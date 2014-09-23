@@ -14,8 +14,8 @@ msgstr ""
 "Project-Id-Version: gtk+.gtk-3-0.hi\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gtk"
 "%2b&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2014-09-19 21:08+0000\n"
-"PO-Revision-Date: 2014-09-23 16:28+0630\n"
+"POT-Creation-Date: 2014-09-23 11:04+0000\n"
+"PO-Revision-Date: 2014-09-23 16:36+0630\n"
 "Last-Translator: rajesh <rajesh>\n"
 "Language-Team: Hindi <kde-i18n-doc@kde.org>\n"
 "Language: hi\n"
@@ -302,15 +302,11 @@ msgid "MonBrightnessDown"
 msgstr "MonBrightnessDown"
 
 #: ../gdk/keyname-table.h:6883
-#| msgctxt "keyboard label"
-#| msgid "MonBrightnessUp"
 msgctxt "keyboard label"
 msgid "KbdBrightnessUp"
 msgstr "KbdBrightnessUp"
 
 #: ../gdk/keyname-table.h:6884
-#| msgctxt "keyboard label"
-#| msgid "MonBrightnessDown"
 msgctxt "keyboard label"
 msgid "KbdBrightnessDown"
 msgstr "KbdBrightnessDown"
@@ -321,8 +317,6 @@ msgid "AudioMute"
 msgstr "AudioMute"
 
 #: ../gdk/keyname-table.h:6886
-#| msgctxt "keyboard label"
-#| msgid "AudioMute"
 msgctxt "keyboard label"
 msgid "AudioMicMute"
 msgstr "AudioMicMute"
@@ -1185,14 +1179,12 @@ msgstr ""
 #: ../gtk/gtkmessagedialog.c:957 ../gtk/gtkmountoperation.c:543
 #: ../gtk/gtkpagesetupunixdialog.c:196 ../gtk/gtkprintbackend.c:763
 #: ../gtk/gtkprinteroptionwidget.c:545 ../gtk/gtkprintunixdialog.c:665
-#: ../gtk/gtkprintunixdialog.c:733 ../gtk/gtkwindow.c:11637
+#: ../gtk/gtkprintunixdialog.c:733 ../gtk/gtkwindow.c:11660
 #: ../gtk/inspector/css-editor.c:195
 #: ../gtk/resources/ui/gtkappchooserdialog.ui.h:2
 #: ../gtk/resources/ui/gtkassistant.ui.h:5
 #: ../gtk/resources/ui/gtkcolorchooserdialog.ui.h:2
 #: ../gtk/resources/ui/gtkfontchooserdialog.ui.h:2
-#| msgctxt "Stock label"
-#| msgid "_Cancel"
 msgid "_Cancel"
 msgstr "रद्द करें (_C)"
 
@@ -1205,8 +1197,6 @@ msgid "_Select"
 msgstr "चुनें (_S)"
 
 #: ../gtk/deprecated/gtkcolorseldialog.c:201
-#| msgctxt "Stock label"
-#| msgid "_Help"
 msgid "_Help"
 msgstr "मदद (_H)"
 
@@ -1242,16 +1232,12 @@ msgstr "पूर्वावलोकनः (_P)"
 
 #: ../gtk/deprecated/gtkfontsel.c:1693 ../gtk/gtkpagesetupunixdialog.c:197
 #: ../gtk/resources/ui/gtkassistant.ui.h:1
-#| msgctxt "Stock label"
-#| msgid "_Apply"
 msgid "_Apply"
 msgstr "लागू करें (_A)"
 
 #: ../gtk/deprecated/gtkfontsel.c:1698 ../gtk/gtkmessagedialog.c:936
 #: ../gtk/gtkmessagedialog.c:958 ../gtk/gtkprintbackend.c:764
-#: ../gtk/gtkwindow.c:11638 ../gtk/inspector/classes-list.c:125
-#| msgctxt "Stock label"
-#| msgid "_OK"
+#: ../gtk/gtkwindow.c:11661 ../gtk/inspector/classes-list.c:125
 msgid "_OK"
 msgstr "ठीक (_O)"
 
@@ -1392,7 +1378,6 @@ msgstr "cwd के बजायय इस निर्देशिका का 
 
 #: ../gtk/encodesymbolic.c:266
 #, c-format
-#| msgid "Invalid file name"
 msgid "Invalid size %s\n"
 msgstr "अमान्य आकार %s\n"
 
@@ -1401,9 +1386,6 @@ msgstr "अमान्य आकार %s\n"
 #.
 #: ../gtk/gtkaboutdialog.c:114
 #, c-format
-#| msgid ""
-#| "This program comes with ABSOLUTELY NO WARRANTY;\n"
-#| "for details, visit <a href=\"%s\">%s</a>"
 msgid ""
 "This program comes with ABSOLUTELY NO WARRANTY.\n"
 "See the <a href=\"%s\">%s</a> for details."
@@ -1417,7 +1399,6 @@ msgid "License"
 msgstr "लाइसेंस"
 
 #: ../gtk/gtkaboutdialog.c:119
-#| msgid "Custom size"
 msgid "Custom License"
 msgstr "मनपसंद लाइसेंस"
 
@@ -1576,33 +1557,28 @@ msgstr "अन्य अनुप्रयोग..."
 #: ../gtk/gtkappchooserdialog.c:203 ../gtk/gtkappchooserdialog.c:210
 #: ../gtk/gtkappchooserdialog.c:227
 #: ../gtk/resources/ui/gtkappchooserdialog.ui.h:1
-#| msgid "Default Application"
 msgid "Select Application"
 msgstr "अनुप्रयोग चुनें"
 
 #. Translators: %s is a filename
 #: ../gtk/gtkappchooserdialog.c:205
 #, c-format
-#| msgid "Opening %s"
 msgid "Opening “%s”."
 msgstr "“%s” खोल रहा है"
 
 #: ../gtk/gtkappchooserdialog.c:206
 #, c-format
-#| msgid "No deserialize function found for format %s"
 msgid "No applications found for “%s”"
 msgstr "“%s” प्रारूप के लिये कोई इच्छित प्रकार्य नहीं पाया गया"
 
 #. Translators: %s is a file type description
 #: ../gtk/gtkappchooserdialog.c:212
 #, c-format
-#| msgid "Opening %s"
 msgid "Opening “%s” files."
 msgstr "“%s” खोल रहा है"
 
 #: ../gtk/gtkappchooserdialog.c:214
 #, c-format
-#| msgid "No applications available to open \"%s\" files"
 msgid "No applications found for “%s” files"
 msgstr "“%s” फ़ाइल में कोई अनुप्रयोग उपलब्ध नहीं"
 
@@ -1620,7 +1596,6 @@ msgstr "तयशुदा अनुप्रयोग"
 
 #: ../gtk/gtkappchooserwidget.c:672
 #, c-format
-#| msgid "No deserialize function found for format %s"
 msgid "No applications found for “%s”."
 msgstr "“%s” के लिये कोई अनुप्रयोग नहीं मिला"
 
@@ -1637,7 +1612,7 @@ msgid "Other Applications"
 msgstr "अन्य अनुप्रयोग"
 
 #: ../gtk/gtkapplicationwindow.c:322 ../gtk/gtkprintoperation-unix.c:481
-#: ../gtk/gtkprintoperation-win32.c:1452
+#: ../gtk/gtkprintoperation-win32.c:1452 ../gtk/inspector/prop-editor.c:1569
 msgid "Application"
 msgstr "अनुप्रयोग"
 
@@ -1668,7 +1643,6 @@ msgstr "पाठ इसके अंदर प्रकट नहीं हो 
 
 #: ../gtk/gtkbuilderparser.c:340
 #, c-format
-#| msgid "Invalid type function on line %d: '%s'"
 msgid "Invalid object type `%s' on line %d"
 msgstr "अवैध वस्तु प्रकार `%s' ऑनलाइन %d"
 
@@ -1684,7 +1658,6 @@ msgstr "डुल्पीकेट वस्तु आईडी '%s' %d पं�
 
 #: ../gtk/gtkbuilderparser.c:652
 #, c-format
-#| msgid "Invalid type function on line %d: '%s'"
 msgid "Invalid property: %s.%s on line %d"
 msgstr "अवैध विशेषता: %s.%s पंक्ति पर %d"
 
@@ -2029,13 +2002,11 @@ msgid "Custom"
 msgstr "मनपसंद"
 
 #: ../gtk/gtkcolorchooserwidget.c:546
-#| msgid "Custom color %d: %s"
 msgid "Custom color"
 msgstr "मनपसंद रंग"
 
 #  Create Folder
 #: ../gtk/gtkcolorchooserwidget.c:547
-#| msgid "Create custom color"
 msgid "Create a custom color"
 msgstr "मनपसंद रंग बनाएँ"
 
@@ -2078,8 +2049,6 @@ msgstr "default:mm"
 
 #: ../gtk/gtkcustompaperunixdialog.c:329 ../gtk/gtkmessagedialog.c:940
 #: ../gtk/resources/ui/gtkassistant.ui.h:6
-#| msgctxt "Stock label"
-#| msgid "_Close"
 msgid "_Close"
 msgstr "बंद करें (_C)"
 
@@ -2139,34 +2108,24 @@ msgstr "कागज हाशिया"
 
 #: ../gtk/gtkentry.c:9575 ../gtk/gtkentry.c:9728 ../gtk/gtklabel.c:6530
 #: ../gtk/gtktextview.c:8841 ../gtk/gtktextview.c:9029
-#| msgctxt "Stock label"
-#| msgid "Cu_t"
 msgid "Cu_t"
 msgstr "काटें (_t)"
 
 #: ../gtk/gtkentry.c:9579 ../gtk/gtkentry.c:9731 ../gtk/gtklabel.c:6531
 #: ../gtk/gtktextview.c:8845 ../gtk/gtktextview.c:9033
-#| msgctxt "Stock label"
-#| msgid "_Copy"
 msgid "_Copy"
 msgstr "नक़ल करें (_C)"
 
 #: ../gtk/gtkentry.c:9583 ../gtk/gtkentry.c:9734 ../gtk/gtklabel.c:6532
 #: ../gtk/gtktextview.c:8847 ../gtk/gtktextview.c:9035
-#| msgctxt "Stock label"
-#| msgid "_Paste"
 msgid "_Paste"
 msgstr "चिपकाएँ (_P)"
 
 #: ../gtk/gtkentry.c:9586 ../gtk/gtklabel.c:6534 ../gtk/gtktextview.c:8850
-#| msgctxt "Stock label"
-#| msgid "_Delete"
 msgid "_Delete"
 msgstr "मिटाएँ (_D)"
 
 #: ../gtk/gtkentry.c:9597 ../gtk/gtklabel.c:6543 ../gtk/gtktextview.c:8864
-#| msgctxt "Stock label"
-#| msgid "Select _All"
 msgid "Select _All"
 msgstr "सभी चुनें (_A)"
 
@@ -2188,8 +2147,6 @@ msgid "(None)"
 msgstr "(कुछ नहीं)"
 
 #: ../gtk/gtkfilechooserbutton.c:795 ../gtk/gtkplacessidebar.c:3273
-#| msgctxt "Stock label"
-#| msgid "_Open"
 msgid "_Open"
 msgstr "खोलें (_O)"
 
@@ -2234,7 +2191,6 @@ msgstr ""
 "फ़ाइल को %s के अंदर बनाने की जरूरत नहीं है क्योंकि यह एक फोल्डर नहीं है"
 
 #: ../gtk/gtkfilechooserwidget.c:768
-#| msgid "Cannot create a file under %s as it is not a folder"
 msgid "Cannot create file as the filename is too long"
 msgstr "फ़ाइल नहीं बना सकता है क्योंकि फ़ाइलनाम काफी लंबा है"
 
@@ -2243,14 +2199,10 @@ msgid "Try using a shorter name."
 msgstr "छोटे नाम के उपयोग की कोशिश करें"
 
 #: ../gtk/gtkfilechooserwidget.c:779
-#| msgid "Could not select file"
 msgid "You may only select folders"
 msgstr "आप केवल फ़ोल्डर चुन सकते हैं"
 
 #: ../gtk/gtkfilechooserwidget.c:780
-#| msgid ""
-#| "You may only select folders.  The item that you selected is not a folder; "
-#| "try using a different item."
 msgid "The item that you selected is not a folder try using a different item."
 msgstr ""
 "मद जिसे आपने चुना वह फोल्डर नहीं है; किसी अलग मद के उपयोग की कोशिश करें."
@@ -2268,12 +2220,10 @@ msgid "Could not select file"
 msgstr "फ़ाइल चुन नहीं सका"
 
 #: ../gtk/gtkfilechooserwidget.c:1665
-#| msgid "_Visit this file"
 msgid "_Visit File"
 msgstr "फ़ाइल को देखें (_V)"
 
 #: ../gtk/gtkfilechooserwidget.c:1668
-#| msgid "Copy _Location"
 msgid "_Copy Location"
 msgstr "स्थान की नक़ल लें (C)"
 
@@ -2317,13 +2267,12 @@ msgid "Yesterday at %H:%M"
 msgstr "कल %H:%M समय पर"
 
 #: ../gtk/gtkfilechooserwidget.c:3761
-#| msgid "Yesterday at %H:%M"
 msgid "Yesterday at %-I:%M %P"
 msgstr "कल %-I:%M %P"
 
 #. Translators: We don't know whether this printer is
 #. * available to print to.
-#: ../gtk/gtkfilechooserwidget.c:3960
+#: ../gtk/gtkfilechooserwidget.c:3960 ../gtk/inspector/prop-editor.c:1572
 #: ../modules/printbackends/cloudprint/gtkprintbackendcloudprint.c:748
 msgid "Unknown"
 msgstr "अज्ञात"
@@ -2334,15 +2283,11 @@ msgstr "फ़ोल्डर में बदल नहीं सकता च�
 
 #: ../gtk/gtkfilechooserwidget.c:5219 ../gtk/gtkprintunixdialog.c:656
 #, c-format
-#| msgid "A file named \"%s\" already exists.  Do you want to replace it?"
 msgid "A file named “%s” already exists.  Do you want to replace it?"
 msgstr "“%s” नामक फ़ाइल पहले से मौजूद है.  क्या आप इसे बदलना चाहते हैं?"
 
 #: ../gtk/gtkfilechooserwidget.c:5222 ../gtk/gtkprintunixdialog.c:660
 #, c-format
-#| msgid ""
-#| "The file already exists in \"%s\".  Replacing it will overwrite its "
-#| "contents."
 msgid ""
 "The file already exists in “%s”.  Replacing it will overwrite its contents."
 msgstr ""
@@ -2391,26 +2336,25 @@ msgstr "फ़ॉन्ट चुनें"
 #. * pages that the printing system may support.
 #.
 #: ../gtk/gtkfontbutton.c:1152 ../gtk/inspector/gestures.c:127
-#: ../gtk/inspector/prop-editor.c:1201 ../gtk/inspector/size-groups.c:251
+#: ../gtk/inspector/prop-editor.c:1202 ../gtk/inspector/size-groups.c:251
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:4958
 msgid "None"
 msgstr "कुछ नहीं"
 
 #: ../gtk/gtkheaderbar.c:414
-#| msgid "Application"
 msgid "Application menu"
 msgstr "अनुप्रयोग मेनू"
 
-#: ../gtk/gtkheaderbar.c:476 ../gtk/gtkwindow.c:8358
+#: ../gtk/gtkheaderbar.c:476 ../gtk/gtkwindow.c:8381
 msgid "Close"
 msgstr "बंद करें"
 
-#: ../gtk/gtkicontheme.c:2306 ../gtk/gtkicontheme.c:2370
+#: ../gtk/gtkicontheme.c:2308 ../gtk/gtkicontheme.c:2372
 #, c-format
 msgid "Icon '%s' not present in theme"
 msgstr "चिह्न '%s' प्रसंग में उपस्थित नहीं है"
 
-#: ../gtk/gtkicontheme.c:4003 ../gtk/gtkicontheme.c:4370
+#: ../gtk/gtkicontheme.c:4005 ../gtk/gtkicontheme.c:4372
 msgid "Failed to load icon"
 msgstr "प्रतीक लोड करने में विफल"
 
@@ -2436,26 +2380,18 @@ msgstr "सिस्टम (%s)"
 
 #  KEEP IN SYNC with gtkiconfactory.c stock icons, when appropriate
 #: ../gtk/gtkinfobar.c:1192 ../gtk/gtkmessagedialog.c:376
-#| msgctxt "Stock label"
-#| msgid "Information"
 msgid "Information"
 msgstr "सूचना"
 
 #: ../gtk/gtkinfobar.c:1196 ../gtk/gtkmessagedialog.c:380
-#| msgctxt "Stock label"
-#| msgid "Question"
 msgid "Question"
 msgstr "प्रश्न"
 
 #: ../gtk/gtkinfobar.c:1200 ../gtk/gtkmessagedialog.c:384
-#| msgctxt "Stock label"
-#| msgid "Warning"
 msgid "Warning"
 msgstr "चेतावनी"
 
 #: ../gtk/gtkinfobar.c:1204 ../gtk/gtkmessagedialog.c:388
-#| msgctxt "Stock label"
-#| msgid "Error"
 msgid "Error"
 msgstr "त्रुटि"
 
@@ -2619,14 +2555,10 @@ msgid "Menu"
 msgstr "मेन्यू"
 
 #: ../gtk/gtkmessagedialog.c:948
-#| msgctxt "Stock label"
-#| msgid "_No"
 msgid "_No"
 msgstr "नहीं (_N)"
 
 #: ../gtk/gtkmessagedialog.c:949
-#| msgctxt "Stock label"
-#| msgid "_Yes"
 msgid "_Yes"
 msgstr "हाँ (_Y)"
 
@@ -2768,23 +2700,18 @@ msgid "Devices"
 msgstr "युक्ति"
 
 #: ../gtk/gtkplacessidebar.c:462
-#| msgid "_Add to Bookmarks"
 msgid "Bookmarks"
 msgstr "पुस्तचिह्न"
 
 #: ../gtk/gtkplacessidebar.c:934
-#| msgid "Recently Used"
 msgid "Recent"
 msgstr "हालिया"
 
 #: ../gtk/gtkplacessidebar.c:936
-#| msgid "Recently Used"
 msgid "Recent files"
 msgstr "हालिया फ़ाइलें"
 
 #: ../gtk/gtkplacessidebar.c:945
-#| msgctxt "keyboard label"
-#| msgid "Home"
 msgid "Home"
 msgstr "घर"
 
@@ -2793,17 +2720,14 @@ msgid "Open your personal folder"
 msgstr "अपना निजी निर्देशिका खोलें"
 
 #: ../gtk/gtkplacessidebar.c:962
-#| msgid "Could not read the contents of the folder"
 msgid "Open the contents of your desktop in a folder"
 msgstr "अपने डेस्कटॉप की सामग्री को निर्देशिका की तरह खोलें"
 
 #: ../gtk/gtkplacessidebar.c:976
-#| msgid "Location"
 msgid "Enter Location"
 msgstr "स्थान डालें"
 
 #: ../gtk/gtkplacessidebar.c:978
-#| msgid "Could not run application"
 msgid "Manually enter a location"
 msgstr "स्थान दस्ती रूप से डालें"
 
@@ -2822,29 +2746,22 @@ msgid "Mount and open %s"
 msgstr "%s को माउन्ट करें और खोलें"
 
 #: ../gtk/gtkplacessidebar.c:1163
-#| msgid "Could not read the contents of the folder"
 msgid "Open the contents of the file system"
 msgstr "फाइल तंत्र के विषयवस्तु को खोलें"
 
 #: ../gtk/gtkplacessidebar.c:1253
-#| msgctxt "Stock label"
-#| msgid "_Network"
 msgid "Network"
 msgstr "संजाल"
 
 #: ../gtk/gtkplacessidebar.c:1259
-#| msgctxt "Stock label"
-#| msgid "_Network"
 msgid "Browse Network"
 msgstr "संजाल ब्राउज़ करें"
 
 #: ../gtk/gtkplacessidebar.c:1261
-#| msgid "Could not read the contents of the folder"
 msgid "Browse the contents of the network"
 msgstr "संजाल के विषय-वस्तु ब्राउज़ करें"
 
 #: ../gtk/gtkplacessidebar.c:1269
-#| msgid "Convert to PS level 1"
 msgid "Connect to Server"
 msgstr "सर्वर से जुड़ें"
 
@@ -2862,8 +2779,6 @@ msgid "_Start"
 msgstr "आरंभ करें (_S)"
 
 #: ../gtk/gtkplacessidebar.c:2231 ../gtk/gtkplacessidebar.c:3358
-#| msgctxt "Stock label, media"
-#| msgid "_Stop"
 msgid "_Stop"
 msgstr "रोकें (_S)"
 
@@ -2877,13 +2792,10 @@ msgid "_Safely Remove Drive"
 msgstr "ड्राइव सुरक्षित रूप से निकालें (_S)"
 
 #: ../gtk/gtkplacessidebar.c:2243
-#| msgid "Connect As"
 msgid "_Connect Drive"
 msgstr "ड्राइव कनेक्ट करें (_C)"
 
 #: ../gtk/gtkplacessidebar.c:2244
-#| msgctxt "Stock label"
-#| msgid "_Disconnect"
 msgid "_Disconnect Drive"
 msgstr "ड्राइव डिसकनेक्ट करें (_D)"
 
@@ -2897,7 +2809,6 @@ msgstr "मल्टी डिस्क युक्ति रोकें (_S)"
 
 #. stop() for type G_DRIVE_START_STOP_TYPE_PASSWORD is normally not used
 #: ../gtk/gtkplacessidebar.c:2254
-#| msgid "Unlock"
 msgid "_Unlock Drive"
 msgstr "ड्राइव अनलॉक करें (_U)"
 
@@ -2907,32 +2818,27 @@ msgstr "ड्राइव लॉक करें (_L)"
 
 #: ../gtk/gtkplacessidebar.c:2284 ../gtk/gtkplacessidebar.c:3033
 #, c-format
-#| msgid "Unable to end process"
 msgid "Unable to start %s"
 msgstr "%s आरंभ करने में असमर्थ"
 
 #: ../gtk/gtkplacessidebar.c:2314
 #, c-format
-#| msgid "Unable to end process"
 msgid "Unable to access “%s”"
 msgstr "“%s” पर पहुँचने में अक्षम"
 
 #: ../gtk/gtkplacessidebar.c:2624
 #, c-format
-#| msgid "Unable to end process"
 msgid "Unable to unmount %s"
 msgstr "%s अनारोहित करने में असमर्थ"
 
 #: ../gtk/gtkplacessidebar.c:2750
 #, c-format
-#| msgid "Unable to end process"
 msgid "Unable to stop %s"
 msgstr "%s रोकने में असमर्थ"
 
 #: ../gtk/gtkplacessidebar.c:2779 ../gtk/gtkplacessidebar.c:2808
 #: ../gtk/gtkplacessidebar.c:2837
 #, c-format
-#| msgid "Unable to end process"
 msgid "Unable to eject %s"
 msgstr "%s बाहर निकालने में असमर्थ"
 
@@ -2950,7 +2856,6 @@ msgid "Open in New _Window"
 msgstr "नए विंडो में खोलें (_W)"
 
 #: ../gtk/gtkplacessidebar.c:3299
-#| msgid "_Add to Bookmarks"
 msgid "_Add Bookmark"
 msgstr "पसंद जोड़ें (_A)"
 
@@ -2987,7 +2892,6 @@ msgid "Authentication"
 msgstr "सत्यापन"
 
 #: ../gtk/gtkprintbackend.c:833
-#| msgid "Remember password until you _logout"
 msgid "_Remember password"
 msgstr "कूटशब्द याद रखें (_R)"
 
@@ -3136,13 +3040,10 @@ msgstr "अनिर्दिष्ट त्रुटि"
 
 #  create the text entry widget
 #: ../gtk/gtkprintunixdialog.c:732
-#| msgid "_Preview:"
 msgid "Pre_view"
 msgstr "पूर्वावलोकन (_v)"
 
 #: ../gtk/gtkprintunixdialog.c:734
-#| msgctxt "Stock label"
-#| msgid "_Print"
 msgid "_Print"
 msgstr "छापें (_P)"
 
@@ -3521,30 +3422,27 @@ msgctxt "volume percentage"
 msgid "%d %%"
 msgstr "%d %%"
 
-#: ../gtk/gtkwindow.c:11632
+#: ../gtk/gtkwindow.c:11655
 msgid "Do you want to use GTK+ Inspector?"
 msgstr "क्या आप सचमुच GTK+ इंस्पेक्टर प्रयोग करना चाहते हैं?"
 
-#: ../gtk/gtkwindow.c:11634
+#: ../gtk/gtkwindow.c:11657
 msgid ""
 "GTK+ Inspector is an interactive debugger that lets you explore and modify "
 "the internals of any GTK+ application. Using it may cause the application to "
 "break or crash."
 msgstr ""
 "GTK+ इंस्पेक्टर अंतःक्रियात्मक डिबगर है जो किसी GTK+ अनुप्रयोग के आंतरिक को "
-"देखने और बदलने देता है. इसे उपयोग करना अनुप्रयोग के ब्रेक करने या क्रैश का "
-"कारण है."
+"देखने और बदलने "
+"देता है. इसे उपयोग करना अनुप्रयोग के ब्रेक करने या क्रैश का कारण है."
 
 #: ../gtk/inspector/action-editor.c:281
-#| msgctxt "Action name"
-#| msgid "Activate"
 msgid "Activate"
 msgstr "सक्रिय करें"
 
 #. vim: set et sw=2 ts=2:
 #: ../gtk/inspector/action-editor.c:302 ../gtk/inspector/actions.ui.h:5
 #: ../gtk/inspector/misc-info.ui.h:1
-#| msgid "Status"
 msgid "State"
 msgstr "स्थिति"
 
@@ -3559,13 +3457,10 @@ msgid "Name"
 msgstr "नाम"
 
 #: ../gtk/inspector/actions.ui.h:3
-#| msgctxt "Accelerator"
-#| msgid "Disabled"
 msgid "Enabled"
 msgstr "सक्षम"
 
 #: ../gtk/inspector/actions.ui.h:4
-#| msgid "Paper Type"
 msgid "Parameter Type"
 msgstr "पैरामीटर प्रकार"
 
@@ -3578,13 +3473,10 @@ msgid "New class"
 msgstr "नया वर्ग"
 
 #: ../gtk/inspector/classes-list.c:126
-#| msgctxt "Stock label"
-#| msgid "_Cancel"
 msgid "Cancel"
 msgstr "रद्द करें"
 
 #: ../gtk/inspector/classes-list.c:133
-#| msgid "Color _name:"
 msgid "Class name"
 msgstr "वर्ग नाम"
 
@@ -3621,8 +3513,6 @@ msgid "Saving CSS failed"
 msgstr "CSS सहेजना विफल"
 
 #: ../gtk/inspector/css-editor.c:196
-#| msgctxt "Stock label"
-#| msgid "_Save"
 msgid "_Save"
 msgstr "सहेजें (_S)"
 
@@ -3641,12 +3531,10 @@ msgstr "आँकड़ा दिखाएँ"
 
 #. vim: set et sw=2 ts=2:
 #: ../gtk/inspector/general.ui.h:1
-#| msgid "GTK+ Options"
 msgid "GTK+ Version"
 msgstr "GTK+ संस्करण"
 
 #: ../gtk/inspector/general.ui.h:2
-#| msgid "Go _Back"
 msgid "GDK Backend"
 msgstr "GDK बैकेंड"
 
@@ -3671,8 +3559,7 @@ msgstr "अनाम खंड"
 msgid "Label"
 msgstr "लेबल"
 
-#: ../gtk/inspector/menu.ui.h:2 ../gtk/inspector/prop-editor.c:1301
-#| msgid "Location"
+#: ../gtk/inspector/menu.ui.h:2 ../gtk/inspector/prop-editor.c:1302
 msgid "Action"
 msgstr "क्रिया"
 
@@ -3685,16 +3572,13 @@ msgid "Buildable ID"
 msgstr "बिल्डयोग्य ID"
 
 #: ../gtk/inspector/misc-info.ui.h:3
-#| msgid "Default Application"
 msgid "Default Widget"
 msgstr "तयशुदा विजेट"
 
 #: ../gtk/inspector/misc-info.ui.h:4 ../gtk/inspector/misc-info.ui.h:6
-#: ../gtk/inspector/prop-editor.c:1004 ../gtk/inspector/prop-editor.c:1184
-#: ../gtk/inspector/prop-editor.c:1309 ../gtk/inspector/prop-editor.c:1420
+#: ../gtk/inspector/prop-editor.c:1005 ../gtk/inspector/prop-editor.c:1185
+#: ../gtk/inspector/prop-editor.c:1310 ../gtk/inspector/prop-editor.c:1421
 #: ../gtk/inspector/window.ui.h:4
-#| msgctxt "Stock label"
-#| msgid "_Properties"
 msgid "Properties"
 msgstr "गुण"
 
@@ -3710,86 +3594,100 @@ msgstr "आकार आबंटित करें"
 msgid "Object Hierarchy"
 msgstr "वस्तु पदक्रम"
 
-#: ../gtk/inspector/prop-editor.c:616
+#: ../gtk/inspector/prop-editor.c:617
 #, c-format
-#| msgid "Printer"
 msgid "Pointer: %p"
 msgstr "पॉइंटर: %p"
 
-#: ../gtk/inspector/prop-editor.c:631
-#| msgid "Unknown"
+#: ../gtk/inspector/prop-editor.c:632
 msgctxt "type name"
 msgid "Unknown"
 msgstr "अज्ञात"
 
-#: ../gtk/inspector/prop-editor.c:632
+#: ../gtk/inspector/prop-editor.c:633
 #, c-format
 msgid "Object: %p (%s)"
 msgstr "वस्तु: %p (%s)"
 
-#: ../gtk/inspector/prop-editor.c:1057
+#: ../gtk/inspector/prop-editor.c:1058
 #, c-format
 msgid "Uneditable property type: %s"
 msgstr "गैरसंपादनयोग्य विशेषता क़िस्म: %s"
 
-#: ../gtk/inspector/prop-editor.c:1175
+#: ../gtk/inspector/prop-editor.c:1176
 msgid "Attribute mapping"
 msgstr "विशेषता मैपिंग"
 
-#: ../gtk/inspector/prop-editor.c:1180
+#: ../gtk/inspector/prop-editor.c:1181
 msgid "Model:"
 msgstr "मॉडल:"
 
-#: ../gtk/inspector/prop-editor.c:1181
+#: ../gtk/inspector/prop-editor.c:1182
 #, c-format
 msgid "%p (%s)"
 msgstr "%p (%s)"
 
-#: ../gtk/inspector/prop-editor.c:1191
-#| msgid "Volume"
+#: ../gtk/inspector/prop-editor.c:1192
 msgid "Column:"
 msgstr "स्तंभ:"
 
-#: ../gtk/inspector/prop-editor.c:1305
+#: ../gtk/inspector/prop-editor.c:1306
 #, c-format
 msgid "Defined at: %p (%s)"
 msgstr "यहाँ परिभाषित: %p (%s)"
 
-#: ../gtk/inspector/prop-editor.c:1369 ../gtk/inspector/prop-editor.c:1385
-#| msgctxt "Stock label"
-#| msgid "_Convert"
+#: ../gtk/inspector/prop-editor.c:1370 ../gtk/inspector/prop-editor.c:1386
 msgid "inverted"
 msgstr "उल्टा"
 
-#: ../gtk/inspector/prop-editor.c:1401
+#: ../gtk/inspector/prop-editor.c:1402
 msgid "bidirectional, inverted"
 msgstr "द्वि-दिशा, उल्टा"
 
-#: ../gtk/inspector/prop-editor.c:1406 ../gtk/inspector/prop-editor.c:1502
+#: ../gtk/inspector/prop-editor.c:1407 ../gtk/inspector/prop-editor.c:1503
 msgid "bidirectional"
 msgstr "द्वि-दिशा"
 
-#: ../gtk/inspector/prop-editor.c:1411
+#: ../gtk/inspector/prop-editor.c:1412
 msgid "Binding:"
 msgstr "बाइंडिंग:"
 
-#: ../gtk/inspector/prop-editor.c:1521
-#| msgid "Starting %s"
+#: ../gtk/inspector/prop-editor.c:1522
 msgid "Setting:"
 msgstr "सेटिंग:"
+
+#: ../gtk/inspector/prop-editor.c:1555
+#| msgid "Paper Source"
+msgid "Source:"
+msgstr "स्रोत:"
+
+#  Translate to default:RTL if you want your widgets
+#  * to be RTL, otherwise translate to default:LTR.
+#  * Do *not* translate it to "predefinito:LTR", if it
+#  * it isn't default:LTR or default:RTL it will not work
+#: ../gtk/inspector/prop-editor.c:1560
+#| msgid "default:mm"
+msgid "Default"
+msgstr "तयशुदा"
+
+#: ../gtk/inspector/prop-editor.c:1563
+#| msgid "GTK+ Theme"
+msgid "Theme"
+msgstr "प्रसंग"
+
+#: ../gtk/inspector/prop-editor.c:1566
+#| msgid "Setting:"
+msgid "XSettings"
+msgstr "एक्ससेटिंग"
 
 #. vim: set et:
 #. vim: set et sw=2 ts=2:
 #: ../gtk/inspector/prop-list.ui.h:1 ../gtk/inspector/style-prop-list.ui.h:1
-#| msgctxt "Stock label"
-#| msgid "_Properties"
 msgid "Property"
 msgstr "गुण"
 
 #: ../gtk/inspector/prop-list.ui.h:2 ../gtk/inspector/style-prop-list.ui.h:2
 #: ../gtk/resources/ui/gtkcoloreditor.ui.h:9
-#| msgctxt "Color channel"
-#| msgid "Value"
 msgid "Value"
 msgstr "मान"
 
@@ -3802,7 +3700,6 @@ msgid "Defined At"
 msgstr "यहाँ परिभाषित"
 
 #: ../gtk/inspector/resource-list.ui.h:1
-#| msgid "Up Path"
 msgid "Path"
 msgstr "पथ"
 
@@ -3815,13 +3712,10 @@ msgid "Count:"
 msgstr "गणनाः"
 
 #: ../gtk/inspector/resource-list.ui.h:4
-#| msgid "Size"
 msgid "Size:"
 msgstr "आकार:"
 
 #: ../gtk/inspector/signals-list.c:109
-#| msgctxt "Stock label"
-#| msgid "_Yes"
 msgid "Yes"
 msgstr "हाँ"
 
@@ -3831,13 +3725,10 @@ msgid "Trace signal emissions on this object"
 msgstr "इस वस्तु पर संकेत निष्कर्षण ट्रेस करें"
 
 #: ../gtk/inspector/signals-list.ui.h:2
-#| msgctxt "Stock label"
-#| msgid "_Clear"
 msgid "Clear log"
 msgstr "लॉग साफ करें"
 
 #: ../gtk/inspector/signals-list.ui.h:4
-#| msgid "Co_nnect"
 msgid "Connected"
 msgstr "कनेक्टेड"
 
@@ -3889,8 +3780,6 @@ msgid "GTK+ Theme"
 msgstr "जीटीके+ प्रसंग"
 
 #: ../gtk/inspector/visual.ui.h:2
-#| msgctxt "Color name"
-#| msgid "Dark Orange"
 msgid "Dark variant"
 msgstr "गहरा चर"
 
@@ -3907,12 +3796,10 @@ msgid "Text Direction"
 msgstr "पाठ दिशा"
 
 #: ../gtk/inspector/visual.ui.h:6
-#| msgid "Left to right"
 msgid "Left-to-Right"
 msgstr "बाएँ से दाहिने"
 
 #: ../gtk/inspector/visual.ui.h:7
-#| msgid "Right to left"
 msgid "Right-to-Left"
 msgstr "दाहिने से बाएँ"
 
@@ -3921,12 +3808,10 @@ msgid "Window scaling"
 msgstr "विंडो स्केलिंग"
 
 #: ../gtk/inspector/visual.ui.h:9
-#| msgid "Application"
 msgid "Animations"
 msgstr "संजीवन"
 
 #: ../gtk/inspector/visual.ui.h:10
-#| msgid "Show other applications"
 msgid "Show Graphic Updates"
 msgstr "आलेखी अद्यतन दिखाएँ"
 
@@ -3947,8 +3832,6 @@ msgid "Object"
 msgstr "वस्तु"
 
 #: ../gtk/inspector/widget-tree.ui.h:4
-#| msgctxt "Action name"
-#| msgid "Press"
 msgid "Address"
 msgstr "पता"
 
@@ -3963,7 +3846,6 @@ msgid "Send Widget to Shell"
 msgstr "विजेट शेल में भेजें"
 
 #: ../gtk/inspector/window.ui.h:2
-#| msgid "Select a File"
 msgid "Select an Object"
 msgstr "वस्तु चुनें"
 
@@ -3979,13 +3861,10 @@ msgid "Signals"
 msgstr "संकेत"
 
 #: ../gtk/inspector/window.ui.h:6
-#| msgid "Search"
 msgid "Hierarchy"
 msgstr "पदानुक्रम"
 
 #: ../gtk/inspector/window.ui.h:7
-#| msgctxt "Stock label"
-#| msgid "_Properties"
 msgid "Child Properties"
 msgstr "संतति गुण"
 
@@ -3994,13 +3873,10 @@ msgid "CSS Classes"
 msgstr "CSS वर्ग"
 
 #: ../gtk/inspector/window.ui.h:9
-#| msgctxt "Stock label"
-#| msgid "_Properties"
 msgid "Style Properties"
 msgstr "शैली विशेषता"
 
 #: ../gtk/inspector/window.ui.h:10 ../gtk/inspector/window.ui.h:18
-#| msgid "Custom"
 msgid "Custom CSS"
 msgstr "मनपसंद CSS"
 
@@ -4013,7 +3889,6 @@ msgid "Data"
 msgstr "आँकड़ा"
 
 #: ../gtk/inspector/window.ui.h:13
-#| msgid "Application"
 msgid "Actions"
 msgstr "क्रियाएँ"
 
@@ -4026,7 +3901,6 @@ msgid "Objects"
 msgstr "वस्तु"
 
 #: ../gtk/inspector/window.ui.h:17
-#| msgid "Paper _source:"
 msgid "Resources"
 msgstr "संसाधन"
 
@@ -4927,7 +4801,6 @@ msgid "Don't include image data in the cache"
 msgstr "कैश में चित्र आंकड़ा शामिल मत करें"
 
 #: ../gtk/updateiconcache.c:1655
-#| msgid "Don't include image data in the cache"
 msgid "Include image data in the cache"
 msgstr "कैश में चित्र आंकड़ा शामिल करें"
 
@@ -5035,8 +4908,6 @@ msgstr "एक्स इनपुट विधि"
 #. Translators: The printer status is online, i.e. it is
 #. * ready to print.
 #: ../modules/printbackends/cloudprint/gtkprintbackendcloudprint.c:744
-#| msgctxt "Stock label"
-#| msgid "_Underline"
 msgid "Online"
 msgstr "ऑनलाइन"
 
@@ -5494,34 +5365,26 @@ msgid "Print to Test Printer"
 msgstr "जाँच मुद्रक में छापें"
 
 #: ../gtk/resources/ui/gtkaboutdialog.ui.h:1
-#| msgctxt "Stock label"
-#| msgid "_About"
 msgid "About"
 msgstr "परिचय"
 
 #: ../gtk/resources/ui/gtkaboutdialog.ui.h:2
-#| msgid "C_redits"
 msgid "Credits"
 msgstr "श्रेय"
 
 #: ../gtk/resources/ui/gtkappchooserdialog.ui.h:4
-#| msgid "Related Applications"
 msgid "_View All Applications"
 msgstr "सभी अनुप्रयोग देखें (_V)"
 
 #: ../gtk/resources/ui/gtkappchooserdialog.ui.h:5
-#| msgid "_Find applications online"
 msgid "_Find New Applications"
 msgstr "नया अनुप्रयोग ढूँढ़ें (_F)"
 
 #: ../gtk/resources/ui/gtkappchooserwidget.ui.h:1
-#| msgid "_Find applications online"
 msgid "No applications found."
 msgstr "कोई अनुप्रयोग नहीं मिला."
 
 #: ../gtk/resources/ui/gtkapplication-quartz.ui.h:2
-#| msgctxt "Stock label"
-#| msgid "_Preferences"
 msgid "Preferences"
 msgstr "वरीयता"
 
@@ -5544,19 +5407,14 @@ msgstr "सभी दिखाएँ"
 
 #: ../gtk/resources/ui/gtkapplication-quartz.ui.h:7
 #, c-format
-#| msgid "About %s"
 msgid "Quit %s"
 msgstr "छोड़ें %s"
 
 #: ../gtk/resources/ui/gtkassistant.ui.h:2
-#| msgctxt "Stock label, media"
-#| msgid "_Next"
 msgid "_Next"
 msgstr "आगे (_N)"
 
 #: ../gtk/resources/ui/gtkassistant.ui.h:3
-#| msgctxt "Stock label, navigation"
-#| msgid "_Back"
 msgid "_Back"
 msgstr "पीछे (_B)"
 
@@ -5578,8 +5436,6 @@ msgid "A"
 msgstr "A"
 
 #: ../gtk/resources/ui/gtkcoloreditor.ui.h:3
-#| msgctxt "Color channel"
-#| msgid "Alpha"
 msgid "Alpha"
 msgstr "अल्फा"
 
@@ -5589,28 +5445,20 @@ msgid "H"
 msgstr "H"
 
 #: ../gtk/resources/ui/gtkcoloreditor.ui.h:5
-#| msgctxt "Color channel"
-#| msgid "Hue"
 msgid "Hue"
 msgstr "वर्ण"
 
 #: ../gtk/resources/ui/gtkcoloreditor.ui.h:6
-#| msgctxt "Color channel"
-#| msgid "S"
 msgctxt "Color Channel"
 msgid "S"
 msgstr "S"
 
 #: ../gtk/resources/ui/gtkcoloreditor.ui.h:7
-#| msgctxt "Color channel"
-#| msgid "V"
 msgctxt "Color Channel"
 msgid "V"
 msgstr "V"
 
 #: ../gtk/resources/ui/gtkcoloreditor.ui.h:8
-#| msgctxt "Color channel"
-#| msgid "Saturation"
 msgid "Saturation"
 msgstr "संतृप्त"
 
@@ -5640,7 +5488,6 @@ msgid "Select which types of files are shown"
 msgstr "चुनें कि कैसी फ़ाइल दिखायी गई है"
 
 #: ../gtk/resources/ui/gtkfontchooserdialog.ui.h:1
-#| msgid "Se_lection"
 msgid "Select Font"
 msgstr "फ़ॉन्ट चुनें"
 
@@ -5918,7 +5765,6 @@ msgid "Volume"
 msgstr "आवाज"
 
 #: ../gtk/resources/ui/gtkvolumebutton.ui.h:2
-#| msgid "Turns volume down or up"
 msgid "Turns volume up or down"
 msgstr "आवाज बढ़ाता या घटाता है"
 
