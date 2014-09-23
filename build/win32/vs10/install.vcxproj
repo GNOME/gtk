@@ -203,6 +203,10 @@
       <Project>{3281202a-cd26-4c67-b892-eb34bdbc612f}</Project>
       <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
     </ProjectReference>
+    <ProjectReference Include="gtk3-icon-browser.vcxproj">
+      <Project>{3281202a-cd26-4c67-b892-eb34bdbc612e}</Project>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+    </ProjectReference>
     <ProjectReference Include="broadwayd.vcxproj">
       <Project>{3281202a-cd26-4c67-b892-eb34bdbc6130}</Project>
       <ReferenceOutputAssembly>false</ReferenceOutputAssembly>

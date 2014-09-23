@@ -18,6 +18,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "gtk3-demo", "gtk3-demo.vcxp
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "gtk3-demo-application", "gtk3-demo-application.vcxproj", "{3281202A-CD26-4C67-B892-EB34BDBC612F}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "gtk3-icon-browser", "gtk3-icon-browser.vcxproj", "{3281202A-CD26-4C67-B892-EB34BDBC612E}"
+EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "gtk-encode-symbolic-svg", "gtk-encode-symbolic-svg.vcxproj", "{3281202A-CD26-4C67-B892-EB34BDBC6131}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "gailutil", "gailutil.vcxproj", "{29E3E814-1BA3-4AD7-A3A7-3669CB80A942}"
@@ -204,6 +206,22 @@ Global
 		{3281202A-CD26-4C67-B892-EB34BDBC612F}.Release_Broadway|Win32.Build.0 = Release|Win32
 		{3281202A-CD26-4C67-B892-EB34BDBC612F}.Release_Broadway|x64.ActiveCfg = Release|x64
 		{3281202A-CD26-4C67-B892-EB34BDBC612F}.Release_Broadway|x64.Build.0 = Release|x64
+		{3281202A-CD26-4C67-B892-EB34BDBC612E}.Debug|Win32.ActiveCfg = Debug|Win32
+		{3281202A-CD26-4C67-B892-EB34BDBC612E}.Debug|Win32.Build.0 = Debug|Win32
+		{3281202A-CD26-4C67-B892-EB34BDBC612E}.Debug|x64.ActiveCfg = Debug|x64
+		{3281202A-CD26-4C67-B892-EB34BDBC612E}.Debug|x64.Build.0 = Debug|x64
+		{3281202A-CD26-4C67-B892-EB34BDBC612E}.Release|Win32.ActiveCfg = Release|Win32
+		{3281202A-CD26-4C67-B892-EB34BDBC612E}.Release|Win32.Build.0 = Release|Win32
+		{3281202A-CD26-4C67-B892-EB34BDBC612E}.Release|x64.ActiveCfg = Release|x64
+		{3281202A-CD26-4C67-B892-EB34BDBC612E}.Release|x64.Build.0 = Release|x64
+		{3281202A-CD26-4C67-B892-EB34BDBC612E}.Debug_Broadway|Win32.ActiveCfg = Debug|Win32
+		{3281202A-CD26-4C67-B892-EB34BDBC612E}.Debug_Broadway|Win32.Build.0 = Debug|Win32
+		{3281202A-CD26-4C67-B892-EB34BDBC612E}.Debug_Broadway|x64.ActiveCfg = Debug|x64
+		{3281202A-CD26-4C67-B892-EB34BDBC612E}.Debug_Broadway|x64.Build.0 = Debug|x64
+		{3281202A-CD26-4C67-B892-EB34BDBC612E}.Release_Broadway|Win32.ActiveCfg = Release|Win32
+		{3281202A-CD26-4C67-B892-EB34BDBC612E}.Release_Broadway|Win32.Build.0 = Release|Win32
+		{3281202A-CD26-4C67-B892-EB34BDBC612E}.Release_Broadway|x64.ActiveCfg = Release|x64
+		{3281202A-CD26-4C67-B892-EB34BDBC612E}.Release_Broadway|x64.Build.0 = Release|x64
 		{3281202A-CD26-4C67-B892-EB34BDBC6131}.Debug|Win32.ActiveCfg = Debug|Win32
 		{3281202A-CD26-4C67-B892-EB34BDBC6131}.Debug|Win32.Build.0 = Debug|Win32
 		{3281202A-CD26-4C67-B892-EB34BDBC6131}.Debug|x64.ActiveCfg = Debug|x64
