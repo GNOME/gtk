@@ -12,8 +12,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+.HEAD.he\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-09-18 05:41+0300\n"
-"PO-Revision-Date: 2014-09-18 05:42+0300\n"
+"POT-Creation-Date: 2014-09-23 17:21+0300\n"
+"PO-Revision-Date: 2014-09-23 17:22+0300\n"
 "Last-Translator: Yosef Or Boczko <yoseforb@gmail.com>\n"
 "Language-Team: עברית <>\n"
 "Language: he\n"
@@ -1167,7 +1167,7 @@ msgstr ""
 #: ../gtk/gtkmessagedialog.c:957 ../gtk/gtkmountoperation.c:543
 #: ../gtk/gtkpagesetupunixdialog.c:196 ../gtk/gtkprintbackend.c:763
 #: ../gtk/gtkprinteroptionwidget.c:545 ../gtk/gtkprintunixdialog.c:665
-#: ../gtk/gtkprintunixdialog.c:733 ../gtk/gtkwindow.c:11637
+#: ../gtk/gtkprintunixdialog.c:733 ../gtk/gtkwindow.c:11660
 #: ../gtk/inspector/css-editor.c:195
 #: ../gtk/resources/ui/gtkappchooserdialog.ui.h:2
 #: ../gtk/resources/ui/gtkassistant.ui.h:5
@@ -1222,7 +1222,7 @@ msgstr "ה_חלה"
 
 #: ../gtk/deprecated/gtkfontsel.c:1698 ../gtk/gtkmessagedialog.c:936
 #: ../gtk/gtkmessagedialog.c:958 ../gtk/gtkprintbackend.c:764
-#: ../gtk/gtkwindow.c:11638 ../gtk/inspector/classes-list.c:125
+#: ../gtk/gtkwindow.c:11661 ../gtk/inspector/classes-list.c:125
 msgid "_OK"
 msgstr "_אישור"
 
@@ -1649,7 +1649,7 @@ msgid "Other Applications"
 msgstr "יישומים אחרים"
 
 #: ../gtk/gtkapplicationwindow.c:322 ../gtk/gtkprintoperation-unix.c:481
-#: ../gtk/gtkprintoperation-win32.c:1452
+#: ../gtk/gtkprintoperation-win32.c:1452 ../gtk/inspector/prop-editor.c:1569
 msgid "Application"
 msgstr "יישום"
 
@@ -2289,7 +2289,7 @@ msgstr "אתמול ב־%-I:%M %P"
 
 #. Translators: We don't know whether this printer is
 #. * available to print to.
-#: ../gtk/gtkfilechooserwidget.c:3960
+#: ../gtk/gtkfilechooserwidget.c:3960 ../gtk/inspector/prop-editor.c:1572
 #: ../modules/printbackends/cloudprint/gtkprintbackendcloudprint.c:748
 msgid "Unknown"
 msgstr "לא ידוע"
@@ -2350,7 +2350,7 @@ msgstr "בחירת גופן"
 #. * pages that the printing system may support.
 #.
 #: ../gtk/gtkfontbutton.c:1152 ../gtk/inspector/gestures.c:127
-#: ../gtk/inspector/prop-editor.c:1201 ../gtk/inspector/size-groups.c:251
+#: ../gtk/inspector/prop-editor.c:1202 ../gtk/inspector/size-groups.c:251
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:4958
 msgid "None"
 msgstr "ללא"
@@ -2359,16 +2359,16 @@ msgstr "ללא"
 msgid "Application menu"
 msgstr "תפריט יישום"
 
-#: ../gtk/gtkheaderbar.c:476 ../gtk/gtkwindow.c:8358
+#: ../gtk/gtkheaderbar.c:476 ../gtk/gtkwindow.c:8381
 msgid "Close"
 msgstr "סגירה"
 
-#: ../gtk/gtkicontheme.c:2306 ../gtk/gtkicontheme.c:2370
+#: ../gtk/gtkicontheme.c:2308 ../gtk/gtkicontheme.c:2372
 #, c-format
 msgid "Icon '%s' not present in theme"
 msgstr "הסמל '%s' לא קיים בערכת הנושא"
 
-#: ../gtk/gtkicontheme.c:4003 ../gtk/gtkicontheme.c:4370
+#: ../gtk/gtkicontheme.c:4005 ../gtk/gtkicontheme.c:4372
 msgid "Failed to load icon"
 msgstr "טעינת הסמל נכשלה"
 
@@ -3429,11 +3429,11 @@ msgctxt "volume percentage"
 msgid "%d %%"
 msgstr "%d %%"
 
-#: ../gtk/gtkwindow.c:11632
+#: ../gtk/gtkwindow.c:11655
 msgid "Do you want to use GTK+ Inspector?"
 msgstr "האם ברצונך להשתמש במפקח GTK+‎?"
 
-#: ../gtk/gtkwindow.c:11634
+#: ../gtk/gtkwindow.c:11657
 msgid ""
 "GTK+ Inspector is an interactive debugger that lets you explore and modify "
 "the internals of any GTK+ application. Using it may cause the application to "
@@ -3564,7 +3564,7 @@ msgstr "קטע ללא שם"
 msgid "Label"
 msgstr "תווית"
 
-#: ../gtk/inspector/menu.ui.h:2 ../gtk/inspector/prop-editor.c:1301
+#: ../gtk/inspector/menu.ui.h:2 ../gtk/inspector/prop-editor.c:1302
 msgid "Action"
 msgstr "פעולה"
 
@@ -3581,8 +3581,8 @@ msgid "Default Widget"
 msgstr "יישומון בררת מחדל"
 
 #: ../gtk/inspector/misc-info.ui.h:4 ../gtk/inspector/misc-info.ui.h:6
-#: ../gtk/inspector/prop-editor.c:1004 ../gtk/inspector/prop-editor.c:1184
-#: ../gtk/inspector/prop-editor.c:1309 ../gtk/inspector/prop-editor.c:1420
+#: ../gtk/inspector/prop-editor.c:1005 ../gtk/inspector/prop-editor.c:1185
+#: ../gtk/inspector/prop-editor.c:1310 ../gtk/inspector/prop-editor.c:1421
 #: ../gtk/inspector/window.ui.h:4
 msgid "Properties"
 msgstr "מאפיינים"
@@ -3599,67 +3599,83 @@ msgstr "גודל הקצאה"
 msgid "Object Hierarchy"
 msgstr "היררכיית Object"
 
-#: ../gtk/inspector/prop-editor.c:616
+#: ../gtk/inspector/prop-editor.c:617
 #, c-format
 msgid "Pointer: %p"
 msgstr "מצביע: %p"
 
-#: ../gtk/inspector/prop-editor.c:631
+#: ../gtk/inspector/prop-editor.c:632
 msgctxt "type name"
 msgid "Unknown"
 msgstr "לא ידוע"
 
-#: ../gtk/inspector/prop-editor.c:632
+#: ../gtk/inspector/prop-editor.c:633
 #, c-format
 msgid "Object: %p (%s)"
 msgstr "עצם: %p ‏(%s)"
 
-#: ../gtk/inspector/prop-editor.c:1057
+#: ../gtk/inspector/prop-editor.c:1058
 #, c-format
 msgid "Uneditable property type: %s"
 msgstr "סוג מאפיין לא ניתן לעריכה: %s"
 
-#: ../gtk/inspector/prop-editor.c:1175
+#: ../gtk/inspector/prop-editor.c:1176
 msgid "Attribute mapping"
 msgstr "מיפוי תכונה"
 
-#: ../gtk/inspector/prop-editor.c:1180
+#: ../gtk/inspector/prop-editor.c:1181
 msgid "Model:"
 msgstr "דגם:"
 
-#: ../gtk/inspector/prop-editor.c:1181
+#: ../gtk/inspector/prop-editor.c:1182
 #, c-format
 msgid "%p (%s)"
 msgstr "%p ‏(%s)"
 
-#: ../gtk/inspector/prop-editor.c:1191
+#: ../gtk/inspector/prop-editor.c:1192
 msgid "Column:"
 msgstr "עמודה:"
 
-#: ../gtk/inspector/prop-editor.c:1305
+#: ../gtk/inspector/prop-editor.c:1306
 #, c-format
 msgid "Defined at: %p (%s)"
 msgstr "הוגדר ב: %p ‏(%s)"
 
-#: ../gtk/inspector/prop-editor.c:1369 ../gtk/inspector/prop-editor.c:1385
+#: ../gtk/inspector/prop-editor.c:1370 ../gtk/inspector/prop-editor.c:1386
 msgid "inverted"
 msgstr "היפוך"
 
-#: ../gtk/inspector/prop-editor.c:1401
+#: ../gtk/inspector/prop-editor.c:1402
 msgid "bidirectional, inverted"
 msgstr "דו כיווני, היפוך"
 
-#: ../gtk/inspector/prop-editor.c:1406 ../gtk/inspector/prop-editor.c:1502
+#: ../gtk/inspector/prop-editor.c:1407 ../gtk/inspector/prop-editor.c:1503
 msgid "bidirectional"
 msgstr "דו כיווני"
 
-#: ../gtk/inspector/prop-editor.c:1411
+#: ../gtk/inspector/prop-editor.c:1412
 msgid "Binding:"
 msgstr "קשר:"
 
-#: ../gtk/inspector/prop-editor.c:1521
+#: ../gtk/inspector/prop-editor.c:1522
 msgid "Setting:"
 msgstr "הגדרה:"
+
+#: ../gtk/inspector/prop-editor.c:1555
+msgid "Source:"
+msgstr "מקור:"
+
+#: ../gtk/inspector/prop-editor.c:1560
+msgid "Default"
+msgstr "ברירת מחדל"
+
+#: ../gtk/inspector/prop-editor.c:1563
+msgid "Theme"
+msgstr "ערכת נושא"
+
+#: ../gtk/inspector/prop-editor.c:1566
+msgid "XSettings"
+msgstr "XSettings"
 
 #. vim: set et:
 #. vim: set et sw=2 ts=2:
