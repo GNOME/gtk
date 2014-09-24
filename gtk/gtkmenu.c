@@ -4487,7 +4487,7 @@ gtk_menu_position (GtkMenu  *menu,
   pointer = _gtk_menu_shell_get_grab_device (GTK_MENU_SHELL (menu));
   gdk_device_get_position (pointer, &pointer_screen, &x, &y);
 
-  /* Realize so we have the proper width and heigh to figure out
+  /* Realize so we have the proper width and height to figure out
    * the right place to popup the menu.
    */
   gtk_widget_realize (priv->toplevel);
