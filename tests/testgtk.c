@@ -4966,7 +4966,7 @@ create_cursors (GtkWidget *widget)
 			"GtkWidget::visible", TRUE,
 			NULL);
 
-#ifdef GDK_WINDOWING_WAYLAND
+#ifdef GDK_WINDOWING_X11
       if (GDK_IS_X11_DISPLAY (gtk_widget_get_display (vbox)))
         cursor_demo = TRUE;
 #endif
