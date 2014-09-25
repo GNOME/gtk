@@ -209,6 +209,9 @@ enum {
   PROP_SHELL_SHOWS_MENUBAR,
   PROP_SHELL_SHOWS_DESKTOP,
   PROP_DECORATION_LAYOUT,
+  PROP_TITLEBAR_DOUBLE_CLICK,
+  PROP_TITLEBAR_MIDDLE_CLICK,
+  PROP_TITLEBAR_RIGHT_CLICK,
   PROP_DIALOGS_USE_HEADER,
   PROP_ENABLE_PRIMARY_PASTE,
   PROP_RECENT_FILES_ENABLED,
@@ -1569,6 +1572,66 @@ gtk_settings_class_init (GtkSettingsClass *class)
                                                                    "menu:minimize,maximize,close", GTK_PARAM_READWRITE),
                                              NULL);
   g_assert (result == PROP_DECORATION_LAYOUT);
+
+  /**
+   * GtkSettings:gtk-titlebar-double-click:
+   *
+   * This setting determines the action to take when a double-click
+   * occurs on the titlebar of client-side decorated windows.
+   *
+   * Recognized actions are minimize, toggle-maximize, menu, lower
+   * or none.
+   *
+   * Since: 3.14.1
+   */
+  result = settings_install_property_parser (class,
+                                             g_param_spec_string ("gtk-titlebar-double-click",
+                                                                  P_("Titlebar double-click action"),
+                                                                   P_("The action to take on titlebar double-click"),
+                                                                   "toggle-maximize", GTK_PARAM_READWRITE),
+                                             NULL);
+  g_assert (result == PROP_TITLEBAR_DOUBLE_CLICK);
+
+  /**
+   * GtkSettings:gtk-titlebar-middle-click:
+   *
+   * This setting determines the action to take when a middle-click
+   * occurs on the titlebar of client-side decorated windows.
+   *
+   * Recognized actions are minimize, toggle-maximize, menu, lower
+   * or none.
+   *
+   * Since: 3.14.1
+   */
+  result = settings_install_property_parser (class,
+                                             g_param_spec_string ("gtk-titlebar-middle-click",
+                                                                  P_("Titlebar middle-click action"),
+                                                                   P_("The action to take on titlebar middle-click"),
+                                                                   "none", GTK_PARAM_READWRITE),
+                                             NULL);
+  g_assert (result == PROP_TITLEBAR_MIDDLE_CLICK);
+
+  /**
+   * GtkSettings:gtk-titlebar-right-click:
+   *
+   * This setting determines the action to take when a right-click
+   * occurs on the titlebar of client-side decorated windows.
+   *
+   * Recognized actions are minimize, toggle-maximize, menu, lower
+   * or none.
+   *
+   * Since: 3.14.1
+   */
+  result = settings_install_property_parser (class,
+                                             g_param_spec_string ("gtk-titlebar-right-click",
+                                                                  P_("Titlebar right-click action"),
+                                                                   P_("The action to take on titlebar right-click"),
+                                                                   "menu", GTK_PARAM_READWRITE),
+                                             NULL);
+  g_assert (result == PROP_TITLEBAR_RIGHT_CLICK);
+
+
+
 
   /**
    * GtkSettings:gtk-dialogs-use-header:
