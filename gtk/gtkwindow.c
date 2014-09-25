@@ -1360,24 +1360,47 @@ gtk_window_titlebar_action (GtkWindow      *window,
                             guint           button,
                             gint            n_press)
 {
+  GtkSettings *settings;
+  gchar *action = NULL;
+  gboolean retval = TRUE;
+
+  settings = gtk_widget_get_settings (GTK_WIDGET (window));
   switch (button)
     {
     case GDK_BUTTON_PRIMARY:
       if (n_press == 2)
-        {
-          _gtk_window_toggle_maximized (window);
-          return TRUE;
-        }
-      return FALSE;
+        g_object_get (settings, "gtk-titlebar-double-click", &action, NULL);
+      break;
     case GDK_BUTTON_MIDDLE:
-      gdk_window_lower (gtk_widget_get_window (GTK_WIDGET (window)));
-      return TRUE;
+      g_object_get (settings, "gtk-titlebar-middle-click", &action, NULL);
+      break;
     case GDK_BUTTON_SECONDARY:
-      gtk_window_do_popup (window, (GdkEventButton*) event);
-      return TRUE;
-    default:
-      return FALSE;
+      g_object_get (settings, "gtk-titlebar-right-click", &action, NULL);
+      break;
     }
+
+  if (action == NULL)
+    retval = FALSE;
+  else if (g_str_equal (action, "none"))
+    retval = FALSE;
+    /* treat all maximization variants the same */
+  else if (g_str_has_prefix (action, "toggle-maximize"))
+    _gtk_window_toggle_maximized (window);
+  else if (g_str_equal (action, "lower"))
+    gdk_window_lower (gtk_widget_get_window (GTK_WIDGET (window)));
+  else if (g_str_equal (action, "minimize"))
+    gdk_window_iconify (gtk_widget_get_window (GTK_WIDGET (window)));
+  else if (g_str_equal (action, "menu"))
+    gtk_window_do_popup (window, (GdkEventButton*) event);
+  else
+    {
+      g_warning ("Unsupported titlebar action %s\n", action);
+      retval = FALSE;
+    }
+
+  g_free (action);
+
+  return retval;
 }
 
 static void
