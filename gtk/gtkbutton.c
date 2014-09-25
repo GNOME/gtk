@@ -607,18 +607,16 @@ multipress_released_cb (GtkGestureMultiPress *gesture,
   GtkButton *button = GTK_BUTTON (widget);
   GtkButtonPrivate *priv = button->priv;
   GdkEventSequence *sequence;
-  const GdkEvent *event;
-  GdkDevice *source;
+
+  g_signal_emit (button, button_signals[RELEASED], 0);
 
   sequence = gtk_gesture_single_get_current_sequence (GTK_GESTURE_SINGLE (gesture));
-  event = gtk_gesture_get_last_event (GTK_GESTURE (gesture), sequence);
-  if (event)
+
+  if (sequence)
     {
-      source = gdk_event_get_source_device (event);
-      if (source && gdk_device_get_source (source) == GDK_SOURCE_TOUCHSCREEN)
-        priv->in_button = FALSE;
+      priv->in_button = FALSE;
+      gtk_button_update_state (button);
     }
-  g_signal_emit (button, button_signals[RELEASED], 0);
 }
 
 static void
