@@ -378,6 +378,38 @@ out:
     XFree (ret_workarea);
 }
 
+static gboolean
+gdk_x11_screen_monitor_has_fullscreen_window (GdkScreen *screen,
+                                              gint       monitor)
+{
+  GList *toplevels, *l;
+  GdkWindow *window;
+  gboolean has_fullscreen;
+
+  toplevels = gdk_screen_get_toplevel_windows (screen);
+
+  has_fullscreen = FALSE;
+
+  for (l = toplevels; l; l = l->next)
+    {
+      window = l->data;
+
+      if ((gdk_window_get_state (window) & GDK_WINDOW_STATE_FULLSCREEN) == 0)
+        continue;
+
+      if (gdk_window_get_fullscreen_mode (window) == GDK_FULLSCREEN_ON_ALL_MONITORS ||
+          gdk_screen_get_monitor_at_window (screen, window) == monitor)
+        {
+          has_fullscreen = TRUE;
+          break;
+        }
+    }
+
+  g_list_free (toplevels);
+
+  return has_fullscreen;
+}
+
 static void
 gdk_x11_screen_get_monitor_workarea (GdkScreen    *screen,
                                      gint          monitor_num,
@@ -393,7 +425,8 @@ gdk_x11_screen_get_monitor_workarea (GdkScreen    *screen,
    * but the primary monitor. Since that is where the 'desktop
    * chrome' usually lives, this works ok in practice.
    */
-  if (monitor_num == GDK_X11_SCREEN (screen)->primary_monitor)
+  if (monitor_num == GDK_X11_SCREEN (screen)->primary_monitor &&
+      !gdk_x11_screen_monitor_has_fullscreen_window (screen, monitor_num))
     {
       get_work_area (screen, &workarea);
       if (gdk_rectangle_intersect (dest, &workarea, &workarea))
