@@ -845,6 +845,10 @@ gdk_screen_get_monitor_geometry (GdkScreen    *screen,
  * similar popups, to avoid placing them below panels, docks or other
  * desktop components.
  *
+ * Note that not all backends may have a concept of workarea. This
+ * function will return the monitor geometry if a workarea is not
+ * available, or does not apply.
+ *
  * Monitor numbers start at 0. To obtain the number of monitors of
  * @screen, use gdk_screen_get_n_monitors().
  *
