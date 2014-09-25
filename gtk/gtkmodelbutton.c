@@ -675,22 +675,17 @@ out:
 static void
 gtk_model_button_pressed (GtkButton *button)
 {
-  button->priv->button_down = TRUE;
+  GTK_BUTTON_CLASS (gtk_model_button_parent_class)->pressed (button);
+
   gtk_model_button_update_state (GTK_MODEL_BUTTON (button));
-  gtk_widget_queue_draw (GTK_WIDGET (button));
 }
 
 static void
 gtk_model_button_released (GtkButton *button)
 {
-  if (button->priv->button_down)
-    {
-      button->priv->button_down = FALSE;
-      if (button->priv->in_button)
-        gtk_button_clicked (button);
-      gtk_model_button_update_state (GTK_MODEL_BUTTON (button));
-      gtk_widget_queue_draw (GTK_WIDGET (button));
-    }
+  GTK_BUTTON_CLASS (gtk_model_button_parent_class)->released (button);
+
+  gtk_model_button_update_state (GTK_MODEL_BUTTON (button));
 }
 
 static void
