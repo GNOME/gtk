@@ -1354,6 +1354,32 @@ popover_destroy (GtkWindowPopover *popover)
   g_free (popover);
 }
 
+static gboolean
+gtk_window_titlebar_action (GtkWindow      *window,
+                            const GdkEvent *event,
+                            guint           button,
+                            gint            n_press)
+{
+  switch (button)
+    {
+    case GDK_BUTTON_PRIMARY:
+      if (n_press == 2)
+        {
+          _gtk_window_toggle_maximized (window);
+          return TRUE;
+        }
+      return FALSE;
+    case GDK_BUTTON_MIDDLE:
+      gdk_window_lower (gtk_widget_get_window (GTK_WIDGET (window)));
+      return TRUE;
+    case GDK_BUTTON_SECONDARY:
+      gtk_window_do_popup (window, (GdkEventButton*) event);
+      return TRUE;
+    default:
+      return FALSE;
+    }
+}
+
 static void
 multipress_gesture_pressed_cb (GtkGestureMultiPress *gesture,
                                gint                  n_press,
@@ -1383,16 +1409,16 @@ multipress_gesture_pressed_cb (GtkGestureMultiPress *gesture,
 
   if (button == GDK_BUTTON_SECONDARY && region == GTK_WINDOW_REGION_TITLE)
     {
-      gtk_window_do_popup (window, (GdkEventButton*) event);
-      gtk_gesture_set_sequence_state (GTK_GESTURE (gesture),
-                                      sequence, GTK_EVENT_SEQUENCE_CLAIMED);
+      if (gtk_window_titlebar_action (window, event, button, n_press))
+        gtk_gesture_set_sequence_state (GTK_GESTURE (gesture),
+                                        sequence, GTK_EVENT_SEQUENCE_CLAIMED);
       return;
     }
   else if (button == GDK_BUTTON_MIDDLE && region == GTK_WINDOW_REGION_TITLE)
     {
-      gdk_window_lower (gtk_widget_get_window (GTK_WIDGET (window)));
-      gtk_gesture_set_sequence_state (GTK_GESTURE (gesture),
-                                      sequence, GTK_EVENT_SEQUENCE_CLAIMED);
+      if (gtk_window_titlebar_action (window, event, button, n_press))
+        gtk_gesture_set_sequence_state (GTK_GESTURE (gesture),
+                                        sequence, GTK_EVENT_SEQUENCE_CLAIMED);
       return;
     }
   else if (button != GDK_BUTTON_PRIMARY)
@@ -1404,8 +1430,7 @@ multipress_gesture_pressed_cb (GtkGestureMultiPress *gesture,
     {
     case GTK_WINDOW_REGION_CONTENT:
       if (event_widget != widget)
-        gtk_widget_style_get (event_widget, "window-dragging",
-                              &window_drag, NULL);
+        gtk_widget_style_get (event_widget, "window-dragging", &window_drag, NULL);
 
       if (!window_drag)
         {
@@ -1416,7 +1441,7 @@ multipress_gesture_pressed_cb (GtkGestureMultiPress *gesture,
       /* fall thru */
     case GTK_WINDOW_REGION_TITLE:
       if (n_press == 2)
-        _gtk_window_toggle_maximized (window);
+        gtk_window_titlebar_action (window, event, button, n_press);
       if (n_press == 1)
         priv->drag_possible = TRUE;
       break;
