@@ -497,6 +497,9 @@ gtk_inspector_widget_tree_scan (GtkInspectorWidgetTree *wt,
   if (g_application_get_default ())
     gtk_inspector_widget_tree_append_object (wt, G_OBJECT (g_application_get_default ()), NULL, NULL);
 
+  if (window)
+    gtk_inspector_widget_tree_append_object (wt, G_OBJECT (window), NULL, NULL);
+
   inspector_win = gtk_widget_get_toplevel (GTK_WIDGET (wt));
   toplevels = gtk_window_list_toplevels ();
   for (l = toplevels; l; l = l->next)
@@ -508,8 +511,6 @@ gtk_inspector_widget_tree_scan (GtkInspectorWidgetTree *wt,
         gtk_inspector_widget_tree_append_object (wt, G_OBJECT (l->data), NULL, NULL);
     }
   g_list_free (toplevels);
-
-  gtk_inspector_widget_tree_append_object (wt, G_OBJECT (window), NULL, NULL);
 
   gtk_tree_view_columns_autosize (GTK_TREE_VIEW (wt));
 }

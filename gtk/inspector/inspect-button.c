@@ -212,9 +212,6 @@ select_widget (GtkInspectorWindow *iw,
 
   gtk_notebook_set_current_page (GTK_NOTEBOOK (iw->top_notebook), 0);
 
-  gtk_inspector_widget_tree_scan (GTK_INSPECTOR_WIDGET_TREE (iw->widget_tree),
-                                  gtk_widget_get_toplevel (widget));
-
   gtk_inspector_widget_tree_select_object (GTK_INSPECTOR_WIDGET_TREE (iw->widget_tree),
                                            G_OBJECT (widget));
 }

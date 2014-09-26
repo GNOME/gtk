@@ -153,35 +153,13 @@ gtk_inspector_window_init (GtkInspectorWindow *iw)
 }
 
 static void
-gtk_inspector_window_select_initially (GtkInspectorWindow *iw)
-{
-  GList *toplevels, *l;
-  GtkWidget *widget;
-
-  toplevels = gtk_window_list_toplevels ();
-  widget = NULL;
-  for (l = toplevels; l; l = l->next)
-    {
-      if (gtk_widget_get_mapped (GTK_WIDGET (l->data)) &&
-          GTK_IS_WINDOW (l->data) &&
-          !GTK_INSPECTOR_IS_WINDOW (l->data))
-        {
-          widget = l->data;
-          break;
-        }
-    }
-  g_list_free (toplevels);
-
-  if (widget)
-    gtk_inspector_widget_tree_scan (GTK_INSPECTOR_WIDGET_TREE (iw->widget_tree), widget);
-}
-
-static void
 gtk_inspector_window_constructed (GObject *object)
 {
-  gtk_inspector_window_select_initially (GTK_INSPECTOR_WINDOW (object));
+  GtkInspectorWindow *iw = GTK_INSPECTOR_WINDOW (object);
 
   G_OBJECT_CLASS (gtk_inspector_window_parent_class)->constructed (object);
+
+  gtk_inspector_widget_tree_scan (GTK_INSPECTOR_WIDGET_TREE (iw->widget_tree), NULL);
 }
 
 static void
