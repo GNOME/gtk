@@ -66,8 +66,8 @@
  * ## States of a sequence # {#touch-sequence-states}
  *
  * Whenever input interaction happens, a single event may trigger a cascade of
- * #GtkGestures, both across the parents of the widget receiving the
- * event and parallelly within an individual widget. It is a responsibility of the
+ * #GtkGestures, both across the parents of the widget receiving the event and
+ * in parallel within an individual widget. It is a responsibility of the
  * widgets using those gestures to set the state of touch sequences accordingly
  * in order to enable cooperation of gestures around the #GdkEventSequences
  * triggering those.
