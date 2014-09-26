@@ -1,3 +1,3 @@
 #!/usr/bin/bash
 
-sass --update .
+bundle exec sass --update --sourcemap=none .
