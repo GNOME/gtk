@@ -2502,15 +2502,9 @@ propagate_event (GtkWidget *widget,
           if (widget != window && gtk_widget_has_grab (widget))
             handled_event = propagate_func (widget, event);
 
-          if (!handled_event)
-            {
-              window = gtk_widget_get_toplevel (widget);
-              if (GTK_IS_WINDOW (window))
-                {
-                  if (gtk_widget_is_sensitive (window))
-                    handled_event = propagate_func (window, event);
-                }
-            }
+          if (!handled_event &&
+              gtk_widget_is_sensitive (window))
+            handled_event = propagate_func (window, event);
 
           g_object_unref (widget);
           return handled_event;
