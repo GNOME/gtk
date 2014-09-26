@@ -1429,6 +1429,15 @@ G_GNUC_END_IGNORE_DEPRECATIONS
 				G_TYPE_ENUM, GTK_DELETE_PARAGRAPH_ENDS,
 				G_TYPE_INT, -1);
 
+  gtk_binding_entry_add_signal (binding_set, GDK_KEY_u, GDK_CONTROL_MASK,
+                                "delete-from-cursor", 2,
+                                G_TYPE_ENUM, GTK_DELETE_PARAGRAPH_ENDS,
+                                G_TYPE_INT, -1);
+  gtk_binding_entry_add_signal (binding_set, GDK_KEY_k, GDK_CONTROL_MASK,
+                                "delete-from-cursor", 2,
+                                G_TYPE_ENUM, GTK_DELETE_PARAGRAPH_ENDS,
+                                G_TYPE_INT, 1);
+
   /* Cut/copy/paste */
 
   gtk_binding_entry_add_signal (binding_set, GDK_KEY_x, GDK_CONTROL_MASK,
