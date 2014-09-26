@@ -1542,7 +1542,6 @@ add_gtk_settings_info (GtkInspectorPropEditor *editor)
   GObject *object;
   const gchar *name;
   GtkWidget *row;
-  GtkWidget *label;
   const gchar *source;
 
   object = editor->priv->object;
