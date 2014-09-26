@@ -291,24 +291,29 @@ GtkWidget*
 gtk_test_find_label (GtkWidget    *widget,
                      const gchar  *label_pattern)
 {
+  GtkWidget *label = NULL;
+
   if (GTK_IS_LABEL (widget))
     {
       const gchar *text = gtk_label_get_text (GTK_LABEL (widget));
       if (g_pattern_match_simple (label_pattern, text))
         return widget;
     }
+
   if (GTK_IS_CONTAINER (widget))
     {
-      GList *node, *list = gtk_container_get_children (GTK_CONTAINER (widget));
+      GList *node, *list;
+
+      list = gtk_container_get_children (GTK_CONTAINER (widget));
       for (node = list; node; node = node->next)
         {
-          GtkWidget *label = gtk_test_find_label (node->data, label_pattern);
+          label = gtk_test_find_label (node->data, label_pattern);
           if (label)
-            return label;
+            break;
         }
       g_list_free (list);
     }
-  return NULL;
+  return label;
 }
 
 static GList*
