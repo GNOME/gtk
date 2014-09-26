@@ -2497,8 +2497,8 @@ gtk_range_multipress_gesture_pressed (GtkGestureMultiPress *gesture,
     {
       gboolean handled;
 
+      gtk_gesture_set_state (priv->multipress_gesture, GTK_EVENT_SEQUENCE_CLAIMED);
       g_signal_emit_by_name (widget, "popup-menu", &handled);
-
       return;
     }
 
@@ -2706,8 +2706,7 @@ update_slider_position (GtkRange *range,
         }
     }
 
-  g_signal_emit (range, signals[CHANGE_VALUE], 0, GTK_SCROLL_JUMP, new_value,
-                 &handled);
+  g_signal_emit (range, signals[CHANGE_VALUE], 0, GTK_SCROLL_JUMP, new_value, &handled);
 }
 
 static void
