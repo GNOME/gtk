@@ -13,8 +13,8 @@
   -GtkTreeView-horizontal-separator: 4;
   -GtkMenu-horizontal-padding: 0;
   -GtkMenu-vertical-padding: 0;
-  -GtkWidget-link-color: #184472;
-  -GtkWidget-visited-link-color: #184472;
+  -GtkWidget-link-color: #4a90d9;
+  -GtkWidget-visited-link-color: #2a76c6;
   -GtkWidget-focus-padding: 2;
   -GtkWidget-focus-line-width: 1;
   -GtkDialog-button-spacing: 4;
@@ -1189,19 +1189,27 @@ GtkCalendar.header GtkColorButton.button.titlebutton {
 GtkCalendar.header .button.titlebutton:link, .button:visited, .header-bar .button.titlebutton:visited,
 .titlebar .button.titlebutton:visited,
 GtkCalendar.header .button.titlebutton:visited {
-  color: #215d9c; }
-  *:link:hover, .button:hover:link, .button:hover:visited, *:link:active, .button:active:link, .button:active:visited, *:link:visited, .button:visited, .header-bar .button.titlebutton:visited,
+  color: #4a90d9; }
+  *:link:visited, .button:visited, .header-bar .button.titlebutton:visited,
   .titlebar .button.titlebutton:visited,
   GtkCalendar.header .button.titlebutton:visited {
-    color: #7397bc; }
-    *:selected *:link:hover, *:selected .button:hover:link, *:selected .button:hover:visited, *:selected *:link:active, *:selected .button:active:link, *:selected .button:active:visited, *:selected *:link:visited, *:selected .button:visited {
+    color: #2a76c6; }
+    *:selected *:link:visited, *:selected .button:visited {
+      color: #a6bed7; }
+  *:link:hover, .button:hover:link, .button:hover:visited {
+    color: #74aae2; }
+    *:selected *:link:hover, *:selected .button:hover:link, *:selected .button:hover:visited {
+      color: #e8eef5; }
+  *:link:active, .button:active:link, .button:active:visited {
+    color: #4a90d9; }
+    *:selected *:link:active, *:selected .button:active:link, *:selected .button:active:visited {
       color: #d2deeb; }
   *:link:backdrop, .button:backdrop:link, .button:backdrop:visited, *:link:backdrop:hover, .button:backdrop:hover:link, .button:backdrop:hover:visited, *:link:backdrop:hover:selected, .button:backdrop:hover:selected:link, .button:backdrop:hover:selected:visited, .titlebar.selection-mode .subtitle:backdrop:hover:link, GtkCalendar.selection-mode.header .subtitle:backdrop:hover:link,
   .header-bar.selection-mode .subtitle:backdrop:hover:link {
     color: #215d9c; }
   *:link:selected, .button:selected:link, .button:selected:visited, .titlebar.selection-mode .subtitle:link, GtkCalendar.selection-mode.header .subtitle:link,
   .header-bar.selection-mode .subtitle:link, *:selected *:link, *:selected .button:link, *:selected .button:visited {
-    color: #ffffff; }
+    color: #d2deeb; }
 
 .button:link, .header-bar .button.titlebutton:link,
 .titlebar .button.titlebutton:link,
@@ -1887,7 +1895,7 @@ GtkTreeView.view.progressbar {
     padding: 4px 8px; }
     .menubar > .menuitem:hover {
       box-shadow: inset 0 -3px #215d9c;
-      color: #3583d5; }
+      color: #4a90d9; }
     .menubar > .menuitem:insensitive {
       color: #939695;
       box-shadow: none; }
