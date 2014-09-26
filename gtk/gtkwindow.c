@@ -11675,13 +11675,6 @@ warn_response (GtkDialog *dialog,
     }
 }
 
-static gboolean
-show_dialog (gpointer data)
-{
-  gtk_widget_show (GTK_WIDGET (data));
-  return G_SOURCE_REMOVE;
-}
-
 static void
 gtk_window_set_debugging (gboolean enable,
                           gboolean select,
@@ -11720,7 +11713,7 @@ gtk_window_set_debugging (gboolean enable,
     {
       gtk_window_present (GTK_WINDOW (inspector_window));
       if (dialog)
-        g_timeout_add (200, show_dialog, dialog);
+        gtk_widget_show (dialog);
 
       if (select)
         gtk_inspector_window_select_widget_under_pointer (GTK_INSPECTOR_WINDOW (inspector_window));
