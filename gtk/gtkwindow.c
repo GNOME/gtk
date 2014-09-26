@@ -416,7 +416,7 @@ static void gtk_window_real_set_focus     (GtkWindow         *window,
 static void gtk_window_real_activate_default (GtkWindow         *window);
 static void gtk_window_real_activate_focus   (GtkWindow         *window);
 static void gtk_window_keys_changed          (GtkWindow         *window);
-static void gtk_window_enable_debugging      (GtkWindow         *window,
+static gboolean gtk_window_enable_debugging  (GtkWindow         *window,
                                               gboolean           toggle);
 static gint gtk_window_draw                  (GtkWidget         *widget,
 					      cairo_t           *cr);
@@ -1208,6 +1208,8 @@ gtk_window_class_init (GtkWindowClass *klass)
    *
    * The default bindings for this signal are Ctrl-Shift-I
    * and Ctrl-Shift-D.
+   *
+   * Return: %TRUE if the key binding was handled
    */
   window_signals[ENABLE_DEBUGGING] =
     g_signal_new (I_("enable-debugging"),
@@ -1215,8 +1217,8 @@ gtk_window_class_init (GtkWindowClass *klass)
                   G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
                   G_STRUCT_OFFSET (GtkWindowClass, enable_debugging),
                   NULL, NULL,
-                  _gtk_marshal_VOID__BOOLEAN,
-                  G_TYPE_NONE,
+                  _gtk_marshal_BOOLEAN__BOOLEAN,
+                  G_TYPE_BOOLEAN,
                   1, G_TYPE_BOOLEAN);
 
   /*
@@ -11773,14 +11775,14 @@ inspector_keybinding_enabled (gboolean *warn)
   return enabled;
 }
 
-static void
+static gboolean
 gtk_window_enable_debugging (GtkWindow *window,
                              gboolean   toggle)
 {
   gboolean warn;
 
   if (!inspector_keybinding_enabled (&warn))
-    return;
+    return FALSE;
 
   if (toggle)
     {
@@ -11792,6 +11794,8 @@ gtk_window_enable_debugging (GtkWindow *window,
     }
   else
     gtk_window_set_debugging (TRUE, TRUE, warn);
+
+  return TRUE;
 }
 
 void
