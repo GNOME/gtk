@@ -225,20 +225,23 @@ gtk_inspector_classes_list_init (GtkInspectorClassesList *cl)
   gtk_widget_init_template (GTK_WIDGET (cl));
 }
 
-static void remove_dead_object (gpointer data, GObject *dead_object);
+static void gtk_inspector_classes_list_remove_dead_object (gpointer data, GObject *dead_object);
 
 static void
 cleanup_context (GtkInspectorClassesList *cl)
 {
   if (cl->priv->context)
-    g_object_weak_unref (G_OBJECT (cl->priv->context), remove_dead_object, cl);
+    {
+      g_object_weak_unref (G_OBJECT (cl->priv->context),gtk_inspector_classes_list_remove_dead_object, cl);
+      cl->priv->context = NULL;
+    }
 
-  gtk_list_store_clear (cl->priv->model);
-  cl->priv->context = NULL;
+  if (cl->priv->model)
+    gtk_list_store_clear (cl->priv->model);
 }
 
 static void
-remove_dead_object (gpointer data, GObject *dead_object)
+gtk_inspector_classes_list_remove_dead_object (gpointer data, GObject *dead_object)
 {
   GtkInspectorClassesList *cl = data;
 
@@ -267,7 +270,7 @@ gtk_inspector_classes_list_set_object (GtkInspectorClassesList *cl,
 
   cl->priv->context = gtk_widget_get_style_context (GTK_WIDGET (object));
 
-  g_object_weak_ref (G_OBJECT (cl->priv->context), remove_dead_object, cl);
+  g_object_weak_ref (G_OBJECT (cl->priv->context), gtk_inspector_classes_list_remove_dead_object, cl);
 
   hash_context = get_hash_context (cl);
   if (hash_context)
@@ -291,9 +294,22 @@ gtk_inspector_classes_list_set_object (GtkInspectorClassesList *cl,
 }
 
 static void
+gtk_inspector_classes_list_finalize (GObject *object)
+{
+  GtkInspectorClassesList *cl = GTK_INSPECTOR_CLASSES_LIST (object);
+
+  cleanup_context (cl);
+  
+  G_OBJECT_CLASS (gtk_inspector_classes_list_parent_class)->finalize (object);
+}
+
+static void
 gtk_inspector_classes_list_class_init (GtkInspectorClassesListClass *klass)
 {
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
+  GObjectClass *object_class = G_OBJECT_CLASS (klass);
+
+  object_class->finalize = gtk_inspector_classes_list_finalize;
 
   gtk_widget_class_set_template_from_resource (widget_class, "/org/gtk/inspector/classes-list.ui");
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorClassesList, model);

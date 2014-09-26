@@ -67,6 +67,9 @@ struct _GtkInspectorCssEditorPrivate
   guint timeout;
 };
 
+static void gtk_inspector_css_editor_remove_dead_object (gpointer  data,
+                                                         GObject  *dead_object);
+
 G_DEFINE_TYPE_WITH_PRIVATE (GtkInspectorCssEditor, gtk_inspector_css_editor, GTK_TYPE_BOX)
 
 static void
@@ -334,6 +337,30 @@ create_provider (GtkInspectorCssEditor *ce)
 }
 
 static void
+destroy_provider (GtkInspectorCssEditor *ce)
+{
+  if (ce->priv->global)
+    {
+      gtk_style_context_remove_provider_for_screen (gdk_screen_get_default (),
+                                                    GTK_STYLE_PROVIDER (ce->priv->provider));
+      g_object_unref (ce->priv->provider);
+      ce->priv->provider = NULL;
+    }
+  else if (ce->priv->context)
+    {
+      GtkStyleProvider *provider;
+
+      provider = g_object_get_data (G_OBJECT (ce->priv->context),
+                                    GTK_INSPECTOR_CSS_EDITOR_PROVIDER);
+      gtk_style_context_remove_provider (ce->priv->context, provider);
+      g_object_set_data (G_OBJECT (ce->priv->context),
+                         GTK_INSPECTOR_CSS_EDITOR_PROVIDER,
+                         NULL);
+    }
+}
+  
+
+static void
 gtk_inspector_css_editor_init (GtkInspectorCssEditor *ce)
 {
   ce->priv = gtk_inspector_css_editor_get_instance_private (ce);
@@ -398,6 +425,16 @@ finalize (GObject *object)
   if (ce->priv->timeout != 0)
     g_source_remove (ce->priv->timeout);
 
+  destroy_provider (ce);
+  if (ce->priv->context)
+    {
+      g_object_weak_unref (G_OBJECT (ce->priv->context), gtk_inspector_css_editor_remove_dead_object, ce);
+      g_object_set_data (G_OBJECT (ce->priv->context),
+                         GTK_INSPECTOR_CSS_EDITOR_TEXT,
+                         NULL);
+      ce->priv->context = NULL;
+    }
+
   G_OBJECT_CLASS (gtk_inspector_css_editor_parent_class)->finalize (object);
 }
 
@@ -427,7 +464,7 @@ gtk_inspector_css_editor_class_init (GtkInspectorCssEditorClass *klass)
 }
 
 static void
-remove_dead_object (gpointer data, GObject *dead_object)
+gtk_inspector_css_editor_remove_dead_object (gpointer data, GObject *dead_object)
 {
   GtkInspectorCssEditor *ce = data;
 
@@ -447,7 +484,7 @@ gtk_inspector_css_editor_set_object (GtkInspectorCssEditor *ce,
 
   if (ce->priv->context)
     {
-      g_object_weak_unref (G_OBJECT (ce->priv->context), remove_dead_object, ce);
+      g_object_weak_unref (G_OBJECT (ce->priv->context), gtk_inspector_css_editor_remove_dead_object, ce);
       text = get_current_text (GTK_TEXT_BUFFER (ce->priv->text));
       g_object_set_data_full (G_OBJECT (ce->priv->context),
                               GTK_INSPECTOR_CSS_EDITOR_TEXT,
@@ -472,7 +509,7 @@ gtk_inspector_css_editor_set_object (GtkInspectorCssEditor *ce,
   set_initial_text (ce);
   disable_toggled (ce->priv->disable_button, ce);
 
-  g_object_weak_ref (G_OBJECT (ce->priv->context), remove_dead_object, ce);
+  g_object_weak_ref (G_OBJECT (ce->priv->context), gtk_inspector_css_editor_remove_dead_object, ce);
 }
 
 // vim: set et sw=2 ts=2:

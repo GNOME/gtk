@@ -88,7 +88,7 @@ typedef struct
 } ObjectData;
 
 static void
-remove_dead_object (gpointer data, GObject *dead_object)
+gtk_widget_tree_remove_dead_object (gpointer data, GObject *dead_object)
 {
   ObjectData *od = data;
 
@@ -113,7 +113,7 @@ object_data_free (gpointer data)
   gtk_tree_row_reference_free (od->row);
 
   if (od->object)
-    g_object_weak_unref (od->object, remove_dead_object, od);
+    g_object_weak_unref (od->object, gtk_widget_tree_remove_dead_object, od);
 
   g_free (od);
 }
@@ -333,7 +333,7 @@ gtk_inspector_widget_tree_append_object (GtkInspectorWidgetTree *wt,
   gtk_tree_path_free (path);
 
   g_hash_table_insert (wt->priv->iters, object, od);
-  g_object_weak_ref (object, remove_dead_object, od);
+  g_object_weak_ref (object, gtk_widget_tree_remove_dead_object, od);
 
   g_free (address);
 
