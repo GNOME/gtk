@@ -1979,11 +1979,10 @@ gtk_entry_class_init (GtkEntryClass *class)
 				"backspace", 0);
 
   gtk_binding_entry_add_signal (binding_set, GDK_KEY_u, GDK_CONTROL_MASK,
-                                "move-cursor", 3,
-                                GTK_TYPE_MOVEMENT_STEP, GTK_MOVEMENT_BUFFER_ENDS,
-                                G_TYPE_INT, -1,
-				G_TYPE_BOOLEAN, FALSE);
-  gtk_binding_entry_add_signal (binding_set, GDK_KEY_u, GDK_CONTROL_MASK,
+				"delete-from-cursor", 2,
+				G_TYPE_ENUM, GTK_DELETE_PARAGRAPH_ENDS,
+				G_TYPE_INT, -1);
+  gtk_binding_entry_add_signal (binding_set, GDK_KEY_k, GDK_CONTROL_MASK,
 				"delete-from-cursor", 2,
 				G_TYPE_ENUM, GTK_DELETE_PARAGRAPH_ENDS,
 				G_TYPE_INT, 1);
