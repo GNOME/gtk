@@ -7149,6 +7149,11 @@ update_window_style_classes (GtkWindow *window)
     gtk_style_context_add_class (context, "maximized");
   else
     gtk_style_context_remove_class (context, "maximized");
+
+  if (priv->fullscreen)
+    gtk_style_context_add_class (context, "fullscreen");
+  else
+    gtk_style_context_remove_class (context, "fullscreen");
 }
 
 static void
