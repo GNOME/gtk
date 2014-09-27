@@ -226,6 +226,10 @@ static void gtk_range_multipress_gesture_released (GtkGestureMultiPress *gesture
                                                    gdouble               x,
                                                    gdouble               y,
                                                    GtkRange             *range);
+static void gtk_range_drag_gesture_begin          (GtkGestureDrag       *gesture,
+                                                   gdouble               offset_x,
+                                                   gdouble               offset_y,
+                                                   GtkRange             *range);
 static void gtk_range_drag_gesture_update         (GtkGestureDrag       *gesture,
                                                    gdouble               offset_x,
                                                    gdouble               offset_y,
@@ -756,18 +760,26 @@ gtk_range_init (GtkRange *range)
 
   _gtk_orientable_set_style_classes (GTK_ORIENTABLE (range));
 
+  /* Note: Order is important here.
+   * The ::drag-begin handler relies on the state set up by the
+   * multipress ::pressed handler. Gestures are handling events
+   * in the oppposite order in which they are added to their
+   * widget.
+   */
+  priv->drag_gesture = gtk_gesture_drag_new (GTK_WIDGET (range));
+  g_signal_connect (priv->drag_gesture, "drag-begin",
+                    G_CALLBACK (gtk_range_drag_gesture_begin), range);
+  g_signal_connect (priv->drag_gesture, "drag-update",
+                    G_CALLBACK (gtk_range_drag_gesture_update), range);
+  g_signal_connect (priv->drag_gesture, "drag-end",
+                    G_CALLBACK (gtk_range_drag_gesture_end), range);
+
   priv->multipress_gesture = gtk_gesture_multi_press_new (GTK_WIDGET (range));
   gtk_gesture_single_set_button (GTK_GESTURE_SINGLE (priv->multipress_gesture), 0);
   g_signal_connect (priv->multipress_gesture, "pressed",
                     G_CALLBACK (gtk_range_multipress_gesture_pressed), range);
   g_signal_connect (priv->multipress_gesture, "released",
                     G_CALLBACK (gtk_range_multipress_gesture_released), range);
-
-  priv->drag_gesture = gtk_gesture_drag_new (GTK_WIDGET (range));
-  g_signal_connect (priv->drag_gesture, "drag-update",
-                    G_CALLBACK (gtk_range_drag_gesture_update), range);
-  g_signal_connect (priv->drag_gesture, "drag-end",
-                    G_CALLBACK (gtk_range_drag_gesture_end), range);
 
   priv->long_press_gesture = gtk_gesture_long_press_new (GTK_WIDGET (range));
   gtk_gesture_group (priv->drag_gesture, priv->long_press_gesture);
@@ -2621,8 +2633,8 @@ gtk_range_multipress_gesture_pressed (GtkGestureMultiPress *gesture,
         update_slider_position (range, x, y);
     }
 
-  if (priv->grab_location == MOUSE_SLIDER)
-    gtk_gesture_set_state (priv->drag_gesture, GTK_EVENT_SEQUENCE_CLAIMED);
+  if (priv->grab_location == MOUSE_SLIDER);
+    /* leave it to grab-begin to claim the sequence */
   else if (priv->grab_location != MOUSE_OUTSIDE)
     gtk_gesture_set_state (priv->multipress_gesture, GTK_EVENT_SEQUENCE_CLAIMED);
 }
@@ -2907,6 +2919,16 @@ gtk_range_drag_gesture_update (GtkGestureDrag *gesture,
 
   if (priv->autoscroll_mode == GTK_SCROLL_NONE)
     update_slider_position (range, priv->mouse_x, priv->mouse_y);
+}
+
+static void
+gtk_range_drag_gesture_begin (GtkGestureDrag *gesture,
+                              gdouble         offset_x,
+                              gdouble         offset_y,
+                              GtkRange       *range)
+{
+  if (range->priv->grab_location == MOUSE_SLIDER)
+    gtk_gesture_set_state (range->priv->drag_gesture, GTK_EVENT_SEQUENCE_CLAIMED);
 }
 
 static void
