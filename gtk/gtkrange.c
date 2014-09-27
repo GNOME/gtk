@@ -2634,7 +2634,7 @@ gtk_range_multipress_gesture_pressed (GtkGestureMultiPress *gesture,
     }
 
   if (priv->grab_location == MOUSE_SLIDER);
-    /* leave it to grab-begin to claim the sequence */
+    /* leave it to ::drag-begin to claim the sequence */
   else if (priv->grab_location != MOUSE_OUTSIDE)
     gtk_gesture_set_state (priv->multipress_gesture, GTK_EVENT_SEQUENCE_CLAIMED);
 }
