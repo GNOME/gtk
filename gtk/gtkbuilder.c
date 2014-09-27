@@ -1316,7 +1316,8 @@ gtk_builder_add_objects_from_resource (GtkBuilder   *builder,
  * Most users will probably want to use gtk_builder_new_from_string().
  *
  * Upon errors 0 will be returned and @error will be assigned a
- * #GError from the #GTK_BUILDER_ERROR or #G_MARKUP_ERROR domain.
+ * #GError from the #GTK_BUILDER_ERROR, #G_MARKUP_ERROR or
+ * #G_VARIANT_PARSE_ERROR domain.
  *
  * It’s not really reasonable to attempt to handle failures of this
  * call.  The only reasonable thing to do when an error is detected is
