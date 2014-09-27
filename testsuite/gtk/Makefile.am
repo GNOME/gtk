@@ -65,6 +65,7 @@ TEST_PROGS += 			\
 	treemodel		\
 	treepath		\
 	treeview		\
+	typename		\
 	window			\
 	displayclose		\
 	$(NULL)
