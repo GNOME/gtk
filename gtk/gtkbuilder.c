@@ -372,36 +372,43 @@ gtk_builder_get_property (GObject    *object,
  * GtkWindow -> gtk_window_get_type
  * GtkHBox -> gtk_hbox_get_type
  * GtkUIManager -> gtk_ui_manager_get_type
- *
+ * GdkRGB -> gdk_rgb_get_type
  */
+static gchar *
+type_name_mangle (const gchar *name)
+{
+  GString *symbol_name = g_string_new ("");
+  int i;
+
+  for (i = 0; name[i] != '\0'; i++)
+    {
+      /* skip if uppercase, first or previous is uppercase */
+      if ((i > 0 && name[i]  == g_ascii_toupper (name[i]) &&
+                   (name[i-1] != g_ascii_toupper (name[i-1]) || i == 1)) ||
+          (i > 2 && name[i]   == g_ascii_toupper (name[i]) &&
+                    name[i-1] == g_ascii_toupper (name[i-1]) &&
+                    name[i-2] == g_ascii_toupper (name[i-2]) &&
+                    name[i+1] != 0 && name[i+1] != g_ascii_toupper (name[i+1])))
+        g_string_append_c (symbol_name, '_');
+      g_string_append_c (symbol_name, g_ascii_tolower (name[i]));
+    }
+  g_string_append (symbol_name, "_get_type");
+
+  return g_string_free (symbol_name, FALSE);
+}
+
 static GType
 _gtk_builder_resolve_type_lazily (const gchar *name)
 {
   static GModule *module = NULL;
   GTypeGetFunc func;
-  GString *symbol_name = g_string_new ("");
-  char c, *symbol;
-  int i;
+  gchar *symbol;
   GType gtype = G_TYPE_INVALID;
 
   if (!module)
     module = g_module_open (NULL, 0);
   
-  for (i = 0; name[i] != '\0'; i++)
-    {
-      c = name[i];
-      /* skip if uppercase, first or previous is uppercase */
-      if ((c == g_ascii_toupper (c) &&
-           i > 0 && name[i-1] != g_ascii_toupper (name[i-1])) ||
-          (i > 2 && name[i]   == g_ascii_toupper (name[i]) &&
-           name[i-1] == g_ascii_toupper (name[i-1]) &&
-           name[i-2] == g_ascii_toupper (name[i-2])))
-        g_string_append_c (symbol_name, '_');
-      g_string_append_c (symbol_name, g_ascii_tolower (c));
-    }
-  g_string_append (symbol_name, "_get_type");
-  
-  symbol = g_string_free (symbol_name, FALSE);
+  symbol = type_name_mangle (name);
 
   if (g_module_symbol (module, symbol, (gpointer)&func))
     gtype = func ();
