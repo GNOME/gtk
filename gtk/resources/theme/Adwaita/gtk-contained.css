@@ -1780,6 +1780,31 @@ GtkTreeView.view {
       -gtk-icon-source: -gtk-icontheme("pan-down-symbolic"); }
     GtkTreeView.view.expander:backdrop {
       color: #86898a; }
+  GtkTreeView.view.progressbar {
+    color: #ffffff;
+    border-radius: 4px;
+    border-color: #184472;
+    background-image: linear-gradient(to bottom, #4a90d9, #2a76c6);
+    box-shadow: inset 0 1px rgba(255, 255, 255, 0.3), 0 1px rgba(0, 0, 0, 0.2); }
+    GtkTreeView.view.progressbar:selected {
+      color: #4a90d9;
+      box-shadow: none;
+      background-image: linear-gradient(to bottom, #ffffff, #e6e6e6); }
+      GtkTreeView.view.progressbar:selected:backdrop {
+        color: #4a90d9;
+        background-color: #fcfcfc; }
+    GtkTreeView.view.progressbar:backdrop {
+      color: #fcfcfc;
+      background-image: none;
+      box-shadow: none; }
+  GtkTreeView.view.trough {
+    background-color: rgba(46, 52, 54, 0.1);
+    border-radius: 4px; }
+    GtkTreeView.view.trough:selected {
+      background-color: rgba(255, 255, 255, 0.3);
+      border-width: 1px 0;
+      border-style: solid;
+      border-color: #4a90d9; }
 
 column-header .button, column-header .header-bar .button.titlebutton, .header-bar column-header .button.titlebutton,
 column-header .titlebar .button.titlebutton,
@@ -1857,24 +1882,6 @@ GtkCalendar.header column-header .button.titlebutton, column-header .button:hove
     column-header .button:backdrop:insensitive {
       border-color: #ededed;
       background-image: none; }
-
-GtkTreeView.view.progressbar {
-  color: #ffffff;
-  border-radius: 4px;
-  border-color: #184472;
-  background-image: linear-gradient(to bottom, #4a90d9, #2a76c6);
-  box-shadow: inset 0 1px rgba(255, 255, 255, 0.3), 0 1px rgba(0, 0, 0, 0.2); }
-  GtkTreeView.view.progressbar:selected {
-    color: #4a90d9;
-    box-shadow: none;
-    background-image: linear-gradient(to bottom, #ffffff, #e6e6e6); }
-    GtkTreeView.view.progressbar:selected:backdrop {
-      color: #4a90d9;
-      background-color: #fcfcfc; }
-  GtkTreeView.view.progressbar:backdrop {
-    color: #fcfcfc;
-    background-image: none;
-    box-shadow: none; }
 
 /*********
  * Menus *
