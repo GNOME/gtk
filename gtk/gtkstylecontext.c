@@ -741,11 +741,11 @@ style_values_lookup_for_state (GtkStyleContext *context,
   GtkCssComputedValues *values;
 
   if (gtk_css_node_declaration_get_state (context->priv->info->decl) == state)
-    return style_values_lookup (context);
+    return g_object_ref (style_values_lookup (context));
 
   gtk_style_context_save (context);
   gtk_style_context_set_state (context, state);
-  values = style_values_lookup (context);
+  values = g_object_ref (style_values_lookup (context));
   gtk_style_context_restore (context);
 
   return values;
@@ -1091,6 +1091,7 @@ gtk_style_context_get_property (GtkStyleContext *context,
 
   values = style_values_lookup_for_state (context, state);
   _gtk_style_property_query (prop, value, gtk_style_context_query_func, values);
+  g_object_unref (values);
 }
 
 /**
@@ -2655,6 +2656,8 @@ gtk_style_context_do_invalidate (GtkStyleContext  *context,
 
   g_signal_emit (context, signals[CHANGED], 0);
 
+  g_object_set_data (G_OBJECT (context), "font-cache-for-get_font", NULL);
+
   priv->invalidating_context = NULL;
 }
 
@@ -3179,7 +3182,7 @@ gtk_style_context_get_font (GtkStyleContext *context,
                             GtkStateFlags    state)
 {
   GtkStyleContextPrivate *priv;
-  GtkCssComputedValues *values;
+  GHashTable *hash;
   PangoFontDescription *description, *previous;
 
   g_return_val_if_fail (GTK_IS_STYLE_CONTEXT (context), NULL);
@@ -3187,14 +3190,24 @@ gtk_style_context_get_font (GtkStyleContext *context,
   priv = context->priv;
   g_return_val_if_fail (priv->widget != NULL || priv->widget_path != NULL, NULL);
 
-  values = style_values_lookup_for_state (context, state);
-
   /* Yuck, fonts are created on-demand but we don't return a ref.
    * Do bad things to achieve this requirement */
   gtk_style_context_get (context, state, "font", &description, NULL);
   
-  previous = g_object_get_data (G_OBJECT (values), "font-cache-for-get_font");
+  hash = g_object_get_data (G_OBJECT (context), "font-cache-for-get_font");
 
+  if (hash == NULL)
+    {
+      hash = g_hash_table_new_full (g_direct_hash, g_direct_equal,
+                                    NULL,
+                                    (GDestroyNotify) pango_font_description_free);
+      g_object_set_data_full (G_OBJECT (context),
+                              "font-cache-for-get_font",
+                              hash,
+                              (GDestroyNotify) g_hash_table_unref);
+    }
+
+  previous = g_hash_table_lookup (hash, GUINT_TO_POINTER (state));
   if (previous)
     {
       pango_font_description_merge (previous, description, TRUE);
@@ -3203,10 +3216,7 @@ gtk_style_context_get_font (GtkStyleContext *context,
     }
   else
     {
-      g_object_set_data_full (G_OBJECT (values),
-                              "font-cache-for-get_font",
-                              description,
-                              (GDestroyNotify) pango_font_description_free);
+      g_hash_table_insert (hash, GUINT_TO_POINTER (state), description);
     }
 
   return description;
