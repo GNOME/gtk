@@ -131,7 +131,7 @@ draw_simple_image(GtkStyle       *style,
 	match_data->orientation = GTK_ORIENTATION_HORIZONTAL;
     }
 
-  if (!(match_data->flags & THEME_MATCH_DIRECTION))
+  if (widget && !(match_data->flags & THEME_MATCH_DIRECTION))
     {
       match_data->flags |= THEME_MATCH_DIRECTION;
       match_data->direction = gtk_widget_get_direction (widget);
