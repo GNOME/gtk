@@ -27,6 +27,7 @@ endif
 noinst_PROGRAMS =  $(TEST_PROGS)	\
 	subsurface			\
 	animated-resizing		\
+	animated-revealing		\
 	motion-compression		\
 	scrolling-performance		\
 	simple				\
@@ -174,6 +175,7 @@ endif
 endif
 
 animated_resizing_DEPENDENCIES = $(TEST_DEPS)
+animated_revealing_DEPENDENCIES = $(TEST_DEPS)
 flicker_DEPENDENCIES = $(TEST_DEPS)
 motion_compression_DEPENDENCIES = $(TEST_DEPS)
 scrolling_performance_DEPENDENCIES = $(TEST_DEPS)
@@ -288,6 +290,13 @@ testwindowsize_DEPENDENCIES = $(TEST_DEPS)
 
 animated_resizing_SOURCES = 	\
 	animated-resizing.c	\
+	frame-stats.c		\
+	frame-stats.h		\
+	variable.c		\
+	variable.h
+
+animated_revealing_SOURCES = 	\
+	animated-revealing.c	\
 	frame-stats.c		\
 	frame-stats.h		\
 	variable.c		\
