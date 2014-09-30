@@ -737,7 +737,9 @@ maybe_set_alignment (GtkButton *button,
     return;
 
 G_GNUC_BEGIN_IGNORE_DEPRECATIONS
-  if (GTK_IS_MISC (widget))
+  if (GTK_IS_LABEL (widget))
+    g_object_set (widget, "xalign", priv->xalign, "yalign", priv->yalign, NULL);
+  else if (GTK_IS_MISC (widget))
     gtk_misc_set_alignment (GTK_MISC (widget), priv->xalign, priv->yalign);
   else if (GTK_IS_ALIGNMENT (widget))
     g_object_set (widget, "xalign", priv->xalign, "yalign", priv->yalign, NULL);
