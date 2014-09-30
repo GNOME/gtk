@@ -1421,16 +1421,25 @@ win32_theme_sources = \
 	resources/theme/win32/gtk-win32-xp.css
 
 adwaita_sources = \
+	resources/theme/Adwaita/assets.txt \
 	resources/theme/Adwaita/assets.svg \
-	resources/theme/Adwaita/_colors.scss \
 	resources/theme/Adwaita/_colors-public.scss \
+	resources/theme/Adwaita/_colors.scss \
 	resources/theme/Adwaita/_common.scss \
 	resources/theme/Adwaita/_drawing.scss \
-	resources/theme/Adwaita/gtk-contained.scss \
 	resources/theme/Adwaita/gtk-contained-dark.scss \
+	resources/theme/Adwaita/gtk-contained.scss \
 	resources/theme/Adwaita/parse-sass.sh \
 	resources/theme/Adwaita/render-assets.sh \
-	resources/theme/Adwaita/assets.txt
+	resources/theme/Adwaita/Gemfile \
+	resources/theme/Adwaita/README \
+	resources/theme/Adwaita/gtk-contained.css \
+	resources/theme/Adwaita/gtk-contained-dark.css \
+	resources/theme/Adwaita/gtk.css \
+	resources/theme/Adwaita/gtk-dark.css
+
+Raleigh_sources = \
+	resources/theme/Raleigh/gtk-default.css
 
 resource_files = $(shell $(GLIB_COMPILE_RESOURCES) --sourcedir=$(srcdir)/resources --generate-dependencies $(builddir)/gtk.gresource.xml)
 
@@ -1708,6 +1717,7 @@ gsettings_SCHEMAS = \
 EXTRA_DIST +=                   \
 	$(resource_files)	\
 	$(adwaita_sources)	\
+	$(Raleigh_sources)	\
 	$(win32_theme_sources)	\
 	$(gsettings_SCHEMAS)	\
 	libgtk3.manifest.in	\
