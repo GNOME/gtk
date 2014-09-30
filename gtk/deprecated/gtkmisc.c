@@ -105,7 +105,7 @@ gtk_misc_class_init (GtkMiscClass *class)
 						       0.0,
 						       1.0,
 						       0.5,
-						       GTK_PARAM_READWRITE));
+						       GTK_PARAM_READWRITE|G_PARAM_DEPRECATED));
 
   g_object_class_install_property (gobject_class,
                                    PROP_YALIGN,
@@ -115,7 +115,7 @@ gtk_misc_class_init (GtkMiscClass *class)
 						       0.0,
 						       1.0,
 						       0.5,
-						       GTK_PARAM_READWRITE));
+						       GTK_PARAM_READWRITE|G_PARAM_DEPRECATED));
 
   g_object_class_install_property (gobject_class,
                                    PROP_XPAD,
