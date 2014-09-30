@@ -59,9 +59,9 @@ The recommended build order for these dependencies:
  as described in the README.txt file in the build/win32/vs10 folder)
 -zlib
 -libpng
--(for GDK-Pixbuf, if not using GDI+) IJG JPEG
+-(for GDK-Pixbuf, if not using GDI+) IJG JPEG or libjpeg-turbo
 -(for GDK-Pixbuf, if not using GDI+) libtiff
- [libtiff requires zlib and IJG JPEG]
+ [libtiff requires zlib and IJG JPEG or libjpeg-turbo]
 -(for GDK-Pixbuf, if not using GDI+) jasper [jpeg-2000 library]
 -(optional for GLib) PCRE (version 8.12 or later, use of CMake to
   build PCRE is recommended-see build/win32/vs10/README.txt of GLib)
@@ -80,6 +80,11 @@ built DLLs go into <root>\vs10\<PlatformName>\bin, built LIBs into
 <root>\vs10\<PlatformName>\include\gtk-3.0. This is then from where
 project files higher in the stack are supposed to look for them, not
 from a specific GLib source tree.
+
+Please note, as GTK+ uses the Adwaita theme for all platforms by default,
+most icons used are not included with GTK+ (which *are* needed), so please see
+https://live.gnome.org/GTK%2B/Win32/MSVCCompilationOfGTKStack (under the
+GTK+ section) on how to get those icons set up for use with GTK+.
 
 *About the dependencies marked with *: These dependencies are optional
  as those are not compulsory components for building and running GTK+
