@@ -12,22 +12,22 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+.HEAD.he\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-09-23 17:21+0300\n"
-"PO-Revision-Date: 2014-09-23 17:22+0300\n"
-"Last-Translator: Yosef Or Boczko <yoseforb@gmail.com>\n"
+"POT-Creation-Date: 2014-09-30 13:42+0300\n"
+"PO-Revision-Date: 2014-09-30 13:57+0300\n"
+"Last-Translator: Yosef Or Boczko <yoseforb@gnome.org>\n"
 "Language-Team: עברית <>\n"
 "Language: he\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"Plural-Forms: nplurals=2; plural= (n!=1);\n"
 "X-Generator: Gtranslator 2.91.6\n"
 "X-Project-Style: default\n"
 
 #: ../gdk/broadway/gdkbroadway-server.c:143
 #, c-format
-msgid "broadway display type not supported '%s'"
-msgstr "סוג תצוגת ה־broadway אינה נתמכת „%s“"
+msgid "Broadway display type not supported: %s"
+msgstr "סוג תצוגת ה־broadway אינה נתמכת: %s"
 
 #: ../gdk/gdk.c:165
 #, c-format
@@ -1111,10 +1111,10 @@ msgstr "_שם הצבע:"
 #: ../gtk/deprecated/gtkcolorsel.c:514
 msgid ""
 "You can enter an HTML-style hexadecimal color value, or simply a color name "
-"such as 'orange' in this entry."
+"such as “orange” in this entry."
 msgstr ""
 "ניתן להזין ערך צבע הקסדצימלי בסגנון HTML, או פשוט לכתוב שם צבע באנגלית כמו "
-"'orange' ברשומה זו."
+"„orange” ברשומה זו."
 
 #: ../gtk/deprecated/gtkcolorsel.c:546
 msgid "_Palette:"
@@ -1126,7 +1126,7 @@ msgstr "גלגל הצבעים"
 
 #: ../gtk/deprecated/gtkcolorsel.c:1070
 msgid ""
-"The previously-selected color, for comparison to the color you're selecting "
+"The previously-selected color, for comparison to the color you’re selecting "
 "now. You can drag this color to a palette entry, or select this color as "
 "current by dragging it to the other color swatch alongside."
 msgstr ""
@@ -1135,18 +1135,18 @@ msgstr ""
 
 #: ../gtk/deprecated/gtkcolorsel.c:1076
 msgid ""
-"The color you've chosen. You can drag this color to a palette entry to save "
+"The color you’ve chosen. You can drag this color to a palette entry to save "
 "it for use in the future."
 msgstr "הצבע שנבחר. ניתן לגרור צבע זה לרשומת פלטה כדי לשמור אותו לשימוש בעתיד."
 
 #: ../gtk/deprecated/gtkcolorsel.c:1082
 msgid ""
-"The previously-selected color, for comparison to the color you're selecting "
+"The previously-selected color, for comparison to the color you’re selecting "
 "now."
 msgstr "הצבע הקודם שנבחר, להשוואה עם הצבע שנבחר כעת."
 
 #: ../gtk/deprecated/gtkcolorsel.c:1086
-msgid "The color you've chosen."
+msgid "The color you’ve chosen."
 msgstr "הצבע שנבחר."
 
 #: ../gtk/deprecated/gtkcolorsel.c:1490
@@ -1156,10 +1156,10 @@ msgstr "_שמירת הצבע כאן"
 #: ../gtk/deprecated/gtkcolorsel.c:1694
 msgid ""
 "Click this palette entry to make it the current color. To change this entry, "
-"drag a color swatch here or right-click it and select \"Save color here.\""
+"drag a color swatch here or right-click it and select “Save color here.”"
 msgstr ""
 "יש ללחוץ על ערך הפלטה כדי להפוך אותו לצבע הנוכחי. כדי לשנות רשומה זו, יש "
-"לגרור פיסת צבע לכאן או ללחוץ לחיצה ימנית ולבחור ב־\"שמור צבע כאן\"."
+"לגרור פיסת צבע לכאן או ללחוץ לחיצה ימנית ולבחור ב„שמור צבע כאן”."
 
 #: ../gtk/deprecated/gtkcolorseldialog.c:191
 #: ../gtk/deprecated/gtkfontsel.c:1689 ../gtk/gtkfilechooserbutton.c:794
@@ -1167,8 +1167,8 @@ msgstr ""
 #: ../gtk/gtkmessagedialog.c:957 ../gtk/gtkmountoperation.c:543
 #: ../gtk/gtkpagesetupunixdialog.c:196 ../gtk/gtkprintbackend.c:763
 #: ../gtk/gtkprinteroptionwidget.c:545 ../gtk/gtkprintunixdialog.c:665
-#: ../gtk/gtkprintunixdialog.c:733 ../gtk/gtkwindow.c:11660
-#: ../gtk/inspector/css-editor.c:195
+#: ../gtk/gtkprintunixdialog.c:733 ../gtk/gtkwindow.c:11708
+#: ../gtk/inspector/css-editor.c:198
 #: ../gtk/resources/ui/gtkappchooserdialog.ui.h:2
 #: ../gtk/resources/ui/gtkassistant.ui.h:5
 #: ../gtk/resources/ui/gtkcolorchooserdialog.ui.h:2
@@ -1222,7 +1222,7 @@ msgstr "ה_חלה"
 
 #: ../gtk/deprecated/gtkfontsel.c:1698 ../gtk/gtkmessagedialog.c:936
 #: ../gtk/gtkmessagedialog.c:958 ../gtk/gtkprintbackend.c:764
-#: ../gtk/gtkwindow.c:11661 ../gtk/inspector/classes-list.c:125
+#: ../gtk/gtkwindow.c:11709 ../gtk/inspector/classes-list.c:125
 msgid "_OK"
 msgstr "_אישור"
 
@@ -1649,7 +1649,7 @@ msgid "Other Applications"
 msgstr "יישומים אחרים"
 
 #: ../gtk/gtkapplicationwindow.c:322 ../gtk/gtkprintoperation-unix.c:481
-#: ../gtk/gtkprintoperation-win32.c:1452 ../gtk/inspector/prop-editor.c:1569
+#: ../gtk/gtkprintoperation-win32.c:1452 ../gtk/inspector/prop-editor.c:1568
 msgid "Application"
 msgstr "יישום"
 
@@ -1675,12 +1675,12 @@ msgstr "Element <%s> not allowed at toplevel"
 
 #: ../gtk/gtkbuilder-menus.c:317
 #, c-format
-msgid "text may not appear inside <%s>"
+msgid "Text may not appear inside <%s>"
 msgstr "ייתכן שהטקסט לא יופיע בתוך <%s>"
 
 #: ../gtk/gtkbuilderparser.c:340
 #, c-format
-msgid "Invalid object type `%s' on line %d"
+msgid "Invalid object type '%s' on line %d"
 msgstr "סוג העצם '%s' שבשורה %d לא תקין"
 
 #: ../gtk/gtkbuilderparser.c:360
@@ -1700,18 +1700,18 @@ msgstr "מאפיין לא תקין: %s.%s בשורה %d"
 
 #: ../gtk/gtkbuilderparser.c:775
 #, c-format
-msgid "Invalid signal `%s' for type `%s' on line %d"
+msgid "Invalid signal '%s' for type '%s' on line %d"
 msgstr "אות לא תקין '%s' לסוג '%s' בשורה %d"
 
 #: ../gtk/gtkbuilderparser.c:1067
 #, c-format
-msgid "Invalid root element: '%s'"
-msgstr "רכיב שורש בלתי תקני: '%s'"
+msgid "Invalid root element: <%s>"
+msgstr "רכיב שורש בלתי תקני: <%s>"
 
 #: ../gtk/gtkbuilderparser.c:1110
 #, c-format
-msgid "Unhandled tag: '%s'"
-msgstr "תגית בלתי מטופלת: '%s'"
+msgid "Unhandled tag: <%s>"
+msgstr "תגית בלתי מטופלת: <%s>"
 
 #. Translate to calendar:YM if you want years to be displayed
 #. * before months; otherwise translate to calendar:MY.
@@ -1820,8 +1820,8 @@ msgstr "מאיץ חדש…"
 #: ../gtk/gtkcellrendererprogress.c:376 ../gtk/gtkcellrendererprogress.c:469
 #, c-format
 msgctxt "progress bar label"
-msgid "%d %%"
-msgstr "%d %%"
+msgid "%d %%"
+msgstr "%d %%"
 
 #: ../gtk/gtkcolorbutton.c:183 ../gtk/gtkcolorbutton.c:383
 msgid "Pick a Color"
@@ -2127,30 +2127,30 @@ msgstr "_ימין:"
 msgid "Paper Margins"
 msgstr "שולי נייר"
 
-#: ../gtk/gtkentry.c:9575 ../gtk/gtkentry.c:9728 ../gtk/gtklabel.c:6530
+#: ../gtk/gtkentry.c:9584 ../gtk/gtkentry.c:9737 ../gtk/gtklabel.c:6587
 #: ../gtk/gtktextview.c:8841 ../gtk/gtktextview.c:9029
 msgid "Cu_t"
 msgstr "_גזירה"
 
-#: ../gtk/gtkentry.c:9579 ../gtk/gtkentry.c:9731 ../gtk/gtklabel.c:6531
+#: ../gtk/gtkentry.c:9588 ../gtk/gtkentry.c:9740 ../gtk/gtklabel.c:6588
 #: ../gtk/gtktextview.c:8845 ../gtk/gtktextview.c:9033
 msgid "_Copy"
 msgstr "ה_עתקה"
 
-#: ../gtk/gtkentry.c:9583 ../gtk/gtkentry.c:9734 ../gtk/gtklabel.c:6532
+#: ../gtk/gtkentry.c:9592 ../gtk/gtkentry.c:9743 ../gtk/gtklabel.c:6589
 #: ../gtk/gtktextview.c:8847 ../gtk/gtktextview.c:9035
 msgid "_Paste"
 msgstr "ה_דבקה"
 
-#: ../gtk/gtkentry.c:9586 ../gtk/gtklabel.c:6534 ../gtk/gtktextview.c:8850
+#: ../gtk/gtkentry.c:9595 ../gtk/gtklabel.c:6591 ../gtk/gtktextview.c:8850
 msgid "_Delete"
 msgstr "מ_חיקה"
 
-#: ../gtk/gtkentry.c:9597 ../gtk/gtklabel.c:6543 ../gtk/gtktextview.c:8864
+#: ../gtk/gtkentry.c:9606 ../gtk/gtklabel.c:6600 ../gtk/gtktextview.c:8864
 msgid "Select _All"
 msgstr "בחירת ה_כול"
 
-#: ../gtk/gtkentry.c:10789
+#: ../gtk/gtkentry.c:10798
 msgid "Caps Lock is on"
 msgstr "ה־Caps Lock פעיל"
 
@@ -2289,7 +2289,7 @@ msgstr "אתמול ב־%-I:%M %P"
 
 #. Translators: We don't know whether this printer is
 #. * available to print to.
-#: ../gtk/gtkfilechooserwidget.c:3960 ../gtk/inspector/prop-editor.c:1572
+#: ../gtk/gtkfilechooserwidget.c:3960 ../gtk/inspector/prop-editor.c:1571
 #: ../modules/printbackends/cloudprint/gtkprintbackendcloudprint.c:748
 msgid "Unknown"
 msgstr "לא ידוע"
@@ -2319,7 +2319,7 @@ msgstr "לא ניתן להתחיל את תהליך החיפוש"
 
 #: ../gtk/gtkfilechooserwidget.c:6047
 msgid ""
-"The program was not able to create a connection to the indexer daemon.  "
+"The program was not able to create a connection to the indexer daemon. "
 "Please make sure it is running."
 msgstr "התכנית לא הצליחה ליצור חיבור אל סוכן האינדקס. יש לוודא כי הוא פעיל."
 
@@ -2349,7 +2349,7 @@ msgstr "בחירת גופן"
 #. Translators, these strings are names for various 'standard' cover
 #. * pages that the printing system may support.
 #.
-#: ../gtk/gtkfontbutton.c:1152 ../gtk/inspector/gestures.c:127
+#: ../gtk/gtkfontbutton.c:1155 ../gtk/inspector/gestures.c:127
 #: ../gtk/inspector/prop-editor.c:1202 ../gtk/inspector/size-groups.c:251
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:4958
 msgid "None"
@@ -2359,7 +2359,7 @@ msgstr "ללא"
 msgid "Application menu"
 msgstr "תפריט יישום"
 
-#: ../gtk/gtkheaderbar.c:476 ../gtk/gtkwindow.c:8381
+#: ../gtk/gtkheaderbar.c:476 ../gtk/gtkwindow.c:8436
 msgid "Close"
 msgstr "סגירה"
 
@@ -2411,12 +2411,12 @@ msgid "Error"
 msgstr "שגיאה"
 
 #. Open Link
-#: ../gtk/gtklabel.c:6511
+#: ../gtk/gtklabel.c:6568
 msgid "_Open Link"
 msgstr "_פתיחת קישור"
 
 #. Copy Link Address
-#: ../gtk/gtklabel.c:6520
+#: ../gtk/gtklabel.c:6577
 msgid "Copy _Link Address"
 msgstr "העתקת כתובת ה_קישור"
 
@@ -2658,8 +2658,8 @@ msgstr "לא ניתן לסיים את התהליך בעל המזהה %d: ‏%s"
 msgid "Page %u"
 msgstr "עמוד %u"
 
-#: ../gtk/gtkpagesetup.c:644 ../gtk/gtkpapersize.c:850
-#: ../gtk/gtkpapersize.c:890
+#: ../gtk/gtkpagesetup.c:644 ../gtk/gtkpapersize.c:875
+#: ../gtk/gtkpapersize.c:915
 msgid "Not a valid page setup file"
 msgstr "קובץ הגדרות עמוד לא תקין"
 
@@ -2749,8 +2749,8 @@ msgstr "פתיחת האשפה"
 #: ../gtk/gtkplacessidebar.c:1054 ../gtk/gtkplacessidebar.c:1082
 #: ../gtk/gtkplacessidebar.c:1290
 #, c-format
-msgid "Mount and open %s"
-msgstr "לעגן ולפתוח את %s"
+msgid "Mount and open “%s”"
+msgstr "לעגן ולפתוח את „%s”"
 
 #: ../gtk/gtkplacessidebar.c:1163
 msgid "Open the contents of the file system"
@@ -2825,8 +2825,8 @@ msgstr "_נעילת הכונן"
 
 #: ../gtk/gtkplacessidebar.c:2284 ../gtk/gtkplacessidebar.c:3033
 #, c-format
-msgid "Unable to start %s"
-msgstr "לא ניתן להפעיל את %s"
+msgid "Unable to start “%s”"
+msgstr "לא ניתן להפעיל את „%s” "
 
 #: ../gtk/gtkplacessidebar.c:2314
 #, c-format
@@ -2835,24 +2835,28 @@ msgstr "לא ניתן לגשת אל „%s“"
 
 #: ../gtk/gtkplacessidebar.c:2624
 #, c-format
-msgid "Unable to unmount %s"
-msgstr "לא ניתן לנתק את %s"
+msgid "Unable to unmount “%s”"
+msgstr "לא ניתן לנתק את „%s”"
 
 #: ../gtk/gtkplacessidebar.c:2750
 #, c-format
-msgid "Unable to stop %s"
-msgstr "לא ניתן לעצור את %s"
+msgid "Unable to stop “%s”"
+msgstr "לא ניתן לעצור את „%s”"
 
-#: ../gtk/gtkplacessidebar.c:2779 ../gtk/gtkplacessidebar.c:2808
-#: ../gtk/gtkplacessidebar.c:2837
+#: ../gtk/gtkplacessidebar.c:2779
+#, c-format
+msgid "Unable to eject “%s”"
+msgstr "לא ניתן לשלוף את „%s”"
+
+#: ../gtk/gtkplacessidebar.c:2808 ../gtk/gtkplacessidebar.c:2837
 #, c-format
 msgid "Unable to eject %s"
 msgstr "לא ניתן לשלוף את %s"
 
 #: ../gtk/gtkplacessidebar.c:2983
 #, c-format
-msgid "Unable to poll %s for media changes"
-msgstr "לא ניתן לתשאל את %s מהם השינויים במדיה"
+msgid "Unable to poll “%s” for media changes"
+msgstr "לא ניתן לתשאל את „%s” מהם השינויים במדיה"
 
 #: ../gtk/gtkplacessidebar.c:3281
 msgid "Open in New _Tab"
@@ -3135,6 +3139,12 @@ msgstr "מלמטה למעלה"
 msgid "Print"
 msgstr "הדפסה"
 
+#: ../gtk/gtkprogressbar.c:444
+#, c-format
+msgctxt "progress bar label"
+msgid "%.0f %%"
+msgstr "%.0f %%"
+
 #: ../gtk/gtkrecentchooserdefault.c:1077 ../gtk/gtkrecentchooserdefault.c:1114
 #, c-format
 msgid "No item for URI '%s' found"
@@ -3184,8 +3194,8 @@ msgstr "לא נמצאו פריטים"
 
 #: ../gtk/gtkrecentchoosermenu.c:534 ../gtk/gtkrecentchoosermenu.c:590
 #, c-format
-msgid "No recently used resource found with URI `%s'"
-msgstr "לא נמצא משאב שנעשה בו שימוש לאחרונה עם הכתובת `%s'"
+msgid "No recently used resource found with URI '%s'"
+msgstr "לא נמצא משאב שנעשה בו שימוש לאחרונה עם הכתובת '%s'"
 
 #: ../gtk/gtkrecentchoosermenu.c:789
 #, c-format
@@ -3426,14 +3436,14 @@ msgstr "עצמה מלאה"
 #: ../gtk/gtkvolumebutton.c:249
 #, c-format
 msgctxt "volume percentage"
-msgid "%d %%"
-msgstr "%d %%"
+msgid "%d %%"
+msgstr "%d %%"
 
-#: ../gtk/gtkwindow.c:11655
+#: ../gtk/gtkwindow.c:11703
 msgid "Do you want to use GTK+ Inspector?"
 msgstr "האם ברצונך להשתמש במפקח GTK+‎?"
 
-#: ../gtk/gtkwindow.c:11657
+#: ../gtk/gtkwindow.c:11705
 msgid ""
 "GTK+ Inspector is an interactive debugger that lets you explore and modify "
 "the internals of any GTK+ application. Using it may cause the application to "
@@ -3495,29 +3505,29 @@ msgstr "הוספת מחלקה"
 msgid "Restore defaults for this widget"
 msgstr "לשחזר בררת מחדל ליישומון זה"
 
-#: ../gtk/inspector/css-editor.c:86 ../gtk/inspector/css-editor.c:92
+#: ../gtk/inspector/css-editor.c:89 ../gtk/inspector/css-editor.c:95
 msgid "You can type here any CSS rule recognized by GTK+."
 msgstr "ניתן להקליד כאן כל הוראת CSS המוכרת על ידי GTK+‎."
 
-#: ../gtk/inspector/css-editor.c:87 ../gtk/inspector/css-editor.c:93
+#: ../gtk/inspector/css-editor.c:90 ../gtk/inspector/css-editor.c:96
 msgid ""
-"You can temporarily disable this custom CSS by clicking on the \"Pause\" "
+"You can temporarily disable this custom CSS by clicking on the “Pause” "
 "button above."
 msgstr "ניתן להשבית באופן זמני CSS מותאם על ידי לחיצה על הכפתור „השהיה” מעל."
 
-#: ../gtk/inspector/css-editor.c:88
+#: ../gtk/inspector/css-editor.c:91
 msgid "Changes are applied instantly and globally, for the whole application."
 msgstr "שינויים מוחלים מיידית ובכל מקום, לכל היישום."
 
-#: ../gtk/inspector/css-editor.c:94
+#: ../gtk/inspector/css-editor.c:97
 msgid "Changes are applied instantly, only for this selected widget."
 msgstr "שינויים מוחלקים מיידית, רק ליישומון נבחר זה."
 
-#: ../gtk/inspector/css-editor.c:156
+#: ../gtk/inspector/css-editor.c:159
 msgid "Saving CSS failed"
 msgstr "ארע כשל בשמירת CSS"
 
-#: ../gtk/inspector/css-editor.c:196
+#: ../gtk/inspector/css-editor.c:199
 msgid "_Save"
 msgstr "_שמירה"
 
@@ -3661,19 +3671,19 @@ msgstr "קשר:"
 msgid "Setting:"
 msgstr "הגדרה:"
 
-#: ../gtk/inspector/prop-editor.c:1555
+#: ../gtk/inspector/prop-editor.c:1554
 msgid "Source:"
 msgstr "מקור:"
 
-#: ../gtk/inspector/prop-editor.c:1560
+#: ../gtk/inspector/prop-editor.c:1559
 msgid "Default"
 msgstr "ברירת מחדל"
 
-#: ../gtk/inspector/prop-editor.c:1563
+#: ../gtk/inspector/prop-editor.c:1562
 msgid "Theme"
 msgstr "ערכת נושא"
 
-#: ../gtk/inspector/prop-editor.c:1566
+#: ../gtk/inspector/prop-editor.c:1565
 msgid "XSettings"
 msgstr "XSettings"
 
@@ -3917,8 +3927,8 @@ msgstr "asme_f"
 
 #: ../gtk/paper_names_offsets.c:5
 msgctxt "paper size"
-msgid "A0x2"
-msgstr "A0x2"
+msgid "A0×2"
+msgstr "A0×2"
 
 #: ../gtk/paper_names_offsets.c:6
 msgctxt "paper size"
@@ -3927,8 +3937,8 @@ msgstr "A0"
 
 #: ../gtk/paper_names_offsets.c:7
 msgctxt "paper size"
-msgid "A0x3"
-msgstr "A0x3"
+msgid "A0×3"
+msgstr "A0×3"
 
 #: ../gtk/paper_names_offsets.c:8
 msgctxt "paper size"
@@ -3942,13 +3952,13 @@ msgstr "A10"
 
 #: ../gtk/paper_names_offsets.c:10
 msgctxt "paper size"
-msgid "A1x3"
-msgstr "A1x3"
+msgid "A1×3"
+msgstr "A1×3"
 
 #: ../gtk/paper_names_offsets.c:11
 msgctxt "paper size"
-msgid "A1x4"
-msgstr "A1x4"
+msgid "A1×4"
+msgstr "A1×4"
 
 #: ../gtk/paper_names_offsets.c:12
 msgctxt "paper size"
@@ -3957,18 +3967,18 @@ msgstr "A2"
 
 #: ../gtk/paper_names_offsets.c:13
 msgctxt "paper size"
-msgid "A2x3"
-msgstr "A2x3"
+msgid "A2×3"
+msgstr "A2×3"
 
 #: ../gtk/paper_names_offsets.c:14
 msgctxt "paper size"
-msgid "A2x4"
-msgstr "A2x4"
+msgid "A2×4"
+msgstr "A2×4"
 
 #: ../gtk/paper_names_offsets.c:15
 msgctxt "paper size"
-msgid "A2x5"
-msgstr "A2x5"
+msgid "A2×5"
+msgstr "A2×5"
 
 #: ../gtk/paper_names_offsets.c:16
 msgctxt "paper size"
@@ -3982,28 +3992,28 @@ msgstr "ְA3 מוגדל"
 
 #: ../gtk/paper_names_offsets.c:18
 msgctxt "paper size"
-msgid "A3x3"
-msgstr "A3x3"
+msgid "A3×3"
+msgstr "A3×3"
 
 #: ../gtk/paper_names_offsets.c:19
 msgctxt "paper size"
-msgid "A3x4"
-msgstr "A3x4"
+msgid "A3×4"
+msgstr "A3×4"
 
 #: ../gtk/paper_names_offsets.c:20
 msgctxt "paper size"
-msgid "A3x5"
-msgstr "A3x5"
+msgid "A3×5"
+msgstr "A3×5"
 
 #: ../gtk/paper_names_offsets.c:21
 msgctxt "paper size"
-msgid "A3x6"
-msgstr "A3x6"
+msgid "A3×6"
+msgstr "A3×6"
 
 #: ../gtk/paper_names_offsets.c:22
 msgctxt "paper size"
-msgid "A3x7"
-msgstr "A3x7"
+msgid "A3×7"
+msgstr "A3×7"
 
 #: ../gtk/paper_names_offsets.c:23
 msgctxt "paper size"
@@ -4022,38 +4032,38 @@ msgstr "A4 לשונית"
 
 #: ../gtk/paper_names_offsets.c:26
 msgctxt "paper size"
-msgid "A4x3"
-msgstr "A4x3"
+msgid "A4×3"
+msgstr "A4×3"
 
 #: ../gtk/paper_names_offsets.c:27
 msgctxt "paper size"
-msgid "A4x4"
-msgstr "A4x4"
+msgid "A4×4"
+msgstr "A4×4"
 
 #: ../gtk/paper_names_offsets.c:28
 msgctxt "paper size"
-msgid "A4x5"
-msgstr "A4x5"
+msgid "A4×5"
+msgstr "A4×5"
 
 #: ../gtk/paper_names_offsets.c:29
 msgctxt "paper size"
-msgid "A4x6"
-msgstr "A4x6"
+msgid "A4×6"
+msgstr "AB×6"
 
 #: ../gtk/paper_names_offsets.c:30
 msgctxt "paper size"
-msgid "A4x7"
-msgstr "A4x7"
+msgid "A4×7"
+msgstr "A4×7"
 
 #: ../gtk/paper_names_offsets.c:31
 msgctxt "paper size"
-msgid "A4x8"
-msgstr "A4x8"
+msgid "A4×8"
+msgstr "A4×8"
 
 #: ../gtk/paper_names_offsets.c:32
 msgctxt "paper size"
-msgid "A4x9"
-msgstr "A4x9"
+msgid "A4×9"
+msgstr "A4×9"
 
 #: ../gtk/paper_names_offsets.c:33
 msgctxt "paper size"
@@ -4352,58 +4362,58 @@ msgstr "מעטפת יו4"
 
 #: ../gtk/paper_names_offsets.c:92
 msgctxt "paper size"
-msgid "10x11"
-msgstr "10x11"
+msgid "10×11"
+msgstr "10×11"
 
 #: ../gtk/paper_names_offsets.c:93
 msgctxt "paper size"
-msgid "10x13"
-msgstr "10x13"
+msgid "10×13"
+msgstr "10×13"
 
 #: ../gtk/paper_names_offsets.c:94
 msgctxt "paper size"
-msgid "10x14"
-msgstr "10x14"
+msgid "10×14"
+msgstr "10×14"
 
 #: ../gtk/paper_names_offsets.c:95 ../gtk/paper_names_offsets.c:96
 msgctxt "paper size"
-msgid "10x15"
-msgstr "10x15"
+msgid "10×15"
+msgstr "10×15"
 
 #: ../gtk/paper_names_offsets.c:97
 msgctxt "paper size"
-msgid "11x12"
-msgstr "11x12"
+msgid "11×12"
+msgstr "11×12"
 
 #: ../gtk/paper_names_offsets.c:98
 msgctxt "paper size"
-msgid "11x15"
-msgstr "11x15"
+msgid "11×15"
+msgstr "11×15"
 
 #: ../gtk/paper_names_offsets.c:99
 msgctxt "paper size"
-msgid "12x19"
-msgstr "12x19"
+msgid "12×19"
+msgstr "12×19"
 
 #: ../gtk/paper_names_offsets.c:100
 msgctxt "paper size"
-msgid "5x7"
-msgstr "5x7"
+msgid "5×7"
+msgstr "5×7"
 
 #: ../gtk/paper_names_offsets.c:101
 msgctxt "paper size"
-msgid "6x9 Envelope"
-msgstr "מעטפה 6x9"
+msgid "6×9 Envelope"
+msgstr "מעטפה ‎6×9"
 
 #: ../gtk/paper_names_offsets.c:102
 msgctxt "paper size"
-msgid "7x9 Envelope"
-msgstr "מעטפה 7x9"
+msgid "7×9 Envelope"
+msgstr "מעטפה ‎7×9"
 
 #: ../gtk/paper_names_offsets.c:103
 msgctxt "paper size"
-msgid "9x11 Envelope"
-msgstr "מעטפה 9x11"
+msgid "9×11 Envelope"
+msgstr "מעטפה ‎9×11"
 
 #: ../gtk/paper_names_offsets.c:104
 msgctxt "paper size"
@@ -4482,17 +4492,17 @@ msgstr "f"
 
 #: ../gtk/paper_names_offsets.c:119
 msgctxt "paper size"
-msgid "FanFold European"
+msgid "Fan-Fold European"
 msgstr "נייר רציף אירופאי"
 
 #: ../gtk/paper_names_offsets.c:120
 msgctxt "paper size"
-msgid "FanFold US"
+msgid "Fan-Fold US"
 msgstr "נייר רציף אמריקאי"
 
 #: ../gtk/paper_names_offsets.c:121
 msgctxt "paper size"
-msgid "FanFold German Legal"
+msgid "Fan-Fold German Legal"
 msgstr "נייר רציף גרמני תקני"
 
 #: ../gtk/paper_names_offsets.c:122
@@ -4507,23 +4517,23 @@ msgstr "מכתב ממשלתי"
 
 #: ../gtk/paper_names_offsets.c:124
 msgctxt "paper size"
-msgid "Index 3x5"
-msgstr "כרטיס 3x5"
+msgid "Index 3×5"
+msgstr "כרטיס ‎3×5"
 
 #: ../gtk/paper_names_offsets.c:125
 msgctxt "paper size"
-msgid "Index 4x6 (postcard)"
-msgstr "כרטיס 4x6 (גלויה)"
+msgid "Index 4×6 (postcard)"
+msgstr "כרטיס ‎4×6 (גלויה)"
 
 #: ../gtk/paper_names_offsets.c:126
 msgctxt "paper size"
-msgid "Index 4x6 ext"
-msgstr "כרטיס 4x6 מורחב"
+msgid "Index 4×6 ext"
+msgstr "כרטיס ‎4×6 מורחב"
 
 #: ../gtk/paper_names_offsets.c:127
 msgctxt "paper size"
-msgid "Index 5x8"
-msgstr "כרטיס 5x8"
+msgid "Index 5×8"
+msgstr "כרטיס ‎5×8"
 
 #: ../gtk/paper_names_offsets.c:128
 msgctxt "paper size"
@@ -4930,8 +4940,8 @@ msgstr "ססמה:"
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:1082
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:1373
 #, c-format
-msgid "Authentication is required to print document '%s' on printer %s"
-msgstr "נדרש אימות כדי להדפיס את המסמך '%s' במדפסת %s"
+msgid "Authentication is required to print document “%s” on printer %s"
+msgstr "נדרש אימות כדי להדפיס את המסמך „%s” במדפסת %s"
 
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:1084
 #, c-format
@@ -4940,8 +4950,8 @@ msgstr "נדרש אימות כדי להדפיס מסמך באמצעות %s"
 
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:1088
 #, c-format
-msgid "Authentication is required to get attributes of job '%s'"
-msgstr "נדרש אימות כדי לקבל את מאפייני המשימה '%s'"
+msgid "Authentication is required to get attributes of job “%s”"
+msgstr "נדרש אימות כדי לקבל את מאפייני המשימה „%s”"
 
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:1090
 msgid "Authentication is required to get attributes of a job"
@@ -4982,8 +4992,8 @@ msgstr "מתחם:"
 
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:1375
 #, c-format
-msgid "Authentication is required to print document '%s'"
-msgstr "נדרש אימות כדי להדפיס את המסמך '%s'"
+msgid "Authentication is required to print document “%s”"
+msgstr "נדרש אימות כדי להדפיס את המסמך „%s”"
 
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:1380
 #, c-format
@@ -4996,67 +5006,67 @@ msgstr "נדרש אימות כדי להדפיס מסמך זה"
 
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:1945
 #, c-format
-msgid "Printer '%s' is low on toner."
-msgstr "במדפסת '%s' חסר דיו."
+msgid "Printer “%s” is low on toner."
+msgstr "במדפסת „%s” חסר דיו."
 
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:1946
 #, c-format
-msgid "Printer '%s' has no toner left."
-msgstr "במדפסת '%s' לא נשאר דיו."
+msgid "Printer “%s” has no toner left."
+msgstr "במדפסת „%s” לא נשאר דיו."
 
 #. Translators: "Developer" like on photo development context
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:1948
 #, c-format
-msgid "Printer '%s' is low on developer."
-msgstr "המדפסת '%s' דלה בחומרי פיתוח."
+msgid "Printer “%s” is low on developer."
+msgstr "המדפסת „%s” דלה בחומרי פיתוח."
 
 #. Translators: "Developer" like on photo development context
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:1950
 #, c-format
-msgid "Printer '%s' is out of developer."
-msgstr "למדפסת '%s' אזלו חומרי הפיתוח."
+msgid "Printer “%s” is out of developer."
+msgstr "למדפסת „%s” אזלו חומרי הפיתוח."
 
 #. Translators: "marker" is one color bin of the printer
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:1952
 #, c-format
-msgid "Printer '%s' is low on at least one marker supply."
-msgstr "למדפסת '%s' כמעט אזל לפחות אחד מחומרי ההדפסה."
+msgid "Printer “%s” is low on at least one marker supply."
+msgstr "למדפסת „%s” כמעט אזל לפחות אחד מחומרי ההדפסה."
 
 #. Translators: "marker" is one color bin of the printer
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:1954
 #, c-format
-msgid "Printer '%s' is out of at least one marker supply."
-msgstr "במדפסת '%s' אזל לפחות אחד מחומרי ההדפסה."
+msgid "Printer “%s” is out of at least one marker supply."
+msgstr "במדפסת „%s” אזל לפחות אחד מחומרי ההדפסה."
 
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:1955
 #, c-format
-msgid "The cover is open on printer '%s'."
-msgstr "המכסה פתוח במדפסת '%s'."
+msgid "The cover is open on printer “%s”."
+msgstr "המכסה פתוח במדפסת „%s”."
 
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:1956
 #, c-format
-msgid "The door is open on printer '%s'."
-msgstr "הדלת פתוחה במדפסת '%s'."
+msgid "The door is open on printer “%s”."
+msgstr "הדלת פתוחה במדפסת „%s”."
 
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:1957
 #, c-format
-msgid "Printer '%s' is low on paper."
-msgstr "במדפסת '%s' חסר נייר."
+msgid "Printer “%s” is low on paper."
+msgstr "במדפסת „%s” חסר נייר."
 
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:1958
 #, c-format
-msgid "Printer '%s' is out of paper."
-msgstr "במדפסת '%s' אין נייר"
+msgid "Printer “%s” is out of paper."
+msgstr "במדפסת „%s” אין נייר"
 
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:1959
 #, c-format
-msgid "Printer '%s' is currently offline."
-msgstr "המדפסת '%s' אינה מקוונת נכון לעכשיו."
+msgid "Printer “%s” is currently offline."
+msgstr "המדפסת „%s” אינה מקוונת נכון לעכשיו."
 
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:1960
 #, c-format
-msgid "There is a problem on printer '%s'."
-msgstr "קיימת בעיה במדפסת '%s'."
+msgid "There is a problem on printer “%s”."
+msgstr "קיימת בעיה במדפסת „%s”."
 
 #. Translators: this is a printer status.
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:2418
@@ -5248,8 +5258,8 @@ msgstr "הדפסה בזמן"
 #.
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:5117
 #, c-format
-msgid "Custom %sx%s"
-msgstr "מותאם אישית %s‏×%s"
+msgid "Custom %s×%s"
+msgstr "מותאם אישית ‎%s‏×%s"
 
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:5199
 msgid "Printer Profile"
@@ -5568,7 +5578,7 @@ msgstr "_דפים:"
 #: ../gtk/resources/ui/gtkprintunixdialog.ui.h:18
 msgid ""
 "Specify one or more page ranges,\n"
-" e.g. 1-3,7,11"
+" e.g. 1?3, 7, 11"
 msgstr ""
 "ניתן לציין טווח דפים אחד או יותר,\n"
 " לדוגמה: 1-3,7,11"
@@ -5683,7 +5693,7 @@ msgstr "_ב:"
 #: ../gtk/resources/ui/gtkprintunixdialog.ui.h:68
 msgid ""
 "Specify the time of print,\n"
-" e.g. 15:30, 2:35 pm, 14:15:20, 11:46:30 am, 4 pm"
+" e.g. 15?30, 2?35 pm, 14?15?20, 11?46?30 am, 4 pm"
 msgstr ""
 "ציון זמן ההדפסה,\n"
 "לדוגמה: 15:30‏, ‎,2:35 pm ‏14:15:20, ‎11:46:30 am, ‏4‎ pm"
@@ -5771,6 +5781,122 @@ msgstr "הנמכת העצמה"
 #: ../gtk/resources/ui/gtkvolumebutton.ui.h:6
 msgid "Decreases the volume"
 msgstr "מנמיך את העצמה"
+
+#~ msgctxt "progress bar label"
+#~ msgid "%d %%"
+#~ msgstr "%d %%"
+
+#~ msgctxt "volume percentage"
+#~ msgid "%d %%"
+#~ msgstr "%d %%"
+
+#~ msgctxt "paper size"
+#~ msgid "A0x2"
+#~ msgstr "A0x2"
+
+#~ msgctxt "paper size"
+#~ msgid "A0x3"
+#~ msgstr "A0x3"
+
+#~ msgctxt "paper size"
+#~ msgid "A1x3"
+#~ msgstr "A1x3"
+
+#~ msgctxt "paper size"
+#~ msgid "A1x4"
+#~ msgstr "A1x4"
+
+#~ msgctxt "paper size"
+#~ msgid "A2x3"
+#~ msgstr "A2x3"
+
+#~ msgctxt "paper size"
+#~ msgid "A2x4"
+#~ msgstr "A2x4"
+
+#~ msgctxt "paper size"
+#~ msgid "A2x5"
+#~ msgstr "A2x5"
+
+#~ msgctxt "paper size"
+#~ msgid "A3x3"
+#~ msgstr "A3x3"
+
+#~ msgctxt "paper size"
+#~ msgid "A3x4"
+#~ msgstr "A3x4"
+
+#~ msgctxt "paper size"
+#~ msgid "A3x5"
+#~ msgstr "A3x5"
+
+#~ msgctxt "paper size"
+#~ msgid "A3x6"
+#~ msgstr "A3x6"
+
+#~ msgctxt "paper size"
+#~ msgid "A3x7"
+#~ msgstr "A3x7"
+
+#~ msgctxt "paper size"
+#~ msgid "A4x3"
+#~ msgstr "A4x3"
+
+#~ msgctxt "paper size"
+#~ msgid "A4x4"
+#~ msgstr "A4x4"
+
+#~ msgctxt "paper size"
+#~ msgid "A4x5"
+#~ msgstr "A4x5"
+
+#~ msgctxt "paper size"
+#~ msgid "A4x6"
+#~ msgstr "A4x6"
+
+#~ msgctxt "paper size"
+#~ msgid "A4x7"
+#~ msgstr "A4x7"
+
+#~ msgctxt "paper size"
+#~ msgid "A4x8"
+#~ msgstr "A4x8"
+
+#~ msgctxt "paper size"
+#~ msgid "A4x9"
+#~ msgstr "A4x9"
+
+#~ msgctxt "paper size"
+#~ msgid "10x11"
+#~ msgstr "10x11"
+
+#~ msgctxt "paper size"
+#~ msgid "10x13"
+#~ msgstr "10x13"
+
+#~ msgctxt "paper size"
+#~ msgid "10x14"
+#~ msgstr "10x14"
+
+#~ msgctxt "paper size"
+#~ msgid "10x15"
+#~ msgstr "10x15"
+
+#~ msgctxt "paper size"
+#~ msgid "11x12"
+#~ msgstr "11x12"
+
+#~ msgctxt "paper size"
+#~ msgid "11x15"
+#~ msgstr "11x15"
+
+#~ msgctxt "paper size"
+#~ msgid "12x19"
+#~ msgstr "12x19"
+
+#~ msgctxt "paper size"
+#~ msgid "5x7"
+#~ msgstr "5x7"
 
 #~ msgid "label"
 #~ msgstr "תווית"
