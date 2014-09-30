@@ -271,6 +271,28 @@ gtk_paper_size_new (const gchar *name)
   return size;
 }
 
+static gchar *
+improve_displayname (const gchar *name)
+{
+  gchar *p, *p1, *p2, *s;
+
+  p = strrchr (name, 'x');
+  if (p && p != name &&
+      g_ascii_isdigit (*(p - 1)) &&
+      g_ascii_isdigit (*(p + 1)))
+    {
+      p1 = g_strndup (name, p - name);
+      p2 = g_strdup (p + 1);
+      s = g_strconcat (p1, "×", p2, NULL);
+      g_free (p1);
+      g_free (p2);
+    }
+  else
+    s = g_strdup (name);
+
+  return s;
+}
+
 /**
  * gtk_paper_size_new_from_ppd:
  * @ppd_name: a PPD paper name
@@ -301,6 +323,7 @@ gtk_paper_size_new_from_ppd (const gchar *ppd_name,
   char *freeme;
   GtkPaperSize *size;
   int i;
+  char *display_name;
 
   lookup_ppd_name = ppd_name;
 
@@ -312,7 +335,7 @@ gtk_paper_size_new_from_ppd (const gchar *ppd_name,
         g_strndup (ppd_name, strlen (ppd_name) - strlen (".Transverse"));
     }
 
-  for (i = 0; i < G_N_ELEMENTS(standard_names_offsets); i++)
+  for (i = 0; i < G_N_ELEMENTS (standard_names_offsets); i++)
     {
       if (standard_names_offsets[i].ppd_name != -1 &&
           strcmp (paper_names + standard_names_offsets[i].ppd_name, lookup_ppd_name) == 0)
@@ -322,7 +345,7 @@ gtk_paper_size_new_from_ppd (const gchar *ppd_name,
         }
     }
 
-  for (i = 0; i < G_N_ELEMENTS(extra_ppd_names_offsets); i++)
+  for (i = 0; i < G_N_ELEMENTS (extra_ppd_names_offsets); i++)
     {
       if (strcmp (paper_names + extra_ppd_names_offsets[i].ppd_name, lookup_ppd_name) == 0)
         {
@@ -332,7 +355,9 @@ gtk_paper_size_new_from_ppd (const gchar *ppd_name,
     }
 
   name = g_strconcat ("ppd_", ppd_name, NULL);
-  size = gtk_paper_size_new_custom (name, ppd_display_name, width, height, GTK_UNIT_POINTS);
+  display_name = improve_displayname (ppd_display_name);
+  size = gtk_paper_size_new_custom (name, display_name, width, height, GTK_UNIT_POINTS);
+  g_free (display_name);
   g_free (name);
 
  out:
