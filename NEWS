@@ -1,3 +1,51 @@
+Overview of Changes in GTK+ 3.14.0 to 3.14.1
+============================================
+
+* Bugs fixed:
+ 635258 Possible type to symbol translation bug
+ 654051 Special GtkToolbar style when in fullscreen mode to respect...
+ 708206 GtkBuilder throws GVariantParse errors instead of the GtkBu...
+ 719936 GtkFontButton: Make sure the dialog isn't destroyed on dele...
+ 729782 Window "disappears" when middle clicking client side decora...
+ 734879 gdk_test_simulate_key() has no implementation on win32
+ 735054 gtkapplication-quartz-menu unconditionally uses 10.7 features
+ 735338 The inspector sometimes doesn't show up
+ 735749 gnome-software: Can't switch between screenshots
+ 736193 changing a GtkPopover's relative widget seems to forcibly d...
+ 736338 GTK+ reftests can't be built on W32
+ 736557 inspector: Show hidden windows in the inspector
+ 736702 GtkWindow event special logic ignores subclass handlers
+ 736830 GtkVolumeButton reaction inverted on scrolling action when ...
+ 736971 GtkSettings: Add a private getter for the source
+ 737251 drop down menus are always scrollable in full screen mode
+ 737297 Gtk buttons don't work with touch anymore
+ 737363 testgtk.c fails to compile when building for Wayland
+ 737386 dark adwaita's -GtkWidget-link-color is unreadable on gray ...
+ 737439 Plug memory leak in gtk_test_find_label()
+ 737517 no border around progress bar 
+
+* Translation updates:
+ Brazilian Portuguese
+ Czech
+ French
+ Galician
+ German
+ Greek
+ Hebrew
+ Hindi
+ Hungarian
+ Indonesian
+ Kannada
+ Latvian
+ Polish
+ Russian
+ Scottish Gaelic
+ Serbian
+ Spanish
+ Tamil
+ Telugu
+
+
 Overview of Changes in GTK+ 3.13.9 to 3.14.0
 ============================================
 
