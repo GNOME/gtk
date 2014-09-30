@@ -9644,6 +9644,8 @@ _gtk_widget_get_modifier_properties (GtkWidget *widget)
  * priority.
  *
  * Since: 3.0
+ *
+ * Deprecated:3.16: Use a custom style provider and style classes instead
  */
 void
 gtk_widget_override_color (GtkWidget     *widget,
@@ -9671,6 +9673,8 @@ gtk_widget_override_color (GtkWidget     *widget,
  * See gtk_widget_override_color().
  *
  * Since: 3.0
+ *
+ * Deprecated:3.16: Use a custom style provider and style classes instead
  */
 void
 gtk_widget_override_background_color (GtkWidget     *widget,
@@ -9695,6 +9699,8 @@ gtk_widget_override_background_color (GtkWidget     *widget,
  * left untouched. See gtk_widget_override_color().
  *
  * Since: 3.0
+ *
+ * Deprecated:3.16: Use a custom style provider and style classes instead
  */
 void
 gtk_widget_override_font (GtkWidget                  *widget,
@@ -9723,6 +9729,8 @@ gtk_widget_override_font (GtkWidget                  *widget,
  * or background color.
  *
  * Since: 3.0
+ *
+ * Deprecated:3.16: Use a custom style provider and style classes instead
  */
 void
 gtk_widget_override_symbolic_color (GtkWidget     *widget,
@@ -9756,6 +9764,8 @@ gtk_widget_override_symbolic_color (GtkWidget     *widget,
  * so the alpha value in @primary and @secondary will be ignored.
  *
  * Since: 3.0
+ *
+ * Deprecated:3.16: Use a custom style provider and style classes instead
  */
 void
 gtk_widget_override_cursor (GtkWidget     *widget,
