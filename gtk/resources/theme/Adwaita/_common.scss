@@ -2825,3 +2825,8 @@ GtkVolumeButton.button { padding: 8px; }
   &:backdrop { color: if($variant=='light', $backdrop_base_color,
                                             $backdrop_fg_color); }
 }
+
+/* Decouple the font of context menus from their entry/textview */
+.context-menu {
+  font: initial;
+}
