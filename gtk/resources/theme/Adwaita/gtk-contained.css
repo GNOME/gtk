@@ -4323,6 +4323,13 @@ GtkCalendar.header .menuitem.titlebutton.button:selected, .list-row:selected {
   GtkCalendar.header .menuitem.titlebutton.button:backdrop:selected, .list-row:backdrop:selected {
     color: #fcfcfc; }
 
+/* GtkSidebar */
+.sidebar {
+  background-color: shade(#ededed, 0.99); }
+
+.sidebar-item {
+  padding: 10px; }
+
 /* GTK NAMED COLORS */
 @define-color theme_fg_color #2e3436;
 @define-color theme_bg_color #ededed;
