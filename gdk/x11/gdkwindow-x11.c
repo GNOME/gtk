@@ -3839,10 +3839,7 @@ gdk_x11_window_set_icon_list (GdkWindow *window,
       
       /* silently ignore overlarge icons */
       if (size + 2 + width * height > GDK_SELECTION_MAX_SIZE(display))
-	{
-	  g_warning ("gdk_window_set_icon_list: icon too large (%dx%d)", width, height);
-	  break;
-	}
+	break;
      
       n++;
       size += 2 + width * height;
