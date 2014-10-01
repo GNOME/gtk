@@ -2834,3 +2834,7 @@ GtkVolumeButton.button { padding: 8px; }
   padding: 10px;
 }
 
+/* Decouple the font of context menus from their entry/textview */
+.context-menu {
+  font: initial;
+}
