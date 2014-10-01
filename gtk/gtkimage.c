@@ -38,6 +38,9 @@
 #include "gtkintl.h"
 #include "gtkprivate.h"
 #include "gtktypebuiltins.h"
+#include "gtkcssshadowsvalueprivate.h"
+#include "gtkstylecontextprivate.h"
+#include "gtkwidgetprivate.h"
 
 #include "a11y/gtkimageaccessible.h"
 
@@ -146,6 +149,8 @@ struct _GtkImagePrivate
 #define DEFAULT_ICON_SIZE GTK_ICON_SIZE_BUTTON
 static gint gtk_image_draw                 (GtkWidget    *widget,
                                             cairo_t      *cr);
+static void gtk_image_size_allocate        (GtkWidget    *widget,
+                                            GtkAllocation*allocation);
 static void gtk_image_unmap                (GtkWidget    *widget);
 static void gtk_image_realize              (GtkWidget    *widget);
 static void gtk_image_unrealize            (GtkWidget    *widget);
@@ -218,6 +223,7 @@ gtk_image_class_init (GtkImageClass *class)
   widget_class->get_preferred_width = gtk_image_get_preferred_width;
   widget_class->get_preferred_height = gtk_image_get_preferred_height;
   widget_class->get_preferred_height_and_baseline_for_width = gtk_image_get_preferred_height_and_baseline_for_width;
+  widget_class->size_allocate = gtk_image_size_allocate;
   widget_class->unmap = gtk_image_unmap;
   widget_class->realize = gtk_image_realize;
   widget_class->unrealize = gtk_image_unrealize;
@@ -1520,6 +1526,26 @@ gtk_image_reset_anim_iter (GtkImage *image)
 
       g_clear_object (&priv->animation_iter);
     }
+}
+
+static void
+gtk_image_size_allocate (GtkWidget     *widget,
+                         GtkAllocation *allocation)
+{
+  GtkBorder extents;
+  GtkAllocation clip;
+
+  GTK_WIDGET_CLASS (gtk_image_parent_class)->size_allocate (widget, allocation);
+
+  /* XXX: This is not strictly correct, we could compute the area
+   * actually occupied by the image, but I'm lazy...
+   */
+  _gtk_css_shadows_value_get_extents (_gtk_style_context_peek_property (gtk_widget_get_style_context (widget), GTK_CSS_PROPERTY_ICON_SHADOW), &extents);
+  clip.x = allocation->x - extents.left;
+  clip.width = allocation->width + extents.left + extents.right;
+  clip.y = allocation->y - extents.top;
+  clip.height = allocation->height + extents.top + extents.bottom;
+  _gtk_widget_set_simple_clip (widget, &clip);
 }
 
 static void

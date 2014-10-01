@@ -268,6 +268,9 @@ testdata = \
 	iconview-empty.css \
 	iconview-empty.ui \
 	iconview-empty.ref.ui \
+	image-icon-shadow-clipping.css \
+	image-icon-shadow-clipping.ref.ui \
+	image-icon-shadow-clipping.ui \
 	image-load-from-file.css \
 	image-load-from-file.ref.ui \
 	image-load-from-file.ui \
