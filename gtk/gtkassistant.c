@@ -1758,8 +1758,8 @@ gtk_assistant_insert_page (GtkAssistant *assistant,
   page_info->current_title = gtk_label_new (NULL);
   gtk_widget_set_no_show_all (page_info->current_title, TRUE);
 
-  gtk_label_set_xalign (page_info->regular_title, 0.0);
-  gtk_label_set_xalign (page_info->current_title, 0.0);
+  gtk_label_set_xalign (GTK_LABEL (page_info->regular_title), 0.0);
+  gtk_label_set_xalign (GTK_LABEL (page_info->current_title), 0.0);
 
   gtk_widget_show (page_info->regular_title);
   gtk_widget_hide (page_info->current_title);
