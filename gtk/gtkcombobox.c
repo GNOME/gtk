@@ -268,8 +268,6 @@ static void     gtk_combo_box_get_property         (GObject         *object,
                                                     GValue          *value,
                                                     GParamSpec      *spec);
 
-static void     gtk_combo_box_state_flags_changed  (GtkWidget       *widget,
-                                                    GtkStateFlags    previous);
 static void     gtk_combo_box_grab_focus           (GtkWidget       *widget);
 static void     gtk_combo_box_style_updated        (GtkWidget       *widget);
 static void     gtk_combo_box_button_toggled       (GtkWidget       *widget,
@@ -503,7 +501,6 @@ gtk_combo_box_class_init (GtkComboBoxClass *klass)
   widget_class->mnemonic_activate = gtk_combo_box_mnemonic_activate;
   widget_class->grab_focus = gtk_combo_box_grab_focus;
   widget_class->style_updated = gtk_combo_box_style_updated;
-  widget_class->state_flags_changed = gtk_combo_box_state_flags_changed;
   widget_class->get_preferred_width = gtk_combo_box_get_preferred_width;
   widget_class->get_preferred_height = gtk_combo_box_get_preferred_height;
   widget_class->get_preferred_height_for_width = gtk_combo_box_get_preferred_height_for_width;
@@ -1347,32 +1344,6 @@ G_GNUC_END_IGNORE_DEPRECATIONS;
 }
 
 static void
-gtk_combo_box_state_flags_changed (GtkWidget     *widget,
-                                   GtkStateFlags  previous)
-{
-  GtkComboBox *combo_box = GTK_COMBO_BOX (widget);
-  GtkComboBoxPrivate *priv = combo_box->priv;
-
-  if (gtk_widget_get_realized (widget))
-    {
-      if (priv->tree_view && priv->cell_view)
-        {
-          GtkStyleContext *context;
-          GtkStateFlags state;
-          GdkRGBA color;
-
-          context  = gtk_widget_get_style_context (widget);
-          state = gtk_widget_get_state_flags (widget);
-          gtk_style_context_get_background_color (context, state, &color);
-
-          gtk_cell_view_set_background_rgba (GTK_CELL_VIEW (priv->cell_view), &color);
-        }
-    }
-
-  gtk_widget_queue_draw (widget);
-}
-
-static void
 gtk_combo_box_button_state_flags_changed (GtkWidget     *widget,
                                           GtkStateFlags  previous,
                                           gpointer       data)
@@ -1531,19 +1502,6 @@ gtk_combo_box_style_updated (GtkWidget *widget)
   GTK_WIDGET_CLASS (gtk_combo_box_parent_class)->style_updated (widget);
 
   gtk_combo_box_check_appearance (combo_box);
-
-  if (priv->tree_view && priv->cell_view)
-    {
-      GtkStyleContext *context;
-      GtkStateFlags state;
-      GdkRGBA color;
-
-      context  = gtk_widget_get_style_context (widget);
-      state = gtk_widget_get_state_flags (widget);
-      gtk_style_context_get_background_color (context, state, &color);
-
-      gtk_cell_view_set_background_rgba (GTK_CELL_VIEW (priv->cell_view), &color);
-    }
 
   child = gtk_bin_get_child (GTK_BIN (combo_box));
   if (GTK_IS_ENTRY (child))
@@ -3461,7 +3419,6 @@ gtk_combo_box_list_setup (GtkComboBox *combo_box)
   GtkComboBoxPrivate *priv = combo_box->priv;
   GtkTreeSelection *sel;
   GtkWidget *child;
-  GtkWidget *widget = GTK_WIDGET (combo_box);
 
   priv->button = gtk_toggle_button_new ();
   child = gtk_bin_get_child (GTK_BIN (combo_box));
@@ -3479,16 +3436,6 @@ gtk_combo_box_list_setup (GtkComboBox *combo_box)
 
   if (priv->cell_view)
     {
-      GtkStyleContext *context;
-      GtkStateFlags state;
-      GdkRGBA color;
-
-      context  = gtk_widget_get_style_context (widget);
-      state = gtk_widget_get_state_flags (widget);
-      gtk_style_context_get_background_color (context, state, &color);
-
-      gtk_cell_view_set_background_rgba (GTK_CELL_VIEW (priv->cell_view), &color);
-
       priv->box = gtk_event_box_new ();
       gtk_widget_add_events (priv->box, GDK_SCROLL_MASK);
       gtk_event_box_set_visible_window (GTK_EVENT_BOX (priv->box),
