@@ -512,7 +512,7 @@ gtk_sidebar_get_stack (GtkSidebar *sidebar)
 {
   GtkSidebarPrivate *priv;
 
-  g_return_if_fail (GTK_IS_SIDEBAR (sidebar));
+  g_return_val_if_fail (GTK_IS_SIDEBAR (sidebar), NULL);
 
   priv = gtk_sidebar_get_instance_private (sidebar);
 
