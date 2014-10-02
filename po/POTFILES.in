@@ -222,6 +222,7 @@ gtk/gtkselection.c
 gtk/gtkseparator.c
 gtk/gtkseparatortoolitem.c
 gtk/gtksettings.c
+gtk/gtksidebar.c
 gtk/gtksizegroup.c
 gtk/gtksizerequest.c
 gtk/gtksocket.c
