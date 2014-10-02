@@ -1639,9 +1639,6 @@ gtk_scrolled_window_draw_overshoot (GtkScrolledWindow *scrolled_window,
   if (!_gtk_scrolled_window_get_overshoot (scrolled_window, &overshoot_x, &overshoot_y))
     return;
 
-  cairo_push_group (cr);
-  cairo_set_operator (cr, CAIRO_OPERATOR_LIGHTEN);
-
   gtk_scrolled_window_relative_allocation (widget, &relative_allocation);
 
   context = gtk_widget_get_style_context (widget);
@@ -1706,9 +1703,6 @@ gtk_scrolled_window_draw_overshoot (GtkScrolledWindow *scrolled_window,
 
       cairo_pattern_destroy (pattern);
     }
-
-  cairo_pop_group_to_source (cr);
-  cairo_paint (cr);
 }
 
 static gboolean
