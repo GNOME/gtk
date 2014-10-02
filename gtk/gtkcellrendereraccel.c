@@ -503,16 +503,10 @@ gtk_cell_renderer_accel_start_editing (GtkCellRenderer      *cell,
   gtk_widget_set_halign (label, GTK_ALIGN_START);
   gtk_widget_set_valign (label, GTK_ALIGN_CENTER);
 
-  context = gtk_widget_get_style_context (widget);
-  gtk_style_context_get_background_color (context, GTK_STATE_FLAG_SELECTED, &color);
-  gtk_widget_override_background_color (eventbox, 0, &color);
+  gtk_widget_set_state_flags (label, GTK_STATE_FLAG_SELECTED, FALSE);
 
-  gtk_style_context_get_color (context, GTK_STATE_FLAG_SELECTED, &color);
-  gtk_widget_override_color (label, 0, &color);
-
-  /* This label is displayed in a treeview cell displaying
-   * an accelerator when the cell is clicked to change the
-   * acelerator.
+  /* This label is displayed in a treeview cell displaying an accelerator
+   * when the cell is clicked to change the acelerator.
    */
   gtk_label_set_text (GTK_LABEL (label), _("New accelerator…"));
 
