@@ -4217,7 +4217,6 @@ gtk_label_draw (GtkWidget *widget,
         {
           gint range[2];
           cairo_region_t *clip;
-          GdkRGBA bg_color, fg_color;
 
           range[0] = info->selection_anchor;
           range[1] = info->selection_end;
@@ -4234,24 +4233,23 @@ gtk_label_draw (GtkWidget *widget,
                                                    range,
                                                    1);
 
-         /* FIXME should use gtk_paint, but it can't use a clip region */
           cairo_save (cr);
+          gtk_style_context_save (context);
 
           gdk_cairo_region (cr, clip);
           cairo_clip (cr);
 
-          state |= GTK_STATE_FLAG_SELECTED;
+          gtk_style_context_set_state (context, state | GTK_STATE_FLAG_SELECTED);
 
-          gtk_style_context_get_color (context, state, &fg_color);
-          gtk_style_context_get_background_color (context, state, &bg_color);
+          gtk_render_background (context, cr,
+                                 allocation.x, allocation.y,
+                                 allocation.width, allocation.height);
 
-          gdk_cairo_set_source_rgba (cr, &bg_color);
-          cairo_paint (cr);
+          gtk_render_layout (context, cr,
+                             x, y,
+                             priv->layout);
 
-          gdk_cairo_set_source_rgba (cr, &fg_color);
-          cairo_move_to (cr, x, y);
-          _gtk_pango_fill_layout (cr, priv->layout);
-
+          gtk_style_context_restore (context);
           cairo_restore (cr);
           cairo_region_destroy (clip);
         }
@@ -4262,7 +4260,6 @@ gtk_label_draw (GtkWidget *widget,
           gint range[2];
           cairo_region_t *clip;
           GdkRectangle rect;
-          GdkRGBA link_color;
 
           if (info->selectable &&
               gtk_widget_has_focus (widget) &&
@@ -4282,12 +4279,11 @@ gtk_label_draw (GtkWidget *widget,
 
           if (active_link)
             {
-              GdkRGBA bg_color;
-
               range[0] = active_link->start;
               range[1] = active_link->end;
 
               cairo_save (cr);
+              gtk_style_context_save (context);
 
               clip = gdk_pango_layout_get_clip_region (priv->layout,
                                                        x, y,
@@ -4302,22 +4298,22 @@ gtk_label_draw (GtkWidget *widget,
               else
                 state |= GTK_STATE_FLAG_PRELIGHT;
 
-              gtk_style_context_get_background_color (context, state, &bg_color);
-
-              gdk_cairo_set_source_rgba (cr, &bg_color);
-              cairo_paint (cr);
-
               if (active_link->visited)
                 state |= GTK_STATE_FLAG_VISITED;
               else
                 state |= GTK_STATE_FLAG_LINK;
 
-              gtk_style_context_get_color (context, state, &link_color);
-              gdk_cairo_set_source_rgba (cr, &link_color);
+              gtk_style_context_set_state (context, state);
 
-              cairo_move_to (cr, x, y);
-              _gtk_pango_fill_layout (cr, priv->layout);
+              gtk_render_background (context, cr,
+                                     allocation.x, allocation.y,
+                                     allocation.width, allocation.height);
 
+              gtk_render_layout (context, cr,
+                                 x, y,
+                                 priv->layout);
+
+              gtk_style_context_restore (context);
               cairo_restore (cr);
             }
 
