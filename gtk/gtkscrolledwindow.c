@@ -1627,7 +1627,7 @@ gtk_scrolled_window_draw_overshoot (GtkScrolledWindow *scrolled_window,
 				    cairo_t           *cr)
 {
   GtkWidget *widget = GTK_WIDGET (scrolled_window);
-  GtkAllocation allocation, relative_allocation;
+  GtkAllocation relative_allocation;
   gint overshoot_x, overshoot_y;
   cairo_pattern_t *pattern;
   GtkStyleContext *context;
@@ -1642,7 +1642,6 @@ gtk_scrolled_window_draw_overshoot (GtkScrolledWindow *scrolled_window,
   cairo_push_group (cr);
   cairo_set_operator (cr, CAIRO_OPERATOR_LIGHTEN);
 
-  gtk_widget_get_allocation (widget, &allocation);
   gtk_scrolled_window_relative_allocation (widget, &relative_allocation);
 
   context = gtk_widget_get_style_context (widget);
