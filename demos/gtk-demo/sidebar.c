@@ -19,7 +19,18 @@ do_sidebar (GtkWidget *do_widget)
   GtkWidget *box;
   GtkWidget *widget;
   GtkWidget *header;
-  const gchar* pages[] = { "Welcome to GTK+", "GtkSidebar Widget", "Automatic navigation", "Consistent appearance", NULL };
+  const gchar* pages[] = {
+    "Welcome to GTK+",
+    "GtkSidebar Widget",
+    "Automatic navigation",
+    "Consistent appearance",
+    "Scrolling",
+    "Page 6",
+    "Page 7",
+    "Page 8",
+    "Page 9",
+    NULL
+  };
   const gchar *c = NULL;
   guint i;
 
@@ -55,9 +66,10 @@ do_sidebar (GtkWidget *do_widget)
         {
           if (i == 0)
             {
-              widget = gtk_image_new_from_icon_name ("help-about", GTK_ICON_SIZE_INVALID);
+              widget = gtk_image_new_from_icon_name ("help-about", GTK_ICON_SIZE_MENU);
               gtk_image_set_pixel_size (GTK_IMAGE (widget), 256);
-            } else
+            }
+          else
             {
               widget = gtk_label_new (c);
             }
