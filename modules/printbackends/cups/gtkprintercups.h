@@ -58,6 +58,15 @@ struct _GtkPrinterCups
   gchar      *ppd_name;
   ppd_file_t *ppd_file;
 
+  gchar    *media_default;
+  GList    *media_supported;
+  GList    *media_size_supported;
+  gint      media_bottom_margin_default;
+  gint      media_top_margin_default;
+  gint      media_left_margin_default;
+  gint      media_right_margin_default;
+  gboolean  media_margin_default_set;
+
   gchar  *default_cover_before;
   gchar  *default_cover_after;
 

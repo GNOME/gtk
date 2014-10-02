@@ -56,6 +56,8 @@
 #include "gtkcupsutils.h"
 #include "gtkcupssecretsutils.h"
 
+#include <gtkprintutils.h>
+
 #ifdef HAVE_COLORD
 #include <colord.h>
 #endif
@@ -1858,6 +1860,39 @@ static const char * const printer_attrs[] =
     "number-up-supported"
   };
 
+/* Attributes we're interested in for printers without PPD */
+static const char * const printer_attrs_detailed[] =
+  {
+    "printer-name",
+    "printer-uri-supported",
+    "member-uris",
+    "printer-location",
+    "printer-info",
+    "printer-state-message",
+    "printer-state-reasons",
+    "printer-state",
+    "queued-job-count",
+    "printer-is-accepting-jobs",
+    "job-sheets-supported",
+    "job-sheets-default",
+    "printer-type",
+    "auth-info-required",
+    "number-up-default",
+    "ipp-versions-supported",
+    "multiple-document-handling-supported",
+    "copies-supported",
+    "number-up-supported"
+    "media-col-default",
+    "media-col-supported",
+    "media-default",
+    "media-size-supported",
+    "media-supported",
+    "media-left-margin-supported",
+    "media-right-margin-supported",
+    "media-bottom-margin-supported",
+    "media-top-margin-supported",
+  };
+
 typedef enum
   {
     GTK_PRINTER_STATE_LEVEL_NONE = 0,
@@ -1865,6 +1900,12 @@ typedef enum
     GTK_PRINTER_STATE_LEVEL_WARNING = 2,
     GTK_PRINTER_STATE_LEVEL_ERROR = 3
   } PrinterStateLevel;
+
+typedef struct
+{
+  float x_dimension;
+  float y_dimension;
+} MediaSize;
 
 typedef struct
 {
@@ -1895,6 +1936,14 @@ typedef struct
   gboolean supports_copies;
   gboolean supports_collate;
   gboolean supports_number_up;
+  gchar    *media_default;
+  GList    *media_supported;
+  GList    *media_size_supported;
+  float     media_bottom_margin_default;
+  float     media_top_margin_default;
+  float     media_left_margin_default;
+  float     media_right_margin_default;
+  gboolean  media_margin_default_set;
 } PrinterSetupInfo;
 
 static void
@@ -2151,6 +2200,103 @@ cups_printer_handle_attribute (GtkPrintBackendCups *cups_backend,
             }
         }
     }
+  else if (g_strcmp0 (ippGetName (attr), "media-default") == 0)
+    {
+      if (ippGetValueTag (attr) == IPP_TAG_KEYWORD ||
+          ippGetValueTag (attr) == IPP_TAG_NAME)
+        info->media_default = g_strdup (ippGetString (attr, 0, NULL));
+    }
+  else if (g_strcmp0 (ippGetName (attr), "media-col-default") == 0)
+    {
+      ipp_attribute_t *iter;
+      ipp_t           *col;
+      gint             num_of_margins = 0;
+
+      for (i = 0; i < ippGetCount (attr); i++)
+        {
+          col = ippGetCollection (attr, i);
+          for (iter = ippFirstAttribute (col); iter != NULL; iter = ippNextAttribute (col))
+            {
+              switch (ippGetValueTag (iter))
+                {
+                  case IPP_TAG_INTEGER:
+                    if (g_strcmp0 (ippGetName (iter), "media-bottom-margin") == 0)
+                      {
+                        info->media_bottom_margin_default = ippGetInteger (iter, 0) / 100.0;
+                        num_of_margins++;
+                      }
+                    else if (g_strcmp0 (ippGetName (iter), "media-top-margin") == 0)
+                      {
+                        info->media_top_margin_default = ippGetInteger (iter, 0) / 100.0;
+                        num_of_margins++;
+                      }
+                    else if (g_strcmp0 (ippGetName (iter), "media-left-margin") == 0)
+                      {
+                        info->media_left_margin_default = ippGetInteger (iter, 0) / 100.0;
+                        num_of_margins++;
+                      }
+                    else if (g_strcmp0 (ippGetName (iter), "media-right-margin") == 0)
+                      {
+                        info->media_right_margin_default = ippGetInteger (iter, 0) / 100.0;
+                        num_of_margins++;
+                      }
+                    break;
+
+                  default:
+                    break;
+                }
+            }
+        }
+
+      if (num_of_margins == 4)
+        info->media_margin_default_set = TRUE;
+    }
+  else if (g_strcmp0 (ippGetName (attr), "media-supported") == 0)
+    {
+      for (i = 0; i < ippGetCount (attr); i++)
+        info->media_supported = g_list_prepend (info->media_supported, g_strdup (ippGetString (attr, i, NULL)));
+
+      info->media_supported = g_list_reverse (info->media_supported);
+    }
+  else if (g_strcmp0 (ippGetName (attr), "media-size-supported") == 0)
+    {
+      ipp_attribute_t *iter;
+      MediaSize       *media_size;
+      gboolean         number_of_dimensions;
+      ipp_t           *media_size_collection;
+
+      for (i = 0; i < ippGetCount (attr); i++)
+        {
+          media_size_collection = ippGetCollection (attr, i);
+          media_size = g_new0 (MediaSize, 1);
+          number_of_dimensions = 0;
+
+          for (iter = ippFirstAttribute (media_size_collection);
+               iter != NULL;
+               iter = ippNextAttribute (media_size_collection))
+            {
+              if (g_strcmp0 (ippGetName (iter), "x-dimension") == 0 &&
+                  ippGetValueTag (iter) == IPP_TAG_INTEGER)
+                {
+                  media_size->x_dimension = ippGetInteger (iter, 0) / 100.0;
+                  number_of_dimensions++;
+                }
+              else if (g_strcmp0 (ippGetName (iter), "y-dimension") == 0 &&
+                  ippGetValueTag (iter) == IPP_TAG_INTEGER)
+                {
+                  media_size->y_dimension = ippGetInteger (iter, 0) / 100.0;
+                  number_of_dimensions++;
+                }
+            }
+
+          if (number_of_dimensions == 2)
+            info->media_size_supported = g_list_prepend (info->media_size_supported, media_size);
+          else
+            g_free (media_size);
+        }
+
+      info->media_size_supported = g_list_reverse (info->media_size_supported);
+    }
   else
     {
       GTK_NOTE (PRINTING,
@@ -2371,9 +2517,9 @@ set_default_printer (GtkPrintBackendCups *cups_backend,
 
 #ifdef HAVE_CUPS_API_1_6
 static void
-cups_request_avahi_printer_info_cb (GtkPrintBackendCups *cups_backend,
-                                    GtkCupsResult       *result,
-                                    gpointer             user_data)
+cups_request_printer_info_cb (GtkPrintBackendCups *cups_backend,
+                              GtkCupsResult       *result,
+                              gpointer             user_data)
 {
   PrinterSetupInfo *info = g_slice_new0 (PrinterSetupInfo);
   GtkPrintBackend  *backend = GTK_PRINT_BACKEND (cups_backend);
@@ -2417,7 +2563,7 @@ cups_request_avahi_printer_info_cb (GtkPrintBackendCups *cups_backend,
 
           printer = gtk_print_backend_find_printer (backend, info->printer_name);
           if (printer != NULL &&
-              GTK_PRINTER_CUPS (printer)->avahi_browsed)
+              GTK_PRINTER_CUPS (printer)->ppd_file == NULL)
             {
               g_object_ref (printer);
             }
@@ -2449,6 +2595,18 @@ cups_request_avahi_printer_info_cb (GtkPrintBackendCups *cups_backend,
 
           set_printer_icon_name_from_info (printer, info);
 
+          GTK_PRINTER_CUPS (printer)->media_default = info->media_default;
+          GTK_PRINTER_CUPS (printer)->media_supported = info->media_supported;
+          GTK_PRINTER_CUPS (printer)->media_size_supported = info->media_size_supported;
+          if (info->media_margin_default_set)
+            {
+              GTK_PRINTER_CUPS (printer)->media_margin_default_set = TRUE;
+              GTK_PRINTER_CUPS (printer)->media_bottom_margin_default = info->media_bottom_margin_default;
+              GTK_PRINTER_CUPS (printer)->media_top_margin_default = info->media_top_margin_default;
+              GTK_PRINTER_CUPS (printer)->media_left_margin_default = info->media_left_margin_default;
+              GTK_PRINTER_CUPS (printer)->media_right_margin_default = info->media_right_margin_default;
+            }
+
           gtk_printer_set_has_details (printer, TRUE);
           g_signal_emit_by_name (printer, "details-acquired", TRUE);
 
@@ -2476,10 +2634,10 @@ done:
 }
 
 static void
-cups_request_avahi_printer_info (const gchar         *printer_uri,
-                                 const gchar         *host,
-                                 gint                 port,
-                                 GtkPrintBackendCups *backend)
+cups_request_printer_info (const gchar         *printer_uri,
+                           const gchar         *host,
+                           gint                 port,
+                           GtkPrintBackendCups *backend)
 {
   GtkCupsRequest *request;
   http_t         *http;
@@ -2501,12 +2659,12 @@ cups_request_avahi_printer_info (const gchar         *printer_uri,
                                        "printer-uri", NULL, printer_uri);
 
       gtk_cups_request_ipp_add_strings (request, IPP_TAG_OPERATION, IPP_TAG_KEYWORD,
-                                        "requested-attributes", G_N_ELEMENTS (printer_attrs),
-                                        NULL, printer_attrs);
+                                        "requested-attributes", G_N_ELEMENTS (printer_attrs_detailed),
+                                        NULL, printer_attrs_detailed);
 
       cups_request_execute (backend,
                             request,
-                            (GtkPrintCupsResponseCallbackFunc) cups_request_avahi_printer_info_cb,
+                            (GtkPrintCupsResponseCallbackFunc) cups_request_printer_info_cb,
                             http,
                             (GDestroyNotify) httpClose);
     }
@@ -3423,6 +3581,7 @@ cups_request_ppd_cb (GtkPrintBackendCups *print_backend,
                      GetPPDData          *data)
 {
   GtkPrinter *printer;
+  struct stat data_info;
 
   gdk_threads_enter ();
 
@@ -3433,36 +3592,42 @@ cups_request_ppd_cb (GtkPrintBackendCups *print_backend,
   GTK_PRINTER_CUPS (printer)->reading_ppd = FALSE;
   print_backend->reading_ppds--;
 
+#ifdef HAVE_CUPS_API_1_6
+  fstat (g_io_channel_unix_get_fd (data->ppd_io), &data_info);
+  /* Standalone Avahi printers and raw printers don't have PPD files or have
+     empty PPD files. Try to get printer details via IPP. */
+  if (data_info.st_size == 0 ||
+      (gtk_cups_result_is_error (result) &&
+       (GTK_PRINTER_CUPS (printer)->avahi_browsed ||
+        ((gtk_cups_result_get_error_type (result) == GTK_CUPS_ERROR_HTTP) &&
+         (gtk_cups_result_get_error_status (result) == HTTP_NOT_FOUND)))))
+    {
+      cups_request_printer_info (GTK_PRINTER_CUPS (printer)->printer_uri,
+                                 GTK_PRINTER_CUPS (printer)->hostname,
+                                 GTK_PRINTER_CUPS (printer)->port,
+                                 GTK_PRINT_BACKEND_CUPS (gtk_printer_get_backend (printer)));
+      goto done;
+    }
+#else
   if (gtk_cups_result_is_error (result))
     {
       gboolean success = FALSE;
 
-#ifdef HAVE_CUPS_API_1_6
-      /* Standalone Avahi printers don't have PPD files. */
-      if (GTK_PRINTER_CUPS (printer)->avahi_browsed)
+      /* If we get a 404 then it is just a raw printer without a ppd
+         and not an error. */
+      if ((gtk_cups_result_get_error_type (result) == GTK_CUPS_ERROR_HTTP) &&
+          (gtk_cups_result_get_error_status (result) == HTTP_NOT_FOUND))
         {
-          cups_request_avahi_printer_info (GTK_PRINTER_CUPS (printer)->printer_uri,
-                                           GTK_PRINTER_CUPS (printer)->hostname,
-                                           GTK_PRINTER_CUPS (printer)->port,
-                                           GTK_PRINT_BACKEND_CUPS (gtk_printer_get_backend (printer)));
+          gtk_printer_set_has_details (printer, TRUE);
+          success = TRUE;
         }
-      else
-#endif
-        {
-          /* If we get a 404 then it is just a raw printer without a ppd
-             and not an error. */
-          if ((gtk_cups_result_get_error_type (result) == GTK_CUPS_ERROR_HTTP) &&
-              (gtk_cups_result_get_error_status (result) == HTTP_NOT_FOUND))
-            {
-              gtk_printer_set_has_details (printer, TRUE);
-              success = TRUE;
-            }
 
-          g_signal_emit_by_name (printer, "details-acquired", success);
-        }
+      g_signal_emit_by_name (printer, "details-acquired", success);
 
       goto done;
     }
+#endif
+
 
   /* let ppdOpenFd take over the ownership of the open file */
   g_io_channel_seek_position (data->ppd_io, 0, G_SEEK_SET, NULL);
@@ -5727,6 +5892,8 @@ cups_printer_prepare_for_print (GtkPrinter       *printer,
   ppd_paper_name = gtk_paper_size_get_ppd_name (paper_size);
   if (ppd_paper_name != NULL)
     gtk_print_settings_set (settings, "cups-PageSize", ppd_paper_name);
+  else if (gtk_paper_size_is_ipp (paper_size))
+    gtk_print_settings_set (settings, "cups-media", gtk_paper_size_get_name (paper_size));
   else
     {
       char width[G_ASCII_DTOSTR_BUF_SIZE];
@@ -5822,54 +5989,150 @@ create_page_setup (ppd_file_t *ppd_file,
   return page_setup;
 }
 
+static GtkPageSetup *
+create_page_setup_from_media (gchar     *media,
+                              MediaSize *media_size,
+                              gboolean   media_margin_default_set,
+                              gint       media_bottom_margin_default,
+                              gint       media_top_margin_default,
+                              gint       media_left_margin_default,
+                              gint       media_right_margin_default)
+{
+  GtkPageSetup *page_setup;
+  GtkPaperSize *paper_size;
+
+  page_setup = gtk_page_setup_new ();
+  paper_size = gtk_paper_size_new_from_ipp (media,
+                                            POINTS_PER_INCH * (media_size->x_dimension / MM_PER_INCH),
+                                            POINTS_PER_INCH * (media_size->y_dimension / MM_PER_INCH));
+  gtk_page_setup_set_paper_size (page_setup, paper_size);
+  gtk_paper_size_free (paper_size);
+
+  if (media_margin_default_set)
+    {
+      gtk_page_setup_set_bottom_margin (page_setup, media_bottom_margin_default, GTK_UNIT_MM);
+      gtk_page_setup_set_top_margin (page_setup, media_top_margin_default, GTK_UNIT_MM);
+      gtk_page_setup_set_left_margin (page_setup, media_left_margin_default, GTK_UNIT_MM);
+      gtk_page_setup_set_right_margin (page_setup, media_right_margin_default, GTK_UNIT_MM);
+    }
+
+  return page_setup;
+}
+
 static GList *
 cups_printer_list_papers (GtkPrinter *printer)
 {
   ppd_file_t *ppd_file;
   ppd_size_t *size;
   GtkPageSetup *page_setup;
-  GList *l;
+  GtkPrinterCups *cups_printer = GTK_PRINTER_CUPS (printer);
+  GList *result = NULL;
   int i;
 
-  ppd_file = gtk_printer_cups_get_ppd (GTK_PRINTER_CUPS (printer));
-  if (ppd_file == NULL)
-    return NULL;
-
-  l = NULL;
-
-  for (i = 0; i < ppd_file->num_sizes; i++)
+  ppd_file = gtk_printer_cups_get_ppd (cups_printer);
+  if (ppd_file != NULL)
     {
-      size = &ppd_file->sizes[i];
+      for (i = 0; i < ppd_file->num_sizes; i++)
+        {
+          size = &ppd_file->sizes[i];
 
-      page_setup = create_page_setup (ppd_file, size);
+          page_setup = create_page_setup (ppd_file, size);
 
-      l = g_list_prepend (l, page_setup);
+          result = g_list_prepend (result, page_setup);
+        }
+    }
+  else if (cups_printer->media_supported != NULL &&
+           cups_printer->media_size_supported != NULL &&
+           /*
+            * 'media_supported' list can contain names of minimal and maximal sizes
+            * for which we don't create item in 'media_size_supported' list.
+            */
+           g_list_length (cups_printer->media_supported) >=
+           g_list_length (cups_printer->media_size_supported))
+    {
+      MediaSize *media_size;
+      GList     *media_iter;
+      GList     *media_size_iter;
+      gchar     *media;
+
+      for (media_iter = cups_printer->media_supported,
+           media_size_iter = cups_printer->media_size_supported;
+           media_size_iter != NULL;
+           media_iter = media_iter->next,
+           media_size_iter = media_size_iter->next)
+        {
+          media = (gchar *) media_iter->data;
+          media_size = (MediaSize *) media_size_iter->data;
+
+          page_setup = create_page_setup_from_media (media,
+                                                     media_size,
+                                                     cups_printer->media_margin_default_set,
+                                                     cups_printer->media_bottom_margin_default,
+                                                     cups_printer->media_top_margin_default,
+                                                     cups_printer->media_left_margin_default,
+                                                     cups_printer->media_right_margin_default);
+
+          result = g_list_prepend (result, page_setup);
+        }
     }
 
-  return g_list_reverse (l);
+  result = g_list_reverse (result);
+
+  return result;
 }
 
 static GtkPageSetup *
 cups_printer_get_default_page_size (GtkPrinter *printer)
 {
-  ppd_file_t *ppd_file;
-  ppd_size_t *size;
-  ppd_option_t *option;
-
+  GtkPrinterCups *cups_printer = GTK_PRINTER_CUPS (printer);
+  GtkPageSetup   *result = NULL;
+  ppd_option_t   *option;
+  ppd_file_t     *ppd_file;
+  ppd_size_t     *size;
 
   ppd_file = gtk_printer_cups_get_ppd (GTK_PRINTER_CUPS (printer));
-  if (ppd_file == NULL)
-    return NULL;
+  if (ppd_file != NULL)
+    {
+      option = ppdFindOption (ppd_file, "PageSize");
+      if (option == NULL)
+        return NULL;
 
-  option = ppdFindOption (ppd_file, "PageSize");
-  if (option == NULL)
-    return NULL;
+      size = ppdPageSize (ppd_file, option->defchoice);
+      if (size == NULL)
+        return NULL;
 
-  size = ppdPageSize (ppd_file, option->defchoice);
-  if (size == NULL)
-    return NULL;
+      result = create_page_setup (ppd_file, size);
+    }
+  else if (cups_printer->media_default != NULL)
+    {
+      MediaSize *media_size;
+      GList     *media_iter;
+      GList     *media_size_iter;
+      gchar     *media;
 
-  return create_page_setup (ppd_file, size);
+      for (media_iter = cups_printer->media_supported,
+           media_size_iter = cups_printer->media_size_supported;
+           media_size_iter != NULL;
+           media_iter = media_iter->next,
+           media_size_iter = media_size_iter->next)
+        {
+          media = (gchar *) media_iter->data;
+          media_size = (MediaSize *) media_size_iter->data;
+
+          if (g_strcmp0 (cups_printer->media_default, media) == 0)
+            {
+              result = create_page_setup_from_media (media,
+                                                     media_size,
+                                                     cups_printer->media_margin_default_set,
+                                                     cups_printer->media_bottom_margin_default,
+                                                     cups_printer->media_top_margin_default,
+                                                     cups_printer->media_left_margin_default,
+                                                     cups_printer->media_right_margin_default);
+            }
+        }
+    }
+
+  return result;
 }
 
 static gboolean
@@ -5879,18 +6142,29 @@ cups_printer_get_hard_margins (GtkPrinter *printer,
 			       gdouble    *left,
 			       gdouble    *right)
 {
-  ppd_file_t *ppd_file;
+  GtkPrinterCups *cups_printer = GTK_PRINTER_CUPS (printer);
+  ppd_file_t     *ppd_file;
+  gboolean        result = FALSE;
 
   ppd_file = gtk_printer_cups_get_ppd (GTK_PRINTER_CUPS (printer));
-  if (ppd_file == NULL)
-    return FALSE;
+  if (ppd_file != NULL)
+    {
+      *left = ppd_file->custom_margins[0];
+      *bottom = ppd_file->custom_margins[1];
+      *right = ppd_file->custom_margins[2];
+      *top = ppd_file->custom_margins[3];
+      result = TRUE;
+    }
+  else if (cups_printer->media_margin_default_set)
+    {
+      *left = cups_printer->media_left_margin_default;
+      *bottom = cups_printer->media_bottom_margin_default;
+      *right = cups_printer->media_right_margin_default;
+      *top = cups_printer->media_top_margin_default;
+      result = TRUE;
+    }
 
-  *left = ppd_file->custom_margins[0];
-  *bottom = ppd_file->custom_margins[1];
-  *right = ppd_file->custom_margins[2];
-  *top = ppd_file->custom_margins[3];
-
-  return TRUE;
+  return result;
 }
 
 static GtkPrintCapabilities

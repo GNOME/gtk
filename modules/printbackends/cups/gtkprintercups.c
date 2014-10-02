@@ -125,6 +125,14 @@ gtk_printer_cups_init (GtkPrinterCups *printer)
   printer->supports_copies = FALSE;
   printer->supports_collate = FALSE;
   printer->supports_number_up = FALSE;
+  printer->media_default = NULL;
+  printer->media_supported = NULL;
+  printer->media_size_supported = NULL;
+  printer->media_bottom_margin_default = 0;
+  printer->media_top_margin_default = 0;
+  printer->media_left_margin_default = 0;
+  printer->media_right_margin_default = 0;
+  printer->media_margin_default_set = FALSE;
 }
 
 static void
@@ -168,6 +176,10 @@ gtk_printer_cups_finalize (GObject *object)
 
   if (printer->ppd_file)
     ppdClose (printer->ppd_file);
+
+  g_free (printer->media_default);
+  g_list_free_full (printer->media_supported, g_free);
+  g_list_free_full (printer->media_size_supported, g_free);
 
   if (printer->get_remote_ppd_poll > 0)
     g_source_remove (printer->get_remote_ppd_poll);
