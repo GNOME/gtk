@@ -1605,10 +1605,6 @@ _gtk_entry_completion_resize_popup (GtkEntryCompletion *completion)
 static void
 gtk_entry_completion_popup (GtkEntryCompletion *completion)
 {
-  GtkTreeViewColumn *column;
-  GtkStyleContext *context;
-  GdkRGBA color;
-  GList *renderers;
   GtkWidget *toplevel;
 
   if (gtk_widget_get_mapped (completion->priv->popup_window))
@@ -1624,17 +1620,6 @@ gtk_entry_completion_popup (GtkEntryCompletion *completion)
     return;
 
   completion->priv->ignore_enter = TRUE;
-
-  column = gtk_tree_view_get_column (GTK_TREE_VIEW (completion->priv->action_view), 0);
-  renderers = gtk_cell_layout_get_cells (GTK_CELL_LAYOUT (column));
-
-  context = gtk_widget_get_style_context (completion->priv->tree_view);
-  gtk_style_context_get_background_color (context, 0, &color);
-
-  g_object_set (GTK_CELL_RENDERER (renderers->data),
-                "cell-background-rgba", &color,
-                NULL);
-  g_list_free (renderers);
 
   gtk_widget_show_all (completion->priv->vbox);
 
