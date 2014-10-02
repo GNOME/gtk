@@ -29,6 +29,7 @@
 #include "gtkbuildable.h"
 #include "gtkbox.h"
 #include "gtkcellrenderertext.h"
+#include "gtkcssprovider.h"
 #include "gtkentry.h"
 #include "gtksearchentry.h"
 #include "gtkgrid.h"
@@ -95,6 +96,8 @@ struct _GtkFontChooserWidgetPrivate
   GtkFontFilterFunc filter_func;
   gpointer          filter_data;
   GDestroyNotify    filter_data_destroy;
+
+  GtkCssProvider *provider;
 };
 
 /* This is the initial fixed height and the top padding of the preview entry */
@@ -547,6 +550,11 @@ gtk_font_chooser_widget_init (GtkFontChooserWidget *fontchooser)
 
   gtk_widget_init_template (GTK_WIDGET (fontchooser));
 
+  priv->provider = gtk_css_provider_new ();
+  gtk_style_context_add_provider (gtk_widget_get_style_context (priv->preview),
+                                  GTK_STYLE_PROVIDER (priv->provider),
+                                  GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
+
   /* Default preview string  */
   priv->preview_text = g_strdup (pango_language_get_sample_string (NULL));
   priv->show_preview_entry = TRUE;
@@ -579,7 +587,7 @@ gtk_font_chooser_widget_init (GtkFontChooserWidget *fontchooser)
                                            fontchooser,
                                            NULL);
 
-  /* Load data and set initial style dependant parameters */
+  /* Load data and set initial style-dependent parameters */
   gtk_font_chooser_widget_load_fonts (fontchooser);
   gtk_font_chooser_widget_set_cell_size (fontchooser);
   gtk_font_chooser_widget_take_font_desc (fontchooser, NULL);
@@ -860,6 +868,8 @@ gtk_font_chooser_widget_finalize (GObject *object)
   if (priv->filter_data_destroy)
     priv->filter_data_destroy (priv->filter_data);
 
+  g_object_unref (priv->provider);
+
   G_OBJECT_CLASS (gtk_font_chooser_widget_parent_class)->finalize (object);
 }
 
@@ -1037,6 +1047,7 @@ gtk_font_chooser_widget_merge_font_desc (GtkFontChooserWidget *fontchooser,
 {
   GtkFontChooserWidgetPrivate *priv = fontchooser->priv;
   PangoFontMask mask;
+  gchar *font, *data;
 
   g_assert (font_desc != NULL);
   /* iter may be NULL if the font doesn't exist on the list */
@@ -1077,7 +1088,11 @@ gtk_font_chooser_widget_merge_font_desc (GtkFontChooserWidget *fontchooser,
       gtk_font_chooser_widget_update_marks (fontchooser);
     }
 
-  gtk_widget_override_font (priv->preview, priv->font_desc);
+  font = pango_font_description_to_string (priv->font_desc);
+  data = g_strconcat ("* { font: ",  font, "; }", NULL);
+  gtk_css_provider_load_from_data (priv->provider, data, -1, NULL);
+  g_free (data);
+  g_free (font);
 
   pango_font_description_free (font_desc); /* adopted */
 
@@ -1101,26 +1116,14 @@ gtk_font_chooser_widget_take_font_desc (GtkFontChooserWidget *fontchooser,
     {
       GtkTreeIter iter;
 
-      if (gtk_font_chooser_widget_find_font (fontchooser,
-                                             font_desc,
-                                             &iter))
-        {
-          gtk_font_chooser_widget_merge_font_desc (fontchooser,
-                                                   font_desc,
-                                                   &iter);
-        }
+      if (gtk_font_chooser_widget_find_font (fontchooser, font_desc, &iter))
+        gtk_font_chooser_widget_merge_font_desc (fontchooser, font_desc, &iter);
       else
-        {
-          gtk_font_chooser_widget_merge_font_desc (fontchooser,
-                                                   font_desc,
-                                                   NULL);
-        }
+        gtk_font_chooser_widget_merge_font_desc (fontchooser, font_desc, NULL);
     }
   else
     {
-      gtk_font_chooser_widget_merge_font_desc (fontchooser,
-                                               font_desc,
-                                               &priv->font_iter);
+      gtk_font_chooser_widget_merge_font_desc (fontchooser, font_desc, &priv->font_iter);
                                                           
     }
 }
