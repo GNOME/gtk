@@ -26,8 +26,7 @@
 #error "Only <gtk/gtk.h> can be included directly."
 #endif
 
-#include <gtk/gtkwidget.h>
-#include <gtk/gtklistbox.h>
+#include <gtk/gtkbin.h>
 #include <gtk/gtkstack.h>
 
 G_BEGIN_DECLS
@@ -45,12 +44,12 @@ typedef struct _GtkSidebarClass   GtkSidebarClass;
 
 struct _GtkSidebar
 {
-  GtkListBox parent;
+  GtkBin parent;
 };
 
 struct _GtkSidebarClass
 {
-  GtkListBoxClass parent_class;
+  GtkBinClass parent_class;
 
   /* Padding for future expansion */
   void (*_gtk_reserved1) (void);
