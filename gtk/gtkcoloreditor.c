@@ -345,8 +345,6 @@ popup_draw (GtkWidget      *popup,
 static void
 gtk_color_editor_init (GtkColorEditor *editor)
 {
-  GdkRGBA transparent = { 0, 0, 0, 0 };
-
   editor->priv = gtk_color_editor_get_instance_private (editor);
   editor->priv->use_alpha = TRUE;
 
@@ -369,8 +367,6 @@ gtk_color_editor_init (GtkColorEditor *editor)
   else
     gtk_style_context_add_class (gtk_widget_get_style_context (editor->priv->h_slider),
                                  GTK_STYLE_CLASS_SCALE_HAS_MARKS_BELOW);
-
-  gtk_widget_override_background_color (editor->priv->overlay, 0, &transparent);
 
   /* Create the scaled popup adjustments manually here because connecting user data is not
    * supported by template GtkBuilder xml (it would be possible to set this up in the xml
