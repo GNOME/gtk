@@ -119,12 +119,28 @@
   background-color: transparentize($selected_bg_color,0.8);
 }
 
-// This is used by GtkScrolledWindow, when rendering the edge
-// gradient shown when content is touch-dragged past boundaries.
-// The color is used as a base for such gradient, which is then
-// stretched/modified as a direct result of user interaction.
+// This is used by GtkScrolledWindow, when content is touch-dragged past boundaries.
 .overshoot {
-  background-color: transparentize($selected_bg_color,0.8);
+  &.top {
+    background: linear-gradient(to top, transparentize($selected_bg_color,1), transparentize($selected_bg_color,0.8));
+    background-size: auto 100px;
+    background-position: center 100%;
+  }
+  &.bottom {
+    background: linear-gradient(to bottom, transparentize($selected_bg_color,1), transparentize($selected_bg_color,0.8));
+    background-size: auto 100px;
+    background-position: center 0%;
+  }
+  &.left {
+    background: linear-gradient(to left, transparentize($selected_bg_color,1), transparentize($selected_bg_color,0.8));
+    background-size: 100px auto;
+    background-position: 100% center;
+  }
+  &.right {
+    background: linear-gradient(to right, transparentize($selected_bg_color,1), transparentize($selected_bg_color,0.8));
+    background-size: 100px auto;
+    background-position: 0% center;
+  }
 }
 
 GtkLabel {

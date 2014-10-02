@@ -1627,82 +1627,57 @@ gtk_scrolled_window_draw_overshoot (GtkScrolledWindow *scrolled_window,
 				    cairo_t           *cr)
 {
   GtkWidget *widget = GTK_WIDGET (scrolled_window);
-  GtkAllocation relative_allocation;
   gint overshoot_x, overshoot_y;
-  cairo_pattern_t *pattern;
   GtkStyleContext *context;
-  cairo_matrix_t matrix;
   GdkRectangle rect;
-  gdouble percent;
-  GdkRGBA color;
 
   if (!_gtk_scrolled_window_get_overshoot (scrolled_window, &overshoot_x, &overshoot_y))
     return;
 
-  gtk_scrolled_window_relative_allocation (widget, &relative_allocation);
-
   context = gtk_widget_get_style_context (widget);
+  gtk_scrolled_window_relative_allocation (widget, &rect);
+  overshoot_x = CLAMP (overshoot_x, - MAX_OVERSHOOT_DISTANCE, MAX_OVERSHOOT_DISTANCE);
+  overshoot_y = CLAMP (overshoot_y, - MAX_OVERSHOOT_DISTANCE, MAX_OVERSHOOT_DISTANCE);
+
   gtk_style_context_save (context);
   gtk_style_context_add_class (context, GTK_STYLE_CLASS_OVERSHOOT);
-  gtk_style_context_get_background_color (context,
-					  gtk_widget_get_state_flags (widget),
-					  &color);
+
+  if (overshoot_x > 0)
+    {
+      gtk_style_context_add_class (context, GTK_STYLE_CLASS_RIGHT);
+
+      gtk_render_background (context, cr, rect.x + rect.width - overshoot_x, rect.y, overshoot_x, rect.height);
+      gtk_render_frame (context, cr, rect.x + rect.width - overshoot_x, rect.y, overshoot_x, rect.height);
+    }
+  else if (overshoot_x < 0)
+    {
+      gtk_style_context_add_class (context, GTK_STYLE_CLASS_LEFT);
+
+      gtk_render_background (context, cr, rect.x, rect.y, -overshoot_x, rect.height);
+      gtk_render_frame (context, cr, rect.x, rect.y, -overshoot_x, rect.height);
+    }
 
   gtk_style_context_restore (context);
 
-  if (overshoot_x != 0)
+  gtk_style_context_save (context);
+  gtk_style_context_add_class (context, GTK_STYLE_CLASS_OVERSHOOT);
+
+  if (overshoot_y > 0)
     {
-      percent = CLAMP (ABS ((gdouble) overshoot_x) / MAX_OVERSHOOT_DISTANCE, 0, 1);
-      rect = relative_allocation;
-      rect.width = MAX_OVERSHOOT_DISTANCE;
+      gtk_style_context_add_class (context, GTK_STYLE_CLASS_BOTTOM);
 
-      pattern = cairo_pattern_create_linear (0, 0, MAX_OVERSHOOT_DISTANCE, 0);
-      cairo_pattern_add_color_stop_rgba (pattern, 0, color.red, color.green, color.blue, color.alpha * percent);
-      cairo_pattern_add_color_stop_rgba (pattern, percent, color.red, color.green, color.blue, 0);
-      cairo_matrix_init_identity (&matrix);
+      gtk_render_background (context, cr, rect.x, rect.y + rect.height - overshoot_y, rect.width, overshoot_y);
+      gtk_render_frame (context, cr, rect.x, rect.y + rect.height - overshoot_y, rect.width, overshoot_y);
+    }
+  else if (overshoot_y < 0)
+    {
+      gtk_style_context_add_class (context, GTK_STYLE_CLASS_TOP);
 
-      if (overshoot_x > 0)
-        {
-          rect.x += relative_allocation.width - MAX_OVERSHOOT_DISTANCE;
-          cairo_matrix_translate (&matrix, relative_allocation.width, 0);
-          cairo_matrix_rotate (&matrix, G_PI);
-        }
-
-      cairo_pattern_set_matrix (pattern, &matrix);
-
-      gdk_cairo_rectangle (cr, &rect);
-      cairo_set_source (cr, pattern);
-      cairo_fill (cr);
-
-      cairo_pattern_destroy (pattern);
+      gtk_render_background (context, cr, rect.x, rect.y, rect.width, -overshoot_y);
+      gtk_render_frame (context, cr, rect.x, rect.y, rect.width, -overshoot_y);
     }
 
-  if (overshoot_y != 0)
-    {
-      percent = CLAMP (ABS ((gdouble) overshoot_y) / MAX_OVERSHOOT_DISTANCE, 0, 1);
-      rect = relative_allocation;
-      rect.height = MAX_OVERSHOOT_DISTANCE;
-
-      pattern = cairo_pattern_create_linear (0, 0, 0, MAX_OVERSHOOT_DISTANCE);
-      cairo_pattern_add_color_stop_rgba (pattern, 0, color.red, color.green, color.blue, color.alpha * percent);
-      cairo_pattern_add_color_stop_rgba (pattern, percent, color.red, color.green, color.blue, 0);
-      cairo_matrix_init_identity (&matrix);
-
-      if (overshoot_y > 0)
-        {
-          rect.y += relative_allocation.height - MAX_OVERSHOOT_DISTANCE;
-          cairo_matrix_translate (&matrix, 0, relative_allocation.height);
-          cairo_matrix_rotate (&matrix, G_PI);
-        }
-
-      cairo_pattern_set_matrix (pattern, &matrix);
-
-      cairo_set_source (cr, pattern);
-      gdk_cairo_rectangle (cr, &rect);
-      cairo_fill (cr);
-
-      cairo_pattern_destroy (pattern);
-    }
+  gtk_style_context_restore (context);
 }
 
 static gboolean

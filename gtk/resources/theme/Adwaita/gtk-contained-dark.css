@@ -75,8 +75,22 @@
   border: 1px solid #215d9c;
   background-color: rgba(33, 93, 156, 0.2); }
 
-.overshoot {
-  background-color: rgba(33, 93, 156, 0.2); }
+.overshoot.top {
+  background: linear-gradient(to top, rgba(33, 93, 156, 0), rgba(33, 93, 156, 0.2));
+  background-size: auto 100px;
+  background-position: center 100%; }
+.overshoot.bottom {
+  background: linear-gradient(to bottom, rgba(33, 93, 156, 0), rgba(33, 93, 156, 0.2));
+  background-size: auto 100px;
+  background-position: center 0%; }
+.overshoot.left {
+  background: linear-gradient(to left, rgba(33, 93, 156, 0), rgba(33, 93, 156, 0.2));
+  background-size: 100px auto;
+  background-position: 100% center; }
+.overshoot.right {
+  background: linear-gradient(to right, rgba(33, 93, 156, 0), rgba(33, 93, 156, 0.2));
+  background-size: 100px auto;
+  background-position: 0% center; }
 
 GtkLabel.separator, .sidebar GtkLabel.separator:backdrop,
 .sidebar .view GtkLabel.separator:backdrop {
@@ -4162,6 +4176,10 @@ GtkCalendar.header .menuitem.titlebutton.button:selected, .list-row:selected {
   .titlebar .menuitem.titlebutton.button:backdrop:selected,
   GtkCalendar.header .menuitem.titlebutton.button:backdrop:selected, .list-row:backdrop:selected {
     color: #c9cbc9; }
+
+/* Decouple the font of context menus from their entry/textview */
+.context-menu {
+  font: initial; }
 
 /* Decouple the font of context menus from their entry/textview */
 .context-menu {
