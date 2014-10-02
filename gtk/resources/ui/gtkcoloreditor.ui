@@ -150,7 +150,8 @@
     <property name="can_focus">False</property>
     <property name="no_show_all">True</property>
     <style>
-      <class name="tooltip"/>
+      <class name="popover"/>
+      <class name="osd"/>
     </style>
     <signal name="draw" handler="popup_draw" swapped="no"/>
     <child>
@@ -208,7 +209,8 @@
     <property name="can_focus">False</property>
     <property name="no_show_all">True</property>
     <style>
-      <class name="tooltip"/>
+      <class name="popover"/>
+      <class name="osd"/>
     </style>
     <signal name="draw" handler="popup_draw" swapped="no"/>
     <child>
@@ -266,7 +268,8 @@
     <property name="can_focus">False</property>
     <property name="no_show_all">True</property>
     <style>
-      <class name="tooltip"/>
+      <class name="popover"/>
+      <class name="osd"/>
     </style>
     <signal name="draw" handler="popup_draw" swapped="no"/>
     <child>
