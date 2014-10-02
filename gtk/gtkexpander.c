@@ -1244,23 +1244,21 @@ gtk_expander_resize_toplevel (GtkExpander *expander)
       if (toplevel && gtk_widget_get_realized (toplevel))
         {
           GtkAllocation toplevel_allocation;
+          GtkAllocation child_allocation;
 
           gtk_widget_get_allocation (toplevel, &toplevel_allocation);
+          gtk_widget_get_allocation (child, &child_allocation);
 
           if (priv->expanded)
             {
               GtkRequisition child_requisition;
 
-              gtk_widget_get_preferred_size (child, &child_requisition, NULL);
+              gtk_widget_get_preferred_height_for_width (child, child_allocation.width, &child_requisition.height, NULL);
 
               toplevel_allocation.height += child_requisition.height;
             }
           else
             {
-              GtkAllocation child_allocation;
-
-              gtk_widget_get_allocation (child, &child_allocation);
-
               toplevel_allocation.height -= child_allocation.height;
             }
 
