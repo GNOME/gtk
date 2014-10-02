@@ -91,7 +91,7 @@ gtk_do_render_check (GtkStyleContext *context,
                      gdouble          width,
                      gdouble          height)
 {
-  GdkRGBA fg_color, bg_color;
+  const GdkRGBA *fg_color, *bg_color;
   GtkStateFlags flags;
   gint exterior_size, interior_size, thickness, pad;
   GtkBorderStyle border_style;
@@ -104,11 +104,10 @@ gtk_do_render_check (GtkStyleContext *context,
   flags = gtk_style_context_get_state (context);
   cairo_save (cr);
 
-  gtk_style_context_get_color (context, flags, &fg_color);
-  gtk_style_context_get_background_color (context, flags, &bg_color);
+  fg_color = _gtk_css_rgba_value_get_rgba (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_COLOR));
+  bg_color = _gtk_css_rgba_value_get_rgba (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_BACKGROUND_COLOR));
   gtk_style_context_get_border (context, flags, &border);
-  border_style = _gtk_css_border_style_value_get 
-    (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_BORDER_TOP_STYLE));
+  border_style = _gtk_css_border_style_value_get (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_BORDER_TOP_STYLE));
 
   border_width = MIN (MIN (border.top, border.bottom),
                       MIN (border.left, border.right));
@@ -133,20 +132,20 @@ gtk_do_render_check (GtkStyleContext *context,
 
   if (border_style == GTK_BORDER_STYLE_SOLID)
     {
-      GdkRGBA border_color;
+      const GdkRGBA *border_color;
 
       cairo_set_line_width (cr, border_width);
-      gtk_style_context_get_border_color (context, flags, &border_color);
+      border_color = _gtk_css_rgba_value_get_rgba (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_BORDER_TOP_COLOR));
 
       cairo_rectangle (cr, x + 0.5, y + 0.5, exterior_size - 1, exterior_size - 1);
-      gdk_cairo_set_source_rgba (cr, &bg_color);
+      gdk_cairo_set_source_rgba (cr, bg_color);
       cairo_fill_preserve (cr);
 
-      gdk_cairo_set_source_rgba (cr, &border_color);
+      gdk_cairo_set_source_rgba (cr, border_color);
       cairo_stroke (cr);
     }
 
-  gdk_cairo_set_source_rgba (cr, &fg_color);
+  gdk_cairo_set_source_rgba (cr, fg_color);
 
   if (flags & GTK_STATE_FLAG_INCONSISTENT)
     {
@@ -249,7 +248,7 @@ gtk_do_render_option (GtkStyleContext *context,
                       gdouble          height)
 {
   GtkStateFlags flags;
-  GdkRGBA fg_color, bg_color;
+  const GdkRGBA *fg_color, *bg_color;
   gint exterior_size, interior_size, pad, thickness, border_width;
   GtkBorderStyle border_style;
   GtkBorder border;
@@ -261,11 +260,10 @@ gtk_do_render_option (GtkStyleContext *context,
 
   cairo_save (cr);
 
-  gtk_style_context_get_color (context, flags, &fg_color);
-  gtk_style_context_get_background_color (context, flags, &bg_color);
+  fg_color = _gtk_css_rgba_value_get_rgba (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_COLOR));
+  bg_color = _gtk_css_rgba_value_get_rgba (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_BACKGROUND_COLOR));
   gtk_style_context_get_border (context, flags, &border);
-  border_style = _gtk_css_border_style_value_get 
-    (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_BORDER_TOP_STYLE));
+  border_style = _gtk_css_border_style_value_get (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_BORDER_TOP_STYLE));
 
   exterior_size = MIN (width, height);
   border_width = MIN (MIN (border.top, border.bottom),
@@ -279,10 +277,10 @@ gtk_do_render_option (GtkStyleContext *context,
 
   if (border_style == GTK_BORDER_STYLE_SOLID)
     {
-      GdkRGBA border_color;
+      const GdkRGBA *border_color;
 
       cairo_set_line_width (cr, border_width);
-      gtk_style_context_get_border_color (context, flags, &border_color);
+      border_color = _gtk_css_rgba_value_get_rgba (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_BORDER_TOP_COLOR));
 
       cairo_new_sub_path (cr);
       cairo_arc (cr,
@@ -291,14 +289,14 @@ gtk_do_render_option (GtkStyleContext *context,
                  (exterior_size - 1) / 2.,
                  0, 2 * G_PI);
 
-      gdk_cairo_set_source_rgba (cr, &bg_color);
+      gdk_cairo_set_source_rgba (cr, bg_color);
       cairo_fill_preserve (cr);
 
-      gdk_cairo_set_source_rgba (cr, &border_color);
+      gdk_cairo_set_source_rgba (cr, border_color);
       cairo_stroke (cr);
     }
 
-  gdk_cairo_set_source_rgba (cr, &fg_color);
+  gdk_cairo_set_source_rgba (cr, fg_color);
 
   /* FIXME: thickness */
   thickness = 1;
@@ -998,7 +996,7 @@ gtk_do_render_expander (GtkStyleContext *context,
                         gdouble          height)
 {
   GtkStateFlags flags;
-  GdkRGBA outline_color, fg_color;
+  const GdkRGBA *outline_color, *fg_color;
   double vertical_overshoot;
   int diameter;
   double radius;
@@ -1017,8 +1015,8 @@ gtk_do_render_expander (GtkStyleContext *context,
   cairo_save (cr);
   flags = gtk_style_context_get_state (context);
 
-  gtk_style_context_get_color (context, flags, &fg_color);
-  gtk_style_context_get_border_color (context, flags, &outline_color);
+  fg_color = _gtk_css_rgba_value_get_rgba (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_COLOR));
+  outline_color = _gtk_css_rgba_value_get_rgba (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_BORDER_TOP_COLOR));
 
   is_rtl = (gtk_style_context_get_state (context) & GTK_STATE_FLAG_DIR_RTL);
   line_width = 1;
@@ -1090,11 +1088,11 @@ gtk_do_render_expander (GtkStyleContext *context,
 
   cairo_set_line_width (cr, line_width);
 
-  gdk_cairo_set_source_rgba (cr, &fg_color);
+  gdk_cairo_set_source_rgba (cr, fg_color);
 
   cairo_fill_preserve (cr);
 
-  gdk_cairo_set_source_rgba (cr, &outline_color);
+  gdk_cairo_set_source_rgba (cr, outline_color);
   cairo_stroke (cr);
 
   cairo_restore (cr);
@@ -1724,8 +1722,8 @@ gtk_do_render_handle (GtkStyleContext *context,
                       gdouble          width,
                       gdouble          height)
 {
-  GtkStateFlags flags;
-  GdkRGBA bg_color, lighter, darker;
+  const GdkRGBA *bg_color;
+  GdkRGBA lighter, darker;
   GtkJunctionSides sides;
   GtkThemingBackground bg;
   gint xx, yy;
@@ -1735,14 +1733,13 @@ gtk_do_render_handle (GtkStyleContext *context,
     return;
 
   cairo_save (cr);
-  flags = gtk_style_context_get_state (context);
 
   cairo_set_line_width (cr, 1.0);
   sides = gtk_style_context_get_junction_sides (context);
-  gtk_style_context_get_background_color (context, flags, &bg_color);
+  bg_color = _gtk_css_rgba_value_get_rgba (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_BACKGROUND_COLOR));
 
-  color_shade (&bg_color, 0.7, &darker);
-  color_shade (&bg_color, 1.3, &lighter);
+  color_shade (bg_color, 0.7, &darker);
+  color_shade (bg_color, 1.3, &lighter);
 
   _gtk_theming_background_init (&bg, context, x, y, width, height, sides);
   has_image = _gtk_theming_background_has_background_image (&bg);
