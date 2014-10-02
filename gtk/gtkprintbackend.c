@@ -756,7 +756,7 @@ request_password (GtkPrintBackend  *backend,
 
   priv->auth_info_required = g_strdupv (ai_required);
   length = g_strv_length (ai_required);
-  priv->auth_info = g_new0 (gchar *, length);
+  priv->auth_info = g_new0 (gchar *, length + 1);
   priv->store_auth_info = FALSE;
 
   dialog = gtk_dialog_new_with_buttons ( _("Authentication"), NULL, GTK_DIALOG_MODAL, 
