@@ -22,10 +22,12 @@
 #include "config.h"
 
 #include "gtksidebar.h"
+
+#include "gtklabel.h"
 #include "gtklistbox.h"
+#include "gtkscrolledwindow.h"
 #include "gtkseparator.h"
 #include "gtkstylecontext.h"
-#include "gtklabel.h"
 #include "gtkprivate.h"
 #include "gtkintl.h"
 
@@ -179,15 +181,24 @@ gtk_sidebar_init (GtkSidebar *sidebar)
 {
   GtkStyleContext *style;
   GtkSidebarPrivate *priv;
+  GtkWidget *sw;
 
   priv = gtk_sidebar_get_instance_private (sidebar);
 
-  priv->list = GTK_LIST_BOX (gtk_list_box_new ());
+  sw = gtk_scrolled_window_new (NULL, NULL);
+  gtk_widget_show (sw);
+  gtk_widget_set_no_show_all (sw, TRUE);
+  gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (sw),
+                                  GTK_POLICY_NEVER,
+                                  GTK_POLICY_AUTOMATIC);
 
-  _gtk_bin_set_child (GTK_BIN (sidebar), GTK_WIDGET (priv->list));
-  gtk_widget_set_parent (GTK_WIDGET (priv->list), GTK_WIDGET (sidebar));
+  _gtk_bin_set_child (GTK_BIN (sidebar), sw);
+  gtk_widget_set_parent (sw, GTK_WIDGET (sidebar));
+
+  priv->list = GTK_LIST_BOX (gtk_list_box_new ());
   gtk_widget_show (GTK_WIDGET (priv->list));
-  gtk_widget_set_no_show_all (GTK_WIDGET (priv->list), TRUE);
+
+  gtk_container_add (GTK_CONTAINER (sw), GTK_WIDGET (priv->list));
 
   gtk_list_box_set_header_func (priv->list, update_header, sidebar, NULL);
   gtk_list_box_set_sort_func (priv->list, sort_list, sidebar, NULL);
