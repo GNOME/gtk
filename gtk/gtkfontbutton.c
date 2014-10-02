@@ -39,6 +39,7 @@
 #include "gtkseparator.h"
 #include "gtkprivate.h"
 #include "gtkintl.h"
+#include "gtkcssprovider.h"
 
 #include <string.h>
 #include <stdio.h>
@@ -82,6 +83,7 @@ struct _GtkFontButtonPrivate
   GtkFontFilterFunc     font_filter;
   gpointer              font_filter_data;
   GDestroyNotify        font_filter_data_destroy;
+  GtkCssProvider       *provider;
 };
 
 /* Signals */
@@ -579,19 +581,19 @@ static void
 gtk_font_button_finalize (GObject *object)
 {
   GtkFontButton *font_button = GTK_FONT_BUTTON (object);
+  GtkFontButtonPrivate *priv = font_button->priv;
 
-  if (font_button->priv->font_dialog != NULL) 
-    gtk_widget_destroy (font_button->priv->font_dialog);
-  font_button->priv->font_dialog = NULL;
+  if (priv->font_dialog != NULL) 
+    gtk_widget_destroy (priv->font_dialog);
 
-  g_free (font_button->priv->title);
-  font_button->priv->title = NULL;
+  g_free (priv->title);
 
   clear_font_data (font_button);
   clear_font_filter_data (font_button);
 
-  g_free (font_button->priv->preview_text);
-  font_button->priv->preview_text = NULL;
+  g_free (priv->preview_text);
+
+  g_clear_object (&priv->provider);
 
   G_OBJECT_CLASS (gtk_font_button_parent_class)->finalize (object);
 }
@@ -1123,22 +1125,47 @@ dialog_destroy (GtkWidget *widget,
 static void
 gtk_font_button_label_use_font (GtkFontButton *font_button)
 {
-  PangoFontDescription *desc;
+  GtkFontButtonPrivate *priv = font_button->priv;
+  GtkStyleContext *context;
 
-  if (font_button->priv->use_font)
+  context = gtk_widget_get_style_context (priv->font_label);
+
+  if (!priv->use_font)
     {
-      desc = pango_font_description_copy (font_button->priv->font_desc);
-
-      if (!font_button->priv->use_size)
-        pango_font_description_unset_fields (desc, PANGO_FONT_MASK_SIZE);
+      if (priv->provider)
+        {
+          gtk_style_context_remove_provider (context, GTK_STYLE_PROVIDER (priv->provider));
+          g_clear_object (&priv->provider);
+        }
     }
   else
-    desc = NULL;
+    {
+      PangoFontDescription *desc;
+      gchar *font, *data;
 
-  gtk_widget_override_font (font_button->priv->font_label, desc);
+      if (!priv->provider)
+        {
+          priv->provider = gtk_css_provider_new ();
+          gtk_style_context_add_provider (context,
+                                          GTK_STYLE_PROVIDER (priv->provider),
+                                          GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
+        }
 
-  if (desc)
-    pango_font_description_free (desc);
+      desc = pango_font_description_copy (priv->font_desc);
+
+      if (!priv->use_size)
+        pango_font_description_unset_fields (desc, PANGO_FONT_MASK_SIZE);
+
+      font = pango_font_description_to_string (desc);
+      data = g_strconcat ("* { font: ",  font, "; }", NULL);
+      
+      gtk_css_provider_load_from_data (priv->provider, data, -1, NULL);
+
+      g_free (data);
+      g_free (font);
+
+      pango_font_description_free (desc);
+    }
 }
 
 static void
