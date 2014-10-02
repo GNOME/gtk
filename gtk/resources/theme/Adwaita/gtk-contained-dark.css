@@ -117,10 +117,10 @@ GtkTextView {
   GtkTextView:backdrop {
     background-color: #323535; }
 
-GtkFlowBox .grid-child {
+.grid-child {
   padding: 3px;
   border-radius: 3px; }
-  GtkFlowBox .grid-child:selected {
+  .grid-child:selected {
     outline-offset: -2px; }
 
 .app-notification,
@@ -2744,58 +2744,50 @@ GtkSwitch {
   .menu .menuitem.radio:insensitive {
     color: #666a6a; }
 
-GtkTreeView.view.check, GtkTreeView.view.radio,
+.view.check, .view.radio,
 .list-row .check, list-row .radio {
   icon-shadow: none; }
-  GtkTreeView.view.check:selected, GtkTreeView.view.check:hover, GtkTreeView.view.radio:selected, GtkTreeView.view.radio:hover,
+  .view.check:selected, .view.check:hover, .view.radio:selected, .view.radio:hover,
   .list-row .check:selected,
   .list-row .check:hover, list-row .radio:selected, list-row .radio:hover {
     icon-shadow: none; }
 
-GtkIconView.view.check,
-GtkFlowBox.view.check {
+.view.content-view.check {
   icon-shadow: none;
   -gtk-icon-source: -gtk-scaled(url("assets/checkbox-selectionmode.png"), url("assets/checkbox-selectionmode@2.png"));
   background-color: transparent; }
 
-GtkIconView.view.check:hover,
-GtkFlowBox.view.check:hover {
+.view.content-view.check:hover {
   icon-shadow: none;
   -gtk-icon-source: -gtk-scaled(url("assets/checkbox-hover-selectionmode.png"), url("assets/checkbox-hover-selectionmode@2.png"));
   background-color: transparent; }
 
-GtkIconView.view.check:active,
-GtkFlowBox.view.check:active {
+.view.content-view.check:active {
   icon-shadow: none;
   -gtk-icon-source: -gtk-scaled(url("assets/checkbox-active-selectionmode.png"), url("assets/checkbox-active-selectionmode@2.png"));
   background-color: transparent; }
 
-GtkIconView.view.check:backdrop,
-GtkFlowBox.view.check:backdrop {
+.view.content-view.check:backdrop {
   icon-shadow: none;
   -gtk-icon-source: -gtk-scaled(url("assets/checkbox-backdrop-selectionmode.png"), url("assets/checkbox-backdrop-selectionmode@2.png"));
   background-color: transparent; }
 
-GtkIconView.view.check:checked,
-GtkFlowBox.view.check:checked {
+.view.content-view.check:checked {
   icon-shadow: none;
   -gtk-icon-source: -gtk-scaled(url("assets/checkbox-checked-selectionmode.png"), url("assets/checkbox-checked-selectionmode@2.png"));
   background-color: transparent; }
 
-GtkIconView.view.check:checked:hover,
-GtkFlowBox.view.check:checked:hover {
+.view.content-view.check:checked:hover {
   icon-shadow: none;
   -gtk-icon-source: -gtk-scaled(url("assets/checkbox-checked-hover-selectionmode.png"), url("assets/checkbox-checked-hover-selectionmode@2.png"));
   background-color: transparent; }
 
-GtkIconView.view.check:checked:active,
-GtkFlowBox.view.check:checked:active {
+.view.content-view.check:checked:active {
   icon-shadow: none;
   -gtk-icon-source: -gtk-scaled(url("assets/checkbox-checked-active-selectionmode.png"), url("assets/checkbox-checked-active-selectionmode@2.png"));
   background-color: transparent; }
 
-GtkIconView.view.check:backdrop:checked,
-GtkFlowBox.view.check:backdrop:checked {
+.view.content-view.check:backdrop:checked {
   icon-shadow: none;
   -gtk-icon-source: -gtk-scaled(url("assets/checkbox-checked-backdrop-selectionmode.png"), url("assets/checkbox-checked-backdrop-selectionmode@2.png"));
   background-color: transparent; }
@@ -3251,6 +3243,18 @@ GtkProgressBar {
     -GtkProgressBar-xspacing: 0;
     -GtkProgressBar-yspacing: 0;
     -GtkProgressBar-min-horizontal-bar-height: 3; }
+  GtkProgressBar.trough {
+    border: 1px solid #1c1f1f;
+    border-radius: 3px;
+    background-color: #2e3333; }
+    GtkProgressBar.trough:backdrop {
+      border-color: #1e2222;
+      background-color: #2f3434;
+      box-shadow: 0 1px rgba(255, 255, 255, 0); }
+    GtkProgressBar.trough.osd {
+      border-style: none;
+      background-color: transparent;
+      box-shadow: none; }
 
 .progressbar {
   background-image: linear-gradient(to bottom, #215d9c 2px, #266cb5);
@@ -3285,74 +3289,63 @@ GtkProgressBar {
     border-style: none;
     border-radius: 0; }
 
-GtkProgressBar.trough {
-  border: 1px solid #1c1f1f;
-  border-radius: 3px;
-  background-color: #2e3333; }
-  GtkProgressBar.trough:backdrop {
-    border-color: #1e2222;
-    background-color: #2f3434;
-    box-shadow: 0 1px rgba(255, 255, 255, 0); }
-  GtkProgressBar.trough.osd {
-    border-style: none;
-    background-color: transparent;
-    box-shadow: none; }
-
 /*************
  * Level Bar *
  *************/
-GtkLevelBar {
-  -GtkLevelBar-min-block-width: 34;
-  -GtkLevelBar-min-block-height: 3;
-  box-shadow: 0 1px rgba(238, 238, 236, 0.1); }
-
-GtkLevelBar.vertical {
+.level-bar.vertical {
   -GtkLevelBar-min-block-width: 3;
   -GtkLevelBar-min-block-height: 34; }
 
-.level-bar.trough {
-  border: 1px solid;
-  padding: 2px;
-  border-radius: 3px;
-  background-color: transparent;
-  background-image: linear-gradient(to bottom, #212121, #292929 90%);
-  border-color: #1c1f1f;
-  box-shadow: inset 0 3px rgba(0, 0, 0, 0.02), inset 0 2px rgba(0, 0, 0, 0.03), inset 0 1px rgba(0, 0, 0, 0.08), inset 0 0 0 1px rgba(33, 93, 156, 0), 0 1px rgba(238, 238, 236, 0.1); }
-  .level-bar.trough:backdrop {
+.level-bar {
+  box-shadow: 0 1px rgba(238, 238, 236, 0.1);
+  -GtkLevelBar-min-block-width: 34;
+  -GtkLevelBar-min-block-height: 3; }
+  .level-bar.vertical {
+    -GtkLevelBar-min-block-width: 3;
+    -GtkLevelBar-min-block-height: 34; }
+  .level-bar.trough {
+    border: 1px solid;
+    padding: 2px;
+    border-radius: 3px;
     background-color: transparent;
     background-image: linear-gradient(to bottom, #212121, #292929 90%);
-    color: #c9cbc9;
-    border-color: #1e2222;
-    background-image: linear-gradient(to bottom, #2c2c2c);
-    box-shadow: inset 0 3px transparent, inset 0 2px transparent, inset 0 1px transparent, 0 1px rgba(238, 238, 236, 0); }
-.level-bar.fill-block {
-  border: 1px solid #1c5187;
-  background-color: #215d9c;
-  box-shadow: 0 1px rgba(0, 0, 0, 0.1);
-  border-radius: 1px; }
-  .level-bar.fill-block:backdrop {
-    border-color: #215d9c;
-    box-shadow: none; }
-  .level-bar.fill-block.indicator-discrete.horizontal {
-    margin: 0 1px; }
-  .level-bar.fill-block.indicator-discrete.vertical {
-    margin: 1px 0; }
-  .level-bar.fill-block.level-high {
-    border-color: #40760c;
-    background-color: #5aa411; }
-    .level-bar.fill-block.level-high:backdrop {
-      border-color: #5aa411; }
-  .level-bar.fill-block.level-low {
-    border-color: #c26000;
-    background-color: #f57900; }
-    .level-bar.fill-block.level-low:backdrop {
-      border-color: #f57900; }
-  .level-bar.fill-block.empty-fill-block {
-    background-color: transparent;
-    border-color: rgba(238, 238, 236, 0.1);
-    box-shadow: none; }
-    .level-bar.fill-block.empty-fill-block:backdrop {
-      border-color: rgba(201, 203, 201, 0.15); }
+    border-color: #1c1f1f;
+    box-shadow: inset 0 3px rgba(0, 0, 0, 0.02), inset 0 2px rgba(0, 0, 0, 0.03), inset 0 1px rgba(0, 0, 0, 0.08), inset 0 0 0 1px rgba(33, 93, 156, 0), 0 1px rgba(238, 238, 236, 0.1); }
+    .level-bar.trough:backdrop {
+      background-color: transparent;
+      background-image: linear-gradient(to bottom, #212121, #292929 90%);
+      color: #c9cbc9;
+      border-color: #1e2222;
+      background-image: linear-gradient(to bottom, #2c2c2c);
+      box-shadow: inset 0 3px transparent, inset 0 2px transparent, inset 0 1px transparent, 0 1px rgba(238, 238, 236, 0); }
+  .level-bar.fill-block {
+    border: 1px solid #1c5187;
+    background-color: #215d9c;
+    box-shadow: 0 1px rgba(0, 0, 0, 0.1);
+    border-radius: 1px; }
+    .level-bar.fill-block:backdrop {
+      border-color: #215d9c;
+      box-shadow: none; }
+    .level-bar.fill-block.indicator-discrete.horizontal {
+      margin: 0 1px; }
+    .level-bar.fill-block.indicator-discrete.vertical {
+      margin: 1px 0; }
+    .level-bar.fill-block.level-high {
+      border-color: #40760c;
+      background-color: #5aa411; }
+      .level-bar.fill-block.level-high:backdrop {
+        border-color: #5aa411; }
+    .level-bar.fill-block.level-low {
+      border-color: #c26000;
+      background-color: #f57900; }
+      .level-bar.fill-block.level-low:backdrop {
+        border-color: #f57900; }
+    .level-bar.fill-block.empty-fill-block {
+      background-color: transparent;
+      border-color: rgba(238, 238, 236, 0.1);
+      box-shadow: none; }
+      .level-bar.fill-block.empty-fill-block:backdrop {
+        border-color: rgba(201, 203, 201, 0.15); }
 
 /**********
  * Frames *
@@ -3634,13 +3627,13 @@ GtkCalendar.header .list-row.button.titlebutton {
 /*************
  * Expanders *
  *************/
-GtkExpander {
+.expander {
   -gtk-icon-source: -gtk-icontheme("pan-end-symbolic"); }
-  GtkExpander:dir(rtl) {
+  .expander:dir(rtl) {
     -gtk-icon-source: -gtk-icontheme("pan-end-symbolic-rtl"); }
-  GtkExpander:hover {
+  .expander:hover {
     color: white; }
-  GtkExpander:checked {
+  .expander:checked {
     -gtk-icon-source: -gtk-icontheme("pan-down-symbolic"); }
 
 /************
@@ -3887,6 +3880,9 @@ GtkFileChooserDialog .dialog-action-box {
   .sidebar:selected,
   .sidebar .view:selected {
     background-color: #215d9c; }
+
+.sidebar-item {
+  padding: 10px; }
 
 GtkPaned {
   margin: 0 8px 8px 0; }
@@ -4151,22 +4147,19 @@ GtkCalendar.selection-mode.header .titlebutton.button {
   GtkCalendar.selection-mode.header .titlebutton.button:backdrop {
     icon-shadow: none; }
 
-.view:selected, .view:selected:focus, .view:selected:hover, GtkLabel:selected, GtkLabel:selected:focus, GtkLabel:selected:hover, GtkFlowBox .grid-child:selected, .entry:selected, .entry:selected:focus, .menuitem.button.flat:selected, .header-bar .menuitem.titlebutton.button:selected,
+.view:selected, .view:selected:focus, .view:selected:hover, GtkLabel:selected, GtkLabel:selected:focus, GtkLabel:selected:hover, .grid-child:selected, .entry:selected, .entry:selected:focus, .menuitem.button.flat:selected, .header-bar .menuitem.titlebutton.button:selected,
 .titlebar .menuitem.titlebutton.button:selected,
 GtkCalendar.header .menuitem.titlebutton.button:selected, .list-row:selected {
   background-color: #215d9c;
   color: #ffffff; }
-  .view:backdrop:selected, GtkLabel:backdrop:selected, GtkFlowBox .grid-child:backdrop:selected, .entry:backdrop:selected, .menuitem.button.flat:backdrop:selected, .header-bar .menuitem.titlebutton.button:backdrop:selected,
+  .view:backdrop:selected, GtkLabel:backdrop:selected, .grid-child:backdrop:selected, .entry:backdrop:selected, .menuitem.button.flat:backdrop:selected, .header-bar .menuitem.titlebutton.button:backdrop:selected,
   .titlebar .menuitem.titlebutton.button:backdrop:selected,
   GtkCalendar.header .menuitem.titlebutton.button:backdrop:selected, .list-row:backdrop:selected {
     color: #c9cbc9; }
 
-/* GtkSidebar */
-.sidebar {
-  background-color: shade(#393f3f, 0.99); }
-
-.sidebar-item {
-  padding: 10px; }
+/* Decouple the font of context menus from their entry/textview */
+.context-menu {
+  font: initial; }
 
 /* GTK NAMED COLORS */
 @define-color theme_fg_color #eeeeec;

@@ -117,10 +117,10 @@ GtkTextView {
   GtkTextView:backdrop {
     background-color: #f4f4f4; }
 
-GtkFlowBox .grid-child {
+.grid-child {
   padding: 3px;
   border-radius: 3px; }
-  GtkFlowBox .grid-child:selected {
+  .grid-child:selected {
     outline-offset: -2px; }
 
 .app-notification,
@@ -2447,7 +2447,7 @@ GtkSwitch {
   GtkCalendar.header .check.titlebutton.button {
     icon-shadow: none; }
 
-GtkTreeView.view.check:selected,
+.view.check:selected,
 .list-row:selected .check {
   -gtk-icon-source: -gtk-scaled(url("assets/selected-checkbox-unchecked.png"), url("assets/selected-checkbox-unchecked@2.png")); }
 
@@ -2459,7 +2459,7 @@ GtkTreeView.view.check:selected,
   GtkCalendar.header .check.titlebutton.button:hover {
     icon-shadow: none; }
 
-GtkTreeView.view.check:hover:selected,
+.view.check:hover:selected,
 .list-row:selected .check:hover {
   -gtk-icon-source: -gtk-scaled(url("assets/selected-checkbox-unchecked-hover.png"), url("assets/selected-checkbox-unchecked-hover@2.png")); }
 
@@ -2471,7 +2471,7 @@ GtkTreeView.view.check:hover:selected,
   GtkCalendar.header .check.titlebutton.button:active {
     icon-shadow: none; }
 
-GtkTreeView.view.check:active:selected,
+.view.check:active:selected,
 .list-row:selected .check:active {
   -gtk-icon-source: -gtk-scaled(url("assets/selected-checkbox-unchecked-active.png"), url("assets/selected-checkbox-unchecked-active@2.png")); }
 
@@ -2483,7 +2483,7 @@ GtkTreeView.view.check:active:selected,
   GtkCalendar.header .check.titlebutton.button:insensitive {
     icon-shadow: none; }
 
-GtkTreeView.view.check:insensitive:selected,
+.view.check:insensitive:selected,
 .list-row:selected .check:insensitive {
   -gtk-icon-source: -gtk-scaled(url("assets/selected-checkbox-unchecked-insensitive.png"), url("assets/selected-checkbox-unchecked-insensitive@2.png")); }
 
@@ -2495,7 +2495,7 @@ GtkTreeView.view.check:insensitive:selected,
   GtkCalendar.header .check.titlebutton.button:backdrop {
     icon-shadow: none; }
 
-GtkTreeView.view.check:backdrop:selected,
+.view.check:backdrop:selected,
 .list-row:selected .check:backdrop {
   -gtk-icon-source: -gtk-scaled(url("assets/selected-checkbox-unchecked-backdrop.png"), url("assets/selected-checkbox-unchecked-backdrop@2.png")); }
 
@@ -2507,7 +2507,7 @@ GtkTreeView.view.check:backdrop:selected,
   GtkCalendar.header .check.titlebutton.button:backdrop:insensitive {
     icon-shadow: none; }
 
-GtkTreeView.view.check:backdrop:insensitive:selected,
+.view.check:backdrop:insensitive:selected,
 .list-row:selected .check:backdrop:insensitive {
   -gtk-icon-source: -gtk-scaled(url("assets/selected-checkbox-unchecked-backdrop-insensitive.png"), url("assets/selected-checkbox-unchecked-backdrop-insensitive@2.png")); }
 
@@ -2519,7 +2519,7 @@ GtkTreeView.view.check:backdrop:insensitive:selected,
   GtkCalendar.header .check.titlebutton.button:inconsistent {
     icon-shadow: none; }
 
-GtkTreeView.view.check:inconsistent:selected,
+.view.check:inconsistent:selected,
 .list-row:selected .check:inconsistent {
   -gtk-icon-source: -gtk-scaled(url("assets/selected-checkbox-mixed.png"), url("assets/selected-checkbox-mixed@2.png")); }
 
@@ -2531,7 +2531,7 @@ GtkTreeView.view.check:inconsistent:selected,
   GtkCalendar.header .check.titlebutton.button:inconsistent:hover {
     icon-shadow: none; }
 
-GtkTreeView.view.check:inconsistent:hover:selected,
+.view.check:inconsistent:hover:selected,
 .list-row:selected .check:inconsistent:hover {
   -gtk-icon-source: -gtk-scaled(url("assets/selected-checkbox-mixed-hover.png"), url("assets/selected-checkbox-mixed-hover@2.png")); }
 
@@ -2543,7 +2543,7 @@ GtkTreeView.view.check:inconsistent:hover:selected,
   GtkCalendar.header .check.titlebutton.button:inconsistent:selected {
     icon-shadow: none; }
 
-GtkTreeView.view.check:inconsistent:selected:selected,
+.view.check:inconsistent:selected:selected,
 .list-row:selected .check:inconsistent:selected {
   -gtk-icon-source: -gtk-scaled(url("assets/selected-checkbox-mixed-active.png"), url("assets/selected-checkbox-mixed-active@2.png")); }
 
@@ -2555,7 +2555,7 @@ GtkTreeView.view.check:inconsistent:selected:selected,
   GtkCalendar.header .check.titlebutton.button:inconsistent:backdrop {
     icon-shadow: none; }
 
-GtkTreeView.view.check:inconsistent:backdrop:selected,
+.view.check:inconsistent:backdrop:selected,
 .list-row:selected .check:inconsistent:backdrop {
   -gtk-icon-source: -gtk-scaled(url("assets/selected-checkbox-mixed-backdrop.png"), url("assets/selected-checkbox-mixed-backdrop@2.png")); }
 
@@ -2567,7 +2567,7 @@ GtkTreeView.view.check:inconsistent:backdrop:selected,
   GtkCalendar.header .check.titlebutton.button:inconsistent:insensitive {
     icon-shadow: none; }
 
-GtkTreeView.view.check:inconsistent:insensitive:selected,
+.view.check:inconsistent:insensitive:selected,
 .list-row:selected .check:inconsistent:insensitive {
   -gtk-icon-source: -gtk-scaled(url("assets/selected-checkbox-mixed-insensitive.png"), url("assets/selected-checkbox-mixed-insensitive@2.png")); }
 
@@ -2579,7 +2579,7 @@ GtkTreeView.view.check:inconsistent:insensitive:selected,
   GtkCalendar.header .check.titlebutton.button:inconsistent:insensitive:backdrop {
     icon-shadow: none; }
 
-GtkTreeView.view.check:inconsistent:insensitive:backdrop:selected,
+.view.check:inconsistent:insensitive:backdrop:selected,
 .list-row:selected .check:inconsistent:insensitive:backdrop {
   -gtk-icon-source: -gtk-scaled(url("assets/selected-checkbox-mixed-backdrop-insensitive.png"), url("assets/selected-checkbox-mixed-backdrop-insensitive@2.png")); }
 
@@ -2591,7 +2591,7 @@ GtkTreeView.view.check:inconsistent:insensitive:backdrop:selected,
   GtkCalendar.header .check.titlebutton.button:checked {
     icon-shadow: none; }
 
-GtkTreeView.view.check:checked:selected,
+.view.check:checked:selected,
 .list-row:selected .check:checked {
   -gtk-icon-source: -gtk-scaled(url("assets/selected-checkbox-checked.png"), url("assets/selected-checkbox-checked@2.png")); }
 
@@ -2603,7 +2603,7 @@ GtkTreeView.view.check:checked:selected,
   GtkCalendar.header .check.titlebutton.button:checked:insensitive {
     icon-shadow: none; }
 
-GtkTreeView.view.check:checked:insensitive:selected,
+.view.check:checked:insensitive:selected,
 .list-row:selected .check:checked:insensitive {
   -gtk-icon-source: -gtk-scaled(url("assets/selected-checkbox-checked-insensitive.png"), url("assets/selected-checkbox-checked-insensitive@2.png")); }
 
@@ -2615,7 +2615,7 @@ GtkTreeView.view.check:checked:insensitive:selected,
   GtkCalendar.header .check.titlebutton.button:checked:hover {
     icon-shadow: none; }
 
-GtkTreeView.view.check:checked:hover:selected,
+.view.check:checked:hover:selected,
 .list-row:selected .check:checked:hover {
   -gtk-icon-source: -gtk-scaled(url("assets/selected-checkbox-checked-hover.png"), url("assets/selected-checkbox-checked-hover@2.png")); }
 
@@ -2627,7 +2627,7 @@ GtkTreeView.view.check:checked:hover:selected,
   GtkCalendar.header .check.titlebutton.button:checked:active {
     icon-shadow: none; }
 
-GtkTreeView.view.check:checked:active:selected,
+.view.check:checked:active:selected,
 .list-row:selected .check:checked:active {
   -gtk-icon-source: -gtk-scaled(url("assets/selected-checkbox-checked-active.png"), url("assets/selected-checkbox-checked-active@2.png")); }
 
@@ -2639,7 +2639,7 @@ GtkTreeView.view.check:checked:active:selected,
   GtkCalendar.header .check.titlebutton.button:backdrop:checked {
     icon-shadow: none; }
 
-GtkTreeView.view.check:backdrop:checked:selected,
+.view.check:backdrop:checked:selected,
 .list-row:selected .check:backdrop:checked {
   -gtk-icon-source: -gtk-scaled(url("assets/selected-checkbox-checked-backdrop.png"), url("assets/selected-checkbox-checked-backdrop@2.png")); }
 
@@ -2651,7 +2651,7 @@ GtkTreeView.view.check:backdrop:checked:selected,
   GtkCalendar.header .check.titlebutton.button:backdrop:checked:insensitive {
     icon-shadow: none; }
 
-GtkTreeView.view.check:backdrop:checked:insensitive:selected,
+.view.check:backdrop:checked:insensitive:selected,
 .list-row:selected .check:backdrop:checked:insensitive {
   -gtk-icon-source: -gtk-scaled(url("assets/selected-checkbox-checked-backdrop-insensitive.png"), url("assets/selected-checkbox-checked-backdrop-insensitive@2.png")); }
 
@@ -2676,7 +2676,7 @@ GtkTreeView.view.check:backdrop:checked:insensitive:selected,
   GtkCalendar.header .radio.titlebutton.button {
     icon-shadow: none; }
 
-GtkTreeView.view.radio:selected,
+.view.radio:selected,
 .list-row:selected .radio {
   -gtk-icon-source: -gtk-scaled(url("assets/selected-radio-unchecked.png"), url("assets/selected-radio-unchecked@2.png")); }
 
@@ -2688,7 +2688,7 @@ GtkTreeView.view.radio:selected,
   GtkCalendar.header .radio.titlebutton.button:hover {
     icon-shadow: none; }
 
-GtkTreeView.view.radio:hover:selected,
+.view.radio:hover:selected,
 .list-row:selected .radio:hover {
   -gtk-icon-source: -gtk-scaled(url("assets/selected-radio-unchecked-hover.png"), url("assets/selected-radio-unchecked-hover@2.png")); }
 
@@ -2700,7 +2700,7 @@ GtkTreeView.view.radio:hover:selected,
   GtkCalendar.header .radio.titlebutton.button:active {
     icon-shadow: none; }
 
-GtkTreeView.view.radio:active:selected,
+.view.radio:active:selected,
 .list-row:selected .radio:active {
   -gtk-icon-source: -gtk-scaled(url("assets/selected-radio-unchecked-active.png"), url("assets/selected-radio-unchecked-active@2.png")); }
 
@@ -2712,7 +2712,7 @@ GtkTreeView.view.radio:active:selected,
   GtkCalendar.header .radio.titlebutton.button:insensitive {
     icon-shadow: none; }
 
-GtkTreeView.view.radio:insensitive:selected,
+.view.radio:insensitive:selected,
 .list-row:selected .radio:insensitive {
   -gtk-icon-source: -gtk-scaled(url("assets/selected-radio-unchecked-insensitive.png"), url("assets/selected-radio-unchecked-insensitive@2.png")); }
 
@@ -2724,7 +2724,7 @@ GtkTreeView.view.radio:insensitive:selected,
   GtkCalendar.header .radio.titlebutton.button:backdrop {
     icon-shadow: none; }
 
-GtkTreeView.view.radio:backdrop:selected,
+.view.radio:backdrop:selected,
 .list-row:selected .radio:backdrop {
   -gtk-icon-source: -gtk-scaled(url("assets/selected-radio-unchecked-backdrop.png"), url("assets/selected-radio-unchecked-backdrop@2.png")); }
 
@@ -2736,7 +2736,7 @@ GtkTreeView.view.radio:backdrop:selected,
   GtkCalendar.header .radio.titlebutton.button:backdrop:insensitive {
     icon-shadow: none; }
 
-GtkTreeView.view.radio:backdrop:insensitive:selected,
+.view.radio:backdrop:insensitive:selected,
 .list-row:selected .radio:backdrop:insensitive {
   -gtk-icon-source: -gtk-scaled(url("assets/selected-radio-unchecked-backdrop-insensitive.png"), url("assets/selected-radio-unchecked-backdrop-insensitive@2.png")); }
 
@@ -2748,7 +2748,7 @@ GtkTreeView.view.radio:backdrop:insensitive:selected,
   GtkCalendar.header .radio.titlebutton.button:inconsistent {
     icon-shadow: none; }
 
-GtkTreeView.view.radio:inconsistent:selected,
+.view.radio:inconsistent:selected,
 .list-row:selected .radio:inconsistent {
   -gtk-icon-source: -gtk-scaled(url("assets/selected-radio-mixed.png"), url("assets/selected-radio-mixed@2.png")); }
 
@@ -2760,7 +2760,7 @@ GtkTreeView.view.radio:inconsistent:selected,
   GtkCalendar.header .radio.titlebutton.button:inconsistent:hover {
     icon-shadow: none; }
 
-GtkTreeView.view.radio:inconsistent:hover:selected,
+.view.radio:inconsistent:hover:selected,
 .list-row:selected .radio:inconsistent:hover {
   -gtk-icon-source: -gtk-scaled(url("assets/selected-radio-mixed-hover.png"), url("assets/selected-radio-mixed-hover@2.png")); }
 
@@ -2772,7 +2772,7 @@ GtkTreeView.view.radio:inconsistent:hover:selected,
   GtkCalendar.header .radio.titlebutton.button:inconsistent:selected {
     icon-shadow: none; }
 
-GtkTreeView.view.radio:inconsistent:selected:selected,
+.view.radio:inconsistent:selected:selected,
 .list-row:selected .radio:inconsistent:selected {
   -gtk-icon-source: -gtk-scaled(url("assets/selected-radio-mixed-active.png"), url("assets/selected-radio-mixed-active@2.png")); }
 
@@ -2784,7 +2784,7 @@ GtkTreeView.view.radio:inconsistent:selected:selected,
   GtkCalendar.header .radio.titlebutton.button:inconsistent:backdrop {
     icon-shadow: none; }
 
-GtkTreeView.view.radio:inconsistent:backdrop:selected,
+.view.radio:inconsistent:backdrop:selected,
 .list-row:selected .radio:inconsistent:backdrop {
   -gtk-icon-source: -gtk-scaled(url("assets/selected-radio-mixed-backdrop.png"), url("assets/selected-radio-mixed-backdrop@2.png")); }
 
@@ -2796,7 +2796,7 @@ GtkTreeView.view.radio:inconsistent:backdrop:selected,
   GtkCalendar.header .radio.titlebutton.button:inconsistent:insensitive {
     icon-shadow: none; }
 
-GtkTreeView.view.radio:inconsistent:insensitive:selected,
+.view.radio:inconsistent:insensitive:selected,
 .list-row:selected .radio:inconsistent:insensitive {
   -gtk-icon-source: -gtk-scaled(url("assets/selected-radio-mixed-insensitive.png"), url("assets/selected-radio-mixed-insensitive@2.png")); }
 
@@ -2808,7 +2808,7 @@ GtkTreeView.view.radio:inconsistent:insensitive:selected,
   GtkCalendar.header .radio.titlebutton.button:inconsistent:insensitive:backdrop {
     icon-shadow: none; }
 
-GtkTreeView.view.radio:inconsistent:insensitive:backdrop:selected,
+.view.radio:inconsistent:insensitive:backdrop:selected,
 .list-row:selected .radio:inconsistent:insensitive:backdrop {
   -gtk-icon-source: -gtk-scaled(url("assets/selected-radio-mixed-backdrop-insensitive.png"), url("assets/selected-radio-mixed-backdrop-insensitive@2.png")); }
 
@@ -2820,7 +2820,7 @@ GtkTreeView.view.radio:inconsistent:insensitive:backdrop:selected,
   GtkCalendar.header .radio.titlebutton.button:checked {
     icon-shadow: none; }
 
-GtkTreeView.view.radio:checked:selected,
+.view.radio:checked:selected,
 .list-row:selected .radio:checked {
   -gtk-icon-source: -gtk-scaled(url("assets/selected-radio-checked.png"), url("assets/selected-radio-checked@2.png")); }
 
@@ -2832,7 +2832,7 @@ GtkTreeView.view.radio:checked:selected,
   GtkCalendar.header .radio.titlebutton.button:checked:insensitive {
     icon-shadow: none; }
 
-GtkTreeView.view.radio:checked:insensitive:selected,
+.view.radio:checked:insensitive:selected,
 .list-row:selected .radio:checked:insensitive {
   -gtk-icon-source: -gtk-scaled(url("assets/selected-radio-checked-insensitive.png"), url("assets/selected-radio-checked-insensitive@2.png")); }
 
@@ -2844,7 +2844,7 @@ GtkTreeView.view.radio:checked:insensitive:selected,
   GtkCalendar.header .radio.titlebutton.button:checked:hover {
     icon-shadow: none; }
 
-GtkTreeView.view.radio:checked:hover:selected,
+.view.radio:checked:hover:selected,
 .list-row:selected .radio:checked:hover {
   -gtk-icon-source: -gtk-scaled(url("assets/selected-radio-checked-hover.png"), url("assets/selected-radio-checked-hover@2.png")); }
 
@@ -2856,7 +2856,7 @@ GtkTreeView.view.radio:checked:hover:selected,
   GtkCalendar.header .radio.titlebutton.button:checked:active {
     icon-shadow: none; }
 
-GtkTreeView.view.radio:checked:active:selected,
+.view.radio:checked:active:selected,
 .list-row:selected .radio:checked:active {
   -gtk-icon-source: -gtk-scaled(url("assets/selected-radio-checked-active.png"), url("assets/selected-radio-checked-active@2.png")); }
 
@@ -2868,7 +2868,7 @@ GtkTreeView.view.radio:checked:active:selected,
   GtkCalendar.header .radio.titlebutton.button:backdrop:checked {
     icon-shadow: none; }
 
-GtkTreeView.view.radio:backdrop:checked:selected,
+.view.radio:backdrop:checked:selected,
 .list-row:selected .radio:backdrop:checked {
   -gtk-icon-source: -gtk-scaled(url("assets/selected-radio-checked-backdrop.png"), url("assets/selected-radio-checked-backdrop@2.png")); }
 
@@ -2880,7 +2880,7 @@ GtkTreeView.view.radio:backdrop:checked:selected,
   GtkCalendar.header .radio.titlebutton.button:backdrop:checked:insensitive {
     icon-shadow: none; }
 
-GtkTreeView.view.radio:backdrop:checked:insensitive:selected,
+.view.radio:backdrop:checked:insensitive:selected,
 .list-row:selected .radio:backdrop:checked:insensitive {
   -gtk-icon-source: -gtk-scaled(url("assets/selected-radio-checked-backdrop-insensitive.png"), url("assets/selected-radio-checked-backdrop-insensitive@2.png")); }
 
@@ -2897,58 +2897,50 @@ GtkTreeView.view.radio:backdrop:checked:insensitive:selected,
   .menu .menuitem.radio:insensitive {
     color: #bdbebf; }
 
-GtkTreeView.view.check, GtkTreeView.view.radio,
+.view.check, .view.radio,
 .list-row .check, list-row .radio {
   icon-shadow: none; }
-  GtkTreeView.view.check:selected, GtkTreeView.view.check:hover, GtkTreeView.view.radio:selected, GtkTreeView.view.radio:hover,
+  .view.check:selected, .view.check:hover, .view.radio:selected, .view.radio:hover,
   .list-row .check:selected,
   .list-row .check:hover, list-row .radio:selected, list-row .radio:hover {
     icon-shadow: none; }
 
-GtkIconView.view.check,
-GtkFlowBox.view.check {
+.view.content-view.check {
   icon-shadow: none;
   -gtk-icon-source: -gtk-scaled(url("assets/checkbox-selectionmode.png"), url("assets/checkbox-selectionmode@2.png"));
   background-color: transparent; }
 
-GtkIconView.view.check:hover,
-GtkFlowBox.view.check:hover {
+.view.content-view.check:hover {
   icon-shadow: none;
   -gtk-icon-source: -gtk-scaled(url("assets/checkbox-hover-selectionmode.png"), url("assets/checkbox-hover-selectionmode@2.png"));
   background-color: transparent; }
 
-GtkIconView.view.check:active,
-GtkFlowBox.view.check:active {
+.view.content-view.check:active {
   icon-shadow: none;
   -gtk-icon-source: -gtk-scaled(url("assets/checkbox-active-selectionmode.png"), url("assets/checkbox-active-selectionmode@2.png"));
   background-color: transparent; }
 
-GtkIconView.view.check:backdrop,
-GtkFlowBox.view.check:backdrop {
+.view.content-view.check:backdrop {
   icon-shadow: none;
   -gtk-icon-source: -gtk-scaled(url("assets/checkbox-backdrop-selectionmode.png"), url("assets/checkbox-backdrop-selectionmode@2.png"));
   background-color: transparent; }
 
-GtkIconView.view.check:checked,
-GtkFlowBox.view.check:checked {
+.view.content-view.check:checked {
   icon-shadow: none;
   -gtk-icon-source: -gtk-scaled(url("assets/checkbox-checked-selectionmode.png"), url("assets/checkbox-checked-selectionmode@2.png"));
   background-color: transparent; }
 
-GtkIconView.view.check:checked:hover,
-GtkFlowBox.view.check:checked:hover {
+.view.content-view.check:checked:hover {
   icon-shadow: none;
   -gtk-icon-source: -gtk-scaled(url("assets/checkbox-checked-hover-selectionmode.png"), url("assets/checkbox-checked-hover-selectionmode@2.png"));
   background-color: transparent; }
 
-GtkIconView.view.check:checked:active,
-GtkFlowBox.view.check:checked:active {
+.view.content-view.check:checked:active {
   icon-shadow: none;
   -gtk-icon-source: -gtk-scaled(url("assets/checkbox-checked-active-selectionmode.png"), url("assets/checkbox-checked-active-selectionmode@2.png"));
   background-color: transparent; }
 
-GtkIconView.view.check:backdrop:checked,
-GtkFlowBox.view.check:backdrop:checked {
+.view.content-view.check:backdrop:checked {
   icon-shadow: none;
   -gtk-icon-source: -gtk-scaled(url("assets/checkbox-checked-backdrop-selectionmode.png"), url("assets/checkbox-checked-backdrop-selectionmode@2.png"));
   background-color: transparent; }
@@ -3404,6 +3396,18 @@ GtkProgressBar {
     -GtkProgressBar-xspacing: 0;
     -GtkProgressBar-yspacing: 0;
     -GtkProgressBar-min-horizontal-bar-height: 3; }
+  GtkProgressBar.trough {
+    border: 1px solid #a1a1a1;
+    border-radius: 3px;
+    background-color: #d2d2d2; }
+    GtkProgressBar.trough:backdrop {
+      border-color: #a8a8a8;
+      background-color: #d4d4d4;
+      box-shadow: 0 1px rgba(255, 255, 255, 0); }
+    GtkProgressBar.trough.osd {
+      border-style: none;
+      background-color: transparent;
+      box-shadow: none; }
 
 .progressbar {
   background-image: linear-gradient(to bottom, #4a90d9 2px, #63a0de);
@@ -3438,74 +3442,63 @@ GtkProgressBar {
     border-style: none;
     border-radius: 0; }
 
-GtkProgressBar.trough {
-  border: 1px solid #a1a1a1;
-  border-radius: 3px;
-  background-color: #d2d2d2; }
-  GtkProgressBar.trough:backdrop {
-    border-color: #a8a8a8;
-    background-color: #d4d4d4;
-    box-shadow: 0 1px rgba(255, 255, 255, 0); }
-  GtkProgressBar.trough.osd {
-    border-style: none;
-    background-color: transparent;
-    box-shadow: none; }
-
 /*************
  * Level Bar *
  *************/
-GtkLevelBar {
-  -GtkLevelBar-min-block-width: 34;
-  -GtkLevelBar-min-block-height: 3;
-  box-shadow: 0 1px white; }
-
-GtkLevelBar.vertical {
+.level-bar.vertical {
   -GtkLevelBar-min-block-width: 3;
   -GtkLevelBar-min-block-height: 34; }
 
-.level-bar.trough {
-  border: 1px solid;
-  padding: 2px;
-  border-radius: 3px;
-  background-color: transparent;
-  background-image: linear-gradient(to bottom, #f7f7f7, #ffffff 90%);
-  border-color: #a1a1a1;
-  box-shadow: inset 0 3px rgba(0, 0, 0, 0.02), inset 0 2px rgba(0, 0, 0, 0.03), inset 0 1px rgba(0, 0, 0, 0.08), inset 0 0 0 1px rgba(74, 144, 217, 0), 0 1px white; }
-  .level-bar.trough:backdrop {
+.level-bar {
+  box-shadow: 0 1px white;
+  -GtkLevelBar-min-block-width: 34;
+  -GtkLevelBar-min-block-height: 3; }
+  .level-bar.vertical {
+    -GtkLevelBar-min-block-width: 3;
+    -GtkLevelBar-min-block-height: 34; }
+  .level-bar.trough {
+    border: 1px solid;
+    padding: 2px;
+    border-radius: 3px;
     background-color: transparent;
     background-image: linear-gradient(to bottom, #f7f7f7, #ffffff 90%);
-    color: #54595a;
-    border-color: #a8a8a8;
-    background-image: linear-gradient(to bottom, #fcfcfc);
-    box-shadow: inset 0 3px transparent, inset 0 2px transparent, inset 0 1px transparent, 0 1px rgba(255, 255, 255, 0); }
-.level-bar.fill-block {
-  border: 1px solid #2a76c6;
-  background-color: #4a90d9;
-  box-shadow: 0 1px rgba(0, 0, 0, 0.1);
-  border-radius: 1px; }
-  .level-bar.fill-block:backdrop {
-    border-color: #4a90d9;
-    box-shadow: none; }
-  .level-bar.fill-block.indicator-discrete.horizontal {
-    margin: 0 1px; }
-  .level-bar.fill-block.indicator-discrete.vertical {
-    margin: 1px 0; }
-  .level-bar.fill-block.level-high {
-    border-color: #5aa411;
-    background-color: #73d216; }
-    .level-bar.fill-block.level-high:backdrop {
-      border-color: #73d216; }
-  .level-bar.fill-block.level-low {
-    border-color: #c26000;
-    background-color: #f57900; }
-    .level-bar.fill-block.level-low:backdrop {
-      border-color: #f57900; }
-  .level-bar.fill-block.empty-fill-block {
-    background-color: transparent;
-    border-color: rgba(46, 52, 54, 0.2);
-    box-shadow: none; }
-    .level-bar.fill-block.empty-fill-block:backdrop {
-      border-color: rgba(84, 89, 90, 0.15); }
+    border-color: #a1a1a1;
+    box-shadow: inset 0 3px rgba(0, 0, 0, 0.02), inset 0 2px rgba(0, 0, 0, 0.03), inset 0 1px rgba(0, 0, 0, 0.08), inset 0 0 0 1px rgba(74, 144, 217, 0), 0 1px white; }
+    .level-bar.trough:backdrop {
+      background-color: transparent;
+      background-image: linear-gradient(to bottom, #f7f7f7, #ffffff 90%);
+      color: #54595a;
+      border-color: #a8a8a8;
+      background-image: linear-gradient(to bottom, #fcfcfc);
+      box-shadow: inset 0 3px transparent, inset 0 2px transparent, inset 0 1px transparent, 0 1px rgba(255, 255, 255, 0); }
+  .level-bar.fill-block {
+    border: 1px solid #2a76c6;
+    background-color: #4a90d9;
+    box-shadow: 0 1px rgba(0, 0, 0, 0.1);
+    border-radius: 1px; }
+    .level-bar.fill-block:backdrop {
+      border-color: #4a90d9;
+      box-shadow: none; }
+    .level-bar.fill-block.indicator-discrete.horizontal {
+      margin: 0 1px; }
+    .level-bar.fill-block.indicator-discrete.vertical {
+      margin: 1px 0; }
+    .level-bar.fill-block.level-high {
+      border-color: #5aa411;
+      background-color: #73d216; }
+      .level-bar.fill-block.level-high:backdrop {
+        border-color: #73d216; }
+    .level-bar.fill-block.level-low {
+      border-color: #c26000;
+      background-color: #f57900; }
+      .level-bar.fill-block.level-low:backdrop {
+        border-color: #f57900; }
+    .level-bar.fill-block.empty-fill-block {
+      background-color: transparent;
+      border-color: rgba(46, 52, 54, 0.2);
+      box-shadow: none; }
+      .level-bar.fill-block.empty-fill-block:backdrop {
+        border-color: rgba(84, 89, 90, 0.15); }
 
 /**********
  * Frames *
@@ -3795,13 +3788,13 @@ GtkCalendar.header .list-row.button.titlebutton {
 /*************
  * Expanders *
  *************/
-GtkExpander {
+.expander {
   -gtk-icon-source: -gtk-icontheme("pan-end-symbolic"); }
-  GtkExpander:dir(rtl) {
+  .expander:dir(rtl) {
     -gtk-icon-source: -gtk-icontheme("pan-end-symbolic-rtl"); }
-  GtkExpander:hover {
+  .expander:hover {
     color: #748489; }
-  GtkExpander:checked {
+  .expander:checked {
     -gtk-icon-source: -gtk-icontheme("pan-down-symbolic"); }
 
 /************
@@ -4048,6 +4041,9 @@ GtkFileChooserDialog .dialog-action-box {
   .sidebar:selected,
   .sidebar .view:selected {
     background-color: #4a90d9; }
+
+.sidebar-item {
+  padding: 10px; }
 
 GtkPaned {
   margin: 0 8px 8px 0; }
@@ -4312,23 +4308,20 @@ GtkCalendar.selection-mode.header .titlebutton.button {
   GtkCalendar.selection-mode.header .titlebutton.button:backdrop {
     icon-shadow: none; }
 
-.view:selected, .view:selected:focus, .view:selected:hover, GtkLabel:selected, GtkLabel:selected:focus, GtkLabel:selected:hover, GtkFlowBox .grid-child:selected, .entry:selected, .entry:selected:focus, .menuitem.button.flat:selected, .header-bar .menuitem.titlebutton.button:selected,
+.view:selected, .view:selected:focus, .view:selected:hover, GtkLabel:selected, GtkLabel:selected:focus, GtkLabel:selected:hover, .grid-child:selected, .entry:selected, .entry:selected:focus, .menuitem.button.flat:selected, .header-bar .menuitem.titlebutton.button:selected,
 .titlebar .menuitem.titlebutton.button:selected,
 GtkCalendar.header .menuitem.titlebutton.button:selected, .list-row:selected {
   background-color: #4a90d9;
   color: #ffffff;
   outline-color: rgba(255, 255, 255, 0.3); }
-  .view:backdrop:selected, GtkLabel:backdrop:selected, GtkFlowBox .grid-child:backdrop:selected, .entry:backdrop:selected, .menuitem.button.flat:backdrop:selected, .header-bar .menuitem.titlebutton.button:backdrop:selected,
+  .view:backdrop:selected, GtkLabel:backdrop:selected, .grid-child:backdrop:selected, .entry:backdrop:selected, .menuitem.button.flat:backdrop:selected, .header-bar .menuitem.titlebutton.button:backdrop:selected,
   .titlebar .menuitem.titlebutton.button:backdrop:selected,
   GtkCalendar.header .menuitem.titlebutton.button:backdrop:selected, .list-row:backdrop:selected {
     color: #fcfcfc; }
 
-/* GtkSidebar */
-.sidebar {
-  background-color: shade(#ededed, 0.99); }
-
-.sidebar-item {
-  padding: 10px; }
+/* Decouple the font of context menus from their entry/textview */
+.context-menu {
+  font: initial; }
 
 /* GTK NAMED COLORS */
 @define-color theme_fg_color #2e3436;

@@ -14,7 +14,7 @@ Adwaita is a complex themes, so to keep it maintainable it's written and process
 generated CSS is then transformed into a gresource file during gtk build and used at runtime in a 
 non-legible or editable form.
 
-It is very likely your change will happen in the _common.scss file. That's where most of the widget 
+It is very likely your change will happen in the _common.scss file. That's where all the widget 
 selectors are defined. Here's a rundown of the "supporting" stylesheets, that are unlikely to be the 
 right place for a drive by stylesheet fix:
 

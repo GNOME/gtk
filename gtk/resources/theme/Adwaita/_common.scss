@@ -175,7 +175,7 @@ GtkTextView { // This will get overridden by .view, needed by gedit line numbers
                                      $backdrop_base_color, 50%); }
 }
 
-GtkFlowBox .grid-child {
+.grid-child {
   padding: 3px;
   border-radius: 3px;
   &:selected {
@@ -1824,7 +1824,7 @@ $asset_suffix: if($variant=='dark', '-dark', '');
       // the borders of the light variant versions of checks and radios are
       // too similar in luminosity to the selected background color, hence
       // we need special casing.
-      GtkTreeView.view.#{$w}#{$s}:selected,
+      .view.#{$w}#{$s}:selected,
       .list-row:selected .#{$w}#{$s} {
         -gtk-icon-source: -gtk-scaled(url("assets/selected-#{$a}#{$as}#{$asset_suffix}.png"),
                                       url("assets/selected-#{$a}#{$as}#{$asset_suffix}@2.png"));
@@ -1849,7 +1849,7 @@ $asset_suffix: if($variant=='dark', '-dark', '');
 }
 
 //treeview and list-rows
-GtkTreeView.view.check, GtkTreeView.view.radio,
+.view.check, .view.radio,
 .list-row .check, list-row .radio {
   icon-shadow: none;
   &:selected, &:hover { icon-shadow: none; }
@@ -1864,8 +1864,7 @@ GtkTreeView.view.check, GtkTreeView.view.radio,
                   (':checked:hover', '-checked-hover-selectionmode'),
                   (':checked:active', '-checked-active-selectionmode'),
                   (':backdrop:checked', '-checked-backdrop-selectionmode') {
-  GtkIconView.view.check#{$s},
-  GtkFlowBox.view.check#{$s} {
+  .view.content-view.check#{$s} {
     icon-shadow: none;
     -gtk-icon-source: -gtk-scaled(url("assets/checkbox#{$as}.png"),
                                     url("assets/checkbox#{$as}@2.png"));
@@ -2081,6 +2080,21 @@ GtkProgressBar {
     -GtkProgressBar-yspacing: 0;
     -GtkProgressBar-min-horizontal-bar-height: 3;
   }
+  &.trough {  // background
+    border: 1px solid $borders_color;
+    border-radius: 3px;
+    background-color: mix($borders_color,$bg_color, 35%);
+    &:backdrop{
+      border-color: $backdrop_borders_color;
+      background-color: $backdrop_dark_fill;
+      box-shadow: 0 1px transparentize(white,1);
+    }
+    &.osd {
+      border-style: none;
+      background-color: transparent;
+      box-shadow: none;
+    }
+  }
 }
 
 // moving bit
@@ -2127,40 +2141,24 @@ GtkProgressBar {
   }
 }
 
-// background
-GtkProgressBar.trough {
-  border: 1px solid $borders_color;
-  border-radius: 3px;
-  background-color: mix($borders_color,$bg_color, 35%);
-  &:backdrop{
-    border-color: $backdrop_borders_color;
-    background-color: $backdrop_dark_fill;
-    box-shadow: 0 1px transparentize(white,1);
-  }
-  &.osd {
-    border-style: none;
-    background-color: transparent;
-    box-shadow: none;
-    //FIXME: there is a margin on top
-  }
-}
 
 /*************
  * Level Bar *
  *************/
 
-GtkLevelBar {
-  -GtkLevelBar-min-block-width: 34;
-  -GtkLevelBar-min-block-height: 3;
-  box-shadow: _widget_edge(); // needs to be set here to avoid clipping
-}
-
-GtkLevelBar.vertical {
+.level-bar.vertical {
   -GtkLevelBar-min-block-width: 3;
   -GtkLevelBar-min-block-height: 34;
 }
 
 .level-bar {
+  box-shadow: _widget_edge(); // needs to be set here to avoid clipping
+  -GtkLevelBar-min-block-width: 34;
+  -GtkLevelBar-min-block-height: 3;
+  &.vertical {
+    -GtkLevelBar-min-block-width: 3;
+    -GtkLevelBar-min-block-height: 34;
+  }
   &.trough {
     border: 1px solid;
     padding: 2px;
@@ -2379,7 +2377,7 @@ GtkScrolledWindow {
  * Expanders *
  *************/
 
-GtkExpander {
+.expander {
   -gtk-icon-source: -gtk-icontheme('pan-end-symbolic');
   &:dir(rtl) { -gtk-icon-source: -gtk-icontheme('pan-end-symbolic-rtl'); }
   &:hover { color: lighten($fg_color,30%); } //only lightens the arrow
@@ -2555,6 +2553,10 @@ GtkFileChooserDialog {
     background-color: $selected_bg_color;
   }
   .separator:backdrop { @extend .separator; } // overriden w/o this
+}
+
+.sidebar-item {
+  padding: 10px;
 }
 
 GtkPaned {
@@ -2824,14 +2826,6 @@ GtkVolumeButton.button { padding: 8px; }
   }
   &:backdrop { color: if($variant=='light', $backdrop_base_color,
                                             $backdrop_fg_color); }
-}
-
-/* GtkSidebar */
-.sidebar {
-  background-color: shade($bg_color, 0.99)
-}
-.sidebar-item {
-  padding: 10px;
 }
 
 /* Decouple the font of context menus from their entry/textview */
