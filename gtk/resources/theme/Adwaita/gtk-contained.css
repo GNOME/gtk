@@ -842,16 +842,6 @@ GtkCalendar.header .button.titlebutton {
   .titlebar .stack-switcher > .titlebutton.button,
   GtkCalendar.header .stack-switcher > .titlebutton.button {
     padding: 5px 2px; }
-  .stack-switcher > .button.needs-attention > GtkLabel, .stack-switcher > .button.needs-attention > GtkImage {
-    animation: needs_attention 150ms ease-in;
-    background-image: -gtk-gradient(radial, center center, 0, center center, 0.5, to(#4a90d9), to(transparent)), -gtk-gradient(radial, center center, 0, center center, 0.5, to(rgba(255, 255, 255, 0.76923)), to(transparent));
-    background-size: 6px 6px, 6px 6px;
-    background-repeat: no-repeat;
-    background-position: right 3px, right 4px; }
-    .stack-switcher > .button.needs-attention > GtkLabel:backdrop, .stack-switcher > .button.needs-attention > GtkImage:backdrop {
-      background-size: 6px 6px, 0 0; }
-    .stack-switcher > .button.needs-attention > GtkLabel:dir(rtl), .stack-switcher > .button.needs-attention > GtkImage:dir(rtl) {
-      background-position: left 3px, left 4px; }
   .stack-switcher > .button.needs-attention:active > GtkLabel, .stack-switcher > .button.needs-attention:active > GtkImage, .stack-switcher > .button.needs-attention:checked > GtkLabel, .stack-switcher > .button.needs-attention:checked > GtkImage {
     animation: none;
     background-image: none; }
@@ -868,6 +858,17 @@ GtkCalendar.header .button.titlebutton {
   .primary-toolbar GtkCalendar.header .button.titlebutton,
   GtkCalendar.header .primary-toolbar .button.titlebutton {
     icon-shadow: none; }
+
+.stack-switcher > .button.needs-attention > GtkLabel, .stack-switcher > .button.needs-attention > GtkImage, .sidebar-item.needs-attention > GtkLabel {
+  animation: needs_attention 150ms ease-in;
+  background-image: -gtk-gradient(radial, center center, 0, center center, 0.5, to(#4a90d9), to(transparent)), -gtk-gradient(radial, center center, 0, center center, 0.5, to(rgba(255, 255, 255, 0.76923)), to(transparent));
+  background-size: 6px 6px, 6px 6px;
+  background-repeat: no-repeat;
+  background-position: right 3px, right 4px; }
+  .stack-switcher > .button.needs-attention > GtkLabel:backdrop, .stack-switcher > .button.needs-attention > GtkImage:backdrop, .sidebar-item.needs-attention > GtkLabel:backdrop {
+    background-size: 6px 6px, 0 0; }
+  .stack-switcher > .button.needs-attention > GtkLabel:dir(rtl), .stack-switcher > .button.needs-attention > GtkImage:dir(rtl), .sidebar-item.needs-attention > GtkLabel:dir(rtl) {
+    background-position: left 3px, left 4px; }
 
 .inline-toolbar GtkToolButton > .button, .inline-toolbar .header-bar GtkToolButton > .button.titlebutton, .header-bar .inline-toolbar GtkToolButton > .button.titlebutton,
 .inline-toolbar .titlebar GtkToolButton > .button.titlebutton,
@@ -4043,7 +4044,12 @@ GtkFileChooserDialog .dialog-action-box {
     background-color: #4a90d9; }
 
 .sidebar-item {
-  padding: 10px; }
+  padding: 10px 4px; }
+  .sidebar-item > GtkLabel {
+    padding-left: 6px;
+    padding-right: 6px; }
+  .sidebar-item.needs-attention > GtkLabel {
+    background-size: 6px 6px, 0 0; }
 
 GtkPaned {
   margin: 0 8px 8px 0; }

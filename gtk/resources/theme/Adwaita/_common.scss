@@ -539,30 +539,7 @@ $_dot_color: if($variant=='light', $selected_bg_color,
       padding: 5px 2px;
     }
     &.needs-attention > GtkLabel,
-    &.needs-attention > GtkImage {
-      animation: needs_attention 150ms ease-in;
-      $_dot_shadow: _text_shadow_color();
-      $_dot_shadow_r: if($variant=='light',0.5,0.45);
-      background-image: -gtk-gradient(radial,
-                                      center center, 0,
-                                      center center, 0.5,
-                                      to($_dot_color),
-                                      to(transparent)),
-                        -gtk-gradient(radial,
-                                      center center, 0,
-                                      center center, $_dot_shadow_r,
-                                      to($_dot_shadow),
-                                      to(transparent));
-      background-size: 6px 6px, 6px 6px;
-      background-repeat: no-repeat;
-      @if $variant == 'light' { background-position: right 3px, right 4px; }
-      @else { background-position: right 3px, right 2px; }
-      &:backdrop { background-size: 6px 6px, 0 0;}
-      &:dir(rtl) {
-        @if $variant == 'light' { background-position: left 3px, left 4px; }
-        @else { background-position: left 3px, left 2px; }
-      }
-    }
+    &.needs-attention > GtkImage { @extend %needs_attention; }
     &.needs-attention:active > GtkLabel,
     &.needs-attention:active > GtkImage,
     &.needs-attention:checked > GtkLabel,
@@ -593,6 +570,32 @@ $_dot_color: if($variant=='light', $selected_bg_color,
   .linked.vertical &:checked,
   .linked.vertical &:backdrop { @extend %linked_vertical; }
 }
+
+%needs_attention {
+  animation: needs_attention 150ms ease-in;
+  $_dot_shadow: _text_shadow_color();
+  $_dot_shadow_r: if($variant=='light',0.5,0.45);
+  background-image: -gtk-gradient(radial,
+                                  center center, 0,
+                                  center center, 0.5,
+                                  to($_dot_color),
+                                  to(transparent)),
+                    -gtk-gradient(radial,
+                                  center center, 0,
+                                  center center, $_dot_shadow_r,
+                                  to($_dot_shadow),
+                                  to(transparent));
+  background-size: 6px 6px, 6px 6px;
+  background-repeat: no-repeat;
+  @if $variant == 'light' { background-position: right 3px, right 4px; }
+  @else { background-position: right 3px, right 2px; }
+  &:backdrop { background-size: 6px 6px, 0 0;}
+  &:dir(rtl) {
+    @if $variant == 'light' { background-position: left 3px, left 4px; }
+    @else { background-position: left 3px, left 2px; }
+  }
+}
+
 
 // all the following is for the +|- buttons on inline toolbars, that way
 // should really be deprecated...
@@ -2556,7 +2559,15 @@ GtkFileChooserDialog {
 }
 
 .sidebar-item {
-  padding: 10px;
+  padding: 10px 4px;
+  > GtkLabel {
+    padding-left: 6px;
+    padding-right: 6px;
+  }
+  &.needs-attention > GtkLabel {
+    @extend %needs_attention;
+    background-size: 6px 6px, 0 0;
+  }
 }
 
 GtkPaned {
