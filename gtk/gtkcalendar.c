@@ -1253,17 +1253,14 @@ static gint
 calendar_top_y_for_row (GtkCalendar *calendar,
                         gint         row)
 {
-  GtkAllocation allocation;
-  gint inner_border = calendar_get_inner_border (calendar);
+  GtkCalendarPrivate *priv = calendar->priv;
   GtkBorder padding;
+  gint inner_border = calendar_get_inner_border (calendar);
 
-  gtk_widget_get_allocation (GTK_WIDGET (calendar), &allocation);
   get_component_paddings (calendar, &padding, NULL, NULL, NULL);
 
-  return  allocation.height
-          - padding.top - inner_border
-          - (CALENDAR_MARGIN + (6 - row)
-             * calendar_row_height (calendar));
+  return priv->header_h + priv->day_name_h + padding.top + inner_border
+         + row * calendar_row_height (calendar);
 }
 
 /* row_from_y: returns the row 0-5 that the
