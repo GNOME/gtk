@@ -307,6 +307,9 @@ testdata = \
 	label-text-shadow-clipping.css \
 	label-text-shadow-clipping.ref.ui \
 	label-text-shadow-clipping.ui \
+	label-text-shadow-changes-modify-clip.css \
+	label-text-shadow-changes-modify-clip.ref.ui \
+	label-text-shadow-changes-modify-clip.ui \
 	label-width-chars-dont-shrink.ref.ui \
 	label-width-chars-dont-shrink.ui \
 	label-wrap-justify.ref.ui \
@@ -478,6 +481,7 @@ libreftest_la_CFLAGS = $(gtk_reftest_CFLAGS)
 libreftest_la_LIBADD = $(gtk_reftest_LDADD)
 libreftest_la_SOURCES =			\
 	expand-expander.c		\
+	label-text-shadow-changes-modify-clip.c	\
 	set-default-direction.c		\
 	statusbar-remove-all.c		\
 	textview-border-windows.c	\

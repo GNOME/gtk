@@ -90,7 +90,7 @@ gtk_css_style_property_register (const char *                   name,
 
   node = g_object_new (GTK_TYPE_CSS_STYLE_PROPERTY,
                        "value-type", value_type,
-                       "affects-size", (affects & GTK_CSS_AFFECTS_SIZE) ? TRUE : FALSE,
+                       "affects-size", (affects & (GTK_CSS_AFFECTS_CLIP | GTK_CSS_AFFECTS_SIZE)) ? TRUE : FALSE,
                        "affects-font", (affects & GTK_CSS_AFFECTS_FONT) ? TRUE : FALSE,
                        "animated", (flags & GTK_STYLE_PROPERTY_ANIMATED) ? TRUE : FALSE,
                        "inherit", (flags & GTK_STYLE_PROPERTY_INHERIT) ? TRUE : FALSE,
