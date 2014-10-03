@@ -3239,9 +3239,10 @@ microphone-sensitivity-medium-symbolic</property>
                           </object>
                         </child>
                         <child>
-                          <object class="GtkButton">
+                          <object class="GtkToggleButton" id="record_button">
                             <property name="visible">True</property>
                             <property name="halign">center</property>
+                            <signal name="toggled" handler="on_record_button_toggled"/>
                             <style>
                               <class name="text-button"/>
                               <class name="image-button"/>

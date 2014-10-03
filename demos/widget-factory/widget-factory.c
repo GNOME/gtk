@@ -291,6 +291,19 @@ on_scale_button_value_changed (GtkScaleButton *button,
 }
 
 static void
+on_record_button_toggled (GtkToggleButton *button,
+                          gpointer         user_data)
+{
+  GtkStyleContext *context;
+
+  context = gtk_widget_get_style_context (GTK_WIDGET (button));
+  if (gtk_toggle_button_get_active (button))
+    gtk_style_context_remove_class (context, "destructive-action");
+  else
+    gtk_style_context_add_class (context, "destructive-action");
+}
+
+static void
 update_header (GtkListBoxRow *row,
                GtkListBoxRow *before,
                gpointer       data)
@@ -882,6 +895,7 @@ activate (GApplication *app)
   gtk_builder_add_callback_symbol (builder, "on_entry_icon_release", (GCallback)on_entry_icon_release);
   gtk_builder_add_callback_symbol (builder, "on_scale_button_value_changed", (GCallback)on_scale_button_value_changed);
   gtk_builder_add_callback_symbol (builder, "on_scale_button_query_tooltip", (GCallback)on_scale_button_query_tooltip);
+  gtk_builder_add_callback_symbol (builder, "on_record_button_toggled", (GCallback)on_record_button_toggled);
 
   gtk_builder_connect_signals (builder, NULL);
 
