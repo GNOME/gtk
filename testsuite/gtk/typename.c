@@ -18,22 +18,21 @@
 
 #include <glib.h>
 
-/* keep in sync with gtkbuilder.c */
+/* Keep in sync with gtkbuilder.c ! */
 static gchar *
 type_name_mangle (const gchar *name)
 {
   GString *symbol_name = g_string_new ("");
-  int i;
+  gint i;
 
   for (i = 0; name[i] != '\0'; i++)
     {
       /* skip if uppercase, first or previous is uppercase */
-      if ((i > 0 && name[i]  == g_ascii_toupper (name[i]) &&
-                   (name[i-1] != g_ascii_toupper (name[i-1]) || i == 1)) ||
-          (i > 2 && name[i]   == g_ascii_toupper (name[i]) &&
-                    name[i-1] == g_ascii_toupper (name[i-1]) &&
-                    name[i-2] == g_ascii_toupper (name[i-2]) && 
-                    name[i+1] != 0 && name[i+1] != g_ascii_toupper (name[i+1])))
+      if ((name[i] == g_ascii_toupper (name[i]) &&
+           i > 0 && name[i-1] != g_ascii_toupper (name[i-1])) ||
+           (i > 2 && name[i]   == g_ascii_toupper (name[i]) &&
+           name[i-1] == g_ascii_toupper (name[i-1]) &&
+           name[i-2] == g_ascii_toupper (name[i-2])))
         g_string_append_c (symbol_name, '_');
       g_string_append_c (symbol_name, g_ascii_tolower (name[i]));
     }
@@ -55,13 +54,10 @@ check (const gchar *TN, const gchar *gtf)
 static void test_GtkWindow (void)    { check ("GtkWindow", "gtk_window_get_type"); }
 static void test_GtkHBox (void)      { check ("GtkHBox", "gtk_hbox_get_type"); }
 static void test_GtkUIManager (void) { check ("GtkUIManager", "gtk_ui_manager_get_type"); }
-static void test_GString (void)      { check ("GString", "g_string_get_type"); }
 static void test_GtkCList (void)     { check ("GtkCList", "gtk_clist_get_type"); }
 static void test_GtkIMContext (void) { check ("GtkIMContext", "gtk_im_context_get_type"); }
-static void test_GdkRGB (void)       { check ("GdkRGB", "gdk_rgb_get_type"); }
-static void test_GdkRGBA (void)      { check ("GdkRGBA", "gdk_rgba_get_type"); }
 static void test_Me2Shell (void)     { check ("Me2Shell", "me_2shell_get_type"); }
-static void test_E2Shell (void)      { check ("E2Shell", "e_2shell_get_type"); }
+static void test_GWeather (void)     { check ("GWeatherLocation", "gweather_location_get_type"); }
  
 int
 main (int argc, char *argv[])
@@ -71,13 +67,10 @@ main (int argc, char *argv[])
   g_test_add_func ("/builder/get-type/GtkWindow",    test_GtkWindow);
   g_test_add_func ("/builder/get-type/GtkHBox",      test_GtkHBox);
   g_test_add_func ("/builder/get-type/GtkUIManager", test_GtkUIManager);
-  g_test_add_func ("/builder/get-type/GString",      test_GString);
   g_test_add_func ("/builder/get-type/GtkCList",     test_GtkCList);
   g_test_add_func ("/builder/get-type/GtkIMContext", test_GtkIMContext);
-  g_test_add_func ("/builder/get-type/GdkRGB",       test_GdkRGB);
-  g_test_add_func ("/builder/get-type/GdkRGBA",      test_GdkRGBA);
   g_test_add_func ("/builder/get-type/Me2Shell",     test_Me2Shell);
-  g_test_add_func ("/builder/get-type/E2Shell",      test_E2Shell);
+  g_test_add_func ("/builder/get-type/GWeather",     test_GWeather);
 
   return g_test_run ();
 }
