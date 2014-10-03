@@ -456,7 +456,9 @@ gail_misc_get_default_attributes (AtkAttributeSet *attrib_set,
 
   style_context = gtk_widget_get_style_context (widget);
 
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
   gtk_style_context_get_background_color (style_context, 0, &color);
+G_GNUC_END_IGNORE_DEPRECATIONS
   value = g_strdup_printf ("%u,%u,%u",
                            (guint) ceil (color.red * 65536 - color.red),
                            (guint) ceil (color.green * 65536 - color.green),
