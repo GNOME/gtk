@@ -259,18 +259,21 @@ G_DEFINE_TYPE_WITH_CODE (MaskEntry, mask_entry, GTK_TYPE_ENTRY,
 static void
 mask_entry_set_background (MaskEntry *entry)
 {
-  static const GdkRGBA error_color = { 1.0, 0.9, 0.9, 1.0 };
-
   if (entry->mask)
     {
       if (!g_regex_match_simple (entry->mask, gtk_entry_get_text (GTK_ENTRY (entry)), 0, 0))
         {
-          gtk_widget_override_color (GTK_WIDGET (entry), 0, &error_color);
+          PangoAttrList *attrs;
+
+          attrs = pango_attr_list_new ();
+          pango_attr_list_insert (attrs, pango_attr_foreground_new (65535, 32767, 32767));
+          gtk_entry_set_attributes (GTK_ENTRY (entry), attrs);
+          pango_attr_list_unref (attrs);
           return;
         }
     }
 
-  gtk_widget_override_color (GTK_WIDGET (entry), 0, NULL);
+  gtk_entry_set_attributes (GTK_ENTRY (entry), NULL);
 }
 
 
