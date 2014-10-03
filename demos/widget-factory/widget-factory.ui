@@ -3200,6 +3200,7 @@ microphone-sensitivity-medium-symbolic</property>
                   <object class="GtkBox">
                     <property name="visible">True</property>
                     <property name="orientation">vertical</property>
+                    <property name="spacing">10</property>
                     <child>
                       <object class="GtkBox">
                         <property name="visible">True</property>
@@ -3313,6 +3314,194 @@ microphone-sensitivity-medium-symbolic</property>
                             </child>
                           </object>
                         </child>
+                        <child>
+                          <object class="GtkButton">
+                            <property name="visible">True</property>
+                            <style>
+                              <class name="image-button"/>
+                              <class name="circular-button"/>
+                            </style>
+                            <child>
+                              <object class="GtkImage">
+                                <property name="visible">True</property>
+                                <property name="icon-size">1</property>
+                                <property name="icon-name">emblem-system-symbolic</property>
+                              </object>
+                            </child>
+                          </object>
+                        </child>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkSeparator">
+                        <property name="visible">True</property>
+                        <property name="orientation">horizontal</property>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkFrame">
+                        <property name="visible">True</property>
+                        <child>
+                          <object class="GtkBox">
+                            <property name="visible">True</property>
+                            <property name="orientation">horizontal</property>
+                            <child>
+                              <object class="GtkSidebar">
+                                <property name="visible">True</property>
+                                <property name="stack">sidebar_stack</property>
+                              </object>
+                            </child>
+                            <child>
+                              <object class="GtkStack" id="sidebar_stack">
+                                <property name="visible">True</property>
+                                <child>
+                                  <object class="GtkBox">
+                                    <property name="visible">True</property>
+                                    <property name="orientation">vertical</property>
+                                    <property name="margin">20</property>
+                                    <property name="spacing">10</property>
+                                    <property name="halign">center</property>
+                                    <property name="valign">center</property>
+                                    <child>
+                                      <object class="GtkEntry">
+                                        <property name="visible">True</property>
+                                        <property name="placeholder-text">First Name</property>
+                                      </object>
+                                    </child>
+                                    <child>
+                                      <object class="GtkEntry">
+                                        <property name="visible">True</property>
+                                        <property name="placeholder-text">Last Name</property>
+                                      </object>
+                                    </child>
+                                  </object>
+                                  <packing>
+                                    <property name="name">id</property>
+                                    <property name="title">Identity</property>
+                                  </packing>
+                                </child>
+                                <child>
+                                  <object class="GtkBox">
+                                    <property name="visible">True</property>
+                                    <property name="orientation">vertical</property>
+                                    <property name="margin">20</property>
+                                    <property name="spacing">10</property>
+                                    <property name="halign">center</property>
+                                    <property name="valign">center</property>
+                                    <child>
+                                      <object class="GtkBox">
+                                        <property name="visible">True</property>
+                                        <property name="orientation">horizontal</property>
+                                        <property name="spacing">2</property>
+                                        <child>
+                                          <object class="GtkComboBoxText">
+                                            <property name="visible">True</property>
+                                            <items>
+                                              <item>1</item>
+                                              <item>2</item>
+                                              <item>3</item>
+                                              <item>4</item>
+                                              <item>5</item>
+                                              <item>6</item>
+                                              <item>7</item>
+                                              <item>8</item>
+                                              <item>9</item>
+                                              <item>10</item>
+                                              <item>11</item>
+                                              <item>12</item>
+                                              <item>13</item>
+                                              <item>14</item>
+                                              <item>15</item>
+                                              <item>16</item>
+                                              <item>17</item>
+                                              <item>18</item>
+                                              <item>19</item>
+                                              <item>20</item>
+                                              <item>21</item>
+                                              <item>22</item>
+                                              <item>23</item>
+                                              <item>24</item>
+                                              <item>25</item>
+                                              <item>26</item>
+                                              <item>27</item>
+                                              <item>28</item>
+                                              <item>29</item>
+                                              <item>30</item>
+                                              <item>31</item>
+                                            </items>
+                                          </object>
+                                        </child>
+                                        <child>
+                                          <object class="GtkComboBoxText">
+                                            <property name="visible">True</property>
+                                            <items>
+                                              <item>January</item>
+                                              <item>February</item>
+                                              <item>March</item>
+                                              <item>April</item>
+                                              <item>May</item>
+                                              <item>June</item>
+                                              <item>July</item>
+                                              <item>August</item>
+                                              <item>September</item>
+                                              <item>October</item>
+                                              <item>November</item>
+                                              <item>December</item>
+                                            </items>
+                                          </object>
+                                        </child>
+                                      </object>
+                                    </child>
+                                    <child>
+                                      <object class="GtkEntry">
+                                        <property name="visible">True</property>
+                                        <property name="placeholder-text">Year</property>
+                                      </object>
+                                    </child>
+                                  </object>
+                                  <packing>
+                                    <property name="name">bd</property>
+                                    <property name="title">Birthdate</property>
+                                  </packing>
+                                </child>
+                                <child>
+                                  <object class="GtkBox">
+                                    <property name="visible">True</property>
+                                    <property name="orientation">vertical</property>
+                                    <property name="margin">20</property>
+                                    <property name="halign">center</property>
+                                    <property name="valign">center</property>
+                                    <style>
+                                      <class name="linked"/>
+                                    </style>
+                                    <child> 
+                                      <object class="GtkEntry">
+                                        <property name="visible">True</property>
+                                        <property name="placeholder-text">Street</property>
+                                      </object>
+                                    </child>
+                                    <child> 
+                                      <object class="GtkEntry">
+                                        <property name="visible">True</property>
+                                        <property name="placeholder-text">City</property>
+                                      </object>
+                                    </child>
+                                    <child> 
+                                      <object class="GtkEntry">
+                                        <property name="visible">True</property>
+                                        <property name="placeholder-text">Province</property>
+                                      </object>
+                                    </child>
+                                  </object>
+                                  <packing>
+                                    <property name="name">ad</property>
+                                    <property name="title">Address</property>
+                                  </packing>
+                                </child>
+                              </object>
+                            </child>
+                          </object>
+                        </child> 
                       </object>
                     </child>
                   </object>

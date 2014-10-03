@@ -851,6 +851,7 @@ activate (GApplication *app)
   GtkWidget *stack;
   GtkWidget *dialog;
   GtkAdjustment *adj;
+  GtkCssProvider *provider;
   static GActionEntry win_entries[] = {
     { "dark", NULL, NULL, "false", change_theme_state },
     { "search", activate_search, NULL, NULL, NULL },
@@ -869,6 +870,13 @@ activate (GApplication *app)
   gint i;
 
   g_type_ensure (my_text_view_get_type ());
+
+  provider = gtk_css_provider_new ();
+  gtk_css_provider_load_from_data (provider, ".circular-button { border-radius: 20px; outline-radius: 20px; }", -1, NULL);
+  gtk_style_context_add_provider_for_screen (gdk_screen_get_default (),
+                                             GTK_STYLE_PROVIDER (provider),
+                                             GTK_STYLE_PROVIDER_PRIORITY_USER);
+  g_object_unref (provider);
 
   builder = gtk_builder_new_from_resource ("/org/gtk/WidgetFactory/widget-factory.ui");
   gtk_builder_add_callback_symbol (builder, "on_entry_icon_release", (GCallback)on_entry_icon_release);
