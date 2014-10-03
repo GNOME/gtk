@@ -190,7 +190,6 @@ do_transparent (GtkWidget *do_widget)
       GtkWidget *sw;
       GtkWidget *overlay;
       GtkWidget *entry;
-      GdkRGBA transparent = {0, 0, 0, 0};
       GtkCssProvider *provider;
       gchar *css;
 
@@ -217,8 +216,6 @@ do_transparent (GtkWidget *do_widget)
       overlay = gtk_overlay_new ();
       gtk_container_add (GTK_CONTAINER (overlay), sw);
       gtk_container_add (GTK_CONTAINER (window), overlay);
-
-      gtk_widget_override_background_color (overlay, 0, &transparent);
 
       entry = gtk_entry_new ();
       provider = gtk_css_provider_new ();
