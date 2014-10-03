@@ -128,7 +128,7 @@
  * in the local xml fragment and objects exposed via
  * gtk_builder_expose_object().
  * 
- * In general, GtkBuilder allows forward references to objects --
+ * In general, GtkBuilder allows forward references to objects —
  * declared in the local xml; an object doesn’t have to be constructed
  * before it can be referred to. The exception to this rule is that an
  * object has to be constructed before it can be used as the value of
