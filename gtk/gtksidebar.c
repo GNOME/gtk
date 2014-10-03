@@ -192,8 +192,7 @@ gtk_sidebar_init (GtkSidebar *sidebar)
                                   GTK_POLICY_NEVER,
                                   GTK_POLICY_AUTOMATIC);
 
-  _gtk_bin_set_child (GTK_BIN (sidebar), sw);
-  gtk_widget_set_parent (sw, GTK_WIDGET (sidebar));
+  gtk_container_add (GTK_CONTAINER (sidebar), sw);
 
   priv->list = GTK_LIST_BOX (gtk_list_box_new ());
   gtk_widget_show (GTK_WIDGET (priv->list));
