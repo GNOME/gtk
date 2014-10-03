@@ -15,6 +15,7 @@
  * License along with this library. If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include <locale.h>
 #include <glib.h>
 
 typedef struct {
@@ -142,6 +143,8 @@ main (int argc, char *argv[])
   GError *error;
   GMarkupParseContext *context;
   ParserData data;
+
+  setlocale (LC_ALL, "");
 
   if (argc < 2)
     {
