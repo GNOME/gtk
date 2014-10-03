@@ -372,23 +372,24 @@ gtk_builder_get_property (GObject    *object,
  * GtkWindow -> gtk_window_get_type
  * GtkHBox -> gtk_hbox_get_type
  * GtkUIManager -> gtk_ui_manager_get_type
- * GdkRGB -> gdk_rgb_get_type
+ * GWeatherLocation -> gweather_location_get_type
+ *
+ * Keep in sync with testsuite/gtk/typename.c !
  */
 static gchar *
 type_name_mangle (const gchar *name)
 {
   GString *symbol_name = g_string_new ("");
-  int i;
+  gint i;
 
   for (i = 0; name[i] != '\0'; i++)
     {
       /* skip if uppercase, first or previous is uppercase */
-      if ((i > 0 && name[i]  == g_ascii_toupper (name[i]) &&
-                   (name[i-1] != g_ascii_toupper (name[i-1]) || i == 1)) ||
-          (i > 2 && name[i]   == g_ascii_toupper (name[i]) &&
-                    name[i-1] == g_ascii_toupper (name[i-1]) &&
-                    name[i-2] == g_ascii_toupper (name[i-2]) &&
-                    name[i+1] != 0 && name[i+1] != g_ascii_toupper (name[i+1])))
+      if ((name[i] == g_ascii_toupper (name[i]) &&
+           i > 0 && name[i-1] != g_ascii_toupper (name[i-1])) ||
+           (i > 2 && name[i]   == g_ascii_toupper (name[i]) &&
+           name[i-1] == g_ascii_toupper (name[i-1]) &&
+           name[i-2] == g_ascii_toupper (name[i-2])))
         g_string_append_c (symbol_name, '_');
       g_string_append_c (symbol_name, g_ascii_tolower (name[i]));
     }
