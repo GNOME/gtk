@@ -19,6 +19,7 @@
  */
 
 #include "config.h"
+#include <glib/gi18n.h>
 #include <gtk/gtk.h>
 
 static void
@@ -234,7 +235,59 @@ on_entry_icon_release (GtkEntry            *entry,
           pulse_it (GTK_WIDGET (entry));
         }
     }
+}
 
+#define EPSILON (1e-10)
+
+static gboolean
+on_scale_button_query_tooltip (GtkWidget  *button,
+                               gint        x,
+                               gint        y,
+                               gboolean    keyboard_mode,
+                               GtkTooltip *tooltip,
+                               gpointer    user_data)
+{
+  GtkScaleButton *scale_button = GTK_SCALE_BUTTON (button);
+  GtkAdjustment *adjustment;
+  gdouble val;
+  gchar *str;
+  AtkImage *image;
+
+  image = ATK_IMAGE (gtk_widget_get_accessible (button));
+
+  adjustment = gtk_scale_button_get_adjustment (scale_button);
+  val = gtk_scale_button_get_value (scale_button);
+
+  if (val < (gtk_adjustment_get_lower (adjustment) + EPSILON))
+    {
+      str = g_strdup (_("Muted"));
+    }
+  else if (val >= (gtk_adjustment_get_upper (adjustment) - EPSILON))
+    {
+      str = g_strdup (_("Full Volume"));
+    }
+  else
+    {
+      gint percent;
+
+      percent = (gint) (100. * val / (gtk_adjustment_get_upper (adjustment) - gtk_adjustment_get_lower (adjustment)) + .5);
+
+      str = g_strdup_printf (C_("volume percentage", "%d %%"), percent);
+    }
+
+  gtk_tooltip_set_text (tooltip, str);
+  atk_image_set_image_description (image, str);
+  g_free (str);
+
+  return TRUE;
+}
+
+static void
+on_scale_button_value_changed (GtkScaleButton *button,
+                               gdouble         value,
+                               gpointer        user_data)
+{
+  gtk_widget_trigger_tooltip_query (GTK_WIDGET (button));
 }
 
 static void
@@ -819,6 +872,9 @@ activate (GApplication *app)
 
   builder = gtk_builder_new_from_resource ("/org/gtk/WidgetFactory/widget-factory.ui");
   gtk_builder_add_callback_symbol (builder, "on_entry_icon_release", (GCallback)on_entry_icon_release);
+  gtk_builder_add_callback_symbol (builder, "on_scale_button_value_changed", (GCallback)on_scale_button_value_changed);
+  gtk_builder_add_callback_symbol (builder, "on_scale_button_query_tooltip", (GCallback)on_scale_button_query_tooltip);
+
   gtk_builder_connect_signals (builder, NULL);
 
   window = (GtkWindow *)gtk_builder_get_object (builder, "window");

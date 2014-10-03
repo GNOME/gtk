@@ -2069,13 +2069,19 @@ Suspendisse feugiat quam quis dolor accumsan cursus. </property>
                                   </packing>
                                 </child>
                                 <child>
-                                  <object class="GtkVolumeButton">
+                                  <object class="GtkScaleButton" id="mic-button">
                                     <property name="visible">True</property>
+                                    <property name="has-tooltip">True</property>
                                     <property name="orientation">horizontal</property>
+                                    <property name="icons">microphone-sensitivity-muted-symbolic
+microphone-sensitivity-high-symbolic
+microphone-sensitivity-low-symbolic
+microphone-sensitivity-medium-symbolic</property>
                                     <property name="valign">center</property>
-                                    <property name="use-symbolic">True</property>
                                     <property name="value">.5</property>
                                     <property name="halign">center</property>
+                                    <signal name="query-tooltip" handler="on_scale_button_query_tooltip" swapped="no"/>
+                                    <signal name="value-changed" handler="on_scale_button_value_changed" swapped="no"/>
                                   </object>
                                   <packing>
                                     <property name="left-attach">0</property>
