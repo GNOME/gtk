@@ -58,6 +58,14 @@
         <property name="orientation">vertical</property>
         <property name="spacing">2</property>
         <property name="border_width">0</property>
+        <style>
+          <class name="view"/>
+        </style>
+        <child internal-child="action_box">
+          <object class="GtkBox">
+            <property name="margin">6</property>
+          </object>
+        </child>
         <child>
           <object class="GtkBox" id="box1">
             <property name="visible">True</property>
