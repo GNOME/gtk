@@ -25,6 +25,7 @@ demos/gtk-demo/theming.ui
 demos/icon-browser/app-menu.ui
 demos/icon-browser/window.ui
 demos/widget-factory/menus.ui
+demos/widget-factory/widget-factory.c
 demos/widget-factory/widget-factory.ui
 examples/application10/app-menu.ui
 examples/application10/gears-menu.ui
@@ -189,6 +190,8 @@ testsuite/reftests/label-sizing.ref.ui
 testsuite/reftests/label-sizing.ui
 testsuite/reftests/label-small-ellipsized.ref.ui
 testsuite/reftests/label-small-ellipsized.ui
+testsuite/reftests/label-text-shadow-changes-modify-clip.ref.ui
+testsuite/reftests/label-text-shadow-changes-modify-clip.ui
 testsuite/reftests/label-text-shadow-clipping.ref.ui
 testsuite/reftests/label-text-shadow-clipping.ui
 testsuite/reftests/label-width-chars-dont-shrink.ref.ui
