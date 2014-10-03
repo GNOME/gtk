@@ -20,12 +20,7 @@ draw_callback (GtkWidget *widget,
                cairo_t   *cr,
                gpointer   data)
 {
-  GtkStyleContext *context;
-  GdkRGBA rgba;
-
-  context = gtk_widget_get_style_context (widget);
-  gtk_style_context_get_background_color (context, GTK_STATE_FLAG_NORMAL, &rgba);
-  gdk_cairo_set_source_rgba (cr, &rgba);
+  gdk_cairo_set_source_rgba (cr, &color);
   cairo_paint (cr);
 
   return TRUE;
@@ -39,7 +34,6 @@ response_cb (GtkDialog *dialog,
   if (response_id == GTK_RESPONSE_OK)
     {
       gtk_color_chooser_get_rgba (GTK_COLOR_CHOOSER (dialog), &color);
-      gtk_widget_override_background_color (da, 0, &color);
     }
 
   gtk_widget_destroy (GTK_WIDGET (dialog));
@@ -105,8 +99,6 @@ do_colorsel (GtkWidget *do_widget)
 
       /* set a minimum size */
       gtk_widget_set_size_request (da, 200, 200);
-      /* set the color */
-      gtk_widget_override_background_color (da, 0, &color);
 
       gtk_container_add (GTK_CONTAINER (frame), da);
 
