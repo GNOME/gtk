@@ -1701,34 +1701,6 @@ status_window_get (GtkWidget *toplevel)
   return status_window;
 }
 
-/* Draw the background (normally white) and border for the status window
- */
-static gboolean
-on_status_window_draw (GtkWidget *widget,
-                       cairo_t   *cr)
-{
-  GtkStyleContext *style;
-  GdkRGBA color;
-
-  style = gtk_widget_get_style_context (widget);
-
-  gtk_style_context_get_background_color (style, 0, &color);
-  gdk_cairo_set_source_rgba (cr, &color);
-  cairo_paint (cr);
-
-  gtk_style_context_get_color (style, 0, &color);
-  gdk_cairo_set_source_rgba (cr, &color);
-  cairo_paint (cr);
-
-  cairo_rectangle (cr, 
-                   0, 0,
-                   gtk_widget_get_allocated_width (widget) - 1,
-                   gtk_widget_get_allocated_height (widget) - 1);
-  cairo_fill (cr);
-
-  return FALSE;
-}
-
 /* Creates the widgets for the status window; called when we
  * first need to show text for the status window.
  */
@@ -1742,16 +1714,12 @@ status_window_make_window (StatusWindow *status_window)
   window = status_window->window;
 
   gtk_window_set_resizable (GTK_WINDOW (window), FALSE);
-  gtk_widget_set_app_paintable (window, TRUE);
 
   status_label = gtk_label_new ("");
   g_object_set (status_label, "margin", 1, NULL);
   gtk_widget_show (status_label);
   
   gtk_container_add (GTK_CONTAINER (window), status_label);
-  
-  g_signal_connect (window, "draw",
-		    G_CALLBACK (on_status_window_draw), NULL);
   
   gtk_window_set_screen (GTK_WINDOW (status_window->window),
 			 gtk_widget_get_screen (status_window->toplevel));
