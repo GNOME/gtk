@@ -539,26 +539,18 @@ recursive_attach_view (int                 depth,
                        GtkTextView        *view,
                        GtkTextChildAnchor *anchor)
 {
-  GtkWidget *child_view;
-  GtkWidget *event_box;
-  GdkRGBA color;
+  GtkWidget *child_view, *frame;
 
   if (depth > 4)
     return;
 
   child_view = gtk_text_view_new_with_buffer (gtk_text_view_get_buffer (view));
 
-  /* Event box is to add a black border around each child view */
-  event_box = gtk_event_box_new ();
-  gdk_rgba_parse (&color, "black");
-  gtk_widget_override_background_color (event_box, 0, &color);
+  /* Frame is to add a black border around each child view */
+  frame = gtk_frame_new (NULL);
+  gtk_container_add (GTK_CONTAINER (frame), child_view);
 
-  gtk_widget_set_halign (child_view, GTK_ALIGN_FILL);
-  gtk_widget_set_valign (child_view, GTK_ALIGN_FILL);
-
-  gtk_container_add (GTK_CONTAINER (event_box), child_view);
-
-  gtk_text_view_add_child_at_anchor (view, event_box, anchor);
+  gtk_text_view_add_child_at_anchor (view, frame, anchor);
 
   recursive_attach_view (depth + 1, GTK_TEXT_VIEW (child_view), anchor);
 }
