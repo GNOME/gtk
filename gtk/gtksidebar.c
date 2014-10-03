@@ -433,9 +433,10 @@ gtk_sidebar_class_init (GtkSidebarClass *klass)
   object_class->get_property = gtk_sidebar_get_property;
 
   obj_properties[PROP_STACK] =
-      g_param_spec_pointer ("stack", P_("Stack"),
-                            P_("Associated stack for this GtkSidebar"),
-                            G_PARAM_READWRITE);
+      g_param_spec_object (I_("stack"), P_("Stack"),
+                           P_("Associated stack for this GtkSidebar"),
+                           GTK_TYPE_STACK,
+                           G_PARAM_READWRITE|G_PARAM_STATIC_STRINGS|G_PARAM_EXPLICIT_NOTIFY);
 
   g_object_class_install_properties (object_class, N_PROPERTIES, obj_properties);
 }
