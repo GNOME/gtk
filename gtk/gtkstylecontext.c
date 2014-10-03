@@ -3499,7 +3499,9 @@ G_GNUC_END_IGNORE_DEPRECATIONS
       {
         GdkRGBA bg;
 
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
         gtk_style_context_get_background_color (context, GTK_STATE_FLAG_NORMAL, &bg);
+G_GNUC_END_IGNORE_DEPRECATIONS
 
         color->red = (color->red + bg.red) * 0.5;
         color->green = (color->green + bg.green) * 0.5;
@@ -3890,7 +3892,9 @@ _gtk_style_context_get_attributes (AtkAttributeSet *attributes,
   GdkRGBA color;
   gchar *value;
 
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
   gtk_style_context_get_background_color (context, flags, &color);
+G_GNUC_END_IGNORE_DEPRECATIONS
   value = g_strdup_printf ("%u,%u,%u",
                            (guint) ceil (color.red * 65536 - color.red),
                            (guint) ceil (color.green * 65536 - color.green),

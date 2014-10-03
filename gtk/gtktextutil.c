@@ -270,7 +270,9 @@ gtk_text_view_set_attributes_from_style (GtkTextView        *text_view,
   context = gtk_widget_get_style_context (GTK_WIDGET (text_view));
   state = gtk_widget_get_state_flags (GTK_WIDGET (text_view));
 
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
   gtk_style_context_get_background_color (context, state, &bg_color);
+G_GNUC_END_IGNORE_DEPRECATIONS
   gtk_style_context_get_color (context, state, &fg_color);
 
   values->appearance.bg_color.red = CLAMP (bg_color.red * 65535. + 0.5, 0, 65535);

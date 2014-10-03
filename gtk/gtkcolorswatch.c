@@ -206,8 +206,10 @@ swatch_draw (GtkWidget *widget,
         }
       else
         {
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
           gtk_style_context_get_background_color (context, state, &bg);
           gtk_style_context_get_border_color (context, state, &border);
+G_GNUC_END_IGNORE_DEPRECATIONS
           gtk_style_context_get_border (context, state, &border_width);
 
           cairo_new_sub_path (cr);

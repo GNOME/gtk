@@ -6422,7 +6422,9 @@ draw_text_with_color (GtkEntry *entry,
       state = gtk_widget_get_state_flags (widget);
       state |= GTK_STATE_FLAG_SELECTED;
 
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
       gtk_style_context_get_background_color (context, state, &selection_color);
+G_GNUC_END_IGNORE_DEPRECATIONS
       gtk_style_context_get_color (context, state, &text_color);
 
       for (i = 0; i < n_ranges; ++i)
@@ -6594,7 +6596,9 @@ gtk_entry_draw_cursor (GtkEntry  *entry,
           GdkRGBA color;
 
           state = gtk_widget_get_state_flags (widget);
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
           gtk_style_context_get_background_color (context, state, &color);
+G_GNUC_END_IGNORE_DEPRECATIONS
 
           gdk_cairo_rectangle (cr, &rect);
           cairo_clip (cr);

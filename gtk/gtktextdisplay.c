@@ -591,7 +591,9 @@ render_para (GtkTextRenderer    *text_renderer,
 
   state |= GTK_STATE_FLAG_SELECTED;
 
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
   gtk_style_context_get_background_color (context, state, &selection);
+G_GNUC_END_IGNORE_DEPRECATIONS
 
   do
     {
@@ -783,7 +785,9 @@ render_para (GtkTextRenderer    *text_renderer,
                   GdkRGBA color;
 
                   state = gtk_widget_get_state_flags (text_renderer->widget);
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
                   gtk_style_context_get_background_color (context, state, &color);
+G_GNUC_END_IGNORE_DEPRECATIONS
 
                   gdk_cairo_set_source_rgba (cr, &color);
 

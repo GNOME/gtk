@@ -2614,7 +2614,9 @@ gtk_flow_box_draw (GtkWidget *widget,
           cairo_path_destroy (path);
 
           state = gtk_widget_get_state_flags (widget);
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
           gtk_style_context_get_border_color (context, state, &border_color);
+G_GNUC_END_IGNORE_DEPRECATIONS
           gtk_style_context_get_border (context, state, &border);
 
           cairo_set_line_width (cr, border.left);

@@ -1083,11 +1083,11 @@ GDK_AVAILABLE_IN_ALL
 void gtk_style_context_get_color            (GtkStyleContext *context,
                                              GtkStateFlags    state,
                                              GdkRGBA         *color);
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_3_16_FOR(gtk_render_background)
 void gtk_style_context_get_background_color (GtkStyleContext *context,
                                              GtkStateFlags    state,
                                              GdkRGBA         *color);
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_3_16_FOR(gtk_render_frame)
 void gtk_style_context_get_border_color     (GtkStyleContext *context,
                                              GtkStateFlags    state,
                                              GdkRGBA         *color);
