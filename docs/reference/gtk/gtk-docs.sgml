@@ -395,6 +395,7 @@
   <part>
     <title>GTK+ Tools</title>
     <xi:include href="gtk3-demo.xml" />
+    <xi:include href="gtk3-demo-application.xml" />
     <xi:include href="gtk3-widget-factory.xml" />
     <xi:include href="gtk3-icon-browser.xml" />
     <xi:include href="gtk-query-immodules-3.0.xml" />
