@@ -2053,6 +2053,7 @@ Suspendisse feugiat quam quis dolor accumsan cursus. </property>
                                 <property name="visible">True</property>
                                 <property name="row-spacing">6</property>
                                 <property name="column-spacing">6</property>
+                                <property name="halign">center</property>
                                 <property name="valign">center</property>
                                 <child>
                                   <object class="GtkVolumeButton">
@@ -2089,9 +2090,6 @@ microphone-sensitivity-medium-symbolic</property>
                                   </packing>
                                 </child>
                               </object>
-                              <packing>
-                                <property name="expand">True</property>
-                              </packing>
                             </child>
                           </object>
                         </child>
@@ -3199,6 +3197,127 @@ microphone-sensitivity-medium-symbolic</property>
                   </object>
                 </child>
                 <child>
+                  <object class="GtkBox">
+                    <property name="visible">True</property>
+                    <property name="orientation">vertical</property>
+                    <child>
+                      <object class="GtkBox">
+                        <property name="visible">True</property>
+                        <property name="orientation">horizontal</property>
+                        <property name="halign">start</property>
+                        <property name="spacing">6</property>
+                        <child>
+                          <object class="GtkButton">
+                            <property name="visible">True</property>
+                            <property name="halign">center</property>
+                            <style>
+                              <class name="text-button"/>
+                              <class name="image-button"/>
+                            </style>
+                            <child>
+                              <object class="GtkBox">
+                                <property name="visible">True</property>
+                                <property name="orientation">horizontal</property>
+                                <property name="spacing">6</property>
+                                <child>
+                                  <object class="GtkLabel">
+                                    <property name="visible">True</property>
+                                    <property name="valign">baseline</property>
+                                    <property name="label">Open</property>
+                                  </object>
+                                </child>
+                                <child>
+                                  <object class="GtkImage">
+                                    <property name="visible">True</property>
+                                    <property name="valign">baseline</property>
+                                    <property name="icon_name">pan-down-symbolic</property>
+                                  </object>
+                                </child>
+                              </object>
+                            </child>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="GtkButton">
+                            <property name="visible">True</property>
+                            <property name="halign">center</property>
+                            <style>
+                              <class name="text-button"/>
+                              <class name="image-button"/>
+                              <class name="destructive-action"/>
+                            </style>
+                            <child>
+                              <object class="GtkBox">
+                                <property name="visible">True</property>
+                                <property name="orientation">horizontal</property>
+                                <property name="spacing">6</property>
+                                <child>
+                                  <object class="GtkImage">
+                                    <property name="visible">True</property>
+                                    <property name="valign">baseline</property>
+                                    <property name="icon_name">media-record-symbolic</property>
+                                  </object>
+                                </child>
+                                <child>
+                                  <object class="GtkLabel">
+                                    <property name="visible">True</property>
+                                    <property name="valign">baseline</property>
+                                    <property name="label">Record</property>
+                                  </object>
+                                </child>
+                              </object>
+                            </child>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="GtkBox">
+                            <property name="visible">True</property>
+                            <property name="orientation">horizontal</property>
+                            <style>
+                              <class name="linked"/>
+                            </style>
+                            <child>
+                              <object class="GtkRadioButton" id="grid_button">
+                                <property name="visible">True</property>
+                                <property name="draw-indicator">False</property>
+                                <property name="active">True</property>
+                                <style>
+                                  <class name="image-button"/>
+                                </style>
+                                <child>
+                                  <object class="GtkImage">
+                                    <property name="visible">True</property>
+                                    <property name="icon-size">1</property>
+                                    <property name="icon-name">view-grid-symbolic</property>
+                                  </object>
+                                </child>
+                              </object>
+                            </child>
+                            <child>
+                              <object class="GtkRadioButton" id="list_button">
+                                <property name="active">True</property>
+                                <property name="visible">True</property>
+                                <property name="draw-indicator">False</property>
+                                <property name="group">grid_button</property>
+                                <style>
+                                  <class name="image-button"/>
+                                </style>
+                                <child>
+                                  <object class="GtkImage">
+                                    <property name="visible">True</property>
+                                    <property name="icon-size">1</property>
+                                    <property name="icon-name">view-list-symbolic</property>
+                                  </object>
+                                </child>
+                              </object>
+                            </child>
+                          </object>
+                        </child>
+                      </object>
+                    </child>
+                  </object>
+                </child>
+                <child>
                   <object class="GtkSpinner">
                     <property name="visible">True</property>
                     <property name="active">True</property>
@@ -3465,7 +3584,7 @@ bad things might happen.</property>
       <action-widget response="cancel">cancel_selection_dialog</action-widget>
       <action-widget response="ok" default="true">select_selection_dialog</action-widget>
     </action-widgets>
-  </object>    
+  </object>
   <object class="GtkSizeGroup">
     <property name="mode">vertical</property>
     <widgets>
