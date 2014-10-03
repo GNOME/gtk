@@ -3258,6 +3258,8 @@ gtk_style_context_get_color (GtkStyleContext *context,
  * Gets the background color for a given state.
  *
  * Since: 3.0
+ *
+ * Deprecated: 3.16: Use gtk_render_background() instead.
  **/
 void
 gtk_style_context_get_background_color (GtkStyleContext *context,
@@ -3287,6 +3289,8 @@ gtk_style_context_get_background_color (GtkStyleContext *context,
  * Gets the border color for a given state.
  *
  * Since: 3.0
+ *
+ * Deprecated: 3.16: Use gtk_render_border() instead.
  **/
 void
 gtk_style_context_get_border_color (GtkStyleContext *context,
