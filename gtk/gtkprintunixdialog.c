@@ -2203,32 +2203,23 @@ paint_page (GtkWidget *widget,
 {
   GtkStyleContext *context;
   gint x, y, width, height;
-  gint text_y, linewidth;
-  GdkRGBA color;
+  gint text_y;
 
   x = x_offset * scale;
   y = y_offset * scale;
   width = 20 * scale;
   height = 26 * scale;
 
-  linewidth = 2;
   text_y = 21;
 
   context = gtk_widget_get_style_context (widget);
 
   gtk_style_context_save (context);
+  gtk_style_context_add_class (context, GTK_STYLE_CLASS_FRAME);
   gtk_style_context_add_class (context, GTK_STYLE_CLASS_VIEW);
 
-  gtk_style_context_get_background_color (context, 0, &color);
-  gdk_cairo_set_source_rgba (cr, &color);
-  cairo_rectangle (cr, x, y, width, height);
-  cairo_fill (cr);
-
-  gtk_style_context_get_color (context, 0, &color);
-  gdk_cairo_set_source_rgba (cr, &color);
-  cairo_set_line_width (cr, linewidth);
-  cairo_rectangle (cr, x + linewidth/2.0, y + linewidth/2.0, width - linewidth, height - linewidth);
-  cairo_stroke (cr);
+  gtk_render_background (context, cr, x, y, width, height);
+  gtk_render_frame (context, cr, x, y, width, height);
 
   cairo_select_font_face (cr, "Sans",
                           CAIRO_FONT_SLANT_NORMAL,
@@ -2762,13 +2753,10 @@ draw_page_cb (GtkWidget          *widget,
   cairo_rectangle (cr, shadow_offset + 1, shadow_offset + 1, w, h);
   cairo_fill (cr);
 
-  gtk_style_context_get_background_color (context, state, &color);
-  gdk_cairo_set_source_rgba (cr, &color);
-  cairo_rectangle (cr, 1, 1, w, h);
-  cairo_fill (cr);
+  gtk_render_background (context, cr, 1, 1, w, h);
+
   cairo_set_line_width (cr, 1.0);
   cairo_rectangle (cr, 0.5, 0.5, w + 1, h + 1);
-
   gtk_style_context_get_color (context, state, &color);
   gdk_cairo_set_source_rgba (cr, &color);
   cairo_stroke (cr);
