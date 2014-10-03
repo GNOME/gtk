@@ -2212,6 +2212,7 @@ paint_page (GtkWidget *widget,
 
   gtk_style_context_save (context);
   gtk_style_context_add_class (context, GTK_STYLE_CLASS_FRAME);
+  gtk_style_context_add_class (context, GTK_STYLE_CLASS_PAPER);
   gtk_style_context_add_class (context, GTK_STYLE_CLASS_VIEW);
 
   gtk_render_background (context, cr, x, y, width, height);
@@ -2750,6 +2751,7 @@ draw_page_cb (GtkWidget          *widget,
   context = gtk_widget_get_style_context (widget);
 
   gtk_style_context_save (context);
+  gtk_style_context_add_class (context, GTK_STYLE_CLASS_PAPER);
   gtk_style_context_add_class (context, GTK_STYLE_CLASS_VIEW);
 
   pos_x = (width - w) / 2;

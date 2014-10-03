@@ -873,6 +873,17 @@ struct _GtkStyleContextClass
  */
 #define GTK_STYLE_CLASS_OVERSHOOT "overshoot"
 
+/*
+ * GTK_STYLE_CLASS_PAPER:
+ * A CSS class that is added to areas that should look like paper.
+ *
+ * This is used in print previews and themes are encouraged to
+ * style it as black text on white background.
+ *
+ * Since: 3.16
+ */
+#define GTK_STYLE_CLASS_PAPER "paper"
+
 /**
  * GTK_STYLE_REGION_ROW:
  *
