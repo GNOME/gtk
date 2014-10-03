@@ -275,7 +275,9 @@ gtk_radio_button_set_group (GtkRadioButton *radio_button,
   GtkWidget *new_group_singleton = NULL;
 
   g_return_if_fail (GTK_IS_RADIO_BUTTON (radio_button));
-  g_return_if_fail (!g_slist_find (group, radio_button));
+
+  if (g_slist_find (group, radio_button))
+    return;
 
   priv = radio_button->priv;
 
