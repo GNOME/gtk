@@ -1,0 +1,44 @@
+<?xml version="1.0"?>
+<!DOCTYPE refentry PUBLIC "-//OASIS//DTD DocBook XML V4.3//EN"
+               "http://www.oasis-open.org/docbook/xml/4.3/docbookx.dtd" [
+]>
+<refentry id="gtk3-demo-application">
+
+<refentryinfo>
+  <title>gtk3-demo-application</title>
+  <productname>GTK+</productname>
+  <authorgroup>
+    <author>
+      <contrib>Developer</contrib>
+      <firstname>Matthias</firstname>
+      <surname>Clasen</surname>
+    </author>
+  </authorgroup>
+</refentryinfo>
+
+<refmeta>
+  <refentrytitle>gtk3-demo-application</refentrytitle>
+  <manvolnum>1</manvolnum>
+  <refmiscinfo class="manual">User Commands</refmiscinfo>
+</refmeta>
+
+<refnamediv>
+  <refname>gtk3-demo</refname>
+  <refpurpose>Demonstrate GtkApplication</refpurpose>
+</refnamediv>
+
+<refsynopsisdiv>
+<cmdsynopsis>
+<command>gtk3-demo</command>
+</cmdsynopsis>
+</refsynopsisdiv>
+
+<refsect1><title>Description</title>
+<para>
+<command>gtk3-demo-application</command> is an example application
+used by <command>gtk3-demo</command>. There is no need to call it
+manually.
+</para>
+</refsect1>
+
+</refentry>

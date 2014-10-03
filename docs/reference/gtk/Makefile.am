@@ -152,6 +152,7 @@ content_files =					\
 	windows.sgml				\
 	x11.sgml				\
 	gtk3-demo.xml				\
+	gtk3-demo-application.xml		\
 	gtk3-widget-factory.xml			\
 	gtk3-icon-browser.xml			\
 	gtk-query-immodules-3.0.xml		\
@@ -339,6 +340,7 @@ man_MANS = 				\
 	gtk-encode-symbolic-svg.1	\
 	gtk-launch.1			\
 	gtk3-demo.1			\
+	gtk3-demo-application.1		\
 	gtk3-widget-factory.1		\
 	gtk3-icon-browser.1		\
 	broadwayd.1
