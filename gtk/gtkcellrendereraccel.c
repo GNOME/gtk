@@ -438,8 +438,6 @@ gtk_cell_renderer_accel_start_editing (GtkCellRenderer      *cell,
   GtkCellRendererAccelPrivate *priv;
   GtkCellRendererText *celltext;
   GtkCellRendererAccel *accel;
-  GtkStyleContext *context;
-  GdkRGBA color;
   GtkWidget *label;
   GtkWidget *eventbox;
   gboolean editable;
