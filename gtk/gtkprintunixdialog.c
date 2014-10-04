@@ -2241,7 +2241,7 @@ draw_collate_cb (GtkWidget          *widget,
   gboolean collate, reverse, rtl;
   gint copies;
   gint text_x;
-  gint x1, x2, p1, p2, y;
+  gint x, y, x1, x2, p1, p2;
 
   collate = dialog_get_collate (dialog);
   reverse = dialog_get_reverse (dialog);
@@ -2252,19 +2252,20 @@ draw_collate_cb (GtkWidget          *widget,
   gtk_icon_size_lookup (GTK_ICON_SIZE_DIALOG, &size, NULL);
   scale = size / 48.0;
 
-  y = (gtk_widget_get_allocated_height (widget) - (26 * scale + 10)) / 2;
+  x = (gtk_widget_get_allocated_width (widget) - 66 * scale) / 2;
+  y = (gtk_widget_get_allocated_height (widget) - 36 * scale) / 2;
   if (rtl)
     {
-      x1 = gtk_widget_get_allocated_width (widget) - 30 * scale;
-      x2 = gtk_widget_get_allocated_width (widget) - 65 * scale;
+      x1 = x + 36;
+      x2 = x;
       p1 = 0;
       p2 = 10;
       text_x = 4;
     }
   else
     {
-      x1 = 0;
-      x2 = 35;
+      x1 = x;
+      x2 = x + 36;
       p1 = 10;
       p2 = 0;
       text_x = 11;
