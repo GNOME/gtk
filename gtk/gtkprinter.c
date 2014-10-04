@@ -243,7 +243,7 @@ gtk_printer_init (GtkPrinter *printer)
   priv->name = NULL;
   priv->location = NULL;
   priv->description = NULL;
-  priv->icon_name = NULL;
+  priv->icon_name = g_strdup ("printer");
 
   priv->is_active = TRUE;
   priv->is_paused = FALSE;
