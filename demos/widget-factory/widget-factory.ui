@@ -3411,6 +3411,7 @@ microphone-sensitivity-medium-symbolic</property>
                                         <child>
                                           <object class="GtkComboBoxText">
                                             <property name="visible">True</property>
+                                            <property name="active">9</property>
                                             <items>
                                               <item>1</item>
                                               <item>2</item>
@@ -3449,6 +3450,7 @@ microphone-sensitivity-medium-symbolic</property>
                                         <child>
                                           <object class="GtkComboBoxText">
                                             <property name="visible">True</property>
+                                            <property name="active">9</property>
                                             <items>
                                               <item>January</item>
                                               <item>February</item>
