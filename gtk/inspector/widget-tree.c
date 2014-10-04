@@ -364,10 +364,15 @@ gtk_inspector_widget_tree_append_object (GtkInspectorWidgetTree *wt,
   if (GTK_IS_COMBO_BOX (object))
     {
       GtkWidget *popup;
+      GObject *child;
 
       popup = gtk_combo_box_get_popup (GTK_COMBO_BOX (object));
       if (popup)
         gtk_inspector_widget_tree_append_object (wt, G_OBJECT (popup), &iter, "popup");
+
+      child = G_OBJECT (gtk_combo_box_get_model (GTK_COMBO_BOX (object)));
+      if (child)
+        gtk_inspector_widget_tree_append_object (wt, child, &iter, "model");
     }
 
   if (GTK_IS_TREE_VIEW (object))
@@ -396,15 +401,6 @@ gtk_inspector_widget_tree_append_object (GtkInspectorWidgetTree *wt,
       GObject *child;
 
       child = G_OBJECT (gtk_icon_view_get_model (GTK_ICON_VIEW (object)));
-      if (child)
-        gtk_inspector_widget_tree_append_object (wt, child, &iter, "model");
-    }
-
-  if (GTK_IS_COMBO_BOX (object))
-    {
-      GObject *child;
-
-      child = G_OBJECT (gtk_combo_box_get_model (GTK_COMBO_BOX (object)));
       if (child)
         gtk_inspector_widget_tree_append_object (wt, child, &iter, "model");
     }
