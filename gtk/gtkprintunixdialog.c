@@ -2241,6 +2241,7 @@ draw_collate_cb (GtkWidget          *widget,
   gboolean collate, reverse, rtl;
   gint copies;
   gint text_x;
+  gint x1, x2, p1, p2, y;
 
   collate = dialog_get_collate (dialog);
   reverse = dialog_get_reverse (dialog);
@@ -2250,21 +2251,38 @@ draw_collate_cb (GtkWidget          *widget,
 
   gtk_icon_size_lookup (GTK_ICON_SIZE_DIALOG, &size, NULL);
   scale = size / 48.0;
-  text_x = rtl ? 4 : 11;
 
-  if (copies == 1)
+  y = (gtk_widget_get_allocated_height (widget) - (26 * scale + 10)) / 2;
+  if (rtl)
     {
-      paint_page (widget, cr, scale, rtl ? 40: 15, 5, reverse ? "1" : "2", text_x);
-      paint_page (widget, cr, scale, rtl ? 50: 5, 15, reverse ? "2" : "1", text_x);
+      x1 = gtk_widget_get_allocated_width (widget) - 30 * scale;
+      x2 = gtk_widget_get_allocated_width (widget) - 65 * scale;
+      p1 = 0;
+      p2 = 10;
+      text_x = 4;
     }
   else
     {
-      paint_page (widget, cr, scale, rtl ? 40: 15, 5, collate == reverse ? "1" : "2", text_x);
-      paint_page (widget, cr, scale, rtl ? 50: 5, 15, reverse ? "2" : "1", text_x);
-
-      paint_page (widget, cr, scale, rtl ? 5 : 50, 5, reverse ? "1" : "2", text_x);
-      paint_page (widget, cr, scale, rtl ? 15 : 40, 15, collate == reverse ? "2" : "1", text_x);
+      x1 = 0;
+      x2 = 35;
+      p1 = 10;
+      p2 = 0;
+      text_x = 11;
     }
+
+  if (copies == 1)
+    {
+      paint_page (widget, cr, scale, x1 + p1, y, reverse ? "1" : "2", text_x);
+      paint_page (widget, cr, scale, x1 + p2, y + 10, reverse ? "2" : "1", text_x);
+    }
+  else
+    {
+      paint_page (widget, cr, scale, x1 + p1, y, collate == reverse ? "1" : "2", text_x);
+      paint_page (widget, cr, scale, x1 + p2, y + 10, reverse ? "2" : "1", text_x);
+
+      paint_page (widget, cr, scale, x2 + p1, y, reverse ? "1" : "2", text_x);
+      paint_page (widget, cr, scale, x2 + p2, y + 10, collate == reverse ? "2" : "1", text_x);
+    }    
 
   return TRUE;
 }
