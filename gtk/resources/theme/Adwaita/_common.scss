@@ -328,7 +328,7 @@ GtkTextView { // This will get overridden by .view, needed by gedit line numbers
     &:backdrop { color: mix($backdrop_fg_color,$backdrop_base_color,80%); }
   }
 
-  .linked.vertical & {
+  .linked.vertical & { //FIXME comment stuff and make the whole thing smarter.
     @include entry(normal, $edge: none);
     background-image: linear-gradient(to bottom, $base_color);
     border-bottom-color: mix($borders_color, $base_color, 30%);
@@ -754,9 +754,14 @@ $_dot_color: if($variant=='light', $selected_bg_color,
   }
 }
 
-%linked_vertical{
+%linked_vertical_middle {
   border-left-style: solid;
   border-top-style: none;
+  border-radius: 0;
+}
+
+%linked_vertical{
+  @extend %linked_vertical_middle;
   &:first-child {
     border-style: solid;
     border-radius: 3px 3px 0 0;
@@ -879,7 +884,7 @@ GtkColorButton.button {
       &:dir(rtl) { border-style: none solid none none; }
     }
   }
-  &.vertical, &.vertical:dir(rtl) {
+  &.vertical, &.vertical:dir(rtl) { //FIXME: try using linking templates for vertically linked stuff
     .button {
       padding-top: 8px;    //  Same vertical padding as image-buttons
       padding-bottom: 8px; //
@@ -1013,6 +1018,14 @@ GtkComboBox {
 .linked > GtkComboBox:only-child > .button {
   @extend %linked:only-child;
 }
+.linked.vertical > GtkComboBoxText > .button,
+.linked.vertical > GtkComboBox > .button { @extend %linked_vertical_middle; }
+.linked.vertical > GtkComboBoxText:first-child > .button,
+.linked.vertical > GtkComboBox:first-child > .button { @extend %linked_vertical:first-child; }
+.linked.vertical > GtkComboBoxText:last-child > .button,
+.linked.vertical > GtkComboBox:last-child > .button { @extend %linked_vertical:last-child; }
+.linked.vertical > GtkComboBoxText:only-child > .button,
+.linked.vertical > GtkComboBox:only-child > .button { @extend %linked_vertical:only-child; }
 
 /************
  * Toolbars *
