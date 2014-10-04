@@ -459,6 +459,10 @@
     <title>Index of new symbols in 3.14</title>
     <xi:include href="xml/api-index-3.14.xml"><xi:fallback /></xi:include>
   </index>
+  <index id="api-index-3-16" role="3.16">
+    <title>Index of new symbols in 3.16</title>
+    <xi:include href="xml/api-index-3.16.xml"><xi:fallback /></xi:include>
+  </index>
 
   <xi:include href="xml/annotation-glossary.xml"><xi:fallback /></xi:include>
 
