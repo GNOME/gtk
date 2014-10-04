@@ -304,6 +304,68 @@ on_record_button_toggled (GtkToggleButton *button,
 }
 
 static void
+on_page_combo_changed (GtkComboBox *combo,
+                       gpointer     user_data)
+{
+  GtkWidget *from;
+  GtkWidget *to;
+
+  from = GTK_WIDGET (g_object_get_data (G_OBJECT (combo), "range_from_spin"));
+  to = GTK_WIDGET (g_object_get_data (G_OBJECT (combo), "range_to_spin"));
+
+  switch (gtk_combo_box_get_active (combo))
+    {
+    case 0: /* Range */
+      gtk_widget_set_sensitive (from, TRUE);
+      gtk_widget_set_sensitive (to, TRUE);
+      break;
+    case 1: /* All */
+      gtk_widget_set_sensitive (from, FALSE);
+      gtk_widget_set_sensitive (to, FALSE);
+      gtk_spin_button_set_value (GTK_SPIN_BUTTON (from), 1);
+      gtk_spin_button_set_value (GTK_SPIN_BUTTON (to), 99);
+      break;
+    case 2: /* Current */
+      gtk_widget_set_sensitive (from, FALSE);
+      gtk_widget_set_sensitive (to, FALSE);
+      gtk_spin_button_set_value (GTK_SPIN_BUTTON (from), 7);
+      gtk_spin_button_set_value (GTK_SPIN_BUTTON (to), 7);
+      break;
+    default:;
+    }
+}
+
+static void
+on_range_from_changed (GtkSpinButton *from)
+{
+  GtkSpinButton *to;
+  gint v1, v2;
+
+  to = GTK_SPIN_BUTTON (g_object_get_data (G_OBJECT (from), "range_to_spin"));
+
+  v1 = gtk_spin_button_get_value_as_int (from);  
+  v2 = gtk_spin_button_get_value_as_int (to);  
+
+  if (v1 > v2)
+    gtk_spin_button_set_value (to, v1);
+}
+
+static void
+on_range_to_changed (GtkSpinButton *to)
+{
+  GtkSpinButton *from;
+  gint v1, v2;
+
+  from = GTK_SPIN_BUTTON (g_object_get_data (G_OBJECT (to), "range_from_spin"));
+
+  v1 = gtk_spin_button_get_value_as_int (from);  
+  v2 = gtk_spin_button_get_value_as_int (to);  
+
+  if (v1 > v2)
+    gtk_spin_button_set_value (from, v2);
+}
+
+static void
 update_header (GtkListBoxRow *row,
                GtkListBoxRow *before,
                gpointer       data)
@@ -861,6 +923,7 @@ activate (GApplication *app)
   GtkWindow *window;
   GtkWidget *widget;
   GtkWidget *widget2;
+  GtkWidget *widget3;
   GtkWidget *stack;
   GtkWidget *dialog;
   GtkAdjustment *adj;
@@ -896,6 +959,9 @@ activate (GApplication *app)
   gtk_builder_add_callback_symbol (builder, "on_scale_button_value_changed", (GCallback)on_scale_button_value_changed);
   gtk_builder_add_callback_symbol (builder, "on_scale_button_query_tooltip", (GCallback)on_scale_button_query_tooltip);
   gtk_builder_add_callback_symbol (builder, "on_record_button_toggled", (GCallback)on_record_button_toggled);
+  gtk_builder_add_callback_symbol (builder, "on_page_combo_changed", (GCallback)on_page_combo_changed);
+  gtk_builder_add_callback_symbol (builder, "on_range_from_changed", (GCallback)on_range_from_changed);
+  gtk_builder_add_callback_symbol (builder, "on_range_to_changed", (GCallback)on_range_to_changed);
 
   gtk_builder_connect_signals (builder, NULL);
 
@@ -1001,6 +1067,14 @@ activate (GApplication *app)
   gtk_tree_view_expand_all (GTK_TREE_VIEW (widget));
 
   populate_colors ((GtkWidget *)gtk_builder_get_object (builder, "munsell"));
+
+  widget = (GtkWidget *)gtk_builder_get_object (builder, "page_combo");
+  widget2 = (GtkWidget *)gtk_builder_get_object (builder, "range_from_spin");
+  widget3 = (GtkWidget *)gtk_builder_get_object (builder, "range_to_spin");
+  g_object_set_data (G_OBJECT (widget), "range_from_spin", widget2);
+  g_object_set_data (G_OBJECT (widget3), "range_from_spin", widget2);
+  g_object_set_data (G_OBJECT (widget), "range_to_spin", widget3);
+  g_object_set_data (G_OBJECT (widget2), "range_to_spin", widget3);
 
   set_accel (GTK_APPLICATION (app), GTK_WIDGET (gtk_builder_get_object (builder, "quitmenuitem")));
   set_accel (GTK_APPLICATION (app), GTK_WIDGET (gtk_builder_get_object (builder, "deletemenuitem")));

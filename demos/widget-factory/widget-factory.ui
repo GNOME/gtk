@@ -93,6 +93,20 @@
     <property name="step_increment">1</property>
     <property name="page_increment">10</property>
   </object>
+  <object class="GtkAdjustment" id="pg_adjustment">
+    <property name="upper">99</property>
+    <property name="lower">1</property>
+    <property name="value">2</property>
+    <property name="step_increment">1</property>
+    <property name="page_increment">10</property>
+  </object>
+  <object class="GtkAdjustment" id="pg_adjustment2">
+    <property name="upper">99</property>
+    <property name="lower">1</property>
+    <property name="value">4</property>
+    <property name="step_increment">1</property>
+    <property name="page_increment">10</property>
+  </object>
   <object class="GtkListStore" id="liststore1">
     <columns>
       <!-- column-name Cool -->
@@ -3497,6 +3511,54 @@ microphone-sensitivity-medium-symbolic</property>
                                   <packing>
                                     <property name="name">ad</property>
                                     <property name="title">Address</property>
+                                  </packing>
+                                </child>
+                                <child>
+                                  <object class="GtkBox">
+                                    <property name="visible">True</property>
+                                    <property name="orientation">vertical</property>
+                                    <property name="margin">20</property>
+                                    <property name="halign">center</property>
+                                    <property name="valign">center</property>
+                                    <style>
+                                      <class name="linked"/>
+                                    </style>
+                                    <child>
+                                      <object class="GtkComboBoxText" id="page_combo">
+                                        <property name="visible">True</property>
+                                        <property name="active">0</property>
+                                        <signal name="changed" handler="on_page_combo_changed"/>
+                                        <items>
+                                          <item>Range</item>
+                                          <item>All</item>
+                                          <item>Current</item>
+                                        </items>
+                                      </object>
+                                    </child>
+                                    <child>
+                                      <object class="GtkSpinButton" id="range_from_spin">
+                                        <property name="visible">True</property>
+                                        <property name="adjustment">pg_adjustment</property>
+                                        <signal name="value-changed" handler="on_range_from_changed"/>
+                                      </object>
+                                    </child>
+                                    <child>
+                                      <object class="GtkSpinButton" id="range_to_spin">
+                                        <property name="visible">True</property>
+                                        <property name="adjustment">pg_adjustment2</property>
+                                        <signal name="value-changed" handler="on_range_to_changed"/>
+                                      </object>
+                                    </child>
+                                    <child>
+                                      <object class="GtkButton">
+                                        <property name="visible">True</property>
+                                        <property name="label">Print</property>
+                                      </object>
+                                    </child>
+                                  </object>
+                                  <packing>
+                                    <property name="name">pg</property>
+                                    <property name="title">Pages</property>
                                   </packing>
                                 </child>
                               </object>
