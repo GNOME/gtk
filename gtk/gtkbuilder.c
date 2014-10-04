@@ -60,14 +60,12 @@
  *
  * GtkBuilder parses textual descriptions of user interfaces which are
  * specified in an XML format which can be roughly described by the
- * RELAX NG schema below. We refer to these descriptions as
- * “GtkBuilder UI definitions” or just
- * “UI definitions” if the context is clear.
+ * RELAX NG schema below. We refer to these descriptions as “GtkBuilder
+ * UI definitions” or just “UI definitions” if the context is clear.
  * Do not confuse GtkBuilder UI Definitions with
- * [GtkUIManager UI Definitions][XML-UI], which
- * are more limited in scope. It is common to use `.ui`
- * as the filename extension for files containing GtkBuilder UI
- * definitions.
+ * [GtkUIManager UI Definitions][XML-UI], which are more limited in scope.
+ * It is common to use `.ui` as the filename extension for files containing
+ * GtkBuilder UI definitions.
  *
  * [RELAX NG Compact Syntax](https://git.gnome.org/browse/gtk+/tree/gtk/gtkbuilder.rnc)
  *
@@ -961,9 +959,9 @@ _gtk_builder_finish (GtkBuilder *builder)
  *
  * Creates a new empty builder object.
  *
- * This function is only useful if you intend to make multiple calls to
- * gtk_builder_add_from_file(), gtk_builder_add_from_resource() or
- * gtk_builder_add_from_string() in order to merge multiple UI
+ * This function is only useful if you intend to make multiple calls
+ * to gtk_builder_add_from_file(), gtk_builder_add_from_resource()
+ * or gtk_builder_add_from_string() in order to merge multiple UI
  * descriptions into a single builder.
  *
  * Most users will probably want to use gtk_builder_new_from_file(),
@@ -990,15 +988,15 @@ gtk_builder_new (void)
  *
  * Most users will probably want to use gtk_builder_new_from_file().
  *
- * Upon errors 0 will be returned and @error will be assigned a
+ * If an error occurs, 0 will be returned and @error will be assigned a
  * #GError from the #GTK_BUILDER_ERROR, #G_MARKUP_ERROR or #G_FILE_ERROR 
  * domain.
  *
  * It’s not really reasonable to attempt to handle failures of this
- * call.  You should not use this function with untrusted files (ie:
- * files that are not part of your application).  Broken #GtkBuilder
+ * call. You should not use this function with untrusted files (ie:
+ * files that are not part of your application). Broken #GtkBuilder
  * files can easily crash your program, and it’s possible that memory
- * was leaked leading up to the reported failure.  The only reasonable
+ * was leaked leading up to the reported failure. The only reasonable
  * thing to do when an error is detected is to call g_error().
  *
  * Returns: A positive value on success, 0 if an error occurred
@@ -1167,7 +1165,7 @@ _gtk_builder_extend_with_template (GtkBuilder    *builder,
  *
  * Most users will probably want to use gtk_builder_new_from_resource().
  *
- * Upon errors 0 will be returned and @error will be assigned a
+ * If an error occurs, 0 will be returned and @error will be assigned a
  * #GError from the #GTK_BUILDER_ERROR, #G_MARKUP_ERROR or #G_RESOURCE_ERROR
  * domain.
  *
@@ -2495,8 +2493,8 @@ gtk_builder_new_from_file (const gchar *filename)
  * Builds the [GtkBuilder UI definition][BUILDER-UI]
  * at @resource_path.
  *
- * If there is an error locating the resurce or parsing the description
- * then the program will be aborted.
+ * If there is an error locating the resource or parsing the
+ * description, then the program will be aborted.
  *
  * Returns: a #GtkBuilder containing the described interface
  *
@@ -2523,11 +2521,11 @@ gtk_builder_new_from_resource (const gchar *resource_path)
  * Builds the user interface described by @string (in the
  * [GtkBuilder UI definition][BUILDER-UI] format).
  *
- * If @string is %NULL-terminated then @length should be -1.  If @length
- * is not -1 then it is the length of @string.
+ * If @string is %NULL-terminated, then @length should be -1.
+ * If @length is not -1, then it is the length of @string.
  *
  * If there is an error parsing @string then the program will be
- * aborted.  You should not attempt to parse user interface description
+ * aborted. You should not attempt to parse user interface description
  * from untrusted sources.
  *
  * Returns: a #GtkBuilder containing the interface described by @string
@@ -2556,7 +2554,7 @@ gtk_builder_new_from_string (const gchar *string,
  * Sets the application associated with @builder.
  *
  * You only need this function if there is more than one #GApplication
- * in your process.  @application cannot be %NULL.
+ * in your process. @application cannot be %NULL.
  *
  * Since: 3.10
  **/
@@ -2583,7 +2581,7 @@ gtk_builder_set_application (GtkBuilder     *builder,
  * from XML that the builder is loading.
  *
  * By default, the builder uses the default application: the one from
- * g_application_get_default().  If you want to use another application
+ * g_application_get_default(). If you want to use another application
  * for constructing proxies, use gtk_builder_set_application().
  *
  * Returns: (transfer none): the application being used by the builder,
