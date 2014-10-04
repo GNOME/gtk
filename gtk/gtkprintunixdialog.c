@@ -2243,12 +2243,12 @@ draw_collate_cb (GtkWidget          *widget,
 
   rtl = (gtk_widget_get_direction (GTK_WIDGET (widget)) == GTK_TEXT_DIR_RTL);
 
-  x = (gtk_widget_get_allocated_width (widget) - 66) / 2;
+  x = (gtk_widget_get_allocated_width (widget) - 30) / 2;
   y = (gtk_widget_get_allocated_height (widget) - 36) / 2;
   if (rtl)
     {
-      x1 = x + 36;
-      x2 = x;
+      x1 = x;
+      x2 = x - 36;
       p1 = 0;
       p2 = 10;
       text_x = 4;
