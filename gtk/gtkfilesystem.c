@@ -87,7 +87,6 @@ struct AsyncFuncData
   GtkFileSystem *file_system;
   GFile *file;
   GCancellable *cancellable;
-  gchar *attributes;
 
   gpointer callback;
   gpointer data;
@@ -393,7 +392,6 @@ free_async_data (AsyncFuncData *async_data)
   g_object_unref (async_data->file);
   g_object_unref (async_data->cancellable);
 
-  g_free (async_data->attributes);
   g_free (async_data);
 }
 
