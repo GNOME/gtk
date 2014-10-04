@@ -227,17 +227,19 @@ GtkTextView {
     box-shadow: none; }
     .entry.progressbar:backdrop {
       background-color: transparent; }
-  .linked .entry:first-child {
-    border-top-right-radius: 0;
-    border-bottom-right-radius: 0; }
-    .linked .entry:first-child:dir(rtl) {
-      border-right-style: none; }
-  .linked .entry:last-child {
-    border-top-left-radius: 0;
-    border-bottom-left-radius: 0;
-    border-left-style: none; }
-    .linked .entry:last-child:dir(rtl) {
-      border-left-style: solid; }
+  .linked .entry {
+    border-radius: 0; }
+    .linked .entry:first-child {
+      border-top-left-radius: 3px;
+      border-bottom-left-radius: 3px; }
+      .linked .entry:first-child:dir(rtl) {
+        border-right-style: none; }
+    .linked .entry:last-child {
+      border-top-right-radius: 3px;
+      border-bottom-right-radius: 3px;
+      border-left-style: none; }
+      .linked .entry:last-child:dir(rtl) {
+        border-left-style: solid; }
   .entry.error {
     color: #cc0000;
     border-color: #cc0000; }
@@ -274,6 +276,108 @@ GtkTextView {
       color: #215d9c; }
     .entry.image:backdrop {
       color: #a9aba9; }
+  .linked.vertical .entry {
+    background-color: transparent;
+    background-image: linear-gradient(to bottom, #212121, #292929 90%);
+    border-color: #1c1f1f;
+    box-shadow: inset 0 3px rgba(0, 0, 0, 0.02), inset 0 2px rgba(0, 0, 0, 0.03), inset 0 1px rgba(0, 0, 0, 0.08), inset 0 0 0 1px rgba(33, 93, 156, 0);
+    background-image: linear-gradient(to bottom, #292929);
+    border-bottom-color: #252626;
+    box-shadow: none; }
+    .linked.vertical .entry:focus {
+      border-color: #0f2b48;
+      box-shadow: inset 0 0 0 1px rgba(33, 93, 156, 0.7), 0 -1px 0 0 #0f2b48; }
+    .linked.vertical .entry:insensitive {
+      background-color: transparent;
+      background-image: linear-gradient(to bottom, #212121, #292929 90%);
+      color: #939695;
+      border-color: #1c1f1f;
+      background-image: linear-gradient(to bottom, #323636);
+      box-shadow: inset 0 3px transparent, inset 0 2px transparent, inset 0 1px transparent;
+      border-bottom-color: #252626; }
+      .linked.vertical .entry:insensitive:backdrop {
+        background-color: transparent;
+        background-image: linear-gradient(to bottom, #212121, #292929 90%);
+        color: #5d6767;
+        border-color: #1e2222;
+        background-image: linear-gradient(to bottom, #323636);
+        box-shadow: inset 0 3px transparent, inset 0 2px transparent, inset 0 1px transparent;
+        border-bottom-color: #272929; }
+    .linked.vertical .entry:backdrop {
+      background-color: transparent;
+      background-image: linear-gradient(to bottom, #212121, #292929 90%);
+      color: #c9cbc9;
+      border-color: #1e2222;
+      background-image: linear-gradient(to bottom, #2c2c2c);
+      box-shadow: inset 0 3px transparent, inset 0 2px transparent, inset 0 1px transparent;
+      border-bottom-color: #272929; }
+    .linked.vertical .entry:first-child {
+      background-color: transparent;
+      background-image: linear-gradient(to bottom, #212121, #292929 90%);
+      border-color: #1c1f1f;
+      box-shadow: inset 0 3px rgba(0, 0, 0, 0.02), inset 0 2px rgba(0, 0, 0, 0.03), inset 0 1px rgba(0, 0, 0, 0.08), inset 0 0 0 1px rgba(33, 93, 156, 0);
+      border-bottom-color: #252626; }
+      .linked.vertical .entry:first-child:focus {
+        background-color: transparent;
+        background-image: linear-gradient(to bottom, #212121, #292929 90%);
+        box-shadow: inset 0 3px rgba(0, 0, 0, 0.02), inset 0 2px rgba(0, 0, 0, 0.03), inset 0 1px rgba(0, 0, 0, 0.08), inset 0 0 0 1px rgba(33, 93, 156, 0.7);
+        border-color: #0f2b48; }
+      .linked.vertical .entry:first-child:insensitive {
+        background-color: transparent;
+        background-image: linear-gradient(to bottom, #212121, #292929 90%);
+        color: #939695;
+        border-color: #1c1f1f;
+        background-image: linear-gradient(to bottom, #323636);
+        box-shadow: inset 0 3px transparent, inset 0 2px transparent, inset 0 1px transparent;
+        border-bottom-color: #272929; }
+        .linked.vertical .entry:first-child:insensitive:backdrop {
+          background-color: transparent;
+          background-image: linear-gradient(to bottom, #212121, #292929 90%);
+          color: #5d6767;
+          border-color: #1e2222;
+          background-image: linear-gradient(to bottom, #323636);
+          box-shadow: inset 0 3px transparent, inset 0 2px transparent, inset 0 1px transparent;
+          border-bottom-color: #272929;
+          border-top-style: solid; }
+      .linked.vertical .entry:first-child:backdrop {
+        background-color: transparent;
+        background-image: linear-gradient(to bottom, #212121, #292929 90%);
+        color: #c9cbc9;
+        border-color: #1e2222;
+        background-image: linear-gradient(to bottom, #2c2c2c);
+        box-shadow: inset 0 3px transparent, inset 0 2px transparent, inset 0 1px transparent;
+        border-bottom-color: #272929; }
+    .linked.vertical .entry:last-child {
+      background-color: transparent;
+      background-image: linear-gradient(to bottom, #212121, #292929 90%);
+      border-color: #1c1f1f;
+      box-shadow: inset 0 3px rgba(0, 0, 0, 0.02), inset 0 2px rgba(0, 0, 0, 0.03), inset 0 1px rgba(0, 0, 0, 0.08), inset 0 0 0 1px rgba(33, 93, 156, 0), 0 1px rgba(238, 238, 236, 0.1);
+      background-image: linear-gradient(to bottom, #292929);
+      box-shadow: 0 1px rgba(238, 238, 236, 0.1); }
+      .linked.vertical .entry:last-child:focus {
+        border-color: #0f2b48;
+        box-shadow: inset 0 0 0 1px rgba(33, 93, 156, 0.7), 0 -1px 0 0 #0f2b48, 0 1px rgba(238, 238, 236, 0.1); }
+      .linked.vertical .entry:last-child:insensitive {
+        background-color: transparent;
+        background-image: linear-gradient(to bottom, #212121, #292929 90%);
+        color: #939695;
+        border-color: #1c1f1f;
+        background-image: linear-gradient(to bottom, #323636);
+        box-shadow: inset 0 3px transparent, inset 0 2px transparent, inset 0 1px transparent, 0 1px rgba(238, 238, 236, 0.1); }
+        .linked.vertical .entry:last-child:insensitive:backdrop {
+          background-color: transparent;
+          background-image: linear-gradient(to bottom, #212121, #292929 90%);
+          color: #5d6767;
+          border-color: #1e2222;
+          background-image: linear-gradient(to bottom, #323636);
+          box-shadow: inset 0 3px transparent, inset 0 2px transparent, inset 0 1px transparent, 0 1px rgba(238, 238, 236, 0); }
+      .linked.vertical .entry:last-child:backdrop {
+        background-color: transparent;
+        background-image: linear-gradient(to bottom, #212121, #292929 90%);
+        color: #c9cbc9;
+        border-color: #1e2222;
+        background-image: linear-gradient(to bottom, #2c2c2c);
+        box-shadow: inset 0 3px transparent, inset 0 2px transparent, inset 0 1px transparent, 0 1px rgba(238, 238, 236, 0); }
 
 /***********
  * Buttons *
@@ -1088,15 +1192,15 @@ GtkCalendar.header .inline-toolbar GtkToolButton:backdrop:only-child > .button.t
   border-radius: 3px;
   border-style: solid; }
 
-.linked.vertical .button, .linked.vertical .button:hover, .linked.vertical .button:active, .linked.vertical .button:checked, .linked.vertical .button:backdrop {
+.linked.vertical .entry, .linked.vertical .entry:focus, .linked.vertical .entry:insensitive, .linked.vertical .entry:insensitive:backdrop, .linked.vertical .entry:backdrop, .linked.vertical .entry:last-child:focus, .linked.vertical .button, .linked.vertical .button:hover, .linked.vertical .button:active, .linked.vertical .button:checked, .linked.vertical .button:backdrop {
   border-left-style: solid;
   border-top-style: none; }
-  .linked.vertical .button:first-child {
+  .linked.vertical .entry:first-child, .linked.vertical .entry:first-child:last-child:focus, .linked.vertical .button:first-child {
     border-style: solid;
     border-radius: 3px 3px 0 0; }
-  .linked.vertical .button:last-child {
+  .linked.vertical .entry:last-child, .linked.vertical .button:last-child {
     border-radius: 0 0 3px 3px; }
-  .linked.vertical .button:only-child {
+  .linked.vertical .entry:only-child, .linked.vertical .entry:only-child:last-child:focus, .linked.vertical .button:only-child {
     border-radius: 3px;
     border-style: solid; }
 
@@ -4176,10 +4280,6 @@ GtkCalendar.header .menuitem.titlebutton.button:selected, .list-row:selected {
   .titlebar .menuitem.titlebutton.button:backdrop:selected,
   GtkCalendar.header .menuitem.titlebutton.button:backdrop:selected, .list-row:backdrop:selected {
     color: #c9cbc9; }
-
-/* Decouple the font of context menus from their entry/textview */
-.context-menu {
-  font: initial; }
 
 /* Decouple the font of context menus from their entry/textview */
 .context-menu {

@@ -237,19 +237,23 @@ GtkTextView { // This will get overridden by .view, needed by gedit line numbers
 .entry {
   border: 1px solid;
   padding: 5px 8px 6px;
+
   &.image { // icons inside the entry
     &.left { padding-left: 0; }
     &.right { padding-right: 0; }
   }
+
   border-radius: 3px;
   transition: all 200ms ease-out;
   @include entry(normal);
+
   &.flat, &.flat:focus {
     padding: 2px;
     @include entry(normal, $edge:none);
     border: none;
     border-radius: 0;
   }
+
   &:focus { @include entry(focus); }
   &:insensitive { @include entry(insensitive); }
   &:backdrop { @include entry(backdrop); }
@@ -258,10 +262,12 @@ GtkTextView { // This will get overridden by .view, needed by gedit line numbers
     background-color: $selected_bg_color;
     color: $selected_fg_color;
   }
+
   &:selected,
   &:selected:focus {
     @extend %selected_items;
   }
+
   &.progressbar {
     margin: 1px;
     border-radius: 0;
@@ -273,19 +279,22 @@ GtkTextView { // This will get overridden by .view, needed by gedit line numbers
     box-shadow: none;
     &:backdrop { background-color: transparent; }
   }
+
   .linked & { //FIXME: use same buttons linking logic and template
+    border-radius: 0;
     &:first-child {
-      border-top-right-radius: 0;
-      border-bottom-right-radius: 0;
+      border-top-left-radius: 3px;
+      border-bottom-left-radius: 3px;
       &:dir(rtl) { border-right-style: none;}
     }
     &:last-child {
-      border-top-left-radius: 0;
-      border-bottom-left-radius: 0;
+      border-top-right-radius: 3px;
+      border-bottom-right-radius: 3px;
       border-left-style: none;
       &:dir(rtl) { border-left-style: solid; }
     }
   }
+
   &.error {
     color: $error_color;
     border-color: $error_color;
@@ -298,6 +307,7 @@ GtkTextView { // This will get overridden by .view, needed by gedit line numbers
       &:selected:backdrop { color: $backdrop_base_color; }
     }
   }
+
   &.warning {
     color: $warning_color;
     border-color: $warning_color;
@@ -310,11 +320,85 @@ GtkTextView { // This will get overridden by .view, needed by gedit line numbers
       &:selected:backdrop { color: $backdrop_base_color; }
     }
   }
+
   &.image { // entry icons colors
     color: mix($fg_color,$base_color,80%);
     &:hover { color: $fg_color; }
     &:active { color: $selected_bg_color; }
     &:backdrop { color: mix($backdrop_fg_color,$backdrop_base_color,80%); }
+  }
+
+  .linked.vertical & {
+    @include entry(normal, $edge: none);
+    background-image: linear-gradient(to bottom, $base_color);
+    border-bottom-color: mix($borders_color, $base_color, 30%);
+    box-shadow: none;
+    @extend %linked_vertical;
+    &:focus {
+      border-color: entry_focus_border($selected_bg_color);
+      box-shadow: entry_focus_glow($selected_bg_color),
+                  0 -1px 0 0 entry_focus_border($selected_bg_color);
+      @extend %linked_vertical;
+    }
+    &:insensitive {
+      @include entry(insensitive, $edge: none);
+      border-bottom-color: mix($borders_color, $base_color, 30%);
+      @extend %linked_vertical;
+      &:backdrop {
+        @include entry(backdrop-insensitive, $edge: none);
+        border-bottom-color: mix($backdrop_borders_color, $backdrop_base_color, 30%);
+        @extend %linked_vertical;
+      }
+    }
+    &:backdrop {
+      @include entry(backdrop, $edge: none);
+      border-bottom-color: mix($backdrop_borders_color, $backdrop_base_color, 30%);
+      @extend %linked_vertical;
+    }
+    &:first-child {
+      @include entry(normal, $edge: none);
+      border-bottom-color: mix($borders_color, $base_color, 30%);
+      &:focus { @include entry(focus, $edge: none); }
+      &:insensitive {
+        @include entry(insensitive, $edge: none);
+        border-bottom-color: mix($backdrop_borders_color, $backdrop_base_color, 30%);
+        @extend %linked_vertical:first-child;
+        &:backdrop {
+          @include entry(backdrop-insensitive, $edge: none);
+          border-bottom-color: mix($backdrop_borders_color, $backdrop_base_color, 30%);
+          border-top-style: solid;
+        }
+      }
+      &:backdrop {
+        @include entry(backdrop, $edge: none);
+        border-bottom-color: mix($backdrop_borders_color, $backdrop_base_color, 30%);
+        @extend %linked_vertical:first-child;
+      }
+    }
+    &:last-child {
+      @include entry(normal);
+      background-image: linear-gradient(to bottom, $base_color);
+      box-shadow: _widget_edge();
+      &:focus {
+        border-color: entry_focus_border($selected_bg_color);
+        box-shadow: entry_focus_glow($selected_bg_color),
+                    0 -1px 0 0 entry_focus_border($selected_bg_color),
+                    _widget_edge();
+        @extend %linked_vertical;
+      }
+      &:insensitive {
+        @include entry(insensitive);
+        @extend %linked_vertical:last-child;
+        &:backdrop {
+          @include entry(backdrop-insensitive);
+          @extend %linked_vertical:last-child;
+        }
+      }
+      &:backdrop {
+        @include entry(backdrop);
+        @extend %linked_vertical:last-child;
+      }
+    }
   }
 }
 
