@@ -41,6 +41,8 @@
 #include "gtktextview.h"
 #include "gtktreeselection.h"
 #include "gtktreestore.h"
+#include "gtktreemodelsort.h"
+#include "gtktreemodelfilter.h"
 #include "gtkwidgetprivate.h"
 
 enum
@@ -336,6 +338,20 @@ gtk_inspector_widget_tree_append_object (GtkInspectorWidgetTree *wt,
   g_object_weak_ref (object, gtk_widget_tree_remove_dead_object, od);
 
   g_free (address);
+
+  if (GTK_IS_TREE_MODEL_SORT (object))
+    {
+      GObject *child = G_OBJECT (gtk_tree_model_sort_get_model (GTK_TREE_MODEL_SORT (object)));
+      if (child)
+        gtk_inspector_widget_tree_append_object (wt, child, &iter, "model");
+    }
+
+  if (GTK_IS_TREE_MODEL_FILTER (object))
+    {
+      GObject *child = G_OBJECT (gtk_tree_model_filter_get_model (GTK_TREE_MODEL_FILTER (object)));
+      if (child)
+        gtk_inspector_widget_tree_append_object (wt, child, &iter, "model");
+    }
 
   if (GTK_IS_CONTAINER (object))
     {
