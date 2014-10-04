@@ -967,15 +967,19 @@ printer_status_cb (GtkPrintBackend    *backend,
   GtkPrintUnixDialogPrivate *priv = dialog->priv;
   GtkTreeIter *iter;
   GtkTreeSelection *selection;
+  GIcon *icon;
 
   iter = g_object_get_data (G_OBJECT (printer), "gtk-print-tree-iter");
 
+  icon = g_themed_icon_new ("printer");
+  g_themed_icon_prepend_name (G_THEMED_ICON (icon), gtk_printer_get_icon_name (printer));
   gtk_list_store_set (GTK_LIST_STORE (priv->printer_list), iter,
-                      PRINTER_LIST_COL_ICON, gtk_printer_get_icon_name (printer),
+                      PRINTER_LIST_COL_ICON, icon,
                       PRINTER_LIST_COL_STATE, gtk_printer_get_state_message (printer),
                       PRINTER_LIST_COL_JOBS, gtk_printer_get_job_count (printer),
                       PRINTER_LIST_COL_LOCATION, gtk_printer_get_location (printer),
                       -1);
+  g_object_unref (icon);
 
   /* When the pause state change then we need to update sensitive property
    * of GTK_RESPONSE_OK button inside of selected_printer_changed function.
@@ -1000,6 +1004,7 @@ printer_added_cb (GtkPrintBackend    *backend,
   GtkTreeIter iter, filter_iter;
   GtkTreeSelection *selection;
   GtkTreePath *path;
+  GIcon *icon;
 
   gtk_list_store_append (GTK_LIST_STORE (priv->printer_list), &iter);
 
@@ -1008,14 +1013,17 @@ printer_added_cb (GtkPrintBackend    *backend,
                           gtk_tree_iter_copy (&iter),
                           (GDestroyNotify) gtk_tree_iter_free);
 
+  icon = g_themed_icon_new ("printer");
+  g_themed_icon_prepend_name (G_THEMED_ICON (icon), gtk_printer_get_icon_name (printer));
   gtk_list_store_set (GTK_LIST_STORE (priv->printer_list), &iter,
-                      PRINTER_LIST_COL_ICON, gtk_printer_get_icon_name (printer),
+                      PRINTER_LIST_COL_ICON, icon,
                       PRINTER_LIST_COL_NAME, gtk_printer_get_name (printer),
                       PRINTER_LIST_COL_STATE, gtk_printer_get_state_message (printer),
                       PRINTER_LIST_COL_JOBS, gtk_printer_get_job_count (printer),
                       PRINTER_LIST_COL_LOCATION, gtk_printer_get_location (printer),
                       PRINTER_LIST_COL_PRINTER_OBJ, printer,
                       -1);
+  g_object_unref (icon);
 
   gtk_tree_model_filter_convert_child_iter_to_iter (priv->printer_list_filter,
                                                     &filter_iter, &iter);
