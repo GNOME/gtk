@@ -2195,21 +2195,17 @@ update_collate_icon (GtkToggleButton    *toggle_button,
 static void
 paint_page (GtkWidget *widget,
             cairo_t   *cr,
-            gfloat     scale,
-            gint       x_offset,
-            gint       y_offset,
+            gint       x,
+            gint       y,
             gchar     *text,
             gint       text_x)
 {
   GtkStyleContext *context;
-  gint x, y, width, height;
+  gint width, height;
   gint text_y;
 
-  x = x_offset * scale;
-  y = y_offset * scale;
-  width = 20 * scale;
-  height = 26 * scale;
-
+  width = 20;
+  height = 26;
   text_y = 21;
 
   context = gtk_widget_get_style_context (widget);
@@ -2224,8 +2220,8 @@ paint_page (GtkWidget *widget,
   cairo_select_font_face (cr, "Sans",
                           CAIRO_FONT_SLANT_NORMAL,
                           CAIRO_FONT_WEIGHT_NORMAL);
-  cairo_set_font_size (cr, (gint)(9 * scale));
-  cairo_move_to (cr, x + (gint)(text_x * scale), y + (gint)(text_y * scale));
+  cairo_set_font_size (cr, 9);
+  cairo_move_to (cr, x + text_x, y + text_y);
   cairo_show_text (cr, text);
 
   gtk_style_context_restore (context);
@@ -2236,8 +2232,6 @@ draw_collate_cb (GtkWidget          *widget,
                  cairo_t            *cr,
                  GtkPrintUnixDialog *dialog)
 {
-  gint size;
-  gfloat scale;
   gboolean collate, reverse, rtl;
   gint copies;
   gint text_x;
@@ -2249,11 +2243,8 @@ draw_collate_cb (GtkWidget          *widget,
 
   rtl = (gtk_widget_get_direction (GTK_WIDGET (widget)) == GTK_TEXT_DIR_RTL);
 
-  gtk_icon_size_lookup (GTK_ICON_SIZE_DIALOG, &size, NULL);
-  scale = size / 48.0;
-
-  x = (gtk_widget_get_allocated_width (widget) - 66 * scale) / 2;
-  y = (gtk_widget_get_allocated_height (widget) - 36 * scale) / 2;
+  x = (gtk_widget_get_allocated_width (widget) - 66) / 2;
+  y = (gtk_widget_get_allocated_height (widget) - 36) / 2;
   if (rtl)
     {
       x1 = x + 36;
@@ -2273,16 +2264,16 @@ draw_collate_cb (GtkWidget          *widget,
 
   if (copies == 1)
     {
-      paint_page (widget, cr, scale, x1 + p1, y, reverse ? "1" : "2", text_x);
-      paint_page (widget, cr, scale, x1 + p2, y + 10, reverse ? "2" : "1", text_x);
+      paint_page (widget, cr, x1 + p1, y, reverse ? "1" : "2", text_x);
+      paint_page (widget, cr, x1 + p2, y + 10, reverse ? "2" : "1", text_x);
     }
   else
     {
-      paint_page (widget, cr, scale, x1 + p1, y, collate == reverse ? "1" : "2", text_x);
-      paint_page (widget, cr, scale, x1 + p2, y + 10, reverse ? "2" : "1", text_x);
+      paint_page (widget, cr, x1 + p1, y, collate == reverse ? "1" : "2", text_x);
+      paint_page (widget, cr, x1 + p2, y + 10, reverse ? "2" : "1", text_x);
 
-      paint_page (widget, cr, scale, x2 + p1, y, reverse ? "1" : "2", text_x);
-      paint_page (widget, cr, scale, x2 + p2, y + 10, collate == reverse ? "2" : "1", text_x);
+      paint_page (widget, cr, x2 + p1, y, reverse ? "1" : "2", text_x);
+      paint_page (widget, cr, x2 + p2, y + 10, collate == reverse ? "2" : "1", text_x);
     }    
 
   return TRUE;
