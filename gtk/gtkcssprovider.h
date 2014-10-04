@@ -103,6 +103,10 @@ gboolean         gtk_css_provider_load_from_path (GtkCssProvider  *css_provider,
                                                   const gchar     *path,
                                                   GError         **error);
 
+GDK_AVAILABLE_IN_3_16
+void             gtk_css_provider_load_from_resource (GtkCssProvider *provider,
+                                                      const gchar    *resource_path);
+
 GDK_AVAILABLE_IN_ALL
 GtkCssProvider * gtk_css_provider_get_default (void);
 

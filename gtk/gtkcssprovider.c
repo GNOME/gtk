@@ -2883,12 +2883,26 @@ gtk_css_provider_load_from_path (GtkCssProvider  *css_provider,
   return result;
 }
 
-static void
-gtk_css_provider_load_from_resource (GtkCssProvider  *css_provider,
-			             const gchar     *resource_path)
+/**
+ * gtk_css_provider_load_from_resource:
+ * @css_provider: a #GtkCssProvider
+ * @resource_path: a #GResource resource path
+ *
+ * Loads the data contained in the resource at @resource_path into
+ * the #GtkCssProvider, clearing any previously loaded information.
+ *
+ * If there is an error locating the resource or parsing the CSS,
+ * then the program will be aborted.
+ *
+ * Since: 3.16
+ */
+void
+gtk_css_provider_load_from_resource (GtkCssProvider *css_provider,
+			             const gchar    *resource_path)
 {
   GFile *file;
-  char *uri, *escaped;
+  gchar *uri, *escaped;
+  GError *error;
 
   g_return_if_fail (GTK_IS_CSS_PROVIDER (css_provider));
   g_return_if_fail (resource_path != NULL);
@@ -2901,7 +2915,8 @@ gtk_css_provider_load_from_resource (GtkCssProvider  *css_provider,
   file = g_file_new_for_uri (uri);
   g_free (uri);
 
-  gtk_css_provider_load_from_file (css_provider, file, NULL);
+  if (!gtk_css_provider_load_from_file (css_provider, file, &error))
+    g_error ("Failed to load CSS: %s", error->message); 
 
   g_object_unref (file);
 }

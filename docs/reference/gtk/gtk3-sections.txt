@@ -6158,6 +6158,7 @@ gtk_css_provider_get_named
 gtk_css_provider_load_from_data
 gtk_css_provider_load_from_file
 gtk_css_provider_load_from_path
+gtk_css_provider_load_from_resource
 gtk_css_provider_new
 gtk_css_provider_to_string
 GTK_CSS_PROVIDER_ERROR
