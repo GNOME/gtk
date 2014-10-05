@@ -1746,13 +1746,10 @@ gtk_scrolled_window_forall (GtkContainer *container,
   GtkScrolledWindowPrivate *priv;
   GtkScrolledWindow *scrolled_window;
 
-  g_return_if_fail (GTK_IS_SCROLLED_WINDOW (container));
-  g_return_if_fail (callback != NULL);
-
   GTK_CONTAINER_CLASS (gtk_scrolled_window_parent_class)->forall (container,
-					      include_internals,
-					      callback,
-					      callback_data);
+                                                                  include_internals,
+                                                                  callback,
+                                                                  callback_data);
   if (include_internals)
     {
       scrolled_window = GTK_SCROLLED_WINDOW (container);
@@ -2051,9 +2048,6 @@ gtk_scrolled_window_size_allocate (GtkWidget     *widget,
   gint sb_spacing;
   gint sb_width;
   gint sb_height;
-
-  g_return_if_fail (GTK_IS_SCROLLED_WINDOW (widget));
-  g_return_if_fail (allocation != NULL);
 
   scrolled_window = GTK_SCROLLED_WINDOW (widget);
   bin = GTK_BIN (scrolled_window);
@@ -2373,9 +2367,6 @@ gtk_scrolled_window_scroll_event (GtkWidget      *widget,
   gdouble delta_y;
   gdouble delta;
 
-  g_return_val_if_fail (GTK_IS_SCROLLED_WINDOW (widget), FALSE);
-  g_return_val_if_fail (event != NULL, FALSE);
-
   scrolled_window = GTK_SCROLLED_WINDOW (widget);
   priv = scrolled_window->priv;
 
@@ -2685,9 +2676,6 @@ gtk_scrolled_window_adjustment_changed (GtkAdjustment *adjustment,
   GtkScrolledWindowPrivate *priv;
   GtkScrolledWindow *scrolled_window;
 
-  g_return_if_fail (adjustment != NULL);
-  g_return_if_fail (data != NULL);
-
   scrolled_window = GTK_SCROLLED_WINDOW (data);
   priv = scrolled_window->priv;
 
@@ -2793,13 +2781,8 @@ static void
 gtk_scrolled_window_remove (GtkContainer *container,
 			    GtkWidget    *child)
 {
-  g_return_if_fail (GTK_IS_SCROLLED_WINDOW (container));
-  g_return_if_fail (child != NULL);
-  g_return_if_fail (gtk_bin_get_child (GTK_BIN (container)) == child);
-
   g_object_set (child, "hadjustment", NULL, "vadjustment", NULL, NULL);
 
-  /* chain parent class handler to remove child */
   GTK_CONTAINER_CLASS (gtk_scrolled_window_parent_class)->remove (container, child);
 }
 
@@ -3071,8 +3054,6 @@ gtk_scrolled_window_get_preferred_height_for_width (GtkWidget *widget,
                                                     gint      *minimum_height,
                                                     gint      *natural_height)
 {
-  g_return_if_fail (GTK_IS_WIDGET (widget));
-
   GTK_WIDGET_GET_CLASS (widget)->get_preferred_height (widget, minimum_height, natural_height);
 }
 
@@ -3082,8 +3063,6 @@ gtk_scrolled_window_get_preferred_width_for_height (GtkWidget *widget,
                                                     gint      *minimum_width,
                                                     gint      *natural_width)
 {
-  g_return_if_fail (GTK_IS_WIDGET (widget));
-
   GTK_WIDGET_GET_CLASS (widget)->get_preferred_width (widget, minimum_width, natural_width);
 }
 
