@@ -1043,7 +1043,7 @@ _gdk_x11_display_create_window_impl (GdkDisplay    *display,
 
   impl->override_redirect = xattributes.override_redirect;
 
-  if (window->parent && window->parent->guffaw_gravity)
+  if (window->parent->guffaw_gravity)
     {
       xattributes.win_gravity = StaticGravity;
       xattributes_mask |= CWWinGravity;
