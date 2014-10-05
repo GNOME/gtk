@@ -143,7 +143,7 @@
   }
 }
 
-GtkLabel {
+.label {
   &.separator {
     color: $fg_color;
     @extend .dim-label;
@@ -177,10 +177,10 @@ GtkAssistant {
     }
   }
   &.csd .sidebar { border-top-style: none; }
-  .sidebar GtkLabel {
+  .sidebar .label {
     padding: 6px 12px;
   }
-  .sidebar GtkLabel.highlight {
+  .sidebar .label.highlight {
     background-color: mix($bg_color, $fg_color, 80%);
   }
 }
@@ -612,15 +612,15 @@ $_dot_color: if($variant=='light', $selected_bg_color,
     // one, so we're adding the missing padding to the label depending on
     // its position inside the button
     padding: 5px 8px 6px; // same as .button
-    GtkLabel:first-child { padding-left: 8px; }
-    GtkLabel:last-child { padding-right: 8px; }
+    .label:first-child { padding-left: 8px; }
+    .label:last-child { padding-right: 8px; }
   }
 
   .stack-switcher > & {
     // to position the needs attention dot, padding is added to the button
     // child, a label needs just lateral padding while an icon needs vertical
     // padding added too.
-    > GtkLabel {
+    > .label {
       padding-left: 6px;  // label padding
       padding-right: 6px; //
     }
@@ -638,11 +638,11 @@ $_dot_color: if($variant=='light', $selected_bg_color,
       // of the padding added to the GtkImage is needed
       padding: 5px 2px;
     }
-    &.needs-attention > GtkLabel,
+    &.needs-attention > .label,
     &.needs-attention > GtkImage { @extend %needs_attention; }
-    &.needs-attention:active > GtkLabel,
+    &.needs-attention:active > .label,
     &.needs-attention:active > GtkImage,
-    &.needs-attention:checked > GtkLabel,
+    &.needs-attention:checked > .label,
     &.needs-attention:checked > GtkImage {
       animation: none;
       background-image: none;
@@ -1236,9 +1236,9 @@ GtkComboBox {
   }
 
   // the following is for spacing the icon and the label inside the home button
-  GtkLabel:last-child { padding-left: 2px; }
-  GtkLabel:first-child { padding-right: 2px; }
-  GtkLabel:only-child { padding-right: 0; padding-left: 0; }
+  .label:last-child { padding-left: 2px; }
+  .label:first-child { padding-right: 2px; }
+  .label:only-child { padding-right: 0; padding-left: 0; }
   GtkImage { padding-top: 1px; }
 }
 
@@ -1686,7 +1686,7 @@ column-header.button.dnd { // for treeview-like derive widgets
         }
       }
     }
-    GtkLabel { //tab text
+    .label { //tab text
       padding: 0 2px; // needed for a nicer focus ring
       font-weight: bold;
       color: $insensitive_fg_color;
@@ -1694,14 +1694,14 @@ column-header.button.dnd { // for treeview-like derive widgets
         color: mix($backdrop_fg_color, $backdrop_insensitive_color, 50%);
       }
     }
-    .prelight-page GtkLabel, GtkLabel.prelight-page {
+    .prelight-page .label, .label.prelight-page {
       // prelight tab text
       color: mix($fg_color, $insensitive_fg_color, 50%);
-      &:backdrop { // FIXME, it's the same as GtkLabel:backdrop up here
+      &:backdrop { // FIXME, it's the same as .label:backdrop up here
         color: mix($backdrop_fg_color, $backdrop_insensitive_color, 50%);
       }
     }
-    .active-page GtkLabel, GtkLabel.active-page {
+    .active-page .label, .label.active-page {
       // active tab text
       color: $fg_color;
       &:backdrop { color: $backdrop_fg_color; }
@@ -2673,11 +2673,11 @@ GtkFileChooserDialog {
 
 .sidebar-item {
   padding: 10px 4px;
-  > GtkLabel {
+  > .label {
     padding-left: 6px;
     padding-right: 6px;
   }
-  &.needs-attention > GtkLabel {
+  &.needs-attention > .label {
     @extend %needs_attention;
     background-size: 6px 6px, 0 0;
   }
