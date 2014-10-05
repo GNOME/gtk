@@ -1298,6 +1298,7 @@ static void
 gtk_label_init (GtkLabel *label)
 {
   GtkLabelPrivate *priv;
+  GtkStyleContext *context;
 
   label->priv = gtk_label_get_instance_private (label);
   priv = label->priv;
@@ -1333,6 +1334,9 @@ gtk_label_init (GtkLabel *label)
   priv->mnemonics_visible = TRUE;
 
   gtk_label_set_text (label, "");
+
+  context = gtk_widget_get_style_context (GTK_WIDGET (label));
+  gtk_style_context_add_class (context, GTK_STYLE_CLASS_LABEL);
 
   priv->drag_gesture = gtk_gesture_drag_new (GTK_WIDGET (label));
   g_signal_connect (priv->drag_gesture, "drag-begin",

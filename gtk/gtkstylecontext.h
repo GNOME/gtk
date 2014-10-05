@@ -177,6 +177,17 @@ struct _GtkStyleContextClass
 #define GTK_STYLE_CLASS_ENTRY "entry"
 
 /**
+ * GTK_STYLE_CLASS_LABEL:
+ *
+ * A CSS class to match labels.
+ *
+ * This is used by #GtkLabel.
+ *
+ * Since: 3.16
+ */
+#define GTK_STYLE_CLASS_LABEL "label"
+
+/**
  * GTK_STYLE_CLASS_COMBOBOX_ENTRY:
  *
  * A CSS class to match combobox entries.
