@@ -26,6 +26,7 @@ testsocket_programs = testsocket testsocket_child
 endif
 
 noinst_PROGRAMS =  $(TEST_PROGS)	\
+	overlayscroll			\
 	syncscroll			\
 	subsurface			\
 	animated-resizing		\
