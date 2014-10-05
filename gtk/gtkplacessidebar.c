@@ -915,6 +915,11 @@ update_places (GtkPlacesSidebar *sidebar)
   else
     original_uri = NULL;
 
+  g_cancellable_cancel (sidebar->cancellable);
+
+  g_object_unref (sidebar->cancellable);
+  sidebar->cancellable = g_cancellable_new ();
+
   gtk_list_store_clear (sidebar->store);
 
   sidebar->devices_header_added = FALSE;
