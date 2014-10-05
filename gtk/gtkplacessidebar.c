@@ -831,7 +831,7 @@ typedef struct {
 } BookmarkQueryClosure;
 
 static void
-on_bookmark_query_info_complete (GObject *source,
+on_bookmark_query_info_complete (GObject      *source,
                                  GAsyncResult *result,
                                  gpointer      data)
 {
