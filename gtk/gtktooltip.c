@@ -205,6 +205,7 @@ gtk_tooltip_init (GtkTooltip *tooltip)
 
   label = gtk_label_new ("");
   gtk_label_set_line_wrap (GTK_LABEL (label), TRUE);
+  gtk_label_set_max_width_chars (GTK_LABEL (label), 70);
   gtk_box_pack_start (GTK_BOX (box), label, FALSE, FALSE, 0);
 
   tooltip->window = window;
