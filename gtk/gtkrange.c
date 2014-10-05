@@ -2257,6 +2257,9 @@ range_grab_add (GtkRange      *range,
                 MouseLocation  location)
 {
   GtkRangePrivate *priv = range->priv;
+  GtkStyleContext *context;
+
+  context = gtk_widget_get_style_context (GTK_WIDGET (range));
 
   /* Don't perform any GDK/GTK+ grab here. Since a button
    * is down, there's an ongoing implicit grab on
@@ -2267,6 +2270,8 @@ range_grab_add (GtkRange      *range,
 
   if (gtk_range_update_mouse_location (range))
     gtk_widget_queue_draw (GTK_WIDGET (range));
+
+  gtk_style_context_add_class (context, "dragging");
 }
 
 static void
@@ -2291,6 +2296,9 @@ range_grab_remove (GtkRange *range)
 {
   GtkRangePrivate *priv = range->priv;
   MouseLocation location;
+  GtkStyleContext *context;
+
+  context = gtk_widget_get_style_context (GTK_WIDGET (range));
 
   location = priv->grab_location;
   priv->grab_location = MOUSE_OUTSIDE;
@@ -2301,6 +2309,8 @@ range_grab_remove (GtkRange *range)
 
   update_zoom_state (range, FALSE);
   range->priv->zoom_set = FALSE;
+
+  gtk_style_context_remove_class (context, "dragging");
 }
 
 static GtkScrollType
