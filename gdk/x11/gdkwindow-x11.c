@@ -3278,8 +3278,6 @@ gdk_window_x11_get_device_state (GdkWindow       *window,
 {
   GdkWindow *child;
 
-  g_return_val_if_fail (window == NULL || GDK_IS_WINDOW (window), FALSE);
-
   if (GDK_WINDOW_DESTROYED (window))
     return FALSE;
 
