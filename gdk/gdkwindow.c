@@ -1335,8 +1335,7 @@ gdk_window_new (GdkWindow     *parent,
       window->input_only = TRUE;
     }
 
-  if (window->parent)
-    window->parent->children = g_list_prepend (window->parent->children, window);
+  window->parent->children = g_list_prepend (window->parent->children, window);
 
   if (window->parent->window_type == GDK_WINDOW_ROOT)
     {
@@ -1362,8 +1361,7 @@ gdk_window_new (GdkWindow     *parent,
       _gdk_display_create_window_impl (display, window, real_parent, screen, event_mask, attributes, attributes_mask);
       window->impl_window = window;
 
-      if (parent)
-        parent->impl_window->native_children = g_list_prepend (parent->impl_window->native_children, window);
+      parent->impl_window->native_children = g_list_prepend (parent->impl_window->native_children, window);
 
       /* This will put the native window topmost in the native parent, which may
        * be wrong wrt other native windows in the non-native hierarchy, so restack */
@@ -1712,9 +1710,8 @@ gdk_window_ensure_native (GdkWindow *window)
                                    NULL, 0);
   new_impl = window->impl;
 
-  if (parent)
-    parent->impl_window->native_children =
-      g_list_prepend (parent->impl_window->native_children, window);
+  parent->impl_window->native_children =
+    g_list_prepend (parent->impl_window->native_children, window);
 
   window->impl = old_impl;
   change_impl (window, window, new_impl);
