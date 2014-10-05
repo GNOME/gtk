@@ -126,6 +126,9 @@ typedef enum
  *  For example, when all of a #GtkTreeView can not be seen.
  * @GTK_POLICY_NEVER: The scrollbar should never appear. In this mode the
  *  content determines the size.
+ * @GTK_POLICY_EXTERNAL: Don't show a scrollbar, but don't force the
+ *  size to follow the content. This can be used e.g. to make multiple
+ *  scrolled windows share a scrollbar. Since: 3.16
  *
  * Determines how the size should be computed to achieve the one of the
  * visibility mode for the scrollbars.
@@ -134,7 +137,8 @@ typedef enum
 {
   GTK_POLICY_ALWAYS,
   GTK_POLICY_AUTOMATIC,
-  GTK_POLICY_NEVER
+  GTK_POLICY_NEVER,
+  GTK_POLICY_EXTERNAL
 } GtkPolicyType;
 
 
