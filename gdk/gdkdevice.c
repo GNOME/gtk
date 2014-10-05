@@ -688,6 +688,7 @@ gdk_device_get_name (GdkDevice *device)
  * @device: a #GdkDevice
  *
  * Determines whether the pointer follows device motion.
+ * This is not meaningful for keyboard devices, which don't have a pointer.
  *
  * Returns: %TRUE if the pointer follows device motion
  *
@@ -697,7 +698,6 @@ gboolean
 gdk_device_get_has_cursor (GdkDevice *device)
 {
   g_return_val_if_fail (GDK_IS_DEVICE (device), FALSE);
-  g_return_val_if_fail (gdk_device_get_source (device) != GDK_SOURCE_KEYBOARD, FALSE);
 
   return device->has_cursor;
 }
