@@ -52,8 +52,8 @@
  * @Title: GtkScrolledWindow
  * @See_also: #GtkScrollable, #GtkViewport, #GtkAdjustment
  *
- * #GtkScrolledWindow is a #GtkBin subclass: it’s a container
- * the accepts a single child widget. #GtkScrolledWindow adds scrollbars
+ * GtkScrolledWindow is a #GtkBin subclass: it’s a container
+ * the accepts a single child widget. GtkScrolledWindow adds scrollbars
  * to the child widget and optionally draws a beveled frame around the
  * child widget.
  *
@@ -68,15 +68,15 @@
  * to scroll child widgets such as #GtkGrid, #GtkBox, and so on.
  *
  * If a widget has native scrolling abilities, it can be added to the
- * #GtkScrolledWindow with gtk_container_add(). If a widget does not, you
+ * GtkScrolledWindow with gtk_container_add(). If a widget does not, you
  * must first add the widget to a #GtkViewport, then add the #GtkViewport
  * to the scrolled window. gtk_container_add() will do this for you for
  * widgets that don’t implement #GtkScrollable natively, so you can
  * ignore the presence of the viewport.
  *
- * The position of the scrollbars is controlled by the scroll
- * adjustments. See #GtkAdjustment for the fields in an adjustment - for
- * #GtkScrollbar, used by #GtkScrolledWindow, the “value” field
+ * The position of the scrollbars is controlled by the scroll adjustments.
+ * See #GtkAdjustment for the fields in an adjustment — for
+ * #GtkScrollbar, used by GtkScrolledWindow, the “value” field
  * represents the position of the scrollbar, which must be between the
  * “lower” field and “upper - page_size.” The “page_size” field
  * represents the size of the visible scrollable area. The
@@ -84,7 +84,7 @@
  * asks to step down (using the small stepper arrows) or page down (using
  * for example the PageDown key).
  *
- * If a #GtkScrolledWindow doesn’t behave quite as you would like, or
+ * If a GtkScrolledWindow doesn’t behave quite as you would like, or
  * doesn’t have exactly the right layout, it’s very possible to set up
  * your own scrolling with #GtkScrollbar and for example a #GtkGrid.
  */
@@ -530,9 +530,9 @@ gtk_scrolled_window_class_init (GtkScrolledWindowClass *class)
    * The ::move-focus-out signal is a
    * [keybinding signal][GtkBindingSignal] which gets
    * emitted when focus is moved away from the scrolled window by a
-   * keybinding.  The #GtkWidget::move-focus signal is emitted with
+   * keybinding. The #GtkWidget::move-focus signal is emitted with
    * @direction_type on this scrolled windows toplevel parent in the
-   * container hierarchy.  The default bindings for this signal are
+   * container hierarchy. The default bindings for this signal are
    * `Tab + Ctrl` and `Tab + Ctrl + Shift`.
    */
   signals[MOVE_FOCUS_OUT] =
@@ -1105,7 +1105,7 @@ gtk_scrolled_window_get_vscrollbar (GtkScrolledWindow *scrolled_window)
  * scrollbar is always present; if %GTK_POLICY_NEVER, the scrollbar is
  * never present; if %GTK_POLICY_AUTOMATIC, the scrollbar is present only
  * if needed (that is, if the slider part of the bar would be smaller
- * than the trough - the display is larger than the page size).
+ * than the trough — the display is larger than the page size).
  */
 void
 gtk_scrolled_window_set_policy (GtkScrolledWindow *scrolled_window,
@@ -1138,9 +1138,9 @@ gtk_scrolled_window_set_policy (GtkScrolledWindow *scrolled_window,
  * gtk_scrolled_window_get_policy:
  * @scrolled_window: a #GtkScrolledWindow
  * @hscrollbar_policy: (out) (allow-none): location to store the policy 
- *     for the horizontal scrollbar, or %NULL.
+ *     for the horizontal scrollbar, or %NULL
  * @vscrollbar_policy: (out) (allow-none): location to store the policy
- *     for the vertical scrollbar, or %NULL.
+ *     for the vertical scrollbar, or %NULL
  * 
  * Retrieves the current policy values for the horizontal and vertical
  * scrollbars. See gtk_scrolled_window_set_policy().
@@ -1229,7 +1229,7 @@ gtk_scrolled_window_get_placement (GtkScrolledWindow *scrolled_window)
  *
  * Unsets the placement of the contents with respect to the scrollbars
  * for the scrolled window. If no window placement is set for a scrolled
- * window, it defaults to GTK_CORNER_TOP_LEFT.
+ * window, it defaults to %GTK_CORNER_TOP_LEFT.
  *
  * See also gtk_scrolled_window_set_placement() and
  * gtk_scrolled_window_get_placement().
@@ -1251,7 +1251,6 @@ gtk_scrolled_window_unset_placement (GtkScrolledWindow *scrolled_window)
  *
  * Changes the type of shadow drawn around the contents of
  * @scrolled_window.
- * 
  **/
 void
 gtk_scrolled_window_set_shadow_type (GtkScrolledWindow *scrolled_window,
@@ -1405,7 +1404,6 @@ gtk_scrolled_window_get_capture_button_press (GtkScrolledWindow *scrolled_window
 
   return scrolled_window->priv->capture_button_press;
 }
-
 
 static void
 gtk_scrolled_window_destroy (GtkWidget *widget)
@@ -2827,7 +2825,7 @@ gtk_scrolled_window_remove (GtkContainer *container,
  * A widget supports scrolling natively if it implements the
  * #GtkScrollable interface.
  *
- * Deprecated: 3.8: gtk_container_add() will now automatically add
+ * Deprecated: 3.8: gtk_container_add() will automatically add
  * a #GtkViewport if the child doesn’t implement #GtkScrollable.
  */
 void
@@ -2899,7 +2897,6 @@ _gtk_scrolled_window_get_scrollbar_spacing (GtkScrolledWindow *scrolled_window)
       return scrollbar_spacing;
     }
 }
-
 
 static void
 gtk_scrolled_window_get_preferred_size (GtkWidget      *widget,
