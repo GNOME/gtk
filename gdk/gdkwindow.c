@@ -3039,7 +3039,7 @@ _gdk_window_ref_cairo_surface (GdkWindow *window)
  * Creates a Cairo context for drawing to @window.
  *
  * Note that calling cairo_reset_clip() on the resulting #cairo_t will
- *rproduce undefined results, so avoid it at all costs.
+ * produce undefined results, so avoid it at all costs.
  *
  * Returns: A newly created Cairo context. Free with
  *  cairo_destroy() when you are done drawing.
