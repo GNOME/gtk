@@ -3039,7 +3039,7 @@ _gdk_window_ref_cairo_surface (GdkWindow *window)
  * Creates a Cairo context for drawing to @window.
  *
  * Note that calling cairo_reset_clip() on the resulting #cairo_t will
- * produce undefined results, so avoid it at all costs.
+ *rproduce undefined results, so avoid it at all costs.
  *
  * Returns: A newly created Cairo context. Free with
  *  cairo_destroy() when you are done drawing.
@@ -3060,11 +3060,15 @@ gdk_cairo_create (GdkWindow *window)
   cr = cairo_create (surface);
 
   if (window->impl_window->current_paint.region != NULL)
-    region = cairo_region_copy (window->impl_window->current_paint.region);
+    {
+      region = cairo_region_copy (window->impl_window->current_paint.region);
+      cairo_region_translate (region, -window->abs_x, -window->abs_y);
+    }
   else
-    region = cairo_region_copy (window->clip_region);
+    {
+      region = cairo_region_copy (window->clip_region);
+    }
 
-  cairo_region_translate (region, -window->abs_x, -window->abs_y);
   gdk_cairo_region (cr, region);
   cairo_region_destroy (region);
   cairo_clip (cr);
