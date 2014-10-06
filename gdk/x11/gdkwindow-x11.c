@@ -99,8 +99,6 @@ const gint _gdk_x11_event_mask_table_size = G_N_ELEMENTS (_gdk_x11_event_mask_ta
 
 /* Forward declarations */
 static void     gdk_x11_window_apply_fullscreen_mode (GdkWindow  *window);
-static void     gdk_window_set_static_win_gravity (GdkWindow  *window,
-						   gboolean    on);
 static gboolean gdk_window_icon_name_set          (GdkWindow  *window);
 static void     set_wm_name                       (GdkDisplay  *display,
 						   Window       xwindow,
@@ -1043,12 +1041,6 @@ _gdk_x11_display_create_window_impl (GdkDisplay    *display,
 
   impl->override_redirect = xattributes.override_redirect;
 
-  if (window->parent->guffaw_gravity)
-    {
-      xattributes.win_gravity = StaticGravity;
-      xattributes_mask |= CWWinGravity;
-    }
-
   /* Sanity checks */
   switch (window->window_type)
     {
@@ -1069,13 +1061,6 @@ _gdk_x11_display_create_window_impl (GdkDisplay    *display,
 
       xattributes.border_pixel = BlackPixel (xdisplay, x11_screen->screen_num);
       xattributes_mask |= CWBorderPixel | CWBackPixel;
-
-      if (window->guffaw_gravity)
-        xattributes.bit_gravity = StaticGravity;
-      else
-        xattributes.bit_gravity = NorthWestGravity;
-
-      xattributes_mask |= CWBitGravity;
 
       xattributes.colormap = _gdk_visual_get_x11_colormap (window->visual);
       xattributes_mask |= CWColormap;
@@ -4575,68 +4560,6 @@ gdk_x11_window_get_input_shape (GdkWindow *window)
   return NULL;
 }
 
-static void
-gdk_window_set_static_bit_gravity (GdkWindow *window,
-                                   gboolean   on)
-{
-  XSetWindowAttributes xattributes;
-  guint xattributes_mask = 0;
-  
-  g_return_if_fail (GDK_IS_WINDOW (window));
-
-  if (window->input_only)
-    return;
-  
-  xattributes.bit_gravity = StaticGravity;
-  xattributes_mask |= CWBitGravity;
-  xattributes.bit_gravity = on ? StaticGravity : ForgetGravity;
-  XChangeWindowAttributes (GDK_WINDOW_XDISPLAY (window),
-			   GDK_WINDOW_XID (window),
-			   CWBitGravity,  &xattributes);
-}
-
-static void
-gdk_window_set_static_win_gravity (GdkWindow *window,
-                                   gboolean   on)
-{
-  XSetWindowAttributes xattributes;
-  
-  g_return_if_fail (GDK_IS_WINDOW (window));
-  
-  xattributes.win_gravity = on ? StaticGravity : NorthWestGravity;
-  
-  XChangeWindowAttributes (GDK_WINDOW_XDISPLAY (window),
-			   GDK_WINDOW_XID (window),
-			   CWWinGravity,  &xattributes);
-}
-
-static gboolean
-gdk_window_x11_set_static_gravities (GdkWindow *window,
-                                     gboolean   use_static)
-{
-  GList *tmp_list;
-  
-  if (!use_static == !window->guffaw_gravity)
-    return TRUE;
-
-  window->guffaw_gravity = use_static;
-  
-  if (!GDK_WINDOW_DESTROYED (window))
-    {
-      gdk_window_set_static_bit_gravity (window, use_static);
-      
-      tmp_list = window->children;
-      while (tmp_list)
-	{
-	  gdk_window_set_static_win_gravity (tmp_list->data, use_static);
-	  
-	  tmp_list = tmp_list->next;
-	}
-    }
-  
-  return TRUE;
-}
-
 /* From the WM spec */
 #define _NET_WM_MOVERESIZE_SIZE_TOPLEFT      0
 #define _NET_WM_MOVERESIZE_SIZE_TOP          1
@@ -5747,7 +5670,6 @@ gdk_window_impl_x11_class_init (GdkWindowImplX11Class *klass)
   impl_class->get_device_state = gdk_window_x11_get_device_state;
   impl_class->shape_combine_region = gdk_window_x11_shape_combine_region;
   impl_class->input_shape_combine_region = gdk_window_x11_input_shape_combine_region;
-  impl_class->set_static_gravities = gdk_window_x11_set_static_gravities;
   impl_class->queue_antiexpose = _gdk_x11_window_queue_antiexpose;
   impl_class->destroy = gdk_x11_window_destroy;
   impl_class->destroy_foreign = gdk_x11_window_destroy_foreign;

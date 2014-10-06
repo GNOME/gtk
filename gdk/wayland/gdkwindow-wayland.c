@@ -1407,13 +1407,6 @@ gdk_window_wayland_input_shape_combine_region (GdkWindow            *window,
   gdk_wayland_window_sync_input_region (window);
 }
 
-static gboolean
-gdk_window_wayland_set_static_gravities (GdkWindow *window,
-                                         gboolean   use_static)
-{
-  return TRUE;
-}
-
 static void
 gdk_wayland_window_destroy (GdkWindow *window,
                             gboolean   recursing,
@@ -2076,7 +2069,6 @@ _gdk_window_impl_wayland_class_init (GdkWindowImplWaylandClass *klass)
   impl_class->get_device_state = gdk_window_wayland_get_device_state;
   impl_class->shape_combine_region = gdk_window_wayland_shape_combine_region;
   impl_class->input_shape_combine_region = gdk_window_wayland_input_shape_combine_region;
-  impl_class->set_static_gravities = gdk_window_wayland_set_static_gravities;
   impl_class->destroy = gdk_wayland_window_destroy;
   impl_class->destroy_foreign = gdk_window_wayland_destroy_foreign;
   impl_class->get_shape = gdk_wayland_window_get_shape;

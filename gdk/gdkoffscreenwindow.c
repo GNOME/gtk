@@ -515,13 +515,6 @@ gdk_offscreen_window_input_shape_combine_region (GdkWindow       *window,
 {
 }
 
-static gboolean
-gdk_offscreen_window_set_static_gravities (GdkWindow *window,
-					   gboolean   use_static)
-{
-  return TRUE;
-}
-
 static void
 gdk_offscreen_window_get_geometry (GdkWindow *window,
 				   gint      *x,
@@ -703,7 +696,6 @@ gdk_offscreen_window_class_init (GdkOffscreenWindowClass *klass)
   impl_class->get_device_state = gdk_offscreen_window_get_device_state;
   impl_class->shape_combine_region = gdk_offscreen_window_shape_combine_region;
   impl_class->input_shape_combine_region = gdk_offscreen_window_input_shape_combine_region;
-  impl_class->set_static_gravities = gdk_offscreen_window_set_static_gravities;
   impl_class->queue_antiexpose = gdk_offscreen_window_queue_antiexpose;
   impl_class->destroy = gdk_offscreen_window_destroy;
   impl_class->destroy_foreign = NULL;

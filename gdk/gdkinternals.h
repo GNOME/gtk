@@ -219,7 +219,6 @@ struct _GdkWindow
   guint8 alpha;
   guint8 fullscreen_mode;
 
-  guint guffaw_gravity : 1;
   guint input_only : 1;
   guint modal_hint : 1;
   guint composited : 1;

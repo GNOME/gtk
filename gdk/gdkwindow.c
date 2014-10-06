@@ -6488,26 +6488,21 @@ gdk_window_merge_child_input_shapes (GdkWindow *window)
  * @window: a #GdkWindow
  * @use_static: %TRUE to turn on static gravity
  *
- * Set the bit gravity of the given window to static, and flag it so
- * all children get static subwindow gravity. This is used if you are
- * implementing scary features that involve deep knowledge of the
- * windowing system. Don’t worry about it unless you have to.
+ * Used to set the bit gravity of the given window to static, and flag
+ * it so all children get static subwindow gravity. This is used if you
+ * are implementing scary features that involve deep knowledge of the
+ * windowing system. Don’t worry about it.
  *
- * Returns: %TRUE if the server supports static gravity
+ * Returns: %FALSE
+ *
+ * Deprecated: 3.16: static gravities haven't worked on anything but X11
+ *   for a long time.
  */
 gboolean
 gdk_window_set_static_gravities (GdkWindow *window,
 				 gboolean   use_static)
 {
-  GdkWindowImplClass *impl_class;
-
   g_return_val_if_fail (GDK_IS_WINDOW (window), FALSE);
-
-  if (gdk_window_has_impl (window))
-    {
-      impl_class = GDK_WINDOW_IMPL_GET_CLASS (window->impl);
-      return impl_class->set_static_gravities (window, use_static);
-    }
 
   return FALSE;
 }

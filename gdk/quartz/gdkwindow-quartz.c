@@ -2050,18 +2050,6 @@ gdk_quartz_window_set_accept_focus (GdkWindow *window,
   window->accept_focus = accept_focus != FALSE;
 }
 
-static gboolean 
-gdk_window_quartz_set_static_gravities (GdkWindow *window,
-                                        gboolean   use_static)
-{
-  if (GDK_WINDOW_DESTROYED (window) ||
-      !WINDOW_IS_TOPLEVEL (window))
-    return FALSE;
-
-  /* FIXME: Implement */
-  return FALSE;
-}
-
 static void
 gdk_quartz_window_set_focus_on_map (GdkWindow *window,
                                     gboolean focus_on_map)
@@ -2954,7 +2942,6 @@ gdk_window_impl_quartz_class_init (GdkWindowImplQuartzClass *klass)
   impl_class->get_device_state = gdk_window_quartz_get_device_state;
   impl_class->shape_combine_region = gdk_window_quartz_shape_combine_region;
   impl_class->input_shape_combine_region = gdk_window_quartz_input_shape_combine_region;
-  impl_class->set_static_gravities = gdk_window_quartz_set_static_gravities;
   impl_class->destroy = gdk_quartz_window_destroy;
   impl_class->destroy_foreign = gdk_quartz_window_destroy_foreign;
   impl_class->get_shape = gdk_quartz_window_get_shape;

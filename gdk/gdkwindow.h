@@ -675,7 +675,7 @@ GdkWindowState gdk_window_get_state (GdkWindow *window);
 /* Set static bit gravity on the parent, and static
  * window gravity on all children.
  */
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_3_16
 gboolean gdk_window_set_static_gravities (GdkWindow *window,
                                           gboolean   use_static);
 

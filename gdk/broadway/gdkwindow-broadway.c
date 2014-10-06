@@ -987,13 +987,6 @@ gdk_broadway_window_end_paint (GdkWindow *window)
   impl->dirty = TRUE;
 }
 
-static gboolean
-gdk_window_broadway_set_static_gravities (GdkWindow *window,
-					  gboolean   use_static)
-{
-  return TRUE;
-}
-
 typedef struct _MoveResizeData MoveResizeData;
 
 struct _MoveResizeData
@@ -1509,7 +1502,6 @@ gdk_window_impl_broadway_class_init (GdkWindowImplBroadwayClass *klass)
   impl_class->get_device_state = gdk_window_broadway_get_device_state;
   impl_class->shape_combine_region = gdk_window_broadway_shape_combine_region;
   impl_class->input_shape_combine_region = gdk_window_broadway_input_shape_combine_region;
-  impl_class->set_static_gravities = gdk_window_broadway_set_static_gravities;
   impl_class->destroy = _gdk_broadway_window_destroy;
   impl_class->destroy_foreign = gdk_broadway_window_destroy_foreign;
   impl_class->get_shape = gdk_broadway_window_get_shape;

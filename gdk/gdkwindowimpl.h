@@ -121,9 +121,6 @@ struct _GdkWindowImplClass
 					       gint             offset_x,
 					       gint             offset_y);
 
-  gboolean     (* set_static_gravities) (GdkWindow       *window,
-				         gboolean         use_static);
-
   /* Called before processing updates for a window. This gives the windowing
    * layer a chance to save the region for later use in avoiding duplicate
    * exposes.

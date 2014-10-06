@@ -2585,15 +2585,6 @@ _gdk_window_get_functions (GdkWindow     *window,
   return (functions_set != NULL);
 }
 
-static gboolean 
-gdk_win32_window_set_static_gravities (GdkWindow *window,
-				 gboolean   use_static)
-{
-  g_return_val_if_fail (GDK_IS_WINDOW (window), FALSE);
-
-  return !use_static;
-}
-
 static void
 gdk_win32_window_begin_resize_drag (GdkWindow     *window,
                               GdkWindowEdge  edge,
@@ -3394,7 +3385,6 @@ gdk_window_impl_win32_class_init (GdkWindowImplWin32Class *klass)
 
   impl_class->shape_combine_region = gdk_win32_window_shape_combine_region;
   impl_class->input_shape_combine_region = gdk_win32_input_shape_combine_region;
-  impl_class->set_static_gravities = gdk_win32_window_set_static_gravities;
   impl_class->destroy = gdk_win32_window_destroy;
   impl_class->destroy_foreign = gdk_win32_window_destroy_foreign;
   impl_class->get_shape = gdk_win32_window_get_shape;
