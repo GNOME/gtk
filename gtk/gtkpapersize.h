@@ -95,6 +95,10 @@ GtkPaperSize *gtk_paper_size_new_from_ppd (const gchar  *ppd_name,
 					   gdouble       width,
 					   gdouble       height);
 GDK_AVAILABLE_IN_ALL
+GtkPaperSize *gtk_paper_size_new_from_ipp (const gchar  *ipd_name,
+					   gdouble       width,
+					   gdouble       height);
+GDK_AVAILABLE_IN_ALL
 GtkPaperSize *gtk_paper_size_new_custom   (const gchar  *name,
 					   const gchar  *display_name,
 					   gdouble       width,
@@ -125,6 +129,8 @@ GDK_AVAILABLE_IN_ALL
 gdouble  gtk_paper_size_get_height       (GtkPaperSize *size, GtkUnit unit);
 GDK_AVAILABLE_IN_ALL
 gboolean gtk_paper_size_is_custom        (GtkPaperSize *size);
+GDK_AVAILABLE_IN_ALL
+gboolean gtk_paper_size_is_ipp           (GtkPaperSize *size);
 
 /* Only for custom sizes: */
 GDK_AVAILABLE_IN_ALL

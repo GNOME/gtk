@@ -69,6 +69,7 @@ struct _GtkPaperSize
 
   gdouble width, height; /* Stored in mm */
   gboolean is_custom;
+  gboolean is_ipp;
 };
 
 G_DEFINE_BOXED_TYPE (GtkPaperSize, gtk_paper_size,
@@ -372,6 +373,100 @@ gtk_paper_size_new_from_ppd (const gchar *ppd_name,
   return size;
 }
 
+/* Tolerance of paper size in points according to PostScript Language Reference */
+#define PAPER_SIZE_TOLERANCE 5
+
+/**
+ * gtk_paper_size_new_from_ipp:
+ * @ppd_name: an IPP paper name
+ * @width: the paper width, in points
+ * @height: the paper height in points
+ *
+ * Creates a new #GtkPaperSize object by using
+ * IPP information.
+ *
+ * If @ipp_name is not a recognized paper name,
+ * @width and @height are used to
+ * construct a custom #GtkPaperSize object.
+ *
+ * Returns: a new #GtkPaperSize, use gtk_paper_size_free()
+ * to free it
+ *
+ * Since: 3.16
+ */
+GtkPaperSize *
+gtk_paper_size_new_from_ipp (const gchar *ipp_name,
+                             gdouble      width,
+                             gdouble      height)
+{
+  GtkPaperSize *size;
+  const gchar  *name = NULL;
+  gboolean      found = FALSE;
+  float         x_dimension;
+  float         y_dimension;
+  gchar        *display_name = NULL;
+  gint          i;
+
+  /* Find paper size according to its name */
+  for (i = 0; i < G_N_ELEMENTS (standard_names_offsets); i++)
+    {
+      if (standard_names_offsets[i].name != -1)
+        name = paper_names + standard_names_offsets[i].name;
+      if (name != NULL &&
+          /* Given paper size name is equal to a name
+             from the standard paper size names list. */
+          ((g_strcmp0 (ipp_name, name) == 0) ||
+           /* Given paper size name is prefixed by a name
+              from the standard paper size names list +
+              it consists of size in its name (e.g. iso_a4_210x297mm). */
+            (g_str_has_prefix (ipp_name, name) &&
+             strlen (ipp_name) > strlen (name) + 2 &&
+             ipp_name[strlen (ipp_name)] == '_' &&
+             g_ascii_isdigit (ipp_name[strlen (ipp_name) + 1]) &&
+             (g_str_has_suffix (ipp_name, "mm") ||
+              g_str_has_suffix (ipp_name, "in")))))
+        {
+          display_name = g_strdup (g_dpgettext2 (GETTEXT_PACKAGE,
+                                                 "paper size",
+                                                 paper_names + standard_names_offsets[i].display_name));
+          found = TRUE;
+          break;
+        }
+    }
+
+  /* Find paper size according to its size */
+  if (display_name == NULL)
+    {
+      for (i = 0; i < G_N_ELEMENTS (standard_names_offsets); i++)
+        {
+          x_dimension = _gtk_print_convert_from_mm (standard_names_offsets[i].width, GTK_UNIT_POINTS);
+          y_dimension = _gtk_print_convert_from_mm (standard_names_offsets[i].height, GTK_UNIT_POINTS);
+
+          if (abs (x_dimension - width) <= PAPER_SIZE_TOLERANCE &&
+              abs (y_dimension - height) <= PAPER_SIZE_TOLERANCE)
+            {
+              display_name = g_strdup (g_dpgettext2 (GETTEXT_PACKAGE,
+                                                     "paper size",
+                                                     paper_names + standard_names_offsets[i].display_name));
+              found = TRUE;
+              break;
+            }
+        }
+    }
+
+  /* Fallback to name of the paper size as given in "ipp_name" parameter */
+  if (display_name == NULL)
+    display_name = g_strdup (ipp_name);
+
+  size = gtk_paper_size_new_custom (ipp_name, display_name, width, height, GTK_UNIT_POINTS);
+  size->is_custom = !found;
+  size->is_ipp = found;
+
+  g_free (display_name);
+
+  return size;
+}
+
 /**
  * gtk_paper_size_new_custom:
  * @name: the paper name
@@ -439,6 +534,7 @@ gtk_paper_size_copy (GtkPaperSize *other)
   size->width = other->width;
   size->height = other->height;
   size->is_custom = other->is_custom;
+  size->is_ipp = other->is_ipp;
 
   return size;
 }
@@ -646,6 +742,20 @@ gboolean
 gtk_paper_size_is_custom (GtkPaperSize *size)
 {
   return size->is_custom;
+}
+
+/**
+ * gtk_paper_size_is_ipp:
+ * @size: a #GtkPaperSize object
+ *
+ * Returns %TRUE if @size is an IPP standard paper size.
+ *
+ * Returns: whether @size is not an IPP custom paper size.
+ **/
+gboolean
+gtk_paper_size_is_ipp (GtkPaperSize *size)
+{
+  return size->is_ipp;
 }
 
 /**
