@@ -83,7 +83,7 @@ enum_monitor (HMONITOR hmonitor,
 
   monitor = _gdk_monitors + *index;
 
-  monitor_info.cbSize = sizeof (MONITORINFOEX);
+  monitor_info.cbSize = sizeof (MONITORINFOEXA2);
   GetMonitorInfoA (hmonitor, (MONITORINFO *) &monitor_info);
 
 #ifndef MONITORINFOF_PRIMARY
