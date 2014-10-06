@@ -177,6 +177,9 @@ struct _GtkPlacesSidebarClass {
   void    (* open_location)          (GtkPlacesSidebar   *sidebar,
                                       GFile              *location,
                                       GtkPlacesOpenFlags  open_flags);
+  void    (* opening_location)          (GtkPlacesSidebar   *sidebar,
+                                      GVolume              *location,
+                                      GtkPlacesOpenFlags  open_flags);
   void    (* populate_popup)         (GtkPlacesSidebar   *sidebar,
                                       GtkMenu            *menu,
                                       GFile              *selected_item,
@@ -236,6 +239,7 @@ typedef enum {
 
 enum {
   OPEN_LOCATION,
+  OPENING_LOCATION,
   POPULATE_POPUP,
   SHOW_ERROR_MESSAGE,
   SHOW_CONNECT_TO_SERVER,
@@ -334,10 +338,24 @@ static GtkListStore *shortcuts_model_new (GtkPlacesSidebar *sidebar);
 G_DEFINE_TYPE (GtkPlacesSidebar, gtk_places_sidebar, GTK_TYPE_SCROLLED_WINDOW);
 
 static void
+emit_opening_location (GtkPlacesSidebar   *sidebar,
+                       GVolume              *volume,
+                       GtkPlacesOpenFlags  open_flags)
+{
+  g_print("GtkPlacesSidebar emit opening location\n");
+  if ((open_flags & sidebar->open_flags) == 0)
+    open_flags = GTK_PLACES_OPEN_NORMAL;
+
+  g_signal_emit (sidebar, places_sidebar_signals[OPENING_LOCATION], 0,
+                 volume, open_flags);
+}
+
+static void
 emit_open_location (GtkPlacesSidebar   *sidebar,
                     GFile              *location,
                     GtkPlacesOpenFlags  open_flags)
 {
+  g_print("GtkPlacesSidebar emit open location\n");
   if ((open_flags & sidebar->open_flags) == 0)
     open_flags = GTK_PLACES_OPEN_NORMAL;
 
@@ -628,7 +646,7 @@ add_special_dirs (GtkPlacesSidebar *sidebar)
       path = g_get_user_special_dir (index);
 
       /* XDG resets special dirs to the home directory in case
-       * it's not finiding what it expects. We don't want the home
+       * it's not finding what it expects. We don't want the home
        * to be added multiple times in that weird configuration.
        */
       if (path == NULL ||
@@ -890,6 +908,7 @@ out:
 static void
 update_places (GtkPlacesSidebar *sidebar)
 {
+  g_print("update places\n");
   GtkTreeIter iter;
   GVolumeMonitor *volume_monitor;
   GList *mounts, *l, *ll;
@@ -997,6 +1016,7 @@ update_places (GtkPlacesSidebar *sidebar)
 
   /* go through all connected drives */
   drives = g_volume_monitor_get_connected_drives (volume_monitor);
+  g_print("drives length %i\n", g_list_length(drives));
 
   for (l = drives; l != NULL; l = l->next)
     {
@@ -1021,6 +1041,7 @@ update_places (GtkPlacesSidebar *sidebar)
               mount = g_volume_get_mount (volume);
               if (mount != NULL)
                 {
+                  g_print("volume mounted\n");
                   /* Show mounted volume in the sidebar */
                   icon = g_mount_get_symbolic_icon (mount);
                   root = g_mount_get_default_location (mount);
@@ -1041,6 +1062,7 @@ update_places (GtkPlacesSidebar *sidebar)
                 }
               else
                 {
+                  g_print("volume unmounted\n");
                   /* Do show the unmounted volumes in the sidebar;
                    * this is so the user can mount it (in case automounting
                    * is off).
@@ -1069,6 +1091,7 @@ update_places (GtkPlacesSidebar *sidebar)
         {
           if (g_drive_is_media_removable (drive) && !g_drive_is_media_check_automatic (drive))
             {
+              g_print("removable strange\n");
               /* If the drive has no mountable volumes and we cannot detect media change.. we
                * display the drive in the sidebar so the user can manually poll the drive by
                * right clicking and selecting "Rescan..."
@@ -1096,6 +1119,7 @@ update_places (GtkPlacesSidebar *sidebar)
 
   /* add all volumes that is not associated with a drive */
   volumes = g_volume_monitor_get_volumes (volume_monitor);
+  g_print("volumesnot associated with drives %i\n", g_list_length(volumes));
   for (l = volumes; l != NULL; l = l->next)
     {
       volume = l->data;
@@ -2302,6 +2326,8 @@ volume_mount_cb (GObject      *source_object,
   gchar *name;
   GMount *mount;
 
+  g_print("GtkPlacesSidebar volume mount callback\n");
+
   volume = G_VOLUME (source_object);
 
   error = NULL;
@@ -2315,6 +2341,8 @@ volume_mount_cb (GObject      *source_object,
           g_free (name);
           emit_show_error_message (sidebar, primary, error->message);
           g_free (primary);
+        } else {
+          g_print("ERROR NOT KNOWn\n");
         }
       g_error_free (error);
     }
@@ -2340,10 +2368,13 @@ static void
 mount_volume (GtkPlacesSidebar *sidebar,
               GVolume          *volume)
 {
+  g_print("GtkPlacesSidebar volume mount\n");
   GMountOperation *mount_op;
 
   mount_op = gtk_mount_operation_new (GTK_WINDOW (gtk_widget_get_toplevel (GTK_WIDGET (sidebar))));
   g_mount_operation_set_password_save (mount_op, G_PASSWORD_SAVE_FOR_SESSION);
+
+  emit_opening_location (sidebar, volume, sidebar->go_to_after_mount_open_flags);
 
   g_object_ref (sidebar);
   g_volume_mount (volume, 0, mount_op, NULL, volume_mount_cb, sidebar);
@@ -2357,11 +2388,16 @@ open_selected_volume (GtkPlacesSidebar   *sidebar,
 {
   GDrive *drive;
   GVolume *volume;
+  g_print("GtkPlacesSidebar open selected volumek\n");
 
   gtk_tree_model_get (model, iter,
                       PLACES_SIDEBAR_COLUMN_DRIVE, &drive,
                       PLACES_SIDEBAR_COLUMN_VOLUME, &volume,
                       -1);
+
+  if (volume != NULL && sidebar->mounting) {
+    g_print("already mounting\n");
+  }
 
   if (volume != NULL && !sidebar->mounting)
     {
@@ -4161,6 +4197,29 @@ gtk_places_sidebar_class_init (GtkPlacesSidebarClass *class)
                         G_OBJECT_CLASS_TYPE (gobject_class),
                         G_SIGNAL_RUN_FIRST,
                         G_STRUCT_OFFSET (GtkPlacesSidebarClass, open_location),
+                        NULL, NULL,
+                        _gtk_marshal_VOID__OBJECT_FLAGS,
+                        G_TYPE_NONE, 2,
+                        G_TYPE_OBJECT,
+                        GTK_TYPE_PLACES_OPEN_FLAGS);
+
+  /**
+   * GtkPlacesSidebar::opening-location:
+   * @sidebar: the object which received the signal.
+   * @location: (type Gio.File): #GFile to which the caller should switch.
+   * @open_flags: a single value from #GtkPlacesOpenFlags specifying how the @location should be opened.
+   *
+   * The places sidebar emits this signal when the user selects a location
+   * in it and it's not ready.  The calling application can display a spinner
+   * while is being getting ready.
+   *
+   * Since: 3.14
+   */
+  places_sidebar_signals [OPENING_LOCATION] =
+          g_signal_new (I_("opening-location"),
+                        G_OBJECT_CLASS_TYPE (gobject_class),
+                        G_SIGNAL_RUN_FIRST,
+                        G_STRUCT_OFFSET (GtkPlacesSidebarClass, opening_location),
                         NULL, NULL,
                         _gtk_marshal_VOID__OBJECT_FLAGS,
                         G_TYPE_NONE, 2,
