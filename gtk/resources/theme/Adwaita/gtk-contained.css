@@ -4447,6 +4447,9 @@ GtkCalendar.header .menuitem.titlebutton.button:selected, .list-row:selected {
 .context-menu {
   font: initial; }
 
+.monospace {
+  font: Monospace; }
+
 /* GTK NAMED COLORS */
 @define-color theme_fg_color #2e3436;
 @define-color theme_bg_color #ededed;
