@@ -101,7 +101,7 @@ gtk_color_swatch_init (GtkColorSwatch *swatch)
 }
 
 #define INTENSITY(r, g, b) ((r) * 0.30 + (g) * 0.59 + (b) * 0.11)
-#define ACTIVE_BADGE_RADIUS 10
+#define PIXBUF_SIZE 16
 
 static gboolean
 swatch_draw (GtkWidget *widget,
@@ -113,18 +113,19 @@ swatch_draw (GtkWidget *widget,
   GtkStyleContext *context;
   GtkStateFlags state;
   GtkIconTheme *theme;
+  GtkBorder border, padding;
+  GdkRectangle rect;
   GtkIconInfo *icon_info = NULL;
 
   theme = gtk_icon_theme_get_default ();
   context = gtk_widget_get_style_context (widget);
-  state = gtk_widget_get_state_flags (widget);
+  state = gtk_style_context_get_state (context);
   width = gtk_widget_get_allocated_width (widget);
   height = gtk_widget_get_allocated_height (widget);
 
   cairo_save (cr);
 
   gtk_style_context_save (context);
-  gtk_style_context_set_state (context, state);
 
   _gtk_theming_background_init (&background, context,
                                 0, 0, width, height,
@@ -184,54 +185,39 @@ swatch_draw (GtkWidget *widget,
 
   if (swatch->priv->icon)
     {
-      icon_info = gtk_icon_theme_lookup_icon (theme, swatch->priv->icon, 16,
+      icon_info = gtk_icon_theme_lookup_icon (theme, swatch->priv->icon, PIXBUF_SIZE,
                                               GTK_ICON_LOOKUP_GENERIC_FALLBACK
                                               | GTK_ICON_LOOKUP_USE_BUILTIN);
     }
   else if ((state & GTK_STATE_FLAG_SELECTED) != 0)
     {
-      GdkRGBA bg, border;
-      GtkBorder border_width;
       GIcon *gicon;
 
-      gtk_style_context_add_class (context, "color-active-badge");
-      _gtk_theming_background_init (&background, context,
-                                    (width - 2 * ACTIVE_BADGE_RADIUS) / 2, (height - 2 * ACTIVE_BADGE_RADIUS) / 2,
-                                    2 * ACTIVE_BADGE_RADIUS, 2* ACTIVE_BADGE_RADIUS,
-                                    GTK_JUNCTION_NONE);
+      gicon = g_themed_icon_new ("object-select-symbolic");
+      /* fallback for themes that don't have object-select-symbolic */
+      g_themed_icon_append_name (G_THEMED_ICON (gicon), "gtk-apply");
 
-      if (_gtk_theming_background_has_background_image (&background))
-        {
-          _gtk_theming_background_render (&background, cr);
-        }
-      else
-        {
-G_GNUC_BEGIN_IGNORE_DEPRECATIONS
-          gtk_style_context_get_background_color (context, state, &bg);
-          gtk_style_context_get_border_color (context, state, &border);
-G_GNUC_END_IGNORE_DEPRECATIONS
-          gtk_style_context_get_border (context, state, &border_width);
-
-          cairo_new_sub_path (cr);
-          cairo_arc (cr, width / 2, height / 2, ACTIVE_BADGE_RADIUS, 0, 2 * G_PI);
-          cairo_close_path (cr);
-          gdk_cairo_set_source_rgba (cr, &bg);
-          cairo_fill_preserve (cr);
-
-          gdk_cairo_set_source_rgba (cr, &border);
-          cairo_set_line_width (cr, border_width.left);
-          cairo_stroke (cr);
-
-          gicon = g_themed_icon_new ("object-select-symbolic");
-          /* fallback for themes that don't have object-select-symbolic */
-          g_themed_icon_append_name (G_THEMED_ICON (gicon), "gtk-apply");
-
-          icon_info = gtk_icon_theme_lookup_by_gicon (theme, gicon, 16,
-                                                      GTK_ICON_LOOKUP_GENERIC_FALLBACK
-                                                      | GTK_ICON_LOOKUP_USE_BUILTIN);
-          g_object_unref (gicon);
-        }
+      icon_info = gtk_icon_theme_lookup_by_gicon (theme, gicon, PIXBUF_SIZE,
+                                                  GTK_ICON_LOOKUP_GENERIC_FALLBACK
+                                                  | GTK_ICON_LOOKUP_USE_BUILTIN);
+      g_object_unref (gicon);
     }
+
+  gtk_style_context_restore (context);
+
+  /* now draw the overlay image */
+  gtk_style_context_save (context);
+  gtk_style_context_add_class (context, GTK_STYLE_CLASS_IMAGE);
+  
+  gtk_style_context_get_border (context, state, &border);
+  gtk_style_context_get_padding (context, state, &padding);
+  rect.width = PIXBUF_SIZE + border.left + border.right + padding.left + padding.right;
+  rect.height = PIXBUF_SIZE + border.top + border.bottom + padding.top + padding.bottom;
+  rect.x = (width - rect.width) / 2;
+  rect.y = (height - rect.height) / 2;
+
+  gtk_render_background (context, cr, rect.x, rect.y, rect.width, rect.height);
+  gtk_render_frame (context, cr, rect.x, rect.y, rect.width, rect.height);
 
   if (icon_info != NULL)
     {
@@ -243,8 +229,8 @@ G_GNUC_END_IGNORE_DEPRECATIONS
       if (pixbuf != NULL)
         {
           gtk_render_icon (context, cr, pixbuf,
-                           (width - gdk_pixbuf_get_width (pixbuf)) / 2,
-                           (height - gdk_pixbuf_get_height (pixbuf)) / 2);
+                           rect.x + border.left + padding.left,
+                           rect.y + border.top + padding.top);
           g_object_unref (pixbuf);
         }
 

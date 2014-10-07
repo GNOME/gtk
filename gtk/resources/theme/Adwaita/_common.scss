@@ -2832,16 +2832,22 @@ GtkColorSwatch {
   &:only-child {
     border-radius: 5px;
   }
-  &.color-active-badge {
-    border-width: 2px;
-    &:hover { background-image: none; }
-    &.color-light, &.color-light:hover {
-      color: transparentize(black,0.7);
-      border-color: transparentize(black,0.7);
-    }
-    &.color-dark, &.color-dark:hover {
-      color: transparentize(white,0.5);
-      border-color: transparentize(white,0.5);
+  &.image, &.image:hover {
+    /* turn off everything from regular color swatch */
+    border-width: 0px;
+    border-radius: 50%;
+    box-shadow: none;
+    background-image: none;
+    &:selected {
+      border-width: 2px;
+      &.color-light, &.color-light:hover {
+        color: transparentize(black,0.7);
+        border-color: transparentize(black,0.7);
+      }
+      &.color-dark, &.color-dark:hover {
+        color: transparentize(white,0.5);
+        border-color: transparentize(white,0.5);
+      }
     }
   }
 }

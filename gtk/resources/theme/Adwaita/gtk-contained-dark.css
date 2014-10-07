@@ -4188,16 +4188,20 @@ GtkColorSwatch {
     border-bottom-right-radius: 5px; }
   GtkColorSwatch:only-child {
     border-radius: 5px; }
-  GtkColorSwatch.color-active-badge {
-    border-width: 2px; }
-    GtkColorSwatch.color-active-badge:hover {
-      background-image: none; }
-    GtkColorSwatch.color-active-badge.color-light, GtkColorSwatch.color-active-badge.color-light:hover {
-      color: rgba(0, 0, 0, 0.3);
-      border-color: rgba(0, 0, 0, 0.3); }
-    GtkColorSwatch.color-active-badge.color-dark, GtkColorSwatch.color-active-badge.color-dark:hover {
-      color: rgba(255, 255, 255, 0.5);
-      border-color: rgba(255, 255, 255, 0.5); }
+  GtkColorSwatch.image, GtkColorSwatch.image:hover {
+    /* turn off everything from regular color swatch */
+    border-width: 0px;
+    border-radius: 50%;
+    box-shadow: none;
+    background-image: none; }
+    GtkColorSwatch.image:selected, GtkColorSwatch.image:hover:selected {
+      border-width: 2px; }
+      GtkColorSwatch.image:selected.color-light, GtkColorSwatch.image:selected.color-light:hover, GtkColorSwatch.image:hover:selected.color-light, GtkColorSwatch.image:hover:selected.color-light:hover {
+        color: rgba(0, 0, 0, 0.3);
+        border-color: rgba(0, 0, 0, 0.3); }
+      GtkColorSwatch.image:selected.color-dark, GtkColorSwatch.image:selected.color-dark:hover, GtkColorSwatch.image:hover:selected.color-dark, GtkColorSwatch.image:hover:selected.color-dark:hover {
+        color: rgba(255, 255, 255, 0.5);
+        border-color: rgba(255, 255, 255, 0.5); }
 
 GtkColorChooserWidget #add-color-button {
   border-color: #2a2f2f;
