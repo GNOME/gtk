@@ -8,6 +8,7 @@ Overview of Changes in GTK+ 3.14.1 to 3.14.2
  737679 Bookmarks are visually duplicated in sidebar
  737952 Documentation missing for GtkTextView's new draw-layer function...
  737929 Long tooltips extend too far horizontally without wrapping 
+ 737777 printing: Properly initialize auth_info in gtkprintbackend.c
         Teach GtkExpander:resize-toplevel about height-for-width
         Fix setting GtkRadioButton:group from .ui files
         Improve sheet drawing in the print dialog
