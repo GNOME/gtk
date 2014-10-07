@@ -20,8 +20,6 @@
 #include "gtkcolorswatchprivate.h"
 
 #include "gtkcolorchooserprivate.h"
-#include "gtkroundedboxprivate.h"
-#include "gtkthemingbackgroundprivate.h"
 #include "gtkdnd.h"
 #include "gtkicontheme.h"
 #include "gtkmain.h"
@@ -30,6 +28,7 @@
 #include "gtkmenushell.h"
 #include "gtkprivate.h"
 #include "gtkintl.h"
+#include "gtkrenderprivate.h"
 #include "gtkwidgetprivate.h"
 #include "a11y/gtkcolorswatchaccessibleprivate.h"
 
@@ -107,7 +106,6 @@ swatch_draw (GtkWidget *widget,
              cairo_t   *cr)
 {
   GtkColorSwatch *swatch = (GtkColorSwatch*)widget;
-  GtkThemingBackground background;
   gdouble width, height;
   GtkStyleContext *context;
   GtkStateFlags state;
@@ -126,20 +124,19 @@ swatch_draw (GtkWidget *widget,
 
   gtk_style_context_save (context);
 
-  _gtk_theming_background_init (&background, context,
-                                0, 0, width, height,
-                                GTK_JUNCTION_NONE);
+  gtk_render_background (context, cr, 0, 0, width, height);
 
   if (swatch->priv->has_color)
     {
       cairo_pattern_t *pattern;
       cairo_matrix_t matrix;
 
+      gtk_render_content_path (context, cr, 0, 0, width, height);
+
       if (swatch->priv->use_alpha)
         {
           cairo_save (cr);
 
-          _gtk_rounded_box_path (&background.padding_box, cr);
           cairo_clip_preserve (cr);
 
           cairo_set_source_rgb (cr, 0.33, 0.33, 0.33);
@@ -155,18 +152,18 @@ swatch_draw (GtkWidget *widget,
 
           cairo_restore (cr);
 
-          background.bg_color = swatch->priv->color;
+          gdk_cairo_set_source_rgba (cr, &swatch->priv->color);
         }
       else
         {
-          background.bg_color = swatch->priv->color;
-          background.bg_color.alpha = 1.0;
+          cairo_set_source_rgb (cr,
+                                swatch->priv->color.red,
+                                swatch->priv->color.green,
+                                swatch->priv->color.blue);
         }
 
-      _gtk_theming_background_render (&background, cr);
+      cairo_fill (cr);
     }
-  else
-    _gtk_theming_background_render (&background, cr);
 
   gtk_render_frame (context, cr, 0, 0, width, height);
 

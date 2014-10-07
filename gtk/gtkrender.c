@@ -2446,3 +2446,47 @@ gtk_render_icon_surface (GtkStyleContext *context,
   cairo_restore (cr);
 }
 
+/*
+ * gtk_render_content_path:
+ * @context: style context to get style information from
+ * @cr: cairo context to add path to
+ * @x: x coordinate of CSS box
+ * @y: y coordinate of CSS box
+ * @width: width of CSS box
+ * @height: height of CSS box
+ *
+ * Adds the path of the content box to @cr for a given border box.
+ * This function respects rounded corners.
+ *
+ * This is useful if you are drawing content that is supposed to
+ * fill the whole content area, like the color buttons in
+ * #GtkColorChooserDialog.
+ **/
+void
+gtk_render_content_path (GtkStyleContext *context,
+                         cairo_t         *cr,
+                         double           x,
+                         double           y,
+                         double           width,
+                         double           height)
+{
+  GtkRoundedBox box;
+
+  g_return_if_fail (GTK_IS_STYLE_CONTEXT (context));
+  g_return_if_fail (cr != NULL);
+
+  _gtk_rounded_box_init_rect (&box, x, y, width, height);
+  _gtk_rounded_box_apply_border_radius_for_context (&box, context, 0);
+
+  _gtk_rounded_box_shrink (&box,
+                           _gtk_css_number_value_get (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_BORDER_TOP_WIDTH), 100)
+                           + _gtk_css_number_value_get (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_PADDING_TOP), 100),
+                           _gtk_css_number_value_get (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_BORDER_RIGHT_WIDTH), 100)
+                           + _gtk_css_number_value_get (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_PADDING_RIGHT), 100),
+                           _gtk_css_number_value_get (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_BORDER_BOTTOM_WIDTH), 100)
+                           + _gtk_css_number_value_get (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_PADDING_BOTTOM), 100),
+                           _gtk_css_number_value_get (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_BORDER_LEFT_WIDTH), 100)
+                           + _gtk_css_number_value_get (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_PADDING_LEFT), 100));
+
+  _gtk_rounded_box_path (&box, cr);
+}
