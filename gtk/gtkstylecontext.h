@@ -297,6 +297,16 @@ struct _GtkStyleContextClass
 #define GTK_STYLE_CLASS_CONTEXT_MENU "context-menu"
 
 /**
+ * GTK_STYLE_CLASS_TOUCH_SELECTION:
+ *
+ * A CSS class for touch selection popups on entries
+ * and text views.
+ *
+ * Since: 3.16
+ */
+#define GTK_STYLE_CLASS_TOUCH_SELECTION "touch-selection"
+
+/**
  * GTK_STYLE_CLASS_MENUBAR:
  *
  * A CSS class to menubars.
