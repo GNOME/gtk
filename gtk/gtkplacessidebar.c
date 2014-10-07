@@ -132,6 +132,7 @@ struct _GtkPlacesSidebar {
   GVolumeMonitor    *volume_monitor;
   GtkTrashMonitor   *trash_monitor;
   GtkSettings       *gtk_settings;
+  GFile             *current_location;
 
   gulong trash_monitor_changed_id;
 
@@ -604,6 +605,22 @@ path_is_home_dir (const gchar *path)
   g_object_unref (location);
 
   return res;
+}
+
+static void
+open_home (GtkPlacesSidebar *sidebar)
+{
+  const gchar *home_path;
+  GFile       *home_dir;
+
+  home_path = g_get_home_dir ();
+  if (!home_path)
+    return;
+
+  home_dir = g_file_new_for_path (home_path);
+  emit_open_location (sidebar, home_dir, 0);
+
+  g_object_unref (home_dir);
 }
 
 static void
@@ -2635,8 +2652,6 @@ unmount_mount_cb (GObject      *source_object,
       g_error_free (error);
     }
 
-  /* FIXME: we need to switch to a path that is available now - $HOME? */
-
   g_object_unref (sidebar);
 }
 
@@ -2688,6 +2703,96 @@ get_unmount_operation (GtkPlacesSidebar *sidebar)
   return mount_op;
 }
 
+/* Returns TRUE if file1 is prefix of file2 or if both files have the
+ * same path
+ */
+static gboolean
+file_prefix_or_same (GFile *file1,
+                     GFile *file2)
+{
+  const gchar *file1path;
+  const gchar *file2path;
+
+  if (g_file_has_prefix (file1, file2))
+    return TRUE;
+
+  file1path = g_file_get_path (file1);
+  file2path = g_file_get_path (file2);
+
+  return g_strcmp0 (file1path, file2path) == 0;
+}
+
+static gboolean
+is_current_location_on_volume (GtkPlacesSidebar *sidebar,
+                               GMount           *mount,
+                               GVolume          *volume,
+                               GDrive           *drive)
+{
+  gboolean *current_location_on_volume;
+  GMount   *mount_default_location;
+  GMount   *mount_for_volume;
+  GList    *volumes_for_drive;
+  GList    *volume_for_drive;
+
+  current_location_on_volume = FALSE;
+
+  if (sidebar->current_location != NULL)
+    {
+      if (mount != NULL)
+        {
+          mount_default_location = g_mount_get_default_location (mount);
+          current_location_on_volume = file_prefix_or_same (sidebar->current_location,
+                                                            mount_default_location);
+
+          g_object_unref (mount_default_location);
+        }
+      /* This code path is probably never reached since mount always exists,
+       * and if it doesn't exists we don't offer a way to eject a volume or
+       * drive in the UI. Do it for defensive programming
+       */
+      else if (volume != NULL)
+        {
+          mount_for_volume = g_volume_get_mount (volume);
+          if (mount_for_volume != NULL)
+            {
+              mount_default_location = g_mount_get_default_location (mount_for_volume);
+              current_location_on_volume = file_prefix_or_same (sidebar->current_location,
+                                                                mount_default_location);
+
+              g_object_unref (mount_default_location);
+              g_object_unref (mount_for_volume);
+            }
+        }
+      /* This code path is probably never reached since mount always exists,
+       * and if it doesn't exists we don't offer a way to eject a volume or
+       * drive in the UI. Do it for defensive programming
+       */
+      else if (drive != NULL)
+        {
+          volumes_for_drive = g_drive_get_volumes (drive);
+          for (volume_for_drive = volumes_for_drive; volume_for_drive != NULL; volume_for_drive = volume_for_drive->next)
+            {
+              mount_for_volume = g_volume_get_mount (volume_for_drive->data);
+              if (mount_for_volume != NULL)
+                {
+                  mount_default_location = g_mount_get_default_location (mount_for_volume);
+                  current_location_on_volume = file_prefix_or_same (sidebar->current_location,
+                                                                    mount_default_location);
+
+                  g_object_unref (mount_default_location);
+                  g_object_unref (mount_for_volume);
+
+                  if (current_location_on_volume)
+                    break;
+                }
+            }
+          g_object_unref (volumes_for_drive);
+        }
+  }
+
+  return current_location_on_volume;
+}
+
 static void
 do_unmount (GMount           *mount,
             GtkPlacesSidebar *sidebar)
@@ -2695,6 +2800,9 @@ do_unmount (GMount           *mount,
   if (mount != NULL)
     {
       GMountOperation *mount_op;
+
+      if (is_current_location_on_volume (sidebar, mount, NULL, NULL))
+        open_home (sidebar);
 
       mount_op = get_unmount_operation (sidebar);
       g_mount_unmount_with_operation (mount,
@@ -2859,12 +2967,24 @@ do_eject (GMount           *mount,
   GMountOperation *mount_op;
 
   mount_op = get_unmount_operation (sidebar);
+
+  if (is_current_location_on_volume (sidebar, mount, volume, drive))
+    open_home (sidebar);
+
   if (mount != NULL)
     g_mount_eject_with_operation (mount, 0, mount_op, NULL, mount_eject_cb,
                                   g_object_ref (sidebar));
+  /* This code path is probably never reached since mount always exists,
+   * and if it doesn't exists we don't offer a way to eject a volume or
+   * drive in the UI. Do it for defensive programming
+   */
   else if (volume != NULL)
     g_volume_eject_with_operation (volume, 0, mount_op, NULL, volume_eject_cb,
                                    g_object_ref (sidebar));
+  /* This code path is probably never reached since mount always exists,
+   * and if it doesn't exists we don't offer a way to eject a volume or
+   * drive in the UI. Do it for defensive programming
+   */
   else if (drive != NULL)
     {
       if (g_drive_can_stop (drive))
@@ -4592,6 +4712,10 @@ gtk_places_sidebar_set_location (GtkPlacesSidebar *sidebar,
 
   selection = gtk_tree_view_get_selection (sidebar->tree_view);
   gtk_tree_selection_unselect_all (selection);
+
+  if (sidebar->current_location != NULL)
+    g_object_unref (sidebar->current_location);
+  sidebar->current_location = g_file_dup (location);
 
   if (location == NULL)
           goto out;
