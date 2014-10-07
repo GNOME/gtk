@@ -292,9 +292,17 @@ static void
 populate_switcher (GtkStackSwitcher *self)
 {
   GtkStackSwitcherPrivate *priv;
+  GtkWidget *widget, *button;
 
   priv = gtk_stack_switcher_get_instance_private (self);
   gtk_container_foreach (GTK_CONTAINER (priv->stack), (GtkCallback)add_child, self);
+
+  widget = gtk_stack_get_visible_child (priv->stack);
+  if (widget)
+    {
+      button = g_hash_table_lookup (priv->buttons, widget);
+      gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (button), TRUE);
+    }
 }
 
 static void
