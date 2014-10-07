@@ -106,10 +106,13 @@ init_version (GtkInspectorGeneral *gen)
 static void
 set_monospace_font (GtkWidget *w)
 {
-  PangoFontDescription *font_desc;
-  font_desc = pango_font_description_from_string ("monospace");
-  gtk_widget_override_font (w, font_desc);
-  pango_font_description_free (font_desc);
+  PangoAttrList *attrs;
+
+  attrs = pango_attr_list_new ();
+  pango_attr_list_insert (attrs, pango_attr_fallback_new (FALSE));
+  pango_attr_list_insert (attrs, pango_attr_family_new ("Monospace"));
+  gtk_label_set_attributes (GTK_LABEL (w), attrs);
+  pango_attr_list_unref (attrs);
 }
 
 static void
