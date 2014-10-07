@@ -19,12 +19,12 @@
 
 // entries
 
-@function entry_focus_border($fc) {
+@function entry_focus_border($fc:$selected_bg_color) {
   @if $variant == 'light' { @return $fc; }
   @else { @return if($fc==$selected_bg_color, $selected_borders_color, darken($fc,35%)); }
 }
 
-@function entry_focus_glow($fc) {
+@function entry_focus_glow($fc:$selected_bg_color) {
   $_focus_glow_color: if($variant=='light', transparentize($fc,0.85),
                                             transparentize($fc,0.3));
   @return inset 0 0 0 1px $_focus_glow_color;
@@ -46,7 +46,7 @@
 // possible $t values:
 // normal, focus, insensitive, backdrop, backdrop-insensitive;
 //
-  background-color: transparent;
+  background-color: $base_color;
   background-image: entry_gradient($base_color);
   $_blank_edge: if($edge == none, none, 0 1px transparentize($edge,1));
   $_entry_edge: if($edge == none, none, _widget_edge($edge));
@@ -74,6 +74,7 @@
   }
   @if $t==insensitive {
     color: $insensitive_fg_color;
+    background-color: $insensitive_bg_color;
     border-color: $borders_color;
     background-image: linear-gradient(to bottom, $insensitive_bg_color);
     @include _shadows($_blank_inner_shadows, $_entry_edge);
@@ -81,12 +82,14 @@
   }
   @if $t==backdrop {
     color: $backdrop_fg_color;
+    background-color: $backdrop_base_color;
     border-color: $backdrop_borders_color;
     background-image: linear-gradient(to bottom, $backdrop_base_color);
     @include _shadows($_blank_inner_shadows, $_blank_edge);
   }
   @if $t==backdrop-insensitive {
     color: $backdrop_insensitive_color;
+    background-color: $insensitive_bg_color;
     border-color: $backdrop_borders_color;
     background-image: linear-gradient(to bottom, $insensitive_bg_color);
     @include _shadows($_blank_inner_shadows, $_blank_edge);

@@ -280,7 +280,7 @@ GtkTextView { // This will get overridden by .view, needed by gedit line numbers
     &:backdrop { background-color: transparent; }
   }
 
-  .linked & { //FIXME: use same buttons linking logic and template
+  .linked > & { //FIXME: use same buttons linking logic and template
     border-radius: 0;
     &:first-child {
       border-top-left-radius: 3px;
@@ -328,6 +328,7 @@ GtkTextView { // This will get overridden by .view, needed by gedit line numbers
     &:backdrop { color: mix($backdrop_fg_color,$backdrop_base_color,80%); }
   }
 
+/*
   .linked.vertical & { //FIXME comment stuff and make the whole thing smarter.
     @include entry(normal, $edge: none);
     background-image: linear-gradient(to bottom, $base_color);
@@ -400,7 +401,56 @@ GtkTextView { // This will get overridden by .view, needed by gedit line numbers
       }
     }
   }
+  */
 }
+
+// set flat background and dimmed top border
+.linked.vertical > .entry {
+  background-image: none;
+  border-top-color: mix($borders_color, $base_color, 40%);
+  &:focus { border-top-color: entry_focus_border(); }
+  &:backdrop { border-top-color: mix($backdrop_borders_color, $backdrop_base_color, 40%); }
+}
+
+// add back normal entry background when it makes sense
+.linked.vertical > .button + .entry,
+.linked.vertical > GtkComboBox + .entry,
+.linked.vertical > GtkComboBoxText + .entry,
+.linked.vertical > .entry:first-child {
+  @include entry(normal, $edge:none);
+  &:focus { @include entry(focus, $edge: none); }
+  &:backdrop {
+    @include entry(backdrop, $edge: none);
+    &:insensitive { @include entry(backdrop-insensitive, $edge: none); }
+  }
+}
+
+// top border of the subsequent linked element of the focused entry
+// needs to be the color of focused entry border
+.linked.vertical > .entry:focus + .entry,
+.linked.vertical > .entry:focus + .button,
+.linked.vertical > .entry:focus + GtkComboBo > .button ,
+.linked.vertical > .entry:focus + GtkComboBoxText > .button  { 
+  border-top-color: entry_focus_border();
+}
+
+//remove shadows, adding back the one used for focus glow
+.linked.vertical > .entry {
+  box-shadow: none;
+  &:focus { box-shadow: entry_focus_glow(); }
+}
+//remove shadows, but the widget hilight, adding back the one used for focus glow
+.linked.vertical > .entry:last-child {
+  box-shadow: _widget_edge();
+  &:focus { box-shadow: entry_focus_glow(), _widget_edge(); }
+}
+
+//border removal and border radius fix
+.linked.vertical > .entry,
+.linked.vertical > .entry:focus,
+.linked.vertical > .entry:insensitive,
+.linked.vertical > .entry:backdrop,
+.linked.vertical > .entry:backdrop:insensitive { @extend %linked_vertical; }
 
 /***********
  * Buttons *
@@ -755,18 +805,18 @@ $_dot_color: if($variant=='light', $selected_bg_color,
 }
 
 %linked_vertical_middle {
-  border-left-style: solid;
-  border-top-style: none;
+  border-style: solid solid none solid;
   border-radius: 0;
 }
 
 %linked_vertical{
   @extend %linked_vertical_middle;
   &:first-child {
-    border-style: solid;
+    @extend %linked_vertical_middle;
     border-radius: 3px 3px 0 0;
   }
   &:last-child {
+    border-style: solid;
     border-radius: 0 0 3px 3px;
   }
   &:only-child {
@@ -960,6 +1010,9 @@ GtkColorButton.button {
  *   }
  * } */
 }
+
+.linked.vertical > .spinbutton.entry { @extend .spinbutton; } // this avoids spinbutton buttons being
+                                                              // overridden with linking
 
 /**************
  * ComboBoxes *
