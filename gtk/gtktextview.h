@@ -72,7 +72,8 @@ typedef enum
  * @GTK_TEXT_VIEW_LAYER_BELOW: The layer rendered below the text (but above the background).
  * @GTK_TEXT_VIEW_LAYER_ABOVE: The layer rendered above the text.
  *
- * Used to reference the parts of #GtkTextView.
+ * Used to reference the layers of #GtkTextView for the purpose of customized
+ * drawing with the ::draw_layer vfunc.
  */
 typedef enum
 {
@@ -96,52 +97,71 @@ struct _GtkTextView
 {
   GtkContainer parent_instance;
 
+  /*< private >*/
+
   GtkTextViewPrivate *priv;
 };
 
 /**
  * GtkTextViewClass:
  * @parent_class: The object class structure needs to be the first
- * @draw_layer: Draw layers below and above the text in the text window.
+ * @populate_popup: The class handler for the #GtkTextView::populate-popup
+ *   signal.
+ * @move_cursor: The class handler for the #GtkTextView::move-cursor
+ *   keybinding signal.
+ * @set_anchor: The class handler for the #GtkTextView::set-anchor
+ *   keybinding signal.
+ * @insert_at_cursor: The class handler for the #GtkTextView::insert-at-cursor
+ *   keybinding signal.
+ * @delete_from_cursor: The class handler for the #GtkTextView::delete-from-cursor
+ *   keybinding signal.
+ * @backspace: The class handler for the #GtkTextView::backspace
+ *   keybinding signal.
+ * @cut_clipboard: The class handler for the #GtkTextView::cut-clipboard
+ *   keybinding signal
+ * @copy_clipboard: The class handler for the #GtkTextview::copy-clipboard
+ *   keybinding signal.
+ * @paste_clipboard: The class handler for the #GtkTextView::paste-clipboard
+ *   keybinding signal.
+ * @toggle_overwrite: The class handler for the #GtkTextView::toggle-overwrite
+ *   keybinding signal.
+ * @create_buffer: The create_buffer vfunc is called to create a #GtkTextBuffer
+ *   for the text view. The default implementation is to just call
+ *   gtk_text_buffer_new(). Since: 3.10
+ * @draw_layer: The draw_layer vfunc is called before and after the text
+ *   view is drawing its own text. Applications can override this vfunc
+ *   in a subclass to draw customized content underneath or above the
+ *   text. Since: 3.14
  */
 struct _GtkTextViewClass
 {
   GtkContainerClass parent_class;
 
-  void (* populate_popup)           (GtkTextView    *text_view,
-                                     GtkWidget      *popup);
+  /*< public */
 
-  /* These are all RUN_ACTION signals for keybindings */
+  void (* populate_popup)        (GtkTextView      *text_view,
+                                  GtkWidget        *popup);
+  void (* move_cursor)           (GtkTextView      *text_view,
+                                  GtkMovementStep   step,
+                                  gint              count,
+                                  gboolean          extend_selection);
+  void (* set_anchor)            (GtkTextView      *text_view);
+  void (* insert_at_cursor)      (GtkTextView      *text_view,
+                                  const gchar      *str);
+  void (* delete_from_cursor)    (GtkTextView      *text_view,
+                                  GtkDeleteType     type,
+                                  gint              count);
+  void (* backspace)             (GtkTextView      *text_view);
+  void (* cut_clipboard)         (GtkTextView      *text_view);
+  void (* copy_clipboard)        (GtkTextView      *text_view);
+  void (* paste_clipboard)       (GtkTextView      *text_view);
+  void (* toggle_overwrite)      (GtkTextView      *text_view);
+  GtkTextBuffer * (* create_buffer) (GtkTextView   *text_view);
+  void (* draw_layer)            (GtkTextView      *text_view,
+			          GtkTextViewLayer  layer,
+			          cairo_t          *cr);
 
-  /* move insertion point */
-  void (* move_cursor) (GtkTextView    *text_view,
-                        GtkMovementStep step,
-                        gint            count,
-                        gboolean        extend_selection);
-
-  /* move the "anchor" (what Emacs calls the mark) to the cursor position */
-  void (* set_anchor)  (GtkTextView    *text_view);
-
-  /* Edits */
-  void (* insert_at_cursor)      (GtkTextView *text_view,
-                                  const gchar *str);
-  void (* delete_from_cursor)    (GtkTextView  *text_view,
-                                  GtkDeleteType type,
-                                  gint          count);
-  void (* backspace)             (GtkTextView *text_view);
-
-  /* cut copy paste */
-  void (* cut_clipboard)   (GtkTextView *text_view);
-  void (* copy_clipboard)  (GtkTextView *text_view);
-  void (* paste_clipboard) (GtkTextView *text_view);
-  /* overwrite */
-  void (* toggle_overwrite) (GtkTextView *text_view);
-
-  GtkTextBuffer * (* create_buffer) (GtkTextView *text_view);
-
-  void (* draw_layer)       (GtkTextView      *text_view,
-			     GtkTextViewLayer  layer,
-			     cairo_t          *cr);
+  /*< private >*/
 
   /* Padding for future expansion */
   void (*_gtk_reserved1) (void);
