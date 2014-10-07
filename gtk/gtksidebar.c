@@ -327,8 +327,16 @@ static void
 populate_sidebar (GtkSidebar *sidebar)
 {
   GtkSidebarPrivate *priv = gtk_sidebar_get_instance_private (sidebar);
+  GtkWidget *widget, *row;
 
   gtk_container_foreach (GTK_CONTAINER (priv->stack), (GtkCallback)add_child, sidebar);
+
+  widget = gtk_stack_get_visible_child (priv->stack);
+  if (widget)
+    {
+      row = g_hash_table_lookup (priv->rows, widget);
+      gtk_list_box_select_row (priv->list, GTK_LIST_BOX_ROW (row));
+    }
 }
 
 static void
