@@ -181,8 +181,6 @@ do_rotated_text (GtkWidget *do_widget)
       PangoLayout *layout;
       PangoAttrList *attrs;
 
-      const GdkRGBA white = { 1.0, 1.0, 1.0, 1.0 };
-
       window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
       gtk_window_set_screen (GTK_WINDOW (window),
                              gtk_widget_get_screen (do_widget));
@@ -195,18 +193,15 @@ do_rotated_text (GtkWidget *do_widget)
       gtk_container_add (GTK_CONTAINER (window), box);
 
       /* Add a drawing area */
-
       drawing_area = gtk_drawing_area_new ();
       gtk_container_add (GTK_CONTAINER (box), drawing_area);
-
-      /* This overrides the background color from the theme */
-      gtk_widget_override_background_color (drawing_area, 0, &white);
+      gtk_style_context_add_class (gtk_widget_get_style_context (drawing_area),
+                                   GTK_STYLE_CLASS_VIEW);
 
       g_signal_connect (drawing_area, "draw",
                         G_CALLBACK (rotated_text_draw), NULL);
 
       /* And a label */
-
       label = gtk_label_new (text);
       gtk_container_add (GTK_CONTAINER (box), label);
 

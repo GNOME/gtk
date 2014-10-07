@@ -821,7 +821,6 @@ create_text (GtkWidget **view,
 {
   GtkWidget *scrolled_window;
   GtkWidget *text_view;
-  PangoFontDescription *font_desc;
 
   scrolled_window = gtk_scrolled_window_new (NULL, NULL);
   gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (scrolled_window),
@@ -840,22 +839,15 @@ create_text (GtkWidget **view,
 
   if (is_source)
     {
-      font_desc = pango_font_description_from_string ("monospace");
-      gtk_widget_override_font (text_view, font_desc);
-      pango_font_description_free (font_desc);
-
-      gtk_text_view_set_wrap_mode (GTK_TEXT_VIEW (text_view),
-                                   GTK_WRAP_NONE);
+      gtk_text_view_set_monospace (GTK_TEXT_VIEW (text_view), TRUE);
+      gtk_text_view_set_wrap_mode (GTK_TEXT_VIEW (text_view), GTK_WRAP_NONE);
     }
   else
     {
       /* Make it a bit nicer for text. */
-      gtk_text_view_set_wrap_mode (GTK_TEXT_VIEW (text_view),
-                                   GTK_WRAP_WORD);
-      gtk_text_view_set_pixels_above_lines (GTK_TEXT_VIEW (text_view),
-                                            2);
-      gtk_text_view_set_pixels_below_lines (GTK_TEXT_VIEW (text_view),
-                                            2);
+      gtk_text_view_set_wrap_mode (GTK_TEXT_VIEW (text_view), GTK_WRAP_WORD);
+      gtk_text_view_set_pixels_above_lines (GTK_TEXT_VIEW (text_view), 2);
+      gtk_text_view_set_pixels_below_lines (GTK_TEXT_VIEW (text_view), 2);
     }
 
   return scrolled_window;

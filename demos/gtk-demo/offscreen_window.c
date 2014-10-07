@@ -573,7 +573,6 @@ do_offscreen_window (GtkWidget *do_widget)
   if (!window)
     {
       GtkWidget *bin, *vbox, *scale, *button;
-      GdkRGBA black;
 
       window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
       gtk_window_set_screen (GTK_WINDOW (window),
@@ -583,8 +582,6 @@ do_offscreen_window (GtkWidget *do_widget)
       g_signal_connect (window, "destroy",
                         G_CALLBACK (gtk_widget_destroyed), &window);
 
-      gdk_rgba_parse (&black, "black");
-      gtk_widget_override_background_color (window, 0, &black);
       gtk_container_set_border_width (GTK_CONTAINER (window), 10);
 
       vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
