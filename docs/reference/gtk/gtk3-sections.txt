@@ -3814,6 +3814,8 @@ gtk_text_tag_table_get_type
 <FILE>gtktextview</FILE>
 <TITLE>GtkTextView</TITLE>
 GtkTextView
+GtkTextViewClass
+GtkTextViewLayer
 GtkTextWindowType
 GtkWrapMode
 gtk_text_view_new
@@ -3831,7 +3833,7 @@ gtk_text_view_get_visible_rect
 gtk_text_view_get_iter_location
 gtk_text_view_get_cursor_locations
 gtk_text_view_get_line_at_y
-gtk_text_view_get_line_yrange
+/gtk_text_view_get_line_yrange
 gtk_text_view_get_iter_at_location
 gtk_text_view_get_iter_at_position
 gtk_text_view_buffer_to_window_coords
