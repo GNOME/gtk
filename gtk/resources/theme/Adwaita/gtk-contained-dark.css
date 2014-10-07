@@ -1362,7 +1362,7 @@ GtkCalendar.header .button.titlebutton:visited {
     background-image: none;
     border-style: none none none solid;
     border-color: rgba(28, 31, 31, 0.3);
-    color: #e4e4e2;
+    color: #dadad8;
     border-radius: 0;
     box-shadow: none; }
     .spinbutton .button:dir(rtl) {
@@ -1376,6 +1376,7 @@ GtkCalendar.header .button.titlebutton:visited {
       box-shadow: inset 0 2px 3px -1px rgba(0, 0, 0, 0.2);
       background-color: rgba(0, 0, 0, 0.1); }
     .spinbutton .button:backdrop {
+      color: #b9bbb9;
       border-color: rgba(30, 34, 34, 0.3);
       background-color: transparent; }
     .spinbutton .button:backdrop:insensitive {
