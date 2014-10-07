@@ -906,7 +906,7 @@ GtkColorButton.button {
     background-image: none;
     border-style: none none none solid;
     border-color: transparentize($borders_color,0.7);
-    color: mix($fg_color,$base_color,95%);
+    color: mix($fg_color, $base_color,90%);
     border-radius: 0;
     box-shadow: none;
   //  padding-left: 6px;
@@ -924,6 +924,7 @@ GtkColorButton.button {
       background-color: transparentize(black,0.9);
     }
     &:backdrop {
+      color: mix($backdrop_fg_color, $backdrop_base_color, 90%);
       border-color: transparentize($backdrop_borders_color,0.7);
       background-color: transparent;
     }
