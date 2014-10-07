@@ -207,20 +207,6 @@ save_clicked (GtkToolButton         *button,
 }
 
 static void
-apply_system_font (GtkInspectorCssEditor *ce)
-{
-  GSettings *s = g_settings_new ("org.gnome.desktop.interface");
-  gchar *font_name = g_settings_get_string (s, "monospace-font-name");
-  PangoFontDescription *font_desc = pango_font_description_from_string (font_name);
-
-  gtk_widget_override_font (ce->priv->view, font_desc);
-
-  pango_font_description_free (font_desc);
-  g_free (font_name);
-  g_object_unref (s);
-}
-
-static void
 update_style (GtkInspectorCssEditor *ce)
 {
   GtkCssProvider *provider;
@@ -373,7 +359,6 @@ constructed (GObject *object)
   GtkInspectorCssEditor *ce = GTK_INSPECTOR_CSS_EDITOR (object);
 
   create_provider (ce);
-  apply_system_font (ce);
   set_initial_text (ce);
 }
 

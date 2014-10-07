@@ -49,6 +49,7 @@
             <property name="visible">True</property>
             <property name="buffer">text</property>
             <property name="wrap-mode">word</property>
+            <property name="monospace">True</property>
           </object>
         </child>
       </object>

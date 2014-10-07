@@ -75,7 +75,6 @@ gtk_inspector_python_shell_init (GtkInspectorPythonShell *python_shell)
     GtkWidget *swin;
     GtkTextBuffer *buffer;
     GtkTextIter iter;
-    PangoFontDescription *font_desc;
 
     python_shell->priv = gtk_inspector_python_shell_get_instance_private (python_shell);
 
@@ -92,6 +91,7 @@ gtk_inspector_python_shell_init (GtkInspectorPythonShell *python_shell)
                                         GTK_SHADOW_IN);
 
     python_shell->priv->textview = gtk_text_view_new();
+    gtk_text_view_set_monospace (GTK_TEXT_VIEW (python_shell->priv->textview), TRUE);
     gtk_widget_show(python_shell->priv->textview);
     gtk_container_add(GTK_CONTAINER(swin), python_shell->priv->textview);
     gtk_text_view_set_cursor_visible(GTK_TEXT_VIEW(python_shell->priv->textview), TRUE);
@@ -102,12 +102,6 @@ gtk_inspector_python_shell_init (GtkInspectorPythonShell *python_shell)
     g_signal_connect(python_shell->priv->textview, "key_press_event",
                      G_CALLBACK(gtk_inspector_python_shell_key_press_cb),
                      python_shell);
-
-    /* Make the textview monospaced */
-    font_desc = pango_font_description_from_string("monospace");
-    pango_font_description_set_size(font_desc, 8 * PANGO_SCALE);
-    gtk_widget_override_font(python_shell->priv->textview, font_desc);
-    pango_font_description_free(font_desc);
 
     /* Create the end-of-buffer mark */
     buffer = gtk_text_view_get_buffer(GTK_TEXT_VIEW(python_shell->priv->textview));
