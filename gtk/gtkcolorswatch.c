@@ -171,18 +171,6 @@ swatch_draw (GtkWidget *widget,
 
   gtk_render_frame (context, cr, 0, 0, width, height);
 
-  if (gtk_widget_has_visible_focus (widget))
-    {
-      cairo_set_line_width (cr, 2);
-      if (swatch->priv->has_color && INTENSITY (swatch->priv->color.red, swatch->priv->color.green, swatch->priv->color.blue) < 0.5)
-        cairo_set_source_rgba (cr, 1., 1., 1., 0.4);
-      else
-        cairo_set_source_rgba (cr, 0., 0., 0., 0.4);
-        _gtk_rounded_box_shrink (&background.padding_box, 3, 3, 3, 3);
-        _gtk_rounded_box_path (&background.padding_box, cr);
-        cairo_stroke (cr);
-    }
-
   if (swatch->priv->icon)
     {
       icon_info = gtk_icon_theme_lookup_icon (theme, swatch->priv->icon, PIXBUF_SIZE,
@@ -239,6 +227,11 @@ swatch_draw (GtkWidget *widget,
 
   cairo_restore (cr);
   gtk_style_context_restore (context);
+
+  if (gtk_widget_has_visible_focus (widget))
+    {
+      gtk_render_focus (context, cr, 0, 0, width, height);
+    }
 
   return FALSE;
 }

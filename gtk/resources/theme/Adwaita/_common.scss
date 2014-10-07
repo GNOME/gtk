@@ -2786,6 +2786,7 @@ GtkColorSwatch {
   }
 
   &.color-light {
+    outline-color: transparentize(black,0.7);
     &:hover {
       background-image: linear-gradient(to bottom,
                                         transparentize(white, 1) 40%,
@@ -2794,6 +2795,7 @@ GtkColorSwatch {
     }
   }
   &.color-dark {
+    outline-color: transparentize(white,0.5);
     &:hover {
        background-image: linear-gradient(to bottom,
                                         transparentize(white, 1) 40%,

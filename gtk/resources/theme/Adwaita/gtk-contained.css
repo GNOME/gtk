@@ -4322,14 +4322,18 @@ GtkColorSwatch {
   border: 1px solid;
   border-color: rgba(0, 0, 0, 0.3);
   box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.2); }
-  GtkColorSwatch.color-light:hover {
-    background-image: linear-gradient(to bottom, rgba(255, 255, 255, 0) 40%, rgba(255, 255, 255, 0.4)); }
-    GtkColorSwatch.color-light:hover:backdrop {
-      background-image: none; }
-  GtkColorSwatch.color-dark:hover {
-    background-image: linear-gradient(to bottom, rgba(255, 255, 255, 0) 40%, rgba(255, 255, 255, 0.2)); }
-    GtkColorSwatch.color-dark:hover:backdrop {
-      background-image: none; }
+  GtkColorSwatch.color-light {
+    outline-color: rgba(0, 0, 0, 0.3); }
+    GtkColorSwatch.color-light:hover {
+      background-image: linear-gradient(to bottom, rgba(255, 255, 255, 0) 40%, rgba(255, 255, 255, 0.4)); }
+      GtkColorSwatch.color-light:hover:backdrop {
+        background-image: none; }
+  GtkColorSwatch.color-dark {
+    outline-color: rgba(255, 255, 255, 0.5); }
+    GtkColorSwatch.color-dark:hover {
+      background-image: linear-gradient(to bottom, rgba(255, 255, 255, 0) 40%, rgba(255, 255, 255, 0.2)); }
+      GtkColorSwatch.color-dark:hover:backdrop {
+        background-image: none; }
   GtkColorSwatch:hover {
     border-color: rgba(0, 0, 0, 0.5); }
   GtkColorSwatch:backdrop {
