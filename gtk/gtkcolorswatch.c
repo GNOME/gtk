@@ -40,7 +40,6 @@ struct _GtkColorSwatchPrivate
   gdouble radius[4];
   gchar *icon;
   guint    has_color        : 1;
-  guint    contains_pointer : 1;
   guint    use_alpha        : 1;
   guint    selectable       : 1;
 
@@ -387,8 +386,6 @@ static gboolean
 swatch_enter_notify (GtkWidget        *widget,
                      GdkEventCrossing *event)
 {
-  GtkColorSwatch *swatch = GTK_COLOR_SWATCH (widget);
-  swatch->priv->contains_pointer = TRUE;
   gtk_widget_set_state_flags (widget, GTK_STATE_FLAG_PRELIGHT, FALSE);
 
   return FALSE;
@@ -398,8 +395,6 @@ static gboolean
 swatch_leave_notify (GtkWidget        *widget,
                      GdkEventCrossing *event)
 {
-  GtkColorSwatch *swatch = GTK_COLOR_SWATCH (widget);
-  swatch->priv->contains_pointer = FALSE;
   gtk_widget_unset_state_flags (widget, GTK_STATE_FLAG_PRELIGHT);
 
   return FALSE;
