@@ -1725,9 +1725,10 @@ gtk_do_render_handle (GtkStyleContext *context,
   const GdkRGBA *bg_color;
   GdkRGBA lighter, darker;
   GtkJunctionSides sides;
-  GtkThemingBackground bg;
   gint xx, yy;
-  gboolean has_image;
+
+  gtk_render_background (context, cr, x, y, width, height);
+  gtk_render_frame (context, cr, x, y, width, height);
 
   if (render_icon_image (context, cr, x, y, width, height))
     return;
@@ -1740,12 +1741,6 @@ gtk_do_render_handle (GtkStyleContext *context,
 
   color_shade (bg_color, 0.7, &darker);
   color_shade (bg_color, 1.3, &lighter);
-
-  _gtk_theming_background_init (&bg, context, x, y, width, height, sides);
-  has_image = _gtk_theming_background_has_background_image (&bg);
-  _gtk_theming_background_render (&bg, cr);
-
-  gtk_do_render_frame (context, cr, x, y, width, height);
 
   if (gtk_style_context_has_class (context, GTK_STYLE_CLASS_GRIP))
     {
@@ -1996,15 +1991,12 @@ gtk_do_render_handle (GtkStyleContext *context,
     }
   else if (gtk_style_context_has_class (context, GTK_STYLE_CLASS_PANE_SEPARATOR))
     {
-      if (!has_image)
-        {
-          if (width > height)
-            for (xx = x + width / 2 - 15; xx <= x + width / 2 + 15; xx += 5)
-              render_dot (cr, &lighter, &darker, xx, y + height / 2 - 1, 3);
-          else
-            for (yy = y + height / 2 - 15; yy <= y + height / 2 + 15; yy += 5)
-              render_dot (cr, &lighter, &darker, x + width / 2 - 1, yy, 3);
-        }
+      if (width > height)
+        for (xx = x + width / 2 - 15; xx <= x + width / 2 + 15; xx += 5)
+          render_dot (cr, &lighter, &darker, xx, y + height / 2 - 1, 3);
+      else
+        for (yy = y + height / 2 - 15; yy <= y + height / 2 + 15; yy += 5)
+          render_dot (cr, &lighter, &darker, x + width / 2 - 1, yy, 3);
     }
   else
     {
