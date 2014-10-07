@@ -3888,6 +3888,8 @@ gtk_text_view_set_input_purpose
 gtk_text_view_get_input_purpose
 gtk_text_view_set_input_hints
 gtk_text_view_get_input_hints
+gtk_text_view_set_monospace
+gtk_text_view_get_monospace
 GTK_TEXT_VIEW_PRIORITY_VALIDATE
 <SUBSECTION Standard>
 GTK_TEXT_VIEW
@@ -6011,6 +6013,7 @@ GTK_STYLE_CLASS_MENU
 GTK_STYLE_CLASS_MENUBAR
 GTK_STYLE_CLASS_MENUITEM
 GTK_STYLE_CLASS_MESSAGE_DIALOG
+GTK_STYLE_CLASS_MONOSPACE
 GTK_STYLE_CLASS_NEEDS_ATTENTION
 GTK_STYLE_CLASS_NOTEBOOK
 GTK_STYLE_CLASS_OSD

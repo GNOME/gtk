@@ -408,6 +408,11 @@ void             gtk_text_view_set_input_hints        (GtkTextView      *text_vi
 GDK_AVAILABLE_IN_3_6
 GtkInputHints    gtk_text_view_get_input_hints        (GtkTextView      *text_view);
 
+GDK_AVAILABLE_IN_3_16
+void             gtk_text_view_set_monospace          (GtkTextView      *text_view,
+                                                       gboolean          monospace);
+GDK_AVAILABLE_IN_3_16
+gboolean         gtk_text_view_get_monospace          (GtkTextView      *text_view);
 
 G_END_DECLS
 

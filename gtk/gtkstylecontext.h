@@ -896,6 +896,16 @@ struct _GtkStyleContextClass
 #define GTK_STYLE_CLASS_PAPER "paper"
 
 /**
+ * GTK_STYLE_CLASS_MONOSPACE:
+ *
+ * A CSS class that is added to text view that should use
+ * a monospace font.
+ *
+ * Since: 3.16
+ */
+#define GTK_STYLE_CLASS_MONOSPACE "monospace"
+
+/**
  * GTK_STYLE_REGION_ROW:
  *
  * A widget region name to define a treeview row.

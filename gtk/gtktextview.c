@@ -308,7 +308,8 @@ enum
   PROP_VSCROLL_POLICY,
   PROP_INPUT_PURPOSE,
   PROP_INPUT_HINTS,
-  PROP_POPULATE_ALL
+  PROP_POPULATE_ALL,
+  PROP_MONOSPACE
 };
 
 static GQuark quark_text_selection_data = 0;
@@ -905,6 +906,23 @@ gtk_text_view_class_init (GtkTextViewClass *klass)
                                                          FALSE,
                                                          GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
 
+  /**
+   * GtkTextview:monospace:
+   *
+   * If %TRUE, set the %GTK_STYLE_CLASS_MONOSPACE style class on the
+   * text view to indicate that a monospace font is desired.
+   *
+   * Since: 3.16
+   */
+  g_object_class_install_property (gobject_class,
+                                   PROP_MONOSPACE,
+                                   g_param_spec_boolean ("monospace",
+                                                         P_("Monospace"),
+                                                         P_("Whether to use a monospace font"),
+                                                         FALSE,
+                                                         GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
+
+  
 
    /* GtkScrollable interface */
    g_object_class_override_property (gobject_class, PROP_HADJUSTMENT,    "hadjustment");
@@ -3389,6 +3407,9 @@ gtk_text_view_set_property (GObject         *object,
           g_object_notify_by_pspec (object, pspec);
         }
       break;
+    case PROP_MONOSPACE:
+      gtk_text_view_set_monospace (text_view, g_value_get_boolean (value));
+      break;
 
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -3496,6 +3517,10 @@ gtk_text_view_get_property (GObject         *object,
 
     case PROP_POPULATE_ALL:
       g_value_set_boolean (value, priv->populate_all);
+      break;
+
+    case PROP_MONOSPACE:
+      g_value_set_boolean (value, gtk_text_view_get_monospace (text_view));
       break;
 
     default:
@@ -10557,4 +10582,59 @@ gtk_text_view_get_input_hints (GtkTextView *text_view)
                 NULL);
 
   return hints;
+}
+
+/**
+ * gtk_text_view_set_monospace:
+ * @text_view: a #GtkTextView
+ * @monospace: %TRUE to request monospace styling
+ *
+ * Sets the #GtkTextView:monospace property, which
+ * indicates that the text view should use monospace
+ * fonts.
+ *
+ * Since: 3.16
+ */
+void
+gtk_text_view_set_monospace (GtkTextView *text_view,
+                             gboolean     monospace)
+{
+  GtkStyleContext *context;
+  gboolean has_monospace;
+
+  g_return_if_fail (GTK_IS_TEXT_VIEW (text_view));
+
+  context = gtk_widget_get_style_context (GTK_WIDGET (text_view));  
+  has_monospace = gtk_style_context_has_class (context, GTK_STYLE_CLASS_MONOSPACE);
+
+  if (has_monospace != monospace)
+    {
+      if (monospace)
+        gtk_style_context_add_class (context, GTK_STYLE_CLASS_MONOSPACE);
+      else
+        gtk_style_context_remove_class (context, GTK_STYLE_CLASS_MONOSPACE);
+      g_object_notify (G_OBJECT (text_view), "monospace");
+    }
+}
+
+/**
+ * gtk_text_view_get_monospace:
+ * @text_view: a #GtkTextView
+ *
+ * Gets the value of the #GtkTextView:monospace property.
+ *
+ * Return: %TRUE if monospace fonts are desired
+ *
+ * Since: 3.16
+ */
+gboolean
+gtk_text_view_get_monospace (GtkTextView *text_view)
+{
+  GtkStyleContext *context;
+
+  g_return_val_if_fail (GTK_IS_TEXT_VIEW (text_view), FALSE);
+
+  context = gtk_widget_get_style_context (GTK_WIDGET (text_view));
+  
+  return gtk_style_context_has_class (context, GTK_STYLE_CLASS_MONOSPACE);
 }
