@@ -9721,6 +9721,8 @@ bubble_targets_received (GtkClipboard     *clipboard,
   priv->selection_bubble = gtk_popover_new (GTK_WIDGET (entry));
   gtk_style_context_add_class (gtk_widget_get_style_context (priv->selection_bubble),
                                GTK_STYLE_CLASS_OSD);
+  gtk_style_context_add_class (gtk_widget_get_style_context (priv->selection_bubble),
+                               "touch-selection");
   gtk_popover_set_position (GTK_POPOVER (priv->selection_bubble),
                             GTK_POS_TOP);
   gtk_popover_set_modal (GTK_POPOVER (priv->selection_bubble), FALSE);
