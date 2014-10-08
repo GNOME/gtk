@@ -1444,7 +1444,7 @@ column-header.button.dnd { // for treeview-like derive widgets
 .popover {
   margin: 10px;
   padding: 2px;
-  border: 1px solid $borders-color;
+  border: 1px solid $borders_color;
   border-radius: 5px;
   //background-clip: border-box;
   background-color: $bg_color;
@@ -1465,6 +1465,58 @@ column-header.button.dnd { // for treeview-like derive widgets
     text-shadow: none;
     transition: none;
   }
+
+  &.osd {
+    @extend %osd;
+    box-shadow: none;
+    background-color: transparentize($osd_bg_color, 0.3);
+    border-color: $osd_outer_borders_color;
+    .entry { //FIXME this shouldn't belong here
+      transition: none;
+      background-color: transparent;
+      color: $osd_fg_color;
+      border-color: $osd_borders_color;
+      background-image: linear-gradient(to bottom, transparentize(black, 0.5));
+      box-shadow: none;
+      &:focus {
+        transition: none;
+        background-color: transparent;
+        box-shadow: none;
+        border-color: $selected_bg_color;
+        background-image: linear-gradient(to bottom, transparentize(black, 0.5));
+        box-shadow: entry_focus_glow($selected_bg_color);
+      }
+      &:backdrop {
+        text-shadow: none;
+        icon-shadow: none;
+      }
+      &:selected {
+        text-shadow: none;
+        background-color: $selected_bg_color;
+        color: $selected_fg_color;
+      }
+      &.spinbutton .button {
+         @include button(undecorated);
+         border-style: none none none solid;
+         border-color: $osd_borders_color;
+         border-radius: 0;
+         color: $osd_fg_color;
+         &:last-child { border-radius: 0 3px 3px 0; }
+      }
+      &.spinbutton .button:backdrop {
+         @include button(undecorated);
+         text-shadow: none;
+         icon-shadow: none;
+         border-style: none none none solid;
+         border-color: $osd_borders_color;
+         border-radius: 0;
+         color: $osd_fg_color;
+         &:last-child { border-radius: 0 3px 3px 0; }
+      }
+
+    }
+  }
+/*
   &.osd { // Also used for touch cut'n'paste overlays
           // FIXME Doesn't work
     background-image: none;
@@ -1480,9 +1532,11 @@ column-header.button.dnd { // for treeview-like derive widgets
       &:insensitive { @include button(osd-insensitive); };
     }
   }
+*/
 }
 
 //touch selection handlebars for the Popover.osd above
+/*
 .entry.cursor-handle,
 .cursor-handle {
   background-color: transparent;
@@ -1492,6 +1546,7 @@ column-header.button.dnd { // for treeview-like derive widgets
   &.top { -gtk-icon-source: -gtk-icontheme('selection-start-symbolic'); }
   &.bottom { -gtk-icon-source: -gtk-icontheme('selection-end-symbolic'); }
 }
+*/
 
 /*****************
  * Notebooks and *
@@ -2954,7 +3009,8 @@ GtkVolumeButton.button { padding: 8px; }
 }
 
 /* Decouple the font of context menus from their entry/textview */
-.context-menu {
+.context-menu,
+.osd.popover {
   font: initial;
 }
 

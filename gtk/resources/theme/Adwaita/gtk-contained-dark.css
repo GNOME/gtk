@@ -135,13 +135,13 @@ GtkTextView {
   .grid-child:selected {
     outline-offset: -2px; }
 
-.app-notification,
+.popover.osd, .app-notification,
 .app-notification.frame, .osd {
   color: #eeeeec;
   outline-color: rgba(238, 238, 236, 0.3);
   text-shadow: 0 1px black;
   icon-shadow: 0 1px black; }
-  .app-notification:backdrop, .osd:backdrop {
+  .popover.osd:backdrop, .app-notification:backdrop, .osd:backdrop {
     text-shadow: none; }
 
 /*********************
@@ -2058,7 +2058,24 @@ GtkCalendar.header column-header .button.titlebutton, column-header .button:hove
   border: 1px solid #1c1f1f;
   border-radius: 5px;
   background-color: #393f3f;
-  box-shadow: 0 2px 3px rgba(0, 0, 0, 0.5); }
+  box-shadow: 0 2px 3px rgba(0, 0, 0, 0.5);
+  /*
+    &.osd { // Also used for touch cut'n'paste overlays
+            // FIXME Doesn't work
+      background-image: none;
+      background-color: $osd_bg_color;
+      border: 1px solid $borders_color;
+      color: $osd_fg_color;
+      .button {
+        color: white;
+        text-shadow: none;
+        @include button(osd);
+        &:hover { @include button(osd-hover); };
+        &:active { @include button(osd-active); };
+        &:insensitive { @include button(osd-insensitive); };
+      }
+    }
+  */ }
   .popover:backdrop {
     box-shadow: none; }
   .popover > .list, .popover > .view, .popover > .toolbar
@@ -2095,57 +2112,70 @@ GtkCalendar.header column-header .button.titlebutton, column-header .button:hove
     text-shadow: none;
     transition: none; }
   .popover.osd {
-    background-image: none;
-    background-color: #2e3436;
-    border: 1px solid #1c1f1f;
-    color: #eeeeec; }
-    .popover.osd .button {
-      color: white;
-      text-shadow: none;
-      color: #eeeeec;
-      outline-color: rgba(238, 238, 236, 0.2);
+    box-shadow: none;
+    background-color: rgba(46, 52, 54, 0.7);
+    border-color: rgba(255, 255, 255, 0.1); }
+    .popover.osd .entry {
+      transition: none;
       background-color: transparent;
-      background-clip: padding-box;
-      background-image: linear-gradient(to bottom, rgba(46, 52, 54, 0.7));
+      color: #eeeeec;
       border-color: rgba(0, 0, 0, 0.7);
-      box-shadow: inset 0 -1px rgba(0, 0, 0, 0.3), inset 0 1px rgba(255, 255, 255, 0.1);
-      text-shadow: 0 1px black;
-      icon-shadow: 0 1px black; }
-      .popover.osd .button:hover {
-        color: white;
-        border-color: rgba(0, 0, 0, 0.7);
-        background-image: linear-gradient(to bottom, rgba(74, 84, 87, 0.7));
-        box-shadow: inset 0 -1px rgba(0, 0, 0, 0.3), inset 0 1px rgba(255, 255, 255, 0.1);
-        text-shadow: 0 1px black;
-        icon-shadow: 0 1px black; }
-      .popover.osd .button:active {
-        color: white;
-        border-color: rgba(0, 0, 0, 0.7);
-        background-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.7));
+      background-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.5));
+      box-shadow: none; }
+      .popover.osd .entry:focus {
+        transition: none;
+        background-color: transparent;
         box-shadow: none;
+        border-color: #215d9c;
+        background-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.5));
+        box-shadow: inset 0 0 0 1px rgba(33, 93, 156, 0.7); }
+      .popover.osd .entry:backdrop {
         text-shadow: none;
         icon-shadow: none; }
-      .popover.osd .button:insensitive {
-        color: #939695;
-        border-color: rgba(0, 0, 0, 0.7);
-        background-image: linear-gradient(to bottom, rgba(66, 71, 73, 0.7));
-        box-shadow: none;
+      .popover.osd .entry:selected {
         text-shadow: none;
-        icon-shadow: none; }
+        background-color: #215d9c;
+        color: #ffffff; }
+      .popover.osd .entry.spinbutton .button {
+        border-color: transparent;
+        background-color: transparent;
+        background-image: none;
+        box-shadow: inset 0 1px rgba(255, 255, 255, 0), 0 1px rgba(238, 238, 236, 0);
+        text-shadow: none;
+        icon-shadow: none;
+        border-style: none none none solid;
+        border-color: rgba(0, 0, 0, 0.7);
+        border-radius: 0;
+        color: #eeeeec; }
+        .popover.osd .entry.spinbutton .button:last-child {
+          border-radius: 0 3px 3px 0; }
+      .popover.osd .entry.spinbutton .button:backdrop {
+        border-color: transparent;
+        background-color: transparent;
+        background-image: none;
+        box-shadow: inset 0 1px rgba(255, 255, 255, 0), 0 1px rgba(238, 238, 236, 0);
+        text-shadow: none;
+        icon-shadow: none;
+        text-shadow: none;
+        icon-shadow: none;
+        border-style: none none none solid;
+        border-color: rgba(0, 0, 0, 0.7);
+        border-radius: 0;
+        color: #eeeeec; }
+        .popover.osd .entry.spinbutton .button:backdrop:last-child {
+          border-radius: 0 3px 3px 0; }
 
+/*
 .entry.cursor-handle,
 .cursor-handle {
   background-color: transparent;
   background-image: none;
   box-shadow: none;
-  border-style: none; }
-  .entry.cursor-handle.top,
-  .cursor-handle.top {
-    -gtk-icon-source: -gtk-icontheme("selection-start-symbolic"); }
-  .entry.cursor-handle.bottom,
-  .cursor-handle.bottom {
-    -gtk-icon-source: -gtk-icontheme("selection-end-symbolic"); }
-
+  border-style: none;
+  &.top { -gtk-icon-source: -gtk-icontheme('selection-start-symbolic'); }
+  &.bottom { -gtk-icon-source: -gtk-icontheme('selection-end-symbolic'); }
+}
+*/
 /*****************
  * Notebooks and *
  * Tabs          *
@@ -4283,7 +4313,8 @@ GtkCalendar.header .menuitem.titlebutton.button:selected, .list-row:selected {
     color: #c9cbc9; }
 
 /* Decouple the font of context menus from their entry/textview */
-.context-menu {
+.context-menu,
+.osd.popover {
   font: initial; }
 
 .monospace {
