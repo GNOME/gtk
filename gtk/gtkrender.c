@@ -492,14 +492,11 @@ gtk_do_render_background (GtkStyleContext *context,
                           gdouble          width,
                           gdouble          height)
 {
-  GtkThemingBackground bg;
-
-  _gtk_theming_background_init (&bg, context,
-                                x, y,
-                                width, height,
-                                gtk_style_context_get_junction_sides (context));
-
-  _gtk_theming_background_render (&bg, cr);
+  gtk_theming_background_render (context,
+                                 cr,
+                                 x, y,
+                                 width, height,
+                                 gtk_style_context_get_junction_sides (context));
 }
 
 /**
@@ -1580,7 +1577,6 @@ gtk_do_render_extension (GtkStyleContext *context,
                          gdouble          height,
                          GtkPositionType  gap_side)
 {
-  GtkThemingBackground bg;
   GtkJunctionSides junction = 0;
   guint hidden_side = 0;
 
@@ -1604,11 +1600,11 @@ gtk_do_render_extension (GtkStyleContext *context,
       break;
     }
 
-  _gtk_theming_background_init (&bg, context, 
-                                x, y,
-                                width, height,
-                                junction);
-  _gtk_theming_background_render (&bg, cr);
+  gtk_theming_background_render (context, 
+                                 cr,
+                                 x, y,
+                                 width, height,
+                                 junction);
 
   render_frame_internal (context, cr,
                          x, y, width, height,

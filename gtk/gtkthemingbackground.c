@@ -43,6 +43,20 @@
  */
 #include "fallback-c89.c"
 
+typedef struct _GtkThemingBackground GtkThemingBackground;
+
+struct _GtkThemingBackground {
+  GtkStyleContext *context;
+
+  cairo_rectangle_t paint_area;
+  GtkRoundedBox border_box;
+  GtkRoundedBox padding_box;
+  GtkRoundedBox content_box;
+
+  GtkJunctionSides junction;
+  GdkRGBA bg_color;
+};
+
 static const GtkRoundedBox *
 gtk_theming_background_get_box (GtkThemingBackground *bg,
                                 GtkCssArea            area)
@@ -308,63 +322,44 @@ _gtk_theming_background_init_context (GtkThemingBackground *bg)
 }
 
 void
-_gtk_theming_background_init (GtkThemingBackground *bg,
-                              GtkStyleContext      *context,
-                              gdouble               x,
-                              gdouble               y,
-                              gdouble               width,
-                              gdouble               height,
-                              GtkJunctionSides      junction)
+gtk_theming_background_render (GtkStyleContext      *context,
+                               cairo_t              *cr,
+                               gdouble               x,
+                               gdouble               y,
+                               gdouble               width,
+                               gdouble               height,
+                               GtkJunctionSides      junction)
 {
-  g_assert (bg != NULL);
-
-  bg->context = context;
-
-  bg->paint_area.x = x;
-  bg->paint_area.y = y;
-  bg->paint_area.width = width;
-  bg->paint_area.height = height;
-
-  bg->junction = junction;
-
-  _gtk_theming_background_init_context (bg);
-}
-
-void
-_gtk_theming_background_render (GtkThemingBackground *bg,
-                                cairo_t              *cr)
-{
+  GtkThemingBackground bg;
   gint idx;
   GtkCssValue *background_image;
 
-  background_image = _gtk_style_context_peek_property (bg->context, GTK_CSS_PROPERTY_BACKGROUND_IMAGE);
+  bg.context = context;
+
+  bg.paint_area.x = x;
+  bg.paint_area.y = y;
+  bg.paint_area.width = width;
+  bg.paint_area.height = height;
+
+  bg.junction = junction;
+
+  _gtk_theming_background_init_context (&bg);
+
+  background_image = _gtk_style_context_peek_property (bg.context, GTK_CSS_PROPERTY_BACKGROUND_IMAGE);
 
   cairo_save (cr);
-  cairo_translate (cr, bg->paint_area.x, bg->paint_area.y);
+  cairo_translate (cr, bg.paint_area.x, bg.paint_area.y);
 
-  _gtk_theming_background_apply_shadow (bg, cr, FALSE); /* Outset shadow */
+  _gtk_theming_background_apply_shadow (&bg, cr, FALSE); /* Outset shadow */
 
-  _gtk_theming_background_paint_color (bg, cr, background_image);
+  _gtk_theming_background_paint_color (&bg, cr, background_image);
 
   for (idx = _gtk_css_array_value_get_n_values (background_image) - 1; idx >= 0; idx--)
     {
-      _gtk_theming_background_paint_layer (bg, idx, cr);
+      _gtk_theming_background_paint_layer (&bg, idx, cr);
     }
 
-  _gtk_theming_background_apply_shadow (bg, cr, TRUE);  /* Inset shadow */
+  _gtk_theming_background_apply_shadow (&bg, cr, TRUE);  /* Inset shadow */
 
   cairo_restore (cr);
-}
-
-gboolean
-_gtk_theming_background_has_background_image (GtkThemingBackground *bg)
-{
-  GtkCssImage *image;
-  GtkCssValue *value = _gtk_style_context_peek_property (bg->context, GTK_CSS_PROPERTY_BACKGROUND_IMAGE);
-
-  if (_gtk_css_array_value_get_n_values (value) == 0)
-    return FALSE;
-
-  image = _gtk_css_image_value_get_image (_gtk_css_array_value_get_nth (value, 0));
-  return (image != NULL);
 }

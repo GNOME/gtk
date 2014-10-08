@@ -29,32 +29,13 @@
 
 G_BEGIN_DECLS
 
-typedef struct _GtkThemingBackground GtkThemingBackground;
-
-struct _GtkThemingBackground {
-  GtkStyleContext *context;
-
-  cairo_rectangle_t paint_area;
-  GtkRoundedBox border_box;
-  GtkRoundedBox padding_box;
-  GtkRoundedBox content_box;
-
-  GtkJunctionSides junction;
-  GdkRGBA bg_color;
-};
-
-void _gtk_theming_background_init (GtkThemingBackground *bg,
-                                   GtkStyleContext      *context,
-                                   gdouble               x,
-                                   gdouble               y,
-                                   gdouble               width,
-                                   gdouble               height,
-                                   GtkJunctionSides      junction);
-
-void _gtk_theming_background_render (GtkThemingBackground *bg,
-                                     cairo_t              *cr);
-
-gboolean _gtk_theming_background_has_background_image (GtkThemingBackground *bg);
+void gtk_theming_background_render  (GtkStyleContext      *context,
+                                     cairo_t              *cr,
+                                     gdouble               x,
+                                     gdouble               y,
+                                     gdouble               width,
+                                     gdouble               height,
+                                     GtkJunctionSides      junction);
 
 G_END_DECLS
 
