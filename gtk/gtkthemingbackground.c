@@ -50,10 +50,7 @@ typedef struct _GtkThemingBackground GtkThemingBackground;
 struct _GtkThemingBackground {
   GtkStyleContext *context;
 
-  cairo_rectangle_t paint_area;
   GtkRoundedBox boxes[N_BOXES];
-
-  GtkJunctionSides junction;
 };
 
 static void
@@ -271,7 +268,10 @@ _gtk_theming_background_apply_shadow (GtkThemingBackground *bg,
 }
 
 static void
-_gtk_theming_background_init_context (GtkThemingBackground *bg)
+_gtk_theming_background_init_context (GtkThemingBackground *bg,
+                                      double                width,
+                                      double                height,
+                                      GtkJunctionSides      junction)
 {
   GtkStateFlags flags = gtk_style_context_get_state (bg->context);
   GtkBorder border, padding;
@@ -287,8 +287,8 @@ _gtk_theming_background_init_context (GtkThemingBackground *bg)
    * In the future we might want to support different origins or clips, but
    * right now we just shrink to the default.
    */
-  _gtk_rounded_box_init_rect (&bg->boxes[GTK_CSS_AREA_BORDER_BOX], 0, 0, bg->paint_area.width, bg->paint_area.height);
-  _gtk_rounded_box_apply_border_radius_for_context (&bg->boxes[GTK_CSS_AREA_BORDER_BOX], bg->context, bg->junction);
+  _gtk_rounded_box_init_rect (&bg->boxes[GTK_CSS_AREA_BORDER_BOX], 0, 0, width, height);
+  _gtk_rounded_box_apply_border_radius_for_context (&bg->boxes[GTK_CSS_AREA_BORDER_BOX], bg->context, junction);
 
   bg->boxes[GTK_CSS_AREA_PADDING_BOX] = bg->boxes[GTK_CSS_AREA_BORDER_BOX];
   _gtk_rounded_box_shrink (&bg->boxes[GTK_CSS_AREA_PADDING_BOX],
@@ -317,20 +317,13 @@ gtk_theming_background_render (GtkStyleContext      *context,
 
   bg.context = context;
 
-  bg.paint_area.x = x;
-  bg.paint_area.y = y;
-  bg.paint_area.width = width;
-  bg.paint_area.height = height;
-
-  bg.junction = junction;
-
-  _gtk_theming_background_init_context (&bg);
+  _gtk_theming_background_init_context (&bg, width, height, junction);
 
   background_image = _gtk_style_context_peek_property (bg.context, GTK_CSS_PROPERTY_BACKGROUND_IMAGE);
   bg_color = _gtk_css_rgba_value_get_rgba (_gtk_style_context_peek_property (bg.context, GTK_CSS_PROPERTY_BACKGROUND_COLOR));
 
   cairo_save (cr);
-  cairo_translate (cr, bg.paint_area.x, bg.paint_area.y);
+  cairo_translate (cr, x, y);
 
   _gtk_theming_background_apply_shadow (&bg, cr, FALSE); /* Outset shadow */
 
