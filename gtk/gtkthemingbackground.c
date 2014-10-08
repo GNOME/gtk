@@ -65,14 +65,9 @@ _gtk_theming_background_paint_color (GtkThemingBackground *bg,
      (_gtk_style_context_peek_property (bg->context, GTK_CSS_PROPERTY_BACKGROUND_CLIP), 
       n_values - 1));
 
-  cairo_save (cr);
   _gtk_rounded_box_path (&bg->boxes[clip], cr);
-  cairo_clip (cr);
-
   gdk_cairo_set_source_rgba (cr, bg_color);
-  cairo_paint (cr);
-
-  cairo_restore (cr);
+  cairo_fill (cr);
 }
 
 static void
