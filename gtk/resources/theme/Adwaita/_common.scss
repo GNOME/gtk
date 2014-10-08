@@ -2774,46 +2774,9 @@ GtkInfoBar {
  *****************/
 
 GtkColorSwatch {
-  border: 1px solid;
-  @if $variant == light {
-    border-color: transparentize(black,0.7);
-    box-shadow: inset 0 1px 1px transparentize(black, 0.8);
-  }
-  @else {
-    border-color: $borders_color;
-    box-shadow: inset 0 1px 1px transparentize(black, 0.6);
-  }
+  box-shadow: inset 0 1px transparentize(black, 0.9), _widget_edge();
 
-  &.color-light {
-    outline-color: transparentize(black,0.7);
-    &:hover {
-      background-image: linear-gradient(to bottom,
-                                        transparentize(white, 1) 40%,
-                                        transparentize(white, 0.6));
-      &:backdrop { background-image: none; }
-    }
-  }
-  &.color-dark {
-    outline-color: transparentize(white,0.5);
-    &:hover {
-       background-image: linear-gradient(to bottom,
-                                        transparentize(white, 1) 40%,
-                                        transparentize(white, 0.8));
-       &:backdrop { background-image: none; }
-    }
-  }
-
-  &:hover {
-   border-color: if($variant=='light', transparentize(black, 0.5),
-                                       $backdrop_borders_color);
-  }
-
-  &:backdrop {
-    border-color: if($variant=='light', transparentize(black,0.8),
-                                        $backdrop_borders_color);
-    box-shadow: none;
-  }
-
+  // border rounding
   &.top {
     border-top-left-radius: 5px;
     border-top-right-radius: 5px;
@@ -2833,37 +2796,52 @@ GtkColorSwatch {
   &:only-child {
     border-radius: 5px;
   }
-  &.overlay, &.overlay:hover {
-    /* turn off everything from regular color swatch */
-    border-width: 0px;
-    border-radius: 50%;
-    box-shadow: none;
-    background-image: none;
-    &:selected {
-      border-width: 2px;
-      &.color-light, &.color-light:hover {
-        color: transparentize(black,0.7);
-        border-color: transparentize(black,0.7);
-      }
-      &.color-dark, &.color-dark:hover {
-        color: transparentize(white,0.5);
-        border-color: transparentize(white,0.5);
-      }
-    }
-  }
-}
-GtkColorChooserWidget #add-color-button {
-  border-color: mix($borders_color,$bg_color,50%);
-  background-color: mix($borders_color,$bg_color,50%);
-  color: $bg_color;
-  box-shadow: none;
+
+  // hover effect
   &:hover {
-    border-color: $borders_color;
-    background-color: $borders_color;
+    background-image: linear-gradient(135deg, transparentize(white, 0.3),
+                                              transparentize(white, 1) 50%);
+    box-shadow: inset 0 1px transparentize(white, 0.6),
+                inset 0 -1px if($variant == 'light', transparentize(black, 0.9), transparentize(black, 0.6));
   }
   &:backdrop {
-    border-color: mix($backdrop_borders_color,$backdrop_bg_color,50%);
-    background-color: mix($backdrop_borders_color,$backdrop_bg_color,50%);
+    background-image: none;
+    box-shadow: none;
+  }
+
+  // no hover effect for the colorswatch in the color editor
+  GtkColorEditor & {
+    border-radius: 3px; // same radius as the entry
+    &:hover {
+      background-image: none;
+      box-shadow: inset 0 1px transparentize(black, 0.9), _widget_edge();
+    }
+    &:backdrop { box-shadow: none; }
+  }
+
+  // indicator and keynav outline colors, color-dark is a color with luminosity lower then 50%
+  &.color-dark {
+    color: white;
+    outline-color: transparentize(black, 0.7);
+    &:backdrop { color: transparentize(white, 0.7); }
+  }
+  &.color-light {
+    color: black;
+    outline-color: transparentize(white, 0.5);
+    &:backdrop { color: transparentize(black, 0.7); }
+  }
+
+  // border color
+  &.overlay {
+    border: 1px solid if($variant == 'light', transparentize(black, 0.7), $borders_color);
+    &:hover { border-color: if($variant == 'light', transparentize(black, 0.5), black); }
+  }
+
+  // make the add color button looks like, well, a button
+  &#add-color-button {
+    @include button(normal);
+    &:hover { @include button(hover); }
+    &:backdrop { @include button(backdrop); }
   }
 }
 

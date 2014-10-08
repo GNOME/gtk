@@ -4156,26 +4156,7 @@ GtkInfoBar {
  * Color Chooser *
  *****************/
 GtkColorSwatch {
-  border: 1px solid;
-  border-color: #1c1f1f;
-  box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.4); }
-  GtkColorSwatch.color-light {
-    outline-color: rgba(0, 0, 0, 0.3); }
-    GtkColorSwatch.color-light:hover {
-      background-image: linear-gradient(to bottom, rgba(255, 255, 255, 0) 40%, rgba(255, 255, 255, 0.4)); }
-      GtkColorSwatch.color-light:hover:backdrop {
-        background-image: none; }
-  GtkColorSwatch.color-dark {
-    outline-color: rgba(255, 255, 255, 0.5); }
-    GtkColorSwatch.color-dark:hover {
-      background-image: linear-gradient(to bottom, rgba(255, 255, 255, 0) 40%, rgba(255, 255, 255, 0.2)); }
-      GtkColorSwatch.color-dark:hover:backdrop {
-        background-image: none; }
-  GtkColorSwatch:hover {
-    border-color: #1e2222; }
-  GtkColorSwatch:backdrop {
-    border-color: #1e2222;
-    box-shadow: none; }
+  box-shadow: inset 0 1px rgba(0, 0, 0, 0.1), 0 1px rgba(238, 238, 236, 0.1); }
   GtkColorSwatch.top {
     border-top-left-radius: 5px;
     border-top-right-radius: 5px; }
@@ -4190,32 +4171,56 @@ GtkColorSwatch {
     border-bottom-right-radius: 5px; }
   GtkColorSwatch:only-child {
     border-radius: 5px; }
-  GtkColorSwatch.overlay, GtkColorSwatch.overlay:hover {
-    /* turn off everything from regular color swatch */
-    border-width: 0px;
-    border-radius: 50%;
-    box-shadow: none;
-    background-image: none; }
-    GtkColorSwatch.overlay:selected, GtkColorSwatch.overlay:hover:selected {
-      border-width: 2px; }
-      GtkColorSwatch.overlay:selected.color-light, GtkColorSwatch.overlay:selected.color-light:hover, GtkColorSwatch.overlay:hover:selected.color-light, GtkColorSwatch.overlay:hover:selected.color-light:hover {
-        color: rgba(0, 0, 0, 0.3);
-        border-color: rgba(0, 0, 0, 0.3); }
-      GtkColorSwatch.overlay:selected.color-dark, GtkColorSwatch.overlay:selected.color-dark:hover, GtkColorSwatch.overlay:hover:selected.color-dark, GtkColorSwatch.overlay:hover:selected.color-dark:hover {
-        color: rgba(255, 255, 255, 0.5);
-        border-color: rgba(255, 255, 255, 0.5); }
-
-GtkColorChooserWidget #add-color-button {
-  border-color: #2a2f2f;
-  background-color: #2a2f2f;
-  color: #393f3f;
-  box-shadow: none; }
-  GtkColorChooserWidget #add-color-button:hover {
+  GtkColorSwatch:hover {
+    background-image: linear-gradient(135deg, rgba(255, 255, 255, 0.7), rgba(255, 255, 255, 0) 50%);
+    box-shadow: inset 0 1px rgba(255, 255, 255, 0.4), inset 0 -1px rgba(0, 0, 0, 0.4); }
+  GtkColorSwatch:backdrop {
+    background-image: none;
+    box-shadow: none; }
+  GtkColorEditor GtkColorSwatch {
+    border-radius: 3px; }
+    GtkColorEditor GtkColorSwatch:hover {
+      background-image: none;
+      box-shadow: inset 0 1px rgba(0, 0, 0, 0.1), 0 1px rgba(238, 238, 236, 0.1); }
+    GtkColorEditor GtkColorSwatch:backdrop {
+      box-shadow: none; }
+  GtkColorSwatch.color-dark {
+    color: white;
+    outline-color: rgba(0, 0, 0, 0.3); }
+    GtkColorSwatch.color-dark:backdrop {
+      color: rgba(255, 255, 255, 0.3); }
+  GtkColorSwatch.color-light {
+    color: black;
+    outline-color: rgba(255, 255, 255, 0.5); }
+    GtkColorSwatch.color-light:backdrop {
+      color: rgba(0, 0, 0, 0.3); }
+  GtkColorSwatch.overlay {
+    border: 1px solid #1c1f1f; }
+    GtkColorSwatch.overlay:hover {
+      border-color: black; }
+  GtkColorSwatch#add-color-button {
+    color: #eeeeec;
+    outline-color: rgba(238, 238, 236, 0.3);
     border-color: #1c1f1f;
-    background-color: #1c1f1f; }
-  GtkColorChooserWidget #add-color-button:backdrop {
-    border-color: #2b3030;
-    background-color: #2b3030; }
+    background-image: linear-gradient(to bottom, #454c4c, #393f3f 40%, #2d3232);
+    text-shadow: 0 -1px rgba(0, 0, 0, 0.81176);
+    icon-shadow: 0 -1px rgba(0, 0, 0, 0.81176);
+    box-shadow: inset 0 1px rgba(255, 255, 255, 0.1), 0 1px rgba(238, 238, 236, 0.1); }
+    GtkColorSwatch#add-color-button:hover {
+      color: #eeeeec;
+      outline-color: rgba(238, 238, 236, 0.3);
+      border-color: #1c1f1f;
+      background-image: linear-gradient(to bottom, #5b6464, #434a4a 40%, #393f3f);
+      text-shadow: 0 -1px rgba(0, 0, 0, 0.77976);
+      icon-shadow: 0 -1px rgba(0, 0, 0, 0.77976);
+      box-shadow: inset 0 1px rgba(255, 255, 255, 0.1), 0 1px rgba(238, 238, 236, 0.1); }
+    GtkColorSwatch#add-color-button:backdrop {
+      color: #c9cbc9;
+      border-color: #1e2222;
+      background-image: linear-gradient(to bottom, #393f3f);
+      text-shadow: none;
+      icon-shadow: none;
+      box-shadow: inset 0 1px rgba(255, 255, 255, 0), 0 1px rgba(238, 238, 236, 0); }
 
 /********
  * Misc *
