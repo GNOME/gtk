@@ -4353,18 +4353,18 @@ GtkColorSwatch {
     border-bottom-right-radius: 5px; }
   GtkColorSwatch:only-child {
     border-radius: 5px; }
-  GtkColorSwatch.image, GtkColorSwatch.image:hover {
+  GtkColorSwatch.overlay, GtkColorSwatch.overlay:hover {
     /* turn off everything from regular color swatch */
     border-width: 0px;
     border-radius: 50%;
     box-shadow: none;
     background-image: none; }
-    GtkColorSwatch.image:selected, GtkColorSwatch.image:hover:selected {
+    GtkColorSwatch.overlay:selected, GtkColorSwatch.overlay:hover:selected {
       border-width: 2px; }
-      GtkColorSwatch.image:selected.color-light, GtkColorSwatch.image:selected.color-light:hover, GtkColorSwatch.image:hover:selected.color-light, GtkColorSwatch.image:hover:selected.color-light:hover {
+      GtkColorSwatch.overlay:selected.color-light, GtkColorSwatch.overlay:selected.color-light:hover, GtkColorSwatch.overlay:hover:selected.color-light, GtkColorSwatch.overlay:hover:selected.color-light:hover {
         color: rgba(0, 0, 0, 0.3);
         border-color: rgba(0, 0, 0, 0.3); }
-      GtkColorSwatch.image:selected.color-dark, GtkColorSwatch.image:selected.color-dark:hover, GtkColorSwatch.image:hover:selected.color-dark, GtkColorSwatch.image:hover:selected.color-dark:hover {
+      GtkColorSwatch.overlay:selected.color-dark, GtkColorSwatch.overlay:selected.color-dark:hover, GtkColorSwatch.overlay:hover:selected.color-dark, GtkColorSwatch.overlay:hover:selected.color-dark:hover {
         color: rgba(255, 255, 255, 0.5);
         border-color: rgba(255, 255, 255, 0.5); }
 
@@ -4453,6 +4453,7 @@ GtkCalendar.header .menuitem.titlebutton.button:selected, .list-row:selected {
     color: #fcfcfc; }
 
 /* Decouple the font of context menus from their entry/textview */
+.touch-selection,
 .context-menu {
   font: initial; }
 

@@ -198,7 +198,7 @@ swatch_draw (GtkWidget *widget,
   rect.y = border.top + padding.top;
 
   gtk_style_context_save (context);
-  gtk_style_context_add_class (context, GTK_STYLE_CLASS_IMAGE);
+  gtk_style_context_add_class (context, "overlay");
   
   gtk_render_background (context, cr, rect.x, rect.y, rect.width, rect.height);
   gtk_render_frame (context, cr, rect.x, rect.y, rect.width, rect.height);

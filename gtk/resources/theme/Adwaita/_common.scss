@@ -2834,7 +2834,7 @@ GtkColorSwatch {
   &:only-child {
     border-radius: 5px;
   }
-  &.image, &.image:hover {
+  &.overlay, &.overlay:hover {
     /* turn off everything from regular color swatch */
     border-width: 0px;
     border-radius: 50%;
