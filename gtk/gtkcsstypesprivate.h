@@ -280,6 +280,9 @@ GtkCssChange            _gtk_css_change_for_child                (GtkCssChange  
 GtkCssDependencies      _gtk_css_dependencies_union              (GtkCssDependencies first,
                                                                   GtkCssDependencies second);
 
+/* for lack of better place to put it */
+/* mirror what cairo does */
+#define gtk_rgba_is_clear(rgba) ((rgba)->alpha < ((double)0x00ff / (double)0xffff))
 
 G_END_DECLS
 

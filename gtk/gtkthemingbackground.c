@@ -305,13 +305,19 @@ gtk_theming_background_render (GtkStyleContext      *context,
   GtkCssValue *box_shadow;
   const GdkRGBA *bg_color;
 
+  background_image = _gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_BACKGROUND_IMAGE);
+  bg_color = _gtk_css_rgba_value_get_rgba (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_BACKGROUND_COLOR));
+  box_shadow = _gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_BOX_SHADOW);
+
+  /* This is the common default case of no background */
+  if (gtk_rgba_is_clear (bg_color) &&
+      _gtk_css_array_value_get_n_values (background_image) == 1 &&
+      _gtk_css_image_value_get_image (_gtk_css_array_value_get_nth (background_image, 0)) == NULL &&
+      _gtk_css_shadows_value_is_none (box_shadow))
+    return;
+
   bg.context = context;
-
   _gtk_theming_background_init_context (&bg, width, height, junction);
-
-  background_image = _gtk_style_context_peek_property (bg.context, GTK_CSS_PROPERTY_BACKGROUND_IMAGE);
-  bg_color = _gtk_css_rgba_value_get_rgba (_gtk_style_context_peek_property (bg.context, GTK_CSS_PROPERTY_BACKGROUND_COLOR));
-  box_shadow = _gtk_style_context_peek_property (bg.context, GTK_CSS_PROPERTY_BOX_SHADOW);
 
   cairo_save (cr);
   cairo_translate (cr, x, y);
