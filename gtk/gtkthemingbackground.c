@@ -45,34 +45,17 @@
 
 typedef struct _GtkThemingBackground GtkThemingBackground;
 
+#define N_BOXES (3)
+
 struct _GtkThemingBackground {
   GtkStyleContext *context;
 
   cairo_rectangle_t paint_area;
-  GtkRoundedBox border_box;
-  GtkRoundedBox padding_box;
-  GtkRoundedBox content_box;
+  GtkRoundedBox boxes[N_BOXES];
 
   GtkJunctionSides junction;
   GdkRGBA bg_color;
 };
-
-static const GtkRoundedBox *
-gtk_theming_background_get_box (GtkThemingBackground *bg,
-                                GtkCssArea            area)
-{
-  switch (area)
-    {
-    case GTK_CSS_AREA_BORDER_BOX:
-      return &bg->border_box;
-    case GTK_CSS_AREA_PADDING_BOX:
-      return &bg->padding_box;
-    case GTK_CSS_AREA_CONTENT_BOX:
-      return &bg->content_box;
-    default:
-      g_return_val_if_reached (&bg->border_box);
-  }
-}
 
 static void
 _gtk_theming_background_paint_color (GtkThemingBackground *bg,
@@ -86,7 +69,7 @@ _gtk_theming_background_paint_color (GtkThemingBackground *bg,
       n_values - 1));
 
   cairo_save (cr);
-  _gtk_rounded_box_path (gtk_theming_background_get_box (bg, clip), cr);
+  _gtk_rounded_box_path (&bg->boxes[clip], cr);
   cairo_clip (cr);
 
   gdk_cairo_set_source_rgba (cr, &bg->bg_color);
@@ -115,12 +98,11 @@ _gtk_theming_background_paint_layer (GtkThemingBackground *bg,
               _gtk_css_array_value_get_nth (
                   _gtk_style_context_peek_property (bg->context, GTK_CSS_PROPERTY_BACKGROUND_IMAGE),
                   idx));
-  origin = gtk_theming_background_get_box (
-               bg,
+  origin = &bg->boxes[
                _gtk_css_area_value_get (
                    _gtk_css_array_value_get_nth (
                        _gtk_style_context_peek_property (bg->context, GTK_CSS_PROPERTY_BACKGROUND_ORIGIN),
-                       idx)));
+                       idx))];
   width = origin->box.width;
   height = origin->box.height;
 
@@ -147,12 +129,11 @@ _gtk_theming_background_paint_layer (GtkThemingBackground *bg,
   cairo_save (cr);
 
   _gtk_rounded_box_path (
-      gtk_theming_background_get_box (
-          bg,
+      &bg->boxes[
           _gtk_css_area_value_get (
               _gtk_css_array_value_get_nth (
                   _gtk_style_context_peek_property (bg->context, GTK_CSS_PROPERTY_BACKGROUND_CLIP),
-                  idx))),
+                  idx))],
       cr);
   cairo_clip (cr);
 
@@ -285,7 +266,7 @@ _gtk_theming_background_apply_shadow (GtkThemingBackground *bg,
 {
   _gtk_css_shadows_value_paint_box (_gtk_style_context_peek_property (bg->context, GTK_CSS_PROPERTY_BOX_SHADOW),
                                     cr,
-                                    inset ? &bg->padding_box : &bg->border_box,
+                                    &bg->boxes[inset ? GTK_CSS_AREA_PADDING_BOX : GTK_CSS_AREA_BORDER_BOX],
                                     inset);
 }
 
@@ -307,16 +288,16 @@ _gtk_theming_background_init_context (GtkThemingBackground *bg)
    * In the future we might want to support different origins or clips, but
    * right now we just shrink to the default.
    */
-  _gtk_rounded_box_init_rect (&bg->border_box, 0, 0, bg->paint_area.width, bg->paint_area.height);
-  _gtk_rounded_box_apply_border_radius_for_context (&bg->border_box, bg->context, bg->junction);
+  _gtk_rounded_box_init_rect (&bg->boxes[GTK_CSS_AREA_BORDER_BOX], 0, 0, bg->paint_area.width, bg->paint_area.height);
+  _gtk_rounded_box_apply_border_radius_for_context (&bg->boxes[GTK_CSS_AREA_BORDER_BOX], bg->context, bg->junction);
 
-  bg->padding_box = bg->border_box;
-  _gtk_rounded_box_shrink (&bg->padding_box,
+  bg->boxes[GTK_CSS_AREA_PADDING_BOX] = bg->boxes[GTK_CSS_AREA_BORDER_BOX];
+  _gtk_rounded_box_shrink (&bg->boxes[GTK_CSS_AREA_PADDING_BOX],
 			   border.top, border.right,
 			   border.bottom, border.left);
 
-  bg->content_box = bg->padding_box;
-  _gtk_rounded_box_shrink (&bg->content_box,
+  bg->boxes[GTK_CSS_AREA_CONTENT_BOX] = bg->boxes[GTK_CSS_AREA_PADDING_BOX];
+  _gtk_rounded_box_shrink (&bg->boxes[GTK_CSS_AREA_CONTENT_BOX],
 			   padding.top, padding.right,
 			   padding.bottom, padding.left);
 }
