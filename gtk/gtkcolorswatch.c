@@ -190,16 +190,16 @@ swatch_draw (GtkWidget *widget,
   gtk_style_context_restore (context);
 
   /* now draw the overlay image */
+  gtk_style_context_get_border (context, state, &border);
+  gtk_style_context_get_padding (context, state, &padding);
+  rect.width = width - (border.left + border.right + padding.left + padding.right);
+  rect.height = height - (border.top + border.bottom + padding.top + padding.bottom);
+  rect.x = border.left + padding.left;
+  rect.y = border.top + padding.top;
+
   gtk_style_context_save (context);
   gtk_style_context_add_class (context, GTK_STYLE_CLASS_IMAGE);
   
-  gtk_style_context_get_border (context, state, &border);
-  gtk_style_context_get_padding (context, state, &padding);
-  rect.width = PIXBUF_SIZE + border.left + border.right + padding.left + padding.right;
-  rect.height = PIXBUF_SIZE + border.top + border.bottom + padding.top + padding.bottom;
-  rect.x = (width - rect.width) / 2;
-  rect.y = (height - rect.height) / 2;
-
   gtk_render_background (context, cr, rect.x, rect.y, rect.width, rect.height);
   gtk_render_frame (context, cr, rect.x, rect.y, rect.width, rect.height);
 
@@ -213,8 +213,8 @@ swatch_draw (GtkWidget *widget,
       if (pixbuf != NULL)
         {
           gtk_render_icon (context, cr, pixbuf,
-                           rect.x + border.left + padding.left,
-                           rect.y + border.top + padding.top);
+                           rect.x + (rect.width - gdk_pixbuf_get_width (pixbuf)) / 2,
+                           rect.y + (rect.height - gdk_pixbuf_get_height (pixbuf)) / 2);
           g_object_unref (pixbuf);
         }
 
