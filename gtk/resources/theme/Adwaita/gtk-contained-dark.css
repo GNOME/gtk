@@ -3368,8 +3368,6 @@ GtkLevelBar.vertical {
     padding: 6px;
     border-width: 1px 0 0; }
 
-GtkScrolledWindow .frame {
-  border-radius: 2px; }
 GtkScrolledWindow GtkViewport.frame {
   border-style: none; }
 
@@ -4160,6 +4158,11 @@ GtkCalendar.header .menuitem.titlebutton.button:selected, .list-row:selected {
   .titlebar .menuitem.titlebutton.button:backdrop:selected,
   GtkCalendar.header .menuitem.titlebutton.button:backdrop:selected, .list-row:backdrop:selected {
     color: #c9cbc9; }
+
+/* Decouple the font of context menus from their entry/textview */
+.touch-selection,
+.context-menu {
+  font: initial; }
 
 /* GTK NAMED COLORS */
 @define-color theme_fg_color #eeeeec;

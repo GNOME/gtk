@@ -2222,7 +2222,6 @@ GtkLevelBar.vertical {
 }
 
 GtkScrolledWindow {
-  .frame { border-radius: 2px; }
   GtkViewport.frame { // avoid double borders when viewport inside
                       // scrolled window
     border-style: none;
