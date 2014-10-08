@@ -58,18 +58,35 @@ image_size_value_changed (GtkSpinButton *spin_button,
   gtk_image_set_pixel_size (GTK_IMAGE (image), size);
 }
 
+static void
+set_font_size (GtkWidget *widget, gint size)
+{
+  const gchar *class[3] = { "small-font", "medium-font", "large-font" };
+
+  gtk_style_context_add_class (gtk_widget_get_style_context (widget), class[size]);
+}
+
 int
 main (int    argc,
       char **argv)
 {
   GtkWidget *window, *label, *entry, *button, *grid, *notebook;
   GtkWidget *vbox, *hbox, *grid_hbox, *spin, *spin2, *toggle, *combo, *image, *ebox;
-  PangoFontDescription *font;
   GtkAdjustment *adjustment;
   int i, j;
+  GtkCssProvider *provider;
 
   gtk_init (&argc, &argv);
 
+  provider = gtk_css_provider_new ();
+  gtk_css_provider_load_from_data (provider,
+    ".small-font { font-size: 5px; }"
+    ".medium-font { font-size: 10px; }"
+    ".large-font { font-size: 15px; }", -1, NULL);
+  gtk_style_context_add_provider_for_screen (gdk_screen_get_default (),
+                                             GTK_STYLE_PROVIDER (provider),
+                                             GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
+  g_object_unref (provider);
   window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
   g_signal_connect (G_OBJECT (window), "delete-event", G_CALLBACK (gtk_main_quit), NULL);
 
@@ -94,9 +111,7 @@ main (int    argc,
       for (i = 0; i < 3; i++) {
 	label = gtk_label_new ("│XYyj,Ö...");
 
-	font = pango_font_description_new ();
-	pango_font_description_set_size (font, 5*(i+1)* 1024);
-	gtk_widget_override_font (label, font);
+        set_font_size (label, i);
 
 	gtk_widget_set_valign (label, aligns[j]);
 
@@ -107,9 +122,7 @@ main (int    argc,
 	entry = gtk_entry_new ();
 	gtk_entry_set_text (GTK_ENTRY (entry), "│XYyj,Ö...");
 
-	font = pango_font_description_new ();
-	pango_font_description_set_size (font, 5*(i+1)* 1024);
-	gtk_widget_override_font (entry, font);
+        set_font_size (entry, i);
 
 	gtk_widget_set_valign (entry, aligns[j]);
 
@@ -150,9 +163,7 @@ main (int    argc,
 	{
 	  button = gtk_button_new_with_label ("│Xyj,Ö");
 
-	  font = pango_font_description_new ();
-	  pango_font_description_set_size (font, 5*(i+1)* 1024);
-	  gtk_widget_override_font (button, font);
+          set_font_size (button, i);
 
 	  if (j == 0)
 	    gtk_widget_set_valign (button, GTK_ALIGN_BASELINE);
@@ -168,9 +179,7 @@ main (int    argc,
 				gtk_image_new_from_icon_name ("face-sad", GTK_ICON_SIZE_BUTTON));
 	  gtk_button_set_always_show_image (GTK_BUTTON (button), TRUE);
 
-	  font = pango_font_description_new ();
-	  pango_font_description_set_size (font, 5*(i+1)* 1024);
-	  gtk_widget_override_font (button, font);
+          set_font_size (button, i);
 
 	  if (j == 0)
 	    gtk_widget_set_valign (button, GTK_ALIGN_BASELINE);
@@ -248,9 +257,7 @@ main (int    argc,
 	{
 	  label = gtk_label_new ("Xyjg,Ö.");
 
-	  font = pango_font_description_new ();
-	  pango_font_description_set_size (font, 5*(i+1)* 1024);
-	  gtk_widget_override_font (label, font);
+          set_font_size (label, i);
 
 	  if (j != 0)
 	    gtk_widget_set_valign (label, GTK_ALIGN_BASELINE);
@@ -269,9 +276,7 @@ main (int    argc,
 				gtk_image_new_from_icon_name ("face-sad", GTK_ICON_SIZE_BUTTON));
 	  gtk_button_set_always_show_image (GTK_BUTTON (button), TRUE);
 
-	  font = pango_font_description_new ();
-	  pango_font_description_set_size (font, 5*(i+1)* 1024);
-	  gtk_widget_override_font (button, font);
+          set_font_size (button, i);
 
 	  if (j != 0)
 	    gtk_widget_set_valign (button, GTK_ALIGN_BASELINE);
@@ -343,9 +348,7 @@ main (int    argc,
 	{
 	  button = gtk_button_new_with_label ("│Xyj,Ö");
 
-	  font = pango_font_description_new ();
-	  pango_font_description_set_size (font, 5*(i+1)* 1024);
-	  gtk_widget_override_font (button, font);
+          set_font_size (button, i);
 
 	  if (i != 0)
 	    gtk_widget_set_valign (button, GTK_ALIGN_BASELINE);
@@ -364,9 +367,7 @@ main (int    argc,
 	    g_signal_connect (spin2, "value-changed", (GCallback)image_size_value_changed, image);
 	  gtk_button_set_always_show_image (GTK_BUTTON (button), TRUE);
 
-	  font = pango_font_description_new ();
-	  pango_font_description_set_size (font, 5*(i+1)* 1024);
-	  gtk_widget_override_font (button, font);
+          set_font_size (button, i);
 
 	  gtk_widget_set_valign (button, GTK_ALIGN_BASELINE);
 

@@ -230,23 +230,19 @@ create_widget_visible_border (const char *text)
   GtkWidget *inner_box;
   GtkWidget *test_widget;
   GtkWidget *label;
-  GdkRGBA color;
 
   outer_box = gtk_event_box_new ();
-  gdk_rgba_parse (&color, "black");
-  gtk_widget_override_background_color (outer_box, 0, &color);
+  gtk_style_context_add_class (gtk_widget_get_style_context (outer_box), "black-bg");
 
   inner_box = gtk_event_box_new ();
   gtk_container_set_border_width (GTK_CONTAINER (inner_box), 5);
-  gdk_rgba_parse (&color, "blue");
-  gtk_widget_override_background_color (inner_box, 0, &color);
+  gtk_style_context_add_class (gtk_widget_get_style_context (inner_box), "blue-bg");
 
   gtk_container_add (GTK_CONTAINER (outer_box), inner_box);
 
 
   test_widget = gtk_event_box_new ();
-  gdk_rgba_parse (&color, "red");
-  gtk_widget_override_background_color (test_widget, 0, &color);
+  gtk_style_context_add_class (gtk_widget_get_style_context (test_widget), "red-bg");
 
   gtk_container_add (GTK_CONTAINER (inner_box), test_widget);
 
@@ -426,8 +422,20 @@ open_valigned_label_window (void)
 int
 main (int argc, char *argv[])
 {
+  GtkCssProvider *provider;
+
   gtk_init (&argc, &argv);
 
+  provider = gtk_css_provider_new ();
+  gtk_css_provider_load_from_data (provider,
+    ".black-bg { background-color: black; }"
+    ".red-bg { background-color: red; }"
+    ".blue-bg { background-color: blue; }", -1, NULL);
+  gtk_style_context_add_provider_for_screen (gdk_screen_get_default (),
+                                             GTK_STYLE_PROVIDER (provider),
+                                             GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
+  g_object_unref (provider);
+  
   if (g_getenv ("RTL"))
     gtk_widget_set_default_direction (GTK_TEXT_DIR_RTL);
 
