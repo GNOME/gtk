@@ -54,12 +54,12 @@ struct _GtkThemingBackground {
   GtkRoundedBox boxes[N_BOXES];
 
   GtkJunctionSides junction;
-  GdkRGBA bg_color;
 };
 
 static void
 _gtk_theming_background_paint_color (GtkThemingBackground *bg,
                                      cairo_t              *cr,
+                                     const GdkRGBA        *bg_color,
                                      GtkCssValue          *background_image)
 {
   gint n_values = _gtk_css_array_value_get_n_values (background_image);
@@ -72,7 +72,7 @@ _gtk_theming_background_paint_color (GtkThemingBackground *bg,
   _gtk_rounded_box_path (&bg->boxes[clip], cr);
   cairo_clip (cr);
 
-  gdk_cairo_set_source_rgba (cr, &bg->bg_color);
+  gdk_cairo_set_source_rgba (cr, bg_color);
   cairo_paint (cr);
 
   cairo_restore (cr);
@@ -278,7 +278,6 @@ _gtk_theming_background_init_context (GtkThemingBackground *bg)
 
   gtk_style_context_get_border (bg->context, flags, &border);
   gtk_style_context_get_padding (bg->context, flags, &padding);
-  bg->bg_color = *_gtk_css_rgba_value_get_rgba (_gtk_style_context_peek_property (bg->context, GTK_CSS_PROPERTY_BACKGROUND_COLOR));
 
   /* In the CSS box model, by default the background positioning area is
    * the padding-box, i.e. all the border-box minus the borders themselves,
@@ -314,6 +313,7 @@ gtk_theming_background_render (GtkStyleContext      *context,
   GtkThemingBackground bg;
   gint idx;
   GtkCssValue *background_image;
+  const GdkRGBA *bg_color;
 
   bg.context = context;
 
@@ -327,13 +327,14 @@ gtk_theming_background_render (GtkStyleContext      *context,
   _gtk_theming_background_init_context (&bg);
 
   background_image = _gtk_style_context_peek_property (bg.context, GTK_CSS_PROPERTY_BACKGROUND_IMAGE);
+  bg_color = _gtk_css_rgba_value_get_rgba (_gtk_style_context_peek_property (bg.context, GTK_CSS_PROPERTY_BACKGROUND_COLOR));
 
   cairo_save (cr);
   cairo_translate (cr, bg.paint_area.x, bg.paint_area.y);
 
   _gtk_theming_background_apply_shadow (&bg, cr, FALSE); /* Outset shadow */
 
-  _gtk_theming_background_paint_color (&bg, cr, background_image);
+  _gtk_theming_background_paint_color (&bg, cr, bg_color, background_image);
 
   for (idx = _gtk_css_array_value_get_n_values (background_image) - 1; idx >= 0; idx--)
     {
