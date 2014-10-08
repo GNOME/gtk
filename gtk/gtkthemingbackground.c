@@ -257,17 +257,6 @@ _gtk_theming_background_paint_layer (GtkThemingBackground *bg,
 }
 
 static void
-_gtk_theming_background_apply_shadow (GtkThemingBackground *bg,
-                                      cairo_t              *cr,
-                                      gboolean              inset)
-{
-  _gtk_css_shadows_value_paint_box (_gtk_style_context_peek_property (bg->context, GTK_CSS_PROPERTY_BOX_SHADOW),
-                                    cr,
-                                    &bg->boxes[inset ? GTK_CSS_AREA_PADDING_BOX : GTK_CSS_AREA_BORDER_BOX],
-                                    inset);
-}
-
-static void
 _gtk_theming_background_init_context (GtkThemingBackground *bg,
                                       double                width,
                                       double                height,
@@ -313,6 +302,7 @@ gtk_theming_background_render (GtkStyleContext      *context,
   GtkThemingBackground bg;
   gint idx;
   GtkCssValue *background_image;
+  GtkCssValue *box_shadow;
   const GdkRGBA *bg_color;
 
   bg.context = context;
@@ -321,11 +311,16 @@ gtk_theming_background_render (GtkStyleContext      *context,
 
   background_image = _gtk_style_context_peek_property (bg.context, GTK_CSS_PROPERTY_BACKGROUND_IMAGE);
   bg_color = _gtk_css_rgba_value_get_rgba (_gtk_style_context_peek_property (bg.context, GTK_CSS_PROPERTY_BACKGROUND_COLOR));
+  box_shadow = _gtk_style_context_peek_property (bg.context, GTK_CSS_PROPERTY_BOX_SHADOW);
 
   cairo_save (cr);
   cairo_translate (cr, x, y);
 
-  _gtk_theming_background_apply_shadow (&bg, cr, FALSE); /* Outset shadow */
+  /* Outset shadows */
+  _gtk_css_shadows_value_paint_box (box_shadow,
+                                    cr,
+                                    &bg.boxes[GTK_CSS_AREA_BORDER_BOX],
+                                    FALSE);
 
   _gtk_theming_background_paint_color (&bg, cr, bg_color, background_image);
 
@@ -334,7 +329,11 @@ gtk_theming_background_render (GtkStyleContext      *context,
       _gtk_theming_background_paint_layer (&bg, idx, cr);
     }
 
-  _gtk_theming_background_apply_shadow (&bg, cr, TRUE);  /* Inset shadow */
+  /* Inset shadows */
+  _gtk_css_shadows_value_paint_box (box_shadow,
+                                    cr,
+                                    &bg.boxes[GTK_CSS_AREA_PADDING_BOX],
+                                    TRUE);
 
   cairo_restore (cr);
 }
