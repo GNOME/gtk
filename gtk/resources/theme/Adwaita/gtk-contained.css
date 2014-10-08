@@ -1281,13 +1281,15 @@ GtkCalendar.header .menuitem.titlebutton.button {
 GtkColorButton.button, .header-bar GtkColorButton.button.titlebutton,
 .titlebar GtkColorButton.button.titlebutton,
 GtkCalendar.header GtkColorButton.button.titlebutton {
-  padding: 4px; }
+  padding: 5px; }
   GtkColorButton.button GtkColorSwatch, .header-bar GtkColorButton.button.titlebutton GtkColorSwatch,
   .titlebar GtkColorButton.button.titlebutton GtkColorSwatch,
   GtkCalendar.header GtkColorButton.button.titlebutton GtkColorSwatch {
-    border-radius: 1.5px;
-    box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.2), 0 1px white; }
-    GtkColorButton.button GtkColorSwatch:backdrop, .header-bar GtkColorButton.button.titlebutton GtkColorSwatch:backdrop,
+    border-radius: 0;
+    box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.1), 0 1px white; }
+    GtkColorButton.button GtkColorSwatch:insensitive, .header-bar GtkColorButton.button.titlebutton GtkColorSwatch:insensitive,
+    .titlebar GtkColorButton.button.titlebutton GtkColorSwatch:insensitive,
+    GtkCalendar.header GtkColorButton.button.titlebutton GtkColorSwatch:insensitive, GtkColorButton.button GtkColorSwatch:backdrop, .header-bar GtkColorButton.button.titlebutton GtkColorSwatch:backdrop,
     .titlebar GtkColorButton.button.titlebutton GtkColorSwatch:backdrop,
     GtkCalendar.header GtkColorButton.button.titlebutton GtkColorSwatch:backdrop {
       box-shadow: none; }
