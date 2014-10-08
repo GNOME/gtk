@@ -585,6 +585,12 @@ may_vscroll (GtkScrolledWindow *scrolled_window)
   return priv->vscrollbar_visible || priv->vscrollbar_policy == GTK_POLICY_EXTERNAL;
 }
 
+static inline gboolean
+policy_may_be_visible (GtkPolicyType policy)
+{
+  return policy == GTK_POLICY_ALWAYS || policy == GTK_POLICY_AUTOMATIC;
+}
+
 static void
 scrolled_window_drag_begin_cb (GtkScrolledWindow *scrolled_window,
                                gdouble            start_x,
@@ -2159,21 +2165,21 @@ gtk_scrolled_window_size_allocate (GtkWidget     *widget,
 		}
 	      else /* priv->hscrollbar_policy != GTK_POLICY_AUTOMATIC */
 		{
-		  priv->hscrollbar_visible = priv->hscrollbar_policy < GTK_POLICY_NEVER;
+		  priv->hscrollbar_visible = policy_may_be_visible (priv->hscrollbar_policy);
 		  priv->vscrollbar_visible = child_scroll_height > allocation->height - 
 		    (priv->hscrollbar_visible ? sb_height + sb_spacing : 0);
 		}
 	    }
 	  else /* priv->vscrollbar_policy != GTK_POLICY_AUTOMATIC */
 	    {
-	      priv->vscrollbar_visible = priv->vscrollbar_policy < GTK_POLICY_NEVER;
+	      priv->vscrollbar_visible = policy_may_be_visible (priv->vscrollbar_policy);
 	      
 	      if (priv->hscrollbar_policy == GTK_POLICY_AUTOMATIC)
 		priv->hscrollbar_visible = 
 		  child_scroll_width > allocation->width - 
 		  (priv->vscrollbar_visible ? 0 : sb_width + sb_spacing);
 	      else
-		priv->hscrollbar_visible = priv->hscrollbar_policy < GTK_POLICY_NEVER;
+		priv->hscrollbar_visible = policy_may_be_visible (priv->hscrollbar_policy);
 	    }
 	} 
       else /* GTK_SIZE_REQUEST_WIDTH_FOR_HEIGHT */
@@ -2220,21 +2226,21 @@ gtk_scrolled_window_size_allocate (GtkWidget     *widget,
 		}
 	      else /* priv->vscrollbar_policy != GTK_POLICY_AUTOMATIC */
 		{
-		  priv->vscrollbar_visible = priv->vscrollbar_policy < GTK_POLICY_NEVER;
+		  priv->vscrollbar_visible = policy_may_be_visible (priv->vscrollbar_policy);
 		  priv->hscrollbar_visible = child_scroll_width > allocation->width - 
 		    (priv->vscrollbar_visible ? sb_width + sb_spacing : 0);
 		}
 	    }
 	  else /* priv->hscrollbar_policy != GTK_POLICY_AUTOMATIC */
 	    {
-	      priv->hscrollbar_visible = priv->hscrollbar_policy < GTK_POLICY_NEVER;
+	      priv->hscrollbar_visible = policy_may_be_visible (priv->hscrollbar_policy);
 	      
 	      if (priv->vscrollbar_policy == GTK_POLICY_AUTOMATIC)
 		priv->vscrollbar_visible = 
 		  child_scroll_height > allocation->height - 
 		  (priv->hscrollbar_visible ? 0 : sb_height + sb_spacing);
 	      else
-		priv->vscrollbar_visible = priv->vscrollbar_policy < GTK_POLICY_NEVER;
+		priv->vscrollbar_visible = policy_may_be_visible (priv->vscrollbar_policy);
 	    }
 	}
 
@@ -2959,7 +2965,7 @@ gtk_scrolled_window_get_preferred_size (GtkWidget      *widget,
 		  natural_req.width = MAX (natural_req.width, min_content_width);
 		  extra_width = -1;
 		}
-	      else if (priv->vscrollbar_policy < GTK_POLICY_NEVER)
+	      else if (policy_may_be_visible (priv->vscrollbar_policy))
 		{
 		  minimum_req.width += vscrollbar_requisition.width;
 		  natural_req.width += vscrollbar_requisition.width;
@@ -2987,7 +2993,7 @@ gtk_scrolled_window_get_preferred_size (GtkWidget      *widget,
 		  natural_req.height = MAX (natural_req.height, min_content_height);
 		  extra_height = -1;
 		}
-	      else if (priv->vscrollbar_policy < GTK_POLICY_NEVER)
+	      else if (policy_may_be_visible (priv->vscrollbar_policy))
 		{
 		  minimum_req.height += vscrollbar_requisition.height;
 		  natural_req.height += vscrollbar_requisition.height;
@@ -2996,8 +3002,7 @@ gtk_scrolled_window_get_preferred_size (GtkWidget      *widget,
 	}
     }
 
-  if (priv->hscrollbar_policy == GTK_POLICY_AUTOMATIC ||
-      priv->hscrollbar_policy == GTK_POLICY_ALWAYS)
+  if (policy_may_be_visible (priv->hscrollbar_policy))
     {
       minimum_req.width = MAX (minimum_req.width, hscrollbar_requisition.width);
       natural_req.width = MAX (natural_req.width, hscrollbar_requisition.width);
@@ -3005,8 +3010,7 @@ gtk_scrolled_window_get_preferred_size (GtkWidget      *widget,
 	extra_height = scrollbar_spacing + hscrollbar_requisition.height;
     }
 
-  if (priv->vscrollbar_policy == GTK_POLICY_AUTOMATIC ||
-      priv->vscrollbar_policy == GTK_POLICY_ALWAYS)
+  if (policy_may_be_visible (priv->vscrollbar_policy))
     {
       minimum_req.height = MAX (minimum_req.height, vscrollbar_requisition.height);
       natural_req.height = MAX (natural_req.height, vscrollbar_requisition.height);
