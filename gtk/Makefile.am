@@ -1720,6 +1720,7 @@ EXTRA_DIST +=                   \
 	$(Raleigh_sources)	\
 	$(win32_theme_sources)	\
 	$(gsettings_SCHEMAS)	\
+	$(template_headers)	\
 	libgtk3.manifest.in	\
 	gtk-win32.rc.in		\
 	gtkwin32embed.h		\
