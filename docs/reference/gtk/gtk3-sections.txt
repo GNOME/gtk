@@ -8166,7 +8166,6 @@ GTK_GESTURE_ZOOM_GET_CLASS
 gtk_gesture_zoom_get_type
 </SECTION>
 
-
 <SECTION>
 <FILE>gtksidebar</FILE>
 GtkSidebar
@@ -8184,4 +8183,26 @@ GTK_SIDEBAR_GET_CLASS
 <SUBSECTION Private>
 GtkSidebarPrivate
 gtk_sidebar_get_type
+</SECTION>
+
+<SECTION>
+<FILE>gtkglarea</FILE>
+GtkGLArea
+GtkGLAreaClass
+gtk_gl_area_new
+gtk_gl_area_get_context
+<SUBSECTION>
+gtk_gl_area_set_has_alpha
+gtk_gl_area_get_has_alpha
+gtk_gl_area_set_has_depth_buffer
+gtk_gl_area_get_has_depth_buffer
+gtk_gl_area_make_current
+<SUBSECTION Standard>
+GTK_TYPE_GL_AREA
+GTK_GL_AREA
+GTK_GL_AREA_CLASS
+GTK_IS_GL_AREA
+GTK_IS_GL_AREA_CLASS
+<SUBSECTION Private>
+gtk_gl_area_get_type
 </SECTION>

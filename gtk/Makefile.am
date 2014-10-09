@@ -363,6 +363,7 @@ gtk_public_h_sources = 		\
 	gtkgesturesingle.h	\
 	gtkgestureswipe.h	\
 	gtkgesturezoom.h	\
+	gtkglarea.h		\
 	gtkgrid.h		\
 	gtkheaderbar.h		\
 	gtkicontheme.h		\
@@ -937,6 +938,7 @@ gtk_base_c_sources = 		\
 	gtkgesturesingle.c	\
 	gtkgestureswipe.c	\
 	gtkgesturezoom.c	\
+	gtkglarea.c		\
 	gtkgrid.c		\
 	gtkheaderbar.c		\
 	gtkhsla.c		\
