@@ -525,3 +525,38 @@ gdk_cairo_region_create_from_surface (cairo_surface_t *surface)
 
   return region;
 }
+
+cairo_region_t *
+gdk_cairo_region_from_clip (cairo_t *cr)
+{
+  cairo_rectangle_list_t *rectangles;
+  cairo_region_t *region;
+  int i;
+
+  rectangles = cairo_copy_clip_rectangle_list (cr);
+
+  if (rectangles->status != CAIRO_STATUS_SUCCESS)
+    return NULL;
+
+  region = cairo_region_create ();
+  for (i = 0; i < rectangles->num_rectangles; i++)
+    {
+      cairo_rectangle_int_t clip_rect;
+      cairo_rectangle_t *rect;
+
+      rect = &rectangles->rectangles[i];
+
+      /* Here we assume clip rects are ints for direct targets, which
+         is true for cairo */
+      clip_rect.x = (int)rect->x;
+      clip_rect.y = (int)rect->y;
+      clip_rect.width = (int)rect->width;
+      clip_rect.height = (int)rect->height;
+
+      cairo_region_union_rectangle (region, &clip_rect);
+    }
+
+  cairo_rectangle_list_destroy (rectangles);
+
+  return region;
+}

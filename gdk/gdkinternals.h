@@ -319,8 +319,10 @@ void _gdk_windowing_event_data_free (GdkEvent       *event);
 void _gdk_set_window_state (GdkWindow *window,
                             GdkWindowState new_state);
 
-gboolean _gdk_cairo_surface_extents (cairo_surface_t *surface,
-                                     GdkRectangle *extents);
+gboolean        _gdk_cairo_surface_extents       (cairo_surface_t *surface,
+                                                  GdkRectangle    *extents);
+cairo_region_t *gdk_cairo_region_from_clip       (cairo_t         *cr);
+
 
 /*************************************
  * Interfaces used by windowing code *
