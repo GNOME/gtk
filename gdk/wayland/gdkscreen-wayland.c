@@ -911,6 +911,7 @@ gdk_wayland_visual_new (GdkScreen *screen)
   visual->screen = GDK_SCREEN (screen);
   visual->type = GDK_VISUAL_TRUE_COLOR;
   visual->depth = 32;
+  visual->bits_per_rgb = 8;
 
   return visual;
 }
