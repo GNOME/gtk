@@ -225,6 +225,11 @@ struct _GdkDisplayClass
   gchar *                (*utf8_to_string_target)      (GdkDisplay     *display,
                                                         const gchar    *text);
 
+  gboolean              (*make_gl_context_current)  (GdkDisplay        *display,
+                                                     GdkGLContext      *context);
+  void                  (*destroy_gl_context)       (GdkDisplay        *display,
+                                                     GdkGLContext      *context);
+
   /* Signals */
   void                   (*opened)                     (GdkDisplay     *display);
   void (*closed) (GdkDisplay *display,
@@ -302,6 +307,12 @@ void                _gdk_display_create_window_impl   (GdkDisplay       *display
                                                        GdkWindowAttr    *attributes,
                                                        gint              attributes_mask);
 GdkWindow *         _gdk_display_create_window        (GdkDisplay       *display);
+
+void                gdk_display_destroy_gl_context       (GdkDisplay        *display,
+                                                          GdkGLContext      *context);
+gboolean            gdk_display_make_gl_context_current  (GdkDisplay        *display,
+                                                          GdkGLContext      *context);
+GdkGLContext *      gdk_display_get_current_gl_context   (GdkDisplay        *display);
 
 G_END_DECLS
 

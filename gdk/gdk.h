@@ -41,6 +41,7 @@
 #include <gdk/gdkevents.h>
 #include <gdk/gdkframeclock.h>
 #include <gdk/gdkframetimings.h>
+#include <gdk/gdkglcontext.h>
 #include <gdk/gdkkeys.h>
 #include <gdk/gdkkeysyms.h>
 #include <gdk/gdkmain.h>

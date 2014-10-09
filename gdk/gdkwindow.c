@@ -39,8 +39,11 @@
 #include "gdkmarshalers.h"
 #include "gdkframeclockidle.h"
 #include "gdkwindowimpl.h"
+#include "gdkglcontextprivate.h"
 
 #include <math.h>
+
+#include <epoxy/gl.h>
 
 /* for the use of round() */
 #include "fallback-c89.c"
@@ -184,6 +187,11 @@ static cairo_surface_t *gdk_window_ref_impl_surface (GdkWindow *window);
 
 static void gdk_window_set_frame_clock (GdkWindow      *window,
                                         GdkFrameClock  *clock);
+
+static void draw_ugly_color (GdkWindow       *window,
+                             const cairo_region_t *region,
+                             int color);
+
 
 static guint signals[LAST_SIGNAL] = { 0 };
 
@@ -1861,6 +1869,12 @@ gdk_window_free_current_paint (GdkWindow *window)
   cairo_region_destroy (window->current_paint.region);
   window->current_paint.region = NULL;
 
+  cairo_region_destroy (window->current_paint.flushed_region);
+  window->current_paint.flushed_region = NULL;
+
+  cairo_region_destroy (window->current_paint.need_blend_region);
+  window->current_paint.need_blend_region = NULL;
+
   window->current_paint.surface_needs_composite = FALSE;
 }
 
@@ -2688,6 +2702,55 @@ gdk_window_ref_impl_surface (GdkWindow *window)
   return GDK_WINDOW_IMPL_GET_CLASS (window->impl)->ref_cairo_surface (gdk_window_get_impl_window (window));
 }
 
+GdkGLContext *
+gdk_window_get_paint_gl_context (GdkWindow *window, GError **error)
+{
+  if (window->impl_window->gl_paint_context == NULL)
+    window->impl_window->gl_paint_context =
+      GDK_WINDOW_IMPL_GET_CLASS (window->impl)->create_gl_context (window,
+                                                                   GDK_GL_PROFILE_DEFAULT,
+                                                                   NULL,
+                                                                   error);
+
+  return window->impl_window->gl_paint_context;
+}
+
+/**
+ * gdk_window_create_gl_context:
+ * @window: a #GdkWindow
+ * @profile: the GL profile the context should target
+ * @error: return location for an error
+ *
+ * Creates a new #GdkGLContext for the given window, matching the
+ * framebuffer format to the visual of the #GdkWindow.
+ *
+ * If the creation of the #GdkGLContext failed, @error will be set.
+ *
+ * Returns: (transfer full): the newly created #GdkGLContext, or
+ * %NULL on error
+ *
+ * Since: 3.16
+ **/
+GdkGLContext *
+gdk_window_create_gl_context (GdkWindow    *window,
+                              GdkGLProfile  profile,
+                              GError      **error)
+{
+  GdkGLContext *paint_context;
+
+  g_return_val_if_fail (GDK_IS_WINDOW (window), NULL);
+  g_return_val_if_fail (error == NULL || *error == NULL, NULL);
+
+  paint_context = gdk_window_get_paint_gl_context (window, error);
+  if (paint_context == NULL)
+    return NULL;
+
+  return GDK_WINDOW_IMPL_GET_CLASS (window->impl)->create_gl_context (window,
+                                                                      profile,
+                                                                      paint_context,
+                                                                      error);
+}
+
 /**
  * gdk_window_begin_paint_rect:
  * @window: a #GdkWindow
@@ -2764,6 +2827,7 @@ gdk_window_begin_paint_region (GdkWindow       *window,
   GdkWindowImplClass *impl_class;
   double sx, sy;
   gboolean needs_surface;
+  cairo_content_t surface_content;
 
   g_return_if_fail (GDK_IS_WINDOW (window));
 
@@ -2785,14 +2849,58 @@ gdk_window_begin_paint_region (GdkWindow       *window,
     needs_surface = impl_class->begin_paint_region (window, region);
 
   window->current_paint.region = cairo_region_copy (region);
-
   cairo_region_intersect (window->current_paint.region, window->clip_region);
   cairo_region_get_extents (window->current_paint.region, &clip_box);
+
+  window->current_paint.flushed_region = cairo_region_create ();
+  window->current_paint.need_blend_region = cairo_region_create ();
+
+  surface_content = gdk_window_get_content (window);
+
+  window->current_paint.use_gl = window->impl_window->gl_paint_context != NULL;
+
+  if (window->current_paint.use_gl)
+    {
+      GdkGLContext *context;
+
+      int ww = gdk_window_get_width (window) * gdk_window_get_scale_factor (window);
+      int wh = gdk_window_get_height (window) * gdk_window_get_scale_factor (window);
+
+      context = gdk_window_get_paint_gl_context (window, NULL);
+      if (context == NULL || !gdk_gl_context_make_current (context))
+        {
+          g_warning ("gl rendering failed, context: %p", context);
+          window->current_paint.use_gl = FALSE;
+        }
+      else
+        {
+          /* With gl we always need a surface to combine the gl
+             drawing with the native drawing. */
+          needs_surface = TRUE;
+          /* Also, we need the surface to include alpha */
+          surface_content = CAIRO_CONTENT_COLOR_ALPHA;
+
+          /* Initial setup */
+          glClearColor (0.0f, 0.0f, 0.0f, 0.0f);
+          glDisable (GL_DEPTH_TEST);
+          glDisable(GL_BLEND);
+          glBlendFunc (GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+          glTexEnvi (GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE);
+          glViewport (0, 0, ww, wh);
+
+          glMatrixMode (GL_PROJECTION);
+          glLoadIdentity ();
+          glOrtho (0.0f, ww, 0.0f, wh, -1.0f, 1.0f);
+
+          glMatrixMode (GL_MODELVIEW);
+          glLoadIdentity ();
+        }
+    }
 
   if (needs_surface)
     {
       window->current_paint.surface = gdk_window_create_similar_surface (window,
-                                                                         gdk_window_get_content (window),
+                                                                         surface_content,
                                                                          MAX (clip_box.width, 1),
                                                                          MAX (clip_box.height, 1));
       sx = sy = 1;
@@ -2800,6 +2908,7 @@ gdk_window_begin_paint_region (GdkWindow       *window,
       cairo_surface_get_device_scale (window->current_paint.surface, &sx, &sy);
 #endif
       cairo_surface_set_device_offset (window->current_paint.surface, -clip_box.x*sx, -clip_box.y*sy);
+      gdk_cairo_surface_mark_as_direct (window->current_paint.surface, window);
 
       window->current_paint.surface_needs_composite = TRUE;
     }
@@ -2829,8 +2938,55 @@ gdk_window_begin_paint_region (GdkWindow       *window,
  **/
 void
 gdk_window_mark_paint_from_clip (GdkWindow          *window,
-				 cairo_t            *cr)
+                                 cairo_t            *cr)
 {
+  cairo_region_t *clip_region;
+  GdkWindow *impl_window = window->impl_window;
+
+  if (impl_window->current_paint.surface == NULL ||
+      cairo_get_target (cr) != impl_window->current_paint.surface)
+    return;
+
+  if (cairo_region_is_empty (impl_window->current_paint.flushed_region))
+    return;
+
+  /* This here seems a bit weird, but basically, we're taking the current
+     clip and applying also the flushed region, and the result is that the
+     new clip is the intersection of these. This is the area where the newly
+     drawn region overlaps a previosly flushed area, which is an area of the
+     double buffer surface that need to be blended OVER the back buffer rather
+     than SRCed. */
+  cairo_save (cr);
+  /* We set the indentity matrix here so we get and apply regions in native
+     window coordinates. */
+  cairo_identity_matrix (cr);
+  gdk_cairo_region (cr, impl_window->current_paint.flushed_region);
+  cairo_clip (cr);
+
+  clip_region = gdk_cairo_region_from_clip (cr);
+  if (clip_region == NULL)
+    {
+      /* Failed to represent clip as region, mark all as requiring
+         blend */
+      cairo_region_union (impl_window->current_paint.need_blend_region,
+                          impl_window->current_paint.flushed_region);
+      cairo_region_destroy (impl_window->current_paint.flushed_region);
+      impl_window->current_paint.flushed_region = cairo_region_create ();
+    }
+  else
+    {
+      cairo_region_subtract (impl_window->current_paint.flushed_region, clip_region);
+      cairo_region_union (impl_window->current_paint.need_blend_region, clip_region);
+    }
+
+  /* Clear the area on the double buffer surface to transparent so we
+     can start drawing from scratch the area "above" the flushed
+     region */
+  cairo_set_source_rgba (cr, 0, 0, 0, 0);
+  cairo_set_operator (cr, CAIRO_OPERATOR_SOURCE);
+  cairo_paint (cr);
+
+  cairo_restore (cr);
 }
 
 /**
@@ -2852,7 +3008,6 @@ gdk_window_end_paint (GdkWindow *window)
   GdkWindow *composited;
   GdkWindowImplClass *impl_class;
   GdkRectangle clip_box = { 0, };
-  cairo_region_t *full_clip;
   cairo_t *cr;
 
   g_return_if_fail (GDK_IS_WINDOW (window));
@@ -2872,41 +3027,57 @@ gdk_window_end_paint (GdkWindow *window)
   if (impl_class->end_paint)
     impl_class->end_paint (window);
 
+
   if (window->current_paint.surface_needs_composite)
     {
       cairo_surface_t *surface;
-      gboolean skip_alpha_blending;
 
       cairo_region_get_extents (window->current_paint.region, &clip_box);
-      full_clip = cairo_region_copy (window->clip_region);
-      cairo_region_intersect (full_clip, window->current_paint.region);
 
-      surface = gdk_window_ref_impl_surface (window);
-      cr = cairo_create (surface);
-      cairo_surface_destroy (surface);
-
-      cairo_set_source_surface (cr, window->current_paint.surface, 0, 0);
-      gdk_cairo_region (cr, full_clip);
-      cairo_clip (cr);
-
-      /* We can skip alpha blending for a fast composite case
-       * if we have an impl window or we're a fully opaque window. */
-      skip_alpha_blending = (gdk_window_has_impl (window) ||
-                             window->alpha == 255);
-
-      if (skip_alpha_blending)
+      if (window->current_paint.use_gl)
         {
-          cairo_set_operator (cr, CAIRO_OPERATOR_SOURCE);
-          cairo_paint (cr);
+          cairo_region_t *opaque_region = cairo_region_copy (window->current_paint.region);
+          cairo_region_subtract (opaque_region, window->current_paint.flushed_region);
+          cairo_region_subtract (opaque_region, window->current_paint.need_blend_region);
+
+          if (!gdk_gl_context_make_current (window->gl_paint_context))
+            g_error ("make current failed");
+
+          if (!cairo_region_is_empty (opaque_region))
+            gdk_gl_texture_from_surface (window->current_paint.surface,
+                                         opaque_region);
+          if (!cairo_region_is_empty (window->current_paint.need_blend_region))
+            {
+              glEnable(GL_BLEND);
+              gdk_gl_texture_from_surface (window->current_paint.surface,
+                                           window->current_paint.need_blend_region);
+              glDisable(GL_BLEND);
+            }
+
+          cairo_region_destroy (opaque_region);
+
+          gdk_gl_context_flush_buffer (window->gl_paint_context,
+                                       window->current_paint.region,
+                                       window->active_update_area);
+
+          if (epoxy_has_gl_extension ("GL_GREMEDY_frame_terminator"))
+            glFrameTerminatorGREMEDY();
         }
       else
         {
-          cairo_set_operator (cr, CAIRO_OPERATOR_OVER);
-          cairo_paint_with_alpha (cr, window->alpha / 255.0);
-        }
+          surface = gdk_window_ref_impl_surface (window);
+          cr = cairo_create (surface);
+          cairo_surface_destroy (surface);
 
-      cairo_destroy (cr);
-      cairo_region_destroy (full_clip);
+          cairo_set_source_surface (cr, window->current_paint.surface, 0, 0);
+          gdk_cairo_region (cr, window->current_paint.region);
+          cairo_clip (cr);
+
+          cairo_set_operator (cr, CAIRO_OPERATOR_SOURCE);
+          cairo_paint (cr);
+
+          cairo_destroy (cr);
+        }
     }
 
   gdk_window_free_current_paint (window);
@@ -3432,11 +3603,22 @@ gdk_window_process_updates_internal (GdkWindow *window)
 
 	  expose_region = cairo_region_copy (window->active_update_area);
 
+          /* Sometimes we can't just paint only the new area, as the windowing system
+             requires more to be repainted. For instance, with opengl you typically
+             repaint all of each frame each time and then swap the buffer, although
+             there are extensions that allow us to reuse part of an old frame */
+          if (GDK_WINDOW_IMPL_GET_CLASS (window->impl)->invalidate_for_new_frame)
+            GDK_WINDOW_IMPL_GET_CLASS (window->impl)->invalidate_for_new_frame (window, expose_region);
+
 	  /* Clip to part visible in impl window */
 	  cairo_region_intersect (expose_region, window->clip_region);
 
 	  if (debug_updates)
 	    {
+              cairo_region_t *swap_region = cairo_region_copy (expose_region);
+              cairo_region_subtract (swap_region, window->active_update_area);
+              draw_ugly_color (window, swap_region, 1);
+
 	      /* Make sure we see the red invalid area before redrawing. */
 	      gdk_display_sync (gdk_window_get_display (window));
 	      g_usleep (70000);
@@ -3756,13 +3938,17 @@ gdk_window_set_invalidate_handler (GdkWindow                      *window,
 
 static void
 draw_ugly_color (GdkWindow       *window,
-		 const cairo_region_t *region)
+		 const cairo_region_t *region,
+                 int color)
 {
   cairo_t *cr;
 
   cr = gdk_cairo_create (window);
   /* Draw ugly color all over the newly-invalid region */
-  cairo_set_source_rgb (cr, 50000/65535., 10000/65535., 10000/65535.);
+  if (color == 0)
+    cairo_set_source_rgb (cr, 50000/65535., 10000/65535., 10000/65535.);
+  else
+    cairo_set_source_rgb (cr, 10000/65535., 50000/65535., 10000/65535.);
   gdk_cairo_region (cr, region);
   cairo_fill (cr);
 
@@ -3858,7 +4044,7 @@ gdk_window_invalidate_maybe_recurse_full (GdkWindow            *window,
   invalidate_impl_subwindows (window, region, child_func, user_data, 0, 0);
 
   if (debug_updates)
-    draw_ugly_color (window, visible_region);
+    draw_ugly_color (window, visible_region, 0);
 
   while (window != NULL && 
 	 !cairo_region_is_empty (visible_region))

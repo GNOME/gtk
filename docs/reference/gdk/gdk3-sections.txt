@@ -394,6 +394,7 @@ gdk_window_constrain_size
 gdk_window_beep
 gdk_window_get_scale_factor
 gdk_window_set_opaque_region
+gdk_window_create_gl_context
 gdk_window_mark_paint_from_clip
 
 <SUBSECTION>
@@ -618,6 +619,7 @@ gdk_cairo_rectangle
 gdk_cairo_region
 gdk_cairo_region_create_from_surface
 gdk_cairo_surface_create_from_pixbuf
+gdk_cairo_draw_from_gl
 </SECTION>
 
 <SECTION>
@@ -1005,6 +1007,7 @@ gdk_x11_display_error_trap_pop
 gdk_x11_display_error_trap_pop_ignored
 gdk_x11_display_set_cursor_theme
 gdk_x11_display_set_window_scale
+gdk_x11_display_get_glx_version
 gdk_x11_register_standard_event_type
 gdk_x11_screen_get_screen_number
 gdk_x11_screen_get_xscreen
@@ -1124,6 +1127,11 @@ GDK_X11_KEYMAP_CLASS
 GDK_IS_X11_KEYMAP
 GDK_IS_X11_KEYMAP_CLASS
 GDK_X11_KEYMAP_GET_CLASS
+GDK_TYPE_X11_GL_CONTEXT
+GDK_X11_GL_CONTEXT
+GDK_X11_GL_CONTEXT_CLASS
+GDK_IS_X11_GL_CONTEXT
+GDK_IS_X11_GL_CONTEXT_CLASS
 GDK_TYPE_X11_SCREEN
 GDK_X11_SCREEN
 GDK_X11_SCREEN_CLASS
@@ -1273,4 +1281,27 @@ gdk_frame_timings_get_refresh_interval
 gdk_frame_timings_get_predicted_presentation_time
 <SUBSECTION Private>
 gdk_frame_get_type
+</SECTION>
+
+<SECTION>
+<FILE>gdkglcontext</FILE>
+GdkGLContext
+gdk_gl_context_get_visual
+gdk_gl_context_get_window
+gdk_gl_context_make_current
+gdk_gl_context_clear_current
+gdk_gl_context_get_current
+GDK_GL_ERROR
+GDK_TYPE_GL_ERROR
+GDK_TYPE_GL_PROFILE
+
+<SUBSECTION Standard>
+GDK_GL_CONTEXT
+GDK_IS_GL_CONTEXT
+GDK_TYPE_GL_CONTEXT
+GDK_GL_CONTEXT_CLASS
+GDK_GL_CONTEXT_GET_CLASS
+GDK_IS_GL_CONTEXT_CLASS
+gdk_gl_context_get_type
+gdk_gl_error_quark
 </SECTION>
