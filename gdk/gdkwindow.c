@@ -287,10 +287,15 @@ create_surface_accumulator (GSignalInvocationHint *ihint,
 
 static GQuark quark_pointer_window = 0;
 
+static gboolean always_use_gl = FALSE;
+
 static void
 gdk_window_class_init (GdkWindowClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
+
+  if (g_getenv ("GDK_ALWAYS_USE_GL"))
+    always_use_gl = TRUE;
 
   parent_class = g_type_class_peek_parent (klass);
 
@@ -1417,6 +1422,18 @@ gdk_window_new (GdkWindow     *parent,
   device_manager = gdk_display_get_device_manager (gdk_window_get_display (parent));
   g_signal_connect (device_manager, "device-removed",
                     G_CALLBACK (device_removed_cb), window);
+
+
+  if (always_use_gl)
+    {
+      GError *error = NULL;
+
+      if (gdk_window_get_paint_gl_context (window, &error) == NULL)
+        {
+          g_warning ("Unable to force GL enabled: %s\n", error->message);
+          g_error_free (error);
+        }
+    }
 
   return window;
 }
