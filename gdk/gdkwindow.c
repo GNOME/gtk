@@ -1024,9 +1024,35 @@ recompute_visible_regions (GdkWindow *private,
 				      recalculate_children);
 }
 
+static void
+gdk_window_clear_old_updated_area (GdkWindow *window)
+{
+  int i;
+
+  for (i = 0; i < 2; i++)
+    {
+      if (window->old_updated_area[i])
+        {
+          cairo_region_destroy (window->old_updated_area[i]);
+          window->old_updated_area[i] = NULL;
+        }
+    }
+}
+
+static void
+gdk_window_append_old_updated_area (GdkWindow *window,
+                                    cairo_region_t *region)
+{
+  if (window->old_updated_area[1])
+    cairo_region_destroy (window->old_updated_area[1]);
+  window->old_updated_area[1] = window->old_updated_area[0];
+  window->old_updated_area[0] = cairo_region_reference (region);
+}
+
 void
 _gdk_window_update_size (GdkWindow *window)
 {
+  gdk_window_clear_old_updated_area (window);
   recompute_visible_regions (window, FALSE);
 }
 
@@ -3375,15 +3401,19 @@ gdk_window_process_updates_internal (GdkWindow *window)
    */
   if (window->update_area)
     {
-      cairo_region_t *update_area = window->update_area;
+      g_assert (window->active_update_area == NULL); /* No reentrancy */
+
+      window->active_update_area = window->update_area;
       window->update_area = NULL;
 
       if (gdk_window_is_viewable (window))
 	{
 	  cairo_region_t *expose_region;
 
+	  expose_region = cairo_region_copy (window->active_update_area);
+
 	  /* Clip to part visible in impl window */
-	  cairo_region_intersect (update_area, window->clip_region);
+	  cairo_region_intersect (expose_region, window->clip_region);
 
 	  if (debug_updates)
 	    {
@@ -3395,14 +3425,15 @@ gdk_window_process_updates_internal (GdkWindow *window)
 	  impl_class = GDK_WINDOW_IMPL_GET_CLASS (window->impl);
 
           if (impl_class->queue_antiexpose)
-            impl_class->queue_antiexpose (window, update_area);
+            impl_class->queue_antiexpose (window, expose_region);
 
-	  expose_region = cairo_region_copy (update_area);
           impl_class->process_updates_recurse (window, expose_region);
-	  cairo_region_destroy (expose_region);
-	}
 
-      cairo_region_destroy (update_area);
+          gdk_window_append_old_updated_area (window, window->active_update_area);
+        }
+
+      cairo_region_destroy (window->active_update_area);
+      window->active_update_area = NULL;
     }
 
   window->in_update = FALSE;
@@ -5046,6 +5077,7 @@ gdk_window_hide (GdkWindow *window)
       impl_class->hide (window);
     }
 
+  gdk_window_clear_old_updated_area (window);
   recompute_visible_regions (window, FALSE);
 
   /* all decendants became non-visible, we need to send visibility notify */
@@ -5105,6 +5137,7 @@ gdk_window_withdraw (GdkWindow *window)
 	}
 
       recompute_visible_regions (window, FALSE);
+      gdk_window_clear_old_updated_area (window);
     }
 }
 

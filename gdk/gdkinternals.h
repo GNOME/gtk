@@ -213,6 +213,12 @@ struct _GdkWindow
 
   cairo_region_t *update_area;
   guint update_freeze_count;
+  /* This is the update_area that was in effect when the current expose
+     started. It may be smaller than the expose area if we'e painting
+     more than we have to, but it represents the "true" damage. */
+  cairo_region_t *active_update_area;
+  /* We store the old expose areas to support buffer-age optimizations */
+  cairo_region_t *old_updated_area[2];
 
   GdkWindowState state;
 
