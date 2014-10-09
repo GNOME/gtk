@@ -108,6 +108,7 @@
 
 #include "gtkmenubutton.h"
 #include "gtkmenubuttonprivate.h"
+#include "gtkbuttonprivate.h"
 #include "gtktypebuiltins.h"
 #include "gtkwindow.h"
 #include "gtkmain.h"
@@ -695,6 +696,18 @@ menu_detacher (GtkWidget *widget,
   priv->menu = NULL;
 }
 
+static void
+update_sensitivity (GtkMenuButton *menu_button)
+{
+  GtkMenuButtonPrivate *priv = menu_button->priv;
+
+  if (GTK_BUTTON (menu_button)->priv->action_helper)
+    return;
+
+  gtk_widget_set_sensitive (GTK_WIDGET (menu_button),
+                            priv->menu != NULL || priv->popover != NULL);
+}
+
 /* This function is used in GtkMenuToolButton, the call back will
  * be called when GtkMenuToolButton would have emitted the “show-menu”
  * signal.
@@ -742,7 +755,7 @@ _gtk_menu_button_set_popup_with_func (GtkMenuButton                 *menu_button
       gtk_style_context_add_class (gtk_widget_get_style_context (GTK_WIDGET (menu_button)), "menu-button");
     }
 
-  gtk_widget_set_sensitive (GTK_WIDGET (menu_button), priv->menu != NULL);
+  update_sensitivity (menu_button);
 
   g_object_notify (G_OBJECT (menu_button), "popup");
   g_object_notify (G_OBJECT (menu_button), "menu-model");
@@ -777,8 +790,7 @@ gtk_menu_button_set_popup (GtkMenuButton *menu_button,
   if (menu && priv->popover)
     gtk_menu_button_set_popover (menu_button, NULL);
 
-  gtk_widget_set_sensitive (GTK_WIDGET (menu_button),
-                            priv->menu != NULL || priv->popover != NULL);
+  update_sensitivity (menu_button);
 
   g_object_thaw_notify (G_OBJECT (menu_button));
 }
@@ -1173,8 +1185,7 @@ gtk_menu_button_set_popover (GtkMenuButton *menu_button,
   if (popover && priv->menu)
     gtk_menu_button_set_popup (menu_button, NULL);
 
-  gtk_widget_set_sensitive (GTK_WIDGET (menu_button),
-                            priv->menu != NULL || priv->popover != NULL);
+  update_sensitivity (menu_button);
 
   g_object_notify (G_OBJECT (menu_button), "popover");
   g_object_notify (G_OBJECT (menu_button), "menu-model");
