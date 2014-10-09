@@ -39,7 +39,9 @@ libgdk_wayland_la_SOURCES =			\
 	gdkdisplay-wayland.h			\
 	gdkdnd-wayland.c			\
 	gdkeventsource.c			\
-	gdkkeys-wayland.c			\
+	gdkkeys-wayland.c                       \
+	gdkglcontext-wayland.c			\
+	gdkglcontext-wayland.h			\
 	gdkscreen-wayland.c			\
 	gdkselection-wayland.c			\
 	gdkwindow-wayland.c			\
@@ -54,6 +56,7 @@ libgdkinclude_HEADERS =				\
 libgdkwaylandinclude_HEADERS = 			\
 	gdkwaylanddevice.h			\
 	gdkwaylanddisplay.h			\
+	gdkwaylandglcontext.h			\
 	gdkwaylandselection.h			\
 	gdkwaylandwindow.h
 

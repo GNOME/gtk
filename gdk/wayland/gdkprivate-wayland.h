@@ -237,5 +237,7 @@ struct wl_data_source * gdk_wayland_selection_get_data_source (GdkWindow *owner,
                                                                GdkAtom    selection);
 void gdk_wayland_selection_unset_data_source (GdkAtom selection);
 
+EGLSurface gdk_wayland_window_get_egl_surface (GdkWindow *window,
+                                               EGLConfig config);
 
 #endif /* __GDK_PRIVATE_WAYLAND_H__ */

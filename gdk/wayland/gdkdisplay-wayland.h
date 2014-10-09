@@ -26,6 +26,7 @@
 #include <stdint.h>
 #include <wayland-client.h>
 #include <wayland-cursor.h>
+#include <wayland-egl.h>
 #include <gdk/wayland/gtk-shell-client-protocol.h>
 #include <gdk/wayland/xdg-shell-client-protocol.h>
 
@@ -36,6 +37,8 @@
 #include <gdk/gdk.h>		/* For gdk_get_program_class() */
 
 #include "gdkdisplayprivate.h"
+
+#include <epoxy/egl.h>
 
 G_BEGIN_DECLS
 
@@ -76,6 +79,16 @@ struct _GdkWaylandDisplay
   struct xkb_context *xkb_context;
 
   GdkWaylandSelection *selection;
+
+  /* egl info */
+  EGLDisplay egl_display;
+  int egl_major_version;
+  int egl_minor_version;
+
+  guint have_egl : 1;
+  guint have_egl_khr_create_context : 1;
+  guint have_egl_buffer_age : 1;
+  guint have_egl_swap_buffers_with_damage : 1;
 };
 
 struct _GdkWaylandDisplayClass

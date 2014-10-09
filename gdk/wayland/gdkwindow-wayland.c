@@ -26,6 +26,7 @@
 #include "gdkwindow.h"
 #include "gdkwindowimpl.h"
 #include "gdkdisplay-wayland.h"
+#include "gdkglcontext-wayland.h"
 #include "gdkframeclockprivate.h"
 #include "gdkprivate-wayland.h"
 #include "gdkinternals.h"
@@ -96,6 +97,9 @@ struct _GdkWindowImplWayland
   struct gtk_surface *gtk_surface;
 
   struct wl_subsurface *subsurface;
+
+  struct wl_egl_window *egl_window;
+  EGLSurface egl_surface;
 
   unsigned int mapped : 1;
   unsigned int use_custom_surface : 1;
@@ -169,6 +173,9 @@ gdk_wayland_window_update_size (GdkWindow *window,
 
   window->width = width;
   window->height = height;
+
+  if (impl->egl_window)
+    wl_egl_window_resize (impl->egl_window, width, height, 0, 0);
 
   area.x = 0;
   area.y = 0;
@@ -582,15 +589,18 @@ gdk_window_impl_wayland_end_paint (GdkWindow *window)
   cairo_rectangle_int_t rect;
   int i, n;
 
-  gdk_wayland_window_attach_image (window);
-
-  n = cairo_region_num_rectangles (window->current_paint.region);
-  for (i = 0; i < n; i++)
+  if (!window->current_paint.use_gl)
     {
-      cairo_region_get_rectangle (window->current_paint.region, i, &rect);
-      wl_surface_damage (impl->surface,
-                         rect.x, rect.y, rect.width, rect.height);
-      impl->pending_commit = TRUE;
+      gdk_wayland_window_attach_image (window);
+
+      n = cairo_region_num_rectangles (window->current_paint.region);
+      for (i = 0; i < n; i++)
+        {
+          cairo_region_get_rectangle (window->current_paint.region, i, &rect);
+          wl_surface_damage (impl->surface,
+                             rect.x, rect.y, rect.width, rect.height);
+          impl->pending_commit = TRUE;
+        }
     }
 }
 
@@ -1156,10 +1166,23 @@ gdk_wayland_window_show (GdkWindow *window,
 static void
 gdk_wayland_window_hide_surface (GdkWindow *window)
 {
+  GdkWaylandDisplay *display_wayland = GDK_WAYLAND_DISPLAY (gdk_window_get_display (window));
   GdkWindowImplWayland *impl = GDK_WINDOW_IMPL_WAYLAND (window->impl);
 
   if (impl->surface)
     {
+      if (impl->egl_surface)
+        {
+          eglDestroySurface(display_wayland->egl_display, impl->egl_surface);
+          impl->egl_surface = NULL;
+        }
+
+      if (impl->egl_window)
+        {
+          wl_egl_window_destroy (impl->egl_window);
+          impl->egl_window = NULL;
+        }
+
       if (impl->xdg_surface)
         {
           xdg_surface_destroy (impl->xdg_surface);
@@ -2128,6 +2151,8 @@ _gdk_window_impl_wayland_class_init (GdkWindowImplWaylandClass *klass)
   impl_class->set_opaque_region = gdk_wayland_window_set_opaque_region;
   impl_class->set_shadow_width = gdk_wayland_window_set_shadow_width;
   impl_class->show_window_menu = gdk_wayland_window_show_window_menu;
+  impl_class->create_gl_context = gdk_wayland_window_create_gl_context;
+  impl_class->invalidate_for_new_frame = gdk_wayland_window_invalidate_for_new_frame;
 }
 
 void
@@ -2167,6 +2192,50 @@ gdk_wayland_window_get_wl_surface (GdkWindow *window)
   impl = GDK_WINDOW_IMPL_WAYLAND (window->impl);
 
   return impl->surface;
+}
+
+static struct wl_egl_window *
+gdk_wayland_window_get_wl_egl_window (GdkWindow *window)
+{
+  GdkWindowImplWayland *impl;
+
+  g_return_val_if_fail (GDK_IS_WAYLAND_WINDOW (window), NULL);
+
+  impl = GDK_WINDOW_IMPL_WAYLAND (window->impl);
+
+  if (impl->egl_window == NULL)
+    {
+      impl->egl_window =
+        wl_egl_window_create(impl->surface,
+                             impl->wrapper->width,
+                             impl->wrapper->height);
+    }
+
+  return impl->egl_window;
+}
+
+EGLSurface
+gdk_wayland_window_get_egl_surface (GdkWindow *window,
+                                    EGLConfig config)
+{
+  GdkWaylandDisplay *display_wayland = GDK_WAYLAND_DISPLAY (gdk_window_get_display (window));
+  GdkWindowImplWayland *impl;
+  struct wl_egl_window *egl_window;
+
+  g_return_val_if_fail (GDK_IS_WAYLAND_WINDOW (window), NULL);
+
+  impl = GDK_WINDOW_IMPL_WAYLAND (window->impl);
+
+  if (impl->egl_surface == NULL)
+    {
+      egl_window = gdk_wayland_window_get_wl_egl_window (window);
+
+      impl->egl_surface =
+        eglCreateWindowSurface (display_wayland->egl_display,
+                                config, egl_window, NULL);
+    }
+
+  return impl->egl_surface;
 }
 
 /**
