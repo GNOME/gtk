@@ -128,6 +128,8 @@ typedef struct _GdkWindow             GdkWindow;
 typedef struct _GdkKeymap             GdkKeymap;
 typedef struct _GdkAppLaunchContext   GdkAppLaunchContext;
 
+typedef struct _GdkGLContext          GdkGLContext;
+
 /**
  * GdkByteOrder:
  * @GDK_LSB_FIRST: The values are stored with the least-significant byte
@@ -429,8 +431,26 @@ struct _GdkPoint
   gint y;
 };
 
+/**
+ * GdkGLProfile:
+ * @GDK_GL_PROFILE_DEFAULT: ...
+ * @GDK_GL_PROFILE_LEGACY: ...
+ * @GDK_GL_PROFILE_3_2_CORE: ...
+ *
+ * ...
+ */
+typedef enum {
+  GDK_GL_PROFILE_DEFAULT,
+  GDK_GL_PROFILE_LEGACY,
+  GDK_GL_PROFILE_3_2_CORE
+} GdkGLProfile;
+
+typedef enum {
+  GDK_GL_ERROR_NOT_AVAILABLE,
+  GDK_GL_ERROR_UNSUPPORTED_FORMAT,
+  GDK_GL_ERROR_UNSUPPORTED_PROFILE
+} GdkGLError;
 
 G_END_DECLS
-
 
 #endif /* __GDK_TYPES_H__ */

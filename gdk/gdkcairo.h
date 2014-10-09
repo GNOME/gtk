@@ -70,6 +70,17 @@ GDK_AVAILABLE_IN_3_10
 cairo_surface_t * gdk_cairo_surface_create_from_pixbuf      (const GdkPixbuf *pixbuf,
                                                              int scale,
                                                              GdkWindow *for_window);
+GDK_AVAILABLE_IN_3_16
+void       gdk_cairo_draw_from_gl (cairo_t              *cr,
+                                   GdkWindow            *window,
+                                   int                   source,
+                                   int                   source_type,
+                                   int                   buffer_scale,
+                                   int                   x,
+                                   int                   y,
+                                   int                   width,
+                                   int                   height);
+
 
 G_END_DECLS
 

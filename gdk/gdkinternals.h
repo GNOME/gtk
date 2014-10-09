@@ -84,7 +84,8 @@ typedef enum {
   GDK_DEBUG_DRAW          = 1 <<  9,
   GDK_DEBUG_EVENTLOOP     = 1 << 10,
   GDK_DEBUG_FRAMES        = 1 << 11,
-  GDK_DEBUG_SETTINGS      = 1 << 12
+  GDK_DEBUG_SETTINGS      = 1 << 12,
+  GDK_DEBUG_OPENGL        = 1 << 13
 } GdkDebugFlag;
 
 typedef enum {
@@ -208,8 +209,18 @@ struct _GdkWindow
   struct {
     cairo_region_t *region;
     cairo_surface_t *surface;
+
+    /* Areas of region that have been copied to the back buffer already */
+    cairo_region_t *flushed_region;
+    /* Areas of region that have been copied to the back buffer but
+       needs furter blending of surface data. These two regions are
+       always non-intersecting. */
+    cairo_region_t *need_blend_region;
+
     gboolean surface_needs_composite;
+    gboolean use_gl;
   } current_paint;
+  GdkGLContext *gl_paint_context;
 
   cairo_region_t *update_area;
   guint update_freeze_count;
@@ -327,6 +338,10 @@ void _gdk_set_window_state (GdkWindow *window,
 
 gboolean        _gdk_cairo_surface_extents       (cairo_surface_t *surface,
                                                   GdkRectangle    *extents);
+void            gdk_gl_texture_from_surface      (cairo_surface_t *surface,
+                                                  cairo_region_t  *region);
+void            gdk_cairo_surface_mark_as_direct (cairo_surface_t *surface,
+                                                  GdkWindow       *window);
 cairo_region_t *gdk_cairo_region_from_clip       (cairo_t         *cr);
 
 
@@ -342,6 +357,9 @@ void       _gdk_window_destroy           (GdkWindow      *window,
 void       _gdk_window_clear_update_area (GdkWindow      *window);
 void       _gdk_window_update_size       (GdkWindow      *window);
 gboolean   _gdk_window_update_viewable   (GdkWindow      *window);
+GdkGLContext * gdk_window_get_paint_gl_context (GdkWindow *window,
+                                                GError   **error);
+
 
 void       _gdk_window_process_updates_recurse (GdkWindow *window,
                                                 cairo_region_t *expose_region);

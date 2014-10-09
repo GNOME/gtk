@@ -124,6 +124,21 @@ struct _GdkX11Display
   GSList *error_traps;
 
   gint wm_moveresize_button;
+
+  /* GLX information */
+  gint glx_version;
+  gint glx_error_base;
+  gint glx_event_base;
+
+  guint have_glx : 1;
+
+  /* GLX extensions we check */
+  guint has_glx_swap_interval : 1;
+  guint has_glx_create_context : 1;
+  guint has_glx_texture_from_pixmap : 1;
+  guint has_glx_video_sync : 1;
+  guint has_glx_buffer_age : 1;
+  guint has_glx_sync_control : 1;
 };
 
 struct _GdkX11DisplayClass

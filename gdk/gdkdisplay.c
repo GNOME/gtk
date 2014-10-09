@@ -2225,3 +2225,68 @@ gdk_error_trap_pop (void)
 {
   return gdk_error_trap_pop_internal (TRUE);
 }
+
+/*< private >
+ * gdk_display_destroy_gl_context:
+ * @display: a #GdkDisplay
+ * @context: a #GdkGLContext
+ *
+ * Destroys the platform-specific parts of the @context.
+ *
+ * The @context instance is still valid, though inert, after
+ * this functionr returns.
+ */
+void
+gdk_display_destroy_gl_context (GdkDisplay   *display,
+                                GdkGLContext *context)
+{
+  GdkGLContext *current = gdk_display_get_current_gl_context (display);
+
+  if  (current == context)
+    g_object_set_data (G_OBJECT (display), "-gdk-gl-current-context", NULL);
+
+  GDK_DISPLAY_GET_CLASS (display)->destroy_gl_context (display, context);
+}
+
+/*< private >
+ * gdk_display_make_gl_context_current:
+ * @display: a #GdkDisplay
+ * @context: (optional): a #GdkGLContext, or %NULL
+ *
+ * Makes the given @context the current GL context, or unsets
+ * the current GL context if @context is %NULL.
+ *
+ * Returns: %TRUE if successful
+ */
+gboolean
+gdk_display_make_gl_context_current (GdkDisplay   *display,
+                                     GdkGLContext *context)
+{
+  GdkGLContext *current = gdk_display_get_current_gl_context (display);
+
+  if (current == context)
+    return TRUE;
+
+  if (context == NULL)
+    g_object_set_data (G_OBJECT (display), "-gdk-gl-current-context", NULL);
+  else
+    g_object_set_data_full (G_OBJECT (display), "-gdk-gl-current-context",
+                            g_object_ref (context),
+                            (GDestroyNotify) g_object_unref);
+
+  return GDK_DISPLAY_GET_CLASS (display)->make_gl_context_current (display, context);
+}
+
+/*< private >
+ * gdk_display_get_current_gl_context:
+ * @display: a #GdkDisplay
+ *
+ * Retrieves the current #GdkGLContext associated with @display.
+ *
+ * Returns: (transfer none): the current #GdkGLContext or %NULL
+ */
+GdkGLContext *
+gdk_display_get_current_gl_context (GdkDisplay *display)
+{
+  return g_object_get_data (G_OBJECT (display), "-gdk-gl-current-context");
+}
