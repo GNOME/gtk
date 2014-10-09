@@ -69,6 +69,7 @@ noinst_PROGRAMS =  $(TEST_PROGS)	\
 	testgeometry			\
 	testgiconpixbuf			\
 	testglarea			\
+	testglblending			\
 	testgrid			\
 	testgtk				\
 	testheaderbar			\
@@ -503,6 +504,11 @@ testwindowsize_SOURCES = testwindowsize.c
 
 gdkgears_SOURCES =	\
 	gdkgears.c	\
+	gtkgears.c	\
+	gtkgears.h
+
+testglblending_SOURCES =	\
+	testglblending.c	\
 	gtkgears.c	\
 	gtkgears.h
 
