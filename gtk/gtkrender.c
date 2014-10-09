@@ -899,22 +899,31 @@ render_frame_internal (GtkStyleContext  *context,
   double border_width[4];
   GdkRGBA colors[4];
 
-  border_width[0] = _gtk_css_number_value_get (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_BORDER_TOP_WIDTH), 100);
-  border_width[1] = _gtk_css_number_value_get (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_BORDER_RIGHT_WIDTH), 100);
-  border_width[2] = _gtk_css_number_value_get (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_BORDER_BOTTOM_WIDTH), 100);
-  border_width[3] = _gtk_css_number_value_get (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_BORDER_LEFT_WIDTH), 100);
-
-  border_style[0] = _gtk_css_border_style_value_get (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_BORDER_TOP_STYLE));
-  border_style[1] = _gtk_css_border_style_value_get (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_BORDER_RIGHT_STYLE));
-  border_style[2] = _gtk_css_border_style_value_get (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_BORDER_BOTTOM_STYLE));
-  border_style[3] = _gtk_css_border_style_value_get (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_BORDER_LEFT_STYLE));
-
-  hide_border_sides (border_width, border_style, hidden_side);
-
   if (_gtk_border_image_init (&border_image, context))
-    _gtk_border_image_render (&border_image, border_width, cr, x, y, width, height);
+    {
+      _gtk_border_image_render (&border_image, border_width, cr, x, y, width, height);
+    }
   else
     {
+      border_width[0] = _gtk_css_number_value_get (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_BORDER_TOP_WIDTH), 100);
+      border_width[1] = _gtk_css_number_value_get (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_BORDER_RIGHT_WIDTH), 100);
+      border_width[2] = _gtk_css_number_value_get (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_BORDER_BOTTOM_WIDTH), 100);
+      border_width[3] = _gtk_css_number_value_get (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_BORDER_LEFT_WIDTH), 100);
+
+      /* Optimize the most common case of "This widget has no border" */
+      if (border_width[0] == 0 &&
+          border_width[1] == 0 &&
+          border_width[2] == 0 &&
+          border_width[3] == 0)
+        return;
+
+      border_style[0] = _gtk_css_border_style_value_get (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_BORDER_TOP_STYLE));
+      border_style[1] = _gtk_css_border_style_value_get (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_BORDER_RIGHT_STYLE));
+      border_style[2] = _gtk_css_border_style_value_get (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_BORDER_BOTTOM_STYLE));
+      border_style[3] = _gtk_css_border_style_value_get (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_BORDER_LEFT_STYLE));
+
+      hide_border_sides (border_width, border_style, hidden_side);
+
       colors[0] = *_gtk_css_rgba_value_get_rgba (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_BORDER_TOP_COLOR));
       colors[1] = *_gtk_css_rgba_value_get_rgba (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_BORDER_RIGHT_COLOR));
       colors[2] = *_gtk_css_rgba_value_get_rgba (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_BORDER_BOTTOM_COLOR));
