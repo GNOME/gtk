@@ -290,6 +290,7 @@ struct _GdkWindowImplClass
   gboolean     (* show_window_menu)       (GdkWindow      *window,
                                            GdkEvent       *event);
   GdkGLContext *(*create_gl_context)      (GdkWindow      *window,
+					   gboolean        attached,
                                            GdkGLProfile    profile,
                                            GdkGLContext   *share,
                                            GError        **error);

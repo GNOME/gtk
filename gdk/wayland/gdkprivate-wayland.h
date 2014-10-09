@@ -239,5 +239,7 @@ void gdk_wayland_selection_unset_data_source (GdkAtom selection);
 
 EGLSurface gdk_wayland_window_get_egl_surface (GdkWindow *window,
                                                EGLConfig config);
+EGLSurface gdk_wayland_window_get_dummy_egl_surface (GdkWindow *window,
+						     EGLConfig config);
 
 #endif /* __GDK_PRIVATE_WAYLAND_H__ */
