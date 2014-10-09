@@ -76,7 +76,8 @@ gdk_wayland_window_invalidate_for_new_frame (GdkWindow      *window,
   egl_surface = gdk_wayland_window_get_egl_surface (window->impl_window,
                                                     context_wayland->egl_config);
 
-  if (display_wayland->have_egl_buffer_age)
+  if (display_wayland->have_egl_buffer_age &&
+      gdk_gl_context_make_current (window->gl_paint_context))
     eglQuerySurface (display_wayland->egl_display, egl_surface,
                      EGL_BUFFER_AGE_EXT, &buffer_age);
 
@@ -203,6 +204,9 @@ gdk_wayland_display_init_gl (GdkDisplay *display)
   display_wayland->have_egl_swap_buffers_with_damage =
     epoxy_has_egl_extension (dpy, "EGL_EXT_swap_buffers_with_damage");
 
+  display_wayland->have_egl_surfaceless_context =
+    epoxy_has_egl_extension (dpy, "EGL_KHR_surfaceless_context");
+
   GDK_NOTE (OPENGL,
             g_print ("EGL API version %d.%d found\n"
                      " - Vendor: %s\n"
@@ -297,6 +301,7 @@ find_eglconfig_for_window (GdkWindow        *window,
 
 GdkGLContext *
 gdk_wayland_window_create_gl_context (GdkWindow     *window,
+				      gboolean       attached,
                                       GdkGLProfile   profile,
                                       GdkGLContext  *share,
                                       GError       **error)
@@ -359,6 +364,7 @@ gdk_wayland_window_create_gl_context (GdkWindow     *window,
 
   context->egl_config = config;
   context->egl_context = ctx;
+  context->is_attached = attached;
 
   return GDK_GL_CONTEXT (context);
 }
@@ -404,7 +410,16 @@ gdk_wayland_display_make_gl_context_current (GdkDisplay   *display,
   context_wayland = GDK_WAYLAND_GL_CONTEXT (context);
   window = gdk_gl_context_get_window (context);
 
-  egl_surface = gdk_wayland_window_get_egl_surface (window->impl_window, context_wayland->egl_config);
+  if (context_wayland->is_attached)
+    egl_surface = gdk_wayland_window_get_egl_surface (window->impl_window, context_wayland->egl_config);
+  else
+    {
+      if (display_wayland->have_egl_surfaceless_context)
+	egl_surface = EGL_NO_SURFACE;
+      else
+	egl_surface = gdk_wayland_window_get_dummy_egl_surface (window->impl_window,
+								context_wayland->egl_config);
+    }
 
   if (!eglMakeCurrent(display_wayland->egl_display, egl_surface,
                       egl_surface, context_wayland->egl_context))

@@ -27,15 +27,15 @@
  * OpenGL drawing context.
  *
  * #GdkGLContexts are created for a #GdkWindow using gdk_window_create_gl_context(), and
- * the context will be tied to the native window backing that window, matching the
- * GdkVisual of the window.
+ * the context will match the GdkVisual of the window.
  *
- * A #GdkGLContexts normal framebuffer draws directly on to the back buffer of the native
- * window backing the #GdkWindow, so its not allowed to draw directly to that, as the
- * gdk repaint system is in full control of that. Instead you can create render buffers
- * or textures and use gdk_cairo_draw_from_gl() in the draw function of your widget
- * to draw them. Then Gdk will handle the integration of your rendering with that of
- * other widgets.
+ * A #GdkGLContexts is not tied to any particulare normal
+ * framebuffer. For instance, it cannot draw to the #GdkWindow back
+ * buffer. The gdk repaint system is in full control of the painting
+ * to that. Instead you can create render buffers or textures and use
+ * gdk_cairo_draw_from_gl() in the draw function of your widget to
+ * draw them. Then Gdk will handle the integration of your rendering
+ * with that of other widgets.
  *
  * Support for #GdkGLContext is platform specific, context creation can fail, returning
  * a %NULL context.

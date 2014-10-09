@@ -2725,6 +2725,7 @@ gdk_window_get_paint_gl_context (GdkWindow *window, GError **error)
   if (window->impl_window->gl_paint_context == NULL)
     window->impl_window->gl_paint_context =
       GDK_WINDOW_IMPL_GET_CLASS (window->impl)->create_gl_context (window,
+								   TRUE,
                                                                    GDK_GL_PROFILE_DEFAULT,
                                                                    NULL,
                                                                    error);
@@ -2738,8 +2739,9 @@ gdk_window_get_paint_gl_context (GdkWindow *window, GError **error)
  * @profile: the GL profile the context should target
  * @error: return location for an error
  *
- * Creates a new #GdkGLContext for the given window, matching the
- * framebuffer format to the visual of the #GdkWindow.
+ * Creates a new #GdkGLContext matching the
+ * framebuffer format to the visual of the #GdkWindow. The context
+ * is disconnected from any particular window or surface.
  *
  * If the creation of the #GdkGLContext failed, @error will be set.
  *
@@ -2763,6 +2765,7 @@ gdk_window_create_gl_context (GdkWindow    *window,
     return NULL;
 
   return GDK_WINDOW_IMPL_GET_CLASS (window->impl)->create_gl_context (window,
+								      FALSE,
                                                                       profile,
                                                                       paint_context,
                                                                       error);

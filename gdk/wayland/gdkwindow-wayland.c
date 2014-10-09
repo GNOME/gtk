@@ -101,6 +101,9 @@ struct _GdkWindowImplWayland
   struct wl_egl_window *egl_window;
   EGLSurface egl_surface;
 
+  struct wl_egl_window *dummy_egl_window;
+  EGLSurface dummy_egl_surface;
+
   unsigned int mapped : 1;
   unsigned int use_custom_surface : 1;
   unsigned int pending_commit : 1;
@@ -1171,6 +1174,18 @@ gdk_wayland_window_hide_surface (GdkWindow *window)
 
   if (impl->surface)
     {
+      if (impl->dummy_egl_surface)
+        {
+          eglDestroySurface(display_wayland->egl_display, impl->dummy_egl_surface);
+          impl->dummy_egl_surface = NULL;
+        }
+
+      if (impl->dummy_egl_window)
+        {
+          wl_egl_window_destroy (impl->dummy_egl_window);
+          impl->dummy_egl_window = NULL;
+        }
+
       if (impl->egl_surface)
         {
           eglDestroySurface(display_wayland->egl_display, impl->egl_surface);
@@ -2237,6 +2252,32 @@ gdk_wayland_window_get_egl_surface (GdkWindow *window,
 
   return impl->egl_surface;
 }
+
+EGLSurface
+gdk_wayland_window_get_dummy_egl_surface (GdkWindow *window,
+					  EGLConfig config)
+{
+  GdkWaylandDisplay *display_wayland = GDK_WAYLAND_DISPLAY (gdk_window_get_display (window));
+  GdkWindowImplWayland *impl;
+  struct wl_egl_window *egl_window;
+
+  g_return_val_if_fail (GDK_IS_WAYLAND_WINDOW (window), NULL);
+
+  impl = GDK_WINDOW_IMPL_WAYLAND (window->impl);
+
+  if (impl->dummy_egl_surface == NULL)
+    {
+      impl->dummy_egl_window =
+        wl_egl_window_create (impl->surface, 1, 1);
+
+      impl->dummy_egl_surface =
+        eglCreateWindowSurface (display_wayland->egl_display,
+                                config, impl->dummy_egl_window, NULL);
+    }
+
+  return impl->dummy_egl_surface;
+}
+
 
 /**
  * gdk_wayland_window_set_use_custom_surface:
