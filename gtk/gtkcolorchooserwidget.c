@@ -570,7 +570,7 @@ gtk_color_chooser_widget_init (GtkColorChooserWidget *cc)
       connect_custom_signals (p, cc);
       gtk_container_add (GTK_CONTAINER (box), p);
 
-      if (i == 8)
+      if (i == 9)
         break;
     }
   g_variant_unref (variant);
@@ -734,7 +734,7 @@ add_custom_color (GtkColorChooserWidget *cc,
   GList *children;
 
   children = gtk_container_get_children (GTK_CONTAINER (cc->priv->custom));
-  if (g_list_length (children) >= 8)
+  if (g_list_length (children) >= 9)
     {
       last = g_list_last (children)->data;
       gtk_widget_destroy (last);
