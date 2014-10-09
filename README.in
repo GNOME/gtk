@@ -99,6 +99,14 @@ Release notes for 3.14
   to be problematic. This combination is using code paths in cairo and
   graphics drivers which are rarely tested and likely buggy.
 
+* GtkTextView is now using a pixel-cache internally, and is drawing
+  a background underneath the text. This can cause problems for applications
+  which assumed that they could draw things below and above the text
+  by chaining up in the ::draw implementation of their GtkTextView subclass.
+  As a short-term workaround, you can make the application apply a
+  custom theme to the text view with a transparent background. For
+  a proper fix, use the new ::draw_layer vfunc.
+
 Release notes for 3.12
 ======================
 
