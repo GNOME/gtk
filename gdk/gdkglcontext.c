@@ -270,18 +270,16 @@ gdk_gl_context_flush_buffer (GdkGLContext *context,
  *
  * Makes the @context the current one.
  *
- * Returns: %TRUE if the context is current
- *
  * Since: 3.16
  */
-gboolean
+void
 gdk_gl_context_make_current (GdkGLContext *context)
 {
   GdkGLContextPrivate *priv = gdk_gl_context_get_instance_private (context);
 
-  g_return_val_if_fail (GDK_IS_GL_CONTEXT (context), FALSE);
+  g_return_if_fail (GDK_IS_GL_CONTEXT (context));
 
-  return gdk_display_make_gl_context_current (gdk_window_get_display (priv->window), context);
+  gdk_display_make_gl_context_current (gdk_window_get_display (priv->window), context);
 }
 
 /**

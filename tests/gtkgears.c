@@ -292,12 +292,7 @@ gtk_gears_size_allocate (GtkWidget     *widget,
 
   if (gtk_widget_get_realized (widget))
     {
-      if (!gtk_gl_area_make_current (glarea))
-        {
-          g_warning ("Unable to make gl context current");
-          return;
-        }
-
+      gtk_gl_area_make_current (glarea);
       reshape (allocation->width, allocation->height);
     }
 }
@@ -316,11 +311,7 @@ gtk_gears_realize (GtkWidget *widget)
 
   GTK_WIDGET_CLASS (gtk_gears_parent_class)->realize (widget);
 
-  if (!gtk_gl_area_make_current (glarea))
-    {
-      g_warning ("Unable to make gl context current");
-      return;
-    }
+  gtk_gl_area_make_current (glarea);
 
   glLightfv(GL_LIGHT0, GL_POSITION, pos);
   glEnable(GL_CULL_FACE);

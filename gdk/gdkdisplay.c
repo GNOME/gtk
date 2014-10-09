@@ -2255,17 +2255,15 @@ gdk_display_destroy_gl_context (GdkDisplay   *display,
  *
  * Makes the given @context the current GL context, or unsets
  * the current GL context if @context is %NULL.
- *
- * Returns: %TRUE if successful
  */
-gboolean
+void
 gdk_display_make_gl_context_current (GdkDisplay   *display,
                                      GdkGLContext *context)
 {
   GdkGLContext *current = gdk_display_get_current_gl_context (display);
 
   if (current == context)
-    return TRUE;
+    return;
 
   if (context == NULL)
     g_object_set_data (G_OBJECT (display), "-gdk-gl-current-context", NULL);
@@ -2274,7 +2272,7 @@ gdk_display_make_gl_context_current (GdkDisplay   *display,
                             g_object_ref (context),
                             (GDestroyNotify) g_object_unref);
 
-  return GDK_DISPLAY_GET_CLASS (display)->make_gl_context_current (display, context);
+  GDK_DISPLAY_GET_CLASS (display)->make_gl_context_current (display, context);
 }
 
 /*< private >

@@ -96,8 +96,7 @@ gdk_x11_gl_context_update (GdkGLContext *context)
   GdkWindow *window = gdk_gl_context_get_window (context);
   int width, height;
 
-  if (!gdk_gl_context_make_current (context))
-    return;
+  gdk_gl_context_make_current (context);
 
   width = gdk_window_get_width (window);
   height = gdk_window_get_height (window);
@@ -155,10 +154,12 @@ gdk_x11_window_invalidate_for_new_frame (GdkWindow      *window,
 
   buffer_age = 0;
 
-  if (display_x11->has_glx_buffer_age &&
-      gdk_gl_context_make_current (window->gl_paint_context))
-    glXQueryDrawable(dpy, context_x11->drawable,
-		     GLX_BACK_BUFFER_AGE_EXT, &buffer_age);
+  if (display_x11->has_glx_buffer_age)
+    {
+      gdk_gl_context_make_current (window->gl_paint_context);
+      glXQueryDrawable(dpy, context_x11->drawable,
+		       GLX_BACK_BUFFER_AGE_EXT, &buffer_age);
+    }
 
   invalidate_all = FALSE;
   if (buffer_age == 0 || buffer_age >= 4)
@@ -826,7 +827,7 @@ gdk_x11_display_destroy_gl_context (GdkDisplay   *display,
     }
 }
 
-gboolean
+void
 gdk_x11_display_make_gl_context_current (GdkDisplay   *display,
                                          GdkGLContext *context)
 {
@@ -839,13 +840,10 @@ gdk_x11_display_make_gl_context_current (GdkDisplay   *display,
   if (context == NULL)
     {
       glXMakeContextCurrent (dpy, None, None, NULL);
-      return TRUE;
+      return;
     }
 
   context_x11 = GDK_X11_GL_CONTEXT (context);
-
-  if (context_x11->glx_context == NULL)
-    return FALSE;
 
   window = gdk_gl_context_get_window (context);
 
@@ -862,8 +860,6 @@ gdk_x11_display_make_gl_context_current (GdkDisplay   *display,
             g_print ("Making GLX context current to drawable %lu\n",
                      (unsigned long) context_x11->drawable));
 
-  gdk_x11_display_error_trap_push (display);
-
   glXMakeContextCurrent (dpy, context_x11->drawable, context_x11->drawable,
                          context_x11->glx_context);
 
@@ -874,14 +870,6 @@ gdk_x11_display_make_gl_context_current (GdkDisplay   *display,
       else
         glXSwapIntervalSGI (0);
     }
-
-  if (gdk_x11_display_error_trap_pop (display))
-    {
-      g_critical ("X Error received while calling glXMakeContextCurrent()");
-      return FALSE;
-    }
-
-  return TRUE;
 }
 
 /**

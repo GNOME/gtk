@@ -48,7 +48,7 @@ GDK_AVAILABLE_IN_3_16
 GdkWindow *             gdk_gl_context_get_window       (GdkGLContext *context);
 
 GDK_AVAILABLE_IN_3_16
-gboolean                gdk_gl_context_make_current     (GdkGLContext *context);
+void                    gdk_gl_context_make_current     (GdkGLContext *context);
 GDK_AVAILABLE_IN_3_16
 GdkGLContext *          gdk_gl_context_get_current      (void);
 GDK_AVAILABLE_IN_3_16
