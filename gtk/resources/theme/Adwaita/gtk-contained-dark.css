@@ -4372,6 +4372,23 @@ GtkCalendar.header .menuitem.titlebutton.button:selected, .list-row:selected {
 .monospace {
   font: Monospace; }
 
+/* Overlay scrollbars */
+.scrollbar.overlay-indicator.dragging,
+.scrollbar.overlay-indicator.hovering {
+  -GtkRange-slider-width: 15; }
+
+.scrollbar.overlay-indicator.dragging.trough,
+.scrollbar.overlay-indicator.hovering.trough {
+  background-color: rgba(0, 0, 0, 0.1); }
+
+.sidebar .scrollbar.overlay-indicator,
+.scrollbar.overlay-indicator {
+  -GtkRange-slider-width: 10; }
+
+.sidebar .scrollbar.overlay-indicator .trough,
+.scrollbar.overlay-indicator.trough {
+  background-color: transparent; }
+
 /* GTK NAMED COLORS
    ----------------
    use responsibly! */

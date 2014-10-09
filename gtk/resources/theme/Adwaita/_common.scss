@@ -3022,3 +3022,25 @@ GtkVolumeButton.button { padding: 8px; }
 .monospace {
   font: Monospace;
 }
+
+/* Overlay scrollbars */
+
+.scrollbar.overlay-indicator.dragging,
+.scrollbar.overlay-indicator.hovering {
+  -GtkRange-slider-width: 15;
+}
+
+.scrollbar.overlay-indicator.dragging.trough,
+.scrollbar.overlay-indicator.hovering.trough {
+  background-color: transparentize(black, 0.9);
+}
+
+.sidebar .scrollbar.overlay-indicator,
+.scrollbar.overlay-indicator {
+  -GtkRange-slider-width: 10;
+}
+
+.sidebar .scrollbar.overlay-indicator .trough,
+.scrollbar.overlay-indicator.trough {
+  background-color: transparent;
+}
