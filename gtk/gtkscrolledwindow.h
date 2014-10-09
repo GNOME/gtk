@@ -204,8 +204,6 @@ void           gtk_scrolled_window_set_capture_button_press (GtkScrolledWindow  
 GDK_AVAILABLE_IN_3_4
 gboolean       gtk_scrolled_window_get_capture_button_press (GtkScrolledWindow      *scrolled_window);
 
-gint _gtk_scrolled_window_get_scrollbar_spacing (GtkScrolledWindow *scrolled_window);
-
 
 G_END_DECLS
 

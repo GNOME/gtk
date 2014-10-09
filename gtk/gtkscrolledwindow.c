@@ -283,6 +283,7 @@ static gboolean _gtk_scrolled_window_get_overshoot (GtkScrolledWindow *scrolled_
                                                     gint              *overshoot_y);
 
 static void     gtk_scrolled_window_start_deceleration (GtkScrolledWindow *scrolled_window);
+static gint     _gtk_scrolled_window_get_scrollbar_spacing (GtkScrolledWindow *scrolled_window);
 
 static guint signals[LAST_SIGNAL] = {0};
 
@@ -2858,7 +2859,7 @@ gtk_scrolled_window_add_with_viewport (GtkScrolledWindow *scrolled_window,
  * 
  * Returns: the spacing, in pixels.
  */
-gint
+static gint
 _gtk_scrolled_window_get_scrollbar_spacing (GtkScrolledWindow *scrolled_window)
 {
   GtkScrolledWindowClass *class;
