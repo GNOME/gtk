@@ -394,6 +394,7 @@ gdk_window_constrain_size
 gdk_window_beep
 gdk_window_get_scale_factor
 gdk_window_set_opaque_region
+gdk_window_mark_paint_from_clip
 
 <SUBSECTION>
 gdk_window_get_clip_region
