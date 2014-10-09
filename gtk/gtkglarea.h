@@ -98,7 +98,7 @@ GDK_AVAILABLE_IN_3_16
 GdkGLContext *  gtk_gl_area_get_context         (GtkGLArea        *area);
 
 GDK_AVAILABLE_IN_3_16
-gboolean        gtk_gl_area_make_current        (GtkGLArea        *area);
+void            gtk_gl_area_make_current        (GtkGLArea        *area);
 
 G_END_DECLS
 

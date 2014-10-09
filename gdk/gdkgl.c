@@ -98,8 +98,7 @@ gdk_cairo_draw_from_gl (cairo_t              *cr,
 
   clip_region = gdk_cairo_region_from_clip (cr);
 
-  if (!gdk_gl_context_make_current (context))
-    g_error ("make current failed");
+  gdk_gl_context_make_current (context);
 
   glGenFramebuffersEXT (1, &framebuffer);
   glBindFramebufferEXT (GL_FRAMEBUFFER_EXT, framebuffer);

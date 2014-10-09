@@ -2887,13 +2887,14 @@ gdk_window_begin_paint_region (GdkWindow       *window,
       int wh = gdk_window_get_height (window) * gdk_window_get_scale_factor (window);
 
       context = gdk_window_get_paint_gl_context (window, NULL);
-      if (context == NULL || !gdk_gl_context_make_current (context))
+      if (context == NULL)
         {
           g_warning ("gl rendering failed, context: %p", context);
           window->current_paint.use_gl = FALSE;
         }
       else
         {
+	  gdk_gl_context_make_current (context);
           /* With gl we always need a surface to combine the gl
              drawing with the native drawing. */
           needs_surface = TRUE;
@@ -3060,8 +3061,7 @@ gdk_window_end_paint (GdkWindow *window)
           cairo_region_subtract (opaque_region, window->current_paint.flushed_region);
           cairo_region_subtract (opaque_region, window->current_paint.need_blend_region);
 
-          if (!gdk_gl_context_make_current (window->gl_paint_context))
-            g_error ("make current failed");
+          gdk_gl_context_make_current (window->gl_paint_context);
 
           if (!cairo_region_is_empty (opaque_region))
             gdk_gl_texture_from_surface (window->current_paint.surface,

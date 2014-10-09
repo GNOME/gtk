@@ -57,7 +57,7 @@ void            gdk_wayland_window_invalidate_for_new_frame         (GdkWindow  
                                                                      cairo_region_t    *update_area);
 void            gdk_wayland_display_destroy_gl_context              (GdkDisplay        *display,
                                                                      GdkGLContext      *context);
-gboolean        gdk_wayland_display_make_gl_context_current         (GdkDisplay        *display,
+void            gdk_wayland_display_make_gl_context_current         (GdkDisplay        *display,
                                                                      GdkGLContext      *context);
 
 G_END_DECLS

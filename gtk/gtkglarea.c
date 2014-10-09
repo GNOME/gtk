@@ -219,15 +219,9 @@ gtk_gl_area_realize (GtkWidget *widget)
                                                 NULL);
   if (priv->context != NULL)
     {
-      if (gdk_gl_context_make_current (priv->context))
-	{
-	  glGenFramebuffersEXT (1, &priv->framebuffer);
-	  glBindFramebufferEXT (GL_FRAMEBUFFER_EXT, priv->framebuffer);
-	}
-      else
-	{
-	  g_warning ("Unable to make new context current");
-	}
+      gdk_gl_context_make_current (priv->context);
+      glGenFramebuffersEXT (1, &priv->framebuffer);
+      glBindFramebufferEXT (GL_FRAMEBUFFER_EXT, priv->framebuffer);
     }
 }
 
@@ -239,8 +233,9 @@ gtk_gl_area_unrealize (GtkWidget *widget)
 
   if (priv->context != NULL)
     {
-      if (priv->framebuffer != 0 && gtk_gl_area_make_current (self))
+      if (priv->framebuffer != 0)
 	{
+	  gtk_gl_area_make_current (self);
 	  /* Bind 0, which means render to back buffer, as a result, fb is unbound */
 	  glBindFramebufferEXT (GL_FRAMEBUFFER_EXT, 0);
 	  glDeleteFramebuffersEXT (1, &priv->framebuffer);
@@ -276,8 +271,7 @@ gtk_gl_area_draw (GtkWidget *widget,
   if (priv->context == NULL)
     return FALSE;
 
-  if (!gtk_gl_area_make_current (self))
-    return FALSE;
+  gtk_gl_area_make_current (self);
 
   scale = gtk_widget_get_scale_factor (widget);
   w = gtk_widget_get_allocated_width (widget) * scale;
@@ -332,8 +326,7 @@ gtk_gl_area_draw (GtkWidget *widget,
                               color_tex ? GL_TEXTURE : GL_RENDERBUFFER,
                               scale, 0, 0, w, h);
 
-      if (!gtk_gl_area_make_current (self))
-	g_error ("can't make old context current again");
+      gtk_gl_area_make_current (self);
     }
   else
     {
@@ -613,24 +606,20 @@ gtk_gl_area_get_context (GtkGLArea *area)
  * #GtkGLArea::render signal, and should not be called by
  * application code.
  *
- * Returns: %TRUE if the context was associated successfully with
- *  the widget
- *
  * Since: 3.16
  */
-gboolean
+void
 gtk_gl_area_make_current (GtkGLArea *area)
 {
   GtkGLAreaPrivate *priv = gtk_gl_area_get_instance_private (area);
   GtkWidget *widget;
 
-  g_return_val_if_fail (GTK_IS_GL_AREA (area), FALSE);
+  g_return_if_fail (GTK_IS_GL_AREA (area));
 
   widget = GTK_WIDGET (area);
-  g_return_val_if_fail (gtk_widget_get_realized (widget), FALSE);
 
-  if (priv->context == NULL)
-    return FALSE;
+  g_return_if_fail (gtk_widget_get_realized (widget));
 
-  return gdk_gl_context_make_current (priv->context);
+  if (priv->context)
+    gdk_gl_context_make_current (priv->context);
 }
