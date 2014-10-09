@@ -423,22 +423,28 @@ make_blurred_pango_surface (cairo_t           *existing_cr,
   cairo_surface_t *surface;
   cairo_t *cr;
   gdouble radius, clip_radius;
+  gdouble x_scale, y_scale;
   PangoRectangle ink_rect;
 
   radius = _gtk_css_number_value_get (shadow->radius, 0);
 
   pango_layout_get_pixel_extents (layout, &ink_rect, NULL);
   clip_radius = _gtk_cairo_blur_compute_pixels (radius);
+  x_scale = y_scale = 1;
+#ifdef HAVE_CAIRO_SURFACE_SET_DEVICE_SCALE
+      cairo_surface_get_device_scale (cairo_get_target (existing_cr), &x_scale, &y_scale);
+#endif
 
   surface = cairo_surface_create_similar_image (cairo_get_target (existing_cr),
                                                 CAIRO_FORMAT_A8,
-                                                ink_rect.width + 2 * clip_radius,
-                                                ink_rect.height + 2 * clip_radius);
+                                                x_scale * (ink_rect.width + 2 * clip_radius),
+                                                y_scale * (ink_rect.height + 2 * clip_radius));
+  cairo_surface_set_device_scale (surface, x_scale, y_scale);
   cairo_surface_set_device_offset (surface, -ink_rect.x + clip_radius, -ink_rect.y + clip_radius);
   cr = cairo_create (surface);
   cairo_move_to (cr, 0, 0);
   _gtk_pango_fill_layout (cr, layout);
-  _gtk_cairo_blur_surface (surface, radius);
+  _gtk_cairo_blur_surface (surface, radius * x_scale);
 
   cairo_destroy (cr);
 
