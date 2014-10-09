@@ -6948,6 +6948,8 @@ _gtk_widget_draw_internal (GtkWidget *widget,
     {
       gboolean result;
 
+      gdk_window_mark_paint_from_clip (window, cr);
+
       g_signal_emit (widget, widget_signals[DRAW],
                      0, cr,
                      &result);

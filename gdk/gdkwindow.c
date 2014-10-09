@@ -2814,6 +2814,26 @@ gdk_window_begin_paint_region (GdkWindow       *window,
 }
 
 /**
+ * gdk_window_mark_paint_from_clip:
+ * @window: a #GdkWindow
+ * @cr: a #cairo_t
+ *
+ * If you call this during a paint (e.g. between gdk_window_begin_paint_region()
+ * and gdk_window_end_paint() then gdk will mark the current clip region of the
+ * window as being drawn. This is required when mixing GL rendering via
+ * gdk_cairo_draw_from_gl() and cairo rendering, as otherwise gdk has no way
+ * of knowing when something paints over the gl drawn regions.
+ *
+ * This is typically called automatically by Gtk and you don't need
+ * to care about this.
+ **/
+void
+gdk_window_mark_paint_from_clip (GdkWindow          *window,
+				 cairo_t            *cr)
+{
+}
+
+/**
  * gdk_window_end_paint:
  * @window: a #GdkWindow
  *
