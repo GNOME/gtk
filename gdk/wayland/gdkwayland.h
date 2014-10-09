@@ -33,6 +33,7 @@
 #include <gdk/wayland/gdkwaylanddisplay.h>
 #include <gdk/wayland/gdkwaylandselection.h>
 #include <gdk/wayland/gdkwaylandwindow.h>
+#include <gdk/wayland/gdkwaylandglcontext.h>
 
 #undef __GDKWAYLAND_H_INSIDE__
 
