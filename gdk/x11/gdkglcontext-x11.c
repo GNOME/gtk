@@ -875,9 +875,6 @@ gdk_x11_display_make_gl_context_current (GdkDisplay   *display,
         glXSwapIntervalSGI (0);
     }
 
-  /* TODO: Is this needed? */
-  XSync (dpy, False);
-
   if (gdk_x11_display_error_trap_pop (display))
     {
       g_critical ("X Error received while calling glXMakeContextCurrent()");
