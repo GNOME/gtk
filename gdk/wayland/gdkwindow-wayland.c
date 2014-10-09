@@ -2259,7 +2259,6 @@ gdk_wayland_window_get_dummy_egl_surface (GdkWindow *window,
 {
   GdkWaylandDisplay *display_wayland = GDK_WAYLAND_DISPLAY (gdk_window_get_display (window));
   GdkWindowImplWayland *impl;
-  struct wl_egl_window *egl_window;
 
   g_return_val_if_fail (GDK_IS_WAYLAND_WINDOW (window), NULL);
 
