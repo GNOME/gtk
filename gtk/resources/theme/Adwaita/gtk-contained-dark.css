@@ -1930,13 +1930,12 @@ GtkCalendar.header column-header .button.titlebutton, column-header .button:hove
   .menu.button, .header-bar .menu.button.titlebutton,
   .titlebar .menu.button.titlebutton,
   GtkCalendar.header .menu.button.titlebutton {
-    border-color: #3c3c3c;
     border-style: none;
     border-radius: 0; }
     .menu.button.top {
-      border-bottom: 1px solid; }
+      border-bottom: 1px solid #3c3c3c; }
     .menu.button.bottom {
-      border-top: 1px solid; }
+      border-top: 1px solid #3c3c3c; }
     .menu.button:hover {
       background-color: #3c3c3c; }
     .menu.button:insensitive {
