@@ -1315,6 +1315,20 @@ column-header.button.dnd { // for treeview-like derive widgets
     &.arrow { -gtk-icon-source: -gtk-icontheme('pan-end-symbolic'); }
     &.arrow:dir(rtl) {-gtk-icon-source:-gtk-icontheme('pan-end-symbolic-rtl'); }
   }
+  &.button { // overlow buttons
+    @extend %undecorated_button;
+    border-color: mix($fg_color, $base_color, 10%);
+    border-style: none;
+    border-radius: 0;
+    &.top { border-bottom: 1px solid; }
+    &.bottom { border-top: 1px solid; }
+    &:hover { background-color: mix($fg_color, $base_color, 10%); }
+    &:insensitive {
+      color: transparent;
+      background-color: transparent;
+      border-color: transparent ;
+    }
+  }
 }
 
 .menuitem .accelerator { color: gtkalpha(currentColor,0.55); }
