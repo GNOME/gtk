@@ -53,11 +53,6 @@
             <property name="visible">True</property>
             <property name="orientation">vertical</property>
             <child>
-              <object class="GtkInspectorButtonPath" id="button_path">
-                <property name="visible">True</property>
-              </object>
-            </child>
-            <child>
               <object class="GtkPaned">
                 <property name="visible">True</property>
                 <property name="orientation">horizontal</property>

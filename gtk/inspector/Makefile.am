@@ -19,8 +19,6 @@ libgtkinspector_la_SOURCES = 		\
 	action-editor.c			\
 	actions.h			\
 	actions.c			\
-	button-path.h			\
-	button-path.c			\
 	classes-list.h			\
 	classes-list.c			\
 	css-editor.h			\
@@ -95,7 +93,6 @@ libgtkinspector_la_LDFLAGS =		\
 
 templates = 				\
 	actions.ui 			\
-	button-path.ui 			\
 	classes-list.ui 		\
 	css-editor.ui 			\
 	data-list.ui 			\

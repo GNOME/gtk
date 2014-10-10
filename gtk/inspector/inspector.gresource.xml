@@ -2,7 +2,6 @@
 <gresources>
   <gresource prefix="/org/gtk/inspector">
     <file compressed="true">actions.ui</file>
-    <file compressed="true">button-path.ui</file>
     <file compressed="true">classes-list.ui</file>
     <file compressed="true">css-editor.ui</file>
     <file compressed="true">data-list.ui</file>
