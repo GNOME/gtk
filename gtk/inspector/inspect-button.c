@@ -27,7 +27,7 @@
 #include "window.h"
 #include "widget-tree.h"
 
-#include "gtknotebook.h"
+#include "gtkstack.h"
 #include "gtkmain.h"
 
 typedef struct
@@ -213,7 +213,7 @@ select_widget (GtkInspectorWindow *iw,
 
   iw->selected_widget = widget;
 
-  gtk_notebook_set_current_page (GTK_NOTEBOOK (iw->top_notebook), 0);
+  gtk_stack_set_visible_child_name (GTK_STACK (iw->top_stack), "objects");
 
   if (!gtk_inspector_widget_tree_find_object (wt, G_OBJECT (widget), &iter))
     gtk_inspector_widget_tree_scan (wt, gtk_widget_get_toplevel (widget));

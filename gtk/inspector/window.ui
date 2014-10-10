@@ -42,12 +42,17 @@
             <property name="pack-type">start</property>
           </packing>
         </child>
+        <child type="title">
+          <object class="GtkStackSwitcher">
+            <property name="visible">True</property>
+            <property name="stack">top_stack</property>
+          </object>
+        </child>
       </object>
     </child>
     <child>
-      <object class="GtkNotebook" id="top_notebook">
+      <object class="GtkStack" id="top_stack">
         <property name="visible">True</property>
-        <property name="show-border">False</property>
         <child>
           <object class="GtkBox">
             <property name="visible">True</property>
@@ -299,30 +304,18 @@
             </child>
           </object>
           <packing>
-            <property name="tab_expand">True</property>
-            <property name="tab_fill">True</property>
+            <property name="name">objects</property>
+            <property name="title" translatable="yes">Objects</property>
           </packing>
-        </child>
-        <child type="tab">
-          <object class="GtkLabel">
-            <property name="visible">True</property>
-            <property name="label" translatable="yes">Objects</property>
-          </object>
         </child>
         <child>
           <object class="GtkInspectorResourceList">
             <property name="visible">True</property>
           </object>
           <packing>
-            <property name="tab_expand">True</property>
-            <property name="tab_fill">True</property>
+            <property name="name">resources</property>
+            <property name="title" translatable="yes">Resources</property>
           </packing>
-        </child>
-        <child type="tab">
-          <object class="GtkLabel">
-            <property name="visible">True</property>
-            <property name="label" translatable="yes">Resources</property>
-          </object>
         </child>
         <child>
           <object class="GtkInspectorCssEditor">
@@ -330,45 +323,27 @@
             <property name="global">True</property>
           </object>
           <packing>
-            <property name="tab_expand">True</property>
-            <property name="tab_fill">True</property>
+            <property name="name">css</property>
+            <property name="title" translatable="yes">Custom CSS</property>
           </packing>
-        </child>
-        <child type="tab">
-          <object class="GtkLabel">
-            <property name="visible">True</property>
-            <property name="label" translatable="yes">Custom CSS</property>
-          </object>
         </child>
         <child>
           <object class="GtkInspectorVisual">
             <property name="visible">True</property>
           </object>
           <packing>
-            <property name="tab_expand">True</property>
-            <property name="tab_fill">True</property>
+            <property name="name">visual</property>
+            <property name="title" translatable="yes">Visual</property>
           </packing>
-        </child>
-        <child type="tab">
-          <object class="GtkLabel">
-            <property name="visible">True</property>
-            <property name="label" translatable="yes">Visual</property>
-          </object>
         </child>
         <child>
           <object class="GtkInspectorGeneral">
             <property name="visible">True</property>
           </object>
           <packing>
-            <property name="tab_expand">True</property>
-            <property name="tab_fill">True</property>
+            <property name="name">general</property>
+            <property name="title" translatable="yes">General</property>
           </packing>
-        </child>
-        <child type="tab">
-          <object class="GtkLabel">
-            <property name="visible">True</property>
-            <property name="label" translatable="yes">General</property>
-          </object>
         </child>
       </object>
     </child>

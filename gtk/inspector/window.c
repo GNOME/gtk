@@ -132,15 +132,9 @@ on_send_widget_to_shell_activate (GtkWidget          *menuitem,
 static void
 gtk_inspector_window_init (GtkInspectorWindow *iw)
 {
-  gchar *title;
-
   gtk_widget_init_template (GTK_WIDGET (iw));
 
   gtk_window_group_add_window (gtk_window_group_new (), GTK_WINDOW (iw));
-
-  title = g_strdup_printf (_("GTK+ Inspector — %s"), g_get_application_name ());
-  gtk_window_set_title (GTK_WINDOW (iw), title);
-  g_free (title);
 
   if (gtk_inspector_python_is_enabled ())
     {
@@ -170,7 +164,7 @@ gtk_inspector_window_class_init (GtkInspectorWindowClass *klass)
 
   gtk_widget_class_set_template_from_resource (widget_class, "/org/gtk/inspector/window.ui");
 
-  gtk_widget_class_bind_template_child (widget_class, GtkInspectorWindow, top_notebook);
+  gtk_widget_class_bind_template_child (widget_class, GtkInspectorWindow, top_stack);
   gtk_widget_class_bind_template_child (widget_class, GtkInspectorWindow, widget_tree);
   gtk_widget_class_bind_template_child (widget_class, GtkInspectorWindow, prop_list);
   gtk_widget_class_bind_template_child (widget_class, GtkInspectorWindow, child_prop_list);
