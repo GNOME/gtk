@@ -11667,16 +11667,28 @@ _gtk_window_get_popover_position (GtkWindow             *window,
 
 static GtkWidget *inspector_window = NULL;
 
+static void set_warn_again (gboolean warn);
+
 static void
 warn_response (GtkDialog *dialog,
                gint       response)
 {
+  GtkWidget *check;
+  gboolean remember;
+
+  check = g_object_get_data (G_OBJECT (dialog), "check");
+  remember = gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (check));
+
   gtk_widget_destroy (GTK_WIDGET (dialog));
   g_object_set_data (G_OBJECT (inspector_window), "warning_dialog", NULL);
   if (response == GTK_RESPONSE_NO)
     {
       gtk_widget_destroy (inspector_window);
       inspector_window = NULL;
+    }
+  else
+    {
+      set_warn_again (!remember);
     }
 }
 
@@ -11686,6 +11698,8 @@ gtk_window_set_debugging (gboolean enable,
                           gboolean warn)
 {
   GtkWidget *dialog = NULL;
+  GtkWidget *area;
+  GtkWidget *check;
 
   if (inspector_window == NULL)
     {
@@ -11705,6 +11719,13 @@ gtk_window_set_debugging (gboolean enable,
               _("GTK+ Inspector is an interactive debugger that lets you explore and "
                 "modify the internals of any GTK+ application. Using it may cause the "
                 "application to break or crash."));
+
+          area = gtk_message_dialog_get_message_area (GTK_MESSAGE_DIALOG (dialog));
+          check = gtk_check_button_new_with_label (_("Don't show this message again"));
+          gtk_widget_set_margin_start (check, 10);
+          gtk_widget_show (check);
+          gtk_container_add (GTK_CONTAINER (area), check);
+          g_object_set_data (G_OBJECT (dialog), "check", check);
           gtk_dialog_add_button (GTK_DIALOG (dialog), _("_Cancel"), GTK_RESPONSE_NO);
           gtk_dialog_add_button (GTK_DIALOG (dialog), _("_OK"), GTK_RESPONSE_YES);
           g_signal_connect (dialog, "response", G_CALLBACK (warn_response), NULL);
@@ -11771,6 +11792,25 @@ inspector_keybinding_enabled (gboolean *warn)
     }
 
   return enabled;
+}
+
+static void
+set_warn_again (gboolean warn)
+{
+  GSettingsSchema *schema;
+  GSettings *settings;
+
+  schema = g_settings_schema_source_lookup (g_settings_schema_source_get_default (),
+                                            "org.gtk.Settings.Debug",
+                                            TRUE);
+
+  if (schema)
+    {
+      settings = g_settings_new_full (schema, NULL, NULL);
+      g_settings_set_boolean (settings, "inspector-warning", warn);
+      g_object_unref (settings);
+      g_settings_schema_unref (schema);
+    }
 }
 
 static gboolean
