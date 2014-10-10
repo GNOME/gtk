@@ -137,10 +137,12 @@
                 <property name="hscrollbar-policy">automatic</property>
                 <property name="vscrollbar-policy">automatic</property>
                 <property name="shadow-type">in</property>
+                <style>
+                  <class name="view"/>
+                </style>
                 <child>
                   <object class="GtkTextView">
                     <property name="visible">True</property>
-                    <property name="margin">20</property>
                     <property name="editable">False</property>
                     <property name="buffer">buffer</property>
                   </object>
@@ -157,10 +159,12 @@
                 <property name="hscrollbar-policy">automatic</property>
                 <property name="vscrollbar-policy">automatic</property>
                 <property name="shadow-type">in</property>
+                <style>
+                  <class name="view"/>
+                </style>
                 <child>
                   <object class="GtkImage" id="image">
                     <property name="visible">True</property>
-                    <property name="margin">20</property>
                     <property name="halign">center</property>
                     <property name="valign">center</property>
                   </object>
