@@ -246,6 +246,15 @@
           </packing>
         </child>
         <child>
+          <object class="GtkInspectorStatistics">
+            <property name="visible">True</property>
+          </object>
+          <packing>
+            <property name="name">statistics</property>
+            <property name="title" translatable="yes">Statistics</property>
+          </packing>
+        </child>
+        <child>
           <object class="GtkInspectorResourceList">
             <property name="visible">True</property>
             <property name="close-details-button">close_resource_details</property>

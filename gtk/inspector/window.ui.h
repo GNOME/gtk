@@ -15,6 +15,7 @@ N_("Actions");
 N_("Menu");
 N_("Gestures");
 N_("Objects");
+N_("Statistics");
 N_("Resources");
 N_("Custom CSS");
 N_("Visual");

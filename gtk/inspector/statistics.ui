@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface domain="gtk30">
+  <object class="GtkListStore" id="model">
+    <columns>
+      <column type="gchararray"/>
+      <column type="gint"/>
+      <column type="gint"/>
+    </columns>
+  </object>
+  <template class="GtkInspectorStatistics" parent="GtkBox">
+    <property name="visible">True</property>
+    <property name="orientation">vertical</property>
+    <child>
+      <object class="GtkStack" id="stack">
+        <property name="visible">True</property>
+        <child>
+          <object class="GtkBox">
+            <property name="visible">True</property>
+            <property name="orientation">vertical</property>
+            <child>
+              <object class="GtkToolbar" id="toolbar">
+                <property name="visible">True</property>
+                <property name="icon-size">small-toolbar</property>
+                <child>
+                  <object class="GtkToolButton" id="button">
+                    <property name="visible">True</property>
+                    <property name="icon-name">view-refresh-symbolic</property>
+                    <property name="tooltip-text" translatable="yes">Refresh</property>
+                    <signal name="clicked" handler="refresh_clicked"/>
+                  </object>
+                </child>
+              </object>
+            </child>
+            <child>
+              <object class="GtkScrolledWindow">
+                <property name="visible">True</property>
+                <property name="expand">True</property>
+                <property name="hscrollbar-policy">automatic</property>
+                <property name="vscrollbar-policy">always</property>
+                <property name="shadow-type">in</property>
+                <child>
+                  <object class="GtkTreeView" id="view">
+                    <property name="visible">True</property>
+                    <property name="model">model</property>
+                    <child>
+                      <object class="GtkTreeViewColumn">
+                        <property name="visible">True</property>
+                        <property name="sort-column-id">0</property>
+                        <property name="title" translatable="yes">Type</property>
+                        <child>
+                          <object class="GtkCellRendererText">
+                            <property name="scale">0.8</property>
+                          </object>
+                          <attributes>
+                            <attribute name="text">0</attribute>
+                          </attributes>
+                        </child>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkTreeViewColumn" id="column_self">
+                        <property name="visible">True</property>
+                        <property name="sort-column-id">1</property>
+                        <property name="title" translatable="yes">Self</property>
+                        <child>
+                          <object class="GtkCellRendererText" id="renderer_self">
+                            <property name="scale">0.8</property>
+                          </object>
+                        </child>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkTreeViewColumn" id="column_cumulative">
+                        <property name="visible">True</property>
+                        <property name="sort-column-id">2</property>
+                        <property name="title" translatable="yes">Cumulative</property>
+                        <child>
+                          <object class="GtkCellRendererText" id="renderer_cumulative">
+                            <property name="scale">0.8</property>
+                          </object>
+                        </child>
+                      </object>
+                    </child>
+                  </object>
+                </child>
+              </object>
+            </child>
+          </object>
+          <packing>
+            <property name="name">statistics</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkLabel">
+            <property name="visible">True</property>
+            <property name="halign">center</property>
+            <property name="valign">center</property>
+            <property name="label" translatable="yes">Enable statistics with GOBJECT_DEBUG=instance-count</property>
+          </object>
+          <packing>
+            <property name="name">excuse</property>
+          </packing>
+        </child>
+      </object>
+    </child>
+  </template>
+</interface>

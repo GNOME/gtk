@@ -54,6 +54,8 @@ libgtkinspector_la_SOURCES = 		\
 	signals-list.c			\
 	size-groups.h			\
 	size-groups.c			\
+	statistics.h			\
+	statistics.c			\
 	visual.h			\
 	visual.c			\
 	window.h			\
@@ -100,6 +102,7 @@ templates = 				\
 	prop-list.ui 			\
 	resource-list.ui		\
 	signals-list.ui			\
+	statistics.ui			\
 	style-prop-list.ui		\
 	visual.ui			\
 	window.ui
