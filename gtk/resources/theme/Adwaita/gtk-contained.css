@@ -2049,13 +2049,12 @@ GtkCalendar.header column-header .button.titlebutton, column-header .button:hove
   .menu.button, .header-bar .menu.button.titlebutton,
   .titlebar .menu.button.titlebutton,
   GtkCalendar.header .menu.button.titlebutton {
-    border-color: #eaeaea;
     border-style: none;
     border-radius: 0; }
     .menu.button.top {
-      border-bottom: 1px solid; }
+      border-bottom: 1px solid #eaeaea; }
     .menu.button.bottom {
-      border-top: 1px solid; }
+      border-top: 1px solid #eaeaea; }
     .menu.button:hover {
       background-color: #eaeaea; }
     .menu.button:insensitive {
