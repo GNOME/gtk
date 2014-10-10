@@ -20,6 +20,7 @@ progs_ldadd = \
 
 noinst_PROGRAMS = $(TEST_PROGS)
 
+TESTS_ENVIRONMENT = G_ENABLE_DIAGNOSTIC=0
 
 TEST_PROGS			+= testing
 testing_SOURCES			 = testing.c
