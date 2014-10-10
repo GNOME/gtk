@@ -46,6 +46,10 @@ struct _GtkInspectorResourceListPrivate
   GtkWidget *count_label;
   GtkWidget *size_label;
   GtkWidget *info_grid;
+  GtkTreeViewColumn *count_column;
+  GtkCellRenderer *count_renderer;
+  GtkTreeViewColumn *size_column;
+  GtkCellRenderer *size_renderer;
 };
 
 G_DEFINE_TYPE_WITH_PRIVATE (GtkInspectorResourceList, gtk_inspector_resource_list, GTK_TYPE_BOX)
@@ -90,19 +94,21 @@ load_resources_recurse (GtkInspectorResourceList *sl,
       if (has_slash)
         {
           load_resources_recurse (sl, &iter, p, &count, &size);
+          *count_out += count;
+          *size_out += size;
         }
       else
         {
-          count = 1;
+          count = 0;
           g_resources_get_info (p, 0, &size, NULL, NULL);
+          *count_out += 1;
+          *size_out += size;
         }
 
       gtk_tree_store_set (sl->priv->model, &iter,
                           COLUMN_COUNT, count,
                           COLUMN_SIZE, size,
                           -1);
-      *count_out += count;
-      *size_out += size;
 
       g_free (p);
     }
@@ -226,10 +232,53 @@ load_resources (GtkInspectorResourceList *sl)
 }
 
 static void
+count_data_func (GtkTreeViewColumn *col,
+                 GtkCellRenderer   *cell,
+                 GtkTreeModel      *model,
+                 GtkTreeIter       *iter,
+                 gpointer           data)
+{
+  gint count;
+  gchar *text;
+
+  gtk_tree_model_get (model, iter, COLUMN_COUNT, &count, -1);
+  if (count > 0)
+    {
+      text = g_strdup_printf ("%d", count);
+      g_object_set (cell, "text", text, NULL);
+      g_free (text);
+    }
+  else
+    g_object_set (cell, "text", "", NULL);
+}
+
+static void
+size_data_func (GtkTreeViewColumn *col,
+                GtkCellRenderer   *cell,
+                GtkTreeModel      *model,
+                GtkTreeIter       *iter,
+                gpointer           data)
+{
+  gint size;
+  gchar *text;
+
+  gtk_tree_model_get (model, iter, COLUMN_SIZE, &size, -1);
+  text = g_format_size (size);
+  g_object_set (cell, "text", text, NULL);
+  g_free (text);
+}
+
+static void
 gtk_inspector_resource_list_init (GtkInspectorResourceList *sl)
 {
   sl->priv = gtk_inspector_resource_list_get_instance_private (sl);
   gtk_widget_init_template (GTK_WIDGET (sl));
+  gtk_tree_view_column_set_cell_data_func (sl->priv->count_column,
+                                           sl->priv->count_renderer,
+                                           count_data_func, sl, NULL);
+  gtk_tree_view_column_set_cell_data_func (sl->priv->size_column,
+                                           sl->priv->size_renderer,
+                                           size_data_func, sl, NULL);
   load_resources (sl);
 }
 
@@ -249,6 +298,10 @@ gtk_inspector_resource_list_class_init (GtkInspectorResourceListClass *klass)
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorResourceList, count);
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorResourceList, size_label);
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorResourceList, info_grid);
+  gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorResourceList, count_column);
+  gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorResourceList, count_renderer);
+  gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorResourceList, size_column);
+  gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorResourceList, size_renderer);
 
   gtk_widget_class_bind_template_callback (widget_class, selection_changed);
 }
