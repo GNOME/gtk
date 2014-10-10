@@ -1,3 +1,25 @@
+Overview of Changes from GTK+ 2.24.24 to 2.24.25
+================================================
+
+* Bug fixes:
+ 689138 GtkButton: do not prelight in touchscreen mode
+ 705054 Embed manifest into gtk-update-icon-cache.exe
+ 729924 Crash while trying to print
+ 731582 Please use AC_PATH_TOOL to improve cross-compile...
+ 733689 Editing a GtkEntry with completion, causes CRITI...
+ 734563 Fails to install due to typo in modules/input/Ma...
+ 734879 gdk_test_simulate_key() has no implementation on...
+ 735005 gdk_drawable_get_screen() used for mask, which i...
+ 735428 gtk_main() tries to unlock an unlocked mutex
+Avoid a crash when using the pixbuf engine outside GTK+
+ 
+* Other changes:
+ - Build fixes for MS Visual C 2010 and later
+
+* Translation updates:
+ Hungarian
+
+
 Overview of Changes from GTK+ 2.24.23 to 2.24.24
 ================================================
 
