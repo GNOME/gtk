@@ -360,6 +360,26 @@ gtk_print_backend_cups_class_init (GtkPrintBackendCupsClass *class)
   backend_class->set_password = gtk_print_backend_cups_set_password;
 }
 
+static gboolean
+option_is_ipp_option (GtkPrinterOption *option)
+{
+  gpointer data = g_object_get_data (G_OBJECT (option), "is-ipp-option");
+
+  if (data != NULL)
+    return GPOINTER_TO_UINT (data) != 0;
+  else
+    return FALSE;
+}
+
+static void
+option_set_is_ipp_option (GtkPrinterOption *option,
+                          gboolean          is_ipp_option)
+{
+  g_object_set_data (G_OBJECT (option),
+                     "is-ipp-option",
+                     GUINT_TO_POINTER (is_ipp_option ? 1 : 0));
+}
+
 static cairo_status_t
 _cairo_write_to_cups (void                *closure,
                       const unsigned char *data,
@@ -1891,6 +1911,8 @@ static const char * const printer_attrs_detailed[] =
     "media-right-margin-supported",
     "media-bottom-margin-supported",
     "media-top-margin-supported",
+    "sides-default",
+    "sides-supported",
   };
 
 typedef enum
@@ -1944,6 +1966,8 @@ typedef struct
   float     media_left_margin_default;
   float     media_right_margin_default;
   gboolean  media_margin_default_set;
+  gchar    *sides_default;
+  GList    *sides_supported;
 } PrinterSetupInfo;
 
 static void
@@ -2199,6 +2223,17 @@ cups_printer_handle_attribute (GtkPrintBackendCups *cups_backend,
               info->supports_collate = TRUE;
             }
         }
+    }
+  else if (g_strcmp0 (ippGetName (attr), "sides-default") == 0)
+    {
+      info->sides_default = g_strdup (ippGetString (attr, 0, NULL));
+    }
+  else if (g_strcmp0 (ippGetName (attr), "sides-supported") == 0)
+    {
+      for (i = 0; i < ippGetCount (attr); i++)
+        info->sides_supported = g_list_prepend (info->sides_supported, g_strdup (ippGetString (attr, i, NULL)));
+
+      info->sides_supported = g_list_reverse (info->sides_supported);
     }
   else if (g_strcmp0 (ippGetName (attr), "media-default") == 0)
     {
@@ -2606,6 +2641,8 @@ cups_request_printer_info_cb (GtkPrintBackendCups *cups_backend,
               GTK_PRINTER_CUPS (printer)->media_left_margin_default = info->media_left_margin_default;
               GTK_PRINTER_CUPS (printer)->media_right_margin_default = info->media_right_margin_default;
             }
+          GTK_PRINTER_CUPS (printer)->sides_default = info->sides_default;
+          GTK_PRINTER_CUPS (printer)->sides_supported = info->sides_supported;
 
           gtk_printer_set_has_details (printer, TRUE);
           g_signal_emit_by_name (printer, "details-acquired", TRUE);
@@ -4222,6 +4259,26 @@ static const struct {
 };
 
 static const struct {
+  const char *ipp_option_name;
+  const char *gtk_option_name;
+  const char *translation;
+} ipp_option_translations[] = {
+  { "sides", "gtk-duplex", N_("Two Sided") },
+};
+
+static const struct {
+  const char *ipp_option_name;
+  const char *ipp_choice;
+  const char *translation;
+} ipp_choice_translations[] = {
+  { "sides", "one-sided", NC_("sides", "One Sided") },
+  /* Translators: this is an option of "Two Sided" */
+  { "sides", "two-sided-long-edge", NC_("sides", "Long Edge (Standard)") },
+  /* Translators: this is an option of "Two Sided" */
+  { "sides", "two-sided-short-edge", NC_("sides", "Short Edge (Flip)") },
+};
+
+static const struct {
   const char *lpoption;
   const char *name;
 } lpoption_names[] = {
@@ -4914,6 +4971,144 @@ colord_printer_option_set_changed_cb (GtkPrinterOptionSet *set,
 }
 #endif
 
+/*
+ * Lookup translation and Gtk+ name of given IPP option name.
+ */
+static gboolean
+get_ipp_option_translation (const gchar  *ipp_option_name,
+                            gchar       **gtk_option_name,
+                            gchar       **translation)
+{
+  gint i;
+
+  *gtk_option_name = NULL;
+  *translation = NULL;
+
+  for (i = 0; i < G_N_ELEMENTS (ipp_option_translations); i++)
+    {
+      if (g_strcmp0 (ipp_option_translations[i].ipp_option_name, ipp_option_name) == 0)
+        {
+          *gtk_option_name = g_strdup (ipp_option_translations[i].gtk_option_name);
+          *translation = g_strdup (_(ipp_option_translations[i].translation));
+          return TRUE;
+        }
+    }
+
+  return FALSE;
+}
+
+/*
+ * Lookup translation of given IPP choice.
+ */
+static gchar *
+get_ipp_choice_translation (const gchar  *ipp_option_name,
+                            const gchar  *ipp_choice)
+{
+  gchar *translation = NULL;
+  gint   i;
+
+  for (i = 0; i < G_N_ELEMENTS (ipp_choice_translations); i++)
+    {
+      if (g_strcmp0 (ipp_choice_translations[i].ipp_option_name, ipp_option_name) == 0 &&
+          g_strcmp0 (ipp_choice_translations[i].ipp_choice, ipp_choice) == 0)
+        {
+          translation = g_strdup (g_dpgettext2 (GETTEXT_PACKAGE,
+                                                ipp_option_name,
+                                                ipp_choice_translations[i].translation));
+          break;
+        }
+    }
+
+  return translation;
+}
+
+/*
+ * Look the IPP option up in given set of options.
+ * Create it if it doesn't exist and set its default value
+ * if available.
+ */
+static GtkPrinterOption *
+setup_ipp_option (gchar               *ipp_option_name,
+                  gchar               *ipp_choice_default,
+                  GList               *ipp_choices,
+                  GtkPrinterOptionSet *set)
+{
+  GtkPrinterOption *option = NULL;
+  gchar            *gtk_option_name = NULL;
+  gchar            *translation = NULL;
+  gchar            *ipp_choice;
+  gsize             i;
+
+  get_ipp_option_translation (ipp_option_name,
+                              &gtk_option_name,
+                              &translation);
+
+  /* Look the option up in the given set of options. */
+  if (gtk_option_name != NULL)
+    option = gtk_printer_option_set_lookup (set, gtk_option_name);
+
+  /* The option was not found, create it from given choices. */
+  if (option == NULL &&
+      ipp_choices != NULL)
+    {
+      GList  *iter;
+      gsize   length;
+      char  **choices = NULL;
+      char  **choices_display = NULL;
+
+      option = gtk_printer_option_new (gtk_option_name,
+                                       translation,
+                                       GTK_PRINTER_OPTION_TYPE_PICKONE);
+
+      length = g_list_length (ipp_choices);
+
+      choices = g_new0 (char *, length);
+      choices_display = g_new0 (char *, length);
+
+      i = 0;
+      for (iter = ipp_choices; iter != NULL; iter = iter->next)
+        {
+          ipp_choice = (gchar *) iter->data;
+
+          choices[i] = g_strdup (ipp_choice);
+
+          translation = get_ipp_choice_translation (ipp_option_name,
+                                                    ipp_choice);
+          if (translation != NULL)
+            choices_display[i] = translation;
+          else
+            choices_display[i] = g_strdup (ipp_choice);
+
+          i++;
+        }
+
+      if (choices != NULL &&
+          choices_display != NULL)
+        {
+          gtk_printer_option_choices_from_array (option,
+                                                 length,
+                                                 choices,
+                                                 choices_display);
+        }
+
+      option_set_is_ipp_option (option, TRUE);
+
+      gtk_printer_option_set_add (set, option);
+
+      g_free (choices);
+      g_free (choices_display);
+    }
+
+  /* The option exists. Set its default value if available. */
+  if (option != NULL &&
+      ipp_choice_default != NULL)
+    {
+      gtk_printer_option_set (option, ipp_choice_default);
+    }
+
+  return option;
+}
+
 static GtkPrinterOptionSet *
 cups_printer_get_options (GtkPrinter           *printer,
 			  GtkPrintSettings     *settings,
@@ -5154,6 +5349,18 @@ cups_printer_get_options (GtkPrinter           *printer,
       for (i = 0; i < ppd_file->num_groups; i++)
         handle_group (set, ppd_file, &ppd_file->groups[i], &ppd_file->groups[i], settings);
     }
+  else
+    {
+      /* Try IPP options */
+
+      option = setup_ipp_option ("sides",
+                                 cups_printer->sides_default,
+                                 cups_printer->sides_supported,
+                                 set);
+
+      if (option != NULL)
+        set_option_from_settings (option, settings);
+    }
 
   /* Now honor the user set defaults for this printer */
   num_opts = cups_get_user_options (gtk_printer_get_name (printer), 0, &opts);
@@ -5207,10 +5414,17 @@ cups_printer_get_options (GtkPrinter           *printer,
           option = gtk_printer_option_set_lookup (set, "gtk-duplex");
           if (option && opts[i].value)
             {
-              if (strcmp (opts[i].value, "two-sided-short-edge") == 0)
-                gtk_printer_option_set (option, "DuplexTumble");
-              else if (strcmp (opts[i].value, "two-sided-long-edge") == 0)
-                gtk_printer_option_set (option, "DuplexNoTumble");
+              if (!option_is_ipp_option (option))
+                {
+                  if (strcmp (opts[i].value, "two-sided-short-edge") == 0)
+                    gtk_printer_option_set (option, "DuplexTumble");
+                  else if (strcmp (opts[i].value, "two-sided-long-edge") == 0)
+                    gtk_printer_option_set (option, "DuplexNoTumble");
+                }
+              else
+                {
+                  gtk_printer_option_set (option, opts[i].value);
+                }
             }
         }
       else
@@ -5376,11 +5590,13 @@ map_settings_to_option (GtkPrinterOption  *option,
 			gint               n_elements,
 			GtkPrintSettings  *settings,
 			const gchar       *standard_name,
-			const gchar       *cups_name)
+			const gchar       *cups_name,
+			const gchar       *ipp_name)
 {
   int i;
   char *name;
   const char *cups_value;
+  const char *ipp_value;
   const char *standard_value;
 
   /* If the cups-specific setting is set, always use that */
@@ -5391,6 +5607,17 @@ map_settings_to_option (GtkPrinterOption  *option,
   if (cups_value != NULL)
     {
       gtk_printer_option_set (option, cups_value);
+      return;
+    }
+
+  /* If the IPP-specific setting is set, use that */
+  name = g_strdup_printf ("cups-%s", ipp_name);
+  ipp_value = gtk_print_settings_get (settings, name);
+  g_free (name);
+
+  if (ipp_value != NULL)
+    {
+      gtk_printer_option_set (option, ipp_value);
       return;
     }
 
@@ -5426,7 +5653,9 @@ map_option_to_settings (const gchar       *value,
 			gint               n_elements,
 			GtkPrintSettings  *settings,
 			const gchar       *standard_name,
-			const gchar       *cups_name)
+			const gchar       *cups_name,
+			const gchar       *ipp_name,
+			gboolean           is_ipp_option)
 {
   int i;
   char *name;
@@ -5460,8 +5689,13 @@ map_option_to_settings (const gchar       *value,
     }
 
   /* Always set the corresponding cups-specific setting */
-  name = g_strdup_printf ("cups-%s", cups_name);
+  if (is_ipp_option)
+    name = g_strdup_printf ("cups-%s", ipp_name);
+  else
+    name = g_strdup_printf ("cups-%s", cups_name);
+
   gtk_print_settings_set (settings, name, value);
+
   g_free (name);
 }
 
@@ -5522,16 +5756,20 @@ set_option_from_settings (GtkPrinterOption *option,
 
   if (strcmp (option->name, "gtk-paper-source") == 0)
     map_settings_to_option (option, paper_source_map, G_N_ELEMENTS (paper_source_map),
-			     settings, GTK_PRINT_SETTINGS_DEFAULT_SOURCE, "InputSlot");
+			     settings, GTK_PRINT_SETTINGS_DEFAULT_SOURCE,
+			     "InputSlot", NULL);
   else if (strcmp (option->name, "gtk-output-tray") == 0)
     map_settings_to_option (option, output_tray_map, G_N_ELEMENTS (output_tray_map),
-			    settings, GTK_PRINT_SETTINGS_OUTPUT_BIN, "OutputBin");
+			    settings, GTK_PRINT_SETTINGS_OUTPUT_BIN,
+			    "OutputBin", NULL);
   else if (strcmp (option->name, "gtk-duplex") == 0)
     map_settings_to_option (option, duplex_map, G_N_ELEMENTS (duplex_map),
-			    settings, GTK_PRINT_SETTINGS_DUPLEX, "Duplex");
+			    settings, GTK_PRINT_SETTINGS_DUPLEX,
+			    "Duplex", "sides");
   else if (strcmp (option->name, "cups-OutputMode") == 0)
     map_settings_to_option (option, output_mode_map, G_N_ELEMENTS (output_mode_map),
-			    settings, GTK_PRINT_SETTINGS_QUALITY, "OutputMode");
+			    settings, GTK_PRINT_SETTINGS_QUALITY,
+			    "OutputMode", NULL);
   else if (strcmp (option->name, "cups-Resolution") == 0)
     {
       cups_value = gtk_print_settings_get (settings, option->name);
@@ -5565,16 +5803,19 @@ set_option_from_settings (GtkPrinterOption *option,
     }
   else if (strcmp (option->name, "gtk-paper-type") == 0)
     map_settings_to_option (option, media_type_map, G_N_ELEMENTS (media_type_map),
-			    settings, GTK_PRINT_SETTINGS_MEDIA_TYPE, "MediaType");
+			    settings, GTK_PRINT_SETTINGS_MEDIA_TYPE,
+			    "MediaType", NULL);
   else if (strcmp (option->name, "gtk-n-up") == 0)
     {
       map_settings_to_option (option, all_map, G_N_ELEMENTS (all_map),
-			      settings, GTK_PRINT_SETTINGS_NUMBER_UP, "number-up");
+			      settings, GTK_PRINT_SETTINGS_NUMBER_UP,
+			      "number-up", NULL);
     }
   else if (strcmp (option->name, "gtk-n-up-layout") == 0)
     {
       map_settings_to_option (option, all_map, G_N_ELEMENTS (all_map),
-			      settings, GTK_PRINT_SETTINGS_NUMBER_UP_LAYOUT, "number-up-layout");
+			      settings, GTK_PRINT_SETTINGS_NUMBER_UP_LAYOUT,
+			      "number-up-layout", NULL);
     }
   else if (strcmp (option->name, "gtk-billing-info") == 0)
     {
@@ -5632,16 +5873,20 @@ foreach_option_get_settings (GtkPrinterOption *option,
 
   if (strcmp (option->name, "gtk-paper-source") == 0)
     map_option_to_settings (value, paper_source_map, G_N_ELEMENTS (paper_source_map),
-			    settings, GTK_PRINT_SETTINGS_DEFAULT_SOURCE, "InputSlot");
+			    settings, GTK_PRINT_SETTINGS_DEFAULT_SOURCE,
+			    "InputSlot", NULL, FALSE);
   else if (strcmp (option->name, "gtk-output-tray") == 0)
     map_option_to_settings (value, output_tray_map, G_N_ELEMENTS (output_tray_map),
-			    settings, GTK_PRINT_SETTINGS_OUTPUT_BIN, "OutputBin");
+			    settings, GTK_PRINT_SETTINGS_OUTPUT_BIN,
+			    "OutputBin", NULL, FALSE);
   else if (strcmp (option->name, "gtk-duplex") == 0)
     map_option_to_settings (value, duplex_map, G_N_ELEMENTS (duplex_map),
-			    settings, GTK_PRINT_SETTINGS_DUPLEX, "Duplex");
+			    settings, GTK_PRINT_SETTINGS_DUPLEX,
+			    "Duplex", "sides", option_is_ipp_option (option));
   else if (strcmp (option->name, "cups-OutputMode") == 0)
     map_option_to_settings (value, output_mode_map, G_N_ELEMENTS (output_mode_map),
-			    settings, GTK_PRINT_SETTINGS_QUALITY, "OutputMode");
+			    settings, GTK_PRINT_SETTINGS_QUALITY,
+			    "OutputMode", NULL, FALSE);
   else if (strcmp (option->name, "cups-Resolution") == 0)
     {
       int res, res_x, res_y;
@@ -5661,13 +5906,16 @@ foreach_option_get_settings (GtkPrinterOption *option,
     }
   else if (strcmp (option->name, "gtk-paper-type") == 0)
     map_option_to_settings (value, media_type_map, G_N_ELEMENTS (media_type_map),
-			    settings, GTK_PRINT_SETTINGS_MEDIA_TYPE, "MediaType");
+			    settings, GTK_PRINT_SETTINGS_MEDIA_TYPE,
+			    "MediaType", NULL, FALSE);
   else if (strcmp (option->name, "gtk-n-up") == 0)
     map_option_to_settings (value, all_map, G_N_ELEMENTS (all_map),
-			    settings, GTK_PRINT_SETTINGS_NUMBER_UP, "number-up");
+			    settings, GTK_PRINT_SETTINGS_NUMBER_UP,
+			    "number-up", NULL, FALSE);
   else if (strcmp (option->name, "gtk-n-up-layout") == 0)
     map_option_to_settings (value, all_map, G_N_ELEMENTS (all_map),
-			    settings, GTK_PRINT_SETTINGS_NUMBER_UP_LAYOUT, "number-up-layout");
+			    settings, GTK_PRINT_SETTINGS_NUMBER_UP_LAYOUT,
+			    "number-up-layout", NULL, FALSE);
   else if (strcmp (option->name, "gtk-billing-info") == 0 && strlen (value) > 0)
     gtk_print_settings_set (settings, "cups-job-billing", value);
   else if (strcmp (option->name, "gtk-job-prio") == 0)
