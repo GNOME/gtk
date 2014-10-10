@@ -20,6 +20,7 @@
 #include <fcntl.h>
 
 #include <gio/gunixinputstream.h>
+#include <gio/gunixoutputstream.h>
 #include <glib-unix.h>
 
 #include "gdkwayland.h"
@@ -33,6 +34,7 @@
 
 typedef struct _SelectionBuffer SelectionBuffer;
 typedef struct _StoredSelection StoredSelection;
+typedef struct _AsyncWriteData AsyncWriteData;
 
 struct _SelectionBuffer
 {
@@ -48,6 +50,7 @@ struct _SelectionBuffer
 struct _StoredSelection
 {
   GdkWindow *source;
+  GCancellable *cancellable;
   guchar *data;
   gsize data_len;
   GdkAtom type;
@@ -58,6 +61,12 @@ struct _DataSourceData
 {
   GdkWindow *window;
   GdkAtom selection;
+};
+
+struct _AsyncWriteData {
+  GOutputStream *stream;
+  GdkWaylandSelection *selection;
+  gsize index;
 };
 
 enum {
@@ -87,6 +96,7 @@ struct _GdkWaylandSelection
 };
 
 static void selection_buffer_read (SelectionBuffer *buffer);
+static void async_write_data_write (AsyncWriteData *write_data);
 
 static void
 selection_buffer_notify (SelectionBuffer *buffer)
@@ -272,6 +282,12 @@ gdk_wayland_selection_free (GdkWaylandSelection *selection)
 
   g_free (selection->stored_selection.data);
 
+  if (selection->stored_selection.cancellable)
+    {
+      g_cancellable_cancel (selection->stored_selection.cancellable);
+      g_object_unref (selection->stored_selection.cancellable);
+    }
+
   if (selection->stored_selection.fd > 0)
     close (selection->stored_selection.fd);
 
@@ -366,34 +382,91 @@ gdk_wayland_selection_emit_request (GdkWindow *window,
   gdk_event_free (event);
 }
 
+static AsyncWriteData *
+async_write_data_new (GdkWaylandSelection *selection)
+{
+  AsyncWriteData *write_data;
+
+  write_data = g_slice_new0 (AsyncWriteData);
+  write_data->selection = selection;
+  write_data->stream =
+    g_unix_output_stream_new (selection->stored_selection.fd, TRUE);
+
+  return write_data;
+}
+
+static void
+async_write_data_free (AsyncWriteData *write_data)
+{
+  g_object_unref (write_data->stream);
+  g_slice_free (AsyncWriteData, write_data);
+}
+
+static void
+async_write_data_cb (GObject      *object,
+                     GAsyncResult *res,
+                     gpointer      user_data)
+{
+  AsyncWriteData *write_data = user_data;
+  GError *error = NULL;
+  gsize bytes_written;
+
+  bytes_written = g_output_stream_write_finish (G_OUTPUT_STREAM (object),
+                                                res, &error);
+  if (error)
+    {
+      g_warning ("Error writing selection data: %s", error->message);
+      g_error_free (error);
+
+      async_write_data_free (write_data);
+      return;
+    }
+
+  write_data->index += bytes_written;
+
+  if (write_data->index <
+      write_data->selection->stored_selection.data_len)
+    {
+      /* Write the next chunk */
+      async_write_data_write (write_data);
+    }
+  else
+    async_write_data_free (write_data);
+}
+
+static void
+async_write_data_write (AsyncWriteData *write_data)
+{
+  GdkWaylandSelection *selection = write_data->selection;
+  gsize buf_len;
+  guchar *buf;
+
+  buf = selection->stored_selection.data;
+  buf_len = selection->stored_selection.data_len;
+
+  g_output_stream_write_async (write_data->stream,
+                               &buf[write_data->index],
+                               buf_len - write_data->index,
+                               G_PRIORITY_DEFAULT,
+                               selection->stored_selection.cancellable,
+                               async_write_data_cb,
+                               write_data);
+}
+
 static gboolean
 gdk_wayland_selection_check_write (GdkWaylandSelection *selection)
 {
-  gssize len, bytes_written = 0;
-  gchar *buf;
+  AsyncWriteData *write_data;
 
   if (selection->stored_selection.fd < 0 ||
       selection->stored_selection.data_len == 0)
     return FALSE;
 
-  len = selection->stored_selection.data_len;
-  buf = (gchar *) selection->stored_selection.data;
-
-  while (len > 0)
-    {
-      bytes_written += write (selection->stored_selection.fd,
-                              buf + bytes_written, len);
-
-      if (bytes_written < 0)
-        break;
-
-      len -= bytes_written;
-    }
-
-  close (selection->stored_selection.fd);
+  write_data = async_write_data_new (selection);
+  async_write_data_write (write_data);
   selection->stored_selection.fd = -1;
 
-  return bytes_written != 0;
+  return TRUE;
 }
 
 void
@@ -435,10 +508,17 @@ gdk_wayland_selection_store (GdkWindow    *window,
       g_free (selection->stored_selection.data);
     }
 
+  if (selection->stored_selection.cancellable)
+    {
+      g_cancellable_cancel (selection->stored_selection.cancellable);
+      g_object_unref (selection->stored_selection.cancellable);
+    }
+
   selection->stored_selection.source = window;
   selection->stored_selection.data_len = array->len;
   selection->stored_selection.data = (guchar *) g_array_free (array, FALSE);
   selection->stored_selection.type = type;
+  selection->stored_selection.cancellable = g_cancellable_new ();
 
   gdk_wayland_selection_check_write (selection);
 }
