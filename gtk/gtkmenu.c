@@ -3093,6 +3093,7 @@ gtk_menu_draw (GtkWidget *widget,
         {
           gtk_style_context_save (context);
           gtk_style_context_set_state (context, priv->upper_arrow_state);
+          gtk_style_context_add_class (context, GTK_STYLE_CLASS_TOP);
 
           gtk_render_background (context, cr,
                                  upper.x, upper.y,
@@ -3113,6 +3114,7 @@ gtk_menu_draw (GtkWidget *widget,
         {
           gtk_style_context_save (context);
           gtk_style_context_set_state (context, priv->lower_arrow_state);
+          gtk_style_context_add_class (context, GTK_STYLE_CLASS_BOTTOM);
 
           gtk_render_background (context, cr,
                                  lower.x, lower.y,
