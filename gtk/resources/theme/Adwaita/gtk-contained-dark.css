@@ -1214,7 +1214,9 @@ GtkCalendar.header .menuitem.titlebutton.button:backdrop:hover, .button:link, .h
 .titlebar .button.titlebutton:link,
 GtkCalendar.header .button.titlebutton:link, .button:visited, .header-bar .button.titlebutton:visited,
 .titlebar .button.titlebutton:visited,
-GtkCalendar.header .button.titlebutton:visited, .button:link:hover, .button:link:active, .button:link:checked, .button:visited:hover, .button:visited:active, .button:visited:checked, .button:link:backdrop, .button:visited:backdrop, .notebook tab .button, .notebook tab .header-bar .button.titlebutton, .header-bar .notebook tab .button.titlebutton,
+GtkCalendar.header .button.titlebutton:visited, .button:link:hover, .button:link:active, .button:link:checked, .button:visited:hover, .button:visited:active, .button:visited:checked, .button:link:backdrop, .button:visited:backdrop, .menu.button, .header-bar .menu.button.titlebutton,
+.titlebar .menu.button.titlebutton,
+GtkCalendar.header .menu.button.titlebutton, .notebook tab .button, .notebook tab .header-bar .button.titlebutton, .header-bar .notebook tab .button.titlebutton,
 .notebook tab .titlebar .button.titlebutton,
 .titlebar .notebook tab .button.titlebutton,
 .notebook tab GtkCalendar.header .button.titlebutton,
@@ -2047,6 +2049,22 @@ GtkCalendar.header column-header .button.titlebutton, column-header .button:hove
       -gtk-icon-source: -gtk-icontheme("pan-end-symbolic"); }
     .menu .menuitem.arrow:dir(rtl) {
       -gtk-icon-source: -gtk-icontheme("pan-end-symbolic-rtl"); }
+  .menu.button, .header-bar .menu.button.titlebutton,
+  .titlebar .menu.button.titlebutton,
+  GtkCalendar.header .menu.button.titlebutton {
+    border-color: #3c3c3c;
+    border-style: none;
+    border-radius: 0; }
+    .menu.button.top {
+      border-bottom: 1px solid; }
+    .menu.button.bottom {
+      border-top: 1px solid; }
+    .menu.button:hover {
+      background-color: #3c3c3c; }
+    .menu.button:insensitive {
+      color: transparent;
+      background-color: transparent;
+      border-color: transparent; }
 
 .menuitem .accelerator {
   color: alpha(currentColor,0.55); }
