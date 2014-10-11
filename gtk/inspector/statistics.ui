@@ -5,6 +5,8 @@
       <column type="gchararray"/>
       <column type="gint"/>
       <column type="gint"/>
+      <column type="gint"/>
+      <column type="gint"/>
     </columns>
   </object>
   <template class="GtkInspectorStatistics" parent="GtkBox">
@@ -58,24 +60,48 @@
                       </object>
                     </child>
                     <child>
-                      <object class="GtkTreeViewColumn" id="column_self">
-                        <property name="visible">True</property>
+                      <object class="GtkTreeViewColumn" id="column_self1">
+                        <property name="visible">False</property>
                         <property name="sort-column-id">1</property>
-                        <property name="title" translatable="yes">Self</property>
+                        <property name="title" translatable="yes">Self 1</property>
                         <child>
-                          <object class="GtkCellRendererText" id="renderer_self">
+                          <object class="GtkCellRendererText" id="renderer_self1">
                             <property name="scale">0.8</property>
                           </object>
                         </child>
                       </object>
                     </child>
                     <child>
-                      <object class="GtkTreeViewColumn" id="column_cumulative">
-                        <property name="visible">True</property>
+                      <object class="GtkTreeViewColumn" id="column_cumulative1">
+                        <property name="visible">False</property>
                         <property name="sort-column-id">2</property>
-                        <property name="title" translatable="yes">Cumulative</property>
+                        <property name="title" translatable="yes">Cumulative 1</property>
                         <child>
-                          <object class="GtkCellRendererText" id="renderer_cumulative">
+                          <object class="GtkCellRendererText" id="renderer_cumulative1">
+                            <property name="scale">0.8</property>
+                          </object>
+                        </child>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkTreeViewColumn" id="column_self2">
+                        <property name="visible">False</property>
+                        <property name="sort-column-id">3</property>
+                        <property name="title" translatable="yes">Self 2</property>
+                        <child>
+                          <object class="GtkCellRendererText" id="renderer_self2">
+                            <property name="scale">0.8</property>
+                          </object>
+                        </child>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkTreeViewColumn" id="column_cumulative2">
+                        <property name="visible">False</property>
+                        <property name="sort-column-id">4</property>
+                        <property name="title" translatable="yes">Cumulative 2</property>
+                        <child>
+                          <object class="GtkCellRendererText" id="renderer_cumulative2">
                             <property name="scale">0.8</property>
                           </object>
                         </child>
