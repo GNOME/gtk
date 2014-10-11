@@ -33,8 +33,6 @@
 #include "css-editor.h"
 #include "object-hierarchy.h"
 #include "widget-tree.h"
-#include "python-hooks.h"
-#include "python-shell.h"
 #include "size-groups.h"
 #include "style-prop-list.h"
 #include "data-list.h"
@@ -48,18 +46,6 @@
 #include "gtkwindowgroup.h"
 
 G_DEFINE_TYPE (GtkInspectorWindow, gtk_inspector_window, GTK_TYPE_WINDOW)
-
-static gboolean
-on_widget_tree_button_press (GtkInspectorWidgetTree *wt,
-                             GdkEventButton         *event,
-                             GtkInspectorWindow     *iw)
-{
-  if (event->button == 3)
-    gtk_menu_popup (GTK_MENU (iw->widget_popup), NULL, NULL,
-                    NULL, NULL, event->button, event->time);
-
-  return FALSE;
-}
 
 static void
 on_widget_tree_selection_changed (GtkInspectorWidgetTree *wt,
@@ -109,39 +95,11 @@ on_widget_tree_selection_changed (GtkInspectorWidgetTree *wt,
 }
 
 static void
-on_send_widget_to_shell_activate (GtkWidget          *menuitem,
-                                  GtkInspectorWindow *iw)
-{
-  gchar *str;
-  GObject *object;
-
-  object = gtk_inspector_widget_tree_get_selected_object (GTK_INSPECTOR_WIDGET_TREE (iw->widget_tree));
-
-  if (!object)
-    return;
-
-  str = g_strdup_printf ("gtk_inspector.gobj(%p)", object);
-  gtk_inspector_python_shell_append_text (GTK_INSPECTOR_PYTHON_SHELL (iw->python_shell),
-                                          str,
-                                          NULL);
-
-  g_free (str);
-  gtk_inspector_python_shell_focus (GTK_INSPECTOR_PYTHON_SHELL (iw->python_shell));
-}
-
-static void
 gtk_inspector_window_init (GtkInspectorWindow *iw)
 {
   gtk_widget_init_template (GTK_WIDGET (iw));
 
   gtk_window_group_add_window (gtk_window_group_new (), GTK_WINDOW (iw));
-
-  if (gtk_inspector_python_is_enabled ())
-    {
-      gtk_widget_show (iw->python_shell);
-      g_signal_connect (G_OBJECT (iw->widget_tree), "button-press-event",
-                        G_CALLBACK (on_widget_tree_button_press), iw);
-    }
 }
 
 static void
@@ -173,8 +131,6 @@ gtk_inspector_window_class_init (GtkInspectorWindowClass *klass)
   gtk_widget_class_bind_template_child (widget_class, GtkInspectorWindow, style_prop_list);
   gtk_widget_class_bind_template_child (widget_class, GtkInspectorWindow, widget_css_editor);
   gtk_widget_class_bind_template_child (widget_class, GtkInspectorWindow, object_hierarchy);
-  gtk_widget_class_bind_template_child (widget_class, GtkInspectorWindow, python_shell);
-  gtk_widget_class_bind_template_child (widget_class, GtkInspectorWindow, widget_popup);
   gtk_widget_class_bind_template_child (widget_class, GtkInspectorWindow, size_groups);
   gtk_widget_class_bind_template_child (widget_class, GtkInspectorWindow, data_list);
   gtk_widget_class_bind_template_child (widget_class, GtkInspectorWindow, actions);
@@ -184,7 +140,6 @@ gtk_inspector_window_class_init (GtkInspectorWindowClass *klass)
 
   gtk_widget_class_bind_template_callback (widget_class, gtk_inspector_on_inspect);
   gtk_widget_class_bind_template_callback (widget_class, on_widget_tree_selection_changed);
-  gtk_widget_class_bind_template_callback (widget_class, on_send_widget_to_shell_activate);
 }
 
 GtkWidget *

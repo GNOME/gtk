@@ -34,8 +34,6 @@
 #include "misc-info.h"
 #include "object-hierarchy.h"
 #include "prop-list.h"
-#include "python-hooks.h"
-#include "python-shell.h"
 #include "resource-list.h"
 #include "resources.h"
 #include "signals-list.h"
@@ -48,10 +46,6 @@
 void
 gtk_inspector_init (void)
 {
-#ifdef ENABLE_PYTHON
-  gtk_inspector_python_init ();
-#endif
-
   gtk_inspector_register_resource ();
 
   g_type_ensure (GTK_TYPE_INSPECTOR_ACTIONS);
@@ -64,7 +58,6 @@ gtk_inspector_init (void)
   g_type_ensure (GTK_TYPE_INSPECTOR_MISC_INFO);
   g_type_ensure (GTK_TYPE_INSPECTOR_OBJECT_HIERARCHY);
   g_type_ensure (GTK_TYPE_INSPECTOR_PROP_LIST);
-  g_type_ensure (GTK_TYPE_INSPECTOR_PYTHON_SHELL);
   g_type_ensure (GTK_TYPE_INSPECTOR_RESOURCE_LIST);
   g_type_ensure (GTK_TYPE_INSPECTOR_SIGNALS_LIST);
   g_type_ensure (GTK_TYPE_INSPECTOR_STYLE_PROP_LIST);

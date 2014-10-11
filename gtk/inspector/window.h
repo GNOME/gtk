@@ -47,7 +47,6 @@ typedef struct
   GtkWidget *child_prop_list;
   GtkWidget *signals_list;
   GtkWidget *style_prop_list;
-  GtkWidget *python_shell;
   GtkWidget *classes_list;
   GtkWidget *widget_css_editor;
   GtkWidget *object_hierarchy;
@@ -57,8 +56,6 @@ typedef struct
   GtkWidget *menu;
   GtkWidget *misc_info;
   GtkWidget *gestures;
-
-  GtkWidget *widget_popup;
 
   GtkWidget *selected_widget;
   GtkWidget *flash_widget;

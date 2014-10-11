@@ -5,16 +5,6 @@
     <property name="icon-name">find-location-symbolic</property>
     <property name="icon-size">4</property>
   </object>
-  <object class="GtkMenu" id="widget_popup">
-    <property name="visible">True</property>
-    <child>
-      <object class="GtkMenuItem">
-        <property name="visible">True</property>
-        <property name="label" translatable="yes">Send Widget to Shell</property>
-        <signal name="activate" handler="on_send_widget_to_shell_activate"/>
-      </object>
-    </child>
-  </object>
   <template class="GtkInspectorWindow" parent="GtkWindow">
     <property name="default-height">500</property>
     <property name="default-width">1000</property>
@@ -62,37 +52,18 @@
                 <property name="visible">True</property>
                 <property name="orientation">horizontal</property>
                 <child>
-                  <object class="GtkPaned">
+                  <object class="GtkScrolledWindow">
                     <property name="visible">True</property>
-                    <property name="orientation">vertical</property>
+                    <property name="hscrollbar-policy">automatic</property>
+                    <property name="vscrollbar-policy">always</property>
+                    <property name="shadow-type">in</property>
+                    <property name="width-request">250</property>
+                    <property name="expand">True</property>
                     <child>
-                      <object class="GtkScrolledWindow">
+                      <object class="GtkInspectorWidgetTree" id="widget_tree">
                         <property name="visible">True</property>
-                        <property name="hscrollbar-policy">automatic</property>
-                        <property name="vscrollbar-policy">always</property>
-                        <property name="shadow-type">in</property>
-                        <property name="width-request">250</property>
-                        <property name="expand">True</property>
-                        <child>
-                          <object class="GtkInspectorWidgetTree" id="widget_tree">
-                            <property name="visible">True</property>
-                            <signal name="widget-changed" handler="on_widget_tree_selection_changed"/>
-                          </object>
-                        </child>
+                        <signal name="widget-changed" handler="on_widget_tree_selection_changed"/>
                       </object>
-                      <packing>
-                        <property name="resize">True</property>
-                        <property name="shrink">False</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkInspectorPythonShell" id="python_shell">
-                        <property name="visible">False</property>
-                      </object>
-                      <packing>
-                        <property name="resize">False</property>
-                        <property name="shrink">False</property>
-                      </packing>
                     </child>
                   </object>
                   <packing>

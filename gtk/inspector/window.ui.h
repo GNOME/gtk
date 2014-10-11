@@ -1,4 +1,3 @@
-N_("Send Widget to Shell");
 N_("Select an Object");
 N_("Miscellaneous");
 N_("Properties");

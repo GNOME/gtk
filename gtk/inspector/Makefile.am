@@ -44,10 +44,6 @@ libgtkinspector_la_SOURCES = 		\
 	prop-list.c			\
 	style-prop-list.h		\
 	style-prop-list.c		\
-	python-hooks.h			\
-	python-hooks.c			\
-	python-shell.h			\
-	python-shell.c			\
 	resource-list.h			\
 	resource-list.c			\
 	resources.h			\
