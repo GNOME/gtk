@@ -1688,8 +1688,10 @@ column-header.button.dnd { // for treeview-like derive widgets
   }
 }
 
-.scrollbars-junction { // the small square between two scrollbars
-  border-color: transparent;
+
+.scrollbars-junction,
+.scrollbars-junction.frame { // the small square between two scrollbars
+  border: none;
   background-color: darken($bg_color, 5%);
   &:backdrop { background-color: transparent; }
 }
