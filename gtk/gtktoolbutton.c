@@ -592,7 +592,8 @@ gtk_tool_button_construct_contents (GtkToolItem *tool_item)
     {
     case GTK_TOOLBAR_ICONS:
       if (icon)
-	gtk_container_add (GTK_CONTAINER (button->priv->button), icon);
+        gtk_container_add (GTK_CONTAINER (button->priv->button), icon);
+      gtk_style_context_add_class (gtk_widget_get_style_context (button->priv->button), "image-button");
       break;
 
     case GTK_TOOLBAR_BOTH:
@@ -628,6 +629,7 @@ gtk_tool_button_construct_contents (GtkToolItem *tool_item)
 
     case GTK_TOOLBAR_TEXT:
       gtk_container_add (GTK_CONTAINER (button->priv->button), label);
+      gtk_style_context_add_class (gtk_widget_get_style_context (button->priv->button), "text-button");
       break;
     }
 
