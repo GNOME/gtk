@@ -120,10 +120,6 @@ swatch_draw (GtkWidget *widget,
   width = gtk_widget_get_allocated_width (widget);
   height = gtk_widget_get_allocated_height (widget);
 
-  cairo_save (cr);
-
-  gtk_style_context_save (context);
-
   gtk_render_background (context, cr, 0, 0, width, height);
 
   if (swatch->priv->has_color)
@@ -220,9 +216,6 @@ swatch_draw (GtkWidget *widget,
 
       g_object_unref (icon_info);
     }
-
-  cairo_restore (cr);
-  gtk_style_context_restore (context);
 
   if (gtk_widget_has_visible_focus (widget))
     {
