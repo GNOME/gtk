@@ -46,7 +46,8 @@ typedef struct _GtkInspectorWidgetTreeClass
 {
   GtkBoxClass parent;
 
-  void (*widget_changed) (GtkInspectorWidgetTree *tree);
+  void (*widget_changed) (GtkInspectorWidgetTree *wt,
+                          GObject                *object);
 } GtkInspectorWidgetTreeClass;
 
 
@@ -54,8 +55,6 @@ G_BEGIN_DECLS
 
 
 GType      gtk_inspector_widget_tree_get_type            (void);
-
-GObject   *gtk_inspector_widget_tree_get_selected_object (GtkInspectorWidgetTree *wt);
 
 void       gtk_inspector_widget_tree_scan                (GtkInspectorWidgetTree *wt,
                                                           GtkWidget              *window);

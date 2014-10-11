@@ -49,9 +49,9 @@ G_DEFINE_TYPE (GtkInspectorWindow, gtk_inspector_window, GTK_TYPE_WINDOW)
 
 static void
 on_widget_tree_selection_changed (GtkInspectorWidgetTree *wt,
+                                  GObject                *selected,
                                   GtkInspectorWindow     *iw)
 {
-  GObject *selected = gtk_inspector_widget_tree_get_selected_object (wt);
   GtkWidget *notebook;
   const gchar *tab;
   gint page_num;

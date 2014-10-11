@@ -81,7 +81,20 @@ static void
 on_widget_selected (GtkTreeSelection       *selection,
                     GtkInspectorWidgetTree *wt)
 {
-  g_signal_emit (wt, widget_tree_signals[WIDGET_CHANGED], 0);
+  GObject *object;
+  GtkTreeIter iter;
+  GtkTreeSelection *sel;
+  GtkTreeModel *model;
+
+  sel = gtk_tree_view_get_selection (GTK_TREE_VIEW (wt->priv->tree));
+  if (gtk_tree_selection_get_selected (sel, &model, &iter))
+    gtk_tree_model_get (model, &iter,
+                        OBJECT, &object,
+                        -1);
+  else
+    object = NULL;
+
+  g_signal_emit (wt, widget_tree_signals[WIDGET_CHANGED], 0, object);
 }
 
 typedef struct
@@ -187,42 +200,19 @@ gtk_inspector_widget_tree_class_init (GtkInspectorWidgetTreeClass *klass)
 
   object_class->finalize = gtk_inspector_widget_tree_finalize;
 
-  klass->widget_changed = NULL;
-
   widget_tree_signals[WIDGET_CHANGED] =
       g_signal_new ("widget-changed",
-                    G_OBJECT_CLASS_TYPE(klass),
+                    G_OBJECT_CLASS_TYPE (klass),
                     G_SIGNAL_RUN_FIRST | G_SIGNAL_NO_RECURSE,
                     G_STRUCT_OFFSET(GtkInspectorWidgetTreeClass, widget_changed),
                     NULL, NULL,
-                    g_cclosure_marshal_VOID__VOID,
-                    G_TYPE_NONE, 0);
+                    g_cclosure_marshal_VOID__OBJECT,
+                    G_TYPE_NONE, 1, G_TYPE_OBJECT);
 
   gtk_widget_class_set_template_from_resource (widget_class, "/org/gtk/inspector/widget-tree.ui");
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorWidgetTree, model);
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorWidgetTree, tree);
   gtk_widget_class_bind_template_callback (widget_class, on_widget_selected);
-}
-
-GObject *
-gtk_inspector_widget_tree_get_selected_object (GtkInspectorWidgetTree *wt)
-{
-  GtkTreeIter iter;
-  GtkTreeSelection *sel;
-  GtkTreeModel *model;
-
-  sel = gtk_tree_view_get_selection (GTK_TREE_VIEW (wt->priv->tree));
-
-  if (gtk_tree_selection_get_selected (sel, &model, &iter))
-    {
-      GObject *object;
-      gtk_tree_model_get (model, &iter,
-                          OBJECT, &object,
-                          -1);
-      return object;
-    }
-
-  return NULL;
 }
 
 typedef struct
