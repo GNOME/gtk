@@ -40,12 +40,12 @@ struct _GtkInspectorResourceListPrivate
   GtkTextBuffer *buffer;
   GtkWidget *image;
   GtkWidget *content;
+  GtkWidget *name_label;
   GtkWidget *type;
   GtkWidget *type_label;
-  GtkWidget *count;
-  GtkWidget *count_label;
   GtkWidget *size_label;
   GtkWidget *info_grid;
+  GtkWidget *stack;
   GtkTreeViewColumn *count_column;
   GtkCellRenderer *count_renderer;
   GtkTreeViewColumn *size_column;
@@ -116,110 +116,105 @@ load_resources_recurse (GtkInspectorResourceList *sl,
 
 }
 
-static void
-selection_changed (GtkTreeSelection         *selection,
-                   GtkInspectorResourceList *rl)
+static gboolean
+populate_details (GtkInspectorResourceList *rl,
+                  GtkTreePath              *tree_path)
 {
   GtkTreeIter iter;
+  gchar *path;
+  gchar *name;
+  GBytes *bytes;
+  gchar *type;
+  gconstpointer data;
+  gint count;
+  gsize size;
+  GError *error = NULL;
+  gchar *markup;
 
-  if (gtk_tree_selection_get_selected (selection, NULL, &iter))
+
+  gtk_tree_model_get_iter (GTK_TREE_MODEL (rl->priv->model), &iter, tree_path);
+ 
+  gtk_tree_model_get (GTK_TREE_MODEL (rl->priv->model), &iter,
+                      COLUMN_PATH, &path,
+                      COLUMN_NAME, &name,
+                      COLUMN_COUNT, &count,
+                      COLUMN_SIZE, &size,
+                      -1);
+
+   if (g_str_has_suffix (path, "/"))
+     {
+       g_free (path);
+       g_free (name);
+       return FALSE;
+     }
+
+  markup = g_strconcat ("<span face='Monospace' size='small'>", path, "</span>", NULL);
+  gtk_label_set_markup (GTK_LABEL (rl->priv->name_label), markup);
+  g_free (markup);
+
+  bytes = g_resources_lookup_data (path, 0, &error);
+  if (bytes == NULL)
     {
-      gchar *path;
-      gchar *name;
-      GBytes *bytes;
-      gchar *type;
-      gconstpointer data;
-      gint count;
-      gsize size;
-      GError *error = NULL;
-
-      gtk_widget_hide (rl->priv->info_grid);
-
-      gtk_tree_model_get (GTK_TREE_MODEL (rl->priv->model), &iter,
-                          COLUMN_PATH, &path,
-                          COLUMN_NAME, &name,
-                          COLUMN_COUNT, &count,
-                          COLUMN_SIZE, &size,
-                          -1);
-
-      if (g_str_has_suffix (path, "/"))
-        {
-          gchar *text;
-
-          text = g_strdup_printf ("%d", count);
-          gtk_label_set_text (GTK_LABEL (rl->priv->count_label), text);
-          g_free (text);
-
-          text = g_format_size (size);
-          gtk_label_set_text (GTK_LABEL (rl->priv->size_label), text);
-          g_free (text);
-       
-          gtk_widget_hide (rl->priv->type);
-          gtk_widget_hide (rl->priv->type_label);
-          gtk_widget_show (rl->priv->count);
-          gtk_widget_show (rl->priv->count_label);
-          gtk_widget_show (rl->priv->info_grid);
-
-          gtk_text_buffer_set_text (rl->priv->buffer, "", -1);
-          gtk_stack_set_visible_child_name (GTK_STACK (rl->priv->content), "text");
-          goto out;
-        }
-      bytes = g_resources_lookup_data (path, 0, &error);
-      if (bytes == NULL)
-        {
-          gtk_text_buffer_set_text (rl->priv->buffer, error->message, -1);
-          g_error_free (error);
-          gtk_stack_set_visible_child_name (GTK_STACK (rl->priv->content), "text");
-        }
-      else
-        {
-          gchar *text;
-
-          data = g_bytes_get_data (bytes, &size);
-          type = g_content_type_guess (name, data, size, NULL);
-
-          text = g_content_type_get_description (type);
-          gtk_label_set_text (GTK_LABEL (rl->priv->type_label), text);
-          g_free (text);
-
-          text = g_format_size (size);
-          gtk_label_set_text (GTK_LABEL (rl->priv->size_label), text);
-          g_free (text);
-       
-          gtk_widget_show (rl->priv->type);
-          gtk_widget_show (rl->priv->type_label);
-          gtk_widget_hide (rl->priv->count);
-          gtk_widget_hide (rl->priv->count_label);
-          gtk_widget_show (rl->priv->info_grid);
-          
-          if (g_content_type_is_a (type, "text/*"))
-            {
-              gtk_text_buffer_set_text (rl->priv->buffer, data, -1);
-              gtk_stack_set_visible_child_name (GTK_STACK (rl->priv->content), "text");
-            }
-          else if (g_content_type_is_a (type, "image/*"))
-            {
-              gtk_image_set_from_resource (GTK_IMAGE (rl->priv->image), path);
-              gtk_stack_set_visible_child_name (GTK_STACK (rl->priv->content), "image");
-            }
-          else
-            {
-              gtk_text_buffer_set_text (rl->priv->buffer, "", 0);
-              gtk_stack_set_visible_child_name (GTK_STACK (rl->priv->content), "text");
-            }
-
-          g_free (type);
-          g_bytes_unref (bytes);
-        }
-out:
-      g_free (path);
-      g_free (name);
+      gtk_text_buffer_set_text (rl->priv->buffer, error->message, -1);
+      g_error_free (error);
+      gtk_stack_set_visible_child_name (GTK_STACK (rl->priv->content), "text");
     }
   else
     {
-      gtk_text_buffer_set_text (rl->priv->buffer, "", -1);
-      gtk_stack_set_visible_child_name (GTK_STACK (rl->priv->content), "text");
+      gchar *text;
+
+      data = g_bytes_get_data (bytes, &size);
+      type = g_content_type_guess (name, data, size, NULL);
+
+      text = g_content_type_get_description (type);
+      gtk_label_set_text (GTK_LABEL (rl->priv->type_label), text);
+      g_free (text);
+
+      text = g_format_size (size);
+      gtk_label_set_text (GTK_LABEL (rl->priv->size_label), text);
+      g_free (text);
+       
+      if (g_content_type_is_a (type, "text/*"))
+        {
+          gtk_text_buffer_set_text (rl->priv->buffer, data, -1);
+          gtk_stack_set_visible_child_name (GTK_STACK (rl->priv->content), "text");
+        }
+      else if (g_content_type_is_a (type, "image/*"))
+        {
+          gtk_image_set_from_resource (GTK_IMAGE (rl->priv->image), path);
+          gtk_stack_set_visible_child_name (GTK_STACK (rl->priv->content), "image");
+        }
+      else
+        {
+          gtk_text_buffer_set_text (rl->priv->buffer, "", 0);
+          gtk_stack_set_visible_child_name (GTK_STACK (rl->priv->content), "text");
+        }
+
+      g_free (type);
+      g_bytes_unref (bytes);
     }
+
+  g_free (path);
+  g_free (name);
+
+  return TRUE;
+}
+
+static void
+row_activated (GtkTreeView              *treeview,
+               GtkTreePath              *path,
+               GtkTreeViewColumn        *column,
+               GtkInspectorResourceList *sl)
+{
+  if (populate_details (sl, path))  
+    gtk_stack_set_visible_child_name (GTK_STACK (sl->priv->stack), "details");
+}
+
+static void
+close_details (GtkWidget                *button,
+               GtkInspectorResourceList *sl)
+{
+  gtk_stack_set_visible_child_name (GTK_STACK (sl->priv->stack), "list");
 }
 
 static void
@@ -269,6 +264,14 @@ size_data_func (GtkTreeViewColumn *col,
 }
 
 static void
+on_map (GtkWidget *widget)
+{
+  GtkInspectorResourceList *sl = GTK_INSPECTOR_RESOURCE_LIST (widget);
+
+  gtk_stack_set_visible_child_name (GTK_STACK (sl->priv->stack), "list");
+}
+
+static void
 gtk_inspector_resource_list_init (GtkInspectorResourceList *sl)
 {
   sl->priv = gtk_inspector_resource_list_get_instance_private (sl);
@@ -279,6 +282,7 @@ gtk_inspector_resource_list_init (GtkInspectorResourceList *sl)
   gtk_tree_view_column_set_cell_data_func (sl->priv->size_column,
                                            sl->priv->size_renderer,
                                            size_data_func, sl, NULL);
+  g_signal_connect (sl, "map", G_CALLBACK (on_map), NULL);
   load_resources (sl);
 }
 
@@ -292,18 +296,19 @@ gtk_inspector_resource_list_class_init (GtkInspectorResourceListClass *klass)
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorResourceList, buffer);
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorResourceList, content);
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorResourceList, image);
+  gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorResourceList, name_label);
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorResourceList, type_label);
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorResourceList, type);
-  gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorResourceList, count_label);
-  gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorResourceList, count);
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorResourceList, size_label);
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorResourceList, info_grid);
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorResourceList, count_column);
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorResourceList, count_renderer);
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorResourceList, size_column);
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorResourceList, size_renderer);
+  gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorResourceList, stack);
 
-  gtk_widget_class_bind_template_callback (widget_class, selection_changed);
+  gtk_widget_class_bind_template_callback (widget_class, row_activated);
+  gtk_widget_class_bind_template_callback (widget_class, close_details);
 }
 
 // vim: set et sw=2 ts=2:
