@@ -28,6 +28,9 @@
             <property name="icon-name">media-playback-pause-symbolic</property>
             <property name="tooltip-text" translatable="yes">Disable this custom CSS</property>
             <signal name="toggled" handler="disable_toggled"/>
+            <style>
+              <class name="image-button"/>
+            </style>
           </object>
         </child>
         <child>
@@ -36,6 +39,9 @@
             <property name="icon-name">document-save-symbolic</property>
             <property name="tooltip-text" translatable="yes">Save the current CSS</property>
             <signal name="clicked" handler="save_clicked"/>
+            <style>
+              <class name="image-button"/>
+            </style>
           </object>
         </child>
       </object>
