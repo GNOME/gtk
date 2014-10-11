@@ -2,7 +2,7 @@
 <interface domain="gtk30">
   <template class="GtkInspectorWindow" parent="GtkWindow">
     <property name="default-height">500</property>
-    <property name="default-width">1000</property>
+    <property name="default-width">800</property>
     <property name="icon">resource:///org/gtk/inspector/logo.png</property>
     <child type="titlebar">
       <object class="GtkHeaderBar">
@@ -75,6 +75,8 @@
         <child type="title">
           <object class="GtkStackSwitcher">
             <property name="visible">True</property>
+            <property name="margin-start">6</property>
+            <property name="margin-end">6</property>
             <property name="stack">top_stack</property>
           </object>
         </child>
