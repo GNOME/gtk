@@ -37,10 +37,14 @@
                 <child>
                   <object class="GtkTreeViewColumn">
                     <property name="title" translatable="yes">Path</property>
+                    <property name="resizable">True</property>
                     <property name="sort-column-id">0</property>
                     <child>
                       <object class="GtkCellRendererText">
                         <property name="scale">0.8</property>
+                        <property name="ellipsize">end</property>
+                        <property name="width-chars">10</property>
+                        <property name="max-width-chars">5</property>
                       </object>
                       <attributes>
                         <attribute name="text">0</attribute>
@@ -51,6 +55,7 @@
                 <child>
                   <object class="GtkTreeViewColumn" id="count_column">
                     <property name="title" translatable="yes">Count</property>
+                    <property name="resizable">True</property>
                     <property name="sort-column-id">1</property>
                     <child>
                       <object class="GtkCellRendererText" id="count_renderer">
@@ -62,6 +67,7 @@
                 <child>
                   <object class="GtkTreeViewColumn" id="size_column">
                     <property name="title" translatable="yes">Size</property>
+                    <property name="resizable">True</property>
                     <property name="sort-column-id">2</property>
                     <child>
                       <object class="GtkCellRendererText" id="size_renderer">
