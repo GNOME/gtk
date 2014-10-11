@@ -704,6 +704,17 @@ gtk_style_context_impl_get_property (GObject    *object,
     }
 }
 
+/* returns TRUE if someone called gtk_style_context_save() but hasn’t
+ * called gtk_style_context_restore() yet.
+ * In those situations we don’t invalidate the context when somebody
+ * changes state/regions/classes.
+ */
+static gboolean
+gtk_style_context_is_saved (GtkStyleContext *context)
+{
+  return context->priv->info->next != NULL;
+}
+
 static void
 style_info_add_to_widget_path (GtkStyleInfo  *info,
                                GtkWidgetPath *path,
@@ -810,12 +821,16 @@ style_values_lookup (GtkStyleContext *context)
     }
 
   values = _gtk_css_computed_values_new ();
-  style_info_set_values (info, values);
-  g_hash_table_insert (priv->style_values,
-                       style_info_copy (info),
-                       values);
 
+  style_info_set_values (info, values);
+  if (gtk_style_context_is_saved (context))
+    g_hash_table_insert (priv->style_values,
+                         style_info_copy (info),
+                         g_object_ref (values));
+  
   build_properties (context, values, info, NULL);
+
+  g_object_unref (values);
 
   return values;
 }
@@ -859,17 +874,6 @@ gtk_style_context_set_invalid (GtkStyleContext *context,
         gtk_style_context_set_invalid (priv->parent, TRUE);
       G_GNUC_END_IGNORE_DEPRECATIONS;
     }
-}
-
-/* returns TRUE if someone called gtk_style_context_save() but hasn’t
- * called gtk_style_context_restore() yet.
- * In those situations we don’t invalidate the context when somebody
- * changes state/regions/classes.
- */
-static gboolean
-gtk_style_context_is_saved (GtkStyleContext *context)
-{
-  return context->priv->info->next != NULL;
 }
 
 static void
@@ -3080,10 +3084,6 @@ _gtk_style_context_validate (GtkStyleContext  *context,
       if (current)
         {
           changes = _gtk_css_computed_values_get_difference (values, current);
-
-          /* In the case where we keep the cache, we want unanimated values */
-          if (values != current)
-            _gtk_css_computed_values_cancel_animations (current);
         }
       else
         {
@@ -3094,6 +3094,8 @@ _gtk_style_context_validate (GtkStyleContext  *context,
   else
     {
       changes = _gtk_css_computed_values_compute_dependencies (current, parent_changes);
+      if (!_gtk_bitmask_is_empty (changes))
+	build_properties (context, current, info, changes);
 
       gtk_style_context_update_cache (context, parent_changes);
     }
