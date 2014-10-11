@@ -704,20 +704,12 @@ gtk_style_context_impl_get_property (GObject    *object,
     }
 }
 
-static GtkWidgetPath *
-create_query_path (GtkStyleContext *context,
-                   GtkStyleInfo    *info)
+static void
+style_info_add_to_widget_path (GtkStyleInfo  *info,
+                               GtkWidgetPath *path,
+                               guint          pos)
 {
-  GtkStyleContextPrivate *priv;
-  GtkWidgetPath *path;
-  guint i, pos, length;
-
-  priv = context->priv;
-  path = priv->widget ? _gtk_widget_create_path (priv->widget) : gtk_widget_path_copy (priv->widget_path);
-  length = gtk_widget_path_length (path);
-  if (length == 0)
-    return path;
-  pos = length - 1;
+  guint i;
 
   /* Set widget regions */
   for (i = 0; i < info->regions->len; i++)
@@ -744,6 +736,21 @@ G_GNUC_END_IGNORE_DEPRECATIONS
 
   /* Set widget state */
   gtk_widget_path_iter_set_state (path, pos, info->state_flags);
+}
+
+static GtkWidgetPath *
+create_query_path (GtkStyleContext *context,
+                   GtkStyleInfo    *info)
+{
+  GtkStyleContextPrivate *priv;
+  GtkWidgetPath *path;
+  guint length;
+
+  priv = context->priv;
+  path = priv->widget ? _gtk_widget_create_path (priv->widget) : gtk_widget_path_copy (priv->widget_path);
+  length = gtk_widget_path_length (path);
+  if (length > 0)
+    style_info_add_to_widget_path (info, path, length - 1);
 
   return path;
 }
