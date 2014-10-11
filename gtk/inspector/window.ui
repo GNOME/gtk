@@ -31,8 +31,29 @@
           </packing>
         </child>
         <child>
-          <object class="GtkButton" id="close_details">
+          <object class="GtkButton" id="close_object_details">
             <property name="tooltip-text" translatable="yes">Show all Objects</property>
+            <property name="halign">center</property>
+            <property name="valign">center</property>
+            <signal name="clicked" handler="close_details"/>
+            <style>
+              <class name="image-button"/>
+            </style>
+            <child>
+              <object class="GtkImage">
+                <property name="visible">True</property>
+                <property name="icon-name">view-list-symbolic</property>
+                <property name="icon-size">1</property>
+              </object>
+            </child>
+          </object>
+          <packing>
+            <property name="pack-type">start</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkButton" id="close_resource_details">
+            <property name="tooltip-text" translatable="yes">Show all Resources</property>
             <property name="halign">center</property>
             <property name="valign">center</property>
             <signal name="clicked" handler="close_details"/>
@@ -231,6 +252,7 @@
         <child>
           <object class="GtkInspectorResourceList">
             <property name="visible">True</property>
+            <property name="close-details-button">close_resource_details</property>
           </object>
           <packing>
             <property name="name">resources</property>

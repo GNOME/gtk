@@ -1,5 +1,6 @@
 N_("Select an Object");
 N_("Show all Objects");
+N_("Show all Resources");
 N_("Miscellaneous");
 N_("Properties");
 N_("Signals");

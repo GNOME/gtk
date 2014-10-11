@@ -28,6 +28,12 @@
 
 enum
 {
+  PROP_0,
+  PROP_CLOSE_DETAILS_BUTTON
+};
+
+enum
+{
   COLUMN_NAME,
   COLUMN_PATH,
   COLUMN_COUNT,
@@ -47,11 +53,13 @@ struct _GtkInspectorResourceListPrivate
   GtkWidget *info_grid;
   GtkWidget *stack;
   GtkWidget *tree;
+  GtkWidget *close_details_button;
   GtkTreeViewColumn *count_column;
   GtkCellRenderer *count_renderer;
   GtkTreeViewColumn *size_column;
   GtkCellRenderer *size_renderer;
 };
+
 
 G_DEFINE_TYPE_WITH_PRIVATE (GtkInspectorResourceList, gtk_inspector_resource_list, GTK_TYPE_BOX)
 
@@ -219,6 +227,21 @@ close_details (GtkWidget                *button,
 }
 
 static void
+visible_child_name_changed (GObject *obj, GParamSpec *pspec, GtkInspectorResourceList *sl)
+{
+  const gchar *child;
+  gboolean resources_visible;
+  gboolean resource_details_visible;
+
+  child = gtk_stack_get_visible_child_name (GTK_STACK (gtk_widget_get_parent (GTK_WIDGET (sl))));
+  resources_visible = g_strcmp0 (child, "resources") == 0;
+  child = gtk_stack_get_visible_child_name (GTK_STACK (sl->priv->stack));
+  resource_details_visible = g_strcmp0 (child, "details") == 0;
+
+  gtk_widget_set_visible (sl->priv->close_details_button, resources_visible && resource_details_visible);
+}
+
+static void
 load_resources (GtkInspectorResourceList *sl)
 {
   gint count = 0;
@@ -274,24 +297,99 @@ on_map (GtkWidget *widget)
 }
 
 static void
+parent_set (GtkWidget *widget, GtkWidget *old_parent)
+{
+  if (old_parent)
+    g_signal_handlers_disconnect_by_func (old_parent, visible_child_name_changed, widget);
+  g_signal_connect (gtk_widget_get_parent (widget), "notify::visible-child-name",
+                    G_CALLBACK (visible_child_name_changed), widget);
+}
+
+static void
 gtk_inspector_resource_list_init (GtkInspectorResourceList *sl)
 {
   sl->priv = gtk_inspector_resource_list_get_instance_private (sl);
+
   gtk_widget_init_template (GTK_WIDGET (sl));
+
   gtk_tree_view_column_set_cell_data_func (sl->priv->count_column,
                                            sl->priv->count_renderer,
                                            count_data_func, sl, NULL);
   gtk_tree_view_column_set_cell_data_func (sl->priv->size_column,
                                            sl->priv->size_renderer,
                                            size_data_func, sl, NULL);
+
   g_signal_connect (sl, "map", G_CALLBACK (on_map), NULL);
-  load_resources (sl);
+  g_signal_connect (sl->priv->stack, "notify::visible-child-name",
+                    G_CALLBACK (visible_child_name_changed), sl);
+}
+
+static void
+constructed (GObject *object)
+{
+  GtkInspectorResourceList *rl = GTK_INSPECTOR_RESOURCE_LIST (object);
+
+  g_signal_connect (rl->priv->close_details_button, "clicked",
+                    G_CALLBACK (close_details), rl);
+  
+  load_resources (rl);
+}
+
+static void
+get_property (GObject    *object,
+              guint       param_id,
+              GValue     *value,
+              GParamSpec *pspec)
+{
+  GtkInspectorResourceList *rl = GTK_INSPECTOR_RESOURCE_LIST (object);
+
+  switch (param_id)
+    {
+    case PROP_CLOSE_DETAILS_BUTTON:
+      g_value_take_object (value, rl->priv->close_details_button);
+      break;
+
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, param_id, pspec);
+      break;
+    }
+}
+
+static void
+set_property (GObject      *object,
+              guint         param_id,
+              const GValue *value,
+              GParamSpec   *pspec)
+{
+  GtkInspectorResourceList *rl = GTK_INSPECTOR_RESOURCE_LIST (object);
+  
+  switch (param_id)
+    {
+    case PROP_CLOSE_DETAILS_BUTTON:
+      rl->priv->close_details_button = g_value_get_object (value);
+      break;
+
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, param_id, pspec);
+      break;
+    }
 }
 
 static void
 gtk_inspector_resource_list_class_init (GtkInspectorResourceListClass *klass)
 {
+  GObjectClass *object_class = G_OBJECT_CLASS (klass);
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
+
+  object_class->get_property = get_property;
+  object_class->set_property = set_property;
+  object_class->constructed = constructed;
+
+  widget_class->parent_set = parent_set;
+
+  g_object_class_install_property (object_class, PROP_CLOSE_DETAILS_BUTTON,
+      g_param_spec_object ("close-details-button", NULL, NULL,
+                           GTK_TYPE_WIDGET, G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY));
 
   gtk_widget_class_set_template_from_resource (widget_class, "/org/gtk/inspector/resource-list.ui");
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorResourceList, model);
@@ -311,7 +409,6 @@ gtk_inspector_resource_list_class_init (GtkInspectorResourceListClass *klass)
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorResourceList, tree);
 
   gtk_widget_class_bind_template_callback (widget_class, row_activated);
-  gtk_widget_class_bind_template_callback (widget_class, close_details);
 }
 
 // vim: set et sw=2 ts=2:

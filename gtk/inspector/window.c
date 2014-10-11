@@ -110,7 +110,7 @@ visible_child_name_changed (GObject *obj, GParamSpec *pspec, GtkInspectorWindow 
   object_details_visible = g_strcmp0 (child, "object-details") == 0;
 
   gtk_widget_set_visible (iw->select_object, objects_visible);
-  gtk_widget_set_visible (iw->close_details, objects_visible && object_details_visible);
+  gtk_widget_set_visible (iw->close_object_details, objects_visible && object_details_visible);
 }
 
 static void
@@ -150,7 +150,7 @@ gtk_inspector_window_class_init (GtkInspectorWindowClass *klass)
   gtk_widget_class_bind_template_child (widget_class, GtkInspectorWindow, object_stack);
   gtk_widget_class_bind_template_child (widget_class, GtkInspectorWindow, object_tree);
   gtk_widget_class_bind_template_child (widget_class, GtkInspectorWindow, object_details);
-  gtk_widget_class_bind_template_child (widget_class, GtkInspectorWindow, close_details);
+  gtk_widget_class_bind_template_child (widget_class, GtkInspectorWindow, close_object_details);
   gtk_widget_class_bind_template_child (widget_class, GtkInspectorWindow, select_object);
   gtk_widget_class_bind_template_child (widget_class, GtkInspectorWindow, prop_list);
   gtk_widget_class_bind_template_child (widget_class, GtkInspectorWindow, child_prop_list);
