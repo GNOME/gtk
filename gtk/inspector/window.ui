@@ -1,10 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface domain="gtk30">
-  <object class="GtkImage" id="inspect_image">
-    <property name="visible">True</property>
-    <property name="icon-name">find-location-symbolic</property>
-    <property name="icon-size">4</property>
-  </object>
   <template class="GtkInspectorWindow" parent="GtkWindow">
     <property name="default-height">500</property>
     <property name="default-width">1000</property>
@@ -14,17 +9,41 @@
         <property name="visible">True</property>
         <property name="show-close-button">True</property>
         <child>
-          <object class="GtkBox">
+          <object class="GtkButton" id="select_object">
             <property name="visible">True</property>
+            <property name="tooltip-text" translatable="yes">Select an Object</property>
+            <property name="halign">center</property>
+            <property name="valign">center</property>
+            <signal name="clicked" handler="gtk_inspector_on_inspect"/>
             <style>
-              <class name="linked"/>
+              <class name="image-button"/>
             </style>
             <child>
-              <object class="GtkButton">
+              <object class="GtkImage">
                 <property name="visible">True</property>
-                <property name="image">inspect_image</property>
-                <property name="tooltip-text" translatable="yes">Select an Object</property>
-                <signal name="clicked" handler="gtk_inspector_on_inspect"/>
+                <property name="icon-name">find-location-symbolic</property>
+                <property name="icon-size">1</property>
+              </object>
+            </child>
+          </object>
+          <packing>
+            <property name="pack-type">start</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkButton" id="close_details">
+            <property name="tooltip-text" translatable="yes">Show all Objects</property>
+            <property name="halign">center</property>
+            <property name="valign">center</property>
+            <signal name="clicked" handler="close_details"/>
+            <style>
+              <class name="image-button"/>
+            </style>
+            <child>
+              <object class="GtkImage">
+                <property name="visible">True</property>
+                <property name="icon-name">view-list-symbolic</property>
+                <property name="icon-size">1</property>
               </object>
             </child>
           </object>
@@ -61,41 +80,6 @@
                 <property name="visible">True</property>
                 <property name="orientation">vertical</property>
                 <child>
-                  <object class="GtkBox">
-                    <property name="visible">True</property>
-                    <property name="orientation">horizontal</property>
-                    <child>
-                      <object class="GtkButton">
-                        <property name="visible">True</property>
-                        <property name="halign">center</property>
-                        <property name="valign">center</property>
-                        <property name="margin">6</property>
-                        <signal name="clicked" handler="close_details"/>
-                        <style>
-                          <class name="image-button"/>
-                        </style>
-                        <child>
-                          <object class="GtkImage">
-                            <property name="visible">True</property>
-                            <property name="icon-name">window-close-symbolic</property>
-                            <property name="icon-size">1</property>
-                          </object>
-                        </child>
-                      </object>
-                    </child>
-                    <child>
-                      <object class="GtkLabel" id="object_id">
-                        <property name="visible">True</property>
-                        <property name="halign">center</property>
-                        <property name="valign">center</property>
-                      </object>
-                      <packing>
-                        <property name="expand">True</property>
-                      </packing>
-                    </child>
-                  </object>
-                </child>
-                <child>
                   <object class="GtkSeparator">
                     <property name="visible">True</property>
                     <property name="orientation">horizontal</property>
@@ -109,6 +93,12 @@
                       <object class="GtkSidebar">
                         <property name="visible">True</property>
                         <property name="stack">object_details</property>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkSeparator">
+                        <property name="visible">True</property>
+                        <property name="orientation">vertical</property>
                       </object>
                     </child>
                     <child>
@@ -164,16 +154,14 @@
                           </packing>
                         </child>
                         <child>
-                          <object class="GtkInspectorClassesList" id="classes_list">
-                  </object>
+                          <object class="GtkInspectorClassesList" id="classes_list"/>
                           <packing>
                             <property name="name">css-classes</property>
                             <property name="title" translatable="yes">CSS Classes</property>
                           </packing>
                         </child>
                         <child>
-                          <object class="GtkInspectorStylePropList" id="style_prop_list">
-                  </object>
+                          <object class="GtkInspectorStylePropList" id="style_prop_list"/>
                           <packing>
                             <property name="name">style-properties</property>
                             <property name="title" translatable="yes">Style Properties</property>
@@ -189,32 +177,28 @@
                           </packing>
                         </child>
                         <child>
-                          <object class="GtkInspectorSizeGroups" id="size_groups">
-                  </object>
+                          <object class="GtkInspectorSizeGroups" id="size_groups"/>
                           <packing>
                             <property name="name">size-groups</property>
                             <property name="title" translatable="yes">Size Groups</property>
                           </packing>
                         </child>
                         <child>
-                          <object class="GtkInspectorDataList" id="data_list">
-                  </object>
+                          <object class="GtkInspectorDataList" id="data_list"/>
                           <packing>
                             <property name="name">data</property>
                             <property name="title" translatable="yes">Data</property>
                           </packing>
                         </child>
                         <child>
-                          <object class="GtkInspectorActions" id="actions">
-                  </object>
+                          <object class="GtkInspectorActions" id="actions"/>
                           <packing>
                             <property name="name">actions</property>
                             <property name="title" translatable="yes">Actions</property>
                           </packing>
                         </child>
                         <child>
-                          <object class="GtkInspectorMenu" id="menu">
-                  </object>
+                          <object class="GtkInspectorMenu" id="menu"/>
                           <packing>
                             <property name="name">menu</property>
                             <property name="title" translatable="yes">Menu</property>

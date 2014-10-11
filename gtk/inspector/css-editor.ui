@@ -43,8 +43,9 @@
     <child>
       <object class="GtkScrolledWindow">
         <property name="visible">True</property>
+        <property name="hscrollbar-policy">never</property>
+        <property name="vscrollbar-policy">automatic</property>
         <property name="expand">True</property>
-        <property name="shadow-type">in</property>
         <child>
           <object class="GtkTextView" id="view">
             <property name="visible">True</property>

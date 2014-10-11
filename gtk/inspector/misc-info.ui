@@ -1,14 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface domain="gtk30">
   <template class="GtkInspectorMiscInfo" parent="GtkScrolledWindow">
-
     <child>
       <object class="GtkBox">
         <property name="visible">true</property>
         <property name="orientation">vertical</property>
         <property name="margin">60</property>
         <property name="spacing">10</property>
-
         <child>
           <object class="GtkFrame">
             <property name="visible">True</property>
