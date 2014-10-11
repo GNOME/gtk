@@ -55,7 +55,6 @@ examples/bp/bloatpad.c
 examples/bp/gtk/menus.ui
 examples/plugman.c
 gtk/inspector/actions.ui
-gtk/inspector/button-path.ui
 gtk/inspector/classes-list.ui
 gtk/inspector/css-editor.ui
 gtk/inspector/data-list.ui
@@ -63,12 +62,12 @@ gtk/inspector/general.ui
 gtk/inspector/menu.ui
 gtk/inspector/misc-info.ui
 gtk/inspector/object-hierarchy.ui
+gtk/inspector/object-tree.ui
 gtk/inspector/prop-list.ui
 gtk/inspector/resource-list.ui
 gtk/inspector/signals-list.ui
 gtk/inspector/style-prop-list.ui
 gtk/inspector/visual.ui
-gtk/inspector/widget-tree.ui
 gtk/inspector/window.ui
 gtk/paper_names.c
 gtk/resources/ui/gtkaboutdialog.ui

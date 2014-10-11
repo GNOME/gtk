@@ -56,8 +56,6 @@ examples/bp/gtk/menus.ui
 examples/plugman.c
 gtk/inspector/actions.ui
 gtk/inspector/actions.ui.h
-gtk/inspector/button-path.ui
-gtk/inspector/button-path.ui.h
 gtk/inspector/classes-list.ui
 gtk/inspector/classes-list.ui.h
 gtk/inspector/css-editor.ui
@@ -72,6 +70,8 @@ gtk/inspector/misc-info.ui
 gtk/inspector/misc-info.ui.h
 gtk/inspector/object-hierarchy.ui
 gtk/inspector/object-hierarchy.ui.h
+gtk/inspector/object-tree.ui
+gtk/inspector/object-tree.ui.h
 gtk/inspector/prop-list.ui
 gtk/inspector/prop-list.ui.h
 gtk/inspector/resource-list.ui
@@ -82,8 +82,6 @@ gtk/inspector/style-prop-list.ui
 gtk/inspector/style-prop-list.ui.h
 gtk/inspector/visual.ui
 gtk/inspector/visual.ui.h
-gtk/inspector/widget-tree.ui
-gtk/inspector/widget-tree.ui.h
 gtk/inspector/window.ui
 gtk/inspector/window.ui.h
 gtk/resources/ui/gtkaboutdialog.ui

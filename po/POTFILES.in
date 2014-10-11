@@ -274,7 +274,6 @@ gtk/gtkwidget.c
 gtk/gtkwindow.c
 gtk/inspector/action-editor.c
 gtk/inspector/actions.ui.h
-gtk/inspector/button-path.ui.h
 gtk/inspector/classes-list.c
 gtk/inspector/classes-list.ui.h
 gtk/inspector/css-editor.c
@@ -289,6 +288,7 @@ gtk/inspector/menu.ui.h
 gtk/inspector/misc-info.c
 gtk/inspector/misc-info.ui.h
 gtk/inspector/object-hierarchy.ui.h
+gtk/inspector/object-tree.ui.h
 gtk/inspector/prop-editor.c
 gtk/inspector/prop-list.ui.h
 gtk/inspector/resource-list.ui.h
@@ -298,7 +298,6 @@ gtk/inspector/size-groups.c
 gtk/inspector/style-prop-list.ui.h
 gtk/inspector/visual.c
 gtk/inspector/visual.ui.h
-gtk/inspector/widget-tree.ui.h
 gtk/inspector/window.c
 gtk/inspector/window.ui.h
 gtk/paper_names_offsets.c
