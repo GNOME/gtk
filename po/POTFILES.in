@@ -295,6 +295,7 @@ gtk/inspector/resource-list.ui.h
 gtk/inspector/signals-list.c
 gtk/inspector/signals-list.ui.h
 gtk/inspector/size-groups.c
+gtk/inspector/statistics.ui.h
 gtk/inspector/style-prop-list.ui.h
 gtk/inspector/visual.c
 gtk/inspector/visual.ui.h
