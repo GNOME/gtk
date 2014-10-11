@@ -25,7 +25,7 @@
 #include <glib/gi18n-lib.h>
 
 #include "window.h"
-#include "widget-tree.h"
+#include "object-tree.h"
 
 #include "gtkstack.h"
 #include "gtkmain.h"
@@ -208,16 +208,16 @@ static void
 select_widget (GtkInspectorWindow *iw,
                GtkWidget          *widget)
 {
-  GtkInspectorWidgetTree *wt = GTK_INSPECTOR_WIDGET_TREE (iw->widget_tree);
+  GtkInspectorObjectTree *wt = GTK_INSPECTOR_OBJECT_TREE (iw->object_tree);
   GtkTreeIter iter;
 
   iw->selected_widget = widget;
 
   gtk_stack_set_visible_child_name (GTK_STACK (iw->top_stack), "objects");
 
-  if (!gtk_inspector_widget_tree_find_object (wt, G_OBJECT (widget), &iter))
-    gtk_inspector_widget_tree_scan (wt, gtk_widget_get_toplevel (widget));
- gtk_inspector_widget_tree_select_object (wt, G_OBJECT (widget));
+  if (!gtk_inspector_object_tree_find_object (wt, G_OBJECT (widget), &iter))
+    gtk_inspector_object_tree_scan (wt, gtk_widget_get_toplevel (widget));
+ gtk_inspector_object_tree_select_object (wt, G_OBJECT (widget));
 }
 
 static void

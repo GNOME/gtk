@@ -19,7 +19,7 @@
 #include <glib/gi18n-lib.h>
 
 #include "prop-editor.h"
-#include "widget-tree.h"
+#include "object-tree.h"
 
 #include "gtkactionable.h"
 #include "gtkadjustment.h"

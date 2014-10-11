@@ -42,7 +42,7 @@ typedef struct
   GtkWindow parent;
 
   GtkWidget *top_stack;
-  GtkWidget *widget_tree;
+  GtkWidget *object_tree;
   GtkWidget *prop_list;
   GtkWidget *child_prop_list;
   GtkWidget *signals_list;

@@ -19,7 +19,7 @@
 #include <glib/gi18n-lib.h>
 
 #include "gestures.h"
-#include "widget-tree.h"
+#include "object-tree.h"
 
 #include "gtksizegroup.h"
 #include "gtkcomboboxtext.h"
@@ -32,14 +32,14 @@
 enum
 {
   PROP_0,
-  PROP_WIDGET_TREE
+  PROP_OBJECT_TREE
 };
 
 struct _GtkInspectorGesturesPrivate
 {
   GtkSizeGroup *sizegroup;
   GObject *object;
-  GtkWidget *widget_tree;
+  GtkWidget *object_tree;
 };
 
 G_DEFINE_TYPE_WITH_PRIVATE (GtkInspectorGestures, gtk_inspector_gestures, GTK_TYPE_BOX)
@@ -92,7 +92,7 @@ row_activated (GtkListBox           *box,
   GObject *gesture;
   
   gesture = G_OBJECT (g_object_get_data (G_OBJECT (row), "gesture"));
-  gtk_inspector_widget_tree_select_object (GTK_INSPECTOR_WIDGET_TREE (sl->priv->widget_tree),
+  gtk_inspector_object_tree_select_object (GTK_INSPECTOR_OBJECT_TREE (sl->priv->object_tree),
                                            gesture);
 }
 
@@ -223,8 +223,8 @@ get_property (GObject    *object,
 
   switch (param_id)
     {
-      case PROP_WIDGET_TREE:
-        g_value_take_object (value, sl->priv->widget_tree);
+      case PROP_OBJECT_TREE:
+        g_value_take_object (value, sl->priv->object_tree);
         break;
 
       default:
@@ -243,8 +243,8 @@ set_property (GObject      *object,
 
   switch (param_id)
     {
-      case PROP_WIDGET_TREE:
-        sl->priv->widget_tree = g_value_get_object (value);
+      case PROP_OBJECT_TREE:
+        sl->priv->object_tree = g_value_get_object (value);
         break;
 
       default:
@@ -261,8 +261,8 @@ gtk_inspector_gestures_class_init (GtkInspectorGesturesClass *klass)
   object_class->get_property = get_property;
   object_class->set_property = set_property;
 
-  g_object_class_install_property (object_class, PROP_WIDGET_TREE,
-      g_param_spec_object ("widget-tree", "Widget Tree", "Widget tree",
+  g_object_class_install_property (object_class, PROP_OBJECT_TREE,
+      g_param_spec_object ("object-tree", "Widget Tree", "Widget tree",
                            GTK_TYPE_WIDGET, G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY));
 }
 

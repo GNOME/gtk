@@ -10,7 +10,7 @@
       <column type="gboolean"/>
     </columns>
   </object>
-  <template class="GtkInspectorWidgetTree" parent="GtkBox">
+  <template class="GtkInspectorObjectTree" parent="GtkBox">
     <property name="visible">True</property>
     <property name="orientation">vertical</property>
     <child>

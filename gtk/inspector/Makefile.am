@@ -38,6 +38,8 @@ libgtkinspector_la_SOURCES = 		\
 	misc-info.c			\
 	object-hierarchy.h		\
 	object-hierarchy.c		\
+	object-tree.h			\
+	object-tree.c			\
 	prop-editor.h			\
 	prop-editor.c			\
 	prop-list.h			\
@@ -54,8 +56,6 @@ libgtkinspector_la_SOURCES = 		\
 	size-groups.c			\
 	visual.h			\
 	visual.c			\
-	widget-tree.h			\
-	widget-tree.c			\
 	window.h			\
 	window.c
 
@@ -96,12 +96,12 @@ templates = 				\
 	menu.ui				\
 	misc-info.ui			\
 	object-hierarchy.ui 		\
+	object-tree.ui 			\
 	prop-list.ui 			\
 	resource-list.ui		\
 	signals-list.ui			\
 	style-prop-list.ui		\
 	visual.ui			\
-	widget-tree.ui 			\
 	window.ui
 
 template_headers = $(templates:.ui=.ui.h)

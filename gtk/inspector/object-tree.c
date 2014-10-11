@@ -27,7 +27,7 @@
 
 #include <string.h>
 
-#include "widget-tree.h"
+#include "object-tree.h"
 #include "prop-list.h"
 
 #include "gtkbuildable.h"
@@ -59,12 +59,12 @@ enum
 
 enum
 {
-  WIDGET_CHANGED,
+  OBJECT_CHANGED,
   LAST_SIGNAL
 };
 
 
-struct _GtkInspectorWidgetTreePrivate
+struct _GtkInspectorObjectTreePrivate
 {
   GtkTreeView *tree;
   GtkTreeStore *model;
@@ -73,13 +73,13 @@ struct _GtkInspectorWidgetTreePrivate
   gulong unmap_hook;
 };
 
-static guint widget_tree_signals[LAST_SIGNAL] = { 0 };
+static guint signals[LAST_SIGNAL] = { 0 };
 
-G_DEFINE_TYPE_WITH_PRIVATE (GtkInspectorWidgetTree, gtk_inspector_widget_tree, GTK_TYPE_BOX)
+G_DEFINE_TYPE_WITH_PRIVATE (GtkInspectorObjectTree, gtk_inspector_object_tree, GTK_TYPE_BOX)
 
 static void
 on_widget_selected (GtkTreeSelection       *selection,
-                    GtkInspectorWidgetTree *wt)
+                    GtkInspectorObjectTree *wt)
 {
   GObject *object;
   GtkTreeIter iter;
@@ -94,18 +94,18 @@ on_widget_selected (GtkTreeSelection       *selection,
   else
     object = NULL;
 
-  g_signal_emit (wt, widget_tree_signals[WIDGET_CHANGED], 0, object);
+  g_signal_emit (wt, signals[OBJECT_CHANGED], 0, object);
 }
 
 typedef struct
 {
-  GtkInspectorWidgetTree *wt;
+  GtkInspectorObjectTree *wt;
   GObject *object;
   GtkTreeRowReference *row;
 } ObjectData;
 
 static void
-gtk_widget_tree_remove_dead_object (gpointer data, GObject *dead_object)
+gtk_object_tree_remove_dead_object (gpointer data, GObject *dead_object)
 {
   ObjectData *od = data;
 
@@ -130,7 +130,7 @@ object_data_free (gpointer data)
   gtk_tree_row_reference_free (od->row);
 
   if (od->object)
-    g_object_weak_unref (od->object, gtk_widget_tree_remove_dead_object, od);
+    g_object_weak_unref (od->object, gtk_object_tree_remove_dead_object, od);
 
   g_free (od);
 }
@@ -141,12 +141,12 @@ map_or_unmap (GSignalInvocationHint *ihint,
               const GValue          *params,
               gpointer               data)
 {
-  GtkInspectorWidgetTree *wt = data;
+  GtkInspectorObjectTree *wt = data;
   GtkWidget *widget;
   GtkTreeIter iter;
 
   widget = g_value_get_object (params);
-  if (gtk_inspector_widget_tree_find_object (wt, G_OBJECT (widget), &iter))
+  if (gtk_inspector_object_tree_find_object (wt, G_OBJECT (widget), &iter))
     gtk_tree_store_set (wt->priv->model, &iter,
                         SENSITIVE, gtk_widget_get_mapped (widget),
                         -1);
@@ -155,11 +155,11 @@ map_or_unmap (GSignalInvocationHint *ihint,
 }
 
 static void
-gtk_inspector_widget_tree_init (GtkInspectorWidgetTree *wt)
+gtk_inspector_object_tree_init (GtkInspectorObjectTree *wt)
 {
   guint signal_id;
 
-  wt->priv = gtk_inspector_widget_tree_get_instance_private (wt);
+  wt->priv = gtk_inspector_object_tree_get_instance_private (wt);
   wt->priv->iters = g_hash_table_new_full (g_direct_hash,
                                            g_direct_equal,
                                            NULL,
@@ -173,13 +173,13 @@ gtk_inspector_widget_tree_init (GtkInspectorWidgetTree *wt)
   wt->priv->unmap_hook = g_signal_add_emission_hook (signal_id, 0,
                                                    map_or_unmap, wt, NULL);
 
-  gtk_inspector_widget_tree_append_object (wt, G_OBJECT (gtk_settings_get_default ()), NULL, NULL);
+  gtk_inspector_object_tree_append_object (wt, G_OBJECT (gtk_settings_get_default ()), NULL, NULL);
 }
 
 static void
-gtk_inspector_widget_tree_finalize (GObject *object)
+gtk_inspector_object_tree_finalize (GObject *object)
 {
-  GtkInspectorWidgetTree *wt = GTK_INSPECTOR_WIDGET_TREE (object);
+  GtkInspectorObjectTree *wt = GTK_INSPECTOR_OBJECT_TREE (object);
   guint signal_id;
 
   g_hash_table_unref (wt->priv->iters);
@@ -189,35 +189,35 @@ gtk_inspector_widget_tree_finalize (GObject *object)
   signal_id = g_signal_lookup ("unmap", GTK_TYPE_WIDGET);
   g_signal_remove_emission_hook (signal_id, wt->priv->unmap_hook);
 
-  G_OBJECT_CLASS (gtk_inspector_widget_tree_parent_class)->finalize (object);
+  G_OBJECT_CLASS (gtk_inspector_object_tree_parent_class)->finalize (object);
 }
 
 static void
-gtk_inspector_widget_tree_class_init (GtkInspectorWidgetTreeClass *klass)
+gtk_inspector_object_tree_class_init (GtkInspectorObjectTreeClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
 
-  object_class->finalize = gtk_inspector_widget_tree_finalize;
+  object_class->finalize = gtk_inspector_object_tree_finalize;
 
-  widget_tree_signals[WIDGET_CHANGED] =
-      g_signal_new ("widget-changed",
+  signals[OBJECT_CHANGED] =
+      g_signal_new ("object-changed",
                     G_OBJECT_CLASS_TYPE (klass),
                     G_SIGNAL_RUN_FIRST | G_SIGNAL_NO_RECURSE,
-                    G_STRUCT_OFFSET(GtkInspectorWidgetTreeClass, widget_changed),
+                    G_STRUCT_OFFSET (GtkInspectorObjectTreeClass, object_changed),
                     NULL, NULL,
                     g_cclosure_marshal_VOID__OBJECT,
                     G_TYPE_NONE, 1, G_TYPE_OBJECT);
 
-  gtk_widget_class_set_template_from_resource (widget_class, "/org/gtk/inspector/widget-tree.ui");
-  gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorWidgetTree, model);
-  gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorWidgetTree, tree);
+  gtk_widget_class_set_template_from_resource (widget_class, "/org/gtk/inspector/object-tree.ui");
+  gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorObjectTree, model);
+  gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorObjectTree, tree);
   gtk_widget_class_bind_template_callback (widget_class, on_widget_selected);
 }
 
 typedef struct
 {
-  GtkInspectorWidgetTree *wt;
+  GtkInspectorObjectTree *wt;
   GtkTreeIter *iter;
   GObject *parent;
 } FindAllData;
@@ -228,7 +228,7 @@ child_callback (GtkWidget *widget,
 {
   FindAllData *d = data;
 
-  gtk_inspector_widget_tree_append_object (d->wt, G_OBJECT (widget), d->iter, NULL);
+  gtk_inspector_object_tree_append_object (d->wt, G_OBJECT (widget), d->iter, NULL);
 }
 
 static gboolean
@@ -240,7 +240,7 @@ cell_callback (GtkCellRenderer *renderer,
 
   cell_layout = g_object_get_data (d->parent, "gtk-inspector-cell-layout");
   g_object_set_data (G_OBJECT (renderer), "gtk-inspector-cell-layout", cell_layout);
-  gtk_inspector_widget_tree_append_object (d->wt, G_OBJECT (renderer), d->iter, NULL);
+  gtk_inspector_object_tree_append_object (d->wt, G_OBJECT (renderer), d->iter, NULL);
 
   return FALSE;
 }
@@ -253,12 +253,12 @@ tag_callback (GtkTextTag *tag,
   gchar *name;
 
   g_object_get (tag, "name", &name, NULL);
-  gtk_inspector_widget_tree_append_object (d->wt, G_OBJECT (tag), d->iter, name);
+  gtk_inspector_object_tree_append_object (d->wt, G_OBJECT (tag), d->iter, name);
   g_free (name);
 }
 
 void
-gtk_inspector_widget_tree_append_object (GtkInspectorWidgetTree *wt,
+gtk_inspector_object_tree_append_object (GtkInspectorObjectTree *wt,
                                          GObject                *object,
                                          GtkTreeIter            *parent_iter,
                                          const gchar            *name)
@@ -328,7 +328,7 @@ gtk_inspector_widget_tree_append_object (GtkInspectorWidgetTree *wt,
   gtk_tree_path_free (path);
 
   g_hash_table_insert (wt->priv->iters, object, od);
-  g_object_weak_ref (object, gtk_widget_tree_remove_dead_object, od);
+  g_object_weak_ref (object, gtk_object_tree_remove_dead_object, od);
 
   g_free (address);
 
@@ -351,14 +351,14 @@ gtk_inspector_widget_tree_append_object (GtkInspectorWidgetTree *wt,
     {
       GObject *child = G_OBJECT (gtk_tree_model_sort_get_model (GTK_TREE_MODEL_SORT (object)));
       if (child)
-        gtk_inspector_widget_tree_append_object (wt, child, &iter, "model");
+        gtk_inspector_object_tree_append_object (wt, child, &iter, "model");
     }
 
   if (GTK_IS_TREE_MODEL_FILTER (object))
     {
       GObject *child = G_OBJECT (gtk_tree_model_filter_get_model (GTK_TREE_MODEL_FILTER (object)));
       if (child)
-        gtk_inspector_widget_tree_append_object (wt, child, &iter, "model");
+        gtk_inspector_object_tree_append_object (wt, child, &iter, "model");
     }
 
   if (GTK_IS_MENU_ITEM (object))
@@ -367,7 +367,7 @@ gtk_inspector_widget_tree_append_object (GtkInspectorWidgetTree *wt,
 
       submenu = gtk_menu_item_get_submenu (GTK_MENU_ITEM (object));
       if (submenu)
-        gtk_inspector_widget_tree_append_object (wt, G_OBJECT (submenu), &iter, "submenu");
+        gtk_inspector_object_tree_append_object (wt, G_OBJECT (submenu), &iter, "submenu");
     }
 
   if (GTK_IS_COMBO_BOX (object))
@@ -377,11 +377,11 @@ gtk_inspector_widget_tree_append_object (GtkInspectorWidgetTree *wt,
 
       popup = gtk_combo_box_get_popup (GTK_COMBO_BOX (object));
       if (popup)
-        gtk_inspector_widget_tree_append_object (wt, G_OBJECT (popup), &iter, "popup");
+        gtk_inspector_object_tree_append_object (wt, G_OBJECT (popup), &iter, "popup");
 
       child = G_OBJECT (gtk_combo_box_get_model (GTK_COMBO_BOX (object)));
       if (child)
-        gtk_inspector_widget_tree_append_object (wt, child, &iter, "model");
+        gtk_inspector_object_tree_append_object (wt, child, &iter, "model");
     }
 
   if (GTK_IS_TREE_VIEW (object))
@@ -391,17 +391,17 @@ gtk_inspector_widget_tree_append_object (GtkInspectorWidgetTree *wt,
 
       child = G_OBJECT (gtk_tree_view_get_model (GTK_TREE_VIEW (object)));
       if (child)
-        gtk_inspector_widget_tree_append_object (wt, child, &iter, "model");
+        gtk_inspector_object_tree_append_object (wt, child, &iter, "model");
 
       child = G_OBJECT (gtk_tree_view_get_selection (GTK_TREE_VIEW (object)));
       if (child)
-        gtk_inspector_widget_tree_append_object (wt, child, &iter, "selection");
+        gtk_inspector_object_tree_append_object (wt, child, &iter, "selection");
 
       n_columns = gtk_tree_view_get_n_columns (GTK_TREE_VIEW (object));
       for (i = 0; i < n_columns; i++)
         {
           child = G_OBJECT (gtk_tree_view_get_column (GTK_TREE_VIEW (object), i));
-          gtk_inspector_widget_tree_append_object (wt, child, &iter, NULL);
+          gtk_inspector_object_tree_append_object (wt, child, &iter, NULL);
         }
     }
 
@@ -411,7 +411,7 @@ gtk_inspector_widget_tree_append_object (GtkInspectorWidgetTree *wt,
 
       child = G_OBJECT (gtk_icon_view_get_model (GTK_ICON_VIEW (object)));
       if (child)
-        gtk_inspector_widget_tree_append_object (wt, child, &iter, "model");
+        gtk_inspector_object_tree_append_object (wt, child, &iter, "model");
     }
 
   if (GTK_IS_CELL_AREA (object))
@@ -430,7 +430,7 @@ gtk_inspector_widget_tree_append_object (GtkInspectorWidgetTree *wt,
 
       area = gtk_cell_layout_get_area (GTK_CELL_LAYOUT (object));
       g_object_set_data (G_OBJECT (area), "gtk-inspector-cell-layout", object);
-      gtk_inspector_widget_tree_append_object (wt, G_OBJECT (area), &iter, "cell-area");
+      gtk_inspector_object_tree_append_object (wt, G_OBJECT (area), &iter, "cell-area");
     }
 
   if (GTK_IS_TEXT_VIEW (object))
@@ -438,7 +438,7 @@ gtk_inspector_widget_tree_append_object (GtkInspectorWidgetTree *wt,
       GtkTextBuffer *buffer;
 
       buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (object));
-      gtk_inspector_widget_tree_append_object (wt, G_OBJECT (buffer), &iter, "buffer");
+      gtk_inspector_object_tree_append_object (wt, G_OBJECT (buffer), &iter, "buffer");
     }
 
   if (GTK_IS_TEXT_BUFFER (object))
@@ -446,7 +446,7 @@ gtk_inspector_widget_tree_append_object (GtkInspectorWidgetTree *wt,
       GtkTextTagTable *tags;
 
       tags = gtk_text_buffer_get_tag_table (GTK_TEXT_BUFFER (object));
-      gtk_inspector_widget_tree_append_object (wt, G_OBJECT (tags), &iter, "tag-table");
+      gtk_inspector_object_tree_append_object (wt, G_OBJECT (tags), &iter, "tag-table");
     }
 
   if (GTK_IS_TEXT_TAG_TABLE (object))
@@ -481,7 +481,7 @@ gtk_inspector_widget_tree_append_object (GtkInspectorWidgetTree *wt,
           for (l = list; l; l = l->next)
             {
               GObject *controller = l->data;
-              gtk_inspector_widget_tree_append_object (wt, controller, &iter, phases[i].name);
+              gtk_inspector_object_tree_append_object (wt, controller, &iter, phases[i].name);
             }
           g_list_free (list);
         }
@@ -490,7 +490,7 @@ gtk_inspector_widget_tree_append_object (GtkInspectorWidgetTree *wt,
 }
 
 void
-gtk_inspector_widget_tree_scan (GtkInspectorWidgetTree *wt,
+gtk_inspector_object_tree_scan (GtkInspectorObjectTree *wt,
                                 GtkWidget              *window)
 {
   GtkWidget *inspector_win;
@@ -498,12 +498,12 @@ gtk_inspector_widget_tree_scan (GtkInspectorWidgetTree *wt,
 
   gtk_tree_store_clear (wt->priv->model);
   g_hash_table_remove_all (wt->priv->iters);
-  gtk_inspector_widget_tree_append_object (wt, G_OBJECT (gtk_settings_get_default ()), NULL, NULL);
+  gtk_inspector_object_tree_append_object (wt, G_OBJECT (gtk_settings_get_default ()), NULL, NULL);
   if (g_application_get_default ())
-    gtk_inspector_widget_tree_append_object (wt, G_OBJECT (g_application_get_default ()), NULL, NULL);
+    gtk_inspector_object_tree_append_object (wt, G_OBJECT (g_application_get_default ()), NULL, NULL);
 
   if (window)
-    gtk_inspector_widget_tree_append_object (wt, G_OBJECT (window), NULL, NULL);
+    gtk_inspector_object_tree_append_object (wt, G_OBJECT (window), NULL, NULL);
 
   inspector_win = gtk_widget_get_toplevel (GTK_WIDGET (wt));
   toplevels = gtk_window_list_toplevels ();
@@ -513,7 +513,7 @@ gtk_inspector_widget_tree_scan (GtkInspectorWidgetTree *wt,
           gtk_window_get_window_type (l->data) == GTK_WINDOW_TOPLEVEL &&
           l->data != window &&
           l->data != inspector_win)
-        gtk_inspector_widget_tree_append_object (wt, G_OBJECT (l->data), NULL, NULL);
+        gtk_inspector_object_tree_append_object (wt, G_OBJECT (l->data), NULL, NULL);
     }
   g_list_free (toplevels);
 
@@ -521,7 +521,7 @@ gtk_inspector_widget_tree_scan (GtkInspectorWidgetTree *wt,
 }
 
 gboolean
-gtk_inspector_widget_tree_find_object (GtkInspectorWidgetTree *wt,
+gtk_inspector_object_tree_find_object (GtkInspectorObjectTree *wt,
                                        GObject                *object,
                                        GtkTreeIter            *iter)
 {
@@ -543,12 +543,12 @@ gtk_inspector_widget_tree_find_object (GtkInspectorWidgetTree *wt,
 }
 
 void
-gtk_inspector_widget_tree_select_object (GtkInspectorWidgetTree *wt,
+gtk_inspector_object_tree_select_object (GtkInspectorObjectTree *wt,
                                          GObject                *object)
 {
   GtkTreeIter iter;
 
-  if (gtk_inspector_widget_tree_find_object (wt, object, &iter))
+  if (gtk_inspector_object_tree_find_object (wt, object, &iter))
     {
       GtkTreePath *path = gtk_tree_model_get_path (GTK_TREE_MODEL (wt->priv->model), &iter);
       gtk_tree_view_expand_to_path (GTK_TREE_VIEW (wt->priv->tree), path);

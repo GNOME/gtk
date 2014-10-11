@@ -32,7 +32,7 @@
 #include "classes-list.h"
 #include "css-editor.h"
 #include "object-hierarchy.h"
-#include "widget-tree.h"
+#include "object-tree.h"
 #include "size-groups.h"
 #include "style-prop-list.h"
 #include "data-list.h"
@@ -48,7 +48,7 @@
 G_DEFINE_TYPE (GtkInspectorWindow, gtk_inspector_window, GTK_TYPE_WINDOW)
 
 static void
-on_widget_tree_selection_changed (GtkInspectorWidgetTree *wt,
+on_object_tree_selection_changed (GtkInspectorObjectTree *wt,
                                   GObject                *selected,
                                   GtkInspectorWindow     *iw)
 {
@@ -109,7 +109,7 @@ gtk_inspector_window_constructed (GObject *object)
 
   G_OBJECT_CLASS (gtk_inspector_window_parent_class)->constructed (object);
 
-  gtk_inspector_widget_tree_scan (GTK_INSPECTOR_WIDGET_TREE (iw->widget_tree), NULL);
+  gtk_inspector_object_tree_scan (GTK_INSPECTOR_OBJECT_TREE (iw->object_tree), NULL);
 }
 
 static void
@@ -123,7 +123,7 @@ gtk_inspector_window_class_init (GtkInspectorWindowClass *klass)
   gtk_widget_class_set_template_from_resource (widget_class, "/org/gtk/inspector/window.ui");
 
   gtk_widget_class_bind_template_child (widget_class, GtkInspectorWindow, top_stack);
-  gtk_widget_class_bind_template_child (widget_class, GtkInspectorWindow, widget_tree);
+  gtk_widget_class_bind_template_child (widget_class, GtkInspectorWindow, object_tree);
   gtk_widget_class_bind_template_child (widget_class, GtkInspectorWindow, prop_list);
   gtk_widget_class_bind_template_child (widget_class, GtkInspectorWindow, child_prop_list);
   gtk_widget_class_bind_template_child (widget_class, GtkInspectorWindow, signals_list);
@@ -139,7 +139,7 @@ gtk_inspector_window_class_init (GtkInspectorWindowClass *klass)
   gtk_widget_class_bind_template_child (widget_class, GtkInspectorWindow, gestures);
 
   gtk_widget_class_bind_template_callback (widget_class, gtk_inspector_on_inspect);
-  gtk_widget_class_bind_template_callback (widget_class, on_widget_tree_selection_changed);
+  gtk_widget_class_bind_template_callback (widget_class, on_object_tree_selection_changed);
 }
 
 GtkWidget *

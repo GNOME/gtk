@@ -20,7 +20,7 @@
 
 #include "misc-info.h"
 #include "window.h"
-#include "widget-tree.h"
+#include "object-tree.h"
 
 #include "gtktypebuiltins.h"
 #include "gtktreeview.h"
@@ -29,7 +29,7 @@
 #include "gtkframe.h"
 
 struct _GtkInspectorMiscInfoPrivate {
-  GtkInspectorWidgetTree *widget_tree;
+  GtkInspectorObjectTree *object_tree;
 
   GObject *object;
 
@@ -50,7 +50,7 @@ struct _GtkInspectorMiscInfoPrivate {
 enum
 {
   PROP_0,
-  PROP_WIDGET_TREE
+  PROP_OBJECT_TREE
 };
 
 G_DEFINE_TYPE_WITH_PRIVATE (GtkInspectorMiscInfo, gtk_inspector_misc_info, GTK_TYPE_SCROLLED_WINDOW)
@@ -127,17 +127,17 @@ show_object (GtkInspectorMiscInfo *sl,
 {
   GtkTreeIter iter;
 
-  g_object_set_data (G_OBJECT (sl->priv->widget_tree), "next-tab", (gpointer)tab);
-  if (gtk_inspector_widget_tree_find_object (sl->priv->widget_tree, object, &iter))
+  g_object_set_data (G_OBJECT (sl->priv->object_tree), "next-tab", (gpointer)tab);
+  if (gtk_inspector_object_tree_find_object (sl->priv->object_tree, object, &iter))
     {
-      gtk_inspector_widget_tree_select_object (sl->priv->widget_tree, object);
+      gtk_inspector_object_tree_select_object (sl->priv->object_tree, object);
     }
   else if (GTK_IS_WIDGET (object) &&
-           gtk_inspector_widget_tree_find_object (sl->priv->widget_tree, G_OBJECT (gtk_widget_get_parent (GTK_WIDGET (object))), &iter))
+           gtk_inspector_object_tree_find_object (sl->priv->object_tree, G_OBJECT (gtk_widget_get_parent (GTK_WIDGET (object))), &iter))
 
     {
-      gtk_inspector_widget_tree_append_object (sl->priv->widget_tree, object, &iter, name);
-      gtk_inspector_widget_tree_select_object (sl->priv->widget_tree, object);
+      gtk_inspector_object_tree_append_object (sl->priv->object_tree, object, &iter, name);
+      gtk_inspector_object_tree_select_object (sl->priv->object_tree, object);
     }
   else
     {
@@ -301,8 +301,8 @@ get_property (GObject    *object,
 
   switch (param_id)
     {
-      case PROP_WIDGET_TREE:
-        g_value_take_object (value, sl->priv->widget_tree);
+      case PROP_OBJECT_TREE:
+        g_value_take_object (value, sl->priv->object_tree);
         break;
 
       default:
@@ -321,8 +321,8 @@ set_property (GObject      *object,
 
   switch (param_id)
     {
-      case PROP_WIDGET_TREE:
-        sl->priv->widget_tree = g_value_get_object (value);
+      case PROP_OBJECT_TREE:
+        sl->priv->object_tree = g_value_get_object (value);
         break;
 
       default:
@@ -340,8 +340,8 @@ gtk_inspector_misc_info_class_init (GtkInspectorMiscInfoClass *klass)
   object_class->get_property = get_property;
   object_class->set_property = set_property;
 
-  g_object_class_install_property (object_class, PROP_WIDGET_TREE,
-      g_param_spec_object ("widget-tree", "Widget Tree", "Widget tree",
+  g_object_class_install_property (object_class, PROP_OBJECT_TREE,
+      g_param_spec_object ("object-tree", "Object Tree", "Obect tree",
                            GTK_TYPE_WIDGET, G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY));
 
   gtk_widget_class_set_template_from_resource (widget_class, "/org/gtk/inspector/misc-info.ui");

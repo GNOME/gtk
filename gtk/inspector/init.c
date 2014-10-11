@@ -33,6 +33,7 @@
 #include "menu.h"
 #include "misc-info.h"
 #include "object-hierarchy.h"
+#include "object-tree.h"
 #include "prop-list.h"
 #include "resource-list.h"
 #include "resources.h"
@@ -40,7 +41,6 @@
 #include "size-groups.h"
 #include "style-prop-list.h"
 #include "visual.h"
-#include "widget-tree.h"
 #include "window.h"
 
 void
@@ -57,13 +57,13 @@ gtk_inspector_init (void)
   g_type_ensure (GTK_TYPE_INSPECTOR_MENU);
   g_type_ensure (GTK_TYPE_INSPECTOR_MISC_INFO);
   g_type_ensure (GTK_TYPE_INSPECTOR_OBJECT_HIERARCHY);
+  g_type_ensure (GTK_TYPE_INSPECTOR_OBJECT_TREE);
   g_type_ensure (GTK_TYPE_INSPECTOR_PROP_LIST);
   g_type_ensure (GTK_TYPE_INSPECTOR_RESOURCE_LIST);
   g_type_ensure (GTK_TYPE_INSPECTOR_SIGNALS_LIST);
   g_type_ensure (GTK_TYPE_INSPECTOR_STYLE_PROP_LIST);
   g_type_ensure (GTK_TYPE_INSPECTOR_SIZE_GROUPS);
   g_type_ensure (GTK_TYPE_INSPECTOR_VISUAL);
-  g_type_ensure (GTK_TYPE_INSPECTOR_WIDGET_TREE);
   g_type_ensure (GTK_TYPE_INSPECTOR_WINDOW);
 }
 

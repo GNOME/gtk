@@ -27,7 +27,7 @@
 #include "prop-list.h"
 
 #include "prop-editor.h"
-#include "widget-tree.h"
+#include "object-tree.h"
 
 #include "gtkcelllayout.h"
 #include "gtktreeview.h"
@@ -46,7 +46,7 @@ enum
 enum
 {
   PROP_0,
-  PROP_WIDGET_TREE,
+  PROP_OBJECT_TREE,
   PROP_CHILD_PROPERTIES
 };
 
@@ -56,7 +56,7 @@ struct _GtkInspectorPropListPrivate
   GtkListStore *model;
   GHashTable *prop_iters;
   gulong notify_handler_id;
-  GtkInspectorWidgetTree *widget_tree;
+  GtkInspectorObjectTree *object_tree;
   gboolean child_properties;
   GtkTreeViewColumn *attribute_column;
   GtkWidget *tree;
@@ -88,8 +88,8 @@ get_property (GObject    *object,
 
   switch (param_id)
     {
-      case PROP_WIDGET_TREE:
-        g_value_take_object (value, pl->priv->widget_tree);
+      case PROP_OBJECT_TREE:
+        g_value_take_object (value, pl->priv->object_tree);
         break;
 
       case PROP_CHILD_PROPERTIES:
@@ -112,8 +112,8 @@ set_property (GObject      *object,
 
   switch (param_id)
     {
-      case PROP_WIDGET_TREE:
-        pl->priv->widget_tree = g_value_get_object (value);
+      case PROP_OBJECT_TREE:
+        pl->priv->object_tree = g_value_get_object (value);
         break;
 
       case PROP_CHILD_PROPERTIES:
@@ -139,15 +139,15 @@ show_object (GtkInspectorPropEditor *editor,
   popover = gtk_widget_get_ancestor (GTK_WIDGET (editor), GTK_TYPE_POPOVER);
   gtk_widget_hide (popover);
 
-  g_object_set_data (G_OBJECT (pl->priv->widget_tree), "next-tab", (gpointer)tab);
-  if (gtk_inspector_widget_tree_find_object (pl->priv->widget_tree, object, &iter))
+  g_object_set_data (G_OBJECT (pl->priv->object_tree), "next-tab", (gpointer)tab);
+  if (gtk_inspector_object_tree_find_object (pl->priv->object_tree, object, &iter))
     {
-      gtk_inspector_widget_tree_select_object (pl->priv->widget_tree, object);
+      gtk_inspector_object_tree_select_object (pl->priv->object_tree, object);
     }
-  else if (gtk_inspector_widget_tree_find_object (pl->priv->widget_tree, pl->priv->object, &iter))
+  else if (gtk_inspector_object_tree_find_object (pl->priv->object_tree, pl->priv->object, &iter))
     {
-      gtk_inspector_widget_tree_append_object (pl->priv->widget_tree, object, &iter, name);
-      gtk_inspector_widget_tree_select_object (pl->priv->widget_tree, object);
+      gtk_inspector_object_tree_append_object (pl->priv->object_tree, object, &iter, name);
+      gtk_inspector_object_tree_select_object (pl->priv->object_tree, object);
     }
   else
     {
@@ -215,8 +215,8 @@ gtk_inspector_prop_list_class_init (GtkInspectorPropListClass *klass)
   object_class->get_property = get_property;
   object_class->set_property = set_property;
 
-  g_object_class_install_property (object_class, PROP_WIDGET_TREE,
-      g_param_spec_object ("widget-tree", "Widget Tree", "Widget tree",
+  g_object_class_install_property (object_class, PROP_OBJECT_TREE,
+      g_param_spec_object ("object-tree", "Object Tree", "Object tree",
                            GTK_TYPE_WIDGET, G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY));
   g_object_class_install_property (object_class, PROP_CHILD_PROPERTIES,
       g_param_spec_boolean ("child-properties", "Child properties", "Child properties",

@@ -48,9 +48,9 @@
             <property name="visible">True</property>
             <property name="orientation">horizontal</property>
             <child>
-              <object class="GtkInspectorWidgetTree" id="widget_tree">
+              <object class="GtkInspectorObjectTree" id="object_tree">
                 <property name="visible">True</property>
-                <signal name="widget-changed" handler="on_widget_tree_selection_changed"/>
+                <signal name="object-changed" handler="on_object_tree_selection_changed"/>
               </object>
               <packing>
                 <property name="resize">True</property>
@@ -65,7 +65,7 @@
                 <child>
                   <object class="GtkInspectorMiscInfo" id="misc_info">
                     <property name="visible">True</property>
-                    <property name="widget-tree">widget_tree</property>
+                    <property name="object-tree">object_tree</property>
                   </object>
                   <packing>
                     <property name="tab_expand">True</property>
@@ -82,7 +82,7 @@
                   <object class="GtkInspectorPropList" id="prop_list">
                     <property name="visible">True</property>
                     <property name="child-properties">False</property>
-                    <property name="widget-tree">widget_tree</property>
+                    <property name="object-tree">object_tree</property>
                   </object>
                   <packing>
                     <property name="tab_expand">True</property>
@@ -128,7 +128,7 @@
                 <child>
                   <object class="GtkInspectorPropList" id="child_prop_list">
                     <property name="child-properties">True</property>
-                    <property name="widget-tree">widget_tree</property>
+                    <property name="object-tree">object_tree</property>
                   </object>
                   <packing>
                     <property name="tab_expand">True</property>
@@ -242,7 +242,7 @@
                 </child>
                 <child>
                   <object class="GtkInspectorGestures" id="gestures">
-                    <property name="widget-tree">widget_tree</property>
+                    <property name="object-tree">object_tree</property>
                   </object>
                 </child>
                 <child type="tab">
