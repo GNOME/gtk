@@ -25,7 +25,7 @@
             <property name="vscrollbar-policy">always</property>
             <property name="shadow-type">in</property>
             <child>
-              <object class="GtkTreeView">
+              <object class="GtkTreeView" id="tree">
                 <property name="visible">True</property>
                 <property name="model">model</property>
                 <property name="activate-on-single-click">True</property>

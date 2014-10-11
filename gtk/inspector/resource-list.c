@@ -46,6 +46,7 @@ struct _GtkInspectorResourceListPrivate
   GtkWidget *size_label;
   GtkWidget *info_grid;
   GtkWidget *stack;
+  GtkWidget *tree;
   GtkTreeViewColumn *count_column;
   GtkCellRenderer *count_renderer;
   GtkTreeViewColumn *size_column;
@@ -268,6 +269,7 @@ on_map (GtkWidget *widget)
 {
   GtkInspectorResourceList *sl = GTK_INSPECTOR_RESOURCE_LIST (widget);
 
+  gtk_tree_view_expand_all (GTK_TREE_VIEW (sl->priv->tree));
   gtk_stack_set_visible_child_name (GTK_STACK (sl->priv->stack), "list");
 }
 
@@ -306,6 +308,7 @@ gtk_inspector_resource_list_class_init (GtkInspectorResourceListClass *klass)
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorResourceList, size_column);
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorResourceList, size_renderer);
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorResourceList, stack);
+  gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorResourceList, tree);
 
   gtk_widget_class_bind_template_callback (widget_class, row_activated);
   gtk_widget_class_bind_template_callback (widget_class, close_details);
