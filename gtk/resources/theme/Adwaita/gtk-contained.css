@@ -2343,7 +2343,7 @@ GtkCalendar.header column-header .button.titlebutton, column-header .button:hove
 .scrollbars-junction, .scrollbar.trough,
 .scrollbars-junction.frame,
 .frame.scrollbar.trough {
-  border: none;
+  border-color: transparent;
   background-color: #e0e0e0; }
   .scrollbars-junction:backdrop, .scrollbar.trough:backdrop,
   .scrollbars-junction.frame:backdrop,
