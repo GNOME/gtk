@@ -2465,10 +2465,14 @@ GtkCalendar.header column-header .button.titlebutton, column-header .button:hove
     .scrollbar.slider:backdrop, .scrollbar.slider:insensitive {
       background-color: #4b5050; }
 
-.scrollbars-junction, .scrollbar.trough {
-  border-color: transparent;
+.scrollbars-junction, .scrollbar.trough,
+.scrollbars-junction.frame,
+.frame.scrollbar.trough {
+  border: none;
   background-color: #2d3232; }
-  .scrollbars-junction:backdrop, .scrollbar.trough:backdrop {
+  .scrollbars-junction:backdrop, .scrollbar.trough:backdrop,
+  .scrollbars-junction.frame:backdrop,
+  .frame.scrollbar.trough:backdrop {
     background-color: transparent; }
 
 /**********
