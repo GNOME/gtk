@@ -59,7 +59,8 @@ enum
 
 enum
 {
-  OBJECT_CHANGED,
+  OBJECT_SELECTED,
+  OBJECT_ACTIVATED,
   LAST_SIGNAL
 };
 
@@ -78,24 +79,45 @@ static guint signals[LAST_SIGNAL] = { 0 };
 G_DEFINE_TYPE_WITH_PRIVATE (GtkInspectorObjectTree, gtk_inspector_object_tree, GTK_TYPE_BOX)
 
 static void
-on_widget_selected (GtkTreeSelection       *selection,
-                    GtkInspectorObjectTree *wt)
+on_row_activated (GtkTreeView            *tree,
+                  GtkTreePath            *path,
+                  GtkTreeViewColumn      *col,
+                  GtkInspectorObjectTree *wt)
+{
+  GtkTreeIter iter;
+  GObject *object;
+  gchar *name;
+
+  gtk_tree_model_get_iter (GTK_TREE_MODEL (wt->priv->model), &iter, path);
+  gtk_tree_model_get (GTK_TREE_MODEL (wt->priv->model), &iter,
+                      OBJECT, &object,
+                      OBJECT_NAME, &name,
+                      -1);
+
+  g_signal_emit (wt, signals[OBJECT_ACTIVATED], 0, object, name);
+
+  g_free (name);
+}
+
+static void
+on_selection_changed (GtkTreeSelection       *selection,
+                      GtkInspectorObjectTree *wt)
 {
   GObject *object;
   GtkTreeIter iter;
   GtkTreeSelection *sel;
   GtkTreeModel *model;
-
+ 
+  object = NULL;
   sel = gtk_tree_view_get_selection (GTK_TREE_VIEW (wt->priv->tree));
   if (gtk_tree_selection_get_selected (sel, &model, &iter))
     gtk_tree_model_get (model, &iter,
                         OBJECT, &object,
                         -1);
-  else
-    object = NULL;
-
-  g_signal_emit (wt, signals[OBJECT_CHANGED], 0, object);
+  if (object)
+    g_signal_emit (wt, signals[OBJECT_SELECTED], 0, object);
 }
+
 
 typedef struct
 {
@@ -200,19 +222,29 @@ gtk_inspector_object_tree_class_init (GtkInspectorObjectTreeClass *klass)
 
   object_class->finalize = gtk_inspector_object_tree_finalize;
 
-  signals[OBJECT_CHANGED] =
-      g_signal_new ("object-changed",
+  signals[OBJECT_ACTIVATED] =
+      g_signal_new ("object-activated",
                     G_OBJECT_CLASS_TYPE (klass),
                     G_SIGNAL_RUN_FIRST | G_SIGNAL_NO_RECURSE,
-                    G_STRUCT_OFFSET (GtkInspectorObjectTreeClass, object_changed),
+                    G_STRUCT_OFFSET (GtkInspectorObjectTreeClass, object_activated),
                     NULL, NULL,
-                    g_cclosure_marshal_VOID__OBJECT,
+                    NULL,
+                    G_TYPE_NONE, 2, G_TYPE_OBJECT, G_TYPE_STRING);
+
+  signals[OBJECT_SELECTED] =
+      g_signal_new ("object-selected",
+                    G_OBJECT_CLASS_TYPE (klass),
+                    G_SIGNAL_RUN_FIRST | G_SIGNAL_NO_RECURSE,
+                    G_STRUCT_OFFSET (GtkInspectorObjectTreeClass, object_selected),
+                    NULL, NULL,
+                    NULL,
                     G_TYPE_NONE, 1, G_TYPE_OBJECT);
 
   gtk_widget_class_set_template_from_resource (widget_class, "/org/gtk/inspector/object-tree.ui");
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorObjectTree, model);
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorObjectTree, tree);
-  gtk_widget_class_bind_template_callback (widget_class, on_widget_selected);
+  gtk_widget_class_bind_template_callback (widget_class, on_selection_changed);
+  gtk_widget_class_bind_template_callback (widget_class, on_row_activated);
 }
 
 typedef struct
@@ -486,7 +518,6 @@ gtk_inspector_object_tree_append_object (GtkInspectorObjectTree *wt,
           g_list_free (list);
         }
     }
-
 }
 
 void
@@ -550,10 +581,14 @@ gtk_inspector_object_tree_select_object (GtkInspectorObjectTree *wt,
 
   if (gtk_inspector_object_tree_find_object (wt, object, &iter))
     {
-      GtkTreePath *path = gtk_tree_model_get_path (GTK_TREE_MODEL (wt->priv->model), &iter);
+      GtkTreePath *path;
+
+      path = gtk_tree_model_get_path (GTK_TREE_MODEL (wt->priv->model), &iter);
       gtk_tree_view_expand_to_path (GTK_TREE_VIEW (wt->priv->tree), path);
       gtk_tree_selection_select_iter (gtk_tree_view_get_selection (GTK_TREE_VIEW (wt->priv->tree)), &iter);
       gtk_tree_view_scroll_to_cell (GTK_TREE_VIEW (wt->priv->tree), path, NULL, FALSE, 0, 0);
+      gtk_tree_view_row_activated (GTK_TREE_VIEW (wt->priv->tree), path, NULL);
+      gtk_tree_path_free (path);
     }
 }
 

@@ -42,22 +42,30 @@
 #include "misc-info.h"
 #include "gestures.h"
 
-#include "gtknotebook.h"
+#include "gtklabel.h"
+#include "gtkbutton.h"
+#include "gtkstack.h"
+#include "gtktreeviewcolumn.h"
+#include "gtkwindow.h"
 #include "gtkwindowgroup.h"
 
 G_DEFINE_TYPE (GtkInspectorWindow, gtk_inspector_window, GTK_TYPE_WINDOW)
 
 static void
-on_object_tree_selection_changed (GtkInspectorObjectTree *wt,
-                                  GObject                *selected,
-                                  GtkInspectorWindow     *iw)
+on_object_activated (GtkInspectorObjectTree *wt,
+                     GObject                *selected,
+                     const gchar            *name,
+                     GtkInspectorWindow     *iw)
 {
-  GtkWidget *notebook;
   const gchar *tab;
-  gint page_num;
+  gchar *id;
 
   if (!gtk_inspector_prop_list_set_object (GTK_INSPECTOR_PROP_LIST (iw->prop_list), selected))
     return;
+
+  id = g_strconcat (g_type_name_from_instance ((GTypeInstance*)selected), name[0] ? " : " : NULL, name, NULL);
+  gtk_label_set_label (GTK_LABEL (iw->object_id), id);
+  g_free (id);
 
   gtk_inspector_prop_list_set_object (GTK_INSPECTOR_PROP_LIST (iw->child_prop_list), selected);
   gtk_inspector_style_prop_list_set_object (GTK_INSPECTOR_STYLE_PROP_LIST (iw->style_prop_list), selected);
@@ -72,26 +80,26 @@ on_object_tree_selection_changed (GtkInspectorObjectTree *wt,
   gtk_inspector_menu_set_object (GTK_INSPECTOR_MENU (iw->menu), selected);
   gtk_inspector_gestures_set_object (GTK_INSPECTOR_GESTURES (iw->gestures), selected);
 
-  notebook = gtk_widget_get_parent (iw->prop_list);
   tab = g_object_get_data (G_OBJECT (wt), "next-tab");
-  if (g_strcmp0 (tab, "properties") == 0)
-    {
-      page_num = gtk_notebook_page_num (GTK_NOTEBOOK (notebook), iw->prop_list);
-      gtk_notebook_set_current_page (GTK_NOTEBOOK (notebook), page_num);
-    }
-  else if (g_strcmp0 (tab, "data") == 0)
-    {
-      page_num = gtk_notebook_page_num (GTK_NOTEBOOK (notebook), iw->data_list);
-      gtk_notebook_set_current_page (GTK_NOTEBOOK (notebook), page_num);
-    }
-  else if (g_strcmp0 (tab, "actions") == 0)
-    {
-      page_num = gtk_notebook_page_num (GTK_NOTEBOOK (notebook), iw->actions);
-      gtk_notebook_set_current_page (GTK_NOTEBOOK (notebook), page_num);
-    }
+  if (tab)
+    gtk_stack_set_visible_child_name (GTK_STACK (iw->object_details), tab);
 
+  gtk_stack_set_visible_child_name (GTK_STACK (iw->object_stack), "object-details");
+}
+
+static void
+on_object_selected (GtkInspectorObjectTree *wt,
+                    GObject                *selected,
+                    GtkInspectorWindow     *iw)
+{
   if (GTK_IS_WIDGET (selected))
     gtk_inspector_flash_widget (iw, GTK_WIDGET (selected));
+}
+
+static void
+close_details (GtkWidget *button, GtkInspectorWindow *iw)
+{
+  gtk_stack_set_visible_child_name (GTK_STACK (iw->object_stack), "object-tree");
 }
 
 static void
@@ -123,7 +131,10 @@ gtk_inspector_window_class_init (GtkInspectorWindowClass *klass)
   gtk_widget_class_set_template_from_resource (widget_class, "/org/gtk/inspector/window.ui");
 
   gtk_widget_class_bind_template_child (widget_class, GtkInspectorWindow, top_stack);
+  gtk_widget_class_bind_template_child (widget_class, GtkInspectorWindow, object_stack);
   gtk_widget_class_bind_template_child (widget_class, GtkInspectorWindow, object_tree);
+  gtk_widget_class_bind_template_child (widget_class, GtkInspectorWindow, object_details);
+  gtk_widget_class_bind_template_child (widget_class, GtkInspectorWindow, object_id);
   gtk_widget_class_bind_template_child (widget_class, GtkInspectorWindow, prop_list);
   gtk_widget_class_bind_template_child (widget_class, GtkInspectorWindow, child_prop_list);
   gtk_widget_class_bind_template_child (widget_class, GtkInspectorWindow, signals_list);
@@ -139,7 +150,9 @@ gtk_inspector_window_class_init (GtkInspectorWindowClass *klass)
   gtk_widget_class_bind_template_child (widget_class, GtkInspectorWindow, gestures);
 
   gtk_widget_class_bind_template_callback (widget_class, gtk_inspector_on_inspect);
-  gtk_widget_class_bind_template_callback (widget_class, on_object_tree_selection_changed);
+  gtk_widget_class_bind_template_callback (widget_class, on_object_activated);
+  gtk_widget_class_bind_template_callback (widget_class, on_object_selected);
+  gtk_widget_class_bind_template_callback (widget_class, close_details);
 }
 
 GtkWidget *

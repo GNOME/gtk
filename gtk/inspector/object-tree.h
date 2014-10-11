@@ -46,8 +46,10 @@ typedef struct _GtkInspectorObjectTreeClass
 {
   GtkBoxClass parent;
 
-  void (*object_changed) (GtkInspectorObjectTree *wt,
-                          GObject                *object);
+  void (*object_selected)  (GtkInspectorObjectTree *wt,
+                            GObject                *object);
+  void (*object_activated) (GtkInspectorObjectTree *wt,
+                            GObject                *object);
 } GtkInspectorObjectTreeClass;
 
 
