@@ -39,6 +39,7 @@
 #include "gtkmenuitem.h"
 #include "gtksettings.h"
 #include "gtktextview.h"
+#include "gtktreeview.h"
 #include "gtktreeselection.h"
 #include "gtktreestore.h"
 #include "gtktreemodelsort.h"
@@ -65,6 +66,7 @@ enum
 
 struct _GtkInspectorWidgetTreePrivate
 {
+  GtkTreeView *tree;
   GtkTreeStore *model;
   GHashTable *iters;
   gulong map_hook;
@@ -73,7 +75,7 @@ struct _GtkInspectorWidgetTreePrivate
 
 static guint widget_tree_signals[LAST_SIGNAL] = { 0 };
 
-G_DEFINE_TYPE_WITH_PRIVATE (GtkInspectorWidgetTree, gtk_inspector_widget_tree, GTK_TYPE_TREE_VIEW)
+G_DEFINE_TYPE_WITH_PRIVATE (GtkInspectorWidgetTree, gtk_inspector_widget_tree, GTK_TYPE_BOX)
 
 static void
 on_widget_selected (GtkTreeSelection       *selection,
@@ -198,6 +200,7 @@ gtk_inspector_widget_tree_class_init (GtkInspectorWidgetTreeClass *klass)
 
   gtk_widget_class_set_template_from_resource (widget_class, "/org/gtk/inspector/widget-tree.ui");
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorWidgetTree, model);
+  gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorWidgetTree, tree);
   gtk_widget_class_bind_template_callback (widget_class, on_widget_selected);
 }
 
@@ -208,7 +211,7 @@ gtk_inspector_widget_tree_get_selected_object (GtkInspectorWidgetTree *wt)
   GtkTreeSelection *sel;
   GtkTreeModel *model;
 
-  sel = gtk_tree_view_get_selection (GTK_TREE_VIEW (wt));
+  sel = gtk_tree_view_get_selection (GTK_TREE_VIEW (wt->priv->tree));
 
   if (gtk_tree_selection_get_selected (sel, &model, &iter))
     {
@@ -339,20 +342,6 @@ gtk_inspector_widget_tree_append_object (GtkInspectorWidgetTree *wt,
 
   g_free (address);
 
-  if (GTK_IS_TREE_MODEL_SORT (object))
-    {
-      GObject *child = G_OBJECT (gtk_tree_model_sort_get_model (GTK_TREE_MODEL_SORT (object)));
-      if (child)
-        gtk_inspector_widget_tree_append_object (wt, child, &iter, "model");
-    }
-
-  if (GTK_IS_TREE_MODEL_FILTER (object))
-    {
-      GObject *child = G_OBJECT (gtk_tree_model_filter_get_model (GTK_TREE_MODEL_FILTER (object)));
-      if (child)
-        gtk_inspector_widget_tree_append_object (wt, child, &iter, "model");
-    }
-
   if (GTK_IS_CONTAINER (object))
     {
       FindAllData data;
@@ -368,6 +357,20 @@ gtk_inspector_widget_tree_append_object (GtkInspectorWidgetTree *wt,
    * children in the GtkContainer sense, but which we still want
    * to show in the tree right away.
    */
+  if (GTK_IS_TREE_MODEL_SORT (object))
+    {
+      GObject *child = G_OBJECT (gtk_tree_model_sort_get_model (GTK_TREE_MODEL_SORT (object)));
+      if (child)
+        gtk_inspector_widget_tree_append_object (wt, child, &iter, "model");
+    }
+
+  if (GTK_IS_TREE_MODEL_FILTER (object))
+    {
+      GObject *child = G_OBJECT (gtk_tree_model_filter_get_model (GTK_TREE_MODEL_FILTER (object)));
+      if (child)
+        gtk_inspector_widget_tree_append_object (wt, child, &iter, "model");
+    }
+
   if (GTK_IS_MENU_ITEM (object))
     {
       GtkWidget *submenu;
@@ -524,7 +527,7 @@ gtk_inspector_widget_tree_scan (GtkInspectorWidgetTree *wt,
     }
   g_list_free (toplevels);
 
-  gtk_tree_view_columns_autosize (GTK_TREE_VIEW (wt));
+  gtk_tree_view_columns_autosize (GTK_TREE_VIEW (wt->priv->tree));
 }
 
 gboolean
@@ -558,9 +561,9 @@ gtk_inspector_widget_tree_select_object (GtkInspectorWidgetTree *wt,
   if (gtk_inspector_widget_tree_find_object (wt, object, &iter))
     {
       GtkTreePath *path = gtk_tree_model_get_path (GTK_TREE_MODEL (wt->priv->model), &iter);
-      gtk_tree_view_expand_to_path (GTK_TREE_VIEW (wt), path);
-      gtk_tree_selection_select_iter (gtk_tree_view_get_selection (GTK_TREE_VIEW (wt)), &iter);
-      gtk_tree_view_scroll_to_cell (GTK_TREE_VIEW (wt), path, NULL, FALSE, 0, 0);
+      gtk_tree_view_expand_to_path (GTK_TREE_VIEW (wt->priv->tree), path);
+      gtk_tree_selection_select_iter (gtk_tree_view_get_selection (GTK_TREE_VIEW (wt->priv->tree)), &iter);
+      gtk_tree_view_scroll_to_cell (GTK_TREE_VIEW (wt->priv->tree), path, NULL, FALSE, 0, 0);
     }
 }
 

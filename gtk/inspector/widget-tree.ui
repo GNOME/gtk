@@ -10,73 +10,90 @@
       <column type="gboolean"/>
     </columns>
   </object>
-  <template class="GtkInspectorWidgetTree" parent="GtkTreeView">
-    <property name="model">model</property>
-    <property name="enable-search">True</property>
-    <property name="search-column">2</property>
-    <child internal-child="selection">
-      <object class="GtkTreeSelection">
-        <signal name="changed" handler="on_widget_selected"/>
-      </object>
-    </child>
+  <template class="GtkInspectorWidgetTree" parent="GtkBox">
+    <property name="visible">True</property>
+    <property name="orientation">vertical</property>
     <child>
-      <object class="GtkTreeViewColumn">
-        <property name="title" translatable="yes">Object</property>
-        <property name="resizable">True</property>
+      <object class="GtkScrolledWindow">
+        <property name="visible">True</property>
+        <property name="hscrollbar-policy">automatic</property>
+        <property name="vscrollbar-policy">always</property>
+        <property name="shadow-type">in</property>
+        <property name="width-request">250</property>
+        <property name="expand">True</property>
         <child>
-          <object class="GtkCellRendererText">
-            <property name="scale">0.8</property>
+          <object class="GtkTreeView" id="tree">
+            <property name="visible">True</property>
+            <property name="model">model</property>
+            <property name="enable-search">True</property>
+            <property name="search-column">2</property>
+            <child internal-child="selection">
+              <object class="GtkTreeSelection">
+                <signal name="changed" handler="on_widget_selected"/>
+              </object>
+            </child>
+            <child>
+              <object class="GtkTreeViewColumn">
+                <property name="title" translatable="yes">Object</property>
+                <property name="resizable">True</property>
+                <child>
+                  <object class="GtkCellRendererText">
+                    <property name="scale">0.8</property>
+                  </object>
+                  <attributes>
+                    <attribute name="text">1</attribute>
+                    <attribute name="sensitive">5</attribute>
+                  </attributes>
+                </child>
+              </object>
+            </child>
+            <child>
+              <object class="GtkTreeViewColumn">
+                <property name="title" translatable="yes">Name</property>
+                <property name="resizable">True</property>
+                <child>
+                  <object class="GtkCellRendererText">
+                    <property name="scale">0.8</property>
+                  </object>
+                  <attributes>
+                    <attribute name="text">2</attribute>
+                    <attribute name="sensitive">5</attribute>
+                  </attributes>
+                </child>
+              </object>
+            </child>
+            <child>
+              <object class="GtkTreeViewColumn">
+                <property name="title" translatable="yes">Label</property>
+                <property name="resizable">True</property>
+                <child>
+                  <object class="GtkCellRendererText">
+                    <property name="scale">0.8</property>
+                  </object>
+                  <attributes>
+                    <attribute name="text">3</attribute>
+                    <attribute name="sensitive">5</attribute>
+                  </attributes>
+                </child>
+              </object>
+            </child>
+            <child>
+              <object class="GtkTreeViewColumn">
+                <property name="title" translatable="yes">Address</property>
+                <property name="resizable">True</property>
+                <child>
+                  <object class="GtkCellRendererText">
+                    <property name="scale">0.8</property>
+                    <property name="family">monospace</property>
+                  </object>
+                  <attributes>
+                    <attribute name="text">4</attribute>
+                    <attribute name="sensitive">5</attribute>
+                  </attributes>
+                </child>
+              </object>
+            </child>
           </object>
-          <attributes>
-            <attribute name="text">1</attribute>
-            <attribute name="sensitive">5</attribute>
-          </attributes>
-        </child>
-      </object>
-    </child>
-    <child>
-      <object class="GtkTreeViewColumn">
-        <property name="title" translatable="yes">Name</property>
-        <property name="resizable">True</property>
-        <child>
-          <object class="GtkCellRendererText">
-            <property name="scale">0.8</property>
-          </object>
-          <attributes>
-            <attribute name="text">2</attribute>
-            <attribute name="sensitive">5</attribute>
-          </attributes>
-        </child>
-      </object>
-    </child>
-    <child>
-      <object class="GtkTreeViewColumn">
-        <property name="title" translatable="yes">Label</property>
-        <property name="resizable">True</property>
-        <child>
-          <object class="GtkCellRendererText">
-            <property name="scale">0.8</property>
-          </object>
-          <attributes>
-            <attribute name="text">3</attribute>
-            <attribute name="sensitive">5</attribute>
-          </attributes>
-        </child>
-      </object>
-    </child>
-    <child>
-      <object class="GtkTreeViewColumn">
-        <property name="title" translatable="yes">Address</property>
-        <property name="resizable">True</property>
-        <child>
-          <object class="GtkCellRendererText">
-            <property name="scale">0.8</property>
-            <property name="family">monospace</property>
-          </object>
-          <attributes>
-            <attribute name="text">4</attribute>
-            <attribute name="sensitive">5</attribute>
-          </attributes>
         </child>
       </object>
     </child>

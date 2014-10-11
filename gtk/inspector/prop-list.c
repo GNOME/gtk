@@ -30,6 +30,7 @@
 #include "widget-tree.h"
 
 #include "gtkcelllayout.h"
+#include "gtktreeview.h"
 #include "gtkpopover.h"
 
 enum
