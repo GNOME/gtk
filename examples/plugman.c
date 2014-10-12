@@ -208,7 +208,9 @@ plugin_action (GAction  *action,
 
   gdk_rgba_parse (&color, g_action_get_name (action));
 
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
   gtk_widget_override_color (text, 0, &color);
+G_GNUC_END_IGNORE_DEPRECATIONS
 }
 
 static void
