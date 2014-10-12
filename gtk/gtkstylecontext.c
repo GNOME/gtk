@@ -762,8 +762,21 @@ create_query_path (GtkStyleContext *context,
   priv = context->priv;
   path = priv->widget ? _gtk_widget_create_path (priv->widget) : gtk_widget_path_copy (priv->widget_path);
   length = gtk_widget_path_length (path);
-  if (length > 0)
-    style_info_add_to_widget_path (info, path, length - 1);
+  if (gtk_style_context_is_saved (context))
+    {
+      GtkStyleInfo *root = g_slist_last (context->priv->saved_nodes)->data;
+
+      if (length > 0)
+        style_info_add_to_widget_path (root, path, length - 1);
+
+      gtk_widget_path_append_type (path, length > 0 ?gtk_widget_path_iter_get_object_type (path, length - 1) : G_TYPE_NONE);
+      style_info_add_to_widget_path (info, path, length);
+    }
+  else
+    {
+      if (length > 0)
+        style_info_add_to_widget_path (info, path, length - 1);
+    }
 
   return path;
 }
