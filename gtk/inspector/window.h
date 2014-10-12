@@ -50,6 +50,7 @@ typedef struct
   GtkWidget *select_object;
   GtkWidget *prop_list;
   GtkWidget *child_prop_list;
+  GtkWidget *selector;
   GtkWidget *signals_list;
   GtkWidget *style_prop_list;
   GtkWidget *classes_list;

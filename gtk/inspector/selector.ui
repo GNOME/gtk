@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface domain="gtk30">
+  <object class="GtkTreeStore" id="model">
+    <columns>
+      <column type="gchararray"/>
+    </columns>
+  </object>
+  <template class="GtkInspectorSelector" parent="GtkBox">
+    <property name="orientation">horizontal</property>
+    <child>
+      <object class="GtkScrolledWindow">
+        <property name="visible">True</property>
+        <property name="hscrollbar-policy">never</property>
+        <property name="vscrollbar-policy">automatic</property>
+        <property name="expand">True</property>
+        <child>
+          <object class="GtkTreeView" id="tree">
+            <property name="visible">True</property>
+            <property name="model">model</property>
+            <child>
+              <object class="GtkTreeViewColumn">
+                <property name="title" translatable="yes">Selector</property>
+                <child>
+                  <object class="GtkCellRendererText">
+                    <property name="scale">0.8</property>
+                  </object>
+                  <attributes>
+                    <attribute name="text">0</attribute>
+                  </attributes> 
+                </child>
+              </object>
+            </child>
+          </object>
+        </child>
+      </object>
+    </child>
+  </template>
+</interface>

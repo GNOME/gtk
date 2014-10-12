@@ -44,6 +44,8 @@ libgtkinspector_la_SOURCES = 		\
 	prop-editor.c			\
 	prop-list.h			\
 	prop-list.c			\
+	selector.h			\
+	selector.c			\
 	style-prop-list.h		\
 	style-prop-list.c		\
 	resource-list.h			\
@@ -101,6 +103,7 @@ templates = 				\
 	object-tree.ui 			\
 	prop-list.ui 			\
 	resource-list.ui		\
+	selector.ui			\
 	signals-list.ui			\
 	statistics.ui			\
 	style-prop-list.ui		\

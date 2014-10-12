@@ -33,6 +33,7 @@
 #include "css-editor.h"
 #include "object-hierarchy.h"
 #include "object-tree.h"
+#include "selector.h"
 #include "size-groups.h"
 #include "style-prop-list.h"
 #include "data-list.h"
@@ -66,6 +67,7 @@ on_object_activated (GtkInspectorObjectTree *wt,
   gtk_inspector_style_prop_list_set_object (GTK_INSPECTOR_STYLE_PROP_LIST (iw->style_prop_list), selected);
   gtk_inspector_signals_list_set_object (GTK_INSPECTOR_SIGNALS_LIST (iw->signals_list), selected);
   gtk_inspector_object_hierarchy_set_object (GTK_INSPECTOR_OBJECT_HIERARCHY (iw->object_hierarchy), selected);
+  gtk_inspector_selector_set_object (GTK_INSPECTOR_SELECTOR (iw->selector), selected);
   gtk_inspector_misc_info_set_object (GTK_INSPECTOR_MISC_INFO (iw->misc_info), selected);
   gtk_inspector_classes_list_set_object (GTK_INSPECTOR_CLASSES_LIST (iw->classes_list), selected);
   gtk_inspector_css_editor_set_object (GTK_INSPECTOR_CSS_EDITOR (iw->widget_css_editor), selected);
@@ -159,6 +161,7 @@ gtk_inspector_window_class_init (GtkInspectorWindowClass *klass)
   gtk_widget_class_bind_template_child (widget_class, GtkInspectorWindow, style_prop_list);
   gtk_widget_class_bind_template_child (widget_class, GtkInspectorWindow, widget_css_editor);
   gtk_widget_class_bind_template_child (widget_class, GtkInspectorWindow, object_hierarchy);
+  gtk_widget_class_bind_template_child (widget_class, GtkInspectorWindow, selector);
   gtk_widget_class_bind_template_child (widget_class, GtkInspectorWindow, size_groups);
   gtk_widget_class_bind_template_child (widget_class, GtkInspectorWindow, data_list);
   gtk_widget_class_bind_template_child (widget_class, GtkInspectorWindow, actions);

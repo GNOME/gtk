@@ -152,6 +152,16 @@
                           </packing>
                         </child>
                         <child>
+                          <object class="GtkInspectorPropList" id="child_prop_list">
+                            <property name="child-properties">True</property>
+                            <property name="object-tree">object_tree</property>
+                          </object>
+                          <packing>
+                            <property name="name">child-properties</property>
+                            <property name="title" translatable="yes">Child Properties</property>
+                          </packing>
+                        </child>
+                        <child>
                           <object class="GtkInspectorObjectHierarchy" id="object_hierarchy">
                             <property name="visible">True</property>
                           </object>
@@ -161,13 +171,12 @@
                           </packing>
                         </child>
                         <child>
-                          <object class="GtkInspectorPropList" id="child_prop_list">
-                            <property name="child-properties">True</property>
-                            <property name="object-tree">object_tree</property>
+                          <object class="GtkInspectorSelector" id="selector">
+                            <property name="visible">True</property>
                           </object>
                           <packing>
-                            <property name="name">child-properties</property>
-                            <property name="title" translatable="yes">Child Properties</property>
+                            <property name="name">selector</property>
+                            <property name="title" translatable="yes">Selector</property>
                           </packing>
                         </child>
                         <child>
