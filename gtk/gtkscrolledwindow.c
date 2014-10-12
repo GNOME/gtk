@@ -153,6 +153,8 @@ struct _GtkScrolledWindowPrivate
   gint     min_content_width;
   gint     min_content_height;
 
+  guint scroll_events_overshoot_id;
+
   /* Kinetic scrolling */
   GtkGesture *long_press_gesture;
   GtkGesture *swipe_gesture;
@@ -1458,6 +1460,12 @@ gtk_scrolled_window_destroy (GtkWidget *widget)
       priv->deceleration_id = 0;
     }
 
+  if (priv->scroll_events_overshoot_id)
+    {
+      g_source_remove (priv->scroll_events_overshoot_id);
+      priv->scroll_events_overshoot_id = 0;
+    }
+
   g_clear_object (&priv->drag_gesture);
   g_clear_object (&priv->swipe_gesture);
   g_clear_object (&priv->long_press_gesture);
@@ -2376,6 +2384,18 @@ gtk_scrolled_window_size_allocate (GtkWidget     *widget,
 }
 
 static gboolean
+start_scroll_deceleration_cb (gpointer user_data)
+{
+  GtkScrolledWindow *scrolled_window = user_data;
+  GtkScrolledWindowPrivate *priv = scrolled_window->priv;
+
+  priv->scroll_events_overshoot_id = 0;
+  gtk_scrolled_window_start_deceleration (scrolled_window);
+  return FALSE;
+}
+
+
+static gboolean
 gtk_scrolled_window_scroll_event (GtkWidget      *widget,
 				  GdkEventScroll *event)
 {
@@ -2388,6 +2408,8 @@ gtk_scrolled_window_scroll_event (GtkWidget      *widget,
 
   scrolled_window = GTK_SCROLLED_WINDOW (widget);
   priv = scrolled_window->priv;
+
+  gtk_scrolled_window_invalidate_overshoot (scrolled_window);
 
   if (gdk_event_get_scroll_deltas ((GdkEvent *) event, &delta_x, &delta_y))
     {
@@ -2408,13 +2430,9 @@ gtk_scrolled_window_scroll_event (GtkWidget      *widget,
           scroll_unit = pow (page_size, 2.0 / 3.0);
 #endif
 
-          new_value = CLAMP (gtk_adjustment_get_value (adj) + delta_x * scroll_unit,
-                             gtk_adjustment_get_lower (adj),
-                             gtk_adjustment_get_upper (adj) -
-                             gtk_adjustment_get_page_size (adj));
-
-          gtk_adjustment_set_value (adj, new_value);
-
+          new_value = priv->unclamped_hadj_value + delta_x * scroll_unit;
+          _gtk_scrolled_window_set_adjustment_value (scrolled_window, adj,
+                                                     new_value);
           handled = TRUE;
         }
 
@@ -2435,13 +2453,9 @@ gtk_scrolled_window_scroll_event (GtkWidget      *widget,
           scroll_unit = pow (page_size, 2.0 / 3.0);
 #endif
 
-          new_value = CLAMP (gtk_adjustment_get_value (adj) + delta_y * scroll_unit,
-                             gtk_adjustment_get_lower (adj),
-                             gtk_adjustment_get_upper (adj) -
-                             gtk_adjustment_get_page_size (adj));
-
-          gtk_adjustment_set_value (adj, new_value);
-
+          new_value = priv->unclamped_vadj_value + delta_y * scroll_unit;
+          _gtk_scrolled_window_set_adjustment_value (scrolled_window, adj,
+                                                     new_value);
           handled = TRUE;
         }
     }
@@ -2476,6 +2490,26 @@ gtk_scrolled_window_scroll_event (GtkWidget      *widget,
           gtk_adjustment_set_value (adj, new_value);
 
           handled = TRUE;
+        }
+    }
+
+  if (handled)
+    {
+      gtk_scrolled_window_cancel_deceleration (scrolled_window);
+      gtk_scrolled_window_invalidate_overshoot (scrolled_window);
+
+      if (priv->scroll_events_overshoot_id)
+        {
+          g_source_remove (priv->scroll_events_overshoot_id);
+          priv->scroll_events_overshoot_id = 0;
+        }
+
+      if (_gtk_scrolled_window_get_overshoot (scrolled_window, NULL, NULL))
+        {
+          priv->scroll_events_overshoot_id =
+            gdk_threads_add_timeout (50, start_scroll_deceleration_cb, scrolled_window);
+          g_source_set_name_by_id (priv->scroll_events_overshoot_id,
+                                   "[gtk+] start_scroll_deceleration_cb");
         }
     }
 
