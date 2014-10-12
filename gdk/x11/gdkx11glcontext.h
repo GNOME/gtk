@@ -41,8 +41,8 @@ GType gdk_x11_gl_context_get_type (void) G_GNUC_CONST;
 
 GDK_AVAILABLE_IN_3_16
 gboolean        gdk_x11_display_get_glx_version (GdkDisplay *display,
-                                                 int        *major,
-                                                 int        *minor);
+                                                 gint       *major,
+                                                 gint       *minor);
 
 G_END_DECLS
 

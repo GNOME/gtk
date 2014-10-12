@@ -26,19 +26,20 @@
  * #GdkGLContext is an object representing the platform-specific
  * OpenGL drawing context.
  *
- * #GdkGLContexts are created for a #GdkWindow using gdk_window_create_gl_context(), and
- * the context will match the GdkVisual of the window.
+ * #GdkGLContexts are created for a #GdkWindow using
+ * gdk_window_create_gl_context(), and the context will match
+ * the #GdkVisual of the window.
  *
  * A #GdkGLContexts is not tied to any particulare normal
  * framebuffer. For instance, it cannot draw to the #GdkWindow back
- * buffer. The gdk repaint system is in full control of the painting
+ * buffer. The GDK repaint system is in full control of the painting
  * to that. Instead you can create render buffers or textures and use
  * gdk_cairo_draw_from_gl() in the draw function of your widget to
- * draw them. Then Gdk will handle the integration of your rendering
+ * draw them. Then GDK will handle the integration of your rendering
  * with that of other widgets.
  *
- * Support for #GdkGLContext is platform specific, context creation can fail, returning
- * a %NULL context.
+ * Support for #GdkGLContext is platform-specific, context creation
+ * can fail, returning %NULL context.
  *
  * A #GdkGLContext has to be made "current" in order to start using
  * it, otherwise any OpenGL call will be ignored.
@@ -46,7 +47,8 @@
  * ## Creating a new OpenGL context ##
  *
  * In order to create a new #GdkGLContext instance you need a
- * #GdkWindow, which you typically get during the realize call of a widget.
+ * #GdkWindow, which you typically get during the realize call
+ * of a widget.
  *
  * ## Using a GdkGLContext ##
  *
@@ -255,7 +257,7 @@ gdk_gl_context_get_visual (GdkGLContext *context)
  * Since: 3.16
  */
 void
-gdk_gl_context_flush_buffer (GdkGLContext *context,
+gdk_gl_context_flush_buffer (GdkGLContext   *context,
                              cairo_region_t *painted,
                              cairo_region_t *damage)
 {

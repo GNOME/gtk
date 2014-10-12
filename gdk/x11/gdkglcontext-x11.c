@@ -882,12 +882,12 @@ gdk_x11_display_make_gl_context_current (GdkDisplay   *display,
  *
  * Returns: %TRUE if GLX is available
  *
- * Since: 3.14
+ * Since: 3.16
  */
 gboolean
 gdk_x11_display_get_glx_version (GdkDisplay *display,
-                                 int        *major,
-                                 int        *minor)
+                                 gint       *major,
+                                 gint       *minor)
 {
   g_return_val_if_fail (GDK_IS_DISPLAY (display), FALSE);
 
