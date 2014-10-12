@@ -815,7 +815,6 @@ main (int argc, char **argv)
   GtkWidget *button, *scrolled, *grid;
   GtkTreeViewColumn *column;
   GtkCellRenderer *renderer;
-  GdkRGBA black = {0,0,0,1};
   GFile *file;
   
   gtk_init (&argc, &argv);
@@ -847,7 +846,6 @@ main (int argc, char **argv)
   gtk_container_add (GTK_CONTAINER (frame), darea);
   gtk_widget_realize (darea);
   gtk_widget_show (darea);
-  gtk_widget_override_background_color (darea, 0, &black);
 
 
   vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 5);
