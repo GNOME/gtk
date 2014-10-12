@@ -147,7 +147,6 @@ struct PropertyValue
 
 struct GtkStyleInfo
 {
-  GtkStyleInfo *next;
   GArray *style_classes;
   GArray *regions;
   GtkJunctionSides junction_sides;
@@ -167,6 +166,7 @@ struct _GtkStyleContextPrivate
   GtkWidgetPath *widget_path;
   GHashTable *style_values;
   GtkStyleInfo *info;
+  GSList *saved_nodes;
   GArray *property_cache;
   gint scale;
 
@@ -338,14 +338,16 @@ style_info_free (GtkStyleInfo *info)
   g_slice_free (GtkStyleInfo, info);
 }
 
-static GtkStyleInfo *
-style_info_pop (GtkStyleInfo *info)
+static void
+gtk_style_context_pop_style_info (GtkStyleContext *context)
 {
-  GtkStyleInfo *next = info->next;
+  GtkStyleContextPrivate *priv = context->priv;
 
-  style_info_free (info);
+  g_return_if_fail (priv->saved_nodes != NULL);
 
-  return next;
+  style_info_free (priv->info);
+  priv->info = priv->saved_nodes->data;
+  priv->saved_nodes = g_slist_remove (priv->saved_nodes, priv->info);
 }
 
 static GtkStyleInfo *
@@ -362,7 +364,6 @@ style_info_copy (GtkStyleInfo *info)
                        info->regions->data,
                        info->regions->len);
 
-  copy->next = info;
   copy->junction_sides = info->junction_sides;
   copy->state_flags = info->state_flags;
   style_info_set_values (copy, info->values);
@@ -625,8 +626,9 @@ gtk_style_context_finalize (GObject *object)
 
   g_hash_table_destroy (priv->style_values);
 
-  while (priv->info)
-    priv->info = style_info_pop (priv->info);
+  while (priv->saved_nodes)
+    gtk_style_context_pop_style_info (style_context);
+  style_info_free (priv->info);
 
   gtk_style_context_clear_property_cache (style_context);
   g_array_free (priv->property_cache, TRUE);
@@ -712,7 +714,7 @@ gtk_style_context_impl_get_property (GObject    *object,
 static gboolean
 gtk_style_context_is_saved (GtkStyleContext *context)
 {
-  return context->priv->info->next != NULL;
+  return context->priv->saved_nodes != NULL;
 }
 
 static void
@@ -1534,6 +1536,8 @@ gtk_style_context_save (GtkStyleContext *context)
 
   priv = context->priv;
 
+  priv->saved_nodes = g_slist_prepend (priv->saved_nodes, priv->info);
+
   priv->info = style_info_copy (priv->info);
   /* Need to unset animations here because we can not know what style
    * class potential transitions came from once we save().
@@ -1554,21 +1558,16 @@ gtk_style_context_save (GtkStyleContext *context)
 void
 gtk_style_context_restore (GtkStyleContext *context)
 {
-  GtkStyleContextPrivate *priv;
-
   g_return_if_fail (GTK_IS_STYLE_CONTEXT (context));
 
-  priv = context->priv;
-
-  priv->info = style_info_pop (priv->info);
-
-  if (!priv->info)
+  if (context->priv->saved_nodes == NULL)
     {
       g_warning ("Unpaired gtk_style_context_restore() call");
 
-      /* Create default region */
-      priv->info = style_info_new ();
+      return;
     }
+
+  gtk_style_context_pop_style_info (context);
 }
 
 static gboolean
@@ -2862,13 +2861,15 @@ static void
 gtk_style_context_clear_cache (GtkStyleContext *context)
 {
   GtkStyleContextPrivate *priv;
-  GtkStyleInfo *info;
+  GSList *l;
 
   priv = context->priv;
 
-  for (info = priv->info; info; info = info->next)
+  style_info_set_values (priv->info, NULL);
+
+  for (l = priv->saved_nodes; l; l = l->next)
     {
-      style_info_set_values (info, NULL);
+      style_info_set_values (l->data, NULL);
     }
   g_hash_table_remove_all (priv->style_values);
 
