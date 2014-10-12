@@ -14,7 +14,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gtk"
 "%2b&keywords=I18N+L10N&component=general\n"
 "POT-Creation-Date: 2014-10-12 06:44+0000\n"
-"PO-Revision-Date: 2014-10-12 22:59+0100\n"
+"PO-Revision-Date: 2014-10-12 23:01+0100\n"
 "Last-Translator: Dušan Kazik <prescott66@gmail.com>\n"
 "Language-Team: Slovak <gnome-sk-list@gnome.org>\n"
 "Language: sk\n"
@@ -1423,7 +1423,7 @@ msgstr ""
 
 #: ../gtk/gtkaboutdialog.c:125
 msgid "The MIT License (MIT)"
-msgstr ""
+msgstr "Licencia MIT (MIT)"
 
 #: ../gtk/gtkaboutdialog.c:126
 msgid "Artistic License 2.0"
