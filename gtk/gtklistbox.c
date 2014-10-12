@@ -147,7 +147,12 @@ enum {
 #define BOX_PRIV(box) ((GtkListBoxPrivate*)gtk_list_box_get_instance_private ((GtkListBox*)(box)))
 #define ROW_PRIV(row) ((GtkListBoxRowPrivate*)gtk_list_box_row_get_instance_private ((GtkListBoxRow*)(row)))
 
-G_DEFINE_TYPE_WITH_PRIVATE (GtkListBox, gtk_list_box, GTK_TYPE_CONTAINER)
+static void     gtk_list_box_buildable_interface_init     (GtkBuildableIface *iface);
+
+G_DEFINE_TYPE_WITH_CODE (GtkListBox, gtk_list_box, GTK_TYPE_CONTAINER,
+                         G_ADD_PRIVATE (GtkListBox)
+                         G_IMPLEMENT_INTERFACE (GTK_TYPE_BUILDABLE,
+                                                gtk_list_box_buildable_interface_init))
 G_DEFINE_TYPE_WITH_PRIVATE (GtkListBoxRow, gtk_list_box_row, GTK_TYPE_BIN)
 
 static void                 gtk_list_box_apply_filter_all             (GtkListBox          *box);
@@ -3516,4 +3521,24 @@ gtk_list_box_row_class_init (GtkListBoxRowClass *klass)
 
   g_object_class_install_properties (object_class, LAST_ROW_PROPERTY, row_properties);
 
+}
+
+static void
+gtk_list_box_buildable_add_child (GtkBuildable *buildable,
+                                  GtkBuilder   *builder,
+                                  GObject      *child,
+                                  const gchar  *type)
+{
+  if (type && strcmp (type, "placeholder") == 0)
+    gtk_list_box_set_placeholder (GTK_LIST_BOX (buildable), GTK_WIDGET (child));
+  else if (!type)
+    gtk_container_add (GTK_CONTAINER (buildable), GTK_WIDGET (child));
+  else
+    GTK_BUILDER_WARN_INVALID_CHILD_TYPE (buildable, type);
+}
+
+static void
+gtk_list_box_buildable_interface_init (GtkBuildableIface *iface)
+{
+  iface->add_child = gtk_list_box_buildable_add_child;
 }
