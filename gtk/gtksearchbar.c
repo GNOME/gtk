@@ -250,6 +250,9 @@ reveal_child_changed_cb (GObject      *object,
   gboolean reveal_child;
 
   g_object_get (object, "reveal-child", &reveal_child, NULL);
+  if (reveal_child)
+    gtk_widget_set_child_visible (priv->revealer, TRUE);
+
   if (reveal_child == priv->reveal_child)
     return;
 
@@ -264,6 +267,19 @@ reveal_child_changed_cb (GObject      *object,
     }
 
   g_object_notify (G_OBJECT (bar), "search-mode-enabled");
+}
+
+static void
+child_revealed_changed_cb (GObject      *object,
+                           GParamSpec   *pspec,
+                           GtkSearchBar *bar)
+{
+  GtkSearchBarPrivate *priv = gtk_search_bar_get_instance_private (bar);
+  gboolean val;
+
+  g_object_get (object, "child-revealed", &val, NULL);
+  if (!val)
+    gtk_widget_set_child_visible (priv->revealer, FALSE);
 }
 
 static void
@@ -437,10 +453,15 @@ gtk_search_bar_init (GtkSearchBar *bar)
 
   gtk_widget_init_template (GTK_WIDGET (bar));
 
-  gtk_widget_show_all (priv->tool_box);
+  /* We use child-visible to avoid the unexpanded revealer
+   * peaking out by 1 pixel
+   */
+  gtk_widget_set_child_visible (priv->revealer, FALSE);
 
   g_signal_connect (priv->revealer, "notify::reveal-child",
                     G_CALLBACK (reveal_child_changed_cb), bar);
+  g_signal_connect (priv->revealer, "notify::child-revealed",
+                    G_CALLBACK (child_revealed_changed_cb), bar);
 
   gtk_widget_set_no_show_all (priv->close_button, TRUE);
   g_signal_connect (priv->close_button, "clicked",
