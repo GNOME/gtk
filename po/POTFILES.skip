@@ -65,7 +65,9 @@ gtk/inspector/object-hierarchy.ui
 gtk/inspector/object-tree.ui
 gtk/inspector/prop-list.ui
 gtk/inspector/resource-list.ui
+gtk/inspector/selector.ui
 gtk/inspector/signals-list.ui
+gtk/inspector/statistics.ui
 gtk/inspector/style-prop-list.ui
 gtk/inspector/visual.ui
 gtk/inspector/window.ui

@@ -76,8 +76,12 @@ gtk/inspector/prop-list.ui
 gtk/inspector/prop-list.ui.h
 gtk/inspector/resource-list.ui
 gtk/inspector/resource-list.ui.h
+gtk/inspector/selector.ui
+gtk/inspector/selector.ui.h
 gtk/inspector/signals-list.ui
 gtk/inspector/signals-list.ui.h
+gtk/inspector/statistics.ui
+gtk/inspector/statistics.ui.h
 gtk/inspector/style-prop-list.ui
 gtk/inspector/style-prop-list.ui.h
 gtk/inspector/visual.ui

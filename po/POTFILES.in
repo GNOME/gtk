@@ -292,6 +292,7 @@ gtk/inspector/object-tree.ui.h
 gtk/inspector/prop-editor.c
 gtk/inspector/prop-list.ui.h
 gtk/inspector/resource-list.ui.h
+gtk/inspector/selector.ui.h
 gtk/inspector/signals-list.c
 gtk/inspector/signals-list.ui.h
 gtk/inspector/size-groups.c
