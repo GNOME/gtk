@@ -1294,6 +1294,8 @@ gdk_gl_context_get_current
 GDK_GL_ERROR
 GDK_TYPE_GL_ERROR
 GDK_TYPE_GL_PROFILE
+GdkGLProfile
+GdkGLError
 
 <SUBSECTION Standard>
 GDK_GL_CONTEXT
