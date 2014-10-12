@@ -183,8 +183,6 @@ swatch_draw (GtkWidget *widget,
       g_object_unref (gicon);
     }
 
-  gtk_style_context_restore (context);
-
   /* now draw the overlay image */
   gtk_style_context_get_border (context, state, &border);
   gtk_style_context_get_padding (context, state, &padding);
@@ -221,6 +219,8 @@ swatch_draw (GtkWidget *widget,
     {
       gtk_render_focus (context, cr, 0, 0, width, height);
     }
+
+  gtk_style_context_restore (context);
 
   return FALSE;
 }
