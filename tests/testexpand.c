@@ -45,7 +45,6 @@ create_box_window (void)
   GtkWidget *box1, *box2, *box3;
   GtkWidget *toggle;
   GtkWidget *colorbox;
-  GdkRGBA red, blue;
 
   window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
   gtk_window_set_title (GTK_WINDOW (window), "Boxes");
@@ -81,11 +80,7 @@ create_box_window (void)
                     gtk_label_new ("VBox 3 Bottom"),
                     FALSE, FALSE, 0);
 
-  gdk_rgba_parse (&red, "red");
-  gdk_rgba_parse (&blue, "blue");
-
-  colorbox = gtk_event_box_new ();
-  gtk_widget_override_background_color (colorbox, 0, &red);
+  colorbox = gtk_frame_new (NULL);
 
   toggle = gtk_toggle_button_new_with_label ("H Expand");
   gtk_widget_set_halign (toggle, GTK_ALIGN_CENTER);
@@ -97,8 +92,7 @@ create_box_window (void)
 
   gtk_box_pack_start (GTK_BOX (box3), colorbox, FALSE, TRUE, 0);
 
-  colorbox = gtk_event_box_new ();
-  gtk_widget_override_background_color (colorbox, 0, &blue);
+  colorbox = gtk_frame_new (NULL);
 
   toggle = gtk_toggle_button_new_with_label ("V Expand");
   gtk_widget_set_halign (toggle, GTK_ALIGN_CENTER);
@@ -120,7 +114,6 @@ create_grid_window (void)
   GtkWidget *grid;
   GtkWidget *toggle;
   GtkWidget *colorbox;
-  GdkRGBA red, blue;
 
   window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
   gtk_window_set_title (GTK_WINDOW (window), "Grid");
@@ -132,11 +125,7 @@ create_grid_window (void)
   gtk_grid_attach (GTK_GRID (grid), gtk_label_new ("Left"), 0, 1, 1, 2);
   gtk_grid_attach (GTK_GRID (grid), gtk_label_new ("Right"), 2, 1, 1, 2);
 
-  gdk_rgba_parse (&red, "red");
-  gdk_rgba_parse (&blue, "blue");
-
-  colorbox = gtk_event_box_new ();
-  gtk_widget_override_background_color (colorbox, GTK_STATE_NORMAL, &red);
+  colorbox = gtk_frame_new (NULL);
 
   toggle = gtk_toggle_button_new_with_label ("H Expand");
   gtk_widget_set_halign (toggle, GTK_ALIGN_CENTER);
@@ -148,8 +137,7 @@ create_grid_window (void)
 
   gtk_grid_attach (GTK_GRID (grid), colorbox, 1, 1, 1, 1);
 
-  colorbox = gtk_event_box_new ();
-  gtk_widget_override_background_color (colorbox, 0, &blue);
+  colorbox = gtk_frame_new (NULL);
 
   toggle = gtk_toggle_button_new_with_label ("V Expand");
   gtk_widget_set_halign (toggle, GTK_ALIGN_CENTER);
