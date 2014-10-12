@@ -2710,16 +2710,8 @@ static gboolean
 file_prefix_or_same (GFile *file1,
                      GFile *file2)
 {
-  const gchar *file1path;
-  const gchar *file2path;
-
-  if (g_file_has_prefix (file1, file2))
-    return TRUE;
-
-  file1path = g_file_get_path (file1);
-  file2path = g_file_get_path (file2);
-
-  return g_strcmp0 (file1path, file2path) == 0;
+  return g_file_has_prefix (file1, file2) ||
+         g_file_equal (file1, file2);
 }
 
 static gboolean
@@ -2728,8 +2720,8 @@ is_current_location_on_volume (GtkPlacesSidebar *sidebar,
                                GVolume          *volume,
                                GDrive           *drive)
 {
-  gboolean *current_location_on_volume;
-  GMount   *mount_default_location;
+  gboolean  current_location_on_volume;
+  GFile    *mount_default_location;
   GMount   *mount_for_volume;
   GList    *volumes_for_drive;
   GList    *volume_for_drive;
@@ -2786,7 +2778,7 @@ is_current_location_on_volume (GtkPlacesSidebar *sidebar,
                     break;
                 }
             }
-          g_object_unref (volumes_for_drive);
+          g_list_free_full (volumes_for_drive, g_object_unref);
         }
   }
 
@@ -4258,6 +4250,12 @@ gtk_places_sidebar_dispose (GObject *object)
       sidebar->gtk_settings = NULL;
     }
 
+  if (sidebar->current_location != NULL)
+    {
+        g_object_unref (sidebar->current_location);
+        sidebar->current_location = NULL;
+    }
+
   G_OBJECT_CLASS (gtk_places_sidebar_parent_class)->dispose (object);
 }
 
@@ -4715,7 +4713,7 @@ gtk_places_sidebar_set_location (GtkPlacesSidebar *sidebar,
 
   if (sidebar->current_location != NULL)
     g_object_unref (sidebar->current_location);
-  sidebar->current_location = g_file_dup (location);
+  sidebar->current_location = g_object_ref (location);
 
   if (location == NULL)
           goto out;
