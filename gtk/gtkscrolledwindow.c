@@ -208,6 +208,7 @@ enum
 {
   SCROLL_CHILD,
   MOVE_FOCUS_OUT,
+  EDGE_OVERSHOT,
   LAST_SIGNAL
 };
 
@@ -545,7 +546,33 @@ gtk_scrolled_window_class_init (GtkScrolledWindowClass *class)
                   _gtk_marshal_VOID__ENUM,
                   G_TYPE_NONE, 1,
                   GTK_TYPE_DIRECTION_TYPE);
-  
+
+  /**
+   * GtkScrolledWindow::edge-overshot:
+   * @scrolled_window: a #GtkScrolledWindow
+   * @pos: edge side that was hit
+   *
+   * The ::edge-overshot signal is emitted whenever user initiated scrolling
+   * makes the scrolledwindow firmly surpass (ie. with some edge resistance)
+   * the lower or upper limits defined by the adjustment in that orientation.
+   *
+   * If a similar behavior without edge resistance is desired, one alternative
+   * may be to check on #GtkAdjustment::value-changed that the value equals
+   * either #GtkAdjustment:lower or #GtkAdjustment:upper - #GtkAdjustment:page-size.
+   *
+   * Note: The @pos argument is LTR/RTL aware, so callers should be aware too
+   * if intending to provide behavior on horizontal edges.
+   *
+   * Since: 3.16
+   */
+  signals[EDGE_OVERSHOT] =
+    g_signal_new (I_("edge-overshot"),
+                  G_TYPE_FROM_CLASS (gobject_class),
+                  G_SIGNAL_RUN_LAST, 0,
+                  NULL, NULL,
+                  g_cclosure_marshal_generic,
+                  G_TYPE_NONE, 1, GTK_TYPE_POSITION_TYPE);
+
   binding_set = gtk_binding_set_by_class (class);
 
   add_scroll_binding (binding_set, GDK_KEY_Left,  GDK_CONTROL_MASK, GTK_SCROLL_STEP_BACKWARD, TRUE);
@@ -2525,20 +2552,46 @@ _gtk_scrolled_window_set_adjustment_value (GtkScrolledWindow *scrolled_window,
 {
   GtkScrolledWindowPrivate *priv = scrolled_window->priv;
   gdouble lower, upper, *prev_value;
+  GtkPositionType edge_pos;
+  gboolean vertical;
 
   lower = gtk_adjustment_get_lower (adjustment) - MAX_OVERSHOOT_DISTANCE;
   upper = gtk_adjustment_get_upper (adjustment) -
     gtk_adjustment_get_page_size (adjustment) + MAX_OVERSHOOT_DISTANCE;
 
   if (adjustment == gtk_range_get_adjustment (GTK_RANGE (priv->hscrollbar)))
-    prev_value = &priv->unclamped_hadj_value;
+    vertical = FALSE;
   else if (adjustment == gtk_range_get_adjustment (GTK_RANGE (priv->vscrollbar)))
-    prev_value = &priv->unclamped_vadj_value;
+    vertical = TRUE;
   else
     return;
 
-  *prev_value = CLAMP (value, lower, upper);
+  if (vertical)
+    prev_value = &priv->unclamped_vadj_value;
+  else
+    prev_value = &priv->unclamped_hadj_value;
+
+  value = CLAMP (value, lower, upper);
+
+  if (*prev_value == value)
+    return;
+
+  *prev_value = value;
   gtk_adjustment_set_value (adjustment, value);
+
+  if (value == lower)
+    edge_pos = vertical ? GTK_POS_TOP : GTK_POS_LEFT;
+  else if (value == upper)
+    edge_pos = vertical ? GTK_POS_BOTTOM : GTK_POS_RIGHT;
+  else
+    return;
+
+  /* Invert horizontal edge position on RTL */
+  if (!vertical &&
+      gtk_widget_get_direction (GTK_WIDGET (scrolled_window)) == GTK_TEXT_DIR_RTL)
+    edge_pos = (edge_pos == GTK_POS_LEFT) ? GTK_POS_RIGHT : GTK_POS_LEFT;
+
+  g_signal_emit (scrolled_window, signals[EDGE_OVERSHOT], 0, edge_pos);
 }
 
 static gboolean

@@ -133,6 +133,7 @@ noinst_PROGRAMS =  $(TEST_PROGS)	\
 	testexpander			\
 	testvolumebutton		\
 	testscrolledwindow		\
+	testscrolledge			\
 	testswitch			\
 	testcellarea			\
 	testswitch			\
@@ -270,6 +271,7 @@ testgrouping_DEPENDENCIES = $(TEST_DEPS)
 testtooltips_DEPENDENCIES = $(TEST_DEPS)
 testvolumebutton_DEPENDENCIES = $(TEST_DEPS)
 testscrolledwindow_DEPENDENCIES = $(TEST_DEPS)
+testscrolledge_DEPENDENCIES = $(TEST_DEPS)
 testcellarea_DEPENDENCIES = $(TEST_DEPS)
 testtreemenu_DEPENDENCIES = $(TEST_DEPS)
 testwindows_DEPENDENCIES = $(TEST_DEPS)
