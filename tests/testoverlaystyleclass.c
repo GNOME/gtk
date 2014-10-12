@@ -42,18 +42,28 @@ int
 main (int argc, char *argv[])
 {
   GtkWidget *win, *overlay, *grid, *main_child, *child, *label, *sw;
-  GdkRGBA color;
+  GtkCssProvider *provider;
   gchar *str;
 
   gtk_init (&argc, &argv);
+
+  provider = gtk_css_provider_new ();
+  gtk_css_provider_load_from_data (provider,
+                                   "GtkLabel { border: 3px solid black; border-radius: 5px; padding: 2px; }"
+                                   ".top { border-top-style: none; right-radius: 0px; border-top-left-radius: 0px; }"
+                                   ".bottom { border-bottom-style: none; border-bottom-right-radius: 0px; border-bottom-left-radius: 0px; }"
+                                   ".left { border-left-style: none; border-top-left-radius: 0px; border-bottom-left-radius: 0px; }"
+                                   ".right { border-right-style: none; border-top-right-radius: 0px; border-bottom-right-radius: 0px; }",
+                                   -1, NULL);
+  gtk_style_context_add_provider_for_screen (gdk_screen_get_default (),
+                                             GTK_STYLE_PROVIDER (provider),
+                                             GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
 
   win = gtk_window_new (GTK_WINDOW_TOPLEVEL);
   gtk_window_set_default_size (GTK_WINDOW (win), 600, 600);
 
   grid = gtk_grid_new ();
   child = gtk_event_box_new ();
-  gdk_rgba_parse (&color, "red");
-  gtk_widget_override_background_color (child, 0, &color);
   gtk_widget_set_hexpand (child, TRUE);
   gtk_widget_set_vexpand (child, TRUE);
   gtk_container_add (GTK_CONTAINER (grid), child);
@@ -69,11 +79,11 @@ main (int argc, char *argv[])
 
   main_child = gtk_event_box_new ();
   gtk_container_add (GTK_CONTAINER (sw), main_child);
-  gdk_rgba_parse (&color, "green");
-  gtk_widget_override_background_color (main_child, 0, &color);
   gtk_widget_set_hexpand (main_child, TRUE);
   gtk_widget_set_vexpand (main_child, TRUE);
   label = gtk_label_new ("Main child");
+  gtk_widget_set_halign (label, GTK_ALIGN_CENTER);
+  gtk_widget_set_valign (label, GTK_ALIGN_CENTER);
   gtk_container_add (GTK_CONTAINER (main_child), label);
 
   child = gtk_label_new (NULL);
