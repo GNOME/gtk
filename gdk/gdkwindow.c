@@ -2949,13 +2949,15 @@ gdk_window_begin_paint_region (GdkWindow       *window,
  * @cr: a #cairo_t
  *
  * If you call this during a paint (e.g. between gdk_window_begin_paint_region()
- * and gdk_window_end_paint() then gdk will mark the current clip region of the
+ * and gdk_window_end_paint() then GDK will mark the current clip region of the
  * window as being drawn. This is required when mixing GL rendering via
- * gdk_cairo_draw_from_gl() and cairo rendering, as otherwise gdk has no way
- * of knowing when something paints over the gl drawn regions.
+ * gdk_cairo_draw_from_gl() and cairo rendering, as otherwise GDK has no way
+ * of knowing when something paints over the GL-drawn regions.
  *
- * This is typically called automatically by Gtk and you don't need
+ * This is typically called automatically by GTK+ and you don't need
  * to care about this.
+ *
+ * Since: 3.16
  **/
 void
 gdk_window_mark_paint_from_clip (GdkWindow          *window,
@@ -2978,7 +2980,7 @@ gdk_window_mark_paint_from_clip (GdkWindow          *window,
      double buffer surface that need to be blended OVER the back buffer rather
      than SRCed. */
   cairo_save (cr);
-  /* We set the indentity matrix here so we get and apply regions in native
+  /* We set the identity matrix here so we get and apply regions in native
      window coordinates. */
   cairo_identity_matrix (cr);
   gdk_cairo_region (cr, impl_window->current_paint.flushed_region);
@@ -3014,14 +3016,14 @@ gdk_window_mark_paint_from_clip (GdkWindow          *window,
  * gdk_window_end_paint:
  * @window: a #GdkWindow
  *
- * Indicates that the backing store created by the most recent call to
- * gdk_window_begin_paint_region() should be copied onscreen and
+ * Indicates that the backing store created by the most recent call
+ * to gdk_window_begin_paint_region() should be copied onscreen and
  * deleted, leaving the next-most-recent backing store or no backing
  * store at all as the active paint region. See
- * gdk_window_begin_paint_region() for full details. It is an error to
- * call this function without a matching
- * gdk_window_begin_paint_region() first.
+ * gdk_window_begin_paint_region() for full details.
  *
+ * It is an error to call this function without a matching
+ * gdk_window_begin_paint_region() first.
  **/
 void
 gdk_window_end_paint (GdkWindow *window)
