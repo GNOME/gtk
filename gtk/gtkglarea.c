@@ -392,11 +392,11 @@ gtk_gl_area_class_init (GtkGLAreaClass *klass)
   /**
    * GtkGLArea:has-alpha:
    *
-   * If set to #TRUE the buffer allocated by the widget will have an alpha channel component,
+   * If set to %TRUE the buffer allocated by the widget will have an alpha channel component,
    * and when rendering to the window the result will be composited over whatever is below
    * the widget.
    *
-   * If set to #FALSE there will be no alpha channel, and the buffer will fully replace anything
+   * If set to %FALSE there will be no alpha channel, and the buffer will fully replace anything
    * below the widget.
    *
    * Since: 3.16
@@ -411,7 +411,7 @@ gtk_gl_area_class_init (GtkGLAreaClass *klass)
   /**
    * GtkGLArea:has-depth-buffer:
    *
-   * If set to #TRUE the widget will allocate and enable a depth buffer for the target
+   * If set to %TRUE the widget will allocate and enable a depth buffer for the target
    * framebuffer.
    *
    * Since: 3.16
@@ -475,20 +475,21 @@ gtk_gl_area_init (GtkGLArea *self)
 GtkWidget *
 gtk_gl_area_new (void)
 {
-  return g_object_new (GTK_TYPE_GL_AREA,
-                       NULL);
+  return g_object_new (GTK_TYPE_GL_AREA, NULL);
 }
 
 /**
  * gtk_gl_area_get_has_alpha:
  * @area: a #GtkGLArea
  *
- * Returns: @true if the @area has an alpha component, @false otherwise
+ * Returns whether the area has an alpha component.
+ *
+ * Returns: %TRUE if the @area has an alpha component, %FALSE otherwise
  *
  * Since: 3.16
  */
 gboolean
-gtk_gl_area_get_has_alpha (GtkGLArea        *area)
+gtk_gl_area_get_has_alpha (GtkGLArea *area)
 {
   GtkGLAreaPrivate *priv = gtk_gl_area_get_instance_private (area);
 
@@ -500,20 +501,20 @@ gtk_gl_area_get_has_alpha (GtkGLArea        *area)
 /**
  * gtk_gl_area_set_has_alpha:
  * @area: a #GtkGLArea
- * @has_alpha: a boolean
+ * @has_alpha: %TRUE to add an alpha component
  *
- * If @has_alpha is #TRUE the buffer allocated by the widget will have an alpha channel component,
- * and when rendering to the window the result will be composited over whatever is below
- * the widget.
+ * If @has_alpha is %TRUE the buffer allocated by the widget will have
+ * an alpha channel component, and when rendering to the window the
+ * result will be composited over whatever is below the widget.
  *
- * If @has_alpha is #FALSE there will be no alpha channel, and the buffer will fully replace anything
- * below the widget.
+ * If @has_alpha is %FALSE there will be no alpha channel, and the
+ * buffer will fully replace anything below the widget.
  *
  * Since: 3.16
  */
 void
-gtk_gl_area_set_has_alpha (GtkGLArea        *area,
-                           gboolean          has_alpha)
+gtk_gl_area_set_has_alpha (GtkGLArea *area,
+                           gboolean   has_alpha)
 {
   GtkGLAreaPrivate *priv = gtk_gl_area_get_instance_private (area);
 
@@ -533,12 +534,14 @@ gtk_gl_area_set_has_alpha (GtkGLArea        *area,
  * gtk_gl_area_get_has_depth_buffer:
  * @area: a #GtkGLArea
  *
- * Returns: @true if the @area has an depth buffer, @false otherwise
+ * Returns whether the area has a depth buffer.
+ *
+ * Returns: %TRUE if the @area has a depth buffer, %FALSE otherwise
  *
  * Since: 3.16
  */
 gboolean
-gtk_gl_area_get_has_depth_buffer (GtkGLArea        *area)
+gtk_gl_area_get_has_depth_buffer (GtkGLArea *area)
 {
   GtkGLAreaPrivate *priv = gtk_gl_area_get_instance_private (area);
 
@@ -550,16 +553,17 @@ gtk_gl_area_get_has_depth_buffer (GtkGLArea        *area)
 /**
  * gtk_gl_area_set_has_depth_buffer:
  * @area: a #GtkGLArea
- * @has_depth_buffer: a boolean
+ * @has_depth_buffer: %TRUE to add a depth buffer
  *
- * If @has_depth_buffer is #TRUE the widget will allocate and enable a depth buffer for the target
- * framebuffer. Otherwise there will be none.
+ * If @has_depth_buffer is %TRUE the widget will allocate and
+ * enable a depth buffer for the target framebuffer. Otherwise
+ * there will be none.
  *
  * Since: 3.16
  */
 void
-gtk_gl_area_set_has_depth_buffer (GtkGLArea        *area,
-                                  gboolean          has_depth_buffer)
+gtk_gl_area_set_has_depth_buffer (GtkGLArea *area,
+                                  gboolean   has_depth_buffer)
 {
   GtkGLAreaPrivate *priv = gtk_gl_area_get_instance_private (area);
 
