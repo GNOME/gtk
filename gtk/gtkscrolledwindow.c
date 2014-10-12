@@ -270,11 +270,9 @@ static void  gtk_scrolled_window_unmap                 (GtkWidget           *wid
 static void  gtk_scrolled_window_grab_notify           (GtkWidget           *widget,
                                                         gboolean             was_grabbed);
 
-static gboolean _gtk_scrolled_window_set_adjustment_value      (GtkScrolledWindow *scrolled_window,
-                                                                GtkAdjustment     *adjustment,
-                                                                gdouble            value,
-                                                                gboolean           allow_overshooting,
-                                                                gboolean           snap_to_border);
+static void _gtk_scrolled_window_set_adjustment_value  (GtkScrolledWindow *scrolled_window,
+                                                        GtkAdjustment     *adjustment,
+                                                        gdouble            value);
 
 static void gtk_scrolled_window_cancel_deceleration (GtkScrolledWindow *scrolled_window);
 
@@ -695,16 +693,16 @@ scrolled_window_drag_update_cb (GtkScrolledWindow *scrolled_window,
   if (hadjustment && may_hscroll (scrolled_window))
     {
       dx = priv->drag_start_x - offset_x;
-      _gtk_scrolled_window_set_adjustment_value (scrolled_window, hadjustment,
-                                                 dx, TRUE, FALSE);
+      _gtk_scrolled_window_set_adjustment_value (scrolled_window,
+                                                 hadjustment, dx);
     }
 
   vadjustment = gtk_range_get_adjustment (GTK_RANGE (priv->vscrollbar));
   if (vadjustment && may_vscroll (scrolled_window))
     {
       dy = priv->drag_start_y - offset_y;
-      _gtk_scrolled_window_set_adjustment_value (scrolled_window, vadjustment,
-                                                 dy, TRUE, FALSE);
+      _gtk_scrolled_window_set_adjustment_value (scrolled_window,
+                                                 vadjustment, dy);
     }
 
   gtk_scrolled_window_invalidate_overshoot (scrolled_window);
@@ -2484,45 +2482,27 @@ gtk_scrolled_window_scroll_event (GtkWidget      *widget,
   return handled;
 }
 
-static gboolean
+static void
 _gtk_scrolled_window_set_adjustment_value (GtkScrolledWindow *scrolled_window,
                                            GtkAdjustment     *adjustment,
-                                           gdouble            value,
-                                           gboolean           allow_overshooting,
-                                           gboolean           snap_to_border)
+                                           gdouble            value)
 {
   GtkScrolledWindowPrivate *priv = scrolled_window->priv;
   gdouble lower, upper, *prev_value;
 
-  lower = gtk_adjustment_get_lower (adjustment);
+  lower = gtk_adjustment_get_lower (adjustment) - MAX_OVERSHOOT_DISTANCE;
   upper = gtk_adjustment_get_upper (adjustment) -
-    gtk_adjustment_get_page_size (adjustment);
+    gtk_adjustment_get_page_size (adjustment) + MAX_OVERSHOOT_DISTANCE;
 
   if (adjustment == gtk_range_get_adjustment (GTK_RANGE (priv->hscrollbar)))
     prev_value = &priv->unclamped_hadj_value;
   else if (adjustment == gtk_range_get_adjustment (GTK_RANGE (priv->vscrollbar)))
     prev_value = &priv->unclamped_vadj_value;
   else
-    return FALSE;
-
-  if (snap_to_border)
-    {
-      if (*prev_value < 0 && value > 0)
-        value = 0;
-      else if (*prev_value > upper && value < upper)
-        value = upper;
-    }
-
-  if (allow_overshooting)
-    {
-      lower -= MAX_OVERSHOOT_DISTANCE;
-      upper += MAX_OVERSHOOT_DISTANCE;
-    }
+    return;
 
   *prev_value = CLAMP (value, lower, upper);
   gtk_adjustment_set_value (adjustment, value);
-
-  return (*prev_value != value);
 }
 
 static gboolean
