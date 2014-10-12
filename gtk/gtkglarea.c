@@ -376,8 +376,8 @@ gtk_gl_area_class_init (GtkGLAreaClass *klass)
    * The #GdkGLContext used by the #GtkGLArea widget.
    *
    * The #GtkGLArea widget is responsible for creating the #GdkGLContext
-   * instance. See the #GtkGLArea::create-context signal on how to
-   * override the default behavior.
+   * instance. If you need to render with other kinds of buffers (stencil,
+   * depth, etc), use render buffers.
    *
    * Since: 3.16
    */
