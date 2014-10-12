@@ -1714,6 +1714,9 @@ gdk_display_supports_input_shapes (GdkDisplay *display)
  * Returns: %TRUE if windows may be composited.
  *
  * Since: 2.12
+ *
+ * Deprecated: 3.16: Compositing is an outdated technology that
+ *   only ever worked on X11.
  */
 gboolean
 gdk_display_supports_composite (GdkDisplay *display)

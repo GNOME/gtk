@@ -6522,6 +6522,9 @@ gdk_window_set_static_gravities (GdkWindow *window,
  * Returns: %TRUE if the window is composited.
  *
  * Since: 2.22
+ *
+ * Deprecated: 3.16: Compositing is an outdated technology that
+ *   only ever worked on X11.
  **/
 gboolean
 gdk_window_get_composited (GdkWindow *window)
@@ -6560,6 +6563,9 @@ gdk_window_get_composited (GdkWindow *window)
  * attempting to do so.
  *
  * Since: 2.12
+ *
+ * Deprecated: 3.16: Compositing is an outdated technology that
+ *   only ever worked on X11.
  */
 void
 gdk_window_set_composited (GdkWindow *window,
@@ -6582,12 +6588,14 @@ gdk_window_set_composited (GdkWindow *window,
 
   impl_class = GDK_WINDOW_IMPL_GET_CLASS (window->impl);
 
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
   if (composited && (!gdk_display_supports_composite (display) || !impl_class->set_composited))
     {
       g_warning ("gdk_window_set_composited called but "
                  "compositing is not supported");
       return;
     }
+G_GNUC_END_IGNORE_DEPRECATIONS
 
   impl_class->set_composited (window, composited);
 

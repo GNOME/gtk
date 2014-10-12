@@ -627,9 +627,9 @@ void gdk_window_shape_combine_region (GdkWindow	      *window,
 GDK_AVAILABLE_IN_ALL
 void gdk_window_set_child_shapes (GdkWindow *window);
 
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_3_16
 gboolean gdk_window_get_composited (GdkWindow *window);
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_3_16
 void gdk_window_set_composited   (GdkWindow *window,
                                   gboolean   composited);
 
