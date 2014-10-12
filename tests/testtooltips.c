@@ -39,6 +39,17 @@ query_tooltip_cb (GtkWidget  *widget,
 }
 
 static gboolean
+draw_tooltip (GtkWidget *widget,
+              cairo_t   *cr,
+              gpointer   unused)
+{
+  cairo_set_source_rgb (cr, 0, 0, 1);
+  cairo_paint (cr);
+
+  return FALSE;
+}
+
+static gboolean
 query_tooltip_custom_cb (GtkWidget  *widget,
 			 gint        x,
 			 gint        y,
@@ -46,10 +57,10 @@ query_tooltip_custom_cb (GtkWidget  *widget,
 			 GtkTooltip *tooltip,
 			 gpointer    data)
 {
-  GdkRGBA color = { 0, 0, 1, 1 };
   GtkWindow *window = gtk_widget_get_tooltip_window (widget);
 
-  gtk_widget_override_background_color (GTK_WIDGET (window), 0, &color);
+  gtk_widget_set_app_paintable (GTK_WIDGET (window), TRUE);
+  g_signal_connect (window, "draw", G_CALLBACK (draw_tooltip), NULL);
 
   return TRUE;
 }
