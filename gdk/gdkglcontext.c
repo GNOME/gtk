@@ -30,13 +30,12 @@
  * gdk_window_create_gl_context(), and the context will match
  * the #GdkVisual of the window.
  *
- * A #GdkGLContexts is not tied to any particulare normal
- * framebuffer. For instance, it cannot draw to the #GdkWindow back
- * buffer. The GDK repaint system is in full control of the painting
- * to that. Instead you can create render buffers or textures and use
- * gdk_cairo_draw_from_gl() in the draw function of your widget to
- * draw them. Then GDK will handle the integration of your rendering
- * with that of other widgets.
+ * A #GdkGLContext is not tied to any particular normal framebuffer.
+ * For instance, it cannot draw to the #GdkWindow back buffer. The GDK
+ * repaint system is in full control of the painting to that. Instead,
+ * you can create render buffers or textures and use gdk_cairo_draw_from_gl()
+ * in the draw function of your widget to draw them. Then GDK will handle
+ * the integration of your rendering with that of other widgets.
  *
  * Support for #GdkGLContext is platform-specific, context creation
  * can fail, returning %NULL context.
