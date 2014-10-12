@@ -342,6 +342,10 @@ window_draw (GtkWidget *widget,
   GtkAllocation allocation;
   GtkWidget *child;
 
+  /* put a red background on the window */
+  cairo_set_source_rgb (cr, 1, 0, 0);
+  cairo_paint (cr);
+
   /* get our child (in this case, the event box) */ 
   child = gtk_bin_get_child (GTK_BIN (widget));
 
@@ -366,7 +370,6 @@ create_composited_window (GtkWidget *widget)
   if (!window)
     {
       GtkWidget *event, *button;
-      GdkRGBA red;
 
       /* make the widgets */
       button = gtk_button_new_with_label ("A Button");
@@ -376,10 +379,6 @@ create_composited_window (GtkWidget *widget)
       g_signal_connect (window, "destroy",
                         G_CALLBACK (gtk_widget_destroyed),
                         &window);
-
-      /* put a red background on the window */
-      gdk_rgba_parse (&red, "red");
-      gtk_widget_override_background_color (window, 0, &red);
 
       /* set our event box to have a fully-transparent background
        * drawn on it.  currently there is no way to simply tell gtk
@@ -400,8 +399,10 @@ create_composited_window (GtkWidget *widget)
       /* set the event box GdkWindow to be composited.
        * obviously must be performed after event box is realised.
        */
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
       gdk_window_set_composited (gtk_widget_get_window (event),
                                  TRUE);
+G_GNUC_END_IGNORE_DEPRECATIONS
 
       /* set up the compositing handler.
        * note that we do _after so that the normal (red) background is drawn
@@ -1977,6 +1978,9 @@ on_rotated_text_draw (GtkWidget *widget,
   PangoContext *context;
   PangoFontDescription *desc;
 
+  cairo_set_source_rgb (cr, 1, 1, 1);
+  cairo_paint (cr);
+
   if (tile_pixbuf)
     {
       gdk_cairo_set_source_pixbuf (cr, tile_pixbuf, 0, 0);
@@ -2031,7 +2035,6 @@ create_rotated_text (GtkWidget *widget)
 
   if (!window)
     {
-      const GdkRGBA white = { 1.0, 1.0, 1.0, 1.0 };
       GtkRequisition requisition;
       GtkWidget *content_area;
       GtkWidget *drawing_area;
@@ -2056,7 +2059,6 @@ create_rotated_text (GtkWidget *widget)
 
       drawing_area = gtk_drawing_area_new ();
       gtk_box_pack_start (GTK_BOX (content_area), drawing_area, TRUE, TRUE, 0);
-      gtk_widget_override_background_color (drawing_area, 0, &white);
 
       tile_pixbuf = gdk_pixbuf_new_from_file ("marble.xpm", NULL);
       
@@ -4107,6 +4109,21 @@ create_expander (GtkWidget *widget)
 /* GtkEventBox */
 
 
+static gboolean
+event_box_draw (GtkWidget *widget,
+		cairo_t   *cr,
+		gpointer   user_data)
+{
+  if (gtk_widget_get_window (widget) ==
+      gtk_widget_get_window (gtk_widget_get_parent (widget)))
+    return FALSE;
+
+  cairo_set_source_rgb (cr, 0, 1, 0);
+  cairo_paint (cr);
+
+  return FALSE;
+}
+
 static void
 event_box_label_pressed (GtkWidget        *widget,
 			 GdkEventButton   *event,
@@ -4153,15 +4170,9 @@ create_event_box (GtkWidget *widget)
   GtkWidget *label;
   GtkWidget *visible_window_check;
   GtkWidget *above_child_check;
-  GdkRGBA color;
 
   if (!window)
     {
-      color.red = 0;
-      color.blue = 1;
-      color.green = 0;
-      color.alpha = 1;
-      
       window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
       gtk_window_set_screen (GTK_WINDOW (window),
 			     gtk_widget_get_screen (widget));
@@ -4175,7 +4186,6 @@ create_event_box (GtkWidget *widget)
 
       box1 = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
       gtk_container_add (GTK_CONTAINER (window), box1);
-      gtk_widget_override_background_color (window, 0, &color);
 
       hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
       gtk_box_pack_start (GTK_BOX (box1), hbox, TRUE, FALSE, 0);
@@ -4187,6 +4197,9 @@ create_event_box (GtkWidget *widget)
       gtk_container_add (GTK_CONTAINER (event_box), vbox);
       g_signal_connect (event_box, "button_press_event",
 			G_CALLBACK (event_box_label_pressed),
+			NULL);
+      g_signal_connect (event_box, "draw",
+			G_CALLBACK (event_box_draw),
 			NULL);
       
       label = gtk_label_new ("Click on this label");
@@ -4203,7 +4216,7 @@ create_event_box (GtkWidget *widget)
       gtk_box_pack_start (GTK_BOX (box1), visible_window_check, FALSE, TRUE, 0);
       g_signal_connect (visible_window_check, "toggled",
 			G_CALLBACK (event_box_toggle_visible_window), event_box);
-      gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (visible_window_check), FALSE);
+      gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (visible_window_check), TRUE);
       
       above_child_check = gtk_check_button_new_with_label("Above Child");
       gtk_box_pack_start (GTK_BOX (box1), above_child_check, FALSE, TRUE, 0);
@@ -4814,11 +4827,14 @@ cursor_draw (GtkWidget *widget,
 	     gpointer   user_data)
 {
   int width, height;
-  GtkStyleContext *context;
-  GdkRGBA bg;
 
   width = gtk_widget_get_allocated_width (widget);
   height = gtk_widget_get_allocated_height (widget);
+
+  cairo_set_fill_rule (cr, CAIRO_FILL_RULE_EVEN_ODD);
+  cairo_rectangle (cr, 0, 0, width, height);
+  cairo_rectangle (cr, width / 3, height / 3, width / 3, height / 3);
+  cairo_clip (cr);
 
   cairo_set_source_rgb (cr, 1, 1, 1);
   cairo_rectangle (cr, 0, 0, width, height / 2);
@@ -4826,12 +4842,6 @@ cursor_draw (GtkWidget *widget,
 
   cairo_set_source_rgb (cr, 0, 0, 0);
   cairo_rectangle (cr, 0, height / 2, width, height / 2);
-  cairo_fill (cr);
-
-  context = gtk_widget_get_style_context (widget);
-  gtk_style_context_get_background_color (context, GTK_STATE_FLAG_NORMAL, &bg);
-  gdk_cairo_set_source_rgba (cr, &bg);
-  cairo_rectangle (cr, width / 3, height / 3, width / 3, height / 3);
   cairo_fill (cr);
 
   return TRUE;
