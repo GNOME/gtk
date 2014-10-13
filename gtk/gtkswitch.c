@@ -269,6 +269,7 @@ gtk_switch_pan_gesture_pan (GtkGesturePan   *gesture,
   state = gtk_widget_get_state_flags (widget);
 
   gtk_style_context_save (context);
+  gtk_style_context_remove_class (context, GTK_STYLE_CLASS_TROUGH);
   gtk_style_context_add_class (context, GTK_STYLE_CLASS_SLIDER);
   gtk_style_context_get_padding (context, state, &padding);
   gtk_style_context_restore (context);
@@ -381,6 +382,7 @@ gtk_switch_get_preferred_width (GtkWidget *widget,
 
   gtk_style_context_save (context);
 
+  gtk_style_context_remove_class (context, GTK_STYLE_CLASS_TROUGH);
   gtk_style_context_add_class (context, GTK_STYLE_CLASS_SLIDER);
   gtk_style_context_get_padding (context, state, &padding);
 
@@ -433,6 +435,7 @@ gtk_switch_get_preferred_height (GtkWidget *widget,
 
   gtk_style_context_save (context);
 
+  gtk_style_context_remove_class (context, GTK_STYLE_CLASS_TROUGH);
   gtk_style_context_add_class (context, GTK_STYLE_CLASS_SLIDER);
   gtk_style_context_get_padding (context, state, &padding);
 
@@ -568,6 +571,7 @@ gtk_switch_paint_handle (GtkWidget    *widget,
   GtkStyleContext *context = gtk_widget_get_style_context (widget);
 
   gtk_style_context_save (context);
+  gtk_style_context_remove_class (context, GTK_STYLE_CLASS_TROUGH);
   gtk_style_context_add_class (context, GTK_STYLE_CLASS_SLIDER);
 
   gtk_render_slider (context, cr,
@@ -597,6 +601,7 @@ gtk_switch_draw (GtkWidget *widget,
 
   gtk_style_context_save (context);
 
+  gtk_style_context_remove_class (context, GTK_STYLE_CLASS_TROUGH);
   gtk_style_context_add_class (context, GTK_STYLE_CLASS_SLIDER);
 
   gtk_style_context_get_padding (context, state, &padding);
@@ -607,9 +612,6 @@ gtk_switch_draw (GtkWidget *widget,
   y = 0;
   width = gtk_widget_get_allocated_width (widget);
   height = gtk_widget_get_allocated_height (widget);
-
-  gtk_style_context_save (context);
-  gtk_style_context_add_class (context, GTK_STYLE_CLASS_TROUGH);
 
   gtk_render_background (context, cr, x, y, width, height);
   gtk_render_frame (context, cr, x, y, width, height);
@@ -656,8 +658,6 @@ gtk_switch_draw (GtkWidget *widget,
   g_object_unref (layout);
 
   handle.x = x + priv->handle_x;
-
-  gtk_style_context_restore (context);
 
   gtk_switch_paint_handle (widget, cr, &handle);
 
@@ -1019,6 +1019,7 @@ gtk_switch_class_init (GtkSwitchClass *klass)
 static void
 gtk_switch_init (GtkSwitch *self)
 {
+  GtkStyleContext *context;
   GtkGesture *gesture;
 
   self->priv = gtk_switch_get_instance_private (self);
@@ -1048,6 +1049,9 @@ gtk_switch_init (GtkSwitch *self)
   gtk_event_controller_set_propagation_phase (GTK_EVENT_CONTROLLER (gesture),
                                               GTK_PHASE_BUBBLE);
   self->priv->pan_gesture = gesture;
+
+  context = gtk_widget_get_style_context (GTK_WIDGET (self));
+  gtk_style_context_add_class (context, GTK_STYLE_CLASS_TROUGH);
 }
 
 /**
