@@ -91,6 +91,8 @@ add_type_count (GtkInspectorStatistics *sl, GType type)
   self = g_type_get_instance_count (type);
   cumulative += self;
 
+  data->self1 = data->self2;
+  data->cumulative1 = data->cumulative2;
   data->self2 = self;
   data->cumulative2 = cumulative;
 
@@ -122,13 +124,6 @@ refresh_clicked (GtkWidget *button, GtkInspectorStatistics *sl)
   GHashTableIter iter;
   TypeData *data;
   GtkTreeIter treeiter;
-
-  g_hash_table_iter_init (&iter, sl->priv->counts);
-  while (g_hash_table_iter_next (&iter, NULL, (gpointer *)&data))
-    {
-      data->self1 = data->self2;
-      data->cumulative1 = data->cumulative2;
-    }
 
   if (sl->priv->snapshot_count == 0)
     {
