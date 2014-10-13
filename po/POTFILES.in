@@ -7,14 +7,17 @@ gdk/gdkcursor.c
 gdk/gdkdevice.c
 gdk/gdkdevicemanager.c
 gdk/gdkdisplaymanager.c
+gdk/gdkglcontext.c
 gdk/gdkpango.c
 gdk/gdkscreen.c
 gdk/gdkwindow.c
 gdk/keyname-table.h
+gdk/wayland/gdkglcontext-wayland.c
 gdk/win32/gdkmain-win32.c
 gdk/x11/gdkapplaunchcontext-x11.c
 gdk/x11/gdkdevicemanager-xi2.c
 gdk/x11/gdkdevice-xi2.c
+gdk/x11/gdkglcontext-x11.c
 gdk/x11/gdkmain-x11.c
 gtk/a11y/gtkbooleancellaccessible.c
 gtk/a11y/gtkbuttonaccessible.c
@@ -147,6 +150,7 @@ gtk/gtkframe.c
 gtk/gtkgesture.c
 gtk/gtkgesturepan.c
 gtk/gtkgesturesingle.c
+gtk/gtkglarea.c
 gtk/gtkgrid.c
 gtk/gtkheaderbar.c
 gtk/gtkicontheme.c
