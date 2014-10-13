@@ -1062,6 +1062,9 @@ _gdk_x11_display_create_window_impl (GdkDisplay    *display,
       xattributes.border_pixel = BlackPixel (xdisplay, x11_screen->screen_num);
       xattributes_mask |= CWBorderPixel | CWBackPixel;
 
+      xattributes.bit_gravity = NorthWestGravity;
+      xattributes_mask |= CWBitGravity;
+
       xattributes.colormap = _gdk_visual_get_x11_colormap (window->visual);
       xattributes_mask |= CWColormap;
 
