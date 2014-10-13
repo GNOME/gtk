@@ -1,3 +1,20 @@
+Overview of Changes in GTK+ 3.14.2 to 3.14.3
+============================================
+
+* Bugs fixed:
+ 724096 search-bar: don't show the widget until we're ready to reveal
+ 737981 Strange frame in GtkScrolledWindow
+ 737983 gtkplacessidebar: Open $HOME after unmounting or ejecting
+ 737985 Unnecessary "GtkScrolledWindow .frame"
+ 738158 Flat context menu button 
+
+* Translation updates:
+ Italian
+ Persian
+ Serbian
+ Slovak
+
+
 Overview of Changes in GTK+ 3.14.1 to 3.14.2
 ============================================
 
