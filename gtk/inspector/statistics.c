@@ -40,7 +40,6 @@ struct _GtkInspectorStatisticsPrivate
   GtkCellRenderer *renderer_self2;
   GtkTreeViewColumn *column_cumulative2;
   GtkCellRenderer *renderer_cumulative2;
-  gint snapshot_count;
   GHashTable *counts;
 };
 
@@ -125,17 +124,6 @@ refresh_clicked (GtkWidget *button, GtkInspectorStatistics *sl)
   TypeData *data;
   GtkTreeIter treeiter;
 
-  if (sl->priv->snapshot_count == 0)
-    {
-      gtk_tree_view_column_set_visible (sl->priv->column_self2, TRUE);
-      gtk_tree_view_column_set_visible (sl->priv->column_cumulative2, TRUE);
-    }
-  else if (sl->priv->snapshot_count == 1)
-    {
-      gtk_tree_view_column_set_visible (sl->priv->column_self1, TRUE);
-      gtk_tree_view_column_set_visible (sl->priv->column_cumulative1, TRUE);
-    }
-
   update_type_counts (sl);
 
   gtk_list_store_clear (GTK_LIST_STORE (sl->priv->model));
@@ -153,8 +141,6 @@ refresh_clicked (GtkWidget *button, GtkInspectorStatistics *sl)
                           COLUMN_CUMULATIVE2, data->cumulative2,
                           -1);
     }
-
-  sl->priv->snapshot_count++;
 }
 
 static gboolean

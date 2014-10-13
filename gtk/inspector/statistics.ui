@@ -62,7 +62,7 @@
                     </child>
                     <child>
                       <object class="GtkTreeViewColumn" id="column_self1">
-                        <property name="visible">False</property>
+                        <property name="visible">True</property>
                         <property name="sort-column-id">2</property>
                         <property name="title" translatable="yes">Self 1</property>
                         <child>
@@ -74,7 +74,7 @@
                     </child>
                     <child>
                       <object class="GtkTreeViewColumn" id="column_cumulative1">
-                        <property name="visible">False</property>
+                        <property name="visible">True</property>
                         <property name="sort-column-id">3</property>
                         <property name="title" translatable="yes">Cumulative 1</property>
                         <child>
@@ -86,7 +86,7 @@
                     </child>
                     <child>
                       <object class="GtkTreeViewColumn" id="column_self2">
-                        <property name="visible">False</property>
+                        <property name="visible">True</property>
                         <property name="sort-column-id">4</property>
                         <property name="title" translatable="yes">Self 2</property>
                         <child>
@@ -98,7 +98,7 @@
                     </child>
                     <child>
                       <object class="GtkTreeViewColumn" id="column_cumulative2">
-                        <property name="visible">False</property>
+                        <property name="visible">True</property>
                         <property name="sort-column-id">5</property>
                         <property name="title" translatable="yes">Cumulative 2</property>
                         <child>
