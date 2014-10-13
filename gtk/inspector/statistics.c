@@ -45,6 +45,7 @@ struct _GtkInspectorStatisticsPrivate
 
 typedef struct {
   GType type;
+  GtkTreeIter treeiter;
   gint self1;
   gint cumulative1;
   gint self2;
@@ -84,6 +85,11 @@ add_type_count (GtkInspectorStatistics *sl, GType type)
     {
       data = g_new0 (TypeData, 1);
       data->type = type;
+      gtk_list_store_append (GTK_LIST_STORE (sl->priv->model), &data->treeiter);
+      gtk_list_store_set (GTK_LIST_STORE (sl->priv->model), &data->treeiter,
+                          COLUMN_TYPE, data->type,
+                          COLUMN_TYPE_NAME, g_type_name (data->type),
+                          -1);
       g_hash_table_insert (sl->priv->counts, GSIZE_TO_POINTER (type), data);
     }
 
@@ -95,6 +101,12 @@ add_type_count (GtkInspectorStatistics *sl, GType type)
   data->self2 = self;
   data->cumulative2 = cumulative;
 
+  gtk_list_store_set (GTK_LIST_STORE (sl->priv->model), &data->treeiter,
+                      COLUMN_SELF1, data->self1,
+                      COLUMN_CUMULATIVE1, data->cumulative1,
+                      COLUMN_SELF2, data->self2,
+                      COLUMN_CUMULATIVE2, data->cumulative2,
+                      -1);
   return cumulative;
 }
 
@@ -120,27 +132,7 @@ update_type_counts (GtkInspectorStatistics *sl)
 static void
 refresh_clicked (GtkWidget *button, GtkInspectorStatistics *sl)
 {
-  GHashTableIter iter;
-  TypeData *data;
-  GtkTreeIter treeiter;
-
   update_type_counts (sl);
-
-  gtk_list_store_clear (GTK_LIST_STORE (sl->priv->model));
-
-  g_hash_table_iter_init (&iter, sl->priv->counts);
-  while (g_hash_table_iter_next (&iter, NULL, (gpointer *)&data))
-    {
-      gtk_list_store_append (GTK_LIST_STORE (sl->priv->model), &treeiter);
-      gtk_list_store_set (GTK_LIST_STORE (sl->priv->model), &treeiter,
-                          COLUMN_TYPE, data->type,
-                          COLUMN_TYPE_NAME, g_type_name (data->type),
-                          COLUMN_SELF1, data->self1,
-                          COLUMN_CUMULATIVE1, data->cumulative1,
-                          COLUMN_SELF2, data->self2,
-                          COLUMN_CUMULATIVE2, data->cumulative2,
-                          -1);
-    }
 }
 
 static gboolean
