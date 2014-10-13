@@ -55,6 +55,7 @@ typedef struct {
 enum
 {
   COLUMN_TYPE,
+  COLUMN_TYPE_NAME,
   COLUMN_SELF1,
   COLUMN_CUMULATIVE1,
   COLUMN_SELF2,
@@ -149,7 +150,8 @@ refresh_clicked (GtkWidget *button, GtkInspectorStatistics *sl)
     {
       gtk_list_store_append (GTK_LIST_STORE (sl->priv->model), &treeiter);
       gtk_list_store_set (GTK_LIST_STORE (sl->priv->model), &treeiter,
-                          COLUMN_TYPE, g_type_name (data->type),
+                          COLUMN_TYPE, data->type,
+                          COLUMN_TYPE_NAME, g_type_name (data->type),
                           COLUMN_SELF1, data->self1,
                           COLUMN_CUMULATIVE1, data->cumulative1,
                           COLUMN_SELF2, data->self2,
