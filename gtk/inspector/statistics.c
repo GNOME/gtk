@@ -97,10 +97,27 @@ add_type_count (GtkInspectorStatistics *sl, GType type)
 }
 
 static void
-refresh_clicked (GtkWidget *button, GtkInspectorStatistics *sl)
+update_type_counts (GtkInspectorStatistics *sl)
 {
   GType type;
   gpointer class;
+
+  for (type = G_TYPE_INTERFACE; type <= G_TYPE_FUNDAMENTAL_MAX; type += G_TYPE_FUNDAMENTAL_SHIFT)
+    {
+      class = g_type_class_peek (type);
+      if (class == NULL)
+        continue;
+
+      if (!G_TYPE_IS_INSTANTIATABLE (type))
+        continue;
+
+      add_type_count (sl, type);
+    }
+}
+
+static void
+refresh_clicked (GtkWidget *button, GtkInspectorStatistics *sl)
+{
   GHashTableIter iter;
   TypeData *data;
   GtkTreeIter treeiter;
@@ -123,17 +140,7 @@ refresh_clicked (GtkWidget *button, GtkInspectorStatistics *sl)
       gtk_tree_view_column_set_visible (sl->priv->column_cumulative1, TRUE);
     }
 
-  for (type = G_TYPE_INTERFACE; type <= G_TYPE_FUNDAMENTAL_MAX; type += G_TYPE_FUNDAMENTAL_SHIFT)
-    {
-      class = g_type_class_peek (type);
-      if (class == NULL)
-        continue;
-
-      if (!G_TYPE_IS_INSTANTIATABLE (type))
-        continue;
-
-      add_type_count (sl, type);
-    }
+  update_type_counts (sl);
 
   gtk_list_store_clear (GTK_LIST_STORE (sl->priv->model));
 
@@ -244,7 +251,7 @@ gtk_inspector_statistics_init (GtkInspectorStatistics *sl)
   sl->priv->counts = g_hash_table_new_full (NULL, NULL, NULL, g_free);
 
   if (has_instance_counts ())
-    add_type_count (sl, G_TYPE_OBJECT);
+    update_type_counts (sl);
   else
     gtk_stack_set_visible_child_name (GTK_STACK (sl->priv->stack), "excuse");
 }
