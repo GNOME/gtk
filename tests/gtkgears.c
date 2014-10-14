@@ -48,7 +48,7 @@ static gboolean gtk_gears_tick          (GtkWidget     *widget,
                                          gpointer       user_data);
 
 GtkWidget *
-gtk_gears_new ()
+gtk_gears_new (void)
 {
   GtkWidget *gears;
 

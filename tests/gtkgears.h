@@ -20,16 +20,20 @@ enum {
 #define GTK_IS_GEARS(inst)  (G_TYPE_CHECK_INSTANCE_TYPE ((inst), \
                              GTK_TYPE_GEARS))
 
-typedef struct {
+typedef struct _GtkGears GtkGears;
+typedef struct _GtkGearsClass GtkGearsClass;
+
+struct _GtkGears {
   GtkGLArea parent;
-} GtkGears;
+};
 
-typedef struct {
+struct _GtkGearsClass {
   GtkGLAreaClass parent_class;
-} GtkGearsClass;
+};
 
+GType      gtk_gears_get_type      (void) G_GNUC_CONST;
 
-GtkWidget *gtk_gears_new           ();
+GtkWidget *gtk_gears_new           (void);
 void       gtk_gears_set_axis      (GtkGears *gears,
                                     int       axis,
                                     double    value);
