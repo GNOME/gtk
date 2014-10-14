@@ -2938,9 +2938,9 @@ gtk_window_dispose (GObject *object)
   GtkWindow *window = GTK_WINDOW (object);
   GtkWindowPrivate *priv = window->priv;
 
+  unset_titlebar (window);
   gtk_window_set_focus (window, NULL);
   gtk_window_set_default (window, NULL);
-  unset_titlebar (window);
   remove_attach_widget (window);
 
   G_OBJECT_CLASS (gtk_window_parent_class)->dispose (object);
