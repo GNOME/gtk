@@ -30,6 +30,7 @@
 #include "data-list.h"
 #include "general.h"
 #include "gestures.h"
+#include "graphdata.h"
 #include "menu.h"
 #include "misc-info.h"
 #include "object-hierarchy.h"
@@ -50,6 +51,7 @@ gtk_inspector_init (void)
 {
   gtk_inspector_register_resource ();
 
+  g_type_ensure (GTK_TYPE_GRAPH_DATA);
   g_type_ensure (GTK_TYPE_INSPECTOR_ACTIONS);
   g_type_ensure (GTK_TYPE_INSPECTOR_CLASSES_LIST);
   g_type_ensure (GTK_TYPE_INSPECTOR_CSS_EDITOR);

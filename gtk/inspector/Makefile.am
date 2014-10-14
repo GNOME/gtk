@@ -29,6 +29,8 @@ libgtkinspector_la_SOURCES = 		\
 	general.c			\
 	gestures.h			\
 	gestures.c			\
+	graphdata.h			\
+	graphdata.c			\
 	init.h				\
 	init.c				\
 	inspect-button.c		\

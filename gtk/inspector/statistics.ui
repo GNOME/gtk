@@ -8,6 +8,8 @@
       <column type="gint"/>
       <column type="gint"/>
       <column type="gint"/>
+      <column type="GtkGraphData"/>
+      <column type="GtkGraphData"/>
     </columns>
   </object>
   <template class="GtkInspectorStatistics" parent="GtkBox">

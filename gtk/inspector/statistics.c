@@ -20,6 +20,7 @@
 
 #include "statistics.h"
 
+#include "graphdata.h"
 #include "gtkstack.h"
 #include "gtktreeview.h"
 #include "gtkcellrenderertext.h"
@@ -46,10 +47,8 @@ struct _GtkInspectorStatisticsPrivate
 typedef struct {
   GType type;
   GtkTreeIter treeiter;
-  gint self1;
-  gint cumulative1;
-  gint self2;
-  gint cumulative2;
+  GtkGraphData *self;
+  GtkGraphData *cumulative;
 } TypeData;
 
 enum
@@ -59,7 +58,9 @@ enum
   COLUMN_SELF1,
   COLUMN_CUMULATIVE1,
   COLUMN_SELF2,
-  COLUMN_CUMULATIVE2
+  COLUMN_CUMULATIVE2,
+  COLUMN_SELF_DATA,
+  COLUMN_CUMULATIVE_DATA
 };
 
 G_DEFINE_TYPE_WITH_PRIVATE (GtkInspectorStatistics, gtk_inspector_statistics, GTK_TYPE_BOX)
@@ -85,10 +86,14 @@ add_type_count (GtkInspectorStatistics *sl, GType type)
     {
       data = g_new0 (TypeData, 1);
       data->type = type;
+      data->self = gtk_graph_data_new (60);
+      data->cumulative = gtk_graph_data_new (60);
       gtk_list_store_append (GTK_LIST_STORE (sl->priv->model), &data->treeiter);
       gtk_list_store_set (GTK_LIST_STORE (sl->priv->model), &data->treeiter,
                           COLUMN_TYPE, data->type,
                           COLUMN_TYPE_NAME, g_type_name (data->type),
+                          COLUMN_SELF_DATA, data->self,
+                          COLUMN_CUMULATIVE_DATA, data->cumulative,
                           -1);
       g_hash_table_insert (sl->priv->counts, GSIZE_TO_POINTER (type), data);
     }
@@ -96,16 +101,14 @@ add_type_count (GtkInspectorStatistics *sl, GType type)
   self = g_type_get_instance_count (type);
   cumulative += self;
 
-  data->self1 = data->self2;
-  data->cumulative1 = data->cumulative2;
-  data->self2 = self;
-  data->cumulative2 = cumulative;
+  gtk_graph_data_prepend_value (data->self, self);
+  gtk_graph_data_prepend_value (data->cumulative, cumulative);
 
   gtk_list_store_set (GTK_LIST_STORE (sl->priv->model), &data->treeiter,
-                      COLUMN_SELF1, data->self1,
-                      COLUMN_CUMULATIVE1, data->cumulative1,
-                      COLUMN_SELF2, data->self2,
-                      COLUMN_CUMULATIVE2, data->cumulative2,
+                      COLUMN_SELF1, (int) gtk_graph_data_get_value (data->self, 1),
+                      COLUMN_CUMULATIVE1, (int) gtk_graph_data_get_value (data->cumulative, 1),
+                      COLUMN_SELF2, (int) gtk_graph_data_get_value (data->self, 0),
+                      COLUMN_CUMULATIVE2, (int) gtk_graph_data_get_value (data->cumulative, 0),
                       -1);
   return cumulative;
 }
@@ -203,6 +206,17 @@ cell_data_delta (GtkCellLayout   *layout,
 }
 
 static void
+type_data_free (gpointer data)
+{
+  TypeData *type_data = data;
+
+  g_object_unref (type_data->self);
+  g_object_unref (type_data->cumulative);
+
+  g_free (type_data);
+}
+
+static void
 gtk_inspector_statistics_init (GtkInspectorStatistics *sl)
 {
   sl->priv = gtk_inspector_statistics_get_instance_private (sl);
@@ -223,7 +237,7 @@ gtk_inspector_statistics_init (GtkInspectorStatistics *sl)
                                       sl->priv->renderer_cumulative2,
                                       cell_data_delta,
                                       GINT_TO_POINTER (COLUMN_CUMULATIVE2), NULL);
-  sl->priv->counts = g_hash_table_new_full (NULL, NULL, NULL, g_free);
+  sl->priv->counts = g_hash_table_new_full (NULL, NULL, NULL, type_data_free);
 
   if (has_instance_counts ())
     update_type_counts (sl);
