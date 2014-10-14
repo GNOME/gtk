@@ -16701,7 +16701,7 @@ gtk_widget_init_template (GtkWidget *widget)
 
   /* This will build the template XML as children to the widget instance, also it
    * will validate that the template is created for the correct GType and assert that
-   * there is no infinate recursion.
+   * there is no infinite recursion.
    */
   if (!_gtk_builder_extend_with_template (builder, widget, class_type,
 					  (const gchar *)g_bytes_get_data (template->data, NULL),
