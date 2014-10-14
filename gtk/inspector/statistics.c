@@ -42,6 +42,7 @@ struct _GtkInspectorStatisticsPrivate
   GtkTreeViewColumn *column_cumulative2;
   GtkCellRenderer *renderer_cumulative2;
   GHashTable *counts;
+  guint update_source_id;
 };
 
 typedef struct {
@@ -113,9 +114,10 @@ add_type_count (GtkInspectorStatistics *sl, GType type)
   return cumulative;
 }
 
-static void
-update_type_counts (GtkInspectorStatistics *sl)
+static gboolean
+update_type_counts (gpointer data)
 {
+  GtkInspectorStatistics *sl = data;
   GType type;
   gpointer class;
 
@@ -130,12 +132,29 @@ update_type_counts (GtkInspectorStatistics *sl)
 
       add_type_count (sl, type);
     }
+
+  return TRUE;
 }
 
 static void
-refresh_clicked (GtkWidget *button, GtkInspectorStatistics *sl)
+toggle_record (GtkToggleToolButton    *button,
+               GtkInspectorStatistics *sl)
 {
-  update_type_counts (sl);
+  if (gtk_toggle_tool_button_get_active (button) == (sl->priv->update_source_id != 0))
+    return;
+
+  if (gtk_toggle_tool_button_get_active (button))
+    {
+      sl->priv->update_source_id = gdk_threads_add_timeout_seconds (1,
+                                                                    update_type_counts,
+                                                                    sl);
+      update_type_counts (sl);
+    }
+  else
+    {
+      g_source_remove (sl->priv->update_source_id);
+      sl->priv->update_source_id = 0;
+    }
 }
 
 static gboolean
@@ -250,6 +269,9 @@ finalize (GObject *object)
 {
   GtkInspectorStatistics *sl = GTK_INSPECTOR_STATISTICS (object);
 
+  if (sl->priv->update_source_id)
+    g_source_remove (sl->priv->update_source_id);
+
   g_hash_table_unref (sl->priv->counts);
 
   G_OBJECT_CLASS (gtk_inspector_statistics_parent_class)->finalize (object);
@@ -276,7 +298,7 @@ gtk_inspector_statistics_class_init (GtkInspectorStatisticsClass *klass)
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorStatistics, column_cumulative2);
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorStatistics, renderer_cumulative2);
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorStatistics, button);
-  gtk_widget_class_bind_template_callback (widget_class, refresh_clicked);
+  gtk_widget_class_bind_template_callback (widget_class, toggle_record);
 }
 
 // vim: set et sw=2 ts=2:

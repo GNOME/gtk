@@ -27,11 +27,11 @@
                 <property name="visible">True</property>
                 <property name="icon-size">small-toolbar</property>
                 <child>
-                  <object class="GtkToolButton" id="button">
+                  <object class="GtkToggleToolButton" id="button">
                     <property name="visible">True</property>
-                    <property name="icon-name">view-refresh-symbolic</property>
-                    <property name="tooltip-text" translatable="yes">Refresh</property>
-                    <signal name="clicked" handler="refresh_clicked"/>
+                    <property name="icon-name">media-record-symbolic</property>
+                    <property name="tooltip-text" translatable="yes">Collect Statistics</property>
+                    <signal name="toggled" handler="toggle_record"/>
                   </object>
                 </child>
               </object>
