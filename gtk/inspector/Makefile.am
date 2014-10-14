@@ -19,6 +19,8 @@ libgtkinspector_la_SOURCES = 		\
 	action-editor.c			\
 	actions.h			\
 	actions.c			\
+	cellrenderergraph.h		\
+	cellrenderergraph.c		\
 	classes-list.h			\
 	classes-list.c			\
 	css-editor.h			\

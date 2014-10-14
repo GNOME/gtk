@@ -25,6 +25,7 @@
 #include "init.h"
 
 #include "actions.h"
+#include "cellrenderergraph.h"
 #include "classes-list.h"
 #include "css-editor.h"
 #include "data-list.h"
@@ -51,6 +52,7 @@ gtk_inspector_init (void)
 {
   gtk_inspector_register_resource ();
 
+  g_type_ensure (GTK_TYPE_CELL_RENDERER_GRAPH);
   g_type_ensure (GTK_TYPE_GRAPH_DATA);
   g_type_ensure (GTK_TYPE_INSPECTOR_ACTIONS);
   g_type_ensure (GTK_TYPE_INSPECTOR_CLASSES_LIST);

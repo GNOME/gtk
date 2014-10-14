@@ -110,6 +110,40 @@
                         </child>
                       </object>
                     </child>
+                    <child>
+                      <object class="GtkTreeViewColumn" id="column_self_graph">
+                        <property name="visible">True</property>
+                        <property name="sort-column-id">4</property>
+                        <property name="title" translatable="yes">Self</property>
+                        <child>
+                          <object class="GtkCellRendererGraph" id="renderer_self_graph">
+                            <property name="minimum">0</property>
+                            <property name="xpad">1</property>
+                            <property name="ypad">1</property>
+                          </object>
+                          <attributes>
+                            <attribute name="data">6</attribute>
+                          </attributes>
+                        </child>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkTreeViewColumn" id="column_cumulative_graph">
+                        <property name="visible">True</property>
+                        <property name="sort-column-id">5</property>
+                        <property name="title" translatable="yes">Cumulative</property>
+                        <child>
+                          <object class="GtkCellRendererGraph" id="renderer_cumulative_graph">
+                            <property name="minimum">0</property>
+                            <property name="xpad">1</property>
+                            <property name="ypad">1</property>
+                          </object>
+                          <attributes>
+                            <attribute name="data">7</attribute>
+                          </attributes>
+                        </child>
+                      </object>
+                    </child>
                   </object>
                 </child>
               </object>
