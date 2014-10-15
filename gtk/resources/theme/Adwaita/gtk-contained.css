@@ -1884,9 +1884,14 @@ GtkTreeView.view {
   -GtkTreeView-tree-line-width: 1;
   -GtkTreeView-tree-line-pattern: '';
   -GtkTreeView-expander-size: 16;
-  border-color: #ededed; }
+  border-left-color: rgba(46, 52, 54, 0.5);
+  border-top-color: #ededed; }
+  GtkTreeView.view:selected, GtkTreeView.view:backdrop:selected {
+    border-left-color: rgba(255, 255, 255, 0.5);
+    border-top-color: rgba(46, 52, 54, 0.1); }
   GtkTreeView.view:backdrop {
-    border-color: #ededed; }
+    border-left-color: rgba(84, 89, 90, 0.5);
+    border-top: #ededed; }
   GtkTreeView.view.expander {
     -gtk-icon-source: -gtk-icontheme("pan-end-symbolic");
     color: #6c7072; }

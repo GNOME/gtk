@@ -1247,17 +1247,23 @@ GtkComboBox {
 /**************
  * Tree Views *
  **************/
-GtkTreeView.view { // treeview grid lines and expanders, unfortunatelly
-                   // the tree lines color can't be set
+GtkTreeView.view {
   -GtkTreeView-grid-line-width: 1;
   -GtkTreeView-grid-line-pattern: '';
   -GtkTreeView-tree-line-width: 1;
   -GtkTreeView-tree-line-pattern: '';
   -GtkTreeView-expander-size: 16;
-  border-color: $bg_color; // this is actually the line color
-  // :selected is ignored hence no style for it
+
+  border-left-color: mix($fg_color, $base_color, 0.5); // this is actually the tree lines color,
+  border-top-color: $bg_color;                         // while this is the grid lines color, better then nothing
+
+  &:selected, &:backdrop:selected {
+    border-left-color: mix($selected_fg_color, $selected_bg_color, 0.5);
+    border-top-color: transparentize($fg_color, 0.9); // doesn't work unfortunatelly
+  }
   &:backdrop {
-    border-color: $backdrop_bg_color;
+    border-left-color: mix($backdrop_fg_color, $backdrop_bg_color, 0.5);
+    border-top: $backdrop_bg_color;
   }
   &.expander {
     -gtk-icon-source: -gtk-icontheme('pan-end-symbolic');
