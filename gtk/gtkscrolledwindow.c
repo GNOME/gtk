@@ -1666,6 +1666,7 @@ gtk_scrolled_window_draw_overshoot (GtkScrolledWindow *scrolled_window,
   overshoot_y = CLAMP (overshoot_y, - MAX_OVERSHOOT_DISTANCE, MAX_OVERSHOOT_DISTANCE);
 
   gtk_style_context_save (context);
+  gtk_style_context_remove_class (context, GTK_STYLE_CLASS_FRAME);
   gtk_style_context_add_class (context, GTK_STYLE_CLASS_OVERSHOOT);
 
   if (overshoot_x > 0)
@@ -1686,6 +1687,7 @@ gtk_scrolled_window_draw_overshoot (GtkScrolledWindow *scrolled_window,
   gtk_style_context_restore (context);
 
   gtk_style_context_save (context);
+  gtk_style_context_remove_class (context, GTK_STYLE_CLASS_FRAME);
   gtk_style_context_add_class (context, GTK_STYLE_CLASS_OVERSHOOT);
 
   if (overshoot_y > 0)
