@@ -894,10 +894,12 @@ render_frame_internal (GtkStyleContext  *context,
                        GtkJunctionSides  junction)
 {
   GtkBorderImage border_image;
-  GtkBorderStyle border_style[4];
-  GtkRoundedBox border_box;
   double border_width[4];
-  GdkRGBA colors[4];
+
+  border_width[0] = _gtk_css_number_value_get (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_BORDER_TOP_WIDTH), 100);
+  border_width[1] = _gtk_css_number_value_get (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_BORDER_RIGHT_WIDTH), 100);
+  border_width[2] = _gtk_css_number_value_get (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_BORDER_BOTTOM_WIDTH), 100);
+  border_width[3] = _gtk_css_number_value_get (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_BORDER_LEFT_WIDTH), 100);
 
   if (_gtk_border_image_init (&border_image, context))
     {
@@ -905,10 +907,9 @@ render_frame_internal (GtkStyleContext  *context,
     }
   else
     {
-      border_width[0] = _gtk_css_number_value_get (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_BORDER_TOP_WIDTH), 100);
-      border_width[1] = _gtk_css_number_value_get (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_BORDER_RIGHT_WIDTH), 100);
-      border_width[2] = _gtk_css_number_value_get (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_BORDER_BOTTOM_WIDTH), 100);
-      border_width[3] = _gtk_css_number_value_get (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_BORDER_LEFT_WIDTH), 100);
+      GtkBorderStyle border_style[4];
+      GtkRoundedBox border_box;
+      GdkRGBA colors[4];
 
       /* Optimize the most common case of "This widget has no border" */
       if (border_width[0] == 0 &&
