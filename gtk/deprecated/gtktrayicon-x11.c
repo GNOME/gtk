@@ -356,6 +356,27 @@ gtk_tray_icon_draw (GtkWidget *widget,
       cairo_set_operator (cr, CAIRO_OPERATOR_SOURCE);
       cairo_paint (cr);
     }
+  else
+    {
+      GdkRectangle clip;
+
+      if (gdk_cairo_get_clip_rectangle (cr, &clip))
+        {
+          /* Clear to parent-relative pixmap
+           * We need to use direct X access here because GDK doesn't know about
+           * the parent realtive pixmap. */
+          cairo_surface_flush (target);
+
+          XClearArea (GDK_WINDOW_XDISPLAY (window),
+                      GDK_WINDOW_XID (window),
+                      clip.x, clip.y,
+                      clip.width, clip.height,
+                      False);
+          cairo_surface_mark_dirty_rectangle (target, 
+                                              clip.x, clip.y,
+                                              clip.width, clip.height);
+        }
+    }
 
   if (GTK_WIDGET_CLASS (gtk_tray_icon_parent_class)->draw)
     retval = GTK_WIDGET_CLASS (gtk_tray_icon_parent_class)->draw (widget, cr);
@@ -480,6 +501,11 @@ gtk_tray_icon_get_visual_property (GtkTrayIcon *icon)
       icon->priv->manager_visual = NULL;
       icon->priv->manager_visual_rgba = FALSE;
     }
+
+  /* For the background-relative hack we use when we aren't
+   * using a real RGBA visual, we can't be double-buffered
+   */
+  gtk_widget_set_double_buffered (GTK_WIDGET (icon), icon->priv->manager_visual_rgba);
 
   if (type != None)
     XFree (prop.prop);
