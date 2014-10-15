@@ -3640,6 +3640,7 @@ gdk_window_process_updates_internal (GdkWindow *window)
               cairo_region_t *swap_region = cairo_region_copy (expose_region);
               cairo_region_subtract (swap_region, window->active_update_area);
               draw_ugly_color (window, swap_region, 1);
+              cairo_region_destroy (swap_region);
 
 	      /* Make sure we see the red invalid area before redrawing. */
 	      gdk_display_sync (gdk_window_get_display (window));
@@ -3654,6 +3655,8 @@ gdk_window_process_updates_internal (GdkWindow *window)
           impl_class->process_updates_recurse (window, expose_region);
 
           gdk_window_append_old_updated_area (window, window->active_update_area);
+
+          cairo_region_destroy (expose_region);
         }
 
       cairo_region_destroy (window->active_update_area);
