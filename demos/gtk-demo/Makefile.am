@@ -75,6 +75,7 @@ LDADDS = \
 	$(top_builddir)/gtk/libgtk-3.la	\
 	$(top_builddir)/gdk/libgdk-3.la	\
 	$(GTK_DEP_LIBS)				\
+	$(GDK_DEP_LIBS)			\
 	-lm
 
 bin_PROGRAMS = gtk3-demo gtk3-demo-application
