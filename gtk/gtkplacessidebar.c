@@ -897,6 +897,7 @@ on_bookmark_query_info_complete (GObject      *source,
   g_free (mount_uri);
   g_free (tooltip);
   g_free (bookmark_name);
+  g_object_unref (icon);
 
 out:
   g_clear_object (&info);
