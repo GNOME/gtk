@@ -501,10 +501,13 @@ gtk_tray_icon_get_visual_property (GtkTrayIcon *icon)
       icon->priv->manager_visual_rgba = FALSE;
     }
 
+
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
   /* For the background-relative hack we use when we aren't
    * using a real RGBA visual, we can't be double-buffered
    */
   gtk_widget_set_double_buffered (GTK_WIDGET (icon), icon->priv->manager_visual_rgba);
+G_GNUC_END_IGNORE_DEPRECATIONS
 
   if (type != None)
     XFree (prop.prop);
