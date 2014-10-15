@@ -2790,6 +2790,10 @@ GtkInfoBar {
  *****************/
 
 GtkColorSwatch {
+  // This widget is made of two boxes one on top of the other, the lower box is GtkColorSwatch {} the other one
+  // is GtkColorSwatch .overlay {}, GtkColorSwatch has the programmatically set background, so most of the style
+  // is applied to the overlay box.
+
   box-shadow: inset 0 1px transparentize(black, 0.9), _widget_edge();
 
   // border rounding
@@ -2801,17 +2805,19 @@ GtkColorSwatch {
     border-bottom-left-radius: 5px;
     border-bottom-right-radius: 5px;
   }
-  &.left, &:first-child {
+  &.left, &:first-child, &:first-child .overlay {
     border-top-left-radius: 5px;
     border-bottom-left-radius: 5px;
   }
-  &.right, &:last-child {
+  &.right, &:last-child, &:last-child .overlay {
     border-top-right-radius: 5px;
     border-bottom-right-radius: 5px;
   }
-  &:only-child {
+  &:only-child, &:only-child .overlay {
     border-radius: 5px;
   }
+  // nth-child works just on the custom colors row
+
 
   // hover effect
   &:hover {
@@ -2855,9 +2861,12 @@ GtkColorSwatch {
 
   // make the add color button looks like, well, a button
   &#add-color-button {
+    border-style: solid; // the borders are drawn by the overlay for standard colorswatches to have them semi
+    border-width: 1px;   // translucent on the colored background, here it's not necessary so they need to be set
     @include button(normal);
     &:hover { @include button(hover); }
     &:backdrop { @include button(backdrop); }
+    .overlay { @include button(undecorated); } // reset the overlay to not cover the button style underneat
   }
 }
 
