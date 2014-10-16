@@ -922,8 +922,12 @@ gtk_spin_button_panel_get_context (GtkSpinButton *spin_button,
                                                  panel == priv->down_panel);
     }
 
+  gtk_style_context_set_state (*contextp, gtk_spin_button_panel_get_state (spin_button, panel));
+
   return *contextp;
 }
+
+#include "gtkcsssectionprivate.h"
 
 static void
 gtk_spin_button_panel_get_size (GtkSpinButton *spin_button,
@@ -940,7 +944,7 @@ gtk_spin_button_panel_get_size (GtkSpinButton *spin_button,
   icon_size = MAX (w, h);
 
   context = gtk_spin_button_panel_get_context (spin_button, panel);
-  state = gtk_spin_button_panel_get_state (spin_button, panel);
+  state = gtk_style_context_get_state (context);
 
   gtk_style_context_get_padding (context, state, &button_padding);
   gtk_style_context_get_border (context, state, &button_border);
@@ -1031,7 +1035,6 @@ gtk_spin_button_panel_draw (GtkSpinButton   *spin_button,
 {
   GtkSpinButtonPrivate *priv = spin_button->priv;
   GtkStyleContext *context;
-  GtkStateFlags state;
   GtkWidget *widget;
   gdouble width, height, x, y;
   gint icon_width, icon_height;
@@ -1043,8 +1046,6 @@ gtk_spin_button_panel_draw (GtkSpinButton   *spin_button,
   gtk_cairo_transform_to_window (cr, widget, panel);
 
   context = gtk_spin_button_panel_get_context (spin_button, panel);
-  state = gtk_spin_button_panel_get_state (spin_button, panel);
-  gtk_style_context_set_state (context, state);
 
   height = gdk_window_get_height (panel);
   width = gdk_window_get_width (panel);
