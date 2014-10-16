@@ -2,6 +2,8 @@
   @return unquote("alpha(#{$c},#{$a})");
 }
 
+$ease-out-quad: cubic-bezier(0.25, 0.46, 0.45, 0.94);
+
 * {
   padding: 0;
   -GtkToolButton-icon-spacing: 4;
@@ -244,7 +246,7 @@ GtkTextView { // This will get overridden by .view, needed by gedit line numbers
   }
 
   border-radius: 3px;
-  transition: all 200ms ease-out;
+  transition: all 200ms $ease-out-quad;
   @include entry(normal);
 
   &.flat, &.flat:focus {
@@ -429,7 +431,7 @@ $_dot_color: if($variant=='light', $selected_bg_color,
 
 .button {
 
-  $_button_transition: all 200ms ease-out;
+  $_button_transition: all 200ms $ease-out-quad;
 
   border: 1px solid;
   border-radius: 3px;
@@ -1548,7 +1550,7 @@ column-header.button.dnd { // for treeview-like derive widgets
   -GtkNotebook-has-tab-gap: false;
   -GtkWidget-focus-padding: 0;
   -GtkWidget-focus-line-width: 0;
-  transition: all 200ms ease-out;
+  transition: all 200ms $ease-out-quad;
   &:backdrop {
     background-color: $backdrop_base_color;
   }
@@ -2487,7 +2489,7 @@ GtkScrolledWindow {
 
 // transition
 .list-row, list-row.button {
-  transition: all 300ms cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  transition: all 300ms $ease-out-quad;
   &:hover { transition: none; }
 }
 
