@@ -520,6 +520,9 @@ $_dot_color: if($variant=='light', $selected_bg_color,
     // to position the needs attention dot, padding is added to the button
     // child, a label needs just lateral padding while an icon needs vertical
     // padding added too.
+
+    outline-offset: -3px; // needs to be set or it gets overridden by GtkRadioButton outline-offset
+
     > GtkLabel {
       padding-left: 6px;  // label padding
       padding-right: 6px; //
