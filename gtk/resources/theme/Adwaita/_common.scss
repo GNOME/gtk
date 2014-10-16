@@ -2421,7 +2421,7 @@ GtkScrolledWindow {
   border-radius: 0;   // and no rounded corners
   box-shadow: none;   // and no box-shadow
   &:hover {
-    background-color: mix(black, $base_color, 5%);
+    background-color: mix($fg_color, $base_color, 5%);
   }
   &:active {
     box-shadow: inset 0 2px 2px -2px transparentize(black,0.8);
@@ -2429,7 +2429,7 @@ GtkScrolledWindow {
   &:selected {
     &:active { box-shadow: inset 0 2px 3px -1px transparentize(black,0.5); }
     &:hover {
-      background-color: mix(black, $selected_bg_color, 10%);
+      background-color: mix($fg_color, $selected_bg_color, 10%);
     }
     &:backdrop { background-color: $selected_bg_color; }
   }

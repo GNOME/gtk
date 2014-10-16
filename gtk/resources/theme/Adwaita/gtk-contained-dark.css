@@ -3556,13 +3556,13 @@ GtkCalendar.header .list-row.button.titlebutton {
   border-radius: 0;
   box-shadow: none; }
   .list-row.button:hover {
-    background-color: #262626; }
+    background-color: #323232; }
   .list-row.button:active {
     box-shadow: inset 0 2px 2px -2px rgba(0, 0, 0, 0.2); }
   .list-row.button:selected:active {
     box-shadow: inset 0 2px 3px -1px rgba(0, 0, 0, 0.5); }
   .list-row.button:selected:hover {
-    background-color: #1d538c; }
+    background-color: #356ba4; }
   .list-row.button:selected:backdrop {
     background-color: #215d9c; }
 
