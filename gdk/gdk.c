@@ -149,6 +149,7 @@ static const GDebugKey gdk_debug_keys[] = {
   {"eventloop",     GDK_DEBUG_EVENTLOOP},
   {"frames",        GDK_DEBUG_FRAMES},
   {"settings",      GDK_DEBUG_SETTINGS},
+  {"nogl",          GDK_DEBUG_NOGL},
   {"opengl",        GDK_DEBUG_OPENGL},
 };
 

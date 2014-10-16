@@ -2722,6 +2722,14 @@ gdk_window_ref_impl_surface (GdkWindow *window)
 GdkGLContext *
 gdk_window_get_paint_gl_context (GdkWindow *window, GError **error)
 {
+  if (_gdk_debug_flags & GDK_DEBUG_NOGL)
+    {
+      g_set_error_literal (error, GDK_GL_ERROR,
+                           GDK_GL_ERROR_NOT_AVAILABLE,
+                           _("GL support disabled via GDK_DEBUG"));
+      return NULL;
+    }
+
   if (window->impl_window->gl_paint_context == NULL)
     window->impl_window->gl_paint_context =
       GDK_WINDOW_IMPL_GET_CLASS (window->impl)->create_gl_context (window,

@@ -400,6 +400,10 @@ nevertheless.
       <listitem><para>Miscellaneous information</para></listitem>
     </varlistentry>
     <varlistentry>
+      <term>nogl</term>
+      <listitem><para>Turn off OpenGL. GDK will behave as if OpenGL support was not available.</para></listitem>
+    </varlistentry>
+    <varlistentry>
       <term>nograbs</term>
       <listitem><para>Turn off all pointer and keyboard grabs</para></listitem>
     </varlistentry>
