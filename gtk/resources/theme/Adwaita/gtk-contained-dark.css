@@ -956,25 +956,29 @@ GtkCalendar.header .button.titlebutton {
     .titlebar .text-button.titlebutton.button .label:last-child,
     GtkCalendar.header .text-button.titlebutton.button .label:last-child {
       padding-right: 8px; }
-  .stack-switcher > .button > .label {
-    padding-left: 6px;
-    padding-right: 6px; }
-  .stack-switcher > .button > GtkImage, .header-bar .stack-switcher > .button.titlebutton > GtkImage,
-  .titlebar .stack-switcher > .button.titlebutton > GtkImage,
-  GtkCalendar.header .stack-switcher > .button.titlebutton > GtkImage {
-    padding-left: 6px;
-    padding-right: 6px;
-    padding-top: 3px;
-    padding-bottom: 3px; }
-  .stack-switcher > .button.text-button {
-    padding: 5px 10px 6px; }
-  .stack-switcher > .button.image-button, .header-bar .stack-switcher > .titlebutton.button,
-  .titlebar .stack-switcher > .titlebutton.button,
-  GtkCalendar.header .stack-switcher > .titlebutton.button {
-    padding: 5px 2px; }
-  .stack-switcher > .button.needs-attention:active > .label, .stack-switcher > .button.needs-attention:active > GtkImage, .stack-switcher > .button.needs-attention:checked > .label, .stack-switcher > .button.needs-attention:checked > GtkImage {
-    animation: none;
-    background-image: none; }
+  .stack-switcher > .button, .header-bar .stack-switcher > .button.titlebutton,
+  .titlebar .stack-switcher > .button.titlebutton,
+  GtkCalendar.header .stack-switcher > .button.titlebutton {
+    outline-offset: -3px; }
+    .stack-switcher > .button > .label {
+      padding-left: 6px;
+      padding-right: 6px; }
+    .stack-switcher > .button > GtkImage, .header-bar .stack-switcher > .button.titlebutton > GtkImage,
+    .titlebar .stack-switcher > .button.titlebutton > GtkImage,
+    GtkCalendar.header .stack-switcher > .button.titlebutton > GtkImage {
+      padding-left: 6px;
+      padding-right: 6px;
+      padding-top: 3px;
+      padding-bottom: 3px; }
+    .stack-switcher > .button.text-button {
+      padding: 5px 10px 6px; }
+    .stack-switcher > .button.image-button, .header-bar .stack-switcher > .titlebutton.button,
+    .titlebar .stack-switcher > .titlebutton.button,
+    GtkCalendar.header .stack-switcher > .titlebutton.button {
+      padding: 5px 2px; }
+    .stack-switcher > .button.needs-attention:active > .label, .stack-switcher > .button.needs-attention:active > GtkImage, .stack-switcher > .button.needs-attention:checked > .label, .stack-switcher > .button.needs-attention:checked > GtkImage {
+      animation: none;
+      background-image: none; }
   .inline-toolbar .button, .inline-toolbar .header-bar .button.titlebutton, .header-bar .inline-toolbar .button.titlebutton,
   .inline-toolbar .titlebar .button.titlebutton,
   .titlebar .inline-toolbar .button.titlebutton,
