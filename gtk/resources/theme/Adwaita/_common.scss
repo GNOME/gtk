@@ -428,12 +428,27 @@ $_dot_color: if($variant=='light', $selected_bg_color,
 
 
 .button {
+
+  $_button_transition: all 200ms ease-out;
+
   border: 1px solid;
   border-radius: 3px;
-  transition: all 200ms ease-out;
   padding: 5px 8px 6px;
+  transition: $_button_transition;
   @include button(normal);
-  &.flat { @include button(undecorated); }
+  &.flat {
+    @include button(undecorated);
+    // to avoid adiacent buttons borders clashing when transitioning, the transition on the normal state is set
+    // to none, while it's added back in the hover state, so the button decoration will fade in on hover, but
+    // it won't fade out when the pointer leave the button allocation area. To make the transition more evident
+    // in this case the duration is increased.
+    transition: none;
+    &:hover {
+      transition: $_button_transition;
+      transition-duration: 500ms;
+      &:active { transition: $_button_transition; }
+    }
+  }
   &:hover {
     @include button(hover);
     -gtk-image-effect: highlight;

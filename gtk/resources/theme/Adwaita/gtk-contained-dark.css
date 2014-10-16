@@ -390,8 +390,8 @@ GtkTextView {
 GtkCalendar.header .button.titlebutton {
   border: 1px solid;
   border-radius: 3px;
-  transition: all 200ms ease-out;
   padding: 5px 8px 6px;
+  transition: all 200ms ease-out;
   color: #eeeeec;
   outline-color: rgba(238, 238, 236, 0.3);
   border-color: #1c1f1f;
@@ -407,7 +407,17 @@ GtkCalendar.header .button.titlebutton {
     background-image: none;
     box-shadow: inset 0 1px rgba(255, 255, 255, 0), 0 1px rgba(238, 238, 236, 0);
     text-shadow: none;
-    icon-shadow: none; }
+    icon-shadow: none;
+    transition: none; }
+    .button.flat:hover, .header-bar .titlebutton.button:hover,
+    .titlebar .titlebutton.button:hover,
+    GtkCalendar.header .titlebutton.button:hover {
+      transition: all 200ms ease-out;
+      transition-duration: 500ms; }
+      .button.flat:hover:active, .header-bar .titlebutton.button:hover:active,
+      .titlebar .titlebutton.button:hover:active,
+      GtkCalendar.header .titlebutton.button:hover:active {
+        transition: all 200ms ease-out; }
   .button:hover, .header-bar .button.titlebutton:hover,
   .titlebar .button.titlebutton:hover,
   GtkCalendar.header .button.titlebutton:hover {
@@ -1892,13 +1902,13 @@ GtkTreeView.view {
   -GtkTreeView-tree-line-width: 1;
   -GtkTreeView-tree-line-pattern: '';
   -GtkTreeView-expander-size: 16;
-  border-left-color: rgba(238, 238, 236, 0.5);
+  border-left-color: #292929;
   border-top-color: #393f3f; }
   GtkTreeView.view:selected, GtkTreeView.view:backdrop:selected {
-    border-left-color: rgba(255, 255, 255, 0.5);
+    border-left-color: #225d9c;
     border-top-color: rgba(238, 238, 236, 0.1); }
   GtkTreeView.view:backdrop {
-    border-left-color: rgba(201, 203, 201, 0.5);
+    border-left-color: #393f3f;
     border-top: #393f3f; }
   GtkTreeView.view.expander {
     -gtk-icon-source: -gtk-icontheme("pan-end-symbolic");
