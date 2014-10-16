@@ -26,6 +26,8 @@
 #include "gtkstylecontext.h"
 #include "gtkmarshalers.h"
 #include "gtkprivate.h"
+#include "gtkrender.h"
+
 #include <epoxy/gl.h>
 
 /**
@@ -117,6 +119,7 @@
 
 typedef struct {
   GdkGLContext *context;
+  GError *error;
   GLuint framebuffer;
   gboolean has_alpha;
   gboolean has_depth_buffer;
@@ -216,7 +219,7 @@ gtk_gl_area_realize (GtkWidget *widget)
   window = gtk_widget_get_window (widget);
   priv->context = gdk_window_create_gl_context (window,
                                                 GDK_GL_PROFILE_DEFAULT,
-                                                NULL);
+                                                &priv->error);
   if (priv->context != NULL)
     {
       gdk_gl_context_make_current (priv->context);
@@ -247,6 +250,8 @@ gtk_gl_area_unrealize (GtkWidget *widget)
       gdk_gl_context_clear_current ();
     }
 
+  g_clear_error (&priv->error);
+
   GTK_WIDGET_CLASS (gtk_gl_area_parent_class)->unrealize (widget);
 }
 
@@ -255,6 +260,29 @@ gtk_gl_area_size_allocate (GtkWidget     *widget,
                            GtkAllocation *allocation)
 {
   GTK_WIDGET_CLASS (gtk_gl_area_parent_class)->size_allocate (widget, allocation);
+}
+
+static void
+gtk_gl_area_draw_error_screen (GtkGLArea *self,
+                               cairo_t   *cr,
+                               gint       width,
+                               gint       height)
+{
+  GtkGLAreaPrivate *priv = gtk_gl_area_get_instance_private (self);
+  PangoLayout *layout;
+  int layout_height;
+
+  layout = gtk_widget_create_pango_layout (GTK_WIDGET (self),
+                                           priv->error->message);
+  pango_layout_set_width (layout, width * PANGO_SCALE);
+  pango_layout_set_alignment (layout, PANGO_ALIGN_CENTER);
+  pango_layout_get_pixel_size (layout, NULL, &layout_height);
+  gtk_render_layout (gtk_widget_get_style_context (GTK_WIDGET (self)),
+                     cr,
+                     0, (height - layout_height) / 2,
+                     layout);
+
+  g_object_unref (layout);
 }
 
 static gboolean
@@ -269,7 +297,13 @@ gtk_gl_area_draw (GtkWidget *widget,
   GLenum status;
 
   if (priv->context == NULL)
-    return FALSE;
+    {
+      gtk_gl_area_draw_error_screen (self,
+                                     cr,
+                                     gtk_widget_get_allocated_width (widget),
+                                     gtk_widget_get_allocated_height (widget));
+      return FALSE;
+    }
 
   gtk_gl_area_make_current (self);
 
