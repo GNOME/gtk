@@ -1901,7 +1901,7 @@ static const char * const printer_attrs_detailed[] =
     "ipp-versions-supported",
     "multiple-document-handling-supported",
     "copies-supported",
-    "number-up-supported"
+    "number-up-supported",
     "media-col-default",
     "media-col-supported",
     "media-default",
