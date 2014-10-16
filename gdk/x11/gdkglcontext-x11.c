@@ -368,7 +368,7 @@ gdk_x11_gl_context_texture_from_surface (GdkGLContext *context,
   if (glx_pixmap == NULL)
     return FALSE;
 
-  window = gdk_gl_context_get_window (gdk_gl_context_get_current ());
+  window = gdk_gl_context_get_window (gdk_gl_context_get_current ())->impl_window;
   window_scale = gdk_window_get_scale_factor (window);
   window_height = gdk_window_get_height (window);
 
