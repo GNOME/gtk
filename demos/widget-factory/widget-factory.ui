@@ -3491,19 +3491,19 @@ microphone-sensitivity-medium-symbolic</property>
                                     <style>
                                       <class name="linked"/>
                                     </style>
-                                    <child> 
+                                    <child>
                                       <object class="GtkEntry">
                                         <property name="visible">True</property>
                                         <property name="placeholder-text">Street</property>
                                       </object>
                                     </child>
-                                    <child> 
+                                    <child>
                                       <object class="GtkEntry">
                                         <property name="visible">True</property>
                                         <property name="placeholder-text">City</property>
                                       </object>
                                     </child>
-                                    <child> 
+                                    <child>
                                       <object class="GtkEntry">
                                         <property name="visible">True</property>
                                         <property name="placeholder-text">Province</property>
@@ -3566,7 +3566,141 @@ microphone-sensitivity-medium-symbolic</property>
                               </object>
                             </child>
                           </object>
-                        </child> 
+                        </child>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkFrame">
+                        <property name="visible">True</property>
+                        <child>
+                          <object class="GtkBox">
+                            <property name="visible">True</property>
+                            <property name="orientation">horizontal</property>
+                            <child>
+                              <object class="GtkToolbar">
+                                <property name="visible">True</property>
+                                <property name="orientation">vertical</property>
+                                <property name="icon-size">1</property>
+                                <child>
+                                  <object class="GtkToolButton" id="toolbutton1">
+                                    <property name="visible">True</property>
+                                    <property name="icon-name">document-open-symbolic</property>
+                                  </object>
+                                </child>
+                                <child>
+                                  <object class="GtkToolButton" id="toolbutton2">
+                                    <property name="visible">True</property>
+                                    <property name="icon-name">send-to-symbolic</property>
+                                  </object>
+                                </child>
+                                <child>
+                                  <object class="GtkToolButton" id="toolbutton3">
+                                    <property name="visible">True</property>
+                                    <property name="icon-name">view-fullscreen-symbolic</property>
+                                  </object>
+                                </child>
+                                <child>
+                                  <object class="GtkToolButton" id="toolbutton4">
+                                    <property name="visible">True</property>
+                                    <property name="icon-name">star-new-symbolic</property>
+                                  </object>
+                                </child>
+                              </object>
+                            </child>
+                            <child>
+                              <object class="GtkTextView" id="tooltextview">
+                                <property name="visible">True</property>
+                              </object>
+                              <packing>
+                                <property name="expand">True</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <object class="GtkBox">
+                                <property name="visible">True</property>
+                                <property name="orientation">vertical</property>
+                                <property name="margin">6</property>
+                                <child>
+                                  <object class="GtkBox">
+                                    <property name="visible">True</property>
+                                    <property name="orientation">vertical</property>
+                                    <style>
+                                      <class name="linked"/>
+                                    </style>
+                                    <child>
+                                      <object class="GtkButton" id="cutbutton">
+                                        <property name="visible">True</property>
+                                        <property name="sensitive">False</property>
+                                        <style>
+                                          <class name="image-button"/>
+                                        </style>
+                                        <child>
+                                          <object class="GtkImage">
+                                            <property name="visible">True</property>
+                                            <property name="icon-size">1</property>
+                                            <property name="icon-name">edit-cut-symbolic</property>
+                                          </object>
+                                        </child>
+                                      </object>
+                                    </child>
+                                    <child>
+                                      <object class="GtkButton" id="copybutton">
+                                        <property name="visible">True</property>
+                                        <property name="sensitive">False</property>
+                                        <style>
+                                          <class name="image-button"/>
+                                        </style>
+                                        <child>
+                                          <object class="GtkImage">
+                                            <property name="visible">True</property>
+                                            <property name="icon-size">1</property>
+                                            <property name="icon-name">edit-copy-symbolic</property>
+                                          </object>
+                                        </child>
+                                      </object>
+                                    </child>
+                                    <child>
+                                      <object class="GtkButton" id="pastebutton">
+                                        <property name="visible">True</property>
+                                        <property name="sensitive">False</property>
+                                        <style>
+                                          <class name="image-button"/>
+                                        </style>
+                                        <child>
+                                          <object class="GtkImage">
+                                            <property name="visible">True</property>
+                                            <property name="icon-size">1</property>
+                                            <property name="icon-name">edit-paste-symbolic</property>
+                                          </object>
+                                        </child>
+                                      </object>
+                                    </child>
+                                  </object>
+                                </child>
+                                <child>
+                                  <object class="GtkButton" id="deletebutton">
+                                    <property name="visible">True</property>
+                                    <property name="sensitive">False</property>
+                                    <property name="valign">end</property>
+                                    <style>
+                                      <class name="image-button"/>
+                                    </style>
+                                    <child>
+                                      <object class="GtkImage">
+                                        <property name="visible">True</property>
+                                        <property name="icon-size">1</property>
+                                        <property name="icon-name">edit-delete-symbolic</property>
+                                      </object>
+                                    </child>
+                                  </object>
+                                  <packing>
+                                    <property name="expand">True</property>
+                                  </packing>
+                                </child>
+                              </object>
+                            </child>
+                          </object>
+                        </child>
                       </object>
                     </child>
                   </object>

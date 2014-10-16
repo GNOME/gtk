@@ -917,6 +917,79 @@ toggle_selection_mode (GtkSwitch  *sw,
 }
 
 static void
+handle_insert (GtkWidget *button, GtkWidget *textview)
+{
+  GtkTextBuffer *buffer;
+  const gchar *id;
+  const gchar *text;
+
+  id = gtk_buildable_get_name (GTK_BUILDABLE (button));
+
+  if (strcmp (id, "toolbutton1") == 0)
+    text = "⌘";
+  else if (strcmp (id, "toolbutton2") == 0)
+    text = "⚽";
+  else if (strcmp (id, "toolbutton3") == 0)
+    text = "⤢";
+  else if (strcmp (id, "toolbutton4") == 0)
+    text = "☆";
+  else
+    text = "";
+
+  buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (textview));
+  gtk_text_buffer_insert_at_cursor (buffer, text, -1);
+}
+
+static void
+handle_cutcopypaste (GtkWidget *button, GtkWidget *textview)
+{
+  GtkTextBuffer *buffer;
+  GtkClipboard *clipboard;
+  const gchar *id;
+
+  clipboard = gtk_widget_get_clipboard (textview, GDK_SELECTION_CLIPBOARD);
+  buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (textview));
+  id = gtk_buildable_get_name (GTK_BUILDABLE (button));
+
+  if (strcmp (id, "cutbutton") == 0)
+    gtk_text_buffer_cut_clipboard (buffer, clipboard, TRUE);
+  else if (strcmp (id, "copybutton") == 0)
+    gtk_text_buffer_copy_clipboard (buffer, clipboard);
+  else if (strcmp (id, "pastebutton") == 0)
+    gtk_text_buffer_paste_clipboard (buffer, clipboard, NULL, TRUE);
+  else if (strcmp (id, "deletebutton") == 0)
+    gtk_text_buffer_delete_selection (buffer, TRUE, TRUE);
+}
+
+static void
+clipboard_owner_change (GtkClipboard *clipboard, GdkEvent *event, GtkWidget *button)
+{
+  const gchar *id;
+  gboolean has_text;
+
+  id = gtk_buildable_get_name (GTK_BUILDABLE (button));
+  has_text = gtk_clipboard_wait_is_text_available (clipboard);
+
+  if (strcmp (id, "pastebutton") == 0)
+    gtk_widget_set_sensitive (button, has_text);
+}
+
+static void
+textbuffer_notify_selection (GObject *object, GParamSpec *pspec, GtkWidget *button)
+{
+  const gchar *id;
+  gboolean has_selection;
+
+  id = gtk_buildable_get_name (GTK_BUILDABLE (button));
+  has_selection = gtk_text_buffer_get_has_selection (GTK_TEXT_BUFFER (object));
+
+  if (strcmp (id, "cutbutton") == 0 ||
+      strcmp (id, "copybutton") == 0 ||
+      strcmp (id, "deletebutton") == 0)
+    gtk_widget_set_sensitive (button, has_selection);
+}
+
+static void
 activate (GApplication *app)
 {
   GtkBuilder *builder;
@@ -1081,6 +1154,33 @@ activate (GApplication *app)
   set_accel (GTK_APPLICATION (app), GTK_WIDGET (gtk_builder_get_object (builder, "searchmenuitem")));
   set_accel (GTK_APPLICATION (app), GTK_WIDGET (gtk_builder_get_object (builder, "darkmenuitem")));
   set_accel (GTK_APPLICATION (app), GTK_WIDGET (gtk_builder_get_object (builder, "aboutmenuitem")));
+
+  widget2 = (GtkWidget *)gtk_builder_get_object (builder, "tooltextview");
+
+  widget = (GtkWidget *)gtk_builder_get_object (builder, "toolbutton1");
+  g_signal_connect (widget, "clicked", G_CALLBACK (handle_insert), widget2);
+  widget = (GtkWidget *)gtk_builder_get_object (builder, "toolbutton2");
+  g_signal_connect (widget, "clicked", G_CALLBACK (handle_insert), widget2);
+  widget = (GtkWidget *)gtk_builder_get_object (builder, "toolbutton3");
+  g_signal_connect (widget, "clicked", G_CALLBACK (handle_insert), widget2);
+  widget = (GtkWidget *)gtk_builder_get_object (builder, "toolbutton4");
+  g_signal_connect (widget, "clicked", G_CALLBACK (handle_insert), widget2);
+  widget = (GtkWidget *)gtk_builder_get_object (builder, "cutbutton");
+  g_signal_connect (widget, "clicked", G_CALLBACK (handle_cutcopypaste), widget2);
+  g_signal_connect (gtk_text_view_get_buffer (GTK_TEXT_VIEW (widget2)), "notify::has-selection",
+                    G_CALLBACK (textbuffer_notify_selection), widget);
+  widget = (GtkWidget *)gtk_builder_get_object (builder, "copybutton");
+  g_signal_connect (widget, "clicked", G_CALLBACK (handle_cutcopypaste), widget2);
+  g_signal_connect (gtk_text_view_get_buffer (GTK_TEXT_VIEW (widget2)), "notify::has-selection",
+                    G_CALLBACK (textbuffer_notify_selection), widget);
+  widget = (GtkWidget *)gtk_builder_get_object (builder, "deletebutton");
+  g_signal_connect (widget, "clicked", G_CALLBACK (handle_cutcopypaste), widget2);
+  g_signal_connect (gtk_text_view_get_buffer (GTK_TEXT_VIEW (widget2)), "notify::has-selection",
+                    G_CALLBACK (textbuffer_notify_selection), widget);
+  widget = (GtkWidget *)gtk_builder_get_object (builder, "pastebutton");
+  g_signal_connect (widget, "clicked", G_CALLBACK (handle_cutcopypaste), widget2);
+  g_signal_connect (gtk_widget_get_clipboard (widget2, GDK_SELECTION_CLIPBOARD), "owner-change",
+                    G_CALLBACK (clipboard_owner_change), widget);
 
   gtk_widget_show_all (GTK_WIDGET (window));
 
