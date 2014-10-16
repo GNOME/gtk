@@ -3608,8 +3608,15 @@ microphone-sensitivity-medium-symbolic</property>
                               </object>
                             </child>
                             <child>
-                              <object class="GtkTextView" id="tooltextview">
+                              <object class="GtkScrolledWindow">
                                 <property name="visible">True</property>
+                                <property name="hscrollbar-policy">automatic</property>
+                                <property name="vscrollbar-policy">automatic</property>
+                                <child>
+                                  <object class="GtkTextView" id="tooltextview">
+                                    <property name="visible">True</property>
+                                  </object>
+                                </child>
                               </object>
                               <packing>
                                 <property name="expand">True</property>
