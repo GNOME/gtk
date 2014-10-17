@@ -32,12 +32,11 @@
 .background {
   color: #2e3436;
   background-color: #ededed; }
-
-.background:backdrop {
-  text-shadow: none;
-  icon-shadow: none;
-  color: #454f52;
-  background-color: #ededed; }
+  .background:backdrop {
+    text-shadow: none;
+    icon-shadow: none;
+    color: #8d9091;
+    background-color: #ededed; }
 
 /*
    These wildcard seems unavoidable, need to investigate.
