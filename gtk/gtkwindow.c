@@ -3977,7 +3977,8 @@ gtk_window_set_titlebar (GtkWindow *window,
       priv->custom_title = FALSE;
       priv->client_decorated = FALSE;
       gtk_style_context_remove_class (gtk_widget_get_style_context (widget), GTK_STYLE_CLASS_CSD);
-      return;
+
+      goto out;
     }
 
   if (gtk_window_supports_csd (window))
@@ -4001,6 +4002,7 @@ gtk_window_set_titlebar (GtkWindow *window,
   gtk_style_context_add_class (gtk_widget_get_style_context (titlebar),
                                GTK_STYLE_CLASS_TITLEBAR);
 
+out:
   if (was_mapped)
     gtk_widget_map (widget);
 }
