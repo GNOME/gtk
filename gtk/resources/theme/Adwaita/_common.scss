@@ -56,16 +56,15 @@
  ***************/
 
 .background {
-    color: $fg_color;
-    background-color: $bg_color;
-}
+  color: $fg_color;
+  background-color: $bg_color;
 
-.background:backdrop {
+  &:backdrop {
     text-shadow: none;
     icon-shadow: none;
-
-    color: lighten($fg_color,10%);
+    color: $backdrop_fg_color;
     background-color: $backdrop_bg_color;
+  }
 }
 
 /*
