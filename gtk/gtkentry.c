@@ -3034,6 +3034,9 @@ gtk_entry_finalize (GObject *object)
   if (priv->tabs)
     pango_tab_array_free (priv->tabs);
 
+  if (priv->attrs)
+    pango_attr_list_unref (priv->attrs);
+
   G_OBJECT_CLASS (gtk_entry_parent_class)->finalize (object);
 }
 
