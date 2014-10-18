@@ -73,6 +73,12 @@ Patches should be in unified diff form. (The -up option to GNU diff)
 Even better are git-formatted patches. (Use git format-patch)
 
 
+Release notes for 3.16
+======================
+
+* GTK+ now includes an OpenGL rendering widget. To support GL on various
+  platforms, GTK+ uses libepoxy.
+
 Release notes for 3.14
 ======================
 

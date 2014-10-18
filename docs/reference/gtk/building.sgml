@@ -256,6 +256,19 @@ How to compile GTK+ itself
       </listitem>
       <listitem>
         <para>
+          <ulink url="https://github.com/anholt/libepoxy">libepoxy</ulink>
+          is a library that abstracts the differences between different
+          OpenGL libraries. GTK+ uses it for cross-platform GL support.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          The <ulink url="http://wayland.freedesktop.org">Wayland</ulink> libraries
+          are needed to build GTK+ with the Wayland backend.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           The <ulink url="http://www.freedesktop.org/wiki/Software/shared-mime-info">shared-mime-info</ulink>
           package is not a hard dependency of GTK+, but it contains definitions
           for mime types that are used by GIO and, indirectly, by GTK+.
@@ -264,7 +277,7 @@ How to compile GTK+ itself
           <envar>XDG_DATA_DIRS</envar> set accordingly at configure time.
           Otherwise, gdk-pixbuf falls back to its built-in mime type detection.
         </para>
-      </listitem>
+      <listitem>
     </itemizedlist>
   </refsect1>
   <refsect1 id="building">

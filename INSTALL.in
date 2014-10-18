@@ -9,9 +9,13 @@ GTK+ requires the following packages:
    GdkPixbuf @GDK_PIXBUF_REQUIRED_VERSION@, ATK @ATK_REQUIRED_VERSION@
    and cairo @CAIRO_REQUIRED_VERSION@.
 
+ - libepoxy, for cross-platform OpenGL support.
+   It can be found here: https://github.com/anholt/libepoxy
+
  - Each GDK backend has its own backend-specific requirements. For
    the X11 backend, X11 R6 and XInput version 2 (as well as a number
-   of other extensions) are required.
+   of other extensions) are required. The Wayland backend requires
+   (obviously) the Wayland libraries.
 
  - gobject-introspection @INTROSPECTION_REQUIRED_VERSION@ or newer.
 
