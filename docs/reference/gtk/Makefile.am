@@ -84,6 +84,7 @@ IGNORE_HFILES=				\
 	gtktextbufferserializ.h		\
 	gtktextchildprivate.h		\
 	gtktextdisplay.h		\
+	gtktexthandleprivate.h		\
 	gtktextiterprivate.h		\
 	gtktextlayout.h			\
 	gtktextmarkprivate.h		\
