@@ -3543,6 +3543,7 @@ gtk_tearoff_menu_item_get_type
 <FILE>gtktextbuffer</FILE>
 <TITLE>GtkTextBuffer</TITLE>
 GtkTextBuffer
+GtkTextBufferClass
 gtk_text_buffer_new
 gtk_text_buffer_get_line_count
 gtk_text_buffer_get_char_count
@@ -3629,9 +3630,9 @@ GTK_TYPE_TEXT_BUFFER
 GTK_TEXT_BUFFER_CLASS
 GTK_IS_TEXT_BUFFER_CLASS
 GTK_TEXT_BUFFER_GET_CLASS
+gtk_text_buffer_get_type
 <SUBSECTION Private>
 GtkTextBufferPrivate
-gtk_text_buffer_get_type
 </SECTION>
 
 <SECTION>
