@@ -4522,25 +4522,62 @@ GtkCalendar.header .menuitem.titlebutton.button:selected, .list-row:selected {
 .monospace {
   font: Monospace; }
 
-/* GTK NAMED COLORS */
+/* GTK NAMED COLORS
+   ----------------
+   use responsibly! */
+/*
+widget text/foregroung color */
 @define-color theme_fg_color #2e3436;
+/*
+widget base background color */
 @define-color theme_bg_color #ededed;
+/*
+text widgets and the like base background color */
 @define-color theme_base_color #ffffff;
+/*
+base background color of selections */
 @define-color theme_selected_bg_color #4a90d9;
+/*
+text/foreground color of selections */
 @define-color theme_selected_fg_color #ffffff;
+/*
+base background color of insensitive widgets */
 @define-color insensitive_bg_color #f4f4f4;
+/*
+text foreground color of insensitive widgets */
 @define-color insensitive_fg_color #8d9091;
+/*
+insensitive text widgets and the like base background color */
 @define-color insensitive_base_color #ffffff;
+/*
+widget text/foreground color on backdrop windows */
 @define-color theme_unfocused_fg_color #8d9091;
+/*
+widget base background color on backdrop windows */
 @define-color theme_unfocused_bg_color #ededed;
+/*
+text widgets and the like base background color on backdrop windows */
 @define-color theme_unfocused_base_color #fcfcfc;
+/*
+base background color of selections on backdrop windows */
 @define-color theme_unfocused_selected_bg_color #4a90d9;
+/*
+text/foreground color of selections on backdrop windows */
 @define-color theme_unfocused_selected_fg_color #ffffff;
+/*
+widgets main borders color */
 @define-color borders #a1a1a1;
+/*
+widgets main borders color on backdrop windows */
 @define-color unfocused_borders #a8a8a8;
+/*
+these are pretty self explicative */
 @define-color warning_color #f57900;
 @define-color error_color #cc0000;
 @define-color success_color #73d216;
+/*
+these colors are exported for the window manager and shouldn't be used in applications,
+read if you used those and something break with a version upgrade you're on your own... */
 @define-color wm_title shade(#2e3436, 1.8);
 @define-color wm_unfocused_title #8d9091;
 @define-color wm_highlight white;
