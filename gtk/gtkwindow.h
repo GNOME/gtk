@@ -482,6 +482,8 @@ gboolean gtk_window_get_resize_grip_area   (GtkWindow    *window,
 GDK_AVAILABLE_IN_3_10
 void     gtk_window_set_titlebar           (GtkWindow    *window,
                                             GtkWidget    *titlebar);
+GDK_AVAILABLE_IN_3_16
+GtkWidget *gtk_window_get_titlebar         (GtkWindow    *window);
 
 GDK_AVAILABLE_IN_3_12
 gboolean gtk_window_is_maximized           (GtkWindow    *window);

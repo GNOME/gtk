@@ -4007,6 +4007,31 @@ out:
     gtk_widget_map (widget);
 }
 
+/**
+ * gtk_window_get_titlebar:
+ * @window: a #GtkWindow
+ *
+ * Returns the custom titlebar that has been set with
+ * gtk_window_set_titlebar().
+ *
+ * Returns: (transfer none): the custom titlebar, or %NULL
+ *
+ * Since: 3.16
+ */
+GtkWidget *
+gtk_window_get_titlebar (GtkWindow *window)
+{
+  GtkWindowPrivate *priv = window->priv;
+
+  g_return_val_if_fail (GTK_IS_WINDOW (window), NULL);
+
+  /* Don't return the internal titlebar */
+  if (priv->title_box == priv->titlebar)
+    return NULL;
+
+  return priv->title_box;
+}
+
 gboolean
 _gtk_window_titlebar_shows_app_menu (GtkWindow *window)
 {
