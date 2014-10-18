@@ -405,8 +405,8 @@ gtk_about_dialog_class_init (GtkAboutDialogClass *klass)
    */
   props[PROP_LICENSE] =
     g_param_spec_string ("license",
-                         _("License"),
-                         _("The license of the program"),
+                         P_("License"),
+                         P_("The license of the program"),
                          NULL,
                          GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY);
 
@@ -694,7 +694,7 @@ apply_use_header_bar (GtkAboutDialog *about)
       action_area = gtk_dialog_get_action_area (GTK_DIALOG (about));
       G_GNUC_END_IGNORE_DEPRECATIONS
 
-      priv->credits_button = gtk_toggle_button_new_with_mnemonic ("C_redits");
+      priv->credits_button = gtk_toggle_button_new_with_mnemonic (_("C_redits"));
       g_object_bind_property (priv->credits_page, "visible",
                               priv->credits_button, "visible", G_BINDING_SYNC_CREATE);
       g_signal_connect (priv->credits_button, "toggled", G_CALLBACK (toggle_credits), about);
@@ -702,7 +702,7 @@ apply_use_header_bar (GtkAboutDialog *about)
                                          "secondary", TRUE,
                                          NULL);
 
-      priv->license_button = gtk_toggle_button_new_with_mnemonic ("_License");
+      priv->license_button = gtk_toggle_button_new_with_mnemonic (_("_License"));
       g_object_bind_property (priv->license_page, "visible",
                               priv->license_button, "visible", G_BINDING_SYNC_CREATE);
       g_signal_connect (priv->license_button, "toggled", G_CALLBACK (toggle_license), about);
@@ -711,7 +711,7 @@ apply_use_header_bar (GtkAboutDialog *about)
                                          NULL);
 
 
-      gtk_dialog_add_button (GTK_DIALOG (about), "_Close", GTK_RESPONSE_DELETE_EVENT);
+      gtk_dialog_add_button (GTK_DIALOG (about), _("_Close"), GTK_RESPONSE_DELETE_EVENT);
     }
 }
 
