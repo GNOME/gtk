@@ -49,10 +49,16 @@ struct _GtkMenuSectionBox
   gint               depth;
 };
 
+typedef struct
+{
+  gint     n_items;
+  gboolean previous_is_iconic;
+} MenuData;
+
 G_DEFINE_TYPE (GtkMenuSectionBox, gtk_menu_section_box, GTK_TYPE_BOX)
 
 void                    gtk_menu_section_box_sync_separators            (GtkMenuSectionBox  *box,
-                                                                         gint               *n_items);
+                                                                         MenuData           *data);
 void                    gtk_menu_section_box_new_submenu                (GtkMenuTrackerItem *item,
                                                                          GtkMenuSectionBox  *toplevel,
                                                                          GtkWidget          *focus);
@@ -63,12 +69,12 @@ static void
 gtk_menu_section_box_sync_item (GtkWidget *widget,
                                 gpointer   user_data)
 {
-  gint *n_items = user_data;
+  MenuData *data = (MenuData *)user_data;
 
   if (GTK_IS_MENU_SECTION_BOX (widget))
-    gtk_menu_section_box_sync_separators (GTK_MENU_SECTION_BOX (widget), n_items);
+    gtk_menu_section_box_sync_separators (GTK_MENU_SECTION_BOX (widget), data);
   else
-    (*n_items)++;
+    data->n_items++;
 }
 
 /* We are trying to implement the following rules here:
@@ -78,26 +84,32 @@ gtk_menu_section_box_sync_item (GtkWidget *widget,
  * rule 3: don't show a separator for the first section
  * rule 4: don't show a separator for the following sections if there are
  *         no items before it
- * (rule 5: these rules don't apply exactly the same way for subsections)
+ * rule 5: never show separators directly above or below an iconic box
+ * (rule 6: these rules don't apply exactly the same way for subsections)
  */
 void
 gtk_menu_section_box_sync_separators (GtkMenuSectionBox *box,
-                                      gint              *n_items)
+                                      MenuData          *data)
 {
+  GtkWidget *parent_widget;
+  gboolean previous_section_is_iconic;
   gboolean should_have_separator;
+  gboolean should_have_top_margin = FALSE;
+  gboolean is_not_empty_item;
   gboolean has_separator;
   gboolean has_label;
-  gint n_items_before = *n_items;
+  gboolean separator_condition;
+  gint n_items_before;
 
-  gtk_container_foreach (GTK_CONTAINER (box->item_box), gtk_menu_section_box_sync_item, n_items);
+  n_items_before =  data->n_items;
+  previous_section_is_iconic = data->previous_is_iconic;
 
-  if (box->iconic)
-    {
-      if (n_items_before > 0)
-        gtk_widget_set_margin_top (GTK_WIDGET (box->item_box), 10);
-      else
-        gtk_widget_set_margin_top (GTK_WIDGET (box->item_box), 0);
-    }
+  gtk_container_foreach (GTK_CONTAINER (box->item_box), gtk_menu_section_box_sync_item, data);
+
+  is_not_empty_item = (data->n_items > n_items_before);
+
+  if (is_not_empty_item)
+    data->previous_is_iconic = box->iconic;
 
   if (box->separator == NULL)
     return;
@@ -105,7 +117,19 @@ gtk_menu_section_box_sync_separators (GtkMenuSectionBox *box,
   has_separator = gtk_widget_get_parent (box->separator) != NULL;
   has_label = !GTK_IS_SEPARATOR (box->separator);
 
-  should_have_separator = (has_label || (n_items_before > 0 && box->depth <= 1)) && *n_items > n_items_before;
+  separator_condition = has_label ? TRUE : n_items_before > 0 &&
+                                           box->depth <= 1 &&
+                                           !previous_section_is_iconic &&
+                                           !box->iconic;
+
+  should_have_separator = separator_condition && is_not_empty_item;
+
+  should_have_top_margin = !should_have_separator &&
+                           (box->depth <= 1 || box->iconic) &&
+                           n_items_before > 0 &&
+                           is_not_empty_item;
+
+  gtk_widget_set_margin_top (GTK_WIDGET (box->item_box), should_have_top_margin ? 10 : 0);
 
   if (should_have_separator == has_separator)
     return;
@@ -120,9 +144,11 @@ static gboolean
 gtk_menu_section_box_handle_sync_separators (gpointer user_data)
 {
   GtkMenuSectionBox *box = user_data;
-  gint n_items = 0;
+  MenuData data;
 
-  gtk_menu_section_box_sync_separators (box, &n_items);
+  data.n_items = 0;
+  data.previous_is_iconic = FALSE;
+  gtk_menu_section_box_sync_separators (box, &data);
 
   box->separator_sync_idle = 0;
 
@@ -329,11 +355,7 @@ gtk_menu_section_box_dispose (GObject *object)
       box->separator_sync_idle = 0;
     }
 
-  if (box->separator)
-    {
-      gtk_widget_destroy (box->separator);
-      box->separator = NULL;
-    }
+  g_clear_object (&box->separator);
 
   if (box->size_group)
     {
@@ -448,7 +470,10 @@ gtk_menu_section_box_new_section (GtkMenuTrackerItem *item,
       g_object_bind_property (item, "label", title, "label", G_BINDING_SYNC_CREATE);
       gtk_style_context_add_class (gtk_widget_get_style_context (title), GTK_STYLE_CLASS_SEPARATOR);
       gtk_widget_set_halign (title, GTK_ALIGN_START);
+
       box->separator = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
+      g_object_ref_sink (box->separator);
+
       g_object_set (box->separator,
                     "margin-start", 12,
                     "margin-end", 12,
@@ -462,6 +487,8 @@ gtk_menu_section_box_new_section (GtkMenuTrackerItem *item,
   else
     {
       box->separator = separator;
+      g_object_ref_sink (box->separator);
+
       g_object_set (box->separator,
                     "margin-start", 12,
                     "margin-end", 12,
@@ -470,8 +497,6 @@ gtk_menu_section_box_new_section (GtkMenuTrackerItem *item,
                     NULL);
       gtk_widget_show (box->separator);
     }
-
-  g_object_add_weak_pointer (G_OBJECT (box->separator), (gpointer *)&(box->separator));
 
   box->tracker = gtk_menu_tracker_new_for_item_link (item, G_MENU_LINK_SECTION, FALSE,
                                                      gtk_menu_section_box_insert_func,
