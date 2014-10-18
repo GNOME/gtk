@@ -28,6 +28,7 @@
 #include "gtkcsscornervalueprivate.h"
 #include "gtkcssenumvalueprivate.h"
 #include "gtkcssimagevalueprivate.h"
+#include "gtkcssnodedeclarationprivate.h"
 #include "gtkcssnumbervalueprivate.h"
 #include "gtkcssrgbavalueprivate.h"
 #include "gtkcssshadowsvalueprivate.h"
@@ -129,14 +130,7 @@
 #define GTK_STYLE_CONTEXT_CACHED_CHANGE (GTK_CSS_CHANGE_STATE)
 
 typedef struct GtkStyleInfo GtkStyleInfo;
-typedef struct GtkRegion GtkRegion;
 typedef struct PropertyValue PropertyValue;
-
-struct GtkRegion
-{
-  GQuark class_quark;
-  GtkRegionFlags flags;
-};
 
 struct PropertyValue
 {
@@ -147,10 +141,7 @@ struct PropertyValue
 
 struct GtkStyleInfo
 {
-  GArray *style_classes;
-  GArray *regions;
-  GtkJunctionSides junction_sides;
-  GtkStateFlags state_flags;
+  GtkCssNodeDeclaration *decl;
   GtkCssComputedValues *values;
 };
 
@@ -306,8 +297,7 @@ style_info_new (void)
   GtkStyleInfo *info;
 
   info = g_slice_new0 (GtkStyleInfo);
-  info->style_classes = g_array_new (FALSE, FALSE, sizeof (GQuark));
-  info->regions = g_array_new (FALSE, FALSE, sizeof (GtkRegion));
+  info->decl = gtk_css_node_declaration_new ();
 
   return info;
 }
@@ -333,8 +323,7 @@ style_info_free (GtkStyleInfo *info)
 {
   if (info->values)
     g_object_unref (info->values);
-  g_array_free (info->style_classes, TRUE);
-  g_array_free (info->regions, TRUE);
+  gtk_css_node_declaration_unref (info->decl);
   g_slice_free (GtkStyleInfo, info);
 }
 
@@ -356,16 +345,7 @@ style_info_copy (GtkStyleInfo *info)
   GtkStyleInfo *copy;
 
   copy = style_info_new ();
-  g_array_insert_vals (copy->style_classes, 0,
-                       info->style_classes->data,
-                       info->style_classes->len);
-
-  g_array_insert_vals (copy->regions, 0,
-                       info->regions->data,
-                       info->regions->len);
-
-  copy->junction_sides = info->junction_sides;
-  copy->state_flags = info->state_flags;
+  copy->decl = gtk_css_node_declaration_ref (info->decl);
   style_info_set_values (copy, info->values);
 
   return copy;
@@ -374,28 +354,9 @@ style_info_copy (GtkStyleInfo *info)
 static guint
 style_info_hash (gconstpointer elem)
 {
-  const GtkStyleInfo *info;
-  guint i, hash = 0;
+  const GtkStyleInfo *info = elem;
 
-  info = elem;
-
-  for (i = 0; i < info->style_classes->len; i++)
-    {
-      hash += g_array_index (info->style_classes, GQuark, i);
-      hash <<= 5;
-    }
-
-  for (i = 0; i < info->regions->len; i++)
-    {
-      GtkRegion *region;
-
-      region = &g_array_index (info->regions, GtkRegion, i);
-      hash += region->class_quark;
-      hash += region->flags;
-      hash <<= 5;
-    }
-
-  return hash ^ info->state_flags;
+  return gtk_css_node_declaration_hash (info->decl);
 }
 
 static gboolean
@@ -407,29 +368,7 @@ style_info_equal (gconstpointer elem1,
   info1 = elem1;
   info2 = elem2;
 
-  if (info1->state_flags != info2->state_flags)
-    return FALSE;
-
-  if (info1->junction_sides != info2->junction_sides)
-    return FALSE;
-
-  if (info1->style_classes->len != info2->style_classes->len)
-    return FALSE;
-
-  if (memcmp (info1->style_classes->data,
-              info2->style_classes->data,
-              info1->style_classes->len * sizeof (GQuark)) != 0)
-    return FALSE;
-
-  if (info1->regions->len != info2->regions->len)
-    return FALSE;
-
-  if (memcmp (info1->regions->data,
-              info2->regions->data,
-              info1->regions->len * sizeof (GtkRegion)) != 0)
-    return FALSE;
-
-  return TRUE;
+  return gtk_css_node_declaration_equal (info1->decl, info2->decl);
 }
 
 static void
@@ -490,7 +429,7 @@ gtk_style_context_init (GtkStyleContext *style_context)
 
   /* Create default info store */
   priv->info = style_info_new ();
-  priv->info->state_flags = GTK_STATE_FLAG_DIR_LTR;
+  gtk_css_node_declaration_set_state (&priv->info->decl, GTK_STATE_FLAG_DIR_LTR);
 
   priv->property_cache = g_array_new (FALSE, FALSE, sizeof (PropertyValue));
 
@@ -717,40 +656,6 @@ gtk_style_context_is_saved (GtkStyleContext *context)
   return context->priv->saved_nodes != NULL;
 }
 
-static void
-style_info_add_to_widget_path (GtkStyleInfo  *info,
-                               GtkWidgetPath *path,
-                               guint          pos)
-{
-  guint i;
-
-  /* Set widget regions */
-  for (i = 0; i < info->regions->len; i++)
-    {
-      GtkRegion *region;
-
-      region = &g_array_index (info->regions, GtkRegion, i);
-G_GNUC_BEGIN_IGNORE_DEPRECATIONS
-      gtk_widget_path_iter_add_region (path, pos,
-                                       g_quark_to_string (region->class_quark),
-                                       region->flags);
-G_GNUC_END_IGNORE_DEPRECATIONS
-    }
-
-  /* Set widget classes */
-  for (i = 0; i < info->style_classes->len; i++)
-    {
-      GQuark quark;
-
-      quark = g_array_index (info->style_classes, GQuark, i);
-      gtk_widget_path_iter_add_class (path, pos,
-                                      g_quark_to_string (quark));
-    }
-
-  /* Set widget state */
-  gtk_widget_path_iter_set_state (path, pos, info->state_flags);
-}
-
 static GtkWidgetPath *
 create_query_path (GtkStyleContext *context,
                    GtkStyleInfo    *info)
@@ -767,15 +672,15 @@ create_query_path (GtkStyleContext *context,
       GtkStyleInfo *root = g_slist_last (context->priv->saved_nodes)->data;
 
       if (length > 0)
-        style_info_add_to_widget_path (root, path, length - 1);
+        gtk_css_node_declaration_add_to_widget_path (root->decl, path, length - 1);
 
-      gtk_widget_path_append_type (path, length > 0 ?gtk_widget_path_iter_get_object_type (path, length - 1) : G_TYPE_NONE);
-      style_info_add_to_widget_path (info, path, length);
+      gtk_widget_path_append_type (path, length > 0 ? gtk_widget_path_iter_get_object_type (path, length - 1) : G_TYPE_NONE);
+      gtk_css_node_declaration_add_to_widget_path (info->decl, path, length);
     }
   else
     {
       if (length > 0)
-        style_info_add_to_widget_path (info, path, length - 1);
+        gtk_css_node_declaration_add_to_widget_path (info->decl, path, length - 1);
     }
 
   return path;
@@ -856,7 +761,7 @@ style_values_lookup_for_state (GtkStyleContext *context,
 {
   GtkCssComputedValues *values;
 
-  if (context->priv->info->state_flags == state)
+  if (gtk_css_node_declaration_get_state (context->priv->info->decl) == state)
     return style_values_lookup (context);
 
   gtk_style_context_save (context);
@@ -1296,11 +1201,10 @@ gtk_style_context_set_state (GtkStyleContext *context,
   GtkStateFlags old_flags;
   g_return_if_fail (GTK_IS_STYLE_CONTEXT (context));
 
-  old_flags = context->priv->info->state_flags;
-  if (old_flags == flags)
-    return;
+  old_flags = gtk_css_node_declaration_get_state (context->priv->info->decl);
 
-  context->priv->info->state_flags = flags;
+  if (!gtk_css_node_declaration_set_state (&context->priv->info->decl, flags))
+    return;
 
   if (((old_flags ^ flags) & (GTK_STATE_FLAG_DIR_LTR | GTK_STATE_FLAG_DIR_RTL)) &&
       !gtk_style_context_is_saved (context))
@@ -1324,7 +1228,7 @@ gtk_style_context_get_state (GtkStyleContext *context)
 {
   g_return_val_if_fail (GTK_IS_STYLE_CONTEXT (context), 0);
 
-  return context->priv->info->state_flags;
+  return gtk_css_node_declaration_get_state (context->priv->info->decl);
 }
 
 /**
@@ -1583,98 +1487,6 @@ gtk_style_context_restore (GtkStyleContext *context)
   gtk_style_context_pop_style_info (context);
 }
 
-static gboolean
-style_class_find (GArray *array,
-                  GQuark  class_quark,
-                  guint  *position)
-{
-  gint min, max, mid;
-  gboolean found = FALSE;
-  guint pos;
-
-  if (position)
-    *position = 0;
-
-  if (!array || array->len == 0)
-    return FALSE;
-
-  min = 0;
-  max = array->len - 1;
-
-  do
-    {
-      GQuark item;
-
-      mid = (min + max) / 2;
-      item = g_array_index (array, GQuark, mid);
-
-      if (class_quark == item)
-        {
-          found = TRUE;
-          pos = mid;
-        }
-      else if (class_quark > item)
-        min = pos = mid + 1;
-      else
-        {
-          max = mid - 1;
-          pos = mid;
-        }
-    }
-  while (!found && min <= max);
-
-  if (position)
-    *position = pos;
-
-  return found;
-}
-
-static gboolean
-region_find (GArray *array,
-             GQuark  class_quark,
-             guint  *position)
-{
-  gint min, max, mid;
-  gboolean found = FALSE;
-  guint pos;
-
-  if (position)
-    *position = 0;
-
-  if (!array || array->len == 0)
-    return FALSE;
-
-  min = 0;
-  max = array->len - 1;
-
-  do
-    {
-      GtkRegion *region;
-
-      mid = (min + max) / 2;
-      region = &g_array_index (array, GtkRegion, mid);
-
-      if (region->class_quark == class_quark)
-        {
-          found = TRUE;
-          pos = mid;
-        }
-      else if (region->class_quark > class_quark)
-        min = pos = mid + 1;
-      else
-        {
-          max = mid - 1;
-          pos = mid;
-        }
-    }
-  while (!found && min <= max);
-
-  if (position)
-    *position = pos;
-
-  return found;
-}
-
 /**
  * gtk_style_context_add_class:
  * @context: a #GtkStyleContext
@@ -1704,9 +1516,7 @@ gtk_style_context_add_class (GtkStyleContext *context,
                              const gchar     *class_name)
 {
   GtkStyleContextPrivate *priv;
-  GtkStyleInfo *info;
   GQuark class_quark;
-  guint position;
 
   g_return_if_fail (GTK_IS_STYLE_CONTEXT (context));
   g_return_if_fail (class_name != NULL);
@@ -1714,14 +1524,8 @@ gtk_style_context_add_class (GtkStyleContext *context,
   priv = context->priv;
   class_quark = g_quark_from_string (class_name);
 
-  info = priv->info;
-
-  if (!style_class_find (info->style_classes, class_quark, &position))
-    {
-      g_array_insert_val (info->style_classes, position, class_quark);
-
-      gtk_style_context_queue_invalidate_internal (context, GTK_CSS_CHANGE_CLASS);
-    }
+  if (gtk_css_node_declaration_add_class (&priv->info->decl, class_quark))
+    gtk_style_context_queue_invalidate_internal (context, GTK_CSS_CHANGE_CLASS);
 }
 
 /**
@@ -1738,9 +1542,7 @@ gtk_style_context_remove_class (GtkStyleContext *context,
                                 const gchar     *class_name)
 {
   GtkStyleContextPrivate *priv;
-  GtkStyleInfo *info;
   GQuark class_quark;
-  guint position;
 
   g_return_if_fail (GTK_IS_STYLE_CONTEXT (context));
   g_return_if_fail (class_name != NULL);
@@ -1752,14 +1554,8 @@ gtk_style_context_remove_class (GtkStyleContext *context,
 
   priv = context->priv;
 
-  info = priv->info;
-
-  if (style_class_find (info->style_classes, class_quark, &position))
-    {
-      g_array_remove_index (info->style_classes, position);
-
-      gtk_style_context_queue_invalidate_internal (context, GTK_CSS_CHANGE_CLASS);
-    }
+  if (gtk_css_node_declaration_remove_class (&priv->info->decl, class_quark))
+    gtk_style_context_queue_invalidate_internal (context, GTK_CSS_CHANGE_CLASS);
 }
 
 /**
@@ -1779,7 +1575,6 @@ gtk_style_context_has_class (GtkStyleContext *context,
                              const gchar     *class_name)
 {
   GtkStyleContextPrivate *priv;
-  GtkStyleInfo *info;
   GQuark class_quark;
 
   g_return_val_if_fail (GTK_IS_STYLE_CONTEXT (context), FALSE);
@@ -1792,12 +1587,18 @@ gtk_style_context_has_class (GtkStyleContext *context,
 
   priv = context->priv;
 
-  info = priv->info;
+  return gtk_css_node_declaration_has_class (priv->info->decl, class_quark);
+}
 
-  if (style_class_find (info->style_classes, class_quark, NULL))
-    return TRUE;
+static void
+quarks_to_strings (GList *list)
+{
+  GList *l;
 
-  return FALSE;
+  for (l = list; l; l = l->next)
+    {
+      l->data = (char *) g_quark_to_string (GPOINTER_TO_UINT (l->data));
+    }
 }
 
 /**
@@ -1817,23 +1618,14 @@ GList *
 gtk_style_context_list_classes (GtkStyleContext *context)
 {
   GtkStyleContextPrivate *priv;
-  GtkStyleInfo *info;
-  GList *classes = NULL;
-  guint i;
+  GList *classes;
 
   g_return_val_if_fail (GTK_IS_STYLE_CONTEXT (context), NULL);
 
   priv = context->priv;
-
-  info = priv->info;
-
-  for (i = 0; i < info->style_classes->len; i++)
-    {
-      GQuark quark;
-
-      quark = g_array_index (info->style_classes, GQuark, i);
-      classes = g_list_prepend (classes, (gchar *) g_quark_to_string (quark));
-    }
+  
+  classes = gtk_css_node_declaration_list_classes (priv->info->decl);
+  quarks_to_strings (classes);
 
   return classes;
 }
@@ -1857,28 +1649,16 @@ GList *
 gtk_style_context_list_regions (GtkStyleContext *context)
 {
   GtkStyleContextPrivate *priv;
-  GtkStyleInfo *info;
-  GList *classes = NULL;
-  guint i;
+  GList *regions;
 
   g_return_val_if_fail (GTK_IS_STYLE_CONTEXT (context), NULL);
 
   priv = context->priv;
 
-  info = priv->info;
+  regions = gtk_css_node_declaration_list_regions (priv->info->decl);
+  quarks_to_strings (regions);
 
-  for (i = 0; i < info->regions->len; i++)
-    {
-      GtkRegion *region;
-      const gchar *class_name;
-
-      region = &g_array_index (info->regions, GtkRegion, i);
-
-      class_name = g_quark_to_string (region->class_quark);
-      classes = g_list_prepend (classes, (gchar *) class_name);
-    }
-
-  return classes;
+  return regions;
 }
 
 gboolean
@@ -1940,9 +1720,7 @@ gtk_style_context_add_region (GtkStyleContext *context,
                               GtkRegionFlags   flags)
 {
   GtkStyleContextPrivate *priv;
-  GtkStyleInfo *info;
   GQuark region_quark;
-  guint position;
 
   g_return_if_fail (GTK_IS_STYLE_CONTEXT (context));
   g_return_if_fail (region_name != NULL);
@@ -1951,19 +1729,8 @@ gtk_style_context_add_region (GtkStyleContext *context,
   priv = context->priv;
   region_quark = g_quark_from_string (region_name);
 
-  info = priv->info;
-
-  if (!region_find (info->regions, region_quark, &position))
-    {
-      GtkRegion region;
-
-      region.class_quark = region_quark;
-      region.flags = flags;
-
-      g_array_insert_val (info->regions, position, region);
-
-      gtk_style_context_queue_invalidate_internal (context, GTK_CSS_CHANGE_REGION);
-    }
+  if (gtk_css_node_declaration_add_region (&priv->info->decl, region_quark, flags))
+    gtk_style_context_queue_invalidate_internal (context, GTK_CSS_CHANGE_REGION);
 }
 
 /**
@@ -1982,9 +1749,7 @@ gtk_style_context_remove_region (GtkStyleContext *context,
                                  const gchar     *region_name)
 {
   GtkStyleContextPrivate *priv;
-  GtkStyleInfo *info;
   GQuark region_quark;
-  guint position;
 
   g_return_if_fail (GTK_IS_STYLE_CONTEXT (context));
   g_return_if_fail (region_name != NULL);
@@ -1996,14 +1761,8 @@ gtk_style_context_remove_region (GtkStyleContext *context,
 
   priv = context->priv;
 
-  info = priv->info;
-
-  if (region_find (info->regions, region_quark, &position))
-    {
-      g_array_remove_index (info->regions, position);
-
-      gtk_style_context_queue_invalidate_internal (context, GTK_CSS_CHANGE_REGION);
-    }
+  if (gtk_css_node_declaration_remove_region (&priv->info->decl, region_quark))
+    gtk_style_context_queue_invalidate_internal (context, GTK_CSS_CHANGE_REGION);
 }
 
 /**
@@ -2028,9 +1787,7 @@ gtk_style_context_has_region (GtkStyleContext *context,
                               GtkRegionFlags  *flags_return)
 {
   GtkStyleContextPrivate *priv;
-  GtkStyleInfo *info;
   GQuark region_quark;
-  guint position;
 
   g_return_val_if_fail (GTK_IS_STYLE_CONTEXT (context), FALSE);
   g_return_val_if_fail (region_name != NULL, FALSE);
@@ -2045,21 +1802,7 @@ gtk_style_context_has_region (GtkStyleContext *context,
 
   priv = context->priv;
 
-  info = priv->info;
-
-  if (region_find (info->regions, region_quark, &position))
-    {
-      if (flags_return)
-        {
-          GtkRegion *region;
-
-          region = &g_array_index (info->regions, GtkRegion, position);
-          *flags_return = region->flags;
-        }
-      return TRUE;
-    }
-
-  return FALSE;
+  return gtk_css_node_declaration_has_region (priv->info->decl, region_quark, flags_return);
 }
 
 static gint
@@ -2629,7 +2372,7 @@ gtk_style_context_set_junction_sides (GtkStyleContext  *context,
 {
   g_return_if_fail (GTK_IS_STYLE_CONTEXT (context));
 
-  context->priv->info->junction_sides = sides;
+  gtk_css_node_declaration_set_junction_sides (&context->priv->info->decl, sides);
 }
 
 /**
@@ -2647,7 +2390,7 @@ gtk_style_context_get_junction_sides (GtkStyleContext *context)
 {
   g_return_val_if_fail (GTK_IS_STYLE_CONTEXT (context), 0);
 
-  return context->priv->info->junction_sides;
+  return gtk_css_node_declaration_get_junction_sides (context->priv->info->decl);
 }
 
 gboolean
@@ -3854,6 +3597,7 @@ _gtk_style_context_get_icon_lookup_flags (GtkStyleContext *context)
 {
   GtkCssIconStyle icon_style;
   GtkIconLookupFlags flags;
+  GtkStateFlags state;
 
   g_return_val_if_fail (GTK_IS_STYLE_CONTEXT (context), 0);
 
@@ -3875,9 +3619,10 @@ _gtk_style_context_get_icon_lookup_flags (GtkStyleContext *context)
       return 0;
     }
 
-  if (context->priv->info->state_flags & GTK_STATE_FLAG_DIR_LTR)
+  state = gtk_style_context_get_state (context);
+  if (state & GTK_STATE_FLAG_DIR_LTR)
     flags |= GTK_ICON_LOOKUP_DIR_LTR;
-  else if (context->priv->info->state_flags & GTK_STATE_FLAG_DIR_RTL)
+  else if (state & GTK_STATE_FLAG_DIR_RTL)
     flags |= GTK_ICON_LOOKUP_DIR_RTL;
 
   return flags;
