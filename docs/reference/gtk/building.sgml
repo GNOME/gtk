@@ -277,7 +277,7 @@ How to compile GTK+ itself
           <envar>XDG_DATA_DIRS</envar> set accordingly at configure time.
           Otherwise, gdk-pixbuf falls back to its built-in mime type detection.
         </para>
-      <listitem>
+      </listitem>
     </itemizedlist>
   </refsect1>
   <refsect1 id="building">
