@@ -6,7 +6,7 @@
 // Sass thinks we're using the colors in the variables as strings and may shoot
 // warning, it's innocuous and can be defeated by using "" + $var
 /*
-widget text/foregroung color */
+widget text/foreground color */
 @define-color theme_fg_color #{"" +$fg_color};
 
 /*
@@ -78,7 +78,7 @@ these are pretty self explicative */
 @define-color warning_color #{"" +$warning_color};
 @define-color error_color #{"" +$error_color};
 @define-color success_color #{"" +$success_color};
-//@define-color desctructive_color #{$destructive_color}
+//@define-color destructive_color #{$destructive_color}
 
 //WM
 
