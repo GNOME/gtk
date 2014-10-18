@@ -102,10 +102,10 @@ $ease-out-quad: cubic-bezier(0.25, 0.46, 0.45, 0.94);
 }
 
 .view {
-  color: $fg_color;
+  color: $text_color;
   background-color: $base_color;
   &:backdrop {
-    color: $backdrop_fg_color;
+    color: $backdrop_text_color;
     background-color: $backdrop_base_color;
   }
   &:selected,
@@ -2552,6 +2552,7 @@ GtkScrolledWindow {
  * Calendar *
  ***********/
 GtkCalendar {
+  color: $text_color;
   border: 1px solid $borders_color;
   &:selected {
     background-color: $selected_bg_color;
@@ -2563,24 +2564,31 @@ GtkCalendar {
   }
   &.header {
     @extend .titlebar;
+    color: $fg_color;
     box-shadow: inset 0 -1px mix($borders_color, $bg_color, 30%),
                 inset 0px 1px $top_hilight,
                 0 1px 2px transparentize(black,0.9);
     border: 1px solid $borders_color;
     border-radius: 0;
-    &:backdrop { box-shadow: none; }
+    &:backdrop {
+      color: $backdrop_fg_color;
+      box-shadow: none;
+    }
   }
   &.button {
     @extend %undecorated_button;
-    color: transparentize($fg-color,0.55);
+    color: transparentize($fg_color, 0.55);
     &:hover {
       @extend %undecorated_button;
       color: $fg_color;
     }
     &:backdrop { color: transparentize($backdrop_fg_color,0.55); }
   }
-  &.highlight { color: gtkalpha(currentColor,0.55); }
-  &:backdrop { border-color: $backdrop_borders_color; }
+  &.highlight, &.highlight:backdrop { color: gtkalpha(currentColor, 0.55); }
+  &:backdrop {
+    color: $backdrop_text_color;
+    border-color: $backdrop_borders_color;
+  }
 }
 
 /***********

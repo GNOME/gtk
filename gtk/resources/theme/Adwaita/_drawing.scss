@@ -60,6 +60,7 @@
                          inset 0 2px transparentize(black, 1),
                          inset 0 1px transparentize(black, 1);
   @if $t==normal {
+    color: $text_color;
     border-color: $borders_color;
     @include _shadows($_inner_shadows,
                       entry_focus_glow(transparentize($fc,1)),
@@ -80,7 +81,7 @@
 
   }
   @if $t==backdrop {
-    color: $backdrop_fg_color;
+    color: $backdrop_text_color;
     border-color: $backdrop_borders_color;
     background-image: linear-gradient(to bottom, $backdrop_base_color);
     @include _shadows($_blank_inner_shadows, $_blank_edge);
