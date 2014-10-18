@@ -350,7 +350,8 @@ backend_immodules=
 have_gio_unix=no
 GDK_BACKENDS=
 GDK_EXTRA_LIBS=
-GDK_EXTRA_CFLAGS=
+# expoxy.pc has Cflags: -I${includedir}, but pkg-config swallows that :-(
+GDK_EXTRA_CFLAGS="-I${prefix}/include"
 GDK_WINDOWING=
 PANGO_PACKAGES="pango pangocairo"
 
