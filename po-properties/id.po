@@ -9,10 +9,10 @@
 # Dirgita Devina <dirgitadevina@yahoo.co.id>, 2010, 2012.
 msgid ""
 msgstr ""
-"Project-Id-Version: gtk+-properties master\n"
+"Project-Id-Version: gtk+-properties gtk-3-14\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gtk"
 "%2b&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2014-09-25 21:08+0000\n"
+"POT-Creation-Date: 2014-10-18 21:02+0000\n"
 "PO-Revision-Date: 2014-09-26 10:11+0700\n"
 "Last-Translator: Andika Triwidada <andika@gmail.com>\n"
 "Language-Team: Indonesian <gnome@i15n.org>\n"
@@ -1126,6 +1126,14 @@ msgstr "Teks keterangan"
 msgid "Comments about the program"
 msgstr "Keterangan mengenai program"
 
+#: ../gtk/gtkaboutdialog.c:408
+msgid "License"
+msgstr "Lisensi"
+
+#: ../gtk/gtkaboutdialog.c:409
+msgid "The license of the program"
+msgstr "Lisensi program"
+
 #: ../gtk/gtkaboutdialog.c:436
 msgid "License Type"
 msgstr "Jenis Lisensi"
@@ -1794,7 +1802,7 @@ msgstr ""
 "Menentukan apakah child_displacement_x/y_properties juga mempengaruhi fokus "
 "kotak"
 
-#: ../gtk/gtkbutton.c:558 ../gtk/gtkentry.c:836 ../gtk/gtkentry.c:2035
+#: ../gtk/gtkbutton.c:558 ../gtk/gtkentry.c:836 ../gtk/gtkentry.c:2044
 msgid "Inner Border"
 msgstr "Batas Dalam"
 
@@ -2305,7 +2313,7 @@ msgid "The vertical text alignment, from 0 (top) to 1 (bottom)."
 msgstr "Perataan teks vertikal, bernilai 0 (atas) hingga 1 (bawah)."
 
 #: ../gtk/gtkcellrendererprogress.c:225 ../gtk/gtklevelbar.c:1009
-#: ../gtk/gtkprogressbar.c:159 ../gtk/gtkrange.c:443
+#: ../gtk/gtkprogressbar.c:159 ../gtk/gtkrange.c:447
 msgid "Inverted"
 msgstr "Dibalik"
 
@@ -2313,7 +2321,7 @@ msgstr "Dibalik"
 msgid "Invert the direction in which the progress bar grows"
 msgstr "Balikkan arah berkembangnya bilah kemajuan"
 
-#: ../gtk/gtkcellrendererspin.c:113 ../gtk/gtkrange.c:435
+#: ../gtk/gtkcellrendererspin.c:113 ../gtk/gtkrange.c:439
 #: ../gtk/gtkscalebutton.c:210 ../gtk/gtkspinbutton.c:347
 msgid "Adjustment"
 msgstr "Penyesuaian"
@@ -3584,7 +3592,7 @@ msgstr "Batas Kemajuan"
 msgid "Border around the progress bar"
 msgstr "Batas di sekeliling batang kemajuan"
 
-#: ../gtk/gtkentry.c:2036
+#: ../gtk/gtkentry.c:2045
 msgid "Border between text and frame."
 msgstr "Batas antara teks dan bingkai."
 
@@ -3792,7 +3800,7 @@ msgstr "Penyaring"
 msgid "The current filter for selecting which files are displayed"
 msgstr "Saringan yang telah dipergunakan untuk memilih berkas yang ditampilkan"
 
-#: ../gtk/gtkfilechooser.c:388 ../gtk/gtkplacessidebar.c:4395
+#: ../gtk/gtkfilechooser.c:388 ../gtk/gtkplacessidebar.c:4525
 msgid "Local Only"
 msgstr "Pada Komputer Ini Saja"
 
@@ -4362,7 +4370,7 @@ msgstr "Tipe Pesan"
 msgid "The type of message"
 msgstr "Tipe pesan"
 
-#: ../gtk/gtkinfobar.c:461 ../gtk/gtksearchbar.c:418
+#: ../gtk/gtkinfobar.c:461 ../gtk/gtksearchbar.c:434
 msgid "Show Close Button"
 msgstr "Tampilkan Tombol Tutup"
 
@@ -5242,19 +5250,19 @@ msgstr "Dapat dikecilkan"
 msgid "If TRUE, the child can be made smaller than its requisition"
 msgstr "Bila bernilai TRUE, anak dapat dibuat lebih kecil ukurannnya"
 
-#: ../gtk/gtkplacessidebar.c:4364
+#: ../gtk/gtkplacessidebar.c:4494
 msgid "Location to Select"
 msgstr "Lokasi untu Dipilih"
 
-#: ../gtk/gtkplacessidebar.c:4365
+#: ../gtk/gtkplacessidebar.c:4495
 msgid "The location to highlight in the sidebar"
 msgstr "Lokasi yang akan disorot di bilah sisi"
 
-#: ../gtk/gtkplacessidebar.c:4370
+#: ../gtk/gtkplacessidebar.c:4500
 msgid "Open Flags"
 msgstr "Flag Buka"
 
-#: ../gtk/gtkplacessidebar.c:4371
+#: ../gtk/gtkplacessidebar.c:4501
 msgid ""
 "Modes in which the calling application can open locations selected in the "
 "sidebar"
@@ -5262,37 +5270,37 @@ msgstr ""
 "Mode dimana aplikasi yang memanggil dapat membuka lokasi yang dipilih pada "
 "bilah sisi"
 
-#: ../gtk/gtkplacessidebar.c:4377
+#: ../gtk/gtkplacessidebar.c:4507
 msgid "Show 'Desktop'"
 msgstr "Tampilkan 'Desktop'"
 
-#: ../gtk/gtkplacessidebar.c:4378
+#: ../gtk/gtkplacessidebar.c:4508
 msgid "Whether the sidebar includes a builtin shortcut to the Desktop folder"
 msgstr "Apakah bilah sisi termasuk pintasan bawaan ke folder Desktop"
 
-#: ../gtk/gtkplacessidebar.c:4383
+#: ../gtk/gtkplacessidebar.c:4513
 msgid "Show 'Connect to Server'"
 msgstr "Tampilkan 'Menyambung ke Server'"
 
-#: ../gtk/gtkplacessidebar.c:4384
+#: ../gtk/gtkplacessidebar.c:4514
 msgid ""
 "Whether the sidebar includes a builtin shortcut to a 'Connect to server' "
 "dialog"
 msgstr ""
 "Apakah bilah sisi memuat pintasan bawaan ke dialog 'Menyambung ke server'"
 
-#: ../gtk/gtkplacessidebar.c:4389
+#: ../gtk/gtkplacessidebar.c:4519
 msgid "Show 'Enter Location'"
 msgstr "Tampilkan 'Masukkan Lokasi'"
 
-#: ../gtk/gtkplacessidebar.c:4390
+#: ../gtk/gtkplacessidebar.c:4520
 msgid ""
 "Whether the sidebar includes a builtin shortcut to manually enter a location"
 msgstr ""
 "Apakah bilah sisi memuat pintasan bawaan ke memasukkan suatu lokasi secara "
 "manual"
 
-#: ../gtk/gtkplacessidebar.c:4396
+#: ../gtk/gtkplacessidebar.c:4526
 msgid "Whether the sidebar only includes local files"
 msgstr "Apakah bilah sisi hanya menyertakan berkas lokal"
 
@@ -5739,127 +5747,127 @@ msgstr "Butir menu radio tempat grup pemilik widget ini."
 msgid "The radio tool button whose group this button belongs to."
 msgstr "Tombol alat radio tempat grup pemilik tombol ini."
 
-#: ../gtk/gtkrange.c:436
+#: ../gtk/gtkrange.c:440
 msgid "The GtkAdjustment that contains the current value of this range object"
 msgstr "GtkAdjustment yang berisi nilai sekarang pada obyek jangkauan"
 
-#: ../gtk/gtkrange.c:444
+#: ../gtk/gtkrange.c:448
 msgid "Invert direction slider moves to increase range value"
 msgstr "Balik arah slider yang bergerak untuk meningkatkan nilai jangkauan"
 
-#: ../gtk/gtkrange.c:451
+#: ../gtk/gtkrange.c:455
 msgid "Lower stepper sensitivity"
 msgstr "Sensitivitas stepper bawah"
 
-#: ../gtk/gtkrange.c:452
+#: ../gtk/gtkrange.c:456
 msgid ""
 "The sensitivity policy for the stepper that points to the adjustment's lower "
 "side"
 msgstr ""
 "Kebijakan sensitivitas bagi stepper yang menunjuk ke pengaturan sisi bawah"
 
-#: ../gtk/gtkrange.c:460
+#: ../gtk/gtkrange.c:464
 msgid "Upper stepper sensitivity"
 msgstr "Sensitivitas stepper atas"
 
-#: ../gtk/gtkrange.c:461
+#: ../gtk/gtkrange.c:465
 msgid ""
 "The sensitivity policy for the stepper that points to the adjustment's upper "
 "side"
 msgstr ""
 "Kebijakan sensitivitas bagi stepper yang menunjuk ke pengaturan sisi atas"
 
-#: ../gtk/gtkrange.c:478
+#: ../gtk/gtkrange.c:482
 msgid "Show Fill Level"
 msgstr "Tampilkan Tingkat Pengisian"
 
-#: ../gtk/gtkrange.c:479
+#: ../gtk/gtkrange.c:483
 msgid "Whether to display a fill level indicator graphics on trough."
 msgstr "Apakah menampilkan grafik indikator tingkat pengisian."
 
-#: ../gtk/gtkrange.c:495
+#: ../gtk/gtkrange.c:499
 msgid "Restrict to Fill Level"
 msgstr "Batasi Tingkat Pengisian"
 
-#: ../gtk/gtkrange.c:496
+#: ../gtk/gtkrange.c:500
 msgid "Whether to restrict the upper boundary to the fill level."
 msgstr "Apakah perlu membatasi batas atas tingkat pengisian."
 
-#: ../gtk/gtkrange.c:511
+#: ../gtk/gtkrange.c:515
 msgid "Fill Level"
 msgstr "Tingkat Pengisian"
 
-#: ../gtk/gtkrange.c:512
+#: ../gtk/gtkrange.c:516
 msgid "The fill level."
 msgstr "Tingkat pengisian."
 
-#: ../gtk/gtkrange.c:529
+#: ../gtk/gtkrange.c:533
 msgid "Round Digits"
 msgstr "Digit Pembulatan"
 
-#: ../gtk/gtkrange.c:530
+#: ../gtk/gtkrange.c:534
 msgid "The number of digits to round the value to."
 msgstr "Nilai dibulatkan ke cacah digit ini."
 
-#: ../gtk/gtkrange.c:536 ../gtk/gtkswitch.c:957
+#: ../gtk/gtkrange.c:540 ../gtk/gtkswitch.c:957
 msgid "Slider Width"
 msgstr "Lebar slider"
 
-#: ../gtk/gtkrange.c:537
+#: ../gtk/gtkrange.c:541
 msgid "Width of scrollbar or scale thumb"
 msgstr "Lebar scrollbar atau patokan skala"
 
-#: ../gtk/gtkrange.c:544
+#: ../gtk/gtkrange.c:548
 msgid "Trough Border"
 msgstr "Batas"
 
-#: ../gtk/gtkrange.c:545
+#: ../gtk/gtkrange.c:549
 msgid "Spacing between thumb/steppers and outer trough bevel"
 msgstr "Besar ruangan antara patokan/tangga dan batas luar"
 
-#: ../gtk/gtkrange.c:552
+#: ../gtk/gtkrange.c:556
 msgid "Stepper Size"
 msgstr "Ukuran tangga"
 
-#: ../gtk/gtkrange.c:553
+#: ../gtk/gtkrange.c:557
 msgid "Length of step buttons at ends"
 msgstr "Panjang tombol tangga pada sisi ujung"
 
-#: ../gtk/gtkrange.c:566
+#: ../gtk/gtkrange.c:570
 msgid "Stepper Spacing"
 msgstr "Ruang isi tangga"
 
-#: ../gtk/gtkrange.c:567
+#: ../gtk/gtkrange.c:571
 msgid "Spacing between step buttons and thumb"
 msgstr "Besar ruangan yang mengisi antara tangga dan patokan"
 
-#: ../gtk/gtkrange.c:574
+#: ../gtk/gtkrange.c:578
 msgid "Arrow X Displacement"
 msgstr "Pemindahan sisi X panah"
 
-#: ../gtk/gtkrange.c:575
+#: ../gtk/gtkrange.c:579
 msgid ""
 "How far in the x direction to move the arrow when the button is depressed"
 msgstr ""
 "Seberapa jauh pada arah x yang digunakan untuk memindahkan panah saat tombol "
 "dilepas"
 
-#: ../gtk/gtkrange.c:582
+#: ../gtk/gtkrange.c:586
 msgid "Arrow Y Displacement"
 msgstr "Pemindahan sisi Y panah"
 
-#: ../gtk/gtkrange.c:583
+#: ../gtk/gtkrange.c:587
 msgid ""
 "How far in the y direction to move the arrow when the button is depressed"
 msgstr ""
 "Seberapa jauh pada arah y yang digunakan untuk memindahkan panah saat tombol "
 "dilepas"
 
-#: ../gtk/gtkrange.c:599
+#: ../gtk/gtkrange.c:603
 msgid "Trough Under Steppers"
 msgstr "Trough Di Bawah Stepper"
 
-#: ../gtk/gtkrange.c:600
+#: ../gtk/gtkrange.c:604
 msgid ""
 "Whether to draw trough for full length of range or exclude the steppers and "
 "spacing"
@@ -5867,11 +5875,11 @@ msgstr ""
 "Apakah menggambar trough sepanjang jangkauan atau mengecualikan stepper dan "
 "jarak"
 
-#: ../gtk/gtkrange.c:613
+#: ../gtk/gtkrange.c:617
 msgid "Arrow scaling"
 msgstr "Penskalaan panah"
 
-#: ../gtk/gtkrange.c:614
+#: ../gtk/gtkrange.c:618
 msgid "Arrow scaling with regard to scroll button size"
 msgstr "Penskalaan panah terhadap ukuran tombol gulir"
 
@@ -6222,15 +6230,15 @@ msgstr "Penggulungan Kinetik"
 msgid "Kinetic scrolling mode."
 msgstr "Mode penggulungan kinektik."
 
-#: ../gtk/gtksearchbar.c:407
+#: ../gtk/gtksearchbar.c:423
 msgid "Search Mode Enabled"
 msgstr "Mode Cari Difungsikan"
 
-#: ../gtk/gtksearchbar.c:408
+#: ../gtk/gtksearchbar.c:424
 msgid "Whether the search mode is on and the search bar shown"
 msgstr "Apakah mode cari menyala dan bilah pencarian ditampilkan"
 
-#: ../gtk/gtksearchbar.c:419
+#: ../gtk/gtksearchbar.c:435
 msgid "Whether to show the close button in the toolbar"
 msgstr "Apakah menampilkan tombol tutup dalam bilah alat"
 
@@ -7103,7 +7111,7 @@ msgstr "Perlu Perhatian"
 msgid "Whether this page needs attention"
 msgstr "Apakah halaman ini perlu perhatian"
 
-#: ../gtk/gtkstackswitcher.c:515 ../gtk/gtkstackswitcher.c:516
+#: ../gtk/gtkstackswitcher.c:523 ../gtk/gtkstackswitcher.c:524
 msgid "Stack"
 msgstr "Tumpukan"
 
