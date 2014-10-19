@@ -496,11 +496,13 @@ static gboolean list_select_func   (GtkTreeSelection      *selection,
 				    gpointer               data);
 
 static void list_selection_changed     (GtkTreeSelection      *tree_selection,
-					GtkFileChooserWidget *impl);
+					GtkFileChooserWidget  *impl);
 static void list_row_activated         (GtkTreeView           *tree_view,
 					GtkTreePath           *path,
 					GtkTreeViewColumn     *column,
-					GtkFileChooserWidget *impl);
+					GtkFileChooserWidget  *impl);
+static void list_cursor_changed        (GtkTreeView           *treeview,
+                                        GtkFileChooserWidget  *impl);
 
 static void path_bar_clicked (GtkPathBar            *path_bar,
 			      GFile                 *file,
@@ -6571,24 +6573,45 @@ static void
 check_preview_change (GtkFileChooserWidget *impl)
 {
   GtkFileChooserWidgetPrivate *priv = impl->priv;
-  GtkTreePath *cursor_path;
+  GtkTreePath *path;
   GFile *new_file;
   char *new_display_name;
   GtkTreeModel *model;
+  GtkTreeSelection *selection;
 
-  gtk_tree_view_get_cursor (GTK_TREE_VIEW (priv->browse_files_tree_view), &cursor_path, NULL);
   model = gtk_tree_view_get_model (GTK_TREE_VIEW (priv->browse_files_tree_view));
-  if (cursor_path)
+  selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (priv->browse_files_tree_view));
+  if (gtk_tree_selection_get_mode (selection) == GTK_SELECTION_SINGLE ||
+      gtk_tree_selection_get_mode (selection) == GTK_SELECTION_BROWSE)
     {
       GtkTreeIter iter;
 
-      gtk_tree_model_get_iter (model, &iter, cursor_path);
+      if (gtk_tree_selection_get_selected (selection, NULL, &iter))
+        path = gtk_tree_model_get_path (model, &iter);
+      else
+        path = NULL;
+    }
+  else
+    {
+      gtk_tree_view_get_cursor (GTK_TREE_VIEW (priv->browse_files_tree_view), &path, NULL);
+      if (path && !gtk_tree_selection_path_is_selected (selection, path))
+        {
+          gtk_tree_path_free (path);
+          path = NULL;
+        }
+    }
+
+  if (path)
+    {
+      GtkTreeIter iter;
+
+      gtk_tree_model_get_iter (model, &iter, path);
       gtk_tree_model_get (model, &iter,
                           MODEL_COL_FILE, &new_file,
                           MODEL_COL_NAME, &new_display_name,
                           -1);
       
-      gtk_tree_path_free (cursor_path);
+      gtk_tree_path_free (path);
     }
   else
     {
@@ -6694,6 +6717,13 @@ list_selection_changed (GtkTreeSelection      *selection,
   check_file_list_menu_sensitivity (impl);
 
   g_signal_emit_by_name (impl, "selection-changed", 0);
+}
+
+static void
+list_cursor_changed (GtkTreeView          *list,
+                     GtkFileChooserWidget *impl)
+{
+  check_preview_change (impl);
 }
 
 /* Callback used when a row in the file list is activated */
@@ -7382,6 +7412,7 @@ gtk_file_chooser_widget_class_init (GtkFileChooserWidgetClass *class)
   gtk_widget_class_bind_template_callback (widget_class, list_row_activated);
   gtk_widget_class_bind_template_callback (widget_class, file_list_drag_motion_cb);
   gtk_widget_class_bind_template_callback (widget_class, list_selection_changed);
+  gtk_widget_class_bind_template_callback (widget_class, list_cursor_changed);
   gtk_widget_class_bind_template_callback (widget_class, renderer_editing_canceled_cb);
   gtk_widget_class_bind_template_callback (widget_class, renderer_edited_cb);
   gtk_widget_class_bind_template_callback (widget_class, filter_combo_changed);
