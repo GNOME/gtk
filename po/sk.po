@@ -13,8 +13,8 @@ msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gtk"
 "%2b&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2014-10-12 06:44+0000\n"
-"PO-Revision-Date: 2014-10-12 23:01+0100\n"
+"POT-Creation-Date: 2014-10-19 04:22+0000\n"
+"PO-Revision-Date: 2014-10-19 19:21+0100\n"
 "Last-Translator: Dušan Kazik <prescott66@gmail.com>\n"
 "Language-Team: Slovak <gnome-sk-list@gnome.org>\n"
 "Language: sk\n"
@@ -22,7 +22,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 1 : (n>=2 && n<=4) ? 2 : 0;\n"
-"X-Generator: Poedit 1.6.9\n"
+"X-Generator: Poedit 1.5.4\n"
 
 #  HTML backend
 #: ../gdk/broadway/gdkbroadway-server.c:143
@@ -1172,7 +1172,7 @@ msgstr ""
 #: ../gtk/gtkmessagedialog.c:957 ../gtk/gtkmountoperation.c:543
 #: ../gtk/gtkpagesetupunixdialog.c:196 ../gtk/gtkprintbackend.c:763
 #: ../gtk/gtkprinteroptionwidget.c:545 ../gtk/gtkprintunixdialog.c:665
-#: ../gtk/gtkprintunixdialog.c:733 ../gtk/gtkwindow.c:11708
+#: ../gtk/gtkprintunixdialog.c:733 ../gtk/gtkwindow.c:11710
 #: ../gtk/inspector/css-editor.c:198
 #: ../gtk/resources/ui/gtkappchooserdialog.ui.h:2
 #: ../gtk/resources/ui/gtkassistant.ui.h:5
@@ -1228,7 +1228,7 @@ msgstr "Po_užiť"
 
 #: ../gtk/deprecated/gtkfontsel.c:1698 ../gtk/gtkmessagedialog.c:936
 #: ../gtk/gtkmessagedialog.c:958 ../gtk/gtkprintbackend.c:764
-#: ../gtk/gtkwindow.c:11709 ../gtk/inspector/classes-list.c:125
+#: ../gtk/gtkwindow.c:11711 ../gtk/inspector/classes-list.c:125
 msgid "_OK"
 msgstr "_Ok"
 
@@ -1384,8 +1384,7 @@ msgstr ""
 "Tento program je vydaný ABSOLÚTNE BEZ ZÁRUKY;\n"
 "podrobnosti nájdete na <a href=\"%s\">%s</a>"
 
-#: ../gtk/gtkaboutdialog.c:118 ../gtk/gtkaboutdialog.c:408
-#: ../gtk/resources/ui/gtkaboutdialog.ui.h:3
+#: ../gtk/gtkaboutdialog.c:118 ../gtk/resources/ui/gtkaboutdialog.ui.h:3
 msgid "License"
 msgstr "Licencia"
 
@@ -1453,9 +1452,19 @@ msgstr ""
 "GNU Lesser General Public License (menej všeobecná zverejňovacia licencia "
 "GNU), len verzia 3"
 
-#: ../gtk/gtkaboutdialog.c:409
-msgid "The license of the program"
-msgstr "Licencia programu"
+#: ../gtk/gtkaboutdialog.c:697
+#| msgid "Credits"
+msgid "C_redits"
+msgstr "_Poďakovanie"
+
+#: ../gtk/gtkaboutdialog.c:705
+msgid "_License"
+msgstr "_Licencia"
+
+#: ../gtk/gtkaboutdialog.c:714 ../gtk/gtkcustompaperunixdialog.c:329
+#: ../gtk/gtkmessagedialog.c:940 ../gtk/resources/ui/gtkassistant.ui.h:6
+msgid "_Close"
+msgstr "Za_vrieť"
 
 #: ../gtk/gtkaboutdialog.c:982
 msgid "Could not show link"
@@ -2046,11 +2055,6 @@ msgstr "P_rispôsobiť"
 msgid "default:mm"
 msgstr "default:mm"
 
-#: ../gtk/gtkcustompaperunixdialog.c:329 ../gtk/gtkmessagedialog.c:940
-#: ../gtk/resources/ui/gtkassistant.ui.h:6
-msgid "_Close"
-msgstr "Za_vrieť"
-
 #. And show the custom paper dialog
 #: ../gtk/gtkcustompaperunixdialog.c:405 ../gtk/gtkprintunixdialog.c:3311
 msgid "Manage Custom Sizes"
@@ -2105,30 +2109,30 @@ msgstr "_Pravý:"
 msgid "Paper Margins"
 msgstr "Okraje papiera"
 
-#: ../gtk/gtkentry.c:9584 ../gtk/gtkentry.c:9739 ../gtk/gtklabel.c:6530
+#: ../gtk/gtkentry.c:9587 ../gtk/gtkentry.c:9742 ../gtk/gtklabel.c:6530
 #: ../gtk/gtktextview.c:8841 ../gtk/gtktextview.c:9031
 msgid "Cu_t"
 msgstr "Vystri_hnúť"
 
-#: ../gtk/gtkentry.c:9588 ../gtk/gtkentry.c:9742 ../gtk/gtklabel.c:6531
+#: ../gtk/gtkentry.c:9591 ../gtk/gtkentry.c:9745 ../gtk/gtklabel.c:6531
 #: ../gtk/gtktextview.c:8845 ../gtk/gtktextview.c:9035
 msgid "_Copy"
 msgstr "_Kopírovať"
 
-#: ../gtk/gtkentry.c:9592 ../gtk/gtkentry.c:9745 ../gtk/gtklabel.c:6532
+#: ../gtk/gtkentry.c:9595 ../gtk/gtkentry.c:9748 ../gtk/gtklabel.c:6532
 #: ../gtk/gtktextview.c:8847 ../gtk/gtktextview.c:9037
 msgid "_Paste"
 msgstr "_Vložiť"
 
-#: ../gtk/gtkentry.c:9595 ../gtk/gtklabel.c:6534 ../gtk/gtktextview.c:8850
+#: ../gtk/gtkentry.c:9598 ../gtk/gtklabel.c:6534 ../gtk/gtktextview.c:8850
 msgid "_Delete"
 msgstr "O_dstrániť"
 
-#: ../gtk/gtkentry.c:9606 ../gtk/gtklabel.c:6543 ../gtk/gtktextview.c:8864
+#: ../gtk/gtkentry.c:9609 ../gtk/gtklabel.c:6543 ../gtk/gtktextview.c:8864
 msgid "Select _All"
 msgstr "Vybr_ať všetko"
 
-#: ../gtk/gtkentry.c:10800
+#: ../gtk/gtkentry.c:10803
 msgid "Caps Lock is on"
 msgstr "Caps Lock je zapnutý"
 
@@ -2136,7 +2140,7 @@ msgstr "Caps Lock je zapnutý"
 msgid "Select a File"
 msgstr "Výber súboru"
 
-#: ../gtk/gtkfilechooserbutton.c:104 ../gtk/gtkplacessidebar.c:982
+#: ../gtk/gtkfilechooserbutton.c:104 ../gtk/gtkplacessidebar.c:983
 msgid "Desktop"
 msgstr "Plocha"
 
@@ -2145,7 +2149,7 @@ msgstr "Plocha"
 msgid "(None)"
 msgstr "(žiaden)"
 
-#: ../gtk/gtkfilechooserbutton.c:795 ../gtk/gtkplacessidebar.c:3398
+#: ../gtk/gtkfilechooserbutton.c:795 ../gtk/gtkplacessidebar.c:3391
 msgid "_Open"
 msgstr "_Otvoriť"
 
@@ -2346,7 +2350,7 @@ msgstr "(žiadna)"
 msgid "Application menu"
 msgstr "Ponuka aplikácie"
 
-#: ../gtk/gtkheaderbar.c:476 ../gtk/gtkwindow.c:8436
+#: ../gtk/gtkheaderbar.c:476 ../gtk/gtkwindow.c:8438
 msgid "Close"
 msgstr "Zavrieť"
 
@@ -2706,198 +2710,198 @@ msgstr "Zariadenia"
 msgid "Bookmarks"
 msgstr "Záložky"
 
-#: ../gtk/gtkplacessidebar.c:956
+#: ../gtk/gtkplacessidebar.c:957
 msgid "Recent"
 msgstr "Nedávne"
 
-#: ../gtk/gtkplacessidebar.c:958
+#: ../gtk/gtkplacessidebar.c:959
 msgid "Recent files"
 msgstr "Nedávne súbory"
 
-#: ../gtk/gtkplacessidebar.c:967
+#: ../gtk/gtkplacessidebar.c:968
 msgid "Home"
 msgstr "Domov"
 
 #  tooltip
-#: ../gtk/gtkplacessidebar.c:969
+#: ../gtk/gtkplacessidebar.c:970
 msgid "Open your personal folder"
 msgstr "Otvorí váš osobný priečinok"
 
 # tooltip
-#: ../gtk/gtkplacessidebar.c:984
+#: ../gtk/gtkplacessidebar.c:985
 msgid "Open the contents of your desktop in a folder"
 msgstr "Otvorí obsah vašej plochy v priečinku"
 
-#: ../gtk/gtkplacessidebar.c:998
+#: ../gtk/gtkplacessidebar.c:999
 msgid "Enter Location"
 msgstr "Zadať umiestnenie"
 
-#: ../gtk/gtkplacessidebar.c:1000
+#: ../gtk/gtkplacessidebar.c:1001
 msgid "Manually enter a location"
 msgstr "Umožní zadať umiestnenie ručne"
 
-#: ../gtk/gtkplacessidebar.c:1011
+#: ../gtk/gtkplacessidebar.c:1012
 msgid "Trash"
 msgstr "Kôš"
 
 # tooltip
-#: ../gtk/gtkplacessidebar.c:1013
+#: ../gtk/gtkplacessidebar.c:1014
 msgid "Open the trash"
 msgstr "Otvorí Kôš"
 
 #  tooltip (all 3x)
-#: ../gtk/gtkplacessidebar.c:1076 ../gtk/gtkplacessidebar.c:1104
-#: ../gtk/gtkplacessidebar.c:1312
+#: ../gtk/gtkplacessidebar.c:1077 ../gtk/gtkplacessidebar.c:1105
+#: ../gtk/gtkplacessidebar.c:1313
 #, c-format
 msgid "Mount and open %s"
 msgstr "Pripojí a otvorí %s"
 
 #  tooltip
-#: ../gtk/gtkplacessidebar.c:1185
+#: ../gtk/gtkplacessidebar.c:1186
 msgid "Open the contents of the file system"
 msgstr "Otvorí obsah súborového systému"
 
 #  heading
-#: ../gtk/gtkplacessidebar.c:1275
+#: ../gtk/gtkplacessidebar.c:1276
 msgid "Network"
 msgstr "Sieť"
 
-#: ../gtk/gtkplacessidebar.c:1281
+#: ../gtk/gtkplacessidebar.c:1282
 msgid "Browse Network"
 msgstr "Prehliadať sieť"
 
 # tooltip
-#: ../gtk/gtkplacessidebar.c:1283
+#: ../gtk/gtkplacessidebar.c:1284
 msgid "Browse the contents of the network"
 msgstr "Otvorí prehliadanie obsahu siete"
 
-#: ../gtk/gtkplacessidebar.c:1291
+#: ../gtk/gtkplacessidebar.c:1292
 msgid "Connect to Server"
 msgstr "Pripojiť k serveru"
 
 #  tooltip
-#: ../gtk/gtkplacessidebar.c:1293
+#: ../gtk/gtkplacessidebar.c:1294
 msgid "Connect to a network server address"
 msgstr "Pripojí k sieťovej adrese servera"
 
-#: ../gtk/gtkplacessidebar.c:1695
+#: ../gtk/gtkplacessidebar.c:1696
 msgid "New bookmark"
 msgstr "Nová záložka"
 
 #. Adjust start/stop items to reflect the type of the drive
-#: ../gtk/gtkplacessidebar.c:2252 ../gtk/gtkplacessidebar.c:3476
+#: ../gtk/gtkplacessidebar.c:2253 ../gtk/gtkplacessidebar.c:3469
 msgid "_Start"
 msgstr "_Spustiť"
 
-#: ../gtk/gtkplacessidebar.c:2253 ../gtk/gtkplacessidebar.c:3483
+#: ../gtk/gtkplacessidebar.c:2254 ../gtk/gtkplacessidebar.c:3476
 msgid "_Stop"
 msgstr "_Zastaviť"
 
 #. start() for type G_DRIVE_START_STOP_TYPE_SHUTDOWN is normally not used
-#: ../gtk/gtkplacessidebar.c:2260
+#: ../gtk/gtkplacessidebar.c:2261
 msgid "_Power On"
 msgstr "_Zapnúť"
 
-#: ../gtk/gtkplacessidebar.c:2261
+#: ../gtk/gtkplacessidebar.c:2262
 msgid "_Safely Remove Drive"
 msgstr "_Bezpečne odstrániť jednotku"
 
-#: ../gtk/gtkplacessidebar.c:2265
+#: ../gtk/gtkplacessidebar.c:2266
 msgid "_Connect Drive"
 msgstr "_Pripojiť jednotku"
 
-#: ../gtk/gtkplacessidebar.c:2266
+#: ../gtk/gtkplacessidebar.c:2267
 msgid "_Disconnect Drive"
 msgstr "O_dpojiť jednotku"
 
-#: ../gtk/gtkplacessidebar.c:2270
+#: ../gtk/gtkplacessidebar.c:2271
 msgid "_Start Multi-disk Device"
 msgstr "_Spustiť viac diskové zariadenie"
 
-#: ../gtk/gtkplacessidebar.c:2271
+#: ../gtk/gtkplacessidebar.c:2272
 msgid "_Stop Multi-disk Device"
 msgstr "_Zastaviť viac diskové zariadenie"
 
 # button
 #. stop() for type G_DRIVE_START_STOP_TYPE_PASSWORD is normally not used
-#: ../gtk/gtkplacessidebar.c:2276
+#: ../gtk/gtkplacessidebar.c:2277
 msgid "_Unlock Drive"
 msgstr "_Odomknúť jedontku"
 
-#: ../gtk/gtkplacessidebar.c:2277
+#: ../gtk/gtkplacessidebar.c:2278
 msgid "_Lock Drive"
 msgstr "_Uzamknúť jednotku"
 
-#: ../gtk/gtkplacessidebar.c:2306 ../gtk/gtkplacessidebar.c:3158
+#: ../gtk/gtkplacessidebar.c:2307 ../gtk/gtkplacessidebar.c:3151
 #, c-format
 msgid "Unable to start %s"
 msgstr "Nepodarilo sa spustiť %s"
 
-#: ../gtk/gtkplacessidebar.c:2336
+#: ../gtk/gtkplacessidebar.c:2337
 #, c-format
 msgid "Unable to access “%s”"
 msgstr "Nepodarilo sa pristúpiť k „%s“"
 
-#: ../gtk/gtkplacessidebar.c:2646
+#: ../gtk/gtkplacessidebar.c:2647
 #, c-format
 msgid "Unable to unmount %s"
 msgstr "Nepodarilo sa odpojiť %s"
 
-#: ../gtk/gtkplacessidebar.c:2863
+#: ../gtk/gtkplacessidebar.c:2856
 #, c-format
 msgid "Unable to stop %s"
 msgstr "Nepodarilo sa zastavit %s"
 
-#: ../gtk/gtkplacessidebar.c:2892 ../gtk/gtkplacessidebar.c:2921
-#: ../gtk/gtkplacessidebar.c:2950
+#: ../gtk/gtkplacessidebar.c:2885 ../gtk/gtkplacessidebar.c:2914
+#: ../gtk/gtkplacessidebar.c:2943
 #, c-format
 msgid "Unable to eject %s"
 msgstr "Nepodarilo sa vysunúť %s"
 
 # DK: je tam dobre to mnozne cislo? "médií" ?
 # PK: podla mna ano, proste ci su nove media
-#: ../gtk/gtkplacessidebar.c:3108
+#: ../gtk/gtkplacessidebar.c:3101
 #, c-format
 msgid "Unable to poll %s for media changes"
 msgstr "Nepodarilo sa skontrolovať %s na zmenu nosiča"
 
-#: ../gtk/gtkplacessidebar.c:3406
+#: ../gtk/gtkplacessidebar.c:3399
 msgid "Open in New _Tab"
 msgstr "Otvoriť na novej _karte"
 
-#: ../gtk/gtkplacessidebar.c:3415
+#: ../gtk/gtkplacessidebar.c:3408
 msgid "Open in New _Window"
 msgstr "Otvoriť v novom _okne"
 
-#: ../gtk/gtkplacessidebar.c:3424
+#: ../gtk/gtkplacessidebar.c:3417
 msgid "_Add Bookmark"
 msgstr "_Pridať záložku"
 
-#: ../gtk/gtkplacessidebar.c:3430
+#: ../gtk/gtkplacessidebar.c:3423
 msgid "Remove"
 msgstr "Odstrániť"
 
-#: ../gtk/gtkplacessidebar.c:3437
+#: ../gtk/gtkplacessidebar.c:3430
 msgid "Rename…"
 msgstr "Premenovať…"
 
-#: ../gtk/gtkplacessidebar.c:3448
+#: ../gtk/gtkplacessidebar.c:3441
 msgid "_Mount"
 msgstr "_Pripojiť"
 
-#: ../gtk/gtkplacessidebar.c:3455
+#: ../gtk/gtkplacessidebar.c:3448
 msgid "_Unmount"
 msgstr "_Odpojiť"
 
-#: ../gtk/gtkplacessidebar.c:3462
+#: ../gtk/gtkplacessidebar.c:3455
 msgid "_Eject"
 msgstr "_Vysunúť"
 
-#: ../gtk/gtkplacessidebar.c:3469
+#: ../gtk/gtkplacessidebar.c:3462
 msgid "_Detect Media"
 msgstr "_Zistiť nosič"
 
-#: ../gtk/gtkplacessidebar.c:4084
+#: ../gtk/gtkplacessidebar.c:4077
 msgid "Computer"
 msgstr "Počítač"
 
@@ -3451,11 +3455,11 @@ msgctxt "volume percentage"
 msgid "%d %%"
 msgstr "%d %%"
 
-#: ../gtk/gtkwindow.c:11703
+#: ../gtk/gtkwindow.c:11705
 msgid "Do you want to use GTK+ Inspector?"
 msgstr "Chcete použiť nástroj Inšpektor GTK+?"
 
-#: ../gtk/gtkwindow.c:11705
+#: ../gtk/gtkwindow.c:11707
 msgid ""
 "GTK+ Inspector is an interactive debugger that lets you explore and modify "
 "the internals of any GTK+ application. Using it may cause the application to "
@@ -5827,100 +5831,5 @@ msgstr "Znížiť hlasitosť"
 msgid "Decreases the volume"
 msgstr "Zníženie hlasitosti"
 
-# PM: nedá sa online nahradiť na internete?
-#~ msgid "Failed to look for applications online"
-#~ msgstr "Online vyhľadávanie aplikácií zlyhalo"
-
-#~ msgid "Select an application to open “%s”"
-#~ msgstr "Vyberte aplikáciu na otvorenie „%s“"
-
-#~ msgid "No applications available to open “%s” files"
-#~ msgstr "Na otvorenie súborov typu „%s“ nie je dostupná žiadna aplikácia"
-
-# PM: ak sa nahradí online vyššie tak ja tu treba
-# PM: druhá časť vety znie neprirodzene treba zmeniť slovosled
-#~ msgid ""
-#~ "Click \"Show other applications\", for more options, or \"Find "
-#~ "applications online\" to install a new application"
-#~ msgstr ""
-#~ "Viac volieb získate kliknutím na „Zobraziť ďalšie aplikácie“, alebo "
-#~ "kliknutím na „Nájsť aplikácie online“ pre nainštalovanie novej aplikácie"
-
-#~ msgid ""
-#~ "%s cannot quit at this time:\n"
-#~ "\n"
-#~ "%s"
-#~ msgstr ""
-#~ "Aplikácia %s teraz nemôže skončiť:\n"
-#~ "\n"
-#~ "%s"
-
-#~ msgid "Please select a folder below"
-#~ msgstr "Nižšie si vyberte priečinok, prosím"
-
-#~ msgid "Please type a file name"
-#~ msgstr "Zadajte názov súboru, prosím"
-
-#~ msgid "Recently Used"
-#~ msgstr "Nedávno použité"
-
-#~ msgid "Search:"
-#~ msgstr "Hľadať:"
-
-#~ msgid "Save in folder:"
-#~ msgstr "Uložiť do priečinka:"
-
-#~ msgid "Create in folder:"
-#~ msgstr "Vytvoriť v priečinku:"
-
-#~ msgid "Places"
-#~ msgstr "Umiestnenia"
-
-#~ msgid "Unmaximize"
-#~ msgstr "Zrušiť maximalizáciu"
-
-#~ msgid "Always on Top"
-#~ msgstr "Vždy na vrchu"
-
-#~ msgid "Always on Visible Workspace"
-#~ msgstr "Vždy na viditeľnom pracovnom priestore"
-
-#~ msgid "Only on This Workspace"
-#~ msgstr "Len na tomto pracovnom priestore"
-
-#~ msgid "Move to Workspace Up"
-#~ msgstr "Presunúť na pracovný priestor vyššie"
-
-#~ msgid "Move to Workspace Down"
-#~ msgstr "Presunúť na pracovný priestor nižšie"
-
-#~ msgid "Move to Another Workspace"
-#~ msgstr "Presunúť na iný pracovný priestor"
-
-#~ msgid "Workspace %d"
-#~ msgstr "Pracovný priestor č. %d"
-
-#~ msgid "_License"
-#~ msgstr "_Licencia"
-
-#~ msgid "Show Other Applications"
-#~ msgstr "Zobraziť ďalšie aplikácie"
-
-#~ msgid "C_ontinue"
-#~ msgstr "Pokrač_ovať"
-
-#~ msgid "Type a file name"
-#~ msgstr "Zadajte názov súboru"
-
-#~ msgid "+"
-#~ msgstr "+"
-
-#~ msgid "-"
-#~ msgstr "-"
-
-#~ msgid "Switches between on and off states"
-#~ msgstr "Prepína medzi zapnutým a vypnutým stavom"
-
-#~ msgctxt "light switch widget"
-#~ msgid "Switch"
-#~ msgstr "Prepínač"
+#~ msgid "The license of the program"
+#~ msgstr "Licencia programu"
