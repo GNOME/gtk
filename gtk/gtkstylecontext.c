@@ -346,7 +346,6 @@ style_info_copy (GtkStyleInfo *info)
 
   copy = style_info_new ();
   copy->decl = gtk_css_node_declaration_ref (info->decl);
-  style_info_set_values (copy, info->values);
 
   return copy;
 }
@@ -1436,11 +1435,6 @@ gtk_style_context_save (GtkStyleContext *context)
   priv->saved_nodes = g_slist_prepend (priv->saved_nodes, priv->info);
 
   priv->info = style_info_copy (priv->info);
-  /* Need to unset animations here because we can not know what style
-   * class potential transitions came from once we save().
-   */
-  if (priv->info->values && !_gtk_css_computed_values_is_static (priv->info->values))
-    style_info_set_values (priv->info, NULL);
 }
 
 /**
