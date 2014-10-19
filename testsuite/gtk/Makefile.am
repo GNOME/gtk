@@ -34,6 +34,7 @@ TEST_PROGS += 			\
 	adjustment		\
 	bitmask			\
 	builder			\
+	builderparser		\
 	cellarea		\
 	check-icon-names	\
 	clipboard		\
@@ -161,10 +162,22 @@ test_icontheme =					\
 	icons2/index.theme				\
 	$(NULL)
 
+test_ui =						\
+	ui/test1.ui					\
+	ui/test1.expected				\
+	ui/test2.ui					\
+	ui/test2.expected				\
+	ui/test3.ui					\
+	ui/test3.expected				\
+	ui/test4.ui					\
+	ui/test4.expected				\
+	$(NULL)
+
 EXTRA_DIST +=				\
 	file-chooser-test-dir/empty     \
 	file-chooser-test-dir/text.txt	\
 	$(test_icontheme)		\
+	$(test_ui)			\
 	$(NULL)
 
 GTK_GSETTINGS_SCHEMAS = \
@@ -186,7 +199,7 @@ all-am: gschemas.compiled
 if BUILDOPT_INSTALL_TESTS
 insttestdir = $(libexecdir)/installed-tests/$(PACKAGE)
 insttest_PROGRAMS = $(TEST_PROGS)
-nobase_insttest_DATA = $(test_icontheme)
+nobase_insttest_DATA = $(test_icontheme) $(test_ui)
 
 %.test: %$(EXEEXT) Makefile
 	$(AM_V_GEN) (echo '[Test]' > $@.tmp; \
