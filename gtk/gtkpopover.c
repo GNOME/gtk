@@ -99,6 +99,10 @@
 #include "a11y/gtkpopoveraccessible.h"
 #include "gtkmenusectionbox.h"
 
+#ifdef GDK_WINDOWING_WAYLAND
+#include "wayland/gdkwayland.h"
+#endif
+
 #define TAIL_GAP_WIDTH 24
 #define TAIL_HEIGHT    12
 
@@ -523,8 +527,24 @@ gtk_popover_get_gap_coords (GtkPopover      *popover,
 
   gtk_popover_get_pointing_to (popover, &rect);
   gtk_widget_get_allocation (widget, &allocation);
-  gtk_widget_translate_coordinates (priv->widget, widget,
-                                    rect.x, rect.y, &rect.x, &rect.y);
+
+#ifdef GDK_WINDOWING_WAYLAND
+  if (GDK_IS_WAYLAND_DISPLAY (gtk_widget_get_display (widget)))
+    {
+      gint win_x, win_y;
+
+      gtk_widget_translate_coordinates (priv->widget, GTK_WIDGET (priv->window),
+                                        rect.x, rect.y, &rect.x, &rect.y);
+      gdk_window_get_origin (gtk_widget_get_window (GTK_WIDGET (popover)),
+                             &win_x, &win_y);
+      rect.x -= win_x;
+      rect.y -= win_y;
+    }
+  else
+#endif
+    gtk_widget_translate_coordinates (priv->widget, widget,
+                                      rect.x, rect.y, &rect.x, &rect.y);
+
   get_margin (widget, &margin);
 
   if (gtk_widget_get_direction (widget) == GTK_TEXT_DIR_LTR)
@@ -802,7 +822,11 @@ gtk_popover_update_position (GtkPopover *popover)
   overshoot[GTK_POS_LEFT] = req.width - rect.x;
   overshoot[GTK_POS_RIGHT] = rect.x + rect.width + req.width - window_alloc.width;
 
-  if (overshoot[pos] <= 0)
+  if (GDK_IS_WAYLAND_DISPLAY (gtk_widget_get_display (widget)))
+    {
+      priv->final_position = priv->preferred_position;
+    }
+  else if (overshoot[pos] <= 0)
     {
       priv->final_position = priv->preferred_position;
     }

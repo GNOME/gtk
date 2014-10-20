@@ -6319,7 +6319,19 @@ popover_realize (GtkWidget        *widget,
 
   popover_get_rect (popover, window, &rect);
 
-  attributes.window_type = GDK_WINDOW_CHILD;
+#ifdef GDK_WINDOWING_WAYLAND
+  if (GDK_IS_WAYLAND_DISPLAY (gtk_widget_get_display (widget)))
+    {
+      attributes.window_type = GDK_WINDOW_SUBSURFACE;
+      parent_window = gdk_screen_get_root_window (gtk_widget_get_screen (widget));
+    }
+  else
+#endif
+    {
+      attributes.window_type = GDK_WINDOW_CHILD;
+      parent_window = gtk_widget_get_window (GTK_WIDGET (window));
+    }
+
   attributes.wclass = GDK_INPUT_OUTPUT;
   attributes.x = rect.x;
   attributes.y = rect.y;
@@ -6330,9 +6342,14 @@ popover_realize (GtkWidget        *widget,
     GDK_EXPOSURE_MASK;
   attributes_mask = GDK_WA_X | GDK_WA_Y | GDK_WA_VISUAL;
 
-  parent_window = gtk_widget_get_window (GTK_WIDGET (window));
   popover->window = gdk_window_new (parent_window, &attributes, attributes_mask);
   gtk_widget_register_window (GTK_WIDGET (window), popover->window);
+
+#ifdef GDK_WINDOWING_WAYLAND
+  if (GDK_IS_WAYLAND_DISPLAY (gtk_widget_get_display (widget)))
+    gdk_window_set_transient_for (popover->window,
+                                  gtk_widget_get_window (GTK_WIDGET (window)));
+#endif
 
   gtk_widget_set_parent_window (popover->widget, popover->window);
 }
@@ -7123,6 +7140,11 @@ popover_unrealize (GtkWidget        *widget,
                    GtkWindowPopover *popover,
                    GtkWindow        *window)
 {
+#ifdef GDK_WINDOWING_WAYLAND
+  if (GDK_IS_WAYLAND_DISPLAY (gtk_widget_get_display (widget)))
+    gdk_window_set_transient_for (popover->window, NULL);
+#endif
+
   gtk_widget_unregister_window (GTK_WIDGET (window), popover->window);
   gtk_widget_unrealize (popover->widget);
   gdk_window_destroy (popover->window);
