@@ -2324,6 +2324,14 @@ gtk_settings_set_property_value_internal (GtkSettings            *settings,
     apply_queued_setting (settings, pspec, qvalue);
 }
 
+/**
+ * gtk_settings_set_property_value:
+ * @settings:
+ * @prop_name:
+ * @new_value:
+ *
+ * Deprecated: 3.16: Use g_object_set() instead.
+ */
 void
 gtk_settings_set_property_value (GtkSettings            *settings,
                                  const gchar            *prop_name,
@@ -2350,6 +2358,15 @@ _gtk_settings_set_property_value_from_rc (GtkSettings            *settings,
                                             GTK_SETTINGS_SOURCE_THEME);
 }
 
+/**
+ * gtk_settings_set_string_property:
+ * @settings:
+ * @name:
+ * @v_string:
+ * @origin:
+ *
+ * Deprecated: 3.16: Use g_object_set() instead.
+ */
 void
 gtk_settings_set_string_property (GtkSettings *settings,
                                   const gchar *name,
@@ -2365,10 +2382,20 @@ gtk_settings_set_string_property (GtkSettings *settings,
   svalue.origin = (gchar*) origin;
   g_value_init (&svalue.value, G_TYPE_STRING);
   g_value_set_static_string (&svalue.value, v_string);
-  gtk_settings_set_property_value (settings, name, &svalue);
+  gtk_settings_set_property_value_internal (settings, name, &svalue,
+                                            GTK_SETTINGS_SOURCE_APPLICATION);
   g_value_unset (&svalue.value);
 }
 
+/**
+ * gtk_settings_set_long_property:
+ * @settings:
+ * @name:
+ * @v_long:
+ * @origin:
+ *
+ * Deprecated: 3.16: Use g_object_set() instead.
+ */
 void
 gtk_settings_set_long_property (GtkSettings *settings,
                                 const gchar *name,
@@ -2383,10 +2410,20 @@ gtk_settings_set_long_property (GtkSettings *settings,
   svalue.origin = (gchar*) origin;
   g_value_init (&svalue.value, G_TYPE_LONG);
   g_value_set_long (&svalue.value, v_long);
-  gtk_settings_set_property_value (settings, name, &svalue);
+  gtk_settings_set_property_value_internal (settings, name, &svalue,
+                                            GTK_SETTINGS_SOURCE_APPLICATION);
   g_value_unset (&svalue.value);
 }
 
+/**
+ * gtk_settings_set_double_property:
+ * @settings:
+ * @name:
+ * @v_double:
+ * @origin:
+ *
+ * Deprecated: 3.16: Use g_object_set() instead.
+ */
 void
 gtk_settings_set_double_property (GtkSettings *settings,
                                   const gchar *name,
@@ -2401,7 +2438,8 @@ gtk_settings_set_double_property (GtkSettings *settings,
   svalue.origin = (gchar*) origin;
   g_value_init (&svalue.value, G_TYPE_DOUBLE);
   g_value_set_double (&svalue.value, v_double);
-  gtk_settings_set_property_value (settings, name, &svalue);
+  gtk_settings_set_property_value_internal (settings, name, &svalue,
+                                            GTK_SETTINGS_SOURCE_APPLICATION);
   g_value_unset (&svalue.value);
 }
 

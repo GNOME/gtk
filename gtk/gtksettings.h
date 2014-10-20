@@ -120,21 +120,21 @@ gboolean gtk_rc_property_parse_border      (const GParamSpec *pspec,
                                             const GString    *gstring,
                                             GValue           *property_value);
 
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_3_16
 void     gtk_settings_set_property_value   (GtkSettings            *settings,
                                             const gchar            *name,
                                             const GtkSettingsValue *svalue);
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_3_16
 void     gtk_settings_set_string_property  (GtkSettings            *settings,
                                             const gchar            *name,
                                             const gchar            *v_string,
                                             const gchar            *origin);
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_3_16
 void     gtk_settings_set_long_property    (GtkSettings            *settings,
                                             const gchar            *name,
                                             glong                   v_long,
                                             const gchar            *origin);
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_3_16
 void     gtk_settings_set_double_property  (GtkSettings            *settings,
                                             const gchar            *name,
                                             gdouble                 v_double,
