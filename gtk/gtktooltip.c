@@ -20,6 +20,7 @@
 #include "config.h"
 
 #include "gtktooltip.h"
+#include "gtktooltipprivate.h"
 
 #include <math.h>
 #include <string.h>

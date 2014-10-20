@@ -53,7 +53,7 @@
 #include "gtkbindings.h"
 #include "gtkprivate.h"
 #include "gtkaccessible.h"
-#include "gtktooltip.h"
+#include "gtktooltipprivate.h"
 #include "gtkinvisible.h"
 #include "gtkbuildable.h"
 #include "gtkbuilderprivate.h"

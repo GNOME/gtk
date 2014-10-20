@@ -48,7 +48,7 @@
 #include "gtkicontheme.h"
 #include "gtkmain.h"
 #include "gtkplug.h"
-#include "gtktooltip.h"
+#include "gtktooltipprivate.h"
 #include "gtkwindow.h"
 #include "gtkintl.h"
 #include "gtkselectionprivate.h"

@@ -123,7 +123,7 @@
 #include "gtkrecentmanager.h"
 #include "gtkselectionprivate.h"
 #include "gtksettingsprivate.h"
-#include "gtktooltip.h"
+#include "gtktooltipprivate.h"
 #include "gtkversion.h"
 #include "gtkwidgetprivate.h"
 #include "gtkwindowprivate.h"

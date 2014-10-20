@@ -672,6 +672,7 @@ gtk_private_h_sources =		\
 	gtktogglebuttonprivate.h \
 	gtktoolbarprivate.h	\
 	gtktoolpaletteprivate.h	\
+	gtktooltipprivate.h	\
 	gtktreedatalist.h	\
 	gtktreeprivate.h	\
 	gtkwidgetprivate.h	\
