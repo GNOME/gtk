@@ -3710,6 +3710,64 @@ microphone-sensitivity-medium-symbolic</property>
                         </child>
                       </object>
                     </child>
+                    <child>
+                      <object class="GtkFrame">
+                        <property name="visible">True</property>
+                        <child>
+                          <object class="GtkPaned">
+                            <property name="visible">True</property>
+                            <property name="orientation">horizontal</property>
+                            <property name="wide-handle">True</property>
+                            <child>
+                              <object class="GtkNotebook">
+                                <property name="visible">True</property>
+                                <child>
+                                  <object class="GtkBox">
+                                    <property name="visible">True</property>
+                                    <property name="height-request">120</property>
+                                  </object>
+                                </child>
+                                <child type="tab">
+                                  <object class="GtkLabel">
+                                    <property name="visible">True</property>
+                                    <property name="label" translatable="yes">Page 1</property>
+                                  </object>
+                                </child>
+                                <child>
+                                  <object class="GtkBox">
+                                    <property name="visible">True</property>
+                                    <property name="height-request">120</property>
+                                  </object>
+                                </child>
+                                <child type="tab">
+                                  <object class="GtkLabel">
+                                    <property name="visible">True</property>
+                                    <property name="label" translatable="yes">Page 2</property>
+                                  </object>
+                                </child>
+                              </object> 
+                            </child>
+                            <child>
+                              <object class="GtkNotebook">
+                                <property name="visible">True</property>
+                                <child>
+                                  <object class="GtkBox">
+                                    <property name="visible">True</property>
+                                    <property name="height-request">120</property>
+                                  </object>
+                                </child>
+                                <child type="tab">
+                                  <object class="GtkLabel">
+                                    <property name="visible">True</property>
+                                    <property name="label" translatable="yes">Page 3</property>
+                                  </object>
+                                </child>
+                              </object> 
+                            </child>
+                          </object>
+                        </child>
+                      </object>
+                    </child>
                   </object>
                 </child>
                 <child>
