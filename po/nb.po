@@ -5,10 +5,10 @@
 # Torstein Adolf Winterseth <kvikende@fsfe.org>, 2010.
 msgid ""
 msgstr ""
-"Project-Id-Version: gtk+ 3.9.13\n"
+"Project-Id-Version: gtk+ 3.14.x\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-10-03 21:31+0200\n"
-"PO-Revision-Date: 2014-10-03 21:43+0200\n"
+"POT-Creation-Date: 2014-10-20 18:52+0200\n"
+"PO-Revision-Date: 2014-10-20 19:03+0200\n"
 "Last-Translator: Kjartan Maraas <kmaraas@gnome.org>\n"
 "Language-Team: Norwegian bokmål <i18n-nb@lister.ping.uio.no>\n"
 "Language: no\n"
@@ -1160,7 +1160,7 @@ msgstr ""
 #: ../gtk/gtkmessagedialog.c:957 ../gtk/gtkmountoperation.c:543
 #: ../gtk/gtkpagesetupunixdialog.c:196 ../gtk/gtkprintbackend.c:763
 #: ../gtk/gtkprinteroptionwidget.c:545 ../gtk/gtkprintunixdialog.c:665
-#: ../gtk/gtkprintunixdialog.c:733 ../gtk/gtkwindow.c:11708
+#: ../gtk/gtkprintunixdialog.c:733 ../gtk/gtkwindow.c:11710
 #: ../gtk/inspector/css-editor.c:198
 #: ../gtk/resources/ui/gtkappchooserdialog.ui.h:2
 #: ../gtk/resources/ui/gtkassistant.ui.h:5
@@ -1215,7 +1215,7 @@ msgstr "_Bruk"
 
 #: ../gtk/deprecated/gtkfontsel.c:1698 ../gtk/gtkmessagedialog.c:936
 #: ../gtk/gtkmessagedialog.c:958 ../gtk/gtkprintbackend.c:764
-#: ../gtk/gtkwindow.c:11709 ../gtk/inspector/classes-list.c:125
+#: ../gtk/gtkwindow.c:11711 ../gtk/inspector/classes-list.c:125
 msgid "_OK"
 msgstr "_OK"
 
@@ -1371,8 +1371,7 @@ msgstr ""
 "Dette programmet kommer UTEN NOEN SOM HELST GARANTI.\n"
 "besøk  <a href=«%s»>%s</a> for detaljer."
 
-#: ../gtk/gtkaboutdialog.c:118 ../gtk/gtkaboutdialog.c:408
-#: ../gtk/resources/ui/gtkaboutdialog.ui.h:3
+#: ../gtk/gtkaboutdialog.c:118 ../gtk/resources/ui/gtkaboutdialog.ui.h:3
 msgid "License"
 msgstr "Lisens"
 
@@ -1424,9 +1423,18 @@ msgstr "GNU Lesser General Public License. Kun versjon 2.1"
 msgid "GNU Lesser General Public License, version 3 only"
 msgstr "GNU Lesser General Public License. Kun versjon 3"
 
-#: ../gtk/gtkaboutdialog.c:409
-msgid "The license of the program"
-msgstr "Programmets lisens"
+#: ../gtk/gtkaboutdialog.c:697
+msgid "C_redits"
+msgstr "Bid_ragsytere"
+
+#: ../gtk/gtkaboutdialog.c:705
+msgid "_License"
+msgstr "_Lisens"
+
+#: ../gtk/gtkaboutdialog.c:714 ../gtk/gtkcustompaperunixdialog.c:329
+#: ../gtk/gtkmessagedialog.c:940 ../gtk/resources/ui/gtkassistant.ui.h:6
+msgid "_Close"
+msgstr "_Lukk"
 
 #: ../gtk/gtkaboutdialog.c:982
 msgid "Could not show link"
@@ -2009,13 +2017,8 @@ msgstr "_Tilpass"
 msgid "default:mm"
 msgstr "default:mm"
 
-#: ../gtk/gtkcustompaperunixdialog.c:329 ../gtk/gtkmessagedialog.c:940
-#: ../gtk/resources/ui/gtkassistant.ui.h:6
-msgid "_Close"
-msgstr "_Lukk"
-
 #. And show the custom paper dialog
-#: ../gtk/gtkcustompaperunixdialog.c:405 ../gtk/gtkprintunixdialog.c:3305
+#: ../gtk/gtkcustompaperunixdialog.c:405 ../gtk/gtkprintunixdialog.c:3311
 msgid "Manage Custom Sizes"
 msgstr "Håndter egendefinerte størrelser"
 
@@ -2068,30 +2071,30 @@ msgstr "Høy_re:"
 msgid "Paper Margins"
 msgstr "Papirmarger"
 
-#: ../gtk/gtkentry.c:9584 ../gtk/gtkentry.c:9737 ../gtk/gtklabel.c:6530
-#: ../gtk/gtktextview.c:8841 ../gtk/gtktextview.c:9029
+#: ../gtk/gtkentry.c:9587 ../gtk/gtkentry.c:9742 ../gtk/gtklabel.c:6530
+#: ../gtk/gtktextview.c:8841 ../gtk/gtktextview.c:9031
 msgid "Cu_t"
 msgstr "Klipp u_t"
 
-#: ../gtk/gtkentry.c:9588 ../gtk/gtkentry.c:9740 ../gtk/gtklabel.c:6531
-#: ../gtk/gtktextview.c:8845 ../gtk/gtktextview.c:9033
+#: ../gtk/gtkentry.c:9591 ../gtk/gtkentry.c:9745 ../gtk/gtklabel.c:6531
+#: ../gtk/gtktextview.c:8845 ../gtk/gtktextview.c:9035
 msgid "_Copy"
 msgstr "_Kopier"
 
-#: ../gtk/gtkentry.c:9592 ../gtk/gtkentry.c:9743 ../gtk/gtklabel.c:6532
-#: ../gtk/gtktextview.c:8847 ../gtk/gtktextview.c:9035
+#: ../gtk/gtkentry.c:9595 ../gtk/gtkentry.c:9748 ../gtk/gtklabel.c:6532
+#: ../gtk/gtktextview.c:8847 ../gtk/gtktextview.c:9037
 msgid "_Paste"
 msgstr "_Lim inn"
 
-#: ../gtk/gtkentry.c:9595 ../gtk/gtklabel.c:6534 ../gtk/gtktextview.c:8850
+#: ../gtk/gtkentry.c:9598 ../gtk/gtklabel.c:6534 ../gtk/gtktextview.c:8850
 msgid "_Delete"
 msgstr "_Slett"
 
-#: ../gtk/gtkentry.c:9606 ../gtk/gtklabel.c:6543 ../gtk/gtktextview.c:8864
+#: ../gtk/gtkentry.c:9609 ../gtk/gtklabel.c:6543 ../gtk/gtktextview.c:8864
 msgid "Select _All"
 msgstr "Velg _alt"
 
-#: ../gtk/gtkentry.c:10798
+#: ../gtk/gtkentry.c:10803
 msgid "Caps Lock is on"
 msgstr "Caps Lock er på"
 
@@ -2099,7 +2102,7 @@ msgstr "Caps Lock er på"
 msgid "Select a File"
 msgstr "Velg en fil"
 
-#: ../gtk/gtkfilechooserbutton.c:104 ../gtk/gtkplacessidebar.c:960
+#: ../gtk/gtkfilechooserbutton.c:104 ../gtk/gtkplacessidebar.c:983
 msgid "Desktop"
 msgstr "Skrivebord"
 
@@ -2108,7 +2111,7 @@ msgstr "Skrivebord"
 msgid "(None)"
 msgstr "(Ingen)"
 
-#: ../gtk/gtkfilechooserbutton.c:795 ../gtk/gtkplacessidebar.c:3273
+#: ../gtk/gtkfilechooserbutton.c:795 ../gtk/gtkplacessidebar.c:3391
 msgid "_Open"
 msgstr "_Åpne"
 
@@ -2303,7 +2306,7 @@ msgstr "Ingen"
 msgid "Application menu"
 msgstr "Programmeny"
 
-#: ../gtk/gtkheaderbar.c:476 ../gtk/gtkwindow.c:8436
+#: ../gtk/gtkheaderbar.c:476 ../gtk/gtkwindow.c:8438
 msgid "Close"
 msgstr "Lukk"
 
@@ -2630,7 +2633,7 @@ msgstr ""
 " Topp: %s %s\n"
 " Bunn: %s %s"
 
-#: ../gtk/gtkpagesetupunixdialog.c:882 ../gtk/gtkprintunixdialog.c:3359
+#: ../gtk/gtkpagesetupunixdialog.c:882 ../gtk/gtkprintunixdialog.c:3365
 msgid "Manage Custom Sizes…"
 msgstr "Håndter egendefinerte størrelser …"
 
@@ -2644,195 +2647,195 @@ msgstr "Sideoppsett"
 msgid "File System Root"
 msgstr "Filsystemrot"
 
-#: ../gtk/gtkplacessidebar.c:454
+#: ../gtk/gtkplacessidebar.c:455
 msgid "Devices"
 msgstr "Enheter"
 
-#: ../gtk/gtkplacessidebar.c:462
+#: ../gtk/gtkplacessidebar.c:463
 msgid "Bookmarks"
 msgstr "Bokmerker"
 
-#: ../gtk/gtkplacessidebar.c:934
+#: ../gtk/gtkplacessidebar.c:957
 msgid "Recent"
 msgstr "Nylig"
 
-#: ../gtk/gtkplacessidebar.c:936
+#: ../gtk/gtkplacessidebar.c:959
 msgid "Recent files"
 msgstr "Nylig brukte filer"
 
-#: ../gtk/gtkplacessidebar.c:945
+#: ../gtk/gtkplacessidebar.c:968
 msgid "Home"
 msgstr "Hjem"
 
-#: ../gtk/gtkplacessidebar.c:947
+#: ../gtk/gtkplacessidebar.c:970
 msgid "Open your personal folder"
 msgstr "Åpne din personlige mappe"
 
-#: ../gtk/gtkplacessidebar.c:962
+#: ../gtk/gtkplacessidebar.c:985
 msgid "Open the contents of your desktop in a folder"
 msgstr "Åpne innholdet av skrivebordet i en mappe"
 
-#: ../gtk/gtkplacessidebar.c:976
+#: ../gtk/gtkplacessidebar.c:999
 msgid "Enter Location"
 msgstr "Oppgi lokasjon"
 
-#: ../gtk/gtkplacessidebar.c:978
+#: ../gtk/gtkplacessidebar.c:1001
 msgid "Manually enter a location"
 msgstr "Oppgi lokasjon manuelt"
 
-#: ../gtk/gtkplacessidebar.c:989
+#: ../gtk/gtkplacessidebar.c:1012
 msgid "Trash"
 msgstr "Papirkurv"
 
-#: ../gtk/gtkplacessidebar.c:991
+#: ../gtk/gtkplacessidebar.c:1014
 msgid "Open the trash"
 msgstr "Åpne papirkurv"
 
-#: ../gtk/gtkplacessidebar.c:1054 ../gtk/gtkplacessidebar.c:1082
-#: ../gtk/gtkplacessidebar.c:1290
+#: ../gtk/gtkplacessidebar.c:1077 ../gtk/gtkplacessidebar.c:1105
+#: ../gtk/gtkplacessidebar.c:1313
 #, c-format
 msgid "Mount and open %s"
 msgstr "Monter og åpne %s"
 
-#: ../gtk/gtkplacessidebar.c:1163
+#: ../gtk/gtkplacessidebar.c:1186
 msgid "Open the contents of the file system"
 msgstr "Åpne innholdet i filsystemet"
 
-#: ../gtk/gtkplacessidebar.c:1253
+#: ../gtk/gtkplacessidebar.c:1276
 msgid "Network"
 msgstr "Nettverk"
 
-#: ../gtk/gtkplacessidebar.c:1259
+#: ../gtk/gtkplacessidebar.c:1282
 msgid "Browse Network"
 msgstr "Bla gjennom nettverk"
 
-#: ../gtk/gtkplacessidebar.c:1261
+#: ../gtk/gtkplacessidebar.c:1284
 msgid "Browse the contents of the network"
 msgstr "Bla gjennom innholdet på nettverket"
 
-#: ../gtk/gtkplacessidebar.c:1269
+#: ../gtk/gtkplacessidebar.c:1292
 msgid "Connect to Server"
 msgstr "Koble til tjener"
 
-#: ../gtk/gtkplacessidebar.c:1271
+#: ../gtk/gtkplacessidebar.c:1294
 msgid "Connect to a network server address"
 msgstr "Koble til en nettverkstjeneradresse"
 
-#: ../gtk/gtkplacessidebar.c:1673
+#: ../gtk/gtkplacessidebar.c:1696
 msgid "New bookmark"
 msgstr "Nytt bokmerke"
 
 #. Adjust start/stop items to reflect the type of the drive
-#: ../gtk/gtkplacessidebar.c:2230 ../gtk/gtkplacessidebar.c:3351
+#: ../gtk/gtkplacessidebar.c:2253 ../gtk/gtkplacessidebar.c:3469
 msgid "_Start"
 msgstr "_Start"
 
-#: ../gtk/gtkplacessidebar.c:2231 ../gtk/gtkplacessidebar.c:3358
+#: ../gtk/gtkplacessidebar.c:2254 ../gtk/gtkplacessidebar.c:3476
 msgid "_Stop"
 msgstr "_Stopp"
 
 #. start() for type G_DRIVE_START_STOP_TYPE_SHUTDOWN is normally not used
-#: ../gtk/gtkplacessidebar.c:2238
+#: ../gtk/gtkplacessidebar.c:2261
 msgid "_Power On"
 msgstr "Slå _på"
 
-#: ../gtk/gtkplacessidebar.c:2239
+#: ../gtk/gtkplacessidebar.c:2262
 msgid "_Safely Remove Drive"
 msgstr "_Fjern stasjon på en trygg måte"
 
-#: ../gtk/gtkplacessidebar.c:2243
+#: ../gtk/gtkplacessidebar.c:2266
 msgid "_Connect Drive"
 msgstr "_Koble til stasjon"
 
-#: ../gtk/gtkplacessidebar.c:2244
+#: ../gtk/gtkplacessidebar.c:2267
 msgid "_Disconnect Drive"
 msgstr "Koble _fra stasjon"
 
-#: ../gtk/gtkplacessidebar.c:2248
+#: ../gtk/gtkplacessidebar.c:2271
 msgid "_Start Multi-disk Device"
 msgstr "_Start enhet med flere disker"
 
-#: ../gtk/gtkplacessidebar.c:2249
+#: ../gtk/gtkplacessidebar.c:2272
 msgid "_Stop Multi-disk Device"
 msgstr "_Stopp enhet med flere disker"
 
 #. stop() for type G_DRIVE_START_STOP_TYPE_PASSWORD is normally not used
-#: ../gtk/gtkplacessidebar.c:2254
+#: ../gtk/gtkplacessidebar.c:2277
 msgid "_Unlock Drive"
 msgstr "Lås _opp stasjon"
 
-#: ../gtk/gtkplacessidebar.c:2255
+#: ../gtk/gtkplacessidebar.c:2278
 msgid "_Lock Drive"
 msgstr "_Lås stasjon"
 
-#: ../gtk/gtkplacessidebar.c:2284 ../gtk/gtkplacessidebar.c:3033
+#: ../gtk/gtkplacessidebar.c:2307 ../gtk/gtkplacessidebar.c:3151
 #, c-format
 msgid "Unable to start %s"
 msgstr "Kan ikke starte %s"
 
-#: ../gtk/gtkplacessidebar.c:2314
+#: ../gtk/gtkplacessidebar.c:2337
 #, c-format
 msgid "Unable to access “%s”"
 msgstr "Kan ikke aksessere «%s»"
 
-#: ../gtk/gtkplacessidebar.c:2624
+#: ../gtk/gtkplacessidebar.c:2647
 #, c-format
 msgid "Unable to unmount %s"
 msgstr "Kan ikke avmontere %s"
 
-#: ../gtk/gtkplacessidebar.c:2750
+#: ../gtk/gtkplacessidebar.c:2856
 #, c-format
 msgid "Unable to stop %s"
 msgstr "Kan ikke stoppe %s"
 
-#: ../gtk/gtkplacessidebar.c:2779 ../gtk/gtkplacessidebar.c:2808
-#: ../gtk/gtkplacessidebar.c:2837
+#: ../gtk/gtkplacessidebar.c:2885 ../gtk/gtkplacessidebar.c:2914
+#: ../gtk/gtkplacessidebar.c:2943
 #, c-format
 msgid "Unable to eject %s"
 msgstr "Kan ikke løse ut %s"
 
-#: ../gtk/gtkplacessidebar.c:2983
+#: ../gtk/gtkplacessidebar.c:3101
 #, c-format
 msgid "Unable to poll %s for media changes"
 msgstr "Kan ikke spørre %s etter endringer i medie"
 
-#: ../gtk/gtkplacessidebar.c:3281
+#: ../gtk/gtkplacessidebar.c:3399
 msgid "Open in New _Tab"
 msgstr "Åpne i ny _fane"
 
-#: ../gtk/gtkplacessidebar.c:3290
+#: ../gtk/gtkplacessidebar.c:3408
 msgid "Open in New _Window"
 msgstr "Åpne i nytt _vindu"
 
-#: ../gtk/gtkplacessidebar.c:3299
+#: ../gtk/gtkplacessidebar.c:3417
 msgid "_Add Bookmark"
 msgstr "_Legg til bokmerke"
 
-#: ../gtk/gtkplacessidebar.c:3305
+#: ../gtk/gtkplacessidebar.c:3423
 msgid "Remove"
 msgstr "Fjern"
 
-#: ../gtk/gtkplacessidebar.c:3312
+#: ../gtk/gtkplacessidebar.c:3430
 msgid "Rename…"
 msgstr "Endre navn …"
 
-#: ../gtk/gtkplacessidebar.c:3323
+#: ../gtk/gtkplacessidebar.c:3441
 msgid "_Mount"
 msgstr "_Monter"
 
-#: ../gtk/gtkplacessidebar.c:3330
+#: ../gtk/gtkplacessidebar.c:3448
 msgid "_Unmount"
 msgstr "A_vmonter"
 
-#: ../gtk/gtkplacessidebar.c:3337
+#: ../gtk/gtkplacessidebar.c:3455
 msgid "_Eject"
 msgstr "_Løs ut"
 
-#: ../gtk/gtkplacessidebar.c:3344
+#: ../gtk/gtkplacessidebar.c:3462
 msgid "_Detect Media"
 msgstr "_Gjenkjenn medie"
 
-#: ../gtk/gtkplacessidebar.c:3953
+#: ../gtk/gtkplacessidebar.c:4077
 msgid "Computer"
 msgstr "Datamaskin"
 
@@ -3000,7 +3003,7 @@ msgstr "S_kriv ut"
 msgid "Getting printer information failed"
 msgstr "Klarte ikke å hente informasjon om skriveren"
 
-#: ../gtk/gtkprintunixdialog.c:2041
+#: ../gtk/gtkprintunixdialog.c:2049
 msgid "Getting printer information…"
 msgstr "Henter informasjon om skriver …"
 
@@ -3010,42 +3013,42 @@ msgstr "Henter informasjon om skriver …"
 #. Translators: These strings name the possible arrangements of
 #. * multiple pages on a sheet when printing
 #.
-#: ../gtk/gtkprintunixdialog.c:3088
+#: ../gtk/gtkprintunixdialog.c:3094
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:4907
 msgid "Left to right, top to bottom"
 msgstr "Venstre til høyre, topp til bunn"
 
-#: ../gtk/gtkprintunixdialog.c:3088
+#: ../gtk/gtkprintunixdialog.c:3094
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:4907
 msgid "Left to right, bottom to top"
 msgstr "Venstre til høyre, bunn til topp"
 
-#: ../gtk/gtkprintunixdialog.c:3089
+#: ../gtk/gtkprintunixdialog.c:3095
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:4908
 msgid "Right to left, top to bottom"
 msgstr "Høyre til venstre, topp til bunn"
 
-#: ../gtk/gtkprintunixdialog.c:3089
+#: ../gtk/gtkprintunixdialog.c:3095
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:4908
 msgid "Right to left, bottom to top"
 msgstr "Høyre til venstre, bunn til topp"
 
-#: ../gtk/gtkprintunixdialog.c:3090
+#: ../gtk/gtkprintunixdialog.c:3096
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:4909
 msgid "Top to bottom, left to right"
 msgstr "Topp til bunn, venstre til høyre"
 
-#: ../gtk/gtkprintunixdialog.c:3090
+#: ../gtk/gtkprintunixdialog.c:3096
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:4909
 msgid "Top to bottom, right to left"
 msgstr "Topp til bunn, høyre til venstre"
 
-#: ../gtk/gtkprintunixdialog.c:3091
+#: ../gtk/gtkprintunixdialog.c:3097
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:4910
 msgid "Bottom to top, left to right"
 msgstr "Bunn til topp, venstre til høyre"
 
-#: ../gtk/gtkprintunixdialog.c:3091
+#: ../gtk/gtkprintunixdialog.c:3097
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:4910
 msgid "Bottom to top, right to left"
 msgstr "Bunn til topp, høyre til venstre"
@@ -3053,28 +3056,28 @@ msgstr "Bunn til topp, høyre til venstre"
 #. Translators, this string is used to label the option in the print
 #. * dialog that controls in what order multiple pages are arranged
 #.
-#: ../gtk/gtkprintunixdialog.c:3095 ../gtk/gtkprintunixdialog.c:3108
+#: ../gtk/gtkprintunixdialog.c:3101 ../gtk/gtkprintunixdialog.c:3114
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:4987
 msgid "Page Ordering"
 msgstr "Siderekkefølge"
 
-#: ../gtk/gtkprintunixdialog.c:3124
+#: ../gtk/gtkprintunixdialog.c:3130
 msgid "Left to right"
 msgstr "Venstre til høyre"
 
-#: ../gtk/gtkprintunixdialog.c:3125
+#: ../gtk/gtkprintunixdialog.c:3131
 msgid "Right to left"
 msgstr "Høyre til venstre"
 
-#: ../gtk/gtkprintunixdialog.c:3137
+#: ../gtk/gtkprintunixdialog.c:3143
 msgid "Top to bottom"
 msgstr "Topp til bunn"
 
-#: ../gtk/gtkprintunixdialog.c:3138
+#: ../gtk/gtkprintunixdialog.c:3144
 msgid "Bottom to top"
 msgstr "Bunn til topp"
 
-#: ../gtk/gtkprintunixdialog.c:3381
+#: ../gtk/gtkprintunixdialog.c:3387
 msgid "Print"
 msgstr "Skriv ut"
 
@@ -3374,16 +3377,16 @@ msgctxt "volume percentage"
 msgid "%d %%"
 msgstr "%d %%"
 
-#: ../gtk/gtkwindow.c:11703
+#: ../gtk/gtkwindow.c:11705
 msgid "Do you want to use GTK+ Inspector?"
 msgstr "Vil du bruke GTK+ inspektør?"
 
-#: ../gtk/gtkwindow.c:11705
+#: ../gtk/gtkwindow.c:11707
 msgid ""
 "GTK+ Inspector is an interactive debugger that lets you explore and modify "
 "the internals of any GTK+ application. Using it may cause the application to "
 "break or crash."
-msgstr ""
+msgstr "GTK+ inspektør er en interaktiv feilsøkingsfunksjon som lar deg utforske og endre interne ting i ethvert GTK+-program. Dette kan forårsake at applikasjonen slutter å virke eller krasjer."
 
 #: ../gtk/inspector/action-editor.c:281
 msgid "Activate"
@@ -3440,25 +3443,26 @@ msgstr "Gjenopprett forvalg for denne komponenten"
 
 #: ../gtk/inspector/css-editor.c:89 ../gtk/inspector/css-editor.c:95
 msgid "You can type here any CSS rule recognized by GTK+."
-msgstr "Du kan skrive inn en hvilken som helst CSS-regel som gjenkjennes av GTK+."
+msgstr ""
+"Du kan skrive inn en hvilken som helst CSS-regel som gjenkjennes av GTK+."
 
 #: ../gtk/inspector/css-editor.c:90 ../gtk/inspector/css-editor.c:96
 msgid ""
 "You can temporarily disable this custom CSS by clicking on the \"Pause\" "
 "button above."
-msgstr ""
+msgstr "Du kan slå av denne egendefinerte CSSen midlertidig ved å klikke på «Pause»-knappen over."
 
 #: ../gtk/inspector/css-editor.c:91
 msgid "Changes are applied instantly and globally, for the whole application."
-msgstr ""
+msgstr "Endringer tas i bruk med det samme og i alle deler av programmet."
 
 #: ../gtk/inspector/css-editor.c:97
 msgid "Changes are applied instantly, only for this selected widget."
-msgstr ""
+msgstr "Endringer tas i bruk med det samme, men kun for valgt komponent."
 
 #: ../gtk/inspector/css-editor.c:159
 msgid "Saving CSS failed"
-msgstr ""
+msgstr "Lagring av CSS feilet"
 
 #: ../gtk/inspector/css-editor.c:199
 msgid "_Save"
@@ -3517,7 +3521,7 @@ msgstr "Ikon"
 
 #: ../gtk/inspector/misc-info.ui.h:2
 msgid "Buildable ID"
-msgstr ""
+msgstr "Byggbar ID"
 
 #: ../gtk/inspector/misc-info.ui.h:3
 msgid "Default Widget"
@@ -3532,15 +3536,15 @@ msgstr "Egenskaper"
 
 #: ../gtk/inspector/misc-info.ui.h:5
 msgid "Focus Widget"
-msgstr ""
+msgstr "Fokuser komponent"
 
 #: ../gtk/inspector/misc-info.ui.h:7
 msgid "Allocated size"
-msgstr ""
+msgstr "Allokert størrelse"
 
 #: ../gtk/inspector/object-hierarchy.ui.h:1
 msgid "Object Hierarchy"
-msgstr ""
+msgstr "Objekthierarki"
 
 #: ../gtk/inspector/prop-editor.c:617
 #, c-format
@@ -3558,13 +3562,13 @@ msgid "Object: %p (%s)"
 msgstr "Objekt: %p (%s)"
 
 #: ../gtk/inspector/prop-editor.c:1058
-#, fuzzy, c-format
+#, c-format
 msgid "Uneditable property type: %s"
-msgstr "Kan ikke stoppe %s"
+msgstr "Type egenskap som ikke kan redigeres: %s"
 
 #: ../gtk/inspector/prop-editor.c:1176
 msgid "Attribute mapping"
-msgstr ""
+msgstr "Kartlegging av attributt"
 
 #: ../gtk/inspector/prop-editor.c:1181
 msgid "Model:"
@@ -3582,7 +3586,7 @@ msgstr "Kolonne:"
 #: ../gtk/inspector/prop-editor.c:1306
 #, c-format
 msgid "Defined at: %p (%s)"
-msgstr ""
+msgstr "Definert ved: %p (%s)"
 
 #: ../gtk/inspector/prop-editor.c:1370 ../gtk/inspector/prop-editor.c:1386
 msgid "inverted"
@@ -3590,11 +3594,11 @@ msgstr "invertert"
 
 #: ../gtk/inspector/prop-editor.c:1402
 msgid "bidirectional, inverted"
-msgstr ""
+msgstr "bidireksjonell, omvendt"
 
 #: ../gtk/inspector/prop-editor.c:1407 ../gtk/inspector/prop-editor.c:1503
 msgid "bidirectional"
-msgstr ""
+msgstr "bidireksjonell"
 
 #: ../gtk/inspector/prop-editor.c:1412
 msgid "Binding:"
@@ -3662,7 +3666,7 @@ msgstr "Ja"
 #. vim: set et sw=2 ts=2:
 #: ../gtk/inspector/signals-list.ui.h:1
 msgid "Trace signal emissions on this object"
-msgstr ""
+msgstr "Utsendelse av sporingssignal på dette objektet"
 
 #: ../gtk/inspector/signals-list.ui.h:2
 msgid "Clear log"
@@ -3678,7 +3682,7 @@ msgstr "Antall"
 
 #: ../gtk/inspector/size-groups.c:223
 msgid "Ignore hidden"
-msgstr ""
+msgstr "Ignorer skjulte"
 
 #: ../gtk/inspector/size-groups.c:241
 msgid "Mode"
@@ -3704,20 +3708,20 @@ msgstr "Adresse"
 
 #: ../gtk/inspector/visual.c:243 ../gtk/inspector/visual.c:269
 msgid "Theme is hardcoded by GTK_THEME"
-msgstr ""
+msgstr "Tema er hardkodet av GTK_THEME"
 
 #: ../gtk/inspector/visual.c:387
 msgid "Backend does not support window scaling"
-msgstr ""
+msgstr "Motor støtter ikke skalering av vinduer"
 
 #: ../gtk/inspector/visual.c:426
 msgid "Setting is hardcoded by GTK_TEST_TOUCHSCREEN"
-msgstr ""
+msgstr "Innstillingen er hardkodet av GTK_TEST_TOUCHSCREEN"
 
 #. vim: set et sw=2 ts=2:
 #: ../gtk/inspector/visual.ui.h:1
 msgid "GTK+ Theme"
-msgstr ""
+msgstr "GTK+ tema"
 
 #: ../gtk/inspector/visual.ui.h:2
 msgid "Dark variant"
@@ -3745,7 +3749,7 @@ msgstr "Høyre-til-venstre"
 
 #: ../gtk/inspector/visual.ui.h:8
 msgid "Window scaling"
-msgstr ""
+msgstr "Skalering av vindu"
 
 #: ../gtk/inspector/visual.ui.h:9
 msgid "Animations"
@@ -3753,19 +3757,19 @@ msgstr "Animasjoner"
 
 #: ../gtk/inspector/visual.ui.h:10
 msgid "Show Graphic Updates"
-msgstr ""
+msgstr "Vis grafikkoppdateringer"
 
 #: ../gtk/inspector/visual.ui.h:11
 msgid "Show Baselines"
-msgstr ""
+msgstr "Vis utgangspunkter"
 
 #: ../gtk/inspector/visual.ui.h:12
 msgid "Show Pixel Cache"
-msgstr ""
+msgstr "Vis pikselbuffer"
 
 #: ../gtk/inspector/visual.ui.h:13
 msgid "Simulate touchscreen"
-msgstr ""
+msgstr "Simuler berøringsskjerm"
 
 #: ../gtk/inspector/widget-tree.ui.h:1
 msgid "Object"
@@ -3783,7 +3787,7 @@ msgstr "GTK+ inspektør – %s"
 #. vim: set et sw=2 ts=2:
 #: ../gtk/inspector/window.ui.h:1
 msgid "Send Widget to Shell"
-msgstr ""
+msgstr "Send komponent til skallet"
 
 #: ../gtk/inspector/window.ui.h:2
 msgid "Select an Object"
