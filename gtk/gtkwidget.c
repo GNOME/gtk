@@ -1397,6 +1397,9 @@ G_GNUC_END_IGNORE_DEPRECATIONS
    * will automatically be set to %TRUE and there will be taken care of
    * #GtkWidget::query-tooltip in the default signal handler.
    *
+   * Note that if both #GtkWidget:tooltip-text and #GtkWidget:tooltip-markup
+   * are set, the last one wins.
+   *
    * Since: 2.12
    */
   g_object_class_install_property (gobject_class,
@@ -1417,6 +1420,9 @@ G_GNUC_END_IGNORE_DEPRECATIONS
    * tooltip shown if the given string is not %NULL: #GtkWidget:has-tooltip
    * will automatically be set to %TRUE and there will be taken care of
    * #GtkWidget::query-tooltip in the default signal handler.
+   *
+   * Note that if both #GtkWidget:tooltip-text and #GtkWidget:tooltip-markup
+   * are set, the last one wins.
    *
    * Since: 2.12
    */
