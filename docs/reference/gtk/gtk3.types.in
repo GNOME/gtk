@@ -90,6 +90,7 @@ gtk_gesture_rotate_get_type
 gtk_gesture_single_get_type
 gtk_gesture_swipe_get_type
 gtk_gesture_zoom_get_type
+gtk_gl_area_get_type
 gtk_grid_get_type
 gtk_handle_box_get_type
 gtk_hbox_get_type
