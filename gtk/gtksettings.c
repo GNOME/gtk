@@ -2231,6 +2231,12 @@ _gtk_rc_property_parser_from_type (GType type)
     return NULL;
 }
 
+/**
+ * gtk_settings_install_property:
+ * @pspec:
+ *
+ * Deprecated: 3.16: This function is not useful outside GTK+.
+ */
 void
 gtk_settings_install_property (GParamSpec *pspec)
 {
@@ -2252,6 +2258,8 @@ gtk_settings_install_property (GParamSpec *pspec)
  * gtk_settings_install_property_parser:
  * @pspec:
  * @parser: (scope call):
+ *
+ * Deprecated: 3.16: This function is not useful outside GTK+.
  */
 void
 gtk_settings_install_property_parser (GParamSpec          *pspec,

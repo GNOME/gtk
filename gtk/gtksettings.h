@@ -92,9 +92,9 @@ GtkSettings*    gtk_settings_get_default             (void);
 GDK_AVAILABLE_IN_ALL
 GtkSettings*    gtk_settings_get_for_screen          (GdkScreen *screen);
 
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_3_16
 void            gtk_settings_install_property        (GParamSpec         *pspec);
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_3_16
 void            gtk_settings_install_property_parser (GParamSpec         *pspec,
                                                       GtkRcPropertyParser parser);
 
