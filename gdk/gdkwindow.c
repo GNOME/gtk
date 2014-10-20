@@ -8747,6 +8747,8 @@ do_child_shapes (GdkWindow *window,
     gdk_region_subtract (region, private->shape);
 
   gdk_window_shape_combine_region (window, region, 0, 0);
+
+  cairo_region_destroy (region);
 }
 
 /**
