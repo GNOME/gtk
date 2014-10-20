@@ -138,7 +138,8 @@ enum {
   PROP_POSITION,
   PROP_POSITION_SET,
   PROP_MIN_POSITION,
-  PROP_MAX_POSITION
+  PROP_MAX_POSITION,
+  PROP_WIDE_HANDLE
 };
 
 enum {
@@ -379,6 +380,23 @@ gtk_paned_class_init (GtkPanedClass *class)
                                                      P_("Largest possible value for the \"position\" property"),
                                                      0, G_MAXINT, G_MAXINT,
                                                      GTK_PARAM_READABLE|G_PARAM_EXPLICIT_NOTIFY));
+
+  /**
+   * GtkPaned:wide-handle:
+   *
+   * Setting this property to %TRUE indicates that the paned needs
+   * to provide stronger visual separation (e.g. because it separates
+   * between two notebooks, whose tab rows would otherwise merge visually).
+   *
+   * Since: 3.16 
+   */
+  g_object_class_install_property (object_class,
+                                   PROP_WIDE_HANDLE,
+                                   g_param_spec_boolean ("wide-handle",
+                                                         P_("Wide Handle"),
+                                                         P_("Whether the paned should have a prominent handle"),
+                                                         FALSE,
+                                                         GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
 
   gtk_widget_class_install_style_property (widget_class,
 					   g_param_spec_int ("handle-size",
@@ -852,6 +870,9 @@ gtk_paned_set_property (GObject        *object,
           g_object_notify_by_pspec (object, pspec);
         }
       break;
+    case PROP_WIDE_HANDLE:
+      gtk_paned_set_wide_handle (paned, g_value_get_boolean (value));
+      break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
@@ -883,6 +904,9 @@ gtk_paned_get_property (GObject        *object,
       break;
     case PROP_MAX_POSITION:
       g_value_set_int (value, priv->max_position);
+      break;
+    case PROP_WIDE_HANDLE:
+      g_value_set_boolean (value, gtk_paned_get_wide_handle (paned));
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -2841,4 +2865,60 @@ gtk_paned_get_handle_window (GtkPaned *paned)
   g_return_val_if_fail (GTK_IS_PANED (paned), NULL);
 
   return paned->priv->handle;
+}
+
+/**
+ * gtk_paned_set_wide_handle:
+ * @paned: a #GtkPaned
+ * @wide: the new value for the #GtkPaned:wide-handle property
+ *
+ * Sets the #GtkPaned:wide-handle property.
+ *
+ * Since: 3.16
+ */
+void
+gtk_paned_set_wide_handle (GtkPaned *paned,
+                           gboolean  wide)
+{
+  GtkStyleContext *context;
+  gboolean old_wide;
+
+  g_return_if_fail (GTK_IS_PANED (paned));
+
+  old_wide = gtk_paned_get_wide_handle (paned);
+  if (old_wide != wide)
+    {
+      context = gtk_widget_get_style_context (GTK_WIDGET (paned));
+      if (wide)
+        gtk_style_context_add_class (context, GTK_STYLE_CLASS_WIDE);
+      else
+        gtk_style_context_remove_class (context, GTK_STYLE_CLASS_WIDE);
+
+      gtk_widget_queue_resize (GTK_WIDGET (paned));
+      g_object_notify (G_OBJECT (paned), "wide-handle");
+    }
+}
+
+/**
+ * gtk_paned_get_wide_handle:
+ * @paned: a #GtkPaned
+ *
+ * Gets the #GtkPaned:wide-handle property.
+ *
+ * Returns: %TRUE if the paned should have a wide handle
+ *
+ * Since: 3.16
+ */
+gboolean
+gtk_paned_get_wide_handle (GtkPaned *paned)
+{
+  GtkStyleContext *context;
+
+  g_return_val_if_fail (GTK_IS_PANED (paned), FALSE);
+  
+  context = gtk_widget_get_style_context (GTK_WIDGET (paned));
+  if (gtk_style_context_has_class (context, GTK_STYLE_CLASS_WIDE))
+    return TRUE;
+  else
+    return FALSE;
 }

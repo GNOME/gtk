@@ -2593,6 +2593,8 @@ gtk_paned_get_child2
 gtk_paned_set_position
 gtk_paned_get_position
 gtk_paned_get_handle_window
+gtk_paned_set_wide_handle
+gtk_paned_get_wide_handle
 <SUBSECTION Standard>
 GTK_PANED
 GTK_IS_PANED
@@ -6053,6 +6055,7 @@ GTK_STYLE_CLASS_TROUGH
 GTK_STYLE_CLASS_VERTICAL
 GTK_STYLE_CLASS_VIEW
 GTK_STYLE_CLASS_WARNING
+GTK_STYLE_CLASS_WIDE
 GTK_STYLE_REGION_COLUMN
 GTK_STYLE_REGION_COLUMN_HEADER
 GTK_STYLE_REGION_ROW

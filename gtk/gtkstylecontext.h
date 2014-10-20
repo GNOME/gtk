@@ -916,6 +916,16 @@ struct _GtkStyleContextClass
 #define GTK_STYLE_CLASS_MONOSPACE "monospace"
 
 /**
+ * GTK_STYLE_CLASS_WIDE:
+ *
+ * A CSS class to indicate that a UI element should be 'wide'.
+ * Used by #GtkPaned.
+ *
+ * Since: 3.16
+ */
+#define GTK_STYLE_CLASS_WIDE "wide"
+
+/**
  * GTK_STYLE_REGION_ROW:
  *
  * A widget region name to define a treeview row.
