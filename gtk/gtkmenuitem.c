@@ -469,14 +469,13 @@ gtk_menu_item_class_init (GtkMenuItemClass *klass)
   g_object_class_override_property (gobject_class, PROP_ACTION_NAME, "action-name");
   g_object_class_override_property (gobject_class, PROP_ACTION_TARGET, "action-target");
 
-  gtk_widget_class_install_style_property_parser (widget_class,
-                                                  g_param_spec_enum ("selected-shadow-type",
-                                                                     "Selected Shadow Type",
-                                                                     "Shadow type when item is selected",
-                                                                     GTK_TYPE_SHADOW_TYPE,
-                                                                     GTK_SHADOW_NONE,
-                                                                     GTK_PARAM_READABLE),
-                                                  gtk_rc_property_parse_enum);
+  gtk_widget_class_install_style_property (widget_class,
+                                           g_param_spec_enum ("selected-shadow-type",
+                                                              "Selected Shadow Type",
+                                                              "Shadow type when item is selected",
+                                                              GTK_TYPE_SHADOW_TYPE,
+                                                              GTK_SHADOW_NONE,
+                                                              GTK_PARAM_READABLE));
 
   /**
    * GtkMenuItem:horizontal-padding:
