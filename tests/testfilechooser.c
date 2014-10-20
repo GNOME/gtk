@@ -647,7 +647,7 @@ main (int argc, char **argv)
   /* THIS IS A TERRIBLE PREVIEW WIDGET, AND SHOULD NOT BE COPIED AT ALL.
    */
   preview_vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
-  /*gtk_file_chooser_set_preview_widget (GTK_FILE_CHOOSER (dialog), preview_vbox);*/
+  gtk_file_chooser_set_preview_widget (GTK_FILE_CHOOSER (dialog), preview_vbox);
 
   preview_label = gtk_label_new (NULL);
   gtk_box_pack_start (GTK_BOX (preview_vbox), preview_label, TRUE, TRUE, 0);
