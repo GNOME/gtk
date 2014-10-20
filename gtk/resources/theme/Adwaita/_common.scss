@@ -2701,8 +2701,7 @@ GtkFileChooserDialog {
  * Sidebar *
  ***********/
 
-.sidebar,
-.sidebar .view {
+.sidebar {
   border: none;
   $_sidebar_bg: lighten($bg_color,5%);
   background-color: $_sidebar_bg;
@@ -2724,7 +2723,18 @@ GtkFileChooserDialog {
   &:selected {
     background-color: $selected_bg_color;
   }
-  .separator:backdrop { @extend .separator; } // overriden w/o this
+}
+
+// Places sidebar is a special case, since the view here have to look like chrome not content, so we override text color
+GtkPlacesSidebar.sidebar .view {
+  color: $fg_color;
+  &:backdrop { color: $backdrop_fg_color; }
+  &:selected {
+    color: $selected_fg_color;
+    &:backdrop { color: if($variant == 'light', $backdrop_base_color, $selected_bg_color); }
+  }
+  .separator,
+  .separator:backdrop { @extend .separator; }
 }
 
 .sidebar-item {
