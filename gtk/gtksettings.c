@@ -80,13 +80,13 @@
  * for settings by installing a `settings.ini` file
  * next to their `gtk.css` file.
  *
- * Applications can override system-wide settings with
- * gtk_settings_set_string_property(), gtk_settings_set_long_property(),
- * etc. This should be restricted to special cases though; GtkSettings are
- * not meant as an application configuration facility. When doing so, you
- * need to be aware that settings that are specific to individual widgets
- * may not be available before the widget type has been realized at least
- * once. The following example demonstrates a way to do this:
+ * Applications can override system-wide settings by setting the property
+ * of the GtkSettings object with g_object_set(). This should be restricted
+ * to special cases though; GtkSettings are not meant as an application
+ * configuration facility. When doing so, you need to be aware that settings
+ * that are specific to individual widgets may not be available before the
+ * widget type has been realized at least once. The following example
+ * demonstrates a way to do this:
  * |[<!-- language="C" -->
  *   gtk_init (&argc, &argv);
  *
