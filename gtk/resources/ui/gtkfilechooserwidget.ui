@@ -187,6 +187,7 @@
                             <signal name="popup-menu" handler="list_popup_menu_cb" swapped="no"/>
                             <signal name="query-tooltip" handler="file_list_query_tooltip_cb" swapped="no"/>
                             <signal name="row-activated" handler="list_row_activated" swapped="no"/>
+                            <signal name="cursor-changed" handler="list_cursor_changed" swapped="no"/>
                             <child internal-child="selection">
                               <object class="GtkTreeSelection" id="treeview-selection2">
                                 <signal name="changed" handler="list_selection_changed" swapped="no"/>
