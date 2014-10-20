@@ -12,8 +12,8 @@ msgstr ""
 "Project-Id-Version: gtk+-properties master\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gtk"
 "%2b&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2014-09-25 21:08+0000\n"
-"PO-Revision-Date: 2014-09-26 10:11+0700\n"
+"POT-Creation-Date: 2014-10-20 13:10+0000\n"
+"PO-Revision-Date: 2014-10-21 01:43+0700\n"
 "Last-Translator: Andika Triwidada <andika@gmail.com>\n"
 "Language-Team: Indonesian <gnome@i15n.org>\n"
 "Language: id\n"
@@ -113,6 +113,22 @@ msgstr "Tampilan Baku"
 msgid "The default display for GDK"
 msgstr "Tampilan baku untuk GDK"
 
+#: ../gdk/gdkglcontext.c:189 ../gtk/gtkwidget.c:1447
+msgid "Window"
+msgstr "Jendela"
+
+#: ../gdk/gdkglcontext.c:190
+msgid "The GDK window bound to the GL context"
+msgstr "Jendela GDK yang diikat ke konteks GL"
+
+#: ../gdk/gdkglcontext.c:205
+msgid "Visual"
+msgstr "Visual"
+
+#: ../gdk/gdkglcontext.c:206
+msgid "The GDK visual used by the GL context"
+msgstr "Visual GDK yang dipakai oleh konteks GL"
+
 #: ../gdk/gdkscreen.c:91
 msgid "Font options"
 msgstr "Opsi fonta"
@@ -129,7 +145,7 @@ msgstr "Resolusi fonta"
 msgid "The resolution for fonts on the screen"
 msgstr "Resolusi fonta pada layar"
 
-#: ../gdk/gdkwindow.c:311 ../gdk/gdkwindow.c:312
+#: ../gdk/gdkwindow.c:324 ../gdk/gdkwindow.c:325
 msgid "Cursor"
 msgstr "Kursor"
 
@@ -174,7 +190,7 @@ msgid "The cell renderer represented by this accessible"
 msgstr "Perender sel yang diwakili oleh yang dapat diakses ini"
 
 #: ../gtk/deprecated/gtkaction.c:243 ../gtk/deprecated/gtkactiongroup.c:200
-#: ../gtk/deprecated/gtkthemingengine.c:263 ../gtk/gtkprinter.c:121
+#: ../gtk/deprecated/gtkthemingengine.c:247 ../gtk/gtkprinter.c:121
 #: ../gtk/gtkstack.c:412 ../gtk/gtktextmark.c:136
 msgid "Name"
 msgstr "Nama"
@@ -184,7 +200,7 @@ msgid "A unique name for the action."
 msgstr "Nama unik untuk aksi ini."
 
 #: ../gtk/deprecated/gtkaction.c:264 ../gtk/gtkbutton.c:245
-#: ../gtk/gtkexpander.c:275 ../gtk/gtkframe.c:166 ../gtk/gtklabel.c:727
+#: ../gtk/gtkexpander.c:275 ../gtk/gtkframe.c:166 ../gtk/gtklabel.c:731
 #: ../gtk/gtkmenuitem.c:444 ../gtk/gtktoolbutton.c:239
 #: ../gtk/gtktoolitemgroup.c:1597
 msgid "Label"
@@ -225,18 +241,18 @@ msgid "GIcon"
 msgstr "GIcon"
 
 #: ../gtk/deprecated/gtkaction.c:343 ../gtk/deprecated/gtkstatusicon.c:270
-#: ../gtk/gtkcellrendererpixbuf.c:258 ../gtk/gtkimage.c:343
+#: ../gtk/gtkcellrendererpixbuf.c:258 ../gtk/gtkimage.c:349
 msgid "The GIcon being displayed"
 msgstr "GIcon yang sedang ditampilkan"
 
 #: ../gtk/deprecated/gtkaction.c:365 ../gtk/deprecated/gtkstatusicon.c:253
-#: ../gtk/gtkcellrendererpixbuf.c:223 ../gtk/gtkimage.c:325
+#: ../gtk/gtkcellrendererpixbuf.c:223 ../gtk/gtkimage.c:331
 #: ../gtk/gtkprinter.c:170 ../gtk/gtkwindow.c:859
 msgid "Icon Name"
 msgstr "Icon Name"
 
 #: ../gtk/deprecated/gtkaction.c:366 ../gtk/deprecated/gtkstatusicon.c:254
-#: ../gtk/gtkcellrendererpixbuf.c:224 ../gtk/gtkimage.c:326
+#: ../gtk/gtkcellrendererpixbuf.c:224 ../gtk/gtkimage.c:332
 msgid "The name of the icon from the icon theme"
 msgstr "Nama ikon dari tema ikon"
 
@@ -473,8 +489,8 @@ msgstr "Bayangan panah"
 msgid "Appearance of the shadow surrounding the arrow"
 msgstr "Muncul tidaknya bayangan pada panah"
 
-#: ../gtk/deprecated/gtkarrow.c:139 ../gtk/gtkcombobox.c:1055
-#: ../gtk/gtkmenu.c:795 ../gtk/gtkmenuitem.c:520
+#: ../gtk/deprecated/gtkarrow.c:139 ../gtk/gtkcombobox.c:1052
+#: ../gtk/gtkmenu.c:795 ../gtk/gtkmenuitem.c:519
 msgid "Arrow Scaling"
 msgstr "Penskalaan Panah"
 
@@ -554,7 +570,7 @@ msgstr "Tombol Bantuan"
 msgid "The help button of the dialog."
 msgstr "Tombol bantuan dari dialog."
 
-#: ../gtk/deprecated/gtkfontsel.c:240 ../gtk/gtkfontbutton.c:456
+#: ../gtk/deprecated/gtkfontsel.c:240 ../gtk/gtkfontbutton.c:458
 msgid "Font name"
 msgstr "Nama fonta"
 
@@ -570,29 +586,29 @@ msgstr "Contoh teks"
 msgid "The text to display in order to demonstrate the selected font"
 msgstr "Teks yang ditulis untuk melihat contoh font yang dipilih"
 
-#: ../gtk/deprecated/gtkhandlebox.c:222 ../gtk/gtkcombobox.c:1071
-#: ../gtk/gtkentry.c:947 ../gtk/gtkmenubar.c:216 ../gtk/gtkstatusbar.c:165
-#: ../gtk/gtktoolbar.c:632 ../gtk/gtkviewport.c:178
+#: ../gtk/deprecated/gtkhandlebox.c:223 ../gtk/gtkcombobox.c:1068
+#: ../gtk/gtkentry.c:947 ../gtk/gtkmenubar.c:217 ../gtk/gtkstatusbar.c:165
+#: ../gtk/gtktoolbar.c:633 ../gtk/gtkviewport.c:179
 msgid "Shadow type"
 msgstr "Tipe shadow"
 
-#: ../gtk/deprecated/gtkhandlebox.c:223
+#: ../gtk/deprecated/gtkhandlebox.c:224
 msgid "Appearance of the shadow that surrounds the container"
 msgstr "Bagaimana bayangan yang mengelilingi kontainer ditampilkan"
 
-#: ../gtk/deprecated/gtkhandlebox.c:231
+#: ../gtk/deprecated/gtkhandlebox.c:232
 msgid "Handle position"
 msgstr "Posisi handle"
 
-#: ../gtk/deprecated/gtkhandlebox.c:232
+#: ../gtk/deprecated/gtkhandlebox.c:233
 msgid "Position of the handle relative to the child widget"
 msgstr "Posisi handle relatif dari widget anak"
 
-#: ../gtk/deprecated/gtkhandlebox.c:240
+#: ../gtk/deprecated/gtkhandlebox.c:241
 msgid "Snap edge"
 msgstr "Jepret pada sisi"
 
-#: ../gtk/deprecated/gtkhandlebox.c:241
+#: ../gtk/deprecated/gtkhandlebox.c:242
 msgid ""
 "Side of the handlebox that's lined up with the docking point to dock the "
 "handlebox"
@@ -600,11 +616,11 @@ msgstr ""
 "Sisi kotak handle yang berbaris dengan titik doking sebagai tempat sandar "
 "kotak handle"
 
-#: ../gtk/deprecated/gtkhandlebox.c:249
+#: ../gtk/deprecated/gtkhandlebox.c:250
 msgid "Snap edge set"
 msgstr "Jepret pada sisi di set"
 
-#: ../gtk/deprecated/gtkhandlebox.c:250
+#: ../gtk/deprecated/gtkhandlebox.c:251
 msgid ""
 "Whether to use the value from the snap_edge property or a value derived from "
 "handle_position"
@@ -612,11 +628,11 @@ msgstr ""
 "Menentukan apakah menggunakan nilai dari snap_edge atau nilai dari "
 "handle_position"
 
-#: ../gtk/deprecated/gtkhandlebox.c:257
+#: ../gtk/deprecated/gtkhandlebox.c:258
 msgid "Child Detached"
 msgstr "Anak Dilepas"
 
-#: ../gtk/deprecated/gtkhandlebox.c:258
+#: ../gtk/deprecated/gtkhandlebox.c:259
 msgid ""
 "A boolean value indicating whether the handlebox's child is attached or "
 "detached."
@@ -648,11 +664,11 @@ msgstr "Grup Akselerator"
 msgid "The Accel Group to use for stock accelerator keys"
 msgstr "Grup Akselerasi bagi kunci akselerator stok"
 
-#: ../gtk/deprecated/gtkmisc.c:103 ../gtk/gtkentry.c:914
+#: ../gtk/deprecated/gtkmisc.c:104 ../gtk/gtkentry.c:914 ../gtk/gtklabel.c:779
 msgid "X align"
 msgstr "Perataan x"
 
-#: ../gtk/deprecated/gtkmisc.c:104 ../gtk/gtkentry.c:915
+#: ../gtk/deprecated/gtkmisc.c:105 ../gtk/gtkentry.c:915 ../gtk/gtklabel.c:780
 msgid ""
 "The horizontal alignment, from 0 (left) to 1 (right). Reversed for RTL "
 "layouts."
@@ -660,29 +676,29 @@ msgstr ""
 "Penyesuaian horisontal, bernilai 0 (kiri) hingga 1 (kanan). Nilainya dibalik "
 "untuk tataletak dari kanan-ke-kiri (RTL)."
 
-#: ../gtk/deprecated/gtkmisc.c:113
+#: ../gtk/deprecated/gtkmisc.c:114 ../gtk/gtklabel.c:797
 msgid "Y align"
 msgstr "Perataan y"
 
-#: ../gtk/deprecated/gtkmisc.c:114
+#: ../gtk/deprecated/gtkmisc.c:115 ../gtk/gtklabel.c:798
 msgid "The vertical alignment, from 0 (top) to 1 (bottom)"
 msgstr "Penyesuaian vertikal, bernilai 0 (atas) hingga 1 (bawah)"
 
-#: ../gtk/deprecated/gtkmisc.c:123
+#: ../gtk/deprecated/gtkmisc.c:124
 msgid "X pad"
 msgstr "Isian sisi X"
 
-#: ../gtk/deprecated/gtkmisc.c:124
+#: ../gtk/deprecated/gtkmisc.c:125
 msgid ""
 "The amount of space to add on the left and right of the widget, in pixels"
 msgstr ""
 "Ruangan yang ditambahkan pada sisi kiri dan kanan widget dalam satuan piksel"
 
-#: ../gtk/deprecated/gtkmisc.c:133
+#: ../gtk/deprecated/gtkmisc.c:134
 msgid "Y pad"
 msgstr "Isian Y"
 
-#: ../gtk/deprecated/gtkmisc.c:134
+#: ../gtk/deprecated/gtkmisc.c:135
 msgid ""
 "The amount of space to add on the top and bottom of the widget, in pixels"
 msgstr ""
@@ -740,7 +756,7 @@ msgstr ""
 "Nilai yang diberikan gtk_radio_action_get_current_valu() pada saat aksi ini "
 "dijadikan aksi utama dalam kelompoknya."
 
-#: ../gtk/deprecated/gtkradioaction.c:139 ../gtk/gtkradiobutton.c:162
+#: ../gtk/deprecated/gtkradioaction.c:139 ../gtk/gtkradiobutton.c:163
 #: ../gtk/gtkradiomenuitem.c:410 ../gtk/gtkradiotoolbutton.c:80
 msgid "Group"
 msgstr "Kelompok"
@@ -768,37 +784,37 @@ msgstr "Tampilkan Bilangan"
 msgid "Whether the items should be displayed with a number"
 msgstr "Apakah butir mesti ditampilkan dengan suatu angka"
 
-#: ../gtk/deprecated/gtkstatusicon.c:224 ../gtk/gtkimage.c:230
+#: ../gtk/deprecated/gtkstatusicon.c:224 ../gtk/gtkimage.c:236
 msgid "Pixbuf"
 msgstr "Pixbuf"
 
-#: ../gtk/deprecated/gtkstatusicon.c:225 ../gtk/gtkimage.c:231
+#: ../gtk/deprecated/gtkstatusicon.c:225 ../gtk/gtkimage.c:237
 msgid "A GdkPixbuf to display"
 msgstr "GdkPixbuf yang hendak ditampilkan"
 
-#: ../gtk/deprecated/gtkstatusicon.c:232 ../gtk/gtkimage.c:246
+#: ../gtk/deprecated/gtkstatusicon.c:232 ../gtk/gtkimage.c:252
 #: ../gtk/gtkrecentmanager.c:292
 msgid "Filename"
 msgstr "Nama berkas"
 
-#: ../gtk/deprecated/gtkstatusicon.c:233 ../gtk/gtkimage.c:247
+#: ../gtk/deprecated/gtkstatusicon.c:233 ../gtk/gtkimage.c:253
 msgid "Filename to load and display"
 msgstr "Nama berkas yang hendak dibuka dan ditampilkan"
 
 #: ../gtk/deprecated/gtkstatusicon.c:245 ../gtk/gtkcellrendererpixbuf.c:187
-#: ../gtk/gtkimage.c:260
+#: ../gtk/gtkimage.c:266
 msgid "Stock ID"
 msgstr "ID stok"
 
-#: ../gtk/deprecated/gtkstatusicon.c:246 ../gtk/gtkimage.c:261
+#: ../gtk/deprecated/gtkstatusicon.c:246 ../gtk/gtkimage.c:267
 msgid "Stock ID for a stock image to display"
 msgstr "ID stok untuk gambar stok yang hendak ditampilkan"
 
-#: ../gtk/deprecated/gtkstatusicon.c:277 ../gtk/gtkimage.c:365
+#: ../gtk/deprecated/gtkstatusicon.c:277 ../gtk/gtkimage.c:371
 msgid "Storage type"
 msgstr "Tipe penyimpanan"
 
-#: ../gtk/deprecated/gtkstatusicon.c:278 ../gtk/gtkimage.c:366
+#: ../gtk/deprecated/gtkstatusicon.c:278 ../gtk/gtkimage.c:372
 msgid "The representation being used for image data"
 msgstr "Metode yang digunakan untuk data gambar"
 
@@ -812,7 +828,7 @@ msgid "The size of the icon"
 msgstr "Ukuran ikon"
 
 #: ../gtk/deprecated/gtkstatusicon.c:296 ../gtk/gtkinvisible.c:98
-#: ../gtk/gtkmountoperation.c:177 ../gtk/gtkstylecontext.c:251
+#: ../gtk/gtkmountoperation.c:177 ../gtk/gtkstylecontext.c:249
 #: ../gtk/gtkwindow.c:867
 msgid "Screen"
 msgstr "Layar"
@@ -834,13 +850,13 @@ msgid "Whether the status icon is embedded"
 msgstr "Apakah ikon status ditanam"
 
 #: ../gtk/deprecated/gtkstatusicon.c:336
-#: ../gtk/deprecated/gtktrayicon-x11.c:126 ../gtk/gtkgesturepan.c:237
+#: ../gtk/deprecated/gtktrayicon-x11.c:127 ../gtk/gtkgesturepan.c:237
 #: ../gtk/gtkorientable.c:61
 msgid "Orientation"
 msgstr "Orientasi"
 
 #: ../gtk/deprecated/gtkstatusicon.c:337
-#: ../gtk/deprecated/gtktrayicon-x11.c:127
+#: ../gtk/deprecated/gtktrayicon-x11.c:128
 msgid "The orientation of the tray"
 msgstr "Arah dari laci"
 
@@ -852,16 +868,16 @@ msgstr "Punya tooltip"
 msgid "Whether this tray icon has a tooltip"
 msgstr "Apakah ikon baki ini punya tooltip"
 
-#: ../gtk/deprecated/gtkstatusicon.c:391 ../gtk/gtkwidget.c:1405
+#: ../gtk/deprecated/gtkstatusicon.c:391 ../gtk/gtkwidget.c:1408
 msgid "Tooltip Text"
 msgstr "Teks Tooltip"
 
-#: ../gtk/deprecated/gtkstatusicon.c:392 ../gtk/gtkwidget.c:1406
-#: ../gtk/gtkwidget.c:1427
+#: ../gtk/deprecated/gtkstatusicon.c:392 ../gtk/gtkwidget.c:1409
+#: ../gtk/gtkwidget.c:1433
 msgid "The contents of the tooltip for this widget"
 msgstr "Isi tooltip bagi widget ini"
 
-#: ../gtk/deprecated/gtkstatusicon.c:415 ../gtk/gtkwidget.c:1426
+#: ../gtk/deprecated/gtkstatusicon.c:415 ../gtk/gtkwidget.c:1432
 msgid "Tooltip markup"
 msgstr "Markup tooltip"
 
@@ -870,7 +886,7 @@ msgid "The contents of the tooltip for this tray icon"
 msgstr "Isi tooltip bagi ikon baki ini"
 
 #: ../gtk/deprecated/gtkstatusicon.c:433 ../gtk/gtkcolorbutton.c:181
-#: ../gtk/gtkfilechooserbutton.c:445 ../gtk/gtkfontbutton.c:441
+#: ../gtk/gtkfilechooserbutton.c:445 ../gtk/gtkfontbutton.c:443
 #: ../gtk/gtkheaderbar.c:1811 ../gtk/gtkprintjob.c:132 ../gtk/gtkstack.c:419
 #: ../gtk/gtktreeviewcolumn.c:322
 msgid "Title"
@@ -904,24 +920,24 @@ msgstr "Kolom"
 msgid "The number of columns in the table"
 msgstr "Jumlah kolom dalam tabel"
 
-#: ../gtk/deprecated/gtktable.c:207 ../gtk/gtkgrid.c:1734
+#: ../gtk/deprecated/gtktable.c:207 ../gtk/gtkgrid.c:1735
 msgid "Row spacing"
 msgstr "Jarak antar baris"
 
-#: ../gtk/deprecated/gtktable.c:208 ../gtk/gtkgrid.c:1735
+#: ../gtk/deprecated/gtktable.c:208 ../gtk/gtkgrid.c:1736
 msgid "The amount of space between two consecutive rows"
 msgstr "Besar ruangan antara dua baris"
 
-#: ../gtk/deprecated/gtktable.c:216 ../gtk/gtkgrid.c:1741
+#: ../gtk/deprecated/gtktable.c:216 ../gtk/gtkgrid.c:1742
 msgid "Column spacing"
 msgstr "Jarak antar kolom"
 
-#: ../gtk/deprecated/gtktable.c:217 ../gtk/gtkgrid.c:1742
+#: ../gtk/deprecated/gtktable.c:217 ../gtk/gtkgrid.c:1743
 msgid "The amount of space between two consecutive columns"
 msgstr "Besar ruangan jarak antar kolom"
 
 #: ../gtk/deprecated/gtktable.c:225 ../gtk/gtkbox.c:263
-#: ../gtk/gtkflowbox.c:3691 ../gtk/gtkstack.c:384 ../gtk/gtktoolbar.c:564
+#: ../gtk/gtkflowbox.c:3693 ../gtk/gtkstack.c:384 ../gtk/gtktoolbar.c:565
 #: ../gtk/gtktoolitemgroup.c:1646
 msgid "Homogeneous"
 msgstr "Homogen"
@@ -930,11 +946,11 @@ msgstr "Homogen"
 msgid "If TRUE, the table cells are all the same width/height"
 msgstr "Bila TRUE, sel tabel memiliki tinggi/lebar yang sama"
 
-#: ../gtk/deprecated/gtktable.c:233 ../gtk/gtkgrid.c:1773
+#: ../gtk/deprecated/gtktable.c:233 ../gtk/gtkgrid.c:1774
 msgid "Left attachment"
 msgstr "Pasangan kiri"
 
-#: ../gtk/deprecated/gtktable.c:234 ../gtk/gtkgrid.c:1774 ../gtk/gtkmenu.c:758
+#: ../gtk/deprecated/gtktable.c:234 ../gtk/gtkgrid.c:1775 ../gtk/gtkmenu.c:758
 msgid "The column number to attach the left side of the child to"
 msgstr "Jumlah kolom yang dipasangkan pada sisi kiri anak"
 
@@ -946,7 +962,7 @@ msgstr "Pasangan kanan"
 msgid "The column number to attach the right side of a child widget to"
 msgstr "jumlah kolom yang dipasangkan pada sisi kanan widget"
 
-#: ../gtk/deprecated/gtktable.c:247 ../gtk/gtkgrid.c:1780
+#: ../gtk/deprecated/gtktable.c:247 ../gtk/gtkgrid.c:1781
 msgid "Top attachment"
 msgstr "Pasangan atas"
 
@@ -1002,7 +1018,7 @@ msgstr ""
 "Ruangan ekstra yang diisikan di antara anak dan sisi tetangga atas dan "
 "bawah, dalam satuan piksel"
 
-#: ../gtk/deprecated/gtkthemingengine.c:264
+#: ../gtk/deprecated/gtkthemingengine.c:248
 msgid "Theming engine name"
 msgstr "Nama mesin penyusun tema"
 
@@ -1016,7 +1032,7 @@ msgstr "Apakah proksi aksi ini berupa proksi aksi radio"
 
 #: ../gtk/deprecated/gtktoggleaction.c:137 ../gtk/gtkcellrendererspinner.c:125
 #: ../gtk/gtkcheckmenuitem.c:122 ../gtk/gtkmenu.c:555 ../gtk/gtkspinner.c:119
-#: ../gtk/gtkswitch.c:909 ../gtk/gtktogglebutton.c:178
+#: ../gtk/gtkswitch.c:906 ../gtk/gtktogglebutton.c:179
 #: ../gtk/gtktoggletoolbutton.c:127
 msgid "Active"
 msgstr "Aktif"
@@ -1025,56 +1041,56 @@ msgstr "Aktif"
 msgid "Whether the toggle action should be active"
 msgstr "Apakah aksi jungkit mesti aktif"
 
-#: ../gtk/deprecated/gtktrayicon-x11.c:135 ../gtk/gtkcellrenderertext.c:341
+#: ../gtk/deprecated/gtktrayicon-x11.c:136 ../gtk/gtkcellrenderertext.c:341
 #: ../gtk/gtktexttag.c:265
 msgid "Foreground color"
 msgstr "Warna latar depan"
 
-#: ../gtk/deprecated/gtktrayicon-x11.c:136
+#: ../gtk/deprecated/gtktrayicon-x11.c:137
 msgid "Foreground color for symbolic icons"
 msgstr "Warna latar depan bagi ikon simbolis"
 
-#: ../gtk/deprecated/gtktrayicon-x11.c:143
+#: ../gtk/deprecated/gtktrayicon-x11.c:144
 msgid "Error color"
 msgstr "Warna galat"
 
-#: ../gtk/deprecated/gtktrayicon-x11.c:144
+#: ../gtk/deprecated/gtktrayicon-x11.c:145
 msgid "Error color for symbolic icons"
 msgstr "Warna galat bagi ikon simbolis"
 
-#: ../gtk/deprecated/gtktrayicon-x11.c:151
+#: ../gtk/deprecated/gtktrayicon-x11.c:152
 msgid "Warning color"
 msgstr "Warna peringatan"
 
-#: ../gtk/deprecated/gtktrayicon-x11.c:152
+#: ../gtk/deprecated/gtktrayicon-x11.c:153
 msgid "Warning color for symbolic icons"
 msgstr "Warna peringatan bagi ikon simbolis"
 
-#: ../gtk/deprecated/gtktrayicon-x11.c:159
+#: ../gtk/deprecated/gtktrayicon-x11.c:160
 msgid "Success color"
 msgstr "Warna sukses"
 
-#: ../gtk/deprecated/gtktrayicon-x11.c:160
+#: ../gtk/deprecated/gtktrayicon-x11.c:161
 msgid "Success color for symbolic icons"
 msgstr "Warna sukses bagi ikon simbolis"
 
-#: ../gtk/deprecated/gtktrayicon-x11.c:167 ../gtk/gtkbox.c:322
+#: ../gtk/deprecated/gtktrayicon-x11.c:168 ../gtk/gtkbox.c:322
 msgid "Padding"
 msgstr "Isian"
 
-#: ../gtk/deprecated/gtktrayicon-x11.c:168
+#: ../gtk/deprecated/gtktrayicon-x11.c:169
 msgid "Padding that should be put around icons in the tray"
 msgstr "Pengganjal yang mesti diletakkan di sekitar ikon di baki"
 
-#: ../gtk/deprecated/gtktrayicon-x11.c:177
+#: ../gtk/deprecated/gtktrayicon-x11.c:178
 msgid "Icon Size"
 msgstr "Ukuran Ikon"
 
-#: ../gtk/deprecated/gtktrayicon-x11.c:178
+#: ../gtk/deprecated/gtktrayicon-x11.c:179
 msgid "The pixel size that icons should be forced to, or zero"
 msgstr "Ikon mesti dipaksa ukuran pikselnya sekian, atau nol"
 
-#: ../gtk/deprecated/gtkuimanager.c:460 ../gtk/gtkcombobox.c:834
+#: ../gtk/deprecated/gtkuimanager.c:460 ../gtk/gtkcombobox.c:831
 msgid "Add tearoffs to menus"
 msgstr "Tambahkan penyobek pada menu"
 
@@ -1125,6 +1141,14 @@ msgstr "Teks keterangan"
 #: ../gtk/gtkaboutdialog.c:388
 msgid "Comments about the program"
 msgstr "Keterangan mengenai program"
+
+#: ../gtk/gtkaboutdialog.c:408
+msgid "License"
+msgstr "Lisensi"
+
+#: ../gtk/gtkaboutdialog.c:409
+msgid "The license of the program"
+msgstr "Lisensi program"
 
 #: ../gtk/gtkaboutdialog.c:436
 msgid "License Type"
@@ -1214,19 +1238,19 @@ msgstr "Lipat lisensi"
 msgid "Whether to wrap the license text."
 msgstr "Apakah teks lisensi dilipat."
 
-#: ../gtk/gtkaccellabel.c:191
+#: ../gtk/gtkaccellabel.c:192
 msgid "Accelerator Closure"
 msgstr "Penutup Akselerator"
 
-#: ../gtk/gtkaccellabel.c:192
+#: ../gtk/gtkaccellabel.c:193
 msgid "The closure to be monitored for accelerator changes"
 msgstr "Penutup yang dipantau untuk perubahan akselerator"
 
-#: ../gtk/gtkaccellabel.c:198
+#: ../gtk/gtkaccellabel.c:199
 msgid "Accelerator Widget"
 msgstr "Widget Akselerator"
 
-#: ../gtk/gtkaccellabel.c:199
+#: ../gtk/gtkaccellabel.c:200
 msgid "The widget to be monitored for accelerator changes"
 msgstr "Widget yang dipantau untuk perubahan akselerator"
 
@@ -1268,7 +1292,7 @@ msgstr ""
 "pada awal atau akhir bapaknya"
 
 #: ../gtk/gtkactionbar.c:257 ../gtk/gtkbox.c:336 ../gtk/gtkheaderbar.c:1803
-#: ../gtk/gtknotebook.c:774 ../gtk/gtkpaned.c:336 ../gtk/gtkpopover.c:1317
+#: ../gtk/gtknotebook.c:774 ../gtk/gtkpaned.c:337 ../gtk/gtkpopover.c:1319
 #: ../gtk/gtkstack.c:433 ../gtk/gtktoolitemgroup.c:1674
 msgid "Position"
 msgstr "Posisi"
@@ -1278,7 +1302,7 @@ msgstr "Posisi"
 msgid "The index of the child in the parent"
 msgstr "Indek anak dalam bapak"
 
-#: ../gtk/gtkadjustment.c:146 ../gtk/gtkcellrendererprogress.c:137
+#: ../gtk/gtkadjustment.c:146 ../gtk/gtkcellrendererprogress.c:138
 #: ../gtk/gtkscalebutton.c:191 ../gtk/gtkspinbutton.c:404
 msgid "Value"
 msgstr "Nilai"
@@ -1461,7 +1485,7 @@ msgid "TRUE if the window should show a menubar at the top of the window"
 msgstr ""
 "TRUE jika jendela mesti menampilkan bilah menu di bagian puncak jendela"
 
-#: ../gtk/gtkaspectframe.c:107 ../gtk/gtkwidget.c:1473
+#: ../gtk/gtkaspectframe.c:107 ../gtk/gtkwidget.c:1479
 msgid "Horizontal Alignment"
 msgstr "Perataan Horisontal"
 
@@ -1469,7 +1493,7 @@ msgstr "Perataan Horisontal"
 msgid "X alignment of the child"
 msgstr "Penyesuaian letak X pada anak"
 
-#: ../gtk/gtkaspectframe.c:114 ../gtk/gtkwidget.c:1489
+#: ../gtk/gtkaspectframe.c:114 ../gtk/gtkwidget.c:1495
 msgid "Vertical Alignment"
 msgstr "Perataan Vertikal"
 
@@ -1632,7 +1656,7 @@ msgstr "Jarak"
 msgid "The amount of space between children"
 msgstr "Jarak antar anak"
 
-#: ../gtk/gtkbox.c:264 ../gtk/gtkflowbox.c:3692
+#: ../gtk/gtkbox.c:264 ../gtk/gtkflowbox.c:3694
 msgid "Whether the children should all be the same size"
 msgstr "Menentukan apakah semua anak memiliki ukuran yang sama atau tidak"
 
@@ -1645,7 +1669,7 @@ msgid ""
 "The position of the baseline aligned widgets if extra space is available"
 msgstr "Posisi widget yang rata baseline bila ruang ekstra tersedia"
 
-#: ../gtk/gtkbox.c:297 ../gtk/gtkcellareabox.c:330 ../gtk/gtktoolbar.c:556
+#: ../gtk/gtkbox.c:297 ../gtk/gtkcellareabox.c:330 ../gtk/gtktoolbar.c:557
 #: ../gtk/gtktoolitemgroup.c:1653 ../gtk/gtktoolpalette.c:1016
 #: ../gtk/gtktreeviewcolumn.c:330
 msgid "Expand"
@@ -1672,11 +1696,11 @@ msgid "Extra space to put between the child and its neighbors, in pixels"
 msgstr ""
 "Ruang tambahan yang diisikan antara anak dan tetangganya dalam satuan piksel"
 
-#: ../gtk/gtkbuilder.c:290
+#: ../gtk/gtkbuilder.c:288
 msgid "Translation Domain"
 msgstr "Domain Terjemahan"
 
-#: ../gtk/gtkbuilder.c:291
+#: ../gtk/gtkbuilder.c:289
 msgid "The translation domain used by gettext"
 msgstr "Domain penerjemahan yang dipakai oleh gettext"
 
@@ -1687,12 +1711,12 @@ msgid ""
 msgstr ""
 "Tulisan pada widget label dalam tombol, (jika tombol berisi widget label"
 
-#: ../gtk/gtkbutton.c:252 ../gtk/gtkexpander.c:283 ../gtk/gtklabel.c:748
+#: ../gtk/gtkbutton.c:252 ../gtk/gtkexpander.c:283 ../gtk/gtklabel.c:752
 #: ../gtk/gtkmenuitem.c:459 ../gtk/gtktoolbutton.c:246
 msgid "Use underline"
 msgstr "Gunakan garis bawah"
 
-#: ../gtk/gtkbutton.c:253 ../gtk/gtkexpander.c:284 ../gtk/gtklabel.c:749
+#: ../gtk/gtkbutton.c:253 ../gtk/gtkexpander.c:284 ../gtk/gtklabel.c:753
 #: ../gtk/gtkmenuitem.c:460
 msgid ""
 "If set, an underline in the text indicates the next character should be used "
@@ -1706,7 +1730,7 @@ msgid ""
 "If set, the label is used to pick a stock item instead of being displayed"
 msgstr "Jika ini diisi, tulisan pada label akan dipilih dari item stok"
 
-#: ../gtk/gtkbutton.c:271 ../gtk/gtkcombobox.c:858
+#: ../gtk/gtkbutton.c:271 ../gtk/gtkcombobox.c:855
 #: ../gtk/gtkfilechooserbutton.c:431
 msgid "Focus on click"
 msgstr "Klik untuk membuat fokus"
@@ -1794,7 +1818,7 @@ msgstr ""
 "Menentukan apakah child_displacement_x/y_properties juga mempengaruhi fokus "
 "kotak"
 
-#: ../gtk/gtkbutton.c:558 ../gtk/gtkentry.c:836 ../gtk/gtkentry.c:2035
+#: ../gtk/gtkbutton.c:558 ../gtk/gtkentry.c:836 ../gtk/gtkentry.c:2044
 msgid "Inner Border"
 msgstr "Batas Dalam"
 
@@ -1810,27 +1834,27 @@ msgstr "Jarak antar citra"
 msgid "Spacing in pixels between the image and label"
 msgstr "Ruang dalam piksel antar citra dan label"
 
-#: ../gtk/gtkcalendar.c:471
+#: ../gtk/gtkcalendar.c:472
 msgid "Year"
 msgstr "Tahun"
 
-#: ../gtk/gtkcalendar.c:472
+#: ../gtk/gtkcalendar.c:473
 msgid "The selected year"
 msgstr "Tahun yang dipilih"
 
-#: ../gtk/gtkcalendar.c:485
+#: ../gtk/gtkcalendar.c:486
 msgid "Month"
 msgstr "Bulan"
 
-#: ../gtk/gtkcalendar.c:486
+#: ../gtk/gtkcalendar.c:487
 msgid "The selected month (as a number between 0 and 11)"
 msgstr "Bulan yang dipilih (dalam angka mulai 0 hingga 11)"
 
-#: ../gtk/gtkcalendar.c:500
+#: ../gtk/gtkcalendar.c:501
 msgid "Day"
 msgstr "Hari"
 
-#: ../gtk/gtkcalendar.c:501
+#: ../gtk/gtkcalendar.c:502
 msgid ""
 "The selected day (as a number between 1 and 31, or 0 to unselect the "
 "currently selected day)"
@@ -1838,83 +1862,83 @@ msgstr ""
 "Hari yang dipilih (dalam angka dari 1 hingga 31, atau 0 untuk membatalkan "
 "pilihan pada hari yang sudah dipilih)"
 
-#: ../gtk/gtkcalendar.c:515
+#: ../gtk/gtkcalendar.c:516
 msgid "Show Heading"
 msgstr "Tampilkan heading"
 
-#: ../gtk/gtkcalendar.c:516
+#: ../gtk/gtkcalendar.c:517
 msgid "If TRUE, a heading is displayed"
 msgstr "Bila bernilai TRUE, heading ditampilkan"
 
-#: ../gtk/gtkcalendar.c:530
+#: ../gtk/gtkcalendar.c:531
 msgid "Show Day Names"
 msgstr "Tampilkan nama-nama hari"
 
-#: ../gtk/gtkcalendar.c:531
+#: ../gtk/gtkcalendar.c:532
 msgid "If TRUE, day names are displayed"
 msgstr "Bila bernilai TRUE, nama-nama hari ditampilkan"
 
-#: ../gtk/gtkcalendar.c:544
+#: ../gtk/gtkcalendar.c:545
 msgid "No Month Change"
 msgstr "Bulan Tetap"
 
-#: ../gtk/gtkcalendar.c:545
+#: ../gtk/gtkcalendar.c:546
 msgid "If TRUE, the selected month cannot be changed"
 msgstr "Bila bernilai TRUE, bulan yang sudah dipilih tidak dapat diganti"
 
-#: ../gtk/gtkcalendar.c:559
+#: ../gtk/gtkcalendar.c:560
 msgid "Show Week Numbers"
 msgstr "Tampilkan angka minggu"
 
-#: ../gtk/gtkcalendar.c:560
+#: ../gtk/gtkcalendar.c:561
 msgid "If TRUE, week numbers are displayed"
 msgstr "Bila bernilai TRUE, angka minggu ditampilkan"
 
-#: ../gtk/gtkcalendar.c:575
+#: ../gtk/gtkcalendar.c:576
 msgid "Details Width"
 msgstr "Lebar Detail"
 
-#: ../gtk/gtkcalendar.c:576
+#: ../gtk/gtkcalendar.c:577
 msgid "Details width in characters"
 msgstr "Lebar rincian dalam karakter"
 
-#: ../gtk/gtkcalendar.c:591
+#: ../gtk/gtkcalendar.c:592
 msgid "Details Height"
 msgstr "Tinggi Detail"
 
-#: ../gtk/gtkcalendar.c:592
+#: ../gtk/gtkcalendar.c:593
 msgid "Details height in rows"
 msgstr "Tinggi rincian dalam baris"
 
-#: ../gtk/gtkcalendar.c:608
+#: ../gtk/gtkcalendar.c:609
 msgid "Show Details"
 msgstr "Tampilkan Detail"
 
-#: ../gtk/gtkcalendar.c:609
+#: ../gtk/gtkcalendar.c:610
 msgid "If TRUE, details are shown"
 msgstr "Bila bernilai TRUE, rincian ditampilkan"
 
-#: ../gtk/gtkcalendar.c:621
+#: ../gtk/gtkcalendar.c:622
 msgid "Inner border"
 msgstr "Bingkai dalam"
 
-#: ../gtk/gtkcalendar.c:622
+#: ../gtk/gtkcalendar.c:623
 msgid "Inner border space"
 msgstr "Jarak bingkai dalam"
 
-#: ../gtk/gtkcalendar.c:633
+#: ../gtk/gtkcalendar.c:634
 msgid "Vertical separation"
 msgstr "Pemisahan vertikal"
 
-#: ../gtk/gtkcalendar.c:634
+#: ../gtk/gtkcalendar.c:635
 msgid "Space between day headers and main area"
 msgstr "Jarak antara tajuk hari dan wilayah utama"
 
-#: ../gtk/gtkcalendar.c:645
+#: ../gtk/gtkcalendar.c:646
 msgid "Horizontal separation"
 msgstr "Pemisahan horisontal"
 
-#: ../gtk/gtkcalendar.c:646
+#: ../gtk/gtkcalendar.c:647
 msgid "Space between week headers and main area"
 msgstr "Jarak antara tajuk minggu dan wilayah utama"
 
@@ -1954,27 +1978,27 @@ msgstr ""
 "Suatu nilai GtkPackType yang menunjukkan apakah sel dipak dengan rujukan ke "
 "awal atau akhir area sel"
 
-#: ../gtk/gtkcellarea.c:789
+#: ../gtk/gtkcellarea.c:790
 msgid "Focus Cell"
 msgstr "Sel Fokus"
 
-#: ../gtk/gtkcellarea.c:790
+#: ../gtk/gtkcellarea.c:791
 msgid "The cell which currently has focus"
 msgstr "Sel yang kini memiliki fokus"
 
-#: ../gtk/gtkcellarea.c:808
+#: ../gtk/gtkcellarea.c:809
 msgid "Edited Cell"
 msgstr "Sel yang Diedit"
 
-#: ../gtk/gtkcellarea.c:809
+#: ../gtk/gtkcellarea.c:810
 msgid "The cell which is currently being edited"
 msgstr "Sel yang sedang disunting"
 
-#: ../gtk/gtkcellarea.c:827
+#: ../gtk/gtkcellarea.c:828
 msgid "Edit Widget"
 msgstr "Widget Penyunting"
 
-#: ../gtk/gtkcellarea.c:828
+#: ../gtk/gtkcellarea.c:829
 msgid "The widget currently editing the edited cell"
 msgstr "Widget yang kini menyunting sel yang diedit"
 
@@ -2184,7 +2208,7 @@ msgstr "Kolom Teks"
 msgid "A column in the data source model to get the strings from"
 msgstr "Kolom pada model sumber data asal untuk mengambil kalimat"
 
-#: ../gtk/gtkcellrenderercombo.c:169 ../gtk/gtkcombobox.c:927
+#: ../gtk/gtkcellrenderercombo.c:169 ../gtk/gtkcombobox.c:924
 msgid "Has Entry"
 msgstr "Ada Isinya"
 
@@ -2252,31 +2276,31 @@ msgstr ""
 "Menentukan apakah pixbuf yang telah digambar harus diwarnai menurut yang "
 "telah ditentukan"
 
-#: ../gtk/gtkcellrendererpixbuf.c:257 ../gtk/gtkimage.c:342
+#: ../gtk/gtkcellrendererpixbuf.c:257 ../gtk/gtkimage.c:348
 #: ../gtk/gtkwindow.c:807
 msgid "Icon"
 msgstr "Ikon"
 
-#: ../gtk/gtkcellrendererprogress.c:138
+#: ../gtk/gtkcellrendererprogress.c:139
 msgid "Value of the progress bar"
 msgstr "Nilai dari batang proses"
 
-#: ../gtk/gtkcellrendererprogress.c:155 ../gtk/gtkcellrenderertext.c:253
+#: ../gtk/gtkcellrendererprogress.c:156 ../gtk/gtkcellrenderertext.c:253
 #: ../gtk/gtkentrybuffer.c:348 ../gtk/gtkentry.c:898
 #: ../gtk/gtkmessagedialog.c:214 ../gtk/gtkprogressbar.c:183
 #: ../gtk/gtktextbuffer.c:217
 msgid "Text"
 msgstr "Teks"
 
-#: ../gtk/gtkcellrendererprogress.c:156
+#: ../gtk/gtkcellrendererprogress.c:157
 msgid "Text on the progress bar"
 msgstr "Teks yang ditampilkan pada batang proses"
 
-#: ../gtk/gtkcellrendererprogress.c:179 ../gtk/gtkcellrendererspinner.c:144
+#: ../gtk/gtkcellrendererprogress.c:180 ../gtk/gtkcellrendererspinner.c:144
 msgid "Pulse"
 msgstr "Pulsa"
 
-#: ../gtk/gtkcellrendererprogress.c:180
+#: ../gtk/gtkcellrendererprogress.c:181
 msgid ""
 "Set this to positive values to indicate that some progress is made, but you "
 "don't know how much."
@@ -2284,11 +2308,11 @@ msgstr ""
 "Isi dengan nilai positif untuk mengindikasikan telah dicapai suatu kemajuan, "
 "tapi Anda tak tahu seberapa banyak."
 
-#: ../gtk/gtkcellrendererprogress.c:196
+#: ../gtk/gtkcellrendererprogress.c:197
 msgid "Text x alignment"
 msgstr "Perataan x"
 
-#: ../gtk/gtkcellrendererprogress.c:197
+#: ../gtk/gtkcellrendererprogress.c:198
 msgid ""
 "The horizontal text alignment, from 0 (left) to 1 (right). Reversed for RTL "
 "layouts."
@@ -2296,24 +2320,24 @@ msgstr ""
 "Perataan teks horisontal, bernilai 0 (kiri) hingga 1 (kanan). Nilainya "
 "dibalik untuk tata letak dari kanan-ke-kiri (RTL)."
 
-#: ../gtk/gtkcellrendererprogress.c:213
+#: ../gtk/gtkcellrendererprogress.c:214
 msgid "Text y alignment"
 msgstr "Perataan y"
 
-#: ../gtk/gtkcellrendererprogress.c:214
+#: ../gtk/gtkcellrendererprogress.c:215
 msgid "The vertical text alignment, from 0 (top) to 1 (bottom)."
 msgstr "Perataan teks vertikal, bernilai 0 (atas) hingga 1 (bawah)."
 
-#: ../gtk/gtkcellrendererprogress.c:225 ../gtk/gtklevelbar.c:1009
-#: ../gtk/gtkprogressbar.c:159 ../gtk/gtkrange.c:443
+#: ../gtk/gtkcellrendererprogress.c:226 ../gtk/gtklevelbar.c:1009
+#: ../gtk/gtkprogressbar.c:159 ../gtk/gtkrange.c:447
 msgid "Inverted"
 msgstr "Dibalik"
 
-#: ../gtk/gtkcellrendererprogress.c:226 ../gtk/gtkprogressbar.c:160
+#: ../gtk/gtkcellrendererprogress.c:227 ../gtk/gtkprogressbar.c:160
 msgid "Invert the direction in which the progress bar grows"
 msgstr "Balikkan arah berkembangnya bilah kemajuan"
 
-#: ../gtk/gtkcellrendererspin.c:113 ../gtk/gtkrange.c:435
+#: ../gtk/gtkcellrendererspin.c:113 ../gtk/gtkrange.c:439
 #: ../gtk/gtkscalebutton.c:210 ../gtk/gtkspinbutton.c:347
 msgid "Adjustment"
 msgstr "Penyesuaian"
@@ -2364,7 +2388,7 @@ msgid "Marked up text to render"
 msgstr "Teks bermarka yang hendak ditulis"
 
 #: ../gtk/gtkcellrenderertext.c:269 ../gtk/gtkentry.c:1469
-#: ../gtk/gtklabel.c:734
+#: ../gtk/gtklabel.c:738
 msgid "Attributes"
 msgstr "Atribut"
 
@@ -2430,12 +2454,12 @@ msgid "Foreground color as a GdkRGBA"
 msgstr "Warna latar depan dalam GdkRGBA"
 
 #: ../gtk/gtkcellrenderertext.c:366 ../gtk/gtkentry.c:794
-#: ../gtk/gtktexttag.c:297 ../gtk/gtktextview.c:748
+#: ../gtk/gtktexttag.c:297 ../gtk/gtktextview.c:749
 msgid "Editable"
 msgstr "Dapat disunting"
 
 #: ../gtk/gtkcellrenderertext.c:367 ../gtk/gtktexttag.c:298
-#: ../gtk/gtktextview.c:749
+#: ../gtk/gtktextview.c:750
 msgid "Whether the text can be modified by the user"
 msgstr "Menentukan apakah teks bisa diganti-ganti oleh user"
 
@@ -2544,7 +2568,7 @@ msgstr ""
 "sebagai petunjuk dalam menggambar tulisan itu. Jika Anda tidak mengerti "
 "parameter ini, berarti Anda tidak memerlukannya."
 
-#: ../gtk/gtkcellrenderertext.c:516 ../gtk/gtklabel.c:860
+#: ../gtk/gtkcellrenderertext.c:516 ../gtk/gtklabel.c:900
 #: ../gtk/gtkprogressbar.c:227
 msgid "Ellipsize"
 msgstr "Elipsis"
@@ -2558,15 +2582,15 @@ msgstr ""
 "cukup ruang untuk menampilkan seluruh string"
 
 #: ../gtk/gtkcellrenderertext.c:536 ../gtk/gtkfilechooserbutton.c:459
-#: ../gtk/gtklabel.c:881
+#: ../gtk/gtklabel.c:921
 msgid "Width In Characters"
 msgstr "Lebar dalam karakter"
 
-#: ../gtk/gtkcellrenderertext.c:537 ../gtk/gtklabel.c:882
+#: ../gtk/gtkcellrenderertext.c:537 ../gtk/gtklabel.c:922
 msgid "The desired width of the label, in characters"
 msgstr "Lebar label yang diinginkan dalam karakter"
 
-#: ../gtk/gtkcellrenderertext.c:561 ../gtk/gtklabel.c:942
+#: ../gtk/gtkcellrenderertext.c:561 ../gtk/gtklabel.c:982
 msgid "Maximum Width In Characters"
 msgstr "Lebar Maksimum Dalam Karakter"
 
@@ -2586,7 +2610,7 @@ msgstr ""
 "Cara memecah kalimat dalam baris-baris pada saat kotak sel tidak memiliki "
 "cukup ruang untuk menampilkan keseluruhan teks"
 
-#: ../gtk/gtkcellrenderertext.c:600 ../gtk/gtkcombobox.c:745
+#: ../gtk/gtkcellrenderertext.c:600 ../gtk/gtkcombobox.c:742
 msgid "Wrap width"
 msgstr "Lebar pembengkokan"
 
@@ -2758,7 +2782,7 @@ msgstr "Kondisi tidak konsisten"
 msgid "The inconsistent state of the button"
 msgstr "Kondisi tombol tidak konsisten"
 
-#: ../gtk/gtkcellrenderertoggle.c:153 ../gtk/gtklistbox.c:3498
+#: ../gtk/gtkcellrenderertoggle.c:153 ../gtk/gtklistbox.c:3503
 msgid "Activatable"
 msgstr "Dapat diaktifkan"
 
@@ -2778,7 +2802,7 @@ msgstr "Menggambar tombol togel sebagai tombol radio"
 msgid "Indicator size"
 msgstr "Ukuran indikator"
 
-#: ../gtk/gtkcellrenderertoggle.c:170 ../gtk/gtkcheckbutton.c:131
+#: ../gtk/gtkcellrenderertoggle.c:170 ../gtk/gtkcheckbutton.c:132
 #: ../gtk/gtkcheckmenuitem.c:146
 msgid "Size of check or radio indicator"
 msgstr "Ukuran indikator cek atau radio"
@@ -2795,13 +2819,13 @@ msgstr "Model CellView"
 msgid "The model for cell view"
 msgstr "Model tampilan sel"
 
-#: ../gtk/gtkcellview.c:253 ../gtk/gtkcombobox.c:1014
+#: ../gtk/gtkcellview.c:253 ../gtk/gtkcombobox.c:1011
 #: ../gtk/gtkentrycompletion.c:474 ../gtk/gtkiconview.c:641
 #: ../gtk/gtktreemenu.c:312 ../gtk/gtktreeviewcolumn.c:414
 msgid "Cell Area"
 msgstr "Area Sel"
 
-#: ../gtk/gtkcellview.c:254 ../gtk/gtkcombobox.c:1015
+#: ../gtk/gtkcellview.c:254 ../gtk/gtkcombobox.c:1012
 #: ../gtk/gtkentrycompletion.c:475 ../gtk/gtkiconview.c:642
 #: ../gtk/gtktreemenu.c:313 ../gtk/gtktreeviewcolumn.c:415
 msgid "The GtkCellArea used to layout cells"
@@ -2832,15 +2856,15 @@ msgstr "Pas Model"
 msgid "Whether to request enough space for every row in the model"
 msgstr "Apakah meminta cukup ruang untuk setiap baris dalam model"
 
-#: ../gtk/gtkcheckbutton.c:130 ../gtk/gtkcheckmenuitem.c:145
+#: ../gtk/gtkcheckbutton.c:131 ../gtk/gtkcheckmenuitem.c:145
 msgid "Indicator Size"
 msgstr "Ukuran Indikator"
 
-#: ../gtk/gtkcheckbutton.c:138 ../gtk/gtkexpander.c:349
+#: ../gtk/gtkcheckbutton.c:139 ../gtk/gtkexpander.c:349
 msgid "Indicator Spacing"
 msgstr "Jarak Indikator"
 
-#: ../gtk/gtkcheckbutton.c:139
+#: ../gtk/gtkcheckbutton.c:140
 msgid "Spacing around check or radio indicator"
 msgstr "Jarak antara indikator cek atau radio"
 
@@ -2848,7 +2872,7 @@ msgstr "Jarak antara indikator cek atau radio"
 msgid "Whether the menu item is checked"
 msgstr "Apakah menu item sedang dipilih atau tidak"
 
-#: ../gtk/gtkcheckmenuitem.c:130 ../gtk/gtktogglebutton.c:186
+#: ../gtk/gtkcheckmenuitem.c:130 ../gtk/gtktogglebutton.c:187
 msgid "Inconsistent"
 msgstr "Tidak konsisten"
 
@@ -2912,111 +2936,111 @@ msgstr "Tampilkan penyunting"
 msgid "Scale type"
 msgstr "Tipe skala"
 
-#: ../gtk/gtkcolorswatch.c:760
+#: ../gtk/gtkcolorswatch.c:726
 msgid "RGBA Color"
 msgstr "Warna RGBA"
 
-#: ../gtk/gtkcolorswatch.c:760
+#: ../gtk/gtkcolorswatch.c:726
 msgid "Color as RGBA"
 msgstr "Warna sebagai RGBA"
 
-#: ../gtk/gtkcolorswatch.c:763 ../gtk/gtklabel.c:798 ../gtk/gtklistbox.c:3512
+#: ../gtk/gtkcolorswatch.c:729 ../gtk/gtklabel.c:838 ../gtk/gtklistbox.c:3517
 msgid "Selectable"
 msgstr "Dapat dipilih"
 
-#: ../gtk/gtkcolorswatch.c:763
+#: ../gtk/gtkcolorswatch.c:729
 msgid "Whether the swatch is selectable"
 msgstr "Apakah swatch dapat dipilih"
 
-#: ../gtk/gtkcombobox.c:728
+#: ../gtk/gtkcombobox.c:725
 msgid "ComboBox model"
 msgstr "Model ComboBox"
 
-#: ../gtk/gtkcombobox.c:729
+#: ../gtk/gtkcombobox.c:726
 msgid "The model for the combo box"
 msgstr "Model kotak combo"
 
-#: ../gtk/gtkcombobox.c:746
+#: ../gtk/gtkcombobox.c:743
 msgid "Wrap width for laying out the items in a grid"
 msgstr "Lebar lipatan untuk menata letak butir dalam kisi"
 
-#: ../gtk/gtkcombobox.c:768 ../gtk/gtktreemenu.c:366
+#: ../gtk/gtkcombobox.c:765 ../gtk/gtktreemenu.c:366
 msgid "Row span column"
 msgstr "Jarak antar baris"
 
-#: ../gtk/gtkcombobox.c:769 ../gtk/gtktreemenu.c:367
+#: ../gtk/gtkcombobox.c:766 ../gtk/gtktreemenu.c:367
 msgid "TreeModel column containing the row span values"
 msgstr "Kolom TreeModel berisi nilai row span"
 
-#: ../gtk/gtkcombobox.c:790 ../gtk/gtktreemenu.c:387
+#: ../gtk/gtkcombobox.c:787 ../gtk/gtktreemenu.c:387
 msgid "Column span column"
 msgstr "Jarak antar kolom"
 
-#: ../gtk/gtkcombobox.c:791 ../gtk/gtktreemenu.c:388
+#: ../gtk/gtkcombobox.c:788 ../gtk/gtktreemenu.c:388
 msgid "TreeModel column containing the column span values"
 msgstr "Kolom TreeModel berisi nilai column span"
 
-#: ../gtk/gtkcombobox.c:812
+#: ../gtk/gtkcombobox.c:809
 msgid "Active item"
 msgstr "Objek aktif"
 
-#: ../gtk/gtkcombobox.c:813
+#: ../gtk/gtkcombobox.c:810
 msgid "The item which is currently active"
 msgstr "Objek yang aktif"
 
-#: ../gtk/gtkcombobox.c:835
+#: ../gtk/gtkcombobox.c:832
 msgid "Whether dropdowns should have a tearoff menu item"
 msgstr "Apakah dropdown harus memiliki sebuah objek menu tearoff"
 
-#: ../gtk/gtkcombobox.c:850 ../gtk/gtkentry.c:819
+#: ../gtk/gtkcombobox.c:847 ../gtk/gtkentry.c:819
 msgid "Has Frame"
 msgstr "Ada bingkai atau tidak"
 
-#: ../gtk/gtkcombobox.c:851
+#: ../gtk/gtkcombobox.c:848
 msgid "Whether the combo box draws a frame around the child"
 msgstr ""
 "Menentukan apakah kotak combo mengambarkan suatu bingkai di sekitar anak"
 
-#: ../gtk/gtkcombobox.c:859
+#: ../gtk/gtkcombobox.c:856
 msgid "Whether the combo box grabs focus when it is clicked with the mouse"
 msgstr "Menentukan apakah kotak combo memfokuskan ketika diklik dengan mouse"
 
-#: ../gtk/gtkcombobox.c:876 ../gtk/gtkmenu.c:618
+#: ../gtk/gtkcombobox.c:873 ../gtk/gtkmenu.c:618
 msgid "Tearoff Title"
 msgstr "Judul saat disobek"
 
-#: ../gtk/gtkcombobox.c:877
+#: ../gtk/gtkcombobox.c:874
 msgid ""
 "A title that may be displayed by the window manager when the popup is torn-"
 "off"
 msgstr ""
 "Judul yang mungkin ditampilkan oleh manajer jendela ketika popup dilepas"
 
-#: ../gtk/gtkcombobox.c:894
+#: ../gtk/gtkcombobox.c:891
 msgid "Popup shown"
 msgstr "Popup ditampilkan"
 
-#: ../gtk/gtkcombobox.c:895
+#: ../gtk/gtkcombobox.c:892
 msgid "Whether the combo's dropdown is shown"
 msgstr "Apakah dropdown kombo ditampilkan"
 
-#: ../gtk/gtkcombobox.c:911
+#: ../gtk/gtkcombobox.c:908
 msgid "Button Sensitivity"
 msgstr "Kepekaan Tombol"
 
-#: ../gtk/gtkcombobox.c:912
+#: ../gtk/gtkcombobox.c:909
 msgid "Whether the dropdown button is sensitive when the model is empty"
 msgstr "Apakah tombol dropdown peka ketika model kosong"
 
-#: ../gtk/gtkcombobox.c:928
+#: ../gtk/gtkcombobox.c:925
 msgid "Whether combo box has an entry"
 msgstr "Apakah kotak combo punya entri"
 
-#: ../gtk/gtkcombobox.c:943
+#: ../gtk/gtkcombobox.c:940
 msgid "Entry Text Column"
 msgstr "Kolom Teks Entri"
 
-#: ../gtk/gtkcombobox.c:944
+#: ../gtk/gtkcombobox.c:941
 msgid ""
 "The column in the combo box's model to associate with strings from the entry "
 "if the combo was created with #GtkComboBox:has-entry = %TRUE"
@@ -3024,11 +3048,11 @@ msgstr ""
 "Kolom pada model kotak kombo yang diasosiasikan dengan string dari entri "
 "bila kombo dibuat dengan #GtkComboBox:has-entry = %TRUE"
 
-#: ../gtk/gtkcombobox.c:961
+#: ../gtk/gtkcombobox.c:958
 msgid "ID Column"
 msgstr "Kolom ID"
 
-#: ../gtk/gtkcombobox.c:962
+#: ../gtk/gtkcombobox.c:959
 msgid ""
 "The column in the combo box's model that provides string IDs for the values "
 "in the model"
@@ -3036,19 +3060,19 @@ msgstr ""
 "Kolom pada model kotak kombo yang menyediakan ID string bagi nilai-nilai "
 "dalam model"
 
-#: ../gtk/gtkcombobox.c:977
+#: ../gtk/gtkcombobox.c:974
 msgid "Active id"
 msgstr "ID aktif"
 
-#: ../gtk/gtkcombobox.c:978
+#: ../gtk/gtkcombobox.c:975
 msgid "The value of the id column for the active row"
 msgstr "Nilai dari kolom id bagi baris aktif"
 
-#: ../gtk/gtkcombobox.c:994
+#: ../gtk/gtkcombobox.c:991
 msgid "Popup Fixed Width"
 msgstr "Lebar Tetap Popup"
 
-#: ../gtk/gtkcombobox.c:995
+#: ../gtk/gtkcombobox.c:992
 msgid ""
 "Whether the popup's width should be a fixed width matching the allocated "
 "width of the combo box"
@@ -3056,52 +3080,52 @@ msgstr ""
 "Apakah lebar popup mesti suatu nilai tetap yang cocok dengan lebar kotak "
 "kombo yang dialokasikan"
 
-#: ../gtk/gtkcombobox.c:1021
+#: ../gtk/gtkcombobox.c:1018
 msgid "Appears as list"
 msgstr "Tampilkan sebagai daftar"
 
-#: ../gtk/gtkcombobox.c:1022
+#: ../gtk/gtkcombobox.c:1019
 msgid "Whether dropdowns should look like lists rather than menus"
 msgstr ""
 "Menentukan apakah dropdowns harus kelihatan seperti daftar dari pada menu"
 
-#: ../gtk/gtkcombobox.c:1038
+#: ../gtk/gtkcombobox.c:1035
 msgid "Arrow Size"
 msgstr "Ukuran Panah"
 
-#: ../gtk/gtkcombobox.c:1039
+#: ../gtk/gtkcombobox.c:1036
 msgid "The minimum size of the arrow in the combo box"
 msgstr "Ukuran minimum panah dalam kotak kombo"
 
-#: ../gtk/gtkcombobox.c:1056
+#: ../gtk/gtkcombobox.c:1053
 msgid "The amount of space used by the arrow"
 msgstr "Banyaknya ruang yang dipakai oleh panah"
 
-#: ../gtk/gtkcombobox.c:1072
+#: ../gtk/gtkcombobox.c:1069
 msgid "Which kind of shadow to draw around the combo box"
 msgstr "Jenis bayangan mana yang digambar di sekeliling kotak kombo"
 
-#: ../gtk/gtkcontainer.c:490
+#: ../gtk/gtkcontainer.c:507
 msgid "Resize mode"
 msgstr "Modus Ganti ukuran"
 
-#: ../gtk/gtkcontainer.c:491
+#: ../gtk/gtkcontainer.c:508
 msgid "Specify how resize events are handled"
 msgstr "Menentukan bagaimana penggantian ukuran dikerjakan"
 
-#: ../gtk/gtkcontainer.c:498
+#: ../gtk/gtkcontainer.c:515
 msgid "Border width"
 msgstr "Lebar batas"
 
-#: ../gtk/gtkcontainer.c:499
+#: ../gtk/gtkcontainer.c:516
 msgid "The width of the empty border outside the containers children"
 msgstr "Lebar batas kosong diluar anak kontainer"
 
-#: ../gtk/gtkcontainer.c:507
+#: ../gtk/gtkcontainer.c:524
 msgid "Child"
 msgstr "Anak"
 
-#: ../gtk/gtkcontainer.c:508
+#: ../gtk/gtkcontainer.c:525
 msgid "Can be used to add a new child to the container"
 msgstr "Dapat digunakan untuk menambah anak pada kontainer"
 
@@ -3161,7 +3185,7 @@ msgstr "Nilai awal"
 msgid "The initial specified value used for this property"
 msgstr "Nilai awal yang dinyatakan yang dipakai untuk properti ini"
 
-#: ../gtk/gtkdialog.c:585 ../gtk/gtkinfobar.c:516
+#: ../gtk/gtkdialog.c:585 ../gtk/gtkinfobar.c:517
 msgid "Content area border"
 msgstr "Batas area isi"
 
@@ -3169,7 +3193,7 @@ msgstr "Batas area isi"
 msgid "Width of border around the main dialog area"
 msgstr "Lebar batas disekeliling area dialog utama"
 
-#: ../gtk/gtkdialog.c:603 ../gtk/gtkinfobar.c:534
+#: ../gtk/gtkdialog.c:603 ../gtk/gtkinfobar.c:535
 msgid "Content area spacing"
 msgstr "Jarak antara wilayah isi"
 
@@ -3177,15 +3201,15 @@ msgstr "Jarak antara wilayah isi"
 msgid "Spacing between elements of the main dialog area"
 msgstr "Jarak antar elemen dari wilayah dialog utama"
 
-#: ../gtk/gtkdialog.c:611 ../gtk/gtkinfobar.c:551
+#: ../gtk/gtkdialog.c:611 ../gtk/gtkinfobar.c:552
 msgid "Button spacing"
 msgstr "Ruangan tombol"
 
-#: ../gtk/gtkdialog.c:612 ../gtk/gtkinfobar.c:552
+#: ../gtk/gtkdialog.c:612 ../gtk/gtkinfobar.c:553
 msgid "Spacing between buttons"
 msgstr "Ruangan antara tombol-tombol"
 
-#: ../gtk/gtkdialog.c:628 ../gtk/gtkinfobar.c:568
+#: ../gtk/gtkdialog.c:628 ../gtk/gtkinfobar.c:569
 msgid "Action area border"
 msgstr "Batas area aksi"
 
@@ -3221,19 +3245,19 @@ msgstr "Penyangga Teks"
 msgid "Text buffer object which actually stores entry text"
 msgstr "Objek penyangga teks yang sebenarnya menyimpan teks entri"
 
-#: ../gtk/gtkentry.c:774 ../gtk/gtklabel.c:823
+#: ../gtk/gtkentry.c:774 ../gtk/gtklabel.c:863
 msgid "Cursor Position"
 msgstr "Posisi kursor"
 
-#: ../gtk/gtkentry.c:775 ../gtk/gtklabel.c:824
+#: ../gtk/gtkentry.c:775 ../gtk/gtklabel.c:864
 msgid "The current position of the insertion cursor in chars"
 msgstr "Posisi kursor saat ini untuk memasukkan karakter"
 
-#: ../gtk/gtkentry.c:784 ../gtk/gtklabel.c:833
+#: ../gtk/gtkentry.c:784 ../gtk/gtklabel.c:873
 msgid "Selection Bound"
 msgstr "Batas seleksi"
 
-#: ../gtk/gtkentry.c:785 ../gtk/gtklabel.c:834
+#: ../gtk/gtkentry.c:785 ../gtk/gtklabel.c:874
 msgid ""
 "The position of the opposite end of the selection from the cursor in chars"
 msgstr "Posisi lawan pilihan dari kursor dalam satuan karakter"
@@ -3325,7 +3349,7 @@ msgid "Which kind of shadow to draw around the entry when has-frame is set"
 msgstr ""
 "Jenis bayangan mana yang digambar di sekeliling entri ketika has-frame ditata"
 
-#: ../gtk/gtkentry.c:963 ../gtk/gtktextview.c:822
+#: ../gtk/gtkentry.c:963 ../gtk/gtktextview.c:823
 msgid "Overwrite mode"
 msgstr "Modus Timpa"
 
@@ -3514,11 +3538,11 @@ msgstr "Markup tooltip ikon primer"
 msgid "Secondary icon tooltip markup"
 msgstr "Markup tooltip ikon sekunder"
 
-#: ../gtk/gtkentry.c:1397 ../gtk/gtktextview.c:850
+#: ../gtk/gtkentry.c:1397 ../gtk/gtktextview.c:851
 msgid "IM module"
 msgstr "Modul IM"
 
-#: ../gtk/gtkentry.c:1398 ../gtk/gtktextview.c:851
+#: ../gtk/gtkentry.c:1398 ../gtk/gtktextview.c:852
 msgid "Which IM module should be used"
 msgstr "Modul IM mana yang mesti dipakai"
 
@@ -3530,35 +3554,35 @@ msgstr "Pelengkapan"
 msgid "The auxiliary completion object"
 msgstr "Objek pelengkapan tambahan"
 
-#: ../gtk/gtkentry.c:1434 ../gtk/gtkimcontext.c:331 ../gtk/gtktextview.c:868
+#: ../gtk/gtkentry.c:1434 ../gtk/gtkimcontext.c:331 ../gtk/gtktextview.c:869
 msgid "Purpose"
 msgstr "Kegunaan"
 
-#: ../gtk/gtkentry.c:1435 ../gtk/gtkimcontext.c:332 ../gtk/gtktextview.c:869
+#: ../gtk/gtkentry.c:1435 ../gtk/gtkimcontext.c:332 ../gtk/gtktextview.c:870
 msgid "Purpose of the text field"
 msgstr "Kegunaan ruas teks"
 
-#: ../gtk/gtkentry.c:1451 ../gtk/gtkimcontext.c:339 ../gtk/gtktextview.c:886
+#: ../gtk/gtkentry.c:1451 ../gtk/gtkimcontext.c:339 ../gtk/gtktextview.c:887
 msgid "hints"
 msgstr "petunjuk"
 
-#: ../gtk/gtkentry.c:1452 ../gtk/gtkimcontext.c:340 ../gtk/gtktextview.c:887
+#: ../gtk/gtkentry.c:1452 ../gtk/gtkimcontext.c:340 ../gtk/gtktextview.c:888
 msgid "Hints for the text field behaviour"
 msgstr "Petunjuk bagi perilaku ruas teks"
 
-#: ../gtk/gtkentry.c:1470 ../gtk/gtklabel.c:735
+#: ../gtk/gtkentry.c:1470 ../gtk/gtklabel.c:739
 msgid "A list of style attributes to apply to the text of the label"
 msgstr "Daftar gaya atribut yang hendak ditempelkan pada label teks"
 
-#: ../gtk/gtkentry.c:1485 ../gtk/gtktextview.c:903
+#: ../gtk/gtkentry.c:1485 ../gtk/gtktextview.c:904
 msgid "Populate all"
 msgstr "Isi semua"
 
-#: ../gtk/gtkentry.c:1486 ../gtk/gtktextview.c:904
+#: ../gtk/gtkentry.c:1486 ../gtk/gtktextview.c:905
 msgid "Whether to emit ::populate-popup for touch popups"
 msgstr "Apakah memancarkan ::populate-popup bagi popup sentuh"
 
-#: ../gtk/gtkentry.c:1500 ../gtk/gtktexttag.c:531 ../gtk/gtktextview.c:798
+#: ../gtk/gtkentry.c:1500 ../gtk/gtktexttag.c:531 ../gtk/gtktextview.c:799
 msgid "Tabs"
 msgstr "Tab"
 
@@ -3584,7 +3608,7 @@ msgstr "Batas Kemajuan"
 msgid "Border around the progress bar"
 msgstr "Batas di sekeliling batang kemajuan"
 
-#: ../gtk/gtkentry.c:2036
+#: ../gtk/gtkentry.c:2045
 msgid "Border between text and frame."
 msgstr "Batas antara teks dan bingkai."
 
@@ -3702,11 +3726,11 @@ msgstr "Apakah pengembang telah dibuka untuk menampilkan widget anak"
 msgid "Text of the expander's label"
 msgstr "Teks dari nama expander"
 
-#: ../gtk/gtkexpander.c:291 ../gtk/gtklabel.c:741
+#: ../gtk/gtkexpander.c:291 ../gtk/gtklabel.c:745
 msgid "Use markup"
 msgstr "Gunakan markup"
 
-#: ../gtk/gtkexpander.c:292 ../gtk/gtklabel.c:742
+#: ../gtk/gtkexpander.c:292 ../gtk/gtklabel.c:746
 msgid "The text of the label includes XML markup. See pango_parse_markup()"
 msgstr ""
 "Label teks termasuk markup XML-nya. Silakan baca pango_parse_markup() untuk "
@@ -3792,7 +3816,7 @@ msgstr "Penyaring"
 msgid "The current filter for selecting which files are displayed"
 msgstr "Saringan yang telah dipergunakan untuk memilih berkas yang ditampilkan"
 
-#: ../gtk/gtkfilechooser.c:388 ../gtk/gtkplacessidebar.c:4395
+#: ../gtk/gtkfilechooser.c:388 ../gtk/gtkplacessidebar.c:4525
 msgid "Local Only"
 msgstr "Pada Komputer Ini Saja"
 
@@ -3893,30 +3917,30 @@ msgstr "Posisi Y"
 msgid "Y position of child widget"
 msgstr "Posisi Y widget anak"
 
-#: ../gtk/gtkflowbox.c:3664 ../gtk/gtkiconview.c:400 ../gtk/gtklistbox.c:415
+#: ../gtk/gtkflowbox.c:3666 ../gtk/gtkiconview.c:400 ../gtk/gtklistbox.c:420
 #: ../gtk/gtktreeselection.c:131
 msgid "Selection mode"
 msgstr "Moda pilihan"
 
-#: ../gtk/gtkflowbox.c:3665 ../gtk/gtkiconview.c:401 ../gtk/gtklistbox.c:416
+#: ../gtk/gtkflowbox.c:3667 ../gtk/gtkiconview.c:401 ../gtk/gtklistbox.c:421
 msgid "The selection mode"
 msgstr "Moda pilihan"
 
-#: ../gtk/gtkflowbox.c:3678 ../gtk/gtkiconview.c:657 ../gtk/gtklistbox.c:423
+#: ../gtk/gtkflowbox.c:3680 ../gtk/gtkiconview.c:657 ../gtk/gtklistbox.c:428
 #: ../gtk/gtktreeview.c:1210
 msgid "Activate on Single Click"
 msgstr "Aktifkan pada Klik Tunggal"
 
-#: ../gtk/gtkflowbox.c:3679 ../gtk/gtkiconview.c:658 ../gtk/gtklistbox.c:424
+#: ../gtk/gtkflowbox.c:3681 ../gtk/gtkiconview.c:658 ../gtk/gtklistbox.c:429
 #: ../gtk/gtktreeview.c:1211
 msgid "Activate row on a single click"
 msgstr "Aktifkan baris pada klik tunggal"
 
-#: ../gtk/gtkflowbox.c:3708
+#: ../gtk/gtkflowbox.c:3710
 msgid "Minimum Children Per Line"
 msgstr "Minimum Anak Per Baris"
 
-#: ../gtk/gtkflowbox.c:3709
+#: ../gtk/gtkflowbox.c:3711
 msgid ""
 "The minimum number of children to allocate consecutively in the given "
 "orientation."
@@ -3924,11 +3948,11 @@ msgstr ""
 "Cacah minimum anak yang dialokasikan secara berurutan dalam orientasi yang "
 "diberikan."
 
-#: ../gtk/gtkflowbox.c:3722
+#: ../gtk/gtkflowbox.c:3724
 msgid "Maximum Children Per Line"
 msgstr "Maksimum Anak Per Baris"
 
-#: ../gtk/gtkflowbox.c:3723
+#: ../gtk/gtkflowbox.c:3725
 msgid ""
 "The maximum amount of children to request space for consecutively in the "
 "given orientation."
@@ -3936,63 +3960,63 @@ msgstr ""
 "Cacah maksimum anak yang meminta ruang secara berurutan dalam orientasi yang "
 "diberikan."
 
-#: ../gtk/gtkflowbox.c:3735
+#: ../gtk/gtkflowbox.c:3737
 msgid "Vertical spacing"
 msgstr "Jarak antara vertikal"
 
-#: ../gtk/gtkflowbox.c:3736
+#: ../gtk/gtkflowbox.c:3738
 msgid "The amount of vertical space between two children"
 msgstr "Banyaknya jarak vertikal antara dua anak"
 
-#: ../gtk/gtkflowbox.c:3747
+#: ../gtk/gtkflowbox.c:3749
 msgid "Horizontal spacing"
 msgstr "Jarak antara horisontal"
 
-#: ../gtk/gtkflowbox.c:3748
+#: ../gtk/gtkflowbox.c:3750
 msgid "The amount of horizontal space between two children"
 msgstr "Banyaknya jarak horisontal antara dua anak"
 
-#: ../gtk/gtkfontbutton.c:442
+#: ../gtk/gtkfontbutton.c:444
 msgid "The title of the font chooser dialog"
 msgstr "Judul dialog pemilih fonta"
 
-#: ../gtk/gtkfontbutton.c:457
+#: ../gtk/gtkfontbutton.c:459
 msgid "The name of the selected font"
 msgstr "Nama fonta yang dipilih"
 
-#: ../gtk/gtkfontbutton.c:458
+#: ../gtk/gtkfontbutton.c:460
 msgid "Sans 12"
 msgstr "Sans 12"
 
-#: ../gtk/gtkfontbutton.c:472
+#: ../gtk/gtkfontbutton.c:474
 msgid "Use font in label"
 msgstr "Gunakan fonta ini pada label"
 
-#: ../gtk/gtkfontbutton.c:473
+#: ../gtk/gtkfontbutton.c:475
 msgid "Whether the label is drawn in the selected font"
 msgstr "Apakah label digambar dengan fonta yang dipilih"
 
-#: ../gtk/gtkfontbutton.c:488
+#: ../gtk/gtkfontbutton.c:490
 msgid "Use size in label"
 msgstr "Gunakan ukuran ini pada label"
 
-#: ../gtk/gtkfontbutton.c:489
+#: ../gtk/gtkfontbutton.c:491
 msgid "Whether the label is drawn with the selected font size"
 msgstr "Apakah label digambar dengan ukuran fonta yang dipilih"
 
-#: ../gtk/gtkfontbutton.c:505
+#: ../gtk/gtkfontbutton.c:507
 msgid "Show style"
 msgstr "Tampilkan gaya"
 
-#: ../gtk/gtkfontbutton.c:506
+#: ../gtk/gtkfontbutton.c:508
 msgid "Whether the selected font style is shown in the label"
 msgstr "Menentukan apakah gaya huruf terpilih akan ditampilkan pada label"
 
-#: ../gtk/gtkfontbutton.c:521
+#: ../gtk/gtkfontbutton.c:523
 msgid "Show size"
 msgstr "Tampilkan ukuran"
 
-#: ../gtk/gtkfontbutton.c:522
+#: ../gtk/gtkfontbutton.c:524
 msgid "Whether selected font size is shown in the label"
 msgstr "Menentukan apakah ukuran fonta terpilih nampak pada label"
 
@@ -4056,68 +4080,92 @@ msgstr "GdkWindow yang akan menerima peristiwa"
 msgid "Allowed orientations"
 msgstr "Orientasi yang diijinkan"
 
-#: ../gtk/gtkgesturesingle.c:251
+#: ../gtk/gtkgesturesingle.c:258
 msgid "Handle only touch events"
 msgstr "Hanya menangani peristiwa sentuhan"
 
-#: ../gtk/gtkgesturesingle.c:252
+#: ../gtk/gtkgesturesingle.c:259
 msgid "Whether the gesture handles only touch events"
 msgstr "Apakah gestur menangani hanya peristiwa sentuhan"
 
-#: ../gtk/gtkgesturesingle.c:268 ../gtk/gtkgesturesingle.c:269
+#: ../gtk/gtkgesturesingle.c:275 ../gtk/gtkgesturesingle.c:276
 msgid "Whether the gesture is exclusive"
 msgstr "Apakah gestur eksklusif"
 
-#: ../gtk/gtkgesturesingle.c:283
+#: ../gtk/gtkgesturesingle.c:290
 msgid "Button number"
 msgstr "Nomor tombol"
 
-#: ../gtk/gtkgesturesingle.c:284
+#: ../gtk/gtkgesturesingle.c:291
 msgid "Button number to listen to"
 msgstr "Nomor tombol yang akan didengar"
 
-#: ../gtk/gtkgrid.c:1748
+#: ../gtk/gtkglarea.c:420
+msgid "Context"
+msgstr "Konteks"
+
+#: ../gtk/gtkglarea.c:421
+msgid "The GL context"
+msgstr "Konteks GL"
+
+#: ../gtk/gtkglarea.c:440
+msgid "Has alpha"
+msgstr "Punya alfa"
+
+#: ../gtk/gtkglarea.c:441
+msgid "Whether the gl area color buffer has an alpha component"
+msgstr "Apakah penyangga warna area gl punya komponen alfa"
+
+#: ../gtk/gtkglarea.c:455
+msgid "Has depth buffer"
+msgstr "Punya penyangga kedalaman"
+
+#: ../gtk/gtkglarea.c:456
+msgid "Whether a depth buffer is allocated"
+msgstr "Apakah suatu penyangga kedalaman dialokasikan"
+
+#: ../gtk/gtkgrid.c:1749
 msgid "Row Homogeneous"
 msgstr "Baris Homogen"
 
-#: ../gtk/gtkgrid.c:1749
+#: ../gtk/gtkgrid.c:1750
 msgid "If TRUE, the rows are all the same height"
 msgstr "Bila TRUE, semua baris sama tinggi"
 
-#: ../gtk/gtkgrid.c:1755
+#: ../gtk/gtkgrid.c:1756
 msgid "Column Homogeneous"
 msgstr "Kolom Homogen"
 
-#: ../gtk/gtkgrid.c:1756
+#: ../gtk/gtkgrid.c:1757
 msgid "If TRUE, the columns are all the same width"
 msgstr "Bila TRUE, semua kolom sama lebar"
 
-#: ../gtk/gtkgrid.c:1762
+#: ../gtk/gtkgrid.c:1763
 msgid "Baseline Row"
 msgstr "Baris Baseline"
 
-#: ../gtk/gtkgrid.c:1763
+#: ../gtk/gtkgrid.c:1764
 msgid "The row to align the to the baseline when valign is GTK_ALIGN_BASELINE"
 msgstr ""
 "Baris untuk meratakan ke baseline ketika valign berisi GTK_ALIGN_BASELINE"
 
-#: ../gtk/gtkgrid.c:1781
+#: ../gtk/gtkgrid.c:1782
 msgid "The row number to attach the top side of a child widget to"
 msgstr "Sisi atas widget anak akan ditempelkan pada nomor baris ini"
 
-#: ../gtk/gtkgrid.c:1787 ../gtk/gtklayout.c:673 ../gtk/gtktreeviewcolumn.c:271
+#: ../gtk/gtkgrid.c:1788 ../gtk/gtklayout.c:673 ../gtk/gtktreeviewcolumn.c:271
 msgid "Width"
 msgstr "Lebar"
 
-#: ../gtk/gtkgrid.c:1788
+#: ../gtk/gtkgrid.c:1789
 msgid "The number of columns that a child spans"
 msgstr "Cacah kolom yang dicakup oleh anak"
 
-#: ../gtk/gtkgrid.c:1794 ../gtk/gtklayout.c:682
+#: ../gtk/gtkgrid.c:1795 ../gtk/gtklayout.c:682
 msgid "Height"
 msgstr "Tinggi"
 
-#: ../gtk/gtkgrid.c:1795
+#: ../gtk/gtkgrid.c:1796
 msgid "The number of rows that a child spans"
 msgstr "Cacah baris yang dicakup oleh anak"
 
@@ -4296,89 +4344,89 @@ msgstr "Kotak Pilihan Alfa"
 msgid "Opacity of the selection box"
 msgstr "Opasitas kotak pilihan"
 
-#: ../gtk/gtkimage.c:238
+#: ../gtk/gtkimage.c:244
 msgid "Surface"
 msgstr "Permukaan"
 
-#: ../gtk/gtkimage.c:239
+#: ../gtk/gtkimage.c:245
 msgid "A cairo_surface_t to display"
 msgstr "Suatu cairo_surface_t untuk ditampilkan"
 
-#: ../gtk/gtkimage.c:274
+#: ../gtk/gtkimage.c:280
 msgid "Icon set"
 msgstr "Set ikon"
 
-#: ../gtk/gtkimage.c:275
+#: ../gtk/gtkimage.c:281
 msgid "Icon set to display"
 msgstr "Set ikon yang hendak ditampilkan"
 
-#: ../gtk/gtkimage.c:283 ../gtk/gtkscalebutton.c:201 ../gtk/gtktoolbar.c:531
+#: ../gtk/gtkimage.c:289 ../gtk/gtkscalebutton.c:201 ../gtk/gtktoolbar.c:532
 #: ../gtk/gtktoolpalette.c:954
 msgid "Icon size"
 msgstr "Ukuran ikon"
 
-#: ../gtk/gtkimage.c:284
+#: ../gtk/gtkimage.c:290
 msgid "Symbolic size to use for stock icon, icon set or named icon"
 msgstr ""
 "Ukuran simbolis untuk digunakan pada ikon stock. ikon set ataupun named ikon"
 
-#: ../gtk/gtkimage.c:300
+#: ../gtk/gtkimage.c:306
 msgid "Pixel size"
 msgstr "Ukuran piksel"
 
-#: ../gtk/gtkimage.c:301
+#: ../gtk/gtkimage.c:307
 msgid "Pixel size to use for named icon"
 msgstr "Ukuran piksel pada ikon bernama"
 
-#: ../gtk/gtkimage.c:309
+#: ../gtk/gtkimage.c:315
 msgid "Animation"
 msgstr "Animasi"
 
-#: ../gtk/gtkimage.c:310
+#: ../gtk/gtkimage.c:316
 msgid "GdkPixbufAnimation to display"
 msgstr "GdkPixbufAnimation yang hendak ditampilkan"
 
-#: ../gtk/gtkimage.c:357
+#: ../gtk/gtkimage.c:363
 msgid "Resource"
 msgstr "Sumber daya"
 
-#: ../gtk/gtkimage.c:358
+#: ../gtk/gtkimage.c:364
 msgid "The resource path being displayed"
 msgstr "Path sumber daya yang sedang ditampilkan"
 
-#: ../gtk/gtkimage.c:384
+#: ../gtk/gtkimage.c:390
 msgid "Use Fallback"
 msgstr "Gunakan Cadangan"
 
-#: ../gtk/gtkimage.c:385
+#: ../gtk/gtkimage.c:391
 msgid "Whether to use icon names fallback"
 msgstr "Apakah memakai cadangan nama ikon"
 
-#: ../gtk/gtkinfobar.c:445 ../gtk/gtkmessagedialog.c:189
+#: ../gtk/gtkinfobar.c:446 ../gtk/gtkmessagedialog.c:189
 msgid "Message Type"
 msgstr "Tipe Pesan"
 
-#: ../gtk/gtkinfobar.c:446 ../gtk/gtkmessagedialog.c:190
+#: ../gtk/gtkinfobar.c:447 ../gtk/gtkmessagedialog.c:190
 msgid "The type of message"
 msgstr "Tipe pesan"
 
-#: ../gtk/gtkinfobar.c:461 ../gtk/gtksearchbar.c:418
+#: ../gtk/gtkinfobar.c:462 ../gtk/gtksearchbar.c:434
 msgid "Show Close Button"
 msgstr "Tampilkan Tombol Tutup"
 
-#: ../gtk/gtkinfobar.c:462
+#: ../gtk/gtkinfobar.c:463
 msgid "Whether to include a standard close button"
 msgstr "Apakah menyertakan tombol tutup yang standar"
 
-#: ../gtk/gtkinfobar.c:517
+#: ../gtk/gtkinfobar.c:518
 msgid "Width of border around the content area"
 msgstr "Lebar batas sekeliling wilayah isi"
 
-#: ../gtk/gtkinfobar.c:535
+#: ../gtk/gtkinfobar.c:536
 msgid "Spacing between elements of the area"
 msgstr "Jarak antar elemen dari wilayah"
 
-#: ../gtk/gtkinfobar.c:569
+#: ../gtk/gtkinfobar.c:570
 msgid "Width of border around the action area"
 msgstr "Lebar batas sekeliling wilayah aksi"
 
@@ -4386,29 +4434,29 @@ msgstr "Lebar batas sekeliling wilayah aksi"
 msgid "The screen where this window will be displayed"
 msgstr "Layar tempat jendela hendak ditampilkan"
 
-#: ../gtk/gtklabel.c:728
+#: ../gtk/gtklabel.c:732
 msgid "The text of the label"
 msgstr "Label teks"
 
-#: ../gtk/gtklabel.c:756 ../gtk/gtktexttag.c:405 ../gtk/gtktextview.c:765
+#: ../gtk/gtklabel.c:760 ../gtk/gtktexttag.c:405 ../gtk/gtktextview.c:766
 msgid "Justification"
 msgstr "Rata"
 
-#: ../gtk/gtklabel.c:757
+#: ../gtk/gtklabel.c:761
 msgid ""
 "The alignment of the lines in the text of the label relative to each other. "
 "This does NOT affect the alignment of the label within its allocation. See "
-"GtkMisc::xalign for that"
+"GtkLabel:xalign for that"
 msgstr ""
 "Penyesuaian letak baris pada label teks, relatif terhadap satu dan yang "
-"lainnya. Hal ini tidak berpengaruh pada penyesuaian letak label dalam "
-"lokasinya.  Silakan baca GtkMis::xalign untuk informasi lengkapnya"
+"lainnya. Hal ini TIDAK memengaruhi perataan label dalam alokasinya. Lihat "
+"GtkLabel:xalign untuk itu"
 
-#: ../gtk/gtklabel.c:765
+#: ../gtk/gtklabel.c:805
 msgid "Pattern"
 msgstr "Pola"
 
-#: ../gtk/gtklabel.c:766
+#: ../gtk/gtklabel.c:806
 msgid ""
 "A string with _ characters in positions correspond to characters in the text "
 "to underline"
@@ -4416,44 +4464,44 @@ msgstr ""
 "Kalimat dengan karakter _ (underscore) pada suatu karakter akan membuat "
 "karakter tersebut diberi garis bawah"
 
-#: ../gtk/gtklabel.c:773
+#: ../gtk/gtklabel.c:813
 msgid "Line wrap"
 msgstr "potong baris"
 
-#: ../gtk/gtklabel.c:774
+#: ../gtk/gtklabel.c:814
 msgid "If set, wrap lines if the text becomes too wide"
 msgstr "Jika diset, baris akan dipotong bila terlalu lebar"
 
-#: ../gtk/gtklabel.c:790
+#: ../gtk/gtklabel.c:830
 msgid "Line wrap mode"
 msgstr "Mode pembengkokan baris"
 
-#: ../gtk/gtklabel.c:791
+#: ../gtk/gtklabel.c:831
 msgid "If wrap is set, controls how linewrapping is done"
 msgstr ""
 "Bila pelipatan diaktifkan, mengendalikan bagaimana pelipatan baris dilakukan"
 
-#: ../gtk/gtklabel.c:799
+#: ../gtk/gtklabel.c:839
 msgid "Whether the label text can be selected with the mouse"
 msgstr "Menentukan apakah teks label dapat dipilih dengan mouse atau tidak"
 
-#: ../gtk/gtklabel.c:805
+#: ../gtk/gtklabel.c:845
 msgid "Mnemonic key"
 msgstr "Tombol singkat"
 
-#: ../gtk/gtklabel.c:806
+#: ../gtk/gtklabel.c:846
 msgid "The mnemonic accelerator key for this label"
 msgstr "Tombol singkat untuk label ini"
 
-#: ../gtk/gtklabel.c:814
+#: ../gtk/gtklabel.c:854
 msgid "Mnemonic widget"
 msgstr "Widget mnemonik"
 
-#: ../gtk/gtklabel.c:815
+#: ../gtk/gtklabel.c:855
 msgid "The widget to be activated when the label's mnemonic key is pressed"
 msgstr "Widget yang diaktifkan saat tombol singkat ditekan"
 
-#: ../gtk/gtklabel.c:861
+#: ../gtk/gtklabel.c:901
 msgid ""
 "The preferred place to ellipsize the string, if the label does not have "
 "enough room to display the entire string"
@@ -4461,39 +4509,39 @@ msgstr ""
 "Tempat yang disukai untuk menyingkat string, bila label tak punya cukup "
 "ruang untuk menampilkan seluruhnya."
 
-#: ../gtk/gtklabel.c:902
+#: ../gtk/gtklabel.c:942
 msgid "Single Line Mode"
 msgstr "Moda Satu Baris"
 
-#: ../gtk/gtklabel.c:903
+#: ../gtk/gtklabel.c:943
 msgid "Whether the label is in single line mode"
 msgstr "Menentukan apakah teks label dalam mode baris tunggal"
 
-#: ../gtk/gtklabel.c:920
+#: ../gtk/gtklabel.c:960
 msgid "Angle"
 msgstr "Sudut"
 
-#: ../gtk/gtklabel.c:921
+#: ../gtk/gtklabel.c:961
 msgid "Angle at which the label is rotated"
 msgstr "Sudut rotasi label"
 
-#: ../gtk/gtklabel.c:943
+#: ../gtk/gtklabel.c:983
 msgid "The desired maximum width of the label, in characters"
 msgstr "Lebar maksimum label dalam karakter"
 
-#: ../gtk/gtklabel.c:961
+#: ../gtk/gtklabel.c:1001
 msgid "Track visited links"
 msgstr "Lacak taut yang telah dikunjungi"
 
-#: ../gtk/gtklabel.c:962
+#: ../gtk/gtklabel.c:1002
 msgid "Whether visited links should be tracked"
 msgstr "Apakah taut yang pernah dikunjungi mesti dilacak"
 
-#: ../gtk/gtklabel.c:979
+#: ../gtk/gtklabel.c:1019
 msgid "Number of lines"
 msgstr "Banyaknya baris"
 
-#: ../gtk/gtklabel.c:980
+#: ../gtk/gtklabel.c:1020
 msgid "The desired number of lines, when ellipsizing a wrapping label"
 msgstr "Banyaknya baris yang diinginkan ketika menyingkat label yang melipat"
 
@@ -4573,11 +4621,11 @@ msgstr "Telah Dikunjungi"
 msgid "Whether this link has been visited."
 msgstr "Apakah taut ini pernah dikunjungi."
 
-#: ../gtk/gtklistbox.c:3499
+#: ../gtk/gtklistbox.c:3504
 msgid "Whether this row can be activated"
 msgstr "Apakah baris dapat diaktifkan"
 
-#: ../gtk/gtklistbox.c:3513
+#: ../gtk/gtklistbox.c:3518
 msgid "Whether this row can be selected"
 msgstr "Apakah baris dapat dipilih"
 
@@ -4645,79 +4693,79 @@ msgstr "Widget diperiksa"
 msgid "magnification"
 msgstr "pembesaran"
 
-#: ../gtk/gtkmenubar.c:190
+#: ../gtk/gtkmenubar.c:191
 msgid "Pack direction"
 msgstr "Arah pengepakan"
 
-#: ../gtk/gtkmenubar.c:191
+#: ../gtk/gtkmenubar.c:192
 msgid "The pack direction of the menubar"
 msgstr "Arah pengepakan batang menu"
 
-#: ../gtk/gtkmenubar.c:207
+#: ../gtk/gtkmenubar.c:208
 msgid "Child Pack direction"
 msgstr "Arah Pemaketan Anak"
 
-#: ../gtk/gtkmenubar.c:208
+#: ../gtk/gtkmenubar.c:209
 msgid "The child pack direction of the menubar"
 msgstr "Arah dari menubar anak"
 
-#: ../gtk/gtkmenubar.c:217
+#: ../gtk/gtkmenubar.c:218
 msgid "Style of bevel around the menubar"
 msgstr "Gaya kotak sekitar kotak menu"
 
-#: ../gtk/gtkmenubar.c:233 ../gtk/gtktoolbar.c:590
+#: ../gtk/gtkmenubar.c:234 ../gtk/gtktoolbar.c:591
 msgid "Internal padding"
 msgstr "Isian internal"
 
-#: ../gtk/gtkmenubar.c:234
+#: ../gtk/gtkmenubar.c:235
 msgid "Amount of border space between the menubar shadow and the menu items"
 msgstr "Jumlah ruangan batas antara kotak menu dan isi menu"
 
-#: ../gtk/gtkmenubutton.c:511
+#: ../gtk/gtkmenubutton.c:512
 msgid "Popup"
 msgstr "Popup"
 
-#: ../gtk/gtkmenubutton.c:512
+#: ../gtk/gtkmenubutton.c:513
 msgid "The dropdown menu."
 msgstr "Menu dropdown."
 
-#: ../gtk/gtkmenubutton.c:531
+#: ../gtk/gtkmenubutton.c:532
 msgid "Menu model"
 msgstr "Model menu"
 
-#: ../gtk/gtkmenubutton.c:532
+#: ../gtk/gtkmenubutton.c:533
 msgid "The model from which the popup is made."
 msgstr "Model darimana popup dibuat."
 
-#: ../gtk/gtkmenubutton.c:545
+#: ../gtk/gtkmenubutton.c:546
 msgid "Align with"
 msgstr "Ratakan dengan"
 
-#: ../gtk/gtkmenubutton.c:546
+#: ../gtk/gtkmenubutton.c:547
 msgid "The parent widget which the menu should align with."
 msgstr "Widget induk dimana menu mesti meratakan dengannya."
 
-#: ../gtk/gtkmenubutton.c:560 ../gtk/gtkstylecontext.c:265
+#: ../gtk/gtkmenubutton.c:561 ../gtk/gtkstylecontext.c:263
 msgid "Direction"
 msgstr "Arah"
 
-#: ../gtk/gtkmenubutton.c:561
+#: ../gtk/gtkmenubutton.c:562
 msgid "The direction the arrow should point."
 msgstr "Arah mana panah mesti menunjuk."
 
-#: ../gtk/gtkmenubutton.c:577
+#: ../gtk/gtkmenubutton.c:578
 msgid "Use a popover"
 msgstr "Pakai popover"
 
-#: ../gtk/gtkmenubutton.c:578
+#: ../gtk/gtkmenubutton.c:579
 msgid "Use a popover instead of a menu"
 msgstr "Pakai popover sebagai ganti menu"
 
-#: ../gtk/gtkmenubutton.c:592
+#: ../gtk/gtkmenubutton.c:593
 msgid "Popover"
 msgstr "Popover"
 
-#: ../gtk/gtkmenubutton.c:593
+#: ../gtk/gtkmenubutton.c:594
 msgid "The popover"
 msgstr "Popovernya"
 
@@ -4890,17 +4938,17 @@ msgstr "Tata lokasi akselerator dari butir menu"
 msgid "The text for the child label"
 msgstr "Teks bagi label anak"
 
-#: ../gtk/gtkmenuitem.c:521
+#: ../gtk/gtkmenuitem.c:520
 msgid "Amount of space used up by arrow, relative to the menu item's font size"
 msgstr ""
 "Banyaknya ruang yang dipakai oleh panah, relatif terhadap ukuran fonta butir "
 "menu"
 
-#: ../gtk/gtkmenuitem.c:534
+#: ../gtk/gtkmenuitem.c:533
 msgid "Width in Characters"
 msgstr "Lebar dalam Karakter"
 
-#: ../gtk/gtkmenuitem.c:535
+#: ../gtk/gtkmenuitem.c:534
 msgid "The minimum desired width of the menu item in characters"
 msgstr "Lebar minimum yang diinginkan dari butir menu dalam karakter"
 
@@ -4980,7 +5028,7 @@ msgstr "Area pesan"
 msgid "GtkVBox that holds the dialog's primary and secondary labels"
 msgstr "GtkVBox yang menampung label primer dan sekunder milik dialog"
 
-#: ../gtk/gtkmountoperation.c:161 ../gtk/gtkstylecontext.c:282
+#: ../gtk/gtkmountoperation.c:161 ../gtk/gtkstylecontext.c:280
 msgid "Parent"
 msgstr "Induk"
 
@@ -5186,75 +5234,83 @@ msgstr "Tab yang aktif digambar dengan suatu celah di dasar"
 msgid "The orientation of the orientable"
 msgstr "Orientasi dari yang dapat diputar"
 
-#: ../gtk/gtkpaned.c:337
+#: ../gtk/gtkpaned.c:338
 msgid ""
 "Position of paned separator in pixels (0 means all the way to the left/top)"
 msgstr ""
 "Posisi pemisah pane dalam satuan piksel (0 berarti hingga ke sebelah kiri/"
 "atas)"
 
-#: ../gtk/gtkpaned.c:344
+#: ../gtk/gtkpaned.c:345
 msgid "Position Set"
 msgstr "Posisi diset"
 
-#: ../gtk/gtkpaned.c:345
+#: ../gtk/gtkpaned.c:346
 msgid "TRUE if the Position property should be used"
 msgstr "Bernilai TRUE apabila properti Posisi harus digunakan"
 
-#: ../gtk/gtkpaned.c:361
+#: ../gtk/gtkpaned.c:362
 msgid "Minimal Position"
 msgstr "Posisi Minimal"
 
-#: ../gtk/gtkpaned.c:362
+#: ../gtk/gtkpaned.c:363
 msgid "Smallest possible value for the \"position\" property"
 msgstr "Nilai terkecil yang paling mungkin untuk nilai \"posisi\""
 
-#: ../gtk/gtkpaned.c:378
+#: ../gtk/gtkpaned.c:379
 msgid "Maximal Position"
 msgstr "Posisi Maksimal"
 
-#: ../gtk/gtkpaned.c:379
+#: ../gtk/gtkpaned.c:380
 msgid "Largest possible value for the \"position\" property"
 msgstr "Nilai terbesar yang paling mungkin untuk nilai \"posisi\""
 
-#: ../gtk/gtkpaned.c:385
+#: ../gtk/gtkpaned.c:396
+msgid "Wide Handle"
+msgstr "Pegangan Lebar"
+
+#: ../gtk/gtkpaned.c:397
+msgid "Whether the paned should have a prominent handle"
+msgstr "Apakah panel mesti memiliki suatu pegangan yang menonjol"
+
+#: ../gtk/gtkpaned.c:403
 msgid "Handle Size"
 msgstr "Ukuran handle"
 
-#: ../gtk/gtkpaned.c:386
+#: ../gtk/gtkpaned.c:404
 msgid "Width of handle"
 msgstr "Lebar handle"
 
-#: ../gtk/gtkpaned.c:403
+#: ../gtk/gtkpaned.c:421
 msgid "Resize"
 msgstr "Ganti ukuran"
 
-#: ../gtk/gtkpaned.c:404
+#: ../gtk/gtkpaned.c:422
 msgid "If TRUE, the child expands and shrinks along with the paned widget"
 msgstr ""
 "Bila bernilai TRUE, anak dapat diperbesar/kecil sebatas ukuran widget pan"
 
-#: ../gtk/gtkpaned.c:419
+#: ../gtk/gtkpaned.c:437
 msgid "Shrink"
 msgstr "Dapat dikecilkan"
 
-#: ../gtk/gtkpaned.c:420
+#: ../gtk/gtkpaned.c:438
 msgid "If TRUE, the child can be made smaller than its requisition"
 msgstr "Bila bernilai TRUE, anak dapat dibuat lebih kecil ukurannnya"
 
-#: ../gtk/gtkplacessidebar.c:4364
+#: ../gtk/gtkplacessidebar.c:4494
 msgid "Location to Select"
 msgstr "Lokasi untu Dipilih"
 
-#: ../gtk/gtkplacessidebar.c:4365
+#: ../gtk/gtkplacessidebar.c:4495
 msgid "The location to highlight in the sidebar"
 msgstr "Lokasi yang akan disorot di bilah sisi"
 
-#: ../gtk/gtkplacessidebar.c:4370
+#: ../gtk/gtkplacessidebar.c:4500
 msgid "Open Flags"
 msgstr "Flag Buka"
 
-#: ../gtk/gtkplacessidebar.c:4371
+#: ../gtk/gtkplacessidebar.c:4501
 msgid ""
 "Modes in which the calling application can open locations selected in the "
 "sidebar"
@@ -5262,37 +5318,37 @@ msgstr ""
 "Mode dimana aplikasi yang memanggil dapat membuka lokasi yang dipilih pada "
 "bilah sisi"
 
-#: ../gtk/gtkplacessidebar.c:4377
+#: ../gtk/gtkplacessidebar.c:4507
 msgid "Show 'Desktop'"
 msgstr "Tampilkan 'Desktop'"
 
-#: ../gtk/gtkplacessidebar.c:4378
+#: ../gtk/gtkplacessidebar.c:4508
 msgid "Whether the sidebar includes a builtin shortcut to the Desktop folder"
 msgstr "Apakah bilah sisi termasuk pintasan bawaan ke folder Desktop"
 
-#: ../gtk/gtkplacessidebar.c:4383
+#: ../gtk/gtkplacessidebar.c:4513
 msgid "Show 'Connect to Server'"
 msgstr "Tampilkan 'Menyambung ke Server'"
 
-#: ../gtk/gtkplacessidebar.c:4384
+#: ../gtk/gtkplacessidebar.c:4514
 msgid ""
 "Whether the sidebar includes a builtin shortcut to a 'Connect to server' "
 "dialog"
 msgstr ""
 "Apakah bilah sisi memuat pintasan bawaan ke dialog 'Menyambung ke server'"
 
-#: ../gtk/gtkplacessidebar.c:4389
+#: ../gtk/gtkplacessidebar.c:4519
 msgid "Show 'Enter Location'"
 msgstr "Tampilkan 'Masukkan Lokasi'"
 
-#: ../gtk/gtkplacessidebar.c:4390
+#: ../gtk/gtkplacessidebar.c:4520
 msgid ""
 "Whether the sidebar includes a builtin shortcut to manually enter a location"
 msgstr ""
 "Apakah bilah sisi memuat pintasan bawaan ke memasukkan suatu lokasi secara "
 "manual"
 
-#: ../gtk/gtkplacessidebar.c:4396
+#: ../gtk/gtkplacessidebar.c:4526
 msgid "Whether the sidebar only includes local files"
 msgstr "Apakah bilah sisi hanya menyertakan berkas lokal"
 
@@ -5308,31 +5364,31 @@ msgstr "Jendela Soket"
 msgid "The window of the socket the plug is embedded in"
 msgstr "Jendela tempat penutup ditanamkan pada soket"
 
-#: ../gtk/gtkpopover.c:1289
+#: ../gtk/gtkpopover.c:1291
 msgid "Relative to"
 msgstr "Relatif terhadap"
 
-#: ../gtk/gtkpopover.c:1290
+#: ../gtk/gtkpopover.c:1292
 msgid "Widget the bubble window points to"
 msgstr "Widget yang ditunjuk oleh jendela gelembung"
 
-#: ../gtk/gtkpopover.c:1303
+#: ../gtk/gtkpopover.c:1305
 msgid "Pointing to"
 msgstr "Menunjuk ke"
 
-#: ../gtk/gtkpopover.c:1304
+#: ../gtk/gtkpopover.c:1306
 msgid "Rectangle the bubble window points to"
 msgstr "Persegi panjang yang ditunjuk oleh jendela gelembung"
 
-#: ../gtk/gtkpopover.c:1318
+#: ../gtk/gtkpopover.c:1320
 msgid "Position to place the bubble window"
 msgstr "Posisi untuk menempatkan jendela gelembung"
 
-#: ../gtk/gtkpopover.c:1333 ../gtk/gtkwindow.c:747
+#: ../gtk/gtkpopover.c:1335 ../gtk/gtkwindow.c:747
 msgid "Modal"
 msgstr "Modal"
 
-#: ../gtk/gtkpopover.c:1334
+#: ../gtk/gtkpopover.c:1336
 msgid "Whether the popover is modal"
 msgstr "Apakah popover modal"
 
@@ -5727,7 +5783,7 @@ msgstr "Tinggi batang vertikal minimal"
 msgid "The minimum vertical height of the progress bar"
 msgstr "Tinggi vertikal minimum dari batang kemajuan"
 
-#: ../gtk/gtkradiobutton.c:163
+#: ../gtk/gtkradiobutton.c:164
 msgid "The radio button whose group this widget belongs to."
 msgstr "Tombol radio tempat kelompok widget ini berada."
 
@@ -5739,127 +5795,127 @@ msgstr "Butir menu radio tempat grup pemilik widget ini."
 msgid "The radio tool button whose group this button belongs to."
 msgstr "Tombol alat radio tempat grup pemilik tombol ini."
 
-#: ../gtk/gtkrange.c:436
+#: ../gtk/gtkrange.c:440
 msgid "The GtkAdjustment that contains the current value of this range object"
 msgstr "GtkAdjustment yang berisi nilai sekarang pada obyek jangkauan"
 
-#: ../gtk/gtkrange.c:444
+#: ../gtk/gtkrange.c:448
 msgid "Invert direction slider moves to increase range value"
 msgstr "Balik arah slider yang bergerak untuk meningkatkan nilai jangkauan"
 
-#: ../gtk/gtkrange.c:451
+#: ../gtk/gtkrange.c:455
 msgid "Lower stepper sensitivity"
 msgstr "Sensitivitas stepper bawah"
 
-#: ../gtk/gtkrange.c:452
+#: ../gtk/gtkrange.c:456
 msgid ""
 "The sensitivity policy for the stepper that points to the adjustment's lower "
 "side"
 msgstr ""
 "Kebijakan sensitivitas bagi stepper yang menunjuk ke pengaturan sisi bawah"
 
-#: ../gtk/gtkrange.c:460
+#: ../gtk/gtkrange.c:464
 msgid "Upper stepper sensitivity"
 msgstr "Sensitivitas stepper atas"
 
-#: ../gtk/gtkrange.c:461
+#: ../gtk/gtkrange.c:465
 msgid ""
 "The sensitivity policy for the stepper that points to the adjustment's upper "
 "side"
 msgstr ""
 "Kebijakan sensitivitas bagi stepper yang menunjuk ke pengaturan sisi atas"
 
-#: ../gtk/gtkrange.c:478
+#: ../gtk/gtkrange.c:482
 msgid "Show Fill Level"
 msgstr "Tampilkan Tingkat Pengisian"
 
-#: ../gtk/gtkrange.c:479
+#: ../gtk/gtkrange.c:483
 msgid "Whether to display a fill level indicator graphics on trough."
 msgstr "Apakah menampilkan grafik indikator tingkat pengisian."
 
-#: ../gtk/gtkrange.c:495
+#: ../gtk/gtkrange.c:499
 msgid "Restrict to Fill Level"
 msgstr "Batasi Tingkat Pengisian"
 
-#: ../gtk/gtkrange.c:496
+#: ../gtk/gtkrange.c:500
 msgid "Whether to restrict the upper boundary to the fill level."
 msgstr "Apakah perlu membatasi batas atas tingkat pengisian."
 
-#: ../gtk/gtkrange.c:511
+#: ../gtk/gtkrange.c:515
 msgid "Fill Level"
 msgstr "Tingkat Pengisian"
 
-#: ../gtk/gtkrange.c:512
+#: ../gtk/gtkrange.c:516
 msgid "The fill level."
 msgstr "Tingkat pengisian."
 
-#: ../gtk/gtkrange.c:529
+#: ../gtk/gtkrange.c:533
 msgid "Round Digits"
 msgstr "Digit Pembulatan"
 
-#: ../gtk/gtkrange.c:530
+#: ../gtk/gtkrange.c:534
 msgid "The number of digits to round the value to."
 msgstr "Nilai dibulatkan ke cacah digit ini."
 
-#: ../gtk/gtkrange.c:536 ../gtk/gtkswitch.c:957
+#: ../gtk/gtkrange.c:540 ../gtk/gtkswitch.c:954
 msgid "Slider Width"
 msgstr "Lebar slider"
 
-#: ../gtk/gtkrange.c:537
+#: ../gtk/gtkrange.c:541
 msgid "Width of scrollbar or scale thumb"
 msgstr "Lebar scrollbar atau patokan skala"
 
-#: ../gtk/gtkrange.c:544
+#: ../gtk/gtkrange.c:548
 msgid "Trough Border"
 msgstr "Batas"
 
-#: ../gtk/gtkrange.c:545
+#: ../gtk/gtkrange.c:549
 msgid "Spacing between thumb/steppers and outer trough bevel"
 msgstr "Besar ruangan antara patokan/tangga dan batas luar"
 
-#: ../gtk/gtkrange.c:552
+#: ../gtk/gtkrange.c:556
 msgid "Stepper Size"
 msgstr "Ukuran tangga"
 
-#: ../gtk/gtkrange.c:553
+#: ../gtk/gtkrange.c:557
 msgid "Length of step buttons at ends"
 msgstr "Panjang tombol tangga pada sisi ujung"
 
-#: ../gtk/gtkrange.c:566
+#: ../gtk/gtkrange.c:570
 msgid "Stepper Spacing"
 msgstr "Ruang isi tangga"
 
-#: ../gtk/gtkrange.c:567
+#: ../gtk/gtkrange.c:571
 msgid "Spacing between step buttons and thumb"
 msgstr "Besar ruangan yang mengisi antara tangga dan patokan"
 
-#: ../gtk/gtkrange.c:574
+#: ../gtk/gtkrange.c:578
 msgid "Arrow X Displacement"
 msgstr "Pemindahan sisi X panah"
 
-#: ../gtk/gtkrange.c:575
+#: ../gtk/gtkrange.c:579
 msgid ""
 "How far in the x direction to move the arrow when the button is depressed"
 msgstr ""
 "Seberapa jauh pada arah x yang digunakan untuk memindahkan panah saat tombol "
 "dilepas"
 
-#: ../gtk/gtkrange.c:582
+#: ../gtk/gtkrange.c:586
 msgid "Arrow Y Displacement"
 msgstr "Pemindahan sisi Y panah"
 
-#: ../gtk/gtkrange.c:583
+#: ../gtk/gtkrange.c:587
 msgid ""
 "How far in the y direction to move the arrow when the button is depressed"
 msgstr ""
 "Seberapa jauh pada arah y yang digunakan untuk memindahkan panah saat tombol "
 "dilepas"
 
-#: ../gtk/gtkrange.c:599
+#: ../gtk/gtkrange.c:603
 msgid "Trough Under Steppers"
 msgstr "Trough Di Bawah Stepper"
 
-#: ../gtk/gtkrange.c:600
+#: ../gtk/gtkrange.c:604
 msgid ""
 "Whether to draw trough for full length of range or exclude the steppers and "
 "spacing"
@@ -5867,11 +5923,11 @@ msgstr ""
 "Apakah menggambar trough sepanjang jangkauan atau mengecualikan stepper dan "
 "jarak"
 
-#: ../gtk/gtkrange.c:613
+#: ../gtk/gtkrange.c:617
 msgid "Arrow scaling"
 msgstr "Penskalaan panah"
 
-#: ../gtk/gtkrange.c:614
+#: ../gtk/gtkrange.c:618
 msgid "Arrow scaling with regard to scroll button size"
 msgstr "Penskalaan panah terhadap ukuran tombol gulir"
 
@@ -6118,51 +6174,51 @@ msgid ""
 "Display a second forward arrow button on the opposite end of the scrollbar"
 msgstr "Tampilkan tombol panah maju kedua di ujung lain dari batang penggulung"
 
-#: ../gtk/gtkscrolledwindow.c:363
+#: ../gtk/gtkscrolledwindow.c:364
 msgid "Horizontal Adjustment"
 msgstr "Penyesuaian Horisontal"
 
-#: ../gtk/gtkscrolledwindow.c:364
+#: ../gtk/gtkscrolledwindow.c:365
 msgid "The GtkAdjustment for the horizontal position"
 msgstr "GtkAdjustment untuk posisi horisontal"
 
-#: ../gtk/gtkscrolledwindow.c:371
+#: ../gtk/gtkscrolledwindow.c:372
 msgid "Vertical Adjustment"
 msgstr "Penyesuaian Vertikal"
 
-#: ../gtk/gtkscrolledwindow.c:372
+#: ../gtk/gtkscrolledwindow.c:373
 msgid "The GtkAdjustment for the vertical position"
 msgstr "GtkAdjustment untuk posisi vertikal"
 
-#: ../gtk/gtkscrolledwindow.c:379
+#: ../gtk/gtkscrolledwindow.c:380
 msgid "Horizontal Scrollbar Policy"
 msgstr "Kebijakan Scrollbar Horisontal"
 
-#: ../gtk/gtkscrolledwindow.c:380
+#: ../gtk/gtkscrolledwindow.c:381
 msgid "When the horizontal scrollbar is displayed"
 msgstr "Saat scrollbar horisontal ditampilkan"
 
-#: ../gtk/gtkscrolledwindow.c:388
+#: ../gtk/gtkscrolledwindow.c:389
 msgid "Vertical Scrollbar Policy"
 msgstr "Kebijakan Scrollbar Vertikal"
 
-#: ../gtk/gtkscrolledwindow.c:389
+#: ../gtk/gtkscrolledwindow.c:390
 msgid "When the vertical scrollbar is displayed"
 msgstr "Saat scrollbar vertikal ditampilkan"
 
-#: ../gtk/gtkscrolledwindow.c:397
+#: ../gtk/gtkscrolledwindow.c:398
 msgid "Window Placement"
 msgstr "Penempatan window"
 
-#: ../gtk/gtkscrolledwindow.c:398
+#: ../gtk/gtkscrolledwindow.c:399
 msgid "Where the contents are located with respect to the scrollbars."
 msgstr "Dimana isi diletakkan terhadap batang penggulung."
 
-#: ../gtk/gtkscrolledwindow.c:417
+#: ../gtk/gtkscrolledwindow.c:418
 msgid "Window Placement Set"
 msgstr "Penempatan Jendela Ditata"
 
-#: ../gtk/gtkscrolledwindow.c:418
+#: ../gtk/gtkscrolledwindow.c:419
 msgid ""
 "Whether \"window-placement\" should be used to determine the location of the "
 "contents with respect to the scrollbars."
@@ -6170,67 +6226,67 @@ msgstr ""
 "Apakah \"window-placement\" mesti dipakai untuk menentukan lokasi isi "
 "terhadap batang penggulung."
 
-#: ../gtk/gtkscrolledwindow.c:425
+#: ../gtk/gtkscrolledwindow.c:426 ../gtk/gtkspinbutton.c:415
 msgid "Shadow Type"
 msgstr "Tipe Bayangan"
 
-#: ../gtk/gtkscrolledwindow.c:426
+#: ../gtk/gtkscrolledwindow.c:427
 msgid "Style of bevel around the contents"
 msgstr "Gaya bevel disekeliling isi"
 
-#: ../gtk/gtkscrolledwindow.c:440
+#: ../gtk/gtkscrolledwindow.c:441
 msgid "Scrollbars within bevel"
 msgstr "Bilah gulir dengan bevel"
 
-#: ../gtk/gtkscrolledwindow.c:441
+#: ../gtk/gtkscrolledwindow.c:442
 msgid "Place scrollbars within the scrolled window's bevel"
 msgstr "Tempatkan bilah gulir di dalam bevel jendela yang digulirkan"
 
-#: ../gtk/gtkscrolledwindow.c:447
+#: ../gtk/gtkscrolledwindow.c:448
 msgid "Scrollbar spacing"
 msgstr "Jarak scrollbar"
 
-#: ../gtk/gtkscrolledwindow.c:448
+#: ../gtk/gtkscrolledwindow.c:449
 msgid "Number of pixels between the scrollbars and the scrolled window"
 msgstr ""
 "Jumlah piksel yang ditempatkan antara scrollbar dengan jendela yang discroll"
 
-#: ../gtk/gtkscrolledwindow.c:464
+#: ../gtk/gtkscrolledwindow.c:465
 msgid "Minimum Content Width"
 msgstr "Lebar Minimal Isi"
 
-#: ../gtk/gtkscrolledwindow.c:465
+#: ../gtk/gtkscrolledwindow.c:466
 msgid "The minimum width that the scrolled window will allocate to its content"
 msgstr ""
 "Lebar minimal yang akan dialokasikan oleh jendela yang digulung ke isinya"
 
-#: ../gtk/gtkscrolledwindow.c:479
+#: ../gtk/gtkscrolledwindow.c:480
 msgid "Minimum Content Height"
 msgstr "Tinggi Minimal Isi"
 
-#: ../gtk/gtkscrolledwindow.c:480
+#: ../gtk/gtkscrolledwindow.c:481
 msgid ""
 "The minimum height that the scrolled window will allocate to its content"
 msgstr ""
 "Tinggi minimal yang akan dialokasikan oleh jendela yang digulung ke isinya"
 
-#: ../gtk/gtkscrolledwindow.c:495
+#: ../gtk/gtkscrolledwindow.c:496
 msgid "Kinetic Scrolling"
 msgstr "Penggulungan Kinetik"
 
-#: ../gtk/gtkscrolledwindow.c:496
+#: ../gtk/gtkscrolledwindow.c:497
 msgid "Kinetic scrolling mode."
 msgstr "Mode penggulungan kinektik."
 
-#: ../gtk/gtksearchbar.c:407
+#: ../gtk/gtksearchbar.c:423
 msgid "Search Mode Enabled"
 msgstr "Mode Cari Difungsikan"
 
-#: ../gtk/gtksearchbar.c:408
+#: ../gtk/gtksearchbar.c:424
 msgid "Whether the search mode is on and the search bar shown"
 msgstr "Apakah mode cari menyala dan bilah pencarian ditampilkan"
 
-#: ../gtk/gtksearchbar.c:419
+#: ../gtk/gtksearchbar.c:435
 msgid "Whether to show the close button in the toolbar"
 msgstr "Apakah menampilkan tombol tutup dalam bilah alat"
 
@@ -6974,6 +7030,15 @@ msgstr ""
 "Waktu bagi penekanan tombol/sentuhan yang dianggap sebagai penekanan lama "
 "(dalam milidetik)"
 
+#: ../gtk/gtksidebar.c:443 ../gtk/gtkstackswitcher.c:523
+#: ../gtk/gtkstackswitcher.c:524
+msgid "Stack"
+msgstr "Tumpukan"
+
+#: ../gtk/gtksidebar.c:444
+msgid "Associated stack for this GtkSidebar"
+msgstr "Stack yang terkait dengan GtkSidebar ini"
+
 #: ../gtk/gtksizegroup.c:323 ../gtk/gtktreeselection.c:130
 msgid "Mode"
 msgstr "Mode"
@@ -7103,31 +7168,27 @@ msgstr "Perlu Perhatian"
 msgid "Whether this page needs attention"
 msgstr "Apakah halaman ini perlu perhatian"
 
-#: ../gtk/gtkstackswitcher.c:515 ../gtk/gtkstackswitcher.c:516
-msgid "Stack"
-msgstr "Tumpukan"
-
 #: ../gtk/gtkstatusbar.c:166
 msgid "Style of bevel around the statusbar text"
 msgstr "Gaya bevel di sekeliling teks statusbar"
 
-#: ../gtk/gtkstylecontext.c:252
+#: ../gtk/gtkstylecontext.c:250
 msgid "The associated GdkScreen"
 msgstr "GdkScreen terkait"
 
-#: ../gtk/gtkstylecontext.c:258
+#: ../gtk/gtkstylecontext.c:256
 msgid "FrameClock"
 msgstr "FrameClock"
 
-#: ../gtk/gtkstylecontext.c:259
+#: ../gtk/gtkstylecontext.c:257
 msgid "The associated GdkFrameClock"
 msgstr "GdkFrameClock terkait"
 
-#: ../gtk/gtkstylecontext.c:266 ../gtk/gtktexttag.c:288
+#: ../gtk/gtkstylecontext.c:264 ../gtk/gtktexttag.c:288
 msgid "Text direction"
 msgstr "Arah teks"
 
-#: ../gtk/gtkstylecontext.c:283
+#: ../gtk/gtkstylecontext.c:281
 msgid "The parent style context"
 msgstr "Konteks gaya induk"
 
@@ -7147,19 +7208,19 @@ msgstr "Tipe nilai"
 msgid "The value type returned by GtkStyleContext"
 msgstr "Tipe nilai yang dikembalikan oleh GtkStyleContext"
 
-#: ../gtk/gtkswitch.c:910
+#: ../gtk/gtkswitch.c:907
 msgid "Whether the switch is on or off"
 msgstr "Apakah saklar nyala atau mati"
 
-#: ../gtk/gtkswitch.c:924
+#: ../gtk/gtkswitch.c:921
 msgid "State"
 msgstr "Keadaan"
 
-#: ../gtk/gtkswitch.c:925
+#: ../gtk/gtkswitch.c:922
 msgid "The backend state"
 msgstr "Keadaan backend"
 
-#: ../gtk/gtkswitch.c:958
+#: ../gtk/gtkswitch.c:955
 msgid "The minimum width of the handle"
 msgstr "Lebar minimal dari pegangan"
 
@@ -7301,7 +7362,7 @@ msgstr ""
 "diset.  Pango memiliki konstanta untuk beberapa ukuran, sebagai misal "
 "PANGO_SCALE_X_LARGE"
 
-#: ../gtk/gtktexttag.c:406 ../gtk/gtktextview.c:766
+#: ../gtk/gtktexttag.c:406 ../gtk/gtktextview.c:767
 msgid "Left, right, or center justification"
 msgstr "Rataan kiri, kanan, atau tengah"
 
@@ -7318,7 +7379,7 @@ msgstr ""
 msgid "Left margin"
 msgstr "Margin kiri"
 
-#: ../gtk/gtktexttag.c:433 ../gtk/gtktextview.c:775
+#: ../gtk/gtktexttag.c:433 ../gtk/gtktextview.c:776
 msgid "Width of the left margin in pixels"
 msgstr "Lebar margin kiri dalam satuan piksel"
 
@@ -7326,15 +7387,15 @@ msgstr "Lebar margin kiri dalam satuan piksel"
 msgid "Right margin"
 msgstr "Margin kanan"
 
-#: ../gtk/gtktexttag.c:443 ../gtk/gtktextview.c:783
+#: ../gtk/gtktexttag.c:443 ../gtk/gtktextview.c:784
 msgid "Width of the right margin in pixels"
 msgstr "Lebar margin kanan dalam satuan piksel"
 
-#: ../gtk/gtktexttag.c:453 ../gtk/gtktextview.c:790
+#: ../gtk/gtktexttag.c:453 ../gtk/gtktextview.c:791
 msgid "Indent"
 msgstr "Indentasi"
 
-#: ../gtk/gtktexttag.c:454 ../gtk/gtktextview.c:791
+#: ../gtk/gtktexttag.c:454 ../gtk/gtktextview.c:792
 msgid "Amount to indent the paragraph, in pixels"
 msgstr "Jumlah piksel untuk membuat indentasi paragraf"
 
@@ -7350,7 +7411,7 @@ msgstr ""
 msgid "Pixels above lines"
 msgstr "Piksel di atas tulisan"
 
-#: ../gtk/gtktexttag.c:475 ../gtk/gtktextview.c:725
+#: ../gtk/gtktexttag.c:475 ../gtk/gtktextview.c:726
 msgid "Pixels of blank space above paragraphs"
 msgstr "Jumlah piksel ruang kosong di atas paragraf"
 
@@ -7358,7 +7419,7 @@ msgstr "Jumlah piksel ruang kosong di atas paragraf"
 msgid "Pixels below lines"
 msgstr "Piksel di bawah tulisan"
 
-#: ../gtk/gtktexttag.c:485 ../gtk/gtktextview.c:733
+#: ../gtk/gtktexttag.c:485 ../gtk/gtktextview.c:734
 msgid "Pixels of blank space below paragraphs"
 msgstr "Jumlah piksel ruang kosong di bawah paragraf"
 
@@ -7366,18 +7427,18 @@ msgstr "Jumlah piksel ruang kosong di bawah paragraf"
 msgid "Pixels inside wrap"
 msgstr "Piksel dalam potongan"
 
-#: ../gtk/gtktexttag.c:495 ../gtk/gtktextview.c:741
+#: ../gtk/gtktexttag.c:495 ../gtk/gtktextview.c:742
 msgid "Pixels of blank space between wrapped lines in a paragraph"
 msgstr "Banyaknya piksel kosong antara baris yang dipotong dalam paragraf"
 
-#: ../gtk/gtktexttag.c:522 ../gtk/gtktextview.c:757
+#: ../gtk/gtktexttag.c:522 ../gtk/gtktextview.c:758
 msgid ""
 "Whether to wrap lines never, at word boundaries, or at character boundaries"
 msgstr ""
 "Menentukan apakah baris tidak pernah dipotong, atau dipotong pada batas "
 "kata, atau dipotong pada batas karakter"
 
-#: ../gtk/gtktexttag.c:532 ../gtk/gtktextview.c:799
+#: ../gtk/gtktexttag.c:532 ../gtk/gtktextview.c:800
 msgid "Custom tabs for this text"
 msgstr "Tab sendiri untuk teks ini"
 
@@ -7515,163 +7576,171 @@ msgstr "Ketentuan latar belakang paragraf"
 msgid "Whether this tag affects the paragraph background color"
 msgstr "Tentukan apakah tag ini berpengaruh pada warna latar belakang paragraf"
 
-#: ../gtk/gtktextview.c:724
+#: ../gtk/gtktextview.c:725
 msgid "Pixels Above Lines"
 msgstr "Piksel Di Atas Garis"
 
-#: ../gtk/gtktextview.c:732
+#: ../gtk/gtktextview.c:733
 msgid "Pixels Below Lines"
 msgstr "Piksel Di Bawah Garis"
 
-#: ../gtk/gtktextview.c:740
+#: ../gtk/gtktextview.c:741
 msgid "Pixels Inside Wrap"
 msgstr "Piksel Dalam Pelipatan"
 
-#: ../gtk/gtktextview.c:756
+#: ../gtk/gtktextview.c:757
 msgid "Wrap Mode"
 msgstr "Mode Pembengkokan"
 
-#: ../gtk/gtktextview.c:774
+#: ../gtk/gtktextview.c:775
 msgid "Left Margin"
 msgstr "Margin Kiri"
 
-#: ../gtk/gtktextview.c:782
+#: ../gtk/gtktextview.c:783
 msgid "Right Margin"
 msgstr "Margin Kanan"
 
-#: ../gtk/gtktextview.c:806
+#: ../gtk/gtktextview.c:807
 msgid "Cursor Visible"
 msgstr "Kursor Nampak"
 
-#: ../gtk/gtktextview.c:807
+#: ../gtk/gtktextview.c:808
 msgid "If the insertion cursor is shown"
 msgstr "Menentukan apakah kursor untuk menulis kelihatan atau tidak"
 
-#: ../gtk/gtktextview.c:814
+#: ../gtk/gtktextview.c:815
 msgid "Buffer"
 msgstr "Buffer"
 
-#: ../gtk/gtktextview.c:815
+#: ../gtk/gtktextview.c:816
 msgid "The buffer which is displayed"
 msgstr "Buffer yang ditampilkan"
 
-#: ../gtk/gtktextview.c:823
+#: ../gtk/gtktextview.c:824
 msgid "Whether entered text overwrites existing contents"
 msgstr "Menentukan apakah teks yang dimasukkan menimpa isi yang ada sebelumnya"
 
-#: ../gtk/gtktextview.c:830
+#: ../gtk/gtktextview.c:831
 msgid "Accepts tab"
 msgstr "Perbolehkan tab"
 
-#: ../gtk/gtktextview.c:831
+#: ../gtk/gtktextview.c:832
 msgid "Whether Tab will result in a tab character being entered"
 msgstr "Apakah Tab akan menyisipkan karakter Tab"
 
+#: ../gtk/gtktextview.c:920
+msgid "Monospace"
+msgstr "Monospace"
+
 #: ../gtk/gtktextview.c:921
+msgid "Whether to use a monospace font"
+msgstr "Apakah menggunakan suatu fonta lebar seragam"
+
+#: ../gtk/gtktextview.c:939
 msgid "Error underline color"
 msgstr "Warna garis bawah galat"
 
-#: ../gtk/gtktextview.c:922
+#: ../gtk/gtktextview.c:940
 msgid "Color with which to draw error-indication underlines"
 msgstr "Warna untuk menggambar garis bawah kesalahan"
 
-#: ../gtk/gtktogglebutton.c:179 ../gtk/gtktoggletoolbutton.c:128
+#: ../gtk/gtktogglebutton.c:180 ../gtk/gtktoggletoolbutton.c:128
 msgid "If the toggle button should be pressed in"
 msgstr "Apakah tombol jungkit harus ditekan ke dalam"
 
-#: ../gtk/gtktogglebutton.c:187
+#: ../gtk/gtktogglebutton.c:188
 msgid "If the toggle button is in an \"in between\" state"
 msgstr "Menentukan apakah tombol togel ada dalam kondisi \"antara\""
 
-#: ../gtk/gtktogglebutton.c:194
+#: ../gtk/gtktogglebutton.c:195
 msgid "Draw Indicator"
 msgstr "Indikator gambar"
 
-#: ../gtk/gtktogglebutton.c:195
+#: ../gtk/gtktogglebutton.c:196
 msgid "If the toggle part of the button is displayed"
 msgstr "Menentukan apakah bagian togel tombol ditampilkan"
 
-#: ../gtk/gtktoolbar.c:502 ../gtk/gtktoolpalette.c:984
+#: ../gtk/gtktoolbar.c:503 ../gtk/gtktoolpalette.c:984
 msgid "Toolbar Style"
 msgstr "Gaya toolbar"
 
-#: ../gtk/gtktoolbar.c:503
+#: ../gtk/gtktoolbar.c:504
 msgid "How to draw the toolbar"
 msgstr "Cara menggambar toolbar"
 
-#: ../gtk/gtktoolbar.c:510
+#: ../gtk/gtktoolbar.c:511
 msgid "Show Arrow"
 msgstr "Tampilkan Panah"
 
-#: ../gtk/gtktoolbar.c:511
+#: ../gtk/gtktoolbar.c:512
 msgid "If an arrow should be shown if the toolbar doesn't fit"
 msgstr ""
 "Menentukan apakah panah harus ditampilkan pada toolbar bila ruangannya sudah "
 "tidak cukup"
 
-#: ../gtk/gtktoolbar.c:532
+#: ../gtk/gtktoolbar.c:533
 msgid "Size of icons in this toolbar"
 msgstr "Ukuran ikon pada batang perkakas ini"
 
-#: ../gtk/gtktoolbar.c:547 ../gtk/gtktoolpalette.c:970
+#: ../gtk/gtktoolbar.c:548 ../gtk/gtktoolpalette.c:970
 msgid "Icon size set"
 msgstr "Ukuran ikon ditata"
 
-#: ../gtk/gtktoolbar.c:548 ../gtk/gtktoolpalette.c:971
+#: ../gtk/gtktoolbar.c:549 ../gtk/gtktoolpalette.c:971
 msgid "Whether the icon-size property has been set"
 msgstr "Apakah properti icon-size telah ditata"
 
-#: ../gtk/gtktoolbar.c:557
+#: ../gtk/gtktoolbar.c:558
 msgid "Whether the item should receive extra space when the toolbar grows"
 msgstr ""
 "Menentukan apakah obyek bisa menambah ruang saat toolbar bertambah besar"
 
-#: ../gtk/gtktoolbar.c:565 ../gtk/gtktoolitemgroup.c:1647
+#: ../gtk/gtktoolbar.c:566 ../gtk/gtktoolitemgroup.c:1647
 msgid "Whether the item should be the same size as other homogeneous items"
 msgstr ""
 "Menentukan apakah obyek memiliki ukuran yang sama dengan obyek homogen lain "
 "atau tidak"
 
-#: ../gtk/gtktoolbar.c:572
+#: ../gtk/gtktoolbar.c:573
 msgid "Spacer size"
 msgstr "Ukuran pengisi ruang"
 
-#: ../gtk/gtktoolbar.c:573
+#: ../gtk/gtktoolbar.c:574
 msgid "Size of spacers"
 msgstr "Ukuran pengisi ruang"
 
-#: ../gtk/gtktoolbar.c:591
+#: ../gtk/gtktoolbar.c:592
 msgid "Amount of border space between the toolbar shadow and the buttons"
 msgstr "Jumlah ruangan dalam batas antara bayangan toolbar dan tombolnya"
 
-#: ../gtk/gtktoolbar.c:599
+#: ../gtk/gtktoolbar.c:600
 msgid "Maximum child expand"
 msgstr "Ekspansi anak maksimal"
 
-#: ../gtk/gtktoolbar.c:600
+#: ../gtk/gtktoolbar.c:601
 msgid "Maximum amount of space an expandable item will be given"
 msgstr ""
 "Banyaknya ruang maksimum yang diberikan kepada suatu butir yang dapat "
 "dikembangkan"
 
-#: ../gtk/gtktoolbar.c:608
+#: ../gtk/gtktoolbar.c:609
 msgid "Space style"
 msgstr "Gaya pengisi ruangan"
 
-#: ../gtk/gtktoolbar.c:609
+#: ../gtk/gtktoolbar.c:610
 msgid "Whether spacers are vertical lines or just blank"
 msgstr ""
 "Menentukan apakah pengisi ruangan digambar secara vertikal atau kosong saja"
 
-#: ../gtk/gtktoolbar.c:616
+#: ../gtk/gtktoolbar.c:617
 msgid "Button relief"
 msgstr "Relief tombol"
 
-#: ../gtk/gtktoolbar.c:617
+#: ../gtk/gtktoolbar.c:618
 msgid "Type of bevel around toolbar buttons"
 msgstr "Tipe gaya dekorasi di sekeliling tombol toolbar"
 
-#: ../gtk/gtktoolbar.c:633
+#: ../gtk/gtktoolbar.c:634
 msgid "Style of bevel around the toolbar"
 msgstr "Gaya dekorasi sekeliling toolbar"
 
@@ -8170,7 +8239,7 @@ msgstr "ID kolom pengurut"
 msgid "Logical sort column ID this column sorts on when selected for sorting"
 msgstr "ID lojik kolom pengurutan yang dipakai ketika dipilih untuk pengurutan"
 
-#: ../gtk/gtkviewport.c:179
+#: ../gtk/gtkviewport.c:180
 msgid "Determines how the shadowed box around the viewport is drawn"
 msgstr "Menentukan bagaimana menggambar kotak berbayang di sekeliling viewport"
 
@@ -8324,163 +8393,159 @@ msgstr ""
 msgid "Whether this widget has a tooltip"
 msgstr "Apakah widget memiliki suatu tooltip"
 
-#: ../gtk/gtkwidget.c:1441
-msgid "Window"
-msgstr "Jendela"
-
-#: ../gtk/gtkwidget.c:1442
+#: ../gtk/gtkwidget.c:1448
 msgid "The widget's window if it is realized"
 msgstr "Jendela widget bila diwujudkan"
 
-#: ../gtk/gtkwidget.c:1458
+#: ../gtk/gtkwidget.c:1464
 msgid "Double Buffered"
 msgstr "Disangga Berganda"
 
-#: ../gtk/gtkwidget.c:1459
+#: ../gtk/gtkwidget.c:1465
 msgid "Whether the widget is double buffered"
 msgstr "Apakah widget disangga berganda"
 
-#: ../gtk/gtkwidget.c:1474
+#: ../gtk/gtkwidget.c:1480
 msgid "How to position in extra horizontal space"
 msgstr "Bagaimana memposisikan di ruang horisontal ekstra"
 
-#: ../gtk/gtkwidget.c:1490
+#: ../gtk/gtkwidget.c:1496
 msgid "How to position in extra vertical space"
 msgstr "Bagaimana memposisikan di ruang vertikal ekstra"
 
-#: ../gtk/gtkwidget.c:1511
+#: ../gtk/gtkwidget.c:1517
 msgid "Margin on Left"
 msgstr "Marjin di Kiri"
 
-#: ../gtk/gtkwidget.c:1512
+#: ../gtk/gtkwidget.c:1518
 msgid "Pixels of extra space on the left side"
 msgstr "Cacah piksel ruang ekstra pada sisi kiri"
 
-#: ../gtk/gtkwidget.c:1534
+#: ../gtk/gtkwidget.c:1540
 msgid "Margin on Right"
 msgstr "Marjin di Kanan"
 
-#: ../gtk/gtkwidget.c:1535
+#: ../gtk/gtkwidget.c:1541
 msgid "Pixels of extra space on the right side"
 msgstr "Cacah piksel ruang ekstra pada sisi kanan"
 
-#: ../gtk/gtkwidget.c:1556
+#: ../gtk/gtkwidget.c:1562
 msgid "Margin on Start"
 msgstr "Margin di Awal"
 
-#: ../gtk/gtkwidget.c:1557
+#: ../gtk/gtkwidget.c:1563
 msgid "Pixels of extra space on the start"
 msgstr "Piksel ruang ekstra di awal"
 
-#: ../gtk/gtkwidget.c:1578
+#: ../gtk/gtkwidget.c:1584
 msgid "Margin on End"
 msgstr "Margin di Akhir"
 
-#: ../gtk/gtkwidget.c:1579
+#: ../gtk/gtkwidget.c:1585
 msgid "Pixels of extra space on the end"
 msgstr "Piksel ruang ekstra di akhir"
 
-#: ../gtk/gtkwidget.c:1599
+#: ../gtk/gtkwidget.c:1605
 msgid "Margin on Top"
 msgstr "Marjin di Puncak"
 
-#: ../gtk/gtkwidget.c:1600
+#: ../gtk/gtkwidget.c:1606
 msgid "Pixels of extra space on the top side"
 msgstr "Cacah piksel ruang ekstra pada sisi atas"
 
-#: ../gtk/gtkwidget.c:1620
+#: ../gtk/gtkwidget.c:1626
 msgid "Margin on Bottom"
 msgstr "Marjin di Dasar"
 
-#: ../gtk/gtkwidget.c:1621
+#: ../gtk/gtkwidget.c:1627
 msgid "Pixels of extra space on the bottom side"
 msgstr "Cacah piksel ruang ekstra pada sisi bawah"
 
-#: ../gtk/gtkwidget.c:1638
+#: ../gtk/gtkwidget.c:1644
 msgid "All Margins"
 msgstr "Semua Batas"
 
-#: ../gtk/gtkwidget.c:1639
+#: ../gtk/gtkwidget.c:1645
 msgid "Pixels of extra space on all four sides"
 msgstr "Cacah piksel ruang ekstra pada keempat sisi"
 
-#: ../gtk/gtkwidget.c:1672
+#: ../gtk/gtkwidget.c:1678
 msgid "Horizontal Expand"
 msgstr "Mengembang Horisontal"
 
-#: ../gtk/gtkwidget.c:1673
+#: ../gtk/gtkwidget.c:1679
 msgid "Whether widget wants more horizontal space"
 msgstr "Apakah widget ingin ruang horisontal lebih"
 
-#: ../gtk/gtkwidget.c:1687
+#: ../gtk/gtkwidget.c:1693
 msgid "Horizontal Expand Set"
 msgstr "Tata Ekspansi Horisontal"
 
-#: ../gtk/gtkwidget.c:1688
+#: ../gtk/gtkwidget.c:1694
 msgid "Whether to use the hexpand property"
 msgstr "Apakah menggunakan properti hexpand"
 
-#: ../gtk/gtkwidget.c:1702
+#: ../gtk/gtkwidget.c:1708
 msgid "Vertical Expand"
 msgstr "Mengembang Vertikal"
 
-#: ../gtk/gtkwidget.c:1703
+#: ../gtk/gtkwidget.c:1709
 msgid "Whether widget wants more vertical space"
 msgstr "Apakah widget ingin ruang vertikal lebih"
 
-#: ../gtk/gtkwidget.c:1717
+#: ../gtk/gtkwidget.c:1723
 msgid "Vertical Expand Set"
 msgstr "Tata Ekspansi Vertikal"
 
-#: ../gtk/gtkwidget.c:1718
+#: ../gtk/gtkwidget.c:1724
 msgid "Whether to use the vexpand property"
 msgstr "Apakah menggunakan properti vexpand"
 
-#: ../gtk/gtkwidget.c:1732
+#: ../gtk/gtkwidget.c:1738
 msgid "Expand Both"
 msgstr "Ekspansi Dua Arah"
 
-#: ../gtk/gtkwidget.c:1733
+#: ../gtk/gtkwidget.c:1739
 msgid "Whether widget wants to expand in both directions"
 msgstr "Apakah widget ingin mengembang ke kedua arah"
 
-#: ../gtk/gtkwidget.c:1750
+#: ../gtk/gtkwidget.c:1756
 msgid "Opacity for Widget"
 msgstr "Kelegapan bagi Widget"
 
-#: ../gtk/gtkwidget.c:1751
+#: ../gtk/gtkwidget.c:1757
 msgid "The opacity of the widget, from 0 to 1"
 msgstr "Tingkat tembus pandang widget, dari 0 ke 1"
 
-#: ../gtk/gtkwidget.c:1768
+#: ../gtk/gtkwidget.c:1774
 msgid "Scale factor"
 msgstr "Faktor skala"
 
-#: ../gtk/gtkwidget.c:1769
+#: ../gtk/gtkwidget.c:1775
 msgid "The scaling factor of the window"
 msgstr "Faktor skala jendela"
 
-#: ../gtk/gtkwidget.c:3562
+#: ../gtk/gtkwidget.c:3568
 msgid "Interior Focus"
 msgstr "Fokus interior"
 
-#: ../gtk/gtkwidget.c:3563
+#: ../gtk/gtkwidget.c:3569
 msgid "Whether to draw the focus indicator inside widgets"
 msgstr "Menentukan apakah menggambar indikator fokus di dalam widget"
 
-#: ../gtk/gtkwidget.c:3576
+#: ../gtk/gtkwidget.c:3582
 msgid "Focus linewidth"
 msgstr "Lebar garis fokus"
 
-#: ../gtk/gtkwidget.c:3577
+#: ../gtk/gtkwidget.c:3583
 msgid "Width, in pixels, of the focus indicator line"
 msgstr "Lebar garis indikator fokus dalam piksel"
 
-#: ../gtk/gtkwidget.c:3591
+#: ../gtk/gtkwidget.c:3597
 msgid "Focus line dash pattern"
 msgstr "Garis fokus berpola garis-garis"
 
-#: ../gtk/gtkwidget.c:3592
+#: ../gtk/gtkwidget.c:3598
 msgid ""
 "Dash pattern used to draw the focus indicator. The character values are "
 "interpreted as pixel widths of alternating on and off segments of the line."
@@ -8489,27 +8554,27 @@ msgstr ""
 "karakter diinterpretasi sebagai lebar piksel atas segmen garis nyala dan "
 "mati bergantian."
 
-#: ../gtk/gtkwidget.c:3605
+#: ../gtk/gtkwidget.c:3611
 msgid "Focus padding"
 msgstr "Isian fokus"
 
-#: ../gtk/gtkwidget.c:3606
+#: ../gtk/gtkwidget.c:3612
 msgid "Width, in pixels, between focus indicator and the widget 'box'"
 msgstr "Lebar antara indikator fokus dan kotak widget dalam piksel"
 
-#: ../gtk/gtkwidget.c:3612
+#: ../gtk/gtkwidget.c:3618
 msgid "Cursor color"
 msgstr "Warna kursor"
 
-#: ../gtk/gtkwidget.c:3613
+#: ../gtk/gtkwidget.c:3619
 msgid "Color with which to draw insertion cursor"
 msgstr "Warna untuk menggambar kursor pengisian"
 
-#: ../gtk/gtkwidget.c:3618
+#: ../gtk/gtkwidget.c:3624
 msgid "Secondary cursor color"
 msgstr "Wanra kursor sekunder"
 
-#: ../gtk/gtkwidget.c:3619
+#: ../gtk/gtkwidget.c:3625
 msgid ""
 "Color with which to draw the secondary insertion cursor when editing mixed "
 "right-to-left and left-to-right text"
@@ -8517,45 +8582,45 @@ msgstr ""
 "Warna yang akan digambarkan pada kursor pengisian sekunder saat mengedit "
 "campuran teks kanan-ke-kiri dan kiri-ke-kanan"
 
-#: ../gtk/gtkwidget.c:3625
+#: ../gtk/gtkwidget.c:3631
 msgid "Cursor line aspect ratio"
 msgstr "Rasio aspek garis kursor"
 
-#: ../gtk/gtkwidget.c:3626
+#: ../gtk/gtkwidget.c:3632
 msgid "Aspect ratio with which to draw insertion cursor"
 msgstr "Rasio aspek yang digunakan saat menggambar kursor pengisian teks"
 
-#: ../gtk/gtkwidget.c:3632
+#: ../gtk/gtkwidget.c:3638
 msgid "Window dragging"
 msgstr "Penyeretan jendela"
 
-#: ../gtk/gtkwidget.c:3633
+#: ../gtk/gtkwidget.c:3639
 msgid "Whether windows can be dragged and maximized by clicking on empty areas"
 msgstr ""
 "Apakah jendela dapat diseret dan dimaksimalkan dengan mengklik pada daerah "
 "kosong"
 
-#: ../gtk/gtkwidget.c:3650
+#: ../gtk/gtkwidget.c:3656
 msgid "Unvisited Link Color"
 msgstr "Warna Taut Belum Dikunjungi"
 
-#: ../gtk/gtkwidget.c:3651
+#: ../gtk/gtkwidget.c:3657
 msgid "Color of unvisited links"
 msgstr "Warna dari taut yang belum dikunjungi"
 
-#: ../gtk/gtkwidget.c:3667
+#: ../gtk/gtkwidget.c:3673
 msgid "Visited Link Color"
 msgstr "Warna Taut Telah Dikunjungi"
 
-#: ../gtk/gtkwidget.c:3668
+#: ../gtk/gtkwidget.c:3674
 msgid "Color of visited links"
 msgstr "Warna dari taut yang telah dikunjungi"
 
-#: ../gtk/gtkwidget.c:3683
+#: ../gtk/gtkwidget.c:3689
 msgid "Wide Separators"
 msgstr "Pembatas Lebar"
 
-#: ../gtk/gtkwidget.c:3684
+#: ../gtk/gtkwidget.c:3690
 msgid ""
 "Whether separators have configurable width and should be drawn using a box "
 "instead of a line"
@@ -8563,43 +8628,43 @@ msgstr ""
 "Apakah pemisah memiliki lebar yang dapat diatur dan mesti digambar memakai "
 "kotak, bukan garis"
 
-#: ../gtk/gtkwidget.c:3698
+#: ../gtk/gtkwidget.c:3704
 msgid "Separator Width"
 msgstr "Lebar Pembatas"
 
-#: ../gtk/gtkwidget.c:3699
+#: ../gtk/gtkwidget.c:3705
 msgid "The width of separators if wide-separators is TRUE"
 msgstr "Lebar pembatas bila \"wide-separator\" berisi TRUE"
 
-#: ../gtk/gtkwidget.c:3713
+#: ../gtk/gtkwidget.c:3719
 msgid "Separator Height"
 msgstr "Tinggi Pembatas"
 
-#: ../gtk/gtkwidget.c:3714
+#: ../gtk/gtkwidget.c:3720
 msgid "The height of separators if \"wide-separators\" is TRUE"
 msgstr "Tinggi pembatas bila \"wide-separator\" berisi TRUE"
 
-#: ../gtk/gtkwidget.c:3728
+#: ../gtk/gtkwidget.c:3734
 msgid "Horizontal Scroll Arrow Length"
 msgstr "Panjang Panah Penggulung Mendatar"
 
-#: ../gtk/gtkwidget.c:3729
+#: ../gtk/gtkwidget.c:3735
 msgid "The length of horizontal scroll arrows"
 msgstr "Panjang dari panah penggulung arah mendatar"
 
-#: ../gtk/gtkwidget.c:3743
+#: ../gtk/gtkwidget.c:3749
 msgid "Vertical Scroll Arrow Length"
 msgstr "Panjang Panah Penggulung Tegak"
 
-#: ../gtk/gtkwidget.c:3744
+#: ../gtk/gtkwidget.c:3750
 msgid "The length of vertical scroll arrows"
 msgstr "Panjang dari panah penggulung arah tegak"
 
-#: ../gtk/gtkwidget.c:3750 ../gtk/gtkwidget.c:3751
+#: ../gtk/gtkwidget.c:3756 ../gtk/gtkwidget.c:3757
 msgid "Width of text selection handles"
 msgstr "Lebar gagang untuk seleksi teks"
 
-#: ../gtk/gtkwidget.c:3756 ../gtk/gtkwidget.c:3757
+#: ../gtk/gtkwidget.c:3762 ../gtk/gtkwidget.c:3763
 msgid "Height of text selection handles"
 msgstr "Tinggi gagang untuk seleksi teks"
 
