@@ -27,6 +27,7 @@
 #include "gtkradiobutton.h"
 
 #include "gtkbuttonprivate.h"
+#include "gtktogglebuttonprivate.h"
 #include "gtklabel.h"
 #include "gtkmarshalers.h"
 #include "gtkprivate.h"

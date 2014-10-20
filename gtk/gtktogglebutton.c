@@ -27,6 +27,7 @@
 #include "gtktogglebutton.h"
 
 #include "gtkbuttonprivate.h"
+#include "gtktogglebuttonprivate.h"
 #include "gtklabel.h"
 #include "gtkmain.h"
 #include "gtkmarshalers.h"

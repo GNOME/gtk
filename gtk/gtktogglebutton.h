@@ -95,9 +95,6 @@ void       gtk_toggle_button_set_inconsistent  (GtkToggleButton *toggle_button,
 GDK_AVAILABLE_IN_ALL
 gboolean   gtk_toggle_button_get_inconsistent  (GtkToggleButton *toggle_button);
 
-void       _gtk_toggle_button_set_active       (GtkToggleButton *toggle_button,
-                                                gboolean         is_active);
-
 
 G_END_DECLS
 
