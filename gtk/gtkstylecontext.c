@@ -3548,10 +3548,10 @@ _gtk_style_context_get_icon_extents (GtkStyleContext *context,
   g_return_if_fail (GTK_IS_STYLE_CONTEXT (context));
   g_return_if_fail (extents != NULL);
 
-  rect.x = x;
-  rect.y = y;
-  rect.width = width;
-  rect.height = height;
+  extents->x = x;
+  extents->y = y;
+  extents->width = width;
+  extents->height = height;
 
   /* strictly speaking we should return an empty rect here,
    * but most code still draws a fallback  in this case */
