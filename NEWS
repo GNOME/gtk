@@ -1,3 +1,24 @@
+Overview of Changes in GTK+ 3.14.3 to 3.14.4
+============================================
+
+* Bugs fixed:
+ 730893 Dialogs use headerbars even when DialogsUseHeader is unset
+ 737986 Transparent icon background rendered black on XFCE
+ 738636 GtkStackSwitcher focus overlap border
+ 738873 wayland backend aborts [...] if XDG_RUNTIME_DIR unset
+        Only allow one center widget in boxes
+        Memory leak fixes
+
+* Translation updates
+ Brazilian Portuguese
+ Indonesian
+ Kazakh
+ Norwegian bokmål
+ Polish
+ Slovak
+ Spanish
+
+
 Overview of Changes in GTK+ 3.14.2 to 3.14.3
 ============================================
 
