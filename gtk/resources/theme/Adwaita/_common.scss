@@ -1564,9 +1564,9 @@ column-header.button.dnd { // for treeview-like derive widgets
     &.left { border-left-width: 0; }
     &:backdrop { border-color: $backdrop_borders_color; }
   }
+
   &.header {
     // FIXME: double borders in some case, can't fix it w/o a class tho
-    // FIXME: doesn't work on dark var
     background-color: mix($bg_color, $borders_color, 70%);
 
     // this is the shading of the header behind the tabs
@@ -1606,6 +1606,9 @@ column-header.button.dnd { // for treeview-like derive widgets
       box-shadow: none;
     }
   }
+
+  .frame > &.frame { border: none; } // axes borders when the notebook is inside a frame
+
   tab {
     border-width: 0;
     border-style: solid;

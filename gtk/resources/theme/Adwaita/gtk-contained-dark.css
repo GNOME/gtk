@@ -2248,6 +2248,8 @@ GtkCalendar.header column-header .button.titlebutton, column-header .button:hove
     .notebook.header:backdrop {
       background-color: #2f3434;
       box-shadow: none; }
+  .frame > .notebook.frame {
+    border: none; }
   .notebook tab {
     border-width: 0;
     border-style: solid;
