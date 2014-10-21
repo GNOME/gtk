@@ -8,7 +8,6 @@ $ease-out-quad: cubic-bezier(0.25, 0.46, 0.45, 0.94);
   padding: 0;
   -GtkToolButton-icon-spacing: 4;
   -GtkTextView-error-underline-color: $error_color;
-  -GtkPaned-handle-size: 1;
 
   -GtkCheckButton-indicator-size: 16;
   -GtkCheckMenuItem-indicator-size: 16;
@@ -2749,23 +2748,39 @@ GtkPlacesSidebar.sidebar .view {
   }
 }
 
-GtkPaned {
-  // This is actually the invisible area of the paned separator, not a margin...
-  margin: 0 8px 8px 0; //drag area of the separator
+GtkPaned { // this is for the standard paned separator
+
+  -GtkPaned-handle-size: 1; // sets separator width
+
+  margin: 0 8px 8px 0; // drag area of the separator, not a real margin
   &:dir(rtl) {
     margin-right: 0;
     margin-left: 8px;
   }
-}
-
-.pane-separator {
-  //FIXME abusing a background-image to get rid of the handle decoration
-  //I'd like something better...
-  background-image: linear-gradient(to bottom, $borders_color);
-  &:backdrop {
-    background-image: linear-gradient(to bottom, $backdrop_borders_color);
+  .pane-separator {
+    //FIXME abusing a background-image to get rid of the handle decoration
+    //I'd like something better...
+    background-image: linear-gradient(to bottom, $borders_color);
+    background-color: transparent; // transparent background color to gets rid of the decoration.
+    &:backdrop {
+      background-image: linear-gradient(to bottom, $backdrop_borders_color);
+    }
   }
 }
+
+GtkPaned.wide { // this is for the paned with wide separator
+  -GtkPaned-handle-size: 5; // wider separator here
+  margin: 0; // no need of the invisible drag area so, reset margin
+  .pane-separator {
+    border-style: none solid;
+    border-color: $borders_color;
+    background-image: none;
+    border-width: 1px;
+  }
+  &.vertical .pane-separator { border-style: solid none;}
+  .pane-separator:backdrop { border-color: $backdrop_borders_color; }
+}
+
 
 /**************
  * GtkInfoBar *

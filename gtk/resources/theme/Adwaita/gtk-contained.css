@@ -2,7 +2,6 @@
   padding: 0;
   -GtkToolButton-icon-spacing: 4;
   -GtkTextView-error-underline-color: #cc0000;
-  -GtkPaned-handle-size: 1;
   -GtkCheckButton-indicator-size: 16;
   -GtkCheckMenuItem-indicator-size: 16;
   -GtkScrolledWindow-scrollbar-spacing: 0;
@@ -4231,15 +4230,29 @@ GtkPlacesSidebar.sidebar .view {
     background-size: 6px 6px, 0 0; }
 
 GtkPaned {
+  -GtkPaned-handle-size: 1;
   margin: 0 8px 8px 0; }
   GtkPaned:dir(rtl) {
     margin-right: 0;
     margin-left: 8px; }
+  GtkPaned .pane-separator {
+    background-image: linear-gradient(to bottom, #a1a1a1);
+    background-color: transparent; }
+    GtkPaned .pane-separator:backdrop {
+      background-image: linear-gradient(to bottom, #a8a8a8); }
 
-.pane-separator {
-  background-image: linear-gradient(to bottom, #a1a1a1); }
-  .pane-separator:backdrop {
-    background-image: linear-gradient(to bottom, #a8a8a8); }
+GtkPaned.wide {
+  -GtkPaned-handle-size: 5;
+  margin: 0; }
+  GtkPaned.wide .pane-separator {
+    border-style: none solid;
+    border-color: #a1a1a1;
+    background-image: none;
+    border-width: 1px; }
+  GtkPaned.wide.vertical .pane-separator {
+    border-style: solid none; }
+  GtkPaned.wide .pane-separator:backdrop {
+    border-color: #a8a8a8; }
 
 /**************
  * GtkInfoBar *
