@@ -102,6 +102,10 @@ GtkBitmask *            _gtk_css_computed_values_advance              (GtkCssCom
 void                    _gtk_css_computed_values_cancel_animations    (GtkCssComputedValues     *values);
 gboolean                _gtk_css_computed_values_is_static            (GtkCssComputedValues     *values);
 
+char *                  gtk_css_computed_values_to_string             (GtkCssComputedValues     *values);
+void                    gtk_css_computed_values_print                 (GtkCssComputedValues     *values,
+                                                                       GString                  *string);
+
 G_END_DECLS
 
 #endif /* __GTK_CSS_COMPUTED_VALUES_PRIVATE_H__ */

@@ -28,6 +28,7 @@
 #include "gtkcssinheritvalueprivate.h"
 #include "gtkcssinitialvalueprivate.h"
 #include "gtkcssnumbervalueprivate.h"
+#include "gtkcsssectionprivate.h"
 #include "gtkcssshorthandpropertyprivate.h"
 #include "gtkcssstringvalueprivate.h"
 #include "gtkcssstylepropertyprivate.h"
@@ -625,5 +626,45 @@ _gtk_css_computed_values_compute_dependencies (GtkCssComputedValues *values,
     changes = _gtk_bitmask_union (changes, values->depends_on_font_size);
 
   return changes;
+}
+
+void
+gtk_css_computed_values_print (GtkCssComputedValues *values,
+                               GString              *string)
+{
+  guint i;
+
+  g_return_if_fail (GTK_IS_CSS_COMPUTED_VALUES (values));
+  g_return_if_fail (string != NULL);
+
+  for (i = 0; i < _gtk_css_style_property_get_n_properties (); i++)
+    {
+      GtkCssSection *section = _gtk_css_computed_values_get_section (values, i);
+      g_string_append (string, _gtk_style_property_get_name (GTK_STYLE_PROPERTY (_gtk_css_style_property_lookup_by_id (i))));
+      g_string_append (string, ": ");
+      _gtk_css_value_print (_gtk_css_computed_values_get_value (values, i), string);
+      g_string_append (string, ";");
+      if (section)
+        {
+          g_string_append (string, " /* ");
+          _gtk_css_section_print (section, string);
+          g_string_append (string, " */");
+        }
+      g_string_append (string, "\n");
+    }
+}
+
+char *
+gtk_css_computed_values_to_string (GtkCssComputedValues *values)
+{
+  GString *string;
+
+  g_return_val_if_fail (GTK_IS_CSS_COMPUTED_VALUES (values), NULL);
+
+  string = g_string_new ("");
+
+  gtk_css_computed_values_print (values, string);
+
+  return g_string_free (string, FALSE);
 }
 
