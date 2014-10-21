@@ -4213,11 +4213,13 @@ GtkFileChooserDialog .dialog-action-box {
     background-color: #4a90d9; }
 
 GtkPlacesSidebar.sidebar .view {
-  color: #2e3436; }
+  color: #2e3436;
+  background-color: transparent; }
   GtkPlacesSidebar.sidebar .view:backdrop {
     color: #8d9091; }
   GtkPlacesSidebar.sidebar .view:selected {
-    color: #ffffff; }
+    color: #ffffff;
+    background-color: #4a90d9; }
     GtkPlacesSidebar.sidebar .view:selected:backdrop {
       color: white; }
 
@@ -4229,6 +4231,9 @@ GtkPlacesSidebar.sidebar .view {
   .sidebar-item.needs-attention > .label {
     background-size: 6px 6px, 0 0; }
 
+/*********
+ * Paned *
+ *********/
 GtkPaned {
   -GtkPaned-handle-size: 1;
   margin: 0 8px 8px 0; }

@@ -2702,8 +2702,8 @@ GtkFileChooserDialog {
 
 .sidebar {
   border: none;
-  $_sidebar_bg: lighten($bg_color,5%);
-  background-color: $_sidebar_bg;
+  background-color: $sidebar_bg_color;
+
   .scrollbar {
     &.trough {
       background-color: darken($bg_color,10%);
@@ -2711,14 +2711,17 @@ GtkFileChooserDialog {
       border-width: 2px;
       border-color: transparent;
     }
+
     &.slider {
-      background-color: $_sidebar_bg;
+      background-color: $sidebar_bg_color;
       &:hover { background-color: lighten($bg_color, 10%); }
     }
   }
+
   &:backdrop {
-    background-color: lighten($backdrop_bg_color,5%);
+    background-color: $backdrop_sidebar_bg_color;
   }
+
   &:selected {
     background-color: $selected_bg_color;
   }
@@ -2726,15 +2729,23 @@ GtkFileChooserDialog {
 
 // Places sidebar is a special case, since the view here have to look like chrome not content, so we override text color
 GtkPlacesSidebar.sidebar .view {
+
   color: $fg_color;
+  background-color: transparent;
+
   &:backdrop { color: $backdrop_fg_color; }
+
   &:selected {
     color: $selected_fg_color;
+    background-color: $selected_bg_color;
+
     &:backdrop { color: if($variant == 'light', $backdrop_base_color, $selected_bg_color); }
   }
+
   .separator,
   .separator:backdrop { @extend .separator; }
 }
+
 
 .sidebar-item {
   padding: 10px 4px;
@@ -2747,6 +2758,11 @@ GtkPlacesSidebar.sidebar .view {
     background-size: 6px 6px, 0 0;
   }
 }
+
+
+/*********
+ * Paned *
+ *********/
 
 GtkPaned { // this is for the standard paned separator
 

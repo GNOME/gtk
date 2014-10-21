@@ -26,6 +26,8 @@ $osd_bg_color: #2e3436;
 $osd_borders_color: transparentize(black, 0.3);
 $osd_outer_borders_color: transparentize(white, 0.9);
 
+$sidebar_bg_color: lighten($bg_color,5%);
+
 $tooltip_borders_color: $osd_outer_borders_color;
 
 //insensitive state derived colors
@@ -41,3 +43,4 @@ $backdrop_fg_color: mix($fg_color, $backdrop_bg_color, 50%);
 $backdrop_insensitive_color: if($variant == 'light', darken($backdrop_bg_color, 15%), lighten($backdrop_bg_color, 15%));
 $backdrop_borders_color: mix($borders_color, $bg_color, 90%);
 $backdrop_dark_fill: mix($backdrop_borders_color, $backdrop_bg_color, 35%);
+$backdrop_sidebar_bg_color: lighten($backdrop_bg_color,5%);
