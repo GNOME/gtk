@@ -219,6 +219,10 @@ init_theme (GtkInspectorVisual *vis)
   fill_gtk (path, t);
   g_free (path);
 
+  path = g_build_filename (g_get_home_dir (), "themes", NULL);
+  fill_gtk (path, t);
+  g_free (path);
+
   settings = g_settings_new ("org.gnome.desktop.interface");
   current_theme = g_settings_get_string (settings, "gtk-theme");
   g_object_unref (settings);
