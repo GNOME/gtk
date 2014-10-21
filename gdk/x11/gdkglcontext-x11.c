@@ -289,7 +289,7 @@ glx_pixmap_get (cairo_surface_t *surface)
   int i, value;
   gboolean y_inverted;
   const int pixmap_attributes[] = {
-    GLX_TEXTURE_TARGET_EXT, GLX_TEXTURE_RECTANGLE_EXT,
+    GLX_TEXTURE_TARGET_EXT, GLX_TEXTURE_2D_EXT,
     GLX_TEXTURE_FORMAT_EXT, GLX_TEXTURE_FORMAT_RGBA_EXT,
     None
   };
@@ -309,7 +309,7 @@ glx_pixmap_get (cairo_surface_t *surface)
       glXGetFBConfigAttrib (display, fbconfigs[i],
 			    GLX_BIND_TO_TEXTURE_TARGETS_EXT,
 			    &value);
-      if (!(value & GLX_TEXTURE_RECTANGLE_BIT_EXT))
+      if ((value & GLX_TEXTURE_RECTANGLE_BIT_EXT))
 	continue;
 
       glXGetFBConfigAttrib (display, fbconfigs[i],
