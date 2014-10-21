@@ -135,7 +135,21 @@ gtk_model_button_set_accel (GtkModelButton *button,
   /* ignore */
 }
 
-static void gtk_model_button_update_state (GtkModelButton *button);
+static void
+gtk_model_button_update_state (GtkModelButton *button)
+{
+  GtkStateFlags state;
+
+  state = gtk_widget_get_state_flags (GTK_WIDGET (button));
+
+  state &= ~GTK_STATE_FLAG_CHECKED;
+
+  if (button->toggled && !button->has_submenu)
+    state |= GTK_STATE_FLAG_CHECKED;
+
+  gtk_widget_set_state_flags (GTK_WIDGET (button), state, TRUE);
+}
+
 
 static void
 gtk_model_button_set_toggled (GtkModelButton *button,
@@ -151,6 +165,7 @@ gtk_model_button_set_has_submenu (GtkModelButton *button,
                                   gboolean        has_submenu)
 {
   button->has_submenu = has_submenu;
+  gtk_model_button_update_state (button);
   gtk_widget_queue_resize (GTK_WIDGET (button));
 }
 
@@ -540,38 +555,6 @@ gtk_model_button_size_allocate (GtkWidget     *widget,
   pango_font_metrics_unref (metrics);
 }
 
-static GtkStateFlags
-get_button_state (GtkModelButton *model_button)
-{
-  GtkButton *button = GTK_BUTTON (model_button);
-  GtkStateFlags state;
-
-  state = gtk_widget_get_state_flags (GTK_WIDGET (model_button));
-
-  state &= ~(GTK_STATE_FLAG_INCONSISTENT |
-             GTK_STATE_FLAG_ACTIVE |
-             GTK_STATE_FLAG_CHECKED |
-             GTK_STATE_FLAG_PRELIGHT);
-
-  if (model_button->toggled && !model_button->has_submenu)
-    state |= GTK_STATE_FLAG_CHECKED;
-
-  if (button->priv->activate_timeout ||
-      (button->priv->button_down && button->priv->in_button))
-    state |= GTK_STATE_FLAG_ACTIVE;
-
-  if (button->priv->in_button)
-    state |= GTK_STATE_FLAG_PRELIGHT;
-
-  return state;
-}
-
-static void
-gtk_model_button_update_state (GtkModelButton *button)
-{
-  gtk_widget_set_state_flags (GTK_WIDGET (button), get_button_state (button), TRUE);
-}
-
 static gint
 gtk_model_button_draw (GtkWidget *widget,
                        cairo_t   *cr)
@@ -580,25 +563,18 @@ gtk_model_button_draw (GtkWidget *widget,
   GtkButton *button = GTK_BUTTON (widget);
   GtkWidget *child;
   GtkStyleContext *context;
-  GtkStateFlags state;
   gint border_width;
   gint x, y;
   gint width, height;
   gint indicator_size, indicator_spacing;
   gint baseline;
 
-  state = get_button_state (model_button);
-
-  context = gtk_widget_get_style_context (widget);
-  gtk_style_context_save (context);
-  gtk_style_context_set_state (context, state);
-
   if (model_button->iconic)
     {
-      GTK_WIDGET_CLASS (gtk_model_button_parent_class)->draw (widget, cr);
-      goto out;
+      return GTK_WIDGET_CLASS (gtk_model_button_parent_class)->draw (widget, cr);
     }
 
+  context = gtk_widget_get_style_context (widget);
   width = gtk_widget_get_allocated_width (widget);
   height = gtk_widget_get_allocated_height (widget);
   border_width = gtk_container_get_border_width (GTK_CONTAINER (widget));
@@ -629,6 +605,10 @@ gtk_model_button_draw (GtkWidget *widget,
 
   if (model_button->has_submenu)
     {
+      GtkStateFlags state;
+
+      gtk_style_context_save (context);
+      state = gtk_style_context_get_state (context);
       state = state & ~(GTK_STATE_FLAG_DIR_LTR|GTK_STATE_FLAG_DIR_RTL);
       if (indicator_is_left (widget))
         state = state | GTK_STATE_FLAG_DIR_RTL;
@@ -638,23 +618,28 @@ gtk_model_button_draw (GtkWidget *widget,
       gtk_style_context_set_state (context, state);
       gtk_style_context_add_class (context, GTK_STYLE_CLASS_EXPANDER);
       gtk_render_expander (context, cr, x, y, indicator_size, indicator_size);
+      gtk_style_context_restore (context);
     }
   else if (model_button->role == GTK_MENU_TRACKER_ITEM_ROLE_CHECK)
     {
+      gtk_style_context_save (context);
       gtk_style_context_add_class (context, GTK_STYLE_CLASS_CHECK);
       gtk_render_check (context, cr, x, y, indicator_size, indicator_size);
+      gtk_style_context_restore (context);
     }
   else if (model_button->role == GTK_MENU_TRACKER_ITEM_ROLE_RADIO)
     {
+      gtk_style_context_save (context);
       gtk_style_context_add_class (context, GTK_STYLE_CLASS_RADIO);
       gtk_render_option (context, cr, x, y, indicator_size, indicator_size);
+      gtk_style_context_restore (context);
     }
 
   if (gtk_widget_has_visible_focus (widget))
     {
       GtkBorder border;
  
-      gtk_style_context_get_border (context, state, &border);
+      gtk_style_context_get_border (context, gtk_style_context_get_state (context), &border);
 
       gtk_render_focus (context, cr,
                         border_width + border.left,
@@ -667,33 +652,7 @@ gtk_model_button_draw (GtkWidget *widget,
   if (child)
     gtk_container_propagate_draw (GTK_CONTAINER (widget), child, cr);
 
-out:
-  gtk_style_context_restore (context);
-
   return FALSE;
-}
-
-static void
-gtk_model_button_pressed (GtkButton *button)
-{
-  GTK_BUTTON_CLASS (gtk_model_button_parent_class)->pressed (button);
-
-  gtk_model_button_update_state (GTK_MODEL_BUTTON (button));
-}
-
-static void
-gtk_model_button_released (GtkButton *button)
-{
-  GTK_BUTTON_CLASS (gtk_model_button_parent_class)->released (button);
-
-  gtk_model_button_update_state (GTK_MODEL_BUTTON (button));
-}
-
-static void
-gtk_model_button_enter_leave (GtkButton *button)
-{
-  gtk_model_button_update_state (GTK_MODEL_BUTTON (button));
-  gtk_widget_queue_draw (GTK_WIDGET (button));
 }
 
 static void
@@ -701,7 +660,6 @@ gtk_model_button_class_init (GtkModelButtonClass *class)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (class);
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (class);
-  GtkButtonClass *button_class = GTK_BUTTON_CLASS (class);
 
   object_class->set_property = gtk_model_button_set_property;
 
@@ -712,11 +670,6 @@ gtk_model_button_class_init (GtkModelButtonClass *class)
   widget_class->get_preferred_height_and_baseline_for_width = gtk_model_button_get_preferred_height_and_baseline_for_width;
   widget_class->size_allocate = gtk_model_button_size_allocate;
   widget_class->draw = gtk_model_button_draw;
-
-  button_class->pressed = gtk_model_button_pressed;
-  button_class->released = gtk_model_button_released;
-  button_class->enter = gtk_model_button_enter_leave;
-  button_class->leave = gtk_model_button_enter_leave;
 
   g_object_class_install_property (object_class, PROP_ACTION_ROLE,
                                    g_param_spec_enum ("action-role", "", "",
