@@ -1177,7 +1177,7 @@ gtk_theming_engine_render_check (GtkThemingEngine *engine,
     }
   else
     {
-      if (flags & GTK_STATE_FLAG_ACTIVE)
+      if (flags & GTK_STATE_FLAG_CHECKED)
         {
           cairo_translate (cr,
                            x + pad, y + pad);
@@ -1301,7 +1301,7 @@ gtk_theming_engine_render_option (GtkThemingEngine *engine,
                        line_thickness);
       cairo_fill (cr);
     }
-  if (flags & GTK_STATE_FLAG_ACTIVE)
+  if (flags & GTK_STATE_FLAG_CHECKED)
     {
       pad = thickness + MAX (1, 2 * (exterior_size - 2 * thickness) / 9);
       interior_size = MAX (1, exterior_size - 2 * pad);

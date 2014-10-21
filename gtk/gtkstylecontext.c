@@ -3535,7 +3535,7 @@ _gtk_style_context_get_cursor_color (GtkStyleContext *context,
  *
  * Renders a checkmark (as in a #GtkCheckButton).
  *
- * The %GTK_STATE_FLAG_ACTIVE state determines whether the check is
+ * The %GTK_STATE_FLAG_CHECKED state determines whether the check is
  * on or off, and %GTK_STATE_FLAG_INCONSISTENT determines whether it
  * should be marked as undefined.
  *
@@ -3585,7 +3585,7 @@ gtk_render_check (GtkStyleContext *context,
  * @width: rectangle width
  * @height: rectangle height
  *
- * Renders an option mark (as in a #GtkRadioButton), the %GTK_STATE_FLAG_ACTIVE
+ * Renders an option mark (as in a #GtkRadioButton), the %GTK_STATE_FLAG_CHECKED
  * state will determine whether the option is on or off, and
  * %GTK_STATE_FLAG_INCONSISTENT whether it should be marked as undefined.
  *
@@ -3780,7 +3780,7 @@ gtk_render_frame (GtkStyleContext *context,
  * @height: rectangle height
  *
  * Renders an expander (as used in #GtkTreeView and #GtkExpander) in the area
- * defined by @x, @y, @width, @height. The state %GTK_STATE_FLAG_ACTIVE
+ * defined by @x, @y, @width, @height. The state %GTK_STATE_FLAG_CHECKED
  * determines whether the expander is collapsed or expanded.
  *
  * Typical expander rendering:
@@ -4164,7 +4164,7 @@ gtk_render_handle (GtkStyleContext *context,
  * @height: rectangle height
  *
  * Renders an activity indicator (such as in #GtkSpinner).
- * The state %GTK_STATE_FLAG_ACTIVE determines whether there is
+ * The state %GTK_STATE_FLAG_CHECKED determines whether there is
  * activity going on.
  *
  * Since: 3.0
