@@ -2771,18 +2771,16 @@ GtkPaned { // this is for the standard paned separator
 
   -GtkPaned-handle-size: 1; // sets separator width
 
+  -gtk-icon-source: none; // removes handle decoration
   margin: 0 8px 8px 0; // drag area of the separator, not a real margin
   &:dir(rtl) {
     margin-right: 0;
     margin-left: 8px;
   }
   .pane-separator {
-    //FIXME abusing a background-image to get rid of the handle decoration
-    //I'd like something better...
-    background-image: linear-gradient(to bottom, $borders_color);
-    background-color: transparent; // transparent background color to gets rid of the decoration.
+    background-color: $borders_color;
     &:backdrop {
-      background-image: linear-gradient(to bottom, $backdrop_borders_color);
+      background-color: $backdrop_borders_color;
     }
   }
 }
@@ -2791,9 +2789,9 @@ GtkPaned.wide { // this is for the paned with wide separator
   -GtkPaned-handle-size: 5; // wider separator here
   margin: 0; // no need of the invisible drag area so, reset margin
   .pane-separator {
+    background-color: transparent;
     border-style: none solid;
     border-color: $borders_color;
-    background-image: none;
     border-width: 1px;
   }
   &.vertical .pane-separator { border-style: solid none;}

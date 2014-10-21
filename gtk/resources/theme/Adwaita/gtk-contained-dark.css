@@ -4077,23 +4077,23 @@ GtkPlacesSidebar.sidebar .view {
  *********/
 GtkPaned {
   -GtkPaned-handle-size: 1;
+  -gtk-icon-source: none;
   margin: 0 8px 8px 0; }
   GtkPaned:dir(rtl) {
     margin-right: 0;
     margin-left: 8px; }
   GtkPaned .pane-separator {
-    background-image: linear-gradient(to bottom, #1c1f1f);
-    background-color: transparent; }
+    background-color: #1c1f1f; }
     GtkPaned .pane-separator:backdrop {
-      background-image: linear-gradient(to bottom, #1e2222); }
+      background-color: #1e2222; }
 
 GtkPaned.wide {
   -GtkPaned-handle-size: 5;
   margin: 0; }
   GtkPaned.wide .pane-separator {
+    background-color: transparent;
     border-style: none solid;
     border-color: #1c1f1f;
-    background-image: none;
     border-width: 1px; }
   GtkPaned.wide.vertical .pane-separator {
     border-style: solid none; }

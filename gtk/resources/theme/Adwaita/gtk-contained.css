@@ -4238,23 +4238,23 @@ GtkPlacesSidebar.sidebar .view {
  *********/
 GtkPaned {
   -GtkPaned-handle-size: 1;
+  -gtk-icon-source: none;
   margin: 0 8px 8px 0; }
   GtkPaned:dir(rtl) {
     margin-right: 0;
     margin-left: 8px; }
   GtkPaned .pane-separator {
-    background-image: linear-gradient(to bottom, #a1a1a1);
-    background-color: transparent; }
+    background-color: #a1a1a1; }
     GtkPaned .pane-separator:backdrop {
-      background-image: linear-gradient(to bottom, #a8a8a8); }
+      background-color: #a8a8a8; }
 
 GtkPaned.wide {
   -GtkPaned-handle-size: 5;
   margin: 0; }
   GtkPaned.wide .pane-separator {
+    background-color: transparent;
     border-style: none solid;
     border-color: #a1a1a1;
-    background-image: none;
     border-width: 1px; }
   GtkPaned.wide.vertical .pane-separator {
     border-style: solid none; }
