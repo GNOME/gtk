@@ -13,8 +13,8 @@ msgstr ""
 "Project-Id-Version: gtk+ master\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gtk"
 "%2b&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2014-09-23 09:06+0000\n"
-"PO-Revision-Date: 2014-09-24 00:21+0700\n"
+"POT-Creation-Date: 2014-10-20 18:44+0000\n"
+"PO-Revision-Date: 2014-10-21 19:45+0700\n"
 "Last-Translator: Andika Triwidada <andika@gmail.com>\n"
 "Language-Team: Indonesian <gnome@i15n.org>\n"
 "Language: id\n"
@@ -26,51 +26,51 @@ msgstr ""
 
 #: ../gdk/broadway/gdkbroadway-server.c:143
 #, c-format
-msgid "broadway display type not supported '%s'"
-msgstr "tipe tampilan broadway tak didukung '%s'"
+msgid "Broadway display type not supported: %s"
+msgstr "Tipe tampilan broadway tak didukung: %s"
 
-#: ../gdk/gdk.c:165
+#: ../gdk/gdk.c:167
 #, c-format
 msgid "Error parsing option --gdk-debug"
 msgstr "Galat sewaktu mengurai opsi --gdk-debug"
 
-#: ../gdk/gdk.c:185
+#: ../gdk/gdk.c:187
 #, c-format
 msgid "Error parsing option --gdk-no-debug"
 msgstr "Galat sewaktu mengurai opsi --gdk-no-debug"
 
 #. Description of --class=CLASS in --help output
-#: ../gdk/gdk.c:213
+#: ../gdk/gdk.c:215
 msgid "Program class as used by the window manager"
 msgstr "Kelas program yang digunakan pengatur jendela program"
 
 #. Placeholder in --class=CLASS in --help output
-#: ../gdk/gdk.c:214
+#: ../gdk/gdk.c:216
 msgid "CLASS"
 msgstr "KELAS"
 
 #. Description of --name=NAME in --help output
-#: ../gdk/gdk.c:216
+#: ../gdk/gdk.c:218
 msgid "Program name as used by the window manager"
 msgstr "Nama program sebagaimana digunakan oleh program pengatur jendela"
 
 #. Placeholder in --name=NAME in --help output
-#: ../gdk/gdk.c:217
+#: ../gdk/gdk.c:219
 msgid "NAME"
 msgstr "NAMA"
 
 #. Description of --display=DISPLAY in --help output
-#: ../gdk/gdk.c:219
+#: ../gdk/gdk.c:221
 msgid "X display to use"
 msgstr "Tampilan X yang akan dipakai"
 
 #. Placeholder in --display=DISPLAY in --help output
-#: ../gdk/gdk.c:220
+#: ../gdk/gdk.c:222
 msgid "DISPLAY"
 msgstr "TAMPILAN"
 
 #. Description of --gdk-debug=FLAGS in --help output
-#: ../gdk/gdk.c:223
+#: ../gdk/gdk.c:225
 msgid "GDK debugging flags to set"
 msgstr "Tanda debug GDK yang hendak disetel"
 
@@ -78,14 +78,18 @@ msgstr "Tanda debug GDK yang hendak disetel"
 #. Placeholder in --gdk-no-debug=FLAGS in --help output
 #. Placeholder in --gtk-debug=FLAGS in --help output
 #. Placeholder in --gtk-no-debug=FLAGS in --help output
-#: ../gdk/gdk.c:224 ../gdk/gdk.c:227 ../gtk/gtkmain.c:460 ../gtk/gtkmain.c:463
+#: ../gdk/gdk.c:226 ../gdk/gdk.c:229 ../gtk/gtkmain.c:460 ../gtk/gtkmain.c:463
 msgid "FLAGS"
 msgstr "TANDA"
 
 #. Description of --gdk-no-debug=FLAGS in --help output
-#: ../gdk/gdk.c:226
+#: ../gdk/gdk.c:228
 msgid "GDK debugging flags to unset"
 msgstr "Tanda debug GDK yang ingin dibuang setelannya"
+
+#: ../gdk/gdkwindow.c:2729
+msgid "GL support disabled via GDK_DEBUG"
+msgstr "Dukungan GL dinonaktifkan melalui GDK_DEBUG"
 
 #.
 #. * Translators, the strings in the “keyboard label” context are
@@ -429,6 +433,24 @@ msgctxt "keyboard label"
 msgid "Suspend"
 msgstr "Suspend"
 
+#: ../gdk/wayland/gdkglcontext-wayland.c:278
+#: ../gdk/wayland/gdkglcontext-wayland.c:288 ../gdk/x11/gdkglcontext-x11.c:568
+msgid "No available configurations for the given pixel format"
+msgstr "Tak ada konfigurasi yang tersedia bagi format piksel yang diberikan"
+
+#: ../gdk/wayland/gdkglcontext-wayland.c:321 ../gdk/x11/gdkglcontext-x11.c:688
+msgid "No GL implementation is available"
+msgstr "Tak ada implementasi GL yang tersedia"
+
+#: ../gdk/wayland/gdkglcontext-wayland.c:330
+msgid "3.2 core GL profile is not available on EGL implementation"
+msgstr "Profil GL inti 3.2 tak tersedia pada implementasi EGL"
+
+#: ../gdk/wayland/gdkglcontext-wayland.c:353 ../gdk/x11/gdkglcontext-x11.c:727
+#: ../gdk/x11/gdkglcontext-x11.c:771
+msgid "Unable to create a GL context"
+msgstr "Tak dapat membuat sebuah konteks GL"
+
 #. Description of --sync in --help output
 #: ../gdk/win32/gdkmain-win32.c:53
 msgid "Don't batch GDI requests"
@@ -474,6 +496,20 @@ msgstr "Membuka '%s'"
 msgid "Opening %d Item"
 msgid_plural "Opening %d Items"
 msgstr[0] "Membuka %d Item"
+
+#: ../gdk/x11/gdkglcontext-x11.c:614
+#, c-format
+msgid "No available configurations for the given RGBA pixel format"
+msgstr ""
+"Tak ada konfigurasi yang tersedia bagi format piksel RGBA yang diberikan"
+
+#: ../gdk/x11/gdkglcontext-x11.c:697
+msgid ""
+"The GLX_ARB_create_context_profile extension needed to create 3.2 core "
+"profiles is not available"
+msgstr ""
+"Ekstensi GLX_ARB_create_context_profile yang diperlukan untuk membuat profil "
+"inti 3.2 tak tersedia"
 
 #: ../gtk/a11y/gtkbooleancellaccessible.c:43
 msgctxt "Action description"
@@ -1106,10 +1142,10 @@ msgstr "_Nama warna:"
 #: ../gtk/deprecated/gtkcolorsel.c:514
 msgid ""
 "You can enter an HTML-style hexadecimal color value, or simply a color name "
-"such as 'orange' in this entry."
+"such as “orange” in this entry."
 msgstr ""
-"Anda dapat memasukkan nilai warna dalam gaya HTML heksadesimal, atau bisa "
-"juga masukkan namanya, misalnya 'orange'."
+"Anda dapat memasukkan nilai warna heksadesimal gaya HTML, atau bisa juga "
+"masukkan namanya, misalnya \"oranye\" dalam entri ini."
 
 #: ../gtk/deprecated/gtkcolorsel.c:546
 msgid "_Palette:"
@@ -1121,32 +1157,33 @@ msgstr "Roda Warna"
 
 #: ../gtk/deprecated/gtkcolorsel.c:1070
 msgid ""
-"The previously-selected color, for comparison to the color you're selecting "
+"The previously-selected color, for comparison to the color you’re selecting "
 "now. You can drag this color to a palette entry, or select this color as "
 "current by dragging it to the other color swatch alongside."
 msgstr ""
 "Warna yang sebelumnya dipilih sebagai warna perbandingan dengan warna yang "
-"Anda pilih sekarang. Ambil warna ini ke dalam palet, atau pilih warna ini "
-"sebagai warna aktif dengan menyeretnya ke dalam kotak warna."
+"Anda pilih sekarang. Anda dapat menyeret warna ini ke suatu entri palet, "
+"atau pilih warna ini sebagai warna aktif dengan menyeretnya ke dalam kotak "
+"warna."
 
 #: ../gtk/deprecated/gtkcolorsel.c:1076
 msgid ""
-"The color you've chosen. You can drag this color to a palette entry to save "
+"The color you’ve chosen. You can drag this color to a palette entry to save "
 "it for use in the future."
 msgstr ""
-"Warna yang Anda pilih. Ambil warna ini ke dalam palet agar dapat digunakan "
-"di kemudian hari"
+"Warna yang Anda pilih. Ambil warna ini ke suatu entri palet agar dapat "
+"digunakan di kemudian hari."
 
 #: ../gtk/deprecated/gtkcolorsel.c:1082
 msgid ""
-"The previously-selected color, for comparison to the color you're selecting "
+"The previously-selected color, for comparison to the color you’re selecting "
 "now."
 msgstr ""
 "Warna yang sebelumnya dipilih, untuk perbandingan dengan warna yang kini "
 "sedang Anda pilih."
 
 #: ../gtk/deprecated/gtkcolorsel.c:1086
-msgid "The color you've chosen."
+msgid "The color you’ve chosen."
 msgstr "Warna yang telah Anda pilih."
 
 #: ../gtk/deprecated/gtkcolorsel.c:1490
@@ -1156,20 +1193,20 @@ msgstr "_Simpan warna di sini"
 #: ../gtk/deprecated/gtkcolorsel.c:1694
 msgid ""
 "Click this palette entry to make it the current color. To change this entry, "
-"drag a color swatch here or right-click it and select \"Save color here.\""
+"drag a color swatch here or right-click it and select “Save color here.”"
 msgstr ""
-"Klik pada palet untuk menjadikannya sebagai warna aktif. Untuk merubahnya, "
-"ambil warna pada kotak warna atau klik kanan dan pilih \"Simpan warna di sini"
-"\""
+"Klik entri palet ini untuk menjadikannya sebagai warna aktif. Untuk mengubah "
+"entri ini, seret suatu warna ke sini atau klik kanan dan pilih \"Simpan "
+"warna di sini\"."
 
 #: ../gtk/deprecated/gtkcolorseldialog.c:191
 #: ../gtk/deprecated/gtkfontsel.c:1689 ../gtk/gtkfilechooserbutton.c:794
-#: ../gtk/gtkfilechooserwidget.c:5226 ../gtk/gtkmessagedialog.c:944
+#: ../gtk/gtkfilechooserwidget.c:5228 ../gtk/gtkmessagedialog.c:944
 #: ../gtk/gtkmessagedialog.c:957 ../gtk/gtkmountoperation.c:543
 #: ../gtk/gtkpagesetupunixdialog.c:196 ../gtk/gtkprintbackend.c:763
 #: ../gtk/gtkprinteroptionwidget.c:545 ../gtk/gtkprintunixdialog.c:665
-#: ../gtk/gtkprintunixdialog.c:733 ../gtk/gtkwindow.c:11660
-#: ../gtk/inspector/css-editor.c:195
+#: ../gtk/gtkprintunixdialog.c:733 ../gtk/gtkwindow.c:11756
+#: ../gtk/inspector/css-editor.c:198
 #: ../gtk/resources/ui/gtkappchooserdialog.ui.h:2
 #: ../gtk/resources/ui/gtkassistant.ui.h:5
 #: ../gtk/resources/ui/gtkcolorchooserdialog.ui.h:2
@@ -1223,7 +1260,7 @@ msgstr "Ter_apkan"
 
 #: ../gtk/deprecated/gtkfontsel.c:1698 ../gtk/gtkmessagedialog.c:936
 #: ../gtk/gtkmessagedialog.c:958 ../gtk/gtkprintbackend.c:764
-#: ../gtk/gtkwindow.c:11661 ../gtk/inspector/classes-list.c:125
+#: ../gtk/gtkwindow.c:11757 ../gtk/inspector/classes-list.c:125
 msgid "_OK"
 msgstr "_Ok"
 
@@ -1373,14 +1410,13 @@ msgstr "Ukuran tak valid %s\n"
 #: ../gtk/gtkaboutdialog.c:114
 #, c-format
 msgid ""
-"This program comes with ABSOLUTELY NO WARRANTY.\n"
+"This program comes with absolutely no warranty.\n"
 "See the <a href=\"%s\">%s</a> for details."
 msgstr ""
-"Program ini TANPA JAMINAN APAPUN.\n"
+"Program ini tanpa jaminan apapun.\n"
 "Lihat <a href=\"%s\">%s</a> untuk rinciannya."
 
-#: ../gtk/gtkaboutdialog.c:118 ../gtk/gtkaboutdialog.c:408
-#: ../gtk/resources/ui/gtkaboutdialog.ui.h:3
+#: ../gtk/gtkaboutdialog.c:118 ../gtk/resources/ui/gtkaboutdialog.ui.h:3
 msgid "License"
 msgstr "Lisensi"
 
@@ -1432,9 +1468,18 @@ msgstr "GNU Lesser General Public License, hanya versi 2.1"
 msgid "GNU Lesser General Public License, version 3 only"
 msgstr "GNU Lesser General Public License, hanya versi 3"
 
-#: ../gtk/gtkaboutdialog.c:409
-msgid "The license of the program"
-msgstr "Lisensi program"
+#: ../gtk/gtkaboutdialog.c:697
+msgid "C_redits"
+msgstr "K_redit"
+
+#: ../gtk/gtkaboutdialog.c:705
+msgid "_License"
+msgstr "_Lisensi"
+
+#: ../gtk/gtkaboutdialog.c:714 ../gtk/gtkcustompaperunixdialog.c:329
+#: ../gtk/gtkmessagedialog.c:940 ../gtk/resources/ui/gtkassistant.ui.h:6
+msgid "_Close"
+msgstr "_Tutup"
 
 #: ../gtk/gtkaboutdialog.c:982
 msgid "Could not show link"
@@ -1471,7 +1516,7 @@ msgstr "Karya Seni"
 #. * translated on keyboards used for your language, don't translate
 #. * this.
 #.
-#: ../gtk/gtkaccellabel.c:163
+#: ../gtk/gtkaccellabel.c:164
 msgctxt "keyboard label"
 msgid "Shift"
 msgstr "Shift"
@@ -1481,7 +1526,7 @@ msgstr "Shift"
 #. * translated on keyboards used for your language, don't translate
 #. * this.
 #.
-#: ../gtk/gtkaccellabel.c:169
+#: ../gtk/gtkaccellabel.c:170
 msgctxt "keyboard label"
 msgid "Ctrl"
 msgstr "Ctrl"
@@ -1491,7 +1536,7 @@ msgstr "Ctrl"
 #. * translated on keyboards used for your language, don't translate
 #. * this.
 #.
-#: ../gtk/gtkaccellabel.c:175
+#: ../gtk/gtkaccellabel.c:176
 msgctxt "keyboard label"
 msgid "Alt"
 msgstr "Alt"
@@ -1501,7 +1546,7 @@ msgstr "Alt"
 #. * translated on keyboards used for your language, don't translate
 #. * this.
 #.
-#: ../gtk/gtkaccellabel.c:798
+#: ../gtk/gtkaccellabel.c:795
 msgctxt "keyboard label"
 msgid "Super"
 msgstr "Super"
@@ -1511,7 +1556,7 @@ msgstr "Super"
 #. * translated on keyboards used for your language, don't translate
 #. * this.
 #.
-#: ../gtk/gtkaccellabel.c:811
+#: ../gtk/gtkaccellabel.c:808
 msgctxt "keyboard label"
 msgid "Hyper"
 msgstr "Hyper"
@@ -1521,17 +1566,17 @@ msgstr "Hyper"
 #. * translated on keyboards used for your language, don't translate
 #. * this.
 #.
-#: ../gtk/gtkaccellabel.c:825
+#: ../gtk/gtkaccellabel.c:822
 msgctxt "keyboard label"
 msgid "Meta"
 msgstr "Meta"
 
-#: ../gtk/gtkaccellabel.c:842
+#: ../gtk/gtkaccellabel.c:839
 msgctxt "keyboard label"
 msgid "Space"
 msgstr "Spasi"
 
-#: ../gtk/gtkaccellabel.c:845
+#: ../gtk/gtkaccellabel.c:842
 msgctxt "keyboard label"
 msgid "Backslash"
 msgstr "Backslash"
@@ -1598,7 +1643,7 @@ msgid "Other Applications"
 msgstr "Aplikasi Lain"
 
 #: ../gtk/gtkapplicationwindow.c:322 ../gtk/gtkprintoperation-unix.c:481
-#: ../gtk/gtkprintoperation-win32.c:1452 ../gtk/inspector/prop-editor.c:1569
+#: ../gtk/gtkprintoperation-win32.c:1452 ../gtk/inspector/prop-editor.c:1568
 msgid "Application"
 msgstr "Aplikasi"
 
@@ -1624,12 +1669,12 @@ msgstr "Elemen <%s> tak diperbolehkan di aras puncak"
 
 #: ../gtk/gtkbuilder-menus.c:317
 #, c-format
-msgid "text may not appear inside <%s>"
-msgstr "teks tak boleh muncul di dalam <%s>"
+msgid "Text may not appear inside <%s>"
+msgstr "Teks tak boleh muncul di dalam <%s>"
 
 #: ../gtk/gtkbuilderparser.c:340
 #, c-format
-msgid "Invalid object type `%s' on line %d"
+msgid "Invalid object type '%s' on line %d"
 msgstr "Tipe objek '%s' tak valid pada baris %d"
 
 #: ../gtk/gtkbuilderparser.c:360
@@ -1649,18 +1694,18 @@ msgstr "Properti tak valid: %s.%s pada baris %d"
 
 #: ../gtk/gtkbuilderparser.c:775
 #, c-format
-msgid "Invalid signal `%s' for type `%s' on line %d"
+msgid "Invalid signal '%s' for type '%s' on line %d"
 msgstr "Sinyal tak valid '%s' bagi tipe '%s' pada baris %d"
 
 #: ../gtk/gtkbuilderparser.c:1067
 #, c-format
-msgid "Invalid root element: '%s'"
-msgstr "Elemen akar tidak berlaku: %s"
+msgid "Invalid root element: <%s>"
+msgstr "Elemen akar tak valid: <%s>"
 
 #: ../gtk/gtkbuilderparser.c:1110
 #, c-format
-msgid "Unhandled tag: '%s'"
-msgstr "Tag tak tertangani: '%s'"
+msgid "Unhandled tag: <%s>"
+msgstr "Tag tak tertangani: <%s>"
 
 #. Translate to calendar:YM if you want years to be displayed
 #. * before months; otherwise translate to calendar:MY.
@@ -1672,7 +1717,7 @@ msgstr "Tag tak tertangani: '%s'"
 #. * text direction of RTL and specify "calendar:YM", then the year
 #. * will appear to the right of the month.
 #.
-#: ../gtk/gtkcalendar.c:870
+#: ../gtk/gtkcalendar.c:871
 msgid "calendar:MY"
 msgstr "calendar:MY"
 
@@ -1681,7 +1726,7 @@ msgstr "calendar:MY"
 #. * first day of the week to calendar:week_start:1 if you want Monday
 #. * to be the first day of the week, and so on.
 #.
-#: ../gtk/gtkcalendar.c:908
+#: ../gtk/gtkcalendar.c:909
 msgid "calendar:week_start:0"
 msgstr "calendar:week_start:0"
 
@@ -1690,7 +1735,7 @@ msgstr "calendar:week_start:0"
 #. *
 #. * If you don't understand this, leave it as "2000"
 #.
-#: ../gtk/gtkcalendar.c:1935
+#: ../gtk/gtkcalendar.c:1936
 msgctxt "year measurement template"
 msgid "2000"
 msgstr "2000"
@@ -1705,7 +1750,7 @@ msgstr "2000"
 #. * digits. That needs support from your system and locale definition
 #. * too.
 #.
-#: ../gtk/gtkcalendar.c:1966 ../gtk/gtkcalendar.c:2636
+#: ../gtk/gtkcalendar.c:1967 ../gtk/gtkcalendar.c:2637
 #, c-format
 msgctxt "calendar:day:digits"
 msgid "%d"
@@ -1721,7 +1766,7 @@ msgstr "%d"
 #. * digits. That needs support from your system and locale definition
 #. * too.
 #.
-#: ../gtk/gtkcalendar.c:1998 ../gtk/gtkcalendar.c:2502
+#: ../gtk/gtkcalendar.c:1999 ../gtk/gtkcalendar.c:2503
 #, c-format
 msgctxt "calendar:week:digits"
 msgid "%d"
@@ -1737,7 +1782,7 @@ msgstr "%d"
 #. *
 #. * "%Y" is appropriate for most locales.
 #.
-#: ../gtk/gtkcalendar.c:2289
+#: ../gtk/gtkcalendar.c:2290
 msgctxt "calendar year format"
 msgid "%Y"
 msgstr "%Y"
@@ -1759,19 +1804,18 @@ msgctxt "Accelerator"
 msgid "Invalid"
 msgstr "Tak valid"
 
-#. This label is displayed in a treeview cell displaying
-#. * an accelerator when the cell is clicked to change the
-#. * acelerator.
+#. This label is displayed in a treeview cell displaying an accelerator
+#. * when the cell is clicked to change the acelerator.
 #.
-#: ../gtk/gtkcellrendereraccel.c:415 ../gtk/gtkcellrendereraccel.c:517
+#: ../gtk/gtkcellrendereraccel.c:415 ../gtk/gtkcellrendereraccel.c:509
 msgid "New accelerator…"
 msgstr "Akselerator baru…"
 
-#: ../gtk/gtkcellrendererprogress.c:376 ../gtk/gtkcellrendererprogress.c:469
+#: ../gtk/gtkcellrendererprogress.c:377 ../gtk/gtkcellrendererprogress.c:470
 #, c-format
 msgctxt "progress bar label"
-msgid "%d %%"
-msgstr "%d %%"
+msgid "%d %%"
+msgstr "%d %%"
 
 #: ../gtk/gtkcolorbutton.c:183 ../gtk/gtkcolorbutton.c:383
 msgid "Pick a Color"
@@ -2004,7 +2048,7 @@ msgctxt "Color channel"
 msgid "Alpha"
 msgstr "Alfa"
 
-#: ../gtk/gtkcolorswatch.c:483
+#: ../gtk/gtkcolorswatch.c:449
 msgid "_Customize"
 msgstr "_Gubah"
 
@@ -2018,21 +2062,16 @@ msgstr "_Gubah"
 msgid "default:mm"
 msgstr "default:mm"
 
-#: ../gtk/gtkcustompaperunixdialog.c:329 ../gtk/gtkmessagedialog.c:940
-#: ../gtk/resources/ui/gtkassistant.ui.h:6
-msgid "_Close"
-msgstr "_Tutup"
-
 #. And show the custom paper dialog
-#: ../gtk/gtkcustompaperunixdialog.c:405 ../gtk/gtkprintunixdialog.c:3305
+#: ../gtk/gtkcustompaperunixdialog.c:405 ../gtk/gtkprintunixdialog.c:3313
 msgid "Manage Custom Sizes"
 msgstr "Kelola Ukuran Sesuaian"
 
-#: ../gtk/gtkcustompaperunixdialog.c:567 ../gtk/gtkpagesetupunixdialog.c:815
+#: ../gtk/gtkcustompaperunixdialog.c:567 ../gtk/gtkpagesetupunixdialog.c:811
 msgid "inch"
 msgstr "inci"
 
-#: ../gtk/gtkcustompaperunixdialog.c:569 ../gtk/gtkpagesetupunixdialog.c:813
+#: ../gtk/gtkcustompaperunixdialog.c:569 ../gtk/gtkpagesetupunixdialog.c:809
 msgid "mm"
 msgstr "mm"
 
@@ -2077,30 +2116,30 @@ msgstr "_Kanan:"
 msgid "Paper Margins"
 msgstr "Margin Kertas"
 
-#: ../gtk/gtkentry.c:9575 ../gtk/gtkentry.c:9728 ../gtk/gtklabel.c:6530
-#: ../gtk/gtktextview.c:8841 ../gtk/gtktextview.c:9029
+#: ../gtk/gtkentry.c:9589 ../gtk/gtkentry.c:9744 ../gtk/gtklabel.c:6586
+#: ../gtk/gtktextview.c:8868 ../gtk/gtktextview.c:9058
 msgid "Cu_t"
 msgstr "Po_tong"
 
-#: ../gtk/gtkentry.c:9579 ../gtk/gtkentry.c:9731 ../gtk/gtklabel.c:6531
-#: ../gtk/gtktextview.c:8845 ../gtk/gtktextview.c:9033
+#: ../gtk/gtkentry.c:9593 ../gtk/gtkentry.c:9747 ../gtk/gtklabel.c:6587
+#: ../gtk/gtktextview.c:8872 ../gtk/gtktextview.c:9062
 msgid "_Copy"
 msgstr "_Salin"
 
-#: ../gtk/gtkentry.c:9583 ../gtk/gtkentry.c:9734 ../gtk/gtklabel.c:6532
-#: ../gtk/gtktextview.c:8847 ../gtk/gtktextview.c:9035
+#: ../gtk/gtkentry.c:9597 ../gtk/gtkentry.c:9750 ../gtk/gtklabel.c:6588
+#: ../gtk/gtktextview.c:8874 ../gtk/gtktextview.c:9064
 msgid "_Paste"
 msgstr "Tem_pel"
 
-#: ../gtk/gtkentry.c:9586 ../gtk/gtklabel.c:6534 ../gtk/gtktextview.c:8850
+#: ../gtk/gtkentry.c:9600 ../gtk/gtklabel.c:6590 ../gtk/gtktextview.c:8877
 msgid "_Delete"
 msgstr "_Hapus"
 
-#: ../gtk/gtkentry.c:9597 ../gtk/gtklabel.c:6543 ../gtk/gtktextview.c:8864
+#: ../gtk/gtkentry.c:9611 ../gtk/gtklabel.c:6599 ../gtk/gtktextview.c:8891
 msgid "Select _All"
 msgstr "Pilih Semu_a"
 
-#: ../gtk/gtkentry.c:10789
+#: ../gtk/gtkentry.c:10805
 msgid "Caps Lock is on"
 msgstr "Caps Lock menyala"
 
@@ -2108,7 +2147,7 @@ msgstr "Caps Lock menyala"
 msgid "Select a File"
 msgstr "Pilih Berkas"
 
-#: ../gtk/gtkfilechooserbutton.c:104 ../gtk/gtkplacessidebar.c:960
+#: ../gtk/gtkfilechooserbutton.c:104 ../gtk/gtkplacessidebar.c:983
 msgid "Desktop"
 msgstr "Desktop"
 
@@ -2117,7 +2156,7 @@ msgstr "Desktop"
 msgid "(None)"
 msgstr "(Nihil)"
 
-#: ../gtk/gtkfilechooserbutton.c:795 ../gtk/gtkplacessidebar.c:3273
+#: ../gtk/gtkfilechooserbutton.c:795 ../gtk/gtkplacessidebar.c:3391
 msgid "_Open"
 msgstr "Buk_a"
 
@@ -2138,11 +2177,11 @@ msgstr "%1$s pada %2$s"
 msgid "Type name of new folder"
 msgstr "Ketikkan nama folder baru"
 
-#: ../gtk/gtkfilechooserwidget.c:730
+#: ../gtk/gtkfilechooserwidget.c:732
 msgid "The folder could not be created"
 msgstr "Folder tidak dapat dibuat"
 
-#: ../gtk/gtkfilechooserwidget.c:743
+#: ../gtk/gtkfilechooserwidget.c:745
 msgid ""
 "The folder could not be created, as a file with the same name already "
 "exists.  Try using a different name for the folder, or rename the file first."
@@ -2151,110 +2190,110 @@ msgstr ""
 "yang sama. Silakan ganti nama folder ini, atau ganti nama berkas itu "
 "terlebih dahulu."
 
-#: ../gtk/gtkfilechooserwidget.c:757
+#: ../gtk/gtkfilechooserwidget.c:759
 msgid "You need to choose a valid filename."
 msgstr "Anda perlu memilih nama berkas yang valid."
 
-#: ../gtk/gtkfilechooserwidget.c:760
+#: ../gtk/gtkfilechooserwidget.c:762
 #, c-format
 msgid "Cannot create a file under %s as it is not a folder"
 msgstr "Tak bisa membuat berkas di bawah %s karena itu bukan folder"
 
-#: ../gtk/gtkfilechooserwidget.c:768
+#: ../gtk/gtkfilechooserwidget.c:770
 msgid "Cannot create file as the filename is too long"
 msgstr "Tak bisa membuat berkas karena nama terlalu panjang"
 
-#: ../gtk/gtkfilechooserwidget.c:769
+#: ../gtk/gtkfilechooserwidget.c:771
 msgid "Try using a shorter name."
 msgstr "Cobalah memakai nama yang lebih pendek."
 
-#: ../gtk/gtkfilechooserwidget.c:779
+#: ../gtk/gtkfilechooserwidget.c:781
 msgid "You may only select folders"
 msgstr "Anda hanya boleh memilih folder"
 
-#: ../gtk/gtkfilechooserwidget.c:780
+#: ../gtk/gtkfilechooserwidget.c:782
 msgid "The item that you selected is not a folder try using a different item."
 msgstr "Butir yang Anda pilih bukan folder; cobalah memilih butir lain."
 
-#: ../gtk/gtkfilechooserwidget.c:788
+#: ../gtk/gtkfilechooserwidget.c:790
 msgid "Invalid file name"
 msgstr "Nama berkas tidak sah"
 
-#: ../gtk/gtkfilechooserwidget.c:798
+#: ../gtk/gtkfilechooserwidget.c:800
 msgid "The folder contents could not be displayed"
 msgstr "Isi folder tidak dapat ditampilkan"
 
-#: ../gtk/gtkfilechooserwidget.c:1435
+#: ../gtk/gtkfilechooserwidget.c:1437
 msgid "Could not select file"
 msgstr "Tidak dapat memilih berkas"
 
-#: ../gtk/gtkfilechooserwidget.c:1665
+#: ../gtk/gtkfilechooserwidget.c:1667
 msgid "_Visit File"
 msgstr "Kunjungi _Berkas"
 
-#: ../gtk/gtkfilechooserwidget.c:1668
+#: ../gtk/gtkfilechooserwidget.c:1670
 msgid "_Copy Location"
 msgstr "Salin _Lokasi"
 
-#: ../gtk/gtkfilechooserwidget.c:1671
+#: ../gtk/gtkfilechooserwidget.c:1673
 msgid "_Add to Bookmarks"
 msgstr "T_ambah dalam Penanda Tautan"
 
-#: ../gtk/gtkfilechooserwidget.c:1678
+#: ../gtk/gtkfilechooserwidget.c:1680
 msgid "Show _Hidden Files"
 msgstr "_Tampilkan Berkas Tersembunyi"
 
-#: ../gtk/gtkfilechooserwidget.c:1681
+#: ../gtk/gtkfilechooserwidget.c:1683
 msgid "Show _Size Column"
 msgstr "Tampilkan Kolom _Ukuran"
 
 #. Label
-#: ../gtk/gtkfilechooserwidget.c:1973
+#: ../gtk/gtkfilechooserwidget.c:1975
 msgid "_Name:"
 msgstr "_Nama:"
 
-#: ../gtk/gtkfilechooserwidget.c:3648
+#: ../gtk/gtkfilechooserwidget.c:3650
 #, c-format
 msgid "Could not read the contents of %s"
 msgstr "Tidak dapat membaca isi dari %s"
 
-#: ../gtk/gtkfilechooserwidget.c:3652
+#: ../gtk/gtkfilechooserwidget.c:3654
 msgid "Could not read the contents of the folder"
 msgstr "Tidak bisa membaca isi dari folder"
 
-#: ../gtk/gtkfilechooserwidget.c:3759
+#: ../gtk/gtkfilechooserwidget.c:3761
 msgid "%H:%M"
 msgstr "%H:%M"
 
-#: ../gtk/gtkfilechooserwidget.c:3759
+#: ../gtk/gtkfilechooserwidget.c:3761
 msgid "%-I:%M %P"
 msgstr "%-H:%M"
 
-#: ../gtk/gtkfilechooserwidget.c:3761
+#: ../gtk/gtkfilechooserwidget.c:3763
 msgid "Yesterday at %H:%M"
 msgstr "Kemarin, pukul %H:%M"
 
-#: ../gtk/gtkfilechooserwidget.c:3761
+#: ../gtk/gtkfilechooserwidget.c:3763
 msgid "Yesterday at %-I:%M %P"
 msgstr "Kemarin, pukul %H:%M"
 
 #. Translators: We don't know whether this printer is
 #. * available to print to.
-#: ../gtk/gtkfilechooserwidget.c:3960 ../gtk/inspector/prop-editor.c:1572
+#: ../gtk/gtkfilechooserwidget.c:3962 ../gtk/inspector/prop-editor.c:1571
 #: ../modules/printbackends/cloudprint/gtkprintbackendcloudprint.c:748
 msgid "Unknown"
 msgstr "Tidak Diketahui"
 
-#: ../gtk/gtkfilechooserwidget.c:4433
+#: ../gtk/gtkfilechooserwidget.c:4435
 msgid "Cannot change to folder because it is not local"
 msgstr "Tidak dapat mengganti folder karena tidak berada pada komputer lokal"
 
-#: ../gtk/gtkfilechooserwidget.c:5219 ../gtk/gtkprintunixdialog.c:656
+#: ../gtk/gtkfilechooserwidget.c:5221 ../gtk/gtkprintunixdialog.c:656
 #, c-format
 msgid "A file named “%s” already exists.  Do you want to replace it?"
 msgstr "Berkas \"%s\" sudah ada. Timpa?"
 
-#: ../gtk/gtkfilechooserwidget.c:5222 ../gtk/gtkprintunixdialog.c:660
+#: ../gtk/gtkfilechooserwidget.c:5224 ../gtk/gtkprintunixdialog.c:660
 #, c-format
 msgid ""
 "The file already exists in “%s”.  Replacing it will overwrite its contents."
@@ -2262,23 +2301,23 @@ msgstr ""
 "Berkas sudah ada dalam \"%s\". Berkas lama akan diganti dengan yang baru "
 "bila Anda menimpanya."
 
-#: ../gtk/gtkfilechooserwidget.c:5227 ../gtk/gtkprintunixdialog.c:668
+#: ../gtk/gtkfilechooserwidget.c:5229 ../gtk/gtkprintunixdialog.c:668
 msgid "_Replace"
 msgstr "_Timpa"
 
-#: ../gtk/gtkfilechooserwidget.c:6046
+#: ../gtk/gtkfilechooserwidget.c:6048
 msgid "Could not start the search process"
 msgstr "Tidak dapat memulai proses pencarian"
 
-#: ../gtk/gtkfilechooserwidget.c:6047
+#: ../gtk/gtkfilechooserwidget.c:6049
 msgid ""
-"The program was not able to create a connection to the indexer daemon.  "
+"The program was not able to create a connection to the indexer daemon. "
 "Please make sure it is running."
 msgstr ""
-"Program tidak dapat membuat koneksi ke indexer daemon.  Pastikan program "
+"Program tidak dapat membuat koneksi ke daemon pengindeks.  Pastikan program "
 "sedang berjalan."
 
-#: ../gtk/gtkfilechooserwidget.c:6061
+#: ../gtk/gtkfilechooserwidget.c:6063
 msgid "Could not send the search request"
 msgstr "Tidak dapat mengirim permintaan pencarian"
 
@@ -2291,20 +2330,20 @@ msgstr "Tidak dapat mengirim permintaan pencarian"
 msgid "File System"
 msgstr "Sistem Berkas"
 
-#: ../gtk/gtkfontbutton.c:358
+#: ../gtk/gtkfontbutton.c:360
 msgid "Sans 12"
 msgstr "Sans 12"
 
-#: ../gtk/gtkfontbutton.c:443 ../gtk/gtkfontbutton.c:571
+#: ../gtk/gtkfontbutton.c:445 ../gtk/gtkfontbutton.c:573
 msgid "Pick a Font"
 msgstr "Pilih Fonta"
 
 #. Translators, these strings are names for various 'standard' cover
 #. * pages that the printing system may support.
 #.
-#: ../gtk/gtkfontbutton.c:1152 ../gtk/inspector/gestures.c:127
+#: ../gtk/gtkfontbutton.c:1182 ../gtk/inspector/gestures.c:127
 #: ../gtk/inspector/prop-editor.c:1202 ../gtk/inspector/size-groups.c:251
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:4958
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:5184
 msgid "None"
 msgstr "Nihil"
 
@@ -2312,7 +2351,7 @@ msgstr "Nihil"
 msgid "Application menu"
 msgstr "Menu aplikasi"
 
-#: ../gtk/gtkheaderbar.c:476 ../gtk/gtkwindow.c:8381
+#: ../gtk/gtkheaderbar.c:476 ../gtk/gtkwindow.c:8463
 msgid "Close"
 msgstr "Tutup"
 
@@ -2345,29 +2384,29 @@ msgctxt "input method menu"
 msgid "System (%s)"
 msgstr "Sistem (%s)"
 
-#: ../gtk/gtkinfobar.c:1192 ../gtk/gtkmessagedialog.c:376
+#: ../gtk/gtkinfobar.c:1193 ../gtk/gtkmessagedialog.c:376
 msgid "Information"
 msgstr "Informasi"
 
-#: ../gtk/gtkinfobar.c:1196 ../gtk/gtkmessagedialog.c:380
+#: ../gtk/gtkinfobar.c:1197 ../gtk/gtkmessagedialog.c:380
 msgid "Question"
 msgstr "Pertanyaan"
 
-#: ../gtk/gtkinfobar.c:1200 ../gtk/gtkmessagedialog.c:384
+#: ../gtk/gtkinfobar.c:1201 ../gtk/gtkmessagedialog.c:384
 msgid "Warning"
 msgstr "Peringatan"
 
-#: ../gtk/gtkinfobar.c:1204 ../gtk/gtkmessagedialog.c:388
+#: ../gtk/gtkinfobar.c:1205 ../gtk/gtkmessagedialog.c:388
 msgid "Error"
 msgstr "Galat"
 
 #. Open Link
-#: ../gtk/gtklabel.c:6511
+#: ../gtk/gtklabel.c:6567
 msgid "_Open Link"
 msgstr "_Buka Taut"
 
 #. Copy Link Address
-#: ../gtk/gtklabel.c:6520
+#: ../gtk/gtklabel.c:6576
 msgid "Copy _Link Address"
 msgstr "Sa_lin Alamat Taut"
 
@@ -2508,7 +2547,7 @@ msgstr "Menampilkan Opsi GTK+"
 msgid "default:LTR"
 msgstr "default:LTR"
 
-#: ../gtk/gtkmenubutton.c:654 ../gtk/inspector/window.ui.h:14
+#: ../gtk/gtkmenubutton.c:655 ../gtk/inspector/window.ui.h:16
 msgid "Menu"
 msgstr "Menu"
 
@@ -2610,8 +2649,8 @@ msgstr "Tidak dapat mengakhiri proses dengan PID %d: %s"
 msgid "Page %u"
 msgstr "Halaman %u"
 
-#: ../gtk/gtkpagesetup.c:644 ../gtk/gtkpapersize.c:850
-#: ../gtk/gtkpapersize.c:890
+#: ../gtk/gtkpagesetup.c:644 ../gtk/gtkpapersize.c:985
+#: ../gtk/gtkpapersize.c:1025
 msgid "Not a valid page setup file"
 msgstr "Bukan berkas tata halaman yang sah"
 
@@ -2623,7 +2662,7 @@ msgstr "Pencetak Apa Saja"
 msgid "For portable documents"
 msgstr "Untuk dokumen portabel"
 
-#: ../gtk/gtkpagesetupunixdialog.c:833
+#: ../gtk/gtkpagesetupunixdialog.c:829
 #, c-format
 msgid ""
 "Margins:\n"
@@ -2638,11 +2677,11 @@ msgstr ""
 " Atas: %s %s\n"
 " Bawah: %s %s"
 
-#: ../gtk/gtkpagesetupunixdialog.c:882 ../gtk/gtkprintunixdialog.c:3359
+#: ../gtk/gtkpagesetupunixdialog.c:878 ../gtk/gtkprintunixdialog.c:3367
 msgid "Manage Custom Sizes…"
 msgstr "Kelola Ukuran Gubahan…"
 
-#: ../gtk/gtkpagesetupunixdialog.c:904
+#: ../gtk/gtkpagesetupunixdialog.c:900
 #: ../gtk/resources/ui/gtkpagesetupunixdialog.ui.h:1
 #: ../gtk/resources/ui/gtkprintunixdialog.ui.h:44
 msgid "Page Setup"
@@ -2652,195 +2691,199 @@ msgstr "Atur Halaman"
 msgid "File System Root"
 msgstr "Akar Sistem Berkas"
 
-#: ../gtk/gtkplacessidebar.c:454
+#: ../gtk/gtkplacessidebar.c:455
 msgid "Devices"
 msgstr "Perangkat"
 
-#: ../gtk/gtkplacessidebar.c:462
+#: ../gtk/gtkplacessidebar.c:463
 msgid "Bookmarks"
 msgstr "Penanda Taut"
 
-#: ../gtk/gtkplacessidebar.c:934
+#: ../gtk/gtkplacessidebar.c:957
 msgid "Recent"
 msgstr "Baru-baru Ini Dipakai"
 
-#: ../gtk/gtkplacessidebar.c:936
+#: ../gtk/gtkplacessidebar.c:959
 msgid "Recent files"
 msgstr "Berkas yang baru-baru ini dipakai"
 
-#: ../gtk/gtkplacessidebar.c:945
+#: ../gtk/gtkplacessidebar.c:968
 msgid "Home"
 msgstr "Rumah"
 
-#: ../gtk/gtkplacessidebar.c:947
+#: ../gtk/gtkplacessidebar.c:970
 msgid "Open your personal folder"
 msgstr "Buka folder personal Anda."
 
-#: ../gtk/gtkplacessidebar.c:962
+#: ../gtk/gtkplacessidebar.c:985
 msgid "Open the contents of your desktop in a folder"
 msgstr "Buka isi dari desktop Anda dalam suatu folder"
 
-#: ../gtk/gtkplacessidebar.c:976
+#: ../gtk/gtkplacessidebar.c:999
 msgid "Enter Location"
 msgstr "Masukkan Lokasi"
 
-#: ../gtk/gtkplacessidebar.c:978
+#: ../gtk/gtkplacessidebar.c:1001
 msgid "Manually enter a location"
 msgstr "Masukkan suatu lokasi secara manual"
 
-#: ../gtk/gtkplacessidebar.c:989
+#: ../gtk/gtkplacessidebar.c:1012
 msgid "Trash"
 msgstr "Tong Sampah"
 
-#: ../gtk/gtkplacessidebar.c:991
+#: ../gtk/gtkplacessidebar.c:1014
 msgid "Open the trash"
 msgstr "Buka tong sampah"
 
-#: ../gtk/gtkplacessidebar.c:1054 ../gtk/gtkplacessidebar.c:1082
-#: ../gtk/gtkplacessidebar.c:1290
+#: ../gtk/gtkplacessidebar.c:1077 ../gtk/gtkplacessidebar.c:1105
+#: ../gtk/gtkplacessidebar.c:1313
 #, c-format
-msgid "Mount and open %s"
-msgstr "Kait dan buka %s"
+msgid "Mount and open “%s”"
+msgstr "Kait dan buka \"%s\""
 
-#: ../gtk/gtkplacessidebar.c:1163
+#: ../gtk/gtkplacessidebar.c:1186
 msgid "Open the contents of the file system"
 msgstr "Buka isi dari sistem berkas"
 
-#: ../gtk/gtkplacessidebar.c:1253
+#: ../gtk/gtkplacessidebar.c:1276
 msgid "Network"
 msgstr "Jaringan"
 
-#: ../gtk/gtkplacessidebar.c:1259
+#: ../gtk/gtkplacessidebar.c:1282
 msgid "Browse Network"
 msgstr "Ramban Jaringan"
 
-#: ../gtk/gtkplacessidebar.c:1261
+#: ../gtk/gtkplacessidebar.c:1284
 msgid "Browse the contents of the network"
 msgstr "Ramban isi jaringan"
 
-#: ../gtk/gtkplacessidebar.c:1269
+#: ../gtk/gtkplacessidebar.c:1292
 msgid "Connect to Server"
 msgstr "Menyambung ke Server"
 
-#: ../gtk/gtkplacessidebar.c:1271
+#: ../gtk/gtkplacessidebar.c:1294
 msgid "Connect to a network server address"
 msgstr "Menyambung ke alamat server jaringan"
 
-#: ../gtk/gtkplacessidebar.c:1673
+#: ../gtk/gtkplacessidebar.c:1696
 msgid "New bookmark"
 msgstr "Tanda taut baru"
 
 #. Adjust start/stop items to reflect the type of the drive
-#: ../gtk/gtkplacessidebar.c:2230 ../gtk/gtkplacessidebar.c:3351
+#: ../gtk/gtkplacessidebar.c:2253 ../gtk/gtkplacessidebar.c:3469
 msgid "_Start"
 msgstr "_Mulai"
 
-#: ../gtk/gtkplacessidebar.c:2231 ../gtk/gtkplacessidebar.c:3358
+#: ../gtk/gtkplacessidebar.c:2254 ../gtk/gtkplacessidebar.c:3476
 msgid "_Stop"
 msgstr "_Hentikan"
 
 #. start() for type G_DRIVE_START_STOP_TYPE_SHUTDOWN is normally not used
-#: ../gtk/gtkplacessidebar.c:2238
+#: ../gtk/gtkplacessidebar.c:2261
 msgid "_Power On"
 msgstr "_Nyalakan"
 
-#: ../gtk/gtkplacessidebar.c:2239
+#: ../gtk/gtkplacessidebar.c:2262
 msgid "_Safely Remove Drive"
 msgstr "Lepa_s Kandar Dengan Aman"
 
-#: ../gtk/gtkplacessidebar.c:2243
+#: ../gtk/gtkplacessidebar.c:2266
 msgid "_Connect Drive"
 msgstr "_Sambungkan Kandar"
 
-#: ../gtk/gtkplacessidebar.c:2244
+#: ../gtk/gtkplacessidebar.c:2267
 msgid "_Disconnect Drive"
 msgstr "Putuskan Kan_dar"
 
-#: ../gtk/gtkplacessidebar.c:2248
+#: ../gtk/gtkplacessidebar.c:2271
 msgid "_Start Multi-disk Device"
 msgstr "Mulai Perangkat Multi-di_ska"
 
-#: ../gtk/gtkplacessidebar.c:2249
+#: ../gtk/gtkplacessidebar.c:2272
 msgid "_Stop Multi-disk Device"
 msgstr "Hentikan Perangkat Multi-di_ska"
 
 #. stop() for type G_DRIVE_START_STOP_TYPE_PASSWORD is normally not used
-#: ../gtk/gtkplacessidebar.c:2254
+#: ../gtk/gtkplacessidebar.c:2277
 msgid "_Unlock Drive"
 msgstr "Buka K_unci Kandar"
 
-#: ../gtk/gtkplacessidebar.c:2255
+#: ../gtk/gtkplacessidebar.c:2278
 msgid "_Lock Drive"
 msgstr "_Kunci Kandar"
 
-#: ../gtk/gtkplacessidebar.c:2284 ../gtk/gtkplacessidebar.c:3033
+#: ../gtk/gtkplacessidebar.c:2307 ../gtk/gtkplacessidebar.c:3151
 #, c-format
-msgid "Unable to start %s"
-msgstr "Tak bisa memulai %s"
+msgid "Unable to start “%s”"
+msgstr "Tak bisa memulai \"%s\""
 
-#: ../gtk/gtkplacessidebar.c:2314
+#: ../gtk/gtkplacessidebar.c:2337
 #, c-format
 msgid "Unable to access “%s”"
 msgstr "Tak bisa mengakses \"%s\""
 
-#: ../gtk/gtkplacessidebar.c:2624
+#: ../gtk/gtkplacessidebar.c:2647
 #, c-format
-msgid "Unable to unmount %s"
-msgstr "Tak bisa melepas kait %s"
+msgid "Unable to unmount “%s”"
+msgstr "Tak bisa melepas kait \"%s\""
 
-#: ../gtk/gtkplacessidebar.c:2750
+#: ../gtk/gtkplacessidebar.c:2856
 #, c-format
-msgid "Unable to stop %s"
-msgstr "Tak bisa menghentikan %s"
+msgid "Unable to stop “%s”"
+msgstr "Tak bisa menghentikan \"%s\""
 
-#: ../gtk/gtkplacessidebar.c:2779 ../gtk/gtkplacessidebar.c:2808
-#: ../gtk/gtkplacessidebar.c:2837
+#: ../gtk/gtkplacessidebar.c:2885
+#, c-format
+msgid "Unable to eject “%s”"
+msgstr "Tak bisa mengeluarkan \"%s\""
+
+#: ../gtk/gtkplacessidebar.c:2914 ../gtk/gtkplacessidebar.c:2943
 #, c-format
 msgid "Unable to eject %s"
 msgstr "Tak bisa mengeluarkan %s"
 
-#: ../gtk/gtkplacessidebar.c:2983
+#: ../gtk/gtkplacessidebar.c:3101
 #, c-format
-msgid "Unable to poll %s for media changes"
-msgstr "Tak bisa mem-poll %s untuk pergantian media"
+msgid "Unable to poll “%s” for media changes"
+msgstr "Tak bisa mem-poll \"%s\" untuk pergantian media"
 
-#: ../gtk/gtkplacessidebar.c:3281
+#: ../gtk/gtkplacessidebar.c:3399
 msgid "Open in New _Tab"
 msgstr "Buka dalam _Tab Baru"
 
-#: ../gtk/gtkplacessidebar.c:3290
+#: ../gtk/gtkplacessidebar.c:3408
 msgid "Open in New _Window"
 msgstr "Buka dalam _Jendela Baru"
 
-#: ../gtk/gtkplacessidebar.c:3299
+#: ../gtk/gtkplacessidebar.c:3417
 msgid "_Add Bookmark"
 msgstr "T_ambah Tanda Taut"
 
-#: ../gtk/gtkplacessidebar.c:3305
+#: ../gtk/gtkplacessidebar.c:3423
 msgid "Remove"
 msgstr "Hapus"
 
-#: ../gtk/gtkplacessidebar.c:3312
+#: ../gtk/gtkplacessidebar.c:3430
 msgid "Rename…"
 msgstr "Ubah Nama…"
 
-#: ../gtk/gtkplacessidebar.c:3323
+#: ../gtk/gtkplacessidebar.c:3441
 msgid "_Mount"
 msgstr "_Kait"
 
-#: ../gtk/gtkplacessidebar.c:3330
+#: ../gtk/gtkplacessidebar.c:3448
 msgid "_Unmount"
 msgstr "_Lepas Kait"
 
-#: ../gtk/gtkplacessidebar.c:3337
+#: ../gtk/gtkplacessidebar.c:3455
 msgid "_Eject"
 msgstr "_Keluarkan"
 
-#: ../gtk/gtkplacessidebar.c:3344
+#: ../gtk/gtkplacessidebar.c:3462
 msgid "_Detect Media"
 msgstr "_Deteksi Media"
 
-#: ../gtk/gtkplacessidebar.c:3953
+#: ../gtk/gtkplacessidebar.c:4077
 msgid "Computer"
 msgstr "Komputer"
 
@@ -2950,7 +2993,7 @@ msgstr "Habis kertas"
 
 #. Translators: this is a printer status.
 #: ../gtk/gtkprintoperation-win32.c:620
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2421
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2476
 msgid "Paused"
 msgstr "Ditahan"
 
@@ -3007,7 +3050,7 @@ msgstr "_Cetak"
 msgid "Getting printer information failed"
 msgstr "Gagal memperoleh informasi pencetak"
 
-#: ../gtk/gtkprintunixdialog.c:2041
+#: ../gtk/gtkprintunixdialog.c:2049
 msgid "Getting printer information…"
 msgstr "Mengambil informasi pencetak…"
 
@@ -3017,73 +3060,79 @@ msgstr "Mengambil informasi pencetak…"
 #. Translators: These strings name the possible arrangements of
 #. * multiple pages on a sheet when printing
 #.
-#: ../gtk/gtkprintunixdialog.c:3088
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:4907
+#: ../gtk/gtkprintunixdialog.c:3096
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:5133
 msgid "Left to right, top to bottom"
 msgstr "Kiri ke kanan, puncak ke dasar"
 
-#: ../gtk/gtkprintunixdialog.c:3088
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:4907
+#: ../gtk/gtkprintunixdialog.c:3096
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:5133
 msgid "Left to right, bottom to top"
 msgstr "Kiri ke kanan, dasar ke puncak"
 
-#: ../gtk/gtkprintunixdialog.c:3089
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:4908
+#: ../gtk/gtkprintunixdialog.c:3097
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:5134
 msgid "Right to left, top to bottom"
 msgstr "Kanan ke kiri, puncak ke dasar"
 
-#: ../gtk/gtkprintunixdialog.c:3089
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:4908
+#: ../gtk/gtkprintunixdialog.c:3097
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:5134
 msgid "Right to left, bottom to top"
 msgstr "Kanan ke kiri, dasar ke puncak"
 
-#: ../gtk/gtkprintunixdialog.c:3090
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:4909
+#: ../gtk/gtkprintunixdialog.c:3098
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:5135
 msgid "Top to bottom, left to right"
 msgstr "Puncak ke dasar, kiri ke kanan"
 
-#: ../gtk/gtkprintunixdialog.c:3090
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:4909
+#: ../gtk/gtkprintunixdialog.c:3098
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:5135
 msgid "Top to bottom, right to left"
 msgstr "Puncak ke dasar, kanan ke kiri"
 
-#: ../gtk/gtkprintunixdialog.c:3091
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:4910
+#: ../gtk/gtkprintunixdialog.c:3099
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:5136
 msgid "Bottom to top, left to right"
 msgstr "Dasar ke puncak, kiri ke kanan"
 
-#: ../gtk/gtkprintunixdialog.c:3091
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:4910
+#: ../gtk/gtkprintunixdialog.c:3099
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:5136
 msgid "Bottom to top, right to left"
 msgstr "Dasar ke puncak, kanan ke kiri"
 
 #. Translators, this string is used to label the option in the print
 #. * dialog that controls in what order multiple pages are arranged
 #.
-#: ../gtk/gtkprintunixdialog.c:3095 ../gtk/gtkprintunixdialog.c:3108
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:4987
+#: ../gtk/gtkprintunixdialog.c:3103 ../gtk/gtkprintunixdialog.c:3116
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:5213
 msgid "Page Ordering"
 msgstr "Urutan Halaman"
 
-#: ../gtk/gtkprintunixdialog.c:3124
+#: ../gtk/gtkprintunixdialog.c:3132
 msgid "Left to right"
 msgstr "Kiri ke kanan"
 
-#: ../gtk/gtkprintunixdialog.c:3125
+#: ../gtk/gtkprintunixdialog.c:3133
 msgid "Right to left"
 msgstr "Kanan ke kiri"
 
-#: ../gtk/gtkprintunixdialog.c:3137
+#: ../gtk/gtkprintunixdialog.c:3145
 msgid "Top to bottom"
 msgstr "Puncak ke dasar"
 
-#: ../gtk/gtkprintunixdialog.c:3138
+#: ../gtk/gtkprintunixdialog.c:3146
 msgid "Bottom to top"
 msgstr "Dasar ke puncak"
 
-#: ../gtk/gtkprintunixdialog.c:3381
+#: ../gtk/gtkprintunixdialog.c:3389
 msgid "Print"
 msgstr "Cetak"
+
+#: ../gtk/gtkprogressbar.c:447
+#, c-format
+msgctxt "progress bar label"
+msgid "%.0f %%"
+msgstr "%.0f %%"
 
 #: ../gtk/gtkrecentchooserdefault.c:1077 ../gtk/gtkrecentchooserdefault.c:1114
 #, c-format
@@ -3134,8 +3183,8 @@ msgstr "Tidak menemukan item"
 
 #: ../gtk/gtkrecentchoosermenu.c:534 ../gtk/gtkrecentchoosermenu.c:590
 #, c-format
-msgid "No recently used resource found with URI `%s'"
-msgstr "Tidak ada sumber yang sering digunakan dengan URI '%s'"
+msgid "No recently used resource found with URI '%s'"
+msgstr "Tidak ada sumber yang baru digunakan dengan URI '%s'"
 
 #: ../gtk/gtkrecentchoosermenu.c:789
 #, c-format
@@ -3188,7 +3237,7 @@ msgstr "Cari"
 #. * glyphs then use MEDIUM VERTICAL BAR (U+2759) as the text for
 #. * the state
 #.
-#: ../gtk/gtkswitch.c:397 ../gtk/gtkswitch.c:448 ../gtk/gtkswitch.c:634
+#: ../gtk/gtkswitch.c:401 ../gtk/gtkswitch.c:453 ../gtk/gtkswitch.c:633
 msgctxt "switch"
 msgid "ON"
 msgstr "NYALA"
@@ -3196,7 +3245,7 @@ msgstr "NYALA"
 #. Translators: if the "off" state label requires more than three
 #. * glyphs then use WHITE CIRCLE (U+25CB) as the text for the state
 #.
-#: ../gtk/gtkswitch.c:405 ../gtk/gtkswitch.c:449 ../gtk/gtkswitch.c:649
+#: ../gtk/gtkswitch.c:409 ../gtk/gtkswitch.c:454 ../gtk/gtkswitch.c:648
 msgctxt "switch"
 msgid "OFF"
 msgstr "MATI"
@@ -3376,14 +3425,14 @@ msgstr "Volume Penuh"
 #: ../gtk/gtkvolumebutton.c:249
 #, c-format
 msgctxt "volume percentage"
-msgid "%d %%"
-msgstr "%d %%"
+msgid "%d %%"
+msgstr "%d %%"
 
-#: ../gtk/gtkwindow.c:11655
+#: ../gtk/gtkwindow.c:11744
 msgid "Do you want to use GTK+ Inspector?"
 msgstr "Apakah Anda ingin memakai GTK+ Inspector?"
 
-#: ../gtk/gtkwindow.c:11657
+#: ../gtk/gtkwindow.c:11746
 msgid ""
 "GTK+ Inspector is an interactive debugger that lets you explore and modify "
 "the internals of any GTK+ application. Using it may cause the application to "
@@ -3392,6 +3441,10 @@ msgstr ""
 "GTK+ Inspector adalah suatu pengawakutu interaktif yang memungkinkan Anda "
 "mengeksplorasi dan mengubah internal dari sebarang aplikasi GTK+. Memakainya "
 "dapat menyebabkan aplikasi rusak atau remuk."
+
+#: ../gtk/gtkwindow.c:11751
+msgid "Don't show this message again"
+msgstr "Jangan tunjukkan pesan ini lagi"
 
 #: ../gtk/inspector/action-editor.c:281
 msgid "Activate"
@@ -3408,7 +3461,7 @@ msgid "Prefix"
 msgstr "Prefiks"
 
 #: ../gtk/inspector/actions.ui.h:2 ../gtk/inspector/classes-list.ui.h:3
-#: ../gtk/inspector/signals-list.ui.h:3 ../gtk/inspector/widget-tree.ui.h:2
+#: ../gtk/inspector/object-tree.ui.h:2 ../gtk/inspector/signals-list.ui.h:3
 #: ../gtk/resources/ui/gtkfilechooserwidget.ui.h:4
 msgid "Name"
 msgstr "Nama"
@@ -3420,10 +3473,6 @@ msgstr "Difungsikan"
 #: ../gtk/inspector/actions.ui.h:4
 msgid "Parameter Type"
 msgstr "Tipe parameter"
-
-#: ../gtk/inspector/button-path.ui.h:1
-msgid "Choose a widget through the inspector"
-msgstr "Pilih suatu widget melalui inspector"
 
 #: ../gtk/inspector/classes-list.c:122
 msgid "New class"
@@ -3446,33 +3495,33 @@ msgstr "Tambah kelas"
 msgid "Restore defaults for this widget"
 msgstr "Kembalikan baku bagi widget ini"
 
-#: ../gtk/inspector/css-editor.c:86 ../gtk/inspector/css-editor.c:92
+#: ../gtk/inspector/css-editor.c:89 ../gtk/inspector/css-editor.c:95
 msgid "You can type here any CSS rule recognized by GTK+."
 msgstr ""
 "Anda dapat mengetikkan di sini sebarang aturan CSS yang dikenal oleh GTK+."
 
-#: ../gtk/inspector/css-editor.c:87 ../gtk/inspector/css-editor.c:93
+#: ../gtk/inspector/css-editor.c:90 ../gtk/inspector/css-editor.c:96
 msgid ""
-"You can temporarily disable this custom CSS by clicking on the \"Pause\" "
+"You can temporarily disable this custom CSS by clicking on the “Pause” "
 "button above."
 msgstr ""
-"Adan dapat mematikan CSS ubahan ini sementara dengan mengklik tombol \"Jeda"
+"Anda dapat mematikan sementara CSS ubahan ini dengan mengklik tombol \"Jeda"
 "\" di atas."
 
-#: ../gtk/inspector/css-editor.c:88
+#: ../gtk/inspector/css-editor.c:91
 msgid "Changes are applied instantly and globally, for the whole application."
 msgstr ""
 "Perubahan diterapkan seketika dan secara global, bagi seluruh aplikasi."
 
-#: ../gtk/inspector/css-editor.c:94
+#: ../gtk/inspector/css-editor.c:97
 msgid "Changes are applied instantly, only for this selected widget."
 msgstr "Perubahan diterapkan seketika, hanya bagi widget yang dipilih ini."
 
-#: ../gtk/inspector/css-editor.c:156
+#: ../gtk/inspector/css-editor.c:159
 msgid "Saving CSS failed"
 msgstr "Penyimpanan CSS gagal"
 
-#: ../gtk/inspector/css-editor.c:196
+#: ../gtk/inspector/css-editor.c:199
 msgid "_Save"
 msgstr "_Simpan"
 
@@ -3515,7 +3564,7 @@ msgid "Unnamed section"
 msgstr "Seksi tanpa nama"
 
 #. vim: set et sw=2 ts=2:
-#: ../gtk/inspector/menu.ui.h:1 ../gtk/inspector/widget-tree.ui.h:3
+#: ../gtk/inspector/menu.ui.h:1 ../gtk/inspector/object-tree.ui.h:3
 msgid "Label"
 msgstr "Label"
 
@@ -3538,7 +3587,7 @@ msgstr "Widget Baku"
 #: ../gtk/inspector/misc-info.ui.h:4 ../gtk/inspector/misc-info.ui.h:6
 #: ../gtk/inspector/prop-editor.c:1005 ../gtk/inspector/prop-editor.c:1185
 #: ../gtk/inspector/prop-editor.c:1310 ../gtk/inspector/prop-editor.c:1421
-#: ../gtk/inspector/window.ui.h:4
+#: ../gtk/inspector/window.ui.h:5
 msgid "Properties"
 msgstr "Properti"
 
@@ -3553,6 +3602,14 @@ msgstr "Ukuran teralokasikan"
 #: ../gtk/inspector/object-hierarchy.ui.h:1
 msgid "Object Hierarchy"
 msgstr "Hirarki Objek"
+
+#: ../gtk/inspector/object-tree.ui.h:1
+msgid "Object"
+msgstr "Objek"
+
+#: ../gtk/inspector/object-tree.ui.h:4
+msgid "Address"
+msgstr "Alamat"
 
 #: ../gtk/inspector/prop-editor.c:617
 #, c-format
@@ -3616,24 +3673,23 @@ msgstr "Pengikatan:"
 msgid "Setting:"
 msgstr "Pengaturan:"
 
-#: ../gtk/inspector/prop-editor.c:1555
+#: ../gtk/inspector/prop-editor.c:1554
 msgid "Source:"
 msgstr "Sumber:"
 
-#: ../gtk/inspector/prop-editor.c:1560
+#: ../gtk/inspector/prop-editor.c:1559
 msgid "Default"
 msgstr "Baku"
 
-#: ../gtk/inspector/prop-editor.c:1563
+#: ../gtk/inspector/prop-editor.c:1562
 msgid "Theme"
 msgstr "Tema"
 
-#: ../gtk/inspector/prop-editor.c:1566
+#: ../gtk/inspector/prop-editor.c:1565
 msgid "XSettings"
 msgstr "XSettings"
 
 #. vim: set et:
-#. vim: set et sw=2 ts=2:
 #: ../gtk/inspector/prop-list.ui.h:1 ../gtk/inspector/style-prop-list.ui.h:1
 msgid "Property"
 msgstr "Properti"
@@ -3655,17 +3711,30 @@ msgstr "Didefinisikan Pada"
 msgid "Path"
 msgstr "Path"
 
-#: ../gtk/inspector/resource-list.ui.h:2
+#: ../gtk/inspector/resource-list.ui.h:2 ../gtk/inspector/signals-list.ui.h:5
+msgid "Count"
+msgstr "Cacah"
+
+#: ../gtk/inspector/resource-list.ui.h:3
+#: ../gtk/resources/ui/gtkfilechooserwidget.ui.h:5
+msgid "Size"
+msgstr "Ukuran"
+
+#: ../gtk/inspector/resource-list.ui.h:4
+msgid "Name:"
+msgstr "Nama:"
+
+#: ../gtk/inspector/resource-list.ui.h:5
 msgid "Type:"
 msgstr "Tipe:"
 
-#: ../gtk/inspector/resource-list.ui.h:3
-msgid "Count:"
-msgstr "Cacah:"
-
-#: ../gtk/inspector/resource-list.ui.h:4
+#: ../gtk/inspector/resource-list.ui.h:6
 msgid "Size:"
 msgstr "Ukuran:"
+
+#: ../gtk/inspector/selector.ui.h:1 ../gtk/inspector/window.ui.h:9
+msgid "Selector"
+msgstr "Pemilih"
 
 #: ../gtk/inspector/signals-list.c:109
 msgid "Yes"
@@ -3683,10 +3752,6 @@ msgstr "Bersihkan log"
 #: ../gtk/inspector/signals-list.ui.h:4
 msgid "Connected"
 msgstr "Tersambung"
-
-#: ../gtk/inspector/signals-list.ui.h:5
-msgid "Count"
-msgstr "Cacah"
 
 #: ../gtk/inspector/size-groups.c:223
 msgid "Ignore hidden"
@@ -3707,6 +3772,43 @@ msgstr "Vertikal"
 #: ../gtk/inspector/size-groups.c:254
 msgid "Both"
 msgstr "Keduanya"
+
+#. vim: set et sw=2 ts=2:
+#: ../gtk/inspector/statistics.ui.h:1
+msgid "Collect Statistics"
+msgstr "Mengumpulkan Statistik"
+
+#: ../gtk/inspector/statistics.ui.h:2
+msgid "Type"
+msgstr "Tipe"
+
+#: ../gtk/inspector/statistics.ui.h:3
+msgid "Self 1"
+msgstr "Mandiri 1"
+
+#: ../gtk/inspector/statistics.ui.h:4
+msgid "Cumulative 1"
+msgstr "Kumulatif 1"
+
+#: ../gtk/inspector/statistics.ui.h:5
+msgid "Self 2"
+msgstr "Mandiri 2"
+
+#: ../gtk/inspector/statistics.ui.h:6
+msgid "Cumulative 2"
+msgstr "Kumulatif 2"
+
+#: ../gtk/inspector/statistics.ui.h:7 ../gtk/inspector/statistics.ui.h:9
+msgid "Self"
+msgstr "Mandiri"
+
+#: ../gtk/inspector/statistics.ui.h:8 ../gtk/inspector/statistics.ui.h:10
+msgid "Cumulative"
+msgstr "Kumulatif"
+
+#: ../gtk/inspector/statistics.ui.h:11
+msgid "Enable statistics with GOBJECT_DEBUG=instance-count"
+msgstr "Fungsikan statistik dengan GOBJECT_DEBUG=instance-count"
 
 #. this is the header for the location column in the print dialog
 #: ../gtk/inspector/style-prop-list.ui.h:3
@@ -3779,88 +3881,83 @@ msgstr "Tampilkan Singgahan Piksel"
 msgid "Simulate touchscreen"
 msgstr "Simulasikan layar sentuh"
 
-#: ../gtk/inspector/widget-tree.ui.h:1
-msgid "Object"
-msgstr "Objek"
-
-#: ../gtk/inspector/widget-tree.ui.h:4
-msgid "Address"
-msgstr "Alamat"
-
-#: ../gtk/inspector/window.c:143
-#, c-format
-msgid "GTK+ Inspector — %s"
-msgstr "GTK+ Inspector — %s"
-
 #. vim: set et sw=2 ts=2:
 #: ../gtk/inspector/window.ui.h:1
-msgid "Send Widget to Shell"
-msgstr "Kirim Widget ke Shell"
-
-#: ../gtk/inspector/window.ui.h:2
 msgid "Select an Object"
 msgstr "Pilih suatu Objek"
 
+#: ../gtk/inspector/window.ui.h:2
+msgid "Show all Objects"
+msgstr "Tampilkan semua Objek"
+
+#: ../gtk/inspector/window.ui.h:3
+msgid "Show all Resources"
+msgstr "Tampilkan semua Sumber Daya"
+
 #. Translators: "Miscellaneous" is the label for a button, that opens
 #. up an extra panel of settings in a print dialog.
-#: ../gtk/inspector/window.ui.h:3
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:4180
+#: ../gtk/inspector/window.ui.h:4
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:4248
 msgid "Miscellaneous"
 msgstr "Lain-lain"
 
-#: ../gtk/inspector/window.ui.h:5
+#: ../gtk/inspector/window.ui.h:6
 msgid "Signals"
 msgstr "Sinyal"
-
-#: ../gtk/inspector/window.ui.h:6
-msgid "Hierarchy"
-msgstr "Hirarki"
 
 #: ../gtk/inspector/window.ui.h:7
 msgid "Child Properties"
 msgstr "Properti Anak"
 
 #: ../gtk/inspector/window.ui.h:8
+msgid "Hierarchy"
+msgstr "Hirarki"
+
+#: ../gtk/inspector/window.ui.h:10
 msgid "CSS Classes"
 msgstr "Kelas CSS"
 
-#: ../gtk/inspector/window.ui.h:9
+#: ../gtk/inspector/window.ui.h:11
 msgid "Style Properties"
 msgstr "Properti Gaya"
 
-#: ../gtk/inspector/window.ui.h:10 ../gtk/inspector/window.ui.h:18
+#: ../gtk/inspector/window.ui.h:12 ../gtk/inspector/window.ui.h:21
 msgid "Custom CSS"
 msgstr "CSS ubahan"
 
-#: ../gtk/inspector/window.ui.h:11
+#: ../gtk/inspector/window.ui.h:13
 msgid "Size Groups"
 msgstr "Grup Ukuran"
 
-#: ../gtk/inspector/window.ui.h:12
+#: ../gtk/inspector/window.ui.h:14
 msgid "Data"
 msgstr "Data"
 
-#: ../gtk/inspector/window.ui.h:13
+#: ../gtk/inspector/window.ui.h:15
 msgid "Actions"
 msgstr "Aksi"
 
-#: ../gtk/inspector/window.ui.h:15
+#: ../gtk/inspector/window.ui.h:17
 msgid "Gestures"
 msgstr "Gestur"
 
-#: ../gtk/inspector/window.ui.h:16
+#: ../gtk/inspector/window.ui.h:18
 msgid "Objects"
 msgstr "Objek"
 
-#: ../gtk/inspector/window.ui.h:17
+#: ../gtk/inspector/window.ui.h:19
+msgid "Statistics"
+msgstr "Statistik"
+
+#: ../gtk/inspector/window.ui.h:20
 msgid "Resources"
 msgstr "Sumber Daya"
 
-#: ../gtk/inspector/window.ui.h:19
+#: ../gtk/inspector/window.ui.h:22
 msgid "Visual"
 msgstr "Visual"
 
-#: ../gtk/inspector/window.ui.h:20
+#: ../gtk/inspector/window.ui.h:23
 #: ../gtk/resources/ui/gtkprintunixdialog.ui.h:24
 msgid "General"
 msgstr "Umum"
@@ -3872,8 +3969,8 @@ msgstr "asme_f"
 
 #: ../gtk/paper_names_offsets.c:5
 msgctxt "paper size"
-msgid "A0x2"
-msgstr "A0x2"
+msgid "A0×2"
+msgstr "A0×2"
 
 #: ../gtk/paper_names_offsets.c:6
 msgctxt "paper size"
@@ -3882,8 +3979,8 @@ msgstr "A0"
 
 #: ../gtk/paper_names_offsets.c:7
 msgctxt "paper size"
-msgid "A0x3"
-msgstr "A0x3"
+msgid "A0×3"
+msgstr "A0×3"
 
 #: ../gtk/paper_names_offsets.c:8
 msgctxt "paper size"
@@ -3897,13 +3994,13 @@ msgstr "A10"
 
 #: ../gtk/paper_names_offsets.c:10
 msgctxt "paper size"
-msgid "A1x3"
-msgstr "A1x3"
+msgid "A1×3"
+msgstr "A1×3"
 
 #: ../gtk/paper_names_offsets.c:11
 msgctxt "paper size"
-msgid "A1x4"
-msgstr "A1x4"
+msgid "A1×4"
+msgstr "A1×4"
 
 #: ../gtk/paper_names_offsets.c:12
 msgctxt "paper size"
@@ -3912,18 +4009,18 @@ msgstr "A2"
 
 #: ../gtk/paper_names_offsets.c:13
 msgctxt "paper size"
-msgid "A2x3"
-msgstr "A2x3"
+msgid "A2×3"
+msgstr "A2×3"
 
 #: ../gtk/paper_names_offsets.c:14
 msgctxt "paper size"
-msgid "A2x4"
-msgstr "A2x4"
+msgid "A2×4"
+msgstr "A2×4"
 
 #: ../gtk/paper_names_offsets.c:15
 msgctxt "paper size"
-msgid "A2x5"
-msgstr "A2x5"
+msgid "A2×5"
+msgstr "A2×5"
 
 #: ../gtk/paper_names_offsets.c:16
 msgctxt "paper size"
@@ -3937,28 +4034,28 @@ msgstr "A3 Ekstra"
 
 #: ../gtk/paper_names_offsets.c:18
 msgctxt "paper size"
-msgid "A3x3"
-msgstr "A3x3"
+msgid "A3×3"
+msgstr "A3×3"
 
 #: ../gtk/paper_names_offsets.c:19
 msgctxt "paper size"
-msgid "A3x4"
-msgstr "A3x4"
+msgid "A3×4"
+msgstr "A3×4"
 
 #: ../gtk/paper_names_offsets.c:20
 msgctxt "paper size"
-msgid "A3x5"
-msgstr "A3x5"
+msgid "A3×5"
+msgstr "A3×5"
 
 #: ../gtk/paper_names_offsets.c:21
 msgctxt "paper size"
-msgid "A3x6"
-msgstr "A3x6"
+msgid "A3×6"
+msgstr "A3×6"
 
 #: ../gtk/paper_names_offsets.c:22
 msgctxt "paper size"
-msgid "A3x7"
-msgstr "A3x7"
+msgid "A3×7"
+msgstr "A3×7"
 
 #: ../gtk/paper_names_offsets.c:23
 msgctxt "paper size"
@@ -3977,38 +4074,38 @@ msgstr "A4 Tab"
 
 #: ../gtk/paper_names_offsets.c:26
 msgctxt "paper size"
-msgid "A4x3"
-msgstr "A4x3"
+msgid "A4×3"
+msgstr "A4×3"
 
 #: ../gtk/paper_names_offsets.c:27
 msgctxt "paper size"
-msgid "A4x4"
-msgstr "A4x4"
+msgid "A4×4"
+msgstr "A4×4"
 
 #: ../gtk/paper_names_offsets.c:28
 msgctxt "paper size"
-msgid "A4x5"
-msgstr "A4x5"
+msgid "A4×5"
+msgstr "A4×5"
 
 #: ../gtk/paper_names_offsets.c:29
 msgctxt "paper size"
-msgid "A4x6"
-msgstr "A4x6"
+msgid "A4×6"
+msgstr "A4×6"
 
 #: ../gtk/paper_names_offsets.c:30
 msgctxt "paper size"
-msgid "A4x7"
-msgstr "A4x7"
+msgid "A4×7"
+msgstr "A4×7"
 
 #: ../gtk/paper_names_offsets.c:31
 msgctxt "paper size"
-msgid "A4x8"
-msgstr "A4x8"
+msgid "A4×8"
+msgstr "A4×8"
 
 #: ../gtk/paper_names_offsets.c:32
 msgctxt "paper size"
-msgid "A4x9"
-msgstr "A4x9"
+msgid "A4×9"
+msgstr "A4×9"
 
 #: ../gtk/paper_names_offsets.c:33
 msgctxt "paper size"
@@ -4192,495 +4289,585 @@ msgstr "RA2"
 
 #: ../gtk/paper_names_offsets.c:69
 msgctxt "paper size"
+msgid "RA3"
+msgstr "RA3"
+
+#: ../gtk/paper_names_offsets.c:70
+msgctxt "paper size"
+msgid "RA4"
+msgstr "RA4"
+
+#: ../gtk/paper_names_offsets.c:71
+msgctxt "paper size"
 msgid "SRA0"
 msgstr "SRA0"
 
-#: ../gtk/paper_names_offsets.c:70
+#: ../gtk/paper_names_offsets.c:72
 msgctxt "paper size"
 msgid "SRA1"
 msgstr "SRA1"
 
-#: ../gtk/paper_names_offsets.c:71
+#: ../gtk/paper_names_offsets.c:73
 msgctxt "paper size"
 msgid "SRA2"
 msgstr "SRA2"
 
-#: ../gtk/paper_names_offsets.c:72
+#: ../gtk/paper_names_offsets.c:74
+msgctxt "paper size"
+msgid "SRA3"
+msgstr "SRA3"
+
+#: ../gtk/paper_names_offsets.c:75
+msgctxt "paper size"
+msgid "SRA4"
+msgstr "SRA4"
+
+#: ../gtk/paper_names_offsets.c:76
 msgctxt "paper size"
 msgid "JB0"
 msgstr "JB0"
 
-#: ../gtk/paper_names_offsets.c:73
+#: ../gtk/paper_names_offsets.c:77
 msgctxt "paper size"
 msgid "JB1"
 msgstr "JB1"
 
-#: ../gtk/paper_names_offsets.c:74
+#: ../gtk/paper_names_offsets.c:78
 msgctxt "paper size"
 msgid "JB10"
 msgstr "JB10"
 
-#: ../gtk/paper_names_offsets.c:75
+#: ../gtk/paper_names_offsets.c:79
 msgctxt "paper size"
 msgid "JB2"
 msgstr "JB2"
 
-#: ../gtk/paper_names_offsets.c:76
+#: ../gtk/paper_names_offsets.c:80
 msgctxt "paper size"
 msgid "JB3"
 msgstr "JB3"
 
-#: ../gtk/paper_names_offsets.c:77
+#: ../gtk/paper_names_offsets.c:81
 msgctxt "paper size"
 msgid "JB4"
 msgstr "JB4"
 
-#: ../gtk/paper_names_offsets.c:78
+#: ../gtk/paper_names_offsets.c:82
 msgctxt "paper size"
 msgid "JB5"
 msgstr "JB5"
 
-#: ../gtk/paper_names_offsets.c:79
+#: ../gtk/paper_names_offsets.c:83
 msgctxt "paper size"
 msgid "JB6"
 msgstr "JB6"
 
-#: ../gtk/paper_names_offsets.c:80
+#: ../gtk/paper_names_offsets.c:84
 msgctxt "paper size"
 msgid "JB7"
 msgstr "JB7"
 
-#: ../gtk/paper_names_offsets.c:81
+#: ../gtk/paper_names_offsets.c:85
 msgctxt "paper size"
 msgid "JB8"
 msgstr "JB8"
 
-#: ../gtk/paper_names_offsets.c:82
+#: ../gtk/paper_names_offsets.c:86
 msgctxt "paper size"
 msgid "JB9"
 msgstr "JB9"
 
-#: ../gtk/paper_names_offsets.c:83
+#: ../gtk/paper_names_offsets.c:87
 msgctxt "paper size"
 msgid "jis exec"
 msgstr "jis exec"
 
-#: ../gtk/paper_names_offsets.c:84
+#: ../gtk/paper_names_offsets.c:88
 msgctxt "paper size"
 msgid "Choukei 2 Envelope"
 msgstr "Amplop Choukei 2"
 
-#: ../gtk/paper_names_offsets.c:85
+#: ../gtk/paper_names_offsets.c:89
 msgctxt "paper size"
 msgid "Choukei 3 Envelope"
 msgstr "Amplop Choukei 3"
 
-#: ../gtk/paper_names_offsets.c:86
+#: ../gtk/paper_names_offsets.c:90
 msgctxt "paper size"
 msgid "Choukei 4 Envelope"
 msgstr "Amplop Choukei 4"
 
-#: ../gtk/paper_names_offsets.c:87
+#: ../gtk/paper_names_offsets.c:91
+msgctxt "paper size"
+msgid "Choukei 40 Envelope"
+msgstr "Amplop Choukei 40"
+
+#: ../gtk/paper_names_offsets.c:92
 msgctxt "paper size"
 msgid "hagaki (postcard)"
 msgstr "hagaki (kartu pos)"
 
-#: ../gtk/paper_names_offsets.c:88
+#: ../gtk/paper_names_offsets.c:93
 msgctxt "paper size"
 msgid "kahu Envelope"
 msgstr "Amplop kahu"
 
-#: ../gtk/paper_names_offsets.c:89
+#: ../gtk/paper_names_offsets.c:94
 msgctxt "paper size"
 msgid "kaku2 Envelope"
 msgstr "Amplop kaku2"
 
-#: ../gtk/paper_names_offsets.c:90
+#: ../gtk/paper_names_offsets.c:95
+msgctxt "paper size"
+msgid "kaku3 Envelope"
+msgstr "Amplop kaku3"
+
+#: ../gtk/paper_names_offsets.c:96
+msgctxt "paper size"
+msgid "kaku4 Envelope"
+msgstr "Amplop kaku4"
+
+#: ../gtk/paper_names_offsets.c:97
+msgctxt "paper size"
+msgid "kaku5 Envelope"
+msgstr "Amplop kaku5"
+
+#: ../gtk/paper_names_offsets.c:98
+msgctxt "paper size"
+msgid "kaku7 Envelope"
+msgstr "Amplop kaku7"
+
+#: ../gtk/paper_names_offsets.c:99
+msgctxt "paper size"
+msgid "kaku8 Envelope"
+msgstr "Amplop kaku8"
+
+#: ../gtk/paper_names_offsets.c:100
 msgctxt "paper size"
 msgid "oufuku (reply postcard)"
 msgstr "oufuku (kartu pos balasan)"
 
-#: ../gtk/paper_names_offsets.c:91
+#: ../gtk/paper_names_offsets.c:101
 msgctxt "paper size"
 msgid "you4 Envelope"
 msgstr "Amplop you4"
 
-#: ../gtk/paper_names_offsets.c:92
-msgctxt "paper size"
-msgid "10x11"
-msgstr "10x11"
-
-#: ../gtk/paper_names_offsets.c:93
-msgctxt "paper size"
-msgid "10x13"
-msgstr "10x13"
-
-#: ../gtk/paper_names_offsets.c:94
-msgctxt "paper size"
-msgid "10x14"
-msgstr "10x14"
-
-#: ../gtk/paper_names_offsets.c:95 ../gtk/paper_names_offsets.c:96
-msgctxt "paper size"
-msgid "10x15"
-msgstr "10x15"
-
-#: ../gtk/paper_names_offsets.c:97
-msgctxt "paper size"
-msgid "11x12"
-msgstr "11x12"
-
-#: ../gtk/paper_names_offsets.c:98
-msgctxt "paper size"
-msgid "11x15"
-msgstr "11x15"
-
-#: ../gtk/paper_names_offsets.c:99
-msgctxt "paper size"
-msgid "12x19"
-msgstr "12x19"
-
-#: ../gtk/paper_names_offsets.c:100
-msgctxt "paper size"
-msgid "5x7"
-msgstr "5x7"
-
-#: ../gtk/paper_names_offsets.c:101
-msgctxt "paper size"
-msgid "6x9 Envelope"
-msgstr "Amplop 6x9"
-
 #: ../gtk/paper_names_offsets.c:102
 msgctxt "paper size"
-msgid "7x9 Envelope"
-msgstr "Amplop 7x9"
+msgid "you6 Envelope"
+msgstr "Amplop you6"
 
 #: ../gtk/paper_names_offsets.c:103
 msgctxt "paper size"
-msgid "9x11 Envelope"
-msgstr "Amplop 9x11"
+msgid "10×11"
+msgstr "10×11"
 
 #: ../gtk/paper_names_offsets.c:104
+msgctxt "paper size"
+msgid "10×13"
+msgstr "10×13"
+
+#: ../gtk/paper_names_offsets.c:105
+msgctxt "paper size"
+msgid "10×14"
+msgstr "10×14"
+
+#: ../gtk/paper_names_offsets.c:106
+msgctxt "paper size"
+msgid "10×15"
+msgstr "10×15"
+
+#: ../gtk/paper_names_offsets.c:107
+msgctxt "paper size"
+msgid "11×12"
+msgstr "11×12"
+
+#: ../gtk/paper_names_offsets.c:108
+msgctxt "paper size"
+msgid "11×15"
+msgstr "11×15"
+
+#: ../gtk/paper_names_offsets.c:109
+msgctxt "paper size"
+msgid "12×19"
+msgstr "12×19"
+
+#: ../gtk/paper_names_offsets.c:110
+msgctxt "paper size"
+msgid "5×7"
+msgstr "5×7"
+
+#: ../gtk/paper_names_offsets.c:111
+msgctxt "paper size"
+msgid "6×9 Envelope"
+msgstr "Amplop 6×9"
+
+#: ../gtk/paper_names_offsets.c:112
+msgctxt "paper size"
+msgid "7×9 Envelope"
+msgstr "Amplop 7×9"
+
+#: ../gtk/paper_names_offsets.c:113
+msgctxt "paper size"
+msgid "8×10 Envelope"
+msgstr "Amplop 8×10"
+
+#: ../gtk/paper_names_offsets.c:114
+msgctxt "paper size"
+msgid "9×11 Envelope"
+msgstr "Amplop 9×11"
+
+#: ../gtk/paper_names_offsets.c:115
+msgctxt "paper size"
+msgid "9×12 Envelope"
+msgstr "Amplop 9×12"
+
+#: ../gtk/paper_names_offsets.c:116
 msgctxt "paper size"
 msgid "a2 Envelope"
 msgstr "Amplop a2"
 
-#: ../gtk/paper_names_offsets.c:105
+#: ../gtk/paper_names_offsets.c:117
 msgctxt "paper size"
 msgid "Arch A"
 msgstr "Arch A"
 
-#: ../gtk/paper_names_offsets.c:106
+#: ../gtk/paper_names_offsets.c:118
 msgctxt "paper size"
 msgid "Arch B"
 msgstr "Arch B"
 
-#: ../gtk/paper_names_offsets.c:107
+#: ../gtk/paper_names_offsets.c:119
 msgctxt "paper size"
 msgid "Arch C"
 msgstr "Arch C"
 
-#: ../gtk/paper_names_offsets.c:108
+#: ../gtk/paper_names_offsets.c:120
 msgctxt "paper size"
 msgid "Arch D"
 msgstr "Arch D"
 
-#: ../gtk/paper_names_offsets.c:109
+#: ../gtk/paper_names_offsets.c:121
 msgctxt "paper size"
 msgid "Arch E"
 msgstr "Arch E"
 
-#: ../gtk/paper_names_offsets.c:110
+#: ../gtk/paper_names_offsets.c:122
 msgctxt "paper size"
 msgid "b-plus"
 msgstr "b-plus"
 
-#: ../gtk/paper_names_offsets.c:111
+#: ../gtk/paper_names_offsets.c:123
 msgctxt "paper size"
 msgid "c"
 msgstr "c"
 
-#: ../gtk/paper_names_offsets.c:112
+#: ../gtk/paper_names_offsets.c:124
 msgctxt "paper size"
 msgid "c5 Envelope"
 msgstr "Amplop c5"
 
-#: ../gtk/paper_names_offsets.c:113
+#: ../gtk/paper_names_offsets.c:125
 msgctxt "paper size"
 msgid "d"
 msgstr "d"
 
-#: ../gtk/paper_names_offsets.c:114
+#: ../gtk/paper_names_offsets.c:126
 msgctxt "paper size"
 msgid "e"
 msgstr "e"
 
-#: ../gtk/paper_names_offsets.c:115
+#: ../gtk/paper_names_offsets.c:127
 msgctxt "paper size"
 msgid "edp"
 msgstr "edp"
 
-#: ../gtk/paper_names_offsets.c:116
+#: ../gtk/paper_names_offsets.c:128
 msgctxt "paper size"
 msgid "European edp"
 msgstr "edp Eropa"
 
-#: ../gtk/paper_names_offsets.c:117
+#: ../gtk/paper_names_offsets.c:129
 msgctxt "paper size"
 msgid "Executive"
 msgstr "Eksekutif"
 
-#: ../gtk/paper_names_offsets.c:118
+#: ../gtk/paper_names_offsets.c:130
 msgctxt "paper size"
 msgid "f"
 msgstr "f"
 
-#: ../gtk/paper_names_offsets.c:119
+#: ../gtk/paper_names_offsets.c:131
 msgctxt "paper size"
-msgid "FanFold European"
-msgstr "FanFold Eropa"
+msgid "Fan-Fold European"
+msgstr "Fan-Fold Eropa"
 
-#: ../gtk/paper_names_offsets.c:120
+#: ../gtk/paper_names_offsets.c:132
 msgctxt "paper size"
-msgid "FanFold US"
-msgstr "FanFold AS"
+msgid "Fan-Fold US"
+msgstr "Fan Fold AS"
 
-#: ../gtk/paper_names_offsets.c:121
+#: ../gtk/paper_names_offsets.c:133
 msgctxt "paper size"
-msgid "FanFold German Legal"
-msgstr "FanFlod Legal Jerman"
+msgid "Fan-Fold German Legal"
+msgstr "Fan Fold Legal Jerman"
 
-#: ../gtk/paper_names_offsets.c:122
+#: ../gtk/paper_names_offsets.c:134
 msgctxt "paper size"
 msgid "Government Legal"
 msgstr "Pemerintah Legal"
 
-#: ../gtk/paper_names_offsets.c:123
+#: ../gtk/paper_names_offsets.c:135
 msgctxt "paper size"
 msgid "Government Letter"
 msgstr "Surat Pemerintah"
 
-#: ../gtk/paper_names_offsets.c:124
+#: ../gtk/paper_names_offsets.c:136
 msgctxt "paper size"
-msgid "Index 3x5"
-msgstr "Indeks 3x5"
+msgid "Index 3×5"
+msgstr "Indeks 3×5"
 
-#: ../gtk/paper_names_offsets.c:125
+#: ../gtk/paper_names_offsets.c:137
 msgctxt "paper size"
-msgid "Index 4x6 (postcard)"
-msgstr "Indeks 4x6 (kartu pos)"
+msgid "Index 4×6 (postcard)"
+msgstr "Indeks 4×6 (kartu pos)"
 
-#: ../gtk/paper_names_offsets.c:126
+#: ../gtk/paper_names_offsets.c:138
 msgctxt "paper size"
-msgid "Index 4x6 ext"
-msgstr "Indeks 4x6 ekstensi"
+msgid "Index 4×6 ext"
+msgstr "Indeks 4×6 ext"
 
-#: ../gtk/paper_names_offsets.c:127
+#: ../gtk/paper_names_offsets.c:139
 msgctxt "paper size"
-msgid "Index 5x8"
-msgstr "Indeks 5x8"
+msgid "Index 5×8"
+msgstr "Indeks 5×8"
 
-#: ../gtk/paper_names_offsets.c:128
+#: ../gtk/paper_names_offsets.c:140
 msgctxt "paper size"
 msgid "Invoice"
 msgstr "Tagihan"
 
-#: ../gtk/paper_names_offsets.c:129
+#: ../gtk/paper_names_offsets.c:141
 msgctxt "paper size"
 msgid "Tabloid"
 msgstr "Tabloid"
 
-#: ../gtk/paper_names_offsets.c:130
+#: ../gtk/paper_names_offsets.c:142
 msgctxt "paper size"
 msgid "US Legal"
 msgstr "Legal AS"
 
-#: ../gtk/paper_names_offsets.c:131
+#: ../gtk/paper_names_offsets.c:143
 msgctxt "paper size"
 msgid "US Legal Extra"
 msgstr "Legal AS Ekstra"
 
-#: ../gtk/paper_names_offsets.c:132
+#: ../gtk/paper_names_offsets.c:144
 msgctxt "paper size"
 msgid "US Letter"
 msgstr "Kuarto AS"
 
-#: ../gtk/paper_names_offsets.c:133
+#: ../gtk/paper_names_offsets.c:145
 msgctxt "paper size"
 msgid "US Letter Extra"
 msgstr "Kuarto AS Ekstra"
 
-#: ../gtk/paper_names_offsets.c:134
+#: ../gtk/paper_names_offsets.c:146
 msgctxt "paper size"
 msgid "US Letter Plus"
 msgstr "Kuarto Plus AS"
 
-#: ../gtk/paper_names_offsets.c:135
+#: ../gtk/paper_names_offsets.c:147
 msgctxt "paper size"
 msgid "Monarch Envelope"
 msgstr "Amplop Monarki"
 
-#: ../gtk/paper_names_offsets.c:136
+#: ../gtk/paper_names_offsets.c:148
 msgctxt "paper size"
 msgid "#10 Envelope"
 msgstr "Amplop #10"
 
-#: ../gtk/paper_names_offsets.c:137
+#: ../gtk/paper_names_offsets.c:149
 msgctxt "paper size"
 msgid "#11 Envelope"
 msgstr "Amplop #11"
 
-#: ../gtk/paper_names_offsets.c:138
+#: ../gtk/paper_names_offsets.c:150
 msgctxt "paper size"
 msgid "#12 Envelope"
 msgstr "Amplop #12"
 
-#: ../gtk/paper_names_offsets.c:139
+#: ../gtk/paper_names_offsets.c:151
 msgctxt "paper size"
 msgid "#14 Envelope"
 msgstr "Amplop #14"
 
-#: ../gtk/paper_names_offsets.c:140
+#: ../gtk/paper_names_offsets.c:152
 msgctxt "paper size"
 msgid "#9 Envelope"
 msgstr "Amplop #9"
 
-#: ../gtk/paper_names_offsets.c:141
+#: ../gtk/paper_names_offsets.c:153
+msgctxt "paper size"
+msgid "Oficio"
+msgstr "Oficio"
+
+#: ../gtk/paper_names_offsets.c:154
 msgctxt "paper size"
 msgid "Personal Envelope"
 msgstr "Amplop Pribadi"
 
-#: ../gtk/paper_names_offsets.c:142
+#: ../gtk/paper_names_offsets.c:155
 msgctxt "paper size"
 msgid "Quarto"
 msgstr "Kuarto"
 
-#: ../gtk/paper_names_offsets.c:143
+#: ../gtk/paper_names_offsets.c:156
 msgctxt "paper size"
 msgid "Super A"
 msgstr "Super A"
 
-#: ../gtk/paper_names_offsets.c:144
+#: ../gtk/paper_names_offsets.c:157
 msgctxt "paper size"
 msgid "Super B"
 msgstr "Super B"
 
-#: ../gtk/paper_names_offsets.c:145
+#: ../gtk/paper_names_offsets.c:158
 msgctxt "paper size"
 msgid "Wide Format"
 msgstr "Bentuk Lebar"
 
-#: ../gtk/paper_names_offsets.c:146
+#: ../gtk/paper_names_offsets.c:159
+msgctxt "paper size"
+msgid "Photo L"
+msgstr "Foto L"
+
+#: ../gtk/paper_names_offsets.c:160
 msgctxt "paper size"
 msgid "Dai-pa-kai"
 msgstr "Dai-pa-kai"
 
-#: ../gtk/paper_names_offsets.c:147
+#: ../gtk/paper_names_offsets.c:161
 msgctxt "paper size"
 msgid "Folio"
 msgstr "Folio"
 
-#: ../gtk/paper_names_offsets.c:148
+#: ../gtk/paper_names_offsets.c:162
 msgctxt "paper size"
 msgid "Folio sp"
 msgstr "Folio sp"
 
-#: ../gtk/paper_names_offsets.c:149
+#: ../gtk/paper_names_offsets.c:163
 msgctxt "paper size"
 msgid "Invite Envelope"
 msgstr "Amplop Undangan"
 
-#: ../gtk/paper_names_offsets.c:150
+#: ../gtk/paper_names_offsets.c:164
 msgctxt "paper size"
 msgid "Italian Envelope"
 msgstr "Amplop Italia"
 
-#: ../gtk/paper_names_offsets.c:151
+#: ../gtk/paper_names_offsets.c:165
 msgctxt "paper size"
 msgid "juuro-ku-kai"
 msgstr "juuro-ku-kai"
 
-#: ../gtk/paper_names_offsets.c:152
+#: ../gtk/paper_names_offsets.c:166
+msgctxt "paper size"
+msgid "Large Photo"
+msgstr "Foto Besar"
+
+#: ../gtk/paper_names_offsets.c:167
+msgctxt "paper size"
+msgid "Medium Photo"
+msgstr "Foto Sedang"
+
+#: ../gtk/paper_names_offsets.c:168
 msgctxt "paper size"
 msgid "pa-kai"
 msgstr "pa-kai"
 
-#: ../gtk/paper_names_offsets.c:153
+#: ../gtk/paper_names_offsets.c:169
 msgctxt "paper size"
 msgid "Postfix Envelope"
 msgstr "Amplop Postfix"
 
-#: ../gtk/paper_names_offsets.c:154
+#: ../gtk/paper_names_offsets.c:170
 msgctxt "paper size"
 msgid "Small Photo"
 msgstr "Foto Kecil"
 
-#: ../gtk/paper_names_offsets.c:155
+#: ../gtk/paper_names_offsets.c:171
+msgctxt "paper size"
+msgid "Wide Photo"
+msgstr "Foto Lebar"
+
+#: ../gtk/paper_names_offsets.c:172
 msgctxt "paper size"
 msgid "prc1 Envelope"
 msgstr "Amplop prc1"
 
-#: ../gtk/paper_names_offsets.c:156
+#: ../gtk/paper_names_offsets.c:173
 msgctxt "paper size"
 msgid "prc10 Envelope"
 msgstr "Amplop prc10"
 
-#: ../gtk/paper_names_offsets.c:157
+#: ../gtk/paper_names_offsets.c:174
 msgctxt "paper size"
 msgid "prc 16k"
 msgstr "prc 16k"
 
-#: ../gtk/paper_names_offsets.c:158
+#: ../gtk/paper_names_offsets.c:175
 msgctxt "paper size"
 msgid "prc2 Envelope"
 msgstr "Amplop prc2"
 
-#: ../gtk/paper_names_offsets.c:159
+#: ../gtk/paper_names_offsets.c:176
 msgctxt "paper size"
 msgid "prc3 Envelope"
 msgstr "Amplop prc3"
 
-#: ../gtk/paper_names_offsets.c:160
+#: ../gtk/paper_names_offsets.c:177
 msgctxt "paper size"
 msgid "prc 32k"
 msgstr "prc 32k"
 
-#: ../gtk/paper_names_offsets.c:161
+#: ../gtk/paper_names_offsets.c:178
 msgctxt "paper size"
 msgid "prc4 Envelope"
 msgstr "Amplop prc4"
 
-#: ../gtk/paper_names_offsets.c:162
+#: ../gtk/paper_names_offsets.c:179
 msgctxt "paper size"
 msgid "prc5 Envelope"
 msgstr "Amplop prc5"
 
-#: ../gtk/paper_names_offsets.c:163
+#: ../gtk/paper_names_offsets.c:180
 msgctxt "paper size"
 msgid "prc6 Envelope"
 msgstr "Amplop prc6"
 
-#: ../gtk/paper_names_offsets.c:164
+#: ../gtk/paper_names_offsets.c:181
 msgctxt "paper size"
 msgid "prc7 Envelope"
 msgstr "Amplop prc7"
 
-#: ../gtk/paper_names_offsets.c:165
+#: ../gtk/paper_names_offsets.c:182
 msgctxt "paper size"
 msgid "prc8 Envelope"
 msgstr "Amplop prc8"
 
-#: ../gtk/paper_names_offsets.c:166
+#: ../gtk/paper_names_offsets.c:183
 msgctxt "paper size"
 msgid "prc9 Envelope"
 msgstr "Amplop prc9"
 
-#: ../gtk/paper_names_offsets.c:167
+#: ../gtk/paper_names_offsets.c:184
 msgctxt "paper size"
 msgid "ROC 16k"
 msgstr "ROC 16k"
 
-#: ../gtk/paper_names_offsets.c:168
+#: ../gtk/paper_names_offsets.c:185
 msgctxt "paper size"
 msgid "ROC 8k"
 msgstr "ROC 8k"
@@ -4873,313 +5060,331 @@ msgstr "Dormant"
 msgid "Pages per _sheet:"
 msgstr "Halaman per _lembar:"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1042
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1351
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1064
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1373
 msgid "Username:"
 msgstr "Nama Pengguna:"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1043
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1360
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1065
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1382
 msgid "Password:"
 msgstr "Sandi:"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1082
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1373
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1104
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1395
 #, c-format
-msgid "Authentication is required to print document '%s' on printer %s"
-msgstr "Perlu otentikasi untuk mencetak dokumen '%s' pada pencetak %s"
+msgid "Authentication is required to print document “%s” on printer %s"
+msgstr "Perlu otentikasi untuk mencetak dokumen \"%s\" pada pencetak %s"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1084
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1106
 #, c-format
 msgid "Authentication is required to print a document on %s"
 msgstr "Perlu otentikasi untuk mencetak suatu dokumen pada %s"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1088
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1110
 #, c-format
-msgid "Authentication is required to get attributes of job '%s'"
-msgstr "Perlu otentikasi untuk memperoleh atribut dari tugas '%s'"
+msgid "Authentication is required to get attributes of job “%s”"
+msgstr "Perlu otentikasi untuk memperoleh atribut dari tugas \"%s\""
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1090
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1112
 msgid "Authentication is required to get attributes of a job"
 msgstr "Perlu otentikasi untuk memperoleh atribut dari suatu tugas"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1094
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1116
 #, c-format
 msgid "Authentication is required to get attributes of printer %s"
 msgstr "Perlu otentikasi untuk memperoleh atribut dari pencetak %s"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1096
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1118
 msgid "Authentication is required to get attributes of a printer"
 msgstr "Perlu otentikasi untuk memperoleh atribut dari suatu pencetak"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1099
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1121
 #, c-format
 msgid "Authentication is required to get default printer of %s"
 msgstr "Perlu otentikasi untuk memperoleh pencetak bawaan dari %s"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1102
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1124
 #, c-format
 msgid "Authentication is required to get printers from %s"
 msgstr "Perlu otentikasi untuk memperoleh pencetak dari %s"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1107
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1129
 #, c-format
 msgid "Authentication is required to get a file from %s"
 msgstr "Perlu otentikasi untuk memperoleh suatu berkas dari %s"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1109
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1131
 #, c-format
 msgid "Authentication is required on %s"
 msgstr "Perlu otentikasi pada %s"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1345
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1367
 msgid "Domain:"
 msgstr "Domain:"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1375
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1397
 #, c-format
-msgid "Authentication is required to print document '%s'"
-msgstr "Perlu otentikasi untuk mencetak dokumen '%s'"
+msgid "Authentication is required to print document “%s”"
+msgstr "Perlu otentikasi untuk mencetak dokumen \"%s\""
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1380
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1402
 #, c-format
 msgid "Authentication is required to print this document on printer %s"
 msgstr "Perlu otentikasi untuk mencetak dokumen ini pada pencetak %s"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1382
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1404
 msgid "Authentication is required to print this document"
 msgstr "Perlu otentikasi untuk mencetak dokumen ini"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1945
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1841
 #, c-format
-msgid "Printer '%s' is low on toner."
-msgstr "Tinta pada pencetak '%s' tersisa sedikit."
+msgid "Printer “%s” is low on toner."
+msgstr "Tinta pada pencetak \"%s\" tersisa sedikit."
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1946
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1842
 #, c-format
-msgid "Printer '%s' has no toner left."
-msgstr "Tinta pada pencetak '%s' habis."
-
-#. Translators: "Developer" like on photo development context
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1948
-#, c-format
-msgid "Printer '%s' is low on developer."
-msgstr "Developer pada pencetak '%s' tersisa sedikit."
+msgid "Printer “%s” has no toner left."
+msgstr "Tinta pada pencetak \"%s\" habis."
 
 #. Translators: "Developer" like on photo development context
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1950
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1844
 #, c-format
-msgid "Printer '%s' is out of developer."
-msgstr "Developer pada pencetak '%s' habis."
+msgid "Printer “%s” is low on developer."
+msgstr "Developer pada pencetak \"%s\" tersisa sedikit."
+
+#. Translators: "Developer" like on photo development context
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1846
+#, c-format
+msgid "Printer “%s” is out of developer."
+msgstr "Developer pada pencetak \"%s\" habis."
 
 #. Translators: "marker" is one color bin of the printer
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1952
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1848
 #, c-format
-msgid "Printer '%s' is low on at least one marker supply."
-msgstr "Paling tidak satu catu penanda pencetak '%s' tersisa sedikit."
+msgid "Printer “%s” is low on at least one marker supply."
+msgstr "Paling tidak satu catu penanda pencetak \"%s\" tersisa sedikit."
 
 #. Translators: "marker" is one color bin of the printer
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1954
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1850
 #, c-format
-msgid "Printer '%s' is out of at least one marker supply."
-msgstr "Paling tidak satu catu penanda pencetak '%s' habis."
+msgid "Printer “%s” is out of at least one marker supply."
+msgstr "Paling tidak satu catu penanda pencetak \"%s\" habis."
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1955
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1851
 #, c-format
-msgid "The cover is open on printer '%s'."
-msgstr "Penutup pencetak '%s' terbuka."
+msgid "The cover is open on printer “%s”."
+msgstr "Penutup pencetak \"%s\" terbuka."
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1956
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1852
 #, c-format
-msgid "The door is open on printer '%s'."
-msgstr "Pintu pencetak '%s' terbuka."
+msgid "The door is open on printer “%s”."
+msgstr "Pintu pencetak \"%s\" terbuka."
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1957
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1853
 #, c-format
-msgid "Printer '%s' is low on paper."
-msgstr "Kertas di pencetak '%s' tersisa sedikit."
+msgid "Printer “%s” is low on paper."
+msgstr "Kertas di pencetak \"%s\" tersisa sedikit."
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1958
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1854
 #, c-format
-msgid "Printer '%s' is out of paper."
-msgstr "Pencetak '%s' kehabisan kertas."
+msgid "Printer “%s” is out of paper."
+msgstr "Pencetak \"%s\" kehabisan kertas."
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1959
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1855
 #, c-format
-msgid "Printer '%s' is currently offline."
-msgstr "Pencetak '%s' sedang luring."
+msgid "Printer “%s” is currently offline."
+msgstr "Pencetak \"%s\" sedang luring."
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1960
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1856
 #, c-format
-msgid "There is a problem on printer '%s'."
-msgstr "Ada masalah pada pencetak '%s'."
+msgid "There is a problem on printer “%s”."
+msgstr "Ada masalah pada pencetak \"%s\"."
 
 #. Translators: this is a printer status.
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2418
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2473
 msgid "Paused; Rejecting Jobs"
 msgstr "Diistirahatkan; Menolak Tugas"
 
 #. Translators: this is a printer status.
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2424
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2479
 msgid "Rejecting Jobs"
 msgstr "Menolak Tugas"
 
 #. Translators: this string connects multiple printer states together.
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2466
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2521
 msgid "; "
 msgstr "; "
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:4131
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:4199
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:4266
 msgid "Two Sided"
 msgstr "Dua Sisi"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:4132
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:4200
 msgid "Paper Type"
 msgstr "Jenis Kertas"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:4133
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:4201
 msgid "Paper Source"
 msgstr "Sumber Kertas"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:4134
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:4202
 msgid "Output Tray"
 msgstr "Baki Keluaran"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:4135
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:4203
 msgid "Resolution"
 msgstr "Resolusi"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:4136
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:4204
 msgid "GhostScript pre-filtering"
 msgstr "Pra penapisan GhostScript"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:4145
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:4213
 msgid "One Sided"
 msgstr "Satu Sisi"
 
 #. Translators: this is an option of "Two Sided"
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:4147
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:4215
 msgid "Long Edge (Standard)"
 msgstr "Sisi Panjang (Standar)"
 
 #. Translators: this is an option of "Two Sided"
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:4149
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:4217
 msgid "Short Edge (Flip)"
 msgstr "Sisi Pendek (Putar)"
 
 #. Translators: this is an option of "Paper Source"
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:4151
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:4153
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:4161
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:4219
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:4221
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:4229
 msgid "Auto Select"
 msgstr "Seleksi Otomatis"
 
 # "Bawaan Pencetak" bukan "Baku Pencetak"^^
 #. Translators: this is an option of "Paper Source"
 #. Translators: this is an option of "Resolution"
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:4155
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:4157
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:4159
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:4163
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:4650
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:4223
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:4225
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:4227
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:4231
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:4738
 msgid "Printer Default"
 msgstr "Bawaan Pencetak"
 
 #. Translators: this is an option of "GhostScript"
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:4165
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:4233
 msgid "Embed GhostScript fonts only"
 msgstr "Tempelkan fonta GhostScript saja"
 
 #. Translators: this is an option of "GhostScript"
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:4167
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:4235
 msgid "Convert to PS level 1"
 msgstr "Konversi ke PS tingkat 1"
 
 #. Translators: this is an option of "GhostScript"
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:4169
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:4237
 msgid "Convert to PS level 2"
 msgstr "Konversi ke PS tingkat 2"
 
 #. Translators: this is an option of "GhostScript"
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:4171
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:4239
 msgid "No pre-filtering"
 msgstr "Tanpa prapenyaringan"
+
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:4274
+msgctxt "sides"
+msgid "One Sided"
+msgstr "Satu Sisi"
+
+#. Translators: this is an option of "Two Sided"
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:4276
+msgctxt "sides"
+msgid "Long Edge (Standard)"
+msgstr "Sisi Panjang (Standar)"
+
+#. Translators: this is an option of "Two Sided"
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:4278
+msgctxt "sides"
+msgid "Short Edge (Flip)"
+msgstr "Sisi Pendek (Putar)"
 
 #. Translators: These strings name the possible values of the
 #. * job priority option in the print dialog
 #.
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:4902
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:5128
 msgid "Urgent"
 msgstr "Penting"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:4902
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:5128
 msgid "High"
 msgstr "Tinggi"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:4902
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:5128
 msgid "Medium"
 msgstr "Sedang"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:4902
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:5128
 msgid "Low"
 msgstr "Rendah"
 
 #. Translators, this string is used to label the job priority option
 #. * in the print dialog
 #.
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:4932
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:5158
 msgid "Job Priority"
 msgstr "Prioritas Tugas"
 
 #. Translators, this string is used to label the billing info entry
 #. * in the print dialog
 #.
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:4943
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:5169
 msgid "Billing Info"
 msgstr "Info Tagihan"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:4958
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:5184
 msgid "Classified"
 msgstr "Terklasifikasi"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:4958
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:5184
 msgid "Confidential"
 msgstr "Pribadi"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:4958
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:5184
 msgid "Secret"
 msgstr "Rahasia"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:4958
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:5184
 msgid "Standard"
 msgstr "Standar"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:4958
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:5184
 msgid "Top Secret"
 msgstr "Sangat Rahasia"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:4958
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:5184
 msgid "Unclassified"
 msgstr "Belum terklasifikasi"
 
 #. Translators, this string is used to label the pages-per-sheet option
 #. * in the print dialog
 #.
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:4969
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:5195
 msgid "Pages per Sheet"
 msgstr "Halaman per Lembar"
 
 #. Translators, this is the label used for the option in the print
 #. * dialog that controls the front cover page.
 #.
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:5029
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:5255
 msgid "Before"
 msgstr "Sebelum"
 
 #. Translators, this is the label used for the option in the print
 #. * dialog that controls the back cover page.
 #.
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:5044
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:5270
 msgid "After"
 msgstr "Sesudah"
 
@@ -5187,14 +5392,14 @@ msgstr "Sesudah"
 #. * a print job is printed. Possible values are 'now', a specified time,
 #. * or 'on hold'
 #.
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:5064
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:5290
 msgid "Print at"
 msgstr "Dicetak pada"
 
 #. Translators: this is the name of the option that allows the user
 #. * to specify a time when a print job will be printed.
 #.
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:5075
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:5301
 msgid "Print at time"
 msgstr "Dicetak pada waktu"
 
@@ -5203,33 +5408,33 @@ msgstr "Dicetak pada waktu"
 #. * the width and height in points. E.g: "Custom
 #. * 230.4x142.9"
 #.
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:5117
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:5343
 #, c-format
-msgid "Custom %sx%s"
+msgid "Custom %s×%s"
 msgstr "Gubahan %sx%s"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:5199
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:5444
 msgid "Printer Profile"
 msgstr "Profil Pencetak"
 
 #. TRANSLATORS: this is when color profile information is unavailable
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:5206
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:5451
 msgid "Unavailable"
 msgstr "Tak tersedia"
 
 #. TRANSLATORS: when we're running an old CUPS, and
 #. * it hasn't registered the device with colord
-#: ../modules/printbackends/cups/gtkprintercups.c:241
+#: ../modules/printbackends/cups/gtkprintercups.c:258
 msgid "Color management unavailable"
 msgstr "Manajemen warna tak tersedia"
 
 #. TRANSLATORS: when there is no color profile available
-#: ../modules/printbackends/cups/gtkprintercups.c:253
+#: ../modules/printbackends/cups/gtkprintercups.c:270
 msgid "No profile available"
 msgstr "Profil tak tersedia"
 
 #. TRANSLATORS: when the color profile has no title
-#: ../modules/printbackends/cups/gtkprintercups.c:264
+#: ../modules/printbackends/cups/gtkprintercups.c:281
 msgid "Unspecified profile"
 msgstr "Profil tak dinyatakan"
 
@@ -5418,10 +5623,6 @@ msgstr "_Lokasi:"
 msgid "Files"
 msgstr "Berkas"
 
-#: ../gtk/resources/ui/gtkfilechooserwidget.ui.h:5
-msgid "Size"
-msgstr "Ukuran"
-
 #: ../gtk/resources/ui/gtkfilechooserwidget.ui.h:6
 msgid "Modified"
 msgstr "Diubah"
@@ -5523,10 +5724,10 @@ msgstr "_Halaman:"
 #: ../gtk/resources/ui/gtkprintunixdialog.ui.h:18
 msgid ""
 "Specify one or more page ranges,\n"
-" e.g. 1-3,7,11"
+" e.g. 1–3, 7, 11"
 msgstr ""
 "Nyatakan satu atau lebih rentang halaman,\n"
-"mis: 1-3,7,11"
+"mis. 1-3, 7, 11"
 
 #: ../gtk/resources/ui/gtkprintunixdialog.ui.h:17
 msgid "Pages"
@@ -5638,10 +5839,10 @@ msgstr "_Pada:"
 #: ../gtk/resources/ui/gtkprintunixdialog.ui.h:68
 msgid ""
 "Specify the time of print,\n"
-" e.g. 15:30, 2:35 pm, 14:15:20, 11:46:30 am, 4 pm"
+" e.g. 15∶30, 2∶35 pm, 14∶15∶20, 11∶46∶30 am, 4 pm"
 msgstr ""
 "Nyatakan waktu pencetakan,\n"
-"mis: 15:30, 14:15:20, 4"
+" mis. 15:30, 14:15:20, 4"
 
 #: ../gtk/resources/ui/gtkprintunixdialog.ui.h:67
 msgid "Time of print"
