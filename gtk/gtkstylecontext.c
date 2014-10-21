@@ -27,6 +27,7 @@
 #include "gtkcsscolorvalueprivate.h"
 #include "gtkcsscornervalueprivate.h"
 #include "gtkcssenumvalueprivate.h"
+#include "gtkcssimagebuiltinprivate.h"
 #include "gtkcssimagevalueprivate.h"
 #include "gtkcssnodedeclarationprivate.h"
 #include "gtkcssnumbervalueprivate.h"
@@ -3548,14 +3549,19 @@ _gtk_style_context_get_icon_extents (GtkStyleContext *context,
   g_return_if_fail (GTK_IS_STYLE_CONTEXT (context));
   g_return_if_fail (extents != NULL);
 
+  if (_gtk_css_image_value_get_image (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_ICON_SOURCE)) == NULL)
+    {
+      extents->x = extents->y = extents->width = extents->height = 0;
+      return;
+    }
+
   extents->x = x;
   extents->y = y;
   extents->width = width;
   extents->height = height;
 
-  /* strictly speaking we should return an empty rect here,
-   * but most code still draws a fallback  in this case */
-  if (_gtk_css_image_value_get_image (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_ICON_SOURCE)) == NULL)
+  /* builtin images can't be transformed */
+  if (GTK_IS_CSS_IMAGE_BUILTIN (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_ICON_SOURCE)))
     return;
 
   if (!_gtk_css_transform_value_get_matrix (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_ICON_TRANSFORM), &transform_matrix))

@@ -26,6 +26,7 @@
 #include "gtkcsscornervalueprivate.h"
 #include "gtkcssenginevalueprivate.h"
 #include "gtkcssenumvalueprivate.h"
+#include "gtkcssimagebuiltinprivate.h"
 #include "gtkcssimagevalueprivate.h"
 #include "gtkcssnumbervalueprivate.h"
 #include "gtkcssrgbavalueprivate.h"
@@ -51,6 +52,9 @@ render_icon_image (GtkStyleContext *context,
 
   image = _gtk_css_image_value_get_image (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_ICON_SOURCE));
   if (image == NULL)
+    return TRUE;
+
+  if (GTK_IS_CSS_IMAGE_BUILTIN (image))
     return FALSE;
 
   shadows = _gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_ICON_SHADOW);

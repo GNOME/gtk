@@ -47,6 +47,7 @@
 #include "gtkcsseasevalueprivate.h"
 #include "gtkcssenginevalueprivate.h"
 #include "gtkcssimageprivate.h"
+#include "gtkcssimagebuiltinprivate.h"
 #include "gtkcssimagegradientprivate.h"
 #include "gtkcssimagevalueprivate.h"
 #include "gtkcssinitialvalueprivate.h"
@@ -656,6 +657,16 @@ css_image_value_parse (GtkCssStyleProperty *property,
   return _gtk_css_image_value_new (image);
 }
 
+static GtkCssValue *
+css_image_value_parse_with_builtin (GtkCssStyleProperty *property,
+                                    GtkCssParser        *parser)
+{
+  if (_gtk_css_parser_try (parser, "builtin", TRUE))
+    return _gtk_css_image_value_new (gtk_css_image_builtin_new ());
+
+  return css_image_value_parse (property, parser);
+}
+
 static void
 css_image_value_query (GtkCssStyleProperty *property,
                        const GtkCssValue   *css_value,
@@ -1036,10 +1047,10 @@ _gtk_css_style_property_init_properties (void)
                                           G_TYPE_NONE,
                                           GTK_STYLE_PROPERTY_ANIMATED,
                                           GTK_CSS_AFFECTS_ICON,
-                                          css_image_value_parse,
+                                          css_image_value_parse_with_builtin,
                                           NULL,
                                           NULL,
-                                          _gtk_css_image_value_new (NULL));
+                                          _gtk_css_image_value_new (gtk_css_image_builtin_new ()));
   gtk_css_style_property_register        ("icon-shadow",
                                           GTK_CSS_PROPERTY_ICON_SHADOW,
                                           G_TYPE_NONE,

@@ -65,7 +65,7 @@ struct _GtkCssImageClass
   /* compare two images for equality */
   gboolean     (* equal)                           (GtkCssImage                *image1,
                                                     GtkCssImage                *image2);
-  /* transition between start and end image (end may be NULL), returns new reference */
+  /* transition between start and end image (end may be NULL), returns new reference (optional) */
   GtkCssImage *(* transition)                      (GtkCssImage                *start,
                                                     GtkCssImage                *end,
                                                     guint                       property_id,
