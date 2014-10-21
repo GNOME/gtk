@@ -1673,6 +1673,16 @@ fi
 AM_CONDITIONAL(HAVE_COLORD, test "x$have_colord" = "xyes")
 
 ##################################################
+# Check for libcanberra (only used in examples)
+##################################################
+
+PKG_CHECK_MODULES(LIBCANBERRA, libcanberra-gtk3,
+                  have_libcanberra=yes, have_libcanberra=no)
+if test "$have_libcanberra" = "yes"; then
+        AC_DEFINE(HAVE_LIBCANBERRA, 1, [define if we have libcanberra])
+fi
+
+##################################################
 # Checks for gtk-doc and docbook-tools
 ##################################################
 

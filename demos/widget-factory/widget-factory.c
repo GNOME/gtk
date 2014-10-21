@@ -19,8 +19,12 @@
  */
 
 #include "config.h"
+
 #include <glib/gi18n.h>
 #include <gtk/gtk.h>
+#ifdef HAVE_LIBCANBERRA
+#include <canberra-gtk.h>
+#endif
 
 static void
 change_theme_state (GSimpleAction *action,
@@ -575,6 +579,82 @@ update_title_header (GtkListBoxRow *row,
 }
 
 static void
+overshot (GtkScrolledWindow *sw, GtkPositionType pos, GtkWidget *widget)
+{
+  GtkWidget *box, *row, *label, *swatch;
+  GdkRGBA rgba;
+  const gchar *color;
+  gchar *text;
+  GtkWidget *silver;
+  GtkWidget *gold;
+
+  silver = GTK_WIDGET (g_object_get_data (G_OBJECT (widget), "Silver"));
+  gold = GTK_WIDGET (g_object_get_data (G_OBJECT (widget), "Gold"));
+
+  if (pos == GTK_POS_TOP)
+    {
+      if (silver)
+        {
+          gtk_container_remove (GTK_CONTAINER (widget), silver);
+          g_object_set_data (G_OBJECT (widget), "Silver", NULL);
+        }
+      if (gold)
+        {
+          gtk_container_remove (GTK_CONTAINER (widget), gold);
+          g_object_set_data (G_OBJECT (widget), "Gold", NULL);
+        }
+
+#ifdef HAVE_LIBCANBERRA
+      if (silver || gold)
+        ca_gtk_play_for_widget (widget, 0, "event.id", "message", NULL); 
+#endif
+
+      return;
+    }
+
+
+  if (gold)
+    return;
+  else if (silver)
+    color = "Gold";
+  else
+    color = "Silver";
+
+  row = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 20);
+  text = g_strconcat ("<b>", color, "</b>", NULL);
+  label = gtk_label_new (text);
+  g_free (text);
+  g_object_set (label,
+                "use-markup", TRUE,
+                "halign", GTK_ALIGN_START,
+                "valign", GTK_ALIGN_CENTER,
+                "margin", 6,
+                "xalign", 0.0,
+                NULL);
+  gtk_box_pack_start (GTK_BOX (row), label, TRUE, TRUE, 0);
+  gdk_rgba_parse (&rgba, color);
+  swatch = g_object_new (g_type_from_name ("GtkColorSwatch"),
+                         "rgba", &rgba,
+                         "selectable", FALSE,
+                         "halign", GTK_ALIGN_END,
+                         "valign", GTK_ALIGN_CENTER,
+                         "margin", 6,
+                         "height-request", 24,
+                         NULL);
+  box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
+  gtk_container_add (GTK_CONTAINER (box), swatch);
+  gtk_box_pack_start (GTK_BOX (row), box, FALSE, FALSE, 0);
+  gtk_widget_show_all (row);
+  gtk_list_box_insert (GTK_LIST_BOX (widget), row, -1);
+  row = gtk_widget_get_parent (row);
+  gtk_list_box_row_set_activatable (GTK_LIST_BOX_ROW (row), FALSE);
+  g_object_set_data (G_OBJECT (widget), color, row);
+#ifdef HAVE_LIBCANBERRA
+  ca_gtk_play_for_widget (widget, 0, "event.id", "complete", NULL); 
+#endif
+}
+
+static void
 populate_colors (GtkWidget *widget)
 {
   struct { const gchar *name; const gchar *color; const gchar *title; } colors[] = {
@@ -621,6 +701,7 @@ populate_colors (GtkWidget *widget)
   };
   gint i;
   GtkWidget *row, *box, *label, *swatch;
+  GtkWidget *sw;
   GdkRGBA rgba;
 
   gtk_list_box_set_header_func (GTK_LIST_BOX (widget), update_title_header, NULL, NULL);
@@ -657,6 +738,9 @@ populate_colors (GtkWidget *widget)
     }
 
   gtk_list_box_invalidate_headers (GTK_LIST_BOX (widget));
+
+  sw = gtk_widget_get_ancestor (widget, GTK_TYPE_SCROLLED_WINDOW);
+  g_signal_connect (sw, "edge-overshot", G_CALLBACK (overshot), widget);
 }
 
 typedef struct {
