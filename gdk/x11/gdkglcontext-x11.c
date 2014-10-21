@@ -316,13 +316,7 @@ glx_pixmap_get (cairo_surface_t *surface)
 			    GLX_BIND_TO_TEXTURE_RGBA_EXT,
 			    &value);
       if (value == FALSE)
-	{
-	  glXGetFBConfigAttrib (display, fbconfigs[i],
-				GLX_BIND_TO_TEXTURE_RGB_EXT,
-				&value);
-	  if (value == FALSE)
-	    continue;
-	}
+        continue;
 
       glXGetFBConfigAttrib (display, fbconfigs[i],
 			    GLX_Y_INVERTED_EXT,
