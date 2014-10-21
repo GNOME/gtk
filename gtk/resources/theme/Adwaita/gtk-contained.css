@@ -4473,6 +4473,10 @@ GtkColorSwatch {
       box-shadow: inset 0 1px rgba(255, 255, 255, 0), 0 1px rgba(255, 255, 255, 0);
       text-shadow: none;
       icon-shadow: none; }
+  :selected GtkColorSwatch {
+    box-shadow: none; }
+    :selected GtkColorSwatch.overlay {
+      border-color: #ffffff; }
 
 /********
  * Misc *

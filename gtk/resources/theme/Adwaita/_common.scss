@@ -2902,7 +2902,6 @@ GtkColorSwatch {
   }
   // nth-child works just on the custom colors row
 
-
   // hover effect
   &:hover {
     background-image: linear-gradient(135deg, transparentize(white, 0.3),
@@ -2952,6 +2951,15 @@ GtkColorSwatch {
     &:backdrop { @include button(backdrop); }
     .overlay { @include button(undecorated); } // reset the overlay to not cover the button style underneat
   }
+
+  // take care of colorswatches on selected elements
+  :selected & {
+    box-shadow: none;
+    &.overlay {
+      border-color: $selected_fg_color;
+    }
+  }
+
 }
 
 
