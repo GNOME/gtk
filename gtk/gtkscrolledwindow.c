@@ -87,6 +87,23 @@
  * If a GtkScrolledWindow doesn’t behave quite as you would like, or
  * doesn’t have exactly the right layout, it’s very possible to set up
  * your own scrolling with #GtkScrollbar and for example a #GtkGrid.
+ *
+ * # Touch support
+ *
+ * GtkScrolledWindow has built-in support for touch devices. When a
+ * touchscreen is used, swiping will move the scrolled window, and will
+ * expose 'kinetic' behavior. This can be turned off with the
+ * #GtkScrolledWindow:kinetic-scrolling property if it is undesired.
+ *
+ * GtkScrolledWindow also displays visual 'overshoot' indication when
+ * the content is pulled beyond the end, and this situation can be
+ * captured with the #GtkScrolledWindow::edge-overshot signal.
+ *
+ * If no mouse device is present, the scrollbars will overlayed as
+ * narrow, auto-hiding indicators over the content. If traditional
+ * scrollbars are desired although no mouse is present, this behaviour
+ * can be turned off with the #GtkScrolledWindow:overlay-scrolling
+ * property.
  */
 
 
@@ -526,8 +543,8 @@ gtk_scrolled_window_class_init (GtkScrolledWindowClass *class)
   /**
    * GtkScrolledWindow:kinetic-scrolling:
    *
-   * The kinetic scrolling behavior flags. Kinetic scrolling
-   * only applies to devices with source %GDK_SOURCE_TOUCHSCREEN
+   * Whether kinetic scrolling is enabled or not. Kinetic scrolling
+   * only applies to devices with source %GDK_SOURCE_TOUCHSCREEN.
    *
    * Since: 3.4
    */
@@ -539,6 +556,16 @@ gtk_scrolled_window_class_init (GtkScrolledWindowClass *class)
                                                          TRUE,
                                                          GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
 
+  /**
+   * GtkScrolledWindow:overlay-scrolling:
+   *
+   * Whether overlay scrolling is enabled or not. If it is, the
+   * scrollbars are only added as traditional widgets when a mouse
+   * is present. Otherwise, they are overlayed on top of the content,
+   * as narrow indicators.
+   *
+   * Since: 3.16
+   */
   g_object_class_install_property (gobject_class,
                                    PROP_OVERLAY_SCROLLING,
                                    g_param_spec_boolean ("overlay-scrolling",
@@ -3703,7 +3730,7 @@ gtk_scrolled_window_device_removed (GdkDeviceManager  *dm,
                                     GdkDevice         *device,
                                     GtkScrolledWindow *scrolled_window)
 {
-  /* We need to work around the fact that ::device-removed is emitted
+  /* Work around the fact that ::device-removed is emitted
    * before the device is removed from the list.
    */
   g_object_set_data (G_OBJECT (device), "removed", GINT_TO_POINTER (1));
@@ -3875,6 +3902,15 @@ gtk_scrolled_window_set_min_content_height (GtkScrolledWindow *scrolled_window,
     }
 }
 
+/**
+ * gtk_scrolled_window_set_overlay_scrolling:
+ * @scrolled_window: a #GtkScrolledWindow
+ * @overlay_scrolling: whether to enable overlay scrolling
+ *
+ * Enables or disables overlay scrolling for this scrolled window.
+ *
+ * Since: 3.16
+ */
 void
 gtk_scrolled_window_set_overlay_scrolling (GtkScrolledWindow *scrolled_window,
                                            gboolean           overlay_scrolling)
@@ -3896,6 +3932,16 @@ gtk_scrolled_window_set_overlay_scrolling (GtkScrolledWindow *scrolled_window,
     }
 }
 
+/**
+ * gtk_scrolled_window_get_overlay_scrolling:
+ * @scrolled_window: a #GtkScrolledWindow
+ *
+ * Returns whether overlay scrolling is enabled for this scrolled window.
+ *
+ * Returns: %TRUE if overlay scrolling is enabled
+ *
+ * Since: 3.16
+ */
 gboolean
 gtk_scrolled_window_get_overlay_scrolling (GtkScrolledWindow *scrolled_window)
 {
