@@ -669,7 +669,6 @@ gtk_private_h_sources =		\
 	gtktexttypes.h		\
 	gtktextutil.h		\
 	gtkthemingbackgroundprivate.h \
-	deprecated/gtkthemingengineprivate.h \
 	gtktrashmonitor.h	\
 	gtktogglebuttonprivate.h \
 	gtktoolbarprivate.h	\
