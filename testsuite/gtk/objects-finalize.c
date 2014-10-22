@@ -114,6 +114,7 @@ main (int argc, char **argv)
 	  all_types[i] != GDK_TYPE_X11_DISPLAY &&
 	  all_types[i] != GDK_TYPE_X11_DEVICE_MANAGER_XI2 &&
 	  all_types[i] != GDK_TYPE_X11_DISPLAY_MANAGER &&
+	  all_types[i] != GDK_TYPE_X11_GL_CONTEXT &&
 #endif
 	  /* Not allowed to finalize a GdkPixbufLoader without calling gdk_pixbuf_loader_close() */
 	  all_types[i] != GDK_TYPE_PIXBUF_LOADER &&
