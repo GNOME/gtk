@@ -36,7 +36,7 @@
 
 #include <cairo/cairo-xlib.h>
 
-#include <GL/glx.h>
+#include <epoxy/glx.h>
 
 G_DEFINE_TYPE (GdkX11GLContext, gdk_x11_gl_context, GDK_TYPE_GL_CONTEXT)
 
