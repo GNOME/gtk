@@ -378,7 +378,7 @@ gtk_paper_size_new_from_ppd (const gchar *ppd_name,
 
 /**
  * gtk_paper_size_new_from_ipp:
- * @ppd_name: an IPP paper name
+ * @ipp_name: an IPP paper name
  * @width: the paper width, in points
  * @height: the paper height in points
  *

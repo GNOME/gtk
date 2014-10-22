@@ -95,7 +95,7 @@ GtkPaperSize *gtk_paper_size_new_from_ppd (const gchar  *ppd_name,
 					   gdouble       width,
 					   gdouble       height);
 GDK_AVAILABLE_IN_ALL
-GtkPaperSize *gtk_paper_size_new_from_ipp (const gchar  *ipd_name,
+GtkPaperSize *gtk_paper_size_new_from_ipp (const gchar  *ipp_name,
 					   gdouble       width,
 					   gdouble       height);
 GDK_AVAILABLE_IN_ALL

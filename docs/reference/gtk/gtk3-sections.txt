@@ -7151,6 +7151,7 @@ GTK_PAPER_NAME_EXECUTIVE
 GTK_PAPER_NAME_LEGAL
 gtk_paper_size_new
 gtk_paper_size_new_from_ppd
+gtk_paper_size_new_from_ipp
 gtk_paper_size_new_custom
 gtk_paper_size_copy
 gtk_paper_size_free
@@ -7161,6 +7162,7 @@ gtk_paper_size_get_display_name
 gtk_paper_size_get_ppd_name
 gtk_paper_size_get_width
 gtk_paper_size_get_height
+gtk_paper_size_is_ipp
 gtk_paper_size_is_custom
 gtk_paper_size_set_size
 gtk_paper_size_get_default_top_margin
