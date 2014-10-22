@@ -31,7 +31,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="..\..\..\gdk;..\..\..\gdk\broadway;..\crypt"
+				AdditionalIncludeDirectories="..\..\..\gdk;..\..\..\gdk\broadway"
 				PreprocessorDefinitions="_DEBUG;$(GdkDefines)"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
@@ -62,7 +62,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="2"
-				AdditionalIncludeDirectories="..\..\..\gdk;..\..\..\gdk\broadway;..\crypt"
+				AdditionalIncludeDirectories="..\..\..\gdk;..\..\..\gdk\broadway"
 				EnableIntrinsicFunctions="true"
 				PreprocessorDefinitions="$(GdkDefines)"
 				RuntimeLibrary="2"
@@ -95,7 +95,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="..\..\..\gdk;..\..\..\gdk\broadway;..\crypt"
+				AdditionalIncludeDirectories="..\..\..\gdk;..\..\..\gdk\broadway"
 				PreprocessorDefinitions="_DEBUG;$(GdkDefines)"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
@@ -127,7 +127,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="2"
-				AdditionalIncludeDirectories="..\..\..\gdk;..\..\..\gdk\broadway;..\crypt"
+				AdditionalIncludeDirectories="..\..\..\gdk;..\..\..\gdk\broadway"
 				EnableIntrinsicFunctions="true"
 				PreprocessorDefinitions="$(GdkDefines)"
 				RuntimeLibrary="2"
@@ -157,8 +157,8 @@
 			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}"
 			>
 		</Filter>
-			<File RelativePath="..\crypt\crypt3.c" />
 			<File RelativePath="..\..\..\gdk\broadway\broadwayd.c" />
+			<File RelativePath="..\..\..\gdk\broadway\broadway-buffer.c" />
 			<File RelativePath="..\..\..\gdk\broadway\broadway-output.c" />
 			<File RelativePath="..\..\..\gdk\broadway\broadway-server.c" />
 		<Filter

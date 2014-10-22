@@ -15,8 +15,8 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\crypt\crypt3.c"><Filter>Sources</Filter></ClCompile>
     <ClCompile Include="..\..\..\gdk\broadway\broadwayd.c"><Filter>Sources</Filter></ClCompile>
+    <ClCompile Include="..\..\..\gdk\broadway\broadway-buffer.c"><Filter>Sources</Filter></ClCompile>
     <ClCompile Include="..\..\..\gdk\broadway\broadway-output.c"><Filter>Sources</Filter></ClCompile>
     <ClCompile Include="..\..\..\gdk\broadway\broadway-server.c"><Filter>Sources</Filter></ClCompile>
   </ItemGroup>
