@@ -511,7 +511,11 @@ gtk_sidebar_set_stack (GtkSidebar *sidebar,
  * gtk_sidebar_get_stack:
  * @sidebar: a #GtkSidebar
  *
- * Returns: (transfer full): the associated #GtkStack
+ * Retrieves the stack.
+ * See gtk_sidebar_set_stack().
+ *
+ * Returns: (transfer full): the associated #GtkStack or
+ *     %NULL if none has been set explicitly
  *
  * Since: 3.16
  */
