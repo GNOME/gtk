@@ -8,6 +8,7 @@
 #include <X11/Xatom.h>
 #include <gdkx.h>
 #include "widgets.h"
+#include "gtkgears.h"
 
 #define SMALL_WIDTH  240
 #define SMALL_HEIGHT 75
@@ -1480,6 +1481,24 @@ create_flow_box (void)
   return info;
 }
 
+static WidgetInfo *
+create_gl_area (void)
+{
+  WidgetInfo *info;
+  GtkWidget *widget;
+  GtkWidget *gears;
+
+  widget = gtk_frame_new (NULL);
+  gtk_frame_set_shadow_type (GTK_FRAME (widget), GTK_SHADOW_IN);
+
+  gears = gtk_gears_new ();
+  gtk_container_add (GTK_CONTAINER (widget), gears);
+ 
+  info = new_widget_info ("glarea", widget, MEDIUM);
+
+  return info;
+}
+
 GList *
 get_all_widgets (void)
 {
@@ -1544,6 +1563,7 @@ get_all_widgets (void)
   retval = g_list_prepend (retval, create_search_entry ());
   retval = g_list_prepend (retval, create_level_bar ());
   retval = g_list_prepend (retval, create_info_bar ());
+  retval = g_list_prepend (retval, create_gl_area ());
 
   return retval;
 }

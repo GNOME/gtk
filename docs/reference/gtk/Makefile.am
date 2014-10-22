@@ -206,6 +206,7 @@ HTML_IMAGES = \
 	$(srcdir)/images/font-button.png				\
 	$(srcdir)/images/fontchooser.png				\
 	$(srcdir)/images/frame.png					\
+	$(srcdir)/images/glarea.png					\
 	$(srcdir)/images/headerbar.png					\
 	$(srcdir)/images/icon-view.png					\
 	$(srcdir)/images/image.png					\

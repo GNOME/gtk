@@ -5,6 +5,7 @@ AM_CPPFLAGS = \
 	-I$(top_builddir)/gdk		\
 	-I$(top_srcdir)/gdk		\
 	-I$(top_srcdir)/gdk/x11		\
+	-I$(top_srcdir)/tests		\
 	$(GTK_DEBUG_FLAGS)		\
 	$(GTK_DEP_CFLAGS)
 
@@ -30,7 +31,9 @@ doc_shooter_SOURCES=	\
 	shadow.h	\
 	shooter.c	\
 	widgets.c	\
-	widgets.h
+	widgets.h	\
+	$(top_srcdir)/tests/gtkgears.c \
+	$(top_srcdir)/tests/gtkgears.h
 
 clean-local:
 	for file in *.png; do \

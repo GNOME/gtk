@@ -42,6 +42,9 @@
     <link linkend="GtkScale">
       <inlinegraphic fileref="scales.png" format="PNG"></inlinegraphic>
     </link>
+    <link linkend="GtkGLArea">
+      <inlinegraphic fileref="glarea.png" format="PNG"></inlinegraphic>
+    </link>
   </para>
 </section>
 
