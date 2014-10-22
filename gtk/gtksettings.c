@@ -2335,21 +2335,21 @@ gtk_settings_set_property_value_internal (GtkSettings            *settings,
 /**
  * gtk_settings_set_property_value:
  * @settings:
- * @prop_name:
- * @new_value:
+ * @name:
+ * @svalue:
  *
  * Deprecated: 3.16: Use g_object_set() instead.
  */
 void
 gtk_settings_set_property_value (GtkSettings            *settings,
-                                 const gchar            *prop_name,
-                                 const GtkSettingsValue *new_value)
+                                 const gchar            *name,
+                                 const GtkSettingsValue *svalue)
 {
   g_return_if_fail (GTK_SETTINGS (settings));
-  g_return_if_fail (prop_name != NULL);
-  g_return_if_fail (new_value != NULL);
+  g_return_if_fail (name != NULL);
+  g_return_if_fail (svalue != NULL);
 
-  gtk_settings_set_property_value_internal (settings, prop_name, new_value,
+  gtk_settings_set_property_value_internal (settings, name, svalue,
                                             GTK_SETTINGS_SOURCE_APPLICATION);
 }
 
