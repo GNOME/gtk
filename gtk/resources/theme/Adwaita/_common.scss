@@ -1530,6 +1530,8 @@ column-header.button.dnd { // for treeview-like derive widgets
   margin: 4px;
   padding: 0px;
   background-color: $base_color;
+  border: 1px solid $borders_color; // adds borders in a non composited env
+  .csd & { border: none; }  // axes borders in a composited env
   .menuitem {
     text-shadow: none;
     padding: 4px;
@@ -3078,6 +3080,8 @@ GtkVolumeButton.button { padding: 8px; }
   box-shadow: 0 3px 9px 1px transparentize(black, 0.5),
               0 0 0 1px $_wm_border; //doing borders with box-shadow
 
+  // FIXME rationalize window-frame shadows
+
   /* this is used for the resize cursor area */
   margin: 10px;
 
@@ -3088,8 +3092,11 @@ GtkVolumeButton.button { padding: 8px; }
   &.tiled {
     border-radius: 0;
   }
+  &.popup {
+    box-shadow: none;
+  }
   &.csd {
-    &.popup {
+    .popup {
       border-radius: 0;
       box-shadow: 0 1px 2px transparentize(black, 0.8),
                   0 0 0 1px transparentize($_wm_border,0.1);
