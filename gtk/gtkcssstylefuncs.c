@@ -1075,8 +1075,8 @@ gtk_css_style_funcs_init (void)
  * Returns: %TRUE if parsing succeeded.
  **/
 gboolean
-_gtk_css_style_parse_value (GValue       *value,
-                            GtkCssParser *parser)
+_gtk_css_style_funcs_parse_value (GValue       *value,
+                                  GtkCssParser *parser)
 {
   GtkStyleParseFunc func;
 
@@ -1111,8 +1111,8 @@ _gtk_css_style_parse_value (GValue       *value,
  * valid value, a random string will be printed instead.
  **/
 void
-_gtk_css_style_print_value (const GValue *value,
-                            GString      *string)
+_gtk_css_style_funcs_print_value (const GValue *value,
+                                  GString      *string)
 {
   GtkStylePrintFunc func;
 
@@ -1153,12 +1153,12 @@ _gtk_css_style_print_value (const GValue *value,
  * Returns: the resulting value
  **/
 GtkCssValue *
-_gtk_css_style_compute_value (GtkStyleProviderPrivate *provider,
-                              GtkCssComputedValues    *values,
-                              GtkCssComputedValues    *parent_values,
-			      GType                    target_type,
-                              GtkCssValue             *specified,
-                              GtkCssDependencies      *dependencies)
+_gtk_css_style_funcs_compute_value (GtkStyleProviderPrivate *provider,
+                                    GtkCssComputedValues    *values,
+                                    GtkCssComputedValues    *parent_values,
+                                    GType                    target_type,
+                                    GtkCssValue             *specified,
+                                    GtkCssDependencies      *dependencies)
 {
   GtkStyleComputeFunc func;
 

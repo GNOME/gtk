@@ -1727,8 +1727,8 @@ gtk_css_provider_get_style_property (GtkStyleProvider *provider,
 					     val->section != NULL ? gtk_css_section_get_file (val->section) : NULL,
 					     val->value);
 
-	      found = _gtk_css_style_parse_value (value,
-						  scanner->parser);
+	      found = _gtk_css_style_funcs_parse_value (value,
+					                scanner->parser);
 
 	      gtk_css_scanner_destroy (scanner);
 

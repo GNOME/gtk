@@ -45,7 +45,7 @@ gtk_css_value_typed_compute (GtkCssValue             *value,
 {
   GtkCssCustomProperty *custom = GTK_CSS_CUSTOM_PROPERTY (_gtk_css_style_property_lookup_by_id (property_id));
 
-  return _gtk_css_style_compute_value (provider, values, parent_values, custom->pspec->value_type, value, dependencies);
+  return _gtk_css_style_funcs_compute_value (provider, values, parent_values, custom->pspec->value_type, value, dependencies);
 }
 
 static gboolean
@@ -68,7 +68,7 @@ static void
 gtk_css_value_typed_print (const GtkCssValue *value,
                            GString           *string)
 {
-  _gtk_css_style_print_value (&value->value, string);
+  _gtk_css_style_funcs_print_value (&value->value, string);
 }
 
 static const GtkCssValueClass GTK_CSS_VALUE_TYPED = {

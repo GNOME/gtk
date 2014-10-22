@@ -75,7 +75,7 @@ gtk_css_custom_property_parse_value (GtkStyleProperty *property,
     {
       g_value_init (&value, gtk_css_custom_property_get_specified_type (custom->pspec));
 
-      success = _gtk_css_style_parse_value (&value, parser);
+      success = _gtk_css_style_funcs_parse_value (&value, parser);
     }
 
   if (!success)

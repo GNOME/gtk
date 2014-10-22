@@ -24,11 +24,11 @@
 
 G_BEGIN_DECLS
 
-gboolean            _gtk_css_style_parse_value             (GValue                  *value,
+gboolean            _gtk_css_style_funcs_parse_value       (GValue                  *value,
                                                             GtkCssParser            *parser);
-void                _gtk_css_style_print_value             (const GValue            *value,
+void                _gtk_css_style_funcs_print_value       (const GValue            *value,
                                                             GString                 *string);
-GtkCssValue *       _gtk_css_style_compute_value           (GtkStyleProviderPrivate *provider,
+GtkCssValue *       _gtk_css_style_funcs_compute_value     (GtkStyleProviderPrivate *provider,
                                                             GtkCssComputedValues    *values,
                                                             GtkCssComputedValues    *parent_values,
 							    GType                    target_type,
