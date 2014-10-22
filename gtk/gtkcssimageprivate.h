@@ -59,8 +59,8 @@ struct _GtkCssImageClass
                                                     guint                       property_id,
                                                     GtkStyleProviderPrivate    *provider,
 						    int                         scale,
-                                                    GtkCssComputedValues       *values,
-                                                    GtkCssComputedValues       *parent_values,
+                                                    GtkCssStyle       *values,
+                                                    GtkCssStyle       *parent_values,
                                                     GtkCssDependencies         *dependencies);
   /* compare two images for equality */
   gboolean     (* equal)                           (GtkCssImage                *image1,
@@ -97,8 +97,8 @@ GtkCssImage *  _gtk_css_image_compute              (GtkCssImage                *
                                                     guint                       property_id,
                                                     GtkStyleProviderPrivate    *provider,
 						    int                        scale,
-                                                    GtkCssComputedValues       *values,
-                                                    GtkCssComputedValues       *parent_values,
+                                                    GtkCssStyle       *values,
+                                                    GtkCssStyle       *parent_values,
                                                     GtkCssDependencies         *dependencies);
 gboolean       _gtk_css_image_equal                (GtkCssImage                *image1,
                                                     GtkCssImage                *image2);

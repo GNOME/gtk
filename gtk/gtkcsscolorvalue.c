@@ -101,8 +101,8 @@ static GtkCssValue *
 gtk_css_value_color_get_fallback (guint                    property_id,
                                   GtkStyleProviderPrivate *provider,
 				  int                      scale,
-                                  GtkCssComputedValues    *values,
-                                  GtkCssComputedValues    *parent_values)
+                                  GtkCssStyle    *values,
+                                  GtkCssStyle    *parent_values)
 {
   static const GdkRGBA transparent = { 0, 0, 0, 0 };
 
@@ -303,8 +303,8 @@ gtk_css_value_color_compute (GtkCssValue             *value,
                              guint                    property_id,
                              GtkStyleProviderPrivate *provider,
 			     int                      scale,
-                             GtkCssComputedValues    *values,
-                             GtkCssComputedValues    *parent_values,
+                             GtkCssStyle    *values,
+                             GtkCssStyle    *parent_values,
                              GtkCssDependencies      *dependencies)
 {
   GtkCssValue *resolved, *current;
@@ -318,7 +318,7 @@ gtk_css_value_color_compute (GtkCssValue             *value,
     {
       if (parent_values)
         {
-          current = _gtk_css_computed_values_get_value (parent_values, GTK_CSS_PROPERTY_COLOR);
+          current = gtk_css_style_get_value (parent_values, GTK_CSS_PROPERTY_COLOR);
           current_deps = GTK_CSS_EQUALS_PARENT;
         }
       else
@@ -329,7 +329,7 @@ gtk_css_value_color_compute (GtkCssValue             *value,
     }
   else
     {
-      current = _gtk_css_computed_values_get_value (values, GTK_CSS_PROPERTY_COLOR);
+      current = gtk_css_style_get_value (values, GTK_CSS_PROPERTY_COLOR);
       current_deps = GTK_CSS_DEPENDS_ON_COLOR;
     }
   

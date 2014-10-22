@@ -38,21 +38,21 @@ gtk_css_value_number_free (GtkCssValue *value)
 static double
 get_base_font_size (guint                    property_id,
                     GtkStyleProviderPrivate *provider,
-                    GtkCssComputedValues    *values,
-                    GtkCssComputedValues    *parent_values,
+                    GtkCssStyle    *values,
+                    GtkCssStyle    *parent_values,
                     GtkCssDependencies      *dependencies)
 {
   if (property_id == GTK_CSS_PROPERTY_FONT_SIZE)
     {
       *dependencies = GTK_CSS_DEPENDS_ON_PARENT;
       if (parent_values)
-        return _gtk_css_number_value_get (_gtk_css_computed_values_get_value (parent_values, GTK_CSS_PROPERTY_FONT_SIZE), 100);
+        return _gtk_css_number_value_get (gtk_css_style_get_value (parent_values, GTK_CSS_PROPERTY_FONT_SIZE), 100);
       else
         return _gtk_css_font_size_get_default (provider);
     }
 
   *dependencies = GTK_CSS_DEPENDS_ON_FONT_SIZE;
-  return _gtk_css_number_value_get (_gtk_css_computed_values_get_value (values, GTK_CSS_PROPERTY_FONT_SIZE), 100);
+  return _gtk_css_number_value_get (gtk_css_style_get_value (values, GTK_CSS_PROPERTY_FONT_SIZE), 100);
 }
                     
 static GtkCssValue *
@@ -60,8 +60,8 @@ gtk_css_value_number_compute (GtkCssValue             *number,
                               guint                    property_id,
                               GtkStyleProviderPrivate *provider,
 			      int                      scale,
-                              GtkCssComputedValues    *values,
-                              GtkCssComputedValues    *parent_values,
+                              GtkCssStyle    *values,
+                              GtkCssStyle    *parent_values,
                               GtkCssDependencies      *dependencies)
 {
   switch (number->unit)

@@ -29,8 +29,8 @@ gboolean            _gtk_css_style_funcs_parse_value       (GValue              
 void                _gtk_css_style_funcs_print_value       (const GValue            *value,
                                                             GString                 *string);
 GtkCssValue *       _gtk_css_style_funcs_compute_value     (GtkStyleProviderPrivate *provider,
-                                                            GtkCssComputedValues    *values,
-                                                            GtkCssComputedValues    *parent_values,
+                                                            GtkCssStyle             *style,
+                                                            GtkCssStyle             *parent_style,
 							    GType                    target_type,
                                                             GtkCssValue             *specified,
                                                             GtkCssDependencies      *dependencies);

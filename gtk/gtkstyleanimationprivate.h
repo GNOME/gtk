@@ -21,7 +21,7 @@
 #define __GTK_STYLE_ANIMATION_PRIVATE_H__
 
 #include <glib-object.h>
-#include "gtkcsscomputedvaluesprivate.h"
+#include "gtkcssstyleprivate.h"
 
 G_BEGIN_DECLS
 
@@ -50,14 +50,14 @@ struct _GtkStyleAnimationClass
                                                          gint64                  at_time_us);
   void          (* set_values)                          (GtkStyleAnimation      *animation,
                                                          gint64                  for_time_us,
-                                                         GtkCssComputedValues   *values);
+                                                         GtkCssStyle   *values);
 };
 
 GType           _gtk_style_animation_get_type           (void) G_GNUC_CONST;
 
 void            _gtk_style_animation_set_values         (GtkStyleAnimation      *animation,
                                                          gint64                  for_time_us,
-                                                         GtkCssComputedValues   *values);
+                                                         GtkCssStyle   *values);
 gboolean        _gtk_style_animation_is_finished        (GtkStyleAnimation      *animation,
                                                          gint64                  at_time_us);
 gboolean        _gtk_style_animation_is_static          (GtkStyleAnimation      *animation,

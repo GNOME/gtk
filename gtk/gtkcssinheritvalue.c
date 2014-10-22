@@ -38,14 +38,14 @@ gtk_css_value_inherit_compute (GtkCssValue             *value,
                                guint                    property_id,
                                GtkStyleProviderPrivate *provider,
 			       int                      scale,
-                               GtkCssComputedValues    *values,
-                               GtkCssComputedValues    *parent_values,
+                               GtkCssStyle    *values,
+                               GtkCssStyle    *parent_values,
                                GtkCssDependencies      *dependencies)
 {
   if (parent_values)
     {
       *dependencies = GTK_CSS_EQUALS_PARENT;
-      return _gtk_css_value_ref (_gtk_css_computed_values_get_value (parent_values, property_id));
+      return _gtk_css_value_ref (gtk_css_style_get_value (parent_values, property_id));
     }
   else
     {

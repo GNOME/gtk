@@ -21,7 +21,7 @@
 
 #include "gtkcssimageprivate.h"
 
-#include "gtkcsscomputedvaluesprivate.h"
+#include "gtkcssstyleprivate.h"
 
 /* for the types only */
 #include "gtk/gtkcssimagecrossfadeprivate.h"
@@ -65,8 +65,8 @@ gtk_css_image_real_compute (GtkCssImage             *image,
                             guint                    property_id,
                             GtkStyleProviderPrivate *provider,
 			    int                      scale,
-                            GtkCssComputedValues    *values,
-                            GtkCssComputedValues    *parent_values,
+                            GtkCssStyle    *values,
+                            GtkCssStyle    *parent_values,
                             GtkCssDependencies      *dependencies)
 {
   return g_object_ref (image);
@@ -150,16 +150,16 @@ _gtk_css_image_compute (GtkCssImage             *image,
                         guint                    property_id,
                         GtkStyleProviderPrivate *provider,
 			int                      scale,
-                        GtkCssComputedValues    *values,
-                        GtkCssComputedValues    *parent_values,
+                        GtkCssStyle    *values,
+                        GtkCssStyle    *parent_values,
                         GtkCssDependencies      *dependencies)
 {
   GtkCssDependencies unused;
   GtkCssImageClass *klass;
 
   g_return_val_if_fail (GTK_IS_CSS_IMAGE (image), NULL);
-  g_return_val_if_fail (GTK_IS_CSS_COMPUTED_VALUES (values), NULL);
-  g_return_val_if_fail (parent_values == NULL || GTK_IS_CSS_COMPUTED_VALUES (parent_values), NULL);
+  g_return_val_if_fail (GTK_IS_CSS_STYLE (values), NULL);
+  g_return_val_if_fail (parent_values == NULL || GTK_IS_CSS_STYLE (parent_values), NULL);
 
   if (dependencies == NULL)
     dependencies = &unused;

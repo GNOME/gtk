@@ -95,8 +95,8 @@ gtk_css_image_scaled_compute (GtkCssImage             *image,
 			      guint                    property_id,
 			      GtkStyleProviderPrivate *provider,
 			      int                      scale,
-			      GtkCssComputedValues    *values,
-			      GtkCssComputedValues    *parent_values,
+			      GtkCssStyle    *values,
+			      GtkCssStyle    *parent_values,
 			      GtkCssDependencies      *dependencies)
 {
   GtkCssImageScaled *scaled = GTK_CSS_IMAGE_SCALED (image);

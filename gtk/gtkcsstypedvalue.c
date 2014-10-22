@@ -39,8 +39,8 @@ gtk_css_value_typed_compute (GtkCssValue             *value,
                              guint                    property_id,
                              GtkStyleProviderPrivate *provider,
 			     int                      scale,
-                             GtkCssComputedValues    *values,
-                             GtkCssComputedValues    *parent_values,
+                             GtkCssStyle    *values,
+                             GtkCssStyle    *parent_values,
                              GtkCssDependencies      *dependencies)
 {
   GtkCssCustomProperty *custom = GTK_CSS_CUSTOM_PROPERTY (_gtk_css_style_property_lookup_by_id (property_id));

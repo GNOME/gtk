@@ -305,8 +305,8 @@ gtk_gradient_resolve (GtkGradient         *gradient,
 cairo_pattern_t *
 _gtk_gradient_resolve_full (GtkGradient             *gradient,
                             GtkStyleProviderPrivate *provider,
-                            GtkCssComputedValues    *values,
-                            GtkCssComputedValues    *parent_values,
+                            GtkCssStyle    *values,
+                            GtkCssStyle    *parent_values,
                             GtkCssDependencies      *dependencies)
 {
   cairo_pattern_t *pattern;
@@ -314,8 +314,8 @@ _gtk_gradient_resolve_full (GtkGradient             *gradient,
 
   g_return_val_if_fail (gradient != NULL, NULL);
   g_return_val_if_fail (GTK_IS_STYLE_PROVIDER (provider), NULL);
-  g_return_val_if_fail (GTK_IS_CSS_COMPUTED_VALUES (values), NULL);
-  g_return_val_if_fail (parent_values == NULL || GTK_IS_CSS_COMPUTED_VALUES (parent_values), NULL);
+  g_return_val_if_fail (GTK_IS_CSS_STYLE (values), NULL);
+  g_return_val_if_fail (parent_values == NULL || GTK_IS_CSS_STYLE (parent_values), NULL);
   g_return_val_if_fail (*dependencies == 0, NULL);
 
   if (gradient->radius0 == 0 && gradient->radius1 == 0)
@@ -339,7 +339,7 @@ _gtk_gradient_resolve_full (GtkGradient             *gradient,
       /* if color resolving fails, assume transparency */
       val = _gtk_css_color_value_resolve (_gtk_symbolic_color_get_css_value (stop->color),
                                           provider,
-                                          _gtk_css_computed_values_get_value (values, GTK_CSS_PROPERTY_COLOR),
+                                          gtk_css_style_get_value (values, GTK_CSS_PROPERTY_COLOR),
                                           GTK_CSS_DEPENDS_ON_COLOR,
                                           &stop_deps,
                                           NULL);

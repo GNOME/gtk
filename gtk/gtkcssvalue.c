@@ -20,7 +20,7 @@
 #include "gtkprivate.h"
 #include "gtkcssvalueprivate.h"
 
-#include "gtkcsscomputedvaluesprivate.h"
+#include "gtkcssstyleprivate.h"
 #include "gtkstyleproviderprivate.h"
 
 struct _GtkCssValue {
@@ -88,16 +88,16 @@ _gtk_css_value_compute (GtkCssValue             *value,
                         guint                    property_id,
                         GtkStyleProviderPrivate *provider,
 			int                      scale,
-                        GtkCssComputedValues    *values,
-                        GtkCssComputedValues    *parent_values,
+                        GtkCssStyle    *values,
+                        GtkCssStyle    *parent_values,
                         GtkCssDependencies      *dependencies)
 {
   GtkCssDependencies fallback;
 
   gtk_internal_return_val_if_fail (value != NULL, NULL);
   gtk_internal_return_val_if_fail (GTK_IS_STYLE_PROVIDER_PRIVATE (provider), NULL);
-  gtk_internal_return_val_if_fail (GTK_IS_CSS_COMPUTED_VALUES (values), NULL);
-  gtk_internal_return_val_if_fail (parent_values == NULL || GTK_IS_CSS_COMPUTED_VALUES (parent_values), NULL);
+  gtk_internal_return_val_if_fail (GTK_IS_CSS_STYLE (values), NULL);
+  gtk_internal_return_val_if_fail (parent_values == NULL || GTK_IS_CSS_STYLE (parent_values), NULL);
 
   if (dependencies == NULL)
     dependencies = &fallback;

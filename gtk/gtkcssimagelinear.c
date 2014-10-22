@@ -421,8 +421,8 @@ gtk_css_image_linear_compute (GtkCssImage             *image,
                               guint                    property_id,
                               GtkStyleProviderPrivate *provider,
 			      int                      scale,
-                              GtkCssComputedValues    *values,
-                              GtkCssComputedValues    *parent_values,
+                              GtkCssStyle    *values,
+                              GtkCssStyle    *parent_values,
                               GtkCssDependencies      *dependencies)
 {
   GtkCssImageLinear *linear = GTK_CSS_IMAGE_LINEAR (image);

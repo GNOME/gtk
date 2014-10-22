@@ -372,7 +372,6 @@ gtk_private_h_sources =		\
 	gtkcssbgsizevalueprivate.h	\
 	gtkcssbordervalueprivate.h	\
 	gtkcsscolorvalueprivate.h	\
-	gtkcsscomputedvaluesprivate.h \
 	gtkcsscornervalueprivate.h	\
 	gtkcsscustompropertyprivate.h \
 	gtkcsseasevalueprivate.h	\
@@ -408,6 +407,7 @@ gtk_private_h_sources =		\
 	gtkcssshorthandpropertyprivate.h \
 	gtkcssstringvalueprivate.h	\
 	gtkcssstylefuncsprivate.h \
+	gtkcssstyleprivate.h 	\
 	gtkcssstylepropertyprivate.h \
 	gtkcsstransformvalueprivate.h	\
 	gtkcsstransitionprivate.h	\
@@ -596,7 +596,6 @@ gtk_base_c_sources = 		\
 	gtkcssbgsizevalue.c	\
 	gtkcssbordervalue.c	\
 	gtkcsscolorvalue.c	\
-	gtkcsscomputedvalues.c	\
 	gtkcsscornervalue.c	\
 	gtkcsscustomproperty.c	\
 	gtkcsseasevalue.c	\
@@ -628,6 +627,7 @@ gtk_base_c_sources = 		\
 	gtkcsssection.c 	\
 	gtkcssselector.c	\
 	gtkcssstringvalue.c	\
+	gtkcssstyle.c		\
 	gtkcssshadowsvalue.c	\
 	gtkcssshadowvalue.c	\
 	gtkcssshorthandproperty.c \

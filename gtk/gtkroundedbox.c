@@ -221,17 +221,19 @@ _cairo_ellipsis (cairo_t *cr,
 	         double xradius, double yradius,
 	         double angle1, double angle2)
 {
+  cairo_matrix_t save;
+
   if (xradius <= 0.0 || yradius <= 0.0)
     {
       cairo_line_to (cr, xc, yc);
       return;
     }
 
-  cairo_save (cr);
+  cairo_get_matrix (cr, &save);
   cairo_translate (cr, xc, yc);
   cairo_scale (cr, xradius, yradius);
   cairo_arc (cr, 0, 0, 1.0, angle1, angle2);
-  cairo_restore (cr);
+  cairo_set_matrix (cr, &save);
 }
 
 static void
@@ -240,17 +242,19 @@ _cairo_ellipsis_negative (cairo_t *cr,
                           double xradius, double yradius,
                           double angle1, double angle2)
 {
+  cairo_matrix_t save;
+
   if (xradius <= 0.0 || yradius <= 0.0)
     {
       cairo_line_to (cr, xc, yc);
       return;
     }
 
-  cairo_save (cr);
+  cairo_get_matrix (cr, &save);
   cairo_translate (cr, xc, yc);
   cairo_scale (cr, xradius, yradius);
   cairo_arc_negative (cr, 0, 0, 1.0, angle1, angle2);
-  cairo_restore (cr);
+  cairo_set_matrix (cr, &save);
 }
 
 void

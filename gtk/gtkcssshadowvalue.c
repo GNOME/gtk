@@ -67,8 +67,8 @@ gtk_css_value_shadow_compute (GtkCssValue             *shadow,
                               guint                    property_id,
                               GtkStyleProviderPrivate *provider,
 			      int                      scale,
-                              GtkCssComputedValues    *values,
-                              GtkCssComputedValues    *parent_values,
+                              GtkCssStyle    *values,
+                              GtkCssStyle    *parent_values,
                               GtkCssDependencies      *dependencies)
 {
   GtkCssValue *hoffset, *voffset, *radius, *spread, *color;

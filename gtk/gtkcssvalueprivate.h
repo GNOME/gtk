@@ -44,8 +44,8 @@ struct _GtkCssValueClass {
                                                        guint                       property_id,
                                                        GtkStyleProviderPrivate    *provider,
 						       int                         scale,
-                                                       GtkCssComputedValues       *values,
-                                                       GtkCssComputedValues       *parent_values,
+                                                       GtkCssStyle       *values,
+                                                       GtkCssStyle       *parent_values,
                                                        GtkCssDependencies         *dependencies);
   gboolean      (* equal)                             (const GtkCssValue          *value1,
                                                        const GtkCssValue          *value2);
@@ -70,8 +70,8 @@ GtkCssValue *_gtk_css_value_compute                   (GtkCssValue              
                                                        guint                       property_id,
                                                        GtkStyleProviderPrivate    *provider,
 						       int                         scale,
-                                                       GtkCssComputedValues       *values,
-                                                       GtkCssComputedValues       *parent_values,
+                                                       GtkCssStyle       *values,
+                                                       GtkCssStyle       *parent_values,
                                                        GtkCssDependencies         *dependencies);
 gboolean     _gtk_css_value_equal                     (const GtkCssValue          *value1,
                                                        const GtkCssValue          *value2);

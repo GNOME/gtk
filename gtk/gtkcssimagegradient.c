@@ -35,8 +35,8 @@ gtk_css_image_gradient_compute (GtkCssImage             *image,
                                 guint                    property_id,
                                 GtkStyleProviderPrivate *provider,
 				int                      scale,
-                                GtkCssComputedValues    *values,
-                                GtkCssComputedValues    *parent_values,
+                                GtkCssStyle    *values,
+                                GtkCssStyle    *parent_values,
                                 GtkCssDependencies      *dependencies)
 {
   GtkCssImageGradient *gradient = GTK_CSS_IMAGE_GRADIENT (image);

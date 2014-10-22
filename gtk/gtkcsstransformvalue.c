@@ -232,8 +232,8 @@ gtk_css_transform_compute (GtkCssTransform         *dest,
                            guint                    property_id,
                            GtkStyleProviderPrivate *provider,
                            int                      scale,
-                           GtkCssComputedValues    *values,
-                           GtkCssComputedValues    *parent_values,
+                           GtkCssStyle    *values,
+                           GtkCssStyle    *parent_values,
                            GtkCssDependencies      *dependencies)
 {
   GtkCssDependencies x_deps, y_deps;
@@ -286,8 +286,8 @@ gtk_css_value_transform_compute (GtkCssValue             *value,
                                  guint                    property_id,
                                  GtkStyleProviderPrivate *provider,
 			         int                      scale,
-                                 GtkCssComputedValues    *values,
-                                 GtkCssComputedValues    *parent_values,
+                                 GtkCssStyle    *values,
+                                 GtkCssStyle    *parent_values,
                                  GtkCssDependencies      *dependencies)
 {
   GtkCssDependencies transform_deps;

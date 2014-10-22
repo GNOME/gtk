@@ -60,8 +60,8 @@ gtk_css_image_builtin_compute (GtkCssImage             *image,
                                guint                    property_id,
                                GtkStyleProviderPrivate *provider,
                                int                      scale,
-                               GtkCssComputedValues    *values,
-                               GtkCssComputedValues    *parent_values,
+                               GtkCssStyle    *values,
+                               GtkCssStyle    *parent_values,
                                GtkCssDependencies      *dependencies)
 {
   return g_object_ref (image);

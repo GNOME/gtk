@@ -45,8 +45,8 @@ gtk_css_value_bg_size_compute (GtkCssValue             *value,
                                guint                    property_id,
                                GtkStyleProviderPrivate *provider,
 			       int                      scale,
-                               GtkCssComputedValues    *values,
-                               GtkCssComputedValues    *parent_values,
+                               GtkCssStyle    *values,
+                               GtkCssStyle    *parent_values,
                                GtkCssDependencies      *dependencies)
 {
   GtkCssValue *x, *y;

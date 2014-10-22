@@ -41,8 +41,8 @@ gtk_css_value_corner_compute (GtkCssValue             *corner,
                               guint                    property_id,
                               GtkStyleProviderPrivate *provider,
 			      int                      scale,
-                              GtkCssComputedValues    *values,
-                              GtkCssComputedValues    *parent_values,
+                              GtkCssStyle    *values,
+                              GtkCssStyle    *parent_values,
                               GtkCssDependencies      *dependencies)
 {
   GtkCssValue *x, *y;

@@ -94,7 +94,7 @@ _gtk_css_lookup_set (GtkCssLookup  *lookup,
  * _gtk_css_lookup_resolve:
  * @lookup: the lookup
  * @context: the context the values are resolved for
- * @values: a new #GtkCssComputedValues to be filled with the new properties
+ * @values: a new #GtkCssStyle to be filled with the new properties
  *
  * Resolves the current lookup into a styleproperties object. This is done
  * by converting from the “winning declaration” to the “computed value”.
@@ -106,15 +106,15 @@ void
 _gtk_css_lookup_resolve (GtkCssLookup            *lookup,
                          GtkStyleProviderPrivate *provider,
 			 int                      scale,
-                         GtkCssComputedValues    *values,
-                         GtkCssComputedValues    *parent_values)
+                         GtkCssStyle             *values,
+                         GtkCssStyle             *parent_values)
 {
   guint i, n;
 
   g_return_if_fail (lookup != NULL);
   g_return_if_fail (GTK_IS_STYLE_PROVIDER_PRIVATE (provider));
-  g_return_if_fail (GTK_IS_CSS_COMPUTED_VALUES (values));
-  g_return_if_fail (parent_values == NULL || GTK_IS_CSS_COMPUTED_VALUES (parent_values));
+  g_return_if_fail (GTK_IS_CSS_STYLE (values));
+  g_return_if_fail (parent_values == NULL || GTK_IS_CSS_STYLE (parent_values));
 
   n = _gtk_css_style_property_get_n_properties ();
 
@@ -122,13 +122,13 @@ _gtk_css_lookup_resolve (GtkCssLookup            *lookup,
     {
       if (lookup->values[i].value ||
           _gtk_bitmask_get (lookup->missing, i))
-        _gtk_css_computed_values_compute_value (values,
-                                                provider,
-						scale,
-                                                parent_values,
-                                                i,
-                                                lookup->values[i].value,
-                                                lookup->values[i].section);
+        gtk_css_style_compute_value (values,
+                                     provider,
+                                     scale,
+                                     parent_values,
+                                     i,
+                                     lookup->values[i].value,
+                                     lookup->values[i].section);
       /* else not a relevant property */
     }
 }

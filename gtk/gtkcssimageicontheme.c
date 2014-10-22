@@ -129,8 +129,8 @@ gtk_css_image_icon_theme_compute (GtkCssImage             *image,
                                   guint                    property_id,
                                   GtkStyleProviderPrivate *provider,
                                   int                      scale,
-                                  GtkCssComputedValues    *values,
-                                  GtkCssComputedValues    *parent_values,
+                                  GtkCssStyle    *values,
+                                  GtkCssStyle    *parent_values,
                                   GtkCssDependencies      *dependencies)
 {
   GtkCssImageIconTheme *icon_theme = GTK_CSS_IMAGE_ICON_THEME (image);
@@ -148,7 +148,7 @@ gtk_css_image_icon_theme_compute (GtkCssImage             *image,
   copy->name = g_strdup (icon_theme->name);
   copy->icon_theme = gtk_icon_theme_get_for_screen (screen);
   copy->scale = scale;
-  copy->color = *_gtk_css_rgba_value_get_rgba (_gtk_css_computed_values_get_value (values, GTK_CSS_PROPERTY_COLOR));
+  copy->color = *_gtk_css_rgba_value_get_rgba (gtk_css_style_get_value (values, GTK_CSS_PROPERTY_COLOR));
 
   *dependencies = GTK_CSS_DEPENDS_ON_COLOR;
 
