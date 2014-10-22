@@ -1387,6 +1387,41 @@ create_stack_switcher (void)
 }
 
 static WidgetInfo *
+create_sidebar (void)
+{
+  GtkWidget *stack;
+  GtkWidget *sidebar;
+  GtkWidget *hbox;
+  GtkWidget *view;
+  GtkWidget *frame;
+
+  stack = gtk_stack_new ();
+  gtk_widget_set_size_request (stack, 120, 120);
+  view = gtk_label_new ("Sidebar");
+  gtk_style_context_add_class (gtk_widget_get_style_context (view), "view");
+  gtk_widget_set_halign (view, GTK_ALIGN_FILL);
+  gtk_widget_set_valign (view, GTK_ALIGN_FILL);
+  gtk_widget_show (view);
+  gtk_stack_add_titled (GTK_STACK (stack), view, "page1", "Page 1");
+  view = gtk_text_view_new ();
+  gtk_widget_show (view);
+  gtk_stack_add_titled (GTK_STACK (stack), view, "page2", "Page 2");
+
+  sidebar = gtk_sidebar_new ();
+  gtk_sidebar_set_stack (GTK_SIDEBAR (sidebar), GTK_STACK (stack));
+
+  frame = gtk_frame_new (NULL);
+  hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
+
+  gtk_box_pack_start (GTK_BOX (hbox), sidebar, FALSE, FALSE, 0);
+  gtk_box_pack_start (GTK_BOX (hbox), gtk_separator_new (GTK_ORIENTATION_VERTICAL), FALSE, FALSE, 0);
+  gtk_box_pack_start (GTK_BOX (hbox), stack, TRUE, TRUE, 0);
+  gtk_container_add (GTK_CONTAINER (frame), hbox);
+
+  return new_widget_info ("sidebar", frame, ASIS);
+}
+
+static WidgetInfo *
 create_list_box (void)
 {
   GtkWidget *widget;
@@ -1564,6 +1599,7 @@ get_all_widgets (void)
   retval = g_list_prepend (retval, create_level_bar ());
   retval = g_list_prepend (retval, create_info_bar ());
   retval = g_list_prepend (retval, create_gl_area ());
+  retval = g_list_prepend (retval, create_sidebar ());
 
   return retval;
 }

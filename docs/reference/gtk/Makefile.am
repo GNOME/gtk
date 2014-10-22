@@ -238,6 +238,7 @@ HTML_IMAGES = \
 	$(srcdir)/images/search-bar.png					\
 	$(srcdir)/images/search-entry.png				\
 	$(srcdir)/images/separator.png					\
+	$(srcdir)/images/sidebar.png					\
 	$(srcdir)/images/spinbutton.png					\
 	$(srcdir)/images/spinner.png					\
 	$(srcdir)/images/stack.png					\
