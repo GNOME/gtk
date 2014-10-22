@@ -2599,8 +2599,6 @@ gtk_status_icon_set_tooltip_markup (GtkStatusIcon *status_icon,
 {
 #ifdef GDK_WINDOWING_X11
   GtkStatusIconPrivate *priv;
-#else
-  gchar *text = NULL;
 #endif
 
   g_return_if_fail (GTK_IS_STATUS_ICON (status_icon));
@@ -2612,12 +2610,14 @@ gtk_status_icon_set_tooltip_markup (GtkStatusIcon *status_icon,
     gtk_widget_set_tooltip_markup (priv->tray_icon, markup);
 #endif
 #ifdef GDK_WINDOWING_WIN32
+  gchar *text = NULL;
   if (markup)
     pango_parse_markup (markup, -1, 0, NULL, &text, NULL, NULL);
   gtk_status_icon_set_tooltip_text (status_icon, text);
   g_free (text);
 #endif
 #ifdef GDK_WINDOWING_QUARTZ
+  gchar *text = NULL;
   if (markup)
     pango_parse_markup (markup, -1, 0, NULL, &text, NULL, NULL);
   gtk_status_icon_set_tooltip_text (status_icon, text);
