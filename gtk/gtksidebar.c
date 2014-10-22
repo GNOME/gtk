@@ -32,14 +32,14 @@
 #include "gtkintl.h"
 
 /**
- * SECTION:gtk-sidebar
- * @short_description: An automatic sidebar widget
- * @title: GtkSidebar
+ * SECTION:gtksidebar
+ * @Title: GtkSidebar
+ * @Short_description: An automatic sidebar widget
  *
- * A GtkSidebarWindow enables you to quickly and easily provide a consistent
+ * A GtkSidebar enables you to quickly and easily provide a consistent
  * "sidebar" object for your user interface.
  *
- * In order to use a GtkSidebar, you simply use a GtkStack to organise
+ * In order to use a GtkSidebar, you simply use a GtkStack to organize
  * your UI flow, and add the sidebar to your sidebar area. You can use
  * gtk_sidebar_set_stack() to connect the #GtkSidebar to the #GtkStack.
  *
