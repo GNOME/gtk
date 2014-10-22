@@ -18,8 +18,6 @@
 #ifndef __GDK_PRIVATE_MIR_H__
 #define __GDK_PRIVATE_MIR_H__
 
-#include "config.h"
-
 #include "gdkmir.h"
 #include "gdkdisplay.h"
 #include "gdkscreen.h"
@@ -32,8 +30,10 @@ typedef struct _GdkMirWindowReference GdkMirWindowReference;
 typedef struct _GdkMirEventSource GdkMirEventSource;
 
 #define GDK_TYPE_MIR_WINDOW_IMPL              (gdk_mir_window_impl_get_type ())
-#define GDK_MIR_WINDOW_IMPL(object)           (G_TYPE_CHECK_INSTANCE_CAST ((object), GDK_TYPE_WINDOW_IMPL_MIR, GdkMirWindowImpl))
-#define GDK_IS_WINDOW_IMPL_MIR(object)        (G_TYPE_CHECK_INSTANCE_TYPE ((object), GDK_TYPE_WINDOW_IMPL_MIR))
+#define GDK_MIR_WINDOW_IMPL(object)           (G_TYPE_CHECK_INSTANCE_CAST ((object), GDK_TYPE_MIR_WINDOW_IMPL, GdkMirWindowImpl))
+#define GDK_IS_WINDOW_IMPL_MIR(object)        (G_TYPE_CHECK_INSTANCE_TYPE ((object), GDK_TYPE_MIR_WINDOW_IMPL))
+
+GType gdk_mir_window_impl_get_type (void);
 
 GdkDisplay *_gdk_mir_display_open (const gchar *display_name);
 

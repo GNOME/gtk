@@ -661,23 +661,6 @@ gdk_mir_window_impl_input_shape_combine_region (GdkWindow            *window,
   g_printerr ("gdk_mir_window_impl_input_shape_combine_region window=%p\n", window);
 }
 
-static gboolean
-gdk_mir_window_impl_set_static_gravities (GdkWindow *window,
-                                          gboolean   use_static)
-{
-  g_printerr ("gdk_mir_window_impl_set_static_gravities window=%p\n", window);
-  return FALSE;
-}
-
-static gboolean
-gdk_mir_window_impl_queue_antiexpose (GdkWindow      *window,
-                                      cairo_region_t *area)
-{
-  //g_printerr ("gdk_mir_window_impl_queue_antiexpose window=%p\n", window);
-  // FIXME: ?
-  return FALSE;
-}
-
 static void
 gdk_mir_window_impl_destroy (GdkWindow *window,
                              gboolean   recursing,
@@ -704,16 +687,6 @@ static void
 gdk_mir_window_impl_destroy_foreign (GdkWindow *window)
 {
   g_printerr ("gdk_mir_window_impl_destroy_foreign window=%p\n", window);
-}
-
-static gboolean
-gdk_mir_window_impl_resize_cairo_surface (GdkWindow       *window,
-                                          cairo_surface_t *surface,
-                                          gint             width,
-                                          gint             height)
-{
-  g_printerr ("gdk_mir_window_impl_resize_cairo_surface window=%p\n", window);
-  return FALSE;
 }
 
 static void
@@ -1207,11 +1180,8 @@ gdk_mir_window_impl_class_init (GdkMirWindowImplClass *klass)
   impl_class->get_input_shape = gdk_mir_window_impl_get_input_shape;
   impl_class->shape_combine_region = gdk_mir_window_impl_shape_combine_region;
   impl_class->input_shape_combine_region = gdk_mir_window_impl_input_shape_combine_region;
-  impl_class->set_static_gravities = gdk_mir_window_impl_set_static_gravities;
-  impl_class->queue_antiexpose = gdk_mir_window_impl_queue_antiexpose;
   impl_class->destroy = gdk_mir_window_impl_destroy;
   impl_class->destroy_foreign = gdk_mir_window_impl_destroy_foreign;
-  impl_class->resize_cairo_surface = gdk_mir_window_impl_resize_cairo_surface;
   impl_class->focus = gdk_mir_window_impl_focus;
   impl_class->set_type_hint = gdk_mir_window_impl_set_type_hint;
   impl_class->get_type_hint = gdk_mir_window_impl_get_type_hint;

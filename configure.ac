@@ -341,7 +341,7 @@ if test -z "$backend_set"; then
   else
     enable_x11_backend=yes
     enable_wayland_backend=maybe
-    enable_mir_backend=maybe
+    enable_mir_backend=no
   fi
 fi
 

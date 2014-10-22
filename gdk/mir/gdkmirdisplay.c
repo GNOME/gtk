@@ -23,6 +23,7 @@
 #include "gdkmir.h"
 #include "gdkmir-private.h"
 
+#define GDK_TYPE_DISPLAY_MIR              (gdk_mir_display_get_type ())
 #define GDK_MIR_DISPLAY(object)           (G_TYPE_CHECK_INSTANCE_CAST ((object), GDK_TYPE_DISPLAY_MIR, GdkMirDisplay))
 #define GDK_MIR_DISPLAY_CLASS(klass)      (G_TYPE_CHECK_CLASS_CAST ((klass), GDK_TYPE_DISPLAY_MIR, GdkMirDisplayClass))
 #define GDK_IS_MIR_DISPLAY_CLASS(klass)   (G_TYPE_CHECK_CLASS_TYPE ((klass), GDK_TYPE_MIR_DISPLAY))
