@@ -357,7 +357,7 @@ gdk_wayland_window_create_gl_context (GdkWindow     *window,
   GDK_NOTE (OPENGL,
             g_print ("Created EGL context[%p]\n", ctx));
 
-  context = g_object_new (GDK_WAYLAND_TYPE_GL_CONTEXT,
+  context = g_object_new (GDK_TYPE_WAYLAND_GL_CONTEXT,
                           "window", window,
                           "visual", gdk_window_get_visual (window),
                           NULL);

@@ -30,9 +30,9 @@
 
 G_BEGIN_DECLS
 
-#define GDK_WAYLAND_TYPE_GL_CONTEXT		(gdk_wayland_gl_context_get_type ())
-#define GDK_WAYLAND_GL_CONTEXT(obj)		(G_TYPE_CHECK_INSTANCE_CAST ((obj), GDK_WAYLAND_TYPE_GL_CONTEXT, GdkWaylandGLContext))
-#define GDK_WAYLAND_IS_GL_CONTEXT(obj)	(G_TYPE_CHECK_INSTANCE_TYPE ((obj), GDK_WAYLAND_TYPE_GL_CONTEXT))
+#define GDK_TYPE_WAYLAND_GL_CONTEXT		(gdk_wayland_gl_context_get_type ())
+#define GDK_WAYLAND_GL_CONTEXT(obj)		(G_TYPE_CHECK_INSTANCE_CAST ((obj), GDK_TYPE_WAYLAND_GL_CONTEXT, GdkWaylandGLContext))
+#define GDK_WAYLAND_IS_GL_CONTEXT(obj)	(G_TYPE_CHECK_INSTANCE_TYPE ((obj), GDK_TYPE_WAYLAND_GL_CONTEXT))
 
 typedef struct _GdkWaylandGLContext		GdkWaylandGLContext;
 typedef struct _GdkWaylandGLContextClass	GdkWaylandGLContextClass;

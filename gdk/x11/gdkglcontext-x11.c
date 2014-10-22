@@ -788,7 +788,7 @@ gdk_x11_window_create_gl_context (GdkWindow    *window,
                      glx_context,
                      is_direct ? "direct" : "indirect"));
 
-  context = g_object_new (GDK_X11_TYPE_GL_CONTEXT,
+  context = g_object_new (GDK_TYPE_X11_GL_CONTEXT,
                           "window", window,
                           "visual", gdk_visual,
                           NULL);

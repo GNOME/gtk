@@ -29,9 +29,9 @@
 
 G_BEGIN_DECLS
 
-#define GDK_X11_TYPE_GL_CONTEXT		(gdk_x11_gl_context_get_type ())
-#define GDK_X11_GL_CONTEXT(obj)		(G_TYPE_CHECK_INSTANCE_CAST ((obj), GDK_X11_TYPE_GL_CONTEXT, GdkX11GLContext))
-#define GDK_X11_IS_GL_CONTEXT(obj)	(G_TYPE_CHECK_INSTANCE_TYPE ((obj), GDK_X11_TYPE_GL_CONTEXT))
+#define GDK_TYPE_X11_GL_CONTEXT		(gdk_x11_gl_context_get_type ())
+#define GDK_X11_GL_CONTEXT(obj)		(G_TYPE_CHECK_INSTANCE_CAST ((obj), GDK_TYPE_X11_GL_CONTEXT, GdkX11GLContext))
+#define GDK_X11_IS_GL_CONTEXT(obj)	(G_TYPE_CHECK_INSTANCE_TYPE ((obj), GDK_TYPE_X11_GL_CONTEXT))
 
 typedef struct _GdkX11GLContext		GdkX11GLContext;
 typedef struct _GdkX11GLContextClass	GdkX11GLContextClass;
