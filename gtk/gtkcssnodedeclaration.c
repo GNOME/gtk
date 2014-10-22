@@ -90,7 +90,7 @@ gtk_css_node_declaration_make_writable_resize (GtkCssNodeDeclaration **decl,
   if ((*decl)->refcount == 1)
     {
       if (bytes_removed > 0 && old_size - offset - bytes_removed > 0)
-        memmove (((char *) *decl) + offset + bytes_removed, ((char *) *decl) + offset, old_size - offset - bytes_removed);
+        memmove (((char *) *decl) + offset, ((char *) *decl) + offset + bytes_removed, old_size - offset - bytes_removed);
       *decl = g_realloc (*decl, new_size);
       if (bytes_added > 0 && old_size - offset > 0)
         memmove (((char *) *decl) + offset + bytes_added, ((char *) *decl) + offset, old_size - offset);
