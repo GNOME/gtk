@@ -8181,6 +8181,8 @@ gtk_gesture_zoom_get_type
 GtkSidebar
 GtkSidebarClass
 gtk_sidebar_new
+gtk_sidebar_set_stack
+gtk_sidebar_get_stack
 
 <SUBSECTION Standard>
 GTK_TYPE_SIDEBAR
