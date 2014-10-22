@@ -104,7 +104,7 @@ gboolean         gtk_css_provider_load_from_path (GtkCssProvider  *css_provider,
                                                   GError         **error);
 
 GDK_AVAILABLE_IN_3_16
-void             gtk_css_provider_load_from_resource (GtkCssProvider *provider,
+void             gtk_css_provider_load_from_resource (GtkCssProvider *css_provider,
                                                       const gchar    *resource_path);
 
 GDK_AVAILABLE_IN_ALL

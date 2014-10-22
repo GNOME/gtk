@@ -2887,7 +2887,6 @@ gtk_css_provider_load_from_path (GtkCssProvider  *css_provider,
  * gtk_css_provider_load_from_resource:
  * @css_provider: a #GtkCssProvider
  * @resource_path: a #GResource resource path
- * @error: return location for an error
  *
  * Loads the data contained in the resource at @resource_path into
  * the #GtkCssProvider, clearing any previously loaded information.
