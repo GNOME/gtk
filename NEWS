@@ -1,3 +1,109 @@
+Overview of Changes in GTK+ 3.15.0
+==================================
+
+* GDK supports rendering windows using OpenGL; currently
+  this is implemented for X11 and Wayland using libepoxy
+
+* GtkGLArea: A new widget for rendering with OpenGL
+
+* GtkSidebar: A new switcher for GtkStack that looks like
+  a sidebar
+
+* Better typography: In many places, we now use proper Unicode
+  characters for dashes, quotes, multiplication signs and the
+  like, instead of ASCII approximations
+
+* Theming:
+ - Context menus use the default font instead of inheriting from
+   the widget they are attached to
+ - Theming engines are no longer used
+ - Backdrop style has been fine-tuned to make the difference to
+   the active window more evident without affecting readability
+
+* Inspector:
+ - Show nested tree models
+ - Add a checkbox to disable the warning dialog
+ - Rearrange the UI to gain space
+ - Show object counts
+
+* GtkTextView has a monospace property
+
+* GtkPaned has a wide-handle property
+
+* GtkPrintUnixDialog
+ - Has improved appearance without headerbars
+ - Better rendering of sheet icons
+ - No more missing icons
+
+* GtkScrolledWindow
+ - A new policy, GTK_POLICY_EXTERNAL, which allows scrolling
+   without showing a scrollbar
+ - Scroll events can now overshoot as well
+ - The new signal ::edge-overshot is emitted when the scrolled
+   window is fully overshot
+ - Scrollbars will be overlayed as narrow indicators when
+   there is no mouse
+
+* Deprecations:
+ - gdk_window_set_static_gravities
+ - gdk_window_set_composited
+ - gtk_style_context_get_background_color
+ - gtk_style_context_get_border_color
+ - gtk_settings_set_string/long/double_property
+ - gtk_settings_install_property
+
+* Bugs fixed:
+ 119189 Add OpenGL support to GTK+
+ 154709 don't use the cursor for preview
+ 582799 GtkContainer should parse a list of widgets for a focus chain
+ 671138 About dialog contains scary warranty disclaimer in copyright...
+ 672946 Add gtk_css_provider_load_resource_from_file
+ 681185 Document precedence between tooltip-markup and tooltip-text
+ 724096 search-bar: don't show the widget until we're ready to reveal
+ 725441 Print Dialog: Add support for PPD-less printing on IPP print...
+ 730730 scrolling is broken when sharing adjustments
+ 730893 Dialogs use headerbars even when DialogsUseHeader is unset
+ 733157 Remove redundant checks for NULL
+ 735192 Use better typography for paper names
+ 735293 No vertical stack switcher component available (Sidebar)
+ 735841 EmptyBoxes: instructions_label's alignment is off
+ 737670 GtkCalendar days cannot be selected if vertical size is grea...
+ 737679 Bookmarks are visually duplicated in sidebar
+ 737777 Applications crash randomly while printing with a password-s...
+ 737929 Long tooltips extend too far horizontally without wrapping
+ 737952 Documentation missing for GtkTextView's new draw-layer funct...
+ 737981 Strange frame in GtkScrolledWindow
+ 737983 gtkplacessidebar: Open $HOME after unmounting or ejecting
+ 737985 Unnecessary "GtkScrolledWindow .frame"
+ 737986 Transparent icon background rendered black on XFCE
+ 738083 GtkMenuButton is not disabled even if corresponding GAction is
+ 738111 GtkListBox should allow for setting "placeholder" via GtkBui...
+ 738158 Flat context menu button
+ 738272 inspector: Add a tab for object counts
+ 738533 Show overshoot on scroll events
+ 738534 Add ::edge-hit signal
+ 738591 Can't select file after showing header context menu
+ 738636 GtkStackSwitcher focus overlap border
+ 738670 GL Context on NVIDIA
+ 738860 GtkPaned: Add a "wide-handle" property
+ 738873 wayland backend aborts entire program if XDG_RUNTIME_DIR unset
+ 738912 wayland: Don't try to create a subsurface again 
+
+* Translation updates
+ Czech
+ French
+ German
+ Hebrew
+ Indonesian
+ Italian
+ Kazakh
+ Korean
+ Persian
+ Polish
+ Scottish Gaelic
+ Spanish
+
+
 Overview of Changes in GTK+ 3.14.0 to 3.14.1
 ============================================
 
