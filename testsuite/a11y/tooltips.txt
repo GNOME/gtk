@@ -1,0 +1,78 @@
+window1
+  "frame"
+  index: 0
+  state: enabled resizable sensitive showing visible
+  toolkit: gtk
+  <AtkComponent>
+  layer: window
+  alpha: 1
+  box1
+    "filler"
+    parent: window1
+    index: 0
+    state: enabled horizontal sensitive showing visible
+    toolkit: gtk
+    <AtkComponent>
+    layer: widget
+    alpha: 1
+    button-with-tooltip-text
+      "push button"
+      parent: box1
+      index: 0
+      description: Tooltip1
+      state: enabled focusable sensitive showing visible has-tooltip
+      toolkit: gtk
+      <AtkComponent>
+      layer: widget
+      alpha: 1
+      <AtkImage>
+      image size: -1 x -1
+      image description: (null)
+      <AtkAction>
+      action 0 name: click
+      action 0 description: Clicks the button
+    button-with-has-tooltip-true
+      "push button"
+      parent: box1
+      index: 1
+      state: enabled focusable sensitive showing visible has-tooltip
+      toolkit: gtk
+      <AtkComponent>
+      layer: widget
+      alpha: 1
+      <AtkImage>
+      image size: -1 x -1
+      image description: (null)
+      <AtkAction>
+      action 0 name: click
+      action 0 description: Clicks the button
+    button-without-tooltip
+      "push button"
+      parent: box1
+      index: 2
+      state: enabled focusable sensitive showing visible
+      toolkit: gtk
+      <AtkComponent>
+      layer: widget
+      alpha: 1
+      <AtkImage>
+      image size: -1 x -1
+      image description: (null)
+      <AtkAction>
+      action 0 name: click
+      action 0 description: Clicks the button
+    button-with-has-tooltip-false
+      "push button"
+      parent: box1
+      index: 3
+      state: enabled focusable sensitive showing visible
+      toolkit: gtk
+      <AtkComponent>
+      layer: widget
+      alpha: 1
+      <AtkImage>
+      image size: -1 x -1
+      image description: (null)
+      <AtkAction>
+      action 0 name: click
+      action 0 description: Clicks the button
