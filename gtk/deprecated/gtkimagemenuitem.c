@@ -49,8 +49,36 @@
  *
  * A GtkImageMenuItem is a menu item which has an icon next to the text label.
  *
- * Note that the user can disable display of menu icons, so make sure to still
- * fill in the text label.
+ * This is functionally equivalent to:
+ *
+ * |[<!-- language="C" -->
+ *   GtkWidget *box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 6);
+ *   GtkWidget *icon = gtk_image_new_from_icon_name ("folder-music-symbolic, GTK_ICON_SIZE_MENU);
+ *   GtkWidget *label = gtk_label_new ("Music");
+ *   GtkWidget *menu_item = gtk_menu_item_new ();
+ *
+ *   gtk_container_add (GTK_CONTAINER (box), icon);
+ *   gtk_container_add (GTK_CONTAINER (box), label);
+ *
+ *   gtk_container_add (GTK_CONTAINER (menu_item), box);
+ *
+ *   gtk_widget_show_all (menu_item);
+ * ]|
+ *
+ * Note that the user may disable display of menu icons using
+ * the #GtkSettings:gtk-menu-images setting, so make sure to still
+ * fill in the text label. If you want to ensure that your menu items
+ * show an icon you are strongly encouraged to use a #GtkMenuItem
+ * with a #GtkImage instead.
+ *
+ * #GtkImageMenuItem has been deprecated since GTK+ 3.10. If you want to
+ * display an icon in a menu item, you should use #GtkMenuItem and pack a
+ * #GtkBox with a #GtkImage and a #GtkLabel instead. You should also consider
+ * using #GtkBuilder and the XML #GMenu description for creating menus, by
+ * following the [GMenu guide][https://developer.gnome.org/GMenu/]. You should
+ * consider using icons in menu items only sparingly, and for "objects" (or
+ * "nouns") elements only, like bookmarks, files, and links; "actions" (or
+ * "verbs") should not have icons.
  */
 
 
