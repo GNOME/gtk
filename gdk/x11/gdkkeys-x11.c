@@ -1499,8 +1499,10 @@ gdk_x11_keymap_map_virtual_modifiers (GdkKeymap       *keymap,
   int i, j;
   gboolean retval;
 
+#ifdef HAVE_XKB
   if (KEYMAP_USE_XKB (keymap))
     get_xkb (keymap_x11);
+#endif
 
   retval = TRUE;
 
