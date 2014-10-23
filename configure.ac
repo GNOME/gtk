@@ -621,8 +621,6 @@ if test "x$GLIB_VERSION_MAJOR_MINOR" = "x$GLIB_REQUIRED_VERSION_MAJOR_MINOR"; th
   CFLAGS="-DG_DISABLE_DEPRECATED $CFLAGS"
 fi
 
-CFLAGS="-DGDK_PIXBUF_DISABLE_DEPRECATED $CFLAGS"
-
 
 dnl
 dnl Check for bind_textdomain_codeset, including -lintl if GLib brings it in.
