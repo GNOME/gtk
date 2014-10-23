@@ -5604,6 +5604,7 @@ static gboolean
 gdk_x11_window_show_window_menu (GdkWindow *window,
                                  GdkEvent  *event)
 {
+  GdkWindowImplX11 *impl = GDK_WINDOW_IMPL_X11 (window->impl);
   GdkDisplay *display = GDK_WINDOW_DISPLAY (window);
   GdkDevice *device;
   int device_id;
@@ -5636,8 +5637,8 @@ gdk_x11_window_show_window_menu (GdkWindow *window,
   xclient.window = GDK_WINDOW_XID (window);
   xclient.message_type = gdk_x11_get_xatom_by_name_for_display (display, "_GTK_SHOW_WINDOW_MENU");
   xclient.data.l[0] = device_id;
-  xclient.data.l[1] = x_root;
-  xclient.data.l[2] = y_root;
+  xclient.data.l[1] = x_root * impl->window_scale;
+  xclient.data.l[2] = y_root * impl->window_scale;
   xclient.format = 32;
 
   XSendEvent (GDK_DISPLAY_XDISPLAY (display), GDK_WINDOW_XROOTWIN (window), False,
