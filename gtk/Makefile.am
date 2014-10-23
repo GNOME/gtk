@@ -368,6 +368,7 @@ gtk_private_h_sources =		\
 	gtkcomboboxprivate.h	\
 	gtkcontainerprivate.h   \
 	gtkcssanimationprivate.h	\
+	gtkcssanimatedstyleprivate.h	\
 	gtkcssarrayvalueprivate.h	\
 	gtkcssbgsizevalueprivate.h	\
 	gtkcssbordervalueprivate.h	\
@@ -592,6 +593,7 @@ gtk_base_c_sources = 		\
 	gtkcomboboxtext.c	\
 	gtkcontainer.c		\
 	gtkcssanimation.c	\
+	gtkcssanimatedstyle.c	\
 	gtkcssarrayvalue.c	\
 	gtkcssbgsizevalue.c	\
 	gtkcssbordervalue.c	\

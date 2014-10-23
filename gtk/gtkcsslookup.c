@@ -106,15 +106,15 @@ void
 _gtk_css_lookup_resolve (GtkCssLookup            *lookup,
                          GtkStyleProviderPrivate *provider,
 			 int                      scale,
-                         GtkCssStyle             *values,
-                         GtkCssStyle             *parent_values)
+                         GtkCssAnimatedStyle     *style,
+                         GtkCssStyle             *parent_style)
 {
   guint i, n;
 
   g_return_if_fail (lookup != NULL);
   g_return_if_fail (GTK_IS_STYLE_PROVIDER_PRIVATE (provider));
-  g_return_if_fail (GTK_IS_CSS_STYLE (values));
-  g_return_if_fail (parent_values == NULL || GTK_IS_CSS_STYLE (parent_values));
+  g_return_if_fail (GTK_IS_CSS_ANIMATED_STYLE (style));
+  g_return_if_fail (parent_style == NULL || GTK_IS_CSS_ANIMATED_STYLE (parent_style));
 
   n = _gtk_css_style_property_get_n_properties ();
 
@@ -122,13 +122,13 @@ _gtk_css_lookup_resolve (GtkCssLookup            *lookup,
     {
       if (lookup->values[i].value ||
           _gtk_bitmask_get (lookup->missing, i))
-        gtk_css_style_compute_value (values,
-                                     provider,
-                                     scale,
-                                     parent_values,
-                                     i,
-                                     lookup->values[i].value,
-                                     lookup->values[i].section);
+        gtk_css_animated_style_compute_value (style,
+                                              provider,
+                                              scale,
+                                              parent_style,
+                                              i,
+                                              lookup->values[i].value,
+                                              lookup->values[i].section);
       /* else not a relevant property */
     }
 }

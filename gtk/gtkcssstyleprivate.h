@@ -41,61 +41,38 @@ typedef struct _GtkCssStyleClass      GtkCssStyleClass;
 struct _GtkCssStyle
 {
   GObject parent;
-
-  GPtrArray             *values;               /* the unanimated (aka intrinsic) values */
-  GPtrArray             *sections;             /* sections the values are defined in */
-
-  GPtrArray             *animated_values;      /* NULL or array of animated values/NULL if not animated */
-  gint64                 current_time;         /* the current time in our world */
-  GSList                *animations;           /* the running animations, least important one first */
-
-  GtkBitmask            *depends_on_parent;    /* for intrinsic values */
-  GtkBitmask            *equals_parent;        /* dito */
-  GtkBitmask            *depends_on_color;     /* dito */
-  GtkBitmask            *depends_on_font_size; /* dito */
 };
 
 struct _GtkCssStyleClass
 {
   GObjectClass parent_class;
+
+  /* Get the value for the given property id. This needs to be FAST. */
+  GtkCssValue *         (* get_value)                           (GtkCssStyle            *style,
+                                                                 guint                   id);
+  /* Get the section the value at the given id was declared at or NULL if unavailable.
+   * Optional: default impl will just return NULL */
+  GtkCssSection *       (* get_section)                         (GtkCssStyle            *style,
+                                                                 guint                   id);
+  /* Compute the bitmask of potentially changed properties if the parent has changed
+   * the passed in ones.
+   * This is for example needed when changes in the "color" property will affect
+   * all properties using "currentColor" as a color.
+   * Optional: The default impl just returns the parent changes unchanged */
+  GtkBitmask *          (* compute_dependencies)                (GtkCssStyle            *style,
+                                                                 const GtkBitmask       *parent_changes);
 };
 
 GType                   gtk_css_style_get_type                  (void) G_GNUC_CONST;
 
-GtkCssStyle *           gtk_css_style_new                       (void);
-
-void                    gtk_css_style_compute_value             (GtkCssStyle            *style,
-                                                                 GtkStyleProviderPrivate*provider,
-								 int                     scale,
-                                                                 GtkCssStyle            *parent_style,
-                                                                 guint                   id,
-                                                                 GtkCssValue            *specified,
-                                                                 GtkCssSection          *section);
-void                    gtk_css_style_set_animated_value        (GtkCssStyle            *style,
-                                                                 guint                   id,
-                                                                 GtkCssValue            *value);
-                                                                        
 GtkCssValue *           gtk_css_style_get_value                 (GtkCssStyle            *style,
                                                                  guint                   id);
 GtkCssSection *         gtk_css_style_get_section               (GtkCssStyle            *style,
-                                                                 guint                   id);
-GtkCssValue *           gtk_css_style_get_intrinsic_value       (GtkCssStyle            *style,
                                                                  guint                   id);
 GtkBitmask *            gtk_css_style_get_difference            (GtkCssStyle            *style,
                                                                  GtkCssStyle            *other);
 GtkBitmask *            gtk_css_style_compute_dependencies      (GtkCssStyle            *style,
                                                                  const GtkBitmask       *parent_changes);
-
-void                    gtk_css_style_create_animations         (GtkCssStyle            *style,
-                                                                 GtkCssStyle            *parent_style,
-                                                                 gint64                  timestamp,
-                                                                 GtkStyleProviderPrivate*provider,
-								 int                     scale,
-                                                                 GtkCssStyle            *source);
-GtkBitmask *            gtk_css_style_advance                   (GtkCssStyle            *style,
-                                                                 gint64                  timestamp);
-void                    gtk_css_style_cancel_animations         (GtkCssStyle            *style);
-gboolean                gtk_css_style_is_static                 (GtkCssStyle            *style);
 
 char *                  gtk_css_style_to_string                 (GtkCssStyle            *style);
 void                    gtk_css_style_print                     (GtkCssStyle            *style,

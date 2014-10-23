@@ -503,7 +503,7 @@ gtk_style_context_should_animate (GtkStyleContext *context)
     return FALSE;
 
   values = style_values_lookup (context);
-  if (gtk_css_style_is_static (values))
+  if (gtk_css_animated_style_is_static (GTK_CSS_ANIMATED_STYLE (values)))
     return FALSE;
 
   g_object_get (gtk_widget_get_settings (context->priv->widget),
@@ -704,7 +704,7 @@ build_properties (GtkStyleContext             *context,
   _gtk_css_lookup_resolve (lookup, 
                            GTK_STYLE_PROVIDER_PRIVATE (priv->cascade),
 			   priv->scale,
-                           values,
+                           GTK_CSS_ANIMATED_STYLE (values),
                            priv->parent ? style_values_lookup (priv->parent) : NULL);
 
   _gtk_css_lookup_free (lookup);
@@ -734,7 +734,7 @@ style_values_lookup (GtkStyleContext *context)
       return values;
     }
 
-  values = gtk_css_style_new ();
+  values = gtk_css_animated_style_new ();
 
   style_info_set_values (info, values);
   if (gtk_style_context_is_saved (context))
@@ -772,7 +772,7 @@ style_values_lookup_for_state (GtkStyleContext *context,
 
   decl = gtk_css_node_declaration_ref (context->priv->info->decl);
   gtk_css_node_declaration_set_state (&decl, state);
-  values = gtk_css_style_new ();
+  values = gtk_css_animated_style_new ();
   build_properties (context, values, decl, NULL, NULL);
   gtk_css_node_declaration_unref (decl);
 
@@ -2696,9 +2696,9 @@ gtk_style_context_update_animations (GtkStyleContext *context,
   
   values = style_values_lookup (context);
 
-  differences = gtk_css_style_advance (values, timestamp);
+  differences = gtk_css_animated_style_advance (GTK_CSS_ANIMATED_STYLE (values), timestamp);
 
-  if (gtk_css_style_is_static (values))
+  if (gtk_css_animated_style_is_static (GTK_CSS_ANIMATED_STYLE (values)))
     _gtk_style_context_update_animating (context);
 
   return differences;
@@ -2805,13 +2805,15 @@ _gtk_style_context_validate (GtkStyleContext  *context,
       values = style_values_lookup (context);
 
       if (values != current)
-        gtk_css_style_create_animations (values,
-                                         priv->parent ? style_values_lookup (priv->parent) : NULL,
-                                         timestamp,
-                                         GTK_STYLE_PROVIDER_PRIVATE (priv->cascade),
-                                         priv->scale,
-                                         gtk_style_context_should_create_transitions (context) ? current : NULL);
-      if (gtk_css_style_is_static (values))
+        gtk_css_animated_style_create_animations (GTK_CSS_ANIMATED_STYLE (values),
+                                                  priv->parent ? GTK_CSS_ANIMATED_STYLE (style_values_lookup (priv->parent)) : NULL,
+                                                  timestamp,
+                                                  GTK_STYLE_PROVIDER_PRIVATE (priv->cascade),
+                                                  priv->scale,
+                                                  gtk_style_context_should_create_transitions (context) 
+                                                    ? GTK_CSS_ANIMATED_STYLE (current)
+                                                    : NULL);
+      if (gtk_css_animated_style_is_static (GTK_CSS_ANIMATED_STYLE (values)))
         change &= ~GTK_CSS_CHANGE_ANIMATE;
       else
         change |= GTK_CSS_CHANGE_ANIMATE;

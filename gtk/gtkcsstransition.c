@@ -26,15 +26,15 @@
 G_DEFINE_TYPE (GtkCssTransition, _gtk_css_transition, GTK_TYPE_STYLE_ANIMATION)
 
 static void
-gtk_css_transition_set_values (GtkStyleAnimation *animation,
-                               gint64             for_time_us,
-                               GtkCssStyle       *style)
+gtk_css_transition_set_values (GtkStyleAnimation   *animation,
+                               gint64               for_time_us,
+                               GtkCssAnimatedStyle *style)
 {
   GtkCssTransition *transition = GTK_CSS_TRANSITION (animation);
   GtkCssValue *value, *end;
   double progress;
 
-  end = gtk_css_style_get_intrinsic_value (style, transition->property);
+  end = gtk_css_animated_style_get_intrinsic_value (style, transition->property);
 
   if (transition->start_time >= for_time_us)
     value = _gtk_css_value_ref (transition->start);
@@ -55,7 +55,7 @@ gtk_css_transition_set_values (GtkStyleAnimation *animation,
 
   if (value)
     {
-      gtk_css_style_set_animated_value (style, transition->property, value);
+      gtk_css_animated_style_set_animated_value (style, transition->property, value);
       _gtk_css_value_unref (value);
     }
 }

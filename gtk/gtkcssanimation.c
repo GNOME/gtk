@@ -104,7 +104,7 @@ gtk_css_animation_get_progress_from_iteration (GtkCssAnimation *animation,
 static void
 gtk_css_animation_set_values (GtkStyleAnimation    *style_animation,
                               gint64                for_time_us,
-                              GtkCssStyle *values)
+                              GtkCssAnimatedStyle  *style)
 {
   GtkCssAnimation *animation = GTK_CSS_ANIMATION (style_animation);
   double iteration, progress;
@@ -128,8 +128,8 @@ gtk_css_animation_set_values (GtkStyleAnimation    *style_animation,
       value = _gtk_css_keyframes_get_value (animation->keyframes,
                                             i,
                                             progress,
-                                            gtk_css_style_get_intrinsic_value (values, property_id));
-      gtk_css_style_set_animated_value (values, property_id, value);
+                                            gtk_css_animated_style_get_intrinsic_value (style, property_id));
+      gtk_css_animated_style_set_animated_value (style, property_id, value);
       _gtk_css_value_unref (value);
     }
 }

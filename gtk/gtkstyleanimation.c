@@ -26,7 +26,7 @@ G_DEFINE_ABSTRACT_TYPE (GtkStyleAnimation, _gtk_style_animation, G_TYPE_OBJECT)
 static void
 gtk_style_animation_real_set_values (GtkStyleAnimation    *animation,
                                      gint64                for_time_us,
-                                     GtkCssStyle *values)
+                                     GtkCssAnimatedStyle  *style)
 {
 }
 
@@ -60,16 +60,16 @@ _gtk_style_animation_init (GtkStyleAnimation *animation)
 void
 _gtk_style_animation_set_values (GtkStyleAnimation    *animation,
                                  gint64                for_time_us,
-                                 GtkCssStyle *values)
+                                 GtkCssAnimatedStyle  *style)
 {
   GtkStyleAnimationClass *klass;
 
   g_return_if_fail (GTK_IS_STYLE_ANIMATION (animation));
-  g_return_if_fail (GTK_IS_CSS_STYLE (values));
+  g_return_if_fail (GTK_IS_CSS_ANIMATED_STYLE (style));
 
   klass = GTK_STYLE_ANIMATION_GET_CLASS (animation);
 
-  return klass->set_values (animation, for_time_us, values);
+  klass->set_values (animation, for_time_us, style);
 }
 
 gboolean
