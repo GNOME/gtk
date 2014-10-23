@@ -642,7 +642,9 @@ gtk_font_chooser_widget_load_fonts (GtkFontChooserWidget *fontchooser)
 
   qsort (families, n_families, sizeof (PangoFontFamily *), cmp_families);
 
+  g_signal_handlers_block_by_func(priv->family_face_list, cursor_changed_cb, fontchooser);
   gtk_list_store_clear (list_store);
+  g_signal_handlers_unblock_by_func (priv->family_face_list, cursor_changed_cb, fontchooser);
 
   /* Iterate over families and faces */
   for (i = 0; i < n_families; i++)
