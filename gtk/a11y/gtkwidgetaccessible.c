@@ -395,9 +395,6 @@ gtk_widget_accessible_ref_state_set (AtkObject *accessible)
           else
             atk_state_set_add_state (state_set, ATK_STATE_VERTICAL);
         }
-
-      if (gtk_widget_get_has_tooltip (widget))
-        atk_state_set_add_state (state_set, ATK_STATE_HAS_TOOLTIP);
     }
   return state_set;
 }
@@ -504,11 +501,6 @@ gtk_widget_accessible_notify_gtk (GObject    *obj,
 
       state = ATK_STATE_HORIZONTAL;
       value = (gtk_orientable_get_orientation (orientable) == GTK_ORIENTATION_HORIZONTAL);
-    }
-  else if (g_strcmp0 (pspec->name, "has-tooltip") == 0)
-    {
-      state = ATK_STATE_HAS_TOOLTIP;
-      value = gtk_widget_get_has_tooltip (widget);
     }
   else
     return;

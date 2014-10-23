@@ -84,7 +84,6 @@ testdata = \
 	headerbar.ui headerbar.txt \
 	tree.ui tree.txt \
 	actionbar.ui actionbar.txt \
-	tooltips.ui tooltips.txt \
 	$(NULL)
 
 test_in_files = \
