@@ -3876,7 +3876,9 @@ bad things might happen.</property>
                 <property name="visible">True</property>
                 <property name="halign">end</property>
                 <property name="valign">baseline</property>
-                <property name="label">Details</property>
+                <property name="label">_Details</property>
+                <property name="use-underline">True</property>
+                <property name="mnemonic-widget">details_entry</property>
                 <style>
                   <class name="dim-label"/>
                 </style>
@@ -3889,7 +3891,7 @@ bad things might happen.</property>
               </packing>
             </child>
             <child>
-              <object class="GtkEntry">
+              <object class="GtkEntry" id="details_entry">
                 <property name="visible">True</property>
                 <property name="halign">fill</property>
                 <property name="valign">baseline</property>
@@ -3906,7 +3908,9 @@ bad things might happen.</property>
                 <property name="visible">True</property>
                 <property name="halign">end</property>
                 <property name="valign">baseline</property>
-                <property name="label">More Details</property>
+                <property name="label">More D_etails</property>
+                <property name="use-underline">True</property>
+                <property name="mnemonic-widget">more_details_entry</property>
                 <style>
                   <class name="dim-label"/>
                 </style>
@@ -3919,7 +3923,7 @@ bad things might happen.</property>
               </packing>
             </child>
             <child>
-              <object class="GtkEntry">
+              <object class="GtkEntry" id="more_details_entry">
                 <property name="visible">True</property>
                 <property name="halign">fill</property>
                 <property name="valign">baseline</property>
@@ -3936,7 +3940,9 @@ bad things might happen.</property>
                 <property name="visible">True</property>
                 <property name="halign">end</property>
                 <property name="valign">baseline</property>
-                <property name="label">Level</property>
+                <property name="label">_Level</property>
+                <property name="use-underline">True</property>
+                <property name="mnemonic-widget">level_scale</property>
                 <style>
                   <class name="dim-label"/>
                 </style>
@@ -3949,7 +3955,7 @@ bad things might happen.</property>
               </packing>
             </child>
             <child>
-              <object class="GtkScale">
+              <object class="GtkScale" id="level_scale">
                 <property name="visible">True</property>
                 <property name="halign">fill</property>
                 <property name="valign">baseline</property>
@@ -3968,7 +3974,9 @@ bad things might happen.</property>
                 <property name="visible">True</property>
                 <property name="halign">end</property>
                 <property name="valign">baseline</property>
-                <property name="label">Mode</property>
+                <property name="label">_Mode</property>
+                <property name="use-underline">True</property>
+                <property name="mnemonic-widget">mode_switch</property>
                 <style>
                   <class name="dim-label"/>
                 </style>
@@ -3981,7 +3989,7 @@ bad things might happen.</property>
               </packing>
             </child>
             <child>
-              <object class="GtkSwitch">
+              <object class="GtkSwitch" id="mode_switch">
                 <property name="visible">True</property>
                 <property name="halign">start</property>
                 <property name="valign">baseline</property>
