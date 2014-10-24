@@ -585,25 +585,6 @@ gtk_style_properties_set (GtkStyleProperties *props,
   va_end (args);
 }
 
-GtkCssValue *
-_gtk_style_properties_peek_property (GtkStyleProperties  *props,
-                                     GtkCssStyleProperty *property,
-                                     GtkStateFlags        state)
-{
-  GtkStylePropertiesPrivate *priv;
-  PropertyData *prop;
-
-  g_return_val_if_fail (GTK_IS_STYLE_PROPERTIES (props), FALSE);
-  g_return_val_if_fail (property != NULL, FALSE);
-
-  priv = props->priv;
-  prop = g_hash_table_lookup (priv->properties, property);
-  if (prop == NULL)
-    return NULL;
-
-  return property_data_match_state (prop, state);
-}
-
 typedef struct {
   GtkStyleProperties *props;
   GtkStateFlags       state;
@@ -614,10 +595,14 @@ style_query_func (guint    id,
                   gpointer data)
 {
   StyleQueryData *query = data;
+  PropertyData *prop;
 
-  return _gtk_style_properties_peek_property (query->props,
-                                              _gtk_css_style_property_lookup_by_id (id),
-                                              query->state);
+  prop = g_hash_table_lookup (query->props->priv->properties,
+                              _gtk_css_style_property_lookup_by_id (id));
+  if (prop == NULL)
+    return NULL;
+
+  return property_data_match_state (prop, query->state);
 }
 
 /**
