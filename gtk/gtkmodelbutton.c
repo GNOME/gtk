@@ -38,7 +38,7 @@ struct _GtkModelButton
   GtkWidget *box;
   GtkWidget *image;
   GtkWidget *label;
-  gboolean toggled;
+  gboolean active;
   gboolean has_submenu;
   gboolean centered;
   gboolean inverted;
@@ -56,7 +56,7 @@ enum
   PROP_ACTION_ROLE,
   PROP_ICON,
   PROP_TEXT,
-  PROP_TOGGLED,
+  PROP_ACTIVE,
   PROP_ACCEL,
   PROP_HAS_SUBMENU,
   PROP_INVERTED,
@@ -140,11 +140,14 @@ gtk_model_button_update_state (GtkModelButton *button)
 {
   GtkStateFlags state;
 
+  if (button->role == GTK_MENU_TRACKER_ITEM_ROLE_NORMAL)
+    return;
+
   state = gtk_widget_get_state_flags (GTK_WIDGET (button));
 
   state &= ~GTK_STATE_FLAG_CHECKED;
 
-  if (button->toggled && !button->has_submenu)
+  if (button->active && !button->has_submenu)
     state |= GTK_STATE_FLAG_CHECKED;
 
   gtk_widget_set_state_flags (GTK_WIDGET (button), state, TRUE);
@@ -152,10 +155,10 @@ gtk_model_button_update_state (GtkModelButton *button)
 
 
 static void
-gtk_model_button_set_toggled (GtkModelButton *button,
-                              gboolean        toggled)
+gtk_model_button_set_active (GtkModelButton *button,
+                             gboolean        active)
 {
-  button->toggled = toggled;
+  button->active = active;
   gtk_model_button_update_state (button);
   gtk_widget_queue_draw (GTK_WIDGET (button));
 }
@@ -213,6 +216,25 @@ gtk_model_button_set_iconic (GtkModelButton *button,
 }
 
 static void
+gtk_model_button_get_property (GObject    *object,
+                               guint       prop_id,
+                               GValue     *value,
+                               GParamSpec *pspec)
+{
+  GtkModelButton *button = GTK_MODEL_BUTTON (object);
+
+  switch (prop_id)
+    {
+    case PROP_ACTIVE:
+      g_value_set_boolean (value, button->active);
+      break;
+
+    default:
+      g_assert_not_reached ();
+    }
+}
+
+static void
 gtk_model_button_set_property (GObject      *object,
                                guint         prop_id,
                                const GValue *value,
@@ -234,8 +256,8 @@ gtk_model_button_set_property (GObject      *object,
       gtk_model_button_set_text (button, g_value_get_string (value));
       break;
 
-    case PROP_TOGGLED:
-      gtk_model_button_set_toggled (button, g_value_get_boolean (value));
+    case PROP_ACTIVE:
+      gtk_model_button_set_active (button, g_value_get_boolean (value));
       break;
 
     case PROP_ACCEL:
@@ -661,6 +683,7 @@ gtk_model_button_class_init (GtkModelButtonClass *class)
   GObjectClass *object_class = G_OBJECT_CLASS (class);
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (class);
 
+  object_class->get_property = gtk_model_button_get_property;
   object_class->set_property = gtk_model_button_set_property;
 
   widget_class->get_preferred_width = gtk_model_button_get_preferred_width;
@@ -682,9 +705,9 @@ gtk_model_button_class_init (GtkModelButtonClass *class)
   g_object_class_install_property (object_class, PROP_TEXT,
                                    g_param_spec_string ("text", "", "", NULL,
                                                         G_PARAM_WRITABLE | G_PARAM_STATIC_STRINGS));
-  g_object_class_install_property (object_class, PROP_TOGGLED,
-                                   g_param_spec_boolean ("toggled", "", "", FALSE,
-                                                         G_PARAM_WRITABLE | G_PARAM_STATIC_STRINGS));
+  g_object_class_install_property (object_class, PROP_ACTIVE,
+                                   g_param_spec_boolean ("active", "", "", FALSE,
+                                                         G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
   g_object_class_install_property (object_class, PROP_ACCEL,
                                    g_param_spec_string ("accel", "", "", NULL,
                                                         G_PARAM_WRITABLE | G_PARAM_STATIC_STRINGS));
