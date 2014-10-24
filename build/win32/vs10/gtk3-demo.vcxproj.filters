@@ -32,6 +32,7 @@
     <ClCompile Include="..\..\..\demos\gtk-demo\event_axes.c"><Filter>Source Files</Filter></ClCompile>
     <ClCompile Include="..\..\..\demos\gtk-demo\expander.c"><Filter>Source Files</Filter></ClCompile>
     <ClCompile Include="..\..\..\demos\gtk-demo\gestures.c"><Filter>Source Files</Filter></ClCompile>
+    <ClCompile Include="..\..\..\demos\gtk-demo\glarea.c"><Filter>Source Files</Filter></ClCompile>
     <ClCompile Include="..\..\..\demos\gtk-demo\headerbar.c"><Filter>Source Files</Filter></ClCompile>
     <ClCompile Include="..\..\..\demos\gtk-demo\hypertext.c"><Filter>Source Files</Filter></ClCompile>
     <ClCompile Include="..\..\..\demos\gtk-demo\iconview.c"><Filter>Source Files</Filter></ClCompile>
@@ -55,6 +56,7 @@
     <ClCompile Include="..\..\..\demos\gtk-demo\rotated_text.c"><Filter>Source Files</Filter></ClCompile>
     <ClCompile Include="..\..\..\demos\gtk-demo\search_entry.c"><Filter>Source Files</Filter></ClCompile>
     <ClCompile Include="..\..\..\demos\gtk-demo\search_entry2.c"><Filter>Source Files</Filter></ClCompile>
+    <ClCompile Include="..\..\..\demos\gtk-demo\sidebar.c"><Filter>Source Files</Filter></ClCompile>
     <ClCompile Include="..\..\..\demos\gtk-demo\sizegroup.c"><Filter>Source Files</Filter></ClCompile>
     <ClCompile Include="..\..\..\demos\gtk-demo\spinner.c"><Filter>Source Files</Filter></ClCompile>
     <ClCompile Include="..\..\..\demos\gtk-demo\stack.c"><Filter>Source Files</Filter></ClCompile>

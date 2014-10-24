@@ -190,6 +190,7 @@
     <ClCompile Include="..\..\..\demos\gtk-demo\event_axes.c" />
     <ClCompile Include="..\..\..\demos\gtk-demo\expander.c" />
     <ClCompile Include="..\..\..\demos\gtk-demo\gestures.c" />
+    <ClCompile Include="..\..\..\demos\gtk-demo\glarea.c" />
     <ClCompile Include="..\..\..\demos\gtk-demo\headerbar.c" />
     <ClCompile Include="..\..\..\demos\gtk-demo\hypertext.c" />
     <ClCompile Include="..\..\..\demos\gtk-demo\iconview.c" />
@@ -213,6 +214,7 @@
     <ClCompile Include="..\..\..\demos\gtk-demo\rotated_text.c" />
     <ClCompile Include="..\..\..\demos\gtk-demo\search_entry.c" />
     <ClCompile Include="..\..\..\demos\gtk-demo\search_entry2.c" />
+    <ClCompile Include="..\..\..\demos\gtk-demo\sidebar.c" />
     <ClCompile Include="..\..\..\demos\gtk-demo\sizegroup.c" />
     <ClCompile Include="..\..\..\demos\gtk-demo\spinner.c" />
     <ClCompile Include="..\..\..\demos\gtk-demo\stack.c" />

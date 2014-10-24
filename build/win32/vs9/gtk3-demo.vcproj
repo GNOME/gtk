@@ -181,6 +181,7 @@
 			<File RelativePath="..\..\..\demos\gtk-demo\event_axes.c" />
 			<File RelativePath="..\..\..\demos\gtk-demo\expander.c" />
 			<File RelativePath="..\..\..\demos\gtk-demo\gestures.c" />
+			<File RelativePath="..\..\..\demos\gtk-demo\glarea.c" />
 			<File RelativePath="..\..\..\demos\gtk-demo\headerbar.c" />
 			<File RelativePath="..\..\..\demos\gtk-demo\hypertext.c" />
 			<File RelativePath="..\..\..\demos\gtk-demo\iconview.c" />
@@ -204,6 +205,7 @@
 			<File RelativePath="..\..\..\demos\gtk-demo\rotated_text.c" />
 			<File RelativePath="..\..\..\demos\gtk-demo\search_entry.c" />
 			<File RelativePath="..\..\..\demos\gtk-demo\search_entry2.c" />
+			<File RelativePath="..\..\..\demos\gtk-demo\sidebar.c" />
 			<File RelativePath="..\..\..\demos\gtk-demo\sizegroup.c" />
 			<File RelativePath="..\..\..\demos\gtk-demo\spinner.c" />
 			<File RelativePath="..\..\..\demos\gtk-demo\stack.c" />
