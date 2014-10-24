@@ -30,39 +30,6 @@ static GActionEntry entries[] = {
   { "action10", activate, NULL, NULL, NULL }
 };
 
-static void
-open_menu (GtkWidget *button, const gchar *name)
-{
-  GtkWidget *stack;
-  g_print ("open %s\n", name);
-  stack = gtk_widget_get_ancestor (button, GTK_TYPE_STACK);
-  gtk_stack_set_visible_child_name (GTK_STACK (stack), name);
-}
-
-void
-open_main (GtkWidget *button)
-{
-  open_menu (button, "main");
-}
-
-void
-open_submenu1 (GtkWidget *button)
-{
-  open_menu (button, "submenu1");
-}
-
-void
-open_submenu2 (GtkWidget *button)
-{
-  open_menu (button, "submenu2");
-}
-
-void
-open_subsubmenu (GtkWidget *button)
-{
-  open_menu (button, "subsubmenu");
-}
-
 int
 main (int argc, char *argv[])
 {
@@ -124,7 +91,6 @@ main (int argc, char *argv[])
   popover = GTK_WIDGET (gtk_menu_button_get_popover (GTK_MENU_BUTTON (button)));
 
   builder = gtk_builder_new_from_file ("popover2.ui");
-  gtk_builder_connect_signals (builder, NULL);
   popover2 = (GtkWidget *)gtk_builder_get_object (builder, "popover");
   gtk_menu_button_set_popover (GTK_MENU_BUTTON (button2), popover2);
 

@@ -9,8 +9,7 @@ AM_CPPFLAGS =				\
 	-I$(top_srcdir)/gdk		\
 	$(GTK_DEBUG_FLAGS)		\
 	$(GTK_DEP_CFLAGS)		\
-	$(GDK_DEP_CFLAGS)		\
-	-pthread
+	$(GDK_DEP_CFLAGS)
 
 DEPS = \
 	$(top_builddir)/gtk/libgtk-3.la
@@ -20,10 +19,7 @@ LDADD = \
 	$(top_builddir)/gdk/libgdk-3.la	\
 	$(GTK_DEP_LIBS)			\
 	$(GDK_DEP_LIBS)			\
-	-lgmodule-2.0			\
 	-lm
-
-AM_LDFLAGS = -Wl,--export-dynamic -pthread
 
 
 if USE_X11
