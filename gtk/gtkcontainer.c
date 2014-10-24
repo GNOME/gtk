@@ -51,6 +51,7 @@
 #include "gtkwidgetpath.h"
 #include "a11y/gtkcontaineraccessible.h"
 #include "a11y/gtkcontaineraccessibleprivate.h"
+#include "gtkpopovermenu.h"
 
 /**
  * SECTION:gtkcontainer
@@ -608,7 +609,10 @@ gtk_container_buildable_set_child_property (GtkContainer *container,
   GValue gvalue = G_VALUE_INIT;
   GError *error = NULL;
 
-  if (gtk_widget_get_parent (child) != (GtkWidget *)container && !GTK_IS_ASSISTANT (container) && !GTK_IS_ACTION_BAR (container))
+  if (gtk_widget_get_parent (child) != (GtkWidget *)container &&
+      !GTK_IS_ASSISTANT (container) &&
+      !GTK_IS_ACTION_BAR (container) &&
+      !GTK_IS_POPOVER_MENU (container))
     {
       /* This can happen with internal children of complex widgets.
        * Silently ignore the child properties in this case. We explicitly
