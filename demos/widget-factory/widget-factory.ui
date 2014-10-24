@@ -3721,6 +3721,7 @@ microphone-sensitivity-medium-symbolic</property>
                             <child>
                               <object class="GtkNotebook">
                                 <property name="visible">True</property>
+                                <property name="show-border">False</property>
                                 <child>
                                   <object class="GtkBox">
                                     <property name="visible">True</property>
@@ -3750,6 +3751,7 @@ microphone-sensitivity-medium-symbolic</property>
                             <child>
                               <object class="GtkNotebook">
                                 <property name="visible">True</property>
+                                <property name="show-border">False</property>
                                 <child>
                                   <object class="GtkBox">
                                     <property name="visible">True</property>
