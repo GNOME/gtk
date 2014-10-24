@@ -99,8 +99,10 @@
 #include "a11y/gtkpopoveraccessible.h"
 #include "gtkmenusectionbox.h"
 
-#define TAIL_GAP_WIDTH 24
-#define TAIL_HEIGHT    12
+#define TAIL_GAP_WIDTH  24
+#define TAIL_HEIGHT     12
+#define TRANSITION_DIFF 10
+#define TRANSITION_DURATION 330 * 1000
 
 #define POS_IS_VERTICAL(p) ((p) == GTK_POS_TOP || (p) == GTK_POS_BOTTOM)
 
@@ -139,6 +141,11 @@ struct _GtkPopoverPrivate
   guint button_pressed     : 1;
   guint apply_shape        : 1;
   guint grab_notify_blocked : 1;
+  gint64 start_time;
+  gint transition_diff;
+  gint start_transition_diff;
+  guint tick_id;
+
 };
 
 static GQuark quark_widget_popovers = 0;
@@ -160,6 +167,7 @@ gtk_popover_init (GtkPopover *popover)
   popover->priv = gtk_popover_get_instance_private (popover);
   popover->priv->modal = TRUE;
   popover->priv->apply_shape = TRUE;
+  popover->priv->tick_id = 0;
 
   context = gtk_widget_get_style_context (widget);
   gtk_style_context_add_class (context, GTK_STYLE_CLASS_BACKGROUND);
@@ -294,6 +302,9 @@ gtk_popover_realize (GtkWidget *widget)
   gtk_widget_set_realized (widget, TRUE);
 }
 
+
+
+
 static gboolean
 window_focus_in (GtkWidget  *widget,
                  GdkEvent   *event,
@@ -397,7 +408,81 @@ gtk_popover_apply_modality (GtkPopover *popover,
     }
 }
 
+
+
+/* From clutter-easing.c, based on Robert Penner's
+ * infamous easing equations, MIT license.
+ */
+static double
+ease_out_cubic (double t)
+{
+  double p = t - 1;
+  return p * p * p + 1;
+}
+
+
+static gboolean
+show_animate_cb (GtkWidget     *widget,
+                 GdkFrameClock *frame_clock,
+                 gpointer       user_data)
+{
+  GtkPopover *popover = GTK_POPOVER (widget);
+  GtkPopoverPrivate *priv = gtk_popover_get_instance_private (popover);
+  gint64 now = gdk_frame_clock_get_frame_time (frame_clock);
+  gdouble t;
+  gboolean hiding = (priv->start_transition_diff < 0);
+
+
+  if (now < (priv->start_time + TRANSITION_DURATION))
+    t = (now - priv->start_time) / (gdouble) (TRANSITION_DURATION);
+  else
+    t = 1.0;
+  t = ease_out_cubic (t);
+
+  if (hiding)
+    {
+      priv->transition_diff = (priv->start_transition_diff * t);
+      gtk_widget_set_opacity (widget, 1.0 - t);
+    }
+  else
+    {
+      priv->transition_diff = priv->start_transition_diff - (priv->start_transition_diff * t);
+      gtk_widget_set_opacity (widget, t);
+    }
+
+  gtk_widget_queue_resize (GTK_WIDGET (popover));
+
+
+  if (t >= 1.0)
+    {
+      priv->transition_diff = 0;
+      priv->tick_id = 0;
+      if (hiding)
+        {
+          g_object_notify (G_OBJECT (widget), "visible");
+          GTK_WIDGET_CLASS (gtk_popover_parent_class)->hide (widget);
+        }
+      return FALSE;
+    }
+
+  return TRUE;
+
+}
+
+
 static void
+gtk_popover_start_transition (GtkWidget *widget,
+                              gint       transition_diff)
+{
+  GtkPopoverPrivate *priv = GTK_POPOVER (widget)->priv;
+
+  priv->start_time = gdk_frame_clock_get_frame_time (gtk_widget_get_frame_clock (widget));
+  priv->start_transition_diff = transition_diff;
+   if (priv->tick_id == 0)
+     priv->tick_id = gtk_widget_add_tick_callback (widget, show_animate_cb, widget, NULL);
+}
+
+  static void
 gtk_popover_map (GtkWidget *widget)
 {
   GtkPopoverPrivate *priv = GTK_POPOVER (widget)->priv;
@@ -409,6 +494,8 @@ gtk_popover_map (GtkWidget *widget)
 
   if (priv->modal)
     gtk_popover_apply_modality (GTK_POPOVER (widget), TRUE);
+
+  gtk_popover_start_transition (widget, TRANSITION_DIFF);
 }
 
 static void
@@ -574,17 +661,17 @@ gtk_popover_get_gap_coords (GtkPopover      *popover,
   if (initial_x_out)
     *initial_x_out = initial_x;
   if (initial_y_out)
-    *initial_y_out = initial_y;
+    *initial_y_out = initial_y - priv->transition_diff;
 
   if (tip_x_out)
     *tip_x_out = tip_x;
   if (tip_y_out)
-    *tip_y_out = tip_y;
+    *tip_y_out = tip_y - priv->transition_diff;
 
   if (final_x_out)
     *final_x_out = final_x;
   if (final_y_out)
-    *final_y_out = final_y;
+    *final_y_out = final_y - priv->transition_diff;
 
   if (gap_side_out)
     *gap_side_out = gap_side;
@@ -624,11 +711,11 @@ gtk_popover_get_rect_coords (GtkPopover *popover,
   if (x1_out)
     *x1_out = x1;
   if (y1_out)
-    *y1_out = y1;
+    *y1_out = y1 - priv->transition_diff;
   if (x2_out)
     *x2_out = x2;
   if (y2_out)
-    *y2_out = y2;
+    *y2_out = y2 - priv->transition_diff;
 }
 
 static void
@@ -818,6 +905,7 @@ gtk_popover_draw (GtkWidget *widget,
                   cairo_t   *cr)
 {
   GtkPopover *popover = GTK_POPOVER (widget);
+  GtkPopoverPrivate *priv = popover->priv;
   GtkStyleContext *context;
   GtkAllocation allocation;
   GtkWidget *child;
@@ -887,7 +975,7 @@ gtk_popover_draw (GtkWidget *widget,
 
   /* Render the arrow background */
   gtk_render_background (context, cr,
-                         0, 0,
+                         0, -priv->transition_diff,
                          allocation.width, allocation.height);
 
   /* Render the border of the arrow tip */
@@ -1246,6 +1334,20 @@ gtk_popover_focus (GtkWidget        *widget,
   return TRUE;
 }
 
+static void
+gtk_popover_hide (GtkWidget *widget)
+{
+  GtkPopoverPrivate *priv = GTK_POPOVER (widget)->priv;
+
+  if (gtk_widget_get_mapped (widget) && priv->tick_id == 0)
+    {
+      gtk_popover_start_transition (widget, -TRANSITION_DIFF);
+    }
+  else
+    {
+      GTK_WIDGET_CLASS (gtk_popover_parent_class)->hide (widget);
+    }
+}
 
 static void
 gtk_popover_class_init (GtkPopoverClass *klass)
@@ -1272,6 +1374,7 @@ gtk_popover_class_init (GtkPopoverClass *klass)
   widget_class->key_press_event = gtk_popover_key_press;
   widget_class->grab_focus = gtk_popover_grab_focus;
   widget_class->focus = gtk_popover_focus;
+  widget_class->hide = gtk_popover_hide;
 
   /**
    * GtkPopover:relative-to:
