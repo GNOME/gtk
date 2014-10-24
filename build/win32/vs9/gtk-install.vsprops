@@ -416,9 +416,10 @@ $(CopyDir)\bin\glib-compile-schemas.exe $(CopyDir)\share\glib-2.0\schemas&#x0D;&
 copy ..\..\..\gdk\broadway\gdkbroadway.h $(CopyDir)\include\gtk-$(ApiVersion)\gdk&#x0D;&#x0A;
 
 mkdir $(CopyDir)\include\gtk-$(ApiVersion)\gdk\broadway&#x0D;&#x0A;
-copy ..\..\..\gdk\broadway\gdkbroadwaywindow.h $(CopyDir)\include\gtk-$(ApiVersion)\gdk\broadway&#x0D;&#x0A;
 copy ..\..\..\gdk\broadway\gdkbroadwaycursor.h $(CopyDir)\include\gtk-$(ApiVersion)\gdk\broadway&#x0D;&#x0A;
+copy ..\..\..\gdk\broadway\gdkbroadwaydisplay.h $(CopyDir)\include\gtk-$(ApiVersion)\gdk\broadway&#x0D;&#x0A;
 copy ..\..\..\gdk\broadway\gdkbroadwayvisual.h $(CopyDir)\include\gtk-$(ApiVersion)\gdk\broadway&#x0D;&#x0A;
+copy ..\..\..\gdk\broadway\gdkbroadwaywindow.h $(CopyDir)\include\gtk-$(ApiVersion)\gdk\broadway&#x0D;&#x0A;
 		      "
 	/>
 </VisualStudioPropertySheet>
