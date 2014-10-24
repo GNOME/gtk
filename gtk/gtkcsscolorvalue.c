@@ -23,7 +23,6 @@
 #include "gtkcssstylepropertyprivate.h"
 #include "gtkhslaprivate.h"
 #include "gtkstylepropertyprivate.h"
-#include "gtkstyleproperties.h"
 #include "gtkwin32themeprivate.h"
 
 typedef enum {
