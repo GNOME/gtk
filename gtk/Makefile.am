@@ -239,6 +239,7 @@ deprecated_h_sources = 			\
 	deprecated/gtkstatusicon.h	\
 	deprecated/gtkstock.h		\
 	deprecated/gtkstyle.h		\
+	deprecated/gtkstyleproperties.h	\
 	deprecated/gtksymboliccolor.h	\
 	deprecated/gtktable.h		\
 	deprecated/gtktearoffmenuitem.h	\
@@ -271,6 +272,7 @@ a11y_private_h_sources =			\
 deprecated_private_h_sources =			\
 	deprecated/gtkgradientprivate.h		\
 	deprecated/gtknumerableiconprivate.h	\
+	deprecated/gtkstylepropertiesprivate.h	\
 	deprecated/gtksymboliccolorprivate.h
 
 gtk_public_h_sources = 		\
@@ -443,7 +445,6 @@ gtk_public_h_sources = 		\
 	gtkstackswitcher.h	\
 	gtkstatusbar.h		\
 	gtkstylecontext.h	\
-	gtkstyleproperties.h	\
 	gtkstyleprovider.h	\
 	gtkswitch.h		\
 	gtktestutils.h		\
@@ -655,7 +656,6 @@ gtk_private_h_sources =		\
 	gtkstyleanimationprivate.h \
 	gtkstylecascadeprivate.h \
 	gtkstylecontextprivate.h \
-	gtkstylepropertiesprivate.h \
 	gtkstylepropertyprivate.h \
 	gtkstyleproviderprivate.h \
 	gtktextbtree.h		\
@@ -768,6 +768,7 @@ deprecated_c_sources = 			\
 	deprecated/gtkstatusicon.c	\
 	deprecated/gtkstock.c		\
 	deprecated/gtkstyle.c		\
+	deprecated/gtkstyleproperties.c	\
 	deprecated/gtksymboliccolor.c	\
 	deprecated/gtktable.c		\
 	deprecated/gtktearoffmenuitem.c	\
@@ -1047,7 +1048,6 @@ gtk_base_c_sources = 		\
 	gtkstyleanimation.c	\
 	gtkstylecascade.c	\
 	gtkstylecontext.c	\
-	gtkstyleproperties.c	\
 	gtkstyleproperty.c	\
 	gtkstyleprovider.c	\
 	gtkstyleproviderprivate.c	\

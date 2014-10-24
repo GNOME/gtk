@@ -23,7 +23,7 @@
 #endif
 
 #include <gdk/gdk.h>
-#include <gtk/gtkstyleproperties.h>
+#include <gtk/deprecated/gtkstyleproperties.h>
 
 G_BEGIN_DECLS
 

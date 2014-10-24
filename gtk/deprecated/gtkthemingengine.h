@@ -27,7 +27,7 @@
 
 #include <gtk/gtkborder.h>
 #include <gtk/gtkenums.h>
-#include <gtk/gtkstyleproperties.h>
+#include <gtk/deprecated/gtkstyleproperties.h>
 #include <gtk/gtktypes.h>
 
 G_BEGIN_DECLS

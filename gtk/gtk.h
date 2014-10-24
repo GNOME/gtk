@@ -191,7 +191,6 @@
 #include <gtk/gtkstackswitcher.h>
 #include <gtk/gtkstatusbar.h>
 #include <gtk/gtkstylecontext.h>
-#include <gtk/gtkstyleproperties.h>
 #include <gtk/gtkstyleprovider.h>
 #include <gtk/gtkswitch.h>
 #include <gtk/gtktextattributes.h>
@@ -260,6 +259,7 @@
 #include <gtk/deprecated/gtkstatusicon.h>
 #include <gtk/deprecated/gtkstock.h>
 #include <gtk/deprecated/gtkstyle.h>
+#include <gtk/deprecated/gtkstyleproperties.h>
 #include <gtk/deprecated/gtksymboliccolor.h>
 #include <gtk/deprecated/gtktable.h>
 #include <gtk/deprecated/gtktearoffmenuitem.h>
