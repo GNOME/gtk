@@ -1,0 +1,598 @@
+<?xml version="1.0"?>
+<interface>
+  <object class="GtkPopover" id="popover">
+    <child>
+      <object class="GtkStack">
+        <property name="visible">True</property>
+        <property name="homogeneous">False</property>
+        <property name="transition-type">slide-left-right</property>
+        <child>
+          <object class="GtkBox" id="main">
+            <property name="visible">True</property>
+            <property name="orientation">vertical</property>
+            <property name="halign">fill</property>
+            <property name="margin">10</property>
+            <child>
+              <object class="GtkBox">
+                <property name="visible">True</property>
+                <property name="orientation">vertical</property>
+                <property name="margin-start">12</property>
+                <property name="margin-end">12</property>
+                <property name="margin-top">6</property>
+                <property name="margin-bottom">3</property>
+                <child>
+                  <object class="GtkLabel">
+                    <property name="visible">True</property>
+                    <property name="halign">start</property>
+                    <property name="label">Edit</property>
+                    <style>
+                      <class name="separator"/>
+                    </style>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkSeparator">
+                    <property name="visible">True</property>
+                    <property name="orientation">horizontal</property>
+                  </object>
+                </child>
+              </object>
+            </child>
+            <child>
+              <object class="GtkModelButton">
+                <property name="visible">True</property>
+                <property name="action-name">top.cut</property>
+                <property name="text">Cut</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkModelButton">
+                <property name="visible">True</property>
+                <property name="action-name">top.copy</property>
+                <property name="text">Copy</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkModelButton">
+                <property name="visible">True</property>
+                <property name="action-name">top.paste</property>
+                <property name="text">Paste</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkSeparator">
+                <property name="visible">True</property>
+                <property name="orientation">horizontal</property>
+                <property name="margin-start">12</property>
+                <property name="margin-end">12</property>
+                <property name="margin-top">3</property>
+                <property name="margin-bottom">3</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkModelButton">
+                <property name="visible">True</property>
+                <property name="action-name">action1</property>
+                <property name="text">No action</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkModelButton">
+                <property name="visible">True</property>
+                <property name="action-name">top.action2</property>
+                <property name="action-role">check</property>
+                <property name="text">Toggle</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkModelButton">
+                <property name="visible">True</property>
+                <property name="action-name">top.action2a</property>
+                <property name="action-role">check</property>
+                <property name="text">Another Toggle</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkBox">
+                <property name="visible">True</property>
+                <property name="orientation">vertical</property>
+                <property name="margin-start">12</property>
+                <property name="margin-end">12</property>
+                <property name="margin-top">6</property>
+                <property name="margin-bottom">3</property>
+                <child>
+                  <object class="GtkLabel">
+                    <property name="visible">True</property>
+                    <property name="halign">start</property>
+                    <property name="label">Middle Section</property>
+                    <style>
+                      <class name="separator"/>
+                    </style>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkSeparator">
+                    <property name="visible">True</property>
+                    <property name="orientation">horizontal</property>
+                  </object>
+                </child>
+              </object>
+            </child>
+            <child>
+              <object class="GtkModelButton">
+                <property name="visible">True</property>
+                <property name="action-name">top.action3</property>
+                <property name="action-target">'three'</property>
+                <property name="action-role">radio</property>
+                <property name="text">Radio 1</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkModelButton">
+                <property name="visible">True</property>
+                <property name="action-name">top.action3</property>
+                <property name="action-target">'four'</property>
+                <property name="action-role">radio</property>
+                <property name="text">Radio 2</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkModelButton">
+                <property name="visible">True</property>
+                <property name="text">Submenu 1</property>
+                <property name="has-submenu">True</property>
+                <signal name="clicked" handler="open_submenu1"/>
+              </object>
+            </child>
+            <child>
+              <object class="GtkModelButton">
+                <property name="visible">True</property>
+                <property name="text">Submenu 2</property>
+                <property name="has-submenu">True</property>
+                <signal name="clicked" handler="open_submenu2"/>
+              </object>
+            </child>
+            <child>
+              <object class="GtkBox">
+                <property name="visible">True</property>
+                <property name="orientation">vertical</property>
+                <property name="margin-start">12</property>
+                <property name="margin-end">12</property>
+                <property name="margin-top">6</property>
+                <property name="margin-bottom">3</property>
+                <child>
+                  <object class="GtkLabel">
+                    <property name="visible">True</property>
+                    <property name="halign">start</property>
+                    <property name="label">End Section</property>
+                    <style>
+                      <class name="separator"/>
+                    </style>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkSeparator">
+                    <property name="visible">True</property>
+                    <property name="orientation">horizontal</property>
+                  </object>
+                </child>
+              </object>
+            </child>
+            <child>
+              <object class="GtkModelButton">
+                <property name="visible">True</property>
+                <property name="action-name">top.action9</property>
+                <property name="text">Another Item 9</property>
+                <property name="icon">icon9</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkModelButton">
+                <property name="visible">True</property>
+                <property name="action-name">top.action10</property>
+                <property name="text">Another Item 10</property>
+              </object>
+            </child>
+          </object>
+          <packing>
+            <property name="name">main</property>
+          </packing>
+        </child>
+
+        <child>
+          <object class="GtkBox" id="submenu1">
+            <property name="visible">True</property>
+            <property name="orientation">vertical</property>
+            <property name="margin">10</property>
+
+            <child>
+              <object class="GtkModelButton">
+                <property name="visible">True</property>
+                <property name="text">Submenu 1</property>
+                <property name="has-submenu">True</property>
+                <property name="inverted">True</property>
+                <property name="centered">True</property>
+                <signal name="clicked" handler="open_main"/>
+              </object>
+            </child>
+            <child>
+              <object class="GtkBox">
+                <property name="visible">True</property>
+                <property name="orientation">vertical</property>
+                <property name="margin-start">12</property>
+                <property name="margin-end">12</property>
+                <property name="margin-top">6</property>
+                <property name="margin-bottom">3</property>
+                <child>
+                  <object class="GtkLabel">
+                    <property name="visible">True</property>
+                    <property name="halign">start</property>
+                    <property name="label">5555</property>
+                    <style>
+                      <class name="separator"/>
+                    </style>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkSeparator">
+                    <property name="visible">True</property>
+                    <property name="orientation">horizontal</property>
+                  </object>
+                </child>
+              </object>
+            </child>
+            <child>
+              <object class="GtkModelButton">
+                <property name="visible">True</property>
+                <property name="action-name">top.action5</property>
+                <property name="text">Item 5</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkModelButton">
+                <property name="visible">True</property>
+                <property name="action-name">top.action5</property>
+                <property name="text">Item 5a</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkModelButton">
+                <property name="visible">True</property>
+                <property name="action-name">top.action5</property>
+                <property name="text">Item 5b</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkBox">
+                <property name="visible">True</property>
+                <property name="orientation">horizontal</property>
+                <property name="halign">fill</property>
+                <property name="margin-top">10</property>
+                <style>
+                  <class name="linked"/>
+                </style>
+                <child>
+                  <object class="GtkModelButton">
+                    <property name="visible">True</property>
+                    <property name="text">List</property>
+                    <property name="action-name">top.set-view</property>
+                    <property name="action-target">'list'</property>
+                    <property name="action-role">radio</property>
+                    <property name="iconic">True</property>
+                    <property name="centered">True</property>
+                    <property name="icon">icon-list</property>
+                  </object>
+                  <packing>
+                    <property name="expand">True</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkModelButton">
+                    <property name="visible">True</property>
+                    <property name="text">Grid</property>
+                    <property name="action-name">top.set-view</property>
+                    <property name="action-target">'grid'</property>
+                    <property name="action-role">radio</property>
+                    <property name="iconic">True</property>
+                    <property name="centered">True</property>
+                    <property name="icon">icon-grid</property>
+                  </object>
+                  <packing>
+                    <property name="expand">True</property>
+                  </packing>
+                </child>
+              </object>
+            </child>
+            <child>
+              <object class="GtkModelButton">
+                <property name="visible">True</property>
+                <property name="action-name">top.action5</property>
+                <property name="text">Item 5c</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkModelButton">
+                <property name="visible">True</property>
+                <property name="action-name">top.action5</property>
+                <property name="text">Item 5d</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkBox">
+                <property name="visible">True</property>
+                <property name="orientation">vertical</property>
+                <property name="margin-start">12</property>
+                <property name="margin-end">12</property>
+                <property name="margin-top">6</property>
+                <property name="margin-bottom">3</property>
+                <child>
+                  <object class="GtkLabel">
+                    <property name="visible">True</property>
+                    <property name="halign">start</property>
+                    <property name="label">Format</property>
+                    <style>
+                      <class name="separator"/>
+                    </style>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkSeparator">
+                    <property name="visible">True</property>
+                    <property name="orientation">horizontal</property>
+                  </object>
+                </child>
+              </object>
+            </child>
+            <child>
+              <object class="GtkBox">
+                <property name="visible">True</property>
+                <property name="orientation">horizontal</property>
+                <property name="halign">fill</property>
+                <property name="margin-top">10</property>
+                <style>
+                  <class name="linked"/>
+                </style>
+                <child>
+                  <object class="GtkModelButton">
+                    <property name="visible">True</property>
+                    <property name="text">Bold</property>
+                    <property name="action-name">top.bold</property>
+                    <property name="action-role">check</property>
+                    <property name="iconic">True</property>
+                    <property name="centered">True</property>
+                  </object>
+                  <packing>
+                    <property name="expand">True</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkModelButton">
+                    <property name="visible">True</property>
+                    <property name="text">Italic</property>
+                    <property name="action-name">top.italic</property>
+                    <property name="action-role">check</property>
+                    <property name="iconic">True</property>
+                    <property name="centered">True</property>
+                    <property name="icon">icon-italic</property>
+                  </object>
+                  <packing>
+                    <property name="expand">True</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkModelButton">
+                    <property name="visible">True</property>
+                    <property name="text">Strikethrough</property>
+                    <property name="action-name">top.strikethrough</property>
+                    <property name="action-role">check</property>
+                    <property name="iconic">True</property>
+                    <property name="centered">True</property>
+                    <property name="icon">icon-strikethrough</property>
+                  </object>
+                  <packing>
+                    <property name="expand">True</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkModelButton">
+                    <property name="visible">True</property>
+                    <property name="text">Underline</property>
+                    <property name="action-name">top.underline</property>
+                    <property name="action-role">check</property>
+                    <property name="iconic">True</property>
+                    <property name="centered">True</property>
+                    <property name="icon">icon-underline</property>
+                  </object>
+                  <packing>
+                    <property name="expand">True</property>
+                  </packing>
+                </child>
+              </object>
+            </child>
+            <child>
+              <object class="GtkBox">
+                <property name="visible">True</property>
+                <property name="orientation">vertical</property>
+                <property name="margin-start">12</property>
+                <property name="margin-end">12</property>
+                <property name="margin-top">6</property>
+                <property name="margin-bottom">3</property>
+                <child>
+                  <object class="GtkLabel">
+                    <property name="visible">True</property>
+                    <property name="halign">start</property>
+                    <property name="label">6666</property>
+                    <style>
+                      <class name="separator"/>
+                    </style>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkSeparator">
+                    <property name="visible">True</property>
+                    <property name="orientation">horizontal</property>
+                  </object>
+                </child>
+              </object>
+            </child>
+            <child>
+              <object class="GtkModelButton">
+                <property name="visible">True</property>
+                <property name="action-name">top.action6</property>
+                <property name="text">Item 6</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkModelButton">
+                <property name="visible">True</property>
+                <property name="action-name">top.action6</property>
+                <property name="text">Item 6a</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkModelButton">
+                <property name="visible">True</property>
+                <property name="action-name">top.action6</property>
+                <property name="text">Item 6b</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkModelButton">
+                <property name="visible">True</property>
+                <property name="action-name">top.action6</property>
+                <property name="text">Item 6c</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkModelButton">
+                <property name="visible">True</property>
+                <property name="action-name">top.action6</property>
+                <property name="text">Item 6d</property>
+              </object>
+            </child>
+          </object>
+          <packing>
+            <property name="name">submenu1</property>
+          </packing>
+        </child>
+      
+        <child>
+          <object class="GtkBox" id="submenu2">
+            <property name="visible">True</property>
+            <property name="orientation">vertical</property>
+            <property name="margin">10</property>
+            <child>
+              <object class="GtkModelButton">
+                <property name="visible">True</property>
+                <property name="text">Submenu 2</property>
+                <property name="has-submenu">True</property>
+                <property name="inverted">True</property>
+                <property name="centered">True</property>
+                <signal name="clicked" handler="open_main"/>
+              </object>
+            </child>
+            <child>
+              <object class="GtkModelButton">
+                <property name="visible">True</property>
+                <property name="action-name">top.action7</property>
+                <property name="text">Item 7</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkModelButton">
+                <property name="visible">True</property>
+                <property name="text">Subsubmenu</property>
+                <property name="icon">icon9</property>
+                <property name="has-submenu">True</property>
+                <signal name="clicked" handler="open_subsubmenu"/>
+              </object>
+            </child>
+          </object>
+          <packing>
+            <property name="name">submenu2</property>
+          </packing>
+        </child>
+
+        <child>
+          <object class="GtkBox" id="subsubmenu">
+            <property name="visible">True</property>
+            <property name="orientation">vertical</property>
+            <property name="margin">10</property>
+
+            <child>
+              <object class="GtkModelButton">
+                <property name="visible">True</property>
+                <property name="text">Subsubmenu</property>
+                <property name="has-submenu">True</property>
+                <property name="inverted">True</property>
+                <property name="centered">True</property>
+                <signal name="clicked" handler="open_submenu2"/>
+              </object>
+            </child>
+            <child>
+              <object class="GtkModelButton">
+                <property name="visible">True</property>
+                <property name="action-name">action8</property>
+                <property name="text">Item 8</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkSeparator">
+                <property name="visible">True</property>
+                <property name="orientation">horizontal</property>
+                <property name="margin-start">12</property>
+                <property name="margin-end">12</property>
+                <property name="margin-top">3</property>
+                <property name="margin-bottom">3</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkModelButton">
+                <property name="visible">True</property>
+                <property name="action-name">top.action9</property>
+                <property name="text">Item 9</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkModelButton">
+                <property name="visible">True</property>
+                <property name="action-name">top.action10</property>
+                <property name="text">Item 10</property>
+              </object>
+            </child>
+
+          </object>
+          <packing>
+            <property name="name">subsubmenu</property>
+          </packing>
+        </child>
+
+      </object>
+    </child>
+  </object>
+  <object class="GThemedIcon" id="icon9">
+    <property name="name">preferences-desktop-font</property>
+  </object>
+  <object class="GThemedIcon" id="icon-grid">
+    <property name="name">view-grid-symbolic</property>
+  </object>
+  <object class="GThemedIcon" id="icon-list">
+    <property name="name">view-list-symbolic</property>
+  </object>
+  <object class="GThemedIcon" id="icon-italic">
+    <property name="name">format-text-italic-symbolic</property>
+  </object>
+  <object class="GThemedIcon" id="icon-strikethrough">
+    <property name="name">format-text-strikethrough-symbolic</property>
+  </object>
+  <object class="GThemedIcon" id="icon-underline">
+    <property name="name">format-text-underline-symbolic</property>
+  </object>
+  <object class="GtkSizeGroup">
+    <property name="mode">horizontal</property>
+    <widgets>
+      <widget name="main"/>
+      <widget name="submenu1"/>
+    </widgets>
+  </object>
+</interface>
