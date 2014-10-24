@@ -150,6 +150,8 @@ struct _GtkLevelBarPrivate {
 
   GList *offsets;
 
+  gchar *cur_value_class;
+
   guint inverted : 1;
 };
 
@@ -336,6 +338,8 @@ gtk_level_bar_draw_fill_continuous (GtkLevelBar           *self,
   base_area.width -= block_margin.left + block_margin.right;
   base_area.height -= block_margin.top + block_margin.bottom;
 
+  if (self->priv->cur_value_class)
+    gtk_style_context_remove_class (context, self->priv->cur_value_class);
   gtk_style_context_add_class (context, STYLE_CLASS_EMPTY_FILL_BLOCK);
 
   gtk_render_background (context, cr, base_area.x, base_area.y,
@@ -344,6 +348,8 @@ gtk_level_bar_draw_fill_continuous (GtkLevelBar           *self,
                     base_area.width, base_area.height);
 
   gtk_style_context_remove_class (context, STYLE_CLASS_EMPTY_FILL_BLOCK);
+  if (self->priv->cur_value_class)
+    gtk_style_context_add_class (context, self->priv->cur_value_class);
 
   /* now render the filled part on top of it */
   block_area = base_area;
@@ -442,7 +448,11 @@ gtk_level_bar_draw_fill_discrete (GtkLevelBar           *self,
         }
 
       if (idx > num_filled - 1)
-        gtk_style_context_add_class (context, STYLE_CLASS_EMPTY_FILL_BLOCK);
+        {
+          gtk_style_context_add_class (context, STYLE_CLASS_EMPTY_FILL_BLOCK);
+          if (self->priv->cur_value_class != NULL)
+            gtk_style_context_remove_class (context, self->priv->cur_value_class);
+        }
 
       gtk_render_background (context, cr,
                              block_area.x, block_area.y,
@@ -635,10 +645,12 @@ gtk_level_bar_update_level_style_classes (GtkLevelBar *self)
         }
     }
 
+  g_clear_pointer (&self->priv->cur_value_class, g_free);
+
   if (value_class != NULL)
     {
       gtk_style_context_add_class (context, value_class);
-      g_free (value_class);
+      self->priv->cur_value_class = value_class;
     }
 }
 
@@ -884,6 +896,7 @@ gtk_level_bar_finalize (GObject *obj)
   GtkLevelBar *self = GTK_LEVEL_BAR (obj);
 
   g_list_free_full (self->priv->offsets, (GDestroyNotify) gtk_level_bar_offset_free);
+  g_free (self->priv->cur_value_class);
 
   G_OBJECT_CLASS (gtk_level_bar_parent_class)->finalize (obj);
 }
