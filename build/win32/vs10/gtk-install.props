@@ -407,9 +407,10 @@ $(CopyDir)\bin\glib-compile-schemas.exe $(CopyDir)\share\glib-2.0\schemas
     <GtkDoInstallBroadwayHeaders>
 copy ..\..\..\gdk\broadway\gdkbroadway.h $(CopyDir)\include\gtk-$(ApiVersion)\gdk
 mkdir $(CopyDir)\include\gtk-$(ApiVersion)\gdk\broadway
-copy ..\..\..\gdk\broadway\gdkbroadwaywindow.h $(CopyDir)\include\gtk-$(ApiVersion)\gdk\broadway
 copy ..\..\..\gdk\broadway\gdkbroadwaycursor.h $(CopyDir)\include\gtk-$(ApiVersion)\gdk\broadway
+copy ..\..\..\gdk\broadway\gdkbroadwaydisplay.h $(CopyDir)\include\gtk-$(ApiVersion)\gdk\broadway
 copy ..\..\..\gdk\broadway\gdkbroadwayvisual.h $(CopyDir)\include\gtk-$(ApiVersion)\gdk\broadway
+copy ..\..\..\gdk\broadway\gdkbroadwaywindow.h $(CopyDir)\include\gtk-$(ApiVersion)\gdk\broadway
     </GtkDoInstallBroadwayHeaders>
   </PropertyGroup>
   <PropertyGroup>
