@@ -71,11 +71,6 @@ void                    _gtk_css_computed_values_compute_value        (GtkCssCom
                                                                        guint                     id,
                                                                        GtkCssValue              *specified,
                                                                        GtkCssSection            *section);
-void                    _gtk_css_computed_values_set_value            (GtkCssComputedValues     *values,
-                                                                       guint                     id,
-                                                                       GtkCssValue              *value,
-                                                                       GtkCssDependencies        dependencies,
-                                                                       GtkCssSection            *section);
 void                    _gtk_css_computed_values_set_animated_value   (GtkCssComputedValues     *values,
                                                                        guint                     id,
                                                                        GtkCssValue              *value);

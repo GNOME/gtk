@@ -327,7 +327,7 @@ gtk_style_properties_provider_lookup (GtkStyleProviderPrivate *provider,
       if (value == NULL)
         continue;
 
-      _gtk_css_lookup_set_computed (lookup, id, NULL, value);
+      _gtk_css_lookup_set (lookup, id, NULL, value);
     }
 }
 

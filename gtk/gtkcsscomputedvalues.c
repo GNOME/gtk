@@ -146,40 +146,6 @@ _gtk_css_computed_values_compute_value (GtkCssComputedValues    *values,
 
   value = _gtk_css_value_compute (specified, id, provider, scale, values, parent_values, &dependencies);
 
-  _gtk_css_computed_values_set_value (values, id, value, dependencies, section);
-
-  _gtk_css_value_unref (value);
-  _gtk_css_value_unref (specified);
-}
-
-void
-_gtk_css_computed_values_set_animated_value (GtkCssComputedValues *values,
-                                             guint                 id,
-                                             GtkCssValue          *value)
-{
-  gtk_internal_return_if_fail (GTK_IS_CSS_COMPUTED_VALUES (values));
-  gtk_internal_return_if_fail (value != NULL);
-
-  if (values->animated_values == NULL)
-    values->animated_values = g_ptr_array_new_with_free_func ((GDestroyNotify)_gtk_css_value_unref);
-  if (id >= values->animated_values->len)
-   g_ptr_array_set_size (values->animated_values, id + 1);
-
-  if (g_ptr_array_index (values->animated_values, id))
-    _gtk_css_value_unref (g_ptr_array_index (values->animated_values, id));
-  g_ptr_array_index (values->animated_values, id) = _gtk_css_value_ref (value);
-
-}
-
-void
-_gtk_css_computed_values_set_value (GtkCssComputedValues *values,
-                                    guint                 id,
-                                    GtkCssValue          *value,
-                                    GtkCssDependencies    dependencies,
-                                    GtkCssSection        *section)
-{
-  gtk_internal_return_if_fail (GTK_IS_CSS_COMPUTED_VALUES (values));
-
   if (values->values == NULL)
     values->values = g_ptr_array_new_full (_gtk_css_style_property_get_n_properties (),
 					   (GDestroyNotify)_gtk_css_value_unref);
@@ -214,6 +180,28 @@ _gtk_css_computed_values_set_value (GtkCssComputedValues *values,
 
       g_ptr_array_index (values->sections, id) = gtk_css_section_ref (section);
     }
+
+  _gtk_css_value_unref (value);
+  _gtk_css_value_unref (specified);
+}
+
+void
+_gtk_css_computed_values_set_animated_value (GtkCssComputedValues *values,
+                                             guint                 id,
+                                             GtkCssValue          *value)
+{
+  gtk_internal_return_if_fail (GTK_IS_CSS_COMPUTED_VALUES (values));
+  gtk_internal_return_if_fail (value != NULL);
+
+  if (values->animated_values == NULL)
+    values->animated_values = g_ptr_array_new_with_free_func ((GDestroyNotify)_gtk_css_value_unref);
+  if (id >= values->animated_values->len)
+   g_ptr_array_set_size (values->animated_values, id + 1);
+
+  if (g_ptr_array_index (values->animated_values, id))
+    _gtk_css_value_unref (g_ptr_array_index (values->animated_values, id));
+  g_ptr_array_index (values->animated_values, id) = _gtk_css_value_ref (value);
+
 }
 
 GtkCssValue *
