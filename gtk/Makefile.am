@@ -406,6 +406,7 @@ gtk_public_h_sources = 		\
 	gtkplacessidebar.h	\
 	gtkplug.h		\
 	gtkpopover.h		\
+	gtkpopovermenu.h	\
 	gtkprintcontext.h	\
 	gtkprintoperation.h	\
 	gtkprintoperationpreview.h \
@@ -1008,6 +1009,7 @@ gtk_base_c_sources = 		\
 	gtkprogressbar.c	\
 	gtkpixelcache.c		\
 	gtkpopover.c		\
+	gtkpopovermenu.c	\
 	gtkradiobutton.c	\
 	gtkradiomenuitem.c	\
 	gtkradiotoolbutton.c	\
