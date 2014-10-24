@@ -27,6 +27,9 @@
 #include "gtkbuildable.h"
 #include "gtklabel.h"
 #include "gtkframe.h"
+#include "gtkbutton.h"
+#include "gtkwidgetprivate.h"
+
 
 struct _GtkInspectorMiscInfoPrivate {
   GtkInspectorWidgetTree *widget_tree;
@@ -43,8 +46,22 @@ struct _GtkInspectorMiscInfoPrivate {
   GtkWidget *focus_widget_row;
   GtkWidget *focus_widget;
   GtkWidget *focus_widget_button;
+  GtkWidget *mnemonic_label_row;
+  GtkWidget *mnemonic_label;
   GtkWidget *allocated_size_row;
   GtkWidget *allocated_size;
+  GtkWidget *clip_area_row;
+  GtkWidget *clip_area;
+  GtkWidget *accessible_role_row;
+  GtkWidget *accessible_role;
+  GtkWidget *mapped_row;
+  GtkWidget *mapped;
+  GtkWidget *realized_row;
+  GtkWidget *realized;
+  GtkWidget *is_toplevel_row;
+  GtkWidget *is_toplevel;
+  GtkWidget *child_visible_row;
+  GtkWidget *child_visible;
 };
 
 enum
@@ -97,12 +114,31 @@ state_flags_changed (GtkWidget *w, GtkStateFlags old_flags, GtkInspectorMiscInfo
 static void
 allocation_changed (GtkWidget *w, GdkRectangle *allocation, GtkInspectorMiscInfo *sl)
 {
-  gchar *size_label = g_strdup_printf ("%d × %d",
-                                       gtk_widget_get_allocated_width (w),
-                                       gtk_widget_get_allocated_height (w));
+  GtkAllocation clip;
+  gchar *size_label;
+
+  size_label = g_strdup_printf ("%d × %d",
+                                gtk_widget_get_allocated_width (w),
+                                gtk_widget_get_allocated_height (w));
 
   gtk_label_set_label (GTK_LABEL (sl->priv->allocated_size), size_label);
   g_free (size_label);
+
+  gtk_widget_get_clip (w, &clip);
+
+  if (clip.width == gtk_widget_get_allocated_width (w) &&
+      clip.height == gtk_widget_get_allocated_height (w))
+    {
+      gtk_widget_hide (sl->priv->clip_area_row);
+    }
+  else
+    {
+      gtk_widget_show (sl->priv->clip_area_row);
+
+      size_label = g_strdup_printf ("%d × %d", clip.width, clip.height);
+      gtk_label_set_label (GTK_LABEL (sl->priv->clip_area), size_label);
+      g_free (size_label);
+    }
 }
 
 static void
@@ -214,6 +250,16 @@ show_focus_widget (GtkWidget *button, GtkInspectorMiscInfo *sl)
     show_object (sl, G_OBJECT (widget), NULL, "properties"); 
 }
 
+static void
+show_mnemonic_label (GtkWidget *button, GtkInspectorMiscInfo *sl)
+{
+  GtkWidget *widget;
+
+  widget = g_object_get_data (G_OBJECT (button), "mnemonic-label");
+  if (widget)
+    show_object (sl, G_OBJECT (widget), NULL, "properties");
+}
+
 void
 gtk_inspector_misc_info_set_object (GtkInspectorMiscInfo *sl,
                                     GObject              *object)
@@ -242,18 +288,63 @@ gtk_inspector_misc_info_set_object (GtkInspectorMiscInfo *sl,
 
   if (GTK_IS_WIDGET (object))
     {
+      AtkObject *accessible;
+      AtkRole role;
+      GList *list, *l;
+
       gtk_widget_show (sl->priv->state_row);
       g_signal_connect_object (object, "state-flags-changed", G_CALLBACK (state_flags_changed), sl, 0);
       state_flags_changed (GTK_WIDGET (sl->priv->object), 0, sl);
 
+      gtk_widget_show (sl->priv->mnemonic_label_row);
+      gtk_container_forall (GTK_CONTAINER (sl->priv->mnemonic_label), (GtkCallback)gtk_widget_destroy, NULL);
+      list = gtk_widget_list_mnemonic_labels (GTK_WIDGET (sl->priv->object));
+      for (l = list; l; l = l->next)
+        {
+          gchar *tmp;
+          GtkWidget *button;
+
+          tmp = g_strdup_printf ("%p (%s)", l->data, g_type_name_from_instance ((GTypeInstance*)l->data));
+          button = gtk_button_new_with_label (tmp);
+          gtk_widget_show (button);
+          gtk_container_add (GTK_CONTAINER (sl->priv->mnemonic_label), button);
+          g_object_set_data (G_OBJECT (button), "mnemonic-label", l->data);
+          g_signal_connect (button, "clicked", G_CALLBACK (show_mnemonic_label), sl);
+        }
+      g_list_free (list);
+
       allocation_changed (GTK_WIDGET (sl->priv->object), NULL, sl);
       gtk_widget_show (sl->priv->allocated_size_row);
       g_signal_connect_object (object, "size-allocate", G_CALLBACK (allocation_changed), sl, 0);
+
+      accessible = ATK_OBJECT (gtk_widget_get_accessible (GTK_WIDGET (sl->priv->object)));
+      role = atk_object_get_role (accessible);
+      gtk_label_set_text (GTK_LABEL (sl->priv->accessible_role), atk_role_get_name (role));
+      gtk_widget_show (sl->priv->accessible_role_row);
+
+      gtk_widget_set_visible (sl->priv->mapped, gtk_widget_get_mapped (GTK_WIDGET (sl->priv->object)));
+      gtk_widget_show (sl->priv->mapped_row);
+
+      gtk_widget_set_visible (sl->priv->realized, gtk_widget_get_realized (GTK_WIDGET (sl->priv->object)));
+      gtk_widget_show (sl->priv->realized_row);
+
+      gtk_widget_set_visible (sl->priv->is_toplevel, gtk_widget_is_toplevel (GTK_WIDGET (sl->priv->object)));
+      gtk_widget_show (sl->priv->is_toplevel_row);
+
+      gtk_widget_set_visible (sl->priv->child_visible, gtk_widget_get_child_visible (GTK_WIDGET (sl->priv->object)));
+      gtk_widget_show (sl->priv->is_toplevel_row);
     }
   else
     {
       gtk_widget_hide (sl->priv->state_row);
+      gtk_widget_hide (sl->priv->mnemonic_label_row);
       gtk_widget_hide (sl->priv->allocated_size_row);
+      gtk_widget_hide (sl->priv->clip_area_row);
+      gtk_widget_hide (sl->priv->accessible_role_row);
+      gtk_widget_hide (sl->priv->mapped_row);
+      gtk_widget_hide (sl->priv->realized_row);
+      gtk_widget_hide (sl->priv->is_toplevel_row);
+      gtk_widget_hide (sl->priv->child_visible_row);
     }
 
   if (GTK_IS_BUILDABLE (object))
@@ -355,8 +446,22 @@ gtk_inspector_misc_info_class_init (GtkInspectorMiscInfoClass *klass)
    gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorMiscInfo, focus_widget_row);
    gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorMiscInfo, focus_widget);
    gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorMiscInfo, focus_widget_button);
+   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorMiscInfo, mnemonic_label_row);
+   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorMiscInfo, mnemonic_label);
    gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorMiscInfo, allocated_size_row);
    gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorMiscInfo, allocated_size);
+   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorMiscInfo, clip_area_row);
+   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorMiscInfo, clip_area);
+   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorMiscInfo, accessible_role_row);
+   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorMiscInfo, accessible_role);
+   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorMiscInfo, mapped_row);
+   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorMiscInfo, mapped);
+   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorMiscInfo, realized_row);
+   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorMiscInfo, realized);
+   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorMiscInfo, is_toplevel_row);
+   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorMiscInfo, is_toplevel);
+   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorMiscInfo, child_visible_row);
+   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorMiscInfo, child_visible);
 
   gtk_widget_class_bind_template_callback (widget_class, show_default_widget);
   gtk_widget_class_bind_template_callback (widget_class, show_focus_widget);
