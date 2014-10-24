@@ -10272,6 +10272,7 @@ gtk_window_set_screen (GtkWindow *window,
   GtkWindowPrivate *priv;
   GtkWidget *widget;
   GdkScreen *previous_screen;
+  gboolean was_rgba;
   gboolean was_mapped;
 
   g_return_if_fail (GTK_IS_WINDOW (window));
@@ -10285,6 +10286,12 @@ gtk_window_set_screen (GtkWindow *window,
   widget = GTK_WIDGET (window);
 
   previous_screen = priv->screen;
+
+  if (gdk_screen_get_rgba_visual (previous_screen) == gtk_widget_get_visual (widget))
+    was_rgba = TRUE;
+  else
+    was_rgba = FALSE;
+
   was_mapped = gtk_widget_get_mapped (widget);
 
   if (was_mapped)
@@ -10317,6 +10324,15 @@ gtk_window_set_screen (GtkWindow *window,
       _gtk_widget_propagate_composited_changed (widget);
     }
   g_object_notify (G_OBJECT (window), "screen");
+
+  if (was_rgba)
+    {
+      GdkVisual *visual;
+
+      visual = gdk_screen_get_rgba_visual (screen);
+      if (visual)
+        gtk_widget_set_visual (widget, visual);
+    }
 
   if (was_mapped)
     gtk_widget_map (widget);
