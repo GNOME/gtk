@@ -55,6 +55,15 @@ increase_level (gpointer data)
   return G_SOURCE_CONTINUE;
 }
 
+static gboolean
+window_delete_event (GtkWidget *widget,
+                     GdkEvent *event,
+                     gpointer _data)
+{
+  gtk_main_quit ();
+  return FALSE;
+}
+
 int
 main (int argc, char *argv[])
 {
@@ -71,6 +80,9 @@ main (int argc, char *argv[])
   g_object_set (bar, "margin", 20, NULL);
   gtk_container_add (GTK_CONTAINER (window), bar);
   gtk_widget_show_all (window);
+
+  g_signal_connect (window, "delete-event",
+                    G_CALLBACK (window_delete_event), NULL);
 
   g_timeout_add (100, increase_level, bar);
   gtk_main ();
