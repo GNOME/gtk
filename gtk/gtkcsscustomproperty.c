@@ -25,7 +25,7 @@
 
 #include "gtkcssstylefuncsprivate.h"
 #include "gtkcsstypedvalueprivate.h"
-#include "gtkstylepropertiesprivate.h"
+#include "deprecated/gtkstylepropertiesprivate.h"
 
 #include "deprecated/gtkthemingengine.h"
 

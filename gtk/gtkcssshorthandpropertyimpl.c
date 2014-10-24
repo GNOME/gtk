@@ -39,7 +39,7 @@
 #include "gtkcssstringvalueprivate.h"
 #include "gtkcssstylefuncsprivate.h"
 #include "gtkcssvalueprivate.h"
-#include "gtkstylepropertiesprivate.h"
+#include "deprecated/gtkstylepropertiesprivate.h"
 #include "gtktypebuiltins.h"
 
 /* this is in case round() is not provided by the compiler, 
