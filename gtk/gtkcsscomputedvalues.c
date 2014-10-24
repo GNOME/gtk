@@ -34,7 +34,6 @@
 #include "gtkcssstylepropertyprivate.h"
 #include "gtkcsstransitionprivate.h"
 #include "gtkstyleanimationprivate.h"
-#include "gtkstylepropertiesprivate.h"
 #include "gtkstylepropertyprivate.h"
 #include "gtkstyleproviderprivate.h"
 

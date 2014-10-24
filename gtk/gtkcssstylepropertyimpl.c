@@ -30,7 +30,6 @@
 #include "gtkcsstypesprivate.h"
 #include "gtkintl.h"
 #include "gtkprivatetypebuiltins.h"
-#include "gtkstylepropertiesprivate.h"
 
 /* this is in case round() is not provided by the compiler, 
  * such as in the case of C89 compilers, like MSVC

@@ -22,7 +22,6 @@
 #include "gtkcsstypesprivate.h"
 #include "gtkprivatetypebuiltins.h"
 #include "gtkcssstylepropertyprivate.h"
-#include "gtkstylepropertiesprivate.h"
 
 GtkCssLookup *
 _gtk_css_lookup_new (const GtkBitmask *relevant)

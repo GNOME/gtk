@@ -37,7 +37,6 @@
 #include "gtksettingsprivate.h"
 #include "gtkstyleprovider.h"
 #include "gtkstylecontextprivate.h"
-#include "gtkstylepropertiesprivate.h"
 #include "gtkstylepropertyprivate.h"
 #include "gtkstyleproviderprivate.h"
 #include "gtkwidgetpath.h"
