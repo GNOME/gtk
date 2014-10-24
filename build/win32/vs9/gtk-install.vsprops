@@ -55,6 +55,7 @@ copy ..\..\..\gdk\gdkdisplaymanager.h $(CopyDir)\include\gtk-3.0\gdk\gdkdisplaym
 copy ..\..\..\gdk\gdkdnd.h $(CopyDir)\include\gtk-3.0\gdk\gdkdnd.h&#x0D;&#x0A;
 copy ..\..\..\gdk\gdkevents.h $(CopyDir)\include\gtk-3.0\gdk\gdkevents.h&#x0D;&#x0A;
 copy ..\..\..\gdk\gdkframetimings.h $(CopyDir)\include\gtk-3.0\gdk\gdkframetimings.h&#x0D;&#x0A;
+copy ..\..\..\gdk\gdkglcontext.h $(CopyDir)\include\gtk-3.0\gdk\gdkglcontext.h&#x0D;&#x0A;
 copy ..\..\..\gdk\gdkkeys.h $(CopyDir)\include\gtk-3.0\gdk\gdkkeys.h&#x0D;&#x0A;
 copy ..\..\..\gdk\gdkkeysyms.h $(CopyDir)\include\gtk-3.0\gdk\gdkkeysyms.h&#x0D;&#x0A;
 copy ..\..\..\gdk\gdkkeysyms-compat.h $(CopyDir)\include\gtk-3.0\gdk\gdkkeysyms-compat.h&#x0D;&#x0A;
@@ -174,6 +175,7 @@ copy ..\..\..\gtk\gtkgesturerotate.h $(CopyDir)\include\gtk-3.0\gtk\gtkgesturero
 copy ..\..\..\gtk\gtkgesturesingle.h $(CopyDir)\include\gtk-3.0\gtk\gtkgesturesingle.h&#x0D;&#x0A;
 copy ..\..\..\gtk\gtkgestureswipe.h $(CopyDir)\include\gtk-3.0\gtk\gtkgestureswipe.h&#x0D;&#x0A;
 copy ..\..\..\gtk\gtkgesturezoom.h $(CopyDir)\include\gtk-3.0\gtk\gtkgesturezoom.h&#x0D;&#x0A;
+copy ..\..\..\gtk\gtkglarea.h $(CopyDir)\include\gtk-3.0\gtk\gtkglarea.h&#x0D;&#x0A;
 copy ..\..\..\gtk\gtkgrid.h $(CopyDir)\include\gtk-3.0\gtk\gtkgrid.h&#x0D;&#x0A;
 copy ..\..\..\gtk\gtkheaderbar.h $(CopyDir)\include\gtk-3.0\gtk\gtkheaderbar.h&#x0D;&#x0A;
 copy ..\..\..\gtk\gtkicontheme.h $(CopyDir)\include\gtk-3.0\gtk\gtkicontheme.h&#x0D;&#x0A;
@@ -228,6 +230,7 @@ copy ..\..\..\gtk\gtkrecentchoosermenu.h $(CopyDir)\include\gtk-3.0\gtk\gtkrecen
 copy ..\..\..\gtk\gtkrecentchooserwidget.h $(CopyDir)\include\gtk-3.0\gtk\gtkrecentchooserwidget.h&#x0D;&#x0A;
 copy ..\..\..\gtk\gtkrecentfilter.h $(CopyDir)\include\gtk-3.0\gtk\gtkrecentfilter.h&#x0D;&#x0A;
 copy ..\..\..\gtk\gtkrecentmanager.h $(CopyDir)\include\gtk-3.0\gtk\gtkrecentmanager.h&#x0D;&#x0A;
+copy ..\..\..\gtk\gtkrender.h  $(CopyDir)\include\gtk-3.0\gtk\gtkrender.h&#x0D;&#x0A;
 copy ..\..\..\gtk\gtkrevealer.h $(CopyDir)\include\gtk-3.0\gtk\gtkrevealer.h&#x0D;&#x0A;
 copy ..\..\..\gtk\gtkscale.h $(CopyDir)\include\gtk-3.0\gtk\gtkscale.h&#x0D;&#x0A;
 copy ..\..\..\gtk\gtkscalebutton.h $(CopyDir)\include\gtk-3.0\gtk\gtkscalebutton.h&#x0D;&#x0A;
@@ -242,6 +245,7 @@ copy ..\..\..\gtk\gtkseparatormenuitem.h $(CopyDir)\include\gtk-3.0\gtk\gtksepar
 copy ..\..\..\gtk\gtkseparatortoolitem.h $(CopyDir)\include\gtk-3.0\gtk\gtkseparatortoolitem.h&#x0D;&#x0A;
 copy ..\..\..\gtk\gtksettings.h $(CopyDir)\include\gtk-3.0\gtk\gtksettings.h&#x0D;&#x0A;
 copy ..\..\..\gtk\gtkshow.h $(CopyDir)\include\gtk-3.0\gtk\gtkshow.h&#x0D;&#x0A;
+copy ..\..\..\gtk\gtksidebar.h $(CopyDir)\include\gtk-3.0\gtk\gtksidebar.h&#x0D;&#x0A;
 copy ..\..\..\gtk\gtksizegroup.h $(CopyDir)\include\gtk-3.0\gtk\gtksizegroup.h&#x0D;&#x0A;
 copy ..\..\..\gtk\gtksizerequest.h $(CopyDir)\include\gtk-3.0\gtk\gtksizerequest.h&#x0D;&#x0A;
 copy ..\..\..\gtk\gtksocket.h $(CopyDir)\include\gtk-3.0\gtk\gtksocket.h&#x0D;&#x0A;

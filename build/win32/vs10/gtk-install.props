@@ -53,6 +53,7 @@ copy ..\..\..\gdk\gdkdisplaymanager.h $(CopyDir)\include\gtk-3.0\gdk\gdkdisplaym
 copy ..\..\..\gdk\gdkdnd.h $(CopyDir)\include\gtk-3.0\gdk\gdkdnd.h
 copy ..\..\..\gdk\gdkevents.h $(CopyDir)\include\gtk-3.0\gdk\gdkevents.h
 copy ..\..\..\gdk\gdkframetimings.h $(CopyDir)\include\gtk-3.0\gdk\gdkframetimings.h
+copy ..\..\..\gdk\gdkglcontext.h $(CopyDir)\include\gtk-3.0\gdk\gdkglcontext.h
 copy ..\..\..\gdk\gdkkeys.h $(CopyDir)\include\gtk-3.0\gdk\gdkkeys.h
 copy ..\..\..\gdk\gdkkeysyms.h $(CopyDir)\include\gtk-3.0\gdk\gdkkeysyms.h
 copy ..\..\..\gdk\gdkkeysyms-compat.h $(CopyDir)\include\gtk-3.0\gdk\gdkkeysyms-compat.h
@@ -172,6 +173,7 @@ copy ..\..\..\gtk\gtkgesturerotate.h $(CopyDir)\include\gtk-3.0\gtk\gtkgesturero
 copy ..\..\..\gtk\gtkgesturesingle.h $(CopyDir)\include\gtk-3.0\gtk\gtkgesturesingle.h
 copy ..\..\..\gtk\gtkgestureswipe.h $(CopyDir)\include\gtk-3.0\gtk\gtkgestureswipe.h
 copy ..\..\..\gtk\gtkgesturezoom.h $(CopyDir)\include\gtk-3.0\gtk\gtkgesturezoom.h
+copy ..\..\..\gtk\gtkglarea.h $(CopyDir)\include\gtk-3.0\gtk\gtkglarea.h
 copy ..\..\..\gtk\gtkgrid.h $(CopyDir)\include\gtk-3.0\gtk\gtkgrid.h
 copy ..\..\..\gtk\gtkheaderbar.h $(CopyDir)\include\gtk-3.0\gtk\gtkheaderbar.h
 copy ..\..\..\gtk\gtkicontheme.h $(CopyDir)\include\gtk-3.0\gtk\gtkicontheme.h
@@ -226,6 +228,7 @@ copy ..\..\..\gtk\gtkrecentchoosermenu.h $(CopyDir)\include\gtk-3.0\gtk\gtkrecen
 copy ..\..\..\gtk\gtkrecentchooserwidget.h $(CopyDir)\include\gtk-3.0\gtk\gtkrecentchooserwidget.h
 copy ..\..\..\gtk\gtkrecentfilter.h $(CopyDir)\include\gtk-3.0\gtk\gtkrecentfilter.h
 copy ..\..\..\gtk\gtkrecentmanager.h $(CopyDir)\include\gtk-3.0\gtk\gtkrecentmanager.h
+copy ..\..\..\gtk\gtkrender.h  $(CopyDir)\include\gtk-3.0\gtk\gtkrender.h
 copy ..\..\..\gtk\gtkrevealer.h $(CopyDir)\include\gtk-3.0\gtk\gtkrevealer.h
 copy ..\..\..\gtk\gtkscale.h $(CopyDir)\include\gtk-3.0\gtk\gtkscale.h
 copy ..\..\..\gtk\gtkscalebutton.h $(CopyDir)\include\gtk-3.0\gtk\gtkscalebutton.h
@@ -240,6 +243,7 @@ copy ..\..\..\gtk\gtkseparatormenuitem.h $(CopyDir)\include\gtk-3.0\gtk\gtksepar
 copy ..\..\..\gtk\gtkseparatortoolitem.h $(CopyDir)\include\gtk-3.0\gtk\gtkseparatortoolitem.h
 copy ..\..\..\gtk\gtksettings.h $(CopyDir)\include\gtk-3.0\gtk\gtksettings.h
 copy ..\..\..\gtk\gtkshow.h $(CopyDir)\include\gtk-3.0\gtk\gtkshow.h
+copy ..\..\..\gtk\gtksidebar.h $(CopyDir)\include\gtk-3.0\gtk\gtksidebar.h
 copy ..\..\..\gtk\gtksizegroup.h $(CopyDir)\include\gtk-3.0\gtk\gtksizegroup.h
 copy ..\..\..\gtk\gtksizerequest.h $(CopyDir)\include\gtk-3.0\gtk\gtksizerequest.h
 copy ..\..\..\gtk\gtksocket.h $(CopyDir)\include\gtk-3.0\gtk\gtksocket.h
