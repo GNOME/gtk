@@ -5410,6 +5410,12 @@ gtk_widget_remove_tick_callback (GtkWidget *widget,
     }
 }
 
+gboolean
+gtk_widget_has_tick_callback (GtkWidget *widget)
+{
+  return widget->priv->tick_callbacks != NULL;
+}
+
 static void
 gtk_widget_connect_frame_clock (GtkWidget     *widget,
                                 GdkFrameClock *frame_clock)

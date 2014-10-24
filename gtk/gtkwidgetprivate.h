@@ -162,6 +162,7 @@ void              _gtk_widget_remove_controller            (GtkWidget           
                                                             GtkEventController  *controller);
 GList *           _gtk_widget_list_controllers             (GtkWidget           *widget,
                                                             GtkPropagationPhase  phase);
+gboolean          gtk_widget_has_tick_callback             (GtkWidget *widget);
 
 G_END_DECLS
 
