@@ -21,7 +21,7 @@ add_custom_css (void)
 {
   GtkCssProvider *provider;
   const gchar data[] =
-  ".level-bar.fill-block.empty-fill-block.level-my-offset {"
+  ".level-bar.fill-block.empty-fill-block {"
   "   background-color: transparent;"
   "   background-image: none;"
   "   border-color: alpha(@theme_fg_color, 0.1);"
