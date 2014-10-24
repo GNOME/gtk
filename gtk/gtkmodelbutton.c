@@ -31,6 +31,8 @@
 #include "gtkrender.h"
 #include "gtkstylecontext.h"
 #include "gtktypebuiltins.h"
+#include "gtkstack.h"
+#include "gtkpopover.h"
 
 struct _GtkModelButton
 {
@@ -43,6 +45,7 @@ struct _GtkModelButton
   gboolean centered;
   gboolean inverted;
   gboolean iconic;
+  gchar *menu_name;
   GtkMenuTrackerItemRole role;
 };
 
@@ -59,6 +62,7 @@ enum
   PROP_ACTIVE,
   PROP_ACCEL,
   PROP_HAS_SUBMENU,
+  PROP_MENU_NAME,
   PROP_INVERTED,
   PROP_CENTERED,
   PROP_ICONIC
@@ -173,6 +177,16 @@ gtk_model_button_set_has_submenu (GtkModelButton *button,
 }
 
 static void
+gtk_model_button_set_menu_name (GtkModelButton *button,
+                                const gchar    *menu_name)
+{
+  g_free (button->menu_name);
+  button->menu_name = g_strdup (menu_name);
+  gtk_model_button_update_state (button);
+  gtk_widget_queue_resize (GTK_WIDGET (button));
+}
+
+static void
 gtk_model_button_set_inverted (GtkModelButton *button,
                                gboolean        inverted)
 {
@@ -229,6 +243,10 @@ gtk_model_button_get_property (GObject    *object,
       g_value_set_boolean (value, button->active);
       break;
 
+    case PROP_MENU_NAME:
+      g_value_set_string (value, button->menu_name);
+      break;
+
     default:
       g_assert_not_reached ();
     }
@@ -266,6 +284,10 @@ gtk_model_button_set_property (GObject      *object,
 
     case PROP_HAS_SUBMENU:
       gtk_model_button_set_has_submenu (button, g_value_get_boolean (value));
+      break;
+
+    case PROP_MENU_NAME:
+      gtk_model_button_set_menu_name (button, g_value_get_string (value));
       break;
 
     case PROP_INVERTED:
@@ -678,10 +700,33 @@ gtk_model_button_draw (GtkWidget *widget,
 }
 
 static void
+gtk_model_button_clicked (GtkButton *button)
+{
+  GtkModelButton *model_button = GTK_MODEL_BUTTON (button);
+  if (model_button->menu_name != NULL)
+    {
+      GtkWidget *stack;
+
+      stack = gtk_widget_get_ancestor (GTK_WIDGET (button), GTK_TYPE_STACK);
+      if (stack != NULL)
+        gtk_stack_set_visible_child_name (GTK_STACK (stack), model_button->menu_name);
+    }
+  else if (model_button->role == GTK_MENU_TRACKER_ITEM_ROLE_NORMAL)
+    {
+      GtkWidget *popover;
+
+      popover = gtk_widget_get_ancestor (GTK_WIDGET (button), GTK_TYPE_POPOVER);
+      if (popover != NULL)
+        gtk_widget_hide (popover);
+    }
+}
+
+static void
 gtk_model_button_class_init (GtkModelButtonClass *class)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (class);
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (class);
+  GtkButtonClass *button_class = GTK_BUTTON_CLASS (class);
 
   object_class->get_property = gtk_model_button_get_property;
   object_class->set_property = gtk_model_button_set_property;
@@ -693,6 +738,8 @@ gtk_model_button_class_init (GtkModelButtonClass *class)
   widget_class->get_preferred_height_and_baseline_for_width = gtk_model_button_get_preferred_height_and_baseline_for_width;
   widget_class->size_allocate = gtk_model_button_size_allocate;
   widget_class->draw = gtk_model_button_draw;
+
+  button_class->clicked = gtk_model_button_clicked;
 
   g_object_class_install_property (object_class, PROP_ACTION_ROLE,
                                    g_param_spec_enum ("action-role", "", "",
@@ -714,6 +761,9 @@ gtk_model_button_class_init (GtkModelButtonClass *class)
   g_object_class_install_property (object_class, PROP_HAS_SUBMENU,
                                    g_param_spec_boolean ("has-submenu", "", "", FALSE,
                                                          G_PARAM_WRITABLE | G_PARAM_STATIC_STRINGS));
+  g_object_class_install_property (object_class, PROP_MENU_NAME,
+                                   g_param_spec_string ("menu-name", "", "", NULL,
+                                                        G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
   g_object_class_install_property (object_class, PROP_INVERTED,
                                    g_param_spec_boolean ("inverted", "", "", FALSE,
 
