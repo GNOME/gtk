@@ -170,6 +170,41 @@
                 </child>
 
                 <child>
+                  <object class="GtkListBoxRow" id="mnemonic_label_row">
+                    <property name="visible">True</property>
+                    <property name="activatable">False</property>
+                    <child>
+                      <object class="GtkBox">
+                        <property name="visible">True</property>
+                        <property name="orientation">horizontal</property>
+                        <property name="margin">10</property>
+                        <property name="spacing">40</property>
+                        <child>
+                          <object class="GtkLabel">
+                            <property name="visible">True</property>
+                            <property name="label" translatable="yes">Mnemonic Label</property>
+                            <property name="halign">start</property>
+                            <property name="valign">baseline</property>
+                            <property name="xalign">0.0</property>
+                          </object>
+                          <packing>
+                            <property name="expand">True</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkBox" id="mnemonic_label">
+                            <property name="visible">True</property>
+                            <property name="orientation">horizontal</property>
+                            <property name="spacing">10</property>
+                            <property name="halign">end</property>
+                          </object>
+                        </child>
+                      </object>
+                    </child>
+                  </object>
+                </child>
+
+                <child>
                   <object class="GtkListBoxRow" id="allocated_size_row">
                     <property name="visible">true</property>
                     <property name="activatable">false</property>
@@ -203,6 +238,254 @@
                   </object>
                 </child>
 
+                <child>
+                  <object class="GtkListBoxRow" id="clip_area_row">
+                    <property name="visible">true</property>
+                    <property name="activatable">false</property>
+                    <child>
+                      <object class="GtkBox">
+                        <property name="visible">true</property>
+                        <property name="orientation">horizontal</property>
+                        <property name="margin">10</property>
+                        <property name="spacing">40</property>
+                        <child>
+                          <object class="GtkLabel">
+                            <property name="visible">true</property>
+                            <property name="label" translatable="yes">Clip area</property>
+                            <property name="halign">start</property>
+                            <property name="valign">baseline</property>
+                            <property name="xalign">0</property>
+                          </object>
+                          <packing>
+                            <property name="expand">true</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkLabel" id="clip_area">
+                            <property name="visible">true</property>
+                            <property name="halign">end</property>
+                            <property name="valign">baseline</property>
+                          </object>
+                        </child>
+                      </object>
+                    </child>
+                  </object>
+                </child>
+
+                <child>
+                  <object class="GtkListBoxRow" id="tick_callback_row">
+                    <property name="visible">true</property>
+                    <property name="activatable">false</property>
+                    <child>
+                      <object class="GtkBox">
+                        <property name="visible">true</property>
+                        <property name="orientation">horizontal</property>
+                        <property name="margin">10</property>
+                        <property name="spacing">40</property>
+                        <child>
+                          <object class="GtkLabel">
+                            <property name="visible">true</property>
+                            <property name="label" translatable="yes">Tick callback</property>
+                            <property name="halign">start</property>
+                            <property name="valign">baseline</property>
+                            <property name="xalign">0</property>
+                          </object>
+                          <packing>
+                            <property name="expand">true</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkImage" id="tick_callback">
+                            <property name="visible">true</property>
+                            <property name="halign">end</property>
+                            <property name="valign">baseline</property>
+                            <property name="icon-name">object-select-symbolic</property>
+                            <property name="icon-size">1</property>
+                          </object>
+                        </child>
+                      </object>
+                    </child>
+                  </object>
+                </child>
+
+                <child>
+                  <object class="GtkListBoxRow" id="accessible_role_row">
+                    <property name="visible">true</property>
+                    <property name="activatable">false</property>
+                    <child>
+                      <object class="GtkBox">
+                        <property name="visible">true</property>
+                        <property name="orientation">horizontal</property>
+                        <property name="margin">10</property>
+                        <property name="spacing">40</property>
+                        <child>
+                          <object class="GtkLabel">
+                            <property name="visible">true</property>
+                            <property name="label" translatable="yes">Accessible role</property>
+                            <property name="halign">start</property>
+                            <property name="valign">baseline</property>
+                            <property name="xalign">0</property>
+                          </object>
+                          <packing>
+                            <property name="expand">true</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkLabel" id="accessible_role">
+                            <property name="visible">true</property>
+                            <property name="halign">end</property>
+                            <property name="valign">baseline</property>
+                          </object>
+                        </child>
+                      </object>
+                    </child>
+                  </object>
+                </child>
+
+                <child>
+                  <object class="GtkListBoxRow" id="mapped_row">
+                    <property name="visible">true</property>
+                    <property name="activatable">false</property>
+                    <child>
+                      <object class="GtkBox">
+                        <property name="visible">true</property>
+                        <property name="orientation">horizontal</property>
+                        <property name="margin">10</property>
+                        <property name="spacing">40</property>
+                        <child>
+                          <object class="GtkLabel">
+                            <property name="visible">true</property>
+                            <property name="label" translatable="yes">Mapped</property>
+                            <property name="halign">start</property>
+                            <property name="valign">baseline</property>
+                            <property name="xalign">0</property>
+                          </object>
+                          <packing>
+                            <property name="expand">true</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkImage" id="mapped">
+                            <property name="visible">true</property>
+                            <property name="halign">end</property>
+                            <property name="valign">baseline</property>
+                            <property name="icon-size">1</property>
+                            <property name="icon-name">object-select-symbolic</property>
+                          </object>
+                        </child>
+                      </object>
+                    </child>
+                  </object>
+                </child>
+
+                <child>
+                  <object class="GtkListBoxRow" id="realized_row">
+                    <property name="visible">true</property>
+                    <property name="activatable">false</property>
+                    <child>
+                      <object class="GtkBox">
+                        <property name="visible">true</property>
+                        <property name="orientation">horizontal</property>
+                        <property name="margin">10</property>
+                        <property name="spacing">40</property>
+                        <child>
+                          <object class="GtkLabel">
+                            <property name="visible">true</property>
+                            <property name="label" translatable="yes">Realized</property>
+                            <property name="halign">start</property>
+                            <property name="valign">baseline</property>
+                            <property name="xalign">0</property>
+                          </object>
+                          <packing>
+                            <property name="expand">true</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkImage" id="realized">
+                            <property name="visible">true</property>
+                            <property name="halign">end</property>
+                            <property name="valign">baseline</property>
+                            <property name="icon-size">1</property>
+                            <property name="icon-name">object-select-symbolic</property>
+                          </object>
+                        </child>
+                      </object>
+                    </child>
+                  </object>
+                </child>
+
+                <child>
+                  <object class="GtkListBoxRow" id="is_toplevel_row">
+                    <property name="visible">true</property>
+                    <property name="activatable">false</property>
+                    <child>
+                      <object class="GtkBox">
+                        <property name="visible">true</property>
+                        <property name="orientation">horizontal</property>
+                        <property name="margin">10</property>
+                        <property name="spacing">40</property>
+                        <child>
+                          <object class="GtkLabel">
+                            <property name="visible">true</property>
+                            <property name="label" translatable="yes">Is Toplevel</property>
+                            <property name="halign">start</property>
+                            <property name="valign">baseline</property>
+                            <property name="xalign">0</property>
+                          </object>
+                          <packing>
+                            <property name="expand">true</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkImage" id="is_toplevel">
+                            <property name="visible">true</property>
+                            <property name="halign">end</property>
+                            <property name="valign">baseline</property>
+                            <property name="icon-size">1</property>
+                            <property name="icon-name">object-select-symbolic</property>
+                          </object>
+                        </child>
+                      </object>
+                    </child>
+                  </object>
+                </child>
+
+                <child>
+                  <object class="GtkListBoxRow" id="child_visible_row">
+                    <property name="visible">true</property>
+                    <property name="activatable">false</property>
+                    <child>
+                      <object class="GtkBox">
+                        <property name="visible">true</property>
+                        <property name="orientation">horizontal</property>
+                        <property name="margin">10</property>
+                        <property name="spacing">40</property>
+                        <child>
+                          <object class="GtkLabel">
+                            <property name="visible">true</property>
+                            <property name="label" translatable="yes">Child Visible</property>
+                            <property name="halign">start</property>
+                            <property name="valign">baseline</property>
+                            <property name="xalign">0</property>
+                          </object>
+                          <packing>
+                            <property name="expand">true</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkImage" id="child_visible">
+                            <property name="visible">true</property>
+                            <property name="halign">end</property>
+                            <property name="valign">baseline</property>
+                            <property name="icon-size">1</property>
+                            <property name="icon-name">object-select-symbolic</property>
+                          </object>
+                        </child>
+                      </object>
+                    </child>
+                  </object>
+                </child>
+
               </object>
             </child>
           </object>
@@ -220,3 +503,4 @@
     </widgets>
   </object>
 </interface>
+
