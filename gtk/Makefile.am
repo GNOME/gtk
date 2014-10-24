@@ -393,6 +393,7 @@ gtk_public_h_sources = 		\
 	gtkmenushell.h		\
 	gtkmenutoolbutton.h	\
 	gtkmessagedialog.h	\
+	gtkmodelbutton.h	\
 	gtkmodules.h		\
 	gtkmountoperation.h	\
 	gtknotebook.h		\
@@ -624,7 +625,6 @@ gtk_private_h_sources =		\
 	gtkmenutrackeritem.h	\
 	gtkmnemonichash.h	\
 	gtkmodelmenuitem.h	\
-	gtkmodelbutton.h	\
 	gtkmodifierstyle.h	\
 	gtkmodulesprivate.h	\
 	gtkmountoperationprivate.h \

@@ -20,6 +20,10 @@
 #ifndef __GTK_MODEL_BUTTON_H__
 #define __GTK_MODEL_BUTTON_H__
 
+#if !defined (__GTK_H_INSIDE__) && !defined (GTK_COMPILATION)
+#error "Only <gtk/gtk.h> can be included directly."
+#endif
+
 #include <gtk/gtkwidget.h>
 
 G_BEGIN_DECLS
@@ -32,8 +36,10 @@ G_BEGIN_DECLS
 
 typedef struct _GtkModelButton                            GtkModelButton;
 
+GDK_AVAILABLE_IN_3_16
 GType                   gtk_model_button_get_type                    (void) G_GNUC_CONST;
 
+GDK_AVAILABLE_IN_3_16
 GtkWidget *             gtk_model_button_new                         (void);
 
 G_END_DECLS

@@ -141,6 +141,7 @@
 #include <gtk/gtkmenushell.h>
 #include <gtk/gtkmenutoolbutton.h>
 #include <gtk/gtkmessagedialog.h>
+#include <gtk/gtkmodelbutton.h>
 #include <gtk/gtkmodules.h>
 #include <gtk/gtkmountoperation.h>
 #include <gtk/gtknotebook.h>
