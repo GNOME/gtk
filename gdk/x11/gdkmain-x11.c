@@ -279,7 +279,8 @@ gdk_x_error (Display	 *xdisplay,
         {
           GdkX11Display *gdk_display = displays->data;
 
-          if (xdisplay == gdk_display->xdisplay)
+          if (GDK_IS_X11_DISPLAY (gdk_display) &&
+              xdisplay == gdk_display->xdisplay)
             {
               error_display = GDK_DISPLAY (gdk_display);
               g_slist_free (displays);

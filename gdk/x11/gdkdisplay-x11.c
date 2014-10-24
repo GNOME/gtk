@@ -1947,7 +1947,8 @@ gdk_x11_lookup_xdisplay (Display *xdisplay)
 
   for (l = list; l; l = l->next)
     {
-      if (GDK_DISPLAY_XDISPLAY (l->data) == xdisplay)
+      if (GDK_IS_X11_DISPLAY (l->data) &&
+          GDK_DISPLAY_XDISPLAY (l->data) == xdisplay)
         {
           display = l->data;
           break;
@@ -2801,7 +2802,10 @@ gdk_x11_set_sm_client_id (const gchar *sm_client_id)
 
   displays = gdk_display_manager_list_displays (gdk_display_manager_get ());
   for (l = displays; l; l = l->next)
-    set_sm_client_id (l->data, sm_client_id);
+    {
+      if (GDK_IS_X11_DISPLAY (l->data))
+        set_sm_client_id (l->data, sm_client_id);
+    }
 
   g_slist_free (displays);
 }
