@@ -175,10 +175,45 @@ gtk_inspector_window_class_init (GtkInspectorWindowClass *klass)
   gtk_widget_class_bind_template_callback (widget_class, close_details);
 }
 
+static GdkScreen *
+get_inspector_screen (void)
+{
+  static GdkDisplay *display = NULL;
+
+  if (display == NULL)
+    {
+      const gchar *name;
+
+      name = g_getenv ("GTK_INSPECTOR_DISPLAY");
+      display = gdk_display_open (name);
+
+      if (display)
+        g_debug ("Using display %s for GtkInspector", name);
+      else
+        g_message ("Failed to open display %s", name);
+    }
+
+  if (!display)
+    {
+      display = gdk_display_open (NULL);
+      if (display)
+        g_debug ("Using default display for GtkInspector");
+      else
+        g_message ("Failed to separate connection to default display");
+    }
+
+  if (!display)
+    display = gdk_display_get_default ();
+
+  return gdk_display_get_default_screen (display);
+}
+
 GtkWidget *
 gtk_inspector_window_new (void)
 {
-  return GTK_WIDGET (g_object_new (GTK_TYPE_INSPECTOR_WINDOW, NULL));
+  return GTK_WIDGET (g_object_new (GTK_TYPE_INSPECTOR_WINDOW,
+                                   "screen", get_inspector_screen (),
+                                   NULL));
 }
 
 // vim: set et sw=2 ts=2:

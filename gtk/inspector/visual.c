@@ -361,7 +361,7 @@ scale_changed (GtkAdjustment *adjustment, GtkInspectorVisual *vis)
   gint scale;
 
   scale = gtk_adjustment_get_value (adjustment);
-  display = gtk_widget_get_display (GTK_WIDGET (vis));
+  display = gdk_display_get_default ();
   gdk_x11_display_set_window_scale (display, scale);
 }
 #endif
@@ -372,7 +372,7 @@ init_scale (GtkInspectorVisual *vis)
 #if defined (GDK_WINDOWING_X11) && defined (HAVE_CAIRO_SURFACE_SET_DEVICE_SCALE)
   GdkScreen *screen;
 
-  screen = gtk_widget_get_screen (GTK_WIDGET (vis));
+  screen = gdk_screen_get_default ();
   if (GDK_IS_X11_SCREEN (screen))
     {
       gdouble scale;

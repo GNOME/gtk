@@ -63,6 +63,7 @@ typedef struct
   GtkWidget *misc_info;
   GtkWidget *gestures;
 
+  GtkWidget *invisible;
   GtkWidget *selected_widget;
   GtkWidget *flash_widget;
 

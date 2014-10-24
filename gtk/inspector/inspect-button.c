@@ -29,6 +29,7 @@
 
 #include "gtkstack.h"
 #include "gtkmain.h"
+#include "gtkinvisible.h"
 
 typedef struct
 {
@@ -312,21 +313,39 @@ gtk_inspector_on_inspect (GtkWidget          *button,
   GdkDisplay *display;
   GdkDevice *device;
   GdkCursor *cursor;
+  GdkGrabStatus status;
 
-  g_signal_connect (button, "event",
-                    G_CALLBACK (property_query_event), iw);
+  if (!iw->invisible)
+    {
+      iw->invisible = gtk_invisible_new_for_screen (gdk_screen_get_default ());
+      gtk_widget_add_events (iw->invisible,
+                             GDK_POINTER_MOTION_MASK |
+                             GDK_BUTTON_PRESS_MASK |
+                             GDK_BUTTON_RELEASE_MASK |
+                             GDK_KEY_PRESS_MASK |
+                             GDK_KEY_RELEASE_MASK);
+      gtk_widget_realize (iw->invisible);
+      gtk_widget_show (iw->invisible);
+    }
 
-  display = gtk_widget_get_display (button);
+  display = gdk_display_get_default ();
   cursor = gdk_cursor_new_for_display (display, GDK_CROSSHAIR);
   device = gdk_device_manager_get_client_pointer (gdk_display_get_device_manager (display));
-  gdk_device_grab (device,
-                   gtk_widget_get_window (GTK_WIDGET (button)),
-                   GDK_OWNERSHIP_NONE, TRUE,
-                   GDK_BUTTON_RELEASE_MASK | GDK_POINTER_MOTION_MASK,
-                   cursor, GDK_CURRENT_TIME);
+  status = gdk_device_grab (device,
+                            gtk_widget_get_window (iw->invisible),
+                            GDK_OWNERSHIP_NONE, TRUE,
+                            GDK_BUTTON_RELEASE_MASK | GDK_POINTER_MOTION_MASK,
+                            cursor, GDK_CURRENT_TIME);
   g_object_unref (cursor);
-  gtk_grab_add (GTK_WIDGET (button));
+  if (status != GDK_GRAB_SUCCESS)
+    {
+      g_warning ("grab failed (%d) :-(\n", status); 
+      return;
+    }
 
+  g_signal_connect (iw->invisible, "event", G_CALLBACK (property_query_event), iw);
+
+  gtk_grab_add (GTK_WIDGET (iw->invisible));
   gdk_window_lower (gtk_widget_get_window (GTK_WIDGET (iw)));
 }
 
@@ -419,7 +438,7 @@ gtk_inspector_window_select_widget_under_pointer (GtkInspectorWindow *iw)
   GdkDevice *device;
   GtkWidget *widget;
 
-  display = gtk_widget_get_display (GTK_WIDGET (iw));
+  display = gdk_display_get_default ();
   dm = gdk_display_get_device_manager (display);
   device = gdk_device_manager_get_client_pointer (dm);
 

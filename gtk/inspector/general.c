@@ -70,7 +70,7 @@ init_version (GtkInspectorGeneral *gen)
   const gchar *backend;
   GdkDisplay *display;
 
-  display = gtk_widget_get_display (GTK_WIDGET (gen));
+  display = gdk_display_get_default ();
 
 #ifdef GDK_WINDOWING_X11
   if (GDK_IS_X11_DISPLAY (display))
