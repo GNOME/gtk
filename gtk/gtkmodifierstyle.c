@@ -20,6 +20,8 @@
 #include "gtkstyleproviderprivate.h"
 #include "gtkintl.h"
 
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
+
 typedef struct StylePropertyValue StylePropertyValue;
 
 struct _GtkModifierStylePrivate
@@ -75,13 +77,9 @@ gtk_modifier_style_get_style_property (GtkStyleProvider *provider,
   GdkColor color;
   gchar *str;
 
-G_GNUC_BEGIN_IGNORE_DEPRECATIONS
-
   /* Reject non-color types for now */
   if (pspec->value_type != GDK_TYPE_COLOR)
     return FALSE;
-
-G_GNUC_END_IGNORE_DEPRECATIONS
 
   priv = GTK_MODIFIER_STYLE (provider)->priv;
   str = g_strdup_printf ("-%s-%s",
@@ -240,15 +238,11 @@ _gtk_modifier_style_map_color (GtkModifierStyle *style,
 
   priv = style->priv;
 
-  G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
-
   if (color)
     symbolic_color = gtk_symbolic_color_new_literal (color);
 
   gtk_style_properties_map_color (priv->style,
                                   name, symbolic_color);
-
-  G_GNUC_END_IGNORE_DEPRECATIONS;
 
   _gtk_style_provider_private_changed (GTK_STYLE_PROVIDER_PRIVATE (style));
 }
@@ -292,3 +286,5 @@ _gtk_modifier_style_set_color_property (GtkModifierStyle *style,
 
   _gtk_style_provider_private_changed (GTK_STYLE_PROVIDER_PRIVATE (style));
 }
+
+G_GNUC_END_IGNORE_DEPRECATIONS

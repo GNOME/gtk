@@ -39,6 +39,8 @@
 #include "deprecated/gtkgradient.h"
 #include "deprecated/gtksymboliccolorprivate.h"
 
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
+
 /**
  * SECTION:gtkstyleproperties
  * @Short_description: Store for style property information
@@ -56,6 +58,10 @@
  * and its variants are the preferred way to access styling information
  * from widget implementations and theming engine implementations
  * should use the APIs provided by #GtkThemingEngine instead.
+ *
+ * #GtkStyleProperties has been deprecated in GTK 3.16. The CSS
+ * machinery does not use it anymore and all users of this object
+ * have been deprecated.
  */
 
 typedef struct PropertyData PropertyData;
@@ -284,15 +290,11 @@ gtk_style_properties_provider_get_color (GtkStyleProviderPrivate *provider,
 {
   GtkSymbolicColor *symbolic;
 
-  G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
-
   symbolic = gtk_style_properties_lookup_color (GTK_STYLE_PROPERTIES (provider), name);
   if (symbolic == NULL)
     return NULL;
 
   return _gtk_symbolic_color_get_css_value (symbolic);
-
-  G_GNUC_END_IGNORE_DEPRECATIONS;
 }
 
 static void
@@ -354,6 +356,8 @@ gtk_style_properties_provider_private_init (GtkStyleProviderPrivateInterface *if
  * Returns a newly created #GtkStyleProperties
  *
  * Returns: a new #GtkStyleProperties
+ *
+ * Deprecated: 3.16: #GtkStyleProperties are deprecated.
  **/
 GtkStyleProperties *
 gtk_style_properties_new (void)
@@ -387,8 +391,6 @@ gtk_style_properties_map_color (GtkStyleProperties *props,
 
   priv = props->priv;
 
-  G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
-
   if (G_UNLIKELY (!priv->color_map))
     priv->color_map = g_hash_table_new_full (g_str_hash,
                                              g_str_equal,
@@ -398,8 +400,6 @@ gtk_style_properties_map_color (GtkStyleProperties *props,
   g_hash_table_replace (priv->color_map,
                         g_strdup (name),
                         gtk_symbolic_color_ref (color));
-
-  G_GNUC_END_IGNORE_DEPRECATIONS;
 
   _gtk_style_provider_private_changed (GTK_STYLE_PROVIDER_PRIVATE (props));
 }
@@ -472,6 +472,8 @@ _gtk_style_properties_set_property_by_property (GtkStyleProperties  *props,
  * Sets a styling property in @props.
  *
  * Since: 3.0
+ *
+ * Deprecated: 3.16: #GtkStyleProperties are deprecated.
  **/
 void
 gtk_style_properties_set_property (GtkStyleProperties *props,
@@ -510,6 +512,8 @@ gtk_style_properties_set_property (GtkStyleProperties *props,
  * Sets several style properties on @props.
  *
  * Since: 3.0
+ *
+ * Deprecated: 3.16: #GtkStyleProperties are deprecated.
  **/
 void
 gtk_style_properties_set_valist (GtkStyleProperties *props,
@@ -570,6 +574,8 @@ gtk_style_properties_set_valist (GtkStyleProperties *props,
  * Sets several style properties on @props.
  *
  * Since: 3.0
+ *
+ * Deprecated: 3.16: #GtkStyleProperties are deprecated.
  **/
 void
 gtk_style_properties_set (GtkStyleProperties *props,
@@ -618,6 +624,8 @@ style_query_func (guint    id,
  * Returns: %TRUE if the property exists in @props, %FALSE otherwise
  *
  * Since: 3.0
+ *
+ * Deprecated: 3.16: #GtkStyleProperties are deprecated.
  **/
 gboolean
 gtk_style_properties_get_property (GtkStyleProperties *props,
@@ -661,6 +669,8 @@ gtk_style_properties_get_property (GtkStyleProperties *props,
  * Retrieves several style property values from @props for a given state.
  *
  * Since: 3.0
+ *
+ * Deprecated: 3.16: #GtkStyleProperties are deprecated.
  **/
 void
 gtk_style_properties_get_valist (GtkStyleProperties *props,
@@ -708,6 +718,8 @@ gtk_style_properties_get_valist (GtkStyleProperties *props,
  * given state.
  *
  * Since: 3.0
+ *
+ * Deprecated: 3.16: #GtkStyleProperties are deprecated.
  **/
 void
 gtk_style_properties_get (GtkStyleProperties *props,
@@ -732,6 +744,8 @@ gtk_style_properties_get (GtkStyleProperties *props,
  * Unsets a style property in @props.
  *
  * Since: 3.0
+ *
+ * Deprecated: 3.16: #GtkStyleProperties are deprecated.
  **/
 void
 gtk_style_properties_unset_property (GtkStyleProperties *props,
@@ -799,6 +813,8 @@ gtk_style_properties_unset_property (GtkStyleProperties *props,
  * @props: a #GtkStyleProperties
  *
  * Clears all style information from @props.
+ *
+ * Deprecated: 3.16: #GtkStyleProperties are deprecated.
  **/
 void
 gtk_style_properties_clear (GtkStyleProperties *props)
@@ -825,6 +841,8 @@ gtk_style_properties_clear (GtkStyleProperties *props)
  * will prevail.
  *
  * Since: 3.0
+ *
+ * Deprecated: 3.16: #GtkStyleProperties are deprecated.
  **/
 void
 gtk_style_properties_merge (GtkStyleProperties       *props,
@@ -858,9 +876,7 @@ gtk_style_properties_merge (GtkStyleProperties       *props,
               g_hash_table_lookup (priv->color_map, name))
             continue;
 
-          G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
           gtk_style_properties_map_color (props, name, color);
-          G_GNUC_END_IGNORE_DEPRECATIONS;
         }
     }
 
@@ -936,3 +952,5 @@ gtk_style_properties_merge (GtkStyleProperties       *props,
 
   _gtk_style_provider_private_changed (GTK_STYLE_PROVIDER_PRIVATE (props));
 }
+
+G_GNUC_END_IGNORE_DEPRECATIONS;
