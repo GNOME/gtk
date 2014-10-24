@@ -7,11 +7,11 @@
 # Мирослав Николић <miroslavnikolic@rocketmail.com>, 2011—2014.
 msgid ""
 msgstr ""
-"Project-Id-Version: gtk+ 2.6\n"
+"Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gtk%2b&"
 "keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2014-10-10 19:08+0000\n"
-"PO-Revision-Date: 2014-10-12 08:40+0200\n"
+"POT-Creation-Date: 2014-10-24 04:24+0000\n"
+"PO-Revision-Date: 2014-10-24 10:37+0200\n"
 "Last-Translator: Мирослав Николић <miroslavnikolic@rocketmail.com>\n"
 "Language-Team: Serbian <gnom@prevod.org>\n"
 "Language: sr\n"
@@ -1125,13 +1125,23 @@ msgstr "Напомене"
 msgid "Comments about the program"
 msgstr "Напомене о програму"
 
+#: ../gtk/gtkaboutdialog.c:408
+#| msgid "License Type"
+msgid "License"
+msgstr "Дозвола"
+
+#: ../gtk/gtkaboutdialog.c:409
+#| msgid "The license type of the program"
+msgid "The license of the program"
+msgstr "Дозвола за коришћење програма"
+
 #: ../gtk/gtkaboutdialog.c:436
 msgid "License Type"
 msgstr "Врста дозволе"
 
 #: ../gtk/gtkaboutdialog.c:437
 msgid "The license type of the program"
-msgstr "Врста дозволе за програм"
+msgstr "Врста дозволе за коришћење програма"
 
 #: ../gtk/gtkaboutdialog.c:452
 msgid "Website URL"
@@ -1451,7 +1461,8 @@ msgstr "Приказује траку изборника"
 
 #: ../gtk/gtkapplicationwindow.c:847
 msgid "TRUE if the window should show a menubar at the top of the window"
-msgstr "Постављено ако прозор треба да прикаже траку изборника на врху прозора."
+msgstr ""
+"Постављено ако прозор треба да прикаже траку изборника на врху прозора."
 
 #: ../gtk/gtkaspectframe.c:107 ../gtk/gtkwidget.c:1473
 msgid "Horizontal Alignment"
@@ -3785,7 +3796,7 @@ msgstr "Пропусник"
 msgid "The current filter for selecting which files are displayed"
 msgstr "Текући филтер којим се одређује које датотеке да приказује"
 
-#: ../gtk/gtkfilechooser.c:388 ../gtk/gtkplacessidebar.c:4400
+#: ../gtk/gtkfilechooser.c:388 ../gtk/gtkplacessidebar.c:4525
 msgid "Local Only"
 msgstr "Само локално"
 
@@ -4353,7 +4364,7 @@ msgstr "Врста обавештења"
 msgid "The type of message"
 msgstr "Врста обавештења"
 
-#: ../gtk/gtkinfobar.c:461 ../gtk/gtksearchbar.c:418
+#: ../gtk/gtkinfobar.c:461 ../gtk/gtksearchbar.c:434
 msgid "Show Close Button"
 msgstr "Прикажи дугме за затварање"
 
@@ -5236,38 +5247,38 @@ msgid "If TRUE, the child can be made smaller than its requisition"
 msgstr ""
 "Ако је постављено, садржани елемент може бити мањи него што је потребно"
 
-#: ../gtk/gtkplacessidebar.c:4369
+#: ../gtk/gtkplacessidebar.c:4494
 msgid "Location to Select"
 msgstr "Место за бирање"
 
-#: ../gtk/gtkplacessidebar.c:4370
+#: ../gtk/gtkplacessidebar.c:4495
 msgid "The location to highlight in the sidebar"
 msgstr "Место за истицање у бочној траци"
 
-#: ../gtk/gtkplacessidebar.c:4375
+#: ../gtk/gtkplacessidebar.c:4500
 msgid "Open Flags"
 msgstr "Отвори опције"
 
-#: ../gtk/gtkplacessidebar.c:4376
+#: ../gtk/gtkplacessidebar.c:4501
 msgid ""
 "Modes in which the calling application can open locations selected in the "
 "sidebar"
 msgstr ""
 "Режими у којима програм позивар може да отвори места изабрана у бочној траци"
 
-#: ../gtk/gtkplacessidebar.c:4382
+#: ../gtk/gtkplacessidebar.c:4507
 msgid "Show 'Desktop'"
 msgstr "Прикажи „Радну површ“"
 
-#: ../gtk/gtkplacessidebar.c:4383
+#: ../gtk/gtkplacessidebar.c:4508
 msgid "Whether the sidebar includes a builtin shortcut to the Desktop folder"
 msgstr "Да ли бочна трака садржи уграђену пречицу до фасцикле „Радна површ“"
 
-#: ../gtk/gtkplacessidebar.c:4388
+#: ../gtk/gtkplacessidebar.c:4513
 msgid "Show 'Connect to Server'"
 msgstr "Прикажи „Повежи се са сервером“"
 
-#: ../gtk/gtkplacessidebar.c:4389
+#: ../gtk/gtkplacessidebar.c:4514
 msgid ""
 "Whether the sidebar includes a builtin shortcut to a 'Connect to server' "
 "dialog"
@@ -5275,16 +5286,16 @@ msgstr ""
 "Да ли бочна трака садржи уграђену пречицу до прозорчета „Повежи се са "
 "сервером“"
 
-#: ../gtk/gtkplacessidebar.c:4394
+#: ../gtk/gtkplacessidebar.c:4519
 msgid "Show 'Enter Location'"
 msgstr "Приказује 'Унесите место'"
 
-#: ../gtk/gtkplacessidebar.c:4395
+#: ../gtk/gtkplacessidebar.c:4520
 msgid ""
 "Whether the sidebar includes a builtin shortcut to manually enter a location"
 msgstr "Да ли бочна трака садржи уграђену пречицу за ручно уношење места"
 
-#: ../gtk/gtkplacessidebar.c:4401
+#: ../gtk/gtkplacessidebar.c:4526
 msgid "Whether the sidebar only includes local files"
 msgstr "Да ли бочна трака укључује само месне датотеке"
 
@@ -6208,15 +6219,15 @@ msgstr "Кинетичко клизање"
 msgid "Kinetic scrolling mode."
 msgstr "Режим кинетичког клизања."
 
-#: ../gtk/gtksearchbar.c:407
+#: ../gtk/gtksearchbar.c:423
 msgid "Search Mode Enabled"
 msgstr "Укључени режим претраге"
 
-#: ../gtk/gtksearchbar.c:408
+#: ../gtk/gtksearchbar.c:424
 msgid "Whether the search mode is on and the search bar shown"
 msgstr "Да ли се ознака исцртава помоћу изабраног писма"
 
-#: ../gtk/gtksearchbar.c:419
+#: ../gtk/gtksearchbar.c:435
 msgid "Whether to show the close button in the toolbar"
 msgstr "Да ли ће бити приказано дугме за затварање у траци алата"
 
