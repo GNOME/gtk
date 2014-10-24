@@ -23,7 +23,7 @@
       <ForcedIncludeFiles>msvc_recommended_pragmas.h;%(ForcedIncludeFiles)</ForcedIncludeFiles>
     </ClCompile>
 	<Link>
-      <AdditionalDependencies>pangocairo-1.0.lib;cairo.lib;cairo-gobject.lib;pango-1.0.lib;gdk_pixbuf-2.0.lib;gio-2.0.lib;gmodule-2.0.lib;gobject-2.0.lib;glib-2.0.lib;intl.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>pangocairo-1.0.lib;cairo.lib;cairo-gobject.lib;pango-1.0.lib;gdk_pixbuf-2.0.lib;gio-2.0.lib;gmodule-2.0.lib;gobject-2.0.lib;glib-2.0.lib;intl.lib;epoxy.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>$(GlibEtcInstallRoot)\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
