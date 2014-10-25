@@ -84,6 +84,9 @@ gtk_inspector_selector_set_object (GtkInspectorSelector *oh,
       parent = iter;
     }
 
+  g_strfreev (words);
+  g_free (path);
+
   gtk_tree_view_expand_all (oh->priv->tree);
   gtk_tree_selection_select_iter (gtk_tree_view_get_selection (oh->priv->tree), &iter);
 }
