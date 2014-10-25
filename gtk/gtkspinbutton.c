@@ -906,7 +906,7 @@ gtk_spin_button_panel_get_state (GtkSpinButton *spin_button,
 
 static GtkStyleContext *
 gtk_spin_button_panel_get_context (GtkSpinButton *spin_button,
-                                   GdkWindow *panel)
+                                   GdkWindow     *panel)
 {
   GtkSpinButtonPrivate *priv = spin_button->priv;
   GtkStyleContext **contextp;
@@ -921,6 +921,7 @@ gtk_spin_button_panel_get_context (GtkSpinButton *spin_button,
                                                  panel == priv->down_panel);
     }
 
+  gtk_style_context_set_screen (*contextp, gtk_widget_get_screen (GTK_WIDGET (spin_button)));
   gtk_style_context_set_state (*contextp, gtk_spin_button_panel_get_state (spin_button, panel));
 
   return *contextp;
