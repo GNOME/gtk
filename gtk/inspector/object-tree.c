@@ -45,6 +45,7 @@
 #include "gtktreemodelsort.h"
 #include "gtktreemodelfilter.h"
 #include "gtkwidgetprivate.h"
+#include "gtkstylecontext.h"
 
 enum
 {
@@ -52,7 +53,7 @@ enum
   OBJECT_TYPE,
   OBJECT_NAME,
   OBJECT_LABEL,
-  OBJECT_ADDRESS,
+  OBJECT_CLASSES,
   SENSITIVE
 };
 
@@ -307,7 +308,7 @@ gtk_inspector_object_tree_append_object (GtkInspectorObjectTree *wt,
   GtkTreeIter iter;
   GtkTreePath *path;
   const gchar *class_name;
-  gchar *address;
+  gchar *classes;
   gboolean mapped;
   ObjectData *od;
   const gchar *label;
@@ -322,10 +323,28 @@ gtk_inspector_object_tree_append_object (GtkInspectorObjectTree *wt,
   if (GTK_IS_WIDGET (object))
     {
       const gchar *id;
+      GtkStyleContext *context;
+      GList *list, *l;
+      GString *string;
+
       id = gtk_widget_get_name (GTK_WIDGET (object));
-       if (name == NULL && id != NULL && g_strcmp0 (id, class_name) != 0)
-         name = id;
+      if (name == NULL && id != NULL && g_strcmp0 (id, class_name) != 0)
+        name = id;
+
+      context = gtk_widget_get_style_context (GTK_WIDGET (object));
+      string = g_string_new ("");
+      list = gtk_style_context_list_classes (context);
+      for (l = list; l; l = l->next)
+        {
+          if (string->len > 0)
+            g_string_append_c (string, ' ');
+          g_string_append (string, (gchar *)l->data);
+        }
+      classes = g_string_free (string, FALSE);
+      g_list_free (list);
     }
+  else
+    classes = g_strdup ("");
 
   if (GTK_IS_BUILDABLE (object))
     {
@@ -349,17 +368,17 @@ gtk_inspector_object_tree_append_object (GtkInspectorObjectTree *wt,
   else
     label = "";
 
-  address = g_strdup_printf ("%p", object);
-
   gtk_tree_store_append (wt->priv->model, &iter, parent_iter);
   gtk_tree_store_set (wt->priv->model, &iter,
                       OBJECT, object,
                       OBJECT_TYPE, class_name,
                       OBJECT_NAME, name,
                       OBJECT_LABEL, label,
-                      OBJECT_ADDRESS, address,
+                      OBJECT_CLASSES, classes,
                       SENSITIVE, mapped,
                       -1);
+
+  g_free (classes);
 
   od = g_new0 (ObjectData, 1);
   od->wt = wt;
@@ -370,8 +389,6 @@ gtk_inspector_object_tree_append_object (GtkInspectorObjectTree *wt,
 
   g_hash_table_insert (wt->priv->iters, object, od);
   g_object_weak_ref (object, gtk_object_tree_remove_dead_object, od);
-
-  g_free (address);
 
   if (GTK_IS_CONTAINER (object))
     {

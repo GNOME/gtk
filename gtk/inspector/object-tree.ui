@@ -79,12 +79,11 @@
             </child>
             <child>
               <object class="GtkTreeViewColumn">
-                <property name="title" translatable="yes">Address</property>
+                <property name="title" translatable="yes">Style Classes</property>
                 <property name="resizable">True</property>
                 <child>
                   <object class="GtkCellRendererText">
                     <property name="scale">0.8</property>
-                    <property name="family">monospace</property>
                   </object>
                   <attributes>
                     <attribute name="text">4</attribute>
