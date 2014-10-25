@@ -31,6 +31,7 @@
                 <child internal-child="selection">
                   <object class="GtkTreeSelection">
                     <property name="mode">single</property>
+                    <signal name="changed" handler="on_selection_changed"/>
                   </object>
                 </child>
                 <child>

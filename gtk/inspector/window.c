@@ -100,6 +100,7 @@ on_object_selected (GtkInspectorObjectTree *wt,
                     GObject                *selected,
                     GtkInspectorWindow     *iw)
 {
+  gtk_widget_set_sensitive (iw->object_details_button, selected != NULL);
   if (GTK_IS_WIDGET (selected))
     gtk_inspector_flash_widget (iw, GTK_WIDGET (selected));
 }
@@ -176,6 +177,7 @@ gtk_inspector_window_class_init (GtkInspectorWindowClass *klass)
   gtk_widget_class_bind_template_child (widget_class, GtkInspectorWindow, object_tree);
   gtk_widget_class_bind_template_child (widget_class, GtkInspectorWindow, object_details);
   gtk_widget_class_bind_template_child (widget_class, GtkInspectorWindow, object_buttons);
+  gtk_widget_class_bind_template_child (widget_class, GtkInspectorWindow, object_details_button);
   gtk_widget_class_bind_template_child (widget_class, GtkInspectorWindow, select_object);
   gtk_widget_class_bind_template_child (widget_class, GtkInspectorWindow, prop_list);
   gtk_widget_class_bind_template_child (widget_class, GtkInspectorWindow, child_prop_list);

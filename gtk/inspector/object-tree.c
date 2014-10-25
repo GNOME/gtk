@@ -124,8 +124,7 @@ on_selection_changed (GtkTreeSelection       *selection,
   GObject *object;
 
   object = gtk_inspector_object_tree_get_selected (wt);
-  if (object)
-    g_signal_emit (wt, signals[OBJECT_SELECTED], 0, object);
+  g_signal_emit (wt, signals[OBJECT_SELECTED], 0, object);
 }
 
 

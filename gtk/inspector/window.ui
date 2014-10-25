@@ -34,7 +34,7 @@
           <object class="GtkStack" id="object_buttons">
             <property name="visible">True</property>
             <child>
-              <object class="GtkButton">
+              <object class="GtkButton" id="object_details_button">
                 <property name="visible">True</property>
                 <property name="tooltip-text" translatable="yes">Show Details</property>
                 <property name="halign">center</property>

@@ -47,6 +47,7 @@ typedef struct
   GtkWidget *object_id;
   GtkWidget *object_details;
   GtkWidget *object_buttons;
+  GtkWidget *object_details_button;
   GtkWidget *select_object;
   GtkWidget *prop_list;
   GtkWidget *child_prop_list;

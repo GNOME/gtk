@@ -224,6 +224,39 @@ row_activated (GtkTreeView              *treeview,
   gtk_stack_set_visible_child_name (GTK_STACK (sl->priv->buttons), "details");
 }
 
+static gboolean
+can_show_details (GtkInspectorResourceList *rl)
+{
+  GtkTreeSelection *selection;
+  GtkTreeModel *model;
+  GtkTreeIter iter;
+  gchar *path;
+
+  selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (rl->priv->tree));
+  if (!gtk_tree_selection_get_selected (selection, &model, &iter))
+    return FALSE;
+
+  gtk_tree_model_get (GTK_TREE_MODEL (rl->priv->model), &iter,
+                      COLUMN_PATH, &path,
+                      -1);
+
+   if (g_str_has_suffix (path, "/"))
+     {
+       g_free (path);
+       return FALSE;
+     }
+
+  g_free (path);
+  return TRUE;
+}
+
+static void
+on_selection_changed (GtkTreeSelection         *selection,
+                      GtkInspectorResourceList *rl)
+{
+  gtk_widget_set_sensitive (rl->priv->open_details_button, can_show_details (rl));
+}
+
 static void
 open_details (GtkWidget                *button,
               GtkInspectorResourceList *sl)
@@ -265,6 +298,7 @@ visible_child_name_changed (GObject *obj, GParamSpec *pspec, GtkInspectorResourc
   resources_visible = g_strcmp0 (child, "resources") == 0;
 
   gtk_widget_set_visible (sl->priv->buttons, resources_visible);
+  gtk_widget_set_sensitive (sl->priv->open_details_button, can_show_details (sl));
 }
 
 static void
@@ -439,6 +473,7 @@ gtk_inspector_resource_list_class_init (GtkInspectorResourceListClass *klass)
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorResourceList, tree);
 
   gtk_widget_class_bind_template_callback (widget_class, row_activated);
+  gtk_widget_class_bind_template_callback (widget_class, on_selection_changed);
 }
 
 // vim: set et sw=2 ts=2:
