@@ -18,7 +18,7 @@ msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gtk"
 "%2b&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2014-09-30 09:14+0000\n"
+"POT-Creation-Date: 2014-10-25 20:57+0000\n"
 "PO-Revision-Date: 2014-09-30 13:06+0200\n"
 "Last-Translator: Marek Černocký <marek@manet.cz>\n"
 "Language-Team: Czech <gnome-cs-list@gnome.org>\n"
@@ -35,48 +35,48 @@ msgstr ""
 msgid "Broadway display type not supported: %s"
 msgstr "Displej typu broadway není podporovaný: %s"
 
-#: ../gdk/gdk.c:165
+#: ../gdk/gdk.c:167
 #, c-format
 msgid "Error parsing option --gdk-debug"
 msgstr "Chyba při analýze přepínače --gdk-debug"
 
-#: ../gdk/gdk.c:185
+#: ../gdk/gdk.c:187
 #, c-format
 msgid "Error parsing option --gdk-no-debug"
 msgstr "Chyba při analýze přepínače --gdk-no-debug"
 
 #. Description of --class=CLASS in --help output
-#: ../gdk/gdk.c:213
+#: ../gdk/gdk.c:215
 msgid "Program class as used by the window manager"
 msgstr "Třída programu používaná správcem oken"
 
 #. Placeholder in --class=CLASS in --help output
-#: ../gdk/gdk.c:214
+#: ../gdk/gdk.c:216
 msgid "CLASS"
 msgstr "TŘÍDA"
 
 #. Description of --name=NAME in --help output
-#: ../gdk/gdk.c:216
+#: ../gdk/gdk.c:218
 msgid "Program name as used by the window manager"
 msgstr "Název programu používaný správcem oken"
 
 #. Placeholder in --name=NAME in --help output
-#: ../gdk/gdk.c:217
+#: ../gdk/gdk.c:219
 msgid "NAME"
 msgstr "NÁZEV"
 
 #. Description of --display=DISPLAY in --help output
-#: ../gdk/gdk.c:219
+#: ../gdk/gdk.c:221
 msgid "X display to use"
 msgstr "Displej X, který použije"
 
 #. Placeholder in --display=DISPLAY in --help output
-#: ../gdk/gdk.c:220
+#: ../gdk/gdk.c:222
 msgid "DISPLAY"
 msgstr "DISPLEJ"
 
 #. Description of --gdk-debug=FLAGS in --help output
-#: ../gdk/gdk.c:223
+#: ../gdk/gdk.c:225
 msgid "GDK debugging flags to set"
 msgstr "Ladicí příznaky GDK, které nastaví"
 
@@ -84,14 +84,18 @@ msgstr "Ladicí příznaky GDK, které nastaví"
 #. Placeholder in --gdk-no-debug=FLAGS in --help output
 #. Placeholder in --gtk-debug=FLAGS in --help output
 #. Placeholder in --gtk-no-debug=FLAGS in --help output
-#: ../gdk/gdk.c:224 ../gdk/gdk.c:227 ../gtk/gtkmain.c:460 ../gtk/gtkmain.c:463
+#: ../gdk/gdk.c:226 ../gdk/gdk.c:229 ../gtk/gtkmain.c:460 ../gtk/gtkmain.c:463
 msgid "FLAGS"
 msgstr "PŘÍZNAKY"
 
 #. Description of --gdk-no-debug=FLAGS in --help output
-#: ../gdk/gdk.c:226
+#: ../gdk/gdk.c:228
 msgid "GDK debugging flags to unset"
 msgstr "Ladicí příznaky GDK, jejichž nastavení zruší"
+
+#: ../gdk/gdkwindow.c:2729
+msgid "GL support disabled via GDK_DEBUG"
+msgstr ""
 
 #.
 #. * Translators, the strings in the “keyboard label” context are
@@ -435,6 +439,26 @@ msgctxt "keyboard label"
 msgid "Suspend"
 msgstr "UspatDoPaměti"
 
+#: ../gdk/wayland/gdkglcontext-wayland.c:278
+#: ../gdk/wayland/gdkglcontext-wayland.c:288 ../gdk/x11/gdkglcontext-x11.c:562
+msgid "No available configurations for the given pixel format"
+msgstr ""
+
+#: ../gdk/wayland/gdkglcontext-wayland.c:321 ../gdk/x11/gdkglcontext-x11.c:682
+#, fuzzy
+#| msgid "No profile available"
+msgid "No GL implementation is available"
+msgstr "Žádný profil není k dispozici"
+
+#: ../gdk/wayland/gdkglcontext-wayland.c:330
+msgid "3.2 core GL profile is not available on EGL implementation"
+msgstr ""
+
+#: ../gdk/wayland/gdkglcontext-wayland.c:353 ../gdk/x11/gdkglcontext-x11.c:721
+#: ../gdk/x11/gdkglcontext-x11.c:765
+msgid "Unable to create a GL context"
+msgstr ""
+
 #. Description of --sync in --help output
 #: ../gdk/win32/gdkmain-win32.c:53
 msgid "Don't batch GDI requests"
@@ -482,6 +506,17 @@ msgid_plural "Opening %d Items"
 msgstr[0] "Otevírání %d položky"
 msgstr[1] "Otevírání %d položek"
 msgstr[2] "Otevírání %d položek"
+
+#: ../gdk/x11/gdkglcontext-x11.c:608
+#, c-format
+msgid "No available configurations for the given RGBA pixel format"
+msgstr ""
+
+#: ../gdk/x11/gdkglcontext-x11.c:691
+msgid ""
+"The GLX_ARB_create_context_profile extension needed to create 3.2 core "
+"profiles is not available"
+msgstr ""
 
 #: ../gtk/a11y/gtkbooleancellaccessible.c:43
 msgctxt "Action description"
@@ -1167,11 +1202,11 @@ msgstr ""
 
 #: ../gtk/deprecated/gtkcolorseldialog.c:191
 #: ../gtk/deprecated/gtkfontsel.c:1689 ../gtk/gtkfilechooserbutton.c:794
-#: ../gtk/gtkfilechooserwidget.c:5226 ../gtk/gtkmessagedialog.c:944
+#: ../gtk/gtkfilechooserwidget.c:5228 ../gtk/gtkmessagedialog.c:944
 #: ../gtk/gtkmessagedialog.c:957 ../gtk/gtkmountoperation.c:543
 #: ../gtk/gtkpagesetupunixdialog.c:196 ../gtk/gtkprintbackend.c:763
 #: ../gtk/gtkprinteroptionwidget.c:545 ../gtk/gtkprintunixdialog.c:665
-#: ../gtk/gtkprintunixdialog.c:733 ../gtk/gtkwindow.c:11708
+#: ../gtk/gtkprintunixdialog.c:733 ../gtk/gtkwindow.c:11772
 #: ../gtk/inspector/css-editor.c:198
 #: ../gtk/resources/ui/gtkappchooserdialog.ui.h:2
 #: ../gtk/resources/ui/gtkassistant.ui.h:5
@@ -1226,7 +1261,7 @@ msgstr "_Použít"
 
 #: ../gtk/deprecated/gtkfontsel.c:1698 ../gtk/gtkmessagedialog.c:936
 #: ../gtk/gtkmessagedialog.c:958 ../gtk/gtkprintbackend.c:764
-#: ../gtk/gtkwindow.c:11709 ../gtk/inspector/classes-list.c:125
+#: ../gtk/gtkwindow.c:11773 ../gtk/inspector/classes-list.c:125
 msgid "_OK"
 msgstr "_Budiž"
 
@@ -1374,16 +1409,18 @@ msgstr "Neplatná velikost %s\n"
 #. * contains the name of the license as link text.
 #.
 #: ../gtk/gtkaboutdialog.c:114
-#, c-format
+#, fuzzy, c-format
+#| msgid ""
+#| "This program comes with ABSOLUTELY NO WARRANTY.\n"
+#| "See the <a href=\"%s\">%s</a> for details."
 msgid ""
-"This program comes with ABSOLUTELY NO WARRANTY.\n"
+"This program comes with absolutely no warranty.\n"
 "See the <a href=\"%s\">%s</a> for details."
 msgstr ""
 "Tento program je rozšiřován BEZ JAKÉKOLIV ZÁRUKY.\n"
 "Podrobnosti naleznete na <a href=\"%s\">%s</a>."
 
-#: ../gtk/gtkaboutdialog.c:118 ../gtk/gtkaboutdialog.c:408
-#: ../gtk/resources/ui/gtkaboutdialog.ui.h:3
+#: ../gtk/gtkaboutdialog.c:118 ../gtk/resources/ui/gtkaboutdialog.ui.h:3
 msgid "License"
 msgstr "Licence"
 
@@ -1435,9 +1472,18 @@ msgstr "GNU Lesser General Public License, pouze verze 2.1"
 msgid "GNU Lesser General Public License, version 3 only"
 msgstr "GNU Lesser General Public License, pouze verze 3"
 
-#: ../gtk/gtkaboutdialog.c:409
-msgid "The license of the program"
-msgstr "Licence programu"
+#: ../gtk/gtkaboutdialog.c:697
+msgid "C_redits"
+msgstr "Zá_sluhy"
+
+#: ../gtk/gtkaboutdialog.c:705
+msgid "_License"
+msgstr "_Licence"
+
+#: ../gtk/gtkaboutdialog.c:714 ../gtk/gtkcustompaperunixdialog.c:329
+#: ../gtk/gtkmessagedialog.c:940 ../gtk/resources/ui/gtkassistant.ui.h:6
+msgid "_Close"
+msgstr "_Zavřít"
 
 #: ../gtk/gtkaboutdialog.c:982
 msgid "Could not show link"
@@ -1474,7 +1520,7 @@ msgstr "Grafika"
 #. * translated on keyboards used for your language, don't translate
 #. * this.
 #.
-#: ../gtk/gtkaccellabel.c:163
+#: ../gtk/gtkaccellabel.c:164
 msgctxt "keyboard label"
 msgid "Shift"
 msgstr "Shift"
@@ -1484,7 +1530,7 @@ msgstr "Shift"
 #. * translated on keyboards used for your language, don't translate
 #. * this.
 #.
-#: ../gtk/gtkaccellabel.c:169
+#: ../gtk/gtkaccellabel.c:170
 msgctxt "keyboard label"
 msgid "Ctrl"
 msgstr "Ctrl"
@@ -1494,7 +1540,7 @@ msgstr "Ctrl"
 #. * translated on keyboards used for your language, don't translate
 #. * this.
 #.
-#: ../gtk/gtkaccellabel.c:175
+#: ../gtk/gtkaccellabel.c:176
 msgctxt "keyboard label"
 msgid "Alt"
 msgstr "Alt"
@@ -1504,7 +1550,7 @@ msgstr "Alt"
 #. * translated on keyboards used for your language, don't translate
 #. * this.
 #.
-#: ../gtk/gtkaccellabel.c:798
+#: ../gtk/gtkaccellabel.c:795
 msgctxt "keyboard label"
 msgid "Super"
 msgstr "Super"
@@ -1514,7 +1560,7 @@ msgstr "Super"
 #. * translated on keyboards used for your language, don't translate
 #. * this.
 #.
-#: ../gtk/gtkaccellabel.c:811
+#: ../gtk/gtkaccellabel.c:808
 msgctxt "keyboard label"
 msgid "Hyper"
 msgstr "Hyper"
@@ -1524,17 +1570,17 @@ msgstr "Hyper"
 #. * translated on keyboards used for your language, don't translate
 #. * this.
 #.
-#: ../gtk/gtkaccellabel.c:825
+#: ../gtk/gtkaccellabel.c:822
 msgctxt "keyboard label"
 msgid "Meta"
 msgstr "Meta"
 
-#: ../gtk/gtkaccellabel.c:842
+#: ../gtk/gtkaccellabel.c:839
 msgctxt "keyboard label"
 msgid "Space"
 msgstr "Mezerník"
 
-#: ../gtk/gtkaccellabel.c:845
+#: ../gtk/gtkaccellabel.c:842
 msgctxt "keyboard label"
 msgid "Backslash"
 msgstr "Zpětné lomítko"
@@ -1675,7 +1721,7 @@ msgstr "Neobsloužená značka: <%s>"
 #. * text direction of RTL and specify "calendar:YM", then the year
 #. * will appear to the right of the month.
 #.
-#: ../gtk/gtkcalendar.c:870
+#: ../gtk/gtkcalendar.c:871
 msgid "calendar:MY"
 msgstr "calendar:MY"
 
@@ -1683,7 +1729,7 @@ msgstr "calendar:MY"
 #. * first day of the week to calendar:week_start:1 if you want Monday
 #. * to be the first day of the week, and so on.
 #.
-#: ../gtk/gtkcalendar.c:908
+#: ../gtk/gtkcalendar.c:909
 msgid "calendar:week_start:0"
 msgstr "calendar:week_start:1"
 
@@ -1692,7 +1738,7 @@ msgstr "calendar:week_start:1"
 #. *
 #. * If you don't understand this, leave it as "2000"
 #.
-#: ../gtk/gtkcalendar.c:1935
+#: ../gtk/gtkcalendar.c:1936
 msgctxt "year measurement template"
 msgid "2000"
 msgstr "2000"
@@ -1707,7 +1753,7 @@ msgstr "2000"
 #. * digits. That needs support from your system and locale definition
 #. * too.
 #.
-#: ../gtk/gtkcalendar.c:1966 ../gtk/gtkcalendar.c:2636
+#: ../gtk/gtkcalendar.c:1967 ../gtk/gtkcalendar.c:2637
 #, c-format
 msgctxt "calendar:day:digits"
 msgid "%d"
@@ -1723,7 +1769,7 @@ msgstr "%d"
 #. * digits. That needs support from your system and locale definition
 #. * too.
 #.
-#: ../gtk/gtkcalendar.c:1998 ../gtk/gtkcalendar.c:2502
+#: ../gtk/gtkcalendar.c:1999 ../gtk/gtkcalendar.c:2503
 #, c-format
 msgctxt "calendar:week:digits"
 msgid "%d"
@@ -1739,7 +1785,7 @@ msgstr "%d"
 #. *
 #. * "%Y" is appropriate for most locales.
 #.
-#: ../gtk/gtkcalendar.c:2289
+#: ../gtk/gtkcalendar.c:2290
 msgctxt "calendar year format"
 msgid "%Y"
 msgstr "%Y"
@@ -1761,15 +1807,14 @@ msgctxt "Accelerator"
 msgid "Invalid"
 msgstr "Neplatné"
 
-#. This label is displayed in a treeview cell displaying
-#. * an accelerator when the cell is clicked to change the
-#. * acelerator.
+#. This label is displayed in a treeview cell displaying an accelerator
+#. * when the cell is clicked to change the acelerator.
 #.
-#: ../gtk/gtkcellrendereraccel.c:415 ../gtk/gtkcellrendereraccel.c:517
+#: ../gtk/gtkcellrendereraccel.c:415 ../gtk/gtkcellrendereraccel.c:509
 msgid "New accelerator…"
 msgstr "Nová klávesová zkratka…"
 
-#: ../gtk/gtkcellrendererprogress.c:376 ../gtk/gtkcellrendererprogress.c:469
+#: ../gtk/gtkcellrendererprogress.c:377 ../gtk/gtkcellrendererprogress.c:470
 #, c-format
 msgctxt "progress bar label"
 msgid "%d %%"
@@ -2006,7 +2051,7 @@ msgctxt "Color channel"
 msgid "Alpha"
 msgstr "Alfa"
 
-#: ../gtk/gtkcolorswatch.c:483
+#: ../gtk/gtkcolorswatch.c:449
 msgid "_Customize"
 msgstr "_Upravit"
 
@@ -2020,21 +2065,16 @@ msgstr "_Upravit"
 msgid "default:mm"
 msgstr "default:mm"
 
-#: ../gtk/gtkcustompaperunixdialog.c:329 ../gtk/gtkmessagedialog.c:940
-#: ../gtk/resources/ui/gtkassistant.ui.h:6
-msgid "_Close"
-msgstr "_Zavřít"
-
 #. And show the custom paper dialog
-#: ../gtk/gtkcustompaperunixdialog.c:405 ../gtk/gtkprintunixdialog.c:3305
+#: ../gtk/gtkcustompaperunixdialog.c:405 ../gtk/gtkprintunixdialog.c:3313
 msgid "Manage Custom Sizes"
 msgstr "Správa vlastních velikostí"
 
-#: ../gtk/gtkcustompaperunixdialog.c:567 ../gtk/gtkpagesetupunixdialog.c:815
+#: ../gtk/gtkcustompaperunixdialog.c:567 ../gtk/gtkpagesetupunixdialog.c:811
 msgid "inch"
 msgstr "palec"
 
-#: ../gtk/gtkcustompaperunixdialog.c:569 ../gtk/gtkpagesetupunixdialog.c:813
+#: ../gtk/gtkcustompaperunixdialog.c:569 ../gtk/gtkpagesetupunixdialog.c:809
 msgid "mm"
 msgstr "mm"
 
@@ -2079,30 +2119,30 @@ msgstr "P_ravý:"
 msgid "Paper Margins"
 msgstr "Okraje papíru"
 
-#: ../gtk/gtkentry.c:9584 ../gtk/gtkentry.c:9737 ../gtk/gtklabel.c:6587
-#: ../gtk/gtktextview.c:8841 ../gtk/gtktextview.c:9029
+#: ../gtk/gtkentry.c:9589 ../gtk/gtkentry.c:9744 ../gtk/gtklabel.c:6586
+#: ../gtk/gtktextview.c:8868 ../gtk/gtktextview.c:9058
 msgid "Cu_t"
 msgstr "_Vyjmout"
 
-#: ../gtk/gtkentry.c:9588 ../gtk/gtkentry.c:9740 ../gtk/gtklabel.c:6588
-#: ../gtk/gtktextview.c:8845 ../gtk/gtktextview.c:9033
+#: ../gtk/gtkentry.c:9593 ../gtk/gtkentry.c:9747 ../gtk/gtklabel.c:6587
+#: ../gtk/gtktextview.c:8872 ../gtk/gtktextview.c:9062
 msgid "_Copy"
 msgstr "_Kopírovat"
 
-#: ../gtk/gtkentry.c:9592 ../gtk/gtkentry.c:9743 ../gtk/gtklabel.c:6589
-#: ../gtk/gtktextview.c:8847 ../gtk/gtktextview.c:9035
+#: ../gtk/gtkentry.c:9597 ../gtk/gtkentry.c:9750 ../gtk/gtklabel.c:6588
+#: ../gtk/gtktextview.c:8874 ../gtk/gtktextview.c:9064
 msgid "_Paste"
 msgstr "V_ložit"
 
-#: ../gtk/gtkentry.c:9595 ../gtk/gtklabel.c:6591 ../gtk/gtktextview.c:8850
+#: ../gtk/gtkentry.c:9600 ../gtk/gtklabel.c:6590 ../gtk/gtktextview.c:8877
 msgid "_Delete"
 msgstr "_Smazat"
 
-#: ../gtk/gtkentry.c:9606 ../gtk/gtklabel.c:6600 ../gtk/gtktextview.c:8864
+#: ../gtk/gtkentry.c:9611 ../gtk/gtklabel.c:6599 ../gtk/gtktextview.c:8891
 msgid "Select _All"
 msgstr "Vybr_at vše"
 
-#: ../gtk/gtkentry.c:10798
+#: ../gtk/gtkentry.c:10805
 msgid "Caps Lock is on"
 msgstr "Funkce Caps Lock je zapnuta"
 
@@ -2110,7 +2150,7 @@ msgstr "Funkce Caps Lock je zapnuta"
 msgid "Select a File"
 msgstr "Vyberte soubor"
 
-#: ../gtk/gtkfilechooserbutton.c:104 ../gtk/gtkplacessidebar.c:960
+#: ../gtk/gtkfilechooserbutton.c:104 ../gtk/gtkplacessidebar.c:983
 msgid "Desktop"
 msgstr "Pracovní plocha"
 
@@ -2119,7 +2159,7 @@ msgstr "Pracovní plocha"
 msgid "(None)"
 msgstr "(žádný)"
 
-#: ../gtk/gtkfilechooserbutton.c:795 ../gtk/gtkplacessidebar.c:3273
+#: ../gtk/gtkfilechooserbutton.c:795 ../gtk/gtkplacessidebar.c:3393
 msgid "_Open"
 msgstr "_Otevřít"
 
@@ -2140,11 +2180,11 @@ msgstr "%1$s na %2$s"
 msgid "Type name of new folder"
 msgstr "Napište název nové složky"
 
-#: ../gtk/gtkfilechooserwidget.c:730
+#: ../gtk/gtkfilechooserwidget.c:732
 msgid "The folder could not be created"
 msgstr "Složku nelze vytvořit"
 
-#: ../gtk/gtkfilechooserwidget.c:743
+#: ../gtk/gtkfilechooserwidget.c:745
 msgid ""
 "The folder could not be created, as a file with the same name already "
 "exists.  Try using a different name for the folder, or rename the file first."
@@ -2152,125 +2192,125 @@ msgstr ""
 "Složku nelze vytvořit, protože již existuje soubor se stejným názvem. Zkuste "
 "pro složku použít jiný název, nebo nejprve přejmenovat soubor."
 
-#: ../gtk/gtkfilechooserwidget.c:757
+#: ../gtk/gtkfilechooserwidget.c:759
 msgid "You need to choose a valid filename."
 msgstr "Vybraný název souboru musí být platný."
 
-#: ../gtk/gtkfilechooserwidget.c:760
+#: ../gtk/gtkfilechooserwidget.c:762
 #, c-format
 msgid "Cannot create a file under %s as it is not a folder"
 msgstr "V %s nelze vytvořit soubor, jelikož se nejedná o složku"
 
-#: ../gtk/gtkfilechooserwidget.c:768
+#: ../gtk/gtkfilechooserwidget.c:770
 msgid "Cannot create file as the filename is too long"
 msgstr "Nelze vytvořit soubor, protože název je příliš dlouhý"
 
-#: ../gtk/gtkfilechooserwidget.c:769
+#: ../gtk/gtkfilechooserwidget.c:771
 msgid "Try using a shorter name."
 msgstr "Zkuste použít kratší název."
 
-#: ../gtk/gtkfilechooserwidget.c:779
+#: ../gtk/gtkfilechooserwidget.c:781
 msgid "You may only select folders"
 msgstr "Vybírat můžete jen složky"
 
-#: ../gtk/gtkfilechooserwidget.c:780
+#: ../gtk/gtkfilechooserwidget.c:782
 msgid "The item that you selected is not a folder try using a different item."
 msgstr "Položka, kterou jste vybrali, není složka. Zkuste použít jinou."
 
-#: ../gtk/gtkfilechooserwidget.c:788
+#: ../gtk/gtkfilechooserwidget.c:790
 msgid "Invalid file name"
 msgstr "Neplatný název souboru"
 
-#: ../gtk/gtkfilechooserwidget.c:798
+#: ../gtk/gtkfilechooserwidget.c:800
 msgid "The folder contents could not be displayed"
 msgstr "Obsah složky nelze zobrazit"
 
-#: ../gtk/gtkfilechooserwidget.c:1435
+#: ../gtk/gtkfilechooserwidget.c:1437
 msgid "Could not select file"
 msgstr "Nelze vybrat soubor"
 
-#: ../gtk/gtkfilechooserwidget.c:1665
+#: ../gtk/gtkfilechooserwidget.c:1667
 msgid "_Visit File"
 msgstr "Podí_vat se na tento soubor"
 
-#: ../gtk/gtkfilechooserwidget.c:1668
+#: ../gtk/gtkfilechooserwidget.c:1670
 msgid "_Copy Location"
 msgstr "_Kopírovat umístění"
 
-#: ../gtk/gtkfilechooserwidget.c:1671
+#: ../gtk/gtkfilechooserwidget.c:1673
 msgid "_Add to Bookmarks"
 msgstr "_Přidat mezi záložky"
 
-#: ../gtk/gtkfilechooserwidget.c:1678
+#: ../gtk/gtkfilechooserwidget.c:1680
 msgid "Show _Hidden Files"
 msgstr "Zobrazovat _skryté soubory"
 
-#: ../gtk/gtkfilechooserwidget.c:1681
+#: ../gtk/gtkfilechooserwidget.c:1683
 msgid "Show _Size Column"
 msgstr "Z_obrazovat sloupec Velikost"
 
 #. Label
-#: ../gtk/gtkfilechooserwidget.c:1973
+#: ../gtk/gtkfilechooserwidget.c:1975
 msgid "_Name:"
 msgstr "_Název:"
 
-#: ../gtk/gtkfilechooserwidget.c:3648
+#: ../gtk/gtkfilechooserwidget.c:3650
 #, c-format
 msgid "Could not read the contents of %s"
 msgstr "Nelze přečíst obsah %s"
 
-#: ../gtk/gtkfilechooserwidget.c:3652
+#: ../gtk/gtkfilechooserwidget.c:3654
 msgid "Could not read the contents of the folder"
 msgstr "Nelze přečíst obsah složky"
 
-#: ../gtk/gtkfilechooserwidget.c:3759
+#: ../gtk/gtkfilechooserwidget.c:3761
 msgid "%H:%M"
 msgstr "%k∶%M"
 
-#: ../gtk/gtkfilechooserwidget.c:3759
+#: ../gtk/gtkfilechooserwidget.c:3761
 msgid "%-I:%M %P"
 msgstr "%l∶%M %P"
 
-#: ../gtk/gtkfilechooserwidget.c:3761
+#: ../gtk/gtkfilechooserwidget.c:3763
 msgid "Yesterday at %H:%M"
 msgstr "Včera v %k∶%M"
 
-#: ../gtk/gtkfilechooserwidget.c:3761
+#: ../gtk/gtkfilechooserwidget.c:3763
 msgid "Yesterday at %-I:%M %P"
 msgstr "Včera v %k∶%M"
 
 #. Translators: We don't know whether this printer is
 #. * available to print to.
-#: ../gtk/gtkfilechooserwidget.c:3960 ../gtk/inspector/prop-editor.c:1571
+#: ../gtk/gtkfilechooserwidget.c:3962 ../gtk/inspector/prop-editor.c:1571
 #: ../modules/printbackends/cloudprint/gtkprintbackendcloudprint.c:748
 msgid "Unknown"
 msgstr "Neznámé"
 
-#: ../gtk/gtkfilechooserwidget.c:4433
+#: ../gtk/gtkfilechooserwidget.c:4435
 msgid "Cannot change to folder because it is not local"
 msgstr "Nelze přejít do složky, protože není místní"
 
-#: ../gtk/gtkfilechooserwidget.c:5219 ../gtk/gtkprintunixdialog.c:656
+#: ../gtk/gtkfilechooserwidget.c:5221 ../gtk/gtkprintunixdialog.c:656
 #, c-format
 msgid "A file named “%s” already exists.  Do you want to replace it?"
 msgstr "Soubor nazvaný „%s“ již existuje. Chcete jej nahradit?"
 
-#: ../gtk/gtkfilechooserwidget.c:5222 ../gtk/gtkprintunixdialog.c:660
+#: ../gtk/gtkfilechooserwidget.c:5224 ../gtk/gtkprintunixdialog.c:660
 #, c-format
 msgid ""
 "The file already exists in “%s”.  Replacing it will overwrite its contents."
 msgstr ""
 "V „%s“ již tento soubor existuje. Jeho nahrazením přepíšete celý jeho obsah."
 
-#: ../gtk/gtkfilechooserwidget.c:5227 ../gtk/gtkprintunixdialog.c:668
+#: ../gtk/gtkfilechooserwidget.c:5229 ../gtk/gtkprintunixdialog.c:668
 msgid "_Replace"
 msgstr "Na_hradit"
 
-#: ../gtk/gtkfilechooserwidget.c:6046
+#: ../gtk/gtkfilechooserwidget.c:6048
 msgid "Could not start the search process"
 msgstr "Nelze spustit proces hledání"
 
-#: ../gtk/gtkfilechooserwidget.c:6047
+#: ../gtk/gtkfilechooserwidget.c:6049
 msgid ""
 "The program was not able to create a connection to the indexer daemon. "
 "Please make sure it is running."
@@ -2278,7 +2318,7 @@ msgstr ""
 "Program nebyl schopen vytvořit spojení s indexovacím démonem. Ujistěte se "
 "prosím, že běží."
 
-#: ../gtk/gtkfilechooserwidget.c:6061
+#: ../gtk/gtkfilechooserwidget.c:6063
 msgid "Could not send the search request"
 msgstr "Nelze odeslat vyhledávací požadavek"
 
@@ -2291,20 +2331,20 @@ msgstr "Nelze odeslat vyhledávací požadavek"
 msgid "File System"
 msgstr "Systém souborů"
 
-#: ../gtk/gtkfontbutton.c:358
+#: ../gtk/gtkfontbutton.c:360
 msgid "Sans 12"
 msgstr "Sans 12"
 
-#: ../gtk/gtkfontbutton.c:443 ../gtk/gtkfontbutton.c:571
+#: ../gtk/gtkfontbutton.c:445 ../gtk/gtkfontbutton.c:573
 msgid "Pick a Font"
 msgstr "Vybrat písmo"
 
 #. Translators, these strings are names for various 'standard' cover
 #. * pages that the printing system may support.
 #.
-#: ../gtk/gtkfontbutton.c:1155 ../gtk/inspector/gestures.c:127
+#: ../gtk/gtkfontbutton.c:1182 ../gtk/inspector/gestures.c:127
 #: ../gtk/inspector/prop-editor.c:1202 ../gtk/inspector/size-groups.c:251
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:4958
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:5184
 msgid "None"
 msgstr "Žádné"
 
@@ -2312,7 +2352,7 @@ msgstr "Žádné"
 msgid "Application menu"
 msgstr "Nabídka aplikace"
 
-#: ../gtk/gtkheaderbar.c:476 ../gtk/gtkwindow.c:8436
+#: ../gtk/gtkheaderbar.c:476 ../gtk/gtkwindow.c:8463
 msgid "Close"
 msgstr "Zavřít"
 
@@ -2345,29 +2385,29 @@ msgctxt "input method menu"
 msgid "System (%s)"
 msgstr "Systémová (%s)"
 
-#: ../gtk/gtkinfobar.c:1192 ../gtk/gtkmessagedialog.c:376
+#: ../gtk/gtkinfobar.c:1193 ../gtk/gtkmessagedialog.c:376
 msgid "Information"
 msgstr "Informace"
 
-#: ../gtk/gtkinfobar.c:1196 ../gtk/gtkmessagedialog.c:380
+#: ../gtk/gtkinfobar.c:1197 ../gtk/gtkmessagedialog.c:380
 msgid "Question"
 msgstr "Otázka"
 
-#: ../gtk/gtkinfobar.c:1200 ../gtk/gtkmessagedialog.c:384
+#: ../gtk/gtkinfobar.c:1201 ../gtk/gtkmessagedialog.c:384
 msgid "Warning"
 msgstr "Varování"
 
-#: ../gtk/gtkinfobar.c:1204 ../gtk/gtkmessagedialog.c:388
+#: ../gtk/gtkinfobar.c:1205 ../gtk/gtkmessagedialog.c:388
 msgid "Error"
 msgstr "Chyba"
 
 #. Open Link
-#: ../gtk/gtklabel.c:6568
+#: ../gtk/gtklabel.c:6567
 msgid "_Open Link"
 msgstr "_Otevřít odkaz"
 
 #. Copy Link Address
-#: ../gtk/gtklabel.c:6577
+#: ../gtk/gtklabel.c:6576
 msgid "Copy _Link Address"
 msgstr "Ko_pírovat adresu odkazu"
 
@@ -2509,7 +2549,7 @@ msgstr "Zobrazit přepínače GTK+"
 msgid "default:LTR"
 msgstr "default:LTR"
 
-#: ../gtk/gtkmenubutton.c:654 ../gtk/inspector/window.ui.h:14
+#: ../gtk/gtkmenubutton.c:655 ../gtk/inspector/window.ui.h:18
 msgid "Menu"
 msgstr "Nabídka"
 
@@ -2610,8 +2650,8 @@ msgstr "Nelze ukončit proces s PID %d: %s"
 msgid "Page %u"
 msgstr "Strana %u"
 
-#: ../gtk/gtkpagesetup.c:644 ../gtk/gtkpapersize.c:875
-#: ../gtk/gtkpapersize.c:915
+#: ../gtk/gtkpagesetup.c:644 ../gtk/gtkpapersize.c:985
+#: ../gtk/gtkpapersize.c:1025
 msgid "Not a valid page setup file"
 msgstr "Neplatný soubor vzhledu stránky"
 
@@ -2623,7 +2663,7 @@ msgstr "Libovolná tiskárna"
 msgid "For portable documents"
 msgstr "Pro přenositelné dokumenty"
 
-#: ../gtk/gtkpagesetupunixdialog.c:833
+#: ../gtk/gtkpagesetupunixdialog.c:829
 #, c-format
 msgid ""
 "Margins:\n"
@@ -2638,11 +2678,11 @@ msgstr ""
 " Horní: %s %s\n"
 " Dolní: %s %s"
 
-#: ../gtk/gtkpagesetupunixdialog.c:882 ../gtk/gtkprintunixdialog.c:3359
+#: ../gtk/gtkpagesetupunixdialog.c:878 ../gtk/gtkprintunixdialog.c:3367
 msgid "Manage Custom Sizes…"
 msgstr "Správa vlastních velikostí…"
 
-#: ../gtk/gtkpagesetupunixdialog.c:904
+#: ../gtk/gtkpagesetupunixdialog.c:900
 #: ../gtk/resources/ui/gtkpagesetupunixdialog.ui.h:1
 #: ../gtk/resources/ui/gtkprintunixdialog.ui.h:44
 msgid "Page Setup"
@@ -2652,199 +2692,199 @@ msgstr "Vzhled stránky"
 msgid "File System Root"
 msgstr "Kořen systému souborů"
 
-#: ../gtk/gtkplacessidebar.c:454
+#: ../gtk/gtkplacessidebar.c:455
 msgid "Devices"
 msgstr "Zařízení"
 
-#: ../gtk/gtkplacessidebar.c:462
+#: ../gtk/gtkplacessidebar.c:463
 msgid "Bookmarks"
 msgstr "Záložky"
 
-#: ../gtk/gtkplacessidebar.c:934
+#: ../gtk/gtkplacessidebar.c:957
 msgid "Recent"
 msgstr "Naposledy použité"
 
-#: ../gtk/gtkplacessidebar.c:936
+#: ../gtk/gtkplacessidebar.c:959
 msgid "Recent files"
 msgstr "Naposledy použité soubory"
 
-#: ../gtk/gtkplacessidebar.c:945
+#: ../gtk/gtkplacessidebar.c:968
 msgid "Home"
 msgstr "Domů"
 
-#: ../gtk/gtkplacessidebar.c:947
+#: ../gtk/gtkplacessidebar.c:970
 msgid "Open your personal folder"
 msgstr "Otevřít osobní složku"
 
-#: ../gtk/gtkplacessidebar.c:962
+#: ../gtk/gtkplacessidebar.c:985
 msgid "Open the contents of your desktop in a folder"
 msgstr "Otevřít obsah vaší plochy ve složce"
 
-#: ../gtk/gtkplacessidebar.c:976
+#: ../gtk/gtkplacessidebar.c:999
 msgid "Enter Location"
 msgstr "Zadat umístění"
 
-#: ../gtk/gtkplacessidebar.c:978
+#: ../gtk/gtkplacessidebar.c:1001
 msgid "Manually enter a location"
 msgstr "Vložit umístění ručně"
 
-#: ../gtk/gtkplacessidebar.c:989
+#: ../gtk/gtkplacessidebar.c:1012
 msgid "Trash"
 msgstr "Koš"
 
-#: ../gtk/gtkplacessidebar.c:991
+#: ../gtk/gtkplacessidebar.c:1014
 msgid "Open the trash"
 msgstr "Otevřít koš"
 
-#: ../gtk/gtkplacessidebar.c:1054 ../gtk/gtkplacessidebar.c:1082
-#: ../gtk/gtkplacessidebar.c:1290
+#: ../gtk/gtkplacessidebar.c:1077 ../gtk/gtkplacessidebar.c:1105
+#: ../gtk/gtkplacessidebar.c:1313
 #, c-format
 msgid "Mount and open “%s”"
 msgstr "Připojit a otevřít „%s“"
 
-#: ../gtk/gtkplacessidebar.c:1163
+#: ../gtk/gtkplacessidebar.c:1186
 msgid "Open the contents of the file system"
 msgstr "Otevřít obsah systému souborů"
 
-#: ../gtk/gtkplacessidebar.c:1253
+#: ../gtk/gtkplacessidebar.c:1276
 msgid "Network"
 msgstr "Síť"
 
-#: ../gtk/gtkplacessidebar.c:1259
+#: ../gtk/gtkplacessidebar.c:1282
 msgid "Browse Network"
 msgstr "Procházet síť"
 
-#: ../gtk/gtkplacessidebar.c:1261
+#: ../gtk/gtkplacessidebar.c:1284
 msgid "Browse the contents of the network"
 msgstr "Procházet obsah na síti"
 
-#: ../gtk/gtkplacessidebar.c:1269
+#: ../gtk/gtkplacessidebar.c:1292
 msgid "Connect to Server"
 msgstr "Připojit k serveru"
 
-#: ../gtk/gtkplacessidebar.c:1271
+#: ../gtk/gtkplacessidebar.c:1294
 msgid "Connect to a network server address"
 msgstr "Připojit k síťové adrese serveru"
 
-#: ../gtk/gtkplacessidebar.c:1673
+#: ../gtk/gtkplacessidebar.c:1698
 msgid "New bookmark"
 msgstr "Nová záložka"
 
 #. Adjust start/stop items to reflect the type of the drive
-#: ../gtk/gtkplacessidebar.c:2230 ../gtk/gtkplacessidebar.c:3351
+#: ../gtk/gtkplacessidebar.c:2255 ../gtk/gtkplacessidebar.c:3471
 msgid "_Start"
 msgstr "_Spustit"
 
-#: ../gtk/gtkplacessidebar.c:2231 ../gtk/gtkplacessidebar.c:3358
+#: ../gtk/gtkplacessidebar.c:2256 ../gtk/gtkplacessidebar.c:3478
 msgid "_Stop"
 msgstr "_Zastavit"
 
 #. start() for type G_DRIVE_START_STOP_TYPE_SHUTDOWN is normally not used
-#: ../gtk/gtkplacessidebar.c:2238
+#: ../gtk/gtkplacessidebar.c:2263
 msgid "_Power On"
 msgstr "_Zapnout"
 
-#: ../gtk/gtkplacessidebar.c:2239
+#: ../gtk/gtkplacessidebar.c:2264
 msgid "_Safely Remove Drive"
 msgstr "_Bezpečně odebrat jednotku"
 
-#: ../gtk/gtkplacessidebar.c:2243
+#: ../gtk/gtkplacessidebar.c:2268
 msgid "_Connect Drive"
 msgstr "_Připojit jednotku"
 
-#: ../gtk/gtkplacessidebar.c:2244
+#: ../gtk/gtkplacessidebar.c:2269
 msgid "_Disconnect Drive"
 msgstr "_Odpojit jednotku"
 
-#: ../gtk/gtkplacessidebar.c:2248
+#: ../gtk/gtkplacessidebar.c:2273
 msgid "_Start Multi-disk Device"
 msgstr "_Spustit zařízení s více disky"
 
-#: ../gtk/gtkplacessidebar.c:2249
+#: ../gtk/gtkplacessidebar.c:2274
 msgid "_Stop Multi-disk Device"
 msgstr "_Zastavit zařízení s více disky"
 
 #. stop() for type G_DRIVE_START_STOP_TYPE_PASSWORD is normally not used
-#: ../gtk/gtkplacessidebar.c:2254
+#: ../gtk/gtkplacessidebar.c:2279
 msgid "_Unlock Drive"
 msgstr "_Odemknout jednotku"
 
-#: ../gtk/gtkplacessidebar.c:2255
+#: ../gtk/gtkplacessidebar.c:2280
 msgid "_Lock Drive"
 msgstr "_Uzamknout jednotku"
 
-#: ../gtk/gtkplacessidebar.c:2284 ../gtk/gtkplacessidebar.c:3033
+#: ../gtk/gtkplacessidebar.c:2309 ../gtk/gtkplacessidebar.c:3153
 #, c-format
 msgid "Unable to start “%s”"
 msgstr "Není možné spustit „%s“"
 
-#: ../gtk/gtkplacessidebar.c:2314
+#: ../gtk/gtkplacessidebar.c:2339
 #, c-format
 msgid "Unable to access “%s”"
 msgstr "Není možné přistoupit k „%s“"
 
-#: ../gtk/gtkplacessidebar.c:2624
+#: ../gtk/gtkplacessidebar.c:2649
 #, c-format
 msgid "Unable to unmount “%s”"
 msgstr "Není možné odpojit „%s“"
 
-#: ../gtk/gtkplacessidebar.c:2750
+#: ../gtk/gtkplacessidebar.c:2858
 #, c-format
 msgid "Unable to stop “%s”"
 msgstr "Není možné zastavit „%s“"
 
-#: ../gtk/gtkplacessidebar.c:2779
+#: ../gtk/gtkplacessidebar.c:2887
 #, c-format
 msgid "Unable to eject “%s”"
 msgstr "Není možné vysunout „%s“"
 
-#: ../gtk/gtkplacessidebar.c:2808 ../gtk/gtkplacessidebar.c:2837
+#: ../gtk/gtkplacessidebar.c:2916 ../gtk/gtkplacessidebar.c:2945
 #, c-format
 msgid "Unable to eject %s"
 msgstr "Nezdařilo se vysunout %s"
 
-#: ../gtk/gtkplacessidebar.c:2983
+#: ../gtk/gtkplacessidebar.c:3103
 #, c-format
 msgid "Unable to poll “%s” for media changes"
 msgstr "Není možné zkontrolovat „%s“ ohledně změny média"
 
-#: ../gtk/gtkplacessidebar.c:3281
+#: ../gtk/gtkplacessidebar.c:3401
 msgid "Open in New _Tab"
 msgstr "Otevřít v nové kar_tě"
 
-#: ../gtk/gtkplacessidebar.c:3290
+#: ../gtk/gtkplacessidebar.c:3410
 msgid "Open in New _Window"
 msgstr "Otevřít v no_vém okně"
 
-#: ../gtk/gtkplacessidebar.c:3299
+#: ../gtk/gtkplacessidebar.c:3419
 msgid "_Add Bookmark"
 msgstr "_Přidat záložku"
 
-#: ../gtk/gtkplacessidebar.c:3305
+#: ../gtk/gtkplacessidebar.c:3425
 msgid "Remove"
 msgstr "Odstranit"
 
-#: ../gtk/gtkplacessidebar.c:3312
+#: ../gtk/gtkplacessidebar.c:3432
 msgid "Rename…"
 msgstr "Přejmenovat…"
 
-#: ../gtk/gtkplacessidebar.c:3323
+#: ../gtk/gtkplacessidebar.c:3443
 msgid "_Mount"
 msgstr "_Připojit"
 
-#: ../gtk/gtkplacessidebar.c:3330
+#: ../gtk/gtkplacessidebar.c:3450
 msgid "_Unmount"
 msgstr "_Odpojit"
 
-#: ../gtk/gtkplacessidebar.c:3337
+#: ../gtk/gtkplacessidebar.c:3457
 msgid "_Eject"
 msgstr "V_ysunout"
 
-#: ../gtk/gtkplacessidebar.c:3344
+#: ../gtk/gtkplacessidebar.c:3464
 msgid "_Detect Media"
 msgstr "_Rozpoznat médium"
 
-#: ../gtk/gtkplacessidebar.c:3953
+#: ../gtk/gtkplacessidebar.c:4079
 msgid "Computer"
 msgstr "Počítač"
 
@@ -2954,7 +2994,7 @@ msgstr "Došel papír"
 
 #. Translators: this is a printer status.
 #: ../gtk/gtkprintoperation-win32.c:620
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2421
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2476
 msgid "Paused"
 msgstr "Přerušeno"
 
@@ -3011,7 +3051,7 @@ msgstr "_Tisk"
 msgid "Getting printer information failed"
 msgstr "Získávání informací o tiskárně selhalo"
 
-#: ../gtk/gtkprintunixdialog.c:2041
+#: ../gtk/gtkprintunixdialog.c:2049
 msgid "Getting printer information…"
 msgstr "Získávají se informace o tiskárně…"
 
@@ -3021,75 +3061,75 @@ msgstr "Získávají se informace o tiskárně…"
 #. Translators: These strings name the possible arrangements of
 #. * multiple pages on a sheet when printing
 #.
-#: ../gtk/gtkprintunixdialog.c:3088
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:4907
+#: ../gtk/gtkprintunixdialog.c:3096
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:5133
 msgid "Left to right, top to bottom"
 msgstr "Zleva doprava, shora dolů"
 
-#: ../gtk/gtkprintunixdialog.c:3088
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:4907
+#: ../gtk/gtkprintunixdialog.c:3096
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:5133
 msgid "Left to right, bottom to top"
 msgstr "Zleva doprava, zdola nahoru"
 
-#: ../gtk/gtkprintunixdialog.c:3089
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:4908
+#: ../gtk/gtkprintunixdialog.c:3097
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:5134
 msgid "Right to left, top to bottom"
 msgstr "Zprava doleva, shora dolů"
 
-#: ../gtk/gtkprintunixdialog.c:3089
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:4908
+#: ../gtk/gtkprintunixdialog.c:3097
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:5134
 msgid "Right to left, bottom to top"
 msgstr "Zprava doleva, zdola nahoru"
 
-#: ../gtk/gtkprintunixdialog.c:3090
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:4909
+#: ../gtk/gtkprintunixdialog.c:3098
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:5135
 msgid "Top to bottom, left to right"
 msgstr "Shora dolů, zleva doprava"
 
-#: ../gtk/gtkprintunixdialog.c:3090
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:4909
+#: ../gtk/gtkprintunixdialog.c:3098
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:5135
 msgid "Top to bottom, right to left"
 msgstr "Shora dolů, zprava doleva"
 
-#: ../gtk/gtkprintunixdialog.c:3091
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:4910
+#: ../gtk/gtkprintunixdialog.c:3099
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:5136
 msgid "Bottom to top, left to right"
 msgstr "Zdola nahoru, zleva doprava"
 
-#: ../gtk/gtkprintunixdialog.c:3091
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:4910
+#: ../gtk/gtkprintunixdialog.c:3099
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:5136
 msgid "Bottom to top, right to left"
 msgstr "Zdola nahoru, zprava doleva"
 
 #. Translators, this string is used to label the option in the print
 #. * dialog that controls in what order multiple pages are arranged
 #.
-#: ../gtk/gtkprintunixdialog.c:3095 ../gtk/gtkprintunixdialog.c:3108
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:4987
+#: ../gtk/gtkprintunixdialog.c:3103 ../gtk/gtkprintunixdialog.c:3116
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:5213
 msgid "Page Ordering"
 msgstr "Řazení stran"
 
-#: ../gtk/gtkprintunixdialog.c:3124
+#: ../gtk/gtkprintunixdialog.c:3132
 msgid "Left to right"
 msgstr "Zleva doprava"
 
-#: ../gtk/gtkprintunixdialog.c:3125
+#: ../gtk/gtkprintunixdialog.c:3133
 msgid "Right to left"
 msgstr "Zprava doleva"
 
-#: ../gtk/gtkprintunixdialog.c:3137
+#: ../gtk/gtkprintunixdialog.c:3145
 msgid "Top to bottom"
 msgstr "Shora dolů"
 
-#: ../gtk/gtkprintunixdialog.c:3138
+#: ../gtk/gtkprintunixdialog.c:3146
 msgid "Bottom to top"
 msgstr "Zdola nahoru"
 
-#: ../gtk/gtkprintunixdialog.c:3381
+#: ../gtk/gtkprintunixdialog.c:3389
 msgid "Print"
 msgstr "Tisk"
 
-#: ../gtk/gtkprogressbar.c:444
+#: ../gtk/gtkprogressbar.c:447
 #, c-format
 msgctxt "progress bar label"
 msgid "%.0f %%"
@@ -3198,7 +3238,7 @@ msgstr "Hledat"
 #. * glyphs then use MEDIUM VERTICAL BAR (U+2759) as the text for
 #. * the state
 #.
-#: ../gtk/gtkswitch.c:397 ../gtk/gtkswitch.c:448 ../gtk/gtkswitch.c:634
+#: ../gtk/gtkswitch.c:401 ../gtk/gtkswitch.c:453 ../gtk/gtkswitch.c:633
 msgctxt "switch"
 msgid "ON"
 msgstr "❙"
@@ -3206,7 +3246,7 @@ msgstr "❙"
 #. Translators: if the "off" state label requires more than three
 #. * glyphs then use WHITE CIRCLE (U+25CB) as the text for the state
 #.
-#: ../gtk/gtkswitch.c:405 ../gtk/gtkswitch.c:449 ../gtk/gtkswitch.c:649
+#: ../gtk/gtkswitch.c:409 ../gtk/gtkswitch.c:454 ../gtk/gtkswitch.c:648
 msgctxt "switch"
 msgid "OFF"
 msgstr "○"
@@ -3390,11 +3430,11 @@ msgctxt "volume percentage"
 msgid "%d %%"
 msgstr "%d %%"
 
-#: ../gtk/gtkwindow.c:11703
+#: ../gtk/gtkwindow.c:11760
 msgid "Do you want to use GTK+ Inspector?"
 msgstr "Chcete použít GTK+ Inspector?"
 
-#: ../gtk/gtkwindow.c:11705
+#: ../gtk/gtkwindow.c:11762
 msgid ""
 "GTK+ Inspector is an interactive debugger that lets you explore and modify "
 "the internals of any GTK+ application. Using it may cause the application to "
@@ -3403,6 +3443,10 @@ msgstr ""
 "GTK+ Inspektor je interaktivní ladicí program, který umožňuje prozkoumat a "
 "změnit vnitřní strukturu jakékoliv aplikace GTK+. Použití tohoto programu "
 "může vést k přerušení běhu nebo pádu aplikace."
+
+#: ../gtk/gtkwindow.c:11767
+msgid "Don't show this message again"
+msgstr ""
 
 #: ../gtk/inspector/action-editor.c:281
 msgid "Activate"
@@ -3419,7 +3463,7 @@ msgid "Prefix"
 msgstr "Předpona"
 
 #: ../gtk/inspector/actions.ui.h:2 ../gtk/inspector/classes-list.ui.h:3
-#: ../gtk/inspector/signals-list.ui.h:3 ../gtk/inspector/widget-tree.ui.h:2
+#: ../gtk/inspector/object-tree.ui.h:2 ../gtk/inspector/signals-list.ui.h:3
 #: ../gtk/resources/ui/gtkfilechooserwidget.ui.h:4
 msgid "Name"
 msgstr "Název"
@@ -3431,10 +3475,6 @@ msgstr "Zapnuto"
 #: ../gtk/inspector/actions.ui.h:4
 msgid "Parameter Type"
 msgstr "Typ parametru"
-
-#: ../gtk/inspector/button-path.ui.h:1
-msgid "Choose a widget through the inspector"
-msgstr "Vybrat widget přes Inspector"
 
 #: ../gtk/inspector/classes-list.c:122
 msgid "New class"
@@ -3524,7 +3564,7 @@ msgid "Unnamed section"
 msgstr "Sekce bez názvu"
 
 #. vim: set et sw=2 ts=2:
-#: ../gtk/inspector/menu.ui.h:1 ../gtk/inspector/widget-tree.ui.h:3
+#: ../gtk/inspector/menu.ui.h:1 ../gtk/inspector/object-tree.ui.h:3
 msgid "Label"
 msgstr "Popisek"
 
@@ -3547,7 +3587,7 @@ msgstr "Výchozí widget"
 #: ../gtk/inspector/misc-info.ui.h:4 ../gtk/inspector/misc-info.ui.h:6
 #: ../gtk/inspector/prop-editor.c:1005 ../gtk/inspector/prop-editor.c:1185
 #: ../gtk/inspector/prop-editor.c:1310 ../gtk/inspector/prop-editor.c:1421
-#: ../gtk/inspector/window.ui.h:4
+#: ../gtk/inspector/window.ui.h:7
 msgid "Properties"
 msgstr "Vlastnosti"
 
@@ -3556,12 +3596,54 @@ msgid "Focus Widget"
 msgstr "Widget zaměření"
 
 #: ../gtk/inspector/misc-info.ui.h:7
+msgid "Mnemonic Label"
+msgstr ""
+
+#: ../gtk/inspector/misc-info.ui.h:8
 msgid "Allocated size"
 msgstr "Alokovaná velikost"
+
+#: ../gtk/inspector/misc-info.ui.h:9
+msgid "Clip area"
+msgstr ""
+
+#: ../gtk/inspector/misc-info.ui.h:10
+msgid "Tick callback"
+msgstr ""
+
+#: ../gtk/inspector/misc-info.ui.h:11
+msgid "Accessible role"
+msgstr ""
+
+#: ../gtk/inspector/misc-info.ui.h:12
+msgid "Mapped"
+msgstr ""
+
+#: ../gtk/inspector/misc-info.ui.h:13
+msgid "Realized"
+msgstr ""
+
+#: ../gtk/inspector/misc-info.ui.h:14
+msgid "Is Toplevel"
+msgstr ""
+
+#: ../gtk/inspector/misc-info.ui.h:15
+msgid "Child Visible"
+msgstr ""
 
 #: ../gtk/inspector/object-hierarchy.ui.h:1
 msgid "Object Hierarchy"
 msgstr "Hierarchie objektu"
+
+#: ../gtk/inspector/object-tree.ui.h:1
+msgid "Object"
+msgstr "Objekt"
+
+#: ../gtk/inspector/object-tree.ui.h:4
+#, fuzzy
+#| msgid "CSS Classes"
+msgid "Style Classes"
+msgstr "Třídy CSS"
 
 #: ../gtk/inspector/prop-editor.c:617
 #, c-format
@@ -3642,7 +3724,6 @@ msgid "XSettings"
 msgstr "Nastavení X"
 
 #. vim: set et:
-#. vim: set et sw=2 ts=2:
 #: ../gtk/inspector/prop-list.ui.h:1 ../gtk/inspector/style-prop-list.ui.h:1
 msgid "Property"
 msgstr "Vlastnost"
@@ -3664,17 +3745,35 @@ msgstr "Definováno na"
 msgid "Path"
 msgstr "Cesta"
 
-#: ../gtk/inspector/resource-list.ui.h:2
+#: ../gtk/inspector/resource-list.ui.h:2 ../gtk/inspector/signals-list.ui.h:5
+msgid "Count"
+msgstr "Počet"
+
+#: ../gtk/inspector/resource-list.ui.h:3
+#: ../gtk/resources/ui/gtkfilechooserwidget.ui.h:5
+msgid "Size"
+msgstr "Velikost"
+
+#: ../gtk/inspector/resource-list.ui.h:4
+#, fuzzy
+#| msgid "_Name:"
+msgid "Name:"
+msgstr "_Název:"
+
+#: ../gtk/inspector/resource-list.ui.h:5
 msgid "Type:"
 msgstr "Typ:"
 
-#: ../gtk/inspector/resource-list.ui.h:3
-msgid "Count:"
-msgstr "Počet:"
-
-#: ../gtk/inspector/resource-list.ui.h:4
+#: ../gtk/inspector/resource-list.ui.h:6
 msgid "Size:"
 msgstr "Velikost:"
+
+#: ../gtk/inspector/selector.ui.h:1 ../gtk/inspector/window.ui.h:11
+#, fuzzy
+#| msgctxt "Action name"
+#| msgid "Select"
+msgid "Selector"
+msgstr "Vybrat"
 
 #: ../gtk/inspector/signals-list.c:109
 msgid "Yes"
@@ -3692,10 +3791,6 @@ msgstr "Vymazat protokol"
 #: ../gtk/inspector/signals-list.ui.h:4
 msgid "Connected"
 msgstr "Připojeno"
-
-#: ../gtk/inspector/signals-list.ui.h:5
-msgid "Count"
-msgstr "Počet"
 
 #: ../gtk/inspector/size-groups.c:223
 msgid "Ignore hidden"
@@ -3717,21 +3812,60 @@ msgstr "Svislý"
 msgid "Both"
 msgstr "Obojí"
 
+#. vim: set et sw=2 ts=2:
+#: ../gtk/inspector/statistics.ui.h:1
+msgid "Collect Statistics"
+msgstr ""
+
+#: ../gtk/inspector/statistics.ui.h:2
+#, fuzzy
+#| msgid "Type:"
+msgid "Type"
+msgstr "Typ:"
+
+#: ../gtk/inspector/statistics.ui.h:3
+msgid "Self 1"
+msgstr ""
+
+#: ../gtk/inspector/statistics.ui.h:4
+msgid "Cumulative 1"
+msgstr ""
+
+#: ../gtk/inspector/statistics.ui.h:5
+msgid "Self 2"
+msgstr ""
+
+#: ../gtk/inspector/statistics.ui.h:6
+msgid "Cumulative 2"
+msgstr ""
+
+#: ../gtk/inspector/statistics.ui.h:7 ../gtk/inspector/statistics.ui.h:9
+msgid "Self"
+msgstr ""
+
+#: ../gtk/inspector/statistics.ui.h:8 ../gtk/inspector/statistics.ui.h:10
+msgid "Cumulative"
+msgstr ""
+
+#: ../gtk/inspector/statistics.ui.h:11
+msgid "Enable statistics with GOBJECT_DEBUG=instance-count"
+msgstr ""
+
 #. this is the header for the location column in the print dialog
 #: ../gtk/inspector/style-prop-list.ui.h:3
 #: ../gtk/resources/ui/gtkprintunixdialog.ui.h:4
 msgid "Location"
 msgstr "Umístění"
 
-#: ../gtk/inspector/visual.c:243 ../gtk/inspector/visual.c:269
+#: ../gtk/inspector/visual.c:247 ../gtk/inspector/visual.c:273
 msgid "Theme is hardcoded by GTK_THEME"
 msgstr "Motiv je napevno nastaven pomocí GTK_THEME"
 
-#: ../gtk/inspector/visual.c:387
+#: ../gtk/inspector/visual.c:391
 msgid "Backend does not support window scaling"
 msgstr "Podpůrná vrstva nepodporuje škálování oken"
 
-#: ../gtk/inspector/visual.c:426
+#: ../gtk/inspector/visual.c:430
 msgid "Setting is hardcoded by GTK_TEST_TOUCHSCREEN"
 msgstr "Nastavení je napevno zadáno pomocí GTK_TEST_TOUCHSCREEN"
 
@@ -3788,88 +3922,95 @@ msgstr "Zobrazit pixelovou mezipaměť"
 msgid "Simulate touchscreen"
 msgstr "Simulace dotykové obrazovky"
 
-#: ../gtk/inspector/widget-tree.ui.h:1
-msgid "Object"
-msgstr "Objekt"
-
-#: ../gtk/inspector/widget-tree.ui.h:4
-msgid "Address"
-msgstr "Adresa"
-
-#: ../gtk/inspector/window.c:143
-#, c-format
-msgid "GTK+ Inspector — %s"
-msgstr "GTK+ Inspector — %s"
-
 #. vim: set et sw=2 ts=2:
 #: ../gtk/inspector/window.ui.h:1
-msgid "Send Widget to Shell"
-msgstr "Odeslat widget na Shell"
-
-#: ../gtk/inspector/window.ui.h:2
 msgid "Select an Object"
 msgstr "Vyberte objekt"
 
+#: ../gtk/inspector/window.ui.h:2 ../gtk/inspector/window.ui.h:4
+#, fuzzy
+#| msgid "Job Details"
+msgid "Show Details"
+msgstr "Podrobnosti k úloze"
+
+#: ../gtk/inspector/window.ui.h:3
+#, fuzzy
+#| msgid "Select an Object"
+msgid "Show all Objects"
+msgstr "Vyberte objekt"
+
+#: ../gtk/inspector/window.ui.h:5
+#, fuzzy
+#| msgid "Show _Private Resources"
+msgid "Show all Resources"
+msgstr "Zo_brazovat soukromé zdroje"
+
 #. Translators: "Miscellaneous" is the label for a button, that opens
 #. up an extra panel of settings in a print dialog.
-#: ../gtk/inspector/window.ui.h:3
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:4180
+#: ../gtk/inspector/window.ui.h:6
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:4248
 msgid "Miscellaneous"
 msgstr "Různé"
 
-#: ../gtk/inspector/window.ui.h:5
+#: ../gtk/inspector/window.ui.h:8
 msgid "Signals"
 msgstr "Signály"
 
-#: ../gtk/inspector/window.ui.h:6
-msgid "Hierarchy"
-msgstr "Hierarchie"
-
-#: ../gtk/inspector/window.ui.h:7
+#: ../gtk/inspector/window.ui.h:9
 msgid "Child Properties"
 msgstr "Vlastnosti potomka"
 
-#: ../gtk/inspector/window.ui.h:8
+#: ../gtk/inspector/window.ui.h:10
+msgid "Hierarchy"
+msgstr "Hierarchie"
+
+#: ../gtk/inspector/window.ui.h:12
 msgid "CSS Classes"
 msgstr "Třídy CSS"
 
-#: ../gtk/inspector/window.ui.h:9
+#: ../gtk/inspector/window.ui.h:13
 msgid "Style Properties"
 msgstr "Vlastnosti stylu"
 
-#: ../gtk/inspector/window.ui.h:10 ../gtk/inspector/window.ui.h:18
+#: ../gtk/inspector/window.ui.h:14 ../gtk/inspector/window.ui.h:23
 msgid "Custom CSS"
 msgstr "Vlastní CSS"
 
-#: ../gtk/inspector/window.ui.h:11
+#: ../gtk/inspector/window.ui.h:15
 msgid "Size Groups"
 msgstr "Skupiny velikostí"
 
-#: ../gtk/inspector/window.ui.h:12
+#: ../gtk/inspector/window.ui.h:16
 msgid "Data"
 msgstr "Data"
 
-#: ../gtk/inspector/window.ui.h:13
+#: ../gtk/inspector/window.ui.h:17
 msgid "Actions"
 msgstr "Akce"
 
-#: ../gtk/inspector/window.ui.h:15
+#: ../gtk/inspector/window.ui.h:19
 msgid "Gestures"
 msgstr "Gesta"
 
-#: ../gtk/inspector/window.ui.h:16
+#: ../gtk/inspector/window.ui.h:20
 msgid "Objects"
 msgstr "Objekty"
 
-#: ../gtk/inspector/window.ui.h:17
+#: ../gtk/inspector/window.ui.h:21
+#, fuzzy
+#| msgid "Status"
+msgid "Statistics"
+msgstr "Stav"
+
+#: ../gtk/inspector/window.ui.h:22
 msgid "Resources"
 msgstr "Zdroje"
 
-#: ../gtk/inspector/window.ui.h:19
+#: ../gtk/inspector/window.ui.h:24
 msgid "Visual"
 msgstr "Vizuální"
 
-#: ../gtk/inspector/window.ui.h:20
+#: ../gtk/inspector/window.ui.h:25
 #: ../gtk/resources/ui/gtkprintunixdialog.ui.h:24
 msgid "General"
 msgstr "Obecné"
@@ -4200,496 +4341,627 @@ msgid "RA2"
 msgstr "RA2"
 
 #: ../gtk/paper_names_offsets.c:69
+#, fuzzy
+#| msgctxt "paper size"
+#| msgid "A3"
+msgctxt "paper size"
+msgid "RA3"
+msgstr "A3"
+
+#: ../gtk/paper_names_offsets.c:70
+#, fuzzy
+#| msgctxt "paper size"
+#| msgid "A4"
+msgctxt "paper size"
+msgid "RA4"
+msgstr "A4"
+
+#: ../gtk/paper_names_offsets.c:71
 msgctxt "paper size"
 msgid "SRA0"
 msgstr "SRA0"
 
-#: ../gtk/paper_names_offsets.c:70
+#: ../gtk/paper_names_offsets.c:72
 msgctxt "paper size"
 msgid "SRA1"
 msgstr "SRA1"
 
-#: ../gtk/paper_names_offsets.c:71
+#: ../gtk/paper_names_offsets.c:73
 msgctxt "paper size"
 msgid "SRA2"
 msgstr "SRA2"
 
-#: ../gtk/paper_names_offsets.c:72
+#: ../gtk/paper_names_offsets.c:74
+msgctxt "paper size"
+msgid "SRA3"
+msgstr ""
+
+#: ../gtk/paper_names_offsets.c:75
+msgctxt "paper size"
+msgid "SRA4"
+msgstr ""
+
+#: ../gtk/paper_names_offsets.c:76
 msgctxt "paper size"
 msgid "JB0"
 msgstr "JB0"
 
-#: ../gtk/paper_names_offsets.c:73
+#: ../gtk/paper_names_offsets.c:77
 msgctxt "paper size"
 msgid "JB1"
 msgstr "JB1"
 
-#: ../gtk/paper_names_offsets.c:74
+#: ../gtk/paper_names_offsets.c:78
 msgctxt "paper size"
 msgid "JB10"
 msgstr "JB10"
 
-#: ../gtk/paper_names_offsets.c:75
+#: ../gtk/paper_names_offsets.c:79
 msgctxt "paper size"
 msgid "JB2"
 msgstr "JB2"
 
-#: ../gtk/paper_names_offsets.c:76
+#: ../gtk/paper_names_offsets.c:80
 msgctxt "paper size"
 msgid "JB3"
 msgstr "JB3"
 
-#: ../gtk/paper_names_offsets.c:77
+#: ../gtk/paper_names_offsets.c:81
 msgctxt "paper size"
 msgid "JB4"
 msgstr "JB4"
 
-#: ../gtk/paper_names_offsets.c:78
+#: ../gtk/paper_names_offsets.c:82
 msgctxt "paper size"
 msgid "JB5"
 msgstr "JB5"
 
-#: ../gtk/paper_names_offsets.c:79
+#: ../gtk/paper_names_offsets.c:83
 msgctxt "paper size"
 msgid "JB6"
 msgstr "JB6"
 
-#: ../gtk/paper_names_offsets.c:80
+#: ../gtk/paper_names_offsets.c:84
 msgctxt "paper size"
 msgid "JB7"
 msgstr "JB7"
 
-#: ../gtk/paper_names_offsets.c:81
+#: ../gtk/paper_names_offsets.c:85
 msgctxt "paper size"
 msgid "JB8"
 msgstr "JB8"
 
-#: ../gtk/paper_names_offsets.c:82
+#: ../gtk/paper_names_offsets.c:86
 msgctxt "paper size"
 msgid "JB9"
 msgstr "JB9"
 
-#: ../gtk/paper_names_offsets.c:83
+#: ../gtk/paper_names_offsets.c:87
 msgctxt "paper size"
 msgid "jis exec"
 msgstr "jis exec"
 
-#: ../gtk/paper_names_offsets.c:84
+#: ../gtk/paper_names_offsets.c:88
 msgctxt "paper size"
 msgid "Choukei 2 Envelope"
 msgstr "Obálka Choukei 2"
 
-#: ../gtk/paper_names_offsets.c:85
+#: ../gtk/paper_names_offsets.c:89
 msgctxt "paper size"
 msgid "Choukei 3 Envelope"
 msgstr "Obálka Choukei 3"
 
-#: ../gtk/paper_names_offsets.c:86
+#: ../gtk/paper_names_offsets.c:90
 msgctxt "paper size"
 msgid "Choukei 4 Envelope"
 msgstr "Obálka Choukei 4"
 
-#: ../gtk/paper_names_offsets.c:87
+#: ../gtk/paper_names_offsets.c:91
+#, fuzzy
+#| msgctxt "paper size"
+#| msgid "Choukei 4 Envelope"
+msgctxt "paper size"
+msgid "Choukei 40 Envelope"
+msgstr "Obálka Choukei 4"
+
+#: ../gtk/paper_names_offsets.c:92
 msgctxt "paper size"
 msgid "hagaki (postcard)"
 msgstr "hagaki (dopisnice)"
 
-#: ../gtk/paper_names_offsets.c:88
+#: ../gtk/paper_names_offsets.c:93
 msgctxt "paper size"
 msgid "kahu Envelope"
 msgstr "Obálka kahu"
 
-#: ../gtk/paper_names_offsets.c:89
+#: ../gtk/paper_names_offsets.c:94
 msgctxt "paper size"
 msgid "kaku2 Envelope"
 msgstr "Obálka kaku2"
 
-#: ../gtk/paper_names_offsets.c:90
+#: ../gtk/paper_names_offsets.c:95
+#, fuzzy
+#| msgctxt "paper size"
+#| msgid "kaku2 Envelope"
+msgctxt "paper size"
+msgid "kaku3 Envelope"
+msgstr "Obálka kaku2"
+
+#: ../gtk/paper_names_offsets.c:96
+#, fuzzy
+#| msgctxt "paper size"
+#| msgid "kaku2 Envelope"
+msgctxt "paper size"
+msgid "kaku4 Envelope"
+msgstr "Obálka kaku2"
+
+#: ../gtk/paper_names_offsets.c:97
+#, fuzzy
+#| msgctxt "paper size"
+#| msgid "kaku2 Envelope"
+msgctxt "paper size"
+msgid "kaku5 Envelope"
+msgstr "Obálka kaku2"
+
+#: ../gtk/paper_names_offsets.c:98
+#, fuzzy
+#| msgctxt "paper size"
+#| msgid "kaku2 Envelope"
+msgctxt "paper size"
+msgid "kaku7 Envelope"
+msgstr "Obálka kaku2"
+
+#: ../gtk/paper_names_offsets.c:99
+#, fuzzy
+#| msgctxt "paper size"
+#| msgid "kaku2 Envelope"
+msgctxt "paper size"
+msgid "kaku8 Envelope"
+msgstr "Obálka kaku2"
+
+#: ../gtk/paper_names_offsets.c:100
 msgctxt "paper size"
 msgid "oufuku (reply postcard)"
 msgstr "oufuku (odpovědní dopisnice)"
 
-#: ../gtk/paper_names_offsets.c:91
+#: ../gtk/paper_names_offsets.c:101
 msgctxt "paper size"
 msgid "you4 Envelope"
 msgstr "Obálka you4"
 
-#: ../gtk/paper_names_offsets.c:92
+#: ../gtk/paper_names_offsets.c:102
+#, fuzzy
+#| msgctxt "paper size"
+#| msgid "you4 Envelope"
+msgctxt "paper size"
+msgid "you6 Envelope"
+msgstr "Obálka you4"
+
+#: ../gtk/paper_names_offsets.c:103
 msgctxt "paper size"
 msgid "10×11"
 msgstr "10×11"
 
-#: ../gtk/paper_names_offsets.c:93
+#: ../gtk/paper_names_offsets.c:104
 msgctxt "paper size"
 msgid "10×13"
 msgstr "10×13"
 
-#: ../gtk/paper_names_offsets.c:94
+#: ../gtk/paper_names_offsets.c:105
 msgctxt "paper size"
 msgid "10×14"
 msgstr "10×14"
 
-#: ../gtk/paper_names_offsets.c:95 ../gtk/paper_names_offsets.c:96
+#: ../gtk/paper_names_offsets.c:106
 msgctxt "paper size"
 msgid "10×15"
 msgstr "10×15"
 
-#: ../gtk/paper_names_offsets.c:97
+#: ../gtk/paper_names_offsets.c:107
 msgctxt "paper size"
 msgid "11×12"
 msgstr "11×12"
 
-#: ../gtk/paper_names_offsets.c:98
+#: ../gtk/paper_names_offsets.c:108
 msgctxt "paper size"
 msgid "11×15"
 msgstr "11×15"
 
-#: ../gtk/paper_names_offsets.c:99
+#: ../gtk/paper_names_offsets.c:109
 msgctxt "paper size"
 msgid "12×19"
 msgstr "12×19"
 
-#: ../gtk/paper_names_offsets.c:100
+#: ../gtk/paper_names_offsets.c:110
 msgctxt "paper size"
 msgid "5×7"
 msgstr "5×7"
 
-#: ../gtk/paper_names_offsets.c:101
+#: ../gtk/paper_names_offsets.c:111
 msgctxt "paper size"
 msgid "6×9 Envelope"
 msgstr "Obálka 6×9"
 
-#: ../gtk/paper_names_offsets.c:102
+#: ../gtk/paper_names_offsets.c:112
 msgctxt "paper size"
 msgid "7×9 Envelope"
 msgstr "Obálka 7×9"
 
-#: ../gtk/paper_names_offsets.c:103
+#: ../gtk/paper_names_offsets.c:113
+#, fuzzy
+#| msgctxt "paper size"
+#| msgid "9×11 Envelope"
+msgctxt "paper size"
+msgid "8×10 Envelope"
+msgstr "Obálka 9×11"
+
+#: ../gtk/paper_names_offsets.c:114
 msgctxt "paper size"
 msgid "9×11 Envelope"
 msgstr "Obálka 9×11"
 
-#: ../gtk/paper_names_offsets.c:104
+#: ../gtk/paper_names_offsets.c:115
+#, fuzzy
+#| msgctxt "paper size"
+#| msgid "9×11 Envelope"
+msgctxt "paper size"
+msgid "9×12 Envelope"
+msgstr "Obálka 9×11"
+
+#: ../gtk/paper_names_offsets.c:116
 msgctxt "paper size"
 msgid "a2 Envelope"
 msgstr "Obálka a2"
 
-#: ../gtk/paper_names_offsets.c:105
+#: ../gtk/paper_names_offsets.c:117
 msgctxt "paper size"
 msgid "Arch A"
 msgstr "Arch A"
 
-#: ../gtk/paper_names_offsets.c:106
+#: ../gtk/paper_names_offsets.c:118
 msgctxt "paper size"
 msgid "Arch B"
 msgstr "Arch B"
 
-#: ../gtk/paper_names_offsets.c:107
+#: ../gtk/paper_names_offsets.c:119
 msgctxt "paper size"
 msgid "Arch C"
 msgstr "Arch C"
 
-#: ../gtk/paper_names_offsets.c:108
+#: ../gtk/paper_names_offsets.c:120
 msgctxt "paper size"
 msgid "Arch D"
 msgstr "Arch D"
 
-#: ../gtk/paper_names_offsets.c:109
+#: ../gtk/paper_names_offsets.c:121
 msgctxt "paper size"
 msgid "Arch E"
 msgstr "Arch E"
 
-#: ../gtk/paper_names_offsets.c:110
+#: ../gtk/paper_names_offsets.c:122
 msgctxt "paper size"
 msgid "b-plus"
 msgstr "b-plus"
 
-#: ../gtk/paper_names_offsets.c:111
+#: ../gtk/paper_names_offsets.c:123
 msgctxt "paper size"
 msgid "c"
 msgstr "c"
 
-#: ../gtk/paper_names_offsets.c:112
+#: ../gtk/paper_names_offsets.c:124
 msgctxt "paper size"
 msgid "c5 Envelope"
 msgstr "Obálka c5"
 
-#: ../gtk/paper_names_offsets.c:113
+#: ../gtk/paper_names_offsets.c:125
 msgctxt "paper size"
 msgid "d"
 msgstr "d"
 
-#: ../gtk/paper_names_offsets.c:114
+#: ../gtk/paper_names_offsets.c:126
 msgctxt "paper size"
 msgid "e"
 msgstr "e"
 
-#: ../gtk/paper_names_offsets.c:115
+#: ../gtk/paper_names_offsets.c:127
 msgctxt "paper size"
 msgid "edp"
 msgstr "edp"
 
-#: ../gtk/paper_names_offsets.c:116
+#: ../gtk/paper_names_offsets.c:128
 msgctxt "paper size"
 msgid "European edp"
 msgstr "European edp"
 
-#: ../gtk/paper_names_offsets.c:117
+#: ../gtk/paper_names_offsets.c:129
 msgctxt "paper size"
 msgid "Executive"
 msgstr "Executive"
 
-#: ../gtk/paper_names_offsets.c:118
+#: ../gtk/paper_names_offsets.c:130
 msgctxt "paper size"
 msgid "f"
 msgstr "f"
 
-#: ../gtk/paper_names_offsets.c:119
+#: ../gtk/paper_names_offsets.c:131
 msgctxt "paper size"
 msgid "Fan-Fold European"
 msgstr "Fan-Fold European"
 
-#: ../gtk/paper_names_offsets.c:120
+#: ../gtk/paper_names_offsets.c:132
 msgctxt "paper size"
 msgid "Fan-Fold US"
 msgstr "Fan-Fold US"
 
-#: ../gtk/paper_names_offsets.c:121
+#: ../gtk/paper_names_offsets.c:133
 msgctxt "paper size"
 msgid "Fan-Fold German Legal"
 msgstr "Fan-Fold German Legal"
 
-#: ../gtk/paper_names_offsets.c:122
+#: ../gtk/paper_names_offsets.c:134
 msgctxt "paper size"
 msgid "Government Legal"
 msgstr "Government Legal"
 
-#: ../gtk/paper_names_offsets.c:123
+#: ../gtk/paper_names_offsets.c:135
 msgctxt "paper size"
 msgid "Government Letter"
 msgstr "Government Letter"
 
-#: ../gtk/paper_names_offsets.c:124
+#: ../gtk/paper_names_offsets.c:136
 msgctxt "paper size"
 msgid "Index 3×5"
 msgstr "Index 3×5"
 
-#: ../gtk/paper_names_offsets.c:125
+#: ../gtk/paper_names_offsets.c:137
 msgctxt "paper size"
 msgid "Index 4×6 (postcard)"
 msgstr "Index 4×6 (dopisnice)"
 
-#: ../gtk/paper_names_offsets.c:126
+#: ../gtk/paper_names_offsets.c:138
 msgctxt "paper size"
 msgid "Index 4×6 ext"
 msgstr "Index 4×6 ext"
 
-#: ../gtk/paper_names_offsets.c:127
+#: ../gtk/paper_names_offsets.c:139
 msgctxt "paper size"
 msgid "Index 5×8"
 msgstr "Index 5×8"
 
-#: ../gtk/paper_names_offsets.c:128
+#: ../gtk/paper_names_offsets.c:140
 msgctxt "paper size"
 msgid "Invoice"
 msgstr "Invoice"
 
-#: ../gtk/paper_names_offsets.c:129
+#: ../gtk/paper_names_offsets.c:141
 msgctxt "paper size"
 msgid "Tabloid"
 msgstr "Tabloid"
 
-#: ../gtk/paper_names_offsets.c:130
+#: ../gtk/paper_names_offsets.c:142
 msgctxt "paper size"
 msgid "US Legal"
 msgstr "US Legal"
 
-#: ../gtk/paper_names_offsets.c:131
+#: ../gtk/paper_names_offsets.c:143
 msgctxt "paper size"
 msgid "US Legal Extra"
 msgstr "US Legal Extra"
 
-#: ../gtk/paper_names_offsets.c:132
+#: ../gtk/paper_names_offsets.c:144
 msgctxt "paper size"
 msgid "US Letter"
 msgstr "US Letter"
 
-#: ../gtk/paper_names_offsets.c:133
+#: ../gtk/paper_names_offsets.c:145
 msgctxt "paper size"
 msgid "US Letter Extra"
 msgstr "US Letter Extra"
 
-#: ../gtk/paper_names_offsets.c:134
+#: ../gtk/paper_names_offsets.c:146
 msgctxt "paper size"
 msgid "US Letter Plus"
 msgstr "US Letter Plus"
 
-#: ../gtk/paper_names_offsets.c:135
+#: ../gtk/paper_names_offsets.c:147
 msgctxt "paper size"
 msgid "Monarch Envelope"
 msgstr "Obálka Monarch"
 
-#: ../gtk/paper_names_offsets.c:136
+#: ../gtk/paper_names_offsets.c:148
 msgctxt "paper size"
 msgid "#10 Envelope"
 msgstr "Obálka č. 10"
 
-#: ../gtk/paper_names_offsets.c:137
+#: ../gtk/paper_names_offsets.c:149
 msgctxt "paper size"
 msgid "#11 Envelope"
 msgstr "Obálka č. 11"
 
-#: ../gtk/paper_names_offsets.c:138
+#: ../gtk/paper_names_offsets.c:150
 msgctxt "paper size"
 msgid "#12 Envelope"
 msgstr "Obálka č. 12"
 
-#: ../gtk/paper_names_offsets.c:139
+#: ../gtk/paper_names_offsets.c:151
 msgctxt "paper size"
 msgid "#14 Envelope"
 msgstr "Obálka č. 14"
 
-#: ../gtk/paper_names_offsets.c:140
+#: ../gtk/paper_names_offsets.c:152
 msgctxt "paper size"
 msgid "#9 Envelope"
 msgstr "Obálka č. 9"
 
-#: ../gtk/paper_names_offsets.c:141
+#: ../gtk/paper_names_offsets.c:153
+msgctxt "paper size"
+msgid "Oficio"
+msgstr ""
+
+#: ../gtk/paper_names_offsets.c:154
 msgctxt "paper size"
 msgid "Personal Envelope"
 msgstr "Osobní obálka"
 
-#: ../gtk/paper_names_offsets.c:142
+#: ../gtk/paper_names_offsets.c:155
 msgctxt "paper size"
 msgid "Quarto"
 msgstr "Quarto"
 
-#: ../gtk/paper_names_offsets.c:143
+#: ../gtk/paper_names_offsets.c:156
 msgctxt "paper size"
 msgid "Super A"
 msgstr "Super A"
 
-#: ../gtk/paper_names_offsets.c:144
+#: ../gtk/paper_names_offsets.c:157
 msgctxt "paper size"
 msgid "Super B"
 msgstr "Super B"
 
-#: ../gtk/paper_names_offsets.c:145
+#: ../gtk/paper_names_offsets.c:158
 msgctxt "paper size"
 msgid "Wide Format"
 msgstr "Široký formát"
 
-#: ../gtk/paper_names_offsets.c:146
+#: ../gtk/paper_names_offsets.c:159
+msgctxt "paper size"
+msgid "Photo L"
+msgstr ""
+
+#: ../gtk/paper_names_offsets.c:160
 msgctxt "paper size"
 msgid "Dai-pa-kai"
 msgstr "Dai-pa-kai"
 
-#: ../gtk/paper_names_offsets.c:147
+#: ../gtk/paper_names_offsets.c:161
 msgctxt "paper size"
 msgid "Folio"
 msgstr "Folio"
 
-#: ../gtk/paper_names_offsets.c:148
+#: ../gtk/paper_names_offsets.c:162
 msgctxt "paper size"
 msgid "Folio sp"
 msgstr "Folio sp"
 
-#: ../gtk/paper_names_offsets.c:149
+#: ../gtk/paper_names_offsets.c:163
 msgctxt "paper size"
 msgid "Invite Envelope"
 msgstr "Obálka Invite"
 
-#: ../gtk/paper_names_offsets.c:150
+#: ../gtk/paper_names_offsets.c:164
 msgctxt "paper size"
 msgid "Italian Envelope"
 msgstr "Italská obálka"
 
-#: ../gtk/paper_names_offsets.c:151
+#: ../gtk/paper_names_offsets.c:165
 msgctxt "paper size"
 msgid "juuro-ku-kai"
 msgstr "juuro-ku-kai"
 
-#: ../gtk/paper_names_offsets.c:152
+#: ../gtk/paper_names_offsets.c:166
+#, fuzzy
+#| msgctxt "paper size"
+#| msgid "Small Photo"
+msgctxt "paper size"
+msgid "Large Photo"
+msgstr "Small Photo"
+
+#: ../gtk/paper_names_offsets.c:167
+#, fuzzy
+#| msgid "Medium"
+msgctxt "paper size"
+msgid "Medium Photo"
+msgstr "Střední"
+
+#: ../gtk/paper_names_offsets.c:168
 msgctxt "paper size"
 msgid "pa-kai"
 msgstr "pa-kai"
 
-#: ../gtk/paper_names_offsets.c:153
+#: ../gtk/paper_names_offsets.c:169
 msgctxt "paper size"
 msgid "Postfix Envelope"
 msgstr "Obálka Postfix"
 
-#: ../gtk/paper_names_offsets.c:154
+#: ../gtk/paper_names_offsets.c:170
 msgctxt "paper size"
 msgid "Small Photo"
 msgstr "Small Photo"
 
-#: ../gtk/paper_names_offsets.c:155
+#: ../gtk/paper_names_offsets.c:171
+#, fuzzy
+#| msgctxt "paper size"
+#| msgid "Wide Format"
+msgctxt "paper size"
+msgid "Wide Photo"
+msgstr "Široký formát"
+
+#: ../gtk/paper_names_offsets.c:172
 msgctxt "paper size"
 msgid "prc1 Envelope"
 msgstr "Obálka prc1"
 
-#: ../gtk/paper_names_offsets.c:156
+#: ../gtk/paper_names_offsets.c:173
 msgctxt "paper size"
 msgid "prc10 Envelope"
 msgstr "Obálka prc10"
 
-#: ../gtk/paper_names_offsets.c:157
+#: ../gtk/paper_names_offsets.c:174
 msgctxt "paper size"
 msgid "prc 16k"
 msgstr "prc 16k"
 
-#: ../gtk/paper_names_offsets.c:158
+#: ../gtk/paper_names_offsets.c:175
 msgctxt "paper size"
 msgid "prc2 Envelope"
 msgstr "Obálka prc2"
 
-#: ../gtk/paper_names_offsets.c:159
+#: ../gtk/paper_names_offsets.c:176
 msgctxt "paper size"
 msgid "prc3 Envelope"
 msgstr "Obálka prc3"
 
-#: ../gtk/paper_names_offsets.c:160
+#: ../gtk/paper_names_offsets.c:177
 msgctxt "paper size"
 msgid "prc 32k"
 msgstr "prc 32k"
 
-#: ../gtk/paper_names_offsets.c:161
+#: ../gtk/paper_names_offsets.c:178
 msgctxt "paper size"
 msgid "prc4 Envelope"
 msgstr "Obálka prc4"
 
-#: ../gtk/paper_names_offsets.c:162
+#: ../gtk/paper_names_offsets.c:179
 msgctxt "paper size"
 msgid "prc5 Envelope"
 msgstr "Obálka prc5"
 
-#: ../gtk/paper_names_offsets.c:163
+#: ../gtk/paper_names_offsets.c:180
 msgctxt "paper size"
 msgid "prc6 Envelope"
 msgstr "Obálka prc6"
 
-#: ../gtk/paper_names_offsets.c:164
+#: ../gtk/paper_names_offsets.c:181
 msgctxt "paper size"
 msgid "prc7 Envelope"
 msgstr "Obálka prc7"
 
-#: ../gtk/paper_names_offsets.c:165
+#: ../gtk/paper_names_offsets.c:182
 msgctxt "paper size"
 msgid "prc8 Envelope"
 msgstr "Obálka prc8"
 
-#: ../gtk/paper_names_offsets.c:166
+#: ../gtk/paper_names_offsets.c:183
 msgctxt "paper size"
 msgid "prc9 Envelope"
 msgstr "Obálka prc9"
 
-#: ../gtk/paper_names_offsets.c:167
+#: ../gtk/paper_names_offsets.c:184
 msgctxt "paper size"
 msgid "ROC 16k"
 msgstr "ROC 16k"
 
-#: ../gtk/paper_names_offsets.c:168
+#: ../gtk/paper_names_offsets.c:185
 msgctxt "paper size"
 msgid "ROC 8k"
 msgstr "ROC 8k"
@@ -4882,315 +5154,339 @@ msgstr "Dlouhodobě nepřipojena"
 msgid "Pages per _sheet:"
 msgstr "St_ran na list:"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1042
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1351
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1064
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1373
 msgid "Username:"
 msgstr "Uživatelské jméno:"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1043
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1360
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1065
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1382
 msgid "Password:"
 msgstr "Heslo:"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1082
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1373
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1104
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1395
 #, c-format
 msgid "Authentication is required to print document “%s” on printer %s"
 msgstr ""
 "Je vyžadováno ověření, aby bylo možné vytisknout dokument „%s“ na tiskárně %s"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1084
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1106
 #, c-format
 msgid "Authentication is required to print a document on %s"
 msgstr "Je vyžadováno ověření, aby bylo možné vytisknout dokument na %s"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1088
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1110
 #, c-format
 msgid "Authentication is required to get attributes of job “%s”"
 msgstr "Je vyžadováno ověření, aby bylo možné získat atributy úlohy „%s“"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1090
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1112
 msgid "Authentication is required to get attributes of a job"
 msgstr "Je vyžadováno ověření, aby bylo možné získat atributy úlohy"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1094
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1116
 #, c-format
 msgid "Authentication is required to get attributes of printer %s"
 msgstr "Je vyžadováno ověření, aby bylo možné získat atributy tiskárny %s"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1096
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1118
 msgid "Authentication is required to get attributes of a printer"
 msgstr "Je vyžadováno ověření, aby bylo možné získat atributy tiskárny"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1099
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1121
 #, c-format
 msgid "Authentication is required to get default printer of %s"
 msgstr "Je vyžadováno ověření, aby bylo možné získat výchozí tiskárnu %s"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1102
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1124
 #, c-format
 msgid "Authentication is required to get printers from %s"
 msgstr "Je vyžadováno ověření, aby bylo možné získat tiskárny z %s"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1107
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1129
 #, c-format
 msgid "Authentication is required to get a file from %s"
 msgstr "Je vyžadováno ověření, aby bylo možné získat soubor z %s"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1109
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1131
 #, c-format
 msgid "Authentication is required on %s"
 msgstr "Na %s je vyžadováno ověření"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1345
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1367
 msgid "Domain:"
 msgstr "Doména:"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1375
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1397
 #, c-format
 msgid "Authentication is required to print document “%s”"
 msgstr "Je vyžadováno ověření, aby bylo možné vytisknout dokument „%s“"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1380
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1402
 #, c-format
 msgid "Authentication is required to print this document on printer %s"
 msgstr ""
 "Je vyžadováno ověření, aby bylo možné tento dokument vytisknout na tiskárně "
 "%s"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1382
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1404
 msgid "Authentication is required to print this document"
 msgstr "Je vyžadováno ověření, aby bylo možné tento dokument vytisknout"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1945
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1841
 #, c-format
 msgid "Printer “%s” is low on toner."
 msgstr "Tiskárně „%s“ dochází toner."
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1946
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1842
 #, c-format
 msgid "Printer “%s” has no toner left."
 msgstr "Tiskárně „%s“ došel toner."
 
 #. Translators: "Developer" like on photo development context
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1948
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1844
 #, c-format
 msgid "Printer “%s” is low on developer."
 msgstr "Tiskárně „%s“ dochází vývojka."
 
 #. Translators: "Developer" like on photo development context
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1950
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1846
 #, c-format
 msgid "Printer “%s” is out of developer."
 msgstr "Tiskárně „%s“ došla vývojka."
 
 #. Translators: "marker" is one color bin of the printer
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1952
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1848
 #, c-format
 msgid "Printer “%s” is low on at least one marker supply."
 msgstr "Tiskárně „%s“ dochází zásoba alespoň jednoho popisovače."
 
 #. Translators: "marker" is one color bin of the printer
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1954
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1850
 #, c-format
 msgid "Printer “%s” is out of at least one marker supply."
 msgstr "Tiskárně „%s“ došla zásoba alespoň jednoho popisovače."
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1955
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1851
 #, c-format
 msgid "The cover is open on printer “%s”."
 msgstr "Na tiskárně „%s“ je otevřen kryt."
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1956
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1852
 #, c-format
 msgid "The door is open on printer “%s”."
 msgstr "Na tiskárně „%s“ jsou otevřena dvířka."
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1957
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1853
 #, c-format
 msgid "Printer “%s” is low on paper."
 msgstr "Tiskárně „%s“ dochází papír."
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1958
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1854
 #, c-format
 msgid "Printer “%s” is out of paper."
 msgstr "Tiskárně „%s“ došel papír."
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1959
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1855
 #, c-format
 msgid "Printer “%s” is currently offline."
 msgstr "Tiskárna „%s“ není v tomto okamžiku připojena."
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1960
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1856
 #, c-format
 msgid "There is a problem on printer “%s”."
 msgstr "Na tiskárně „%s“ se vyskytla chyba."
 
 #. Translators: this is a printer status.
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2418
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2473
 msgid "Paused; Rejecting Jobs"
 msgstr "Pozastaveno ; Úlohy se odmítají"
 
 #. Translators: this is a printer status.
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2424
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2479
 msgid "Rejecting Jobs"
 msgstr "Úlohy se odmítají"
 
 #. Translators: this string connects multiple printer states together.
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2466
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2521
 msgid "; "
 msgstr "; "
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:4131
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:4199
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:4266
 msgid "Two Sided"
 msgstr "Oboustranný"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:4132
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:4200
 msgid "Paper Type"
 msgstr "Typ papíru"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:4133
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:4201
 msgid "Paper Source"
 msgstr "Zdroj papíru"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:4134
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:4202
 msgid "Output Tray"
 msgstr "Výstupní zásobník"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:4135
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:4203
 msgid "Resolution"
 msgstr "Rozlišení"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:4136
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:4204
 msgid "GhostScript pre-filtering"
 msgstr "Předběžné filtrování GhostScript"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:4145
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:4213
 msgid "One Sided"
 msgstr "Jednostranný"
 
 #. Translators: this is an option of "Two Sided"
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:4147
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:4215
 msgid "Long Edge (Standard)"
 msgstr "Delší okraj (standardní)"
 
 #. Translators: this is an option of "Two Sided"
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:4149
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:4217
 msgid "Short Edge (Flip)"
 msgstr "Kratší okraj (otočení)"
 
 #. Translators: this is an option of "Paper Source"
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:4151
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:4153
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:4161
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:4219
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:4221
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:4229
 msgid "Auto Select"
 msgstr "Automatický výběr"
 
 #. Translators: this is an option of "Paper Source"
 #. Translators: this is an option of "Resolution"
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:4155
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:4157
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:4159
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:4163
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:4650
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:4223
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:4225
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:4227
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:4231
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:4738
 msgid "Printer Default"
 msgstr "Výchozí pro tiskárnu"
 
 #. Translators: this is an option of "GhostScript"
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:4165
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:4233
 msgid "Embed GhostScript fonts only"
 msgstr "Vložit pouze písma GhostScript"
 
 #. Translators: this is an option of "GhostScript"
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:4167
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:4235
 msgid "Convert to PS level 1"
 msgstr "Převést na PS, úroveň 1"
 
 #. Translators: this is an option of "GhostScript"
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:4169
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:4237
 msgid "Convert to PS level 2"
 msgstr "Převést na PS, úroveň 2"
 
 #. Translators: this is an option of "GhostScript"
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:4171
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:4239
 msgid "No pre-filtering"
 msgstr "Bez předběžného filtrování"
+
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:4274
+#, fuzzy
+#| msgid "One Sided"
+msgctxt "sides"
+msgid "One Sided"
+msgstr "Jednostranný"
+
+#. Translators: this is an option of "Two Sided"
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:4276
+#, fuzzy
+#| msgid "Long Edge (Standard)"
+msgctxt "sides"
+msgid "Long Edge (Standard)"
+msgstr "Delší okraj (standardní)"
+
+#. Translators: this is an option of "Two Sided"
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:4278
+#, fuzzy
+#| msgid "Short Edge (Flip)"
+msgctxt "sides"
+msgid "Short Edge (Flip)"
+msgstr "Kratší okraj (otočení)"
 
 #. Translators: These strings name the possible values of the
 #. * job priority option in the print dialog
 #.
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:4902
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:5128
 msgid "Urgent"
 msgstr "Naléhavá"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:4902
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:5128
 msgid "High"
 msgstr "Vysoká"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:4902
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:5128
 msgid "Medium"
 msgstr "Střední"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:4902
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:5128
 msgid "Low"
 msgstr "Nízká"
 
 #. Translators, this string is used to label the job priority option
 #. * in the print dialog
 #.
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:4932
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:5158
 msgid "Job Priority"
 msgstr "Priorita úlohy"
 
 #. Translators, this string is used to label the billing info entry
 #. * in the print dialog
 #.
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:4943
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:5169
 msgid "Billing Info"
 msgstr "Účtovací informace"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:4958
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:5184
 msgid "Classified"
 msgstr "Utajované"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:4958
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:5184
 msgid "Confidential"
 msgstr "Důvěrné"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:4958
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:5184
 msgid "Secret"
 msgstr "Tajné"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:4958
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:5184
 msgid "Standard"
 msgstr "Standardní"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:4958
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:5184
 msgid "Top Secret"
 msgstr "Přísně tajné"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:4958
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:5184
 msgid "Unclassified"
 msgstr "Neutajované"
 
 #. Translators, this string is used to label the pages-per-sheet option
 #. * in the print dialog
 #.
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:4969
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:5195
 msgid "Pages per Sheet"
 msgstr "Stran na list"
 
 #. Translators, this is the label used for the option in the print
 #. * dialog that controls the front cover page.
 #.
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:5029
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:5255
 msgid "Before"
 msgstr "Před"
 
 #. Translators, this is the label used for the option in the print
 #. * dialog that controls the back cover page.
 #.
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:5044
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:5270
 msgid "After"
 msgstr "Za"
 
@@ -5198,14 +5494,14 @@ msgstr "Za"
 #. * a print job is printed. Possible values are 'now', a specified time,
 #. * or 'on hold'
 #.
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:5064
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:5290
 msgid "Print at"
 msgstr "Vytisknout"
 
 #. Translators: this is the name of the option that allows the user
 #. * to specify a time when a print job will be printed.
 #.
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:5075
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:5301
 msgid "Print at time"
 msgstr "Vytisknout v určený čas"
 
@@ -5214,33 +5510,33 @@ msgstr "Vytisknout v určený čas"
 #. * the width and height in points. E.g: "Custom
 #. * 230.4x142.9"
 #.
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:5117
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:5343
 #, c-format
 msgid "Custom %s×%s"
 msgstr "Vlastní %s×%s"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:5199
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:5444
 msgid "Printer Profile"
 msgstr "Profil tiskárny"
 
 #. TRANSLATORS: this is when color profile information is unavailable
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:5206
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:5451
 msgid "Unavailable"
 msgstr "Není k dispozici"
 
 #. TRANSLATORS: when we're running an old CUPS, and
 #. * it hasn't registered the device with colord
-#: ../modules/printbackends/cups/gtkprintercups.c:241
+#: ../modules/printbackends/cups/gtkprintercups.c:258
 msgid "Color management unavailable"
 msgstr "Správa barev není k dispozici"
 
 #. TRANSLATORS: when there is no color profile available
-#: ../modules/printbackends/cups/gtkprintercups.c:253
+#: ../modules/printbackends/cups/gtkprintercups.c:270
 msgid "No profile available"
 msgstr "Žádný profil není k dispozici"
 
 #. TRANSLATORS: when the color profile has no title
-#: ../modules/printbackends/cups/gtkprintercups.c:264
+#: ../modules/printbackends/cups/gtkprintercups.c:281
 msgid "Unspecified profile"
 msgstr "Neurčený profil"
 
@@ -5429,10 +5725,6 @@ msgstr "_Umístění:"
 msgid "Files"
 msgstr "Soubory"
 
-#: ../gtk/resources/ui/gtkfilechooserwidget.ui.h:5
-msgid "Size"
-msgstr "Velikost"
-
 #: ../gtk/resources/ui/gtkfilechooserwidget.ui.h:6
 msgid "Modified"
 msgstr "Změněno"
@@ -5538,7 +5830,7 @@ msgstr "St_rany:"
 #| " e.g. 1-3,7,11"
 msgid ""
 "Specify one or more page ranges,\n"
-" e.g. 1?3, 7, 11"
+" e.g. 1–3, 7, 11"
 msgstr ""
 "Zadejte prosím jeden nebo více rozsahů stran,\n"
 "např. 1-3,7,11"
@@ -5657,7 +5949,7 @@ msgstr "_V:"
 #| " e.g. 15:30, 2:35 pm, 14:15:20, 11:46:30 am, 4 pm"
 msgid ""
 "Specify the time of print,\n"
-" e.g. 15?30, 2?35 pm, 14?15?20, 11?46?30 am, 4 pm"
+" e.g. 15∶30, 2∶35 pm, 14∶15∶20, 11∶46∶30 am, 4 pm"
 msgstr ""
 "Upřesněte čas tisku,\n"
 " např. 15:30, 14:35, 14:15:20, 11:46:30, 16:00"
@@ -5745,3 +6037,18 @@ msgstr "Snížit hlasitost"
 #: ../gtk/resources/ui/gtkvolumebutton.ui.h:6
 msgid "Decreases the volume"
 msgstr "Sníží hlasitost"
+
+#~ msgid "Choose a widget through the inspector"
+#~ msgstr "Vybrat widget přes Inspector"
+
+#~ msgid "Count:"
+#~ msgstr "Počet:"
+
+#~ msgid "Address"
+#~ msgstr "Adresa"
+
+#~ msgid "GTK+ Inspector — %s"
+#~ msgstr "GTK+ Inspector — %s"
+
+#~ msgid "Send Widget to Shell"
+#~ msgstr "Odeslat widget na Shell"
