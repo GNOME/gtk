@@ -28,6 +28,8 @@
 #include "gdkwindow-broadway.h"
 #include "gdkscreen-broadway.h"
 
+#include "gdkbroadwaydisplay.h"
+#include "gdkdisplay.h"
 #include "gdkwindow.h"
 #include "gdkwindowimpl.h"
 #include "gdkdisplay-broadway.h"
@@ -81,6 +83,28 @@ G_DEFINE_TYPE (GdkWindowImplBroadway,
 	       gdk_window_impl_broadway,
 	       GDK_TYPE_WINDOW_IMPL)
 
+static GdkDisplay *
+find_broadway_display (void)
+{
+  GdkDisplay *display;
+  GSList *list, *l;
+
+  display = NULL;
+
+  list = gdk_display_manager_list_displays (gdk_display_manager_get ());
+  for (l = list; l; l = l->next)
+    {
+      if (GDK_IS_BROADWAY_DISPLAY (l->data))
+        {
+          display = l->data;
+          break; 
+        }
+    }
+  g_slist_free (list);
+
+  return display;
+}
+
 static void
 update_dirty_windows_and_sync (void)
 {
@@ -88,7 +112,8 @@ update_dirty_windows_and_sync (void)
   GdkBroadwayDisplay *display;
   gboolean updated_surface;
 
-  display = GDK_BROADWAY_DISPLAY (gdk_display_get_default ());
+  display = GDK_BROADWAY_DISPLAY (find_broadway_display ());
+  g_assert (display != NULL);
 
   updated_surface = FALSE;
   for (l = display->toplevels; l != NULL; l = l->next)
@@ -120,7 +145,7 @@ flush_idle (gpointer data)
 {
   flush_id = 0;
 
-  gdk_display_flush (gdk_display_get_default ());
+  gdk_display_flush (find_broadway_display ());
 
   return FALSE;
 }

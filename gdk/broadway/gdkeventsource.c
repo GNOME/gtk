@@ -92,14 +92,31 @@ gdk_event_source_check (GSource *source)
 void
 _gdk_broadway_events_got_input (BroadwayInputMsg *message)
 {
-  GdkDisplay *display = gdk_display_get_default ();
-  GdkBroadwayDisplay *display_broadway = GDK_BROADWAY_DISPLAY (display);
+  GdkDisplay *display;
+  GdkBroadwayDisplay *display_broadway;
   GdkBroadwayDeviceManager *device_manager;
   GdkScreen *screen;
   GdkWindow *window;
   GdkEvent *event = NULL;
   GList *node;
+  GSList *list, *d;
 
+  display = NULL;
+
+  list = gdk_display_manager_list_displays (gdk_display_manager_get ());
+  for (d = list; d; d = d->next)
+    {
+      if (GDK_IS_BROADWAY_DISPLAY (d->data))
+        {
+          display = d->data;
+          break;
+        }
+    }
+  g_slist_free (list);
+
+  g_assert (display != NULL);
+
+  display_broadway = GDK_BROADWAY_DISPLAY (display);
   device_manager = GDK_BROADWAY_DEVICE_MANAGER (gdk_display_get_device_manager (display));
 
   switch (message->base.type) {
