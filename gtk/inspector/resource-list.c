@@ -29,7 +29,7 @@
 enum
 {
   PROP_0,
-  PROP_CLOSE_DETAILS_BUTTON
+  PROP_BUTTONS
 };
 
 enum
@@ -53,6 +53,8 @@ struct _GtkInspectorResourceListPrivate
   GtkWidget *info_grid;
   GtkWidget *stack;
   GtkWidget *tree;
+  GtkWidget *buttons;
+  GtkWidget *open_details_button;
   GtkWidget *close_details_button;
   GtkTreeViewColumn *count_column;
   GtkCellRenderer *count_renderer;
@@ -215,8 +217,34 @@ row_activated (GtkTreeView              *treeview,
                GtkTreeViewColumn        *column,
                GtkInspectorResourceList *sl)
 {
-  if (populate_details (sl, path))  
-    gtk_stack_set_visible_child_name (GTK_STACK (sl->priv->stack), "details");
+  if (!populate_details (sl, path))
+    return;
+
+  gtk_stack_set_visible_child_name (GTK_STACK (sl->priv->stack), "details");
+  gtk_stack_set_visible_child_name (GTK_STACK (sl->priv->buttons), "details");
+}
+
+static void
+open_details (GtkWidget                *button,
+              GtkInspectorResourceList *sl)
+{
+  GtkTreeSelection *selection;
+  GtkTreeModel *model;
+  GtkTreeIter iter;
+  GtkTreePath *path;
+
+  selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (sl->priv->tree));
+  if (!gtk_tree_selection_get_selected (selection, &model, &iter))
+    return;
+  
+  path = gtk_tree_model_get_path (model, &iter);
+  if (populate_details (sl, path))
+    {
+      gtk_stack_set_visible_child_name (GTK_STACK (sl->priv->stack), "details");
+      gtk_stack_set_visible_child_name (GTK_STACK (sl->priv->buttons), "details");
+    }
+
+  gtk_tree_path_free (path);
 }
 
 static void
@@ -224,6 +252,7 @@ close_details (GtkWidget                *button,
                GtkInspectorResourceList *sl)
 {
   gtk_stack_set_visible_child_name (GTK_STACK (sl->priv->stack), "list");
+  gtk_stack_set_visible_child_name (GTK_STACK (sl->priv->buttons), "list");
 }
 
 static void
@@ -231,14 +260,11 @@ visible_child_name_changed (GObject *obj, GParamSpec *pspec, GtkInspectorResourc
 {
   const gchar *child;
   gboolean resources_visible;
-  gboolean resource_details_visible;
 
   child = gtk_stack_get_visible_child_name (GTK_STACK (gtk_widget_get_parent (GTK_WIDGET (sl))));
   resources_visible = g_strcmp0 (child, "resources") == 0;
-  child = gtk_stack_get_visible_child_name (GTK_STACK (sl->priv->stack));
-  resource_details_visible = g_strcmp0 (child, "details") == 0;
 
-  gtk_widget_set_visible (sl->priv->close_details_button, resources_visible && resource_details_visible);
+  gtk_widget_set_visible (sl->priv->buttons, resources_visible);
 }
 
 static void
@@ -329,6 +355,8 @@ constructed (GObject *object)
 {
   GtkInspectorResourceList *rl = GTK_INSPECTOR_RESOURCE_LIST (object);
 
+  g_signal_connect (rl->priv->open_details_button, "clicked",
+                    G_CALLBACK (open_details), rl);
   g_signal_connect (rl->priv->close_details_button, "clicked",
                     G_CALLBACK (close_details), rl);
   
@@ -345,8 +373,8 @@ get_property (GObject    *object,
 
   switch (param_id)
     {
-    case PROP_CLOSE_DETAILS_BUTTON:
-      g_value_take_object (value, rl->priv->close_details_button);
+    case PROP_BUTTONS:
+      g_value_take_object (value, rl->priv->buttons);
       break;
 
     default:
@@ -365,8 +393,10 @@ set_property (GObject      *object,
   
   switch (param_id)
     {
-    case PROP_CLOSE_DETAILS_BUTTON:
-      rl->priv->close_details_button = g_value_get_object (value);
+    case PROP_BUTTONS:
+      rl->priv->buttons = g_value_get_object (value);
+      rl->priv->open_details_button = gtk_stack_get_child_by_name (GTK_STACK (rl->priv->buttons), "list");
+      rl->priv->close_details_button = gtk_stack_get_child_by_name (GTK_STACK (rl->priv->buttons), "details");
       break;
 
     default:
@@ -387,8 +417,8 @@ gtk_inspector_resource_list_class_init (GtkInspectorResourceListClass *klass)
 
   widget_class->parent_set = parent_set;
 
-  g_object_class_install_property (object_class, PROP_CLOSE_DETAILS_BUTTON,
-      g_param_spec_object ("close-details-button", NULL, NULL,
+  g_object_class_install_property (object_class, PROP_BUTTONS,
+      g_param_spec_object ("buttons", NULL, NULL,
                            GTK_TYPE_WIDGET, G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY));
 
   gtk_widget_class_set_template_from_resource (widget_class, "/org/gtk/inspector/resource-list.ui");

@@ -99,21 +99,31 @@ on_row_activated (GtkTreeView            *tree,
   g_free (name);
 }
 
-static void
-on_selection_changed (GtkTreeSelection       *selection,
-                      GtkInspectorObjectTree *wt)
+GObject *
+gtk_inspector_object_tree_get_selected (GtkInspectorObjectTree *wt)
 {
   GObject *object;
   GtkTreeIter iter;
   GtkTreeSelection *sel;
   GtkTreeModel *model;
- 
+
   object = NULL;
   sel = gtk_tree_view_get_selection (GTK_TREE_VIEW (wt->priv->tree));
   if (gtk_tree_selection_get_selected (sel, &model, &iter))
     gtk_tree_model_get (model, &iter,
                         OBJECT, &object,
                         -1);
+
+  return object;
+}
+
+static void
+on_selection_changed (GtkTreeSelection       *selection,
+                      GtkInspectorObjectTree *wt)
+{
+  GObject *object;
+
+  object = gtk_inspector_object_tree_get_selected (wt);
   if (object)
     g_signal_emit (wt, signals[OBJECT_SELECTED], 0, object);
 }

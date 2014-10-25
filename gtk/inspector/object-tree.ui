@@ -25,7 +25,6 @@
             <property name="model">model</property>
             <property name="enable-search">True</property>
             <property name="search-column">2</property>
-            <property name="activate-on-single-click">True</property>
             <signal name="row-activated" handler="on_row_activated"/>
             <child internal-child="selection">
               <object class="GtkTreeSelection">

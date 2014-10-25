@@ -335,8 +335,11 @@ gtk_inspector_prop_list_set_object (GtkInspectorPropList *pl,
   guint num_properties;
   guint i;
 
-  if (pl->priv->object == object || !object)
+  if (!object)
     return FALSE;
+
+  if (pl->priv->object == object)
+    return TRUE;
 
   cleanup_object (pl);
 

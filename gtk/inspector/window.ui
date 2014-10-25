@@ -31,20 +31,51 @@
           </packing>
         </child>
         <child>
-          <object class="GtkButton" id="close_object_details">
-            <property name="tooltip-text" translatable="yes">Show all Objects</property>
-            <property name="halign">center</property>
-            <property name="valign">center</property>
-            <signal name="clicked" handler="close_details"/>
-            <style>
-              <class name="image-button"/>
-            </style>
+          <object class="GtkStack" id="object_buttons">
+            <property name="visible">True</property>
             <child>
-              <object class="GtkImage">
+              <object class="GtkButton">
                 <property name="visible">True</property>
-                <property name="icon-name">view-list-symbolic</property>
-                <property name="icon-size">1</property>
+                <property name="tooltip-text" translatable="yes">Show Details</property>
+                <property name="halign">center</property>
+                <property name="valign">center</property>
+                <signal name="clicked" handler="open_object_details"/>
+                <style>
+                  <class name="image-button"/>
+                </style>
+                <child>
+                  <object class="GtkImage">
+                    <property name="visible">True</property>
+                    <property name="icon-name">dialog-information-symbolic</property>
+                    <property name="icon-size">1</property>
+                  </object>
+                </child>
               </object>
+              <packing>
+                <property name="name">list</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkButton">
+                <property name="visible">True</property>
+                <property name="tooltip-text" translatable="yes">Show all Objects</property>
+                <property name="halign">center</property>
+                <property name="valign">center</property>
+                <signal name="clicked" handler="close_object_details"/>
+                <style>
+                  <class name="image-button"/>
+                </style>
+                <child>
+                  <object class="GtkImage">
+                    <property name="visible">True</property>
+                    <property name="icon-name">view-list-symbolic</property>
+                    <property name="icon-size">1</property>
+                  </object>
+                </child>
+              </object>
+              <packing>
+                <property name="name">details</property>
+              </packing>
             </child>
           </object>
           <packing>
@@ -52,20 +83,48 @@
           </packing>
         </child>
         <child>
-          <object class="GtkButton" id="close_resource_details">
-            <property name="tooltip-text" translatable="yes">Show all Resources</property>
-            <property name="halign">center</property>
-            <property name="valign">center</property>
-            <signal name="clicked" handler="close_details"/>
-            <style>
-              <class name="image-button"/>
-            </style>
+          <object class="GtkStack" id="resource_buttons">
             <child>
-              <object class="GtkImage">
+              <object class="GtkButton">
                 <property name="visible">True</property>
-                <property name="icon-name">view-list-symbolic</property>
-                <property name="icon-size">1</property>
+                <property name="tooltip-text" translatable="yes">Show Details</property>
+                <property name="halign">center</property>
+                <property name="valign">center</property>
+                <style>
+                  <class name="image-button"/>
+                </style>
+                <child>
+                  <object class="GtkImage">
+                    <property name="visible">True</property>
+                    <property name="icon-name">dialog-information-symbolic</property>
+                    <property name="icon-size">1</property>
+                  </object>
+                </child>
               </object>
+              <packing>
+                <property name="name">list</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkButton">
+                <property name="visible">True</property>
+                <property name="tooltip-text" translatable="yes">Show all Resources</property>
+                <property name="halign">center</property>
+                <property name="valign">center</property>
+                <style>
+                  <class name="image-button"/>
+                </style>
+                <child>
+                  <object class="GtkImage">
+                    <property name="visible">True</property>
+                    <property name="icon-name">view-list-symbolic</property>
+                    <property name="icon-size">1</property>
+                  </object>
+                </child>
+              </object>
+              <packing>
+                <property name="name">details</property>
+              </packing>
             </child>
           </object>
           <packing>
@@ -266,7 +325,7 @@
         <child>
           <object class="GtkInspectorResourceList">
             <property name="visible">True</property>
-            <property name="close-details-button">close_resource_details</property>
+            <property name="buttons">resource_buttons</property>
           </object>
           <packing>
             <property name="name">resources</property>

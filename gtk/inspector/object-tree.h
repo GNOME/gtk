@@ -70,6 +70,8 @@ gboolean   gtk_inspector_object_tree_find_object         (GtkInspectorObjectTree
                                                           GObject                *object,
                                                           GtkTreeIter            *iter);
 
+GObject   *gtk_inspector_object_tree_get_selected        (GtkInspectorObjectTree *wt);
+
 G_END_DECLS
 
 
