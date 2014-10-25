@@ -363,7 +363,7 @@ init_font (GtkInspectorVisual *vis)
                           G_BINDING_BIDIRECTIONAL|G_BINDING_SYNC_CREATE);
 }
 
-#if defined (GDK_WINDOWING_X11) && defined (HAVE_CAIRO_SURFACE_SET_DEVICE_SCALE)
+#if defined (GDK_WINDOWING_X11)
 static void
 scale_changed (GtkAdjustment *adjustment, GtkInspectorVisual *vis)
 {
@@ -379,7 +379,7 @@ scale_changed (GtkAdjustment *adjustment, GtkInspectorVisual *vis)
 static void
 init_scale (GtkInspectorVisual *vis)
 {
-#if defined (GDK_WINDOWING_X11) && defined (HAVE_CAIRO_SURFACE_SET_DEVICE_SCALE)
+#if defined (GDK_WINDOWING_X11)
   GdkScreen *screen;
 
   screen = gdk_screen_get_default ();

@@ -469,9 +469,7 @@ gdk_x11_gl_context_texture_from_surface (GdkGLContext *paint_context,
   window_height = gdk_window_get_height (window);
 
   sx = sy = 1;
-#ifdef HAVE_CAIRO_SURFACE_SET_DEVICE_SCALE
   cairo_surface_get_device_scale (window->current_paint.surface, &sx, &sy);
-#endif
 
   cairo_surface_get_device_offset (surface,
 				   &device_x_offset, &device_y_offset);

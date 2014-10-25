@@ -524,9 +524,7 @@ get_surface_size (cairo_surface_t *surface,
 
   x_scale = y_scale = 1;
 
-#ifdef HAVE_CAIRO_SURFACE_SET_DEVICE_SCALE
   cairo_surface_get_device_scale (surface, &x_scale, &y_scale);
-#endif
 
   /* Assume any set scaling is icon scale */
   *width =
@@ -562,9 +560,7 @@ create_cursor_image (cairo_surface_t *source_surface,
                                                  height,
                                                  width * 4);
 
-#ifdef HAVE_CAIRO_SURFACE_SET_DEVICE_SCALE
   cairo_surface_set_device_scale (surface, scale, scale);
-#endif
 
   cr = cairo_create (surface);
   cairo_set_operator (cr, CAIRO_OPERATOR_SOURCE);

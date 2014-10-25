@@ -596,9 +596,7 @@ gdk_cairo_draw_from_gl (cairo_t              *cr,
                                                   (alpha_size == 0) ? CAIRO_FORMAT_RGB24 : CAIRO_FORMAT_ARGB32,
                                                   width, height);
 
-#ifdef HAVE_CAIRO_SURFACE_SET_DEVICE_SCALE
       cairo_surface_set_device_scale (image, buffer_scale, buffer_scale);
-#endif
 
       framebuffer = paint_data->tmp_framebuffer;
       glBindFramebufferEXT (GL_FRAMEBUFFER_EXT, framebuffer);
@@ -677,9 +675,7 @@ gdk_gl_texture_from_surface (cairo_surface_t *surface,
   window_height = gdk_window_get_height (window);
 
   sx = sy = 1;
-#ifdef HAVE_CAIRO_SURFACE_SET_DEVICE_SCALE
   cairo_surface_get_device_scale (window->current_paint.surface, &sx, &sy);
-#endif
 
   cairo_surface_get_device_offset (surface,
                                    &device_x_offset, &device_y_offset);

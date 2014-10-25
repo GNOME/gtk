@@ -44,7 +44,7 @@ m4_define([gtk_binary_version], [3.0.0])
 m4_define([glib_required_version], [2.43.0])
 m4_define([pango_required_version], [1.36.7])
 m4_define([atk_required_version], [2.15.1])
-m4_define([cairo_required_version], [1.12.0])
+m4_define([cairo_required_version], [1.14.0])
 m4_define([gdk_pixbuf_required_version], [2.30.0])
 m4_define([introspection_required_version], [1.39.0])
 m4_define([wayland_required_version], [1.5.91])
@@ -1341,17 +1341,6 @@ else
 *** GTK+. For more information see http://www.pango.org]))
         LIBS="$gtk_save_LIBS"
 fi
-
-# Check for cairo_set_device_scale, as we don't want to depend hard on
-# this until there is a stable release with it
-CAIRO_CFLAGS=`$PKG_CONFIG --cflags cairo`
-CAIRO_LIBS=`$PKG_CONFIG --libs cairo`
-CFLAGS="$CFLAGS $CAIRO_CFLAGS"
-gtk_save_LIBS="$LIBS"
-LIBS="$CAIRO_LIBS $LIBS"
-AC_CHECK_FUNCS(cairo_surface_set_device_scale)
-LIBS="$gtk_save_LIBS"
-
 
 CFLAGS="$saved_cflags"
 LDFLAGS="$saved_ldflags"

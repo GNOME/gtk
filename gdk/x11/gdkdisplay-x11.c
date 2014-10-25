@@ -2707,11 +2707,6 @@ gdk_x11_display_set_window_scale (GdkDisplay *display,
 
   scale = MAX (scale, 1);
 
-#ifndef HAVE_CAIRO_SURFACE_SET_DEVICE_SCALE
-  /* Without cairo support we can't support any scale but 1 */
-  scale = 1;
-#endif
-
   x11_screen = GDK_X11_SCREEN (GDK_X11_DISPLAY (display)->screen);
 
   if (!x11_screen->fixed_window_scale)

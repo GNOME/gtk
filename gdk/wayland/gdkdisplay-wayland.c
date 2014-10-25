@@ -800,9 +800,7 @@ _gdk_wayland_display_create_shm_surface (GdkWaylandDisplay *display,
   cairo_surface_set_user_data (surface, &gdk_wayland_cairo_key,
                                data, gdk_wayland_cairo_surface_destroy);
 
-#ifdef HAVE_CAIRO_SURFACE_SET_DEVICE_SCALE
   cairo_surface_set_device_scale (surface, scale, scale);
-#endif
 
   status = cairo_surface_status (surface);
   if (status != CAIRO_STATUS_SUCCESS)

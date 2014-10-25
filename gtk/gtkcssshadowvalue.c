@@ -431,9 +431,7 @@ make_blurred_pango_surface (cairo_t           *existing_cr,
   pango_layout_get_pixel_extents (layout, &ink_rect, NULL);
   clip_radius = _gtk_cairo_blur_compute_pixels (radius);
   x_scale = y_scale = 1;
-#ifdef HAVE_CAIRO_SURFACE_SET_DEVICE_SCALE
-      cairo_surface_get_device_scale (cairo_get_target (existing_cr), &x_scale, &y_scale);
-#endif
+  cairo_surface_get_device_scale (cairo_get_target (existing_cr), &x_scale, &y_scale);
 
   surface = cairo_surface_create_similar_image (cairo_get_target (existing_cr),
                                                 CAIRO_FORMAT_A8,

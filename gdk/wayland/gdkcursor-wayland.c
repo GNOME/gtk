@@ -308,13 +308,9 @@ _gdk_wayland_display_get_cursor_for_surface (GdkDisplay *display,
 
   if (surface)
     {
-#ifdef HAVE_CAIRO_SURFACE_SET_DEVICE_SCALE
-	{
-	  double sx, sy;
-	  cairo_surface_get_device_scale (surface, &sx, &sy);
-	  cursor->surface.scale = (int)sx;
-	}
-#endif
+      double sx, sy;
+      cairo_surface_get_device_scale (surface, &sx, &sy);
+      cursor->surface.scale = (int)sx;
       cursor->surface.width = cairo_image_surface_get_width (surface);
       cursor->surface.height = cairo_image_surface_get_height (surface);
     }

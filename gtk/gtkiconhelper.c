@@ -335,9 +335,7 @@ get_surface_size (GtkIconHelper   *self,
     {
       x_scale = y_scale = 1;
 
-#ifdef HAVE_CAIRO_SURFACE_SET_DEVICE_SCALE
       cairo_surface_get_device_scale (surface, &x_scale, &y_scale);
-#endif
 
       /* Assume any set scaling is icon scale */
       *width =

@@ -1128,11 +1128,7 @@ _gdk_x11_screen_new (GdkDisplay *display,
   /* we want this to be always non-null */
   x11_screen->window_manager_name = g_strdup ("unknown");
 
-#ifdef HAVE_CAIRO_SURFACE_SET_DEVICE_SCALE
   scale_str = g_getenv ("GDK_SCALE");
-#else
-  scale_str = "1";
-#endif
   if (scale_str)
     {
       x11_screen->fixed_window_scale = TRUE;

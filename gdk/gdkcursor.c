@@ -450,9 +450,7 @@ gdk_cursor_get_image (GdkCursor *cursor)
   h = cairo_image_surface_get_height (surface);
 
   x_scale = y_scale = 1;
-#ifdef HAVE_CAIRO_SURFACE_SET_DEVICE_SCALE
   cairo_surface_get_device_scale (surface, &x_scale, &y_scale);
-#endif
 
   pixbuf = gdk_pixbuf_get_from_surface (surface, 0, 0, w, h);
   cairo_surface_destroy (surface);

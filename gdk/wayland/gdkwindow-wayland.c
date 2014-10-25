@@ -217,9 +217,7 @@ _gdk_wayland_screen_create_root_window (GdkScreen *screen,
                                       impl->scale,
                                       impl->scale);
 
-#ifdef HAVE_CAIRO_SURFACE_SET_DEVICE_SCALE
   cairo_surface_set_device_scale (impl->cairo_surface, impl->scale, impl->scale);
-#endif
 
   window->window_type = GDK_WINDOW_ROOT;
   window->depth = 32;
@@ -419,11 +417,6 @@ window_update_scale (GdkWindow *window)
                                               l->data);
       scale = MAX (scale, output_scale);
     }
-
-#ifndef HAVE_CAIRO_SURFACE_SET_DEVICE_SCALE
-  /* Don't announce a scale if we can't support it */
-  scale = 1;
-#endif
 
   if (scale != impl->scale)
     {

@@ -2945,9 +2945,7 @@ gdk_window_begin_paint_region (GdkWindow       *window,
                                                                          MAX (clip_box.width, 1),
                                                                          MAX (clip_box.height, 1));
       sx = sy = 1;
-#ifdef HAVE_CAIRO_SURFACE_SET_DEVICE_SCALE
       cairo_surface_get_device_scale (window->current_paint.surface, &sx, &sy);
-#endif
       cairo_surface_set_device_offset (window->current_paint.surface, -clip_box.x*sx, -clip_box.y*sy);
       gdk_cairo_surface_mark_as_direct (window->current_paint.surface, window);
 
@@ -9457,9 +9455,7 @@ gdk_window_create_similar_surface (GdkWindow *     window,
 
   window_surface = gdk_window_ref_impl_surface (window);
   sx = sy = 1;
-#ifdef HAVE_CAIRO_SURFACE_SET_DEVICE_SCALE
   cairo_surface_get_device_scale (window_surface, &sx, &sy);
-#endif
 
   switch (_gdk_rendering_mode)
   {
@@ -9467,18 +9463,14 @@ gdk_window_create_similar_surface (GdkWindow *     window,
       {
         cairo_rectangle_t rect = { 0, 0, width * sx, height *sy };
         surface = cairo_recording_surface_create (content, &rect);
-#ifdef HAVE_CAIRO_SURFACE_SET_DEVICE_SCALE
         cairo_surface_set_device_scale (surface, sx, sy);
-#endif
       }
       break;
     case GDK_RENDERING_MODE_IMAGE:
       surface = cairo_image_surface_create (content == CAIRO_CONTENT_COLOR ? CAIRO_FORMAT_RGB24 :
                                             content == CAIRO_CONTENT_ALPHA ? CAIRO_FORMAT_A8 : CAIRO_FORMAT_ARGB32,
                                             width * sx, height * sy);
-#ifdef HAVE_CAIRO_SURFACE_SET_DEVICE_SCALE
       cairo_surface_set_device_scale (surface, sx, sy);
-#endif
       break;
     case GDK_RENDERING_MODE_SIMILAR:
     default:
@@ -9556,12 +9548,10 @@ gdk_window_create_similar_image_surface (GdkWindow *     window,
       cairo_surface_destroy (window_surface);
     }
 
-#ifdef HAVE_CAIRO_SURFACE_SET_DEVICE_SCALE
   if (scale == 0)
     scale = gdk_window_get_scale_factor (window);
 
   cairo_surface_set_device_scale (surface, scale, scale);
-#endif
 
   return surface;
 }

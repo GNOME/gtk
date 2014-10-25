@@ -467,9 +467,7 @@ gdk_x11_ref_cairo_surface (GdkWindow *window)
       impl->cairo_surface = gdk_x11_create_cairo_surface (impl,
                                                           gdk_window_get_width (window) * impl->window_scale,
                                                           gdk_window_get_height (window) * impl->window_scale);
-#ifdef HAVE_CAIRO_SURFACE_SET_DEVICE_SCALE
       cairo_surface_set_device_scale (impl->cairo_surface, impl->window_scale, impl->window_scale);
-#endif
 
       if (WINDOW_IS_TOPLEVEL (window) && impl->toplevel->in_frame)
         hook_surface_changed (window);
@@ -2961,9 +2959,7 @@ gdk_window_x11_set_background (GdkWindow      *window,
 
           cairo_surface_get_device_offset (surface, &x, &y);
           sx = sy = 1.;
-#ifdef HAVE_CAIRO_SURFACE_SET_DEVICE_SCALE
           cairo_surface_get_device_scale (surface, &sx, &sy);
-#endif
           /* XXX: This still bombs for non-pixmaps, but there's no way to
            * detect we're not a pixmap in Cairo... */
           if (x == 0.0 && y == 0.0 &&

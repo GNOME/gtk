@@ -23,9 +23,6 @@
 /* Define to 1 if you have the `bind_textdomain_codeset' function. */
 #define HAVE_BIND_TEXTDOMAIN_CODESET 1
 
-/* Define to 1 if you have the `cairo_surface_set_device_scale' function. */
-/* #undef HAVE_CAIRO_SURFACE_SET_DEVICE_SCALE */
-
 /* define if we have colord */
 /* #undef HAVE_COLORD */
 
