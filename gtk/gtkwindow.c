@@ -6299,7 +6299,7 @@ popover_realize (GtkWidget        *widget,
   attributes.y = rect.y;
   attributes.width = rect.width;
   attributes.height = rect.height;
-  attributes.visual = gtk_widget_get_visual (widget);
+  attributes.visual = gtk_widget_get_visual (GTK_WIDGET (window));
   attributes.event_mask = gtk_widget_get_events (popover->widget) |
     GDK_EXPOSURE_MASK;
   attributes_mask = GDK_WA_X | GDK_WA_Y | GDK_WA_VISUAL;
