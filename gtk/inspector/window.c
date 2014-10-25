@@ -209,12 +209,6 @@ get_inspector_screen (void)
   if (display == NULL)
     {
       const gchar *name;
-      const gchar *backends;
-
-      backends = g_getenv ("GTK_INSPECTOR_BACKEND");
-
-      if (backends)
-        gdk_set_allowed_backends (backends);
 
       name = g_getenv ("GTK_INSPECTOR_DISPLAY");
       display = gdk_display_open (name);
