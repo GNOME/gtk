@@ -15,7 +15,7 @@ msgstr ""
 "Project-Id-Version: gtk+-properties\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gtk"
 "%2b&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2014-09-30 08:56+0000\n"
+"POT-Creation-Date: 2014-10-25 20:39+0000\n"
 "PO-Revision-Date: 2014-09-30 13:07+0200\n"
 "Last-Translator: Marek Černocký <marek@manet.cz>\n"
 "Language-Team: Czech <gnome-cs-list@gnome.org>\n"
@@ -1120,6 +1120,14 @@ msgstr "Řetězec poznámek"
 #: ../gtk/gtkaboutdialog.c:388
 msgid "Comments about the program"
 msgstr "Poznámky o programu"
+
+#: ../gtk/gtkaboutdialog.c:408
+msgid "License"
+msgstr "Licence"
+
+#: ../gtk/gtkaboutdialog.c:409
+msgid "The license of the program"
+msgstr "Licence programu"
 
 #: ../gtk/gtkaboutdialog.c:436
 msgid "License Type"
@@ -3766,7 +3774,7 @@ msgstr "Filtr"
 msgid "The current filter for selecting which files are displayed"
 msgstr "Aktuální filtr pro výběr, které soubory se zobrazují"
 
-#: ../gtk/gtkfilechooser.c:388 ../gtk/gtkplacessidebar.c:4395
+#: ../gtk/gtkfilechooser.c:388 ../gtk/gtkplacessidebar.c:4525
 msgid "Local Only"
 msgstr "Jen místní"
 
@@ -4331,7 +4339,7 @@ msgstr "Typ zprávy"
 msgid "The type of message"
 msgstr "Typ zprávy"
 
-#: ../gtk/gtkinfobar.c:461 ../gtk/gtksearchbar.c:418
+#: ../gtk/gtkinfobar.c:461 ../gtk/gtksearchbar.c:434
 msgid "Show Close Button"
 msgstr "Zobrazovat tlačítko Zavřít"
 
@@ -5207,19 +5215,19 @@ msgstr "Zmenšovat"
 msgid "If TRUE, the child can be made smaller than its requisition"
 msgstr "Je-li zapnuto, může být potomek menší, než jeho požadavek"
 
-#: ../gtk/gtkplacessidebar.c:4364
+#: ../gtk/gtkplacessidebar.c:4494
 msgid "Location to Select"
 msgstr "Umístění, které se má vybrat"
 
-#: ../gtk/gtkplacessidebar.c:4365
+#: ../gtk/gtkplacessidebar.c:4495
 msgid "The location to highlight in the sidebar"
 msgstr "Umístění, které se má zvýraznit v postranní liště"
 
-#: ../gtk/gtkplacessidebar.c:4370
+#: ../gtk/gtkplacessidebar.c:4500
 msgid "Open Flags"
 msgstr "Otevírací příznaky"
 
-#: ../gtk/gtkplacessidebar.c:4371
+#: ../gtk/gtkplacessidebar.c:4501
 msgid ""
 "Modes in which the calling application can open locations selected in the "
 "sidebar"
@@ -5227,19 +5235,19 @@ msgstr ""
 "Režimy, ve kterých volající aplikace může otevřít umístění vybrané v "
 "postranní liště"
 
-#: ../gtk/gtkplacessidebar.c:4377
+#: ../gtk/gtkplacessidebar.c:4507
 msgid "Show 'Desktop'"
 msgstr "Zobrazovat „Plochu“"
 
-#: ../gtk/gtkplacessidebar.c:4378
+#: ../gtk/gtkplacessidebar.c:4508
 msgid "Whether the sidebar includes a builtin shortcut to the Desktop folder"
 msgstr "Jestli má postranní panel obsahovat zabudovaný odkaz na složku Plocha"
 
-#: ../gtk/gtkplacessidebar.c:4383
+#: ../gtk/gtkplacessidebar.c:4513
 msgid "Show 'Connect to Server'"
 msgstr "Zobrazovat „Připojit k serveru“"
 
-#: ../gtk/gtkplacessidebar.c:4384
+#: ../gtk/gtkplacessidebar.c:4514
 msgid ""
 "Whether the sidebar includes a builtin shortcut to a 'Connect to server' "
 "dialog"
@@ -5247,17 +5255,17 @@ msgstr ""
 "Jestli má postranní panel obsahovat zabudovaný odkaz na dialogové okno "
 "„Připojit k serveru“"
 
-#: ../gtk/gtkplacessidebar.c:4389
+#: ../gtk/gtkplacessidebar.c:4519
 msgid "Show 'Enter Location'"
 msgstr "Zobrazit „Zadat umístění“"
 
-#: ../gtk/gtkplacessidebar.c:4390
+#: ../gtk/gtkplacessidebar.c:4520
 msgid ""
 "Whether the sidebar includes a builtin shortcut to manually enter a location"
 msgstr ""
 "Jestli má postranní panel obsahovat zabudovaný odkaz na ruční zadání umístění"
 
-#: ../gtk/gtkplacessidebar.c:4396
+#: ../gtk/gtkplacessidebar.c:4526
 msgid "Whether the sidebar only includes local files"
 msgstr "Jestli má postranní panel obsahovat jen místní soubory"
 
@@ -6168,15 +6176,15 @@ msgstr "Živé posunování"
 msgid "Kinetic scrolling mode."
 msgstr "Režim živého posunování."
 
-#: ../gtk/gtksearchbar.c:407
+#: ../gtk/gtksearchbar.c:423
 msgid "Search Mode Enabled"
 msgstr "Zapnut vyhledávací režim"
 
-#: ../gtk/gtksearchbar.c:408
+#: ../gtk/gtksearchbar.c:424
 msgid "Whether the search mode is on and the search bar shown"
 msgstr "Zda je vyhledávací režim zapnutý a lišta hledání zobrazena"
 
-#: ../gtk/gtksearchbar.c:419
+#: ../gtk/gtksearchbar.c:435
 msgid "Whether to show the close button in the toolbar"
 msgstr "Zda na liště nástrojů zobrazovat zavírací tlačítko"
 
@@ -7049,7 +7057,7 @@ msgstr "Vyžaduje pozornost"
 msgid "Whether this page needs attention"
 msgstr "Jestli tato stránka vyžaduje pozornost"
 
-#: ../gtk/gtkstackswitcher.c:515 ../gtk/gtkstackswitcher.c:516
+#: ../gtk/gtkstackswitcher.c:523 ../gtk/gtkstackswitcher.c:524
 msgid "Stack"
 msgstr "Zásobník"
 
@@ -8802,39 +8810,3 @@ msgstr "Název profilu barev"
 #: ../modules/printbackends/cups/gtkprintercups.c:94
 msgid "The title of the color profile to use"
 msgstr "Název profilu barev, který se má použít"
-
-#~ msgid "Hold Time"
-#~ msgstr "Doba držení"
-
-#~ msgid "Hold Time (in milliseconds)"
-#~ msgstr "Doba držení (v milisekundách)"
-
-#~ msgid "Drag Threshold"
-#~ msgstr "Práh tažení"
-
-#~ msgid "Drag Threshold (in pixels)"
-#~ msgstr "Práh tažení (v pixelech)"
-
-#~ msgid "Width of resize grip"
-#~ msgstr "Šířka úchytu pro změnu velikosti"
-
-#~ msgid "Height of resize grip"
-#~ msgstr "Výška úchytu pro změnu velikosti"
-
-#~ msgid "menu-model"
-#~ msgstr "menu-model"
-
-#~ msgid "The dropdown menu's model."
-#~ msgstr "Model rozbalovací nabídky."
-
-#~ msgid "align-widget"
-#~ msgstr "align-widget"
-
-#~ msgid "direction"
-#~ msgstr "směr"
-
-#~ msgid "Window the coordinates are based upon"
-#~ msgstr "Okno, na kterém jsou založeny souřadnice"
-
-#~ msgid "Dash pattern used to draw the focus indicator"
-#~ msgstr "Vzorek používaný při kreslení čáry indikátoru zaměření"
