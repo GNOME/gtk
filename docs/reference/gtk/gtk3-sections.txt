@@ -7960,6 +7960,7 @@ gtk_popover_get_modal
 <TITLE>GtkPopoverMenu</TITLE>
 GtkPopoverMenu
 gtk_popover_menu_new
+gtk_popover_menu_open_submenu
 </SECTION>
 
 <SECTION>
