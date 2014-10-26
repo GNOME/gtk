@@ -20,7 +20,7 @@
 
 #include <glib-object.h>
 #include "gtk/gtkbitmaskprivate.h"
-#include "gtk/gtkcssanimatedstyleprivate.h"
+#include "gtk/gtkcssstyleprivate.h"
 #include "gtk/gtkcsssection.h"
 
 
@@ -51,7 +51,7 @@ void                    _gtk_css_lookup_set                     (GtkCssLookup   
 void                    _gtk_css_lookup_resolve                 (GtkCssLookup               *lookup,
                                                                  GtkStyleProviderPrivate    *provider,
 								 int                         scale,
-                                                                 GtkCssAnimatedStyle        *style,
+                                                                 GtkCssStyle                *style,
                                                                  GtkCssStyle                *parent_style);
 
 static inline const GtkBitmask *

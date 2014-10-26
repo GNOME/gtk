@@ -24,6 +24,7 @@
 
 #include "gtkstylecontextprivate.h"
 #include "gtkcontainerprivate.h"
+#include "gtkcssanimatedstyleprivate.h"
 #include "gtkcsscolorvalueprivate.h"
 #include "gtkcsscornervalueprivate.h"
 #include "gtkcssenumvalueprivate.h"
@@ -33,6 +34,7 @@
 #include "gtkcssnumbervalueprivate.h"
 #include "gtkcssrgbavalueprivate.h"
 #include "gtkcssshadowsvalueprivate.h"
+#include "gtkcssstaticstyleprivate.h"
 #include "gtkcssstylepropertyprivate.h"
 #include "gtkcsstransformvalueprivate.h"
 #include "gtkdebug.h"
@@ -680,7 +682,7 @@ create_query_path (GtkStyleContext             *context,
 
 static void
 build_properties (GtkStyleContext             *context,
-                  GtkCssStyle        *values,
+                  GtkCssStyle                 *style,
                   const GtkCssNodeDeclaration *decl,
                   const GtkBitmask            *relevant_changes,
                   GtkCssChange                *out_change)
@@ -704,7 +706,7 @@ build_properties (GtkStyleContext             *context,
   _gtk_css_lookup_resolve (lookup, 
                            GTK_STYLE_PROVIDER_PRIVATE (priv->cascade),
 			   priv->scale,
-                           GTK_CSS_ANIMATED_STYLE (values),
+                           style,
                            priv->parent ? style_values_lookup (priv->parent) : NULL);
 
   _gtk_css_lookup_free (lookup);
@@ -734,11 +736,11 @@ style_values_lookup (GtkStyleContext *context)
       return values;
     }
 
-  values = gtk_css_animated_style_new ();
 
-  style_info_set_values (info, values);
   if (gtk_style_context_is_saved (context))
     {
+<<<<<<< HEAD
+      values = gtk_css_static_style_new ();
       g_hash_table_insert (priv->style_values,
                            gtk_css_node_declaration_ref (info->decl),
                            g_object_ref (values));
@@ -747,11 +749,14 @@ style_values_lookup (GtkStyleContext *context)
     }
   else
     {
+      values = gtk_css_animated_style_new ();
+
       build_properties (context, values, info->decl, NULL, &priv->relevant_changes);
       /* These flags are always relevant */
       priv->relevant_changes |= GTK_CSS_CHANGE_SOURCE;
     }
-
+  
+  style_info_set_values (info, values);
   g_object_unref (values);
 
   return values;
@@ -772,7 +777,7 @@ style_values_lookup_for_state (GtkStyleContext *context,
 
   decl = gtk_css_node_declaration_ref (context->priv->info->decl);
   gtk_css_node_declaration_set_state (&decl, state);
-  values = gtk_css_animated_style_new ();
+  values = gtk_css_static_style_new ();
   build_properties (context, values, decl, NULL, NULL);
   gtk_css_node_declaration_unref (decl);
 
