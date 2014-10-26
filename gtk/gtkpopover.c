@@ -856,9 +856,9 @@ gtk_popover_draw (GtkWidget *widget,
 
   /* Render the rect background */
   gtk_render_background (context, cr,
-                         rect_x1 + border.left, rect_y1 + border.top,
-                         rect_x2 - rect_x1 - border.left - border.right,
-                         rect_y2 - rect_y1 - border.top - border.bottom);
+                         rect_x1, rect_y1,
+                         rect_x2 - rect_x1,
+                         rect_y2 - rect_y1);
 
   gtk_popover_get_gap_coords (popover,
                               &initial_x, &initial_y,
