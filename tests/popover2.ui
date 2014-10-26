@@ -129,7 +129,6 @@
       <object class="GtkModelButton">
         <property name="visible">True</property>
         <property name="text">Submenu 1</property>
-        <property name="has-submenu">True</property>
         <property name="menu-name">submenu1</property>
       </object>
     </child>
@@ -137,7 +136,6 @@
       <object class="GtkModelButton">
         <property name="visible">True</property>
         <property name="text">Submenu 2</property>
-        <property name="has-submenu">True</property>
         <property name="menu-name">submenu2</property>
       </object>
     </child>
@@ -186,7 +184,6 @@
       <object class="GtkModelButton">
         <property name="visible">True</property>
         <property name="text">Submenu 1</property>
-        <property name="has-submenu">True</property>
         <property name="inverted">True</property>
         <property name="centered">True</property>
         <property name="menu-name">main</property>
@@ -499,7 +496,6 @@
       <object class="GtkModelButton">
         <property name="visible">True</property>
         <property name="text">Submenu 2</property>
-        <property name="has-submenu">True</property>
         <property name="inverted">True</property>
         <property name="centered">True</property>
         <property name="menu-name">main</property>
@@ -523,7 +519,6 @@
         <property name="visible">True</property>
         <property name="text">Subsubmenu</property>
         <property name="icon">icon9</property>
-        <property name="has-submenu">True</property>
         <property name="menu-name">subsubmenu</property>
       </object>
       <packing>
@@ -534,7 +529,6 @@
       <object class="GtkModelButton">
         <property name="visible">True</property>
         <property name="text">Subsubmenu</property>
-        <property name="has-submenu">True</property>
         <property name="inverted">True</property>
         <property name="centered">True</property>
         <property name="menu-name">submenu2</property>
