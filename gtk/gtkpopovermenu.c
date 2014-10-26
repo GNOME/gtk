@@ -68,25 +68,16 @@ gtk_popover_menu_init (GtkPopoverMenu *popover)
 }
 
 static void
-back_to_main (GtkWidget *popover)
-{
-  GtkWidget *stack;
-
-  stack = gtk_bin_get_child (GTK_BIN (popover));
-  gtk_stack_set_visible_child_name (GTK_STACK (stack), "main");
-}
-
-static void
 gtk_popover_menu_map (GtkWidget *widget)
 {
   GTK_WIDGET_CLASS (gtk_popover_menu_parent_class)->map (widget);
-  back_to_main (widget);
+  gtk_popover_menu_open_submenu (GTK_POPOVER_MENU (widget), "main");
 }
 
 static void
 gtk_popover_menu_unmap (GtkWidget *widget)
 {
-  back_to_main (widget);
+  gtk_popover_menu_open_submenu (GTK_POPOVER_MENU (widget), "main");
   GTK_WIDGET_CLASS (gtk_popover_menu_parent_class)->unmap (widget);
 }
 
@@ -236,4 +227,33 @@ GtkWidget *
 gtk_popover_menu_new (void)
 {
   return g_object_new (GTK_TYPE_POPOVER_MENU, NULL);
+}
+
+/**
+ * gtk_popover_menu_open_submenu:
+ * @popover: a #GtkPopoverMenu
+ * @name: the name of the menu to switch to
+ *
+ * Opens a submenu of the @popover. The @name
+ * must be one of the names given to the submenus
+ * of @popover with #GtkPopoverMenu:submenu, or
+ * "main" to switch back to the main menu.
+ *
+ * #GtkModelButton will open submenus automatically
+ * when the #GtkModelButton:menu-name property is set,
+ * so this function is only needed when you are using
+ * other kinds of widgets to initiate menu changes.
+ *
+ * Since: 3.16
+ */
+void
+gtk_popover_menu_open_submenu (GtkPopoverMenu *popover,
+                               const gchar    *name)
+{
+  GtkWidget *stack;
+
+  g_return_if_fail (GTK_IS_POPOVER_MENU (popover));
+
+  stack = gtk_bin_get_child (GTK_BIN (popover));
+  gtk_stack_set_visible_child_name (GTK_STACK (stack), name);
 }

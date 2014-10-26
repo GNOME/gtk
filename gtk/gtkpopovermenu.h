@@ -52,6 +52,10 @@ GType       gtk_popover_menu_get_type (void) G_GNUC_CONST;
 GDK_AVAILABLE_IN_3_16
 GtkWidget * gtk_popover_menu_new      (void);
 
+GDK_AVAILABLE_IN_3_16
+void        gtk_popover_menu_open_submenu (GtkPopoverMenu *popover,
+
+
 G_END_DECLS
 
 #endif /* __GTK_POPOVER_MENU_H__ */
