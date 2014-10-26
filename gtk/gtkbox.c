@@ -2616,17 +2616,22 @@ gtk_box_set_center_widget (GtkBox    *box,
                            GtkWidget *widget)
 {
   GtkBoxPrivate *priv = box->priv;
+  GtkWidget *old_center = NULL;
 
   g_return_if_fail (GTK_IS_BOX (box));
 
   if (priv->center)
     {
+      old_center = g_object_ref (priv->center->widget);
       gtk_box_remove (GTK_CONTAINER (box), priv->center->widget);
       priv->center = NULL;
     }
 
   if (widget)
     priv->center = gtk_box_pack (box, widget, FALSE, TRUE, 0, GTK_PACK_START);
+
+  if (old_center)
+    g_object_unref (old_center);
 }
 
 /**
