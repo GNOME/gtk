@@ -302,7 +302,7 @@ gtk_menu_section_box_insert_func (GtkMenuTrackerItem *item,
         g_object_bind_property (item, "icon", widget, "icon", G_BINDING_SYNC_CREATE);
 
       g_object_bind_property (item, "sensitive", widget, "sensitive", G_BINDING_SYNC_CREATE);
-      g_object_bind_property (item, "role", widget, "action-role", G_BINDING_SYNC_CREATE);
+      g_object_bind_property (item, "role", widget, "role", G_BINDING_SYNC_CREATE);
       g_object_bind_property (item, "toggled", widget, "active", G_BINDING_SYNC_CREATE);
       g_signal_connect (widget, "clicked", G_CALLBACK (gtk_popover_item_activate), item);
     }
