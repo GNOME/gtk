@@ -28,19 +28,25 @@
 
 G_BEGIN_DECLS
 
-#define GTK_TYPE_MODEL_BUTTON                            (gtk_model_button_get_type ())
-#define GTK_MODEL_BUTTON(inst)                           (G_TYPE_CHECK_INSTANCE_CAST ((inst),                      \
-                                                             GTK_TYPE_MODEL_BUTTON, GtkModelButton))
-#define GTK_IS_MODEL_BUTTON(inst)                        (G_TYPE_CHECK_INSTANCE_TYPE ((inst),                      \
-                                                             GTK_TYPE_MODEL_BUTTON))
+#define GTK_TYPE_MODEL_BUTTON         (gtk_model_button_get_type ())
+#define GTK_MODEL_BUTTON(inst)        (G_TYPE_CHECK_INSTANCE_CAST ((inst),                      \
+                                      GTK_TYPE_MODEL_BUTTON, GtkModelButton))
+#define GTK_IS_MODEL_BUTTON(inst)     (G_TYPE_CHECK_INSTANCE_TYPE ((inst),                      \
+                                      GTK_TYPE_MODEL_BUTTON))
 
-typedef struct _GtkModelButton                            GtkModelButton;
+typedef struct _GtkModelButton        GtkModelButton;
+
+typedef enum {
+  GTK_BUTTON_ROLE_NORMAL,
+  GTK_BUTTON_ROLE_CHECK,
+  GTK_BUTTON_ROLE_RADIO
+} GtkButtonRole;
 
 GDK_AVAILABLE_IN_3_16
-GType                   gtk_model_button_get_type                    (void) G_GNUC_CONST;
+GType       gtk_model_button_get_type (void) G_GNUC_CONST;
 
 GDK_AVAILABLE_IN_3_16
-GtkWidget *             gtk_model_button_new                         (void);
+GtkWidget * gtk_model_button_new      (void);
 
 G_END_DECLS
 

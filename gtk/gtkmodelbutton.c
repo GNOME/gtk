@@ -33,6 +33,7 @@
 #include "gtktypebuiltins.h"
 #include "gtkstack.h"
 #include "gtkpopover.h"
+#include "gtkintl.h"
 
 struct _GtkModelButton
 {
@@ -45,7 +46,7 @@ struct _GtkModelButton
   gboolean inverted;
   gboolean iconic;
   gchar *menu_name;
-  GtkMenuTrackerItemRole role;
+  GtkButtonRole role;
 };
 
 typedef GtkButtonClass GtkModelButtonClass;
@@ -55,19 +56,22 @@ G_DEFINE_TYPE (GtkModelButton, gtk_model_button, GTK_TYPE_BUTTON)
 enum
 {
   PROP_0,
-  PROP_ACTION_ROLE,
+  PROP_ROLE,
   PROP_ICON,
   PROP_TEXT,
   PROP_ACTIVE,
   PROP_MENU_NAME,
   PROP_INVERTED,
   PROP_CENTERED,
-  PROP_ICONIC
+  PROP_ICONIC,
+  LAST_PROPERTY
 };
 
+static GParamSpec *properties[LAST_PROPERTY] = { NULL, };
+
 static void
-gtk_model_button_set_action_role (GtkModelButton         *button,
-                                  GtkMenuTrackerItemRole  role)
+gtk_model_button_set_role (GtkModelButton *button,
+                           GtkButtonRole   role)
 {
   AtkObject *accessible;
   AtkRole a11y_role;
@@ -81,15 +85,15 @@ gtk_model_button_set_action_role (GtkModelButton         *button,
   accessible = gtk_widget_get_accessible (GTK_WIDGET (button));
   switch (role)
     {
-    case GTK_MENU_TRACKER_ITEM_ROLE_NORMAL:
+    case GTK_BUTTON_ROLE_NORMAL:
       a11y_role = ATK_ROLE_PUSH_BUTTON;
       break;
 
-    case GTK_MENU_TRACKER_ITEM_ROLE_CHECK:
+    case GTK_BUTTON_ROLE_CHECK:
       a11y_role = ATK_ROLE_CHECK_BOX;
       break;
 
-    case GTK_MENU_TRACKER_ITEM_ROLE_RADIO:
+    case GTK_BUTTON_ROLE_RADIO:
       a11y_role = ATK_ROLE_RADIO_BUTTON;
       break;
 
@@ -119,6 +123,7 @@ gtk_model_button_set_icon (GtkModelButton *button,
 {
   gtk_image_set_from_gicon (GTK_IMAGE (button->image), icon, GTK_ICON_SIZE_MENU);
   update_visibility (button);
+  g_object_notify_by_pspec (G_OBJECT (button), properties[PROP_ICON]);
 }
 
 static void
@@ -127,6 +132,7 @@ gtk_model_button_set_text (GtkModelButton *button,
 {
   gtk_label_set_text_with_mnemonic (GTK_LABEL (button->label), text);
   update_visibility (button);
+  g_object_notify_by_pspec (G_OBJECT (button), properties[PROP_TEXT]);
 }
 
 static void
@@ -134,7 +140,7 @@ gtk_model_button_update_state (GtkModelButton *button)
 {
   GtkStateFlags state;
 
-  if (button->role == GTK_MENU_TRACKER_ITEM_ROLE_NORMAL)
+  if (button->role == GTK_BUTTON_ROLE_NORMAL)
     return;
 
   state = gtk_widget_get_state_flags (GTK_WIDGET (button));
@@ -152,9 +158,13 @@ static void
 gtk_model_button_set_active (GtkModelButton *button,
                              gboolean        active)
 {
+  if (button->active == active)
+    return;
+
   button->active = active;
   gtk_model_button_update_state (button);
   gtk_widget_queue_draw (GTK_WIDGET (button));
+  g_object_notify_by_pspec (G_OBJECT (button), properties[PROP_ACTIVE]);
 }
 
 static void
@@ -165,23 +175,32 @@ gtk_model_button_set_menu_name (GtkModelButton *button,
   button->menu_name = g_strdup (menu_name);
   gtk_model_button_update_state (button);
   gtk_widget_queue_resize (GTK_WIDGET (button));
+  g_object_notify_by_pspec (G_OBJECT (button), properties[PROP_MENU_NAME]);
 }
 
 static void
 gtk_model_button_set_inverted (GtkModelButton *button,
                                gboolean        inverted)
 {
+  if (button->inverted == inverted)
+    return;
+
   button->inverted = inverted;
   gtk_widget_queue_resize (GTK_WIDGET (button));
+  g_object_notify_by_pspec (G_OBJECT (button), properties[PROP_INVERTED]);
 }
 
 static void
 gtk_model_button_set_centered (GtkModelButton *button,
                                gboolean        centered)
 {
+  if (button->centered == centered)
+    return;
+
   button->centered = centered;
   gtk_widget_set_halign (button->box, button->centered ? GTK_ALIGN_CENTER : GTK_ALIGN_FILL);
   gtk_widget_queue_draw (GTK_WIDGET (button));
+  g_object_notify_by_pspec (G_OBJECT (button), properties[PROP_CENTERED]);
 }
 
 static void
@@ -189,6 +208,9 @@ gtk_model_button_set_iconic (GtkModelButton *button,
                              gboolean        iconic)
 {
   GtkStyleContext *context;
+
+  if (button->iconic == iconic)
+    return;
 
   button->iconic = iconic;
 
@@ -208,6 +230,7 @@ gtk_model_button_set_iconic (GtkModelButton *button,
 
   update_visibility (button);
   gtk_widget_queue_resize (GTK_WIDGET (button));
+  g_object_notify_by_pspec (G_OBJECT (button), properties[PROP_ICONIC]);
 }
 
 static void
@@ -220,12 +243,40 @@ gtk_model_button_get_property (GObject    *object,
 
   switch (prop_id)
     {
+    case PROP_ROLE:
+      g_value_set_enum (value, button->role);
+      break;
+
+    case PROP_ICON:
+      {
+        GIcon *icon;
+        gtk_image_get_gicon (GTK_IMAGE (button->image), &icon, NULL);
+        g_value_set_object (value, icon);
+      }
+      break;
+
+    case PROP_TEXT:
+      g_value_set_string (value, gtk_label_get_text (GTK_LABEL (button->label)));
+      break;
+
     case PROP_ACTIVE:
       g_value_set_boolean (value, button->active);
       break;
 
     case PROP_MENU_NAME:
       g_value_set_string (value, button->menu_name);
+      break;
+
+    case PROP_INVERTED:
+      g_value_set_boolean (value, button->inverted);
+      break;
+
+    case PROP_CENTERED:
+      g_value_set_boolean (value, button->centered);
+      break;
+
+    case PROP_ICONIC:
+      g_value_set_boolean (value, button->iconic);
       break;
 
     default:
@@ -243,8 +294,8 @@ gtk_model_button_set_property (GObject      *object,
 
   switch (prop_id)
     {
-    case PROP_ACTION_ROLE:
-      gtk_model_button_set_action_role (button, g_value_get_enum (value));
+    case PROP_ROLE:
+      gtk_model_button_set_role (button, g_value_get_enum (value));
       break;
 
     case PROP_ICON:
@@ -328,7 +379,7 @@ has_sibling_with_indicator (GtkWidget *button)
         continue;
 
       if (!sibling->centered &&
-          (sibling->menu_name || sibling->role != GTK_MENU_TRACKER_ITEM_ROLE_NORMAL))
+          (sibling->menu_name || sibling->role != GTK_BUTTON_ROLE_NORMAL))
         {
           has_indicator = TRUE;
           break;
@@ -343,7 +394,7 @@ has_sibling_with_indicator (GtkWidget *button)
 static gboolean
 needs_indicator (GtkModelButton *button)
 {
-  if (button->role != GTK_MENU_TRACKER_ITEM_ROLE_NORMAL)
+  if (button->role != GTK_BUTTON_ROLE_NORMAL)
     return TRUE;
 
   return has_sibling_with_indicator (GTK_WIDGET (button));
@@ -637,14 +688,14 @@ gtk_model_button_draw (GtkWidget *widget,
       gtk_render_expander (context, cr, x, y, indicator_size, indicator_size);
       gtk_style_context_restore (context);
     }
-  else if (model_button->role == GTK_MENU_TRACKER_ITEM_ROLE_CHECK)
+  else if (model_button->role == GTK_BUTTON_ROLE_CHECK)
     {
       gtk_style_context_save (context);
       gtk_style_context_add_class (context, GTK_STYLE_CLASS_CHECK);
       gtk_render_check (context, cr, x, y, indicator_size, indicator_size);
       gtk_style_context_restore (context);
     }
-  else if (model_button->role == GTK_MENU_TRACKER_ITEM_ROLE_RADIO)
+  else if (model_button->role == GTK_BUTTON_ROLE_RADIO)
     {
       gtk_style_context_save (context);
       gtk_style_context_add_class (context, GTK_STYLE_CLASS_RADIO);
@@ -684,7 +735,7 @@ gtk_model_button_clicked (GtkButton *button)
       if (stack != NULL)
         gtk_stack_set_visible_child_name (GTK_STACK (stack), model_button->menu_name);
     }
-  else if (model_button->role == GTK_MENU_TRACKER_ITEM_ROLE_NORMAL)
+  else if (model_button->role == GTK_BUTTON_ROLE_NORMAL)
     {
       GtkWidget *popover;
 
@@ -714,33 +765,40 @@ gtk_model_button_class_init (GtkModelButtonClass *class)
 
   button_class->clicked = gtk_model_button_clicked;
 
-  g_object_class_install_property (object_class, PROP_ACTION_ROLE,
-                                   g_param_spec_enum ("action-role", "", "",
-                                                      GTK_TYPE_MENU_TRACKER_ITEM_ROLE,
-                                                      GTK_MENU_TRACKER_ITEM_ROLE_NORMAL,
-                                                      G_PARAM_WRITABLE | G_PARAM_STATIC_STRINGS));
-  g_object_class_install_property (object_class, PROP_ICON,
-                                   g_param_spec_object ("icon", "", "", G_TYPE_ICON,
-                                                        G_PARAM_WRITABLE | G_PARAM_STATIC_STRINGS));
-  g_object_class_install_property (object_class, PROP_TEXT,
-                                   g_param_spec_string ("text", "", "", NULL,
-                                                        G_PARAM_WRITABLE | G_PARAM_STATIC_STRINGS));
-  g_object_class_install_property (object_class, PROP_ACTIVE,
-                                   g_param_spec_boolean ("active", "", "", FALSE,
-                                                         G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
-  g_object_class_install_property (object_class, PROP_MENU_NAME,
-                                   g_param_spec_string ("menu-name", "", "", NULL,
-                                                        G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
-  g_object_class_install_property (object_class, PROP_INVERTED,
-                                   g_param_spec_boolean ("inverted", "", "", FALSE,
-
-                                                         G_PARAM_WRITABLE | G_PARAM_STATIC_STRINGS));
-  g_object_class_install_property (object_class, PROP_CENTERED,
-                                   g_param_spec_boolean ("centered", "", "", FALSE,
-                                                         G_PARAM_WRITABLE | G_PARAM_STATIC_STRINGS));
-  g_object_class_install_property (object_class, PROP_ICONIC,
-                                   g_param_spec_boolean ("iconic", "", "", TRUE,
-                                                         G_PARAM_WRITABLE | G_PARAM_STATIC_STRINGS));
+  properties[PROP_ROLE] =
+    g_param_spec_enum ("role", P_("Role"), P_("The role of this button"),
+                       GTK_TYPE_BUTTON_ROLE,
+                       GTK_BUTTON_ROLE_NORMAL,
+                       G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
+  properties[PROP_ICON] = 
+    g_param_spec_object ("icon", P_("Icon"), P_("The icon"),
+                         G_TYPE_ICON,
+                         G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
+  properties[PROP_TEXT] =
+    g_param_spec_string ("text", P_("Text"), P_("The text"),
+                         NULL,
+                         G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
+  properties[PROP_ACTIVE] =
+    g_param_spec_boolean ("active", P_("Active"), P_("Active"),
+                          FALSE,
+                          G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
+  properties[PROP_MENU_NAME] =
+    g_param_spec_string ("menu-name", P_("Menu name"), P_("The name of the menu to open"),
+                         NULL,
+                         G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
+  properties[PROP_INVERTED] =
+    g_param_spec_boolean ("inverted", P_("Inverted"), P_("Whether the menu is a parent"),
+                          FALSE,
+                          G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
+  properties[PROP_CENTERED] =
+    g_param_spec_boolean ("centered", P_("Centered"), P_("Whether to center the contents"),
+                          FALSE,
+                          G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
+  properties[PROP_ICONIC] =
+    g_param_spec_boolean ("iconic", P_("Iconic"), P_("Whether to prefer the icon over text"),
+                          TRUE,
+                          G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
+  g_object_class_install_properties (object_class, LAST_PROPERTY, properties);
 
   gtk_widget_class_set_accessible_role (GTK_WIDGET_CLASS (class), ATK_ROLE_PUSH_BUTTON);
 }
