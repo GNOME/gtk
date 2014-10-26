@@ -41,7 +41,6 @@ struct _GtkModelButton
   GtkWidget *image;
   GtkWidget *label;
   gboolean active;
-  gboolean has_submenu;
   gboolean centered;
   gboolean inverted;
   gboolean iconic;
@@ -61,7 +60,6 @@ enum
   PROP_TEXT,
   PROP_ACTIVE,
   PROP_ACCEL,
-  PROP_HAS_SUBMENU,
   PROP_MENU_NAME,
   PROP_INVERTED,
   PROP_CENTERED,
@@ -151,7 +149,7 @@ gtk_model_button_update_state (GtkModelButton *button)
 
   state &= ~GTK_STATE_FLAG_CHECKED;
 
-  if (button->active && !button->has_submenu)
+  if (button->active && !button->menu_name)
     state |= GTK_STATE_FLAG_CHECKED;
 
   gtk_widget_set_state_flags (GTK_WIDGET (button), state, TRUE);
@@ -165,15 +163,6 @@ gtk_model_button_set_active (GtkModelButton *button,
   button->active = active;
   gtk_model_button_update_state (button);
   gtk_widget_queue_draw (GTK_WIDGET (button));
-}
-
-static void
-gtk_model_button_set_has_submenu (GtkModelButton *button,
-                                  gboolean        has_submenu)
-{
-  button->has_submenu = has_submenu;
-  gtk_model_button_update_state (button);
-  gtk_widget_queue_resize (GTK_WIDGET (button));
 }
 
 static void
@@ -282,10 +271,6 @@ gtk_model_button_set_property (GObject      *object,
       gtk_model_button_set_accel (button, g_value_get_string (value));
       break;
 
-    case PROP_HAS_SUBMENU:
-      gtk_model_button_set_has_submenu (button, g_value_get_boolean (value));
-      break;
-
     case PROP_MENU_NAME:
       gtk_model_button_set_menu_name (button, g_value_get_string (value));
       break;
@@ -355,7 +340,7 @@ has_sibling_with_indicator (GtkWidget *button)
         continue;
 
       if (!sibling->centered &&
-          (sibling->has_submenu || sibling->role != GTK_MENU_TRACKER_ITEM_ROLE_NORMAL))
+          (sibling->menu_name || sibling->role != GTK_MENU_TRACKER_ITEM_ROLE_NORMAL))
         {
           has_indicator = TRUE;
           break;
@@ -647,7 +632,7 @@ gtk_model_button_draw (GtkWidget *widget,
                     width - 2 * border_width,
                     height - 2 * border_width);
 
-  if (model_button->has_submenu)
+  if (model_button->menu_name)
     {
       GtkStateFlags state;
 
@@ -758,9 +743,6 @@ gtk_model_button_class_init (GtkModelButtonClass *class)
   g_object_class_install_property (object_class, PROP_ACCEL,
                                    g_param_spec_string ("accel", "", "", NULL,
                                                         G_PARAM_WRITABLE | G_PARAM_STATIC_STRINGS));
-  g_object_class_install_property (object_class, PROP_HAS_SUBMENU,
-                                   g_param_spec_boolean ("has-submenu", "", "", FALSE,
-                                                         G_PARAM_WRITABLE | G_PARAM_STATIC_STRINGS));
   g_object_class_install_property (object_class, PROP_MENU_NAME,
                                    g_param_spec_string ("menu-name", "", "", NULL,
                                                         G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
