@@ -59,7 +59,6 @@ enum
   PROP_ICON,
   PROP_TEXT,
   PROP_ACTIVE,
-  PROP_ACCEL,
   PROP_MENU_NAME,
   PROP_INVERTED,
   PROP_CENTERED,
@@ -128,13 +127,6 @@ gtk_model_button_set_text (GtkModelButton *button,
 {
   gtk_label_set_text_with_mnemonic (GTK_LABEL (button->label), text);
   update_visibility (button);
-}
-
-static void
-gtk_model_button_set_accel (GtkModelButton *button,
-                            const gchar    *accel)
-{
-  /* ignore */
 }
 
 static void
@@ -265,10 +257,6 @@ gtk_model_button_set_property (GObject      *object,
 
     case PROP_ACTIVE:
       gtk_model_button_set_active (button, g_value_get_boolean (value));
-      break;
-
-    case PROP_ACCEL:
-      gtk_model_button_set_accel (button, g_value_get_string (value));
       break;
 
     case PROP_MENU_NAME:
@@ -740,9 +728,6 @@ gtk_model_button_class_init (GtkModelButtonClass *class)
   g_object_class_install_property (object_class, PROP_ACTIVE,
                                    g_param_spec_boolean ("active", "", "", FALSE,
                                                          G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
-  g_object_class_install_property (object_class, PROP_ACCEL,
-                                   g_param_spec_string ("accel", "", "", NULL,
-                                                        G_PARAM_WRITABLE | G_PARAM_STATIC_STRINGS));
   g_object_class_install_property (object_class, PROP_MENU_NAME,
                                    g_param_spec_string ("menu-name", "", "", NULL,
                                                         G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
