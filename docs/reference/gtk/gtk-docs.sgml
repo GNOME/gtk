@@ -114,6 +114,7 @@
       <xi:include href="xml/gtkscalebutton.xml" />
       <xi:include href="xml/gtkvolumebutton.xml" />
       <xi:include href="xml/gtklockbutton.xml" />
+      <xi:include href="xml/gtkmodelbutton.xml" />
     </chapter>
 
     <chapter id="NumericEntry">
@@ -191,6 +192,7 @@
       <xi:include href="xml/gtktoggletoolbutton.xml" />
       <xi:include href="xml/gtkradiotoolbutton.xml" />
       <xi:include href="xml/gtkpopover.xml" />
+      <xi:include href="xml/gtkpopovermenu.xml" />
     </chapter>
 
     <chapter id="SelectorWidgets">
