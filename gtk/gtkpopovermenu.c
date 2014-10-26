@@ -34,7 +34,7 @@ enum {
 G_DEFINE_TYPE (GtkPopoverMenu, gtk_popover_menu, GTK_TYPE_POPOVER)
 
 static void
-gtk_popover_menu_ensure_stack (GtkPopoverMenu *popover)
+gtk_popover_menu_init (GtkPopoverMenu *popover)
 {
   GtkWidget *stack;
 
@@ -43,105 +43,6 @@ gtk_popover_menu_ensure_stack (GtkPopoverMenu *popover)
   gtk_stack_set_transition_type (GTK_STACK (stack), GTK_STACK_TRANSITION_TYPE_SLIDE_LEFT_RIGHT);
   gtk_widget_show (stack);
   gtk_container_add (GTK_CONTAINER (popover), stack);
-}
-
-static GtkWidget *
-gtk_popover_menu_ensure_submenu (GtkPopoverMenu *popover,
-                                 const gchar    *name)
-{
-  GtkWidget *stack;
-  GtkWidget *submenu;
-
-  stack = gtk_bin_get_child (GTK_BIN (popover));
-  submenu = gtk_stack_get_child_by_name (GTK_STACK (stack), name);
-  if (submenu == NULL)
-    {
-      submenu = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
-      gtk_widget_set_halign (submenu, GTK_ALIGN_FILL);
-      g_object_set (submenu, "margin", 10, NULL);
-      gtk_widget_show (submenu);
-      gtk_stack_add_named (GTK_STACK (stack), submenu, name);
-    }
-
-  return submenu;
-}
-
-static void
-gtk_popover_menu_set_submenu (GtkPopoverMenu *popover,
-                              GtkWidget      *child,
-                              const gchar    *name)
-{
-  const gchar *old_name;
-  GtkWidget *submenu;
-
-  old_name = g_object_get_data (G_OBJECT (child), "GtkPopoverMenu:submenu");
-
-  if (g_strcmp0 (old_name, name) == 0)
-    return; 
-  
-  submenu = gtk_popover_menu_ensure_submenu (popover, name);
-
-  g_object_ref (child);
-  gtk_container_remove (GTK_CONTAINER (gtk_widget_get_parent (child)), child);
-  gtk_container_add (GTK_CONTAINER (submenu), child);
-  g_object_unref (child);
-
-  g_object_set_data_full (G_OBJECT (child), "GtkPopoverMenu:submenu", g_strdup (name), g_free);
-
-  gtk_container_child_notify (GTK_CONTAINER (popover), child, "submenu");
-}
-
-static const gchar *
-gtk_popover_menu_get_submenu (GtkPopoverMenu *popover,
-                              GtkWidget      *child)
-{
-  return (const gchar *)g_object_get_data (G_OBJECT (child), "GtkPopoverMenu:submenu");
-}
-
-static void
-gtk_popover_menu_add_item (GtkPopoverMenu *popover,
-                           GtkWidget      *item)
-{
-  const gchar *name;
-  GtkWidget *submenu;
-
-  name = gtk_popover_menu_get_submenu (popover, item);
-  if (name == NULL)
-    name = "main";
-
-  submenu = gtk_popover_menu_ensure_submenu (popover, name);
-  gtk_container_add (GTK_CONTAINER (submenu), item);
-}
-
-static void
-gtk_popover_menu_remove_item (GtkPopoverMenu *popover,
-                              GtkWidget      *item)
-{
-  const gchar *name;
-  GtkWidget *submenu;
-  GList *children;
-
-  name = gtk_popover_menu_get_submenu (popover, item);
-  if (name == NULL)
-    name = "main";
-
-  submenu = gtk_popover_menu_ensure_submenu (popover, name);
-
-  g_assert (submenu == gtk_widget_get_parent (item));
-  gtk_container_remove (GTK_CONTAINER (submenu), item);
-
-  children = gtk_container_get_children (GTK_CONTAINER (submenu));
-  if (children == NULL)
-    gtk_container_remove (GTK_CONTAINER (gtk_bin_get_child (GTK_BIN (popover))), submenu);
-  else
-    g_list_free (children);
-}
-
-static void
-gtk_popover_menu_init (GtkPopoverMenu *popover)
-{
-  gtk_popover_menu_ensure_stack (popover);
-  gtk_popover_menu_ensure_submenu (popover, "main");
 }
 
 static void
@@ -171,24 +72,40 @@ static void
 gtk_popover_menu_add (GtkContainer *container,
                       GtkWidget    *child)
 {
+  GtkWidget *stack;
 
-  if (!gtk_bin_get_child (GTK_BIN (container)))
+  stack = gtk_bin_get_child (GTK_BIN (container));
+
+  if (stack == NULL)
     {
       gtk_widget_set_parent (child, GTK_WIDGET (container));
       _gtk_bin_set_child (GTK_BIN (container), child);
     }
   else
-    gtk_popover_menu_add_item (GTK_POPOVER_MENU (container), child);
+    {
+      gchar *name;
+
+      if (gtk_stack_get_child_by_name (GTK_STACK (stack), "main"))
+        name = "submenu";
+      else
+        name = "main";
+
+      gtk_stack_add_named (GTK_STACK (stack), child, name);
+    }
 }
 
 static void
 gtk_popover_menu_remove (GtkContainer *container,
                          GtkWidget    *child)
 {
-  if (child == gtk_bin_get_child (GTK_BIN (container)))
+  GtkWidget *stack;
+
+  stack = gtk_bin_get_child (GTK_BIN (container));
+
+  if (child == stack)
     GTK_CONTAINER_CLASS (gtk_popover_menu_parent_class)->remove (container, child);
   else
-    gtk_popover_menu_remove_item (GTK_POPOVER_MENU (container), child);
+    gtk_container_remove (GTK_CONTAINER (stack), child);
 }
 
 static void
@@ -198,14 +115,22 @@ gtk_popover_menu_get_child_property (GtkContainer *container,
                                      GValue       *value,
                                      GParamSpec   *pspec)
 {
-  if (child == gtk_bin_get_child (GTK_BIN (container)))
+  GtkWidget *stack;
+
+  stack = gtk_bin_get_child (GTK_BIN (container));
+
+  if (child == stack)
     return;
 
   switch (property_id)
  
     {
     case CHILD_PROP_SUBMENU:
-      g_value_set_string (value, gtk_popover_menu_get_submenu (GTK_POPOVER_MENU (container), child));
+      {
+        gchar *name;
+        gtk_container_child_get (GTK_CONTAINER (stack), child, "name", &name, NULL);
+        g_value_set_string (value, name);
+      }
       break;
 
     default:
@@ -221,13 +146,21 @@ gtk_popover_menu_set_child_property (GtkContainer *container,
                                      const GValue *value,
                                      GParamSpec   *pspec)
 {
-  if (child == gtk_bin_get_child (GTK_BIN (container)))
+  GtkWidget *stack;
+
+  stack = gtk_bin_get_child (GTK_BIN (container));
+
+  if (child == stack)
     return;
 
   switch (property_id)
     {
     case CHILD_PROP_SUBMENU:
-      gtk_popover_menu_set_submenu (GTK_POPOVER_MENU (container), child, g_value_get_string (value));
+      {
+        const gchar *name;
+        name = g_value_get_string (value);
+        gtk_container_child_set (GTK_CONTAINER (stack), child, "name", name, NULL);
+      }
       break;
 
     default:
@@ -254,9 +187,9 @@ gtk_popover_menu_class_init (GtkPopoverMenuClass *klass)
                                               CHILD_PROP_SUBMENU,
                                               g_param_spec_string ("submenu",
                                                                    P_("Submenu"),
-                                                                   P_("The name of the submenu to place this child in"),
+                                                                   P_("The name of the submenu"),
                                                                    NULL,
-                                                                   G_PARAM_READWRITE));
+                                                                   G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 }
 
 GtkWidget *
