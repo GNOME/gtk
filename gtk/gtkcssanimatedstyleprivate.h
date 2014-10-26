@@ -38,17 +38,11 @@ struct _GtkCssAnimatedStyle
 {
   GtkCssStyle parent;
 
-  GPtrArray             *values;               /* the unanimated (aka intrinsic) values */
-  GPtrArray             *sections;             /* sections the values are defined in */
+  GtkCssStyle           *style;                /* the style if we weren't animating */
 
   GPtrArray             *animated_values;      /* NULL or array of animated values/NULL if not animated */
   gint64                 current_time;         /* the current time in our world */
   GSList                *animations;           /* the running animations, least important one first */
-
-  GtkBitmask            *depends_on_parent;    /* for intrinsic values */
-  GtkBitmask            *equals_parent;        /* dito */
-  GtkBitmask            *depends_on_color;     /* dito */
-  GtkBitmask            *depends_on_font_size; /* dito */
 };
 
 struct _GtkCssAnimatedStyleClass

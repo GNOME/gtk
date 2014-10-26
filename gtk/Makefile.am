@@ -406,6 +406,7 @@ gtk_private_h_sources =		\
 	gtkcssshadowsvalueprivate.h	\
 	gtkcssshadowvalueprivate.h      \
 	gtkcssshorthandpropertyprivate.h \
+	gtkcssstaticstyleprivate.h	\
 	gtkcssstringvalueprivate.h	\
 	gtkcssstylefuncsprivate.h \
 	gtkcssstyleprivate.h 	\
@@ -634,6 +635,7 @@ gtk_base_c_sources = 		\
 	gtkcssshadowvalue.c	\
 	gtkcssshorthandproperty.c \
 	gtkcssshorthandpropertyimpl.c \
+	gtkcssstaticstyle.c	\
 	gtkcssstylefuncs.c	\
 	gtkcssstyleproperty.c	\
 	gtkcssstylepropertyimpl.c \

@@ -29,6 +29,7 @@
 #include "gtkcssnumbervalueprivate.h"
 #include "gtkcsssectionprivate.h"
 #include "gtkcssshorthandpropertyprivate.h"
+#include "gtkcssstaticstyleprivate.h"
 #include "gtkcssstringvalueprivate.h"
 #include "gtkcssstylepropertyprivate.h"
 #include "gtkcsstransitionprivate.h"
@@ -59,11 +60,7 @@ gtk_css_animated_style_get_section (GtkCssStyle *style,
 {
   GtkCssAnimatedStyle *animated = GTK_CSS_ANIMATED_STYLE (style);
 
-  if (animated->sections == NULL ||
-      id >= animated->sections->len)
-    return NULL;
-
-  return g_ptr_array_index (animated->sections, id);
+  return gtk_css_style_get_section (animated->style, id);
 }
 
 static GtkBitmask *
@@ -71,16 +68,9 @@ gtk_css_animated_style_compute_dependencies (GtkCssStyle      *style,
                                              const GtkBitmask *parent_changes)
 {
   GtkCssAnimatedStyle *animated = GTK_CSS_ANIMATED_STYLE (style);
-  GtkBitmask *changes;
 
-  changes = _gtk_bitmask_copy (parent_changes);
-  changes = _gtk_bitmask_intersect (changes, animated->depends_on_parent);
-  if (_gtk_bitmask_get (changes, GTK_CSS_PROPERTY_COLOR))
-    changes = _gtk_bitmask_union (changes, animated->depends_on_color);
-  if (_gtk_bitmask_get (changes, GTK_CSS_PROPERTY_FONT_SIZE))
-    changes = _gtk_bitmask_union (changes, animated->depends_on_font_size);
-
-  return changes;
+  /* XXX: This misses dependencies due to animations */
+  return gtk_css_style_compute_dependencies (animated->style, parent_changes);
 }
 
 static void
@@ -88,16 +78,6 @@ gtk_css_animated_style_dispose (GObject *object)
 {
   GtkCssAnimatedStyle *style = GTK_CSS_ANIMATED_STYLE (object);
 
-  if (style->values)
-    {
-      g_ptr_array_unref (style->values);
-      style->values = NULL;
-    }
-  if (style->sections)
-    {
-      g_ptr_array_unref (style->sections);
-      style->sections = NULL;
-    }
   if (style->animated_values)
     {
       g_ptr_array_unref (style->animated_values);
@@ -115,10 +95,7 @@ gtk_css_animated_style_finalize (GObject *object)
 {
   GtkCssAnimatedStyle *style = GTK_CSS_ANIMATED_STYLE (object);
 
-  _gtk_bitmask_free (style->depends_on_parent);
-  _gtk_bitmask_free (style->equals_parent);
-  _gtk_bitmask_free (style->depends_on_color);
-  _gtk_bitmask_free (style->depends_on_font_size);
+  g_object_unref (style->style);
 
   G_OBJECT_CLASS (gtk_css_animated_style_parent_class)->finalize (object);
 }
@@ -140,23 +117,13 @@ gtk_css_animated_style_class_init (GtkCssAnimatedStyleClass *klass)
 static void
 gtk_css_animated_style_init (GtkCssAnimatedStyle *style)
 {
-  style->depends_on_parent = _gtk_bitmask_new ();
-  style->equals_parent = _gtk_bitmask_new ();
-  style->depends_on_color = _gtk_bitmask_new ();
-  style->depends_on_font_size = _gtk_bitmask_new ();
+  style->style = gtk_css_static_style_new ();
 }
 
 GtkCssStyle *
 gtk_css_animated_style_new (void)
 {
   return g_object_new (GTK_TYPE_CSS_ANIMATED_STYLE, NULL);
-}
-
-static void
-maybe_unref_section (gpointer section)
-{
-  if (section)
-    gtk_css_section_unref (section);
 }
 
 void
@@ -168,69 +135,13 @@ gtk_css_animated_style_compute_value (GtkCssAnimatedStyle     *style,
                                       GtkCssValue             *specified,
                                       GtkCssSection           *section)
 {
-  GtkCssDependencies dependencies;
-  GtkCssValue *value;
-
   gtk_internal_return_if_fail (GTK_IS_CSS_ANIMATED_STYLE (style));
   gtk_internal_return_if_fail (GTK_IS_STYLE_PROVIDER_PRIVATE (provider));
   gtk_internal_return_if_fail (parent_style == NULL || GTK_IS_CSS_STYLE (parent_style));
 
-  /* http://www.w3.org/TR/css3-cascade/#cascade
-   * Then, for every element, the value for each property can be found
-   * by following this pseudo-algorithm:
-   * 1) Identify all declarations that apply to the element
-   */
-  if (specified == NULL)
-    {
-      GtkCssStyleProperty *prop = _gtk_css_style_property_lookup_by_id (id);
-
-      if (_gtk_css_style_property_is_inherit (prop))
-        specified = _gtk_css_inherit_value_new ();
-      else
-        specified = _gtk_css_initial_value_new ();
-    }
-  else
-    _gtk_css_value_ref (specified);
-
-  value = _gtk_css_value_compute (specified, id, provider, scale, GTK_CSS_STYLE (style), parent_style, &dependencies);
-
-  if (style->values == NULL)
-    style->values = g_ptr_array_new_full (_gtk_css_style_property_get_n_properties (),
-					   (GDestroyNotify)_gtk_css_value_unref);
-  if (id >= style->values->len)
-   g_ptr_array_set_size (style->values, id + 1);
-
-  if (g_ptr_array_index (style->values, id))
-    _gtk_css_value_unref (g_ptr_array_index (style->values, id));
-  g_ptr_array_index (style->values, id) = _gtk_css_value_ref (value);
-
-  if (dependencies & (GTK_CSS_DEPENDS_ON_PARENT | GTK_CSS_EQUALS_PARENT))
-    style->depends_on_parent = _gtk_bitmask_set (style->depends_on_parent, id, TRUE);
-  if (dependencies & (GTK_CSS_EQUALS_PARENT))
-    style->equals_parent = _gtk_bitmask_set (style->equals_parent, id, TRUE);
-  if (dependencies & (GTK_CSS_DEPENDS_ON_COLOR))
-    style->depends_on_color = _gtk_bitmask_set (style->depends_on_color, id, TRUE);
-  if (dependencies & (GTK_CSS_DEPENDS_ON_FONT_SIZE))
-    style->depends_on_font_size = _gtk_bitmask_set (style->depends_on_font_size, id, TRUE);
-
-  if (style->sections && style->sections->len > id && g_ptr_array_index (style->sections, id))
-    {
-      gtk_css_section_unref (g_ptr_array_index (style->sections, id));
-      g_ptr_array_index (style->sections, id) = NULL;
-    }
-
-  if (section)
-    {
-      if (style->sections == NULL)
-        style->sections = g_ptr_array_new_with_free_func (maybe_unref_section);
-      if (style->sections->len <= id)
-        g_ptr_array_set_size (style->sections, id + 1);
-
-      g_ptr_array_index (style->sections, id) = gtk_css_section_ref (section);
-    }
-
-  _gtk_css_value_unref (value);
-  _gtk_css_value_unref (specified);
+  gtk_css_static_style_compute_value (GTK_CSS_STATIC_STYLE (style->style),
+                                      provider, scale, parent_style,
+                                      id, specified, section);
 }
 
 void
@@ -258,11 +169,7 @@ gtk_css_animated_style_get_intrinsic_value (GtkCssAnimatedStyle *style,
 {
   gtk_internal_return_val_if_fail (GTK_IS_CSS_ANIMATED_STYLE (style), NULL);
 
-  if (style->values == NULL ||
-      id >= style->values->len)
-    return NULL;
-
-  return g_ptr_array_index (style->values, id);
+  return gtk_css_style_get_value (style->style, id);
 }
 
 /* TRANSITIONS */
