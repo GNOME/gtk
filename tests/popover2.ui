@@ -473,6 +473,13 @@
           </object>
         </child>
         <child>
+          <object class="GtkScale">
+            <property name="visible">True</property>
+            <property name="draw-value">False</property>
+            <property name="adjustment">adjustment</property>
+          </object>
+        </child>
+        <child>
           <object class="GtkModelButton">
             <property name="visible">True</property>
             <property name="text">Subsubmenu</property>
@@ -553,5 +560,10 @@
   </object>
   <object class="GThemedIcon" id="icon-underline">
     <property name="name">format-text-underline-symbolic</property>
+  </object>
+  <object class="GtkAdjustment" id="adjustment">
+    <property name="lower">0</property>
+    <property name="upper">100</property>
+    <property name="value">50</property>
   </object>
 </interface>
