@@ -70,6 +70,25 @@ enum
 static GParamSpec *properties[LAST_PROPERTY] = { NULL, };
 
 static void
+gtk_model_button_update_state (GtkModelButton *button)
+{
+  GtkStateFlags state;
+
+  if (button->role == GTK_BUTTON_ROLE_NORMAL)
+    return;
+
+  state = gtk_widget_get_state_flags (GTK_WIDGET (button));
+
+  state &= ~GTK_STATE_FLAG_CHECKED;
+
+  if (button->active && !button->menu_name)
+    state |= GTK_STATE_FLAG_CHECKED;
+
+  gtk_widget_set_state_flags (GTK_WIDGET (button), state, TRUE);
+}
+
+
+static void
 gtk_model_button_set_role (GtkModelButton *button,
                            GtkButtonRole   role)
 {
@@ -80,7 +99,6 @@ gtk_model_button_set_role (GtkModelButton *button,
     return;
 
   button->role = role;
-  gtk_widget_queue_draw (GTK_WIDGET (button));
 
   accessible = gtk_widget_get_accessible (GTK_WIDGET (button));
   switch (role)
@@ -102,6 +120,10 @@ gtk_model_button_set_role (GtkModelButton *button,
     }
 
   atk_object_set_role (accessible, a11y_role);
+
+  gtk_model_button_update_state (button);
+  gtk_widget_queue_draw (GTK_WIDGET (button));
+  g_object_notify_by_pspec (G_OBJECT (button), properties[PROP_ROLE]);
 }
 
 static void
@@ -134,25 +156,6 @@ gtk_model_button_set_text (GtkModelButton *button,
   update_visibility (button);
   g_object_notify_by_pspec (G_OBJECT (button), properties[PROP_TEXT]);
 }
-
-static void
-gtk_model_button_update_state (GtkModelButton *button)
-{
-  GtkStateFlags state;
-
-  if (button->role == GTK_BUTTON_ROLE_NORMAL)
-    return;
-
-  state = gtk_widget_get_state_flags (GTK_WIDGET (button));
-
-  state &= ~GTK_STATE_FLAG_CHECKED;
-
-  if (button->active && !button->menu_name)
-    state |= GTK_STATE_FLAG_CHECKED;
-
-  gtk_widget_set_state_flags (GTK_WIDGET (button), state, TRUE);
-}
-
 
 static void
 gtk_model_button_set_active (GtkModelButton *button,
