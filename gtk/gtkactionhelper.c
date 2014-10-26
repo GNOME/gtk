@@ -23,6 +23,8 @@
 #include "gtkwidget.h"
 #include "gtkwidgetprivate.h"
 #include "gtkdebug.h"
+#include "gtkmodelbutton.h"
+#include "gtktypebuiltins.h"
 
 #include <string.h>
 
@@ -66,6 +68,8 @@ struct _GtkActionHelper
   gboolean enabled;
   gboolean active;
 
+  GtkButtonRole role;
+
   gint reporting;
 };
 
@@ -74,6 +78,7 @@ enum
   PROP_0,
   PROP_ENABLED,
   PROP_ACTIVE,
+  PROP_ROLE,
   N_PROPS
 };
 
@@ -104,6 +109,17 @@ gtk_action_helper_report_change (GtkActionHelper *helper,
 
         if (pspec && G_PARAM_SPEC_VALUE_TYPE (pspec) == G_TYPE_BOOLEAN)
           g_object_set (G_OBJECT (helper->widget), "active", helper->active, NULL);
+      }
+      break;
+
+    case PROP_ROLE:
+      {
+        GParamSpec *pspec;
+
+        pspec = g_object_class_find_property (G_OBJECT_GET_CLASS (helper->widget), "role");
+
+        if (pspec && G_PARAM_SPEC_VALUE_TYPE (pspec) == GTK_TYPE_BUTTON_ROLE)
+          g_object_set (G_OBJECT (helper->widget), "role", helper->role, NULL);
       }
       break;
 
@@ -146,10 +162,19 @@ gtk_action_helper_action_added (GtkActionHelper    *helper,
     GTK_NOTE(ACTIONS, g_message("actionhelper: %s found and enabled", helper->action_name));
 
   if (helper->target != NULL && state != NULL)
-    helper->active = g_variant_equal (state, helper->target);
-
+    {
+      helper->active = g_variant_equal (state, helper->target);
+      helper->role = GTK_BUTTON_ROLE_RADIO;
+    }
   else if (state != NULL && g_variant_is_of_type (state, G_VARIANT_TYPE_BOOLEAN))
-    helper->active = g_variant_get_boolean (state);
+    {
+      helper->active = g_variant_get_boolean (state);
+      helper->role = GTK_BUTTON_ROLE_CHECK;
+    }
+  else
+    {
+      helper->role = GTK_BUTTON_ROLE_NORMAL;
+    }
 
   if (should_emit_signals)
     {
@@ -158,6 +183,8 @@ gtk_action_helper_action_added (GtkActionHelper    *helper,
 
       if (helper->active)
         gtk_action_helper_report_change (helper, PROP_ACTIVE);
+
+      gtk_action_helper_report_change (helper, PROP_ROLE);
     }
 }
 
@@ -242,6 +269,10 @@ gtk_action_helper_get_property (GObject *object, guint prop_id,
       g_value_set_boolean (value, helper->active);
       break;
 
+    case PROP_ROLE:
+      g_value_set_enum (value, helper->role);
+      break;
+
     default:
       g_assert_not_reached ();
     }
@@ -313,6 +344,10 @@ gtk_action_helper_class_init (GtkActionHelperClass *class)
                                                                  G_PARAM_READABLE | G_PARAM_STATIC_STRINGS);
   gtk_action_helper_pspecs[PROP_ACTIVE] = g_param_spec_boolean ("active", "active", "active", FALSE,
                                                                 G_PARAM_READABLE | G_PARAM_STATIC_STRINGS);
+  gtk_action_helper_pspecs[PROP_ROLE] = g_param_spec_enum ("role", "role", "role",
+                                                           GTK_TYPE_BUTTON_ROLE,
+                                                           GTK_BUTTON_ROLE_NORMAL,
+                                                           G_PARAM_READABLE | G_PARAM_STATIC_STRINGS);
   g_object_class_install_properties (class, N_PROPS, gtk_action_helper_pspecs);
 }
 
