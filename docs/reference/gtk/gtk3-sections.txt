@@ -7956,6 +7956,21 @@ gtk_popover_get_modal
 </SECTION>
 
 <SECTION>
+<FILE>gtkpopovermenu</FILE>
+<TITLE>GtkPopoverMenu</TITLE>
+GtkPopoverMenu
+gtk_popover_menu_new
+</SECTION>
+
+<SECTION>
+<FILE>gtkmodelbutton</FILE>
+<TITLE>GtkModelButton</TITLE>
+GtkModelButton
+GtkButtonRole
+gtk_model_button_new
+</SECTION>
+
+<SECTION>
 <FILE>gtkeventcontroller</FILE>
 <TITLE>GtkEventController</TITLE>
 GtkEventController

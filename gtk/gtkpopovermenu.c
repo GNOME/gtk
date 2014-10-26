@@ -22,6 +22,28 @@
 #include "gtkintl.h"
 
 
+/**
+ * SECTION:gtkpopovermenu
+ * @Short_description: Popovers to use as menus
+ *
+ * GtkPopoverMenu is a subclass of #GtkPopover that treats its
+ * childen like menus and allows switching between them. It is
+ * meant to be used primarily together with #GtkModelButton, but
+ * any widget can be used, such as #GtkSpinButton or #GtkScale.
+ *
+ * To add a child as a submenu, set the #GtkPopoverMenu:submenu
+ * child property to the name of the submenu. To let the user open
+ * this submenu, add a #GtkModelButton whose #GtkModelButton:menu-name
+ * property is set to the name you've given to the submenu.
+ *
+ * By convention, the first child of a submenu should be a #GtkModelButton
+ * to switch back to the parent menu. Such a button should use the
+ * #GtkModelButton:inverted and #GtkModelButton:centered properties
+ * to achieve a title-like appearance and place the submenu indicator
+ * at the opposite side. To switch back to the main menu, use "main"
+ * as the menu name.
+ */
+
 struct _GtkPopoverMenu
 {
   GtkPopover parent_instance;
@@ -183,6 +205,15 @@ gtk_popover_menu_class_init (GtkPopoverMenuClass *klass)
   container_class->set_child_property = gtk_popover_menu_set_child_property;
   container_class->get_child_property = gtk_popover_menu_get_child_property;
 
+  /**
+   * GtkPopoverMenu:submenu:
+   *
+   * The submenu child property specifies the name of the submenu
+   * If it is %NULL or "main", the child is used as the main menu,
+   * which is shown initially when the popover is mapped.
+   *
+   * Since: 3.16
+   */
   gtk_container_class_install_child_property (container_class,
                                               CHILD_PROP_SUBMENU,
                                               g_param_spec_string ("submenu",
@@ -192,6 +223,15 @@ gtk_popover_menu_class_init (GtkPopoverMenuClass *klass)
                                                                    G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 }
 
+/**
+ * gtk_popover_menu_new:
+ *
+ * Creates a new popover menu.
+ *
+ * Returns: a new #GtkPopoverMenu
+ *
+ * Since: 3.16
+ */
 GtkWidget *
 gtk_popover_menu_new (void)
 {

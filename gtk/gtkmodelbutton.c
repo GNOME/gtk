@@ -35,9 +35,40 @@
 #include "gtkpopover.h"
 #include "gtkintl.h"
 
+/**
+ * SECTION:gtkmodelbutton
+ * @Short_description: A button that uses a GAction as model
+ * @Title: GtkModelButton
+ *
+ * GtkModelButton is a button class that can use a #GAction as its model.
+ *
+ * Model buttons are used when popovers from a menu model with
+ * gtk_popover_new_from_model(); they can also be used manually in
+ * a #GtkPopoverMenu.
+ *
+ * When the action is specified via the #GtkActionable:action-name
+ * and #GtkActionable:action-target properties, the role of the button
+ * (i.e. whether it is a plain, check or radio button) is determined by
+ * the type of the action and doesn't have to be explicitly specified
+ * with the #GtkModelButton:role property.
+ *
+ * The content of the button is specified by the #GtkModelButton:text
+ * and #GtkModelButton:icon properties.
+ *
+ * The appearance of model buttons can be influenced with the
+ * #GtkModelButton:centered and #GtkModelButton:iconic properties.
+ *
+ * Model buttons have built-in support for submenus in #GtkPopoverMenu.
+ * To make a GtkModelButton that opens a submenu when activated, set
+ * the #GtkModelButton:menu-name property. To make a button that goes
+ * back to the parent menu, you should set the #GtkModelButton:inverted
+ * property to place the submenu indicator at the opposite side.
+ */
+
 struct _GtkModelButton
 {
   GtkButton parent_instance;
+
   GtkWidget *box;
   GtkWidget *image;
   GtkWidget *label;
@@ -459,12 +490,12 @@ gtk_model_button_get_preferred_width (GtkWidget *widget,
 }
 
 static void
-gtk_model_button_get_preferred_height_and_baseline_for_width (GtkWidget          *widget,
-                                                              gint                width,
-                                                              gint               *minimum,
-                                                              gint               *natural,
-                                                              gint               *minimum_baseline,
-                                                              gint               *natural_baseline)
+gtk_model_button_get_preferred_height_and_baseline_for_width (GtkWidget *widget,
+                                                              gint       width,
+                                                              gint      *minimum,
+                                                              gint      *natural,
+                                                              gint      *minimum_baseline,
+                                                              gint      *natural_baseline)
 {
   GtkModelButton *button = GTK_MODEL_BUTTON (widget);
   GtkWidget *child;
@@ -641,9 +672,7 @@ gtk_model_button_draw (GtkWidget *widget,
   gint baseline;
 
   if (model_button->iconic)
-    {
-      return GTK_WIDGET_CLASS (gtk_model_button_parent_class)->draw (widget, cr);
-    }
+    return GTK_WIDGET_CLASS (gtk_model_button_parent_class)->draw (widget, cr);
 
   context = gtk_widget_get_style_context (widget);
   width = gtk_widget_get_allocated_width (widget);
@@ -768,37 +797,126 @@ gtk_model_button_class_init (GtkModelButtonClass *class)
 
   button_class->clicked = gtk_model_button_clicked;
 
+  /**
+   * GtkModelButton:role:
+   *
+   * Specifies whether the button is a plain, check or radio button.
+   * When #GtkActionable:action-name is set, the role will be determined
+   * from the action and does not have to be set explicitly.
+   *
+   * Since: 3.16
+   */
   properties[PROP_ROLE] =
-    g_param_spec_enum ("role", P_("Role"), P_("The role of this button"),
+    g_param_spec_enum ("role",
+                       P_("Role"),
+                       P_("The role of this button"),
                        GTK_TYPE_BUTTON_ROLE,
                        GTK_BUTTON_ROLE_NORMAL,
                        G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
+
+  /**
+   * GtkModelButton:icon:
+   *
+   * A #GIcon that will be used if iconic appearance for the button is
+   * desired.
+   *
+   * Since: 3.16
+   */
   properties[PROP_ICON] = 
-    g_param_spec_object ("icon", P_("Icon"), P_("The icon"),
+    g_param_spec_object ("icon",
+                         P_("Icon"),
+                         P_("The icon"),
                          G_TYPE_ICON,
                          G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
+
+  /**
+   * GtkModelButton:text:
+   *
+   * The label for the button.
+   *
+   * Since: 3.16
+   */
   properties[PROP_TEXT] =
-    g_param_spec_string ("text", P_("Text"), P_("The text"),
+    g_param_spec_string ("text",
+                         P_("Text"),
+                         P_("The text"),
                          NULL,
                          G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
+
+  /**
+   * GtkModelButton:active:
+   *
+   * The state of the button. This is reflecting the state of the associated
+   * #GAction.
+   *
+   * Since: 3.16
+   */
   properties[PROP_ACTIVE] =
-    g_param_spec_boolean ("active", P_("Active"), P_("Active"),
+    g_param_spec_boolean ("active",
+                          P_("Active"),
+                          P_("Active"),
                           FALSE,
                           G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
+
+  /**
+   * GtkModelButton:menu-name:
+   *
+   * The name of a submenu to open when the button is activated.
+   * If this is set, the button should not have an action associated with it.
+   *
+   * Since: 3.16
+   */
   properties[PROP_MENU_NAME] =
-    g_param_spec_string ("menu-name", P_("Menu name"), P_("The name of the menu to open"),
+    g_param_spec_string ("menu-name",
+                         P_("Menu name"),
+                         P_("The name of the menu to open"),
                          NULL,
                          G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
+
+  /**
+   * GtkModelButton:inverted:
+   *
+   * Whether to show the submenu indicator at the opposite side than normal.
+   * This property should be set for model buttons that 'go back' to a parent
+   * menu.
+   *
+   * Since: 3.16
+   */
   properties[PROP_INVERTED] =
-    g_param_spec_boolean ("inverted", P_("Inverted"), P_("Whether the menu is a parent"),
+    g_param_spec_boolean ("inverted",
+                          P_("Inverted"),
+                          P_("Whether the menu is a parent"),
                           FALSE,
                           G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
+
+  /**
+   * GtkModelButton:centered:
+   *
+   * Wether to render the button contents centered instead of left-aligned.
+   * This property should be set for title-like items.
+   *
+   * Since: 3.16
+   */
   properties[PROP_CENTERED] =
-    g_param_spec_boolean ("centered", P_("Centered"), P_("Whether to center the contents"),
+    g_param_spec_boolean ("centered",
+                          P_("Centered"),
+                          P_("Whether to center the contents"),
                           FALSE,
                           G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
+
+  /**
+   * GtkModelButton:iconic:
+   *
+   * If this property is set, the button will show an icon if one is set.
+   * If no icon is set, the text will be used. This is typically used for
+   * horizontal sections of linked buttons.
+   *
+   * Since: 3.16
+   */
   properties[PROP_ICONIC] =
-    g_param_spec_boolean ("iconic", P_("Iconic"), P_("Whether to prefer the icon over text"),
+    g_param_spec_boolean ("iconic",
+                          P_("Iconic"),
+                          P_("Whether to prefer the icon over text"),
                           TRUE,
                           G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
   g_object_class_install_properties (object_class, LAST_PROPERTY, properties);
@@ -811,12 +929,10 @@ gtk_model_button_init (GtkModelButton *button)
 {
   gtk_button_set_relief (GTK_BUTTON (button), GTK_RELIEF_NONE);
   button->box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 6);
-  g_object_set (button->box,
-                "margin-start", 12,
-                "margin-end", 12,
-                "margin-top", 3,
-                "margin-bottom", 3,
-                NULL);
+  gtk_widget_set_margin_start (button->box, 12);
+  gtk_widget_set_margin_end (button->box, 12);
+  gtk_widget_set_margin_top (button->box, 3);
+  gtk_widget_set_margin_bottom (button->box, 3);
   gtk_widget_set_halign (button->box, GTK_ALIGN_FILL);
   gtk_widget_show (button->box);
   button->image = gtk_image_new ();

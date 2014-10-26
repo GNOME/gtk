@@ -126,6 +126,7 @@ gtk_menu_shell_get_type
 gtk_menu_tool_button_get_type
 gtk_message_dialog_get_type
 gtk_misc_get_type
+gtk_model_button_get_type
 gtk_mount_operation_get_type
 gtk_notebook_get_type
 gtk_numerable_icon_get_type
@@ -139,6 +140,7 @@ gtk_paper_size_get_type
 gtk_places_sidebar_get_type
 @ENABLE_ON_X11@gtk_plug_get_type
 gtk_popover_get_type
+gtk_popover_menu_get_type
 @DISABLE_ON_W32@gtk_printer_get_type
 gtk_print_context_get_type
 @DISABLE_ON_W32@gtk_print_job_get_type
