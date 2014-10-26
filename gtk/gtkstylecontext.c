@@ -706,7 +706,7 @@ build_properties (GtkStyleContext             *context,
   _gtk_css_lookup_resolve (lookup, 
                            GTK_STYLE_PROVIDER_PRIVATE (priv->cascade),
 			   priv->scale,
-                           style,
+                           GTK_CSS_STATIC_STYLE (style),
                            priv->parent ? style_values_lookup (priv->parent) : NULL);
 
   _gtk_css_lookup_free (lookup);
@@ -739,19 +739,18 @@ style_values_lookup (GtkStyleContext *context)
 
   if (gtk_style_context_is_saved (context))
     {
-<<<<<<< HEAD
       values = gtk_css_static_style_new ();
       g_hash_table_insert (priv->style_values,
                            gtk_css_node_declaration_ref (info->decl),
                            g_object_ref (values));
-    
+
       build_properties (context, values, info->decl, NULL, NULL);
     }
   else
     {
       values = gtk_css_animated_style_new ();
 
-      build_properties (context, values, info->decl, NULL, &priv->relevant_changes);
+      build_properties (context, GTK_CSS_ANIMATED_STYLE (values)->style, info->decl, NULL, &priv->relevant_changes);
       /* These flags are always relevant */
       priv->relevant_changes |= GTK_CSS_CHANGE_SOURCE;
     }
@@ -2838,7 +2837,7 @@ _gtk_style_context_validate (GtkStyleContext  *context,
     {
       changes = gtk_css_style_compute_dependencies (current, parent_changes);
       if (!_gtk_bitmask_is_empty (changes))
-	build_properties (context, current, info->decl, changes, NULL);
+	build_properties (context, GTK_CSS_ANIMATED_STYLE (current)->style, info->decl, changes, NULL);
 
       gtk_style_context_update_cache (context, parent_changes);
     }

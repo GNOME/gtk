@@ -54,13 +54,6 @@ GType                   gtk_css_animated_style_get_type         (void) G_GNUC_CO
 
 GtkCssStyle *           gtk_css_animated_style_new              (void);
 
-void                    gtk_css_animated_style_compute_value    (GtkCssAnimatedStyle    *style,
-                                                                 GtkStyleProviderPrivate*provider,
-								 int                     scale,
-                                                                 GtkCssStyle            *parent_style,
-                                                                 guint                   id,
-                                                                 GtkCssValue            *specified,
-                                                                 GtkCssSection          *section);
 void                    gtk_css_animated_style_set_animated_value(GtkCssAnimatedStyle   *style,
                                                                  guint                   id,
                                                                  GtkCssValue            *value);

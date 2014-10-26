@@ -19,8 +19,6 @@
 
 #include "gtkcsslookupprivate.h"
 
-#include "gtkcssanimatedstyleprivate.h"
-#include "gtkcssstaticstyleprivate.h"
 #include "gtkcssstylepropertyprivate.h"
 #include "gtkcsstypesprivate.h"
 #include "gtkprivatetypebuiltins.h"
@@ -108,14 +106,14 @@ void
 _gtk_css_lookup_resolve (GtkCssLookup            *lookup,
                          GtkStyleProviderPrivate *provider,
 			 int                      scale,
-                         GtkCssStyle             *style,
+                         GtkCssStaticStyle       *style,
                          GtkCssStyle             *parent_style)
 {
   guint i, n;
 
   g_return_if_fail (lookup != NULL);
   g_return_if_fail (GTK_IS_STYLE_PROVIDER_PRIVATE (provider));
-  g_return_if_fail (GTK_IS_CSS_STYLE (style));
+  g_return_if_fail (GTK_IS_CSS_STATIC_STYLE (style));
   g_return_if_fail (parent_style == NULL || GTK_IS_CSS_STYLE (parent_style));
 
   n = _gtk_css_style_property_get_n_properties ();
@@ -124,24 +122,13 @@ _gtk_css_lookup_resolve (GtkCssLookup            *lookup,
     {
       if (lookup->values[i].value ||
           _gtk_bitmask_get (lookup->missing, i))
-        {
-          if (GTK_IS_CSS_ANIMATED_STYLE (style))
-            gtk_css_animated_style_compute_value (GTK_CSS_ANIMATED_STYLE (style),
-                                                  provider,
-                                                  scale,
-                                                  parent_style,
-                                                  i,
-                                                  lookup->values[i].value,
-                                                  lookup->values[i].section);
-          else
-            gtk_css_static_style_compute_value (GTK_CSS_STATIC_STYLE (style),
-                                                provider,
-                                                scale,
-                                                parent_style,
-                                                i,
-                                                lookup->values[i].value,
-                                                lookup->values[i].section);
-        }
+        gtk_css_static_style_compute_value (GTK_CSS_STATIC_STYLE (style),
+                                            provider,
+                                            scale,
+                                            parent_style,
+                                            i,
+                                            lookup->values[i].value,
+                                            lookup->values[i].section);
       /* else not a relevant property */
     }
 }

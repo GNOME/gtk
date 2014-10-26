@@ -127,24 +127,6 @@ gtk_css_animated_style_new (void)
 }
 
 void
-gtk_css_animated_style_compute_value (GtkCssAnimatedStyle     *style,
-                                      GtkStyleProviderPrivate *provider,
-                                      int                      scale,
-                                      GtkCssStyle             *parent_style,
-                                      guint                    id,
-                                      GtkCssValue             *specified,
-                                      GtkCssSection           *section)
-{
-  gtk_internal_return_if_fail (GTK_IS_CSS_ANIMATED_STYLE (style));
-  gtk_internal_return_if_fail (GTK_IS_STYLE_PROVIDER_PRIVATE (provider));
-  gtk_internal_return_if_fail (parent_style == NULL || GTK_IS_CSS_STYLE (parent_style));
-
-  gtk_css_static_style_compute_value (GTK_CSS_STATIC_STYLE (style->style),
-                                      provider, scale, parent_style,
-                                      id, specified, section);
-}
-
-void
 gtk_css_animated_style_set_animated_value (GtkCssAnimatedStyle *style,
                                            guint                id,
                                            GtkCssValue         *value)
