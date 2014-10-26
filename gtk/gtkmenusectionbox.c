@@ -39,7 +39,6 @@ struct _GtkMenuSectionBox
 {
   GtkBox             parent_instance;
 
-  GtkSizeGroup      *size_group;
   GtkMenuSectionBox *toplevel;
   GtkMenuTracker    *tracker;
   GtkBox            *item_box;
@@ -335,12 +334,6 @@ gtk_menu_section_box_dispose (GObject *object)
       box->separator = NULL;
     }
 
-  if (box->size_group)
-    {
-      g_object_unref (box->size_group);
-      box->size_group = NULL;
-    }
-
   if (box->tracker)
     {
       gtk_menu_tracker_free (box->tracker);
@@ -364,8 +357,6 @@ gtk_menu_section_box_new_toplevel (GtkStack    *stack,
   GtkMenuSectionBox *box;
 
   box = g_object_new (GTK_TYPE_MENU_SECTION_BOX, "margin", 10,  NULL);
-  box->size_group = gtk_size_group_new (GTK_SIZE_GROUP_HORIZONTAL);
-  gtk_size_group_add_widget (box->size_group, GTK_WIDGET (box));
   gtk_stack_add_named (stack, GTK_WIDGET (box), "main");
 
   box->tracker = gtk_menu_tracker_new (GTK_ACTION_OBSERVABLE (_gtk_widget_get_action_muxer (GTK_WIDGET (box))),
@@ -385,8 +376,6 @@ gtk_menu_section_box_new_submenu (GtkMenuTrackerItem *item,
   GtkWidget *button;
 
   box = g_object_new (GTK_TYPE_MENU_SECTION_BOX, "margin", 10, NULL);
-  box->size_group = g_object_ref (toplevel->size_group);
-  gtk_size_group_add_widget (box->size_group, GTK_WIDGET (box));
 
   button = g_object_new (GTK_TYPE_MODEL_BUTTON,
                          "has-submenu", TRUE,
@@ -425,7 +414,6 @@ gtk_menu_section_box_new_section (GtkMenuTrackerItem *item,
   const gchar *hint;
 
   box = g_object_new (GTK_TYPE_MENU_SECTION_BOX, NULL);
-  box->size_group = g_object_ref (parent->size_group);
   box->toplevel = parent->toplevel;
   box->depth = parent->depth + 1;
 

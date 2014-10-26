@@ -1961,7 +1961,7 @@ gtk_popover_bind_model (GtkPopover  *popover,
   if (model)
     {
       stack = gtk_stack_new ();
-      gtk_stack_set_homogeneous (GTK_STACK (stack), FALSE);
+      gtk_stack_set_vhomogeneous (GTK_STACK (stack), FALSE);
       gtk_stack_set_transition_type (GTK_STACK (stack), GTK_STACK_TRANSITION_TYPE_SLIDE_LEFT_RIGHT);
       gtk_widget_show (stack);
       gtk_container_add (GTK_CONTAINER (popover), stack);
