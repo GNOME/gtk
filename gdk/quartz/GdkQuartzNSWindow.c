@@ -654,6 +654,8 @@ update_context_from_dragging_info (id <NSDraggingInfo> sender)
   _gdk_quartz_drag_source_context = NULL;
 }
 
+#ifdef AVAILABLE_MAC_OS_X_VERSION_10_7_AND_LATER
+
 - (void)setStyleMask:(NSUInteger)styleMask
 {
   gboolean was_fullscreen;
@@ -668,5 +670,7 @@ update_context_from_dragging_info (id <NSDraggingInfo> sender)
   if (was_fullscreen != is_fullscreen)
     _gdk_quartz_window_update_fullscreen_state ([[self contentView] gdkWindow]);
 }
+
+#endif
 
 @end
