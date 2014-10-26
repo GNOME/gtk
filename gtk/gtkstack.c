@@ -84,6 +84,8 @@
 enum  {
   PROP_0,
   PROP_HOMOGENEOUS,
+  PROP_HHOMOGENEOUS,
+  PROP_VHOMOGENEOUS,
   PROP_VISIBLE_CHILD,
   PROP_VISIBLE_CHILD_NAME,
   PROP_TRANSITION_DURATION,
@@ -120,7 +122,8 @@ typedef struct {
 
   GtkStackChildInfo *visible_child;
 
-  gboolean homogeneous;
+  gboolean hhomogeneous;
+  gboolean vhomogeneous;
 
   GtkStackTransitionType transition_type;
   guint transition_duration;
@@ -217,17 +220,22 @@ gtk_stack_finalize (GObject *obj)
 
 static void
 gtk_stack_get_property (GObject   *object,
-                       guint       property_id,
-                       GValue     *value,
-                       GParamSpec *pspec)
+                        guint       property_id,
+                        GValue     *value,
+                        GParamSpec *pspec)
 {
   GtkStack *stack = GTK_STACK (object);
-  GtkStackPrivate *priv = gtk_stack_get_instance_private (stack);
 
   switch (property_id)
     {
     case PROP_HOMOGENEOUS:
-      g_value_set_boolean (value, priv->homogeneous);
+      g_value_set_boolean (value, gtk_stack_get_homogeneous (stack));
+      break;
+    case PROP_HHOMOGENEOUS:
+      g_value_set_boolean (value, gtk_stack_get_hhomogeneous (stack));
+      break;
+    case PROP_VHOMOGENEOUS:
+      g_value_set_boolean (value, gtk_stack_get_vhomogeneous (stack));
       break;
     case PROP_VISIBLE_CHILD:
       g_value_set_object (value, gtk_stack_get_visible_child (stack));
@@ -252,9 +260,9 @@ gtk_stack_get_property (GObject   *object,
 
 static void
 gtk_stack_set_property (GObject     *object,
-                       guint         property_id,
-                       const GValue *value,
-                       GParamSpec   *pspec)
+                        guint         property_id,
+                        const GValue *value,
+                        GParamSpec   *pspec)
 {
   GtkStack *stack = GTK_STACK (object);
 
@@ -262,6 +270,12 @@ gtk_stack_set_property (GObject     *object,
     {
     case PROP_HOMOGENEOUS:
       gtk_stack_set_homogeneous (stack, g_value_get_boolean (value));
+      break;
+    case PROP_HHOMOGENEOUS:
+      gtk_stack_set_hhomogeneous (stack, g_value_get_boolean (value));
+      break;
+    case PROP_VHOMOGENEOUS:
+      gtk_stack_set_vhomogeneous (stack, g_value_get_boolean (value));
       break;
     case PROP_VISIBLE_CHILD:
       gtk_stack_set_visible_child (stack, g_value_get_object (value));
@@ -382,6 +396,30 @@ gtk_stack_class_init (GtkStackClass *klass)
 
   stack_props[PROP_HOMOGENEOUS] =
       g_param_spec_boolean ("homogeneous", P_("Homogeneous"), P_("Homogeneous sizing"),
+                            TRUE,
+                            GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY);
+
+  /**
+   * GtkStack:hhomogeneous:
+   *
+   * %TRUE if the stack allocates the same width for all children.
+   *
+   * Since: 3.16
+   */
+  stack_props[PROP_HHOMOGENEOUS] =
+      g_param_spec_boolean ("hhomogeneous", P_("Horizontally homogeneous"), P_("Horizontally homogeneous sizing"),
+                            TRUE,
+                            GTK_PARAM_READWRITE | G_PARAM_CONSTRUCT | G_PARAM_EXPLICIT_NOTIFY);
+
+  /**
+   * GtkStack:vhomogeneous:
+   *
+   * %TRUE if the stack allocates the same height for all children.
+   *
+   * Since: 3.16
+   */
+  stack_props[PROP_VHOMOGENEOUS] =
+      g_param_spec_boolean ("vhomogeneous", P_("Vertically homogeneous"), P_("Vertically homogeneous sizing"),
                             TRUE,
                             GTK_PARAM_READWRITE | G_PARAM_CONSTRUCT | G_PARAM_EXPLICIT_NOTIFY);
   stack_props[PROP_VISIBLE_CHILD] =
@@ -1155,7 +1193,7 @@ gtk_stack_add (GtkContainer *container,
   else
     gtk_widget_set_child_visible (child, FALSE);
 
-  if (priv->homogeneous || priv->visible_child == child_info)
+  if (priv->hhomogeneous || priv->vhomogeneous || priv->visible_child == child_info)
     gtk_widget_queue_resize (GTK_WIDGET (stack));
 }
 
@@ -1195,7 +1233,7 @@ gtk_stack_remove (GtkContainer *container,
   g_free (child_info->icon_name);
   g_slice_free (GtkStackChildInfo, child_info);
 
-  if (priv->homogeneous && was_visible)
+  if ((priv->hhomogeneous || priv->vhomogeneous) && was_visible)
     gtk_widget_queue_resize (GTK_WIDGET (stack));
 }
 
@@ -1243,6 +1281,10 @@ gtk_stack_get_child_by_name (GtkStack    *stack,
  * size for all its children. If it isn't, the stack
  * may change size when a different child becomes visible.
  *
+ * Since 3.16, homogeneity can be controlled separately
+ * for horizontal and vertical size, with the
+ * #GtkStack:hhomogeneous and #GtkStack:vhomogeneous.
+ *
  * Since: 3.10
  */
 void
@@ -1255,15 +1297,28 @@ gtk_stack_set_homogeneous (GtkStack *stack,
 
   homogeneous = !!homogeneous;
 
-  if (priv->homogeneous == homogeneous)
+  if ((priv->hhomogeneous && priv->vhomogeneous) == homogeneous)
     return;
 
-  priv->homogeneous = homogeneous;
+  g_object_freeze_notify (G_OBJECT (stack));
+
+  if (priv->hhomogeneous != homogeneous)
+    {
+      priv->hhomogeneous = homogeneous;
+      g_object_notify_by_pspec (G_OBJECT (stack), stack_props[PROP_HHOMOGENEOUS]);
+    }
+
+  if (priv->vhomogeneous != homogeneous)
+    {
+      priv->vhomogeneous = homogeneous;
+      g_object_notify_by_pspec (G_OBJECT (stack), stack_props[PROP_VHOMOGENEOUS]);
+    }
 
   if (gtk_widget_get_visible (GTK_WIDGET(stack)))
     gtk_widget_queue_resize (GTK_WIDGET (stack));
 
   g_object_notify_by_pspec (G_OBJECT (stack), stack_props[PROP_HOMOGENEOUS]);
+  g_object_thaw_notify (G_OBJECT (stack));
 }
 
 /**
@@ -1284,7 +1339,115 @@ gtk_stack_get_homogeneous (GtkStack *stack)
 
   g_return_val_if_fail (GTK_IS_STACK (stack), FALSE);
 
-  return priv->homogeneous;
+  return priv->hhomogeneous && priv->vhomogeneous;
+}
+
+/**
+ * gtk_stack_set_hhomogeneous:
+ * @stack: a #GtkStack
+ * @hhomogeneous: %TRUE to make @stack horizontally homogeneous
+ *
+ * Sets the #GtkStack to be horizontally homogeneous or not.
+ * If it is homogeneous, the #GtkStack will request the same
+ * width for all its children. If it isn't, the stack
+ * may change width when a different child becomes visible.
+ *
+ * Since: 3.16
+ */
+void
+gtk_stack_set_hhomogeneous (GtkStack *stack,
+                            gboolean  hhomogeneous)
+{
+  GtkStackPrivate *priv = gtk_stack_get_instance_private (stack);
+
+  g_return_if_fail (GTK_IS_STACK (stack));
+
+  hhomogeneous = !!hhomogeneous;
+
+  if (priv->hhomogeneous == hhomogeneous)
+    return;
+  
+  priv->hhomogeneous = hhomogeneous;
+
+  if (gtk_widget_get_visible (GTK_WIDGET(stack)))
+    gtk_widget_queue_resize (GTK_WIDGET (stack));
+
+  g_object_notify_by_pspec (G_OBJECT (stack), stack_props[PROP_HHOMOGENEOUS]);
+}
+
+/**
+ * gtk_stack_get_hhomogeneous:
+ * @stack: a #GtkStack
+ *
+ * Gets whether @stack is horizontally homogeneous.
+ * See gtk_stack_set_hhomogeneous().
+ *
+ * Returns: whether @stack is horizontally homogeneous.
+ *
+ * Since: 3.16
+ */
+gboolean
+gtk_stack_get_hhomogeneous (GtkStack *stack)
+{
+  GtkStackPrivate *priv = gtk_stack_get_instance_private (stack);
+
+  g_return_val_if_fail (GTK_IS_STACK (stack), FALSE);
+
+  return priv->hhomogeneous;
+}
+
+/**
+ * gtk_stack_set_vhomogeneous:
+ * @stack: a #GtkStack
+ * @vhomogeneous: %TRUE to make @stack vertically homogeneous
+ *
+ * Sets the #GtkStack to be vertically homogeneous or not.
+ * If it is homogeneous, the #GtkStack will request the same
+ * height for all its children. If it isn't, the stack
+ * may change height when a different child becomes visible.
+ *
+ * Since: 3.16
+ */
+void
+gtk_stack_set_vhomogeneous (GtkStack *stack,
+                            gboolean  vhomogeneous)
+{
+  GtkStackPrivate *priv = gtk_stack_get_instance_private (stack);
+
+  g_return_if_fail (GTK_IS_STACK (stack));
+
+  vhomogeneous = !!vhomogeneous;
+
+  if (priv->vhomogeneous == vhomogeneous)
+    return;
+  
+  priv->vhomogeneous = vhomogeneous;
+
+  if (gtk_widget_get_visible (GTK_WIDGET(stack)))
+    gtk_widget_queue_resize (GTK_WIDGET (stack));
+
+  g_object_notify_by_pspec (G_OBJECT (stack), stack_props[PROP_VHOMOGENEOUS]);
+}
+
+/**
+ * gtk_stack_get_vhomogeneous:
+ * @stack: a #GtkStack
+ *
+ * Gets whether @stack is vertically homogeneous.
+ * See gtk_stack_set_vhomogeneous().
+ *
+ * Returns: whether @stack is vertically homogeneous.
+ *
+ * Since: 3.16
+ */
+gboolean
+gtk_stack_get_vhomogeneous (GtkStack *stack)
+{
+  GtkStackPrivate *priv = gtk_stack_get_instance_private (stack);
+
+  g_return_val_if_fail (GTK_IS_STACK (stack), FALSE);
+
+  return priv->vhomogeneous;
 }
 
 /**
@@ -1909,7 +2072,7 @@ gtk_stack_get_preferred_height (GtkWidget *widget,
       child_info = l->data;
       child = child_info->widget;
 
-      if (!priv->homogeneous &&
+      if (!priv->vhomogeneous &&
           (priv->visible_child != child_info &&
            priv->last_visible_child != child_info))
         continue;
@@ -1950,7 +2113,7 @@ gtk_stack_get_preferred_height_for_width (GtkWidget *widget,
       child_info = l->data;
       child = child_info->widget;
 
-      if (!priv->homogeneous &&
+      if (!priv->vhomogeneous &&
           (priv->visible_child != child_info &&
            priv->last_visible_child != child_info))
         continue;
@@ -1990,7 +2153,7 @@ gtk_stack_get_preferred_width (GtkWidget *widget,
       child_info = l->data;
       child = child_info->widget;
 
-      if (!priv->homogeneous &&
+      if (!priv->hhomogeneous &&
           (priv->visible_child != child_info &&
            priv->last_visible_child != child_info))
         continue;
@@ -2031,7 +2194,7 @@ gtk_stack_get_preferred_width_for_height (GtkWidget *widget,
       child_info = l->data;
       child = child_info->widget;
 
-      if (!priv->homogeneous &&
+      if (!priv->hhomogeneous &&
           (priv->visible_child != child_info &&
            priv->last_visible_child != child_info))
         continue;
