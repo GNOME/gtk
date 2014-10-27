@@ -11,7 +11,7 @@ window1
     parent: window1
     index: 0
     name: Go to the GTK+ website or >google it
-    state: enabled focusable multi-line sensitive
+    state: enabled focusable multi-line sensitive has-tooltip
     toolkit: gtk
     <AtkComponent>
     layer: widget
@@ -57,7 +57,7 @@ window1
     unnamed-GtkLabelAccessibleLinkImpl-0
       "link"
       parent: label1
-      state: enabled focusable multi-line sensitive
+      state: enabled focusable multi-line sensitive has-tooltip
       <AtkHyperlinkImpl>
         <AtkHyperlink>
         start index: 10
@@ -66,7 +66,7 @@ window1
     unnamed-GtkLabelAccessibleLinkImpl-1
       "link"
       parent: label1
-      state: enabled focusable multi-line sensitive
+      state: enabled focusable multi-line sensitive has-tooltip
       <AtkHyperlinkImpl>
         <AtkHyperlink>
         start index: 27

@@ -11,7 +11,7 @@ window1
     parent: window1
     index: 0
     name: Hello World!
-    state: enabled focusable sensitive showing visible visited
+    state: enabled focusable sensitive showing visible visited has-tooltip
     toolkit: gtk
     <AtkComponent>
     layer: widget

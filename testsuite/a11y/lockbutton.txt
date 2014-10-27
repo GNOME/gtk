@@ -13,7 +13,7 @@ window1
     name: Lock
     description: Dialog is unlocked.
 Click to prevent further changes
-    state: enabled focusable sensitive showing visible
+    state: enabled focusable sensitive showing visible has-tooltip
     toolkit: gtk
     <AtkComponent>
     layer: widget
