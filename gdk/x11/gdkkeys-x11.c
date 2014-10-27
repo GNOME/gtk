@@ -1058,6 +1058,7 @@ MyEnhancedXkbTranslateKeyCode(register XkbDescPtr     xkb,
     int col,nKeyGroups;
     unsigned preserve,effectiveGroup;
     KeySym *syms;
+    int found_col = 0;
 
     if (mods_rtrn!=NULL)
         *mods_rtrn = 0;
@@ -1090,7 +1091,7 @@ MyEnhancedXkbTranslateKeyCode(register XkbDescPtr     xkb,
                 break;
         }
     }
-    col= effectiveGroup*XkbKeyGroupsWidth(xkb,key);
+    found_col = col= effectiveGroup*XkbKeyGroupsWidth(xkb,key);
     type = XkbKeyKeyType(xkb,key,effectiveGroup);
 
     preserve= 0;
@@ -1129,7 +1130,7 @@ MyEnhancedXkbTranslateKeyCode(register XkbDescPtr     xkb,
             }
 
             if (!found && ((mods&type->mods.mask) == entry->mods.mask)) {
-                col+= entry->level;
+                found_col= col + entry->level;
                 if (type->preserve)
                     preserve= type->preserve[i].mask;
 
@@ -1143,7 +1144,7 @@ MyEnhancedXkbTranslateKeyCode(register XkbDescPtr     xkb,
     }
 
     if (keysym_rtrn!=NULL)
-        *keysym_rtrn= syms[col];
+        *keysym_rtrn= syms[found_col];
     if (mods_rtrn) {
         /* ---- Begin section modified for GDK  ---- */
         *mods_rtrn &= ~preserve;
@@ -1175,7 +1176,7 @@ MyEnhancedXkbTranslateKeyCode(register XkbDescPtr     xkb,
 
     /* ---- End stuff GDK adds to the original Xlib version ---- */
 
-    return (syms[col] != NoSymbol);
+    return (syms[found_col] != NoSymbol);
 }
 #endif /* HAVE_XKB */
 
