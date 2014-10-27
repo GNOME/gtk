@@ -44,12 +44,6 @@ static GSList *main_window_stack;
 
 void _gdk_quartz_window_flush (GdkWindowImplQuartz *window_impl);
 
-#ifndef AVAILABLE_MAC_OS_X_VERSION_10_7_AND_LATER
-static FullscreenSavedGeometry *get_fullscreen_geometry (GdkWindow *window);
-#endif
-
-#define FULLSCREEN_DATA "fullscreen-data"
-
 typedef struct
 {
   gint            x, y;
@@ -57,6 +51,12 @@ typedef struct
   GdkWMDecoration decor;
 } FullscreenSavedGeometry;
 
+
+#ifndef AVAILABLE_MAC_OS_X_VERSION_10_7_AND_LATER
+static FullscreenSavedGeometry *get_fullscreen_geometry (GdkWindow *window);
+#endif
+
+#define FULLSCREEN_DATA "fullscreen-data"
 
 static void update_toplevel_order (void);
 static void clear_toplevel_order  (void);
