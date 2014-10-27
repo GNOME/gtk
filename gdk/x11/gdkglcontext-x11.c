@@ -288,11 +288,16 @@ glx_pixmap_get (cairo_surface_t *surface)
   XVisualInfo *visinfo;
   int i, value;
   gboolean y_inverted;
-  const int pixmap_attributes[] = {
-    GLX_TEXTURE_TARGET_EXT, GLX_TEXTURE_2D_EXT,
-    GLX_TEXTURE_FORMAT_EXT, GLX_TEXTURE_FORMAT_RGBA_EXT,
+  gboolean with_alpha;
+  guint target = 0;
+  guint format = 0;
+  int pixmap_attributes[] = {
+    GLX_TEXTURE_TARGET_EXT, 0,
+    GLX_TEXTURE_FORMAT_EXT, 0,
     None
   };
+
+  with_alpha = cairo_surface_get_content (surface) == CAIRO_CONTENT_COLOR_ALPHA;
 
   y_inverted = FALSE;
   fbconfigs = glXGetFBConfigs (display, XScreenNumberOfScreen (screen), &nfbconfigs);
@@ -300,35 +305,56 @@ glx_pixmap_get (cairo_surface_t *surface)
     {
       visinfo = glXGetVisualFromFBConfig (display, fbconfigs[i]);
       if (!visinfo || visinfo->visualid != XVisualIDFromVisual (visual))
-	continue;
+        continue;
 
       glXGetFBConfigAttrib (display, fbconfigs[i], GLX_DRAWABLE_TYPE, &value);
       if (!(value & GLX_PIXMAP_BIT))
-	continue;
-
-      glXGetFBConfigAttrib (display, fbconfigs[i],
-			    GLX_BIND_TO_TEXTURE_TARGETS_EXT,
-			    &value);
-      if ((value & GLX_TEXTURE_RECTANGLE_BIT_EXT))
-	continue;
-
-      glXGetFBConfigAttrib (display, fbconfigs[i],
-			    GLX_BIND_TO_TEXTURE_RGBA_EXT,
-			    &value);
-      if (value == FALSE)
         continue;
 
       glXGetFBConfigAttrib (display, fbconfigs[i],
-			    GLX_Y_INVERTED_EXT,
-			    &value);
+                            GLX_BIND_TO_TEXTURE_TARGETS_EXT,
+                            &value);
+      if ((value & (GLX_TEXTURE_RECTANGLE_BIT_EXT | GLX_TEXTURE_2D_BIT_EXT)) == 0)
+        continue;
+      if ((value & GLX_TEXTURE_2D_BIT_EXT))
+        target = GLX_TEXTURE_2D_EXT;
+      else
+        target = GLX_TEXTURE_RECTANGLE_EXT;
+
+      if (!with_alpha)
+        {
+          glXGetFBConfigAttrib (display, fbconfigs[i],
+                                GLX_BIND_TO_TEXTURE_RGB_EXT,
+                                &value);
+          if (!value)
+            continue;
+
+          format = GLX_TEXTURE_FORMAT_RGB_EXT;
+        }
+      else
+        {
+          glXGetFBConfigAttrib (display, fbconfigs[i],
+                                GLX_BIND_TO_TEXTURE_RGBA_EXT,
+                                &value);
+          if (!value)
+            continue;
+          format = GLX_TEXTURE_FORMAT_RGBA_EXT;
+        }
+
+      glXGetFBConfigAttrib (display, fbconfigs[i],
+                            GLX_Y_INVERTED_EXT,
+                            &value);
       if (value == TRUE)
-	y_inverted = TRUE;
+        y_inverted = TRUE;
 
       break;
     }
 
   if (i == nfbconfigs)
     return NULL;
+
+  pixmap_attributes[1] = target;
+  pixmap_attributes[3] = format;
 
   glx_pixmap = g_slice_new0 (GdkGLXPixmap);
   glx_pixmap->y_inverted = y_inverted;
@@ -345,6 +371,7 @@ gdk_x11_gl_context_texture_from_surface (GdkGLContext *context,
 					 cairo_surface_t *surface,
 					 cairo_region_t *region)
 {
+  GdkGLContext *current;
   GdkGLXPixmap *glx_pixmap;
   double device_x_offset, device_y_offset;
   cairo_rectangle_int_t rect;
@@ -353,7 +380,10 @@ gdk_x11_gl_context_texture_from_surface (GdkGLContext *context,
   int window_height;
   int window_scale;
   unsigned int texture_id;
+  gboolean use_texture_rectangle;
+  guint target;
   double sx, sy;
+  float uscale, vscale;
 
   if (cairo_surface_get_type (surface) != CAIRO_SURFACE_TYPE_XLIB)
     return FALSE;
@@ -362,7 +392,11 @@ gdk_x11_gl_context_texture_from_surface (GdkGLContext *context,
   if (glx_pixmap == NULL)
     return FALSE;
 
-  window = gdk_gl_context_get_window (gdk_gl_context_get_current ())->impl_window;
+  current = gdk_gl_context_get_current ();
+
+  use_texture_rectangle = gdk_gl_context_use_texture_rectangle (current);
+
+  window = gdk_gl_context_get_window (current)->impl_window;
   window_scale = gdk_window_get_scale_factor (window);
   window_height = gdk_window_get_height (window);
 
@@ -377,9 +411,19 @@ gdk_x11_gl_context_texture_from_surface (GdkGLContext *context,
   /* Ensure all the X stuff are synced before we read it back via texture-from-pixmap */
   glXWaitX();
 
+  if (use_texture_rectangle)
+    target = GL_TEXTURE_RECTANGLE_ARB;
+  else
+    target = GL_TEXTURE_2D;
+
   glGenTextures (1, &texture_id);
-  glBindTexture (GL_TEXTURE_RECTANGLE_ARB, texture_id);
-  glEnable (GL_TEXTURE_RECTANGLE_ARB);
+  glBindTexture (target, texture_id);
+  glEnable (target);
+
+  glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+  glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+  glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+  glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 
   glXBindTexImageEXT (glx_pixmap->display, glx_pixmap->drawable,
 		      GLX_FRONT_LEFT_EXT, NULL);
@@ -401,17 +445,28 @@ gdk_x11_gl_context_texture_from_surface (GdkGLContext *context,
 
 #define FLIP_Y(_y) (window_height - (_y))
 
+      if (use_texture_rectangle)
+        {
+          uscale = 1.0;
+          vscale = 1.0;
+        }
+      else
+        {
+          uscale = 1.0 / cairo_xlib_surface_get_width (surface);
+          vscale = 1.0 / cairo_xlib_surface_get_height (surface);
+        }
+
       glBegin (GL_QUADS);
-      glTexCoord2f (src_x, src_y + src_height);
+      glTexCoord2f (uscale * src_x, vscale * (src_y + src_height));
       glVertex2f (rect.x * window_scale, FLIP_Y(rect.y + rect.height) * window_scale);
 
-      glTexCoord2f (src_x + src_width, src_y + src_height);
+      glTexCoord2f (uscale * (src_x + src_width), vscale * (src_y + src_height));
       glVertex2f ((rect.x + rect.width) * window_scale, FLIP_Y(rect.y + rect.height) * window_scale);
 
-      glTexCoord2f (src_x + src_width, src_y);
+      glTexCoord2f (uscale * (src_x + src_width), vscale * src_y);
       glVertex2f ((rect.x + rect.width) * window_scale, FLIP_Y(rect.y) * window_scale);
 
-      glTexCoord2f (src_x, src_y);
+      glTexCoord2f (uscale * src_x, vscale * src_y);
       glVertex2f (rect.x * window_scale, FLIP_Y(rect.y) * window_scale);
       glEnd();
     }
@@ -419,7 +474,7 @@ gdk_x11_gl_context_texture_from_surface (GdkGLContext *context,
   glXReleaseTexImageEXT (glx_pixmap->display, glx_pixmap->drawable,
   			 GLX_FRONT_LEFT_EXT);
 
-  glDisable (GL_TEXTURE_RECTANGLE_ARB);
+  glDisable (target);
   glDeleteTextures (1, &texture_id);
 
   glx_pixmap_destroy(glx_pixmap);

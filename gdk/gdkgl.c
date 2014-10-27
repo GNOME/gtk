@@ -113,20 +113,15 @@ gdk_cairo_draw_from_gl (cairo_t              *cr,
       glBindRenderbufferEXT (GL_RENDERBUFFER_EXT, source);
       glFramebufferRenderbufferEXT (GL_FRAMEBUFFER_EXT, GL_COLOR_ATTACHMENT0_EXT,
                                     GL_RENDERBUFFER_EXT, source);
-      glBindFramebufferEXT(GL_DRAW_FRAMEBUFFER_EXT, 0);
+      glBindFramebufferEXT (GL_DRAW_FRAMEBUFFER_EXT, 0);
     }
   else if (source_type == GL_TEXTURE)
     {
+      glBindTexture (GL_TEXTURE_2D, source);
+
       glGetTexLevelParameteriv (GL_TEXTURE_2D, 0, GL_TEXTURE_ALPHA_SIZE,  &alpha_size);
 
-      glBindTexture (GL_TEXTURE_2D, source);
-      glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-      glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-      glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-      glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-      glFramebufferTexture2DEXT (GL_FRAMEBUFFER_EXT, GL_COLOR_ATTACHMENT0_EXT,
-                                 GL_TEXTURE_2D, source, 0);
-      glBindFramebufferEXT(GL_DRAW_FRAMEBUFFER_EXT, 0);
+      glBindFramebufferEXT (GL_DRAW_FRAMEBUFFER_EXT, 0);
     }
   else
     {
@@ -234,9 +229,6 @@ gdk_cairo_draw_from_gl (cairo_t              *cr,
       /* Translate to impl coords */
       cairo_region_translate (clip_region, dx, dy);
 
-      glGetTexLevelParameteriv (GL_TEXTURE_2D, 0, GL_TEXTURE_WIDTH,  &texture_width);
-      glGetTexLevelParameteriv (GL_TEXTURE_2D, 0, GL_TEXTURE_HEIGHT,  &texture_height);
-
       if (alpha_size != 0)
         {
           cairo_region_t *opaque_region, *blend_region;
@@ -260,6 +252,19 @@ gdk_cairo_draw_from_gl (cairo_t              *cr,
           cairo_region_destroy (opaque_region);
           cairo_region_destroy (blend_region);
         }
+
+      glBindTexture (GL_TEXTURE_2D, source);
+
+      glGetTexLevelParameteriv (GL_TEXTURE_2D, 0, GL_TEXTURE_WIDTH,  &texture_width);
+      glGetTexLevelParameteriv (GL_TEXTURE_2D, 0, GL_TEXTURE_HEIGHT,  &texture_height);
+
+      glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+      glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+      glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+      glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+      glFramebufferTexture2DEXT (GL_FRAMEBUFFER_EXT, GL_COLOR_ATTACHMENT0_EXT,
+                                 GL_TEXTURE_2D, source, 0);
+
       glEnable (GL_SCISSOR_TEST);
       glEnable (GL_TEXTURE_2D);
 
@@ -389,6 +394,9 @@ gdk_gl_texture_from_surface (cairo_surface_t *surface,
   unsigned int texture_id;
   int window_scale;
   double sx, sy;
+  float umax, vmax;
+  gboolean use_texture_rectangle;
+  guint target;
 
   current = gdk_gl_context_get_current ();
   if (current &&
@@ -398,7 +406,9 @@ gdk_gl_texture_from_surface (cairo_surface_t *surface,
 
   /* Software fallback */
 
-  window = gdk_gl_context_get_window (gdk_gl_context_get_current ());
+  use_texture_rectangle = gdk_gl_context_use_texture_rectangle (current);
+
+  window = gdk_gl_context_get_window (current);
   window_scale = gdk_window_get_scale_factor (window);
   window_height = gdk_window_get_height (window);
 
@@ -411,8 +421,18 @@ gdk_gl_texture_from_surface (cairo_surface_t *surface,
                                    &device_x_offset, &device_y_offset);
 
   glGenTextures (1, &texture_id);
-  glBindTexture (GL_TEXTURE_RECTANGLE_ARB, texture_id);
-  glEnable (GL_TEXTURE_RECTANGLE_ARB);
+  if (use_texture_rectangle)
+    target = GL_TEXTURE_RECTANGLE_ARB;
+  else
+    target = GL_TEXTURE_2D;
+
+  glBindTexture (target, texture_id);
+  glEnable (target);
+
+  glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+  glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+  glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+  glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 
   n_rects = cairo_region_num_rectangles (region);
   for (i = 0; i < n_rects; i++)
@@ -433,7 +453,7 @@ gdk_gl_texture_from_surface (cairo_surface_t *surface,
 
       glPixelStorei (GL_UNPACK_ALIGNMENT, 4);
       glPixelStorei (GL_UNPACK_ROW_LENGTH, cairo_image_surface_get_stride (image)/4);
-      glTexImage2D (GL_TEXTURE_RECTANGLE_ARB, 0, 4, e.width, e.height, 0, GL_BGRA, GL_UNSIGNED_INT_8_8_8_8_REV,
+      glTexImage2D (target, 0, 4, e.width, e.height, 0, GL_BGRA, GL_UNSIGNED_INT_8_8_8_8_REV,
                     cairo_image_surface_get_data (image));
       glPixelStorei (GL_UNPACK_ROW_LENGTH, 0);
 
@@ -441,21 +461,32 @@ gdk_gl_texture_from_surface (cairo_surface_t *surface,
 
 #define FLIP_Y(_y) (window_height - (_y))
 
+      if (use_texture_rectangle)
+        {
+          umax = rect.width * sx;
+          vmax = rect.height * sy;
+        }
+      else
+        {
+          umax = 1.0;
+          vmax = 1.0;
+        }
+
       glBegin (GL_QUADS);
-      glTexCoord2f (0.0f * sx, rect.height * sy);
+      glTexCoord2f (0, vmax);
       glVertex2f (rect.x * window_scale, FLIP_Y(rect.y + rect.height) * window_scale);
 
-      glTexCoord2f (rect.width * sx, rect.height * sy);
+      glTexCoord2f (umax, vmax);
       glVertex2f ((rect.x + rect.width) * window_scale, FLIP_Y(rect.y + rect.height) * window_scale);
 
-      glTexCoord2f (rect.width * sx, 0.0f * sy);
+      glTexCoord2f (umax, 0);
       glVertex2f ((rect.x + rect.width) * window_scale, FLIP_Y(rect.y) * window_scale);
 
-      glTexCoord2f (0.0f * sx, 0.0f * sy);
+      glTexCoord2f (0, 0);
       glVertex2f (rect.x * window_scale, FLIP_Y(rect.y) * window_scale);
       glEnd();
     }
 
-  glDisable (GL_TEXTURE_RECTANGLE_ARB);
+  glDisable (target);
   glDeleteTextures (1, &texture_id);
 }
