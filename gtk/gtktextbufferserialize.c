@@ -590,6 +590,7 @@ serialize_text (GtkTextBuffer        *buffer,
   g_string_append (context->text_str, "</text>\n</text_view_markup>\n");
 }
 
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
 static void
 serialize_pixbufs (SerializationContext *context,
 		   GString              *text)
@@ -611,6 +612,7 @@ serialize_pixbufs (SerializationContext *context,
       g_free (tmp);
     }
 }
+G_GNUC_END_IGNORE_DEPRECATIONS
 
 guint8 *
 _gtk_text_buffer_serialize_rich_text (GtkTextBuffer     *register_buffer,
@@ -1068,6 +1070,7 @@ typedef struct
   const gchar *start;
 } Header;
 
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
 static GdkPixbuf *
 get_pixbuf_from_headers (GList   *headers,
                          int      id,
@@ -1090,6 +1093,7 @@ get_pixbuf_from_headers (GList   *headers,
 
   return pixbuf;
 }
+G_GNUC_END_IGNORE_DEPRECATIONS
 
 static void
 parse_apply_tag_element (GMarkupParseContext  *context,

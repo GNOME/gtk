@@ -510,6 +510,7 @@ _gtk_icon_cache_get_icon (GtkIconCache *cache,
 
   length = GET_UINT32 (cache->buffer, pixel_data_offset + 4);
   
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
   if (!gdk_pixdata_deserialize (&pixdata, length, 
 				(guchar *)(cache->buffer + pixel_data_offset + 8),
 				&error))
@@ -520,6 +521,7 @@ _gtk_icon_cache_get_icon (GtkIconCache *cache,
 
       return NULL;
     }
+G_GNUC_END_IGNORE_DEPRECATIONS
 
   pixbuf = gdk_pixbuf_new_from_data (pixdata.pixel_data, GDK_COLORSPACE_RGB,
 				     (pixdata.pixdata_type & GDK_PIXDATA_COLOR_TYPE_MASK) == GDK_PIXDATA_COLOR_TYPE_RGBA,
