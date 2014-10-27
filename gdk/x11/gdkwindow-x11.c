@@ -3624,8 +3624,14 @@ gdk_x11_window_set_shadow_width (GdkWindow *window,
                                  int        top,
                                  int        bottom)
 {
+  GdkWindowImplX11 *impl = GDK_WINDOW_IMPL_X11 (window->impl);
   Atom frame_extents;
-  gulong data[4] = { left, right, top, bottom };
+  gulong data[4] = {
+    left * impl->window_scale,
+    right * impl->window_scale,
+    top * impl->window_scale,
+    bottom * impl->window_scale
+  };
 
   frame_extents = gdk_x11_get_xatom_by_name_for_display (gdk_window_get_display (window),
                                                          "_GTK_FRAME_EXTENTS");
