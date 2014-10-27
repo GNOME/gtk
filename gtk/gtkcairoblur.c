@@ -147,6 +147,7 @@ _boxblur (guchar  *buffer,
           int      radius)
 {
   guchar *flipped_buffer;
+  int d = _gtk_cairo_blur_compute_pixels (radius);
 
   flipped_buffer = g_malloc (width * height);
 
@@ -154,13 +155,13 @@ _boxblur (guchar  *buffer,
   flip_buffer (flipped_buffer, buffer, width, height);
 
   /* Step 2: blur rows (really columns) */
-  blur_rows (flipped_buffer, buffer, height, width, radius);
+  blur_rows (flipped_buffer, buffer, height, width, d);
 
   /* Step 3: swap rows and columns */
   flip_buffer (buffer, flipped_buffer, height, width);
 
   /* Step 4: blur rows */
-  blur_rows (buffer, flipped_buffer, width, height, radius);
+  blur_rows (buffer, flipped_buffer, width, height, d);
 
   g_free (flipped_buffer);
 }
