@@ -354,7 +354,7 @@ gtk_menu_section_box_dispose (GObject *object)
       box->separator_sync_idle = 0;
     }
 
-    g_clear_object (&box->separator);
+  g_clear_object (&box->separator);
 
   if (box->tracker)
     {
