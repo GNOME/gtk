@@ -77,9 +77,15 @@
 
 #include "gdkintl.h"
 
+#include <epoxy/gl.h>
+
 typedef struct {
   GdkWindow *window;
   GdkVisual *visual;
+
+  guint realized : 1;
+  guint use_texture_rectangle : 1;
+
 } GdkGLContextPrivate;
 
 enum {
@@ -265,6 +271,33 @@ gdk_gl_context_end_frame (GdkGLContext   *context,
   GDK_GL_CONTEXT_GET_CLASS (context)->end_frame (context, painted, damage);
 }
 
+gboolean
+gdk_gl_context_use_texture_rectangle (GdkGLContext *context)
+{
+  GdkGLContextPrivate *priv = gdk_gl_context_get_instance_private (context);
+
+  return priv->use_texture_rectangle;
+}
+
+static void
+gdk_gl_context_realize (GdkGLContext *context)
+{
+  GdkGLContextPrivate *priv = gdk_gl_context_get_instance_private (context);
+  gboolean has_npot, has_texture_rectangle;
+
+  has_npot = epoxy_has_gl_extension ("GL_ARB_texture_non_power_of_two");
+  has_texture_rectangle = epoxy_has_gl_extension ("GL_ARB_texture_rectangle");
+
+  if (has_npot)
+    priv->use_texture_rectangle = FALSE;
+  else if (has_texture_rectangle)
+    priv->use_texture_rectangle = TRUE;
+  else
+    g_warning ("Gl implementation doesn't support any form of non-power-of-two textures");
+
+  priv->realized = TRUE;
+}
+
 /**
  * gdk_gl_context_make_current:
  * @context: a #GdkGLContext
@@ -281,6 +314,9 @@ gdk_gl_context_make_current (GdkGLContext *context)
   g_return_if_fail (GDK_IS_GL_CONTEXT (context));
 
   gdk_display_make_gl_context_current (gdk_window_get_display (priv->window), context);
+
+  if (!priv->realized)
+    gdk_gl_context_realize (context);
 }
 
 /**

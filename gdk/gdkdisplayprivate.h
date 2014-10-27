@@ -116,6 +116,9 @@ struct _GdkDisplay
 
   guint double_click_time;  /* Maximum time between clicks in msecs */
   guint double_click_distance;   /* Maximum distance between clicks in pixels */
+
+  guint has_gl_extension_texture_non_power_of_two : 1;
+  guint has_gl_extension_texture_rectangle : 1;
 };
 
 struct _GdkDisplayClass
