@@ -197,9 +197,9 @@ gdk_x11_window_invalidate_for_new_frame (GdkWindow      *window,
 }
 
 static void
-gdk_x11_gl_context_flush_buffer (GdkGLContext *context,
-                                 cairo_region_t *painted,
-                                 cairo_region_t *damage)
+gdk_x11_gl_context_end_frame (GdkGLContext *context,
+                              cairo_region_t *painted,
+                              cairo_region_t *damage)
 {
   GdkX11GLContext *context_x11 = GDK_X11_GL_CONTEXT (context);
   GdkWindow *window = gdk_gl_context_get_window (context);
@@ -433,7 +433,7 @@ gdk_x11_gl_context_class_init (GdkX11GLContextClass *klass)
   GdkGLContextClass *context_class = GDK_GL_CONTEXT_CLASS (klass);
 
   context_class->update = gdk_x11_gl_context_update;
-  context_class->flush_buffer = gdk_x11_gl_context_flush_buffer;
+  context_class->end_frame = gdk_x11_gl_context_end_frame;
   context_class->texture_from_surface = gdk_x11_gl_context_texture_from_surface;
 }
 

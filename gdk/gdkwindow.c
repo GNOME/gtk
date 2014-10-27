@@ -3086,9 +3086,9 @@ gdk_window_end_paint (GdkWindow *window)
 
           cairo_region_destroy (opaque_region);
 
-          gdk_gl_context_flush_buffer (window->gl_paint_context,
-                                       window->current_paint.region,
-                                       window->active_update_area);
+          gdk_gl_context_end_frame (window->gl_paint_context,
+                                    window->current_paint.region,
+                                    window->active_update_area);
 
           if (epoxy_has_gl_extension ("GL_GREMEDY_frame_terminator"))
             glFrameTerminatorGREMEDY();

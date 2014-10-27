@@ -242,7 +242,7 @@ gdk_gl_context_get_visual (GdkGLContext *context)
 }
 
 /*< private >
- * gdk_gl_context_flush_buffer:
+ * gdk_gl_context_end_frame:
  * @context: a #GdkGLContext
  * @painted: The area that has been redrawn this frame
  * @damage: The area that we know is actually different from the last frame
@@ -256,13 +256,13 @@ gdk_gl_context_get_visual (GdkGLContext *context)
  * Since: 3.16
  */
 void
-gdk_gl_context_flush_buffer (GdkGLContext   *context,
-                             cairo_region_t *painted,
-                             cairo_region_t *damage)
+gdk_gl_context_end_frame (GdkGLContext   *context,
+                          cairo_region_t *painted,
+                          cairo_region_t *damage)
 {
   g_return_if_fail (GDK_IS_GL_CONTEXT (context));
 
-  GDK_GL_CONTEXT_GET_CLASS (context)->flush_buffer (context, painted, damage);
+  GDK_GL_CONTEXT_GET_CLASS (context)->end_frame (context, painted, damage);
 }
 
 /**
