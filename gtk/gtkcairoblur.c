@@ -140,6 +140,23 @@ flip_buffer (guchar *dst_buffer,
 #undef BLOCK_SIZE
 }
 
+/*
+ * Gets the size for a single box blur.
+ *
+ * Much of this, the 3 * sqrt(2 * pi) / 4, is the known value for
+ * approximating a Gaussian using box blurs.  This yields quite a good
+ * approximation for a Gaussian.  For more details, see:
+ * http://www.w3.org/TR/SVG11/filters.html#feGaussianBlurElement
+ * https://bugzilla.mozilla.org/show_bug.cgi?id=590039#c19
+ */
+#define GAUSSIAN_SCALE_FACTOR ((3.0 * sqrt(2 * G_PI) / 4))
+
+static int
+get_box_filter_size (double radius)
+{
+  return GAUSSIAN_SCALE_FACTOR * radius;
+}
+
 static void
 _boxblur (guchar  *buffer,
           int      width,
@@ -147,7 +164,7 @@ _boxblur (guchar  *buffer,
           int      radius)
 {
   guchar *flipped_buffer;
-  int d = _gtk_cairo_blur_compute_pixels (radius);
+  int d = get_box_filter_size (radius);
 
   flipped_buffer = g_malloc (width * height);
 
@@ -210,7 +227,7 @@ _gtk_cairo_blur_surface (cairo_surface_t* surface,
  *
  * This is just the number of pixels added by the blur radius, shadow
  * offset and spread are not included.
- * 
+ *
  * Much of this, the 3 * sqrt(2 * pi) / 4, is the known value for
  * approximating a Gaussian using box blurs.  This yields quite a good
  * approximation for a Gaussian.  Then we multiply this by 1.5 since our
@@ -219,10 +236,8 @@ _gtk_cairo_blur_surface (cairo_surface_t* surface,
  * http://www.w3.org/TR/SVG11/filters.html#feGaussianBlurElement
  * https://bugzilla.mozilla.org/show_bug.cgi?id=590039#c19
  */
-#define GAUSSIAN_SCALE_FACTOR ((3.0 * sqrt(2 * G_PI) / 4) * 1.5)
-
 int
 _gtk_cairo_blur_compute_pixels (double radius)
 {
-  return floor (radius * GAUSSIAN_SCALE_FACTOR + 0.5);
+  return floor (radius * GAUSSIAN_SCALE_FACTOR * 1.5 + 0.5);
 }
