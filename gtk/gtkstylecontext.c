@@ -2626,8 +2626,6 @@ gtk_style_context_clear_cache (GtkStyleContext *context)
 
   priv = context->priv;
 
-  style_info_set_values (priv->info, NULL);
-
   for (l = priv->saved_nodes; l; l = l->next)
     {
       style_info_set_values (l->data, NULL);
@@ -2781,6 +2779,8 @@ _gtk_style_context_validate (GtkStyleContext  *context,
   if (!priv->invalid && change == 0 && _gtk_bitmask_is_empty (parent_changes))
     return;
 
+  g_assert (!gtk_style_context_is_saved (context));
+
   priv->pending_changes = 0;
   gtk_style_context_set_invalid (context, FALSE);
 
@@ -2803,9 +2803,9 @@ _gtk_style_context_validate (GtkStyleContext  *context,
       else
         {
           gtk_style_context_update_cache (context, parent_changes);
-          style_info_set_values (info, NULL);
         }
 
+      style_info_set_values (info, NULL);
       values = style_values_lookup (context);
 
       if (values != current)
@@ -2911,6 +2911,8 @@ gtk_style_context_invalidate (GtkStyleContext *context)
   g_return_if_fail (GTK_IS_STYLE_CONTEXT (context));
 
   gtk_style_context_clear_cache (context);
+
+  style_info_set_values (context->priv->info, NULL);
 
   changes = _gtk_bitmask_new ();
   changes = _gtk_bitmask_invert_range (changes,
