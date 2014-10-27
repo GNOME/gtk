@@ -2913,8 +2913,9 @@ gdk_window_begin_paint_region (GdkWindow       *window,
           glClearColor (0.0f, 0.0f, 0.0f, 0.0f);
           glDisable (GL_DEPTH_TEST);
           glDisable(GL_BLEND);
-          glBlendFunc (GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+          glBlendFunc (GL_ONE, GL_ONE_MINUS_SRC_ALPHA);
           glTexEnvi (GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE);
+
           glViewport (0, 0, ww, wh);
 
           glMatrixMode (GL_PROJECTION);
