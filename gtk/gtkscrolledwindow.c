@@ -3397,7 +3397,8 @@ indicator_set_fade (Indicator *indicator,
   if (visible && !gdk_window_is_visible (indicator->window))
     {
       gdk_window_show (indicator->window);
-      indicator->conceil_timer = g_timeout_add (INDICATOR_FADE_OUT_TIME, maybe_hide_indicator, indicator);
+      if (!g_getenv ("GTK_OVERLAY_SCROLLING_NO_FADE"))
+        indicator->conceil_timer = g_timeout_add (INDICATOR_FADE_OUT_TIME, maybe_hide_indicator, indicator);
     }
   if (!visible && gdk_window_is_visible (indicator->window))
     {
@@ -3589,6 +3590,9 @@ setup_indicator (GtkScrolledWindow *scrolled_window,
   gdk_window_hide (indicator->window);
   gtk_widget_set_opacity (scrollbar, 0.0);
   indicator->current_pos = 0.0;
+
+  if (g_getenv ("GTK_OVERLAY_SCROLLING_NO_FADE"))
+    indicator_start_fade (indicator, 1.0);
 }
 
 static void
