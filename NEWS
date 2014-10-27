@@ -1,3 +1,35 @@
+Overview of Changes in GTK+ 3.15.1
+==================================
+
+* An experimental mir backend has been added.
+  Use --enable-mir-backend to build it.
+
+* Inspector:
+ - Show more information
+ - Use a separate display connection
+
+* Deprecations:
+ - GtkStyleProperties
+
+* Bugs fixed:
+ 707695 GtkLevelBar Colour CSS
+ 737561 quartz: gtk+ 3.14.0 fails to build on 10.6.8, 'NSFullScreen...
+ 738650 fix separator with iconic section and more
+ 738886 Out of bounds access in MyEnhancedXkbTranslateKeyCode
+ 738955 Client-side decoration window menus appear at wrong positio...
+ 738982 Add support for ATK_STATE_HAS_TOOLTIP
+ 739001 Fix Build of broadwayd on Visual Studio
+ 739005 gtkstatusicon.c won't build with both X11 and Quartz backen...
+ 739111 GtkFontChooserDialog fixes
+ 739150 Dragging bookmark crashes nautilus 
+
+Translation updates:
+ Czech
+ Hungarian
+ Serbian
+ Spanish
+
+
 Overview of Changes in GTK+ 3.15.0
 ==================================
 
