@@ -239,8 +239,8 @@ do_hypertext (GtkWidget *do_widget)
       GtkWidget *sw;
       GtkTextBuffer *buffer;
 
-      hand_cursor = gdk_cursor_new (GDK_HAND2);
-      regular_cursor = gdk_cursor_new (GDK_XTERM);
+      hand_cursor = gdk_cursor_new_for_display (gtk_widget_get_display (do_widget), GDK_HAND2);
+      regular_cursor = gdk_cursor_new_for_display (gtk_widget_get_display (do_widget), GDK_XTERM);
 
       window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
       gtk_window_set_screen (GTK_WINDOW (window),
