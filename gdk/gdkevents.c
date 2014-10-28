@@ -461,6 +461,15 @@ gdk_event_peek (void)
   return event;
 }
 
+static GdkDisplay *
+event_get_display (const GdkEvent *event)
+{
+  if (event->any.window)
+    return gdk_window_get_display (event->any.window);
+  else
+    return gdk_display_get_default ();
+}
+
 /**
  * gdk_event_put:
  * @event: a #GdkEvent.
@@ -476,10 +485,7 @@ gdk_event_put (const GdkEvent *event)
   
   g_return_if_fail (event != NULL);
 
-  if (event->any.window)
-    display = gdk_window_get_display (event->any.window);
-  else
-    display = gdk_display_get_default ();
+  display = event_get_display (event);
 
   gdk_display_put_event (display, event);
 }
@@ -713,7 +719,7 @@ gdk_event_copy (const GdkEvent *event)
     }
 
   if (gdk_event_is_allocated (event))
-    _gdk_display_event_data_copy (gdk_display_get_default (), event, new_event);
+    _gdk_display_event_data_copy (event_get_display (event), event, new_event);
 
   return new_event;
 }
@@ -804,7 +810,7 @@ gdk_event_free (GdkEvent *event)
       break;
     }
 
-  display = gdk_display_get_default ();
+  display = event_get_display (event);
   if (display)
     _gdk_display_event_data_free (display, event);
 
