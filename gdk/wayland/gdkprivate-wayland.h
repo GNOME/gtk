@@ -224,9 +224,10 @@ GdkWaylandSelection * gdk_wayland_display_get_selection (GdkDisplay *display);
 GdkWaylandSelection * gdk_wayland_selection_new (void);
 void gdk_wayland_selection_free (GdkWaylandSelection *selection);
 
-void gdk_wayland_selection_set_offer (struct wl_data_offer *offer);
-struct wl_data_offer * gdk_wayland_selection_get_offer (void);
-GList * gdk_wayland_selection_get_targets (void);
+void gdk_wayland_selection_set_offer (GdkDisplay           *display,
+                                      struct wl_data_offer *wl_offer);
+struct wl_data_offer * gdk_wayland_selection_get_offer (GdkDisplay *display);
+GList * gdk_wayland_selection_get_targets (GdkDisplay *display);
 
 void     gdk_wayland_selection_store   (GdkWindow    *window,
                                         GdkAtom       type,
@@ -235,7 +236,7 @@ void     gdk_wayland_selection_store   (GdkWindow    *window,
                                         gint          len);
 struct wl_data_source * gdk_wayland_selection_get_data_source (GdkWindow *owner,
                                                                GdkAtom    selection);
-void gdk_wayland_selection_unset_data_source (GdkAtom selection);
+void gdk_wayland_selection_unset_data_source (GdkDisplay *display, GdkAtom selection);
 
 EGLSurface gdk_wayland_window_get_egl_surface (GdkWindow *window,
                                                EGLConfig config);

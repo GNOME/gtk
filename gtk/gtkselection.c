@@ -885,7 +885,7 @@ gtk_selection_clear_targets (GtkWidget *widget,
 
 #ifdef GDK_WINDOWING_WAYLAND
   if (GDK_IS_WAYLAND_DISPLAY (gtk_widget_get_display (widget)))
-    gdk_wayland_selection_clear_targets (selection);
+    gdk_wayland_selection_clear_targets (gtk_widget_get_display (widget), selection);
 #endif
 
   lists = g_object_get_data (G_OBJECT (widget), gtk_selection_handler_key);

@@ -543,7 +543,8 @@ data_device_data_offer (void                  *data,
                         struct wl_data_device *data_device,
                         struct wl_data_offer  *_offer)
 {
-  gdk_wayland_selection_set_offer (_offer);
+  GdkWaylandDeviceData *device = (GdkWaylandDeviceData *)data;
+  gdk_wayland_selection_set_offer (device->display, _offer);
 }
 
 static void
@@ -573,7 +574,7 @@ data_device_enter (void                  *data,
 
   gdk_wayland_drop_context_update_targets (device->drop_context);
 
-  dnd_owner = gdk_selection_owner_get (gdk_drag_get_selection (device->drop_context));
+  dnd_owner = gdk_selection_owner_get_for_display (device->display, gdk_drag_get_selection (device->drop_context));
 
   if (dnd_owner)
     _gdk_wayland_drag_context_set_source_window (device->drop_context, dnd_owner);
@@ -585,7 +586,7 @@ data_device_enter (void                  *data,
                                         wl_fixed_to_double (y));
   _gdk_wayland_drag_context_emit_event (device->drop_context, GDK_DRAG_ENTER,
                                         GDK_CURRENT_TIME);
-  gdk_wayland_selection_set_offer (offer);
+  gdk_wayland_selection_set_offer (device->display, offer);
 }
 
 static void
@@ -645,7 +646,7 @@ data_device_drop (void                  *data,
   g_debug (G_STRLOC ": %s data_device = %p",
            G_STRFUNC, data_device);
 
-  local_dnd_owner = gdk_selection_owner_get (gdk_drag_get_selection (device->drop_context));
+  local_dnd_owner = gdk_selection_owner_get_for_display (device->display, gdk_drag_get_selection (device->drop_context));
 
   if (local_dnd_owner)
     {
@@ -664,10 +665,12 @@ data_device_selection (void                  *data,
                        struct wl_data_device *wl_data_device,
                        struct wl_data_offer  *offer)
 {
+  GdkWaylandDeviceData *device = (GdkWaylandDeviceData *) data;
+
   g_debug (G_STRLOC ": %s wl_data_device = %p wl_data_offer = %p",
            G_STRFUNC, wl_data_device, offer);
 
-  gdk_wayland_selection_set_offer (offer);
+  gdk_wayland_selection_set_offer (device->display, offer);
 }
 
 static const struct wl_data_device_listener data_device_listener = {

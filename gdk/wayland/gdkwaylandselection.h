@@ -45,7 +45,7 @@ gdk_wayland_selection_add_targets (GdkWindow *window,
 #define gdk_wayland_selection_clear_targets gdk_wayland_selection_clear_targets_libgtk_only
 GDK_AVAILABLE_IN_ALL
 void
-gdk_wayland_selection_clear_targets (GdkAtom selection);
+gdk_wayland_selection_clear_targets (GdkDisplay *display, GdkAtom selection);
 
 #define gdk_wayland_drag_context_get_dnd_window gdk_wayland_drag_context_get_dnd_window_libgtk_only
 GDK_AVAILABLE_IN_ALL

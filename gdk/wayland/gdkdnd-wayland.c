@@ -65,12 +65,13 @@ gdk_wayland_drag_context_finalize (GObject *object)
 {
   GdkWaylandDragContext *wayland_context = GDK_WAYLAND_DRAG_CONTEXT (object);
   GdkDragContext *context = GDK_DRAG_CONTEXT (object);
+  GdkDisplay *display = gdk_window_get_display (context->source_window);
 
   contexts = g_list_remove (contexts, context);
 
   if (context->is_source &&
-      gdk_selection_owner_get (gdk_drag_get_selection (context)) == context->source_window)
-    gdk_wayland_selection_unset_data_source (gdk_drag_get_selection (context));
+      gdk_selection_owner_get_for_display (display, gdk_drag_get_selection (context)) == context->source_window)
+    gdk_wayland_selection_unset_data_source (display, gdk_drag_get_selection (context));
 
   if (wayland_context->data_source)
     wl_data_source_destroy (wayland_context->data_source);
@@ -191,10 +192,12 @@ gdk_wayland_drop_context_set_status (GdkDragContext *context,
                                      gboolean        accepted)
 {
   GdkWaylandDragContext *context_wayland;
+  GdkDisplay *display;
   struct wl_data_offer *wl_offer;
 
   context_wayland = GDK_WAYLAND_DRAG_CONTEXT (context);
-  wl_offer = gdk_wayland_selection_get_offer ();
+  display = gdk_window_get_display (context->source_window);
+  wl_offer = gdk_wayland_selection_get_offer (display);
 
   if (!wl_offer)
     return;
@@ -241,8 +244,10 @@ gdk_wayland_drag_context_drop_finish (GdkDragContext *context,
 				      gboolean        success,
 				      guint32         time)
 {
-  if (gdk_selection_owner_get (gdk_drag_get_selection (context)))
-    gdk_wayland_selection_unset_data_source (gdk_drag_get_selection (context));
+  GdkDisplay *display = gdk_window_get_display (context->source_window);
+
+  if (gdk_selection_owner_get_for_display (display, gdk_drag_get_selection (context)))
+    gdk_wayland_selection_unset_data_source (display, gdk_drag_get_selection (context));
 }
 
 static gboolean
@@ -301,13 +306,10 @@ _gdk_wayland_window_register_dnd (GdkWindow *window)
 }
 
 static GdkWindow *
-create_dnd_window (void)
+create_dnd_window (GdkScreen *screen)
 {
   GdkWindowAttr attrs;
-  GdkScreen *screen;
   guint mask;
-
-  screen = gdk_display_get_default_screen (gdk_display_get_default ());
 
   attrs.x = attrs.y = 0;
   attrs.width = attrs.height = 100;
@@ -343,7 +345,7 @@ _gdk_wayland_window_drag_begin (GdkWindow *window,
   gdk_drag_context_set_device (context, device);
   display_wayland = GDK_WAYLAND_DISPLAY (gdk_device_get_display (device));
 
-  context_wayland->dnd_window = create_dnd_window ();
+  context_wayland->dnd_window = create_dnd_window (gdk_window_get_screen (window));
   context_wayland->dnd_surface = gdk_wayland_window_get_wl_surface (context_wayland->dnd_window);
   context_wayland->data_source =
     gdk_wayland_selection_get_data_source (window,
@@ -380,8 +382,9 @@ _gdk_wayland_drop_context_new (GdkDevice             *device,
 void
 gdk_wayland_drop_context_update_targets (GdkDragContext *context)
 {
+  GdkDisplay *display = gdk_window_get_display (context->source_window);
   g_list_free (context->targets);
-  context->targets = g_list_copy (gdk_wayland_selection_get_targets ());
+  context->targets = g_list_copy (gdk_wayland_selection_get_targets (display));
 }
 
 void
