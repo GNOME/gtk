@@ -3010,6 +3010,7 @@ gdk_window_mark_paint_from_clip (GdkWindow          *window,
       cairo_region_subtract (impl_window->current_paint.flushed_region, clip_region);
       cairo_region_union (impl_window->current_paint.need_blend_region, clip_region);
     }
+  cairo_region_destroy (clip_region);
 
   /* Clear the area on the double buffer surface to transparent so we
      can start drawing from scratch the area "above" the flushed
