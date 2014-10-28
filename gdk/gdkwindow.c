@@ -8000,9 +8000,9 @@ gdk_pointer_grab (GdkWindow *	  window,
   gulong serial;
   GList *devices, *dev;
 
-  g_return_val_if_fail (window != NULL, 0);
-  g_return_val_if_fail (GDK_IS_WINDOW (window), 0);
-  g_return_val_if_fail (confine_to == NULL || GDK_IS_WINDOW (confine_to), 0);
+  g_return_val_if_fail (window != NULL, GDK_GRAB_FAILED);
+  g_return_val_if_fail (GDK_IS_WINDOW (window), GDK_GRAB_FAILED);
+  g_return_val_if_fail (confine_to == NULL || GDK_IS_WINDOW (confine_to), GDK_GRAB_FAILED);
 
   /* We need a native window for confine to to work, ensure we have one */
   if (confine_to)
@@ -8112,7 +8112,7 @@ gdk_keyboard_grab (GdkWindow *window,
   gulong serial;
   GList *devices, *dev;
 
-  g_return_val_if_fail (GDK_IS_WINDOW (window), 0);
+  g_return_val_if_fail (GDK_IS_WINDOW (window), GDK_GRAB_FAILED);
 
   /* Non-viewable client side window => fail */
   if (!_gdk_window_has_impl (window) &&

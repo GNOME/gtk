@@ -1291,8 +1291,8 @@ gdk_device_grab (GdkDevice        *device,
   GdkGrabStatus res;
   GdkWindow *native;
 
-  g_return_val_if_fail (GDK_IS_DEVICE (device), GDK_GRAB_SUCCESS);
-  g_return_val_if_fail (GDK_IS_WINDOW (window), GDK_GRAB_SUCCESS);
+  g_return_val_if_fail (GDK_IS_DEVICE (device), GDK_GRAB_FAILED);
+  g_return_val_if_fail (GDK_IS_WINDOW (window), GDK_GRAB_FAILED);
 
   native = gdk_window_get_toplevel (window);
 
