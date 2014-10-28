@@ -219,7 +219,9 @@ static void                 gtk_about_dialog_set_property   (GObject            
                                                              guint               prop_id,
                                                              const GValue       *value,
                                                              GParamSpec         *pspec);
-static void                 gtk_about_dialog_show           (GtkWidget          *widge);
+static void                 gtk_about_dialog_realize        (GtkWidget          *widget);
+static void                 gtk_about_dialog_unrealize      (GtkWidget          *widget);
+static void                 gtk_about_dialog_show           (GtkWidget          *widget);
 static void                 update_name_version             (GtkAboutDialog     *about);
 static void                 follow_if_link                  (GtkAboutDialog     *about,
                                                              GtkTextView        *text_view,
@@ -304,6 +306,8 @@ gtk_about_dialog_class_init (GtkAboutDialogClass *klass)
   object_class->finalize = gtk_about_dialog_finalize;
 
   widget_class->show = gtk_about_dialog_show;
+  widget_class->realize = gtk_about_dialog_realize;
+  widget_class->unrealize = gtk_about_dialog_unrealize;
 
   klass->activate_link = gtk_about_dialog_activate_link;
 
@@ -736,8 +740,6 @@ gtk_about_dialog_init (GtkAboutDialog *about)
   priv->documenters = NULL;
   priv->artists = NULL;
 
-  priv->hand_cursor = gdk_cursor_new (GDK_HAND2);
-  priv->regular_cursor = gdk_cursor_new (GDK_XTERM);
   priv->hovering_over_link = FALSE;
   priv->wrap_license = FALSE;
 
@@ -791,10 +793,33 @@ gtk_about_dialog_finalize (GObject *object)
   g_slist_foreach (priv->visited_links, (GFunc)g_free, NULL);
   g_slist_free (priv->visited_links);
 
-  g_object_unref (priv->hand_cursor);
-  g_object_unref (priv->regular_cursor);
-
   G_OBJECT_CLASS (gtk_about_dialog_parent_class)->finalize (object);
+}
+
+static void
+gtk_about_dialog_realize (GtkWidget *widget)
+{
+  GtkAboutDialog *about = GTK_ABOUT_DIALOG (widget);
+  GtkAboutDialogPrivate *priv = about->priv;
+  GdkDisplay *display;
+
+  GTK_WIDGET_CLASS (gtk_about_dialog_parent_class)->realize (widget);
+
+  display = gtk_widget_get_display (widget);
+  priv->hand_cursor = gdk_cursor_new_for_display (display, GDK_HAND2);
+  priv->regular_cursor = gdk_cursor_new_for_display (display, GDK_XTERM);
+}
+
+static void
+gtk_about_dialog_unrealize (GtkWidget *widget)
+{
+  GtkAboutDialog *about = GTK_ABOUT_DIALOG (widget);
+  GtkAboutDialogPrivate *priv = about->priv;
+
+  g_clear_object (&priv->hand_cursor);
+  g_clear_object (&priv->regular_cursor);
+
+  GTK_WIDGET_CLASS (gtk_about_dialog_parent_class)->unrealize (widget);
 }
 
 static void
