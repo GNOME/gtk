@@ -276,7 +276,8 @@ _gdk_x11_screen_init_visuals (GdkScreen *screen)
        * Additional formats (like ABGR) could be added later if they
        * turn up.
        */
-      if (visuals[i]->depth == 32 &&
+      if (x11_screen->rgba_visual == NULL &&
+          visuals[i]->depth == 32 &&
 	  (visuals[i]->red_mask   == 0xff0000 &&
 	   visuals[i]->green_mask == 0x00ff00 &&
 	   visuals[i]->blue_mask  == 0x0000ff))
