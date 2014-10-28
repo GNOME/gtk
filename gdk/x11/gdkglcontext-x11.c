@@ -286,6 +286,7 @@ glx_pixmap_get (cairo_surface_t *surface)
   GLXFBConfig *fbconfigs;
   int nfbconfigs;
   XVisualInfo *visinfo;
+  VisualID visualid;
   int i, value;
   gboolean y_inverted;
   gboolean with_alpha;
@@ -304,7 +305,13 @@ glx_pixmap_get (cairo_surface_t *surface)
   for (i = 0; i < nfbconfigs; i++)
     {
       visinfo = glXGetVisualFromFBConfig (display, fbconfigs[i]);
-      if (!visinfo || visinfo->visualid != XVisualIDFromVisual (visual))
+      if (!visinfo)
+        continue;
+
+      visualid = visinfo->visualid;
+      XFree (visinfo);
+
+      if (visualid != XVisualIDFromVisual (visual))
         continue;
 
       glXGetFBConfigAttrib (display, fbconfigs[i], GLX_DRAWABLE_TYPE, &value);
@@ -338,6 +345,7 @@ glx_pixmap_get (cairo_surface_t *surface)
                                 &value);
           if (!value)
             continue;
+
           format = GLX_TEXTURE_FORMAT_RGBA_EXT;
         }
 
@@ -349,6 +357,8 @@ glx_pixmap_get (cairo_surface_t *surface)
 
       break;
     }
+
+  XFree (fbconfigs);
 
   if (i == nfbconfigs)
     return NULL;
