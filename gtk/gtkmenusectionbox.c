@@ -90,7 +90,6 @@ void
 gtk_menu_section_box_sync_separators (GtkMenuSectionBox *box,
                                       MenuData          *data)
 {
-  GtkWidget *parent_widget;
   gboolean previous_section_is_iconic;
   gboolean should_have_separator;
   gboolean should_have_top_margin = FALSE;
