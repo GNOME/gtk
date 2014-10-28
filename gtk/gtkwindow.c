@@ -6991,7 +6991,7 @@ gtk_window_realize (GtkWidget *widget)
 
       for (i = 0; i < 8; i++)
         {
-          attributes.cursor = gdk_cursor_new (cursor_type[i]);
+          attributes.cursor = gdk_cursor_new_for_display (gtk_widget_get_display (widget), cursor_type[i]);
           priv->border_window[i] = gdk_window_new (gdk_window, &attributes, attributes_mask);
           g_object_unref (attributes.cursor);
 
