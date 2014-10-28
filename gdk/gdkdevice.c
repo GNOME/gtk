@@ -1260,6 +1260,8 @@ get_native_grab_event_mask (GdkEventMask grab_mask)
  * or the window becomes unviewable. This overrides any previous grab on the device
  * by this client.
  *
+ * Note that @device and @window need to be on the same display.
+ *
  * Device grabs are used for operations which need complete control over the
  * given device events (either pointer or keyboard). For example in GTK+ this
  * is used for Drag and Drop operations, popup menus and such.
@@ -1293,6 +1295,7 @@ gdk_device_grab (GdkDevice        *device,
 
   g_return_val_if_fail (GDK_IS_DEVICE (device), GDK_GRAB_FAILED);
   g_return_val_if_fail (GDK_IS_WINDOW (window), GDK_GRAB_FAILED);
+  g_return_val_if_fail (gdk_window_get_display (window) == gdk_device_get_display (device), GDK_GRAB_FAILED);
 
   native = gdk_window_get_toplevel (window);
 
