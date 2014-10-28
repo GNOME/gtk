@@ -192,11 +192,13 @@ gdk_cursor_unref (GdkCursor *cursor)
  * To make the cursor invisible, use %GDK_BLANK_CURSOR.
  *
  * Returns: a new #GdkCursor
+ *
+ * Deprecated: 3.16: Use gdk_cursor_new_for_display() instead.
  */
 GdkCursor*
 gdk_cursor_new (GdkCursorType cursor_type)
 {
-  return gdk_cursor_new_for_display (gdk_display_get_default(), cursor_type);
+  return gdk_cursor_new_for_display (gdk_display_get_default (), cursor_type);
 }
 
 /**

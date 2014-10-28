@@ -219,7 +219,7 @@ GType      gdk_cursor_get_type           (void) G_GNUC_CONST;
 GDK_AVAILABLE_IN_ALL
 GdkCursor* gdk_cursor_new_for_display	 (GdkDisplay      *display,
 					  GdkCursorType    cursor_type);
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_3_16
 GdkCursor* gdk_cursor_new		 (GdkCursorType	   cursor_type);
 GDK_AVAILABLE_IN_ALL
 GdkCursor* gdk_cursor_new_from_pixbuf	 (GdkDisplay      *display,
