@@ -269,19 +269,62 @@ on_highlight_widget (GtkWidget          *button,
   start_flash (iw, widget);
 }
 
+static void
+deemphasize_window (GtkWidget *window)
+{
+  GdkScreen *screen;
+
+  screen = gtk_widget_get_screen (window);
+  if (gdk_screen_is_composited (screen) &&
+      gtk_widget_get_visual (window) == gdk_screen_get_rgba_visual (screen))
+    {
+      cairo_rectangle_int_t rect;
+      cairo_region_t *region;
+
+      gtk_widget_set_opacity (window, 0.3);
+      rect.x = rect.y = rect.width = rect.height = 0;
+      region = cairo_region_create_rectangle (&rect);
+      gtk_widget_input_shape_combine_region (window, region);
+      cairo_region_destroy (region);
+    }
+  else
+    gdk_window_lower (gtk_widget_get_window (window));
+}
+
+static void
+reemphasize_window (GtkWidget *window)
+{
+  GdkScreen *screen;
+
+  screen = gtk_widget_get_screen (window);
+  if (gdk_screen_is_composited (screen) &&
+      gtk_widget_get_visual (window) == gdk_screen_get_rgba_visual (screen))
+    {
+      gtk_widget_set_opacity (window, 1.0);
+      gtk_widget_input_shape_combine_region (window, NULL);
+    }
+  else
+    gdk_window_raise (gtk_widget_get_window (window));
+}
+
 static gboolean
 property_query_event (GtkWidget *widget,
                       GdkEvent  *event,
                       gpointer   data)
 {
   GtkInspectorWindow *iw = (GtkInspectorWindow *)data;
+  GdkDevice *device;
 
   if (event->type == GDK_BUTTON_RELEASE)
     {
+      device = gdk_event_get_device (event);
+
       g_signal_handlers_disconnect_by_func (widget, property_query_event, data);
       gtk_grab_remove (widget);
       if (iw->grabbed)
-        gdk_device_ungrab (gdk_event_get_device (event), GDK_CURRENT_TIME);
+        gdk_device_ungrab (device, GDK_CURRENT_TIME);
+      reemphasize_window (GTK_WIDGET (iw));
+
       on_inspect_widget (widget, event, data);
     }
   else if (event->type == GDK_MOTION_NOTIFY)
@@ -291,7 +334,6 @@ property_query_event (GtkWidget *widget,
   else if (event->type == GDK_KEY_PRESS)
     {
       GdkEventKey *ke = (GdkEventKey*)event;
-      GdkDevice *device;
 
       if (ke->keyval == GDK_KEY_Escape)
         {
@@ -300,7 +342,8 @@ property_query_event (GtkWidget *widget,
           device = gdk_device_get_associated_device (gdk_event_get_device (event));
           if (iw->grabbed)
             gdk_device_ungrab (device, GDK_CURRENT_TIME);
-          gdk_window_raise (gtk_widget_get_window (GTK_WIDGET (iw)));
+          reemphasize_window (GTK_WIDGET (iw));
+
           clear_flash (iw);
         }
     }
@@ -344,7 +387,7 @@ gtk_inspector_on_inspect (GtkWidget          *button,
   g_signal_connect (iw->invisible, "event", G_CALLBACK (property_query_event), iw);
 
   gtk_grab_add (GTK_WIDGET (iw->invisible));
-  gdk_window_lower (gtk_widget_get_window (GTK_WIDGET (iw)));
+  deemphasize_window (GTK_WIDGET (iw));
 }
 
 static gboolean
