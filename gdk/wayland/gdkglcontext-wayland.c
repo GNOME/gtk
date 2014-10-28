@@ -249,11 +249,11 @@ find_eglconfig_for_window (GdkWindow        *window,
   attrs[i++] = EGL_RGB_BUFFER;
 
   attrs[i++] = EGL_RED_SIZE;
-  attrs[i++] = gdk_visual_get_bits_per_rgb (visual);
+  attrs[i++] = 1;
   attrs[i++] = EGL_GREEN_SIZE;
-  attrs[i++] = gdk_visual_get_bits_per_rgb (visual);
+  attrs[i++] = 1;
   attrs[i++] = EGL_BLUE_SIZE;
-  attrs[i++] = gdk_visual_get_bits_per_rgb (visual);
+  attrs[i++] = 1;
 
   use_rgba = (visual == gdk_screen_get_rgba_visual (gdk_display_get_default_screen (display)));
 
