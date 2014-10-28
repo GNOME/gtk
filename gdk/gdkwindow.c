@@ -6063,11 +6063,15 @@ gdk_window_get_cursor (GdkWindow *window)
  * @window: a #GdkWindow
  * @cursor: (allow-none): a cursor
  *
- * Sets the default mouse pointer for a #GdkWindow. Use gdk_cursor_new_for_display()
- * or gdk_cursor_new_from_pixbuf() to create the cursor. To make the cursor
- * invisible, use %GDK_BLANK_CURSOR. Passing %NULL for the @cursor argument
- * to gdk_window_set_cursor() means that @window will use the cursor of its
- * parent window. Most windows should use this default.
+ * Sets the default mouse pointer for a #GdkWindow.
+ *
+ * Note that @cursor must be for the same display as @window.
+ *
+ * Use gdk_cursor_new_for_display() or gdk_cursor_new_from_pixbuf() to
+ * create the cursor. To make the cursor invisible, use %GDK_BLANK_CURSOR.
+ * Passing %NULL for the @cursor argument to gdk_window_set_cursor() means
+ * that @window will use the cursor of its parent window. Most windows
+ * should use this default.
  */
 void
 gdk_window_set_cursor (GdkWindow *window,
