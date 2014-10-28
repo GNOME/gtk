@@ -432,19 +432,6 @@ gdk_wayland_display_notify_startup_complete (GdkDisplay  *display,
 {
 }
 
-static void
-gdk_wayland_display_event_data_copy (GdkDisplay     *display,
-				     const GdkEvent *src,
-				     GdkEvent       *dst)
-{
-}
-
-static void
-gdk_wayland_display_event_data_free (GdkDisplay *display,
-				     GdkEvent   *event)
-{
-}
-
 static GdkKeymap *
 _gdk_wayland_display_get_keymap (GdkDisplay *display)
 {
@@ -535,8 +522,6 @@ gdk_wayland_display_class_init (GdkWaylandDisplayClass * class)
   display_class->after_process_all_updates = gdk_wayland_display_after_process_all_updates;
   display_class->get_next_serial = gdk_wayland_display_get_next_serial;
   display_class->notify_startup_complete = gdk_wayland_display_notify_startup_complete;
-  display_class->event_data_copy = gdk_wayland_display_event_data_copy;
-  display_class->event_data_free = gdk_wayland_display_event_data_free;
   display_class->create_window_impl = _gdk_wayland_display_create_window_impl;
   display_class->get_keymap = _gdk_wayland_display_get_keymap;
   display_class->push_error_trap = gdk_wayland_display_push_error_trap;

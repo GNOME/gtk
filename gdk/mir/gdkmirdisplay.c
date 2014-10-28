@@ -383,21 +383,6 @@ gdk_mir_display_notify_startup_complete (GdkDisplay  *display,
 }
 
 static void
-gdk_mir_display_event_data_copy (GdkDisplay     *display,
-                                 const GdkEvent *src,
-                                 GdkEvent       *dst)
-{
-  //g_printerr ("gdk_mir_display_event_data_copy\n");
-}
-
-static void
-gdk_mir_display_event_data_free (GdkDisplay *display,
-                                 GdkEvent   *event)
-{
-  //g_printerr ("gdk_mir_display_event_data_free\n");
-}
-
-static void
 gdk_mir_display_create_window_impl (GdkDisplay    *display,
                                     GdkWindow     *window,
                                     GdkWindow     *real_parent,
@@ -556,8 +541,6 @@ gdk_mir_display_class_init (GdkMirDisplayClass *klass)
   display_class->after_process_all_updates = gdk_mir_display_after_process_all_updates;
   display_class->get_next_serial = gdk_mir_display_get_next_serial;
   display_class->notify_startup_complete = gdk_mir_display_notify_startup_complete;
-  display_class->event_data_copy = gdk_mir_display_event_data_copy;
-  display_class->event_data_free = gdk_mir_display_event_data_free;
   display_class->create_window_impl = gdk_mir_display_create_window_impl;
   display_class->get_keymap = gdk_mir_display_get_keymap;
   display_class->push_error_trap = gdk_mir_display_push_error_trap;

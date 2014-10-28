@@ -330,19 +330,6 @@ gdk_broadway_display_get_next_serial (GdkDisplay *display)
   return _gdk_broadway_server_get_next_serial (broadway_display->server);
 }
 
-static void
-gdk_broadway_display_event_data_copy (GdkDisplay    *display,
-				      const GdkEvent *src,
-				      GdkEvent       *dst)
-{
-}
-
-static void
-gdk_broadway_display_event_data_free (GdkDisplay    *display,
-				      GdkEvent *event)
-{
-}
-
 void
 gdk_broadway_display_show_keyboard (GdkBroadwayDisplay *display)
 {
@@ -398,8 +385,6 @@ gdk_broadway_display_class_init (GdkBroadwayDisplayClass * class)
   display_class->after_process_all_updates = _gdk_broadway_display_after_process_all_updates;
   display_class->get_next_serial = gdk_broadway_display_get_next_serial;
   display_class->notify_startup_complete = gdk_broadway_display_notify_startup_complete;
-  display_class->event_data_copy = gdk_broadway_display_event_data_copy;
-  display_class->event_data_free = gdk_broadway_display_event_data_free;
   display_class->create_window_impl = _gdk_broadway_display_create_window_impl;
   display_class->get_keymap = _gdk_broadway_display_get_keymap;
   display_class->get_selection_owner = _gdk_broadway_display_get_selection_owner;

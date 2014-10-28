@@ -111,6 +111,19 @@ gdk_display_real_opened (GdkDisplay *display)
 }
 
 static void
+gdk_display_real_event_data_copy (GdkDisplay     *display,
+                                  const GdkEvent *src,
+                                  GdkEvent       *dst)
+{
+}
+
+static void
+gdk_display_real_event_data_free (GdkDisplay     *display,
+                                  GdkEvent       *dst)
+{
+}
+
+static void
 gdk_display_class_init (GdkDisplayClass *class)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (class);
@@ -123,6 +136,8 @@ gdk_display_class_init (GdkDisplayClass *class)
 
   class->opened = gdk_display_real_opened;
   class->make_default = gdk_display_real_make_default;
+  class->event_data_copy = gdk_display_real_event_data_copy;
+  class->event_data_free = gdk_display_real_event_data_free;
 
   /**
    * GdkDisplay::opened:

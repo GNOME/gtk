@@ -2810,19 +2810,6 @@ gdk_x11_set_sm_client_id (const gchar *sm_client_id)
   g_slist_free (displays);
 }
 
-static void
-gdk_x11_display_event_data_copy (GdkDisplay    *display,
-                                const GdkEvent *src,
-                                GdkEvent       *dst)
-{
-}
-
-static void
-gdk_x11_display_event_data_free (GdkDisplay *display,
-                                 GdkEvent *event)
-{
-}
-
 static gint
 pop_error_trap (GdkDisplay *display,
                 gboolean    ignored)
@@ -2894,8 +2881,6 @@ gdk_x11_display_class_init (GdkX11DisplayClass * class)
   display_class->after_process_all_updates = _gdk_x11_display_after_process_all_updates;
   display_class->get_next_serial = gdk_x11_display_get_next_serial;
   display_class->notify_startup_complete = gdk_x11_display_notify_startup_complete;
-  display_class->event_data_copy = gdk_x11_display_event_data_copy;
-  display_class->event_data_free = gdk_x11_display_event_data_free;
   display_class->create_window_impl = _gdk_x11_display_create_window_impl;
   display_class->get_keymap = gdk_x11_display_get_keymap;
   display_class->push_error_trap = gdk_x11_display_error_trap_push;
