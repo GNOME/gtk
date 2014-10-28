@@ -6761,6 +6761,9 @@ update_opaque_region (GtkWindow           *window,
       is_opaque = (color->alpha >= 1.0);
     }
 
+  if (gtk_widget_get_opacity (widget) < 1.0)
+    is_opaque = FALSE;
+
   if (is_opaque)
     {
       cairo_rectangle_int_t rect;

@@ -7122,8 +7122,9 @@ _gtk_widget_draw (GtkWidget *widget,
   cairo_save (cr);
 
   push_group =
-    (widget->priv->alpha != 255 &&
-     !gtk_widget_is_toplevel (widget));
+    widget->priv->alpha != 255 &&
+    (!gtk_widget_is_toplevel (widget) ||
+     gtk_widget_get_visual (widget) == gdk_screen_get_rgba_visual (gtk_widget_get_screen (widget)));
 
   if (push_group)
     cairo_push_group (cr);
@@ -15958,7 +15959,8 @@ gtk_widget_update_alpha (GtkWidget *widget)
 
   if (gtk_widget_get_realized (widget))
     {
-      if (gtk_widget_is_toplevel (widget))
+      if (gtk_widget_is_toplevel (widget) &&
+          gtk_widget_get_visual (widget) != gdk_screen_get_rgba_visual (gtk_widget_get_screen (widget)))
 	gdk_window_set_opacity (priv->window, priv->alpha / 255.0);
 
       gtk_widget_queue_draw (widget);
