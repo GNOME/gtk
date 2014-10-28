@@ -574,6 +574,7 @@ find_fbconfig_for_visual (GdkDisplay        *display,
   int n_configs, i;
   gboolean use_rgba;
   gboolean retval = FALSE;
+  VisualID xvisual_id = XVisualIDFromVisual(gdk_x11_visual_get_xvisual (visual));
 
   i = 0;
   attrs[i++] = GLX_DRAWABLE_TYPE;
@@ -586,14 +587,13 @@ find_fbconfig_for_visual (GdkDisplay        *display,
   attrs[i++] = GL_TRUE;
 
   attrs[i++] = GLX_RED_SIZE;
-  attrs[i++] = gdk_visual_get_bits_per_rgb (visual);
+  attrs[i++] = 1;
   attrs[i++] = GLX_GREEN_SIZE;
-  attrs[i++] = gdk_visual_get_bits_per_rgb (visual);;
+  attrs[i++] = 1;
   attrs[i++] = GLX_BLUE_SIZE;
-  attrs[i++] = gdk_visual_get_bits_per_rgb (visual);;
+  attrs[i++] = 1;
 
   use_rgba = (visual == gdk_screen_get_rgba_visual (gdk_display_get_default_screen (display)));
-
   if (use_rgba)
     {
       attrs[i++] = GLX_ALPHA_SIZE;
@@ -618,44 +618,30 @@ find_fbconfig_for_visual (GdkDisplay        *display,
       return FALSE;
     }
 
-  /* if we don't care about an alpha channel, then the first
-   * valid configuration is the one we give back
-   */
-  if (!use_rgba)
-    {
-      if (fb_config_out != NULL)
-        *fb_config_out = configs[0];
-
-      if (visinfo_out != NULL)
-        *visinfo_out = glXGetVisualFromFBConfig (dpy, configs[0]);
-
-      retval = TRUE;
-      goto out;
-    }
-
   for (i = 0; i < n_configs; i++)
     {
       XVisualInfo *visinfo;
-      unsigned long mask;
 
       visinfo = glXGetVisualFromFBConfig (dpy, configs[i]);
       if (visinfo == NULL)
-        continue;
-
-      mask = visinfo->red_mask | visinfo->green_mask | visinfo->blue_mask;
-      if (visinfo->depth == 32 && mask != 0xffffffff)
         {
-          if (fb_config_out != NULL)
-            *fb_config_out = configs[i];
-
-          if (visinfo_out != NULL)
-            *visinfo_out = visinfo;
-
-          retval = TRUE;
-          goto out;
+          XFree (visinfo);
+          continue;
         }
 
-      XFree (visinfo);
+      if (visinfo->visualid != xvisual_id)
+        continue;
+
+      if (fb_config_out != NULL)
+        *fb_config_out = configs[i];
+
+      if (visinfo_out != NULL)
+        *visinfo_out = visinfo;
+      else
+        XFree (visinfo);
+
+      retval = TRUE;
+      goto out;
     }
 
   g_set_error (error, GDK_GL_ERROR,
