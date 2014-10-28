@@ -6015,6 +6015,9 @@ gdk_window_set_cursor_internal (GdkWindow *window,
   if (GDK_WINDOW_DESTROYED (window))
     return;
 
+  g_assert (gdk_window_get_display (window) == gdk_device_get_display (device));
+  g_assert (!cursor || gdk_window_get_display (window) == gdk_cursor_get_display (cursor));
+
   if (window->window_type == GDK_WINDOW_ROOT ||
       window->window_type == GDK_WINDOW_FOREIGN)
     GDK_WINDOW_IMPL_GET_CLASS (window->impl)->set_device_cursor (window, device, cursor);
