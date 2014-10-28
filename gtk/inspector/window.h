@@ -68,6 +68,8 @@ typedef struct
   GtkWidget *selected_widget;
   GtkWidget *flash_widget;
 
+  gboolean grabbed;
+
   gint flash_count;
   gint flash_cnx;
 

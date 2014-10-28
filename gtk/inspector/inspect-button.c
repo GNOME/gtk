@@ -280,7 +280,8 @@ property_query_event (GtkWidget *widget,
     {
       g_signal_handlers_disconnect_by_func (widget, property_query_event, data);
       gtk_grab_remove (widget);
-      gdk_device_ungrab (gdk_event_get_device (event), GDK_CURRENT_TIME);
+      if (iw->grabbed)
+        gdk_device_ungrab (gdk_event_get_device (event), GDK_CURRENT_TIME);
       on_inspect_widget (widget, event, data);
     }
   else if (event->type == GDK_MOTION_NOTIFY)
@@ -297,7 +298,8 @@ property_query_event (GtkWidget *widget,
           g_signal_handlers_disconnect_by_func (widget, property_query_event, data);
           gtk_grab_remove (widget);
           device = gdk_device_get_associated_device (gdk_event_get_device (event));
-          gdk_device_ungrab (device, GDK_CURRENT_TIME);
+          if (iw->grabbed)
+            gdk_device_ungrab (device, GDK_CURRENT_TIME);
           gdk_window_raise (gtk_widget_get_window (GTK_WIDGET (iw)));
           clear_flash (iw);
         }
@@ -337,11 +339,7 @@ gtk_inspector_on_inspect (GtkWidget          *button,
                             GDK_BUTTON_RELEASE_MASK | GDK_POINTER_MOTION_MASK,
                             cursor, GDK_CURRENT_TIME);
   g_object_unref (cursor);
-  if (status != GDK_GRAB_SUCCESS)
-    {
-      g_warning ("grab failed (%d) :-(\n", status); 
-      return;
-    }
+  iw->grabbed = status == GDK_GRAB_SUCCESS;
 
   g_signal_connect (iw->invisible, "event", G_CALLBACK (property_query_event), iw);
 
