@@ -10531,7 +10531,12 @@ gdk_window_configure_finished (GdkWindow *window)
  *
  * For toplevel windows this depends on support from the windowing system
  * that may not always be there. For instance, On X11, this works only on
- * X screens with a compositing manager running.
+ * X screens with a compositing manager running. On Wayland, there is no
+ * per-window opacity value that the compositor would apply. Instead, use
+ * `gdk_window_set_opaque_region (window, NULL)` to tell the compositor
+ * that the entire window is (potentially) non-opaque, and draw your content
+ * with alpha, or use gtk_widget_set_opacity() to set an overall opacity
+ * for your widgets.
  *
  * For child windows this function only works for non-native windows.
  *
