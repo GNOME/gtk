@@ -953,6 +953,8 @@ _gdk_x11_screen_update_visuals_for_gl (GdkScreen *screen)
   if (x11_screen->rgba_visual)
     x11_screen->rgba_visual = pick_better_visual_for_gl (x11_screen, gl_info, x11_screen->rgba_visual);
 
+  g_free (gl_info);
+
   save_cached_gl_visuals (display,
                           gdk_x11_visual_get_xvisual (x11_screen->system_visual)->visualid,
                           x11_screen->rgba_visual ? gdk_x11_visual_get_xvisual (x11_screen->rgba_visual)->visualid : 0);
