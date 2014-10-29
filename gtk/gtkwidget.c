@@ -12971,8 +12971,6 @@ void
 gtk_widget_set_csd_input_shape (GtkWidget            *widget,
                                 const cairo_region_t *region)
 {
-  GtkWidgetPrivate *priv = widget->priv;
-
   if (region == NULL)
     g_object_set_data (G_OBJECT (widget), "csd-shade", NULL);
   else
