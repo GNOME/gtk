@@ -634,10 +634,7 @@ find_fbconfig_for_visual (GdkDisplay        *display,
 
       visinfo = glXGetVisualFromFBConfig (dpy, configs[i]);
       if (visinfo == NULL)
-        {
-          XFree (visinfo);
-          continue;
-        }
+        continue;
 
       if (visinfo->visualid != xvisual_id)
         continue;
