@@ -202,7 +202,11 @@ GtkTextView { // This will get overridden by .view, needed by gedit line numbers
 
 %osd, .osd {
   color: $osd_fg_color;
+  border-color: $osd_outer_borders_color;
+  background-color: transparentize($osd_bg_color, 0.3);
+  background-clip: padding-box;
   outline-color: transparentize($osd_fg_color, 0.7);
+  box-shadow: none;
   text-shadow: 0 1px black;
   icon-shadow: 0 1px black;
   &:backdrop { text-shadow: none; }
@@ -400,6 +404,11 @@ GtkTextView { // This will get overridden by .view, needed by gedit line numbers
       }
     }
   }
+  .osd & {
+    @include entry(osd);
+    &:focus { @include entry(osd-focus); }
+    &:backdrop { @include entry(osd-backdrop); }
+  }
 }
 
 /***********
@@ -496,13 +505,11 @@ $_dot_color: if($variant=='light', $selected_bg_color,
     &:active, &:checked {
       @include button(osd-active);
       border-color: $osd_outer_borders_color;
-      box-shadow: none
+      box-shadow: none;
     }
     &:insensitive, &:backdrop:insensitive {
       @include button(osd-insensitive);
       border-color: $osd_outer_borders_color;
-      // FIXME: if this state actually exists we should probably make the button
-      //        disappear
     }
     &:backdrop {
       @include button(osd-backdrop);
@@ -511,9 +518,6 @@ $_dot_color: if($variant=='light', $selected_bg_color,
   }
   //overlay / OSD style
   .osd & {
-    // FIXME: for some reason I can't figure out the bookmark button in gnome
-    //        documents gets borders radius 0, when they get backdrop and
-    //        another state
     @include button(osd);
     // there's a problem with sass which prevents it to extend the linked
     // placeholder as expected, it should just be "@extend %linked;", the
@@ -555,6 +559,31 @@ $_dot_color: if($variant=='light', $selected_bg_color,
     &:backdrop {
       @include button(osd-backdrop);
       @extend %linked;
+    }
+    &.flat {
+      @include button(undecorated);
+      box-shadow: none; //FIXME respect no edge on the button mixin
+      text-shadow: 0 1px black;
+      icon-shadow: 0 1px black;
+      &:hover {
+        @include button(osd-hover);
+        background-clip: padding-box;
+        border-color: transparent;
+        box-shadow: none;
+      }
+      &:insensitive {
+        @include button(osd-insensitive);
+        background-image: none;
+        border-color: transparent;
+        box-shadow: none;
+      }
+      &:backdrop { @include button(undecorated); }
+      &:active, &:checked {
+        @include button(osd-active);
+        background-clip: padding-box;
+        border-color: transparent;
+        box-shadow: none;
+      }
     }
   }
 
@@ -902,6 +931,42 @@ GtkColorButton.button {
       color: transparentize($backdrop_insensitive_color,0.7);
       border-style: none none none solid; // It is needed or it gets overridden
       &:dir(rtl) { border-style: none solid none none; }
+    }
+  }
+  .osd & {
+    .button {
+      @include button(undecorated);
+      color: $osd_fg_color;
+      border-style: none none none solid;
+      border-color: transparentize($osd_borders_color, 0.3);
+      border-radius: 0;
+      box-shadow: none;
+      icon-shadow: 0 1px black;
+      &:dir(rtl) { border-style: none solid none none; }
+      &:hover {
+        @include button(undecorated);
+        color: $osd_fg_color;
+        border-color: transparentize($osd_borders_color, 0.3);
+        background-color: transparentize($osd_fg_color, 0.9);
+        icon-shadow: 0 1px black;
+        box-shadow: none;
+      }
+      &:backdrop {
+        @include button(undecorated);
+        color: $osd_fg_color;
+        border-color: transparentize($osd_borders_color, 0.3);
+        icon-shadow: none;
+        box-shadow: none;
+      }
+      &:insensitive {
+        @include button(undecorated);
+        color: $osd_insensitive_fg_color;
+        border-color: transparentize($osd_borders_color, 0.3);
+        icon-shadow: none;
+        box-shadow: none;
+      }
+      &:last-child { border-radius: 0 3px 3px 0; }
+      &:dir(rtl):first-child { border-radius: 3px 0 0 3px; }
     }
   }
   &.vertical, &.vertical:dir(rtl) { //FIXME: try using linking templates for vertically linked stuff
@@ -1503,21 +1568,7 @@ column-header.button.dnd { // for treeview-like derive widgets
     text-shadow: none;
     transition: none;
   }
-  &.osd { // Also used for touch cut'n'paste overlays
-          // FIXME Doesn't work
-    background-image: none;
-    background-color: $osd_bg_color;
-    border: 1px solid $borders_color;
-    color: $osd_fg_color;
-    .button {
-      color: white;
-      text-shadow: none;
-      @include button(osd);
-      &:hover { @include button(osd-hover); };
-      &:active { @include button(osd-active); };
-      &:insensitive { @include button(osd-insensitive); };
-    }
-  }
+  &.osd { @extend %osd; }
 }
 
 //touch selection handlebars for the Popover.osd above

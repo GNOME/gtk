@@ -44,7 +44,7 @@
 //        use the default one
 //
 // possible $t values:
-// normal, focus, insensitive, backdrop, backdrop-insensitive;
+// normal, focus, insensitive, backdrop, backdrop-insensitive, osd, osd-focus, osd-backdrop;
 //
   background-color: transparent;
   background-image: entry_gradient($base_color);
@@ -91,6 +91,30 @@
     border-color: $backdrop_borders_color;
     background-image: linear-gradient(to bottom, $insensitive_bg_color);
     @include _shadows($_blank_inner_shadows, $_blank_edge);
+  }
+  @if $t==osd {
+    color: $osd_text_color;
+    border-color: $osd_borders_color;
+    background-image: linear-gradient(to bottom, transparentize(black, 0.5));
+    box-shadow: none;
+    text-shadow: 0 1px black;
+    icon-shadow: 0 1px black;
+  }
+  @if $t==osd-focus {
+    color: $osd_text_color;
+    border-color: $selected_bg_color;
+    background-image: linear-gradient(to bottom, transparentize(black, 0.5));
+    box-shadow: entry_focus_glow($selected_bg_color);
+    text-shadow: 0 1px black;
+    icon-shadow: 0 1px black;
+  }
+  @if $t==osd-backdrop {
+    color: $osd_text_color;
+    border-color: $osd_borders_color;
+    background-image: linear-gradient(to bottom, transparentize(black, 0.5));
+    box-shadow: none;
+    text-shadow: none;
+    icon-shadow: none;
   }
 }
 
@@ -327,8 +351,7 @@
     background-clip: padding-box;
     background-image: linear-gradient(to bottom, $_bg);
     border-color: $osd_borders_color;
-    box-shadow: inset 0 -1px transparentize(black, 0.7),
-                inset 0 1px transparentize(white, 0.9);
+    box-shadow: inset 0 1px transparentize(white, 0.9);
     text-shadow: 0 1px black;
     icon-shadow: 0 1px black;
   }
@@ -342,8 +365,7 @@
     color: white;
     border-color: $osd_borders_color;
     background-image: linear-gradient(to bottom, $_bg);
-    box-shadow: inset 0 -1px transparentize(black, 0.7),
-                inset 0 1px transparentize(white, 0.9);
+    box-shadow: inset 0 1px transparentize(white, 0.9);
     text-shadow: 0 1px black;
     icon-shadow: 0 1px black;
 
@@ -365,9 +387,9 @@
   //
   // insensitive osd button
   //
-    $_bg: transparentize(mix($insensitive_fg_color,$osd_bg_color,20%),0.3);
+    $_bg: transparentize($osd_insensitive_bg_color,0.5);
 
-    color: $insensitive_fg_color;
+    color: $osd_insensitive_fg_color;
     border-color: $osd_borders_color;
     background-image: linear-gradient(to bottom, $_bg);
     box-shadow: none;
@@ -382,8 +404,8 @@
                             transparentize($osd_bg_color, 0.3));
 
     color: $osd_fg_color;
+    border-color: $osd_borders_color;
     background-image: linear-gradient(to bottom, $_bg);
-    background-clip: padding-box;
     box-shadow: none;
     text-shadow: none;
     icon-shadow: none;
