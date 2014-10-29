@@ -6678,7 +6678,7 @@ shape:
   rect.width = gtk_widget_get_allocated_width (widget) - window_border.left - window_border.right;
   rect.height = gtk_widget_get_allocated_height (widget) - window_border.top - window_border.bottom;
   region = cairo_region_create_rectangle (&rect);
-  gtk_widget_input_shape_combine_region (widget, region);
+  gtk_widget_set_csd_input_shape (widget, region);
   cairo_region_destroy (region);
 }
 

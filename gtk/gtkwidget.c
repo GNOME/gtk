@@ -943,6 +943,8 @@ static void gtk_cairo_set_event_window (cairo_t        *cr,
 static void gtk_cairo_set_event (cairo_t        *cr,
 				 GdkEventExpose *event);
 
+static void gtk_widget_update_input_shape (GtkWidget *widget);
+
 /* --- variables --- */
 static gint             GtkWidget_private_offset = 0;
 static gpointer         gtk_widget_parent_class = NULL;
@@ -5529,9 +5531,7 @@ gtk_widget_realize (GtkWidget *widget)
 	  gdk_window_shape_combine_region (priv->window, region, 0, 0);
 	}
 
-      region = g_object_get_qdata (G_OBJECT (widget), quark_input_shape_info);
-      if (region)
-	gdk_window_input_shape_combine_region (priv->window, region, 0, 0);
+      gtk_widget_update_input_shape (widget);
 
       if (priv->multidevice)
         gdk_window_set_support_multidevice (priv->window, TRUE);
@@ -12926,6 +12926,62 @@ gtk_widget_shape_combine_region (GtkWidget *widget,
     }
 }
 
+static void
+gtk_widget_update_input_shape (GtkWidget *widget)
+{
+  GtkWidgetPrivate *priv = widget->priv;
+
+  /* set shape if widget has a gdk window already.
+   * otherwise the shape is scheduled to be set by gtk_widget_realize().
+   */
+  if (priv->window)
+    {
+      cairo_region_t *region;
+      cairo_region_t *csd_region;
+      cairo_region_t *app_region;
+      gboolean free_region;
+
+      app_region = g_object_get_qdata (G_OBJECT (widget), quark_input_shape_info);
+      csd_region = g_object_get_data (G_OBJECT (widget), "csd-region");
+
+      free_region = FALSE;
+
+      if (app_region && csd_region)
+        {
+          free_region = TRUE;
+          region = cairo_region_copy (app_region);
+          cairo_region_intersect (region, csd_region);
+          gdk_window_input_shape_combine_region (priv->window, region, 0, 0);
+        }
+      else if (app_region)
+        region = app_region;
+      else if (csd_region)
+        region = csd_region;
+      else
+        region = NULL;
+
+      gdk_window_input_shape_combine_region (priv->window, region, 0, 0);
+
+      if (free_region)
+        cairo_region_destroy (region);
+    }
+}
+
+void
+gtk_widget_set_csd_input_shape (GtkWidget            *widget,
+                                const cairo_region_t *region)
+{
+  GtkWidgetPrivate *priv = widget->priv;
+
+  if (region == NULL)
+    g_object_set_data (G_OBJECT (widget), "csd-shade", NULL);
+  else
+    g_object_set_data_full (G_OBJECT (widget), "csd-shade",
+                            cairo_region_copy (region),
+                            (GDestroyNotify) cairo_region_destroy);
+  gtk_widget_update_input_shape (widget);
+}
+
 /**
  * gtk_widget_input_shape_combine_region:
  * @widget: a #GtkWidget
@@ -12938,36 +12994,20 @@ gtk_widget_shape_combine_region (GtkWidget *widget,
  * Since: 3.0
  **/
 void
-gtk_widget_input_shape_combine_region (GtkWidget *widget,
+gtk_widget_input_shape_combine_region (GtkWidget      *widget,
                                        cairo_region_t *region)
 {
-  GtkWidgetPrivate *priv;
-
   g_return_if_fail (GTK_IS_WIDGET (widget));
   /*  set_shape doesn't work on widgets without gdk window */
   g_return_if_fail (gtk_widget_get_has_window (widget));
 
-  priv = widget->priv;
-
   if (region == NULL)
-    {
-      if (priv->window)
-	gdk_window_input_shape_combine_region (priv->window, NULL, 0, 0);
-
-      g_object_set_qdata (G_OBJECT (widget), quark_input_shape_info, NULL);
-    }
+    g_object_set_qdata (G_OBJECT (widget), quark_input_shape_info, NULL);
   else
-    {
-      g_object_set_qdata_full (G_OBJECT (widget), quark_input_shape_info,
-			       cairo_region_copy (region),
-			       (GDestroyNotify) cairo_region_destroy);
-
-      /* set shape if widget has a gdk window already.
-       * otherwise the shape is scheduled to be set by gtk_widget_realize().
-       */
-      if (priv->window)
-	gdk_window_input_shape_combine_region (priv->window, region, 0, 0);
-    }
+    g_object_set_qdata_full (G_OBJECT (widget), quark_input_shape_info,
+                             cairo_region_copy (region),
+                             (GDestroyNotify) cairo_region_destroy);
+  gtk_widget_update_input_shape (widget);
 }
 
 
