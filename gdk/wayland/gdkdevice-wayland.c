@@ -539,12 +539,47 @@ _gdk_wayland_device_get_keymap (GdkDevice *device)
 }
 
 static void
+emit_selection_owner_change (GdkWindow *window,
+                             GdkAtom    atom)
+{
+  GdkEvent *event;
+
+  event = gdk_event_new (GDK_OWNER_CHANGE);
+  event->owner_change.window = g_object_ref (window);
+  event->owner_change.owner = NULL;
+  event->owner_change.reason = GDK_OWNER_CHANGE_NEW_OWNER;
+  event->owner_change.selection = atom;
+  event->owner_change.time = GDK_CURRENT_TIME;
+  event->owner_change.selection_time = GDK_CURRENT_TIME;
+
+  gdk_event_put (event);
+  gdk_event_free (event);
+}
+
+static void
+emit_selection_owner_change_forall (GdkAtom atom)
+{
+  GdkDisplay *display = gdk_display_get_default ();
+  GdkScreen *screen = GDK_WAYLAND_DISPLAY (display)->screen;
+  GList *windows, *l;
+
+  windows = gdk_screen_get_toplevel_windows (screen);
+
+  for (l = windows; l; l = l->next)
+    emit_selection_owner_change (l->data, atom);
+
+  g_list_free (windows);
+}
+
+static void
 data_device_data_offer (void                  *data,
                         struct wl_data_device *data_device,
                         struct wl_data_offer  *_offer)
 {
   GdkWaylandDeviceData *device = (GdkWaylandDeviceData *)data;
   gdk_wayland_selection_set_offer (device->display, _offer);
+
+  emit_selection_owner_change_forall (gdk_atom_intern_static_string ("GdkWaylandSelection"));
 }
 
 static void
@@ -587,6 +622,8 @@ data_device_enter (void                  *data,
   _gdk_wayland_drag_context_emit_event (device->drop_context, GDK_DRAG_ENTER,
                                         GDK_CURRENT_TIME);
   gdk_wayland_selection_set_offer (device->display, offer);
+  emit_selection_owner_change (dest_window,
+                               gdk_atom_intern_static_string ("GdkWaylandSelection"));
 }
 
 static void
@@ -671,6 +708,7 @@ data_device_selection (void                  *data,
            G_STRFUNC, wl_data_device, offer);
 
   gdk_wayland_selection_set_offer (device->display, offer);
+  emit_selection_owner_change_forall (gdk_atom_intern_static_string ("CLIPBOARD"));
 }
 
 static const struct wl_data_device_listener data_device_listener = {
