@@ -30,6 +30,8 @@
 #include "gdkx11window.h"
 #include "gdkx11visual.h"
 #include "gdkvisualprivate.h"
+#include "gdkx11property.h"
+#include <X11/Xatom.h>
 
 #include "gdkinternals.h"
 
@@ -817,6 +819,66 @@ pick_better_visual_for_gl (GdkX11Screen *x11_screen,
   return compatible;
 }
 
+static gboolean
+get_cached_gl_visuals (GdkDisplay *display, int *system, int *rgba)
+{
+  gboolean found;
+  Atom type_return;
+  gint format_return;
+  gulong nitems_return;
+  gulong bytes_after_return;
+  guchar *data = NULL;
+  Display *dpy;
+
+  dpy = gdk_x11_display_get_xdisplay (display);
+
+  found = FALSE;
+
+  gdk_x11_display_error_trap_push (display);
+  if (XGetWindowProperty (dpy, DefaultRootWindow (dpy),
+                          gdk_x11_get_xatom_by_name_for_display (display, "GDK_VISUALS"),
+                          0, 2, False, XA_INTEGER, &type_return,
+                          &format_return, &nitems_return,
+                          &bytes_after_return, &data) == Success)
+    {
+      if (type_return == XA_INTEGER &&
+          format_return == 32 &&
+          nitems_return == 2 &&
+          data != NULL)
+        {
+          long *visuals = (long *) data;
+
+          *system = (int)visuals[0];
+          *rgba = (int)visuals[1];
+          found = TRUE;
+        }
+    }
+  gdk_x11_display_error_trap_pop_ignored (display);
+
+  if (data)
+    XFree (data);
+
+  return found;
+}
+
+static void
+save_cached_gl_visuals (GdkDisplay *display, int system, int rgba)
+{
+  long visualdata[2];
+  Display *dpy;
+
+  dpy = gdk_x11_display_get_xdisplay (display);
+
+  visualdata[0] = system;
+  visualdata[1] = rgba;
+
+  gdk_x11_display_error_trap_push (display);
+  XChangeProperty(dpy, DefaultRootWindow (dpy), gdk_x11_get_xatom_by_name_for_display (display, "GDK_VISUALS"),
+                  XA_INTEGER, 32, PropModeReplace, (unsigned char *)visualdata, 2);
+  gdk_x11_display_error_trap_pop_ignored (display);
+}
+
+
 void
 _gdk_x11_screen_update_visuals_for_gl (GdkScreen *screen)
 {
@@ -826,15 +888,33 @@ _gdk_x11_screen_update_visuals_for_gl (GdkScreen *screen)
   Display *dpy;
   struct glvisualinfo *gl_info;
   int i;
+  int system_visual_id, rgba_visual_id;
 
   x11_screen = GDK_X11_SCREEN (screen);
   display = x11_screen->display;
   display_x11 = GDK_X11_DISPLAY (display);
+  dpy = gdk_x11_display_get_xdisplay (display);
+
+  /* We save the default visuals as a property on the root window to avoid
+     having to initialize GL each time, as it may not be used later. */
+  if (get_cached_gl_visuals (display, &system_visual_id, &rgba_visual_id))
+    {
+      for (i = 0; i < x11_screen->nvisuals; i++)
+        {
+          GdkVisual *visual = x11_screen->visuals[i];
+          int visual_id = gdk_x11_visual_get_xvisual (visual)->visualid;
+
+          if (visual_id == system_visual_id)
+            x11_screen->system_visual = visual;
+          if (visual_id == rgba_visual_id)
+            x11_screen->rgba_visual = visual;
+        }
+
+      return;
+    }
 
   if (!gdk_x11_screen_init_gl (screen))
     return;
-
-  dpy = gdk_x11_display_get_xdisplay (display);
 
   gl_info = g_new0 (struct glvisualinfo, x11_screen->nvisuals);
 
@@ -872,6 +952,10 @@ _gdk_x11_screen_update_visuals_for_gl (GdkScreen *screen)
   x11_screen->system_visual = pick_better_visual_for_gl (x11_screen, gl_info, x11_screen->system_visual);
   if (x11_screen->rgba_visual)
     x11_screen->rgba_visual = pick_better_visual_for_gl (x11_screen, gl_info, x11_screen->rgba_visual);
+
+  save_cached_gl_visuals (display,
+                          gdk_x11_visual_get_xvisual (x11_screen->system_visual)->visualid,
+                          x11_screen->rgba_visual ? gdk_x11_visual_get_xvisual (x11_screen->rgba_visual)->visualid : 0);
 }
 
 

@@ -165,7 +165,8 @@ static const char *const precache_atoms[] = {
   "_NET_WM_USER_TIME_WINDOW",
   "_NET_VIRTUAL_ROOTS",
   "GDK_SELECTION",
-  "_NET_WM_STATE_FOCUSED"
+  "_NET_WM_STATE_FOCUSED",
+  "GDK_VISUALS"
 };
 
 static char *gdk_sm_client_id;
