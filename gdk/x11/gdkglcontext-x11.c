@@ -29,6 +29,7 @@
 #include "gdkx11screen.h"
 #include "gdkx11window.h"
 #include "gdkx11visual.h"
+#include "gdkvisualprivate.h"
 
 #include "gdkinternals.h"
 
@@ -508,10 +509,10 @@ gdk_x11_gl_context_init (GdkX11GLContext *self)
 }
 
 gboolean
-gdk_x11_display_init_gl (GdkDisplay *display)
+gdk_x11_screen_init_gl (GdkScreen *screen)
 {
+  GdkDisplay *display = gdk_screen_get_display (screen);
   GdkX11Display *display_x11 = GDK_X11_DISPLAY (display);
-  GdkScreen *screen;
   Display *dpy;
   int error_base, event_base;
   int screen_num;
@@ -524,7 +525,6 @@ gdk_x11_display_init_gl (GdkDisplay *display)
   if (!glXQueryExtension (dpy, &error_base, &event_base))
     return FALSE;
 
-  screen = gdk_display_get_default_screen (display);
   screen_num = GDK_X11_SCREEN (screen)->screen_num;
 
   display_x11->have_glx = TRUE;
@@ -545,6 +545,10 @@ gdk_x11_display_init_gl (GdkDisplay *display)
     epoxy_has_glx_extension (dpy, screen_num, "GLX_EXT_buffer_age");
   display_x11->has_glx_sync_control =
     epoxy_has_glx_extension (dpy, screen_num, "GLX_OML_sync_control");
+  display_x11->has_glx_multisample =
+    epoxy_has_glx_extension (dpy, screen_num, "GLX_ARB_multisample");
+  display_x11->has_glx_visual_rating =
+    epoxy_has_glx_extension (dpy, screen_num, "GLX_EXT_visual_rating");
 
   GDK_NOTE (OPENGL,
             g_print ("GLX version %d.%d found\n"
@@ -702,6 +706,175 @@ create_gl_context (GdkDisplay   *display,
                               True);
 }
 
+struct glvisualinfo {
+  int supports_gl;
+  int double_buffer;
+  int stereo;
+  int alpha_size;
+  int depth_size;
+  int stencil_size;
+  int num_multisample;
+  int visual_caveat;
+};
+
+static gboolean
+visual_compatible (const GdkVisual *a, const GdkVisual *b)
+{
+  return a->type == b->type &&
+    a->depth == b->depth &&
+    a->red_mask == b->red_mask &&
+    a->green_mask == b->green_mask &&
+    a->blue_mask == b->blue_mask &&
+    a->colormap_size == b->colormap_size &&
+    a->bits_per_rgb == b->bits_per_rgb;
+}
+
+static gboolean
+visual_is_rgba (const GdkVisual *visual)
+{
+  return
+    visual->depth == 32 &&
+    visual->red_mask   == 0xff0000 &&
+    visual->green_mask == 0x00ff00 &&
+    visual->blue_mask  == 0x0000ff;
+}
+
+/* This picks a compatible (as in has the same X visual details) visual
+   that has "better" characteristics on the GL side */
+static GdkVisual *
+pick_better_visual_for_gl (GdkX11Screen *x11_screen,
+                           struct glvisualinfo *gl_info,
+                           GdkVisual *compatible)
+{
+  GdkVisual *visual;
+  int i;
+  gboolean want_alpha = visual_is_rgba (compatible);
+
+  /* First look for "perfect match", i.e:
+   * supports gl
+   * double buffer
+   * alpha iff visual is an rgba visual
+   * no unnecessary stuff
+   */
+  for (i = 0; i < x11_screen->nvisuals; i++)
+    {
+      visual = x11_screen->visuals[i];
+      if (visual_compatible (visual, compatible) &&
+          gl_info[i].supports_gl &&
+          gl_info[i].double_buffer &&
+          !gl_info[i].stereo &&
+          (want_alpha ? (gl_info[i].alpha_size > 0) : (gl_info[i].alpha_size == 0)) &&
+          (gl_info[i].depth_size == 0) &&
+          (gl_info[i].stencil_size == 0) &&
+          (gl_info[i].num_multisample == 0) &&
+          (gl_info[i].visual_caveat == GLX_NONE_EXT))
+        return visual;
+    }
+
+  if (!want_alpha)
+    {
+      /* Next, allow alpha even if we don't want it: */
+      for (i = 0; i < x11_screen->nvisuals; i++)
+        {
+          visual = x11_screen->visuals[i];
+          if (visual_compatible (visual, compatible) &&
+              gl_info[i].supports_gl &&
+              gl_info[i].double_buffer &&
+              !gl_info[i].stereo &&
+              (gl_info[i].depth_size == 0) &&
+              (gl_info[i].stencil_size == 0) &&
+              (gl_info[i].num_multisample == 0) &&
+              (gl_info[i].visual_caveat == GLX_NONE_EXT))
+            return visual;
+        }
+    }
+
+  /* Next, allow depth and stencil buffers: */
+  for (i = 0; i < x11_screen->nvisuals; i++)
+    {
+      visual = x11_screen->visuals[i];
+      if (visual_compatible (visual, compatible) &&
+          gl_info[i].supports_gl &&
+          gl_info[i].double_buffer &&
+          !gl_info[i].stereo &&
+          (gl_info[i].num_multisample == 0) &&
+          (gl_info[i].visual_caveat == GLX_NONE_EXT))
+        return visual;
+    }
+
+  /* Next, allow multisample: */
+  for (i = 0; i < x11_screen->nvisuals; i++)
+    {
+      visual = x11_screen->visuals[i];
+      if (visual_compatible (visual, compatible) &&
+          gl_info[i].supports_gl &&
+          gl_info[i].double_buffer &&
+          !gl_info[i].stereo &&
+          (gl_info[i].visual_caveat == GLX_NONE_EXT))
+        return visual;
+    }
+
+  return compatible;
+}
+
+void
+_gdk_x11_screen_update_visuals_for_gl (GdkScreen *screen)
+{
+  GdkX11Screen *x11_screen;
+  GdkDisplay *display;
+  GdkX11Display *display_x11;
+  Display *dpy;
+  struct glvisualinfo *gl_info;
+  int i;
+
+  x11_screen = GDK_X11_SCREEN (screen);
+  display = x11_screen->display;
+  display_x11 = GDK_X11_DISPLAY (display);
+
+  if (!gdk_x11_screen_init_gl (screen))
+    return;
+
+  dpy = gdk_x11_display_get_xdisplay (display);
+
+  gl_info = g_new0 (struct glvisualinfo, x11_screen->nvisuals);
+
+  for (i = 0; i < x11_screen->nvisuals; i++)
+    {
+      XVisualInfo *visual_list;
+      XVisualInfo visual_template;
+      int nxvisuals;
+
+      visual_template.screen = x11_screen->screen_num;
+      visual_template.visualid = gdk_x11_visual_get_xvisual (x11_screen->visuals[i])->visualid;
+      visual_list = XGetVisualInfo (x11_screen->xdisplay, VisualIDMask| VisualScreenMask, &visual_template, &nxvisuals);
+
+      if (visual_list == NULL)
+        continue;
+
+      glXGetConfig (dpy, &visual_list[0], GLX_USE_GL, &gl_info[i].supports_gl);
+      glXGetConfig (dpy, &visual_list[0], GLX_DOUBLEBUFFER, &gl_info[i].double_buffer);
+      glXGetConfig (dpy, &visual_list[0], GLX_STEREO, &gl_info[i].stereo);
+      glXGetConfig (dpy, &visual_list[0], GLX_ALPHA_SIZE, &gl_info[i].alpha_size);
+      glXGetConfig (dpy, &visual_list[0], GLX_DEPTH_SIZE, &gl_info[i].depth_size);
+      glXGetConfig (dpy, &visual_list[0], GLX_STENCIL_SIZE, &gl_info[i].stencil_size);
+
+      if (display_x11->has_glx_multisample)
+        glXGetConfig(dpy, &visual_list[0], GLX_SAMPLE_BUFFERS_ARB, &gl_info[i].num_multisample);
+
+      if (display_x11->has_glx_visual_rating)
+        glXGetConfig(dpy, &visual_list[0], GLX_VISUAL_CAVEAT_EXT, &gl_info[i].visual_caveat);
+      else
+        gl_info[i].visual_caveat = GLX_NONE_EXT;
+
+      XFree (visual_list);
+    }
+
+  x11_screen->system_visual = pick_better_visual_for_gl (x11_screen, gl_info, x11_screen->system_visual);
+  if (x11_screen->rgba_visual)
+    x11_screen->rgba_visual = pick_better_visual_for_gl (x11_screen, gl_info, x11_screen->rgba_visual);
+}
+
+
 GdkGLContext *
 gdk_x11_window_create_gl_context (GdkWindow    *window,
 				  gboolean      attached,
@@ -723,7 +896,7 @@ gdk_x11_window_create_gl_context (GdkWindow    *window,
 
   display = gdk_window_get_display (window);
 
-  if (!gdk_x11_display_init_gl (display))
+  if (!gdk_x11_screen_init_gl (gdk_window_get_screen (window)))
     {
       g_set_error_literal (error, GDK_GL_ERROR,
                            GDK_GL_ERROR_NOT_AVAILABLE,
@@ -936,7 +1109,7 @@ gdk_x11_display_get_glx_version (GdkDisplay *display,
   if (!GDK_IS_X11_DISPLAY (display))
     return FALSE;
 
-  if (!gdk_x11_display_init_gl (display))
+  if (!gdk_x11_screen_init_gl (gdk_display_get_default_screen (display)))
     return FALSE;
 
   if (major != NULL)

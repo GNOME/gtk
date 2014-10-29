@@ -341,6 +341,11 @@ _gdk_x11_screen_init_visuals (GdkScreen *screen)
 
   x11_screen->visuals = visuals;
   x11_screen->nvisuals = nvisuals;
+
+  /* If GL is available we want to pick better default/rgba visuals,
+     as we care about glx details such as alpha/depth/stencil depth,
+     stereo and double buffering */
+  _gdk_x11_screen_update_visuals_for_gl (screen);
 }
 
 gint
