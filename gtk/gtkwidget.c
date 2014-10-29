@@ -12951,7 +12951,6 @@ gtk_widget_update_input_shape (GtkWidget *widget)
           free_region = TRUE;
           region = cairo_region_copy (app_region);
           cairo_region_intersect (region, csd_region);
-          gdk_window_input_shape_combine_region (priv->window, region, 0, 0);
         }
       else if (app_region)
         region = app_region;
