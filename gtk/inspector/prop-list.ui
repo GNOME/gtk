@@ -23,7 +23,6 @@
             <property name="visible">True</property>
             <property name="model">model</property>
             <property name="tooltip-column">3</property>
-            <property name="activate-on-single-click">True</property>
             <signal name="row-activated" handler="row_activated"/>
             <child>
               <object class="GtkTreeViewColumn">
