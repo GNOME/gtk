@@ -208,7 +208,9 @@ init_theme (GtkInspectorVisual *vis)
   gchar *themedir = get_data_path ("themes");
 
   t = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, NULL);
+  /* Builtin themes */
   g_hash_table_add (t, g_strdup ("Adwaita"));
+  g_hash_table_add (t, g_strdup ("HighContrast"));
   g_hash_table_add (t, g_strdup ("Raleigh"));
 
   fill_gtk (themedir, t);
