@@ -1043,6 +1043,7 @@ gdk_x11_window_create_gl_context (GdkWindow    *window,
       /* GDK_GL_PROFILE_DEFAULT is currently
        * equivalent to the LEGACY profile
        */
+      profile = GDK_GL_PROFILE_LEGACY;
       glx_context = create_gl_context (display, config, share);
     }
 
@@ -1119,6 +1120,7 @@ gdk_x11_window_create_gl_context (GdkWindow    *window,
 
   context = g_object_new (GDK_TYPE_X11_GL_CONTEXT,
                           "window", window,
+                          "profile", profile,
                           "shared-context", share,
                           NULL);
 

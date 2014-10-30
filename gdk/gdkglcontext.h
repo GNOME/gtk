@@ -44,6 +44,8 @@ GType gdk_gl_context_get_type (void) G_GNUC_CONST;
 
 GDK_AVAILABLE_IN_3_16
 GdkWindow *             gdk_gl_context_get_window       (GdkGLContext *context);
+GDK_AVAILABLE_IN_3_16
+GdkGLProfile            gdk_gl_context_get_profile      (GdkGLContext *context);
 
 GDK_AVAILABLE_IN_3_16
 void                    gdk_gl_context_make_current     (GdkGLContext *context);

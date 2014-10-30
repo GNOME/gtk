@@ -81,6 +81,7 @@
 typedef struct {
   GdkWindow *window;
   GdkGLContext *shared_context;
+  GdkGLProfile profile;
 
   guint realized : 1;
   guint use_texture_rectangle : 1;
@@ -91,6 +92,7 @@ enum {
   PROP_0,
 
   PROP_WINDOW,
+  PROP_PROFILE,
   PROP_SHARED_CONTEXT,
 
   LAST_PROP
@@ -154,6 +156,10 @@ gdk_gl_context_set_property (GObject      *gobject,
       }
       break;
 
+    case PROP_PROFILE:
+      priv->profile = g_value_get_enum (value);
+      break;
+
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (gobject, prop_id, pspec);
     }
@@ -175,6 +181,10 @@ gdk_gl_context_get_property (GObject    *gobject,
 
     case PROP_SHARED_CONTEXT:
       g_value_set_object (value, priv->shared_context);
+      break;
+
+    case PROP_PROFILE:
+      g_value_set_enum (value, priv->profile);
       break;
 
     default:
@@ -202,6 +212,23 @@ gdk_gl_context_class_init (GdkGLContextClass *klass)
                          G_PARAM_READWRITE |
                          G_PARAM_CONSTRUCT_ONLY |
                          G_PARAM_STATIC_STRINGS);
+
+  /**
+   * GdkGLContext:profile:
+   *
+   * The #GdkGLProfile of the context
+   *
+   * Since: 3.16
+   */
+  obj_pspecs[PROP_PROFILE] =
+    g_param_spec_enum ("profile",
+                       P_("Profile"),
+                       P_("The GL profile the context was created for"),
+                       GDK_TYPE_GL_PROFILE,
+                       GDK_GL_PROFILE_DEFAULT,
+                       G_PARAM_READWRITE |
+                       G_PARAM_CONSTRUCT_ONLY |
+                       G_PARAM_STATIC_STRINGS);
 
   /**
    * GdkGLContext:shared-context:
@@ -328,6 +355,26 @@ gdk_gl_context_get_window (GdkGLContext *context)
   g_return_val_if_fail (GDK_IS_GL_CONTEXT (context), NULL);
 
   return priv->window;
+}
+
+/**
+ * gdk_gl_context_get_profile:
+ * @context: a #GdkGLContext
+ *
+ * Retrieves the #GdkGLProfile that @context was created for.
+ *
+ * Returns: a #GdkGLProfile
+ *
+ * Since: 3.16
+ */
+GdkGLProfile
+gdk_gl_context_get_profile (GdkGLContext *context)
+{
+  GdkGLContextPrivate *priv = gdk_gl_context_get_instance_private (context);
+
+  g_return_val_if_fail (GDK_IS_GL_CONTEXT (context), GDK_GL_PROFILE_LEGACY);
+
+  return priv->profile;
 }
 
 /**

@@ -326,6 +326,9 @@ gdk_wayland_window_create_gl_context (GdkWindow     *window,
       return NULL;
     }
 
+  if (profile == GDK_GL_PROFILE_DEFAULT)
+    profile = GDK_GL_PROFILE_LEGACY;
+
   if (profile == GDK_GL_PROFILE_3_2_CORE &&
       !display_wayland->have_egl_khr_create_context)
     {
@@ -363,6 +366,7 @@ gdk_wayland_window_create_gl_context (GdkWindow     *window,
 
   context = g_object_new (GDK_TYPE_WAYLAND_GL_CONTEXT,
                           "window", window,
+                          "profile", profile,
                           "shared-context", share,
                           NULL);
 
