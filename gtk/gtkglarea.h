@@ -95,10 +95,29 @@ void            gtk_gl_area_set_has_depth_buffer (GtkGLArea        *area,
                                                   gboolean          has_depth_buffer);
 
 GDK_AVAILABLE_IN_3_16
+gboolean        gtk_gl_area_get_has_stencil_buffer (GtkGLArea        *area);
+
+GDK_AVAILABLE_IN_3_16
+void            gtk_gl_area_set_has_stencil_buffer (GtkGLArea        *area,
+						    gboolean          has_stencil_buffer);
+
+GDK_AVAILABLE_IN_3_16
+gboolean       gtk_gl_area_get_auto_render (GtkGLArea *area);
+GDK_AVAILABLE_IN_3_16
+void           gtk_gl_area_set_auto_render (GtkGLArea *area,
+					    gboolean   auto_render);
+GDK_AVAILABLE_IN_3_16
+void           gtk_gl_area_queue_render    (GtkGLArea *area);
+
+
+GDK_AVAILABLE_IN_3_16
 GdkGLContext *  gtk_gl_area_get_context         (GtkGLArea        *area);
 
 GDK_AVAILABLE_IN_3_16
 void            gtk_gl_area_make_current        (GtkGLArea        *area);
+GDK_AVAILABLE_IN_3_16
+void            gtk_gl_area_attach_buffers      (GtkGLArea        *area);
+
 
 G_END_DECLS
 
