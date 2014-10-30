@@ -2894,7 +2894,6 @@ gdk_x11_display_class_init (GdkX11DisplayClass * class)
   display_class->text_property_to_utf8_list = _gdk_x11_display_text_property_to_utf8_list;
   display_class->utf8_to_string_target = _gdk_x11_display_utf8_to_string_target;
 
-  display_class->destroy_gl_context = gdk_x11_display_destroy_gl_context;
   display_class->make_gl_context_current = gdk_x11_display_make_gl_context_current;
 
   _gdk_x11_windowing_init ();

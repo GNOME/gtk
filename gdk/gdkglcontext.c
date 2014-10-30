@@ -103,13 +103,18 @@ G_DEFINE_QUARK (gdk-gl-error-quark, gdk_gl_error)
 
 G_DEFINE_ABSTRACT_TYPE_WITH_PRIVATE (GdkGLContext, gdk_gl_context, G_TYPE_OBJECT)
 
+static GPrivate thread_current_context = G_PRIVATE_INIT (g_object_unref);
+
 static void
 gdk_gl_context_dispose (GObject *gobject)
 {
   GdkGLContext *context = GDK_GL_CONTEXT (gobject);
   GdkGLContextPrivate *priv = gdk_gl_context_get_instance_private (context);
+  GdkGLContext *current;
 
-  gdk_display_destroy_gl_context (gdk_window_get_display (priv->window), context);
+  current = g_private_get (&thread_current_context);
+  if (current == context)
+    g_private_replace (&thread_current_context, NULL);
 
   g_clear_object (&priv->window);
   g_clear_object (&priv->visual);
@@ -310,13 +315,20 @@ void
 gdk_gl_context_make_current (GdkGLContext *context)
 {
   GdkGLContextPrivate *priv = gdk_gl_context_get_instance_private (context);
+  GdkGLContext *current;
 
   g_return_if_fail (GDK_IS_GL_CONTEXT (context));
 
-  gdk_display_make_gl_context_current (gdk_window_get_display (priv->window), context);
+  current = g_private_get (&thread_current_context);
+  if (current == context)
+    return;
 
-  if (!priv->realized)
-    gdk_gl_context_realize (context);
+  if (gdk_display_make_gl_context_current (gdk_window_get_display (priv->window), context))
+    {
+      g_private_replace (&thread_current_context, g_object_ref (context));
+      if (!priv->realized)
+        gdk_gl_context_realize (context);
+    }
 }
 
 /**
@@ -352,9 +364,16 @@ gdk_gl_context_get_window (GdkGLContext *context)
 void
 gdk_gl_context_clear_current (void)
 {
-  GdkDisplay *display = gdk_display_get_default ();
+  GdkGLContext *current;
 
-  gdk_display_make_gl_context_current (display, NULL);
+  current = g_private_get (&thread_current_context);
+  if (current != NULL)
+    {
+      GdkGLContextPrivate *priv = gdk_gl_context_get_instance_private (current);
+
+      if (gdk_display_make_gl_context_current (gdk_window_get_display (priv->window), NULL))
+        g_private_replace (&thread_current_context, NULL);
+    }
 }
 
 /**
@@ -369,7 +388,9 @@ gdk_gl_context_clear_current (void)
 GdkGLContext *
 gdk_gl_context_get_current (void)
 {
-  GdkDisplay *display = gdk_display_get_default ();
+  GdkGLContext *current;
 
-  return gdk_display_get_current_gl_context (display);
+  current = g_private_get (&thread_current_context);
+
+  return current;
 }

@@ -40,7 +40,7 @@ struct _GdkGLContextClass
 {
   GObjectClass parent_class;
 
-  void (* update)          (GdkGLContext *context);
+  void (* update)       (GdkGLContext *context);
   void (* end_frame)    (GdkGLContext *context,
                          cairo_region_t *painted,
                          cairo_region_t *damage);

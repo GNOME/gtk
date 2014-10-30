@@ -35,6 +35,8 @@
 
 G_DEFINE_TYPE (GdkWaylandGLContext, gdk_wayland_gl_context, GDK_TYPE_GL_CONTEXT)
 
+static void gdk_x11_gl_context_dispose (GObject *gobject);
+
 static void
 gdk_wayland_gl_context_update (GdkGLContext *context)
 {
@@ -159,9 +161,11 @@ static void
 gdk_wayland_gl_context_class_init (GdkWaylandGLContextClass *klass)
 {
   GdkGLContextClass *context_class = GDK_GL_CONTEXT_CLASS (klass);
+  GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
 
   context_class->update = gdk_wayland_gl_context_update;
   context_class->end_frame = gdk_wayland_gl_context_end_frame;
+  gobject_class->dispose = gdk_x11_gl_context_dispose;
 }
 
 static void
@@ -369,16 +373,18 @@ gdk_wayland_window_create_gl_context (GdkWindow     *window,
   return GDK_GL_CONTEXT (context);
 }
 
-void
-gdk_wayland_display_destroy_gl_context (GdkDisplay   *display,
-                                        GdkGLContext *context)
+static void
+gdk_x11_gl_context_dispose (GObject *gobject)
 {
-  GdkWaylandDisplay *display_wayland = GDK_WAYLAND_DISPLAY (display);
-  GdkWaylandGLContext *context_wayland = GDK_WAYLAND_GL_CONTEXT (context);
+  GdkWaylandGLContext *context_wayland = GDK_WAYLAND_GL_CONTEXT (gobject);
 
-  /* TODO: Unset as current if current? */
   if (context_wayland->egl_context != NULL)
     {
+      GdkGLContext *context = GDK_GL_CONTEXT (gobject);
+      GdkWindow *window = gdk_gl_context_get_window (context);
+      GdkDisplay *display = gdk_window_get_display (window);
+      GdkWaylandDisplay *display_wayland = GDK_WAYLAND_DISPLAY (display);
+
       if (eglGetCurrentContext () == context_wayland->egl_context)
         eglMakeCurrent(display_wayland->egl_display, EGL_NO_SURFACE, EGL_NO_SURFACE,
                        EGL_NO_CONTEXT);
@@ -389,9 +395,11 @@ gdk_wayland_display_destroy_gl_context (GdkDisplay   *display,
                          context_wayland->egl_context);
       context_wayland->egl_context = NULL;
     }
+
+  G_OBJECT_CLASS (gdk_wayland_gl_context_parent_class)->dispose (gobject);
 }
 
-void
+gboolean
 gdk_wayland_display_make_gl_context_current (GdkDisplay   *display,
                                              GdkGLContext *context)
 {
@@ -404,7 +412,7 @@ gdk_wayland_display_make_gl_context_current (GdkDisplay   *display,
     {
       eglMakeCurrent(display_wayland->egl_display, EGL_NO_SURFACE, EGL_NO_SURFACE,
                      EGL_NO_CONTEXT);
-      return;
+      return TRUE;
     }
 
   context_wayland = GDK_WAYLAND_GL_CONTEXT (context);
@@ -422,6 +430,11 @@ gdk_wayland_display_make_gl_context_current (GdkDisplay   *display,
     }
 
   if (!eglMakeCurrent (display_wayland->egl_display, egl_surface,
-		       egl_surface, context_wayland->egl_context))
-    g_critical ("eglMakeCurrent failed");
+                       egl_surface, context_wayland->egl_context))
+    {
+      g_warning ("eglMakeCurrent failed");
+      return FALSE;
+    }
+
+  return TRUE;
 }

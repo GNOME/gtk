@@ -496,13 +496,39 @@ gdk_x11_gl_context_texture_from_surface (GdkGLContext *context,
 }
 
 static void
+gdk_x11_gl_context_dispose (GObject *gobject)
+{
+  GdkX11GLContext *context_x11 = GDK_X11_GL_CONTEXT (gobject);
+
+  if (context_x11->glx_context != NULL)
+    {
+      GdkGLContext *context = GDK_GL_CONTEXT (gobject);
+      GdkWindow *window = gdk_gl_context_get_window (context);
+      GdkDisplay *display = gdk_window_get_display (window);
+      Display *dpy = gdk_x11_display_get_xdisplay (display);
+
+      if (glXGetCurrentContext () == context_x11->glx_context)
+        glXMakeContextCurrent (dpy, None, None, NULL);
+
+      GDK_NOTE (OPENGL, g_print ("Destroying GLX context\n"));
+      glXDestroyContext (dpy, context_x11->glx_context);
+      context_x11->glx_context = NULL;
+    }
+
+  G_OBJECT_CLASS (gdk_x11_gl_context_parent_class)->dispose (gobject);
+}
+
+static void
 gdk_x11_gl_context_class_init (GdkX11GLContextClass *klass)
 {
   GdkGLContextClass *context_class = GDK_GL_CONTEXT_CLASS (klass);
+  GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
 
   context_class->update = gdk_x11_gl_context_update;
   context_class->end_frame = gdk_x11_gl_context_end_frame;
   context_class->texture_from_surface = gdk_x11_gl_context_texture_from_surface;
+
+  gobject_class->dispose = gdk_x11_gl_context_dispose;
 }
 
 static void
@@ -1110,25 +1136,7 @@ gdk_x11_window_create_gl_context (GdkWindow    *window,
   return GDK_GL_CONTEXT (context);
 }
 
-void
-gdk_x11_display_destroy_gl_context (GdkDisplay   *display,
-                                    GdkGLContext *context)
-{
-  GdkX11GLContext *context_x11 = GDK_X11_GL_CONTEXT (context);
-  Display *dpy = gdk_x11_display_get_xdisplay (display);
-
-  if (context_x11->glx_context != NULL)
-    {
-      if (glXGetCurrentContext () == context_x11->glx_context)
-        glXMakeContextCurrent (dpy, None, None, NULL);
-
-      GDK_NOTE (OPENGL, g_print ("Destroying GLX context\n"));
-      glXDestroyContext (dpy, context_x11->glx_context);
-      context_x11->glx_context = NULL;
-    }
-}
-
-void
+gboolean
 gdk_x11_display_make_gl_context_current (GdkDisplay   *display,
                                          GdkGLContext *context)
 {
@@ -1141,7 +1149,7 @@ gdk_x11_display_make_gl_context_current (GdkDisplay   *display,
   if (context == NULL)
     {
       glXMakeContextCurrent (dpy, None, None, NULL);
-      return;
+      return TRUE;
     }
 
   context_x11 = GDK_X11_GL_CONTEXT (context);
@@ -1161,8 +1169,13 @@ gdk_x11_display_make_gl_context_current (GdkDisplay   *display,
             g_print ("Making GLX context current to drawable %lu\n",
                      (unsigned long) context_x11->drawable));
 
-  glXMakeContextCurrent (dpy, context_x11->drawable, context_x11->drawable,
-                         context_x11->glx_context);
+  if (!glXMakeContextCurrent (dpy, context_x11->drawable, context_x11->drawable,
+                              context_x11->glx_context))
+    {
+      GDK_NOTE (OPENGL,
+                g_print ("Making GLX context current failed\n"));
+      return FALSE;
+    }
 
   if (context_x11->is_attached && GDK_X11_DISPLAY (display)->has_glx_swap_interval)
     {
@@ -1171,6 +1184,8 @@ gdk_x11_display_make_gl_context_current (GdkDisplay   *display,
       else
         glXSwapIntervalSGI (0);
     }
+
+  return TRUE;
 }
 
 /**
