@@ -761,7 +761,7 @@ background_loaded_cb (GObject      *source,
   pixbuf = gdk_pixbuf_new_from_stream_finish (res, &error);
   if (error)
     {
-      g_warning ("%s", error->message);
+      g_warning ("Error loading '%s': %s", bd->filename, error->message);
       g_error_free (error);
       return;
     }
