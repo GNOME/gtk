@@ -179,6 +179,7 @@ gtk/gtkmenuitem.c
 gtk/gtkmenushell.c
 gtk/gtkmenutoolbutton.c
 gtk/gtkmessagedialog.c
+gtk/gtkmodelbutton.c
 gtk/gtkmodifierstyle.c
 gtk/gtkmodules.c
 gtk/gtkmountoperation.c
@@ -195,6 +196,7 @@ gtk/gtkpathbar.c
 gtk/gtkplacessidebar.c
 gtk/gtkplug.c
 gtk/gtkpopover.c
+gtk/gtkpopovermenu.c
 gtk/gtkprintbackend.c
 gtk/gtkprinter.c
 gtk/gtkprinteroption.c
