@@ -247,7 +247,10 @@ gtk_gl_area_unrealize (GtkWidget *widget)
       else
 	g_warning ("can't free framebuffer");
 
-      gdk_gl_context_clear_current ();
+      /* Make sure to destroy if current */
+      g_object_run_dispose (G_OBJECT (priv->context));
+      g_object_unref (priv->context);
+      priv->context = NULL;
     }
 
   g_clear_error (&priv->error);
@@ -380,23 +383,11 @@ gtk_gl_area_draw (GtkWidget *widget,
 }
 
 static void
-gtk_gl_area_screen_changed (GtkWidget *widget,
-                            GdkScreen *old_screen)
-{
-  GtkGLArea *self = GTK_GL_AREA (widget);
-  GtkGLAreaPrivate *priv = gtk_gl_area_get_instance_private (self);
-
-  /* this will cause the context to be recreated on realize */
-  g_clear_object (&priv->context);
-}
-
-static void
 gtk_gl_area_class_init (GtkGLAreaClass *klass)
 {
   GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
 
-  widget_class->screen_changed = gtk_gl_area_screen_changed;
   widget_class->realize = gtk_gl_area_realize;
   widget_class->unrealize = gtk_gl_area_unrealize;
   widget_class->size_allocate = gtk_gl_area_size_allocate;
