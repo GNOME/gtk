@@ -2286,7 +2286,7 @@ GtkCalendar.header column-header .button.titlebutton, column-header .button:hove
   padding: 2px;
   border: 1px solid #a1a1a1;
   border-radius: 5px;
-  background-color: #ededed;
+  background-color: #f6f6f6;
   box-shadow: 0 2px 3px rgba(0, 0, 0, 0.5); }
   .popover:backdrop {
     box-shadow: none; }
