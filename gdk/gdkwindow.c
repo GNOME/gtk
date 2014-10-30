@@ -1993,6 +1993,14 @@ _gdk_window_destroy_hierarchy (GdkWindow *window,
 		}
 	    }
 
+          if (window->gl_paint_context)
+            {
+              /* Make sure to destroy if current */
+              g_object_run_dispose (G_OBJECT (window->gl_paint_context));
+              g_object_unref (window->gl_paint_context);
+              window->gl_paint_context = NULL;
+            }
+
           if (window->frame_clock)
             {
               g_object_run_dispose (G_OBJECT (window->frame_clock));
