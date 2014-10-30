@@ -997,7 +997,6 @@ gdk_x11_window_create_gl_context (GdkWindow    *window,
   GdkDisplay *display;
   GdkX11GLContext *context;
   GdkVisual *visual;
-  GdkVisual *gdk_visual;
   GLXFBConfig config;
   GLXContext glx_context;
   GLXWindow drawable;
@@ -1106,9 +1105,6 @@ gdk_x11_window_create_gl_context (GdkWindow    *window,
       set_glx_drawable_info (window->impl_window, info);
     }
 
-  gdk_visual = gdk_x11_screen_lookup_visual (gdk_display_get_default_screen (display),
-                                             xvisinfo->visualid);
-
   XFree (xvisinfo);
 
   if (attached)
@@ -1123,7 +1119,6 @@ gdk_x11_window_create_gl_context (GdkWindow    *window,
 
   context = g_object_new (GDK_TYPE_X11_GL_CONTEXT,
                           "window", window,
-                          "visual", gdk_visual,
                           "shared-context", share,
                           NULL);
 

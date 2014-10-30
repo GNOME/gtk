@@ -43,8 +43,6 @@ GDK_AVAILABLE_IN_3_16
 GType gdk_gl_context_get_type (void) G_GNUC_CONST;
 
 GDK_AVAILABLE_IN_3_16
-GdkVisual *             gdk_gl_context_get_visual       (GdkGLContext *context);
-GDK_AVAILABLE_IN_3_16
 GdkWindow *             gdk_gl_context_get_window       (GdkGLContext *context);
 
 GDK_AVAILABLE_IN_3_16

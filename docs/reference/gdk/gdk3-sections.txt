@@ -1286,7 +1286,6 @@ gdk_frame_get_type
 <SECTION>
 <FILE>gdkglcontext</FILE>
 GdkGLContext
-gdk_gl_context_get_visual
 gdk_gl_context_get_window
 gdk_gl_context_make_current
 gdk_gl_context_clear_current

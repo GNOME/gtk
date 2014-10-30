@@ -72,7 +72,6 @@
 
 #include "gdkglcontextprivate.h"
 #include "gdkdisplayprivate.h"
-#include "gdkvisual.h"
 #include "gdkinternals.h"
 
 #include "gdkintl.h"
@@ -81,7 +80,6 @@
 
 typedef struct {
   GdkWindow *window;
-  GdkVisual *visual;
   GdkGLContext *shared_context;
 
   guint realized : 1;
@@ -93,7 +91,6 @@ enum {
   PROP_0,
 
   PROP_WINDOW,
-  PROP_VISUAL,
   PROP_SHARED_CONTEXT,
 
   LAST_PROP
@@ -119,7 +116,6 @@ gdk_gl_context_dispose (GObject *gobject)
     g_private_replace (&thread_current_context, NULL);
 
   g_clear_object (&priv->window);
-  g_clear_object (&priv->visual);
   g_clear_object (&priv->shared_context);
 
   G_OBJECT_CLASS (gdk_gl_context_parent_class)->dispose (gobject);
@@ -149,15 +145,6 @@ gdk_gl_context_set_property (GObject      *gobject,
       }
       break;
 
-    case PROP_VISUAL:
-      {
-        GdkVisual *visual = g_value_get_object (value);
-
-        if (visual != NULL)
-          priv->visual = g_object_ref (visual);
-      }
-      break;
-
     case PROP_SHARED_CONTEXT:
       {
         GdkGLContext *context = g_value_get_object (value);
@@ -184,10 +171,6 @@ gdk_gl_context_get_property (GObject    *gobject,
     {
     case PROP_WINDOW:
       g_value_set_object (value, priv->window);
-      break;
-
-    case PROP_VISUAL:
-      g_value_set_object (value, priv->visual);
       break;
 
     case PROP_SHARED_CONTEXT:
@@ -221,22 +204,6 @@ gdk_gl_context_class_init (GdkGLContextClass *klass)
                          G_PARAM_STATIC_STRINGS);
 
   /**
-   * GdkGLContext:visual:
-   *
-   * The #GdkVisual matching the pixel format used by the context.
-   *
-   * Since: 3.16
-   */
-  obj_pspecs[PROP_VISUAL] =
-    g_param_spec_object ("visual",
-                         P_("Visual"),
-                         P_("The GDK visual used by the GL context"),
-                         GDK_TYPE_VISUAL,
-                         G_PARAM_READWRITE |
-                         G_PARAM_CONSTRUCT_ONLY |
-                         G_PARAM_STATIC_STRINGS);
-
-  /**
    * GdkGLContext:shared-context:
    *
    * The #GdkGLContext that this context is sharing data with, or #NULL
@@ -262,26 +229,6 @@ gdk_gl_context_class_init (GdkGLContextClass *klass)
 static void
 gdk_gl_context_init (GdkGLContext *self)
 {
-}
-
-/**
- * gdk_gl_context_get_visual:
- * @context: a #GdkGLContext
- *
- * Retrieves the #GdkVisual associated with the @context.
- *
- * Returns: (transfer none): the #GdkVisual
- *
- * Since: 3.16
- */
-GdkVisual *
-gdk_gl_context_get_visual (GdkGLContext *context)
-{
-  GdkGLContextPrivate *priv = gdk_gl_context_get_instance_private (context);
-
-  g_return_val_if_fail (GDK_IS_GL_CONTEXT (context), NULL);
-
-  return priv->visual;
 }
 
 /*< private >
