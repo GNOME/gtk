@@ -180,8 +180,6 @@ _gdk_x11_window_get_toplevel (GdkWindow *window)
   return impl->toplevel;
 }
 
-static const cairo_user_data_key_t gdk_x11_cairo_key;
-
 /**
  * _gdk_x11_window_update_size:
  * @impl: a #GdkWindowImplX11.
@@ -441,14 +439,6 @@ gdk_x11_window_end_frame (GdkWindow *window)
  * X11 specific implementations of generic functions *
  *****************************************************/
 
-static void
-gdk_x11_cairo_surface_destroy (void *data)
-{
-  GdkWindowImplX11 *impl = data;
-
-  impl->cairo_surface = NULL;
-}
-
 static cairo_surface_t *
 gdk_x11_create_cairo_surface (GdkWindowImplX11 *impl,
 			      int width,
@@ -479,16 +469,12 @@ gdk_x11_ref_cairo_surface (GdkWindow *window)
 #ifdef HAVE_CAIRO_SURFACE_SET_DEVICE_SCALE
       cairo_surface_set_device_scale (impl->cairo_surface, impl->window_scale, impl->window_scale);
 #endif
-      
-      if (impl->cairo_surface)
-	cairo_surface_set_user_data (impl->cairo_surface, &gdk_x11_cairo_key,
-				     impl, gdk_x11_cairo_surface_destroy);
 
       if (WINDOW_IS_TOPLEVEL (window) && impl->toplevel->in_frame)
         hook_surface_changed (window);
     }
-  else
-    cairo_surface_reference (impl->cairo_surface);
+
+  cairo_surface_reference (impl->cairo_surface);
 
   return impl->cairo_surface;
 }
@@ -1318,8 +1304,8 @@ gdk_x11_window_destroy (GdkWindow *window,
   if (impl->cairo_surface)
     {
       cairo_surface_finish (impl->cairo_surface);
-      cairo_surface_set_user_data (impl->cairo_surface, &gdk_x11_cairo_key,
-                                   NULL, NULL);
+      cairo_surface_destroy (impl->cairo_surface);
+      impl->cairo_surface = NULL;
     }
 
   if (!recursing && !foreign_destroy)
