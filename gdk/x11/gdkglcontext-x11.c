@@ -1124,6 +1124,7 @@ gdk_x11_window_create_gl_context (GdkWindow    *window,
   context = g_object_new (GDK_TYPE_X11_GL_CONTEXT,
                           "window", window,
                           "visual", gdk_visual,
+                          "shared-context", share,
                           NULL);
 
   context->profile = profile;
