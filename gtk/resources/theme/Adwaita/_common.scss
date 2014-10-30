@@ -493,7 +493,7 @@ $_dot_color: if($variant=='light', $selected_bg_color,
   &.osd {
     &.image-button { padding: 13px; }
     color: $osd_fg_color;
-    border-radius: 6px;
+    border-radius: 5px;
     outline-color: transparentize($osd_fg_color, 0.7);  //FIXME: define a color var?
     @include button(osd);
     border: none;
@@ -1123,7 +1123,7 @@ GtkComboBox {
   .osd &, &.osd {
     padding: 13px;
     border: none;
-    border-radius: 6px;
+    border-radius: 5px;
     background-color: $osd_bg_color;
   }
 }
@@ -1134,7 +1134,7 @@ GtkComboBox {
   @extend %inset-bar;
   border-width: 0 1px 1px;
   padding: 3px;
-  border-radius: 0  0 4px 4px;
+  border-radius: 0  0 5px 5px;
 }
 .search-bar, .location-bar {
   @extend .toolbar;
@@ -1549,7 +1549,6 @@ column-header.button.dnd { // for treeview-like derive widgets
   padding: 2px;
   border: 1px solid $borders-color;
   border-radius: 5px;
-  //background-clip: border-box;
   background-color: $bg_color;
 
   box-shadow: 0 2px 3px transparentize(black, 0.5);
@@ -3024,7 +3023,7 @@ GtkColorSwatch {
   &:hover {
     @extend %undecorated_button;
     background-color: transparentize($fg_color,0.9);
-    border-radius: 4px;
+    border-radius: 5px;
   }
   &:backdrop,
   &:backdrop:hover,
