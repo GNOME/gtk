@@ -24,9 +24,9 @@ msgstr ""
 "Project-Id-Version: GTK+ master\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gtk"
 "%2b&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2014-10-05 08:55+0000\n"
-"PO-Revision-Date: 2014-10-05 16:22+0100\n"
-"Last-Translator: Christian Kirbach <christian.kirbach@gmail.com>\n"
+"POT-Creation-Date: 2014-10-30 09:41+0000\n"
+"PO-Revision-Date: 2014-10-30 14:27+0100\n"
+"Last-Translator: Bernd Homuth <dev@hmt.im>\n"
 "Language-Team: Deutsch <gnome-de@gnome.org>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
@@ -1157,13 +1157,23 @@ msgstr "Zeichenkette mit Kommentar"
 msgid "Comments about the program"
 msgstr "Kommentare über dieses Programme"
 
+#: ../gtk/gtkaboutdialog.c:408
+#| msgid "License Type"
+msgid "License"
+msgstr "Lizenz"
+
+#: ../gtk/gtkaboutdialog.c:409
+#| msgid "The license type of the program"
+msgid "The license of the program"
+msgstr "Die Lizenz des Programms"
+
 #: ../gtk/gtkaboutdialog.c:436
 msgid "License Type"
 msgstr "Lizenztyp"
 
 #: ../gtk/gtkaboutdialog.c:437
 msgid "The license type of the program"
-msgstr "Die Lizenz des Programms"
+msgstr "Der Lizenztyp des Programms"
 
 #: ../gtk/gtkaboutdialog.c:452
 msgid "Website URL"
@@ -3873,7 +3883,7 @@ msgid "The current filter for selecting which files are displayed"
 msgstr ""
 "Der momentan zum Auswählen der anzuzeigenden Dateien zu verwendende Filter"
 
-#: ../gtk/gtkfilechooser.c:388 ../gtk/gtkplacessidebar.c:4395
+#: ../gtk/gtkfilechooser.c:388 ../gtk/gtkplacessidebar.c:4525
 msgid "Local Only"
 msgstr "Nur lokal"
 
@@ -4461,7 +4471,7 @@ msgstr "Nachrichtentyp"
 msgid "The type of message"
 msgstr "Der Typ der Nachricht"
 
-#: ../gtk/gtkinfobar.c:461 ../gtk/gtksearchbar.c:418
+#: ../gtk/gtkinfobar.c:461 ../gtk/gtksearchbar.c:434
 msgid "Show Close Button"
 msgstr "Schließen-Knopf zeigen"
 
@@ -4494,10 +4504,6 @@ msgid "Justification"
 msgstr "Ausrichtung"
 
 #: ../gtk/gtklabel.c:757
-#| msgid ""
-#| "The alignment of the lines in the text of the label relative to each "
-#| "other. This does NOT affect the alignment of the label within its "
-#| "allocation. See GtkLabel:xalign for that"
 msgid ""
 "The alignment of the lines in the text of the label relative to each other. "
 "This does NOT affect the alignment of the label within its allocation. See "
@@ -5362,19 +5368,19 @@ msgstr "Schrumpfen"
 msgid "If TRUE, the child can be made smaller than its requisition"
 msgstr "Soll das Kind kleiner als der angeforderte Raum gemacht werden können?"
 
-#: ../gtk/gtkplacessidebar.c:4364
+#: ../gtk/gtkplacessidebar.c:4494
 msgid "Location to Select"
 msgstr "Zu wählender Ort"
 
-#: ../gtk/gtkplacessidebar.c:4365
+#: ../gtk/gtkplacessidebar.c:4495
 msgid "The location to highlight in the sidebar"
 msgstr "Der in der Seitenleiste hervorzuhebende Ort"
 
-#: ../gtk/gtkplacessidebar.c:4370
+#: ../gtk/gtkplacessidebar.c:4500
 msgid "Open Flags"
 msgstr "Offene Flags"
 
-#: ../gtk/gtkplacessidebar.c:4371
+#: ../gtk/gtkplacessidebar.c:4501
 msgid ""
 "Modes in which the calling application can open locations selected in the "
 "sidebar"
@@ -5382,21 +5388,21 @@ msgstr ""
 "Die Arten, in denen eine aufrufende Anwendung ausgewählte Orte in der "
 "Seitenleiste öffnen kann"
 
-#: ../gtk/gtkplacessidebar.c:4377
+#: ../gtk/gtkplacessidebar.c:4507
 msgid "Show 'Desktop'"
 msgstr "»Schreibtisch« anzeigen"
 
-#: ../gtk/gtkplacessidebar.c:4378
+#: ../gtk/gtkplacessidebar.c:4508
 msgid "Whether the sidebar includes a builtin shortcut to the Desktop folder"
 msgstr ""
 "Legt fest, ob die Seitenleiste einen Verweis auf den Schreibtisch-Ordner "
 "enthalten soll"
 
-#: ../gtk/gtkplacessidebar.c:4383
+#: ../gtk/gtkplacessidebar.c:4513
 msgid "Show 'Connect to Server'"
 msgstr "»Verbinden mit Server« anzeigen"
 
-#: ../gtk/gtkplacessidebar.c:4384
+#: ../gtk/gtkplacessidebar.c:4514
 msgid ""
 "Whether the sidebar includes a builtin shortcut to a 'Connect to server' "
 "dialog"
@@ -5404,18 +5410,18 @@ msgstr ""
 "Festlegen, ob die Seitenleiste einen eingebauten Link für den Dialog "
 "»Verbindung mit Server herstellen« enthält"
 
-#: ../gtk/gtkplacessidebar.c:4389
+#: ../gtk/gtkplacessidebar.c:4519
 msgid "Show 'Enter Location'"
 msgstr "Zeige »Ort eingeben«"
 
-#: ../gtk/gtkplacessidebar.c:4390
+#: ../gtk/gtkplacessidebar.c:4520
 msgid ""
 "Whether the sidebar includes a builtin shortcut to manually enter a location"
 msgstr ""
 "Legt fest, ob die Seitenleiste einen eingebauten Link zur manuellen "
 "Ortsangabe enthält"
 
-#: ../gtk/gtkplacessidebar.c:4396
+#: ../gtk/gtkplacessidebar.c:4526
 msgid "Whether the sidebar only includes local files"
 msgstr "Legt fest, ob die Seitenleiste nur lokale Dateien enthalten soll"
 
@@ -6360,17 +6366,17 @@ msgstr "Kinetisches Rollen"
 msgid "Kinetic scrolling mode."
 msgstr "Kinetischer Rollmodus."
 
-#: ../gtk/gtksearchbar.c:407
+#: ../gtk/gtksearchbar.c:423
 msgid "Search Mode Enabled"
 msgstr "Suchmodus aktiviert"
 
-#: ../gtk/gtksearchbar.c:408
+#: ../gtk/gtksearchbar.c:424
 msgid "Whether the search mode is on and the search bar shown"
 msgstr ""
 "Legt fest, ob der Suchmodus eingeschaltet und die Suchleiste angezeigt "
 "werden soll"
 
-#: ../gtk/gtksearchbar.c:419
+#: ../gtk/gtksearchbar.c:435
 msgid "Whether to show the close button in the toolbar"
 msgstr ""
 "Legt fest, ob der Schließen-Knopf in der Werkzeugleiste dargestellt werden "
@@ -7267,7 +7273,7 @@ msgstr "Benötigt Aufmerksamkeit"
 msgid "Whether this page needs attention"
 msgstr "Gibt an, ob diese Seite Aufmerksamkeit benötigt"
 
-#: ../gtk/gtkstackswitcher.c:515 ../gtk/gtkstackswitcher.c:516
+#: ../gtk/gtkstackswitcher.c:523 ../gtk/gtkstackswitcher.c:524
 msgid "Stack"
 msgstr "Stapel"
 
