@@ -118,6 +118,7 @@
  */
 
 typedef struct {
+  GdkGLProfile profile;
   GdkGLContext *context;
   GdkWindow *event_window;
   GError *error;
@@ -141,11 +142,13 @@ enum {
   PROP_0,
 
   PROP_CONTEXT,
+  PROP_PROFILE,
   PROP_HAS_ALPHA,
   PROP_HAS_DEPTH_BUFFER,
   PROP_HAS_STENCIL_BUFFER,
 
   PROP_AUTO_RENDER,
+
   LAST_PROP
 };
 
@@ -202,6 +205,11 @@ gtk_gl_area_set_property (GObject      *gobject,
                                         g_value_get_boolean (value));
       break;
 
+    case PROP_PROFILE:
+      gtk_gl_area_set_profile (GTK_GL_AREA(gobject),
+			       g_value_get_enum (value));
+      break;
+
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (gobject, prop_id, pspec);
     }
@@ -237,6 +245,10 @@ gtk_gl_area_get_property (GObject    *gobject,
       g_value_set_object (value, priv->context);
       break;
 
+    case PROP_PROFILE:
+      g_value_set_enum (value, priv->profile);
+      break;
+
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (gobject, prop_id, pspec);
     }
@@ -267,7 +279,7 @@ gtk_gl_area_realize (GtkWidget *widget)
   gtk_widget_register_window (widget, priv->event_window);
 
   priv->context = gdk_window_create_gl_context (gtk_widget_get_window (widget),
-						GDK_GL_PROFILE_DEFAULT,
+						priv->profile,
 						&priv->error);
 }
 
@@ -655,6 +667,23 @@ gtk_gl_area_class_init (GtkGLAreaClass *klass)
                          G_PARAM_STATIC_STRINGS);
 
   /**
+   * GdkGLArea:profile:
+   *
+   * The #GdkGLProfile to use to create the GL context for the area
+   *
+   * Since: 3.16
+   */
+  obj_props[PROP_PROFILE] =
+    g_param_spec_enum ("profile",
+                       P_("Profile"),
+                       P_("The GL profile to use for the GL context"),
+                       GDK_TYPE_GL_PROFILE,
+                       GDK_GL_PROFILE_DEFAULT,
+                       G_PARAM_READWRITE |
+                       G_PARAM_CONSTRUCT |
+                       G_PARAM_STATIC_STRINGS);
+
+  /**
    * GtkGLArea:auto-render:
    *
    * If set to %TRUE the #GtkGLArea::render signal will be emitted every time the widget
@@ -764,6 +793,7 @@ gtk_gl_area_init (GtkGLArea *area)
   gtk_widget_set_has_window (GTK_WIDGET (area), FALSE);
   gtk_widget_set_app_paintable (GTK_WIDGET (area), TRUE);
 
+  priv->profile = GDK_GL_PROFILE_DEFAULT;
   priv->auto_render = TRUE;
   priv->needs_render = TRUE;
 }
@@ -781,6 +811,52 @@ GtkWidget *
 gtk_gl_area_new (void)
 {
   return g_object_new (GTK_TYPE_GL_AREA, NULL);
+}
+
+/**
+ * gtk_gl_area_get_profile:
+ * @area: a #GtkGLArea
+ *
+ * Returns the profile that will be used to create the GL context for the area.
+ *
+ * Returns: a #GdkGLProfile
+ *
+ * Since: 3.16
+ */
+GdkGLProfile
+gtk_gl_area_get_profile (GtkGLArea        *area)
+{
+  GtkGLAreaPrivate *priv = gtk_gl_area_get_instance_private (area);
+
+  g_return_val_if_fail (GTK_IS_GL_AREA (area), FALSE);
+
+  return priv->profile;
+}
+
+/**
+ * gtk_gl_area_set_profile:
+ * @area: a #GtkGLArea
+ * @profile: a #GdkGLProfile
+ *
+ * Sets the profile type to be used when creating the context for the widget.
+ * This must be called before the are has been realized.
+ *
+ * Since: 3.16
+ */
+void
+gtk_gl_area_set_profile (GtkGLArea        *area,
+			 GdkGLProfile      profile)
+{
+  GtkGLAreaPrivate *priv = gtk_gl_area_get_instance_private (area);
+
+  g_return_if_fail (GTK_IS_GL_AREA (area));
+
+  if (priv->profile != profile)
+    {
+      priv->profile = profile;
+
+      g_object_notify (G_OBJECT (area), "profile");
+    }
 }
 
 /**
