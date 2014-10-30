@@ -68,6 +68,9 @@ struct _GtkGLAreaClass
   /*< public >*/
   gboolean       (* render)         (GtkGLArea        *area,
                                      GdkGLContext     *context);
+  void           (* resize)         (GtkGLArea        *area,
+				     int               width,
+				     int               height);
 
   /*< private >*/
   gpointer _padding[6];

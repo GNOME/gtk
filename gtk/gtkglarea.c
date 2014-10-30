@@ -134,6 +134,7 @@ typedef struct {
   gboolean has_depth_buffer;
   gboolean has_stencil_buffer;
 
+  gboolean needs_resize;
   gboolean needs_render;
   gboolean auto_render;
 } GtkGLAreaPrivate;
@@ -156,6 +157,7 @@ static GParamSpec *obj_props[LAST_PROP] = { NULL, };
 
 enum {
   RENDER,
+  RESIZE,
 
   LAST_SIGNAL
 };
@@ -257,7 +259,8 @@ gtk_gl_area_get_property (GObject    *gobject,
 static void
 gtk_gl_area_realize (GtkWidget *widget)
 {
-  GtkGLAreaPrivate *priv = gtk_gl_area_get_instance_private ((GtkGLArea *) widget);
+  GtkGLArea *area = GTK_GL_AREA (widget);
+  GtkGLAreaPrivate *priv = gtk_gl_area_get_instance_private (area);
   GtkAllocation allocation;
   GdkWindowAttr attributes;
   gint attributes_mask;
@@ -281,6 +284,14 @@ gtk_gl_area_realize (GtkWidget *widget)
   priv->context = gdk_window_create_gl_context (gtk_widget_get_window (widget),
 						priv->profile,
 						&priv->error);
+
+  priv->needs_resize = TRUE;
+}
+
+static void
+gtk_gl_area_resize (GtkGLArea *area, int width, int height)
+{
+  glViewport (0, 0, width, height);
 }
 
 /*
@@ -539,13 +550,17 @@ gtk_gl_area_size_allocate (GtkWidget     *widget,
 
   GTK_WIDGET_CLASS (gtk_gl_area_parent_class)->size_allocate (widget, allocation);
 
-  if (gtk_widget_get_realized (widget) &&
-      priv->event_window != NULL)
-    gdk_window_move_resize (priv->event_window,
-			    allocation->x,
-			    allocation->y,
-			    allocation->width,
-			    allocation->height);
+  if (gtk_widget_get_realized (widget))
+    {
+      if (priv->event_window != NULL)
+	gdk_window_move_resize (priv->event_window,
+				allocation->x,
+				allocation->y,
+				allocation->width,
+				allocation->height);
+
+      priv->needs_resize = TRUE;
+    }
 
   priv->needs_render = TRUE;
   gtk_gl_area_maybe_allocate_buffers (area);
@@ -605,15 +620,21 @@ gtk_gl_area_draw (GtkWidget *widget,
   scale = gtk_widget_get_scale_factor (widget);
   w = gtk_widget_get_allocated_width (widget) * scale;
   h = gtk_widget_get_allocated_height (widget) * scale;
- 
+
   status = glCheckFramebufferStatusEXT(GL_FRAMEBUFFER_EXT);
   if (status ==  GL_FRAMEBUFFER_COMPLETE_EXT)
     {
       if (priv->needs_render || priv->auto_render)
 	{
-	  glViewport(0, 0, w, h);
+	  if (priv->needs_resize)
+	    {
+	      g_signal_emit (area, area_signals[RESIZE], 0, w, h, NULL);
+	      priv->needs_resize = FALSE;
+	    }
+
 	  g_signal_emit (area, area_signals[RENDER], 0, priv->context, &unused);
 	}
+
       priv->needs_render = FALSE;
 
       gdk_cairo_draw_from_gl (cr,
@@ -637,6 +658,8 @@ gtk_gl_area_class_init (GtkGLAreaClass *klass)
 {
   GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
+
+  klass->resize = gtk_gl_area_resize;
 
   widget_class->realize = gtk_gl_area_realize;
   widget_class->unrealize = gtk_gl_area_unrealize;
@@ -783,6 +806,31 @@ gtk_gl_area_class_init (GtkGLAreaClass *klass)
                    NULL,
 		   G_TYPE_BOOLEAN, 1,
 		   GDK_TYPE_GL_CONTEXT);
+
+  /**
+   * GtkGLArea::resized:
+   * @area: the #GtkGLArea that emitted the signal
+   *
+   * The ::resized signal is emitted once when the widget is realized, and
+   * then each time the widget is changed while realized. This is useful
+   * in order to keep GL state up to date with the widget size, like for
+   * instance camera properties which may depend on the width/height ratio.
+   *
+   * The GL context for the area is guaranteed to be current when this is emitted.
+   *
+   * The default handler sets up the gl Viewport.
+   *
+   * Since: 3.16
+   */
+  area_signals[RESIZE] =
+    g_signal_new ("resize",
+                  G_TYPE_FROM_CLASS (klass),
+                  G_SIGNAL_RUN_LAST,
+                  G_STRUCT_OFFSET (GtkGLAreaClass, resize),
+                  NULL, NULL,
+                  _gtk_marshal_VOID__INT_INT,
+                  G_TYPE_NONE, 2, G_TYPE_INT, G_TYPE_INT);
+
 }
 
 static void
