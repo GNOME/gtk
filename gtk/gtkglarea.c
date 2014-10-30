@@ -367,6 +367,8 @@ gtk_gl_area_allocate_buffers (GtkGLArea *area, int width, int height)
       else
 	glRenderbufferStorageEXT (GL_RENDERBUFFER_EXT, GL_DEPTH_COMPONENT24, width, height);
     }
+
+  priv->needs_render = TRUE;
 }
 
 static void
@@ -562,7 +564,6 @@ gtk_gl_area_size_allocate (GtkWidget     *widget,
       priv->needs_resize = TRUE;
     }
 
-  priv->needs_render = TRUE;
   gtk_gl_area_maybe_allocate_buffers (area);
 }
 
@@ -957,7 +958,7 @@ gtk_gl_area_set_has_alpha (GtkGLArea *area,
 
       g_object_notify (G_OBJECT (area), "has-alpha");
 
-      gtk_gl_area_maybe_allocate_buffers (area);
+      gtk_gl_area_delete_buffers (area);
     }
 }
 
