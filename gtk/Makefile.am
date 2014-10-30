@@ -1405,6 +1405,7 @@ gtk.gresource.xml: Makefile.am
           n=`basename $$f`; \
           $(ECHO) "    <file preprocess=\"to-pixdata\">theme/Adwaita/assets/$$n</file>" >> $@; \
         done; \
+	$(ECHO) "    <file alias=\"theme/HighContrast.css\">theme/HighContrast/gtk.css</file>" >> $@; \
 	if test "$(win32_theme)" = "yes"; then \
 	  for f in $(srcdir)/resources/theme/win32/*.css; do \
 	    n=`basename $$f`; \
@@ -1452,7 +1453,16 @@ adwaita_sources = \
 	resources/theme/Adwaita/gtk.css \
 	resources/theme/Adwaita/gtk-dark.css
 
-Raleigh_sources = \
+highcontrast_sources = \
+	resources/theme/HighContrast/_colors.scss \
+	resources/theme/HighContrast/_common.scss \
+	resources/theme/HighContrast/_drawing.scss \
+	resources/theme/HighContrast/Gemfile \
+	resources/theme/HighContrast/gtk.css \
+	resources/theme/HighContrast/gtk.scss \
+	resources/theme/HighContrast/parse-sass.sh
+
+raleigh_sources = \
 	resources/theme/Raleigh/gtk-default.css
 
 resource_files = $(shell $(GLIB_COMPILE_RESOURCES) --sourcedir=$(srcdir)/resources --generate-dependencies $(builddir)/gtk.gresource.xml)
@@ -1731,7 +1741,8 @@ gsettings_SCHEMAS = \
 EXTRA_DIST +=                   \
 	$(resource_files)	\
 	$(adwaita_sources)	\
-	$(Raleigh_sources)	\
+	$(highcontrast_sources)	\
+	$(raleigh_sources)	\
 	$(win32_theme_sources)	\
 	$(gsettings_SCHEMAS)	\
 	$(template_headers)	\
