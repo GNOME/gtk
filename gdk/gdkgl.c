@@ -54,6 +54,8 @@ gdk_cairo_surface_mark_as_direct (cairo_surface_t *surface,
  * This is the main way to draw GL content in GTK+. It takes a render buffer ID 
  * (@source_type == #GL_RENDERBUFFER) or a texture id (@source_type == #GL_TEXTURE)
  * and draws it onto @cr with an OVER operation, respecting the current clip.
+ * The top left corner of the rectangle specified by @x, @y, @width and @height
+ * will be drawn at the current (0,0) position of the cairo_t.
  *
  * This will work for *all* cairo_t, as long as @window is realized, but the
  * fallback implementation that reads back the pixels from the buffer may be
