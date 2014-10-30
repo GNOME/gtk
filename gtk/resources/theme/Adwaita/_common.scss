@@ -202,8 +202,8 @@ GtkTextView { // This will get overridden by .view, needed by gedit line numbers
 
 %osd, .osd {
   color: $osd_fg_color;
-  border-color: $osd_outer_borders_color;
-  background-color: transparentize($osd_bg_color, 0.3);
+  border: none;
+  background-color: $osd_bg_color;
   background-clip: padding-box;
   outline-color: transparentize($osd_fg_color, 0.7);
   box-shadow: none;
@@ -408,6 +408,7 @@ GtkTextView { // This will get overridden by .view, needed by gedit line numbers
     @include entry(osd);
     &:focus { @include entry(osd-focus); }
     &:backdrop { @include entry(osd-backdrop); }
+    &:insensitive { @include entry(osd-insensitive); }
   }
 }
 
@@ -493,27 +494,27 @@ $_dot_color: if($variant=='light', $selected_bg_color,
     &.image-button { padding: 13px; }
     color: $osd_fg_color;
     border-radius: 6px;
-    outline-color: transparentize($osd_fg_color, 0.8);
+    outline-color: transparentize($osd_fg_color, 0.7);  //FIXME: define a color var?
     @include button(osd);
-    border-color: $osd_outer_borders_color;
+    border: none;
     box-shadow: none;
     &:hover {
       @include button(osd-hover);
-      border-color: $osd_outer_borders_color;
+      border: none;
       box-shadow: none;
     }
     &:active, &:checked {
       @include button(osd-active);
-      border-color: $osd_outer_borders_color;
+      border: none;
       box-shadow: none;
     }
     &:insensitive, &:backdrop:insensitive {
       @include button(osd-insensitive);
-      border-color: $osd_outer_borders_color;
+      border: none;
     }
     &:backdrop {
       @include button(osd-backdrop);
-      border-color: $osd_outer_borders_color;
+      border: none;
     }
   }
   //overlay / OSD style
@@ -946,7 +947,7 @@ GtkColorButton.button {
       &:hover {
         @include button(undecorated);
         color: $osd_fg_color;
-        border-color: transparentize($osd_borders_color, 0.3);
+        border-color: transparentize(opacify($osd_borders_color, 1), 0.5);
         background-color: transparentize($osd_fg_color, 0.9);
         icon-shadow: 0 1px black;
         box-shadow: none;
@@ -954,14 +955,14 @@ GtkColorButton.button {
       &:backdrop {
         @include button(undecorated);
         color: $osd_fg_color;
-        border-color: transparentize($osd_borders_color, 0.3);
+        border-color: transparentize(opacify($osd_borders_color, 1), 0.5);
         icon-shadow: none;
         box-shadow: none;
       }
       &:insensitive {
         @include button(undecorated);
         color: $osd_insensitive_fg_color;
-        border-color: transparentize($osd_borders_color, 0.3);
+        border-color: transparentize(opacify($osd_borders_color, 1), 0.5);
         icon-shadow: none;
         box-shadow: none;
       }
@@ -1121,10 +1122,9 @@ GtkComboBox {
   background-color: $bg_color;
   .osd &, &.osd {
     padding: 13px;
-    border: $osd_outer_borders_color;
+    border: none;
     border-radius: 6px;
-    background-color: transparentize($osd_bg_color, 0.3);
-    background-clip: padding-box;
+    background-color: $osd_bg_color;
   }
 }
 
@@ -2154,7 +2154,7 @@ GtkCheckButton.text-button, GtkRadioButton.text-button {
     //OSD sliders
     .osd & {
       @include button(osd);
-      background-color: $osd_bg_color;
+      background-color: opacify($osd_bg_color, 1);
       &:hover { @include button(osd-hover); }
       &:active { @include button(osd-active); }
       &:backdrop { @include button(osd-backdrop); }
@@ -2554,19 +2554,14 @@ GtkScrolledWindow {
 .app-notification.frame {
   @extend %osd;
   padding: 10px;
-  border-width: 0 1px 1px;
-  border-style: solid;
-  border-color: $osd_outer_borders_color;
+  border: none;
   border-radius: 0 0 6px 6px;
-  background-color: transparentize($osd_bg_color, 0.3);
+  background-color: $osd_bg_color;
   background-image: linear-gradient(to bottom, transparentize(black, 0.8),
                                                transparent 2px);
   background-clip: padding-box;
   &:backdrop { background-image: none; }
   .button {
-    border: 1px solid;
-    color: $osd_fg_color;
-    outline-color: transparentize($osd_fg_color, 0.8);
     @include button(osd);
     &.flat {
       @extend %undecorated_button;
@@ -2577,10 +2572,14 @@ GtkScrolledWindow {
       &:backdrop:insensitive { @extend %undecorated_button; }
     }
     &:hover { @include button(osd-hover); }
-    &:active, &:checked, &:backdrop:active, &:backdrop:checked {
+    &:active,
+    &:checked,
+    &:backdrop:active,
+    &:backdrop:checked {
       @include button(osd-active);
     }
-    &:insensitive, &:backdrop:insensitive {
+    &:insensitive,
+    &:backdrop:insensitive {
       @include button(osd-insensitive);
     }
     &:backdrop { @include button(osd-backdrop); }

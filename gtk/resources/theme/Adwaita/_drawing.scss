@@ -95,7 +95,8 @@
   @if $t==osd {
     color: $osd_text_color;
     border-color: $osd_borders_color;
-    background-image: linear-gradient(to bottom, transparentize(black, 0.5));
+    background-image: linear-gradient(to bottom, transparentize(opacify($osd_borders_color, 1), 0.5));
+    background-clip: padding-box;
     box-shadow: none;
     text-shadow: 0 1px black;
     icon-shadow: 0 1px black;
@@ -103,15 +104,26 @@
   @if $t==osd-focus {
     color: $osd_text_color;
     border-color: $selected_bg_color;
-    background-image: linear-gradient(to bottom, transparentize(black, 0.5));
+    background-image: linear-gradient(to bottom, transparentize(opacify($osd_borders_color, 1), 0.5));
+    background-clip: padding-box;
     box-shadow: entry_focus_glow($selected_bg_color);
     text-shadow: 0 1px black;
     icon-shadow: 0 1px black;
   }
+  @if $t==osd-insensitive {
+    color: $osd_insensitive_fg_color;
+    border-color: $osd_borders_color;
+    background-image: linear-gradient(to bottom, $osd_insensitive_bg_color);
+    background-clip: padding-box;
+    box-shadow: none;
+    text-shadow: none;
+    icon-shadow: none;
+  }
   @if $t==osd-backdrop {
     color: $osd_text_color;
     border-color: $osd_borders_color;
-    background-image: linear-gradient(to bottom, transparentize(black, 0.5));
+    background-image: linear-gradient(to bottom, transparentize(opacify($osd_borders_color, 1), 0.5));
+    background-clip: padding-box;
     box-shadow: none;
     text-shadow: none;
     icon-shadow: none;
@@ -343,32 +355,32 @@
   // normal osd button
   //
     $_bg: if($c!=$bg_color, transparentize($c, 0.5),
-                            transparentize($osd_bg_color, 0.3));
+                            $osd_bg_color);
 
     color: $osd_fg_color;
-    outline-color: transparentize($osd_fg_color, 0.8);
-    background-color: transparent;
-    background-clip: padding-box;
-    background-image: linear-gradient(to bottom, $_bg);
     border-color: $osd_borders_color;
+    background-image: linear-gradient(to bottom, $_bg);
+    background-clip: padding-box;
     box-shadow: inset 0 1px transparentize(white, 0.9);
     text-shadow: 0 1px black;
     icon-shadow: 0 1px black;
+    outline-color: transparentize($osd_fg_color, 0.7);
   }
   @else if $t==osd-hover {
   //
   // active osd button
   //
     $_bg: if($c!=$bg_color, transparentize($c, 0.3),
-                            transparentize(lighten($osd_bg_color, 12%), 0.3));
+                            lighten($osd_bg_color, 12%));
 
     color: white;
     border-color: $osd_borders_color;
     background-image: linear-gradient(to bottom, $_bg);
+    background-clip: padding-box;
     box-shadow: inset 0 1px transparentize(white, 0.9);
     text-shadow: 0 1px black;
     icon-shadow: 0 1px black;
-
+    outline-color: transparentize($osd_fg_color, 0.7);
   }
   @else if $t==osd-active {
   //
@@ -379,19 +391,20 @@
     color: white;
     border-color: $osd_borders_color;
     background-image: linear-gradient(to bottom, $_bg);
+    background-clip: padding-box;
     box-shadow: none;
     text-shadow: none;
     icon-shadow: none;
+    outline-color: transparentize($osd_fg_color, 0.7);
   }
   @else if $t==osd-insensitive {
   //
   // insensitive osd button
   //
-    $_bg: transparentize($osd_insensitive_bg_color,0.5);
-
     color: $osd_insensitive_fg_color;
     border-color: $osd_borders_color;
-    background-image: linear-gradient(to bottom, $_bg);
+    background-image: linear-gradient(to bottom, $osd_insensitive_bg_color);
+    background-clip: padding-box;
     box-shadow: none;
     text-shadow: none;
     icon-shadow: none;
@@ -401,11 +414,12 @@
   // backdrop osd button
   //
     $_bg: if($c!=$bg_color, transparentize($c, 0.5),
-                            transparentize($osd_bg_color, 0.3));
+                            $osd_bg_color);
 
     color: $osd_fg_color;
     border-color: $osd_borders_color;
     background-image: linear-gradient(to bottom, $_bg);
+    background-clip: padding-box;
     box-shadow: none;
     text-shadow: none;
     icon-shadow: none;
@@ -418,7 +432,7 @@
     background-color: transparent;
     background-image: none;
 
-    @include _shadows(inset 0 1px transparentize(white,1),
+    @include _shadows(inset 0 1px transparentize(white, 1),
                       $_blank_edge);
 
     text-shadow: none;
