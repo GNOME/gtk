@@ -46,6 +46,9 @@
 #include "gtktreemodelfilter.h"
 #include "gtkwidgetprivate.h"
 #include "gtkstylecontext.h"
+#include "gtksearchbar.h"
+#include "gtksearchentry.h"
+#include "treewalk.h"
 
 enum
 {
@@ -73,6 +76,11 @@ struct _GtkInspectorObjectTreePrivate
   GHashTable *iters;
   gulong map_hook;
   gulong unmap_hook;
+  GtkTreeViewColumn *object_column;
+  GtkWidget *search_bar;
+  GtkWidget *search_entry;
+  GtkTreeWalk *walk;
+  gint search_length;
 };
 
 static guint signals[LAST_SIGNAL] = { 0 };
@@ -123,7 +131,12 @@ on_selection_changed (GtkTreeSelection       *selection,
                       GtkInspectorObjectTree *wt)
 {
   GObject *object;
+  GtkTreeIter iter;
 
+  if (gtk_tree_selection_get_selected (selection, NULL, &iter))
+    gtk_tree_walk_reset (wt->priv->walk, &iter);
+  else
+    gtk_tree_walk_reset (wt->priv->walk, NULL);
   object = gtk_inspector_object_tree_get_selected (wt);
   g_signal_emit (wt, signals[OBJECT_SELECTED], 0, object);
 }
@@ -187,6 +200,214 @@ map_or_unmap (GSignalInvocationHint *ihint,
 }
 
 static void
+move_search_to_row (GtkInspectorObjectTree *wt,
+                    GtkTreeIter            *iter)
+{
+  GtkTreeSelection *selection;
+  GtkTreePath *path;
+
+  selection = gtk_tree_view_get_selection (wt->priv->tree);
+  path = gtk_tree_model_get_path (GTK_TREE_MODEL (wt->priv->model), iter);
+  gtk_tree_view_expand_to_path (wt->priv->tree, path);
+  gtk_tree_selection_select_path (selection, path);
+  gtk_tree_view_scroll_to_cell (wt->priv->tree, path, wt->priv->object_column, FALSE, 0.0, 0.0);
+  gtk_tree_path_free (path);
+}
+
+static gboolean
+key_press_event (GtkWidget              *window,
+                 GdkEvent               *event,
+                 GtkInspectorObjectTree *wt)
+{
+  if (gtk_widget_get_mapped (GTK_WIDGET (wt)))
+    {
+      GdkModifierType default_accel;
+      gboolean search_started;
+
+      search_started = gtk_search_bar_get_search_mode (GTK_SEARCH_BAR (wt->priv->search_bar));
+      default_accel = gtk_widget_get_modifier_mask (GTK_WIDGET (wt), GDK_MODIFIER_INTENT_PRIMARY_ACCELERATOR);
+
+      if (search_started &&
+          (event->key.keyval == GDK_KEY_Return ||
+           event->key.keyval == GDK_KEY_ISO_Enter ||
+           event->key.keyval == GDK_KEY_KP_Enter))
+        {
+          GtkTreeSelection *selection;
+          GtkTreeModel *model;
+          GtkTreeIter iter;
+          GtkTreePath *path;
+
+          selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (wt->priv->tree));
+          if (gtk_tree_selection_get_selected (selection, &model, &iter))
+            {
+              path = gtk_tree_model_get_path (model, &iter);
+              gtk_tree_view_row_activated (GTK_TREE_VIEW (wt->priv->tree),
+                                           path,
+                                           wt->priv->object_column);
+              gtk_tree_path_free (path);
+
+              return GDK_EVENT_STOP;
+            }
+          else
+            return GDK_EVENT_PROPAGATE;
+        }
+      else if (search_started &&
+               (event->key.keyval == GDK_KEY_Escape))
+        {
+          gtk_search_bar_set_search_mode (GTK_SEARCH_BAR (wt->priv->search_bar), FALSE);
+          return GDK_EVENT_STOP;
+        }
+      else if (search_started &&
+               ((event->key.state & (default_accel | GDK_SHIFT_MASK)) == (default_accel | GDK_SHIFT_MASK)) &&
+               (event->key.keyval == GDK_KEY_g || event->key.keyval == GDK_KEY_G))
+        {
+          GtkTreeIter iter;
+          if (gtk_tree_walk_next_match (wt->priv->walk, TRUE, TRUE, &iter))
+            move_search_to_row (wt, &iter);
+          else
+            gtk_widget_error_bell (GTK_WIDGET (wt));
+
+          return GDK_EVENT_STOP;
+        }
+      else if (search_started &&
+               ((event->key.state & (default_accel | GDK_SHIFT_MASK)) == default_accel) &&
+               (event->key.keyval == GDK_KEY_g || event->key.keyval == GDK_KEY_G))
+        {
+          GtkTreeIter iter;
+
+          if (gtk_tree_walk_next_match (wt->priv->walk, TRUE, FALSE, &iter))
+            move_search_to_row (wt, &iter);
+          else
+            gtk_widget_error_bell (GTK_WIDGET (wt));
+
+          return GDK_EVENT_STOP;
+        }
+
+      return gtk_search_bar_handle_event (GTK_SEARCH_BAR (wt->priv->search_bar), event);
+    }
+  else
+    return GDK_EVENT_PROPAGATE;
+}
+
+static void
+on_hierarchy_changed (GtkWidget *widget,
+                      GtkWidget *previous_toplevel)
+{
+  if (previous_toplevel)
+    g_signal_handlers_disconnect_by_func (previous_toplevel, key_press_event, widget);
+  g_signal_connect (gtk_widget_get_toplevel (widget), "key-press-event",
+                    G_CALLBACK (key_press_event), widget);
+}
+
+static void
+on_search_changed (GtkSearchEntry         *entry,
+                   GtkInspectorObjectTree *wt)
+{
+  GtkTreeIter iter;
+  gint length;
+  gboolean backwards;
+
+  length = strlen (gtk_entry_get_text (GTK_ENTRY (entry)));
+  backwards = length < wt->priv->search_length;
+  wt->priv->search_length = length;
+
+  if (length == 0)
+    return;
+
+  if (gtk_tree_walk_next_match (wt->priv->walk, backwards, backwards, &iter))
+    move_search_to_row (wt, &iter);
+  else if (!backwards)
+    gtk_widget_error_bell (GTK_WIDGET (wt));
+}
+
+static gboolean
+match_string (const gchar *string,
+              const gchar *text)
+{
+  gchar *lower;
+  gboolean match = FALSE;
+
+  if (string)
+    {
+      lower = g_ascii_strdown (string, -1);
+      match = g_str_has_prefix (lower, text);
+      g_free (lower);
+    }
+
+  return match;
+}
+
+static gboolean
+match_row (GtkTreeModel *model,
+           GtkTreeIter  *iter,
+           gpointer      data)
+{
+  GtkInspectorObjectTree *wt = data;
+  gchar *type, *name, *label;
+  const gchar *text;
+  gboolean match;
+
+  text = gtk_entry_get_text (GTK_ENTRY (wt->priv->search_entry));
+  gtk_tree_model_get (model, iter,
+                      OBJECT_TYPE, &type,
+                      OBJECT_NAME, &name,
+                      OBJECT_LABEL, &label,
+                      -1);
+
+  match = (match_string (type, text) ||
+           match_string (name, text) ||
+           match_string (label, text));
+
+  g_free (type);
+  g_free (name);
+  g_free (label);
+
+  return match;
+}
+
+static void
+search_mode_changed (GObject                *search_bar,
+                     GParamSpec             *pspec,
+                     GtkInspectorObjectTree *wt)
+{
+  if (!gtk_search_bar_get_search_mode (GTK_SEARCH_BAR (search_bar)))
+    {
+      gtk_tree_walk_reset (wt->priv->walk, NULL);
+      wt->priv->search_length = 0;
+    }
+}
+
+static void
+next_match (GtkButton              *button,
+            GtkInspectorObjectTree *wt)
+{
+  if (gtk_search_bar_get_search_mode (GTK_SEARCH_BAR (wt->priv->search_bar)))
+    {
+      GtkTreeIter iter;
+
+      if (gtk_tree_walk_next_match (wt->priv->walk, TRUE, FALSE, &iter))
+        move_search_to_row (wt, &iter);
+      else
+        gtk_widget_error_bell (GTK_WIDGET (wt));
+    }
+}
+
+static void
+previous_match (GtkButton              *button,
+                GtkInspectorObjectTree *wt)
+{
+  if (gtk_search_bar_get_search_mode (GTK_SEARCH_BAR (wt->priv->search_bar)))
+    {
+      GtkTreeIter iter;
+
+      if (gtk_tree_walk_next_match (wt->priv->walk, TRUE, TRUE, &iter))
+        move_search_to_row (wt, &iter);
+      else
+        gtk_widget_error_bell (GTK_WIDGET (wt));
+    }
+}
+
+static void
 gtk_inspector_object_tree_init (GtkInspectorObjectTree *wt)
 {
   guint signal_id;
@@ -197,6 +418,13 @@ gtk_inspector_object_tree_init (GtkInspectorObjectTree *wt)
                                            NULL,
                                            (GDestroyNotify) object_data_free);
   gtk_widget_init_template (GTK_WIDGET (wt));
+
+  gtk_search_bar_connect_entry (GTK_SEARCH_BAR (wt->priv->search_bar),
+                                GTK_ENTRY (wt->priv->search_entry));
+
+  g_signal_connect (wt->priv->search_bar, "notify::search-mode-enabled",
+                    G_CALLBACK (search_mode_changed), wt);
+  wt->priv->walk = gtk_tree_walk_new (GTK_TREE_MODEL (wt->priv->model), match_row, wt, NULL);
 
   signal_id = g_signal_lookup ("map", GTK_TYPE_WIDGET);
   wt->priv->map_hook = g_signal_add_emission_hook (signal_id, 0,
@@ -220,6 +448,8 @@ gtk_inspector_object_tree_finalize (GObject *object)
   g_signal_remove_emission_hook (signal_id, wt->priv->map_hook);
   signal_id = g_signal_lookup ("unmap", GTK_TYPE_WIDGET);
   g_signal_remove_emission_hook (signal_id, wt->priv->unmap_hook);
+
+  gtk_tree_walk_free (wt->priv->walk);
 
   G_OBJECT_CLASS (gtk_inspector_object_tree_parent_class)->finalize (object);
 }
@@ -253,8 +483,15 @@ gtk_inspector_object_tree_class_init (GtkInspectorObjectTreeClass *klass)
   gtk_widget_class_set_template_from_resource (widget_class, "/org/gtk/inspector/object-tree.ui");
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorObjectTree, model);
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorObjectTree, tree);
+  gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorObjectTree, object_column);
+  gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorObjectTree, search_bar);
+  gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorObjectTree, search_entry);
   gtk_widget_class_bind_template_callback (widget_class, on_selection_changed);
   gtk_widget_class_bind_template_callback (widget_class, on_row_activated);
+  gtk_widget_class_bind_template_callback (widget_class, on_hierarchy_changed);
+  gtk_widget_class_bind_template_callback (widget_class, on_search_changed);
+  gtk_widget_class_bind_template_callback (widget_class, next_match);
+  gtk_widget_class_bind_template_callback (widget_class, previous_match);
 }
 
 typedef struct

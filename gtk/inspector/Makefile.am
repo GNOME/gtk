@@ -62,6 +62,8 @@ libgtkinspector_la_SOURCES = 		\
 	statistics.c			\
 	style-prop-list.h		\
 	style-prop-list.c		\
+	treewalk.h			\
+	treewalk.c			\
 	visual.h			\
 	visual.c			\
 	window.h			\
