@@ -743,7 +743,8 @@ gtk_radio_button_focus (GtkWidget         *widget,
       tmp_slist = priv->group;
       while (tmp_slist)
 	{
-	  if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (tmp_slist->data)))
+	  if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (tmp_slist->data)) &&
+	      gtk_widget_get_visible (tmp_slist->data))
 	    selected_button = tmp_slist->data;
 	  tmp_slist = tmp_slist->next;
 	}
