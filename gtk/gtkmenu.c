@@ -3339,6 +3339,7 @@ gtk_menu_get_preferred_height_for_width (GtkWidget *widget,
     {
       GdkScreen *screen = gtk_widget_get_screen (priv->toplevel);
       GdkRectangle monitor;
+      GtkBorder border;
 
       gdk_screen_get_monitor_workarea (screen, priv->monitor_num, &monitor);
 
@@ -3348,10 +3349,12 @@ gtk_menu_get_preferred_height_for_width (GtkWidget *widget,
       if (priv->position_y + nat_height > monitor.y + monitor.height)
         nat_height = monitor.y + monitor.height - priv->position_y;
 
-      if (priv->position_y < monitor.y)
+      _gtk_window_get_shadow_width (GTK_WINDOW (priv->toplevel), &border);
+
+      if (priv->position_y + border.top < monitor.y)
         {
-          min_height -= monitor.y - priv->position_y;
-          nat_height -= monitor.y - priv->position_y;
+          min_height -= monitor.y - (priv->position_y + border.top);
+          nat_height -= monitor.y - (priv->position_y + border.top);
         }
     }
 
