@@ -1880,6 +1880,12 @@ GtkComboBox {
   .header-bar, .maximized
   .header-bar {
     border-radius: 0; }
+  .titlebar.default-decoration,
+  .header-bar.default-decoration {
+    padding: 4px; }
+    .titlebar.default-decoration .button,
+    .header-bar.default-decoration .button {
+      padding: 5px; }
 
 /************
  * Pathbars *
