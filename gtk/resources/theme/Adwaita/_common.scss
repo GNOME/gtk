@@ -100,10 +100,10 @@
 }
 
 .view {
-  color: $fg_color;
+  color: $text_color;
   background-color: $base_color;
   &:backdrop {
-    color: $backdrop_fg_color;
+    color: $backdrop_text_color;
     background-color: $backdrop_base_color;
   }
   &:selected,
@@ -2417,12 +2417,16 @@ GtkCalendar {
   }
   &.header {
     @extend .titlebar;
+    color: $fg_color;
     box-shadow: inset 0 -1px mix($borders_color, $bg_color, 30%),
                 inset 0px 1px $top_hilight,
                 0 1px 2px transparentize(black,0.9);
     border: 1px solid $borders_color;
     border-radius: 0;
-    &:backdrop { box-shadow: none; }
+    &:backdrop {
+      color: $backdrop_fg_color;
+      box-shadow: none;
+    }
   }
   &.button {
     @extend %undecorated_button;
@@ -2433,8 +2437,13 @@ GtkCalendar {
     }
     &:backdrop { color: transparentize($backdrop_fg_color,0.55); }
   }
-  &.highlight { color: gtkalpha(currentColor,0.55); }
-  &:backdrop { border-color: $backdrop_borders_color; }
+  &.highlight,
+  &.highlight:backdrop { color: gtkalpha(currentColor,0.55); }
+
+  &:backdrop {
+    color: $backdrop_text_color;
+    border-color: $backdrop_borders_color;
+  }
 }
 
 /***********
@@ -2547,8 +2556,7 @@ GtkFileChooserDialog {
  * Sidebar *
  ***********/
 
-.sidebar,
-.sidebar .view {
+.sidebar {
   border: none;
   $_sidebar_bg: lighten($bg_color,5%);
   background-color: $_sidebar_bg;
@@ -2571,6 +2579,25 @@ GtkFileChooserDialog {
     background-color: $selected_bg_color;
   }
   .separator:backdrop { @extend .separator; } // overriden w/o this
+}
+
+// Places sidebar is a special case, since the view here have to look like chrome not content, so we override text color
+GtkPlacesSidebar.sidebar .view {
+
+  color: $fg_color;
+  background-color: transparent;
+
+  &:backdrop { color: $backdrop_fg_color; }
+
+  &:selected {
+    color: $selected_fg_color;
+    background-color: $selected_bg_color;
+
+    &:backdrop { color: if($variant == 'light', $backdrop_base_color, $selected_bg_color); }
+  }
+
+  &.separator,
+  &.separator:backdrop { @extend .separator; }
 }
 
 GtkPaned {

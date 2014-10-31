@@ -64,10 +64,10 @@
     color: #ffffff; }
 
 .view {
-  color: #2e3436;
+  color: black;
   background-color: #ffffff; }
   .view:backdrop {
-    color: #8d9091;
+    color: #323232;
     background-color: #fcfcfc; }
 
 .rubberband {
@@ -77,19 +77,16 @@
 .overshoot {
   background-color: rgba(74, 144, 217, 0.2); }
 
-GtkLabel.separator, .sidebar GtkLabel.separator:backdrop,
-.sidebar .view GtkLabel.separator:backdrop {
+GtkLabel.separator, .sidebar GtkLabel.separator:backdrop, GtkPlacesSidebar.sidebar GtkLabel.view.separator, GtkPlacesSidebar.sidebar GtkLabel.view.separator:backdrop {
   color: #2e3436; }
-  GtkLabel.separator:backdrop, .sidebar GtkLabel.separator:backdrop,
-  .sidebar .view GtkLabel.separator:backdrop {
+  GtkLabel.separator:backdrop, .sidebar GtkLabel.separator:backdrop {
     color: #8d9091; }
 GtkLabel:insensitive {
   color: #8d9091; }
   GtkLabel:insensitive:backdrop {
     color: #c7c7c7; }
 
-.dim-label, GtkLabel.separator, .sidebar GtkLabel.separator:backdrop,
-.sidebar .view GtkLabel.separator:backdrop, .titlebar .subtitle, GtkCalendar.header .subtitle,
+.dim-label, GtkLabel.separator, .sidebar GtkLabel.separator:backdrop, GtkPlacesSidebar.sidebar GtkLabel.view.separator, GtkPlacesSidebar.sidebar GtkLabel.view.separator:backdrop, .titlebar .subtitle, GtkCalendar.header .subtitle,
 .header-bar .subtitle {
   opacity: 0.55;
   text-shadow: none; }
@@ -158,6 +155,7 @@ GtkFlowBox .grid-child {
   transition: all 200ms ease-out;
   background-color: transparent;
   background-image: linear-gradient(to bottom, #f7f7f7, #ffffff 90%);
+  color: black;
   border-color: #a1a1a1;
   box-shadow: inset 0 3px rgba(0, 0, 0, 0.02), inset 0 2px rgba(0, 0, 0, 0.03), inset 0 1px rgba(0, 0, 0, 0.08), inset 0 0 0 1px rgba(74, 144, 217, 0), 0 1px white; }
   .entry.image.left {
@@ -168,6 +166,7 @@ GtkFlowBox .grid-child {
     padding: 2px;
     background-color: transparent;
     background-image: linear-gradient(to bottom, #f7f7f7, #ffffff 90%);
+    color: black;
     border-color: #a1a1a1;
     box-shadow: inset 0 3px rgba(0, 0, 0, 0.02), inset 0 2px rgba(0, 0, 0, 0.03), inset 0 1px rgba(0, 0, 0, 0.08), inset 0 0 0 1px rgba(74, 144, 217, 0);
     border: none;
@@ -187,7 +186,7 @@ GtkFlowBox .grid-child {
   .entry:backdrop {
     background-color: transparent;
     background-image: linear-gradient(to bottom, #f7f7f7, #ffffff 90%);
-    color: #8d9091;
+    color: #323232;
     border-color: #a8a8a8;
     background-image: linear-gradient(to bottom, #fcfcfc);
     box-shadow: inset 0 3px transparent, inset 0 2px transparent, inset 0 1px transparent, 0 1px rgba(255, 255, 255, 0); }
@@ -1391,9 +1390,7 @@ GtkComboBox {
     color: #c7c7c7; }
   GtkComboBox .menuitem {
     text-shadow: none; }
-  GtkComboBox .separator, GtkComboBox .sidebar .separator:backdrop, .sidebar GtkComboBox .separator:backdrop,
-  GtkComboBox .sidebar .view .separator:backdrop,
-  .sidebar .view GtkComboBox .separator:backdrop {
+  GtkComboBox .separator, GtkComboBox .sidebar .separator:backdrop, .sidebar GtkComboBox .separator:backdrop, GtkComboBox GtkPlacesSidebar.sidebar .view.separator, GtkPlacesSidebar.sidebar GtkComboBox .view.separator, GtkComboBox GtkPlacesSidebar.sidebar .view.separator:backdrop, GtkPlacesSidebar.sidebar GtkComboBox .view.separator:backdrop {
     -GtkWidget-wide-separators: true;
     -GtkWidget-horizontal-separator: 0;
     -GtkWidget-vertical-separator: 0; }
@@ -1458,12 +1455,10 @@ GtkComboBox {
   .header-bar .subtitle {
     font-size: smaller;
     padding: 0 12px; }
-  .titlebar .header-bar-separator, GtkCalendar.header .header-bar-separator, .titlebar > GtkBox > .separator.vertical, GtkCalendar.header > GtkBox > .separator.vertical,
-  .sidebar .view .titlebar > GtkBox > .vertical.separator:backdrop,
-  .sidebar .view GtkCalendar.header > GtkBox > .vertical.separator:backdrop,
+  .titlebar .header-bar-separator, GtkCalendar.header .header-bar-separator, .titlebar > GtkBox > .separator.vertical, GtkCalendar.header > GtkBox > .separator.vertical, GtkPlacesSidebar.sidebar .titlebar > GtkBox > .vertical.view.separator:backdrop, GtkPlacesSidebar.sidebar GtkCalendar.header > GtkBox > .vertical.view.separator:backdrop,
   .header-bar .header-bar-separator,
   .header-bar > GtkBox > .separator.vertical,
-  .sidebar .view .header-bar > GtkBox > .vertical.separator:backdrop {
+  GtkPlacesSidebar.sidebar .header-bar > GtkBox > .vertical.view.separator:backdrop {
     -GtkWidget-wide-separators: true;
     -GtkWidget-separator-width: 1px;
     border-width: 0 1px;
@@ -3493,12 +3488,13 @@ GtkLevelBar.vertical {
   border-radius: 3px;
   background-color: transparent;
   background-image: linear-gradient(to bottom, #f7f7f7, #ffffff 90%);
+  color: black;
   border-color: #a1a1a1;
   box-shadow: inset 0 3px rgba(0, 0, 0, 0.02), inset 0 2px rgba(0, 0, 0, 0.03), inset 0 1px rgba(0, 0, 0, 0.08), inset 0 0 0 1px rgba(74, 144, 217, 0), 0 1px white; }
   .level-bar.trough:backdrop {
     background-color: transparent;
     background-image: linear-gradient(to bottom, #f7f7f7, #ffffff 90%);
-    color: #8d9091;
+    color: #323232;
     border-color: #a8a8a8;
     background-image: linear-gradient(to bottom, #fcfcfc);
     box-shadow: inset 0 3px transparent, inset 0 2px transparent, inset 0 1px transparent, 0 1px rgba(255, 255, 255, 0); }
@@ -3548,14 +3544,9 @@ GtkLevelBar.vertical {
 GtkScrolledWindow GtkViewport.frame {
   border-style: none; }
 
-.separator, .sidebar .separator:backdrop,
-.sidebar .view .separator:backdrop {
+.separator, .sidebar .separator:backdrop, GtkPlacesSidebar.sidebar .view.separator, GtkPlacesSidebar.sidebar .view.separator:backdrop {
   color: rgba(0, 0, 0, 0.1); }
-  GtkFileChooserButton .separator, GtkFileChooserButton .sidebar .separator:backdrop, .sidebar GtkFileChooserButton .separator:backdrop,
-  GtkFileChooserButton .sidebar .view .separator:backdrop,
-  .sidebar .view GtkFileChooserButton .separator:backdrop, GtkFontButton .separator, GtkFontButton .sidebar .separator:backdrop, .sidebar GtkFontButton .separator:backdrop,
-  GtkFontButton .sidebar .view .separator:backdrop,
-  .sidebar .view GtkFontButton .separator:backdrop {
+  GtkFileChooserButton .separator, GtkFileChooserButton .sidebar .separator:backdrop, .sidebar GtkFileChooserButton .separator:backdrop, GtkFileChooserButton GtkPlacesSidebar.sidebar .view.separator, GtkPlacesSidebar.sidebar GtkFileChooserButton .view.separator, GtkFileChooserButton GtkPlacesSidebar.sidebar .view.separator:backdrop, GtkPlacesSidebar.sidebar GtkFileChooserButton .view.separator:backdrop, GtkFontButton .separator, GtkFontButton .sidebar .separator:backdrop, .sidebar GtkFontButton .separator:backdrop, GtkFontButton GtkPlacesSidebar.sidebar .view.separator, GtkPlacesSidebar.sidebar GtkFontButton .view.separator, GtkFontButton GtkPlacesSidebar.sidebar .view.separator:backdrop, GtkPlacesSidebar.sidebar GtkFontButton .view.separator:backdrop {
     -GtkWidget-wide-separators: true;
     -GtkWidget-horizontal-separator: 0;
     -GtkWidget-vertical-separator: 0; }
@@ -3838,10 +3829,12 @@ GtkCalendar {
     GtkCalendar:selected:backdrop {
       color: #fcfcfc; }
   GtkCalendar.header {
+    color: #2e3436;
     box-shadow: inset 0 -1px #d6d6d6, inset 0px 1px white, 0 1px 2px rgba(0, 0, 0, 0.1);
     border: 1px solid #a1a1a1;
     border-radius: 0; }
     GtkCalendar.header:backdrop {
+      color: #8d9091;
       box-shadow: none; }
   GtkCalendar.button, .header-bar GtkCalendar.button.titlebutton,
   .titlebar GtkCalendar.button.titlebutton,
@@ -3855,9 +3848,10 @@ GtkCalendar {
     .titlebar GtkCalendar.button.titlebutton:backdrop,
     GtkCalendar.header GtkCalendar.button.titlebutton:backdrop {
       color: rgba(141, 144, 145, 0.45); }
-  GtkCalendar.highlight {
+  GtkCalendar.highlight, GtkCalendar.highlight:backdrop {
     color: alpha(currentColor,0.55); }
   GtkCalendar:backdrop {
+    color: #323232;
     border-color: #a8a8a8; }
 
 /***********
@@ -4048,28 +4042,33 @@ GtkFileChooserDialog .dialog-action-box {
 /***********
  * Sidebar *
  ***********/
-.sidebar,
-.sidebar .view {
+.sidebar {
   border: none;
   background-color: #fafafa; }
-  .sidebar .scrollbar.trough,
-  .sidebar .view .scrollbar.trough {
+  .sidebar .scrollbar.trough {
     background-color: lightgray;
     border-radius: 6px;
     border-width: 2px;
     border-color: transparent; }
-  .sidebar .scrollbar.slider,
-  .sidebar .view .scrollbar.slider {
+  .sidebar .scrollbar.slider {
     background-color: #fafafa; }
-    .sidebar .scrollbar.slider:hover,
-    .sidebar .view .scrollbar.slider:hover {
+    .sidebar .scrollbar.slider:hover {
       background-color: white; }
-  .sidebar:backdrop,
-  .sidebar .view:backdrop {
+  .sidebar:backdrop {
     background-color: #fafafa; }
-  .sidebar:selected,
-  .sidebar .view:selected {
+  .sidebar:selected {
     background-color: #4a90d9; }
+
+GtkPlacesSidebar.sidebar .view {
+  color: #2e3436;
+  background-color: transparent; }
+  GtkPlacesSidebar.sidebar .view:backdrop {
+    color: #8d9091; }
+  GtkPlacesSidebar.sidebar .view:selected {
+    color: #ffffff;
+    background-color: #4a90d9; }
+    GtkPlacesSidebar.sidebar .view:selected:backdrop {
+      color: #fcfcfc; }
 
 GtkPaned {
   margin: 0 8px 8px 0; }
@@ -4352,6 +4351,7 @@ GtkCalendar.header .menuitem.titlebutton.button:selected, .list-row:selected {
 
 /* GTK NAMED COLORS */
 @define-color theme_fg_color #2e3436;
+@define-color theme_text_color black;
 @define-color theme_bg_color #ededed;
 @define-color theme_base_color #ffffff;
 @define-color theme_selected_bg_color #4a90d9;
@@ -4360,6 +4360,7 @@ GtkCalendar.header .menuitem.titlebutton.button:selected, .list-row:selected {
 @define-color insensitive_fg_color #8d9091;
 @define-color insensitive_base_color #ffffff;
 @define-color theme_unfocused_fg_color #8d9091;
+@define-color theme_unfocused_text_color #323232;
 @define-color theme_unfocused_bg_color #ededed;
 @define-color theme_unfocused_base_color #fcfcfc;
 @define-color theme_unfocused_selected_bg_color #4a90d9;

@@ -4,6 +4,7 @@
 // Sass thinks we're using the colors in the variables as strings and may shoot
 // warning, it's innocuous and can be defeated by using "" + $var
 @define-color theme_fg_color #{$fg_color};
+@define-color theme_text_color #{"" + $text_color};
 @define-color theme_bg_color #{$bg_color};
 @define-color theme_base_color #{"" + $base_color};
 @define-color theme_selected_bg_color #{$selected_bg_color};
@@ -12,6 +13,7 @@
 @define-color insensitive_fg_color #{$insensitive_fg_color};
 @define-color insensitive_base_color #{"" + $base_color};
 @define-color theme_unfocused_fg_color #{$backdrop_fg_color};
+@define-color theme_unfocused_text_color #{$backdrop_text_color};
 @define-color theme_unfocused_bg_color #{$backdrop_bg_color};
 @define-color theme_unfocused_base_color #{$backdrop_base_color};
 @define-color theme_unfocused_selected_bg_color #{$selected_bg_color};

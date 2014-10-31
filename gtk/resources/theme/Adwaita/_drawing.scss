@@ -52,6 +52,7 @@
                                             transparentize($fc,0.3));
 
   @if $t==normal {
+    color: $text-color;
     border-color: $borders_color;
     @include _shadows($_inner_shadows,
                       inset 0 0 0 1px transparentize($fc,1),
@@ -77,7 +78,7 @@
 
   }
   @if $t==backdrop {
-    color: $backdrop_fg_color;
+    color: $backdrop_text_color;
     border-color: $backdrop_borders_color;
     background-image: linear-gradient(to bottom, $backdrop_base_color);
     @include _shadows($_blank_inner_shadows, $_blank_edge);
