@@ -48,20 +48,20 @@ libgtkinspector_la_SOURCES = 		\
 	prop-editor.c			\
 	prop-list.h			\
 	prop-list.c			\
-	selector.h			\
-	selector.c			\
-	style-prop-list.h		\
-	style-prop-list.c		\
 	resource-list.h			\
 	resource-list.c			\
 	resources.h			\
 	resources.c			\
+	selector.h			\
+	selector.c			\
 	signals-list.h			\
 	signals-list.c			\
 	size-groups.h			\
 	size-groups.c			\
 	statistics.h			\
 	statistics.c			\
+	style-prop-list.h		\
+	style-prop-list.c		\
 	visual.h			\
 	visual.c			\
 	window.h			\
