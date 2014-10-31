@@ -29,6 +29,9 @@
 #include "gtkcssstylepropertyprivate.h"
 #include "gtkliststore.h"
 #include "gtksettings.h"
+#include "gtktreeview.h"
+#include "gtktreeselection.h"
+#include "gtksearchbar.h"
 
 enum
 {
@@ -44,10 +47,61 @@ struct _GtkInspectorStylePropListPrivate
   GHashTable *css_files;
   GtkListStore *model;
   GtkWidget *widget;
+  GtkWidget *tree;
+  GtkWidget *search_bar;
+  GtkWidget *search_entry;
   GHashTable *prop_iters;
+  GtkTreeViewColumn *name_column;
 };
 
 G_DEFINE_TYPE_WITH_PRIVATE (GtkInspectorStylePropList, gtk_inspector_style_prop_list, GTK_TYPE_BOX)
+
+static gboolean
+key_press_event (GtkWidget                 *window,
+                 GdkEvent                  *event,
+                 GtkInspectorStylePropList *pl)
+{
+  if (gtk_widget_get_mapped (GTK_WIDGET (pl)))
+    {
+      if (event->key.keyval == GDK_KEY_Return ||
+          event->key.keyval == GDK_KEY_ISO_Enter ||
+          event->key.keyval == GDK_KEY_KP_Enter)
+        {
+          GtkTreeSelection *selection;
+          GtkTreeModel *model;
+          GtkTreeIter iter;
+          GtkTreePath *path;
+
+          selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (pl->priv->tree));
+          if (gtk_tree_selection_get_selected (selection, &model, &iter))
+            {
+              path = gtk_tree_model_get_path (model, &iter);
+              gtk_tree_view_row_activated (GTK_TREE_VIEW (pl->priv->tree),
+                                           path,
+                                           pl->priv->name_column);
+              gtk_tree_path_free (path);
+
+              return GDK_EVENT_STOP;
+            }
+          else
+            return GDK_EVENT_PROPAGATE;
+        }
+
+      return gtk_search_bar_handle_event (GTK_SEARCH_BAR (pl->priv->search_bar), event);
+    }
+  else
+    return GDK_EVENT_PROPAGATE;
+}
+
+static void
+hierarchy_changed (GtkWidget *widget,
+                   GtkWidget *previous_toplevel)
+{
+  if (previous_toplevel)
+    g_signal_handlers_disconnect_by_func (previous_toplevel, key_press_event, widget);
+  g_signal_connect (gtk_widget_get_toplevel (widget), "key-press-event",
+                    G_CALLBACK (key_press_event), widget);
+}
 
 static void
 gtk_inspector_style_prop_list_init (GtkInspectorStylePropList *pl)
@@ -59,7 +113,8 @@ gtk_inspector_style_prop_list_init (GtkInspectorStylePropList *pl)
   gtk_tree_sortable_set_sort_column_id (GTK_TREE_SORTABLE (pl->priv->model),
                                         COLUMN_NAME,
                                         GTK_SORT_ASCENDING);
-
+  gtk_tree_view_set_search_entry (GTK_TREE_VIEW (pl->priv->tree),
+                                  GTK_ENTRY (pl->priv->search_entry));
   pl->priv->css_files = g_hash_table_new_full (g_file_hash, (GEqualFunc) g_file_equal,
                                            g_object_unref, (GDestroyNotify) g_strfreev);
 
@@ -67,6 +122,8 @@ gtk_inspector_style_prop_list_init (GtkInspectorStylePropList *pl)
                                                 g_str_equal,
                                                 NULL,
                                                 (GDestroyNotify) gtk_tree_iter_free);
+
+  g_signal_connect (pl, "hierarchy-changed", G_CALLBACK (hierarchy_changed), NULL);
 
   for (i = 0; i < _gtk_css_style_property_get_n_properties (); i++)
     {
@@ -134,6 +191,10 @@ gtk_inspector_style_prop_list_class_init (GtkInspectorStylePropListClass *klass)
 
   gtk_widget_class_set_template_from_resource (widget_class, "/org/gtk/inspector/style-prop-list.ui");
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorStylePropList, model);
+  gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorStylePropList, tree);
+  gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorStylePropList, search_bar);
+  gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorStylePropList, search_entry);
+  gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorStylePropList, name_column);
 }
 
 static gchar *
