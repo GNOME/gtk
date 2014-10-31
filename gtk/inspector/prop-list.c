@@ -31,7 +31,9 @@
 
 #include "gtkcelllayout.h"
 #include "gtktreeview.h"
+#include "gtktreeselection.h"
 #include "gtkpopover.h"
+#include "gtksearchbar.h"
 
 enum
 {
@@ -58,11 +60,61 @@ struct _GtkInspectorPropListPrivate
   gulong notify_handler_id;
   GtkInspectorObjectTree *object_tree;
   gboolean child_properties;
+  GtkTreeViewColumn *name_column;
   GtkTreeViewColumn *attribute_column;
   GtkWidget *tree;
+  GtkWidget *search_entry;
+  GtkWidget *search_bar;
 };
 
 G_DEFINE_TYPE_WITH_PRIVATE (GtkInspectorPropList, gtk_inspector_prop_list, GTK_TYPE_BOX)
+
+static gboolean
+key_press_event (GtkWidget            *window,
+                 GdkEvent             *event,
+                 GtkInspectorPropList *pl)
+{
+  if (gtk_widget_get_mapped (GTK_WIDGET (pl)))
+    {
+      if (event->key.keyval == GDK_KEY_Return ||
+          event->key.keyval == GDK_KEY_ISO_Enter ||
+          event->key.keyval == GDK_KEY_KP_Enter)
+        {
+          GtkTreeSelection *selection;
+          GtkTreeModel *model;
+          GtkTreeIter iter;
+          GtkTreePath *path;
+
+          selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (pl->priv->tree));
+          if (gtk_tree_selection_get_selected (selection, &model, &iter))
+            {
+              path = gtk_tree_model_get_path (model, &iter);
+              gtk_tree_view_row_activated (GTK_TREE_VIEW (pl->priv->tree),
+                                           path,
+                                           pl->priv->name_column);
+              gtk_tree_path_free (path);
+
+              return GDK_EVENT_STOP;
+            }
+          else
+            return GDK_EVENT_PROPAGATE;
+        }
+
+      return gtk_search_bar_handle_event (GTK_SEARCH_BAR (pl->priv->search_bar), event);
+    }
+  else
+    return GDK_EVENT_PROPAGATE;
+}
+
+static void
+hierarchy_changed (GtkWidget *widget,
+                   GtkWidget *previous_toplevel)
+{
+  if (previous_toplevel)
+    g_signal_handlers_disconnect_by_func (previous_toplevel, key_press_event, widget);
+  g_signal_connect (gtk_widget_get_toplevel (widget), "key-press-event",
+                    G_CALLBACK (key_press_event), widget);
+}
 
 static void
 gtk_inspector_prop_list_init (GtkInspectorPropList *pl)
@@ -72,10 +124,14 @@ gtk_inspector_prop_list_init (GtkInspectorPropList *pl)
   gtk_tree_sortable_set_sort_column_id (GTK_TREE_SORTABLE (pl->priv->model),
                                         COLUMN_NAME,
                                         GTK_SORT_ASCENDING);
+  gtk_tree_view_set_search_entry (GTK_TREE_VIEW (pl->priv->tree),
+                                  GTK_ENTRY (pl->priv->search_entry));
   pl->priv->prop_iters = g_hash_table_new_full (g_str_hash,
                                                 g_str_equal,
                                                 NULL,
                                                 (GDestroyNotify) gtk_tree_iter_free);
+
+  g_signal_connect (pl, "hierarchy-changed", G_CALLBACK (hierarchy_changed), NULL);
 }
 
 static void
@@ -226,6 +282,8 @@ gtk_inspector_prop_list_class_init (GtkInspectorPropListClass *klass)
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorPropList, model);
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorPropList, attribute_column);
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorPropList, tree);
+  gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorPropList, search_entry);
+  gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorPropList, search_bar);
   gtk_widget_class_bind_template_callback (widget_class, row_activated);
 }
 
