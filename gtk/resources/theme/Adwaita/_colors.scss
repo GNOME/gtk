@@ -38,7 +38,7 @@ $insensitive_borders_color: $borders_color;
 //colors for the backdrop state, derived from the main colors.
 $backdrop_base_color: if($variant =='light', darken($base_color,1%), lighten($base_color,1%));
 $backdrop_bg_color: $bg_color;
-$backdrop_fg_color: mix($fg_color, $backdrop_bg_color, 80%);
+$backdrop_fg_color: mix($fg_color, $backdrop_bg_color, 50%);
 $backdrop_insensitive_color: if($variant =='light', darken($backdrop_bg_color,15%), lighten($backdrop_bg_color,15%));
 $backdrop_borders_color: mix($borders_color, $bg_color, 90%);
 $backdrop_dark_fill: mix($backdrop_borders_color,$backdrop_bg_color, 35%);
