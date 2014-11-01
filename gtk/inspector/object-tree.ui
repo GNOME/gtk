@@ -17,6 +17,7 @@
     <child>
       <object class="GtkSearchBar" id="search_bar">
         <property name="visible">True</property>
+        <property name="show-close-button">True</property>
         <child>
           <object class="GtkBox">
             <property name="visible">True</property>
