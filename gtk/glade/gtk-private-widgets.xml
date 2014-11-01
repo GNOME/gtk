@@ -7,6 +7,7 @@
   <glade-widget-classes>
     <!-- base GTK+ private widgets -->
     <glade-widget-class name="GtkPathBar" generic-name="pathbar" title="Path Bar" icon-name="widget-gtk-toolbar"/>
+    <glade-widget-class name="GtkColorEditor" generic-name="coloreditor" title="Color Editor" icon-name="widget-gtk-colorselection"/>
     <glade-widget-class name="GtkColorSwatch" generic-name="colorswatch" title="Color Swatch" icon-name="widget-gtk-colorselection"/>
     <glade-widget-class name="GtkColorPlane" generic-name="colorplane" title="Color Plane" icon-name="widget-gtk-colorselection"/>
     <glade-widget-class name="GtkColorScale" generic-name="colorscale" title="Color Scale" icon-name="widget-gtk-colorselection"/>
@@ -23,6 +24,7 @@
   
   <glade-widget-group name="gtk-private" title="Private GTK+ Classes">
     <glade-widget-class-ref name="GtkPathBar"/>
+    <glade-widget-class-ref name="GtkColorEditor"/>
     <glade-widget-class-ref name="GtkColorSwatch"/>
     <glade-widget-class-ref name="GtkColorPlane"/>
     <glade-widget-class-ref name="GtkColorScale"/>
