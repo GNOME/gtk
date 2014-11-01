@@ -1449,6 +1449,8 @@ gtk_list_box_unselect_all_internal (GtkListBox *box)
       dirty |= gtk_list_box_row_set_selected (row, FALSE);
     }
 
+  BOX_PRIV (box)->selected_row = NULL;
+
   return dirty;
 }
 

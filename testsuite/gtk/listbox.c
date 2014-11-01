@@ -137,11 +137,17 @@ test_selection (void)
   g_assert_cmpint (count, ==, 1);
   row2 = gtk_list_box_get_selected_row (list);
   g_assert (row2 == row);
+  gtk_list_box_unselect_all (list);
+  row2 = gtk_list_box_get_selected_row (list);
+  g_assert (row2 == NULL);
+  gtk_list_box_select_row (list, row);
+  row2 = gtk_list_box_get_selected_row (list);
+  g_assert (row2 == row);
 
   gtk_list_box_set_selection_mode (list, GTK_SELECTION_BROWSE);
   gtk_container_remove (GTK_CONTAINER (list), GTK_WIDGET (row));
   g_assert (callback_row == NULL);
-  g_assert_cmpint (count, ==, 2);
+  g_assert_cmpint (count, ==, 4);
   row2 = gtk_list_box_get_selected_row (list);
   g_assert (row2 == NULL);
 
@@ -149,12 +155,12 @@ test_selection (void)
   gtk_list_box_select_row (list, row);
   g_assert (gtk_list_box_row_is_selected (row));
   g_assert (callback_row == row);
-  g_assert_cmpint (count, ==, 3);
+  g_assert_cmpint (count, ==, 5);
 
   gtk_list_box_set_selection_mode (list, GTK_SELECTION_NONE);
   g_assert (!gtk_list_box_row_is_selected (row));
   g_assert (callback_row == NULL);
-  g_assert_cmpint (count, ==, 4);
+  g_assert_cmpint (count, ==, 6);
   row2 = gtk_list_box_get_selected_row (list);
   g_assert (row2 == NULL);
 
