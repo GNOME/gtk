@@ -210,7 +210,7 @@ move_search_to_row (GtkInspectorObjectTree *wt,
   path = gtk_tree_model_get_path (GTK_TREE_MODEL (wt->priv->model), iter);
   gtk_tree_view_expand_to_path (wt->priv->tree, path);
   gtk_tree_selection_select_path (selection, path);
-  gtk_tree_view_scroll_to_cell (wt->priv->tree, path, wt->priv->object_column, FALSE, 0.0, 0.0);
+  gtk_tree_view_scroll_to_cell (wt->priv->tree, path, NULL, TRUE, 0.5, 0.0);
   gtk_tree_path_free (path);
 }
 
@@ -853,7 +853,7 @@ gtk_inspector_object_tree_select_object (GtkInspectorObjectTree *wt,
       path = gtk_tree_model_get_path (GTK_TREE_MODEL (wt->priv->model), &iter);
       gtk_tree_view_expand_to_path (GTK_TREE_VIEW (wt->priv->tree), path);
       gtk_tree_selection_select_iter (gtk_tree_view_get_selection (GTK_TREE_VIEW (wt->priv->tree)), &iter);
-      gtk_tree_view_scroll_to_cell (GTK_TREE_VIEW (wt->priv->tree), path, NULL, FALSE, 0, 0);
+      gtk_tree_view_scroll_to_cell (GTK_TREE_VIEW (wt->priv->tree), path, NULL, TRUE, 0.5, 0);
       gtk_tree_view_row_activated (GTK_TREE_VIEW (wt->priv->tree), path, NULL);
       gtk_tree_path_free (path);
     }
