@@ -740,9 +740,6 @@ gdk_event_free (GdkEvent *event)
 
   g_return_if_fail (event != NULL);
 
-  if (event->any.window)
-    g_object_unref (event->any.window);
-  
   switch (event->any.type)
     {
     case GDK_KEY_PRESS:
@@ -813,6 +810,9 @@ gdk_event_free (GdkEvent *event)
   display = event_get_display (event);
   if (display)
     _gdk_display_event_data_free (display, event);
+
+  if (event->any.window)
+    g_object_unref (event->any.window);
 
   g_hash_table_remove (event_hash, event);
   g_slice_free (GdkEventPrivate, (GdkEventPrivate*) event);
