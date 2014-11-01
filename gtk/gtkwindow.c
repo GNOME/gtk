@@ -6385,6 +6385,9 @@ get_shadow_width (GtkWidget *widget,
       priv->tiled)
     return;
 
+  if (!gtk_widget_is_toplevel (widget))
+    return;
+
   state = gtk_widget_get_state_flags (widget);
   context = gtk_widget_get_style_context (widget);
 
