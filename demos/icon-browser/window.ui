@@ -16,6 +16,7 @@
     <property name="title" translatable="yes">Icon Browser</property>
     <property name="default-width">600</property>
     <property name="default-height">800</property>
+    <signal name="key-press-event" handler="key_press_event_cb"/>
     <child type="titlebar">
       <object class="GtkHeaderBar" id="header">
         <property name="visible">True</property>
@@ -47,7 +48,7 @@
         </child>
         <child>
           <object class="GtkToggleButton" id="search">
-            <property name="visible">False</property>
+            <property name="visible">True</property>
             <style>
               <class name="image-button"/>
             </style>
@@ -83,10 +84,11 @@
             <child>
               <object class="GtkSearchBar" id="searchbar">
                 <property name="visible">True</property>
+                <property name="search-mode-enabled" bind-source="search" bind-property="active" bind-flags="bidirectional"/>
                 <child>
                   <object class="GtkSearchEntry" id="searchentry">
-                    <signal name="search-changed" handler="search_text_changed"/>
                     <property name="visible">True</property>
+                    <signal name="search-changed" handler="search_text_changed"/>
                   </object>
                 </child>
               </object>

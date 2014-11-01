@@ -1,3 +1,4 @@
+#include <string.h>
 #include "iconbrowserapp.h"
 #include "iconbrowserwin.h"
 #include <gtk/gtk.h>
@@ -51,7 +52,7 @@ enum {
 G_DEFINE_TYPE(IconBrowserWindow, icon_browser_window, GTK_TYPE_APPLICATION_WINDOW);
 
 static void
-search_text_changed (GtkEntry *entry)
+search_text_changed (GtkEntry *entry, IconBrowserWindow *win)
 {
   const gchar *text;
 
@@ -59,6 +60,8 @@ search_text_changed (GtkEntry *entry)
 
   if (text[0] == '\0')
     return;
+
+  gtk_tree_model_filter_refilter (win->filter_model);
 }
 
 static void
@@ -190,6 +193,8 @@ selected_context_changed (GtkListBox *list, IconBrowserWindow *win)
   row = GTK_WIDGET (gtk_list_box_get_selected_row (list));
   if (row == NULL)
     return;
+
+  gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (win->search), FALSE);
 
   label = gtk_bin_get_child (GTK_BIN (row));
   win->current_context = g_object_get_data (G_OBJECT (label), "context");
@@ -671,11 +676,13 @@ populate (IconBrowserWindow *win)
 }
 
 static gboolean
-key_press_event_cb (GtkWidget    *widget,
-                    GdkEvent     *event,
-                    GtkSearchBar *bar)
+key_press_event_cb (GtkWidget *widget,
+                    GdkEvent  *event,
+                    gpointer   data)
 {
-  return gtk_search_bar_handle_event (bar, event);
+  IconBrowserWindow *win = data;
+
+  return gtk_search_bar_handle_event (GTK_SEARCH_BAR (win->searchbar), event);
 }
 
 static gboolean
@@ -687,7 +694,12 @@ icon_visible_func (GtkTreeModel *model,
   gchar *context;
   gchar *name;
   gint column;
+  gboolean search;
+  const gchar *search_text;
   gboolean visible;
+
+  search = gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (win->search));
+  search_text = gtk_entry_get_text (GTK_ENTRY (win->searchentry));
 
   if (win->symbolic)
     column = SYMBOLIC_NAME_COLUMN;
@@ -698,8 +710,12 @@ icon_visible_func (GtkTreeModel *model,
                       column, &name,
                       CONTEXT_COLUMN, &context,
                       -1);
-
-  visible = name != NULL && win->current_context != NULL && g_strcmp0 (context, win->current_context->id) == 0;
+  if (!name)
+    visible = FALSE;
+  else if (search)
+    visible = strstr (name, search_text) != NULL;
+  else
+    visible = win->current_context != NULL && g_strcmp0 (context, win->current_context->id) == 0;
 
   g_free (name);
   g_free (context);
@@ -727,21 +743,25 @@ symbolic_toggled (GtkToggleButton *toggle, IconBrowserWindow *win)
 }
 
 static void
+search_mode_toggled (GObject *searchbar, GParamSpec *pspec, IconBrowserWindow *win)
+{
+  if (gtk_search_bar_get_search_mode (GTK_SEARCH_BAR (searchbar)))
+    gtk_list_box_unselect_all (GTK_LIST_BOX (win->context_list));
+}
+
+static void
 icon_browser_window_init (IconBrowserWindow *win)
 {
   gtk_widget_init_template (GTK_WIDGET (win));
 
   win->contexts = g_hash_table_new_full (g_str_hash, g_str_equal, NULL, g_free);
 
-  g_object_bind_property (win->search, "active",
-                          win->searchbar, "search-mode-enabled",
-                          G_BINDING_BIDIRECTIONAL);
-
-//  gtk_tree_view_set_search_entry (GTK_TREE_VIEW (win->list), GTK_ENTRY (win->searchentry));
-  g_signal_connect (win, "key-press-event", G_CALLBACK (key_press_event_cb), win->searchbar);
-
   gtk_tree_model_filter_set_visible_func (win->filter_model, icon_visible_func, win, NULL);
   gtk_window_set_transient_for (GTK_WINDOW (win->details), GTK_WINDOW (win));
+
+
+  g_signal_connect (win->searchbar, "notify::search-mode-enabled",
+                    G_CALLBACK (search_mode_toggled), win);
 
   symbolic_toggled (GTK_TOGGLE_BUTTON (win->symbolic_radio), win);
 
@@ -778,6 +798,7 @@ icon_browser_window_class_init (IconBrowserWindowClass *class)
   gtk_widget_class_bind_template_callback (GTK_WIDGET_CLASS (class), item_activated);
   gtk_widget_class_bind_template_callback (GTK_WIDGET_CLASS (class), selected_context_changed);
   gtk_widget_class_bind_template_callback (GTK_WIDGET_CLASS (class), symbolic_toggled);
+  gtk_widget_class_bind_template_callback (GTK_WIDGET_CLASS (class), key_press_event_cb);
 }
 
 IconBrowserWindow *
