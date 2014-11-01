@@ -4,7 +4,7 @@
   <object class="GtkAdjustment" id="adjustment">
     <property name="upper">1</property>
     <property name="step_increment">0.02</property>
-    <property name="page_increment">0.20000000000000001</property>
+    <property name="page_increment">0.2</property>
   </object>
   <template class="GtkVolumeButton" parent="GtkScaleButton">
     <property name="visible">True</property>
