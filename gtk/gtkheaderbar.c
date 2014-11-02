@@ -1650,6 +1650,9 @@ gtk_header_bar_set_child_property (GtkContainer *container,
   Child *child;
 
   l = find_child_link (bar, widget);
+  if (l == NULL)
+    return;
+
   child = l->data;
 
   switch (property_id)
