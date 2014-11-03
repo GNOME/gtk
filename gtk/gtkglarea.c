@@ -524,7 +524,8 @@ gtk_gl_area_unrealize (GtkWidget *widget)
 	}
 
       /* Make sure to destroy if current */
-      g_object_run_dispose (G_OBJECT (priv->context));
+      if (priv->context == gdk_gl_context_get_current ())
+        gdk_gl_context_clear_current ();
       g_object_unref (priv->context);
       priv->context = NULL;
     }
