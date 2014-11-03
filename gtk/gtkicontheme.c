@@ -2305,7 +2305,7 @@ gtk_icon_theme_load_icon_for_scale (GtkIconTheme        *icon_theme,
   if (!icon_info)
     {
       g_set_error (error, GTK_ICON_THEME_ERROR,  GTK_ICON_THEME_NOT_FOUND,
-                   _("Icon '%s' not present in theme"), icon_name);
+                   _("Icon '%s' not present in theme %s"), icon_name, icon_theme->priv->current_theme);
       return NULL;
     }
 
@@ -2369,7 +2369,7 @@ gtk_icon_theme_load_surface (GtkIconTheme        *icon_theme,
   if (!icon_info)
     {
       g_set_error (error, GTK_ICON_THEME_ERROR,  GTK_ICON_THEME_NOT_FOUND,
-                   _("Icon '%s' not present in theme"), icon_name);
+                   _("Icon '%s' not present in theme %s"), icon_name, icon_theme->priv->current_theme);
       return NULL;
     }
 
