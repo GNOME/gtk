@@ -268,6 +268,8 @@ gtk_gl_area_realize (GtkWidget *widget)
 
   GTK_WIDGET_CLASS (gtk_gl_area_parent_class)->realize (widget);
 
+  gtk_widget_get_allocation (widget, &allocation);
+
   attributes.window_type = GDK_WINDOW_CHILD;
   attributes.x = allocation.x;
   attributes.y = allocation.y;
