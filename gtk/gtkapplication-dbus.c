@@ -334,6 +334,7 @@ gtk_application_impl_dbus_inhibit (GtkApplicationImpl         *impl,
   GVariant *res;
   GError *error = NULL;
   guint cookie;
+  static gboolean warned = FALSE;
 
   if (dbus->sm_proxy == NULL)
     return 0;
@@ -352,7 +353,11 @@ gtk_application_impl_dbus_inhibit (GtkApplicationImpl         *impl,
 
  if (error)
     {
-      g_warning ("Calling Inhibit failed: %s", error->message);
+      if (!warned)
+        {
+          g_warning ("Calling Inhibit failed: %s", error->message);
+          warned = TRUE;
+        }
       g_error_free (error);
       return 0;
     }
@@ -390,6 +395,7 @@ gtk_application_impl_dbus_is_inhibited (GtkApplicationImpl         *impl,
   GVariant *res;
   GError *error = NULL;
   gboolean inhibited;
+  static gboolean warned = FALSE;
 
   if (dbus->sm_proxy == NULL)
     return FALSE;
@@ -403,7 +409,11 @@ gtk_application_impl_dbus_is_inhibited (GtkApplicationImpl         *impl,
                                 &error);
   if (error)
     {
-      g_warning ("Calling IsInhibited failed: %s", error->message);
+      if (!warned)
+        {
+          g_warning ("Calling IsInhibited failed: %s", error->message);
+          warned = TRUE;
+        }
       g_error_free (error);
       return FALSE;
     }
