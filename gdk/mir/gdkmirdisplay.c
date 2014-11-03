@@ -317,9 +317,7 @@ static GdkCursor *
 gdk_mir_display_get_cursor_for_type (GdkDisplay    *display,
                                      GdkCursorType  cursor_type)
 {
-  //g_printerr ("gdk_mir_display_get_cursor_for_type (%u)\n", cursor_type);
-  /* We don't support configurable cursors */
-  return g_object_ref (GDK_MIR_DISPLAY (display)->cursor);
+  return _gdk_mir_cursor_new (display, cursor_type);
 }
 
 static GdkCursor *
