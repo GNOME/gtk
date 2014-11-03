@@ -158,6 +158,7 @@ static GParamSpec *obj_props[LAST_PROP] = { NULL, };
 enum {
   RENDER,
   RESIZE,
+  CREATE_CONTEXT,
 
   LAST_SIGNAL
 };
@@ -281,11 +282,32 @@ gtk_gl_area_realize (GtkWidget *widget)
 				       &attributes, attributes_mask);
   gtk_widget_register_window (widget, priv->event_window);
 
-  priv->context = gdk_window_create_gl_context (gtk_widget_get_window (widget),
-						priv->profile,
-						&priv->error);
+
+  g_clear_error (&priv->error);
+  priv->context = NULL;
+  g_signal_emit (area, area_signals[CREATE_CONTEXT], 0, &priv->context);
+
+  /* In case the signal failed, but did not set an error */
+  if (priv->context == NULL && priv->error == NULL)
+    g_set_error_literal (&priv->error, GDK_GL_ERROR,
+                         GDK_GL_ERROR_NOT_AVAILABLE,
+                         _("OpenGL context creation failed"));
 
   priv->needs_resize = TRUE;
+}
+
+static GdkGLContext *
+gtk_gl_area_real_create_context (GtkGLArea *area)
+{
+  GtkGLAreaPrivate *priv = gtk_gl_area_get_instance_private (area);
+  GtkWidget *widget = GTK_WIDGET (area);
+  GError *error = NULL;
+  GdkGLContext *context;
+
+  context = gdk_window_create_gl_context (gtk_widget_get_window (widget), priv->profile, &priv->error);
+  gtk_gl_area_set_error (area, error);
+
+  return context;
 }
 
 static void
@@ -654,6 +676,18 @@ gtk_gl_area_draw (GtkWidget *widget,
   return TRUE;
 }
 
+static gboolean
+create_context_accumulator (GSignalInvocationHint *ihint,
+                            GValue *return_accu,
+                            const GValue *handler_return,
+                            gpointer data)
+{
+  g_value_copy (handler_return, return_accu);
+
+  /* stop after the first handler returning a valid object */
+  return g_value_get_object (handler_return) == NULL;
+}
+
 static void
 gtk_gl_area_class_init (GtkGLAreaClass *klass)
 {
@@ -661,6 +695,7 @@ gtk_gl_area_class_init (GtkGLAreaClass *klass)
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
 
   klass->resize = gtk_gl_area_resize;
+  klass->create_context = gtk_gl_area_real_create_context;
 
   widget_class->realize = gtk_gl_area_realize;
   widget_class->unrealize = gtk_gl_area_unrealize;
@@ -832,6 +867,34 @@ gtk_gl_area_class_init (GtkGLAreaClass *klass)
                   _gtk_marshal_VOID__INT_INT,
                   G_TYPE_NONE, 2, G_TYPE_INT, G_TYPE_INT);
 
+  /**
+   * GtkGLArea::create-context:
+   * @area: the #GtkGLArea that emitted the signal
+   * @error: (allow-none): location to store error information on failure
+   *
+   * The ::create-context signal is emitted when the widget is being
+   * realized, and allows you to override how the GL context is
+   * created. This is useful when you want to reuse an existing GL
+   * context, or if you want to try creating different kinds of GL
+   * profiles.
+   *
+   * If context creation fails then the signal handler can use
+   * gtk_gl_area_set_error() to register a more detailed error
+   * of how the construction failed.
+   *
+   * Returns: (transfer full): a newly created #GdkGLContext; the
+   * #GtkGLArea widget will take ownership of the returned value.
+   *
+   * Since: 3.16
+   */
+  area_signals[CREATE_CONTEXT] =
+    g_signal_new ("create-context",
+                  G_TYPE_FROM_CLASS (klass),
+                  G_SIGNAL_RUN_LAST,
+                  G_STRUCT_OFFSET (GtkGLAreaClass, create_context),
+                  create_context_accumulator, NULL,
+                  _gtk_marshal_OBJECT__VOID,
+                  GDK_TYPE_GL_CONTEXT, 0);
 }
 
 static void
@@ -860,6 +923,50 @@ GtkWidget *
 gtk_gl_area_new (void)
 {
   return g_object_new (GTK_TYPE_GL_AREA, NULL);
+}
+
+/**
+ * gtk_gl_area_set_error:
+ * @area: a #GtkGLArea
+ * @error: (allow-none): a new #GError, or %NULL to unset the error
+ *
+ * Sets an error on the area which will be shown instead of the
+ * gl rendering. This is useful in the ::create-context signal
+ * if GL context creation fails.
+ *
+ * Since: 3.16
+ */
+void
+gtk_gl_area_set_error (GtkGLArea *area,
+                       const GError *error)
+{
+  GtkGLAreaPrivate *priv = gtk_gl_area_get_instance_private (area);
+
+  g_return_if_fail (GTK_IS_GL_AREA (area));
+
+  g_clear_error (&priv->error);
+  if (error)
+    priv->error = g_error_copy (error);
+}
+
+/**
+ * gtk_gl_area_get_error:
+ * @area: a #GtkGLArea
+ *
+ * Gets the current error set on the @area.
+ *
+ * Returns: (transfer none): the #GError or %NULL
+ *
+ * Since: 3.16
+ */
+GError *
+gtk_gl_area_get_error (GtkGLArea *area)
+{
+  GtkGLAreaPrivate *priv = gtk_gl_area_get_instance_private (area);
+
+  g_return_val_if_fail (GTK_IS_GL_AREA (area), NULL);
+
+  return priv->error;
 }
 
 /**

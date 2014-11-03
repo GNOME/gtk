@@ -71,6 +71,7 @@ struct _GtkGLAreaClass
   void           (* resize)         (GtkGLArea        *area,
 				     int               width,
 				     int               height);
+  GdkGLContext * (* create_context) (GtkGLArea        *area);
 
   /*< private >*/
   gpointer _padding[6];
@@ -126,6 +127,11 @@ void            gtk_gl_area_make_current        (GtkGLArea        *area);
 GDK_AVAILABLE_IN_3_16
 void            gtk_gl_area_attach_buffers      (GtkGLArea        *area);
 
+GDK_AVAILABLE_IN_3_16
+void            gtk_gl_area_set_error           (GtkGLArea        *area,
+                                                 const GError     *error);
+GDK_AVAILABLE_IN_3_16
+GError *        gtk_gl_area_get_error           (GtkGLArea        *area);
 
 G_END_DECLS
 
