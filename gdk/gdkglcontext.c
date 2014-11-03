@@ -79,6 +79,7 @@
 #include <epoxy/gl.h>
 
 typedef struct {
+  GdkDisplay *display;
   GdkWindow *window;
   GdkGLContext *shared_context;
   GdkGLProfile profile;
@@ -91,6 +92,7 @@ typedef struct {
 enum {
   PROP_0,
 
+  PROP_DISPLAY,
   PROP_WINDOW,
   PROP_PROFILE,
   PROP_SHARED_CONTEXT,
@@ -117,6 +119,7 @@ gdk_gl_context_dispose (GObject *gobject)
   if (current == context)
     g_private_replace (&thread_current_context, NULL);
 
+  g_clear_object (&priv->display);
   g_clear_object (&priv->window);
   g_clear_object (&priv->shared_context);
 
@@ -133,6 +136,20 @@ gdk_gl_context_set_property (GObject      *gobject,
 
   switch (prop_id)
     {
+    case PROP_DISPLAY:
+      {
+        GdkDisplay *display = g_value_get_object (value);
+
+        if (display)
+          g_object_ref (display);
+
+        if (priv->display)
+          g_object_unref (priv->display);
+
+        priv->display = display;
+      }
+      break;
+
     case PROP_WINDOW:
       {
         GdkWindow *window = g_value_get_object (value);
@@ -175,6 +192,10 @@ gdk_gl_context_get_property (GObject    *gobject,
 
   switch (prop_id)
     {
+    case PROP_DISPLAY:
+      g_value_set_object (value, priv->display);
+      break;
+
     case PROP_WINDOW:
       g_value_set_object (value, priv->window);
       break;
@@ -196,6 +217,22 @@ static void
 gdk_gl_context_class_init (GdkGLContextClass *klass)
 {
   GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
+
+  /**
+   * GdkGLContext:display:
+   *
+   * The #GdkWindow the gl context is bound to.
+   *
+   * Since: 3.16
+   */
+  obj_pspecs[PROP_DISPLAY] =
+    g_param_spec_object ("display",
+                         P_("Display"),
+                         P_("The GDK display the context is from"),
+                         GDK_TYPE_DISPLAY,
+                         G_PARAM_READWRITE |
+                         G_PARAM_CONSTRUCT_ONLY |
+                         G_PARAM_STATIC_STRINGS);
 
   /**
    * GdkGLContext:window:
@@ -329,12 +366,32 @@ gdk_gl_context_make_current (GdkGLContext *context)
   if (current == context)
     return;
 
-  if (gdk_display_make_gl_context_current (gdk_window_get_display (priv->window), context))
+  if (gdk_display_make_gl_context_current (priv->display, context))
     {
       g_private_replace (&thread_current_context, g_object_ref (context));
       if (!priv->realized)
         gdk_gl_context_realize (context);
     }
+}
+
+/**
+ * gdk_gl_context_get_display:
+ * @context: a #GdkGLContext
+ *
+ * Retrieves the #GdkDisplay the @context is created for
+ *
+ * Returns: (transfer none): a #GdkDisplay or %NULL
+ *
+ * Since: 3.16
+ */
+GdkDisplay *
+gdk_gl_context_get_display (GdkGLContext *context)
+{
+  GdkGLContextPrivate *priv = gdk_gl_context_get_instance_private (context);
+
+  g_return_val_if_fail (GDK_IS_GL_CONTEXT (context), NULL);
+
+  return priv->display;
 }
 
 /**
@@ -417,7 +474,7 @@ gdk_gl_context_clear_current (void)
     {
       GdkGLContextPrivate *priv = gdk_gl_context_get_instance_private (current);
 
-      if (gdk_display_make_gl_context_current (gdk_window_get_display (priv->window), NULL))
+      if (gdk_display_make_gl_context_current (priv->display, NULL))
         g_private_replace (&thread_current_context, NULL);
     }
 }

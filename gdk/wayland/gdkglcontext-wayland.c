@@ -365,6 +365,7 @@ gdk_wayland_window_create_gl_context (GdkWindow     *window,
             g_print ("Created EGL context[%p]\n", ctx));
 
   context = g_object_new (GDK_TYPE_WAYLAND_GL_CONTEXT,
+                          "display", display,
                           "window", window,
                           "profile", profile,
                           "shared-context", share,

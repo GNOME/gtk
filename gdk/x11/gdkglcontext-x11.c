@@ -206,7 +206,7 @@ gdk_x11_gl_context_end_frame (GdkGLContext *context,
 {
   GdkX11GLContext *context_x11 = GDK_X11_GL_CONTEXT (context);
   GdkWindow *window = gdk_gl_context_get_window (context);
-  GdkDisplay *display = gdk_window_get_display (window);
+  GdkDisplay *display = gdk_gl_context_get_display (context);
   Display *dpy = gdk_x11_display_get_xdisplay (display);
   GdkX11Display *display_x11 = GDK_X11_DISPLAY (display);
   DrawableInfo *info;
@@ -503,8 +503,7 @@ gdk_x11_gl_context_dispose (GObject *gobject)
   if (context_x11->glx_context != NULL)
     {
       GdkGLContext *context = GDK_GL_CONTEXT (gobject);
-      GdkWindow *window = gdk_gl_context_get_window (context);
-      GdkDisplay *display = gdk_window_get_display (window);
+      GdkDisplay *display = gdk_gl_context_get_display (context);
       Display *dpy = gdk_x11_display_get_xdisplay (display);
 
       if (glXGetCurrentContext () == context_x11->glx_context)
@@ -1119,6 +1118,7 @@ gdk_x11_window_create_gl_context (GdkWindow    *window,
                      is_direct ? "direct" : "indirect"));
 
   context = g_object_new (GDK_TYPE_X11_GL_CONTEXT,
+                          "display", display,
                           "window", window,
                           "profile", profile,
                           "shared-context", share,
