@@ -216,6 +216,7 @@ struct _GtkFileChooserWidgetPrivate {
   GtkWidget *browse_files_popup_menu_size_column_item;
   GtkWidget *browse_files_popup_menu_copy_file_location_item;
   GtkWidget *browse_files_popup_menu_visit_file_item;
+  GtkWidget *browse_files_popup_menu_sort_directories_item;
   GtkWidget *browse_new_folder_button;
   GtkWidget *browse_path_bar_hbox;
   GtkSizeGroup *browse_path_bar_size_group;
@@ -1427,6 +1428,28 @@ show_size_column_toggled_cb (GtkCheckMenuItem *item,
                                     priv->show_size_column);
 }
 
+static void
+sort_directories_toggled_cb (GtkCheckMenuItem     *item,
+                             GtkFileChooserWidget *impl)
+{
+  GtkFileChooserWidgetPrivate *priv = impl->priv;
+  GtkTreeSortable *sortable;
+
+  priv->sort_directories_first = gtk_check_menu_item_get_active (item);
+
+  /* force resorting */
+  sortable = GTK_TREE_SORTABLE (priv->browse_files_model);
+  if (sortable == NULL)
+    return;
+
+  gtk_tree_sortable_set_sort_column_id (sortable,
+                                        GTK_TREE_SORTABLE_UNSORTED_SORT_COLUMN_ID,
+                                        priv->sort_order);
+  gtk_tree_sortable_set_sort_column_id (sortable,
+                                        priv->sort_column,
+                                        priv->sort_order);
+}
+
 /* Shows an error dialog about not being able to select a dragged file */
 static void
 error_selecting_dragged_file_dialog (GtkFileChooserWidget *impl,
@@ -1683,6 +1706,9 @@ file_list_build_popup_menu (GtkFileChooserWidget *impl)
   priv->browse_files_popup_menu_size_column_item	= file_list_add_check_menu_item (impl, _("Show _Size Column"),
 											 G_CALLBACK (show_size_column_toggled_cb));
 
+  priv->browse_files_popup_menu_sort_directories_item   = file_list_add_check_menu_item (impl, _("Sort _Folders before Files"),
+                                                                                         G_CALLBACK (sort_directories_toggled_cb));
+
   check_file_list_menu_sensitivity (impl);
 }
 
@@ -1716,6 +1742,13 @@ file_list_update_popup_menu (GtkFileChooserWidget *impl)
 				  priv->show_size_column);
   g_signal_handlers_unblock_by_func (priv->browse_files_popup_menu_size_column_item,
 				     G_CALLBACK (show_size_column_toggled_cb), impl);
+
+  g_signal_handlers_block_by_func (priv->browse_files_popup_menu_sort_directories_item,
+                                   G_CALLBACK (sort_directories_toggled_cb), impl);
+  gtk_check_menu_item_set_active (GTK_CHECK_MENU_ITEM (priv->browse_files_popup_menu_sort_directories_item),
+                                  priv->sort_directories_first);
+  g_signal_handlers_unblock_by_func (priv->browse_files_popup_menu_sort_directories_item,
+                                     G_CALLBACK (sort_directories_toggled_cb), impl);
 }
 
 static void
@@ -3062,10 +3095,11 @@ settings_save (GtkFileChooserWidget *impl)
   g_settings_set_boolean (settings, SETTINGS_KEY_SHOW_HIDDEN,
                           gtk_file_chooser_get_show_hidden (GTK_FILE_CHOOSER (impl)));
   g_settings_set_boolean (settings, SETTINGS_KEY_SHOW_SIZE_COLUMN, priv->show_size_column);
+  g_settings_set_boolean (settings, SETTINGS_KEY_SORT_DIRECTORIES_FIRST, priv->sort_directories_first);
   g_settings_set_enum (settings, SETTINGS_KEY_SORT_COLUMN, priv->sort_column);
   g_settings_set_enum (settings, SETTINGS_KEY_SORT_ORDER, priv->sort_order);
   g_settings_set_int (settings, SETTINGS_KEY_SIDEBAR_WIDTH,
-                     gtk_paned_get_position (GTK_PANED (priv->browse_widgets_hpaned)));
+                      gtk_paned_get_position (GTK_PANED (priv->browse_widgets_hpaned)));
 
   /* Now apply the settings */
   g_settings_apply (settings);
