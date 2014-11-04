@@ -7735,11 +7735,17 @@ gtk_window_handle_wm_event (GtkWindow *window,
 gboolean
 _gtk_window_check_handle_wm_event (GdkEvent *event)
 {
+  GtkWindowPrivate *priv;
   GtkWidget *widget;
 
   widget = gtk_get_event_widget (event);
 
   if (!GTK_IS_WINDOW (widget))
+    return GDK_EVENT_PROPAGATE;
+
+  priv = GTK_WINDOW (widget)->priv;
+
+  if (!priv->multipress_gesture)
     return GDK_EVENT_PROPAGATE;
 
   if (event->type != GDK_BUTTON_PRESS && event->type != GDK_BUTTON_RELEASE &&
