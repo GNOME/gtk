@@ -1,0 +1,2 @@
+ERROR: gtk-builder-error-quark 8
+Duplicate object ID 'foo' on line 5 (previously on line 3)

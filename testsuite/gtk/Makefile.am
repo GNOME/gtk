@@ -163,14 +163,13 @@ test_icontheme =					\
 	$(NULL)
 
 test_ui =						\
-	ui/test1.ui					\
-	ui/test1.expected				\
-	ui/test2.ui					\
-	ui/test2.expected				\
-	ui/test3.ui					\
-	ui/test3.expected				\
-	ui/test4.ui					\
-	ui/test4.expected				\
+	ui/test1.ui ui/test1.expected			\
+	ui/test2.ui ui/test2.expected			\
+	ui/test3.ui ui/test3.expected			\
+	ui/test4.ui ui/test4.expected			\
+	ui/test5.ui ui/test5.expected			\
+	ui/test6.ui ui/test6.expected			\
+	ui/test7.ui ui/test7.expected			\
 	$(NULL)
 
 EXTRA_DIST +=				\
