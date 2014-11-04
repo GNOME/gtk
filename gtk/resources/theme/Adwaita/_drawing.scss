@@ -33,7 +33,7 @@
 //        use the default one
 //
 // possible $t values:
-// normal, focus, insensitive, backdrop, backdrop-insensitive;
+// normal, focus, insensitive, backdrop, backdrop-insensitive, osd, osd-focus, osd-insensitive, osd-backdrop.
 //
   background-color: transparent;
   background-image: entry_gradient($base_color);
@@ -59,6 +59,7 @@
                       $_entry_edge);
     // the second transparent shadow is needed for the transition to work
   }
+
   @if $t==focus {
     @include _shadows($_inner_shadows,
                       inset 0 0 0 1px $_focus_glow_color,
@@ -70,24 +71,66 @@
                        darken($fc,35%));
     }
   }
+
   @if $t==insensitive {
     color: $insensitive_fg_color;
     border-color: $borders_color;
     background-image: linear-gradient(to bottom, $insensitive_bg_color);
     @include _shadows($_blank_inner_shadows, $_entry_edge);
-
   }
+
   @if $t==backdrop {
     color: $backdrop_text_color;
     border-color: $backdrop_borders_color;
     background-image: linear-gradient(to bottom, $backdrop_base_color);
     @include _shadows($_blank_inner_shadows, $_blank_edge);
   }
+
   @if $t==backdrop-insensitive {
     color: $backdrop_insensitive_color;
     border-color: $backdrop_borders_color;
     background-image: linear-gradient(to bottom, $insensitive_bg_color);
     @include _shadows($_blank_inner_shadows, $_blank_edge);
+  }
+
+  @if $t==osd {
+    color: $osd_text_color;
+    border-color: $osd_borders_color;
+    background-image: linear-gradient(to bottom, transparentize(opacify($osd_borders_color, 1), 0.5));
+    background-clip: padding-box;
+    box-shadow: none;
+    text-shadow: 0 1px black;
+    icon-shadow: 0 1px black;
+  }
+
+  @if $t==osd-focus {
+    color: $osd_text_color;
+    border-color: $selected_bg_color;
+    background-image: linear-gradient(to bottom, transparentize(opacify($osd_borders_color, 1), 0.5));
+    background-clip: padding-box;
+    box-shadow: inset 0 0 0 1px transparentize($fc, 0.6);
+    text-shadow: 0 1px black;
+    icon-shadow: 0 1px black;
+  }
+
+  @if $t==osd-insensitive {
+    color: $osd_insensitive_fg_color;
+    border-color: $osd_borders_color;
+    background-image: linear-gradient(to bottom, $osd_insensitive_bg_color);
+    background-clip: padding-box;
+    box-shadow: none;
+    text-shadow: none;
+    icon-shadow: none;
+  }
+
+  @if $t==osd-backdrop {
+    color: $osd_text_color;
+    border-color: $osd_borders_color;
+    background-image: linear-gradient(to bottom, transparentize(opacify($osd_borders_color, 1), 0.5));
+    background-clip: padding-box;
+    box-shadow: none;
+    text-shadow: none;
+    icon-shadow: none;
   }
 }
 
@@ -210,6 +253,7 @@
                       inset 0 2px 1px -2px transparentize(black,0.4),
                       $_button_edge);
   }
+
   @else if $t==insensitive {
   //
   // insensitive button
@@ -227,6 +271,7 @@
     @include _shadows(inset 0 1px transparentize(white,1), $_button_edge);
     > GtkLabel { color: inherit; }
   }
+
   @else if $t==insensitive-active {
   //
   // insensitive pushed button
@@ -262,7 +307,7 @@
 
   @else if $t==backdrop-active {
   //
-  // backdrop pushed button FIXME no colors here!
+  // backdrop pushed button
   //
     $_bg: if($c!=$bg_color, darken($c,10%), $backdrop_dark_fill);
     $_bc: if($variant=='light',$_bg,_border_color($c));
@@ -316,35 +361,35 @@
   // normal osd button
   //
     $_bg: if($c!=$bg_color, transparentize($c, 0.5),
-                            transparentize($osd_bg_color, 0.3));
+                            $osd_bg_color);
 
     color: $osd_fg_color;
-    outline-color: transparentize($osd_fg_color, 0.8);
-    background-color: transparent;
-    background-clip: padding-box;
-    background-image: linear-gradient(to bottom, $_bg);
     border-color: $osd_borders_color;
-    box-shadow: inset 0 -1px transparentize(black, 0.7),
-                inset 0 1px transparentize(white, 0.9);
+    background-image: linear-gradient(to bottom, $_bg);
+    background-clip: padding-box;
+    box-shadow: inset 0 1px transparentize(white, 0.9);
     text-shadow: 0 1px black;
     icon-shadow: 0 1px black;
+    outline-color: transparentize($osd_fg_color, 0.7);
   }
+
   @else if $t==osd-hover {
   //
   // active osd button
   //
     $_bg: if($c!=$bg_color, transparentize($c, 0.3),
-                            transparentize(lighten($osd_bg_color, 12%), 0.3));
+                            lighten($osd_bg_color, 12%));
 
     color: white;
     border-color: $osd_borders_color;
     background-image: linear-gradient(to bottom, $_bg);
-    box-shadow: inset 0 -1px transparentize(black, 0.7),
-                inset 0 1px transparentize(white, 0.9);
+    background-clip: padding-box;
+    box-shadow: inset 0 1px transparentize(white, 0.9);
     text-shadow: 0 1px black;
     icon-shadow: 0 1px black;
-
+    outline-color: transparentize($osd_fg_color, 0.7);
   }
+
   @else if $t==osd-active {
   //
   // active osd button
@@ -354,37 +399,42 @@
     color: white;
     border-color: $osd_borders_color;
     background-image: linear-gradient(to bottom, $_bg);
+    background-clip: padding-box;
     box-shadow: none;
     text-shadow: none;
     icon-shadow: none;
+    outline-color: transparentize($osd_fg_color, 0.7);
   }
+
   @else if $t==osd-insensitive {
   //
   // insensitive osd button
   //
-    $_bg: transparentize(mix($insensitive_fg_color,$osd_bg_color,20%),0.3);
-
-    color: $insensitive_fg_color;
+    color: $osd_insensitive_fg_color;
     border-color: $osd_borders_color;
-    background-image: linear-gradient(to bottom, $_bg);
+    background-image: linear-gradient(to bottom, $osd_insensitive_bg_color);
+    background-clip: padding-box;
     box-shadow: none;
     text-shadow: none;
     icon-shadow: none;
   }
+
   @else if $t==osd-backdrop {
   //
   // backdrop osd button
   //
     $_bg: if($c!=$bg_color, transparentize($c, 0.5),
-                            transparentize($osd_bg_color, 0.3));
+                            $osd_bg_color);
 
     color: $osd_fg_color;
+    border-color: $osd_borders_color;
     background-image: linear-gradient(to bottom, $_bg);
     background-clip: padding-box;
     box-shadow: none;
     text-shadow: none;
     icon-shadow: none;
   }
+
   @else if $t==undecorated {
   //
   // reset

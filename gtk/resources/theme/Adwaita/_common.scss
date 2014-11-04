@@ -185,7 +185,11 @@ GtkFlowBox .grid-child {
 
 %osd, .osd {
   color: $osd_fg_color;
+  border: none;
+  background-color: $osd_bg_color;
+  background-clip: padding-box;
   outline-color: transparentize($osd_fg_color, 0.7);
+  box-shadow: none;
   text-shadow: 0 1px black;
   icon-shadow: 0 1px black;
   &:backdrop { text-shadow: none; }
@@ -220,31 +224,41 @@ GtkFlowBox .grid-child {
 .entry {
   border: 1px solid;
   padding: 5px 8px 6px;
+
   &.image { // icons inside the entry
     &.left { padding-left: 0; }
     &.right { padding-right: 0; }
   }
+
   border-radius: 3px;
   transition: all 200ms ease-out;
   @include entry(normal);
+
   &.flat, &.flat:focus {
     padding: 2px;
     @include entry(normal, $edge:none);
     border: none;
     border-radius: 0;
   }
+
   &:focus { @include entry(focus); }
+
   &:insensitive { @include entry(insensitive); }
+
   &:backdrop { @include entry(backdrop); }
+
   &:backdrop:insensitive { @include entry(backdrop-insensitive); }
+
   &:selected, &:backdrop:selected {
     background-color: $selected_bg_color;
     color: $selected_fg_color;
   }
+
   &:selected,
   &:selected:focus {
     @extend %selected_items;
   }
+
   &.progressbar {
     margin: 1px;
     border-radius: 0;
@@ -256,6 +270,7 @@ GtkFlowBox .grid-child {
     box-shadow: none;
     &:backdrop { background-color: transparent; }
   }
+
   .linked & { //FIXME: use same buttons linking logic and template
     &:first-child {
       border-top-right-radius: 0;
@@ -269,6 +284,7 @@ GtkFlowBox .grid-child {
       &:dir(rtl) { border-left-style: solid; }
     }
   }
+
   &.error {
     color: $error_color;
     border-color: $error_color;
@@ -281,6 +297,7 @@ GtkFlowBox .grid-child {
       &:selected:backdrop { color: $backdrop_base_color; }
     }
   }
+
   &.warning {
     color: $warning_color;
     border-color: $warning_color;
@@ -293,11 +310,19 @@ GtkFlowBox .grid-child {
       &:selected:backdrop { color: $backdrop_base_color; }
     }
   }
+
   &.image { // entry icons colors
     color: mix($fg_color,$base_color,80%);
     &:hover { color: $fg_color; }
     &:active { color: $selected_bg_color; }
     &:backdrop { color: mix($backdrop_fg_color,$backdrop_base_color,80%); }
+  }
+
+  .osd & {
+    @include entry(osd);
+    &:focus { @include entry(osd-focus); }
+    &:backdrop { @include entry(osd-backdrop); }
+    &:insensitive { @include entry(osd-insensitive); }
   }
 }
 
@@ -367,37 +392,33 @@ $_dot_color: if($variant=='light', $selected_bg_color,
   &.osd {
     &.image-button { padding: 13px; }
     color: $osd_fg_color;
-    border-radius: 6px;
-    outline-color: transparentize($osd_fg_color, 0.8);
+    border-radius: 5px;
+    outline-color: transparentize($osd_fg_color, 0.7);
     @include button(osd);
-    border-color: $osd_outer_borders_color;
+    border: none;
     box-shadow: none;
     &:hover {
       @include button(osd-hover);
-      border-color: $osd_outer_borders_color;
+      border: none;
       box-shadow: none;
     }
     &:active, &:checked {
       @include button(osd-active);
-      border-color: $osd_outer_borders_color;
+      border: none;
       box-shadow: none
     }
     &:insensitive, &:backdrop:insensitive {
       @include button(osd-insensitive);
-      border-color: $osd_outer_borders_color;
-      // FIXME: if this state actually exists we should probably make the button
-      //        disappear
+      border: none;
     }
     &:backdrop {
       @include button(osd-backdrop);
-      border-color: $osd_outer_borders_color;
+      border: none;
     }
   }
+
   //overlay / OSD style
   .osd & {
-    // FIXME: for some reason I can't figure out the bookmark button in gnome
-    //        documents gets borders radius 0, when they get backdrop and
-    //        another state
     @include button(osd);
     // there's a problem with sass which prevents it to extend the linked
     // placeholder as expected, it should just be "@extend %linked;", the
@@ -440,8 +461,33 @@ $_dot_color: if($variant=='light', $selected_bg_color,
       @include button(osd-backdrop);
       @extend %linked;
     }
-  }
 
+    &.flat {
+      @include button(undecorated);
+      box-shadow: none; //FIXME respect no edge on the button mixin
+      text-shadow: 0 1px black;
+      icon-shadow: 0 1px black;
+      &:hover {
+        @include button(osd-hover);
+        background-clip: padding-box;
+        border-color: transparent;
+        box-shadow: none;
+      }
+      &:insensitive {
+        @include button(osd-insensitive);
+        background-image: none;
+        border-color: transparent;
+        box-shadow: none;
+      }
+      &:backdrop { @include button(undecorated); }
+      &:active, &:checked {
+        @include button(osd-active);
+        background-clip: padding-box;
+        border-color: transparent;
+        box-shadow: none;
+      }
+    }
+  }
   // Suggested and Destructive Action buttons
   @each $b_type, $b_color in (suggested-action, $selected_bg_color),
                               (destructive-action, $destructive_color) {
@@ -778,6 +824,44 @@ GtkColorButton.button {
       &:dir(rtl) { border-style: none solid none none; }
     }
   }
+
+  .osd & {
+    .button {
+      @include button(undecorated);
+      color: $osd_fg_color;
+      border-style: none none none solid;
+      border-color: transparentize($osd_borders_color, 0.3);
+      border-radius: 0;
+      box-shadow: none;
+      icon-shadow: 0 1px black;
+      &:dir(rtl) { border-style: none solid none none; }
+      &:hover {
+        @include button(undecorated);
+        color: $osd_fg_color;
+        border-color: transparentize(opacify($osd_borders_color, 1), 0.5);
+        background-color: transparentize($osd_fg_color, 0.9);
+        icon-shadow: 0 1px black;
+        box-shadow: none;
+      }
+      &:backdrop {
+        @include button(undecorated);
+        color: $osd_fg_color;
+        border-color: transparentize(opacify($osd_borders_color, 1), 0.5);
+        icon-shadow: none;
+        box-shadow: none;
+      }
+      &:insensitive {
+        @include button(undecorated);
+        color: $osd_insensitive_fg_color;
+        border-color: transparentize(opacify($osd_borders_color, 1), 0.5);
+        icon-shadow: none;
+        box-shadow: none;
+      }
+      &:last-child { border-radius: 0 3px 3px 0; }
+      &:dir(rtl):first-child { border-radius: 3px 0 0 3px; }
+    }
+  }
+
   &.vertical, &.vertical:dir(rtl) {
     .button {
       padding-top: 8px;    //  Same vertical padding as image-buttons
@@ -922,10 +1006,9 @@ GtkComboBox {
   background-color: $bg_color;
   .osd &, &.osd {
     padding: 13px;
-    border: $osd_outer_borders_color;
-    border-radius: 6px;
-    background-color: transparentize($osd_bg_color, 0.3);
-    background-clip: padding-box;
+    border: none;
+    border-radius: 5px;
+    background-color: $osd_bg_color;
   }
 }
 
@@ -1363,21 +1446,7 @@ column-header.button.dnd { // for treeview-like derive widgets
     text-shadow: none;
     transition: none;
   }
-  &.osd { // Also used for touch cut'n'paste overlays
-          // FIXME Doesn't work
-    background-image: none;
-    background-color: $osd_bg_color;
-    border: 1px solid $borders_color;
-    color: $osd_fg_color;
-    .button {
-      color: white;
-      text-shadow: none;
-      @include button(osd);
-      &:hover { @include button(osd-hover); };
-      &:active { @include button(osd-active); };
-      &:insensitive { @include button(osd-insensitive); };
-    }
-  }
+  &.osd { @extend %osd; }
 }
 
 //touch selection handlebars for the Popover.osd above
@@ -2358,20 +2427,17 @@ GtkScrolledWindow {
 .app-notification.frame {
   @extend %osd;
   padding: 10px;
-  border-width: 0 1px 1px;
-  border-style: solid;
-  border-color: $osd_outer_borders_color;
+  border: none;
   border-radius: 0 0 6px 6px;
-  background-color: transparentize($osd_bg_color, 0.3);
+  background-color: $osd_bg_color;
   background-image: linear-gradient(to bottom, transparentize(black, 0.8),
                                                transparent 2px);
   background-clip: padding-box;
   &:backdrop { background-image: none; }
+
   .button {
-    border: 1px solid;
-    color: $osd_fg_color;
-    outline-color: transparentize($osd_fg_color, 0.8);
     @include button(osd);
+
     &.flat {
       @extend %undecorated_button;
       icon-shadow: 0 1px black;
@@ -2380,13 +2446,20 @@ GtkScrolledWindow {
       &:insensitive,
       &:backdrop:insensitive { @extend %undecorated_button; }
     }
+
     &:hover { @include button(osd-hover); }
-    &:active, &:checked, &:backdrop:active, &:backdrop:checked {
+    &:active,
+    &:checked,
+    &:backdrop:active,
+    &:backdrop:checked {
       @include button(osd-active);
     }
-    &:insensitive, &:backdrop:insensitive {
+
+    &:insensitive,
+    &:backdrop:insensitive {
       @include button(osd-insensitive);
     }
+
     &:backdrop { @include button(osd-backdrop); }
   }
 }
