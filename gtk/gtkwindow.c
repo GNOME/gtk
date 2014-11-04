@@ -1604,7 +1604,7 @@ gtk_window_constructed (GObject *object)
 
   G_OBJECT_CLASS (gtk_window_parent_class)->constructed (object);
 
-  if (priv->type == GTK_WINDOW_TOPLEVEL)
+  if (priv->type == GTK_WINDOW_TOPLEVEL && !GTK_IS_PLUG (window))
     {
       priv->multipress_gesture = gtk_gesture_multi_press_new (GTK_WIDGET (object));
       gtk_gesture_single_set_button (GTK_GESTURE_SINGLE (priv->multipress_gesture), 0);
