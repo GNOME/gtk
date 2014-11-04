@@ -1284,6 +1284,32 @@ gdk_window_wayland_restack_toplevel (GdkWindow *window,
 }
 
 static void
+gdk_window_request_transient_parent_commit (GdkWindow *window)
+{
+  GdkWindowImplWayland *window_impl, *impl;
+  GdkFrameClock *frame_clock;
+
+  window_impl = GDK_WINDOW_IMPL_WAYLAND (window->impl);
+
+  if (!window_impl->transient_for)
+    return;
+
+  impl = GDK_WINDOW_IMPL_WAYLAND (window_impl->transient_for->impl);
+
+  if (!impl->surface || impl->pending_commit)
+    return;
+
+  frame_clock = gdk_window_get_frame_clock (window_impl->transient_for);
+
+  if (!frame_clock)
+    return;
+
+  impl->pending_commit = TRUE;
+  gdk_frame_clock_request_phase (frame_clock,
+                                 GDK_FRAME_CLOCK_PHASE_AFTER_PAINT);
+}
+
+static void
 gdk_window_wayland_move_resize (GdkWindow *window,
                                 gboolean   with_move,
                                 gint       x,
@@ -1305,15 +1331,8 @@ gdk_window_wayland_move_resize (GdkWindow *window,
 
           if (impl->subsurface)
             {
-              GdkWindowImplWayland *parent_impl;
-
               wl_subsurface_set_position (impl->subsurface, x, y);
-
-              g_assert (impl->transient_for != NULL);
-              parent_impl = GDK_WINDOW_IMPL_WAYLAND (impl->transient_for->impl);
-
-              if (parent_impl->surface && !parent_impl->pending_commit)
-                wl_surface_commit (parent_impl->surface);
+              gdk_window_request_transient_parent_commit (window);
             }
         }
     }
