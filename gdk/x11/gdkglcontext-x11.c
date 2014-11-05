@@ -533,6 +533,7 @@ gdk_x11_gl_context_class_init (GdkX11GLContextClass *klass)
 static void
 gdk_x11_gl_context_init (GdkX11GLContext *self)
 {
+  self->do_frame_sync = TRUE;
 }
 
 gboolean
@@ -1175,12 +1176,15 @@ gdk_x11_display_make_gl_context_current (GdkDisplay   *display,
       screen = gdk_window_get_screen (window);
       do_frame_sync = ! gdk_screen_is_composited (screen);
 
-      context_x11->do_frame_sync = do_frame_sync;
+      if (do_frame_sync != context_x11->do_frame_sync)
+        {
+          context_x11->do_frame_sync = do_frame_sync;
 
-      if (context_x11->do_frame_sync)
-        glXSwapIntervalSGI (1);
-      else
-        glXSwapIntervalSGI (0);
+          if (do_frame_sync)
+            glXSwapIntervalSGI (1);
+          else
+            glXSwapIntervalSGI (0);
+        }
     }
 
   return TRUE;
