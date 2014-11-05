@@ -35,6 +35,28 @@ gdk_cairo_surface_mark_as_direct (cairo_surface_t *surface,
                                g_object_ref (window),  g_object_unref);
 }
 
+void
+gdk_gl_texture_quad (float x1, float y1,
+                     float x2, float y2,
+                     float u1, float v1,
+                     float u2, float v2)
+{
+  glBegin (GL_QUADS);
+  glTexCoord2f (u1, v2);
+  glVertex2f (x1, y2);
+
+  glTexCoord2f (u2, v2);
+  glVertex2f (x2, y2);
+
+  glTexCoord2f (u2, v1);
+  glVertex2f (x2, y1);
+
+  glTexCoord2f (u1, v1);
+  glVertex2f (x1, y1);
+  glEnd();
+}
+
+
 /* x,y,width,height describes a rectangle in the gl render buffer
    coordinate space, and its top left corner is drawn at the current
    position according to the cairo translation. */
@@ -304,19 +326,10 @@ gdk_cairo_draw_from_gl (cairo_t              *cr,
               int clipped_src_x = x + (dest.x - dx * window_scale);
               int clipped_src_y = y + (height - dest.height - (dest.y - dy * window_scale));
 
-              glBegin (GL_QUADS);
-              glTexCoord2f (clipped_src_x / (float)texture_width, clipped_src_y / (float)texture_height);
-              glVertex2f (dest.x, FLIP_Y(dest.y + dest.height));
-
-              glTexCoord2f ((clipped_src_x + dest.width) / (float)texture_width, clipped_src_y / (float)texture_height);
-              glVertex2f (dest.x + dest.width, FLIP_Y(dest.y + dest.height));
-
-              glTexCoord2f ((clipped_src_x + dest.width) / (float)texture_width, (clipped_src_y + dest.height) / (float)texture_height);
-              glVertex2f (dest.x + dest.width, FLIP_Y(dest.y));
-
-              glTexCoord2f (clipped_src_x / (float)texture_width, (clipped_src_y + dest.height) / (float)texture_height);
-              glVertex2f (dest.x, FLIP_Y(dest.y));
-              glEnd();
+              gdk_gl_texture_quad (dest.x, FLIP_Y(dest.y),
+                                   dest.x + dest.width, FLIP_Y(dest.y + dest.height),
+                                   clipped_src_x / (float)texture_width, (clipped_src_y + dest.height) / (float)texture_height,
+                                   (clipped_src_x + dest.width) / (float)texture_width, clipped_src_y / (float)texture_height);
 
               if (impl_window->current_paint.flushed_region)
                 {
@@ -425,7 +438,6 @@ gdk_gl_texture_from_surface (cairo_surface_t *surface,
     return;
 
   /* Software fallback */
-
   use_texture_rectangle = gdk_gl_context_use_texture_rectangle (current);
 
   window = gdk_gl_context_get_window (current);
@@ -492,19 +504,10 @@ gdk_gl_texture_from_surface (cairo_surface_t *surface,
           vmax = 1.0;
         }
 
-      glBegin (GL_QUADS);
-      glTexCoord2f (0, vmax);
-      glVertex2f (rect.x * window_scale, FLIP_Y(rect.y + rect.height) * window_scale);
-
-      glTexCoord2f (umax, vmax);
-      glVertex2f ((rect.x + rect.width) * window_scale, FLIP_Y(rect.y + rect.height) * window_scale);
-
-      glTexCoord2f (umax, 0);
-      glVertex2f ((rect.x + rect.width) * window_scale, FLIP_Y(rect.y) * window_scale);
-
-      glTexCoord2f (0, 0);
-      glVertex2f (rect.x * window_scale, FLIP_Y(rect.y) * window_scale);
-      glEnd();
+      gdk_gl_texture_quad (rect.x * window_scale, FLIP_Y(rect.y) * window_scale,
+                           (rect.x + rect.width) * window_scale, FLIP_Y(rect.y + rect.height) * window_scale,
+                           0, 0,
+                           umax, vmax);
     }
 
   glDisable (target);
