@@ -105,25 +105,16 @@ gdk_cairo_draw_from_gl (cairo_t              *cr,
 
   gdk_gl_context_make_current (context);
 
-  glGenFramebuffersEXT (1, &framebuffer);
-  glBindFramebufferEXT (GL_FRAMEBUFFER_EXT, framebuffer);
-
   if (source_type == GL_RENDERBUFFER)
     {
-      glGetRenderbufferParameteriv (GL_RENDERBUFFER, GL_RENDERBUFFER_ALPHA_SIZE,  &alpha_size);
-
       glBindRenderbufferEXT (GL_RENDERBUFFER_EXT, source);
-      glFramebufferRenderbufferEXT (GL_FRAMEBUFFER_EXT, GL_COLOR_ATTACHMENT0_EXT,
-                                    GL_RENDERBUFFER_EXT, source);
-      glBindFramebufferEXT (GL_DRAW_FRAMEBUFFER_EXT, 0);
+      glGetRenderbufferParameteriv (GL_RENDERBUFFER, GL_RENDERBUFFER_ALPHA_SIZE,  &alpha_size);
     }
   else if (source_type == GL_TEXTURE)
     {
       glBindTexture (GL_TEXTURE_2D, source);
 
       glGetTexLevelParameteriv (GL_TEXTURE_2D, 0, GL_TEXTURE_ALPHA_SIZE,  &alpha_size);
-
-      glBindFramebufferEXT (GL_DRAW_FRAMEBUFFER_EXT, 0);
     }
   else
     {
@@ -156,6 +147,14 @@ gdk_cairo_draw_from_gl (cairo_t              *cr,
     {
       int window_height;
       int i;
+
+      /* Create a framebuffer with the source renderbuffer and
+         make it the current target for reads */
+      glGenFramebuffersEXT (1, &framebuffer);
+      glBindFramebufferEXT (GL_FRAMEBUFFER_EXT, framebuffer);
+      glFramebufferRenderbufferEXT (GL_FRAMEBUFFER_EXT, GL_COLOR_ATTACHMENT0_EXT,
+                                    GL_RENDERBUFFER_EXT, source);
+      glBindFramebufferEXT (GL_DRAW_FRAMEBUFFER_EXT, 0);
 
       /* Translate to impl coords */
       cairo_region_translate (clip_region, dx, dy);
@@ -212,6 +211,9 @@ gdk_cairo_draw_from_gl (cairo_t              *cr,
         }
 
       glDisable (GL_SCISSOR_TEST);
+
+      glBindFramebufferEXT (GL_FRAMEBUFFER_EXT, 0);
+      glDeleteFramebuffersEXT (1, &framebuffer);
 
 #undef FLIP_Y
 
@@ -351,6 +353,22 @@ gdk_cairo_draw_from_gl (cairo_t              *cr,
       cairo_surface_set_device_scale (image, buffer_scale, buffer_scale);
 #endif
 
+      glGenFramebuffersEXT (1, &framebuffer);
+      glBindFramebufferEXT (GL_FRAMEBUFFER_EXT, framebuffer);
+
+      if (source_type == GL_RENDERBUFFER)
+        {
+          /* Create a framebuffer with the source renderbuffer and
+             make it the current target for reads */
+          glFramebufferRenderbufferEXT (GL_FRAMEBUFFER_EXT, GL_COLOR_ATTACHMENT0_EXT,
+                                        GL_RENDERBUFFER_EXT, source);
+        }
+      else
+        {
+          glFramebufferTexture2DEXT (GL_FRAMEBUFFER_EXT, GL_COLOR_ATTACHMENT0_EXT,
+                                     GL_TEXTURE_2D, source, 0);
+        }
+
       glPixelStorei (GL_PACK_ALIGNMENT, 4);
       glPixelStorei (GL_PACK_ROW_LENGTH, cairo_image_surface_get_stride (image) / 4);
 
@@ -358,6 +376,9 @@ gdk_cairo_draw_from_gl (cairo_t              *cr,
                     cairo_image_surface_get_data (image));
 
       glPixelStorei (GL_PACK_ROW_LENGTH, 0);
+
+      glBindFramebufferEXT (GL_FRAMEBUFFER_EXT, 0);
+      glDeleteFramebuffersEXT (1, &framebuffer);
 
       cairo_surface_mark_dirty (image);
 
@@ -371,12 +392,6 @@ gdk_cairo_draw_from_gl (cairo_t              *cr,
 
       cairo_surface_destroy (image);
     }
-
-  glDrawBuffer (GL_BACK);
-  glReadBuffer(GL_BACK);
-
-  glBindFramebufferEXT (GL_FRAMEBUFFER_EXT, 0);
-  glDeleteFramebuffersEXT (1, &framebuffer);
 
   if (clip_region)
     cairo_region_destroy (clip_region);
