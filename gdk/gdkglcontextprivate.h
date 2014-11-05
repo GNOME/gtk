@@ -54,6 +54,15 @@ void            gdk_gl_context_end_frame (GdkGLContext *context,
                                           cairo_region_t *painted,
                                           cairo_region_t *damage);
 
+
+
+typedef struct {
+  guint tmp_framebuffer;
+} GdkGLContextPaintData;
+
+GdkGLContextPaintData *gdk_gl_context_get_paint_data (GdkGLContext *context);
+
+
 G_END_DECLS
 
 #endif /* __GDK_GL_CONTEXT_PRIVATE_H__ */

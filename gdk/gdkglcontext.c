@@ -87,6 +87,7 @@ typedef struct {
   guint realized : 1;
   guint use_texture_rectangle : 1;
 
+  GdkGLContextPaintData *paint_data;
 } GdkGLContextPrivate;
 
 enum {
@@ -124,6 +125,15 @@ gdk_gl_context_dispose (GObject *gobject)
   g_clear_object (&priv->shared_context);
 
   G_OBJECT_CLASS (gdk_gl_context_parent_class)->dispose (gobject);
+}
+
+static void
+gdk_gl_context_finalize (GObject *gobject)
+{
+  GdkGLContext *context = GDK_GL_CONTEXT (gobject);
+  GdkGLContextPrivate *priv = gdk_gl_context_get_instance_private (context);
+
+  g_clear_pointer (&priv->paint_data, g_free);
 }
 
 static void
@@ -286,6 +296,7 @@ gdk_gl_context_class_init (GdkGLContextClass *klass)
   gobject_class->set_property = gdk_gl_context_set_property;
   gobject_class->get_property = gdk_gl_context_get_property;
   gobject_class->dispose = gdk_gl_context_dispose;
+  gobject_class->finalize = gdk_gl_context_finalize;
 
   g_object_class_install_properties (gobject_class, LAST_PROP, obj_pspecs);
 }
@@ -317,6 +328,18 @@ gdk_gl_context_end_frame (GdkGLContext   *context,
   g_return_if_fail (GDK_IS_GL_CONTEXT (context));
 
   GDK_GL_CONTEXT_GET_CLASS (context)->end_frame (context, painted, damage);
+}
+
+GdkGLContextPaintData *
+gdk_gl_context_get_paint_data (GdkGLContext *context)
+{
+
+  GdkGLContextPrivate *priv = gdk_gl_context_get_instance_private (context);
+
+  if (priv->paint_data == NULL)
+    priv->paint_data = g_new0 (GdkGLContextPaintData, 1);
+
+  return priv->paint_data;
 }
 
 gboolean

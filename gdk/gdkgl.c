@@ -86,9 +86,10 @@ gdk_cairo_draw_from_gl (cairo_t              *cr,
   gboolean trivial_transform;
   cairo_surface_t *group_target;
   GdkWindow *direct_window, *impl_window;
-  GLuint framebuffer;
-  GLint alpha_size = 0;
+  guint framebuffer;
+  int alpha_size = 0;
   cairo_region_t *clip_region;
+  GdkGLContextPaintData *paint_data;
 
   impl_window = window->impl_window;
 
@@ -104,6 +105,10 @@ gdk_cairo_draw_from_gl (cairo_t              *cr,
   clip_region = gdk_cairo_region_from_clip (cr);
 
   gdk_gl_context_make_current (context);
+  paint_data = gdk_gl_context_get_paint_data (context);
+
+  if (paint_data->tmp_framebuffer == 0)
+    glGenFramebuffersEXT (1, &paint_data->tmp_framebuffer);
 
   if (source_type == GL_RENDERBUFFER)
     {
@@ -150,7 +155,7 @@ gdk_cairo_draw_from_gl (cairo_t              *cr,
 
       /* Create a framebuffer with the source renderbuffer and
          make it the current target for reads */
-      glGenFramebuffersEXT (1, &framebuffer);
+      framebuffer = paint_data->tmp_framebuffer;
       glBindFramebufferEXT (GL_FRAMEBUFFER_EXT, framebuffer);
       glFramebufferRenderbufferEXT (GL_FRAMEBUFFER_EXT, GL_COLOR_ATTACHMENT0_EXT,
                                     GL_RENDERBUFFER_EXT, source);
@@ -213,7 +218,6 @@ gdk_cairo_draw_from_gl (cairo_t              *cr,
       glDisable (GL_SCISSOR_TEST);
 
       glBindFramebufferEXT (GL_FRAMEBUFFER_EXT, 0);
-      glDeleteFramebuffersEXT (1, &framebuffer);
 
 #undef FLIP_Y
 
@@ -353,7 +357,7 @@ gdk_cairo_draw_from_gl (cairo_t              *cr,
       cairo_surface_set_device_scale (image, buffer_scale, buffer_scale);
 #endif
 
-      glGenFramebuffersEXT (1, &framebuffer);
+      framebuffer = paint_data->tmp_framebuffer;
       glBindFramebufferEXT (GL_FRAMEBUFFER_EXT, framebuffer);
 
       if (source_type == GL_RENDERBUFFER)
@@ -378,7 +382,6 @@ gdk_cairo_draw_from_gl (cairo_t              *cr,
       glPixelStorei (GL_PACK_ROW_LENGTH, 0);
 
       glBindFramebufferEXT (GL_FRAMEBUFFER_EXT, 0);
-      glDeleteFramebuffersEXT (1, &framebuffer);
 
       cairo_surface_mark_dirty (image);
 
