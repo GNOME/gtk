@@ -311,7 +311,7 @@ handle_motion_event (GdkWindow *window, const MirMotionEvent *event)
     case mir_motion_action_up:
       event_type = event->action == mir_motion_action_down ? GDK_BUTTON_PRESS : GDK_BUTTON_RELEASE;
       changed_button_state = button_state ^ event->button_state;
-      if ((changed_button_state & mir_motion_button_primary) != 0)
+      if (changed_button_state == 0 || (changed_button_state & mir_motion_button_primary) != 0)
         generate_button_event (window, event_type, x, y, GDK_BUTTON_PRIMARY, modifier_state);
       if ((changed_button_state & mir_motion_button_secondary) != 0)
         generate_button_event (window, event_type, x, y, GDK_BUTTON_SECONDARY, modifier_state);
