@@ -27,7 +27,9 @@ test_nonzerox (void)
 
   overlay = gtk_overlay_new ();
   gdk_rgba_parse (&color, "red");
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
   gtk_widget_override_background_color (overlay, 0, &color);
+G_GNUC_END_IGNORE_DEPRECATIONS
   gtk_grid_attach (GTK_GRID (grid), overlay, 1, 1, 1, 1);
 
   text = gtk_text_view_new ();
@@ -101,7 +103,9 @@ test_relative (void)
 
   overlay = gtk_overlay_new ();
   gdk_rgba_parse (&color, "yellow");
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
   gtk_widget_override_background_color (overlay, 0, &color);
+G_GNUC_END_IGNORE_DEPRECATIONS
   gtk_container_add (GTK_CONTAINER (win), overlay);
 
   grid = gtk_grid_new ();
@@ -376,7 +380,9 @@ test_stacking (void)
   overlay = gtk_overlay_new ();
   main_child = gtk_event_box_new ();
   gdk_rgba_parse (&color, "green");
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
   gtk_widget_override_background_color (main_child, 0, &color);
+G_GNUC_END_IGNORE_DEPRECATIONS
   gtk_widget_set_hexpand (main_child, TRUE);
   gtk_widget_set_vexpand (main_child, TRUE);
   label = gtk_label_new ("Main child");
