@@ -1073,6 +1073,19 @@ textbuffer_notify_selection (GObject *object, GParamSpec *pspec, GtkWidget *butt
     gtk_widget_set_sensitive (button, has_selection);
 }
 
+static gboolean
+osd_frame_button_press (GtkWidget *frame, GdkEventButton *event, gpointer data)
+{
+  GtkWidget *osd;
+  gboolean visible;
+
+  osd = g_object_get_data (G_OBJECT (frame), "osd");
+  visible = gtk_widget_get_visible (osd);
+  gtk_widget_set_visible (osd, !visible);
+
+  return GDK_EVENT_STOP;
+}
+
 static void
 activate (GApplication *app)
 {
@@ -1119,6 +1132,7 @@ activate (GApplication *app)
   gtk_builder_add_callback_symbol (builder, "on_page_combo_changed", (GCallback)on_page_combo_changed);
   gtk_builder_add_callback_symbol (builder, "on_range_from_changed", (GCallback)on_range_from_changed);
   gtk_builder_add_callback_symbol (builder, "on_range_to_changed", (GCallback)on_range_to_changed);
+  gtk_builder_add_callback_symbol (builder, "osd_frame_button_press", (GCallback)osd_frame_button_press);
 
   gtk_builder_connect_signals (builder, NULL);
 
@@ -1265,6 +1279,10 @@ activate (GApplication *app)
   g_signal_connect (widget, "clicked", G_CALLBACK (handle_cutcopypaste), widget2);
   g_signal_connect (gtk_widget_get_clipboard (widget2, GDK_SELECTION_CLIPBOARD), "owner-change",
                     G_CALLBACK (clipboard_owner_change), widget);
+
+  widget = (GtkWidget *)gtk_builder_get_object (builder, "osd_frame");
+  widget2 = (GtkWidget *)gtk_builder_get_object (builder, "totem_like_osd");
+  g_object_set_data (G_OBJECT (widget), "osd", widget2);
 
   gtk_widget_show_all (GTK_WIDGET (window));
 

@@ -82,6 +82,7 @@
   </menu>
   <object class="GtkAdjustment" id="adjustment1">
     <property name="upper">100</property>
+    <property name="lower">1</property>
     <property name="value">50</property>
     <property name="step_increment">1</property>
     <property name="page_increment">10</property>
@@ -3711,60 +3712,154 @@ microphone-sensitivity-medium-symbolic</property>
                       </object>
                     </child>
                     <child>
-                      <object class="GtkFrame">
+                      <object class="GtkOverlay">
                         <property name="visible">True</property>
-                        <child>
-                          <object class="GtkPaned">
-                            <property name="visible">True</property>
-                            <property name="orientation">horizontal</property>
-                            <property name="wide-handle">True</property>
+                        <child type="overlay">
+                          <object class="GtkToolbar" id="totem_like_osd">
+                            <property name="no-show-all">True</property>
+                            <property name="opacity">0.9</property>
+                            <property name="margin">20</property>
+                            <property name="halign">fill</property>
+                            <property name="valign">end</property>
+                            <style>
+                              <class name="osd"/>
+                            </style>
                             <child>
-                              <object class="GtkNotebook">
+                              <object class="GtkToolItem">
                                 <property name="visible">True</property>
-                                <property name="show-border">False</property>
                                 <child>
                                   <object class="GtkBox">
                                     <property name="visible">True</property>
-                                    <property name="height-request">120</property>
+                                    <property name="orientation">horizontal</property>
+                                    <style>
+                                      <class name="linked"/>
+                                    </style>
+                                    <child>
+                                      <object class="GtkButton">
+                                        <property name="visible">True</property>
+                                        <style>
+                                          <class name="image-button"/>
+                                        </style>
+                                        <child>
+                                          <object class="GtkImage">
+                                            <property name="visible">True</property>
+                                            <property name="icon-name">pan-start-symbolic</property>
+                                            <property name="icon-size">1</property>
+                                          </object>
+                                        </child>
+                                      </object>
+                                    </child>
+                                    <child>
+                                      <object class="GtkButton">
+                                        <property name="visible">True</property>
+                                        <style>
+                                          <class name="image-button"/>
+                                        </style>
+                                        <child>
+                                          <object class="GtkImage">
+                                            <property name="visible">True</property>
+                                            <property name="icon-name">pan-end-symbolic</property>
+                                            <property name="icon-size">1</property>
+                                          </object>
+                                        </child>
+                                      </object>
+                                    </child>
                                   </object>
                                 </child>
-                                <child type="tab">
-                                  <object class="GtkLabel">
-                                    <property name="visible">True</property>
-                                    <property name="label" translatable="yes">Page 1</property>
-                                  </object>
-                                </child>
-                                <child>
-                                  <object class="GtkBox">
-                                    <property name="visible">True</property>
-                                    <property name="height-request">120</property>
-                                  </object>
-                                </child>
-                                <child type="tab">
-                                  <object class="GtkLabel">
-                                    <property name="visible">True</property>
-                                    <property name="label" translatable="yes">Page 2</property>
-                                  </object>
-                                </child>
-                              </object> 
+                              </object>
                             </child>
                             <child>
-                              <object class="GtkNotebook">
+                              <object class="GtkToolItem">
                                 <property name="visible">True</property>
-                                <property name="show-border">False</property>
                                 <child>
-                                  <object class="GtkBox">
+                                  <object class="GtkScale">
                                     <property name="visible">True</property>
-                                    <property name="height-request">120</property>
+                                    <property name="draw-value">False</property>
+                                    <property name="orientation">horizontal</property>
+                                    <property name="adjustment">adjustment1</property>
                                   </object>
                                 </child>
-                                <child type="tab">
-                                  <object class="GtkLabel">
+                              </object>
+                              <packing>
+                                <property name="expand">True</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <object class="GtkToolItem">
+                                <property name="visible">True</property>
+                                <child>
+                                  <object class="GtkVolumeButton">
                                     <property name="visible">True</property>
-                                    <property name="label" translatable="yes">Page 3</property>
+                                    <property name="orientation">vertical</property>
+                                    <property name="use-symbolic">True</property>
+                                    <property name="value">.5</property>
+                                    <style>
+                                      <class name="image-button"/>
+                                    </style>
                                   </object>
                                 </child>
-                              </object> 
+                              </object>
+                            </child>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="GtkFrame" id="osd_frame">
+                            <property name="visible">True</property>
+                            <signal name="button-press-event" handler="osd_frame_button_press"/>
+                            <child>
+                              <object class="GtkPaned">
+                                <property name="visible">True</property>
+                                <property name="orientation">horizontal</property>
+                                <property name="wide-handle">True</property>
+                                <child>
+                                  <object class="GtkNotebook">
+                                    <property name="visible">True</property>
+                                    <property name="show-border">False</property>
+                                    <child>
+                                      <object class="GtkBox">
+                                        <property name="visible">True</property>
+                                        <property name="height-request">120</property>
+                                      </object>
+                                    </child>
+                                    <child type="tab">
+                                      <object class="GtkLabel">
+                                        <property name="visible">True</property>
+                                        <property name="label" translatable="yes">Page 1</property>
+                                      </object>
+                                    </child>
+                                    <child>
+                                      <object class="GtkBox">
+                                        <property name="visible">True</property>
+                                        <property name="vexpand">True</property>
+                                      </object>
+                                    </child>
+                                    <child type="tab">
+                                      <object class="GtkLabel">
+                                        <property name="visible">True</property>
+                                        <property name="label" translatable="yes">Page 2</property>
+                                      </object>
+                                    </child>
+                                  </object>
+                                </child>
+                                <child>
+                                  <object class="GtkNotebook">
+                                    <property name="visible">True</property>
+                                    <property name="show-border">False</property>
+                                    <child>
+                                      <object class="GtkBox">
+                                        <property name="visible">True</property>
+                                        <property name="vexpand">True</property>
+                                      </object>
+                                    </child>
+                                    <child type="tab">
+                                      <object class="GtkLabel">
+                                        <property name="visible">True</property>
+                                        <property name="label" translatable="yes">Page 3</property>
+                                      </object>
+                                    </child>
+                                  </object>
+                                </child>
+                              </object>
                             </child>
                           </object>
                         </child>
