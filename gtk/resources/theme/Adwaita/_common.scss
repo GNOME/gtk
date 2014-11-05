@@ -2810,8 +2810,26 @@ GtkFileChooserDialog {
 // Places sidebar is a special case, since the view here have to look like chrome not content, so we override text color
 GtkPlacesSidebar.sidebar .view {
 
+  $_backdrop_selected_fg_color: if($variant == 'light', $backdrop_base_color, $selected_bg_color); // FIXME this should be a general
+                                                                                                   // color var
+
   color: $fg_color;
   background-color: transparent;
+
+  .separator,
+  .separator:backdrop { @extend .separator; }
+
+  .image { // icons color
+    color: mix($fg_color, $sidebar_bg_color, 70%);
+
+    &:selected {
+      color: mix($selected_fg_color, $selected_bg_color, 90%);
+
+      &:backdrop { color: mix($_backdrop_selected_fg_color, $selected_bg_color, 90%); }
+    }
+
+    &:backdrop { color: mix($backdrop_fg_color, $sidebar_bg_color, 70%); }
+  }
 
   &:backdrop { color: $backdrop_fg_color; }
 
@@ -2819,11 +2837,8 @@ GtkPlacesSidebar.sidebar .view {
     color: $selected_fg_color;
     background-color: $selected_bg_color;
 
-    &:backdrop { color: if($variant == 'light', $backdrop_base_color, $selected_bg_color); }
+    &:backdrop { color: $_backdrop_selected_fg_color; }
   }
-
-  .separator,
-  .separator:backdrop { @extend .separator; }
 }
 
 

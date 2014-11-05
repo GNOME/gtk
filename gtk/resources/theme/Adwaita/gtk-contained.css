@@ -4096,6 +4096,14 @@ GtkFileChooserDialog .dialog-action-box {
 GtkPlacesSidebar.sidebar .view {
   color: #2e3436;
   background-color: transparent; }
+  GtkPlacesSidebar.sidebar .view .image {
+    color: #6b6f70; }
+    GtkPlacesSidebar.sidebar .view .image:selected {
+      color: #ecf3fb; }
+      GtkPlacesSidebar.sidebar .view .image:selected:backdrop {
+        color: #ecf3fb; }
+    GtkPlacesSidebar.sidebar .view .image:backdrop {
+      color: #adafb0; }
   GtkPlacesSidebar.sidebar .view:backdrop {
     color: #8d9091; }
   GtkPlacesSidebar.sidebar .view:selected {
