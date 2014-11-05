@@ -413,8 +413,14 @@ gdk_mir_event_source_queue_event (GdkDisplay     *display,
     case mir_event_type_resize:
       handle_resize_event (window, &event->resize);
       break;
+    case mir_event_type_prompt_session_state_change:
+      // FIXME?
+      break;
+    case mir_event_type_orientation:
+      // FIXME?
+      break;
     default:
-      g_assert_not_reached ();
+      g_warning ("Ignoring unknown Mir event %d", event->type);
       // FIXME?
       break;
     }
