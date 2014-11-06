@@ -552,71 +552,6 @@ gdk_mir_window_impl_reparent (GdkWindow *window,
   return FALSE;
 }
 
-static const gchar *
-get_cursor_name_for_cursor_type (GdkCursorType cursor_type)
-{
-  switch (cursor_type)
-    {
-    case GDK_BLANK_CURSOR:
-      return mir_disabled_cursor_name;
-    case GDK_X_CURSOR:
-    case GDK_ARROW:
-    case GDK_CENTER_PTR:
-    case GDK_DRAFT_LARGE:
-    case GDK_DRAFT_SMALL:
-    case GDK_LEFT_PTR:
-    case GDK_RIGHT_PTR:
-    case GDK_TOP_LEFT_ARROW:
-      return mir_arrow_cursor_name;
-    case GDK_CLOCK:
-    case GDK_WATCH:
-      return mir_busy_cursor_name;
-    case GDK_XTERM:
-      return mir_caret_cursor_name;
-    case GDK_HAND1:
-    case GDK_HAND2:
-      return mir_pointing_hand_cursor_name;
-      return mir_open_hand_cursor_name;
-    case GDK_FLEUR:
-      return mir_closed_hand_cursor_name;
-    case GDK_LEFT_SIDE:
-    case GDK_LEFT_TEE:
-    case GDK_RIGHT_SIDE:
-    case GDK_RIGHT_TEE:
-    case GDK_SB_LEFT_ARROW:
-    case GDK_SB_RIGHT_ARROW:
-      return mir_horizontal_resize_cursor_name;
-    case GDK_BASED_ARROW_DOWN:
-    case GDK_BASED_ARROW_UP:
-    case GDK_BOTTOM_SIDE:
-    case GDK_BOTTOM_TEE:
-    case GDK_DOUBLE_ARROW:
-    case GDK_SB_DOWN_ARROW:
-    case GDK_SB_UP_ARROW:
-    case GDK_TOP_SIDE:
-    case GDK_TOP_TEE:
-      return mir_vertical_resize_cursor_name;
-    case GDK_BOTTOM_LEFT_CORNER:
-    case GDK_LL_ANGLE:
-    case GDK_TOP_RIGHT_CORNER:
-    case GDK_UR_ANGLE:
-      return mir_diagonal_resize_bottom_to_top_cursor_name;
-    case GDK_BOTTOM_RIGHT_CORNER:
-    case GDK_LR_ANGLE:
-    case GDK_SIZING:
-    case GDK_TOP_LEFT_CORNER:
-    case GDK_UL_ANGLE:
-      return mir_diagonal_resize_top_to_bottom_cursor_name;
-      return mir_omnidirectional_resize_cursor_name;
-    case GDK_SB_V_DOUBLE_ARROW:
-      return mir_vsplit_resize_cursor_name;
-    case GDK_SB_H_DOUBLE_ARROW:
-      return mir_hsplit_resize_cursor_name;
-    default:
-      return mir_default_cursor_name;
-    }
-}
-
 static void
 gdk_mir_window_impl_set_device_cursor (GdkWindow *window,
                                        GdkDevice *device,
@@ -626,7 +561,7 @@ gdk_mir_window_impl_set_device_cursor (GdkWindow *window,
   MirCursorConfiguration *configuration;
 
   if (cursor)
-    cursor_name = get_cursor_name_for_cursor_type (gdk_cursor_get_cursor_type (cursor));
+    cursor_name = _gdk_mir_cursor_get_name (cursor);
   else
     cursor_name = mir_default_cursor_name;
 

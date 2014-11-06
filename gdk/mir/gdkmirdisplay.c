@@ -45,8 +45,6 @@ typedef struct GdkMirDisplay
   /* Screen information */
   GdkScreen *screen;
 
-  GdkCursor *cursor;
-
   GdkKeymap *keymap;
 } GdkMirDisplay;
 
@@ -317,16 +315,14 @@ static GdkCursor *
 gdk_mir_display_get_cursor_for_type (GdkDisplay    *display,
                                      GdkCursorType  cursor_type)
 {
-  return _gdk_mir_cursor_new (display, cursor_type);
+  return _gdk_mir_cursor_new_for_type (display, cursor_type);
 }
 
 static GdkCursor *
 gdk_mir_display_get_cursor_for_name (GdkDisplay  *display,
                                      const gchar *name)
 {
-  g_printerr ("gdk_mir_display_get_cursor_for_name (\"%s\")\n", name);
-  /* We don't support configurable cursors */
-  return g_object_ref (GDK_MIR_DISPLAY (display)->cursor);
+  return _gdk_mir_cursor_new_for_name (display, name);
 }
 
 static GdkCursor *
@@ -495,7 +491,6 @@ static void
 gdk_mir_display_init (GdkMirDisplay *display)
 {
   display->event_source = _gdk_mir_event_source_new (GDK_DISPLAY (display));
-  display->cursor = _gdk_mir_cursor_new (GDK_DISPLAY (display), GDK_ARROW);
   display->keymap = _gdk_mir_keymap_new ();
 }
 

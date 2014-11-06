@@ -51,7 +51,11 @@ GdkDevice *_gdk_mir_pointer_new (GdkDeviceManager *device_manager, const gchar *
 
 void _gdk_mir_pointer_set_location (GdkDevice *pointer, gdouble x, gdouble y, GdkWindow *window, GdkModifierType mask);
 
-GdkCursor *_gdk_mir_cursor_new (GdkDisplay *display, GdkCursorType type);
+GdkCursor *_gdk_mir_cursor_new_for_type (GdkDisplay *display, GdkCursorType type);
+
+GdkCursor *_gdk_mir_cursor_new_for_name (GdkDisplay *display, const gchar *name);
+
+const gchar *_gdk_mir_cursor_get_name (GdkCursor *cursor);
 
 GdkWindowImpl *_gdk_mir_window_impl_new (void);
 
