@@ -1873,7 +1873,7 @@ column-header.button.dnd { // for treeview-like derive widgets
   background-clip: padding-box;
   background-image: none;
   border-style: solid;
-  -GtkRange-trough-border: 0;
+  -GtkRange-trough-border: 1;
   -GtkScrollbar-has-backward-stepper: false;
   -GtkScrollbar-has-forward-stepper: false;
   -GtkRange-slider-width: 13;
@@ -1886,25 +1886,61 @@ column-header.button.dnd { // for treeview-like derive widgets
   .button {
     border: none;
   }
-  &.trough { @extend .scrollbars-junction; }
-  &.slider {
+
+  .trough {
+    @extend .scrollbars-junction;
+    &.right { border-right: 1px solid $borders_color; }
+  }
+
+  .slider {
     border-radius: 20px;
     border: 3px solid transparent; //margin :/
     background-color: mix($bg_color, $fg_color, 70%);
-    &:hover {
-      background-color: mix($bg_color, $fg_color, 50%);
-    }
-    &:prelight:active {
-      background-color: $selected_bg_color;
-    }
+
+    &:hover { background-color: mix($bg_color, $fg_color, 50%); }
+
+    &:prelight:active { background-color: $selected_bg_color; }
+
     &.fine-tune {
       border-width: 5px;
-      &:prelight:active {
-        background-color: $selected_bg_color;
-      }
+      &:prelight:active { background-color: $selected_bg_color; }
     }
-    &:backdrop, &:insensitive {
+
+    &:backdrop,
+    &:insensitive {
       background-color: mix($bg_color, $fg_color, 90%);
+    }
+  }
+
+  .sidebar &.overlay-indicator,
+  &.overlay-indicator {  // overlay scrollbars
+    -GtkRange-slider-width: 8px;
+
+    .slider {
+      border-width: 2px;
+      background-color: transparentize($fg_color, 0.8);
+    }
+
+    .trough {
+      background-color: transparent;
+    }
+
+    &.hovering,
+    &.dragging {
+      -GtkRange-slider-width: 15px;
+
+      .slider { 
+        border-width: 3px;
+        background-color: transparentize($fg_color, 0.7);
+        &:active { background-color: $fg_color; }
+      }
+
+      .trough {
+        border: none;     // to override sidebar styling
+        border-radius: 0; //
+        background-color: if($variant == 'light', transparentize($fg_color, 0.9),
+                                                  transparentize($fg_color, 0.95));
+      }
     }
   }
 }
@@ -3165,26 +3201,4 @@ GtkVolumeButton.button { padding: 8px; }
 
 .monospace {
   font: Monospace;
-}
-
-/* Overlay scrollbars */
-
-.scrollbar.overlay-indicator.dragging,
-.scrollbar.overlay-indicator.hovering {
-  -GtkRange-slider-width: 15;
-}
-
-.scrollbar.overlay-indicator.dragging.trough,
-.scrollbar.overlay-indicator.hovering.trough {
-  background-color: transparentize(black, 0.9);
-}
-
-.sidebar .scrollbar.overlay-indicator,
-.scrollbar.overlay-indicator {
-  -GtkRange-slider-width: 10;
-}
-
-.sidebar .scrollbar.overlay-indicator .trough,
-.scrollbar.overlay-indicator.trough {
-  background-color: transparent;
 }
