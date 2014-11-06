@@ -1697,6 +1697,7 @@ gtk_header_bar_set_child_property (GtkContainer *container,
     case CHILD_PROP_PACK_TYPE:
       child->pack_type = g_value_get_enum (value);
       _gtk_header_bar_update_separator_visibility (bar);
+      gtk_widget_queue_resize (widget);
       break;
 
     case CHILD_PROP_POSITION:
