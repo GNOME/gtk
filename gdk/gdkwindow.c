@@ -287,15 +287,10 @@ create_surface_accumulator (GSignalInvocationHint *ihint,
 
 static GQuark quark_pointer_window = 0;
 
-static gboolean always_use_gl = FALSE;
-
 static void
 gdk_window_class_init (GdkWindowClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
-
-  if (g_getenv ("GDK_ALWAYS_USE_GL"))
-    always_use_gl = TRUE;
 
   parent_class = g_type_class_peek_parent (klass);
 
@@ -1424,7 +1419,7 @@ gdk_window_new (GdkWindow     *parent,
                     G_CALLBACK (device_removed_cb), window);
 
 
-  if (always_use_gl)
+  if ((_gdk_gl_flags & (GDK_GL_FLAGS_ALWAYS | GDK_GL_FLAGS_DISABLE)) == GDK_GL_FLAGS_ALWAYS)
     {
       GError *error = NULL;
 
@@ -2730,7 +2725,7 @@ gdk_window_ref_impl_surface (GdkWindow *window)
 GdkGLContext *
 gdk_window_get_paint_gl_context (GdkWindow *window, GError **error)
 {
-  if (_gdk_debug_flags & GDK_DEBUG_NOGL)
+  if (_gdk_gl_flags & GDK_GL_FLAGS_DISABLE)
     {
       g_set_error_literal (error, GDK_GL_ERROR,
                            GDK_GL_ERROR_NOT_AVAILABLE,

@@ -85,9 +85,16 @@ typedef enum {
   GDK_DEBUG_EVENTLOOP     = 1 << 10,
   GDK_DEBUG_FRAMES        = 1 << 11,
   GDK_DEBUG_SETTINGS      = 1 << 12,
-  GDK_DEBUG_NOGL          = 1 << 13,
-  GDK_DEBUG_OPENGL        = 1 << 14
+  GDK_DEBUG_OPENGL        = 1 << 13,
 } GdkDebugFlag;
+
+typedef enum {
+  GDK_GL_FLAGS_DISABLE                = 1 << 0,
+  GDK_GL_FLAGS_ALWAYS                 = 1 << 1,
+  GDK_GL_FLAGS_SOFTWARE_DRAW_GL       = 1 << 2,
+  GDK_GL_FLAGS_SOFTWARE_DRAW_SURFACE  = 1 << 3,
+} GdkGLFlags;
+
 
 typedef enum {
   GDK_RENDERING_MODE_SIMILAR = 0,
@@ -99,6 +106,7 @@ extern GList            *_gdk_default_filters;
 extern GdkWindow        *_gdk_parent_root;
 
 extern guint _gdk_debug_flags;
+extern guint _gdk_gl_flags;
 extern GdkRenderingMode    _gdk_rendering_mode;
 
 #ifdef G_ENABLE_DEBUG

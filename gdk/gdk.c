@@ -134,6 +134,14 @@ static GMutex gdk_threads_mutex;
 static GCallback gdk_threads_lock = NULL;
 static GCallback gdk_threads_unlock = NULL;
 
+static const GDebugKey gdk_gl_keys[] = {
+  {"disable",               GDK_GL_FLAGS_DISABLE},
+  {"always",                GDK_GL_FLAGS_ALWAYS},
+  {"software-draw",         GDK_GL_FLAGS_SOFTWARE_DRAW_GL | GDK_GL_FLAGS_SOFTWARE_DRAW_SURFACE},
+  {"software-draw-gl",      GDK_GL_FLAGS_SOFTWARE_DRAW_GL},
+  {"software-draw-surface", GDK_GL_FLAGS_SOFTWARE_DRAW_SURFACE},
+};
+
 #ifdef G_ENABLE_DEBUG
 static const GDebugKey gdk_debug_keys[] = {
   {"events",        GDK_DEBUG_EVENTS},
@@ -149,7 +157,6 @@ static const GDebugKey gdk_debug_keys[] = {
   {"eventloop",     GDK_DEBUG_EVENTLOOP},
   {"frames",        GDK_DEBUG_FRAMES},
   {"settings",      GDK_DEBUG_SETTINGS},
-  {"nogl",          GDK_DEBUG_NOGL},
   {"opengl",        GDK_DEBUG_OPENGL},
 };
 
@@ -248,6 +255,7 @@ void
 gdk_pre_parse_libgtk_only (void)
 {
   const char *rendering_mode;
+  const gchar *gl_string;
 
   gdk_initialized = TRUE;
 
@@ -267,6 +275,12 @@ gdk_pre_parse_libgtk_only (void)
                                               G_N_ELEMENTS (gdk_debug_keys));
   }
 #endif  /* G_ENABLE_DEBUG */
+
+  gl_string = getenv("GDK_GL");
+  if (gl_string != NULL)
+    _gdk_gl_flags = g_parse_debug_string (gl_string,
+                                          (GDebugKey *) gdk_gl_keys,
+                                          G_N_ELEMENTS (gdk_gl_keys));
 
   if (getenv ("GDK_NATIVE_WINDOWS"))
     {
