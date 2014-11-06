@@ -3291,8 +3291,7 @@ gtk_tree_view_multipress_gesture_pressed (GtkGestureMultiPress *gesture,
       tree_view->priv->extend_selection_pressed = FALSE;
     }
 
-  if (button == GDK_BUTTON_PRIMARY &&
-      (n_press == 2 || (n_press == 1 && tree_view->priv->activate_on_single_click)))
+  if (button == GDK_BUTTON_PRIMARY && n_press == 2)
     gtk_tree_view_row_activated (tree_view, path, column);
   else
     {
