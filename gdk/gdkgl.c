@@ -462,8 +462,6 @@ gdk_cairo_draw_from_gl (cairo_t              *cr,
       glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
       glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
       glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-      glFramebufferTexture2DEXT (GL_FRAMEBUFFER_EXT, GL_COLOR_ATTACHMENT0_EXT,
-                                 GL_TEXTURE_2D, source, 0);
 
       glEnable (GL_SCISSOR_TEST);
       glEnable (GL_TEXTURE_2D);
