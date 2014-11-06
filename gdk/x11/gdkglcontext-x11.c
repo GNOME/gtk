@@ -380,11 +380,10 @@ glx_pixmap_get (cairo_surface_t *surface)
 }
 
 static gboolean
-gdk_x11_gl_context_texture_from_surface (GdkGLContext *context,
+gdk_x11_gl_context_texture_from_surface (GdkGLContext *paint_context,
 					 cairo_surface_t *surface,
 					 cairo_region_t *region)
 {
-  GdkGLContext *current;
   GdkGLXPixmap *glx_pixmap;
   double device_x_offset, device_y_offset;
   cairo_rectangle_int_t rect;
@@ -405,11 +404,9 @@ gdk_x11_gl_context_texture_from_surface (GdkGLContext *context,
   if (glx_pixmap == NULL)
     return FALSE;
 
-  current = gdk_gl_context_get_current ();
+  use_texture_rectangle = gdk_gl_context_use_texture_rectangle (paint_context);
 
-  use_texture_rectangle = gdk_gl_context_use_texture_rectangle (current);
-
-  window = gdk_gl_context_get_window (current)->impl_window;
+  window = gdk_gl_context_get_window (paint_context)->impl_window;
   window_scale = gdk_window_get_scale_factor (window);
   window_height = gdk_window_get_height (window);
 
