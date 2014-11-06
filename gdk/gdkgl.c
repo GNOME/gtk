@@ -88,6 +88,8 @@ gdk_gl_texture_quad (float x1, float y1,
  * For #GL_RENDERBUFFER the code will always fall back to software for buffers
  * with alpha components, so make sure you use #GL_TEXTURE if using alpha.
  *
+ * Calling this may change the current GL context.
+ *
  * Since: 3.16
  */
 void
