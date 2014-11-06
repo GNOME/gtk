@@ -50,7 +50,7 @@ get_vertex_type_name (int type)
   return "unknown";
 }
 
-guint
+static guint
 create_shader (int type, const char const *code)
 {
   guint shader;
@@ -82,7 +82,7 @@ create_shader (int type, const char const *code)
   return shader;
 }
 
-guint
+static guint
 make_program (const char const *vertex_shader_code, const char const *fragment_shader_code)
 {
   guint program, vertex_shader, fragment_shader;
