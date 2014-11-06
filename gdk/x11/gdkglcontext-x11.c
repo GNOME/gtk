@@ -157,6 +157,8 @@ gdk_x11_window_invalidate_for_new_frame (GdkWindow      *window,
 
   buffer_age = 0;
 
+  context_x11->do_blit_swap = FALSE;
+
   if (display_x11->has_glx_buffer_age)
     {
       gdk_gl_context_make_current (window->gl_paint_context);
@@ -164,9 +166,20 @@ gdk_x11_window_invalidate_for_new_frame (GdkWindow      *window,
 		       GLX_BACK_BUFFER_AGE_EXT, &buffer_age);
     }
 
+
   invalidate_all = FALSE;
   if (buffer_age == 0 || buffer_age >= 4)
-    invalidate_all = TRUE;
+    {
+      cairo_rectangle_int_t whole_window = { 0, 0, gdk_window_get_width (window), gdk_window_get_height (window) };
+
+      if (gdk_gl_context_has_framebuffer_blit (window->gl_paint_context) &&
+          cairo_region_contains_rectangle (update_area, &whole_window) != CAIRO_REGION_OVERLAP_IN)
+        {
+          context_x11->do_blit_swap = TRUE;
+        }
+      else
+        invalidate_all = TRUE;
+    }
   else
     {
       if (buffer_age >= 2)
@@ -197,6 +210,25 @@ gdk_x11_window_invalidate_for_new_frame (GdkWindow      *window,
       cairo_region_union_rectangle (update_area, &window_rect);
     }
 
+}
+
+static void
+gdk_gl_blit_region (GdkWindow *window, cairo_region_t *region)
+{
+  int n_rects, i;
+  int scale = gdk_window_get_scale_factor (window);
+  int wh = gdk_window_get_height (window);
+  cairo_rectangle_int_t rect;
+
+  n_rects = cairo_region_num_rectangles (region);
+  for (i = 0; i < n_rects; i++)
+    {
+      cairo_region_get_rectangle (region, i, &rect);
+      glScissor (rect.x * scale, (wh - rect.y - rect.height) * scale, rect.width * scale, rect.height * scale);
+      glBlitFramebuffer (rect.x * scale, (wh - rect.y - rect.height) * scale, (rect.x + rect.width) * scale, (wh - rect.y) * scale,
+                         rect.x * scale, (wh - rect.y - rect.height) * scale, (rect.x + rect.width) * scale, (wh - rect.y) * scale,
+                         GL_COLOR_BUFFER_BIT, GL_NEAREST);
+    }
 }
 
 static void
@@ -257,7 +289,19 @@ gdk_x11_gl_context_end_frame (GdkGLContext *context,
         }
     }
 
-  glXSwapBuffers (dpy, drawable);
+  if (context_x11->do_blit_swap)
+    {
+      glDrawBuffer(GL_FRONT);
+      glReadBuffer(GL_BACK);
+      gdk_gl_blit_region (window, painted);
+      glDrawBuffer(GL_BACK);
+      glFlush();
+
+      if (gdk_gl_context_has_frame_terminator (context))
+        glFrameTerminatorGREMEDY ();
+    }
+  else
+    glXSwapBuffers (dpy, drawable);
 
   if (context_x11->do_frame_sync && info != NULL && display_x11->has_glx_video_sync)
     glXGetVideoSyncSGI (&info->last_frame_counter);

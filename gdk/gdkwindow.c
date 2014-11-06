@@ -3108,9 +3108,6 @@ gdk_window_end_paint (GdkWindow *window)
           gdk_gl_context_end_frame (window->gl_paint_context,
                                     window->current_paint.region,
                                     window->active_update_area);
-
-          if (epoxy_has_gl_extension ("GL_GREMEDY_frame_terminator"))
-            glFrameTerminatorGREMEDY();
         }
       else
         {

@@ -49,6 +49,7 @@ struct _GdkX11GLContext
   guint is_direct : 1;
   guint do_frame_sync : 1;
 
+  guint do_blit_swap : 1;
 };
 
 struct _GdkX11GLContextClass
