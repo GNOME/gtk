@@ -103,7 +103,7 @@ gdk_cairo_draw_from_gl (cairo_t              *cr,
                         int                   width,
                         int                   height)
 {
-  GdkGLContext *context;
+  GdkGLContext *paint_context;
   cairo_surface_t *image;
   cairo_matrix_t matrix;
   int dx, dy, window_scale;
@@ -119,8 +119,8 @@ gdk_cairo_draw_from_gl (cairo_t              *cr,
 
   window_scale = gdk_window_get_scale_factor (impl_window);
 
-  context = gdk_window_get_paint_gl_context (window, NULL);
-  if (context == NULL)
+  paint_context = gdk_window_get_paint_gl_context (window, NULL);
+  if (paint_context == NULL)
     {
       g_warning ("gdk_cairo_draw_gl_render_buffer failed - no paint context");
       return;
@@ -128,8 +128,8 @@ gdk_cairo_draw_from_gl (cairo_t              *cr,
 
   clip_region = gdk_cairo_region_from_clip (cr);
 
-  gdk_gl_context_make_current (context);
-  paint_data = gdk_gl_context_get_paint_data (context);
+  gdk_gl_context_make_current (paint_context);
+  paint_data = gdk_gl_context_get_paint_data (paint_context);
 
   if (paint_data->tmp_framebuffer == 0)
     glGenFramebuffersEXT (1, &paint_data->tmp_framebuffer);
@@ -415,11 +415,12 @@ gdk_cairo_draw_from_gl (cairo_t              *cr,
     cairo_region_destroy (clip_region);
 }
 
+/* This is always called with the paint context current */
 void
 gdk_gl_texture_from_surface (cairo_surface_t *surface,
 			     cairo_region_t  *region)
 {
-  GdkGLContext *current;
+  GdkGLContext *paint_context;
   cairo_surface_t *image;
   double device_x_offset, device_y_offset;
   cairo_rectangle_int_t rect, e;
@@ -433,16 +434,16 @@ gdk_gl_texture_from_surface (cairo_surface_t *surface,
   gboolean use_texture_rectangle;
   guint target;
 
-  current = gdk_gl_context_get_current ();
-  if (current &&
-      GDK_GL_CONTEXT_GET_CLASS (current)->texture_from_surface &&
-      GDK_GL_CONTEXT_GET_CLASS (current)->texture_from_surface (current, surface, region))
+  paint_context = gdk_gl_context_get_current ();
+  if (paint_context &&
+      GDK_GL_CONTEXT_GET_CLASS (paint_context)->texture_from_surface &&
+      GDK_GL_CONTEXT_GET_CLASS (paint_context)->texture_from_surface (paint_context, surface, region))
     return;
 
   /* Software fallback */
-  use_texture_rectangle = gdk_gl_context_use_texture_rectangle (current);
+  use_texture_rectangle = gdk_gl_context_use_texture_rectangle (paint_context);
 
-  window = gdk_gl_context_get_window (current);
+  window = gdk_gl_context_get_window (paint_context);
   window_scale = gdk_window_get_scale_factor (window);
   window_height = gdk_window_get_height (window);
 
