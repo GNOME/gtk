@@ -18,7 +18,6 @@
 #include "config.h"
 #include "gtkpopovermenu.h"
 #include "gtkstack.h"
-#include "gtkbox.h"
 #include "gtkintl.h"
 
 
