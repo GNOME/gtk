@@ -374,6 +374,9 @@ void            gtk_entry_set_tabs                           (GtkEntry          
 GDK_AVAILABLE_IN_3_10
 PangoTabArray  *gtk_entry_get_tabs                           (GtkEntry             *entry);
 
+GDK_AVAILABLE_IN_3_16
+void           gtk_entry_grab_focus_without_selecting        (GtkEntry             *entry);
+
 G_END_DECLS
 
 #endif /* __GTK_ENTRY_H__ */

@@ -1196,6 +1196,7 @@ gtk_entry_get_input_purpose
 GtkInputHints
 gtk_entry_set_input_hints
 gtk_entry_get_input_hints
+gtk_entry_grab_focus_without_selecting
 
 <SUBSECTION Standard>
 GTK_ENTRY
