@@ -1872,87 +1872,157 @@ column-header.button.dnd { // for treeview-like derive widgets
  **************/
 
 .scrollbar {
-  background-clip: padding-box;
-  background-image: none;
-  border-style: solid;
+  -GtkRange-slider-width: 13;
   -GtkRange-trough-border: 1;
   -GtkScrollbar-has-backward-stepper: false;
   -GtkScrollbar-has-forward-stepper: false;
-  -GtkRange-slider-width: 13;
   -GtkScrollbar-min-slider-length: 42; // minimum size for the slider.
                                        // sadly can't be in '.slider'
                                        // where it belongs
-
   -GtkRange-stepper-spacing: 0;
   -GtkRange-trough-under-steppers: 1;
+
   .button {
     border: none;
   }
 
+  // trough coloring
   .trough {
-    @extend .scrollbars-junction;
-    &.right { border-right: 1px solid $borders_color; }
+    background-color: $scrollbar_bg_color;
+    border: 1px none $borders_color;
+
+    &:backdrop {
+      background-color: $backdrop_scrollbar_bg_color;
+      border-color: $backdrop_borders_color;
+    }
   }
 
+  // slider coloring
+  %scrollbar_slider_coloring,
   .slider {
-    border-radius: 20px;
-    border: 3px solid transparent; //margin :/
+    border-color: transparent;
+    border-style: solid;
     background-color: mix($bg_color, $fg_color, 70%);
+    background-clip: padding-box; // needed since we use the borders as margins
 
     &:hover { background-color: mix($bg_color, $fg_color, 50%); }
 
     &:prelight:active { background-color: $selected_bg_color; }
 
-    &.fine-tune {
-      border-width: 5px;
-      &:prelight:active { background-color: $selected_bg_color; }
-    }
+    &:backdrop { background-color: mix($backdrop_bg_color, $backdrop_fg_color, 60%); }
 
-    &:backdrop,
     &:insensitive {
-      background-color: mix($bg_color, $fg_color, 90%);
+      background-color: transparent;
     }
   }
 
-  .sidebar &.overlay-indicator,
-  &.overlay-indicator {  // overlay scrollbars
+  &.overlay-indicator { // Overlay scrolling indicator
     -GtkRange-slider-width: 8px;
 
-    .slider {
+    &.vertical .slider,
+    &.horizontal .slider {
+      background-color: transparentize($fg_color, 0.7);
       border-width: 2px;
-      background-color: transparentize($fg_color, 0.8);
+      border-radius: 30px;
     }
 
     .trough {
+      border-color: transparent;
       background-color: transparent;
     }
 
-    &.hovering,
-    &.dragging {
-      -GtkRange-slider-width: 15px;
+    &.dragging,
+    &.hovering {
+      -GtkRange-slider-width: 13;
 
-      .slider { 
-        border-width: 3px;
-        background-color: transparentize($fg_color, 0.7);
-        &:active { background-color: $fg_color; }
+      &.vertical {
+        @extend %scrollbar_vertical_sizing;
+
+        .slider {
+          @extend %scrollbar_slider_coloring;
+
+          border-width: 1px 1px 1px 2px; // see comments in the sizing part
+          &:dir(rtl) { border-width: 1px 2px 1px 1px; }
+        }
+      }
+
+      &.horizontal {
+        @extend %scrollbar_horizontal_sizing;
+
+        .slider {
+          @extend %scrollbar_slider_coloring;
+
+          border-width: 2px 1px 1px 1px;
+         }
       }
 
       .trough {
-        border: none;     // to override sidebar styling
-        border-radius: 0; //
-        background-color: if($variant == 'light', transparentize($fg_color, 0.9),
-                                                  transparentize($fg_color, 0.95));
+        border-color: transparentize($borders_color, 0.3);
+        background-color: transparentize($scrollbar_bg_color, 0.3);
       }
     }
   }
-}
 
+  // sizing
+  %scrollbar_vertical_sizing,
+  &.vertical {
+    .slider {
+      border-width: 3px 3px 3px 4px; // This is used as a margin actually, it's uneven since the
+                                     // trough border needs to be compensated
+      border-radius: 6px;
+      border-top-left-radius: 7px 6px;    // uneven vertical/horizontal radius since borders are uneven
+      border-bottom-left-radius: 7px 6px; //
+
+      &.fine-tune { border-width: 4px 4px 4px 5px; }
+
+      &:dir(rtl) {
+        border-width: 3px 4px 3px 3px;
+        border-radius: 6px;
+        border-top-right-radius: 7px 6px;
+        border-bottom-right-radius: 7px 6px;
+
+        &.fine-tune { border-width: 4px 5px 4px 4px; }
+      }
+    }
+
+    .trough {
+      border-left-style: solid;
+
+      &:dir(rtl) {
+        border-left-style: none;
+        border-right-style: solid;
+      }
+    }
+  }
+
+  %scrollbar_horizontal_sizing,
+  &.horizontal {
+    .slider {
+      border-width: 4px 3px 3px 3px;
+      border-radius: 6px;
+      border-top-right-radius: 7px 5px; // This is actually bogus, to workaround a gtk+ border radius drawing issue
+      border-top-left-radius: 6px 7px;
+
+      &.fine-tune { border-width: 5px 4px 4px 4px; }
+    }
+
+    .trough { border-top-style: solid; }
+  }
+}
 
 .scrollbars-junction,
 .scrollbars-junction.frame { // the small square between two scrollbars
   border-color: transparent;
-  background-color: darken($bg_color, 5%);
-  &:backdrop { background-color: transparent; }
+  // the border image is used to add the missing dot between the borders, details, details, details...
+  border-image: linear-gradient(to bottom, $borders_color 1px, transparent 1px) 0 0 0 1 / 0 1px stretch;
+  background-color: $scrollbar_bg_color;
+
+  &:dir(rtl) { border-image-slice: 0 1 0 0; }
+
+  &:backdrop {
+    border-image-source: linear-gradient(to bottom, $backdrop_borders_color 1px, transparent 1px);
+    background-color: $backdrop_scrollbar_bg_color;
+  }
 }
 
 
@@ -2821,7 +2891,7 @@ GtkFileChooserDialog {
 .sidebar {
   border: none;
   background-color: $sidebar_bg_color;
-
+/*
   .scrollbar {
     &.trough {
       background-color: darken($bg_color,10%);
@@ -2835,7 +2905,7 @@ GtkFileChooserDialog {
       &:hover { background-color: lighten($bg_color, 10%); }
     }
   }
-
+*/
   &:backdrop {
     background-color: $backdrop_sidebar_bg_color;
   }

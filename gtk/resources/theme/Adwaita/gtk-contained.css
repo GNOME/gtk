@@ -2404,13 +2404,10 @@ column-header .titlebar .button.titlebutton,
  * Scrollbars *
  **************/
 .scrollbar {
-  background-clip: padding-box;
-  background-image: none;
-  border-style: solid;
+  -GtkRange-slider-width: 13;
   -GtkRange-trough-border: 1;
   -GtkScrollbar-has-backward-stepper: false;
   -GtkScrollbar-has-forward-stepper: false;
-  -GtkRange-slider-width: 13;
   -GtkScrollbar-min-slider-length: 42;
   -GtkRange-stepper-spacing: 0;
   -GtkRange-trough-under-steppers: 1; }
@@ -2418,50 +2415,91 @@ column-header .titlebar .button.titlebutton,
   .scrollbar .titlebar .button.titlebutton,
   .titlebar .scrollbar .button.titlebutton {
     border: none; }
-  .scrollbar .trough.right {
-    border-right: 1px solid #a1a1a1; }
+  .scrollbar .trough {
+    background-color: #dbdbdb;
+    border: 1px none #a1a1a1; }
+    .scrollbar .trough:backdrop {
+      background-color: #e5e5e5;
+      border-color: #a8a8a8; }
+  .scrollbar.overlay-indicator.dragging.vertical .slider, .scrollbar.overlay-indicator.hovering.vertical .slider, .scrollbar.overlay-indicator.dragging.horizontal .slider, .scrollbar.overlay-indicator.hovering.horizontal .slider,
   .scrollbar .slider {
-    border-radius: 20px;
-    border: 3px solid transparent;
-    background-color: #b3b5b6; }
+    border-color: transparent;
+    border-style: solid;
+    background-color: #b3b5b6;
+    background-clip: padding-box; }
+    .scrollbar.overlay-indicator.dragging.vertical .slider:hover, .scrollbar.overlay-indicator.hovering.vertical .slider:hover, .scrollbar.overlay-indicator.dragging.horizontal .slider:hover, .scrollbar.overlay-indicator.hovering.horizontal .slider:hover,
     .scrollbar .slider:hover {
       background-color: #8d9091; }
+    .scrollbar.overlay-indicator.dragging.vertical .slider:prelight:active, .scrollbar.overlay-indicator.hovering.vertical .slider:prelight:active, .scrollbar.overlay-indicator.dragging.horizontal .slider:prelight:active, .scrollbar.overlay-indicator.hovering.horizontal .slider:prelight:active,
     .scrollbar .slider:prelight:active {
       background-color: #4a90d9; }
-    .scrollbar .slider.fine-tune {
-      border-width: 5px; }
-      .scrollbar .slider.fine-tune:prelight:active {
-        background-color: #4a90d9; }
-    .scrollbar .slider:backdrop, .scrollbar .slider:insensitive {
-      background-color: #d9dada; }
-  .sidebar .scrollbar.overlay-indicator, .scrollbar.overlay-indicator {
-    -GtkRange-slider-width: 8px; }
-    .sidebar .scrollbar.overlay-indicator .slider, .scrollbar.overlay-indicator .slider {
-      border-width: 2px;
-      background-color: rgba(46, 52, 54, 0.2); }
-    .sidebar .scrollbar.overlay-indicator .trough, .scrollbar.overlay-indicator .trough {
+    .scrollbar.overlay-indicator.dragging.vertical .slider:backdrop, .scrollbar.overlay-indicator.hovering.vertical .slider:backdrop, .scrollbar.overlay-indicator.dragging.horizontal .slider:backdrop, .scrollbar.overlay-indicator.hovering.horizontal .slider:backdrop,
+    .scrollbar .slider:backdrop {
+      background-color: #c6c7c8; }
+    .scrollbar.overlay-indicator.dragging.vertical .slider:insensitive, .scrollbar.overlay-indicator.hovering.vertical .slider:insensitive, .scrollbar.overlay-indicator.dragging.horizontal .slider:insensitive, .scrollbar.overlay-indicator.hovering.horizontal .slider:insensitive,
+    .scrollbar .slider:insensitive {
       background-color: transparent; }
-    .sidebar .scrollbar.overlay-indicator.hovering, .sidebar .scrollbar.overlay-indicator.dragging, .scrollbar.overlay-indicator.hovering, .scrollbar.overlay-indicator.dragging {
-      -GtkRange-slider-width: 15px; }
-      .sidebar .scrollbar.overlay-indicator.hovering .slider, .sidebar .scrollbar.overlay-indicator.dragging .slider, .scrollbar.overlay-indicator.hovering .slider, .scrollbar.overlay-indicator.dragging .slider {
-        border-width: 3px;
-        background-color: rgba(46, 52, 54, 0.3); }
-        .sidebar .scrollbar.overlay-indicator.hovering .slider:active, .sidebar .scrollbar.overlay-indicator.dragging .slider:active, .scrollbar.overlay-indicator.hovering .slider:active, .scrollbar.overlay-indicator.dragging .slider:active {
-          background-color: #2e3436; }
-      .sidebar .scrollbar.overlay-indicator.hovering .trough, .sidebar .scrollbar.overlay-indicator.dragging .trough, .scrollbar.overlay-indicator.hovering .trough, .scrollbar.overlay-indicator.dragging .trough {
-        border: none;
-        border-radius: 0;
-        background-color: rgba(46, 52, 54, 0.1); }
+  .scrollbar.overlay-indicator {
+    -GtkRange-slider-width: 8px; }
+    .scrollbar.overlay-indicator.vertical .slider, .scrollbar.overlay-indicator.horizontal .slider {
+      background-color: rgba(46, 52, 54, 0.3);
+      border-width: 2px;
+      border-radius: 30px; }
+    .scrollbar.overlay-indicator .trough {
+      border-color: transparent;
+      background-color: transparent; }
+    .scrollbar.overlay-indicator.dragging, .scrollbar.overlay-indicator.hovering {
+      -GtkRange-slider-width: 13; }
+      .scrollbar.overlay-indicator.dragging.vertical .slider, .scrollbar.overlay-indicator.hovering.vertical .slider {
+        border-width: 1px 1px 1px 2px; }
+        .scrollbar.overlay-indicator.dragging.vertical .slider:dir(rtl), .scrollbar.overlay-indicator.hovering.vertical .slider:dir(rtl) {
+          border-width: 1px 2px 1px 1px; }
+      .scrollbar.overlay-indicator.dragging.horizontal .slider, .scrollbar.overlay-indicator.hovering.horizontal .slider {
+        border-width: 2px 1px 1px 1px; }
+      .scrollbar.overlay-indicator.dragging .trough, .scrollbar.overlay-indicator.hovering .trough {
+        border-color: rgba(161, 161, 161, 0.7);
+        background-color: rgba(219, 219, 219, 0.7); }
+  .scrollbar .scrollbar.overlay-indicator.dragging.vertical .slider, .scrollbar .scrollbar.overlay-indicator.hovering.vertical .slider, .scrollbar.vertical .slider {
+    border-width: 3px 3px 3px 4px;
+    border-radius: 6px;
+    border-top-left-radius: 7px 6px;
+    border-bottom-left-radius: 7px 6px; }
+    .scrollbar .scrollbar.overlay-indicator.dragging.vertical .slider.fine-tune, .scrollbar .scrollbar.overlay-indicator.hovering.vertical .slider.fine-tune, .scrollbar.vertical .slider.fine-tune {
+      border-width: 4px 4px 4px 5px; }
+    .scrollbar .scrollbar.overlay-indicator.dragging.vertical .slider:dir(rtl), .scrollbar .scrollbar.overlay-indicator.hovering.vertical .slider:dir(rtl), .scrollbar.vertical .slider:dir(rtl) {
+      border-width: 3px 4px 3px 3px;
+      border-radius: 6px;
+      border-top-right-radius: 7px 6px;
+      border-bottom-right-radius: 7px 6px; }
+      .scrollbar .scrollbar.overlay-indicator.dragging.vertical .slider:dir(rtl).fine-tune, .scrollbar .scrollbar.overlay-indicator.hovering.vertical .slider:dir(rtl).fine-tune, .scrollbar.vertical .slider:dir(rtl).fine-tune {
+        border-width: 4px 5px 4px 4px; }
+  .scrollbar .scrollbar.overlay-indicator.dragging.vertical .trough, .scrollbar .scrollbar.overlay-indicator.hovering.vertical .trough, .scrollbar.vertical .trough {
+    border-left-style: solid; }
+    .scrollbar .scrollbar.overlay-indicator.dragging.vertical .trough:dir(rtl), .scrollbar .scrollbar.overlay-indicator.hovering.vertical .trough:dir(rtl), .scrollbar.vertical .trough:dir(rtl) {
+      border-left-style: none;
+      border-right-style: solid; }
+  .scrollbar .scrollbar.overlay-indicator.dragging.horizontal .slider, .scrollbar .scrollbar.overlay-indicator.hovering.horizontal .slider, .scrollbar.horizontal .slider {
+    border-width: 4px 3px 3px 3px;
+    border-radius: 6px;
+    border-top-right-radius: 7px 5px;
+    border-top-left-radius: 6px 7px; }
+    .scrollbar .scrollbar.overlay-indicator.dragging.horizontal .slider.fine-tune, .scrollbar .scrollbar.overlay-indicator.hovering.horizontal .slider.fine-tune, .scrollbar.horizontal .slider.fine-tune {
+      border-width: 5px 4px 4px 4px; }
+  .scrollbar .scrollbar.overlay-indicator.dragging.horizontal .trough, .scrollbar .scrollbar.overlay-indicator.hovering.horizontal .trough, .scrollbar.horizontal .trough {
+    border-top-style: solid; }
 
-.scrollbars-junction, .scrollbar .trough,
-.scrollbars-junction.frame,
-.scrollbar .frame.trough {
+.scrollbars-junction,
+.scrollbars-junction.frame {
   border-color: transparent;
-  background-color: #e0e0e0; }
-  .scrollbars-junction:backdrop, .scrollbar .trough:backdrop,
-  .scrollbars-junction.frame:backdrop,
-  .scrollbar .frame.trough:backdrop {
-    background-color: transparent; }
+  border-image: linear-gradient(to bottom, #a1a1a1 1px, transparent 1px) 0 0 0 1/0 1px stretch;
+  background-color: #dbdbdb; }
+  .scrollbars-junction:dir(rtl),
+  .scrollbars-junction.frame:dir(rtl) {
+    border-image-slice: 0 1 0 0; }
+  .scrollbars-junction:backdrop,
+  .scrollbars-junction.frame:backdrop {
+    border-image-source: linear-gradient(to bottom, #a8a8a8 1px, transparent 1px);
+    background-color: #e5e5e5; }
 
 /**********
  * Switch *
@@ -4098,16 +4136,22 @@ GtkFileChooserDialog .dialog-action-box {
  ***********/
 .sidebar {
   border: none;
-  background-color: #fafafa; }
-  .sidebar .scrollbar.trough {
-    background-color: lightgray;
-    border-radius: 6px;
-    border-width: 2px;
-    border-color: transparent; }
-  .sidebar .scrollbar.slider {
-    background-color: #fafafa; }
-    .sidebar .scrollbar.slider:hover {
-      background-color: white; }
+  background-color: #fafafa;
+  /*
+    .scrollbar {
+      &.trough {
+        background-color: darken($bg_color,10%);
+        border-radius: 6px;
+        border-width: 2px;
+        border-color: transparent;
+      }
+  
+      &.slider {
+        background-color: $sidebar_bg_color;
+        &:hover { background-color: lighten($bg_color, 10%); }
+      }
+    }
+  */ }
   .sidebar:backdrop {
     background-color: #fafafa; }
   .sidebar:selected {
