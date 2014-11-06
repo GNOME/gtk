@@ -65,6 +65,11 @@ typedef struct {
   guint texture_quad_program;
   guint texture_quad_program_position_location;
   guint texture_quad_program_uv_location;
+  guint texture_quad_program_map_location;
+  guint texture_quad_rect_program;
+  guint texture_quad_rect_program_position_location;
+  guint texture_quad_rect_program_uv_location;
+  guint texture_quad_rect_program_map_location;
 } GdkGLContextPaintData;
 
 GdkGLContextPaintData *gdk_gl_context_get_paint_data (GdkGLContext *context);

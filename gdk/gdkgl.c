@@ -140,7 +140,10 @@ bind_vao (GdkGLContextPaintData *paint_data)
 }
 
 static void
-use_texture_program (GdkGLContextPaintData *paint_data)
+use_texture_2d_program (GdkGLContextPaintData *paint_data,
+                        guint *position_location,
+                        guint *uv_location,
+                        guint *map_location)
 {
   const char *vertex_shader_code =
     "#version 120\n"
@@ -165,6 +168,7 @@ use_texture_program (GdkGLContextPaintData *paint_data)
       paint_data->texture_quad_program = make_program (vertex_shader_code, fragment_shader_code);
       paint_data->texture_quad_program_position_location = glGetAttribLocation (paint_data->texture_quad_program, "position");
       paint_data->texture_quad_program_uv_location = glGetAttribLocation (paint_data->texture_quad_program, "uv");
+      paint_data->texture_quad_program_map_location = glGetUniformLocation (paint_data->texture_quad_program, "map");
     }
 
   if (paint_data->current_program != paint_data->texture_quad_program)
@@ -172,10 +176,59 @@ use_texture_program (GdkGLContextPaintData *paint_data)
       glUseProgram (paint_data->texture_quad_program);
       paint_data->current_program = paint_data->texture_quad_program;
     }
+
+  *position_location = paint_data->texture_quad_program_position_location;
+  *uv_location = paint_data->texture_quad_program_uv_location;
+  *map_location = paint_data->texture_quad_program_map_location;
 }
+
+static void
+use_texture_rect_program (GdkGLContextPaintData *paint_data,
+                          guint *position_location,
+                          guint *uv_location,
+                          guint *map_location)
+{
+  const char *vertex_shader_code =
+    "#version 120\n"
+    "uniform sampler2DRect map;"
+    "attribute vec2 position;\n"
+    "attribute vec2 uv;\n"
+    "varying vec2 vUv;\n"
+    "void main() {\n"
+    "  gl_Position = vec4(position, 0, 1);\n"
+    "  vUv = uv;\n"
+    "}\n";
+  const char *fragment_shader_code =
+    "#version 120\n"
+    "varying vec2 vUv;\n"
+    "uniform sampler2DRect map;\n"
+    "void main() {\n"
+    "  gl_FragColor = texture2DRect (map, vUv);\n"
+    "}\n";
+
+  if (paint_data->texture_quad_rect_program == 0)
+    {
+      paint_data->texture_quad_rect_program = make_program (vertex_shader_code, fragment_shader_code);
+      paint_data->texture_quad_rect_program_position_location = glGetAttribLocation (paint_data->texture_quad_rect_program, "position");
+      paint_data->texture_quad_rect_program_uv_location = glGetAttribLocation (paint_data->texture_quad_rect_program, "uv");
+      paint_data->texture_quad_rect_program_map_location = glGetUniformLocation (paint_data->texture_quad_rect_program, "map");
+    }
+
+  if (paint_data->current_program != paint_data->texture_quad_rect_program)
+    {
+      glUseProgram (paint_data->texture_quad_rect_program);
+      paint_data->current_program = paint_data->texture_quad_rect_program;
+    }
+
+  *position_location = paint_data->texture_quad_rect_program_position_location;
+  *uv_location = paint_data->texture_quad_rect_program_uv_location;
+  *map_location = paint_data->texture_quad_rect_program_map_location;
+}
+
 
 void
 gdk_gl_texture_quad (GdkGLContext *paint_context,
+                     guint texture_target,
                      float x1, float y1,
                      float x2, float y2,
                      float u1, float v1,
@@ -197,6 +250,7 @@ gdk_gl_texture_quad (GdkGLContext *paint_context,
     u1, v2,
     u1, v1,
   };
+  guint position_location, uv_location, map_location;
 
   bind_vao (paint_data);
 
@@ -206,19 +260,22 @@ gdk_gl_texture_quad (GdkGLContext *paint_context,
   if (paint_data->tmp_uv_buffer == 0)
     glGenBuffers(1, &paint_data->tmp_uv_buffer);
 
-  use_texture_program (paint_data);
+  if (texture_target == GL_TEXTURE_RECTANGLE_ARB)
+    use_texture_rect_program (paint_data, &position_location, &uv_location, &map_location);
+  else
+    use_texture_2d_program (paint_data, &position_location, &uv_location, &map_location);
 
   glActiveTexture (GL_TEXTURE0);
+  glUniform1i(map_location, 0); /* Use texture unit 0 */
+
   glEnableVertexAttribArray (0);
   glBindBuffer (GL_ARRAY_BUFFER, paint_data->tmp_vertex_buffer);
   glBufferData (GL_ARRAY_BUFFER, sizeof(vertex_buffer_data), vertex_buffer_data, GL_STREAM_DRAW);
-  glVertexAttribPointer (paint_data->texture_quad_program_position_location,
-                         2, GL_FLOAT, GL_FALSE, 0, NULL);
+  glVertexAttribPointer (position_location, 2, GL_FLOAT, GL_FALSE, 0, NULL);
   glEnableVertexAttribArray (1);
   glBindBuffer (GL_ARRAY_BUFFER, paint_data->tmp_uv_buffer);
   glBufferData (GL_ARRAY_BUFFER, sizeof(uv_buffer_data), uv_buffer_data, GL_STREAM_DRAW);
-  glVertexAttribPointer (paint_data->texture_quad_program_uv_location,
-                         2, GL_FLOAT, GL_FALSE, 0, NULL);
+  glVertexAttribPointer (uv_location, 2, GL_FLOAT, GL_FALSE, 0, NULL);
   glDrawArrays (GL_TRIANGLE_FAN, 0, 4);
   glDisableVertexAttribArray (0);
   glDisableVertexAttribArray (1);
@@ -497,6 +554,7 @@ gdk_cairo_draw_from_gl (cairo_t              *cr,
               int clipped_src_y = y + (height - dest.height - (dest.y - dy * window_scale));
 
               gdk_gl_texture_quad (paint_context,
+                                   GL_TEXTURE_2D,
                                    dest.x, FLIP_Y(dest.y),
                                    dest.x + dest.width, FLIP_Y(dest.y + dest.height),
                                    clipped_src_x / (float)texture_width, (clipped_src_y + dest.height) / (float)texture_height,
@@ -634,10 +692,10 @@ gdk_gl_texture_from_surface (cairo_surface_t *surface,
   glBindTexture (target, texture_id);
   glEnable (target);
 
-  glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-  glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-  glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-  glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+  glTexParameteri (target, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+  glTexParameteri (target, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+  glTexParameteri (target, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+  glTexParameteri (target, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 
   n_rects = cairo_region_num_rectangles (region);
   for (i = 0; i < n_rects; i++)
@@ -677,7 +735,7 @@ gdk_gl_texture_from_surface (cairo_surface_t *surface,
           vmax = 1.0;
         }
 
-      gdk_gl_texture_quad (paint_context,
+      gdk_gl_texture_quad (paint_context, target,
                            rect.x * window_scale, FLIP_Y(rect.y) * window_scale,
                            (rect.x + rect.width) * window_scale, FLIP_Y(rect.y + rect.height) * window_scale,
                            0, 0,

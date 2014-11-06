@@ -280,7 +280,7 @@ glx_pixmap_destroy (void *data)
 }
 
 static GdkGLXPixmap *
-glx_pixmap_get (cairo_surface_t *surface)
+glx_pixmap_get (cairo_surface_t *surface, guint texture_target)
 {
   Display *display = cairo_xlib_surface_get_display (surface);
   Screen *screen = cairo_xlib_surface_get_screen (surface);
@@ -324,12 +324,22 @@ glx_pixmap_get (cairo_surface_t *surface)
       glXGetFBConfigAttrib (display, fbconfigs[i],
                             GLX_BIND_TO_TEXTURE_TARGETS_EXT,
                             &value);
-      if ((value & (GLX_TEXTURE_RECTANGLE_BIT_EXT | GLX_TEXTURE_2D_BIT_EXT)) == 0)
-        continue;
-      if ((value & GLX_TEXTURE_2D_BIT_EXT))
-        target = GLX_TEXTURE_2D_EXT;
+      if (texture_target == GL_TEXTURE_2D)
+        {
+          if (value & GLX_TEXTURE_2D_BIT_EXT)
+            target = GLX_TEXTURE_2D_EXT;
+          else
+            continue;
+        }
+      else if (texture_target == GL_TEXTURE_RECTANGLE_ARB)
+        {
+          if (value & GLX_TEXTURE_RECTANGLE_BIT_EXT)
+            target = GLX_TEXTURE_RECTANGLE_EXT;
+          else
+            continue;
+        }
       else
-        target = GLX_TEXTURE_RECTANGLE_EXT;
+        continue;
 
       if (!with_alpha)
         {
@@ -400,11 +410,15 @@ gdk_x11_gl_context_texture_from_surface (GdkGLContext *paint_context,
   if (cairo_surface_get_type (surface) != CAIRO_SURFACE_TYPE_XLIB)
     return FALSE;
 
-  glx_pixmap = glx_pixmap_get (surface);
+  use_texture_rectangle = gdk_gl_context_use_texture_rectangle (paint_context);
+  if (use_texture_rectangle)
+    target = GL_TEXTURE_RECTANGLE_ARB;
+  else
+    target = GL_TEXTURE_2D;
+
+  glx_pixmap = glx_pixmap_get (surface, target);
   if (glx_pixmap == NULL)
     return FALSE;
-
-  use_texture_rectangle = gdk_gl_context_use_texture_rectangle (paint_context);
 
   window = gdk_gl_context_get_window (paint_context)->impl_window;
   window_scale = gdk_window_get_scale_factor (window);
@@ -421,19 +435,14 @@ gdk_x11_gl_context_texture_from_surface (GdkGLContext *paint_context,
   /* Ensure all the X stuff are synced before we read it back via texture-from-pixmap */
   glXWaitX();
 
-  if (use_texture_rectangle)
-    target = GL_TEXTURE_RECTANGLE_ARB;
-  else
-    target = GL_TEXTURE_2D;
-
   glGenTextures (1, &texture_id);
   glBindTexture (target, texture_id);
   glEnable (target);
 
-  glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-  glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-  glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-  glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+  glTexParameteri (target, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+  glTexParameteri (target, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+  glTexParameteri (target, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+  glTexParameteri (target, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 
   glXBindTexImageEXT (glx_pixmap->display, glx_pixmap->drawable,
 		      GLX_FRONT_LEFT_EXT, NULL);
@@ -466,7 +475,7 @@ gdk_x11_gl_context_texture_from_surface (GdkGLContext *paint_context,
           vscale = 1.0 / cairo_xlib_surface_get_height (surface);
         }
 
-      gdk_gl_texture_quad (paint_context,
+      gdk_gl_texture_quad (paint_context, target,
                            rect.x * window_scale, FLIP_Y(rect.y) * window_scale,
                            (rect.x + rect.width) * window_scale, FLIP_Y(rect.y + rect.height) * window_scale,
                            uscale * src_x, vscale * src_y,
