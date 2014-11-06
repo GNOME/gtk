@@ -359,7 +359,9 @@ gdk_gl_context_realize (GdkGLContext *context)
   has_npot = epoxy_has_gl_extension ("GL_ARB_texture_non_power_of_two");
   has_texture_rectangle = epoxy_has_gl_extension ("GL_ARB_texture_rectangle");
 
-  if (has_npot)
+  if (_gdk_gl_flags & GDK_GL_FLAGS_TEXTURE_RECTANGLE)
+    priv->use_texture_rectangle = TRUE;
+  else if (has_npot)
     priv->use_texture_rectangle = FALSE;
   else if (has_texture_rectangle)
     priv->use_texture_rectangle = TRUE;

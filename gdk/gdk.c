@@ -140,6 +140,7 @@ static const GDebugKey gdk_gl_keys[] = {
   {"software-draw",         GDK_GL_FLAGS_SOFTWARE_DRAW_GL | GDK_GL_FLAGS_SOFTWARE_DRAW_SURFACE},
   {"software-draw-gl",      GDK_GL_FLAGS_SOFTWARE_DRAW_GL},
   {"software-draw-surface", GDK_GL_FLAGS_SOFTWARE_DRAW_SURFACE},
+  {"texture-rectangle",     GDK_GL_FLAGS_TEXTURE_RECTANGLE},
 };
 
 #ifdef G_ENABLE_DEBUG

@@ -93,6 +93,7 @@ typedef enum {
   GDK_GL_FLAGS_ALWAYS                 = 1 << 1,
   GDK_GL_FLAGS_SOFTWARE_DRAW_GL       = 1 << 2,
   GDK_GL_FLAGS_SOFTWARE_DRAW_SURFACE  = 1 << 3,
+  GDK_GL_FLAGS_TEXTURE_RECTANGLE      = 1 << 4,
 } GdkGLFlags;
 
 
