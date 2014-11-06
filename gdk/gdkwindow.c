@@ -2934,13 +2934,6 @@ gdk_window_begin_paint_region (GdkWindow       *window,
           glTexEnvi (GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE);
 
           glViewport (0, 0, ww, wh);
-
-          glMatrixMode (GL_PROJECTION);
-          glLoadIdentity ();
-          glOrtho (0.0f, ww, 0.0f, wh, -1.0f, 1.0f);
-
-          glMatrixMode (GL_MODELVIEW);
-          glLoadIdentity ();
         }
     }
 
