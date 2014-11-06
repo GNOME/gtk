@@ -236,8 +236,9 @@ gdk_gl_texture_quad (GdkGLContext *paint_context,
 {
   GdkGLContextPaintData *paint_data  = gdk_gl_context_get_paint_data (paint_context);;
   GdkWindow *window = gdk_gl_context_get_window (paint_context);
-  float w = gdk_window_get_width (window);
-  float h = gdk_window_get_height (window);
+  int window_scale = gdk_window_get_scale_factor (window);
+  float w = gdk_window_get_width (window) * window_scale;
+  float h = gdk_window_get_height (window) * window_scale;
   float vertex_buffer_data[] = {
     (x2 * 2) / w - 1, (y1 * 2) / h - 1,
     (x2 * 2) / w - 1, (y2 * 2) / h - 1,
