@@ -86,6 +86,7 @@ typedef struct {
 
   guint realized : 1;
   guint use_texture_rectangle : 1;
+  guint has_gl_framebuffer_blit : 1;
 
   GdkGLContextPaintData *paint_data;
 } GdkGLContextPrivate;
@@ -350,6 +351,14 @@ gdk_gl_context_use_texture_rectangle (GdkGLContext *context)
   return priv->use_texture_rectangle;
 }
 
+gboolean
+gdk_gl_context_has_framebuffer_blit (GdkGLContext *context)
+{
+  GdkGLContextPrivate *priv = gdk_gl_context_get_instance_private (context);
+
+  return priv->has_gl_framebuffer_blit;
+}
+
 static void
 gdk_gl_context_realize (GdkGLContext *context)
 {
@@ -358,6 +367,8 @@ gdk_gl_context_realize (GdkGLContext *context)
 
   has_npot = epoxy_has_gl_extension ("GL_ARB_texture_non_power_of_two");
   has_texture_rectangle = epoxy_has_gl_extension ("GL_ARB_texture_rectangle");
+
+  priv->has_gl_framebuffer_blit = epoxy_has_gl_extension ("GL_EXT_framebuffer_blit");
 
   if (_gdk_gl_flags & GDK_GL_FLAGS_TEXTURE_RECTANGLE)
     priv->use_texture_rectangle = TRUE;

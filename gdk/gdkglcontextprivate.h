@@ -49,13 +49,6 @@ struct _GdkGLContextClass
                                      cairo_region_t  *region);
 };
 
-gboolean gdk_gl_context_use_texture_rectangle (GdkGLContext *context);
-void            gdk_gl_context_end_frame (GdkGLContext *context,
-                                          cairo_region_t *painted,
-                                          cairo_region_t *damage);
-
-
-
 typedef struct {
   guint vertex_array_object;
   guint tmp_framebuffer;
@@ -72,8 +65,12 @@ typedef struct {
   guint texture_quad_rect_program_map_location;
 } GdkGLContextPaintData;
 
-GdkGLContextPaintData *gdk_gl_context_get_paint_data (GdkGLContext *context);
-
+GdkGLContextPaintData *gdk_gl_context_get_paint_data        (GdkGLContext   *context);
+gboolean               gdk_gl_context_use_texture_rectangle (GdkGLContext   *context);
+gboolean               gdk_gl_context_has_framebuffer_blit  (GdkGLContext   *context);
+void                   gdk_gl_context_end_frame             (GdkGLContext   *context,
+                                                             cairo_region_t *painted,
+                                                             cairo_region_t *damage);
 
 G_END_DECLS
 
