@@ -1989,8 +1989,8 @@ column-header .titlebar .button.titlebutton,
     transition: none; }
 column-header:last-child .button, column-header:last-child .header-bar .button.titlebutton, .header-bar column-header:last-child .button.titlebutton,
 column-header:last-child .titlebar .button.titlebutton,
-.titlebar column-header:last-child .button.titlebutton, column-header:last-child.button, .header-bar column-header.button.titlebutton:last-child,
-.titlebar column-header.button.titlebutton:last-child {
+.titlebar column-header:last-child .button.titlebutton, column-header:last-child .button:backdrop, column-header:last-child.button, .header-bar column-header.button.titlebutton:last-child,
+.titlebar column-header.button.titlebutton:last-child, column-header:last-child.button:backdrop {
   border-right-style: none; }
 
 column-header.button.dnd, column-header .button.dnd, column-header .header-bar .dnd.button.titlebutton, .header-bar column-header .dnd.button.titlebutton,

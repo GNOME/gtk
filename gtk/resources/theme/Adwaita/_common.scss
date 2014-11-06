@@ -1464,7 +1464,9 @@ column-header {
     }
   }
   &:last-child .button,
-  &:last-child.button { //treeview-like derived widgets in Banshee and Evolution
+  &:last-child .button:backdrop, // set :backdrop too or the border will be visibile there
+  &:last-child.button,
+  &:last-child.button:backdrop { //treeview-like derived widgets in Banshee and Evolution
     border-right-style: none;
   }
 }
