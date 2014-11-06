@@ -975,8 +975,10 @@ gtk_model_button_init (GtkModelButton *button)
   gtk_widget_set_halign (button->box, GTK_ALIGN_FILL);
   gtk_widget_show (button->box);
   button->image = gtk_image_new ();
+  gtk_widget_set_no_show_all (button->image, TRUE);
   g_object_set (button->image, "margin", 4, NULL);
   button->label = gtk_label_new ("");
+  gtk_widget_set_no_show_all (button->label, TRUE);
   gtk_container_add (GTK_CONTAINER (button->box), button->image);
   gtk_container_add (GTK_CONTAINER (button->box), button->label);
   gtk_container_add (GTK_CONTAINER (button), button->box);
