@@ -76,6 +76,14 @@ struct _GdkWindowImplX11
 
   gint window_scale;
 
+  /* Width and height not divided by window_scale - this matters in the
+   * corner-case where the window manager assigns us a size that isn't
+   * a multiple of window_scale - for example for a maximized window
+   * with an odd-sized title-bar.
+   */
+  gint unscaled_width;
+  gint unscaled_height;
+
   cairo_surface_t *cairo_surface;
 
 #if defined (HAVE_XCOMPOSITE) && defined(HAVE_XDAMAGE) && defined (HAVE_XFIXES)

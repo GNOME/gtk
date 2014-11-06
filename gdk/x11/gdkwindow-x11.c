@@ -194,8 +194,7 @@ _gdk_x11_window_update_size (GdkWindowImplX11 *impl)
   if (impl->cairo_surface)
     {
       cairo_xlib_surface_set_size (impl->cairo_surface,
-                                   gdk_window_get_width (impl->wrapper) * impl->window_scale,
-                                   gdk_window_get_height (impl->wrapper) * impl->window_scale);
+                                   impl->unscaled_width, impl->unscaled_height);
     }
 }
 
@@ -734,6 +733,8 @@ _gdk_x11_screen_init_root_window (GdkScreen *screen)
   window->y = 0;
   window->abs_x = 0;
   window->abs_y = 0;
+  impl->unscaled_width = WidthOfScreen (x11_screen->xscreen);
+  impl->unscaled_height = HeightOfScreen (x11_screen->xscreen);
   window->width = WidthOfScreen (x11_screen->xscreen) / impl->window_scale;
   window->height = HeightOfScreen (x11_screen->xscreen) / impl->window_scale;
   window->viewable = TRUE;
@@ -1080,6 +1081,9 @@ _gdk_x11_display_create_window_impl (GdkDisplay    *display,
         window->height = 32767 /  impl->window_scale;
     }
 
+  impl->unscaled_width = window->width * impl->window_scale;
+  impl->unscaled_height = window->height * impl->window_scale;
+
   impl->xid = XCreateWindow (xdisplay, xparent,
                              (window->x + window->parent->abs_x) * impl->window_scale,
                              (window->y + window->parent->abs_y) * impl->window_scale,
@@ -1229,6 +1233,8 @@ gdk_x11_window_foreign_new_for_display (GdkDisplay *display,
 
   win->x = attrs.x / impl->window_scale;
   win->y = attrs.y / impl->window_scale;
+  impl->unscaled_width = attrs.width;
+  impl->unscaled_height = attrs.height;
   win->width = attrs.width / impl->window_scale;
   win->height = attrs.height  / impl->window_scale;
   win->window_type = GDK_WINDOW_FOREIGN;
@@ -1789,13 +1795,15 @@ window_x11_resize (GdkWindow *window,
 
       if (impl->override_redirect)
         {
+          impl->unscaled_width = width * impl->window_scale;
+          impl->unscaled_height = height * impl->window_scale;
           window->width = width;
           window->height = height;
           _gdk_x11_window_update_size (GDK_WINDOW_IMPL_X11 (window->impl));
         }
       else
         {
-          if (width != window->width || height != window->height)
+          if (width * impl->window_scale != impl->unscaled_width || height * impl->window_scale != impl->unscaled_height)
             window->resize_count += 1;
         }
     }
@@ -1835,6 +1843,8 @@ window_x11_move_resize (GdkWindow *window,
           window->x = x;
           window->y = y;
 
+          impl->unscaled_width = width * impl->window_scale;
+          impl->unscaled_height = height * impl->window_scale;
           window->width = width;
           window->height = height;
 
@@ -1842,7 +1852,7 @@ window_x11_move_resize (GdkWindow *window,
         }
       else
         {
-          if (width != window->width || height != window->height)
+          if (width * impl->window_scale != impl->unscaled_width || height * impl->window_scale != impl->unscaled_height)
             window->resize_count += 1;
         }
     }
@@ -1922,17 +1932,30 @@ _gdk_x11_window_set_window_scale (GdkWindow *window,
                  (window->x + window->parent->abs_x) * impl->window_scale,
                  (window->y + window->parent->abs_y) * impl->window_scale);
   else if (WINDOW_IS_TOPLEVEL(window))
-    XResizeWindow (GDK_WINDOW_XDISPLAY (window),
-                   GDK_WINDOW_XID (window),
-                   window->width * impl->window_scale,
-                   window->height * impl->window_scale);
+    {
+      if (impl->override_redirect)
+        {
+          impl->unscaled_width = window->width * impl->window_scale;
+          impl->unscaled_height = window->height * impl->window_scale;
+        }
+
+      XResizeWindow (GDK_WINDOW_XDISPLAY (window),
+                     GDK_WINDOW_XID (window),
+                     window->width * impl->window_scale,
+                     window->height * impl->window_scale);
+    }
   else
-    XMoveResizeWindow (GDK_WINDOW_XDISPLAY (window),
-                       GDK_WINDOW_XID (window),
-                       (window->x + window->parent->abs_x) * impl->window_scale,
-                       (window->y + window->parent->abs_y) * impl->window_scale,
-                       window->width * impl->window_scale,
-                       window->height * impl->window_scale);
+    {
+      impl->unscaled_width = window->width * impl->window_scale;
+      impl->unscaled_height = window->height * impl->window_scale;
+
+      XMoveResizeWindow (GDK_WINDOW_XDISPLAY (window),
+                         GDK_WINDOW_XID (window),
+                         (window->x + window->parent->abs_x) * impl->window_scale,
+                         (window->y + window->parent->abs_y) * impl->window_scale,
+                         window->width * impl->window_scale,
+                         window->height * impl->window_scale);
+    }
 
   gdk_window_invalidate_rect (window, NULL, TRUE);
 

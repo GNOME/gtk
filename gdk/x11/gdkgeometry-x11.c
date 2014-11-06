@@ -62,6 +62,8 @@ _gdk_x11_window_move_resize_child (GdkWindow *window,
 
   window->x = x;
   window->y = y;
+  impl->unscaled_width = width * impl->window_scale;
+  impl->unscaled_height = height * impl->window_scale;
   window->width = width;
   window->height = height;
 
