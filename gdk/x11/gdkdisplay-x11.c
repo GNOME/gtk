@@ -767,8 +767,8 @@ gdk_x11_display_translate_event (GdkEventTranslator *translator,
 			   : ""));
       if (window && GDK_WINDOW_TYPE (window) == GDK_WINDOW_ROOT)
         {
-	  window->width = xevent->xconfigure.width / window_impl->window_scale;
-	  window->height = xevent->xconfigure.height / window_impl->window_scale;
+	  window->width = (xevent->xconfigure.width + window_impl->window_scale - 1) / window_impl->window_scale;
+	  window->height = (xevent->xconfigure.height + window_impl->window_scale - 1) / window_impl->window_scale;
 
 	  _gdk_window_update_size (window);
 	  _gdk_x11_window_update_size (GDK_WINDOW_IMPL_X11 (window->impl));
@@ -793,8 +793,8 @@ gdk_x11_display_translate_event (GdkEventTranslator *translator,
 	{
 	  event->configure.type = GDK_CONFIGURE;
 	  event->configure.window = window;
-	  event->configure.width = xevent->xconfigure.width / window_impl->window_scale;
-	  event->configure.height = xevent->xconfigure.height / window_impl->window_scale;
+	  event->configure.width = (xevent->xconfigure.width + window_impl->window_scale - 1) / window_impl->window_scale;
+	  event->configure.height = (xevent->xconfigure.height + window_impl->window_scale - 1) / window_impl->window_scale;
 
 	  if (!xevent->xconfigure.send_event &&
 	      !xevent->xconfigure.override_redirect &&
@@ -826,8 +826,8 @@ gdk_x11_display_translate_event (GdkEventTranslator *translator,
 	    {
 	      window->x = event->configure.x;
 	      window->y = event->configure.y;
-	      window->width = xevent->xconfigure.width / window_impl->window_scale;
-	      window->height = xevent->xconfigure.height / window_impl->window_scale;
+              window->width = event->configure.width;
+              window->height = event->configure.height;
 
 	      _gdk_window_update_size (window);
 	      _gdk_x11_window_update_size (GDK_WINDOW_IMPL_X11 (window->impl));
