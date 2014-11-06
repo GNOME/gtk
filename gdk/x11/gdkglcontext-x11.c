@@ -466,7 +466,8 @@ gdk_x11_gl_context_texture_from_surface (GdkGLContext *paint_context,
           vscale = 1.0 / cairo_xlib_surface_get_height (surface);
         }
 
-      gdk_gl_texture_quad (rect.x * window_scale, FLIP_Y(rect.y) * window_scale,
+      gdk_gl_texture_quad (paint_context,
+                           rect.x * window_scale, FLIP_Y(rect.y) * window_scale,
                            (rect.x + rect.width) * window_scale, FLIP_Y(rect.y + rect.height) * window_scale,
                            uscale * src_x, vscale * src_y,
                            uscale * (src_x + src_width), vscale * (src_y + src_height));

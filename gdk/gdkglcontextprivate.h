@@ -57,7 +57,14 @@ void            gdk_gl_context_end_frame (GdkGLContext *context,
 
 
 typedef struct {
+  guint vertex_array_object;
   guint tmp_framebuffer;
+  guint tmp_vertex_buffer;
+  guint tmp_uv_buffer;
+  guint current_program;
+  guint texture_quad_program;
+  guint texture_quad_program_position_location;
+  guint texture_quad_program_uv_location;
 } GdkGLContextPaintData;
 
 GdkGLContextPaintData *gdk_gl_context_get_paint_data (GdkGLContext *context);

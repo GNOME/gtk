@@ -35,25 +35,193 @@ gdk_cairo_surface_mark_as_direct (cairo_surface_t *surface,
                                g_object_ref (window),  g_object_unref);
 }
 
+static const char *
+get_vertex_type_name (int type)
+{
+  switch (type)
+    {
+    case GL_VERTEX_SHADER:
+      return "vertex";
+    case GL_GEOMETRY_SHADER:
+      return "geometry";
+    case GL_FRAGMENT_SHADER:
+      return "fragment";
+    }
+  return "unknown";
+}
+
+guint
+create_shader (int type, const char const *code)
+{
+  guint shader;
+  int status;
+
+  shader = glCreateShader (type);
+  glShaderSource (shader, 1, &code, NULL);
+  glCompileShader (shader);
+
+  glGetShaderiv (shader, GL_COMPILE_STATUS, &status);
+  if (status == GL_FALSE)
+    {
+      int log_len;
+      char *buffer;
+
+      glGetShaderiv (shader, GL_INFO_LOG_LENGTH, &log_len);
+
+      buffer = g_malloc (log_len + 1);
+      glGetShaderInfoLog (shader, log_len, NULL, buffer);
+
+      g_warning ("Compile failure in %s shader:\n%s\n", get_vertex_type_name (type), buffer);
+      g_free (buffer);
+
+      glDeleteShader (shader);
+
+      return 0;
+    }
+
+  return shader;
+}
+
+guint
+make_program (const char const *vertex_shader_code, const char const *fragment_shader_code)
+{
+  guint program, vertex_shader, fragment_shader;
+  int status;
+
+  vertex_shader = create_shader (GL_VERTEX_SHADER, vertex_shader_code);
+  if (vertex_shader == 0)
+    return 0;
+
+  fragment_shader = create_shader (GL_FRAGMENT_SHADER, fragment_shader_code);
+  if (fragment_shader == 0)
+    {
+      glDeleteShader (vertex_shader);
+      return 0;
+    }
+
+  program = glCreateProgram ();
+  glAttachShader (program, vertex_shader);
+  glAttachShader (program, fragment_shader);
+
+  glLinkProgram (program);
+
+  glDeleteShader (vertex_shader);
+  glDeleteShader (fragment_shader);
+
+  glGetProgramiv (program, GL_LINK_STATUS, &status);
+  if (status == GL_FALSE)
+    {
+      int log_len;
+      char *buffer;
+
+      glGetProgramiv (program, GL_INFO_LOG_LENGTH, &log_len);
+
+      buffer = g_malloc (log_len + 1);
+      glGetProgramInfoLog (program, log_len, NULL, buffer);
+      g_warning ("Linker failure: %s\n", buffer);
+      g_free (buffer);
+
+      glDeleteProgram (program);
+      return 0;
+    }
+
+  return program;
+}
+
+static void
+bind_vao (GdkGLContextPaintData *paint_data)
+{
+  if (paint_data->vertex_array_object == 0)
+    {
+      glGenVertexArrays (1, &paint_data->vertex_array_object);
+      /* ATM we only use one VAO, so always bind it */
+      glBindVertexArray (paint_data->vertex_array_object);
+    }
+}
+
+static void
+use_texture_program (GdkGLContextPaintData *paint_data)
+{
+  const char *vertex_shader_code =
+    "#version 120\n"
+    "uniform sampler2D map;"
+    "attribute vec2 position;\n"
+    "attribute vec2 uv;\n"
+    "varying vec2 vUv;\n"
+    "void main() {\n"
+    "  gl_Position = vec4(position, 0, 1);\n"
+    "  vUv = uv;\n"
+    "}\n";
+  const char *fragment_shader_code =
+    "#version 120\n"
+    "varying vec2 vUv;\n"
+    "uniform sampler2D map;\n"
+    "void main() {\n"
+    "  gl_FragColor = texture2D (map, vUv);\n"
+    "}\n";
+
+  if (paint_data->texture_quad_program == 0)
+    {
+      paint_data->texture_quad_program = make_program (vertex_shader_code, fragment_shader_code);
+      paint_data->texture_quad_program_position_location = glGetAttribLocation (paint_data->texture_quad_program, "position");
+      paint_data->texture_quad_program_uv_location = glGetAttribLocation (paint_data->texture_quad_program, "uv");
+    }
+
+  if (paint_data->current_program != paint_data->texture_quad_program)
+    {
+      glUseProgram (paint_data->texture_quad_program);
+      paint_data->current_program = paint_data->texture_quad_program;
+    }
+}
+
 void
-gdk_gl_texture_quad (float x1, float y1,
+gdk_gl_texture_quad (GdkGLContext *paint_context,
+                     float x1, float y1,
                      float x2, float y2,
                      float u1, float v1,
                      float u2, float v2)
 {
-  glBegin (GL_QUADS);
-  glTexCoord2f (u1, v2);
-  glVertex2f (x1, y2);
+  GdkGLContextPaintData *paint_data  = gdk_gl_context_get_paint_data (paint_context);;
+  GdkWindow *window = gdk_gl_context_get_window (paint_context);
+  float w = gdk_window_get_width (window);
+  float h = gdk_window_get_height (window);
+  float vertex_buffer_data[] = {
+    (x2 * 2) / w - 1, (y1 * 2) / h - 1,
+    (x2 * 2) / w - 1, (y2 * 2) / h - 1,
+    (x1 * 2) / w - 1, (y2 * 2) / h - 1,
+    (x1 * 2) / w - 1, (y1 * 2) / h - 1,
+  };
+  float uv_buffer_data[] = {
+    u2, v1,
+    u2, v2,
+    u1, v2,
+    u1, v1,
+  };
 
-  glTexCoord2f (u2, v2);
-  glVertex2f (x2, y2);
+  bind_vao (paint_data);
 
-  glTexCoord2f (u2, v1);
-  glVertex2f (x2, y1);
+  if (paint_data->tmp_vertex_buffer == 0)
+    glGenBuffers(1, &paint_data->tmp_vertex_buffer);
 
-  glTexCoord2f (u1, v1);
-  glVertex2f (x1, y1);
-  glEnd();
+  if (paint_data->tmp_uv_buffer == 0)
+    glGenBuffers(1, &paint_data->tmp_uv_buffer);
+
+  use_texture_program (paint_data);
+
+  glActiveTexture (GL_TEXTURE0);
+  glEnableVertexAttribArray (0);
+  glBindBuffer (GL_ARRAY_BUFFER, paint_data->tmp_vertex_buffer);
+  glBufferData (GL_ARRAY_BUFFER, sizeof(vertex_buffer_data), vertex_buffer_data, GL_STREAM_DRAW);
+  glVertexAttribPointer (paint_data->texture_quad_program_position_location,
+                         2, GL_FLOAT, GL_FALSE, 0, NULL);
+  glEnableVertexAttribArray (1);
+  glBindBuffer (GL_ARRAY_BUFFER, paint_data->tmp_uv_buffer);
+  glBufferData (GL_ARRAY_BUFFER, sizeof(uv_buffer_data), uv_buffer_data, GL_STREAM_DRAW);
+  glVertexAttribPointer (paint_data->texture_quad_program_uv_location,
+                         2, GL_FLOAT, GL_FALSE, 0, NULL);
+  glDrawArrays (GL_TRIANGLE_FAN, 0, 4);
+  glDisableVertexAttribArray (0);
+  glDisableVertexAttribArray (1);
 }
 
 
@@ -328,7 +496,8 @@ gdk_cairo_draw_from_gl (cairo_t              *cr,
               int clipped_src_x = x + (dest.x - dx * window_scale);
               int clipped_src_y = y + (height - dest.height - (dest.y - dy * window_scale));
 
-              gdk_gl_texture_quad (dest.x, FLIP_Y(dest.y),
+              gdk_gl_texture_quad (paint_context,
+                                   dest.x, FLIP_Y(dest.y),
                                    dest.x + dest.width, FLIP_Y(dest.y + dest.height),
                                    clipped_src_x / (float)texture_width, (clipped_src_y + dest.height) / (float)texture_height,
                                    (clipped_src_x + dest.width) / (float)texture_width, clipped_src_y / (float)texture_height);
@@ -507,7 +676,8 @@ gdk_gl_texture_from_surface (cairo_surface_t *surface,
           vmax = 1.0;
         }
 
-      gdk_gl_texture_quad (rect.x * window_scale, FLIP_Y(rect.y) * window_scale,
+      gdk_gl_texture_quad (paint_context,
+                           rect.x * window_scale, FLIP_Y(rect.y) * window_scale,
                            (rect.x + rect.width) * window_scale, FLIP_Y(rect.y + rect.height) * window_scale,
                            0, 0,
                            umax, vmax);

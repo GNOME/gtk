@@ -341,7 +341,8 @@ gboolean        _gdk_cairo_surface_extents       (cairo_surface_t *surface,
                                                   GdkRectangle    *extents);
 void            gdk_gl_texture_from_surface      (cairo_surface_t *surface,
                                                   cairo_region_t  *region);
-void           gdk_gl_texture_quad               (float x1, float y1,
+void           gdk_gl_texture_quad               (GdkGLContext *paint_context,
+                                                  float x1, float y1,
                                                   float x2, float y2,
                                                   float u1, float v1,
                                                   float u2, float v2);
