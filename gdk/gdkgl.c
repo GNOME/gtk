@@ -692,6 +692,7 @@ gdk_gl_texture_from_surface (cairo_surface_t *surface,
 
   glBindTexture (target, texture_id);
   glEnable (target);
+  glEnable (GL_SCISSOR_TEST);
 
   glTexParameteri (target, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
   glTexParameteri (target, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
@@ -743,6 +744,7 @@ gdk_gl_texture_from_surface (cairo_surface_t *surface,
                            umax, vmax);
     }
 
+  glDisable (GL_SCISSOR_TEST);
   glDisable (target);
   glDeleteTextures (1, &texture_id);
 }
