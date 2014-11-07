@@ -1437,8 +1437,13 @@ gdk_window_wayland_input_shape_combine_region (GdkWindow            *window,
     return;
 
   g_clear_pointer (&impl->input_region, cairo_region_destroy);
-  impl->input_region = cairo_region_copy (shape_region);
-  cairo_region_translate (impl->input_region, offset_x, offset_y);
+
+  if (shape_region)
+    {
+      impl->input_region = cairo_region_copy (shape_region);
+      cairo_region_translate (impl->input_region, offset_x, offset_y);
+    }
+
   gdk_wayland_window_sync_input_region (window);
 }
 
