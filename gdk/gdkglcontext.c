@@ -75,6 +75,7 @@
 #include "gdkinternals.h"
 
 #include "gdkintl.h"
+#include "gdk-private.h"
 
 #include <epoxy/gl.h>
 

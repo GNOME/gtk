@@ -2,6 +2,7 @@
 #define __GDK__PRIVATE_H__
 
 #include <gdk/gdk.h>
+#include "gdk/gdkinternals.h"
 
 #define GDK_PRIVATE_CALL(symbol)        (gdk__private__ ()->symbol)
 
@@ -16,6 +17,9 @@ void            gdk_add_option_entries          (GOptionGroup *group);
 
 void            gdk_pre_parse                   (void);
 
+GdkGLFlags      gdk_gl_get_flags                (void);
+void            gdk_gl_set_flags                (GdkGLFlags flags);
+
 typedef struct {
   /* add all private functions here, initialize them in gdk-private.c */
   gboolean (* gdk_device_grab_info) (GdkDisplay  *display,
@@ -27,6 +31,8 @@ typedef struct {
 
   void (* gdk_add_option_entries) (GOptionGroup *group);
   void (* gdk_pre_parse) (void);
+  GdkGLFlags (* gdk_gl_get_flags) (void);
+  void (* gdk_gl_set_flags) (GdkGLFlags flags);
 } GdkPrivateVTable;
 
 GDK_AVAILABLE_IN_ALL

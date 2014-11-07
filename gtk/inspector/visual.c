@@ -34,7 +34,7 @@
 #include "x11/gdkx.h"
 #endif
 
-#include "gdk/gdkinternals.h"
+#include "gdk/gdk-private.h"
 
 struct _GtkInspectorVisualPrivate
 {
@@ -492,7 +492,7 @@ init_gl (GtkInspectorVisual *vis)
 {
   GdkGLFlags flags;
 
-  flags = gdk_gl_get_flags ();
+  flags = GDK_PRIVATE_CALL (gdk_gl_get_flags) ();
 
   if (flags & GDK_GL_ALWAYS)
     gtk_combo_box_set_active_id (GTK_COMBO_BOX (vis->priv->gl_combo), "always");
@@ -528,14 +528,14 @@ update_gl_flag (GtkSwitch  *sw,
 {
   GdkGLFlags flags;
 
-  flags = gdk_gl_get_flags ();
+  flags = GDK_PRIVATE_CALL (gdk_gl_get_flags) ();
 
   if (gtk_switch_get_active (sw))
     flags |= flag;
   else
     flags &= ~flag;
 
-  gdk_gl_set_flags (flags);
+  GDK_PRIVATE_CALL (gdk_gl_set_flags) (flags);
 }
 
 static void

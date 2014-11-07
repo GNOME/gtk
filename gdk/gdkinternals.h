@@ -109,12 +109,6 @@ extern guint _gdk_debug_flags;
 extern guint _gdk_gl_flags;
 extern GdkRenderingMode    _gdk_rendering_mode;
 
-/* export these so we can use them from the inspector */
-_GDK_EXTERN
-GdkGLFlags gdk_gl_get_flags (void);
-_GDK_EXTERN
-void       gdk_gl_set_flags (GdkGLFlags flags);
-
 #ifdef G_ENABLE_DEBUG
 
 #define GDK_NOTE(type,action)                G_STMT_START { \

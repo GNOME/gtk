@@ -40,6 +40,7 @@
 #include "gdkframeclockidle.h"
 #include "gdkwindowimpl.h"
 #include "gdkglcontextprivate.h"
+#include "gdk-private.h"
 
 #include <math.h>
 
