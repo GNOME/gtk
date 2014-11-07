@@ -1953,7 +1953,8 @@ gdk_window_quartz_get_pointer_helper (GdkWindow       *window,
   
   toplevel = GDK_WINDOW_OBJECT (gdk_window_get_effective_toplevel (window));
 
-  *mask = _gdk_quartz_events_get_current_event_mask ();
+  *mask = _gdk_quartz_events_get_current_keyboard_modifiers ()
+	| _gdk_quartz_events_get_current_mouse_modifiers ();
 
   /* Get the y coordinate, needs to be flipped. */
   if (window == _gdk_root)
