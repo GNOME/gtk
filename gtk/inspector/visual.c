@@ -51,6 +51,12 @@ struct _GtkInspectorVisualPrivate
   GtkWidget *pixelcache_switch;
   GtkWidget *touchscreen_switch;
 
+  GtkWidget *gl_box;
+  GtkWidget *gl_combo;
+  GtkWidget *software_gl_switch;
+  GtkWidget *software_surface_switch;
+  GtkWidget *texture_rectangle_switch;
+
   GtkAdjustment *focus_adjustment;
 };
 
@@ -442,9 +448,15 @@ keynav_failed (GtkWidget *widget, GtkDirectionType direction, GtkInspectorVisual
   if (direction == GTK_DIR_DOWN &&
       widget == vis->priv->visual_box)
     next = vis->priv->debug_box;
+  else if (direction == GTK_DIR_DOWN &&
+      widget == vis->priv->debug_box)
+    next = vis->priv->gl_box;
   else if (direction == GTK_DIR_UP &&
            widget == vis->priv->debug_box)
     next = vis->priv->visual_box;
+  else if (direction == GTK_DIR_UP &&
+           widget == vis->priv->gl_box)
+    next = vis->priv->debug_box;
   else 
     next = NULL;
 
@@ -474,6 +486,75 @@ keynav_failed (GtkWidget *widget, GtkDirectionType direction, GtkInspectorVisual
 }
 
 static void
+init_gl (GtkInspectorVisual *vis)
+{
+  GdkGLFlags flags;
+
+  flags = gdk_gl_get_flags ();
+
+  if (flags & GDK_GL_ALWAYS)
+    gtk_combo_box_set_active_id (GTK_COMBO_BOX (vis->priv->gl_combo), "always");
+  else if (flags & GDK_GL_DISABLE)
+    gtk_combo_box_set_active_id (GTK_COMBO_BOX (vis->priv->gl_combo), "disable");
+  else
+    gtk_combo_box_set_active_id (GTK_COMBO_BOX (vis->priv->gl_combo), "maybe");
+  gtk_widget_set_sensitive (vis->priv->gl_combo, FALSE);
+  gtk_widget_set_tooltip_text (vis->priv->gl_combo,
+                               _("Not settable at runtime.\nUse GDK_GL=always or GDK_GL=never instead"));
+
+  gtk_switch_set_active (GTK_SWITCH (vis->priv->software_gl_switch),
+                         flags & GDK_GL_SOFTWARE_DRAW_GL);
+  gtk_switch_set_active (GTK_SWITCH (vis->priv->software_surface_switch),
+                         flags & GDK_GL_SOFTWARE_DRAW_SURFACE);
+  gtk_switch_set_active (GTK_SWITCH (vis->priv->texture_rectangle_switch),
+                         flags & GDK_GL_TEXTURE_RECTANGLE);
+
+  if (flags & GDK_GL_DISABLE)
+    {
+      gtk_widget_set_sensitive (vis->priv->software_gl_switch, FALSE);
+      gtk_widget_set_sensitive (vis->priv->software_surface_switch, FALSE);
+      gtk_widget_set_sensitive (vis->priv->texture_rectangle_switch, FALSE);
+      gtk_widget_set_tooltip_text (vis->priv->software_gl_switch, _("GL rendering is disabled"));
+      gtk_widget_set_tooltip_text (vis->priv->software_surface_switch, _("GL rendering is disabled"));
+      gtk_widget_set_tooltip_text (vis->priv->texture_rectangle_switch, _("GL rendering is disabled"));
+    }
+}
+
+static void
+update_gl_flag (GtkSwitch  *sw,
+                GdkGLFlags  flag)
+{
+  GdkGLFlags flags;
+
+  flags = gdk_gl_get_flags ();
+
+  if (gtk_switch_get_active (sw))
+    flags |= flag;
+  else
+    flags &= ~flag;
+
+  gdk_gl_set_flags (flags);
+}
+
+static void
+software_gl_activate (GtkSwitch *sw)
+{
+  update_gl_flag (sw, GDK_GL_SOFTWARE_DRAW_GL);
+}
+
+static void
+software_surface_activate (GtkSwitch *sw)
+{
+  update_gl_flag (sw, GDK_GL_SOFTWARE_DRAW_SURFACE);
+}
+
+static void
+texture_rectangle_activate (GtkSwitch *sw)
+{
+  update_gl_flag (sw, GDK_GL_TEXTURE_RECTANGLE);
+}
+
+static void
 gtk_inspector_visual_init (GtkInspectorVisual *vis)
 {
   vis->priv = gtk_inspector_visual_get_instance_private (vis);
@@ -486,6 +567,7 @@ gtk_inspector_visual_init (GtkInspectorVisual *vis)
   init_scale (vis);
   init_animation (vis);
   init_touchscreen (vis);
+  init_gl (vis);
 }
 
 static void
@@ -501,6 +583,7 @@ gtk_inspector_visual_constructed (GObject *object)
 
    g_signal_connect (vis->priv->visual_box, "keynav-failed", G_CALLBACK (keynav_failed), vis);
    g_signal_connect (vis->priv->debug_box, "keynav-failed", G_CALLBACK (keynav_failed), vis);
+   g_signal_connect (vis->priv->gl_box, "keynav-failed", G_CALLBACK (keynav_failed), vis);
 }
 
 static void
@@ -526,6 +609,11 @@ gtk_inspector_visual_class_init (GtkInspectorVisualClass *klass)
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorVisual, visual_box);
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorVisual, debug_box);
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorVisual, font_button);
+  gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorVisual, gl_box);
+  gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorVisual, gl_combo);
+  gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorVisual, software_gl_switch);
+  gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorVisual, software_surface_switch);
+  gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorVisual, texture_rectangle_switch);
 
   gtk_widget_class_bind_template_callback (widget_class, updates_activate);
   gtk_widget_class_bind_template_callback (widget_class, direction_changed);
@@ -533,6 +621,9 @@ gtk_inspector_visual_class_init (GtkInspectorVisualClass *klass)
   gtk_widget_class_bind_template_callback (widget_class, pixelcache_activate);
   gtk_widget_class_bind_template_callback (widget_class, theme_changed);
   gtk_widget_class_bind_template_callback (widget_class, icons_changed);
+  gtk_widget_class_bind_template_callback (widget_class, software_gl_activate);
+  gtk_widget_class_bind_template_callback (widget_class, software_surface_activate);
+  gtk_widget_class_bind_template_callback (widget_class, texture_rectangle_activate);
 }
 
 // vim: set et sw=2 ts=2:
