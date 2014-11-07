@@ -49,9 +49,9 @@ void                  gdk_init                            (gint           *argc,
 GDK_AVAILABLE_IN_ALL
 gboolean              gdk_init_check                      (gint           *argc,
                                                            gchar        ***argv);
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_3_16
 void                  gdk_add_option_entries_libgtk_only  (GOptionGroup   *group);
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_3_16
 void                  gdk_pre_parse_libgtk_only           (void);
 
 GDK_AVAILABLE_IN_ALL

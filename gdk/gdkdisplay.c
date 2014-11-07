@@ -24,6 +24,8 @@
 #include "gdkdisplay.h"
 #include "gdkdisplayprivate.h"
 
+#include "gdk-private.h"
+
 #include "gdkdeviceprivate.h"
 #include "gdkdisplaymanagerprivate.h"
 #include "gdkevents.h"
@@ -1293,8 +1295,8 @@ _gdk_display_pointer_info_foreach (GdkDisplay                   *display,
     }
 }
 
-/**
- * gdk_device_grab_info_libgtk_only:
+/*< private >
+ * gdk_device_grab_info:
  * @display: the display for which to get the grab information
  * @device: device to get the grab information from
  * @grab_window: (out) (transfer none): location to store current grab window
@@ -1307,12 +1309,12 @@ _gdk_display_pointer_info_foreach (GdkDisplay                   *display,
  *
  * Returns: %TRUE if this application currently has the
  *  keyboard grabbed.
- **/
+ */
 gboolean
-gdk_device_grab_info_libgtk_only (GdkDisplay  *display,
-                                  GdkDevice   *device,
-                                  GdkWindow  **grab_window,
-                                  gboolean    *owner_events)
+gdk_device_grab_info (GdkDisplay  *display,
+                      GdkDevice   *device,
+                      GdkWindow  **grab_window,
+                      gboolean    *owner_events)
 {
   GdkDeviceGrabInfo *info;
 
@@ -1332,6 +1334,33 @@ gdk_device_grab_info_libgtk_only (GdkDisplay  *display,
     }
   else
     return FALSE;
+}
+
+/**
+ * gdk_device_grab_info_libgtk_only:
+ * @display: the display for which to get the grab information
+ * @device: device to get the grab information from
+ * @grab_window: (out) (transfer none): location to store current grab window
+ * @owner_events: (out): location to store boolean indicating whether
+ *   the @owner_events flag to gdk_keyboard_grab() or
+ *   gdk_pointer_grab() was %TRUE.
+ *
+ * Determines information about the current keyboard grab.
+ * This is not public API and must not be used by applications.
+ *
+ * Returns: %TRUE if this application currently has the
+ *  keyboard grabbed.
+ *
+ * Deprecated: 3.16: The symbol was never meant to be used outside
+ *   of GTK+
+ */
+gboolean
+gdk_device_grab_info_libgtk_only (GdkDisplay  *display,
+                                  GdkDevice   *device,
+                                  GdkWindow  **grab_window,
+                                  gboolean    *owner_events)
+{
+  return gdk_device_grab_info (display, device, grab_window, owner_events);
 }
 
 /**

@@ -123,7 +123,7 @@ void             gdk_display_warp_pointer          (GdkDisplay             *disp
                                                     gint                   y);
 #endif /* GDK_MULTIDEVICE_SAFE */
 
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_3_16
 GdkDisplay *gdk_display_open_default_libgtk_only (void);
 
 GDK_AVAILABLE_IN_ALL
