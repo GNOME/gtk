@@ -1419,7 +1419,7 @@ gdk_window_new (GdkWindow     *parent,
                     G_CALLBACK (device_removed_cb), window);
 
 
-  if ((_gdk_gl_flags & (GDK_GL_FLAGS_ALWAYS | GDK_GL_FLAGS_DISABLE)) == GDK_GL_FLAGS_ALWAYS)
+  if ((_gdk_gl_flags & (GDK_GL_ALWAYS | GDK_GL_DISABLE)) == GDK_GL_ALWAYS)
     {
       GError *error = NULL;
 
@@ -2725,7 +2725,7 @@ gdk_window_ref_impl_surface (GdkWindow *window)
 GdkGLContext *
 gdk_window_get_paint_gl_context (GdkWindow *window, GError **error)
 {
-  if (_gdk_gl_flags & GDK_GL_FLAGS_DISABLE)
+  if (_gdk_gl_flags & GDK_GL_DISABLE)
     {
       g_set_error_literal (error, GDK_GL_ERROR,
                            GDK_GL_ERROR_NOT_AVAILABLE,

@@ -135,12 +135,12 @@ static GCallback gdk_threads_lock = NULL;
 static GCallback gdk_threads_unlock = NULL;
 
 static const GDebugKey gdk_gl_keys[] = {
-  {"disable",               GDK_GL_FLAGS_DISABLE},
-  {"always",                GDK_GL_FLAGS_ALWAYS},
-  {"software-draw",         GDK_GL_FLAGS_SOFTWARE_DRAW_GL | GDK_GL_FLAGS_SOFTWARE_DRAW_SURFACE},
-  {"software-draw-gl",      GDK_GL_FLAGS_SOFTWARE_DRAW_GL},
-  {"software-draw-surface", GDK_GL_FLAGS_SOFTWARE_DRAW_SURFACE},
-  {"texture-rectangle",     GDK_GL_FLAGS_TEXTURE_RECTANGLE},
+  {"disable",               GDK_GL_DISABLE},
+  {"always",                GDK_GL_ALWAYS},
+  {"software-draw",         GDK_GL_SOFTWARE_DRAW_GL | GDK_GL_SOFTWARE_DRAW_SURFACE},
+  {"software-draw-gl",      GDK_GL_SOFTWARE_DRAW_GL},
+  {"software-draw-surface", GDK_GL_SOFTWARE_DRAW_SURFACE},
+  {"texture-rectangle",     GDK_GL_TEXTURE_RECTANGLE},
 };
 
 #ifdef G_ENABLE_DEBUG

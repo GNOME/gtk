@@ -393,7 +393,7 @@ gdk_cairo_draw_from_gl (cairo_t              *cr,
 
   /* For direct paint of non-alpha renderbuffer, we can
      just do a bitblit */
-  if ((_gdk_gl_flags & GDK_GL_FLAGS_SOFTWARE_DRAW_GL) == 0 &&
+  if ((_gdk_gl_flags & GDK_GL_SOFTWARE_DRAW_GL) == 0 &&
       source_type == GL_RENDERBUFFER &&
       alpha_size == 0 &&
       direct_window != NULL &&
@@ -474,7 +474,7 @@ gdk_cairo_draw_from_gl (cairo_t              *cr,
 
     }
   /* For direct paint of alpha or non-alpha textures we can use texturing */
-  else if ((_gdk_gl_flags & GDK_GL_FLAGS_SOFTWARE_DRAW_GL) == 0 &&
+  else if ((_gdk_gl_flags & GDK_GL_SOFTWARE_DRAW_GL) == 0 &&
            source_type == GL_TEXTURE &&
            direct_window != NULL &&
            direct_window->current_paint.use_gl &&
@@ -663,7 +663,7 @@ gdk_gl_texture_from_surface (cairo_surface_t *surface,
   guint target;
 
   paint_context = gdk_gl_context_get_current ();
-  if ((_gdk_gl_flags & GDK_GL_FLAGS_SOFTWARE_DRAW_SURFACE) == 0 &&
+  if ((_gdk_gl_flags & GDK_GL_SOFTWARE_DRAW_SURFACE) == 0 &&
       paint_context &&
       GDK_GL_CONTEXT_GET_CLASS (paint_context)->texture_from_surface &&
       GDK_GL_CONTEXT_GET_CLASS (paint_context)->texture_from_surface (paint_context, surface, region))

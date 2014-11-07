@@ -380,14 +380,14 @@ gdk_gl_context_realize (GdkGLContext *context)
   priv->has_gl_framebuffer_blit = epoxy_has_gl_extension ("GL_EXT_framebuffer_blit");
   priv->has_frame_terminator = epoxy_has_gl_extension ("GL_GREMEDY_frame_terminator");
 
-  if (_gdk_gl_flags & GDK_GL_FLAGS_TEXTURE_RECTANGLE)
+  if (_gdk_gl_flags & GDK_GL_TEXTURE_RECTANGLE)
     priv->use_texture_rectangle = TRUE;
   else if (has_npot)
     priv->use_texture_rectangle = FALSE;
   else if (has_texture_rectangle)
     priv->use_texture_rectangle = TRUE;
   else
-    g_warning ("Gl implementation doesn't support any form of non-power-of-two textures");
+    g_warning ("GL implementation doesn't support any form of non-power-of-two textures");
 
   priv->realized = TRUE;
 }
@@ -542,4 +542,33 @@ gdk_gl_context_get_current (void)
   current = g_private_get (&thread_current_context);
 
   return current;
+}
+
+/**
+ * gdk_gl_get_flags:
+ *
+ * Returns the currently active GL flags.
+ *
+ * Returns: the GL flags
+ *
+ * Since: 3.16
+ */
+GdkGLFlags
+gdk_gl_get_flags (void)
+{
+  return _gdk_gl_flags;
+}
+
+/**
+ * gdk_gl_set_flags:
+ * @flags: #GdkGLFlags to set
+ *
+ * Sets GL flags.
+ *
+ * Since: 3.16
+ */
+void
+gdk_gl_set_flags (GdkGLFlags flags)
+{
+  _gdk_gl_flags = flags;
 }
