@@ -1296,6 +1296,11 @@ GDK_TYPE_GL_PROFILE
 GdkGLProfile
 GdkGLError
 
+<SUBSECTION>
+GdkGLFlags
+gdk_gl_get_flags
+gdk_gl_set_flags
+
 <SUBSECTION Standard>
 GDK_GL_CONTEXT
 GDK_IS_GL_CONTEXT
