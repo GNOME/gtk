@@ -94,12 +94,26 @@ typedef enum {
   GDK_RENDERING_MODE_RECORDING
 } GdkRenderingMode;
 
+typedef enum {
+  GDK_GL_DISABLE                = 1 << 0,
+  GDK_GL_ALWAYS                 = 1 << 1,
+  GDK_GL_SOFTWARE_DRAW_GL       = 1 << 2,
+  GDK_GL_SOFTWARE_DRAW_SURFACE  = 1 << 3,
+  GDK_GL_TEXTURE_RECTANGLE      = 1 << 4
+} GdkGLFlags;
+
 extern GList            *_gdk_default_filters;
 extern GdkWindow        *_gdk_parent_root;
 
 extern guint _gdk_debug_flags;
 extern guint _gdk_gl_flags;
 extern GdkRenderingMode    _gdk_rendering_mode;
+
+/* export these so we can use them from the inspector */
+_GDK_EXTERN
+GdkGLFlags gdk_gl_get_flags (void);
+_GDK_EXTERN
+void       gdk_gl_set_flags (GdkGLFlags flags);
 
 #ifdef G_ENABLE_DEBUG
 
