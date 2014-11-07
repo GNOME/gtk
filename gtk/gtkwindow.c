@@ -1469,6 +1469,9 @@ multipress_gesture_pressed_cb (GtkGestureMultiPress *gesture,
         gtk_window_titlebar_action (window, event, button, n_press);
       if (n_press == 1)
         priv->drag_possible = TRUE;
+
+      gtk_gesture_set_sequence_state (GTK_GESTURE (gesture),
+                                      sequence, GTK_EVENT_SEQUENCE_CLAIMED);
       break;
     default:
       if (!priv->maximized)
