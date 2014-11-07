@@ -4380,9 +4380,17 @@ gdk_window_thaw_updates (GdkWindow *window)
  *
  * This function is not part of the GDK public API and is only
  * for use by GTK+.
- **/
+ *
+ * Deprecated: 3.16: This symbol was never meant to be used outside of GTK+
+ */
 void
 gdk_window_freeze_toplevel_updates_libgtk_only (GdkWindow *window)
+{
+  gdk_window_freeze_toplevel_updates (window);
+}
+
+void
+gdk_window_freeze_toplevel_updates (GdkWindow *window)
 {
   g_return_if_fail (GDK_IS_WINDOW (window));
   g_return_if_fail (window->window_type != GDK_WINDOW_CHILD);
@@ -4400,9 +4408,17 @@ gdk_window_freeze_toplevel_updates_libgtk_only (GdkWindow *window)
  *
  * This function is not part of the GDK public API and is only
  * for use by GTK+.
- **/
+ *
+ * Deprecated: 3.16: This symbol was never meant to be used outside of GTK+
+ */
 void
 gdk_window_thaw_toplevel_updates_libgtk_only (GdkWindow *window)
+{
+  gdk_window_thaw_toplevel_updates (window);
+}
+
+void
+gdk_window_thaw_toplevel_updates (GdkWindow *window)
 {
   g_return_if_fail (GDK_IS_WINDOW (window));
   g_return_if_fail (window->window_type != GDK_WINDOW_CHILD);

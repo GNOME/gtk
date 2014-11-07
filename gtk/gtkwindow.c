@@ -63,6 +63,8 @@
 #include "inspector/init.h"
 #include "inspector/window.h"
 
+#include "gdk/gdk-private.h"
+
 #ifdef GDK_WINDOWING_X11
 #include "x11/gdkx.h"
 #endif
@@ -7396,7 +7398,8 @@ gtk_window_configure_event (GtkWidget         *widget,
   if (priv->configure_request_count > 0)
     {
       priv->configure_request_count -= 1;
-      gdk_window_thaw_toplevel_updates_libgtk_only (gtk_widget_get_window (widget));
+
+      GDK_PRIVATE_CALL (gdk_window_thaw_toplevel_updates) (gtk_widget_get_window (widget));
     }
 
   /*
@@ -9281,7 +9284,8 @@ gtk_window_move_resize (GtkWindow *window)
         {
 	  /* Increment the number of have-not-yet-received-notify requests */
 	  priv->configure_request_count += 1;
-	  gdk_window_freeze_toplevel_updates_libgtk_only (gdk_window);
+
+          GDK_PRIVATE_CALL (gdk_window_freeze_toplevel_updates) (gdk_window);
 
 	  /* for GTK_RESIZE_QUEUE toplevels, we are now awaiting a new
 	   * configure event in response to our resizing request.

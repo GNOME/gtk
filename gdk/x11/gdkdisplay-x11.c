@@ -38,6 +38,7 @@
 #include "gdkprivate-x11.h"
 #include "gdkscreen-x11.h"
 #include "gdkglcontext-x11.h"
+#include "gdk-private.h"
 
 #include <glib.h>
 #include <glib/gprintf.h>
@@ -704,7 +705,7 @@ gdk_x11_display_translate_event (GdkEventTranslator *translator,
             }
 
 	  if (toplevel)
-            gdk_window_freeze_toplevel_updates_libgtk_only (window);
+            gdk_window_freeze_toplevel_updates (window);
 
           _gdk_x11_window_grab_check_unmap (window, xevent->xany.serial);
         }
@@ -728,7 +729,7 @@ gdk_x11_display_translate_event (GdkEventTranslator *translator,
 					 0);
 
 	  if (toplevel)
-	    gdk_window_thaw_toplevel_updates_libgtk_only (window);
+	    gdk_window_thaw_toplevel_updates (window);
 	}
 
       break;

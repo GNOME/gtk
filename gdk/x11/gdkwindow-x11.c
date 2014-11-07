@@ -38,6 +38,7 @@
 #include "gdkdisplay-x11.h"
 #include "gdkglcontext-x11.h"
 #include "gdkprivate-x11.h"
+#include "gdk-private.h"
 
 #include <stdlib.h>
 #include <stdio.h>
@@ -1129,7 +1130,7 @@ _gdk_x11_display_create_window_impl (GdkDisplay    *display,
   connect_frame_clock (window);
 
   if (GDK_WINDOW_TYPE (window) != GDK_WINDOW_CHILD)
-    gdk_window_freeze_toplevel_updates_libgtk_only (window);
+    gdk_window_freeze_toplevel_updates (window);
 }
 
 static GdkEventMask

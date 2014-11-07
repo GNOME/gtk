@@ -11,6 +11,8 @@ gdk__private__ (void)
     gdk_pre_parse,
     gdk_gl_get_flags,
     gdk_gl_set_flags,
+    gdk_window_freeze_toplevel_updates,
+    gdk_window_thaw_toplevel_updates,
   };
 
   return &table;
