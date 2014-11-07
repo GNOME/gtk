@@ -33,6 +33,8 @@
 #include "x11/gdkx.h"
 #endif
 
+#include "gdk/gdkinternals.h"
+
 struct _GtkInspectorVisualPrivate
 {
   GtkWidget *visual_box;
