@@ -242,7 +242,7 @@
                           <object class="GtkInspectorClassesList" id="classes_list"/>
                           <packing>
                             <property name="name">css-classes</property>
-                            <property name="title" translatable="yes">CSS Classes</property>
+                            <property name="title" translatable="yes">Style Classes</property>
                           </packing>
                         </child>
                         <child>
@@ -258,7 +258,7 @@
                           </object>
                           <packing>
                             <property name="name">css</property>
-                            <property name="title" translatable="yes">Custom CSS</property>
+                            <property name="title" translatable="yes">CSS</property>
                           </packing>
                         </child>
                         <child>
@@ -339,7 +339,7 @@
           </object>
           <packing>
             <property name="name">css</property>
-            <property name="title" translatable="yes">Custom CSS</property>
+            <property name="title" translatable="yes">CSS</property>
           </packing>
         </child>
         <child>
