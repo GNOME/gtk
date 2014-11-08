@@ -206,7 +206,6 @@ init_theme (GtkInspectorVisual *vis)
   gchar *theme, *current_theme, *path;
   gint i, pos;
   GSettings *settings;
-  gchar *themedir;
 
   t = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, NULL);
   g_hash_table_add (t, g_strdup ("Adwaita"));
