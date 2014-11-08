@@ -83,6 +83,26 @@
           </packing>
         </child>
         <child>
+          <object class="GtkToggleButton" id="record_statistics_button">
+            <property name="tooltip-text" translatable="yes">Collect Statistics</property>
+            <property name="halign">center</property>
+            <property name="valign">center</property>
+            <style>
+              <class name="image-button"/>
+            </style>
+            <child>
+              <object class="GtkImage">
+                <property name="visible">True</property>
+                <property name="icon-name">media-record-symbolic</property>
+                <property name="icon-size">1</property>
+              </object>
+            </child>
+          </object>
+          <packing>
+            <property name="pack-type">start</property>
+          </packing>
+        </child>
+        <child>
           <object class="GtkStack" id="resource_buttons">
             <child>
               <object class="GtkButton">
@@ -316,6 +336,7 @@
         <child>
           <object class="GtkInspectorStatistics">
             <property name="visible">True</property>
+            <property name="button">record_statistics_button</property>
           </object>
           <packing>
             <property name="name">statistics</property>

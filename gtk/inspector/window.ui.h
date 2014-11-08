@@ -1,6 +1,7 @@
 N_("Select an Object");
 N_("Show Details");
 N_("Show all Objects");
+N_("Collect Statistics");
 N_("Show Details");
 N_("Show all Resources");
 N_("Miscellaneous");

@@ -23,26 +23,11 @@
             <property name="visible">True</property>
             <property name="orientation">vertical</property>
             <child>
-              <object class="GtkToolbar" id="toolbar">
-                <property name="visible">True</property>
-                <property name="icon-size">small-toolbar</property>
-                <child>
-                  <object class="GtkToggleToolButton" id="button">
-                    <property name="visible">True</property>
-                    <property name="icon-name">media-record-symbolic</property>
-                    <property name="tooltip-text" translatable="yes">Collect Statistics</property>
-                    <signal name="toggled" handler="toggle_record"/>
-                  </object>
-                </child>
-              </object>
-            </child>
-            <child>
               <object class="GtkScrolledWindow">
                 <property name="visible">True</property>
                 <property name="expand">True</property>
                 <property name="hscrollbar-policy">automatic</property>
                 <property name="vscrollbar-policy">always</property>
-                <property name="shadow-type">in</property>
                 <child>
                   <object class="GtkTreeView" id="view">
                     <property name="visible">True</property>

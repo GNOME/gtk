@@ -26,6 +26,12 @@
 #include "gtkcellrenderertext.h"
 #include "gtkcelllayout.h"
 
+enum
+{
+  PROP_0,
+  PROP_BUTTON
+};
+
 struct _GtkInspectorStatisticsPrivate
 {
   GtkWidget *stack;
@@ -137,13 +143,13 @@ update_type_counts (gpointer data)
 }
 
 static void
-toggle_record (GtkToggleToolButton    *button,
+toggle_record (GtkToggleButton        *button,
                GtkInspectorStatistics *sl)
 {
-  if (gtk_toggle_tool_button_get_active (button) == (sl->priv->update_source_id != 0))
+  if (gtk_toggle_button_get_active (button) == (sl->priv->update_source_id != 0))
     return;
 
-  if (gtk_toggle_tool_button_get_active (button))
+  if (gtk_toggle_button_get_active (button))
     {
       sl->priv->update_source_id = gdk_threads_add_timeout_seconds (1,
                                                                     update_type_counts,
@@ -236,6 +242,27 @@ type_data_free (gpointer data)
 }
 
 static void
+visible_child_name_changed (GObject *obj, GParamSpec *pspec, GtkInspectorStatistics *sl)
+{
+  const gchar *child;
+  gboolean visible;
+
+  child = gtk_stack_get_visible_child_name (GTK_STACK (gtk_widget_get_parent (GTK_WIDGET (sl))));
+  visible = g_strcmp0 (child, "statistics") == 0;
+
+  gtk_widget_set_visible (sl->priv->button, visible);
+}
+
+static void
+parent_set (GtkWidget *widget, GtkWidget *old_parent)
+{
+  if (old_parent)
+    g_signal_handlers_disconnect_by_func (old_parent, visible_child_name_changed, widget);
+  g_signal_connect (gtk_widget_get_parent (widget), "notify::visible-child-name",
+                    G_CALLBACK (visible_child_name_changed), widget);
+}
+
+static void
 gtk_inspector_statistics_init (GtkInspectorStatistics *sl)
 {
   sl->priv = gtk_inspector_statistics_get_instance_private (sl);
@@ -265,6 +292,20 @@ gtk_inspector_statistics_init (GtkInspectorStatistics *sl)
 }
 
 static void
+constructed (GObject *object)
+{
+  GtkInspectorStatistics *sl = GTK_INSPECTOR_STATISTICS (object);
+
+  g_signal_connect (sl->priv->button, "toggled",
+                    G_CALLBACK (toggle_record), sl);
+
+  if (has_instance_counts ())
+    update_type_counts (sl);
+  else
+    gtk_stack_set_visible_child_name (GTK_STACK (sl->priv->stack), "excuse");
+}
+
+static void
 finalize (GObject *object)
 {
   GtkInspectorStatistics *sl = GTK_INSPECTOR_STATISTICS (object);
@@ -278,12 +319,61 @@ finalize (GObject *object)
 }
 
 static void
+get_property (GObject    *object,
+              guint       param_id,
+              GValue     *value,
+              GParamSpec *pspec)
+{
+  GtkInspectorStatistics *sl = GTK_INSPECTOR_STATISTICS (object);
+
+  switch (param_id)
+    {
+    case PROP_BUTTON:
+      g_value_take_object (value, sl->priv->button);
+      break;
+
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, param_id, pspec);
+      break;
+    }
+}
+
+static void
+set_property (GObject      *object,
+              guint         param_id,
+              const GValue *value,
+              GParamSpec   *pspec)
+{
+  GtkInspectorStatistics *sl = GTK_INSPECTOR_STATISTICS (object);
+
+  switch (param_id)
+    {
+    case PROP_BUTTON:
+      sl->priv->button = g_value_get_object (value);
+      break;
+
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, param_id, pspec);
+      break;
+    }
+}
+
+static void
 gtk_inspector_statistics_class_init (GtkInspectorStatisticsClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
 
+  object_class->get_property = get_property;
+  object_class->set_property = set_property;
+  object_class->constructed = constructed;
   object_class->finalize = finalize;
+
+  widget_class->parent_set = parent_set;
+
+  g_object_class_install_property (object_class, PROP_BUTTON,
+      g_param_spec_object ("button", NULL, NULL,
+                           GTK_TYPE_WIDGET, G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY));
 
   gtk_widget_class_set_template_from_resource (widget_class, "/org/gtk/inspector/statistics.ui");
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorStatistics, view);
@@ -297,8 +387,6 @@ gtk_inspector_statistics_class_init (GtkInspectorStatisticsClass *klass)
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorStatistics, renderer_self2);
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorStatistics, column_cumulative2);
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorStatistics, renderer_cumulative2);
-  gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorStatistics, button);
-  gtk_widget_class_bind_template_callback (widget_class, toggle_record);
 }
 
 // vim: set et sw=2 ts=2:
