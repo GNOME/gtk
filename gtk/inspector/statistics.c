@@ -25,6 +25,7 @@
 #include "gtktreeview.h"
 #include "gtkcellrenderertext.h"
 #include "gtkcelllayout.h"
+#include "gtksearchbar.h"
 
 enum
 {
@@ -49,6 +50,8 @@ struct _GtkInspectorStatisticsPrivate
   GtkCellRenderer *renderer_cumulative2;
   GHashTable *counts;
   guint update_source_id;
+  GtkWidget *search_entry;
+  GtkWidget *search_bar;
 };
 
 typedef struct {
@@ -262,6 +265,87 @@ parent_set (GtkWidget *widget, GtkWidget *old_parent)
                     G_CALLBACK (visible_child_name_changed), widget);
 }
 
+static gboolean
+key_press_event (GtkWidget              *window,
+                 GdkEvent               *event,
+                 GtkInspectorStatistics *sl)
+{
+  if (gtk_widget_get_mapped (GTK_WIDGET (sl)))
+    {
+      if (event->key.keyval == GDK_KEY_Return ||
+          event->key.keyval == GDK_KEY_ISO_Enter ||
+          event->key.keyval == GDK_KEY_KP_Enter)
+        {
+          GtkTreeSelection *selection;
+          GtkTreeModel *model;
+          GtkTreeIter iter;
+          GtkTreePath *path;
+
+          selection = gtk_tree_view_get_selection (sl->priv->view);
+          if (gtk_tree_selection_get_selected (selection, &model, &iter))
+            {
+              path = gtk_tree_model_get_path (model, &iter);
+              gtk_tree_view_row_activated (sl->priv->view, path, NULL);
+              gtk_tree_path_free (path);
+
+              return GDK_EVENT_STOP;
+            }
+          else
+            return GDK_EVENT_PROPAGATE;
+        }
+
+      return gtk_search_bar_handle_event (GTK_SEARCH_BAR (sl->priv->search_bar), event);
+    }
+  else
+    return GDK_EVENT_PROPAGATE;
+}
+
+static gboolean
+match_string (const gchar *string,
+              const gchar *text)
+{
+  gchar *lower;
+  gboolean match = FALSE;
+
+  if (string)
+    {
+      lower = g_ascii_strdown (string, -1);
+      match = g_str_has_prefix (lower, text);
+      g_free (lower);
+    }
+
+  return match;
+}
+
+static gboolean
+match_row (GtkTreeModel *model,
+           gint          column,
+           const gchar  *key,
+           GtkTreeIter  *iter,
+           gpointer      data)
+{
+  gchar *type;
+  gboolean match;
+
+  gtk_tree_model_get (model, iter, column, &type, -1);
+
+  match = match_string (type, key);
+
+  g_free (type);
+
+  return !match;
+}
+
+static void
+hierarchy_changed (GtkWidget *widget,
+                   GtkWidget *previous_toplevel)
+{
+  if (previous_toplevel)
+    g_signal_handlers_disconnect_by_func (previous_toplevel, key_press_event, widget);
+  g_signal_connect (gtk_widget_get_toplevel (widget), "key-press-event",
+                    G_CALLBACK (key_press_event), widget);
+}
+
 static void
 gtk_inspector_statistics_init (GtkInspectorStatistics *sl)
 {
@@ -285,10 +369,9 @@ gtk_inspector_statistics_init (GtkInspectorStatistics *sl)
                                       GINT_TO_POINTER (COLUMN_CUMULATIVE2), NULL);
   sl->priv->counts = g_hash_table_new_full (NULL, NULL, NULL, type_data_free);
 
-  if (has_instance_counts ())
-    update_type_counts (sl);
-  else
-    gtk_stack_set_visible_child_name (GTK_STACK (sl->priv->stack), "excuse");
+  gtk_tree_view_set_search_entry (sl->priv->view, GTK_ENTRY (sl->priv->search_entry));
+  gtk_tree_view_set_search_equal_func (sl->priv->view, match_row, sl, NULL);
+  g_signal_connect (sl, "hierarchy-changed", G_CALLBACK (hierarchy_changed), NULL);
 }
 
 static void
@@ -387,6 +470,9 @@ gtk_inspector_statistics_class_init (GtkInspectorStatisticsClass *klass)
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorStatistics, renderer_self2);
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorStatistics, column_cumulative2);
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorStatistics, renderer_cumulative2);
+  gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorStatistics, search_entry);
+  gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorStatistics, search_bar);
+
 }
 
 // vim: set et sw=2 ts=2:
