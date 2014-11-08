@@ -54,6 +54,9 @@ start_element_handler (GMarkupParseContext  *contexts,
                                    G_MARKUP_COLLECT_STRDUP|G_MARKUP_COLLECT_OPTIONAL, "context", &context,
                                    G_MARKUP_COLLECT_STRDUP|G_MARKUP_COLLECT_OPTIONAL, "comments", &comments,
                                    G_MARKUP_COLLECT_STRING|G_MARKUP_COLLECT_OPTIONAL, "id", NULL,
+                                   G_MARKUP_COLLECT_STRING|G_MARKUP_COLLECT_OPTIONAL, "bind-source", NULL,
+                                   G_MARKUP_COLLECT_STRING|G_MARKUP_COLLECT_OPTIONAL, "bind-property", NULL,
+                                   G_MARKUP_COLLECT_STRING|G_MARKUP_COLLECT_OPTIONAL, "bind-flags", NULL,
                                    G_MARKUP_COLLECT_INVALID);
 
       if (translatable == TRUE)
