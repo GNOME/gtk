@@ -205,10 +205,10 @@ set_sync_counter(Display     *display,
 {
     XSyncValue sync_value;
 
-    XSyncIntsToValue(&sync_value,
-                     value & G_GINT64_CONSTANT(0xFFFFFFFF),
-                     value >> 32);
-    XSyncSetCounter(display, counter, sync_value);
+    XSyncIntsToValue (&sync_value,
+                      value & G_GINT64_CONSTANT(0xFFFFFFFF),
+                      value >> 32);
+    XSyncSetCounter (display, counter, sync_value);
 }
 
 static void
@@ -226,9 +226,9 @@ window_pre_damage (GdkWindow *window)
       impl->toplevel->current_counter_value % 2 == 0)
     {
       impl->toplevel->current_counter_value += 1;
-      set_sync_counter(GDK_WINDOW_XDISPLAY (impl->wrapper),
-		       impl->toplevel->extended_update_counter,
-		       impl->toplevel->current_counter_value);
+      set_sync_counter (GDK_WINDOW_XDISPLAY (impl->wrapper),
+		        impl->toplevel->extended_update_counter,
+                        impl->toplevel->current_counter_value);
     }
 }
 
