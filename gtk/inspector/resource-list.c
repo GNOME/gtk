@@ -25,6 +25,9 @@
 #include "gtktextbuffer.h"
 #include "gtktreestore.h"
 #include "gtktreeselection.h"
+#include "gtksearchbar.h"
+#include "gtksearchentry.h"
+#include "treewalk.h"
 
 enum
 {
@@ -56,10 +59,15 @@ struct _GtkInspectorResourceListPrivate
   GtkWidget *buttons;
   GtkWidget *open_details_button;
   GtkWidget *close_details_button;
+  GtkTreeViewColumn *path_column;
   GtkTreeViewColumn *count_column;
   GtkCellRenderer *count_renderer;
   GtkTreeViewColumn *size_column;
   GtkCellRenderer *size_renderer;
+  GtkWidget *search_bar;
+  GtkWidget *search_entry;
+  GtkTreeWalk *walk;
+  gint search_length;
 };
 
 
@@ -254,6 +262,13 @@ static void
 on_selection_changed (GtkTreeSelection         *selection,
                       GtkInspectorResourceList *rl)
 {
+  GtkTreeIter iter;
+
+  if (gtk_tree_selection_get_selected (selection, NULL, &iter))
+    gtk_tree_walk_reset (rl->priv->walk, &iter);
+  else
+    gtk_tree_walk_reset (rl->priv->walk, NULL);
+
   gtk_widget_set_sensitive (rl->priv->open_details_button, can_show_details (rl));
 }
 
@@ -366,6 +381,211 @@ parent_set (GtkWidget *widget, GtkWidget *old_parent)
 }
 
 static void
+move_search_to_row (GtkInspectorResourceList *sl,
+                    GtkTreeIter              *iter)
+{
+  GtkTreeSelection *selection;
+  GtkTreePath *path;
+
+  selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (sl->priv->tree));
+  path = gtk_tree_model_get_path (GTK_TREE_MODEL (sl->priv->model), iter);
+  gtk_tree_view_expand_to_path (GTK_TREE_VIEW (sl->priv->tree), path);
+  gtk_tree_selection_select_path (selection, path);
+  gtk_tree_view_scroll_to_cell (GTK_TREE_VIEW (sl->priv->tree), path, NULL, TRUE, 0.5, 0.0);
+  gtk_tree_path_free (path);
+}
+
+static gboolean
+key_press_event (GtkWidget                *window,
+                 GdkEvent                 *event,
+                 GtkInspectorResourceList *sl)
+{
+  if (gtk_widget_get_mapped (GTK_WIDGET (sl)))
+    {
+      GdkModifierType default_accel;
+      gboolean search_started;
+
+      search_started = gtk_search_bar_get_search_mode (GTK_SEARCH_BAR (sl->priv->search_bar));
+      default_accel = gtk_widget_get_modifier_mask (GTK_WIDGET (sl), GDK_MODIFIER_INTENT_PRIMARY_ACCELERATOR);
+
+      if (search_started &&
+          (event->key.keyval == GDK_KEY_Return ||
+           event->key.keyval == GDK_KEY_ISO_Enter ||
+           event->key.keyval == GDK_KEY_KP_Enter))
+        {
+          GtkTreeSelection *selection;
+          GtkTreeModel *model;
+          GtkTreeIter iter;
+          GtkTreePath *path;
+
+          selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (sl->priv->tree));
+          if (gtk_tree_selection_get_selected (selection, &model, &iter))
+            {
+              path = gtk_tree_model_get_path (model, &iter);
+              gtk_tree_view_row_activated (GTK_TREE_VIEW (sl->priv->tree),
+                                           path,
+                                           sl->priv->path_column);
+              gtk_tree_path_free (path);
+
+              return GDK_EVENT_STOP;
+            }
+          else
+            return GDK_EVENT_PROPAGATE;
+        }
+      else if (search_started &&
+               (event->key.keyval == GDK_KEY_Escape))
+        {
+          gtk_search_bar_set_search_mode (GTK_SEARCH_BAR (sl->priv->search_bar), FALSE);
+          return GDK_EVENT_STOP;
+        }
+      else if (search_started &&
+               ((event->key.state & (default_accel | GDK_SHIFT_MASK)) == (default_accel | GDK_SHIFT_MASK)) &&
+               (event->key.keyval == GDK_KEY_g || event->key.keyval == GDK_KEY_G))
+        {
+          GtkTreeIter iter;
+          if (gtk_tree_walk_next_match (sl->priv->walk, TRUE, TRUE, &iter))
+            move_search_to_row (sl, &iter);
+          else
+            gtk_widget_error_bell (GTK_WIDGET (sl));
+
+          return GDK_EVENT_STOP;
+        }
+      else if (search_started &&
+               ((event->key.state & (default_accel | GDK_SHIFT_MASK)) == default_accel) &&
+               (event->key.keyval == GDK_KEY_g || event->key.keyval == GDK_KEY_G))
+        {
+          GtkTreeIter iter;
+
+          if (gtk_tree_walk_next_match (sl->priv->walk, TRUE, FALSE, &iter))
+            move_search_to_row (sl, &iter);
+          else
+            gtk_widget_error_bell (GTK_WIDGET (sl));
+
+          return GDK_EVENT_STOP;
+        }
+
+      return gtk_search_bar_handle_event (GTK_SEARCH_BAR (sl->priv->search_bar), event);
+    }
+  else
+    return GDK_EVENT_PROPAGATE;
+}
+
+static void
+on_hierarchy_changed (GtkWidget *widget,
+                      GtkWidget *previous_toplevel)
+{
+  if (previous_toplevel)
+    g_signal_handlers_disconnect_by_func (previous_toplevel, key_press_event, widget);
+  g_signal_connect (gtk_widget_get_toplevel (widget), "key-press-event",
+                    G_CALLBACK (key_press_event), widget);
+}
+
+static void
+on_search_changed (GtkSearchEntry           *entry,
+                   GtkInspectorResourceList *sl)
+{
+  GtkTreeIter iter;
+  gint length;
+  gboolean backwards;
+
+  length = strlen (gtk_entry_get_text (GTK_ENTRY (entry)));
+  backwards = length < sl->priv->search_length;
+  sl->priv->search_length = length;
+
+  if (length == 0)
+    return;
+
+  if (gtk_tree_walk_next_match (sl->priv->walk, backwards, backwards, &iter))
+    move_search_to_row (sl, &iter);
+  else if (!backwards)
+    gtk_widget_error_bell (GTK_WIDGET (sl));
+}
+
+static gboolean
+match_string (const gchar *string,
+              const gchar *text)
+{
+  gchar *lower;
+  gboolean match = FALSE;
+
+  if (string)
+    {
+      lower = g_ascii_strdown (string, -1);
+      match = g_str_has_prefix (lower, text);
+      g_free (lower);
+    }
+
+  return match;
+}
+
+static gboolean
+match_row (GtkTreeModel *model,
+           GtkTreeIter  *iter,
+           gpointer      data)
+{
+  GtkInspectorResourceList *sl = data;
+  gchar *name, *path;
+  const gchar *text;
+  gboolean match;
+
+  text = gtk_entry_get_text (GTK_ENTRY (sl->priv->search_entry));
+  gtk_tree_model_get (model, iter,
+                      COLUMN_NAME, &name,
+                      COLUMN_PATH, &path,
+                      -1);
+
+  match = (match_string (name, text) ||
+           match_string (path, text));
+
+  g_free (name);
+  g_free (path);
+
+  return match;
+}
+
+static void
+search_mode_changed (GObject                  *search_bar,
+                     GParamSpec               *pspec,
+                     GtkInspectorResourceList *sl)
+{
+  if (!gtk_search_bar_get_search_mode (GTK_SEARCH_BAR (search_bar)))
+    {
+      gtk_tree_walk_reset (sl->priv->walk, NULL);
+      sl->priv->search_length = 0;
+    }
+}
+
+static void
+next_match (GtkButton                *button,
+            GtkInspectorResourceList *sl)
+{
+  if (gtk_search_bar_get_search_mode (GTK_SEARCH_BAR (sl->priv->search_bar)))
+    {
+      GtkTreeIter iter;
+
+      if (gtk_tree_walk_next_match (sl->priv->walk, TRUE, FALSE, &iter))
+        move_search_to_row (sl, &iter);
+      else
+        gtk_widget_error_bell (GTK_WIDGET (sl));
+    }
+}
+
+static void
+previous_match (GtkButton                *button,
+                GtkInspectorResourceList *sl)
+{
+  if (gtk_search_bar_get_search_mode (GTK_SEARCH_BAR (sl->priv->search_bar)))
+    {
+      GtkTreeIter iter;
+
+      if (gtk_tree_walk_next_match (sl->priv->walk, TRUE, TRUE, &iter))
+        move_search_to_row (sl, &iter);
+      else
+        gtk_widget_error_bell (GTK_WIDGET (sl));
+    }
+}
+
+static void
 gtk_inspector_resource_list_init (GtkInspectorResourceList *sl)
 {
   sl->priv = gtk_inspector_resource_list_get_instance_private (sl);
@@ -382,6 +602,13 @@ gtk_inspector_resource_list_init (GtkInspectorResourceList *sl)
   g_signal_connect (sl, "map", G_CALLBACK (on_map), NULL);
   g_signal_connect (sl->priv->stack, "notify::visible-child-name",
                     G_CALLBACK (visible_child_name_changed), sl);
+
+  gtk_search_bar_connect_entry (GTK_SEARCH_BAR (sl->priv->search_bar),
+                                GTK_ENTRY (sl->priv->search_entry));
+
+  g_signal_connect (sl->priv->search_bar, "notify::search-mode-enabled",
+                    G_CALLBACK (search_mode_changed), sl);
+  sl->priv->walk = gtk_tree_walk_new (GTK_TREE_MODEL (sl->priv->model), match_row, sl, NULL);
 }
 
 static void
@@ -440,6 +667,16 @@ set_property (GObject      *object,
 }
 
 static void
+finalize (GObject *object)
+{
+  GtkInspectorResourceList *sl = GTK_INSPECTOR_RESOURCE_LIST (object);
+
+  gtk_tree_walk_free (sl->priv->walk);
+
+  G_OBJECT_CLASS (gtk_inspector_resource_list_parent_class)->finalize (object);
+}
+
+static void
 gtk_inspector_resource_list_class_init (GtkInspectorResourceListClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
@@ -448,6 +685,7 @@ gtk_inspector_resource_list_class_init (GtkInspectorResourceListClass *klass)
   object_class->get_property = get_property;
   object_class->set_property = set_property;
   object_class->constructed = constructed;
+  object_class->finalize = finalize;
 
   widget_class->parent_set = parent_set;
 
@@ -471,9 +709,16 @@ gtk_inspector_resource_list_class_init (GtkInspectorResourceListClass *klass)
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorResourceList, size_renderer);
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorResourceList, stack);
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorResourceList, tree);
+  gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorResourceList, search_bar);
+  gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorResourceList, search_entry);
+  gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorResourceList, path_column);
 
   gtk_widget_class_bind_template_callback (widget_class, row_activated);
   gtk_widget_class_bind_template_callback (widget_class, on_selection_changed);
+  gtk_widget_class_bind_template_callback (widget_class, on_hierarchy_changed);
+  gtk_widget_class_bind_template_callback (widget_class, on_search_changed);
+  gtk_widget_class_bind_template_callback (widget_class, next_match);
+  gtk_widget_class_bind_template_callback (widget_class, previous_match);
 }
 
 // vim: set et sw=2 ts=2:

@@ -13,65 +13,127 @@
   </object>
   <template class="GtkInspectorResourceList" parent="GtkBox">
     <property name="orientation">horizontal</property>
+    <signal name="hierarchy-changed" handler="on_hierarchy_changed"/>
     <child>
       <object class="GtkStack" id="stack">
         <property name="visible">True</property>
         <property name="transition-type">none</property>
         <child>
-          <object class="GtkScrolledWindow">
+          <object class="GtkBox">
             <property name="visible">True</property>
-            <property name="expand">True</property>
-            <property name="hscrollbar-policy">never</property>
-            <property name="vscrollbar-policy">automatic</property>
+            <property name="orientation">vertical</property>
             <child>
-              <object class="GtkTreeView" id="tree">
+              <object class="GtkSearchBar" id="search_bar">
                 <property name="visible">True</property>
-                <property name="model">model</property>
-                <signal name="row-activated" handler="row_activated"/>
-                <child internal-child="selection">
-                  <object class="GtkTreeSelection">
-                    <property name="mode">single</property>
-                    <signal name="changed" handler="on_selection_changed"/>
-                  </object>
-                </child>
+                <property name="show-close-button">True</property>
                 <child>
-                  <object class="GtkTreeViewColumn">
-                    <property name="title" translatable="yes">Path</property>
-                    <property name="resizable">True</property>
-                    <property name="sort-column-id">0</property>
+                  <object class="GtkBox">
+                    <property name="visible">True</property>
+                    <property name="orientation">horizontal</property>
+                    <style>
+                      <class name="linked"/>
+                    </style>
                     <child>
-                      <object class="GtkCellRendererText">
-                        <property name="scale">0.8</property>
-                        <property name="ellipsize">end</property>
-                        <property name="width-chars">10</property>
-                        <property name="max-width-chars">5</property>
+                      <object class="GtkSearchEntry" id="search_entry">
+                        <property name="visible">True</property>
+                        <property name="max-width-chars">40</property>
+                        <signal name="search-changed" handler="on_search_changed"/>
                       </object>
-                      <attributes>
-                        <attribute name="text">0</attribute>
-                      </attributes>
+                    </child>
+                    <child>
+                      <object class="GtkButton">
+                        <property name="visible">True</property>
+                        <signal name="clicked" handler="next_match"/>
+                        <style>
+                          <class name="image-button"/>
+                        </style>
+                        <child>
+                          <object class="GtkImage">
+                            <property name="visible">True</property>
+                            <property name="icon-name">go-down-symbolic</property>
+                            <property name="icon-size">1</property>
+                          </object>
+                        </child>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkButton">
+                        <property name="visible">True</property>
+                        <signal name="clicked" handler="previous_match"/>
+                        <style>
+                          <class name="image-button"/>
+                        </style>
+                        <child>
+                          <object class="GtkImage">
+                            <property name="visible">True</property>
+                            <property name="icon-name">go-up-symbolic</property>
+                            <property name="icon-size">1</property>
+                          </object>
+                        </child>
+                      </object>
                     </child>
                   </object>
                 </child>
+              </object>
+            </child>
+            <child>
+              <object class="GtkScrolledWindow">
+                <property name="visible">True</property>
+                <property name="expand">True</property>
+                <property name="hscrollbar-policy">never</property>
+                <property name="vscrollbar-policy">automatic</property>
                 <child>
-                  <object class="GtkTreeViewColumn" id="count_column">
-                    <property name="title" translatable="yes">Count</property>
-                    <property name="resizable">True</property>
-                    <property name="sort-column-id">1</property>
-                    <child>
-                      <object class="GtkCellRendererText" id="count_renderer">
-                        <property name="scale">0.8</property>
+                  <object class="GtkTreeView" id="tree">
+                    <property name="visible">True</property>
+                    <property name="model">model</property>
+                    <property name="enable-search">False</property>
+                    <signal name="row-activated" handler="row_activated"/>
+                    <child internal-child="selection">
+                      <object class="GtkTreeSelection">
+                        <property name="mode">single</property>
+                        <signal name="changed" handler="on_selection_changed"/>
                       </object>
                     </child>
-                  </object>
-                </child>
-                <child>
-                  <object class="GtkTreeViewColumn" id="size_column">
-                    <property name="title" translatable="yes">Size</property>
-                    <property name="resizable">True</property>
-                    <property name="sort-column-id">2</property>
                     <child>
-                      <object class="GtkCellRendererText" id="size_renderer">
-                        <property name="scale">0.8</property>
+                      <object class="GtkTreeViewColumn" id="path_column">
+                        <property name="title" translatable="yes">Path</property>
+                        <property name="resizable">True</property>
+                        <property name="sort-column-id">0</property>
+                        <child>
+                          <object class="GtkCellRendererText">
+                            <property name="scale">0.8</property>
+                            <property name="ellipsize">end</property>
+                            <property name="width-chars">10</property>
+                            <property name="max-width-chars">5</property>
+                          </object>
+                          <attributes>
+                            <attribute name="text">0</attribute>
+                          </attributes>
+                        </child>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkTreeViewColumn" id="count_column">
+                        <property name="title" translatable="yes">Count</property>
+                        <property name="resizable">True</property>
+                        <property name="sort-column-id">1</property>
+                        <child>
+                          <object class="GtkCellRendererText" id="count_renderer">
+                            <property name="scale">0.8</property>
+                          </object>
+                        </child>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkTreeViewColumn" id="size_column">
+                        <property name="title" translatable="yes">Size</property>
+                        <property name="resizable">True</property>
+                        <property name="sort-column-id">2</property>
+                        <child>
+                          <object class="GtkCellRendererText" id="size_renderer">
+                            <property name="scale">0.8</property>
+                          </object>
+                        </child>
                       </object>
                     </child>
                   </object>
