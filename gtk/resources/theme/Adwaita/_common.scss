@@ -1902,14 +1902,14 @@ column-header.button.dnd { // for treeview-like derive widgets
   .slider {
     border-color: transparent;
     border-style: solid;
-    background-color: mix($bg_color, $fg_color, 70%);
+    background-color: mix($fg_color, $bg_color, 40%);
     background-clip: padding-box; // needed since we use the borders as margins
 
-    &:hover { background-color: mix($bg_color, $fg_color, 50%); }
+    &:hover { background-color: mix($fg_color, $bg_color, 60%); }
 
-    &:prelight:active { background-color: $selected_bg_color; }
+    &:prelight:active { background-color: if($variant=='light', darken($selected_bg_color, 10%), lighten($selected_bg_color, 10%));}
 
-    &:backdrop { background-color: mix($backdrop_bg_color, $backdrop_fg_color, 60%); }
+    &:backdrop { background-color: mix($backdrop_fg_color, $backdrop_bg_color, 40%); }
 
     &:insensitive {
       background-color: transparent;

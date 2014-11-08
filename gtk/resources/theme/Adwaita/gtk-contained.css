@@ -2425,14 +2425,14 @@ column-header .titlebar .button.titlebutton,
   .scrollbar .slider {
     border-color: transparent;
     border-style: solid;
-    background-color: #b3b5b6;
+    background-color: #a0a3a3;
     background-clip: padding-box; }
     .scrollbar.overlay-indicator.dragging.vertical .slider:hover, .scrollbar.overlay-indicator.hovering.vertical .slider:hover, .scrollbar.overlay-indicator.dragging.horizontal .slider:hover, .scrollbar.overlay-indicator.hovering.horizontal .slider:hover,
     .scrollbar .slider:hover {
-      background-color: #8d9091; }
+      background-color: #7a7e7f; }
     .scrollbar.overlay-indicator.dragging.vertical .slider:prelight:active, .scrollbar.overlay-indicator.hovering.vertical .slider:prelight:active, .scrollbar.overlay-indicator.dragging.horizontal .slider:prelight:active, .scrollbar.overlay-indicator.hovering.horizontal .slider:prelight:active,
     .scrollbar .slider:prelight:active {
-      background-color: #4a90d9; }
+      background-color: #2a76c6; }
     .scrollbar.overlay-indicator.dragging.vertical .slider:backdrop, .scrollbar.overlay-indicator.hovering.vertical .slider:backdrop, .scrollbar.overlay-indicator.dragging.horizontal .slider:backdrop, .scrollbar.overlay-indicator.hovering.horizontal .slider:backdrop,
     .scrollbar .slider:backdrop {
       background-color: #c6c7c8; }
