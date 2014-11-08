@@ -304,19 +304,6 @@ close_details (GtkWidget                *button,
 }
 
 static void
-visible_child_name_changed (GObject *obj, GParamSpec *pspec, GtkInspectorResourceList *sl)
-{
-  const gchar *child;
-  gboolean resources_visible;
-
-  child = gtk_stack_get_visible_child_name (GTK_STACK (gtk_widget_get_parent (GTK_WIDGET (sl))));
-  resources_visible = g_strcmp0 (child, "resources") == 0;
-
-  gtk_widget_set_visible (sl->priv->buttons, resources_visible);
-  gtk_widget_set_sensitive (sl->priv->open_details_button, can_show_details (sl));
-}
-
-static void
 load_resources (GtkInspectorResourceList *sl)
 {
   gint count = 0;
@@ -369,15 +356,7 @@ on_map (GtkWidget *widget)
 
   gtk_tree_view_expand_all (GTK_TREE_VIEW (sl->priv->tree));
   gtk_stack_set_visible_child_name (GTK_STACK (sl->priv->stack), "list");
-}
-
-static void
-parent_set (GtkWidget *widget, GtkWidget *old_parent)
-{
-  if (old_parent)
-    g_signal_handlers_disconnect_by_func (old_parent, visible_child_name_changed, widget);
-  g_signal_connect (gtk_widget_get_parent (widget), "notify::visible-child-name",
-                    G_CALLBACK (visible_child_name_changed), widget);
+  gtk_widget_set_sensitive (sl->priv->open_details_button, can_show_details (sl));
 }
 
 static void
@@ -600,8 +579,6 @@ gtk_inspector_resource_list_init (GtkInspectorResourceList *sl)
                                            size_data_func, sl, NULL);
 
   g_signal_connect (sl, "map", G_CALLBACK (on_map), NULL);
-  g_signal_connect (sl->priv->stack, "notify::visible-child-name",
-                    G_CALLBACK (visible_child_name_changed), sl);
 
   gtk_search_bar_connect_entry (GTK_SEARCH_BAR (sl->priv->search_bar),
                                 GTK_ENTRY (sl->priv->search_entry));
@@ -686,8 +663,6 @@ gtk_inspector_resource_list_class_init (GtkInspectorResourceListClass *klass)
   object_class->set_property = set_property;
   object_class->constructed = constructed;
   object_class->finalize = finalize;
-
-  widget_class->parent_set = parent_set;
 
   g_object_class_install_property (object_class, PROP_BUTTONS,
       g_param_spec_object ("buttons", NULL, NULL,

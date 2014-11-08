@@ -244,27 +244,6 @@ type_data_free (gpointer data)
   g_free (type_data);
 }
 
-static void
-visible_child_name_changed (GObject *obj, GParamSpec *pspec, GtkInspectorStatistics *sl)
-{
-  const gchar *child;
-  gboolean visible;
-
-  child = gtk_stack_get_visible_child_name (GTK_STACK (gtk_widget_get_parent (GTK_WIDGET (sl))));
-  visible = g_strcmp0 (child, "statistics") == 0;
-
-  gtk_widget_set_visible (sl->priv->button, visible);
-}
-
-static void
-parent_set (GtkWidget *widget, GtkWidget *old_parent)
-{
-  if (old_parent)
-    g_signal_handlers_disconnect_by_func (old_parent, visible_child_name_changed, widget);
-  g_signal_connect (gtk_widget_get_parent (widget), "notify::visible-child-name",
-                    G_CALLBACK (visible_child_name_changed), widget);
-}
-
 static gboolean
 key_press_event (GtkWidget              *window,
                  GdkEvent               *event,
@@ -451,8 +430,6 @@ gtk_inspector_statistics_class_init (GtkInspectorStatisticsClass *klass)
   object_class->set_property = set_property;
   object_class->constructed = constructed;
   object_class->finalize = finalize;
-
-  widget_class->parent_set = parent_set;
 
   g_object_class_install_property (object_class, PROP_BUTTON,
       g_param_spec_object ("button", NULL, NULL,

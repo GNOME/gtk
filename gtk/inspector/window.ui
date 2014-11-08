@@ -9,34 +9,40 @@
         <property name="visible">True</property>
         <property name="show-close-button">True</property>
         <child>
-          <object class="GtkButton" id="select_object">
+          <object class="GtkStack" id="button_stack">
             <property name="visible">True</property>
-            <property name="tooltip-text" translatable="yes">Select an Object</property>
-            <property name="halign">center</property>
-            <property name="valign">center</property>
-            <signal name="clicked" handler="gtk_inspector_on_inspect"/>
-            <style>
-              <class name="image-button"/>
-            </style>
+            <property name="visible-child-name" bind-source="top_stack" bind-property="visible-child-name"/>
             <child>
-              <object class="GtkImage">
+              <object class="GtkBox">
                 <property name="visible">True</property>
-                <property name="icon-name">find-location-symbolic</property>
-                <property name="icon-size">1</property>
-              </object>
-            </child>
-          </object>
-          <packing>
-            <property name="pack-type">start</property>
-          </packing>
-        </child>
-        <child>
-          <object class="GtkStack" id="object_buttons">
-            <property name="visible">True</property>
-            <child>
-              <object class="GtkButton" id="object_details_button">
-                <property name="visible">True</property>
-                <property name="tooltip-text" translatable="yes">Show Details</property>
+                <property name="orientation">horizontal</property>
+                <property name="spacing">6</property>
+                <child>
+                  <object class="GtkButton" id="select_object">
+                    <property name="visible">True</property>
+                    <property name="tooltip-text" translatable="yes">Select an Object</property>
+                    <property name="halign">center</property>
+                    <property name="valign">center</property>
+                    <signal name="clicked" handler="gtk_inspector_on_inspect"/>
+                    <style>
+                      <class name="image-button"/>
+                    </style>
+                    <child>
+                      <object class="GtkImage">
+                        <property name="visible">True</property>
+                        <property name="icon-name">find-location-symbolic</property>
+                        <property name="icon-size">1</property>
+                      </object>
+                    </child>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkStack" id="object_buttons">
+                    <property name="visible">True</property>
+                    <child>
+                      <object class="GtkButton" id="object_details_button">
+                        <property name="visible">True</property>
+                        <property name="tooltip-text" translatable="yes">Show Details</property>
                 <property name="halign">center</property>
                 <property name="valign">center</property>
                 <signal name="clicked" handler="open_object_details"/>
@@ -78,14 +84,17 @@
               </packing>
             </child>
           </object>
+            </child>
+          </object>
           <packing>
-            <property name="pack-type">start</property>
+            <property name="name">objects</property>
           </packing>
         </child>
         <child>
           <object class="GtkToggleButton" id="record_statistics_button">
+            <property name="visible">True</property>
             <property name="tooltip-text" translatable="yes">Collect Statistics</property>
-            <property name="halign">center</property>
+            <property name="halign">start</property>
             <property name="valign">center</property>
             <style>
               <class name="image-button"/>
@@ -99,11 +108,14 @@
             </child>
           </object>
           <packing>
-            <property name="pack-type">start</property>
+            <property name="name">statistics</property>
           </packing>
         </child>
         <child>
           <object class="GtkStack" id="resource_buttons">
+            <property name="visible">True</property>
+            <property name="halign">start</property>
+            <property name="valign">center</property>
             <child>
               <object class="GtkButton">
                 <property name="visible">True</property>
@@ -148,8 +160,37 @@
             </child>
           </object>
           <packing>
-            <property name="pack-type">start</property>
+            <property name="name">resources</property>
           </packing>
+        </child>
+        <child>
+          <object class="GtkBox">
+            <property name="visible">True</property>
+          </object>
+          <packing>
+            <property name="name">css</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkBox">
+            <property name="visible">True</property>
+          </object>
+          <packing>
+            <property name="name">visual</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkBox">
+            <property name="visible">True</property>
+          </object>
+          <packing>
+            <property name="name">general</property>
+          </packing>
+        </child>
+        </object>
+        <packing>
+          <property name="pack-type">start</property>
+        </packing>
         </child>
         <child type="title">
           <object class="GtkStackSwitcher">
