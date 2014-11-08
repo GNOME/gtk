@@ -502,7 +502,7 @@ init_gl (GtkInspectorVisual *vis)
     gtk_combo_box_set_active_id (GTK_COMBO_BOX (vis->priv->gl_combo), "maybe");
   gtk_widget_set_sensitive (vis->priv->gl_combo, FALSE);
   gtk_widget_set_tooltip_text (vis->priv->gl_combo,
-                               _("Not settable at runtime.\nUse GDK_GL=always or GDK_GL=never instead"));
+                               _("Not settable at runtime.\nUse GDK_GL=always or GDK_GL=disable instead"));
 
   gtk_switch_set_active (GTK_SWITCH (vis->priv->software_gl_switch),
                          flags & GDK_GL_SOFTWARE_DRAW_GL);
