@@ -364,7 +364,10 @@ constructed (GObject *object)
   if (has_instance_counts ())
     update_type_counts (sl);
   else
-    gtk_stack_set_visible_child_name (GTK_STACK (sl->priv->stack), "excuse");
+    {
+      gtk_stack_set_visible_child_name (GTK_STACK (sl->priv->stack), "excuse");
+      gtk_widget_set_sensitive (sl->priv->button, FALSE);
+    }
 }
 
 static void
