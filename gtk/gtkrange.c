@@ -42,6 +42,7 @@
 #include "gtkscrollbar.h"
 #include "gtktypebuiltins.h"
 #include "gtkwindow.h"
+#include "gtkwidgetprivate.h"
 #include "a11y/gtkrangeaccessible.h"
 
 /**
@@ -1638,6 +1639,8 @@ gtk_range_size_allocate (GtkWidget     *widget,
     gdk_window_move_resize (priv->event_window,
                             allocation->x, allocation->y,
                             allocation->width, allocation->height);
+
+  _gtk_widget_set_simple_clip (widget, NULL);
 }
 
 static void
