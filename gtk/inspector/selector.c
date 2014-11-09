@@ -68,7 +68,10 @@ gtk_inspector_selector_set_object (GtkInspectorSelector *oh,
   gtk_tree_store_clear (oh->priv->model);
 
   if (!GTK_IS_WIDGET (object))
-    return;
+    {
+      gtk_widget_hide (GTK_WIDGET (oh));
+      return;
+    }
 
   widget = GTK_WIDGET (object);
 
@@ -89,6 +92,8 @@ gtk_inspector_selector_set_object (GtkInspectorSelector *oh,
 
   gtk_tree_view_expand_all (oh->priv->tree);
   gtk_tree_selection_select_iter (gtk_tree_view_get_selection (oh->priv->tree), &iter);
+
+  gtk_widget_show (GTK_WIDGET (oh));
 }
 
 // vim: set et sw=2 ts=2:
