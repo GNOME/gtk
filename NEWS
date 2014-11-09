@@ -1,3 +1,26 @@
+Overview of Changes in GTK+ 3.14.4 to 3.14.5
+============================================
+
+* Bugs fixed:
+ 726316 Backdrop inconvenient on multimonitor for reading text
+ 737561 quartz: gtk+ 3.14.0 fails to build on 10.6.8, 'NSFullScreen...
+ 737891 mounting LUKS partition from nautilus takes very long
+ 738321 GtkMenu has unnecessary scroll buttons
+ 738648 gdk_window_get_content() causes creation/destruction of bac...
+ 738650 fix separator with iconic section and more
+ 738886 Out of bounds access in MyEnhancedXkbTranslateKeyCode`
+ 738955 Client-side decoration window menus appear at wrong positio...
+ 739005 gtkstatusicon.c won't build with both X11 and Quartz backen...
+ 739111 GtkFontChooserDialog fixes 
+
+* Translation updates:
+ Czech
+ German
+ Hungarian
+ Lithuanian
+ Serbian
+
+
 Overview of Changes in GTK+ 3.14.3 to 3.14.4
 ============================================
 
