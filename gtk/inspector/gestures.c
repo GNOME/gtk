@@ -177,40 +177,40 @@ void
 gtk_inspector_gestures_set_object (GtkInspectorGestures *sl,
                                    GObject              *object)
 {
+  GHashTable *hash;
+  GHashTableIter iter;
+  GList *list, *l;
+  gint phase;
+
   clear_all (sl);
+  gtk_widget_hide (GTK_WIDGET (sl));
 
-  if (GTK_IS_WIDGET (object))
+  if (!GTK_IS_WIDGET (object))
+    return;
+
+  hash = g_hash_table_new (g_direct_hash, g_direct_equal);
+  for (phase = GTK_PHASE_NONE; phase <= GTK_PHASE_TARGET; phase++)
     {
-      GHashTable *hash;
-      GHashTableIter iter;
-      GList *list, *l;
-      gint phase;
-
-      hash = g_hash_table_new (g_direct_hash, g_direct_equal);
-      for (phase = GTK_PHASE_NONE; phase <= GTK_PHASE_TARGET; phase++)
-        {
-          list = _gtk_widget_list_controllers (GTK_WIDGET (object), phase);
-          for (l = list; l; l = l->next)
-            g_hash_table_insert (hash, l->data, GINT_TO_POINTER (phase));
-          g_list_free (list);
-        }
-      
-      while (g_hash_table_size (hash) > 0)
-        {
-          gpointer key, value;
-          GtkGesture *gesture;
-          g_hash_table_iter_init (&iter, hash);
-          g_hash_table_iter_next (&iter, &key, &value);
-          gesture = key;
-          add_gesture_group (sl, object, gesture, hash);
-        }
-
-      g_hash_table_unref (hash);
-
-      gtk_widget_show (GTK_WIDGET (sl));
+      list = _gtk_widget_list_controllers (GTK_WIDGET (object), phase);
+      for (l = list; l; l = l->next)
+        g_hash_table_insert (hash, l->data, GINT_TO_POINTER (phase));
+      g_list_free (list);
     }
-  else
-    gtk_widget_hide (GTK_WIDGET (sl));
+      
+  if (g_hash_table_size (hash))
+    gtk_widget_show (GTK_WIDGET (sl));
+
+  while (g_hash_table_size (hash) > 0)
+    {
+      gpointer key, value;
+      GtkGesture *gesture;
+      g_hash_table_iter_init (&iter, hash);
+      g_hash_table_iter_next (&iter, &key, &value);
+      gesture = key;
+      add_gesture_group (sl, object, gesture, hash);
+    }
+
+  g_hash_table_unref (hash);
 }
 
 static void
