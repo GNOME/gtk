@@ -16,8 +16,8 @@ msgstr ""
 "Project-Id-Version: lt\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gtk"
 "%2b&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2014-10-06 12:41+0000\n"
-"PO-Revision-Date: 2014-10-06 23:33+0300\n"
+"POT-Creation-Date: 2014-11-09 09:42+0000\n"
+"PO-Revision-Date: 2014-11-09 17:44+0200\n"
 "Last-Translator: Aurimas Černius <aurisc4@gmail.com>\n"
 "Language-Team: Lietuvių <gnome-lt@lists.akl.lt>\n"
 "Language: lt\n"
@@ -1122,6 +1122,16 @@ msgstr "Komentarų eilutė"
 #: ../gtk/gtkaboutdialog.c:388
 msgid "Comments about the program"
 msgstr "Pastabos apie programą"
+
+#: ../gtk/gtkaboutdialog.c:408
+#| msgid "License Type"
+msgid "License"
+msgstr "Licencija"
+
+#: ../gtk/gtkaboutdialog.c:409
+#| msgid "The license type of the program"
+msgid "The license of the program"
+msgstr "Programos licencija"
 
 #: ../gtk/gtkaboutdialog.c:436
 msgid "License Type"
@@ -3771,7 +3781,7 @@ msgstr "Filtras"
 msgid "The current filter for selecting which files are displayed"
 msgstr "Šiuo metu naudojamas failų išvedimo filtras"
 
-#: ../gtk/gtkfilechooser.c:388 ../gtk/gtkplacessidebar.c:4400
+#: ../gtk/gtkfilechooser.c:388 ../gtk/gtkplacessidebar.c:4525
 msgid "Local Only"
 msgstr "Tik vietiniai failai"
 
@@ -4334,7 +4344,7 @@ msgstr "Pranešimo tipas"
 msgid "The type of message"
 msgstr "Pranešimo tipas"
 
-#: ../gtk/gtkinfobar.c:461 ../gtk/gtksearchbar.c:418
+#: ../gtk/gtkinfobar.c:461 ../gtk/gtksearchbar.c:434
 msgid "Show Close Button"
 msgstr "Rodyti užvėrimo mygtuką"
 
@@ -5208,19 +5218,19 @@ msgid "If TRUE, the child can be made smaller than its requisition"
 msgstr ""
 "Jei TEIGIAMA, vaikinis objektas gali būti sumažintas daugiau, nei jam reikia"
 
-#: ../gtk/gtkplacessidebar.c:4369
+#: ../gtk/gtkplacessidebar.c:4494
 msgid "Location to Select"
 msgstr "Žymima vieta"
 
-#: ../gtk/gtkplacessidebar.c:4370
+#: ../gtk/gtkplacessidebar.c:4495
 msgid "The location to highlight in the sidebar"
 msgstr "Žymima vieta šoniniame polangyje"
 
-#: ../gtk/gtkplacessidebar.c:4375
+#: ../gtk/gtkplacessidebar.c:4500
 msgid "Open Flags"
 msgstr "Atvėrimo požymiai"
 
-#: ../gtk/gtkplacessidebar.c:4376
+#: ../gtk/gtkplacessidebar.c:4501
 msgid ""
 "Modes in which the calling application can open locations selected in the "
 "sidebar"
@@ -5228,19 +5238,19 @@ msgstr ""
 "Veiksenos, kuriomis kviečiančioji programa gali atverti šoniniame polangyje "
 "pasirinktas vieta"
 
-#: ../gtk/gtkplacessidebar.c:4382
+#: ../gtk/gtkplacessidebar.c:4507
 msgid "Show 'Desktop'"
 msgstr "Rodyti „darbastalį“"
 
-#: ../gtk/gtkplacessidebar.c:4383
+#: ../gtk/gtkplacessidebar.c:4508
 msgid "Whether the sidebar includes a builtin shortcut to the Desktop folder"
 msgstr "Ar šoniniame polangyje rodyti integruotą nuorodą į darbastalio aplanką"
 
-#: ../gtk/gtkplacessidebar.c:4388
+#: ../gtk/gtkplacessidebar.c:4513
 msgid "Show 'Connect to Server'"
 msgstr "Rodyti „Prisijungti prie serverio“"
 
-#: ../gtk/gtkplacessidebar.c:4389
+#: ../gtk/gtkplacessidebar.c:4514
 msgid ""
 "Whether the sidebar includes a builtin shortcut to a 'Connect to server' "
 "dialog"
@@ -5248,16 +5258,16 @@ msgstr ""
 "Ar šoninis polangis turi integruotą nuorodą į dialogą „Prisijungti prie "
 "serverio“"
 
-#: ../gtk/gtkplacessidebar.c:4394
+#: ../gtk/gtkplacessidebar.c:4519
 msgid "Show 'Enter Location'"
 msgstr "Rodyti „Įvesti vieta“"
 
-#: ../gtk/gtkplacessidebar.c:4395
+#: ../gtk/gtkplacessidebar.c:4520
 msgid ""
 "Whether the sidebar includes a builtin shortcut to manually enter a location"
 msgstr "Ar šoninis polangis turi integruotą trumpinį rankiniam vietos įvedimui"
 
-#: ../gtk/gtkplacessidebar.c:4401
+#: ../gtk/gtkplacessidebar.c:4526
 msgid "Whether the sidebar only includes local files"
 msgstr "Ar šoniniame polangyje rodyti tik vietinius failus"
 
@@ -6176,15 +6186,15 @@ msgstr "Kinetinis slinkimas"
 msgid "Kinetic scrolling mode."
 msgstr "Kinetinio slinkimo veiksena."
 
-#: ../gtk/gtksearchbar.c:407
+#: ../gtk/gtksearchbar.c:423
 msgid "Search Mode Enabled"
 msgstr "Įjungta paieškos veiksena"
 
-#: ../gtk/gtksearchbar.c:408
+#: ../gtk/gtksearchbar.c:424
 msgid "Whether the search mode is on and the search bar shown"
 msgstr "Ar paieškos veiksena yra įjungta ir paieškos juosta yra rodoma"
 
-#: ../gtk/gtksearchbar.c:419
+#: ../gtk/gtksearchbar.c:435
 msgid "Whether to show the close button in the toolbar"
 msgstr "Ar rodyti užvėrimo mygtuką"
 
@@ -7050,7 +7060,7 @@ msgstr "Reikia dėmesio"
 msgid "Whether this page needs attention"
 msgstr "Ar šiam puslapiui reikia dėmesio"
 
-#: ../gtk/gtkstackswitcher.c:515 ../gtk/gtkstackswitcher.c:516
+#: ../gtk/gtkstackswitcher.c:523 ../gtk/gtkstackswitcher.c:524
 msgid "Stack"
 msgstr "Krūva"
 

@@ -16,8 +16,8 @@ msgstr ""
 "Project-Id-Version: lt\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gtk"
 "%2b&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2014-10-06 12:40+0000\n"
-"PO-Revision-Date: 2014-10-06 23:31+0300\n"
+"POT-Creation-Date: 2014-11-09 09:41+0000\n"
+"PO-Revision-Date: 2014-11-09 17:42+0200\n"
 "Last-Translator: Aurimas Černius <aurisc4@gmail.com>\n"
 "Language-Team: Lietuvių <gnome-lt@lists.akl.lt>\n"
 "Language: lt\n"
@@ -1173,7 +1173,7 @@ msgstr ""
 #: ../gtk/gtkmessagedialog.c:957 ../gtk/gtkmountoperation.c:543
 #: ../gtk/gtkpagesetupunixdialog.c:196 ../gtk/gtkprintbackend.c:763
 #: ../gtk/gtkprinteroptionwidget.c:545 ../gtk/gtkprintunixdialog.c:665
-#: ../gtk/gtkprintunixdialog.c:733 ../gtk/gtkwindow.c:11708
+#: ../gtk/gtkprintunixdialog.c:733 ../gtk/gtkwindow.c:11716
 #: ../gtk/inspector/css-editor.c:198
 #: ../gtk/resources/ui/gtkappchooserdialog.ui.h:2
 #: ../gtk/resources/ui/gtkassistant.ui.h:5
@@ -1228,7 +1228,7 @@ msgstr "Prit_aikyti"
 
 #: ../gtk/deprecated/gtkfontsel.c:1698 ../gtk/gtkmessagedialog.c:936
 #: ../gtk/gtkmessagedialog.c:958 ../gtk/gtkprintbackend.c:764
-#: ../gtk/gtkwindow.c:11709 ../gtk/inspector/classes-list.c:125
+#: ../gtk/gtkwindow.c:11717 ../gtk/inspector/classes-list.c:125
 msgid "_OK"
 msgstr "_Gerai"
 
@@ -1384,8 +1384,7 @@ msgstr ""
 "Ši programa teikiama BE JOKIOS GARANTIJOS.\n"
 "Daugiau informacijos rasite adresu <a href=\"%s\">%s</a>."
 
-#: ../gtk/gtkaboutdialog.c:118 ../gtk/gtkaboutdialog.c:408
-#: ../gtk/resources/ui/gtkaboutdialog.ui.h:3
+#: ../gtk/gtkaboutdialog.c:118 ../gtk/resources/ui/gtkaboutdialog.ui.h:3
 msgid "License"
 msgstr "Licencija"
 
@@ -1437,9 +1436,20 @@ msgstr "GNU Bendroji Vieša Licencija su išimtimis, tik versija 2.1"
 msgid "GNU Lesser General Public License, version 3 only"
 msgstr "GNU Bendroji Vieša Licencija su išimtimis, tik versija 3"
 
-#: ../gtk/gtkaboutdialog.c:409
-msgid "The license of the program"
-msgstr "Programos licencija"
+#: ../gtk/gtkaboutdialog.c:697
+#| msgid "Credits"
+msgid "C_redits"
+msgstr "_Padėkos"
+
+#: ../gtk/gtkaboutdialog.c:705
+#| msgid "License"
+msgid "_License"
+msgstr "_Licencija"
+
+#: ../gtk/gtkaboutdialog.c:714 ../gtk/gtkcustompaperunixdialog.c:329
+#: ../gtk/gtkmessagedialog.c:940 ../gtk/resources/ui/gtkassistant.ui.h:6
+msgid "_Close"
+msgstr "_Užverti"
 
 #: ../gtk/gtkaboutdialog.c:982
 msgid "Could not show link"
@@ -2022,11 +2032,6 @@ msgstr "_Tinkinti"
 msgid "default:mm"
 msgstr "default:mm"
 
-#: ../gtk/gtkcustompaperunixdialog.c:329 ../gtk/gtkmessagedialog.c:940
-#: ../gtk/resources/ui/gtkassistant.ui.h:6
-msgid "_Close"
-msgstr "_Užverti"
-
 #. And show the custom paper dialog
 #: ../gtk/gtkcustompaperunixdialog.c:405 ../gtk/gtkprintunixdialog.c:3311
 msgid "Manage Custom Sizes"
@@ -2081,30 +2086,30 @@ msgstr "_Dešinė:"
 msgid "Paper Margins"
 msgstr "Popieriaus paraštės"
 
-#: ../gtk/gtkentry.c:9584 ../gtk/gtkentry.c:9737 ../gtk/gtklabel.c:6530
-#: ../gtk/gtktextview.c:8841 ../gtk/gtktextview.c:9029
+#: ../gtk/gtkentry.c:9587 ../gtk/gtkentry.c:9742 ../gtk/gtklabel.c:6530
+#: ../gtk/gtktextview.c:8841 ../gtk/gtktextview.c:9031
 msgid "Cu_t"
 msgstr "_Iškirpti"
 
-#: ../gtk/gtkentry.c:9588 ../gtk/gtkentry.c:9740 ../gtk/gtklabel.c:6531
-#: ../gtk/gtktextview.c:8845 ../gtk/gtktextview.c:9033
+#: ../gtk/gtkentry.c:9591 ../gtk/gtkentry.c:9745 ../gtk/gtklabel.c:6531
+#: ../gtk/gtktextview.c:8845 ../gtk/gtktextview.c:9035
 msgid "_Copy"
 msgstr "_Kopijuoti"
 
-#: ../gtk/gtkentry.c:9592 ../gtk/gtkentry.c:9743 ../gtk/gtklabel.c:6532
-#: ../gtk/gtktextview.c:8847 ../gtk/gtktextview.c:9035
+#: ../gtk/gtkentry.c:9595 ../gtk/gtkentry.c:9748 ../gtk/gtklabel.c:6532
+#: ../gtk/gtktextview.c:8847 ../gtk/gtktextview.c:9037
 msgid "_Paste"
 msgstr "Į_dėti"
 
-#: ../gtk/gtkentry.c:9595 ../gtk/gtklabel.c:6534 ../gtk/gtktextview.c:8850
+#: ../gtk/gtkentry.c:9598 ../gtk/gtklabel.c:6534 ../gtk/gtktextview.c:8850
 msgid "_Delete"
 msgstr "Iš_trinti"
 
-#: ../gtk/gtkentry.c:9606 ../gtk/gtklabel.c:6543 ../gtk/gtktextview.c:8864
+#: ../gtk/gtkentry.c:9609 ../gtk/gtklabel.c:6543 ../gtk/gtktextview.c:8864
 msgid "Select _All"
 msgstr "P_ažymėti viską"
 
-#: ../gtk/gtkentry.c:10798
+#: ../gtk/gtkentry.c:10803
 msgid "Caps Lock is on"
 msgstr "Caps Lock įjungtas"
 
@@ -2112,7 +2117,7 @@ msgstr "Caps Lock įjungtas"
 msgid "Select a File"
 msgstr "Pasirinkite failą"
 
-#: ../gtk/gtkfilechooserbutton.c:104 ../gtk/gtkplacessidebar.c:965
+#: ../gtk/gtkfilechooserbutton.c:104 ../gtk/gtkplacessidebar.c:983
 msgid "Desktop"
 msgstr "Darbastalis"
 
@@ -2121,7 +2126,7 @@ msgstr "Darbastalis"
 msgid "(None)"
 msgstr "(Joks)"
 
-#: ../gtk/gtkfilechooserbutton.c:795 ../gtk/gtkplacessidebar.c:3278
+#: ../gtk/gtkfilechooserbutton.c:795 ../gtk/gtkplacessidebar.c:3391
 msgid "_Open"
 msgstr "At_verti"
 
@@ -2313,7 +2318,7 @@ msgstr "Nėra"
 msgid "Application menu"
 msgstr "Programos meniu"
 
-#: ../gtk/gtkheaderbar.c:476 ../gtk/gtkwindow.c:8436
+#: ../gtk/gtkheaderbar.c:476 ../gtk/gtkwindow.c:8444
 msgid "Close"
 msgstr "Užverti"
 
@@ -2652,195 +2657,195 @@ msgstr "Puslapio sąranka"
 msgid "File System Root"
 msgstr "Failų sistemos šakninis aplankas"
 
-#: ../gtk/gtkplacessidebar.c:454
+#: ../gtk/gtkplacessidebar.c:455
 msgid "Devices"
 msgstr "Įrenginiai"
 
-#: ../gtk/gtkplacessidebar.c:462
+#: ../gtk/gtkplacessidebar.c:463
 msgid "Bookmarks"
 msgstr "Žymelės"
 
-#: ../gtk/gtkplacessidebar.c:939
+#: ../gtk/gtkplacessidebar.c:957
 msgid "Recent"
 msgstr "Neseniai naudotieji"
 
-#: ../gtk/gtkplacessidebar.c:941
+#: ../gtk/gtkplacessidebar.c:959
 msgid "Recent files"
 msgstr "Neseniai naudoti failai"
 
-#: ../gtk/gtkplacessidebar.c:950
+#: ../gtk/gtkplacessidebar.c:968
 msgid "Home"
 msgstr "Namai"
 
-#: ../gtk/gtkplacessidebar.c:952
+#: ../gtk/gtkplacessidebar.c:970
 msgid "Open your personal folder"
 msgstr "Atverkite savo asmeninį aplanką"
 
-#: ../gtk/gtkplacessidebar.c:967
+#: ../gtk/gtkplacessidebar.c:985
 msgid "Open the contents of your desktop in a folder"
 msgstr "Atverkite darbastalį aplanke"
 
-#: ../gtk/gtkplacessidebar.c:981
+#: ../gtk/gtkplacessidebar.c:999
 msgid "Enter Location"
 msgstr "Įveskite vietą"
 
-#: ../gtk/gtkplacessidebar.c:983
+#: ../gtk/gtkplacessidebar.c:1001
 msgid "Manually enter a location"
 msgstr "Rankomis įveskite vietą"
 
-#: ../gtk/gtkplacessidebar.c:994
+#: ../gtk/gtkplacessidebar.c:1012
 msgid "Trash"
 msgstr "Šiukšlinė"
 
-#: ../gtk/gtkplacessidebar.c:996
+#: ../gtk/gtkplacessidebar.c:1014
 msgid "Open the trash"
 msgstr "Atverti šiukšlinę"
 
-#: ../gtk/gtkplacessidebar.c:1059 ../gtk/gtkplacessidebar.c:1087
-#: ../gtk/gtkplacessidebar.c:1295
+#: ../gtk/gtkplacessidebar.c:1077 ../gtk/gtkplacessidebar.c:1105
+#: ../gtk/gtkplacessidebar.c:1313
 #, c-format
 msgid "Mount and open %s"
 msgstr "Prijungti ir atverti %s"
 
-#: ../gtk/gtkplacessidebar.c:1168
+#: ../gtk/gtkplacessidebar.c:1186
 msgid "Open the contents of the file system"
 msgstr "Atverti failų sistemos turinį"
 
-#: ../gtk/gtkplacessidebar.c:1258
+#: ../gtk/gtkplacessidebar.c:1276
 msgid "Network"
 msgstr "Tinklas"
 
-#: ../gtk/gtkplacessidebar.c:1264
+#: ../gtk/gtkplacessidebar.c:1282
 msgid "Browse Network"
 msgstr "Naršyti tinklą"
 
-#: ../gtk/gtkplacessidebar.c:1266
+#: ../gtk/gtkplacessidebar.c:1284
 msgid "Browse the contents of the network"
 msgstr "Naršykite tinklo turinį"
 
-#: ../gtk/gtkplacessidebar.c:1274
+#: ../gtk/gtkplacessidebar.c:1292
 msgid "Connect to Server"
 msgstr "Prisijungti prie serverio"
 
-#: ../gtk/gtkplacessidebar.c:1276
+#: ../gtk/gtkplacessidebar.c:1294
 msgid "Connect to a network server address"
 msgstr "Prisijungti prie tinklo serverio adreso"
 
-#: ../gtk/gtkplacessidebar.c:1678
+#: ../gtk/gtkplacessidebar.c:1696
 msgid "New bookmark"
 msgstr "Nauja žymelė"
 
 #. Adjust start/stop items to reflect the type of the drive
-#: ../gtk/gtkplacessidebar.c:2235 ../gtk/gtkplacessidebar.c:3356
+#: ../gtk/gtkplacessidebar.c:2253 ../gtk/gtkplacessidebar.c:3469
 msgid "_Start"
 msgstr "_Pradėti"
 
-#: ../gtk/gtkplacessidebar.c:2236 ../gtk/gtkplacessidebar.c:3363
+#: ../gtk/gtkplacessidebar.c:2254 ../gtk/gtkplacessidebar.c:3476
 msgid "_Stop"
 msgstr "_Sustabdyti"
 
 #. start() for type G_DRIVE_START_STOP_TYPE_SHUTDOWN is normally not used
-#: ../gtk/gtkplacessidebar.c:2243
+#: ../gtk/gtkplacessidebar.c:2261
 msgid "_Power On"
 msgstr "Į_jungti"
 
-#: ../gtk/gtkplacessidebar.c:2244
+#: ../gtk/gtkplacessidebar.c:2262
 msgid "_Safely Remove Drive"
 msgstr "_Saugiai išimti laikmeną"
 
-#: ../gtk/gtkplacessidebar.c:2248
+#: ../gtk/gtkplacessidebar.c:2266
 msgid "_Connect Drive"
 msgstr "Prijungti laikmeną"
 
-#: ../gtk/gtkplacessidebar.c:2249
+#: ../gtk/gtkplacessidebar.c:2267
 msgid "_Disconnect Drive"
 msgstr "Atj_ungti laikmeną"
 
-#: ../gtk/gtkplacessidebar.c:2253
+#: ../gtk/gtkplacessidebar.c:2271
 msgid "_Start Multi-disk Device"
 msgstr "_Paleisti daugelio diskų įrenginį"
 
-#: ../gtk/gtkplacessidebar.c:2254
+#: ../gtk/gtkplacessidebar.c:2272
 msgid "_Stop Multi-disk Device"
 msgstr "_Sustabdyti daugelio diskų įrenginį"
 
 #. stop() for type G_DRIVE_START_STOP_TYPE_PASSWORD is normally not used
-#: ../gtk/gtkplacessidebar.c:2259
+#: ../gtk/gtkplacessidebar.c:2277
 msgid "_Unlock Drive"
 msgstr "_Atrakinti laikmeną"
 
-#: ../gtk/gtkplacessidebar.c:2260
+#: ../gtk/gtkplacessidebar.c:2278
 msgid "_Lock Drive"
 msgstr "_Užrakinti laikmeną"
 
-#: ../gtk/gtkplacessidebar.c:2289 ../gtk/gtkplacessidebar.c:3038
+#: ../gtk/gtkplacessidebar.c:2307 ../gtk/gtkplacessidebar.c:3151
 #, c-format
 msgid "Unable to start %s"
 msgstr "Nepavyko paleisti %s"
 
-#: ../gtk/gtkplacessidebar.c:2319
+#: ../gtk/gtkplacessidebar.c:2337
 #, c-format
 msgid "Unable to access “%s”"
 msgstr "Nepavyko prieiti „%s“"
 
-#: ../gtk/gtkplacessidebar.c:2629
+#: ../gtk/gtkplacessidebar.c:2647
 #, c-format
 msgid "Unable to unmount %s"
 msgstr "Nepavyko atjungti %s"
 
-#: ../gtk/gtkplacessidebar.c:2755
+#: ../gtk/gtkplacessidebar.c:2856
 #, c-format
 msgid "Unable to stop %s"
 msgstr "Nepavyko sustabdyti %s"
 
-#: ../gtk/gtkplacessidebar.c:2784 ../gtk/gtkplacessidebar.c:2813
-#: ../gtk/gtkplacessidebar.c:2842
+#: ../gtk/gtkplacessidebar.c:2885 ../gtk/gtkplacessidebar.c:2914
+#: ../gtk/gtkplacessidebar.c:2943
 #, c-format
 msgid "Unable to eject %s"
 msgstr "Nepavyko išstumti %s"
 
-#: ../gtk/gtkplacessidebar.c:2988
+#: ../gtk/gtkplacessidebar.c:3101
 #, c-format
 msgid "Unable to poll %s for media changes"
 msgstr "Nepavyko užklausti %s dėl laikmenų pasikeitimų"
 
-#: ../gtk/gtkplacessidebar.c:3286
+#: ../gtk/gtkplacessidebar.c:3399
 msgid "Open in New _Tab"
 msgstr "Atverti naujoje _kortelėje"
 
-#: ../gtk/gtkplacessidebar.c:3295
+#: ../gtk/gtkplacessidebar.c:3408
 msgid "Open in New _Window"
 msgstr "Atverti naujame _lange"
 
-#: ../gtk/gtkplacessidebar.c:3304
+#: ../gtk/gtkplacessidebar.c:3417
 msgid "_Add Bookmark"
 msgstr "_Pridėti žymelę"
 
-#: ../gtk/gtkplacessidebar.c:3310
+#: ../gtk/gtkplacessidebar.c:3423
 msgid "Remove"
 msgstr "Pašalinti"
 
-#: ../gtk/gtkplacessidebar.c:3317
+#: ../gtk/gtkplacessidebar.c:3430
 msgid "Rename…"
 msgstr "Pervadinti…"
 
-#: ../gtk/gtkplacessidebar.c:3328
+#: ../gtk/gtkplacessidebar.c:3441
 msgid "_Mount"
 msgstr "_Prijungti"
 
-#: ../gtk/gtkplacessidebar.c:3335
+#: ../gtk/gtkplacessidebar.c:3448
 msgid "_Unmount"
 msgstr "_Atjungti"
 
-#: ../gtk/gtkplacessidebar.c:3342
+#: ../gtk/gtkplacessidebar.c:3455
 msgid "_Eject"
 msgstr "iš_stumti"
 
-#: ../gtk/gtkplacessidebar.c:3349
+#: ../gtk/gtkplacessidebar.c:3462
 msgid "_Detect Media"
 msgstr "_Aptikti laikmeną"
 
-#: ../gtk/gtkplacessidebar.c:3958
+#: ../gtk/gtkplacessidebar.c:4077
 msgid "Computer"
 msgstr "Kompiuteris"
 
@@ -3379,11 +3384,11 @@ msgctxt "volume percentage"
 msgid "%d %%"
 msgstr "%d %%"
 
-#: ../gtk/gtkwindow.c:11703
+#: ../gtk/gtkwindow.c:11711
 msgid "Do you want to use GTK+ Inspector?"
 msgstr "Ar norite naudoti GTK+ inspektorių?"
 
-#: ../gtk/gtkwindow.c:11705
+#: ../gtk/gtkwindow.c:11713
 msgid ""
 "GTK+ Inspector is an interactive debugger that lets you explore and modify "
 "the internals of any GTK+ application. Using it may cause the application to "
@@ -3615,22 +3620,18 @@ msgid "Setting:"
 msgstr "Nustatymas:"
 
 #: ../gtk/inspector/prop-editor.c:1554
-#| msgid "Paper Source"
 msgid "Source:"
 msgstr "Šaltinis:"
 
 #: ../gtk/inspector/prop-editor.c:1559
-#| msgid "default:mm"
 msgid "Default"
 msgstr "Numatyta"
 
 #: ../gtk/inspector/prop-editor.c:1562
-#| msgid "GTK+ Theme"
 msgid "Theme"
 msgstr "Tema"
 
 #: ../gtk/inspector/prop-editor.c:1565
-#| msgid "Setting:"
 msgid "XSettings"
 msgstr "XSettings"
 
@@ -5730,3 +5731,4 @@ msgstr "Patylinti"
 #: ../gtk/resources/ui/gtkvolumebutton.ui.h:6
 msgid "Decreases the volume"
 msgstr "Patylina"
+
