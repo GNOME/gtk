@@ -282,8 +282,9 @@ gtk_inspector_size_groups_set_object (GtkInspectorSizeGroups *sl,
       return;
     }
 
-  gtk_widget_show (GTK_WIDGET (sl));
   groups = _gtk_widget_get_sizegroups (GTK_WIDGET (object));
+  if (groups)
+    gtk_widget_show (GTK_WIDGET (sl));
   for (l = groups; l; l = l->next)
     {
       GtkSizeGroup *group = l->data;
