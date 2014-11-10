@@ -561,13 +561,13 @@ reorder_child (GtkStack  *stack,
             }
         }
 
-      l = g_list_next (l);
+      l = l->next;
       num++;
     }
 
   g_return_if_fail (old_link != NULL);
 
-  if (old_link == new_link || (g_list_next (old_link) == NULL && new_link == NULL))
+  if (old_link == new_link || (old_link->next == NULL && new_link == NULL))
     return;
 
   priv->children = g_list_delete_link (priv->children, old_link);
@@ -611,14 +611,7 @@ gtk_stack_get_child_property (GtkContainer *container,
       break;
 
     case CHILD_PROP_POSITION:
-      i = 0;
-      for (list = priv->children; list != NULL; list = g_list_next (list))
-        {
-          if (info == list->data)
-            break;
-          ++i;
-        }
-      g_value_set_int (value, i);
+      g_value_set_int (value, g_list_index (priv->children, info));
       break;
 
     case CHILD_PROP_NEEDS_ATTENTION:
@@ -1050,7 +1043,7 @@ set_visible_child (GtkStack               *stack,
   else if (is_direction_dependent_transition (transition_type))
     {
       gboolean i_first = FALSE;
-      for (l = priv->children; l != NULL; l = g_list_next (l))
+      for (l = priv->children; l != NULL; l = l->next)
         {
 	  if (child_info == l->data)
 	    {
