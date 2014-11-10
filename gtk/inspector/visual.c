@@ -130,8 +130,20 @@ redraw_everything (void)
 static void
 updates_activate (GtkSwitch *sw)
 {
-  gdk_window_set_debug_updates (gtk_switch_get_active (sw));
+  gboolean updates;
+
+  updates = gtk_switch_get_active (sw);
+  GDK_PRIVATE_CALL (gdk_display_set_debug_updates) (gdk_display_get_default (), updates);
   redraw_everything ();
+}
+
+static void
+init_updates (GtkInspectorVisual *vis)
+{
+  gboolean updates;
+
+  updates = GDK_PRIVATE_CALL (gdk_display_get_debug_updates) (gdk_display_get_default ());
+  gtk_switch_set_active (GTK_SWITCH (vis->priv->updates_switch), updates);
 }
 
 static void
@@ -588,6 +600,7 @@ gtk_inspector_visual_init (GtkInspectorVisual *vis)
   init_font (vis);
   init_scale (vis);
   init_rendering_mode (vis);
+  init_updates (vis);
   init_animation (vis);
   init_touchscreen (vis);
   init_gl (vis);
