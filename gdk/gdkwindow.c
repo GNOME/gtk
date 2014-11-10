@@ -3117,6 +3117,8 @@ gdk_window_end_paint (GdkWindow *window)
           cairo_paint (cr);
 
           cairo_destroy (cr);
+
+          cairo_surface_flush (surface);
         }
     }
 
