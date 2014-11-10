@@ -2864,6 +2864,8 @@ gdk_window_end_paint (GdkWindow *window)
 
       cairo_destroy (cr);
       cairo_region_destroy (full_clip);
+
+      cairo_surface_flush (surface);
     }
 
   gdk_window_free_current_paint (window);
