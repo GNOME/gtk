@@ -21,6 +21,7 @@
 #include "gdkdisplay.h"
 #include "gdkwindow.h"
 #include "gdkcursor.h"
+#include "gdkinternals.h"
 
 G_BEGIN_DECLS
 
@@ -119,6 +120,8 @@ struct _GdkDisplay
 
   guint has_gl_extension_texture_non_power_of_two : 1;
   guint has_gl_extension_texture_rectangle : 1;
+
+  GdkRenderingMode rendering_mode;
 };
 
 struct _GdkDisplayClass

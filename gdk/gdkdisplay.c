@@ -223,6 +223,8 @@ gdk_display_init (GdkDisplay *display)
 
   display->multiple_click_info = g_hash_table_new_full (NULL, NULL, NULL,
                                                         (GDestroyNotify) g_free);
+
+  display->rendering_mode = _gdk_rendering_mode;
 }
 
 static void

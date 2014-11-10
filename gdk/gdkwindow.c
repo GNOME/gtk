@@ -9448,6 +9448,7 @@ gdk_window_create_similar_surface (GdkWindow *     window,
                                    int             width,
                                    int             height)
 {
+  GdkDisplay *display;
   cairo_surface_t *window_surface, *surface;
   double sx, sy;
 
@@ -9457,7 +9458,8 @@ gdk_window_create_similar_surface (GdkWindow *     window,
   sx = sy = 1;
   cairo_surface_get_device_scale (window_surface, &sx, &sy);
 
-  switch (_gdk_rendering_mode)
+  display = gdk_window_get_display (window);
+  switch (display->rendering_mode)
   {
     case GDK_RENDERING_MODE_RECORDING:
       {
