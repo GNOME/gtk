@@ -23,6 +23,10 @@ void            gdk_gl_set_flags                (GdkGLFlags flags);
 void            gdk_window_freeze_toplevel_updates      (GdkWindow *window);
 void            gdk_window_thaw_toplevel_updates        (GdkWindow *window);
 
+GdkRenderingMode gdk_display_get_rendering_mode (GdkDisplay       *display);
+void             gdk_display_set_rendering_mode (GdkDisplay       *display,
+                                                 GdkRenderingMode  mode);
+
 typedef struct {
   /* add all private functions here, initialize them in gdk-private.c */
   gboolean (* gdk_device_grab_info) (GdkDisplay  *display,
@@ -34,10 +38,16 @@ typedef struct {
 
   void (* gdk_add_option_entries) (GOptionGroup *group);
   void (* gdk_pre_parse) (void);
+
   GdkGLFlags (* gdk_gl_get_flags) (void);
-  void (* gdk_gl_set_flags) (GdkGLFlags flags);
+  void       (* gdk_gl_set_flags) (GdkGLFlags flags);
+
   void (* gdk_window_freeze_toplevel_updates) (GdkWindow *window);
   void (* gdk_window_thaw_toplevel_updates) (GdkWindow *window);
+
+  GdkRenderingMode (* gdk_display_get_rendering_mode) (GdkDisplay       *display);
+  void             (* gdk_display_set_rendering_mode) (GdkDisplay       *display,
+                                                       GdkRenderingMode  mode);
 } GdkPrivateVTable;
 
 GDK_AVAILABLE_IN_ALL

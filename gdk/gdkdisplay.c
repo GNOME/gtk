@@ -2289,3 +2289,16 @@ gdk_display_make_gl_context_current (GdkDisplay   *display,
 {
   return GDK_DISPLAY_GET_CLASS (display)->make_gl_context_current (display, context);
 }
+
+GdkRenderingMode
+gdk_display_get_rendering_mode (GdkDisplay *display)
+{
+  return display->rendering_mode;
+}
+
+void
+gdk_display_set_rendering_mode (GdkDisplay       *display,
+                                GdkRenderingMode  mode)
+{
+  display->rendering_mode = mode;
+}
