@@ -1601,10 +1601,17 @@ gtk_window_constructed (GObject *object)
 {
   GtkWindow *window = GTK_WINDOW (object);
   GtkWindowPrivate *priv = window->priv;
+  gboolean is_plug;
 
   G_OBJECT_CLASS (gtk_window_parent_class)->constructed (object);
 
-  if (priv->type == GTK_WINDOW_TOPLEVEL && !GTK_IS_PLUG (window))
+#ifdef GDK_WINDOWING_X11
+  is_plug = GTK_IS_PLUG (window);
+#else
+  is_plug = FALSE;
+#endif
+
+  if (priv->type == GTK_WINDOW_TOPLEVEL && !is_plug)
     {
       priv->multipress_gesture = gtk_gesture_multi_press_new (GTK_WIDGET (object));
       gtk_gesture_single_set_button (GTK_GESTURE_SINGLE (priv->multipress_gesture), 0);
