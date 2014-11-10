@@ -49,6 +49,7 @@ struct _GtkInspectorVisualPrivate
   GtkAdjustment *scale_adjustment;
 
   GtkWidget *debug_box;
+  GtkWidget *rendering_mode_combo;
   GtkWidget *updates_switch;
   GtkWidget *baselines_switch;
   GtkWidget *pixelcache_switch;
@@ -523,6 +524,25 @@ init_gl (GtkInspectorVisual *vis)
 }
 
 static void
+init_rendering_mode (GtkInspectorVisual *vis)
+{
+  GdkRenderingMode mode;
+
+  mode = GDK_PRIVATE_CALL (gdk_display_get_rendering_mode) (gdk_display_get_default ());
+  gtk_combo_box_set_active (GTK_COMBO_BOX (vis->priv->rendering_mode_combo), mode);
+}
+
+static void
+rendering_mode_changed (GtkComboBox        *c,
+                        GtkInspectorVisual *vis)
+{
+  GdkRenderingMode mode;
+
+  mode = gtk_combo_box_get_active (c);
+  GDK_PRIVATE_CALL (gdk_display_set_rendering_mode) (gdk_display_get_default (), mode);
+}
+
+static void
 update_gl_flag (GtkSwitch  *sw,
                 GdkGLFlags  flag)
 {
@@ -567,6 +587,7 @@ gtk_inspector_visual_init (GtkInspectorVisual *vis)
   init_icons (vis);
   init_font (vis);
   init_scale (vis);
+  init_rendering_mode (vis);
   init_animation (vis);
   init_touchscreen (vis);
   init_gl (vis);
@@ -597,6 +618,7 @@ gtk_inspector_visual_class_init (GtkInspectorVisualClass *klass)
   object_class->constructed = gtk_inspector_visual_constructed;
 
   gtk_widget_class_set_template_from_resource (widget_class, "/org/gtk/inspector/visual.ui");
+  gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorVisual, rendering_mode_combo);
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorVisual, updates_switch);
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorVisual, direction_combo);
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorVisual, baselines_switch);
@@ -619,6 +641,7 @@ gtk_inspector_visual_class_init (GtkInspectorVisualClass *klass)
 
   gtk_widget_class_bind_template_callback (widget_class, updates_activate);
   gtk_widget_class_bind_template_callback (widget_class, direction_changed);
+  gtk_widget_class_bind_template_callback (widget_class, rendering_mode_changed);
   gtk_widget_class_bind_template_callback (widget_class, baselines_activate);
   gtk_widget_class_bind_template_callback (widget_class, pixelcache_activate);
   gtk_widget_class_bind_template_callback (widget_class, theme_changed);
