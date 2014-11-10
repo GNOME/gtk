@@ -5763,7 +5763,7 @@ gtk_tree_view_key_press (GtkWidget   *widget,
       if (event->keyval == GDK_KEY_Escape)
 	{
 	  tree_view->priv->cur_reorder = NULL;
-	  gtk_tree_view_button_release_drag_column (widget, NULL);
+	  gtk_tree_view_button_release_drag_column (widget, (GdkEventButton *) event);
 	}
       return TRUE;
     }
