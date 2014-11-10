@@ -27,6 +27,10 @@ GdkRenderingMode gdk_display_get_rendering_mode (GdkDisplay       *display);
 void             gdk_display_set_rendering_mode (GdkDisplay       *display,
                                                  GdkRenderingMode  mode);
 
+gboolean         gdk_display_get_debug_updates (GdkDisplay *display);
+void             gdk_display_set_debug_updates (GdkDisplay *display,
+                                                gboolean    debug_updates);
+
 typedef struct {
   /* add all private functions here, initialize them in gdk-private.c */
   gboolean (* gdk_device_grab_info) (GdkDisplay  *display,
@@ -48,6 +52,10 @@ typedef struct {
   GdkRenderingMode (* gdk_display_get_rendering_mode) (GdkDisplay       *display);
   void             (* gdk_display_set_rendering_mode) (GdkDisplay       *display,
                                                        GdkRenderingMode  mode);
+
+  gboolean         (* gdk_display_get_debug_updates) (GdkDisplay *display);
+  void             (* gdk_display_set_debug_updates) (GdkDisplay *display,
+                                                      gboolean    debug_updates);
 } GdkPrivateVTable;
 
 GDK_AVAILABLE_IN_ALL

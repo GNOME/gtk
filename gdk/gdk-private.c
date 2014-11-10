@@ -14,7 +14,9 @@ gdk__private__ (void)
     gdk_window_freeze_toplevel_updates,
     gdk_window_thaw_toplevel_updates,
     gdk_display_get_rendering_mode,
-    gdk_display_set_rendering_mode
+    gdk_display_set_rendering_mode,
+    gdk_display_get_debug_updates,
+    gdk_display_set_debug_updates
   };
 
   return &table;

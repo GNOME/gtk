@@ -2302,3 +2302,20 @@ gdk_display_set_rendering_mode (GdkDisplay       *display,
 {
   display->rendering_mode = mode;
 }
+
+void
+gdk_display_set_debug_updates (GdkDisplay *display,
+                               gboolean    debug_updates)
+{
+  display->debug_updates = debug_updates;
+  display->debug_updates_set = TRUE;
+}
+
+gboolean
+gdk_display_get_debug_updates (GdkDisplay *display)
+{
+  if (display->debug_updates_set)
+    return display->debug_updates;
+  else
+    return _gdk_debug_updates;
+}

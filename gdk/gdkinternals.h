@@ -108,6 +108,7 @@ extern GdkWindow        *_gdk_parent_root;
 extern guint _gdk_debug_flags;
 extern guint _gdk_gl_flags;
 extern GdkRenderingMode    _gdk_rendering_mode;
+extern gboolean _gdk_debug_updates;
 
 #ifdef G_ENABLE_DEBUG
 

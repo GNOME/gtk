@@ -3338,7 +3338,7 @@ gdk_cairo_create (GdkWindow *window)
 /* Code for dirty-region queueing
  */
 static GSList *update_windows = NULL;
-static gboolean debug_updates = FALSE;
+gboolean _gdk_debug_updates = FALSE;
 
 static inline gboolean
 gdk_window_is_ancestor (GdkWindow *window,
@@ -3613,7 +3613,9 @@ gdk_window_process_updates_internal (GdkWindow *window)
 {
   GdkWindowImplClass *impl_class;
   GdkWindow *toplevel;
+  GdkDisplay *display;
 
+  display = gdk_window_get_display (window);
   toplevel = gdk_window_get_toplevel (window);
   if (toplevel->geometry_dirty)
     {
@@ -3653,7 +3655,7 @@ gdk_window_process_updates_internal (GdkWindow *window)
 	  /* Clip to part visible in impl window */
 	  cairo_region_intersect (expose_region, window->clip_region);
 
-	  if (debug_updates)
+	  if (gdk_display_get_debug_updates (display))
 	    {
               cairo_region_t *swap_region = cairo_region_copy (expose_region);
               cairo_region_subtract (swap_region, window->active_update_area);
@@ -4067,6 +4069,7 @@ gdk_window_invalidate_maybe_recurse_full (GdkWindow            *window,
 {
   cairo_region_t *visible_region;
   cairo_rectangle_int_t r;
+  GdkDisplay *display;
 
   g_return_if_fail (GDK_IS_WINDOW (window));
 
@@ -4086,7 +4089,8 @@ gdk_window_invalidate_maybe_recurse_full (GdkWindow            *window,
 
   invalidate_impl_subwindows (window, region, child_func, user_data, 0, 0);
 
-  if (debug_updates)
+  display = gdk_window_get_display (window);
+  if (gdk_display_get_debug_updates (display))
     draw_ugly_color (window, visible_region, 0);
 
   while (window != NULL && 
@@ -4458,7 +4462,7 @@ gdk_window_thaw_toplevel_updates (GdkWindow *window)
 void
 gdk_window_set_debug_updates (gboolean setting)
 {
-  debug_updates = setting;
+  _gdk_debug_updates = setting;
 }
 
 /**
