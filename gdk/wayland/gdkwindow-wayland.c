@@ -683,23 +683,17 @@ static void
 gdk_wayland_window_sync_margin (GdkWindow *window)
 {
   GdkWindowImplWayland *impl = GDK_WINDOW_IMPL_WAYLAND (window->impl);
+  gint x, y, width, height;
 
   if (!impl->xdg_surface)
     return;
 
-  /* XXX: xdg_surface now has xdg_surface_set_window_geometry.
-   *
-   * We need to have a GdkToplevel or some other class in order
-   * to make this work correctly. For now, don't do anything with
-   * the shadow widths.
-   */
-#if 0
-  xdg_surface_set_margin (impl->xdg_surface,
-                          impl->margin_left,
-                          impl->margin_right,
-                          impl->margin_top,
-                          impl->margin_bottom);
-#endif
+  x = impl->margin_left;
+  y = impl->margin_top;
+  width = window->width - (impl->margin_left + impl->margin_right);
+  height = window->height - (impl->margin_top + impl->margin_bottom);
+
+  xdg_surface_set_window_geometry (impl->xdg_surface, x, y, width, height);
 }
 
 static struct wl_region *
@@ -858,8 +852,8 @@ xdg_surface_configure (void               *data,
     {
       gdk_window_constrain_size (&impl->geometry_hints,
                                  impl->geometry_mask,
-                                 width,
-                                 height,
+                                 width + impl->margin_left + impl->margin_right,
+                                 height + impl->margin_top + impl->margin_bottom,
                                  &width,
                                  &height);
 
@@ -889,6 +883,7 @@ xdg_surface_configure (void               *data,
     }
 
   _gdk_set_window_state (window, new_state);
+  gdk_wayland_window_sync_margin (window);
   xdg_surface_ack_configure (xdg_surface, serial);
 }
 
@@ -1024,6 +1019,12 @@ gdk_wayland_window_create_xdg_popup (GdkWindow            *window,
 
   x = window->x - parent_x;
   y = window->y - parent_y;
+
+  if (parent_impl->xdg_surface)
+    {
+      x -= parent_impl->margin_left;
+      y -= parent_impl->margin_top;
+    }
 
   impl->xdg_popup = xdg_shell_get_xdg_popup (display_wayland->xdg_shell,
                                              impl->surface,
@@ -2047,9 +2048,21 @@ gdk_wayland_window_set_shadow_width (GdkWindow *window,
                                      int        bottom)
 {
   GdkWindowImplWayland *impl = GDK_WINDOW_IMPL_WAYLAND (window->impl);
+  gint new_width, new_height;
 
   if (GDK_WINDOW_DESTROYED (window))
     return;
+
+  if (left == impl->margin_left && right == impl->margin_right &&
+      top == impl->margin_top && bottom == impl->margin_bottom)
+    return;
+
+  /* Reconfigure window to keep the same window geometry */
+  new_width = window->width -
+    (impl->margin_left + impl->margin_right) + (left + right);
+  new_height = window->height -
+    (impl->margin_top + impl->margin_bottom) + (top + bottom);
+  gdk_wayland_window_configure (window, new_width, new_height);
 
   impl->margin_left = left;
   impl->margin_right = right;
