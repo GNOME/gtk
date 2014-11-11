@@ -66,7 +66,6 @@ struct _GtkSearchEngineClass
 };
 
 GType            _gtk_search_engine_get_type        (void);
-gboolean         _gtk_search_engine_enabled         (void);
 
 GtkSearchEngine* _gtk_search_engine_new             (void);
 

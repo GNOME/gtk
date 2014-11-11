@@ -50,7 +50,6 @@ struct _GtkQueryClass
 };
 
 GType     _gtk_query_get_type       (void);
-gboolean  _gtk_query_enabled        (void);
 
 GtkQuery* _gtk_query_new            (void);
 
