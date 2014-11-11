@@ -147,7 +147,7 @@
                       <object class="GtkSearchEntry" id="search_entry">
                         <property name="visible">True</property>
                         <property name="hexpand">True</property>
-                        <signal name="activate" handler="search_entry_activate_cb" swapped="no"/>
+                        <signal name="search-changed" handler="search_entry_activate_cb" swapped="no"/>
                       </object>
                     </child>
                   </object>
