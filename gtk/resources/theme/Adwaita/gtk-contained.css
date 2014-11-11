@@ -2096,23 +2096,7 @@ column-header .titlebar .button.titlebutton,
   box-shadow: 0 2px 3px rgba(0, 0, 0, 0.5); }
   .popover:backdrop {
     box-shadow: none; }
-  .popover > .list, .popover > .view, .popover > .toolbar
-  .popover.osd > .toolbar, .popover > .inline-toolbar
-  .popover.osd > .toolbar, .popover > .search-bar
-  .popover.osd > .toolbar, .popover > .location-bar
-  .popover.osd > .toolbar, .popover > .toolbar
-  .popover.osd > .inline-toolbar, .popover > .inline-toolbar
-  .popover.osd > .inline-toolbar, .popover > .search-bar
-  .popover.osd > .inline-toolbar, .popover > .location-bar
-  .popover.osd > .inline-toolbar, .popover > .toolbar
-  .popover.osd > .search-bar, .popover > .inline-toolbar
-  .popover.osd > .search-bar, .popover > .search-bar
-  .popover.osd > .search-bar, .popover > .location-bar
-  .popover.osd > .search-bar, .popover > .toolbar
-  .popover.osd > .location-bar, .popover > .inline-toolbar
-  .popover.osd > .location-bar, .popover > .search-bar
-  .popover.osd > .location-bar, .popover > .location-bar
-  .popover.osd > .location-bar {
+  .popover > .list, .popover > .view, .popover > .toolbar, .popover > .inline-toolbar, .popover > .search-bar, .popover > .location-bar, .popover.osd > .toolbar, .popover.osd > .inline-toolbar, .popover.osd > .search-bar, .popover.osd > .location-bar {
     border-style: none;
     background-color: transparent; }
   .popover .button.flat, .popover .header-bar .titlebutton.button, .header-bar .popover .titlebutton.button,
