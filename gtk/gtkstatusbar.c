@@ -183,9 +183,13 @@ gtk_statusbar_init (GtkStatusbar *statusbar)
 {
   GtkStatusbarPrivate *priv;
   GtkShadowType shadow_type;
+  GtkStyleContext *context;
 
   statusbar->priv = gtk_statusbar_get_instance_private (statusbar);
   priv = statusbar->priv;
+
+  context = gtk_widget_get_style_context (GTK_WIDGET (statusbar));
+  gtk_style_context_add_class (context, GTK_STYLE_CLASS_STATUSBAR);
 
   priv->seq_context_id = 1;
   priv->seq_message_id = 1;

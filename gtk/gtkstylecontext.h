@@ -355,6 +355,17 @@ struct _GtkStyleContextClass
 #define GTK_STYLE_CLASS_INLINE_TOOLBAR "inline-toolbar"
 
 /**
+ * GTK_STYLE_CLASS_STATUSBAR:
+ *
+ * A CSS class to match statusbars.
+ *
+ * This is used in #GtkStatusbar.
+ *
+ * Since: 3.16
+ */
+#define GTK_STYLE_CLASS_STATUSBAR "statusbar"
+
+/**
  * GTK_STYLE_CLASS_RADIO:
  *
  * A CSS class to match radio buttons.
