@@ -257,7 +257,7 @@ gtk_action_bar_class_init (GtkActionBarClass *klass)
                                                                 P_("Position"),
                                                                 P_("The index of the child in the parent"),
                                                                 -1, G_MAXINT, 0,
-                                                                G_PARAM_READABLE));
+                                                                G_PARAM_READWRITE));
 
   gtk_widget_class_set_template_from_resource (widget_class, "/org/gtk/libgtk/ui/gtkactionbar.ui");
   gtk_widget_class_bind_template_child_internal_private (widget_class, GtkActionBar, box);
