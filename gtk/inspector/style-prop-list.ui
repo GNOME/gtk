@@ -34,7 +34,7 @@
             <property name="visible">True</property>
             <property name="model">model</property>
             <property name="search-column">0</property>
-            <property name="enable-search">True</property>
+            <property name="enable-search">False</property>
             <child>
               <object class="GtkTreeViewColumn" id="name_column">
                 <property name="title" translatable="yes">Property</property>

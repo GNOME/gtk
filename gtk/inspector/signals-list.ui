@@ -50,6 +50,7 @@
               <object class="GtkTreeView" id="view">
                 <property name="visible">True</property>
                 <property name="model">model</property>
+                <property name="enable-search">False</property>
                 <child>
                   <object class="GtkTreeViewColumn">
                     <property name="title" translatable="yes">Name</property>

@@ -22,6 +22,7 @@
           <object class= "GtkTreeView">
             <property name="visible">True</property>
             <property name="model">model</property>
+            <property name="enable-search">False</property>
             <property name="activate-on-single-click">True</property>
             <signal name="row-activated" handler="row_activated"/>
             <child>

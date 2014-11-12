@@ -17,6 +17,7 @@
           <object class="GtkTreeView" id="tree">
             <property name="visible">True</property>
             <property name="model">model</property>
+            <property name="enable-search">False</property>
             <child>
               <object class="GtkTreeViewColumn">
                 <property name="title" translatable="yes">Selector</property>
