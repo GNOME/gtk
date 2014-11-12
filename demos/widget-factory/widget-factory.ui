@@ -169,7 +169,7 @@ Morbi massa libero, congue vitae scelerisque vel, ultricies vel nisl.
 Vestibulum in tortor diam, quis aliquet quam. Praesent ut justo neque, tempus rutrum est.
 Duis eu lectus quam. Vivamus eget metus a mauris molestie venenatis pulvinar eleifend nisi.
 Nulla facilisi. Pellentesque at dolor sit amet purus dapibus pulvinar molestie quis neque.
-Suspendisse feugiat quam quis dolor accumsan cursus. </property>
+Suspendisse feugiat quam quis dolor accumsan cursus.</property>
   </object>
   <object class="GtkTextBuffer" id="textbuffer2">
     <property name="text">* Translation updates:
@@ -1602,6 +1602,8 @@ Suspendisse feugiat quam quis dolor accumsan cursus. </property>
                                 <property name="can_focus">True</property>
                                 <property name="buffer">textbuffer1</property>
                                 <property name="wrap_mode">2</property>
+                                <property name="left_margin">10</property>
+                                <property name="right_margin">10</property>
                               </object>
                             </child>
                           </object>
@@ -2137,6 +2139,8 @@ microphone-sensitivity-medium-symbolic</property>
                                             <property name="visible">True</property>
                                             <property name="can_focus">True</property>
                                             <property name="buffer">textbuffer2</property>
+                                            <property name="left_margin">10</property>
+                                            <property name="right_margin">10</property>
                                           </object>
                                         </child>
                                       </object>
@@ -2899,6 +2903,8 @@ microphone-sensitivity-medium-symbolic</property>
                                         <property name="can_focus">True</property>
                                         <property name="buffer">textbuffer1</property>
                                         <property name="wrap_mode">2</property>
+                                        <property name="left_margin">10</property>
+                                        <property name="right_margin">10</property>
                                       </object>
                                     </child>
                                   </object>
