@@ -2956,6 +2956,50 @@ _gtk_css_provider_get_theme_dir (void)
   return path;
 }
 
+static gchar *
+_gtk_css_find_theme (const gchar *name,
+                     const gchar *variant)
+{
+  gchar *subpath;
+  gchar *path;
+
+  if (variant)
+    subpath = g_strdup_printf ("gtk-3.0" G_DIR_SEPARATOR_S "gtk-%s.css", variant);
+  else
+    subpath = g_strdup ("gtk-3.0" G_DIR_SEPARATOR_S "gtk.css");
+
+  /* First look in the user's config directory */
+  path = g_build_filename (g_get_user_data_dir (), "themes", name, subpath, NULL);
+  if (!g_file_test (path, G_FILE_TEST_EXISTS))
+    {
+      g_free (path);
+      /* Next look in the user's home directory
+       */
+      path = g_build_filename (g_get_home_dir (), ".themes", name, subpath, NULL);
+      if (!g_file_test (path, G_FILE_TEST_EXISTS))
+        {
+          gchar *theme_dir;
+
+          g_free (path);
+
+          /* Finally, try in the default theme directory */
+          theme_dir = _gtk_css_provider_get_theme_dir ();
+          path = g_build_filename (theme_dir, name, subpath, NULL);
+          g_free (theme_dir);
+
+          if (!g_file_test (path, G_FILE_TEST_EXISTS))
+            {
+              g_free (path);
+              path = NULL;
+            }
+        }
+    }
+
+  g_free (subpath);
+
+  return path;
+}
+
 /**
  * _gtk_css_provider_load_named:
  * @provider: a #GtkCssProvider
@@ -2997,44 +3041,8 @@ _gtk_css_provider_load_named (GtkCssProvider *provider,
     }
   g_free (resource_path);
 
-
-  /* Next try looking for files in the various theme directories.
-   */
-  if (variant)
-    subpath = g_strdup_printf ("gtk-3.0" G_DIR_SEPARATOR_S "gtk-%s.css", variant);
-  else
-    subpath = g_strdup ("gtk-3.0" G_DIR_SEPARATOR_S "gtk.css");
-
-  /* First look in the user's config directory
-   */
-  path = g_build_filename (g_get_user_data_dir (), "themes", name, subpath, NULL);
-  if (!g_file_test (path, G_FILE_TEST_EXISTS))
-    {
-      g_free (path);
-      /* Next look in the user's home directory
-       */
-      path = g_build_filename (g_get_home_dir (), ".themes", name, subpath, NULL);
-      if (!g_file_test (path, G_FILE_TEST_EXISTS))
-        {
-          gchar *theme_dir;
-
-          g_free (path);
-
-          /* Finally, try in the default theme directory */
-          theme_dir = _gtk_css_provider_get_theme_dir ();
-          path = g_build_filename (theme_dir, name, subpath, NULL);
-          g_free (theme_dir);
-
-          if (!g_file_test (path, G_FILE_TEST_EXISTS))
-            {
-              g_free (path);
-              path = NULL;
-            }
-        }
-    }
-
-  g_free (subpath);
-
+  /* Next try looking for files in the various theme directories. */
+  path = _gtk_css_find_theme (name, variant);
   if (path)
     {
       char *dir, *resource_file;
