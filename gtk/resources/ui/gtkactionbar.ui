@@ -15,7 +15,7 @@
               <class name="action-bar"/>
             </style>
             <child>
-              <object class="GtkBox" id="center_box">
+              <object class="GtkBox" id="box">
                 <property name="visible">True</property>
                 <property name="orientation">horizontal</property>
                 <property name="can_focus">False</property>
