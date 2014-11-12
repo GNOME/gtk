@@ -2210,13 +2210,14 @@ gtk_range_draw (GtkWidget *widget,
 
       gtk_style_context_save (context);
       gtk_style_context_add_class (context, GTK_STYLE_CLASS_SLIDER);
+      gtk_style_context_get_margin (context, widget_state, &margin);
       gtk_style_context_set_state (context, state);
 
       gtk_render_slider (context, cr,
-                         priv->slider.x,
-                         priv->slider.y,
-                         priv->slider.width,
-                         priv->slider.height,
+                         priv->slider.x + margin.left,
+                         priv->slider.y + margin.top,
+                         priv->slider.width - margin.left - margin.right,
+                         priv->slider.height - margin.top - margin.bottom,
                          priv->orientation);
 
       gtk_style_context_restore (context);
