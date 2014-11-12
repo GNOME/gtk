@@ -3083,17 +3083,16 @@ GtkCheckButton.text-button, GtkRadioButton.text-button {
   -GtkRange-slider-width: 20;
   -GtkRange-trough-border: 2;
   outline-offset: -9px;
-  outline-radius: 4px;
-  margin: 10px; }
+  outline-radius: 4px; }
   .scale.fine-tune,
   .scale.scale-has-marks-above.scale-has-marks-below.fine-tune,
   .scale.vertical.scale-has-marks-above.scale-has-marks-below.fine-tune {
-    margin: 8px;
     outline-offset: -7px;
     outline-radius: 6px; }
     .scale.fine-tune.trough,
     .scale.scale-has-marks-above.scale-has-marks-below.fine-tune.trough,
     .scale.vertical.scale-has-marks-above.scale-has-marks-below.fine-tune.trough {
+      margin: 8px;
       border-radius: 4px; }
   .scale.slider,
   .scale.scale-has-marks-above.scale-has-marks-below.slider,
@@ -3201,6 +3200,7 @@ GtkCheckButton.text-button, GtkRadioButton.text-button {
   .scale.trough,
   .scale.scale-has-marks-above.scale-has-marks-below.trough,
   .scale.vertical.scale-has-marks-above.scale-has-marks-below.trough {
+    margin: 10px;
     border: 1px solid #a1a1a1;
     border-radius: 3px;
     background-color: #cecece;

@@ -2235,18 +2235,22 @@ GtkCheckButton.text-button, GtkRadioButton.text-button {
 .scale,
 .scale.scale-has-marks-above.scale-has-marks-below,
 .scale.vertical.scale-has-marks-above.scale-has-marks-below {
+  // FIXME: rationalize
   -GtkScale-slider-length: 20;
   -GtkRange-slider-width: 20;
   -GtkRange-trough-border: 2;
   outline-offset: -9px;
   outline-radius: 4px;
-  margin: 10px;
+
   &.fine-tune {
-    margin: 8px;
     outline-offset: -7px;
     outline-radius: 6px;
-    &.trough { border-radius: 4px; }
+    &.trough {
+      margin: 8px;
+      border-radius: 4px;
+    }
   }
+
   &.slider {
     //FIXME: better gradient on the slider and hover state
     @include button(normal);
@@ -2297,6 +2301,7 @@ GtkCheckButton.text-button, GtkRadioButton.text-button {
     }
   }
   &.trough {
+    margin: 10px;
     border: 1px solid $borders_color;
     border-radius: 3px;
     background-color: mix($bg_color,$borders_color,60%);
