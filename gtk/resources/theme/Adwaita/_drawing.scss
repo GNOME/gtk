@@ -568,4 +568,8 @@
 
   background-repeat: no-repeat;
   background-position: $_position;
+
+  background-color: transparent; // reset some properties to be sure to not inherit them somehow
+  border: none;                  //
+  box-shadow: none;              //
 }
