@@ -122,24 +122,20 @@ $ease-out-quad: cubic-bezier(0.25, 0.46, 0.45, 0.94);
 // This is used by GtkScrolledWindow, when content is touch-dragged past boundaries.
 .overshoot {
   &.top {
-    background: linear-gradient(to top, transparentize($selected_bg_color,1), transparentize($selected_bg_color,0.8));
-    background-size: auto 100px;
-    background-position: center 100%;
+    @include overshoot(top);
+    &:backdrop { @include overshoot(top, backdrop); }
   }
   &.bottom {
-    background: linear-gradient(to bottom, transparentize($selected_bg_color,1), transparentize($selected_bg_color,0.8));
-    background-size: auto 100px;
-    background-position: center 0%;
+    @include overshoot(bottom);
+    &:backdrop { @include overshoot(bottom, backdrop); }
   }
   &.left {
-    background: linear-gradient(to left, transparentize($selected_bg_color,1), transparentize($selected_bg_color,0.8));
-    background-size: 100px auto;
-    background-position: 100% center;
+    @include overshoot(left);
+    &:backdrop { @include overshoot(left, backdrop); }
   }
   &.right {
-    background: linear-gradient(to right, transparentize($selected_bg_color,1), transparentize($selected_bg_color,0.8));
-    background-size: 100px auto;
-    background-position: 0% center;
+    @include overshoot(right);
+    &:backdrop { @include overshoot(right, backdrop); }
   }
 }
 

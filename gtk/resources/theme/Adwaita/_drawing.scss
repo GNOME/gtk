@@ -498,3 +498,74 @@
               inset 0 1px $hc; // top highlight
 
 }
+
+@mixin overshoot($p, $t:normal, $c:$borders_color) {
+//
+// overshoot
+//
+// $p: position
+// $t: type
+// $c: base color
+//
+// possible $p values:
+// top, bottom, right, left
+//
+// possible $t values:
+// normal, backdrop
+//
+
+  $_radial_gradient_length: 4%;
+  $_linear_gradient_length: 70%;
+
+  $_position: center top;
+  $_linear_gradient_direction: to bottom;
+  $_radial_gradient_size: 100% $_radial_gradient_length;
+  $_linear_gradient_size: 100% $_linear_gradient_length;
+
+  @if $p==bottom {
+    $_position: center bottom;
+    $_linear_gradient_direction: to top; 
+  }
+
+  @else if $p==right {
+    $_position: right center;
+    $_linear_gradient_direction: to left;
+    $_radial_gradient_size: $_radial_gradient_length 100%;
+    $_linear_gradient_size: $_linear_gradient_length 100%;
+  }
+
+  @else if $p==left {
+    $_position: left center;
+    $_linear_gradient_direction: to right;
+    $_radial_gradient_size: $_radial_gradient_length 100%;
+    $_linear_gradient_size: $_linear_gradient_length 100%;
+  }
+  
+  $_color: $c;
+
+  @if $t==backdrop {
+    $_color: if($c==$borders_color, $backdrop_borders_color, $c);
+  }
+
+  $_radial_gradient: -gtk-gradient(radial,
+                                  $_position, 0,
+                                  $_position, 0.5,
+                                  to($_color),
+                                  to(transparentize($_color, 1)));
+
+  $_linear_gradient: linear-gradient($_linear_gradient_direction, transparentize($_color, 0.85),
+                                                                  transparentize($_color, 1));
+
+  @if $t==normal {
+    background-image: $_radial_gradient, $_linear_gradient;
+    background-size: $_radial_gradient_size, $_linear_gradient_size;
+  }
+
+  @else if $t==backdrop {
+    background-image: $_radial_gradient;
+    background-size: $_radial_gradient_size;
+  }
+
+  background-repeat: no-repeat;
+  background-position: $_position;
+}

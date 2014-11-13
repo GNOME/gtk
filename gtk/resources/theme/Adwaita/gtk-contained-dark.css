@@ -74,21 +74,45 @@
   background-color: rgba(33, 93, 156, 0.2); }
 
 .overshoot.top {
-  background: linear-gradient(to top, rgba(33, 93, 156, 0), rgba(33, 93, 156, 0.2));
-  background-size: auto 100px;
-  background-position: center 100%; }
+  background-image: -gtk-gradient(radial, center top, 0, center top, 0.5, to(#1c1f1f), to(rgba(28, 31, 31, 0))), linear-gradient(to bottom, rgba(28, 31, 31, 0.15), rgba(28, 31, 31, 0));
+  background-size: 100% 4%, 100% 70%;
+  background-repeat: no-repeat;
+  background-position: center top; }
+  .overshoot.top:backdrop {
+    background-image: -gtk-gradient(radial, center top, 0, center top, 0.5, to(#1e2222), to(rgba(30, 34, 34, 0)));
+    background-size: 100% 4%;
+    background-repeat: no-repeat;
+    background-position: center top; }
 .overshoot.bottom {
-  background: linear-gradient(to bottom, rgba(33, 93, 156, 0), rgba(33, 93, 156, 0.2));
-  background-size: auto 100px;
-  background-position: center 0%; }
+  background-image: -gtk-gradient(radial, center bottom, 0, center bottom, 0.5, to(#1c1f1f), to(rgba(28, 31, 31, 0))), linear-gradient(to top, rgba(28, 31, 31, 0.15), rgba(28, 31, 31, 0));
+  background-size: 100% 4%, 100% 70%;
+  background-repeat: no-repeat;
+  background-position: center bottom; }
+  .overshoot.bottom:backdrop {
+    background-image: -gtk-gradient(radial, center bottom, 0, center bottom, 0.5, to(#1e2222), to(rgba(30, 34, 34, 0)));
+    background-size: 100% 4%;
+    background-repeat: no-repeat;
+    background-position: center bottom; }
 .overshoot.left {
-  background: linear-gradient(to left, rgba(33, 93, 156, 0), rgba(33, 93, 156, 0.2));
-  background-size: 100px auto;
-  background-position: 100% center; }
+  background-image: -gtk-gradient(radial, left center, 0, left center, 0.5, to(#1c1f1f), to(rgba(28, 31, 31, 0))), linear-gradient(to right, rgba(28, 31, 31, 0.15), rgba(28, 31, 31, 0));
+  background-size: 4% 100%, 70% 100%;
+  background-repeat: no-repeat;
+  background-position: left center; }
+  .overshoot.left:backdrop {
+    background-image: -gtk-gradient(radial, left center, 0, left center, 0.5, to(#1e2222), to(rgba(30, 34, 34, 0)));
+    background-size: 4% 100%;
+    background-repeat: no-repeat;
+    background-position: left center; }
 .overshoot.right {
-  background: linear-gradient(to right, rgba(33, 93, 156, 0), rgba(33, 93, 156, 0.2));
-  background-size: 100px auto;
-  background-position: 0% center; }
+  background-image: -gtk-gradient(radial, right center, 0, right center, 0.5, to(#1c1f1f), to(rgba(28, 31, 31, 0))), linear-gradient(to left, rgba(28, 31, 31, 0.15), rgba(28, 31, 31, 0));
+  background-size: 4% 100%, 70% 100%;
+  background-repeat: no-repeat;
+  background-position: right center; }
+  .overshoot.right:backdrop {
+    background-image: -gtk-gradient(radial, right center, 0, right center, 0.5, to(#1e2222), to(rgba(30, 34, 34, 0)));
+    background-size: 4% 100%;
+    background-repeat: no-repeat;
+    background-position: right center; }
 
 .label.separator, GtkPlacesSidebar.sidebar .view .label.separator {
   color: #eeeeec; }
