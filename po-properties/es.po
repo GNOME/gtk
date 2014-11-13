@@ -18,8 +18,8 @@ msgstr ""
 "Project-Id-Version: gtk+-properties.master\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gtk"
 "%2b&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2014-11-12 10:00+0000\n"
-"PO-Revision-Date: 2014-11-12 12:37+0100\n"
+"POT-Creation-Date: 2014-11-13 10:02+0000\n"
+"PO-Revision-Date: 2014-11-13 12:41+0100\n"
 "Last-Translator: Daniel Mustieles <daniel.mustieles@gmail.com>\n"
 "Language-Team: Español; Castellano <gnome-es-list@gnome.org>\n"
 "Language: \n"
@@ -120,10 +120,9 @@ msgid "The default display for GDK"
 msgstr "El visor predeterminado para GDK"
 
 #: ../gdk/gdkglcontext.c:244
-#, fuzzy
 #| msgid "The GDK visual used by the GL context"
 msgid "The GDK display the context is from"
-msgstr "El GDK visual usado por el contexto GL"
+msgstr "El contexto del que proviene la visualización GDK"
 
 #: ../gdk/gdkglcontext.c:259 ../gtk/gtkwidget.c:1449
 msgid "Window"
@@ -138,21 +137,18 @@ msgid "Profile"
 msgstr "Perfil"
 
 #: ../gdk/gdkglcontext.c:276
-#, fuzzy
 #| msgid "The Cell Area this context was created for"
 msgid "The GL profile the context was created for"
-msgstr "La célula de área para la que se creó este contexto"
+msgstr "El perfil GL para el que fue creado el contexto"
 
 #: ../gdk/gdkglcontext.c:292
-#| msgid "Style context"
 msgid "Shared context"
 msgstr "Contexto compartido"
 
 #: ../gdk/gdkglcontext.c:293
-#, fuzzy
 #| msgid "The Cell Area this context was created for"
 msgid "The GL context this context share data with"
-msgstr "La célula de área para la que se creó este contexto"
+msgstr "El contexto GL con el que este contexto comparte datos"
 
 #: ../gdk/gdkscreen.c:91
 msgid "Font options"
@@ -4177,21 +4173,18 @@ msgid "The GL context"
 msgstr "El contexto GL"
 
 #: ../gtk/gtkglarea.c:741
-#, fuzzy
 #| msgid "The GDK visual used by the GL context"
 msgid "The GL profile to use for the GL context"
-msgstr "El GDK visual usado por el contexto GL"
+msgstr "El perfil GL que usar para el contexto GL"
 
 #: ../gtk/gtkglarea.c:763
-#| msgid "Text to render"
 msgid "Auto render"
 msgstr "Renderizado automático"
 
 #: ../gtk/gtkglarea.c:764
-#, fuzzy
 #| msgid "Whether the column can be reordered around the headers"
 msgid "Whether the gl area renders on each redraw"
-msgstr "Indica si la columna poder ser reordenada alrededor de las cabeceras"
+msgstr "Indica si el área GL se renderiza en cada redibujado"
 
 #: ../gtk/gtkglarea.c:782
 msgid "Has alpha"
@@ -4210,16 +4203,14 @@ msgid "Whether a depth buffer is allocated"
 msgstr "Indica si se ha reservado un búfer de profundidad"
 
 #: ../gtk/gtkglarea.c:812
-#, fuzzy
 #| msgid "Has depth buffer"
 msgid "Has stencil buffer"
-msgstr "Tiene un búfer de profundidad"
+msgstr "Tiene un búfer de plantilla"
 
 #: ../gtk/gtkglarea.c:813
-#, fuzzy
 #| msgid "Whether a depth buffer is allocated"
 msgid "Whether a stencil buffer is allocated"
-msgstr "Indica si se ha reservado un búfer de profundidad"
+msgstr "Indica si se ha reservado un búfer de plantilla"
 
 #: ../gtk/gtkgrid.c:1749
 msgid "Row Homogeneous"
@@ -5143,58 +5134,48 @@ msgid "Role"
 msgstr "Rol"
 
 #: ../gtk/gtkmodelbutton.c:851
-#| msgid "The toggle state of the button"
 msgid "The role of this button"
 msgstr "El rol de este botón"
 
 #: ../gtk/gtkmodelbutton.c:867
-#| msgid "The icon size"
 msgid "The icon"
 msgstr "El icono"
 
 #: ../gtk/gtkmodelbutton.c:881
-#| msgid "The GL context"
 msgid "The text"
 msgstr "El texto"
 
 #: ../gtk/gtkmodelbutton.c:910
-#| msgid "Menu model"
 msgid "Menu name"
 msgstr "Nombre del menú"
 
 #: ../gtk/gtkmodelbutton.c:911
-#, fuzzy
 #| msgid "The name of the selected font"
 msgid "The name of the menu to open"
-msgstr "El nombre de la tipografía seleccionada"
+msgstr "El nombre del menú que abrir"
 
 #: ../gtk/gtkmodelbutton.c:927
-#, fuzzy
 #| msgid "Whether the menu has a tearoff item"
 msgid "Whether the menu is a parent"
-msgstr "Indica si el menú tiene un tirador"
+msgstr "Indica si el menú es padre"
 
 #: ../gtk/gtkmodelbutton.c:941
-#| msgid "Center Widget"
 msgid "Centered"
 msgstr "Centrado"
 
 #: ../gtk/gtkmodelbutton.c:942
-#, fuzzy
 #| msgid "Whether to wrap the license text."
 msgid "Whether to center the contents"
-msgstr "Indica si se debe ajustar el texto de la licencia."
+msgstr "Indica si se debe centrar el contenido"
 
 #: ../gtk/gtkmodelbutton.c:957
-#| msgid "Icon"
 msgid "Iconic"
 msgstr "Icónico"
 
 #: ../gtk/gtkmodelbutton.c:958
-#, fuzzy
 #| msgid "Whether to wrap the license text."
 msgid "Whether to prefer the icon over text"
-msgstr "Indica si se debe ajustar el texto de la licencia."
+msgstr "Indica si se prefiere el icono sobre el texto"
 
 #: ../gtk/gtkmountoperation.c:161 ../gtk/gtkstylecontext.c:272
 msgid "Parent"
@@ -5439,16 +5420,14 @@ msgid "Largest possible value for the \"position\" property"
 msgstr "El valor más grande posible para la propiedad \"posicion\""
 
 #: ../gtk/gtkpaned.c:396
-#, fuzzy
 #| msgid "Width of handle"
 msgid "Wide Handle"
-msgstr "Anchura del tirador"
+msgstr "Tirador ancho"
 
 #: ../gtk/gtkpaned.c:397
-#, fuzzy
 #| msgid "Whether the window frame should have a close button"
 msgid "Whether the paned should have a prominent handle"
-msgstr "Indica si el marco de la ventana debe tener un botón de cierre"
+msgstr "Indica si el panel debe tener un tirador prominente"
 
 #: ../gtk/gtkpaned.c:403
 msgid "Handle Size"
@@ -5571,7 +5550,6 @@ msgid "Whether the popover is modal"
 msgstr "Indica si la ventana emergente es modal"
 
 #: ../gtk/gtkpopovermenu.c:265
-#| msgid "The name of the widget"
 msgid "The name of the submenu"
 msgstr "El nombre del submenú"
 
@@ -6479,16 +6457,14 @@ msgid "Kinetic scrolling mode."
 msgstr "Modo de desplazamiento de Kinetic"
 
 #: ../gtk/gtkscrolledwindow.c:572
-#, fuzzy
 #| msgid "Kinetic Scrolling"
 msgid "Overlay Scrolling"
-msgstr "Desplazamiento de Kinetic"
+msgstr "Superposición del desplazamiento"
 
 #: ../gtk/gtkscrolledwindow.c:573
-#, fuzzy
 #| msgid "Kinetic scrolling mode."
 msgid "Overlay scrolling mode"
-msgstr "Modo de desplazamiento de Kinetic"
+msgstr "Modo de superposición del desplazamiento"
 
 #: ../gtk/gtksearchbar.c:423
 msgid "Search Mode Enabled"
@@ -7368,28 +7344,24 @@ msgid "Homogeneous sizing"
 msgstr "Tamaño homogéneo"
 
 #: ../gtk/gtkstack.c:410
-#, fuzzy
 #| msgid "Horizontal options"
 msgid "Horizontally homogeneous"
-msgstr "Opciones horizontales"
+msgstr "Homogéneo horizontalmente"
 
 #: ../gtk/gtkstack.c:410
-#, fuzzy
 #| msgid "Homogeneous sizing"
 msgid "Horizontally homogeneous sizing"
-msgstr "Tamaño homogéneo"
+msgstr "Tamaño horizontal homogéneo"
 
 #: ../gtk/gtkstack.c:422
-#, fuzzy
 #| msgid "Vertical options"
 msgid "Vertically homogeneous"
-msgstr "Opciones verticales"
+msgstr "Homogéneo verticalmente"
 
 #: ../gtk/gtkstack.c:422
-#, fuzzy
 #| msgid "Homogeneous sizing"
 msgid "Vertically homogeneous sizing"
-msgstr "Tamaño homogéneo"
+msgstr "Tamaño vertical homogéneo"
 
 #: ../gtk/gtkstack.c:426
 msgid "Visible child"
