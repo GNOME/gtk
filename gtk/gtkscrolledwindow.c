@@ -1876,14 +1876,6 @@ gtk_scrolled_window_draw (GtkWidget *widget,
 
   GTK_WIDGET_CLASS (gtk_scrolled_window_parent_class)->draw (widget, cr);
 
-  if (priv->hindicator.enabled &&
-      gtk_cairo_should_draw_window (cr, priv->hindicator.window))
-    gtk_container_propagate_draw (GTK_CONTAINER (scrolled_window), priv->hscrollbar, cr);
-
-  if (priv->vindicator.enabled &&
-      gtk_cairo_should_draw_window (cr, priv->vindicator.window))
-    gtk_container_propagate_draw (GTK_CONTAINER (scrolled_window), priv->vscrollbar, cr);
-
   if (gtk_cairo_should_draw_window (cr, gtk_widget_get_window (widget)))
     gtk_scrolled_window_draw_overshoot (scrolled_window, cr);
 
