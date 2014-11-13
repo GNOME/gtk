@@ -124,7 +124,7 @@ _gdk_mir_screen_new (GdkDisplay *display)
 
   screen = g_object_new (GDK_TYPE_MIR_SCREEN, NULL);
   screen->display = display;
-  mir_connection_set_display_config_change_callback (get_connection (screen), config_changed_cb, display);
+  mir_connection_set_display_config_change_callback (get_connection (screen), config_changed_cb, screen);
   update_display_config (screen);
 
   return GDK_SCREEN (screen);
