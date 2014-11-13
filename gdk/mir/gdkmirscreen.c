@@ -302,7 +302,8 @@ gdk_mir_screen_get_monitor_width_mm	(GdkScreen *screen,
                                      gint       monitor_num)
 {
   g_printerr ("gdk_mir_screen_get_monitor_width_mm (%d)\n", monitor_num);
-  return get_output (screen, monitor_num)->physical_width_mm;
+  MirDisplayOutput *output = get_output (screen, monitor_num);
+  return output ? output->physical_width_mm : 0;
 }
 
 static gint
@@ -310,7 +311,8 @@ gdk_mir_screen_get_monitor_height_mm (GdkScreen *screen,
                                       gint       monitor_num)
 {
   g_printerr ("gdk_mir_screen_get_monitor_height_mm (%d)\n", monitor_num);
-  return get_output (screen, monitor_num)->physical_height_mm;
+  MirDisplayOutput *output = get_output (screen, monitor_num);
+  return output ? output->physical_height_mm : 0;
 }
 
 static gchar *
@@ -331,11 +333,19 @@ gdk_mir_screen_get_monitor_geometry (GdkScreen    *screen,
   MirDisplayMode *mode;
 
   output = get_output (screen, monitor_num);
-  mode = &output->modes[output->current_mode];
-  dest->x = output->position_x;
-  dest->y = output->position_y;
-  dest->width = mode->horizontal_resolution;
-  dest->height = mode->vertical_resolution;
+
+  if (output)
+    {
+      mode = &output->modes[output->current_mode];
+      dest->x = output->position_x;
+      dest->y = output->position_y;
+      dest->width = mode->horizontal_resolution;
+      dest->height = mode->vertical_resolution;
+    }
+  else
+    {
+      *dest = {0, 0, 0, 0};
+    }
 }
 
 static void
