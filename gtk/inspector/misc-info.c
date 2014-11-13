@@ -36,6 +36,8 @@ struct _GtkInspectorMiscInfoPrivate {
 
   GObject *object;
 
+  GtkWidget *refcount_row;
+  GtkWidget *refcount;
   GtkWidget *state_row;
   GtkWidget *state;
   GtkWidget *buildable_id_row;
@@ -268,7 +270,15 @@ static gboolean
 update_info (gpointer data)
 {
   GtkInspectorMiscInfo *sl = data;
+  gchar *tmp;
 
+  if (G_IS_OBJECT (sl->priv->object))
+    {
+      tmp = g_strdup_printf ("%d", sl->priv->object->ref_count);
+      gtk_label_set_text (GTK_LABEL (sl->priv->refcount), tmp);
+      g_free (tmp);
+    }
+  
   if (GTK_IS_WIDGET (sl->priv->object))
     {
       AtkObject *accessible;
@@ -279,11 +289,11 @@ update_info (gpointer data)
       list = gtk_widget_list_mnemonic_labels (GTK_WIDGET (sl->priv->object));
       for (l = list; l; l = l->next)
         {
-          gchar *tmp;
           GtkWidget *button;
 
           tmp = g_strdup_printf ("%p (%s)", l->data, g_type_name_from_instance ((GTypeInstance*)l->data));
           button = gtk_button_new_with_label (tmp);
+          g_free (tmp);
           gtk_widget_show (button);
           gtk_container_add (GTK_CONTAINER (sl->priv->mnemonic_label), button);
           g_object_set_data (G_OBJECT (button), "mnemonic-label", l->data);
@@ -300,6 +310,18 @@ update_info (gpointer data)
       gtk_widget_set_visible (sl->priv->realized, gtk_widget_get_realized (GTK_WIDGET (sl->priv->object)));
       gtk_widget_set_visible (sl->priv->is_toplevel, gtk_widget_is_toplevel (GTK_WIDGET (sl->priv->object)));
       gtk_widget_set_visible (sl->priv->child_visible, gtk_widget_get_child_visible (GTK_WIDGET (sl->priv->object)));
+    }
+
+  if (GTK_IS_BUILDABLE (sl->priv->object))
+    {
+      gtk_label_set_text (GTK_LABEL (sl->priv->buildable_id),
+                          gtk_buildable_get_name (GTK_BUILDABLE (sl->priv->object)));
+    }
+
+  if (GTK_IS_WINDOW (sl->priv->object))
+    {
+      update_default_widget (sl);
+      update_focus_widget (sl);
     }
 
   return G_SOURCE_CONTINUE;
@@ -319,12 +341,6 @@ gtk_inspector_misc_info_set_object (GtkInspectorMiscInfo *sl,
       sl->priv->object = NULL;
     }
 
-  if (!GTK_IS_WIDGET (object) && !GTK_IS_BUILDABLE (object))
-    {
-      gtk_widget_hide (GTK_WIDGET (sl));
-      return;
-    }
-
   gtk_widget_show (GTK_WIDGET (sl));
 
   sl->priv->object = object;
@@ -333,6 +349,7 @@ gtk_inspector_misc_info_set_object (GtkInspectorMiscInfo *sl,
 
   if (GTK_IS_WIDGET (object))
     {
+      gtk_widget_show (sl->priv->refcount_row);
       gtk_widget_show (sl->priv->state_row);
       gtk_widget_show (sl->priv->allocated_size_row);
       gtk_widget_show (sl->priv->mnemonic_label_row);
@@ -348,8 +365,6 @@ gtk_inspector_misc_info_set_object (GtkInspectorMiscInfo *sl,
 
       g_signal_connect_object (object, "size-allocate", G_CALLBACK (allocation_changed), sl, 0);
       allocation_changed (GTK_WIDGET (sl->priv->object), NULL, sl);
-
-      update_info (sl);
     }
   else
     {
@@ -367,8 +382,6 @@ gtk_inspector_misc_info_set_object (GtkInspectorMiscInfo *sl,
 
   if (GTK_IS_BUILDABLE (object))
     {
-      gtk_label_set_text (GTK_LABEL (sl->priv->buildable_id),
-                          gtk_buildable_get_name (GTK_BUILDABLE (object)));
       gtk_widget_show (sl->priv->buildable_id_row);
     }
   else
@@ -381,9 +394,6 @@ gtk_inspector_misc_info_set_object (GtkInspectorMiscInfo *sl,
       gtk_widget_show (sl->priv->default_widget_row);
       gtk_widget_show (sl->priv->focus_widget_row);
 
-      update_default_widget (sl);
-      update_focus_widget (sl);
-
       g_signal_connect_object (object, "set-focus", G_CALLBACK (set_focus_cb), sl, G_CONNECT_AFTER);
     }
   else
@@ -391,6 +401,8 @@ gtk_inspector_misc_info_set_object (GtkInspectorMiscInfo *sl,
       gtk_widget_hide (sl->priv->default_widget_row);
       gtk_widget_hide (sl->priv->focus_widget_row);
     }
+
+  update_info (sl);
 }
 
 static void
@@ -479,34 +491,36 @@ gtk_inspector_misc_info_class_init (GtkInspectorMiscInfoClass *klass)
                            GTK_TYPE_WIDGET, G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY));
 
   gtk_widget_class_set_template_from_resource (widget_class, "/org/gtk/inspector/misc-info.ui");
-   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorMiscInfo, state_row);
-   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorMiscInfo, state);
-   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorMiscInfo, buildable_id_row);
-   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorMiscInfo, buildable_id);
-   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorMiscInfo, default_widget_row);
-   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorMiscInfo, default_widget);
-   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorMiscInfo, default_widget_button);
-   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorMiscInfo, focus_widget_row);
-   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorMiscInfo, focus_widget);
-   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorMiscInfo, focus_widget_button);
-   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorMiscInfo, mnemonic_label_row);
-   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorMiscInfo, mnemonic_label);
-   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorMiscInfo, allocated_size_row);
-   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorMiscInfo, allocated_size);
-   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorMiscInfo, clip_area_row);
-   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorMiscInfo, clip_area);
-   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorMiscInfo, tick_callback_row);
-   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorMiscInfo, tick_callback);
-   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorMiscInfo, accessible_role_row);
-   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorMiscInfo, accessible_role);
-   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorMiscInfo, mapped_row);
-   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorMiscInfo, mapped);
-   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorMiscInfo, realized_row);
-   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorMiscInfo, realized);
-   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorMiscInfo, is_toplevel_row);
-   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorMiscInfo, is_toplevel);
-   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorMiscInfo, child_visible_row);
-   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorMiscInfo, child_visible);
+  gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorMiscInfo, refcount_row);
+  gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorMiscInfo, refcount);
+  gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorMiscInfo, state_row);
+  gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorMiscInfo, state);
+  gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorMiscInfo, buildable_id_row);
+  gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorMiscInfo, buildable_id);
+  gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorMiscInfo, default_widget_row);
+  gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorMiscInfo, default_widget);
+  gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorMiscInfo, default_widget_button);
+  gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorMiscInfo, focus_widget_row);
+  gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorMiscInfo, focus_widget);
+  gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorMiscInfo, focus_widget_button);
+  gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorMiscInfo, mnemonic_label_row);
+  gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorMiscInfo, mnemonic_label);
+  gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorMiscInfo, allocated_size_row);
+  gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorMiscInfo, allocated_size);
+  gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorMiscInfo, clip_area_row);
+  gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorMiscInfo, clip_area);
+  gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorMiscInfo, tick_callback_row);
+  gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorMiscInfo, tick_callback);
+  gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorMiscInfo, accessible_role_row);
+  gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorMiscInfo, accessible_role);
+  gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorMiscInfo, mapped_row);
+  gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorMiscInfo, mapped);
+  gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorMiscInfo, realized_row);
+  gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorMiscInfo, realized);
+  gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorMiscInfo, is_toplevel_row);
+  gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorMiscInfo, is_toplevel);
+  gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorMiscInfo, child_visible_row);
+  gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorMiscInfo, child_visible);
 
   gtk_widget_class_bind_template_callback (widget_class, show_default_widget);
   gtk_widget_class_bind_template_callback (widget_class, show_focus_widget);

@@ -16,6 +16,40 @@
                 <property name="visible">True</property>
                 <property name="selection-mode">none</property>
                 <child>
+                  <object class="GtkListBoxRow" id="refcount_row">
+                    <property name="visible">True</property>
+                    <property name="activatable">False</property>
+                    <child>
+                      <object class="GtkBox">
+                        <property name="visible">True</property>
+                        <property name="orientation">horizontal</property>
+                        <property name="margin">10</property>
+                        <property name="spacing">40</property>
+                        <child>
+                          <object class="GtkLabel" id="refcount_label">
+                            <property name="visible">True</property>
+                            <property name="label" translatable="yes">Reference count</property>
+                            <property name="halign">start</property>
+                            <property name="valign">baseline</property>
+                            <property name="xalign">0.0</property>
+                          </object>
+                          <packing>
+                            <property name="expand">True</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkLabel" id="refcount">
+                            <property name="visible">True</property>
+                            <property name="selectable">True</property>
+                            <property name="halign">end</property>
+                            <property name="valign">baseline</property>
+                          </object>
+                        </child>
+                      </object>
+                    </child>
+                  </object>
+                </child>
+                <child>
                   <object class="GtkListBoxRow" id="state_row">
                     <property name="visible">True</property>
                     <property name="activatable">False</property>

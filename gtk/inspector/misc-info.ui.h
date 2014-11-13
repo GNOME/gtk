@@ -1,3 +1,4 @@
+N_("Reference count");
 N_("State");
 N_("Buildable ID");
 N_("Default Widget");
