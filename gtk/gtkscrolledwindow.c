@@ -1884,7 +1884,8 @@ gtk_scrolled_window_draw (GtkWidget *widget,
       gtk_cairo_should_draw_window (cr, priv->vindicator.window))
     gtk_container_propagate_draw (GTK_CONTAINER (scrolled_window), priv->vscrollbar, cr);
 
-  gtk_scrolled_window_draw_overshoot (scrolled_window, cr);
+  if (gtk_cairo_should_draw_window (cr, gtk_widget_get_window (widget)))
+    gtk_scrolled_window_draw_overshoot (scrolled_window, cr);
 
   return FALSE;
 }
