@@ -64,6 +64,8 @@ struct _GtkInspectorMiscInfoPrivate {
   GtkWidget *is_toplevel;
   GtkWidget *child_visible_row;
   GtkWidget *child_visible;
+
+  guint update_source_id;
 };
 
 enum
@@ -262,6 +264,47 @@ show_mnemonic_label (GtkWidget *button, GtkInspectorMiscInfo *sl)
     show_object (sl, G_OBJECT (widget), NULL, "properties");
 }
 
+static gboolean
+update_info (gpointer data)
+{
+  GtkInspectorMiscInfo *sl = data;
+
+  if (GTK_IS_WIDGET (sl->priv->object))
+    {
+      AtkObject *accessible;
+      AtkRole role;
+      GList *list, *l;
+
+      gtk_container_forall (GTK_CONTAINER (sl->priv->mnemonic_label), (GtkCallback)gtk_widget_destroy, NULL);
+      list = gtk_widget_list_mnemonic_labels (GTK_WIDGET (sl->priv->object));
+      for (l = list; l; l = l->next)
+        {
+          gchar *tmp;
+          GtkWidget *button;
+
+          tmp = g_strdup_printf ("%p (%s)", l->data, g_type_name_from_instance ((GTypeInstance*)l->data));
+          button = gtk_button_new_with_label (tmp);
+          gtk_widget_show (button);
+          gtk_container_add (GTK_CONTAINER (sl->priv->mnemonic_label), button);
+          g_object_set_data (G_OBJECT (button), "mnemonic-label", l->data);
+          g_signal_connect (button, "clicked", G_CALLBACK (show_mnemonic_label), sl);
+        }
+      g_list_free (list);
+
+      gtk_widget_set_visible (sl->priv->tick_callback, gtk_widget_has_tick_callback (GTK_WIDGET (sl->priv->object)));
+
+      accessible = ATK_OBJECT (gtk_widget_get_accessible (GTK_WIDGET (sl->priv->object)));
+      role = atk_object_get_role (accessible);
+      gtk_label_set_text (GTK_LABEL (sl->priv->accessible_role), atk_role_get_name (role));
+      gtk_widget_set_visible (sl->priv->mapped, gtk_widget_get_mapped (GTK_WIDGET (sl->priv->object)));
+      gtk_widget_set_visible (sl->priv->realized, gtk_widget_get_realized (GTK_WIDGET (sl->priv->object)));
+      gtk_widget_set_visible (sl->priv->is_toplevel, gtk_widget_is_toplevel (GTK_WIDGET (sl->priv->object)));
+      gtk_widget_set_visible (sl->priv->child_visible, gtk_widget_get_child_visible (GTK_WIDGET (sl->priv->object)));
+    }
+
+  return G_SOURCE_CONTINUE;
+}
+
 void
 gtk_inspector_misc_info_set_object (GtkInspectorMiscInfo *sl,
                                     GObject              *object)
@@ -290,54 +333,23 @@ gtk_inspector_misc_info_set_object (GtkInspectorMiscInfo *sl,
 
   if (GTK_IS_WIDGET (object))
     {
-      AtkObject *accessible;
-      AtkRole role;
-      GList *list, *l;
-
       gtk_widget_show (sl->priv->state_row);
+      gtk_widget_show (sl->priv->allocated_size_row);
+      gtk_widget_show (sl->priv->mnemonic_label_row);
+      gtk_widget_show (sl->priv->tick_callback_row);
+      gtk_widget_show (sl->priv->accessible_role_row);
+      gtk_widget_show (sl->priv->mapped_row);
+      gtk_widget_show (sl->priv->realized_row);
+      gtk_widget_show (sl->priv->is_toplevel_row);
+      gtk_widget_show (sl->priv->is_toplevel_row);
+
       g_signal_connect_object (object, "state-flags-changed", G_CALLBACK (state_flags_changed), sl, 0);
       state_flags_changed (GTK_WIDGET (sl->priv->object), 0, sl);
 
-      gtk_widget_show (sl->priv->mnemonic_label_row);
-      gtk_container_forall (GTK_CONTAINER (sl->priv->mnemonic_label), (GtkCallback)gtk_widget_destroy, NULL);
-      list = gtk_widget_list_mnemonic_labels (GTK_WIDGET (sl->priv->object));
-      for (l = list; l; l = l->next)
-        {
-          gchar *tmp;
-          GtkWidget *button;
-
-          tmp = g_strdup_printf ("%p (%s)", l->data, g_type_name_from_instance ((GTypeInstance*)l->data));
-          button = gtk_button_new_with_label (tmp);
-          gtk_widget_show (button);
-          gtk_container_add (GTK_CONTAINER (sl->priv->mnemonic_label), button);
-          g_object_set_data (G_OBJECT (button), "mnemonic-label", l->data);
-          g_signal_connect (button, "clicked", G_CALLBACK (show_mnemonic_label), sl);
-        }
-      g_list_free (list);
-
-      allocation_changed (GTK_WIDGET (sl->priv->object), NULL, sl);
-      gtk_widget_show (sl->priv->allocated_size_row);
       g_signal_connect_object (object, "size-allocate", G_CALLBACK (allocation_changed), sl, 0);
+      allocation_changed (GTK_WIDGET (sl->priv->object), NULL, sl);
 
-      gtk_widget_set_visible (sl->priv->tick_callback, gtk_widget_has_tick_callback (GTK_WIDGET (sl->priv->object)));
-      gtk_widget_show (sl->priv->tick_callback_row);
-
-      accessible = ATK_OBJECT (gtk_widget_get_accessible (GTK_WIDGET (sl->priv->object)));
-      role = atk_object_get_role (accessible);
-      gtk_label_set_text (GTK_LABEL (sl->priv->accessible_role), atk_role_get_name (role));
-      gtk_widget_show (sl->priv->accessible_role_row);
-
-      gtk_widget_set_visible (sl->priv->mapped, gtk_widget_get_mapped (GTK_WIDGET (sl->priv->object)));
-      gtk_widget_show (sl->priv->mapped_row);
-
-      gtk_widget_set_visible (sl->priv->realized, gtk_widget_get_realized (GTK_WIDGET (sl->priv->object)));
-      gtk_widget_show (sl->priv->realized_row);
-
-      gtk_widget_set_visible (sl->priv->is_toplevel, gtk_widget_is_toplevel (GTK_WIDGET (sl->priv->object)));
-      gtk_widget_show (sl->priv->is_toplevel_row);
-
-      gtk_widget_set_visible (sl->priv->child_visible, gtk_widget_get_child_visible (GTK_WIDGET (sl->priv->object)));
-      gtk_widget_show (sl->priv->is_toplevel_row);
+      update_info (sl);
     }
   else
     {
@@ -389,6 +401,28 @@ gtk_inspector_misc_info_init (GtkInspectorMiscInfo *sl)
 }
 
 static void
+map (GtkWidget *widget)
+{
+  GtkInspectorMiscInfo *sl = GTK_INSPECTOR_MISC_INFO (widget);
+
+  GTK_WIDGET_CLASS (gtk_inspector_misc_info_parent_class)->map (widget);
+
+  sl->priv->update_source_id = gdk_threads_add_timeout_seconds (1, update_info, sl);
+  update_info (sl);
+}
+
+static void
+unmap (GtkWidget *widget)
+{
+  GtkInspectorMiscInfo *sl = GTK_INSPECTOR_MISC_INFO (widget);
+
+  g_source_remove (sl->priv->update_source_id);
+  sl->priv->update_source_id = 0;
+
+  GTK_WIDGET_CLASS (gtk_inspector_misc_info_parent_class)->unmap (widget);
+}
+
+static void
 get_property (GObject    *object,
               guint       param_id,
               GValue     *value,
@@ -437,6 +471,9 @@ gtk_inspector_misc_info_class_init (GtkInspectorMiscInfoClass *klass)
   object_class->get_property = get_property;
   object_class->set_property = set_property;
 
+  widget_class->map = map;
+  widget_class->unmap = unmap;
+
   g_object_class_install_property (object_class, PROP_OBJECT_TREE,
       g_param_spec_object ("object-tree", "Object Tree", "Obect tree",
                            GTK_TYPE_WIDGET, G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY));
@@ -476,3 +513,4 @@ gtk_inspector_misc_info_class_init (GtkInspectorMiscInfoClass *klass)
 }
 
 // vim: set et sw=2 ts=2:
+
