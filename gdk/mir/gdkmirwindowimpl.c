@@ -154,7 +154,7 @@ static void
 ensure_surface (GdkWindow *window)
 {
   GdkMirWindowImpl *impl = GDK_MIR_WINDOW_IMPL (window->impl);
-  MirPixelFormat formats[100], pixel_format = mir_pixel_format_invalid;
+  MirPixelFormat formats[mir_pixel_formats], pixel_format = mir_pixel_format_invalid;
   unsigned int n_formats, i;
   MirSurfaceParameters parameters;
   MirEventDelegate event_delegate = { event_cb, NULL };
@@ -172,7 +172,7 @@ ensure_surface (GdkWindow *window)
 
   // Should probably calculate this once?
   // Should prefer certain formats over others
-  mir_connection_get_available_surface_formats (get_connection (window), formats, 100, &n_formats);
+  mir_connection_get_available_surface_formats (get_connection (window), formats, mir_pixel_formats, &n_formats);
   for (i = 0; i < n_formats; i++)
     if (formats[i] == mir_pixel_format_argb_8888)
       {
