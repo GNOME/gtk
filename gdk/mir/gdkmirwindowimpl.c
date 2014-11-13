@@ -47,7 +47,7 @@ struct _GdkMirWindowImpl
   GList *transient_children;
 
   /* Desired surface attributes */
-  MirSurfaceType surface_type; // FIXME
+  MirSurfaceType surface_type;
   MirSurfaceState surface_state;
 
   /* Pattern for background */
@@ -125,6 +125,8 @@ _gdk_mir_window_impl_get_cursor_state (GdkMirWindowImpl *impl,
 static void
 gdk_mir_window_impl_init (GdkMirWindowImpl *impl)
 {
+  impl->surface_type = mir_surface_type_normal;
+  impl->surface_state = mir_surface_state_unknown;
 }
 
 static MirConnection *
@@ -137,9 +139,24 @@ static void
 set_surface_state (GdkMirWindowImpl *impl,
                    MirSurfaceState state)
 {
+  if (impl->surface_state == state)
+    return;
+
   impl->surface_state = state;
   if (impl->surface)
     mir_surface_set_state (impl->surface, state);
+}
+
+static void
+set_surface_type (GdkMirWindowImpl *impl,
+                  MirSurfaceType type)
+{
+  if (impl->surface_type == type)
+    return;
+
+  impl->surface_type = type;
+  if (impl->surface)
+    mir_surface_set_type (impl->surface, type);
 }
 
 static void
@@ -202,6 +219,7 @@ ensure_surface (GdkWindow *window)
   _gdk_mir_event_source_queue (window_ref, &resize_event);
 
   mir_surface_set_event_handler (impl->surface, &event_delegate); // FIXME: Ignore some events until shown
+  set_surface_type (impl, impl->surface_type);
   set_surface_state (impl, impl->surface_state);
 }
 
@@ -717,14 +735,60 @@ static void
 gdk_mir_window_impl_set_type_hint (GdkWindow         *window,
                                    GdkWindowTypeHint  hint)
 {
-  //g_printerr ("gdk_mir_window_impl_set_type_hint window=%p\n", window);
-  // FIXME: ?
+  MirSurfaceType mir_type = mir_surface_type_normal;
+
+  switch (hint)
+    {
+      case GDK_WINDOW_TYPE_HINT_NORMAL:
+      case GDK_WINDOW_TYPE_HINT_DOCK:
+      case GDK_WINDOW_TYPE_HINT_TOOLBAR:
+      case GDK_WINDOW_TYPE_HINT_DESKTOP:
+        mir_type = mir_surface_type_normal;
+        break;
+      case GDK_WINDOW_TYPE_HINT_DIALOG:
+        mir_type = mir_surface_type_dialog;
+        break;
+      case GDK_WINDOW_TYPE_HINT_UTILITY:
+        mir_type = mir_surface_type_utility;
+        break;
+      case GDK_WINDOW_TYPE_HINT_MENU:
+      case GDK_WINDOW_TYPE_HINT_DROPDOWN_MENU:
+      case GDK_WINDOW_TYPE_HINT_POPUP_MENU:
+      case GDK_WINDOW_TYPE_HINT_COMBO:
+        mir_type = mir_surface_type_popover;
+        break;
+      case GDK_WINDOW_TYPE_HINT_SPLASHSCREEN:
+      case GDK_WINDOW_TYPE_HINT_TOOLTIP:
+      case GDK_WINDOW_TYPE_HINT_DND:
+      case GDK_WINDOW_TYPE_HINT_NOTIFICATION:
+        mir_type = mir_surface_type_overlay;
+        break;
+    }
+
+  mir_surface_set_type (GDK_MIR_WINDOW_IMPL (window->impl), mir_type);
 }
 
 static GdkWindowTypeHint
 gdk_mir_window_impl_get_type_hint (GdkWindow *window)
 {
-  g_printerr ("gdk_mir_window_impl_get_type_hint window=%p\n", window);
+  GdkMirWindowImpl *impl = GDK_MIR_WINDOW_IMPL (window->impl);
+
+  switch (impl->surface_type)
+    {
+      case mir_surface_type_normal:
+      case mir_surface_type_freestyle:
+      case mir_surface_type_inputmethod:
+        return GDK_WINDOW_TYPE_HINT_NORMAL;
+      case mir_surface_type_utility:
+        return GDK_WINDOW_TYPE_HINT_UTILITY;
+      case mir_surface_type_dialog:
+        return GDK_WINDOW_TYPE_HINT_DIALOG;
+      case mir_surface_type_overlay:
+        return GDK_WINDOW_TYPE_HINT_TOOLTIP;
+      case mir_surface_type_popover:
+        return GDK_WINDOW_TYPE_HINT_MENU;
+    }
+
   return GDK_WINDOW_TYPE_HINT_NORMAL;
 }
 
