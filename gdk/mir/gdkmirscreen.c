@@ -163,7 +163,12 @@ static void
 gdk_mir_screen_finalize (GObject *object)
 {
   GdkMirScreen *screen = GDK_MIR_SCREEN (object);
+
   mir_connection_set_display_config_change_callback (get_connection (screen), NULL, NULL);
+  mir_display_config_destroy (screen->display_config);
+  g_clear_pointer (&screen->visual);
+  g_clear_pointer (&screen->root_window);
+
   G_OBJECT_CLASS (gdk_mir_screen_parent_class)->finalize (object);
 }
 
@@ -280,7 +285,7 @@ gdk_mir_screen_get_n_monitors (GdkScreen *screen)
 
   for (i = 0; i < config->num_outputs; i++)
     if (config->outputs[i].used)
-      count++;
+      ++count;
 
   return count;
 }
