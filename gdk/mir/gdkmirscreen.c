@@ -95,6 +95,29 @@ get_screen_size (MirDisplayConfiguration *config, gint *width, gint *height)
 }
 
 static void
+get_screen_size_mm (MirDisplayConfiguration *config, gint *width, gint *height)
+{
+  uint32_t i;
+
+  *width = 0;
+  *height = 0;
+
+  if (!config)
+    return;
+
+  for (i = 0; i < config->num_outputs; i++)
+    {
+      MirDisplayOutput *o = &config->outputs[i];
+
+      if (!o->used)
+        continue;
+
+      *width += o->physical_width_mm;
+      *height += o->physical_height_mm;
+    }
+}
+
+static void
 update_display_config (GdkMirScreen *screen)
 {
   gdk_mir_display_get_mir_connection (GDK_DISPLAY (screen->display));
@@ -194,16 +217,18 @@ static gint
 gdk_mir_screen_get_width_mm (GdkScreen *screen)
 {
   g_printerr ("gdk_mir_screen_get_width_mm\n");
-  // FIXME: A combination of all screens?
-  return get_output (screen, 0)->physical_width_mm;
+  gint width, height;
+  get_screen_size_mm (GDK_MIR_SCREEN (screen)->display_config, &width, &height);
+  return width;
 }
 
 static gint
 gdk_mir_screen_get_height_mm (GdkScreen *screen)
 {
   g_printerr ("gdk_mir_screen_get_height_mm\n");
-  // FIXME: A combination of all screens?
-  return get_output (screen, 0)->physical_height_mm;
+  gint width, height;
+  get_screen_size_mm (GDK_MIR_SCREEN (screen)->display_config, &width, &height);
+  return height;
 }
 
 static gint
