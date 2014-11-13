@@ -9,6 +9,8 @@ N_("Mnemonic Label");
 N_("Allocated size");
 N_("Clip area");
 N_("Tick callback");
+N_("Frame count");
+N_("Frame rate");
 N_("Accessible role");
 N_("Mapped");
 N_("Realized");

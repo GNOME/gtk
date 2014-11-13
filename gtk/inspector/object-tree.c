@@ -780,6 +780,15 @@ gtk_inspector_object_tree_append_object (GtkInspectorObjectTree *wt,
             }
           g_list_free (list);
         }
+
+       if (gtk_widget_is_toplevel (GTK_WIDGET (object)))
+         {
+           GObject *clock;
+
+           clock = (GObject *)gtk_widget_get_frame_clock (GTK_WIDGET (object));
+           if (clock)
+             gtk_inspector_object_tree_append_object (wt, clock, &iter, "frame-clock");
+         }
     }
 }
 

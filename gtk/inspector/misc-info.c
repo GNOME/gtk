@@ -56,6 +56,10 @@ struct _GtkInspectorMiscInfoPrivate {
   GtkWidget *clip_area;
   GtkWidget *tick_callback_row;
   GtkWidget *tick_callback;
+  GtkWidget *framerate_row;
+  GtkWidget *framerate;
+  GtkWidget *framecount_row;
+  GtkWidget *framecount;
   GtkWidget *accessible_role_row;
   GtkWidget *accessible_role;
   GtkWidget *mapped_row;
@@ -68,6 +72,7 @@ struct _GtkInspectorMiscInfoPrivate {
   GtkWidget *child_visible;
 
   guint update_source_id;
+  gint64 last_frame;
 };
 
 enum
@@ -324,6 +329,43 @@ update_info (gpointer data)
       update_focus_widget (sl);
     }
 
+  if (GDK_IS_FRAME_CLOCK (sl->priv->object))
+    {
+      GdkFrameClock *clock;
+      gint64 frame;
+      gint64 frame_time;
+      gint64 history_start;
+      gint64 history_len;
+      gint64 previous_frame_time;
+      GdkFrameTimings *previous_timings;
+
+      clock = GDK_FRAME_CLOCK (sl->priv->object);
+      frame = gdk_frame_clock_get_frame_counter (clock);
+      frame_time = gdk_frame_clock_get_frame_time (clock);
+
+      tmp = g_strdup_printf ("%ld", frame);
+      gtk_label_set_label (GTK_LABEL (sl->priv->framecount), tmp);
+      g_free (tmp);
+
+      history_start = gdk_frame_clock_get_history_start (clock);
+      history_len = frame - history_start;
+
+      if (history_len > 0 && sl->priv->last_frame != frame)
+        {
+          previous_timings = gdk_frame_clock_get_timings (clock, history_start);
+          previous_frame_time = gdk_frame_timings_get_frame_time (previous_timings);
+          tmp = g_strdup_printf ("%4.1f ⁄ s", (G_USEC_PER_SEC * history_len) / (double) (frame_time - previous_frame_time));
+          gtk_label_set_label (GTK_LABEL (sl->priv->framerate), tmp);
+          g_free (tmp);
+        }
+      else
+        {
+          gtk_label_set_label (GTK_LABEL (sl->priv->framerate), "—");
+        }
+
+      sl->priv->last_frame = frame;
+    }
+
   return G_SOURCE_CONTINUE;
 }
 
@@ -400,6 +442,17 @@ gtk_inspector_misc_info_set_object (GtkInspectorMiscInfo *sl,
     {
       gtk_widget_hide (sl->priv->default_widget_row);
       gtk_widget_hide (sl->priv->focus_widget_row);
+    }
+
+  if (GDK_IS_FRAME_CLOCK (object))
+    {
+      gtk_widget_show (sl->priv->framecount_row);
+      gtk_widget_show (sl->priv->framerate_row);
+    }
+  else
+    {
+      gtk_widget_hide (sl->priv->framecount_row);
+      gtk_widget_hide (sl->priv->framerate_row);
     }
 
   update_info (sl);
@@ -511,6 +564,10 @@ gtk_inspector_misc_info_class_init (GtkInspectorMiscInfoClass *klass)
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorMiscInfo, clip_area);
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorMiscInfo, tick_callback_row);
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorMiscInfo, tick_callback);
+  gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorMiscInfo, framecount_row);
+  gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorMiscInfo, framecount);
+  gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorMiscInfo, framerate_row);
+  gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorMiscInfo, framerate);
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorMiscInfo, accessible_role_row);
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorMiscInfo, accessible_role);
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorMiscInfo, mapped_row);

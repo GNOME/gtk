@@ -343,6 +343,74 @@
                 </child>
 
                 <child>
+                  <object class="GtkListBoxRow" id="framecount_row">
+                    <property name="visible">true</property>
+                    <property name="activatable">false</property>
+                    <child>
+                      <object class="GtkBox">
+                        <property name="visible">true</property>
+                        <property name="orientation">horizontal</property>
+                        <property name="margin">10</property>
+                        <property name="spacing">40</property>
+                        <child>
+                          <object class="GtkLabel">
+                            <property name="visible">true</property>
+                            <property name="label" translatable="yes">Frame count</property>
+                            <property name="halign">start</property>
+                            <property name="valign">baseline</property>
+                            <property name="xalign">0</property>
+                          </object>
+                          <packing>
+                            <property name="expand">true</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkLabel" id="framecount">
+                            <property name="visible">true</property>
+                            <property name="halign">end</property>
+                            <property name="valign">baseline</property>
+                          </object>
+                        </child>
+                      </object>
+                    </child>
+                  </object>
+                </child>
+
+                <child>
+                  <object class="GtkListBoxRow" id="framerate_row">
+                    <property name="visible">true</property>
+                    <property name="activatable">false</property>
+                    <child>
+                      <object class="GtkBox">
+                        <property name="visible">true</property>
+                        <property name="orientation">horizontal</property>
+                        <property name="margin">10</property>
+                        <property name="spacing">40</property>
+                        <child>
+                          <object class="GtkLabel">
+                            <property name="visible">true</property>
+                            <property name="label" translatable="yes">Frame rate</property>
+                            <property name="halign">start</property>
+                            <property name="valign">baseline</property>
+                            <property name="xalign">0</property>
+                          </object>
+                          <packing>
+                            <property name="expand">true</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkLabel" id="framerate">
+                            <property name="visible">true</property>
+                            <property name="halign">end</property>
+                            <property name="valign">baseline</property>
+                          </object>
+                        </child>
+                      </object>
+                    </child>
+                  </object>
+                </child>
+
+                <child>
                   <object class="GtkListBoxRow" id="accessible_role_row">
                     <property name="visible">true</property>
                     <property name="activatable">false</property>
