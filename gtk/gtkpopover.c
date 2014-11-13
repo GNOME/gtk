@@ -598,9 +598,7 @@ gtk_popover_get_rect_coords (GtkPopover *popover,
                              gint       *y2_out)
 {
   GtkWidget *widget = GTK_WIDGET (popover);
-  GtkPopoverPrivate *priv = popover->priv;
   GtkAllocation allocation;
-  GtkPositionType pos;
   gint x1, x2, y1, y2;
   GtkBorder margin;
 
@@ -618,25 +616,10 @@ gtk_popover_get_rect_coords (GtkPopover *popover,
   y2 = allocation.height -
     gtk_widget_get_margin_bottom (widget) + y1;
 
-  pos = get_effective_position (popover, priv->final_position);
-
-  if (pos == GTK_POS_TOP)
-    y2 -= MAX (TAIL_HEIGHT, margin.bottom);
-  else if (pos == GTK_POS_BOTTOM)
-    y1 += MAX (TAIL_HEIGHT, margin.top);
-  else if (pos == GTK_POS_LEFT)
-    x2 -= MAX (TAIL_HEIGHT, margin.right);
-  else if (pos == GTK_POS_RIGHT)
-    x1 += MAX (TAIL_HEIGHT, margin.left);
-
-  if (pos != GTK_POS_BOTTOM)
-    y1 += margin.top;
-  if (pos != GTK_POS_TOP)
-    y2 -= margin.bottom;
-  if (pos != GTK_POS_RIGHT)
-    x1 += margin.left;
-  if (pos != GTK_POS_LEFT)
-    x2 -= margin.right;
+  x1 += MAX (TAIL_HEIGHT, margin.left);
+  y1 += MAX (TAIL_HEIGHT, margin.top);
+  x2 -= MAX (TAIL_HEIGHT, margin.right);
+  y2 -= MAX (TAIL_HEIGHT, margin.bottom);
 
   if (x1_out)
     *x1_out = x1;
