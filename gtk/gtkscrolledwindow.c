@@ -3349,6 +3349,7 @@ create_indicator_window (GtkScrolledWindow *scrolled_window,
                          GtkWidget         *child)
 {
   GtkWidget *widget = GTK_WIDGET (scrolled_window);
+  GdkRGBA transparent = { 0, 0, 0, 0 };
   GtkAllocation allocation;
   GdkWindow *window;
   GdkWindowAttr attributes;
@@ -3370,7 +3371,8 @@ create_indicator_window (GtkScrolledWindow *scrolled_window,
   window = gdk_window_new (gtk_widget_get_window (widget),
                            &attributes, attributes_mask);
   gtk_widget_register_window (widget, window);
-  gtk_style_context_set_background (gtk_widget_get_style_context (widget), window);
+
+  gdk_window_set_background_rgba (window, &transparent);
 
   if (scrolled_window->priv->touch_mode)
     gtk_widget_set_parent_window (child, window);
