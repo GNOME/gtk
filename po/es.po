@@ -17,8 +17,8 @@ msgstr ""
 "Project-Id-Version: gtk+.master\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gtk"
 "%2b&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2014-11-12 09:59+0000\n"
-"PO-Revision-Date: 2014-11-12 12:33+0100\n"
+"POT-Creation-Date: 2014-11-13 10:01+0000\n"
+"PO-Revision-Date: 2014-11-13 12:30+0100\n"
 "Last-Translator: Daniel Mustieles <daniel.mustieles@gmail.com>\n"
 "Language-Team: Español; Castellano <gnome-es-list@gnome.org>\n"
 "Language: \n"
@@ -2367,7 +2367,6 @@ msgid "None"
 msgstr "Ninguna"
 
 #: ../gtk/gtkglarea.c:296
-#| msgid "Getting printer information failed"
 msgid "OpenGL context creation failed"
 msgstr "Falló al crear el contexto de OpenGL"
 
@@ -2381,7 +2380,6 @@ msgstr "Cerrar"
 
 #: ../gtk/gtkicontheme.c:2308 ../gtk/gtkicontheme.c:2372
 #, c-format
-#| msgid "Icon '%s' not present in theme"
 msgid "Icon '%s' not present in theme %s"
 msgstr "El icono «%s» no está presente en el tema %s"
 
@@ -3480,9 +3478,8 @@ msgstr "No mostrar este mensaje de nuevo"
 msgid "Activate"
 msgstr "Activar"
 
-#. vim: set et sw=2 ts=2:
 #: ../gtk/inspector/action-editor.c:302 ../gtk/inspector/actions.ui.h:5
-#: ../gtk/inspector/misc-info.ui.h:1
+#: ../gtk/inspector/misc-info.ui.h:2
 msgid "State"
 msgstr "Estado"
 
@@ -3578,7 +3575,6 @@ msgid "GDK Backend"
 msgstr "«Backend» de GDK"
 
 #: ../gtk/inspector/general.ui.h:4
-#| msgid "GTK+ Version"
 msgid "GL Version"
 msgstr "Versión de GL"
 
@@ -3615,58 +3611,72 @@ msgstr "Acción"
 msgid "Icon"
 msgstr "Icono"
 
-#: ../gtk/inspector/misc-info.ui.h:2
+#. vim: set et sw=2 ts=2:
+#: ../gtk/inspector/misc-info.ui.h:1
+#| msgid "Preferences"
+msgid "Reference count"
+msgstr "Cuenta de referencias"
+
+#: ../gtk/inspector/misc-info.ui.h:3
 msgid "Buildable ID"
 msgstr "ID que se puede construir"
 
-#: ../gtk/inspector/misc-info.ui.h:3
+#: ../gtk/inspector/misc-info.ui.h:4
 msgid "Default Widget"
 msgstr "Widget predeterminada"
 
-#: ../gtk/inspector/misc-info.ui.h:4 ../gtk/inspector/misc-info.ui.h:6
+#: ../gtk/inspector/misc-info.ui.h:5 ../gtk/inspector/misc-info.ui.h:7
 #: ../gtk/inspector/prop-editor.c:1005 ../gtk/inspector/prop-editor.c:1185
 #: ../gtk/inspector/prop-editor.c:1310 ../gtk/inspector/prop-editor.c:1421
 #: ../gtk/inspector/window.ui.h:8
 msgid "Properties"
 msgstr "Propiedades"
 
-#: ../gtk/inspector/misc-info.ui.h:5
+#: ../gtk/inspector/misc-info.ui.h:6
 msgid "Focus Widget"
 msgstr "Dar el foco al widget"
 
-#: ../gtk/inspector/misc-info.ui.h:7
+#: ../gtk/inspector/misc-info.ui.h:8
 msgid "Mnemonic Label"
 msgstr "Etiqueta nemotécnica"
 
-#: ../gtk/inspector/misc-info.ui.h:8
+#: ../gtk/inspector/misc-info.ui.h:9
 msgid "Allocated size"
 msgstr "Tamaño reservado"
 
-#: ../gtk/inspector/misc-info.ui.h:9
+#: ../gtk/inspector/misc-info.ui.h:10
 msgid "Clip area"
 msgstr "Área de recorte"
 
-#: ../gtk/inspector/misc-info.ui.h:10
+#: ../gtk/inspector/misc-info.ui.h:11
 msgid "Tick callback"
 msgstr "Retorno de llamada del tic"
 
-#: ../gtk/inspector/misc-info.ui.h:11
+#: ../gtk/inspector/misc-info.ui.h:12
+msgid "Frame count"
+msgstr "Cuenta de fotogramas"
+
+#: ../gtk/inspector/misc-info.ui.h:13
+msgid "Frame rate"
+msgstr "Tasa de fotogramas"
+
+#: ../gtk/inspector/misc-info.ui.h:14
 msgid "Accessible role"
 msgstr "Rol accesible"
 
-#: ../gtk/inspector/misc-info.ui.h:12
+#: ../gtk/inspector/misc-info.ui.h:15
 msgid "Mapped"
 msgstr "Mapeado"
 
-#: ../gtk/inspector/misc-info.ui.h:13
+#: ../gtk/inspector/misc-info.ui.h:16
 msgid "Realized"
 msgstr "Realizado"
 
-#: ../gtk/inspector/misc-info.ui.h:14
+#: ../gtk/inspector/misc-info.ui.h:17
 msgid "Is Toplevel"
 msgstr "Es de nivel superior"
 
-#: ../gtk/inspector/misc-info.ui.h:15
+#: ../gtk/inspector/misc-info.ui.h:18
 msgid "Child Visible"
 msgstr "Hijo visible"
 
@@ -3679,7 +3689,6 @@ msgid "Object"
 msgstr "Objeto"
 
 #: ../gtk/inspector/object-tree.ui.h:4 ../gtk/inspector/window.ui.h:13
-#| msgid "CSS Classes"
 msgid "Style Classes"
 msgstr "Clases de estilos"
 
@@ -3947,8 +3956,6 @@ msgid "Animations"
 msgstr "Animaciones"
 
 #: ../gtk/inspector/visual.ui.h:10
-#| msgctxt "print operation status"
-#| msgid "Generating data"
 msgid "Rendering Mode"
 msgstr "Modo de renderizado"
 
@@ -3961,8 +3968,6 @@ msgid "Image"
 msgstr "Imagen"
 
 #: ../gtk/inspector/visual.ui.h:13
-#| msgctxt "Stock label, media"
-#| msgid "_Record"
 msgid "Recording"
 msgstr "Grabación"
 
@@ -3991,23 +3996,18 @@ msgid "When needed"
 msgstr "Cuando sea necesario"
 
 #: ../gtk/inspector/visual.ui.h:20
-#| msgid "Always on Top"
 msgid "Always"
 msgstr "Siempre"
 
 #: ../gtk/inspector/visual.ui.h:21
-#| msgctxt "Accelerator"
-#| msgid "Disabled"
 msgid "Disabled"
 msgstr "Desactivado"
 
 #: ../gtk/inspector/visual.ui.h:22
-#| msgid "Software"
 msgid "Software GL"
 msgstr "Software GL"
 
 #: ../gtk/inspector/visual.ui.h:23
-#| msgid "Software"
 msgid "Software Surfaces"
 msgstr "Superficies software"
 
@@ -4021,7 +4021,6 @@ msgid "Select an Object"
 msgstr "Seleccionar un objeto"
 
 #: ../gtk/inspector/window.ui.h:2 ../gtk/inspector/window.ui.h:5
-#| msgid "Job Details"
 msgid "Show Details"
 msgstr "Mostrar detalles"
 
@@ -4061,7 +4060,6 @@ msgid "Style Properties"
 msgstr "Propiedades del estilo"
 
 #: ../gtk/inspector/window.ui.h:15 ../gtk/inspector/window.ui.h:24
-#| msgid "CLASS"
 msgid "CSS"
 msgstr "CSS"
 
