@@ -139,6 +139,8 @@ gdk_mir_screen_dispose (GObject *object)
 static void
 gdk_mir_screen_finalize (GObject *object)
 {
+  GdkMirScreen *screen = GDK_MIR_SCREEN (object);
+  mir_connection_set_display_config_change_callback (get_connection (screen), NULL, NULL);
   G_OBJECT_CLASS (gdk_mir_screen_parent_class)->finalize (object);
 }
 
