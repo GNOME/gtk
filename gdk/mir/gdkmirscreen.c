@@ -166,8 +166,8 @@ gdk_mir_screen_finalize (GObject *object)
 
   mir_connection_set_display_config_change_callback (get_connection (screen), NULL, NULL);
   mir_display_config_destroy (screen->display_config);
-  g_clear_pointer (&screen->visual);
-  g_clear_pointer (&screen->root_window);
+  g_clear_object (&screen->visual);
+  g_clear_object (&screen->root_window);
 
   G_OBJECT_CLASS (gdk_mir_screen_parent_class)->finalize (object);
 }
