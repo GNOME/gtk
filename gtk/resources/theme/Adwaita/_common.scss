@@ -1898,7 +1898,6 @@ column-header.button.dnd { // for treeview-like derive widgets
   }
 
   // slider coloring
-  %scrollbar_slider_coloring,
   .slider {
     border-color: transparent;
     border-style: solid;
@@ -1919,11 +1918,10 @@ column-header.button.dnd { // for treeview-like derive widgets
   &.overlay-indicator { // Overlay scrolling indicator
     -GtkRange-slider-width: 8px;
 
-    &.vertical .slider,
-    &.horizontal .slider {
+    .slider {
       background-color: transparentize($fg_color, 0.7);
       border-width: 2px;
-      border-radius: 30px;
+      border-radius: 100px;
     }
 
     .trough {
@@ -1935,53 +1933,38 @@ column-header.button.dnd { // for treeview-like derive widgets
     &.hovering {
       -GtkRange-slider-width: 13;
 
-      &.vertical {
-        @extend %scrollbar_vertical_sizing;
-
-        .slider {
-          @extend %scrollbar_slider_coloring;
-
-          border-width: 1px 1px 1px 2px; // see comments in the sizing part
-          &:dir(rtl) { border-width: 1px 2px 1px 1px; }
-        }
-      }
-
-      &.horizontal {
-        @extend %scrollbar_horizontal_sizing;
-
-        .slider {
-          @extend %scrollbar_slider_coloring;
-
-          border-width: 2px 1px 1px 1px;
-         }
-      }
+      .slider { border-width: 1px; }
 
       .trough {
         border-color: transparentize($borders_color, 0.3);
         background-color: transparentize($scrollbar_bg_color, 0.3);
       }
+
+      &.fine-tune {
+
+        .slider { border-width: 3px; }
+
+        .trough { background-color: if($variant=='light', darken($scrollbar_bg_color, 3%), lighten($scrollbar_bg_color, 3%)); }
+      }
     }
   }
 
-  // sizing
-  %scrollbar_vertical_sizing,
-  &.vertical {
-    .slider {
-      border-width: 3px 3px 3px 4px; // This is used as a margin actually, it's uneven since the
-                                     // trough border needs to be compensated
-      border-radius: 6px;
-      border-top-left-radius: 7px 6px;    // uneven vertical/horizontal radius since borders are uneven
-      border-bottom-left-radius: 7px 6px; //
+  // borders and margins
+  .slider {
+    border-width: 3px;
+    border-radius: 100px;
+  }
 
-      &.fine-tune { border-width: 4px 4px 4px 5px; }
+  &.fine-tune .slider { border-width: 4px; }
+
+  &.vertical {
+
+    .slider {
+      margin-left: 1px;
 
       &:dir(rtl) {
-        border-width: 3px 4px 3px 3px;
-        border-radius: 6px;
-        border-top-right-radius: 7px 6px;
-        border-bottom-right-radius: 7px 6px;
-
-        &.fine-tune { border-width: 4px 5px 4px 4px; }
+        margin-left: 0;
+        margin-right: 1px;
       }
     }
 
@@ -1995,15 +1978,10 @@ column-header.button.dnd { // for treeview-like derive widgets
     }
   }
 
-  %scrollbar_horizontal_sizing,
   &.horizontal {
-    .slider {
-      border-width: 4px 3px 3px 3px;
-      border-radius: 6px;
-      border-top-right-radius: 7px 5px; // This is actually bogus, to workaround a gtk+ border radius drawing issue
-      border-top-left-radius: 6px 7px;
 
-      &.fine-tune { border-width: 5px 4px 4px 4px; }
+    .slider {
+      margin-top: 1px;
     }
 
     .trough { border-top-style: solid; }

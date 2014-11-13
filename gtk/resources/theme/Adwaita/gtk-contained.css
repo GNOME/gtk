@@ -2405,71 +2405,57 @@ column-header .titlebar .button.titlebutton,
     .scrollbar .trough:backdrop {
       background-color: #e5e5e5;
       border-color: #a8a8a8; }
-  .scrollbar.overlay-indicator.dragging.vertical .slider, .scrollbar.overlay-indicator.hovering.vertical .slider, .scrollbar.overlay-indicator.dragging.horizontal .slider, .scrollbar.overlay-indicator.hovering.horizontal .slider,
   .scrollbar .slider {
     border-color: transparent;
     border-style: solid;
     background-color: #a0a3a3;
     background-clip: padding-box; }
-    .scrollbar.overlay-indicator.dragging.vertical .slider:hover, .scrollbar.overlay-indicator.hovering.vertical .slider:hover, .scrollbar.overlay-indicator.dragging.horizontal .slider:hover, .scrollbar.overlay-indicator.hovering.horizontal .slider:hover,
     .scrollbar .slider:hover {
       background-color: #7a7e7f; }
-    .scrollbar.overlay-indicator.dragging.vertical .slider:prelight:active, .scrollbar.overlay-indicator.hovering.vertical .slider:prelight:active, .scrollbar.overlay-indicator.dragging.horizontal .slider:prelight:active, .scrollbar.overlay-indicator.hovering.horizontal .slider:prelight:active,
     .scrollbar .slider:prelight:active {
       background-color: #2a76c6; }
-    .scrollbar.overlay-indicator.dragging.vertical .slider:backdrop, .scrollbar.overlay-indicator.hovering.vertical .slider:backdrop, .scrollbar.overlay-indicator.dragging.horizontal .slider:backdrop, .scrollbar.overlay-indicator.hovering.horizontal .slider:backdrop,
     .scrollbar .slider:backdrop {
       background-color: #c6c7c8; }
-    .scrollbar.overlay-indicator.dragging.vertical .slider:insensitive, .scrollbar.overlay-indicator.hovering.vertical .slider:insensitive, .scrollbar.overlay-indicator.dragging.horizontal .slider:insensitive, .scrollbar.overlay-indicator.hovering.horizontal .slider:insensitive,
     .scrollbar .slider:insensitive {
       background-color: transparent; }
   .scrollbar.overlay-indicator {
     -GtkRange-slider-width: 8px; }
-    .scrollbar.overlay-indicator.vertical .slider, .scrollbar.overlay-indicator.horizontal .slider {
+    .scrollbar.overlay-indicator .slider {
       background-color: rgba(46, 52, 54, 0.3);
       border-width: 2px;
-      border-radius: 30px; }
+      border-radius: 100px; }
     .scrollbar.overlay-indicator .trough {
       border-color: transparent;
       background-color: transparent; }
     .scrollbar.overlay-indicator.dragging, .scrollbar.overlay-indicator.hovering {
       -GtkRange-slider-width: 13; }
-      .scrollbar.overlay-indicator.dragging.vertical .slider, .scrollbar.overlay-indicator.hovering.vertical .slider {
-        border-width: 1px 1px 1px 2px; }
-        .scrollbar.overlay-indicator.dragging.vertical .slider:dir(rtl), .scrollbar.overlay-indicator.hovering.vertical .slider:dir(rtl) {
-          border-width: 1px 2px 1px 1px; }
-      .scrollbar.overlay-indicator.dragging.horizontal .slider, .scrollbar.overlay-indicator.hovering.horizontal .slider {
-        border-width: 2px 1px 1px 1px; }
+      .scrollbar.overlay-indicator.dragging .slider, .scrollbar.overlay-indicator.hovering .slider {
+        border-width: 1px; }
       .scrollbar.overlay-indicator.dragging .trough, .scrollbar.overlay-indicator.hovering .trough {
         border-color: rgba(161, 161, 161, 0.7);
         background-color: rgba(219, 219, 219, 0.7); }
-  .scrollbar .scrollbar.overlay-indicator.dragging.vertical .slider, .scrollbar .scrollbar.overlay-indicator.hovering.vertical .slider, .scrollbar.vertical .slider {
-    border-width: 3px 3px 3px 4px;
-    border-radius: 6px;
-    border-top-left-radius: 7px 6px;
-    border-bottom-left-radius: 7px 6px; }
-    .scrollbar .scrollbar.overlay-indicator.dragging.vertical .slider.fine-tune, .scrollbar .scrollbar.overlay-indicator.hovering.vertical .slider.fine-tune, .scrollbar.vertical .slider.fine-tune {
-      border-width: 4px 4px 4px 5px; }
-    .scrollbar .scrollbar.overlay-indicator.dragging.vertical .slider:dir(rtl), .scrollbar .scrollbar.overlay-indicator.hovering.vertical .slider:dir(rtl), .scrollbar.vertical .slider:dir(rtl) {
-      border-width: 3px 4px 3px 3px;
-      border-radius: 6px;
-      border-top-right-radius: 7px 6px;
-      border-bottom-right-radius: 7px 6px; }
-      .scrollbar .scrollbar.overlay-indicator.dragging.vertical .slider:dir(rtl).fine-tune, .scrollbar .scrollbar.overlay-indicator.hovering.vertical .slider:dir(rtl).fine-tune, .scrollbar.vertical .slider:dir(rtl).fine-tune {
-        border-width: 4px 5px 4px 4px; }
-  .scrollbar .scrollbar.overlay-indicator.dragging.vertical .trough, .scrollbar .scrollbar.overlay-indicator.hovering.vertical .trough, .scrollbar.vertical .trough {
+      .scrollbar.overlay-indicator.dragging.fine-tune .slider, .scrollbar.overlay-indicator.hovering.fine-tune .slider {
+        border-width: 3px; }
+      .scrollbar.overlay-indicator.dragging.fine-tune .trough, .scrollbar.overlay-indicator.hovering.fine-tune .trough {
+        background-color: lightgray; }
+  .scrollbar .slider {
+    border-width: 3px;
+    border-radius: 100px; }
+  .scrollbar.fine-tune .slider {
+    border-width: 4px; }
+  .scrollbar.vertical .slider {
+    margin-left: 1px; }
+    .scrollbar.vertical .slider:dir(rtl) {
+      margin-left: 0;
+      margin-right: 1px; }
+  .scrollbar.vertical .trough {
     border-left-style: solid; }
-    .scrollbar .scrollbar.overlay-indicator.dragging.vertical .trough:dir(rtl), .scrollbar .scrollbar.overlay-indicator.hovering.vertical .trough:dir(rtl), .scrollbar.vertical .trough:dir(rtl) {
+    .scrollbar.vertical .trough:dir(rtl) {
       border-left-style: none;
       border-right-style: solid; }
-  .scrollbar .scrollbar.overlay-indicator.dragging.horizontal .slider, .scrollbar .scrollbar.overlay-indicator.hovering.horizontal .slider, .scrollbar.horizontal .slider {
-    border-width: 4px 3px 3px 3px;
-    border-radius: 6px;
-    border-top-right-radius: 7px 5px;
-    border-top-left-radius: 6px 7px; }
-    .scrollbar .scrollbar.overlay-indicator.dragging.horizontal .slider.fine-tune, .scrollbar .scrollbar.overlay-indicator.hovering.horizontal .slider.fine-tune, .scrollbar.horizontal .slider.fine-tune {
-      border-width: 5px 4px 4px 4px; }
-  .scrollbar .scrollbar.overlay-indicator.dragging.horizontal .trough, .scrollbar .scrollbar.overlay-indicator.hovering.horizontal .trough, .scrollbar.horizontal .trough {
+  .scrollbar.horizontal .slider {
+    margin-top: 1px; }
+  .scrollbar.horizontal .trough {
     border-top-style: solid; }
 
 .scrollbars-junction,
