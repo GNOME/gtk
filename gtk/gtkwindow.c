@@ -6248,7 +6248,7 @@ popover_get_rect (GtkWindowPopover      *popover,
         }
       else
         rect->y = CLAMP (popover->rect.y + (popover->rect.height / 2) -
-                         (req.height / 2), win_alloc.y, win_alloc.y + win_alloc.height - req.height);
+                         (req.height / 2), 0, win_alloc.y + win_alloc.height + win_border.top - req.height);
 
       if ((popover->pos == GTK_POS_LEFT) ==
           (gtk_widget_get_direction (popover->widget) == GTK_TEXT_DIR_LTR))
@@ -6280,7 +6280,7 @@ popover_get_rect (GtkWindowPopover      *popover,
         }
       else
         rect->x = CLAMP (popover->rect.x + (popover->rect.width / 2) -
-                         (req.width / 2), win_alloc.x, win_alloc.x + win_alloc.width - req.width);
+                         (req.width / 2), 0, win_alloc.x + win_alloc.width + win_border.right - req.width);
 
       if (popover->pos == GTK_POS_TOP)
         {
