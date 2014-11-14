@@ -586,8 +586,6 @@ gtk_stack_get_child_property (GtkContainer *container,
   GtkStack *stack = GTK_STACK (container);
   GtkStackPrivate *priv = gtk_stack_get_instance_private (stack);
   GtkStackChildInfo *info;
-  GList *list;
-  guint i;
 
   info = find_child_info_for_widget (stack, child);
   if (info == NULL)
