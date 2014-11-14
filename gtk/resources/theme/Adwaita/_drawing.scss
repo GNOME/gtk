@@ -515,7 +515,7 @@
 //
 
   $_small_gradient_length: 5%;
-  $_big_gradient_length: 120%;
+  $_big_gradient_length: 100%;
 
   $_position: center top;
   $_small_gradient_size: 100% $_small_gradient_length;
@@ -545,7 +545,7 @@
     $_small_gradient_color: darken($borders_color, 10%);
     $_big_gradient_color: $fg_color;
 
-    @if $t==backdrop { $_small_graident_color: $backdrop_borders_color; }
+    @if $t==backdrop { $_small_gradient_color: $backdrop_borders_color; }
   }
 
   $_small_gradient: -gtk-gradient(radial,
@@ -557,7 +557,7 @@
   $_big_gradient: -gtk-gradient(radial,
                                 $_position, 0,
                                 $_position, 0.6,
-                                from(transparentize($_big_gradient_color, 0.9)),
+                                from(transparentize($_big_gradient_color, 0.93)),
                                 to(transparentize($_big_gradient_color, 1)));
 
   @if $t==normal {
