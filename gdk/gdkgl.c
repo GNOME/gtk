@@ -234,7 +234,7 @@ gdk_gl_texture_quad (GdkGLContext *paint_context,
                      float u1, float v1,
                      float u2, float v2)
 {
-  GdkGLContextPaintData *paint_data  = gdk_gl_context_get_paint_data (paint_context);;
+  GdkGLContextPaintData *paint_data  = gdk_gl_context_get_paint_data (paint_context);
   GdkWindow *window = gdk_gl_context_get_window (paint_context);
   int window_scale = gdk_window_get_scale_factor (window);
   float w = gdk_window_get_width (window) * window_scale;
