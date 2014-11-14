@@ -383,7 +383,10 @@ gdk_mir_screen_get_monitor_geometry (GdkScreen    *screen,
     }
   else
     {
-      *dest = {0, 0, 0, 0};
+      dest->x = 0;
+      dest->y = 0;
+      dest->width = 0;
+      dest->height = 0;
     }
 }
 
