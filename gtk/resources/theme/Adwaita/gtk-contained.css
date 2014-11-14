@@ -2136,7 +2136,6 @@ column-header .titlebar .button.titlebutton,
  * Popovers   *
  ***************/
 .popover {
-  margin: 10px;
   padding: 2px;
   border: 1px solid #a1a1a1;
   border-radius: 5px;
@@ -2144,7 +2143,12 @@ column-header .titlebar .button.titlebutton,
   box-shadow: 0 2px 3px rgba(0, 0, 0, 0.5); }
   .popover:backdrop {
     box-shadow: none; }
-  .popover > .list, .popover > .view, .popover > .toolbar, .popover > .inline-toolbar, .popover > .search-bar, .popover > .location-bar, .popover.osd > .toolbar, .popover.osd > .inline-toolbar, .popover.osd > .search-bar, .popover.osd > .location-bar {
+  .popover > .list,
+  .popover > .view,
+  .popover > .toolbar,
+  .popover > .inline-toolbar,
+  .popover > .search-bar,
+  .popover > .location-bar, .popover.osd > .toolbar, .popover.osd > .inline-toolbar, .popover.osd > .search-bar, .popover.osd > .location-bar {
     border-style: none;
     background-color: transparent; }
   .popover .button.flat, .popover .header-bar .titlebutton.button, .header-bar .popover .titlebutton.button,

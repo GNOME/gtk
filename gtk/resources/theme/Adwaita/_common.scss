@@ -1572,28 +1572,31 @@ column-header.button.dnd { // for treeview-like derive widgets
  ***************/
 
 .popover {
-  margin: 10px;
   padding: 2px;
   border: 1px solid $borders-color;
   border-radius: 5px;
   background-color: mix($bg_color, $base_color, 50%);
 
   box-shadow: 0 2px 3px transparentize(black, 0.5);
+
   &:backdrop {
     box-shadow: none;
   }
-  & > .list,
-  & > .view,
-  & > .toolbar,
+
+  > .list,
+  > .view,
+  > .toolbar,
   &.osd > .toolbar {
     border-style: none;
     background-color: transparent;
   }
+
   .button.flat,
   .button.flat:hover {
     text-shadow: none;
     transition: none;
   }
+
   &.osd { @extend %osd; }
 }
 
