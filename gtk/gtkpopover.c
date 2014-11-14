@@ -639,6 +639,9 @@ gtk_popover_apply_tail_path (GtkPopover *popover,
   gint tip_x, tip_y;
   gint final_x, final_y;
 
+  if (!popover->priv->widget)
+    return;
+
   cairo_set_line_width (cr, 1);
   gtk_popover_get_gap_coords (popover,
                               &initial_x, &initial_y,
@@ -843,29 +846,38 @@ gtk_popover_draw (GtkWidget *widget,
                          rect_x2 - rect_x1,
                          rect_y2 - rect_y1);
 
-  gtk_popover_get_gap_coords (popover,
-                              &initial_x, &initial_y,
-                              NULL, NULL,
-                              &final_x, &final_y,
-                              &gap_side);
-
-  if (POS_IS_VERTICAL (gap_side))
+  if (popover->priv->widget)
     {
-      gap_start = initial_x - rect_x1;
-      gap_end = final_x - rect_x1;
+      gtk_popover_get_gap_coords (popover,
+                                  &initial_x, &initial_y,
+                                  NULL, NULL,
+                                  &final_x, &final_y,
+                                  &gap_side);
+
+      if (POS_IS_VERTICAL (gap_side))
+        {
+          gap_start = initial_x - rect_x1;
+          gap_end = final_x - rect_x1;
+        }
+      else
+        {
+          gap_start = initial_y - rect_y1;
+          gap_end = final_y - rect_y1;
+        }
+
+      /* Now render the frame, without the gap for the arrow tip */
+      gtk_render_frame_gap (context, cr,
+                            rect_x1, rect_y1,
+                            rect_x2 - rect_x1, rect_y2 - rect_y1,
+                            gap_side,
+                            gap_start, gap_end);
     }
   else
     {
-      gap_start = initial_y - rect_y1;
-      gap_end = final_y - rect_y1;
-    }
-
-  /* Now render the frame, without the gap for the arrow tip */
-  gtk_render_frame_gap (context, cr,
+      gtk_render_frame (context, cr,
                         rect_x1, rect_y1,
-                        rect_x2 - rect_x1, rect_y2 - rect_y1,
-                        gap_side,
-                        gap_start, gap_end);
+                        rect_x2 - rect_x1, rect_y2 - rect_y1);
+    }
 
   /* Clip to the arrow shape */
   cairo_save (cr);
