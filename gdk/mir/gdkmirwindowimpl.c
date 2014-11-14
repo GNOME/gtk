@@ -757,15 +757,17 @@ gdk_mir_window_impl_set_type_hint (GdkWindow         *window,
       case GDK_WINDOW_TYPE_HINT_COMBO:
         mir_type = mir_surface_type_popover;
         break;
-      case GDK_WINDOW_TYPE_HINT_SPLASHSCREEN:
       case GDK_WINDOW_TYPE_HINT_TOOLTIP:
+        mir_type = mir_surface_type_tip;
+        break;
+      case GDK_WINDOW_TYPE_HINT_SPLASHSCREEN:
       case GDK_WINDOW_TYPE_HINT_DND:
       case GDK_WINDOW_TYPE_HINT_NOTIFICATION:
         mir_type = mir_surface_type_overlay;
         break;
     }
 
-  mir_surface_set_type (GDK_MIR_WINDOW_IMPL (window->impl), mir_type);
+  set_surface_type (GDK_MIR_WINDOW_IMPL (window->impl), mir_type);
 }
 
 static GdkWindowTypeHint
@@ -778,15 +780,20 @@ gdk_mir_window_impl_get_type_hint (GdkWindow *window)
       case mir_surface_type_normal:
       case mir_surface_type_freestyle:
       case mir_surface_type_inputmethod:
+      case mir_surface_type_satellite:
         return GDK_WINDOW_TYPE_HINT_NORMAL;
       case mir_surface_type_utility:
         return GDK_WINDOW_TYPE_HINT_UTILITY;
       case mir_surface_type_dialog:
         return GDK_WINDOW_TYPE_HINT_DIALOG;
-      case mir_surface_type_overlay:
+      case mir_surface_type_tip:
         return GDK_WINDOW_TYPE_HINT_TOOLTIP;
       case mir_surface_type_popover:
         return GDK_WINDOW_TYPE_HINT_MENU;
+      case mir_surface_type_overlay:
+        return GDK_WINDOW_TYPE_HINT_NOTIFICATION;
+      case mir_surface_types:
+        break;
     }
 
   return GDK_WINDOW_TYPE_HINT_NORMAL;
