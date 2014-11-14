@@ -3519,6 +3519,7 @@ indicator_enter_notify (GtkWidget        *scrollbar,
   gtk_style_context_add_class (context, "hovering");
   gtk_widget_queue_resize (scrollbar);
   indicator->over = TRUE;
+  indicator_start_fade (indicator, 1.0);
 
   return G_SOURCE_CONTINUE;
 }
