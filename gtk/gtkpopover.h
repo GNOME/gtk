@@ -79,7 +79,7 @@ void            gtk_popover_set_pointing_to (GtkPopover            *popover,
                                              const GdkRectangle    *rect);
 GDK_AVAILABLE_IN_3_12
 gboolean        gtk_popover_get_pointing_to (GtkPopover            *popover,
-                                             GdkRectangle *rect);
+                                             GdkRectangle          *rect);
 GDK_AVAILABLE_IN_3_12
 void            gtk_popover_set_position    (GtkPopover            *popover,
                                              GtkPositionType        position);
