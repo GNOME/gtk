@@ -1963,6 +1963,8 @@ GtkTreeView.view {
   -GtkTreeView-expander-size: 16;
   border-left-color: #fdfdfd;
   border-top-color: #ededed; }
+  GtkTreeView.view:selected, GtkTreeView.view:selected:focus, GtkTreeView.view:selected:hover {
+    border-radius: 0; }
   GtkTreeView.view:selected, GtkTreeView.view:backdrop:selected {
     border-left-color: #4a90d9;
     border-top-color: rgba(46, 52, 54, 0.1); }

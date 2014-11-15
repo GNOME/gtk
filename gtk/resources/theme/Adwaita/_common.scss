@@ -1352,6 +1352,10 @@ GtkTreeView.view {
   border-left-color: mix($fg_color, $base_color, 0.5); // this is actually the tree lines color,
   border-top-color: $bg_color;                         // while this is the grid lines color, better then nothing
 
+  &:selected,
+  &:selected:focus,
+  &:selected:hover { border-radius: 0; } // rest border radius in lists
+
   &:selected, &:backdrop:selected {
     border-left-color: mix($selected_fg_color, $selected_bg_color, 0.5);
     border-top-color: transparentize($fg_color, 0.9); // doesn't work unfortunatelly
