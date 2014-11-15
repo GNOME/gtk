@@ -175,6 +175,22 @@ gtk_popover_menu_remove (GtkContainer *container,
 }
 
 static void
+gtk_popover_menu_forall (GtkContainer *container,
+                         gboolean      include_internals,
+                         GtkCallback   callback,
+                         gpointer      callback_data)
+{
+  GtkWidget *stack;
+
+  stack = gtk_bin_get_child (GTK_BIN (container));
+
+  if (include_internals)
+    (* callback) (stack, callback_data);
+
+  gtk_container_forall (GTK_CONTAINER (stack), callback, callback_data);
+}
+
+static void
 gtk_popover_menu_get_child_property (GtkContainer *container,
                                      GtkWidget    *child,
                                      guint         property_id,
@@ -246,6 +262,7 @@ gtk_popover_menu_class_init (GtkPopoverMenuClass *klass)
 
   container_class->add = gtk_popover_menu_add;
   container_class->remove = gtk_popover_menu_remove;
+  container_class->forall = gtk_popover_menu_forall;
   container_class->set_child_property = gtk_popover_menu_set_child_property;
   container_class->get_child_property = gtk_popover_menu_get_child_property;
 
