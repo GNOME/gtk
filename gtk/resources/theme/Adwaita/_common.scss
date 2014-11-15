@@ -110,6 +110,7 @@ $ease-out-quad: cubic-bezier(0.25, 0.46, 0.45, 0.94);
   &:selected,
   &:selected:focus,
   &:selected:hover {
+    border-radius: 3px;
     @extend %selected_items;
   }
 }
@@ -258,10 +259,6 @@ GtkTextView { // This will get overridden by .view, needed by gedit line numbers
   &:insensitive { @include entry(insensitive); }
   &:backdrop { @include entry(backdrop); }
   &:backdrop:insensitive { @include entry(backdrop-insensitive); }
-  &:selected, &:backdrop:selected {
-    background-color: $selected_bg_color;
-    color: $selected_fg_color;
-  }
 
   &:selected,
   &:selected:focus {
@@ -295,29 +292,21 @@ GtkTextView { // This will get overridden by .view, needed by gedit line numbers
     }
   }
 
-  &.error {
+  &.error { // FIXME: dark variant love needed
     color: $error_color;
     border-color: $error_color;
     &:focus { @include entry(focus, $error_color); }
     &:selected, &:selected:focus {
       background-color: $error_color;
     }
-    @if $variant == 'dark' {
-      &:selected:focus { color: $base_color; }
-      &:selected:backdrop { color: $backdrop_base_color; }
-    }
   }
 
-  &.warning {
+  &.warning { // FIXME: dark variant love needed
     color: $warning_color;
     border-color: $warning_color;
     &:focus { @include entry(focus, $warning_color); }
     &:selected, &:selected:focus {
       background-color: $warning_color;
-    }
-    @if $variant == 'dark' {
-      &:selected:focus { color: $base_color; }
-      &:selected:backdrop { color: $backdrop_base_color; }
     }
   }
 
@@ -1379,7 +1368,7 @@ GtkTreeView.view {
     &:selected {
       color: mix($selected_fg_color, $selected_bg_color, 70%);
       &:hover { color: $selected_fg_color; }
-      &:backdrop { color: mix($backdrop_base_color, $selected_bg_color, 70%); }
+      &:backdrop { color: mix($backdrop_selected_fg_color, $selected_bg_color, 70%); }
     }
     &:checked {
       -gtk-icon-source: -gtk-icontheme('pan-down-symbolic');
@@ -2723,11 +2712,7 @@ GtkCalendar {
   border: 1px solid $borders_color;
 
   &:selected {
-    background-color: $selected_bg_color;
-    color: $selected_fg_color;
-    border-radius: 3px;
-
-    &:backdrop { color: if($variant=='light', $backdrop_base_color, $backdrop_fg_color); }
+    @extend .view:selected;
   }
 
   &.header {
@@ -2873,35 +2858,18 @@ GtkFileChooserDialog {
 .sidebar {
   border: none;
   background-color: $sidebar_bg_color;
-/*
-  .scrollbar {
-    &.trough {
-      background-color: darken($bg_color,10%);
-      border-radius: 6px;
-      border-width: 2px;
-      border-color: transparent;
-    }
 
-    &.slider {
-      background-color: $sidebar_bg_color;
-      &:hover { background-color: lighten($bg_color, 10%); }
-    }
-  }
-*/
   &:backdrop {
     background-color: $backdrop_sidebar_bg_color;
   }
 
   &:selected {
-    background-color: $selected_bg_color;
+    @extend %selected_items;
   }
 }
 
 // Places sidebar is a special case, since the view here have to look like chrome not content, so we override text color
 GtkPlacesSidebar.sidebar .view {
-
-  $_backdrop_selected_fg_color: if($variant == 'light', $backdrop_base_color, $selected_bg_color); // FIXME this should be a general
-                                                                                                   // color var
 
   color: $fg_color;
   background-color: transparent;
@@ -2915,7 +2883,7 @@ GtkPlacesSidebar.sidebar .view {
     &:selected {
       color: mix($selected_fg_color, $selected_bg_color, 90%);
 
-      &:backdrop { color: mix($_backdrop_selected_fg_color, $selected_bg_color, 90%); }
+      &:backdrop { color: mix($backdrop_selected_fg_color, $selected_bg_color, 90%); }
     }
 
     &:backdrop { color: mix($backdrop_fg_color, $sidebar_bg_color, 70%); }
@@ -2924,10 +2892,7 @@ GtkPlacesSidebar.sidebar .view {
   &:backdrop { color: $backdrop_fg_color; }
 
   &:selected {
-    color: $selected_fg_color;
-    background-color: $selected_bg_color;
-
-    &:backdrop { color: $_backdrop_selected_fg_color; }
+    @extend %selected_items;
   }
 }
 
@@ -3243,8 +3208,7 @@ GtkVolumeButton.button { padding: 8px; }
   @if $variant == 'light' {
     outline-color: transparentize($selected_fg_color, 0.7);
   }
-  &:backdrop { color: if($variant=='light', $backdrop_base_color,
-                                            $backdrop_fg_color); }
+  &:backdrop { color: $backdrop_selected_fg_color; }
 }
 
 /* Decouple the font of context menus from their entry/textview */

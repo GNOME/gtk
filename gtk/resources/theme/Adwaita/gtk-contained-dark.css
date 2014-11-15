@@ -68,6 +68,8 @@
   .view:backdrop {
     color: #d4d4d4;
     background-color: #2c2c2c; }
+  .view:selected, GtkCalendar:selected, .view:selected:focus, GtkCalendar:focus:selected, .view:selected:hover, GtkCalendar:hover:selected {
+    border-radius: 3px; }
 
 .rubberband {
   border: 1px solid #215d9c;
@@ -262,9 +264,6 @@ GtkTextView {
     border-color: #1e2222;
     background-image: linear-gradient(to bottom, #323636);
     box-shadow: inset 0 3px transparent, inset 0 2px transparent, inset 0 1px transparent, 0 1px rgba(238, 238, 236, 0); }
-  .entry:selected, .entry:backdrop:selected {
-    background-color: #215d9c;
-    color: #ffffff; }
   .entry.progressbar {
     margin: 1px;
     border-radius: 0;
@@ -299,10 +298,6 @@ GtkTextView {
       border-color: #1a0000; }
     .entry.error:selected, .entry.error:selected:focus {
       background-color: #cc0000; }
-    .entry.error:selected:focus {
-      color: #292929; }
-    .entry.error:selected:backdrop {
-      color: #2c2c2c; }
   .entry.warning {
     color: #f57900;
     border-color: #f57900; }
@@ -313,10 +308,6 @@ GtkTextView {
       border-color: #432100; }
     .entry.warning:selected, .entry.warning:selected:focus {
       background-color: #f57900; }
-    .entry.warning:selected:focus {
-      color: #292929; }
-    .entry.warning:selected:backdrop {
-      color: #2c2c2c; }
   .entry.image {
     color: #c6c6c5; }
     .entry.image:hover {
@@ -1990,7 +1981,7 @@ GtkTreeView.view {
       GtkTreeView.view.expander:selected:hover {
         color: #ffffff; }
       GtkTreeView.view.expander:selected:backdrop {
-        color: #283a4d; }
+        color: #bccee1; }
     GtkTreeView.view.expander:checked {
       -gtk-icon-source: -gtk-icontheme("pan-down-symbolic"); }
     GtkTreeView.view.expander:backdrop {
@@ -2905,7 +2896,7 @@ GtkSwitch {
 .view.check, .view.radio,
 .list-row .check, list-row .radio {
   icon-shadow: none; }
-  .view.check:selected, .view.check:hover, .view.radio:selected, .view.radio:hover,
+  .view.check:selected, GtkCalendar.check:selected, .view.check:hover, .view.radio:selected, GtkCalendar.radio:selected, .view.radio:hover,
   .list-row .check:selected,
   .list-row .check:hover, list-row .radio:selected, list-row .radio:hover {
     icon-shadow: none; }
@@ -3781,12 +3772,6 @@ GtkPlacesSidebar.sidebar .view .separator:backdrop {
 GtkCalendar {
   color: white;
   border: 1px solid #1c1f1f; }
-  GtkCalendar:selected {
-    background-color: #215d9c;
-    color: #ffffff;
-    border-radius: 3px; }
-    GtkCalendar:selected:backdrop {
-      color: #939695; }
   GtkCalendar.header {
     border: 1px solid rgba(0, 0, 0, 0.1);
     border-radius: 0; }
@@ -3997,26 +3982,9 @@ GtkFileChooserDialog .dialog-action-box {
  ***********/
 .sidebar {
   border: none;
-  background-color: #454c4c;
-  /*
-    .scrollbar {
-      &.trough {
-        background-color: darken($bg_color,10%);
-        border-radius: 6px;
-        border-width: 2px;
-        border-color: transparent;
-      }
-  
-      &.slider {
-        background-color: $sidebar_bg_color;
-        &:hover { background-color: lighten($bg_color, 10%); }
-      }
-    }
-  */ }
+  background-color: #454c4c; }
   .sidebar:backdrop {
     background-color: #454c4c; }
-  .sidebar:selected {
-    background-color: #215d9c; }
 
 GtkPlacesSidebar.sidebar .view {
   color: #eeeeec;
@@ -4026,16 +3994,11 @@ GtkPlacesSidebar.sidebar .view {
     GtkPlacesSidebar.sidebar .view .image:selected {
       color: #e8eef5; }
       GtkPlacesSidebar.sidebar .view .image:selected:backdrop {
-        color: #215d9c; }
+        color: #e8eef5; }
     GtkPlacesSidebar.sidebar .view .image:backdrop {
       color: #7b7f7f; }
   GtkPlacesSidebar.sidebar .view:backdrop {
     color: #939695; }
-  GtkPlacesSidebar.sidebar .view:selected {
-    color: #ffffff;
-    background-color: #215d9c; }
-    GtkPlacesSidebar.sidebar .view:selected:backdrop {
-      color: #215d9c; }
 
 .sidebar-item {
   padding: 10px 4px; }
@@ -4340,13 +4303,13 @@ GtkVolumeButton.button, .header-bar GtkVolumeButton.button.titlebutton,
   .titlebar.selection-mode .titlebutton.button:backdrop {
     icon-shadow: none; }
 
-.view:selected, .view:selected:focus, .view:selected:hover, .label:selected, .label:selected:focus, .label:selected:hover, .grid-child:selected, .entry:selected, .entry:selected:focus, .menuitem.button.flat:selected, .header-bar .menuitem.titlebutton.button:selected,
-.titlebar .menuitem.titlebutton.button:selected, .list-row:selected {
+.view:selected, GtkCalendar:selected, .view:selected:focus, GtkCalendar:focus:selected, .view:selected:hover, GtkCalendar:hover:selected, .label:selected, .label:selected:focus, .label:selected:hover, .grid-child:selected, .entry:selected, .entry:selected:focus, .menuitem.button.flat:selected, .header-bar .menuitem.titlebutton.button:selected,
+.titlebar .menuitem.titlebutton.button:selected, .list-row:selected, .sidebar:selected, GtkPlacesSidebar.sidebar .view:selected, GtkPlacesSidebar.sidebar GtkCalendar:selected {
   background-color: #215d9c;
   color: #ffffff; }
-  .view:backdrop:selected, .label:backdrop:selected, .grid-child:backdrop:selected, .entry:backdrop:selected, .menuitem.button.flat:backdrop:selected, .header-bar .menuitem.titlebutton.button:backdrop:selected,
-  .titlebar .menuitem.titlebutton.button:backdrop:selected, .list-row:backdrop:selected {
-    color: #939695; }
+  .view:backdrop:selected, GtkCalendar:backdrop:selected, GtkCalendar:backdrop:focus:selected, GtkCalendar:backdrop:hover:selected, .label:backdrop:selected, .grid-child:backdrop:selected, .entry:backdrop:selected, .menuitem.button.flat:backdrop:selected, .header-bar .menuitem.titlebutton.button:backdrop:selected,
+  .titlebar .menuitem.titlebutton.button:backdrop:selected, .list-row:backdrop:selected, .sidebar:backdrop:selected, GtkPlacesSidebar.sidebar .view:backdrop:selected, GtkPlacesSidebar.sidebar GtkCalendar:backdrop:selected {
+    color: #ffffff; }
 
 /* Decouple the font of context menus from their entry/textview */
 .touch-selection,
