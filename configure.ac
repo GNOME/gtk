@@ -48,6 +48,7 @@ m4_define([cairo_required_version], [1.14.0])
 m4_define([gdk_pixbuf_required_version], [2.30.0])
 m4_define([introspection_required_version], [1.39.0])
 m4_define([wayland_required_version], [1.5.91])
+m4_define([mirclient_required_version], [0.9.0])
 m4_define([epoxy_required_version], [1.0])
 GLIB_REQUIRED_VERSION=glib_required_version
 PANGO_REQUIRED_VERSION=pango_required_version
@@ -464,7 +465,7 @@ else
   AM_CONDITIONAL(USE_WAYLAND, false)
 fi
 
-MIR_DEPENDENCIES="mirclient"
+MIR_DEPENDENCIES="mirclient >= mirclient_required_version"
 if test "$enable_mir_backend" = "maybe" ; then
   PKG_CHECK_EXISTS($MIR_DEPENDENCIES, [have_mir_deps=yes], [have_mir_deps=no])
   AC_MSG_CHECKING([for MIR_DEPENDENCIES])
