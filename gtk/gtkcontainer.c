@@ -1722,7 +1722,10 @@ gtk_container_remove (GtkContainer *container,
 {
   g_return_if_fail (GTK_IS_CONTAINER (container));
   g_return_if_fail (GTK_IS_WIDGET (widget));
-  g_return_if_fail (gtk_widget_get_parent (widget) == GTK_WIDGET (container) || GTK_IS_ASSISTANT (container) || GTK_IS_ACTION_BAR (container));
+  g_return_if_fail (gtk_widget_get_parent (widget) == GTK_WIDGET (container) ||
+                    GTK_IS_ASSISTANT (container) ||
+                    GTK_IS_ACTION_BAR (container) ||
+                    GTK_IS_POPOVER_MENU (container));
 
   g_object_ref (container);
   g_object_ref (widget);
