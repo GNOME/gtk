@@ -1840,7 +1840,7 @@ gtk_dialog_buildable_custom_finished (GtkBuildable *buildable,
       else
 	signal_id = GTK_WIDGET_GET_CLASS (object)->activate_signal;
 
-      if (signal_id)
+      if (signal_id && !is_action)
 	{
 	  GClosure *closure;
 
