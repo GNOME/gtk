@@ -29,6 +29,7 @@
 #include "gdkscreen.h"
 #include "gdkmonitorprivate.h"
 #include "gdkdisplay-quartz.h"
+#include "gdkglcontext-quartz.h"
 
 
 static GdkWindow *
@@ -297,6 +298,7 @@ gdk_quartz_display_class_init (GdkQuartzDisplayClass *class)
   display_class->get_n_monitors = gdk_quartz_display_get_n_monitors;
   display_class->get_monitor = gdk_quartz_display_get_monitor;
   display_class->get_primary_monitor = gdk_quartz_display_get_primary_monitor;
+  display_class->make_gl_context_current = gdk_quartz_display_make_gl_context_current;
 
   ProcessSerialNumber psn = { 0, kCurrentProcess };
 

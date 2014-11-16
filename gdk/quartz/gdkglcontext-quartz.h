@@ -24,17 +24,40 @@
 #define __GDK_QUARTZ_GL_CONTEXT__
 
 #include "gdkglcontextprivate.h"
+#include "gdkdisplayprivate.h"
 #include "gdkvisual.h"
 #include "gdkwindow.h"
 #include "gdkinternals.h"
 #include "gdkmain.h"
 
+#import <OpenGL/OpenGL.h>
+#import <OpenGL/gl.h>
+#import <AppKit/AppKit.h>
+
 G_BEGIN_DECLS
 
+struct _GdkQuartzGLContext
+{
+  GdkGLContext parent_instance;
+
+  NSOpenGLContext *gl_context;
+  gboolean is_attached;
+};
+
+struct _GdkQuartzGLContextClass
+{
+  GdkGLContextClass parent_class;
+};
+
+gboolean        gdk_quartz_display_init_gl                         (GdkDisplay        *display);
 GdkGLContext *  gdk_quartz_window_create_gl_context                (GdkWindow         *window,
                                                                     gboolean           attach,
                                                                     GdkGLContext      *share,
                                                                     GError           **error);
+void            gdk_quartz_window_invalidate_for_new_frame         (GdkWindow         *window,
+                                                                    cairo_region_t    *update_area);
+gboolean        gdk_quartz_display_make_gl_context_current         (GdkDisplay        *display,
+                                                                    GdkGLContext      *context);
 
 G_END_DECLS
 

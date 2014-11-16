@@ -64,6 +64,7 @@ libgdkquartzinclude_HEADERS =		\
 	gdkquartzdisplay.h		\
 	gdkquartzdisplaymanager.h	\
 	gdkquartzdnd.h			\
+	gdkquartzglcontext.h		\
 	gdkquartzkeys.h			\
 	gdkquartzmonitor.h		\
 	gdkquartzscreen.h		\
