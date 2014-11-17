@@ -1832,47 +1832,50 @@ gtk_scrolled_window_draw (GtkWidget *widget,
   GtkStyleContext *context;
   gboolean scrollbars_within_bevel;
 
-  context = gtk_widget_get_style_context (widget);
-  gtk_scrolled_window_relative_allocation (widget, &relative_allocation);
-
-  gtk_render_background (context, cr,
-                         0, 0,
-                         gtk_widget_get_allocated_width (widget),
-                         gtk_widget_get_allocated_height (widget));
-
-  if (priv->hscrollbar_visible &&
-      priv->vscrollbar_visible)
-    gtk_scrolled_window_draw_scrollbars_junction (scrolled_window, cr);
-
-  gtk_widget_style_get (widget, "scrollbars-within-bevel", &scrollbars_within_bevel, NULL);
-
-  if (!scrollbars_within_bevel)
+  if (gtk_cairo_should_draw_window (cr, gtk_widget_get_window (widget)))
     {
-      GtkStateFlags state;
-      GtkBorder padding, border;
+      context = gtk_widget_get_style_context (widget);
+      gtk_scrolled_window_relative_allocation (widget, &relative_allocation);
 
-      state = gtk_widget_get_state_flags (widget);
-      gtk_style_context_get_padding (context, state, &padding);
-      gtk_style_context_get_border (context, state, &border);
+      gtk_render_background (context, cr,
+                             0, 0,
+                             gtk_widget_get_allocated_width (widget),
+                             gtk_widget_get_allocated_height (widget));
 
-      relative_allocation.x -= padding.left + border.left;
-      relative_allocation.y -= padding.top + border.top;
-      relative_allocation.width += padding.left + padding.right + border.left + border.right;
-      relative_allocation.height += padding.top + padding.bottom + border.top + border.bottom;
+      if (priv->hscrollbar_visible &&
+          priv->vscrollbar_visible)
+        gtk_scrolled_window_draw_scrollbars_junction (scrolled_window, cr);
+
+      gtk_widget_style_get (widget, "scrollbars-within-bevel", &scrollbars_within_bevel, NULL);
+
+      if (!scrollbars_within_bevel)
+        {
+          GtkStateFlags state;
+          GtkBorder padding, border;
+
+          state = gtk_widget_get_state_flags (widget);
+          gtk_style_context_get_padding (context, state, &padding);
+          gtk_style_context_get_border (context, state, &border);
+
+          relative_allocation.x -= padding.left + border.left;
+          relative_allocation.y -= padding.top + border.top;
+          relative_allocation.width += padding.left + padding.right + border.left + border.right;
+          relative_allocation.height += padding.top + padding.bottom + border.top + border.bottom;
+        }
+      else
+        {
+          relative_allocation.x = 0;
+          relative_allocation.y = 0;
+          relative_allocation.width = gtk_widget_get_allocated_width (widget);
+          relative_allocation.height = gtk_widget_get_allocated_height (widget);
+        }
+
+      gtk_render_frame (context, cr,
+                        relative_allocation.x,
+                        relative_allocation.y,
+                        relative_allocation.width,
+                        relative_allocation.height);
     }
-  else
-    {
-      relative_allocation.x = 0;
-      relative_allocation.y = 0;
-      relative_allocation.width = gtk_widget_get_allocated_width (widget);
-      relative_allocation.height = gtk_widget_get_allocated_height (widget);
-    }
-
-  gtk_render_frame (context, cr,
-                    relative_allocation.x,
-                    relative_allocation.y,
-		    relative_allocation.width,
-		    relative_allocation.height);
 
   GTK_WIDGET_CLASS (gtk_scrolled_window_parent_class)->draw (widget, cr);
 
