@@ -3387,7 +3387,9 @@ static void
 indicator_set_fade (Indicator *indicator,
                     gdouble    pos)
 {
-  gboolean visible;
+  gboolean visible, changed;
+
+  changed = indicator->current_pos != pos;
   indicator->current_pos = pos;
 
   visible = indicator->current_pos != 0.0 || indicator->target_pos != 0.0;
@@ -3404,8 +3406,11 @@ indicator_set_fade (Indicator *indicator,
       indicator->conceil_timer = 0;
     }
 
-  gtk_widget_set_opacity (indicator->scrollbar, indicator->current_pos);
-  gtk_widget_queue_draw (indicator->scrollbar);
+  if (changed)
+    {
+      gtk_widget_set_opacity (indicator->scrollbar, indicator->current_pos);
+      gtk_widget_queue_draw (indicator->scrollbar);
+    }
 }
 
 static double
