@@ -343,6 +343,7 @@ handle_surface_event (GdkWindow *window, const MirSurfaceEvent *event)
   switch (event->attrib)
     {
     case mir_surface_attrib_type:
+      _gdk_mir_window_impl_set_surface_type (impl, event->value);
       break;
     case mir_surface_attrib_state:
       _gdk_mir_window_impl_set_surface_state (impl, event->value);
