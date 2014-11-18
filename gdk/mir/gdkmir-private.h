@@ -18,6 +18,8 @@
 #ifndef __GDK_PRIVATE_MIR_H__
 #define __GDK_PRIVATE_MIR_H__
 
+#include <epoxy/egl.h>
+
 #include "gdkmir.h"
 #include "gdkdisplay.h"
 #include "gdkscreen.h"
@@ -78,6 +80,28 @@ void _gdk_mir_window_reference_unref (GdkMirWindowReference *ref);
 void _gdk_mir_event_source_queue (GdkMirWindowReference *window_ref, const MirEvent *event);
 
 MirPixelFormat _gdk_mir_display_get_pixel_format (GdkDisplay *display, MirBufferUsage usage);
+
+gboolean _gdk_mir_display_init_egl_display (GdkDisplay *display);
+
+EGLDisplay _gdk_mir_display_get_egl_display (GdkDisplay *display);
+
+gboolean _gdk_mir_display_have_egl_khr_create_context (GdkDisplay *display);
+
+gboolean _gdk_mir_display_have_egl_buffer_age (GdkDisplay *display);
+
+gboolean _gdk_mir_display_have_egl_swap_buffers_with_damage (GdkDisplay *display);
+
+gboolean _gdk_mir_display_have_egl_surfaceless_context (GdkDisplay *display);
+
+gboolean _gdk_mir_display_make_gl_context_current (GdkDisplay *display, GdkGLContext *context);
+
+EGLSurface _gdk_mir_window_get_egl_surface (GdkWindow *window, EGLConfig config);
+
+EGLSurface _gdk_mir_window_get_dummy_egl_surface (GdkWindow *window, EGLConfig config);
+
+GdkGLContext *_gdk_mir_window_create_gl_context (GdkWindow *window, gboolean attach, GdkGLProfile profile, GdkGLContext *share, GError **error);
+
+void _gdk_mir_window_invalidate_for_new_frame (GdkWindow *window, cairo_region_t *update_area);
 
 void _gdk_mir_print_modifiers (unsigned int modifiers);
 

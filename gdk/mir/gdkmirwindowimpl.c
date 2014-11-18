@@ -64,6 +64,13 @@ struct _GdkMirWindowImpl
   /* Cairo context for current frame */
   cairo_surface_t *cairo_surface;
 
+  /* Egl surface for the current mir surface */
+  EGLSurface egl_surface;
+
+  /* Dummy MIR and EGL surfaces */
+  MirSurface *dummy_surface;
+  EGLSurface dummy_egl_surface;
+
   /* TRUE if the window can be seen */
   gboolean visible;
 
@@ -135,12 +142,6 @@ gdk_mir_window_impl_init (GdkMirWindowImpl *impl)
   impl->surface_state = mir_surface_state_unknown;
 }
 
-static MirConnection *
-get_connection (GdkWindow *window)
-{
-  return gdk_mir_display_get_mir_connection (gdk_window_get_display (window));
-}
-
 static void
 set_surface_state (GdkMirWindowImpl *impl,
                    MirSurfaceState state)
@@ -173,13 +174,32 @@ event_cb (MirSurface     *surface,
   _gdk_mir_event_source_queue (context, event);
 }
 
+static MirSurface *
+create_mir_surface (GdkDisplay *display,
+                    gint width,
+                    gint height,
+                    MirBufferUsage buffer_usage)
+{
+  MirSurfaceParameters parameters;
+  MirConnection *connection;
+
+  parameters.name = "GTK+ Mir";
+  parameters.width = width;
+  parameters.height = height;
+  parameters.pixel_format = _gdk_mir_display_get_pixel_format (display, buffer_usage);
+  parameters.buffer_usage = buffer_usage;
+  parameters.output_id = mir_display_output_id_invalid;
+
+  connection = gdk_mir_display_get_mir_connection (display);
+
+  return mir_connection_create_surface_sync (connection, &parameters);
+}
+
 static void
-ensure_surface (GdkWindow *window)
+ensure_surface_full (GdkWindow *window,
+                     MirBufferUsage buffer_usage)
 {
   GdkMirWindowImpl *impl = GDK_MIR_WINDOW_IMPL (window->impl);
-  MirPixelFormat formats[mir_pixel_formats], pixel_format = mir_pixel_format_invalid;
-  unsigned int n_formats, i;
-  MirSurfaceParameters parameters;
   MirEventDelegate event_delegate = { event_cb, NULL };
   GdkMirWindowReference *window_ref;
 
@@ -193,40 +213,37 @@ ensure_surface (GdkWindow *window)
 
   event_delegate.context = window_ref;
 
-  // Should probably calculate this once?
-  // Should prefer certain formats over others
-  mir_connection_get_available_surface_formats (get_connection (window), formats, mir_pixel_formats, &n_formats);
-  for (i = 0; i < n_formats; i++)
-    if (formats[i] == mir_pixel_format_argb_8888)
-      {
-        pixel_format = formats[i];
-        break;
-      }
+  impl->surface = create_mir_surface (gdk_window_get_display (window),
+                                      window->width, window->height,
+                                      buffer_usage);
 
-  parameters.name = "GTK+ Mir";
-  parameters.width = window->width;
-  parameters.height = window->height;
-  parameters.pixel_format = pixel_format;
-  parameters.buffer_usage = mir_buffer_usage_software;
-  parameters.output_id = mir_display_output_id_invalid;
-  impl->surface = mir_connection_create_surface_sync (get_connection (window), &parameters);
+  if (buffer_usage == mir_buffer_usage_software)
+  {
+    MirGraphicsRegion region;
+    MirEvent resize_event;
 
-  MirGraphicsRegion region;
-  MirEvent resize_event;
+    mir_surface_get_graphics_region (impl->surface, &region);
 
-  mir_surface_get_graphics_region (impl->surface, &region);
+    /* Send the initial configure with the size the server gave... */
+    resize_event.resize.type = mir_event_type_resize;
+    resize_event.resize.surface_id = 0;
+    resize_event.resize.width = region.width;
+    resize_event.resize.height = region.height;
 
-  /* Send the initial configure with the size the server gave... */
-  resize_event.resize.type = mir_event_type_resize;
-  resize_event.resize.surface_id = 0;
-  resize_event.resize.width = region.width;
-  resize_event.resize.height = region.height;
-
-  _gdk_mir_event_source_queue (window_ref, &resize_event);
+    _gdk_mir_event_source_queue (window_ref, &resize_event);
+  }
 
   mir_surface_set_event_handler (impl->surface, &event_delegate); // FIXME: Ignore some events until shown
   set_surface_type (impl, impl->surface_type);
   set_surface_state (impl, impl->surface_state);
+}
+
+static void
+ensure_surface (GdkWindow *window)
+{
+  ensure_surface_full (window, window->gl_paint_context ?
+                                 mir_buffer_usage_hardware :
+                                 mir_buffer_usage_software);
 }
 
 static void
@@ -237,15 +254,30 @@ ensure_no_surface (GdkWindow *window)
   if (impl->cairo_surface)
     {
       cairo_surface_finish (impl->cairo_surface);
-      cairo_surface_destroy (impl->cairo_surface);
-      impl->cairo_surface = NULL;
+      g_clear_pointer(&impl->cairo_surface, cairo_surface_destroy);
     }
 
-  if (impl->surface)
+  if (window->gl_paint_context)
     {
-      mir_surface_release_sync (impl->surface);
-      impl->surface = NULL;
+      GdkDisplay *display = gdk_window_get_display (window);
+      EGLDisplay egl_display = _gdk_mir_display_get_egl_display (display);
+
+      if (impl->egl_surface)
+        {
+          eglDestroySurface (egl_display, impl->egl_surface);
+          impl->egl_surface = NULL;
+        }
+
+      if (impl->dummy_egl_surface)
+        {
+          eglDestroySurface (egl_display, impl->dummy_egl_surface);
+          impl->dummy_egl_surface = NULL;
+        }
+
+      g_clear_pointer (&impl->dummy_surface, mir_surface_release_sync);
     }
+
+  g_clear_pointer(&impl->surface, mir_surface_release_sync);
 }
 
 static void
@@ -316,7 +348,7 @@ gdk_mir_window_impl_ref_cairo_surface (GdkWindow *window)
   //g_printerr ("gdk_mir_window_impl_ref_cairo_surface window=%p\n", window);
   GdkMirWindowImpl *impl = GDK_MIR_WINDOW_IMPL (window->impl);
   MirGraphicsRegion region;
-  cairo_format_t pixel_format = CAIRO_FORMAT_INVALID;
+  cairo_format_t pixel_format = CAIRO_FORMAT_ARGB32;
   cairo_surface_t *cairo_surface;
   cairo_t *c;
 
@@ -327,31 +359,16 @@ gdk_mir_window_impl_ref_cairo_surface (GdkWindow *window)
     }
 
   /* Transient windows get rendered into a buffer and copied onto their parent */
-  if (impl->transient_for)
+  if (impl->transient_for || window->gl_paint_context)
     {
-      cairo_surface = cairo_image_surface_create (CAIRO_FORMAT_ARGB32, window->width, window->height);
+      cairo_surface = cairo_image_surface_create (pixel_format, window->width, window->height);
     }
   else
     {
       ensure_surface (window);
 
       mir_surface_get_graphics_region (impl->surface, &region);
-
-      // FIXME: Should calculate this once
-      switch (region.pixel_format)
-        {
-        case mir_pixel_format_argb_8888:
-          pixel_format = CAIRO_FORMAT_ARGB32;
-          break;
-        default:
-        case mir_pixel_format_abgr_8888:
-        case mir_pixel_format_xbgr_8888:
-        case mir_pixel_format_xrgb_8888:
-        case mir_pixel_format_bgr_888:
-          // uh-oh...
-          g_printerr ("Unsupported pixel format %d\n", region.pixel_format);
-          break;
-        }
+      g_assert (region.pixel_format == mir_pixel_format_argb_8888);
 
       cairo_surface = cairo_image_surface_create_for_data ((unsigned char *) region.vaddr,
                                                            pixel_format,
@@ -1245,6 +1262,60 @@ gdk_mir_window_impl_set_shadow_width (GdkWindow *window,
   g_printerr ("gdk_mir_window_impl_set_shadow_width window=%p\n", window);
 }
 
+EGLSurface
+_gdk_mir_window_get_egl_surface (GdkWindow *window,
+                                 EGLConfig config)
+{
+  GdkMirWindowImpl *impl;
+
+  impl = GDK_MIR_WINDOW_IMPL (window->impl);
+
+  if (!impl->egl_surface)
+    {
+      EGLDisplay egl_display;
+      EGLNativeWindowType egl_window;
+
+      ensure_no_surface (window);
+      ensure_surface_full (window, mir_buffer_usage_hardware);
+
+      egl_display = _gdk_mir_display_get_egl_display (gdk_window_get_display (window));
+      egl_window = (EGLNativeWindowType) mir_surface_get_egl_native_window (impl->surface);
+
+      impl->egl_surface =
+        eglCreateWindowSurface (egl_display, config, egl_window, NULL);
+    }
+
+  return impl->egl_surface;
+}
+
+EGLSurface
+_gdk_mir_window_get_dummy_egl_surface (GdkWindow *window,
+                                       EGLConfig config)
+{
+  GdkMirWindowImpl *impl;
+
+  impl = GDK_MIR_WINDOW_IMPL (window->impl);
+
+  if (!impl->dummy_egl_surface)
+    {
+      GdkDisplay *display;
+      EGLDisplay egl_display;
+      EGLNativeWindowType egl_window;
+
+      display = gdk_window_get_display (window);
+      impl->dummy_surface = create_mir_surface (display, 1, 1,
+                                                mir_buffer_usage_hardware);
+
+      egl_display = _gdk_mir_display_get_egl_display (display);
+      egl_window = (EGLNativeWindowType) mir_surface_get_egl_native_window (impl->surface);
+
+      impl->dummy_egl_surface =
+        eglCreateWindowSurface (egl_display, config, egl_window, NULL);
+    }
+
+  return impl->dummy_egl_surface;
+}
+
 MirSurface *
 gdk_mir_window_get_mir_surface (GdkWindow *window)
 {
@@ -1345,4 +1416,5 @@ gdk_mir_window_impl_class_init (GdkMirWindowImplClass *klass)
   impl_class->get_scale_factor = gdk_mir_window_impl_get_scale_factor;
   impl_class->set_opaque_region = gdk_mir_window_impl_set_opaque_region;
   impl_class->set_shadow_width = gdk_mir_window_impl_set_shadow_width;
+  impl_class->create_gl_context = _gdk_mir_window_create_gl_context;
 }
