@@ -650,6 +650,8 @@ gtk_stack_set_child_property (GtkContainer *container,
       for (l = priv->children; l != NULL; l = l->next)
         {
           info2 = l->data;
+          if (info == info2)
+            continue;
           if (g_strcmp0 (info2->name, name) == 0)
             {
               g_warning ("Duplicate child name in GtkStack: %s\n", name);
