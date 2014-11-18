@@ -266,7 +266,6 @@ gtk_scale_class_init (GtkScaleClass *class)
   widget_class->get_preferred_width = gtk_scale_get_preferred_width;
   widget_class->get_preferred_height = gtk_scale_get_preferred_height;
 
-  range_class->slider_detail = "Xscale";
   range_class->get_range_border = gtk_scale_get_range_border;
 
   class->get_layout_offsets = gtk_scale_real_get_layout_offsets;

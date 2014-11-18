@@ -335,9 +335,6 @@ gtk_range_class_init (GtkRangeClass *class)
   class->move_slider = gtk_range_move_slider;
   class->change_value = gtk_range_real_change_value;
 
-  class->slider_detail = "slider";
-  class->stepper_detail = "stepper";
-
   /**
    * GtkRange::value-changed:
    * @range: the #GtkRange that received the signal
