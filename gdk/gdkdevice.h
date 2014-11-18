@@ -274,6 +274,11 @@ gboolean gdk_device_grab_info_libgtk_only (GdkDisplay  *display,
 GDK_AVAILABLE_IN_3_12
 GdkWindow *gdk_device_get_last_event_window (GdkDevice *device);
 
+GDK_AVAILABLE_IN_3_16
+const gchar *gdk_device_get_vendor_id       (GdkDevice *device);
+GDK_AVAILABLE_IN_3_16
+const gchar *gdk_device_get_product_id      (GdkDevice *device);
+
 G_END_DECLS
 
 #endif /* __GDK_DEVICE_H__ */

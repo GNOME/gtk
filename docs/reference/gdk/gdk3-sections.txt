@@ -713,6 +713,8 @@ GdkGrabOwnership
 
 <SUBSECTION>
 gdk_device_get_name
+gdk_device_get_vendor_id
+gdk_device_get_product_id
 gdk_device_get_source
 gdk_device_set_mode
 gdk_device_get_mode

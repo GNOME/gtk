@@ -86,7 +86,9 @@ enum {
   PROP_INPUT_SOURCE,
   PROP_INPUT_MODE,
   PROP_HAS_CURSOR,
-  PROP_N_AXES
+  PROP_N_AXES,
+  PROP_VENDOR_ID,
+  PROP_PRODUCT_ID
 };
 
 
@@ -236,6 +238,36 @@ gdk_device_class_init (GdkDeviceClass *klass)
                                                       P_("Number of axes in the device"),
                                                       0, G_MAXUINT, 0,
                                                       G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
+  /**
+   * GdkDevice:vendor-id:
+   *
+   * Vendor ID of this device, see gdk_device_get_vendor_id().
+   *
+   * Since: 3.16
+   */
+  g_object_class_install_property (object_class,
+                                   PROP_VENDOR_ID,
+                                   g_param_spec_string ("vendor-id",
+                                                        P_("Vendor ID"),
+                                                        P_("Vendor ID"),
+                                                        NULL,
+                                                        G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY |
+                                                        G_PARAM_STATIC_STRINGS));
+  /**
+   * GdkDevice:product-id:
+   *
+   * Product ID of this device, see gdk_device_get_product_id().
+   *
+   * Since: 3.16
+   */
+  g_object_class_install_property (object_class,
+                                   PROP_PRODUCT_ID,
+                                   g_param_spec_string ("product-id",
+                                                        P_("Product ID"),
+                                                        P_("Product ID"),
+                                                        NULL,
+                                                        G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY |
+                                                        G_PARAM_STATIC_STRINGS));
 
   /**
    * GdkDevice::changed:
@@ -293,6 +325,9 @@ gdk_device_dispose (GObject *object)
   device->name = NULL;
   device->keys = NULL;
 
+  g_clear_pointer (&device->vendor_id, g_free);
+  g_clear_pointer (&device->product_id, g_free);
+
   G_OBJECT_CLASS (gdk_device_parent_class)->dispose (object);
 }
 
@@ -328,6 +363,12 @@ gdk_device_set_property (GObject      *object,
       break;
     case PROP_HAS_CURSOR:
       device->has_cursor = g_value_get_boolean (value);
+      break;
+    case PROP_VENDOR_ID:
+      device->vendor_id = g_value_dup_string (value);
+      break;
+    case PROP_PRODUCT_ID:
+      device->product_id = g_value_dup_string (value);
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -371,6 +412,12 @@ gdk_device_get_property (GObject    *object,
       break;
     case PROP_N_AXES:
       g_value_set_uint (value, device->axes->len);
+      break;
+    case PROP_VENDOR_ID:
+      g_value_set_string (value, device->vendor_id);
+      break;
+    case PROP_PRODUCT_ID:
+      g_value_set_string (value, device->product_id);
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -1756,4 +1803,69 @@ gdk_device_get_last_event_window (GdkDevice *device)
   info = _gdk_display_get_pointer_info (display, device);
 
   return info->window_under_pointer;
+}
+
+/**
+ * gdk_device_get_vendor_id:
+ * @device: a slave #GdkDevice
+ *
+ * Returns the vendor ID of this device, or %NULL if this information couldn't
+ * be obtained. This ID is retrieved from the device, and is thus constant for
+ * it.
+ *
+ * This function, together with gdk_device_get_product_id(), can be used to eg.
+ * compose #GSettings paths to store settings for this device.
+ *
+ * |[<!-- language="C" -->
+ *  static GSettings *
+ *  get_device_settings (GdkDevice *device)
+ *  {
+ *    const gchar *vendor, *product;
+ *    GSettings *settings;
+ *    GdkDevice *device;
+ *    gchar *path;
+ *
+ *    vendor = gdk_device_get_vendor_id (device);
+ *    product = gdk_device_get_product_id (device);
+ *
+ *    path = g_strdup_printf ("/org/example/app/devices/%s:%s/", vendor, product);
+ *    settings = g_settings_new_with_path (DEVICE_SCHEMA, path);
+ *    g_free (path);
+ *
+ *    return settings;
+ *  }
+ * ]|
+ *
+ * Returns: (nullable): the vendor ID, or %NULL
+ *
+ * Since: 3.16
+ */
+const gchar *
+gdk_device_get_vendor_id (GdkDevice *device)
+{
+  g_return_val_if_fail (GDK_IS_DEVICE (device), NULL);
+  g_return_val_if_fail (gdk_device_get_device_type (device) != GDK_DEVICE_TYPE_MASTER, NULL);
+
+  return device->vendor_id;
+}
+
+/**
+ * gdk_device_get_product_id:
+ * @device: a slave #GdkDevice
+ *
+ * Returns the product ID of this device, or %NULL if this information couldn't
+ * be obtained. This ID is retrieved from the device, and is thus constant for
+ * it. See gdk_device_get_vendor_id() for more information.
+ *
+ * Returns: (nullable): the product ID, or %NULL
+ *
+ * Since: 3.16
+ */
+const gchar *
+gdk_device_get_product_id (GdkDevice *device)
+{
+  g_return_val_if_fail (GDK_IS_DEVICE (device), NULL);
+  g_return_val_if_fail (gdk_device_get_device_type (device) != GDK_DEVICE_TYPE_MASTER, NULL);
+
+  return device->product_id;
 }
