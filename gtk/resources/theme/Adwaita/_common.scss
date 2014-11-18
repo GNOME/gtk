@@ -1566,7 +1566,7 @@ column-header.button.dnd { // for treeview-like derive widgets
 
 .popover {
   padding: 2px;
-  border: 1px solid $borders-color;
+  border: 1px solid $borders_color;
   border-radius: 5px;
   background-color: mix($bg_color, $base_color, 50%);
 
