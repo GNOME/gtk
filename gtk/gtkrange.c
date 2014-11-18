@@ -146,7 +146,6 @@ struct _GtkRangePrivate
 
   /* Whether we're doing fine adjustment */
   guint zoom                   : 1;
-  guint zoom_set               : 1;
   GtkGesture *long_press_gesture;
   GtkScrollType autoscroll_mode;
   guint autoscroll_id;
@@ -2312,7 +2311,6 @@ range_grab_remove (GtkRange *range)
     gtk_widget_queue_draw (GTK_WIDGET (range));
 
   update_zoom_state (range, FALSE);
-  range->priv->zoom_set = FALSE;
 
   gtk_style_context_remove_class (context, "dragging");
 }
@@ -2468,7 +2466,6 @@ gtk_range_long_press_gesture_pressed (GtkGestureLongPress *gesture,
                                       GtkRange            *range)
 {
   update_zoom_state (range, TRUE);
-  range->priv->zoom_set = TRUE;
 }
 
 static void
@@ -2624,7 +2621,6 @@ gtk_range_multipress_gesture_pressed (GtkGestureMultiPress *gesture,
           if (state_mask & GDK_SHIFT_MASK)
             {
               update_zoom_state (range, TRUE);
-              range->priv->zoom_set = TRUE;
             }
         }
 
