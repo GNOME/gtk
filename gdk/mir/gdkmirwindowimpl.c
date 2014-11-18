@@ -218,20 +218,20 @@ ensure_surface_full (GdkWindow *window,
                                       buffer_usage);
 
   if (buffer_usage == mir_buffer_usage_software)
-  {
-    MirGraphicsRegion region;
-    MirEvent resize_event;
+    {
+      MirGraphicsRegion region;
+      MirEvent resize_event;
 
-    mir_surface_get_graphics_region (impl->surface, &region);
+      mir_surface_get_graphics_region (impl->surface, &region);
 
-    /* Send the initial configure with the size the server gave... */
-    resize_event.resize.type = mir_event_type_resize;
-    resize_event.resize.surface_id = 0;
-    resize_event.resize.width = region.width;
-    resize_event.resize.height = region.height;
+      /* Send the initial configure with the size the server gave... */
+      resize_event.resize.type = mir_event_type_resize;
+      resize_event.resize.surface_id = 0;
+      resize_event.resize.width = region.width;
+      resize_event.resize.height = region.height;
 
-    _gdk_mir_event_source_queue (window_ref, &resize_event);
-  }
+      _gdk_mir_event_source_queue (window_ref, &resize_event);
+    }
 
   mir_surface_set_event_handler (impl->surface, &event_delegate); // FIXME: Ignore some events until shown
   set_surface_type (impl, impl->surface_type);
