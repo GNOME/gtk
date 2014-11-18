@@ -46,12 +46,17 @@ typedef struct GdkMirDisplay
   GdkScreen *screen;
 
   GdkKeymap *keymap;
+
+  MirPixelFormat sw_pixel_format;
+  MirPixelFormat hw_pixel_format;
 } GdkMirDisplay;
 
 typedef struct GdkMirDisplayClass
 {
   GdkDisplayClass parent_class;
 } GdkMirDisplayClass;
+
+static void initialize_pixel_formats (GdkMirDisplay *display);
 
 /**
  * SECTION:mir_interaction
@@ -112,6 +117,7 @@ _gdk_mir_display_open (const gchar *display_name)
   display->connection = connection;
   GDK_DISPLAY (display)->device_manager = _gdk_mir_device_manager_new (GDK_DISPLAY (display));
   display->screen = _gdk_mir_screen_new (GDK_DISPLAY (display));
+  initialize_pixel_formats (display);
 
   g_signal_emit_by_name (display, "opened");
 
@@ -488,6 +494,45 @@ gdk_mir_display_utf8_to_string_target (GdkDisplay  *display,
 }
 
 static void
+initialize_pixel_formats (GdkMirDisplay *display)
+{
+  MirPixelFormat formats[mir_pixel_formats];
+  unsigned int n_formats, i;
+
+  mir_connection_get_available_surface_formats (display->connection, formats,
+                                                mir_pixel_formats, &n_formats);
+
+  display->sw_pixel_format = mir_pixel_format_invalid;
+  display->hw_pixel_format = mir_pixel_format_invalid;
+
+  for (i = 0; i < n_formats; i++)
+    {
+      switch (formats[i])
+      {
+        case mir_pixel_format_abgr_8888:
+        case mir_pixel_format_xbgr_8888:
+        case mir_pixel_format_argb_8888:
+        case mir_pixel_format_xrgb_8888:
+          display->hw_pixel_format = formats[i];
+          break;
+        default:
+          continue;
+      }
+
+      if (display->hw_pixel_format != mir_pixel_format_invalid)
+        break;
+    }
+
+  for (i = 0; i < n_formats; i++)
+    {
+      if (formats[i] == mir_pixel_format_argb_8888)
+        {
+          display->sw_pixel_format = formats[i];
+          break;
+        }
+    }
+}
+
 gdk_mir_display_init (GdkMirDisplay *display)
 {
   display->event_source = _gdk_mir_event_source_new (GDK_DISPLAY (display));

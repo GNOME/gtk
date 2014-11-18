@@ -77,6 +77,8 @@ void _gdk_mir_window_reference_unref (GdkMirWindowReference *ref);
 
 void _gdk_mir_event_source_queue (GdkMirWindowReference *window_ref, const MirEvent *event);
 
+MirPixelFormat _gdk_mir_display_get_pixel_format (GdkDisplay *display, MirBufferUsage usage);
+
 void _gdk_mir_print_modifiers (unsigned int modifiers);
 
 void _gdk_mir_print_key_event (const MirKeyEvent *event);
