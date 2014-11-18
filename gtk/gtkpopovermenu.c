@@ -103,7 +103,12 @@ struct _GtkPopoverMenu
 };
 
 enum {
-  CHILD_PROP_SUBMENU = 1
+  PROP_VISIBLE_SUBMENU = 1
+};
+
+enum {
+  CHILD_PROP_SUBMENU = 1,
+  CHILD_PROP_POSITION
 };
 
 G_DEFINE_TYPE (GtkPopoverMenu, gtk_popover_menu, GTK_TYPE_POPOVER)
@@ -205,13 +210,20 @@ gtk_popover_menu_get_child_property (GtkContainer *container,
     return;
 
   switch (property_id)
- 
     {
     case CHILD_PROP_SUBMENU:
       {
         gchar *name;
         gtk_container_child_get (GTK_CONTAINER (stack), child, "name", &name, NULL);
         g_value_set_string (value, name);
+      }
+      break;
+
+    case CHILD_PROP_POSITION:
+      {
+        gint position;
+        gtk_container_child_get (GTK_CONTAINER (stack), child, "position", &position, NULL);
+        g_value_set_int (value, position);
       }
       break;
 
@@ -245,8 +257,60 @@ gtk_popover_menu_set_child_property (GtkContainer *container,
       }
       break;
 
+    case CHILD_PROP_POSITION:
+      {
+        gint position;
+        position = g_value_get_int (value);
+        gtk_container_child_set (GTK_CONTAINER (stack), child, "position", position, NULL);
+      }
+      break;
+
     default:
       GTK_CONTAINER_WARN_INVALID_CHILD_PROPERTY_ID (container, property_id, pspec); 
+      break;
+    }
+}
+
+static void
+gtk_popover_menu_get_property (GObject    *object,
+                               guint       property_id,
+                               GValue     *value,
+                               GParamSpec *pspec)
+{
+  GtkWidget *stack;
+
+  stack = gtk_bin_get_child (GTK_BIN (object));
+
+  switch (property_id)
+    {
+    case PROP_VISIBLE_SUBMENU:
+      g_value_set_string (value, gtk_stack_get_visible_child_name (GTK_STACK (stack)));
+      break;
+
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, property_id, pspec);
+      break;
+    }
+}
+
+static void
+gtk_popover_menu_set_property (GObject      *object,
+                               guint         property_id,
+                               const GValue *value,
+                               GParamSpec   *pspec)
+{
+  GtkWidget *stack;
+
+  stack = gtk_bin_get_child (GTK_BIN (object));
+
+  switch (property_id)
+    {
+    case PROP_VISIBLE_SUBMENU:
+      gtk_stack_set_visible_child_name (GTK_STACK (stack), g_value_get_string (value));
+      break;
+
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, property_id, pspec);
       break;
     }
 }
@@ -256,6 +320,10 @@ gtk_popover_menu_class_init (GtkPopoverMenuClass *klass)
 {
   GtkContainerClass *container_class = GTK_CONTAINER_CLASS (klass);
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
+  GObjectClass *object_class = G_OBJECT_CLASS (klass);
+
+  object_class->set_property = gtk_popover_menu_set_property;
+  object_class->get_property = gtk_popover_menu_get_property;
 
   widget_class->map = gtk_popover_menu_map;
   widget_class->unmap = gtk_popover_menu_unmap;
@@ -265,6 +333,14 @@ gtk_popover_menu_class_init (GtkPopoverMenuClass *klass)
   container_class->forall = gtk_popover_menu_forall;
   container_class->set_child_property = gtk_popover_menu_set_child_property;
   container_class->get_child_property = gtk_popover_menu_get_child_property;
+
+  g_object_class_install_property (object_class,
+                                   PROP_VISIBLE_SUBMENU,
+                                   g_param_spec_string ("visible-submenu",
+                                                        P_("Visible submenu"),
+                                                        P_("The name of the visible submenu"),
+                                                        NULL,
+                                                        G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 
   /**
    * GtkPopoverMenu:submenu:
@@ -282,6 +358,14 @@ gtk_popover_menu_class_init (GtkPopoverMenuClass *klass)
                                                                    P_("The name of the submenu"),
                                                                    NULL,
                                                                    G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
+
+  gtk_container_class_install_child_property (container_class,
+                                              CHILD_PROP_POSITION,
+                                              g_param_spec_int ("position",
+                                                                P_("Position"),
+                                                                P_("The index of the child in the parent"),
+                                                                -1, G_MAXINT, 0,
+                                                                G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 }
 
 /**
@@ -326,4 +410,5 @@ gtk_popover_menu_open_submenu (GtkPopoverMenu *popover,
 
   stack = gtk_bin_get_child (GTK_BIN (popover));
   gtk_stack_set_visible_child_name (GTK_STACK (stack), name);
+  g_object_notify (G_OBJECT (popover), "visible-submenu");
 }
