@@ -619,7 +619,9 @@ gboolean _gdk_mir_display_have_egl_buffer_age (GdkDisplay *display)
 
 gboolean _gdk_mir_display_have_egl_swap_buffers_with_damage (GdkDisplay *display)
 {
-  return GDK_MIR_DISPLAY (display)->have_egl_swap_buffers_with_damage;
+  /* FIXME: this seems to cause rendering problems, at least with radeon */
+  // return GDK_MIR_DISPLAY (display)->have_egl_swap_buffers_with_damage;
+  return FALSE;
 }
 
 gboolean _gdk_mir_display_have_egl_surfaceless_context (GdkDisplay *display)
