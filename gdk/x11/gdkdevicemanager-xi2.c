@@ -32,6 +32,7 @@
 #include <X11/Xlib.h>
 #include <X11/Xutil.h>
 #include <X11/extensions/XInput2.h>
+#include <X11/Xatom.h>
 
 #include <string.h>
 
@@ -300,6 +301,39 @@ is_touch_device (XIAnyClassInfo **classes,
   return FALSE;
 }
 
+static gboolean
+get_device_ids (GdkDisplay    *display,
+                XIDeviceInfo  *info,
+                gchar        **vendor_id,
+                gchar        **product_id)
+{
+  gulong nitems, bytes_after;
+  guint32 *data;
+  int rc, format;
+  Atom type;
+
+  gdk_x11_display_error_trap_push (display);
+
+  rc = XIGetProperty (GDK_DISPLAY_XDISPLAY (display),
+                      info->deviceid,
+                      gdk_x11_get_xatom_by_name_for_display (display, "Device Product ID"),
+                      0, 2, False, XA_INTEGER, &type, &format, &nitems, &bytes_after,
+                      (guchar **) &data);
+  gdk_x11_display_error_trap_pop_ignored (display);
+
+  if (rc != Success || type != XA_INTEGER || format != 32 || nitems != 2)
+    return FALSE;
+
+  if (vendor_id)
+    *vendor_id = g_strdup_printf ("%.4x", data[0]);
+  if (product_id)
+    *product_id = g_strdup_printf ("%.4x", data[1]);
+
+  XFree (data);
+
+  return TRUE;
+}
+
 static GdkDevice *
 create_device (GdkDeviceManager *device_manager,
                GdkDisplay       *display,
@@ -311,6 +345,7 @@ create_device (GdkDeviceManager *device_manager,
   GdkDevice *device;
   GdkInputMode mode;
   gint num_touches = 0;
+  gchar *vendor_id = NULL, *product_id = NULL;
 
   if (dev->use == XIMasterKeyboard || dev->use == XISlaveKeyboard)
     input_source = GDK_SOURCE_KEYBOARD;
@@ -369,6 +404,10 @@ create_device (GdkDeviceManager *device_manager,
                          num_touches);
             }));
 
+  if (dev->use != XIMasterKeyboard &&
+      dev->use != XIMasterPointer)
+    get_device_ids (display, dev, &vendor_id, &product_id);
+
   device = g_object_new (GDK_TYPE_X11_DEVICE_XI2,
                          "name", dev->name,
                          "type", type,
@@ -378,9 +417,13 @@ create_device (GdkDeviceManager *device_manager,
                          "display", display,
                          "device-manager", device_manager,
                          "device-id", dev->deviceid,
+                         "vendor-id", vendor_id,
+                         "product-id", product_id,
                          NULL);
 
   translate_device_classes (display, device, dev->classes, dev->num_classes);
+  g_free (vendor_id);
+  g_free (product_id);
 
   return device;
 }
