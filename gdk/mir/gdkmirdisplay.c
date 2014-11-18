@@ -46,12 +46,23 @@ typedef struct GdkMirDisplay
   GdkScreen *screen;
 
   GdkKeymap *keymap;
+
+  MirPixelFormat sw_pixel_format;
+  MirPixelFormat hw_pixel_format;
+
+  EGLDisplay egl_display;
+  guint have_egl_khr_create_context : 1;
+  guint have_egl_buffer_age : 1;
+  guint have_egl_swap_buffers_with_damage : 1;
+  guint have_egl_surfaceless_context : 1;
 } GdkMirDisplay;
 
 typedef struct GdkMirDisplayClass
 {
   GdkDisplayClass parent_class;
 } GdkMirDisplayClass;
+
+static void initialize_pixel_formats (GdkMirDisplay *display);
 
 /**
  * SECTION:mir_interaction
@@ -112,6 +123,7 @@ _gdk_mir_display_open (const gchar *display_name)
   display->connection = connection;
   GDK_DISPLAY (display)->device_manager = _gdk_mir_device_manager_new (GDK_DISPLAY (display));
   display->screen = _gdk_mir_screen_new (GDK_DISPLAY (display));
+  initialize_pixel_formats (display);
 
   g_signal_emit_by_name (display, "opened");
 
@@ -488,6 +500,180 @@ gdk_mir_display_utf8_to_string_target (GdkDisplay  *display,
 }
 
 static void
+initialize_pixel_formats (GdkMirDisplay *display)
+{
+  MirPixelFormat formats[mir_pixel_formats];
+  unsigned int n_formats, i;
+
+  mir_connection_get_available_surface_formats (display->connection, formats,
+                                                mir_pixel_formats, &n_formats);
+
+  display->sw_pixel_format = mir_pixel_format_invalid;
+  display->hw_pixel_format = mir_pixel_format_invalid;
+
+  for (i = 0; i < n_formats; i++)
+    {
+      switch (formats[i])
+      {
+        case mir_pixel_format_abgr_8888:
+        case mir_pixel_format_xbgr_8888:
+        case mir_pixel_format_argb_8888:
+        case mir_pixel_format_xrgb_8888:
+          display->hw_pixel_format = formats[i];
+          break;
+        default:
+          continue;
+      }
+
+      if (display->hw_pixel_format != mir_pixel_format_invalid)
+        break;
+    }
+
+  for (i = 0; i < n_formats; i++)
+    {
+      if (formats[i] == mir_pixel_format_argb_8888)
+        {
+          display->sw_pixel_format = formats[i];
+          break;
+        }
+    }
+}
+
+MirPixelFormat
+_gdk_mir_display_get_pixel_format (GdkDisplay *display,
+                                   MirBufferUsage usage)
+{
+  GdkMirDisplay *mir_dpy = GDK_MIR_DISPLAY (display);
+
+  if (usage == mir_buffer_usage_hardware)
+    return mir_dpy->hw_pixel_format;
+
+  return mir_dpy->sw_pixel_format;
+}
+
+gboolean
+_gdk_mir_display_init_egl_display (GdkDisplay *display)
+{
+  GdkMirDisplay *mir_dpy = GDK_MIR_DISPLAY (display);
+  EGLint major_version, minor_version;
+  EGLDisplay *dpy;
+
+  if (mir_dpy->egl_display)
+    return TRUE;
+
+  dpy = eglGetDisplay (mir_connection_get_egl_native_display (mir_dpy->connection));
+  if (dpy == NULL)
+    return FALSE;
+
+  if (!eglInitialize (dpy, &major_version, &minor_version))
+    return FALSE;
+
+  if (!eglBindAPI (EGL_OPENGL_API))
+    return FALSE;
+
+  mir_dpy->egl_display = dpy;
+
+  mir_dpy->have_egl_khr_create_context =
+    epoxy_has_egl_extension (dpy, "EGL_KHR_create_context");
+
+  mir_dpy->have_egl_buffer_age =
+    epoxy_has_egl_extension (dpy, "EGL_EXT_buffer_age");
+
+  mir_dpy->have_egl_swap_buffers_with_damage =
+    epoxy_has_egl_extension (dpy, "EGL_EXT_swap_buffers_with_damage");
+
+  mir_dpy->have_egl_surfaceless_context =
+    epoxy_has_egl_extension (dpy, "EGL_KHR_surfaceless_context");
+
+  GDK_NOTE (OPENGL,
+            g_print ("EGL API version %d.%d found\n"
+                     " - Vendor: %s\n"
+                     " - Version: %s\n"
+                     " - Client APIs: %s\n"
+                     " - Extensions:\n"
+                     "\t%s\n",
+                     major_version,
+                     minor_version,
+                     eglQueryString (dpy, EGL_VENDOR),
+                     eglQueryString (dpy, EGL_VERSION),
+                     eglQueryString (dpy, EGL_CLIENT_APIS),
+                     eglQueryString (dpy, EGL_EXTENSIONS)));
+
+  return TRUE;
+}
+
+static gboolean
+gdk_mir_display_make_gl_context_current (GdkDisplay   *display,
+                                         GdkGLContext *context)
+{
+  EGLDisplay egl_display = _gdk_mir_display_get_egl_display (display);
+  GdkMirGLContext *mir_context;
+  GdkWindow *window;
+  EGLSurface egl_surface;
+
+  if (context == NULL)
+    {
+      eglMakeCurrent(egl_display, EGL_NO_SURFACE, EGL_NO_SURFACE, EGL_NO_CONTEXT);
+      return TRUE;
+    }
+
+  mir_context = GDK_MIR_GL_CONTEXT (context);
+  window = gdk_gl_context_get_window (context);
+
+  if (mir_context->is_attached)
+    {
+      egl_surface = _gdk_mir_window_get_egl_surface (window,
+                                                     mir_context->egl_config);
+    }
+  else
+    {
+      if (_gdk_mir_display_have_egl_surfaceless_context (display))
+        egl_surface = EGL_NO_SURFACE;
+      else
+        egl_surface = _gdk_mir_window_get_dummy_egl_surface (window,
+                                                             mir_context->egl_config);
+    }
+
+  if (!eglMakeCurrent (egl_display, egl_surface, egl_surface, mir_context->egl_context))
+    {
+      g_warning ("eglMakeCurrent failed");
+      return FALSE;
+    }
+
+  return TRUE;
+}
+
+EGLDisplay _gdk_mir_display_get_egl_display (GdkDisplay *display)
+{
+  return GDK_MIR_DISPLAY (display)->egl_display;
+}
+
+gboolean _gdk_mir_display_have_egl_khr_create_context (GdkDisplay *display)
+{
+  return GDK_MIR_DISPLAY (display)->have_egl_khr_create_context;
+}
+
+gboolean _gdk_mir_display_have_egl_buffer_age (GdkDisplay *display)
+{
+  /* FIXME: this is not really supported by mir yet (despite is advertised) */
+  // return GDK_MIR_DISPLAY (display)->have_egl_buffer_age;
+  return FALSE;
+}
+
+gboolean _gdk_mir_display_have_egl_swap_buffers_with_damage (GdkDisplay *display)
+{
+  /* FIXME: this is not really supported by mir yet (despite is advertised) */
+  // return GDK_MIR_DISPLAY (display)->have_egl_swap_buffers_with_damage;
+  return FALSE;
+}
+
+gboolean _gdk_mir_display_have_egl_surfaceless_context (GdkDisplay *display)
+{
+  return GDK_MIR_DISPLAY (display)->have_egl_surfaceless_context;
+}
+
+
+static void
 gdk_mir_display_init (GdkMirDisplay *display)
 {
   display->event_source = _gdk_mir_event_source_new (GDK_DISPLAY (display));
@@ -545,4 +731,5 @@ gdk_mir_display_class_init (GdkMirDisplayClass *klass)
   display_class->convert_selection = gdk_mir_display_convert_selection;
   display_class->text_property_to_utf8_list = gdk_mir_display_text_property_to_utf8_list;
   display_class->utf8_to_string_target = gdk_mir_display_utf8_to_string_target;
+  display_class->make_gl_context_current = gdk_mir_display_make_gl_context_current;
 }
