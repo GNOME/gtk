@@ -105,9 +105,6 @@ struct _GtkRangePrivate
   GdkRectangle       slider;
   GdkWindow         *event_window;
 
-  GQuark             slider_detail_quark;
-  GQuark             stepper_detail_quark[4];
-
   GtkOrientation     orientation;
 
   gdouble  fill_level;
@@ -637,12 +634,6 @@ gtk_range_set_property (GObject      *object,
       if (priv->orientation != g_value_get_enum (value))
         {
           priv->orientation = g_value_get_enum (value);
-
-          priv->slider_detail_quark = 0;
-          priv->stepper_detail_quark[0] = 0;
-          priv->stepper_detail_quark[1] = 0;
-          priv->stepper_detail_quark[2] = 0;
-          priv->stepper_detail_quark[3] = 0;
 
           _gtk_orientable_set_style_classes (GTK_ORIENTABLE (range));
           gtk_widget_queue_resize (GTK_WIDGET (range));
