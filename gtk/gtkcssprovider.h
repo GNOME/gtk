@@ -30,6 +30,11 @@ G_BEGIN_DECLS
 #define GTK_IS_CSS_PROVIDER_CLASS(c)  (G_TYPE_CHECK_CLASS_TYPE    ((c), GTK_TYPE_CSS_PROVIDER))
 #define GTK_CSS_PROVIDER_GET_CLASS(o) (G_TYPE_INSTANCE_GET_CLASS  ((o), GTK_TYPE_CSS_PROVIDER, GtkCssProviderClass))
 
+/**
+ * GTK_CSS_PROVIDER_ERROR:
+ *
+ * Domain for #GtkCssProvider errors.
+ */
 #define GTK_CSS_PROVIDER_ERROR (gtk_css_provider_error_quark ())
 
 /**
@@ -41,7 +46,7 @@ G_BEGIN_DECLS
  * @GTK_CSS_PROVIDER_ERROR_DEPRECATED: Deprecation error.
  * @GTK_CSS_PROVIDER_ERROR_UNKNOWN_VALUE: Unknown value.
  *
- * Deprecated.
+ * Error codes for %GTK_CSS_PROVIDER_ERROR.
  */
 typedef enum
 {
