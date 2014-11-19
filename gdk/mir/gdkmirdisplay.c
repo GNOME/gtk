@@ -404,7 +404,7 @@ gdk_mir_display_create_window_impl (GdkDisplay    *display,
   g_printerr ("\n");
   if (attributes->wclass != GDK_INPUT_OUTPUT)
     return;
-  window->impl = _gdk_mir_window_impl_new ();
+  window->impl = _gdk_mir_window_impl_new (window);
 }
 
 static GdkKeymap *
