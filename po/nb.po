@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 3.16.x\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-11-13 20:54+0100\n"
-"PO-Revision-Date: 2014-11-13 21:13+0100\n"
+"POT-Creation-Date: 2014-11-19 19:31+0100\n"
+"PO-Revision-Date: 2014-11-19 19:42+0100\n"
 "Last-Translator: Kjartan Maraas <kmaraas@gnome.org>\n"
 "Language-Team: Norwegian bokmål <i18n-nb@lister.ping.uio.no>\n"
 "Language: no\n"
@@ -82,7 +82,7 @@ msgstr "Feilsøkingsflagg som skal fjernes for GDK"
 
 #: ../gdk/gdkwindow.c:2733
 msgid "GL support disabled via GDK_DEBUG"
-msgstr ""
+msgstr "GL-støtte slått av via GDK_DEBUG"
 
 #.
 #. * Translators, the strings in the “keyboard label” context are
@@ -495,7 +495,7 @@ msgstr[1] "Åpner %d oppføringer"
 #: ../gdk/x11/gdkglcontext-x11.c:728
 #, c-format
 msgid "No available configurations for the given RGBA pixel format"
-msgstr ""
+msgstr "Ingen tilgjengelige konfigurasjoner for oppgitt RGBA-pikselformat"
 
 #: ../gdk/x11/gdkglcontext-x11.c:1063
 msgid ""
@@ -1183,7 +1183,10 @@ msgstr "_Lagre fargen her"
 msgid ""
 "Click this palette entry to make it the current color. To change this entry, "
 "drag a color swatch here or right-click it and select “Save color here.”"
-msgstr "Klikk på denne palettoppføringen for å bruke den som aktiv farge. For å endre denne oppføringen drar du en fargeprøve hit eller høyreklikk den og velg «Lagre farge her.»"
+msgstr ""
+"Klikk på denne palettoppføringen for å bruke den som aktiv farge. For å "
+"endre denne oppføringen drar du en fargeprøve hit eller høyreklikk den og "
+"velg «Lagre farge her.»"
 
 #: ../gtk/deprecated/gtkcolorseldialog.c:191
 #: ../gtk/deprecated/gtkfontsel.c:1689 ../gtk/gtkfilechooserbutton.c:794
@@ -1383,7 +1386,7 @@ msgstr "Tom"
 
 #: ../gtk/encodesymbolic.c:38
 msgid "Output to this directory instead of cwd"
-msgstr ""
+msgstr "Skriv til denne katalogen i stedet for aktiv katalog"
 
 #: ../gtk/encodesymbolic.c:266
 #, c-format
@@ -1681,7 +1684,7 @@ msgstr "Ugyldig egenskap: %s.%s på linje %d"
 #: ../gtk/gtkbuilderparser.c:775
 #, c-format
 msgid "Invalid signal '%s' for type '%s' on line %d"
-msgstr ""
+msgstr "Ugyldig signal «%s» for type «%s» på linje %d"
 
 #: ../gtk/gtkbuilderparser.c:1067
 #, c-format
@@ -1800,7 +1803,7 @@ msgstr "Ny hurtigtast …"
 #, c-format
 msgctxt "progress bar label"
 msgid "%d %%"
-msgstr ""
+msgstr "%d %%"
 
 #: ../gtk/gtkcolorbutton.c:183 ../gtk/gtkcolorbutton.c:383
 msgid "Pick a Color"
@@ -2101,18 +2104,18 @@ msgstr "Høy_re:"
 msgid "Paper Margins"
 msgstr "Papirmarger"
 
-#: ../gtk/gtkentry.c:9589 ../gtk/gtkentry.c:9744 ../gtk/gtklabel.c:6586
-#: ../gtk/gtktextview.c:8868 ../gtk/gtktextview.c:9058
+#: ../gtk/gtkentry.c:9589 ../gtk/gtkentry.c:9742 ../gtk/gtklabel.c:6586
+#: ../gtk/gtktextview.c:8868 ../gtk/gtktextview.c:9056
 msgid "Cu_t"
 msgstr "Klipp u_t"
 
-#: ../gtk/gtkentry.c:9593 ../gtk/gtkentry.c:9747 ../gtk/gtklabel.c:6587
-#: ../gtk/gtktextview.c:8872 ../gtk/gtktextview.c:9062
+#: ../gtk/gtkentry.c:9593 ../gtk/gtkentry.c:9745 ../gtk/gtklabel.c:6587
+#: ../gtk/gtktextview.c:8872 ../gtk/gtktextview.c:9060
 msgid "_Copy"
 msgstr "_Kopier"
 
-#: ../gtk/gtkentry.c:9597 ../gtk/gtkentry.c:9750 ../gtk/gtklabel.c:6588
-#: ../gtk/gtktextview.c:8874 ../gtk/gtktextview.c:9064
+#: ../gtk/gtkentry.c:9597 ../gtk/gtkentry.c:9748 ../gtk/gtklabel.c:6588
+#: ../gtk/gtktextview.c:8874 ../gtk/gtktextview.c:9062
 msgid "_Paste"
 msgstr "_Lim inn"
 
@@ -2124,7 +2127,7 @@ msgstr "_Slett"
 msgid "Select _All"
 msgstr "Velg _alt"
 
-#: ../gtk/gtkentry.c:10805
+#: ../gtk/gtkentry.c:10803
 msgid "Caps Lock is on"
 msgstr "Caps Lock er på"
 
@@ -2234,7 +2237,7 @@ msgstr "Vis kolonne for _størrelse"
 
 #: ../gtk/gtkfilechooserwidget.c:1709
 msgid "Sort _Folders before Files"
-msgstr ""
+msgstr "Soroter _mapper før filer"
 
 #. Label
 #: ../gtk/gtkfilechooserwidget.c:2008
@@ -2338,9 +2341,8 @@ msgid "None"
 msgstr "Ingen"
 
 #: ../gtk/gtkglarea.c:296
-#, fuzzy
 msgid "OpenGL context creation failed"
-msgstr "Klarte ikke å hente informasjon om skriveren"
+msgstr "Oppretting av OpenGL-kontekst feilet"
 
 #: ../gtk/gtkheaderbar.c:414
 msgid "Application menu"
@@ -2721,7 +2723,7 @@ msgstr "Oppgi lokasjon"
 
 #: ../gtk/gtkplacessidebar.c:1001
 msgid "Manually enter a location"
-msgstr ""
+msgstr "Oppgi lokasjon manuelt"
 
 #: ../gtk/gtkplacessidebar.c:1012
 msgid "Trash"
@@ -3129,7 +3131,7 @@ msgstr "Skriv ut"
 #, c-format
 msgctxt "progress bar label"
 msgid "%.0f %%"
-msgstr ""
+msgstr "%.0f %%"
 
 #: ../gtk/gtkrecentchooserdefault.c:1077 ../gtk/gtkrecentchooserdefault.c:1114
 #, c-format
@@ -3425,11 +3427,11 @@ msgstr "Fullt volum"
 #, c-format
 msgctxt "volume percentage"
 msgid "%d %%"
-msgstr ""
+msgstr "%d %%"
 
 #: ../gtk/gtkwindow.c:11795
 msgid "Do you want to use GTK+ Inspector?"
-msgstr ""
+msgstr "Vil du bruke GTK+ inspektør?"
 
 #: ../gtk/gtkwindow.c:11797
 msgid ""
@@ -3440,7 +3442,7 @@ msgstr ""
 
 #: ../gtk/gtkwindow.c:11802
 msgid "Don't show this message again"
-msgstr ""
+msgstr "Ikke vis denne meldingen igjen"
 
 #: ../gtk/inspector/action-editor.c:281
 msgid "Activate"
@@ -3488,7 +3490,7 @@ msgstr "Legg til en klasse"
 
 #: ../gtk/inspector/classes-list.ui.h:2
 msgid "Restore defaults for this widget"
-msgstr ""
+msgstr "Gjenopprett forvalg for denne komponenten"
 
 #: ../gtk/inspector/css-editor.c:89 ../gtk/inspector/css-editor.c:95
 msgid "You can type here any CSS rule recognized by GTK+."
@@ -3510,7 +3512,7 @@ msgstr ""
 
 #: ../gtk/inspector/css-editor.c:159
 msgid "Saving CSS failed"
-msgstr ""
+msgstr "Lagring av CSS feilet"
 
 #: ../gtk/inspector/css-editor.c:199
 msgid "_Save"
@@ -3519,11 +3521,11 @@ msgstr "_Lagre"
 #. vim: set et sw=2 ts=2:
 #: ../gtk/inspector/css-editor.ui.h:1
 msgid "Disable this custom CSS"
-msgstr ""
+msgstr "Slå av denne egendefinerte CSSen"
 
 #: ../gtk/inspector/css-editor.ui.h:2
 msgid "Save the current CSS"
-msgstr ""
+msgstr "Lagre aktiv CSS"
 
 #: ../gtk/inspector/data-list.ui.h:1
 msgid "Show data"
@@ -3536,31 +3538,31 @@ msgstr "GTK+-versjon"
 
 #: ../gtk/inspector/general.ui.h:2
 msgid "GDK Backend"
-msgstr ""
+msgstr "GDK-motor"
 
 #: ../gtk/inspector/general.ui.h:4
 msgid "GL Version"
-msgstr ""
+msgstr "GL-versjon"
 
 #: ../gtk/inspector/general.ui.h:5
 msgid "GL Vendor"
-msgstr ""
+msgstr "GL-produsent"
 
 #: ../gtk/inspector/gestures.c:128
 msgid "Capture"
-msgstr ""
+msgstr "Fang"
 
 #: ../gtk/inspector/gestures.c:129
 msgid "Bubble"
-msgstr ""
+msgstr "Boble"
 
 #: ../gtk/inspector/gestures.c:130 ../gtk/inspector/menu.ui.h:3
 msgid "Target"
-msgstr ""
+msgstr "Mål"
 
 #: ../gtk/inspector/menu.c:90
 msgid "Unnamed section"
-msgstr ""
+msgstr "Seksjon uten navn"
 
 #. vim: set et sw=2 ts=2:
 #: ../gtk/inspector/menu.ui.h:1 ../gtk/inspector/object-tree.ui.h:3
@@ -3577,13 +3579,12 @@ msgstr "Ikon"
 
 #. vim: set et sw=2 ts=2:
 #: ../gtk/inspector/misc-info.ui.h:1
-#, fuzzy
 msgid "Reference count"
-msgstr "Brukervalg"
+msgstr "Referanseteller"
 
 #: ../gtk/inspector/misc-info.ui.h:3
 msgid "Buildable ID"
-msgstr ""
+msgstr "Byggbar ID"
 
 #: ../gtk/inspector/misc-info.ui.h:4
 msgid "Default Widget"
@@ -3598,19 +3599,19 @@ msgstr "Egenskaper"
 
 #: ../gtk/inspector/misc-info.ui.h:6
 msgid "Focus Widget"
-msgstr ""
+msgstr "Fokuskomponent"
 
 #: ../gtk/inspector/misc-info.ui.h:8
 msgid "Mnemonic Label"
-msgstr ""
+msgstr "Hurtitastetikett"
 
 #: ../gtk/inspector/misc-info.ui.h:9
 msgid "Allocated size"
-msgstr ""
+msgstr "Allokert størrelse"
 
 #: ../gtk/inspector/misc-info.ui.h:10
 msgid "Clip area"
-msgstr ""
+msgstr "Klippeområde"
 
 #: ../gtk/inspector/misc-info.ui.h:11
 msgid "Tick callback"
@@ -3618,35 +3619,35 @@ msgstr ""
 
 #: ../gtk/inspector/misc-info.ui.h:12
 msgid "Frame count"
-msgstr ""
+msgstr "Bildeantall"
 
 #: ../gtk/inspector/misc-info.ui.h:13
 msgid "Frame rate"
-msgstr ""
+msgstr "Rammehastighet"
 
 #: ../gtk/inspector/misc-info.ui.h:14
 msgid "Accessible role"
-msgstr ""
+msgstr "Tilgjengelighetsrolle"
 
 #: ../gtk/inspector/misc-info.ui.h:15
 msgid "Mapped"
-msgstr ""
+msgstr "Tilordnet"
 
 #: ../gtk/inspector/misc-info.ui.h:16
 msgid "Realized"
-msgstr ""
+msgstr "Realisert"
 
 #: ../gtk/inspector/misc-info.ui.h:17
 msgid "Is Toplevel"
-msgstr ""
+msgstr "Er toppobjekt"
 
 #: ../gtk/inspector/misc-info.ui.h:18
 msgid "Child Visible"
-msgstr ""
+msgstr "Underobjekt synlig"
 
 #: ../gtk/inspector/object-hierarchy.ui.h:1
 msgid "Object Hierarchy"
-msgstr ""
+msgstr "Objekthierarki"
 
 #: ../gtk/inspector/object-tree.ui.h:1
 msgid "Object"
@@ -3654,7 +3655,7 @@ msgstr "Objekt"
 
 #: ../gtk/inspector/object-tree.ui.h:4 ../gtk/inspector/window.ui.h:13
 msgid "Style Classes"
-msgstr ""
+msgstr "Stilklasser"
 
 #: ../gtk/inspector/prop-editor.c:617
 #, c-format
@@ -3669,16 +3670,16 @@ msgstr "Ukjent"
 #: ../gtk/inspector/prop-editor.c:633
 #, c-format
 msgid "Object: %p (%s)"
-msgstr ""
+msgstr "Objekt: %p (%s)"
 
 #: ../gtk/inspector/prop-editor.c:1058
-#, fuzzy, c-format
+#, c-format
 msgid "Uneditable property type: %s"
-msgstr "Kan ikke stoppe %s"
+msgstr "Ikke-redigerbar type for egenskap: %s"
 
 #: ../gtk/inspector/prop-editor.c:1176
 msgid "Attribute mapping"
-msgstr ""
+msgstr "Attributt-tilordning"
 
 #: ../gtk/inspector/prop-editor.c:1181
 msgid "Model:"
@@ -3696,24 +3697,23 @@ msgstr "Kolonne:"
 #: ../gtk/inspector/prop-editor.c:1306
 #, c-format
 msgid "Defined at: %p (%s)"
-msgstr ""
+msgstr "Definert ved: %p (%s)"
 
 #: ../gtk/inspector/prop-editor.c:1370 ../gtk/inspector/prop-editor.c:1386
-#, fuzzy
 msgid "inverted"
-msgstr "_Konverter"
+msgstr "invertert"
 
 #: ../gtk/inspector/prop-editor.c:1402
 msgid "bidirectional, inverted"
-msgstr ""
+msgstr "bidireksjonell, invertert"
 
 #: ../gtk/inspector/prop-editor.c:1407 ../gtk/inspector/prop-editor.c:1503
 msgid "bidirectional"
-msgstr ""
+msgstr "bidireksjonell"
 
 #: ../gtk/inspector/prop-editor.c:1412
 msgid "Binding:"
-msgstr ""
+msgstr "Binding:"
 
 #: ../gtk/inspector/prop-editor.c:1522
 msgid "Setting:"
@@ -3751,7 +3751,7 @@ msgstr "Attributt"
 
 #: ../gtk/inspector/prop-list.ui.h:4 ../gtk/inspector/signals-list.ui.h:6
 msgid "Defined At"
-msgstr ""
+msgstr "Definert ved"
 
 #: ../gtk/inspector/resource-list.ui.h:1
 msgid "Path"
@@ -3779,9 +3779,8 @@ msgid "Size:"
 msgstr "Størrelse:"
 
 #: ../gtk/inspector/selector.ui.h:1 ../gtk/inspector/window.ui.h:12
-#, fuzzy
 msgid "Selector"
-msgstr "Velg"
+msgstr "Velger"
 
 #: ../gtk/inspector/signals-list.c:109
 msgid "Yes"
@@ -3790,7 +3789,7 @@ msgstr "Ja"
 #. vim: set et sw=2 ts=2:
 #: ../gtk/inspector/signals-list.ui.h:1
 msgid "Trace signal emissions on this object"
-msgstr ""
+msgstr "Spor signalutsendelser på dette objektet"
 
 #: ../gtk/inspector/signals-list.ui.h:2
 msgid "Clear log"
@@ -3802,11 +3801,11 @@ msgstr "Koblet til"
 
 #: ../gtk/inspector/size-groups.c:223
 msgid "Ignore hidden"
-msgstr ""
+msgstr "Ignorer skjult"
 
 #: ../gtk/inspector/size-groups.c:241
 msgid "Mode"
-msgstr ""
+msgstr "Modus"
 
 #: ../gtk/inspector/size-groups.c:252
 msgid "Horizontal"
@@ -3827,27 +3826,27 @@ msgstr "Type"
 
 #: ../gtk/inspector/statistics.ui.h:2
 msgid "Self 1"
-msgstr ""
+msgstr "Selv 1"
 
 #: ../gtk/inspector/statistics.ui.h:3
 msgid "Cumulative 1"
-msgstr ""
+msgstr "Kumulativ 1"
 
 #: ../gtk/inspector/statistics.ui.h:4
 msgid "Self 2"
-msgstr ""
+msgstr "Selv 2"
 
 #: ../gtk/inspector/statistics.ui.h:5
 msgid "Cumulative 2"
-msgstr ""
+msgstr "Kumulativ 2"
 
 #: ../gtk/inspector/statistics.ui.h:6
 msgid "Self"
-msgstr ""
+msgstr "Selv"
 
 #: ../gtk/inspector/statistics.ui.h:7
 msgid "Cumulative"
-msgstr ""
+msgstr "Kumulativ"
 
 #: ../gtk/inspector/statistics.ui.h:8
 msgid "Enable statistics with GOBJECT_DEBUG=instance-count"
@@ -3913,16 +3912,15 @@ msgstr "Høyre til venstre"
 
 #: ../gtk/inspector/visual.ui.h:8
 msgid "Window scaling"
-msgstr ""
+msgstr "Vinduskalering"
 
 #: ../gtk/inspector/visual.ui.h:9
 msgid "Animations"
 msgstr "Animasjoner"
 
 #: ../gtk/inspector/visual.ui.h:10
-#, fuzzy
 msgid "Rendering Mode"
-msgstr "Genererer data"
+msgstr "Gjengivelsesmodus"
 
 #: ../gtk/inspector/visual.ui.h:11
 msgid "Similar"
@@ -3938,27 +3936,27 @@ msgstr "Opptak"
 
 #: ../gtk/inspector/visual.ui.h:14
 msgid "Show Graphic Updates"
-msgstr ""
+msgstr "Vis grafiske oppdateringer"
 
 #: ../gtk/inspector/visual.ui.h:15
 msgid "Show Baselines"
-msgstr ""
+msgstr "Vis utgangspunkter"
 
 #: ../gtk/inspector/visual.ui.h:16
 msgid "Show Pixel Cache"
-msgstr ""
+msgstr "Vis pikselbuffer"
 
 #: ../gtk/inspector/visual.ui.h:17
 msgid "Simulate touchscreen"
-msgstr ""
+msgstr "Simuler berøringsskjerm"
 
 #: ../gtk/inspector/visual.ui.h:18
 msgid "GL Rendering"
-msgstr ""
+msgstr "GL-gjengivelse"
 
 #: ../gtk/inspector/visual.ui.h:19
 msgid "When needed"
-msgstr ""
+msgstr "Når nødvendig"
 
 #: ../gtk/inspector/visual.ui.h:20
 msgid "Always"
@@ -3970,15 +3968,15 @@ msgstr "Slått av"
 
 #: ../gtk/inspector/visual.ui.h:22
 msgid "Software GL"
-msgstr ""
+msgstr "Programvare-GL"
 
 #: ../gtk/inspector/visual.ui.h:23
 msgid "Software Surfaces"
-msgstr ""
+msgstr "Programvareoverflater"
 
 #: ../gtk/inspector/visual.ui.h:24
 msgid "Texture Rectangle Extension"
-msgstr ""
+msgstr "Utvidelse for teksturrektangel"
 
 #. vim: set et sw=2 ts=2:
 #: ../gtk/inspector/window.ui.h:1
@@ -4013,18 +4011,16 @@ msgid "Signals"
 msgstr "Signaler"
 
 #: ../gtk/inspector/window.ui.h:10
-#, fuzzy
 msgid "Child Properties"
-msgstr "E_genskaper"
+msgstr "Egenskaper for underobjekt"
 
 #: ../gtk/inspector/window.ui.h:11
 msgid "Hierarchy"
 msgstr "Hierarki"
 
 #: ../gtk/inspector/window.ui.h:14
-#, fuzzy
 msgid "Style Properties"
-msgstr "E_genskaper"
+msgstr "Egenskaper for stil"
 
 #: ../gtk/inspector/window.ui.h:15 ../gtk/inspector/window.ui.h:24
 msgid "CSS"
@@ -4032,7 +4028,7 @@ msgstr "CSS"
 
 #: ../gtk/inspector/window.ui.h:16
 msgid "Size Groups"
-msgstr ""
+msgstr "Størrelsesgrupper"
 
 #: ../gtk/inspector/window.ui.h:17
 msgid "Data"
@@ -4044,7 +4040,7 @@ msgstr "Handlinger"
 
 #: ../gtk/inspector/window.ui.h:20
 msgid "Gestures"
-msgstr ""
+msgstr "Gester"
 
 #: ../gtk/inspector/window.ui.h:21
 msgid "Objects"
@@ -4060,7 +4056,7 @@ msgstr "Ressurser"
 
 #: ../gtk/inspector/window.ui.h:25
 msgid "Visual"
-msgstr ""
+msgstr "Synlig"
 
 #: ../gtk/inspector/window.ui.h:26
 #: ../gtk/resources/ui/gtkprintunixdialog.ui.h:24
@@ -4075,7 +4071,7 @@ msgstr "asme_f"
 #: ../gtk/paper_names_offsets.c:5
 msgctxt "paper size"
 msgid "A0×2"
-msgstr ""
+msgstr "A0×2"
 
 #: ../gtk/paper_names_offsets.c:6
 msgctxt "paper size"
@@ -4085,7 +4081,7 @@ msgstr "A0"
 #: ../gtk/paper_names_offsets.c:7
 msgctxt "paper size"
 msgid "A0×3"
-msgstr ""
+msgstr "A0×3"
 
 #: ../gtk/paper_names_offsets.c:8
 msgctxt "paper size"
@@ -4100,12 +4096,12 @@ msgstr "A10"
 #: ../gtk/paper_names_offsets.c:10
 msgctxt "paper size"
 msgid "A1×3"
-msgstr ""
+msgstr "A1×3"
 
 #: ../gtk/paper_names_offsets.c:11
 msgctxt "paper size"
 msgid "A1×4"
-msgstr ""
+msgstr "A1×4"
 
 #: ../gtk/paper_names_offsets.c:12
 msgctxt "paper size"
@@ -4115,17 +4111,17 @@ msgstr "A2"
 #: ../gtk/paper_names_offsets.c:13
 msgctxt "paper size"
 msgid "A2×3"
-msgstr ""
+msgstr "A2×3"
 
 #: ../gtk/paper_names_offsets.c:14
 msgctxt "paper size"
 msgid "A2×4"
-msgstr ""
+msgstr "A2×4"
 
 #: ../gtk/paper_names_offsets.c:15
 msgctxt "paper size"
 msgid "A2×5"
-msgstr ""
+msgstr "A2×5"
 
 #: ../gtk/paper_names_offsets.c:16
 msgctxt "paper size"
@@ -4140,27 +4136,27 @@ msgstr "A3 ekstra"
 #: ../gtk/paper_names_offsets.c:18
 msgctxt "paper size"
 msgid "A3×3"
-msgstr ""
+msgstr "A3×3"
 
 #: ../gtk/paper_names_offsets.c:19
 msgctxt "paper size"
 msgid "A3×4"
-msgstr ""
+msgstr "A3×4"
 
 #: ../gtk/paper_names_offsets.c:20
 msgctxt "paper size"
 msgid "A3×5"
-msgstr ""
+msgstr "A3×5"
 
 #: ../gtk/paper_names_offsets.c:21
 msgctxt "paper size"
 msgid "A3×6"
-msgstr ""
+msgstr "A3×6"
 
 #: ../gtk/paper_names_offsets.c:22
 msgctxt "paper size"
 msgid "A3×7"
-msgstr ""
+msgstr "A3×7"
 
 #: ../gtk/paper_names_offsets.c:23
 msgctxt "paper size"
@@ -4180,37 +4176,37 @@ msgstr "A4 tab"
 #: ../gtk/paper_names_offsets.c:26
 msgctxt "paper size"
 msgid "A4×3"
-msgstr ""
+msgstr "A4×3"
 
 #: ../gtk/paper_names_offsets.c:27
 msgctxt "paper size"
 msgid "A4×4"
-msgstr ""
+msgstr "A4×4"
 
 #: ../gtk/paper_names_offsets.c:28
 msgctxt "paper size"
 msgid "A4×5"
-msgstr ""
+msgstr "A4×5"
 
 #: ../gtk/paper_names_offsets.c:29
 msgctxt "paper size"
 msgid "A4×6"
-msgstr ""
+msgstr "A4×6"
 
 #: ../gtk/paper_names_offsets.c:30
 msgctxt "paper size"
 msgid "A4×7"
-msgstr ""
+msgstr "A4×7"
 
 #: ../gtk/paper_names_offsets.c:31
 msgctxt "paper size"
 msgid "A4×8"
-msgstr ""
+msgstr "A4×8"
 
 #: ../gtk/paper_names_offsets.c:32
 msgctxt "paper size"
 msgid "A4×9"
-msgstr ""
+msgstr "A4×9"
 
 #: ../gtk/paper_names_offsets.c:33
 msgctxt "paper size"
@@ -4815,7 +4811,7 @@ msgstr "#9 konvolutt"
 #: ../gtk/paper_names_offsets.c:153
 msgctxt "paper size"
 msgid "Oficio"
-msgstr ""
+msgstr "Oficio"
 
 #: ../gtk/paper_names_offsets.c:154
 msgctxt "paper size"
@@ -4845,7 +4841,7 @@ msgstr "Bredt format"
 #: ../gtk/paper_names_offsets.c:159
 msgctxt "paper size"
 msgid "Photo L"
-msgstr ""
+msgstr "Photo L"
 
 #: ../gtk/paper_names_offsets.c:160
 msgctxt "paper size"
