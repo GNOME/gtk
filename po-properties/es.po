@@ -18,8 +18,8 @@ msgstr ""
 "Project-Id-Version: gtk+-properties.master\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gtk"
 "%2b&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2014-11-13 10:02+0000\n"
-"PO-Revision-Date: 2014-11-13 12:41+0100\n"
+"POT-Creation-Date: 2014-11-19 10:02+0000\n"
+"PO-Revision-Date: 2014-11-19 12:57+0100\n"
 "Last-Translator: Daniel Mustieles <daniel.mustieles@gmail.com>\n"
 "Language-Team: Español; Castellano <gnome-es-list@gnome.org>\n"
 "Language: \n"
@@ -120,7 +120,6 @@ msgid "The default display for GDK"
 msgstr "El visor predeterminado para GDK"
 
 #: ../gdk/gdkglcontext.c:244
-#| msgid "The GDK visual used by the GL context"
 msgid "The GDK display the context is from"
 msgstr "El contexto del que proviene la visualización GDK"
 
@@ -137,7 +136,6 @@ msgid "Profile"
 msgstr "Perfil"
 
 #: ../gdk/gdkglcontext.c:276
-#| msgid "The Cell Area this context was created for"
 msgid "The GL profile the context was created for"
 msgstr "El perfil GL para el que fue creado el contexto"
 
@@ -146,7 +144,6 @@ msgid "Shared context"
 msgstr "Contexto compartido"
 
 #: ../gdk/gdkglcontext.c:293
-#| msgid "The Cell Area this context was created for"
 msgid "The GL context this context share data with"
 msgstr "El contexto GL con el que este contexto comparte datos"
 
@@ -1331,13 +1328,14 @@ msgstr ""
 "inicio o el final del padre"
 
 #: ../gtk/gtkactionbar.c:257 ../gtk/gtkbox.c:336 ../gtk/gtkheaderbar.c:1849
-#: ../gtk/gtknotebook.c:774 ../gtk/gtkpaned.c:337 ../gtk/gtkpopover.c:1319
-#: ../gtk/gtkstack.c:471 ../gtk/gtktoolitemgroup.c:1674
+#: ../gtk/gtknotebook.c:774 ../gtk/gtkpaned.c:337 ../gtk/gtkpopover.c:1314
+#: ../gtk/gtkpopovermenu.c:365 ../gtk/gtkstack.c:471
+#: ../gtk/gtktoolitemgroup.c:1674
 msgid "Position"
 msgstr "Posición"
 
 #: ../gtk/gtkactionbar.c:258 ../gtk/gtkbox.c:337 ../gtk/gtkheaderbar.c:1850
-#: ../gtk/gtknotebook.c:775 ../gtk/gtkstack.c:472
+#: ../gtk/gtknotebook.c:775 ../gtk/gtkpopovermenu.c:366 ../gtk/gtkstack.c:472
 msgid "The index of the child in the parent"
 msgstr "El índice del hijo en el padre"
 
@@ -4173,7 +4171,6 @@ msgid "The GL context"
 msgstr "El contexto GL"
 
 #: ../gtk/gtkglarea.c:741
-#| msgid "The GDK visual used by the GL context"
 msgid "The GL profile to use for the GL context"
 msgstr "El perfil GL que usar para el contexto GL"
 
@@ -4182,7 +4179,6 @@ msgid "Auto render"
 msgstr "Renderizado automático"
 
 #: ../gtk/gtkglarea.c:764
-#| msgid "Whether the column can be reordered around the headers"
 msgid "Whether the gl area renders on each redraw"
 msgstr "Indica si el área GL se renderiza en cada redibujado"
 
@@ -4203,12 +4199,10 @@ msgid "Whether a depth buffer is allocated"
 msgstr "Indica si se ha reservado un búfer de profundidad"
 
 #: ../gtk/gtkglarea.c:812
-#| msgid "Has depth buffer"
 msgid "Has stencil buffer"
 msgstr "Tiene un búfer de plantilla"
 
 #: ../gtk/gtkglarea.c:813
-#| msgid "Whether a depth buffer is allocated"
 msgid "Whether a stencil buffer is allocated"
 msgstr "Indica si se ha reservado un búfer de plantilla"
 
@@ -5023,7 +5017,7 @@ msgstr ""
 "Establece si el elemento del menú aparece justificado en la parte derecha de "
 "una barra de menú"
 
-#: ../gtk/gtkmenuitem.c:412 ../gtk/gtkpopovermenu.c:264
+#: ../gtk/gtkmenuitem.c:412 ../gtk/gtkpopovermenu.c:357
 msgid "Submenu"
 msgstr "Submenú"
 
@@ -5150,12 +5144,10 @@ msgid "Menu name"
 msgstr "Nombre del menú"
 
 #: ../gtk/gtkmodelbutton.c:911
-#| msgid "The name of the selected font"
 msgid "The name of the menu to open"
 msgstr "El nombre del menú que abrir"
 
 #: ../gtk/gtkmodelbutton.c:927
-#| msgid "Whether the menu has a tearoff item"
 msgid "Whether the menu is a parent"
 msgstr "Indica si el menú es padre"
 
@@ -5164,7 +5156,6 @@ msgid "Centered"
 msgstr "Centrado"
 
 #: ../gtk/gtkmodelbutton.c:942
-#| msgid "Whether to wrap the license text."
 msgid "Whether to center the contents"
 msgstr "Indica si se debe centrar el contenido"
 
@@ -5173,7 +5164,6 @@ msgid "Iconic"
 msgstr "Icónico"
 
 #: ../gtk/gtkmodelbutton.c:958
-#| msgid "Whether to wrap the license text."
 msgid "Whether to prefer the icon over text"
 msgstr "Indica si se prefiere el icono sobre el texto"
 
@@ -5420,12 +5410,10 @@ msgid "Largest possible value for the \"position\" property"
 msgstr "El valor más grande posible para la propiedad \"posicion\""
 
 #: ../gtk/gtkpaned.c:396
-#| msgid "Width of handle"
 msgid "Wide Handle"
 msgstr "Tirador ancho"
 
 #: ../gtk/gtkpaned.c:397
-#| msgid "Whether the window frame should have a close button"
 msgid "Whether the paned should have a prominent handle"
 msgstr "Indica si el panel debe tener un tirador prominente"
 
@@ -5521,35 +5509,45 @@ msgstr "Ventana del socket"
 msgid "The window of the socket the plug is embedded in"
 msgstr "La ventana del socket en la que el enchufe está empotrado"
 
-#: ../gtk/gtkpopover.c:1291
+#: ../gtk/gtkpopover.c:1286
 msgid "Relative to"
 msgstr "Relativo a"
 
-#: ../gtk/gtkpopover.c:1292
+#: ../gtk/gtkpopover.c:1287
 msgid "Widget the bubble window points to"
 msgstr "Widget al que apunta la ventana de burbuja"
 
-#: ../gtk/gtkpopover.c:1305
+#: ../gtk/gtkpopover.c:1300
 msgid "Pointing to"
 msgstr "Apuntando a"
 
-#: ../gtk/gtkpopover.c:1306
+#: ../gtk/gtkpopover.c:1301
 msgid "Rectangle the bubble window points to"
 msgstr "Rectángulo al que la ventana de burbuja apunta"
 
-#: ../gtk/gtkpopover.c:1320
+#: ../gtk/gtkpopover.c:1315
 msgid "Position to place the bubble window"
 msgstr "Posición en la que colocar la ventana de burbuja"
 
-#: ../gtk/gtkpopover.c:1335 ../gtk/gtkwindow.c:753
+#: ../gtk/gtkpopover.c:1330 ../gtk/gtkwindow.c:753
 msgid "Modal"
 msgstr "Modal"
 
-#: ../gtk/gtkpopover.c:1336
+#: ../gtk/gtkpopover.c:1331
 msgid "Whether the popover is modal"
 msgstr "Indica si la ventana emergente es modal"
 
-#: ../gtk/gtkpopovermenu.c:265
+#: ../gtk/gtkpopovermenu.c:340
+#| msgid "Visible Focus"
+msgid "Visible submenu"
+msgstr "Submenú visible"
+
+#: ../gtk/gtkpopovermenu.c:341
+#| msgid "The name of the submenu"
+msgid "The name of the visible submenu"
+msgstr "El nombre del submenú visible"
+
+#: ../gtk/gtkpopovermenu.c:358
 msgid "The name of the submenu"
 msgstr "El nombre del submenú"
 
@@ -6457,12 +6455,10 @@ msgid "Kinetic scrolling mode."
 msgstr "Modo de desplazamiento de Kinetic"
 
 #: ../gtk/gtkscrolledwindow.c:572
-#| msgid "Kinetic Scrolling"
 msgid "Overlay Scrolling"
 msgstr "Superposición del desplazamiento"
 
 #: ../gtk/gtkscrolledwindow.c:573
-#| msgid "Kinetic scrolling mode."
 msgid "Overlay scrolling mode"
 msgstr "Modo de superposición del desplazamiento"
 
@@ -7344,22 +7340,18 @@ msgid "Homogeneous sizing"
 msgstr "Tamaño homogéneo"
 
 #: ../gtk/gtkstack.c:410
-#| msgid "Horizontal options"
 msgid "Horizontally homogeneous"
 msgstr "Homogéneo horizontalmente"
 
 #: ../gtk/gtkstack.c:410
-#| msgid "Homogeneous sizing"
 msgid "Horizontally homogeneous sizing"
 msgstr "Tamaño horizontal homogéneo"
 
 #: ../gtk/gtkstack.c:422
-#| msgid "Vertical options"
 msgid "Vertically homogeneous"
 msgstr "Homogéneo verticalmente"
 
 #: ../gtk/gtkstack.c:422
-#| msgid "Homogeneous sizing"
 msgid "Vertically homogeneous sizing"
 msgstr "Tamaño vertical homogéneo"
 
