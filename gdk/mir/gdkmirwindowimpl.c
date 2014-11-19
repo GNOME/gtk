@@ -428,10 +428,13 @@ gdk_mir_window_impl_show (GdkWindow *window,
   /* Make sure there's a surface to see */
   ensure_surface (window);
 
-  /* Make sure something is rendered and then show first frame */
-  s = gdk_mir_window_impl_ref_cairo_surface (window);
-  send_buffer (window);
-  cairo_surface_destroy (s);
+  if (!window->gl_paint_context)
+  {
+    /* Make sure something is rendered and then show first frame */
+    s = gdk_mir_window_impl_ref_cairo_surface (window);
+    send_buffer (window);
+    cairo_surface_destroy (s);
+  }
 }
 
 static void
