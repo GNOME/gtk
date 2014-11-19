@@ -677,7 +677,7 @@ gdk_mir_window_impl_end_paint (GdkWindow *window)
   GdkMirWindowImpl *impl = GDK_MIR_WINDOW_IMPL (window->impl);
 
   //g_printerr ("gdk_mir_window_impl_end_paint window=%p\n", window);
-  if (impl->visible)
+  if (impl->visible && !window->current_paint.use_gl)
     send_buffer (window);
 }
 
