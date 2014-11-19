@@ -114,6 +114,14 @@ enum {
 G_DEFINE_TYPE (GtkPopoverMenu, gtk_popover_menu, GTK_TYPE_POPOVER)
 
 static void
+visible_submenu_changed (GObject        *object,
+                         GParamSpec     *pspec,
+                         GtkPopoverMenu *popover)
+{
+  g_object_notify (G_OBJECT (popover), "visible-submenu");
+}
+
+static void
 gtk_popover_menu_init (GtkPopoverMenu *popover)
 {
   GtkWidget *stack;
@@ -123,6 +131,8 @@ gtk_popover_menu_init (GtkPopoverMenu *popover)
   gtk_stack_set_transition_type (GTK_STACK (stack), GTK_STACK_TRANSITION_TYPE_SLIDE_LEFT_RIGHT);
   gtk_widget_show (stack);
   gtk_container_add (GTK_CONTAINER (popover), stack);
+  g_signal_connect (stack, "notify::visible-child-name",
+                    G_CALLBACK (visible_submenu_changed), popover);
 }
 
 static void
@@ -410,5 +420,4 @@ gtk_popover_menu_open_submenu (GtkPopoverMenu *popover,
 
   stack = gtk_bin_get_child (GTK_BIN (popover));
   gtk_stack_set_visible_child_name (GTK_STACK (stack), name);
-  g_object_notify (G_OBJECT (popover), "visible-submenu");
 }
