@@ -1993,43 +1993,6 @@ _gtk_file_system_model_set_filter (GtkFileSystemModel      *model,
 }
 
 /**
- * _gtk_file_system_model_add_editable:
- * @model: a #GtkFileSystemModel
- * @iter: Location to return the iter corresponding to the editable row
- * 
- * Adds an “empty” row at the beginning of the model.  This does not refer to
- * any file, but is a temporary placeholder for a file name that the user will
- * type when a corresponding cell is made editable.  When your code is done
- * using this temporary row, call _gtk_file_system_model_remove_editable().
- **/
-void
-_gtk_file_system_model_add_editable (GtkFileSystemModel *model, GtkTreeIter *iter)
-{
-  g_return_if_fail (GTK_IS_FILE_SYSTEM_MODEL (model));
-  g_return_if_fail (!get_node (model, 0)->visible);
-
-  node_set_visible_and_filtered_out (model, 0, TRUE, FALSE);
-  ITER_INIT_FROM_INDEX (model, iter, 0);
-}
-
-/**
- * _gtk_file_system_model_remove_editable:
- * @model: a #GtkFileSystemModel
- * 
- * Removes the “empty” row at the beginning of the model that was
- * created with _gtk_file_system_model_add_editable().  You should call
- * this function when your code is finished editing this temporary row.
- **/
-void
-_gtk_file_system_model_remove_editable (GtkFileSystemModel *model)
-{
-  g_return_if_fail (GTK_IS_FILE_SYSTEM_MODEL (model));
-  g_return_if_fail (get_node (model, 0)->visible);
-
-  node_set_visible_and_filtered_out (model, 0, FALSE, FALSE);
-}
-
-/**
  * freeze_updates:
  * @model: a #GtkFileSystemModel
  *
@@ -2165,4 +2128,48 @@ _gtk_file_system_model_add_and_query_file (GtkFileSystemModel *model,
                            model->cancellable,
                            gtk_file_system_model_query_done,
                            model);
+}
+
+/**
+ * _gtk_file_system_model_add_editable:
+ * @model: a #GtkFileSystemModel
+ * @iter: Location to return the iter corresponding to the editable row
+ * 
+ * Adds an “empty” row at the beginning of the model.  This does not refer to
+ * any file, but is a temporary placeholder for a file name that the user will
+ * type when a corresponding cell is made editable.  When your code is done
+ * using this temporary row, call _gtk_file_system_model_remove_editable().
+ **/
+void
+_gtk_file_system_model_add_editable (GtkFileSystemModel *model, GtkTreeIter *iter)
+{
+  g_return_if_fail (GTK_IS_FILE_SYSTEM_MODEL (model));
+  g_return_if_fail (!get_node (model, 0)->visible);
+
+  node_set_visible_and_filtered_out (model, 0, TRUE, FALSE);
+  ITER_INIT_FROM_INDEX (model, iter, 0);
+
+  /* we don't want file system changes to affect the model while
+   * editing is in place
+   */
+  freeze_updates (model);
+}
+
+/**
+ * _gtk_file_system_model_remove_editable:
+ * @model: a #GtkFileSystemModel
+ * 
+ * Removes the “empty” row at the beginning of the model that was
+ * created with _gtk_file_system_model_add_editable().  You should call
+ * this function when your code is finished editing this temporary row.
+ **/
+void
+_gtk_file_system_model_remove_editable (GtkFileSystemModel *model)
+{
+  g_return_if_fail (GTK_IS_FILE_SYSTEM_MODEL (model));
+  g_return_if_fail (get_node (model, 0)->visible);
+
+  thaw_updates (model);
+
+  node_set_visible_and_filtered_out (model, 0, FALSE, FALSE);
 }
