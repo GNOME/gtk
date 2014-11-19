@@ -205,7 +205,7 @@ update_visibility (GtkModelButton *button)
   has_icon = gtk_image_get_storage_type (GTK_IMAGE (button->image)) != GTK_IMAGE_EMPTY;
   has_text = gtk_label_get_text (GTK_LABEL (button->label))[0] != '\0';
 
-  gtk_widget_set_visible (button->image, has_icon);
+  gtk_widget_set_visible (button->image, has_icon && (button->iconic || !has_text));
   gtk_widget_set_visible (button->label, has_text && (!button->iconic || !has_icon));
 }
 
