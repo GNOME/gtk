@@ -248,7 +248,7 @@ ensure_no_surface (GdkWindow *window)
   if (impl->cairo_surface)
     {
       cairo_surface_finish (impl->cairo_surface);
-      g_clear_pointer(&impl->cairo_surface, cairo_surface_destroy);
+      g_clear_pointer (&impl->cairo_surface, cairo_surface_destroy);
     }
 
   if (window->gl_paint_context)
@@ -329,11 +329,7 @@ send_buffer (GdkWindow *window)
   mir_surface_swap_buffers_sync (impl->surface);
 
   /* The Cairo context is no longer valid */
-  if (impl->cairo_surface)
-    {
-      cairo_surface_destroy (impl->cairo_surface);
-      impl->cairo_surface = NULL;
-    }
+  g_clear_pointer (&impl->cairo_surface, cairo_surface_destroy);
 }
 
 static cairo_surface_t *
