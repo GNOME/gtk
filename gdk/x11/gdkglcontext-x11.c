@@ -94,25 +94,6 @@ set_glx_drawable_info (GdkWindow    *window,
 }
 
 static void
-gdk_x11_gl_context_update (GdkGLContext *context)
-{
-  GdkWindow *window = gdk_gl_context_get_window (context);
-  int width, height;
-
-  gdk_gl_context_make_current (context);
-
-  width = gdk_window_get_width (window);
-  height = gdk_window_get_height (window);
-
-  GDK_NOTE (OPENGL, g_print ("Updating GL viewport size to { %d, %d } for window %lu (context: %p)\n",
-                             width, height,
-                             (unsigned long) gdk_x11_window_get_xid (window),
-                             context));
-
-  glViewport (0, 0, width, height);
-}
-
-static void
 maybe_wait_for_vblank (GdkDisplay  *display,
                        GLXDrawable  drawable)
 {
@@ -563,7 +544,6 @@ gdk_x11_gl_context_class_init (GdkX11GLContextClass *klass)
   GdkGLContextClass *context_class = GDK_GL_CONTEXT_CLASS (klass);
   GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
 
-  context_class->update = gdk_x11_gl_context_update;
   context_class->end_frame = gdk_x11_gl_context_end_frame;
   context_class->texture_from_surface = gdk_x11_gl_context_texture_from_surface;
 

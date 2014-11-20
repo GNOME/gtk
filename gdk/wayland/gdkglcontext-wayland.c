@@ -37,24 +37,6 @@ G_DEFINE_TYPE (GdkWaylandGLContext, gdk_wayland_gl_context, GDK_TYPE_GL_CONTEXT)
 
 static void gdk_x11_gl_context_dispose (GObject *gobject);
 
-static void
-gdk_wayland_gl_context_update (GdkGLContext *context)
-{
-  GdkWindow *window = gdk_gl_context_get_window (context);
-  int width, height;
-
-  gdk_gl_context_make_current (context);
-
-  width = gdk_window_get_width (window);
-  height = gdk_window_get_height (window);
-
-  GDK_NOTE (OPENGL, g_print ("Updating GL viewport size to { %d, %d } for window %p (context: %p)\n",
-                             width, height,
-                             window, context));
-
-  glViewport (0, 0, width, height);
-}
-
 void
 gdk_wayland_window_invalidate_for_new_frame (GdkWindow      *window,
                                              cairo_region_t *update_area)
@@ -163,7 +145,6 @@ gdk_wayland_gl_context_class_init (GdkWaylandGLContextClass *klass)
   GdkGLContextClass *context_class = GDK_GL_CONTEXT_CLASS (klass);
   GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
 
-  context_class->update = gdk_wayland_gl_context_update;
   context_class->end_frame = gdk_wayland_gl_context_end_frame;
   gobject_class->dispose = gdk_x11_gl_context_dispose;
 }
