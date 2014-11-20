@@ -220,7 +220,8 @@ gtk_gesture_single_handle_event (GtkEventController *controller,
   if (sequence == priv->current_sequence &&
       (event->type == GDK_BUTTON_RELEASE || event->type == GDK_TOUCH_END))
     priv->current_button = 0;
-  else if (!retval)
+  else if (priv->current_sequence == sequence &&
+           !gtk_gesture_handles_sequence (GTK_GESTURE (controller), sequence))
     {
       if (button == priv->current_button && event->type == GDK_BUTTON_PRESS)
         priv->current_button = 0;
