@@ -31,34 +31,12 @@ G_DEFINE_TYPE_WITH_CODE (GtkButtonAccessible, gtk_button_accessible, GTK_TYPE_CO
                          G_IMPLEMENT_INTERFACE (ATK_TYPE_IMAGE, atk_image_interface_init))
 
 static void
-state_changed_cb (GtkWidget *widget, GtkStateFlags previous_flags)
-{
-  AtkObject *accessible;
-  GtkStateFlags flags;
-  gboolean was_active;
-  gboolean active;
-
-  flags = gtk_widget_get_state_flags (widget);
-
-  was_active = (previous_flags & GTK_STATE_FLAG_ACTIVE) != 0;
-  active = (flags & GTK_STATE_FLAG_ACTIVE) != 0;
-
-  accessible = gtk_widget_get_accessible (widget);
-  if (active && !was_active)
-    atk_object_notify_state_change (accessible, ATK_STATE_ARMED, TRUE);
-  else if (!active && was_active)
-    atk_object_notify_state_change (accessible, ATK_STATE_ARMED, FALSE);
-}
-
-static void
 gtk_button_accessible_initialize (AtkObject *obj,
                                   gpointer   data)
 {
   GtkWidget *parent;
 
   ATK_OBJECT_CLASS (gtk_button_accessible_parent_class)->initialize (obj, data);
-
-  g_signal_connect (data, "state-flags-changed", G_CALLBACK (state_changed_cb), NULL);
 
   parent = gtk_widget_get_parent (gtk_accessible_get_widget (GTK_ACCESSIBLE (obj)));
   if (GTK_IS_TREE_VIEW (parent))
