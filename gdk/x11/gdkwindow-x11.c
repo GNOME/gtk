@@ -3262,10 +3262,14 @@ gdk_x11_window_get_frame_extents (GdkWindow    *window,
   if (vroots)
     XFree (vroots);
 
-  rect->x /= impl->window_scale;
-  rect->y /= impl->window_scale;
-  rect->width /= impl->window_scale;
-  rect->height /= impl->window_scale;
+  /* Here we extend the size to include the extra pixels if we round x/y down
+     as well as round the size up when we divide by scale so that the returned
+     size is guaranteed to cover the real pixels, but it may overshoot a bit
+     in case the window is not positioned/sized according to the scale */
+  rect->width = (rect->width + rect->x % impl->window_scale + impl->window_scale - 1) / impl->window_scale;
+  rect->height = (rect->height + rect->y % impl->window_scale + impl->window_scale - 1) / impl->window_scale;
+  rect->x = rect->x / impl->window_scale;
+  rect->y = rect->y / impl->window_scale;
   gdk_x11_display_error_trap_pop_ignored (display);
 }
 
