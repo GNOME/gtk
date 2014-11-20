@@ -4719,8 +4719,8 @@ gtk_text_view_set_handle_position (GtkTextView           *text_view,
 
 static void
 gtk_text_view_show_magnifier (GtkTextView *text_view,
-                              gint         x,
-                              gint         y)
+                              GtkTextIter *iter,
+                              gint         x)
 {
   cairo_rectangle_int_t rect;
   GtkTextViewPrivate *priv;
@@ -4729,22 +4729,19 @@ gtk_text_view_show_magnifier (GtkTextView *text_view,
   _gtk_text_view_ensure_magnifier (text_view);
   gtk_widget_get_allocation (GTK_WIDGET (text_view), &allocation);
 
-#define RECT_WIDTH 40
-
   priv = text_view->priv;
-  x = CLAMP (x, 0, allocation.width);
-  y = CLAMP (y, 0, allocation.height);
-  rect.x = x - (RECT_WIDTH / 2);
-  rect.y = y - (RECT_WIDTH / 2);
-  rect.width = rect.height = RECT_WIDTH;
+  gtk_text_view_get_iter_location (text_view, iter,
+                                   (GdkRectangle *) &rect);
+  gtk_text_view_buffer_to_window_coords (text_view, GTK_TEXT_WINDOW_TEXT,
+                                         rect.x, rect.y, &rect.x, &rect.y);
   _text_window_to_widget_coords (text_view, &rect.x, &rect.y);
+  rect.x = x;
 
-  _gtk_magnifier_set_coords (GTK_MAGNIFIER (priv->magnifier), x, y);
+  _gtk_magnifier_set_coords (GTK_MAGNIFIER (priv->magnifier),
+                             rect.x, rect.y + rect.height / 2);
   gtk_popover_set_pointing_to (GTK_POPOVER (priv->magnifier_popover),
                                &rect);
   gtk_widget_show (priv->magnifier_popover);
-
-#undef RECT_WIDTH
 }
 
 static void
@@ -4834,7 +4831,10 @@ gtk_text_view_handle_dragged (GtkTextHandle         *handle,
                                             gtk_text_buffer_get_selection_bound (buffer));
     }
 
-  gtk_text_view_show_magnifier (text_view, x, y);
+  if (_gtk_text_handle_get_is_dragged (priv->text_handle, cursor_pos))
+    gtk_text_view_show_magnifier (text_view, &cursor, x);
+  else
+    gtk_text_view_show_magnifier (text_view, &bound, x);
 }
 
 static void
@@ -7089,12 +7089,16 @@ gtk_text_view_drag_gesture_update (GtkGestureDrag *gesture,
   const GdkEvent *event;
   SelectionData *data;
   GdkDevice *device;
+  GtkTextIter cursor;
 
   data = g_object_get_qdata (G_OBJECT (gesture), quark_text_selection_data);
   sequence = gtk_gesture_single_get_current_sequence (GTK_GESTURE_SINGLE (gesture));
   event = gtk_gesture_get_last_event (GTK_GESTURE (gesture), sequence);
   drag_gesture_get_text_window_coords (gesture, text_view,
                                        &start_x, &start_y, &x, &y);
+
+  get_iter_from_gesture (text_view, text_view->priv->drag_gesture,
+                         &cursor, NULL, NULL);
 
   if (!data)
     {
@@ -7178,7 +7182,7 @@ gtk_text_view_drag_gesture_update (GtkGestureDrag *gesture,
     {
       _gtk_text_view_ensure_text_handles (text_view);
       gtk_text_view_update_handles (text_view, GTK_TEXT_HANDLE_MODE_SELECTION);
-      gtk_text_view_show_magnifier (text_view, x, y);
+      gtk_text_view_show_magnifier (text_view, &cursor, x);
     }
 }
 
