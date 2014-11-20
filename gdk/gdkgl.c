@@ -700,7 +700,7 @@ gdk_gl_texture_from_surface (cairo_surface_t *surface,
     {
       cairo_region_get_rectangle (region, i, &rect);
 
-      glScissor (rect.x * window_scale, unscaled_window_height - (rect.y - rect.height) * window_scale,
+      glScissor (rect.x * window_scale, unscaled_window_height - (rect.y + rect.height) * window_scale,
                  rect.width * window_scale, rect.height * window_scale);
 
       e = rect;
