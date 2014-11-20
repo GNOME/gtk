@@ -36,7 +36,7 @@ echo $(ConfigurationName) &gt; ..\..\..\MSVC_$(ConfigurationName)&#x0D;&#x0A;
 	<UserMacro
 		Name="GenGdkConfigHBroadway"
 		Value="
-if exist ..\..\..\MSVC_$(ConfigurationName) goto DONE_GDKCONFIG_H&#x0D;&#x0A;
+if exist ..\..\..\MSVC_$(ConfigurationName)_Broadway goto DONE_GDKCONFIG_H&#x0D;&#x0A;
 
 if exist ..\..\..\gdk\gdkconfig.h del ..\..\..\gdk\gdkconfig.h&#x0D;&#x0A;
 if exist ..\..\..\GDK_WIN32ONLY_BUILD del ..\..\..\GDK_WIN32ONLY_BUILD&#x0D;&#x0A;
@@ -50,7 +50,7 @@ if &quot;$(ConfigurationName)&quot; == &quot;Debug_Broadway&quot; del ..\..\..\M
 copy ..\..\..\gdk\gdkconfig.h.win32_broadway ..\..\..\gdk\gdkconfig.h&#x0D;&#x0A;
 copy ..\..\..\gdk\gdkconfig.h.win32_broadway ..\..\..\GDK_BROADWAY_BUILD&#x0D;&#x0A;
 
-echo $(ConfigurationName) &gt; ..\..\..\MSVC_$(ConfigurationName)&#x0D;&#x0A;
+echo $(ConfigurationName) &gt; ..\..\..\MSVC_$(ConfigurationName)_Broadway&#x0D;&#x0A;
 :DONE_GDKCONFIG_H&#x0D;&#x0A;
 		      "
 	/>
