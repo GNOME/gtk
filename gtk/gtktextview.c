@@ -5198,18 +5198,43 @@ gtk_text_view_multipress_gesture_pressed (GtkGestureMultiPress *gesture,
                                                       &start, &end) &&
                 gtk_text_iter_in_range (&iter, &start, &end) && !extends)
               {
-                /* Claim the sequence on the drag gesture, but attach no selection data */
-                gtk_gesture_set_state (priv->drag_gesture,
-                                       GTK_EVENT_SEQUENCE_CLAIMED);
+                if (is_touchscreen)
+                  {
+                    if (!priv->selection_bubble ||
+			!gtk_widget_get_visible (priv->selection_bubble))
+                      gtk_text_view_selection_bubble_popup_set (text_view);
+                    else
+                      gtk_text_view_selection_bubble_popup_unset (text_view);
+
+                    handle_mode = GTK_TEXT_HANDLE_MODE_SELECTION;
+                  }
+                else
+                  {
+                    /* Claim the sequence on the drag gesture, but attach no
+                     * selection data, this is a special case to start DnD.
+                     */
+                    gtk_gesture_set_state (priv->drag_gesture,
+                                           GTK_EVENT_SEQUENCE_CLAIMED);
+                  }
                 break;
               }
+            else
+	      {
+                gtk_text_view_selection_bubble_popup_unset (text_view);
 
-            gtk_text_view_start_selection_drag (text_view, &iter,
-                                                SELECT_CHARACTERS, extends);
+		if (is_touchscreen)
+		  gtk_text_buffer_place_cursor (get_buffer (text_view), &iter);
+		else
+		  gtk_text_view_start_selection_drag (text_view, &iter,
+						      SELECT_CHARACTERS, extends);
+	      }
             break;
           }
         case 2:
         case 3:
+          if (is_touchscreen)
+            break;
+
           handle_mode = GTK_TEXT_HANDLE_MODE_SELECTION;
           gtk_text_view_end_selection_drag (text_view);
 
@@ -7103,6 +7128,12 @@ gtk_text_view_drag_gesture_update (GtkGestureDrag *gesture,
   drag_gesture_get_text_window_coords (gesture, text_view,
                                        &start_x, &start_y, &x, &y);
 
+  device = gdk_event_get_source_device (event);
+
+  is_touchscreen = test_touchscreen ||
+                   (gtk_get_debug_flags () & GTK_DEBUG_TOUCHSCREEN) != 0 ||
+                   gdk_device_get_source (device) == GDK_SOURCE_TOUCHSCREEN;
+
   get_iter_from_gesture (text_view, text_view->priv->drag_gesture,
                          &cursor, NULL, NULL);
 
@@ -7114,39 +7145,43 @@ gtk_text_view_drag_gesture_update (GtkGestureDrag *gesture,
       if (gtk_drag_check_threshold (GTK_WIDGET (text_view),
 				    start_x, start_y, x, y))
         {
-          GtkTextIter iter;
-          gint buffer_x, buffer_y;
+          if (!is_touchscreen)
+            {
+              GtkTextIter iter;
+              gint buffer_x, buffer_y;
 
-          gtk_text_view_window_to_buffer_coords (text_view,
-                                                 GTK_TEXT_WINDOW_TEXT,
-                                                 start_x, start_y,
-                                                 &buffer_x,
-                                                 &buffer_y);
+              gtk_text_view_window_to_buffer_coords (text_view,
+                                                     GTK_TEXT_WINDOW_TEXT,
+                                                     start_x, start_y,
+                                                     &buffer_x,
+                                                     &buffer_y);
 
-          gtk_text_layout_get_iter_at_pixel (text_view->priv->layout,
-                                             &iter, buffer_x, buffer_y);
+              gtk_text_layout_get_iter_at_pixel (text_view->priv->layout,
+                                                 &iter, buffer_x, buffer_y);
 
-          gtk_text_view_start_selection_dnd (text_view, &iter, event,
-                                             start_x, start_y);
+              gtk_text_view_start_selection_dnd (text_view, &iter, event,
+                                                 start_x, start_y);
+              return;
+            }
+          else
+            {
+              gtk_text_view_start_selection_drag (text_view, &cursor,
+                                                  SELECT_WORDS, TRUE);
+              data = g_object_get_qdata (G_OBJECT (gesture), quark_text_selection_data);
+            }
         }
-
-      return;
+      else
+        return;
     }
 
   /* Text selection */
-  device = gdk_event_get_source_device (event);
-
-  is_touchscreen = test_touchscreen ||
-                   (gtk_get_debug_flags () & GTK_DEBUG_TOUCHSCREEN) != 0 ||
-                   gdk_device_get_source (device) == GDK_SOURCE_TOUCHSCREEN;
-
   if (data->granularity == SELECT_CHARACTERS)
     {
       move_mark_to_pointer_and_scroll (text_view, "insert");
     }
   else
     {
-      GtkTextIter cursor, start, end;
+      GtkTextIter start, end;
       GtkTextIter orig_start, orig_end;
       GtkTextBuffer *buffer;
 
@@ -7238,13 +7273,11 @@ gtk_text_view_drag_gesture_end (GtkGestureDrag *gesture,
     (gtk_get_debug_flags () & GTK_DEBUG_TOUCHSCREEN) != 0 ||
     gdk_device_get_source (device) == GDK_SOURCE_TOUCHSCREEN;
 
-  if (priv->selection_bubble &&
-      gtk_widget_get_visible (priv->selection_bubble))
-    gtk_text_view_selection_bubble_popup_unset (text_view);
-  else if (is_touchscreen)
+  if (!clicked_in_selection && is_touchscreen &&
+      (!priv->selection_bubble || !gtk_widget_get_visible (priv->selection_bubble)))
     gtk_text_view_selection_bubble_popup_set (text_view);
 
-  if (clicked_in_selection &&
+  if (!is_touchscreen && clicked_in_selection &&
       !gtk_drag_check_threshold (GTK_WIDGET (text_view), start_x, start_y, x, y))
     {
       GtkTextHandleMode mode = GTK_TEXT_HANDLE_MODE_NONE;
