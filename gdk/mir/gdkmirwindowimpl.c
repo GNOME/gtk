@@ -1519,6 +1519,18 @@ _gdk_mir_window_get_dummy_egl_surface (GdkWindow *window,
   return impl->dummy_egl_surface;
 }
 
+MirSurface *
+gdk_mir_window_get_mir_surface (GdkWindow *window)
+{
+  GdkMirWindowImpl *impl;
+
+  g_return_val_if_fail (GDK_IS_WINDOW_MIR (window), NULL);
+
+  impl = GDK_MIR_WINDOW_IMPL (window->impl);
+
+  return impl->surface;
+}
+
 static void
 gdk_mir_window_impl_class_init (GdkMirWindowImplClass *klass)
 {

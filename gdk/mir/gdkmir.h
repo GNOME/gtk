@@ -40,6 +40,9 @@ GDK_AVAILABLE_IN_3_10
 GType gdk_mir_window_get_type (void);
 
 GDK_AVAILABLE_IN_3_16
+MirSurface *gdk_mir_window_get_mir_surface (GdkWindow *window);
+
+GDK_AVAILABLE_IN_3_16
 GType gdk_mir_gl_context_get_type (void) G_GNUC_CONST;
 
 #endif /* __GDK_MIR_H__ */
