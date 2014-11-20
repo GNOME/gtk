@@ -101,7 +101,7 @@ _gtk_text_handle_draw (GtkTextHandle         *handle,
   gint width, height;
 
   priv = handle->priv;
-  context = gtk_widget_get_style_context (priv->parent);
+  context = gtk_widget_get_style_context (priv->windows[pos].widget);
   _gtk_text_handle_get_size (handle, &width, &height);
 
   cairo_save (cr);
@@ -221,6 +221,12 @@ static void
 gtk_text_handle_widget_style_updated (GtkWidget     *widget,
                                       GtkTextHandle *handle)
 {
+  GtkTextHandlePrivate *priv;
+
+  priv = handle->priv;
+  gtk_style_context_set_parent (gtk_widget_get_style_context (widget),
+                                gtk_widget_get_style_context (priv->parent));
+
   _gtk_text_handle_update (handle, GTK_TEXT_HANDLE_POSITION_SELECTION_START);
   _gtk_text_handle_update (handle, GTK_TEXT_HANDLE_POSITION_SELECTION_END);
 }
@@ -254,6 +260,9 @@ _gtk_text_handle_ensure_widget (GtkTextHandle         *handle,
       priv->windows[pos].widget = g_object_ref_sink (widget);
       window = gtk_widget_get_ancestor (priv->parent, GTK_TYPE_WINDOW);
       _gtk_window_add_popover (GTK_WINDOW (window), widget);
+
+      gtk_style_context_set_parent (gtk_widget_get_style_context (widget),
+                                    gtk_widget_get_style_context (priv->parent));
     }
 
   return priv->windows[pos].widget;
