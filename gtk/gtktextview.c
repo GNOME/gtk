@@ -7161,10 +7161,11 @@ gtk_text_view_drag_gesture_update (GtkGestureDrag *gesture,
       extend_selection (text_view, data->granularity, &cursor, &start, &end);
 
       /* either the selection extends to the front, or end (or not) */
-      if (gtk_text_iter_compare (&cursor, &orig_start) < 0)
-        gtk_text_buffer_select_range (buffer, &start, &orig_end);
-      else
-        gtk_text_buffer_select_range (buffer, &end, &orig_start);
+      if (gtk_text_iter_compare (&orig_start, &start) < 0)
+        start = orig_start;
+      if (gtk_text_iter_compare (&orig_end, &end) > 0)
+        end = orig_end;
+      gtk_text_buffer_select_range (buffer, &start, &end);
 
       gtk_text_view_scroll_mark_onscreen (text_view,
 					  gtk_text_buffer_get_insert (buffer));
@@ -7313,15 +7314,18 @@ gtk_text_view_start_selection_drag (GtkTextView          *text_view,
            gtk_text_iter_compare (&old_ins, &old_bound) <= 0))
         {
           bound = old_end;
-          orig_start = old_end;
-          orig_end = old_end;
         }
       else
         {
           ins = bound;
           bound = old_start;
-          orig_end = bound;
-          orig_start = bound;
+        }
+
+      /* Store any previous selection */
+      if (gtk_text_iter_compare (&old_start, &old_end) != 0)
+        {
+          orig_start = old_ins;
+          orig_end = old_bound;
         }
     }
 
