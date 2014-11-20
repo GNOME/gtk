@@ -35,6 +35,9 @@ $ease-out-quad: cubic-bezier(0.25, 0.46, 0.45, 0.94);
   -GtkWidget-focus-padding: 2;    // FIXME: do we still need these?
   -GtkWidget-focus-line-width: 1; //
 
+  -GtkWidget-text-handle-width: 20;
+  -GtkWidget-text-handle-height: 20;
+
   -GtkDialog-button-spacing: 4;
   -GtkDialog-action-area-border: 0;
 
