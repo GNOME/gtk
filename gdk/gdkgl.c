@@ -401,7 +401,7 @@ gdk_cairo_draw_from_gl (cairo_t              *cr,
       trivial_transform &&
       clip_region != NULL)
     {
-      int window_height;
+      int unscaled_window_height;
       int i;
 
       /* Create a framebuffer with the source renderbuffer and
@@ -417,10 +417,10 @@ gdk_cairo_draw_from_gl (cairo_t              *cr,
 
       glEnable (GL_SCISSOR_TEST);
 
-      window_height = gdk_window_get_height (impl_window);
+      gdk_window_get_unscaled_size (impl_window, NULL, &unscaled_window_height);
       glDrawBuffer (GL_BACK);
 
-#define FLIP_Y(_y) (window_height*window_scale - (_y))
+#define FLIP_Y(_y) (unscaled_window_height - (_y))
 
       for (i = 0; i < cairo_region_num_rectangles (clip_region); i++)
         {
@@ -481,7 +481,7 @@ gdk_cairo_draw_from_gl (cairo_t              *cr,
            trivial_transform &&
            clip_region != NULL)
     {
-      int window_height;
+      int unscaled_window_height;
       GLint texture_width;
       GLint texture_height;
       int i;
@@ -526,9 +526,9 @@ gdk_cairo_draw_from_gl (cairo_t              *cr,
       glEnable (GL_SCISSOR_TEST);
       glEnable (GL_TEXTURE_2D);
 
-      window_height = gdk_window_get_height (impl_window);
+      gdk_window_get_unscaled_size (impl_window, NULL, &unscaled_window_height);
 
-#define FLIP_Y(_y) (window_height*window_scale - (_y))
+#define FLIP_Y(_y) (unscaled_window_height - (_y))
 
       for (i = 0; i < cairo_region_num_rectangles (clip_region); i++)
         {
@@ -652,7 +652,7 @@ gdk_gl_texture_from_surface (cairo_surface_t *surface,
   cairo_rectangle_int_t rect, e;
   int n_rects, i;
   GdkWindow *window;
-  int window_height;
+  int unscaled_window_height;
   unsigned int texture_id;
   int window_scale;
   double sx, sy;
@@ -672,7 +672,7 @@ gdk_gl_texture_from_surface (cairo_surface_t *surface,
 
   window = gdk_gl_context_get_window (paint_context);
   window_scale = gdk_window_get_scale_factor (window);
-  window_height = gdk_window_get_height (window);
+  gdk_window_get_unscaled_size (window, NULL, &unscaled_window_height);
 
   sx = sy = 1;
   cairo_surface_get_device_scale (window->current_paint.surface, &sx, &sy);
@@ -700,7 +700,7 @@ gdk_gl_texture_from_surface (cairo_surface_t *surface,
     {
       cairo_region_get_rectangle (region, i, &rect);
 
-      glScissor (rect.x * window_scale, (window_height - rect.y - rect.height) * window_scale,
+      glScissor (rect.x * window_scale, unscaled_window_height - (rect.y - rect.height) * window_scale,
                  rect.width * window_scale, rect.height * window_scale);
 
       e = rect;
@@ -720,7 +720,7 @@ gdk_gl_texture_from_surface (cairo_surface_t *surface,
 
       cairo_surface_unmap_image (surface, image);
 
-#define FLIP_Y(_y) (window_height - (_y))
+#define FLIP_Y(_y) (unscaled_window_height - (_y))
 
       if (use_texture_rectangle)
         {
@@ -734,8 +734,8 @@ gdk_gl_texture_from_surface (cairo_surface_t *surface,
         }
 
       gdk_gl_texture_quad (paint_context, target,
-                           rect.x * window_scale, FLIP_Y(rect.y) * window_scale,
-                           (rect.x + rect.width) * window_scale, FLIP_Y(rect.y + rect.height) * window_scale,
+                           rect.x * window_scale, FLIP_Y(rect.y),
+                           (rect.x + rect.width) * window_scale, FLIP_Y((rect.y + rect.height) * window_scale),
                            0, 0,
                            umax, vmax);
     }
