@@ -1524,7 +1524,7 @@ gdk_mir_window_get_mir_surface (GdkWindow *window)
 {
   GdkMirWindowImpl *impl;
 
-  g_return_val_if_fail (GDK_IS_WINDOW_MIR (window), NULL);
+  g_return_val_if_fail (GDK_IS_MIR_WINDOW (window), NULL);
 
   impl = GDK_MIR_WINDOW_IMPL (window->impl);
 

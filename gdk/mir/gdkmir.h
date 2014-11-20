@@ -28,7 +28,7 @@
 #define GDK_MIR_IS_GL_CONTEXT(obj)        (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GDK_TYPE_MIR_GL_CONTEXT))
 
 #define GDK_TYPE_MIR_WINDOW               (gdk_mir_window_get_type ())
-#define GDK_IS_WINDOW_MIR(object)         (G_TYPE_CHECK_INSTANCE_TYPE ((object), GDK_TYPE_MIR_WINDOW))
+#define GDK_IS_MIR_WINDOW(object)         (G_TYPE_CHECK_INSTANCE_TYPE ((object), GDK_TYPE_MIR_WINDOW))
 
 GDK_AVAILABLE_IN_3_10
 GType gdk_mir_display_get_type (void);
