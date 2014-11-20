@@ -11045,6 +11045,37 @@ gdk_window_get_scale_factor (GdkWindow *window)
   return 1;
 }
 
+/* Returns the *real* unscaled size, which may be a fractional size
+   in window scale coordinates. We need this to properly handle GL
+   coordinates which are y-flipped in the real coordinates. */
+void
+gdk_window_get_unscaled_size (GdkWindow *window,
+                              int *unscaled_width,
+                              int *unscaled_height)
+{
+  GdkWindowImplClass *impl_class;
+  gint scale;
+
+  g_return_if_fail (GDK_IS_WINDOW (window));
+
+  if (window->impl_window == window)
+    {
+      impl_class = GDK_WINDOW_IMPL_GET_CLASS (window->impl);
+
+      if (impl_class->get_unscaled_size)
+        return impl_class->get_unscaled_size (window, unscaled_width, unscaled_height);
+    }
+
+  scale = gdk_window_get_scale_factor (window);
+
+  if (unscaled_width)
+    *unscaled_width = window->width * scale;
+
+  if (unscaled_height)
+    *unscaled_height = window->height * scale;
+}
+
+
 /**
  * gdk_window_set_opaque_region:
  * @window: a top-level or non-native #GdkWindow

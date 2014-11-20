@@ -198,6 +198,20 @@ _gdk_x11_window_update_size (GdkWindowImplX11 *impl)
     }
 }
 
+void
+gdk_x11_window_get_unscaled_size (GdkWindow *window,
+                                  int *unscaled_width,
+                                  int *unscaled_height)
+{
+  GdkWindowImplX11 *impl = GDK_WINDOW_IMPL_X11 (window->impl);
+
+  if (unscaled_width)
+    *unscaled_width = impl->unscaled_width;
+
+  if (unscaled_height)
+    *unscaled_height = impl->unscaled_height;
+}
+
 static void
 set_sync_counter(Display     *display,
 		 XSyncCounter counter,
@@ -5758,4 +5772,5 @@ gdk_window_impl_x11_class_init (GdkWindowImplX11Class *klass)
   impl_class->show_window_menu = gdk_x11_window_show_window_menu;
   impl_class->create_gl_context = gdk_x11_window_create_gl_context;
   impl_class->invalidate_for_new_frame = gdk_x11_window_invalidate_for_new_frame;
+  impl_class->get_unscaled_size = gdk_x11_window_get_unscaled_size;
 }

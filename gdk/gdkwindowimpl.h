@@ -279,6 +279,9 @@ struct _GdkWindowImplClass
                                            GdkAtom         property);
 
   gint         (* get_scale_factor)       (GdkWindow      *window);
+  void         (* get_unscaled_size)      (GdkWindow      *window,
+                                           int            *unscaled_width,
+                                           int            *unscaled_height);
 
   void         (* set_opaque_region)      (GdkWindow      *window,
                                            cairo_region_t *region);
