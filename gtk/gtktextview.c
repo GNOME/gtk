@@ -458,7 +458,7 @@ static void     gtk_text_view_check_keymap_direction (GtkTextView        *text_v
 static void     gtk_text_view_start_selection_drag   (GtkTextView          *text_view,
                                                       const GtkTextIter    *iter,
                                                       SelectionGranularity  granularity,
-                                                      const GdkEvent       *event);
+                                                      gboolean              extends);
 static gboolean gtk_text_view_end_selection_drag     (GtkTextView        *text_view);
 static void     gtk_text_view_start_selection_dnd    (GtkTextView        *text_view,
                                                       const GtkTextIter  *iter,
@@ -5171,6 +5171,15 @@ gtk_text_view_multipress_gesture_pressed (GtkGestureMultiPress *gesture,
   else if (button == GDK_BUTTON_PRIMARY)
     {
       GtkTextHandleMode handle_mode = GTK_TEXT_HANDLE_MODE_NONE;
+      gboolean extends = FALSE;
+      GdkModifierType state;
+
+      gdk_event_get_state (event, &state);
+
+      if (state &
+          gtk_widget_get_modifier_mask (GTK_WIDGET (text_view),
+                                        GDK_MODIFIER_INTENT_EXTEND_SELECTION))
+        extends = TRUE;
 
       switch (n_press)
         {
@@ -5187,10 +5196,7 @@ gtk_text_view_multipress_gesture_pressed (GtkGestureMultiPress *gesture,
 
             if (gtk_text_buffer_get_selection_bounds (get_buffer (text_view),
                                                       &start, &end) &&
-                gtk_text_iter_in_range (&iter, &start, &end) &&
-                !(event->button.state &
-                  gtk_widget_get_modifier_mask (GTK_WIDGET (text_view),
-                                                GDK_MODIFIER_INTENT_EXTEND_SELECTION)))
+                gtk_text_iter_in_range (&iter, &start, &end) && !extends)
               {
                 /* Claim the sequence on the drag gesture, but attach no selection data */
                 gtk_gesture_set_state (priv->drag_gesture,
@@ -5199,7 +5205,7 @@ gtk_text_view_multipress_gesture_pressed (GtkGestureMultiPress *gesture,
               }
 
             gtk_text_view_start_selection_drag (text_view, &iter,
-                                                SELECT_CHARACTERS, event);
+                                                SELECT_CHARACTERS, extends);
             break;
           }
         case 2:
@@ -5211,7 +5217,7 @@ gtk_text_view_multipress_gesture_pressed (GtkGestureMultiPress *gesture,
                                  &iter, NULL, NULL);
           gtk_text_view_start_selection_drag (text_view, &iter,
                                               n_press == 2 ? SELECT_WORDS : SELECT_LINES,
-                                              event);
+                                              extends);
           break;
         default:
           break;
@@ -7267,14 +7273,13 @@ static void
 gtk_text_view_start_selection_drag (GtkTextView          *text_view,
                                     const GtkTextIter    *iter,
                                     SelectionGranularity  granularity,
-                                    const GdkEvent       *event)
+                                    gboolean              extend)
 {
   GtkTextViewPrivate *priv;
   GtkTextIter cursor, ins, bound;
   GtkTextIter orig_start, orig_end;
   GtkTextBuffer *buffer;
   SelectionData *data;
-  GdkModifierType state;
 
   priv = text_view->priv;
   data = g_slice_new0 (SelectionData);
@@ -7287,11 +7292,8 @@ gtk_text_view_start_selection_drag (GtkTextView          *text_view,
 
   orig_start = ins;
   orig_end = bound;
-  gdk_event_get_state (event, &state);
 
-  if (state &
-      gtk_widget_get_modifier_mask (GTK_WIDGET (text_view),
-                                    GDK_MODIFIER_INTENT_EXTEND_SELECTION))
+  if (extend)
     {
       /* Extend selection */
       GtkTextIter old_ins, old_bound;
