@@ -33,7 +33,7 @@ echo $(Configuration) &gt; ..\..\..\MSVC_$(Configuration)
 :DONE_GDKCONFIG_H
     </GenGdkConfigHWin32>
     <GenGdkConfigHBroadway>
-if exist ..\..\..\MSVC_$(Configuration) goto DONE_GDKCONFIG_H
+if exist ..\..\..\MSVC_$(Configuration)_Broadway goto DONE_GDKCONFIG_H
 
 
 if exist ..\..\..\gdk\gdkconfig.h del ..\..\..\gdk\gdkconfig.h
@@ -53,7 +53,7 @@ copy ..\..\..\gdk\gdkconfig.h.win32_broadway ..\..\..\gdk\gdkconfig.h
 
 copy ..\..\..\gdk\gdkconfig.h.win32_broadway ..\..\..\GDK_BROADWAY_BUILD
 
-echo $(Configuration) &gt; ..\..\..\MSVC_$(Configuration)
+echo $(Configuration) &gt; ..\..\..\MSVC_$(Configuration)_Broadway
 
 :DONE_GDKCONFIG_H
     </GenGdkConfigHBroadway>
