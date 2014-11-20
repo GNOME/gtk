@@ -16,6 +16,8 @@
   -GtkWidget-visited-link-color: #215d9c;
   -GtkWidget-focus-padding: 2;
   -GtkWidget-focus-line-width: 1;
+  -GtkWidget-text-handle-width: 20;
+  -GtkWidget-text-handle-height: 20;
   -GtkDialog-button-spacing: 4;
   -GtkDialog-action-area-border: 0;
   -GtkStatusbar-shadow-type: none;
