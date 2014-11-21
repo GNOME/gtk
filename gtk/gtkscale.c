@@ -185,15 +185,7 @@ static void
 gtk_scale_notify (GObject    *object,
                   GParamSpec *pspec)
 {
-  if (strcmp (pspec->name, "orientation") == 0)
-    {
-      GtkOrientation orientation;
-
-      orientation = gtk_orientable_get_orientation (GTK_ORIENTABLE (object));
-      gtk_range_set_flippable (GTK_RANGE (object),
-                               orientation == GTK_ORIENTATION_HORIZONTAL);
-    }
-  else if (strcmp (pspec->name, "inverted") == 0)
+  if (strcmp (pspec->name, "inverted") == 0)
     {
       GtkScale *scale = GTK_SCALE (object);
       GtkScaleMark *mark;
@@ -494,8 +486,7 @@ gtk_scale_init (GtkScale *scale)
   priv->digits = 1;
   gtk_range_set_round_digits (range, priv->digits);
 
-  gtk_range_set_flippable (range,
-                           gtk_orientable_get_orientation (GTK_ORIENTABLE (range)) == GTK_ORIENTATION_HORIZONTAL);
+  gtk_range_set_flippable (range, TRUE);
 
   context = gtk_widget_get_style_context (GTK_WIDGET (scale));
   gtk_style_context_add_class (context, GTK_STYLE_CLASS_SCALE);
