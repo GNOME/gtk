@@ -68,6 +68,8 @@ struct _GdkX11Display
   gboolean have_randr13;
   gint xrandr_event_base;
 
+  gboolean have_present;
+
   /* If the SECURITY extension is in place, whether this client holds
    * a trusted authorization and so is allowed to make various requests
    * (grabs, properties etc.) Otherwise always TRUE.

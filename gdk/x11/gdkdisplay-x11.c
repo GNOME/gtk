@@ -49,6 +49,7 @@
 
 #include <X11/Xatom.h>
 #include <X11/Xlibint.h>
+#include <X11/Xlib-xcb.h>
 
 #ifdef HAVE_XKB
 #include <X11/XKBlib.h>
@@ -70,6 +71,10 @@
 
 #ifdef HAVE_RANDR
 #include <X11/extensions/Xrandr.h>
+#endif
+
+#ifdef HAVE_PRESENT
+#include <xcb/present.h>
 #endif
 
 typedef struct _GdkErrorTrap  GdkErrorTrap;
@@ -1366,6 +1371,7 @@ _gdk_x11_display_open (const gchar *display_name)
   GdkWindowAttr attr;
   gint argc;
   gchar *argv[1];
+  xcb_connection_t *xcb_conn;
 
   XClassHint *class_hint;
   gulong pid;
@@ -1385,6 +1391,8 @@ _gdk_x11_display_open (const gchar *display_name)
   XAddConnectionWatch (xdisplay, gdk_internal_connection_watch, NULL);
 
   _gdk_x11_precache_atoms (display, precache_atoms, G_N_ELEMENTS (precache_atoms));
+
+  xcb_conn = XGetXCBConnection (display_x11->xdisplay);
 
   /* RandR must be initialized before we initialize the screens */
   display_x11->have_randr12 = FALSE;
@@ -1449,6 +1457,14 @@ _gdk_x11_display_open (const gchar *display_name)
   else
 #endif
     display_x11->have_xfixes = FALSE;
+
+#ifdef HAVE_PRESENT
+  if (xcb_get_extension_data (xcb_conn, &xcb_present_id))
+    {
+      (void) xcb_present_query_version (xcb_conn, XCB_PRESENT_MAJOR_VERSION, XCB_PRESENT_MINOR_VERSION);
+      display_x11->have_present = TRUE;
+    }
+#endif
 
 #ifdef HAVE_XCOMPOSITE
   if (XCompositeQueryExtension (display_x11->xdisplay,

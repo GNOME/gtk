@@ -46,11 +46,18 @@ gdk_window_impl_process_updates_recurse (GdkWindow      *window,
   _gdk_window_process_updates_recurse (window, region);
 }
 
+static gboolean
+gdk_window_impl_do_composite (GdkWindow *window)
+{
+  return FALSE;
+}
+
 static void
 gdk_window_impl_class_init (GdkWindowImplClass *impl_class)
 {
   impl_class->beep = gdk_window_impl_beep;
   impl_class->process_updates_recurse = gdk_window_impl_process_updates_recurse;
+  impl_class->do_composite = gdk_window_impl_do_composite;
 }
 
 static void

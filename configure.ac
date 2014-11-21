@@ -310,6 +310,10 @@ AC_ARG_ENABLE(xdamage,
               [AS_HELP_STRING([--enable-xdamage],
                               [support X Damage extension [default=maybe]])],,
               [enable_xdamage="maybe"])
+AC_ARG_ENABLE(xpresent,
+              [AS_HELP_STRING([--enable-xpresent],
+                              [support X Present extension [default=maybe]])],,
+              [enable_xpresent="maybe"])
 
 AC_ARG_ENABLE(x11-backend,
               [AS_HELP_STRING([--enable-x11-backend],
@@ -1283,6 +1287,18 @@ if test "x$enable_x11_backend" = xyes; then
       GTK_PACKAGES_FOR_X="$GTK_PACKAGES_FOR_X xdamage"
     elif test x"$enable_xdamage" = xyes; then
       AC_MSG_ERROR([Xdamage support requested but xdamage not found])
+    fi
+  fi
+
+  if test x"$enable_xpresent" != xno; then
+    if $PKG_CONFIG --exists xcb-present ; then
+      AC_DEFINE(HAVE_PRESENT, 1, [Have the Present X extension])
+
+      X_PACKAGES="$X_PACKAGES xcb-present"
+      X_EXTENSIONS="$X_EXTENSIONS Present"
+      GTK_PACKAGES_FOR_X="$GTK_PACKAGES_FOR_X xcb-present"
+    elif test x"$enable_xpresent" = xyes; then
+      AC_MSG_ERROR([Present support requested but xcb-present not found])
     fi
   fi
 

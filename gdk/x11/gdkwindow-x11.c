@@ -53,6 +53,7 @@
 #include <X11/Xlib.h>
 #include <X11/Xutil.h>
 #include <X11/Xatom.h>
+#include <X11/Xlib-xcb.h>
 
 #include <X11/extensions/shape.h>
 
@@ -70,6 +71,10 @@
 
 #ifdef HAVE_XDAMAGE
 #include <X11/extensions/Xdamage.h>
+#endif
+
+#ifdef HAVE_PRESENT
+#include <xcb/present.h>
 #endif
 
 const int _gdk_x11_event_mask_table[21] =
@@ -3398,7 +3403,7 @@ do_shape_combine_region (GdkWindow       *window,
       _gdk_x11_region_get_xrectangles (shape_region,
                                        0, 0, impl->window_scale,
                                        &xrects, &n_rects);
-      
+
       if (shape == ShapeBounding)
 	{
 	  _gdk_x11_window_tmp_unset_parent_bg (window);
@@ -5683,6 +5688,56 @@ gdk_x11_window_show_window_menu (GdkWindow *window,
   return TRUE;
 }
 
+static gboolean
+gdk_x11_window_do_composite (GdkWindow *window)
+{
+  GdkDisplay *display = gdk_window_get_display (window);
+  GdkX11Display *display_x11 = GDK_X11_DISPLAY (display);
+
+#ifdef HAVE_PRESENT
+  if (display_x11->have_present)
+    {
+      Display *xdisplay = GDK_DISPLAY_XDISPLAY (display);
+      xcb_connection_t *xcb_conn = XGetXCBConnection (xdisplay);
+      XserverRegion update_region;
+      XRectangle *rects;
+      int n_rects;
+      double sx, sy;
+      double offs_x, offs_y;
+
+      cairo_surface_get_device_scale (window->current_paint.surface, &sx, &sy);
+      cairo_surface_get_device_offset (window->current_paint.surface, &offs_x, &offs_y);
+
+      _gdk_x11_region_get_xrectangles (window->current_paint.region,
+                                       offs_x / sx, offs_y / sy, sx, &rects, &n_rects);
+      update_region = XFixesCreateRegion (xdisplay, rects, n_rects);
+
+      xcb_present_pixmap (xcb_conn,
+                          GDK_WINDOW_XID (window),
+                          cairo_xlib_surface_get_drawable (window->current_paint.surface),
+                          XNextRequest (xdisplay),
+                          update_region,
+                          update_region,
+                          -offs_x,
+                          -offs_y,
+                          None, /* target_crtc */
+                          None, /* wait_fence */
+                          None, /* idle_fence */
+                          0, /* options */
+                          0, /* target_msc */
+                          0, /* divisor */
+                          0, /* remainder */
+                          0, NULL /* notifies */ );
+
+      XFixesDestroyRegion (xdisplay, update_region);
+
+      return TRUE;
+    }
+#endif
+
+  return FALSE;
+}
+
 static void
 gdk_window_impl_x11_class_init (GdkWindowImplX11Class *klass)
 {
@@ -5773,4 +5828,5 @@ gdk_window_impl_x11_class_init (GdkWindowImplX11Class *klass)
   impl_class->create_gl_context = gdk_x11_window_create_gl_context;
   impl_class->invalidate_for_new_frame = gdk_x11_window_invalidate_for_new_frame;
   impl_class->get_unscaled_size = gdk_x11_window_get_unscaled_size;
+  impl_class->do_composite = gdk_x11_window_do_composite;
 }

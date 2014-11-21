@@ -299,6 +299,7 @@ struct _GdkWindowImplClass
                                            GError        **error);
   void         (*invalidate_for_new_frame)(GdkWindow      *window,
                                            cairo_region_t *update_area);
+  gboolean     (*do_composite)            (GdkWindow      *window);
 };
 
 /* Interface Functions */
