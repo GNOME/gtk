@@ -186,7 +186,7 @@ create_mir_surface (GdkDisplay *display,
   MirSurfaceParameters parameters;
   MirConnection *connection;
 
-  parameters.name = "GTK+ Mir";
+  parameters.name = g_get_prgname ();
   parameters.width = width;
   parameters.height = height;
   parameters.pixel_format = _gdk_mir_display_get_pixel_format (display, buffer_usage);
