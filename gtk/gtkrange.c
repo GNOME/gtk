@@ -3531,6 +3531,120 @@ gtk_range_calc_request (GtkRange      *range,
 }
 
 static void
+gtk_range_compute_slider_position (GtkRange     *range,
+                                   gdouble       adjustment_value,
+                                   GdkRectangle *slider_rect)
+{
+  GtkRangePrivate *priv = range->priv;
+  gint trough_border;
+  gboolean trough_under_steppers;
+
+  gtk_range_get_props (range, NULL, NULL, &trough_border, NULL,
+                       &trough_under_steppers, NULL, NULL);
+
+  if (priv->orientation == GTK_ORIENTATION_VERTICAL)
+    {
+      gint y, bottom, top, height;
+        
+      /* Slider fits into the trough, with stepper_spacing on either side,
+       * and the size/position based on the adjustment or fixed, depending.
+       */
+      slider_rect->x = priv->trough.x + trough_border;
+      slider_rect->width = priv->trough.width - trough_border * 2;
+
+      /* Compute slider position/length */
+      top = priv->trough.y;
+      bottom = priv->trough.y + priv->trough.height;
+
+      if (! trough_under_steppers)
+        {
+          top += trough_border;
+          bottom -= trough_border;
+        }
+
+      /* slider height is the fraction (page_size /
+       * total_adjustment_range) times the trough height in pixels
+       */
+
+      if (gtk_adjustment_get_upper (priv->adjustment) - gtk_adjustment_get_lower (priv->adjustment) != 0)
+        height = ((bottom - top) * (gtk_adjustment_get_page_size (priv->adjustment) /
+                                     (gtk_adjustment_get_upper (priv->adjustment) - gtk_adjustment_get_lower (priv->adjustment))));
+      else
+        height = priv->min_slider_size;
+
+      if (height < priv->min_slider_size ||
+          priv->slider_size_fixed)
+        height = priv->min_slider_size;
+
+      height = MIN (height, priv->trough.height);
+      
+      y = top;
+
+      if (gtk_adjustment_get_upper (priv->adjustment) - gtk_adjustment_get_lower (priv->adjustment) - gtk_adjustment_get_page_size (priv->adjustment) != 0)
+        y += (bottom - top - height) * ((adjustment_value - gtk_adjustment_get_lower (priv->adjustment)) /
+                                        (gtk_adjustment_get_upper (priv->adjustment) - gtk_adjustment_get_lower (priv->adjustment) - gtk_adjustment_get_page_size (priv->adjustment)));
+
+      y = CLAMP (y, top, bottom);
+      
+      if (should_invert (range))
+        y = bottom - (y - top + height);
+      
+      slider_rect->y = y;
+      slider_rect->height = height;
+    }
+  else
+    {
+      gint x, left, right, width;
+        
+      /* Slider fits into the trough, with stepper_spacing on either side,
+       * and the size/position based on the adjustment or fixed, depending.
+       */
+      priv->slider.y = priv->trough.y + trough_border;
+      priv->slider.height = priv->trough.height - trough_border * 2;
+
+      /* Compute slider position/length */
+      left = priv->trough.x;
+      right = priv->trough.x + priv->trough.width;
+
+      if (! trough_under_steppers)
+        {
+          left += trough_border;
+          right -= trough_border;
+        }
+
+      /* slider width is the fraction (page_size /
+       * total_adjustment_range) times the trough width in pixels
+       */
+
+      if (gtk_adjustment_get_upper (priv->adjustment) - gtk_adjustment_get_lower (priv->adjustment) != 0)
+        width = ((right - left) * (gtk_adjustment_get_page_size (priv->adjustment) /
+                                 (gtk_adjustment_get_upper (priv->adjustment) - gtk_adjustment_get_lower (priv->adjustment))));
+      else
+        width = priv->min_slider_size;
+
+      if (width < priv->min_slider_size ||
+          priv->slider_size_fixed)
+        width = priv->min_slider_size;
+
+      width = MIN (width, priv->trough.width);
+      
+      x = left;
+
+      if (gtk_adjustment_get_upper (priv->adjustment) - gtk_adjustment_get_lower (priv->adjustment) - gtk_adjustment_get_page_size (priv->adjustment) != 0)
+        x += (right - left - width) * ((adjustment_value - gtk_adjustment_get_lower (priv->adjustment)) /
+                                       (gtk_adjustment_get_upper (priv->adjustment) - gtk_adjustment_get_lower (priv->adjustment) - gtk_adjustment_get_page_size (priv->adjustment)));
+      
+      x = CLAMP (x, left, right);
+      
+      if (should_invert (range))
+        x = right - (x - left + width);
+      
+      priv->slider.x = x;
+      priv->slider.width = width;
+    }
+}
+
+static void
 gtk_range_calc_layout (GtkRange *range,
 		       gdouble   adjustment_value)
 {
@@ -3681,55 +3795,7 @@ gtk_range_calc_layout (GtkRange *range,
       priv->trough.width = range_rect.width;
       priv->trough.height = priv->stepper_c.y - priv->trough.y - stepper_spacing * has_steppers_cd;
 
-      /* Slider fits into the trough, with stepper_spacing on either side,
-       * and the size/position based on the adjustment or fixed, depending.
-       */
-      priv->slider.x = priv->trough.x + trough_border;
-      priv->slider.width = priv->trough.width - trough_border * 2;
-
-      /* Compute slider position/length */
-      {
-        gint y, bottom, top, height;
-        
-        top = priv->trough.y;
-        bottom = priv->trough.y + priv->trough.height;
-
-        if (! trough_under_steppers)
-          {
-            top += trough_border;
-            bottom -= trough_border;
-          }
-
-        /* slider height is the fraction (page_size /
-         * total_adjustment_range) times the trough height in pixels
-         */
-
-	if (gtk_adjustment_get_upper (priv->adjustment) - gtk_adjustment_get_lower (priv->adjustment) != 0)
-	  height = ((bottom - top) * (gtk_adjustment_get_page_size (priv->adjustment) /
-				       (gtk_adjustment_get_upper (priv->adjustment) - gtk_adjustment_get_lower (priv->adjustment))));
-	else
-          height = priv->min_slider_size;
-
-        if (height < priv->min_slider_size ||
-            priv->slider_size_fixed)
-          height = priv->min_slider_size;
-
-        height = MIN (height, priv->trough.height);
-        
-        y = top;
-
-	if (gtk_adjustment_get_upper (priv->adjustment) - gtk_adjustment_get_lower (priv->adjustment) - gtk_adjustment_get_page_size (priv->adjustment) != 0)
-	  y += (bottom - top - height) * ((adjustment_value - gtk_adjustment_get_lower (priv->adjustment)) /
-					  (gtk_adjustment_get_upper (priv->adjustment) - gtk_adjustment_get_lower (priv->adjustment) - gtk_adjustment_get_page_size (priv->adjustment)));
-
-        y = CLAMP (y, top, bottom);
-        
-        if (should_invert (range))
-          y = bottom - (y - top + height);
-        
-        priv->slider.y = y;
-        priv->slider.height = height;
-      }
+      gtk_range_compute_slider_position (range, adjustment_value, &priv->slider);
     }
   else
     {
@@ -3825,55 +3891,7 @@ gtk_range_calc_layout (GtkRange *range,
       priv->trough.width = priv->stepper_c.x - priv->trough.x - stepper_spacing * has_steppers_cd;
       priv->trough.height = range_rect.height;
 
-      /* Slider fits into the trough, with stepper_spacing on either side,
-       * and the size/position based on the adjustment or fixed, depending.
-       */
-      priv->slider.y = priv->trough.y + trough_border;
-      priv->slider.height = priv->trough.height - trough_border * 2;
-
-      /* Compute slider position/length */
-      {
-        gint x, left, right, width;
-        
-        left = priv->trough.x;
-        right = priv->trough.x + priv->trough.width;
-
-        if (! trough_under_steppers)
-          {
-            left += trough_border;
-            right -= trough_border;
-          }
-
-        /* slider width is the fraction (page_size /
-         * total_adjustment_range) times the trough width in pixels
-         */
-
-	if (gtk_adjustment_get_upper (priv->adjustment) - gtk_adjustment_get_lower (priv->adjustment) != 0)
-	  width = ((right - left) * (gtk_adjustment_get_page_size (priv->adjustment) /
-                                   (gtk_adjustment_get_upper (priv->adjustment) - gtk_adjustment_get_lower (priv->adjustment))));
-	else
-	  width = priv->min_slider_size;
-
-        if (width < priv->min_slider_size ||
-            priv->slider_size_fixed)
-          width = priv->min_slider_size;
-
-        width = MIN (width, priv->trough.width);
-        
-        x = left;
-
-	if (gtk_adjustment_get_upper (priv->adjustment) - gtk_adjustment_get_lower (priv->adjustment) - gtk_adjustment_get_page_size (priv->adjustment) != 0)
-          x += (right - left - width) * ((adjustment_value - gtk_adjustment_get_lower (priv->adjustment)) /
-                                         (gtk_adjustment_get_upper (priv->adjustment) - gtk_adjustment_get_lower (priv->adjustment) - gtk_adjustment_get_page_size (priv->adjustment)));
-        
-        x = CLAMP (x, left, right);
-        
-        if (should_invert (range))
-          x = right - (x - left + width);
-        
-        priv->slider.x = x;
-        priv->slider.width = width;
-      }
+      gtk_range_compute_slider_position (range, adjustment_value, &priv->slider);
     }
   
   gtk_range_update_mouse_location (range);
