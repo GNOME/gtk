@@ -4012,17 +4012,10 @@ gtk_range_real_change_value (GtkRange      *range,
       value = floor ((value * power) + 0.5) / power;
     }
 
-  if (gtk_adjustment_get_value (priv->adjustment) != value)
-    {
-      priv->need_recalc = TRUE;
-
-      gtk_widget_queue_draw (GTK_WIDGET (range));
-
-      if (priv->in_drag)
-        gtk_adjustment_set_value (priv->adjustment, value);
-      else
-        gtk_adjustment_animate_to_value (priv->adjustment, value);
-    }
+  if (priv->in_drag)
+    gtk_adjustment_set_value (priv->adjustment, value);
+  else
+    gtk_adjustment_animate_to_value (priv->adjustment, value);
 
   return FALSE;
 }
