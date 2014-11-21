@@ -7280,10 +7280,8 @@ gtk_text_view_drag_gesture_end (GtkGestureDrag *gesture,
     (gtk_get_debug_flags () & GTK_DEBUG_TOUCHSCREEN) != 0 ||
     gdk_device_get_source (device) == GDK_SOURCE_TOUCHSCREEN;
 
-  if (clicked_in_selection && priv->selection_bubble &&
-      gtk_widget_get_visible (priv->selection_bubble))
-    gtk_text_view_selection_bubble_popup_unset (text_view);
-  else if (!clicked_in_selection && is_touchscreen)
+  if (!clicked_in_selection && is_touchscreen &&
+      (!priv->selection_bubble || !gtk_widget_get_visible (priv->selection_bubble)))
     gtk_text_view_selection_bubble_popup_set (text_view);
 
   if (!is_touchscreen && clicked_in_selection &&
