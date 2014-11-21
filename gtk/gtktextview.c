@@ -1639,7 +1639,7 @@ _gtk_text_view_ensure_magnifier (GtkTextView *text_view)
     return;
 
   priv->magnifier = _gtk_magnifier_new (GTK_WIDGET (text_view));
-  _gtk_magnifier_set_magnification (GTK_MAGNIFIER (priv->magnifier), 2.0);
+  _gtk_magnifier_set_magnification (GTK_MAGNIFIER (priv->magnifier), 1.5);
   priv->magnifier_popover = gtk_popover_new (GTK_WIDGET (text_view));
   gtk_style_context_add_class (gtk_widget_get_style_context (priv->magnifier_popover),
                                GTK_STYLE_CLASS_OSD);
