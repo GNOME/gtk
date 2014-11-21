@@ -4726,7 +4726,7 @@ gtk_text_view_show_magnifier (GtkTextView *text_view,
   GtkTextViewPrivate *priv;
   GtkRequisition req;
 
-#define N_LINES 3
+#define N_LINES 1
 
   priv = text_view->priv;
   _gtk_text_view_ensure_magnifier (text_view);
