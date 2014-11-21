@@ -113,8 +113,6 @@ struct _GtkRangePrivate
   gint  round_digits;                /* Round off value to this many digits, -1 for no rounding */
   gint  slide_initial_slider_position;
   gint  slide_initial_coordinate_delta;
-  gint  slider_start;                /* Slider range along the long dimension, in widget->window coords */
-  gint  slider_end;
 
   /* Steppers are: < > ---- < >
    *               a b      c d
@@ -1115,11 +1113,20 @@ gtk_range_get_slider_range (GtkRange *range,
 
   gtk_range_calc_layout (range, gtk_adjustment_get_value (priv->adjustment));
 
-  if (slider_start)
-    *slider_start = priv->slider_start;
-
-  if (slider_end)
-    *slider_end = priv->slider_end;
+  if (priv->orientation == GTK_ORIENTATION_VERTICAL)
+    {
+      if (slider_start)
+        *slider_start = priv->slider.y;
+      if (slider_end)
+        *slider_end = priv->slider.y + priv->slider.height;
+    }
+  else
+    {
+      if (slider_start)
+        *slider_start = priv->slider.x;
+      if (slider_end)
+        *slider_end = priv->slider.x + priv->slider.width;
+    }
 }
 
 /**
@@ -2662,6 +2669,7 @@ update_slider_position (GtkRange *range,
   gdouble mark_value;
   gdouble mark_delta;
   gdouble zoom;
+  gint slider_start, slider_end;
   gint i;
 
   if (priv->zoom)
@@ -2697,6 +2705,7 @@ update_slider_position (GtkRange *range,
   new_value = coord_to_value (range, c);
   next_value = coord_to_value (range, c + 1);
   mark_delta = fabs (next_value - new_value);
+  gtk_range_get_slider_range (range, &slider_start, &slider_end);
 
   for (i = 0; i < priv->n_marks; i++)
     {
@@ -2704,7 +2713,7 @@ update_slider_position (GtkRange *range,
 
       if (fabs (gtk_adjustment_get_value (priv->adjustment) - mark_value) < 3 * mark_delta)
         {
-          if (fabs (new_value - mark_value) < (priv->slider_end - priv->slider_start) * 0.5 * mark_delta)
+          if (fabs (new_value - mark_value) < (slider_end - slider_start) * 0.5 * mark_delta)
             {
               new_value = mark_value;
               break;
@@ -3720,10 +3729,6 @@ gtk_range_calc_layout (GtkRange *range,
         
         priv->slider.y = y;
         priv->slider.height = height;
-
-        /* These are publically exported */
-        priv->slider_start = priv->slider.y;
-        priv->slider_end = priv->slider.y + priv->slider.height;
       }
     }
   else
@@ -3868,10 +3873,6 @@ gtk_range_calc_layout (GtkRange *range,
         
         priv->slider.x = x;
         priv->slider.width = width;
-
-        /* These are publically exported */
-        priv->slider_start = priv->slider.x;
-        priv->slider_end = priv->slider.x + priv->slider.width;
       }
     }
   
