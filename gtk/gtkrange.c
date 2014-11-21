@@ -277,8 +277,7 @@ static void          gtk_range_calc_request             (GtkRange      *range,
                                                          GtkBorder     *border,
                                                          gint          *n_steppers_p,
                                                          gboolean      *has_steppers_ab,
-                                                         gboolean      *has_steppers_cd,
-                                                         gint          *slider_length_p);
+                                                         gboolean      *has_steppers_cd);
 static void          gtk_range_adjustment_value_changed (GtkAdjustment *adjustment,
                                                          gpointer       data);
 static void          gtk_range_adjustment_changed       (GtkAdjustment *adjustment,
@@ -1574,7 +1573,7 @@ gtk_range_get_preferred_width (GtkWidget *widget,
   gtk_range_calc_request (range,
                           slider_width, stepper_size,
                           trough_border, stepper_spacing,
-                          &range_rect, &border, NULL, NULL, NULL, NULL);
+                          &range_rect, &border, NULL, NULL, NULL);
 
   *minimum = *natural = range_rect.width + border.left + border.right;
 }
@@ -1600,7 +1599,7 @@ gtk_range_get_preferred_height (GtkWidget *widget,
   gtk_range_calc_request (range,
                           slider_width, stepper_size,
                           trough_border, stepper_spacing,
-                          &range_rect, &border, NULL, NULL, NULL, NULL);
+                          &range_rect, &border, NULL, NULL, NULL);
 
   *minimum = *natural = range_rect.height + border.top + border.bottom;
 }
@@ -3454,11 +3453,9 @@ gtk_range_calc_request (GtkRange      *range,
                         GtkBorder     *border,
                         gint          *n_steppers_p,
                         gboolean      *has_steppers_ab,
-                        gboolean      *has_steppers_cd,
-                        gint          *slider_length_p)
+                        gboolean      *has_steppers_cd)
 {
   GtkRangePrivate *priv = range->priv;
-  gint slider_length;
   gint n_steppers;
   gint n_steppers_ab;
   gint n_steppers_cd;
@@ -3485,8 +3482,6 @@ gtk_range_calc_request (GtkRange      *range,
 
   n_steppers = n_steppers_ab + n_steppers_cd;
 
-  slider_length = priv->min_slider_size;
-
   range_rect->x = 0;
   range_rect->y = 0;
   
@@ -3496,7 +3491,7 @@ gtk_range_calc_request (GtkRange      *range,
   if (priv->orientation == GTK_ORIENTATION_VERTICAL)
     {
       range_rect->width =  + trough_border * 2 + slider_width;
-      range_rect->height = stepper_size * n_steppers + trough_border * 2 + slider_length;
+      range_rect->height = stepper_size * n_steppers + trough_border * 2 + priv->min_slider_size;
 
       if (n_steppers_ab > 0)
         range_rect->height += stepper_spacing;
@@ -3506,7 +3501,7 @@ gtk_range_calc_request (GtkRange      *range,
     }
   else
     {
-      range_rect->width = stepper_size * n_steppers + trough_border * 2 + slider_length;
+      range_rect->width = stepper_size * n_steppers + trough_border * 2 + priv->min_slider_size;
       range_rect->height = trough_border * 2 + slider_width;
 
       if (n_steppers_ab > 0)
@@ -3524,9 +3519,6 @@ gtk_range_calc_request (GtkRange      *range,
 
   if (has_steppers_cd)
     *has_steppers_cd = (n_steppers_cd > 0);
-
-  if (slider_length_p)
-    *slider_length_p = slider_length;
 }
 
 static void
@@ -3535,7 +3527,6 @@ gtk_range_calc_layout (GtkRange *range,
 {
   GtkRangePrivate *priv = range->priv;
   gint slider_width, stepper_size, trough_border, stepper_spacing;
-  gint slider_length;
   GtkBorder border;
   gint n_steppers;
   gboolean has_steppers_ab;
@@ -3569,7 +3560,7 @@ gtk_range_calc_layout (GtkRange *range,
                           slider_width, stepper_size,
                           trough_border, stepper_spacing,
                           &range_rect, &border, &n_steppers,
-                          &has_steppers_ab, &has_steppers_cd, &slider_length);
+                          &has_steppers_ab, &has_steppers_cd);
   
   /* We never expand to fill available space in the small dimension
    * (i.e. vertical scrollbars are always a fixed width)
