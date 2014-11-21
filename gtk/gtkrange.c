@@ -60,13 +60,10 @@
  */
 
 
-#define SCROLL_DELAY_FACTOR 5    /* Scroll repeat multiplier */
-#define UPDATE_DELAY        300  /* Delay for queued update */
 #define TIMEOUT_INITIAL     500
-#define TIMEOUT_REPEAT      50
-#define ZOOM_HOLD_TIME      500
+#define TIMEOUT_REPEAT      250
 #define AUTOSCROLL_FACTOR   20
-#define SCROLL_EDGE_SIZE 15
+#define SCROLL_EDGE_SIZE    15
 
 typedef struct _GtkRangeStepTimer GtkRangeStepTimer;
 
@@ -4044,7 +4041,7 @@ initial_timeout (gpointer data)
   GtkRange *range = GTK_RANGE (data);
   GtkRangePrivate *priv = range->priv;
 
-  priv->timer->timeout_id = gdk_threads_add_timeout (TIMEOUT_REPEAT * SCROLL_DELAY_FACTOR,
+  priv->timer->timeout_id = gdk_threads_add_timeout (TIMEOUT_REPEAT,
                                                      second_timeout,
                                                      range);
   g_source_set_name_by_id (priv->timer->timeout_id, "[gtk+] second_timeout");
