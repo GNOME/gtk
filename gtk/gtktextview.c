@@ -4724,8 +4724,9 @@ gtk_text_view_show_magnifier (GtkTextView *text_view,
 {
   cairo_rectangle_int_t rect;
   GtkTextViewPrivate *priv;
-  GtkAllocation allocation;
   GtkRequisition req;
+
+#define N_LINES 3
 
   priv = text_view->priv;
   _gtk_text_view_ensure_magnifier (text_view);
@@ -4733,34 +4734,26 @@ gtk_text_view_show_magnifier (GtkTextView *text_view,
   /* Set size/content depending on iter rect */
   gtk_text_view_get_iter_location (text_view, iter,
                                    (GdkRectangle *) &rect);
-  rect.x = x;
+  rect.x = x + priv->xoffset;
   gtk_text_view_buffer_to_window_coords (text_view, GTK_TEXT_WINDOW_TEXT,
                                          rect.x, rect.y, &rect.x, &rect.y);
   _text_window_to_widget_coords (text_view, &rect.x, &rect.y);
-  req.height = rect.height *
+  req.height = rect.height * N_LINES *
     _gtk_magnifier_get_magnification (GTK_MAGNIFIER (priv->magnifier));
-  req.width = (req.height * 4) / 3;
+  req.width = MAX ((req.height * 4) / 3, 80);
   gtk_widget_set_size_request (priv->magnifier, req.width, req.height);
 
   _gtk_magnifier_set_coords (GTK_MAGNIFIER (priv->magnifier),
                              rect.x, rect.y + rect.height / 2);
 
-#define RECT_WIDTH 40
-
-  gtk_widget_get_allocation (GTK_WIDGET (text_view), &allocation);
-  x = CLAMP (x, 0, allocation.width);
-  y = CLAMP (y, 0, allocation.height);
-  rect.x = x - (RECT_WIDTH / 2);
-  rect.y = y - (RECT_WIDTH / 2);
-  rect.width = rect.height = RECT_WIDTH;
-  _text_window_to_widget_coords (text_view, &rect.x, &rect.y);
-
+  rect.height /= 2;
+  rect.y += rect.height;
   gtk_popover_set_pointing_to (GTK_POPOVER (priv->magnifier_popover),
                                &rect);
 
   gtk_widget_show (priv->magnifier_popover);
 
-#undef RECT_WIDTH
+#undef N_LINES
 }
 
 static void
