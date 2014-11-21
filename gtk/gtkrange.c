@@ -3963,6 +3963,7 @@ static void
 gtk_range_calc_marks (GtkRange *range)
 {
   GtkRangePrivate *priv = range->priv;
+  GdkRectangle slider;
   gint i;
 
   if (!priv->recalc_marks)
@@ -3972,15 +3973,13 @@ gtk_range_calc_marks (GtkRange *range)
 
   for (i = 0; i < priv->n_marks; i++)
     {
-      priv->need_recalc = TRUE;
-      gtk_range_calc_layout (range, priv->marks[i]);
-      if (priv->orientation == GTK_ORIENTATION_HORIZONTAL)
-        priv->mark_pos[i] = priv->slider.x + priv->slider.width / 2;
-      else
-        priv->mark_pos[i] = priv->slider.y + priv->slider.height / 2;
-    }
+      gtk_range_compute_slider_position (range, priv->marks[i], &slider);
 
-  priv->need_recalc = TRUE;
+      if (priv->orientation == GTK_ORIENTATION_HORIZONTAL)
+        priv->mark_pos[i] = slider.x + slider.width / 2;
+      else
+        priv->mark_pos[i] = slider.y + slider.height / 2;
+    }
 }
 
 static gboolean
