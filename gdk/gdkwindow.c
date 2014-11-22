@@ -3069,7 +3069,6 @@ gdk_window_end_paint (GdkWindow *window)
   if (impl_class->end_paint)
     impl_class->end_paint (window);
 
-
   if (window->current_paint.surface_needs_composite)
     {
       cairo_surface_t *surface;
