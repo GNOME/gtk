@@ -5,8 +5,19 @@
       <object class="GtkBox">
         <property name="visible">true</property>
         <property name="orientation">vertical</property>
-        <property name="margin">60</property>
+        <property name="margin-start">60</property>
+        <property name="margin-end">60</property>
+        <property name="margin-bottom">60</property>
         <property name="spacing">10</property>
+        <child>
+          <object class="GtkLabel" id="object_title">
+            <property name="visible">True</property>
+            <property name="halign">fill</property>
+            <property name="valign">center</property>
+            <property name="margin-top">12</property>
+            <property name="margin-bottom">30</property>
+          </object>
+        </child>
         <child>
           <object class="GtkFrame">
             <property name="visible">True</property>

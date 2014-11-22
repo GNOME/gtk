@@ -70,6 +70,7 @@ struct _GtkInspectorMiscInfoPrivate {
   GtkWidget *is_toplevel;
   GtkWidget *child_visible_row;
   GtkWidget *child_visible;
+  GtkWidget *object_title;
 
   guint update_source_id;
   gint64 last_frame;
@@ -372,6 +373,8 @@ void
 gtk_inspector_misc_info_set_object (GtkInspectorMiscInfo *sl,
                                     GObject              *object)
 {
+  const gchar *title;
+
   if (sl->priv->object)
     {
       g_signal_handlers_disconnect_by_func (sl->priv->object, state_flags_changed, sl);
@@ -387,6 +390,9 @@ gtk_inspector_misc_info_set_object (GtkInspectorMiscInfo *sl,
   sl->priv->object = object;
   g_object_weak_ref (G_OBJECT (sl), disconnect_each_other, object);
   g_object_weak_ref (object, disconnect_each_other, sl);
+
+  title = (const gchar *)g_object_get_data (object, "gtk-inspector-object-title");
+  gtk_label_set_label (GTK_LABEL (sl->priv->object_title), title);
 
   if (GTK_IS_WIDGET (object))
     {
@@ -577,6 +583,7 @@ gtk_inspector_misc_info_class_init (GtkInspectorMiscInfoClass *klass)
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorMiscInfo, is_toplevel);
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorMiscInfo, child_visible_row);
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorMiscInfo, child_visible);
+  gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorMiscInfo, object_title);
 
   gtk_widget_class_bind_template_callback (widget_class, show_default_widget);
   gtk_widget_class_bind_template_callback (widget_class, show_focus_widget);
