@@ -207,10 +207,7 @@ use_texture_rect_program (GdkGLContextPaintData *paint_data)
 void
 gdk_gl_texture_quad (GdkGLContext *paint_context,
                      guint texture_target,
-                     float x1, float y1,
-                     float x2, float y2,
-                     float u1, float v1,
-                     float u2, float v2)
+                     GdkTexturedQuad *quad)
 {
   GdkGLContextPaintData *paint_data  = gdk_gl_context_get_paint_data (paint_context);
   GdkGLContextProgram *program;
@@ -219,16 +216,16 @@ gdk_gl_texture_quad (GdkGLContext *paint_context,
   float w = gdk_window_get_width (window) * window_scale;
   float h = gdk_window_get_height (window) * window_scale;
   float vertex_buffer_data[] = {
-    (x2 * 2) / w - 1, (y1 * 2) / h - 1,
-    (x2 * 2) / w - 1, (y2 * 2) / h - 1,
-    (x1 * 2) / w - 1, (y2 * 2) / h - 1,
-    (x1 * 2) / w - 1, (y1 * 2) / h - 1,
+    (quad->x2 * 2) / w - 1, (quad->y1 * 2) / h - 1,
+    (quad->x2 * 2) / w - 1, (quad->y2 * 2) / h - 1,
+    (quad->x1 * 2) / w - 1, (quad->y2 * 2) / h - 1,
+    (quad->x1 * 2) / w - 1, (quad->y1 * 2) / h - 1,
   };
   float uv_buffer_data[] = {
-    u2, v1,
-    u2, v2,
-    u1, v2,
-    u1, v1,
+    quad->u2, quad->v1,
+    quad->u2, quad->v2,
+    quad->u1, quad->v2,
+    quad->u1, quad->v1,
   };
 
   bind_vao (paint_data);
@@ -261,7 +258,6 @@ gdk_gl_texture_quad (GdkGLContext *paint_context,
   glDisableVertexAttribArray (0);
   glDisableVertexAttribArray (1);
 }
-
 
 /* x,y,width,height describes a rectangle in the gl render buffer
    coordinate space, and its top left corner is drawn at the current
@@ -533,13 +529,14 @@ gdk_cairo_draw_from_gl (cairo_t              *cr,
             {
               int clipped_src_x = x + (dest.x - dx * window_scale);
               int clipped_src_y = y + (height - dest.height - (dest.y - dy * window_scale));
+              GdkTexturedQuad quad = {
+                dest.x, FLIP_Y(dest.y),
+                dest.x + dest.width, FLIP_Y(dest.y + dest.height),
+                clipped_src_x / (float)texture_width, (clipped_src_y + dest.height) / (float)texture_height,
+                (clipped_src_x + dest.width) / (float)texture_width, clipped_src_y / (float)texture_height,
+              };
 
-              gdk_gl_texture_quad (paint_context,
-                                   GL_TEXTURE_2D,
-                                   dest.x, FLIP_Y(dest.y),
-                                   dest.x + dest.width, FLIP_Y(dest.y + dest.height),
-                                   clipped_src_x / (float)texture_width, (clipped_src_y + dest.height) / (float)texture_height,
-                                   (clipped_src_x + dest.width) / (float)texture_width, clipped_src_y / (float)texture_height);
+              gdk_gl_texture_quad (paint_context, GL_TEXTURE_2D, &quad);
 
               if (impl_window->current_paint.flushed_region)
                 {
@@ -713,11 +710,16 @@ gdk_gl_texture_from_surface (cairo_surface_t *surface,
           vmax = 1.0;
         }
 
-      gdk_gl_texture_quad (paint_context, target,
-                           rect.x * window_scale, FLIP_Y(rect.y),
-                           (rect.x + rect.width) * window_scale, FLIP_Y((rect.y + rect.height) * window_scale),
-                           0, 0,
-                           umax, vmax);
+      {
+        GdkTexturedQuad quad = {
+          rect.x * window_scale, FLIP_Y(rect.y),
+          (rect.x + rect.width) * window_scale, FLIP_Y((rect.y + rect.height) * window_scale),
+          0, 0,
+          umax, vmax,
+        };
+
+        gdk_gl_texture_quad (paint_context, target, &quad);
+      }
     }
 
   glDisable (GL_SCISSOR_TEST);

@@ -350,12 +350,16 @@ gboolean        _gdk_cairo_surface_extents       (cairo_surface_t *surface,
                                                   GdkRectangle    *extents);
 void            gdk_gl_texture_from_surface      (cairo_surface_t *surface,
                                                   cairo_region_t  *region);
+
+typedef struct {
+  float x1, y1, x2, y2;
+  float u1, v1, u2, v2;
+} GdkTexturedQuad;
+
 void           gdk_gl_texture_quad               (GdkGLContext *paint_context,
                                                   guint texture_target,
-                                                  float x1, float y1,
-                                                  float x2, float y2,
-                                                  float u1, float v1,
-                                                  float u2, float v2);
+                                                  GdkTexturedQuad *quad);
+
 void            gdk_cairo_surface_mark_as_direct (cairo_surface_t *surface,
                                                   GdkWindow       *window);
 cairo_region_t *gdk_cairo_region_from_clip       (cairo_t         *cr);
