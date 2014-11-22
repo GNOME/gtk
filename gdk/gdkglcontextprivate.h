@@ -49,19 +49,22 @@ struct _GdkGLContextClass
 };
 
 typedef struct {
+  guint program;
+  guint position_location;
+  guint uv_location;
+  guint map_location;
+} GdkGLContextProgram;
+
+typedef struct {
   guint vertex_array_object;
   guint tmp_framebuffer;
   guint tmp_vertex_buffer;
   guint tmp_uv_buffer;
-  guint current_program;
-  guint texture_quad_program;
-  guint texture_quad_program_position_location;
-  guint texture_quad_program_uv_location;
-  guint texture_quad_program_map_location;
-  guint texture_quad_rect_program;
-  guint texture_quad_rect_program_position_location;
-  guint texture_quad_rect_program_uv_location;
-  guint texture_quad_rect_program_map_location;
+
+  GdkGLContextProgram texture_2d_quad_program;
+  GdkGLContextProgram texture_rect_quad_program;
+
+  GdkGLContextProgram *current_program;
 } GdkGLContextPaintData;
 
 GdkGLContextPaintData *gdk_gl_context_get_paint_data        (GdkGLContext   *context);

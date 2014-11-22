@@ -82,50 +82,53 @@ create_shader (int type, const char const *code)
   return shader;
 }
 
-static guint
-make_program (const char const *vertex_shader_code, const char const *fragment_shader_code)
+static void
+make_program (GdkGLContextProgram *program,
+              const char const *vertex_shader_code,
+              const char const *fragment_shader_code)
 {
-  guint program, vertex_shader, fragment_shader;
+  guint vertex_shader, fragment_shader;
   int status;
 
   vertex_shader = create_shader (GL_VERTEX_SHADER, vertex_shader_code);
   if (vertex_shader == 0)
-    return 0;
+    return;
 
   fragment_shader = create_shader (GL_FRAGMENT_SHADER, fragment_shader_code);
   if (fragment_shader == 0)
     {
       glDeleteShader (vertex_shader);
-      return 0;
+      return;
     }
 
-  program = glCreateProgram ();
-  glAttachShader (program, vertex_shader);
-  glAttachShader (program, fragment_shader);
+  program->program = glCreateProgram ();
+  glAttachShader (program->program, vertex_shader);
+  glAttachShader (program->program, fragment_shader);
 
-  glLinkProgram (program);
+  glLinkProgram (program->program);
 
   glDeleteShader (vertex_shader);
   glDeleteShader (fragment_shader);
 
-  glGetProgramiv (program, GL_LINK_STATUS, &status);
+  glGetProgramiv (program->program, GL_LINK_STATUS, &status);
   if (status == GL_FALSE)
     {
       int log_len;
       char *buffer;
 
-      glGetProgramiv (program, GL_INFO_LOG_LENGTH, &log_len);
+      glGetProgramiv (program->program, GL_INFO_LOG_LENGTH, &log_len);
 
       buffer = g_malloc (log_len + 1);
-      glGetProgramInfoLog (program, log_len, NULL, buffer);
+      glGetProgramInfoLog (program->program, log_len, NULL, buffer);
       g_warning ("Linker failure: %s\n", buffer);
       g_free (buffer);
 
-      glDeleteProgram (program);
-      return 0;
+      glDeleteProgram (program->program);
     }
 
-  return program;
+  program->position_location = glGetAttribLocation (program->program, "position");
+  program->uv_location = glGetAttribLocation (program->program, "uv");
+  program->map_location = glGetUniformLocation (program->program, "map");
 }
 
 static void
@@ -140,10 +143,7 @@ bind_vao (GdkGLContextPaintData *paint_data)
 }
 
 static void
-use_texture_2d_program (GdkGLContextPaintData *paint_data,
-                        guint *position_location,
-                        guint *uv_location,
-                        guint *map_location)
+use_texture_2d_program (GdkGLContextPaintData *paint_data)
 {
   const char *vertex_shader_code =
     "#version 120\n"
@@ -163,30 +163,18 @@ use_texture_2d_program (GdkGLContextPaintData *paint_data,
     "  gl_FragColor = texture2D (map, vUv);\n"
     "}\n";
 
-  if (paint_data->texture_quad_program == 0)
-    {
-      paint_data->texture_quad_program = make_program (vertex_shader_code, fragment_shader_code);
-      paint_data->texture_quad_program_position_location = glGetAttribLocation (paint_data->texture_quad_program, "position");
-      paint_data->texture_quad_program_uv_location = glGetAttribLocation (paint_data->texture_quad_program, "uv");
-      paint_data->texture_quad_program_map_location = glGetUniformLocation (paint_data->texture_quad_program, "map");
-    }
+  if (paint_data->texture_2d_quad_program.program == 0)
+    make_program (&paint_data->texture_2d_quad_program, vertex_shader_code, fragment_shader_code);
 
-  if (paint_data->current_program != paint_data->texture_quad_program)
+  if (paint_data->current_program != &paint_data->texture_2d_quad_program)
     {
-      glUseProgram (paint_data->texture_quad_program);
-      paint_data->current_program = paint_data->texture_quad_program;
+      paint_data->current_program = &paint_data->texture_2d_quad_program;
+      glUseProgram (paint_data->current_program->program);
     }
-
-  *position_location = paint_data->texture_quad_program_position_location;
-  *uv_location = paint_data->texture_quad_program_uv_location;
-  *map_location = paint_data->texture_quad_program_map_location;
 }
 
 static void
-use_texture_rect_program (GdkGLContextPaintData *paint_data,
-                          guint *position_location,
-                          guint *uv_location,
-                          guint *map_location)
+use_texture_rect_program (GdkGLContextPaintData *paint_data)
 {
   const char *vertex_shader_code =
     "#version 120\n"
@@ -206,25 +194,15 @@ use_texture_rect_program (GdkGLContextPaintData *paint_data,
     "  gl_FragColor = texture2DRect (map, vUv);\n"
     "}\n";
 
-  if (paint_data->texture_quad_rect_program == 0)
-    {
-      paint_data->texture_quad_rect_program = make_program (vertex_shader_code, fragment_shader_code);
-      paint_data->texture_quad_rect_program_position_location = glGetAttribLocation (paint_data->texture_quad_rect_program, "position");
-      paint_data->texture_quad_rect_program_uv_location = glGetAttribLocation (paint_data->texture_quad_rect_program, "uv");
-      paint_data->texture_quad_rect_program_map_location = glGetUniformLocation (paint_data->texture_quad_rect_program, "map");
-    }
+  if (paint_data->texture_rect_quad_program.program == 0)
+    make_program (&paint_data->texture_rect_quad_program, vertex_shader_code, fragment_shader_code);
 
-  if (paint_data->current_program != paint_data->texture_quad_rect_program)
+  if (paint_data->current_program != &paint_data->texture_rect_quad_program)
     {
-      glUseProgram (paint_data->texture_quad_rect_program);
-      paint_data->current_program = paint_data->texture_quad_rect_program;
+      paint_data->current_program = &paint_data->texture_rect_quad_program;
+      glUseProgram (paint_data->current_program->program);
     }
-
-  *position_location = paint_data->texture_quad_rect_program_position_location;
-  *uv_location = paint_data->texture_quad_rect_program_uv_location;
-  *map_location = paint_data->texture_quad_rect_program_map_location;
 }
-
 
 void
 gdk_gl_texture_quad (GdkGLContext *paint_context,
@@ -235,6 +213,7 @@ gdk_gl_texture_quad (GdkGLContext *paint_context,
                      float u2, float v2)
 {
   GdkGLContextPaintData *paint_data  = gdk_gl_context_get_paint_data (paint_context);
+  GdkGLContextProgram *program;
   GdkWindow *window = gdk_gl_context_get_window (paint_context);
   int window_scale = gdk_window_get_scale_factor (window);
   float w = gdk_window_get_width (window) * window_scale;
@@ -251,7 +230,6 @@ gdk_gl_texture_quad (GdkGLContext *paint_context,
     u1, v2,
     u1, v1,
   };
-  guint position_location, uv_location, map_location;
 
   bind_vao (paint_data);
 
@@ -262,21 +240,23 @@ gdk_gl_texture_quad (GdkGLContext *paint_context,
     glGenBuffers(1, &paint_data->tmp_uv_buffer);
 
   if (texture_target == GL_TEXTURE_RECTANGLE_ARB)
-    use_texture_rect_program (paint_data, &position_location, &uv_location, &map_location);
+    use_texture_rect_program (paint_data);
   else
-    use_texture_2d_program (paint_data, &position_location, &uv_location, &map_location);
+    use_texture_2d_program (paint_data);
+
+  program = paint_data->current_program;
 
   glActiveTexture (GL_TEXTURE0);
-  glUniform1i(map_location, 0); /* Use texture unit 0 */
+  glUniform1i(program->map_location, 0); /* Use texture unit 0 */
 
   glEnableVertexAttribArray (0);
   glBindBuffer (GL_ARRAY_BUFFER, paint_data->tmp_vertex_buffer);
   glBufferData (GL_ARRAY_BUFFER, sizeof(vertex_buffer_data), vertex_buffer_data, GL_STREAM_DRAW);
-  glVertexAttribPointer (position_location, 2, GL_FLOAT, GL_FALSE, 0, NULL);
+  glVertexAttribPointer (program->position_location, 2, GL_FLOAT, GL_FALSE, 0, NULL);
   glEnableVertexAttribArray (1);
   glBindBuffer (GL_ARRAY_BUFFER, paint_data->tmp_uv_buffer);
   glBufferData (GL_ARRAY_BUFFER, sizeof(uv_buffer_data), uv_buffer_data, GL_STREAM_DRAW);
-  glVertexAttribPointer (uv_location, 2, GL_FLOAT, GL_FALSE, 0, NULL);
+  glVertexAttribPointer (program->uv_location, 2, GL_FLOAT, GL_FALSE, 0, NULL);
   glDrawArrays (GL_TRIANGLE_FAN, 0, 4);
   glDisableVertexAttribArray (0);
   glDisableVertexAttribArray (1);
