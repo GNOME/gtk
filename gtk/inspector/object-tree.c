@@ -615,6 +615,17 @@ gtk_inspector_object_tree_append_object (GtkInspectorObjectTree *wt,
                       SENSITIVE, mapped,
                       -1);
 
+  if (name && *name)
+    {
+      gchar *title;
+      title = g_strconcat (class_name, " — ", name, NULL);
+      g_object_set_data_full (object, "gtk-inspector-object-title", title, g_free);
+    }
+  else
+    {
+      g_object_set_data (object, "gtk-inspector-object-title", (gpointer)class_name);
+    }
+
   g_free (classes);
 
   od = g_new0 (ObjectData, 1);
