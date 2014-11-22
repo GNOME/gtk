@@ -1,3 +1,78 @@
+Overview of Changes in GTK+ 3.15.2
+==================================
+
+* GtkPopoverMenu: A GtkPopover subclass that makes it easy
+  to manually build menu-like popovers which can include
+  arbitrary controls.
+
+* GtkModelButton: A button widget that is optimized for
+  use inside popovers with a GAction as 'model'.
+
+* GL support:
+ - Try harder to pick good visuals
+ - Rework the way GL rendering is done in GtkGLArea
+ - Support input events in GtkGLArea
+ - Use shaders
+ - The GDK_GL environment variable can be used for debugging
+
+* Inspector:
+ - Make picking widgets work in Wayland
+ - Rework search in all pages
+ - Improve space use
+ - Support GL information and debug flags
+ - Shield the inspector window from more debug settings
+ - Hide empty tabs
+
+* Theming:
+ - Include the HighContrast theme
+ - Add borders to menus in non-composited environments
+ - Load themes from versioned directories like
+   .../themes/Emerald/gtk-3-14/.
+
+* Wayland:
+ - Make window opacity work
+ - Propagate clipboard owner changes
+
+* Mir:
+ - Improved event handling
+ - Support cursors
+ - Enable CSD
+ - Better monitor support
+ - Add OpenGL support
+
+* Deprecations:
+ - gdk_cursor_new
+ - gdk_device_grab_info_libgtk_only
+ - gdk_display_open_default_libgtk_only
+ - gdk_add_option_entries_libgtk_only
+ - gdk_pre_parse_libgtk_only
+
+* Bugs fixed:
+ 687963 Extend warning "Icon '%s' not present in theme" to mention...
+ 734140 Gnome apps spam stderr with warnings if Gnome Session Manager...
+ 737891 mounting LUKS partition from nautilus takes very long
+ 738321 GtkMenu has unnecessary scroll buttons
+ 738648 gdk_window_get_content() causes creation/destruction of back...
+ 738670 GL Context on NVIDIA
+ 738800 Menu border missing in Adwaita when no compositor is running
+ 738887 "Cannot commit NULL buffer to xdg_surface" error too pervasive
+ 739474 radiobutton: don't consider hidden buttons in the group for focus
+ 739750 Fix handling of windows with sizes that aren't a multiple of...
+ 739781 Make global GDK libgtk_only functions more private
+ 739885 gtk3-3.14.5 - fail to link - undefined reference to `GTK_IS_PLUG'
+ 739977 Don't wait for ENTER to initiate search
+ 740011 overscroll overlay is opaque in unfocused mode sidebars
+ 740346 Mir backend needs support for GdkGLContext 
+
+* Translation updates:
+ Greek
+ Hebrew
+ Kazakh
+ Norwegian bokmål
+ Spanish
+ Swedish
+
+
 Overview of Changes in GTK+ 3.15.1
 ==================================
 
