@@ -169,7 +169,6 @@ disconnect_each_other (gpointer  still_alive,
 static void
 show_object (GtkInspectorMiscInfo *sl,
              GObject              *object,
-             const gchar          *name,
              const gchar          *tab)
 {
   GtkTreeIter iter;
@@ -183,7 +182,7 @@ show_object (GtkInspectorMiscInfo *sl,
            gtk_inspector_object_tree_find_object (sl->priv->object_tree, G_OBJECT (gtk_widget_get_parent (GTK_WIDGET (object))), &iter))
 
     {
-      gtk_inspector_object_tree_append_object (sl->priv->object_tree, object, &iter, name);
+      gtk_inspector_object_tree_append_object (sl->priv->object_tree, object, &iter, NULL);
       gtk_inspector_object_tree_select_object (sl->priv->object_tree, object);
     }
   else
@@ -221,7 +220,7 @@ show_default_widget (GtkWidget *button, GtkInspectorMiscInfo *sl)
   update_default_widget (sl);
   widget = gtk_window_get_default_widget (GTK_WINDOW (sl->priv->object));
   if (widget)
-    show_object (sl, G_OBJECT (widget), NULL, "properties"); 
+    show_object (sl, G_OBJECT (widget), "properties"); 
 }
 
 static void
@@ -258,7 +257,7 @@ show_focus_widget (GtkWidget *button, GtkInspectorMiscInfo *sl)
 
   widget = gtk_window_get_focus (GTK_WINDOW (sl->priv->object));
   if (widget)
-    show_object (sl, G_OBJECT (widget), NULL, "properties"); 
+    show_object (sl, G_OBJECT (widget), "properties"); 
 }
 
 static void
@@ -268,7 +267,7 @@ show_mnemonic_label (GtkWidget *button, GtkInspectorMiscInfo *sl)
 
   widget = g_object_get_data (G_OBJECT (button), "mnemonic-label");
   if (widget)
-    show_object (sl, G_OBJECT (widget), NULL, "properties");
+    show_object (sl, G_OBJECT (widget), "properties");
 }
 
 static gboolean
