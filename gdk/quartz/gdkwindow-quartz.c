@@ -211,9 +211,6 @@ gdk_window_impl_quartz_finalize (GObject *object)
 
   check_grab_destroy (GDK_WINDOW_IMPL_QUARTZ (object)->wrapper);
 
-  if (impl->paint_clip_region)
-    cairo_region_destroy (impl->paint_clip_region);
-
   if (impl->transient_for)
     g_object_unref (impl->transient_for);
 
@@ -340,58 +337,7 @@ static gboolean
 gdk_window_impl_quartz_begin_paint_region (GdkWindow       *window,
 					   const cairo_region_t *region)
 {
-  GdkWindowImplQuartz *impl = GDK_WINDOW_IMPL_QUARTZ (window->impl);
-  cairo_region_t *clipped_and_offset_region;
-  cairo_t *cr;
-
-  clipped_and_offset_region = cairo_region_copy (region);
-
-  cairo_region_intersect (clipped_and_offset_region,
-                        window->clip_region);
-  cairo_region_translate (clipped_and_offset_region,
-                     window->abs_x, window->abs_y);
-
-  impl->paint_clip_region = cairo_region_reference (clipped_and_offset_region);
-
-  if (cairo_region_is_empty (clipped_and_offset_region))
-    goto done;
-
-  cr = gdk_cairo_create (window);
-
-  cairo_translate (cr, -window->abs_x, -window->abs_y);
-
-  gdk_cairo_region (cr, clipped_and_offset_region);
-  cairo_clip (cr);
-
-  while (window->background == NULL && window->parent)
-    {
-      cairo_translate (cr, -window->x, window->y);
-      window = window->parent;
-    }
-  
-  if (window->background)
-    cairo_set_source (cr, window->background);
-  else
-    cairo_set_source_rgba (cr, 0, 0, 0, 0);
-
-  /* Can use cairo_paint() here, we clipped above */
-  cairo_paint (cr);
-
-  cairo_destroy (cr);
-
-done:
-  cairo_region_destroy (clipped_and_offset_region);
-
   return FALSE;
-}
-
-static void
-gdk_window_impl_quartz_end_paint (GdkWindow *window)
-{
-  GdkWindowImplQuartz *impl = GDK_WINDOW_IMPL_QUARTZ (window->impl);
-
-  cairo_region_destroy (impl->paint_clip_region);
-  impl->paint_clip_region = NULL;
 }
 
 static void
@@ -2947,7 +2893,6 @@ gdk_window_impl_quartz_class_init (GdkWindowImplQuartzClass *klass)
   impl_class->get_shape = gdk_quartz_window_get_shape;
   impl_class->get_input_shape = gdk_quartz_window_get_input_shape;
   impl_class->begin_paint_region = gdk_window_impl_quartz_begin_paint_region;
-  impl_class->end_paint = gdk_window_impl_quartz_end_paint;
   impl_class->get_scale_factor = gdk_quartz_window_get_scale_factor;
 
   impl_class->focus = gdk_quartz_window_focus;
