@@ -431,6 +431,7 @@ gdk_x11_gl_context_texture_from_surface (GdkGLContext *paint_context,
   guint target;
   double sx, sy;
   float uscale, vscale;
+  GdkTexturedQuad *quads;
 
   if (cairo_surface_get_type (surface) != CAIRO_SURFACE_TYPE_XLIB)
     return FALSE;
@@ -473,21 +474,24 @@ gdk_x11_gl_context_texture_from_surface (GdkGLContext *paint_context,
   glEnable (GL_SCISSOR_TEST);
 
   n_rects = cairo_region_num_rectangles (region);
+  quads = g_new (GdkTexturedQuad, n_rects);
+
+#define FLIP_Y(_y) (window_height - (_y))
+
+  cairo_region_get_extents (region, &rect);
+  glScissor (rect.x * window_scale, FLIP_Y(rect.y) * window_scale,
+             (rect.x + rect.width) * window_scale, FLIP_Y (rect.y + rect.height) * window_scale);
+
   for (i = 0; i < n_rects; i++)
     {
       int src_x, src_y, src_height, src_width;
 
       cairo_region_get_rectangle (region, i, &rect);
 
-      glScissor (rect.x * window_scale, (window_height - rect.y - rect.height) * window_scale,
-		 rect.width * window_scale, rect.height * window_scale);
-
       src_x = rect.x * sx + device_x_offset;
       src_y = rect.y * sy + device_y_offset;
       src_width = rect.width * sx;
       src_height = rect.height * sy;
-
-#define FLIP_Y(_y) (window_height - (_y))
 
       if (use_texture_rectangle)
         {
@@ -507,11 +511,17 @@ gdk_x11_gl_context_texture_from_surface (GdkGLContext *paint_context,
           uscale * src_x, vscale * src_y,
           uscale * (src_x + src_width), vscale * (src_y + src_height),
         };
-        gdk_gl_texture_quad (paint_context, target, &quad);
+
+        quads[i] = quad;
       }
     }
 
+#undef FLIP_Y
+
   glDisable (GL_SCISSOR_TEST);
+
+  gdk_gl_texture_quads (paint_context, target, n_rects, quads);
+  g_free (quads);
 
   glXReleaseTexImageEXT (glx_pixmap->display, glx_pixmap->drawable,
   			 GLX_FRONT_LEFT_EXT);

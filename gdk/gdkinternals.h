@@ -356,9 +356,10 @@ typedef struct {
   float u1, v1, u2, v2;
 } GdkTexturedQuad;
 
-void           gdk_gl_texture_quad               (GdkGLContext *paint_context,
-                                                  guint texture_target,
-                                                  GdkTexturedQuad *quad);
+void           gdk_gl_texture_quads               (GdkGLContext *paint_context,
+                                                   guint texture_target,
+                                                   int n_quads,
+                                                   GdkTexturedQuad *quads);
 
 void            gdk_cairo_surface_mark_as_direct (cairo_surface_t *surface,
                                                   GdkWindow       *window);
