@@ -24,6 +24,7 @@
 
 #include <epoxy/gl.h>
 #include <math.h>
+#include <string.h>
 
 static cairo_user_data_key_t direct_key;
 
@@ -217,6 +218,7 @@ gdk_gl_texture_quads (GdkGLContext *paint_context,
   float w = gdk_window_get_width (window) * window_scale;
   float h = gdk_window_get_height (window) * window_scale;
   int i;
+  float *vertex_buffer_data;
 
   bind_vao (paint_data);
 
@@ -240,19 +242,35 @@ gdk_gl_texture_quads (GdkGLContext *paint_context,
   glVertexAttribPointer (program->position_location, 2, GL_FLOAT, GL_FALSE, sizeof(float) * 4, NULL);
   glVertexAttribPointer (program->uv_location, 2, GL_FLOAT, GL_FALSE, sizeof(float) * 4, NULL + sizeof(float) * 2);
 
+#define VERTEX_SIZE 4
+
+#define QUAD_N_VERTICES 6
+
+#define QUAD_SIZE (VERTEX_SIZE * QUAD_N_VERTICES)
+
+  vertex_buffer_data = g_new (float, n_quads * QUAD_SIZE);
+
   for (i = 0; i < n_quads; i++)
     {
       GdkTexturedQuad *quad = &quads[i];
-      float vertex_buffer_data[] = {
+      float vertex_data[] = {
+        (quad->x1 * 2) / w - 1, (quad->y1 * 2) / h - 1, quad->u1, quad->v1,
+        (quad->x1 * 2) / w - 1, (quad->y2 * 2) / h - 1, quad->u1, quad->v2,
         (quad->x2 * 2) / w - 1, (quad->y1 * 2) / h - 1, quad->u2, quad->v1,
+
         (quad->x2 * 2) / w - 1, (quad->y2 * 2) / h - 1, quad->u2, quad->v2,
         (quad->x1 * 2) / w - 1, (quad->y2 * 2) / h - 1, quad->u1, quad->v2,
-        (quad->x1 * 2) / w - 1, (quad->y1 * 2) / h - 1, quad->u1, quad->v1,
+        (quad->x2 * 2) / w - 1, (quad->y1 * 2) / h - 1, quad->u2, quad->v1,
       };
 
-      glBufferData (GL_ARRAY_BUFFER, sizeof(vertex_buffer_data), vertex_buffer_data, GL_STREAM_DRAW);
-      glDrawArrays (GL_TRIANGLE_FAN, 0, 4);
+      float *vertex = &vertex_buffer_data[i * QUAD_SIZE];
+      memcpy (vertex, vertex_data, sizeof(vertex_data));
     }
+
+  glBufferData (GL_ARRAY_BUFFER, sizeof(float) * n_quads * QUAD_SIZE, vertex_buffer_data, GL_STREAM_DRAW);
+  glDrawArrays (GL_TRIANGLES, 0, n_quads * QUAD_N_VERTICES);
+
+  g_free (vertex_buffer_data);
 
   glDisableVertexAttribArray (0);
   glDisableVertexAttribArray (1);
