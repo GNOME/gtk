@@ -470,6 +470,8 @@ gdk_x11_gl_context_texture_from_surface (GdkGLContext *paint_context,
   glXBindTexImageEXT (glx_pixmap->display, glx_pixmap->drawable,
 		      GLX_FRONT_LEFT_EXT, NULL);
 
+  glEnable (GL_SCISSOR_TEST);
+
   n_rects = cairo_region_num_rectangles (region);
   for (i = 0; i < n_rects; i++)
     {
@@ -508,6 +510,8 @@ gdk_x11_gl_context_texture_from_surface (GdkGLContext *paint_context,
         gdk_gl_texture_quad (paint_context, target, &quad);
       }
     }
+
+  glDisable (GL_SCISSOR_TEST);
 
   glXReleaseTexImageEXT (glx_pixmap->display, glx_pixmap->drawable,
   			 GLX_FRONT_LEFT_EXT);
