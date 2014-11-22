@@ -10,23 +10,56 @@
   <template class="GtkInspectorClassesList" parent="GtkBox">
     <property name="orientation">vertical</property>
     <child>
-      <object class="GtkToolbar">
+      <object class="GtkBox">
         <property name="visible">True</property>
-        <property name="icon-size">small-toolbar</property>
+        <property name="orientation">horizontal</property>
+        <property name="spacing">6</property>
+        <property name="margin">6</property>
         <child>
-          <object class="GtkToolButton">
+          <object class="GtkButton">
             <property name="visible">True</property>
-            <property name="icon-name">list-add-symbolic</property>
+            <property name="relief">none</property>
             <property name="tooltip-text" translatable="yes">Add a class</property>
             <signal name="clicked" handler="add_clicked"/>
+            <style>
+              <class name="image-button"/>
+            </style>
+            <child>
+              <object class="GtkImage">
+                <property name="visible">True</property>
+                <property name="icon-name">list-add-symbolic</property>
+                <property name="icon-size">1</property>
+              </object>
+            </child>
           </object>
+          <packing>
+            <property name="pack-type">start</property>
+          </packing>
         </child>
         <child>
-          <object class="GtkToolButton">
+          <object class="GtkButton">
             <property name="visible">True</property>
-            <property name="icon-name">edit-undo-symbolic</property>
+            <property name="relief">none</property>
             <property name="tooltip-text" translatable="yes">Restore defaults for this widget</property>
             <signal name="clicked" handler="restore_defaults_clicked"/>
+            <style>
+              <class name="image-button"/>
+            </style>
+            <child>
+              <object class="GtkImage">
+                <property name="visible">True</property>
+                <property name="icon-name">edit-undo-symbolic</property>
+                <property name="icon-size">1</property>
+              </object>
+            </child>
+          </object>
+          <packing>
+            <property name="pack-type">start</property>
+          </packing>
+        </child>
+        <child type="center">
+          <object class="GtkLabel" id="object_title">
+            <property name="visible">True</property>
           </object>
         </child>
       </object>

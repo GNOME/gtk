@@ -31,6 +31,7 @@
 #include "gtkbutton.h"
 #include "gtkdialog.h"
 #include "gtkstylecontext.h"
+#include "gtklabel.h"
 
 enum
 {
@@ -49,6 +50,7 @@ struct _GtkInspectorClassesListPrivate
 {
   GtkListStore *model;
   GtkStyleContext *context;
+  GtkWidget *object_title;
 };
 
 G_DEFINE_TYPE_WITH_PRIVATE (GtkInspectorClassesList, gtk_inspector_classes_list, GTK_TYPE_BOX)
@@ -257,6 +259,7 @@ gtk_inspector_classes_list_set_object (GtkInspectorClassesList *cl,
   GHashTable *hash_context;
   GtkTreeIter tree_iter;
   GtkInspectorClassesListByContext *c;
+  const gchar *title;
 
   cleanup_context (cl);
 
@@ -271,6 +274,9 @@ gtk_inspector_classes_list_set_object (GtkInspectorClassesList *cl,
   cl->priv->context = gtk_widget_get_style_context (GTK_WIDGET (object));
 
   g_object_weak_ref (G_OBJECT (cl->priv->context), gtk_inspector_classes_list_remove_dead_object, cl);
+
+  title = (const gchar *)g_object_get_data (object, "gtk-inspector-object-title");
+  gtk_label_set_label (GTK_LABEL (cl->priv->object_title), title);
 
   hash_context = get_hash_context (cl);
   if (hash_context)
@@ -313,6 +319,7 @@ gtk_inspector_classes_list_class_init (GtkInspectorClassesListClass *klass)
 
   gtk_widget_class_set_template_from_resource (widget_class, "/org/gtk/inspector/classes-list.ui");
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorClassesList, model);
+  gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorClassesList, object_title);
   gtk_widget_class_bind_template_callback (widget_class, add_clicked);
   gtk_widget_class_bind_template_callback (widget_class, restore_defaults_clicked);
   gtk_widget_class_bind_template_callback (widget_class, enabled_toggled);
