@@ -190,7 +190,7 @@ gtk_gl_area_set_property (GObject      *gobject,
     {
     case PROP_AUTO_RENDER:
       gtk_gl_area_set_auto_render (GTK_GL_AREA(gobject),
-				   g_value_get_boolean (value));
+                                   g_value_get_boolean (value));
       break;
 
     case PROP_HAS_ALPHA:
@@ -210,7 +210,7 @@ gtk_gl_area_set_property (GObject      *gobject,
 
     case PROP_PROFILE:
       gtk_gl_area_set_profile (GTK_GL_AREA(gobject),
-			       g_value_get_enum (value));
+                               g_value_get_enum (value));
       break;
 
     default:
@@ -281,7 +281,7 @@ gtk_gl_area_realize (GtkWidget *widget)
   attributes_mask = GDK_WA_X | GDK_WA_Y;
 
   priv->event_window = gdk_window_new (gtk_widget_get_parent_window (widget),
-				       &attributes, attributes_mask);
+                                       &attributes, attributes_mask);
   gtk_widget_register_window (widget, priv->event_window);
 
 
@@ -352,8 +352,8 @@ gtk_gl_area_create_buffers (GtkGLArea *area)
 
   scale = gtk_widget_get_scale_factor (widget);
   gtk_gl_area_allocate_buffers (area,
-				gtk_widget_get_allocated_width (widget) * scale,
-				gtk_widget_get_allocated_height (widget) * scale);
+                                gtk_widget_get_allocated_width (widget) * scale,
+                                gtk_widget_get_allocated_height (widget) * scale);
 }
 
 /*
@@ -387,9 +387,9 @@ gtk_gl_area_allocate_buffers (GtkGLArea *area, int width, int height)
     {
       glBindRenderbufferEXT (GL_RENDERBUFFER_EXT, priv->depth_stencil_buffer);
       if (priv->has_stencil_buffer)
-	glRenderbufferStorageEXT (GL_RENDERBUFFER_EXT, GL_DEPTH24_STENCIL8_EXT, width, height);
+        glRenderbufferStorageEXT (GL_RENDERBUFFER_EXT, GL_DEPTH24_STENCIL8_EXT, width, height);
       else
-	glRenderbufferStorageEXT (GL_RENDERBUFFER_EXT, GL_DEPTH_COMPONENT24, width, height);
+        glRenderbufferStorageEXT (GL_RENDERBUFFER_EXT, GL_DEPTH_COMPONENT24, width, height);
     }
 
   priv->needs_render = TRUE;
@@ -408,8 +408,8 @@ gtk_gl_area_maybe_allocate_buffers (GtkGLArea *area)
   gtk_gl_area_make_current (area);
   scale = gtk_widget_get_scale_factor (widget);
   gtk_gl_area_allocate_buffers (area,
-				gtk_widget_get_allocated_width (widget) * scale,
-				gtk_widget_get_allocated_height (widget) * scale);
+                                gtk_widget_get_allocated_width (widget) * scale,
+                                gtk_widget_get_allocated_height (widget) * scale);
 }
 
 /**
@@ -440,19 +440,19 @@ gtk_gl_area_attach_buffers (GtkGLArea *area)
 
   if (priv->texture)
     glFramebufferTexture2D (GL_FRAMEBUFFER_EXT, GL_COLOR_ATTACHMENT0_EXT,
-			    GL_TEXTURE_2D, priv->texture, 0);
+                            GL_TEXTURE_2D, priv->texture, 0);
   else if (priv->render_buffer)
     glFramebufferRenderbufferEXT (GL_FRAMEBUFFER_EXT, GL_COLOR_ATTACHMENT0_EXT,
-				  GL_RENDERBUFFER_EXT, priv->render_buffer);
+                                  GL_RENDERBUFFER_EXT, priv->render_buffer);
 
   if (priv->depth_stencil_buffer)
     {
       if (priv->has_depth_buffer)
-	glFramebufferRenderbufferEXT (GL_FRAMEBUFFER_EXT, GL_DEPTH_ATTACHMENT_EXT,
-				      GL_RENDERBUFFER_EXT, priv->depth_stencil_buffer);
+        glFramebufferRenderbufferEXT (GL_FRAMEBUFFER_EXT, GL_DEPTH_ATTACHMENT_EXT,
+                                      GL_RENDERBUFFER_EXT, priv->depth_stencil_buffer);
       if (priv->has_stencil_buffer)
-	glFramebufferRenderbufferEXT (GL_FRAMEBUFFER_EXT, GL_STENCIL_ATTACHMENT_EXT,
-				      GL_RENDERBUFFER_EXT, priv->depth_stencil_buffer);
+        glFramebufferRenderbufferEXT (GL_FRAMEBUFFER_EXT, GL_STENCIL_ATTACHMENT_EXT,
+                                      GL_RENDERBUFFER_EXT, priv->depth_stencil_buffer);
     }
 }
 
@@ -520,10 +520,10 @@ gtk_gl_area_unrealize (GtkWidget *widget)
   if (priv->context != NULL)
     {
       if (priv->have_buffers)
-	{
-	  gtk_gl_area_make_current (area);
-	  gtk_gl_area_delete_buffers (area);
-	}
+        {
+          gtk_gl_area_make_current (area);
+          gtk_gl_area_delete_buffers (area);
+        }
 
       /* Make sure to destroy if current */
       if (priv->context == gdk_gl_context_get_current ())
@@ -580,11 +580,11 @@ gtk_gl_area_size_allocate (GtkWidget     *widget,
   if (gtk_widget_get_realized (widget))
     {
       if (priv->event_window != NULL)
-	gdk_window_move_resize (priv->event_window,
-				allocation->x,
-				allocation->y,
-				allocation->width,
-				allocation->height);
+        gdk_window_move_resize (priv->event_window,
+                                allocation->x,
+                                allocation->y,
+                                allocation->width,
+                                allocation->height);
 
       priv->needs_resize = TRUE;
     }
@@ -651,15 +651,15 @@ gtk_gl_area_draw (GtkWidget *widget,
   if (status ==  GL_FRAMEBUFFER_COMPLETE_EXT)
     {
       if (priv->needs_render || priv->auto_render)
-	{
-	  if (priv->needs_resize)
-	    {
-	      g_signal_emit (area, area_signals[RESIZE], 0, w, h, NULL);
-	      priv->needs_resize = FALSE;
-	    }
+        {
+          if (priv->needs_resize)
+            {
+              g_signal_emit (area, area_signals[RESIZE], 0, w, h, NULL);
+              priv->needs_resize = FALSE;
+            }
 
-	  g_signal_emit (area, area_signals[RENDER], 0, priv->context, &unused);
-	}
+          g_signal_emit (area, area_signals[RENDER], 0, priv->context, &unused);
+        }
 
       priv->needs_render = FALSE;
 
@@ -731,7 +731,7 @@ gtk_gl_area_class_init (GtkGLAreaClass *klass)
   /**
    * GdkGLArea:profile:
    *
-   * The #GdkGLProfile to use to create the GL context for the area
+   * The #GdkGLProfile to use to create the GL context for the area.
    *
    * Since: 3.16
    */
@@ -748,13 +748,15 @@ gtk_gl_area_class_init (GtkGLAreaClass *klass)
   /**
    * GtkGLArea:auto-render:
    *
-   * If set to %TRUE the #GtkGLArea::render signal will be emitted every time the widget
-   * draws. This is the default and is useful if drawing the widget is fastr.
+   * If set to %TRUE the #GtkGLArea::render signal will be emitted every time
+   * the widget draws. This is the default and is useful if drawing the widget
+   * is faster.
    *
-   * If set to %FALSE the data from previous rendering is kept around and will be used
-   * for drawing the widget the next time, unless the window is resized. In order to
-   * force a rendering gtk_gl_area_queue_render() must be called. This mode is useful
-   * when the scene changes seldom, but takes a long time to redraw.
+   * If set to %FALSE the data from previous rendering is kept around and will
+   * be used for drawing the widget the next time, unless the window is resized.
+   * In order to force a rendering gtk_gl_area_queue_render() must be called.
+   * This mode is useful when the scene changes seldomly, but takes a long time
+   * to redraw.
    *
    * Since: 3.16
    */
@@ -768,12 +770,12 @@ gtk_gl_area_class_init (GtkGLAreaClass *klass)
   /**
    * GtkGLArea:has-alpha:
    *
-   * If set to %TRUE the buffer allocated by the widget will have an alpha channel component,
-   * and when rendering to the window the result will be composited over whatever is below
-   * the widget.
+   * If set to %TRUE the buffer allocated by the widget will have an alpha channel
+   * component, and when rendering to the window the result will be composited over
+   * whatever is below the widget.
    *
-   * If set to %FALSE there will be no alpha channel, and the buffer will fully replace anything
-   * below the widget.
+   * If set to %FALSE there will be no alpha channel, and the buffer will fully
+   * replace anything below the widget.
    *
    * Since: 3.16
    */
@@ -787,8 +789,8 @@ gtk_gl_area_class_init (GtkGLAreaClass *klass)
   /**
    * GtkGLArea:has-depth-buffer:
    *
-   * If set to %TRUE the widget will allocate and enable a depth buffer for the target
-   * framebuffer.
+   * If set to %TRUE the widget will allocate and enable a depth buffer for the
+   * target framebuffer.
    *
    * Since: 3.16
    */
@@ -802,8 +804,8 @@ gtk_gl_area_class_init (GtkGLAreaClass *klass)
   /**
    * GtkGLArea:has-stencil-buffer:
    *
-   * If set to %TRUE the widget will allocate and enable a stencil buffer for the target
-   * framebuffer.
+   * If set to %TRUE the widget will allocate and enable a stencil buffer for the
+   * target framebuffer.
    *
    * Since: 3.16
    */
@@ -838,13 +840,13 @@ gtk_gl_area_class_init (GtkGLAreaClass *klass)
    */
   area_signals[RENDER] =
     g_signal_new (I_("render"),
-		   G_TYPE_FROM_CLASS (gobject_class),
-		   G_SIGNAL_RUN_LAST,
-		   G_STRUCT_OFFSET (GtkGLAreaClass, render),
-                   _gtk_boolean_handled_accumulator, NULL,
-                   NULL,
-		   G_TYPE_BOOLEAN, 1,
-		   GDK_TYPE_GL_CONTEXT);
+                  G_TYPE_FROM_CLASS (gobject_class),
+                  G_SIGNAL_RUN_LAST,
+                  G_STRUCT_OFFSET (GtkGLAreaClass, render),
+                  _gtk_boolean_handled_accumulator, NULL,
+                  NULL,
+                  G_TYPE_BOOLEAN, 1,
+                  GDK_TYPE_GL_CONTEXT);
 
   /**
    * GtkGLArea::resized:
@@ -855,9 +857,10 @@ gtk_gl_area_class_init (GtkGLAreaClass *klass)
    * in order to keep GL state up to date with the widget size, like for
    * instance camera properties which may depend on the width/height ratio.
    *
-   * The GL context for the area is guaranteed to be current when this is emitted.
+   * The GL context for the area is guaranteed to be current when this signal
+   * is emitted.
    *
-   * The default handler sets up the gl Viewport.
+   * The default handler sets up the GL viewport.
    *
    * Since: 3.16
    */
@@ -885,8 +888,8 @@ gtk_gl_area_class_init (GtkGLAreaClass *klass)
    * gtk_gl_area_set_error() to register a more detailed error
    * of how the construction failed.
    *
-   * Returns: (transfer full): a newly created #GdkGLContext; the
-   * #GtkGLArea widget will take ownership of the returned value.
+   * Returns: (transfer full): a newly created #GdkGLContext;
+   *     the #GtkGLArea widget will take ownership of the returned value.
    *
    * Since: 3.16
    */
@@ -934,13 +937,13 @@ gtk_gl_area_new (void)
  * @error: (allow-none): a new #GError, or %NULL to unset the error
  *
  * Sets an error on the area which will be shown instead of the
- * gl rendering. This is useful in the ::create-context signal
- * if GL context creation fails.
+ * GL rendering. This is useful in the #GtkGLArea::create-context
+ * signal if GL context creation fails.
  *
  * Since: 3.16
  */
 void
-gtk_gl_area_set_error (GtkGLArea *area,
+gtk_gl_area_set_error (GtkGLArea    *area,
                        const GError *error)
 {
   GtkGLAreaPrivate *priv = gtk_gl_area_get_instance_private (area);
@@ -983,7 +986,7 @@ gtk_gl_area_get_error (GtkGLArea *area)
  * Since: 3.16
  */
 GdkGLProfile
-gtk_gl_area_get_profile (GtkGLArea        *area)
+gtk_gl_area_get_profile (GtkGLArea *area)
 {
   GtkGLAreaPrivate *priv = gtk_gl_area_get_instance_private (area);
 
@@ -1003,8 +1006,8 @@ gtk_gl_area_get_profile (GtkGLArea        *area)
  * Since: 3.16
  */
 void
-gtk_gl_area_set_profile (GtkGLArea        *area,
-			 GdkGLProfile      profile)
+gtk_gl_area_set_profile (GtkGLArea    *area,
+                         GdkGLProfile  profile)
 {
   GtkGLAreaPrivate *priv = gtk_gl_area_get_instance_private (area);
 
@@ -1156,7 +1159,7 @@ gtk_gl_area_get_has_stencil_buffer (GtkGLArea *area)
  */
 void
 gtk_gl_area_set_has_stencil_buffer (GtkGLArea *area,
-				    gboolean   has_stencil_buffer)
+                                    gboolean   has_stencil_buffer)
 {
   GtkGLAreaPrivate *priv = gtk_gl_area_get_instance_private (area);
 
@@ -1178,8 +1181,8 @@ gtk_gl_area_set_has_stencil_buffer (GtkGLArea *area,
  * gtk_gl_area_queue_render:
  * @area: a #GtkGLArea
  *
- * Marks the currently rendered data (if any) as invalid, and queues a
- * redraw of the widget, ensuring that the #GtkGLArea::render signal
+ * Marks the currently rendered data (if any) as invalid, and queues
+ * a redraw of the widget, ensuring that the #GtkGLArea::render signal
  * is emitted during the draw.
  *
  * This is only needed when the gtk_gl_area_set_auto_render() has
@@ -1228,19 +1231,19 @@ gtk_gl_area_get_auto_render (GtkGLArea *area)
  *
  * If @auto_render is %TRUE the #GtkGLArea::render signal will be
  * emitted every time the widget draws. This is the default and is
- * useful if drawing the widget is fastr.
+ * useful if drawing the widget is faster.
  *
  * If @auto_render is %FALSE the data from previous rendering is kept
  * around and will be used for drawing the widget the next time,
  * unless the window is resized. In order to force a rendering
  * gtk_gl_area_queue_render() must be called. This mode is useful when
- * the scene changes seldom, but takes a long time to redraw.
+ * the scene changes seldomly, but takes a long time to redraw.
  *
  * Since: 3.16
  */
 void
 gtk_gl_area_set_auto_render (GtkGLArea *area,
-			     gboolean   auto_render)
+                             gboolean   auto_render)
 {
   GtkGLAreaPrivate *priv = gtk_gl_area_get_instance_private (area);
 
@@ -1255,7 +1258,7 @@ gtk_gl_area_set_auto_render (GtkGLArea *area,
       g_object_notify (G_OBJECT (area), "auto-render");
 
       if (auto_render)
-	gtk_widget_queue_draw (GTK_WIDGET (area));
+        gtk_widget_queue_draw (GTK_WIDGET (area));
     }
 }
 
