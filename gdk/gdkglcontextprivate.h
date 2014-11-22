@@ -59,7 +59,6 @@ typedef struct {
   guint vertex_array_object;
   guint tmp_framebuffer;
   guint tmp_vertex_buffer;
-  guint tmp_uv_buffer;
 
   GdkGLContextProgram texture_2d_quad_program;
   GdkGLContextProgram texture_rect_quad_program;

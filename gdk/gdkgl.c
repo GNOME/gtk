@@ -223,9 +223,6 @@ gdk_gl_texture_quads (GdkGLContext *paint_context,
   if (paint_data->tmp_vertex_buffer == 0)
     glGenBuffers(1, &paint_data->tmp_vertex_buffer);
 
-  if (paint_data->tmp_uv_buffer == 0)
-    glGenBuffers(1, &paint_data->tmp_uv_buffer);
-
   if (texture_target == GL_TEXTURE_RECTANGLE_ARB)
     use_texture_rect_program (paint_data);
   else
@@ -239,32 +236,21 @@ gdk_gl_texture_quads (GdkGLContext *paint_context,
   glEnableVertexAttribArray (0);
   glEnableVertexAttribArray (1);
   glBindBuffer (GL_ARRAY_BUFFER, paint_data->tmp_vertex_buffer);
-  glVertexAttribPointer (program->position_location, 2, GL_FLOAT, GL_FALSE, 0, NULL);
-  glBindBuffer (GL_ARRAY_BUFFER, paint_data->tmp_uv_buffer);
-  glVertexAttribPointer (program->uv_location, 2, GL_FLOAT, GL_FALSE, 0, NULL);
+
+  glVertexAttribPointer (program->position_location, 2, GL_FLOAT, GL_FALSE, sizeof(float) * 4, NULL);
+  glVertexAttribPointer (program->uv_location, 2, GL_FLOAT, GL_FALSE, sizeof(float) * 4, NULL + sizeof(float) * 2);
 
   for (i = 0; i < n_quads; i++)
     {
       GdkTexturedQuad *quad = &quads[i];
       float vertex_buffer_data[] = {
-        (quad->x2 * 2) / w - 1, (quad->y1 * 2) / h - 1,
-        (quad->x2 * 2) / w - 1, (quad->y2 * 2) / h - 1,
-        (quad->x1 * 2) / w - 1, (quad->y2 * 2) / h - 1,
-        (quad->x1 * 2) / w - 1, (quad->y1 * 2) / h - 1,
-      };
-      float uv_buffer_data[] = {
-        quad->u2, quad->v1,
-        quad->u2, quad->v2,
-        quad->u1, quad->v2,
-        quad->u1, quad->v1,
+        (quad->x2 * 2) / w - 1, (quad->y1 * 2) / h - 1, quad->u2, quad->v1,
+        (quad->x2 * 2) / w - 1, (quad->y2 * 2) / h - 1, quad->u2, quad->v2,
+        (quad->x1 * 2) / w - 1, (quad->y2 * 2) / h - 1, quad->u1, quad->v2,
+        (quad->x1 * 2) / w - 1, (quad->y1 * 2) / h - 1, quad->u1, quad->v1,
       };
 
-      glBindBuffer (GL_ARRAY_BUFFER, paint_data->tmp_vertex_buffer);
       glBufferData (GL_ARRAY_BUFFER, sizeof(vertex_buffer_data), vertex_buffer_data, GL_STREAM_DRAW);
-
-      glBindBuffer (GL_ARRAY_BUFFER, paint_data->tmp_uv_buffer);
-      glBufferData (GL_ARRAY_BUFFER, sizeof(uv_buffer_data), uv_buffer_data, GL_STREAM_DRAW);
-
       glDrawArrays (GL_TRIANGLE_FAN, 0, 4);
     }
 
