@@ -19,29 +19,56 @@
   <template class="GtkInspectorCssEditor" parent="GtkBox">
     <property name="orientation">vertical</property>
     <child>
-      <object class="GtkToolbar" id="toolbar">
+      <object class="GtkBox">
         <property name="visible">True</property>
-        <property name="icon-size">small-toolbar</property>
+        <property name="orientation">horizontal</property>
+        <property name="spacing">6</property>
+        <property name="margin">6</property>
         <child>
-          <object class="GtkToggleToolButton" id="disable_button">
+          <object class="GtkToggleButton" id="disable_button">
             <property name="visible">True</property>
-            <property name="icon-name">media-playback-pause-symbolic</property>
+            <property name="relief">none</property>
             <property name="tooltip-text" translatable="yes">Disable this custom CSS</property>
             <signal name="toggled" handler="disable_toggled"/>
             <style>
               <class name="image-button"/>
             </style>
+            <child>
+              <object class="GtkImage">
+                <property name="visible">True</property>
+                <property name="icon-name">media-playback-pause-symbolic</property>
+                <property name="icon-size">1</property>
+              </object>
+            </child>
           </object>
+          <packing>
+            <property name="pack-type">start</property>
+          </packing>
         </child>
         <child>
-          <object class="GtkToolButton" id="save_button">
+          <object class="GtkButton" id="save_button">
             <property name="visible">True</property>
-            <property name="icon-name">document-save-symbolic</property>
+            <property name="relief">none</property>
             <property name="tooltip-text" translatable="yes">Save the current CSS</property>
             <signal name="clicked" handler="save_clicked"/>
             <style>
               <class name="image-button"/>
             </style>
+            <child>
+              <object class="GtkImage">
+                <property name="visible">True</property>
+                <property name="icon-name">document-save-symbolic</property>
+                <property name="icon-size">1</property>
+              </object>
+            </child>
+          </object>
+          <packing>
+            <property name="pack-type">start</property>
+          </packing>
+        </child>
+        <child type="center">
+          <object class="GtkLabel" id="object_title">
+            <property name="visible">True</property>
           </object>
         </child>
       </object>

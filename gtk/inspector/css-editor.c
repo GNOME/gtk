@@ -31,7 +31,8 @@
 #include "gtktextview.h"
 #include "gtkmessagedialog.h"
 #include "gtkfilechooserdialog.h"
-#include "gtktoggletoolbutton.h"
+#include "gtktogglebutton.h"
+#include "gtklabel.h"
 
 #define GTK_INSPECTOR_CSS_EDITOR_TEXT "inspector-css-editor-text"
 #define GTK_INSPECTOR_CSS_EDITOR_PROVIDER "inspector-css-editor-provider"
@@ -57,13 +58,13 @@ typedef struct
 
 struct _GtkInspectorCssEditorPrivate
 {
-  GtkWidget *toolbar;
   GtkWidget *view;
+  GtkWidget *object_title;
   GtkTextBuffer *text;
   GtkCssProvider *provider;
   gboolean global;
   GtkStyleContext *context;
-  GtkToggleToolButton *disable_button;
+  GtkToggleButton *disable_button;
   guint timeout;
 };
 
@@ -102,10 +103,10 @@ set_initial_text (GtkInspectorCssEditor *ce)
 }
 
 static void
-disable_toggled (GtkToggleToolButton   *button,
+disable_toggled (GtkToggleButton       *button,
                  GtkInspectorCssEditor *ce)
 {
-  if (gtk_toggle_tool_button_get_active (button))
+  if (gtk_toggle_button_get_active (button))
     {
       if (ce->priv->global)
         gtk_style_context_remove_provider_for_screen (gdk_screen_get_default (),
@@ -187,7 +188,7 @@ save_response (GtkWidget             *dialog,
 }
 
 static void
-save_clicked (GtkToolButton         *button,
+save_clicked (GtkButton             *button,
               GtkInspectorCssEditor *ce)
 {
   GtkWidget *dialog;
@@ -439,10 +440,10 @@ gtk_inspector_css_editor_class_init (GtkInspectorCssEditorClass *klass)
                             TRUE, G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY));
 
   gtk_widget_class_set_template_from_resource (widget_class, "/org/gtk/inspector/css-editor.ui");
-  gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorCssEditor, toolbar);
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorCssEditor, text);
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorCssEditor, view);
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorCssEditor, disable_button);
+  gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorCssEditor, object_title);
   gtk_widget_class_bind_template_callback (widget_class, disable_toggled);
   gtk_widget_class_bind_template_callback (widget_class, save_clicked);
   gtk_widget_class_bind_template_callback (widget_class, text_changed);
@@ -463,6 +464,7 @@ gtk_inspector_css_editor_set_object (GtkInspectorCssEditor *ce,
 {
   gchar *text;
   GtkCssProvider *provider;
+  const gchar *title;
 
   g_return_if_fail (GTK_INSPECTOR_IS_CSS_EDITOR (ce));
   g_return_if_fail (!ce->priv->global);
@@ -484,6 +486,9 @@ gtk_inspector_css_editor_set_object (GtkInspectorCssEditor *ce,
     }
 
   gtk_widget_show (GTK_WIDGET (ce));
+
+  title = (const gchar *)g_object_get_data (object, "gtk-inspector-object-title");
+  gtk_label_set_label (GTK_LABEL (ce->priv->object_title), title);
 
   ce->priv->context = gtk_widget_get_style_context (GTK_WIDGET (object));
 
