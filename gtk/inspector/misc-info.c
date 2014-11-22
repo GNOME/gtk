@@ -540,7 +540,7 @@ gtk_inspector_misc_info_class_init (GtkInspectorMiscInfoClass *klass)
   widget_class->unmap = unmap;
 
   g_object_class_install_property (object_class, PROP_OBJECT_TREE,
-      g_param_spec_object ("object-tree", "Object Tree", "Obect tree",
+      g_param_spec_object ("object-tree", "Object Tree", "Object tree",
                            GTK_TYPE_WIDGET, G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY));
 
   gtk_widget_class_set_template_from_resource (widget_class, "/org/gtk/inspector/misc-info.ui");
