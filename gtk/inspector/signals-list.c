@@ -23,8 +23,9 @@
 #include "gtkcellrenderer.h"
 #include "gtkliststore.h"
 #include "gtktextbuffer.h"
-#include "gtktoggletoolbutton.h"
+#include "gtktogglebutton.h"
 #include "gtktreeviewcolumn.h"
+#include "gtklabel.h"
 
 enum
 {
@@ -45,6 +46,7 @@ struct _GtkInspectorSignalsListPrivate
   GtkWidget *log_win;
   GtkWidget *trace_button;
   GtkWidget *clear_button;
+  GtkWidget *object_title;
   GtkTreeViewColumn *count_column;
   GtkCellRenderer *count_renderer;
   GObject *object;
@@ -148,7 +150,14 @@ gtk_inspector_signals_list_set_object (GtkInspectorSignalsList *sl,
   sl->priv->object = object;
 
   if (object)
-    read_signals_from_object (sl, object);
+    {
+      const gchar *title;
+
+      title = (const gchar *)g_object_get_data (object, "gtk-inspector-object-title");
+      gtk_label_set_label (GTK_LABEL (sl->priv->object_title), title);
+
+      read_signals_from_object (sl, object);
+    }
 }
 
 static void
@@ -184,8 +193,6 @@ gtk_inspector_signals_list_init (GtkInspectorSignalsList *sl)
 {
   sl->priv = gtk_inspector_signals_list_get_instance_private (sl);
   gtk_widget_init_template (GTK_WIDGET (sl));
-
-  gtk_tool_button_set_icon_name (GTK_TOOL_BUTTON (sl->priv->clear_button), "edit-clear-symbolic");
 
   gtk_tree_view_column_set_cell_data_func (sl->priv->count_column,
                                            sl->priv->count_renderer,
@@ -295,18 +302,18 @@ stop_tracing (GtkInspectorSignalsList *sl)
 {
   sl->priv->tracing = FALSE;
   gtk_tree_model_foreach (GTK_TREE_MODEL (sl->priv->model), stop_tracing_cb, sl);
-  gtk_toggle_tool_button_set_active (GTK_TOGGLE_TOOL_BUTTON (sl->priv->trace_button), FALSE);
+  gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (sl->priv->trace_button), FALSE);
 }
 
 static void
-toggle_tracing (GtkToggleToolButton *button, GtkInspectorSignalsList *sl)
+toggle_tracing (GtkToggleButton *button, GtkInspectorSignalsList *sl)
 {
-  if (gtk_toggle_tool_button_get_active (button) == sl->priv->tracing)
+  if (gtk_toggle_button_get_active (button) == sl->priv->tracing)
     return;
 
   //gtk_widget_show (sl->priv->log_win);
 
-  if (gtk_toggle_tool_button_get_active (button))
+  if (gtk_toggle_button_get_active (button))
     start_tracing (sl);
   else
     stop_tracing (sl);
@@ -323,7 +330,7 @@ clear_log_cb (GtkTreeModel *model,
 }
 
 static void
-clear_log (GtkToolButton *button, GtkInspectorSignalsList *sl)
+clear_log (GtkButton *button, GtkInspectorSignalsList *sl)
 {
   gtk_text_buffer_set_text (sl->priv->text, "", -1);
 
@@ -344,6 +351,7 @@ gtk_inspector_signals_list_class_init (GtkInspectorSignalsListClass *klass)
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorSignalsList, count_renderer);
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorSignalsList, trace_button);
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorSignalsList, clear_button);
+  gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorSignalsList, object_title);
   gtk_widget_class_bind_template_callback (widget_class, toggle_tracing);
   gtk_widget_class_bind_template_callback (widget_class, clear_log);
 }

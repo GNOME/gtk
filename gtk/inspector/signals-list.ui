@@ -20,22 +20,56 @@
         <property name="orientation">vertical</property>
         <property name="visible">True</property>
         <child>
-          <object class="GtkToolbar" id="toolbar">
+          <object class="GtkBox">
             <property name="visible">True</property>
-            <property name="icon-size">small-toolbar</property>
+            <property name="orientation">horizontal</property>
+            <property name="spacing">6</property>
+            <property name="margin">6</property>
             <child>
-              <object class="GtkToggleToolButton" id="trace_button">
+              <object class="GtkToggleButton" id="trace_button">
                 <property name="visible">True</property>
-                <property name="icon-name">media-record-symbolic</property>
+                <property name="relief">none</property>
                 <property name="tooltip-text" translatable="yes">Trace signal emissions on this object</property>
                 <signal name="toggled" handler="toggle_tracing"/>
+                <style>
+                  <class name="image-button"/>
+                </style>
+                <child>
+                  <object class="GtkImage">
+                    <property name="visible">True</property>
+                    <property name="icon-name">media-record-symbolic</property>
+                    <property name="icon-size">1</property>
+                  </object>
+                </child>
               </object>
+              <packing>
+                <property name="pack-type">start</property>
+              </packing>
             </child>
             <child>
-              <object class="GtkToolButton" id="clear_button">
+              <object class="GtkButton" id="clear_button">
                 <property name="visible">True</property>
+                <property name="relief">none</property>
                 <property name="tooltip-text" translatable="yes">Clear log</property>
                 <signal name="clicked" handler="clear_log"/>
+                <style>
+                  <class name="image-button"/>
+                </style>
+                <child>
+                  <object class="GtkImage">
+                    <property name="visible">True</property>
+                    <property name="icon-name">edit-clear-symbolic</property>
+                    <property name="icon-size">1</property>
+                  </object>
+                </child>
+              </object>
+              <packing>
+                <property name="pack-type">start</property>
+              </packing>
+            </child>
+            <child type="center">
+              <object class="GtkLabel" id="object_title">
+                <property name="visible">True</property>
               </object>
             </child>
           </object>
