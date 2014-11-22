@@ -665,10 +665,9 @@ gdk_mir_window_impl_get_device_state (GdkWindow       *window,
 }
 
 static gboolean
-gdk_mir_window_impl_begin_paint_region (GdkWindow            *window,
-                                        const cairo_region_t *region)
+gdk_mir_window_impl_begin_paint (GdkWindow *window)
 {
-  //g_printerr ("gdk_mir_window_impl_begin_paint_region window=%p\n", window);
+  //g_printerr ("gdk_mir_window_impl_begin_paint window=%p\n", window);
   /* Indicate we are ready to be drawn onto directly? */
   return FALSE;
 }
@@ -1557,7 +1556,7 @@ gdk_mir_window_impl_class_init (GdkMirWindowImplClass *klass)
   impl_class->get_geometry = gdk_mir_window_impl_get_geometry;
   impl_class->get_root_coords = gdk_mir_window_impl_get_root_coords;
   impl_class->get_device_state = gdk_mir_window_impl_get_device_state;
-  impl_class->begin_paint_region = gdk_mir_window_impl_begin_paint_region;
+  impl_class->begin_paint = gdk_mir_window_impl_begin_paint;
   impl_class->end_paint = gdk_mir_window_impl_end_paint;
   impl_class->get_shape = gdk_mir_window_impl_get_shape;
   impl_class->get_input_shape = gdk_mir_window_impl_get_input_shape;

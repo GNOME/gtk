@@ -2891,8 +2891,8 @@ gdk_window_begin_paint_region (GdkWindow       *window,
   impl_class = GDK_WINDOW_IMPL_GET_CLASS (window->impl);
 
   needs_surface = TRUE;
-  if (impl_class->begin_paint_region)
-    needs_surface = impl_class->begin_paint_region (window, region);
+  if (impl_class->begin_paint)
+    needs_surface = impl_class->begin_paint (window);
 
   window->current_paint.region = cairo_region_copy (region);
   cairo_region_intersect (window->current_paint.region, window->clip_region);

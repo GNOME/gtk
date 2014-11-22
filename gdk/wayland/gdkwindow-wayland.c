@@ -570,8 +570,7 @@ gdk_wayland_window_create_similar_image_surface (GdkWindow *     window,
 }
 
 static gboolean
-gdk_window_impl_wayland_begin_paint_region (GdkWindow            *window,
-                                            const cairo_region_t *region)
+gdk_window_impl_wayland_begin_paint (GdkWindow *window)
 {
   GdkWindowImplWayland *impl = GDK_WINDOW_IMPL_WAYLAND (window->impl);
   gdk_wayland_window_ensure_cairo_surface (window);
@@ -2125,7 +2124,7 @@ _gdk_window_impl_wayland_class_init (GdkWindowImplWaylandClass *klass)
   impl_class->destroy_foreign = gdk_window_wayland_destroy_foreign;
   impl_class->get_shape = gdk_wayland_window_get_shape;
   impl_class->get_input_shape = gdk_wayland_window_get_input_shape;
-  impl_class->begin_paint_region = gdk_window_impl_wayland_begin_paint_region;
+  impl_class->begin_paint = gdk_window_impl_wayland_begin_paint;
   impl_class->end_paint = gdk_window_impl_wayland_end_paint;
   /* impl_class->beep */
 

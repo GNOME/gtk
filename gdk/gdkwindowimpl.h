@@ -106,8 +106,7 @@ struct _GdkWindowImplClass
                                          gdouble         *x,
                                          gdouble         *y,
                                          GdkModifierType *mask);
-  gboolean    (* begin_paint_region)    (GdkWindow       *window,
-					 const cairo_region_t *region);
+  gboolean    (* begin_paint)           (GdkWindow       *window);
   void        (* end_paint)             (GdkWindow       *window);
 
   cairo_region_t * (* get_shape)        (GdkWindow       *window);
