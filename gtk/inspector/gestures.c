@@ -39,7 +39,7 @@ struct _GtkInspectorGesturesPrivate
 {
   GtkSizeGroup *sizegroup;
   GObject *object;
-  GtkWidget *object_tree;
+  GtkInspectorObjectTree *object_tree;
 };
 
 G_DEFINE_TYPE_WITH_PRIVATE (GtkInspectorGestures, gtk_inspector_gestures, GTK_TYPE_BOX)
@@ -51,7 +51,9 @@ gtk_inspector_gestures_init (GtkInspectorGestures *sl)
   sl->priv->sizegroup = gtk_size_group_new (GTK_SIZE_GROUP_HORIZONTAL);
   g_object_set (sl,
                 "orientation", GTK_ORIENTATION_VERTICAL,
-                "margin", 60,
+                "margin-start", 60,
+                "margin-end", 60,
+                "margin-bottom", 60,
                 "spacing", 10,
                 NULL);
 }
@@ -92,8 +94,7 @@ row_activated (GtkListBox           *box,
   GObject *gesture;
   
   gesture = G_OBJECT (g_object_get_data (G_OBJECT (row), "gesture"));
-  gtk_inspector_object_tree_select_object (GTK_INSPECTOR_OBJECT_TREE (sl->priv->object_tree),
-                                           gesture);
+  gtk_inspector_object_tree_select_object (sl->priv->object_tree, gesture);
 }
 
 static void
@@ -181,12 +182,24 @@ gtk_inspector_gestures_set_object (GtkInspectorGestures *sl,
   GHashTableIter iter;
   GList *list, *l;
   gint phase;
+  const gchar *title;
+  GtkWidget *label;
 
   clear_all (sl);
   gtk_widget_hide (GTK_WIDGET (sl));
 
   if (!GTK_IS_WIDGET (object))
     return;
+
+  title = (const gchar *)g_object_get_data (object, "gtk-inspector-object-title");
+  label = gtk_label_new (title);
+
+  gtk_widget_set_halign (label, GTK_ALIGN_FILL);
+  gtk_widget_set_valign (label, GTK_ALIGN_CENTER);
+  gtk_widget_set_margin_top (label, 12);
+  gtk_widget_set_margin_bottom (label, 30);
+  gtk_widget_show (label);
+  gtk_container_add (GTK_CONTAINER (sl), label);
 
   hash = g_hash_table_new (g_direct_hash, g_direct_equal);
   for (phase = GTK_PHASE_NONE; phase <= GTK_PHASE_TARGET; phase++)
