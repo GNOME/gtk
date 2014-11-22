@@ -12,14 +12,57 @@
   <template class="GtkInspectorStylePropList" parent="GtkBox">
     <property name="orientation">vertical</property>
     <child>
-      <object class="GtkSearchBar" id="search_bar">
+      <object class="GtkStack" id="search_stack">
         <property name="visible">True</property>
-        <property name="show-close-button">True</property>
+        <property name="hhomogeneous">True</property>
+        <property name="vhomogeneous">True</property>
+        <property name="transition-type">crossfade</property>
         <child>
-          <object class="GtkSearchEntry" id="search_entry">
+          <object class="GtkBox" id="search_box">
             <property name="visible">True</property>
-            <property name="max-width-chars">40</property>
+            <property name="orientation">horizontal</property>
+            <property name="spacing">6</property>
+            <property name="margin">6</property>
+            <child type="center">
+              <object class="GtkSearchEntry" id="search_entry">
+                <property name="visible">True</property>
+                <property name="max-width-chars">40</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkButton" id="search_close_button">
+                <property name="visible">True</property>
+                <signal name="clicked" handler="search_close_clicked"/>
+                <style>
+                  <class name="image-button"/>
+                </style>
+                <child>
+                  <object class="GtkImage">
+                    <property name="visible">True</property>
+                    <property name="icon-name">window-close-symbolic</property>
+                    <property name="icon-size">1</property>
+                  </object>
+                </child>
+              </object>
+              <packing>
+                <property name="pack-type">end</property>
+              </packing>
+            </child>
           </object>
+          <packing>
+            <property name="name">search</property>
+          </packing>
+       </child>
+        <child>
+          <object class="GtkLabel" id="object_title">
+            <property name="visible">True</property>
+            <property name="margin">10</property>
+            <property name="halign">fill</property>
+            <property name="valign">center</property>
+          </object>
+          <packing>
+            <property name="name">title</property>
+          </packing>
         </child>
       </object>
     </child>
