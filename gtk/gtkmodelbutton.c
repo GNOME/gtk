@@ -879,7 +879,7 @@ gtk_model_button_class_init (GtkModelButtonClass *class)
     g_param_spec_string ("text",
                          P_("Text"),
                          P_("The text"),
-                         NULL,
+                         "",
                          G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
 
   /**
@@ -956,7 +956,7 @@ gtk_model_button_class_init (GtkModelButtonClass *class)
     g_param_spec_boolean ("iconic",
                           P_("Iconic"),
                           P_("Whether to prefer the icon over text"),
-                          TRUE,
+                          FALSE,
                           G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
   g_object_class_install_properties (object_class, LAST_PROPERTY, properties);
 
