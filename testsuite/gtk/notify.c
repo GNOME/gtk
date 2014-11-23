@@ -602,6 +602,10 @@ test_type (gconstpointer data)
           g_str_equal (pspec->name, "visible-child-name"))
         continue;
 
+      if (pspec->owner_type == GTK_TYPE_POPOVER_MENU &&
+          g_str_equal (pspec->name, "visible-submenu"))
+        continue;
+
       if (pspec->owner_type == GTK_TYPE_TEXT_VIEW &&
           g_str_equal (pspec->name, "im-module"))
         continue;
@@ -626,6 +630,10 @@ test_type (gconstpointer data)
       if (g_type_is_a (type, GTK_TYPE_ASSISTANT) &&
 	  g_str_equal (pspec->name, "use-header-bar"))
 	continue;
+
+      if (type == GTK_TYPE_MODEL_BUTTON &&
+          pspec->owner_type == GTK_TYPE_BUTTON)
+        continue;
 
       if (g_test_verbose ())
         g_print ("Property %s.%s\n", g_type_name (pspec->owner_type), pspec->name);
