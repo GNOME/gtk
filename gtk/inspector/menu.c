@@ -22,6 +22,8 @@
 
 #include "gtktreestore.h"
 #include "gtkwidgetprivate.h"
+#include "gtklabel.h"
+
 
 enum
 {
@@ -35,6 +37,7 @@ enum
 struct _GtkInspectorMenuPrivate
 {
   GtkTreeStore *model;
+  GtkWidget *object_title;
 };
 
 G_DEFINE_TYPE_WITH_PRIVATE (GtkInspectorMenu, gtk_inspector_menu, GTK_TYPE_BOX)
@@ -130,6 +133,13 @@ gtk_inspector_menu_set_object (GtkInspectorMenu *sl,
   
   if (G_IS_MENU_MODEL (object))
     add_menu (sl, G_MENU_MODEL (object), NULL);
+
+  if (G_IS_OBJECT (object))
+    {
+      const gchar *title;
+      title = (const gchar *)g_object_get_data (object, "gtk-inspector-object-title");
+      gtk_label_set_label (GTK_LABEL (sl->priv->object_title), title);
+    }
 }
 
 static void
@@ -139,6 +149,7 @@ gtk_inspector_menu_class_init (GtkInspectorMenuClass *klass)
 
   gtk_widget_class_set_template_from_resource (widget_class, "/org/gtk/inspector/menu.ui");
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorMenu, model);
+  gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorMenu, object_title);
 }
 
 // vim: set et sw=2 ts=2:
