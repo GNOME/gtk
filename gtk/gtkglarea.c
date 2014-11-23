@@ -743,6 +743,7 @@ gtk_gl_area_class_init (GtkGLAreaClass *klass)
                        GDK_GL_PROFILE_DEFAULT,
                        G_PARAM_READWRITE |
                        G_PARAM_CONSTRUCT |
+                       G_PARAM_EXPLICIT_NOTIFY |
                        G_PARAM_STATIC_STRINGS);
 
   /**
@@ -765,7 +766,9 @@ gtk_gl_area_class_init (GtkGLAreaClass *klass)
                           P_("Auto render"),
                           P_("Whether the gl area renders on each redraw"),
                           TRUE,
-                          GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
+                          GTK_PARAM_READWRITE |
+                          G_PARAM_STATIC_STRINGS |
+                          G_PARAM_EXPLICIT_NOTIFY);
 
   /**
    * GtkGLArea:has-alpha:
@@ -784,7 +787,9 @@ gtk_gl_area_class_init (GtkGLAreaClass *klass)
                           P_("Has alpha"),
                           P_("Whether the gl area color buffer has an alpha component"),
                           FALSE,
-                          GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
+                          GTK_PARAM_READWRITE |
+                          G_PARAM_STATIC_STRINGS |
+                          G_PARAM_EXPLICIT_NOTIFY);
 
   /**
    * GtkGLArea:has-depth-buffer:
@@ -799,7 +804,9 @@ gtk_gl_area_class_init (GtkGLAreaClass *klass)
                           P_("Has depth buffer"),
                           P_("Whether a depth buffer is allocated"),
                           FALSE,
-                          GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
+                          GTK_PARAM_READWRITE |
+                          G_PARAM_STATIC_STRINGS |
+                          G_PARAM_EXPLICIT_NOTIFY);
 
   /**
    * GtkGLArea:has-stencil-buffer:
@@ -814,7 +821,9 @@ gtk_gl_area_class_init (GtkGLAreaClass *klass)
                           P_("Has stencil buffer"),
                           P_("Whether a stencil buffer is allocated"),
                           FALSE,
-                          GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
+                          GTK_PARAM_READWRITE |
+                          G_PARAM_STATIC_STRINGS |
+                          G_PARAM_EXPLICIT_NOTIFY);
 
   gobject_class->set_property = gtk_gl_area_set_property;
   gobject_class->get_property = gtk_gl_area_get_property;
