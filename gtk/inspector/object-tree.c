@@ -801,6 +801,19 @@ gtk_inspector_object_tree_append_object (GtkInspectorObjectTree *wt,
              gtk_inspector_object_tree_append_object (wt, clock, &iter, "frame-clock");
          }
     }
+
+  if (GTK_IS_APPLICATION (object))
+    {
+      GObject *menu;
+
+      menu = (GObject *)gtk_application_get_app_menu (GTK_APPLICATION (object));
+      if (menu)
+        gtk_inspector_object_tree_append_object (wt, menu, &iter, "app-menu");
+
+      menu = (GObject *)gtk_application_get_menubar (GTK_APPLICATION (object));
+      if (menu)
+        gtk_inspector_object_tree_append_object (wt, menu, &iter, "menubar");
+    }
 }
 
 void
