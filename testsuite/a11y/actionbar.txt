@@ -17,7 +17,7 @@ window1
     alpha: 1
     button1
       "push button"
-      parent: center_box
+      parent: box
       index: 0
       name: Start 1
       state: enabled focusable sensitive showing visible
@@ -33,7 +33,7 @@ window1
       action 0 description: Clicks the button
     button2
       "push button"
-      parent: center_box
+      parent: box
       index: 1
       name: Start 2
       state: enabled focusable sensitive showing visible
@@ -49,7 +49,7 @@ window1
       action 0 description: Clicks the button
     button5
       "push button"
-      parent: center_box
+      parent: box
       index: 2
       name: Center
       state: enabled focusable sensitive showing visible
@@ -65,7 +65,7 @@ window1
       action 0 description: Clicks the button
     button4
       "push button"
-      parent: center_box
+      parent: box
       index: 3
       name: End 2
       state: enabled focusable sensitive showing visible
@@ -81,7 +81,7 @@ window1
       action 0 description: Clicks the button
     button3
       "push button"
-      parent: center_box
+      parent: box
       index: 4
       name: End 1
       state: enabled focusable sensitive showing visible
