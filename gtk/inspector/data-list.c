@@ -22,13 +22,16 @@
 
 #include "gtktreeview.h"
 #include "gtkcellrenderertext.h"
-#include "gtktoggletoolbutton.h"
+#include "gtktogglebutton.h"
+#include "gtklabel.h"
+
 
 struct _GtkInspectorDataListPrivate
 {
   GtkTreeModel *object;
   GtkTreeModel *types;
   GtkTreeView *view;
+  GtkWidget *object_title;
   gboolean show_data;
 };
 
@@ -111,6 +114,8 @@ void
 gtk_inspector_data_list_set_object (GtkInspectorDataList *sl,
                                     GObject              *object)
 {
+  const gchar *title;
+
   clear_view (sl);
   sl->priv->object = NULL;
   sl->priv->show_data = FALSE;
@@ -121,6 +126,9 @@ gtk_inspector_data_list_set_object (GtkInspectorDataList *sl,
       return;
     }
 
+  title = (const gchar *)g_object_get_data (object, "gtk-inspector-object-title");
+  gtk_label_set_label (GTK_LABEL (sl->priv->object_title), title);
+
   gtk_widget_show (GTK_WIDGET (sl));
 
   sl->priv->object = GTK_TREE_MODEL (object);
@@ -129,13 +137,13 @@ gtk_inspector_data_list_set_object (GtkInspectorDataList *sl,
 }
 
 static void
-toggle_show (GtkToggleToolButton  *button,
+toggle_show (GtkToggleButton      *button,
              GtkInspectorDataList *sl)
 {
-  if (gtk_toggle_tool_button_get_active (button) == sl->priv->show_data)
+  if (gtk_toggle_button_get_active (button) == sl->priv->show_data)
     return;
 
-  if (gtk_toggle_tool_button_get_active (button))
+  if (gtk_toggle_button_get_active (button))
     show_data (sl);
   else
     show_types (sl);
@@ -148,6 +156,7 @@ gtk_inspector_data_list_class_init (GtkInspectorDataListClass *klass)
 
   gtk_widget_class_set_template_from_resource (widget_class, "/org/gtk/inspector/data-list.ui");
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorDataList, view);
+  gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorDataList, object_title);
   gtk_widget_class_bind_template_callback (widget_class, toggle_show);
 }
 
