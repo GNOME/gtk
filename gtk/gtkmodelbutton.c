@@ -986,6 +986,15 @@ gtk_model_button_init (GtkModelButton *button)
                                GTK_STYLE_CLASS_MENUITEM);
 }
 
+/**
+ * gtk_model_button_new:
+ *
+ * Creates a new GtkModelButton.
+ *
+ * Returns: the newly created #GtkModelButton widget
+ *
+ * Since: 3.16
+ */
 GtkWidget *
 gtk_model_button_new (void)
 {
