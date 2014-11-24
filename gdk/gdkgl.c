@@ -240,7 +240,7 @@ gdk_gl_texture_quads (GdkGLContext *paint_context,
   glBindBuffer (GL_ARRAY_BUFFER, paint_data->tmp_vertex_buffer);
 
   glVertexAttribPointer (program->position_location, 2, GL_FLOAT, GL_FALSE, sizeof(float) * 4, NULL);
-  glVertexAttribPointer (program->uv_location, 2, GL_FLOAT, GL_FALSE, sizeof(float) * 4, NULL + sizeof(float) * 2);
+  glVertexAttribPointer (program->uv_location, 2, GL_FLOAT, GL_FALSE, sizeof(float) * 4, (void *) (sizeof(float) * 2));
 
 #define VERTEX_SIZE 4
 
