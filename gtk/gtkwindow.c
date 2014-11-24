@@ -3707,6 +3707,21 @@ gtk_window_get_destroy_with_parent (GtkWindow *window)
   return window->priv->destroy_with_parent;
 }
 
+static void
+gtk_window_apply_hide_titlebar_when_maximized (GtkWindow *window)
+{
+#ifdef GDK_WINDOWING_X11
+  GdkWindow *gdk_window;
+  gboolean setting;
+
+  setting = window->priv->hide_titlebar_when_maximized;
+  gdk_window = gtk_widget_get_window (GTK_WIDGET (window));
+
+  if (GDK_IS_X11_WINDOW (gdk_window))
+    gdk_x11_window_set_hide_titlebar_when_maximized (gdk_window, setting);
+#endif
+}
+
 /**
  * gtk_window_set_hide_titlebar_when_maximized:
  * @window: a #GtkWindow
@@ -3734,18 +3749,9 @@ gtk_window_set_hide_titlebar_when_maximized (GtkWindow *window,
   if (window->priv->hide_titlebar_when_maximized == setting)
     return;
 
-#ifdef GDK_WINDOWING_X11
-  {
-    GdkWindow *gdk_window;
-
-    gdk_window = gtk_widget_get_window (GTK_WIDGET (window));
-
-    if (GDK_IS_X11_WINDOW (gdk_window))
-      gdk_x11_window_set_hide_titlebar_when_maximized (gdk_window, setting);
-  }
-#endif
-
   window->priv->hide_titlebar_when_maximized = setting;
+  gtk_window_apply_hide_titlebar_when_maximized (window);
+
   g_object_notify (G_OBJECT (window), "hide-titlebar-when-maximized");
 }
 
@@ -5933,8 +5939,7 @@ gtk_window_map (GtkWidget *widget)
   if (priv->type == GTK_WINDOW_TOPLEVEL)
     {
       gtk_window_set_theme_variant (window);
-      gtk_window_set_hide_titlebar_when_maximized (window,
-                                                   priv->hide_titlebar_when_maximized);
+      gtk_window_apply_hide_titlebar_when_maximized (window);
     }
 
   /* No longer use the default settings */
