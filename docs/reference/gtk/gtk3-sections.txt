@@ -8224,12 +8224,21 @@ GtkGLArea
 GtkGLAreaClass
 gtk_gl_area_new
 gtk_gl_area_get_context
+gtk_gl_area_make_current
+gtk_gl_area_queue_render
+gtk_gl_area_set_error
+gtk_gl_area_get_error
+gtk_gl_area_set_profile
+gtk_gl_area_get_profile
 <SUBSECTION>
 gtk_gl_area_set_has_alpha
 gtk_gl_area_get_has_alpha
 gtk_gl_area_set_has_depth_buffer
 gtk_gl_area_get_has_depth_buffer
-gtk_gl_area_make_current
+gtk_gl_area_set_has_stencil_buffer
+gtk_gl_area_get_has_stencil_buffer
+gtk_gl_area_set_auto_render
+gtk_gl_area_get_auto_render
 <SUBSECTION Standard>
 GTK_TYPE_GL_AREA
 GTK_GL_AREA
