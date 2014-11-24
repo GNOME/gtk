@@ -101,8 +101,6 @@ rebuild_child (GtkWidget   *self,
   GtkStyleContext *context;
   GtkWidget *button_child;
 
-  gtk_widget_set_valign (GTK_WIDGET (self), GTK_ALIGN_CENTER);
-
   button_child = gtk_bin_get_child (GTK_BIN (self));
   if (button_child != NULL)
     gtk_widget_destroy (button_child);
