@@ -200,10 +200,9 @@ get_secret_cb (GObject      *source_object,
 
       g_variant_unref (secret);
 
-      if (ba_passwd == NULL || strlen (ba_passwd) > len + 1)
+      if (ba_passwd == NULL)
         {
-          /* No secret or the secret is not a zero terminated value */
-          GTK_NOTE (PRINTING, g_print ("Invalid secret.\n"));
+          GTK_NOTE (PRINTING, g_print ("Invalid / no secret found.\n"));
           g_variant_unref (s_value);
           goto fail;
         }
