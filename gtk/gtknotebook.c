@@ -6249,7 +6249,7 @@ gtk_notebook_calculate_tabs_allocation (GtkNotebook  *notebook,
 
       if (page != priv->cur_page)
         {
-          GtkBorder padding = {};
+          GtkBorder active_padding, normal_padding, padding;
 
           /* The active tab is by definition at least the same height as the inactive one.
            * The padding we're building is the offset between the two tab states, 
@@ -6261,10 +6261,15 @@ gtk_notebook_calculate_tabs_allocation (GtkNotebook  *notebook,
           gtk_style_context_save (context);
           notebook_tab_prepare_style_context (notebook, page, context, TRUE);
 
-          /* gtk_style_context_get_padding (context, GTK_STATE_FLAG_ACTIVE, &active_padding); */
-          /* gtk_style_context_get_padding (context, GTK_STATE_FLAG_NORMAL, &normal_padding); */
+          gtk_style_context_get_padding (context, GTK_STATE_FLAG_ACTIVE, &active_padding);
+          gtk_style_context_get_padding (context, GTK_STATE_FLAG_NORMAL, &normal_padding);
 
           gtk_style_context_restore (context);
+
+          padding.top = MAX (0, active_padding.top - normal_padding.top);
+          padding.right = MAX (0, active_padding.right - normal_padding.right);
+          padding.bottom = MAX (0, active_padding.bottom - normal_padding.bottom);
+          padding.left = MAX (0, active_padding.left - normal_padding.left);
 
           switch (tab_pos)
             {
