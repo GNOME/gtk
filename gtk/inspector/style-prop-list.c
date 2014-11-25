@@ -68,116 +68,19 @@ search_close_clicked (GtkWidget                 *button,
 }
 
 static gboolean
-is_keynav_event (GdkEvent *event)
-{
-  GdkModifierType state = 0;
-  guint keyval;
-
-  if (!gdk_event_get_keyval (event, &keyval))
-    return FALSE;
-
-  gdk_event_get_state (event, &state);
-
-  if (keyval == GDK_KEY_Tab       || keyval == GDK_KEY_KP_Tab ||
-      keyval == GDK_KEY_Up        || keyval == GDK_KEY_KP_Up ||
-      keyval == GDK_KEY_Down      || keyval == GDK_KEY_KP_Down ||
-      keyval == GDK_KEY_Left      || keyval == GDK_KEY_KP_Left ||
-      keyval == GDK_KEY_Right     || keyval == GDK_KEY_KP_Right ||
-      keyval == GDK_KEY_Home      || keyval == GDK_KEY_KP_Home ||
-      keyval == GDK_KEY_End       || keyval == GDK_KEY_KP_End ||
-      keyval == GDK_KEY_Page_Up   || keyval == GDK_KEY_KP_Page_Up ||
-      keyval == GDK_KEY_Page_Down || keyval == GDK_KEY_KP_Page_Down ||
-      ((state & (GDK_CONTROL_MASK | GDK_MOD1_MASK)) != 0))
-        return TRUE;
-
-  /* Other navigation events should get automatically
-   * ignored as they will not change the content of the entry
-   */
-  return FALSE;
-}
-
-static void
-preedit_changed_cb (GtkEntry  *entry,
-                    GtkWidget *popup,
-                    gboolean  *preedit_changed)
-{
-  *preedit_changed = TRUE;
-}
-
-static gboolean
 key_press_event (GtkWidget                 *window,
                  GdkEvent                  *event,
                  GtkInspectorStylePropList *pl)
 {
-  gboolean handled;
-  gboolean preedit_changed;
-  guint preedit_change_id;
-  gboolean res;
-  gchar *old_text, *new_text;
-
   if (!gtk_widget_get_mapped (GTK_WIDGET (pl)))
     return GDK_EVENT_PROPAGATE;
 
-  if (is_keynav_event (event) ||
-      event->key.keyval == GDK_KEY_space ||
-      event->key.keyval == GDK_KEY_Menu)
-    return GDK_EVENT_PROPAGATE;
-
-  if (event->key.keyval == GDK_KEY_Return ||
-      event->key.keyval == GDK_KEY_ISO_Enter ||
-      event->key.keyval == GDK_KEY_KP_Enter)
-    {
-      GtkTreeSelection *selection;
-      GtkTreeModel *model;
-      GtkTreeIter iter;
-      GtkTreePath *path;
-
-      selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (pl->priv->tree));
-      if (gtk_tree_selection_get_selected (selection, &model, &iter))
-        {
-          path = gtk_tree_model_get_path (model, &iter);
-          gtk_tree_view_row_activated (GTK_TREE_VIEW (pl->priv->tree),
-                                       path,
-                                       pl->priv->name_column);
-          gtk_tree_path_free (path);
-
-          return GDK_EVENT_STOP;
-        }
-      else
-        return GDK_EVENT_PROPAGATE;
-    }
-
-  if (event->key.keyval == GDK_KEY_Escape)
-    {
-      gtk_entry_set_text (GTK_ENTRY (pl->priv->search_entry), "");
-      gtk_stack_set_visible_child_name (GTK_STACK (pl->priv->search_stack), "title");
-      return GDK_EVENT_STOP;
-    }
-
-  if (!gtk_widget_get_realized (pl->priv->search_entry))
-    gtk_widget_realize (pl->priv->search_entry);
-
-  handled = FALSE;
-  preedit_changed = FALSE;
-  preedit_change_id = g_signal_connect (pl->priv->search_entry, "preedit-changed",
-                                        G_CALLBACK (preedit_changed_cb), &preedit_changed);
-
-  old_text = g_strdup (gtk_entry_get_text (GTK_ENTRY (pl->priv->search_entry)));
-  res = gtk_widget_event (pl->priv->search_entry, event);
-  new_text = g_strdup (gtk_entry_get_text (GTK_ENTRY (pl->priv->search_entry)));
-
-  g_signal_handler_disconnect (pl->priv->search_entry, preedit_change_id);
-
-  if ((res && g_strcmp0 (new_text, old_text) != 0) || preedit_changed)
+  if (gtk_search_entry_handle_event (GTK_SEARCH_ENTRY (pl->priv->search_entry), event))
     {
       gtk_stack_set_visible_child_name (GTK_STACK (pl->priv->search_stack), "search");
-      handled = TRUE;
+      return GDK_EVENT_STOP;
     }
-
-  g_free (old_text);
-  g_free (new_text);
-
-  return handled ? GDK_EVENT_STOP : GDK_EVENT_PROPAGATE;
+  return GDK_EVENT_PROPAGATE;
 }
 
 static void
@@ -209,8 +112,6 @@ gtk_inspector_style_prop_list_init (GtkInspectorStylePropList *pl)
                                                 g_str_equal,
                                                 NULL,
                                                 (GDestroyNotify) gtk_tree_iter_free);
-
-  g_signal_connect (pl, "hierarchy-changed", G_CALLBACK (hierarchy_changed), NULL);
 
   for (i = 0; i < _gtk_css_style_property_get_n_properties (); i++)
     {
@@ -284,6 +185,7 @@ gtk_inspector_style_prop_list_class_init (GtkInspectorStylePropListClass *klass)
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorStylePropList, object_title);
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorStylePropList, name_column);
   gtk_widget_class_bind_template_callback (widget_class, search_close_clicked);
+  gtk_widget_class_bind_template_callback (widget_class, hierarchy_changed);
 }
 
 static gchar *

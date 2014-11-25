@@ -408,6 +408,14 @@ previous_match (GtkButton              *button,
 }
 
 static void
+stop_search (GtkWidget              *entry,
+             GtkInspectorObjectTree *wt)
+{
+  gtk_entry_set_text (GTK_ENTRY (wt->priv->search_entry), "");
+  gtk_search_bar_set_search_mode (GTK_SEARCH_BAR (wt->priv->search_bar), FALSE);
+}
+
+static void
 gtk_inspector_object_tree_init (GtkInspectorObjectTree *wt)
 {
   guint signal_id;
@@ -492,6 +500,7 @@ gtk_inspector_object_tree_class_init (GtkInspectorObjectTreeClass *klass)
   gtk_widget_class_bind_template_callback (widget_class, on_search_changed);
   gtk_widget_class_bind_template_callback (widget_class, next_match);
   gtk_widget_class_bind_template_callback (widget_class, previous_match);
+  gtk_widget_class_bind_template_callback (widget_class, stop_search);
 }
 
 typedef struct
