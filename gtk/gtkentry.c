@@ -2834,13 +2834,15 @@ get_icon_width (GtkEntry             *entry,
   GtkStyleContext *context;
   GtkBorder padding;
   gint width;
+  GtkStateFlags state;
 
   if (!icon_info)
     return 0;
 
   context = gtk_widget_get_style_context (GTK_WIDGET (entry));
+  state = gtk_style_context_get_state (context);
   gtk_entry_prepare_context_for_icon (entry, context, icon_pos);
-  gtk_style_context_get_padding (context, 0, &padding);
+  gtk_style_context_get_padding (context, state, &padding);
 
   _gtk_icon_helper_get_size (icon_info->icon_helper, context,
                              &width, NULL);
@@ -3406,19 +3408,17 @@ _gtk_entry_get_borders (GtkEntry *entry,
   GtkWidget *widget = GTK_WIDGET (entry);
   GtkBorder padding, border;
   GtkStyleContext *context;
+  GtkStateFlags state;
 
   context = gtk_widget_get_style_context (widget);
+  state = gtk_style_context_get_state (context);
+  gtk_style_context_get_padding (context, state, &padding);
+  gtk_style_context_get_border (context, state, &border);
 
-  gtk_style_context_get_padding (context, 0, &padding);
-  gtk_style_context_get_border (context, 0, &border);
-
-  if (border_out != NULL)
-    {
-      border_out->top = padding.top + border.top;
-      border_out->bottom = padding.bottom + border.bottom;
-      border_out->left = padding.left + border.left;
-      border_out->right = padding.right + border.right;
-    }
+  border_out->top = padding.top + border.top;
+  border_out->bottom = padding.bottom + border.bottom;
+  border_out->left = padding.left + border.left;
+  border_out->right = padding.right + border.right;
 }
 
 static void
@@ -3770,6 +3770,7 @@ draw_icon (GtkWidget            *widget,
   gint x, y, width, height, pix_width, pix_height;
   GtkStyleContext *context;
   GtkBorder padding;
+  GtkStateFlags state;
 
   if (!icon_info)
     return;
@@ -3789,7 +3790,8 @@ draw_icon (GtkWidget            *widget,
   gtk_entry_prepare_context_for_icon (entry, context, icon_pos);
   _gtk_icon_helper_get_size (icon_info->icon_helper, context,
                              &pix_width, &pix_height);
-  gtk_style_context_get_padding (context, 0, &padding);
+  state = gtk_style_context_get_state (context);
+  gtk_style_context_get_padding (context, state, &padding);
 
   x = MAX (0, padding.left);
   y = MAX (0, (height - pix_height) / 2);
@@ -3866,6 +3868,7 @@ get_progress_area (GtkWidget *widget,
   GtkStyleContext *context;
   GtkBorder margin, border, entry_borders;
   gint frame_width, text_area_width, text_area_height;
+  GtkStateFlags state;
 
   context = gtk_widget_get_style_context (widget);
   _gtk_entry_get_borders (entry, &entry_borders);
@@ -3881,13 +3884,15 @@ get_progress_area (GtkWidget *widget,
   *width = text_area_width + entry_borders.left + entry_borders.right;
   *height = text_area_height + entry_borders.top + entry_borders.bottom;
 
+  state = gtk_style_context_get_state (context);
+
   /* if the text area got resized by a subclass, subtract the left/right
    * border width, so that the progress bar won't extend over the resized
    * text area.
    */
   if (frame_width > *width)
     {
-      gtk_style_context_get_border (context, 0, &border);
+      gtk_style_context_get_border (context, state, &border);
       if (gtk_widget_get_direction (GTK_WIDGET (entry)) == GTK_TEXT_DIR_RTL)
         {
           *x = (frame_width - *width) + border.left;
@@ -3900,7 +3905,7 @@ get_progress_area (GtkWidget *widget,
     }
 
   gtk_entry_prepare_context_for_progress (entry, context);
-  gtk_style_context_get_margin (context, 0, &margin);
+  gtk_style_context_get_margin (context, state, &margin);
 
   gtk_style_context_restore (context);
 
@@ -9932,9 +9937,11 @@ gtk_entry_drag_motion (GtkWidget        *widget,
   gint new_position, old_position;
   gint sel1, sel2;
   GtkBorder padding;
+  GtkStateFlags state;
 
   style_context = gtk_widget_get_style_context (widget);
-  gtk_style_context_get_padding (style_context, 0, &padding);
+  state = gtk_style_context_get_state (style_context);
+  gtk_style_context_get_padding (style_context, state, &padding);
   x -= padding.left;
   y -= padding.top;
 
@@ -10007,11 +10014,13 @@ gtk_entry_drag_data_received (GtkWidget        *widget,
   GtkStyleContext *style_context;
   GtkBorder padding;
   gchar *str;
+  GtkStateFlags state;
 
   str = (gchar *) gtk_selection_data_get_text (selection_data);
 
   style_context = gtk_widget_get_style_context (widget);
-  gtk_style_context_get_padding (style_context, 0, &padding);
+  state = gtk_style_context_get_state (style_context);
+  gtk_style_context_get_padding (style_context, state, &padding);
   x -= padding.left;
   y -= padding.top;
 
