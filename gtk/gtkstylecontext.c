@@ -745,6 +745,8 @@ style_values_lookup_for_state (GtkStyleContext *context,
   if (gtk_css_node_declaration_get_state (context->priv->info->decl) == state)
     return g_object_ref (style_values_lookup (context));
 
+  g_warning ("State does not match current state");
+
   decl = gtk_css_node_declaration_ref (context->priv->info->decl);
   gtk_css_node_declaration_set_state (&decl, state);
   values = _gtk_css_computed_values_new ();
