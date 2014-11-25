@@ -1701,7 +1701,9 @@ gtk_stack_set_visible_child_full (GtkStack               *stack,
   GList *l;
 
   g_return_if_fail (GTK_IS_STACK (stack));
-  g_return_if_fail (name != NULL);
+
+  if (name == NULL)
+    return;
 
   child_info = NULL;
   for (l = priv->children; l != NULL; l = l->next)
