@@ -4190,4 +4190,7 @@ _gtk_range_set_steppers (GtkRange      *range,
   range->priv->has_stepper_b = has_b;
   range->priv->has_stepper_c = has_c;
   range->priv->has_stepper_d = has_d;
+
+  range->priv->need_recalc = TRUE;
+  gtk_widget_queue_resize (GTK_WIDGET (range));
 }
