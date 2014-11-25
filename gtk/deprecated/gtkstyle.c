@@ -616,11 +616,13 @@ static gboolean
 set_color_from_context (GtkStyle *style,
                         GtkStateType state,
                         GtkStyleContext *context,
-                        GtkStateFlags flags,
                         GtkRcFlags prop)
 {
   GdkRGBA *color = NULL;
   GdkColor *dest = { 0 }; /* Shut up gcc */
+  GtkStateFlags flags;
+
+  flags = gtk_style_context_get_state (context);
 
   switch (prop)
     {
@@ -674,26 +676,6 @@ set_color (GtkStyle        *style,
            GtkStateType     state,
            GtkRcFlags       prop)
 {
-  GtkStateFlags flags;
-
-  switch (state)
-    {
-    case GTK_STATE_ACTIVE:
-      flags = GTK_STATE_FLAG_ACTIVE;
-      break;
-    case GTK_STATE_PRELIGHT:
-      flags = GTK_STATE_FLAG_PRELIGHT;
-      break;
-    case GTK_STATE_SELECTED:
-      flags = GTK_STATE_FLAG_SELECTED;
-      break;
-    case GTK_STATE_INSENSITIVE:
-      flags = GTK_STATE_FLAG_INSENSITIVE;
-      break;
-    default:
-      flags = 0;
-    }
-
   /* Try to fill in the values from the associated GtkStyleContext.
    * Since fully-transparent black is a very common default (e.g. for 
    * background-color properties), and we must store the result in a GdkColor
@@ -701,11 +683,11 @@ set_color (GtkStyle        *style,
    * we give themes a fallback style class they can style, before using the
    * hardcoded default values.
    */
-  if (!set_color_from_context (style, state, context, flags, prop))
+  if (!set_color_from_context (style, state, context, prop))
     {
       gtk_style_context_save (context);
       gtk_style_context_add_class (context, "gtkstyle-fallback");
-      set_color_from_context (style, state, context, flags, prop);
+      set_color_from_context (style, state, context, prop);
       gtk_style_context_restore (context);
     }
 }
@@ -715,6 +697,7 @@ gtk_style_update_from_context (GtkStyle *style)
 {
   GtkStylePrivate *priv;
   GtkStateType state;
+  GtkStateFlags flags;
   GtkBorder padding;
   gint i;
 
@@ -722,6 +705,27 @@ gtk_style_update_from_context (GtkStyle *style)
 
   for (state = GTK_STATE_NORMAL; state <= GTK_STATE_INSENSITIVE; state++)
     {
+      switch (state)
+        {
+        case GTK_STATE_ACTIVE:
+          flags = GTK_STATE_FLAG_ACTIVE;
+          break;
+        case GTK_STATE_PRELIGHT:
+          flags = GTK_STATE_FLAG_PRELIGHT;
+          break;
+        case GTK_STATE_SELECTED:
+          flags = GTK_STATE_FLAG_SELECTED;
+          break;
+        case GTK_STATE_INSENSITIVE:
+          flags = GTK_STATE_FLAG_INSENSITIVE;
+          break;
+        default:
+          flags = 0;
+        }
+
+      gtk_style_context_save (priv->context);
+      gtk_style_context_set_state (priv->context, flags);
+
       if (gtk_style_context_has_class (priv->context, "entry"))
         {
           gtk_style_context_save (priv->context);
@@ -744,15 +748,18 @@ gtk_style_update_from_context (GtkStyle *style)
           set_color (style, priv->context, state, GTK_RC_BG);
           set_color (style, priv->context, state, GTK_RC_FG);
         }
+
+      gtk_style_context_restore (priv->context);
     }
 
   if (style->font_desc)
     pango_font_description_free (style->font_desc);
 
-  gtk_style_context_get (priv->context, 0,
+  flags = gtk_style_context_get_state (priv->context);
+  gtk_style_context_get (priv->context, flags,
                          "font", &style->font_desc,
                          NULL);
-  gtk_style_context_get_padding (priv->context, 0, &padding);
+  gtk_style_context_get_padding (priv->context, flags, &padding);
 
   style->xthickness = padding.left;
   style->ythickness = padding.top;
