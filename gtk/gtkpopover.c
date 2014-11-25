@@ -1200,10 +1200,25 @@ static gboolean
 gtk_popover_key_press (GtkWidget   *widget,
                        GdkEventKey *event)
 {
+  GtkWidget *toplevel, *focus;
+
   if (event->keyval == GDK_KEY_Escape)
     {
       gtk_widget_hide (widget);
       return GDK_EVENT_STOP;
+    }
+
+  if (!GTK_POPOVER (widget)->priv->modal)
+    return GDK_EVENT_PROPAGATE;
+
+  toplevel = gtk_widget_get_toplevel (widget);
+
+  if (GTK_IS_WINDOW (toplevel))
+    {
+      focus = gtk_window_get_focus (GTK_WINDOW (toplevel));
+
+      if (focus && gtk_widget_is_ancestor (focus, widget))
+        return gtk_window_propagate_key_event (GTK_WINDOW (toplevel), event);
     }
 
   return GDK_EVENT_PROPAGATE;
