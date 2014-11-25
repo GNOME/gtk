@@ -217,8 +217,6 @@ gtk_inspector_prop_list_init (GtkInspectorPropList *pl)
                                                 g_str_equal,
                                                 NULL,
                                                 (GDestroyNotify) gtk_tree_iter_free);
-
-  g_signal_connect (pl, "hierarchy-changed", G_CALLBACK (hierarchy_changed), NULL);
 }
 
 static void
@@ -374,6 +372,7 @@ gtk_inspector_prop_list_class_init (GtkInspectorPropListClass *klass)
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorPropList, object_title);
   gtk_widget_class_bind_template_callback (widget_class, row_activated);
   gtk_widget_class_bind_template_callback (widget_class, search_close_clicked);
+  gtk_widget_class_bind_template_callback (widget_class, hierarchy_changed);
 }
 
 static void

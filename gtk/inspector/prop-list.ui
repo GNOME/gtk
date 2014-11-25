@@ -12,6 +12,7 @@
   </object>
   <template class="GtkInspectorPropList" parent="GtkBox">
     <property name="orientation">vertical</property>
+    <signal name="hierarchy-changed" handler="hierarchy_changed"/>
     <child>
       <object class="GtkStack" id="search_stack">
         <property name="visible">True</property>
