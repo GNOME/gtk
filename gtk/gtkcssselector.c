@@ -804,6 +804,61 @@ static const GtkCssSelectorClass GTK_CSS_SELECTOR_ANY = {
   FALSE, FALSE, FALSE, TRUE, TRUE
 };
 
+/* NONE */
+
+static void
+gtk_css_selector_none_print (const GtkCssSelector *selector,
+                             GString              *string)
+{
+  g_string_append (string, ":not(*)");
+}
+
+static gboolean
+gtk_css_selector_none_match (const GtkCssSelector *selector,
+                             const GtkCssMatcher  *matcher)
+{
+  return FALSE;
+}
+
+static void
+gtk_css_selector_none_tree_match (const GtkCssSelectorTree *tree,
+                                  const GtkCssMatcher  *matcher,
+                                  GHashTable *res)
+{
+}
+
+static GtkCssChange
+gtk_css_selector_none_tree_get_change (const GtkCssSelectorTree *tree,
+                                       const GtkCssMatcher  *matcher)
+{
+  return 0;
+}
+
+
+static GtkCssChange
+gtk_css_selector_none_get_change (const GtkCssSelector *selector, GtkCssChange previous_change)
+{
+  return 0;
+}
+
+static int
+gtk_css_selector_none_compare_one (const GtkCssSelector *a,
+                                   const GtkCssSelector *b)
+{
+  return 0;
+}
+
+static const GtkCssSelectorClass GTK_CSS_SELECTOR_NONE = {
+  "none",
+  gtk_css_selector_none_print,
+  gtk_css_selector_none_match,
+  gtk_css_selector_none_tree_match,
+  gtk_css_selector_none_get_change,
+  gtk_css_selector_none_tree_get_change,
+  gtk_css_selector_none_compare_one,
+  FALSE, FALSE, FALSE, TRUE, TRUE
+};
+
 /* NAME */
 
 typedef struct {
@@ -1838,6 +1893,8 @@ parse_selector_negation (GtkCssParser   *parser,
                                        get_type_reference (name));
       g_free (name);
     }
+  else if (_gtk_css_parser_try (parser, "*", FALSE))
+    selector = gtk_css_selector_new (&GTK_CSS_SELECTOR_NONE, selector, NULL);
   else if (_gtk_css_parser_try (parser, "#", FALSE))
     selector = parse_selector_id (parser, selector, TRUE);
   else if (_gtk_css_parser_try (parser, ".", FALSE))
