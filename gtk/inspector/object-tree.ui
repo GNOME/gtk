@@ -30,6 +30,9 @@
                 <property name="visible">True</property>
                 <property name="max-width-chars">40</property>
                 <signal name="search-changed" handler="on_search_changed"/>
+                <signal name="next-match" handler="next_match"/>
+                <signal name="previous-match" handler="previous_match"/>
+                <signal name="stop-search" handler="stop_search"/>
               </object>
             </child>
             <child>
