@@ -258,8 +258,7 @@ static void          gtk_range_compute_slider_position  (GtkRange      *range,
 static gboolean      gtk_range_scroll                   (GtkRange      *range,
                                                          GtkScrollType  scroll);
 static gboolean      gtk_range_update_mouse_location    (GtkRange      *range);
-static void          gtk_range_calc_layout              (GtkRange      *range,
-							 gdouble	adjustment_value);
+static void          gtk_range_calc_layout              (GtkRange      *range);
 static void          gtk_range_calc_marks               (GtkRange      *range);
 static void          gtk_range_get_props                (GtkRange      *range,
                                                          gint          *slider_width,
@@ -979,7 +978,7 @@ gtk_range_set_slider_size_fixed (GtkRange *range,
       if (priv->adjustment && gtk_widget_get_mapped (GTK_WIDGET (range)))
         {
           priv->need_recalc = TRUE;
-          gtk_range_calc_layout (range, gtk_adjustment_get_value (priv->adjustment));
+          gtk_range_calc_layout (range);
           gtk_widget_queue_draw (GTK_WIDGET (range));
         }
     }
@@ -1034,7 +1033,7 @@ gtk_range_set_min_slider_size (GtkRange *range,
       if (gtk_widget_is_drawable (GTK_WIDGET (range)))
         {
           priv->need_recalc = TRUE;
-          gtk_range_calc_layout (range, gtk_adjustment_get_value (priv->adjustment));
+          gtk_range_calc_layout (range);
           gtk_widget_queue_draw (GTK_WIDGET (range));
         }
     }
@@ -1083,7 +1082,7 @@ gtk_range_get_range_rect (GtkRange     *range,
 
   priv = range->priv;
 
-  gtk_range_calc_layout (range, gtk_adjustment_get_value (priv->adjustment));
+  gtk_range_calc_layout (range);
 
   *range_rect = priv->range_rect;
 }
@@ -1114,7 +1113,7 @@ gtk_range_get_slider_range (GtkRange *range,
 
   priv = range->priv;
 
-  gtk_range_calc_layout (range, gtk_adjustment_get_value (priv->adjustment));
+  gtk_range_calc_layout (range);
 
   if (priv->orientation == GTK_ORIENTATION_VERTICAL)
     {
@@ -1157,7 +1156,7 @@ gtk_range_set_lower_stepper_sensitivity (GtkRange           *range,
       priv->lower_sensitivity = sensitivity;
 
       priv->need_recalc = TRUE;
-      gtk_range_calc_layout (range, gtk_adjustment_get_value (priv->adjustment));
+      gtk_range_calc_layout (range);
       gtk_widget_queue_draw (GTK_WIDGET (range));
 
       g_object_notify (G_OBJECT (range), "lower-stepper-sensitivity");
@@ -1208,7 +1207,7 @@ gtk_range_set_upper_stepper_sensitivity (GtkRange           *range,
       priv->upper_sensitivity = sensitivity;
 
       priv->need_recalc = TRUE;
-      gtk_range_calc_layout (range, gtk_adjustment_get_value (priv->adjustment));
+      gtk_range_calc_layout (range);
       gtk_widget_queue_draw (GTK_WIDGET (range));
 
       g_object_notify (G_OBJECT (range), "upper-stepper-sensitivity");
@@ -1626,7 +1625,7 @@ gtk_range_size_allocate (GtkWidget     *widget,
   priv->recalc_marks = TRUE;
 
   priv->need_recalc = TRUE;
-  gtk_range_calc_layout (range, gtk_adjustment_get_value (priv->adjustment));
+  gtk_range_calc_layout (range);
 
   if (gtk_widget_get_realized (widget))
     gdk_window_move_resize (priv->event_window,
@@ -1646,7 +1645,7 @@ gtk_range_realize (GtkWidget *widget)
   GdkWindowAttr attributes;
   gint attributes_mask;
 
-  gtk_range_calc_layout (range, gtk_adjustment_get_value (priv->adjustment));
+  gtk_range_calc_layout (range);
 
   gtk_widget_set_realized (widget, TRUE);
 
@@ -1961,7 +1960,7 @@ gtk_range_draw (GtkWidget *widget,
     }
 
   gtk_range_calc_marks (range);
-  gtk_range_calc_layout (range, gtk_adjustment_get_value (priv->adjustment));
+  gtk_range_calc_layout (range);
 
   widget_state = gtk_widget_get_state_flags (widget);
 
@@ -3006,7 +3005,7 @@ gtk_range_adjustment_changed (GtkAdjustment *adjustment,
 
   priv->recalc_marks = TRUE;
   priv->need_recalc = TRUE;
-  gtk_range_calc_layout (range, gtk_adjustment_get_value (priv->adjustment));
+  gtk_range_calc_layout (range);
 
   /* now check whether the layout changed  */
   if (layout_changed (priv, &priv_aux))
@@ -3030,7 +3029,7 @@ gtk_range_adjustment_value_changed (GtkAdjustment *adjustment,
   GtkRangePrivate priv_aux = *priv;
 
   priv->need_recalc = TRUE;
-  gtk_range_calc_layout (range, gtk_adjustment_get_value (priv->adjustment));
+  gtk_range_calc_layout (range);
   
   /* now check whether the layout changed  */
   if (layout_changed (priv, &priv_aux) ||
@@ -3647,8 +3646,7 @@ gtk_range_compute_slider_position (GtkRange     *range,
 }
 
 static void
-gtk_range_calc_layout (GtkRange *range,
-		       gdouble   adjustment_value)
+gtk_range_calc_layout (GtkRange *range)
 {
   GtkRangePrivate *priv = range->priv;
   gint slider_width, stepper_size, trough_border, stepper_spacing;
@@ -3797,7 +3795,9 @@ gtk_range_calc_layout (GtkRange *range,
       priv->trough.width = range_rect.width;
       priv->trough.height = priv->stepper_c.y - priv->trough.y - stepper_spacing * has_steppers_cd;
 
-      gtk_range_compute_slider_position (range, adjustment_value, &priv->slider);
+      gtk_range_compute_slider_position (range, 
+                                         gtk_adjustment_get_value (priv->adjustment),
+                                         &priv->slider);
     }
   else
     {
@@ -3893,7 +3893,9 @@ gtk_range_calc_layout (GtkRange *range,
       priv->trough.width = priv->stepper_c.x - priv->trough.x - stepper_spacing * has_steppers_cd;
       priv->trough.height = range_rect.height;
 
-      gtk_range_compute_slider_position (range, adjustment_value, &priv->slider);
+      gtk_range_compute_slider_position (range,
+                                         gtk_adjustment_get_value (priv->adjustment),
+                                         &priv->slider);
     }
   
   gtk_range_update_mouse_location (range);
