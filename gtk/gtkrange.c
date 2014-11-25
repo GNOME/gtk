@@ -252,6 +252,9 @@ static void gtk_range_move_slider              (GtkRange         *range,
                                                 GtkScrollType     scroll);
 
 /* Internals */
+static void          gtk_range_compute_slider_position  (GtkRange      *range,
+                                                         gdouble        adjustment_value,
+                                                         GdkRectangle  *slider_rect);
 static gboolean      gtk_range_scroll                   (GtkRange      *range,
                                                          GtkScrollType  scroll);
 static gboolean      gtk_range_update_mouse_location    (GtkRange      *range);
@@ -2569,6 +2572,7 @@ gtk_range_multipress_gesture_pressed (GtkGestureMultiPress *gesture,
            priv->mouse_location == MOUSE_SLIDER)
     {
       gboolean need_value_update = FALSE;
+      GdkRectangle slider;
 
       /* Any button can be used to drag the slider, but you can start
        * dragging the slider with a trough click using button 1;
@@ -2591,11 +2595,7 @@ gtk_range_multipress_gesture_pressed (GtkGestureMultiPress *gesture,
           /* compute new value for warped slider */
           new_value = slider_low_value + (slider_high_value - slider_low_value) / 2;
 
-	  /* recalc slider, so we can set slide_initial_slider_position
-           * properly
-           */
-	  priv->need_recalc = TRUE;
-          gtk_range_calc_layout (range, new_value);
+          gtk_range_compute_slider_position (range, new_value, &slider);
 
 	  /* defer adjustment updates to update_slider_position() in order
 	   * to keep pixel quantisation
@@ -2613,17 +2613,19 @@ gtk_range_multipress_gesture_pressed (GtkGestureMultiPress *gesture,
             {
               update_zoom_state (range, TRUE);
             }
+
+          slider = priv->slider;
         }
 
       if (priv->orientation == GTK_ORIENTATION_VERTICAL)
         {
-          priv->slide_initial_slider_position = priv->slider.y;
-          priv->slide_initial_coordinate_delta = y - priv->slider.y;
+          priv->slide_initial_slider_position = slider.y;
+          priv->slide_initial_coordinate_delta = y - slider.y;
         }
       else
         {
-          priv->slide_initial_slider_position = priv->slider.x;
-          priv->slide_initial_coordinate_delta = x - priv->slider.x;
+          priv->slide_initial_slider_position = slider.x;
+          priv->slide_initial_coordinate_delta = x - slider.x;
         }
 
       range_grab_add (range, MOUSE_SLIDER);
