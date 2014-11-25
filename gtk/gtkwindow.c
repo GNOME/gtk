@@ -6431,13 +6431,14 @@ get_shadow_width (GtkWidget *widget,
       else
         s = state | GTK_STATE_FLAG_BACKDROP;
 
+      gtk_style_context_set_state (context, s);
+
       /* Always sum border + padding */
       gtk_style_context_get_border (context, s, &border);
       gtk_style_context_get_padding (context, s, &d);
       sum_borders (&d, &border);
 
       /* Calculate the size of the drop shadows ... */
-      gtk_style_context_set_state (context, s);
       shadows = _gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_BOX_SHADOW);
       _gtk_css_shadows_value_get_extents (shadows, &border);
 
