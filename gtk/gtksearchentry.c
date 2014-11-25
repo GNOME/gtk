@@ -31,6 +31,7 @@
 #include "gtksearchentry.h"
 #include "gtkmarshalers.h"
 #include "gtkintl.h"
+#include "gtkbindings.h"
 
 /**
  * SECTION:gtksearchentry
@@ -60,6 +61,9 @@
 
 enum {
   SEARCH_CHANGED,
+  NEXT_MATCH,
+  PREVIOUS_MATCH,
+  STOP_SEARCH,
   LAST_SIGNAL
 };
 
@@ -67,6 +71,8 @@ static guint signals[LAST_SIGNAL] = { 0 };
 
 typedef struct {
   guint delayed_changed_id;
+  gboolean content_changed;
+  gboolean search_stopped;
 } GtkSearchEntryPrivate;
 
 static void gtk_search_entry_icon_release  (GtkEntry             *entry,
@@ -89,6 +95,28 @@ G_DEFINE_TYPE_WITH_CODE (GtkSearchEntry, gtk_search_entry, GTK_TYPE_ENTRY,
 #define GET_PRIV(e) ((GtkSearchEntryPrivate *) gtk_search_entry_get_instance_private ((GtkSearchEntry *) (e)))
 
 static void
+gtk_search_entry_preedit_changed (GtkEntry    *entry,
+                                  const gchar *preedit)
+{
+  GtkSearchEntryPrivate *priv = GET_PRIV (entry);
+
+  priv->content_changed = TRUE;
+}
+
+static void
+gtk_search_entry_notify (GObject    *object,
+                         GParamSpec *pspec)
+{
+  GtkSearchEntryPrivate *priv = GET_PRIV (object);
+
+  if (strcmp (pspec->name, "text") == 0)
+    priv->content_changed = TRUE;
+
+  if (G_OBJECT_CLASS (gtk_search_entry_parent_class)->notify)
+    G_OBJECT_CLASS (gtk_search_entry_parent_class)->notify (object, pspec);
+}
+
+static void
 gtk_search_entry_finalize (GObject *object)
 {
   GtkSearchEntryPrivate *priv = GET_PRIV (object);
@@ -100,15 +128,31 @@ gtk_search_entry_finalize (GObject *object)
 }
 
 static void
+gtk_search_entry_stop_search (GtkSearchEntry *entry)
+{
+  GtkSearchEntryPrivate *priv = GET_PRIV (entry);
+
+  priv->search_stopped = TRUE;
+}
+
+static void
 gtk_search_entry_class_init (GtkSearchEntryClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
+  GtkBindingSet *binding_set;
 
   object_class->finalize = gtk_search_entry_finalize;
+  object_class->notify = gtk_search_entry_notify;
+
+  klass->stop_search = gtk_search_entry_stop_search;
 
   g_signal_override_class_handler ("icon-release",
                                    GTK_TYPE_SEARCH_ENTRY,
                                    G_CALLBACK (gtk_search_entry_icon_release));
+
+  g_signal_override_class_handler ("preedit-changed",
+                                   GTK_TYPE_SEARCH_ENTRY,
+                                   G_CALLBACK (gtk_search_entry_preedit_changed));
 
   /**
    * GtkSearchEntry::search-changed:
@@ -127,6 +171,86 @@ gtk_search_entry_class_init (GtkSearchEntryClass *klass)
                   NULL, NULL,
                   _gtk_marshal_VOID__VOID,
                   G_TYPE_NONE, 0);
+
+  /**
+   * GtkSearchEntry::next-match:
+   * @entry: the entry on which the signal was emitted
+   *
+   * The ::next-match signal is a [keybinding signal][GtkBindingSignal]
+   * which gets emitted when the user initiates a move to the next match
+   * for the current search string.
+   *
+   * Applications should connect to it, to implement moving between
+   * matches.
+   *
+   * The default bindings for this signal is Ctrl-g.
+   *
+   * Since: 3.16
+   */
+  signals[NEXT_MATCH] =
+    g_signal_new (I_("next-match"),
+                  G_OBJECT_CLASS_TYPE (object_class),
+                  G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
+                  G_STRUCT_OFFSET (GtkSearchEntryClass, next_match),
+                  NULL, NULL,
+                  _gtk_marshal_VOID__VOID,
+                  G_TYPE_NONE, 0);
+
+  /**
+   * GtkSearchEntry::previous-match:
+   * @entry: the entry on which the signal was emitted
+   *
+   * The ::previous-match signal is a [keybinding signal][GtkBindingSignal]
+   * which gets emitted when the user initiates a move to the previous match
+   * for the current search string.
+   *
+   * Applications should connect to it, to implement moving between
+   * matches.
+   *
+   * The default bindings for this signal is Ctrl-Shift-g.
+   *
+   * Since: 3.16
+   */
+  signals[PREVIOUS_MATCH] =
+    g_signal_new (I_("previous-match"),
+                  G_OBJECT_CLASS_TYPE (object_class),
+                  G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
+                  G_STRUCT_OFFSET (GtkSearchEntryClass, previous_match),
+                  NULL, NULL,
+                  _gtk_marshal_VOID__VOID,
+                  G_TYPE_NONE, 0);
+
+  /**
+   * GtkSearchEntry::stop-search:
+   * @entry: the entry on which the signal was emitted
+   *
+   * The ::stop-search signal is a [keybinding signal][GtkBindingSignal]
+   * which gets emitted when the user stops a search via keyboard input.
+   *
+   * Applications should connect to it, to implement hiding the search
+   * entry in this case.
+   *
+   * The default bindings for this signal is Escape.
+   *
+   * Since: 3.16
+   */
+  signals[STOP_SEARCH] =
+    g_signal_new (I_("stop-search"),
+                  G_OBJECT_CLASS_TYPE (object_class),
+                  G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
+                  G_STRUCT_OFFSET (GtkSearchEntryClass, stop_search),
+                  NULL, NULL,
+                  _gtk_marshal_VOID__VOID,
+                  G_TYPE_NONE, 0);
+
+  binding_set = gtk_binding_set_by_class (klass);
+
+  gtk_binding_entry_add_signal (binding_set, GDK_KEY_g, GDK_CONTROL_MASK,
+                                "next-match", 0);
+  gtk_binding_entry_add_signal (binding_set, GDK_KEY_g, GDK_SHIFT_MASK | GDK_CONTROL_MASK,
+                                "previous-match", 0);
+  gtk_binding_entry_add_signal (binding_set, GDK_KEY_Escape, 0,
+                                "stop-search", 0);
 }
 
 static void
@@ -252,4 +376,76 @@ GtkWidget *
 gtk_search_entry_new (void)
 {
   return GTK_WIDGET (g_object_new (GTK_TYPE_SEARCH_ENTRY, NULL));
+}
+
+static gboolean
+is_keynav_event (GdkEvent *event)
+{
+  GdkModifierType state = 0;
+  guint keyval;
+
+  if (!gdk_event_get_keyval (event, &keyval))
+    return FALSE;
+
+  gdk_event_get_state (event, &state);
+
+  if (keyval == GDK_KEY_Tab       || keyval == GDK_KEY_KP_Tab ||
+      keyval == GDK_KEY_Up        || keyval == GDK_KEY_KP_Up ||
+      keyval == GDK_KEY_Down      || keyval == GDK_KEY_KP_Down ||
+      keyval == GDK_KEY_Left      || keyval == GDK_KEY_KP_Left ||
+      keyval == GDK_KEY_Right     || keyval == GDK_KEY_KP_Right ||
+      keyval == GDK_KEY_Home      || keyval == GDK_KEY_KP_Home ||
+      keyval == GDK_KEY_End       || keyval == GDK_KEY_KP_End ||
+      keyval == GDK_KEY_Page_Up   || keyval == GDK_KEY_KP_Page_Up ||
+      keyval == GDK_KEY_Page_Down || keyval == GDK_KEY_KP_Page_Down ||
+      ((state & (GDK_CONTROL_MASK | GDK_MOD1_MASK)) != 0))
+        return TRUE;
+
+  /* Other navigation events should get automatically
+   * ignored as they will not change the content of the entry
+   */
+  return FALSE;
+}
+
+/**
+ * gtk_search_entry_handle_event:
+ * @entry: a #GtkSearchEntry
+ * @event: a key event
+ *
+ * This function should be called when the top-level
+ * window which contains the search entry received a
+ * key event.
+ *
+ * If the key event is handled by the search bar and starts
+ * or continues a search, %GDK_EVENT_STOP will be returned.
+ * The caller should ensure that the entry is shown in
+ * this case, and not propagate the event further.
+ *
+ * Returns: %GDK_EVENT_STOP if the key press event resulted
+ *     in a search beginning or continuing, %GDK_EVENT_PROPAGATE
+ *     otherwise.
+ *
+ * Since: 3.16
+ */
+gboolean
+gtk_search_entry_handle_event (GtkSearchEntry *entry,
+                               GdkEvent       *event)
+{
+  GtkSearchEntryPrivate *priv = GET_PRIV (entry);
+  gboolean handled;
+
+  if (!gtk_widget_get_realized (GTK_WIDGET (entry)))
+    gtk_widget_realize (GTK_WIDGET (entry));
+
+  if (is_keynav_event (event) ||
+      event->key.keyval == GDK_KEY_space ||
+      event->key.keyval == GDK_KEY_Menu)
+    return GDK_EVENT_PROPAGATE;
+
+  priv->content_changed = FALSE;
+  priv->search_stopped = FALSE;
+
+  handled = gtk_widget_event (GTK_WIDGET (entry), event);
+
+  return handled && priv->content_changed && !priv->search_stopped ? GDK_EVENT_STOP : GDK_EVENT_PROPAGATE;
 }

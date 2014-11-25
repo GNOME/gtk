@@ -56,11 +56,9 @@ struct _GtkSearchEntryClass
   GtkEntryClass parent_class;
 
   void (*search_changed) (GtkSearchEntry *entry);
-
-  /* Padding for future expansion */
-  void (*_gtk_reserved1) (void);
-  void (*_gtk_reserved2) (void);
-  void (*_gtk_reserved3) (void);
+  void (*next_match)     (GtkSearchEntry *entry);
+  void (*previous_match) (GtkSearchEntry *entry);
+  void (*stop_search)    (GtkSearchEntry *entry);
 };
 
 GDK_AVAILABLE_IN_3_6
@@ -68,6 +66,10 @@ GType           gtk_search_entry_get_type       (void) G_GNUC_CONST;
 
 GDK_AVAILABLE_IN_3_6
 GtkWidget*      gtk_search_entry_new            (void);
+
+GDK_AVAILABLE_IN_3_16
+gboolean        gtk_search_entry_handle_event   (GtkSearchEntry *entry,
+                                                 GdkEvent       *event);
 
 G_END_DECLS
 
