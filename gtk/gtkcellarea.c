@@ -3561,7 +3561,7 @@ gtk_cell_area_inner_cell_area (GtkCellArea        *area,
   g_return_if_fail (inner_area != NULL);
 
   context = gtk_widget_get_style_context (widget);
-  state = gtk_widget_get_state_flags (widget);
+  state = gtk_style_context_get_state (context);
   gtk_style_context_get_padding (context, state, &border);
 
   *inner_area = *cell_area;
@@ -3611,7 +3611,7 @@ gtk_cell_area_request_renderer (GtkCellArea        *area,
   g_return_if_fail (natural_size != NULL);
 
   context = gtk_widget_get_style_context (widget);
-  state = gtk_widget_get_state_flags (widget);
+  state = gtk_style_context_get_state (context);
   gtk_style_context_get_padding (context, state, &border);
 
   if (orientation == GTK_ORIENTATION_HORIZONTAL)
