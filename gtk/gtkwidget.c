@@ -8857,16 +8857,9 @@ gtk_widget_unset_state_flags (GtkWidget     *widget,
 GtkStateFlags
 gtk_widget_get_state_flags (GtkWidget *widget)
 {
-  GtkStateFlags flags;
-
   g_return_val_if_fail (GTK_IS_WIDGET (widget), 0);
 
-  flags = widget->priv->state_flags;
-
-  if (gtk_widget_has_focus (widget))
-    flags |= GTK_STATE_FLAG_FOCUSED;
-
-  return flags;
+  return widget->priv->state_flags;
 }
 
 /**
