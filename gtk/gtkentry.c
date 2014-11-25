@@ -2840,8 +2840,8 @@ get_icon_width (GtkEntry             *entry,
     return 0;
 
   context = gtk_widget_get_style_context (GTK_WIDGET (entry));
-  state = gtk_style_context_get_state (context);
   gtk_entry_prepare_context_for_icon (entry, context, icon_pos);
+  state = gtk_style_context_get_state (context);
   gtk_style_context_get_padding (context, state, &padding);
 
   _gtk_icon_helper_get_size (icon_info->icon_helper, context,
