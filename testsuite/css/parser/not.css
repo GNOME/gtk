@@ -1,0 +1,80 @@
+:not(*) {
+  color: tomato;
+}
+
+:not(GtkButton) {
+  color: tomato;
+}
+
+:not(:hover) {
+  color: tomato;
+}
+
+:not(.yourmom) {
+  color: tomato;
+}
+
+:not(#yourmom) {
+  color: tomato;
+}
+
+:not( *) {
+  color: tomato;
+}
+
+:not( GtkButton) {
+  color: tomato;
+}
+
+:not(    :hover) {
+  color: tomato;
+}
+
+:not(    .yourmom) {
+  color: tomato;
+}
+
+:not( #yourmom) {
+  color: tomato;
+}
+
+:not(* ) {
+  color: tomato;
+}
+
+:not(GtkButton  ) {
+  color: tomato;
+}
+
+:not(:hover      ) {
+  color: tomato;
+}
+
+:not(.yourmom       ) {
+  color: tomato;
+}
+
+:not(#yourmom      ) {
+  color: tomato;
+}
+
+:not( * ) {
+  color: tomato;
+}
+
+:not( GtkButton   ) {
+  color: tomato;
+}
+
+:not(  :hover   ) {
+  color: tomato;
+}
+
+:not(       .yourmom                    ) {
+  color: tomato;
+}
+
+:not(                   #yourmom ) {
+  color: tomato;
+}
+

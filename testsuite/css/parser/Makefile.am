@@ -326,6 +326,8 @@ test_data = \
 	linear-gradient.ref.css \
 	no-semicolon.css \
 	no-semicolon.ref.css \
+	not.css \
+	not.ref.css \
 	nth-child.css \
 	nth-child.ref.css \
 	property-name-errors.css \
