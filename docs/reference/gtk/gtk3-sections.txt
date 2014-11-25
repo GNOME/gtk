@@ -3198,6 +3198,7 @@ gtk_search_bar_get_type
 <TITLE>GtkSearchEntry</TITLE>
 GtkSearchEntry
 gtk_search_entry_new
+gtk_search_entry_handle_event
 <SUBSECTION Standard>
 GTK_TYPE_SEARCH_ENTRY
 GTK_SEARCH_ENTRY
