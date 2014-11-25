@@ -3599,8 +3599,8 @@ gtk_range_compute_slider_position (GtkRange     *range,
       /* Slider fits into the trough, with stepper_spacing on either side,
        * and the size/position based on the adjustment or fixed, depending.
        */
-      priv->slider.y = priv->trough.y + trough_border;
-      priv->slider.height = priv->trough.height - trough_border * 2;
+      slider_rect->y = priv->trough.y + trough_border;
+      slider_rect->height = priv->trough.height - trough_border * 2;
 
       /* Compute slider position/length */
       left = priv->trough.x;
@@ -3639,8 +3639,8 @@ gtk_range_compute_slider_position (GtkRange     *range,
       if (should_invert (range))
         x = right - (x - left + width);
       
-      priv->slider.x = x;
-      priv->slider.width = width;
+      slider_rect->x = x;
+      slider_rect->width = width;
     }
 }
 
