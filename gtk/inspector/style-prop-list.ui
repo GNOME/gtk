@@ -32,6 +32,7 @@
             <child>
               <object class="GtkButton" id="search_close_button">
                 <property name="visible">True</property>
+                <property name="relief">none</property>
                 <signal name="clicked" handler="search_close_clicked"/>
                 <style>
                   <class name="image-button"/>
