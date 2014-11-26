@@ -972,12 +972,14 @@ gtk_spin_button_panel_get_allocations (GtkSpinButton *spin_button,
   gint up_panel_width, up_panel_height;
   GtkStyleContext *context;
   GtkBorder border;
+  GtkStateFlags state;
 
   gtk_widget_get_allocation (widget, &spin_allocation);
   gtk_widget_get_preferred_size (widget, &requisition, NULL);
 
   context = gtk_widget_get_style_context (GTK_WIDGET (spin_button));
-  gtk_style_context_get_border (context, GTK_STATE_FLAG_NORMAL, &border);
+  state = gtk_style_context_get_state (context);
+  gtk_style_context_get_border (context, state, &border);
 
   gtk_spin_button_panel_get_size (spin_button, priv->down_panel, &down_panel_width, &down_panel_height);
   gtk_spin_button_panel_get_size (spin_button, priv->up_panel, &up_panel_width, &up_panel_height);
