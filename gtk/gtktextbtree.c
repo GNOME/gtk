@@ -1376,7 +1376,7 @@ find_line_by_y (GtkTextBTree *tree, BTreeView *view,
 
           if (ld)
             {
-              if (y < (current_y + (ld ? ld->height : 0)))
+              if (y < (current_y + ld->height))
                 return line;
 
               current_y += ld->height;
