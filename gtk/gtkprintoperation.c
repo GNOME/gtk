@@ -2488,17 +2488,22 @@ common_render_page (GtkPrintOperation *op,
   cr = gtk_print_context_get_cairo_context (print_context);
   
   cairo_save (cr);
-  if (priv->manual_scale != 1.0 && priv->manual_number_up <= 1)
-    cairo_scale (cr,
-		 priv->manual_scale,
-		 priv->manual_scale);
   
   if (priv->manual_orientation)
     _gtk_print_context_rotate_according_to_orientation (print_context);
   else
     _gtk_print_context_reverse_according_to_orientation (print_context);
 
-  if (priv->manual_number_up > 1)
+  if (priv->manual_number_up <= 1)
+    {
+      if (!priv->use_full_page)
+        _gtk_print_context_translate_into_margin (print_context);
+      if (priv->manual_scale != 1.0)
+        cairo_scale (cr,
+                     priv->manual_scale,
+                     priv->manual_scale);
+    }
+  else
     {
       GtkPageOrientation  orientation;
       GtkPageSetup       *page_setup;
@@ -2678,9 +2683,6 @@ common_render_page (GtkPrintOperation *op,
           cairo_rotate (cr, - G_PI / 2);
         }
     }
-  else
-    if (!priv->use_full_page)
-      _gtk_print_context_translate_into_margin (print_context);
   
   priv->page_drawing_state = GTK_PAGE_DRAWING_STATE_DRAWING;
 
