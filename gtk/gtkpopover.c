@@ -1218,7 +1218,7 @@ gtk_popover_key_press (GtkWidget   *widget,
       focus = gtk_window_get_focus (GTK_WINDOW (toplevel));
 
       if (focus && gtk_widget_is_ancestor (focus, widget))
-        return gtk_window_propagate_key_event (GTK_WINDOW (toplevel), event);
+        return gtk_widget_event (focus, (GdkEvent*) event);
     }
 
   return GDK_EVENT_PROPAGATE;
