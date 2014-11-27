@@ -160,8 +160,9 @@ gdk_mir_display_dispose (GObject *object)
 {
   GdkMirDisplay *display = GDK_MIR_DISPLAY (object);
 
-  g_object_unref (display->screen);
-  display->screen = NULL;
+  g_clear_object (&display->screen);
+  g_clear_object (&display->keymap);
+  g_clear_pointer (&display->event_source, g_source_unref);
 
   G_OBJECT_CLASS (gdk_mir_display_parent_class)->dispose (object);
 }
