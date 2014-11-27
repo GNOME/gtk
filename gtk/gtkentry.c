@@ -6427,13 +6427,16 @@ draw_text_with_color (GtkEntry *entry,
       pango_layout_get_pixel_extents (layout, NULL, &logical_rect);
       gtk_entry_get_pixel_ranges (entry, &ranges, &n_ranges);
 
-      state = gtk_widget_get_state_flags (widget);
+      gtk_style_context_save (context);
+      state = gtk_style_context_get_state (context);
       state |= GTK_STATE_FLAG_SELECTED;
+      gtk_style_context_set_state (context, state);
 
 G_GNUC_BEGIN_IGNORE_DEPRECATIONS
       gtk_style_context_get_background_color (context, state, &selection_color);
 G_GNUC_END_IGNORE_DEPRECATIONS
       gtk_style_context_get_color (context, state, &text_color);
+      gtk_style_context_restore (context);
 
       for (i = 0; i < n_ranges; ++i)
         cairo_rectangle (cr,
