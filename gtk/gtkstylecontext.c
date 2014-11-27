@@ -3255,14 +3255,18 @@ G_GNUC_END_IGNORE_DEPRECATIONS
     }
   else
     {
-      gtk_style_context_get_color (context, GTK_STATE_FLAG_NORMAL, color);
+      GtkStateFlags state;
+
+      state = gtk_style_context_get_state (context);
+
+      gtk_style_context_get_color (context, state, color);
 
       if (!primary)
       {
         GdkRGBA bg;
 
 G_GNUC_BEGIN_IGNORE_DEPRECATIONS
-        gtk_style_context_get_background_color (context, GTK_STATE_FLAG_NORMAL, &bg);
+        gtk_style_context_get_background_color (context, state, &bg);
 G_GNUC_END_IGNORE_DEPRECATIONS
 
         color->red = (color->red + bg.red) * 0.5;
