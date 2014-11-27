@@ -828,13 +828,18 @@ gdk_x11_display_translate_event (GdkEventTranslator *translator,
 	    {
 	      window->x = event->configure.x;
 	      window->y = event->configure.y;
-              window_impl->unscaled_width = xevent->xconfigure.width;
-              window_impl->unscaled_height = xevent->xconfigure.height;
-              window->width = event->configure.width;
-              window->height = event->configure.height;
 
-	      _gdk_window_update_size (window);
-	      _gdk_x11_window_update_size (window_impl);
+              if (window_impl->unscaled_width != xevent->xconfigure.width ||
+                  window_impl->unscaled_height != xevent->xconfigure.height)
+                {
+                  window_impl->unscaled_width = xevent->xconfigure.width;
+                  window_impl->unscaled_height = xevent->xconfigure.height;
+                  window->width = event->configure.width;
+                  window->height = event->configure.height;
+
+                  _gdk_window_update_size (window);
+                  _gdk_x11_window_update_size (window_impl);
+                }
 
 	      if (window->resize_count >= 1)
 		{
