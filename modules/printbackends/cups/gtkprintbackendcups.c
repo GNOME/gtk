@@ -297,6 +297,7 @@ pb_module_create (void)
 #define ippGetName(attr) attr->name
 #define ippGetCount(attr) attr->num_values
 #define ippGetGroupTag(attr) attr->group_tag
+#define ippGetCollection(attr, index) attr->values[index].collection
 
 static int
 ippGetRange (ipp_attribute_t *attr,
@@ -305,6 +306,24 @@ ippGetRange (ipp_attribute_t *attr,
 {
   *upper = attr->values[element].range.upper;
   return (attr->values[element].range.lower);
+}
+
+static ipp_attribute_t *
+ippFirstAttribute (ipp_t *ipp)
+{
+  if (!ipp)
+    return (NULL);
+
+  return (ipp->current = ipp->attrs);
+}
+
+static ipp_attribute_t *
+ippNextAttribute (ipp_t *ipp)
+{
+  if (!ipp || !ipp->current)
+    return (NULL);
+
+  return (ipp->current = ipp->current->next);
 }
 #endif
 /*
