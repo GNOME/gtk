@@ -587,13 +587,17 @@ render_para (GtkTextRenderer    *text_renderer,
   screen_width = line_display->total_width;
 
   context = gtk_widget_get_style_context (text_renderer->widget);
-  state = gtk_widget_get_state_flags (text_renderer->widget);
+  gtk_style_context_save (context);
 
+  state = gtk_style_context_get_state (context);
   state |= GTK_STATE_FLAG_SELECTED;
+  gtk_style_context_set_state (context, state);
 
 G_GNUC_BEGIN_IGNORE_DEPRECATIONS
   gtk_style_context_get_background_color (context, state, &selection);
 G_GNUC_END_IGNORE_DEPRECATIONS
+
+ gtk_style_context_restore (context);
 
   do
     {
