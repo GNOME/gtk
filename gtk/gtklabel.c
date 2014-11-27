@@ -3426,6 +3426,8 @@ gtk_label_update_layout_attributes (GtkLabel *label)
 
       attrs = pango_attr_list_new ();
 
+      gtk_style_context_save (context);
+
       for (list = priv->select_info->links; list; list = list->next)
         {
           GtkLabelLink *link = list->data;
@@ -3442,6 +3444,7 @@ gtk_label_update_layout_attributes (GtkLabel *label)
           else
             state |= GTK_STATE_FLAG_LINK;
 
+          gtk_style_context_set_state (context, state);
           gtk_style_context_get_color (context, state, &link_color);
 
           attribute = pango_attr_foreground_new (link_color.red * 65535,
@@ -3451,6 +3454,8 @@ gtk_label_update_layout_attributes (GtkLabel *label)
           attribute->end_index = link->end;
           pango_attr_list_insert (attrs, attribute);
         }
+
+      gtk_style_context_restore (context);
     }
   else if (priv->markup_attrs && priv->attrs)
     attrs = pango_attr_list_new ();
