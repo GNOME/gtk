@@ -311,7 +311,7 @@ window_focus_in (GtkWidget  *widget,
 
       focus = gtk_window_get_focus (GTK_WINDOW (widget));
 
-      if (!gtk_widget_is_ancestor (focus, GTK_WIDGET (popover)))
+      if (focus == NULL || !gtk_widget_is_ancestor (focus, GTK_WIDGET (popover)))
         gtk_widget_grab_focus (GTK_WIDGET (popover));
 
       if (priv->grab_notify_blocked)
