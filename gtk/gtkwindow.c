@@ -6407,8 +6407,7 @@ get_shadow_width (GtkWidget *widget,
     return;
 
   if (priv->maximized ||
-      priv->fullscreen ||
-      priv->tiled)
+      priv->fullscreen)
     return;
 
   if (!gtk_widget_is_toplevel (widget))
@@ -9601,7 +9600,6 @@ gtk_window_draw (GtkWidget *widget,
       if (priv->client_decorated &&
           priv->decorated &&
           !priv->fullscreen &&
-          !priv->tiled &&
           !priv->maximized)
         {
           gtk_style_context_save (context);
