@@ -939,7 +939,7 @@ gdk_x11_display_translate_event (GdkEventTranslator *translator,
       event->selection.selection = gdk_x11_xatom_to_atom_for_display (display, xevent->xselection.selection);
       event->selection.target = gdk_x11_xatom_to_atom_for_display (display, xevent->xselection.target);
       if (xevent->xselection.property == None)
-        event->selection.property = GDK_NONE;
+        event->selection.property = event->selection.target;
       else
         event->selection.property = gdk_x11_xatom_to_atom_for_display (display, xevent->xselection.property);
       event->selection.time = xevent->xselection.time;
