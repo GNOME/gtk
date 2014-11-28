@@ -20,6 +20,7 @@
 #include <math.h>
 
 #include "gdkdeviceprivate.h"
+#include "gdkdevicemanagerprivate.h"
 #include "gdkdisplayprivate.h"
 #include "gdkinternals.h"
 #include "gdkintl.h"
@@ -1782,5 +1783,8 @@ _gdk_device_set_time (GdkDevice *device,
                       guint32    time)
 {
   if (time > device->time)
-    device->time = time;
+    {
+      device->time = time;
+      _gdk_device_manager_update_current_device (device->manager, device);
+    }
 }

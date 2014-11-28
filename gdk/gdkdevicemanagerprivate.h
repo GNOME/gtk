@@ -36,6 +36,7 @@ struct _GdkDeviceManager
 
   /*< private >*/
   GdkDisplay *display;
+  GdkDevice *current_device;
 };
 
 struct _GdkDeviceManagerClass
@@ -55,6 +56,10 @@ struct _GdkDeviceManagerClass
                                       GdkDeviceType     type);
   GdkDevice * (* get_client_pointer) (GdkDeviceManager *device_manager);
 };
+
+void
+_gdk_device_manager_update_current_device (GdkDeviceManager *device_manager,
+                                           GdkDevice        *device);
 
 G_END_DECLS
 

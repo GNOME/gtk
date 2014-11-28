@@ -154,13 +154,15 @@ G_DEFINE_ABSTRACT_TYPE (GdkDeviceManager, gdk_device_manager, G_TYPE_OBJECT)
 
 enum {
   PROP_0,
-  PROP_DISPLAY
+  PROP_DISPLAY,
+  PROP_CURRENT_DEVICE
 };
 
 enum {
   DEVICE_ADDED,
   DEVICE_REMOVED,
   DEVICE_CHANGED,
+  CURRENT_DEVICE_CHANGED,
   LAST_SIGNAL
 };
 
@@ -182,6 +184,15 @@ gdk_device_manager_class_init (GdkDeviceManagerClass *klass)
                                                         P_("Display for the device manager"),
                                                         GDK_TYPE_DISPLAY,
                                                         G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY |
+                                                        G_PARAM_STATIC_STRINGS));
+
+  g_object_class_install_property (object_class,
+                                   PROP_CURRENT_DEVICE,
+                                   g_param_spec_object ("current-device",
+                                                        P_("Current device"),
+                                                        P_("Most recently used device"),
+                                                        GDK_TYPE_DEVICE,
+                                                        G_PARAM_READABLE |
                                                         G_PARAM_STATIC_STRINGS));
 
   /**
@@ -283,6 +294,9 @@ gdk_device_manager_get_property (GObject      *object,
     case PROP_DISPLAY:
       g_value_set_object (value, GDK_DEVICE_MANAGER (object)->display);
       break;
+    case PROP_CURRENT_DEVICE:
+      g_value_set_object (value, GDK_DEVICE_MANAGER (object)->current_device);
+      break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
@@ -355,4 +369,23 @@ gdk_device_manager_get_client_pointer (GdkDeviceManager *device_manager)
   g_return_val_if_fail (GDK_IS_DEVICE_MANAGER (device_manager), NULL);
 
   return GDK_DEVICE_MANAGER_GET_CLASS (device_manager)->get_client_pointer (device_manager);
+}
+
+void
+_gdk_device_manager_update_current_device (GdkDeviceManager *device_manager,
+                                           GdkDevice        *device)
+{
+  if (gdk_device_get_device_type (device) != GDK_DEVICE_TYPE_SLAVE)
+    return;
+
+  if (device_manager->current_device == device)
+    return;
+
+  if (device_manager->current_device == NULL ||
+      device == NULL ||
+      gdk_device_get_time (device) >= gdk_device_get_time (device_manager->current_device))
+    {
+      device_manager->current_device = device;
+      g_object_notify (G_OBJECT (device_manager), "current-device");
+    }
 }
