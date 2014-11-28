@@ -414,7 +414,6 @@ static void
 bool_changed (GObject *object, GParamSpec *pspec, gpointer data)
 {
   GtkToggleButton *tb = GTK_TOGGLE_BUTTON (data);
-  GtkWidget *child;
   GValue val = G_VALUE_INIT;
 
   g_value_init (&val, G_TYPE_BOOLEAN);
