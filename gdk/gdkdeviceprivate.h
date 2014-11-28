@@ -56,6 +56,7 @@ struct _GdkDevice
   GList *slaves;
   GdkDeviceType type;
   GArray *axes;
+  guint32 time;
 };
 
 struct _GdkDeviceClass
@@ -172,6 +173,9 @@ GdkWindow * _gdk_device_window_at_position    (GdkDevice        *device,
                                                gdouble          *win_y,
                                                GdkModifierType  *mask,
                                                gboolean          get_toplevel);
+
+void _gdk_device_set_time (GdkDevice *device,
+                           guint32    time);
 
 G_END_DECLS
 

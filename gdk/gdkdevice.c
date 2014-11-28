@@ -1757,3 +1757,30 @@ gdk_device_get_last_event_window (GdkDevice *device)
 
   return info->window_under_pointer;
 }
+
+/**
+ * gdk_device_get_time:
+ * @device: a #GdkDevice
+ *
+ * Returns the timestamp of the last event involving this device that GDK has
+ * received.
+ *
+ * Returns: the timestamp of the last event for this device
+ *
+ * Since: 3.16
+ */
+guint32
+gdk_device_get_time (GdkDevice *device)
+{
+  g_return_val_if_fail (GDK_IS_DEVICE (device), 0);
+
+  return device->time;
+}
+
+void
+_gdk_device_set_time (GdkDevice *device,
+                      guint32    time)
+{
+  if (time > device->time)
+    device->time = time;
+}
