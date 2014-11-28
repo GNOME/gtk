@@ -416,9 +416,20 @@ gdk_mir_display_create_window_impl (GdkDisplay    *display,
   g_printerr (" location=(%d, %d)", window->x, window->y);
   g_printerr (" size=(%d, %d)", window->width, window->height);
   g_printerr ("\n");
-  if (attributes->wclass != GDK_INPUT_OUTPUT)
-    return;
-  window->impl = _gdk_mir_window_impl_new ();
+
+  if (attributes->wclass == GDK_INPUT_OUTPUT)
+    {
+      window->impl = _gdk_mir_window_impl_new ();
+      window->impl_window = window;
+    }
+  else /* attributes->wclass == GDK_INPUT_ONLY */
+    {
+      window->impl = g_object_ref (real_parent->impl);
+      window->impl_window = real_parent;
+
+      /* FIXME: this is called in gdk_window_new, which sets window->impl_window
+       * back to window after this function returns. */
+    }
 }
 
 static GdkKeymap *
