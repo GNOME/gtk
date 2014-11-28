@@ -1968,6 +1968,14 @@ GtkTreeView.view {
   GtkTreeView.view:selected, GtkTreeView.view:backdrop:selected {
     border-left-color: #225d9c;
     border-top-color: rgba(238, 238, 236, 0.1); }
+  GtkTreeView.view:insensitive {
+    color: #939695; }
+    GtkTreeView.view:insensitive:selected {
+      color: #799dc3; }
+      GtkTreeView.view:insensitive:selected:backdrop {
+        color: #638db9; }
+    GtkTreeView.view:insensitive:backdrop {
+      color: #5d6767; }
   GtkTreeView.view:backdrop {
     border-left-color: #393f3f;
     border-top: #393f3f; }

@@ -1360,10 +1360,21 @@ GtkTreeView.view {
     border-left-color: mix($selected_fg_color, $selected_bg_color, 0.5);
     border-top-color: transparentize($fg_color, 0.9); // doesn't work unfortunatelly
   }
+
+  &:insensitive {
+    color: $insensitive_fg_color;
+    &:selected {
+      color: mix($selected_fg_color, $selected_bg_color, 40%);
+      &:backdrop { color: mix($backdrop_selected_fg_color, $selected_bg_color, 30%); }
+    }
+    &:backdrop { color: $backdrop_insensitive_color; }
+  }
+
   &:backdrop {
     border-left-color: mix($backdrop_fg_color, $backdrop_bg_color, 0.5);
     border-top: $backdrop_bg_color;
   }
+
   &.expander {
     -gtk-icon-source: -gtk-icontheme('pan-end-symbolic');
     &:dir(rtl) { -gtk-icon-source: -gtk-icontheme('pan-end-symbolic-rtl'); }
