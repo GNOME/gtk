@@ -26,6 +26,7 @@
 
 #include "gdkinternals.h"
 #include "gdkdisplayprivate.h"
+#include "gdkdeviceprivate.h"
 
 #include <string.h>
 #include <math.h>
@@ -1504,6 +1505,7 @@ gdk_event_set_device (GdkEvent  *event,
     default:
       break;
     }
+  _gdk_device_set_time (device, gdk_event_get_time (event));
 }
 
 /**
@@ -1629,6 +1631,7 @@ gdk_event_set_source_device (GdkEvent  *event,
   private = (GdkEventPrivate *) event;
 
   private->source_device = device;
+  _gdk_device_set_time (device, gdk_event_get_time (event));
 }
 
 /**
