@@ -72,10 +72,10 @@ DEPS = \
 	$(top_builddir)/gtk/libgtk-3.la
 
 LDADDS = \
-	$(top_builddir)/gtk/libgtk-3.la	\
-	$(top_builddir)/gdk/libgdk-3.la	\
+	$(top_builddir)/gtk/libgtk-3.la		\
+	$(top_builddir)/gdk/libgdk-3.la		\
 	$(GTK_DEP_LIBS)				\
-	$(GDK_DEP_LIBS)			\
+	$(GDK_DEP_LIBS)				\
 	-lm
 
 bin_PROGRAMS = gtk3-demo gtk3-demo-application
@@ -86,7 +86,8 @@ dist_desktop_DATA = gtk3-demo.desktop
 BUILT_SOURCES = demos.h demo_resources.c
 
 EXTRA_DIST += 				\
-	$(IMAGEFILES)			\
+	data/source.svg			\
+	data/symbolic-source.svg	\
 	demo.gresource.xml		\
 	$(RESOURCES)			\
 	org.gtk.Demo.gschema.xml
@@ -118,39 +119,40 @@ gtk3_demo_application_LDADD = $(LDADDS)
 demo_resources.c: demo.gresource.xml $(RESOURCES)
 	$(AM_V_GEN) $(GLIB_COMPILE_RESOURCES) --target=$@ --sourcedir=$(srcdir) --generate-source $(srcdir)/demo.gresource.xml
 
-RESOURCES=	$(demos)			\
-		main.ui				\
-		application.ui			\
-		demo.ui				\
-		menus.ui			\
-		stack.ui			\
-		revealer.ui			\
-		theming.ui			\
-		listbox.ui			\
-		popover.ui			\
-		alphatest.png			\
-		apple-red.png			\
-		brick.png			\
-		brick2.png			\
-		background.jpg			\
-		floppybuddy.gif			\
-		gnome-applets.png		\
-		gnome-calendar.png		\
-		gnome-foot.png			\
-		gnome-fs-directory.png		\
-		gnome-fs-regular.png		\
-		gnome-gimp.png			\
-		gnome-gmush.png			\
-		gnome-gsame.png			\
-		gnu-keys.png			\
-		messages.txt			\
-		css_accordion.css		\
-		css_basics.css			\
-		css_multiplebgs.css		\
-		css_pixbufs.css			\
-		css_shadows.css			\
-		cssview.css			\
-		reset.css
+RESOURCES = 
+	$(demos)			\
+	main.ui				\
+	application.ui			\
+	demo.ui				\
+	menus.ui			\
+	stack.ui			\
+	revealer.ui			\
+	theming.ui			\
+	listbox.ui			\
+	popover.ui			\
+	alphatest.png			\
+	apple-red.png			\
+	brick.png			\
+	brick2.png			\
+	background.jpg			\
+	floppybuddy.gif			\
+	gnome-applets.png		\
+	gnome-calendar.png		\
+	gnome-foot.png			\
+	gnome-fs-directory.png		\
+	gnome-fs-regular.png		\
+	gnome-gimp.png			\
+	gnome-gmush.png			\
+	gnome-gsame.png			\
+	gnu-keys.png			\
+	messages.txt			\
+	css_accordion.css		\
+	css_basics.css			\
+	css_multiplebgs.css		\
+	css_pixbufs.css			\
+	css_shadows.css			\
+	cssview.css			\
+	reset.css
 
 iconthemedir = $(datadir)/icons/hicolor
 
@@ -160,13 +162,14 @@ appsicon24dir = $(iconthemedir)/24x24/apps
 appsicon32dir = $(iconthemedir)/32x32/apps
 appsicon48dir = $(iconthemedir)/48x48/apps
 appsicon256dir = $(iconthemedir)/256x256/apps
+appsiconscalabledir = $(iconthemedir)/scalable/apps
 
-dist_appsicon16_DATA = data/16x16/gtk3-demo.png
-dist_appsicon22_DATA = data/22x22/gtk3-demo.png
-dist_appsicon24_DATA = data/24x24/gtk3-demo.png
-dist_appsicon32_DATA = data/32x32/gtk3-demo.png
-dist_appsicon48_DATA = data/48x48/gtk3-demo.png
-dist_appsicon256_DATA = data/256x256/gtk3-demo.png
+dist_appsicon16_DATA = data/16x16/gtk3-demo.png data/16x16/gtk3-demo-symbolic.symbolic.png
+dist_appsicon22_DATA = data/22x22/gtk3-demo.png data/22x22/gtk3-demo-symbolic.symbolic.png
+dist_appsicon24_DATA = data/24x24/gtk3-demo.png data/24x24/gtk3-demo-symbolic.symbolic.png
+dist_appsicon32_DATA = data/32x32/gtk3-demo.png data/32x32/gtk3-demo-symbolic.symbolic.png
+dist_appsicon48_DATA = data/48x48/gtk3-demo.png data/48x48/gtk3-demo-symbolic.symbolic.png
+dist_appsicon256_DATA = data/256x256/gtk3-demo.png data/256x256/gtk3-demo-symbolic.symbolic.png
 
 update_icon_cache = $(GTK_UPDATE_ICON_CACHE) --ignore-theme-index --force
 
