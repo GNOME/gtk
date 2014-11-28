@@ -1766,6 +1766,26 @@ gtk_scrolled_window_draw_scrollbars_junction (GtkScrolledWindow *scrolled_window
 }
 
 static void
+gtk_scrolled_window_inner_allocation (GtkWidget     *widget,
+                                      GtkAllocation *rect)
+{
+  GtkWidget *child;
+  GtkBorder border = { 0 };
+
+  gtk_scrolled_window_relative_allocation (widget, rect);
+
+  child = gtk_bin_get_child (GTK_BIN (widget));
+  if (GTK_IS_SCROLLABLE (child) &&
+      gtk_scrollable_get_border (GTK_SCROLLABLE (child), &border))
+    {
+      rect->x += border.left;
+      rect->y += border.top;
+      rect->width -= border.left + border.right;
+      rect->height -= border.top + border.bottom;
+    }
+}
+
+static void
 gtk_scrolled_window_draw_overshoot (GtkScrolledWindow *scrolled_window,
 				    cairo_t           *cr)
 {
@@ -1778,7 +1798,8 @@ gtk_scrolled_window_draw_overshoot (GtkScrolledWindow *scrolled_window,
     return;
 
   context = gtk_widget_get_style_context (widget);
-  gtk_scrolled_window_relative_allocation (widget, &rect);
+  gtk_scrolled_window_inner_allocation (widget, &rect);
+
   overshoot_x = CLAMP (overshoot_x, - MAX_OVERSHOOT_DISTANCE, MAX_OVERSHOOT_DISTANCE);
   overshoot_y = CLAMP (overshoot_y, - MAX_OVERSHOOT_DISTANCE, MAX_OVERSHOOT_DISTANCE);
 
@@ -1836,7 +1857,7 @@ gtk_scrolled_window_draw_undershoot (GtkScrolledWindow *scrolled_window,
   GtkAdjustment *adj;
 
   context = gtk_widget_get_style_context (widget);
-  gtk_scrolled_window_relative_allocation (widget, &rect);
+  gtk_scrolled_window_inner_allocation (widget, &rect);
 
   gtk_style_context_save (context);
   gtk_style_context_remove_class (context, GTK_STYLE_CLASS_FRAME);
