@@ -119,7 +119,7 @@ gtk3_demo_application_LDADD = $(LDADDS)
 demo_resources.c: demo.gresource.xml $(RESOURCES)
 	$(AM_V_GEN) $(GLIB_COMPILE_RESOURCES) --target=$@ --sourcedir=$(srcdir) --generate-source $(srcdir)/demo.gresource.xml
 
-RESOURCES = 
+RESOURCES =				\
 	$(demos)			\
 	main.ui				\
 	application.ui			\
