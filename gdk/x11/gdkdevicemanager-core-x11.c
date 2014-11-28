@@ -595,6 +595,7 @@ gdk_x11_device_manager_core_translate_event (GdkEventTranslator *translator,
 
       event->crossing.type = GDK_ENTER_NOTIFY;
       event->crossing.window = window;
+      event->crossing.time = xevent->xcrossing.time;
       gdk_event_set_device (event, device_manager->core_pointer);
 
       /* If the subwindow field of the XEvent is non-NULL, then
@@ -605,7 +606,6 @@ gdk_x11_device_manager_core_translate_event (GdkEventTranslator *translator,
       else
         event->crossing.subwindow = NULL;
 
-      event->crossing.time = xevent->xcrossing.time;
       event->crossing.x = (gdouble) xevent->xcrossing.x / scale;
       event->crossing.y = (gdouble) xevent->xcrossing.y / scale;
       event->crossing.x_root = (gdouble) xevent->xcrossing.x_root / scale;
@@ -639,6 +639,7 @@ gdk_x11_device_manager_core_translate_event (GdkEventTranslator *translator,
 
       event->crossing.type = GDK_LEAVE_NOTIFY;
       event->crossing.window = window;
+      event->crossing.time = xevent->xcrossing.time;
       gdk_event_set_device (event, device_manager->core_pointer);
 
       /* If the subwindow field of the XEvent is non-NULL, then
@@ -649,7 +650,6 @@ gdk_x11_device_manager_core_translate_event (GdkEventTranslator *translator,
       else
         event->crossing.subwindow = NULL;
 
-      event->crossing.time = xevent->xcrossing.time;
       event->crossing.x = (gdouble) xevent->xcrossing.x / scale;
       event->crossing.y = (gdouble) xevent->xcrossing.y / scale;
       event->crossing.x_root = (gdouble) xevent->xcrossing.x_root / scale;
