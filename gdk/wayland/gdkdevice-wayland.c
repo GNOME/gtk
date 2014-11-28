@@ -748,11 +748,11 @@ pointer_handle_enter (void              *data,
   device->enter_serial = serial;
 
   event = gdk_event_new (GDK_ENTER_NOTIFY);
+  event->crossing.time = (guint32)(g_get_monotonic_time () / 1000);
   event->crossing.window = g_object_ref (device->pointer_focus);
   gdk_event_set_device (event, device->master_pointer);
   gdk_event_set_source_device (event, device->pointer);
   event->crossing.subwindow = NULL;
-  event->crossing.time = (guint32)(g_get_monotonic_time () / 1000);
   event->crossing.mode = GDK_CROSSING_NORMAL;
   event->crossing.detail = GDK_NOTIFY_ANCESTOR;
   event->crossing.focus = TRUE;
@@ -794,11 +794,11 @@ pointer_handle_leave (void              *data,
   _gdk_wayland_display_update_serial (wayland_display, serial);
 
   event = gdk_event_new (GDK_LEAVE_NOTIFY);
+  event->crossing.time = (guint32)(g_get_monotonic_time () / 1000);
   event->crossing.window = g_object_ref (device->pointer_focus);
   gdk_event_set_device (event, device->master_pointer);
   gdk_event_set_source_device (event, device->pointer);
   event->crossing.subwindow = NULL;
-  event->crossing.time = (guint32)(g_get_monotonic_time () / 1000);
   event->crossing.mode = GDK_CROSSING_NORMAL;
   event->crossing.detail = GDK_NOTIFY_ANCESTOR;
   event->crossing.focus = TRUE;
@@ -846,10 +846,10 @@ pointer_handle_motion (void              *data,
   device->surface_y = wl_fixed_to_double (sy);
 
   event->motion.type = GDK_MOTION_NOTIFY;
+  event->motion.time = time;
   event->motion.window = g_object_ref (device->pointer_focus);
   gdk_event_set_device (event, device->master_pointer);
   gdk_event_set_source_device (event, device->pointer);
-  event->motion.time = time;
   event->motion.axes = NULL;
   event->motion.state = device->modifiers;
   event->motion.is_hint = 0;
@@ -906,10 +906,10 @@ pointer_handle_button (void              *data,
     device->button_press_serial = serial;
 
   event = gdk_event_new (state ? GDK_BUTTON_PRESS : GDK_BUTTON_RELEASE);
+  event->button.time = time;
   event->button.window = g_object_ref (device->pointer_focus);
   gdk_event_set_device (event, device->master_pointer);
   gdk_event_set_source_device (event, device->pointer);
-  event->button.time = time;
   event->button.axes = NULL;
   event->button.state = device->modifiers;
   event->button.button = gdk_button;
@@ -966,10 +966,10 @@ pointer_handle_axis (void              *data,
 
   device->time = time;
   event = gdk_event_new (GDK_SCROLL);
+  event->scroll.time = time;
   event->scroll.window = g_object_ref (device->pointer_focus);
   gdk_event_set_device (event, device->master_pointer);
   gdk_event_set_source_device (event, device->pointer);
-  event->scroll.time = time;
   event->scroll.direction = GDK_SCROLL_SMOOTH;
   event->scroll.delta_x = delta_x;
   event->scroll.delta_y = delta_y;
@@ -1229,10 +1229,10 @@ deliver_key_event (GdkWaylandDeviceData *device,
   device->modifiers = gdk_keymap_get_modifier_state (keymap);
 
   event = gdk_event_new (state ? GDK_KEY_PRESS : GDK_KEY_RELEASE);
+  event->key.time = time_;
   event->key.window = device->keyboard_focus ? g_object_ref (device->keyboard_focus) : NULL;
   gdk_event_set_device (event, device->master_keyboard);
   gdk_event_set_source_device (event, device->keyboard);
-  event->key.time = time_;
   event->key.state = device->modifiers;
   event->key.group = 0;
   event->key.hardware_keycode = key;
@@ -1402,10 +1402,10 @@ _create_touch_event (GdkWaylandDeviceData *device,
   GdkEvent *event;
 
   event = gdk_event_new (evtype);
+  event->touch.time = time;
   event->touch.window = g_object_ref (touch->window);
   gdk_event_set_device (event, device->master_pointer);
   gdk_event_set_source_device (event, device->touch);
-  event->touch.time = time;
   event->touch.state = device->modifiers;
   gdk_event_set_screen (event, display->screen);
   event->touch.sequence = GDK_SLOT_TO_EVENT_SEQUENCE (touch->id);
