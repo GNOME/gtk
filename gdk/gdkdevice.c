@@ -1760,18 +1760,18 @@ gdk_device_get_last_event_window (GdkDevice *device)
 }
 
 /**
- * gdk_device_get_time:
+ * gdk_device_get_motion_time:
  * @device: a #GdkDevice
  *
- * Returns the timestamp of the last event involving this device that GDK has
- * received.
+ * Returns the timestamp of the last motion event involving this device
+ * that GDK has received.
  *
  * Returns: the timestamp of the last event for this device
  *
  * Since: 3.16
  */
 guint32
-gdk_device_get_time (GdkDevice *device)
+gdk_device_get_motion_time (GdkDevice *device)
 {
   g_return_val_if_fail (GDK_IS_DEVICE (device), 0);
 
@@ -1779,8 +1779,8 @@ gdk_device_get_time (GdkDevice *device)
 }
 
 void
-_gdk_device_set_time (GdkDevice *device,
-                      guint32    time)
+_gdk_device_set_motion_time (GdkDevice *device,
+                             guint32    time)
 {
   if (time > device->time)
     {

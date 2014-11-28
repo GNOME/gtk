@@ -186,6 +186,13 @@ gdk_device_manager_class_init (GdkDeviceManagerClass *klass)
                                                         G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY |
                                                         G_PARAM_STATIC_STRINGS));
 
+  /**
+   * GdkDeviceManager:current-device:
+   *
+   * The device that we have most recently seen a motion event for.
+   *
+   * Since: 3.16
+   */
   g_object_class_install_property (object_class,
                                    PROP_CURRENT_DEVICE,
                                    g_param_spec_object ("current-device",
@@ -383,7 +390,7 @@ _gdk_device_manager_update_current_device (GdkDeviceManager *device_manager,
 
   if (device_manager->current_device == NULL ||
       device == NULL ||
-      gdk_device_get_time (device) >= gdk_device_get_time (device_manager->current_device))
+      gdk_device_get_motion_time (device) >= gdk_device_get_motion_time (device_manager->current_device))
     {
       device_manager->current_device = device;
       g_object_notify (G_OBJECT (device_manager), "current-device");

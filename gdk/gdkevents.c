@@ -1482,6 +1482,7 @@ gdk_event_set_device (GdkEvent  *event,
     {
     case GDK_MOTION_NOTIFY:
       event->motion.device = device;
+      _gdk_device_set_motion_time (device, gdk_event_get_time (event));
       break;
     case GDK_BUTTON_PRESS:
     case GDK_2BUTTON_PRESS:
@@ -1505,7 +1506,6 @@ gdk_event_set_device (GdkEvent  *event,
     default:
       break;
     }
-  _gdk_device_set_time (device, gdk_event_get_time (event));
 }
 
 /**
@@ -1631,7 +1631,8 @@ gdk_event_set_source_device (GdkEvent  *event,
   private = (GdkEventPrivate *) event;
 
   private->source_device = device;
-  _gdk_device_set_time (device, gdk_event_get_time (event));
+  if (event->type == GDK_MOTION_NOTIFY)
+    _gdk_device_set_motion_time (device, gdk_event_get_time (event));
 }
 
 /**

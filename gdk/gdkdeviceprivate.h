@@ -174,8 +174,8 @@ GdkWindow * _gdk_device_window_at_position    (GdkDevice        *device,
                                                GdkModifierType  *mask,
                                                gboolean          get_toplevel);
 
-void _gdk_device_set_time (GdkDevice *device,
-                           guint32    time);
+void _gdk_device_set_motion_time (GdkDevice *device,
+                                  guint32    time);
 
 G_END_DECLS
 

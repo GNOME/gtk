@@ -275,7 +275,7 @@ GDK_AVAILABLE_IN_3_12
 GdkWindow *gdk_device_get_last_event_window (GdkDevice *device);
 
 GDK_AVAILABLE_IN_3_16
-guint32    gdk_device_get_time       (GdkDevice *device);
+guint32    gdk_device_get_motion_time (GdkDevice *device);
 
 G_END_DECLS
 
