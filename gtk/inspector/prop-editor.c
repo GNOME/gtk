@@ -427,9 +427,8 @@ bool_changed (GObject *object, GParamSpec *pspec, gpointer data)
       unblock_controller (G_OBJECT (tb));
     }
 
-  child = gtk_bin_get_child (GTK_BIN (tb));
-  gtk_label_set_text (GTK_LABEL (child),
-                      g_value_get_boolean (&val) ? "TRUE" : "FALSE");
+  gtk_button_set_label (GTK_BUTTON (tb),
+                        g_value_get_boolean (&val) ? "TRUE" : "FALSE");
 
   g_value_unset (&val);
 }
