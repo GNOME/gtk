@@ -1733,7 +1733,7 @@ _gdk_device_window_at_position (GdkDevice        *device,
  * gdk_device_get_last_event_window:
  * @device: a #GdkDevice, with a source other than %GDK_SOURCE_KEYBOARD
  *
- * Gets information about which window the given pointer device is in, based on
+ * Gets information about which window the given pointer device is in, based on events
  * that have been received so far from the display server. If another application
  * has a pointer grab, or this application has a grab with owner_events = %FALSE,
  * %NULL may be returned even if the pointer is physically over one of this
