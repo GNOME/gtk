@@ -3649,9 +3649,11 @@ device_manager_has_mouse (GdkDeviceManager *dm)
   GdkDevice *cp;
   GList *slaves, *s;
   GdkDevice *device;
-  gboolean found;
+  guint32 mouse_time;
+  guint32 other_time;
 
-  found = FALSE;
+  mouse_time = 0;
+  other_time = 0;
 
   cp = gdk_device_manager_get_client_pointer (dm);
   slaves = gdk_device_list_slave_devices (cp);
@@ -3659,24 +3661,20 @@ device_manager_has_mouse (GdkDeviceManager *dm)
     {
       device = s->data;
 
-      if (gdk_device_get_source (device) != GDK_SOURCE_MOUSE)
+      if (g_object_get_data (G_OBJECT (device), "removed"))
         continue;
 
       if (strstr (gdk_device_get_name (device), "XTEST"))
         continue;
 
-      if (strstr (gdk_device_get_name (device), "TrackPoint"))
-        continue;
-
-      if (g_object_get_data (G_OBJECT (device), "removed"))
-        continue;
-
-      found = TRUE;
-      break;
+      if (gdk_device_get_source (device) == GDK_SOURCE_MOUSE)
+        mouse_time = MAX (mouse_time, gdk_device_get_time (device));
+      else
+        other_time = MAX (other_time, gdk_device_get_time (device));
     }
   g_list_free (slaves);
 
-  return found;
+  return mouse_time > other_time;
 }
 
 static void
