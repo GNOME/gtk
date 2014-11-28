@@ -3593,6 +3593,7 @@ setup_indicator (GtkScrolledWindow *scrolled_window,
   gdk_window_hide (indicator->window);
   gtk_widget_set_opacity (scrollbar, 0.0);
   indicator->current_pos = 0.0;
+  indicator->target_pos = 0.5;
 }
 
 static void
@@ -3641,19 +3642,20 @@ remove_indicator (GtkScrolledWindow *scrolled_window,
 
   gtk_widget_set_opacity (scrollbar, 1.0);
   indicator->current_pos = 1.0;
+  indicator->target_pos = 0.5;
 }
 
 static gboolean
-device_manager_has_mouse (GdkDeviceManager *dm)
+device_manager_mouse_is_current (GdkDeviceManager *dm)
 {
   GdkDevice *cp;
   GList *slaves, *s;
   GdkDevice *device;
   guint32 mouse_time;
-  guint32 other_time;
+  guint32 touch_time;
 
   mouse_time = 0;
-  other_time = 0;
+  touch_time = 0;
 
   cp = gdk_device_manager_get_client_pointer (dm);
   slaves = gdk_device_list_slave_devices (cp);
@@ -3664,17 +3666,22 @@ device_manager_has_mouse (GdkDeviceManager *dm)
       if (g_object_get_data (G_OBJECT (device), "removed"))
         continue;
 
-      if (strstr (gdk_device_get_name (device), "XTEST"))
-        continue;
-
-      if (gdk_device_get_source (device) == GDK_SOURCE_MOUSE)
-        mouse_time = MAX (mouse_time, gdk_device_get_time (device));
-      else
-        other_time = MAX (other_time, gdk_device_get_time (device));
+      switch (gdk_device_get_source (device))
+        {
+        case GDK_SOURCE_MOUSE:
+          mouse_time = MAX (mouse_time, gdk_device_get_motion_time (device));
+          break;
+        case GDK_SOURCE_TOUCHPAD:
+        case GDK_SOURCE_TOUCHSCREEN:
+          touch_time = MAX (touch_time, gdk_device_get_motion_time (device));
+          break;
+        default:
+          break;
+        }
     }
   g_list_free (slaves);
 
-  return mouse_time > other_time;
+  return mouse_time > touch_time;
 }
 
 static void
@@ -3697,7 +3704,7 @@ gtk_scrolled_window_update_touch_mode (GtkScrolledWindow *scrolled_window)
     {
       GdkDeviceManager *dm;
       dm = gdk_display_get_device_manager (gtk_widget_get_display (GTK_WIDGET (scrolled_window)));
-      touch_mode = !device_manager_has_mouse (dm);
+      touch_mode = !device_manager_mouse_is_current (dm);
     }
 
   if (priv->touch_mode != touch_mode)
@@ -3740,6 +3747,14 @@ gtk_scrolled_window_device_removed (GdkDeviceManager  *dm,
 }
 
 static void
+gtk_scrolled_window_device_changed (GdkDeviceManager  *dm,
+                                    GParamSpec        *pspec,
+                                    GtkScrolledWindow *scrolled_window)
+{
+  gtk_scrolled_window_update_touch_mode (scrolled_window);
+}
+
+static void
 gtk_scrolled_window_realize (GtkWidget *widget)
 {
   GtkScrolledWindow *scrolled_window = GTK_SCROLLED_WINDOW (widget);
@@ -3758,6 +3773,8 @@ gtk_scrolled_window_realize (GtkWidget *widget)
                     G_CALLBACK (gtk_scrolled_window_device_added), scrolled_window);
   g_signal_connect (dm, "device-removed",
                     G_CALLBACK (gtk_scrolled_window_device_removed), scrolled_window);
+  g_signal_connect (dm, "notify::current-device",
+                    G_CALLBACK (gtk_scrolled_window_device_changed), scrolled_window);
 }
 
 static void
@@ -3770,6 +3787,7 @@ gtk_scrolled_window_unrealize (GtkWidget *widget)
   dm = gdk_display_get_device_manager (gtk_widget_get_display (widget));
   g_signal_handlers_disconnect_by_func (dm, gtk_scrolled_window_device_added, scrolled_window);
   g_signal_handlers_disconnect_by_func (dm, gtk_scrolled_window_device_removed, scrolled_window);
+  g_signal_handlers_disconnect_by_func (dm, gtk_scrolled_window_device_changed, scrolled_window);
 
   gtk_widget_set_parent_window (priv->hscrollbar, NULL);
   gtk_widget_unregister_window (widget, priv->hindicator.window);
