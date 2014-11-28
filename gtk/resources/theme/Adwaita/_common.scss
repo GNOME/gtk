@@ -1223,6 +1223,10 @@ GtkTreeView.view { // treeview grid lines and expanders, unfortunatelly
   -GtkTreeView-expander-size: 16;
   border-color: $bg_color; // this is actually the line color
   // :selected is ignored hence no style for it
+  &:insensitive {
+    color: $insensitive_fg_color;
+    &:selected { color: mix($selected_fg_color, $selected_bg_color, 40%); }
+  }
   &:backdrop {
     border-color: $backdrop_bg_color;
   }

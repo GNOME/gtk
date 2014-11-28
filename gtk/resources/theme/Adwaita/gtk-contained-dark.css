@@ -1961,6 +1961,10 @@ GtkTreeView.view {
   -GtkTreeView-tree-line-pattern: '';
   -GtkTreeView-expander-size: 16;
   border-color: #393f3f; }
+  GtkTreeView.view:insensitive {
+    color: #939695; }
+    GtkTreeView.view:insensitive:selected {
+      color: #799dc3; }
   GtkTreeView.view:backdrop {
     border-color: #393f3f; }
   GtkTreeView.view.expander {
