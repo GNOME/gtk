@@ -752,7 +752,7 @@ GtkComboBox {
       &:hover { @include button(hover, $selected_bg_color, $selected_fg_color, noedge); }
       &:active { @include button(active, $selected_bg_color, $selected_fg_color, noedge); }
       &:insensitive { @include button(insensitive, $selected_bg_color, $selected_fg_color, noedge); }
-      &:backdrop { 
+      &:backdrop {
         @include button(backdrop, $selected_bg_color, $selected_fg_color, noedge);
         border-color: darken($selected_bg_color, 15%);
       }
@@ -1374,12 +1374,14 @@ GtkCheckButton.text-button, GtkRadioButton.text-button {
   -GtkRange-trough-border: 2;
   outline-offset: -9px;
   outline-radius: 4px;
-  margin: 10px;
+
   &.fine-tune {
-    margin: 8px;
     outline-offset: -7px;
     outline-radius: 6px;
-    &.trough { border-radius: 4px; }
+    &.trough {
+      border-radius: 4px;
+      margin: 8px;
+    }
   }
   &.slider {
     //FIXME: better gradient on the slider and hover state
@@ -1411,11 +1413,12 @@ GtkCheckButton.text-button, GtkRadioButton.text-button {
       box-shadow: none;
     }
     &:backdrop:insensitive { @include button(backdrop-insensitive);}
-    &:active { 
-      border: 1px solid darken($selected_borders_color,3%); 
+    &:active {
+      border: 1px solid darken($selected_borders_color,3%);
     }
   }
   &.trough {
+    margin: 10px;
     border-width: 1px;
     border-style: solid;
     border-radius: 3px;
@@ -1449,24 +1452,24 @@ GtkCheckButton.text-button, GtkRadioButton.text-button {
     }
   }
 }
- 
+
 //FIXME: scale sliders
 
 %scale_marks_above_horz {
-  margin: 14px 10px 10px;
-  &.fine-tune { margin: 12px 8px 8px; }
+  .trough { margin: 14px 10px 10px; }
+  &.fine-tune .trough { margin: 12px 8px 8px; }
 }
 %scale_marks_below_horz {
-  margin: 10px 10px 14px;
-  &.fine-tune { margin: 8px 8px 12px; }
+  .trough { margin: 10px 10px 14px; }
+  &.fine-tune .trough { margin: 8px 8px 12px; }
 }
 %scale_marks_above_vert {
-  margin: 10px 10px 10px 14px;
-  &.fine-tune { margin: 8px 8px 8px 12px; }
+  .trough { margin: 10px 10px 10px 14px; }
+  &.fine-tune .trough { margin: 8px 8px 8px 12px; }
 }
 %scale_marks_below_vert {
-  margin: 10px 14px 10px 10px;
-  &.fine-tune { margin: 8px 12px 8px 8px; }
+  .trough { margin: 10px 14px 10px 10px; }
+  &.fine-tune .trough { margin: 8px 12px 8px 8px; }
 }
 
 /*****************
@@ -1715,20 +1718,20 @@ GtkExpander {
 /************
  * Calendar *
  ***********/
-GtkCalendar { 
-  border: 1px solid $borders_color; 
+GtkCalendar {
+  border: 1px solid $borders_color;
   &.button {
-    @extend %undecorated_button; 
+    @extend %undecorated_button;
     padding: 0 4px; //FIXME no effect on these pseudobuttons
-    color: mix($fg_color, $base_color, 40%); //we need a dimmed stuff var 
+    color: mix($fg_color, $base_color, 40%); //we need a dimmed stuff var
     &:hover {
-      @extend %undecorated_button; 
-      color: $fg_color; 
-    } 
-    &:backdrop, &:backdrop:hover { 
-      @extend %undecorated_button; 
-      color: mix($backdrop_fg_color, $backdrop_base_color, 50%); 
-    } 
+      @extend %undecorated_button;
+      color: $fg_color;
+    }
+    &:backdrop, &:backdrop:hover {
+      @extend %undecorated_button;
+      color: mix($backdrop_fg_color, $backdrop_base_color, 50%);
+    }
   }
   &.view { border-radius: 2px; }
   &.header {
@@ -1736,8 +1739,8 @@ GtkCalendar {
                                 lighten($bg_color,2%),
                                 darken($bg_color,2%));
     border-bottom-color: mix($borders_color,$bg_color,50%);
-    &:backdrop { 
-      background-image: linear-gradient(to bottom, $backdrop_bg_color); 
+    &:backdrop {
+      background-image: linear-gradient(to bottom, $backdrop_bg_color);
       border-bottom-color: mix($backdrop_borders_color,$backdrop_bg_color,50%);
     }
   }
