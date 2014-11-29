@@ -3280,6 +3280,11 @@ gtk_range_update_mouse_location (GtkRange *range)
     {
       gtk_range_queue_draw_location (range, old);
       gtk_range_queue_draw_location (range, priv->mouse_location);
+
+      if (priv->mouse_location == MOUSE_OUTSIDE)
+        gtk_widget_unset_state_flags (widget, GTK_STATE_FLAG_PRELIGHT);
+      else
+        gtk_widget_set_state_flags (widget, GTK_STATE_FLAG_PRELIGHT, FALSE);
     }
 }
 
