@@ -2253,9 +2253,6 @@ range_grab_add (GtkRange      *range,
    */
   priv->grab_location = location;
 
-  if (gtk_range_update_mouse_location (range))
-    gtk_widget_queue_draw (GTK_WIDGET (range));
-
   gtk_style_context_add_class (context, "dragging");
 }
 
