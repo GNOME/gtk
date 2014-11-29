@@ -287,7 +287,7 @@ static void          gtk_range_adjustment_changed       (GtkAdjustment *adjustme
 static void          gtk_range_add_step_timer           (GtkRange      *range,
                                                          GtkScrollType  step);
 static void          gtk_range_remove_step_timer        (GtkRange      *range);
-static GdkRectangle* get_area                           (GtkRange      *range,
+static void          gtk_range_queue_draw_location      (GtkRange      *range,
                                                          MouseLocation  location);
 static gboolean      gtk_range_real_change_value        (GtkRange      *range,
                                                          GtkScrollType  scroll,
@@ -2535,20 +2535,11 @@ gtk_range_multipress_gesture_pressed (GtkGestureMultiPress *gesture,
             button == GDK_BUTTON_MIDDLE ||
             button == GDK_BUTTON_SECONDARY))
     {
-      GtkAllocation allocation;
-      GdkRectangle *stepper_area;
       GtkScrollType scroll;
 
       range_grab_add (range, priv->mouse_location);
 
-      gtk_widget_get_allocation (widget, &allocation);
-      stepper_area = get_area (range, priv->mouse_location);
-
-      gtk_widget_queue_draw_area (widget,
-                                  allocation.x + stepper_area->x,
-                                  allocation.y + stepper_area->y,
-                                  stepper_area->width,
-                                  stepper_area->height);
+      gtk_range_queue_draw_location (range, priv->mouse_location);
 
       scroll = range_get_scroll_for_grab (range);
       if (scroll != GTK_SCROLL_NONE)
@@ -3939,33 +3930,52 @@ gtk_range_calc_layout (GtkRange *range)
     }
 }
 
-static GdkRectangle*
-get_area (GtkRange     *range,
-          MouseLocation location)
+static void
+gtk_range_queue_draw_location (GtkRange      *range,
+                               MouseLocation  location)
 {
   GtkRangePrivate *priv = range->priv;
+  GtkWidget *widget = GTK_WIDGET (range);
+  const GdkRectangle *rect;
+  GdkRectangle allocation;
 
   switch (location)
     {
     case MOUSE_STEPPER_A:
-      return &priv->stepper_a;
+      rect = &priv->stepper_a;
+      break;
     case MOUSE_STEPPER_B:
-      return &priv->stepper_b;
+      rect = &priv->stepper_b;
+      break;
     case MOUSE_STEPPER_C:
-      return &priv->stepper_c;
+      rect = &priv->stepper_c;
+      break;
     case MOUSE_STEPPER_D:
-      return &priv->stepper_d;
+      rect = &priv->stepper_d;
+      break;
     case MOUSE_TROUGH:
-      return &priv->trough;
+      rect = &priv->trough;
+      break;
     case MOUSE_SLIDER:
-      return &priv->slider;
+      rect = &priv->slider;
+      break;
     case MOUSE_WIDGET:
     case MOUSE_OUTSIDE:
-      break;
+      return;
+    default:
+      g_assert_not_reached ();
+      return;
     }
 
-  g_warning (G_STRLOC": bug");
-  return NULL;
+  if (rect->width <= 0 || rect->height <= 0)
+    return;
+
+  gtk_widget_get_allocation (widget, &allocation);
+  gtk_widget_queue_draw_area (widget,
+                              allocation.x + rect->x,
+                              allocation.y + rect->y,
+                              rect->width,
+                              rect->height);
 }
 
 static void
