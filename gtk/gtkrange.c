@@ -258,6 +258,8 @@ static void          gtk_range_compute_slider_position  (GtkRange      *range,
 static gboolean      gtk_range_scroll                   (GtkRange      *range,
                                                          GtkScrollType  scroll);
 static gboolean      gtk_range_update_mouse_location    (GtkRange      *range);
+static void          gtk_range_calc_slider              (GtkRange      *range);
+static void          gtk_range_calc_stepper_sensitivity (GtkRange      *range);
 static void          gtk_range_calc_layout              (GtkRange      *range);
 static void          gtk_range_calc_marks               (GtkRange      *range);
 static void          gtk_range_get_props                (GtkRange      *range,
@@ -976,11 +978,7 @@ gtk_range_set_slider_size_fixed (GtkRange *range,
       priv->slider_size_fixed = size_fixed ? TRUE : FALSE;
 
       if (priv->adjustment && gtk_widget_get_mapped (GTK_WIDGET (range)))
-        {
-          priv->need_recalc = TRUE;
-          gtk_range_calc_layout (range);
-          gtk_widget_queue_draw (GTK_WIDGET (range));
-        }
+        gtk_range_calc_slider (range);
     }
 }
 
@@ -1150,9 +1148,7 @@ gtk_range_set_lower_stepper_sensitivity (GtkRange           *range,
     {
       priv->lower_sensitivity = sensitivity;
 
-      priv->need_recalc = TRUE;
-      gtk_range_calc_layout (range);
-      gtk_widget_queue_draw (GTK_WIDGET (range));
+      gtk_range_calc_stepper_sensitivity (range);
 
       g_object_notify (G_OBJECT (range), "lower-stepper-sensitivity");
     }
@@ -1201,9 +1197,7 @@ gtk_range_set_upper_stepper_sensitivity (GtkRange           *range,
     {
       priv->upper_sensitivity = sensitivity;
 
-      priv->need_recalc = TRUE;
-      gtk_range_calc_layout (range);
-      gtk_widget_queue_draw (GTK_WIDGET (range));
+      gtk_range_calc_stepper_sensitivity (range);
 
       g_object_notify (G_OBJECT (range), "upper-stepper-sensitivity");
     }
@@ -3638,6 +3632,22 @@ gtk_range_compute_slider_position (GtkRange     *range,
       slider_rect->x = x;
       slider_rect->width = width;
     }
+}
+
+static void
+gtk_range_calc_slider (GtkRange *range)
+{
+  range->priv->need_recalc = TRUE;
+  gtk_range_calc_layout (range);
+  gtk_widget_queue_draw (GTK_WIDGET (range));
+}
+
+static void
+gtk_range_calc_stepper_sensitivity (GtkRange *range)
+{
+  range->priv->need_recalc = TRUE;
+  gtk_range_calc_layout (range);
+  gtk_widget_queue_draw (GTK_WIDGET (range));
 }
 
 static void
