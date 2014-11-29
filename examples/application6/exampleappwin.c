@@ -1,6 +1,7 @@
+#include <gtk/gtk.h>
+
 #include "exampleapp.h"
 #include "exampleappwin.h"
-#include <gtk/gtk.h>
 
 struct ExampleAppWindow
 {

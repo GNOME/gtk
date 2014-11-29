@@ -1,5 +1,6 @@
 #include <gtk/gtk.h>
-#include <exampleapp.h>
+
+#include "exampleapp.h"
 
 int
 main (int argc, char *argv[])
