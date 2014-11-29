@@ -255,7 +255,7 @@ static void          gtk_range_compute_slider_position  (GtkRange      *range,
                                                          GdkRectangle  *slider_rect);
 static gboolean      gtk_range_scroll                   (GtkRange      *range,
                                                          GtkScrollType  scroll);
-static gboolean      gtk_range_update_mouse_location    (GtkRange      *range);
+static void          gtk_range_update_mouse_location    (GtkRange      *range);
 static void          gtk_range_calc_slider              (GtkRange      *range);
 static void          gtk_range_calc_stepper_sensitivity (GtkRange      *range);
 static void          gtk_range_calc_layout              (GtkRange      *range);
@@ -2280,8 +2280,7 @@ range_grab_remove (GtkRange *range)
   gtk_range_queue_draw_location (range, priv->grab_location);
   priv->grab_location = MOUSE_OUTSIDE;
 
-  if (gtk_range_update_mouse_location (range))
-    gtk_widget_queue_draw (GTK_WIDGET (range));
+  gtk_range_update_mouse_location (range);
 
   update_zoom_state (range, FALSE);
 
@@ -2471,8 +2470,7 @@ gtk_range_multipress_gesture_pressed (GtkGestureMultiPress *gesture,
   priv->mouse_x = x;
   priv->mouse_y = y;
 
-  if (gtk_range_update_mouse_location (range))
-    gtk_widget_queue_draw (widget);
+  gtk_range_update_mouse_location (range);
 
   g_object_get (gtk_widget_get_settings (widget),
                 "gtk-primary-button-warps-slider", &primary_warps,
@@ -2935,8 +2933,7 @@ gtk_range_event (GtkWidget *widget,
       priv->mouse_y = y;
     }
 
-  if (gtk_range_update_mouse_location (range))
-    gtk_widget_queue_draw (widget);
+  gtk_range_update_mouse_location (range);
 
   return GDK_EVENT_PROPAGATE;
 }
@@ -3244,7 +3241,7 @@ gtk_range_get_props (GtkRange  *range,
   (ycoord) <  ((rect).y + (rect).height))
 
 /* Update mouse location, return TRUE if it changes */
-static gboolean
+static void
 gtk_range_update_mouse_location (GtkRange *range)
 {
   GtkRangePrivate *priv = range->priv;
@@ -3279,7 +3276,11 @@ gtk_range_update_mouse_location (GtkRange *range)
   else
     priv->mouse_location = MOUSE_OUTSIDE;
 
-  return old != priv->mouse_location;
+  if (old != priv->mouse_location)
+    {
+      gtk_range_queue_draw_location (range, old);
+      gtk_range_queue_draw_location (range, priv->mouse_location);
+    }
 }
 
 /* Clamp rect, border inside widget->allocation, such that we prefer
