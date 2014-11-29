@@ -154,7 +154,7 @@
 #define ANIMATION_DURATION 200
 
 /* Overlay scrollbars */
-#define INDICATOR_FADE_OUT_DELAY 1000
+#define INDICATOR_FADE_OUT_DELAY 2000
 #define INDICATOR_FADE_OUT_DURATION 1000
 #define INDICATOR_FADE_OUT_TIME 500
 
@@ -342,7 +342,8 @@ static void     remove_indicator     (GtkScrolledWindow *sw,
 static void     indicator_stop_fade  (Indicator         *indicator);
 static gboolean maybe_hide_indicator (gpointer data);
 
-
+static void     indicator_start_fade (Indicator *indicator,
+                                      gdouble    pos);
 
 static guint signals[LAST_SIGNAL] = {0};
 
@@ -910,6 +911,127 @@ gtk_scrolled_window_check_attach_pan_gesture (GtkScrolledWindow *sw)
 }
 
 static void
+indicator_set_over (Indicator *indicator,
+                    gboolean   over)
+{
+  GtkStyleContext *context;
+
+  if (indicator->over == over)
+    return;
+
+  context = gtk_widget_get_style_context (indicator->scrollbar);
+  indicator->over = over;
+
+  if (indicator->over)
+    gtk_style_context_add_class (context, "hovering");
+  else
+    gtk_style_context_remove_class (context, "hovering");
+
+  gtk_widget_queue_resize (indicator->scrollbar);
+}
+
+static gboolean
+event_close_to_indicator (GtkScrolledWindow *sw,
+                          Indicator         *indicator,
+                          GdkEvent          *event)
+{
+  GtkAllocation alloc, indicator_alloc;
+  GtkWidget *event_widget;
+  gint win_x, win_y;
+  gdouble x, y;
+
+  event_widget = gtk_get_event_widget (event);
+  gdk_event_get_coords (event, &x, &y);
+
+  gtk_widget_get_allocation (GTK_WIDGET (sw), &alloc);
+  gtk_widget_get_allocation (indicator->scrollbar, &indicator_alloc);
+  gdk_window_get_position (indicator->window, &win_x, &win_y);
+
+  if (event->any.window == indicator->window ||
+      event_widget == indicator->scrollbar)
+    {
+      gint xcoord = x, ycoord = y;
+
+      gtk_widget_translate_coordinates (indicator->scrollbar,
+                                        GTK_WIDGET (sw),
+                                        xcoord, ycoord,
+                                        &xcoord, &ycoord);
+      x = xcoord;
+      y = ycoord;
+    }
+
+  if (x < 0 || x > alloc.width ||
+      y < 0 || y > alloc.height)
+    return FALSE;
+
+  if (x > win_x - alloc.x - 50 &&
+      x < win_x - alloc.x + indicator_alloc.width + 50 &&
+      y > win_y - alloc.y - 50 &&
+      y < win_y - alloc.y + indicator_alloc.height + 50)
+    return TRUE;
+
+  return FALSE;
+}
+
+static gboolean
+captured_event_cb (GtkWidget *widget,
+                   GdkEvent  *event)
+{
+  GtkScrolledWindowPrivate *priv;
+  GtkScrolledWindow *sw;
+  GdkInputSource input_source;
+  GdkDevice *source_device;
+  gboolean indicator_close;
+
+  if (event->type != GDK_MOTION_NOTIFY &&
+      event->type != GDK_LEAVE_NOTIFY)
+    return GDK_EVENT_PROPAGATE;
+
+  sw = GTK_SCROLLED_WINDOW (widget);
+  priv = sw->priv;
+  source_device = gdk_event_get_source_device (event);
+  input_source = gdk_device_get_source (source_device);
+
+  if (input_source != GDK_SOURCE_MOUSE &&
+      input_source != GDK_SOURCE_TOUCHPAD)
+    return GDK_EVENT_PROPAGATE;
+
+  if (event->type == GDK_MOTION_NOTIFY)
+    {
+      indicator_start_fade (&priv->hindicator, 1.0);
+      indicator_start_fade (&priv->vindicator, 1.0);
+
+      /* Check whether we're hovering close to the horizontal scrollbar */
+      indicator_close = event_close_to_indicator (sw, &priv->hindicator, event);
+      indicator_set_over (&priv->hindicator, indicator_close);
+
+      /* Same for the vertical scrollbar */
+      indicator_close = event_close_to_indicator (sw, &priv->vindicator, event);
+      indicator_set_over (&priv->vindicator, indicator_close);
+    }
+  else if (event->type == GDK_LEAVE_NOTIFY &&
+           event->crossing.mode == GDK_CROSSING_UNGRAB)
+    {
+      GtkWidget *scrollbar;
+
+      scrollbar = gtk_get_event_widget (event);
+
+      if (scrollbar == priv->hindicator.scrollbar)
+        {
+          indicator_close = event_close_to_indicator (sw, &priv->hindicator, event);
+          indicator_set_over (&priv->hindicator, indicator_close);
+        }
+      else if (scrollbar == priv->vindicator.scrollbar)
+        {
+          indicator_close = event_close_to_indicator (sw, &priv->vindicator, event);
+          indicator_set_over (&priv->vindicator, indicator_close);
+        }
+    }
+
+  return GDK_EVENT_PROPAGATE;
+}
+
+static void
 gtk_scrolled_window_init (GtkScrolledWindow *scrolled_window)
 {
   GtkWidget *widget = GTK_WIDGET (scrolled_window);
@@ -971,6 +1093,8 @@ gtk_scrolled_window_init (GtkScrolledWindow *scrolled_window)
 
   gtk_scrolled_window_set_kinetic_scrolling (scrolled_window, TRUE);
   gtk_scrolled_window_set_capture_button_press (scrolled_window, TRUE);
+
+  _gtk_widget_set_captured_event_handler (widget, captured_event_cb);
 }
 
 /**
@@ -3557,6 +3681,9 @@ indicator_start_fade (Indicator *indicator,
                 "gtk-enable-animations", &animations_enabled,
                 NULL);
 
+  if (target != 0.0)
+    indicator->last_scroll_time = g_get_monotonic_time ();
+
   if (gtk_widget_get_mapped (indicator->scrollbar) && animations_enabled)
     {
       indicator->source_pos = indicator->current_pos;
@@ -3603,37 +3730,6 @@ indicator_value_changed (GtkAdjustment *adjustment,
     indicator_start_fade (indicator, 1.0);
 }
 
-static gboolean
-indicator_enter_notify (GtkWidget        *scrollbar,
-                        GdkEventCrossing *event,
-                        Indicator        *indicator)
-{
-  GtkStyleContext *context;
-
-  context = gtk_widget_get_style_context (scrollbar);
-  gtk_style_context_add_class (context, "hovering");
-  gtk_widget_queue_resize (scrollbar);
-  indicator->over = TRUE;
-  indicator_start_fade (indicator, 1.0);
-
-  return G_SOURCE_CONTINUE;
-}
-
-static gboolean
-indicator_leave_notify (GtkWidget        *scrollbar,
-                        GdkEventCrossing *event,
-                        Indicator        *indicator)
-{
-  GtkStyleContext *context;
-
-  context = gtk_widget_get_style_context (scrollbar);
-  gtk_style_context_remove_class (context, "hovering");
-  gtk_widget_queue_resize (scrollbar);
-  indicator->over = FALSE;
-
-  return G_SOURCE_CONTINUE;
-}
-
 static void
 indicator_style_changed (GtkStyleContext *context,
                          Indicator       *indicator)
@@ -3670,10 +3766,6 @@ setup_indicator (GtkScrolledWindow *scrolled_window,
   gtk_style_context_add_class (context, "overlay-indicator");
   g_signal_connect (context, "changed",
                     G_CALLBACK (indicator_style_changed), indicator);
-  g_signal_connect (scrollbar, "enter-notify-event",
-                    G_CALLBACK (indicator_enter_notify), indicator);
-  g_signal_connect (scrollbar, "leave-notify-event",
-                    G_CALLBACK (indicator_leave_notify), indicator);
   g_signal_connect (adjustment, "value-changed",
                     G_CALLBACK (indicator_value_changed), indicator);
 
@@ -3701,8 +3793,6 @@ remove_indicator (GtkScrolledWindow *scrolled_window,
 
   gtk_style_context_remove_class (context, "overlay-indicator");
   g_signal_handlers_disconnect_by_func (context, indicator_style_changed, indicator);
-  g_signal_handlers_disconnect_by_func (scrollbar, indicator_enter_notify, indicator);
-  g_signal_handlers_disconnect_by_func (scrollbar, indicator_leave_notify, indicator);
   g_signal_handlers_disconnect_by_func (adjustment, indicator_value_changed, indicator);
   indicator->enabled = FALSE;
 
