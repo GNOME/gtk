@@ -3625,12 +3625,39 @@ gtk_range_compute_slider_position (GtkRange     *range,
     }
 }
 
+static gboolean
+rectangle_equal (const GdkRectangle *a,
+                 const GdkRectangle *b)
+{
+  return a->x == b->x
+      && a->y == b->y
+      && a->width == b->width
+      && a->height == b->height;
+}
+
 static void
 gtk_range_calc_slider (GtkRange *range)
 {
-  range->priv->need_recalc = TRUE;
-  gtk_range_calc_layout (range);
-  gtk_widget_queue_draw (GTK_WIDGET (range));
+  GtkRangePrivate *priv = range->priv;
+  GdkRectangle new_slider;
+
+  gtk_range_compute_slider_position (range, 
+                                     gtk_adjustment_get_value (priv->adjustment),
+                                     &new_slider);
+
+  if (rectangle_equal (&priv->slider, &new_slider))
+    return;
+
+  gtk_range_queue_draw_location (range, MOUSE_SLIDER);
+
+  priv->slider = new_slider;
+
+  gtk_range_queue_draw_location (range, MOUSE_SLIDER);
+
+  if (priv->has_origin)
+    gtk_range_queue_draw_location (range, MOUSE_TROUGH);
+
+  gtk_range_update_mouse_location (range);
 }
 
 static void
@@ -3790,10 +3817,6 @@ gtk_range_calc_layout (GtkRange *range)
       priv->trough.y = priv->stepper_b.y + priv->stepper_b.height + stepper_spacing * has_steppers_ab;
       priv->trough.width = range_rect.width;
       priv->trough.height = priv->stepper_c.y - priv->trough.y - stepper_spacing * has_steppers_cd;
-
-      gtk_range_compute_slider_position (range, 
-                                         gtk_adjustment_get_value (priv->adjustment),
-                                         &priv->slider);
     }
   else
     {
@@ -3888,12 +3911,9 @@ gtk_range_calc_layout (GtkRange *range)
       priv->trough.y = range_rect.y;
       priv->trough.width = priv->stepper_c.x - priv->trough.x - stepper_spacing * has_steppers_cd;
       priv->trough.height = range_rect.height;
-
-      gtk_range_compute_slider_position (range,
-                                         gtk_adjustment_get_value (priv->adjustment),
-                                         &priv->slider);
     }
   
+  gtk_range_calc_slider (range);
   gtk_range_update_mouse_location (range);
 
   switch (priv->upper_sensitivity)
