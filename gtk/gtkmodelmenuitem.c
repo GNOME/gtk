@@ -174,7 +174,7 @@ gtk_model_menu_item_set_icon (GtkModelMenuItem *item,
       if (icon == NULL)
         return;
 
-      box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
+      box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 6);
 
       /* Reparent the child without destroying it */
       g_object_ref (child);
