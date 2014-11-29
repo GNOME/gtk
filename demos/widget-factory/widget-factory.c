@@ -547,6 +547,24 @@ populate_model (GtkTreeStore *store)
   gtk_tree_store_set (store, &iter,
                       0, "Gisele of Aquitaine",
                       -1);
+  gtk_tree_store_append (store, &iter, NULL);
+  gtk_tree_store_set (store, &iter, 3, TRUE, -1);
+  gtk_tree_store_append (store, &iter, NULL);
+  gtk_tree_store_set (store, &iter,
+                      0, "Attila the Hun",
+                      1, "ca. 390",
+                      2, "453",
+                      -1);
+}
+
+static gboolean
+row_separator_func (GtkTreeModel *model, GtkTreeIter *iter, gpointer data)
+{
+  gboolean is_sep;
+
+  gtk_tree_model_get (model, iter, 3, &is_sep, -1);
+
+  return is_sep;
 }
 
 static void
@@ -1235,6 +1253,7 @@ activate (GApplication *app)
 
   widget = (GtkWidget *)gtk_builder_get_object (builder, "charletree");
   populate_model ((GtkTreeStore *)gtk_tree_view_get_model (GTK_TREE_VIEW (widget)));
+  gtk_tree_view_set_row_separator_func (GTK_TREE_VIEW (widget), row_separator_func, NULL, NULL);
   gtk_tree_view_expand_all (GTK_TREE_VIEW (widget));
 
   populate_colors ((GtkWidget *)gtk_builder_get_object (builder, "munsell"));

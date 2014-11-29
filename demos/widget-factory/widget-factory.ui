@@ -332,6 +332,7 @@ Suspendisse feugiat quam quis dolor accumsan cursus.</property>
       <column type="gchararray"/>
       <column type="gchararray"/>
       <column type="gchararray"/>
+      <column type="gboolean"/>
     </columns>
   </object>
   <object class="GtkApplicationWindow" id="window">
