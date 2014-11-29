@@ -2375,20 +2375,20 @@ $asset_suffix: if($variant=='dark', '-dark', '');
 }
 
 %scale_marks_above_horz {
-  margin: 14px 10px 10px;
-  &.fine-tune { margin: 12px 8px 8px; }
+  .trough { margin: 14px 10px 10px; }
+  &.fine-tune .trough { margin: 12px 8px 8px; }
 }
 %scale_marks_below_horz {
-  margin: 10px 10px 14px;
-  &.fine-tune { margin: 8px 8px 12px; }
+ .trough { margin: 10px 10px 14px; }
+  &.fine-tune .trough { margin: 8px 8px 12px; }
 }
 %scale_marks_above_vert {
-  margin: 10px 10px 10px 14px;
-  &.fine-tune { margin: 8px 8px 8px 12px; }
+  .trough { margin: 10px 10px 10px 14px; }
+  &.fine-tune .trough { margin: 8px 8px 8px 12px; }
 }
 %scale_marks_below_vert {
-  margin: 10px 14px 10px 10px;
-  &.fine-tune { margin: 8px 12px 8px 8px; }
+  .trough { margin: 10px 14px 10px 10px; }
+  &.fine-tune .trough { margin: 8px 12px 8px 8px; }
 }
 
 /*****************

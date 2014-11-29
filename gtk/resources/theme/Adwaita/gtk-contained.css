@@ -3533,25 +3533,25 @@ GtkCheckButton.text-button, GtkRadioButton.text-button {
     background-position: center;
     box-shadow: none; }
 
-.scale.scale-has-marks-above {
+.scale.scale-has-marks-above .trough {
   margin: 14px 10px 10px; }
-  .fine-tune.scale.scale-has-marks-above {
-    margin: 12px 8px 8px; }
+.fine-tune.scale.scale-has-marks-above .trough {
+  margin: 12px 8px 8px; }
 
-.scale.scale-has-marks-below {
+.scale.scale-has-marks-below .trough {
   margin: 10px 10px 14px; }
-  .fine-tune.scale.scale-has-marks-below {
-    margin: 8px 8px 12px; }
+.fine-tune.scale.scale-has-marks-below .trough {
+  margin: 8px 8px 12px; }
 
-.scale.vertical.scale-has-marks-above {
+.scale.vertical.scale-has-marks-above .trough {
   margin: 10px 10px 10px 14px; }
-  .fine-tune.scale.vertical.scale-has-marks-above {
-    margin: 8px 8px 8px 12px; }
+.fine-tune.scale.vertical.scale-has-marks-above .trough {
+  margin: 8px 8px 8px 12px; }
 
-.scale.vertical.scale-has-marks-below {
+.scale.vertical.scale-has-marks-below .trough {
   margin: 10px 14px 10px 10px; }
-  .fine-tune.scale.vertical.scale-has-marks-below {
-    margin: 8px 12px 8px 8px; }
+.fine-tune.scale.vertical.scale-has-marks-below .trough {
+  margin: 8px 12px 8px 8px; }
 
 /*****************
  * Progress bars *
