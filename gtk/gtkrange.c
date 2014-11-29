@@ -1030,12 +1030,7 @@ gtk_range_set_min_slider_size (GtkRange *range,
     {
       priv->min_slider_size = min_size;
 
-      if (gtk_widget_is_drawable (GTK_WIDGET (range)))
-        {
-          priv->need_recalc = TRUE;
-          gtk_range_calc_layout (range);
-          gtk_widget_queue_draw (GTK_WIDGET (range));
-        }
+      gtk_widget_queue_resize (GTK_WIDGET (range));
     }
 }
 
