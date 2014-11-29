@@ -1747,14 +1747,16 @@ GtkScrolledWindow GtkViewport.frame {
 /*********************
  * App Notifications *
  *********************/
-.app-notification {
+.app-notification,
+.app-notification.frame {
+  padding: 10px;
   border-width: 0 1px 1px;
   border-style: solid;
   border-color: #7f7f7f;
   border-radius: 0 0 6px 6px;
-  background-image: linear-gradient(to bottom, #efefef 5%, #f4f4f4);
-  padding: 0 4px; }
-  .app-notification .button {
+  background-image: linear-gradient(to bottom, #efefef 5%, #f4f4f4); }
+  .app-notification .button,
+  .app-notification.frame .button {
     padding: 6px; }
 
 /*************
