@@ -2247,6 +2247,7 @@ range_grab_add (GtkRange      *range,
    * is the only widget receiving the pointer events.
    */
   priv->grab_location = location;
+  gtk_range_queue_draw_location (range, location);
 
   gtk_style_context_add_class (context, "dragging");
 }
@@ -2272,16 +2273,14 @@ static void
 range_grab_remove (GtkRange *range)
 {
   GtkRangePrivate *priv = range->priv;
-  MouseLocation location;
   GtkStyleContext *context;
 
   context = gtk_widget_get_style_context (GTK_WIDGET (range));
 
-  location = priv->grab_location;
+  gtk_range_queue_draw_location (range, priv->grab_location);
   priv->grab_location = MOUSE_OUTSIDE;
 
-  if (gtk_range_update_mouse_location (range) ||
-      location != MOUSE_OUTSIDE)
+  if (gtk_range_update_mouse_location (range))
     gtk_widget_queue_draw (GTK_WIDGET (range));
 
   update_zoom_state (range, FALSE);
