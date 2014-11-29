@@ -5657,6 +5657,9 @@ gtk_widget_queue_draw_region (GtkWidget            *widget,
  * defined as @widget->window coordinates for widgets that are not
  * #GTK_NO_WINDOW widgets, and are relative to @widget->allocation.x,
  * @widget->allocation.y for widgets that are #GTK_NO_WINDOW widgets.
+ *
+ * @width or @height may be 0, in this case this function does
+ * nothing. Negative values for @width and @height are not allowed.
  */
 void
 gtk_widget_queue_draw_area (GtkWidget *widget,
@@ -5669,6 +5672,11 @@ gtk_widget_queue_draw_area (GtkWidget *widget,
   cairo_region_t *region;
 
   g_return_if_fail (GTK_IS_WIDGET (widget));
+  g_return_if_fail (width >= 0);
+  g_return_if_fail (height >= 0);
+
+  if (width == 0 || height == 0)
+    return;
 
   rect.x = x;
   rect.y = y;
