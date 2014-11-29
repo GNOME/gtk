@@ -2659,37 +2659,89 @@ unmount_mount_cb (GObject      *source_object,
 }
 
 static void
+notify_unmount_done (GMountOperation *op,
+                     const gchar *message)
+{
+  GApplication *application;
+  gchar *notification_id;
+
+  /* We only can support this when a default GApplication is set */
+  application = g_application_get_default ();
+  if (application == NULL)
+    return;
+
+  notification_id = g_strdup_printf ("gtk-mount-operation-%p", op);
+  g_application_withdraw_notification (application, notification_id);
+
+  if (message != NULL) {
+    GNotification *unplug;
+    GIcon *icon;
+    gchar **strings;
+
+    strings = g_strsplit (message, "\n", 0);
+    icon = g_themed_icon_new ("media-removable");
+    unplug = g_notification_new (strings[0]);
+    g_notification_set_body (unplug, strings[1]);
+    g_notification_set_icon (unplug, icon);
+
+    g_application_send_notification (application, notification_id, unplug);
+    g_object_unref (unplug);
+    g_object_unref (icon);
+    g_strfreev (strings);
+  }
+
+  g_free (notification_id);
+}
+
+static void
+notify_unmount_show (GMountOperation *op,
+                     const gchar *message)
+{
+  GApplication *application;
+  GNotification *unmount;
+  gchar *notification_id;
+  GIcon *icon;
+  gchar **strings;
+
+  /* We only can support this when a default GApplication is set */
+  application = g_application_get_default ();
+  if (application == NULL)
+    return;
+
+  strings = g_strsplit (message, "\n", 0);
+  icon = g_themed_icon_new ("media-removable");
+
+  unmount = g_notification_new (strings[0]);
+  g_notification_set_body (unmount, strings[1]);
+  g_notification_set_icon (unmount, icon);
+  g_notification_set_priority (unmount, G_NOTIFICATION_PRIORITY_URGENT);
+
+  notification_id = g_strdup_printf ("gtk-mount-operation-%p", op);
+  g_application_send_notification (application, notification_id, unmount);
+  g_object_unref (unmount);
+  g_object_unref (icon);
+  g_strfreev (strings);
+  g_free (notification_id);
+}
+
+static void
 show_unmount_progress_cb (GMountOperation *op,
                           const gchar     *message,
                           gint64           time_left,
                           gint64           bytes_left,
                           gpointer         user_data)
 {
-  /* FIXME: These are just libnotify notifications, but GTK+ doesn't do notifications right now.
-   * Should we just call D-Bus directly?
-   */
-#if 0
-  NautilusApplication *app = NAUTILUS_APPLICATION (g_application_get_default ());
-
-  if (bytes_left == 0) {
-          nautilus_application_notify_unmount_done (app, message);
-  } else {
-          nautilus_application_notify_unmount_show (app, message);
-  }
-#endif
+  if (bytes_left == 0)
+    notify_unmount_done (op, message);
+  else
+    notify_unmount_show (op, message);
 }
 
 static void
 show_unmount_progress_aborted_cb (GMountOperation *op,
                                   gpointer         user_data)
 {
-  /* FIXME: These are just libnotify notifications, but GTK+ doesn't do notifications right now.
-   * Should we just call D-Bus directly?
-   */
-#if 0
-  NautilusApplication *app = NAUTILUS_APPLICATION (g_application_get_default ());
-  nautilus_application_notify_unmount_done (app, NULL);
-#endif
+  notify_unmount_done (op, NULL);
 }
 
 static GMountOperation *
