@@ -2950,46 +2950,14 @@ gtk_range_event (GtkWidget *widget,
   return GDK_EVENT_PROPAGATE;
 }
 
-#define check_rectangle(rectangle1, rectangle2)              \
-  {                                                          \
-    if (rectangle1.x != rectangle2.x) return TRUE;           \
-    if (rectangle1.y != rectangle2.y) return TRUE;           \
-    if (rectangle1.width  != rectangle2.width)  return TRUE; \
-    if (rectangle1.height != rectangle2.height) return TRUE; \
-  }
-
-static gboolean
-layout_changed (GtkRangePrivate *priv1,
-		GtkRangePrivate *priv2)
-{
-  check_rectangle (priv1->slider, priv2->slider);
-  check_rectangle (priv1->trough, priv2->trough);
-  check_rectangle (priv1->stepper_a, priv2->stepper_a);
-  check_rectangle (priv1->stepper_d, priv2->stepper_d);
-  check_rectangle (priv1->stepper_b, priv2->stepper_b);
-  check_rectangle (priv1->stepper_c, priv2->stepper_c);
-
-  if (priv1->upper_sensitive != priv2->upper_sensitive) return TRUE;
-  if (priv1->lower_sensitive != priv2->lower_sensitive) return TRUE;
-
-  return FALSE;
-}
-
 static void
 gtk_range_adjustment_changed (GtkAdjustment *adjustment,
 			      gpointer       data)
 {
   GtkRange *range = GTK_RANGE (data);
-  GtkRangePrivate *priv = range->priv;
-  GtkRangePrivate priv_aux = *priv;
 
-  priv->recalc_marks = TRUE;
-  priv->need_recalc = TRUE;
-  gtk_range_calc_layout (range);
-
-  /* now check whether the layout changed  */
-  if (layout_changed (priv, &priv_aux))
-    gtk_widget_queue_draw (GTK_WIDGET (range));
+  gtk_range_calc_slider (range);
+  gtk_range_calc_stepper_sensitivity (range);
 
   /* Note that we don't round off to priv->round_digits here.
    * that's because it's really broken to change a value
@@ -3005,15 +2973,12 @@ gtk_range_adjustment_value_changed (GtkAdjustment *adjustment,
 				    gpointer       data)
 {
   GtkRange *range = GTK_RANGE (data);
-  GtkRangePrivate *priv = range->priv;
-  GtkRangePrivate priv_aux = *priv;
 
-  priv->need_recalc = TRUE;
-  gtk_range_calc_layout (range);
+  gtk_range_calc_slider (range);
+  gtk_range_calc_stepper_sensitivity (range);
   
   /* now check whether the layout changed  */
-  if (layout_changed (priv, &priv_aux) ||
-      (GTK_IS_SCALE (range) && gtk_scale_get_draw_value (GTK_SCALE (range))))
+  if (GTK_IS_SCALE (range) && gtk_scale_get_draw_value (GTK_SCALE (range)))
     {
       gtk_widget_queue_draw (GTK_WIDGET (range));
     }
