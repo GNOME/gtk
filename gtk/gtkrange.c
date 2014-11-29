@@ -3663,9 +3663,55 @@ gtk_range_calc_slider (GtkRange *range)
 static void
 gtk_range_calc_stepper_sensitivity (GtkRange *range)
 {
-  range->priv->need_recalc = TRUE;
-  gtk_range_calc_layout (range);
-  gtk_widget_queue_draw (GTK_WIDGET (range));
+  GtkRangePrivate *priv = range->priv;
+  gboolean was_upper_sensitive, was_lower_sensitive;
+
+  was_upper_sensitive = priv->upper_sensitive;
+  switch (priv->upper_sensitivity)
+    {
+    case GTK_SENSITIVITY_AUTO:
+      priv->upper_sensitive =
+        (gtk_adjustment_get_value (priv->adjustment) <
+         (gtk_adjustment_get_upper (priv->adjustment) - gtk_adjustment_get_page_size (priv->adjustment)));
+      break;
+
+    case GTK_SENSITIVITY_ON:
+      priv->upper_sensitive = TRUE;
+      break;
+
+    case GTK_SENSITIVITY_OFF:
+      priv->upper_sensitive = FALSE;
+      break;
+    }
+
+  was_lower_sensitive = priv->lower_sensitive;
+  switch (priv->lower_sensitivity)
+    {
+    case GTK_SENSITIVITY_AUTO:
+      priv->lower_sensitive =
+        (gtk_adjustment_get_value (priv->adjustment) > gtk_adjustment_get_lower (priv->adjustment));
+      break;
+
+    case GTK_SENSITIVITY_ON:
+      priv->lower_sensitive = TRUE;
+      break;
+
+    case GTK_SENSITIVITY_OFF:
+      priv->lower_sensitive = FALSE;
+      break;
+    }
+
+  /* Too many side effects can influence which stepper reacts to wat condition.
+   * So we just invalidate them all.
+   */
+  if (was_upper_sensitive != priv->upper_sensitive ||
+      was_lower_sensitive != priv->lower_sensitive)
+    {
+      gtk_range_queue_draw_location (range, MOUSE_STEPPER_A);
+      gtk_range_queue_draw_location (range, MOUSE_STEPPER_B);
+      gtk_range_queue_draw_location (range, MOUSE_STEPPER_C);
+      gtk_range_queue_draw_location (range, MOUSE_STEPPER_D);
+    }
 }
 
 static void
@@ -3916,38 +3962,7 @@ gtk_range_calc_layout (GtkRange *range)
   gtk_range_calc_slider (range);
   gtk_range_update_mouse_location (range);
 
-  switch (priv->upper_sensitivity)
-    {
-    case GTK_SENSITIVITY_AUTO:
-      priv->upper_sensitive =
-        (gtk_adjustment_get_value (priv->adjustment) <
-         (gtk_adjustment_get_upper (priv->adjustment) - gtk_adjustment_get_page_size (priv->adjustment)));
-      break;
-
-    case GTK_SENSITIVITY_ON:
-      priv->upper_sensitive = TRUE;
-      break;
-
-    case GTK_SENSITIVITY_OFF:
-      priv->upper_sensitive = FALSE;
-      break;
-    }
-
-  switch (priv->lower_sensitivity)
-    {
-    case GTK_SENSITIVITY_AUTO:
-      priv->lower_sensitive =
-        (gtk_adjustment_get_value (priv->adjustment) > gtk_adjustment_get_lower (priv->adjustment));
-      break;
-
-    case GTK_SENSITIVITY_ON:
-      priv->lower_sensitive = TRUE;
-      break;
-
-    case GTK_SENSITIVITY_OFF:
-      priv->lower_sensitive = FALSE;
-      break;
-    }
+  gtk_range_calc_stepper_sensitivity (range);
 }
 
 static void
