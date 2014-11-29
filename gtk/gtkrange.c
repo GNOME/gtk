@@ -124,7 +124,6 @@ struct _GtkRangePrivate
 
   guint flippable              : 1;
   guint inverted               : 1;
-  guint need_recalc            : 1;
   guint recalc_marks           : 1;
   guint slider_size_fixed      : 1;
   guint trough_click_forward   : 1;  /* trough click was on the forward side of slider */
@@ -240,7 +239,6 @@ static gboolean gtk_range_scroll_event   (GtkWidget        *widget,
                                       GdkEventScroll   *event);
 static gboolean gtk_range_event       (GtkWidget       *widget,
                                        GdkEvent        *event);
-static void gtk_range_style_updated  (GtkWidget        *widget);
 static void update_slider_position   (GtkRange	       *range,
 				      gint              mouse_x,
 				      gint              mouse_y);
@@ -327,7 +325,6 @@ gtk_range_class_init (GtkRangeClass *class)
   widget_class->draw = gtk_range_draw;
   widget_class->event = gtk_range_event;
   widget_class->scroll_event = gtk_range_scroll_event;
-  widget_class->style_updated = gtk_range_style_updated;
   widget_class->key_press_event = gtk_range_key_press;
 
   class->move_slider = gtk_range_move_slider;
@@ -728,7 +725,6 @@ gtk_range_init (GtkRange *range)
   priv->has_stepper_b = FALSE;
   priv->has_stepper_c = FALSE;
   priv->has_stepper_d = FALSE;
-  priv->need_recalc = TRUE;
   priv->round_digits = -1;
   priv->mouse_location = MOUSE_OUTSIDE;
   priv->mouse_x = -1;
@@ -1613,7 +1609,6 @@ gtk_range_size_allocate (GtkWidget     *widget,
 
   priv->recalc_marks = TRUE;
 
-  priv->need_recalc = TRUE;
   gtk_range_calc_layout (range);
 
   if (gtk_widget_get_realized (widget))
@@ -2992,17 +2987,6 @@ gtk_range_adjustment_value_changed (GtkAdjustment *adjustment,
 }
 
 static void
-gtk_range_style_updated (GtkWidget *widget)
-{
-  GtkRange *range = GTK_RANGE (widget);
-  GtkRangePrivate *priv = range->priv;
-
-  priv->need_recalc = TRUE;
-
-  GTK_WIDGET_CLASS (gtk_range_parent_class)->style_updated (widget);
-}
-
-static void
 apply_marks (GtkRange *range, 
              gdouble   oldval,
              gdouble  *newval)
@@ -3688,9 +3672,6 @@ gtk_range_calc_layout (GtkRange *range)
   gboolean trough_under_steppers;
   GdkRectangle range_rect;
   GtkWidget *widget;
-
-  if (!priv->need_recalc)
-    return;
 
   /* If we have a too-small allocation, we prefer the steppers over
    * the trough/slider, probably the steppers are a more useful
