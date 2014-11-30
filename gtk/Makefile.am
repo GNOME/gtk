@@ -576,7 +576,6 @@ gtk_base_c_sources = 		\
 	$(a11y_c_sources)	\
 	$(deprecated_c_sources)	\
 	$(inspector_c_sources)	\
-	$(clipboard_dnd_c_sources) \
 	gtkactionmuxer.c	\
 	gtkactionobserver.c	\
 	gtkactionobservable.c	\
@@ -894,6 +893,16 @@ gtk_base_c_sources = 		\
 	gtkwindowgroup.c	\
 	gtkwin32theme.c
 
+if USE_QUARTZ
+gtk_base_c_sources += 		\
+	gtkclipboard-quartz.c	\
+	gtkdnd-quartz.c
+else
+gtk_base_c_sources += 		\
+	gtkclipboard.c 		\
+	gtkdnd.c
+endif
+
 nodist_gtk_c_sources =
 gtk_c_sources = $(gtk_base_c_sources)
 
@@ -1021,17 +1030,6 @@ if !USE_QUARTZ
 gtk_c_sources += $(gtk_use_stub_c_sources)
 endif
 endif
-endif
-
-if USE_QUARTZ
-clipboard_dnd_c_sources = 	\
-	gtkclipboard-quartz.c	\
-	gtkdnd-quartz.c
-else
-# No wayland gtkdnd-wayland.c yet
-clipboard_dnd_c_sources = 	\
-	gtkclipboard.c \
-	gtkdnd.c
 endif
 
 # we use our own built_sources variable rules to avoid automake's
@@ -1398,23 +1396,12 @@ LDADDS =								\
 	$(GTK_DEP_LIBS)
 
 if HAVE_INTROSPECTION
-# The Quartz clipboard and dnd files aren't annotated for
-# introspection. Rather than copy the annotations over from the
-# regular files, exclude the quartz ones:
 introspection_files = \
     $(filter-out %private.h gtktextdisplay.h gtktextlayout.h gtkx.h, $(gtkinclude_HEADERS) $(a11yinclude_HEADERS) $(deprecatedinclude_HEADERS)) \
-    $(filter-out  gtkclipboard-quartz.c gtkdnd-quartz.c, \
-    $(gtk_base_c_sources)) \
+    $(gtk_base_c_sources) \
     gtkprintoperation-unix.c \
     gtktypebuiltins.h \
     gtktypebuiltins.c
-
-# And include the regular ones:
-if USE_QUARTZ
-introspection_files += \
-    gtkclipboard.c \
-    gtkdnd.c
-endif
 
 if USE_X11
 introspection_files += \
