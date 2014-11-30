@@ -20,11 +20,6 @@ GTK_PRINT_PREVIEW_COMMAND="evince --unlink-tempfile --preview --print-settings %
 endif
 
 SUBDIRS = native .
-if OS_DARWIN
-  ECHO="echo"
-else
-  ECHO=echo -e
-endif
 
 if HAVE_CLOUDPRINT
 if HAVE_PAPI_CUPS
@@ -1174,49 +1169,49 @@ gtktypebuiltins.c: $(gtk_public_h_sources) $(a11y_h_sources) $(deprecated_h_sour
 	&& rm -f xgen-gtbc
 
 gtk.gresource.xml: Makefile.am
-	$(AM_V_GEN) $(ECHO) "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" > $@; \
-	$(ECHO) "<gresources>" >> $@; \
-	$(ECHO) "  <gresource prefix=\"/org/gtk/libgtk\">" >> $@; \
+	$(AM_V_GEN) echo "<?xml version='1.0' encoding='UTF-8'?>" > $@; \
+	echo "<gresources>" >> $@; \
+	echo "  <gresource prefix='/org/gtk/libgtk'>" >> $@; \
 	for f in $(srcdir)/theme/Raleigh/*.css; do \
 	  n=`basename $$f`; \
-	  $(ECHO) "    <file alias=\"theme/Raleigh.css\">theme/Raleigh/$$n</file>" >> $@; \
+	  echo "    <file alias='theme/Raleigh.css'>theme/Raleigh/$$n</file>" >> $@; \
 	done; \
-        $(ECHO) "    <file alias=\"theme/Adwaita.css\">theme/Adwaita/gtk.css</file>" >> $@; \
-        $(ECHO) "    <file alias=\"theme/Adwaita-dark.css\">theme/Adwaita/gtk-dark.css</file>" >> $@; \
-        $(ECHO) "    <file>theme/Adwaita/gtk-contained.css</file>" >> $@; \
-        $(ECHO) "    <file>theme/Adwaita/gtk-contained-dark.css</file>" >> $@; \
+        echo "    <file alias='theme/Adwaita.css'>theme/Adwaita/gtk.css</file>" >> $@; \
+        echo "    <file alias='theme/Adwaita-dark.css'>theme/Adwaita/gtk-dark.css</file>" >> $@; \
+        echo "    <file>theme/Adwaita/gtk-contained.css</file>" >> $@; \
+        echo "    <file>theme/Adwaita/gtk-contained-dark.css</file>" >> $@; \
         for f in $(srcdir)/theme/Adwaita/assets/*; do \
           n=`basename $$f`; \
-          $(ECHO) "    <file preprocess=\"to-pixdata\">theme/Adwaita/assets/$$n</file>" >> $@; \
+          echo "    <file preprocess='to-pixdata'>theme/Adwaita/assets/$$n</file>" >> $@; \
         done; \
-	$(ECHO) "    <file alias=\"theme/HighContrast.css\">theme/HighContrast/gtk.css</file>" >> $@; \
+	echo "    <file alias='theme/HighContrast.css'>theme/HighContrast/gtk.css</file>" >> $@; \
 	if test "$(win32_theme)" = "yes"; then \
 	  for f in $(srcdir)/theme/win32/*.css; do \
 	    n=`basename $$f`; \
-	    $(ECHO) "    <file alias=\"theme/$$n\">theme/win32/$$n</file>" >> $@; \
+	    echo "    <file alias='theme/$$n'>theme/win32/$$n</file>" >> $@; \
 	  done; \
 	fi; \
 	for f in $(srcdir)/cursor/*.png; do \
 	  n=`basename $$f`; \
-	  $(ECHO) "    <file>cursor/$$n</file>" >> $@; \
+	  echo "    <file>cursor/$$n</file>" >> $@; \
 	done; \
 	for f in $(srcdir)/ui/*.ui; do \
 	  n=`basename $$f`; \
-	  $(ECHO) "    <file compressed=\"true\">ui/$$n</file>" >> $@; \
+	  echo "    <file compressed='true'>ui/$$n</file>" >> $@; \
 	done; \
 	for s in 16x16 22x22 24x24 32x32; do \
 	  for f in $(srcdir)/icons/$$s/actions/*.png; do \
 	    n=`basename $$f`; \
-	    $(ECHO) "    <file>icons/$$s/actions/$$n</file>" >> $@; \
+	    echo "    <file>icons/$$s/actions/$$n</file>" >> $@; \
 	  done; \
 	done; \
 	for f in $(srcdir)/inspector/*.ui; do \
 	  n=`basename $$f`; \
-	  $(ECHO) "    <file compressed=\"true\">inspector/$$n</file>" >> $@; \
+	  echo "    <file compressed='true'>inspector/$$n</file>" >> $@; \
 	done; \
-	$(ECHO) "    <file>inspector/logo.png</file>" >> $@; \
-	$(ECHO) "  </gresource>" >> $@; \
-	$(ECHO) "</gresources>" >> $@;
+	echo "    <file>inspector/logo.png</file>" >> $@; \
+	echo "  </gresource>" >> $@; \
+	echo "</gresources>" >> $@;
 
 win32_theme_sources = \
 	theme/win32/gtk-win32.css \
