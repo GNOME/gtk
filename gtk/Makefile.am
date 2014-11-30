@@ -1312,35 +1312,35 @@ pkgdata_DATA = gtkbuilder.rng
 
 EXTRA_DIST += gtkbuilder.rnc gtkbuilder.rng
 
-COMPOSITE_TEMPLATES =				\
-	resources/ui/gtkapplication-quartz.ui	\
-	resources/ui/gtkaboutdialog.ui		\
-	resources/ui/gtkactionbar.ui		\
-	resources/ui/gtkappchooserdialog.ui	\
-	resources/ui/gtkappchooserwidget.ui	\
-	resources/ui/gtkassistant.ui		\
-	resources/ui/gtkcolorchooserdialog.ui	\
-	resources/ui/gtkcoloreditor.ui		\
-	resources/ui/gtkdialog.ui		\
-	resources/ui/gtkfilechooserbutton.ui	\
-	resources/ui/gtkfilechooserwidget.ui	\
-	resources/ui/gtkfilechooserdialog.ui	\
-	resources/ui/gtkfontbutton.ui		\
-	resources/ui/gtkfontchooserdialog.ui	\
-	resources/ui/gtkfontchooserwidget.ui	\
-	resources/ui/gtkinfobar.ui		\
-	resources/ui/gtklockbutton.ui		\
-	resources/ui/gtkmessagedialog.ui	\
-	resources/ui/gtkpagesetupunixdialog.ui	\
-	resources/ui/gtkpathbar.ui		\
-	resources/ui/gtkprintunixdialog.ui	\
-	resources/ui/gtkrecentchooserdefault.ui	\
-	resources/ui/gtksearchbar.ui		\
-	resources/ui/gtkscalebutton.ui		\
-	resources/ui/gtkstatusbar.ui		\
-	resources/ui/gtkvolumebutton.ui
+templates =				\
+	ui/gtkapplication-quartz.ui	\
+	ui/gtkaboutdialog.ui		\
+	ui/gtkactionbar.ui		\
+	ui/gtkappchooserdialog.ui	\
+	ui/gtkappchooserwidget.ui	\
+	ui/gtkassistant.ui		\
+	ui/gtkcolorchooserdialog.ui	\
+	ui/gtkcoloreditor.ui		\
+	ui/gtkdialog.ui		\
+	ui/gtkfilechooserbutton.ui	\
+	ui/gtkfilechooserwidget.ui	\
+	ui/gtkfilechooserdialog.ui	\
+	ui/gtkfontbutton.ui		\
+	ui/gtkfontchooserdialog.ui	\
+	ui/gtkfontchooserwidget.ui	\
+	ui/gtkinfobar.ui		\
+	ui/gtklockbutton.ui		\
+	ui/gtkmessagedialog.ui	\
+	ui/gtkpagesetupunixdialog.ui	\
+	ui/gtkpathbar.ui		\
+	ui/gtkprintunixdialog.ui	\
+	ui/gtkrecentchooserdefault.ui	\
+	ui/gtksearchbar.ui		\
+	ui/gtkscalebutton.ui		\
+	ui/gtkstatusbar.ui		\
+	ui/gtkvolumebutton.ui
 
-template_headers = $(COMPOSITE_TEMPLATES:.ui=.ui.h)
+template_headers = $(templates:.ui=.ui.h)
 
 %.ui.h: %.ui
 	$(AM_V_GEN) mkdir -p $(dir $@) \
@@ -1393,7 +1393,7 @@ gtk.gresource.xml: Makefile.am
 	$(AM_V_GEN) $(ECHO) "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" > $@; \
 	$(ECHO) "<gresources>" >> $@; \
 	$(ECHO) "  <gresource prefix=\"/org/gtk/libgtk\">" >> $@; \
-	for f in $(srcdir)/resources/theme/Raleigh/*.css; do \
+	for f in $(srcdir)/theme/Raleigh/*.css; do \
 	  n=`basename $$f`; \
 	  $(ECHO) "    <file alias=\"theme/Raleigh.css\">theme/Raleigh/$$n</file>" >> $@; \
 	done; \
@@ -1401,27 +1401,27 @@ gtk.gresource.xml: Makefile.am
         $(ECHO) "    <file alias=\"theme/Adwaita-dark.css\">theme/Adwaita/gtk-dark.css</file>" >> $@; \
         $(ECHO) "    <file>theme/Adwaita/gtk-contained.css</file>" >> $@; \
         $(ECHO) "    <file>theme/Adwaita/gtk-contained-dark.css</file>" >> $@; \
-        for f in $(srcdir)/resources/theme/Adwaita/assets/*; do \
+        for f in $(srcdir)/theme/Adwaita/assets/*; do \
           n=`basename $$f`; \
           $(ECHO) "    <file preprocess=\"to-pixdata\">theme/Adwaita/assets/$$n</file>" >> $@; \
         done; \
 	$(ECHO) "    <file alias=\"theme/HighContrast.css\">theme/HighContrast/gtk.css</file>" >> $@; \
 	if test "$(win32_theme)" = "yes"; then \
-	  for f in $(srcdir)/resources/theme/win32/*.css; do \
+	  for f in $(srcdir)/theme/win32/*.css; do \
 	    n=`basename $$f`; \
 	    $(ECHO) "    <file alias=\"theme/$$n\">theme/win32/$$n</file>" >> $@; \
 	  done; \
 	fi; \
-	for f in $(srcdir)/resources/cursor/*.png; do \
+	for f in $(srcdir)/cursor/*.png; do \
 	  n=`basename $$f`; \
 	  $(ECHO) "    <file>cursor/$$n</file>" >> $@; \
 	done; \
-	for f in $(srcdir)/resources/ui/*.ui; do \
+	for f in $(srcdir)/ui/*.ui; do \
 	  n=`basename $$f`; \
 	  $(ECHO) "    <file compressed=\"true\">ui/$$n</file>" >> $@; \
 	done; \
 	for s in 16x16 22x22 24x24 32x32; do \
-	  for f in $(srcdir)/resources/icons/$$s/actions/*.png; do \
+	  for f in $(srcdir)/icons/$$s/actions/*.png; do \
 	    n=`basename $$f`; \
 	    $(ECHO) "    <file>icons/$$s/actions/$$n</file>" >> $@; \
 	  done; \
@@ -1430,49 +1430,49 @@ gtk.gresource.xml: Makefile.am
 	$(ECHO) "</gresources>" >> $@;
 
 win32_theme_sources = \
-	resources/theme/win32/gtk-win32.css \
-	resources/theme/win32/gtk-win32-base.css \
-	resources/theme/win32/gtk-win32-classic.css \
-	resources/theme/win32/gtk-win32-xp.css
+	theme/win32/gtk-win32.css \
+	theme/win32/gtk-win32-base.css \
+	theme/win32/gtk-win32-classic.css \
+	theme/win32/gtk-win32-xp.css
 
 adwaita_sources = \
-	resources/theme/Adwaita/assets.txt \
-	resources/theme/Adwaita/assets.svg \
-	resources/theme/Adwaita/_colors-public.scss \
-	resources/theme/Adwaita/_colors.scss \
-	resources/theme/Adwaita/_common.scss \
-	resources/theme/Adwaita/_drawing.scss \
-	resources/theme/Adwaita/gtk-contained-dark.scss \
-	resources/theme/Adwaita/gtk-contained.scss \
-	resources/theme/Adwaita/parse-sass.sh \
-	resources/theme/Adwaita/render-assets.sh \
-	resources/theme/Adwaita/Gemfile \
-	resources/theme/Adwaita/README \
-	resources/theme/Adwaita/gtk-contained.css \
-	resources/theme/Adwaita/gtk-contained-dark.css \
-	resources/theme/Adwaita/gtk.css \
-	resources/theme/Adwaita/gtk-dark.css
+	theme/Adwaita/assets.txt \
+	theme/Adwaita/assets.svg \
+	theme/Adwaita/_colors-public.scss \
+	theme/Adwaita/_colors.scss \
+	theme/Adwaita/_common.scss \
+	theme/Adwaita/_drawing.scss \
+	theme/Adwaita/gtk-contained-dark.scss \
+	theme/Adwaita/gtk-contained.scss \
+	theme/Adwaita/parse-sass.sh \
+	theme/Adwaita/render-assets.sh \
+	theme/Adwaita/Gemfile \
+	theme/Adwaita/README \
+	theme/Adwaita/gtk-contained.css \
+	theme/Adwaita/gtk-contained-dark.css \
+	theme/Adwaita/gtk.css \
+	theme/Adwaita/gtk-dark.css
 
 highcontrast_sources = \
-	resources/theme/HighContrast/_colors.scss \
-	resources/theme/HighContrast/_common.scss \
-	resources/theme/HighContrast/_drawing.scss \
-	resources/theme/HighContrast/Gemfile \
-	resources/theme/HighContrast/gtk.css \
-	resources/theme/HighContrast/gtk.scss \
-	resources/theme/HighContrast/parse-sass.sh
+	theme/HighContrast/_colors.scss \
+	theme/HighContrast/_common.scss \
+	theme/HighContrast/_drawing.scss \
+	theme/HighContrast/Gemfile \
+	theme/HighContrast/gtk.css \
+	theme/HighContrast/gtk.scss \
+	theme/HighContrast/parse-sass.sh
 
 raleigh_sources = \
-	resources/theme/Raleigh/gtk-default.css
+	theme/Raleigh/gtk-default.css
 
-resource_files = $(shell $(GLIB_COMPILE_RESOURCES) --sourcedir=$(srcdir)/resources --generate-dependencies $(builddir)/gtk.gresource.xml)
+resource_files = $(shell $(GLIB_COMPILE_RESOURCES) --sourcedir=$(srcdir) --generate-dependencies $(builddir)/gtk.gresource.xml)
 
 gtkresources.h: gtk.gresource.xml
 	$(AM_V_GEN) $(GLIB_COMPILE_RESOURCES) $< \
-		--target=$@ --sourcedir=$(srcdir)/resources --c-name _gtk --generate-header --manual-register
+		--target=$@ --sourcedir=$(srcdir) --c-name _gtk --generate-header --manual-register
 gtkresources.c: gtk.gresource.xml $(resource_files) $(template_headers)
 	$(AM_V_GEN) $(GLIB_COMPILE_RESOURCES) $< \
-		--target=$@ --sourcedir=$(srcdir)/resources --c-name _gtk --generate-source --manual-register
+		--target=$@ --sourcedir=$(srcdir) --c-name _gtk --generate-source --manual-register
 
 gtkprivatetypebuiltins.h: stamp-gtkprivatetypebuiltins.h
 	@true
