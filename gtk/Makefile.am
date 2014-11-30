@@ -156,124 +156,11 @@ endif
 # setup source file variables
 #
 
+include $(srcdir)/a11y/Makefile.inc
+include $(srcdir)/deprecated/Makefile.inc
+
 # GTK+ header files for public installation (non-generated, or generated
 # by configure)
-
-a11y_h_sources =				\
-	a11y/gtkarrowaccessible.h		\
-	a11y/gtkbooleancellaccessible.h		\
-	a11y/gtkbuttonaccessible.h		\
-	a11y/gtkcellaccessible.h		\
-	a11y/gtkcellaccessibleparent.h		\
-	a11y/gtkcheckmenuitemaccessible.h	\
-	a11y/gtkcomboboxaccessible.h		\
-	a11y/gtkcontaineraccessible.h		\
-	a11y/gtkcontainercellaccessible.h	\
-	a11y/gtkentryaccessible.h		\
-	a11y/gtkexpanderaccessible.h		\
-	a11y/gtkflowboxaccessible.h		\
-	a11y/gtkflowboxchildaccessible.h	\
-	a11y/gtkframeaccessible.h		\
-	a11y/gtkiconviewaccessible.h		\
-	a11y/gtkimageaccessible.h		\
-	a11y/gtkimagecellaccessible.h		\
-	a11y/gtklabelaccessible.h		\
-	a11y/gtklevelbaraccessible.h 		\
-	a11y/gtklinkbuttonaccessible.h		\
-	a11y/gtklistboxaccessible.h		\
-	a11y/gtklistboxrowaccessible.h		\
-	a11y/gtklockbuttonaccessible.h		\
-	a11y/gtkmenuaccessible.h		\
-	a11y/gtkmenubuttonaccessible.h		\
-	a11y/gtkmenuitemaccessible.h		\
-	a11y/gtkmenushellaccessible.h		\
-	a11y/gtknotebookaccessible.h		\
-	a11y/gtknotebookpageaccessible.h	\
-	a11y/gtkpanedaccessible.h		\
-	a11y/gtkpopoveraccessible.h		\
-	a11y/gtkprogressbaraccessible.h		\
-	a11y/gtkradiobuttonaccessible.h		\
-	a11y/gtkradiomenuitemaccessible.h	\
-	a11y/gtkrangeaccessible.h		\
-	a11y/gtkrenderercellaccessible.h	\
-	a11y/gtkscaleaccessible.h		\
-	a11y/gtkscalebuttonaccessible.h		\
-	a11y/gtkscrolledwindowaccessible.h	\
-	a11y/gtkspinbuttonaccessible.h		\
-	a11y/gtkspinneraccessible.h		\
-	a11y/gtkstatusbaraccessible.h		\
-	a11y/gtkswitchaccessible.h		\
-	a11y/gtktextcellaccessible.h		\
-	a11y/gtktextviewaccessible.h		\
-	a11y/gtktogglebuttonaccessible.h	\
-	a11y/gtktoplevelaccessible.h		\
-	a11y/gtktreeviewaccessible.h		\
-	a11y/gtkwidgetaccessible.h		\
-	a11y/gtkwindowaccessible.h
-
-deprecated_h_sources = 			\
-	deprecated/gtkactivatable.h	\
-	deprecated/gtkaction.h		\
-	deprecated/gtkactiongroup.h	\
-	deprecated/gtkalignment.h	\
-	deprecated/gtkarrow.h		\
-	deprecated/gtkcolorsel.h	\
-	deprecated/gtkcolorseldialog.h	\
-	deprecated/gtkfontsel.h		\
-	deprecated/gtkgradient.h	\
-	deprecated/gtkhandlebox.h	\
-	deprecated/gtkhbbox.h		\
-	deprecated/gtkhbox.h		\
-	deprecated/gtkhpaned.h		\
-	deprecated/gtkhscale.h		\
-	deprecated/gtkhscrollbar.h	\
-	deprecated/gtkhseparator.h	\
-	deprecated/gtkhsv.h		\
-	deprecated/gtkiconfactory.h	\
-	deprecated/gtkimagemenuitem.h	\
-	deprecated/gtkmisc.h		\
-	deprecated/gtknumerableicon.h	\
-	deprecated/gtkradioaction.h	\
-	deprecated/gtkrc.h		\
-	deprecated/gtkrecentaction.h	\
-	deprecated/gtkstatusicon.h	\
-	deprecated/gtkstock.h		\
-	deprecated/gtkstyle.h		\
-	deprecated/gtkstyleproperties.h	\
-	deprecated/gtksymboliccolor.h	\
-	deprecated/gtktable.h		\
-	deprecated/gtktearoffmenuitem.h	\
-	deprecated/gtkthemingengine.h	\
-	deprecated/gtktoggleaction.h	\
-	deprecated/gtkuimanager.h	\
-	deprecated/gtkvbbox.h		\
-	deprecated/gtkvbox.h		\
-	deprecated/gtkvscale.h		\
-	deprecated/gtkvscrollbar.h	\
-	deprecated/gtkvseparator.h	\
-	deprecated/gtkvpaned.h
-
-a11y_private_h_sources =			\
-	a11y/gtkaccessibility.h			\
-	a11y/gtkaccessibilitymisc.h		\
-	a11y/gtkaccessibilityutil.h		\
-	a11y/gtkcellaccessibleprivate.h		\
-	a11y/gtkcolorswatchaccessibleprivate.h	\
-	a11y/gtkcontaineraccessibleprivate.h	\
-	a11y/gtkiconviewaccessibleprivate.h	\
-	a11y/gtklabelaccessibleprivate.h	\
-	a11y/gtkflowboxaccessibleprivate.h	\
-	a11y/gtklistboxaccessibleprivate.h	\
-	a11y/gtklockbuttonaccessibleprivate.h	\
-	a11y/gtktextviewaccessibleprivate.h	\
-	a11y/gtktreeviewaccessibleprivate.h	\
-	a11y/gtkwidgetaccessibleprivate.h
-
-deprecated_private_h_sources =			\
-	deprecated/gtkgradientprivate.h		\
-	deprecated/gtknumerableiconprivate.h	\
-	deprecated/gtkstylepropertiesprivate.h	\
-	deprecated/gtksymboliccolorprivate.h
 
 gtk_public_h_sources = 		\
 	gtk.h			\
@@ -683,105 +570,7 @@ gtk_private_h_sources =		\
 	gtkwindowprivate.h	\
 	gtktreemenu.h
 
-a11y_c_sources =				\
-	a11y/gtkaccessibility.c			\
-	a11y/gtkaccessibilitymisc.c 		\
-	a11y/gtkaccessibilityutil.c		\
-	a11y/gtkarrowaccessible.c		\
-	a11y/gtkbooleancellaccessible.c		\
-	a11y/gtkbuttonaccessible.c		\
-	a11y/gtkcellaccessible.c		\
-	a11y/gtkcellaccessibleparent.c		\
-	a11y/gtkcheckmenuitemaccessible.c	\
-	a11y/gtkcolorswatchaccessible.c		\
-	a11y/gtkcomboboxaccessible.c		\
-	a11y/gtkcontaineraccessible.c		\
-	a11y/gtkcontainercellaccessible.c	\
-	a11y/gtkentryaccessible.c		\
-	a11y/gtkexpanderaccessible.c		\
-	a11y/gtkflowboxaccessible.c		\
-	a11y/gtkflowboxchildaccessible.c	\
-	a11y/gtkframeaccessible.c		\
-	a11y/gtkiconviewaccessible.c		\
-	a11y/gtkimageaccessible.c		\
-	a11y/gtkimagecellaccessible.c		\
-	a11y/gtklabelaccessible.c		\
-	a11y/gtklevelbaraccessible.c		\
-	a11y/gtklinkbuttonaccessible.c		\
-	a11y/gtklistboxaccessible.c		\
-	a11y/gtklistboxrowaccessible.c		\
-	a11y/gtklockbuttonaccessible.c		\
-	a11y/gtkmenuaccessible.c		\
-	a11y/gtkmenubuttonaccessible.c		\
-	a11y/gtkmenushellaccessible.c		\
-	a11y/gtkmenuitemaccessible.c		\
-	a11y/gtknotebookaccessible.c		\
-	a11y/gtknotebookpageaccessible.c	\
-	a11y/gtkpanedaccessible.c		\
-	a11y/gtkpopoveraccessible.c		\
-	a11y/gtkprogressbaraccessible.c		\
-	a11y/gtkradiobuttonaccessible.c		\
-	a11y/gtkradiomenuitemaccessible.c	\
-	a11y/gtkrangeaccessible.c		\
-	a11y/gtkrenderercellaccessible.c	\
-	a11y/gtkscaleaccessible.c		\
-	a11y/gtkscalebuttonaccessible.c		\
-	a11y/gtkscrolledwindowaccessible.c	\
-	a11y/gtkspinbuttonaccessible.c		\
-	a11y/gtkspinneraccessible.c		\
-	a11y/gtkstatusbaraccessible.c		\
-	a11y/gtkswitchaccessible.c		\
-	a11y/gtktextcellaccessible.c		\
-	a11y/gtktextviewaccessible.c		\
-	a11y/gtktogglebuttonaccessible.c	\
-	a11y/gtktoplevelaccessible.c		\
-	a11y/gtktreeviewaccessible.c		\
-	a11y/gtkwidgetaccessible.c		\
-	a11y/gtkwindowaccessible.c
-
 # GTK+ C sources to build the library from
-deprecated_c_sources = 			\
-	deprecated/gtkactivatable.c	\
-	deprecated/gtkaction.c		\
-	deprecated/gtkactiongroup.c	\
-	deprecated/gtkalignment.c	\
-	deprecated/gtkarrow.c		\
-	deprecated/gtkcolorsel.c	\
-	deprecated/gtkcolorseldialog.c	\
-	deprecated/gtkfontsel.c		\
-	deprecated/gtkgradient.c	\
-	deprecated/gtkhandlebox.c	\
-	deprecated/gtkhbbox.c		\
-	deprecated/gtkhbox.c		\
-	deprecated/gtkhpaned.c		\
-	deprecated/gtkhscale.c		\
-	deprecated/gtkhscrollbar.c	\
-	deprecated/gtkhseparator.c	\
-	deprecated/gtkhsv.c		\
-	deprecated/gtkiconfactory.c	\
-	deprecated/gtkimagemenuitem.c	\
-	deprecated/gtkmisc.c		\
-	deprecated/gtknumerableicon.c	\
-	deprecated/gtkradioaction.c	\
-	deprecated/gtkrc.c		\
-	deprecated/gtkrecentaction.c	\
-	deprecated/gtkstatusicon.c	\
-	deprecated/gtkstock.c		\
-	deprecated/gtkstyle.c		\
-	deprecated/gtkstyleproperties.c	\
-	deprecated/gtksymboliccolor.c	\
-	deprecated/gtktable.c		\
-	deprecated/gtktearoffmenuitem.c	\
-	deprecated/gtkthemingengine.c	\
-	deprecated/gtktoggleaction.c	\
-	deprecated/gtkuimanager.c	\
-	deprecated/gtkvbbox.c		\
-	deprecated/gtkvbox.c		\
-	deprecated/gtkvscale.c		\
-	deprecated/gtkvscrollbar.c	\
-	deprecated/gtkvseparator.c	\
-	deprecated/gtkvpaned.c
-
 gtk_base_c_sources = 		\
 	$(a11y_c_sources)	\
 	$(deprecated_c_sources)	\
@@ -1740,6 +1529,8 @@ EXTRA_DIST +=                   \
 	$(win32_theme_sources)	\
 	$(gsettings_SCHEMAS)	\
 	$(template_headers)	\
+	a11y/Makefile.inc	\
+	deprecated/Makefile.inc	\
 	libgtk3.manifest.in	\
 	gtk-win32.rc.in		\
 	gtkwin32embed.h		\
