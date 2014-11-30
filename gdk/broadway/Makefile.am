@@ -31,12 +31,12 @@ libgdkbroadwayinclude_HEADERS = 	\
 	gdkbroadwayvisual.h
 
 clienthtml.h: client.html
-	$(PERL) $(srcdir)/toarray.pl client_html $(srcdir)/client.html > $@
+	$(AM_V_GEN) $(PERL) $(srcdir)/toarray.pl client_html $(srcdir)/client.html > $@
 
 EXTRA_DIST += client.html
 
 broadwayjs.h: broadway.js rawinflate.min.js
-	$(PERL) $(srcdir)/toarray.pl broadway_js $(srcdir)/broadway.js $(srcdir)/rawinflate.min.js  > $@
+	$(AM_V_GEN) $(PERL) $(srcdir)/toarray.pl broadway_js $(srcdir)/broadway.js $(srcdir)/rawinflate.min.js  > $@
 
 EXTRA_DIST += broadway.js rawinflate.min.js
 
