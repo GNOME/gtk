@@ -1,4 +1,5 @@
-# Makefile.am for gtk+/gtk
+AUTOMAKE_OPTIONS=subdir-objects
+
 include $(top_srcdir)/Makefile.decl
 -include $(INTROSPECTION_MAKEFILE)
 INTROSPECTION_GIRS =
