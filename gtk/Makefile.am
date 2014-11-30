@@ -69,7 +69,7 @@ AM_CPPFLAGS =						\
 	-DGTK_PRINT_PREVIEW_COMMAND=\"$(GTK_PRINT_PREVIEW_COMMAND)\"	\
 	-I$(top_builddir)				\
 	-I$(top_builddir)/gtk				\
-	-I$(top_srcdir) -I../gdk			\
+	-I$(top_srcdir) 				\
 	-I$(top_srcdir)/gdk				\
 	-DGTK_FILE_SYSTEM_ENABLE_UNSUPPORTED		\
 	-DGTK_PRINT_BACKEND_ENABLE_UNSUPPORTED		\
