@@ -276,7 +276,7 @@ gtk_inspector_style_prop_list_class_init (GtkInspectorStylePropListClass *klass)
 
   object_class->finalize = finalize;
 
-  gtk_widget_class_set_template_from_resource (widget_class, "/org/gtk/inspector/style-prop-list.ui");
+  gtk_widget_class_set_template_from_resource (widget_class, "/org/gtk/libgtk/inspector/style-prop-list.ui");
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorStylePropList, model);
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorStylePropList, tree);
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorStylePropList, search_stack);

@@ -3,7 +3,7 @@
   <template class="GtkInspectorWindow" parent="GtkWindow">
     <property name="default-height">500</property>
     <property name="default-width">800</property>
-    <property name="icon">resource:///org/gtk/inspector/logo.png</property>
+    <property name="icon">resource:///org/gtk/libgtk/inspector/logo.png</property>
     <child type="titlebar">
       <object class="GtkHeaderBar">
         <property name="visible">True</property>

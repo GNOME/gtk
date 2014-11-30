@@ -18,7 +18,7 @@ else
 GTK_PRINT_PREVIEW_COMMAND="evince --unlink-tempfile --preview --print-settings %s %f"
 endif
 
-SUBDIRS = inspector native .
+SUBDIRS = native .
 if OS_DARWIN
   ECHO="echo"
 else
@@ -122,12 +122,10 @@ endif
 libgtkincludedir = $(includedir)/gtk-3.0/gtk
 libadd = \
 	$(top_builddir)/gdk/libgdk-3.la	\
-	$(top_builddir)/gtk/inspector/libgtkinspector.la \
 	$(GMODULE_LIBS) \
 	$(GTK_DEP_LIBS)
 deps = \
-	$(top_builddir)/gdk/libgdk-3.la	\
-	$(top_builddir)/gtk/inspector/libgtkinspector.la
+	$(top_builddir)/gdk/libgdk-3.la
 
 # libtool stuff: set version and export symbols for resolving
 # since automake doesn't support conditionalized libsomething_la_LDFLAGS
@@ -158,6 +156,7 @@ endif
 
 include $(srcdir)/a11y/Makefile.inc
 include $(srcdir)/deprecated/Makefile.inc
+include $(srcdir)/inspector/Makefile.inc
 
 # GTK+ header files for public installation (non-generated, or generated
 # by configure)
@@ -394,6 +393,7 @@ gtk_private_type_h_sources =	\
 
 # GTK+ header files that don't get installed
 gtk_private_h_sources =		\
+	$(inspector_h_sources)	\
 	$(gtk_private_type_h_sources) \
 	gtkactionmuxer.h	\
 	gtkactionobserver.h	\
@@ -574,6 +574,7 @@ gtk_private_h_sources =		\
 gtk_base_c_sources = 		\
 	$(a11y_c_sources)	\
 	$(deprecated_c_sources)	\
+	$(inspector_c_sources)	\
 	$(clipboard_dnd_c_sources) \
 	gtkactionmuxer.c	\
 	gtkactionobserver.c	\
@@ -1096,6 +1097,7 @@ pkgdata_DATA = gtkbuilder.rng
 EXTRA_DIST += gtkbuilder.rnc gtkbuilder.rng
 
 templates =				\
+	$(inspector_templates)		\
 	ui/gtkapplication-quartz.ui	\
 	ui/gtkaboutdialog.ui		\
 	ui/gtkactionbar.ui		\
@@ -1209,6 +1211,11 @@ gtk.gresource.xml: Makefile.am
 	    $(ECHO) "    <file>icons/$$s/actions/$$n</file>" >> $@; \
 	  done; \
 	done; \
+	for f in $(srcdir)/inspector/*.ui; do \
+	  n=`basename $$f`; \
+	  $(ECHO) "    <file compressed=\"true\">inspector/$$n</file>" >> $@; \
+	done; \
+	$(ECHO) "    <file>inspector/logo.png</file>" >> $@; \
 	$(ECHO) "  </gresource>" >> $@; \
 	$(ECHO) "</gresources>" >> $@;
 
@@ -1531,6 +1538,7 @@ EXTRA_DIST +=                   \
 	$(template_headers)	\
 	a11y/Makefile.inc	\
 	deprecated/Makefile.inc	\
+	inspector/Makefile.inc	\
 	libgtk3.manifest.in	\
 	gtk-win32.rc.in		\
 	gtkwin32embed.h		\

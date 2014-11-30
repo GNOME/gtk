@@ -147,7 +147,7 @@ gtk_inspector_menu_class_init (GtkInspectorMenuClass *klass)
 {
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
 
-  gtk_widget_class_set_template_from_resource (widget_class, "/org/gtk/inspector/menu.ui");
+  gtk_widget_class_set_template_from_resource (widget_class, "/org/gtk/libgtk/inspector/menu.ui");
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorMenu, model);
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorMenu, object_title);
 }

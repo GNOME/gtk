@@ -363,7 +363,7 @@ gtk_inspector_prop_list_class_init (GtkInspectorPropListClass *klass)
       g_param_spec_boolean ("child-properties", "Child properties", "Child properties",
                             FALSE, G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY));
 
-  gtk_widget_class_set_template_from_resource (widget_class, "/org/gtk/inspector/prop-list.ui");
+  gtk_widget_class_set_template_from_resource (widget_class, "/org/gtk/libgtk/inspector/prop-list.ui");
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorPropList, model);
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorPropList, attribute_column);
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorPropList, tree);

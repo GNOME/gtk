@@ -38,7 +38,6 @@
 #include "object-tree.h"
 #include "prop-list.h"
 #include "resource-list.h"
-#include "resources.h"
 #include "selector.h"
 #include "signals-list.h"
 #include "size-groups.h"
@@ -50,8 +49,6 @@
 void
 gtk_inspector_init (void)
 {
-  gtk_inspector_register_resource ();
-
   g_type_ensure (GTK_TYPE_CELL_RENDERER_GRAPH);
   g_type_ensure (GTK_TYPE_GRAPH_DATA);
   g_type_ensure (GTK_TYPE_INSPECTOR_ACTIONS);

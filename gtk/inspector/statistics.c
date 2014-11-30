@@ -438,7 +438,7 @@ gtk_inspector_statistics_class_init (GtkInspectorStatisticsClass *klass)
       g_param_spec_object ("button", NULL, NULL,
                            GTK_TYPE_WIDGET, G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY));
 
-  gtk_widget_class_set_template_from_resource (widget_class, "/org/gtk/inspector/statistics.ui");
+  gtk_widget_class_set_template_from_resource (widget_class, "/org/gtk/libgtk/inspector/statistics.ui");
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorStatistics, view);
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorStatistics, stack);
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorStatistics, model);

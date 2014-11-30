@@ -57,7 +57,7 @@ gtk_inspector_object_hierarchy_class_init (GtkInspectorObjectHierarchyClass *kla
 {
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
 
-  gtk_widget_class_set_template_from_resource (widget_class, "/org/gtk/inspector/object-hierarchy.ui");
+  gtk_widget_class_set_template_from_resource (widget_class, "/org/gtk/libgtk/inspector/object-hierarchy.ui");
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorObjectHierarchy, model);
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorObjectHierarchy, tree);
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorObjectHierarchy, object_title);

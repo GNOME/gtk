@@ -630,7 +630,7 @@ gtk_inspector_visual_class_init (GtkInspectorVisualClass *klass)
 
   object_class->constructed = gtk_inspector_visual_constructed;
 
-  gtk_widget_class_set_template_from_resource (widget_class, "/org/gtk/inspector/visual.ui");
+  gtk_widget_class_set_template_from_resource (widget_class, "/org/gtk/libgtk/inspector/visual.ui");
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorVisual, rendering_mode_combo);
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorVisual, updates_switch);
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorVisual, direction_combo);

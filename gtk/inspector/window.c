@@ -152,7 +152,7 @@ gtk_inspector_window_class_init (GtkInspectorWindowClass *klass)
 
   object_class->constructed = gtk_inspector_window_constructed;
 
-  gtk_widget_class_set_template_from_resource (widget_class, "/org/gtk/inspector/window.ui");
+  gtk_widget_class_set_template_from_resource (widget_class, "/org/gtk/libgtk/inspector/window.ui");
 
   gtk_widget_class_bind_template_child (widget_class, GtkInspectorWindow, top_stack);
   gtk_widget_class_bind_template_child (widget_class, GtkInspectorWindow, object_stack);

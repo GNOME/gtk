@@ -317,7 +317,7 @@ gtk_inspector_classes_list_class_init (GtkInspectorClassesListClass *klass)
 
   object_class->finalize = gtk_inspector_classes_list_finalize;
 
-  gtk_widget_class_set_template_from_resource (widget_class, "/org/gtk/inspector/classes-list.ui");
+  gtk_widget_class_set_template_from_resource (widget_class, "/org/gtk/libgtk/inspector/classes-list.ui");
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorClassesList, model);
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorClassesList, object_title);
   gtk_widget_class_bind_template_callback (widget_class, add_clicked);

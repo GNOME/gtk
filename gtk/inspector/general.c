@@ -348,7 +348,7 @@ gtk_inspector_general_class_init (GtkInspectorGeneralClass *klass)
 
   object_class->constructed = gtk_inspector_general_constructed;
 
-  gtk_widget_class_set_template_from_resource (widget_class, "/org/gtk/inspector/general.ui");
+  gtk_widget_class_set_template_from_resource (widget_class, "/org/gtk/libgtk/inspector/general.ui");
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorGeneral, version_box);
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorGeneral, env_box);
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorGeneral, gl_box);

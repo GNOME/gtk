@@ -342,7 +342,7 @@ gtk_inspector_signals_list_class_init (GtkInspectorSignalsListClass *klass)
 {
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
 
-  gtk_widget_class_set_template_from_resource (widget_class, "/org/gtk/inspector/signals-list.ui");
+  gtk_widget_class_set_template_from_resource (widget_class, "/org/gtk/libgtk/inspector/signals-list.ui");
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorSignalsList, view);
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorSignalsList, model);
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorSignalsList, text);

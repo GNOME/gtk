@@ -548,7 +548,7 @@ gtk_inspector_misc_info_class_init (GtkInspectorMiscInfoClass *klass)
       g_param_spec_object ("object-tree", "Object Tree", "Object tree",
                            GTK_TYPE_WIDGET, G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY));
 
-  gtk_widget_class_set_template_from_resource (widget_class, "/org/gtk/inspector/misc-info.ui");
+  gtk_widget_class_set_template_from_resource (widget_class, "/org/gtk/libgtk/inspector/misc-info.ui");
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorMiscInfo, refcount_row);
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorMiscInfo, refcount);
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorMiscInfo, state_row);

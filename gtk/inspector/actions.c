@@ -284,7 +284,7 @@ gtk_inspector_actions_class_init (GtkInspectorActionsClass *klass)
 {
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
 
-  gtk_widget_class_set_template_from_resource (widget_class, "/org/gtk/inspector/actions.ui");
+  gtk_widget_class_set_template_from_resource (widget_class, "/org/gtk/libgtk/inspector/actions.ui");
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorActions, model);
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorActions, object_title);
   gtk_widget_class_bind_template_callback (widget_class, row_activated);

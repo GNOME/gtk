@@ -1941,7 +1941,6 @@ gtk/makefile.msc
 gtk/gtkversion.h
 gtk/gtk-win32.rc
 gtk/libgtk3.manifest
-gtk/inspector/Makefile
 gtk/native/Makefile
 util/Makefile
 libgail-util/Makefile

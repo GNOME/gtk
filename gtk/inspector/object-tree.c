@@ -480,7 +480,7 @@ gtk_inspector_object_tree_class_init (GtkInspectorObjectTreeClass *klass)
                     NULL,
                     G_TYPE_NONE, 1, G_TYPE_OBJECT);
 
-  gtk_widget_class_set_template_from_resource (widget_class, "/org/gtk/inspector/object-tree.ui");
+  gtk_widget_class_set_template_from_resource (widget_class, "/org/gtk/libgtk/inspector/object-tree.ui");
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorObjectTree, model);
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorObjectTree, tree);
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorObjectTree, object_column);
