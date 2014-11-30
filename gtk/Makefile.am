@@ -1106,7 +1106,6 @@ gtk_base_c_sources = 		\
 
 nodist_gtk_c_sources =
 gtk_c_sources = $(gtk_base_c_sources)
-gtk_all_c_sources = $(gtk_base_c_sources)
 
 gtk_dbus_built_sources = gtkdbusgenerated.c gtkdbusgenerated.h
 
@@ -1118,7 +1117,6 @@ $(gtk_dbus_built_sources) : Makefile.am gtkdbusinterfaces.xml
 	$(srcdir)/gtkdbusinterfaces.xml
 
 nodist_gtk_c_sources += $(gtk_dbus_built_sources)
-gtk_all_c_sources += $(gtk_dbus_built_sources)
 
 gtk_os_unix_c_sources = 		\
 	gtkcustompaperunixdialog.c	\
@@ -1132,7 +1130,6 @@ gtk_os_unix_c_sources = 		\
 	gtkprintunixdialog.c		\
         gtkprintbackend.c		\
 	gtksearchenginetracker.c
-gtk_all_c_sources += $(gtk_os_unix_c_sources)
 if OS_UNIX
 gtk_private_h_sources += \
 	gtkiconcachevalidator.h		\
@@ -1149,7 +1146,6 @@ gtk_os_win32_c_sources = \
 	gtkprint-win32.c		\
 	gtkprintoperation-win32.c	\
 	gtkwin32.c
-gtk_all_c_sources += $(gtk_os_win32_c_sources)
 if OS_WIN32
 gtk_private_h_sources += gtkprint-win32.h
 gtk_c_sources += $(gtk_os_win32_c_sources)
@@ -1181,7 +1177,6 @@ gtk_use_quartz_c_sources = 	\
 	gtkquartz.c
 gtk_use_stub_c_sources = 	\
 	gtkmountoperation-stub.c
-gtk_all_c_sources += $(gtk_use_x11_c_sources) $(gtk_use_win32_c_sources) $(gtk_use_quartz_c_sources) $(gtk_use_stub_c_sources)
 gtk_use_x11_private_h_sources = 	\
 	gtkxembed.h		\
 	deprecated/gtktrayicon.h	\
