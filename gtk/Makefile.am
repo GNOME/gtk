@@ -681,8 +681,7 @@ gtk_private_h_sources =		\
 	gtkwin32themeprivate.h	\
 	gtkwindowprivate.h	\
 	gtktreemenu.h		\
-	$(gtk_private_type_h_sources) \
-	$(gtk_clipboard_dnd_h_sources)
+	$(gtk_private_type_h_sources) 
 
 a11y_c_sources =				\
 	a11y/gtkaccessibility.c			\
