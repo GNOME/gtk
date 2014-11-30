@@ -507,6 +507,7 @@ gtk_private_type_h_sources =	\
 
 # GTK+ header files that don't get installed
 gtk_private_h_sources =		\
+	$(gtk_private_type_h_sources) \
 	gtkactionmuxer.h	\
 	gtkactionobserver.h	\
 	gtkactionobservable.h	\
@@ -680,8 +681,7 @@ gtk_private_h_sources =		\
 	gtkwidgetprivate.h	\
 	gtkwin32themeprivate.h	\
 	gtkwindowprivate.h	\
-	gtktreemenu.h		\
-	$(gtk_private_type_h_sources) 
+	gtktreemenu.h
 
 a11y_c_sources =				\
 	a11y/gtkaccessibility.c			\
@@ -785,6 +785,7 @@ deprecated_c_sources = 			\
 gtk_base_c_sources = 		\
 	$(a11y_c_sources)	\
 	$(deprecated_c_sources)	\
+	$(clipboard_dnd_c_sources) \
 	gtkactionmuxer.c	\
 	gtkactionobserver.c	\
 	gtkactionobservable.c	\
@@ -1100,8 +1101,7 @@ gtk_base_c_sources = 		\
 	gtkwidgetpath.c		\
 	gtkwindow.c		\
 	gtkwindowgroup.c	\
-	gtkwin32theme.c		\
-	$(gtk_clipboard_dnd_c_sources)
+	gtkwin32theme.c
 
 nodist_gtk_c_sources =
 gtk_c_sources = $(gtk_base_c_sources)
@@ -1233,12 +1233,12 @@ endif
 endif
 
 if USE_QUARTZ
-gtk_clipboard_dnd_c_sources = 	\
+clipboard_dnd_c_sources = 	\
 	gtkclipboard-quartz.c	\
 	gtkdnd-quartz.c
 else
 # No wayland gtkdnd-wayland.c yet
-gtk_clipboard_dnd_c_sources = 	\
+clipboard_dnd_c_sources = 	\
 	gtkclipboard.c \
 	gtkdnd.c
 endif
@@ -1260,14 +1260,14 @@ gtk_built_private_headers =			\
 	gtkprivatetypebuiltins.h
 
 gtk_built_sources =				\
+	$(gtk_built_private_headers)		\
+	$(gtk_built_public_sources)		\
 	gtkresources.c				\
 	gtk.gresource.xml			\
 	gtktypebuiltins.c			\
 	gtktypefuncs.c				\
 	gtkmarshalers.c				\
-	gtkprivatetypebuiltins.c		\
-	${gtk_built_private_headers}		\
-	${gtk_built_public_sources}
+	gtkprivatetypebuiltins.c
 
 stamp_files =					\
 	stamp-gtkmarshalers.h			\
