@@ -217,10 +217,6 @@
       <Project>{fc5aadb5-95cd-4bf0-ba8b-0c16fe7073f7}</Project>
       <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
     </ProjectReference>
-    <ProjectReference Include="gtk-inspector.vcxproj">
-      <Project>{fc5aadb5-95cd-4bf0-ba8b-0c16fe7073fd}</Project>
-      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

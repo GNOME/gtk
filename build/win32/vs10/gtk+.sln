@@ -10,8 +10,6 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "broadwayd", "broadwayd.vcxp
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "gdk", "gdk.vcxproj", "{FC5AADB5-95CD-4BF0-BA8B-0C16FE7073F7}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "gtk-inspector", "gtk-inspector.vcxproj", "{FC5AADB5-95CD-4BF0-BA8B-0C16FE7073FD}"
-EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "gtk", "gtk.vcxproj", "{FC5AADB5-95CD-4BF0-BA8B-0C16FE7073F5}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "gtk3-demo", "gtk3-demo.vcxproj", "{FC5AADB5-95CD-4BF0-BA8B-0C16FE7073FC}"
@@ -110,22 +108,6 @@ Global
 		{FC5AADB5-95CD-4BF0-BA8B-0C16FE7073F7}.Release_Broadway|Win32.Build.0 = Release_Broadway|Win32
 		{FC5AADB5-95CD-4BF0-BA8B-0C16FE7073F7}.Release_Broadway|x64.ActiveCfg = Release_Broadway|x64
 		{FC5AADB5-95CD-4BF0-BA8B-0C16FE7073F7}.Release_Broadway|x64.Build.0 = Release_Broadway|x64
-		{FC5AADB5-95CD-4BF0-BA8B-0C16FE7073FD}.Debug|Win32.ActiveCfg = Debug|Win32
-		{FC5AADB5-95CD-4BF0-BA8B-0C16FE7073FD}.Debug|Win32.Build.0 = Debug|Win32
-		{FC5AADB5-95CD-4BF0-BA8B-0C16FE7073FD}.Debug|x64.ActiveCfg = Debug|x64
-		{FC5AADB5-95CD-4BF0-BA8B-0C16FE7073FD}.Debug|x64.Build.0 = Debug|x64
-		{FC5AADB5-95CD-4BF0-BA8B-0C16FE7073FD}.Release|Win32.ActiveCfg = Release|Win32
-		{FC5AADB5-95CD-4BF0-BA8B-0C16FE7073FD}.Release|Win32.Build.0 = Release|Win32
-		{FC5AADB5-95CD-4BF0-BA8B-0C16FE7073FD}.Release|x64.ActiveCfg = Release|x64
-		{FC5AADB5-95CD-4BF0-BA8B-0C16FE7073FD}.Release|x64.Build.0 = Release|x64
-		{FC5AADB5-95CD-4BF0-BA8B-0C16FE7073FD}.Debug_Broadway|Win32.ActiveCfg = Debug|Win32
-		{FC5AADB5-95CD-4BF0-BA8B-0C16FE7073FD}.Debug_Broadway|Win32.Build.0 = Debug|Win32
-		{FC5AADB5-95CD-4BF0-BA8B-0C16FE7073FD}.Debug_Broadway|x64.ActiveCfg = Debug|x64
-		{FC5AADB5-95CD-4BF0-BA8B-0C16FE7073FD}.Debug_Broadway|x64.Build.0 = Debug|x64
-		{FC5AADB5-95CD-4BF0-BA8B-0C16FE7073FD}.Release_Broadway|Win32.ActiveCfg = Release|Win32
-		{FC5AADB5-95CD-4BF0-BA8B-0C16FE7073FD}.Release_Broadway|Win32.Build.0 = Release|Win32
-		{FC5AADB5-95CD-4BF0-BA8B-0C16FE7073FD}.Release_Broadway|x64.ActiveCfg = Release|x64
-		{FC5AADB5-95CD-4BF0-BA8B-0C16FE7073FD}.Release_Broadway|x64.Build.0 = Release|x64
 		{FC5AADB5-95CD-4BF0-BA8B-0C16FE7073F5}.Debug|Win32.ActiveCfg = Debug|Win32
 		{FC5AADB5-95CD-4BF0-BA8B-0C16FE7073F5}.Debug|Win32.Build.0 = Debug|Win32
 		{FC5AADB5-95CD-4BF0-BA8B-0C16FE7073F5}.Debug|x64.ActiveCfg = Debug|x64
