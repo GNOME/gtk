@@ -964,10 +964,10 @@ event_close_to_indicator (GtkScrolledWindow *sw,
       y < 0 || y > alloc.height)
     return FALSE;
 
-  if (x > win_x - alloc.x - 50 &&
-      x < win_x - alloc.x + indicator_alloc.width + 50 &&
-      y > win_y - alloc.y - 50 &&
-      y < win_y - alloc.y + indicator_alloc.height + 50)
+  if (x > win_x - 50 &&
+      x < win_x + indicator_alloc.width + 50 &&
+      y > win_y - 50 &&
+      y < win_y + indicator_alloc.height + 50)
     return TRUE;
 
   return FALSE;
@@ -1040,7 +1040,7 @@ gtk_scrolled_window_init (GtkScrolledWindow *scrolled_window)
   scrolled_window->priv = priv =
     gtk_scrolled_window_get_instance_private (scrolled_window);
 
-  gtk_widget_set_has_window (widget, FALSE);
+  gtk_widget_set_has_window (widget, TRUE);
   gtk_widget_set_can_focus (widget, TRUE);
 
   /* Instantiated by gtk_scrolled_window_set_[hv]adjustment
@@ -2379,8 +2379,8 @@ gtk_scrolled_window_allocate_child (GtkScrolledWindow *swindow,
 
   gtk_scrolled_window_relative_allocation (widget, relative_allocation);
 
-  child_allocation.x = relative_allocation->x + allocation.x;
-  child_allocation.y = relative_allocation->y + allocation.y;
+  child_allocation.x = relative_allocation->x;
+  child_allocation.y = relative_allocation->y;
   child_allocation.width = relative_allocation->width;
   child_allocation.height = relative_allocation->height;
 
@@ -2408,6 +2408,13 @@ gtk_scrolled_window_size_allocate (GtkWidget     *widget,
   scrolled_window = GTK_SCROLLED_WINDOW (widget);
   bin = GTK_BIN (scrolled_window);
   priv = scrolled_window->priv;
+
+  if (gtk_widget_get_realized (widget))
+    {
+      gdk_window_move_resize (gtk_widget_get_window (widget),
+                              allocation->x, allocation->y,
+                              allocation->width, allocation->height);
+    }
 
   /* Get possible scrollbar dimensions */
   sb_spacing = _gtk_scrolled_window_get_scrollbar_spacing (scrolled_window);
@@ -2656,8 +2663,6 @@ gtk_scrolled_window_size_allocate (GtkWidget     *widget,
 
       child_allocation.width = relative_allocation.width;
       child_allocation.height = sb_height;
-      child_allocation.x += allocation->x;
-      child_allocation.y += allocation->y;
 
       if (priv->shadow_type != GTK_SHADOW_NONE)
 	{
@@ -2713,8 +2718,6 @@ gtk_scrolled_window_size_allocate (GtkWidget     *widget,
       child_allocation.y = relative_allocation.y;
       child_allocation.width = sb_width;
       child_allocation.height = relative_allocation.height;
-      child_allocation.x += allocation->x;
-      child_allocation.y += allocation->y;
 
       if (priv->shadow_type != GTK_SHADOW_NONE)
 	{
@@ -3924,8 +3927,31 @@ gtk_scrolled_window_realize (GtkWidget *widget)
   GtkScrolledWindow *scrolled_window = GTK_SCROLLED_WINDOW (widget);
   GtkScrolledWindowPrivate *priv = scrolled_window->priv;
   GdkDeviceManager *dm;
+  GdkWindow *window;
+  GtkAllocation allocation;
+  GdkWindowAttr attributes;
+  gint attributes_mask;
 
-  GTK_WIDGET_CLASS (gtk_scrolled_window_parent_class)->realize (widget);
+  gtk_widget_get_allocation (widget, &allocation);
+
+  attributes.window_type = GDK_WINDOW_CHILD;
+  attributes.wclass = GDK_INPUT_OUTPUT;
+
+  attributes.width = allocation.width;
+  attributes.height = allocation.height;
+  attributes.x = allocation.x;
+  attributes.y = allocation.y;
+  attributes.visual = gtk_widget_get_visual (widget);
+  attributes_mask = GDK_WA_X | GDK_WA_Y | GDK_WA_VISUAL;
+  attributes.event_mask = gtk_widget_get_events (widget) | GDK_EXPOSURE_MASK |
+    GDK_ENTER_NOTIFY_MASK | GDK_LEAVE_NOTIFY_MASK;
+
+  window = gdk_window_new (gtk_widget_get_parent_window (widget),
+                           &attributes, attributes_mask);
+
+  gtk_widget_set_window (widget, window);
+  gtk_widget_register_window (widget, window);
+  gtk_widget_set_realized (widget, TRUE);
 
   priv->hindicator.window = create_indicator_window (scrolled_window, priv->hscrollbar);
   priv->vindicator.window = create_indicator_window (scrolled_window, priv->vscrollbar);
