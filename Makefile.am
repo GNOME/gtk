@@ -9,11 +9,13 @@ ACLOCAL_AMFLAGS = -I m4 ${ACLOCAL_FLAGS}
 EXTRA_DIST +=			\
 	autogen.sh		\
 	HACKING			\
+	README			\
+	INSTALL			\
 	NEWS.pre-1-0		\
-	README.commits	\
+	README.commits		\
 	README.win32		\
 	config.h.win32		\
-	makefile.msc	\
+	makefile.msc		\
 	gtk-zip.sh.in		\
 	sanitize-la.sh		\
 	po/README.translators	\
@@ -88,18 +90,10 @@ ChangeLog:
 	  echo A git checkout and git-log is required to generate this file >> $@); \
 	fi
 
+.PHONY: ChangeLog
+
 uninstall-local:
 	rm -f $(DESTDIR)$(pkgconfigdir)/gtk+-3.0.pc
-
-dist-hook:
-	if test -f $(srcdir)/INSTALL.in && test -f $(srcdir)/README.in ; then \
-	     CONFIG_FILES="INSTALL:$(srcdir)/INSTALL.in README:$(srcdir)/README.in" \
-	     CONFIG_HEADERS= \
-	     $(SHELL) config.status \
-	     && cp INSTALL README $(distdir) ; \
-	fi
-
-.PHONY: ChangeLog
 
 DISTCHECK_CONFIGURE_FLAGS =		\
 	--enable-gtk-doc 		\

@@ -1869,6 +1869,8 @@ fi
 AC_SUBST(GTK_LINK_FLAGS)
 
 AC_CONFIG_FILES([
+README
+INSTALL
 config.h.win32
 gtk-zip.sh
 Makefile
