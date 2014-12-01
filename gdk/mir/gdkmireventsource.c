@@ -127,6 +127,7 @@ generate_key_event (GdkWindow *window, GdkEventType type, guint state, guint key
   event->key.keyval = keyval;
   event->key.hardware_keycode = keycode + 8;
   event->key.is_modifier = is_modifier;
+  event->key.time = g_get_monotonic_time () / 1000;
   set_key_event_string (&event->key);
 
   send_event (window, _gdk_mir_device_manager_get_keyboard (gdk_display_get_device_manager (gdk_window_get_display (window))), event);
@@ -148,6 +149,7 @@ generate_button_event (GdkWindow *window, GdkEventType type, gdouble x, gdouble 
   event->button.y = y;
   event->button.state = state;
   event->button.button = button;
+  event->button.time = g_get_monotonic_time () / 1000;
 
   send_event (window, get_pointer (window), event);
 }
@@ -164,6 +166,7 @@ generate_scroll_event (GdkWindow *window, gdouble x, gdouble y, gdouble delta_x,
   event->scroll.direction = GDK_SCROLL_SMOOTH;
   event->scroll.delta_x = -delta_x;
   event->scroll.delta_y = -delta_y;
+  event->scroll.time = g_get_monotonic_time () / 1000;
 
   send_event (window, get_pointer (window), event);
 }
@@ -178,6 +181,7 @@ generate_motion_event (GdkWindow *window, gdouble x, gdouble y, guint state)
   event->motion.y = y;
   event->motion.state = state;
   event->motion.is_hint = FALSE;
+  event->motion.time = g_get_monotonic_time () / 1000;
 
   send_event (window, get_pointer (window), event);
 }
@@ -193,6 +197,7 @@ generate_crossing_event (GdkWindow *window, GdkEventType type, gdouble x, gdoubl
   event->crossing.mode = GDK_CROSSING_NORMAL;
   event->crossing.detail = GDK_NOTIFY_ANCESTOR;
   event->crossing.focus = TRUE;
+  event->crossing.time = g_get_monotonic_time () / 1000;
 
   send_event (window, get_pointer (window), event);
 }
