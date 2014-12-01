@@ -62,7 +62,7 @@ typedef struct GdkMirDisplayClass
   GdkDisplayClass parent_class;
 } GdkMirDisplayClass;
 
-static void initialize_pixel_formats (GdkMirDisplay *display);
+static void get_pixel_formats (MirConnection *, MirPixelFormat *sw, MirPixelFormat *hw);
 
 /**
  * SECTION:mir_interaction
@@ -104,6 +104,7 @@ GdkDisplay *
 _gdk_mir_display_open (const gchar *display_name)
 {
   MirConnection *connection;
+  MirPixelFormat sw_pixel_format, hw_pixel_format;
   GdkMirDisplay *display;
 
   g_printerr ("gdk_mir_display_open\n");
@@ -111,9 +112,20 @@ _gdk_mir_display_open (const gchar *display_name)
   connection = mir_connect_sync (NULL, "GDK-Mir");
   if (!connection)
      return NULL;
+
   if (!mir_connection_is_valid (connection))
     {
       g_printerr ("Failed to connect to Mir: %s\n", mir_connection_get_error_message (connection));
+      mir_connection_release (connection);
+      return NULL;
+    }
+
+  get_pixel_formats (connection, &sw_pixel_format, &hw_pixel_format);
+
+  if (sw_pixel_format == mir_pixel_format_invalid ||
+      hw_pixel_format == mir_pixel_format_invalid)
+    {
+      g_printerr ("Mir display does not support required pixel formats\n");
       mir_connection_release (connection);
       return NULL;
     }
@@ -123,7 +135,8 @@ _gdk_mir_display_open (const gchar *display_name)
   display->connection = connection;
   GDK_DISPLAY (display)->device_manager = _gdk_mir_device_manager_new (GDK_DISPLAY (display));
   display->screen = _gdk_mir_screen_new (GDK_DISPLAY (display));
-  initialize_pixel_formats (display);
+  display->sw_pixel_format = sw_pixel_format;
+  display->hw_pixel_format = hw_pixel_format;
 
   g_signal_emit_by_name (display, "opened");
 
@@ -501,41 +514,50 @@ gdk_mir_display_utf8_to_string_target (GdkDisplay  *display,
 }
 
 static void
-initialize_pixel_formats (GdkMirDisplay *display)
+get_pixel_formats (MirConnection *connection,
+                   MirPixelFormat *sw_pixel_format,
+                   MirPixelFormat *hw_pixel_format)
 {
   MirPixelFormat formats[mir_pixel_formats];
   unsigned int n_formats, i;
 
-  mir_connection_get_available_surface_formats (display->connection, formats,
+  mir_connection_get_available_surface_formats (connection, formats,
                                                 mir_pixel_formats, &n_formats);
 
-  display->sw_pixel_format = mir_pixel_format_invalid;
-  display->hw_pixel_format = mir_pixel_format_invalid;
-
-  for (i = 0; i < n_formats; i++)
+  if (sw_pixel_format)
     {
-      switch (formats[i])
-      {
-        case mir_pixel_format_abgr_8888:
-        case mir_pixel_format_xbgr_8888:
-        case mir_pixel_format_argb_8888:
-        case mir_pixel_format_xrgb_8888:
-          display->hw_pixel_format = formats[i];
-          break;
-        default:
-          continue;
-      }
+      *sw_pixel_format = mir_pixel_format_invalid;
 
-      if (display->hw_pixel_format != mir_pixel_format_invalid)
-        break;
+      for (i = 0; i < n_formats; i++)
+        {
+          if (formats[i] == mir_pixel_format_argb_8888)
+            {
+              *sw_pixel_format = formats[i];
+              break;
+            }
+        }
     }
 
-  for (i = 0; i < n_formats; i++)
+  if (hw_pixel_format)
     {
-      if (formats[i] == mir_pixel_format_argb_8888)
+      *hw_pixel_format = mir_pixel_format_invalid;
+
+      for (i = 0; i < n_formats; i++)
         {
-          display->sw_pixel_format = formats[i];
-          break;
+          switch (formats[i])
+          {
+            case mir_pixel_format_abgr_8888:
+            case mir_pixel_format_xbgr_8888:
+            case mir_pixel_format_argb_8888:
+            case mir_pixel_format_xrgb_8888:
+              *hw_pixel_format = formats[i];
+              break;
+            default:
+              continue;
+          }
+
+          if (*hw_pixel_format != mir_pixel_format_invalid)
+            break;
         }
     }
 }
