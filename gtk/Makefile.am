@@ -10,8 +10,8 @@ INTROSPECTION_SCANNER_ARGS = \
 	--warn-all
 INTROSPECTION_COMPILER_ARGS = \
 	--includedir=$(srcdir) \
-    --includedir=. \
-    --includedir=../gdk
+	--includedir=. \
+	--includedir=../gdk
 
 if USE_QUARTZ
 GTK_PRINT_PREVIEW_COMMAND="open -a /Applications/Preview.app %f"
@@ -1080,12 +1080,11 @@ MAINTAINERCLEANFILES = \
 
 DISTCLEANFILES =
 
-EXTRA_HEADERS =
 EXTRA_DIST += $(gtk_all_private_h_sources) $(gtk_extra_sources)
 EXTRA_DIST += $(gtk_built_sources)
 
 
-pkgdatadir=$(datadir)/gtk-$(GTK_API_VERSION)
+pkgdatadir = $(datadir)/gtk-$(GTK_API_VERSION)
 pkgdata_DATA = gtkbuilder.rng
 
 EXTRA_DIST += gtkbuilder.rnc gtkbuilder.rng
