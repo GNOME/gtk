@@ -209,14 +209,6 @@ remove_extra_css (GtkStyleProvider *provider)
                                                 provider);
 }
 
-static gboolean
-quit_when_idle (gpointer loop)
-{
-  g_main_loop_quit (loop);
-
-  return G_SOURCE_REMOVE;
-}
-
 static void
 save_image (cairo_surface_t *surface,
             const char      *test_name,
