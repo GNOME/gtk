@@ -225,6 +225,80 @@ GtkLabel {
       &:dir(rtl) { border-left-style: solid; }
     }
   }
+  .linked.vertical & { //FIXME comment stuff and make the whole thing smarter.
+    @include entry(normal);
+    background-image: linear-gradient(to bottom, $base_color);
+    border-bottom-color: mix($borders_color, $base_color, 30%);
+    box-shadow: none;
+    @extend %linked_vertical;
+    &:focus {
+      border-color: entry_focus_border($selected_bg_color);
+      box-shadow: entry_focus_glow($selected_bg_color),
+                  0 -1px 0 0 entry_focus_border($selected_bg_color);
+      @extend %linked_vertical;
+    }
+    &:insensitive {
+      @include entry(insensitive);
+      border-bottom-color: mix($borders_color, $base_color, 30%);
+      @extend %linked_vertical;
+      &:backdrop {
+        @include entry(backdrop-insensitive);
+        border-bottom-color: mix($backdrop_borders_color, $backdrop_base_color, 30%);
+        @extend %linked_vertical;
+      }
+    }
+    &:backdrop {
+      @include entry(backdrop);
+      border-bottom-color: mix($backdrop_borders_color, $backdrop_base_color, 30%);
+      @extend %linked_vertical;
+    }
+    &:first-child {
+      @include entry(normal);
+      border-bottom-color: mix($borders_color, $base_color, 30%);
+      &:focus { @include entry(focus); }
+      &:insensitive {
+        @include entry(insensitive);
+        border-bottom-color: mix($backdrop_borders_color, $backdrop_base_color, 30%);
+        @extend %linked_vertical:first-child;
+        &:backdrop {
+          @include entry(backdrop-insensitive);
+          border-bottom-color: mix($backdrop_borders_color, $backdrop_base_color, 30%);
+          border-top-style: solid;
+        }
+      }
+      &:backdrop {
+        @include entry(backdrop);
+        border-bottom-color: mix($backdrop_borders_color, $backdrop_base_color, 30%);
+        @extend %linked_vertical:first-child;
+      }
+    }
+    &:last-child {
+      @include entry(normal);
+      border-top-width: 0;
+      background-image: linear-gradient(to bottom, $base_color);
+      box-shadow: none;
+      &:focus {
+        border-color: entry_focus_border($selected_bg_color);
+        box-shadow: entry_focus_glow($selected_bg_color),
+                    0 -1px 0 0 entry_focus_border($selected_bg_color),
+                    _widget_edge();
+        @extend %linked_vertical:last-child;
+      }
+      &:insensitive {
+        @include entry(insensitive);
+        @extend %linked_vertical:last-child;
+        &:backdrop {
+          @include entry(backdrop-insensitive);
+          @extend %linked_vertical:last-child;
+        }
+      }
+      &:backdrop {
+        @include entry(backdrop);
+        @extend %linked_vertical:last-child;
+      }
+    }
+  }
+  
   &.error {
     color: $error_color;
     border-color: $error_color;
@@ -348,9 +422,17 @@ GtkLabel {
 //    -GtkWidget-wide-separators: true;
 //    -GtkWidget-horizontal-separator: 0;
 //   }
-  .linked &, .linked &:backdrop {
-    @extend %linked;
-  }
+  .linked &,
+  .linked &:hover,
+  .linked &:active,
+  .linked &:checked,
+  .linked &:backdrop { @extend %linked; }
+
+  .linked.vertical &,
+  .linked.vertical &:hover,
+  .linked.vertical &:active,
+  .linked.vertical &:checked,
+  .linked.vertical &:backdrop { @extend %linked_vertical; }
 }
 
 // all the following is for the +|- buttons on inline toolbars, that way
@@ -419,9 +501,14 @@ GtkLabel {
   }
 }
 
-%linked_vertical{
+%linked_vertical_middle {
   border-left-style: solid;
   border-top-style: none;
+  border-radius: 0;
+}
+
+%linked_vertical{
+  @extend %linked_vertical_middle;
   &:first-child {
     border-style: solid;
     border-radius: 3px 3px 0 0;
@@ -667,6 +754,15 @@ GtkComboBox {
 .linked > GtkComboBox:only-child > .button {
   @extend %linked:only-child;
 }
+
+.linked.vertical > GtkComboBoxText > .button,
+.linked.vertical > GtkComboBox > .button { @extend %linked_vertical_middle; }
+.linked.vertical > GtkComboBoxText:first-child > .button,
+.linked.vertical > GtkComboBox:first-child > .button { @extend %linked_vertical:first-child; }
+.linked.vertical > GtkComboBoxText:last-child > .button,
+.linked.vertical > GtkComboBox:last-child > .button { @extend %linked_vertical:last-child; }
+.linked.vertical > GtkComboBoxText:only-child > .button,
+.linked.vertical > GtkComboBox:only-child > .button { @extend %linked_vertical:only-child; }
 
 /************
  * Toolbars *

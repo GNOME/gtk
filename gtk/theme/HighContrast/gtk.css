@@ -271,6 +271,129 @@
     border-left-style: none; }
     .linked .entry:last-child:dir(rtl) {
       border-left-style: solid; }
+  .linked.vertical .entry {
+    background-color: transparent;
+    border-style: solid;
+    border-width: 1px;
+    background-image: linear-gradient(to bottom, #f7f7f7, #fff 90%);
+    border-color: #7f7f7f;
+    box-shadow: inset 0 2px 2px -2px #7f7f7f, 0 1px #fff;
+    background-image: linear-gradient(to bottom, #fff);
+    border-bottom-color: #d8d8d8;
+    box-shadow: none; }
+    .linked.vertical .entry:focus {
+      border-color: entry_focus_border(#000);
+      box-shadow: entry_focus_glow(#000), 0 -1px 0 0 entry_focus_border(#000); }
+    .linked.vertical .entry:insensitive {
+      background-color: transparent;
+      border-style: solid;
+      border-width: 1px;
+      background-image: linear-gradient(to bottom, #f7f7f7, #fff 90%);
+      color: #7f7f7f;
+      border-color: #7f7f7f;
+      background-image: linear-gradient(to bottom, white);
+      box-shadow: 0 1px #fff;
+      border-bottom-color: #d8d8d8; }
+      .linked.vertical .entry:insensitive:backdrop {
+        background-color: transparent;
+        border-style: solid;
+        border-width: 1px;
+        background-image: linear-gradient(to bottom, #f7f7f7, #fff 90%);
+        color: #7f7f7f;
+        background-image: linear-gradient(to bottom, #fff);
+        box-shadow: 0 1px rgba(255, 255, 255, 0);
+        border-bottom-color: gainsboro; }
+    .linked.vertical .entry:backdrop {
+      background-color: transparent;
+      border-style: solid;
+      border-width: 1px;
+      background-image: linear-gradient(to bottom, #f7f7f7, #fff 90%);
+      color: #000;
+      background-image: linear-gradient(to bottom, #fff);
+      box-shadow: 0 1px rgba(255, 255, 255, 0);
+      border-bottom-color: gainsboro; }
+    .linked.vertical .entry:first-child {
+      background-color: transparent;
+      border-style: solid;
+      border-width: 1px;
+      background-image: linear-gradient(to bottom, #f7f7f7, #fff 90%);
+      border-color: #7f7f7f;
+      box-shadow: inset 0 2px 2px -2px #7f7f7f, 0 1px #fff;
+      border-bottom-color: #d8d8d8; }
+      .linked.vertical .entry:first-child:focus {
+        background-color: transparent;
+        border-style: solid;
+        border-width: 1px;
+        background-image: linear-gradient(to bottom, #f7f7f7, #fff 90%);
+        border-color: #000;
+        box-shadow: inset 0 2px 2px -2px #7f7f7f, inset 0 0 2px 1px #cccccc, 0 1px #fff; }
+      .linked.vertical .entry:first-child:insensitive {
+        background-color: transparent;
+        border-style: solid;
+        border-width: 1px;
+        background-image: linear-gradient(to bottom, #f7f7f7, #fff 90%);
+        color: #7f7f7f;
+        border-color: #7f7f7f;
+        background-image: linear-gradient(to bottom, white);
+        box-shadow: 0 1px #fff;
+        border-bottom-color: gainsboro; }
+        .linked.vertical .entry:first-child:insensitive:backdrop {
+          background-color: transparent;
+          border-style: solid;
+          border-width: 1px;
+          background-image: linear-gradient(to bottom, #f7f7f7, #fff 90%);
+          color: #7f7f7f;
+          background-image: linear-gradient(to bottom, #fff);
+          box-shadow: 0 1px rgba(255, 255, 255, 0);
+          border-bottom-color: gainsboro;
+          border-top-style: solid; }
+      .linked.vertical .entry:first-child:backdrop {
+        background-color: transparent;
+        border-style: solid;
+        border-width: 1px;
+        background-image: linear-gradient(to bottom, #f7f7f7, #fff 90%);
+        color: #000;
+        background-image: linear-gradient(to bottom, #fff);
+        box-shadow: 0 1px rgba(255, 255, 255, 0);
+        border-bottom-color: gainsboro; }
+    .linked.vertical .entry:last-child {
+      background-color: transparent;
+      border-style: solid;
+      border-width: 1px;
+      background-image: linear-gradient(to bottom, #f7f7f7, #fff 90%);
+      border-color: #7f7f7f;
+      box-shadow: inset 0 2px 2px -2px #7f7f7f, 0 1px #fff;
+      border-top-width: 0;
+      background-image: linear-gradient(to bottom, #fff);
+      box-shadow: none; }
+      .linked.vertical .entry:last-child:focus {
+        border-color: entry_focus_border(#000);
+        box-shadow: entry_focus_glow(#000), 0 -1px 0 0 entry_focus_border(#000), _widget_edge(); }
+      .linked.vertical .entry:last-child:insensitive {
+        background-color: transparent;
+        border-style: solid;
+        border-width: 1px;
+        background-image: linear-gradient(to bottom, #f7f7f7, #fff 90%);
+        color: #7f7f7f;
+        border-color: #7f7f7f;
+        background-image: linear-gradient(to bottom, white);
+        box-shadow: 0 1px #fff; }
+        .linked.vertical .entry:last-child:insensitive:backdrop {
+          background-color: transparent;
+          border-style: solid;
+          border-width: 1px;
+          background-image: linear-gradient(to bottom, #f7f7f7, #fff 90%);
+          color: #7f7f7f;
+          background-image: linear-gradient(to bottom, #fff);
+          box-shadow: 0 1px rgba(255, 255, 255, 0); }
+      .linked.vertical .entry:last-child:backdrop {
+        background-color: transparent;
+        border-style: solid;
+        border-width: 1px;
+        background-image: linear-gradient(to bottom, #f7f7f7, #fff 90%);
+        color: #000;
+        background-image: linear-gradient(to bottom, #fff);
+        box-shadow: 0 1px rgba(255, 255, 255, 0); }
   .entry.error {
     color: #cc0000;
     border-color: #cc0000; }
@@ -554,7 +677,7 @@
   border-radius: 3px;
   border-style: solid; }
 
-.osd .button, .osd .button:hover, .osd .button:active, .osd .button:checked, .osd .button:insensitive, .osd .button:backdrop, .inline-toolbar .button, .inline-toolbar .button:backdrop, .linked .button, .linked .button:backdrop, .linked > GtkComboBox > .button:dir(ltr) {
+.osd .button, .osd .button:hover, .osd .button:active, .osd .button:checked, .osd .button:insensitive, .osd .button:backdrop, .inline-toolbar .button, .inline-toolbar .button:backdrop, .linked .button, .linked .button:hover, .linked .button:active, .linked .button:checked, .linked .button:backdrop, .linked > GtkComboBox > .button:dir(ltr) {
   border-radius: 0;
   border-left-style: none; }
   .osd .button:dir(rtl), .inline-toolbar .button:dir(rtl), .linked .button:dir(rtl), .linked > GtkComboBox > .button:dir(rtl) {
@@ -570,6 +693,24 @@
   .osd .button:last-child:dir(rtl), .inline-toolbar .button:last-child:dir(rtl), .linked .button:last-child:dir(rtl), .linked > GtkComboBox:last-child > .button:dir(rtl) {
     border-right-style: solid; }
 .osd .button:only-child, .inline-toolbar .button:only-child, .linked .button:only-child, .linked > GtkComboBox:only-child > .button {
+  border-radius: 3px;
+  border-style: solid; }
+
+.linked.vertical .entry, .linked.vertical .entry:focus, .linked.vertical .entry:insensitive, .linked.vertical .entry:insensitive:backdrop, .linked.vertical .entry:backdrop, .linked.vertical .button, .linked.vertical .button:hover, .linked.vertical .button:active, .linked.vertical .button:checked, .linked.vertical .button:backdrop, .linked.vertical > GtkComboBoxText > .button,
+.linked.vertical > GtkComboBox > .button {
+  border-left-style: solid;
+  border-top-style: none;
+  border-radius: 0; }
+
+.linked.vertical .entry:first-child, .linked.vertical .button:first-child, .linked.vertical > GtkComboBoxText:first-child > .button,
+.linked.vertical > GtkComboBox:first-child > .button {
+  border-style: solid;
+  border-radius: 3px 3px 0 0; }
+.linked.vertical .entry:last-child, .linked.vertical .button:last-child, .linked.vertical > GtkComboBoxText:last-child > .button,
+.linked.vertical > GtkComboBox:last-child > .button {
+  border-radius: 0 0 3px 3px; }
+.linked.vertical .entry:only-child, .linked.vertical .button:only-child, .linked.vertical > GtkComboBoxText:only-child > .button,
+.linked.vertical > GtkComboBox:only-child > .button {
   border-radius: 3px;
   border-style: solid; }
 
