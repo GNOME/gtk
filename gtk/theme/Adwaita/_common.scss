@@ -1349,7 +1349,7 @@ GtkTreeView.view {
   -GtkTreeView-tree-line-pattern: '';
   -GtkTreeView-expander-size: 16;
 
-  border-left-color: mix($fg_color, $base_color, 0.5); // this is actually the tree lines color,
+  border-left-color: mix($fg_color, $base_color, 50%); // this is actually the tree lines color,
   border-top-color: $bg_color;                         // while this is the grid lines color, better then nothing
 
   &:selected,
@@ -1357,7 +1357,7 @@ GtkTreeView.view {
   &:selected:hover { border-radius: 0; } // rest border radius in lists
 
   &:selected, &:backdrop:selected {
-    border-left-color: mix($selected_fg_color, $selected_bg_color, 0.5);
+    border-left-color: mix($selected_fg_color, $selected_bg_color, 50%);
     border-top-color: transparentize($fg_color, 0.9); // doesn't work unfortunatelly
   }
 
@@ -1371,7 +1371,7 @@ GtkTreeView.view {
   }
 
   &:backdrop {
-    border-left-color: mix($backdrop_fg_color, $backdrop_bg_color, 0.5);
+    border-left-color: mix($backdrop_fg_color, $backdrop_bg_color, 50%);
     border-top: $backdrop_bg_color;
   }
 

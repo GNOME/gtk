@@ -1961,12 +1961,12 @@ GtkTreeView.view {
   -GtkTreeView-tree-line-width: 1;
   -GtkTreeView-tree-line-pattern: '';
   -GtkTreeView-expander-size: 16;
-  border-left-color: #fdfdfd;
+  border-left-color: #96999a;
   border-top-color: #ededed; }
   GtkTreeView.view:selected, GtkTreeView.view:selected:focus, GtkTreeView.view:selected:hover {
     border-radius: 0; }
   GtkTreeView.view:selected, GtkTreeView.view:backdrop:selected {
-    border-left-color: #4a90d9;
+    border-left-color: #a4c7ec;
     border-top-color: rgba(46, 52, 54, 0.1); }
   GtkTreeView.view:insensitive {
     color: #8d9091; }
@@ -1977,7 +1977,7 @@ GtkTreeView.view {
     GtkTreeView.view:insensitive:backdrop {
       color: #c7c7c7; }
   GtkTreeView.view:backdrop {
-    border-left-color: #ececec;
+    border-left-color: #bdbebf;
     border-top: #ededed; }
   GtkTreeView.view.expander {
     -gtk-icon-source: -gtk-icontheme("pan-end-symbolic");
