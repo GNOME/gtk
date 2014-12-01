@@ -951,10 +951,12 @@ event_close_to_indicator (GtkScrolledWindow *sw,
                           GdkEvent          *event)
 {
   GtkAllocation alloc, indicator_alloc;
+  GtkScrolledWindowPrivate *priv;
   GtkWidget *event_widget;
   gint win_x, win_y;
   gdouble x, y;
 
+  priv = sw->priv;
   event_widget = gtk_get_event_widget (event);
   gdk_event_get_coords (event, &x, &y);
 
@@ -975,14 +977,12 @@ event_close_to_indicator (GtkScrolledWindow *sw,
       y = ycoord;
     }
 
-  if (x < 0 || x > alloc.width ||
-      y < 0 || y > alloc.height)
-    return FALSE;
-
-  if (x > win_x - 50 &&
-      x < win_x + indicator_alloc.width + 50 &&
-      y > win_y - 50 &&
-      y < win_y + indicator_alloc.height + 50)
+  if ((indicator == &priv->hindicator &&
+       y >= win_y - 50 &&
+       y < win_y + indicator_alloc.height + 50) ||
+      (indicator == &priv->vindicator &&
+       x >= win_x - 50 &&
+       x < win_x + indicator_alloc.width + 50))
     return TRUE;
 
   return FALSE;
