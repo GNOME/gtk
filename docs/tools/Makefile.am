@@ -34,8 +34,8 @@ doc_shooter_SOURCES=	\
 	shooter.c	\
 	widgets.c	\
 	widgets.h	\
-	$(top_srcdir)/tests/gtkgears.c \
-	$(top_srcdir)/tests/gtkgears.h
+	../../tests/gtkgears.c \
+	../../tests/gtkgears.h
 
 clean-local:
 	for file in *.png; do \
