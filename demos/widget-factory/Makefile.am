@@ -47,7 +47,7 @@ dist_appsicon32_DATA = data/32x32/gtk3-widget-factory.png data/32x32/gtk3-widget
 dist_appsicon48_DATA = data/48x48/gtk3-widget-factory.png data/48x48/gtk3-widget-factory-symbolic.symbolic.png
 dist_appsicon256_DATA = data/256x256/gtk3-widget-factory.png data/256x256/gtk3-widget-factory-symbolic.symbolic.png
 
-update_icon_cache = $(GTK_UPDATE_ICON_CACHE) --ignore-theme-index --force
+update_icon_cache = gtk-update-icon-cache --ignore-theme-index --force
 
 install-data-hook: install-update-icon-cache
 uninstall-hook: uninstall-update-icon-cache
