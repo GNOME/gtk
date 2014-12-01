@@ -22,8 +22,8 @@ GTK+ requires the following packages:
 Simple install procedure
 ========================
 
-  % tar xf gtk+-@GTK_VERSION@.tar.xz   # unpack the sources
-  % cd gtk+-@GTK_VERSION@              # change to the toplevel directory
+  % tar xf gtk+-@GTK_VERSION@.tar.xz          # unpack the sources
+  % cd gtk+-@GTK_VERSION@                     # change to the toplevel directory
   % ./configure                        # run the `configure' script
   % make                               # build GTK+
   [ Become root if necessary ]
