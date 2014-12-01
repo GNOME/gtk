@@ -59,6 +59,12 @@
 
 #include "deprecated/gtkrc.h"
 
+#ifdef GDK_WINDOWING_QUARTZ
+#define PRINT_PREVIEW_COMMAND "open -a /Applications/Preview.app %f"
+#else
+#define PRINT_PREVIEW_COMMAND "evince --unlink-tempfile --preview --print-settings %s %f"
+#endif
+
 /**
  * SECTION:gtksettings
  * @Short_description: Sharing settings between applications
@@ -987,7 +993,7 @@ gtk_settings_class_init (GtkSettingsClass *class)
                                              g_param_spec_string ("gtk-print-preview-command",
                                                                   P_("Default command to run when displaying a print preview"),
                                                                   P_("Command to run when displaying a print preview"),
-                                                                  GTK_PRINT_PREVIEW_COMMAND,
+                                                                  PRINT_PREVIEW_COMMAND,
                                                                   GTK_PARAM_READWRITE),
                                              NULL);
   g_assert (result == PROP_PRINT_PREVIEW_COMMAND);

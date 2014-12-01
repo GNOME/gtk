@@ -399,7 +399,6 @@ if test "x$enable_quartz_backend" = xyes; then
   # Pull in gio-unix for GDesktopAppInfo usage, see at least
   # gdkapplaunchcontext-x11.c
   have_gio_unix=yes
-
 else
   AM_CONDITIONAL(USE_QUARTZ, false)
 fi

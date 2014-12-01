@@ -2,12 +2,6 @@ AUTOMAKE_OPTIONS = subdir-objects
 
 include $(top_srcdir)/Makefile.decl
 
-if USE_QUARTZ
-GTK_PRINT_PREVIEW_COMMAND="open -a /Applications/Preview.app %f"
-else
-GTK_PRINT_PREVIEW_COMMAND="evince --unlink-tempfile --preview --print-settings %s %f"
-endif
-
 AM_CPPFLAGS =						\
 	-DG_LOG_DOMAIN=\"Gtk\"				\
 	-DGTK_LIBDIR=\"$(libdir)\"			\
@@ -19,12 +13,11 @@ AM_CPPFLAGS =						\
 	-DGTK_HOST=\"$(host)\"				\
 	-DGTK_COMPILATION				\
 	-DGTK_PRINT_BACKENDS=\"$(GTK_PRINT_BACKENDS)\"	\
-	-DGTK_PRINT_PREVIEW_COMMAND=\"$(GTK_PRINT_PREVIEW_COMMAND)\"	\
+	-DGTK_PRINT_BACKEND_ENABLE_UNSUPPORTED		\
 	-I$(top_builddir)				\
 	-I$(top_builddir)/gtk				\
 	-I$(top_srcdir) 				\
 	-I$(top_srcdir)/gdk				\
-	-DGTK_PRINT_BACKEND_ENABLE_UNSUPPORTED		\
 	$(GMODULE_CFLAGS)				\
 	$(GTK_DEBUG_FLAGS)				\
 	$(GDK_HIDDEN_VISIBILITY_CFLAGS)			\
