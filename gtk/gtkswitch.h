@@ -63,6 +63,7 @@ struct _GtkSwitch
  * GtkSwitchClass:
  * @parent_class: The parent class.
  * @activate: An action signal and emitting it causes the switch to animate.
+ * @state_set: Class handler for the ::state-set signal.
  */
 struct _GtkSwitchClass
 {
