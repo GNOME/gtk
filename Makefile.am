@@ -10,7 +10,9 @@ EXTRA_DIST +=			\
 	autogen.sh		\
 	HACKING			\
 	README			\
+	README.in		\
 	INSTALL			\
+	INSTALL.in		\
 	NEWS.pre-1-0		\
 	README.commits		\
 	README.win32		\
@@ -28,8 +30,6 @@ MAINTAINERCLEANFILES = \
 	$(srcdir)/m4/gtk-doc.m4 \
 	$(srcdir)/INSTALL \
 	$(srcdir)/README \
-	$(srcdir)/omf.make \
-	$(srcdir)/xmldocs.make \
 	$(srcdir)/gtk-doc.make \
 	$(srcdir)/ChangeLog
 
@@ -45,7 +45,6 @@ gdk-x11-3.0.pc gdk-win32-3.0.pc gdk-quartz-3.0.pc gdk-broadway-3.0.pc gdk-waylan
 
 pkgconfigdir = $(libdir)/pkgconfig
 pkgconfig_DATA = gdk-3.0.pc gtk+-3.0.pc gail-3.0.pc
-
 pkgconfig_DATA += ${GDK_BACKENDS:%=gtk+-%-3.0.pc}
 pkgconfig_DATA += ${GDK_BACKENDS:%=gdk-%-3.0.pc}
 
@@ -79,7 +78,7 @@ distclean-local:
 
 ChangeLog:
 	$(AM_V_GEN) if test -d "$(srcdir)/.git"; then \
-	  (GIT_DIR=$(top_srcdir)/.git ./missing --run git log GTK_2_16_0^^.. --stat) | fmt --split-only > $@.tmp \
+	  (GIT_DIR=$(top_srcdir)/.git $(top_builddir)/build-aux/missing git log GTK_2_16_0^^.. --stat) | fmt --split-only > $@.tmp \
 	  && mv -f $@.tmp $@ \
 	  || ($(RM) $@.tmp; \
 	      echo Failed to generate ChangeLog, your ChangeLog may be outdated >&2; \
