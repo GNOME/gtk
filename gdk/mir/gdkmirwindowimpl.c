@@ -910,6 +910,37 @@ gdk_mir_window_impl_set_transient_for (GdkWindow *window,
   ensure_no_surface (window);
 }
 
+/* TODO: Remove once we have proper transient window support. */
+GdkWindow *
+_gdk_mir_window_get_transient_child (GdkWindow *window,
+                                     gint       x,
+                                     gint       y,
+                                     gint      *out_x,
+                                     gint      *out_y)
+{
+  GdkMirWindowImpl *impl = GDK_MIR_WINDOW_IMPL (window->impl);
+  GdkWindow *child = NULL;
+  GList *i;
+
+  if (x < window->x || x >= window->x + window->width ||
+      y < window->y || y >= window->y + window->height)
+    return NULL;
+
+  x -= window->x;
+  y -= window->y;
+
+  for (i = impl->transient_children; i && !child; i = i->next)
+    child = _gdk_mir_window_get_transient_child (i->data, x, y, out_x, out_y);
+
+  if (child)
+    return child;
+
+  *out_x = x;
+  *out_y = y;
+
+  return window;
+}
+
 static void
 gdk_mir_window_impl_get_frame_extents (GdkWindow    *window,
                                        GdkRectangle *rect)

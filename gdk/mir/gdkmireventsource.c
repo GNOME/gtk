@@ -459,7 +459,31 @@ gdk_mir_event_source_convert_events (GdkMirEventSource *source)
        * event was being dispatched...
        */
       if (window != NULL)
-        gdk_mir_event_source_queue_event (source->display, window, &event->event);
+        {
+          /* TODO: Remove once we have proper transient window support. */
+          if (event->event.type == mir_event_type_motion)
+            {
+              GdkWindow *child;
+              gint x;
+              gint y;
+
+              x = event->event.motion.pointer_coordinates[0].x;
+              y = event->event.motion.pointer_coordinates[0].y;
+
+              child = _gdk_mir_window_get_transient_child (window, x, y, &x, &y);
+
+              if (child && child != window)
+                {
+                  window = child;
+
+                  event->event.motion.pointer_count = MAX (event->event.motion.pointer_count, 1);
+                  event->event.motion.pointer_coordinates[0].x = x;
+                  event->event.motion.pointer_coordinates[0].y = y;
+                }
+            }
+
+          gdk_mir_event_source_queue_event (source->display, window, &event->event);
+        }
       else
         g_warning ("window was destroyed before event arrived...");
 
