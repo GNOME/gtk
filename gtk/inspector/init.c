@@ -46,9 +46,13 @@
 #include "visual.h"
 #include "window.h"
 
+#include "gtkmodulesprivate.h"
+
 void
 gtk_inspector_init (void)
 {
+  static GIOExtensionPoint *extension_point = NULL;
+
   g_type_ensure (GTK_TYPE_CELL_RENDERER_GRAPH);
   g_type_ensure (GTK_TYPE_GRAPH_DATA);
   g_type_ensure (GTK_TYPE_INSPECTOR_ACTIONS);
@@ -70,7 +74,25 @@ gtk_inspector_init (void)
   g_type_ensure (GTK_TYPE_INSPECTOR_STYLE_PROP_LIST);
   g_type_ensure (GTK_TYPE_INSPECTOR_VISUAL);
   g_type_ensure (GTK_TYPE_INSPECTOR_WINDOW);
-}
 
+  if (extension_point == NULL)
+    {
+      GIOModuleScope *scope;
+      gchar **paths;
+      int i;
+
+      extension_point = g_io_extension_point_register ("gtk-inspector-page");
+      g_io_extension_point_set_required_type (extension_point, GTK_TYPE_WIDGET);
+
+      paths = _gtk_get_module_path ("inspector");
+      scope = g_io_module_scope_new (G_IO_MODULE_SCOPE_BLOCK_DUPLICATES);
+
+      for (i = 0; paths[i] != NULL; i++)
+        g_io_modules_load_all_in_directory_with_scope (paths[i], scope);
+
+      g_strfreev (paths);
+      g_io_module_scope_free (scope);
+    }
+}
 
 // vim: set et sw=2 ts=2:

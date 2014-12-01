@@ -43,6 +43,7 @@ typedef struct
 
   GtkWidget *top_stack;
   GtkWidget *object_stack;
+  GtkWidget *button_stack;
   GtkWidget *object_tree;
   GtkWidget *object_id;
   GtkWidget *object_details;
@@ -67,6 +68,8 @@ typedef struct
   GtkWidget *invisible;
   GtkWidget *selected_widget;
   GtkWidget *flash_widget;
+
+  GList *extra_pages;
 
   gboolean grabbed;
 

@@ -47,6 +47,7 @@
 #include "gtkbutton.h"
 #include "gtkstack.h"
 #include "gtktreeviewcolumn.h"
+#include "gtkmodulesprivate.h"
 #include "gtkwindow.h"
 #include "gtkwindowgroup.h"
 
@@ -56,6 +57,8 @@ static gboolean
 set_selected_object (GtkInspectorWindow *iw,
                      GObject            *selected)
 {
+  GList *l;
+
   if (!gtk_inspector_prop_list_set_object (GTK_INSPECTOR_PROP_LIST (iw->prop_list), selected))
     return FALSE;
 
@@ -72,6 +75,9 @@ set_selected_object (GtkInspectorWindow *iw,
   gtk_inspector_actions_set_object (GTK_INSPECTOR_ACTIONS (iw->actions), selected);
   gtk_inspector_menu_set_object (GTK_INSPECTOR_MENU (iw->menu), selected);
   gtk_inspector_gestures_set_object (GTK_INSPECTOR_GESTURES (iw->gestures), selected);
+
+  for (l = iw->extra_pages; l != NULL; l = l->next)
+    g_object_set (l->data, "object", selected, NULL);
 
   return TRUE;
 }
@@ -129,9 +135,42 @@ open_object_details (GtkWidget *button, GtkInspectorWindow *iw)
 static void
 gtk_inspector_window_init (GtkInspectorWindow *iw)
 {
+  GIOExtensionPoint *extension_point;
+  GList *l, *extensions;
+
   gtk_widget_init_template (GTK_WIDGET (iw));
 
   gtk_window_group_add_window (gtk_window_group_new (), GTK_WINDOW (iw));
+
+  extension_point = g_io_extension_point_lookup ("gtk-inspector-page");
+  extensions = g_io_extension_point_get_extensions (extension_point);
+
+  for (l = extensions; l != NULL; l = l->next)
+    {
+      GIOExtension *extension = l->data;
+      GType type;
+      GtkWidget *widget;
+      char *title;
+      GtkWidget *box;
+
+      type = g_io_extension_get_type (extension);
+
+      widget = g_object_new (type, NULL);
+
+      iw->extra_pages = g_list_prepend (iw->extra_pages, widget);
+
+      g_object_get (widget, "title", &title, NULL);
+      gtk_stack_add_titled (GTK_STACK (iw->top_stack), widget,
+                            g_io_extension_get_name (extension),
+                            title);
+      box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
+      gtk_stack_add_named (GTK_STACK (iw->button_stack), box,
+                           g_io_extension_get_name (extension));
+
+      gtk_widget_show (box);
+      gtk_widget_show (widget);
+    }
+
 }
 
 static void
@@ -155,6 +194,7 @@ gtk_inspector_window_class_init (GtkInspectorWindowClass *klass)
   gtk_widget_class_set_template_from_resource (widget_class, "/org/gtk/libgtk/inspector/window.ui");
 
   gtk_widget_class_bind_template_child (widget_class, GtkInspectorWindow, top_stack);
+  gtk_widget_class_bind_template_child (widget_class, GtkInspectorWindow, button_stack);
   gtk_widget_class_bind_template_child (widget_class, GtkInspectorWindow, object_stack);
   gtk_widget_class_bind_template_child (widget_class, GtkInspectorWindow, object_tree);
   gtk_widget_class_bind_template_child (widget_class, GtkInspectorWindow, object_details);
