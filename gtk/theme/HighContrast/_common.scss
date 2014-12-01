@@ -746,18 +746,8 @@ GtkComboBox {
     -GtkWidget-wide-separators: true;
     -GtkWidget-separator-width: 1px;
     border-width: 0 1px;
-    border-image: linear-gradient(to bottom,
-                                  transparentize($borders_color,1),
-                                  $borders_color 30%,
-                                  $borders_color 70%,
-                                  transparentize($borders_color,1) 100%)
-                  0 1 / 0 1px stretch; //FIXME use a proper color
-    &:backdrop {
-      border-image: linear-gradient(to bottom,
-                                    transparentize($backdrop_borders_color,
-                                                   0.5))
-                    0 1 / 1px 1px;  //FIXME use a proper color
-    }
+    border-color: $fg_color;
+    border-style: solid;
   }
   &.selection-mode {
     color: darken($selected_bg_color, 15%);
@@ -938,12 +928,8 @@ GtkTreeView.view.progressbar { //Progressbar in treeview cells
     background-color: transparent;
   }
   .separator {
-    font-size: 80%;
-    font-weight: bold;
-    color: mix($fg_color, $bg_color, 20%);
-    text-shadow: none;
+    color: $fg_color;
     background-color: transparent;
-    icon-shadow: none;
     border: 0;
   }
   .button.flat,
@@ -1649,7 +1635,7 @@ GtkScrolledWindow {
 .separator {
   // always disable separators
   // -GtkWidget-wide-separators: true;
-  color: transparentize(black, 0.9);
+  color: $fg_color;
 
   // Font and File button separators
   GtkFileChooserButton &,

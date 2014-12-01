@@ -831,11 +831,8 @@ GtkComboBox {
     -GtkWidget-wide-separators: true;
     -GtkWidget-separator-width: 1px;
     border-width: 0 1px;
-    border-image: linear-gradient(to bottom, rgba(127, 127, 127, 0), #7f7f7f 30%, #7f7f7f 70%, rgba(127, 127, 127, 0) 100%) 0 1/0 1px stretch; }
-    .titlebar .header-bar-separator:backdrop, .titlebar > GtkBox > .separator.vertical:backdrop,
-    .header-bar .header-bar-separator:backdrop,
-    .header-bar > GtkBox > .separator.vertical:backdrop {
-      border-image: linear-gradient(to bottom, rgba(139, 139, 139, 0.5)) 0 1/1px 1px; }
+    border-color: #000;
+    border-style: solid; }
   .titlebar.selection-mode,
   .header-bar.selection-mode {
     color: black;
@@ -1048,12 +1045,8 @@ GtkTreeView.view.progressbar {
   .popover > .list, .popover > .view, .popover > .toolbar {
     background-color: transparent; }
   .popover .separator {
-    font-size: 80%;
-    font-weight: bold;
-    color: #cccccc;
-    text-shadow: none;
+    color: #000;
     background-color: transparent;
-    icon-shadow: none;
     border: 0; }
   .popover .button.flat,
   .popover .button.flat:hover {
@@ -1769,7 +1762,7 @@ GtkScrolledWindow GtkViewport.frame {
   border-style: none; }
 
 .separator {
-  color: rgba(0, 0, 0, 0.1); }
+  color: #000; }
   GtkFileChooserButton .separator, GtkFontButton .separator {
     -GtkWidget-wide-separators: true;
     -GtkWidget-horizontal-separator: 0;
