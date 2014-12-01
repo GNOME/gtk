@@ -279,13 +279,6 @@ AC_ARG_ENABLE(installed_tests,
               [enable_installed_tests=no])
 AM_CONDITIONAL(BUILDOPT_INSTALL_TESTS, test x$enable_installed_tests = xyes)
 
-AC_ARG_ENABLE(gtk2-dependency,
-              [AS_HELP_STRING([--enable-gtk2-dependency],
-                              [Do not build gtk-update-icon-cache and other shared tools])],,
-              [enable_gtk2_dependency=no])
-
-AM_CONDITIONAL(BUILD_ICON_CACHE, [test "x$enable_gtk2_dependency" = xno])
-
 AC_ARG_ENABLE(xkb,
               [AS_HELP_STRING([--enable-xkb],
                               [support XKB extension [default=maybe]])],,
@@ -964,44 +957,6 @@ AC_CHECK_HEADER(sys/sysinfo.h,
 dnl Look for a host system's gdk-pixbuf-csource if we are cross-compiling
 
 AM_CONDITIONAL(CROSS_COMPILING, test $cross_compiling = yes)
-
-AS_IF([test "x$enable_gtk2_dependency" = xyes],
-      [AC_PATH_PROG(GTK_UPDATE_ICON_CACHE, gtk-update-icon-cache, no)
-       if test x$GTK_UPDATE_ICON_CACHE = xno; then
-         AC_MSG_ERROR([
-*** --enable-gtk2-dependency has been set but no existing
-*** `gtk-update-icon-cache` has been found in the path.])
-       fi],
-
-      [test "x$cross_compiling" = xyes],
-      [# If no GTK+2 dependency and cross compiling, we need to find a host gdk-pixbuf.
-       # pkg.m4 blocks all variable starting with PKG, so allow this one
-       m4_pattern_allow([PKG_CONFIG_FOR_BUILD])
-
-       AS_IF([test x$PKG_CONFIG_FOR_BUILD = x],
-             [AC_MSG_ERROR([You must define PKG_CONFIG_FOR_BUILD when cross compiling])])
-
-       AC_MSG_CHECKING([for native gdk-pixbuf])
-       AS_IF([AC_RUN_LOG([$PKG_CONFIG_FOR_BUILD --exists --print-errors gdk-pixbuf-2.0])],
-             [AC_MSG_RESULT([yes])],
-             [AC_MSG_ERROR([native gdk-pixbuf not found])])
-
-       NATIVE_GDKPIXBUF_CFLAGS=`$PKG_CONFIG_FOR_BUILD --cflags gdk-pixbuf-2.0`
-       NATIVE_GDKPIXBUF_LIBS=`$PKG_CONFIG_FOR_BUILD --libs gdk-pixbuf-2.0`
-       # This is the native gtk-update-icon-cache which will be used at
-       # build time, NOT the one installed on the target host.
-       GTK_UPDATE_ICON_CACHE="`cd $builddir && pwd`/gtk/native/native-update-icon-cache$BUILD_EXEEXT"
-       AC_SUBST(NATIVE_GDKPIXBUF_CFLAGS)
-       AC_SUBST(NATIVE_GDKPIXBUF_LIBS)
-       AC_SUBST(GTK_UPDATE_ICON_CACHE)],
-
-      [# In native compiling case, the gtk-update-icon-cache installed
-       # is the same as the one used during build.
-       GTK_UPDATE_ICON_CACHE="\$(abs_top_builddir)/gtk/gtk-update-icon-cache$EXEEXT"
-       AC_SUBST(GTK_UPDATE_ICON_CACHE)]
-)
-
-AM_CONDITIONAL(USE_EXTERNAL_ICON_CACHE, [test "x$enable_gtk2_dependency" = xyes])
 
 ########################################
 # Windowing system checks
@@ -1943,7 +1898,6 @@ gtk/makefile.msc
 gtk/gtkversion.h
 gtk/gtk-win32.rc
 gtk/libgtk3.manifest
-gtk/native/Makefile
 util/Makefile
 libgail-util/Makefile
 modules/Makefile

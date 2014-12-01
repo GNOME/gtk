@@ -19,8 +19,6 @@ else
 GTK_PRINT_PREVIEW_COMMAND="evince --unlink-tempfile --preview --print-settings %s %f"
 endif
 
-SUBDIRS = native .
-
 if HAVE_CLOUDPRINT
 if HAVE_PAPI_CUPS
 GTK_PRINT_BACKENDS=file,papi,cups,cloudprint
@@ -1435,10 +1433,8 @@ endif
 bin_PROGRAMS = \
 	gtk-query-immodules-3.0	\
 	gtk-launch \
-	gtk-encode-symbolic-svg
-
-if BUILD_ICON_CACHE
-bin_PROGRAMS += gtk-update-icon-cache
+	gtk-encode-symbolic-svg \
+	gtk-update-icon-cache
 
 if OS_WIN32
 
@@ -1477,17 +1473,14 @@ $(GTK_UPDATE_ICON_CACHE_MANIFEST_OBJECT): $(GTK_UPDATE_ICON_CACHE_RC) $(GTK_UPDA
 	$(WINDRES) --input $< --output $@ --output-format=coff
 
 endif
-endif
 
 gtk_query_immodules_3_0_DEPENDENCIES = $(DEPS)
 gtk_query_immodules_3_0_LDADD = $(LDADDS) $(GMODULE_LIBS)
 gtk_query_immodules_3_0_SOURCES = queryimmodules.c
 
-if BUILD_ICON_CACHE
 gtk_update_icon_cache_LDADD = $(GDK_PIXBUF_LIBS) $(GTK_UPDATE_ICON_CACHE_MANIFEST_OBJECT)
 gtk_update_icon_cache_DEPENDENCIES = $(GTK_UPDATE_ICON_CACHE_MANIFEST_OBJECT)
 gtk_update_icon_cache_SOURCES = updateiconcache.c
-endif
 
 gtk_encode_symbolic_svg_LDADD = $(GDK_PIXBUF_LIBS) $(top_builddir)/gdk/libgdk-3.la $(GTK_DEP_LIBS)
 gtk_encode_symbolic_svg_SOURCES = encodesymbolic.c
