@@ -1,80 +1,79 @@
 :not(*) {
-  color: rgb(255,99,71);
-}
-
-:not(GtkButton) {
-  color: rgb(255,99,71);
-}
-
-:not(:hover) {
-  color: rgb(255,99,71);
-}
-
-:not(.yourmom) {
-  color: rgb(255,99,71);
-}
-
-:not(#yourmom) {
-  color: rgb(255,99,71);
+  font-size: 1px;
 }
 
 :not(*) {
-  color: rgb(255,99,71);
-}
-
-:not(GtkButton) {
-  color: rgb(255,99,71);
-}
-
-:not(:hover) {
-  color: rgb(255,99,71);
-}
-
-:not(.yourmom) {
-  color: rgb(255,99,71);
-}
-
-:not(#yourmom) {
-  color: rgb(255,99,71);
+  font-size: 6px;
 }
 
 :not(*) {
-  color: rgb(255,99,71);
-}
-
-:not(GtkButton) {
-  color: rgb(255,99,71);
-}
-
-:not(:hover) {
-  color: rgb(255,99,71);
-}
-
-:not(.yourmom) {
-  color: rgb(255,99,71);
-}
-
-:not(#yourmom) {
-  color: rgb(255,99,71);
+  font-size: 11px;
 }
 
 :not(*) {
-  color: rgb(255,99,71);
+  font-size: 16px;
 }
 
 :not(GtkButton) {
-  color: rgb(255,99,71);
+  font-size: 2px;
+}
+
+:not(GtkButton) {
+  font-size: 7px;
+}
+
+:not(GtkButton) {
+  font-size: 12px;
+}
+
+:not(GtkButton) {
+  font-size: 17px;
 }
 
 :not(:hover) {
-  color: rgb(255,99,71);
+  font-size: 3px;
 }
 
 :not(.yourmom) {
-  color: rgb(255,99,71);
+  font-size: 4px;
+}
+
+:not(:hover) {
+  font-size: 8px;
+}
+
+:not(.yourmom) {
+  font-size: 9px;
+}
+
+:not(:hover) {
+  font-size: 13px;
+}
+
+:not(.yourmom) {
+  font-size: 14px;
+}
+
+:not(:hover) {
+  font-size: 18px;
+}
+
+:not(.yourmom) {
+  font-size: 19px;
 }
 
 :not(#yourmom) {
-  color: rgb(255,99,71);
+  font-size: 5px;
 }
 
+:not(#yourmom) {
+  font-size: 10px;
+}
+
+:not(#yourmom) {
+  font-size: 15px;
+}
+
+:not(#yourmom) {
+  font-size: 20px;
+}

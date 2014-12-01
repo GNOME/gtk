@@ -1,80 +1,80 @@
 :not(*) {
-  color: tomato;
+  font-size: 1px;
 }
 
 :not(GtkButton) {
-  color: tomato;
+  font-size: 2px;
 }
 
 :not(:hover) {
-  color: tomato;
+  font-size: 3px;
 }
 
 :not(.yourmom) {
-  color: tomato;
+  font-size: 4px;
 }
 
 :not(#yourmom) {
-  color: tomato;
+  font-size: 5px;
 }
 
 :not( *) {
-  color: tomato;
+  font-size: 6px;
 }
 
 :not( GtkButton) {
-  color: tomato;
+  font-size: 7px;
 }
 
 :not(    :hover) {
-  color: tomato;
+  font-size: 8px;
 }
 
 :not(    .yourmom) {
-  color: tomato;
+  font-size: 9px;
 }
 
 :not( #yourmom) {
-  color: tomato;
+  font-size: 10px;
 }
 
 :not(* ) {
-  color: tomato;
+  font-size: 11px;
 }
 
 :not(GtkButton  ) {
-  color: tomato;
+  font-size: 12px;
 }
 
 :not(:hover      ) {
-  color: tomato;
+  font-size: 13px;
 }
 
 :not(.yourmom       ) {
-  color: tomato;
+  font-size: 14px;
 }
 
 :not(#yourmom      ) {
-  color: tomato;
+  font-size: 15px;
 }
 
 :not( * ) {
-  color: tomato;
+  font-size: 16px;
 }
 
 :not( GtkButton   ) {
-  color: tomato;
+  font-size: 17px;
 }
 
 :not(  :hover   ) {
-  color: tomato;
+  font-size: 18px;
 }
 
 :not(       .yourmom                    ) {
-  color: tomato;
+  font-size: 19px;
 }
 
 :not(                   #yourmom ) {
-  color: tomato;
+  font-size: 20px;
 }
 
