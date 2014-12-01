@@ -123,6 +123,26 @@
   background-color: transparentize($selected_bg_color,0.8);
 }
 
+// This is used by GtkScrolledWindow, when content is touch-dragged past boundaries.
+.overshoot {
+  &.top {
+    @include overshoot(top);
+    &:backdrop { @include overshoot(top, backdrop); }
+  }
+  &.bottom {
+    @include overshoot(bottom);
+    &:backdrop { @include overshoot(bottom, backdrop); }
+  }
+  &.left {
+    @include overshoot(left);
+    &:backdrop { @include overshoot(left, backdrop); }
+  }
+  &.right {
+    @include overshoot(right);
+    &:backdrop { @include overshoot(right, backdrop); }
+  }
+}
+
 GtkLabel {
   &:selected,
   &:selected:focus,

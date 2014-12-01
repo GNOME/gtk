@@ -109,6 +109,71 @@
   border: 1px solid #000;
   background-color: rgba(0, 0, 0, 0.2); }
 
+.overshoot.top {
+  background-image: -gtk-gradient(radial, center top, 0, center top, 0.5, to(black), to(transparent)), -gtk-gradient(radial, center top, 0, center top, 0.6, from(rgba(0, 0, 0, 0.5)), to(transparent));
+  background-size: 100% 5%, 100% 100%;
+  background-repeat: no-repeat;
+  background-position: center top;
+  background-color: transparent;
+  border: none;
+  box-shadow: none; }
+  .overshoot.top:backdrop {
+    background-image: -gtk-gradient(radial, center top, 0, center top, 0.5, to(#8b8b8b), to(rgba(139, 139, 139, 0)));
+    background-size: 100% 5%;
+    background-repeat: no-repeat;
+    background-position: center top;
+    background-color: transparent;
+    border: none;
+    box-shadow: none; }
+.overshoot.bottom {
+  background-image: -gtk-gradient(radial, center bottom, 0, center bottom, 0.5, to(black), to(transparent)), -gtk-gradient(radial, center bottom, 0, center bottom, 0.6, from(rgba(0, 0, 0, 0.5)), to(transparent));
+  background-size: 100% 5%, 100% 100%;
+  background-repeat: no-repeat;
+  background-position: center bottom;
+  background-color: transparent;
+  border: none;
+  box-shadow: none; }
+  .overshoot.bottom:backdrop {
+    background-image: -gtk-gradient(radial, center bottom, 0, center bottom, 0.5, to(#8b8b8b), to(rgba(139, 139, 139, 0)));
+    background-size: 100% 5%;
+    background-repeat: no-repeat;
+    background-position: center bottom;
+    background-color: transparent;
+    border: none;
+    box-shadow: none; }
+.overshoot.left {
+  background-image: -gtk-gradient(radial, left center, 0, left center, 0.5, to(black), to(transparent)), -gtk-gradient(radial, left center, 0, left center, 0.6, from(rgba(0, 0, 0, 0.5)), to(transparent));
+  background-size: 5% 100%, 100% 100%;
+  background-repeat: no-repeat;
+  background-position: left center;
+  background-color: transparent;
+  border: none;
+  box-shadow: none; }
+  .overshoot.left:backdrop {
+    background-image: -gtk-gradient(radial, left center, 0, left center, 0.5, to(#8b8b8b), to(rgba(139, 139, 139, 0)));
+    background-size: 5% 100%;
+    background-repeat: no-repeat;
+    background-position: left center;
+    background-color: transparent;
+    border: none;
+    box-shadow: none; }
+.overshoot.right {
+  background-image: -gtk-gradient(radial, right center, 0, right center, 0.5, to(black), to(transparent)), -gtk-gradient(radial, right center, 0, right center, 0.6, from(rgba(0, 0, 0, 0.5)), to(transparent));
+  background-size: 5% 100%, 100% 100%;
+  background-repeat: no-repeat;
+  background-position: right center;
+  background-color: transparent;
+  border: none;
+  box-shadow: none; }
+  .overshoot.right:backdrop {
+    background-image: -gtk-gradient(radial, right center, 0, right center, 0.5, to(#8b8b8b), to(rgba(139, 139, 139, 0)));
+    background-size: 5% 100%;
+    background-repeat: no-repeat;
+    background-position: right center;
+    background-color: transparent;
+    border: none;
+    box-shadow: none; }
+
 /*********************
  * Spinner Animation *
  *********************/
