@@ -199,6 +199,8 @@ static void
 start_flash (GtkInspectorWindow *iw,
              GtkWidget          *widget)
 {
+  clear_flash (iw);
+
   iw->flash_count = 1;
   iw->flash_widget = widget;
   g_signal_connect_after (widget, "draw", G_CALLBACK (draw_flash), iw);
@@ -447,11 +449,14 @@ void
 gtk_inspector_flash_widget (GtkInspectorWindow *iw,
                             GtkWidget          *widget)
 {
-  if (iw->flash_cnx != 0)
-    return;
-
   if (!gtk_widget_get_visible (widget) || !gtk_widget_get_mapped (widget))
     return;
+
+  if (iw->flash_cnx != 0)
+    {
+      g_source_remove (iw->flash_cnx);
+      iw->flash_cnx = 0;
+    }
 
   start_flash (iw, widget);
   iw->flash_cnx = g_timeout_add (150, (GSourceFunc) on_flash_timeout, iw);
