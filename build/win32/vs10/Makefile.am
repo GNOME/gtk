@@ -22,10 +22,6 @@ EXTRA_DIST +=	\
 	gtk3-demo-application.vcxproj.filters	\
 	gtk3-icon-browser.vcxproj	\
 	gtk3-icon-browser.vcxproj.filters	\
-	gtk-inspector.vcxproj	\
-	gtk-inspector.vcxprojin	\
-	gtk-inspector.vcxproj.filters	\
-	gtk-inspector.vcxproj.filtersin	\
 	gailutil.vcxproj	\
 	gailutil.vcxproj.filters	\
 	install.vcxproj	\
