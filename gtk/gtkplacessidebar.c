@@ -690,7 +690,7 @@ get_home_directory_uri (void)
   if (!home)
     return NULL;
 
-  return g_strconcat ("file://", home, NULL);
+  return g_filename_to_uri (home, NULL, NULL);
 }
 
 static gchar *
@@ -706,7 +706,7 @@ get_desktop_directory_uri (void)
   if (path_is_home_dir (name))
     return NULL;
 
-  return g_strconcat ("file://", name, NULL);
+  return g_filename_to_uri (name, NULL, NULL);
 }
 
 static gboolean
