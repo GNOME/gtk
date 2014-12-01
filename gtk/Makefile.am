@@ -65,7 +65,6 @@ AM_CPPFLAGS =						\
 	-I$(top_builddir)/gtk				\
 	-I$(top_srcdir) 				\
 	-I$(top_srcdir)/gdk				\
-	-DGTK_FILE_SYSTEM_ENABLE_UNSUPPORTED		\
 	-DGTK_PRINT_BACKEND_ENABLE_UNSUPPORTED		\
 	$(GMODULE_CFLAGS)				\
 	$(GTK_DEBUG_FLAGS)				\
@@ -1365,7 +1364,6 @@ install-data-local: install-ms-lib install-def-file install-mac-key-theme
 	$(INSTALL_DATA) $(srcdir)/gtk-keys.css.emacs $(DESTDIR)$(datadir)/themes/Emacs/gtk-3.0/gtk-keys.css
 
 uninstall-local: uninstall-ms-lib uninstall-def-file uninstall-mac-key-theme
-	rm -f $(DESTDIR)$(datadir)/themes/Raleigh/gtk-3.0/gtk.css
 	rm -f $(DESTDIR)$(datadir)/themes/Default/gtk-3.0/gtk-keys.css
 	rm -f $(DESTDIR)$(datadir)/themes/Emacs/gtk-3.0/gtk-keys.css
 
