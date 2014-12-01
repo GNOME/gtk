@@ -1,3 +1,5 @@
+AUTOMAKE_OPTIONS = subdir-objects
+
 include $(top_srcdir)/Makefile.decl
 
 AM_CPPFLAGS = \
