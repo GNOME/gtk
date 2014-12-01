@@ -79,6 +79,9 @@ Release notes for 3.16
 * GTK+ now includes an OpenGL rendering widget. To support GL on various
   platforms, GTK+ uses libepoxy.
 
+* GTK+ no longer uses gtk-update-icon-cache during its build. The
+  --enable-gtk2-dependency configure option has been removed.
+
 Release notes for 3.14
 ======================
 

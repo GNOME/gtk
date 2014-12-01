@@ -417,11 +417,6 @@ How to compile GTK+ itself
           </group>
           <sbr/>
           <group>
-            <arg choice="plain">--enable-gtk2-dependency</arg>
-            <arg choice="plain">--disable-gtk2-dependency</arg>
-          </group>
-          <sbr/>
-          <group>
             <arg choice="plain">--enable-installed-tests</arg>
             <arg choice="plain">--disable-installed-tests</arg>
           </group>
@@ -634,19 +629,6 @@ How to compile GTK+ itself
         <para>
           Build with or without introspection support.
           The default is 'auto'.
-        </para>
-      </formalpara>
-
-      <formalpara>
-        <title><systemitem>--enable-gtk2-dependency</systemitem> or
-           <systemitem>--disable-gtk2-dependency</systemitem></title>
-
-        <para>
-          Whether to rely on an exiting gtk-update-icon-cache utility
-          instead of building our own. Distributions which are shipping
-          both GTK+ 2.x and GTK+ 3 may want to use this option to
-          avoid file conflicts between these packages.
-          The default is to build gtk-update-icon-cache.
         </para>
       </formalpara>
 
