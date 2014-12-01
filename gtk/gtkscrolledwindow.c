@@ -177,6 +177,7 @@ typedef struct
   gint64     start_time;
   gint64     end_time;
   guint      tick_id;
+  guint      over_timeout_id;
 } Indicator;
 
 struct _GtkScrolledWindowPrivate
@@ -934,6 +935,12 @@ indicator_set_over (Indicator *indicator,
 {
   GtkStyleContext *context;
 
+  if (indicator->over_timeout_id)
+    {
+      g_source_remove (indicator->over_timeout_id);
+      indicator->over_timeout_id = 0;
+    }
+
   if (indicator->over == over)
     return;
 
@@ -992,6 +999,38 @@ event_close_to_indicator (GtkScrolledWindow *sw,
 }
 
 static gboolean
+enable_over_timeout_cb (gpointer user_data)
+{
+  Indicator *indicator = user_data;
+
+  indicator_set_over (indicator, TRUE);
+  return G_SOURCE_REMOVE;
+}
+
+static gboolean
+check_update_scrollbar_proximity (GtkScrolledWindow *sw,
+                                  Indicator         *indicator,
+                                  GdkEvent          *event)
+{
+  gboolean indicator_close;
+
+  indicator_close = event_close_to_indicator (sw, indicator, event);
+
+  if (indicator->over_timeout_id)
+    {
+      g_source_remove (indicator->over_timeout_id);
+      indicator->over_timeout_id = 0;
+    }
+
+  if (indicator_close)
+    indicator->over_timeout_id = gdk_threads_add_timeout (30, enable_over_timeout_cb, indicator);
+  else
+    indicator_set_over (indicator, FALSE);
+
+  return indicator_close;
+}
+
+static gboolean
 captured_event_cb (GtkWidget *widget,
                    GdkEvent  *event)
 {
@@ -1019,13 +1058,17 @@ captured_event_cb (GtkWidget *widget,
       indicator_start_fade (&priv->hindicator, 1.0);
       indicator_start_fade (&priv->vindicator, 1.0);
 
-      /* Check whether we're hovering close to the horizontal scrollbar */
-      indicator_close = event_close_to_indicator (sw, &priv->hindicator, event);
-      indicator_set_over (&priv->hindicator, indicator_close);
+      /* Check whether we're hovering close to the vertical scrollbar */
+      indicator_close = check_update_scrollbar_proximity (sw, &priv->vindicator,
+                                                          event);
 
-      /* Same for the vertical scrollbar */
-      indicator_close = event_close_to_indicator (sw, &priv->vindicator, event);
-      indicator_set_over (&priv->vindicator, indicator_close);
+      if (!indicator_close)
+        {
+          /* Otherwise check the vertical scrollbar */
+          check_update_scrollbar_proximity (sw, &priv->hindicator, event);
+        }
+      else
+        indicator_set_over (&priv->hindicator, FALSE);
     }
   else if (event->type == GDK_LEAVE_NOTIFY &&
            event->crossing.mode == GDK_CROSSING_UNGRAB)
@@ -1035,15 +1078,9 @@ captured_event_cb (GtkWidget *widget,
       scrollbar = gtk_get_event_widget (event);
 
       if (scrollbar == priv->hindicator.scrollbar)
-        {
-          indicator_close = event_close_to_indicator (sw, &priv->hindicator, event);
-          indicator_set_over (&priv->hindicator, indicator_close);
-        }
+        check_update_scrollbar_proximity (sw, &priv->hindicator, event);
       else if (scrollbar == priv->vindicator.scrollbar)
-        {
-          indicator_close = event_close_to_indicator (sw, &priv->vindicator, event);
-          indicator_set_over (&priv->vindicator, indicator_close);
-        }
+        check_update_scrollbar_proximity (sw, &priv->vindicator, event);
     }
 
   return GDK_EVENT_PROPAGATE;
@@ -3821,6 +3858,12 @@ remove_indicator (GtkScrolledWindow *scrolled_window,
     {
       g_source_remove (indicator->conceil_timer);
       indicator->conceil_timer = 0;
+    }
+
+  if (indicator->over_timeout_id)
+    {
+      g_source_remove (indicator->over_timeout_id);
+      indicator->over_timeout_id = 0;
     }
 
   if (indicator->tick_id)
