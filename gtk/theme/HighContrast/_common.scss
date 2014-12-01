@@ -1904,6 +1904,19 @@ GtkPaned {
   }
 }
 
+GtkPaned.wide { // this is for the paned with wide separator
+  -GtkPaned-handle-size: 5; // wider separator here
+  margin: 0; // no need of the invisible drag area so, reset margin
+  .pane-separator {
+    background-color: transparent;
+    border-style: none solid;
+    border-color: $borders_color;
+    border-width: 1px;
+  }
+  &.vertical .pane-separator { border-style: solid none;}
+  .pane-separator:backdrop { border-color: $backdrop_borders_color; }
+}
+
 /**************
  * GtkInfoBar *
  **************/

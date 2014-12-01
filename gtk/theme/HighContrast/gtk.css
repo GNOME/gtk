@@ -2047,6 +2047,19 @@ GtkPaned {
   .pane-separator:backdrop {
     background-image: linear-gradient(to bottom, #8b8b8b); }
 
+GtkPaned.wide {
+  -GtkPaned-handle-size: 5;
+  margin: 0; }
+  GtkPaned.wide .pane-separator {
+    background-color: transparent;
+    border-style: none solid;
+    border-color: #7f7f7f;
+    border-width: 1px; }
+  GtkPaned.wide.vertical .pane-separator {
+    border-style: solid none; }
+  GtkPaned.wide .pane-separator:backdrop {
+    border-color: #8b8b8b; }
+
 /**************
  * GtkInfoBar *
  **************/
