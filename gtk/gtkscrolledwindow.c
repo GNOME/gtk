@@ -344,6 +344,9 @@ static gboolean maybe_hide_indicator (gpointer data);
 
 static void     indicator_start_fade (Indicator *indicator,
                                       gdouble    pos);
+static void     indicator_set_over   (Indicator *indicator,
+                                      gboolean   over);
+
 
 static guint signals[LAST_SIGNAL] = {0};
 
@@ -381,6 +384,20 @@ add_tab_bindings (GtkBindingSet    *binding_set,
                                 GTK_TYPE_DIRECTION_TYPE, direction);
 }
 
+static gboolean
+gtk_scrolled_window_leave_notify (GtkWidget *widget,
+                                  GdkEventCrossing *event)
+{
+  GtkScrolledWindowPrivate *priv = GTK_SCROLLED_WINDOW (widget)->priv;
+
+  indicator_set_over (&priv->hindicator, FALSE);
+  indicator_start_fade (&priv->hindicator, 0.0);
+  indicator_set_over (&priv->vindicator, FALSE);
+  indicator_start_fade (&priv->vindicator, 0.0);
+
+  return GDK_EVENT_PROPAGATE;
+}
+
 static void
 gtk_scrolled_window_class_init (GtkScrolledWindowClass *class)
 {
@@ -409,6 +426,7 @@ gtk_scrolled_window_class_init (GtkScrolledWindowClass *class)
   widget_class->grab_notify = gtk_scrolled_window_grab_notify;
   widget_class->realize = gtk_scrolled_window_realize;
   widget_class->unrealize = gtk_scrolled_window_unrealize;
+  widget_class->leave_notify_event = gtk_scrolled_window_leave_notify;
 
   container_class->add = gtk_scrolled_window_add;
   container_class->remove = gtk_scrolled_window_remove;
