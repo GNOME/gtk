@@ -1,17 +1,6 @@
-AUTOMAKE_OPTIONS=subdir-objects
+AUTOMAKE_OPTIONS = subdir-objects
 
 include $(top_srcdir)/Makefile.decl
--include $(INTROSPECTION_MAKEFILE)
-INTROSPECTION_GIRS =
-INTROSPECTION_SCANNER_ENV = \
-	CC="$(CC)"
-INTROSPECTION_SCANNER_ARGS = \
-	--add-include-path=../gdk \
-	--warn-all
-INTROSPECTION_COMPILER_ARGS = \
-	--includedir=$(srcdir) \
-	--includedir=. \
-	--includedir=../gdk
 
 if USE_QUARTZ
 GTK_PRINT_PREVIEW_COMMAND="open -a /Applications/Preview.app %f"
@@ -112,12 +101,11 @@ install-ms-lib:
 uninstall-ms-lib:
 endif
 
-libgtkincludedir = $(includedir)/gtk-3.0/gtk
-libadd = \
+libadd = 				\
 	$(top_builddir)/gdk/libgdk-3.la	\
-	$(GMODULE_LIBS) \
+	$(GMODULE_LIBS) 		\
 	$(GTK_DEP_LIBS)
-deps = \
+deps = 					\
 	$(top_builddir)/gdk/libgdk-3.la
 
 # libtool stuff: set version and export symbols for resolving
@@ -127,7 +115,7 @@ libtool_opts =							\
   $(GTK_LINK_FLAGS)						\
   -version-info $(LT_VERSION_INFO)				\
   -export-dynamic $(no_undefined)				\
-  -rpath $(libdir) $(libgtk_target_ldflags)
+  -rpath $(libdir)
 
 
 included-modules:
@@ -1209,40 +1197,34 @@ gtk.gresource.xml: Makefile.am
 	echo "  </gresource>" >> $@; \
 	echo "</gresources>" >> $@;
 
-win32_theme_sources = \
-	theme/win32/gtk-win32.css \
-	theme/win32/gtk-win32-base.css \
-	theme/win32/gtk-win32-classic.css \
-	theme/win32/gtk-win32-xp.css
-
-adwaita_sources = \
-	theme/Adwaita/assets.txt \
-	theme/Adwaita/assets.svg \
-	theme/Adwaita/_colors-public.scss \
-	theme/Adwaita/_colors.scss \
-	theme/Adwaita/_common.scss \
-	theme/Adwaita/_drawing.scss \
-	theme/Adwaita/gtk-contained-dark.scss \
-	theme/Adwaita/gtk-contained.scss \
-	theme/Adwaita/parse-sass.sh \
-	theme/Adwaita/render-assets.sh \
-	theme/Adwaita/Gemfile \
-	theme/Adwaita/README \
-	theme/Adwaita/gtk-contained.css \
-	theme/Adwaita/gtk-contained-dark.css \
-	theme/Adwaita/gtk.css \
-	theme/Adwaita/gtk-dark.css
-
-highcontrast_sources = \
-	theme/HighContrast/_colors.scss \
-	theme/HighContrast/_common.scss \
-	theme/HighContrast/_drawing.scss \
-	theme/HighContrast/Gemfile \
-	theme/HighContrast/gtk.css \
-	theme/HighContrast/gtk.scss \
-	theme/HighContrast/parse-sass.sh
-
-raleigh_sources = \
+theme_sources = 				\
+	theme/win32/gtk-win32.css 		\
+	theme/win32/gtk-win32-base.css 		\
+	theme/win32/gtk-win32-classic.css 	\
+	theme/win32/gtk-win32-xp.css 		\
+	theme/Adwaita/assets.txt 		\
+	theme/Adwaita/assets.svg 		\
+	theme/Adwaita/_colors-public.scss 	\
+	theme/Adwaita/_colors.scss 		\
+	theme/Adwaita/_common.scss 		\
+	theme/Adwaita/_drawing.scss 		\
+	theme/Adwaita/gtk-contained-dark.scss 	\
+	theme/Adwaita/gtk-contained.scss 	\
+	theme/Adwaita/parse-sass.sh 		\
+	theme/Adwaita/render-assets.sh 		\
+	theme/Adwaita/Gemfile 			\
+	theme/Adwaita/README 			\
+	theme/Adwaita/gtk-contained.css 	\
+	theme/Adwaita/gtk-contained-dark.css 	\
+	theme/Adwaita/gtk.css 			\
+	theme/Adwaita/gtk-dark.css 		\
+	theme/HighContrast/_colors.scss 	\
+	theme/HighContrast/_common.scss 	\
+	theme/HighContrast/_drawing.scss 	\
+	theme/HighContrast/Gemfile 		\
+	theme/HighContrast/gtk.css 		\
+	theme/HighContrast/gtk.scss 		\
+	theme/HighContrast/parse-sass.sh 	\
 	theme/Raleigh/gtk-default.css
 
 resource_files = $(shell $(GLIB_COMPILE_RESOURCES) --sourcedir=$(srcdir) --generate-dependencies $(builddir)/gtk.gresource.xml)
@@ -1301,11 +1283,10 @@ libgtk_3_la_LIBADD = $(libadd)
 libgtk_3_la_DEPENDENCIES = $(deps)
 
 if USE_WIN32
-win32_theme=yes
+win32_theme = yes
 libgtk_3_la_LIBADD += -lole32 -lgdi32 -lcomdlg32 -lwinspool -lcomctl32
-libgtk_3_la_LDFLAGS += -Wl,-luuid
-libgtk_3_la_DEPENDENCIES += $(gtk_win32_res) $(deps)
-libgtk_target_ldflags = $(gtk_win32_res_ldflag)
+libgtk_3_la_LDFLAGS += -Wl,-luuid $(gtk_win32_res_ldflag)
+libgtk_3_la_DEPENDENCIES += $(gtk_win32_res)
 endif
 
 install-exec-hook:
@@ -1372,18 +1353,7 @@ uninstall-local: uninstall-ms-lib uninstall-def-file uninstall-mac-key-theme
 distclean-local:
 	if test $(srcdir) != .; then \
 	  rm -f $(MAINTAINERCLEANFILES); \
-	  rm -rf stock-icons; \
-	  rm -f $(template_headers); \
 	fi
-
-DEPS = libgtk-3.la $(top_builddir)/gdk/libgdk-3.la
-
-TEST_DEPS = $(DEPS) immodules.cache
-
-LDADDS =								\
-	libgtk-3.la							\
-	$(top_builddir)/gdk/libgdk-3.la				\
-	$(GTK_DEP_LIBS)
 
 if HAVE_INTROSPECTION
 introspection_files = \
@@ -1399,8 +1369,16 @@ introspection_files += \
     gtkplug.c
 endif
 
+include $(INTROSPECTION_MAKEFILE)
+INTROSPECTION_SCANNER_ENV = CC="$(CC)"
+INTROSPECTION_COMPILER_ARGS = \
+	--includedir=$(srcdir) \
+	--includedir=. \
+	--includedir=../gdk
+
 Gtk-3.0.gir: $(INTROSPECTION_SCANNER) libgtk-3.la $(top_builddir)/gdk/Gdk-3.0.gir Makefile
 Gtk_3_0_gir_SCANNERFLAGS = 			\
+	--warn-all				\
 	--add-include-path=$(top_builddir)/gdk	\
 	--include-uninstalled=$(top_builddir)/gdk/Gdk-3.0.gir
 Gtk_3_0_gir_INCLUDES = Atk-1.0
@@ -1411,10 +1389,10 @@ endif
 Gtk_3_0_gir_CFLAGS = \
 		$(AM_CPPFLAGS) \
 		-DGTK_TEXT_USE_INTERNAL_UNSUPPORTED_API
-Gtk_3_0_gir_LIBS = libgtk-3.la $(top_builddir)/gdk/libgdk-3.la
 Gtk_3_0_gir_FILES = $(introspection_files)
+Gtk_3_0_gir_LIBS = libgtk-3.la $(top_builddir)/gdk/libgdk-3.la
 Gtk_3_0_gir_EXPORT_PACKAGES = gtk+-3.0
-INTROSPECTION_GIRS += Gtk-3.0.gir
+INTROSPECTION_GIRS = Gtk-3.0.gir
 
 girdir = $(datadir)/gir-1.0
 gir_DATA = $(INTROSPECTION_GIRS)
@@ -1430,9 +1408,31 @@ endif
 #
 bin_PROGRAMS = \
 	gtk-query-immodules-3.0	\
-	gtk-launch \
+	gtk-update-icon-cache \
 	gtk-encode-symbolic-svg \
-	gtk-update-icon-cache
+	gtk-launch
+
+gtk_query_immodules_3_0_SOURCES = queryimmodules.c
+gtk_query_immodules_3_0_LDADD = 		\
+	libgtk-3.la				\
+	$(top_builddir)/gdk/libgdk-3.la		\
+	$(GMODULE_LIBS)				\
+	$(GTK_DEP_LIBS)
+
+gtk_update_icon_cache_SOURCES = updateiconcache.c
+gtk_update_icon_cache_LDADD = $(GDK_PIXBUF_LIBS)
+
+gtk_encode_symbolic_svg_SOURCES = encodesymbolic.c
+gtk_encode_symbolic_svg_LDADD =			\
+	$(GDK_PIXBUF_LIBS)			\
+	$(top_builddir)/gdk/libgdk-3.la		\
+	$(GTK_DEP_LIBS)
+
+gtk_launch_SOURCES = gtk-launch.c
+gtk_launch_LDADD =				\
+	libgtk-3.la				\
+	$(top_builddir)/gdk/libgdk-3.la		\
+	$(GTK_DEP_LIBS)
 
 if OS_WIN32
 
@@ -1470,24 +1470,11 @@ $(GTK_UPDATE_ICON_CACHE_RC):
 $(GTK_UPDATE_ICON_CACHE_MANIFEST_OBJECT): $(GTK_UPDATE_ICON_CACHE_RC) $(GTK_UPDATE_ICON_CACHE_MANIFEST)
 	$(WINDRES) --input $< --output $@ --output-format=coff
 
+gtk_update_icon_cache_LDADD += $(GTK_UPDATE_ICON_CACHE_MANIFEST_OBJECT)
+
 endif
 
-gtk_query_immodules_3_0_DEPENDENCIES = $(DEPS)
-gtk_query_immodules_3_0_LDADD = $(LDADDS) $(GMODULE_LIBS)
-gtk_query_immodules_3_0_SOURCES = queryimmodules.c
-
-gtk_update_icon_cache_LDADD = $(GDK_PIXBUF_LIBS) $(GTK_UPDATE_ICON_CACHE_MANIFEST_OBJECT)
-gtk_update_icon_cache_DEPENDENCIES = $(GTK_UPDATE_ICON_CACHE_MANIFEST_OBJECT)
-gtk_update_icon_cache_SOURCES = updateiconcache.c
-
-gtk_encode_symbolic_svg_LDADD = $(GDK_PIXBUF_LIBS) $(top_builddir)/gdk/libgdk-3.la $(GTK_DEP_LIBS)
-gtk_encode_symbolic_svg_SOURCES = encodesymbolic.c
-
-
-gtk_launch_LDADD = $(LDADDS)
-gtk_launch_SOURCES = gtk-launch.c
-
-.PHONY: files test test-debug
+.PHONY: files
 
 files:
 	@files=`ls $(DISTFILES) 2> /dev/null `; for p in $$files; do \
@@ -1503,10 +1490,7 @@ gsettings_SCHEMAS = \
 
 EXTRA_DIST +=                   \
 	$(resource_files)	\
-	$(adwaita_sources)	\
-	$(highcontrast_sources)	\
-	$(raleigh_sources)	\
-	$(win32_theme_sources)	\
+	$(theme_sources)	\
 	$(gsettings_SCHEMAS)	\
 	$(template_headers)	\
 	a11y/Makefile.inc	\
@@ -1530,7 +1514,5 @@ EXTRA_DIST +=                   \
 	gtktypebuiltins.h.template \
 	gtkprivatetypebuiltins.c.template \
 	gtkprivatetypebuiltins.h.template
-
-install-data-local:
 
 -include $(top_srcdir)/git.mk
