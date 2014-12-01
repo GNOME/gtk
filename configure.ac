@@ -1462,6 +1462,7 @@ else
 
     PRINT_BACKENDS="$PRINT_BACKENDS cups"
     AM_CONDITIONAL(HAVE_CUPS, true)
+    have_cups=yes
 
     gtk_save_cflags="$CFLAGS"
     CFLAGS="$CUPS_CFLAGS"
@@ -1521,8 +1522,9 @@ else
   PKG_CHECK_MODULES(JSON_GLIB, [json-glib-1.0], have_json_glib=yes, have_json_glib=no)
   if test "x$have_rest" = "xyes" -a "x$have_json_glib" = "xyes"; then
     PRINT_BACKENDS="$PRINT_BACKENDS cloudprint"
+    have_cloudprint=yes
   fi
-  AM_CONDITIONAL(HAVE_CLOUDPRINT, test "x$have_rest" = "xyes" -a "x$have_json_glib" = "xyes")
+  AM_CONDITIONAL(HAVE_CLOUDPRINT, test "x$have_cloudprint" = "xyes")
 fi
 
 if test "x$enable_cloudprint" = "xyes" -a "x$have_rest" = "xno"; then
@@ -1536,8 +1538,6 @@ if test "x$enable_cloudprint" = "xyes" -a "x$have_json_glib" = "xno"; then
 *** json-glib not found.
 ])
 fi
-
-AM_CONDITIONAL(HAVE_PAPI_CUPS, test "x$have_papi" = "xyes" -a "x$CUPS_CONFIG" != "xno")
 
 gtk_save_cppflags="$CPPFLAGS"
 CPPFLAGS="$CPPFLAGS $GTK_DEP_CFLAGS $GDK_DEP_CFLAGS"
@@ -1558,7 +1558,6 @@ fi
 
 CPPFLAGS="$gtk_save_cppflags"
 
-
 AC_ARG_ENABLE(test-print-backend,
               [AS_HELP_STRING([--enable-test-print-backend],
                               [build test print backend])],,
@@ -1571,6 +1570,21 @@ AM_CONDITIONAL(TEST_PRINT_BACKEND, test "x$enable_test_print_backend" != "xno")
 if test "$os_win32" = "yes"; then
   AC_CHECK_TYPES([IPrintDialogCallback],[],[],[[#include <windows.h>]])
 fi
+
+GTK_PRINT_BACKENDS="file"
+if test "$have_papi" = "yes"; then
+  GTK_PRINT_BACKENDS="$GTK_PRINT_BACKENDS,papi"
+fi
+if test "$have_cups" = "yes"; then
+  GTK_PRINT_BACKENDS="$GTK_PRINT_BACKENDS,cups"
+fi
+if test "$have_papi" != "yes" -a "$have_cups" != "yes"; then
+  GTK_PRINT_BACKENDS="$GTK_PRINT_BACKENDS,lpr"
+fi
+if test "$have_cloudprint" = "yes"; then
+  GTK_PRINT_BACKENDS="$GTK_PRINT_BACKENDS,cloudprint"
+fi
+AC_SUBST(GTK_PRINT_BACKENDS)
 
 ################################################################
 # Strip -export-dynamic from the link lines of various libraries

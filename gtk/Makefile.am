@@ -8,36 +8,6 @@ else
 GTK_PRINT_PREVIEW_COMMAND="evince --unlink-tempfile --preview --print-settings %s %f"
 endif
 
-if HAVE_CLOUDPRINT
-if HAVE_PAPI_CUPS
-GTK_PRINT_BACKENDS=file,papi,cups,cloudprint
-else
-if HAVE_CUPS
-GTK_PRINT_BACKENDS=file,cups,cloudprint
-else
-if HAVE_PAPI
-GTK_PRINT_BACKENDS=file,papi,cloudprint
-else
-GTK_PRINT_BACKENDS=file,lpr,cloudprint
-endif
-endif
-endif
-else
-if HAVE_PAPI_CUPS
-GTK_PRINT_BACKENDS=file,papi,cups
-else
-if HAVE_CUPS
-GTK_PRINT_BACKENDS=file,cups
-else
-if HAVE_PAPI
-GTK_PRINT_BACKENDS=file,papi
-else
-GTK_PRINT_BACKENDS=file,lpr
-endif
-endif
-endif
-endif
-
 AM_CPPFLAGS =						\
 	-DG_LOG_DOMAIN=\"Gtk\"				\
 	-DGTK_LIBDIR=\"$(libdir)\"			\
