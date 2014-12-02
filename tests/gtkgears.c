@@ -126,7 +126,7 @@ gear(GLfloat inner_radius, GLfloat outer_radius, GLfloat width,
    /* draw front face */
    glBegin(GL_QUAD_STRIP);
    for (i = 0; i <= teeth; i++) {
-      angle = i * 2.0 * M_PI / teeth;
+      angle = i * 2.0 * G_PI / teeth;
       glVertex3f(r0 * cos(angle), r0 * sin(angle), width * 0.5);
       glVertex3f(r1 * cos(angle), r1 * sin(angle), width * 0.5);
       if (i < teeth) {
@@ -139,9 +139,9 @@ gear(GLfloat inner_radius, GLfloat outer_radius, GLfloat width,
 
    /* draw front sides of teeth */
    glBegin(GL_QUADS);
-   da = 2.0 * M_PI / teeth / 4.0;
+   da = 2.0 * G_PI / teeth / 4.0;
    for (i = 0; i < teeth; i++) {
-      angle = i * 2.0 * M_PI / teeth;
+      angle = i * 2.0 * G_PI / teeth;
 
       glVertex3f(r1 * cos(angle), r1 * sin(angle), width * 0.5);
       glVertex3f(r2 * cos(angle + da), r2 * sin(angle + da), width * 0.5);
@@ -157,7 +157,7 @@ gear(GLfloat inner_radius, GLfloat outer_radius, GLfloat width,
    /* draw back face */
    glBegin(GL_QUAD_STRIP);
    for (i = 0; i <= teeth; i++) {
-      angle = i * 2.0 * M_PI / teeth;
+      angle = i * 2.0 * G_PI / teeth;
       glVertex3f(r1 * cos(angle), r1 * sin(angle), -width * 0.5);
       glVertex3f(r0 * cos(angle), r0 * sin(angle), -width * 0.5);
       if (i < teeth) {
@@ -170,9 +170,9 @@ gear(GLfloat inner_radius, GLfloat outer_radius, GLfloat width,
 
    /* draw back sides of teeth */
    glBegin(GL_QUADS);
-   da = 2.0 * M_PI / teeth / 4.0;
+   da = 2.0 * G_PI / teeth / 4.0;
    for (i = 0; i < teeth; i++) {
-      angle = i * 2.0 * M_PI / teeth;
+      angle = i * 2.0 * G_PI / teeth;
 
       glVertex3f(r1 * cos(angle + 3 * da), r1 * sin(angle + 3 * da),
 		 -width * 0.5);
@@ -186,7 +186,7 @@ gear(GLfloat inner_radius, GLfloat outer_radius, GLfloat width,
    /* draw outward faces of teeth */
    glBegin(GL_QUAD_STRIP);
    for (i = 0; i < teeth; i++) {
-      angle = i * 2.0 * M_PI / teeth;
+      angle = i * 2.0 * G_PI / teeth;
 
       glVertex3f(r1 * cos(angle), r1 * sin(angle), width * 0.5);
       glVertex3f(r1 * cos(angle), r1 * sin(angle), -width * 0.5);
@@ -223,7 +223,7 @@ gear(GLfloat inner_radius, GLfloat outer_radius, GLfloat width,
    /* draw inside radius cylinder */
    glBegin(GL_QUAD_STRIP);
    for (i = 0; i <= teeth; i++) {
-      angle = i * 2.0 * M_PI / teeth;
+      angle = i * 2.0 * G_PI / teeth;
       glNormal3f(-cos(angle), -sin(angle), 0.0);
       glVertex3f(r0 * cos(angle), r0 * sin(angle), -width * 0.5);
       glVertex3f(r0 * cos(angle), r0 * sin(angle), width * 0.5);
