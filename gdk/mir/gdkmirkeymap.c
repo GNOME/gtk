@@ -32,10 +32,10 @@ typedef struct GdkMirKeymapClass GdkMirKeymapClass;
 #define GDK_MIR_KEYMAP_GET_CLASS(obj)    (G_TYPE_INSTANCE_GET_CLASS ((obj), GDK_TYPE_MIR_KEYMAP, GdkMirKeymapClass))
 
 #define IsModifierKey(keysym) \
-  ((keysym >= XKB_KEY_Shift_L && keysym <= XKB_KEY_Hyper_R) || \
-   (keysym >= XKB_KEY_ISO_Lock && keysym <= XKB_KEY_ISO_Last_Group_Lock) || \
-   (keysym == XKB_KEY_Mode_switch) || \
-   (keysym == XKB_KEY_Num_Lock))
+  (((keysym) >= XKB_KEY_Shift_L && (keysym) <= XKB_KEY_Hyper_R) || \
+   ((keysym) >= XKB_KEY_ISO_Lock && (keysym) <= XKB_KEY_ISO_Last_Group_Lock) || \
+   ((keysym) == XKB_KEY_Mode_switch) || \
+   ((keysym) == XKB_KEY_Num_Lock))
 
 struct GdkMirKeymap
 {
