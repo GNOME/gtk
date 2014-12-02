@@ -12972,9 +12972,9 @@ gtk_widget_set_csd_input_shape (GtkWidget            *widget,
                                 const cairo_region_t *region)
 {
   if (region == NULL)
-    g_object_set_data (G_OBJECT (widget), "csd-shade", NULL);
+    g_object_set_data (G_OBJECT (widget), "csd-region", NULL);
   else
-    g_object_set_data_full (G_OBJECT (widget), "csd-shade",
+    g_object_set_data_full (G_OBJECT (widget), "csd-region",
                             cairo_region_copy (region),
                             (GDestroyNotify) cairo_region_destroy);
   gtk_widget_update_input_shape (widget);
