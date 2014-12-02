@@ -1,0 +1,12 @@
+= Examples =
+
+== Building the examples ==
+
+The examples in this directory are built alongside the rest of GTK+.
+
+The examples under the `application[1-9]` directories are also included in
+the GTK+ API reference documentation, and can be built independently, using
+the system libraries, by doing:
+
+    $ cd application1
+    $ make -f Makefile.example
