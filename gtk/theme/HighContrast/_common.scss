@@ -828,6 +828,13 @@ GtkComboBox {
     border-width: 0 0 1px;
     padding: 3px;
   }
+  &.vertical {
+    border-right: 1px solid $borders_color;
+    &:dir(rtl) {
+      border-right: none;
+      border-left: 1px solid $borders_color;
+    }
+  }
 }
 
 %inset-bar {
@@ -1990,16 +1997,21 @@ GtkFileChooserDialog {
  ***********/
 
 .sidebar {
-  border-width: 1px 0 0 0;
-  border-style: solid;
-  border-color: $borders_color;
-  &:dir(rtl) { border-width: 0 0 0 1px; }
+  border: none;
   &:backdrop {
     background-color: $bg_color;
   }
 
   &:selected {
     @extend %selected_items;
+  }
+
+  & > GtkScrolledWindow > .frame {
+    border-right: 1px solid $borders_color;
+    &:dir(rtl) {
+      border-right: none;
+      border-left: 1px solid $borders_color;
+    }
   }
 }
 

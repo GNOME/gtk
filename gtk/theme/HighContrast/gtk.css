@@ -946,6 +946,11 @@ GtkComboBox {
   .toolbar.search-bar {
     border-width: 0 0 1px;
     padding: 3px; }
+  .toolbar.vertical {
+    border-right: 1px solid #7f7f7f; }
+    .toolbar.vertical:dir(rtl) {
+      border-right: none;
+      border-left: 1px solid #7f7f7f; }
 
 .toolbar.inline-toolbar, .toolbar.search-bar {
   border-style: solid;
@@ -2173,13 +2178,14 @@ GtkFileChooserDialog .dialog-action-box {
  * Sidebar *
  ***********/
 .sidebar {
-  border-width: 1px 0 0 0;
-  border-style: solid;
-  border-color: #7f7f7f; }
-  .sidebar:dir(rtl) {
-    border-width: 0 0 0 1px; }
+  border: none; }
   .sidebar:backdrop {
     background-color: #fff; }
+  .sidebar > GtkScrolledWindow > .frame {
+    border-right: 1px solid #7f7f7f; }
+    .sidebar > GtkScrolledWindow > .frame:dir(rtl) {
+      border-right: none;
+      border-left: 1px solid #7f7f7f; }
 
 GtkPlacesSidebar.sidebar .view {
   color: #000;
