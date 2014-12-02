@@ -78,6 +78,11 @@
           </object>
         </child>
         <child>
+          <object class="GtkVSeparator">
+            <property name="visible">True</property>
+          </object>
+        </child>
+        <child>
           <object class="GtkBox" id="content_box">
             <property name="visible">True</property>
             <property name="orientation">vertical</property>
