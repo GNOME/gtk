@@ -1,0 +1,24 @@
+CC = gcc
+PKGCONFIG = $(shell which pkg-config)
+CFLAGS = `$(PKGCONFIG) --cflags gtk+-3.0`
+LIBS = `$(PKGCONFIG) --libs gtk+-3.0`
+GLIB_COMPILE_RESOURCES = `$(PKGCONFIG) --variable=glib_compile_resources gio-2.0`
+
+SRC = resources.c exampleapp.c exampleappwin.c main.c
+
+OBJS = $(SRC:.c=.o)
+
+all: exampleapp
+
+resources.c: exampleapp.gresource.xml window.ui
+	$(GLIB_COMPILE_RESOURCES) exampleapp.gresource.xml --target=$@ --sourcedir=. --generate-source
+
+%.o: %.c
+	$(CC) -c -o $(@F) $(CFLAGS) $<
+
+exampleapp: $(OBJS)
+	$(CC) -o $(@F) $(LIBS) $(OBJS)
+
+clean:
+	rm -f resources.c
+	rm -f $(OBJS)
