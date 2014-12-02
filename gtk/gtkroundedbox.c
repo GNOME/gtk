@@ -536,3 +536,50 @@ _gtk_rounded_box_clip_path (const GtkRoundedBox *box,
                    box->box.width, box->box.height);
 }
 
+gboolean
+_gtk_rounded_box_intersects_rectangle (const GtkRoundedBox *box,
+                                       gdouble              x1,
+                                       gdouble              y1,
+                                       gdouble              x2,
+                                       gdouble              y2)
+{
+  if (x2 < box->box.x ||
+      y2 < box->box.y ||
+      x1 >= box->box.x + box->box.width ||
+      y1 >= box->box.y + box->box.height)
+    return FALSE;
+
+  return TRUE;
+}
+
+gboolean
+_gtk_rounded_box_contains_rectangle (const GtkRoundedBox *box,
+                                     gdouble              x1,
+                                     gdouble              y1,
+                                     gdouble              x2,
+                                     gdouble              y2)
+{
+  if (x1 < box->box.x ||
+      y1 < box->box.y ||
+      x2 >= box->box.x + box->box.width ||
+      y2 >= box->box.y + box->box.width)
+    return FALSE;
+
+  if (x1 < box->box.x + box->corner[GTK_CSS_TOP_LEFT].horizontal &&
+      y1 < box->box.y + box->corner[GTK_CSS_TOP_LEFT].vertical)
+    return FALSE;
+
+  if (x2 > box->box.x + box->box.width - box->corner[GTK_CSS_TOP_RIGHT].horizontal &&
+      y1 < box->box.y + box->corner[GTK_CSS_TOP_RIGHT].vertical)
+    return FALSE;
+
+  if (x2 > box->box.x + box->box.width - box->corner[GTK_CSS_BOTTOM_RIGHT].horizontal &&
+      y2 > box->box.y + box->box.height - box->corner[GTK_CSS_BOTTOM_RIGHT].vertical)
+    return FALSE;
+
+  if (x1 < box->box.x + box->corner[GTK_CSS_BOTTOM_LEFT].horizontal &&
+      y2 > box->box.y + box->box.height - box->corner[GTK_CSS_BOTTOM_LEFT].vertical)
+    return FALSE;
+
+  return TRUE;
+}

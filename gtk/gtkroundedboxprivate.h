@@ -91,6 +91,16 @@ void            _gtk_rounded_box_path_left                      (const GtkRounde
                                                                  cairo_t             *cr);
 void            _gtk_rounded_box_clip_path                      (const GtkRoundedBox *box,
                                                                  cairo_t             *cr);
+gboolean        _gtk_rounded_box_intersects_rectangle           (const GtkRoundedBox *box,
+                                                                 gdouble              x1,
+                                                                 gdouble              y1,
+                                                                 gdouble              x2,
+                                                                 gdouble              y2);
+gboolean        _gtk_rounded_box_contains_rectangle             (const GtkRoundedBox *box,
+                                                                 gdouble              x1,
+                                                                 gdouble              y1,
+                                                                 gdouble              x2,
+                                                                 gdouble              y2);
 
 G_END_DECLS
 
