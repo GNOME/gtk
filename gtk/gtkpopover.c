@@ -125,6 +125,7 @@ struct _GtkPopoverPrivate
   GtkAdjustment *vadj;
   GtkAdjustment *hadj;
   GdkRectangle pointing_to;
+  guint prev_focus_unmap_id;
   guint hierarchy_changed_id;
   guint size_allocate_id;
   guint unmap_id;
@@ -235,6 +236,24 @@ gtk_popover_finalize (GObject *object)
 }
 
 static void
+popover_unset_prev_focus (GtkPopover *popover)
+{
+  GtkPopoverPrivate *priv = popover->priv;
+
+  if (!priv->prev_focus_widget)
+    return;
+
+  if (priv->prev_focus_unmap_id)
+    {
+      g_signal_handler_disconnect (priv->prev_focus_widget,
+                                   priv->prev_focus_unmap_id);
+      priv->prev_focus_unmap_id = 0;
+    }
+
+  g_clear_object (&priv->prev_focus_widget);
+}
+
+static void
 gtk_popover_dispose (GObject *object)
 {
   GtkPopover *popover = GTK_POPOVER (object);
@@ -250,11 +269,7 @@ gtk_popover_dispose (GObject *object)
   if (priv->widget)
     gtk_popover_update_relative_to (popover, NULL);
 
-  if (priv->prev_focus_widget)
-    {
-      g_object_unref (priv->prev_focus_widget);
-      priv->prev_focus_widget = NULL;
-    }
+  popover_unset_prev_focus (popover);
 
   G_OBJECT_CLASS (gtk_popover_parent_class)->dispose (object);
 }
@@ -354,6 +369,13 @@ window_set_focus (GtkWindow  *window,
 }
 
 static void
+prev_focus_unmap_cb (GtkWidget  *widget,
+                     GtkPopover *popover)
+{
+  popover_unset_prev_focus (popover);
+}
+
+static void
 gtk_popover_apply_modality (GtkPopover *popover,
                             gboolean    modal)
 {
@@ -369,8 +391,14 @@ gtk_popover_apply_modality (GtkPopover *popover,
       prev_focus = gtk_window_get_focus (priv->window);
       priv->prev_focus_widget = prev_focus;
       if (priv->prev_focus_widget)
-        g_object_ref (prev_focus);
+        {
+          priv->prev_focus_unmap_id =
+            g_signal_connect (prev_focus, "unmap",
+                              G_CALLBACK (prev_focus_unmap_cb), popover);
+          g_object_ref (prev_focus);
+        }
       gtk_grab_add (GTK_WIDGET (popover));
+      gtk_window_set_focus (priv->window, NULL);
       gtk_widget_grab_focus (GTK_WIDGET (popover));
 
       g_signal_connect (priv->window, "focus-in-event",
@@ -385,15 +413,14 @@ gtk_popover_apply_modality (GtkPopover *popover,
       g_signal_handlers_disconnect_by_data (priv->window, popover);
       gtk_grab_remove (GTK_WIDGET (popover));
 
-      if (priv->prev_focus_widget)
-        {
-          /* Let prev_focus_widget regain focus */
-          if (gtk_widget_is_drawable (priv->prev_focus_widget))
-            gtk_widget_grab_focus (priv->prev_focus_widget);
+      /* Let prev_focus_widget regain focus */
+      if (priv->prev_focus_widget &&
+          gtk_widget_is_drawable (priv->prev_focus_widget))
+        gtk_widget_grab_focus (priv->prev_focus_widget);
+      else
+        gtk_widget_grab_focus (GTK_WIDGET (priv->window));
 
-          g_object_unref (priv->prev_focus_widget);
-          priv->prev_focus_widget = NULL;
-        }
+      popover_unset_prev_focus (popover);
     }
 }
 
@@ -1589,7 +1616,7 @@ gtk_popover_update_relative_to (GtkPopover *popover,
       priv->window = NULL;
     }
 
-  g_clear_object (&priv->prev_focus_widget);
+  popover_unset_prev_focus (popover);
 
   if (priv->widget)
     {
