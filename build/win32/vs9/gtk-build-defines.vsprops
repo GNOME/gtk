@@ -40,6 +40,6 @@
 	/>
 	<UserMacro
 		Name="GtkDefines"
-		Value="GTK_COMPILATION;G_LOG_DOMAIN=\&quot;Gtk\&quot;;GTK_HOST=\&quot;i686-pc-vs$(VSVer)\&quot;;GTK_PRINT_BACKENDS=\&quot;file\&quot;;GTK_PRINT_PREVIEW_COMMAND=\&quot;undefined-gtk-print-preview-command\&quot;;$(GtkIncludedImmodulesDefines);GTK_LIBDIR=\&quot;$(GtkDummyPrefix)/lib\&quot;;GTK_DATADIR=\&quot;$(GtkDummyPrefix)/share\&quot;GTK_DATA_PREFIX=\&quot;$(GtkDummyPrefix)\&quot;;GTK_SYSCONFDIR=\&quot;$(GtkDummyPrefix)/etc\&quot;;MULTIPRESS_CONFDIR=\&quot;$(GtkDummyPrefix)/etc/gtk-$(ApiVersion)\&quot;;MULTIPRESS_LOCALEDIR=\&quot;$(GtkDummyPrefix)/share/locale\&quot;;GTK_VERSION=\&quot;$(GtkVersion)/etc\&quot;;GTK_BINARY_VERSION=\&quot;$(GtkBinaryVersion)/etc\&quot;;GDK_DISABLE_DEPRECATED;ISOLATION_AWARE_ENABLED"
+		Value="GTK_COMPILATION;G_LOG_DOMAIN=\&quot;Gtk\&quot;;GTK_HOST=\&quot;i686-pc-vs$(VSVer)\&quot;;GTK_PRINT_BACKENDS=\&quot;file\&quot;;GTK_PRINT_BACKEND_ENABLE_UNSUPPORTED;$(GtkIncludedImmodulesDefines);GTK_LIBDIR=\&quot;$(GtkDummyPrefix)/lib\&quot;;GTK_DATADIR=\&quot;$(GtkDummyPrefix)/share\&quot;GTK_DATA_PREFIX=\&quot;$(GtkDummyPrefix)\&quot;;GTK_SYSCONFDIR=\&quot;$(GtkDummyPrefix)/etc\&quot;;MULTIPRESS_CONFDIR=\&quot;$(GtkDummyPrefix)/etc/gtk-$(ApiVersion)\&quot;;MULTIPRESS_LOCALEDIR=\&quot;$(GtkDummyPrefix)/share/locale\&quot;;GTK_VERSION=\&quot;$(GtkVersion)/etc\&quot;;GTK_BINARY_VERSION=\&quot;$(GtkBinaryVersion)/etc\&quot;;GDK_DISABLE_DEPRECATED;ISOLATION_AWARE_ENABLED"
 	/>
 </VisualStudioPropertySheet>
