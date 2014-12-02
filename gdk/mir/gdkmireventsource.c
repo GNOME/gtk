@@ -22,6 +22,8 @@
 #include "gdkmir.h"
 #include "gdkmir-private.h"
 
+#define NANO_TO_MILLI(x) (x / 1000000)
+
 struct _GdkMirWindowReference {
   GdkMirEventSource *source;
   GdkWindow         *window;
@@ -273,7 +275,7 @@ handle_key_event (GdkWindow *window, const MirKeyEvent *event)
                           event->key_code,
                           event->scan_code,
                           is_modifier,
-                          event->event_time / 1000000);
+                          NANO_TO_MILLI (event->event_time));
       break;
     default:
     //case mir_key_action_multiple:
@@ -301,7 +303,7 @@ handle_motion_event (GdkWindow *window, const MirMotionEvent *event)
       y = event->pointer_coordinates[0].y;
     }
   modifier_state = get_modifier_state (event->modifiers, event->button_state);
-  event_time = event->event_time / 1000000;
+  event_time = NANO_TO_MILLI (event->event_time);
 
   /* The Mir events generate hover-exits even while inside the window so
      counteract this by always generating an enter notify on all other events */
