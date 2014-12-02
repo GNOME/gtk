@@ -17,7 +17,6 @@
 
 #include "config.h"
 
-#include <xkbcommon/xkbcommon.h>
 #include "gdkinternals.h"
 #include "gdkdisplayprivate.h"
 #include "gdkmir.h"
@@ -251,23 +250,25 @@ static void
 handle_key_event (GdkWindow *window, const MirKeyEvent *event)
 {
   GdkMirWindowImpl *impl = GDK_MIR_WINDOW_IMPL (window->impl);
+  GdkKeymap *keymap;
   guint modifier_state;
   MirMotionButton button_state;
-
-  _gdk_mir_window_impl_get_cursor_state (impl, NULL, NULL, NULL, &button_state);
-  modifier_state = get_modifier_state (event->modifiers, button_state);
 
   switch (event->action)
     {
     case mir_key_action_down:
     case mir_key_action_up:
       // FIXME: Convert keycode
+      _gdk_mir_window_impl_get_cursor_state (impl, NULL, NULL, NULL, &button_state);
+      modifier_state = get_modifier_state (event->modifiers, button_state);
+      keymap = gdk_keymap_get_for_display (gdk_window_get_display (window));
+
       generate_key_event (window,
                           event->action == mir_key_action_down ? GDK_KEY_PRESS : GDK_KEY_RELEASE,
                           modifier_state,
                           event->key_code,
                           event->scan_code,
-                          IsModifierKey (event->key_code),
+                          _gdk_mir_keymap_key_is_modifier (keymap, event->key_code),
                           NANO_TO_MILLI (event->event_time));
       break;
     default:

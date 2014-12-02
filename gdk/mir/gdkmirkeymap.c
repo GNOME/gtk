@@ -31,6 +31,12 @@ typedef struct GdkMirKeymapClass GdkMirKeymapClass;
 #define GDK_IS_MIR_KEYMAP_CLASS(klass)   (G_TYPE_CHECK_CLASS_TYPE ((klass), GDK_TYPE_MIR_KEYMAP))
 #define GDK_MIR_KEYMAP_GET_CLASS(obj)    (G_TYPE_INSTANCE_GET_CLASS ((obj), GDK_TYPE_MIR_KEYMAP, GdkMirKeymapClass))
 
+#define IsModifierKey(keysym) \
+  ((keysym >= XKB_KEY_Shift_L && keysym <= XKB_KEY_Hyper_R) || \
+   (keysym >= XKB_KEY_ISO_Lock && keysym <= XKB_KEY_ISO_Last_Group_Lock) || \
+   (keysym == XKB_KEY_Mode_switch) || \
+   (keysym == XKB_KEY_Num_Lock))
+
 struct GdkMirKeymap
 {
   GdkKeymap parent_instance;
@@ -340,6 +346,14 @@ gdk_mir_keymap_get_modifier_state (GdkKeymap *keymap)
   mods = xkb_state_serialize_mods (mir_keymap->xkb_state, XKB_STATE_MODS_EFFECTIVE);
 
   return get_gdk_modifiers (mir_keymap->xkb_keymap, mods);
+}
+
+gboolean
+_gdk_mir_keymap_key_is_modifier (GdkKeymap *keymap,
+                                 guint      keycode)
+{
+  // FIXME: use xkb_state
+  return IsModifierKey (keycode);
 }
 
 static void

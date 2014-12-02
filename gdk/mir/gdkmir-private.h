@@ -69,6 +69,8 @@ GdkDevice *_gdk_mir_device_manager_get_keyboard (GdkDeviceManager *device_manage
 
 GdkKeymap *_gdk_mir_keymap_new (void);
 
+gboolean _gdk_mir_keymap_key_is_modifier (GdkKeymap *keymap, guint keycode);
+
 GdkDevice *_gdk_mir_keyboard_new (GdkDeviceManager *device_manager, const gchar *name);
 
 GdkDevice *_gdk_mir_pointer_new (GdkDeviceManager *device_manager, const gchar *name);
