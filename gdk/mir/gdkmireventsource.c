@@ -22,7 +22,7 @@
 #include "gdkmir.h"
 #include "gdkmir-private.h"
 
-#define NANO_TO_MILLI(x) (x / 1000000)
+#define NANO_TO_MILLI(x) ((x) / 1000000)
 
 struct _GdkMirWindowReference {
   GdkMirEventSource *source;
