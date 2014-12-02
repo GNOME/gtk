@@ -302,7 +302,10 @@
 
     <para>The full, buildable sources for these examples can be found
     in the examples/ directory of the GTK+ source distribution, or
-    <ulink url="https://git.gnome.org/browse/gtk+/tree/examples">online</ulink> in the GTK+ git repository.</para>
+    <ulink url="https://git.gnome.org/browse/gtk+/tree/examples">online</ulink> in the GTK+ git repository.
+    You can build each example separately by using make with the <filename>Makefile.example</filename>
+    file. For more information, see the <filename>README</filename> included in the
+    examples directory.</para>
 
     <section>
       <title>A trivial application</title>
