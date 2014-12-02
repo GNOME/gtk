@@ -477,7 +477,7 @@ gdk_cairo_draw_from_gl (cairo_t              *cr,
       int unscaled_window_height;
       GLint texture_width;
       GLint texture_height;
-      int i, n_rects;
+      int i, n_rects, n_quads;
       GdkTexturedQuad *quads;
       cairo_rectangle_int_t clip_rect;
 
@@ -530,6 +530,7 @@ gdk_cairo_draw_from_gl (cairo_t              *cr,
       glScissor (clip_rect.x, FLIP_Y (clip_rect.y + clip_rect.height),
                  clip_rect.width, clip_rect.height);
 
+      n_quads = 0;
       n_rects = cairo_region_num_rectangles (clip_region);
       quads = g_new (GdkTexturedQuad, n_rects);
       for (i = 0; i < n_rects; i++)
@@ -559,7 +560,7 @@ gdk_cairo_draw_from_gl (cairo_t              *cr,
                 (clipped_src_x + dest.width) / (float)texture_width, clipped_src_y / (float)texture_height,
               };
 
-              quads[i] = quad;
+              quads[n_quads++] = quad;
 
               if (impl_window->current_paint.flushed_region)
                 {
@@ -578,7 +579,9 @@ gdk_cairo_draw_from_gl (cairo_t              *cr,
             }
         }
 
-      gdk_gl_texture_quads (paint_context, GL_TEXTURE_2D, n_rects, quads);
+      if (n_quads > 0)
+        gdk_gl_texture_quads (paint_context, GL_TEXTURE_2D, n_quads, quads);
+
       g_free (quads);
 
       if (alpha_size != 0)
