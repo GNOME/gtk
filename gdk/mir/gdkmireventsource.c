@@ -118,7 +118,7 @@ set_key_event_string (GdkEventKey *event)
 }
 
 static void
-generate_key_event (GdkWindow *window, GdkEventType type, guint state, guint keyval, guint16 keycode, gboolean is_modifier)
+generate_key_event (GdkWindow *window, GdkEventType type, guint state, guint keyval, guint16 keycode, gboolean is_modifier, guint64 time)
 {
   GdkEvent *event;
 
@@ -127,7 +127,7 @@ generate_key_event (GdkWindow *window, GdkEventType type, guint state, guint key
   event->key.keyval = keyval;
   event->key.hardware_keycode = keycode + 8;
   event->key.is_modifier = is_modifier;
-  event->key.time = g_get_monotonic_time () / 1000;
+  event->key.time = time;
   set_key_event_string (&event->key);
 
   send_event (window, _gdk_mir_device_manager_get_keyboard (gdk_display_get_device_manager (gdk_window_get_display (window))), event);
@@ -140,7 +140,7 @@ get_pointer (GdkWindow *window)
 }
 
 static void
-generate_button_event (GdkWindow *window, GdkEventType type, gdouble x, gdouble y, guint button, guint state)
+generate_button_event (GdkWindow *window, GdkEventType type, gdouble x, gdouble y, guint button, guint state, guint64 time)
 {
   GdkEvent *event;
 
@@ -149,13 +149,13 @@ generate_button_event (GdkWindow *window, GdkEventType type, gdouble x, gdouble 
   event->button.y = y;
   event->button.state = state;
   event->button.button = button;
-  event->button.time = g_get_monotonic_time () / 1000;
+  event->button.time = time;
 
   send_event (window, get_pointer (window), event);
 }
 
 static void
-generate_scroll_event (GdkWindow *window, gdouble x, gdouble y, gdouble delta_x, gdouble delta_y, guint state)
+generate_scroll_event (GdkWindow *window, gdouble x, gdouble y, gdouble delta_x, gdouble delta_y, guint state, guint64 time)
 {
   GdkEvent *event;
 
@@ -166,13 +166,13 @@ generate_scroll_event (GdkWindow *window, gdouble x, gdouble y, gdouble delta_x,
   event->scroll.direction = GDK_SCROLL_SMOOTH;
   event->scroll.delta_x = -delta_x;
   event->scroll.delta_y = -delta_y;
-  event->scroll.time = g_get_monotonic_time () / 1000;
+  event->scroll.time = time;
 
   send_event (window, get_pointer (window), event);
 }
 
 static void
-generate_motion_event (GdkWindow *window, gdouble x, gdouble y, guint state)
+generate_motion_event (GdkWindow *window, gdouble x, gdouble y, guint state, guint64 time)
 {
   GdkEvent *event;
 
@@ -181,13 +181,13 @@ generate_motion_event (GdkWindow *window, gdouble x, gdouble y, guint state)
   event->motion.y = y;
   event->motion.state = state;
   event->motion.is_hint = FALSE;
-  event->motion.time = g_get_monotonic_time () / 1000;
+  event->motion.time = time;
 
   send_event (window, get_pointer (window), event);
 }
 
 static void
-generate_crossing_event (GdkWindow *window, GdkEventType type, gdouble x, gdouble y)
+generate_crossing_event (GdkWindow *window, GdkEventType type, gdouble x, gdouble y, guint64 time)
 {
   GdkEvent *event;
 
@@ -197,7 +197,7 @@ generate_crossing_event (GdkWindow *window, GdkEventType type, gdouble x, gdoubl
   event->crossing.mode = GDK_CROSSING_NORMAL;
   event->crossing.detail = GDK_NOTIFY_ANCESTOR;
   event->crossing.focus = TRUE;
-  event->crossing.time = g_get_monotonic_time () / 1000;
+  event->crossing.time = time;
 
   send_event (window, get_pointer (window), event);
 }
@@ -272,7 +272,8 @@ handle_key_event (GdkWindow *window, const MirKeyEvent *event)
                           modifier_state,
                           event->key_code,
                           event->scan_code,
-                          is_modifier);
+                          is_modifier,
+                          event->event_time / 1000);
       break;
     default:
     //case mir_key_action_multiple:
@@ -289,6 +290,7 @@ handle_motion_event (GdkWindow *window, const MirMotionEvent *event)
   gboolean cursor_inside;
   MirMotionButton button_state;
   guint modifier_state;
+  guint64 time;
   GdkEventType event_type;
   MirMotionButton changed_button_state;
 
@@ -299,13 +301,14 @@ handle_motion_event (GdkWindow *window, const MirMotionEvent *event)
       y = event->pointer_coordinates[0].y;
     }
   modifier_state = get_modifier_state (event->modifiers, event->button_state);
+  time = event->event_time / 1000;
 
   /* The Mir events generate hover-exits even while inside the window so
      counteract this by always generating an enter notify on all other events */
   if (!cursor_inside && event->action != mir_motion_action_hover_exit)
     {
       cursor_inside = TRUE;
-      generate_crossing_event (window, GDK_ENTER_NOTIFY, x, y);
+      generate_crossing_event (window, GDK_ENTER_NOTIFY, x, y, time);
     }
 
   /* Update which window has focus */
@@ -317,23 +320,23 @@ handle_motion_event (GdkWindow *window, const MirMotionEvent *event)
       event_type = event->action == mir_motion_action_down ? GDK_BUTTON_PRESS : GDK_BUTTON_RELEASE;
       changed_button_state = button_state ^ event->button_state;
       if (changed_button_state == 0 || (changed_button_state & mir_motion_button_primary) != 0)
-        generate_button_event (window, event_type, x, y, GDK_BUTTON_PRIMARY, modifier_state);
+        generate_button_event (window, event_type, x, y, GDK_BUTTON_PRIMARY, modifier_state, time);
       if ((changed_button_state & mir_motion_button_secondary) != 0)
-        generate_button_event (window, event_type, x, y, GDK_BUTTON_SECONDARY, modifier_state);
+        generate_button_event (window, event_type, x, y, GDK_BUTTON_SECONDARY, modifier_state, time);
       if ((changed_button_state & mir_motion_button_tertiary) != 0)
-        generate_button_event (window, event_type, x, y, GDK_BUTTON_MIDDLE, modifier_state);
+        generate_button_event (window, event_type, x, y, GDK_BUTTON_MIDDLE, modifier_state, time);
       button_state = event->button_state;
       break;
     case mir_motion_action_scroll:
-      generate_scroll_event (window, x, y, event->pointer_coordinates[0].hscroll, event->pointer_coordinates[0].vscroll, modifier_state);
+      generate_scroll_event (window, x, y, event->pointer_coordinates[0].hscroll, event->pointer_coordinates[0].vscroll, modifier_state, time);
       break;
     case mir_motion_action_move: // move with button
     case mir_motion_action_hover_move: // move without button
-      generate_motion_event (window, x, y, modifier_state);
+      generate_motion_event (window, x, y, modifier_state, time);
       break;
     case mir_motion_action_hover_exit:
       cursor_inside = FALSE;
-      generate_crossing_event (window, GDK_LEAVE_NOTIFY, x, y);
+      generate_crossing_event (window, GDK_LEAVE_NOTIFY, x, y, time);
       break;
     }
 
