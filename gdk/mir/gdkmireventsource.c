@@ -258,10 +258,13 @@ get_modifier_state (unsigned int modifiers, unsigned int button_state)
 static void
 handle_key_event (GdkWindow *window, const MirKeyEvent *event)
 {
+  GdkMirWindowImpl *impl = GDK_MIR_WINDOW_IMPL (window->impl);
   guint modifier_state;
+  MirMotionButton button_state;
   gboolean is_modifier = FALSE;
 
-  modifier_state = get_modifier_state (event->modifiers, 0); // FIXME: Need to track button state
+  _gdk_mir_window_impl_get_cursor_state (impl, NULL, NULL, NULL, &button_state);
+  modifier_state = get_modifier_state (event->modifiers, button_state);
 
   switch (event->action)
     {
