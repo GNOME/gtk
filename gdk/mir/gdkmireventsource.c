@@ -41,6 +41,7 @@ struct _GdkMirEventSource
 
   GMutex mir_event_lock;
   GQueue mir_events;
+  gboolean log_events;
 
   GdkDisplay *display;
 };
@@ -401,9 +402,6 @@ gdk_mir_event_source_queue_event (GdkDisplay     *display,
                                   GdkWindow      *window,
                                   const MirEvent *event)
 {
-  if (g_getenv ("GDK_MIR_LOG_EVENTS"))
-    _gdk_mir_print_event (event);
-
   // FIXME: Only generate events if the window wanted them?
   switch (event->type)
     {
@@ -486,6 +484,9 @@ gdk_mir_event_source_convert_events (GdkMirEventSource *source)
                   event->event.motion.pointer_coordinates[0].y = y;
                 }
             }
+
+          if (source->log_events)
+            _gdk_mir_print_event (&event->event);
 
           gdk_mir_event_source_queue_event (source->display, window, &event->event);
         }
@@ -583,6 +584,7 @@ _gdk_mir_event_source_new (GdkDisplay *display)
   source = (GdkMirEventSource *) g_source;
   g_mutex_init (&source->mir_event_lock);
   source->display = display;
+  source->log_events = (g_getenv ("GDK_MIR_LOG_EVENTS") != NULL);
 
   return source;
 }
