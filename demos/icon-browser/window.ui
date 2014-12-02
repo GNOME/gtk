@@ -99,7 +99,6 @@
                 <property name="expand">True</property>
                 <property name="hscrollbar-policy">never</property>
                 <property name="vscrollbar-policy">automatic</property>
-                <property name="shadow-type">in</property>
                 <child>
                   <object class="GtkIconView" id="list">
                     <property name="visible">True</property>
