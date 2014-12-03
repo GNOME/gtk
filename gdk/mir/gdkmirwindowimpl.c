@@ -912,11 +912,11 @@ gdk_mir_window_impl_set_transient_for (GdkWindow *window,
 
 /* TODO: Remove once we have proper transient window support. */
 GdkWindow *
-_gdk_mir_window_get_transient_child (GdkWindow *window,
-                                     gint       x,
-                                     gint       y,
-                                     gint      *out_x,
-                                     gint      *out_y)
+_gdk_mir_window_get_visible_transient_child (GdkWindow *window,
+                                             gint       x,
+                                             gint       y,
+                                             gint      *out_x,
+                                             gint      *out_y)
 {
   GdkMirWindowImpl *impl = GDK_MIR_WINDOW_IMPL (window->impl);
   GdkWindow *child = NULL;
@@ -930,7 +930,10 @@ _gdk_mir_window_get_transient_child (GdkWindow *window,
   y -= window->y;
 
   for (i = impl->transient_children; i && !child; i = i->next)
-    child = _gdk_mir_window_get_transient_child (i->data, x, y, out_x, out_y);
+    {
+      if (GDK_MIR_WINDOW_IMPL (GDK_WINDOW (i->data)->impl)->visible)
+        child = _gdk_mir_window_get_visible_transient_child (i->data, x, y, out_x, out_y);
+    }
 
   if (child)
     return child;

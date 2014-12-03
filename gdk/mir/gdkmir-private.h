@@ -134,10 +134,10 @@ void _gdk_mir_print_resize_event (const MirResizeEvent *event);
 void _gdk_mir_print_event (const MirEvent *event);
 
 /* TODO: Remove once we have proper transient window support. */
-GdkWindow * _gdk_mir_window_get_transient_child (GdkWindow *window,
-                                                 gint       x,
-                                                 gint       y,
-                                                 gint      *out_x,
-                                                 gint      *out_y);
+GdkWindow * _gdk_mir_window_get_visible_transient_child (GdkWindow *window,
+                                                         gint       x,
+                                                         gint       y,
+                                                         gint      *out_x,
+                                                         gint      *out_y);
 
 #endif /* __GDK_PRIVATE_MIR_H__ */
