@@ -257,6 +257,7 @@ new_window (GApplication *app,
   label = gtk_label_new ("Fullscreen:");
   gtk_container_add (GTK_CONTAINER (box), label);
   sw = gtk_switch_new ();
+  gtk_widget_set_valign (sw, GTK_ALIGN_CENTER);
   gtk_actionable_set_action_name (GTK_ACTIONABLE (sw), "win.fullscreen");
   gtk_container_add (GTK_CONTAINER (box), sw);
   gtk_container_add (GTK_CONTAINER (toolbar), GTK_WIDGET (button));
@@ -518,12 +519,11 @@ bloat_pad_startup (GApplication *application)
   GtkApplication *app = GTK_APPLICATION (application);
   GMenu *menu;
   GMenuItem *item;
+  GBytes *bytes;
   GIcon *icon;
   GIcon *icon2;
   GEmblem *emblem;
   GFile *file;
-  gchar *data;
-  gsize size;
   gint i;
   struct {
     const gchar *action_and_target;
@@ -548,7 +548,7 @@ bloat_pad_startup (GApplication *application)
 
   menu = gtk_application_get_menu_by_id (GTK_APPLICATION (application), "icon-menu");
 
-  file = g_file_new_for_path (SRCDIR "/../../gtk/resources/icons/16x16/actions/gtk-select-color.png");
+  file = g_file_new_for_uri ("resource:///org/gtk/libgtk/icons/16x16/actions/gtk-select-color.png");
   icon = g_file_icon_new (file);
   item = g_menu_item_new ("File Icon", NULL);
   g_menu_item_set_icon (item, icon);
@@ -564,31 +564,28 @@ bloat_pad_startup (GApplication *application)
   g_object_unref (item);
   g_object_unref (icon);
 
-  if (g_file_get_contents (SRCDIR "/../../gtk/resources/icons/16x16/actions/gtk-select-font.png", &data, &size, NULL))
-    {
-      GBytes *bytes = g_bytes_new_take (data, size);
-      icon = g_bytes_icon_new (bytes);
-      item = g_menu_item_new ("Bytes Icon", NULL);
-      g_menu_item_set_icon (item, icon);
-      g_menu_append_item (menu, item);
-      g_object_unref (item);
-      g_object_unref (icon);
-      g_bytes_unref (bytes);
-    }
+  bytes = g_resources_lookup_data ("/org/gtk/libgtk/icons/16x16/actions/gtk-select-font.png", 0, NULL);
+  icon = g_bytes_icon_new (bytes);
+  item = g_menu_item_new ("Bytes Icon", NULL);
+  g_menu_item_set_icon (item, icon);
+  g_menu_append_item (menu, item);
+  g_object_unref (item);
+  g_object_unref (icon);
+  g_bytes_unref (bytes);
 
-  icon = G_ICON (gdk_pixbuf_new_from_file (SRCDIR "/../../gtk/resources/icons/16x16/actions/gtk-preferences.png", NULL));
+  icon = G_ICON (gdk_pixbuf_new_from_resource ("/org/gtk/libgtk/icons/16x16/actions/gtk-preferences.png", NULL));
   item = g_menu_item_new ("Pixbuf", NULL);
   g_menu_item_set_icon (item, icon);
   g_menu_append_item (menu, item);
   g_object_unref (item);
   g_object_unref (icon);
 
-  file = g_file_new_for_path (SRCDIR "/../../gtk/resources/icons/16x16/actions/gtk-page-setup.png");
+  file = g_file_new_for_uri ("resource:///org/gtk/libgtk/icons/16x16/actions/gtk-page-setup.png");
   icon = g_file_icon_new (file);
   emblem = g_emblem_new (icon);
   g_object_unref (icon);
   g_object_unref (file);
-  file = g_file_new_for_path (SRCDIR "/../../gtk/resources/icons/16x16/actions/gtk-orientation-reverse-portrait.png");
+  file = g_file_new_for_uri ("resource:///org/gtk/libgtk/icons/16x16/actions/gtk-orientation-reverse-portrait.png");
   icon2 = g_file_icon_new (file);
   icon = g_emblemed_icon_new (icon2, emblem);
   item = g_menu_item_new ("Emblemed Icon", NULL);
