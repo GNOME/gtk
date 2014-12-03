@@ -16481,45 +16481,54 @@ _gtk_widget_set_style (GtkWidget *widget,
   widget->priv->style = style;
 }
 
+GtkActionMuxer *
+_gtk_widget_get_parent_muxer (GtkWidget *widget,
+                              gboolean   create)
+{
+  GtkWidget *parent;
+
+  if (GTK_IS_WINDOW (widget))
+    return gtk_application_get_parent_muxer_for_window (GTK_WINDOW (widget));
+
+  if (GTK_IS_MENU (widget))
+    parent = gtk_menu_get_attach_widget (GTK_MENU (widget));
+  else if (GTK_IS_POPOVER (widget))
+    parent = gtk_popover_get_relative_to (GTK_POPOVER (widget));
+  else
+    parent = gtk_widget_get_parent (widget);
+
+  if (parent)
+    return _gtk_widget_get_action_muxer (parent, create);
+
+  return NULL;
+}
+
 void
 _gtk_widget_update_parent_muxer (GtkWidget *widget)
 {
-  GtkActionMuxer *parent_muxer;
-
   if (widget->priv->muxer == NULL)
     return;
 
-  if (GTK_IS_WINDOW (widget))
-    {
-      parent_muxer = gtk_application_get_parent_muxer_for_window (GTK_WINDOW (widget));
-    }
-  else
-    {
-      GtkWidget *parent;
-
-      if (GTK_IS_MENU (widget))
-        parent = gtk_menu_get_attach_widget (GTK_MENU (widget));
-      else if (GTK_IS_POPOVER (widget))
-        parent = gtk_popover_get_relative_to (GTK_POPOVER (widget));
-      else
-        parent = gtk_widget_get_parent (widget);
-
-      parent_muxer = parent ? _gtk_widget_get_action_muxer (parent) : NULL;
-    }
-
-  gtk_action_muxer_set_parent (widget->priv->muxer, parent_muxer);
+  gtk_action_muxer_set_parent (widget->priv->muxer,
+                               _gtk_widget_get_parent_muxer (widget, TRUE));
 }
 
 GtkActionMuxer *
-_gtk_widget_get_action_muxer (GtkWidget *widget)
+_gtk_widget_get_action_muxer (GtkWidget *widget,
+                              gboolean   create)
 {
-  if (widget->priv->muxer == NULL)
+  if (widget->priv->muxer)
+    return widget->priv->muxer;
+
+  if (create)
     {
       widget->priv->muxer = gtk_action_muxer_new ();
       _gtk_widget_update_parent_muxer (widget);
-    }
 
-  return widget->priv->muxer;
+      return widget->priv->muxer;
+    }
+  else
+    return _gtk_widget_get_parent_muxer (widget, FALSE);
 }
 
 /**
@@ -16548,7 +16557,7 @@ gtk_widget_insert_action_group (GtkWidget    *widget,
   g_return_if_fail (GTK_IS_WIDGET (widget));
   g_return_if_fail (name != NULL);
 
-  muxer = _gtk_widget_get_action_muxer (widget);
+  muxer = _gtk_widget_get_action_muxer (widget, TRUE);
 
   if (group)
     gtk_action_muxer_insert (muxer, name, group);

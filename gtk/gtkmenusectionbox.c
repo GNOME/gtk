@@ -379,7 +379,7 @@ gtk_menu_section_box_new_toplevel (GtkStack    *stack,
   box = g_object_new (GTK_TYPE_MENU_SECTION_BOX, "margin", 10,  NULL);
   gtk_stack_add_named (stack, GTK_WIDGET (box), "main");
 
-  box->tracker = gtk_menu_tracker_new (GTK_ACTION_OBSERVABLE (_gtk_widget_get_action_muxer (GTK_WIDGET (box))),
+  box->tracker = gtk_menu_tracker_new (GTK_ACTION_OBSERVABLE (_gtk_widget_get_action_muxer (GTK_WIDGET (box), TRUE)),
                                        model, TRUE, FALSE, action_namespace,
                                        gtk_menu_section_box_insert_func,
                                        gtk_menu_section_box_remove_func, box);

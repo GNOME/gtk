@@ -397,7 +397,7 @@ gtk_action_helper_new (GtkActionable *widget)
         g_object_get (G_OBJECT (helper->widget), "active", &helper->active, NULL);
     }
 
-  helper->action_context = _gtk_widget_get_action_muxer (GTK_WIDGET (widget));
+  helper->action_context = _gtk_widget_get_action_muxer (GTK_WIDGET (widget), TRUE);
 
   return helper;
 }

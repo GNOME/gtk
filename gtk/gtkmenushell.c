@@ -2194,7 +2194,7 @@ gtk_menu_shell_bind_model (GtkMenuShell *menu_shell,
   g_return_if_fail (GTK_IS_MENU_SHELL (menu_shell));
   g_return_if_fail (model == NULL || G_IS_MENU_MODEL (model));
 
-  muxer = _gtk_widget_get_action_muxer (GTK_WIDGET (menu_shell));
+  muxer = _gtk_widget_get_action_muxer (GTK_WIDGET (menu_shell), TRUE);
 
   g_clear_pointer (&menu_shell->priv->tracker, gtk_menu_tracker_free);
 
