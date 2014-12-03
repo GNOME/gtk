@@ -693,39 +693,39 @@
   .sidebar-item.needs-attention > .label:dir(rtl) {
     background-position: left 3px, left 4px; }
 
-.osd .button, .osd .button:hover, .osd .button:active, .osd .button:checked, .osd .button:insensitive, .osd .button:backdrop, .inline-toolbar .button, .inline-toolbar .button:backdrop, .linked .button, .linked .button:hover, .linked .button:active, .linked .button:checked, .linked .button:backdrop, .linked > GtkComboBox > .button:dir(ltr) {
+.osd .button, .osd .button:hover, .osd .button:active, .osd .button:checked, .osd .button:insensitive, .osd .button:backdrop, .inline-toolbar .button, .inline-toolbar .button:backdrop, .linked > .button, .linked > .button:hover, .linked > .button:active, .linked > .button:checked, .linked > .button:backdrop, .linked > GtkComboBox > .button:dir(ltr) {
   border-radius: 0;
   border-left-style: none; }
-  .osd .button:dir(rtl), .inline-toolbar .button:dir(rtl), .linked .button:dir(rtl), .linked > GtkComboBox > .button:dir(rtl) {
+  .osd .button:dir(rtl), .inline-toolbar .button:dir(rtl), .linked > .button:dir(rtl), .linked > GtkComboBox > .button:dir(rtl) {
     border-radius: 0;
     border-right-style: none;
     border-left-style: solid; }
 
-.osd .button:first-child, .inline-toolbar .button:first-child, .linked .button:first-child, .linked > GtkComboBox:first-child > .button {
+.osd .button:first-child, .inline-toolbar .button:first-child, .linked > .button:first-child, .linked > GtkComboBox:first-child > .button {
   border-radius: 3px 0 0 3px;
   border-left-style: solid; }
-.osd .button:last-child, .inline-toolbar .button:last-child, .linked .button:last-child, .linked > GtkComboBox:last-child > .button {
+.osd .button:last-child, .inline-toolbar .button:last-child, .linked > .button:last-child, .linked > GtkComboBox:last-child > .button {
   border-radius: 0 3px 3px 0; }
-  .osd .button:last-child:dir(rtl), .inline-toolbar .button:last-child:dir(rtl), .linked .button:last-child:dir(rtl), .linked > GtkComboBox:last-child > .button:dir(rtl) {
+  .osd .button:last-child:dir(rtl), .inline-toolbar .button:last-child:dir(rtl), .linked > .button:last-child:dir(rtl), .linked > GtkComboBox:last-child > .button:dir(rtl) {
     border-right-style: solid; }
-.osd .button:only-child, .inline-toolbar .button:only-child, .linked .button:only-child, .linked > GtkComboBox:only-child > .button {
+.osd .button:only-child, .inline-toolbar .button:only-child, .linked > .button:only-child, .linked > GtkComboBox:only-child > .button {
   border-radius: 3px;
   border-style: solid; }
 
-.linked.vertical .entry, .linked.vertical .entry:focus, .linked.vertical .entry:insensitive, .linked.vertical .entry:insensitive:backdrop, .linked.vertical .entry:backdrop, .linked.vertical .button, .linked.vertical .button:hover, .linked.vertical .button:active, .linked.vertical .button:checked, .linked.vertical .button:backdrop, .linked.vertical > GtkComboBoxText > .button,
+.linked.vertical .entry, .linked.vertical .entry:focus, .linked.vertical .entry:insensitive, .linked.vertical .entry:insensitive:backdrop, .linked.vertical .entry:backdrop, .linked.vertical > .button, .linked.vertical > .button:hover, .linked.vertical > .button:active, .linked.vertical > .button:checked, .linked.vertical > .button:backdrop, .linked.vertical > GtkComboBoxText > .button,
 .linked.vertical > GtkComboBox > .button {
   border-left-style: solid;
   border-top-style: none;
   border-radius: 0; }
 
-.linked.vertical .entry:first-child, .linked.vertical .button:first-child, .linked.vertical > GtkComboBoxText:first-child > .button,
+.linked.vertical .entry:first-child, .linked.vertical > .button:first-child, .linked.vertical > GtkComboBoxText:first-child > .button,
 .linked.vertical > GtkComboBox:first-child > .button {
   border-style: solid;
   border-radius: 3px 3px 0 0; }
-.linked.vertical .entry:last-child, .linked.vertical .button:last-child, .linked.vertical > GtkComboBoxText:last-child > .button,
+.linked.vertical .entry:last-child, .linked.vertical > .button:last-child, .linked.vertical > GtkComboBoxText:last-child > .button,
 .linked.vertical > GtkComboBox:last-child > .button {
   border-radius: 0 0 3px 3px; }
-.linked.vertical .entry:only-child, .linked.vertical .button:only-child, .linked.vertical > GtkComboBoxText:only-child > .button,
+.linked.vertical .entry:only-child, .linked.vertical > .button:only-child, .linked.vertical > GtkComboBoxText:only-child > .button,
 .linked.vertical > GtkComboBox:only-child > .button {
   border-radius: 3px;
   border-style: solid; }

@@ -440,17 +440,17 @@ $_dot_color: $selected_bg_color;
 //    -GtkWidget-wide-separators: true;
 //    -GtkWidget-horizontal-separator: 0;
 //   }
-  .linked &,
-  .linked &:hover,
-  .linked &:active,
-  .linked &:checked,
-  .linked &:backdrop { @extend %linked; }
+  .linked > &,
+  .linked > &:hover,
+  .linked > &:active,
+  .linked > &:checked,
+  .linked > &:backdrop { @extend %linked; }
 
-  .linked.vertical &,
-  .linked.vertical &:hover,
-  .linked.vertical &:active,
-  .linked.vertical &:checked,
-  .linked.vertical &:backdrop { @extend %linked_vertical; }
+  .linked.vertical > &,
+  .linked.vertical > &:hover,
+  .linked.vertical > &:active,
+  .linked.vertical > &:checked,
+  .linked.vertical > &:backdrop { @extend %linked_vertical; }
 }
 
 // all the following is for the +|- buttons on inline toolbars, that way
