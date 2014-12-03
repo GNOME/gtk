@@ -505,6 +505,7 @@ gdk_mir_window_impl_move_resize (GdkWindow *window,
                                  gint       width,
                                  gint       height)
 {
+  /*
   g_printerr ("gdk_mir_window_impl_move_resize");
   g_printerr (" window=%p", window);
   if (with_move)
@@ -512,6 +513,7 @@ gdk_mir_window_impl_move_resize (GdkWindow *window,
   if (width > 0)
     g_printerr (" size=%dx%dpx", width, height);
   g_printerr ("\n");
+  */
   GdkMirWindowImpl *impl = GDK_MIR_WINDOW_IMPL (window->impl);
 
   /* Redraw parent where we moved from */
@@ -711,7 +713,7 @@ gdk_mir_window_impl_input_shape_combine_region (GdkWindow            *window,
                                                 gint                  offset_x,
                                                 gint                  offset_y)
 {
-  g_printerr ("gdk_mir_window_impl_input_shape_combine_region window=%p\n", window);
+  // g_printerr ("gdk_mir_window_impl_input_shape_combine_region window=%p\n", window);
 }
 
 static void
@@ -862,7 +864,7 @@ static void
 gdk_mir_window_impl_set_title (GdkWindow   *window,
                                const gchar *title)
 {
-  g_printerr ("gdk_mir_window_impl_set_title window=%p\n", window);
+  // g_printerr ("gdk_mir_window_impl_set_title window=%p\n", window);
 }
 
 static void
@@ -1288,7 +1290,7 @@ gdk_mir_window_impl_set_shadow_width (GdkWindow *window,
                                       gint       top,
                                       gint       bottom)
 {
-  g_printerr ("gdk_mir_window_impl_set_shadow_width window=%p\n", window);
+  // g_printerr ("gdk_mir_window_impl_set_shadow_width window=%p\n", window);
 }
 
 static gboolean
