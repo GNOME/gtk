@@ -277,7 +277,7 @@ GtkTextView { // This will get overridden by .view, needed by gedit line numbers
     &:backdrop { background-color: transparent; }
   }
 
-  .linked & { //FIXME: use same buttons linking logic and template
+  .linked > & { //FIXME: use same buttons linking logic and template
     border-radius: 0;
     &:first-child {
       border-top-left-radius: 3px;
@@ -317,7 +317,7 @@ GtkTextView { // This will get overridden by .view, needed by gedit line numbers
     &:backdrop { color: mix($backdrop_fg_color, $backdrop_base_color, 80%); }
   }
 
-  .linked.vertical & { //FIXME comment stuff and make the whole thing smarter.
+  .linked.vertical > & { //FIXME comment stuff and make the whole thing smarter.
     @include entry(normal, $edge: none);
     background-image: linear-gradient(to bottom, $base_color);
     border-bottom-color: mix($borders_color, $base_color, 30%);
@@ -691,17 +691,17 @@ $_dot_color: if($variant=='light', $selected_bg_color,
 
   .primary-toolbar & { icon-shadow: none; } // tango icons don't need shadows
 
-  .linked &,
-  .linked &:hover,
-  .linked &:active,
-  .linked &:checked,
-  .linked &:backdrop { @extend %linked; }
+  .linked > &,
+  .linked > &:hover,
+  .linked > &:active,
+  .linked > &:checked,
+  .linked > &:backdrop { @extend %linked; }
 
-  .linked.vertical &,
-  .linked.vertical &:hover,
-  .linked.vertical &:active,
-  .linked.vertical &:checked,
-  .linked.vertical &:backdrop { @extend %linked_vertical; }
+  .linked.vertical > &,
+  .linked.vertical > &:hover,
+  .linked.vertical > &:active,
+  .linked.vertical > &:checked,
+  .linked.vertical > &:backdrop { @extend %linked_vertical; }
 }
 
 %needs_attention {
