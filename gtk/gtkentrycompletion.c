@@ -1499,6 +1499,7 @@ _gtk_entry_completion_resize_popup (GtkEntryCompletion *completion)
   GdkWindow *window;
   GtkRequisition popup_req;
   GtkRequisition entry_req;
+  GtkRequisition tree_req;
   GtkTreePath *path;
   gboolean above;
   gint width;
@@ -1525,6 +1526,11 @@ _gtk_entry_completion_resize_popup (GtkEntryCompletion *completion)
   actions = gtk_tree_model_iter_n_children (GTK_TREE_MODEL (completion->priv->actions), NULL);
   action_column  = gtk_tree_view_get_column (GTK_TREE_VIEW (completion->priv->action_view), 0);
 
+  /* Call get preferred size on the on the tree view to force it to validate its
+   * cells before calling into the cell size functions.
+   */
+  gtk_widget_get_preferred_size (completion->priv->tree_view,
+                                 &tree_req, NULL);
   gtk_tree_view_column_cell_get_size (completion->priv->column, NULL,
                                       NULL, NULL, NULL, &height);
   gtk_tree_view_column_cell_get_size (action_column, NULL,
