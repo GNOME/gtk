@@ -2927,11 +2927,11 @@ settings_update_font_options (GtkSettings *settings)
   GtkSettingsPrivate *priv = settings->priv;
   gint hinting;
   gchar *hint_style_str;
-  cairo_hint_style_t hint_style = CAIRO_HINT_STYLE_NONE;
+  cairo_hint_style_t hint_style;
   gint antialias;
-  cairo_antialias_t antialias_mode = CAIRO_ANTIALIAS_GRAY;
+  cairo_antialias_t antialias_mode;
   gchar *rgba_str;
-  cairo_subpixel_order_t subpixel_order = CAIRO_SUBPIXEL_ORDER_DEFAULT;
+  cairo_subpixel_order_t subpixel_order;
   cairo_font_options_t *options;
 
   g_object_get (settings,
@@ -2945,26 +2945,31 @@ settings_update_font_options (GtkSettings *settings)
 
   cairo_font_options_set_hint_metrics (options, CAIRO_HINT_METRICS_ON);
 
-  if (hinting >= 0 && !hinting)
+  hint_style = CAIRO_HINT_STYLE_DEFAULT;
+  if (hinting == 0)
     {
       hint_style = CAIRO_HINT_STYLE_NONE;
     }
-  else if (hint_style_str)
+  else if (hinting == 1)
     {
-      if (strcmp (hint_style_str, "hintnone") == 0)
-        hint_style = CAIRO_HINT_STYLE_NONE;
-      else if (strcmp (hint_style_str, "hintslight") == 0)
-        hint_style = CAIRO_HINT_STYLE_SLIGHT;
-      else if (strcmp (hint_style_str, "hintmedium") == 0)
-        hint_style = CAIRO_HINT_STYLE_MEDIUM;
-      else if (strcmp (hint_style_str, "hintfull") == 0)
-        hint_style = CAIRO_HINT_STYLE_FULL;
+      if (hint_style_str)
+        {
+          if (strcmp (hint_style_str, "hintnone") == 0)
+            hint_style = CAIRO_HINT_STYLE_NONE;
+          else if (strcmp (hint_style_str, "hintslight") == 0)
+            hint_style = CAIRO_HINT_STYLE_SLIGHT;
+          else if (strcmp (hint_style_str, "hintmedium") == 0)
+            hint_style = CAIRO_HINT_STYLE_MEDIUM;
+          else if (strcmp (hint_style_str, "hintfull") == 0)
+            hint_style = CAIRO_HINT_STYLE_FULL;
+        }
     }
 
   g_free (hint_style_str);
 
   cairo_font_options_set_hint_style (options, hint_style);
 
+  subpixel_order = CAIRO_SUBPIXEL_ORDER_DEFAULT;
   if (rgba_str)
     {
       if (strcmp (rgba_str, "rgb") == 0)
@@ -2975,18 +2980,24 @@ settings_update_font_options (GtkSettings *settings)
         subpixel_order = CAIRO_SUBPIXEL_ORDER_VRGB;
       else if (strcmp (rgba_str, "vbgr") == 0)
         subpixel_order = CAIRO_SUBPIXEL_ORDER_VBGR;
-
-      g_free (rgba_str);
     }
+
+  g_free (rgba_str);
 
   cairo_font_options_set_subpixel_order (options, subpixel_order);
 
-  if (antialias >= 0 && !antialias)
-    antialias_mode = CAIRO_ANTIALIAS_NONE;
-  else if (subpixel_order != CAIRO_SUBPIXEL_ORDER_DEFAULT)
-    antialias_mode = CAIRO_ANTIALIAS_SUBPIXEL;
-  else if (antialias >= 0)
-    antialias_mode = CAIRO_ANTIALIAS_GRAY;
+  antialias_mode = CAIRO_ANTIALIAS_DEFAULT;
+  if (antialias == 0)
+    {
+      antialias_mode = CAIRO_ANTIALIAS_NONE;
+    }
+  else if (antialias == 1)
+    {
+      if (subpixel_order != CAIRO_SUBPIXEL_ORDER_DEFAULT)
+        antialias_mode = CAIRO_ANTIALIAS_SUBPIXEL;
+      else
+        antialias_mode = CAIRO_ANTIALIAS_GRAY;
+    }
 
   cairo_font_options_set_antialias (options, antialias_mode);
 
