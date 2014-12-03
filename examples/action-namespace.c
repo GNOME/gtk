@@ -81,6 +81,7 @@ activate (GApplication *app,
     return;
 
   win = gtk_application_window_new (GTK_APPLICATION (app));
+  gtk_window_set_default_size (GTK_WINDOW (win), 200, 300);
 
   doc_actions = g_simple_action_group_new ();
   g_action_map_add_action_entries (G_ACTION_MAP (doc_actions), doc_entries, G_N_ELEMENTS (doc_entries), win);
@@ -110,7 +111,8 @@ activate (GApplication *app,
   gtk_button_set_label (GTK_BUTTON (button), "Menu");
   gtk_widget_insert_action_group (button, "doc", G_ACTION_GROUP (doc_actions));
   gtk_menu_button_set_menu_model (GTK_MENU_BUTTON (button), G_MENU_MODEL (button_menu));
-
+  gtk_widget_set_halign (GTK_WIDGET (button), GTK_ALIGN_CENTER);
+  gtk_widget_set_valign (GTK_WIDGET (button), GTK_ALIGN_START);
   gtk_container_add (GTK_CONTAINER (win), button);
   gtk_container_set_border_width (GTK_CONTAINER (win), 12);
   gtk_widget_show_all (win);
