@@ -2984,15 +2984,10 @@ gdk_window_begin_paint_region (GdkWindow       *window,
 
   if (implicit_paint)
     {
-      int width, height;
-
       paint->uses_implicit = TRUE;
       paint->pixmap = g_object_ref (implicit_paint->pixmap);
       paint->x_offset = -private->abs_x + implicit_paint->x_offset;
       paint->y_offset = -private->abs_y + implicit_paint->y_offset;
-
-      gdk_drawable_get_size (paint->pixmap, &width, &height);
-      paint->surface = _gdk_drawable_create_cairo_surface (paint->pixmap, width, height);
     }
   else
     {
@@ -3002,8 +2997,9 @@ gdk_window_begin_paint_region (GdkWindow       *window,
       paint->pixmap =
 	gdk_pixmap_new (window,
 			MAX (clip_box.width, 1), MAX (clip_box.height, 1), -1);
-      paint->surface = _gdk_drawable_ref_cairo_surface (paint->pixmap);
     }
+
+  paint->surface = _gdk_drawable_ref_cairo_surface (paint->pixmap);
 
   if (paint->surface)
     cairo_surface_set_device_offset (paint->surface,
