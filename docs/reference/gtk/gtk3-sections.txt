@@ -7954,6 +7954,8 @@ gtk_popover_set_position
 gtk_popover_get_position
 gtk_popover_set_modal
 gtk_popover_get_modal
+<SUBSECTION Private>
+gtk_popover_get_type
 </SECTION>
 
 <SECTION>
@@ -7962,6 +7964,8 @@ gtk_popover_get_modal
 GtkPopoverMenu
 gtk_popover_menu_new
 gtk_popover_menu_open_submenu
+<SUBSECTION Private>
+gtk_popover_menu_get_type
 </SECTION>
 
 <SECTION>
