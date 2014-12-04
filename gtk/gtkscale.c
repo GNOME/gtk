@@ -890,16 +890,16 @@ gtk_scale_get_range_border (GtkRange  *range,
       if (gtk_orientable_get_orientation (GTK_ORIENTABLE (scale)) == GTK_ORIENTATION_HORIZONTAL)
         {
           if (n1 > 0)
-            border->top += h1 + value_spacing + slider_width / 2;
+            border->top += h1 + value_spacing + slider_width / 4;
           if (n2 > 0)
-            border->bottom += h2 + value_spacing + slider_width / 2;
+            border->bottom += h2 + value_spacing + slider_width / 4;
         }
       else
         {
           if (n1 > 0)
-            border->left += w1 + value_spacing + slider_width / 2;
+            border->left += w1 + value_spacing + slider_width / 4;
           if (n2 > 0)
-            border->right += w2 + value_spacing + slider_width / 2;
+            border->right += w2 + value_spacing + slider_width / 4;
         }
     }
 }
@@ -1162,14 +1162,14 @@ gtk_scale_draw (GtkWidget *widget,
               if (mark->position == GTK_POS_TOP)
                 {
                   y1 = range_rect.y;
-                  y2 = y1 - slider_width / 2;
+                  y2 = y1 - slider_width / 4;
                   min_pos = min_pos_before;
                   max_pos = find_next_pos (widget, m, marks + i, GTK_POS_TOP) - min_sep;
                 }
               else
                 {
                   y1 = range_rect.y + range_rect.height;
-                  y2 = y1 + slider_width / 2;
+                  y2 = y1 + slider_width / 4;
                   min_pos = min_pos_after;
                   max_pos = find_next_pos (widget, m, marks + i, GTK_POS_BOTTOM) - min_sep;
                 }
@@ -1214,14 +1214,14 @@ gtk_scale_draw (GtkWidget *widget,
               if (mark->position == GTK_POS_TOP)
                 {
                   x1 = range_rect.x;
-                  x2 = range_rect.x - slider_width / 2;
+                  x2 = range_rect.x - slider_width / 4;
                   min_pos = min_pos_before;
                   max_pos = find_next_pos (widget, m, marks + i, GTK_POS_TOP) - min_sep;
                 }
               else
                 {
                   x1 = range_rect.x + range_rect.width;
-                  x2 = range_rect.x + range_rect.width + slider_width / 2;
+                  x2 = range_rect.x + range_rect.width + slider_width / 4;
                   min_pos = min_pos_after;
                   max_pos = find_next_pos (widget, m, marks + i, GTK_POS_BOTTOM) - min_sep;
                 }
