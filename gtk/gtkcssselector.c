@@ -1855,31 +1855,6 @@ parse_selector_pseudo_class (GtkCssParser   *parser,
 }
 
 static GtkCssSelector *
-try_parse_name (GtkCssParser   *parser,
-                GtkCssSelector *selector)
-{
-  char *name;
-
-  name = _gtk_css_parser_try_ident (parser, FALSE);
-  if (name)
-    {
-      if (_gtk_style_context_check_region_name (name))
-	selector = gtk_css_selector_new (&GTK_CSS_SELECTOR_REGION,
-					 selector,
-					 g_intern_string (name));
-      else
-	selector = gtk_css_selector_new (&GTK_CSS_SELECTOR_NAME,
-					 selector,
-					 get_type_reference (name));
-      g_free (name);
-    }
-  else if (_gtk_css_parser_try (parser, "*", FALSE))
-    selector = gtk_css_selector_new (&GTK_CSS_SELECTOR_ANY, selector, NULL);
-  
-  return selector;
-}
-
-static GtkCssSelector *
 parse_selector_negation (GtkCssParser   *parser,
                          GtkCssSelector *selector)
 {
@@ -1926,9 +1901,28 @@ static GtkCssSelector *
 parse_simple_selector (GtkCssParser   *parser,
                        GtkCssSelector *selector)
 {
-  guint size = gtk_css_selector_size (selector);
-  
-  selector = try_parse_name (parser, selector);
+  gboolean parsed_something = FALSE;
+  char *name;
+
+  name = _gtk_css_parser_try_ident (parser, FALSE);
+  if (name)
+    {
+      if (_gtk_style_context_check_region_name (name))
+	selector = gtk_css_selector_new (&GTK_CSS_SELECTOR_REGION,
+					 selector,
+					 g_intern_string (name));
+      else
+	selector = gtk_css_selector_new (&GTK_CSS_SELECTOR_NAME,
+					 selector,
+					 get_type_reference (name));
+      g_free (name);
+      parsed_something = TRUE;
+    }
+  else if (_gtk_css_parser_try (parser, "*", FALSE))
+    {
+      selector = gtk_css_selector_new (&GTK_CSS_SELECTOR_ANY, selector, NULL);
+      parsed_something = TRUE;
+    }
 
   do {
       if (_gtk_css_parser_try (parser, "#", FALSE))
@@ -1939,7 +1933,7 @@ parse_simple_selector (GtkCssParser   *parser,
         selector = parse_selector_negation (parser, selector);
       else if (_gtk_css_parser_try (parser, ":", FALSE))
         selector = parse_selector_pseudo_class (parser, selector, FALSE);
-      else if (gtk_css_selector_size (selector) == size)
+      else if (!parsed_something)
         {
           _gtk_css_parser_error (parser, "Expected a valid selector");
           if (selector)
@@ -1948,6 +1942,8 @@ parse_simple_selector (GtkCssParser   *parser,
         }
       else
         break;
+
+      parsed_something = TRUE;
     }
   while (selector && !_gtk_css_parser_is_eof (parser));
 
