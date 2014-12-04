@@ -446,6 +446,7 @@ gdk_mir_window_impl_hide (GdkWindow *window)
   //g_printerr ("gdk_mir_window_impl_hide window=%p\n", window);
   GdkMirWindowImpl *impl = GDK_MIR_WINDOW_IMPL (window->impl);
 
+  impl->cursor_inside = FALSE;
   impl->visible = FALSE;
   ensure_no_surface (window);
 
@@ -459,6 +460,7 @@ gdk_mir_window_impl_withdraw (GdkWindow *window)
   //g_printerr ("gdk_mir_window_impl_withdraw window=%p\n", window);
   GdkMirWindowImpl *impl = GDK_MIR_WINDOW_IMPL (window->impl);
 
+  impl->cursor_inside = FALSE;
   impl->visible = FALSE;
   ensure_no_surface (window);
 
