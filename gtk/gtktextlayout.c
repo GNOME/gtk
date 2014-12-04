@@ -1580,6 +1580,24 @@ add_text_attrs (GtkTextLayout      *layout,
       
       pango_attr_list_insert (attrs, attr);
     }
+
+  if (style->no_fallback)
+    {
+      attr = pango_attr_fallback_new (!style->no_fallback);
+      attr->start_index = start;
+      attr->end_index = start + byte_count;
+
+      pango_attr_list_insert (attrs, attr);
+    }
+
+  if (style->letter_spacing != 0)
+    {
+      attr = pango_attr_letter_spacing_new (style->letter_spacing);
+      attr->start_index = start;
+      attr->end_index = start + byte_count;
+
+      pango_attr_list_insert (attrs, attr);
+    }
 }
 
 static void

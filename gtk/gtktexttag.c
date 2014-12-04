@@ -129,6 +129,8 @@ enum {
   PROP_PARAGRAPH_BACKGROUND,
   PROP_PARAGRAPH_BACKGROUND_GDK,
   PROP_PARAGRAPH_BACKGROUND_RGBA,
+  PROP_FALLBACK,
+  PROP_LETTER_SPACING,
 
   /* Behavior args */
   PROP_ACCUMULATIVE_MARGIN,
@@ -160,6 +162,8 @@ enum {
   PROP_TABS_SET,
   PROP_INVISIBLE_SET,
   PROP_PARAGRAPH_BACKGROUND_SET,
+  PROP_FALLBACK_SET,
+  PROP_LETTER_SPACING_SET,
 
   LAST_ARG
 };
@@ -600,6 +604,38 @@ gtk_text_tag_class_init (GtkTextTagClass *klass)
                                                        GTK_PARAM_READWRITE));
 
   /**
+   * GtkTextTag:fallback:
+   *
+   * Whether font fallback is enabled.
+   *
+   * When set to %TRUE, other fonts will be substituted
+   * where the current font is missing glyphs.
+   *
+   * Since: 3.16
+   */
+  g_object_class_install_property (object_class,
+                                   PROP_FALLBACK,
+                                   g_param_spec_boolean ("fallback",
+                                                         P_("Fallback"),
+                                                         P_("Whether font fallback is enabled."),
+                                                         TRUE,
+                                                         GTK_PARAM_READWRITE));
+
+  /**
+   * GtkTextTag:letter-spacing:
+   *
+   * Extra spacing between graphemes, in Pango units.
+   *
+   * Since: 3.16
+   */
+  g_object_class_install_property (object_class,
+                                   PROP_LETTER_SPACING,
+                                   g_param_spec_int ("letter-spacing",
+                                                     P_("Letter Spacing"),
+                                                     P_("Extra spacing between graphemes"),
+                                                     0, G_MAXINT, 0,
+                                                     GTK_PARAM_READWRITE));
+  /**
    * GtkTextTag:accumulative-margin:
    *
    * Whether the margins accumulate or override each other.
@@ -725,6 +761,14 @@ gtk_text_tag_class_init (GtkTextTagClass *klass)
   ADD_SET_PROP ("paragraph-background-set", PROP_PARAGRAPH_BACKGROUND_SET,
                 P_("Paragraph background set"),
                 P_("Whether this tag affects the paragraph background color"));
+
+  ADD_SET_PROP ("fallback-set", PROP_FALLBACK_SET,
+                P_("Fallback set"),
+                P_("Whether this tag affects font fallback"));
+
+  ADD_SET_PROP ("letter-spacing-set", PROP_LETTER_SPACING_SET,
+                P_("Letter spacing set"),
+                P_("Whether this tag affects letter spacing"));
 
   /**
    * GtkTextTag::event:
@@ -1450,6 +1494,18 @@ gtk_text_tag_set_property (GObject      *object,
       }
       break;
 
+    case PROP_FALLBACK:
+      priv->fallback_set = TRUE;
+      priv->values->no_fallback = !g_value_get_boolean (value);
+      g_object_notify (object, "fallback-set");
+      break;
+
+    case PROP_LETTER_SPACING:
+      priv->letter_spacing_set = TRUE;
+      priv->values->letter_spacing = g_value_get_int (value);
+      g_object_notify (object, "letter-spacing-set");
+      break;
+
     case PROP_ACCUMULATIVE_MARGIN:
       priv->accumulative_margin = g_value_get_boolean (value);
       g_object_notify (object, "accumulative-margin");
@@ -1763,6 +1819,14 @@ gtk_text_tag_get_property (GObject      *object,
       g_value_set_boxed (value, priv->values->pg_bg_rgba);
       break;
 
+    case PROP_FALLBACK:
+      g_value_set_boolean (value, !priv->values->no_fallback);
+      break;
+
+    case PROP_LETTER_SPACING:
+      g_value_set_int (value, priv->values->letter_spacing);
+      break;
+
     case PROP_ACCUMULATIVE_MARGIN:
       g_value_set_boolean (value, priv->accumulative_margin);
       break;
@@ -1859,6 +1923,14 @@ gtk_text_tag_get_property (GObject      *object,
       
     case PROP_PARAGRAPH_BACKGROUND_SET:
       g_value_set_boolean (value, priv->pg_bg_color_set);
+      break;
+
+    case PROP_FALLBACK_SET:
+      g_value_set_boolean (value, priv->fallback_set);
+      break;
+
+    case PROP_LETTER_SPACING_SET:
+      g_value_set_boolean (value, priv->letter_spacing_set);
       break;
 
     case PROP_BACKGROUND:

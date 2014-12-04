@@ -210,11 +210,15 @@ struct _GtkTextAttributes
   /* can edit this text */
   guint editable : 1;
 
+  guint no_fallback: 1;
+
   /*< private >*/
   /* Paragraph background */
   GdkRGBA *pg_bg_rgba;
 
-  guint padding[3];
+  gint letter_spacing;
+
+  guint padding[2];
 };
 
 GDK_AVAILABLE_IN_ALL

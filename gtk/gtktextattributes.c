@@ -378,6 +378,12 @@ G_GNUC_END_IGNORE_DEPRECATIONS
       if (tag->priv->language_set)
 	dest->language = vals->language;
 
+      if (tag->priv->fallback_set)
+        dest->no_fallback = vals->no_fallback;
+
+      if (tag->priv->letter_spacing_set)
+        dest->letter_spacing = vals->letter_spacing;
+
       ++n;
     }
 
@@ -404,7 +410,8 @@ _gtk_text_tag_affects_size (GtkTextTag *tag)
     priv->tabs_set ||
     priv->underline_set ||
     priv->wrap_mode_set ||
-    priv->invisible_set;
+    priv->invisible_set ||
+    priv->letter_spacing_set;
 }
 
 gboolean
@@ -417,5 +424,6 @@ _gtk_text_tag_affects_nonsize_appearance (GtkTextTag *tag)
     priv->fg_color_set ||
     priv->strikethrough_set ||
     priv->bg_full_height_set ||
-    priv->pg_bg_color_set;
+    priv->pg_bg_color_set ||
+    priv->fallback_set;
 }
