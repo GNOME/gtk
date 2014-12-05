@@ -3815,6 +3815,10 @@ places_sidebar_sort_func (GtkTreeModel *model,
     {
       retval = 1;
     }
+  else if (place_type_b == PLACES_CONNECT_TO_SERVER)
+    {
+      retval = -1;
+    }
 
   return retval;
 }
