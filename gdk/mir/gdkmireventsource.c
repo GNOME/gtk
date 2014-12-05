@@ -391,6 +391,14 @@ handle_resize_event (GdkWindow            *window,
   generate_configure_event (window, event->width, event->height);
 }
 
+static void
+handle_close_event (GdkWindow                  *window,
+                    const MirCloseSurfaceEvent *event)
+{
+  send_event (window, get_pointer (window), gdk_event_new (GDK_DESTROY));
+  gdk_window_destroy_notify (window);
+}
+
 typedef struct
 {
   GdkWindow *window;
@@ -422,6 +430,9 @@ gdk_mir_event_source_queue_event (GdkDisplay     *display,
       break;
     case mir_event_type_orientation:
       // FIXME?
+      break;
+    case mir_event_type_close_surface:
+      handle_close_event (window, &event->close_surface);
       break;
     default:
       g_warning ("Ignoring unknown Mir event %d", event->type);

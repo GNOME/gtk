@@ -270,6 +270,13 @@ _gdk_mir_print_resize_event (const MirResizeEvent *event)
 }
 
 void
+_gdk_mir_print_close_event (const MirCloseSurfaceEvent *event)
+{
+  g_printerr ("CLOSED\n");
+  g_printerr (" Surface %i\n", event->surface_id);
+}
+
+void
 _gdk_mir_print_event (const MirEvent *event)
 {
   switch (event->type)
@@ -285,6 +292,9 @@ _gdk_mir_print_event (const MirEvent *event)
       break;
     case mir_event_type_resize:
       _gdk_mir_print_resize_event (&event->resize);
+      break;
+    case mir_event_type_close_surface:
+      _gdk_mir_print_close_event (&event->close_surface);
       break;
     default:
       g_printerr ("EVENT %u\n", event->type);
