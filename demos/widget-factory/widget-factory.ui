@@ -94,6 +94,13 @@
     <property name="step_increment">1</property>
     <property name="page_increment">10</property>
   </object>
+  <object class="GtkAdjustment" id="adjustment3">
+    <property name="upper">4</property>
+    <property name="lower">0</property>
+    <property name="value">1</property>
+    <property name="step_increment">1</property>
+    <property name="page_increment">1</property>
+  </object>
   <object class="GtkAdjustment" id="pg_adjustment">
     <property name="upper">99</property>
     <property name="lower">1</property>
@@ -1261,6 +1268,29 @@ Suspendisse feugiat quam quis dolor accumsan cursus.</property>
                           </packing>
                         </child>
                         <child>
+                          <object class="GtkScale" id="scale5">
+                            <property name="visible">True</property>
+                            <property name="can_focus">True</property>
+                            <property name="draw_value">False</property>
+                            <property name="has_origin">False</property>
+                            <property name="round_digits">0</property>
+                            <property name="adjustment">adjustment3</property>
+                            <property name="restrict_to_fill_level">False</property>
+                            <marks>
+                              <mark value="0" position="bottom"/>
+                              <mark value="1" position="bottom"/>
+                              <mark value="2" position="bottom"/>
+                              <mark value="3" position="bottom"/>
+                              <mark value="4" position="bottom"/>
+                            </marks>
+                          </object>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="fill">True</property>
+                            <property name="position">2</property>
+                          </packing>
+                        </child>
+                        <child>
                           <object class="GtkBox" id="box25">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
@@ -1357,7 +1387,7 @@ Suspendisse feugiat quam quis dolor accumsan cursus.</property>
                           <packing>
                             <property name="expand">True</property>
                             <property name="fill">True</property>
-                            <property name="position">2</property>
+                            <property name="position">3</property>
                           </packing>
                         </child>
                       </object>
