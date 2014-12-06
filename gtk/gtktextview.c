@@ -7444,7 +7444,7 @@ gtk_text_view_ensure_layout (GtkTextView *text_view)
  * attributes in effect at a given text position.
  *
  * The return value is a copy owned by the caller of this function,
- * and should be freed.
+ * and should be freed with gtk_text_attributes_unref().
  * 
  * Returns: a new #GtkTextAttributes
  **/

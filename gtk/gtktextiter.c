@@ -410,7 +410,7 @@ gtk_text_iter_get_buffer (const GtkTextIter *iter)
  * simple assignment (`GtkTextIter i = j;`). The
  * function is used by language bindings.
  *
- * Returns: a copy of the @iter, free with gtk_text_iter_free ()
+ * Returns: a copy of the @iter, free with gtk_text_iter_free()
  **/
 GtkTextIter*
 gtk_text_iter_copy (const GtkTextIter *iter)
@@ -584,7 +584,7 @@ _gtk_text_iter_get_btree (const GtkTextIter *iter)
  * Returns the character offset of an iterator.
  * Each character in a #GtkTextBuffer has an offset,
  * starting with 0 for the first character in the buffer.
- * Use gtk_text_buffer_get_iter_at_offset () to convert an
+ * Use gtk_text_buffer_get_iter_at_offset() to convert an
  * offset back into an iterator.
  *
  * Returns: a character offset
@@ -923,7 +923,7 @@ gtk_text_iter_get_slice       (const GtkTextIter *start,
  * contains non-text elements such as images, the character and byte
  * offsets in the returned string will not correspond to character and
  * byte offsets in the buffer. If you want offsets to correspond, see
- * gtk_text_iter_get_slice ().
+ * gtk_text_iter_get_slice().
  *
  * Returns: (transfer full): array of characters from the buffer
  **/
@@ -945,7 +945,7 @@ gtk_text_iter_get_text       (const GtkTextIter *start,
  * @start: iterator at start of range
  * @end: iterator at end of range
  *
- * Like gtk_text_iter_get_slice (), but invisible text is not included.
+ * Like gtk_text_iter_get_slice(), but invisible text is not included.
  * Invisible text is usually invisible because a #GtkTextTag with the
  * “invisible” attribute turned on has been applied to it.
  *
@@ -969,7 +969,7 @@ gtk_text_iter_get_visible_slice (const GtkTextIter  *start,
  * @start: iterator at start of range
  * @end: iterator at end of range
  *
- * Like gtk_text_iter_get_text (), but invisible text is not included.
+ * Like gtk_text_iter_get_text(), but invisible text is not included.
  * Invisible text is usually invisible because a #GtkTextTag with the
  * “invisible” attribute turned on has been applied to it.
  *
@@ -1253,8 +1253,8 @@ gtk_text_iter_ends_tag   (const GtkTextIter  *iter,
  * @iter: an iterator
  * @tag: (allow-none): a #GtkTextTag, or %NULL
  *
- * This is equivalent to (gtk_text_iter_begins_tag () ||
- * gtk_text_iter_ends_tag ()), i.e. it tells you whether a range with
+ * This is equivalent to (gtk_text_iter_begins_tag() ||
+ * gtk_text_iter_ends_tag()), i.e. it tells you whether a range with
  * @tag applied to it begins or ends at @iter.
  *
  * Returns: whether @tag is toggled on or off at @iter
@@ -1383,7 +1383,7 @@ gtk_text_iter_get_tags (const GtkTextIter *iter)
  * Returns whether the character at @iter is within an editable region
  * of text.  Non-editable text is “locked” and can’t be changed by the
  * user via #GtkTextView. This function is simply a convenience
- * wrapper around gtk_text_iter_get_attributes (). If no tags applied
+ * wrapper around gtk_text_iter_get_attributes(). If no tags applied
  * to this text affect editability, @default_setting will be returned.
  *
  * You don’t want to use this function to decide whether text can be
@@ -1461,10 +1461,10 @@ gtk_text_iter_can_insert (const GtkTextIter *iter,
  * gtk_text_iter_get_language:
  * @iter: an iterator
  *
- * A convenience wrapper around gtk_text_iter_get_attributes (),
+ * A convenience wrapper around gtk_text_iter_get_attributes(),
  * which returns the language in effect at @iter. If no tags affecting
  * language apply to @iter, the return value is identical to that of
- * gtk_get_default_language ().
+ * gtk_get_default_language().
  *
  * Returns: (transfer full): language in effect at @iter
  **/
@@ -1490,9 +1490,9 @@ gtk_text_iter_get_language (const GtkTextIter *iter)
  * @iter: an iterator
  *
  * Returns %TRUE if @iter begins a paragraph,
- * i.e. if gtk_text_iter_get_line_offset () would return 0.
+ * i.e. if gtk_text_iter_get_line_offset() would return 0.
  * However this function is potentially more efficient than
- * gtk_text_iter_get_line_offset () because it doesn’t have to compute
+ * gtk_text_iter_get_line_offset() because it doesn’t have to compute
  * the offset, it just has to see whether it’s 0.
  *
  * Returns: whether @iter begins a line
@@ -1588,7 +1588,7 @@ gtk_text_iter_ends_line (const GtkTextIter   *iter)
  * @iter: an iterator
  *
  * Returns %TRUE if @iter is the end iterator, i.e. one past the last
- * dereferenceable iterator in the buffer. gtk_text_iter_is_end () is
+ * dereferenceable iterator in the buffer. gtk_text_iter_is_end() is
  * the most efficient way to check whether an iterator is the end
  * iterator.
  *
@@ -1751,7 +1751,7 @@ gtk_text_iter_get_bytes_in_line (const GtkTextIter   *iter)
  * settings you wish to use if no tags are in effect. You’d typically
  * obtain the defaults from gtk_text_view_get_default_attributes().
  *
- * gtk_text_iter_get_attributes () will modify @values, applying the
+ * gtk_text_iter_get_attributes() will modify @values, applying the
  * effects of any tags present at @iter. If any tags affected @values,
  * the function returns %TRUE.
  *
@@ -2209,10 +2209,10 @@ _gtk_text_iter_backward_indexable_segment (GtkTextIter *iter)
  *
  * Moves @iter forward by one character offset. Note that images
  * embedded in the buffer occupy 1 character slot, so
- * gtk_text_iter_forward_char () may actually move onto an image instead
+ * gtk_text_iter_forward_char() may actually move onto an image instead
  * of a character, if you have images in your buffer.  If @iter is the
  * end iterator or one character before it, @iter will now point at
- * the end iterator, and gtk_text_iter_forward_char () returns %FALSE for
+ * the end iterator, and gtk_text_iter_forward_char() returns %FALSE for
  * convenience when writing loops.
  *
  * Returns: whether @iter moved and is dereferenceable
@@ -2241,7 +2241,7 @@ gtk_text_iter_forward_char (GtkTextIter *iter)
  *
  * Moves backward by one character offset. Returns %TRUE if movement
  * was possible; if @iter was the first in the buffer (character
- * offset 0), gtk_text_iter_backward_char () returns %FALSE for convenience when
+ * offset 0), gtk_text_iter_backward_char() returns %FALSE for convenience when
  * writing loops.
  *
  * Returns: whether movement was possible
@@ -2464,8 +2464,8 @@ gtk_text_iter_backward_chars (GtkTextIter *iter, gint count)
  *
  * Moves forward by @count text characters (pixbufs, widgets,
  * etc. do not count as characters for this). Equivalent to moving
- * through the results of gtk_text_iter_get_text (), rather than
- * gtk_text_iter_get_slice ().
+ * through the results of gtk_text_iter_get_text(), rather than
+ * gtk_text_iter_get_slice().
  *
  * Returns: whether @iter moved and is dereferenceable
  **/
@@ -2485,8 +2485,8 @@ gtk_text_iter_forward_text_chars  (GtkTextIter *iter,
  *
  * Moves backward by @count text characters (pixbufs, widgets,
  * etc. do not count as characters for this). Equivalent to moving
- * through the results of gtk_text_iter_get_text (), rather than
- * gtk_text_iter_get_slice ().
+ * through the results of gtk_text_iter_get_text(), rather than
+ * gtk_text_iter_get_slice().
  *
  * Returns: whether @iter moved and is dereferenceable
  **/
@@ -4796,7 +4796,7 @@ lines_match (const GtkTextIter *start,
   return lines_match (&next, lines, visible_only, slice, case_insensitive, NULL, match_end);
 }
 
-/* strsplit () that retains the delimiter as part of the string. */
+/* strsplit() that retains the delimiter as part of the string. */
 static gchar **
 strbreakup (const char *string,
             const char *delimiter,
@@ -4954,7 +4954,7 @@ gtk_text_iter_forward_search (const GtkTextIter *iter,
   do
     {
       /* This loop has an inefficient worst-case, where
-       * gtk_text_iter_get_text () is called repeatedly on
+       * gtk_text_iter_get_text() is called repeatedly on
        * a single line.
        */
       GtkTextIter end;
@@ -5390,7 +5390,7 @@ gtk_text_iter_equal (const GtkTextIter *lhs,
     return real_lhs->line_byte_offset == real_rhs->line_byte_offset;
   else
     {
-      /* the ensure_char_offsets () calls do nothing if the char offsets
+      /* the ensure_char_offsets() calls do nothing if the char offsets
          are already up-to-date. */
       ensure_char_offsets (real_lhs);
       ensure_char_offsets (real_rhs);
@@ -5439,7 +5439,7 @@ gtk_text_iter_compare (const GtkTextIter *lhs,
         }
       else
         {
-          /* the ensure_char_offsets () calls do nothing if
+          /* the ensure_char_offsets() calls do nothing if
              the offsets are already up-to-date. */
           ensure_char_offsets (real_lhs);
           ensure_char_offsets (real_rhs);
