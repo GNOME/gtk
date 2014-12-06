@@ -282,7 +282,7 @@ GtkRadioButton:selected {
   padding: 0;
 }
 
-.notebook .active-page {
+.notebook tab:active {
   color: @selected_fg_color;
   background-color: darker (@bg_color);
 }
