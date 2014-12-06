@@ -1630,6 +1630,14 @@ gtk_text_tag_set_property (GObject      *object,
       priv->pg_bg_color_set = g_value_get_boolean (value);
       break;
 
+    case PROP_FALLBACK_SET:
+      priv->fallback_set = g_value_get_boolean (value);
+      break;
+
+    case PROP_LETTER_SPACING_SET:
+      priv->letter_spacing_set = g_value_get_boolean (value);
+      break;
+
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
