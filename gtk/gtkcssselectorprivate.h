@@ -23,7 +23,7 @@
 
 G_BEGIN_DECLS
 
-typedef struct _GtkCssSelector GtkCssSelector;
+typedef union _GtkCssSelector GtkCssSelector;
 typedef struct _GtkCssSelectorTree GtkCssSelectorTree;
 typedef struct _GtkCssSelectorTreeBuilder GtkCssSelectorTreeBuilder;
 
