@@ -27,7 +27,8 @@ exampleapp: $(OBJS) gschemas.compiled
 	$(CC) -o $(@F) $(LIBS) $(OBJS)
 
 clean:
-	rm -f org.gtk.exampleapp.gschema.xml.valid
+	rm -f org.gtk.exampleapp.gschema.valid
 	rm -f gschemas.compiled
 	rm -f resources.c
 	rm -f $(OBJS)
+	rm -f exampleapp

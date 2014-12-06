@@ -1,5 +1,4 @@
 CC = gcc
-LD = ld
 PKGCONFIG = $(shell which pkg-config)
 CFLAGS = `$(PKGCONFIG) --cflags gtk+-3.0`
 LIBS = `$(PKGCONFIG) --libs gtk+-3.0`
@@ -18,3 +17,4 @@ exampleapp: $(OBJS)
 
 clean:
 	rm -f $(OBJS)
+	rm -f exampleapp

@@ -22,3 +22,4 @@ exampleapp: $(OBJS)
 clean:
 	rm -f resources.c
 	rm -f $(OBJS)
+	rm -f exampleapp
