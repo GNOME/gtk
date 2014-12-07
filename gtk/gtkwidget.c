@@ -1657,6 +1657,8 @@ G_GNUC_END_IGNORE_DEPRECATIONS
    * Signals that all holders of a reference to the widget should release
    * the reference that they hold. May result in finalization of the widget
    * if all references are released.
+   *
+   * This signal is not suitable for saving widget state.
    */
   widget_signals[DESTROY] =
     g_signal_new (I_("destroy"),
