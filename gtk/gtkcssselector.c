@@ -1307,8 +1307,8 @@ DEFINE_SIMPLE_SELECTOR(pseudoclass_state, PSEUDOCLASS_STATE, print_pseudoclass_s
 /* PSEUDOCLASS FOR POSITION */
 
 static void
-gtk_css_selector_pseudoclass_position_print (const GtkCssSelector *selector,
-                                             GString              *string)
+print_pseudoclass_position (const GtkCssSelector *selector,
+                            GString              *string)
 {
   switch (selector->position.type)
     {
@@ -1383,8 +1383,8 @@ gtk_css_selector_pseudoclass_position_print (const GtkCssSelector *selector,
 }
 
 static gboolean
-get_position_match (const GtkCssSelector *selector,
-		    const GtkCssMatcher  *matcher)
+match_pseudoclass_position (const GtkCssSelector *selector,
+		            const GtkCssMatcher  *matcher)
 {
   switch (selector->position.type)
     {
@@ -1411,66 +1411,15 @@ get_position_match (const GtkCssSelector *selector,
   return TRUE;
 }
 
-static gboolean
-gtk_css_selector_pseudoclass_position_match (const GtkCssSelector *selector,
-                                             const GtkCssMatcher  *matcher)
-{
-  if (!get_position_match (selector, matcher))
-    return FALSE;
-
-  return gtk_css_selector_match (gtk_css_selector_previous (selector), matcher);
-}
-
-static void
-gtk_css_selector_pseudoclass_position_tree_match (const GtkCssSelectorTree *tree,
-						  const GtkCssMatcher  *matcher,
-						  GHashTable *res)
-{
-  if (!get_position_match (&tree->selector, matcher))
-    return;
-
-  gtk_css_selector_tree_found_match (tree, res);
-
-  gtk_css_selector_tree_match_previous (tree, matcher, res);
-}
-
-static GtkCssChange
-gtk_css_selector_pseudoclass_position_tree_get_change (const GtkCssSelectorTree *tree,
-						       const GtkCssMatcher  *matcher)
-{
-  GtkCssChange change, previous_change;
-
-  if (!get_position_match (&tree->selector, matcher))
-    return 0;
-
-  change = 0;
-
-  if (tree->matches_offset != GTK_CSS_SELECTOR_TREE_EMPTY_OFFSET)
-    change |= GTK_CSS_CHANGE_POSITION | GTK_CSS_CHANGE_GOT_MATCH;
-
-  previous_change = gtk_css_selector_tree_get_previous_change (tree, matcher);
-
-  if (previous_change != 0)
-    change |= previous_change | GTK_CSS_CHANGE_POSITION | GTK_CSS_CHANGE_GOT_MATCH;
-
-  return change;
-}
-
-static GtkCssChange
-gtk_css_selector_pseudoclass_position_get_change (const GtkCssSelector *selector, GtkCssChange previous_change)
-{
-  return previous_change | GTK_CSS_CHANGE_POSITION;
-}
-
 static guint
-gtk_css_selector_pseudoclass_position_hash_one (const GtkCssSelector *a)
+hash_pseudoclass_position (const GtkCssSelector *a)
 {
   return (((a->position.type << POSITION_NUMBER_BITS) | a->position.a) << POSITION_NUMBER_BITS) | a->position.b;
 }
 
 static int
-gtk_css_selector_pseudoclass_position_compare_one (const GtkCssSelector *a,
-						   const GtkCssSelector *b)
+comp_pseudoclass_position (const GtkCssSelector *a,
+			   const GtkCssSelector *b)
 {
   int diff;
   
@@ -1485,18 +1434,11 @@ gtk_css_selector_pseudoclass_position_compare_one (const GtkCssSelector *a,
   return a->position.b - b->position.b;
 }
 
-static const GtkCssSelectorClass GTK_CSS_SELECTOR_PSEUDOCLASS_POSITION = {
-  "pseudoclass-position",
-  gtk_css_selector_pseudoclass_position_print,
-  gtk_css_selector_pseudoclass_position_match,
-  gtk_css_selector_pseudoclass_position_tree_match,
-  gtk_css_selector_pseudoclass_position_get_change,
-  gtk_css_selector_pseudoclass_position_tree_get_change,
-  gtk_css_selector_pseudoclass_position_hash_one,
-  gtk_css_selector_pseudoclass_position_compare_one,
-  FALSE, TRUE, FALSE, TRUE, TRUE
-};
-
+#define GTK_CSS_CHANGE_PSEUDOCLASS_POSITION GTK_CSS_CHANGE_POSITION
+DEFINE_SIMPLE_SELECTOR(pseudoclass_position, PSEUDOCLASS_POSITION, print_pseudoclass_position,
+                       match_pseudoclass_position, hash_pseudoclass_position, comp_pseudoclass_position,
+                       FALSE, TRUE, FALSE)
+#undef GTK_CSS_CHANGE_PSEUDOCLASS_POSITION
 /* API */
 
 static guint
