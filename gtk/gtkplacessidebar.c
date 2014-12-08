@@ -5129,7 +5129,7 @@ gtk_places_sidebar_remove_shortcut (GtkPlacesSidebar *sidebar,
 GSList *
 gtk_places_sidebar_list_shortcuts (GtkPlacesSidebar *sidebar)
 {
-  g_return_val_if_fail (GTK_IS_PLACES_SIDEBAR (sidebar), FALSE);
+  g_return_val_if_fail (GTK_IS_PLACES_SIDEBAR (sidebar), NULL);
 
   return g_slist_copy_deep (sidebar->shortcuts, (GCopyFunc) g_object_ref, NULL);
 }
