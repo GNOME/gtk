@@ -120,7 +120,7 @@ gtk_menu_tracker_section_find_model (GtkMenuTrackerSection *section,
         (*offset)++;
     }
 
-  return FALSE;
+  return NULL;
 }
 
 /* this is responsible for syncing the showing of a separator for a
