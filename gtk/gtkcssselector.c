@@ -52,13 +52,14 @@ struct _GtkCssSelectorClass {
 				     GtkCssChange                previous_change);
   GtkCssChange      (* tree_get_change)  (const GtkCssSelectorTree *tree,
 					  const GtkCssMatcher      *matcher);
+  void              (* add_specificity)  (const GtkCssSelector  *selector,
+                                          guint                 *ids,
+                                          guint                 *classes,
+                                          guint                 *elements);
   guint             (* hash_one)    (const GtkCssSelector       *selector);
   int               (* compare_one) (const GtkCssSelector       *a,
 				     const GtkCssSelector       *b);
 
-  guint         increase_id_specificity :1;
-  guint         increase_class_specificity :1;
-  guint         increase_element_specificity :1;
   guint         is_simple :1;
 };
 
@@ -261,6 +262,17 @@ gtk_css_selector_tree_get_previous_change (const GtkCssSelectorTree *tree,
   return previous_change;
 }
 
+/* DEFAULTS */
+
+static void
+gtk_css_selector_default_add_specificity (const GtkCssSelector *selector,
+                                          guint                *ids,
+                                          guint                *classes,
+                                          guint                *elements)
+{
+  /* no specificity changes */
+}
+ 
 /* DESCENDANT */
 
 static void
@@ -360,9 +372,10 @@ static const GtkCssSelectorClass GTK_CSS_SELECTOR_DESCENDANT = {
   gtk_css_selector_descendant_tree_match,
   gtk_css_selector_descendant_get_change,
   gtk_css_selector_descendant_tree_get_change,
+  gtk_css_selector_default_add_specificity,
   gtk_css_selector_descendant_hash_one,
   gtk_css_selector_descendant_compare_one,
-  FALSE, FALSE, FALSE, FALSE
+  FALSE
 };
 
 /* DESCENDANT FOR REGION */
@@ -475,9 +488,10 @@ static const GtkCssSelectorClass GTK_CSS_SELECTOR_DESCENDANT_FOR_REGION = {
   gtk_css_selector_descendant_for_region_tree_match,
   gtk_css_selector_descendant_for_region_get_change,
   gtk_css_selector_descendant_for_region_tree_get_change,
+  gtk_css_selector_default_add_specificity,
   gtk_css_selector_descendant_for_region_hash_one,
   gtk_css_selector_descendant_for_region_compare_one,
-  FALSE, FALSE, FALSE, FALSE
+  FALSE
 };
 
 /* CHILD */
@@ -561,9 +575,10 @@ static const GtkCssSelectorClass GTK_CSS_SELECTOR_CHILD = {
   gtk_css_selector_child_tree_match,
   gtk_css_selector_child_get_change,
   gtk_css_selector_child_tree_get_change,
+  gtk_css_selector_default_add_specificity,
   gtk_css_selector_child_hash_one,
   gtk_css_selector_child_compare_one,
-  FALSE, FALSE, FALSE, FALSE
+  FALSE
 };
 
 /* SIBLING */
@@ -667,9 +682,10 @@ static const GtkCssSelectorClass GTK_CSS_SELECTOR_SIBLING = {
   gtk_css_selector_sibling_tree_match,
   gtk_css_selector_sibling_get_change,
   gtk_css_selector_sibling_tree_get_change,
+  gtk_css_selector_default_add_specificity,
   gtk_css_selector_sibling_hash_one,
   gtk_css_selector_sibling_compare_one,
-  FALSE, FALSE, FALSE, FALSE
+  FALSE
 };
 
 /* ADJACENT */
@@ -754,9 +770,10 @@ static const GtkCssSelectorClass GTK_CSS_SELECTOR_ADJACENT = {
   gtk_css_selector_adjacent_tree_match,
   gtk_css_selector_adjacent_get_change,
   gtk_css_selector_adjacent_tree_get_change,
+  gtk_css_selector_default_add_specificity,
   gtk_css_selector_adjacent_hash_one,
   gtk_css_selector_adjacent_compare_one,
-  FALSE, FALSE, FALSE, FALSE
+  FALSE
 };
 
 /* SIMPLE SELECTOR DEFINE */
@@ -860,6 +877,20 @@ gtk_css_selector_ ## n ## _get_change (const GtkCssSelector *selector, GtkCssCha
   return previous_change | GTK_CSS_CHANGE_ ## c; \
 } \
 \
+static void \
+gtk_css_selector_ ## n ## _add_specificity (const GtkCssSelector *selector, \
+                                            guint                *ids, \
+                                            guint                *classes, \
+                                            guint                *elements) \
+{ \
+  if (increase_id_specificity) \
+    (*ids)++; \
+  if (increase_class_specificity) \
+    (*classes)++; \
+  if (increase_element_specificity) \
+    (*elements)++; \
+} \
+\
 static const GtkCssSelectorClass GTK_CSS_SELECTOR_ ## c = { \
   G_STRINGIFY(n), \
   gtk_css_selector_ ## n ## _print, \
@@ -867,9 +898,9 @@ static const GtkCssSelectorClass GTK_CSS_SELECTOR_ ## c = { \
   gtk_css_selector_ ## n ## _tree_match, \
   gtk_css_selector_ ## n ## _get_change, \
   gtk_css_selector_ ## n ## _tree_get_change, \
+  gtk_css_selector_ ## n ## _add_specificity, \
   hash_func, \
   comp_func, \
-  increase_id_specificity, increase_class_specificity, increase_element_specificity, \
   TRUE \
 };\
 \
@@ -880,9 +911,9 @@ static const GtkCssSelectorClass GTK_CSS_SELECTOR_NOT_ ## c = { \
   gtk_css_selector_not_ ## n ## _tree_match, \
   gtk_css_selector_ ## n ## _get_change, \
   gtk_css_selector_ ## n ## _tree_get_change, \
+  gtk_css_selector_ ## n ## _add_specificity, \
   hash_func, \
   comp_func, \
-  increase_id_specificity, increase_class_specificity, increase_element_specificity, \
   TRUE \
 };
 
@@ -1086,6 +1117,28 @@ gtk_css_selector_region_get_change (const GtkCssSelector *selector, GtkCssChange
 }
 
 static guint
+count_bits (guint n)
+{
+  guint result = 0;
+
+  for (result = 0; n != 0; result++)
+    n &= n - 1;
+
+  return result;
+}
+
+static void
+gtk_css_selector_region_add_specificity (const GtkCssSelector *selector,
+                                         guint                *ids,
+                                         guint                *classes,
+                                         guint                *elements)
+{
+  (*elements)++;
+
+  (*classes) += count_bits (selector->region.flags);
+}
+ 
+static guint
 gtk_css_selector_region_hash_one (const GtkCssSelector *a)
 {
   return g_str_hash (a->region.name) ^ a->region.flags;
@@ -1111,9 +1164,10 @@ static const GtkCssSelectorClass GTK_CSS_SELECTOR_REGION = {
   gtk_css_selector_region_tree_match,
   gtk_css_selector_region_get_change,
   gtk_css_selector_region_tree_get_change,
+  gtk_css_selector_region_add_specificity,
   gtk_css_selector_region_hash_one,
   gtk_css_selector_region_compare_one,
-  FALSE, FALSE, TRUE, TRUE
+  TRUE
 };
 
 /* CLASS */
@@ -1922,14 +1976,7 @@ _gtk_css_selector_get_specificity (const GtkCssSelector *selector,
 {
   for (; selector; selector = gtk_css_selector_previous (selector))
     {
-      const GtkCssSelectorClass *klass = selector->class;
-
-      if (klass->increase_id_specificity)
-        (*ids)++;
-      if (klass->increase_class_specificity)
-        (*classes)++;
-      if (klass->increase_element_specificity)
-        (*elements)++;
+      selector->class->add_specificity (selector, ids, classes, elements);
     }
 }
 
