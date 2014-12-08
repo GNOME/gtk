@@ -5790,7 +5790,7 @@ gtk_widget_queue_resize_no_redraw (GtkWidget *widget)
 GdkFrameClock*
 gtk_widget_get_frame_clock (GtkWidget *widget)
 {
-  g_return_val_if_fail (GTK_IS_WIDGET (widget), 0);
+  g_return_val_if_fail (GTK_IS_WIDGET (widget), NULL);
 
   if (widget->priv->realized)
     {
