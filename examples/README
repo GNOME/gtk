@@ -4,7 +4,7 @@
 
 The examples in this directory are built alongside the rest of GTK+.
 
-The examples under the `application[1-9]` directories are also included in
+The examples under the `application[1-10]` directories are also included in
 the GTK+ API reference documentation, and can be built independently, using
 the system libraries, by doing:
 
