@@ -1536,14 +1536,6 @@ parse_selector_pseudo_class_nth_child (GtkCssParser   *parser,
 {
   int a, b;
 
-  if (negate)
-    {
-      _gtk_css_parser_error (parser, "position pseudoclases not yet supported for :not()");
-      if (selector)
-        _gtk_css_selector_free (selector);
-      return NULL;
-    }
-
   if (!_gtk_css_parser_try (parser, "(", TRUE))
     {
       _gtk_css_parser_error (parser, "Missing opening bracket for pseudo-class");
@@ -1648,7 +1640,8 @@ parse_selector_pseudo_class_nth_child (GtkCssParser   *parser,
       return NULL;
     }
 
-  selector = gtk_css_selector_new (&GTK_CSS_SELECTOR_PSEUDOCLASS_POSITION,
+  selector = gtk_css_selector_new (negate ? &GTK_CSS_SELECTOR_NOT_PSEUDOCLASS_POSITION
+                                          : &GTK_CSS_SELECTOR_PSEUDOCLASS_POSITION,
                                    selector);
   selector->position.type = type;
   selector->position.a = a;
@@ -1731,16 +1724,10 @@ parse_selector_pseudo_class (GtkCssParser   *parser,
                                                selector);
               selector->state.state = pseudo_classes[i].state_flag;
             }
-          else if (negate)
-            {
-              _gtk_css_parser_error (parser, "position pseudoclases not yet supported for :not()");
-              if (selector)
-                _gtk_css_selector_free (selector);
-              return NULL;
-            }
           else
             {
-              selector = gtk_css_selector_new (&GTK_CSS_SELECTOR_PSEUDOCLASS_POSITION,
+              selector = gtk_css_selector_new (negate ? &GTK_CSS_SELECTOR_NOT_PSEUDOCLASS_POSITION
+                                                      : &GTK_CSS_SELECTOR_PSEUDOCLASS_POSITION,
                                                selector);
               selector->position.type = pseudo_classes[i].position_type;
               selector->position.a = pseudo_classes[i].position_a;
