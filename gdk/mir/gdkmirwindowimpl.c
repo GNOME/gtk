@@ -288,13 +288,22 @@ redraw_transient (GdkWindow *window)
   gdk_window_invalidate_rect (GDK_MIR_WINDOW_IMPL (window->impl)->transient_for, &r, FALSE);
 }
 
+/* Remove once we have proper transient window support. */
+static gboolean
+should_render_in_parent (GdkWindow *window)
+{
+  GdkMirWindowImpl *impl = GDK_MIR_WINDOW_IMPL (window->impl);
+
+  return impl->transient_for && gdk_window_get_window_type (window) != GDK_WINDOW_TOPLEVEL;
+}
+
 static void
 send_buffer (GdkWindow *window)
 {
   GdkMirWindowImpl *impl = GDK_MIR_WINDOW_IMPL (window->impl);
 
   /* Transient windows draw onto parent instead */
-  if (impl->transient_for)
+  if (should_render_in_parent (window))
     {
       redraw_transient (window);
       return;
@@ -352,7 +361,7 @@ gdk_mir_window_impl_ref_cairo_surface (GdkWindow *window)
     }
 
   /* Transient windows get rendered into a buffer and copied onto their parent */
-  if (impl->transient_for || window->gl_paint_context)
+  if (should_render_in_parent (window) || window->gl_paint_context)
     {
       cairo_surface = cairo_image_surface_create (pixel_format, window->width, window->height);
     }
@@ -450,7 +459,7 @@ gdk_mir_window_impl_hide (GdkWindow *window)
   impl->visible = FALSE;
   ensure_no_surface (window);
 
-  if (impl->transient_for)
+  if (should_render_in_parent (window))
     redraw_transient (window);
 }
 
@@ -464,7 +473,7 @@ gdk_mir_window_impl_withdraw (GdkWindow *window)
   impl->visible = FALSE;
   ensure_no_surface (window);
 
-  if (impl->transient_for)
+  if (should_render_in_parent (window))
     redraw_transient (window);
 }
 
@@ -519,13 +528,13 @@ gdk_mir_window_impl_move_resize (GdkWindow *window,
   GdkMirWindowImpl *impl = GDK_MIR_WINDOW_IMPL (window->impl);
 
   /* Redraw parent where we moved from */
-  if (impl->transient_for)
+  if (should_render_in_parent (window))
     redraw_transient (window);
 
   /* Transient windows can move wherever they want */
   if (with_move)
     {
-      if (impl->transient_for)
+      if (should_render_in_parent (window))
         {
           window->x = x;
           window->y = y;
@@ -552,7 +561,7 @@ gdk_mir_window_impl_move_resize (GdkWindow *window,
   }
 
   /* Redraw parent where we moved to */
-  if (impl->transient_for)
+  if (should_render_in_parent (window))
     redraw_transient (window);
 }
 
@@ -729,7 +738,7 @@ gdk_mir_window_impl_destroy (GdkWindow *window,
   impl->visible = FALSE;
   ensure_no_surface (window);
 
-  if (impl->transient_for)
+  if (should_render_in_parent (window))
     {
       /* Redraw parent */
       redraw_transient (window);
@@ -897,7 +906,7 @@ gdk_mir_window_impl_set_transient_for (GdkWindow *window,
 
   /* Link this window to the parent */
   impl->transient_for = parent;
-  if (parent)
+  if (should_render_in_parent (window))
     {
       GdkMirWindowImpl *parent_impl = GDK_MIR_WINDOW_IMPL (parent->impl);
       parent_impl->transient_children = g_list_append (parent_impl->transient_children, window);
@@ -911,7 +920,8 @@ gdk_mir_window_impl_set_transient_for (GdkWindow *window,
     }
 
   /* Remove surface if we had made one before this was set */
-  ensure_no_surface (window);
+  if (should_render_in_parent (window))
+    ensure_no_surface (window);
 }
 
 /* TODO: Remove once we have proper transient window support. */
