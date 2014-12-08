@@ -60,7 +60,6 @@ struct _GtkCssSelectorClass {
   guint         increase_class_specificity :1;
   guint         increase_element_specificity :1;
   guint         is_simple :1;
-  guint         must_keep_order :1; /* Due to region weirdness these must be kept before a DESCENDANT, so don't reorder */
 };
 
 typedef struct {
@@ -363,7 +362,7 @@ static const GtkCssSelectorClass GTK_CSS_SELECTOR_DESCENDANT = {
   gtk_css_selector_descendant_tree_get_change,
   gtk_css_selector_descendant_hash_one,
   gtk_css_selector_descendant_compare_one,
-  FALSE, FALSE, FALSE, FALSE, FALSE
+  FALSE, FALSE, FALSE, FALSE
 };
 
 /* DESCENDANT FOR REGION */
@@ -478,7 +477,7 @@ static const GtkCssSelectorClass GTK_CSS_SELECTOR_DESCENDANT_FOR_REGION = {
   gtk_css_selector_descendant_for_region_tree_get_change,
   gtk_css_selector_descendant_for_region_hash_one,
   gtk_css_selector_descendant_for_region_compare_one,
-  FALSE, FALSE, FALSE, FALSE, FALSE
+  FALSE, FALSE, FALSE, FALSE
 };
 
 /* CHILD */
@@ -564,7 +563,7 @@ static const GtkCssSelectorClass GTK_CSS_SELECTOR_CHILD = {
   gtk_css_selector_child_tree_get_change,
   gtk_css_selector_child_hash_one,
   gtk_css_selector_child_compare_one,
-  FALSE, FALSE, FALSE, FALSE, FALSE
+  FALSE, FALSE, FALSE, FALSE
 };
 
 /* SIBLING */
@@ -670,7 +669,7 @@ static const GtkCssSelectorClass GTK_CSS_SELECTOR_SIBLING = {
   gtk_css_selector_sibling_tree_get_change,
   gtk_css_selector_sibling_hash_one,
   gtk_css_selector_sibling_compare_one,
-  FALSE, FALSE, FALSE, FALSE, FALSE
+  FALSE, FALSE, FALSE, FALSE
 };
 
 /* ADJACENT */
@@ -757,7 +756,7 @@ static const GtkCssSelectorClass GTK_CSS_SELECTOR_ADJACENT = {
   gtk_css_selector_adjacent_tree_get_change,
   gtk_css_selector_adjacent_hash_one,
   gtk_css_selector_adjacent_compare_one,
-  FALSE, FALSE, FALSE, FALSE, FALSE
+  FALSE, FALSE, FALSE, FALSE
 };
 
 /* SIMPLE SELECTOR DEFINE */
@@ -871,7 +870,7 @@ static const GtkCssSelectorClass GTK_CSS_SELECTOR_ ## c = { \
   hash_func, \
   comp_func, \
   increase_id_specificity, increase_class_specificity, increase_element_specificity, \
-  TRUE, FALSE \
+  TRUE \
 };\
 \
 static const GtkCssSelectorClass GTK_CSS_SELECTOR_NOT_ ## c = { \
@@ -884,7 +883,7 @@ static const GtkCssSelectorClass GTK_CSS_SELECTOR_NOT_ ## c = { \
   hash_func, \
   comp_func, \
   increase_id_specificity, increase_class_specificity, increase_element_specificity, \
-  TRUE, FALSE \
+  TRUE \
 };
 
 /* ANY */
@@ -1114,7 +1113,7 @@ static const GtkCssSelectorClass GTK_CSS_SELECTOR_REGION = {
   gtk_css_selector_region_tree_get_change,
   gtk_css_selector_region_hash_one,
   gtk_css_selector_region_compare_one,
-  FALSE, FALSE, TRUE, TRUE, FALSE
+  FALSE, FALSE, TRUE, TRUE
 };
 
 /* CLASS */
@@ -1968,7 +1967,7 @@ gtk_css_selectors_count_initial_init (void)
 static void
 gtk_css_selectors_count_initial (const GtkCssSelector *selector, GHashTable *hash_one)
 {
-  if (!selector->class->is_simple || selector->class->must_keep_order)
+  if (!selector->class->is_simple)
     {
       guint count = GPOINTER_TO_INT (g_hash_table_lookup (hash_one, selector));
       g_hash_table_replace (hash_one, (gpointer)selector, GUINT_TO_POINTER (count + 1));
@@ -1976,7 +1975,7 @@ gtk_css_selectors_count_initial (const GtkCssSelector *selector, GHashTable *has
     }
 
   for (;
-       selector && selector->class->is_simple && !selector->class->must_keep_order;
+       selector && selector->class->is_simple;
        selector = gtk_css_selector_previous (selector))
     {
       guint count = GPOINTER_TO_INT (g_hash_table_lookup (hash_one, selector));
@@ -1987,11 +1986,11 @@ gtk_css_selectors_count_initial (const GtkCssSelector *selector, GHashTable *has
 static gboolean
 gtk_css_selectors_has_initial_selector (const GtkCssSelector *selector, const GtkCssSelector *initial)
 {
-  if (!selector->class->is_simple || selector->class->must_keep_order)
+  if (!selector->class->is_simple)
     return gtk_css_selector_equal (selector, initial);
 
   for (;
-       selector && selector->class->is_simple && !selector->class->must_keep_order;
+       selector && selector->class->is_simple;
        selector = gtk_css_selector_previous (selector))
     {
       if (gtk_css_selector_equal (selector, initial))
