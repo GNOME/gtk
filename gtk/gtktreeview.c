@@ -1213,9 +1213,9 @@ gtk_tree_view_class_init (GtkTreeViewClass *class)
                                                          GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
 
   /* Style properties */
-#define _TREE_VIEW_EXPANDER_SIZE 14
+#define _TREE_VIEW_EXPANDER_SIZE 11
 #define _TREE_VIEW_VERTICAL_SEPARATOR 2
-#define _TREE_VIEW_HORIZONTAL_SEPARATOR 2
+#define _TREE_VIEW_HORIZONTAL_SEPARATOR 4
 
   gtk_widget_class_install_style_property (widget_class,
 					   g_param_spec_int ("expander-size",

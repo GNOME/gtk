@@ -881,7 +881,7 @@ gtk_notebook_class_init (GtkNotebookClass *class)
                                                              P_("Size of tab overlap area"),
                                                              G_MININT,
                                                              G_MAXINT,
-                                                             2,
+                                                             -8,
                                                              GTK_PARAM_READABLE));
 
 /**
@@ -897,7 +897,7 @@ gtk_notebook_class_init (GtkNotebookClass *class)
                                                              P_("Size of tab curvature"),
                                                              0,
                                                              G_MAXINT,
-                                                             1,
+                                                             0,
                                                              GTK_PARAM_READABLE));
 
   /**
@@ -914,7 +914,7 @@ gtk_notebook_class_init (GtkNotebookClass *class)
                                                              P_("Scroll arrow spacing"),
                                                              0,
                                                              G_MAXINT,
-                                                             0,
+                                                             5,
                                                              GTK_PARAM_READABLE));
 
   /**
@@ -931,7 +931,7 @@ gtk_notebook_class_init (GtkNotebookClass *class)
                                                              P_("Initial gap before the first tab"),
                                                              0,
                                                              G_MAXINT,
-                                                             0,
+                                                             10,
                                                              GTK_PARAM_READABLE));
 
   /**
@@ -948,7 +948,7 @@ gtk_notebook_class_init (GtkNotebookClass *class)
                                            g_param_spec_boolean ("has-tab-gap",
                                                                  P_("Tab gap"),
                                                                  P_("Active tab is drawn with a gap at the bottom"),
-                                                                 TRUE,
+                                                                 FALSE,
                                                                  GTK_PARAM_READABLE));
 
   /**

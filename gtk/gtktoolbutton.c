@@ -302,13 +302,13 @@ gtk_tool_button_class_init (GtkToolButtonClass *klass)
    * Since: 2.10
    */
   gtk_widget_class_install_style_property (widget_class,
-					   g_param_spec_int ("icon-spacing",
-							     P_("Icon spacing"),
-							     P_("Spacing in pixels between the icon and label"),
-							     0,
-							     G_MAXINT,
-							     3,
-							     GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
+                                           g_param_spec_int ("icon-spacing",
+                                                             P_("Icon spacing"),
+                                                             P_("Spacing in pixels between the icon and label"),
+                                                             0,
+                                                             G_MAXINT,
+                                                             4,
+                                                             GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
 
 /**
  * GtkToolButton::clicked:

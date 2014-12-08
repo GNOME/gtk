@@ -612,7 +612,7 @@ gtk_dialog_class_init (GtkDialogClass *class)
                                                              P_("Spacing between buttons"),
                                                              0,
                                                              G_MAXINT,
-                                                             6,
+                                                             4,
                                                              GTK_PARAM_READABLE));
 
   /**
@@ -629,7 +629,7 @@ gtk_dialog_class_init (GtkDialogClass *class)
                                                              P_("Width of border around the button area at the bottom of the dialog"),
                                                              0,
                                                              G_MAXINT,
-                                                             5,
+                                                             0,
                                                              GTK_PARAM_READABLE));
 
   /**

@@ -1051,9 +1051,9 @@ gtk_combo_box_class_init (GtkComboBoxClass *klass)
                                            g_param_spec_float ("arrow-scaling",
                                                                P_("Arrow Scaling"),
                                                                P_("The amount of space used by the arrow"),
-                                                             0,
+                                                             0.0,
                                                              2.0,
-                                                             1.0,
+                                                             0.5,
                                                              GTK_PARAM_READABLE));
 
   /**

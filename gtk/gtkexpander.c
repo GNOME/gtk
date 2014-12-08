@@ -106,7 +106,7 @@
 #include "a11y/gtkexpanderaccessible.h"
 
 
-#define DEFAULT_EXPANDER_SIZE 10
+#define DEFAULT_EXPANDER_SIZE 16
 #define DEFAULT_EXPANDER_SPACING 2
 #define TIMEOUT_EXPAND 500
 

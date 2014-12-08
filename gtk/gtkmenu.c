@@ -707,7 +707,7 @@ gtk_menu_class_init (GtkMenuClass *class)
                                                              P_("Extra space at the top and bottom of the menu"),
                                                              0,
                                                              G_MAXINT,
-                                                             1,
+                                                             0,
                                                              GTK_PARAM_READABLE |
                                                              G_PARAM_DEPRECATED));
 

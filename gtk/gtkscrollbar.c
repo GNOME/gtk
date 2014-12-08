@@ -72,7 +72,7 @@ gtk_scrollbar_class_init (GtkScrollbarClass *class)
 							     P_("Minimum length of scrollbar slider"),
 							     0,
 							     G_MAXINT,
-							     21,
+							     42,
 							     GTK_PARAM_READABLE));
 
   gtk_widget_class_install_style_property (widget_class,
@@ -86,14 +86,14 @@ gtk_scrollbar_class_init (GtkScrollbarClass *class)
 					   g_param_spec_boolean ("has-backward-stepper",
                                                                  P_("Backward stepper"),
                                                                  P_("Display the standard backward arrow button"),
-                                                                 TRUE,
+                                                                 FALSE,
                                                                  GTK_PARAM_READABLE));
 
   gtk_widget_class_install_style_property (widget_class,
                                            g_param_spec_boolean ("has-forward-stepper",
                                                                  P_("Forward stepper"),
                                                                  P_("Display the standard forward arrow button"),
-                                                                 TRUE,
+                                                                 FALSE,
                                                                  GTK_PARAM_READABLE));
 
   gtk_widget_class_install_style_property (widget_class,

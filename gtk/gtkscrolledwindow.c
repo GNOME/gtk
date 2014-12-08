@@ -142,7 +142,7 @@
  *    under A) at least correspond to the space taken up by its scrollbars.
  */
 
-#define DEFAULT_SCROLLBAR_SPACING  3
+#define DEFAULT_SCROLLBAR_SPACING  0
 #define TOUCH_BYPASS_CAPTURED_THRESHOLD 30
 
 /* Kinetic scrolling */
@@ -498,7 +498,7 @@ gtk_scrolled_window_class_init (GtkScrolledWindowClass *class)
 					   g_param_spec_boolean ("scrollbars-within-bevel",
 							         P_("Scrollbars within bevel"),
 							         P_("Place scrollbars within the scrolled window's bevel"),
-							         FALSE,
+							         TRUE,
 							         GTK_PARAM_READABLE));
 
   gtk_widget_class_install_style_property (widget_class,

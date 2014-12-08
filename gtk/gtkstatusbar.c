@@ -165,7 +165,7 @@ gtk_statusbar_class_init (GtkStatusbarClass *class)
                                                               P_("Shadow type"),
                                                               P_("Style of bevel around the statusbar text"),
                                                               GTK_TYPE_SHADOW_TYPE,
-                                                              GTK_SHADOW_IN,
+                                                              GTK_SHADOW_NONE,
                                                               GTK_PARAM_READABLE));
 
   /* Bind class to template

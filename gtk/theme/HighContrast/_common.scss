@@ -4,45 +4,9 @@
 
 * {
   padding: 0;
-  -GtkToolButton-icon-spacing: 4;
   -GtkTextView-error-underline-color: $error_color;
   -GtkPaned-handle-size: 1;
   -gtk-icon-style: symbolic; //force symbolic style icons
-
-  -GtkCheckButton-indicator-size: 16;
-  -GtkCheckMenuItem-indicator-size: 16;
-
-  // The size for scrollbars. The slider is 2px smaller, but we keep it
-  // up so that the whole area is sensitive to button presses for the
-  // slider. The stepper button is larger in both directions, the slider
-  // only in the width
-
-  -GtkScrolledWindow-scrollbar-spacing: 0;
-  -GtkScrolledWindow-scrollbars-within-bevel: 1;
-
-  -GtkToolItemGroup-expander-size: 11;
-  -GtkExpander-expander-size: 16;
-  -GtkTreeView-expander-size: 11;
-
-  -GtkTreeView-horizontal-separator: 4;
-
-  -GtkMenu-horizontal-padding: 0;
-  -GtkMenu-vertical-padding: 0;
-
-  -GtkWidget-link-color: $link_color;
-  -GtkWidget-visited-link-color: $link_color;
-
-  -GtkWidget-focus-padding: 2;    // FIXME: do we still need these?
-  -GtkWidget-focus-line-width: 1; //
-
-  -GtkDialog-button-spacing: 4;
-  -GtkDialog-action-area-border: 0;
-
-  -GtkStatusbar-shadow-type: none;
-
-  // We use the outline properties to signal the focus properties
-  // to the adwaita engine: using real CSS properties is faster,
-  // and we don't use any outlines for now.
 
   outline-color: transparentize($fg_color, 0.7);
   outline-style: dashed;
@@ -733,10 +697,6 @@ GtkComboBox {
 
   //FIXME padding issue
   padding: 0;
-
-  -GtkComboBox-arrow-scaling: 0.5;
-  -GtkComboBox-shadow-type: none;
-
   box-shadow: 0 1px $borders_edge;
 
   @include _button_text_shadow;
@@ -1120,11 +1080,6 @@ GtkTreeView.view.progressbar { //Progressbar in treeview cells
   // Abandon all hope — Ye Who Enter Here
   padding: 0;
   background-color: $base_color;
-  -GtkNotebook-initial-gap: 10;
-  -GtkNotebook-arrow-spacing: 5;
-  -GtkNotebook-tab-curvature: 0;
-  -GtkNotebook-tab-overlap: -8;
-  -GtkNotebook-has-tab-gap: false;
   -GtkWidget-focus-padding: 0;
   -GtkWidget-focus-line-width: 0;
   transition: all 200ms ease-out;
@@ -1356,13 +1311,7 @@ GtkTreeView.view.progressbar { //Progressbar in treeview cells
   background-image: none;
   border-style: solid;
   -GtkRange-trough-border: 0;
-  -GtkScrollbar-has-backward-stepper: false;
-  -GtkScrollbar-has-forward-stepper: false;
   -GtkRange-slider-width: 20;
-  -GtkScrollbar-min-slider-length: 42; // minimum size for the slider.
-                                       // sadly can't be in '.slider'
-                                       // where it belongs
-
   -GtkRange-stepper-spacing: 0;
   -GtkRange-trough-under-steppers: 1;
   .button {

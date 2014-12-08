@@ -3614,7 +3614,7 @@ G_GNUC_END_IGNORE_DEPRECATIONS
 					   g_param_spec_int ("focus-padding",
 							     P_("Focus padding"),
 							     P_("Width, in pixels, between focus indicator and the widget 'box'"),
-							     0, G_MAXINT, 1,
+							     0, G_MAXINT, 2,
 							     GTK_PARAM_READABLE | G_PARAM_DEPRECATED));
 G_GNUC_BEGIN_IGNORE_DEPRECATIONS
   gtk_widget_class_install_style_property (klass,
