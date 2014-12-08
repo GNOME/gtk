@@ -1039,17 +1039,10 @@ static gboolean
 gtk_css_selector_region_match (const GtkCssSelector *selector,
                                const GtkCssMatcher  *matcher)
 {
-  const GtkCssSelector *previous;
-
   if (!_gtk_css_matcher_has_region (matcher, selector->region.name, selector->region.flags))
     return FALSE;
 
-  previous = gtk_css_selector_previous (selector);
-  if (previous && previous->class == &GTK_CSS_SELECTOR_DESCENDANT &&
-      gtk_css_selector_match (gtk_css_selector_previous (previous), matcher))
-    return TRUE;
-
-  return gtk_css_selector_match (previous, matcher);
+  return gtk_css_selector_match (gtk_css_selector_previous (selector), matcher);
 }
 
 static void
@@ -1057,29 +1050,18 @@ gtk_css_selector_region_tree_match (const GtkCssSelectorTree *tree,
 				    const GtkCssMatcher  *matcher,
 				    GHashTable *res)
 {
-  const GtkCssSelectorTree *prev;
-
   if (!_gtk_css_matcher_has_region (matcher, tree->selector.region.name, tree->selector.region.flags))
     return;
 
   gtk_css_selector_tree_found_match (tree, res);
 
-  for (prev = gtk_css_selector_tree_get_previous (tree);
-       prev != NULL;
-       prev = gtk_css_selector_tree_get_sibling (prev))
-    {
-      if (prev->selector.class == &GTK_CSS_SELECTOR_DESCENDANT)
-	gtk_css_selector_tree_match_previous (prev, matcher, res);
-
-      gtk_css_selector_tree_match (prev, matcher, res);
-    }
+  gtk_css_selector_tree_match_previous (tree, matcher, res);
 }
 
 static GtkCssChange
 gtk_css_selector_region_tree_get_change (const GtkCssSelectorTree *tree,
 					 const GtkCssMatcher  *matcher)
 {
-  const GtkCssSelectorTree *prev;
   GtkCssChange change, previous_change;
 
   if (!_gtk_css_matcher_has_region (matcher, tree->selector.region.name, tree->selector.region.flags))
@@ -1090,23 +1072,10 @@ gtk_css_selector_region_tree_get_change (const GtkCssSelectorTree *tree,
   if (tree->matches_offset != GTK_CSS_SELECTOR_TREE_EMPTY_OFFSET)
     change |= GTK_CSS_CHANGE_REGION | GTK_CSS_CHANGE_GOT_MATCH;
 
-  previous_change = 0;
-  for (prev = gtk_css_selector_tree_get_previous (tree);
-       prev != NULL;
-       prev = gtk_css_selector_tree_get_sibling (prev))
-    {
-      if (prev->selector.class == &GTK_CSS_SELECTOR_DESCENDANT)
-	previous_change |= gtk_css_selector_tree_get_previous_change (prev, matcher);
-
-      previous_change |= gtk_css_selector_tree_get_change (prev, matcher);
-    }
+  previous_change = gtk_css_selector_tree_get_previous_change (tree, matcher);
 
   if (previous_change != 0)
-    {
-      previous_change |= GTK_CSS_CHANGE_REGION;
-      previous_change |= _gtk_css_change_for_child (previous_change);
-      change |= previous_change | GTK_CSS_CHANGE_GOT_MATCH;
-    }
+    change |= previous_change | GTK_CSS_CHANGE_REGION | GTK_CSS_CHANGE_GOT_MATCH;
 
   return change;
 }
@@ -1114,13 +1083,7 @@ gtk_css_selector_region_tree_get_change (const GtkCssSelectorTree *tree,
 static GtkCssChange
 gtk_css_selector_region_get_change (const GtkCssSelector *selector, GtkCssChange previous_change)
 {
-  GtkCssChange change;
-
-  change = previous_change;
-  change |= GTK_CSS_CHANGE_REGION;
-  change |= _gtk_css_change_for_child (change);
-
-  return change;
+  return previous_change | GTK_CSS_CHANGE_REGION;
 }
 
 static guint
@@ -1151,7 +1114,7 @@ static const GtkCssSelectorClass GTK_CSS_SELECTOR_REGION = {
   gtk_css_selector_region_tree_get_change,
   gtk_css_selector_region_hash_one,
   gtk_css_selector_region_compare_one,
-  FALSE, FALSE, TRUE, TRUE, TRUE
+  FALSE, FALSE, TRUE, TRUE, FALSE
 };
 
 /* CLASS */
@@ -1836,9 +1799,12 @@ parse_simple_selector (GtkCssParser   *parser,
   /* This is the big region hack where we change the descendant matcher
    * to a version that respects regions.
    */
-  if (selector &&
-      selector[0].class == &GTK_CSS_SELECTOR_ANY && selector[1].class == &GTK_CSS_SELECTOR_DESCENDANT)
-    selector[1].class = &GTK_CSS_SELECTOR_DESCENDANT_FOR_REGION;
+  if (selector)
+    {
+      if ((selector[0].class == &GTK_CSS_SELECTOR_ANY || selector[0].class == &GTK_CSS_SELECTOR_REGION)
+          && selector[1].class == &GTK_CSS_SELECTOR_DESCENDANT)
+        selector[1].class = &GTK_CSS_SELECTOR_DESCENDANT_FOR_REGION;
+    }
 
   return selector;
 }
