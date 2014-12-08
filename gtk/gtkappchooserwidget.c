@@ -798,17 +798,10 @@ gtk_app_chooser_widget_real_add_items (GtkAppChooserWidget *self)
   if (default_app != NULL)
     g_object_unref (default_app);
 
-  if (all_applications != NULL)
-    g_list_free_full (all_applications, g_object_unref);
-
-  if (recommended_apps != NULL)
-    g_list_free_full (recommended_apps, g_object_unref);
-
-  if (fallback_apps != NULL)
-    g_list_free_full (fallback_apps, g_object_unref);
-
-  if (exclude_apps != NULL)
-    g_list_free (exclude_apps);
+  g_list_free_full (all_applications, g_object_unref);
+  g_list_free_full (recommended_apps, g_object_unref);
+  g_list_free_full (fallback_apps, g_object_unref);
+  g_list_free (exclude_apps);
 }
 
 static void
