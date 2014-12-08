@@ -890,140 +890,36 @@ static const GtkCssSelectorClass GTK_CSS_SELECTOR_NOT_ ## c = { \
 /* ANY */
 
 static void
-gtk_css_selector_any_print (const GtkCssSelector *selector,
-                            GString              *string)
+print_any (const GtkCssSelector *selector,
+           GString              *string)
 {
   g_string_append_c (string, '*');
 }
 
 static gboolean
-gtk_css_selector_any_match (const GtkCssSelector *selector,
-                            const GtkCssMatcher  *matcher)
+match_any (const GtkCssSelector *selector,
+           const GtkCssMatcher  *matcher)
 {
-  return gtk_css_selector_match (gtk_css_selector_previous (selector), matcher);
-}
-
-static void
-gtk_css_selector_any_tree_match (const GtkCssSelectorTree *tree,
-				 const GtkCssMatcher  *matcher,
-				 GHashTable *res)
-{
-  gtk_css_selector_tree_found_match (tree, res);
-
-  gtk_css_selector_tree_match_previous (tree, matcher, res);
-}
-
-static GtkCssChange
-gtk_css_selector_any_tree_get_change (const GtkCssSelectorTree *tree,
-				      const GtkCssMatcher  *matcher)
-{
-  GtkCssChange change, previous_change;
-
-  change = 0;
-
-  if (tree->matches_offset != GTK_CSS_SELECTOR_TREE_EMPTY_OFFSET)
-    change |= GTK_CSS_CHANGE_GOT_MATCH;
-
-  previous_change = gtk_css_selector_tree_get_previous_change (tree, matcher);
-
-  if (previous_change != 0)
-    change |= previous_change | GTK_CSS_CHANGE_GOT_MATCH;
-
-  return change;
-}
-
-static GtkCssChange
-gtk_css_selector_any_get_change (const GtkCssSelector *selector, GtkCssChange previous_change)
-{
-  return previous_change;
+  return TRUE;
 }
 
 static guint
-gtk_css_selector_any_hash_one (const GtkCssSelector *a)
+hash_any (const GtkCssSelector *a)
 {
   return 0;
 }
 
 static int
-gtk_css_selector_any_compare_one (const GtkCssSelector *a,
-				  const GtkCssSelector *b)
+comp_any (const GtkCssSelector *a,
+	  const GtkCssSelector *b)
 {
   return 0;
 }
 
-static const GtkCssSelectorClass GTK_CSS_SELECTOR_ANY = {
-  "any",
-  gtk_css_selector_any_print,
-  gtk_css_selector_any_match,
-  gtk_css_selector_any_tree_match,
-  gtk_css_selector_any_get_change,
-  gtk_css_selector_any_tree_get_change,
-  gtk_css_selector_any_hash_one,
-  gtk_css_selector_any_compare_one,
-  FALSE, FALSE, FALSE, TRUE, FALSE
-};
-
-/* NONE */
-
-static void
-gtk_css_selector_none_print (const GtkCssSelector *selector,
-                             GString              *string)
-{
-  g_string_append (string, ":not(*)");
-}
-
-static gboolean
-gtk_css_selector_none_match (const GtkCssSelector *selector,
-                             const GtkCssMatcher  *matcher)
-{
-  return FALSE;
-}
-
-static void
-gtk_css_selector_none_tree_match (const GtkCssSelectorTree *tree,
-                                  const GtkCssMatcher  *matcher,
-                                  GHashTable *res)
-{
-}
-
-static GtkCssChange
-gtk_css_selector_none_tree_get_change (const GtkCssSelectorTree *tree,
-                                       const GtkCssMatcher  *matcher)
-{
-  return 0;
-}
-
-
-static GtkCssChange
-gtk_css_selector_none_get_change (const GtkCssSelector *selector, GtkCssChange previous_change)
-{
-  return 0;
-}
-
-static guint
-gtk_css_selector_none_hash_one (const GtkCssSelector *a)
-{
-  return 0;
-}
-
-static int
-gtk_css_selector_none_compare_one (const GtkCssSelector *a,
-                                   const GtkCssSelector *b)
-{
-  return 0;
-}
-
-static const GtkCssSelectorClass GTK_CSS_SELECTOR_NONE = {
-  "none",
-  gtk_css_selector_none_print,
-  gtk_css_selector_none_match,
-  gtk_css_selector_none_tree_match,
-  gtk_css_selector_none_get_change,
-  gtk_css_selector_none_tree_get_change,
-  gtk_css_selector_none_hash_one,
-  gtk_css_selector_none_compare_one,
-  FALSE, FALSE, FALSE, TRUE, FALSE
-};
+#undef GTK_CSS_CHANGE_ANY
+#define GTK_CSS_CHANGE_ANY 0
+DEFINE_SIMPLE_SELECTOR(any, ANY, print_any, match_any, hash_any, comp_any, FALSE, FALSE, FALSE)
+#undef GTK_CSS_CHANGE_ANY
 
 /* NAME */
 
@@ -1840,7 +1736,7 @@ parse_selector_negation (GtkCssParser   *parser,
       g_free (name);
     }
   else if (_gtk_css_parser_try (parser, "*", FALSE))
-    selector = gtk_css_selector_new (&GTK_CSS_SELECTOR_NONE, selector);
+    selector = gtk_css_selector_new (&GTK_CSS_SELECTOR_NOT_ANY, selector);
   else if (_gtk_css_parser_try (parser, "#", FALSE))
     selector = parse_selector_id (parser, selector, TRUE);
   else if (_gtk_css_parser_try (parser, ".", FALSE))
