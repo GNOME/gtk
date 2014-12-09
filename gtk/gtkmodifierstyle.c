@@ -118,23 +118,15 @@ gtk_modifier_style_provider_get_color (GtkStyleProviderPrivate *provider,
 static void
 gtk_modifier_style_provider_lookup (GtkStyleProviderPrivate *provider,
                                     const GtkCssMatcher     *matcher,
-                                    GtkCssLookup            *lookup)
+                                    GtkCssLookup            *lookup,
+                                    GtkCssChange            *change)
 {
   GtkModifierStyle *style = GTK_MODIFIER_STYLE (provider);
 
   _gtk_style_provider_private_lookup (GTK_STYLE_PROVIDER_PRIVATE (style->priv->style),
                                       matcher,
-                                      lookup);
-}
-
-static GtkCssChange
-gtk_modifier_style_provider_get_change (GtkStyleProviderPrivate *provider,
-                                        const GtkCssMatcher     *matcher)
-{
-  GtkModifierStyle *style = GTK_MODIFIER_STYLE (provider);
-
-  return _gtk_style_provider_private_get_change (GTK_STYLE_PROVIDER_PRIVATE (style->priv->style),
-                                                 matcher);
+                                      lookup,
+                                      change);
 }
 
 static void
@@ -142,7 +134,6 @@ gtk_modifier_style_provider_private_init (GtkStyleProviderPrivateInterface *ifac
 {
   iface->get_color = gtk_modifier_style_provider_get_color;
   iface->lookup = gtk_modifier_style_provider_lookup;
-  iface->get_change = gtk_modifier_style_provider_get_change;
 }
 
 static void

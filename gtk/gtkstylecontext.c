@@ -670,7 +670,8 @@ static void
 build_properties (GtkStyleContext             *context,
                   GtkCssComputedValues        *values,
                   const GtkCssNodeDeclaration *decl,
-                  const GtkBitmask            *relevant_changes)
+                  const GtkBitmask            *relevant_changes,
+                  GtkCssChange                *out_change)
 {
   GtkStyleContextPrivate *priv;
   GtkCssMatcher matcher;
@@ -685,7 +686,8 @@ build_properties (GtkStyleContext             *context,
   if (_gtk_css_matcher_init (&matcher, path))
     _gtk_style_provider_private_lookup (GTK_STYLE_PROVIDER_PRIVATE (priv->cascade),
                                         &matcher,
-                                        lookup);
+                                        lookup,
+                                        out_change);
 
   _gtk_css_lookup_resolve (lookup, 
                            GTK_STYLE_PROVIDER_PRIVATE (priv->cascade),
@@ -724,11 +726,17 @@ style_values_lookup (GtkStyleContext *context)
 
   style_info_set_values (info, values);
   if (gtk_style_context_is_saved (context))
-    g_hash_table_insert (priv->style_values,
-                         gtk_css_node_declaration_ref (info->decl),
-                         g_object_ref (values));
-  
-  build_properties (context, values, info->decl, NULL);
+    {
+      g_hash_table_insert (priv->style_values,
+                           gtk_css_node_declaration_ref (info->decl),
+                           g_object_ref (values));
+    
+      build_properties (context, values, info->decl, NULL, NULL);
+    }
+  else
+    {
+      build_properties (context, values, info->decl, NULL, &priv->relevant_changes);
+    }
 
   g_object_unref (values);
 
@@ -751,7 +759,7 @@ style_values_lookup_for_state (GtkStyleContext *context,
   decl = gtk_css_node_declaration_ref (context->priv->info->decl);
   gtk_css_node_declaration_set_state (&decl, state);
   values = _gtk_css_computed_values_new ();
-  build_properties (context, values, decl, NULL);
+  build_properties (context, values, decl, NULL, NULL);
   gtk_css_node_declaration_unref (decl);
 
   return values;
@@ -2638,7 +2646,7 @@ gtk_style_context_update_cache (GtkStyleContext  *context,
       changes = _gtk_css_computed_values_compute_dependencies (values, parent_changes);
 
       if (!_gtk_bitmask_is_empty (changes))
-	build_properties (context, values, decl, changes);
+	build_properties (context, values, decl, changes, NULL);
 
       _gtk_bitmask_free (changes);
     }
@@ -2694,31 +2702,7 @@ gtk_style_context_needs_full_revalidate (GtkStyleContext  *context,
 
   /* Try to avoid invalidating if we can */
   if (change & GTK_STYLE_CONTEXT_RADICAL_CHANGE)
-    {
-      priv->relevant_changes = GTK_CSS_CHANGE_ANY;
-    }
-  else
-    {
-      if (priv->relevant_changes == GTK_CSS_CHANGE_ANY)
-        {
-          GtkWidgetPath *path;
-          GtkCssMatcher matcher, superset;
-
-          path = create_query_path (context, priv->info->decl);
-          if (_gtk_css_matcher_init (&matcher, path))
-            {
-              _gtk_css_matcher_superset_init (&superset, &matcher, GTK_STYLE_CONTEXT_RADICAL_CHANGE & ~GTK_CSS_CHANGE_SOURCE);
-              priv->relevant_changes = _gtk_style_provider_private_get_change (GTK_STYLE_PROVIDER_PRIVATE (priv->cascade),
-                                                                               &superset);
-            }
-          else
-            priv->relevant_changes = 0;
-
-          priv->relevant_changes &= ~GTK_STYLE_CONTEXT_RADICAL_CHANGE;
-
-          gtk_widget_path_unref (path);
-        }
-    }
+    return TRUE;
 
   if (priv->relevant_changes & change)
     return TRUE;
@@ -2837,7 +2821,7 @@ _gtk_style_context_validate (GtkStyleContext  *context,
     {
       changes = _gtk_css_computed_values_compute_dependencies (current, parent_changes);
       if (!_gtk_bitmask_is_empty (changes))
-	build_properties (context, current, info->decl, changes);
+	build_properties (context, current, info->decl, changes, NULL);
 
       gtk_style_context_update_cache (context, parent_changes);
     }

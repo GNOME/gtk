@@ -1774,7 +1774,8 @@ gtk_css_style_provider_get_keyframes (GtkStyleProviderPrivate *provider,
 static void
 gtk_css_style_provider_lookup (GtkStyleProviderPrivate *provider,
                                const GtkCssMatcher     *matcher,
-                               GtkCssLookup            *lookup)
+                               GtkCssLookup            *lookup,
+                               GtkCssChange            *change)
 {
   GtkCssProvider *css_provider;
   GtkCssProviderPrivate *priv;
@@ -1819,24 +1820,16 @@ gtk_css_style_provider_lookup (GtkStyleProviderPrivate *provider,
     }
 
   g_ptr_array_free (tree_rules, TRUE);
-}
 
-static GtkCssChange
-gtk_css_style_provider_get_change (GtkStyleProviderPrivate *provider,
-                                   const GtkCssMatcher     *matcher)
-{
-  GtkCssProvider *css_provider;
-  GtkCssProviderPrivate *priv;
-  GtkCssChange change;
+  if (change)
+    {
+      GtkCssMatcher change_matcher;
 
-  css_provider = GTK_CSS_PROVIDER (provider);
-  priv = css_provider->priv;
+      _gtk_css_matcher_superset_init (&change_matcher, matcher, GTK_CSS_CHANGE_NAME | GTK_CSS_CHANGE_CLASS);
 
-  change = _gtk_css_selector_tree_get_change_all (priv->tree, matcher);
-
-  verify_tree_get_change_results (css_provider, matcher, change);
-
-  return change;
+      *change = _gtk_css_selector_tree_get_change_all (priv->tree, &change_matcher);
+      verify_tree_get_change_results (css_provider, &change_matcher, *change);
+    }
 }
 
 static void
@@ -1845,7 +1838,6 @@ gtk_css_style_provider_private_iface_init (GtkStyleProviderPrivateInterface *ifa
   iface->get_color = gtk_css_style_provider_get_color;
   iface->get_keyframes = gtk_css_style_provider_get_keyframes;
   iface->lookup = gtk_css_style_provider_lookup;
-  iface->get_change = gtk_css_style_provider_get_change;
 }
 
 static void

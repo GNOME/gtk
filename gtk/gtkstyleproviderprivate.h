@@ -46,9 +46,8 @@ struct _GtkStyleProviderPrivateInterface
                                                  const char              *name);
   void                  (* lookup)              (GtkStyleProviderPrivate *provider,
                                                  const GtkCssMatcher     *matcher,
-                                                 GtkCssLookup            *lookup);
-  GtkCssChange          (* get_change)          (GtkStyleProviderPrivate *provider,
-                                                 const GtkCssMatcher     *matcher);
+                                                 GtkCssLookup            *lookup,
+                                                 GtkCssChange            *out_change);
 
   /* signal */
   void                  (* changed)             (GtkStyleProviderPrivate *provider);
@@ -63,9 +62,8 @@ GtkCssKeyframes *       _gtk_style_provider_private_get_keyframes(GtkStyleProvid
                                                                   const char              *name);
 void                    _gtk_style_provider_private_lookup       (GtkStyleProviderPrivate *provider,
                                                                   const GtkCssMatcher     *matcher,
-                                                                  GtkCssLookup            *lookup);
-GtkCssChange            _gtk_style_provider_private_get_change   (GtkStyleProviderPrivate *provider,
-                                                                  const GtkCssMatcher     *matcher);
+                                                                  GtkCssLookup            *lookup,
+                                                                  GtkCssChange            *out_change);
 
 void                    _gtk_style_provider_private_changed      (GtkStyleProviderPrivate *provider);
 
