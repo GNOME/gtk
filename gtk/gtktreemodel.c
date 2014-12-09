@@ -2014,7 +2014,7 @@ gtk_tree_model_foreach (GtkTreeModel            *model,
   g_return_if_fail (func != NULL);
 
   path = gtk_tree_path_new_first ();
-  if (gtk_tree_model_get_iter (model, &iter, path) == FALSE)
+  if (!gtk_tree_model_get_iter (model, &iter, path))
     {
       gtk_tree_path_free (path);
       return;
