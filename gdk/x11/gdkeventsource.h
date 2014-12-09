@@ -15,8 +15,8 @@
  * License along with this library. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef __GDK_EVENT_SOURCE_H__
-#define __GDK_EVENT_SOURCE_H__
+#ifndef __GDK_X11_EVENT_SOURCE_H__
+#define __GDK_X11_EVENT_SOURCE_H__
 
 #include "gdkeventtranslator.h"
 
@@ -40,4 +40,4 @@ void      gdk_x11_event_source_select_events  (GdkEventSource *source,
 
 G_END_DECLS
 
-#endif /* __GDK_EVENT_SOURCE_H__ */
+#endif /* __GDK_X11_EVENT_SOURCE_H__ */

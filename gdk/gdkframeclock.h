@@ -22,12 +22,12 @@
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/.
  */
 
+#ifndef __GDK_FRAME_CLOCK_H__
+#define __GDK_FRAME_CLOCK_H__
+
 #if !defined (__GDK_H_INSIDE__) && !defined (GDK_COMPILATION)
 #error "Only <gdk/gdk.h> can be included directly."
 #endif
-
-#ifndef __GDK_FRAME_CLOCK_H__
-#define __GDK_FRAME_CLOCK_H__
 
 #include <gdk/gdkframetimings.h>
 
