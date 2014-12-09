@@ -150,8 +150,10 @@ gtk_inspector_window_init (GtkInspectorWindow *iw)
       GIOExtension *extension = l->data;
       GType type;
       GtkWidget *widget;
+      const char *name;
       char *title;
-      GtkWidget *box;
+      GtkWidget *button;
+      gboolean use_picker;
 
       type = g_io_extension_get_type (extension);
 
@@ -159,16 +161,32 @@ gtk_inspector_window_init (GtkInspectorWindow *iw)
 
       iw->extra_pages = g_list_prepend (iw->extra_pages, widget);
 
+      name = g_io_extension_get_name (extension);
       g_object_get (widget, "title", &title, NULL);
-      gtk_stack_add_titled (GTK_STACK (iw->top_stack), widget,
-                            g_io_extension_get_name (extension),
-                            title);
-      box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
-      gtk_stack_add_named (GTK_STACK (iw->button_stack), box,
-                           g_io_extension_get_name (extension));
 
-      gtk_widget_show (box);
+      if (g_object_class_find_property (G_OBJECT_GET_CLASS (widget), "use-picker"))
+        g_object_get (widget, "use-picker", &use_picker, NULL);
+      else
+        use_picker = FALSE;
+
+      if (use_picker)
+        {
+          button = gtk_button_new_from_icon_name ("find-location-symbolic",
+                                                  GTK_ICON_SIZE_MENU);
+          gtk_widget_set_halign (button, GTK_ALIGN_START);
+          gtk_widget_set_valign (button, GTK_ALIGN_CENTER);
+          g_signal_connect (button, "clicked",
+                            G_CALLBACK (gtk_inspector_on_inspect), iw);
+        }
+      else
+        button = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
+
+      gtk_stack_add_titled (GTK_STACK (iw->top_stack), widget, name, title);
+      gtk_stack_add_named (GTK_STACK (iw->button_stack), button, name);
       gtk_widget_show (widget);
+      gtk_widget_show (button);
+
+      g_free (title);
     }
 
 }
