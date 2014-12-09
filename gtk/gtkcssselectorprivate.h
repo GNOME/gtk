@@ -36,6 +36,7 @@ void              _gtk_css_selector_print           (const GtkCssSelector   *sel
 
 gboolean          _gtk_css_selector_matches         (const GtkCssSelector   *selector,
                                                      const GtkCssMatcher    *matcher);
+GtkCssChange      _gtk_css_selector_get_change      (const GtkCssSelector   *selector);
 int               _gtk_css_selector_compare         (const GtkCssSelector   *a,
                                                      const GtkCssSelector   *b);
 
@@ -46,7 +47,6 @@ GtkCssChange _gtk_css_selector_tree_get_change_all   (const GtkCssSelectorTree *
 						      const GtkCssMatcher *matcher);
 void         _gtk_css_selector_tree_match_print      (const GtkCssSelectorTree *tree,
 						      GString                  *str);
-GtkCssChange _gtk_css_selector_tree_match_get_change (const GtkCssSelectorTree *tree);
 
 
 GtkCssSelectorTreeBuilder *_gtk_css_selector_tree_builder_new   (void);

@@ -1744,23 +1744,6 @@ _gtk_css_selector_to_string (const GtkCssSelector *selector)
   return g_string_free (string, FALSE);
 }
 
-
-GtkCssChange
-_gtk_css_selector_tree_match_get_change (const GtkCssSelectorTree *tree)
-{
-  GtkCssChange change = 0;
-
-  update_type_references ();
-
-  while (tree)
-    {
-      change = tree->selector.class->get_change (&tree->selector, change);
-      tree = gtk_css_selector_tree_get_parent (tree);
-    }
-
-  return change;
-}
-
 static gboolean
 gtk_css_selector_foreach_match (const GtkCssSelector *selector,
                                 const GtkCssMatcher  *matcher,
@@ -1843,6 +1826,14 @@ _gtk_css_selector_compare (const GtkCssSelector *a,
   return a_elements - b_elements;
 }
 
+GtkCssChange
+_gtk_css_selector_get_change (const GtkCssSelector *selector)
+{
+  if (selector == NULL)
+    return 0;
+
+  return selector->class->get_change (selector, _gtk_css_selector_get_change (gtk_css_selector_previous (selector)));
+}
 
 /******************** SelectorTree handling *****************/
 

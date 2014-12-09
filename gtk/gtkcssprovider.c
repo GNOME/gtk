@@ -1646,7 +1646,7 @@ verify_tree_get_change_results (GtkCssProvider *provider,
 
 	ruleset = tree_rules->pdata[i];
 
-	verify_change |= _gtk_css_selector_tree_match_get_change (ruleset->selector_match);
+	verify_change |= _gtk_css_selector_get_change (ruleset->selector);
       }
 
     if (change != verify_change)
