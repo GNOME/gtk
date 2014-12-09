@@ -17,6 +17,7 @@
 
 #include "config.h"
 
+#include "gdkdisplayprivate.h"
 #include "gdkdeviceprivate.h"
 #include "gdkscreen.h"
 #include "gdkwindow.h"
@@ -183,6 +184,11 @@ gdk_mir_pointer_ungrab (GdkDevice *device,
 {
   //g_printerr ("gdk_mir_pointer_ungrab\n");
   /* Mir doesn't do grabs */
+
+  GdkDeviceGrabInfo *grab = _gdk_display_get_last_device_grab (gdk_device_get_display (device), device);
+
+  if (grab)
+    grab->serial_end = grab->serial_start;
 }
 
 static GdkWindow *
