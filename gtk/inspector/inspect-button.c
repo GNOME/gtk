@@ -216,8 +216,6 @@ select_widget (GtkInspectorWindow *iw,
 
   iw->selected_widget = widget;
 
-  gtk_stack_set_visible_child_name (GTK_STACK (iw->top_stack), "objects");
-
   if (!gtk_inspector_object_tree_find_object (wt, G_OBJECT (widget), &iter))
     gtk_inspector_object_tree_scan (wt, gtk_widget_get_toplevel (widget));
   gtk_inspector_object_tree_select_object (wt, G_OBJECT (widget));
