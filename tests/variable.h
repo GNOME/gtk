@@ -1,5 +1,5 @@
 #ifndef __VARIABLE_H__
-#define __VARAIBLE_H__
+#define __VARIABLE_H__
 
 typedef struct
 {
