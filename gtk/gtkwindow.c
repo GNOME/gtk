@@ -11214,10 +11214,16 @@ gtk_window_activate_key (GtkWindow   *window,
 
               if (window->priv->application)
                 {
-                  GtkWidget *focused_widget = gtk_window_get_focus (window);
-                  if (focused_widget == NULL)
-                    return FALSE;
-                  GtkActionMuxer *muxer = _gtk_widget_get_action_muxer (focused_widget, FALSE);
+                  GtkWidget *focused_widget;
+                  GtkActionMuxer *muxer;
+
+                  focused_widget = gtk_window_get_focus (window);
+
+                  if (focused_widget)
+                    muxer = _gtk_widget_get_action_muxer (focused_widget, FALSE);
+                  else
+                    muxer = _gtk_widget_get_action_muxer (GTK_WIDGET (window), FALSE);
+
                   if (muxer == NULL)
                     return FALSE;
 
