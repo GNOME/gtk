@@ -1969,12 +1969,22 @@ gtk_tree_model_foreach_helper (GtkTreeModel            *model,
                                GtkTreeModelForeachFunc  func,
                                gpointer                 user_data)
 {
+  gboolean iters_persist;
+
+  iters_persist = gtk_tree_model_get_flags (model) & GTK_TREE_MODEL_ITERS_PERSIST;
+
   do
     {
       GtkTreeIter child;
 
       if ((* func) (model, path, iter, user_data))
         return TRUE;
+
+      if (!iters_persist)
+        {
+          if (!gtk_tree_model_get_iter (model, iter, path))
+            return TRUE;
+        }
 
       if (gtk_tree_model_iter_children (model, &child, iter))
         {
