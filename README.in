@@ -82,6 +82,11 @@ Release notes for 3.16
 * GTK+ no longer uses gtk-update-icon-cache during its build. The
   --enable-gtk2-dependency configure option has been removed.
 
+* The introspection annotations for the x and y parameters of
+  GtkMenuPositionFunc have been corrected from 'out' to 'inout'.
+  If you are using such a function from language-bindings, this
+  may require adjustments.
+
 Release notes for 3.14
 ======================
 

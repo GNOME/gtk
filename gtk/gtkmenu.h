@@ -66,9 +66,9 @@ typedef enum
 /**
  * GtkMenuPositionFunc:
  * @menu: a #GtkMenu.
- * @x: (out): address of the #gint representing the horizontal
+ * @x: (inout): address of the #gint representing the horizontal
  *     position where the menu shall be drawn.
- * @y: (out): address of the #gint representing the vertical position
+ * @y: (inout): address of the #gint representing the vertical position
  *     where the menu shall be drawn.  This is an output parameter.
  * @push_in: (out): This parameter controls how menus placed outside
  *     the monitor are handled.  If this is set to %TRUE and part of
