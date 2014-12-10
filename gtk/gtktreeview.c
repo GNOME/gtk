@@ -861,6 +861,9 @@ static GObject *gtk_tree_view_buildable_get_internal_child (GtkBuildable      *b
 							    const gchar       *childname);
 static void     gtk_tree_view_buildable_init               (GtkBuildableIface *iface);
 
+/* GtkScrollable */
+static void     gtk_tree_view_scrollable_init              (GtkScrollableInterface *iface);
+
 static GtkAdjustment *gtk_tree_view_do_get_hadjustment (GtkTreeView   *tree_view);
 static void           gtk_tree_view_do_set_hadjustment (GtkTreeView   *tree_view,
                                                         GtkAdjustment *adjustment);
@@ -929,7 +932,8 @@ G_DEFINE_TYPE_WITH_CODE (GtkTreeView, gtk_tree_view, GTK_TYPE_CONTAINER,
                          G_ADD_PRIVATE (GtkTreeView)
 			 G_IMPLEMENT_INTERFACE (GTK_TYPE_BUILDABLE,
 						gtk_tree_view_buildable_init)
-			 G_IMPLEMENT_INTERFACE (GTK_TYPE_SCROLLABLE, NULL))
+			 G_IMPLEMENT_INTERFACE (GTK_TYPE_SCROLLABLE,
+                                                gtk_tree_view_scrollable_init))
 
 static void
 gtk_tree_view_class_init (GtkTreeViewClass *class)
@@ -16543,4 +16547,19 @@ gtk_tree_view_get_tooltip_column (GtkTreeView *tree_view)
   g_return_val_if_fail (GTK_IS_TREE_VIEW (tree_view), 0);
 
   return tree_view->priv->tooltip_column;
+}
+
+static gboolean
+gtk_tree_view_get_border (GtkScrollable *scrollable,
+                          GtkBorder     *border)
+{
+  border->top = _gtk_tree_view_get_header_height (GTK_TREE_VIEW (scrollable));
+
+  return TRUE;
+}
+
+static void
+gtk_tree_view_scrollable_init (GtkScrollableInterface *iface)
+{
+  iface->get_border = gtk_tree_view_get_border;
 }
