@@ -158,6 +158,9 @@
 #define INDICATOR_FADE_OUT_DURATION 1000
 #define INDICATOR_FADE_OUT_TIME 500
 
+/* Scrolled off indication */
+#define UNDERSHOOT_SIZE 20
+
 typedef struct
 {
   GtkWidget *scrollbar;
@@ -1822,6 +1825,66 @@ gtk_scrolled_window_draw_overshoot (GtkScrolledWindow *scrolled_window,
   gtk_style_context_restore (context);
 }
 
+static void
+gtk_scrolled_window_draw_undershoot (GtkScrolledWindow *scrolled_window,
+                                     cairo_t           *cr)
+{
+  GtkScrolledWindowPrivate *priv = scrolled_window->priv;
+  GtkWidget *widget = GTK_WIDGET (scrolled_window);
+  GtkStyleContext *context;
+  GdkRectangle rect;
+  GtkAdjustment *adj;
+
+  context = gtk_widget_get_style_context (widget);
+  gtk_scrolled_window_relative_allocation (widget, &rect);
+
+  gtk_style_context_save (context);
+  gtk_style_context_remove_class (context, GTK_STYLE_CLASS_FRAME);
+  gtk_style_context_add_class (context, GTK_STYLE_CLASS_UNDERSHOOT);
+
+  adj = gtk_range_get_adjustment (GTK_RANGE (priv->hscrollbar));
+  if (gtk_adjustment_get_value (adj) < gtk_adjustment_get_upper (adj) - gtk_adjustment_get_page_size (adj))
+    {
+      gtk_style_context_add_class (context, GTK_STYLE_CLASS_RIGHT);
+
+      gtk_render_background (context, cr, rect.x + rect.width - UNDERSHOOT_SIZE, rect.y, UNDERSHOOT_SIZE, rect.height);
+      gtk_render_frame (context, cr, rect.x + rect.width - UNDERSHOOT_SIZE, rect.y, UNDERSHOOT_SIZE, rect.height);
+
+      gtk_style_context_remove_class (context, GTK_STYLE_CLASS_RIGHT);
+    }
+  if (gtk_adjustment_get_value (adj) > gtk_adjustment_get_lower (adj))
+    {
+      gtk_style_context_add_class (context, GTK_STYLE_CLASS_LEFT);
+
+      gtk_render_background (context, cr, rect.x, rect.y, UNDERSHOOT_SIZE, rect.height);
+      gtk_render_frame (context, cr, rect.x, rect.y, UNDERSHOOT_SIZE, rect.height);
+
+      gtk_style_context_remove_class (context, GTK_STYLE_CLASS_LEFT);
+    }
+
+  adj = gtk_range_get_adjustment (GTK_RANGE (priv->vscrollbar));
+  if (gtk_adjustment_get_value (adj) < gtk_adjustment_get_upper (adj) - gtk_adjustment_get_page_size (adj))
+    {
+      gtk_style_context_add_class (context, GTK_STYLE_CLASS_BOTTOM);
+
+      gtk_render_background (context, cr, rect.x, rect.y + rect.height - UNDERSHOOT_SIZE, rect.width, UNDERSHOOT_SIZE);
+      gtk_render_frame (context, cr, rect.x, rect.y + rect.height - UNDERSHOOT_SIZE, rect.width, UNDERSHOOT_SIZE);
+
+      gtk_style_context_remove_class (context, GTK_STYLE_CLASS_BOTTOM);
+    }
+  if (gtk_adjustment_get_value (adj) > gtk_adjustment_get_lower (adj))
+    {
+      gtk_style_context_add_class (context, GTK_STYLE_CLASS_TOP);
+
+      gtk_render_background (context, cr, rect.x, rect.y, rect.width, UNDERSHOOT_SIZE);
+      gtk_render_frame (context, cr, rect.x, rect.y, rect.width, UNDERSHOOT_SIZE);
+
+      gtk_style_context_remove_class (context, GTK_STYLE_CLASS_TOP);
+    }
+
+  gtk_style_context_restore (context);
+}
+
 static gboolean
 gtk_scrolled_window_draw (GtkWidget *widget,
                           cairo_t   *cr)
@@ -1880,7 +1943,10 @@ gtk_scrolled_window_draw (GtkWidget *widget,
   GTK_WIDGET_CLASS (gtk_scrolled_window_parent_class)->draw (widget, cr);
 
   if (gtk_cairo_should_draw_window (cr, gtk_widget_get_window (widget)))
-    gtk_scrolled_window_draw_overshoot (scrolled_window, cr);
+    {
+      gtk_scrolled_window_draw_undershoot (scrolled_window, cr);
+      gtk_scrolled_window_draw_overshoot (scrolled_window, cr);
+    }
 
   return FALSE;
 }

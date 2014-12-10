@@ -906,6 +906,16 @@ struct _GtkStyleContextClass
 #define GTK_STYLE_CLASS_OVERSHOOT "overshoot"
 
 /*
+ * GTK_STYLE_CLASS_UNDERSHOOT:
+ * A CSS class that is added on the visual hints that happen
+ * where content is 'scrolled off' and can be made visible
+ * by scrolling.
+ *
+ * Since: 3.16
+ */
+#define GTK_STYLE_CLASS_UNDERSHOOT "undershoot"
+
+/*
  * GTK_STYLE_CLASS_PAPER:
  * A CSS class that is added to areas that should look like paper.
  *
