@@ -2324,8 +2324,8 @@ gtk_box_reorder_child (GtkBox    *box,
   priv->children = g_list_insert_before (priv->children, new_link, child_info);
 
   gtk_widget_child_notify (child, "position");
-  if (gtk_widget_get_visible (child)
-      && gtk_widget_get_visible (GTK_WIDGET (box)))
+  if (gtk_widget_get_visible (child) &&
+      gtk_widget_get_visible (GTK_WIDGET (box)))
     {
       gtk_box_invalidate_order (box);
       gtk_widget_queue_resize (child);
