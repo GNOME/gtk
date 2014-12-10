@@ -3096,7 +3096,7 @@ gtk_scrollable_get_hscroll_policy
 gtk_scrollable_set_hscroll_policy
 gtk_scrollable_get_vscroll_policy
 gtk_scrollable_set_vscroll_policy
-
+gtk_scrollable_get_border
 
 <SUBSECTION Standard>
 GtkScrollableInterface

@@ -25,6 +25,7 @@
 #include <gdk/gdk.h>
 #include <gtk/gtkenums.h>
 #include <gtk/gtktypes.h>
+#include <gtk/gtkborder.h>
 
 G_BEGIN_DECLS
 
@@ -39,6 +40,9 @@ typedef struct _GtkScrollableInterface GtkScrollableInterface;
 struct _GtkScrollableInterface
 {
   GTypeInterface base_iface;
+
+  gboolean (* get_border) (GtkScrollable *scrollable,
+                           GtkBorder     *border);
 };
 
 /* Public API */
@@ -64,6 +68,10 @@ GtkScrollablePolicy  gtk_scrollable_get_vscroll_policy     (GtkScrollable       
 GDK_AVAILABLE_IN_ALL
 void                 gtk_scrollable_set_vscroll_policy     (GtkScrollable       *scrollable,
 							    GtkScrollablePolicy  policy);
+
+GDK_AVAILABLE_IN_3_16
+gboolean             gtk_scrollable_get_border             (GtkScrollable       *scrollable,
+                                                            GtkBorder           *border);
 
 G_END_DECLS
 

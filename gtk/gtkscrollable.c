@@ -312,3 +312,31 @@ gtk_scrollable_set_vscroll_policy (GtkScrollable       *scrollable,
 
   g_object_set (scrollable, "vscroll-policy", policy, NULL);
 }
+
+/**
+ * gtk_scrollable_get_border:
+ * @scrollable: a #GtkScrollable
+ * @border: return location for the results
+ *
+ * Returns the size of a non-scrolling border around the
+ * outside of the scrollable. An example for this would
+ * be treeview headers. GTK+ can use this information to
+ * display overlayed graphics, like the overshoot indication,
+ * at the right position.
+ *
+ * Returns: %TRUE if @border has been set
+ *
+ * Since: 3.16
+ */
+gboolean
+gtk_scrollable_get_border (GtkScrollable *scrollable,
+                           GtkBorder     *border)
+{
+  g_return_val_if_fail (GTK_IS_SCROLLABLE (scrollable), FALSE);
+  g_return_val_if_fail (border != NULL, FALSE);
+
+  if (GTK_SCROLLABLE_GET_IFACE (scrollable)->get_border)
+    return GTK_SCROLLABLE_GET_IFACE (scrollable)->get_border (scrollable, border);
+
+  return FALSE;
+}
