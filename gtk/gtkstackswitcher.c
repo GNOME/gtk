@@ -244,6 +244,7 @@ add_child (GtkWidget        *widget,
   priv = gtk_stack_switcher_get_instance_private (self);
 
   button = gtk_radio_button_new (NULL);
+  gtk_button_set_focus_on_click (GTK_BUTTON (button), FALSE);
   gtk_toggle_button_set_mode (GTK_TOGGLE_BUTTON (button), FALSE);
 
   update_button (self, widget, button);
