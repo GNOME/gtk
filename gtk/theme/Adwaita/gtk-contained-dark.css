@@ -2047,7 +2047,9 @@ GtkTreeView.view {
     border-left-color: #666a6a;
     border-top: #393f3f; }
   GtkTreeView.view.dnd {
-    border: 1px solid; }
+    border-style: solid none;
+    border-width: 1px;
+    border-color: #87a5c4; }
   GtkTreeView.view.expander {
     -gtk-icon-source: -gtk-icontheme("pan-end-symbolic");
     color: #b2b2b1; }

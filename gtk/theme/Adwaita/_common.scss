@@ -1400,7 +1400,9 @@ GtkTreeView.view {
   }
 
   &.dnd {
-    border: 1px solid;
+    border-style: solid none;
+    border-width: 1px;
+    border-color: mix($fg_color, $selected_bg_color, 50%);
   }
 
   &.expander {
