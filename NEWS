@@ -1,3 +1,36 @@
+Overview of Changes in GTK+ 3.14.5 to 3.14.6
+============================================
+
+* Bugs fixed:
+ 364566 Text editing widgets should support keypad Insert/Delete...
+ 461249 gtk_icon_theme_list_contexts() documentation: What is a ...
+ 721939 Editable cells demo: Add new row at cursor
+ 722781 Foreach call on sort model fails with sort function
+ 730232 print dialog clips off left page size label on A4 landsc...
+ 739453 Home and Desktop do not link to correct place in PlacesS...
+ 739885 gtk3-3.14.5 - fail to link - undefined reference to `GTK...
+ 739977 Don't wait for ENTER to initiate search
+ 740287 GtkWindow's hide-titlebar-when-maximized no longer does ...
+ 740374 Is enum GtkCssProviderError really deprecated?
+ 740612 Cups secret service auth_info lookup fails to read auth_...
+ 740613 XConvertSelection crashes Gtk+ apps
+ 740642 Fix different height for buttons with Hebrew character
+ 740742 Don't scale before translation
+ 740770 Missing style when the GtkCellRenderer:sensitive propert...
+ 740896 GtkPlacesSidebar: add support for unmount notifications
+ 741249 gtk_menu_tracker_section_find_model returns FALSE
+ 741250 gtk_places_sidebar_list_shortcuts returns FALSE
+ 741251 gtk_widget_get_frame_clock returns 0
+ 741252 tests/variable.h header guard typo
+ 741254 Improper headers guards
+ 741314 Adwaita: draw drag hilight on treeview rows
+        Redraw problems with cairo 1.14
+        Avoid excessive redraws due to CSD shadows
+
+* Translation updates:
+ Greek
+
+
 Overview of Changes in GTK+ 3.14.4 to 3.14.5
 ============================================
 
