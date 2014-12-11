@@ -199,6 +199,7 @@ gtk_model_menu_item_set_icon (GtkModelMenuItem *item,
       GtkWidget *image;
 
       image = gtk_image_new_from_gicon (icon, GTK_ICON_SIZE_MENU);
+      gtk_image_set_pixel_size (GTK_IMAGE (image), 16);
       gtk_box_pack_start (GTK_BOX (child), image, FALSE, FALSE, 0);
       gtk_widget_show (image);
     }
