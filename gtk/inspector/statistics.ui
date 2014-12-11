@@ -153,11 +153,17 @@
           </packing>
         </child>
         <child>
-          <object class="GtkLabel">
+          <object class="GtkBox">
             <property name="visible">True</property>
+            <property name="can-focus">True</property>
             <property name="halign">center</property>
             <property name="valign">center</property>
-            <property name="label" translatable="yes">Enable statistics with GOBJECT_DEBUG=instance-count</property>
+            <child>
+              <object class="GtkLabel">
+                <property name="visible">True</property>
+                <property name="label" translatable="yes">Enable statistics with GOBJECT_DEBUG=instance-count</property>
+              </object>
+            </child>
           </object>
           <packing>
             <property name="name">excuse</property>
