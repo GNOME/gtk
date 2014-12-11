@@ -159,7 +159,7 @@
 #define INDICATOR_FADE_OUT_TIME 500
 
 /* Scrolled off indication */
-#define UNDERSHOOT_SIZE 20
+#define UNDERSHOOT_SIZE 40
 
 typedef struct
 {
