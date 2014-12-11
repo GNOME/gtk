@@ -71,7 +71,7 @@ typedef enum {
   POSITION_ONLY,
   POSITION_SORTED
 } PositionType;
-#define POSITION_TYPE_BITS 2
+#define POSITION_TYPE_BITS 4
 #define POSITION_NUMBER_BITS ((sizeof (gpointer) * 8 - POSITION_TYPE_BITS) / 2)
 
 union _GtkCssSelector
