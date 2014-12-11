@@ -1098,6 +1098,7 @@ gtk_image_menu_item_set_image (GtkImageMenuItem *image_menu_item,
                 "visible", show_image (image_menu_item),
                 "no-show-all", TRUE,
                 NULL);
+  gtk_image_set_pixel_size (GTK_IMAGE (image), 16);
 
   g_object_notify (G_OBJECT (image_menu_item), "image");
 }
