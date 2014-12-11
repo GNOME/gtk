@@ -1262,7 +1262,7 @@ find_action_owner (GtkActionable *actionable)
 
   while (widget != NULL)
     {
-      group = _gtk_widget_get_action_group (widget, prefix);
+      group = gtk_widget_get_action_group (widget, prefix);
       if (group && g_action_group_has_action (group, name))
         return (GObject *)widget;
       widget = action_ancestor (widget);

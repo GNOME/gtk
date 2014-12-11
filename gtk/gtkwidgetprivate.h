@@ -153,9 +153,6 @@ void              _gtk_widget_style_context_invalidated    (GtkWidget    *widget
 void              _gtk_widget_update_parent_muxer          (GtkWidget    *widget);
 GtkActionMuxer *  _gtk_widget_get_action_muxer             (GtkWidget    *widget,
                                                             gboolean      create);
-gchar **          _gtk_widget_list_action_prefixes         (GtkWidget    *widget);
-GActionGroup *    _gtk_widget_get_action_group             (GtkWidget    *widget,
-                                                            const gchar  *prefix);
 
 void              _gtk_widget_add_controller               (GtkWidget           *widget,
                                                             GtkEventController  *controller);

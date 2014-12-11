@@ -732,10 +732,10 @@ gtk_action_muxer_remove (GtkActionMuxer *muxer,
     }
 }
 
-gchar **
+const gchar **
 gtk_action_muxer_list_prefixes (GtkActionMuxer *muxer)
 {
-  return (gchar **) g_hash_table_get_keys_as_array (muxer->groups, NULL);
+  return (const gchar **) g_hash_table_get_keys_as_array (muxer->groups, NULL);
 }
 
 GActionGroup *

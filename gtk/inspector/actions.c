@@ -220,12 +220,12 @@ gtk_inspector_actions_set_object (GtkInspectorActions *sl,
       GActionGroup *group;
       gint i;
 
-      prefixes = _gtk_widget_list_action_prefixes (GTK_WIDGET (object));
+      prefixes = gtk_widget_list_action_prefixes (GTK_WIDGET (object));
       if (prefixes)
         {
           for (i = 0; prefixes[i]; i++)
             {
-              group = _gtk_widget_get_action_group (GTK_WIDGET (object), prefixes[i]);
+              group = gtk_widget_get_action_group (GTK_WIDGET (object), prefixes[i]);
               add_group (sl, group, prefixes[i]);
             }
           g_free (prefixes);

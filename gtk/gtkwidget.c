@@ -17037,18 +17037,49 @@ gtk_widget_get_template_child (GtkWidget   *widget,
   return ret;
 }
 
-gchar **
-_gtk_widget_list_action_prefixes (GtkWidget *widget)
+/**
+ * gtk_widget_list_action_prefixes:
+ * @widget: A #GtkWidget
+ *
+ * Retrieves a %NULL-terminated array of strings containing the prefixes of
+ * #GActionGroup's available to @widget.
+ *
+ * Returns: (transfer container): a %NULL-terminated array of strings.
+ *
+ * Since: 3.16
+ */
+const gchar **
+gtk_widget_list_action_prefixes (GtkWidget *widget)
 {
+  g_return_val_if_fail (GTK_IS_WIDGET (widget), NULL);
+
   if (widget->priv->muxer)
-    return gtk_action_muxer_list_prefixes (widget->priv->muxer);
-  return NULL;
+      return gtk_action_muxer_list_prefixes (widget->priv->muxer);
+  return g_new0 (const gchar *, 0 + 1);
 }
 
+/**
+ * gtk_widget_get_action_group:
+ * @widget: A #GtkWidget
+ * @prefix: The “prefix” of the action group.
+ *
+ * Retrieves the #GActionGroup that was registered using @prefix. The resulting
+ * #GActionGroup may have been registered to @widget or any #GtkWidget in its
+ * ancestry.
+ *
+ * If no action group was found matching @prefix, then %NULL is returned.
+ *
+ * Returns: (transfer none) (nullable): A #GActionGroup or %NULL.
+ *
+ * Since: 3.16
+ */
 GActionGroup *
-_gtk_widget_get_action_group (GtkWidget   *widget,
-                              const gchar *prefix)
+gtk_widget_get_action_group (GtkWidget   *widget,
+                             const gchar *prefix)
 {
+  g_return_val_if_fail (GTK_IS_WIDGET (widget), NULL);
+  g_return_val_if_fail (prefix, NULL);
+
   if (widget->priv->muxer)
     return gtk_action_muxer_lookup (widget->priv->muxer, prefix);
   return NULL;

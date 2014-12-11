@@ -5543,6 +5543,8 @@ gtk_widget_get_modifier_mask
 gtk_widget_insert_action_group
 gtk_widget_get_opacity
 gtk_widget_set_opacity
+gtk_widget_list_action_prefixes
+gtk_widget_get_action_group
 
 <SUBSECTION>
 gtk_widget_get_path
