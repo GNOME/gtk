@@ -1394,6 +1394,10 @@ GtkTreeView.view {
     border-top: $backdrop_bg_color;
   }
 
+  &.dnd {
+    border: 1px solid;
+  }
+
   &.expander {
     -gtk-icon-source: -gtk-icontheme('pan-end-symbolic');
     &:dir(rtl) { -gtk-icon-source: -gtk-icontheme('pan-end-symbolic-rtl'); }

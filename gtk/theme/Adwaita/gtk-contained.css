@@ -1991,6 +1991,8 @@ GtkTreeView.view {
   GtkTreeView.view:backdrop {
     border-left-color: #bdbebf;
     border-top: #ededed; }
+  GtkTreeView.view.dnd {
+    border: 1px solid; }
   GtkTreeView.view.expander {
     -gtk-icon-source: -gtk-icontheme("pan-end-symbolic");
     color: #6c7072; }
