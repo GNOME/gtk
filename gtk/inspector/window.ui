@@ -20,6 +20,7 @@
                 <child>
                   <object class="GtkButton" id="select_object">
                     <property name="visible">True</property>
+                    <property name="focus-on-click">False</property>
                     <property name="tooltip-text" translatable="yes">Select an Object</property>
                     <property name="halign">center</property>
                     <property name="valign">center</property>
@@ -42,6 +43,7 @@
                     <child>
                       <object class="GtkButton" id="object_details_button">
                         <property name="visible">True</property>
+                        <property name="focus-on-click">False</property>
                         <property name="tooltip-text" translatable="yes">Show Details</property>
                         <property name="halign">center</property>
                         <property name="valign">center</property>
@@ -64,6 +66,7 @@
                     <child>
                       <object class="GtkButton">
                         <property name="visible">True</property>
+                        <property name="focus-on-click">False</property>
                         <property name="tooltip-text" translatable="yes">Show all Objects</property>
                         <property name="halign">center</property>
                         <property name="valign">center</property>
@@ -93,6 +96,7 @@
             <child>
               <object class="GtkToggleButton" id="record_statistics_button">
                 <property name="visible">True</property>
+                <property name="focus-on-click">False</property>
                 <property name="tooltip-text" translatable="yes">Collect Statistics</property>
                 <property name="halign">start</property>
                 <property name="valign">center</property>
@@ -119,6 +123,7 @@
                 <child>
                   <object class="GtkButton">
                     <property name="visible">True</property>
+                    <property name="focus-on-click">False</property>
                     <property name="tooltip-text" translatable="yes">Show Details</property>
                     <property name="halign">center</property>
                     <property name="valign">center</property>
@@ -140,6 +145,7 @@
                 <child>
                   <object class="GtkButton">
                     <property name="visible">True</property>
+                    <property name="focus-on-click">False</property>
                     <property name="tooltip-text" translatable="yes">Show all Resources</property>
                     <property name="halign">center</property>
                     <property name="valign">center</property>

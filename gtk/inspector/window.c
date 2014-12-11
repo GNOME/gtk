@@ -173,6 +173,7 @@ gtk_inspector_window_init (GtkInspectorWindow *iw)
         {
           button = gtk_button_new_from_icon_name ("find-location-symbolic",
                                                   GTK_ICON_SIZE_MENU);
+          gtk_button_set_focus_on_click (GTK_BUTTON (button), FALSE);
           gtk_widget_set_halign (button, GTK_ALIGN_START);
           gtk_widget_set_valign (button, GTK_ALIGN_CENTER);
           g_signal_connect (button, "clicked",
