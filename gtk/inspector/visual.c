@@ -28,6 +28,7 @@
 #include "gtksettings.h"
 #include "gtkswitch.h"
 #include "gtkwindow.h"
+#include "gtkcssproviderprivate.h"
 
 #ifdef GDK_WINDOWING_X11
 #include "x11/gdkx.h"
@@ -188,7 +189,7 @@ get_data_path (const gchar *subdir)
 {
   gchar *base_datadir, *full_datadir;
 #if defined (GDK_WINDOWING_WIN32) || defined (GDK_WINDOWING_QUARTZ)
-  base_datadir = g_strdup (_gtk_get_datadir());
+  base_datadir = g_strdup (_gtk_get_datadir ());
 #else
   base_datadir = g_strdup (GTK_DATADIR);
 #endif
@@ -205,21 +206,21 @@ init_theme (GtkInspectorVisual *vis)
   gchar *theme, *current_theme, *path;
   gint i, pos;
   GSettings *settings;
-  gchar *themedir = get_data_path ("themes");
+  gchar *themedir;
 
   t = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, NULL);
   g_hash_table_add (t, g_strdup ("Adwaita"));
   g_hash_table_add (t, g_strdup ("Raleigh"));
 
-  fill_gtk (themedir, t);
-
-  g_free (themedir);
+  path = _gtk_css_provider_get_theme_dir ();
+  fill_gtk (path, t);
+  g_free (path);
 
   path = g_build_filename (g_get_user_data_dir (), "themes", NULL);
   fill_gtk (path, t);
   g_free (path);
 
-  path = g_build_filename (g_get_home_dir (), "themes", NULL);
+  path = g_build_filename (g_get_home_dir (), ".themes", NULL);
   fill_gtk (path, t);
   g_free (path);
 
