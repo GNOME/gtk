@@ -2342,7 +2342,7 @@ gtk_container_foreach (GtkContainer *container,
  * default behaviour by overriding the class closure of this signal.
  *
  * This is function is mostly meant to be used by widgets. Applications can use
- * gtk_widget_grab_focus() to manualy set the focus to a specific widget.
+ * gtk_widget_grab_focus() to manually set the focus to a specific widget.
  */
 void
 gtk_container_set_focus_child (GtkContainer *container,
