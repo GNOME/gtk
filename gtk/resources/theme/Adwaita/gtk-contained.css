@@ -380,7 +380,9 @@ GtkCalendar.header .button.titlebutton {
       text-shadow: none;
       icon-shadow: none;
       box-shadow: inset 0 1px rgba(255, 255, 255, 0), 0 1px rgba(255, 255, 255, 0); }
-      .button:backdrop:insensitive > GtkLabel, .button.flat:backdrop:insensitive > GtkLabel, .header-bar .titlebutton.button:backdrop:insensitive > GtkLabel,
+      .button:backdrop:insensitive > GtkLabel, .header-bar .button.titlebutton:backdrop:insensitive > GtkLabel,
+      .titlebar .button.titlebutton:backdrop:insensitive > GtkLabel,
+      GtkCalendar.header .button.titlebutton:backdrop:insensitive > GtkLabel, .button.flat:backdrop:insensitive > GtkLabel, .header-bar .titlebutton.button:backdrop:insensitive > GtkLabel,
       .titlebar .titlebutton.button:backdrop:insensitive > GtkLabel,
       GtkCalendar.header .titlebutton.button:backdrop:insensitive > GtkLabel {
         color: inherit; }
@@ -393,7 +395,11 @@ GtkCalendar.header .button.titlebutton {
       border-color: #a8a8a8;
       background-image: linear-gradient(to bottom, #e7e7e7);
       box-shadow: inset 0 1px rgba(255, 255, 255, 0), 0 1px rgba(255, 255, 255, 0); }
-      .button:backdrop:insensitive:active > GtkLabel, .button:backdrop:insensitive:checked > GtkLabel, .button.flat:backdrop:insensitive:active > GtkLabel, .header-bar .titlebutton.button:backdrop:insensitive:active > GtkLabel,
+      .button:backdrop:insensitive:active > GtkLabel, .header-bar .button.titlebutton:backdrop:insensitive:active > GtkLabel,
+      .titlebar .button.titlebutton:backdrop:insensitive:active > GtkLabel,
+      GtkCalendar.header .button.titlebutton:backdrop:insensitive:active > GtkLabel, .button:backdrop:insensitive:checked > GtkLabel, .header-bar .button.titlebutton:backdrop:insensitive:checked > GtkLabel,
+      .titlebar .button.titlebutton:backdrop:insensitive:checked > GtkLabel,
+      GtkCalendar.header .button.titlebutton:backdrop:insensitive:checked > GtkLabel, .button.flat:backdrop:insensitive:active > GtkLabel, .header-bar .titlebutton.button:backdrop:insensitive:active > GtkLabel,
       .titlebar .titlebutton.button:backdrop:insensitive:active > GtkLabel,
       GtkCalendar.header .titlebutton.button:backdrop:insensitive:active > GtkLabel, .button.flat:backdrop:insensitive:checked > GtkLabel, .header-bar .titlebutton.button:backdrop:insensitive:checked > GtkLabel,
       .titlebar .titlebutton.button:backdrop:insensitive:checked > GtkLabel,
@@ -430,7 +436,11 @@ GtkCalendar.header .button.titlebutton {
       border-color: #a1a1a1;
       background-image: linear-gradient(to bottom, #ebebeb, #f4f4f4);
       box-shadow: inset 0 1px rgba(255, 255, 255, 0), 0 1px white; }
-      .button:insensitive:active > GtkLabel, .button:insensitive:checked > GtkLabel {
+      .button:insensitive:active > GtkLabel, .header-bar .button.titlebutton:insensitive:active > GtkLabel,
+      .titlebar .button.titlebutton:insensitive:active > GtkLabel,
+      GtkCalendar.header .button.titlebutton:insensitive:active > GtkLabel, .button:insensitive:checked > GtkLabel, .header-bar .button.titlebutton:insensitive:checked > GtkLabel,
+      .titlebar .button.titlebutton:insensitive:checked > GtkLabel,
+      GtkCalendar.header .button.titlebutton:insensitive:checked > GtkLabel {
         color: inherit; }
   .button.osd, .header-bar .osd.button.titlebutton,
   .titlebar .osd.button.titlebutton,
@@ -694,7 +704,9 @@ GtkCalendar.header .button.titlebutton {
         text-shadow: none;
         icon-shadow: none;
         box-shadow: inset 0 1px rgba(255, 255, 255, 0), 0 1px rgba(255, 255, 255, 0); }
-        .button.suggested-action:backdrop:insensitive > GtkLabel, .button.suggested-action.flat:backdrop:insensitive > GtkLabel, .header-bar .suggested-action.titlebutton.button:backdrop:insensitive > GtkLabel,
+        .button.suggested-action:backdrop:insensitive > GtkLabel, .header-bar .suggested-action.button.titlebutton:backdrop:insensitive > GtkLabel,
+        .titlebar .suggested-action.button.titlebutton:backdrop:insensitive > GtkLabel,
+        GtkCalendar.header .suggested-action.button.titlebutton:backdrop:insensitive > GtkLabel, .button.suggested-action.flat:backdrop:insensitive > GtkLabel, .header-bar .suggested-action.titlebutton.button:backdrop:insensitive > GtkLabel,
         .titlebar .suggested-action.titlebutton.button:backdrop:insensitive > GtkLabel,
         GtkCalendar.header .suggested-action.titlebutton.button:backdrop:insensitive > GtkLabel {
           color: inherit; }
@@ -707,7 +719,11 @@ GtkCalendar.header .button.titlebutton {
           border-color: #5093da;
           background-image: linear-gradient(to bottom, #5093da);
           box-shadow: inset 0 1px rgba(255, 255, 255, 0), 0 1px rgba(255, 255, 255, 0); }
-          .button.suggested-action:backdrop:insensitive:active > GtkLabel, .button.suggested-action:backdrop:insensitive:checked > GtkLabel, .button.suggested-action.flat:backdrop:insensitive:active > GtkLabel, .header-bar .suggested-action.titlebutton.button:backdrop:insensitive:active > GtkLabel,
+          .button.suggested-action:backdrop:insensitive:active > GtkLabel, .header-bar .suggested-action.button.titlebutton:backdrop:insensitive:active > GtkLabel,
+          .titlebar .suggested-action.button.titlebutton:backdrop:insensitive:active > GtkLabel,
+          GtkCalendar.header .suggested-action.button.titlebutton:backdrop:insensitive:active > GtkLabel, .button.suggested-action:backdrop:insensitive:checked > GtkLabel, .header-bar .suggested-action.button.titlebutton:backdrop:insensitive:checked > GtkLabel,
+          .titlebar .suggested-action.button.titlebutton:backdrop:insensitive:checked > GtkLabel,
+          GtkCalendar.header .suggested-action.button.titlebutton:backdrop:insensitive:checked > GtkLabel, .button.suggested-action.flat:backdrop:insensitive:active > GtkLabel, .header-bar .suggested-action.titlebutton.button:backdrop:insensitive:active > GtkLabel,
           .titlebar .suggested-action.titlebutton.button:backdrop:insensitive:active > GtkLabel,
           GtkCalendar.header .suggested-action.titlebutton.button:backdrop:insensitive:active > GtkLabel, .button.suggested-action.flat:backdrop:insensitive:checked > GtkLabel, .header-bar .suggested-action.titlebutton.button:backdrop:insensitive:checked > GtkLabel,
           .titlebar .suggested-action.titlebutton.button:backdrop:insensitive:checked > GtkLabel,
@@ -734,14 +750,20 @@ GtkCalendar.header .button.titlebutton {
       text-shadow: none;
       icon-shadow: none;
       box-shadow: inset 0 1px rgba(255, 255, 255, 0), 0 1px white; }
-      .button.suggested-action:insensitive > GtkLabel {
+      .button.suggested-action:insensitive > GtkLabel, .header-bar .suggested-action.button.titlebutton:insensitive > GtkLabel,
+      .titlebar .suggested-action.button.titlebutton:insensitive > GtkLabel,
+      GtkCalendar.header .suggested-action.button.titlebutton:insensitive > GtkLabel {
         color: inherit; }
       .button.suggested-action:insensitive:active, .button.suggested-action:insensitive:checked {
         color: #b9d3f0;
         border-color: #1c5187;
         background-image: linear-gradient(to bottom, #4a8cd1, #5093da);
         box-shadow: inset 0 1px rgba(255, 255, 255, 0), 0 1px white; }
-        .button.suggested-action:insensitive:active > GtkLabel, .button.suggested-action:insensitive:checked > GtkLabel {
+        .button.suggested-action:insensitive:active > GtkLabel, .header-bar .suggested-action.button.titlebutton:insensitive:active > GtkLabel,
+        .titlebar .suggested-action.button.titlebutton:insensitive:active > GtkLabel,
+        GtkCalendar.header .suggested-action.button.titlebutton:insensitive:active > GtkLabel, .button.suggested-action:insensitive:checked > GtkLabel, .header-bar .suggested-action.button.titlebutton:insensitive:checked > GtkLabel,
+        .titlebar .suggested-action.button.titlebutton:insensitive:checked > GtkLabel,
+        GtkCalendar.header .suggested-action.button.titlebutton:insensitive:checked > GtkLabel {
           color: inherit; }
     .osd .button.suggested-action {
       color: #eeeeec;
@@ -849,7 +871,9 @@ GtkCalendar.header .button.titlebutton {
         text-shadow: none;
         icon-shadow: none;
         box-shadow: inset 0 1px rgba(255, 255, 255, 0), 0 1px rgba(255, 255, 255, 0); }
-        .button.destructive-action:backdrop:insensitive > GtkLabel, .button.destructive-action.flat:backdrop:insensitive > GtkLabel, .header-bar .destructive-action.titlebutton.button:backdrop:insensitive > GtkLabel,
+        .button.destructive-action:backdrop:insensitive > GtkLabel, .header-bar .destructive-action.button.titlebutton:backdrop:insensitive > GtkLabel,
+        .titlebar .destructive-action.button.titlebutton:backdrop:insensitive > GtkLabel,
+        GtkCalendar.header .destructive-action.button.titlebutton:backdrop:insensitive > GtkLabel, .button.destructive-action.flat:backdrop:insensitive > GtkLabel, .header-bar .destructive-action.titlebutton.button:backdrop:insensitive > GtkLabel,
         .titlebar .destructive-action.titlebutton.button:backdrop:insensitive > GtkLabel,
         GtkCalendar.header .destructive-action.titlebutton.button:backdrop:insensitive > GtkLabel {
           color: inherit; }
@@ -862,7 +886,11 @@ GtkCalendar.header .button.titlebutton {
           border-color: #ef3131;
           background-image: linear-gradient(to bottom, #ef3131);
           box-shadow: inset 0 1px rgba(255, 255, 255, 0), 0 1px rgba(255, 255, 255, 0); }
-          .button.destructive-action:backdrop:insensitive:active > GtkLabel, .button.destructive-action:backdrop:insensitive:checked > GtkLabel, .button.destructive-action.flat:backdrop:insensitive:active > GtkLabel, .header-bar .destructive-action.titlebutton.button:backdrop:insensitive:active > GtkLabel,
+          .button.destructive-action:backdrop:insensitive:active > GtkLabel, .header-bar .destructive-action.button.titlebutton:backdrop:insensitive:active > GtkLabel,
+          .titlebar .destructive-action.button.titlebutton:backdrop:insensitive:active > GtkLabel,
+          GtkCalendar.header .destructive-action.button.titlebutton:backdrop:insensitive:active > GtkLabel, .button.destructive-action:backdrop:insensitive:checked > GtkLabel, .header-bar .destructive-action.button.titlebutton:backdrop:insensitive:checked > GtkLabel,
+          .titlebar .destructive-action.button.titlebutton:backdrop:insensitive:checked > GtkLabel,
+          GtkCalendar.header .destructive-action.button.titlebutton:backdrop:insensitive:checked > GtkLabel, .button.destructive-action.flat:backdrop:insensitive:active > GtkLabel, .header-bar .destructive-action.titlebutton.button:backdrop:insensitive:active > GtkLabel,
           .titlebar .destructive-action.titlebutton.button:backdrop:insensitive:active > GtkLabel,
           GtkCalendar.header .destructive-action.titlebutton.button:backdrop:insensitive:active > GtkLabel, .button.destructive-action.flat:backdrop:insensitive:checked > GtkLabel, .header-bar .destructive-action.titlebutton.button:backdrop:insensitive:checked > GtkLabel,
           .titlebar .destructive-action.titlebutton.button:backdrop:insensitive:checked > GtkLabel,
@@ -889,14 +917,20 @@ GtkCalendar.header .button.titlebutton {
       text-shadow: none;
       icon-shadow: none;
       box-shadow: inset 0 1px rgba(255, 255, 255, 0), 0 1px white; }
-      .button.destructive-action:insensitive > GtkLabel {
+      .button.destructive-action:insensitive > GtkLabel, .header-bar .destructive-action.button.titlebutton:insensitive > GtkLabel,
+      .titlebar .destructive-action.button.titlebutton:insensitive > GtkLabel,
+      GtkCalendar.header .destructive-action.button.titlebutton:insensitive > GtkLabel {
         color: inherit; }
       .button.destructive-action:insensitive:active, .button.destructive-action:insensitive:checked {
         color: #f8acac;
         border-color: #8e0b0b;
         background-image: linear-gradient(to bottom, #e52d2d, #ef3131);
         box-shadow: inset 0 1px rgba(255, 255, 255, 0), 0 1px white; }
-        .button.destructive-action:insensitive:active > GtkLabel, .button.destructive-action:insensitive:checked > GtkLabel {
+        .button.destructive-action:insensitive:active > GtkLabel, .header-bar .destructive-action.button.titlebutton:insensitive:active > GtkLabel,
+        .titlebar .destructive-action.button.titlebutton:insensitive:active > GtkLabel,
+        GtkCalendar.header .destructive-action.button.titlebutton:insensitive:active > GtkLabel, .button.destructive-action:insensitive:checked > GtkLabel, .header-bar .destructive-action.button.titlebutton:insensitive:checked > GtkLabel,
+        .titlebar .destructive-action.button.titlebutton:insensitive:checked > GtkLabel,
+        GtkCalendar.header .destructive-action.button.titlebutton:insensitive:checked > GtkLabel {
           color: inherit; }
     .osd .button.destructive-action {
       color: #eeeeec;
@@ -978,7 +1012,9 @@ GtkCalendar.header .button.titlebutton {
       padding-right: 6px;
       padding-top: 3px;
       padding-bottom: 3px; }
-    .stack-switcher > .button.text-button {
+    .stack-switcher > .button.text-button, .header-bar .stack-switcher > .text-button.button.titlebutton,
+    .titlebar .stack-switcher > .text-button.button.titlebutton,
+    GtkCalendar.header .stack-switcher > .text-button.button.titlebutton {
       padding: 5px 10px 6px; }
     .stack-switcher > .button.image-button, .header-bar .stack-switcher > .titlebutton.button,
     .titlebar .stack-switcher > .titlebutton.button,
@@ -1023,7 +1059,9 @@ GtkCalendar.header .inline-toolbar GtkToolButton > .button.titlebutton {
   text-shadow: 0 1px rgba(255, 255, 255, 0.76923);
   icon-shadow: 0 1px rgba(255, 255, 255, 0.76923);
   box-shadow: inset 0 1px white, 0 1px white; }
-  .inline-toolbar GtkToolButton > .button:hover {
+  .inline-toolbar GtkToolButton > .button:hover, .inline-toolbar .header-bar GtkToolButton > .button.titlebutton:hover,
+  .inline-toolbar .titlebar GtkToolButton > .button.titlebutton:hover,
+  .inline-toolbar GtkCalendar.header GtkToolButton > .button.titlebutton:hover {
     color: #2e3436;
     outline-color: rgba(46, 52, 54, 0.3);
     border-color: #a1a1a1;
@@ -1031,7 +1069,11 @@ GtkCalendar.header .inline-toolbar GtkToolButton > .button.titlebutton {
     text-shadow: 0 1px rgba(255, 255, 255, 0.76923);
     icon-shadow: 0 1px rgba(255, 255, 255, 0.76923);
     box-shadow: inset 0 1px white, 0 1px white; }
-  .inline-toolbar GtkToolButton > .button:active, .inline-toolbar GtkToolButton > .button:checked {
+  .inline-toolbar GtkToolButton > .button:active, .inline-toolbar .header-bar GtkToolButton > .button.titlebutton:active,
+  .inline-toolbar .titlebar GtkToolButton > .button.titlebutton:active,
+  .inline-toolbar GtkCalendar.header GtkToolButton > .button.titlebutton:active, .inline-toolbar GtkToolButton > .button:checked, .inline-toolbar .header-bar GtkToolButton > .button.titlebutton:checked,
+  .inline-toolbar .titlebar GtkToolButton > .button.titlebutton:checked,
+  .inline-toolbar GtkCalendar.header GtkToolButton > .button.titlebutton:checked {
     color: #2e3436;
     outline-color: rgba(46, 52, 54, 0.3);
     border-color: #a1a1a1;
@@ -1039,7 +1081,9 @@ GtkCalendar.header .inline-toolbar GtkToolButton > .button.titlebutton {
     text-shadow: 0 1px rgba(255, 255, 255, 0.76923);
     icon-shadow: 0 1px rgba(255, 255, 255, 0.76923);
     box-shadow: inset 0 1px rgba(0, 0, 0, 0.07), inset 0 2px 1px -2px rgba(0, 0, 0, 0.6), 0 1px white; }
-  .inline-toolbar GtkToolButton > .button:insensitive {
+  .inline-toolbar GtkToolButton > .button:insensitive, .inline-toolbar .header-bar GtkToolButton > .button.titlebutton:insensitive,
+  .inline-toolbar .titlebar GtkToolButton > .button.titlebutton:insensitive,
+  .inline-toolbar GtkCalendar.header GtkToolButton > .button.titlebutton:insensitive {
     color: #8d9091;
     border-color: #a1a1a1;
     background-image: linear-gradient(to bottom, #f4f4f4);
@@ -1048,26 +1092,38 @@ GtkCalendar.header .inline-toolbar GtkToolButton > .button.titlebutton {
     box-shadow: inset 0 1px rgba(255, 255, 255, 0), 0 1px white; }
     .inline-toolbar GtkToolButton > .button:insensitive > GtkLabel {
       color: inherit; }
-  .inline-toolbar GtkToolButton > .button:insensitive:active, .inline-toolbar GtkToolButton > .button:insensitive:checked {
+  .inline-toolbar GtkToolButton > .button:insensitive:active, .inline-toolbar .header-bar GtkToolButton > .button.titlebutton:insensitive:active,
+  .inline-toolbar .titlebar GtkToolButton > .button.titlebutton:insensitive:active,
+  .inline-toolbar GtkCalendar.header GtkToolButton > .button.titlebutton:insensitive:active, .inline-toolbar GtkToolButton > .button:insensitive:checked, .inline-toolbar .header-bar GtkToolButton > .button.titlebutton:insensitive:checked,
+  .inline-toolbar .titlebar GtkToolButton > .button.titlebutton:insensitive:checked,
+  .inline-toolbar GtkCalendar.header GtkToolButton > .button.titlebutton:insensitive:checked {
     color: #8d9091;
     border-color: #a1a1a1;
     background-image: linear-gradient(to bottom, #ebebeb, #f4f4f4);
     box-shadow: inset 0 1px rgba(255, 255, 255, 0), 0 1px white; }
     .inline-toolbar GtkToolButton > .button:insensitive:active > GtkLabel, .inline-toolbar GtkToolButton > .button:insensitive:checked > GtkLabel {
       color: inherit; }
-  .inline-toolbar GtkToolButton > .button:backdrop {
+  .inline-toolbar GtkToolButton > .button:backdrop, .inline-toolbar .header-bar GtkToolButton > .button.titlebutton:backdrop,
+  .inline-toolbar .titlebar GtkToolButton > .button.titlebutton:backdrop,
+  .inline-toolbar GtkCalendar.header GtkToolButton > .button.titlebutton:backdrop {
     color: #8d9091;
     border-color: #a8a8a8;
     background-image: linear-gradient(to bottom, #ededed);
     text-shadow: none;
     icon-shadow: none;
     box-shadow: inset 0 1px rgba(255, 255, 255, 0), 0 1px rgba(255, 255, 255, 0); }
-  .inline-toolbar GtkToolButton > .button:backdrop:active, .inline-toolbar GtkToolButton > .button:backdrop:checked {
+  .inline-toolbar GtkToolButton > .button:backdrop:active, .inline-toolbar .header-bar GtkToolButton > .button.titlebutton:backdrop:active,
+  .inline-toolbar .titlebar GtkToolButton > .button.titlebutton:backdrop:active,
+  .inline-toolbar GtkCalendar.header GtkToolButton > .button.titlebutton:backdrop:active, .inline-toolbar GtkToolButton > .button:backdrop:checked, .inline-toolbar .header-bar GtkToolButton > .button.titlebutton:backdrop:checked,
+  .inline-toolbar .titlebar GtkToolButton > .button.titlebutton:backdrop:checked,
+  .inline-toolbar GtkCalendar.header GtkToolButton > .button.titlebutton:backdrop:checked {
     color: #8d9091;
     border-color: #a8a8a8;
     background-image: linear-gradient(to bottom, #d4d4d4);
     box-shadow: inset 0 1px rgba(255, 255, 255, 0), 0 1px rgba(255, 255, 255, 0); }
-  .inline-toolbar GtkToolButton > .button:backdrop:insensitive {
+  .inline-toolbar GtkToolButton > .button:backdrop:insensitive, .inline-toolbar .header-bar GtkToolButton > .button.titlebutton:backdrop:insensitive,
+  .inline-toolbar .titlebar GtkToolButton > .button.titlebutton:backdrop:insensitive,
+  .inline-toolbar GtkCalendar.header GtkToolButton > .button.titlebutton:backdrop:insensitive {
     color: #c7c7c7;
     border-color: #a8a8a8;
     background-image: linear-gradient(to bottom, #f4f4f4);
@@ -1076,7 +1132,11 @@ GtkCalendar.header .inline-toolbar GtkToolButton > .button.titlebutton {
     box-shadow: inset 0 1px rgba(255, 255, 255, 0), 0 1px rgba(255, 255, 255, 0); }
     .inline-toolbar GtkToolButton > .button:backdrop:insensitive > GtkLabel {
       color: inherit; }
-  .inline-toolbar GtkToolButton > .button:backdrop:insensitive:active, .inline-toolbar GtkToolButton > .button:backdrop:insensitive:checked {
+  .inline-toolbar GtkToolButton > .button:backdrop:insensitive:active, .inline-toolbar .header-bar GtkToolButton > .button.titlebutton:backdrop:insensitive:active,
+  .inline-toolbar .titlebar GtkToolButton > .button.titlebutton:backdrop:insensitive:active,
+  .inline-toolbar GtkCalendar.header GtkToolButton > .button.titlebutton:backdrop:insensitive:active, .inline-toolbar GtkToolButton > .button:backdrop:insensitive:checked, .inline-toolbar .header-bar GtkToolButton > .button.titlebutton:backdrop:insensitive:checked,
+  .inline-toolbar .titlebar GtkToolButton > .button.titlebutton:backdrop:insensitive:checked,
+  .inline-toolbar GtkCalendar.header GtkToolButton > .button.titlebutton:backdrop:insensitive:checked {
     color: #c7c7c7;
     border-color: #a8a8a8;
     background-image: linear-gradient(to bottom, #e7e7e7);
@@ -1488,7 +1548,11 @@ GtkCalendar.header .button.titlebutton:visited {
         text-shadow: none;
         icon-shadow: none;
         box-shadow: inset 0 1px rgba(255, 255, 255, 0); }
-        .spinbutton.vertical .button:first-child:insensitive > GtkLabel, .spinbutton.vertical:dir(rtl) .button:first-child:insensitive > GtkLabel {
+        .spinbutton.vertical .button:first-child:insensitive > GtkLabel, .spinbutton.vertical .header-bar .button.titlebutton:first-child:insensitive > GtkLabel,
+        .spinbutton.vertical .titlebar .button.titlebutton:first-child:insensitive > GtkLabel,
+        .spinbutton.vertical GtkCalendar.header .button.titlebutton:first-child:insensitive > GtkLabel, .spinbutton.vertical:dir(rtl) .button:first-child:insensitive > GtkLabel, .spinbutton.vertical:dir(rtl) .header-bar .button.titlebutton:first-child:insensitive > GtkLabel,
+        .spinbutton.vertical:dir(rtl) .titlebar .button.titlebutton:first-child:insensitive > GtkLabel,
+        .spinbutton.vertical:dir(rtl) GtkCalendar.header .button.titlebutton:first-child:insensitive > GtkLabel {
           color: inherit; }
       .spinbutton.vertical .button:first-child:backdrop, .spinbutton.vertical:dir(rtl) .button:first-child:backdrop {
         color: #8d9091;
@@ -1528,7 +1592,11 @@ GtkCalendar.header .button.titlebutton:visited {
         text-shadow: none;
         icon-shadow: none;
         box-shadow: inset 0 1px rgba(255, 255, 255, 0), 0 1px white; }
-        .spinbutton.vertical .button:last-child:insensitive > GtkLabel, .spinbutton.vertical:dir(rtl) .button:last-child:insensitive > GtkLabel {
+        .spinbutton.vertical .button:last-child:insensitive > GtkLabel, .spinbutton.vertical .header-bar .button.titlebutton:last-child:insensitive > GtkLabel,
+        .spinbutton.vertical .titlebar .button.titlebutton:last-child:insensitive > GtkLabel,
+        .spinbutton.vertical GtkCalendar.header .button.titlebutton:last-child:insensitive > GtkLabel, .spinbutton.vertical:dir(rtl) .button:last-child:insensitive > GtkLabel, .spinbutton.vertical:dir(rtl) .header-bar .button.titlebutton:last-child:insensitive > GtkLabel,
+        .spinbutton.vertical:dir(rtl) .titlebar .button.titlebutton:last-child:insensitive > GtkLabel,
+        .spinbutton.vertical:dir(rtl) GtkCalendar.header .button.titlebutton:last-child:insensitive > GtkLabel {
           color: inherit; }
       .spinbutton.vertical .button:last-child:backdrop, .spinbutton.vertical:dir(rtl) .button:last-child:backdrop {
         color: #8d9091;
@@ -1544,7 +1612,11 @@ GtkCalendar.header .button.titlebutton:visited {
       text-shadow: none;
       icon-shadow: none;
       box-shadow: inset 0 1px rgba(255, 255, 255, 0), 0 1px rgba(255, 255, 255, 0); }
-      .spinbutton.vertical .button:backdrop:insensitive > GtkLabel, .spinbutton.vertical:dir(rtl) .button:backdrop:insensitive > GtkLabel {
+      .spinbutton.vertical .button:backdrop:insensitive > GtkLabel, .spinbutton.vertical .header-bar .button.titlebutton:backdrop:insensitive > GtkLabel,
+      .spinbutton.vertical .titlebar .button.titlebutton:backdrop:insensitive > GtkLabel,
+      .spinbutton.vertical GtkCalendar.header .button.titlebutton:backdrop:insensitive > GtkLabel, .spinbutton.vertical:dir(rtl) .button:backdrop:insensitive > GtkLabel, .spinbutton.vertical:dir(rtl) .header-bar .button.titlebutton:backdrop:insensitive > GtkLabel,
+      .spinbutton.vertical:dir(rtl) .titlebar .button.titlebutton:backdrop:insensitive > GtkLabel,
+      .spinbutton.vertical:dir(rtl) GtkCalendar.header .button.titlebutton:backdrop:insensitive > GtkLabel {
         color: inherit; }
   .spinbutton.vertical.entry, .spinbutton.vertical:dir(rtl).entry {
     border-radius: 0;
@@ -1752,12 +1824,20 @@ GtkComboBox {
           icon-shadow: none;
           box-shadow: inset 0 1px rgba(255, 255, 255, 0), 0 1px rgba(164, 199, 236, 0);
           border-color: #184472; }
-          .titlebar.selection-mode .button:backdrop:insensitive > GtkLabel, GtkCalendar.selection-mode.header .button:backdrop:insensitive > GtkLabel, .titlebar.selection-mode .button.flat:backdrop:insensitive > GtkLabel, GtkCalendar.selection-mode.header .button.flat:backdrop:insensitive > GtkLabel,
+          .titlebar.selection-mode .button:backdrop:insensitive > GtkLabel, GtkCalendar.selection-mode.header .button:backdrop:insensitive > GtkLabel, .titlebar.selection-mode .header-bar .button.titlebutton:backdrop:insensitive > GtkLabel, GtkCalendar.selection-mode.header .header-bar .button.titlebutton:backdrop:insensitive > GtkLabel,
+          GtkCalendar.selection-mode.header .titlebar .button.titlebutton:backdrop:insensitive > GtkLabel,
+          .titlebar.selection-mode GtkCalendar.header .button.titlebutton:backdrop:insensitive > GtkLabel, .titlebar.selection-mode .button.flat:backdrop:insensitive > GtkLabel, GtkCalendar.selection-mode.header .button.flat:backdrop:insensitive > GtkLabel, .titlebar.selection-mode .header-bar .titlebutton.button:backdrop:insensitive > GtkLabel, GtkCalendar.selection-mode.header .header-bar .titlebutton.button:backdrop:insensitive > GtkLabel,
           .titlebar.selection-mode .titlebutton.button:backdrop:insensitive > GtkLabel,
+          GtkCalendar.selection-mode.header .titlebar .titlebutton.button:backdrop:insensitive > GtkLabel,
+          .titlebar.selection-mode GtkCalendar.header .titlebutton.button:backdrop:insensitive > GtkLabel,
           GtkCalendar.selection-mode.header .titlebutton.button:backdrop:insensitive > GtkLabel,
           .header-bar.selection-mode .button:backdrop:insensitive > GtkLabel,
+          .header-bar.selection-mode .titlebar .button.titlebutton:backdrop:insensitive > GtkLabel,
+          .header-bar.selection-mode GtkCalendar.header .button.titlebutton:backdrop:insensitive > GtkLabel,
           .header-bar.selection-mode .button.flat:backdrop:insensitive > GtkLabel,
-          .header-bar.selection-mode .titlebutton.button:backdrop:insensitive > GtkLabel {
+          .header-bar.selection-mode .titlebutton.button:backdrop:insensitive > GtkLabel,
+          .header-bar.selection-mode .titlebar .titlebutton.button:backdrop:insensitive > GtkLabel,
+          .header-bar.selection-mode GtkCalendar.header .titlebutton.button:backdrop:insensitive > GtkLabel {
             color: inherit; }
         .titlebar.selection-mode .button:backdrop:insensitive:active, GtkCalendar.selection-mode.header .button:backdrop:insensitive:active, .titlebar.selection-mode .button:backdrop:insensitive:checked, GtkCalendar.selection-mode.header .button:backdrop:insensitive:checked, .titlebar.selection-mode .button.flat:backdrop:insensitive:active, GtkCalendar.selection-mode.header .button.flat:backdrop:insensitive:active,
         .titlebar.selection-mode .titlebutton.button:backdrop:insensitive:active,
@@ -1775,17 +1855,33 @@ GtkComboBox {
           background-image: linear-gradient(to bottom, #5093da);
           box-shadow: inset 0 1px rgba(255, 255, 255, 0), 0 1px rgba(164, 199, 236, 0);
           border-color: #184472; }
-          .titlebar.selection-mode .button:backdrop:insensitive:active > GtkLabel, GtkCalendar.selection-mode.header .button:backdrop:insensitive:active > GtkLabel, .titlebar.selection-mode .button:backdrop:insensitive:checked > GtkLabel, GtkCalendar.selection-mode.header .button:backdrop:insensitive:checked > GtkLabel, .titlebar.selection-mode .button.flat:backdrop:insensitive:active > GtkLabel, GtkCalendar.selection-mode.header .button.flat:backdrop:insensitive:active > GtkLabel,
+          .titlebar.selection-mode .button:backdrop:insensitive:active > GtkLabel, GtkCalendar.selection-mode.header .button:backdrop:insensitive:active > GtkLabel, .titlebar.selection-mode .header-bar .button.titlebutton:backdrop:insensitive:active > GtkLabel, GtkCalendar.selection-mode.header .header-bar .button.titlebutton:backdrop:insensitive:active > GtkLabel,
+          GtkCalendar.selection-mode.header .titlebar .button.titlebutton:backdrop:insensitive:active > GtkLabel,
+          .titlebar.selection-mode GtkCalendar.header .button.titlebutton:backdrop:insensitive:active > GtkLabel, .titlebar.selection-mode .button:backdrop:insensitive:checked > GtkLabel, GtkCalendar.selection-mode.header .button:backdrop:insensitive:checked > GtkLabel, .titlebar.selection-mode .header-bar .button.titlebutton:backdrop:insensitive:checked > GtkLabel, GtkCalendar.selection-mode.header .header-bar .button.titlebutton:backdrop:insensitive:checked > GtkLabel,
+          GtkCalendar.selection-mode.header .titlebar .button.titlebutton:backdrop:insensitive:checked > GtkLabel,
+          .titlebar.selection-mode GtkCalendar.header .button.titlebutton:backdrop:insensitive:checked > GtkLabel, .titlebar.selection-mode .button.flat:backdrop:insensitive:active > GtkLabel, GtkCalendar.selection-mode.header .button.flat:backdrop:insensitive:active > GtkLabel, .titlebar.selection-mode .header-bar .titlebutton.button:backdrop:insensitive:active > GtkLabel, GtkCalendar.selection-mode.header .header-bar .titlebutton.button:backdrop:insensitive:active > GtkLabel,
           .titlebar.selection-mode .titlebutton.button:backdrop:insensitive:active > GtkLabel,
-          GtkCalendar.selection-mode.header .titlebutton.button:backdrop:insensitive:active > GtkLabel, .titlebar.selection-mode .button.flat:backdrop:insensitive:checked > GtkLabel, GtkCalendar.selection-mode.header .button.flat:backdrop:insensitive:checked > GtkLabel,
+          GtkCalendar.selection-mode.header .titlebar .titlebutton.button:backdrop:insensitive:active > GtkLabel,
+          .titlebar.selection-mode GtkCalendar.header .titlebutton.button:backdrop:insensitive:active > GtkLabel,
+          GtkCalendar.selection-mode.header .titlebutton.button:backdrop:insensitive:active > GtkLabel, .titlebar.selection-mode .button.flat:backdrop:insensitive:checked > GtkLabel, GtkCalendar.selection-mode.header .button.flat:backdrop:insensitive:checked > GtkLabel, .titlebar.selection-mode .header-bar .titlebutton.button:backdrop:insensitive:checked > GtkLabel, GtkCalendar.selection-mode.header .header-bar .titlebutton.button:backdrop:insensitive:checked > GtkLabel,
           .titlebar.selection-mode .titlebutton.button:backdrop:insensitive:checked > GtkLabel,
+          GtkCalendar.selection-mode.header .titlebar .titlebutton.button:backdrop:insensitive:checked > GtkLabel,
+          .titlebar.selection-mode GtkCalendar.header .titlebutton.button:backdrop:insensitive:checked > GtkLabel,
           GtkCalendar.selection-mode.header .titlebutton.button:backdrop:insensitive:checked > GtkLabel,
           .header-bar.selection-mode .button:backdrop:insensitive:active > GtkLabel,
+          .header-bar.selection-mode .titlebar .button.titlebutton:backdrop:insensitive:active > GtkLabel,
+          .header-bar.selection-mode GtkCalendar.header .button.titlebutton:backdrop:insensitive:active > GtkLabel,
           .header-bar.selection-mode .button:backdrop:insensitive:checked > GtkLabel,
+          .header-bar.selection-mode .titlebar .button.titlebutton:backdrop:insensitive:checked > GtkLabel,
+          .header-bar.selection-mode GtkCalendar.header .button.titlebutton:backdrop:insensitive:checked > GtkLabel,
           .header-bar.selection-mode .button.flat:backdrop:insensitive:active > GtkLabel,
           .header-bar.selection-mode .titlebutton.button:backdrop:insensitive:active > GtkLabel,
+          .header-bar.selection-mode .titlebar .titlebutton.button:backdrop:insensitive:active > GtkLabel,
+          .header-bar.selection-mode GtkCalendar.header .titlebutton.button:backdrop:insensitive:active > GtkLabel,
           .header-bar.selection-mode .button.flat:backdrop:insensitive:checked > GtkLabel,
-          .header-bar.selection-mode .titlebutton.button:backdrop:insensitive:checked > GtkLabel {
+          .header-bar.selection-mode .titlebutton.button:backdrop:insensitive:checked > GtkLabel,
+          .header-bar.selection-mode .titlebar .titlebutton.button:backdrop:insensitive:checked > GtkLabel,
+          .header-bar.selection-mode GtkCalendar.header .titlebutton.button:backdrop:insensitive:checked > GtkLabel {
             color: inherit; }
       .titlebar.selection-mode .button.flat:backdrop, GtkCalendar.selection-mode.header .button.flat:backdrop,
       .titlebar.selection-mode .titlebutton.button:backdrop,
@@ -1814,8 +1910,12 @@ GtkComboBox {
         text-shadow: none;
         icon-shadow: none;
         box-shadow: inset 0 1px rgba(255, 255, 255, 0), 0 1px #a4c7ec; }
-        .titlebar.selection-mode .button:insensitive > GtkLabel, GtkCalendar.selection-mode.header .button:insensitive > GtkLabel,
-        .header-bar.selection-mode .button:insensitive > GtkLabel {
+        .titlebar.selection-mode .button:insensitive > GtkLabel, GtkCalendar.selection-mode.header .button:insensitive > GtkLabel, .titlebar.selection-mode .header-bar .button.titlebutton:insensitive > GtkLabel, GtkCalendar.selection-mode.header .header-bar .button.titlebutton:insensitive > GtkLabel,
+        GtkCalendar.selection-mode.header .titlebar .button.titlebutton:insensitive > GtkLabel,
+        .titlebar.selection-mode GtkCalendar.header .button.titlebutton:insensitive > GtkLabel,
+        .header-bar.selection-mode .button:insensitive > GtkLabel,
+        .header-bar.selection-mode .titlebar .button.titlebutton:insensitive > GtkLabel,
+        .header-bar.selection-mode GtkCalendar.header .button.titlebutton:insensitive > GtkLabel {
           color: inherit; }
         .titlebar.selection-mode .button:insensitive:active, GtkCalendar.selection-mode.header .button:insensitive:active, .titlebar.selection-mode .button:insensitive:checked, GtkCalendar.selection-mode.header .button:insensitive:checked,
         .header-bar.selection-mode .button:insensitive:active,
@@ -1824,9 +1924,17 @@ GtkComboBox {
           border-color: #1c5187;
           background-image: linear-gradient(to bottom, #4a8cd1, #5093da);
           box-shadow: inset 0 1px rgba(255, 255, 255, 0), 0 1px #a4c7ec; }
-          .titlebar.selection-mode .button:insensitive:active > GtkLabel, GtkCalendar.selection-mode.header .button:insensitive:active > GtkLabel, .titlebar.selection-mode .button:insensitive:checked > GtkLabel, GtkCalendar.selection-mode.header .button:insensitive:checked > GtkLabel,
+          .titlebar.selection-mode .button:insensitive:active > GtkLabel, GtkCalendar.selection-mode.header .button:insensitive:active > GtkLabel, .titlebar.selection-mode .header-bar .button.titlebutton:insensitive:active > GtkLabel, GtkCalendar.selection-mode.header .header-bar .button.titlebutton:insensitive:active > GtkLabel,
+          GtkCalendar.selection-mode.header .titlebar .button.titlebutton:insensitive:active > GtkLabel,
+          .titlebar.selection-mode GtkCalendar.header .button.titlebutton:insensitive:active > GtkLabel, .titlebar.selection-mode .button:insensitive:checked > GtkLabel, GtkCalendar.selection-mode.header .button:insensitive:checked > GtkLabel, .titlebar.selection-mode .header-bar .button.titlebutton:insensitive:checked > GtkLabel, GtkCalendar.selection-mode.header .header-bar .button.titlebutton:insensitive:checked > GtkLabel,
+          GtkCalendar.selection-mode.header .titlebar .button.titlebutton:insensitive:checked > GtkLabel,
+          .titlebar.selection-mode GtkCalendar.header .button.titlebutton:insensitive:checked > GtkLabel,
           .header-bar.selection-mode .button:insensitive:active > GtkLabel,
-          .header-bar.selection-mode .button:insensitive:checked > GtkLabel {
+          .header-bar.selection-mode .titlebar .button.titlebutton:insensitive:active > GtkLabel,
+          .header-bar.selection-mode GtkCalendar.header .button.titlebutton:insensitive:active > GtkLabel,
+          .header-bar.selection-mode .button:insensitive:checked > GtkLabel,
+          .header-bar.selection-mode .titlebar .button.titlebutton:insensitive:checked > GtkLabel,
+          .header-bar.selection-mode GtkCalendar.header .button.titlebutton:insensitive:checked > GtkLabel {
             color: inherit; }
       .titlebar.selection-mode .button.suggested-action, GtkCalendar.selection-mode.header .button.suggested-action,
       .header-bar.selection-mode .button.suggested-action {
@@ -1867,8 +1975,12 @@ GtkComboBox {
           icon-shadow: none;
           box-shadow: inset 0 1px rgba(255, 255, 255, 0), 0 1px #a4c7ec;
           border-color: #184472; }
-          .titlebar.selection-mode .button.suggested-action:insensitive > GtkLabel, GtkCalendar.selection-mode.header .button.suggested-action:insensitive > GtkLabel,
-          .header-bar.selection-mode .button.suggested-action:insensitive > GtkLabel {
+          .titlebar.selection-mode .button.suggested-action:insensitive > GtkLabel, GtkCalendar.selection-mode.header .button.suggested-action:insensitive > GtkLabel, .titlebar.selection-mode .header-bar .suggested-action.button.titlebutton:insensitive > GtkLabel, GtkCalendar.selection-mode.header .header-bar .suggested-action.button.titlebutton:insensitive > GtkLabel,
+          GtkCalendar.selection-mode.header .titlebar .suggested-action.button.titlebutton:insensitive > GtkLabel,
+          .titlebar.selection-mode GtkCalendar.header .suggested-action.button.titlebutton:insensitive > GtkLabel,
+          .header-bar.selection-mode .button.suggested-action:insensitive > GtkLabel,
+          .header-bar.selection-mode .titlebar .suggested-action.button.titlebutton:insensitive > GtkLabel,
+          .header-bar.selection-mode GtkCalendar.header .suggested-action.button.titlebutton:insensitive > GtkLabel {
             color: inherit; }
         .titlebar.selection-mode .button.suggested-action:backdrop, GtkCalendar.selection-mode.header .button.suggested-action:backdrop,
         .header-bar.selection-mode .button.suggested-action:backdrop {
@@ -1888,8 +2000,12 @@ GtkComboBox {
           icon-shadow: none;
           box-shadow: inset 0 1px rgba(255, 255, 255, 0), 0 1px rgba(164, 199, 236, 0);
           border-color: #184472; }
-          .titlebar.selection-mode .button.suggested-action:backdrop:insensitive > GtkLabel, GtkCalendar.selection-mode.header .button.suggested-action:backdrop:insensitive > GtkLabel,
-          .header-bar.selection-mode .button.suggested-action:backdrop:insensitive > GtkLabel {
+          .titlebar.selection-mode .button.suggested-action:backdrop:insensitive > GtkLabel, GtkCalendar.selection-mode.header .button.suggested-action:backdrop:insensitive > GtkLabel, .titlebar.selection-mode .header-bar .suggested-action.button.titlebutton:backdrop:insensitive > GtkLabel, GtkCalendar.selection-mode.header .header-bar .suggested-action.button.titlebutton:backdrop:insensitive > GtkLabel,
+          GtkCalendar.selection-mode.header .titlebar .suggested-action.button.titlebutton:backdrop:insensitive > GtkLabel,
+          .titlebar.selection-mode GtkCalendar.header .suggested-action.button.titlebutton:backdrop:insensitive > GtkLabel,
+          .header-bar.selection-mode .button.suggested-action:backdrop:insensitive > GtkLabel,
+          .header-bar.selection-mode .titlebar .suggested-action.button.titlebutton:backdrop:insensitive > GtkLabel,
+          .header-bar.selection-mode GtkCalendar.header .suggested-action.button.titlebutton:backdrop:insensitive > GtkLabel {
             color: inherit; }
     .titlebar.selection-mode .selection-menu, GtkCalendar.selection-mode.header .selection-menu, .titlebar.selection-mode .selection-menu:backdrop, GtkCalendar.selection-mode.header .selection-menu:backdrop,
     .header-bar.selection-mode .selection-menu,
@@ -2001,6 +2117,10 @@ GtkTreeView.view {
       border-width: 1px 0;
       border-style: solid;
       border-color: #4a90d9; }
+  GtkTreeView.view.dnd {
+    border-style: solid none;
+    border-width: 1px;
+    border-color: #3c6287; }
 
 column-header .button, column-header .header-bar .button.titlebutton, .header-bar column-header .button.titlebutton,
 column-header .titlebar .button.titlebutton,
@@ -3806,7 +3926,9 @@ GtkCalendar.header .list-row.button.titlebutton {
       icon-shadow: none;
       box-shadow: inset 0 1px rgba(255, 255, 255, 0);
       border-color: #184472; }
-      .list-row:selected .button:backdrop:insensitive > GtkLabel, .list-row:selected .button.flat:backdrop:insensitive > GtkLabel, .list-row:selected .header-bar .titlebutton.button:backdrop:insensitive > GtkLabel, .header-bar .list-row:selected .titlebutton.button:backdrop:insensitive > GtkLabel,
+      .list-row:selected .button:backdrop:insensitive > GtkLabel, .list-row:selected .header-bar .button.titlebutton:backdrop:insensitive > GtkLabel,
+      .list-row:selected .titlebar .button.titlebutton:backdrop:insensitive > GtkLabel,
+      .list-row:selected GtkCalendar.header .button.titlebutton:backdrop:insensitive > GtkLabel, .list-row:selected .button.flat:backdrop:insensitive > GtkLabel, .list-row:selected .header-bar .titlebutton.button:backdrop:insensitive > GtkLabel, .header-bar .list-row:selected .titlebutton.button:backdrop:insensitive > GtkLabel,
       .list-row:selected .titlebar .titlebutton.button:backdrop:insensitive > GtkLabel,
       .titlebar .list-row:selected .titlebutton.button:backdrop:insensitive > GtkLabel,
       .list-row:selected GtkCalendar.header .titlebutton.button:backdrop:insensitive > GtkLabel,
@@ -3826,7 +3948,11 @@ GtkCalendar.header .list-row.button.titlebutton {
         background-image: linear-gradient(to bottom, #e7e7e7);
         box-shadow: inset 0 1px rgba(255, 255, 255, 0);
         border-color: #184472; }
-        .list-row:selected .button:backdrop:insensitive:active > GtkLabel, .list-row:selected .button:backdrop:insensitive:checked > GtkLabel, .list-row:selected .button.flat:backdrop:insensitive:active > GtkLabel, .list-row:selected .header-bar .titlebutton.button:backdrop:insensitive:active > GtkLabel, .header-bar .list-row:selected .titlebutton.button:backdrop:insensitive:active > GtkLabel,
+        .list-row:selected .button:backdrop:insensitive:active > GtkLabel, .list-row:selected .header-bar .button.titlebutton:backdrop:insensitive:active > GtkLabel,
+        .list-row:selected .titlebar .button.titlebutton:backdrop:insensitive:active > GtkLabel,
+        .list-row:selected GtkCalendar.header .button.titlebutton:backdrop:insensitive:active > GtkLabel, .list-row:selected .button:backdrop:insensitive:checked > GtkLabel, .list-row:selected .header-bar .button.titlebutton:backdrop:insensitive:checked > GtkLabel,
+        .list-row:selected .titlebar .button.titlebutton:backdrop:insensitive:checked > GtkLabel,
+        .list-row:selected GtkCalendar.header .button.titlebutton:backdrop:insensitive:checked > GtkLabel, .list-row:selected .button.flat:backdrop:insensitive:active > GtkLabel, .list-row:selected .header-bar .titlebutton.button:backdrop:insensitive:active > GtkLabel, .header-bar .list-row:selected .titlebutton.button:backdrop:insensitive:active > GtkLabel,
         .list-row:selected .titlebar .titlebutton.button:backdrop:insensitive:active > GtkLabel,
         .titlebar .list-row:selected .titlebutton.button:backdrop:insensitive:active > GtkLabel,
         .list-row:selected GtkCalendar.header .titlebutton.button:backdrop:insensitive:active > GtkLabel,
@@ -3856,14 +3982,20 @@ GtkCalendar.header .list-row.button.titlebutton {
     icon-shadow: none;
     box-shadow: inset 0 1px rgba(255, 255, 255, 0);
     border-color: #184472; }
-    .list-row:selected .button:insensitive > GtkLabel {
+    .list-row:selected .button:insensitive > GtkLabel, .list-row:selected .header-bar .button.titlebutton:insensitive > GtkLabel,
+    .list-row:selected .titlebar .button.titlebutton:insensitive > GtkLabel,
+    .list-row:selected GtkCalendar.header .button.titlebutton:insensitive > GtkLabel {
       color: inherit; }
     .list-row:selected .button:insensitive:active, .list-row:selected .button:insensitive:checked {
       color: #8d9091;
       border-color: #a1a1a1;
       background-image: linear-gradient(to bottom, #ebebeb, #f4f4f4);
       box-shadow: inset 0 1px rgba(255, 255, 255, 0); }
-      .list-row:selected .button:insensitive:active > GtkLabel, .list-row:selected .button:insensitive:checked > GtkLabel {
+      .list-row:selected .button:insensitive:active > GtkLabel, .list-row:selected .header-bar .button.titlebutton:insensitive:active > GtkLabel,
+      .list-row:selected .titlebar .button.titlebutton:insensitive:active > GtkLabel,
+      .list-row:selected GtkCalendar.header .button.titlebutton:insensitive:active > GtkLabel, .list-row:selected .button:insensitive:checked > GtkLabel, .list-row:selected .header-bar .button.titlebutton:insensitive:checked > GtkLabel,
+      .list-row:selected .titlebar .button.titlebutton:insensitive:checked > GtkLabel,
+      .list-row:selected GtkCalendar.header .button.titlebutton:insensitive:checked > GtkLabel {
         color: inherit; }
 
 /*********************
@@ -4047,7 +4179,9 @@ GtkCalendar {
       text-shadow: none;
       icon-shadow: none;
       box-shadow: inset 0 1px rgba(255, 255, 255, 0); }
-      .message-dialog.csd .dialog-action-area .button:insensitive > GtkLabel {
+      .message-dialog.csd .dialog-action-area .button:insensitive > GtkLabel, .message-dialog.csd .dialog-action-area .header-bar .button.titlebutton:insensitive > GtkLabel,
+      .message-dialog.csd .dialog-action-area .titlebar .button.titlebutton:insensitive > GtkLabel,
+      .message-dialog.csd .dialog-action-area GtkCalendar.header .button.titlebutton:insensitive > GtkLabel {
         color: inherit; }
     .message-dialog.csd .dialog-action-area .button:backdrop {
       color: #8d9091;
@@ -4063,7 +4197,9 @@ GtkCalendar {
       text-shadow: none;
       icon-shadow: none;
       box-shadow: inset 0 1px rgba(255, 255, 255, 0); }
-      .message-dialog.csd .dialog-action-area .button:backdrop:insensitive > GtkLabel {
+      .message-dialog.csd .dialog-action-area .button:backdrop:insensitive > GtkLabel, .message-dialog.csd .dialog-action-area .header-bar .button.titlebutton:backdrop:insensitive > GtkLabel,
+      .message-dialog.csd .dialog-action-area .titlebar .button.titlebutton:backdrop:insensitive > GtkLabel,
+      .message-dialog.csd .dialog-action-area GtkCalendar.header .button.titlebutton:backdrop:insensitive > GtkLabel {
         color: inherit; }
     .message-dialog.csd .dialog-action-area .button.suggested-action {
       color: white;
@@ -4103,7 +4239,9 @@ GtkCalendar {
           text-shadow: none;
           icon-shadow: none;
           box-shadow: inset 0 1px rgba(255, 255, 255, 0); }
-          .message-dialog.csd .dialog-action-area .button.suggested-action:backdrop:insensitive > GtkLabel {
+          .message-dialog.csd .dialog-action-area .button.suggested-action:backdrop:insensitive > GtkLabel, .message-dialog.csd .dialog-action-area .header-bar .suggested-action.button.titlebutton:backdrop:insensitive > GtkLabel,
+          .message-dialog.csd .dialog-action-area .titlebar .suggested-action.button.titlebutton:backdrop:insensitive > GtkLabel,
+          .message-dialog.csd .dialog-action-area GtkCalendar.header .suggested-action.button.titlebutton:backdrop:insensitive > GtkLabel {
             color: inherit; }
       .message-dialog.csd .dialog-action-area .button.suggested-action:insensitive {
         color: #8d9091;
@@ -4112,7 +4250,9 @@ GtkCalendar {
         text-shadow: none;
         icon-shadow: none;
         box-shadow: inset 0 1px rgba(255, 255, 255, 0); }
-        .message-dialog.csd .dialog-action-area .button.suggested-action:insensitive > GtkLabel {
+        .message-dialog.csd .dialog-action-area .button.suggested-action:insensitive > GtkLabel, .message-dialog.csd .dialog-action-area .header-bar .suggested-action.button.titlebutton:insensitive > GtkLabel,
+        .message-dialog.csd .dialog-action-area .titlebar .suggested-action.button.titlebutton:insensitive > GtkLabel,
+        .message-dialog.csd .dialog-action-area GtkCalendar.header .suggested-action.button.titlebutton:insensitive > GtkLabel {
           color: inherit; }
     .message-dialog.csd .dialog-action-area .button.destructive-action {
       color: white;
@@ -4152,7 +4292,9 @@ GtkCalendar {
           text-shadow: none;
           icon-shadow: none;
           box-shadow: inset 0 1px rgba(255, 255, 255, 0); }
-          .message-dialog.csd .dialog-action-area .button.destructive-action:backdrop:insensitive > GtkLabel {
+          .message-dialog.csd .dialog-action-area .button.destructive-action:backdrop:insensitive > GtkLabel, .message-dialog.csd .dialog-action-area .header-bar .destructive-action.button.titlebutton:backdrop:insensitive > GtkLabel,
+          .message-dialog.csd .dialog-action-area .titlebar .destructive-action.button.titlebutton:backdrop:insensitive > GtkLabel,
+          .message-dialog.csd .dialog-action-area GtkCalendar.header .destructive-action.button.titlebutton:backdrop:insensitive > GtkLabel {
             color: inherit; }
       .message-dialog.csd .dialog-action-area .button.destructive-action:insensitive {
         color: #8d9091;
@@ -4161,7 +4303,9 @@ GtkCalendar {
         text-shadow: none;
         icon-shadow: none;
         box-shadow: inset 0 1px rgba(255, 255, 255, 0); }
-        .message-dialog.csd .dialog-action-area .button.destructive-action:insensitive > GtkLabel {
+        .message-dialog.csd .dialog-action-area .button.destructive-action:insensitive > GtkLabel, .message-dialog.csd .dialog-action-area .header-bar .destructive-action.button.titlebutton:insensitive > GtkLabel,
+        .message-dialog.csd .dialog-action-area .titlebar .destructive-action.button.titlebutton:insensitive > GtkLabel,
+        .message-dialog.csd .dialog-action-area GtkCalendar.header .destructive-action.button.titlebutton:insensitive > GtkLabel {
           color: inherit; }
   .message-dialog.csd .dialog-action-area .button, .message-dialog.csd .dialog-action-area .button:hover, .message-dialog.csd .dialog-action-area .button:active, .message-dialog.csd .dialog-action-area .button:insensitive, .message-dialog.csd .dialog-action-area .button:backdrop, .message-dialog.csd .dialog-action-area .button:backdrop:insensitive, .message-dialog.csd .dialog-action-area .button.suggested-action, .message-dialog.csd .dialog-action-area .button.suggested-action:hover, .message-dialog.csd .dialog-action-area .button.suggested-action:active, .message-dialog.csd .dialog-action-area .button.suggested-action:backdrop, .message-dialog.csd .dialog-action-area .button.suggested-action:backdrop:insensitive, .message-dialog.csd .dialog-action-area .button.suggested-action:insensitive, .message-dialog.csd .dialog-action-area .button.destructive-action, .message-dialog.csd .dialog-action-area .button.destructive-action:hover, .message-dialog.csd .dialog-action-area .button.destructive-action:active, .message-dialog.csd .dialog-action-area .button.destructive-action:backdrop, .message-dialog.csd .dialog-action-area .button.destructive-action:backdrop:insensitive, .message-dialog.csd .dialog-action-area .button.destructive-action:insensitive {
     border-left-style: solid;
@@ -4306,10 +4450,21 @@ GtkInfoBar {
       text-shadow: none;
       icon-shadow: none;
       box-shadow: inset 0 1px rgba(255, 255, 255, 0); }
-      .info .button:insensitive > GtkLabel,
+      .info .button:insensitive > GtkLabel, .info .header-bar .button.titlebutton:insensitive > GtkLabel,
+      .info .titlebar .button.titlebutton:insensitive > GtkLabel,
+      .info GtkCalendar.header .button.titlebutton:insensitive > GtkLabel,
       .question .button:insensitive > GtkLabel,
+      .question .header-bar .button.titlebutton:insensitive > GtkLabel,
+      .question .titlebar .button.titlebutton:insensitive > GtkLabel,
+      .question GtkCalendar.header .button.titlebutton:insensitive > GtkLabel,
       .warning .button:insensitive > GtkLabel,
-      .error .button:insensitive > GtkLabel {
+      .warning .header-bar .button.titlebutton:insensitive > GtkLabel,
+      .warning .titlebar .button.titlebutton:insensitive > GtkLabel,
+      .warning GtkCalendar.header .button.titlebutton:insensitive > GtkLabel,
+      .error .button:insensitive > GtkLabel,
+      .error .header-bar .button.titlebutton:insensitive > GtkLabel,
+      .error .titlebar .button.titlebutton:insensitive > GtkLabel,
+      .error GtkCalendar.header .button.titlebutton:insensitive > GtkLabel {
         color: inherit; }
     .info .button:backdrop,
     .question .button:backdrop,
@@ -4333,10 +4488,21 @@ GtkInfoBar {
         icon-shadow: none;
         box-shadow: inset 0 1px rgba(255, 255, 255, 0);
         border-color: #1c5187; }
-        .info .button:backdrop:insensitive > GtkLabel,
+        .info .button:backdrop:insensitive > GtkLabel, .info .header-bar .button.titlebutton:backdrop:insensitive > GtkLabel,
+        .info .titlebar .button.titlebutton:backdrop:insensitive > GtkLabel,
+        .info GtkCalendar.header .button.titlebutton:backdrop:insensitive > GtkLabel,
         .question .button:backdrop:insensitive > GtkLabel,
+        .question .header-bar .button.titlebutton:backdrop:insensitive > GtkLabel,
+        .question .titlebar .button.titlebutton:backdrop:insensitive > GtkLabel,
+        .question GtkCalendar.header .button.titlebutton:backdrop:insensitive > GtkLabel,
         .warning .button:backdrop:insensitive > GtkLabel,
-        .error .button:backdrop:insensitive > GtkLabel {
+        .warning .header-bar .button.titlebutton:backdrop:insensitive > GtkLabel,
+        .warning .titlebar .button.titlebutton:backdrop:insensitive > GtkLabel,
+        .warning GtkCalendar.header .button.titlebutton:backdrop:insensitive > GtkLabel,
+        .error .button:backdrop:insensitive > GtkLabel,
+        .error .header-bar .button.titlebutton:backdrop:insensitive > GtkLabel,
+        .error .titlebar .button.titlebutton:backdrop:insensitive > GtkLabel,
+        .error GtkCalendar.header .button.titlebutton:backdrop:insensitive > GtkLabel {
           color: inherit; }
 
 /************

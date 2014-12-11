@@ -1223,28 +1223,39 @@ GtkTreeView.view { // treeview grid lines and expanders, unfortunatelly
   -GtkTreeView-expander-size: 16;
   border-color: $bg_color; // this is actually the line color
   // :selected is ignored hence no style for it
+
   &:insensitive {
     color: $insensitive_fg_color;
+
     &:selected { color: mix($selected_fg_color, $selected_bg_color, 40%); }
   }
+
   &:backdrop {
     border-color: $backdrop_bg_color;
   }
+
   &.expander {
     -gtk-icon-source: -gtk-icontheme('pan-end-symbolic');
+
     &:dir(rtl) { -gtk-icon-source: -gtk-icontheme('pan-end-symbolic-rtl'); }
+
     color: mix($fg_color, $base_color, 70%);
+
     &:hover { color: $fg_color; }
+
     &:selected {
       color: mix($selected_fg_color, $selected_bg_color, 70%);
       &:hover { color: $selected_fg_color; }
       &:backdrop { color: mix($backdrop_base_color, $selected_bg_color, 70%); }
     }
+
     &:checked {
       -gtk-icon-source: -gtk-icontheme('pan-down-symbolic');
     }
+
     &:backdrop { color: mix($backdrop_fg_color, $backdrop_base_color, 70%); }
   }
+
   &.progressbar { // progress bar in treeviews
     @if $variant == light { color: $base_color; }
     border-radius: 4px;
@@ -1261,16 +1272,19 @@ GtkTreeView.view { // treeview grid lines and expanders, unfortunatelly
          color: $selected_bg_color;
          box-shadow: none;
       }
+
       @else { box-shadow: inset 0 1px transparentize(white, 0.95); }
       background-image: linear-gradient(to bottom,
                                         $base_color,
                                         darken($base_color,10%));
+
       &:backdrop {
         @if $variant == 'light' { color: $selected_bg_color; }
         @else { border-color: $backdrop_base_color; }
         background-color: $backdrop_base_color;
       }
     }
+
     &:backdrop {
       @if $variant == 'light' { color: $backdrop_base_color; }
       @else { border-color: $backdrop_base_color; }
@@ -1278,9 +1292,11 @@ GtkTreeView.view { // treeview grid lines and expanders, unfortunatelly
       box-shadow: none;
     }
   }
+
   &.trough { // progress bar trough in treeviews
     background-color: transparentize($fg_color,0.9);
     border-radius: 4px;
+
     &:selected {
       background-color: if($variant == 'light',
                            transparentize($selected_fg_color, 0.7),
@@ -1291,6 +1307,12 @@ GtkTreeView.view { // treeview grid lines and expanders, unfortunatelly
         border-color: $selected_bg_color;
       }
     }
+  }
+
+  &.dnd {
+    border-style: solid none;
+    border-width: 1px;
+    border-color: mix($fg_color, $selected_bg_color, 50%);
   }
 }
 
