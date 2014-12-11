@@ -112,6 +112,7 @@ struct _GtkStackChildInfo {
   gchar *title;
   gchar *icon_name;
   gboolean needs_attention;
+  GtkWidget *last_focus;
 };
 
 typedef struct {
@@ -996,6 +997,9 @@ set_visible_child (GtkStack               *stack,
   GtkStackChildInfo *info;
   GtkWidget *widget = GTK_WIDGET (stack);
   GList *l;
+  GtkWidget *toplevel;
+  GtkWidget *focus;
+  gboolean contains_focus = FALSE;
 
   /* If none, pick first visible */
   if (child_info == NULL)
@@ -1013,6 +1017,25 @@ set_visible_child (GtkStack               *stack,
 
   if (child_info == priv->visible_child)
     return;
+
+  toplevel = gtk_widget_get_toplevel (widget);
+  if (GTK_IS_WINDOW (toplevel))
+    {
+      focus = gtk_window_get_focus (GTK_WINDOW (toplevel));
+      if (focus &&
+          priv->visible_child &&
+          gtk_widget_is_ancestor (focus, priv->visible_child->widget))
+        {
+          contains_focus = TRUE;
+
+          if (priv->visible_child->last_focus)
+            g_object_remove_weak_pointer (G_OBJECT (priv->visible_child->last_focus),
+                                          (gpointer *)&priv->visible_child->last_focus);
+          priv->visible_child->last_focus = focus;
+          g_object_add_weak_pointer (G_OBJECT (priv->visible_child->last_focus),
+                                     (gpointer *)&priv->visible_child->last_focus);
+        }
+    }
 
   if (priv->last_visible_child)
     gtk_widget_set_child_visible (priv->last_visible_child->widget, FALSE);
@@ -1033,7 +1056,17 @@ set_visible_child (GtkStack               *stack,
   priv->visible_child = child_info;
 
   if (child_info)
-    gtk_widget_set_child_visible (child_info->widget, TRUE);
+    {
+      gtk_widget_set_child_visible (child_info->widget, TRUE);
+
+      if (contains_focus)
+        {
+          if (child_info->last_focus)
+            gtk_widget_grab_focus (child_info->last_focus);
+          else
+            gtk_widget_child_focus (child_info->widget, GTK_DIR_TAB_FORWARD);
+        }
+    }
 
   if ((child_info == NULL || priv->last_visible_child == NULL) &&
       is_direction_dependent_transition (transition_type))
@@ -1164,6 +1197,7 @@ gtk_stack_add (GtkContainer *container,
   child_info->title = NULL;
   child_info->icon_name = NULL;
   child_info->needs_attention = FALSE;
+  child_info->last_focus = NULL;
 
   priv->children = g_list_append (priv->children, child_info);
 
@@ -1224,6 +1258,11 @@ gtk_stack_remove (GtkContainer *container,
   g_free (child_info->name);
   g_free (child_info->title);
   g_free (child_info->icon_name);
+
+  if (child_info->last_focus)
+    g_object_remove_weak_pointer (G_OBJECT (child_info->last_focus),
+                                  (gpointer *)&child_info->last_focus);
+
   g_slice_free (GtkStackChildInfo, child_info);
 
   if ((priv->hhomogeneous || priv->vhomogeneous) && was_visible)
