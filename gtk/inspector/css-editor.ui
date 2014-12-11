@@ -85,6 +85,7 @@
             <property name="buffer">text</property>
             <property name="wrap-mode">word</property>
             <property name="monospace">True</property>
+            <property name="has-focus">True</property>
           </object>
         </child>
       </object>
