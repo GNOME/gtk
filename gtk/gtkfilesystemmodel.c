@@ -1886,6 +1886,7 @@ remove_file (GtkFileSystemModel *model,
 	     GFile              *file)
 {
   FileModelNode *node;
+  gboolean was_visible;
   guint id;
   guint row;
 
@@ -1897,6 +1898,7 @@ remove_file (GtkFileSystemModel *model,
     return;
 
   node = get_node (model, id);
+  was_visible = node->visible;
   row = node_get_tree_row (model, id);
 
   node_invalidate_index (model, id);
@@ -1912,7 +1914,8 @@ remove_file (GtkFileSystemModel *model,
 
   /* We don't need to resort, as removing a row doesn't change the sorting order of the other rows */
 
-  emit_row_deleted_for_row (model, row);
+  if (was_visible)
+    emit_row_deleted_for_row (model, row);
 }
 
 /**
