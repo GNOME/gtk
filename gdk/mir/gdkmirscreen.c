@@ -327,35 +327,31 @@ gdk_mir_screen_get_monitor_plug_name (GdkScreen *screen,
       switch (output->type)
         {
           case mir_display_output_type_unknown:
-            return g_strdup_printf ("UNKNOWN-%u", output->output_id);
+            return g_strdup_printf ("None-%u", output->output_id);
           case mir_display_output_type_vga:
             return g_strdup_printf ("VGA-%u", output->output_id);
           case mir_display_output_type_dvii:
-            return g_strdup_printf ("DVII-%u", output->output_id);
           case mir_display_output_type_dvid:
-            return g_strdup_printf ("DVID-%u", output->output_id);
           case mir_display_output_type_dvia:
-            return g_strdup_printf ("DVIA-%u", output->output_id);
+            return g_strdup_printf ("DVI-%u", output->output_id);
           case mir_display_output_type_composite:
-            return g_strdup_printf ("COMPOSITE-%u", output->output_id);
-          case mir_display_output_type_svideo:
-            return g_strdup_printf ("SVIDEO-%u", output->output_id);
+            return g_strdup_printf ("Composite-%u", output->output_id);
           case mir_display_output_type_lvds:
             return g_strdup_printf ("LVDS-%u", output->output_id);
           case mir_display_output_type_component:
-            return g_strdup_printf ("COMPONENT-%u", output->output_id);
+            return g_strdup_printf ("CTV-%u", output->output_id);
           case mir_display_output_type_ninepindin:
-            return g_strdup_printf ("NINEPINDIN-%u", output->output_id);
+            return g_strdup_printf ("DIN-%u", output->output_id);
           case mir_display_output_type_displayport:
-            return g_strdup_printf ("DISPLAYPORT-%u", output->output_id);
+            return g_strdup_printf ("DP-%u", output->output_id);
           case mir_display_output_type_hdmia:
-            return g_strdup_printf ("HDMIA-%u", output->output_id);
           case mir_display_output_type_hdmib:
-            return g_strdup_printf ("HDMIB-%u", output->output_id);
+            return g_strdup_printf ("HDMI-%u", output->output_id);
+          case mir_display_output_type_svideo:
           case mir_display_output_type_tv:
             return g_strdup_printf ("TV-%u", output->output_id);
           case mir_display_output_type_edp:
-            return g_strdup_printf ("EDP-%u", output->output_id);
+            return g_strdup_printf ("eDP-%u", output->output_id);
         }
     }
 
