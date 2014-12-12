@@ -382,13 +382,13 @@ gdk_mir_window_impl_ref_cairo_surface (GdkWindow *window)
   impl->cairo_surface = cairo_surface_reference (cairo_surface);
 
   /* Draw background */
-  c = cairo_create (impl->cairo_surface);
   if (impl->background)
-    cairo_set_source (c, impl->background);
-  else
-    cairo_set_source_rgb (c, 1.0, 0.0, 0.0);
-  cairo_paint (c);
-  cairo_destroy (c);
+    {
+      c = cairo_create (impl->cairo_surface);
+      cairo_set_source (c, impl->background);
+      cairo_paint (c);
+      cairo_destroy (c);
+    }
 
   return cairo_surface;
 }
