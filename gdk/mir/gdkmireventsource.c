@@ -167,10 +167,22 @@ generate_scroll_event (GdkWindow *window, gdouble x, gdouble y, gdouble delta_x,
   event->scroll.x = x;
   event->scroll.y = y;
   event->scroll.state = state;
-  event->scroll.direction = GDK_SCROLL_SMOOTH;
-  event->scroll.delta_x = -delta_x;
-  event->scroll.delta_y = -delta_y;
   event->scroll.time = event_time;
+
+  if (ABS (delta_x) == 1 && delta_y == 0)
+    {
+      event->scroll.direction = (delta_x < 0) ? GDK_SCROLL_LEFT : GDK_SCROLL_RIGHT;
+    }
+  else if (ABS (delta_y) == 1 && delta_x == 0)
+    {
+      event->scroll.direction = (delta_y < 0) ? GDK_SCROLL_DOWN : GDK_SCROLL_UP;
+    }
+  else
+    {
+      event->scroll.direction = GDK_SCROLL_SMOOTH;
+      event->scroll.delta_x = -delta_x;
+      event->scroll.delta_y = -delta_y;
+    }
 
   send_event (window, get_pointer (window), event);
 }
