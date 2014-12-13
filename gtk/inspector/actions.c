@@ -216,7 +216,7 @@ gtk_inspector_actions_set_object (GtkInspectorActions *sl,
     add_group (sl, G_ACTION_GROUP (object), "win");
   else if (GTK_IS_WIDGET (object))
     {
-      gchar **prefixes;
+      const gchar **prefixes;
       GActionGroup *group;
       gint i;
 
