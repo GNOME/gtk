@@ -568,16 +568,16 @@ gtk_popover_get_gap_coords (GtkPopover      *popover,
     {
       tip_pos = rect.x + (rect.width / 2);
       initial_x = CLAMP (tip_pos - TAIL_GAP_WIDTH / 2,
-                         border_radius + margin.left,
-                         allocation.width - TAIL_GAP_WIDTH - margin.right - border_radius);
+                         border_radius + margin.left + TAIL_HEIGHT,
+                         allocation.width - TAIL_GAP_WIDTH - margin.right - border_radius - TAIL_HEIGHT);
       initial_y = base;
 
       tip_x = CLAMP (tip_pos, 0, allocation.width);
       tip_y = tip;
 
       final_x = CLAMP (tip_pos + TAIL_GAP_WIDTH / 2,
-                       border_radius + margin.left + TAIL_GAP_WIDTH,
-                       allocation.width - margin.right - border_radius);
+                       border_radius + margin.left + TAIL_GAP_WIDTH + TAIL_HEIGHT,
+                       allocation.width - margin.right - border_radius - TAIL_HEIGHT);
       final_y = base;
     }
   else
@@ -586,16 +586,16 @@ gtk_popover_get_gap_coords (GtkPopover      *popover,
 
       initial_x = base;
       initial_y = CLAMP (tip_pos - TAIL_GAP_WIDTH / 2,
-                         border_radius + margin.top,
-                         allocation.height - TAIL_GAP_WIDTH - margin.bottom - border_radius);
+                         border_radius + margin.top + TAIL_HEIGHT,
+                         allocation.height - TAIL_GAP_WIDTH - margin.bottom - border_radius - TAIL_HEIGHT);
 
       tip_x = tip;
       tip_y = CLAMP (tip_pos, 0, allocation.height);
 
       final_x = base;
       final_y = CLAMP (tip_pos + TAIL_GAP_WIDTH / 2,
-                       border_radius + margin.top + TAIL_GAP_WIDTH,
-                       allocation.height - margin.right - border_radius);
+                       border_radius + margin.top + TAIL_GAP_WIDTH + TAIL_HEIGHT,
+                       allocation.height - margin.right - border_radius - TAIL_HEIGHT);
     }
 
   if (initial_x_out)
