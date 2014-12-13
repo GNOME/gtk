@@ -736,6 +736,8 @@ style_values_lookup (GtkStyleContext *context)
   else
     {
       build_properties (context, values, info->decl, NULL, &priv->relevant_changes);
+      /* These flags are always relevant */
+      priv->relevant_changes |= GTK_CSS_CHANGE_SOURCE;
     }
 
   g_object_unref (values);
