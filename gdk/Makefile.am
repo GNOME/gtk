@@ -430,7 +430,7 @@ gdkconfig.h: stamp-gc-h
 	else rm -f stamp-gc-h; $(MAKE) stamp-gc-h; fi
 stamp-gc-h: $(top_builddir)/config.status
 	$(AM_V_at) cd $(top_builddir) && $(SHELL) ./config.status gdk/gdkconfig.h \
-	&& echo timestamp > $(@F)
+	&& echo timestamp > gdk/$(@F)
 
 dist-hook: ../build/win32/vs9/gdk.vcproj ../build/win32/vs10/gdk.vcxproj ../build/win32/vs10/gdk.vcxproj.filters
 
