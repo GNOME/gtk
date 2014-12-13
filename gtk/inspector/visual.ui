@@ -80,7 +80,7 @@
                         <child>
                           <object class="GtkLabel" id="dark_label">
                             <property name="visible">True</property>
-                            <property name="label" translatable="yes">Dark variant</property>
+                            <property name="label" translatable="yes">Dark Variant</property>
                             <property name="halign">start</property>
                             <property name="valign">baseline</property>
                             <property name="xalign">0.0</property>
