@@ -1254,9 +1254,13 @@ gtk_popover_key_press (GtkWidget   *widget,
 static void
 gtk_popover_grab_focus (GtkWidget *widget)
 {
+  GtkWidget *child;
+
   /* Focus the first natural child */
-  gtk_widget_child_focus (gtk_bin_get_child (GTK_BIN (widget)),
-                          GTK_DIR_TAB_FORWARD);
+  child = gtk_bin_get_child (GTK_BIN (widget));
+
+  if (child)
+    gtk_widget_child_focus (child, GTK_DIR_TAB_FORWARD);
 }
 
 static gboolean
