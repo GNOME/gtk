@@ -1058,7 +1058,7 @@
  * text or icon itself, which is always rendered on top of the shadow layer.
  *
  * |[
- *   text-shadow: text-shadow: 1 1 0 blue, -4 -4 red;
+ *   text-shadow: 1 1 0 blue, -4 -4 red;
  * ]|
 
  * ## box-shadow: [ inset ] horizontal_offset vertical_offset [ blur_radius ] [ spread ] color;
