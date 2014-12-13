@@ -729,16 +729,15 @@ style_values_lookup (GtkStyleContext *context)
 
   g_assert (priv->widget != NULL || priv->widget_path != NULL);
 
-  values = g_hash_table_lookup (priv->style_values, info->decl);
-  if (values)
-    {
-      style_info_set_values (info, values);
-      return values;
-    }
-
-
   if (gtk_style_context_is_saved (context))
     {
+      values = g_hash_table_lookup (priv->style_values, info->decl);
+      if (values)
+        {
+          style_info_set_values (info, values);
+          return values;
+        }
+
       values = gtk_css_static_style_new ();
       g_hash_table_insert (priv->style_values,
                            gtk_css_node_declaration_ref (info->decl),
