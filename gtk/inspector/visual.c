@@ -42,11 +42,14 @@ struct _GtkInspectorVisualPrivate
   GtkWidget *theme_combo;
   GtkWidget *dark_switch;
   GtkWidget *icon_combo;
+  GtkWidget *cursor_combo;
+  GtkWidget *cursor_size_spin;
   GtkWidget *direction_combo;
   GtkWidget *font_button;
   GtkWidget *hidpi_spin;
   GtkWidget *animation_switch;
   GtkAdjustment *scale_adjustment;
+  GtkAdjustment *cursor_size_adjustment;
 
   GtkWidget *debug_box;
   GtkWidget *rendering_mode_combo;
@@ -369,6 +372,99 @@ icons_changed (GtkComboBox        *c,
 }
 
 static void
+fill_cursors (const gchar *path,
+              GHashTable  *t)
+{
+  const gchar *dir_entry;
+  GDir *dir;
+
+  dir = g_dir_open (path, 0, NULL);
+  if (!dir)
+    return;
+
+  while ((dir_entry = g_dir_read_name (dir)))
+    {
+      gchar *filename = g_build_filename (path, dir_entry, "cursors", NULL);
+
+      if (g_file_test (filename, G_FILE_TEST_IS_DIR) &&
+          !g_hash_table_contains (t, dir_entry))
+        g_hash_table_add (t, g_strdup (dir_entry));
+
+      g_free (filename);
+    }
+}
+
+static void
+init_cursors (GtkInspectorVisual *vis)
+{
+  GHashTable *t;
+  GHashTableIter iter;
+  gchar *theme, *current_theme, *path;
+  gint i, pos;
+  GSettings *settings;
+  gchar *cursordir;
+
+  t = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, NULL);
+
+  cursordir = get_data_path ("icons");
+  fill_cursors (cursordir, t);
+  g_free (cursordir);
+
+  path = g_build_filename (g_get_user_data_dir (), "icons", NULL);
+  fill_cursors (path, t);
+  g_free (path);
+
+  settings = g_settings_new ("org.gnome.desktop.interface");
+  current_theme = g_settings_get_string (settings, "cursor-theme");
+  g_object_unref (settings);
+
+  g_hash_table_iter_init (&iter, t);
+  pos = i = 0;
+  while (g_hash_table_iter_next (&iter, (gpointer *)&theme, NULL))
+    {
+      gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (vis->priv->cursor_combo), theme);
+      if (g_strcmp0 (theme, current_theme) == 0)
+        pos = i;
+      i++;
+    }
+  g_hash_table_destroy (t);
+
+  gtk_combo_box_set_active (GTK_COMBO_BOX (vis->priv->cursor_combo), pos);
+}
+
+static void
+cursors_changed (GtkComboBox        *c,
+                 GtkInspectorVisual *vis)
+{
+  gchar *theme = gtk_combo_box_text_get_active_text (GTK_COMBO_BOX_TEXT (c));
+  g_object_set (gtk_settings_get_default (), "gtk-cursor-theme-name", theme, NULL);
+  g_free (theme);
+}
+
+static void
+cursor_size_changed (GtkAdjustment *adjustment, GtkInspectorVisual *vis)
+{
+  gint size;
+
+  size = gtk_adjustment_get_value (adjustment);
+  g_object_set (gtk_settings_get_default (), "gtk-cursor-theme-size", size, NULL);
+}
+
+static void
+init_cursor_size (GtkInspectorVisual *vis)
+{
+  gint size;
+
+  g_object_get (gtk_settings_get_default (), "gtk-cursor-theme-size", &size, NULL);
+  if (size == 0)
+    size = gdk_display_get_default_cursor_size (gdk_display_get_default ());
+
+  gtk_adjustment_set_value (vis->priv->scale_adjustment, (gdouble)size);
+  g_signal_connect (vis->priv->cursor_size_adjustment, "value-changed",
+                    G_CALLBACK (cursor_size_changed), vis);
+}
+
+static void
 init_font (GtkInspectorVisual *vis)
 {
   g_object_bind_property (gtk_settings_get_default (), "gtk-font-name",
@@ -597,6 +693,8 @@ gtk_inspector_visual_init (GtkInspectorVisual *vis)
   init_theme (vis);
   init_dark (vis);
   init_icons (vis);
+  init_cursors (vis);
+  init_cursor_size (vis);
   init_font (vis);
   init_scale (vis);
   init_rendering_mode (vis);
@@ -636,12 +734,15 @@ gtk_inspector_visual_class_init (GtkInspectorVisualClass *klass)
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorVisual, direction_combo);
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorVisual, baselines_switch);
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorVisual, pixelcache_switch);
-  gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorVisual, dark_switch);
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorVisual, theme_combo);
+  gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorVisual, dark_switch);
+  gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorVisual, cursor_combo);
+  gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorVisual, cursor_size_spin);
+  gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorVisual, cursor_size_adjustment);
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorVisual, icon_combo);
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorVisual, hidpi_spin);
-  gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorVisual, animation_switch);
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorVisual, scale_adjustment);
+  gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorVisual, animation_switch);
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorVisual, touchscreen_switch);
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorVisual, visual_box);
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorVisual, debug_box);
@@ -659,6 +760,7 @@ gtk_inspector_visual_class_init (GtkInspectorVisualClass *klass)
   gtk_widget_class_bind_template_callback (widget_class, pixelcache_activate);
   gtk_widget_class_bind_template_callback (widget_class, theme_changed);
   gtk_widget_class_bind_template_callback (widget_class, icons_changed);
+  gtk_widget_class_bind_template_callback (widget_class, cursors_changed);
   gtk_widget_class_bind_template_callback (widget_class, software_gl_activate);
   gtk_widget_class_bind_template_callback (widget_class, software_surface_activate);
   gtk_widget_class_bind_template_callback (widget_class, texture_rectangle_activate);

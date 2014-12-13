@@ -6,6 +6,13 @@
     <property name="step-increment">1</property>
     <property name="page-increment">1</property>
   </object>
+  <object class="GtkAdjustment" id="cursor_size_adjustment">
+    <property name="lower">24</property>
+    <property name="upper">64</property>
+    <property name="step-increment">8</property>
+    <property name="page-increment">8</property>
+    <property name="page-size">0</property>
+  </object>
   <template class="GtkInspectorVisual" parent="GtkScrolledWindow">
     <property name="hscrollbar-policy">never</property>
     <property name="vscrollbar-policy">automatic</property>
@@ -84,6 +91,75 @@
                             <property name="visible">True</property>
                             <property name="halign">end</property>
                             <property name="valign">baseline</property>
+                          </object>
+                          <packing>
+                            <property name="expand">True</property>
+                          </packing>
+                        </child>
+                      </object>
+                    </child>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkListBoxRow">
+                    <property name="visible">True</property>
+                    <property name="activatable">False</property>
+                    <child>
+                      <object class="GtkBox">
+                        <property name="visible">True</property>
+                        <property name="orientation">horizontal</property>
+                        <property name="margin">10</property>
+                        <property name="spacing">40</property>
+                        <child>
+                          <object class="GtkLabel" id="cursor_label">
+                            <property name="visible">True</property>
+                            <property name="label" translatable="yes">Cursor Theme</property>
+                            <property name="halign">start</property>
+                            <property name="valign">baseline</property>
+                            <property name="xalign">0.0</property>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="GtkComboBoxText" id="cursor_combo">
+                            <property name="visible">True</property>
+                            <property name="halign">end</property>
+                            <property name="valign">baseline</property>
+                            <signal name="changed" handler="cursors_changed"/>
+                          </object>
+                          <packing>
+                            <property name="expand">True</property>
+                          </packing>
+                        </child>
+                      </object>
+                    </child>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkListBoxRow">
+                    <property name="visible">True</property>
+                    <property name="activatable">False</property>
+                    <child>
+                      <object class="GtkBox">
+                        <property name="visible">True</property>
+                        <property name="orientation">horizontal</property>
+                        <property name="margin">10</property>
+                        <property name="spacing">40</property>
+                        <child>
+                          <object class="GtkLabel" id="cursor_size_label">
+                            <property name="visible">True</property>
+                            <property name="label" translatable="yes">Cursor Size</property>
+                            <property name="halign">start</property>
+                            <property name="valign">baseline</property>
+                            <property name="xalign">0.0</property>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="GtkSpinButton" id="cursor_size_spin">
+                            <property name="visible">True</property>
+                            <property name="halign">end</property>
+                            <property name="valign">baseline</property>
+                            <property name="adjustment">cursor_size_adjustment</property>
+                            <property name="snap-to-ticks">True</property>
                           </object>
                           <packing>
                             <property name="expand">True</property>
@@ -617,6 +693,8 @@
       <widget name="theme_label"/>
       <widget name="dark_label"/>
       <widget name="icon_label"/>
+      <widget name="cursor_label"/>
+      <widget name="cursor_size_label"/>
       <widget name="font_label"/>
       <widget name="direction_label"/>
       <widget name="hidpi_label"/>
@@ -637,6 +715,7 @@
     <widgets>
       <widget name="theme_combo"/>
       <widget name="icon_combo"/>
+      <widget name="cursor_combo"/>
       <widget name="font_button"/>
       <widget name="direction_combo"/>
       <widget name="rendering_mode_combo"/>
