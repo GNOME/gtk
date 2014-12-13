@@ -142,21 +142,25 @@ $ease-out-quad: cubic-bezier(0.25, 0.46, 0.45, 0.94);
 
 .undershoot {  //FIXME: make a mixin for the overshoot, special case the dark variant
   &.top {
+    background: none;
     background-image: linear-gradient(to bottom, transparentize(black, 0.7),
                                                  transparentize(black, 0.9) 2px,
                                                  transparent 10px);
   } 
   &.bottom {
+    background: none;
     background-image: linear-gradient(to top, transparentize(black, 0.8),
                                               transparentize(black, 0.95) 2px,
                                               transparent 7px);
   } 
   &.left {
+    background: none;
     background-image: linear-gradient(to right, transparentize(black, 0.8),
                                                 transparentize(black, 0.95) 2px,
                                                 transparent 7px);
   } 
   &.right {
+    background: none;
     background-image: linear-gradient(to left, transparentize(black, 0.8),
                                                transparentize(black, 0.95) 2px,
                                                transparent 7px);
