@@ -681,11 +681,10 @@ create_query_path (GtkStyleContext             *context,
 }
 
 static void
-build_properties (GtkStyleContext             *context,
-                  GtkCssStyle                 *style,
-                  const GtkCssNodeDeclaration *decl,
-                  const GtkBitmask            *relevant_changes,
-                  GtkCssChange                *out_change)
+update_properties (GtkStyleContext             *context,
+                   GtkCssStyle                 *style,
+                   const GtkCssNodeDeclaration *decl,
+                   const GtkBitmask            *relevant_changes)
 {
   GtkStyleContextPrivate *priv;
   GtkCssMatcher matcher;
@@ -696,6 +695,38 @@ build_properties (GtkStyleContext             *context,
 
   path = create_query_path (context, decl);
   lookup = _gtk_css_lookup_new (relevant_changes);
+
+  if (_gtk_css_matcher_init (&matcher, path))
+    _gtk_style_provider_private_lookup (GTK_STYLE_PROVIDER_PRIVATE (priv->cascade),
+                                        &matcher,
+                                        lookup,
+                                        NULL);
+
+  _gtk_css_lookup_resolve (lookup, 
+                           GTK_STYLE_PROVIDER_PRIVATE (priv->cascade),
+			   priv->scale,
+                           GTK_CSS_STATIC_STYLE (style),
+                           priv->parent ? style_values_lookup (priv->parent) : NULL);
+
+  _gtk_css_lookup_free (lookup);
+  gtk_widget_path_free (path);
+}
+
+static void
+build_properties (GtkStyleContext             *context,
+                  GtkCssStyle                 *style,
+                  const GtkCssNodeDeclaration *decl,
+                  GtkCssChange                *out_change)
+{
+  GtkStyleContextPrivate *priv;
+  GtkCssMatcher matcher;
+  GtkWidgetPath *path;
+  GtkCssLookup *lookup;
+
+  priv = context->priv;
+
+  path = create_query_path (context, decl);
+  lookup = _gtk_css_lookup_new (NULL);
 
   if (_gtk_css_matcher_init (&matcher, path))
     _gtk_style_provider_private_lookup (GTK_STYLE_PROVIDER_PRIVATE (priv->cascade),
@@ -743,13 +774,13 @@ style_values_lookup (GtkStyleContext *context)
                            gtk_css_node_declaration_ref (info->decl),
                            g_object_ref (values));
 
-      build_properties (context, values, info->decl, NULL, NULL);
+      build_properties (context, values, info->decl, NULL);
     }
   else
     {
       values = gtk_css_animated_style_new ();
 
-      build_properties (context, GTK_CSS_ANIMATED_STYLE (values)->style, info->decl, NULL, &priv->relevant_changes);
+      build_properties (context, GTK_CSS_ANIMATED_STYLE (values)->style, info->decl, &priv->relevant_changes);
       /* These flags are always relevant */
       priv->relevant_changes |= GTK_CSS_CHANGE_SOURCE;
     }
@@ -776,7 +807,7 @@ style_values_lookup_for_state (GtkStyleContext *context,
   decl = gtk_css_node_declaration_ref (context->priv->info->decl);
   gtk_css_node_declaration_set_state (&decl, state);
   values = gtk_css_static_style_new ();
-  build_properties (context, values, decl, NULL, NULL);
+  build_properties (context, values, decl, NULL);
   gtk_css_node_declaration_unref (decl);
 
   return values;
@@ -2657,7 +2688,7 @@ gtk_style_context_update_cache (GtkStyleContext  *context,
       changes = gtk_css_style_compute_dependencies (values, parent_changes);
 
       if (!_gtk_bitmask_is_empty (changes))
-	build_properties (context, values, decl, changes, NULL);
+	update_properties (context, values, decl, changes);
 
       _gtk_bitmask_free (changes);
     }
@@ -2836,7 +2867,7 @@ _gtk_style_context_validate (GtkStyleContext  *context,
     {
       changes = gtk_css_style_compute_dependencies (current, parent_changes);
       if (!_gtk_bitmask_is_empty (changes))
-	build_properties (context, GTK_CSS_ANIMATED_STYLE (current)->style, info->decl, changes, NULL);
+	update_properties (context, GTK_CSS_ANIMATED_STYLE (current)->style, info->decl, changes);
 
       gtk_style_context_update_cache (context, parent_changes);
     }
