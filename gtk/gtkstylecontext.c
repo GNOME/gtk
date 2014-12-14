@@ -505,7 +505,8 @@ gtk_style_context_should_animate (GtkStyleContext *context)
     return FALSE;
 
   values = style_values_lookup (context);
-  if (gtk_css_animated_style_is_static (GTK_CSS_ANIMATED_STYLE (values)))
+  if (!GTK_IS_CSS_ANIMATED_STYLE (values) ||
+      gtk_css_animated_style_is_static (GTK_CSS_ANIMATED_STYLE (values)))
     return FALSE;
 
   g_object_get (gtk_widget_get_settings (context->priv->widget),
@@ -778,9 +779,9 @@ style_values_lookup (GtkStyleContext *context)
     }
   else
     {
-      values = gtk_css_animated_style_new ();
+      values = gtk_css_static_style_new ();
 
-      build_properties (context, GTK_CSS_ANIMATED_STYLE (values)->style, info->decl, &priv->relevant_changes);
+      build_properties (context, values, info->decl, &priv->relevant_changes);
       /* These flags are always relevant */
       priv->relevant_changes |= GTK_CSS_CHANGE_SOURCE;
     }
@@ -2837,20 +2838,26 @@ _gtk_style_context_validate (GtkStyleContext  *context,
 
       style_info_set_values (info, NULL);
       values = style_values_lookup (context);
+      values = gtk_css_animated_style_new (values);
 
       if (values != current)
         gtk_css_animated_style_create_animations (GTK_CSS_ANIMATED_STYLE (values),
-                                                  priv->parent ? GTK_CSS_ANIMATED_STYLE (style_values_lookup (priv->parent)) : NULL,
+                                                  priv->parent ? style_values_lookup (priv->parent) : NULL,
                                                   timestamp,
                                                   GTK_STYLE_PROVIDER_PRIVATE (priv->cascade),
                                                   priv->scale,
                                                   gtk_style_context_should_create_transitions (context) 
-                                                    ? GTK_CSS_ANIMATED_STYLE (current)
+                                                    ? current
                                                     : NULL);
       if (gtk_css_animated_style_is_static (GTK_CSS_ANIMATED_STYLE (values)))
-        change &= ~GTK_CSS_CHANGE_ANIMATE;
+        {
+          change &= ~GTK_CSS_CHANGE_ANIMATE;
+        }
       else
-        change |= GTK_CSS_CHANGE_ANIMATE;
+        {
+          change |= GTK_CSS_CHANGE_ANIMATE;
+          style_info_set_values (info, values);
+        }
       _gtk_style_context_update_animating (context);
 
       if (current)
@@ -2862,12 +2869,19 @@ _gtk_style_context_validate (GtkStyleContext  *context,
           changes = _gtk_bitmask_new ();
           changes = _gtk_bitmask_invert_range (changes, 0, _gtk_css_style_property_get_n_properties ());
         }
+
+      g_object_unref (values);
     }
   else
     {
       changes = gtk_css_style_compute_dependencies (current, parent_changes);
       if (!_gtk_bitmask_is_empty (changes))
-	update_properties (context, GTK_CSS_ANIMATED_STYLE (current)->style, info->decl, changes);
+        {
+          if (GTK_IS_CSS_ANIMATED_STYLE (current))
+	    update_properties (context, GTK_CSS_ANIMATED_STYLE (current)->style, info->decl, changes);
+          else
+	    update_properties (context, current, info->decl, changes);
+        }
 
       gtk_style_context_update_cache (context, parent_changes);
     }
