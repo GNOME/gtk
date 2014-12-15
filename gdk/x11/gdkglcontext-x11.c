@@ -424,7 +424,7 @@ gdk_x11_gl_context_texture_from_surface (GdkGLContext *paint_context,
   cairo_rectangle_int_t rect;
   int n_rects, i;
   GdkWindow *window;
-  int window_height;
+  int unscaled_window_height;
   int window_scale;
   unsigned int texture_id;
   gboolean use_texture_rectangle;
@@ -448,7 +448,7 @@ gdk_x11_gl_context_texture_from_surface (GdkGLContext *paint_context,
 
   window = gdk_gl_context_get_window (paint_context)->impl_window;
   window_scale = gdk_window_get_scale_factor (window);
-  window_height = gdk_window_get_height (window);
+  gdk_window_get_unscaled_size (window, NULL, &unscaled_window_height);
 
   sx = sy = 1;
   cairo_surface_get_device_scale (window->current_paint.surface, &sx, &sy);
@@ -476,11 +476,11 @@ gdk_x11_gl_context_texture_from_surface (GdkGLContext *paint_context,
   n_rects = cairo_region_num_rectangles (region);
   quads = g_new (GdkTexturedQuad, n_rects);
 
-#define FLIP_Y(_y) (window_height - (_y))
+#define FLIP_Y(_y) (unscaled_window_height - (_y))
 
   cairo_region_get_extents (region, &rect);
-  glScissor (rect.x * window_scale, FLIP_Y(rect.y) * window_scale,
-             (rect.x + rect.width) * window_scale, FLIP_Y (rect.y + rect.height) * window_scale);
+  glScissor (rect.x * window_scale, FLIP_Y((rect.y + rect.height) * window_scale),
+             rect.width * window_scale, rect.height * window_scale);
 
   for (i = 0; i < n_rects; i++)
     {
@@ -506,8 +506,8 @@ gdk_x11_gl_context_texture_from_surface (GdkGLContext *paint_context,
 
       {
         GdkTexturedQuad quad = {
-          rect.x * window_scale, FLIP_Y(rect.y) * window_scale,
-          (rect.x + rect.width) * window_scale, FLIP_Y(rect.y + rect.height) * window_scale,
+          rect.x * window_scale, FLIP_Y(rect.y * window_scale),
+          (rect.x + rect.width) * window_scale, FLIP_Y((rect.y + rect.height) * window_scale),
           uscale * src_x, vscale * src_y,
           uscale * (src_x + src_width), vscale * (src_y + src_height),
         };
@@ -518,10 +518,10 @@ gdk_x11_gl_context_texture_from_surface (GdkGLContext *paint_context,
 
 #undef FLIP_Y
 
-  glDisable (GL_SCISSOR_TEST);
-
   gdk_gl_texture_quads (paint_context, target, n_rects, quads);
   g_free (quads);
+
+  glDisable (GL_SCISSOR_TEST);
 
   glXReleaseTexImageEXT (glx_pixmap->display, glx_pixmap->drawable,
   			 GLX_FRONT_LEFT_EXT);

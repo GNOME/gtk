@@ -702,11 +702,13 @@ gdk_gl_texture_from_surface (cairo_surface_t *surface,
 
   n_rects = cairo_region_num_rectangles (region);
 
+#define FLIP_Y(_y) (unscaled_window_height - (_y))
+
   for (i = 0; i < n_rects; i++)
     {
       cairo_region_get_rectangle (region, i, &rect);
 
-      glScissor (rect.x * window_scale, unscaled_window_height - (rect.y + rect.height) * window_scale,
+      glScissor (rect.x * window_scale, FLIP_Y ((rect.y + rect.height) * window_scale),
                  rect.width * window_scale, rect.height * window_scale);
 
       e = rect;
@@ -726,8 +728,6 @@ gdk_gl_texture_from_surface (cairo_surface_t *surface,
 
       cairo_surface_unmap_image (surface, image);
 
-#define FLIP_Y(_y) (unscaled_window_height - (_y))
-
       if (use_texture_rectangle)
         {
           umax = rect.width * sx;
@@ -741,7 +741,7 @@ gdk_gl_texture_from_surface (cairo_surface_t *surface,
 
       {
         GdkTexturedQuad quad = {
-          rect.x * window_scale, FLIP_Y(rect.y),
+          rect.x * window_scale, FLIP_Y(rect.y * window_scale),
           (rect.x + rect.width) * window_scale, FLIP_Y((rect.y + rect.height) * window_scale),
           0, 0,
           umax, vmax,
