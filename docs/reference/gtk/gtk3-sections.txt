@@ -3825,6 +3825,7 @@ GtkTextView
 GtkTextViewClass
 GtkTextViewLayer
 GtkTextWindowType
+GtkTextExtendSelection
 GtkWrapMode
 gtk_text_view_new
 gtk_text_view_new_with_buffer

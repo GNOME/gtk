@@ -82,6 +82,24 @@ typedef enum
 } GtkTextViewLayer;
 
 /**
+ * GtkTextExtendSelection:
+ * @GTK_TEXT_EXTEND_SELECTION_WORD: Selects the current word. It is triggered by
+ *   a double-click for example.
+ * @GTK_TEXT_EXTEND_SELECTION_LINE: Selects the current line. It is triggered by
+ *   a triple-click for example.
+ *
+ * Granularity types that extend the text selection. Use the
+ * #GtkTextView::extend-selection signal to customize the selection.
+ *
+ * Since: 3.16
+ */
+typedef enum
+{
+  GTK_TEXT_EXTEND_SELECTION_WORD,
+  GTK_TEXT_EXTEND_SELECTION_LINE
+} GtkTextExtendSelection;
+
+/**
  * GTK_TEXT_VIEW_PRIORITY_VALIDATE:
  *
  * The priority at which the text view validates onscreen lines
@@ -160,6 +178,11 @@ struct _GtkTextViewClass
   void (* draw_layer)            (GtkTextView      *text_view,
 			          GtkTextViewLayer  layer,
 			          cairo_t          *cr);
+  gboolean (* extend_selection)  (GtkTextView            *text_view,
+                                  GtkTextExtendSelection  granularity,
+                                  const GtkTextIter      *location,
+                                  GtkTextIter            *start,
+                                  GtkTextIter            *end);
 
   /*< private >*/
 
@@ -169,7 +192,6 @@ struct _GtkTextViewClass
   void (*_gtk_reserved3) (void);
   void (*_gtk_reserved4) (void);
   void (*_gtk_reserved5) (void);
-  void (*_gtk_reserved6) (void);
 };
 
 GDK_AVAILABLE_IN_ALL

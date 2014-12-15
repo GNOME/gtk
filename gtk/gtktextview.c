@@ -281,6 +281,7 @@ enum
   SELECT_ALL,
   TOGGLE_CURSOR_VISIBLE,
   PREEDIT_CHANGED,
+  EXTEND_SELECTION,
   LAST_SIGNAL
 };
 
@@ -561,6 +562,12 @@ static void gtk_text_view_queue_draw_region (GtkWidget            *widget,
 static void gtk_text_view_get_rendered_rect (GtkTextView  *text_view,
                                              GdkRectangle *rect);
 
+static gboolean gtk_text_view_extend_selection (GtkTextView            *text_view,
+                                                GtkTextExtendSelection  granularity,
+                                                const GtkTextIter      *location,
+                                                GtkTextIter            *start,
+                                                GtkTextIter            *end);
+
 
 /* FIXME probably need the focus methods. */
 
@@ -714,6 +721,7 @@ gtk_text_view_class_init (GtkTextViewClass *klass)
   klass->paste_clipboard = gtk_text_view_paste_clipboard;
   klass->toggle_overwrite = gtk_text_view_toggle_overwrite;
   klass->create_buffer = gtk_text_view_create_buffer;
+  klass->extend_selection = gtk_text_view_extend_selection;
 
   /*
    * Properties
@@ -1277,6 +1285,34 @@ G_GNUC_END_IGNORE_DEPRECATIONS
                                 _gtk_marshal_VOID__STRING,
                                 G_TYPE_NONE, 1,
                                 G_TYPE_STRING);
+
+  /**
+   * GtkTextView::extend-selection:
+   * @text_view: the object which received the signal
+   * @granularity: the granularity type
+   * @location: the location where to extend the selection
+   * @start: where the selection should start
+   * @end: where the selection should end
+   *
+   * The ::extend-selection signal is emitted when the selection needs to be
+   * extended at @location.
+   *
+   * Returns: %GDK_EVENT_STOP to stop other handlers from being invoked for the
+   *   event. %GDK_EVENT_PROPAGATE to propagate the event further.
+   * Since: 3.16
+   */
+  signals[EXTEND_SELECTION] =
+    g_signal_new (I_("extend-selection"),
+                  G_OBJECT_CLASS_TYPE (gobject_class),
+                  G_SIGNAL_RUN_LAST,
+                  G_STRUCT_OFFSET (GtkTextViewClass, extend_selection),
+                  _gtk_boolean_handled_accumulator, NULL,
+                  NULL, /* generic marshaller */
+                  G_TYPE_BOOLEAN, 4,
+                  GTK_TYPE_TEXT_EXTEND_SELECTION,
+                  GTK_TYPE_TEXT_ITER | G_SIGNAL_TYPE_STATIC_SCOPE,
+                  GTK_TYPE_TEXT_ITER | G_SIGNAL_TYPE_STATIC_SCOPE,
+                  GTK_TYPE_TEXT_ITER | G_SIGNAL_TYPE_STATIC_SCOPE);
 
   /*
    * Key bindings
@@ -6869,28 +6905,68 @@ drag_scan_timeout (gpointer data)
   return TRUE;
 }
 
-/*
- * Move @start and @end to the boundaries of the selection unit (indicated by 
- * @granularity) which contained @start initially.
- * If the selction unit is SELECT_WORDS and @start is not contained in a word
- * the selection is extended to all the white spaces between the end of the 
- * word preceding @start and the start of the one following.
- */
 static void
-extend_selection (GtkTextView *text_view, 
-		  SelectionGranularity granularity, 
-		  GtkTextIter *start, 
-		  GtkTextIter *end)
+extend_selection (GtkTextView          *text_view,
+                  SelectionGranularity  granularity,
+                  const GtkTextIter    *location,
+                  GtkTextIter          *start,
+                  GtkTextIter          *end)
 {
-  *end = *start;
+  GtkTextExtendSelection extend_selection_granularity;
+  gboolean handled = FALSE;
 
-  if (granularity == SELECT_WORDS) 
+  switch (granularity)
     {
+    case SELECT_CHARACTERS:
+      *start = *location;
+      *end = *location;
+      return;
+
+    case SELECT_WORDS:
+      extend_selection_granularity = GTK_TEXT_EXTEND_SELECTION_WORD;
+      break;
+
+    case SELECT_LINES:
+      extend_selection_granularity = GTK_TEXT_EXTEND_SELECTION_LINE;
+      break;
+
+    default:
+      g_assert_not_reached ();
+    }
+
+  g_signal_emit (text_view,
+                 signals[EXTEND_SELECTION], 0,
+                 extend_selection_granularity,
+                 location,
+                 start,
+                 end,
+                 &handled);
+
+  if (!handled)
+    {
+      *start = *location;
+      *end = *location;
+    }
+}
+
+static gboolean
+gtk_text_view_extend_selection (GtkTextView            *text_view,
+                                GtkTextExtendSelection  granularity,
+                                const GtkTextIter      *location,
+                                GtkTextIter            *start,
+                                GtkTextIter            *end)
+{
+  *start = *location;
+  *end = *location;
+
+  switch (granularity)
+    {
+    case GTK_TEXT_EXTEND_SELECTION_WORD:
       if (gtk_text_iter_inside_word (start))
 	{
 	  if (!gtk_text_iter_starts_word (start))
 	    gtk_text_iter_backward_visible_word_start (start);
-	  
+
 	  if (!gtk_text_iter_ends_word (end))
 	    {
 	      if (!gtk_text_iter_forward_visible_word_end (end))
@@ -6900,6 +6976,11 @@ extend_selection (GtkTextView *text_view,
       else
 	{
 	  GtkTextIter tmp;
+
+          /* @start is not contained in a word: the selection is extended to all
+           * the white spaces between the end of the word preceding @start and
+           * the start of the one following.
+           */
 
 	  tmp = *start;
 	  if (gtk_text_iter_backward_visible_word_start (&tmp))
@@ -6922,9 +7003,9 @@ extend_selection (GtkTextView *text_view,
 	  else
 	    gtk_text_iter_forward_to_line_end (end);
 	}
-    }
-  else if (granularity == SELECT_LINES) 
-    {
+      break;
+
+    case GTK_TEXT_EXTEND_SELECTION_LINE:
       if (gtk_text_view_starts_display_line (text_view, start))
 	{
 	  /* If on a display line boundary, we assume the user
@@ -6939,13 +7020,18 @@ extend_selection (GtkTextView *text_view,
 	   * start, and move end to the end unless it's already there.
 	   */
 	  gtk_text_view_backward_display_line_start (text_view, start);
-	  
+
 	  if (!gtk_text_view_starts_display_line (text_view, end))
 	    gtk_text_view_forward_display_line_end (text_view, end);
 	}
+      break;
+
+    default:
+      g_return_val_if_reached (GDK_EVENT_STOP);
     }
+
+  return GDK_EVENT_STOP;
 }
- 
 
 typedef struct
 {
@@ -7061,8 +7147,8 @@ gtk_text_view_drag_gesture_update (GtkGestureDrag *gesture,
 
       get_iter_from_gesture (text_view, text_view->priv->drag_gesture,
                              &cursor, NULL, NULL);
-      start = cursor;
-      extend_selection (text_view, data->granularity, &start, &end);
+
+      extend_selection (text_view, data->granularity, &cursor, &start, &end);
 
       /* either the selection extends to the front, or end (or not) */
       if (gtk_text_iter_compare (&cursor, &orig_start) < 0)
@@ -7191,11 +7277,10 @@ gtk_text_view_start_selection_drag (GtkTextView          *text_view,
   data->granularity = granularity;
 
   buffer = get_buffer (text_view);
-  
+
   cursor = *iter;
-  ins = cursor;
-  
-  extend_selection (text_view, data->granularity, &ins, &bound);
+  extend_selection (text_view, data->granularity, &cursor, &ins, &bound);
+
   orig_start = ins;
   orig_end = bound;
   gdk_event_get_state (event, &state);
