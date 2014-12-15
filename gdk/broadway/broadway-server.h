@@ -21,6 +21,8 @@ typedef struct _BroadwayServerClass BroadwayServerClass;
 
 BroadwayServer     *broadway_server_new                      (char             *address,
 							      int               port,
+                                                              const char       *ssl_cert,
+                                                              const char       *ssl_key,
 							      GError          **error);
 BroadwayServer     *broadway_server_on_unix_socket_new       (char             *address,
 							      GError          **error);

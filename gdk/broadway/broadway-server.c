@@ -42,6 +42,8 @@ struct _BroadwayServer {
 
   char *address;
   int port;
+  char *ssl_cert;
+  char *ssl_key;
   GSocketService *service;
   BroadwayOutput *output;
   guint32 id_counter;
@@ -85,7 +87,8 @@ struct _BroadwayServerClass
 
 typedef struct HttpRequest {
   BroadwayServer *server;
-  GSocketConnection *connection;
+  GSocketConnection *socket_connection;
+  GIOStream *connection;
   GDataInputStream *data;
   GString *request;
 }  HttpRequest;
@@ -93,7 +96,7 @@ typedef struct HttpRequest {
 struct BroadwayInput {
   BroadwayServer *server;
   BroadwayOutput *output;
-  GSocketConnection *connection;
+  GIOStream *connection;
   GByteArray *buffer;
   GSource *source;
   gboolean seen_time;
@@ -155,6 +158,8 @@ broadway_server_finalize (GObject *object)
   BroadwayServer *server = BROADWAY_SERVER (object);
 
   g_free (server->address);
+  g_free (server->ssl_cert);
+  g_free (server->ssl_key);
 
   G_OBJECT_CLASS (broadway_server_parent_class)->finalize (object);
 }
@@ -172,6 +177,7 @@ static void start (BroadwayInput *input);
 static void
 http_request_free (HttpRequest *request)
 {
+  g_object_unref (request->socket_connection);
   g_object_unref (request->connection);
   g_object_unref (request->data);
   g_string_free (request->request, TRUE);
@@ -661,14 +667,13 @@ broadway_server_read_all_input_nonblocking (BroadwayInput *input)
   GInputStream *in;
   gssize res;
   guint8 buffer[1024];
-  GError *error;
+  GError *error = NULL;
 
   if (input == NULL)
     return;
 
-  in = g_io_stream_get_input_stream (G_IO_STREAM (input->connection));
+  in = g_io_stream_get_input_stream (input->connection);
 
-  error = NULL;
   res = g_pollable_input_stream_read_nonblocking (G_POLLABLE_INPUT_STREAM (in),
 						  buffer, sizeof (buffer), NULL, &error);
 
@@ -796,7 +801,8 @@ broadway_server_block_for_input (BroadwayServer *server, char op,
 
     /* Not found, read more, blocking */
 
-    in = g_io_stream_get_input_stream (G_IO_STREAM (input->connection));
+    in = g_io_stream_get_input_stream (input->connection);
+
     res = g_input_stream_read (in, buffer, sizeof (buffer), NULL, NULL);
     if (res <= 0)
       return NULL;
@@ -909,9 +915,11 @@ send_error (HttpRequest *request,
 			 error_code, reason,
 			 error_code, reason,
 			 reason);
+
   /* TODO: This should really be async */
-  g_output_stream_write_all (g_io_stream_get_output_stream (G_IO_STREAM (request->connection)),
-			     res, strlen (res), NULL, NULL, NULL);
+  g_output_stream_write_all (g_io_stream_get_output_stream (request->connection),
+                             res, strlen (res), NULL, NULL, NULL);
+
   g_free (res);
   http_request_free (request);
 }
@@ -1004,8 +1012,8 @@ start_input (HttpRequest *request)
       g_print ("v7 proto response:\n%s", res);
 #endif
 
-      g_output_stream_write_all (g_io_stream_get_output_stream (G_IO_STREAM (request->connection)),
-				 res, strlen (res), NULL, NULL, NULL);
+      g_output_stream_write_all (g_io_stream_get_output_stream (request->connection),
+                                 res, strlen (res), NULL, NULL, NULL);
       g_free (res);
     }
   else
@@ -1015,7 +1023,7 @@ start_input (HttpRequest *request)
       return;
     }
 
-  socket = g_socket_connection_get_socket (request->connection);
+  socket = g_socket_connection_get_socket (request->socket_connection);
   setsockopt (g_socket_get_fd (socket), IPPROTO_TCP,
 	      TCP_NODELAY, (char *) &flag, sizeof(int));
 
@@ -1028,12 +1036,13 @@ start_input (HttpRequest *request)
   g_byte_array_append (input->buffer, data_buffer, data_buffer_size);
 
   input->output =
-    broadway_output_new (g_io_stream_get_output_stream (G_IO_STREAM (request->connection)), 0);
+    broadway_output_new (g_io_stream_get_output_stream (request->connection), 0);
 
   /* This will free and close the data input stream, but we got all the buffered content already */
   http_request_free (request);
 
-  in = g_io_stream_get_input_stream (G_IO_STREAM (input->connection));
+  in = g_io_stream_get_input_stream (input->connection);
+
   input->source = g_pollable_input_stream_create_source (G_POLLABLE_INPUT_STREAM (in), NULL);
   g_source_set_callback (input->source, (GSourceFunc)input_data_cb, input, NULL);
   g_source_attach (input->source, NULL);
@@ -1101,11 +1110,12 @@ send_data (HttpRequest *request,
 			 "Content-Length: %"G_GSIZE_FORMAT"\r\n"
 			 "\r\n",
 			 mimetype, len);
+
   /* TODO: This should really be async */
-  g_output_stream_write_all (g_io_stream_get_output_stream (G_IO_STREAM (request->connection)),
+  g_output_stream_write_all (g_io_stream_get_output_stream (request->connection),
 			     res, strlen (res), NULL, NULL, NULL);
   g_free (res);
-  g_output_stream_write_all (g_io_stream_get_output_stream (G_IO_STREAM (request->connection)),
+  g_output_stream_write_all (g_io_stream_get_output_stream (request->connection),
 			     data, len, NULL, NULL, NULL);
   http_request_free (request);
 }
@@ -1202,11 +1212,49 @@ handle_incoming_connection (GSocketService    *service,
   GInputStream *in;
 
   request = g_new0 (HttpRequest, 1);
-  request->connection = g_object_ref (connection);
+  request->socket_connection = g_object_ref (connection);
   request->server = BROADWAY_SERVER (source_object);
   request->request = g_string_new ("");
 
-  in = g_io_stream_get_input_stream (G_IO_STREAM (connection));
+  if (request->server->ssl_cert && request->server->ssl_key)
+    {
+      GError *error = NULL;
+      GTlsCertificate *certificate;
+
+      certificate = g_tls_certificate_new_from_files (request->server->ssl_cert,
+                                                      request->server->ssl_key,
+                                                      &error);
+      if (!certificate)
+        {
+          g_warning ("Cannot create TLS certificate: %s", error->message);
+          g_error_free (error);
+          return FALSE;
+        }
+
+      request->connection = g_tls_server_connection_new (G_IO_STREAM (connection),
+                                                         certificate,
+                                                         &error);
+      if (!request->connection)
+        {
+          g_warning ("Cannot create TLS connection: %s", error->message);
+          g_error_free (error);
+          return FALSE;
+        }
+
+      if (!g_tls_connection_handshake (G_TLS_CONNECTION (request->connection),
+                                       NULL, &error))
+        {
+          g_warning ("Cannot create TLS connection: %s", error->message);
+          g_error_free (error);
+          return FALSE;
+        }
+    }
+  else
+    {
+      request->connection = g_object_ref (connection);
+    }
+
+  in = g_io_stream_get_input_stream (request->connection);
 
   request->data = g_data_input_stream_new (in);
   g_filter_input_stream_set_close_base_stream (G_FILTER_INPUT_STREAM (request->data), FALSE);
@@ -1219,7 +1267,11 @@ handle_incoming_connection (GSocketService    *service,
 }
 
 BroadwayServer *
-broadway_server_new (char *address, int port, GError **error)
+broadway_server_new (char        *address,
+                     int          port,
+                     const char  *ssl_cert,
+                     const char  *ssl_key,
+                     GError     **error)
 {
   BroadwayServer *server;
   GInetAddress *inet_address;
@@ -1228,6 +1280,8 @@ broadway_server_new (char *address, int port, GError **error)
   server = g_object_new (BROADWAY_TYPE_SERVER, NULL);
   server->port = port;
   server->address = g_strdup (address);
+  server->ssl_cert = g_strdup (ssl_cert);
+  server->ssl_key = g_strdup (ssl_key);
 
   if (address == NULL)
     {

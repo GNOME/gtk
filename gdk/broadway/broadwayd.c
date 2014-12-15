@@ -419,6 +419,8 @@ main (int argc, char *argv[])
   char *http_address = NULL;
   char *unixsocket_address = NULL;
   int http_port = 0;
+  char *ssl_cert = NULL;
+  char *ssl_key = NULL;
   char *display;
   int port = 0;
   const GOptionEntry entries[] = {
@@ -427,6 +429,8 @@ main (int argc, char *argv[])
 #ifdef G_OS_UNIX
     { "unixsocket", 'u', 0, G_OPTION_ARG_STRING, &unixsocket_address, "Unix domain socket address", "ADDRESS" },
 #endif
+    { "cert", 'c', 0, G_OPTION_ARG_STRING, &ssl_cert, "SSL certificate path", "PATH" },
+    { "key", 'k', 0, G_OPTION_ARG_STRING, &ssl_key, "SSL key path", "PATH" },
     { NULL }
   };
 
@@ -493,7 +497,11 @@ main (int argc, char *argv[])
   if (unixsocket_address != NULL)
     server = broadway_server_on_unix_socket_new (unixsocket_address, &error);
   else
-    server = broadway_server_new (http_address, http_port, &error);
+    server = broadway_server_new (http_address,
+                                  http_port,
+                                  ssl_cert,
+                                  ssl_key,
+                                  &error);
 
   if (server == NULL)
     {
