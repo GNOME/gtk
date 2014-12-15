@@ -527,8 +527,8 @@ gdk_cairo_draw_from_gl (cairo_t              *cr,
 
       cairo_region_get_extents (clip_region, &clip_rect);
 
-      glScissor (clip_rect.x, FLIP_Y (clip_rect.y + clip_rect.height),
-                 clip_rect.width, clip_rect.height);
+      glScissor (clip_rect.x * window_scale, FLIP_Y ((clip_rect.y + clip_rect.height) * window_scale),
+                 clip_rect.width * window_scale, clip_rect.height * window_scale);
 
       n_quads = 0;
       n_rects = cairo_region_num_rectangles (clip_region);
