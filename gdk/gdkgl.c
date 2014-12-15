@@ -664,7 +664,6 @@ gdk_gl_texture_from_surface (cairo_surface_t *surface,
   float umax, vmax;
   gboolean use_texture_rectangle;
   guint target;
-  GdkTexturedQuad *quads;
 
   paint_context = gdk_gl_context_get_current ();
   if ((_gdk_gl_flags & GDK_GL_SOFTWARE_DRAW_SURFACE) == 0 &&
@@ -702,7 +701,6 @@ gdk_gl_texture_from_surface (cairo_surface_t *surface,
   glTexParameteri (target, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 
   n_rects = cairo_region_num_rectangles (region);
-  quads = g_new (GdkTexturedQuad, n_rects);
 
   for (i = 0; i < n_rects; i++)
     {
@@ -749,12 +747,12 @@ gdk_gl_texture_from_surface (cairo_surface_t *surface,
           umax, vmax,
         };
 
-        quads[i] = quad;
+        /* We don't want to combine the quads here, because they have different textures.
+         * And we don't want to upload the unused source areas to make it one texture. */
+        gdk_gl_texture_quads (paint_context, target, 1, &quad);
       }
     }
 
-  gdk_gl_texture_quads (paint_context, target, n_rects, quads);
-  g_free (quads);
 
   glDisable (GL_SCISSOR_TEST);
   glDisable (target);
