@@ -2846,7 +2846,8 @@ _gtk_style_context_validate (GtkStyleContext  *context,
                                            priv->scale,
                                            gtk_style_context_should_create_transitions (context) ? current : NULL);
 
-      if (gtk_css_animated_style_is_static (GTK_CSS_ANIMATED_STYLE (values)))
+      if (!GTK_IS_CSS_ANIMATED_STYLE (values) ||
+          gtk_css_animated_style_is_static (GTK_CSS_ANIMATED_STYLE (values)))
         {
           change &= ~GTK_CSS_CHANGE_ANIMATE;
         }
