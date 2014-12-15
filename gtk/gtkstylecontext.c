@@ -2720,23 +2720,6 @@ gtk_style_context_do_invalidate (GtkStyleContext  *context,
   priv->invalidating_context = NULL;
 }
 
-static GtkBitmask *
-gtk_style_context_update_animations (GtkStyleContext *context,
-                                     gint64           timestamp)
-{
-  GtkBitmask *differences;
-  GtkCssStyle *values;
-  
-  values = style_values_lookup (context);
-
-  differences = gtk_css_animated_style_advance (GTK_CSS_ANIMATED_STYLE (values), timestamp);
-
-  if (gtk_css_animated_style_is_static (GTK_CSS_ANIMATED_STYLE (values)))
-    _gtk_style_context_update_animating (context);
-
-  return differences;
-}
-
 static gboolean
 gtk_style_context_needs_full_revalidate (GtkStyleContext  *context,
                                          GtkCssChange      change)
@@ -2892,9 +2875,13 @@ _gtk_style_context_validate (GtkStyleContext  *context,
     {
       GtkBitmask *animation_changes;
 
-      animation_changes = gtk_style_context_update_animations (context, timestamp);
+      animation_changes = gtk_css_animated_style_advance (GTK_CSS_ANIMATED_STYLE (info->values), timestamp);
+
       changes = _gtk_bitmask_union (changes, animation_changes);
       _gtk_bitmask_free (animation_changes);
+
+      if (gtk_css_animated_style_is_static (GTK_CSS_ANIMATED_STYLE (info->values)))
+        _gtk_style_context_update_animating (context);
     }
 
   if (!_gtk_bitmask_is_empty (changes))
