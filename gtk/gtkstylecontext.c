@@ -2838,17 +2838,14 @@ _gtk_style_context_validate (GtkStyleContext  *context,
 
       style_info_set_values (info, NULL);
       values = style_values_lookup (context);
-      values = gtk_css_animated_style_new (values);
 
-      if (values != current)
-        gtk_css_animated_style_create_animations (GTK_CSS_ANIMATED_STYLE (values),
-                                                  priv->parent ? style_values_lookup (priv->parent) : NULL,
-                                                  timestamp,
-                                                  GTK_STYLE_PROVIDER_PRIVATE (priv->cascade),
-                                                  priv->scale,
-                                                  gtk_style_context_should_create_transitions (context) 
-                                                    ? current
-                                                    : NULL);
+      values = gtk_css_animated_style_new (values,
+                                           priv->parent ? style_values_lookup (priv->parent) : NULL,
+                                           timestamp,
+                                           GTK_STYLE_PROVIDER_PRIVATE (priv->cascade),
+                                           priv->scale,
+                                           gtk_style_context_should_create_transitions (context) ? current : NULL);
+
       if (gtk_css_animated_style_is_static (GTK_CSS_ANIMATED_STYLE (values)))
         {
           change &= ~GTK_CSS_CHANGE_ANIMATE;

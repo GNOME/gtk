@@ -52,7 +52,12 @@ struct _GtkCssAnimatedStyleClass
 
 GType                   gtk_css_animated_style_get_type         (void) G_GNUC_CONST;
 
-GtkCssStyle *           gtk_css_animated_style_new              (GtkCssStyle            *style);
+GtkCssStyle *           gtk_css_animated_style_new              (GtkCssStyle            *base_style,
+                                                                 GtkCssStyle            *parent_style,
+                                                                 gint64                  timestamp,
+                                                                 GtkStyleProviderPrivate *provider,
+                                                                 int                     scale,
+                                                                 GtkCssStyle            *previous_style);
 
 void                    gtk_css_animated_style_set_animated_value(GtkCssAnimatedStyle   *style,
                                                                  guint                   id,
@@ -61,12 +66,6 @@ void                    gtk_css_animated_style_set_animated_value(GtkCssAnimated
 GtkCssValue *           gtk_css_animated_style_get_intrinsic_value (GtkCssAnimatedStyle *style,
                                                                  guint                   id);
 
-void                    gtk_css_animated_style_create_animations(GtkCssAnimatedStyle    *style,
-                                                                 GtkCssStyle            *parent_style,
-                                                                 gint64                  timestamp,
-                                                                 GtkStyleProviderPrivate*provider,
-								 int                     scale,
-                                                                 GtkCssStyle            *source);
 GtkBitmask *            gtk_css_animated_style_advance          (GtkCssAnimatedStyle    *style,
                                                                  gint64                  timestamp);
 void                    gtk_css_animated_style_cancel_animations(GtkCssAnimatedStyle    *style);

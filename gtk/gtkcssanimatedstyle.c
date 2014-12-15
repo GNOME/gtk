@@ -119,20 +119,6 @@ gtk_css_animated_style_init (GtkCssAnimatedStyle *style)
 {
 }
 
-GtkCssStyle *
-gtk_css_animated_style_new (GtkCssStyle *style)
-{
-  GtkCssAnimatedStyle *result;
-  
-  g_return_val_if_fail (GTK_IS_CSS_STYLE (style), NULL);
-
-  result = g_object_new (GTK_TYPE_CSS_ANIMATED_STYLE, NULL);
-
-  result->style = g_object_ref (style);
-
-  return GTK_CSS_STYLE (result);
-}
-
 void
 gtk_css_animated_style_set_animated_value (GtkCssAnimatedStyle *style,
                                            guint                id,
@@ -398,17 +384,30 @@ gtk_css_animated_style_create_css_animations (GtkCssAnimatedStyle     *style,
 
 /* PUBLIC API */
 
-void
-gtk_css_animated_style_create_animations (GtkCssAnimatedStyle     *style,
-                                          GtkCssStyle             *parent_style,
-                                          gint64                   timestamp,
-                                          GtkStyleProviderPrivate *provider,
-                                          int                      scale,
-                                          GtkCssStyle             *source)
+GtkCssStyle *
+gtk_css_animated_style_new (GtkCssStyle             *base_style,
+                            GtkCssStyle             *parent_style,
+                            gint64                   timestamp,
+                            GtkStyleProviderPrivate *provider,
+                            int                      scale,
+                            GtkCssStyle             *previous_style)
 {
-  if (source != NULL)
-    gtk_css_animated_style_create_css_transitions (style, timestamp, source);
-  gtk_css_animated_style_create_css_animations (style, parent_style, timestamp, provider, scale, source);
+  GtkCssAnimatedStyle *result;
+  
+  gtk_internal_return_val_if_fail (GTK_IS_CSS_STYLE (base_style), NULL);
+  gtk_internal_return_val_if_fail (parent_style == NULL || GTK_IS_CSS_STYLE (parent_style), NULL);
+  gtk_internal_return_val_if_fail (GTK_IS_STYLE_PROVIDER (provider), NULL);
+  gtk_internal_return_val_if_fail (previous_style == NULL || GTK_IS_CSS_STYLE (previous_style), NULL);
+
+  result = g_object_new (GTK_TYPE_CSS_ANIMATED_STYLE, NULL);
+
+  result->style = g_object_ref (base_style);
+
+  if (previous_style != NULL)
+    gtk_css_animated_style_create_css_transitions (result, timestamp, previous_style);
+  gtk_css_animated_style_create_css_animations (result, parent_style, timestamp, provider, scale, previous_style);
+
+  return GTK_CSS_STYLE (result);
 }
 
 GtkBitmask *
