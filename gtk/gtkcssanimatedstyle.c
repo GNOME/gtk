@@ -479,19 +479,3 @@ gtk_css_animated_style_is_static (GtkCssAnimatedStyle *style)
 
   return TRUE;
 }
-
-void
-gtk_css_animated_style_cancel_animations (GtkCssAnimatedStyle *style)
-{
-  gtk_internal_return_if_fail (GTK_IS_CSS_ANIMATED_STYLE (style));
-
-  if (style->animated_values)
-    {
-      g_ptr_array_unref (style->animated_values);
-      style->animated_values = NULL;
-    }
-
-  g_slist_free_full (style->animations, g_object_unref);
-  style->animations = NULL;
-}
-

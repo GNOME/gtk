@@ -68,7 +68,6 @@ GtkCssValue *           gtk_css_animated_style_get_intrinsic_value (GtkCssAnimat
 
 GtkBitmask *            gtk_css_animated_style_advance          (GtkCssAnimatedStyle    *style,
                                                                  gint64                  timestamp);
-void                    gtk_css_animated_style_cancel_animations(GtkCssAnimatedStyle    *style);
 gboolean                gtk_css_animated_style_is_static        (GtkCssAnimatedStyle    *style);
 
 G_END_DECLS
