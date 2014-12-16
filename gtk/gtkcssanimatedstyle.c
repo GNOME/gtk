@@ -435,7 +435,10 @@ gtk_css_animated_style_new (GtkCssStyle             *base_style,
   result = g_object_new (GTK_TYPE_CSS_ANIMATED_STYLE, NULL);
 
   result->style = g_object_ref (base_style);
+  result->current_time = timestamp;
   result->animations = animations;
+
+  gtk_css_animated_style_apply_animations (result, timestamp);
 
   return GTK_CSS_STYLE (result);
 }
