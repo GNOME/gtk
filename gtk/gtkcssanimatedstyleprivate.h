@@ -58,6 +58,8 @@ GtkCssStyle *           gtk_css_animated_style_new              (GtkCssStyle    
                                                                  GtkStyleProviderPrivate *provider,
                                                                  int                     scale,
                                                                  GtkCssStyle            *previous_style);
+GtkCssStyle *           gtk_css_animated_style_new_advance      (GtkCssAnimatedStyle    *source,
+                                                                 gint64                  timestamp);
 
 void                    gtk_css_animated_style_set_animated_value(GtkCssAnimatedStyle   *style,
                                                                  guint                   id,
@@ -66,8 +68,6 @@ void                    gtk_css_animated_style_set_animated_value(GtkCssAnimated
 GtkCssValue *           gtk_css_animated_style_get_intrinsic_value (GtkCssAnimatedStyle *style,
                                                                  guint                   id);
 
-GtkBitmask *            gtk_css_animated_style_advance          (GtkCssAnimatedStyle    *style,
-                                                                 gint64                  timestamp);
 gboolean                gtk_css_animated_style_is_static        (GtkCssAnimatedStyle    *style);
 
 G_END_DECLS

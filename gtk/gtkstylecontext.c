@@ -2873,14 +2873,19 @@ _gtk_style_context_validate (GtkStyleContext  *context,
   if (change & GTK_CSS_CHANGE_ANIMATE &&
       gtk_style_context_is_animating (context))
     {
+      GtkCssStyle *new_values;
       GtkBitmask *animation_changes;
 
-      animation_changes = gtk_css_animated_style_advance (GTK_CSS_ANIMATED_STYLE (info->values), timestamp);
+      new_values = gtk_css_animated_style_new_advance (GTK_CSS_ANIMATED_STYLE (info->values), timestamp);
+      animation_changes = gtk_css_style_get_difference (new_values, info->values);
+      style_info_set_values (info, new_values);
+      g_object_unref (new_values);
 
       changes = _gtk_bitmask_union (changes, animation_changes);
       _gtk_bitmask_free (animation_changes);
 
-      if (gtk_css_animated_style_is_static (GTK_CSS_ANIMATED_STYLE (info->values)))
+      if (!GTK_IS_CSS_ANIMATED_STYLE (info->values) ||
+          gtk_css_animated_style_is_static (GTK_CSS_ANIMATED_STYLE (info->values)))
         _gtk_style_context_update_animating (context);
     }
 
