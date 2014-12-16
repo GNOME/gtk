@@ -298,6 +298,22 @@ gtk_gl_area_realize (GtkWidget *widget)
   priv->needs_resize = TRUE;
 }
 
+static void
+gtk_gl_area_notify (GObject    *object,
+                    GParamSpec *pspec)
+{
+  if (strcmp (pspec->name, "scale-factor") == 0)
+    {
+      GtkGLArea *area = GTK_GL_AREA (object);
+      GtkGLAreaPrivate *priv = gtk_gl_area_get_instance_private (area);
+
+      priv->needs_resize = TRUE;
+    }
+
+  if (G_OBJECT_CLASS (gtk_gl_area_parent_class)->notify)
+    G_OBJECT_CLASS (gtk_gl_area_parent_class)->notify (object, pspec);
+}
+
 static GdkGLContext *
 gtk_gl_area_real_create_context (GtkGLArea *area)
 {
@@ -843,6 +859,7 @@ gtk_gl_area_class_init (GtkGLAreaClass *klass)
   gobject_class->set_property = gtk_gl_area_set_property;
   gobject_class->get_property = gtk_gl_area_get_property;
   gobject_class->dispose = gtk_gl_area_dispose;
+  gobject_class->notify = gtk_gl_area_notify;
 
   g_object_class_install_properties (gobject_class, LAST_PROP, obj_props);
 
