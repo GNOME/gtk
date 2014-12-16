@@ -103,6 +103,7 @@ struct _GtkMenuTrackerItem
 #define HIDDEN_NEVER         0
 #define HIDDEN_WHEN_MISSING  1
 #define HIDDEN_WHEN_DISABLED 2
+#define HIDDEN_WHEN_ALWAYS   3
 
 enum {
   PROP_0,
@@ -269,6 +270,10 @@ gtk_menu_tracker_item_update_visibility (GtkMenuTrackerItem *self)
 
     case HIDDEN_WHEN_DISABLED:
       visible = self->sensitive;
+      break;
+
+    case HIDDEN_WHEN_ALWAYS:
+      visible = FALSE;
       break;
 
     default:
@@ -479,6 +484,7 @@ GtkMenuTrackerItem *
 _gtk_menu_tracker_item_new (GtkActionObservable *observable,
                             GMenuModel          *model,
                             gint                 item_index,
+                            gboolean             mac_os_mode,
                             const gchar         *action_namespace,
                             gboolean             is_separator)
 {
@@ -501,6 +507,8 @@ _gtk_menu_tracker_item_new (GtkActionObservable *observable,
         self->hidden_when = HIDDEN_WHEN_DISABLED;
       else if (g_str_equal (hidden_when, "action-missing"))
         self->hidden_when = HIDDEN_WHEN_MISSING;
+      else if (mac_os_mode && g_str_equal (hidden_when, "macos-menubar"))
+        self->hidden_when = HIDDEN_WHEN_ALWAYS;
 
       /* Ignore other values -- this code may be running in context of a
        * desktop shell or the like and should not spew criticals due to

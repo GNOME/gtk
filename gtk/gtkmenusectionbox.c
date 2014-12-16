@@ -380,7 +380,7 @@ gtk_menu_section_box_new_toplevel (GtkStack    *stack,
   gtk_stack_add_named (stack, GTK_WIDGET (box), "main");
 
   box->tracker = gtk_menu_tracker_new (GTK_ACTION_OBSERVABLE (_gtk_widget_get_action_muxer (GTK_WIDGET (box), TRUE)),
-                                       model, TRUE, FALSE, action_namespace,
+                                       model, TRUE, FALSE, FALSE, action_namespace,
                                        gtk_menu_section_box_insert_func,
                                        gtk_menu_section_box_remove_func, box);
 
@@ -420,7 +420,7 @@ gtk_menu_section_box_new_submenu (GtkMenuTrackerItem *item,
                        GTK_WIDGET (box), gtk_menu_tracker_item_get_label (item));
   gtk_widget_show (GTK_WIDGET (box));
 
-  box->tracker = gtk_menu_tracker_new_for_item_link (item, G_MENU_LINK_SUBMENU, FALSE,
+  box->tracker = gtk_menu_tracker_new_for_item_link (item, G_MENU_LINK_SUBMENU, FALSE, FALSE,
                                                      gtk_menu_section_box_insert_func,
                                                      gtk_menu_section_box_remove_func,
                                                      box);
@@ -486,7 +486,7 @@ gtk_menu_section_box_new_section (GtkMenuTrackerItem *item,
       gtk_widget_show (box->separator);
     }
 
-  box->tracker = gtk_menu_tracker_new_for_item_link (item, G_MENU_LINK_SECTION, FALSE,
+  box->tracker = gtk_menu_tracker_new_for_item_link (item, G_MENU_LINK_SECTION, FALSE, FALSE,
                                                      gtk_menu_section_box_insert_func,
                                                      gtk_menu_section_box_remove_func,
                                                      box);

@@ -36,6 +36,7 @@ GtkMenuTracker *        gtk_menu_tracker_new                            (GtkActi
                                                                          GMenuModel               *model,
                                                                          gboolean                  with_separators,
                                                                          gboolean                  merge_sections,
+                                                                         gboolean                  mac_os_mode,
                                                                          const gchar              *action_namespace,
                                                                          GtkMenuTrackerInsertFunc  insert_func,
                                                                          GtkMenuTrackerRemoveFunc  remove_func,
@@ -44,6 +45,7 @@ GtkMenuTracker *        gtk_menu_tracker_new                            (GtkActi
 GtkMenuTracker *        gtk_menu_tracker_new_for_item_link              (GtkMenuTrackerItem       *item,
                                                                          const gchar              *link_name,
                                                                          gboolean                  merge_sections,
+                                                                         gboolean                  mac_os_mode,
                                                                          GtkMenuTrackerInsertFunc  insert_func,
                                                                          GtkMenuTrackerRemoveFunc  remove_func,
                                                                          gpointer                  user_data);

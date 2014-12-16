@@ -2087,7 +2087,7 @@ gtk_menu_shell_tracker_insert_func (GtkMenuTrackerItem *item,
        * lazy...
        */
       submenu->priv->tracker = gtk_menu_tracker_new_for_item_link (item,
-                                                                   G_MENU_LINK_SUBMENU, TRUE,
+                                                                   G_MENU_LINK_SUBMENU, TRUE, FALSE,
                                                                    gtk_menu_shell_tracker_insert_func,
                                                                    gtk_menu_shell_tracker_remove_func,
                                                                    submenu);
@@ -2202,8 +2202,8 @@ gtk_menu_shell_bind_model (GtkMenuShell *menu_shell,
     gtk_container_remove (GTK_CONTAINER (menu_shell), menu_shell->priv->children->data);
 
   if (model)
-    menu_shell->priv->tracker = gtk_menu_tracker_new (GTK_ACTION_OBSERVABLE (muxer),
-                                                      model, with_separators, TRUE, action_namespace,
+    menu_shell->priv->tracker = gtk_menu_tracker_new (GTK_ACTION_OBSERVABLE (muxer), model,
+                                                      with_separators, TRUE, FALSE, action_namespace,
                                                       gtk_menu_shell_tracker_insert_func,
                                                       gtk_menu_shell_tracker_remove_func,
                                                       menu_shell);

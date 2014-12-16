@@ -11,12 +11,14 @@
     <section>
       <item>
         <attribute name='label' translatable='yes'>_About Bloatpad</attribute>
+        <attribute name='hidden-when'>macos-menubar</attribute>
         <attribute name='action'>app.about</attribute>
       </item>
     </section>
     <section>
       <item>
         <attribute name='label' translatable='yes'>_Quit</attribute>
+        <attribute name='hidden-when'>macos-menubar</attribute>
         <attribute name='action'>app.quit</attribute>
       </item>
     </section>

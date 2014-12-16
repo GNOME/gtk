@@ -45,6 +45,7 @@ GType                   gtk_menu_tracker_item_role_get_type             (void) G
 GtkMenuTrackerItem *   _gtk_menu_tracker_item_new                       (GtkActionObservable *observable,
                                                                          GMenuModel          *model,
                                                                          gint                 item_index,
+                                                                         gboolean             mac_os_mode,
                                                                          const gchar         *action_namespace,
                                                                          gboolean             is_separator);
 
