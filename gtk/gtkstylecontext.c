@@ -685,17 +685,25 @@ static void
 update_properties (GtkStyleContext             *context,
                    GtkCssStyle                 *style,
                    const GtkCssNodeDeclaration *decl,
-                   const GtkBitmask            *relevant_changes)
+                   const GtkBitmask            *parent_changes)
 {
   GtkStyleContextPrivate *priv;
   GtkCssMatcher matcher;
   GtkWidgetPath *path;
   GtkCssLookup *lookup;
+  GtkBitmask *changes;
 
   priv = context->priv;
 
+  changes = gtk_css_style_compute_dependencies (style, parent_changes);
+  if (_gtk_bitmask_is_empty (changes))
+    {
+      _gtk_bitmask_free (changes);
+      return;
+    }
+
   path = create_query_path (context, decl);
-  lookup = _gtk_css_lookup_new (relevant_changes);
+  lookup = _gtk_css_lookup_new (changes);
 
   if (_gtk_css_matcher_init (&matcher, path))
     _gtk_style_provider_private_lookup (GTK_STYLE_PROVIDER_PRIVATE (priv->cascade),
@@ -711,6 +719,7 @@ update_properties (GtkStyleContext             *context,
 
   _gtk_css_lookup_free (lookup);
   gtk_widget_path_free (path);
+  _gtk_bitmask_free (changes);
 }
 
 static GtkCssStyle *
@@ -2684,14 +2693,8 @@ gtk_style_context_update_cache (GtkStyleContext  *context,
     {
       const GtkCssNodeDeclaration *decl = key;
       GtkCssStyle *values = value;
-      GtkBitmask *changes;
 
-      changes = gtk_css_style_compute_dependencies (values, parent_changes);
-
-      if (!_gtk_bitmask_is_empty (changes))
-	update_properties (context, values, decl, changes);
-
-      _gtk_bitmask_free (changes);
+      update_properties (context, values, decl, parent_changes);
     }
 
   gtk_style_context_clear_property_cache (context);
@@ -2838,15 +2841,13 @@ _gtk_style_context_validate (GtkStyleContext  *context,
     {
       gtk_style_context_update_cache (context, parent_changes);
 
-      changes = gtk_css_style_compute_dependencies (current, parent_changes);
-      if (!_gtk_bitmask_is_empty (changes))
+      if (!_gtk_bitmask_is_empty (parent_changes))
         {
           if (GTK_IS_CSS_ANIMATED_STYLE (current))
-	    update_properties (context, GTK_CSS_ANIMATED_STYLE (current)->style, info->decl, changes);
+	    update_properties (context, GTK_CSS_ANIMATED_STYLE (current)->style, info->decl, parent_changes);
           else
-	    update_properties (context, current, info->decl, changes);
+	    update_properties (context, current, info->decl, parent_changes);
         }
-      _gtk_bitmask_free (changes);
 
       if (change & GTK_CSS_CHANGE_ANIMATE &&
           gtk_style_context_is_animating (context))
