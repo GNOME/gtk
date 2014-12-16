@@ -495,6 +495,9 @@ gtk_menu_tracker_section_new (GtkMenuTracker *tracker,
  * @model: the model to flatten
  * @with_separators: if the toplevel should have separators (ie: TRUE
  *   for menus, FALSE for menubars)
+ * @merge_sections: if sections should have their items merged in the
+ *   usual way or reported only as separators (which can be queried to
+ *   manually handle the items)
  * @action_namespace: the passed-in action namespace
  * @insert_func: insert callback
  * @remove_func: remove callback
