@@ -163,7 +163,7 @@ enum {
   LAST_SIGNAL
 };
 
-static void gtk_gl_area_allocate_buffers (GtkGLArea *area, int width, int height);
+static void gtk_gl_area_allocate_buffers (GtkGLArea *area);
 
 static guint area_signals[LAST_SIGNAL] = { 0, };
 
@@ -322,11 +322,10 @@ gtk_gl_area_resize (GtkGLArea *area, int width, int height)
  * Creates all the buffer objects needed for rendering the scene
  */
 static void
-gtk_gl_area_create_buffers (GtkGLArea *area)
+gtk_gl_area_ensure_buffers (GtkGLArea *area)
 {
   GtkGLAreaPrivate *priv = gtk_gl_area_get_instance_private (area);
   GtkWidget *widget = GTK_WIDGET (area);
-  int scale;
 
   gtk_widget_realize (widget);
 
@@ -341,31 +340,63 @@ gtk_gl_area_create_buffers (GtkGLArea *area)
   glGenFramebuffersEXT (1, &priv->frame_buffer);
 
   if (priv->has_alpha)
-    /* For alpha we use textures as that is required for blending to work */
-    glGenTextures (1, &priv->texture);
+    {
+      /* For alpha we use textures as that is required for blending to work */
+      if (priv->texture == 0)
+        glGenTextures (1, &priv->texture);
+
+      /* Delete old render buffer if any */
+      if (priv->render_buffer != 0)
+        {
+          glDeleteRenderbuffersEXT(1, &priv->render_buffer);
+          priv->render_buffer = 0;
+        }
+    }
   else
+    {
     /* For non-alpha we use render buffers so we can blit instead of texture the result */
-    glGenRenderbuffersEXT (1, &priv->render_buffer);
+      if (priv->render_buffer == 0)
+        glGenRenderbuffersEXT (1, &priv->render_buffer);
 
-  if (priv->has_depth_buffer || priv->has_stencil_buffer)
-    glGenRenderbuffersEXT (1, &priv->depth_stencil_buffer);
+      /* Delete old texture if any */
+      if (priv->texture != 0)
+        {
+          glDeleteTextures(1, &priv->texture);
+          priv->texture = 0;
+        }
+    }
 
-  scale = gtk_widget_get_scale_factor (widget);
-  gtk_gl_area_allocate_buffers (area,
-                                gtk_widget_get_allocated_width (widget) * scale,
-                                gtk_widget_get_allocated_height (widget) * scale);
+  if ((priv->has_depth_buffer || priv->has_stencil_buffer))
+    {
+      if (priv->depth_stencil_buffer == 0)
+        glGenRenderbuffersEXT (1, &priv->depth_stencil_buffer);
+    }
+  else if (priv->depth_stencil_buffer != 0)
+    {
+      /* Delete old depth/stencil buffer */
+      glDeleteRenderbuffersEXT (1, &priv->depth_stencil_buffer);
+      priv->depth_stencil_buffer = 0;
+    }
+
+  gtk_gl_area_allocate_buffers (area);
 }
 
 /*
  * Allocates space of the right type and size for all the buffers
  */
 static void
-gtk_gl_area_allocate_buffers (GtkGLArea *area, int width, int height)
+gtk_gl_area_allocate_buffers (GtkGLArea *area)
 {
   GtkGLAreaPrivate *priv = gtk_gl_area_get_instance_private (area);
+  GtkWidget *widget = GTK_WIDGET (area);
+  int scale, width, height;
 
   if (priv->context == NULL)
     return;
+
+  scale = gtk_widget_get_scale_factor (widget);
+  width = gtk_widget_get_allocated_width (widget) * scale;
+  height = gtk_widget_get_allocated_height (widget) * scale;
 
   if (priv->texture)
     {
@@ -395,23 +426,6 @@ gtk_gl_area_allocate_buffers (GtkGLArea *area, int width, int height)
   priv->needs_render = TRUE;
 }
 
-static void
-gtk_gl_area_maybe_allocate_buffers (GtkGLArea *area)
-{
-  GtkGLAreaPrivate *priv = gtk_gl_area_get_instance_private (area);
-  GtkWidget *widget = GTK_WIDGET (area);
-  int scale;
-
-  if (!priv->have_buffers)
-    return;
-
-  gtk_gl_area_make_current (area);
-  scale = gtk_widget_get_scale_factor (widget);
-  gtk_gl_area_allocate_buffers (area,
-                                gtk_widget_get_allocated_width (widget) * scale,
-                                gtk_widget_get_allocated_height (widget) * scale);
-}
-
 /**
  * gtk_gl_area_attach_buffers:
  * @area: a #GtkGLArea
@@ -434,7 +448,9 @@ gtk_gl_area_attach_buffers (GtkGLArea *area)
   gtk_gl_area_make_current (area);
 
   if (!priv->have_buffers)
-    gtk_gl_area_create_buffers (area);
+    gtk_gl_area_ensure_buffers (area);
+  else if (priv->needs_resize)
+    gtk_gl_area_allocate_buffers (area);
 
   glBindFramebufferEXT (GL_FRAMEBUFFER_EXT, priv->frame_buffer);
 
@@ -464,14 +480,11 @@ gtk_gl_area_delete_buffers (GtkGLArea *area)
   if (priv->context == NULL)
     return;
 
-  if (!priv->have_buffers)
-    return;
-
   priv->have_buffers = FALSE;
 
   if (priv->render_buffer != 0)
     {
-      glDeleteRenderbuffersEXT(1, &priv->render_buffer);
+      glDeleteRenderbuffersEXT (1, &priv->render_buffer);
       priv->render_buffer = 0;
     }
 
@@ -483,8 +496,12 @@ gtk_gl_area_delete_buffers (GtkGLArea *area)
 
   if (priv->depth_stencil_buffer != 0)
     {
-      glDeleteRenderbuffersEXT(1, &priv->depth_stencil_buffer);
+      glDeleteRenderbuffersEXT (1, &priv->depth_stencil_buffer);
+      priv->depth_stencil_buffer = 0;
+    }
 
+  if (priv->frame_buffer != 0)
+    {
       glBindFramebufferEXT (GL_FRAMEBUFFER_EXT, 0);
       glDeleteFramebuffersEXT (1, &priv->frame_buffer);
       priv->frame_buffer = 0;
@@ -588,8 +605,6 @@ gtk_gl_area_size_allocate (GtkWidget     *widget,
 
       priv->needs_resize = TRUE;
     }
-
-  gtk_gl_area_maybe_allocate_buffers (area);
 }
 
 static void
@@ -1131,7 +1146,7 @@ gtk_gl_area_set_has_depth_buffer (GtkGLArea *area,
 
       g_object_notify (G_OBJECT (area), "has-depth-buffer");
 
-      gtk_gl_area_maybe_allocate_buffers (area);
+      priv->have_buffers = FALSE;
     }
 }
 
@@ -1182,7 +1197,7 @@ gtk_gl_area_set_has_stencil_buffer (GtkGLArea *area,
 
       g_object_notify (G_OBJECT (area), "has-stencil-buffer");
 
-      gtk_gl_area_maybe_allocate_buffers (area);
+      priv->have_buffers = FALSE;
     }
 }
 
