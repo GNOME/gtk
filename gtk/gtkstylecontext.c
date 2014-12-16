@@ -2832,16 +2832,6 @@ _gtk_style_context_validate (GtkStyleContext  *context,
       style_info_set_values (info, values);
       _gtk_style_context_update_animating (context);
 
-      if (current)
-        {
-          changes = gtk_css_style_get_difference (values, current);
-        }
-      else
-        {
-          changes = _gtk_bitmask_new ();
-          changes = _gtk_bitmask_invert_range (changes, 0, _gtk_css_style_property_get_n_properties ());
-        }
-
       g_object_unref (values);
     }
   else
@@ -2856,20 +2846,16 @@ _gtk_style_context_validate (GtkStyleContext  *context,
           else
 	    update_properties (context, current, info->decl, changes);
         }
+      _gtk_bitmask_free (changes);
 
       if (change & GTK_CSS_CHANGE_ANIMATE &&
           gtk_style_context_is_animating (context))
         {
           GtkCssStyle *new_values;
-          GtkBitmask *animation_changes;
 
           new_values = gtk_css_animated_style_new_advance (GTK_CSS_ANIMATED_STYLE (info->values), timestamp);
-          animation_changes = gtk_css_style_get_difference (new_values, info->values);
           style_info_set_values (info, new_values);
           g_object_unref (new_values);
-
-          changes = _gtk_bitmask_union (changes, animation_changes);
-          _gtk_bitmask_free (animation_changes);
 
           if (!GTK_IS_CSS_ANIMATED_STYLE (info->values) ||
               gtk_css_animated_style_is_static (GTK_CSS_ANIMATED_STYLE (info->values)))
@@ -2878,7 +2864,15 @@ _gtk_style_context_validate (GtkStyleContext  *context,
     }
 
   if (current)
-    g_object_unref (current);
+    {
+      changes = gtk_css_style_get_difference (info->values, current);
+      g_object_unref (current);
+    }
+  else
+    {
+      changes = _gtk_bitmask_new ();
+      changes = _gtk_bitmask_invert_range (changes, 0, _gtk_css_style_property_get_n_properties ());
+    }
 
   if (!_gtk_bitmask_is_empty (changes))
     gtk_style_context_do_invalidate (context, changes);
