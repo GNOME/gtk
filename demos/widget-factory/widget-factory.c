@@ -159,6 +159,12 @@ spin_value_reset (GtkWidget *button, GtkAdjustment *adjustment)
 static gint pulse_time = 250;
 static gint pulse_entry_mode = 0;
 
+static void
+remove_pulse (gpointer pulse_id)
+{
+  g_source_remove (GPOINTER_TO_UINT (pulse_id));
+}
+
 static gboolean
 pulse_it (GtkWidget *widget)
 {
@@ -170,7 +176,7 @@ pulse_it (GtkWidget *widget)
     gtk_progress_bar_pulse (GTK_PROGRESS_BAR (widget));
 
   pulse_id = g_timeout_add (pulse_time, (GSourceFunc)pulse_it, widget);
-  g_object_set_data (G_OBJECT (widget), "pulse_id", GUINT_TO_POINTER (pulse_id));
+  g_object_set_data_full (G_OBJECT (widget), "pulse_id", GUINT_TO_POINTER (pulse_id), remove_pulse);
 
   return G_SOURCE_REMOVE;
 }
@@ -190,18 +196,14 @@ update_pulse_time (GtkAdjustment *adjustment, GtkWidget *widget)
 
   if (value == 100)
     {
-      if (pulse_id != 0)
-        {
-          g_source_remove (pulse_id);
-          g_object_set_data (G_OBJECT (widget), "pulse_id", NULL);
-        }
+      g_object_set_data (G_OBJECT (widget), "pulse_id", NULL);
     }
   else if (value < 100)
     {
       if (pulse_id == 0 && (GTK_IS_PROGRESS_BAR (widget) || pulse_entry_mode % 3 == 2))
         {
           pulse_id = g_timeout_add (pulse_time, (GSourceFunc)pulse_it, widget);
-          g_object_set_data (G_OBJECT (widget), "pulse_id", GUINT_TO_POINTER (pulse_id));
+          g_object_set_data_full (G_OBJECT (widget), "pulse_id", GUINT_TO_POINTER (pulse_id), remove_pulse);
         }
     }
 }
@@ -212,8 +214,6 @@ on_entry_icon_release (GtkEntry            *entry,
                        GdkEvent            *event,
                        gpointer             user_data)
 {
-  guint pulse_id;
-
   if (icon_pos != GTK_ENTRY_ICON_SECONDARY)
     return;
 
@@ -221,12 +221,7 @@ on_entry_icon_release (GtkEntry            *entry,
 
   if (pulse_entry_mode % 3 == 0)
     {
-      pulse_id = GPOINTER_TO_UINT (g_object_get_data (G_OBJECT (entry), "pulse_id"));
-      if (pulse_id != 0)
-        {
-          g_source_remove (pulse_id);
-          g_object_set_data (G_OBJECT (entry), "pulse_id", NULL);
-        }
+      g_object_set_data (G_OBJECT (entry), "pulse_id", NULL);
       gtk_entry_set_progress_fraction (entry, 0);
     }
   else if (pulse_entry_mode % 3 == 1)
