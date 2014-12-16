@@ -87,6 +87,18 @@ Release notes for 3.16
   If you are using such a function from language-bindings, this
   may require adjustments.
 
+* The lookup order for actions that are activated via keyboard
+  accelerators has been changed to start at the currently focused
+  widget. If your application is making use fo nested action groups
+  via gtk_widget_insert_action_group, you may want to check that
+  this change does not upset your accelerators.
+
+* The GtkScrollable interface has gained a new vfunc, get_border,
+  that is used to position overshoot and undershoot indications that
+  are drawn over the content by GtkScrolledWindow. Unless your scrollable
+  has non-scrolling parts similar to treeview headers, there is no need
+  to implement this vfunc.
+
 Release notes for 3.14
 ======================
 
