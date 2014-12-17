@@ -63,16 +63,6 @@ gtk_css_animated_style_get_section (GtkCssStyle *style,
   return gtk_css_style_get_section (animated->style, id);
 }
 
-static GtkBitmask *
-gtk_css_animated_style_compute_dependencies (GtkCssStyle      *style,
-                                             const GtkBitmask *parent_changes)
-{
-  GtkCssAnimatedStyle *animated = GTK_CSS_ANIMATED_STYLE (style);
-
-  /* XXX: This misses dependencies due to animations */
-  return gtk_css_style_compute_dependencies (animated->style, parent_changes);
-}
-
 static void
 gtk_css_animated_style_dispose (GObject *object)
 {
@@ -111,7 +101,6 @@ gtk_css_animated_style_class_init (GtkCssAnimatedStyleClass *klass)
 
   style_class->get_value = gtk_css_animated_style_get_value;
   style_class->get_section = gtk_css_animated_style_get_section;
-  style_class->compute_dependencies = gtk_css_animated_style_compute_dependencies;
 }
 
 static void

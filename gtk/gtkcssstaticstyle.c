@@ -65,9 +65,14 @@ gtk_css_static_style_get_section (GtkCssStyle *style,
   return g_ptr_array_index (sstyle->sections, id);
 }
 
+/* Compute the bitmask of potentially changed properties if the parent has changed
+ * the passed in ones.
+ * This is for example needed when changes in the "color" property will affect
+ * all properties using "currentColor" as a color.
+ */
 static GtkBitmask *
-gtk_css_static_style_compute_dependencies (GtkCssStyle      *style,
-                                             const GtkBitmask *parent_changes)
+gtk_css_static_style_compute_dependencies (GtkCssStaticStyle *style,
+                                           const GtkBitmask  *parent_changes)
 {
   GtkCssStaticStyle *sstyle = GTK_CSS_STATIC_STYLE (style);
   GtkBitmask *changes;
@@ -125,7 +130,6 @@ gtk_css_static_style_class_init (GtkCssStaticStyleClass *klass)
 
   style_class->get_value = gtk_css_static_style_get_value;
   style_class->get_section = gtk_css_static_style_get_section;
-  style_class->compute_dependencies = gtk_css_static_style_compute_dependencies;
 }
 
 static void
@@ -225,7 +229,7 @@ gtk_css_static_style_new_update (GtkCssStaticStyle       *style,
   gtk_internal_return_val_if_fail (GTK_IS_STYLE_PROVIDER_PRIVATE (provider), NULL);
   gtk_internal_return_val_if_fail (matcher != NULL, NULL);
 
-  changes = gtk_css_style_compute_dependencies (GTK_CSS_STYLE (style), parent_changes);
+  changes = gtk_css_static_style_compute_dependencies (style, parent_changes);
   if (_gtk_bitmask_is_empty (changes))
     {
       _gtk_bitmask_free (changes);

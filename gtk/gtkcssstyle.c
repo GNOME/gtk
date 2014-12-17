@@ -46,18 +46,10 @@ gtk_css_style_real_get_section (GtkCssStyle *style,
   return NULL;
 }
 
-static GtkBitmask *
-gtk_css_style_real_compute_dependencies (GtkCssStyle      *style,
-                                         const GtkBitmask *parent_changes)
-{
-  return _gtk_bitmask_copy (parent_changes);
-}
-
 static void
 gtk_css_style_class_init (GtkCssStyleClass *klass)
 {
   klass->get_section = gtk_css_style_real_get_section;
-  klass->compute_dependencies = gtk_css_style_real_compute_dependencies;
 }
 
 static void
@@ -100,15 +92,6 @@ gtk_css_style_get_difference (GtkCssStyle *style,
     }
 
   return result;
-}
-
-GtkBitmask *
-gtk_css_style_compute_dependencies (GtkCssStyle      *style,
-                                    const GtkBitmask *parent_changes)
-{
-  gtk_internal_return_val_if_fail (GTK_IS_CSS_STYLE (style), _gtk_bitmask_new ());
-
-  return GTK_CSS_STYLE_GET_CLASS (style)->compute_dependencies (style, parent_changes);
 }
 
 void

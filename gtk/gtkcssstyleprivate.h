@@ -54,13 +54,6 @@ struct _GtkCssStyleClass
    * Optional: default impl will just return NULL */
   GtkCssSection *       (* get_section)                         (GtkCssStyle            *style,
                                                                  guint                   id);
-  /* Compute the bitmask of potentially changed properties if the parent has changed
-   * the passed in ones.
-   * This is for example needed when changes in the "color" property will affect
-   * all properties using "currentColor" as a color.
-   * Optional: The default impl just returns the parent changes unchanged */
-  GtkBitmask *          (* compute_dependencies)                (GtkCssStyle            *style,
-                                                                 const GtkBitmask       *parent_changes);
 };
 
 GType                   gtk_css_style_get_type                  (void) G_GNUC_CONST;
@@ -71,8 +64,6 @@ GtkCssSection *         gtk_css_style_get_section               (GtkCssStyle    
                                                                  guint                   id);
 GtkBitmask *            gtk_css_style_get_difference            (GtkCssStyle            *style,
                                                                  GtkCssStyle            *other);
-GtkBitmask *            gtk_css_style_compute_dependencies      (GtkCssStyle            *style,
-                                                                 const GtkBitmask       *parent_changes);
 
 char *                  gtk_css_style_to_string                 (GtkCssStyle            *style);
 void                    gtk_css_style_print                     (GtkCssStyle            *style,
