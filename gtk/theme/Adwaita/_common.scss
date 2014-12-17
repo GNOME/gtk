@@ -103,13 +103,13 @@ $ease-out-quad: cubic-bezier(0.25, 0.46, 0.45, 0.94);
 .view {
   color: $text_color;
   background-color: $base_color;
+
   &:backdrop {
     color: $backdrop_text_color;
     background-color: $backdrop_base_color;
   }
-  &:selected,
-  &:selected:focus,
-  &:selected:hover {
+
+  &:selected {
     border-radius: 3px;
     @extend %selected_items;
   }
@@ -1047,17 +1047,15 @@ GtkColorButton.button {
       border-style: none solid solid solid;
     }
   }
-/* This is to fix spinbuttons in entries, but I feel like hiding code issues
- * hence it's commented atm.
- *  GtkTreeView & {
- *   &.entry, &.entry:focus {
- *     padding: 1px;
- *     border-width: 1px 0;
- *     border-color: $selected_bg_color;
- *     border-radius: 0;
- *     box-shadow: none;
- *   }
- * } */
+  GtkTreeView & {
+    &.entry, &.entry:focus {
+      padding: 1px;
+      border-width: 1px 0;
+      border-color: $selected_bg_color;
+      border-radius: 0;
+      box-shadow: none;
+    }
+  }
 }
 
 /**************
@@ -1380,9 +1378,7 @@ GtkTreeView.view {
   border-left-color: mix($fg_color, $base_color, 50%); // this is actually the tree lines color,
   border-top-color: $bg_color;                         // while this is the grid lines color, better then nothing
 
-  &:selected,
-  &:selected:focus,
-  &:selected:hover { border-radius: 0; } // rest border radius in lists
+  &:selected { border-radius: 0; } // rest border radius in lists
 
   &:selected, &:backdrop:selected {
     border-left-color: mix($selected_fg_color, $selected_bg_color, 50%);
@@ -1427,8 +1423,9 @@ GtkTreeView.view {
 
   &.progressbar { // progress bar in treeviews
     @if $variant == light { color: $base_color; }
+
+    border: 1px solid $selected_borders_color;
     border-radius: 4px;
-    border-color: $selected_borders_color;
     background-image: linear-gradient(to bottom,
                                       $selected_bg_color,
                                       darken($selected_bg_color,10%));
@@ -1450,7 +1447,10 @@ GtkTreeView.view {
                                         darken($base_color,10%));
 
       &:backdrop {
-        @if $variant == 'light' { color: $selected_bg_color; }
+        @if $variant == 'light' {
+          color: $selected_bg_color;
+          border-color: $selected_borders_color; // otherwise it gets inherited by .view(?!?)
+        }
         @else { border-color: $backdrop_base_color; }
         background-color: $backdrop_base_color;
       }
