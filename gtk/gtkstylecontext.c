@@ -681,7 +681,7 @@ create_query_path (GtkStyleContext             *context,
   return path;
 }
 
-static void
+static GtkCssStyle *
 update_properties (GtkStyleContext             *context,
                    GtkCssStyle                 *style,
                    const GtkCssNodeDeclaration *decl,
@@ -692,6 +692,7 @@ update_properties (GtkStyleContext             *context,
   GtkWidgetPath *path;
   GtkCssLookup *lookup;
   GtkBitmask *changes;
+  GtkCssStyle *result;
 
   priv = context->priv;
 
@@ -699,9 +700,10 @@ update_properties (GtkStyleContext             *context,
   if (_gtk_bitmask_is_empty (changes))
     {
       _gtk_bitmask_free (changes);
-      return;
+      return g_object_ref (style);
     }
 
+  result = gtk_css_static_style_copy (GTK_CSS_STATIC_STYLE (style), changes);
   path = create_query_path (context, decl);
   lookup = _gtk_css_lookup_new (changes);
 
@@ -714,12 +716,14 @@ update_properties (GtkStyleContext             *context,
   _gtk_css_lookup_resolve (lookup, 
                            GTK_STYLE_PROVIDER_PRIVATE (priv->cascade),
 			   priv->scale,
-                           GTK_CSS_STATIC_STYLE (style),
+                           GTK_CSS_STATIC_STYLE (result),
                            priv->parent ? style_values_lookup (priv->parent) : NULL);
 
   _gtk_css_lookup_free (lookup);
   gtk_widget_path_free (path);
   _gtk_bitmask_free (changes);
+
+  return result;
 }
 
 static GtkCssStyle *
@@ -2694,7 +2698,9 @@ gtk_style_context_update_cache (GtkStyleContext  *context,
       const GtkCssNodeDeclaration *decl = key;
       GtkCssStyle *values = value;
 
-      update_properties (context, values, decl, parent_changes);
+      values = update_properties (context, values, decl, parent_changes);
+
+      g_hash_table_iter_replace (&iter, values);
     }
 
   gtk_style_context_clear_property_cache (context);
@@ -2843,18 +2849,34 @@ _gtk_style_context_validate (GtkStyleContext  *context,
 
       if (!_gtk_bitmask_is_empty (parent_changes))
         {
-          if (GTK_IS_CSS_ANIMATED_STYLE (current))
-	    update_properties (context, GTK_CSS_ANIMATED_STYLE (current)->style, info->decl, parent_changes);
-          else
-	    update_properties (context, current, info->decl, parent_changes);
-        }
+          GtkCssStyle *new_values;
 
-      if (change & GTK_CSS_CHANGE_ANIMATE &&
+          if (GTK_IS_CSS_ANIMATED_STYLE (current))
+            {
+	      GtkCssStyle *new_base;
+              
+              new_base = update_properties (context, GTK_CSS_ANIMATED_STYLE (current)->style, info->decl, parent_changes);
+              new_values = gtk_css_animated_style_new_advance (GTK_CSS_ANIMATED_STYLE (current),
+                                                               new_base,
+                                                               timestamp);
+              g_object_unref (new_base);
+            }
+          else
+            {
+	      new_values = update_properties (context, current, info->decl, parent_changes);
+            }
+
+          style_info_set_values (info, new_values);
+          g_object_unref (new_values);
+        }
+      else if (change & GTK_CSS_CHANGE_ANIMATE &&
           gtk_style_context_is_animating (context))
         {
           GtkCssStyle *new_values;
 
-          new_values = gtk_css_animated_style_new_advance (GTK_CSS_ANIMATED_STYLE (info->values), timestamp);
+          new_values = gtk_css_animated_style_new_advance (GTK_CSS_ANIMATED_STYLE (info->values),
+                                                           GTK_CSS_ANIMATED_STYLE (info->values)->style,
+                                                           timestamp);
           style_info_set_values (info, new_values);
           g_object_unref (new_values);
 

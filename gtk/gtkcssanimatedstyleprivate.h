@@ -59,6 +59,7 @@ GtkCssStyle *           gtk_css_animated_style_new              (GtkCssStyle    
                                                                  int                     scale,
                                                                  GtkCssStyle            *previous_style);
 GtkCssStyle *           gtk_css_animated_style_new_advance      (GtkCssAnimatedStyle    *source,
+                                                                 GtkCssStyle            *base,
                                                                  gint64                  timestamp);
 
 void                    gtk_css_animated_style_set_animated_value(GtkCssAnimatedStyle   *style,

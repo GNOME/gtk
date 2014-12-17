@@ -55,6 +55,8 @@ struct _GtkCssStaticStyleClass
 GType                   gtk_css_static_style_get_type           (void) G_GNUC_CONST;
 
 GtkCssStyle *           gtk_css_static_style_new                (void);
+GtkCssStyle *           gtk_css_static_style_copy               (GtkCssStaticStyle *original,
+                                                                 const GtkBitmask  *properties_to_not_copy);
 
 void                    gtk_css_static_style_compute_value      (GtkCssStaticStyle      *style,
                                                                  GtkStyleProviderPrivate*provider,

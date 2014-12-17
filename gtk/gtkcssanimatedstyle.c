@@ -445,12 +445,14 @@ gtk_css_animated_style_new (GtkCssStyle             *base_style,
 
 GtkCssStyle *
 gtk_css_animated_style_new_advance (GtkCssAnimatedStyle *source,
+                                    GtkCssStyle         *base,
                                     gint64               timestamp)
 {
   GtkCssAnimatedStyle *result;
   GSList *l, *animations;
 
   gtk_internal_return_val_if_fail (GTK_IS_CSS_ANIMATED_STYLE (source), NULL);
+  gtk_internal_return_val_if_fail (GTK_IS_CSS_STYLE (base), NULL);
   
   animations = NULL;
   for (l = source->animations; l; l = l->next)
@@ -469,7 +471,7 @@ gtk_css_animated_style_new_advance (GtkCssAnimatedStyle *source,
 
   result = g_object_new (GTK_TYPE_CSS_ANIMATED_STYLE, NULL);
 
-  result->style = g_object_ref (source->style);
+  result->style = g_object_ref (base);
   result->current_time = timestamp;
   result->animations = animations;
 

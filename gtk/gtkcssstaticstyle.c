@@ -137,17 +137,81 @@ gtk_css_static_style_init (GtkCssStaticStyle *style)
   style->depends_on_font_size = _gtk_bitmask_new ();
 }
 
+static void
+maybe_unref_section (gpointer section)
+{
+  if (section)
+    gtk_css_section_unref (section);
+}
+
+static void
+gtk_css_static_style_set_value (GtkCssStaticStyle *style,
+                                guint              id,
+                                GtkCssValue       *value,
+                                GtkCssSection     *section)
+{
+  if (style->values == NULL)
+    style->values = g_ptr_array_new_with_free_func ((GDestroyNotify)_gtk_css_value_unref);
+  if (id >= style->values->len)
+   g_ptr_array_set_size (style->values, id + 1);
+
+  if (g_ptr_array_index (style->values, id))
+    _gtk_css_value_unref (g_ptr_array_index (style->values, id));
+  g_ptr_array_index (style->values, id) = _gtk_css_value_ref (value);
+
+  if (style->sections && style->sections->len > id && g_ptr_array_index (style->sections, id))
+    {
+      gtk_css_section_unref (g_ptr_array_index (style->sections, id));
+      g_ptr_array_index (style->sections, id) = NULL;
+    }
+
+  if (section)
+    {
+      if (style->sections == NULL)
+        style->sections = g_ptr_array_new_with_free_func (maybe_unref_section);
+      if (style->sections->len <= id)
+        g_ptr_array_set_size (style->sections, id + 1);
+
+      g_ptr_array_index (style->sections, id) = gtk_css_section_ref (section);
+    }
+}
+
 GtkCssStyle *
 gtk_css_static_style_new (void)
 {
   return g_object_new (GTK_TYPE_CSS_STATIC_STYLE, NULL);
 }
 
-static void
-maybe_unref_section (gpointer section)
+GtkCssStyle *
+gtk_css_static_style_copy (GtkCssStaticStyle *original,
+                           const GtkBitmask  *properties_to_not_copy)
 {
-  if (section)
-    gtk_css_section_unref (section);
+  GtkCssStaticStyle *copy;
+  guint i;
+
+  copy = g_object_new (GTK_TYPE_CSS_STATIC_STYLE, NULL);
+
+  copy->depends_on_parent = _gtk_bitmask_subtract (_gtk_bitmask_union (copy->depends_on_parent, original->depends_on_parent),
+                                                   properties_to_not_copy);
+  copy->equals_parent = _gtk_bitmask_subtract (_gtk_bitmask_union (copy->equals_parent, original->equals_parent),
+                                               properties_to_not_copy);
+  copy->depends_on_color = _gtk_bitmask_subtract (_gtk_bitmask_union (copy->depends_on_color, original->depends_on_color),
+                                                  properties_to_not_copy);
+  copy->depends_on_font_size = _gtk_bitmask_subtract (_gtk_bitmask_union (copy->depends_on_font_size, original->depends_on_font_size),
+                                                      properties_to_not_copy);
+
+  for (i = 0; i < original->values->len; i++)
+    {
+      if (_gtk_bitmask_get (properties_to_not_copy, i))
+        continue;
+
+      gtk_css_static_style_set_value (copy,
+                                      i,
+                                      gtk_css_static_style_get_value (GTK_CSS_STYLE (original), i),
+                                      gtk_css_static_style_get_section (GTK_CSS_STYLE (original), i));
+    }
+
+  return GTK_CSS_STYLE (copy);
 }
 
 void
@@ -185,14 +249,7 @@ gtk_css_static_style_compute_value (GtkCssStaticStyle       *style,
 
   value = _gtk_css_value_compute (specified, id, provider, scale, GTK_CSS_STYLE (style), parent_style, &dependencies);
 
-  if (style->values == NULL)
-    style->values = g_ptr_array_new_with_free_func ((GDestroyNotify)_gtk_css_value_unref);
-  if (id >= style->values->len)
-   g_ptr_array_set_size (style->values, id + 1);
-
-  if (g_ptr_array_index (style->values, id))
-    _gtk_css_value_unref (g_ptr_array_index (style->values, id));
-  g_ptr_array_index (style->values, id) = _gtk_css_value_ref (value);
+  gtk_css_static_style_set_value (style, id, value, section);
 
   if (dependencies & (GTK_CSS_DEPENDS_ON_PARENT | GTK_CSS_EQUALS_PARENT))
     style->depends_on_parent = _gtk_bitmask_set (style->depends_on_parent, id, TRUE);
@@ -202,22 +259,6 @@ gtk_css_static_style_compute_value (GtkCssStaticStyle       *style,
     style->depends_on_color = _gtk_bitmask_set (style->depends_on_color, id, TRUE);
   if (dependencies & (GTK_CSS_DEPENDS_ON_FONT_SIZE))
     style->depends_on_font_size = _gtk_bitmask_set (style->depends_on_font_size, id, TRUE);
-
-  if (style->sections && style->sections->len > id && g_ptr_array_index (style->sections, id))
-    {
-      gtk_css_section_unref (g_ptr_array_index (style->sections, id));
-      g_ptr_array_index (style->sections, id) = NULL;
-    }
-
-  if (section)
-    {
-      if (style->sections == NULL)
-        style->sections = g_ptr_array_new_with_free_func (maybe_unref_section);
-      if (style->sections->len <= id)
-        g_ptr_array_set_size (style->sections, id + 1);
-
-      g_ptr_array_index (style->sections, id) = gtk_css_section_ref (section);
-    }
 
   _gtk_css_value_unref (value);
   _gtk_css_value_unref (specified);
