@@ -177,9 +177,34 @@ gtk_css_static_style_set_value (GtkCssStaticStyle *style,
 }
 
 GtkCssStyle *
-gtk_css_static_style_new (void)
+gtk_css_static_style_new_compute (GtkStyleProviderPrivate *provider,
+                                  const GtkCssMatcher     *matcher,
+                                  int                      scale,
+                                  GtkCssStyle             *parent,
+                                  GtkCssChange            *out_change)
 {
-  return g_object_new (GTK_TYPE_CSS_STATIC_STYLE, NULL);
+  GtkCssStaticStyle *result;
+  GtkCssLookup *lookup;
+
+  lookup = _gtk_css_lookup_new (NULL);
+
+  if (matcher)
+    _gtk_style_provider_private_lookup (provider,
+                                        matcher,
+                                        lookup,
+                                        out_change);
+
+  result = g_object_new (GTK_TYPE_CSS_STATIC_STYLE, NULL);
+
+  _gtk_css_lookup_resolve (lookup, 
+                           provider,
+			   scale,
+                           result,
+                           parent);
+
+  _gtk_css_lookup_free (lookup);
+
+  return GTK_CSS_STYLE (result);
 }
 
 GtkCssStyle *

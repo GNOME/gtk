@@ -734,29 +734,25 @@ build_properties (GtkStyleContext             *context,
   GtkStyleContextPrivate *priv;
   GtkCssMatcher matcher;
   GtkWidgetPath *path;
-  GtkCssLookup *lookup;
   GtkCssStyle *style;
 
   priv = context->priv;
 
-  style = gtk_css_static_style_new ();
-
   path = create_query_path (context, decl);
-  lookup = _gtk_css_lookup_new (NULL);
 
   if (_gtk_css_matcher_init (&matcher, path))
-    _gtk_style_provider_private_lookup (GTK_STYLE_PROVIDER_PRIVATE (priv->cascade),
-                                        &matcher,
-                                        lookup,
-                                        out_change);
+    style = gtk_css_static_style_new_compute (GTK_STYLE_PROVIDER_PRIVATE (priv->cascade),
+                                              &matcher,
+                                              priv->scale,
+                                              priv->parent ? style_values_lookup (priv->parent) : NULL,
+                                              out_change);
+  else
+    style = gtk_css_static_style_new_compute (GTK_STYLE_PROVIDER_PRIVATE (priv->cascade),
+                                              NULL,
+                                              priv->scale,
+                                              priv->parent ? style_values_lookup (priv->parent) : NULL,
+                                              out_change);
 
-  _gtk_css_lookup_resolve (lookup, 
-                           GTK_STYLE_PROVIDER_PRIVATE (priv->cascade),
-			   priv->scale,
-                           GTK_CSS_STATIC_STYLE (style),
-                           priv->parent ? style_values_lookup (priv->parent) : NULL);
-
-  _gtk_css_lookup_free (lookup);
   gtk_widget_path_free (path);
 
   return style;
