@@ -523,7 +523,7 @@
 
   @if $p==bottom {
     $_position: center bottom;
-    $_linear_gradient_direction: to top; 
+    $_linear_gradient_direction: to top;
   }
 
   @else if $p==right {
@@ -537,7 +537,7 @@
     $_small_gradient_size: $_small_gradient_length 100%;
     $_big_gradient_size: $_big_gradient_length 100%;
   }
-  
+
   $_small_gradient_color: $c;
   $_big_gradient_color: $c;
 
@@ -576,4 +576,44 @@
   background-color: transparent; // reset some properties to be sure to not inherit them somehow
   border: none;                  //
   box-shadow: none;              //
+}
+
+@mixin undershoot($p) {
+//
+// undershoot
+//
+// $p: position
+//
+// possible $p values:
+// top, bottom, right, left
+//
+
+  $_shadow_color: if($variant == 'light', transparentize(black, 0.7), transparentize(black, 0.5));
+
+  background-color: transparent; // shouldn't be needed, but better to be sure;
+
+  @if $p==top {
+    background-image: linear-gradient(to bottom, $_shadow_color,
+                                                 transparentize($_shadow_color, 0.5) 3px,
+                                                 transparent);
+  }
+
+  @else if $p==bottom {
+
+    background-image: linear-gradient(to top, transparentize(black, 0.5),
+                                              transparentize(black, 0.8) 3%,
+                                              transparent,
+                                              transparentize(black, 0.98) 25%,
+                                              transparent);
+  }
+
+  @else {
+    $_dir: left;
+
+    @if $p==left { $_dir: right; }
+
+    background-image: linear-gradient(to $_dir, $_shadow_color,
+                                                transparentize($_shadow_color, 0.7) 2px,
+                                                transparent);
+  }
 }
