@@ -37,10 +37,13 @@ libgdk_win32_la_SOURCES = \
 	gdkdevice-wintab.c \
 	gdkdevice-wintab.h \
 	gdkdisplay-win32.c \
+	gdkdisplay-win32.h \
 	gdkdisplaymanager-win32.c \
 	gdkdnd-win32.c \
 	gdkevents-win32.c \
 	gdkgeometry-win32.c \
+	gdkglcontext-win32.c \
+	gdkglcontext-win32.h \
 	gdkglobals-win32.c \
 	gdkinput.c \
 	gdkkeys-win32.c \
@@ -55,6 +58,7 @@ libgdk_win32_la_SOURCES = \
 	gdkwin32display.h \
 	gdkwin32displaymanager.h \
 	gdkwin32dnd.h \
+	gdkwin32glcontext.h		\
 	gdkwin32.h \
 	gdkwin32id.c \
 	gdkwin32keys.h \
@@ -74,6 +78,7 @@ libgdkwin32include_HEADERS =	\
 	gdkwin32display.h	\
 	gdkwin32displaymanager.h\
 	gdkwin32dnd.h		\
+	gdkwin32glcontext.h		\
 	gdkwin32keys.h		\
 	gdkwin32misc.h		\
 	gdkwin32screen.h	\

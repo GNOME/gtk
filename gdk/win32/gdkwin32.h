@@ -35,6 +35,7 @@
 #include <gdk/win32/gdkwin32screen.h>
 #include <gdk/win32/gdkwin32window.h>
 #include <gdk/win32/gdkwin32misc.h>
+#include <gdk/win32/gdkwin32glcontext.h>
 
 #undef __GDKWIN32_H_INSIDE__
 

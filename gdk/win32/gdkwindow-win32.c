@@ -38,6 +38,7 @@
 #include "gdkdisplayprivate.h"
 #include "gdkvisualprivate.h"
 #include "gdkwin32window.h"
+#include "gdkglcontext-win32.h"
 
 #include <cairo-win32.h>
 
@@ -336,13 +337,15 @@ RegisterGdkClass (GdkWindowType wtype, GdkWindowTypeHint wtype_hint)
   switch (wtype)
     {
     case GDK_WINDOW_TOPLEVEL:
+      /* MSDN: CS_OWNDC is needed for OpenGL contexts */
+      wcl.style |= CS_OWNDC;
       if (0 == klassTOPLEVEL)
-	{
-	  wcl.lpszClassName = L"gdkWindowToplevel";
-	  
-	  ONCE_PER_CLASS ();
-	  klassTOPLEVEL = RegisterClassExW (&wcl);
-	}
+        {
+          wcl.lpszClassName = L"gdkWindowToplevel";
+
+          ONCE_PER_CLASS ();
+          klassTOPLEVEL = RegisterClassExW (&wcl);
+        }
       klass = klassTOPLEVEL;
       break;
       
@@ -351,6 +354,10 @@ RegisterGdkClass (GdkWindowType wtype, GdkWindowTypeHint wtype_hint)
 	{
 	  wcl.lpszClassName = L"gdkWindowChild";
 	  
+	  /* XXX: Find out whether GL Widgets are done for GDK_WINDOW_CHILD
+	   *      MSDN says CS_PARENTDC should not be used for GL Context
+	   *      creation
+	   */
 	  wcl.style |= CS_PARENTDC; /* MSDN: ... enhances system performance. */
 	  ONCE_PER_CLASS ();
 	  klassCHILD = RegisterClassExW (&wcl);
@@ -524,8 +531,9 @@ _gdk_win32_display_create_window_impl (GdkDisplay    *display,
 	}
       else
 	{
+	  /* MSDN: We need WS_CLIPCHILDREN and WS_CLIPSIBLINGS for GL Context Creation */
 	  if (window->window_type == GDK_WINDOW_TOPLEVEL)
-	    dwStyle = WS_OVERLAPPEDWINDOW | WS_CLIPCHILDREN;
+	    dwStyle = WS_OVERLAPPEDWINDOW | WS_CLIPCHILDREN | WS_CLIPSIBLINGS;
 	  else
 	    dwStyle = WS_OVERLAPPED | WS_MINIMIZEBOX | WS_SYSMENU | WS_CAPTION | WS_THICKFRAME | WS_CLIPCHILDREN;
 
@@ -3440,6 +3448,8 @@ gdk_window_impl_win32_class_init (GdkWindowImplWin32Class *klass)
   impl_class->get_property = _gdk_win32_window_get_property;
   impl_class->change_property = _gdk_win32_window_change_property;
   impl_class->delete_property = _gdk_win32_window_delete_property;
+  impl_class->create_gl_context = _gdk_win32_window_create_gl_context;
+  impl_class->invalidate_for_new_frame = _gdk_win32_window_invalidate_for_new_frame;
 }
 
 HGDIOBJ
