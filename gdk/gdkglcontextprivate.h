@@ -46,6 +46,11 @@ struct _GdkGLContextClass
   gboolean (* texture_from_surface) (GdkGLContext    *context,
                                      cairo_surface_t *surface,
                                      cairo_region_t  *region);
+  void (* upload_texture) (GdkGLContext    *context,
+                           cairo_surface_t *image_surface,
+                           int              width,
+                           int              height,
+                           guint            texture_target);
 };
 
 typedef struct {

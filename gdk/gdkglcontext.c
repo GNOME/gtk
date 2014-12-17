@@ -226,6 +226,23 @@ gdk_gl_context_get_property (GObject    *gobject,
     }
 }
 
+/* Default implementation of upload_texture() for gdk_gl_texture_from_surface() */
+static void
+gdk_gl_context_upload_texture (GdkGLContext    *context,
+                               cairo_surface_t *image_surface,
+                               int              width,
+                               int              height,
+                               guint            texture_target)
+{
+  g_return_if_fail (GDK_IS_GL_CONTEXT (context));
+
+  glPixelStorei (GL_UNPACK_ALIGNMENT, 4);
+  glPixelStorei (GL_UNPACK_ROW_LENGTH, cairo_image_surface_get_stride (image_surface)/4);
+  glTexImage2D (texture_target, 0, 4, width, height, 0, GL_BGRA, GL_UNSIGNED_INT_8_8_8_8_REV,
+                cairo_image_surface_get_data (image_surface));
+  glPixelStorei (GL_UNPACK_ROW_LENGTH, 0);
+}
+
 static void
 gdk_gl_context_class_init (GdkGLContextClass *klass)
 {
@@ -300,6 +317,9 @@ gdk_gl_context_class_init (GdkGLContextClass *klass)
   gobject_class->get_property = gdk_gl_context_get_property;
   gobject_class->dispose = gdk_gl_context_dispose;
   gobject_class->finalize = gdk_gl_context_finalize;
+
+  /* Default Implementation of upload_texture() for gdk_gl_texture_from_surface() */
+  klass->upload_texture = gdk_gl_context_upload_texture;
 
   g_object_class_install_properties (gobject_class, LAST_PROP, obj_pspecs);
 }

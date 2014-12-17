@@ -720,11 +720,8 @@ gdk_gl_texture_from_surface (cairo_surface_t *surface,
       e.height *= sy;
       image = cairo_surface_map_to_image (surface, &e);
 
-      glPixelStorei (GL_UNPACK_ALIGNMENT, 4);
-      glPixelStorei (GL_UNPACK_ROW_LENGTH, cairo_image_surface_get_stride (image)/4);
-      glTexImage2D (target, 0, 4, e.width, e.height, 0, GL_BGRA, GL_UNSIGNED_INT_8_8_8_8_REV,
-                    cairo_image_surface_get_data (image));
-      glPixelStorei (GL_UNPACK_ROW_LENGTH, 0);
+      /* We might have a different alignment, stride or format, so allow overriding here if needed */
+      GDK_GL_CONTEXT_GET_CLASS (paint_context)->upload_texture (paint_context, image, e.width, e.height, target);
 
       cairo_surface_unmap_image (surface, image);
 
