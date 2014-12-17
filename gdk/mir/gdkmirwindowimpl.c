@@ -958,6 +958,16 @@ _gdk_mir_window_get_visible_transient_child (GdkWindow *window,
   return window;
 }
 
+/* TODO: Remove once we have proper transient window support. */
+void
+_gdk_mir_window_transient_children_foreach (GdkWindow *window,
+                                            GFunc      func,
+                                            gpointer   user_data)
+{
+  GdkMirWindowImpl *impl = GDK_MIR_WINDOW_IMPL (window->impl);
+  g_list_foreach (impl->transient_children, func, user_data);
+}
+
 static void
 gdk_mir_window_impl_get_frame_extents (GdkWindow    *window,
                                        GdkRectangle *rect)

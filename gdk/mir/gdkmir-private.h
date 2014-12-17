@@ -140,4 +140,9 @@ GdkWindow * _gdk_mir_window_get_visible_transient_child (GdkWindow *window,
                                                          gint      *out_x,
                                                          gint      *out_y);
 
+/* TODO: Remove once we have proper transient window support. */
+void _gdk_mir_window_transient_children_foreach (GdkWindow *window,
+                                                 GFunc      func,
+                                                 gpointer   user_data);
+
 #endif /* __GDK_PRIVATE_MIR_H__ */

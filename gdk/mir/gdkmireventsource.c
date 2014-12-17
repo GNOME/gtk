@@ -292,6 +292,44 @@ handle_key_event (GdkWindow *window, const MirKeyEvent *event)
     }
 }
 
+/* TODO: Remove once we have proper transient window support. */
+typedef struct
+{
+  gdouble x;
+  gdouble y;
+  guint32 event_time;
+  gboolean cursor_inside;
+} LeaveInfo;
+
+/* TODO: Remove once we have proper transient window support. */
+static void
+generate_leave_events (GdkWindow *window,
+                       LeaveInfo *user_data)
+{
+  GdkMirWindowImpl *impl = GDK_MIR_WINDOW_IMPL (window->impl);
+  LeaveInfo info = *user_data;
+  gdouble x;
+  gdouble y;
+  gboolean cursor_inside;
+  MirMotionButton button_state;
+
+  info.x -= window->x;
+  info.y -= window->y;
+
+  if (info.cursor_inside)
+    info.cursor_inside = 0 <= info.x && info.x < window->width && 0 <= info.y && info.y < window->height;
+
+  _gdk_mir_window_impl_get_cursor_state (impl, &x, &y, &cursor_inside, &button_state);
+
+  if (cursor_inside && !info.cursor_inside)
+    {
+      _gdk_mir_window_impl_set_cursor_state (impl, x, y, FALSE, button_state);
+      generate_crossing_event (window, GDK_LEAVE_NOTIFY, info.x, info.y, info.event_time);
+    }
+
+  _gdk_mir_window_transient_children_foreach (window, (GFunc) generate_leave_events, &info);
+}
+
 static void
 handle_motion_event (GdkWindow *window, const MirMotionEvent *event)
 {
@@ -312,6 +350,18 @@ handle_motion_event (GdkWindow *window, const MirMotionEvent *event)
     }
   modifier_state = get_modifier_state (event->modifiers, event->button_state);
   event_time = NANO_TO_MILLI (event->event_time);
+
+  /* TODO: Remove once we have proper transient window support. */
+    {
+      LeaveInfo info;
+
+      info.x = x;
+      info.y = y;
+      info.event_time = event_time;
+      info.cursor_inside = TRUE;
+
+      _gdk_mir_window_transient_children_foreach (window, (GFunc) generate_leave_events, &info);
+    }
 
   /* The Mir events generate hover-exits even while inside the window so
      counteract this by always generating an enter notify on all other events */
