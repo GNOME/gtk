@@ -24,6 +24,7 @@
     <ClCompile Include="..\..\..\gdk\win32\gdkdnd-win32.c"><Filter>Source Files</Filter></ClCompile>
     <ClCompile Include="..\..\..\gdk\win32\gdkevents-win32.c"><Filter>Source Files</Filter></ClCompile>
     <ClCompile Include="..\..\..\gdk\win32\gdkgeometry-win32.c"><Filter>Source Files</Filter></ClCompile>
+    <ClCompile Include="..\..\..\gdk\win32\gdkglcontext-win32.c"><Filter>Source Files</Filter></ClCompile>
     <ClCompile Include="..\..\..\gdk\win32\gdkglobals-win32.c"><Filter>Source Files</Filter></ClCompile>
     <ClCompile Include="..\..\..\gdk\win32\gdkinput.c"><Filter>Source Files</Filter></ClCompile>
     <ClCompile Include="..\..\..\gdk\win32\gdkkeys-win32.c"><Filter>Source Files</Filter></ClCompile>
