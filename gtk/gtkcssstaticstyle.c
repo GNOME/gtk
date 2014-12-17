@@ -208,35 +208,69 @@ gtk_css_static_style_new_compute (GtkStyleProviderPrivate *provider,
 }
 
 GtkCssStyle *
-gtk_css_static_style_copy (GtkCssStaticStyle *original,
-                           const GtkBitmask  *properties_to_not_copy)
+gtk_css_static_style_new_update (GtkCssStaticStyle       *style,
+                                 const GtkBitmask        *parent_changes,
+                                 GtkStyleProviderPrivate *provider,
+                                 const GtkCssMatcher     *matcher,
+                                 int                      scale,
+                                 GtkCssStyle             *parent)
 {
-  GtkCssStaticStyle *copy;
+  GtkCssStaticStyle *result;
+  GtkCssLookup *lookup;
+  GtkBitmask *changes;
   guint i;
 
-  copy = g_object_new (GTK_TYPE_CSS_STATIC_STYLE, NULL);
+  gtk_internal_return_val_if_fail (GTK_IS_CSS_STATIC_STYLE (style), NULL);
+  gtk_internal_return_val_if_fail (parent_changes != NULL, NULL);
+  gtk_internal_return_val_if_fail (GTK_IS_STYLE_PROVIDER_PRIVATE (provider), NULL);
+  gtk_internal_return_val_if_fail (matcher != NULL, NULL);
 
-  copy->depends_on_parent = _gtk_bitmask_subtract (_gtk_bitmask_union (copy->depends_on_parent, original->depends_on_parent),
-                                                   properties_to_not_copy);
-  copy->equals_parent = _gtk_bitmask_subtract (_gtk_bitmask_union (copy->equals_parent, original->equals_parent),
-                                               properties_to_not_copy);
-  copy->depends_on_color = _gtk_bitmask_subtract (_gtk_bitmask_union (copy->depends_on_color, original->depends_on_color),
-                                                  properties_to_not_copy);
-  copy->depends_on_font_size = _gtk_bitmask_subtract (_gtk_bitmask_union (copy->depends_on_font_size, original->depends_on_font_size),
-                                                      properties_to_not_copy);
-
-  for (i = 0; i < original->values->len; i++)
+  changes = gtk_css_style_compute_dependencies (GTK_CSS_STYLE (style), parent_changes);
+  if (_gtk_bitmask_is_empty (changes))
     {
-      if (_gtk_bitmask_get (properties_to_not_copy, i))
-        continue;
-
-      gtk_css_static_style_set_value (copy,
-                                      i,
-                                      gtk_css_static_style_get_value (GTK_CSS_STYLE (original), i),
-                                      gtk_css_static_style_get_section (GTK_CSS_STYLE (original), i));
+      _gtk_bitmask_free (changes);
+      return g_object_ref (style);
     }
 
-  return GTK_CSS_STYLE (copy);
+  result = g_object_new (GTK_TYPE_CSS_STATIC_STYLE, NULL);
+
+  result->depends_on_parent = _gtk_bitmask_subtract (_gtk_bitmask_union (result->depends_on_parent, style->depends_on_parent),
+                                                     changes);
+  result->equals_parent = _gtk_bitmask_subtract (_gtk_bitmask_union (result->equals_parent, style->equals_parent),
+                                                 changes);
+  result->depends_on_color = _gtk_bitmask_subtract (_gtk_bitmask_union (result->depends_on_color, style->depends_on_color),
+                                                    changes);
+  result->depends_on_font_size = _gtk_bitmask_subtract (_gtk_bitmask_union (result->depends_on_font_size, style->depends_on_font_size),
+                                                        changes);
+
+  for (i = 0; i < style->values->len; i++)
+    {
+      if (_gtk_bitmask_get (changes, i))
+        continue;
+
+      gtk_css_static_style_set_value (result,
+                                      i,
+                                      gtk_css_static_style_get_value (GTK_CSS_STYLE (style), i),
+                                      gtk_css_static_style_get_section (GTK_CSS_STYLE (style), i));
+    }
+
+  lookup = _gtk_css_lookup_new (changes);
+
+  _gtk_style_provider_private_lookup (provider,
+                                      matcher,
+                                      lookup,
+                                      NULL);
+
+  _gtk_css_lookup_resolve (lookup, 
+                           provider,
+                           scale,
+                           result,
+                           parent);
+
+  _gtk_css_lookup_free (lookup);
+  _gtk_bitmask_free (changes);
+
+  return GTK_CSS_STYLE (result);
 }
 
 void

@@ -690,38 +690,25 @@ update_properties (GtkStyleContext             *context,
   GtkStyleContextPrivate *priv;
   GtkCssMatcher matcher;
   GtkWidgetPath *path;
-  GtkCssLookup *lookup;
-  GtkBitmask *changes;
   GtkCssStyle *result;
 
   priv = context->priv;
 
-  changes = gtk_css_style_compute_dependencies (style, parent_changes);
-  if (_gtk_bitmask_is_empty (changes))
+  path = create_query_path (context, decl);
+
+  if (!_gtk_css_matcher_init (&matcher, path))
     {
-      _gtk_bitmask_free (changes);
-      return g_object_ref (style);
+      g_assert_not_reached ();
     }
 
-  result = gtk_css_static_style_copy (GTK_CSS_STATIC_STYLE (style), changes);
-  path = create_query_path (context, decl);
-  lookup = _gtk_css_lookup_new (changes);
+  result = gtk_css_static_style_new_update (GTK_CSS_STATIC_STYLE (style),
+                                            parent_changes,
+                                            GTK_STYLE_PROVIDER_PRIVATE (priv->cascade),
+                                            &matcher,
+                                            priv->scale,
+                                            priv->parent ? style_values_lookup (priv->parent) : NULL);
 
-  if (_gtk_css_matcher_init (&matcher, path))
-    _gtk_style_provider_private_lookup (GTK_STYLE_PROVIDER_PRIVATE (priv->cascade),
-                                        &matcher,
-                                        lookup,
-                                        NULL);
-
-  _gtk_css_lookup_resolve (lookup, 
-                           GTK_STYLE_PROVIDER_PRIVATE (priv->cascade),
-			   priv->scale,
-                           GTK_CSS_STATIC_STYLE (result),
-                           priv->parent ? style_values_lookup (priv->parent) : NULL);
-
-  _gtk_css_lookup_free (lookup);
   gtk_widget_path_free (path);
-  _gtk_bitmask_free (changes);
 
   return result;
 }

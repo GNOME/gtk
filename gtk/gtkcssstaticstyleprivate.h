@@ -60,8 +60,12 @@ GtkCssStyle *           gtk_css_static_style_new_compute        (GtkStyleProvide
                                                                  int                     scale,
                                                                  GtkCssStyle            *parent,
                                                                  GtkCssChange           *out_change);
-GtkCssStyle *           gtk_css_static_style_copy               (GtkCssStaticStyle *original,
-                                                                 const GtkBitmask  *properties_to_not_copy);
+GtkCssStyle *           gtk_css_static_style_new_update         (GtkCssStaticStyle      *style,
+                                                                 const GtkBitmask       *parent_changes,
+                                                                 GtkStyleProviderPrivate *provider,
+                                                                 const GtkCssMatcher    *matcher,
+                                                                 int                     scale,
+                                                                 GtkCssStyle            *parent);
 
 void                    gtk_css_static_style_compute_value      (GtkCssStaticStyle      *style,
                                                                  GtkStyleProviderPrivate*provider,
