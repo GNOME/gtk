@@ -317,17 +317,35 @@ _gtk_print_context_reverse_according_to_orientation (GtkPrintContext *context)
 void
 _gtk_print_context_translate_into_margin (GtkPrintContext *context)
 {
-  gdouble left, top;
+  gdouble dx, dy;
 
   g_return_if_fail (GTK_IS_PRINT_CONTEXT (context));
 
   /* We do it this way to also handle GTK_UNIT_NONE */
-  left = gtk_page_setup_get_left_margin (context->page_setup, GTK_UNIT_INCH);
-  top = gtk_page_setup_get_top_margin (context->page_setup, GTK_UNIT_INCH);
+  switch (gtk_page_setup_get_orientation (context->page_setup))
+    {
+      default:
+      case GTK_PAGE_ORIENTATION_PORTRAIT:
+        dx = gtk_page_setup_get_left_margin (context->page_setup, GTK_UNIT_INCH);
+        dy = gtk_page_setup_get_top_margin (context->page_setup, GTK_UNIT_INCH);
+        break;
+      case GTK_PAGE_ORIENTATION_LANDSCAPE:
+        dx = gtk_page_setup_get_bottom_margin (context->page_setup, GTK_UNIT_INCH);
+        dy = gtk_page_setup_get_left_margin (context->page_setup, GTK_UNIT_INCH);
+        break;
+      case GTK_PAGE_ORIENTATION_REVERSE_PORTRAIT:
+        dx = gtk_page_setup_get_right_margin (context->page_setup, GTK_UNIT_INCH);
+        dy = gtk_page_setup_get_bottom_margin (context->page_setup, GTK_UNIT_INCH);
+        break;
+      case GTK_PAGE_ORIENTATION_REVERSE_LANDSCAPE:
+        dx = gtk_page_setup_get_top_margin (context->page_setup, GTK_UNIT_INCH);
+        dy = gtk_page_setup_get_right_margin (context->page_setup, GTK_UNIT_INCH);
+        break;
+    }
 
   cairo_translate (context->cr,
-                   left * context->surface_dpi_x / context->pixels_per_unit_x,
-                   top * context->surface_dpi_y / context->pixels_per_unit_y);
+                   dx * context->surface_dpi_x / context->pixels_per_unit_x,
+                   dy * context->surface_dpi_y / context->pixels_per_unit_y);
 }
 
 void
