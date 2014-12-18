@@ -12,8 +12,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+.HEAD.he\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-12-12 12:22+0200\n"
-"PO-Revision-Date: 2014-12-12 12:32+0200\n"
+"POT-Creation-Date: 2014-12-18 13:19+0200\n"
+"PO-Revision-Date: 2014-12-18 13:27+0200\n"
 "Last-Translator: Yosef Or Boczko <yoseforb@gmail.com>\n"
 "Language-Team: עברית <>\n"
 "Language: he\n"
@@ -437,13 +437,14 @@ msgstr "השהיה"
 
 #: ../gdk/mir/gdkmirwindowimpl.c:1308 ../gdk/mir/gdkmirwindowimpl.c:1318
 #: ../gdk/wayland/gdkglcontext-wayland.c:263
-#: ../gdk/wayland/gdkglcontext-wayland.c:273 ../gdk/x11/gdkglcontext-x11.c:697
+#: ../gdk/wayland/gdkglcontext-wayland.c:273
+#: ../gdk/win32/gdkglcontext-win32.c:529 ../gdk/x11/gdkglcontext-x11.c:697
 msgid "No available configurations for the given pixel format"
 msgstr "No available configurations for the given pixel format"
 
 #: ../gdk/mir/gdkmirwindowimpl.c:1350
 #: ../gdk/wayland/gdkglcontext-wayland.c:306
-#: ../gdk/x11/gdkglcontext-x11.c:1052
+#: ../gdk/win32/gdkglcontext-win32.c:507 ../gdk/x11/gdkglcontext-x11.c:1052
 msgid "No GL implementation is available"
 msgstr "No GL implementation is available"
 
@@ -454,9 +455,18 @@ msgstr "3.2 core GL profile is not available on EGL implementation"
 
 #: ../gdk/mir/gdkmirwindowimpl.c:1385
 #: ../gdk/wayland/gdkglcontext-wayland.c:341
-#: ../gdk/x11/gdkglcontext-x11.c:1092 ../gdk/x11/gdkglcontext-x11.c:1136
+#: ../gdk/win32/gdkglcontext-win32.c:543 ../gdk/x11/gdkglcontext-x11.c:1092
+#: ../gdk/x11/gdkglcontext-x11.c:1136
 msgid "Unable to create a GL context"
 msgstr "Unable to create a GL context"
+
+#: ../gdk/win32/gdkglcontext-win32.c:516
+msgid ""
+"The WGL_ARB_create_context extension needed to create 3.2 core profiles is "
+"not available"
+msgstr ""
+"The WGL_ARB_create_context extension needed to create 3.2 core profiles is "
+"not available"
 
 #. Description of --sync in --help output
 #: ../gdk/win32/gdkmain-win32.c:53
@@ -2165,25 +2175,25 @@ msgid "Paper Margins"
 msgstr "שולי נייר"
 
 #: ../gtk/gtkentry.c:9626 ../gtk/gtkentry.c:9779 ../gtk/gtklabel.c:6591
-#: ../gtk/gtktextview.c:8875 ../gtk/gtktextview.c:9063
+#: ../gtk/gtktextview.c:8960 ../gtk/gtktextview.c:9148
 msgid "Cu_t"
 msgstr "_גזירה"
 
 #: ../gtk/gtkentry.c:9630 ../gtk/gtkentry.c:9782 ../gtk/gtklabel.c:6592
-#: ../gtk/gtktextview.c:8879 ../gtk/gtktextview.c:9067
+#: ../gtk/gtktextview.c:8964 ../gtk/gtktextview.c:9152
 msgid "_Copy"
 msgstr "ה_עתקה"
 
 #: ../gtk/gtkentry.c:9634 ../gtk/gtkentry.c:9785 ../gtk/gtklabel.c:6593
-#: ../gtk/gtktextview.c:8881 ../gtk/gtktextview.c:9069
+#: ../gtk/gtktextview.c:8966 ../gtk/gtktextview.c:9154
 msgid "_Paste"
 msgstr "ה_דבקה"
 
-#: ../gtk/gtkentry.c:9637 ../gtk/gtklabel.c:6595 ../gtk/gtktextview.c:8884
+#: ../gtk/gtkentry.c:9637 ../gtk/gtklabel.c:6595 ../gtk/gtktextview.c:8969
 msgid "_Delete"
 msgstr "מ_חיקה"
 
-#: ../gtk/gtkentry.c:9648 ../gtk/gtklabel.c:6604 ../gtk/gtktextview.c:8898
+#: ../gtk/gtkentry.c:9648 ../gtk/gtklabel.c:6604 ../gtk/gtktextview.c:8983
 msgid "Select _All"
 msgstr "בחירת ה_כול"
 
@@ -3912,19 +3922,19 @@ msgstr "ניתן לאפשר סטטיסטיקה עם GOBJECT_DEBUG=instance-count
 msgid "Location"
 msgstr "מיקום"
 
-#: ../gtk/inspector/visual.c:270 ../gtk/inspector/visual.c:296
+#: ../gtk/inspector/visual.c:273 ../gtk/inspector/visual.c:299
 msgid "Theme is hardcoded by GTK_THEME"
 msgstr "ערכת נושא קשיחה בקוד על ידי GTK_THEME"
 
-#: ../gtk/inspector/visual.c:414
+#: ../gtk/inspector/visual.c:510
 msgid "Backend does not support window scaling"
 msgstr "הממשק אינו תומך בקנה מידה לחלון"
 
-#: ../gtk/inspector/visual.c:453
+#: ../gtk/inspector/visual.c:549
 msgid "Setting is hardcoded by GTK_TEST_TOUCHSCREEN"
 msgstr "ניתן להגדיר זאת על ידי GTK_TEST_TOUCHSCREEN"
 
-#: ../gtk/inspector/visual.c:518
+#: ../gtk/inspector/visual.c:614
 msgid ""
 "Not settable at runtime.\n"
 "Use GDK_GL=always or GDK_GL=disable instead"
@@ -3932,8 +3942,8 @@ msgstr ""
 "לא ניתן לקביעה בזמן ריצה.\n"
 "יש להשתמש GDK_GL=always או GDK_GL=disable במקום."
 
-#: ../gtk/inspector/visual.c:532 ../gtk/inspector/visual.c:533
-#: ../gtk/inspector/visual.c:534
+#: ../gtk/inspector/visual.c:628 ../gtk/inspector/visual.c:629
+#: ../gtk/inspector/visual.c:630
 msgid "GL rendering is disabled"
 msgstr "תִּצּוּג GL מושבת"
 
@@ -3943,94 +3953,102 @@ msgid "GTK+ Theme"
 msgstr "ערכת GTK+‎"
 
 #: ../gtk/inspector/visual.ui.h:2
-msgid "Dark variant"
-msgstr "ערכת נושא כהה"
+msgid "Dark Variant"
+msgstr "הֶגְוֵן כהה"
 
 #: ../gtk/inspector/visual.ui.h:3
+msgid "Cursor Theme"
+msgstr "ערכת סמן"
+
+#: ../gtk/inspector/visual.ui.h:4
+msgid "Cursor Size"
+msgstr "גודל סמן"
+
+#: ../gtk/inspector/visual.ui.h:5
 msgid "Icon Theme"
 msgstr "ערכת סמלילים"
 
-#: ../gtk/inspector/visual.ui.h:4 ../gtk/ui/gtkfontbutton.ui.h:1
+#: ../gtk/inspector/visual.ui.h:6 ../gtk/ui/gtkfontbutton.ui.h:1
 msgid "Font"
 msgstr "גופן"
 
-#: ../gtk/inspector/visual.ui.h:5
+#: ../gtk/inspector/visual.ui.h:7
 msgid "Text Direction"
 msgstr "כיוון טקסט"
 
-#: ../gtk/inspector/visual.ui.h:6
+#: ../gtk/inspector/visual.ui.h:8
 msgid "Left-to-Right"
 msgstr "שמאל לימין"
 
-#: ../gtk/inspector/visual.ui.h:7
+#: ../gtk/inspector/visual.ui.h:9
 msgid "Right-to-Left"
 msgstr "ימין לשמאל"
 
-#: ../gtk/inspector/visual.ui.h:8
+#: ../gtk/inspector/visual.ui.h:10
 msgid "Window scaling"
 msgstr "קנה מידה"
 
-#: ../gtk/inspector/visual.ui.h:9
+#: ../gtk/inspector/visual.ui.h:11
 msgid "Animations"
 msgstr "הנפשות"
 
-#: ../gtk/inspector/visual.ui.h:10
+#: ../gtk/inspector/visual.ui.h:12
 msgid "Rendering Mode"
 msgstr "מצב תִּצּוּג"
 
-#: ../gtk/inspector/visual.ui.h:11
+#: ../gtk/inspector/visual.ui.h:13
 msgid "Similar"
 msgstr "דומה"
 
-#: ../gtk/inspector/visual.ui.h:12
+#: ../gtk/inspector/visual.ui.h:14
 msgid "Image"
 msgstr "תמונה"
 
-#: ../gtk/inspector/visual.ui.h:13
+#: ../gtk/inspector/visual.ui.h:15
 msgid "Recording"
 msgstr "רישום"
 
-#: ../gtk/inspector/visual.ui.h:14
+#: ../gtk/inspector/visual.ui.h:16
 msgid "Show Graphic Updates"
 msgstr "הצגת עדכונים גרפיים"
 
-#: ../gtk/inspector/visual.ui.h:15
+#: ../gtk/inspector/visual.ui.h:17
 msgid "Show Baselines"
 msgstr "הצגת קווי בסיס (Baselines)"
 
-#: ../gtk/inspector/visual.ui.h:16
+#: ../gtk/inspector/visual.ui.h:18
 msgid "Show Pixel Cache"
 msgstr "הצגת מטמון פיקסל"
 
-#: ../gtk/inspector/visual.ui.h:17
+#: ../gtk/inspector/visual.ui.h:19
 msgid "Simulate touchscreen"
 msgstr "הדמיית מסך מגע"
 
-#: ../gtk/inspector/visual.ui.h:18
+#: ../gtk/inspector/visual.ui.h:20
 msgid "GL Rendering"
 msgstr "תִּצּוּג GL"
 
-#: ../gtk/inspector/visual.ui.h:19
+#: ../gtk/inspector/visual.ui.h:21
 msgid "When needed"
 msgstr "כאשר נצרך"
 
-#: ../gtk/inspector/visual.ui.h:20
+#: ../gtk/inspector/visual.ui.h:22
 msgid "Always"
 msgstr "תמיד"
 
-#: ../gtk/inspector/visual.ui.h:21
+#: ../gtk/inspector/visual.ui.h:23
 msgid "Disabled"
 msgstr "מושבת"
 
-#: ../gtk/inspector/visual.ui.h:22
+#: ../gtk/inspector/visual.ui.h:24
 msgid "Software GL"
 msgstr "תכנת GL"
 
-#: ../gtk/inspector/visual.ui.h:23
+#: ../gtk/inspector/visual.ui.h:25
 msgid "Software Surfaces"
 msgstr "משטחי תכנה"
 
-#: ../gtk/inspector/visual.ui.h:24
+#: ../gtk/inspector/visual.ui.h:26
 msgid "Texture Rectangle Extension"
 msgstr "הרחבת מרקם מלבן"
 
