@@ -1167,6 +1167,8 @@ gtk_menu_button_set_popover (GtkMenuButton *menu_button,
       g_signal_handlers_disconnect_by_func (priv->popover,
                                             menu_deactivate_cb,
                                             menu_button);
+
+      gtk_popover_set_relative_to (GTK_POPOVER (priv->popover), NULL);
     }
 
   priv->popover = popover;
