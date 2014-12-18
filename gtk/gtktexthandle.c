@@ -177,6 +177,9 @@ gtk_text_handle_set_state (GtkTextHandle *handle,
 
   for (i = 0; i <= GTK_TEXT_HANDLE_POSITION_SELECTION_START; i++)
     {
+      if (!priv->windows[i].widget)
+        continue;
+
       gtk_widget_set_state_flags (priv->windows[i].widget, state, TRUE);
       gtk_widget_queue_draw (priv->windows[i].widget);
     }
