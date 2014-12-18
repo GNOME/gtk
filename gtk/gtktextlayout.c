@@ -2147,6 +2147,7 @@ gtk_text_layout_get_line_display (GtkTextLayout *layout,
   GtkTextIter iter;
   GtkTextAttributes *style;
   gchar *text;
+  gint text_pixel_width;
   PangoAttrList *attrs;
   gint text_allocated, layout_byte_offset, buffer_byte_offset;
   PangoRectangle extents;
@@ -2465,7 +2466,8 @@ gtk_text_layout_get_line_display (GtkTextLayout *layout,
 
   pango_layout_get_extents (display->layout, NULL, &extents);
 
-  display->width = PIXEL_BOUND (extents.width) + display->left_margin + display->right_margin;
+  text_pixel_width = PIXEL_BOUND (extents.width);
+  display->width = text_pixel_width + display->left_margin + display->right_margin;
   display->height += PANGO_PIXELS (extents.height);
 
   /* If we aren't wrapping, we need to do the alignment of each
@@ -2473,7 +2475,7 @@ gtk_text_layout_get_line_display (GtkTextLayout *layout,
    */
   if (pango_layout_get_width (display->layout) < 0)
     {
-      gint excess = display->total_width - display->width;
+      gint excess = display->total_width - text_pixel_width;
 
       switch (pango_layout_get_alignment (display->layout))
 	{
