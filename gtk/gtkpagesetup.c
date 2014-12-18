@@ -485,10 +485,14 @@ gtk_page_setup_get_page_width (GtkPageSetup *setup,
 			       GtkUnit       unit)
 {
   gdouble width;
-  
+
   width = gtk_page_setup_get_paper_width (setup, GTK_UNIT_MM);
-  width -= setup->left_margin + setup->right_margin;
-  
+  if (setup->orientation == GTK_PAGE_ORIENTATION_PORTRAIT ||
+      setup->orientation == GTK_PAGE_ORIENTATION_REVERSE_PORTRAIT)
+    width -= setup->left_margin + setup->right_margin;
+  else
+    width -= setup->top_margin + setup->bottom_margin;
+
   return _gtk_print_convert_from_mm (width, unit);
 }
 
@@ -512,10 +516,14 @@ gtk_page_setup_get_page_height (GtkPageSetup *setup,
 				GtkUnit       unit)
 {
   gdouble height;
-  
+
   height = gtk_page_setup_get_paper_height (setup, GTK_UNIT_MM);
-  height -= setup->top_margin + setup->bottom_margin;
-  
+  if (setup->orientation == GTK_PAGE_ORIENTATION_PORTRAIT ||
+      setup->orientation == GTK_PAGE_ORIENTATION_REVERSE_PORTRAIT)
+    height -= setup->top_margin + setup->bottom_margin;
+  else
+    height -= setup->left_margin + setup->right_margin;
+
   return _gtk_print_convert_from_mm (height, unit);
 }
 
