@@ -202,6 +202,7 @@ copy ..\..\..\gtk\gtkmenuitem.h $(CopyDir)\include\gtk-3.0\gtk\gtkmenuitem.h
 copy ..\..\..\gtk\gtkmenushell.h $(CopyDir)\include\gtk-3.0\gtk\gtkmenushell.h
 copy ..\..\..\gtk\gtkmenutoolbutton.h $(CopyDir)\include\gtk-3.0\gtk\gtkmenutoolbutton.h
 copy ..\..\..\gtk\gtkmessagedialog.h $(CopyDir)\include\gtk-3.0\gtk\gtkmessagedialog.h
+copy ..\..\..\gtk\gtkmodelbutton.h $(CopyDir)\include\gtk-3.0\gtk\gtkmodelbutton.h
 copy ..\..\..\gtk\gtkmodules.h $(CopyDir)\include\gtk-3.0\gtk\gtkmodules.h
 copy ..\..\..\gtk\gtkmountoperation.h $(CopyDir)\include\gtk-3.0\gtk\gtkmountoperation.h
 copy ..\..\..\gtk\gtknotebook.h $(CopyDir)\include\gtk-3.0\gtk\gtknotebook.h
@@ -214,6 +215,7 @@ copy ..\..\..\gtk\gtkpapersize.h $(CopyDir)\include\gtk-3.0\gtk\gtkpapersize.h
 copy ..\..\..\gtk\gtkplacessidebar.h $(CopyDir)\include\gtk-3.0\gtk\gtkplacessidebar.h
 copy ..\..\..\gtk\gtkplug.h $(CopyDir)\include\gtk-3.0\gtk\gtkplug.h
 copy ..\..\..\gtk\gtkpopover.h $(CopyDir)\include\gtk-3.0\gtk\gtkpopover.h
+copy ..\..\..\gtk\gtkpopovermenu.h $(CopyDir)\include\gtk-3.0\gtk\gtkpopovermenu.h
 copy ..\..\..\gtk\gtkprintcontext.h $(CopyDir)\include\gtk-3.0\gtk\gtkprintcontext.h
 copy ..\..\..\gtk\gtkprintoperation.h $(CopyDir)\include\gtk-3.0\gtk\gtkprintoperation.h
 copy ..\..\..\gtk\gtkprintoperationpreview.h $(CopyDir)\include\gtk-3.0\gtk\gtkprintoperationpreview.h
@@ -254,7 +256,6 @@ copy ..\..\..\gtk\gtkstack.h $(CopyDir)\include\gtk-3.0\gtk\gtkstack.h
 copy ..\..\..\gtk\gtkstackswitcher.h $(CopyDir)\include\gtk-3.0\gtk\gtkstackswitcher.h
 copy ..\..\..\gtk\gtkstatusbar.h $(CopyDir)\include\gtk-3.0\gtk\gtkstatusbar.h
 copy ..\..\..\gtk\gtkstylecontext.h $(CopyDir)\include\gtk-3.0\gtk\gtkstylecontext.h
-copy ..\..\..\gtk\gtkstyleproperties.h $(CopyDir)\include\gtk-3.0\gtk\gtkstyleproperties.h
 copy ..\..\..\gtk\gtkstyleprovider.h $(CopyDir)\include\gtk-3.0\gtk\gtkstyleprovider.h
 copy ..\..\..\gtk\gtkswitch.h $(CopyDir)\include\gtk-3.0\gtk\gtkswitch.h
 copy ..\..\..\gtk\gtktestutils.h $(CopyDir)\include\gtk-3.0\gtk\gtktestutils.h
@@ -373,6 +374,7 @@ copy ..\..\..\gtk\deprecated\gtkrecentaction.h $(CopyDir)\include\gtk-3.0\gtk\de
 copy ..\..\..\gtk\deprecated\gtkstatusicon.h $(CopyDir)\include\gtk-3.0\gtk\deprecated\gtkstatusicon.h
 copy ..\..\..\gtk\deprecated\gtkstock.h $(CopyDir)\include\gtk-3.0\gtk\deprecated\gtkstock.h
 copy ..\..\..\gtk\deprecated\gtkstyle.h $(CopyDir)\include\gtk-3.0\gtk\deprecated\gtkstyle.h
+copy ..\..\..\gtk\deprecated\gtkstyleproperties.h $(CopyDir)\include\gtk-3.0\gtk\deprecated\gtkstyleproperties.h
 copy ..\..\..\gtk\deprecated\gtksymboliccolor.h $(CopyDir)\include\gtk-3.0\gtk\deprecated\gtksymboliccolor.h
 copy ..\..\..\gtk\deprecated\gtktable.h $(CopyDir)\include\gtk-3.0\gtk\deprecated\gtktable.h
 copy ..\..\..\gtk\deprecated\gtktearoffmenuitem.h $(CopyDir)\include\gtk-3.0\gtk\deprecated\gtktearoffmenuitem.h

@@ -204,6 +204,7 @@ copy ..\..\..\gtk\gtkmenuitem.h $(CopyDir)\include\gtk-3.0\gtk\gtkmenuitem.h&#x0
 copy ..\..\..\gtk\gtkmenushell.h $(CopyDir)\include\gtk-3.0\gtk\gtkmenushell.h&#x0D;&#x0A;
 copy ..\..\..\gtk\gtkmenutoolbutton.h $(CopyDir)\include\gtk-3.0\gtk\gtkmenutoolbutton.h&#x0D;&#x0A;
 copy ..\..\..\gtk\gtkmessagedialog.h $(CopyDir)\include\gtk-3.0\gtk\gtkmessagedialog.h&#x0D;&#x0A;
+copy ..\..\..\gtk\gtkmodelbutton.h $(CopyDir)\include\gtk-3.0\gtk\gtkmodelbutton.h&#x0D;&#x0A;
 copy ..\..\..\gtk\gtkmodules.h $(CopyDir)\include\gtk-3.0\gtk\gtkmodules.h&#x0D;&#x0A;
 copy ..\..\..\gtk\gtkmountoperation.h $(CopyDir)\include\gtk-3.0\gtk\gtkmountoperation.h&#x0D;&#x0A;
 copy ..\..\..\gtk\gtknotebook.h $(CopyDir)\include\gtk-3.0\gtk\gtknotebook.h&#x0D;&#x0A;
@@ -216,6 +217,7 @@ copy ..\..\..\gtk\gtkpapersize.h $(CopyDir)\include\gtk-3.0\gtk\gtkpapersize.h&#
 copy ..\..\..\gtk\gtkplacessidebar.h $(CopyDir)\include\gtk-3.0\gtk\gtkplacessidebar.h&#x0D;&#x0A;
 copy ..\..\..\gtk\gtkplug.h $(CopyDir)\include\gtk-3.0\gtk\gtkplug.h&#x0D;&#x0A;
 copy ..\..\..\gtk\gtkpopover.h $(CopyDir)\include\gtk-3.0\gtk\gtkpopover.h&#x0D;&#x0A;
+copy ..\..\..\gtk\gtkpopovermenu.h $(CopyDir)\include\gtk-3.0\gtk\gtkpopovermenu.h&#x0D;&#x0A;
 copy ..\..\..\gtk\gtkprintcontext.h $(CopyDir)\include\gtk-3.0\gtk\gtkprintcontext.h&#x0D;&#x0A;
 copy ..\..\..\gtk\gtkprintoperation.h $(CopyDir)\include\gtk-3.0\gtk\gtkprintoperation.h&#x0D;&#x0A;
 copy ..\..\..\gtk\gtkprintoperationpreview.h $(CopyDir)\include\gtk-3.0\gtk\gtkprintoperationpreview.h&#x0D;&#x0A;
@@ -256,7 +258,6 @@ copy ..\..\..\gtk\gtkstack.h $(CopyDir)\include\gtk-3.0\gtk\gtkstack.h&#x0D;&#x0
 copy ..\..\..\gtk\gtkstackswitcher.h $(CopyDir)\include\gtk-3.0\gtk\gtkstackswitcher.h&#x0D;&#x0A;
 copy ..\..\..\gtk\gtkstatusbar.h $(CopyDir)\include\gtk-3.0\gtk\gtkstatusbar.h&#x0D;&#x0A;
 copy ..\..\..\gtk\gtkstylecontext.h $(CopyDir)\include\gtk-3.0\gtk\gtkstylecontext.h&#x0D;&#x0A;
-copy ..\..\..\gtk\gtkstyleproperties.h $(CopyDir)\include\gtk-3.0\gtk\gtkstyleproperties.h&#x0D;&#x0A;
 copy ..\..\..\gtk\gtkstyleprovider.h $(CopyDir)\include\gtk-3.0\gtk\gtkstyleprovider.h&#x0D;&#x0A;
 copy ..\..\..\gtk\gtkswitch.h $(CopyDir)\include\gtk-3.0\gtk\gtkswitch.h&#x0D;&#x0A;
 copy ..\..\..\gtk\gtktestutils.h $(CopyDir)\include\gtk-3.0\gtk\gtktestutils.h&#x0D;&#x0A;
@@ -375,6 +376,7 @@ copy ..\..\..\gtk\deprecated\gtkrecentaction.h $(CopyDir)\include\gtk-3.0\gtk\de
 copy ..\..\..\gtk\deprecated\gtkstatusicon.h $(CopyDir)\include\gtk-3.0\gtk\deprecated\gtkstatusicon.h&#x0D;&#x0A;
 copy ..\..\..\gtk\deprecated\gtkstock.h $(CopyDir)\include\gtk-3.0\gtk\deprecated\gtkstock.h&#x0D;&#x0A;
 copy ..\..\..\gtk\deprecated\gtkstyle.h $(CopyDir)\include\gtk-3.0\gtk\deprecated\gtkstyle.h&#x0D;&#x0A;
+copy ..\..\..\gtk\deprecated\gtkstyleproperties.h $(CopyDir)\include\gtk-3.0\gtk\deprecated\gtkstyleproperties.h&#x0D;&#x0A;
 copy ..\..\..\gtk\deprecated\gtksymboliccolor.h $(CopyDir)\include\gtk-3.0\gtk\deprecated\gtksymboliccolor.h&#x0D;&#x0A;
 copy ..\..\..\gtk\deprecated\gtktable.h $(CopyDir)\include\gtk-3.0\gtk\deprecated\gtktable.h&#x0D;&#x0A;
 copy ..\..\..\gtk\deprecated\gtktearoffmenuitem.h $(CopyDir)\include\gtk-3.0\gtk\deprecated\gtktearoffmenuitem.h&#x0D;&#x0A;
