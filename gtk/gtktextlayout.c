@@ -1622,7 +1622,7 @@ add_child_attrs (GtkTextLayout      *layout,
   PangoRectangle logical_rect;
   gint width, height;
   GSList *tmp_list;
-  GtkWidget *widget;
+  GtkWidget *widget = NULL;
 
   width = 1;
   height = 1;
