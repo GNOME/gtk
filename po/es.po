@@ -17,8 +17,8 @@ msgstr ""
 "Project-Id-Version: gtk+.master\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gtk"
 "%2b&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2014-12-17 10:06+0000\n"
-"PO-Revision-Date: 2014-12-17 12:23+0100\n"
+"POT-Creation-Date: 2014-12-18 07:33+0000\n"
+"PO-Revision-Date: 2014-12-18 10:48+0100\n"
 "Last-Translator: Daniel Mustieles <daniel.mustieles@gmail.com>\n"
 "Language-Team: Español; Castellano <gnome-es-list@gnome.org>\n"
 "Language: \n"
@@ -439,13 +439,14 @@ msgstr "Suspender"
 
 #: ../gdk/mir/gdkmirwindowimpl.c:1308 ../gdk/mir/gdkmirwindowimpl.c:1318
 #: ../gdk/wayland/gdkglcontext-wayland.c:263
-#: ../gdk/wayland/gdkglcontext-wayland.c:273 ../gdk/x11/gdkglcontext-x11.c:697
+#: ../gdk/wayland/gdkglcontext-wayland.c:273
+#: ../gdk/win32/gdkglcontext-win32.c:529 ../gdk/x11/gdkglcontext-x11.c:697
 msgid "No available configurations for the given pixel format"
 msgstr "No hay ninguna configuración disponible para el formato de píxel dado"
 
 #: ../gdk/mir/gdkmirwindowimpl.c:1350
 #: ../gdk/wayland/gdkglcontext-wayland.c:306
-#: ../gdk/x11/gdkglcontext-x11.c:1052
+#: ../gdk/win32/gdkglcontext-win32.c:507 ../gdk/x11/gdkglcontext-x11.c:1052
 msgid "No GL implementation is available"
 msgstr "No hay ninguna implementación de GL disponible"
 
@@ -457,9 +458,21 @@ msgstr ""
 
 #: ../gdk/mir/gdkmirwindowimpl.c:1385
 #: ../gdk/wayland/gdkglcontext-wayland.c:341
-#: ../gdk/x11/gdkglcontext-x11.c:1092 ../gdk/x11/gdkglcontext-x11.c:1136
+#: ../gdk/win32/gdkglcontext-win32.c:543 ../gdk/x11/gdkglcontext-x11.c:1092
+#: ../gdk/x11/gdkglcontext-x11.c:1136
 msgid "Unable to create a GL context"
 msgstr "No se pudo crear un contexto GL"
+
+#: ../gdk/win32/gdkglcontext-win32.c:516
+#| msgid ""
+#| "The GLX_ARB_create_context_profile extension needed to create 3.2 core "
+#| "profiles is not available"
+msgid ""
+"The WGL_ARB_create_context extension needed to create 3.2 core profiles is "
+"not available"
+msgstr ""
+"La extensión WGL_ARB_create_context necesaria para crear perfiles 3.2 del "
+"núcleo no está disponible"
 
 #. Description of --sync in --help output
 #: ../gdk/win32/gdkmain-win32.c:53
@@ -2128,25 +2141,25 @@ msgid "Paper Margins"
 msgstr "Márgenes del papel"
 
 #: ../gtk/gtkentry.c:9626 ../gtk/gtkentry.c:9779 ../gtk/gtklabel.c:6591
-#: ../gtk/gtktextview.c:8875 ../gtk/gtktextview.c:9063
+#: ../gtk/gtktextview.c:8960 ../gtk/gtktextview.c:9148
 msgid "Cu_t"
 msgstr "Cor_tar"
 
 #: ../gtk/gtkentry.c:9630 ../gtk/gtkentry.c:9782 ../gtk/gtklabel.c:6592
-#: ../gtk/gtktextview.c:8879 ../gtk/gtktextview.c:9067
+#: ../gtk/gtktextview.c:8964 ../gtk/gtktextview.c:9152
 msgid "_Copy"
 msgstr "_Copiar"
 
 #: ../gtk/gtkentry.c:9634 ../gtk/gtkentry.c:9785 ../gtk/gtklabel.c:6593
-#: ../gtk/gtktextview.c:8881 ../gtk/gtktextview.c:9069
+#: ../gtk/gtktextview.c:8966 ../gtk/gtktextview.c:9154
 msgid "_Paste"
 msgstr "_Pegar"
 
-#: ../gtk/gtkentry.c:9637 ../gtk/gtklabel.c:6595 ../gtk/gtktextview.c:8884
+#: ../gtk/gtkentry.c:9637 ../gtk/gtklabel.c:6595 ../gtk/gtktextview.c:8969
 msgid "_Delete"
 msgstr "_Eliminar"
 
-#: ../gtk/gtkentry.c:9648 ../gtk/gtklabel.c:6604 ../gtk/gtktextview.c:8898
+#: ../gtk/gtkentry.c:9648 ../gtk/gtklabel.c:6604 ../gtk/gtktextview.c:8983
 msgid "Select _All"
 msgstr "Seleccionar _todo"
 
@@ -3918,17 +3931,14 @@ msgid "GTK+ Theme"
 msgstr "Tema de GTK+"
 
 #: ../gtk/inspector/visual.ui.h:2
-#| msgid "Dark variant"
 msgid "Dark Variant"
 msgstr "Variante oscura"
 
 #: ../gtk/inspector/visual.ui.h:3
-#| msgid "Icon Theme"
 msgid "Cursor Theme"
 msgstr "Tema del cursor"
 
 #: ../gtk/inspector/visual.ui.h:4
-#| msgid "Custom Size %d"
 msgid "Cursor Size"
 msgstr "Tamaño del cursor"
 
