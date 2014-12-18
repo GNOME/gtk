@@ -5231,7 +5231,10 @@ gtk_text_view_multipress_gesture_pressed (GtkGestureMultiPress *gesture,
                 break;
               }
             else if (is_touchscreen)
-	      gtk_text_buffer_place_cursor (get_buffer (text_view), &iter);
+              {
+                gtk_text_view_selection_bubble_popup_unset (text_view);
+                gtk_text_buffer_place_cursor (get_buffer (text_view), &iter);
+              }
 	    else
               gtk_text_view_start_selection_drag (text_view, &iter,
                                                   SELECT_CHARACTERS, extends);
