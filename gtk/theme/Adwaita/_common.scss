@@ -3176,6 +3176,10 @@ GtkVolumeButton.button { padding: 8px; }
   &.popup {
     box-shadow: none;
   }
+  // server-side decorations as used by mutter
+  &.ssd {
+    box-shadow: 0 0 0 1px $_wm_border; //just doing borders, wm draws actual shadows
+  }
   &.csd {
     .popup {
       border-radius: 0;
