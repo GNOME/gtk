@@ -519,7 +519,6 @@ struct _GtkWidgetPrivate
   guint multidevice           : 1;
   guint has_shape_mask        : 1;
   guint in_reparent           : 1;
-  guint supports_clip         : 1;
 
   /* Queue-resize related flags */
   guint alloc_needed          : 1;
@@ -6090,26 +6089,16 @@ gtk_widget_size_allocate_with_baseline (GtkWidget     *widget,
   if (!alloc_needed && !size_changed && !position_changed && !baseline_changed)
     goto out;
 
-  memset (&priv->clip, 0, sizeof (priv->clip));
-  priv->supports_clip = FALSE;
-
   priv->allocated_baseline = baseline;
   g_signal_emit (widget, widget_signals[SIZE_ALLOCATE], 0, &real_allocation);
 
   /* Size allocation is god... after consulting god, no further requests or allocations are needed */
   priv->alloc_needed = FALSE;
 
-  if (priv->supports_clip)
-    {
-      size_changed |= (old_clip.width != priv->clip.width ||
-                       old_clip.height != priv->clip.height);
-      position_changed |= (old_clip.x != priv->clip.x ||
-                          old_clip.y != priv->clip.y);
-    }
-  else
-    {
-      priv->clip = priv->allocation;
-    }
+  size_changed |= (old_clip.width != priv->clip.width ||
+                   old_clip.height != priv->clip.height);
+  position_changed |= (old_clip.x != priv->clip.x ||
+                      old_clip.y != priv->clip.y);
 
   if (gtk_widget_get_mapped (widget) && priv->redraw_on_alloc)
     {
@@ -15531,23 +15520,16 @@ gtk_widget_get_clip (GtkWidget     *widget,
  * @widget: a #GtkWidget
  * @clip: a pointer to a #GtkAllocation to copy from
  *
- * Sets the widget’s clip.  This must not be used
- * directly, but from within a widget’s size_allocate method.
+ * Sets the widget’s clip.  This must not be used directly,
+ * but from within a widget’s size_allocate method.
+ * It must be called after gtk_widget_set_allocation() (or after chaning up
+ * to the parent class), because that function resets the clip.
  *
  * The clip set should be the area that @widget draws on. If @widget is a
  * #GtkContainer, the area must contain all children's clips.
  *
  * If this function is not called by @widget during a ::size-allocate handler,
- * it is assumed to be equal to the allocation. However, if the function is
- * not called, certain features that might extend a widget's allocation will
- * not be available:
- *
- *  * The #GtkWidget::draw signal will be clipped to the widget's allocation
- *    to avoid overdraw.
- *  * Calling gtk_render_background() will not draw outset shadows.
- *
- * It is therefore suggested that you always call gtk_widget_set_clip() during
- * a ::size-allocate handler.
+ * the clip will be set to @widget's allocation.
  *
  * Since: 3.14
  */
@@ -15564,24 +15546,6 @@ gtk_widget_set_clip (GtkWidget           *widget,
   priv = widget->priv;
 
   priv->clip = *clip;
-  priv->supports_clip = TRUE;
-}
-
-/**
- * _gtk_widget_supports_clip:
- * @widget: The #GtkWidget to check
- *
- * Returns %TRUE if the widget called gtk_widget_set_clip() during
- * size allocation. See that function for details.
- *
- * Returns: %TRUE if the widget handles a clip separate from its allocation.
- **/
-gboolean
-_gtk_widget_supports_clip (GtkWidget *widget)
-{
-  g_return_val_if_fail (GTK_IS_WIDGET (widget), TRUE);
-
-  return widget->priv->supports_clip;
 }
 
 static void
@@ -15713,6 +15677,7 @@ gtk_widget_set_allocation (GtkWidget           *widget,
   priv = widget->priv;
 
   priv->allocation = *allocation;
+  priv->clip = *allocation;
 }
 
 /**
