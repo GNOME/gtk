@@ -586,6 +586,9 @@ gdk_x11_screen_init_gl (GdkScreen *screen)
   if (display_x11->have_glx)
     return TRUE;
 
+  if (_gdk_gl_flags & GDK_GL_DISABLE)
+    return FALSE;
+
   dpy = gdk_x11_display_get_xdisplay (display);
 
   if (!glXQueryExtension (dpy, &error_base, &event_base))
