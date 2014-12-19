@@ -111,11 +111,12 @@ gtk_application_impl_dbus_startup (GtkApplicationImpl *impl,
   static gchar *client_id;
   GError *error = NULL;
   GVariant *res;
+  gboolean same_bus;
 
   dbus->session = g_application_get_dbus_connection (G_APPLICATION (impl->application));
 
   if (!dbus->session)
-    return;
+    goto out;
 
   dbus->application_id = g_application_get_application_id (G_APPLICATION (impl->application));
   dbus->object_path = g_application_get_dbus_object_path (G_APPLICATION (impl->application));
@@ -149,14 +150,14 @@ gtk_application_impl_dbus_startup (GtkApplicationImpl *impl,
     {
       g_warning ("Failed to get a session proxy: %s", error->message);
       g_error_free (error);
-      return;
+      goto out;
     }
 
   /* FIXME: should we reuse the D-Bus application id here ? */
   dbus->app_id = g_strdup (g_get_prgname ());
 
   if (!register_session)
-    return;
+    goto out;
 
   g_debug ("Registering client '%s' '%s'", dbus->app_id, client_id);
 
@@ -173,7 +174,7 @@ gtk_application_impl_dbus_startup (GtkApplicationImpl *impl,
       g_warning ("Failed to register client: %s", error->message);
       g_error_free (error);
       g_clear_object (&dbus->sm_proxy);
-      return;
+      goto out;
     }
 
   g_variant_get (res, "(o)", &dbus->client_path);
@@ -195,10 +196,58 @@ gtk_application_impl_dbus_startup (GtkApplicationImpl *impl,
       g_clear_object (&dbus->sm_proxy);
       g_free (dbus->client_path);
       dbus->client_path = NULL;
-      return;
+      goto out;
     }
 
   g_signal_connect (dbus->client_proxy, "g-signal", G_CALLBACK (client_proxy_signal), dbus);
+
+ out:
+  same_bus = FALSE;
+
+  if (dbus->session)
+    {
+      const gchar *id;
+      const gchar *id2;
+      GValue value = G_VALUE_INIT;
+
+      g_value_init (&value, G_TYPE_STRING);
+      gdk_screen_get_setting (gdk_screen_get_default (), "gtk-session-bus-id", &value);
+      id = g_value_get_string (&value);
+
+      if (id && id[0])
+        {
+          res = g_dbus_connection_call_sync (dbus->session,
+                                             "org.freedesktop.DBus",
+                                             "/org/freedesktop/DBus",
+                                             "org.freedesktop.DBus",
+                                             "GetId",
+                                             NULL,
+                                             NULL,
+                                             G_DBUS_CALL_FLAGS_NONE,
+                                             -1,
+                                             NULL,
+                                             NULL);
+          if (res)
+            {
+              g_variant_get (res, "(&s)", &id2);
+
+              if (g_strcmp0 (id, id2) == 0)
+                same_bus = TRUE;
+
+              g_variant_unref (res);
+            }
+        }
+      else
+        same_bus = TRUE;
+
+      g_value_unset (&value);
+    }
+
+  if (!same_bus)
+    g_object_set (gtk_settings_get_default (),
+                  "gtk-shell-shows-app-menu", FALSE,
+                  "gtk-shell-shows-menubar", FALSE,
+                  NULL);
 }
 
 static void
