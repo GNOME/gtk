@@ -328,6 +328,9 @@ static gboolean
 gtk_css_transform_equal (const GtkCssTransform *transform1,
                          const GtkCssTransform *transform2)
 {
+  if (transform1->type != transform2->type)
+    return FALSE;
+
   switch (transform1->type)
     {
     case GTK_CSS_TRANSFORM_MATRIX:
