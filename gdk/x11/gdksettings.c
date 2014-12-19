@@ -58,6 +58,7 @@ static const struct {
   {"Gtk/ShellShowsAppMenu",   "gtk-shell-shows-app-menu"},
   {"Gtk/ShellShowsMenubar",   "gtk-shell-shows-menubar"},
   {"Gtk/ShellShowsDesktop",   "gtk-shell-shows-desktop"},
+  {"Gtk/SessionBusId",        "gtk-session-bus-id"},
   {"Gtk/DecorationLayout",    "gtk-decoration-layout"},
   {"Gtk/TitlebarDoubleClick", "gtk-titlebar-double-click"},
   {"Gtk/TitlebarMiddleClick", "gtk-titlebar-middle-click"},
