@@ -59,6 +59,10 @@ void        _gtk_magnifier_set_magnification (GtkMagnifier *magnifier,
                                               gdouble       magnification);
 gdouble     _gtk_magnifier_get_magnification (GtkMagnifier *magnifier);
 
+void        _gtk_magnifier_set_resize        (GtkMagnifier *magnifier,
+                                              gboolean      resize);
+gboolean    _gtk_magnifier_get_resize        (GtkMagnifier *magnifier);
+
 G_END_DECLS
 
 #endif /* __GTK_MAGNIFIER_H__ */
