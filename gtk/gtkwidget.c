@@ -16597,9 +16597,9 @@ template_data_free (GtkWidgetTemplate *template_data)
 }
 
 static GHashTable *
-get_auto_child_hash (GtkWidget        *widget,
-		     GType                type,
-		     gboolean             create)
+get_auto_child_hash (GtkWidget *widget,
+		     GType      type,
+		     gboolean   create)
 {
   GHashTable *auto_child_hash;
 
@@ -16634,11 +16634,11 @@ get_auto_child_hash (GtkWidget        *widget,
 }
 
 static gboolean
-setup_template_child (GtkWidgetTemplate *template_data,
-		       GType                 class_type,
-		       AutomaticChildClass  *child_class,
-		       GtkWidget         *widget,
-		       GtkBuilder           *builder)
+setup_template_child (GtkWidgetTemplate   *template_data,
+                      GType                class_type,
+                      AutomaticChildClass *child_class,
+                      GtkWidget           *widget,
+                      GtkBuilder          *builder)
 {
   GHashTable *auto_child_hash;
   GObject    *object;
