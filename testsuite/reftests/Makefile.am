@@ -42,7 +42,7 @@ noinst_LTLIBRARIES =		\
 endif
 
 libgtkreftestprivate_la_CFLAGS = $(gtk_reftest_CFLAGS)
-libgtkreftestprivate_la_LDLAGS = $(no_undefined)
+libgtkreftestprivate_la_LDFLAGS = $(no_undefined)
 libgtkreftestprivate_la_LIBADD =	\
 	$(top_builddir)/gdk/libgdk-3.la \
 	$(top_builddir)/gtk/libgtk-3.la \
