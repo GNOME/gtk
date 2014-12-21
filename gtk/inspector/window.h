@@ -64,6 +64,7 @@ typedef struct
   GtkWidget *menu;
   GtkWidget *misc_info;
   GtkWidget *gestures;
+  GtkWidget *magnifier;
 
   GtkWidget *invisible;
   GtkWidget *selected_widget;
@@ -99,7 +100,6 @@ void       gtk_inspector_on_inspect         (GtkWidget          *widget,
 
 void       gtk_inspector_window_select_widget_under_pointer (GtkInspectorWindow *iw);
 
-                                            
 
 G_END_DECLS
 

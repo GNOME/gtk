@@ -18,6 +18,7 @@ N_("Data");
 N_("Actions");
 N_("Menu");
 N_("Gestures");
+N_("Magnifier");
 N_("Objects");
 N_("Statistics");
 N_("Resources");

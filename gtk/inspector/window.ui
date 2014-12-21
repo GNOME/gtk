@@ -365,6 +365,14 @@
                             <property name="title" translatable="yes">Gestures</property>
                           </packing>
                         </child>
+                        <child>
+                          <object class="GtkInspectorMagnifier" id="magnifier">
+                          </object>
+                          <packing>
+                            <property name="name">magnifier</property>
+                            <property name="title" translatable="yes">Magnifier</property>
+                          </packing>
+                        </child>
                       </object>
                     </child>
                   </object>

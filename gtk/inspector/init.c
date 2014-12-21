@@ -32,6 +32,7 @@
 #include "general.h"
 #include "gestures.h"
 #include "graphdata.h"
+#include "magnifier.h"
 #include "menu.h"
 #include "misc-info.h"
 #include "object-hierarchy.h"
@@ -45,6 +46,8 @@
 #include "style-prop-list.h"
 #include "visual.h"
 #include "window.h"
+
+#include "gtkmagnifierprivate.h"
 
 #include "gtkmodulesprivate.h"
 
@@ -61,6 +64,8 @@ gtk_inspector_init (void)
   g_type_ensure (GTK_TYPE_INSPECTOR_DATA_LIST);
   g_type_ensure (GTK_TYPE_INSPECTOR_GENERAL);
   g_type_ensure (GTK_TYPE_INSPECTOR_GESTURES);
+  g_type_ensure (GTK_TYPE_MAGNIFIER);
+  g_type_ensure (GTK_TYPE_INSPECTOR_MAGNIFIER);
   g_type_ensure (GTK_TYPE_INSPECTOR_MENU);
   g_type_ensure (GTK_TYPE_INSPECTOR_MISC_INFO);
   g_type_ensure (GTK_TYPE_INSPECTOR_OBJECT_HIERARCHY);

@@ -10,6 +10,7 @@ inspector_c_sources = 			\
 	inspector/graphdata.c		\
 	inspector/init.c		\
 	inspector/inspect-button.c	\
+	inspector/magnifier.c		\
 	inspector/menu.c		\
 	inspector/misc-info.c		\
 	inspector/object-hierarchy.c	\
@@ -37,6 +38,7 @@ inspector_h_sources = 			\
 	inspector/gestures.h		\
 	inspector/graphdata.h		\
 	inspector/init.h		\
+	inspector/magnifier.h		\
 	inspector/menu.h		\
 	inspector/misc-info.h		\
 	inspector/object-hierarchy.h	\
@@ -59,6 +61,7 @@ inspector_templates =			\
 	inspector/css-editor.ui 	\
 	inspector/data-list.ui 		\
 	inspector/general.ui 		\
+	inspector/magnifier.ui		\
 	inspector/menu.ui		\
 	inspector/misc-info.ui		\
 	inspector/object-hierarchy.ui 	\

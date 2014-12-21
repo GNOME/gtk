@@ -292,6 +292,7 @@ gtk/inspector/general.ui.h
 gtk/inspector/gestures.c
 gtk/inspector/inspect-button.c
 gtk/inspector/menu.c
+gtk/inspector/magnifier.ui.h
 gtk/inspector/menu.ui.h
 gtk/inspector/misc-info.c
 gtk/inspector/misc-info.ui.h

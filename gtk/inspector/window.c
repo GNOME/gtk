@@ -42,6 +42,7 @@
 #include "menu.h"
 #include "misc-info.h"
 #include "gestures.h"
+#include "magnifier.h"
 
 #include "gtklabel.h"
 #include "gtkbutton.h"
@@ -75,6 +76,7 @@ set_selected_object (GtkInspectorWindow *iw,
   gtk_inspector_actions_set_object (GTK_INSPECTOR_ACTIONS (iw->actions), selected);
   gtk_inspector_menu_set_object (GTK_INSPECTOR_MENU (iw->menu), selected);
   gtk_inspector_gestures_set_object (GTK_INSPECTOR_GESTURES (iw->gestures), selected);
+  gtk_inspector_magnifier_set_object (GTK_INSPECTOR_MAGNIFIER (iw->magnifier), selected);
 
   for (l = iw->extra_pages; l != NULL; l = l->next)
     g_object_set (l->data, "object", selected, NULL);
@@ -234,6 +236,7 @@ gtk_inspector_window_class_init (GtkInspectorWindowClass *klass)
   gtk_widget_class_bind_template_child (widget_class, GtkInspectorWindow, menu);
   gtk_widget_class_bind_template_child (widget_class, GtkInspectorWindow, misc_info);
   gtk_widget_class_bind_template_child (widget_class, GtkInspectorWindow, gestures);
+  gtk_widget_class_bind_template_child (widget_class, GtkInspectorWindow, magnifier);
 
   gtk_widget_class_bind_template_callback (widget_class, gtk_inspector_on_inspect);
   gtk_widget_class_bind_template_callback (widget_class, on_object_activated);
