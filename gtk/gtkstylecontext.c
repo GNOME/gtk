@@ -881,6 +881,11 @@ _gtk_style_context_set_widget (GtkStyleContext *context,
 
   context->priv->widget = widget;
 
+  if (widget)
+    gtk_css_node_declaration_set_type (&context->priv->info->decl, G_OBJECT_TYPE (widget));
+  else
+    gtk_css_node_declaration_set_type (&context->priv->info->decl, G_TYPE_NONE);
+
   _gtk_style_context_update_animating (context);
 
   _gtk_style_context_queue_invalidate (context, GTK_CSS_CHANGE_ANY_SELF);
@@ -1373,10 +1378,17 @@ gtk_style_context_set_path (GtkStyleContext *context,
     {
       gtk_widget_path_free (priv->widget_path);
       priv->widget_path = NULL;
+      gtk_css_node_declaration_set_type (&context->priv->info->decl, G_TYPE_NONE);
     }
 
   if (path)
-    priv->widget_path = gtk_widget_path_copy (path);
+    {
+      priv->widget_path = gtk_widget_path_copy (path);
+      if (gtk_widget_path_length (path))
+        gtk_css_node_declaration_set_type (&context->priv->info->decl,
+                                           gtk_widget_path_iter_get_object_type (path, -1));
+    }
+
 
   _gtk_style_context_queue_invalidate (context, GTK_CSS_CHANGE_ANY);
 }

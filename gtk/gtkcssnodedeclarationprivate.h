@@ -33,6 +33,9 @@ void                    gtk_css_node_declaration_unref                  (GtkCssN
 gboolean                gtk_css_node_declaration_set_junction_sides     (GtkCssNodeDeclaration        **decl,
                                                                          GtkJunctionSides               junction_sides);
 GtkJunctionSides        gtk_css_node_declaration_get_junction_sides     (const GtkCssNodeDeclaration   *decl);
+gboolean                gtk_css_node_declaration_set_type               (GtkCssNodeDeclaration        **decl,
+                                                                         GType                          type);
+GType                   gtk_css_node_declaration_get_type               (const GtkCssNodeDeclaration   *decl);
 gboolean                gtk_css_node_declaration_set_state              (GtkCssNodeDeclaration        **decl,
                                                                          GtkStateFlags                  flags);
 GtkStateFlags           gtk_css_node_declaration_get_state              (const GtkCssNodeDeclaration   *decl);

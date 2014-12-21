@@ -32,6 +32,7 @@ struct _GtkRegion
 struct _GtkCssNodeDeclaration {
   guint refcount;
   GtkJunctionSides junction_sides;
+  GType type;
   GtkStateFlags state;
   guint n_classes;
   guint n_regions;
@@ -158,6 +159,25 @@ GtkJunctionSides
 gtk_css_node_declaration_get_junction_sides (const GtkCssNodeDeclaration *decl)
 {
   return decl->junction_sides;
+}
+
+gboolean
+gtk_css_node_declaration_set_type (GtkCssNodeDeclaration **decl,
+                                   GType                   type)
+{
+  if ((*decl)->type == type)
+    return FALSE;
+
+  gtk_css_node_declaration_make_writable (decl);
+  (*decl)->type = type;
+
+  return TRUE;
+}
+
+GType
+gtk_css_node_declaration_get_type (const GtkCssNodeDeclaration *decl)
+{
+  return decl->type;
 }
 
 gboolean
@@ -426,7 +446,7 @@ gtk_css_node_declaration_hash (gconstpointer elem)
   GtkRegion *regions;
   guint hash, i;
   
-  hash = 0;
+  hash = (guint) decl->type;
 
   classes = get_classes (decl);
   for (i = 0; i < decl->n_classes; i++)
@@ -461,6 +481,9 @@ gtk_css_node_declaration_equal (gconstpointer elem1,
 
   if (decl1 == decl2)
     return TRUE;
+
+  if (decl1->type != decl2->type)
+    return FALSE;
 
   if (decl1->state != decl2->state)
     return FALSE;
