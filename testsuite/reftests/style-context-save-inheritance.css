@@ -1,0 +1,18 @@
+@import "reset-to-defaults.css";
+
+.background {
+  color: red;
+}
+
+GtkLabel {
+  color: green;
+}
+
+GtkLabel:link,
+GtkLabel:visited {
+  color: inherit;
+}
+
+#reference, #reference * {
+  color: green;
+}

@@ -652,8 +652,9 @@ gtk_style_context_is_saved (GtkStyleContext *context)
 }
 
 static GtkWidgetPath *
-create_query_path (GtkStyleContext             *context,
-                   const GtkCssNodeDeclaration *decl)
+create_query_path (GtkStyleContext              *context,
+                   const GtkCssNodeDeclaration  *decl,
+                   GtkCssStyle                 **out_parent)
 {
   GtkStyleContextPrivate *priv;
   GtkWidgetPath *path;
@@ -671,11 +672,13 @@ create_query_path (GtkStyleContext             *context,
 
       gtk_widget_path_append_type (path, length > 0 ? gtk_widget_path_iter_get_object_type (path, length - 1) : G_TYPE_NONE);
       gtk_css_node_declaration_add_to_widget_path (decl, path, length);
+      *out_parent = root->values;
     }
   else
     {
       if (length > 0)
         gtk_css_node_declaration_add_to_widget_path (decl, path, length - 1);
+      *out_parent = priv->parent ? style_values_lookup (priv->parent) : NULL;
     }
 
   return path;
@@ -690,11 +693,11 @@ update_properties (GtkStyleContext             *context,
   GtkStyleContextPrivate *priv;
   GtkCssMatcher matcher;
   GtkWidgetPath *path;
-  GtkCssStyle *result;
+  GtkCssStyle *result, *parent;
 
   priv = context->priv;
 
-  path = create_query_path (context, decl);
+  path = create_query_path (context, decl, &parent);
 
   if (!_gtk_css_matcher_init (&matcher, path))
     {
@@ -706,7 +709,7 @@ update_properties (GtkStyleContext             *context,
                                             GTK_STYLE_PROVIDER_PRIVATE (priv->cascade),
                                             &matcher,
                                             priv->scale,
-                                            priv->parent ? style_values_lookup (priv->parent) : NULL);
+                                            parent);
 
   gtk_widget_path_free (path);
 
@@ -721,23 +724,23 @@ build_properties (GtkStyleContext             *context,
   GtkStyleContextPrivate *priv;
   GtkCssMatcher matcher;
   GtkWidgetPath *path;
-  GtkCssStyle *style;
+  GtkCssStyle *style, *parent;
 
   priv = context->priv;
 
-  path = create_query_path (context, decl);
+  path = create_query_path (context, decl, &parent);
 
   if (_gtk_css_matcher_init (&matcher, path))
     style = gtk_css_static_style_new_compute (GTK_STYLE_PROVIDER_PRIVATE (priv->cascade),
                                               &matcher,
                                               priv->scale,
-                                              priv->parent ? style_values_lookup (priv->parent) : NULL,
+                                              parent,
                                               out_change);
   else
     style = gtk_css_static_style_new_compute (GTK_STYLE_PROVIDER_PRIVATE (priv->cascade),
                                               NULL,
                                               priv->scale,
-                                              priv->parent ? style_values_lookup (priv->parent) : NULL,
+                                              parent,
                                               out_change);
 
   gtk_widget_path_free (path);
@@ -1499,6 +1502,11 @@ gtk_style_context_save (GtkStyleContext *context)
   g_return_if_fail (GTK_IS_STYLE_CONTEXT (context));
 
   priv = context->priv;
+
+  /* Make sure we have the style existing. It is the
+   * parent of the new saved node after all. */
+  if (!gtk_style_context_is_saved (context))
+    style_values_lookup (context);
 
   priv->saved_nodes = g_slist_prepend (priv->saved_nodes, priv->info);
 

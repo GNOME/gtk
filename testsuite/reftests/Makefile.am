@@ -397,6 +397,9 @@ testdata = \
 	sizegroups-get-preferred-null.ref.ui \
 	statusbar-remove-all.ref.ui \
 	statusbar-remove-all.ui \
+	style-context-save-inheritance.css \
+	style-context-save-inheritance.ref.ui \
+	style-context-save-inheritance.ui \
 	style-properties-nth-child.css \
 	style-properties-nth-child.ref.ui \
 	style-properties-nth-child.ui \
