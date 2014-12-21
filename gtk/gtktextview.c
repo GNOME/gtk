@@ -3272,6 +3272,9 @@ gtk_text_view_destroy (GtkWidget *widget)
       priv->pixel_cache = NULL;
     }
 
+  if (priv->magnifier)
+    _gtk_magnifier_set_inspected (GTK_MAGNIFIER (priv->magnifier), NULL);
+
   GTK_WIDGET_CLASS (gtk_text_view_parent_class)->destroy (widget);
 }
 
