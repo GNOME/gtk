@@ -493,8 +493,6 @@ _gdk_win32_window_create_gl_context (GdkWindow *window,
   gboolean need_alpha_bits = (visual == gdk_screen_get_rgba_visual (gdk_display_get_default_screen (display)));
 
   /* Real GL Context and Window items */
-  WNDCLASSEX wc;
-  ATOM wc_atom;
   HWND hwnd;
   HDC hdc;
   HGLRC hglrc;

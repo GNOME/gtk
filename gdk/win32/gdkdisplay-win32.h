@@ -33,8 +33,6 @@ struct _GdkWin32Display
   HWND gl_hwnd;
 
   guint hasWglARBCreateContext : 1;
-  guint hasWglARBPbuffer : 1;
-  guint hasWglARBRenderTexture : 1;
   guint hasWglEXTSwapControl : 1;
   guint hasWglOMLSyncControl : 1;
 };
