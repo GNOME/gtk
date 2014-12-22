@@ -3239,7 +3239,6 @@ gtk_notebook_button_release (GtkWidget      *widget,
 {
   GtkNotebook *notebook;
   GtkNotebookPrivate *priv;
-  GtkNotebookPage *page;
 
   if (event->type != GDK_BUTTON_RELEASE)
     return FALSE;
@@ -3247,10 +3246,9 @@ gtk_notebook_button_release (GtkWidget      *widget,
   notebook = GTK_NOTEBOOK (widget);
   priv = notebook->priv;
 
-  page = priv->cur_page;
-
   if (!priv->during_detach &&
-      page->reorderable &&
+      priv->cur_page &&
+      priv->cur_page->reorderable &&
       event->button == priv->pressed_button)
     gtk_notebook_stop_reorder (notebook);
 
