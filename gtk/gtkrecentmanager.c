@@ -346,8 +346,9 @@ gtk_recent_manager_init (GtkRecentManager *manager)
   priv->filename = NULL;
 
   settings = gtk_settings_get_default ();
-  g_signal_connect_swapped (settings, "notify::gtk-recent-files-enabled",
-                            G_CALLBACK (gtk_recent_manager_enabled_changed), manager);
+  if (settings)
+    g_signal_connect_swapped (settings, "notify::gtk-recent-files-enabled",
+                              G_CALLBACK (gtk_recent_manager_enabled_changed), manager);
 }
 
 static void
@@ -470,14 +471,21 @@ gtk_recent_manager_real_changed (GtkRecentManager *manager)
 	}
       else
         {
-          GtkSettings *settings = gtk_settings_get_default ();
-          gint age = 30;
+          GtkSettings *settings;
+          gint age;
           gboolean enabled;
 
-          g_object_get (G_OBJECT (settings),
-                        "gtk-recent-files-max-age", &age,
-                        "gtk-recent-files-enabled", &enabled,
-                        NULL);
+          settings = gtk_settings_get_default ();
+          if (settings)
+            g_object_get (G_OBJECT (settings),
+                          "gtk-recent-files-max-age", &age,
+                          "gtk-recent-files-enabled", &enabled,
+                          NULL);
+          else
+            {
+              age = 30;
+              enabled = TRUE;
+            }
 
           if (age == 0 || !enabled)
             {
