@@ -17,8 +17,8 @@ msgstr ""
 "Project-Id-Version: gtk+.master\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gtk"
 "%2b&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2014-12-18 07:33+0000\n"
-"PO-Revision-Date: 2014-12-18 10:48+0100\n"
+"POT-Creation-Date: 2014-12-22 10:06+0000\n"
+"PO-Revision-Date: 2014-12-22 12:25+0100\n"
 "Last-Translator: Daniel Mustieles <daniel.mustieles@gmail.com>\n"
 "Language-Team: Español; Castellano <gnome-es-list@gnome.org>\n"
 "Language: \n"
@@ -440,13 +440,13 @@ msgstr "Suspender"
 #: ../gdk/mir/gdkmirwindowimpl.c:1308 ../gdk/mir/gdkmirwindowimpl.c:1318
 #: ../gdk/wayland/gdkglcontext-wayland.c:263
 #: ../gdk/wayland/gdkglcontext-wayland.c:273
-#: ../gdk/win32/gdkglcontext-win32.c:529 ../gdk/x11/gdkglcontext-x11.c:697
+#: ../gdk/win32/gdkglcontext-win32.c:527 ../gdk/x11/gdkglcontext-x11.c:700
 msgid "No available configurations for the given pixel format"
 msgstr "No hay ninguna configuración disponible para el formato de píxel dado"
 
 #: ../gdk/mir/gdkmirwindowimpl.c:1350
 #: ../gdk/wayland/gdkglcontext-wayland.c:306
-#: ../gdk/win32/gdkglcontext-win32.c:507 ../gdk/x11/gdkglcontext-x11.c:1052
+#: ../gdk/win32/gdkglcontext-win32.c:505 ../gdk/x11/gdkglcontext-x11.c:1055
 msgid "No GL implementation is available"
 msgstr "No hay ninguna implementación de GL disponible"
 
@@ -458,15 +458,12 @@ msgstr ""
 
 #: ../gdk/mir/gdkmirwindowimpl.c:1385
 #: ../gdk/wayland/gdkglcontext-wayland.c:341
-#: ../gdk/win32/gdkglcontext-win32.c:543 ../gdk/x11/gdkglcontext-x11.c:1092
-#: ../gdk/x11/gdkglcontext-x11.c:1136
+#: ../gdk/win32/gdkglcontext-win32.c:541 ../gdk/x11/gdkglcontext-x11.c:1095
+#: ../gdk/x11/gdkglcontext-x11.c:1139
 msgid "Unable to create a GL context"
 msgstr "No se pudo crear un contexto GL"
 
-#: ../gdk/win32/gdkglcontext-win32.c:516
-#| msgid ""
-#| "The GLX_ARB_create_context_profile extension needed to create 3.2 core "
-#| "profiles is not available"
+#: ../gdk/win32/gdkglcontext-win32.c:514
 msgid ""
 "The WGL_ARB_create_context extension needed to create 3.2 core profiles is "
 "not available"
@@ -521,13 +518,13 @@ msgid_plural "Opening %d Items"
 msgstr[0] "Abriendo %d elemento"
 msgstr[1] "Abriendo %d elementos"
 
-#: ../gdk/x11/gdkglcontext-x11.c:726
+#: ../gdk/x11/gdkglcontext-x11.c:729
 #, c-format
 msgid "No available configurations for the given RGBA pixel format"
 msgstr ""
 "No hay ninguna configuración disponible para el formato de píxel RGBA dado"
 
-#: ../gdk/x11/gdkglcontext-x11.c:1061
+#: ../gdk/x11/gdkglcontext-x11.c:1064
 msgid ""
 "The GLX_ARB_create_context_profile extension needed to create 3.2 core "
 "profiles is not available"
@@ -2141,25 +2138,25 @@ msgid "Paper Margins"
 msgstr "Márgenes del papel"
 
 #: ../gtk/gtkentry.c:9626 ../gtk/gtkentry.c:9779 ../gtk/gtklabel.c:6591
-#: ../gtk/gtktextview.c:8960 ../gtk/gtktextview.c:9148
+#: ../gtk/gtktextview.c:9018 ../gtk/gtktextview.c:9206
 msgid "Cu_t"
 msgstr "Cor_tar"
 
 #: ../gtk/gtkentry.c:9630 ../gtk/gtkentry.c:9782 ../gtk/gtklabel.c:6592
-#: ../gtk/gtktextview.c:8964 ../gtk/gtktextview.c:9152
+#: ../gtk/gtktextview.c:9022 ../gtk/gtktextview.c:9210
 msgid "_Copy"
 msgstr "_Copiar"
 
 #: ../gtk/gtkentry.c:9634 ../gtk/gtkentry.c:9785 ../gtk/gtklabel.c:6593
-#: ../gtk/gtktextview.c:8966 ../gtk/gtktextview.c:9154
+#: ../gtk/gtktextview.c:9024 ../gtk/gtktextview.c:9212
 msgid "_Paste"
 msgstr "_Pegar"
 
-#: ../gtk/gtkentry.c:9637 ../gtk/gtklabel.c:6595 ../gtk/gtktextview.c:8969
+#: ../gtk/gtkentry.c:9637 ../gtk/gtklabel.c:6595 ../gtk/gtktextview.c:9027
 msgid "_Delete"
 msgstr "_Eliminar"
 
-#: ../gtk/gtkentry.c:9648 ../gtk/gtklabel.c:6604 ../gtk/gtktextview.c:8983
+#: ../gtk/gtkentry.c:9648 ../gtk/gtklabel.c:6604 ../gtk/gtktextview.c:9041
 msgid "Select _All"
 msgstr "Seleccionar _todo"
 
@@ -2684,7 +2681,7 @@ msgstr "No se puede finalizar el proceso con PID %d: %s"
 msgid "Page %u"
 msgstr "Página %u"
 
-#: ../gtk/gtkpagesetup.c:644 ../gtk/gtkpapersize.c:985
+#: ../gtk/gtkpagesetup.c:652 ../gtk/gtkpapersize.c:985
 #: ../gtk/gtkpapersize.c:1025
 msgid "Not a valid page setup file"
 msgstr "No es un archivo válido de configuración de página"
@@ -3249,15 +3246,15 @@ msgctxt "recent menu label"
 msgid "%d. %s"
 msgstr "%d. %s"
 
-#: ../gtk/gtkrecentmanager.c:1029 ../gtk/gtkrecentmanager.c:1042
-#: ../gtk/gtkrecentmanager.c:1179 ../gtk/gtkrecentmanager.c:1189
-#: ../gtk/gtkrecentmanager.c:1241 ../gtk/gtkrecentmanager.c:1250
-#: ../gtk/gtkrecentmanager.c:1265
+#: ../gtk/gtkrecentmanager.c:1037 ../gtk/gtkrecentmanager.c:1050
+#: ../gtk/gtkrecentmanager.c:1187 ../gtk/gtkrecentmanager.c:1197
+#: ../gtk/gtkrecentmanager.c:1249 ../gtk/gtkrecentmanager.c:1258
+#: ../gtk/gtkrecentmanager.c:1273
 #, c-format
 msgid "Unable to find an item with URI '%s'"
 msgstr "No se ha podido encontrar un elemento con el URI «%s»"
 
-#: ../gtk/gtkrecentmanager.c:2468
+#: ../gtk/gtkrecentmanager.c:2476
 #, c-format
 msgid "No registered application with name '%s' for item with URI '%s' found"
 msgstr ""
@@ -4074,7 +4071,7 @@ msgstr "Jerarquía"
 msgid "Style Properties"
 msgstr "Propiedades del estilo"
 
-#: ../gtk/inspector/window.ui.h:15 ../gtk/inspector/window.ui.h:24
+#: ../gtk/inspector/window.ui.h:15 ../gtk/inspector/window.ui.h:25
 msgid "CSS"
 msgstr "CSS"
 
@@ -4095,22 +4092,26 @@ msgid "Gestures"
 msgstr "Gestos"
 
 #: ../gtk/inspector/window.ui.h:21
+msgid "Magnifier"
+msgstr "Magnificador"
+
+#: ../gtk/inspector/window.ui.h:22
 msgid "Objects"
 msgstr "Objetos"
 
-#: ../gtk/inspector/window.ui.h:22
+#: ../gtk/inspector/window.ui.h:23
 msgid "Statistics"
 msgstr "Estadísticas"
 
-#: ../gtk/inspector/window.ui.h:23
+#: ../gtk/inspector/window.ui.h:24
 msgid "Resources"
 msgstr "Recursos"
 
-#: ../gtk/inspector/window.ui.h:25
+#: ../gtk/inspector/window.ui.h:26
 msgid "Visual"
 msgstr "Visual"
 
-#: ../gtk/inspector/window.ui.h:26 ../gtk/ui/gtkprintunixdialog.ui.h:24
+#: ../gtk/inspector/window.ui.h:27 ../gtk/ui/gtkprintunixdialog.ui.h:24
 msgid "General"
 msgstr "General"
 
