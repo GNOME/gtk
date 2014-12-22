@@ -455,12 +455,10 @@ gtk_recent_manager_real_changed (GtkRecentManager *manager)
   if (priv->is_dirty)
     {
       GError *write_error;
-      
+
       /* we are marked as dirty, so we dump the content of our
        * recently used items list
        */
-      g_assert (priv->filename != NULL);
-
       if (!priv->recent_items)
         {
           /* if no container object has been defined, we create a new
@@ -496,23 +494,24 @@ gtk_recent_manager_real_changed (GtkRecentManager *manager)
             gtk_recent_manager_clamp_to_age (manager, age);
         }
 
-      write_error = NULL;
-      g_bookmark_file_to_file (priv->recent_items, priv->filename, &write_error);
-      if (write_error)
+      if (priv->filename != NULL)
         {
-          filename_warning ("Attempting to store changes into `%s', "
-			    "but failed: %s",
-			    priv->filename,
-			    write_error->message);
-	  g_error_free (write_error);
-	}
+          write_error = NULL;
+          g_bookmark_file_to_file (priv->recent_items, priv->filename, &write_error);
+          if (write_error)
+            {
+              filename_warning ("Attempting to store changes into `%s', but failed: %s",
+                                priv->filename,
+                                write_error->message);
+              g_error_free (write_error);
+	    }
 
-      if (g_chmod (priv->filename, 0600) < 0)
-        {
-          filename_warning ("Attempting to set the permissions of `%s', "
-                            "but failed: %s",
-                            priv->filename,
-                            g_strerror (errno));
+          if (g_chmod (priv->filename, 0600) < 0)
+            {
+              filename_warning ("Attempting to set the permissions of `%s', but failed: %s",
+                                priv->filename,
+                                g_strerror (errno));
+            }
         }
 
       /* mark us as clean */
@@ -621,28 +620,29 @@ gtk_recent_manager_set_filename (GtkRecentManager *manager,
         priv->filename = g_strdup (filename);
     }
 
-  g_assert (priv->filename != NULL);
-  file = g_file_new_for_path (priv->filename);
-
-  error = NULL;
-  priv->monitor = g_file_monitor_file (file, G_FILE_MONITOR_NONE, NULL, &error);
-  if (error)
+  if (priv->filename != NULL)
     {
-      filename_warning ("Unable to monitor `%s': %s\n"
-                        "The GtkRecentManager will not update its contents "
-                        "if the file is changed from other instances",
-                        priv->filename,
-                        error->message);
-      g_error_free (error);
+      file = g_file_new_for_path (priv->filename);
+
+      error = NULL;
+      priv->monitor = g_file_monitor_file (file, G_FILE_MONITOR_NONE, NULL, &error);
+      if (error)
+        {
+          filename_warning ("Unable to monitor `%s': %s\n"
+                            "The GtkRecentManager will not update its contents "
+                            "if the file is changed from other instances",
+                            priv->filename,
+                            error->message);
+          g_error_free (error);
+        }
+      else
+        g_signal_connect (priv->monitor, "changed",
+                          G_CALLBACK (gtk_recent_manager_monitor_changed),
+                          manager);
+
+      g_object_unref (file);
     }
-  else
-    g_signal_connect (priv->monitor, "changed",
-                      G_CALLBACK (gtk_recent_manager_monitor_changed),
-                      manager);
 
-  g_object_unref (file);
-
-  priv->is_dirty = FALSE;
   build_recent_items_list (manager);
 }
 
@@ -658,46 +658,47 @@ build_recent_items_list (GtkRecentManager *manager)
   GError *read_error;
   gint size;
 
-  g_assert (priv->filename != NULL);
-  
   if (!priv->recent_items)
     {
       priv->recent_items = g_bookmark_file_new ();
       priv->size = 0;
     }
 
-  /* the file exists, and it's valid (we hope); if not, destroy the container
-   * object and hope for a better result when the next "changed" signal is
-   * fired. */
-  read_error = NULL;
-  g_bookmark_file_load_from_file (priv->recent_items, priv->filename, &read_error);
-  if (read_error)
+  if (priv->filename != NULL)
     {
-      /* if the file does not exist we just wait for the first write
-       * operation on this recent manager instance, to avoid creating
-       * empty files and leading to spurious file system events (Sabayon
-       * will not be happy about those)
-       */
-      if (read_error->domain == G_FILE_ERROR &&
-          read_error->code != G_FILE_ERROR_NOENT)
-        filename_warning ("Attempting to read the recently used resources "
-                          "file at `%s', but the parser failed: %s.",
-                          priv->filename,
-                          read_error->message);
-
-      g_bookmark_file_free (priv->recent_items);
-      priv->recent_items = NULL;
-
-      g_error_free (read_error);
-    }
-  else
-    {
-      size = g_bookmark_file_get_size (priv->recent_items);
-      if (priv->size != size)
+      /* the file exists, and it's valid (we hope); if not, destroy the container
+       * object and hope for a better result when the next "changed" signal is
+       * fired. */
+      read_error = NULL;
+      g_bookmark_file_load_from_file (priv->recent_items, priv->filename, &read_error);
+      if (read_error)
         {
-          priv->size = size;
+          /* if the file does not exist we just wait for the first write
+           * operation on this recent manager instance, to avoid creating
+           * empty files and leading to spurious file system events (Sabayon
+           * will not be happy about those)
+           */
+          if (read_error->domain == G_FILE_ERROR &&
+            read_error->code != G_FILE_ERROR_NOENT)
+            filename_warning ("Attempting to read the recently used resources "
+                              "file at `%s', but the parser failed: %s.",
+                              priv->filename,
+                              read_error->message);
 
-          g_object_notify (G_OBJECT (manager), "size");
+          g_bookmark_file_free (priv->recent_items);
+          priv->recent_items = NULL;
+
+          g_error_free (read_error);
+        }
+      else
+        {
+          size = g_bookmark_file_get_size (priv->recent_items);
+          if (priv->size != size)
+            {
+              priv->size = size;
+
+              g_object_notify (G_OBJECT (manager), "size");
+            }
         }
     }
 
@@ -712,7 +713,7 @@ build_recent_items_list (GtkRecentManager *manager)
 
 /**
  * gtk_recent_manager_new:
- * 
+ *
  * Creates a new recent manager object.  Recent manager objects are used to
  * handle the list of recently used resources.  A #GtkRecentManager object
  * monitors the recently used resources list, and emits the “changed” signal
@@ -825,7 +826,7 @@ gtk_recent_manager_add_item_query_info (GObject      *source_object,
  * This function automatically retrieves some of the needed
  * metadata and setting other metadata to common default values; it
  * then feeds the data to gtk_recent_manager_add_full().
- * 
+ *
  * See gtk_recent_manager_add_full() if you want to explicitly
  * define the metadata for the resource pointed by @uri.
  *
