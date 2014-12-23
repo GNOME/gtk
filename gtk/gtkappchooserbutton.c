@@ -1,5 +1,4 @@
-/*
- * gtkappchooserbutton.h: an app-chooser combobox
+/* gtkappchooserbutton.c: an app-chooser combobox
  *
  * Copyright (C) 2010 Red Hat, Inc.
  *
@@ -86,18 +85,18 @@ enum {
 
 #define CUSTOM_ITEM_OTHER_APP "gtk-internal-item-other-app"
 
-static void app_chooser_iface_init (GtkAppChooserIface *iface);
+static void app_chooser_iface_init  (GtkAppChooserIface *iface);
 
 static void real_insert_custom_item (GtkAppChooserButton *self,
-                                     const gchar *name,
-                                     const gchar *label,
-                                     GIcon *icon,
-                                     gboolean custom,
-                                     GtkTreeIter *iter);
+                                     const gchar         *name,
+                                     const gchar         *label,
+                                     GIcon               *icon,
+                                     gboolean             custom,
+                                     GtkTreeIter         *iter);
 
-static void real_insert_separator (GtkAppChooserButton *self,
-                                   gboolean custom,
-                                   GtkTreeIter *iter);
+static void real_insert_separator   (GtkAppChooserButton *self,
+                                     gboolean             custom,
+                                     GtkTreeIter         *iter);
 
 static guint signals[NUM_SIGNALS] = { 0, };
 
@@ -167,12 +166,13 @@ select_app_data_free (SelectAppData *data)
 
 static gboolean
 select_application_func_cb (GtkTreeModel *model,
-                            GtkTreePath *path,
-                            GtkTreeIter *iter,
-                            gpointer user_data)
+                            GtkTreePath  *path,
+                            GtkTreeIter  *iter,
+                            gpointer      user_data)
 {
   SelectAppData *data = user_data;
-  GAppInfo *app_to_match = data->info, *app = NULL;
+  GAppInfo *app_to_match = data->info;
+  GAppInfo *app = NULL;
   gboolean custom;
   gboolean result;
 
@@ -201,7 +201,7 @@ select_application_func_cb (GtkTreeModel *model,
 
 static void
 gtk_app_chooser_button_select_application (GtkAppChooserButton *self,
-                                           GAppInfo *info)
+                                           GAppInfo            *info)
 {
   SelectAppData *data;
 
@@ -217,8 +217,8 @@ gtk_app_chooser_button_select_application (GtkAppChooserButton *self,
 
 static void
 other_application_dialog_response_cb (GtkDialog *dialog,
-                                      gint response_id,
-                                      gpointer user_data)
+                                      gint       response_id,
+                                      gpointer   user_data)
 {
   GtkAppChooserButton *self = user_data;
   GAppInfo *info;
@@ -251,7 +251,8 @@ other_application_item_activated_cb (GtkAppChooserButton *self)
   GtkWindow *toplevel;
 
   toplevel = GTK_WINDOW (gtk_widget_get_toplevel (GTK_WIDGET (self)));
-  dialog = gtk_app_chooser_dialog_new_for_content_type (toplevel, GTK_DIALOG_DESTROY_WITH_PARENT,
+  dialog = gtk_app_chooser_dialog_new_for_content_type (toplevel,
+                                                        GTK_DIALOG_DESTROY_WITH_PARENT,
                                                         self->priv->content_type);
 
   gtk_window_set_modal (GTK_WINDOW (dialog), gtk_window_get_modal (toplevel));
@@ -271,7 +272,7 @@ other_application_item_activated_cb (GtkAppChooserButton *self)
 
 static void
 gtk_app_chooser_button_ensure_dialog_item (GtkAppChooserButton *self,
-                                           GtkTreeIter *prev_iter)
+                                           GtkTreeIter         *prev_iter)
 {
   GtkTreeIter iter, iter2;
 
@@ -575,7 +576,6 @@ gtk_app_chooser_button_finalize (GObject *obj)
   g_hash_table_destroy (self->priv->custom_item_names);
   g_free (self->priv->content_type);
   g_free (self->priv->heading);
-
   g_object_unref (self->priv->store);
 
   G_OBJECT_CLASS (gtk_app_chooser_button_parent_class)->finalize (obj);
@@ -636,7 +636,6 @@ gtk_app_chooser_button_class_init (GtkAppChooserButtonClass *klass)
                           G_PARAM_READWRITE|G_PARAM_CONSTRUCT|G_PARAM_STATIC_STRINGS|G_PARAM_EXPLICIT_NOTIFY);
   g_object_class_install_property (oclass, PROP_SHOW_DEFAULT_ITEM, pspec);
 
-
   /**
    * GtkAppChooserButton:heading:
    *
@@ -647,9 +646,8 @@ gtk_app_chooser_button_class_init (GtkAppChooserButtonClass *klass)
                                P_("Heading"),
                                P_("The text to show at the top of the dialog"),
                                NULL,
-                               G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS|G_PARAM_EXPLICIT_NOTIFY);
+                               G_PARAM_READWRITE|G_PARAM_STATIC_STRINGS|G_PARAM_EXPLICIT_NOTIFY);
   g_object_class_install_property (oclass, PROP_HEADING, pspec);
-
 
   /**
    * GtkAppChooserButton::custom-item-activated:
@@ -676,9 +674,7 @@ gtk_app_chooser_button_init (GtkAppChooserButton *self)
 {
   self->priv = gtk_app_chooser_button_get_instance_private (self);
   self->priv->custom_item_names =
-    g_hash_table_new_full (g_str_hash, g_str_equal,
-                           g_free, NULL);
-
+    g_hash_table_new_full (g_str_hash, g_str_equal, g_free, NULL);
   self->priv->store = gtk_list_store_new (NUM_COLUMNS,
                                           G_TYPE_APP_INFO,
                                           G_TYPE_STRING, /* name */
@@ -696,8 +692,7 @@ app_chooser_button_iter_from_custom_name (GtkAppChooserButton *self,
   GtkTreeIter iter;
   gchar *custom_name = NULL;
 
-  if (!gtk_tree_model_get_iter_first
-      (GTK_TREE_MODEL (self->priv->store), &iter))
+  if (!gtk_tree_model_get_iter_first (GTK_TREE_MODEL (self->priv->store), &iter))
     return FALSE;
 
   do {
@@ -721,16 +716,15 @@ app_chooser_button_iter_from_custom_name (GtkAppChooserButton *self,
 
 static void
 real_insert_custom_item (GtkAppChooserButton *self,
-                         const gchar *name,
-			 const gchar *label,
-			 GIcon *icon,
-			 gboolean custom,
-			 GtkTreeIter *iter)
+                         const gchar         *name,
+                         const gchar         *label,
+                         GIcon               *icon,
+                         gboolean             custom,
+                         GtkTreeIter         *iter)
 {
   if (custom)
     {
-      if (g_hash_table_lookup (self->priv->custom_item_names,
-                               name) != NULL)
+      if (g_hash_table_lookup (self->priv->custom_item_names, name) != NULL)
         {
           g_warning ("Attempting to add custom item %s to GtkAppChooserButton, "
                      "when there's already an item with the same name", name);
@@ -752,13 +746,13 @@ real_insert_custom_item (GtkAppChooserButton *self,
 
 static void
 real_insert_separator (GtkAppChooserButton *self,
-		       gboolean custom,
-		       GtkTreeIter *iter)
+                       gboolean             custom,
+                       GtkTreeIter         *iter)
 {
   gtk_list_store_set (self->priv->store, iter,
-		      COLUMN_CUSTOM, custom,
-		      COLUMN_SEPARATOR, TRUE,
-		      -1);
+                      COLUMN_CUSTOM, custom,
+                      COLUMN_SEPARATOR, TRUE,
+                      -1);
 }
 
 /**
@@ -855,11 +849,10 @@ gtk_app_chooser_button_set_active_custom_item (GtkAppChooserButton *self,
   g_return_if_fail (GTK_IS_APP_CHOOSER_BUTTON (self));
   g_return_if_fail (name != NULL);
 
-  if (g_hash_table_lookup (self->priv->custom_item_names, name) == NULL ||
+  if (!g_hash_table_contains (self->priv->custom_item_names, name) ||
       !app_chooser_button_iter_from_custom_name (self, name, &iter))
     {
-      g_warning ("Can't find the item named %s in the app chooser.",
-                 name);
+      g_warning ("Can't find the item named %s in the app chooser.", name);
       return;
     }
 
