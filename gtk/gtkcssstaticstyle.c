@@ -184,11 +184,11 @@ GtkCssStyle *
 gtk_css_static_style_new_compute (GtkStyleProviderPrivate *provider,
                                   const GtkCssMatcher     *matcher,
                                   int                      scale,
-                                  GtkCssStyle             *parent,
-                                  GtkCssChange            *out_change)
+                                  GtkCssStyle             *parent)
 {
   GtkCssStaticStyle *result;
   GtkCssLookup *lookup;
+  GtkCssChange change = GTK_CSS_CHANGE_ANY_SELF | GTK_CSS_CHANGE_ANY_SIBLING | GTK_CSS_CHANGE_ANY_PARENT;
 
   lookup = _gtk_css_lookup_new (NULL);
 
@@ -196,9 +196,11 @@ gtk_css_static_style_new_compute (GtkStyleProviderPrivate *provider,
     _gtk_style_provider_private_lookup (provider,
                                         matcher,
                                         lookup,
-                                        out_change);
+                                        &change);
 
   result = g_object_new (GTK_TYPE_CSS_STATIC_STYLE, NULL);
+
+  result->change = change;
 
   _gtk_css_lookup_resolve (lookup, 
                            provider,
@@ -238,6 +240,7 @@ gtk_css_static_style_new_update (GtkCssStaticStyle       *style,
 
   result = g_object_new (GTK_TYPE_CSS_STATIC_STYLE, NULL);
 
+  result->change = style->change;
   result->depends_on_parent = _gtk_bitmask_subtract (_gtk_bitmask_union (result->depends_on_parent, style->depends_on_parent),
                                                      changes);
   result->equals_parent = _gtk_bitmask_subtract (_gtk_bitmask_union (result->equals_parent, style->equals_parent),
@@ -327,3 +330,10 @@ gtk_css_static_style_compute_value (GtkCssStaticStyle       *style,
   _gtk_css_value_unref (specified);
 }
 
+GtkCssChange
+gtk_css_static_style_get_change (GtkCssStaticStyle *style)
+{
+  g_return_val_if_fail (GTK_IS_CSS_STATIC_STYLE (style), GTK_CSS_CHANGE_ANY);
+
+  return style->change;
+}

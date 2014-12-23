@@ -167,7 +167,6 @@ struct _GtkStyleContextPrivate
   guint frame_clock_update_id;
   GdkFrameClock *frame_clock;
 
-  GtkCssChange relevant_changes;
   GtkCssChange pending_changes;
 
   const GtkBitmask *invalidating_context;
@@ -407,7 +406,6 @@ gtk_style_context_init (GtkStyleContext *style_context)
                                               g_object_unref);
 
   priv->screen = gdk_screen_get_default ();
-  priv->relevant_changes = GTK_CSS_CHANGE_ANY;
 
   /* Create default info store */
   priv->info = style_info_new ();
@@ -718,8 +716,7 @@ update_properties (GtkStyleContext             *context,
 
 static GtkCssStyle *
 build_properties (GtkStyleContext             *context,
-                  const GtkCssNodeDeclaration *decl,
-                  GtkCssChange                *out_change)
+                  const GtkCssNodeDeclaration *decl)
 {
   GtkStyleContextPrivate *priv;
   GtkCssMatcher matcher;
@@ -734,14 +731,12 @@ build_properties (GtkStyleContext             *context,
     style = gtk_css_static_style_new_compute (GTK_STYLE_PROVIDER_PRIVATE (priv->cascade),
                                               &matcher,
                                               priv->scale,
-                                              parent,
-                                              out_change);
+                                              parent);
   else
     style = gtk_css_static_style_new_compute (GTK_STYLE_PROVIDER_PRIVATE (priv->cascade),
                                               NULL,
                                               priv->scale,
-                                              parent,
-                                              out_change);
+                                              parent);
 
   gtk_widget_path_free (path);
 
@@ -773,7 +768,7 @@ style_values_lookup (GtkStyleContext *context)
           return values;
         }
 
-      values = build_properties (context, info->decl, NULL);
+      values = build_properties (context, info->decl);
       g_hash_table_insert (priv->style_values,
                            gtk_css_node_declaration_ref (info->decl),
                            g_object_ref (values));
@@ -781,9 +776,7 @@ style_values_lookup (GtkStyleContext *context)
     }
   else
     {
-      values = build_properties (context, info->decl, &priv->relevant_changes);
-      /* These flags are always relevant */
-      priv->relevant_changes |= GTK_CSS_CHANGE_SOURCE;
+      values = build_properties (context, info->decl);
     }
   
   style_info_set_values (info, values);
@@ -807,7 +800,7 @@ style_values_lookup_for_state (GtkStyleContext *context,
 
   decl = gtk_css_node_declaration_ref (context->priv->info->decl);
   gtk_css_node_declaration_set_state (&decl, state);
-  values = build_properties (context, decl, NULL);
+  values = build_properties (context, decl);
   gtk_css_node_declaration_unref (decl);
 
   return values;
@@ -2733,16 +2726,17 @@ gtk_style_context_do_invalidate (GtkStyleContext  *context,
 }
 
 static gboolean
-gtk_style_context_needs_full_revalidate (GtkStyleContext  *context,
-                                         GtkCssChange      change)
+gtk_style_context_style_needs_full_revalidate (GtkCssStyle  *style,
+                                               GtkCssChange  change)
 {
-  GtkStyleContextPrivate *priv = context->priv;
-
   /* Try to avoid invalidating if we can */
   if (change & GTK_STYLE_CONTEXT_RADICAL_CHANGE)
     return TRUE;
 
-  if (priv->relevant_changes & change)
+  if (GTK_IS_CSS_ANIMATED_STYLE (style))
+    style = GTK_CSS_ANIMATED_STYLE (style)->style;
+
+  if (gtk_css_static_style_get_change (GTK_CSS_STATIC_STYLE (style)) & change)
     return TRUE;
   else
     return FALSE;
@@ -2818,18 +2812,11 @@ _gtk_style_context_validate (GtkStyleContext  *context,
 
   /* Try to avoid invalidating if we can */
   if (current == NULL ||
-      gtk_style_context_needs_full_revalidate (context, change))
+      gtk_style_context_style_needs_full_revalidate (current, change))
     {
       GtkCssStyle *values;
 
-      if ((priv->relevant_changes & change) & ~GTK_STYLE_CONTEXT_CACHED_CHANGE)
-        {
-          gtk_style_context_clear_cache (context);
-        }
-      else
-        {
-          gtk_style_context_update_cache (context, parent_changes);
-        }
+      gtk_style_context_clear_cache (context);
 
       style_info_set_values (info, NULL);
       values = style_values_lookup (context);

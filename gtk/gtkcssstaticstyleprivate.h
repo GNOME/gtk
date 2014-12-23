@@ -46,6 +46,8 @@ struct _GtkCssStaticStyle
   GtkBitmask            *equals_parent;        /* values that equal their parent values */
   GtkBitmask            *depends_on_color;     /* values that depend on the color property */
   GtkBitmask            *depends_on_font_size; /* values that depend on the font-size property */
+
+  GtkCssChange           change;               /* change as returned by value lookup */
 };
 
 struct _GtkCssStaticStyleClass
@@ -58,8 +60,7 @@ GType                   gtk_css_static_style_get_type           (void) G_GNUC_CO
 GtkCssStyle *           gtk_css_static_style_new_compute        (GtkStyleProviderPrivate *provider,
                                                                  const GtkCssMatcher    *matcher,
                                                                  int                     scale,
-                                                                 GtkCssStyle            *parent,
-                                                                 GtkCssChange           *out_change);
+                                                                 GtkCssStyle            *parent);
 GtkCssStyle *           gtk_css_static_style_new_update         (GtkCssStaticStyle      *style,
                                                                  const GtkBitmask       *parent_changes,
                                                                  GtkStyleProviderPrivate *provider,
@@ -74,6 +75,8 @@ void                    gtk_css_static_style_compute_value      (GtkCssStaticSty
                                                                  guint                   id,
                                                                  GtkCssValue            *specified,
                                                                  GtkCssSection          *section);
+
+GtkCssChange            gtk_css_static_style_get_change         (GtkCssStaticStyle      *style);
 
 G_END_DECLS
 
