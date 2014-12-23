@@ -83,8 +83,7 @@
  * |[<!-- language="C" -->
  * app = gtk_application_new ();
  *
- * builder = gtk_builder_new ();
- * gtk_builder_add_from_string (builder,
+ * builder = gtk_builder_new_from_string (
  *     "<interface>"
  *     "  <menu id='menubar'>"
  *     "    <submenu label='_Edit'>"
@@ -92,7 +91,8 @@
  *     "      <item label='_Paste' action='win.paste'/>"
  *     "    </submenu>"
  *     "  </menu>"
- *     "</interface>");
+ *     "</interface>",
+ *     -1);
  *
  * menubar = G_MENU_MODEL (gtk_builder_get_object (builder,
  *                                                 "menubar"));
