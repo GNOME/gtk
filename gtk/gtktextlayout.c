@@ -1310,6 +1310,8 @@ set_para_values (GtkTextLayout      *layout,
 {
   PangoAlignment pango_align = PANGO_ALIGN_LEFT;
   PangoWrapMode pango_wrap = PANGO_WRAP_WORD;
+  gint h_margin;
+  gint h_padding;
 
   switch (base_dir)
     {
@@ -1392,14 +1394,16 @@ set_para_values (GtkTextLayout      *layout,
       break;
     }
 
+  h_margin = display->left_margin + display->right_margin;
+  h_padding = layout->left_padding + layout->right_padding;
+
   if (style->wrap_mode != GTK_WRAP_NONE)
     {
-      int layout_width = (layout->screen_width - display->left_margin - display->right_margin);
+      int layout_width = (layout->screen_width - h_margin - h_padding);
       pango_layout_set_width (display->layout, layout_width * PANGO_SCALE);
       pango_layout_set_wrap (display->layout, pango_wrap);
     }
-
-  display->total_width = MAX (layout->screen_width, layout->width) - display->left_margin - display->right_margin;
+  display->total_width = MAX (layout->screen_width, layout->width) - h_margin - h_padding;
   
 G_GNUC_BEGIN_IGNORE_DEPRECATIONS
   if (style->pg_bg_color)
@@ -2241,6 +2245,8 @@ gtk_text_layout_get_line_display (GtkTextLayout *layout,
   PangoDirection base_dir;
   GPtrArray *tags;
   gboolean initial_toggle_segments;
+  gint h_margin;
+  gint h_padding;
   
   g_return_val_if_fail (line != NULL, NULL);
 
@@ -2550,6 +2556,11 @@ gtk_text_layout_get_line_display (GtkTextLayout *layout,
 
   text_pixel_width = PIXEL_BOUND (extents.width);
   display->width = text_pixel_width + display->left_margin + display->right_margin;
+
+  h_margin = display->left_margin + display->right_margin;
+  h_padding = layout->left_padding + layout->right_padding;
+
+  display->width = text_pixel_width + h_margin + h_padding;
   display->height += PANGO_PIXELS (extents.height);
 
   /* If we aren't wrapping, we need to do the alignment of each

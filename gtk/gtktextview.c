@@ -156,9 +156,18 @@ struct _GtkTextViewPrivate
   GtkAdjustment *hadjustment;
   GtkAdjustment *vadjustment;
 
-  gint xoffset;         /* Offsets between widget coordinates and buffer coordinates */
+  /* X offset between widget coordinates and buffer coordinates
+   * taking left_padding in account
+   */
+  gint xoffset;
+
+  /* Y offset between widget coordinates and buffer coordinates
+   * taking top_padding and top_margin in account
+   */
   gint yoffset;
-  gint width;           /* Width and height of the buffer */
+
+  /* Width and height of the buffer */
+  gint width;
   gint height;
 
   /* This is used to monitor the overall size request 
@@ -214,8 +223,20 @@ struct _GtkTextViewPrivate
   gint pixels_inside_wrap;
   GtkWrapMode wrap_mode;
   GtkJustification justify;
+
   gint left_margin;
   gint right_margin;
+  gint top_margin;
+  gint bottom_margin;
+  gint left_padding;
+  gint right_padding;
+  gint top_padding;
+  gint bottom_padding;
+  gint top_border;
+  gint bottom_border;
+  gint left_border;
+  gint right_border;
+
   gint indent;
   gint64 handle_place_time;
   PangoTabArray *tabs;
@@ -299,6 +320,8 @@ enum
   PROP_JUSTIFICATION,
   PROP_LEFT_MARGIN,
   PROP_RIGHT_MARGIN,
+  PROP_TOP_MARGIN,
+  PROP_BOTTOM_MARGIN,
   PROP_INDENT,
   PROP_TABS,
   PROP_CURSOR_VISIBLE,
@@ -787,7 +810,19 @@ gtk_text_view_class_init (GtkTextViewClass *klass)
                                                       GTK_TYPE_JUSTIFICATION,
                                                       GTK_JUSTIFY_LEFT,
                                                       GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
- 
+
+  /**
+   * GtkTextView:left-margin:
+   *
+   * The default left margin for text in the text view.
+   * Tags in the buffer may override the default.
+   *
+   * Note that this property is confusingly named. In CSS terms,
+   * the value set here is padding, and it is applied in addition
+   * to the padding from the theme.
+   *
+   * Don't confuse this property with #GtkWidget:margin-left.
+   */
   g_object_class_install_property (gobject_class,
                                    PROP_LEFT_MARGIN,
                                    g_param_spec_int ("left-margin",
@@ -796,11 +831,65 @@ gtk_text_view_class_init (GtkTextViewClass *klass)
                                                      0, G_MAXINT, 0,
                                                      GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
 
+  /**
+   * GtkTextView:right-margin:
+   *
+   * The default right margin for text in the text view.
+   * Tags in the buffer may override the default.
+   *
+   * Note that this property is confusingly named. In CSS terms,
+   * the value set here is padding, and it is applied in addition
+   * to the padding from the theme.
+   *
+   * Don't confuse this property with #GtkWidget:margin-right.
+   */
   g_object_class_install_property (gobject_class,
                                    PROP_RIGHT_MARGIN,
                                    g_param_spec_int ("right-margin",
                                                      P_("Right Margin"),
                                                      P_("Width of the right margin in pixels"),
+                                                     0, G_MAXINT, 0,
+                                                     GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
+
+  /**
+   * GtkTextView:top-margin:
+   *
+   * The top margin for text in the text view.
+   *
+   * Note that this property is confusingly named. In CSS terms,
+   * the value set here is padding, and it is applied in addition
+   * to the padding from the theme.
+   *
+   * Don't confuse this property with #GtkWidget:margin-top.
+   *
+   * Since: 3.18
+   */
+  g_object_class_install_property (gobject_class,
+                                   PROP_TOP_MARGIN,
+                                   g_param_spec_int ("top-margin",
+                                                     P_("Top Margin"),
+                                                     P_("Height of the top margin in pixels"),
+                                                     0, G_MAXINT, 0,
+                                                     GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
+
+  /**
+   * GtkTextView:bottom-margin:
+   *
+   * The bottom margin for text in the text view.
+   *
+   * Note that this property is confusingly named. In CSS terms,
+   * the value set here is padding, and it is applied in addition
+   * to the padding from the theme.
+   *
+   * Don't confuse this property with #GtkWidget:margin-bottom.
+   *
+   * Since: 3.18
+   */
+  g_object_class_install_property (gobject_class,
+                                   PROP_BOTTOM_MARGIN,
+                                   g_param_spec_int ("bottom-margin",
+                                                     P_("Bottom Margin"),
+                                                     P_("Height of the bottom margin in pixels"),
                                                      0, G_MAXINT, 0,
                                                      GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
 
@@ -1568,8 +1657,6 @@ gtk_text_view_init (GtkTextView *text_view)
   priv->pixels_below_lines = 0;
   priv->pixels_inside_wrap = 0;
   priv->justify = GTK_JUSTIFY_LEFT;
-  priv->left_margin = 0;
-  priv->right_margin = 0;
   priv->indent = 0;
   priv->tabs = NULL;
   priv->editable = TRUE;
@@ -2086,51 +2173,46 @@ gtk_text_view_get_line_at_y (GtkTextView *text_view,
                                  line_top);
 }
 
-/**
- * gtk_text_view_scroll_to_iter:
- * @text_view: a #GtkTextView
- * @iter: a #GtkTextIter
- * @within_margin: margin as a [0.0,0.5) fraction of screen size
- * @use_align: whether to use alignment arguments (if %FALSE, 
- *    just get the mark onscreen)
- * @xalign: horizontal alignment of mark within visible area
- * @yalign: vertical alignment of mark within visible area
- *
- * Scrolls @text_view so that @iter is on the screen in the position
- * indicated by @xalign and @yalign. An alignment of 0.0 indicates
- * left or top, 1.0 indicates right or bottom, 0.5 means center. 
- * If @use_align is %FALSE, the text scrolls the minimal distance to 
- * get the mark onscreen, possibly not scrolling at all. The effective 
- * screen for purposes of this function is reduced by a margin of size 
- * @within_margin.
- *
- * Note that this function uses the currently-computed height of the
- * lines in the text buffer. Line heights are computed in an idle 
- * handler; so this function may not have the desired effect if it’s 
- * called before the height computations. To avoid oddness, consider 
- * using gtk_text_view_scroll_to_mark() which saves a point to be 
- * scrolled to after line validation.
- *
- * Returns: %TRUE if scrolling occurred
- **/
-gboolean
-gtk_text_view_scroll_to_iter (GtkTextView   *text_view,
-                              GtkTextIter   *iter,
-                              gdouble        within_margin,
-                              gboolean       use_align,
-                              gdouble        xalign,
-                              gdouble        yalign)
+/* Same as gtk_text_view_scroll_to_iter but deal with
+ * (top_margin / top_padding) and (bottom_margin / bottom_padding).
+ * When with_border == TRUE and you scroll on the edges,
+ * all borders are shown for the corresponding edge.
+ * When with_border == FALSE, only left margin and right_margin
+ * can be seen because they can be can be overwritten by tags.
+ */
+static gboolean
+_gtk_text_view_scroll_to_iter (GtkTextView   *text_view,
+                               GtkTextIter   *iter,
+                               gdouble        within_margin,
+                               gboolean       use_align,
+                               gdouble        xalign,
+                               gdouble        yalign,
+                               gboolean       with_border)
 {
-  GdkRectangle rect;
-  GdkRectangle screen;
-  gint screen_bottom;
-  gint screen_right;
-  gint scroll_dest;
+  GtkTextViewPrivate *priv = text_view->priv;
   GtkWidget *widget;
+
+  GdkRectangle cursor;
+  gint cursor_bottom;
+  gint cursor_right;
+
+  GdkRectangle screen;
+  GdkRectangle screen_dest;
+
+  gint screen_inner_left;
+  gint screen_inner_right;
+  gint screen_inner_top;
+  gint screen_inner_bottom;
+
+  gint border_xoffset = 0;
+  gint border_yoffset = 0;
+  gint within_margin_xoffset;
+  gint within_margin_yoffset;
+
+  gint buffer_bottom;
+  gint buffer_right;
+
   gboolean retval = FALSE;
-  gint scroll_inc;
-  gint screen_xoffset, screen_yoffset;
-  gint current_x_scroll, current_y_scroll;
 
   /* FIXME why don't we do the validate-at-scroll-destination thing
    * from flush_scroll in this function? I think it wasn't done before
@@ -2147,128 +2229,209 @@ gtk_text_view_scroll_to_iter (GtkTextView   *text_view,
 
   DV(g_print(G_STRLOC"\n"));
   
-  gtk_text_layout_get_iter_location (text_view->priv->layout,
+  gtk_text_layout_get_iter_location (priv->layout,
                                      iter,
-                                     &rect);
+                                     &cursor);
 
-  DV (g_print (" target rect %d,%d  %d x %d\n", rect.x, rect.y, rect.width, rect.height));
-  
-  current_x_scroll = text_view->priv->xoffset;
-  current_y_scroll = text_view->priv->yoffset;
+  DV (g_print (" target cursor %d,%d  %d x %d\n", cursor.x, cursor.y, cursor.width, cursor.height));
 
-  screen.x = current_x_scroll;
-  screen.y = current_y_scroll;
+  /* In each direction, *_border are the addition of *_padding and *_margin
+   *
+   * Vadjustment value:
+   * (-priv->top_border) [top padding][top margin] (0) [text][bottom margin][bottom padding]
+   *
+   * Hadjustment value:
+   * (-priv->left_padding) [left padding] (0) [left margin][text][right margin][right padding]
+   *
+   * Buffer coordinates:
+   * on x: (0) [left margin][text][right margin]
+   * on y: (0) [text]
+   *
+   * left margin and right margin are part of the x buffer coordinate
+   * because they are part of the pango layout so that they can be
+   * overwritten by tags.
+   *
+   * Canvas coordinates:
+   * (the canvas is the virtual window where the content of the buffer is drawn )
+   *
+   * on x: (-priv->left_padding) [left padding] (0) [left margin][text][right margin][right padding]
+   * on y: (-priv->top_border) [top margin][top padding] (0) [text][bottom margin][bottom padding]
+   *
+   * (priv->xoffset, priv->yoffset) is the origin of the view (visible part of the canvas)
+   *  in canvas coordinates.
+   * As you can see, canvas coordinates and buffer coordinates are compatible but the canvas
+   * can be larger than the buffer depending of the border size.
+   */
+
+  cursor_bottom = cursor.y + cursor.height;
+  cursor_right = cursor.x + cursor.width;
+
+  /* Current position of the view in canvas coordinates */
+  screen.x = priv->xoffset;
+  screen.y = priv->yoffset;
   screen.width = SCREEN_WIDTH (widget);
   screen.height = SCREEN_HEIGHT (widget);
-  
-  screen_xoffset = screen.width * within_margin;
-  screen_yoffset = screen.height * within_margin;
-  
-  screen.x += screen_xoffset;
-  screen.y += screen_yoffset;
-  screen.width -= screen_xoffset * 2;
-  screen.height -= screen_yoffset * 2;
 
-  /* paranoia check */
-  if (screen.width < 1)
-    screen.width = 1;
-  if (screen.height < 1)
-    screen.height = 1;
-  
-  /* The -1 here ensures that we leave enough space to draw the cursor
-   * when this function is used for horizontal scrolling. 
-   */
-  screen_right = screen.x + screen.width - 1;
-  screen_bottom = screen.y + screen.height;
-  
+  within_margin_xoffset = screen.width * within_margin;
+  within_margin_yoffset = screen.height * within_margin;
+
+  screen_inner_left = screen.x + within_margin_xoffset;
+  screen_inner_top = screen.y + within_margin_yoffset;
+  screen_inner_right = screen.x + screen.width - within_margin_xoffset;
+  screen_inner_bottom = screen.y + screen.width - within_margin_yoffset;
+
+  buffer_bottom = priv->height - priv->bottom_border;
+  buffer_right = priv->width - priv->right_margin;
+
+  screen_dest.x = screen.x;
+  screen_dest.y = screen.y;
+  screen_dest.width = screen.width - within_margin_xoffset * 2;
+  screen_dest.height = screen.height - within_margin_yoffset * 2;
+
+  /* Minimum authorised size check */
+  if (screen_dest.width < 1)
+    screen_dest.width = 1;
+  if (screen_dest.height < 1)
+    screen_dest.height = 1;
+
   /* The alignment affects the point in the target character that we
    * choose to align. If we're doing right/bottom alignment, we align
    * the right/bottom edge of the character the mark is at; if we're
    * doing left/top we align the left/top edge of the character; if
    * we're doing center alignment we align the center of the
    * character.
+   *
+   * The differents cases handle on each direction:
+   *   1. cursor outside of the inner area define by within_margin
+   *   2. if use_align == TRUE, alignment with xalign and yalign
+   *   3. scrolling on the edges dependent of with_border
    */
-  
-  /* Vertical scroll */
 
-  scroll_inc = 0;
-  scroll_dest = current_y_scroll;
-  
+  /* Vertical scroll */
   if (use_align)
-    {      
-      scroll_dest = rect.y + (rect.height * yalign) - (screen.height * yalign);
-      
-      /* if scroll_dest < screen.y, we move a negative increment (up),
-       * else a positive increment (down)
-       */
-      scroll_inc = scroll_dest - screen.y + screen_yoffset;
+    {
+      gint cursor_y_alignment_offset;
+
+      cursor_y_alignment_offset = (cursor.height * yalign) - (screen_dest.height * yalign);
+      screen_dest.y = cursor.y + cursor_y_alignment_offset - within_margin_yoffset;
     }
   else
     {
-      /* move minimum to get onscreen */
-      if (rect.y < screen.y)
+      /* move minimum to get onscreen, showing the
+       * top_border or bottom_border when necessary
+       */
+      if (cursor.y < screen_inner_top)
         {
-          scroll_dest = rect.y;
-          scroll_inc = scroll_dest - screen.y - screen_yoffset;
-        }
-      else if ((rect.y + rect.height) > screen_bottom)
-        {
-          scroll_dest = rect.y + rect.height;
-          scroll_inc = scroll_dest - screen_bottom + screen_yoffset;
-        }
-    }  
-  
-  if (scroll_inc != 0)
-    {
-      gtk_adjustment_animate_to_value (text_view->priv->vadjustment,
-				       current_y_scroll + scroll_inc);
+          if (cursor.y == 0)
+            border_yoffset = (with_border) ? priv->top_padding : 0;
 
-      DV (g_print (" vert increment %d\n", scroll_inc));
+          screen_dest.y = cursor.y - MAX (within_margin_yoffset, border_yoffset);
+        }
+      else if (cursor_bottom > screen_inner_bottom)
+        {
+          if (cursor_bottom == buffer_bottom)
+            border_yoffset = (with_border) ? priv->bottom_padding : 0;
+
+          screen_dest.y = cursor_bottom - screen_dest.height +
+                          MAX (within_margin_yoffset, border_yoffset);
+        }
+    }
+
+  if (screen_dest.y != screen.y)
+    {
+      gtk_adjustment_animate_to_value (priv->vadjustment, screen_dest.y);
+
+      DV (g_print (" vert increment %d\n", screen_dest.y - screen.y));
     }
 
   /* Horizontal scroll */
-  
-  scroll_inc = 0;
-  scroll_dest = current_x_scroll;
-  
-  if (use_align)
-    {      
-      scroll_dest = rect.x + (rect.width * xalign) - (screen.width * xalign);
 
-      /* if scroll_dest < screen.y, we move a negative increment (left),
-       * else a positive increment (right)
-       */
-      scroll_inc = scroll_dest - screen.x + screen_xoffset;
+  if (use_align)
+    {
+      gint cursor_x_alignment_offset;
+
+      cursor_x_alignment_offset = (cursor.width * xalign) - (screen_dest.width * xalign);
+      screen_dest.x = cursor.x + cursor_x_alignment_offset - within_margin_xoffset;
     }
   else
     {
-      /* move minimum to get onscreen */
-      if (rect.x < screen.x)
+      /* move minimum to get onscreen, showing the
+       * left_border or right_border when necessary
+       */
+      if (cursor.x < screen_inner_left)
         {
-          scroll_dest = rect.x;
-          scroll_inc = scroll_dest - screen.x - screen_xoffset;
-        }
-      else if ((rect.x + rect.width) > screen_right)
-        {
-          scroll_dest = rect.x + rect.width;
-          scroll_inc = scroll_dest - screen_right + screen_xoffset;
-        }
-    }
-  
-  if (scroll_inc != 0)
-    {
-      gtk_adjustment_animate_to_value (text_view->priv->hadjustment,
-				       current_x_scroll + scroll_inc);
+          if (cursor.x == priv->left_margin)
+            border_xoffset = (with_border) ? 0 : priv->left_padding;
 
-      DV (g_print (" horiz increment %d\n", scroll_inc));
+          screen_dest.x = cursor.x - MAX (within_margin_xoffset, border_xoffset);
+        }
+      else if (cursor_right > screen_inner_right)
+        {
+          if (cursor.x == buffer_right)
+            border_xoffset = (with_border) ? priv->left_border : priv->left_padding;
+
+          screen_dest.x = cursor_right - screen_dest.width +
+                          MAX (within_margin_xoffset, border_xoffset);
+        }
     }
-  
-  retval = (current_y_scroll != gtk_adjustment_get_value (text_view->priv->vadjustment))
-           || (current_x_scroll != gtk_adjustment_get_value (text_view->priv->hadjustment));
+
+  if (screen_dest.x != screen.x)
+    {
+      gtk_adjustment_animate_to_value (priv->hadjustment, screen_dest.x);
+
+      DV (g_print (" horiz increment %d\n", screen_dest.x - screen.x));
+    }
+
+  retval = (screen.y != gtk_adjustment_get_value (priv->vadjustment))
+           || (screen.x != gtk_adjustment_get_value (priv->hadjustment));
 
   DV(g_print (">%s ("G_STRLOC")\n", retval ? "Actually scrolled" : "Didn't end up scrolling"));
   
   return retval;
+}
+
+/**
+ * gtk_text_view_scroll_to_iter:
+ * @text_view: a #GtkTextView
+ * @iter: a #GtkTextIter
+ * @within_margin: margin as a [0.0,0.5) fraction of screen size
+ * @use_align: whether to use alignment arguments (if %FALSE,
+ *    just get the mark onscreen)
+ * @xalign: horizontal alignment of mark within visible area
+ * @yalign: vertical alignment of mark within visible area
+ *
+ * Scrolls @text_view so that @iter is on the screen in the position
+ * indicated by @xalign and @yalign. An alignment of 0.0 indicates
+ * left or top, 1.0 indicates right or bottom, 0.5 means center.
+ * If @use_align is %FALSE, the text scrolls the minimal distance to
+ * get the mark onscreen, possibly not scrolling at all. The effective
+ * screen for purposes of this function is reduced by a margin of size
+ * @within_margin.
+ *
+ * Note that this function uses the currently-computed height of the
+ * lines in the text buffer. Line heights are computed in an idle
+ * handler; so this function may not have the desired effect if it’s
+ * called before the height computations. To avoid oddness, consider
+ * using gtk_text_view_scroll_to_mark() which saves a point to be
+ * scrolled to after line validation.
+ *
+ * Returns: %TRUE if scrolling occurred
+ **/
+gboolean
+gtk_text_view_scroll_to_iter (GtkTextView   *text_view,
+                              GtkTextIter   *iter,
+                              gdouble        within_margin,
+                              gboolean       use_align,
+                              gdouble        xalign,
+                              gdouble        yalign)
+{
+  return _gtk_text_view_scroll_to_iter (text_view,
+                                        iter,
+                                        within_margin,
+                                        use_align,
+                                        xalign,
+                                        yalign,
+                                        FALSE);
 }
 
 static void
@@ -2369,12 +2532,13 @@ gtk_text_view_flush_scroll (GtkTextView *text_view)
   /* Ensure we have updated width/height */
   gtk_text_view_update_adjustments (text_view);
   
-  retval = gtk_text_view_scroll_to_iter (text_view,
-                                         &iter,
-                                         scroll->within_margin,
-                                         scroll->use_align,
-                                         scroll->xalign,
-                                         scroll->yalign);
+  retval = _gtk_text_view_scroll_to_iter (text_view,
+                                          &iter,
+                                          scroll->within_margin,
+                                          scroll->use_align,
+                                          scroll->xalign,
+                                          scroll->yalign,
+                                          TRUE);
 
   if (text_view->priv->text_handle)
     gtk_text_view_update_handles (text_view,
@@ -2400,6 +2564,7 @@ gtk_text_view_update_adjustments (GtkTextView *text_view)
 
   /* Make room for the cursor after the last character in the widest line */
   width += SPACE_FOR_CURSOR;
+  height += priv->top_border + priv->bottom_border;
 
   if (priv->width != width || priv->height != height)
     {
@@ -2950,23 +3115,25 @@ gtk_text_view_get_justification (GtkTextView *text_view)
  * gtk_text_view_set_left_margin:
  * @text_view: a #GtkTextView
  * @left_margin: left margin in pixels
- * 
+ *
  * Sets the default left margin for text in @text_view.
  * Tags in the buffer may override the default.
- **/
+ *
+ * Note that this function is confusingly named.
+ * In CSS terms, the value set here is padding.
+ */
 void
 gtk_text_view_set_left_margin (GtkTextView *text_view,
                                gint         left_margin)
 {
-  GtkTextViewPrivate *priv;
+  GtkTextViewPrivate *priv = text_view->priv;
 
   g_return_if_fail (GTK_IS_TEXT_VIEW (text_view));
-
-  priv = text_view->priv;
 
   if (priv->left_margin != left_margin)
     {
       priv->left_margin = left_margin;
+      priv->left_border = left_margin + priv->left_padding;
 
       if (priv->layout && priv->layout->default_style)
         {
@@ -2981,12 +3148,12 @@ gtk_text_view_set_left_margin (GtkTextView *text_view,
 /**
  * gtk_text_view_get_left_margin:
  * @text_view: a #GtkTextView
- * 
+ *
  * Gets the default left margin size of paragraphs in the @text_view.
  * Tags in the buffer may override the default.
- * 
+ *
  * Returns: left margin in pixels
- **/
+ */
 gint
 gtk_text_view_get_left_margin (GtkTextView *text_view)
 {
@@ -3002,7 +3169,10 @@ gtk_text_view_get_left_margin (GtkTextView *text_view)
  *
  * Sets the default right margin for text in the text view.
  * Tags in the buffer may override the default.
- **/
+ *
+ * Note that this function is confusingly named.
+ * In CSS terms, the value set here is padding.
+ */
 void
 gtk_text_view_set_right_margin (GtkTextView *text_view,
                                 gint         right_margin)
@@ -3014,6 +3184,7 @@ gtk_text_view_set_right_margin (GtkTextView *text_view,
   if (priv->right_margin != right_margin)
     {
       priv->right_margin = right_margin;
+      priv->right_border = right_margin + priv->right_padding;
 
       if (priv->layout && priv->layout->default_style)
         {
@@ -3028,18 +3199,122 @@ gtk_text_view_set_right_margin (GtkTextView *text_view,
 /**
  * gtk_text_view_get_right_margin:
  * @text_view: a #GtkTextView
- * 
+ *
  * Gets the default right margin for text in @text_view. Tags
  * in the buffer may override the default.
- * 
+ *
  * Returns: right margin in pixels
- **/
+ */
 gint
 gtk_text_view_get_right_margin (GtkTextView *text_view)
 {
   g_return_val_if_fail (GTK_IS_TEXT_VIEW (text_view), 0);
 
   return text_view->priv->right_margin;
+}
+
+/**
+ * gtk_text_view_set_top_margin:
+ * @text_view: a #GtkTextView
+ * @top_margin: top margin in pixels
+ *
+ * Sets the top margin for text in @text_view.
+ *
+ * Note that this function is confusingly named.
+ * In CSS terms, the value set here is padding.
+ *
+ * Since: 3.18
+ */
+void
+gtk_text_view_set_top_margin (GtkTextView *text_view,
+                              gint         top_margin)
+{
+  GtkTextViewPrivate *priv = text_view->priv;
+
+  g_return_if_fail (GTK_IS_TEXT_VIEW (text_view));
+
+  if (priv->top_margin != top_margin)
+    {
+      priv->yoffset += priv->top_margin - top_margin;
+
+      priv->top_margin = top_margin;
+      priv->top_border = top_margin + priv->top_padding;
+
+      if (priv->layout && priv->layout->default_style)
+        gtk_text_layout_default_style_changed (priv->layout);
+
+      gtk_text_view_invalidate (text_view);
+
+      g_object_notify (G_OBJECT (text_view), "top-margin");
+    }
+}
+
+/**
+ * gtk_text_view_get_top_margin:
+ * @text_view: a #GtkTextView
+ *
+ * Gets the top margin for text in the @text_view.
+ *
+ * Returns: top margin in pixels
+ *
+ * Since: 3.18
+ **/
+gint
+gtk_text_view_get_top_margin (GtkTextView *text_view)
+{
+  g_return_val_if_fail (GTK_IS_TEXT_VIEW (text_view), 0);
+
+  return text_view->priv->top_margin;
+}
+
+/**
+ * gtk_text_view_set_bottom_margin:
+ * @text_view: a #GtkTextView
+ * @bottom_margin: bottom margin in pixels
+ *
+ * Sets the bottom margin for text in @text_view.
+ *
+ * Note that this function is confusingly named.
+ * In CSS terms, the value set here is padding.
+ *
+ * Since: 3.18
+ */
+void
+gtk_text_view_set_bottom_margin (GtkTextView *text_view,
+                                 gint         bottom_margin)
+{
+  GtkTextViewPrivate *priv = text_view->priv;
+
+  g_return_if_fail (GTK_IS_TEXT_VIEW (text_view));
+
+  if (priv->bottom_margin != bottom_margin)
+    {
+      priv->bottom_margin = bottom_margin;
+      priv->bottom_border = bottom_margin + priv->bottom_padding;
+
+      if (priv->layout && priv->layout->default_style)
+        gtk_text_layout_default_style_changed (priv->layout);
+
+      g_object_notify (G_OBJECT (text_view), "bottom-margin");
+    }
+}
+
+/**
+ * gtk_text_view_get_bottom_margin:
+ * @text_view: a #GtkTextView
+ *
+ * Gets the bottom margin for text in the @text_view.
+ *
+ * Returns: bottom margin in pixels
+ *
+ * Since: 3.18
+ */
+gint
+gtk_text_view_get_bottom_margin (GtkTextView *text_view)
+{
+  g_return_val_if_fail (GTK_IS_TEXT_VIEW (text_view), 0);
+
+  return text_view->priv->bottom_margin;
 }
 
 /**
@@ -3396,6 +3671,14 @@ gtk_text_view_set_property (GObject         *object,
       gtk_text_view_set_right_margin (text_view, g_value_get_int (value));
       break;
 
+    case PROP_TOP_MARGIN:
+      gtk_text_view_set_top_margin (text_view, g_value_get_int (value));
+      break;
+
+    case PROP_BOTTOM_MARGIN:
+      gtk_text_view_set_bottom_margin (text_view, g_value_get_int (value));
+      break;
+
     case PROP_INDENT:
       gtk_text_view_set_indent (text_view, g_value_get_int (value));
       break;
@@ -3522,6 +3805,14 @@ gtk_text_view_get_property (GObject         *object,
 
     case PROP_RIGHT_MARGIN:
       g_value_set_int (value, priv->right_margin);
+      break;
+
+    case PROP_TOP_MARGIN:
+      g_value_set_int (value, priv->top_margin);
+      break;
+
+    case PROP_BOTTOM_MARGIN:
+      g_value_set_int (value, priv->bottom_margin);
       break;
 
     case PROP_INDENT:
@@ -3859,7 +4150,7 @@ gtk_text_view_size_allocate (GtkWidget *widget,
   DV(g_print(G_STRLOC"\n"));
 
   _gtk_pixel_cache_set_extra_size (priv->pixel_cache, 64,
-                                   allocation->height / 2);
+                                   allocation->height / 2 + priv->top_border);
 
   gtk_widget_get_allocation (widget, &widget_allocation);
   size_changed =
@@ -4241,7 +4532,7 @@ changed_handler (GtkTextLayout     *layout,
 
       gtk_text_layout_get_line_yrange (layout, &first, &new_first_para_top, NULL);
 
-      old_first_para_top = priv->yoffset - priv->first_para_pixels;
+      old_first_para_top = priv->yoffset - priv->first_para_pixels + priv->top_border;
 
       if (new_first_para_top != old_first_para_top)
         {
@@ -4421,6 +4712,52 @@ gtk_text_view_unmap (GtkWidget *widget)
   GTK_WIDGET_CLASS (gtk_text_view_parent_class)->unmap (widget);
 
   _gtk_pixel_cache_unmap (priv->pixel_cache);
+}
+
+static void
+text_window_set_padding (GtkTextView     *text_view,
+                         GtkStyleContext *style_context)
+{
+  GtkTextViewPrivate *priv;
+  GtkStateFlags state;
+  GtkBorder padding;
+
+  priv = text_view->priv;
+
+  gtk_style_context_save (style_context);
+  gtk_style_context_add_class (style_context, GTK_STYLE_CLASS_VIEW);
+
+  state = gtk_widget_get_state_flags (GTK_WIDGET (text_view));
+  gtk_style_context_get_padding (style_context, state, &padding);
+
+  gtk_style_context_restore (style_context);
+
+  if (padding.left != priv->left_padding ||
+      padding.right != priv->right_padding ||
+      padding.top != priv->top_padding ||
+      padding.bottom != priv->bottom_padding)
+    {
+      priv->xoffset += priv->left_padding - padding.left;
+      priv->yoffset += priv->top_padding - padding.top;
+
+      priv->left_padding = padding.left;
+      priv->right_padding = padding.right;
+      priv->top_padding = padding.top;
+      priv->bottom_padding = padding.bottom;
+
+      priv->top_border = padding.top + priv->top_margin;
+      priv->bottom_border = padding.bottom + priv->bottom_margin;
+      priv->left_border = padding.left + priv->left_margin;
+      priv->right_border = padding.right + priv->right_margin;
+
+      if (priv->layout && priv->layout->default_style)
+        {
+          priv->layout->right_padding = priv->right_padding;
+          priv->layout->left_padding = priv->left_padding;
+
+          gtk_text_layout_default_style_changed (priv->layout);
+        }
+    }
 }
 
 static void
@@ -5394,8 +5731,8 @@ gtk_text_view_paint (GtkWidget      *widget,
   priv = text_view->priv;
 
   g_return_if_fail (priv->layout != NULL);
-  g_return_if_fail (priv->xoffset >= 0);
-  g_return_if_fail (priv->yoffset >= 0);
+  g_return_if_fail (priv->xoffset >= - priv->left_padding);
+  g_return_if_fail (priv->yoffset >= - priv->top_border);
 
   while (priv->first_validate_idle != 0)
     {
@@ -5505,6 +5842,8 @@ gtk_text_view_draw (GtkWidget *widget,
   GtkStyleContext *context;
 
   context = gtk_widget_get_style_context (widget);
+
+  text_window_set_padding (GTK_TEXT_VIEW (widget), context);
 
   if (gtk_cairo_should_draw_window (cr, gtk_widget_get_window (widget)))
     {
@@ -7535,8 +7874,12 @@ gtk_text_view_ensure_layout (GtkTextView *text_view)
       style->pixels_above_lines = priv->pixels_above_lines;
       style->pixels_below_lines = priv->pixels_below_lines;
       style->pixels_inside_wrap = priv->pixels_inside_wrap;
+
       style->left_margin = priv->left_margin;
       style->right_margin = priv->right_margin;
+      priv->layout->right_padding = priv->right_padding;
+      priv->layout->left_padding = priv->left_padding;
+
       style->indent = priv->indent;
       style->tabs = priv->tabs ? pango_tab_array_copy (priv->tabs) : NULL;
 
@@ -8370,8 +8713,8 @@ gtk_text_view_value_changed (GtkAdjustment *adjustment,
   
   if (adjustment == priv->hadjustment)
     {
-      dx = priv->xoffset - (gint)gtk_adjustment_get_value (adjustment);
-      priv->xoffset = gtk_adjustment_get_value (adjustment);
+      dx = priv->xoffset - gtk_adjustment_get_value (adjustment);
+      priv->xoffset = gtk_adjustment_get_value (adjustment) - priv->left_padding;
 
       /* If the change is due to a size change we need 
        * to invalidate the entire text window because there might be
@@ -8387,8 +8730,8 @@ gtk_text_view_value_changed (GtkAdjustment *adjustment,
     }
   else if (adjustment == priv->vadjustment)
     {
-      dy = priv->yoffset - (gint)gtk_adjustment_get_value (adjustment);
-      priv->yoffset = gtk_adjustment_get_value (adjustment);
+      dy = priv->yoffset - gtk_adjustment_get_value (adjustment);
+      priv->yoffset = gtk_adjustment_get_value (adjustment) - priv->top_border;
 
       if (priv->layout)
         {
@@ -9376,7 +9719,7 @@ gtk_text_view_get_rendered_rect (GtkTextView  *text_view,
   window = gtk_text_view_get_window (text_view, GTK_TEXT_WINDOW_TEXT);
 
   rect->x = gtk_adjustment_get_value (priv->hadjustment) - extra_w;
-  rect->y = gtk_adjustment_get_value (priv->vadjustment) - extra_h;
+  rect->y = gtk_adjustment_get_value (priv->vadjustment) - extra_h - priv->top_border;
 
   rect->height = gdk_window_get_height (window) + (extra_h * 2);
   rect->width = gdk_window_get_width (window) + (extra_w * 2);
@@ -9405,20 +9748,23 @@ text_window_invalidate_handler (GdkWindow      *window,
 {
   gpointer widget;
   GtkTextView *text_view;
+  GtkTextViewPrivate *priv;
   int x, y;
 
   gdk_window_get_user_data (window, &widget);
   text_view = GTK_TEXT_VIEW (widget);
+  priv = text_view->priv;
 
   /* Scrolling will invalidate everything in the bin window,
    * but we already have it in the cache, so we can ignore that */
-  if (text_view->priv->in_scroll)
+  if (priv->in_scroll)
     return;
 
-  x = gtk_adjustment_get_value (text_view->priv->hadjustment);
-  y = gtk_adjustment_get_value (text_view->priv->vadjustment);
+  x = priv->xoffset;
+  y = priv->yoffset + priv->top_border;
+
   cairo_region_translate (region, x, y);
-  _gtk_pixel_cache_invalidate (text_view->priv->pixel_cache, region);
+  _gtk_pixel_cache_invalidate (priv->pixel_cache, region);
   cairo_region_translate (region, -x, -y);
 }
 

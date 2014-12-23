@@ -132,6 +132,9 @@ struct _GtkTextLayout
 
   GtkTextBuffer *buffer;
 
+  gint left_padding;
+  gint right_padding;
+
   /* Default style used if no tags override it */
   GtkTextAttributes *default_style;
 

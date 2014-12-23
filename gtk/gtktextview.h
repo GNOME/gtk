@@ -405,6 +405,16 @@ void             gtk_text_view_set_right_margin       (GtkTextView      *text_vi
                                                        gint              right_margin);
 GDK_AVAILABLE_IN_ALL
 gint             gtk_text_view_get_right_margin       (GtkTextView      *text_view);
+GDK_AVAILABLE_IN_3_18
+void             gtk_text_view_set_top_margin         (GtkTextView      *text_view,
+                                                       gint              top_margin);
+GDK_AVAILABLE_IN_3_18
+gint             gtk_text_view_get_top_margin         (GtkTextView      *text_view);
+GDK_AVAILABLE_IN_3_18
+void             gtk_text_view_set_bottom_margin      (GtkTextView      *text_view,
+                                                       gint              bottom_margin);
+GDK_AVAILABLE_IN_3_18
+gint             gtk_text_view_get_bottom_margin       (GtkTextView      *text_view);
 GDK_AVAILABLE_IN_ALL
 void             gtk_text_view_set_indent             (GtkTextView      *text_view,
                                                        gint              indent);
