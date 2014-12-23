@@ -151,7 +151,6 @@ struct _GtkAboutDialogPrivate
   gchar **documenters;
   gchar **artists;
 
-
   GSList *credit_sections;
 
   gboolean credits_page_initialized;
@@ -373,9 +372,8 @@ gtk_about_dialog_class_init (GtkAboutDialogClass *klass)
     g_param_spec_string ("copyright",
                          P_("Copyright string"),
                          P_("Copyright information for the program"),
-                         NULL,
+                        NULL,
                          GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY);
-        
 
   /**
    * GtkAboutDialog:comments:
@@ -654,9 +652,9 @@ update_credits_button_visibility (GtkAboutDialog *about)
           priv->documenters != NULL ||
           priv->artists != NULL ||
           priv->credit_sections != NULL ||
-         (priv->translator_credits != NULL &&
-          strcmp (priv->translator_credits, "translator_credits") &&
-          strcmp (priv->translator_credits, "translator-credits")));
+          (priv->translator_credits != NULL &&
+           strcmp (priv->translator_credits, "translator_credits") &&
+           strcmp (priv->translator_credits, "translator-credits")));
   if (show)
     gtk_widget_show (priv->credits_page);
   else
@@ -891,8 +889,8 @@ gtk_about_dialog_get_property (GObject    *object,
 {
   GtkAboutDialog *about = GTK_ABOUT_DIALOG (object);
   GtkAboutDialogPrivate *priv = about->priv;
-        
-  switch (prop_id) 
+
+  switch (prop_id)
     {
     case PROP_NAME:
       g_value_set_string (value, priv->name);
@@ -1078,13 +1076,9 @@ gtk_about_dialog_show (GtkWidget *widget)
 const gchar *
 gtk_about_dialog_get_program_name (GtkAboutDialog *about)
 {
-  GtkAboutDialogPrivate *priv;
-
   g_return_val_if_fail (GTK_IS_ABOUT_DIALOG (about), NULL);
 
-  priv = about->priv;
-
-  return priv->name;
+  return about->priv->name;
 }
 
 static void
@@ -1433,13 +1427,9 @@ gtk_about_dialog_set_wrap_license (GtkAboutDialog *about,
 const gchar *
 gtk_about_dialog_get_website (GtkAboutDialog *about)
 {
-  GtkAboutDialogPrivate *priv;
-
   g_return_val_if_fail (GTK_IS_ABOUT_DIALOG (about), NULL);
 
-  priv = about->priv;
-
-  return priv->website_url;
+  return about->priv->website_url;
 }
 
 /**
@@ -1485,13 +1475,9 @@ gtk_about_dialog_set_website (GtkAboutDialog *about,
 const gchar *
 gtk_about_dialog_get_website_label (GtkAboutDialog *about)
 {
-  GtkAboutDialogPrivate *priv;
-
   g_return_val_if_fail (GTK_IS_ABOUT_DIALOG (about), NULL);
 
-  priv = about->priv;
-
-  return priv->website_text;
+  return about->priv->website_text;
 }
 
 /**
@@ -1539,13 +1525,9 @@ gtk_about_dialog_set_website_label (GtkAboutDialog *about,
 const gchar * const *
 gtk_about_dialog_get_authors (GtkAboutDialog *about)
 {
-  GtkAboutDialogPrivate *priv;
-
   g_return_val_if_fail (GTK_IS_ABOUT_DIALOG (about), NULL);
 
-  priv = about->priv;
-
-  return (const gchar * const *) priv->authors;
+  return (const gchar * const *) about->priv->authors;
 }
 
 /**
@@ -1594,13 +1576,9 @@ gtk_about_dialog_set_authors (GtkAboutDialog  *about,
 const gchar * const *
 gtk_about_dialog_get_documenters (GtkAboutDialog *about)
 {
-  GtkAboutDialogPrivate *priv;
-
   g_return_val_if_fail (GTK_IS_ABOUT_DIALOG (about), NULL);
 
-  priv = about->priv;
-
-  return (const gchar * const *)priv->documenters;
+  return (const gchar * const *)about->priv->documenters;
 }
 
 /**
@@ -1649,13 +1627,9 @@ gtk_about_dialog_set_documenters (GtkAboutDialog *about,
 const gchar * const *
 gtk_about_dialog_get_artists (GtkAboutDialog *about)
 {
-  GtkAboutDialogPrivate *priv;
-
   g_return_val_if_fail (GTK_IS_ABOUT_DIALOG (about), NULL);
 
-  priv = about->priv;
-
-  return (const gchar * const *)priv->artists;
+  return (const gchar * const *)about->priv->artists;
 }
 
 /**
@@ -1908,7 +1882,7 @@ gtk_about_dialog_set_logo_icon_name (GtkAboutDialog *about,
       g_free (sizes);
 
       gtk_image_set_from_icon_name (GTK_IMAGE (priv->logo_image), icon_name,
-                                GTK_ICON_SIZE_DIALOG);
+                                    GTK_ICON_SIZE_DIALOG);
       gtk_image_set_pixel_size (GTK_IMAGE (priv->logo_image), best_size);
     }
   else if ((icons = gtk_window_get_default_icon_list ()))
@@ -2065,7 +2039,7 @@ set_cursor_if_appropriate (GtkAboutDialog *about,
 }
 
 static gboolean
-text_view_motion_notify_event (GtkWidget *text_view,
+text_view_motion_notify_event (GtkWidget      *text_view,
                                GdkEventMotion *event,
                                GtkAboutDialog *about)
 {
@@ -2203,11 +2177,11 @@ text_buffer_new (GtkAboutDialog  *about,
 }
 
 static void
-add_credits_section (GtkAboutDialog *about,
-                     GtkGrid        *grid,
-                     gint           *row,
-                     gchar          *title,
-                     gchar         **people)
+add_credits_section (GtkAboutDialog  *about,
+                     GtkGrid         *grid,
+                     gint            *row,
+                     gchar           *title,
+                     gchar          **people)
 {
   GtkWidget *label;
   gchar *markup;
