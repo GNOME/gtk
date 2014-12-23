@@ -2676,33 +2676,6 @@ gtk_style_context_clear_cache (GtkStyleContext *context)
 }
 
 static void
-gtk_style_context_update_cache (GtkStyleContext  *context,
-                                const GtkBitmask *parent_changes)
-{
-  GtkStyleContextPrivate *priv;
-  GHashTableIter iter;
-  gpointer key, value;
-
-  if (_gtk_bitmask_is_empty (parent_changes))
-    return;
-
-  priv = context->priv;
-
-  g_hash_table_iter_init (&iter, priv->style_values);
-  while (g_hash_table_iter_next (&iter, &key, &value))
-    {
-      const GtkCssNodeDeclaration *decl = key;
-      GtkCssStyle *values = value;
-
-      values = update_properties (context, values, decl, parent_changes);
-
-      g_hash_table_iter_replace (&iter, values);
-    }
-
-  gtk_style_context_clear_property_cache (context);
-}
-
-static void
 gtk_style_context_do_invalidate (GtkStyleContext  *context,
                                  const GtkBitmask *changes)
 {
@@ -2740,6 +2713,41 @@ gtk_style_context_style_needs_full_revalidate (GtkCssStyle  *style,
     return TRUE;
   else
     return FALSE;
+}
+
+static void
+gtk_style_context_update_cache (GtkStyleContext  *context,
+                                GtkCssChange      change,
+                                const GtkBitmask *parent_changes)
+{
+  GtkStyleContextPrivate *priv;
+  GHashTableIter iter;
+  gpointer key, value;
+
+  if (_gtk_bitmask_is_empty (parent_changes))
+    return;
+
+  priv = context->priv;
+
+  g_hash_table_iter_init (&iter, priv->style_values);
+  while (g_hash_table_iter_next (&iter, &key, &value))
+    {
+      const GtkCssNodeDeclaration *decl = key;
+      GtkCssStyle *style = value;
+
+      if (gtk_style_context_style_needs_full_revalidate (style, change))
+        {
+          g_hash_table_iter_remove (&iter);
+        }
+      else
+        {
+          style = update_properties (context, style, decl, parent_changes);
+
+          g_hash_table_iter_replace (&iter, style);
+        }
+    }
+
+  gtk_style_context_clear_property_cache (context);
 }
 
 static gboolean
@@ -2816,8 +2824,6 @@ _gtk_style_context_validate (GtkStyleContext  *context,
     {
       GtkCssStyle *values;
 
-      gtk_style_context_clear_cache (context);
-
       style_info_set_values (info, NULL);
       values = style_values_lookup (context);
 
@@ -2835,8 +2841,6 @@ _gtk_style_context_validate (GtkStyleContext  *context,
     }
   else
     {
-      gtk_style_context_update_cache (context, parent_changes);
-
       if (!_gtk_bitmask_is_empty (parent_changes))
         {
           GtkCssStyle *new_values;
@@ -2891,6 +2895,9 @@ _gtk_style_context_validate (GtkStyleContext  *context,
     gtk_style_context_do_invalidate (context, changes);
 
   change = _gtk_css_change_for_child (change);
+  
+  gtk_style_context_update_cache (context, change, changes);
+
   for (list = priv->children; list; list = list->next)
     {
       _gtk_style_context_validate (list->data, timestamp, change, changes);
