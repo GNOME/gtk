@@ -983,27 +983,26 @@ calendar_compute_days (GtkCalendar *calendar)
 
   first_day = day_of_week (year, month, 1);
   first_day = (first_day + 7 - priv->week_start) % 7;
+  if (first_day == 0)
+    first_day = 7;
 
   /* Compute days of previous month */
   if (month > 1)
     ndays_in_prev_month = month_length[leap (year)][month - 1];
   else
     ndays_in_prev_month = month_length[leap (year - 1)][12];
-  day = ndays_in_prev_month - first_day + 1;
+  day = ndays_in_prev_month - first_day+ 1;
 
-  row = 0;
-  if (first_day > 0)
+  for (col = 0; col < first_day; col++)
     {
-      for (col = 0; col < first_day; col++)
-        {
-          priv->day[row][col] = day;
-          priv->day_month[row][col] = MONTH_PREV;
-          day++;
-        }
+      priv->day[0][col] = day;
+      priv->day_month[0][col] = MONTH_PREV;
+      day++;
     }
 
   /* Compute days of current month */
-  col = first_day;
+  row = first_day / 7;
+  col = first_day % 7;
   for (day = 1; day <= ndays_in_month; day++)
     {
       priv->day[row][col] = day;
