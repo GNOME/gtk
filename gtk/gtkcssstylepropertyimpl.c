@@ -967,7 +967,7 @@ _gtk_css_style_property_init_properties (void)
                                           GTK_CSS_PROPERTY_FONT_SIZE,
                                           G_TYPE_DOUBLE,
                                           GTK_STYLE_PROPERTY_INHERIT | GTK_STYLE_PROPERTY_ANIMATED,
-                                          GTK_CSS_AFFECTS_FONT | GTK_CSS_AFFECTS_TEXT,
+                                          GTK_CSS_AFFECTS_FONT | GTK_CSS_AFFECTS_TEXT | GTK_CSS_AFFECTS_SIZE,
                                           font_size_parse,
                                           query_length_as_double,
                                           assign_length_from_double,
