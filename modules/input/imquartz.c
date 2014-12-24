@@ -172,9 +172,6 @@ output_result (GtkIMContext *context,
         retval = TRUE;
     }
 
-  g_free (fixed_str);
-  g_free (marked_str);
-
   return retval;
 }
 
