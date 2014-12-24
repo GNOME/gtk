@@ -4,9 +4,6 @@
  * GTK Calendar Widget
  * Copyright (C) 1998 Cesar Miquel, Shawn T. Amundson and Mattias Groenlund
  *
- * lib_date routines
- * Copyright (c) 1995, 1996, 1997, 1998 by Steffen Beyer
- *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
  * License as published by the Free Software Foundation; either
@@ -86,12 +83,6 @@
 #define TIMEOUT_INITIAL  500
 #define TIMEOUT_REPEAT    50
 
-/***************************************************************************/
-/* The following date routines are taken from the lib_date package.
- * They have been minimally edited to avoid conflict with types defined
- * in win32 headers.
- */
-
 static const guint month_length[2][13] =
 {
   { 0, 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 },
@@ -104,101 +95,37 @@ static const guint days_in_months[2][14] =
   { 0, 0, 31, 60, 91, 121, 152, 182, 213, 244, 274, 305, 335, 366 }
 };
 
-static glong  calc_days(guint year, guint mm, guint dd);
-static guint  day_of_week(guint year, guint mm, guint dd);
-static glong  dates_difference(guint year1, guint mm1, guint dd1,
-                               guint year2, guint mm2, guint dd2);
-static guint  weeks_in_year(guint year);
-
 static gboolean
 leap (guint year)
 {
-  return((((year % 4) == 0) && ((year % 100) != 0)) || ((year % 400) == 0));
+  return ((((year % 4) == 0) && ((year % 100) != 0)) || ((year % 400) == 0));
 }
 
 static guint
 day_of_week (guint year, guint mm, guint dd)
 {
-  glong  days;
+  GDateTime *dt;
+  guint days;
 
-  days = calc_days(year, mm, dd);
-  if (days > 0L)
-    {
-      days--;
-      days %= 7L;
-      days++;
-    }
-  return( (guint) days );
-}
+  dt = g_date_time_new_local (year, mm, dd, 1, 1, 1);
+  days = g_date_time_get_day_of_week (dt);
+  g_date_time_unref (dt);
 
-static guint weeks_in_year(guint year)
-{
-  return(52 + ((day_of_week(year,1,1)==4) || (day_of_week(year,12,31)==4)));
-}
-
-static gboolean
-check_date(guint year, guint mm, guint dd)
-{
-  if (year < 1) return FALSE;
-  if ((mm < 1) || (mm > 12)) return FALSE;
-  if ((dd < 1) || (dd > month_length[leap(year)][mm])) return FALSE;
-  return TRUE;
+  return days;
 }
 
 static guint
-week_number(guint year, guint mm, guint dd)
+week_of_year (guint year, guint mm, guint dd)
 {
-  guint first;
+  GDateTime *dt;
+  guint week;
 
-  first = day_of_week(year,1,1) - 1;
-  return( (guint) ( (dates_difference(year,1,1, year,mm,dd) + first) / 7L ) +
-          (first < 4) );
+  dt = g_date_time_new_local (year, mm, dd, 1, 1, 1);
+  week = g_date_time_get_week_of_year (dt);
+  g_date_time_unref (dt);
+
+  return week;
 }
-
-static glong
-year_to_days(guint year)
-{
-  return( year * 365L + (year / 4) - (year / 100) + (year / 400) );
-}
-
-
-static glong
-calc_days(guint year, guint mm, guint dd)
-{
-  gboolean lp;
-
-  if (year < 1) return(0L);
-  if ((mm < 1) || (mm > 12)) return(0L);
-  if ((dd < 1) || (dd > month_length[(lp = leap(year))][mm])) return(0L);
-  return( year_to_days(--year) + days_in_months[lp][mm] + dd );
-}
-
-static gboolean
-week_of_year(guint *week, guint *year, guint mm, guint dd)
-{
-  if (check_date(*year,mm,dd))
-    {
-      *week = week_number(*year,mm,dd);
-      if (*week == 0)
-        *week = weeks_in_year(--(*year));
-      else if (*week > weeks_in_year(*year))
-        {
-          *week = 1;
-          (*year)++;
-        }
-      return TRUE;
-    }
-  return FALSE;
-}
-
-static glong
-dates_difference(guint year1, guint mm1, guint dd1,
-                 guint year2, guint mm2, guint dd2)
-{
-  return( calc_days(year2, mm2, dd2) - calc_days(year1, mm1, dd1) );
-}
-
-/*** END OF lib_date routines ********************************************/
 
 /* Spacing around day/week headers and main area, inside those windows */
 #define CALENDAR_MARGIN          0
@@ -1059,9 +986,9 @@ calendar_compute_days (GtkCalendar *calendar)
 
   /* Compute days of previous month */
   if (month > 1)
-    ndays_in_prev_month = month_length[leap (year)][month-1];
+    ndays_in_prev_month = month_length[leap (year)][month - 1];
   else
-    ndays_in_prev_month = month_length[leap (year)][12];
+    ndays_in_prev_month = month_length[leap (year - 1)][12];
   day = ndays_in_prev_month - first_day + 1;
 
   row = 0;
@@ -2434,7 +2361,6 @@ calendar_paint_week_numbers (GtkCalendar *calendar,
   GtkCalendarPrivate *priv = calendar->priv;
   GtkStyleContext *context;
   GtkBorder padding, week_padding;
-  guint week = 0, year;
   gint row, x_loc, y_loc;
   gint day_height;
   char buffer[32];
@@ -2479,16 +2405,25 @@ calendar_paint_week_numbers (GtkCalendar *calendar,
 
   for (row = 0; row < 6; row++)
     {
-      gboolean result;
+      gint year, month, week;
 
       year = priv->year;
-      if (priv->day[row][6] < 15 && row > 3 && priv->month == 11)
-        year++;
+      month = priv->month + priv->day_month[row][6] - MONTH_CURRENT;
 
-      result = week_of_year (&week, &year,
-                             ((priv->day[row][6] < 15 && row > 3 ? 1 : 0)
-                              + priv->month) % 12 + 1, priv->day[row][6]);
-      g_return_if_fail (result);
+      if (month < 0)
+        {
+          month += 12;
+          year -= 1;
+        }
+      else if (month > 11)
+        {
+          month -= 12;
+          year += 1;
+        }
+
+      month += 1;
+
+      week = week_of_year (year, month, priv->day[row][6]);
 
       /* Translators: this defines whether the week numbers should use
        * localized digits or the ones used in English (0123...).
