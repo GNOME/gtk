@@ -822,11 +822,14 @@ gtk_popover_update_position (GtkPopover *popover)
   overshoot[GTK_POS_LEFT] = req.width - rect.x;
   overshoot[GTK_POS_RIGHT] = rect.x + rect.width + req.width - window_alloc.width;
 
+#ifdef GDK_WINDOWING_WAYLAND
   if (GDK_IS_WAYLAND_DISPLAY (gtk_widget_get_display (widget)))
     {
       priv->final_position = priv->preferred_position;
     }
-  else if (overshoot[pos] <= 0)
+  else
+#endif
+  if (overshoot[pos] <= 0)
     {
       priv->final_position = priv->preferred_position;
     }
