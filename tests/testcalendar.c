@@ -67,10 +67,16 @@ calendar_date_to_string (CalendarData *data,
 
   gtk_calendar_get_date (GTK_CALENDAR(data->window),
 			 &year, &month, &day);
-  date = g_date_new_dmy (day, month + 1, year);
-  g_date_strftime (buffer, buff_len-1, "%x", date);
-
-  g_date_free (date);
+  if (g_date_valid_dmy (day, month + 1, year))
+    {
+      date = g_date_new_dmy (day, month + 1, year);
+      g_date_strftime (buffer, buff_len-1, "%x", date);
+      g_date_free (date);
+    }
+  else
+    {
+      g_snprintf (buffer, buff_len - 1, "%d/%d/%d (invalid)", month + 1, day, year);
+    }
 }
 
 static void
