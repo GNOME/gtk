@@ -2748,7 +2748,9 @@ GtkCalendar {
     }
   }
 
+  &:inconsistent, &:inconsistent:backdrop,
   &.highlight, &.highlight:backdrop { color: gtkalpha(currentColor, 0.55); }
+
 
   &:backdrop {
     color: $backdrop_text_color;
