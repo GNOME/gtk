@@ -291,6 +291,11 @@ typedef enum
  *  input methods, and for use cases like typeahead search.
  * @GDK_MODIFIER_INTENT_SHIFT_GROUP: the modifier that switches between keyboard
  *  groups (AltGr on X11/Windows and Option/Alt on OS X).
+ * @GDK_MODIFIER_INTENT_DEFAULT_MOD_MASK: The set of modifier masks accepted
+ * as modifiers in accelerators. Needed because Command is mapped to MOD2 on
+ * OSX, which is widely used, but on X11 MOD2 is NumLock and using that for a
+ * mod key is problematic at best.
+ * Ref: https://bugzilla.gnome.org/show_bug.cgi?id=736125.
  *
  * This enum is used with gdk_keymap_get_modifier_mask()
  * in order to determine what modifiers the
@@ -309,7 +314,8 @@ typedef enum
   GDK_MODIFIER_INTENT_EXTEND_SELECTION,
   GDK_MODIFIER_INTENT_MODIFY_SELECTION,
   GDK_MODIFIER_INTENT_NO_TEXT_INPUT,
-  GDK_MODIFIER_INTENT_SHIFT_GROUP
+  GDK_MODIFIER_INTENT_SHIFT_GROUP,
+  GDK_MODIFIER_INTENT_DEFAULT_MOD_MASK,
 } GdkModifierIntent;
 
 typedef enum

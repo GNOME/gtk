@@ -73,12 +73,7 @@ static void accel_closure_invalidate     (gpointer    data,
 static guint  signal_accel_activate      = 0;
 static guint  signal_accel_changed       = 0;
 static guint  quark_acceleratable_groups = 0;
-static guint  default_accel_mod_mask     = (GDK_SHIFT_MASK   |
-                                            GDK_CONTROL_MASK |
-                                            GDK_MOD1_MASK    |
-                                            GDK_SUPER_MASK   |
-                                            GDK_HYPER_MASK   |
-                                            GDK_META_MASK);
+static guint  default_accel_mod_mask     = 0;
 
 enum {
   PROP_0,
@@ -1752,5 +1747,10 @@ gtk_accelerator_set_default_mod_mask (GdkModifierType default_mod_mask)
 GdkModifierType
 gtk_accelerator_get_default_mod_mask (void)
 {
+  if (!default_accel_mod_mask)
+    default_accel_mod_mask =
+      gdk_keymap_get_modifier_mask (gdk_keymap_get_default (),
+				    GDK_MODIFIER_INTENT_DEFAULT_MOD_MASK);
+
   return default_accel_mod_mask;
 }

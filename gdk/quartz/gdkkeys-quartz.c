@@ -761,6 +761,11 @@ gdk_quartz_keymap_get_modifier_mask (GdkKeymap         *keymap,
     case GDK_MODIFIER_INTENT_SHIFT_GROUP:
       return GDK_MOD1_MASK;
 
+    case GDK_MODIFIER_INTENT_DEFAULT_MOD_MASK:
+      return (GDK_SHIFT_MASK   | GDK_CONTROL_MASK | GDK_MOD1_MASK    |
+	      GDK_MOD2_MASK    | GDK_SUPER_MASK   | GDK_HYPER_MASK   |
+	      GDK_META_MASK);
+
     default:
       g_return_val_if_reached (0);
     }
