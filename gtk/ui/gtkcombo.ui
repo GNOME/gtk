@@ -1,0 +1,232 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface domain="gtk30">
+  <!-- interface-requires gtk+ 3.10 -->
+  <template class="GtkCombo" parent="GtkBin">
+    <child>
+      <object class="GtkToggleButton" id="button">
+        <property name="visible">True</property>
+        <signal name="key-press-event" handler="button_key_press"/>
+        <child>
+          <object class="GtkBox">
+            <property name="visible">True</property>
+            <property name="orientation">horizontal</property>
+            <property name="spacing">6</property>
+            <child type="center">
+              <object class="GtkLabel" id="active_label">
+                <property name="visible">True</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkImage">
+                <property name="visible">True</property>
+                <property name="halign">end</property>
+                <property name="valign">center</property>
+                <property name="icon-name">pan-down-symbolic</property>
+                <property name="icon-size">1</property>
+              </object>
+              <packing>
+                <property name="pack-type">end</property>
+              </packing>
+            </child>
+          </object>
+        </child>
+      </object>
+    </child>
+  </template>
+  <object class="GtkPopover" id="popover">
+    <property name="relative-to">button</property>
+    <property name="position">bottom</property>
+    <property name="modal">True</property>
+    <property name="visible" bind-source="button" bind-property="active" bind-flags="bidirectional"/>
+    <signal name="hide" handler="reset_popover"/>
+    <signal name="key-press-event" handler="popover_key_press"/>
+    <child>
+      <object class="GtkStack" id="stack">
+        <property name="visible">True</property>
+        <property name="vhomogeneous">False</property>
+        <property name="transition-type">slide-left-right</property>
+        <child>
+          <object class="GtkBox">
+            <property name="visible">True</property>
+            <property name="orientation">vertical</property>
+            <property name="margin">10</property>
+            <property name="spacing">10</property>
+            <child>
+              <object class="GtkRevealer" id="search_revealer">
+                <property name="visible">True</property>
+                <property name="transition-type">slide-down</property>
+                <child>
+                  <object class="GtkSearchEntry" id="search_entry">
+                    <property name="visible">True</property>
+                    <property name="width-chars">15</property>
+                    <property name="max-width-chars">15</property>
+                    <signal name="search-changed" handler="search_changed"/>
+                  </object>
+                </child>
+              </object>
+            </child>
+            <child>
+              <object class="GtkScrolledWindow" id="scrolled_window">
+                <property name="visible">True</property>
+                <property name="shadow-type">in</property>
+                <property name="hscrollbar-policy">never</property>
+                <property name="vscrollbar-policy">never</property>
+                <child>
+                  <object class="GtkListBox" id="list">
+                    <property name="visible">True</property>
+                    <property name="selection-mode">none</property>
+                    <property name="width-request">100</property>
+                    <signal name="row-activated" handler="list_row_activated"/>
+                    <child type="placeholder">
+                      <object class="GtkLabel">
+                        <property name="visible">True</property>
+                        <property name="margin">6</property>
+                        <property name="label" translatable="yes">No match</property>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkListBoxRow" id="show_more">
+                        <child>
+                          <object class="GtkImage">
+                            <property name="visible">True</property>
+                            <property name="margin">6</property>
+                            <property name="halign">center</property>
+                            <property name="valign">center</property>
+                            <property name="icon-name">view-more-symbolic</property>
+                            <property name="icon-size">1</property>
+                          </object>
+                        </child>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkListBoxRow" id="add_custom">
+                        <child>
+                          <object class="GtkBox">
+                            <property name="visible">True</property>
+                            <property name="orientation">horizontal</property>
+                            <property name="margin">6</property>
+                            <property name="spacing">12</property>
+                            <child>
+                              <object class="GtkLabel">
+                                <property name="visible">True</property>
+                                <property name="label" translatable="yes">Custom Entry</property>
+                              </object>
+                            </child>
+                            <child>
+                              <object class="GtkImage">
+                                <property name="visible">True</property>
+                                <property name="halign">end</property>
+                                <property name="valign">center</property>
+                                <property name="icon-name">pan-end-symbolic</property>
+                                <property name="icon-size">1</property>
+                              </object>
+                              <packing>
+                                <property name="expand">True</property>
+                              </packing>
+                            </child>
+                          </object>
+                        </child>
+                      </object>
+                    </child>
+                  </object>
+                </child>
+              </object>
+            </child>
+          </object>
+          <packing>
+            <property name="name">list</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkFrame">
+            <property name="visible">True</property>
+            <property name="margin">10</property>
+            <child>
+              <object class="GtkListBox" id="custom">
+                <property name="visible">True</property>
+                <property name="selection-mode">none</property>
+                <property name="width-request">100</property>
+                <signal name="row-activated" handler="custom_row_activated"/>
+                <child>
+                  <object class="GtkListBoxRow" id="back_to_list">
+                    <property name="visible">True</property>
+                    <child>
+                      <object class="GtkBox">
+                        <property name="visible">True</property>
+                        <property name="orientation">horizontal</property>
+                        <property name="margin">6</property>
+                        <property name="spacing">12</property>
+                        <child>
+                          <object class="GtkImage">
+                            <property name="visible">True</property>
+                            <property name="halign">start</property>
+                            <property name="valign">center</property>
+                            <property name="icon-name">pan-start-symbolic</property>
+                            <property name="icon-size">1</property>
+                          </object>
+                        </child>
+                        <child type="center">
+                          <object class="GtkLabel">
+                            <property name="visible">True</property>
+                            <property name="label" translatable="yes">Custom Entry</property>
+                          </object>
+                        </child>
+                      </object>
+                    </child>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkListBoxRow">
+                    <property name="visible">True</property>
+                    <property name="activatable">False</property>
+                    <child>
+                      <object class="GtkEntry" id="custom_entry">
+                        <property name="visible">True</property>
+                        <property name="margin">6</property>
+                        <signal name="activate" handler="custom_entry_done"/>
+                        <signal name="notify::text" handler="custom_entry_changed"/>
+                      </object>
+                    </child>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkListBoxRow">
+                    <property name="visible">True</property>
+                    <property name="activatable">False</property>
+                    <child>
+                      <object class="GtkButton" id="custom_button">
+                        <property name="visible">True</property>
+                        <property name="sensitive">False</property>
+                        <property name="margin">6</property>
+                        <property name="label" translatable="yes">Done</property>
+                        <signal name="clicked" handler="custom_entry_done"/>
+                      </object>
+                    </child>
+                  </object>
+                </child>
+              </object>
+            </child>
+          </object>
+          <packing>
+            <property name="name">custom</property>
+          </packing>
+        </child>
+      </object>
+    </child>
+  </object>
+  <object class="GtkSizeGroup">
+    <property name="mode">horizontal</property>
+    <property name="ignore-hidden">False</property>
+    <widgets>
+      <widget name="search_entry"/>
+      <widget name="scrolled_window"/>
+    </widgets>
+  </object>
+  <object class="GtkSizeGroup">
+    <property name="mode">horizontal</property>
+    <widgets>
+      <widget name="button"/>
+      <widget name="stack"/>
+    </widgets>
+  </object>
+</interface>

@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface domain="gtk30">
+  <!-- interface-requires gtk+ 3.10 -->
+  <template class="GtkComboRow" parent="GtkListBoxRow">
+    <property name="visible">True</property>
+    <child>
+      <object class="GtkBox">
+        <property name="visible">True</property>
+        <property name="orientation">horizontal</property>
+        <property name="margin">6</property>
+        <property name="spacing">12</property>
+        <child>
+          <object class="GtkLabel" id="label">
+            <property name="visible">True</property>
+            <property name="label" bind-source="GtkComboRow" bind-property="text"/>
+          </object>
+        </child>
+        <child>
+          <object class="GtkImage" id="check">
+            <property name="icon-name">object-select-symbolic</property>
+            <property name="icon-size">1</property>
+            <property name="visible" bind-source="GtkComboRow" bind-property="active"/>
+          </object>
+        </child>
+      </object>
+    </child>
+  </template>
+</interface>
