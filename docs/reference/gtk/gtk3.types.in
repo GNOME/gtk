@@ -55,6 +55,7 @@ gtk_color_selection_dialog_get_type
 gtk_color_selection_get_type
 gtk_combo_box_get_type
 gtk_combo_box_text_get_type
+gtk_combo_get_type
 gtk_container_get_type
 gtk_css_provider_get_type
 gtk_dialog_get_type

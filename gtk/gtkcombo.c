@@ -39,6 +39,48 @@
 #include "gtkprivate.h"
 
 
+/**
+ * SECTION:gtkcombo
+ * @Short_description: A simple text-only combo box using a popover
+ * @Title: GtkCombo
+ * @See_also: #GtkComboBoxText
+ *
+ * A GtkCombo is a simple variant of a combo box that hides the
+ * model-view complexity of #GtkcomboBox and uses popovers.
+ *
+ * To create a GtkCombo, use gtk_combo_new().
+ *
+ * You can add items to a GtkCombo using gtk_combo_add_item() and remove
+ * them with gtk_combo_remove_item(). Each item has an ID that is returned
+ * as the value of the #GtkCombo:active property when the item is currently
+ * selected, an optional text that is used to display the item, and an
+ * optional sort key that is used to sort the items.
+ *
+ * If you want to allow the user to enter custom values, use
+ * gtk_combo_set_allow_custom().
+ *
+ * # GtkCombo as GtkBuildable
+ *
+ * The GtkCombo implementation of the GtkBuildable interface supports
+ * adding items directly using the <items> element and specifying <item>
+ * elements for each item. Each <item> element can specify the “id”
+ * and "sort" corresponding to the appended text and also supports
+ * the regular translation attributes “translatable”, “context” and
+ * “comments”.
+ *
+ * Here is a UI definition fragment specifying some GtkCombo items:
+ * |[
+ * <object class="GtkCombo">
+ *   <items>
+ *     <item translatable="yes" id="factory" sort="aaa">Factory</item>
+ *     <item translatable="yes" id="home" sort="ccc">Home</item>
+ *     <item translatable="yes" id="subway" sort="bbb">Subway</item>
+ *   </items>
+ * </object>
+ * ]|
+ */
+
+
 #define GTK_TYPE_COMBO_ROW    (gtk_combo_row_get_type ())
 #define GTK_COMBO_ROW(obj)    (G_TYPE_CHECK_INSTANCE_CAST ((obj), GTK_TYPE_COMBO_ROW, GtkComboRow))
 #define GTK_IS_COMBO_ROW(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GTK_TYPE_COMBO_ROW))
@@ -393,19 +435,44 @@ gtk_combo_class_init (GtkComboClass *class)
   object_class->set_property = gtk_combo_set_property;
   object_class->get_property = gtk_combo_get_property;
 
+  /**
+   * GtkCombo:active:
+   *
+   * The ID of the currently selected item, or %NULL
+   * if no item is currently selected.
+   */
   g_object_class_install_property (object_class,
                                    PROP_ACTIVE,
-                                   g_param_spec_string ("active", P_("Active"), P_("Active"),
+                                   g_param_spec_string ("active",
+                                                        P_("Active"),
+                                                        P_("Active ID"),
                                                         NULL,
                                                         GTK_PARAM_READWRITE));
+
+  /**
+   * GtkCombo:placeholder:
+   *
+   * The text that is displayed if not item is selected.
+   */
   g_object_class_install_property (object_class,
                                    PROP_PLACEHOLDER,
-                                   g_param_spec_string ("placeholder", P_("Placeholder"), P_("Placeholder"),
+                                   g_param_spec_string ("placeholder",
+                                                        P_("Placeholder"),
+                                                        P_("Placeholder text"),
                                                         NULL,
                                                         GTK_PARAM_READWRITE));
+
+  /**
+   * GtkCombo:allow-custom:
+   *
+   * Whether the combo should allow the user to enter
+   * custom values.
+   */
   g_object_class_install_property (object_class,
                                    PROP_ALLOW_CUSTOM,
-                                   g_param_spec_boolean ("allow-custom", P_("Allow custom"), P_("Allow custom"),
+                                   g_param_spec_boolean ("allow-custom",
+                                                         P_("Allow custom"),
+                                                         P_("Allow custom items"),
                                                          FALSE,
                                                          GTK_PARAM_READWRITE));
 
@@ -1091,12 +1158,33 @@ button_key_press (GtkWidget *widget,
 
 /***/
 
+
+/**
+ * gtk_combo_new:
+ *
+ * Creates a new #GtkCombo.
+ *
+ * Returns: A new #GtkCombo
+ *
+ * Since: 3.16
+ */
 GtkWidget *
 gtk_combo_new (void)
 {
   return g_object_new (GTK_TYPE_COMBO, NULL);
 }
 
+/**
+ * gtk_combo_get_active:
+ * @combo: a #GtkCombo
+ *
+ * Gets the ID of the currently selected item.
+ *
+ * Returns: (transfer none): the active ID, or %NULL if no
+ *   item is selected
+ *
+ * Since: 3.16
+ */
 const gchar *
 gtk_combo_get_active (GtkCombo *combo)
 {
@@ -1105,6 +1193,17 @@ gtk_combo_get_active (GtkCombo *combo)
   return combo->active;
 }
 
+/**
+ * gtk_combo_set_active:
+ * @combo: a #GtkCombo
+ * @id: the ID to select
+ *
+ * Sets the active ID to @id. If @id is not the ID
+ * of an item of combo, no item will be selected
+ * after this call.
+ *
+ * Since: 3.16
+ */
 void
 gtk_combo_set_active (GtkCombo    *combo,
                       const gchar *id)
@@ -1114,6 +1213,23 @@ gtk_combo_set_active (GtkCombo    *combo,
   set_active (combo, id);
 }
 
+/**
+ * gtk_combo_add:
+ * @combo: a #GtkCombo
+ * @id: the ID for the item to add
+ * @sort: (allow-none): a sort key for the item
+ * @text: (allow-none): the text to display for the item
+ *
+ * Adds an item to the combo.
+ *
+ * If an item with this ID already exists, its sort key
+ * and display text will be updated with the new values.
+ *
+ * If @sort is %NULL, the item will be sorted according to @text.
+ * If @text is %NULL, the @id will be used to display the item.
+ *
+ * Since: 3.16
+ */
 void
 gtk_combo_add_item (GtkCombo    *combo,
                     const gchar *id,
@@ -1126,6 +1242,18 @@ gtk_combo_add_item (GtkCombo    *combo,
   collapse_list (combo);
 }
 
+/**
+ * gtk_combo_remove:
+ * @combo: a #GtkCombo
+ * @id: the ID of the item to remove
+ *
+ * Removes an item from the combo.
+ *
+ * If the item with the this ID is currently selected,
+ * no item will be selected after this call.
+ *
+ * Since: 3.16
+ */
 void
 gtk_combo_remove_item (GtkCombo    *combo,
                        const gchar *id)
@@ -1141,6 +1269,16 @@ gtk_combo_remove_item (GtkCombo    *combo,
   collapse_list (combo);
 }
 
+/**
+ * gtk_combo_set_placeholder:
+ * @combo: a #GtkCombo
+ * @text: (allow-none): the placeholder text to use, or %NULL
+ *
+ * Sets the placeholder text that is displayed in the combo
+ * if no item is currently selected.
+ *
+ * Since: 3.16
+ */
 void
 gtk_combo_set_placeholder (GtkCombo    *combo,
                            const gchar *text)
@@ -1156,6 +1294,17 @@ gtk_combo_set_placeholder (GtkCombo    *combo,
   g_object_notify (G_OBJECT (combo), "placeholder");
 }
 
+/**
+ * gtk_combo_get_placeholder:
+ * @combo: a #GtkCombo
+ *
+ * Gets the placholder text that is displayed in the combo
+ * if no item is currently selected.
+ *
+ * Returns: (transfer none): the placeholder text
+ *
+ * Since: 3.16
+ */
 const gchar *
 gtk_combo_get_placeholder (GtkCombo *combo)
 {
@@ -1164,6 +1313,16 @@ gtk_combo_get_placeholder (GtkCombo *combo)
   return combo->placeholder;
 }
 
+/**
+ * gtk_combo_set_allow_custom:
+ * @combo: a #GtkCombo
+ * @allow: whether to allow custom items
+ *
+ * Sets whether the combo should allow the user
+ * to enter custom values.
+ *
+ * Since: 3.16
+ */
 void
 gtk_combo_set_allow_custom (GtkCombo *combo,
                             gboolean  allow)
@@ -1180,6 +1339,17 @@ gtk_combo_set_allow_custom (GtkCombo *combo,
   g_object_notify (G_OBJECT (combo), "allow-custom");
 }
 
+/**
+ * gtk_combo_get_allow_custom:
+ * #combo: a #GtkCombo
+ *
+ * Gets whether the combo should allow the user
+ * to enter custom values.
+ *
+ * Returns: %TRUE if custom values are allowed
+ *
+ * Since: 3.16
+ */
 gboolean
 gtk_combo_get_allow_custom (GtkCombo *combo)
 {
