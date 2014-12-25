@@ -157,6 +157,7 @@ gtk_public_h_sources = 		\
 	gtkcolorchooserwidget.h	\
 	gtkcolorchooserdialog.h	\
 	gtkcolorutils.h		\
+	gtkcombo.h		\
 	gtkcombobox.h		\
 	gtkcomboboxtext.h	\
 	gtkcontainer.h		\
@@ -588,6 +589,7 @@ gtk_base_c_sources = 		\
 	gtkcolorscale.c		\
 	gtkcolorswatch.c	\
 	gtkcolorutils.c		\
+	gtkcombo.c		\
 	gtkcombobox.c		\
 	gtkcomboboxtext.c	\
 	gtkcontainer.c		\
@@ -1047,7 +1049,9 @@ templates =				\
 	ui/gtkassistant.ui		\
 	ui/gtkcolorchooserdialog.ui	\
 	ui/gtkcoloreditor.ui		\
-	ui/gtkdialog.ui		\
+	ui/gtkcombo.ui			\
+	ui/gtkcomborow.ui		\
+	ui/gtkdialog.ui			\
 	ui/gtkfilechooserbutton.ui	\
 	ui/gtkfilechooserwidget.ui	\
 	ui/gtkfilechooserdialog.ui	\
