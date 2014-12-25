@@ -98,6 +98,7 @@ noinst_PROGRAMS =  $(TEST_PROGS)	\
 	testmenubutton			\
 	testmountoperation		\
 	testmultidisplay		\
+	testnewcombo			\
 	testnotebookdnd			\
 	testnumerableicon		\
 	testnouiprint			\
@@ -243,6 +244,7 @@ testlockbutton_DEPENDENCIES = $(TEST_DEPS)
 testmenubutton_DEPENDENCIES = $(TEST_DEPS)
 testmountoperation_DEPENDENCIES = $(TEST_DEPS)
 testmultidisplay_DEPENDENCIES = $(TEST_DEPS)
+testnewcombo_DEPENDENCIES = $(TEST_DEPS)
 testnotebookdnd_DEPENDENCIES = $(TEST_DEPS)
 testnouiprint_DEPENDENCIES = $(TEST_DEPS)
 testnumerableicon_DEPENDENCIES = $(TEST_DEPS)
