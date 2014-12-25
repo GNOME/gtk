@@ -193,6 +193,7 @@
       <xi:include href="xml/gtkradiotoolbutton.xml" />
       <xi:include href="xml/gtkpopover.xml" />
       <xi:include href="xml/gtkpopovermenu.xml" />
+      <xi:include href="xml/gtkcombo.xml" />
     </chapter>
 
     <chapter id="SelectorWidgets">

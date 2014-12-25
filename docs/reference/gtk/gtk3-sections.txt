@@ -978,6 +978,33 @@ gtk_combo_box_text_get_type
 </SECTION>
 
 <SECTION>
+<FILE>gtkcombo</FILE>
+<TITLE>GtkCombo</TITLE>
+GtkCombo
+gtk_combo_new
+gtk_combo_add_item
+gtk_combo_remove_item
+gtk_combo_get_active
+gtk_combo_set_active
+gtk_combo_get_placeholder
+gtk_combo_set_placeholder
+gtk_combo_get_allow_custom
+gtk_combo_set_allow_custom
+
+<SUBSECTION Standard>
+GTK_TYPE_COMBO
+GTK_COMBO
+GTK_IS_COMBO
+GTK_COMBO_CLASS
+GTK_IS_COMBO_CLASS
+GTK_COMBO_GET_CLASS
+
+<SUBSECTION Private>
+gtk_combo_get_type
+</SECTION>
+
+
+<SECTION>
 <FILE>gtkcontainer</FILE>
 <TITLE>GtkContainer</TITLE>
 GtkContainer
