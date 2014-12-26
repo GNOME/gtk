@@ -4956,6 +4956,11 @@ gtk_label_multipress_gesture_pressed (GtkGestureMultiPress *gesture,
           gtk_label_select_word (label);
         }
     }
+  else
+    {
+      gtk_gesture_set_state (GTK_GESTURE (gesture), GTK_EVENT_SEQUENCE_DENIED);
+      return;
+    }
 
   if (n_press >= 3)
     gtk_event_controller_reset (GTK_EVENT_CONTROLLER (gesture));
