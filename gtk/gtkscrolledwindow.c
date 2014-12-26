@@ -4017,6 +4017,9 @@ gtk_scrolled_window_realize (GtkWidget *widget)
   priv->hindicator.window = create_indicator_window (scrolled_window, priv->hscrollbar);
   priv->vindicator.window = create_indicator_window (scrolled_window, priv->vscrollbar);
 
+  priv->hindicator.scrollbar = priv->hscrollbar;
+  priv->vindicator.scrollbar = priv->vscrollbar;
+
   gtk_scrolled_window_update_touch_mode (scrolled_window);
 
   dm = gdk_display_get_device_manager (gtk_widget_get_display (widget));
