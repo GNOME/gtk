@@ -232,7 +232,7 @@ typedef char * GtkStock;
  *
  * The “Copy” item and icon.
  *
- * Deprecated: 3.10: Do not use an icon. Use label &quot;_Copy&quot;.
+ * Deprecated: 3.10: Use the named icon &quot;edit-copy&quot; or the label &quot;_Copy&quot;.
  */
 #define GTK_STOCK_COPY             ((GtkStock)"gtk-copy")
 
@@ -241,7 +241,7 @@ typedef char * GtkStock;
  *
  * The “Cut” item and icon.
  *
- * Deprecated: 3.10: Do not use an icon. Use label &quot;Cu_t&quot;.
+ * Deprecated: 3.10: Use the named icon &quot;edit-cut&quot; or the label &quot;Cu_t&quot;.
  */
 #define GTK_STOCK_CUT              ((GtkStock)"gtk-cut")
 
@@ -250,7 +250,7 @@ typedef char * GtkStock;
  *
  * The “Delete” item and icon.
  *
- * Deprecated: 3.10: Do not use an icon. Use label &quot;_Delete&quot;.
+ * Deprecated: 3.10: Use the named icon &quot;edit-cut&quot; or the label &quot;_Delete&quot;.
  */
 #define GTK_STOCK_DELETE           ((GtkStock)"gtk-delete")
 
