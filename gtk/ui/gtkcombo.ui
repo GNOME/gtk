@@ -53,7 +53,6 @@
             <property name="spacing">10</property>
             <child>
               <object class="GtkRevealer" id="search_revealer">
-                <property name="visible">True</property>
                 <property name="transition-type">slide-down</property>
                 <child>
                   <object class="GtkSearchEntry" id="search_entry">
@@ -99,33 +98,10 @@
                       </object>
                     </child>
                     <child>
-                      <object class="GtkListBoxRow" id="add_custom">
-                        <child>
-                          <object class="GtkBox">
-                            <property name="visible">True</property>
-                            <property name="orientation">horizontal</property>
-                            <property name="margin">6</property>
-                            <property name="spacing">12</property>
-                            <child>
-                              <object class="GtkLabel">
-                                <property name="visible">True</property>
-                                <property name="label" translatable="yes">Custom Entry</property>
-                              </object>
-                            </child>
-                            <child>
-                              <object class="GtkImage">
-                                <property name="visible">True</property>
-                                <property name="halign">end</property>
-                                <property name="valign">center</property>
-                                <property name="icon-name">pan-end-symbolic</property>
-                                <property name="icon-size">1</property>
-                              </object>
-                              <packing>
-                                <property name="expand">True</property>
-                              </packing>
-                            </child>
-                          </object>
-                        </child>
+                      <object class="GtkComboRow" id="add_custom">
+                        <property name="visible">False</property>
+                        <property name="group">custom</property>
+                        <property name="text" translatable="yes">Custom Entry</property>
                       </object>
                     </child>
                   </object>
@@ -146,33 +122,12 @@
                 <property name="visible">True</property>
                 <property name="selection-mode">none</property>
                 <property name="width-request">100</property>
-                <signal name="row-activated" handler="custom_row_activated"/>
+                <signal name="row-activated" handler="list_row_activated"/>
                 <child>
-                  <object class="GtkListBoxRow" id="back_to_list">
-                    <property name="visible">True</property>
-                    <child>
-                      <object class="GtkBox">
-                        <property name="visible">True</property>
-                        <property name="orientation">horizontal</property>
-                        <property name="margin">6</property>
-                        <property name="spacing">12</property>
-                        <child>
-                          <object class="GtkImage">
-                            <property name="visible">True</property>
-                            <property name="halign">start</property>
-                            <property name="valign">center</property>
-                            <property name="icon-name">pan-start-symbolic</property>
-                            <property name="icon-size">1</property>
-                          </object>
-                        </child>
-                        <child type="center">
-                          <object class="GtkLabel">
-                            <property name="visible">True</property>
-                            <property name="label" translatable="yes">Custom Entry</property>
-                          </object>
-                        </child>
-                      </object>
-                    </child>
+                  <object class="GtkComboRow" id="back_to_list">
+                    <property name="group">list</property>
+                    <property name="text" translatable="yes">Custom Entry</property>
+                    <property name="inverted">True</property>
                   </object>
                 </child>
                 <child>

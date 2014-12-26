@@ -330,6 +330,7 @@ gtk/ui/gtkcolorchooserdialog.ui
 gtk/ui/gtkcoloreditor.ui
 gtk/ui/gtkcombo.ui
 gtk/ui/gtkcomborow.ui
+gtk/ui/gtkcombotab.ui
 gtk/ui/gtkdialog.ui
 gtk/ui/gtkfilechooserbutton.ui
 gtk/ui/gtkfilechooserdialog.ui
