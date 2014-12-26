@@ -342,6 +342,7 @@ gtk/ui/gtkcolorchooserdialog.ui.h
 gtk/ui/gtkcoloreditor.ui.h
 gtk/ui/gtkcombo.ui.h
 gtk/ui/gtkcomborow.ui.h
+gtk/ui/gtkcombotab.ui.h
 gtk/ui/gtkdialog.ui.h
 gtk/ui/gtkfilechooserbutton.ui.h
 gtk/ui/gtkfilechooserdialog.ui.h

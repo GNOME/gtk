@@ -54,7 +54,9 @@ GDK_AVAILABLE_IN_3_16
 void          gtk_combo_add_item         (GtkCombo    *combo,
                                           const gchar *id,
                                           const gchar *text,
-                                          const gchar *sort);
+                                          const gchar *sort,
+                                          const gchar *group);
+
 GDK_AVAILABLE_IN_3_16
 void          gtk_combo_remove_item      (GtkCombo    *combo,
                                           const gchar *id);
@@ -71,6 +73,12 @@ gboolean      gtk_combo_get_allow_custom (GtkCombo    *combo);
 GDK_AVAILABLE_IN_3_16
 void          gtk_combo_set_allow_custom (GtkCombo    *combo,
                                           gboolean     allow);
+
+GDK_AVAILABLE_IN_3_16
+void          gtk_combo_add_group        (GtkCombo    *combo,
+                                          const gchar *group,
+                                          const gchar *text,
+                                          const gchar *sort);
 
 G_END_DECLS
 

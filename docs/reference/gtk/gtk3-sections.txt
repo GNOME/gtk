@@ -984,6 +984,7 @@ GtkCombo
 gtk_combo_new
 gtk_combo_add_item
 gtk_combo_remove_item
+gtk_combo_add_group
 gtk_combo_get_active
 gtk_combo_set_active
 gtk_combo_get_placeholder

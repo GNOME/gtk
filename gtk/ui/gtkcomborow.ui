@@ -4,7 +4,7 @@
   <template class="GtkComboRow" parent="GtkListBoxRow">
     <property name="visible">True</property>
     <child>
-      <object class="GtkBox">
+      <object class="GtkBox" id="box">
         <property name="visible">True</property>
         <property name="orientation">horizontal</property>
         <property name="margin">6</property>

@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface domain="gtk30">
+  <!-- interface-requires gtk+ 3.10 -->
+  <object class="GtkFrame" id="tab">
+    <property name="visible">True</property>
+    <property name="margin">10</property>
+    <child>
+      <object class="GtkScrolledWindow">
+        <property name="visible">True</property>
+        <property name="hscrollbar-policy">never</property>
+        <property name="vscrollbar-policy">never</property>
+        <child>
+          <object class="GtkListBox" id="list">
+            <property name="visible">True</property>
+            <property name="selection-mode">none</property>
+            <child>
+              <object class="GtkComboRow" id="header">
+                <property name="group">list</property>
+                <property name="inverted">True</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkListBoxRow" id="show_more">
+                <property name="visible">True</property>
+                <child>
+                  <object class="GtkImage">
+                    <property name="visible">True</property>
+                    <property name="margin">6</property>
+                    <property name="halign">center</property>
+                    <property name="valign">center</property>
+                    <property name="icon-name">view-more-symbolic</property>
+                    <property name="icon-size">1</property>
+                  </object>
+                </child>
+              </object>
+            </child>
+          </object>
+        </child>
+      </object>
+    </child>
+  </object>
+</interface>
