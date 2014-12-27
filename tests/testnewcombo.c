@@ -13,7 +13,7 @@ add_one (GtkButton *button, gpointer data)
   id = g_strdup_printf ("%d", count);
   text = g_strdup_printf ("Value %d", count);
   sort = g_strdup_printf ("Value %03d", count);
-  gtk_combo_add_item (GTK_COMBO (data), id, text, sort);
+  gtk_combo_add_item (GTK_COMBO (data), id, text, sort, NULL);
   gtk_combo_set_active (GTK_COMBO (data), id);
   g_free (id);
   g_free (text);
@@ -46,7 +46,12 @@ const gchar data[] =
   "      <item translatable='yes' id='1' sort='Value 001'>Value 1</item>"
   "      <item translatable='yes' id='2' sort='Value 002'>Value 2</item>"
   "      <item translatable='yes' id='3' sort='Value 003'>Value 3</item>"
+  "      <item translatable='yes' id='4' sort='Value 004' group='1'>Value 4</item>"
+  "      <item translatable='yes' id='5' sort='Value 005' group='1'>Value 5</item>"
   "    </items>"
+  "    <groups>"
+  "      <group id='1' translatable='yes'>Group 1</group>"
+  "    </groups>"
   "  </object>"
   "</interface>";
 
@@ -73,9 +78,9 @@ main (int argc, char *argv[])
   combo = gtk_combo_new ();
   gtk_widget_set_halign (combo, GTK_ALIGN_CENTER);
   gtk_container_add (GTK_CONTAINER (box), combo);
-  gtk_combo_add_item (GTK_COMBO (combo), "1", "Value 1", NULL);
-  gtk_combo_add_item (GTK_COMBO (combo), "2", "Value 2", NULL);
-  gtk_combo_add_item (GTK_COMBO (combo), "3", "Value 3", NULL);
+  gtk_combo_add_item (GTK_COMBO (combo), "1", "Value 1", NULL, NULL);
+  gtk_combo_add_item (GTK_COMBO (combo), "2", "Value 2", NULL, NULL);
+  gtk_combo_add_item (GTK_COMBO (combo), "3", "Value 3", NULL, NULL);
   gtk_combo_set_placeholder (GTK_COMBO (combo), "None");
   gtk_combo_set_active (GTK_COMBO (combo), "1");
 
@@ -88,17 +93,17 @@ main (int argc, char *argv[])
   combo = gtk_combo_new ();
   gtk_widget_set_halign (combo, GTK_ALIGN_CENTER);
   gtk_container_add (GTK_CONTAINER (box), combo);
-  gtk_combo_add_item (GTK_COMBO (combo),  "1",  "Value 1", "Value 01");
-  gtk_combo_add_item (GTK_COMBO (combo),  "2",  "Value 2", "Value 02");
-  gtk_combo_add_item (GTK_COMBO (combo),  "3",  "Value 3", "Value 03");
-  gtk_combo_add_item (GTK_COMBO (combo),  "4",  "Value 4", "Value 04");
-  gtk_combo_add_item (GTK_COMBO (combo),  "5",  "Value 5", "Value 05");
-  gtk_combo_add_item (GTK_COMBO (combo),  "6",  "Value 6", "Value 06");
-  gtk_combo_add_item (GTK_COMBO (combo),  "7",  "Value 7", "Value 07");
-  gtk_combo_add_item (GTK_COMBO (combo),  "8",  "Value 8", "Value 08");
-  gtk_combo_add_item (GTK_COMBO (combo),  "9",  "Value 9", "Value 09");
-  gtk_combo_add_item (GTK_COMBO (combo), "10", "Value 10", "Value 10");
-  gtk_combo_add_item (GTK_COMBO (combo), "11", "Value 11", "Value 11");
+  gtk_combo_add_item (GTK_COMBO (combo),  "1",  "Value 1", "Value 01", NULL);
+  gtk_combo_add_item (GTK_COMBO (combo),  "2",  "Value 2", "Value 02", NULL);
+  gtk_combo_add_item (GTK_COMBO (combo),  "3",  "Value 3", "Value 03", NULL);
+  gtk_combo_add_item (GTK_COMBO (combo),  "4",  "Value 4", "Value 04", NULL);
+  gtk_combo_add_item (GTK_COMBO (combo),  "5",  "Value 5", "Value 05", NULL);
+  gtk_combo_add_item (GTK_COMBO (combo),  "6",  "Value 6", "Value 06", NULL);
+  gtk_combo_add_item (GTK_COMBO (combo),  "7",  "Value 7", "Value 07", NULL);
+  gtk_combo_add_item (GTK_COMBO (combo),  "8",  "Value 8", "Value 08", NULL);
+  gtk_combo_add_item (GTK_COMBO (combo),  "9",  "Value 9", "Value 09", NULL);
+  gtk_combo_add_item (GTK_COMBO (combo), "10", "Value 10", "Value 10", NULL);
+  gtk_combo_add_item (GTK_COMBO (combo), "11", "Value 11", "Value 11", NULL);
   gtk_combo_set_placeholder (GTK_COMBO (combo), "None");
   gtk_combo_set_active (GTK_COMBO (combo), "1");
 
@@ -111,12 +116,46 @@ main (int argc, char *argv[])
   combo = gtk_combo_new ();
   gtk_widget_set_halign (combo, GTK_ALIGN_CENTER);
   gtk_container_add (GTK_CONTAINER (box), combo);
-  gtk_combo_add_item (GTK_COMBO (combo), "1", "Value 1", NULL);
-  gtk_combo_add_item (GTK_COMBO (combo), "2", "Value 2", NULL);
-  gtk_combo_add_item (GTK_COMBO (combo), "3", "Value 3", NULL);
+  gtk_combo_add_item (GTK_COMBO (combo), "1", "Value 1", NULL, NULL);
+  gtk_combo_add_item (GTK_COMBO (combo), "2", "Value 2", NULL, NULL);
+  gtk_combo_add_item (GTK_COMBO (combo), "3", "Value 3", NULL, NULL);
   gtk_combo_set_placeholder (GTK_COMBO (combo), "None");
   gtk_combo_set_allow_custom (GTK_COMBO (combo), TRUE);
   gtk_combo_set_active (GTK_COMBO (combo), "1");
+
+  gtk_container_add (GTK_CONTAINER (box), gtk_separator_new (GTK_ORIENTATION_HORIZONTAL));
+
+  label = gtk_label_new ("With grouping");
+  gtk_widget_set_margin_start (label, 10);
+  gtk_container_add (GTK_CONTAINER (box), label);
+
+  combo = gtk_combo_new ();
+  gtk_widget_set_halign (combo, GTK_ALIGN_CENTER);
+  gtk_container_add (GTK_CONTAINER (box), combo);
+  gtk_combo_add_group (GTK_COMBO (combo), "Group 3", "G 3", "Group 3");
+  gtk_combo_add_item (GTK_COMBO (combo),  "1",  "Value 1", "Value 01", "Group 1");
+  gtk_combo_add_item (GTK_COMBO (combo),  "2",  "Value 2", "Value 02", "Group 1");
+  gtk_combo_add_item (GTK_COMBO (combo),  "3",  "Value 3", "Value 03", "Group 1");
+  gtk_combo_add_item (GTK_COMBO (combo),  "4",  "Value 4", "Value 04", "Group 1");
+  gtk_combo_add_item (GTK_COMBO (combo),  "5",  "Value 5", "Value 05", "Group 2");
+  gtk_combo_add_item (GTK_COMBO (combo),  "6",  "Value 6", "Value 06", "Group 2");
+  gtk_combo_add_item (GTK_COMBO (combo),  "7",  "Value 7", "Value 07", "Group 2");
+  gtk_combo_add_item (GTK_COMBO (combo),  "8",  "Value 8", "Value 08", "Group 2");
+  gtk_combo_add_item (GTK_COMBO (combo),  "9",  "Value 9", "Value 09", "Group 3");
+  gtk_combo_add_item (GTK_COMBO (combo), "10", "Value 10", "Value 10", "Group 3");
+  gtk_combo_add_item (GTK_COMBO (combo), "11", "Value 11", "Value 11", "Group 3");
+  gtk_combo_add_item (GTK_COMBO (combo), "12", "Value 12", "Value 12", "Group 3");
+  gtk_combo_add_item (GTK_COMBO (combo), "13", "Value 13", "Value 13", "Group 3");
+  gtk_combo_add_item (GTK_COMBO (combo), "14", "Value 14", "Value 14", "Group 3");
+  gtk_combo_add_item (GTK_COMBO (combo), "15", "Value 15", NULL,       "Group 3");
+  gtk_combo_add_item (GTK_COMBO (combo), "16", "Value 16", NULL,       "Group 3");
+  gtk_combo_add_item (GTK_COMBO (combo), "17", "Value 17", NULL,       "Group 3");
+  gtk_combo_add_item (GTK_COMBO (combo), "18", "Value 18", NULL,       "Group 3");
+  gtk_combo_set_active (GTK_COMBO (combo), "7");
+  button = gtk_button_new_with_label ("Remove active");
+  gtk_widget_set_halign (button, GTK_ALIGN_CENTER);
+  g_signal_connect (button, "clicked", G_CALLBACK (remove_active), combo);
+  gtk_container_add (GTK_CONTAINER (box), button);
 
   gtk_container_add (GTK_CONTAINER (box), gtk_separator_new (GTK_ORIENTATION_HORIZONTAL));
 
