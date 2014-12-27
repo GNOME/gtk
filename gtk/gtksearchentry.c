@@ -385,8 +385,8 @@ gtk_search_entry_new (void)
   return GTK_WIDGET (g_object_new (GTK_TYPE_SEARCH_ENTRY, NULL));
 }
 
-static gboolean
-is_keynav_event (GdkEvent *event)
+gboolean
+gtk_search_entry_is_keynav_event (GdkEvent *event)
 {
   GdkModifierType state = 0;
   guint keyval;
@@ -447,7 +447,7 @@ gtk_search_entry_handle_event (GtkSearchEntry *entry,
   if (!gtk_widget_get_realized (GTK_WIDGET (entry)))
     gtk_widget_realize (GTK_WIDGET (entry));
 
-  if (is_keynav_event (event) ||
+  if (gtk_search_entry_is_keynav_event (event) ||
       event->key.keyval == GDK_KEY_space ||
       event->key.keyval == GDK_KEY_Menu)
     return GDK_EVENT_PROPAGATE;

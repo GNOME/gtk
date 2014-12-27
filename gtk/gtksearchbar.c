@@ -33,6 +33,7 @@
 #include "gtkprivate.h"
 #include "gtkrender.h"
 #include "gtksearchbar.h"
+#include "gtksearchentryprivate.h"
 
 /**
  * SECTION:gtksearchbar
@@ -84,40 +85,12 @@ enum {
 
 static GParamSpec *widget_props[LAST_PROPERTY] = { NULL, };
 
-static gboolean
-is_keynav_event (GdkEvent *event,
-                 guint     keyval)
+static void
+stop_search_cb (GtkWidget    *entry,
+                GtkSearchBar *bar)
 {
-  GdkModifierType state = 0;
-
-  gdk_event_get_state (event, &state);
-
-  if (keyval == GDK_KEY_Tab ||
-      keyval == GDK_KEY_KP_Tab ||
-      keyval == GDK_KEY_Up ||
-      keyval == GDK_KEY_KP_Up ||
-      keyval == GDK_KEY_Down ||
-      keyval == GDK_KEY_KP_Down ||
-      keyval == GDK_KEY_Left ||
-      keyval == GDK_KEY_KP_Left ||
-      keyval == GDK_KEY_Right ||
-      keyval == GDK_KEY_KP_Right ||
-      keyval == GDK_KEY_Home ||
-      keyval == GDK_KEY_KP_Home ||
-      keyval == GDK_KEY_End ||
-      keyval == GDK_KEY_KP_End ||
-      keyval == GDK_KEY_Page_Up ||
-      keyval == GDK_KEY_KP_Page_Up ||
-      keyval == GDK_KEY_Page_Down ||
-      keyval == GDK_KEY_KP_Page_Down ||
-      ((state & (GDK_CONTROL_MASK | GDK_MOD1_MASK)) != 0))
-        return TRUE;
-
-  /* Other navigation events should get automatically
-   * ignored as they will not change the content of the entry
-   */
-
-  return FALSE;
+  GtkSearchBarPrivate *priv = gtk_search_bar_get_instance_private (bar);
+  gtk_revealer_set_reveal_child (GTK_REVEALER (priv->revealer), FALSE);
 }
 
 static gboolean
@@ -125,16 +98,13 @@ entry_key_pressed_event_cb (GtkWidget    *widget,
                             GdkEvent     *event,
                             GtkSearchBar *bar)
 {
-  GtkSearchBarPrivate *priv = gtk_search_bar_get_instance_private (bar);
-  guint keyval;
-
-  if (!gdk_event_get_keyval (event, &keyval) ||
-      keyval != GDK_KEY_Escape)
+  if (event->key.keyval == GDK_KEY_Escape)
+    {
+      stop_search_cb (widget, bar);
+      return GDK_EVENT_STOP;
+    }
+  else
     return GDK_EVENT_PROPAGATE;
-
-  gtk_revealer_set_reveal_child (GTK_REVEALER (priv->revealer), FALSE);
-
-  return GDK_EVENT_STOP;
 }
 
 static void
@@ -143,6 +113,45 @@ preedit_changed_cb (GtkEntry  *entry,
                     gboolean  *preedit_changed)
 {
   *preedit_changed = TRUE;
+}
+
+static gboolean
+gtk_search_bar_handle_event_for_entry (GtkSearchBar *bar,
+                                       GdkEvent     *event)
+{
+  GtkSearchBarPrivate *priv = gtk_search_bar_get_instance_private (bar);
+  gboolean handled;
+  gboolean preedit_changed;
+  guint preedit_change_id;
+  gboolean res;
+  char *old_text, *new_text;
+
+  if (gtk_search_entry_is_keynav_event (event) ||
+      event->key.keyval == GDK_KEY_space ||
+      event->key.keyval == GDK_KEY_Menu)
+    return GDK_EVENT_PROPAGATE;
+
+  if (!gtk_widget_get_realized (priv->entry))
+    gtk_widget_realize (priv->entry);
+
+  handled = GDK_EVENT_PROPAGATE;
+  preedit_changed = FALSE;
+  preedit_change_id = g_signal_connect (priv->entry, "preedit-changed",
+                                        G_CALLBACK (preedit_changed_cb), &preedit_changed);
+
+  old_text = g_strdup (gtk_entry_get_text (GTK_ENTRY (priv->entry)));
+  res = gtk_widget_event (priv->entry, event);
+  new_text = g_strdup (gtk_entry_get_text (GTK_ENTRY (priv->entry)));
+
+  g_signal_handler_disconnect (priv->entry, preedit_change_id);
+
+  if ((res && g_strcmp0 (new_text, old_text) != 0) || preedit_changed)
+    handled = GDK_EVENT_STOP;
+
+  g_free (old_text);
+  g_free (new_text);
+
+  return handled;
 }
 
 /**
@@ -191,12 +200,10 @@ gtk_search_bar_handle_event (GtkSearchBar *bar,
                              GdkEvent     *event)
 {
   GtkSearchBarPrivate *priv = gtk_search_bar_get_instance_private (bar);
-  guint keyval;
   gboolean handled;
-  gboolean preedit_changed;
-  guint preedit_change_id;
-  gboolean res;
-  char *old_text, *new_text;
+
+  if (priv->reveal_child)
+    return GDK_EVENT_PROPAGATE;
 
   if (priv->entry == NULL)
     {
@@ -204,39 +211,13 @@ gtk_search_bar_handle_event (GtkSearchBar *bar,
       return GDK_EVENT_PROPAGATE;
     }
 
-  /* Exit early if the search bar is already shown,
-   * the event doesn't contain a key press,
-   * or the event is a navigation or space bar key press
-   */
-  if (priv->reveal_child ||
-      !gdk_event_get_keyval (event, &keyval) ||
-      is_keynav_event (event, keyval) ||
-      keyval == GDK_KEY_space ||
-      keyval == GDK_KEY_Menu)
-    return GDK_EVENT_PROPAGATE;
+  if (GTK_IS_SEARCH_ENTRY (priv->entry))
+    handled = gtk_search_entry_handle_event (GTK_SEARCH_ENTRY (priv->entry), event);
+  else
+    handled = gtk_search_bar_handle_event_for_entry (bar, event);
 
-  if (!gtk_widget_get_realized (priv->entry))
-    gtk_widget_realize (priv->entry);
-
-  handled = GDK_EVENT_PROPAGATE;
-  preedit_changed = FALSE;
-  preedit_change_id = g_signal_connect (priv->entry, "preedit-changed",
-                                        G_CALLBACK (preedit_changed_cb), &preedit_changed);
-
-  old_text = g_strdup (gtk_entry_get_text (GTK_ENTRY (priv->entry)));
-  res = gtk_widget_event (priv->entry, event);
-  new_text = g_strdup (gtk_entry_get_text (GTK_ENTRY (priv->entry)));
-
-  g_signal_handler_disconnect (priv->entry, preedit_change_id);
-
-  if ((res && g_strcmp0 (new_text, old_text) != 0) || preedit_changed)
-    {
-      handled = GDK_EVENT_STOP;
-      gtk_revealer_set_reveal_child (GTK_REVEALER (priv->revealer), TRUE);
-    }
-
-  g_free (old_text);
-  g_free (new_text);
+  if (handled == GDK_EVENT_STOP)
+    gtk_revealer_set_reveal_child (GTK_REVEALER (priv->revealer), TRUE);
 
   return handled;
 }
@@ -513,7 +494,10 @@ gtk_search_bar_connect_entry (GtkSearchBar *bar,
 
   if (priv->entry != NULL)
     {
-      g_signal_handlers_disconnect_by_func (priv->entry, entry_key_pressed_event_cb, bar);
+      if (GTK_IS_SEARCH_ENTRY (priv->entry))
+        g_signal_handlers_disconnect_by_func (priv->entry, stop_search_cb, bar);
+      else
+        g_signal_handlers_disconnect_by_func (priv->entry, entry_key_pressed_event_cb, bar);
       g_object_remove_weak_pointer (G_OBJECT (priv->entry), (gpointer *) &priv->entry);
       priv->entry = NULL;
     }
@@ -522,8 +506,12 @@ gtk_search_bar_connect_entry (GtkSearchBar *bar,
     {
       priv->entry = GTK_WIDGET (entry);
       g_object_add_weak_pointer (G_OBJECT (priv->entry), (gpointer *) &priv->entry);
-      g_signal_connect (priv->entry, "key-press-event",
-                        G_CALLBACK (entry_key_pressed_event_cb), bar);
+      if (GTK_IS_SEARCH_ENTRY (priv->entry))
+        g_signal_connect (priv->entry, "stop-search",
+                          G_CALLBACK (stop_search_cb), bar);
+      else
+        g_signal_connect (priv->entry, "key-press-event",
+                          G_CALLBACK (entry_key_pressed_event_cb), bar);
     }
 }
 

@@ -485,6 +485,7 @@ gtk_private_h_sources =		\
 	gtkscaleprivate.h	\
 	gtksearchengine.h	\
 	gtksearchenginesimple.h	\
+	gtksearchentryprivate.h \
 	gtkselectionprivate.h	\
 	gtksettingsprivate.h	\
 	gtksizegroup-private.h	\
