@@ -32,6 +32,7 @@ libgdk_mir_la_SOURCES =	\
 	gdkmirwindow.c	\
 	gdkmirwindowimpl.c	\
 	gdkmir-debug.c	\
+	gdkmir-private.h \
 	gdkmir.h
 
 libgdkinclude_HEADERS = \
