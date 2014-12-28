@@ -57,6 +57,7 @@ struct _GtkInspectorGeneralPrivate
 {
   GtkWidget *version_box;
   GtkWidget *env_box;
+  GtkWidget *x_box;
   GtkWidget *gl_box;
   GtkWidget *gtk_version;
   GtkWidget *gdk_backend;
@@ -69,6 +70,9 @@ struct _GtkInspectorGeneralPrivate
   GtkWidget *gtk_exe_prefix;
   GtkWidget *gtk_data_prefix;
   GtkWidget *gsettings_schema_dir;
+  GtkWidget *x_display;
+  GtkWidget *x_rgba;
+  GtkWidget *x_composited;
   GtkSizeGroup *labels;
   GtkAdjustment *focus_adjustment;
 };
@@ -269,13 +273,32 @@ init_env (GtkInspectorGeneral *gen)
 }
 
 static void
+init_x (GtkInspectorGeneral *gen)
+{
+  GdkScreen *screen;
+  gchar *name;
+
+  screen = gdk_screen_get_default ();
+  name = gdk_screen_make_display_name (screen);
+  gtk_label_set_label (GTK_LABEL (gen->priv->x_display), name);
+  g_free (name);
+
+  if (gdk_screen_get_rgba_visual (screen) != NULL)
+    gtk_widget_show (gen->priv->x_rgba);
+
+  if (gdk_screen_is_composited (screen))
+    gtk_widget_show (gen->priv->x_composited);
+}
+
+static void
 gtk_inspector_general_init (GtkInspectorGeneral *gen)
 {
   gen->priv = gtk_inspector_general_get_instance_private (gen);
   gtk_widget_init_template (GTK_WIDGET (gen));
   init_version (gen);
-  init_gl (gen);
   init_env (gen);
+  init_x (gen);
+  init_gl (gen);
 }
 
 static gboolean
@@ -284,18 +307,18 @@ keynav_failed (GtkWidget *widget, GtkDirectionType direction, GtkInspectorGenera
   GtkWidget *next;
   gdouble value, lower, upper, page;
 
-  if (direction == GTK_DIR_DOWN &&
-      widget == gen->priv->version_box)
+  if (direction == GTK_DIR_DOWN && widget == gen->priv->version_box)
     next = gen->priv->env_box;
-  else if (direction == GTK_DIR_DOWN &&
-      widget == gen->priv->env_box)
+  else if (direction == GTK_DIR_DOWN && widget == gen->priv->env_box)
+    next = gen->priv->x_box;
+  else if (direction == GTK_DIR_DOWN && widget == gen->priv->x_box)
     next = gen->priv->gl_box;
-  else if (direction == GTK_DIR_UP &&
-           widget == gen->priv->env_box)
-    next = gen->priv->version_box;
-  else if (direction == GTK_DIR_UP &&
-           widget == gen->priv->gl_box)
+  else if (direction == GTK_DIR_UP && widget == gen->priv->gl_box)
+    next = gen->priv->x_box;
+  else if (direction == GTK_DIR_UP && widget == gen->priv->x_box)
     next = gen->priv->env_box;
+  else if (direction == GTK_DIR_UP && widget == gen->priv->env_box)
+    next = gen->priv->version_box;
   else
     next = NULL;
 
@@ -337,6 +360,7 @@ gtk_inspector_general_constructed (GObject *object)
 
    g_signal_connect (gen->priv->version_box, "keynav-failed", G_CALLBACK (keynav_failed), gen);
    g_signal_connect (gen->priv->env_box, "keynav-failed", G_CALLBACK (keynav_failed), gen);
+   g_signal_connect (gen->priv->x_box, "keynav-failed", G_CALLBACK (keynav_failed), gen);
    g_signal_connect (gen->priv->gl_box, "keynav-failed", G_CALLBACK (keynav_failed), gen);
 }
 
@@ -351,6 +375,7 @@ gtk_inspector_general_class_init (GtkInspectorGeneralClass *klass)
   gtk_widget_class_set_template_from_resource (widget_class, "/org/gtk/libgtk/inspector/general.ui");
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorGeneral, version_box);
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorGeneral, env_box);
+  gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorGeneral, x_box);
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorGeneral, gl_box);
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorGeneral, gtk_version);
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorGeneral, gdk_backend);
@@ -364,6 +389,9 @@ gtk_inspector_general_class_init (GtkInspectorGeneralClass *klass)
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorGeneral, gtk_data_prefix);
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorGeneral, gsettings_schema_dir);
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorGeneral, labels);
+  gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorGeneral, x_display);
+  gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorGeneral, x_composited);
+  gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorGeneral, x_rgba);
 }
 
 // vim: set et sw=2 ts=2:
