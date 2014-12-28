@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface domain="gtk30">
+  <template class="GtkInspectorMagnifier" parent="GtkBox">
+    <property name="orientation">vertical</property>
+    <child>
+      <object class="GtkBox">
+        <property name="visible">True</property>
+        <property name="orientation">horizontal</property>
+        <property name="spacing">6</property>
+        <property name="margin">6</property>
+        <child>
+          <object class="GtkScale" id="magnification">
+            <property name="visible">True</property>
+            <property name="orientation">horizontal</property>
+            <property name="width-request">150</property>
+            <property name="draw-value">False</property>
+            <property name="adjustment">adjustment</property>
+            <marks>
+              <mark value="1.0" position="bottom"/>
+              <mark value="2.0" position="bottom"/>
+              <mark value="3.0" position="bottom"/>
+              <mark value="4.0" position="bottom"/>
+              <mark value="5.0" position="bottom"/>
+            </marks>
+          </object>
+          <packing>
+            <property name="pack-type">start</property>
+          </packing>
+        </child>
+        <child type="center">
+          <object class="GtkLabel" id="object_title">
+            <property name="visible">True</property>
+          </object>
+        </child>
+      </object>
+    </child>
+    <child>
+      <object class="GtkScrolledWindow">
+        <property name="visible">True</property>
+        <property name="hscrollbar-policy">automatic</property>
+        <property name="vscrollbar-policy">automatic</property>
+        <property name="expand">True</property>
+        <property name="shadow-type">none</property>
+        <child>
+          <object class="GtkMagnifier" id="magnifier">
+            <property name="visible">True</property>
+            <property name="resize">True</property>
+            <property name="magnification" bind-source="adjustment" bind-property="value" bind-flags="sync-create"/>
+          </object>
+        </child>
+      </object>
+    </child>
+  </template>
+  <object class="GtkAdjustment" id="adjustment">
+    <property name="lower">1.0</property>
+    <property name="upper">5.0</property>
+    <property name="page-size">0.0</property>
+    <property name="page-increment">0.1</property>
+    <property name="step-increment">0.1</property>
+    <property name="value">2.0</property>
+  </object>
+</interface>
