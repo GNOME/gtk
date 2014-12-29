@@ -135,9 +135,9 @@ _gdk_wayland_display_event_source_new (GdkDisplay *display)
 
   display_wayland = GDK_WAYLAND_DISPLAY (display);
   wl_source->display = display;
-  wl_source->pfd.fd = wl_display_get_fd(display_wayland->wl_display);
+  wl_source->pfd.fd = wl_display_get_fd (display_wayland->wl_display);
   wl_source->pfd.events = G_IO_IN | G_IO_ERR | G_IO_HUP;
-  g_source_add_poll(source, &wl_source->pfd);
+  g_source_add_poll (source, &wl_source->pfd);
 
   g_source_set_priority (source, GDK_PRIORITY_EVENTS);
   g_source_set_can_recurse (source, TRUE);
