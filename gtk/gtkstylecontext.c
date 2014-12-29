@@ -523,6 +523,18 @@ _gtk_style_context_update_animating (GtkStyleContext *context)
 }
 
 static void
+gtk_style_context_clear_parent (GtkStyleContext *context)
+{
+  GtkStyleContextPrivate *priv = context->priv;
+
+  if (priv->parent)
+    {
+      priv->parent->priv->children = g_slist_remove (priv->parent->priv->children, context);
+      g_object_unref (priv->parent);
+    }
+}
+
+static void
 gtk_style_context_finalize (GObject *object)
 {
   GtkStyleContextPrivate *priv;
@@ -536,7 +548,7 @@ gtk_style_context_finalize (GObject *object)
   /* children hold a reference to us */
   g_assert (priv->children == NULL);
 
-  gtk_style_context_set_parent (style_context, NULL);
+  gtk_style_context_clear_parent (style_context);
 
   gtk_style_context_set_cascade (style_context, NULL);
 
@@ -1397,11 +1409,7 @@ gtk_style_context_set_parent (GtkStyleContext *context,
         gtk_style_context_set_invalid (parent, TRUE);
     }
 
-  if (priv->parent)
-    {
-      priv->parent->priv->children = g_slist_remove (priv->parent->priv->children, context);
-      g_object_unref (priv->parent);
-    }
+  gtk_style_context_clear_parent (context);
 
   priv->parent = parent;
 
