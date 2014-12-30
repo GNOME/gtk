@@ -39,7 +39,7 @@
  * @See_also: #GtkColorChooserDialog
  *
  * The #GtkColorChooserWidget widget lets the user select a
- * color. By default, the chooser presents a prefined palette
+ * color. By default, the chooser presents a predefined palette
  * of colors, plus a small number of settable custom colors.
  * It is also possible to select a different color with the
  * single-color editor. To enter the single-color editing mode,
