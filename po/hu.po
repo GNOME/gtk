@@ -12,20 +12,19 @@ msgstr ""
 "Project-Id-Version: gtk+ master\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gtk"
 "%2b&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2014-12-31 10:06+0000\n"
-"PO-Revision-Date: 2014-12-31 12:58+0100\n"
-"Last-Translator: Balázs Úr <urbalazs@gmail.com>\n"
+"POT-Creation-Date: 2014-12-31 12:04+0000\n"
+"PO-Revision-Date: 2014-12-31 14:01+0100\n"
+"Last-Translator: Gabor Kelemen <kelemeng at gnome dot hu>\n"
 "Language-Team: Hungarian <openscope at gmail dot com>\n"
 "Language: hu\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms:  nplurals=2; plural=(n != 1);\n"
-"X-Generator: Lokalize 1.2\n"
+"X-Generator: Lokalize 1.5\n"
 
 #: ../gdk/broadway/gdkbroadway-server.c:143
 #, c-format
-#| msgid "broadway display type not supported '%s'"
 msgid "Broadway display type not supported: %s"
 msgstr "A Broadway kijelzőtípus nem támogatott: „%s”"
 
@@ -443,14 +442,13 @@ msgstr "Nincs elérhető beállítás a megadott képpontformátumhoz"
 #: ../gdk/mir/gdkmirwindowimpl.c:1350
 #: ../gdk/wayland/gdkglcontext-wayland.c:306
 #: ../gdk/win32/gdkglcontext-win32.c:505 ../gdk/x11/gdkglcontext-x11.c:1055
-#| msgid "No profile available"
 msgid "No GL implementation is available"
 msgstr "Nem érhető el GL megvalósítás"
 
 #: ../gdk/mir/gdkmirwindowimpl.c:1362
 #: ../gdk/wayland/gdkglcontext-wayland.c:318
 msgid "3.2 core GL profile is not available on EGL implementation"
-msgstr "A 3.2 mag GL profil nem érhető el az EGL megvalósításban"
+msgstr "A 3.2-es alap GL profil nem érhető el az EGL megvalósításban"
 
 #: ../gdk/mir/gdkmirwindowimpl.c:1385
 #: ../gdk/wayland/gdkglcontext-wayland.c:341
@@ -460,13 +458,12 @@ msgid "Unable to create a GL context"
 msgstr "Nem lehet létrehozni GL környezetet"
 
 #: ../gdk/win32/gdkglcontext-win32.c:514
-#, fuzzy
 msgid ""
 "The WGL_ARB_create_context extension needed to create 3.2 core profiles is "
 "not available"
 msgstr ""
-"A WGL_ARB_create_context kiterjesztés a 3.2 magprofilok létrehozását igényli, "
-"amely nem érhető el"
+"A 3.2-es alapprofilok létrehozásához szükséges WGL_ARB_create_context "
+"kiterjesztés nem érhető el"
 
 #. Description of --sync in --help output
 #: ../gdk/win32/gdkmain-win32.c:53
@@ -521,13 +518,12 @@ msgid "No available configurations for the given RGBA pixel format"
 msgstr "Nincs elérhető beállítás a megadott RGBA képpontformátumhoz"
 
 #: ../gdk/x11/gdkglcontext-x11.c:1064
-#, fuzzy
 msgid ""
 "The GLX_ARB_create_context_profile extension needed to create 3.2 core "
 "profiles is not available"
 msgstr ""
-"A GLX_ARB_create_context_profile kiterjesztés a 3.2 magprofilok létrehozását "
-"igényli, amely nem érhető el"
+"A 3.2-es alapprofilok létrehozásához szükséges GLX_ARB_create_context_profile "
+"kiterjesztés nem érhető el"
 
 #: ../gtk/a11y/gtkbooleancellaccessible.c:43
 msgctxt "Action description"
@@ -1157,9 +1153,6 @@ msgid "Color _name:"
 msgstr "Szín _neve:"
 
 #: ../gtk/deprecated/gtkcolorsel.c:514
-#| msgid ""
-#| "You can enter an HTML-style hexadecimal color value, or simply a color "
-#| "name such as 'orange' in this entry."
 msgid ""
 "You can enter an HTML-style hexadecimal color value, or simply a color name "
 "such as “orange” in this entry."
@@ -1176,10 +1169,6 @@ msgid "Color Wheel"
 msgstr "Színkerék"
 
 #: ../gtk/deprecated/gtkcolorsel.c:1070
-#| msgid ""
-#| "The previously-selected color, for comparison to the color you're "
-#| "selecting now. You can drag this color to a palette entry, or select this "
-#| "color as current by dragging it to the other color swatch alongside."
 msgid ""
 "The previously-selected color, for comparison to the color you’re selecting "
 "now. You can drag this color to a palette entry, or select this color as "
@@ -1190,9 +1179,6 @@ msgstr ""
 "jelenlegit a mellette lévő mezőbe húzással."
 
 #: ../gtk/deprecated/gtkcolorsel.c:1076
-#| msgid ""
-#| "The color you've chosen. You can drag this color to a palette entry to "
-#| "save it for use in the future."
 msgid ""
 "The color you’ve chosen. You can drag this color to a palette entry to save "
 "it for use in the future."
@@ -1201,9 +1187,6 @@ msgstr ""
 "elmentheti későbbi felhasználásra."
 
 #: ../gtk/deprecated/gtkcolorsel.c:1082
-#| msgid ""
-#| "The previously-selected color, for comparison to the color you're "
-#| "selecting now."
 msgid ""
 "The previously-selected color, for comparison to the color you’re selecting "
 "now."
@@ -1212,7 +1195,6 @@ msgstr ""
 "összehasonlításhoz."
 
 #: ../gtk/deprecated/gtkcolorsel.c:1086
-#| msgid "The color you've chosen."
 msgid "The color you’ve chosen."
 msgstr "A kiválasztott szín."
 
@@ -1221,10 +1203,6 @@ msgid "_Save color here"
 msgstr "_Szín mentése ide"
 
 #: ../gtk/deprecated/gtkcolorsel.c:1694
-#| msgid ""
-#| "Click this palette entry to make it the current color. To change this "
-#| "entry, drag a color swatch here or right-click it and select \"Save color "
-#| "here.\""
 msgid ""
 "Click this palette entry to make it the current color. To change this entry, "
 "drag a color swatch here or right-click it and select “Save color here.”"
@@ -1441,9 +1419,6 @@ msgstr "Érvénytelen méret: %s\n"
 #.
 #: ../gtk/gtkaboutdialog.c:114
 #, c-format
-#| msgid ""
-#| "This program comes with ABSOLUTELY NO WARRANTY.\n"
-#| "See the <a href=\"%s\">%s</a> for details."
 msgid ""
 "This program comes with absolutely no warranty.\n"
 "See the <a href=\"%s\">%s</a> for details."
@@ -1504,7 +1479,6 @@ msgid "GNU Lesser General Public License, version 3 only"
 msgstr "GNU Lesser General Public License, csak 3. verzió"
 
 #: ../gtk/gtkaboutdialog.c:699
-#| msgid "Credits"
 msgid "C_redits"
 msgstr "_Köszönet"
 
@@ -1703,13 +1677,11 @@ msgstr "<%s> elem nem engedélyezett a felső szinten"
 
 #: ../gtk/gtkbuilder-menus.c:317
 #, c-format
-#| msgid "text may not appear inside <%s>"
 msgid "Text may not appear inside <%s>"
 msgstr "Nem jelenhet meg szöveg ezen belül: <%s>"
 
 #: ../gtk/gtkbuilderparser.c:340
 #, c-format
-#| msgid "Invalid object type `%s' on line %d"
 msgid "Invalid object type '%s' on line %d"
 msgstr "Érvénytelen objektumtípus („%s”) a(z) %d. sorban"
 
@@ -1732,19 +1704,16 @@ msgstr "Érvénytelen típus: %s.%s a(z) %d. sorban"
 
 #: ../gtk/gtkbuilderparser.c:775
 #, c-format
-#| msgid "Invalid signal `%s' for type `%s' on line %d"
 msgid "Invalid signal '%s' for type '%s' on line %d"
 msgstr "Érvénytelen szignál („%s”) a(z) „%s” típushoz a(z) %d. sorban"
 
 #: ../gtk/gtkbuilderparser.c:1067
 #, c-format
-#| msgid "Invalid root element: '%s'"
 msgid "Invalid root element: <%s>"
 msgstr "Érvénytelen gyökérelem: <%s>"
 
 #: ../gtk/gtkbuilderparser.c:1110
 #, c-format
-#| msgid "Unhandled tag: '%s'"
 msgid "Unhandled tag: <%s>"
 msgstr "Kezeletlen címke: <%s>"
 
@@ -2353,9 +2322,6 @@ msgid "Could not start the search process"
 msgstr "Nem lehet elindítani a keresési folyamatot"
 
 #: ../gtk/gtkfilechooserwidget.c:6083
-#| msgid ""
-#| "The program was not able to create a connection to the indexer daemon.  "
-#| "Please make sure it is running."
 msgid ""
 "The program was not able to create a connection to the indexer daemon. "
 "Please make sure it is running."
@@ -2395,9 +2361,8 @@ msgid "None"
 msgstr "Nincs"
 
 #: ../gtk/gtkglarea.c:296
-#| msgid "Getting printer information failed"
 msgid "OpenGL context creation failed"
-msgstr "OpenGL környezet létrehozása meghiúsult"
+msgstr "Az OpenGL környezet létrehozása meghiúsult"
 
 #: ../gtk/gtkheaderbar.c:414
 msgid "Application menu"
@@ -2409,7 +2374,6 @@ msgstr "Bezárás"
 
 #: ../gtk/gtkicontheme.c:2308 ../gtk/gtkicontheme.c:2372
 #, c-format
-#| msgid "Icon '%s' not present in theme"
 msgid "Icon '%s' not present in theme %s"
 msgstr "„%s” ikon nincs a(z) „%s” témában"
 
@@ -2792,7 +2756,6 @@ msgstr "A Kuka megnyitása"
 #: ../gtk/gtkplacessidebar.c:1077 ../gtk/gtkplacessidebar.c:1105
 #: ../gtk/gtkplacessidebar.c:1313
 #, c-format
-#| msgid "Mount and open %s"
 msgid "Mount and open “%s”"
 msgstr "„%s” csatolása és megnyitása"
 
@@ -2869,7 +2832,6 @@ msgstr "Meghajtó _zárolása"
 
 #: ../gtk/gtkplacessidebar.c:2309 ../gtk/gtkplacessidebar.c:3205
 #, c-format
-#| msgid "Unable to start %s"
 msgid "Unable to start “%s”"
 msgstr "„%s” nem indítható"
 
@@ -2880,19 +2842,16 @@ msgstr "„%s” nem érhető el"
 
 #: ../gtk/gtkplacessidebar.c:2649
 #, c-format
-#| msgid "Unable to unmount %s"
 msgid "Unable to unmount “%s”"
 msgstr "„%s” nem választható le"
 
 #: ../gtk/gtkplacessidebar.c:2910
 #, c-format
-#| msgid "Unable to stop %s"
 msgid "Unable to stop “%s”"
 msgstr "„%s” nem állítható le"
 
 #: ../gtk/gtkplacessidebar.c:2939
 #, c-format
-#| msgid "Unable to eject %s"
 msgid "Unable to eject “%s”"
 msgstr "„%s” nem adható ki"
 
@@ -2903,7 +2862,6 @@ msgstr "%s nem adható ki"
 
 #: ../gtk/gtkplacessidebar.c:3155
 #, c-format
-#| msgid "Unable to poll %s for media changes"
 msgid "Unable to poll “%s” for media changes"
 msgstr "A(z) „%s” adathordozó-változásai nem kérdezhetők le"
 
@@ -3244,7 +3202,6 @@ msgstr "Nem találhatók elemek"
 
 #: ../gtk/gtkrecentchoosermenu.c:534 ../gtk/gtkrecentchoosermenu.c:590
 #, c-format
-#| msgid "No recently used resource found with URI `%s'"
 msgid "No recently used resource found with URI '%s'"
 msgstr "Nem található nemrég használt erőforrás a következő URI címmel: „%s”"
 
@@ -3565,9 +3522,6 @@ msgid "You can type here any CSS rule recognized by GTK+."
 msgstr "A GTK+ által felismert tetszőleges CSS szabályt beírhat ide."
 
 #: ../gtk/inspector/css-editor.c:91 ../gtk/inspector/css-editor.c:97
-#| msgid ""
-#| "You can temporarily disable this custom CSS by clicking on the \"Pause\" "
-#| "button above."
 msgid ""
 "You can temporarily disable this custom CSS by clicking on the “Pause” "
 "button above."
@@ -3615,8 +3569,6 @@ msgid "GDK Backend"
 msgstr "GDK háttérprogram"
 
 #: ../gtk/inspector/general.ui.h:4
-#| msgctxt "keyboard label"
-#| msgid "Display"
 msgid "X display"
 msgstr "X-megjelenítő"
 
@@ -3625,12 +3577,10 @@ msgid "RGBA visual"
 msgstr "RGBA vizuális"
 
 #: ../gtk/inspector/general.ui.h:6
-#| msgid "Computer"
 msgid "Composited"
-msgstr ""
+msgstr "Kompozitált"
 
 #: ../gtk/inspector/general.ui.h:7
-#| msgid "GTK+ Version"
 msgid "GL Version"
 msgstr "GL verzió"
 
@@ -3669,7 +3619,6 @@ msgstr "Ikon"
 
 #. vim: set et sw=2 ts=2:
 #: ../gtk/inspector/misc-info.ui.h:1
-#| msgid "Preferences"
 msgid "Reference count"
 msgstr "Hivatkozásszám"
 
@@ -3706,7 +3655,7 @@ msgstr "Vágási terület"
 
 #: ../gtk/inspector/misc-info.ui.h:11
 msgid "Tick callback"
-msgstr ""
+msgstr "Órajel visszahívás"
 
 #: ../gtk/inspector/misc-info.ui.h:12
 msgid "Frame count"
@@ -3745,7 +3694,6 @@ msgid "Object"
 msgstr "Objektum"
 
 #: ../gtk/inspector/object-tree.ui.h:4 ../gtk/inspector/window.ui.h:13
-#| msgid "CSS Classes"
 msgid "Style Classes"
 msgstr "Stílusosztályok"
 
@@ -3858,7 +3806,6 @@ msgid "Size"
 msgstr "Méret"
 
 #: ../gtk/inspector/resource-list.ui.h:4
-#| msgid "_Name:"
 msgid "Name:"
 msgstr "Név:"
 
@@ -3871,8 +3818,6 @@ msgid "Size:"
 msgstr "Méret:"
 
 #: ../gtk/inspector/selector.ui.h:1 ../gtk/inspector/window.ui.h:12
-#| msgctxt "Action name"
-#| msgid "Select"
 msgid "Selector"
 msgstr "Kiválasztó"
 
@@ -3915,7 +3860,6 @@ msgstr "Mindkettő"
 
 #. vim: set et sw=2 ts=2:
 #: ../gtk/inspector/statistics.ui.h:1
-#| msgid "Type:"
 msgid "Type"
 msgstr "Típus"
 
@@ -3983,17 +3927,14 @@ msgid "GTK+ Theme"
 msgstr "GTK+ téma"
 
 #: ../gtk/inspector/visual.ui.h:2
-#| msgid "Dark variant"
 msgid "Dark Variant"
 msgstr "Sötét változat"
 
 #: ../gtk/inspector/visual.ui.h:3
-#| msgid "Icon Theme"
 msgid "Cursor Theme"
 msgstr "Kurzortéma"
 
 #: ../gtk/inspector/visual.ui.h:4
-#| msgid "Custom Size %d"
 msgid "Cursor Size"
 msgstr "Kurzorméret"
 
@@ -4026,8 +3967,6 @@ msgid "Animations"
 msgstr "Animációk"
 
 #: ../gtk/inspector/visual.ui.h:12
-#| msgctxt "print operation status"
-#| msgid "Generating data"
 msgid "Rendering Mode"
 msgstr "Megjelenítési mód"
 
@@ -4040,8 +3979,6 @@ msgid "Image"
 msgstr "Kép"
 
 #: ../gtk/inspector/visual.ui.h:15
-#| msgctxt "Stock label, media"
-#| msgid "_Record"
 msgid "Recording"
 msgstr "Felvétel"
 
@@ -4070,13 +4007,10 @@ msgid "When needed"
 msgstr "Amikor szükséges"
 
 #: ../gtk/inspector/visual.ui.h:22
-#| msgid "Always on Top"
 msgid "Always"
 msgstr "Mindig"
 
 #: ../gtk/inspector/visual.ui.h:23
-#| msgctxt "Accelerator"
-#| msgid "Disabled"
 msgid "Disabled"
 msgstr "Letiltva"
 
@@ -4098,12 +4032,10 @@ msgid "Select an Object"
 msgstr "Válasszon egy objektumot"
 
 #: ../gtk/inspector/window.ui.h:2 ../gtk/inspector/window.ui.h:5
-#| msgid "Job Details"
 msgid "Show Details"
 msgstr "Részletek megjelenítése"
 
 #: ../gtk/inspector/window.ui.h:3
-#| msgid "Select an Object"
 msgid "Show all Objects"
 msgstr "Minden objektum megjelenítése"
 
@@ -4112,9 +4044,8 @@ msgid "Collect Statistics"
 msgstr "Statisztika gyűjtése"
 
 #: ../gtk/inspector/window.ui.h:6
-#| msgid "Show _Private Resources"
 msgid "Show all Resources"
-msgstr "Minden erőforrások megjelenítése"
+msgstr "Minden erőforrás megjelenítése"
 
 #. Translators: "Miscellaneous" is the label for a button, that opens
 #. up an extra panel of settings in a print dialog.
@@ -4140,7 +4071,6 @@ msgid "Style Properties"
 msgstr "Stílus tulajdonságai"
 
 #: ../gtk/inspector/window.ui.h:15 ../gtk/inspector/window.ui.h:25
-#| msgid "CLASS"
 msgid "CSS"
 msgstr "CSS"
 
@@ -4169,7 +4099,6 @@ msgid "Objects"
 msgstr "Objektumok"
 
 #: ../gtk/inspector/window.ui.h:23
-#| msgid "Status"
 msgid "Statistics"
 msgstr "Statisztika"
 
@@ -4511,15 +4440,11 @@ msgid "RA2"
 msgstr "RA2"
 
 #: ../gtk/paper_names_offsets.c:69
-#| msgctxt "paper size"
-#| msgid "A3"
 msgctxt "paper size"
 msgid "RA3"
 msgstr "RA3"
 
 #: ../gtk/paper_names_offsets.c:70
-#| msgctxt "paper size"
-#| msgid "A4"
 msgctxt "paper size"
 msgid "RA4"
 msgstr "RA4"
@@ -4625,8 +4550,6 @@ msgid "Choukei 4 Envelope"
 msgstr "Choukei 4 boríték"
 
 #: ../gtk/paper_names_offsets.c:91
-#| msgctxt "paper size"
-#| msgid "Choukei 4 Envelope"
 msgctxt "paper size"
 msgid "Choukei 40 Envelope"
 msgstr "Choukei 40 boríték"
@@ -4647,36 +4570,26 @@ msgid "kaku2 Envelope"
 msgstr "kaku2 boríték"
 
 #: ../gtk/paper_names_offsets.c:95
-#| msgctxt "paper size"
-#| msgid "kaku2 Envelope"
 msgctxt "paper size"
 msgid "kaku3 Envelope"
 msgstr "kaku3 boríték"
 
 #: ../gtk/paper_names_offsets.c:96
-#| msgctxt "paper size"
-#| msgid "kaku2 Envelope"
 msgctxt "paper size"
 msgid "kaku4 Envelope"
 msgstr "kaku4 boríték"
 
 #: ../gtk/paper_names_offsets.c:97
-#| msgctxt "paper size"
-#| msgid "kaku2 Envelope"
 msgctxt "paper size"
 msgid "kaku5 Envelope"
 msgstr "kaku5 boríték"
 
 #: ../gtk/paper_names_offsets.c:98
-#| msgctxt "paper size"
-#| msgid "kaku2 Envelope"
 msgctxt "paper size"
 msgid "kaku7 Envelope"
 msgstr "kaku7 boríték"
 
 #: ../gtk/paper_names_offsets.c:99
-#| msgctxt "paper size"
-#| msgid "kaku2 Envelope"
 msgctxt "paper size"
 msgid "kaku8 Envelope"
 msgstr "kaku8 boríték"
@@ -4692,8 +4605,6 @@ msgid "you4 Envelope"
 msgstr "you4 boríték"
 
 #: ../gtk/paper_names_offsets.c:102
-#| msgctxt "paper size"
-#| msgid "you4 Envelope"
 msgctxt "paper size"
 msgid "you6 Envelope"
 msgstr "you6 boríték"
@@ -4739,36 +4650,26 @@ msgid "5×7"
 msgstr "5×7"
 
 #: ../gtk/paper_names_offsets.c:111
-#| msgctxt "paper size"
-#| msgid "6x9 Envelope"
 msgctxt "paper size"
 msgid "6×9 Envelope"
 msgstr "6×9 boríték"
 
 #: ../gtk/paper_names_offsets.c:112
-#| msgctxt "paper size"
-#| msgid "7x9 Envelope"
 msgctxt "paper size"
 msgid "7×9 Envelope"
 msgstr "7×9 boríték"
 
 #: ../gtk/paper_names_offsets.c:113
-#| msgctxt "paper size"
-#| msgid "#10 Envelope"
 msgctxt "paper size"
 msgid "8×10 Envelope"
 msgstr "8×10 boríték"
 
 #: ../gtk/paper_names_offsets.c:114
-#| msgctxt "paper size"
-#| msgid "9x11 Envelope"
 msgctxt "paper size"
 msgid "9×11 Envelope"
 msgstr "9×11 boríték"
 
 #: ../gtk/paper_names_offsets.c:115
-#| msgctxt "paper size"
-#| msgid "#12 Envelope"
 msgctxt "paper size"
 msgid "9×12 Envelope"
 msgstr "9×12 boríték"
@@ -4849,22 +4750,16 @@ msgid "f"
 msgstr "f"
 
 #: ../gtk/paper_names_offsets.c:131
-#| msgctxt "paper size"
-#| msgid "FanFold European"
 msgctxt "paper size"
 msgid "Fan-Fold European"
 msgstr "Európai Fan-Fold"
 
 #: ../gtk/paper_names_offsets.c:132
-#| msgctxt "paper size"
-#| msgid "FanFold US"
 msgctxt "paper size"
 msgid "Fan-Fold US"
 msgstr "US Fan-Fold"
 
 #: ../gtk/paper_names_offsets.c:133
-#| msgctxt "paper size"
-#| msgid "FanFold German Legal"
 msgctxt "paper size"
 msgid "Fan-Fold German Legal"
 msgstr "Fan-Fold German Legal"
@@ -4880,29 +4775,21 @@ msgid "Government Letter"
 msgstr "Government Letter"
 
 #: ../gtk/paper_names_offsets.c:136
-#| msgctxt "paper size"
-#| msgid "Index 3x5"
 msgctxt "paper size"
 msgid "Index 3×5"
 msgstr "Index 3×5"
 
 #: ../gtk/paper_names_offsets.c:137
-#| msgctxt "paper size"
-#| msgid "Index 4x6 (postcard)"
 msgctxt "paper size"
 msgid "Index 4×6 (postcard)"
 msgstr "Index 4×6 (levelezőlap)"
 
 #: ../gtk/paper_names_offsets.c:138
-#| msgctxt "paper size"
-#| msgid "Index 4x6 ext"
 msgctxt "paper size"
 msgid "Index 4×6 ext"
 msgstr "Index 4×6 ext"
 
 #: ../gtk/paper_names_offsets.c:139
-#| msgctxt "paper size"
-#| msgid "Index 5x8"
 msgctxt "paper size"
 msgid "Index 5×8"
 msgstr "Index 5×8"
@@ -5038,14 +4925,11 @@ msgid "juuro-ku-kai"
 msgstr "juuro-ku-kai"
 
 #: ../gtk/paper_names_offsets.c:166
-#| msgctxt "paper size"
-#| msgid "Small Photo"
 msgctxt "paper size"
 msgid "Large Photo"
 msgstr "Nagy fénykép"
 
 #: ../gtk/paper_names_offsets.c:167
-#| msgid "Medium"
 msgctxt "paper size"
 msgid "Medium Photo"
 msgstr "Közepes fénykép"
@@ -5066,8 +4950,6 @@ msgid "Small Photo"
 msgstr "Kis fénykép"
 
 #: ../gtk/paper_names_offsets.c:171
-#| msgctxt "paper size"
-#| msgid "Wide Format"
 msgctxt "paper size"
 msgid "Wide Photo"
 msgstr "Széles fénykép"
@@ -5345,7 +5227,6 @@ msgstr "Jelszó:"
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:1123
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:1414
 #, c-format
-#| msgid "Authentication is required to print document '%s' on printer %s"
 msgid "Authentication is required to print document “%s” on printer %s"
 msgstr ""
 "Hitelesítés szükséges a(z) „%s” dokumentum kinyomtatásához ezen a nyomtatón: "
@@ -5358,7 +5239,6 @@ msgstr "Hitelesítés szükséges a dokumentum kinyomtatásához ezen: %s"
 
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:1129
 #, c-format
-#| msgid "Authentication is required to get attributes of job '%s'"
 msgid "Authentication is required to get attributes of job “%s”"
 msgstr "Hitelesítés szükséges a(z) „%s” feladat jellemzőinek lekéréséhez"
 
@@ -5402,7 +5282,6 @@ msgstr "Tartomány:"
 
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:1416
 #, c-format
-#| msgid "Authentication is required to print document '%s'"
 msgid "Authentication is required to print document “%s”"
 msgstr "Hitelesítés szükséges a dokumentum („%s”) kinyomtatásához"
 
@@ -5418,77 +5297,65 @@ msgstr "Hitelesítés szükséges a dokumentum kinyomtatásához"
 
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:1860
 #, c-format
-#| msgid "Printer '%s' is low on toner."
 msgid "Printer “%s” is low on toner."
 msgstr "A nyomtatóban („%s”) kevés a festék."
 
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:1861
 #, c-format
-#| msgid "Printer '%s' has no toner left."
 msgid "Printer “%s” has no toner left."
 msgstr "A nyomtatóból („%s”) kifogyott a festék."
 
 #. Translators: "Developer" like on photo development context
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:1863
 #, c-format
-#| msgid "Printer '%s' is low on developer."
 msgid "Printer “%s” is low on developer."
 msgstr "A nyomtatóban („%s”) kevés az előhívó."
 
 #. Translators: "Developer" like on photo development context
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:1865
 #, c-format
-#| msgid "Printer '%s' is out of developer."
 msgid "Printer “%s” is out of developer."
 msgstr "A nyomtatóból („%s”) kifogyott az előhívó."
 
 #. Translators: "marker" is one color bin of the printer
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:1867
 #, c-format
-#| msgid "Printer '%s' is low on at least one marker supply."
 msgid "Printer “%s” is low on at least one marker supply."
 msgstr "A nyomtatóban („%s”) legalább egy szín festéke kevés."
 
 #. Translators: "marker" is one color bin of the printer
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:1869
 #, c-format
-#| msgid "Printer '%s' is out of at least one marker supply."
 msgid "Printer “%s” is out of at least one marker supply."
 msgstr "A nyomtatóból („%s”) legalább egy szín festéke kifogyott."
 
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:1870
 #, c-format
-#| msgid "The cover is open on printer '%s'."
 msgid "The cover is open on printer “%s”."
 msgstr "A nyomtató („%s”) fedele nyitva van."
 
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:1871
 #, c-format
-#| msgid "The door is open on printer '%s'."
 msgid "The door is open on printer “%s”."
 msgstr "A nyomtató („%s”) ajtaja nyitva van."
 
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:1872
 #, c-format
-#| msgid "Printer '%s' is low on paper."
 msgid "Printer “%s” is low on paper."
 msgstr "A nyomtatóban („%s”) kevés a papír."
 
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:1873
 #, c-format
-#| msgid "Printer '%s' is out of paper."
 msgid "Printer “%s” is out of paper."
 msgstr "A nyomtatóból („%s”) kifogyott a papír."
 
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:1874
 #, c-format
-#| msgid "Printer '%s' is currently offline."
 msgid "Printer “%s” is currently offline."
 msgstr "A nyomtató („%s”) jelenleg nem érhető el."
 
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:1875
 #, c-format
-#| msgid "There is a problem on printer '%s'."
 msgid "There is a problem on printer “%s”."
 msgstr "A nyomtató („%s”) problémát észlelt."
 
@@ -5584,21 +5451,18 @@ msgid "No pre-filtering"
 msgstr "Nincs előszűrés"
 
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:4293
-#| msgid "One Sided"
 msgctxt "sides"
 msgid "One Sided"
 msgstr "Egyoldalas"
 
 #. Translators: this is an option of "Two Sided"
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:4295
-#| msgid "Long Edge (Standard)"
 msgctxt "sides"
 msgid "Long Edge (Standard)"
 msgstr "Hosszú él (szabványos)"
 
 #. Translators: this is an option of "Two Sided"
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:4297
-#| msgid "Short Edge (Flip)"
 msgctxt "sides"
 msgid "Short Edge (Flip)"
 msgstr "Rövid él (fordított)"
@@ -5703,7 +5567,6 @@ msgstr "Nyomtatás adott időben"
 #.
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:5362
 #, c-format
-#| msgid "Custom %sx%s"
 msgid "Custom %s×%s"
 msgstr "Egyéni %s×%s"
 
@@ -6015,9 +5878,6 @@ msgstr "_Oldalak:"
 
 #: ../gtk/ui/gtkprintunixdialog.ui.h:13 ../gtk/ui/gtkprintunixdialog.ui.h:15
 #: ../gtk/ui/gtkprintunixdialog.ui.h:18
-#| msgid ""
-#| "Specify one or more page ranges,\n"
-#| " e.g. 1-3,7,11"
 msgid ""
 "Specify one or more page ranges,\n"
 " e.g. 1–3, 7, 11"
@@ -6131,9 +5991,6 @@ msgstr "_Ekkor:"
 #: ../gtk/ui/gtkprintunixdialog.ui.h:55 ../gtk/ui/gtkprintunixdialog.ui.h:59
 #: ../gtk/ui/gtkprintunixdialog.ui.h:61 ../gtk/ui/gtkprintunixdialog.ui.h:65
 #: ../gtk/ui/gtkprintunixdialog.ui.h:68
-#| msgid ""
-#| "Specify the time of print,\n"
-#| " e.g. 15:30, 2:35 pm, 14:15:20, 11:46:30 am, 4 pm"
 msgid ""
 "Specify the time of print,\n"
 " e.g. 15∶30, 2∶35 pm, 14∶15∶20, 11∶46∶30 am, 4 pm"
