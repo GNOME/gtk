@@ -12,8 +12,8 @@ msgstr ""
 "Project-Id-Version: Gtk+ master\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gtk"
 "%2b&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2014-12-06 22:05+0000\n"
-"PO-Revision-Date: 2014-12-07 15:02+0700\n"
+"POT-Creation-Date: 2014-12-30 22:06+0000\n"
+"PO-Revision-Date: 2014-12-31 15:48+0700\n"
 "Last-Translator: Trần Ngọc Quân <vnwildman@gmail.com>\n"
 "Language-Team: Vietnamese <gnome-vi-list@gnome.org>\n"
 "Language: vi\n"
@@ -32,12 +32,12 @@ msgstr ""
 #: ../gdk/gdk.c:177
 #, c-format
 msgid "Error parsing option --gdk-debug"
-msgstr "Lỗi phân tích cú pháp của tuỳ chọn --gdk-debug"
+msgstr "Lỗi phân tích cú pháp của tùy chọn --gdk-debug"
 
 #: ../gdk/gdk.c:197
 #, c-format
 msgid "Error parsing option --gdk-no-debug"
-msgstr "Lỗi phân tích cú pháp của tuỳ chọn --gdk-no-debug"
+msgstr "Lỗi phân tích cú pháp của tùy chọn --gdk-no-debug"
 
 #. Description of --class=CLASS in --help output
 #: ../gdk/gdk.c:225
@@ -105,7 +105,7 @@ msgstr "GL hỗ trợ tắt thông qua GDK_DEBUG"
 #: ../gdk/keyname-table.h:6843
 msgctxt "keyboard label"
 msgid "BackSpace"
-msgstr "Xoá lùi"
+msgstr "Xóa lùi"
 
 #: ../gdk/keyname-table.h:6844
 msgctxt "keyboard label"
@@ -435,13 +435,14 @@ msgstr "Tạm ngưng"
 
 #: ../gdk/mir/gdkmirwindowimpl.c:1308 ../gdk/mir/gdkmirwindowimpl.c:1318
 #: ../gdk/wayland/gdkglcontext-wayland.c:263
-#: ../gdk/wayland/gdkglcontext-wayland.c:273 ../gdk/x11/gdkglcontext-x11.c:697
+#: ../gdk/wayland/gdkglcontext-wayland.c:273
+#: ../gdk/win32/gdkglcontext-win32.c:527 ../gdk/x11/gdkglcontext-x11.c:700
 msgid "No available configurations for the given pixel format"
 msgstr "Không có cấu hình sẵn có nào dành cho định dạng điểm ảnh đã cho"
 
 #: ../gdk/mir/gdkmirwindowimpl.c:1350
 #: ../gdk/wayland/gdkglcontext-wayland.c:306
-#: ../gdk/x11/gdkglcontext-x11.c:1052
+#: ../gdk/win32/gdkglcontext-win32.c:505 ../gdk/x11/gdkglcontext-x11.c:1055
 msgid "No GL implementation is available"
 msgstr "Không có phần thực hiện GL"
 
@@ -452,9 +453,18 @@ msgstr "Hồ sơ GL lõi 3.2 không sẵn sàng trên EGL"
 
 #: ../gdk/mir/gdkmirwindowimpl.c:1385
 #: ../gdk/wayland/gdkglcontext-wayland.c:341
-#: ../gdk/x11/gdkglcontext-x11.c:1092 ../gdk/x11/gdkglcontext-x11.c:1136
+#: ../gdk/win32/gdkglcontext-win32.c:541 ../gdk/x11/gdkglcontext-x11.c:1095
+#: ../gdk/x11/gdkglcontext-x11.c:1139
 msgid "Unable to create a GL context"
 msgstr "Không thể tạo ngữ cảnh GL"
+
+#: ../gdk/win32/gdkglcontext-win32.c:514
+msgid ""
+"The WGL_ARB_create_context extension needed to create 3.2 core profiles is "
+"not available"
+msgstr ""
+"Phần mở rộng WGL_ARB_create_context cần thiết để tạo hồ sơ lõi 3.2 không sẵn "
+"có"
 
 #. Description of --sync in --help output
 #: ../gdk/win32/gdkmain-win32.c:53
@@ -464,7 +474,7 @@ msgstr "Đừng gửi bó yêu cầu GDI"
 #. Description of --no-wintab in --help output
 #: ../gdk/win32/gdkmain-win32.c:55
 msgid "Don't use the Wintab API for tablet support"
-msgstr "Đừng dùng API Wintab để hỗ trợ phiến đồ họa"
+msgstr "Đừng dùng API Wintab để hỗ trợ bảng vẽ"
 
 #. Description of --ignore-wintab in --help output
 #: ../gdk/win32/gdkmain-win32.c:57
@@ -474,7 +484,7 @@ msgstr "Tương đương --no-wintab"
 #. Description of --use-wintab in --help output
 #: ../gdk/win32/gdkmain-win32.c:59
 msgid "Do use the Wintab API [default]"
-msgstr "Dùng API WIntab [mặc định]"
+msgstr "Dùng API Wintab [mặc định]"
 
 #. Description of --max-colors=COLORS in --help output
 #: ../gdk/win32/gdkmain-win32.c:61
@@ -502,12 +512,12 @@ msgid "Opening %d Item"
 msgid_plural "Opening %d Items"
 msgstr[0] "Đang mở %d mục"
 
-#: ../gdk/x11/gdkglcontext-x11.c:726
+#: ../gdk/x11/gdkglcontext-x11.c:729
 #, c-format
 msgid "No available configurations for the given RGBA pixel format"
 msgstr "Không có cấu hình sẵn có cho định dạng điểm ảnh RGBA"
 
-#: ../gdk/x11/gdkglcontext-x11.c:1061
+#: ../gdk/x11/gdkglcontext-x11.c:1064
 msgid ""
 "The GLX_ARB_create_context_profile extension needed to create 3.2 core "
 "profiles is not available"
@@ -641,7 +651,7 @@ msgstr "_CD-ROM"
 #: ../gtk/a11y/gtkimageaccessible.c:57 ../gtk/deprecated/gtkstock.c:346
 msgctxt "Stock label"
 msgid "_Clear"
-msgstr "_Xoá trắng"
+msgstr "_Xóa trắng"
 
 #: ../gtk/a11y/gtkimageaccessible.c:58 ../gtk/deprecated/gtkstock.c:347
 msgctxt "Stock label"
@@ -654,7 +664,7 @@ msgstr "Thu nhỏ"
 
 #: ../gtk/a11y/gtkimageaccessible.c:60 ../gtk/gtkheaderbar.c:458
 msgid "Maximize"
-msgstr "Phóng to hết cỡ "
+msgstr "Phóng to hết cỡ"
 
 #: ../gtk/a11y/gtkimageaccessible.c:61 ../gtk/gtkheaderbar.c:458
 msgid "Restore"
@@ -673,7 +683,7 @@ msgstr "Cắ_t"
 #: ../gtk/a11y/gtkimageaccessible.c:64 ../gtk/deprecated/gtkstock.c:352
 msgctxt "Stock label"
 msgid "_Delete"
-msgstr "_Xoá"
+msgstr "_Xóa"
 
 #: ../gtk/a11y/gtkimageaccessible.c:65 ../gtk/deprecated/gtkstock.c:334
 msgctxt "Stock label"
@@ -1205,7 +1215,7 @@ msgstr ""
 #: ../gtk/gtkmessagedialog.c:957 ../gtk/gtkmountoperation.c:543
 #: ../gtk/gtkpagesetupunixdialog.c:196 ../gtk/gtkprintbackend.c:763
 #: ../gtk/gtkprinteroptionwidget.c:545 ../gtk/gtkprintunixdialog.c:665
-#: ../gtk/gtkprintunixdialog.c:733 ../gtk/gtkwindow.c:11811
+#: ../gtk/gtkprintunixdialog.c:733 ../gtk/gtkwindow.c:11844
 #: ../gtk/inspector/css-editor.c:199 ../gtk/ui/gtkappchooserdialog.ui.h:2
 #: ../gtk/ui/gtkassistant.ui.h:5 ../gtk/ui/gtkcolorchooserdialog.ui.h:2
 #: ../gtk/ui/gtkfontchooserdialog.ui.h:2
@@ -1257,7 +1267,7 @@ msgstr "Á_p dụng"
 
 #: ../gtk/deprecated/gtkfontsel.c:1698 ../gtk/gtkmessagedialog.c:936
 #: ../gtk/gtkmessagedialog.c:958 ../gtk/gtkprintbackend.c:764
-#: ../gtk/gtkwindow.c:11812 ../gtk/inspector/classes-list.c:127
+#: ../gtk/gtkwindow.c:11845 ../gtk/inspector/classes-list.c:127
 msgid "_OK"
 msgstr "_OK"
 
@@ -1465,45 +1475,45 @@ msgstr "GNU Lesser General Public License, chỉ phiên bản 2.1"
 msgid "GNU Lesser General Public License, version 3 only"
 msgstr "GNU Lesser General Public License, chỉ phiên bản 3"
 
-#: ../gtk/gtkaboutdialog.c:701
+#: ../gtk/gtkaboutdialog.c:699
 msgid "C_redits"
 msgstr "Công t_rạng"
 
-#: ../gtk/gtkaboutdialog.c:709
+#: ../gtk/gtkaboutdialog.c:707
 msgid "_License"
 msgstr "Giấy _phép"
 
-#: ../gtk/gtkaboutdialog.c:718 ../gtk/gtkcustompaperunixdialog.c:329
+#: ../gtk/gtkaboutdialog.c:716 ../gtk/gtkcustompaperunixdialog.c:329
 #: ../gtk/gtkmessagedialog.c:940 ../gtk/ui/gtkassistant.ui.h:6
 msgid "_Close"
 msgstr "Đón_g"
 
-#: ../gtk/gtkaboutdialog.c:1007
+#: ../gtk/gtkaboutdialog.c:1005
 msgid "Could not show link"
 msgstr "Không thể hiện liên kết"
 
-#: ../gtk/gtkaboutdialog.c:1044
+#: ../gtk/gtkaboutdialog.c:1042
 msgid "Website"
 msgstr "Trang Web"
 
-#: ../gtk/gtkaboutdialog.c:1098 ../gtk/ui/gtkapplication-quartz.ui.h:1
+#: ../gtk/gtkaboutdialog.c:1092 ../gtk/ui/gtkapplication-quartz.ui.h:1
 #, c-format
 msgid "About %s"
 msgstr "Giới thiệu %s"
 
-#: ../gtk/gtkaboutdialog.c:2342
+#: ../gtk/gtkaboutdialog.c:2316
 msgid "Created by"
 msgstr "Tác giả"
 
-#: ../gtk/gtkaboutdialog.c:2345
+#: ../gtk/gtkaboutdialog.c:2319
 msgid "Documented by"
 msgstr "Tài liệu"
 
-#: ../gtk/gtkaboutdialog.c:2355
+#: ../gtk/gtkaboutdialog.c:2329
 msgid "Translated by"
 msgstr "Bản dịch"
 
-#: ../gtk/gtkaboutdialog.c:2360
+#: ../gtk/gtkaboutdialog.c:2334
 msgid "Artwork by"
 msgstr "Đồ họa"
 
@@ -1577,7 +1587,7 @@ msgctxt "keyboard label"
 msgid "Backslash"
 msgstr "Gạch chéo ngược"
 
-#: ../gtk/gtkappchooserbutton.c:291
+#: ../gtk/gtkappchooserbutton.c:292
 msgid "Other application…"
 msgstr "Ứng dụng khác…"
 
@@ -1712,7 +1722,7 @@ msgstr "Thẻ không được quản lý: <%s>"
 #. * text direction of RTL and specify "calendar:YM", then the year
 #. * will appear to the right of the month.
 #.
-#: ../gtk/gtkcalendar.c:871
+#: ../gtk/gtkcalendar.c:798
 msgid "calendar:MY"
 msgstr "calendar:MY"
 
@@ -1720,7 +1730,7 @@ msgstr "calendar:MY"
 #. * first day of the week to calendar:week_start:1 if you want Monday
 #. * to be the first day of the week, and so on.
 #.
-#: ../gtk/gtkcalendar.c:909
+#: ../gtk/gtkcalendar.c:836
 msgid "calendar:week_start:0"
 msgstr "calendar:week_start:1"
 
@@ -1729,7 +1739,7 @@ msgstr "calendar:week_start:1"
 #. *
 #. * If you don't understand this, leave it as "2000"
 #.
-#: ../gtk/gtkcalendar.c:1936
+#: ../gtk/gtkcalendar.c:1862
 msgctxt "year measurement template"
 msgid "2000"
 msgstr "2000"
@@ -1744,7 +1754,7 @@ msgstr "2000"
 #. * digits. That needs support from your system and locale definition
 #. * too.
 #.
-#: ../gtk/gtkcalendar.c:1967 ../gtk/gtkcalendar.c:2637
+#: ../gtk/gtkcalendar.c:1893 ../gtk/gtkcalendar.c:2571
 #, c-format
 msgctxt "calendar:day:digits"
 msgid "%d"
@@ -1760,7 +1770,7 @@ msgstr "%d"
 #. * digits. That needs support from your system and locale definition
 #. * too.
 #.
-#: ../gtk/gtkcalendar.c:1999 ../gtk/gtkcalendar.c:2503
+#: ../gtk/gtkcalendar.c:1925 ../gtk/gtkcalendar.c:2437
 #, c-format
 msgctxt "calendar:week:digits"
 msgid "%d"
@@ -1776,7 +1786,7 @@ msgstr "%d"
 #. *
 #. * "%Y" is appropriate for most locales.
 #.
-#: ../gtk/gtkcalendar.c:2290
+#: ../gtk/gtkcalendar.c:2216
 msgctxt "calendar year format"
 msgid "%Y"
 msgstr "%Y"
@@ -2044,7 +2054,7 @@ msgstr "Trong suốt"
 
 #: ../gtk/gtkcolorswatch.c:449
 msgid "_Customize"
-msgstr "_Tuỳ biến"
+msgstr "_Tùy biến"
 
 #. Translate to the default units to use for presenting
 #. * lengths to the user. Translate to default:inch if you
@@ -2110,30 +2120,30 @@ msgstr "_Phải:"
 msgid "Paper Margins"
 msgstr "Lề giấy"
 
-#: ../gtk/gtkentry.c:9619 ../gtk/gtkentry.c:9772 ../gtk/gtklabel.c:6591
-#: ../gtk/gtktextview.c:8868 ../gtk/gtktextview.c:9056
+#: ../gtk/gtkentry.c:9626 ../gtk/gtkentry.c:9779 ../gtk/gtklabel.c:6591
+#: ../gtk/gtktextview.c:9018 ../gtk/gtktextview.c:9206
 msgid "Cu_t"
 msgstr "Cắ_t"
 
-#: ../gtk/gtkentry.c:9623 ../gtk/gtkentry.c:9775 ../gtk/gtklabel.c:6592
-#: ../gtk/gtktextview.c:8872 ../gtk/gtktextview.c:9060
+#: ../gtk/gtkentry.c:9630 ../gtk/gtkentry.c:9782 ../gtk/gtklabel.c:6592
+#: ../gtk/gtktextview.c:9022 ../gtk/gtktextview.c:9210
 msgid "_Copy"
 msgstr "_Chép"
 
-#: ../gtk/gtkentry.c:9627 ../gtk/gtkentry.c:9778 ../gtk/gtklabel.c:6593
-#: ../gtk/gtktextview.c:8874 ../gtk/gtktextview.c:9062
+#: ../gtk/gtkentry.c:9634 ../gtk/gtkentry.c:9785 ../gtk/gtklabel.c:6593
+#: ../gtk/gtktextview.c:9024 ../gtk/gtktextview.c:9212
 msgid "_Paste"
 msgstr "_Dán"
 
-#: ../gtk/gtkentry.c:9630 ../gtk/gtklabel.c:6595 ../gtk/gtktextview.c:8877
+#: ../gtk/gtkentry.c:9637 ../gtk/gtklabel.c:6595 ../gtk/gtktextview.c:9027
 msgid "_Delete"
 msgstr "_Xóa bỏ"
 
-#: ../gtk/gtkentry.c:9641 ../gtk/gtklabel.c:6604 ../gtk/gtktextview.c:8891
+#: ../gtk/gtkentry.c:9648 ../gtk/gtklabel.c:6604 ../gtk/gtktextview.c:9041
 msgid "Select _All"
 msgstr "Chọn tất _cả"
 
-#: ../gtk/gtkentry.c:10837
+#: ../gtk/gtkentry.c:10848
 msgid "Caps Lock is on"
 msgstr "Caps Lock được bật"
 
@@ -2337,8 +2347,8 @@ msgstr "Chọn phông chữ"
 #. Translators, these strings are names for various 'standard' cover
 #. * pages that the printing system may support.
 #.
-#: ../gtk/gtkfontbutton.c:1182 ../gtk/inspector/general.c:221
-#: ../gtk/inspector/general.c:222 ../gtk/inspector/gestures.c:128
+#: ../gtk/gtkfontbutton.c:1182 ../gtk/inspector/general.c:225
+#: ../gtk/inspector/general.c:226 ../gtk/inspector/gestures.c:128
 #: ../gtk/inspector/prop-editor.c:1200 ../gtk/inspector/size-groups.c:252
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:5203
 msgid "None"
@@ -2352,7 +2362,7 @@ msgstr "Gặp lỗi khi tạo ngữ cảnh OpenGL"
 msgid "Application menu"
 msgstr "Trình đơn ứng dụng"
 
-#: ../gtk/gtkheaderbar.c:476 ../gtk/gtkwindow.c:8502
+#: ../gtk/gtkheaderbar.c:476 ../gtk/gtkwindow.c:8524
 msgid "Close"
 msgstr "Đóng"
 
@@ -2361,7 +2371,7 @@ msgstr "Đóng"
 msgid "Icon '%s' not present in theme %s"
 msgstr "Biểu tượng “%s” không có trong chủ đề (theme) %s"
 
-#: ../gtk/gtkicontheme.c:4005 ../gtk/gtkicontheme.c:4372
+#: ../gtk/gtkicontheme.c:4010 ../gtk/gtkicontheme.c:4377
 msgid "Failed to load icon"
 msgstr "Gặp lỗi khi tải biểu tượng"
 
@@ -2472,18 +2482,18 @@ msgstr "URI không hợp lệ"
 
 #: ../gtk/gtklockbutton.c:272 ../gtk/ui/gtklockbutton.ui.h:1
 msgid "Lock"
-msgstr "Khoá"
+msgstr "Khóa"
 
 #: ../gtk/gtklockbutton.c:281 ../gtk/ui/gtklockbutton.ui.h:2
 msgid "Unlock"
-msgstr "Bỏ khoá"
+msgstr "Bỏ khóa"
 
 #: ../gtk/gtklockbutton.c:290
 msgid ""
 "Dialog is unlocked.\n"
 "Click to prevent further changes"
 msgstr ""
-"Hộp thoại đã mở khoá.\n"
+"Hộp thoại đã mở khóa.\n"
 "Nhấn để ngăn thay đổi"
 
 #: ../gtk/gtklockbutton.c:299
@@ -2491,7 +2501,7 @@ msgid ""
 "Dialog is locked.\n"
 "Click to make changes"
 msgstr ""
-"Hộp thoại đã khoá.\n"
+"Hộp thoại đã khóa.\n"
 "Nhấn để có thể thay đổi"
 
 #: ../gtk/gtklockbutton.c:308
@@ -2525,7 +2535,7 @@ msgstr "Các cờ gỡ lỗi GTK+ cần đặt"
 #. Description of --gtk-no-debug=FLAGS in --help output
 #: ../gtk/gtkmain.c:463
 msgid "GTK+ debugging flags to unset"
-msgstr "Các cờ gỡ lỗi GTK+ cần bỏ đặt"
+msgstr "Các cờ gỡ lỗi GTK+ cần xóa"
 
 #: ../gtk/gtkmain.c:765
 #, c-format
@@ -2646,12 +2656,12 @@ msgstr "Z Shell"
 msgid "Cannot end process with PID %d: %s"
 msgstr "Không thể chấm dứt tiến trình có PID %d: %s"
 
-#: ../gtk/gtknotebook.c:5130 ../gtk/gtknotebook.c:7858
+#: ../gtk/gtknotebook.c:5128 ../gtk/gtknotebook.c:7856
 #, c-format
 msgid "Page %u"
 msgstr "Trang %u"
 
-#: ../gtk/gtkpagesetup.c:644 ../gtk/gtkpapersize.c:985
+#: ../gtk/gtkpagesetup.c:652 ../gtk/gtkpapersize.c:985
 #: ../gtk/gtkpapersize.c:1025
 msgid "Not a valid page setup file"
 msgstr "Không phải một tập tin cài đặt trang hợp lệ"
@@ -2710,7 +2720,7 @@ msgstr "Các tập tin mới dùng gần đây"
 
 #: ../gtk/gtkplacessidebar.c:968
 msgid "Home"
-msgstr "Home"
+msgstr "Thư mục riêng"
 
 #: ../gtk/gtkplacessidebar.c:970
 msgid "Open your personal folder"
@@ -2807,11 +2817,11 @@ msgstr "_Dừng ổ nhiều đĩa"
 #. stop() for type G_DRIVE_START_STOP_TYPE_PASSWORD is normally not used
 #: ../gtk/gtkplacessidebar.c:2279
 msgid "_Unlock Drive"
-msgstr "_Mở khoá ổ đĩa"
+msgstr "_Mở khóa ổ đĩa"
 
 #: ../gtk/gtkplacessidebar.c:2280
 msgid "_Lock Drive"
-msgstr "_Khoá ổ đĩa"
+msgstr "_Khóa ổ đĩa"
 
 #: ../gtk/gtkplacessidebar.c:2309 ../gtk/gtkplacessidebar.c:3205
 #, c-format
@@ -2916,7 +2926,7 @@ msgstr "%s yêu cầu #%d"
 #: ../gtk/gtkprintoperation.c:1777
 msgctxt "print operation status"
 msgid "Initial state"
-msgstr "Tình trạng đầu tiên"
+msgstr "Tình trạng khởi tạo"
 
 #: ../gtk/gtkprintoperation.c:1778
 msgctxt "print operation status"
@@ -3150,7 +3160,7 @@ msgstr "Không thể gỡ bỏ mục"
 
 #: ../gtk/gtkrecentchooserdefault.c:1608
 msgid "Could not clear list"
-msgstr "Không thể xoá danh sách"
+msgstr "Không thể xóa danh sách"
 
 #: ../gtk/gtkrecentchooserdefault.c:1692
 msgid "Copy _Location"
@@ -3216,15 +3226,15 @@ msgctxt "recent menu label"
 msgid "%d. %s"
 msgstr "%d. %s"
 
-#: ../gtk/gtkrecentmanager.c:1029 ../gtk/gtkrecentmanager.c:1042
-#: ../gtk/gtkrecentmanager.c:1179 ../gtk/gtkrecentmanager.c:1189
-#: ../gtk/gtkrecentmanager.c:1241 ../gtk/gtkrecentmanager.c:1250
-#: ../gtk/gtkrecentmanager.c:1265
+#: ../gtk/gtkrecentmanager.c:1042 ../gtk/gtkrecentmanager.c:1055
+#: ../gtk/gtkrecentmanager.c:1192 ../gtk/gtkrecentmanager.c:1202
+#: ../gtk/gtkrecentmanager.c:1254 ../gtk/gtkrecentmanager.c:1263
+#: ../gtk/gtkrecentmanager.c:1278
 #, c-format
 msgid "Unable to find an item with URI '%s'"
 msgstr "Không thể tìm thấy mục có URI “%s”"
 
-#: ../gtk/gtkrecentmanager.c:2468
+#: ../gtk/gtkrecentmanager.c:2484
 #, c-format
 msgid "No registered application with name '%s' for item with URI '%s' found"
 msgstr "Không tìm thấy ứng dụng nào đăng ký tên “%s” cho mục có URI “%s”"
@@ -3435,11 +3445,11 @@ msgctxt "volume percentage"
 msgid "%d %%"
 msgstr "%d %%"
 
-#: ../gtk/gtkwindow.c:11799
+#: ../gtk/gtkwindow.c:11832
 msgid "Do you want to use GTK+ Inspector?"
 msgstr "Bạn có muốn dùng GTK+ Inspector?"
 
-#: ../gtk/gtkwindow.c:11801
+#: ../gtk/gtkwindow.c:11834
 msgid ""
 "GTK+ Inspector is an interactive debugger that lets you explore and modify "
 "the internals of any GTK+ application. Using it may cause the application to "
@@ -3448,7 +3458,7 @@ msgstr ""
 "Bộ điều tra GTK+ là một bộ gỡ lỗi tương tác, nó giúp bạn dò tìm và sửa bên "
 "trong một ứng dụng GTK+. Dùng nó có thể gây ra sự đổ vỡ của ứng dụng."
 
-#: ../gtk/gtkwindow.c:11806
+#: ../gtk/gtkwindow.c:11839
 msgid "Don't show this message again"
 msgstr "Đừng hiện lời nhắc này nữa"
 
@@ -3552,10 +3562,22 @@ msgid "GDK Backend"
 msgstr "Phần thực chạy GDK"
 
 #: ../gtk/inspector/general.ui.h:4
+msgid "X display"
+msgstr "Hiển thị X"
+
+#: ../gtk/inspector/general.ui.h:5
+msgid "RGBA visual"
+msgstr "RGBA trực quan"
+
+#: ../gtk/inspector/general.ui.h:6
+msgid "Composited"
+msgstr "Phức hợp"
+
+#: ../gtk/inspector/general.ui.h:7
 msgid "GL Version"
 msgstr "Phiên bản GL"
 
-#: ../gtk/inspector/general.ui.h:5
+#: ../gtk/inspector/general.ui.h:8
 msgid "GL Vendor"
 msgstr "Đại diện GL"
 
@@ -3762,7 +3784,7 @@ msgstr "Thuộc tính"
 
 #: ../gtk/inspector/prop-list.ui.h:4 ../gtk/inspector/signals-list.ui.h:6
 msgid "Defined At"
-msgstr "Được định nghĩa lúc"
+msgstr "Được định nghĩa tại"
 
 #: ../gtk/inspector/resource-list.ui.h:1
 msgid "Path"
@@ -3803,7 +3825,7 @@ msgstr "Theo dõi tín hiệu phát ra trên đối tượng này"
 
 #: ../gtk/inspector/signals-list.ui.h:2
 msgid "Clear log"
-msgstr "Xoá nhật ký"
+msgstr "Xóa nhật ký"
 
 #: ../gtk/inspector/signals-list.ui.h:4
 msgid "Connected"
@@ -3867,19 +3889,19 @@ msgstr "Bật thống kê bằng GOBJECT_DEBUG=instance-count"
 msgid "Location"
 msgstr "Địa điểm"
 
-#: ../gtk/inspector/visual.c:270 ../gtk/inspector/visual.c:296
+#: ../gtk/inspector/visual.c:273 ../gtk/inspector/visual.c:299
 msgid "Theme is hardcoded by GTK_THEME"
 msgstr "Chủ đề bị có định do GTK_THEME"
 
-#: ../gtk/inspector/visual.c:414
+#: ../gtk/inspector/visual.c:510
 msgid "Backend does not support window scaling"
 msgstr "Phần ứng dụng chạy phía sau không hỗ trợ co dãn cửa sổ"
 
-#: ../gtk/inspector/visual.c:453
+#: ../gtk/inspector/visual.c:549
 msgid "Setting is hardcoded by GTK_TEST_TOUCHSCREEN"
 msgstr "Cài đặt bị cố định bởi GTK_TEST_TOUCHSCREEN"
 
-#: ../gtk/inspector/visual.c:518
+#: ../gtk/inspector/visual.c:614
 msgid ""
 "Not settable at runtime.\n"
 "Use GDK_GL=always or GDK_GL=disable instead"
@@ -3887,8 +3909,8 @@ msgstr ""
 "Không thể đặt được lúc chạy.\n"
 "Dùng GDK_GL=always hay GDK_GL=disable để thay thế"
 
-#: ../gtk/inspector/visual.c:532 ../gtk/inspector/visual.c:533
-#: ../gtk/inspector/visual.c:534
+#: ../gtk/inspector/visual.c:628 ../gtk/inspector/visual.c:629
+#: ../gtk/inspector/visual.c:630
 msgid "GL rendering is disabled"
 msgstr "Tô vẽ GL được bật"
 
@@ -3898,94 +3920,102 @@ msgid "GTK+ Theme"
 msgstr "Chủ đề GTK+"
 
 #: ../gtk/inspector/visual.ui.h:2
-msgid "Dark variant"
-msgstr "Biến thể đậm"
+msgid "Dark Variant"
+msgstr "Biến thể tối"
 
 #: ../gtk/inspector/visual.ui.h:3
+msgid "Cursor Theme"
+msgstr "Chủ đề biểu tượng"
+
+#: ../gtk/inspector/visual.ui.h:4
+msgid "Cursor Size"
+msgstr "Kích cỡ con trỏ"
+
+#: ../gtk/inspector/visual.ui.h:5
 msgid "Icon Theme"
 msgstr "Chủ đề biểu tượng"
 
-#: ../gtk/inspector/visual.ui.h:4 ../gtk/ui/gtkfontbutton.ui.h:1
+#: ../gtk/inspector/visual.ui.h:6 ../gtk/ui/gtkfontbutton.ui.h:1
 msgid "Font"
 msgstr "Phông chữ"
 
-#: ../gtk/inspector/visual.ui.h:5
+#: ../gtk/inspector/visual.ui.h:7
 msgid "Text Direction"
 msgstr "Hướng chữ"
 
-#: ../gtk/inspector/visual.ui.h:6
+#: ../gtk/inspector/visual.ui.h:8
 msgid "Left-to-Right"
 msgstr "Trái-sang-Phải"
 
-#: ../gtk/inspector/visual.ui.h:7
+#: ../gtk/inspector/visual.ui.h:9
 msgid "Right-to-Left"
 msgstr "Phải-sang-Trái"
 
-#: ../gtk/inspector/visual.ui.h:8
+#: ../gtk/inspector/visual.ui.h:10
 msgid "Window scaling"
 msgstr "Giãn cửa sổ"
 
-#: ../gtk/inspector/visual.ui.h:9
+#: ../gtk/inspector/visual.ui.h:11
 msgid "Animations"
 msgstr "Hoạt ảnh"
 
-#: ../gtk/inspector/visual.ui.h:10
+#: ../gtk/inspector/visual.ui.h:12
 msgid "Rendering Mode"
 msgstr "Chế độ tô vẽ"
 
-#: ../gtk/inspector/visual.ui.h:11
+#: ../gtk/inspector/visual.ui.h:13
 msgid "Similar"
 msgstr "Tương tự"
 
-#: ../gtk/inspector/visual.ui.h:12
+#: ../gtk/inspector/visual.ui.h:14
 msgid "Image"
 msgstr "Ảnh"
 
-#: ../gtk/inspector/visual.ui.h:13
+#: ../gtk/inspector/visual.ui.h:15
 msgid "Recording"
 msgstr "Thu"
 
-#: ../gtk/inspector/visual.ui.h:14
+#: ../gtk/inspector/visual.ui.h:16
 msgid "Show Graphic Updates"
 msgstr "Hiện các cập nhật đồ họa"
 
-#: ../gtk/inspector/visual.ui.h:15
+#: ../gtk/inspector/visual.ui.h:17
 msgid "Show Baselines"
 msgstr "Hiện đường cơ sở"
 
-#: ../gtk/inspector/visual.ui.h:16
+#: ../gtk/inspector/visual.ui.h:18
 msgid "Show Pixel Cache"
 msgstr "Hiện bộ đệm điểm ảnh"
 
-#: ../gtk/inspector/visual.ui.h:17
+#: ../gtk/inspector/visual.ui.h:19
 msgid "Simulate touchscreen"
-msgstr "Mô phỏng touchscreen"
+msgstr "Mô phỏng bút viết lên màn hình"
 
-#: ../gtk/inspector/visual.ui.h:18
+#: ../gtk/inspector/visual.ui.h:20
 msgid "GL Rendering"
 msgstr "Tô vẽ GL"
 
-#: ../gtk/inspector/visual.ui.h:19
+#: ../gtk/inspector/visual.ui.h:21
 msgid "When needed"
 msgstr "khi cần"
 
-#: ../gtk/inspector/visual.ui.h:20
+#: ../gtk/inspector/visual.ui.h:22
 msgid "Always"
 msgstr "Luôn"
 
-#: ../gtk/inspector/visual.ui.h:21
+#: ../gtk/inspector/visual.ui.h:23
 msgid "Disabled"
 msgstr "Bị tắt"
 
-#: ../gtk/inspector/visual.ui.h:22
+#: ../gtk/inspector/visual.ui.h:24
 msgid "Software GL"
 msgstr "Phần mềm GL"
 
-#: ../gtk/inspector/visual.ui.h:23
+#: ../gtk/inspector/visual.ui.h:25
 msgid "Software Surfaces"
 msgstr "Bề mặt phần mềm"
 
-#: ../gtk/inspector/visual.ui.h:24
+#: ../gtk/inspector/visual.ui.h:26
 msgid "Texture Rectangle Extension"
 msgstr "Phần mở rộng tô phủ hình chữ nhật"
 
@@ -4033,7 +4063,7 @@ msgstr "Thứ bậc"
 msgid "Style Properties"
 msgstr "Thuộc tính kiểu dáng"
 
-#: ../gtk/inspector/window.ui.h:15 ../gtk/inspector/window.ui.h:24
+#: ../gtk/inspector/window.ui.h:15 ../gtk/inspector/window.ui.h:25
 msgid "CSS"
 msgstr "CSS"
 
@@ -4054,22 +4084,26 @@ msgid "Gestures"
 msgstr "Động tác"
 
 #: ../gtk/inspector/window.ui.h:21
+msgid "Magnifier"
+msgstr "Kính lúp"
+
+#: ../gtk/inspector/window.ui.h:22
 msgid "Objects"
 msgstr "Đối tượng"
 
-#: ../gtk/inspector/window.ui.h:22
+#: ../gtk/inspector/window.ui.h:23
 msgid "Statistics"
 msgstr "Thống kê"
 
-#: ../gtk/inspector/window.ui.h:23
+#: ../gtk/inspector/window.ui.h:24
 msgid "Resources"
 msgstr "Tài nguyên"
 
-#: ../gtk/inspector/window.ui.h:25
+#: ../gtk/inspector/window.ui.h:26
 msgid "Visual"
 msgstr "Trực quan"
 
-#: ../gtk/inspector/window.ui.h:26 ../gtk/ui/gtkprintunixdialog.ui.h:24
+#: ../gtk/inspector/window.ui.h:27 ../gtk/ui/gtkprintunixdialog.ui.h:24
 msgid "General"
 msgstr "Chung"
 
@@ -4986,7 +5020,7 @@ msgstr "ROC 8k"
 #: ../gtk/updateiconcache.c:1386
 #, c-format
 msgid "Failed to write header\n"
-msgstr "Lỗi ghi phần đầu\n"
+msgstr "Gặp lỗi khi ghi phần đầu\n"
 
 #: ../gtk/updateiconcache.c:1392
 #, c-format
@@ -5455,7 +5489,7 @@ msgstr "Thông tin hóa đơn"
 
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:5203
 msgid "Classified"
-msgstr "Xem riêng"
+msgstr "Cấp độ"
 
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:5203
 msgid "Confidential"
@@ -5721,7 +5755,7 @@ msgstr "V"
 
 #: ../gtk/ui/gtkcoloreditor.ui.h:8
 msgid "Saturation"
-msgstr "Độ bão hoà"
+msgstr "Độ bão hòa"
 
 #: ../gtk/ui/gtkfilechooserwidget.ui.h:1
 msgid "Create Fo_lder"
@@ -5813,7 +5847,7 @@ msgstr "Trạng thái"
 
 #: ../gtk/ui/gtkprintunixdialog.ui.h:8
 msgid "Range"
-msgstr "Phạm vi"
+msgstr "Vùng"
 
 #: ../gtk/ui/gtkprintunixdialog.ui.h:9
 msgid "_All Pages"
@@ -5837,7 +5871,7 @@ msgid ""
 "Specify one or more page ranges,\n"
 " e.g. 1–3, 7, 11"
 msgstr ""
-"Hãy ghi rõ một hay nhiều vùng trang,\n"
+"Đưa ra một hay nhiều vùng trang,\n"
 " v.d. 1-3, 7, 11"
 
 #: ../gtk/ui/gtkprintunixdialog.ui.h:17
@@ -5951,7 +5985,7 @@ msgid ""
 " e.g. 15∶30, 2∶35 pm, 14∶15∶20, 11∶46∶30 am, 4 pm"
 msgstr ""
 "Chỉ định giờ in,\n"
-"  v.d. 15:30, 2:35 pm, 14:15:20, 11:46:30 am, 4 pm"
+" v.d. 15:30, 2:35 pm, 14:15:20, 11:46:30 am, 4 pm"
 
 #: ../gtk/ui/gtkprintunixdialog.ui.h:67
 msgid "Time of print"
