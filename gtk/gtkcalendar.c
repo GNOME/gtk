@@ -108,6 +108,9 @@ day_of_week (guint year, guint mm, guint dd)
   guint days;
 
   dt = g_date_time_new_local (year, mm, dd, 1, 1, 1);
+  if (dt == NULL)
+    return 0;
+
   days = g_date_time_get_day_of_week (dt);
   g_date_time_unref (dt);
 
@@ -121,6 +124,9 @@ week_of_year (guint year, guint mm, guint dd)
   guint week;
 
   dt = g_date_time_new_local (year, mm, dd, 1, 1, 1);
+  if (dt == NULL)
+    return 1;
+
   week = g_date_time_get_week_of_year (dt);
   g_date_time_unref (dt);
 
