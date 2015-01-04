@@ -1384,12 +1384,12 @@ gtk_cell_renderer_text_set_property (GObject      *object,
 	  case PROP_SIZE:
 	    pango_font_description_set_size (priv->font,
 					     g_value_get_int (value));
-	    g_object_notify (object, "size-points");
+	    g_object_notify (object, "size");
 	    break;
 	  case PROP_SIZE_POINTS:
 	    pango_font_description_set_size (priv->font,
 					     g_value_get_double (value) * PANGO_SCALE);
-	    g_object_notify (object, "size");
+	    g_object_notify (object, "size-points");
 	    break;
 	  }
 	
