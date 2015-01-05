@@ -13,7 +13,8 @@ add_one (GtkButton *button, gpointer data)
   id = g_strdup_printf ("%d", count);
   text = g_strdup_printf ("Value %d", count);
   sort = g_strdup_printf ("Value %03d", count);
-  gtk_combo_add_item (GTK_COMBO (data), id, text, sort, NULL);
+  gtk_combo_add_item (GTK_COMBO (data), id, text);
+  gtk_combo_item_set_sort_key (GTK_COMBO (data), id, sort);
   gtk_combo_set_active (GTK_COMBO (data), id);
   g_free (id);
   g_free (text);
@@ -26,7 +27,8 @@ remove_active (GtkButton *button, gpointer data)
   const gchar *id;
 
   id = gtk_combo_get_active (GTK_COMBO (data));
-  gtk_combo_remove_item (GTK_COMBO (data), id);
+  if (id != NULL)
+    gtk_combo_remove_item (GTK_COMBO (data), id);
 }
 
 static void
@@ -40,7 +42,7 @@ const gchar data[] =
   "  <object class='GtkCombo' id='combo'>"
   "    <property name='visible'>True</property>"
   "    <property name='halign'>center</property>"
-  "    <property name='placeholder'>None</property>"
+  "    <property name='placeholder-text'>None</property>"
   "    <property name='active'>1</property>"
   "    <items>"
   "      <item translatable='yes' id='1' sort='Value 001'>Value 1</item>"
@@ -54,6 +56,16 @@ const gchar data[] =
   "    </groups>"
   "  </object>"
   "</interface>";
+
+static gboolean
+string_to_bool (GBinding     *binding,
+                const GValue *from_value,
+                GValue       *to_value,
+                gpointer      data)
+{
+  g_value_set_boolean (to_value, g_value_get_string (from_value) != NULL);
+  return TRUE;
+}
 
 int
 main (int argc, char *argv[])
@@ -78,10 +90,10 @@ main (int argc, char *argv[])
   combo = gtk_combo_new ();
   gtk_widget_set_halign (combo, GTK_ALIGN_CENTER);
   gtk_container_add (GTK_CONTAINER (box), combo);
-  gtk_combo_add_item (GTK_COMBO (combo), "1", "Value 1", NULL, NULL);
-  gtk_combo_add_item (GTK_COMBO (combo), "2", "Value 2", NULL, NULL);
-  gtk_combo_add_item (GTK_COMBO (combo), "3", "Value 3", NULL, NULL);
-  gtk_combo_set_placeholder (GTK_COMBO (combo), "None");
+  gtk_combo_add_item (GTK_COMBO (combo), "1", "Value 1");
+  gtk_combo_add_item (GTK_COMBO (combo), "2", "Value 2");
+  gtk_combo_add_item (GTK_COMBO (combo), "3", "Value 3");
+  gtk_combo_set_placeholder_text (GTK_COMBO (combo), "None");
   gtk_combo_set_active (GTK_COMBO (combo), "1");
 
   gtk_container_add (GTK_CONTAINER (box), gtk_separator_new (GTK_ORIENTATION_HORIZONTAL));
@@ -93,18 +105,29 @@ main (int argc, char *argv[])
   combo = gtk_combo_new ();
   gtk_widget_set_halign (combo, GTK_ALIGN_CENTER);
   gtk_container_add (GTK_CONTAINER (box), combo);
-  gtk_combo_add_item (GTK_COMBO (combo),  "1",  "Value 1", "Value 01", NULL);
-  gtk_combo_add_item (GTK_COMBO (combo),  "2",  "Value 2", "Value 02", NULL);
-  gtk_combo_add_item (GTK_COMBO (combo),  "3",  "Value 3", "Value 03", NULL);
-  gtk_combo_add_item (GTK_COMBO (combo),  "4",  "Value 4", "Value 04", NULL);
-  gtk_combo_add_item (GTK_COMBO (combo),  "5",  "Value 5", "Value 05", NULL);
-  gtk_combo_add_item (GTK_COMBO (combo),  "6",  "Value 6", "Value 06", NULL);
-  gtk_combo_add_item (GTK_COMBO (combo),  "7",  "Value 7", "Value 07", NULL);
-  gtk_combo_add_item (GTK_COMBO (combo),  "8",  "Value 8", "Value 08", NULL);
-  gtk_combo_add_item (GTK_COMBO (combo),  "9",  "Value 9", "Value 09", NULL);
-  gtk_combo_add_item (GTK_COMBO (combo), "10", "Value 10", "Value 10", NULL);
-  gtk_combo_add_item (GTK_COMBO (combo), "11", "Value 11", "Value 11", NULL);
-  gtk_combo_set_placeholder (GTK_COMBO (combo), "None");
+  gtk_combo_add_item (GTK_COMBO (combo),  "1",  "Value 1");
+  gtk_combo_add_item (GTK_COMBO (combo),  "2",  "Value 2");
+  gtk_combo_add_item (GTK_COMBO (combo),  "3",  "Value 3");
+  gtk_combo_add_item (GTK_COMBO (combo),  "4",  "Value 4");
+  gtk_combo_add_item (GTK_COMBO (combo),  "5",  "Value 5");
+  gtk_combo_add_item (GTK_COMBO (combo),  "6",  "Value 6");
+  gtk_combo_add_item (GTK_COMBO (combo),  "7",  "Value 7");
+  gtk_combo_add_item (GTK_COMBO (combo),  "8",  "Value 8");
+  gtk_combo_add_item (GTK_COMBO (combo),  "9",  "Value 9");
+  gtk_combo_add_item (GTK_COMBO (combo), "10", "Value 10");
+  gtk_combo_add_item (GTK_COMBO (combo), "11", "Value 11");
+  gtk_combo_item_set_sort_key (GTK_COMBO (combo),  "1",  "Value 01");
+  gtk_combo_item_set_sort_key (GTK_COMBO (combo),  "2",  "Value 02");
+  gtk_combo_item_set_sort_key (GTK_COMBO (combo),  "3",  "Value 03");
+  gtk_combo_item_set_sort_key (GTK_COMBO (combo),  "4",  "Value 04");
+  gtk_combo_item_set_sort_key (GTK_COMBO (combo),  "5",  "Value 05");
+  gtk_combo_item_set_sort_key (GTK_COMBO (combo),  "6",  "Value 06");
+  gtk_combo_item_set_sort_key (GTK_COMBO (combo),  "7",  "Value 07");
+  gtk_combo_item_set_sort_key (GTK_COMBO (combo),  "8",  "Value 08");
+  gtk_combo_item_set_sort_key (GTK_COMBO (combo),  "9",  "Value 09");
+  gtk_combo_item_set_sort_key (GTK_COMBO (combo), "10",  "Value 10");
+  gtk_combo_item_set_sort_key (GTK_COMBO (combo), "11",  "Value 11");
+  gtk_combo_set_placeholder_text (GTK_COMBO (combo), "None");
   gtk_combo_set_active (GTK_COMBO (combo), "1");
 
   gtk_container_add (GTK_CONTAINER (box), gtk_separator_new (GTK_ORIENTATION_HORIZONTAL));
@@ -116,10 +139,10 @@ main (int argc, char *argv[])
   combo = gtk_combo_new ();
   gtk_widget_set_halign (combo, GTK_ALIGN_CENTER);
   gtk_container_add (GTK_CONTAINER (box), combo);
-  gtk_combo_add_item (GTK_COMBO (combo), "1", "Value 1", NULL, NULL);
-  gtk_combo_add_item (GTK_COMBO (combo), "2", "Value 2", NULL, NULL);
-  gtk_combo_add_item (GTK_COMBO (combo), "3", "Value 3", NULL, NULL);
-  gtk_combo_set_placeholder (GTK_COMBO (combo), "None");
+  gtk_combo_add_item (GTK_COMBO (combo), "1", "Value 1");
+  gtk_combo_add_item (GTK_COMBO (combo), "2", "Value 2");
+  gtk_combo_add_item (GTK_COMBO (combo), "3", "Value 3");
+  gtk_combo_set_placeholder_text (GTK_COMBO (combo), "None");
   gtk_combo_set_allow_custom (GTK_COMBO (combo), TRUE);
   gtk_combo_set_active (GTK_COMBO (combo), "1");
 
@@ -133,29 +156,65 @@ main (int argc, char *argv[])
   gtk_widget_set_halign (combo, GTK_ALIGN_CENTER);
   gtk_container_add (GTK_CONTAINER (box), combo);
   gtk_combo_add_group (GTK_COMBO (combo), "Group 3", "G 3", "Group 3");
-  gtk_combo_add_item (GTK_COMBO (combo),  "1",  "Value 1", "Value 01", "Group 1");
-  gtk_combo_add_item (GTK_COMBO (combo),  "2",  "Value 2", "Value 02", "Group 1");
-  gtk_combo_add_item (GTK_COMBO (combo),  "3",  "Value 3", "Value 03", "Group 1");
-  gtk_combo_add_item (GTK_COMBO (combo),  "4",  "Value 4", "Value 04", "Group 1");
-  gtk_combo_add_item (GTK_COMBO (combo),  "5",  "Value 5", "Value 05", "Group 2");
-  gtk_combo_add_item (GTK_COMBO (combo),  "6",  "Value 6", "Value 06", "Group 2");
-  gtk_combo_add_item (GTK_COMBO (combo),  "7",  "Value 7", "Value 07", "Group 2");
-  gtk_combo_add_item (GTK_COMBO (combo),  "8",  "Value 8", "Value 08", "Group 2");
-  gtk_combo_add_item (GTK_COMBO (combo),  "9",  "Value 9", "Value 09", "Group 3");
-  gtk_combo_add_item (GTK_COMBO (combo), "10", "Value 10", "Value 10", "Group 3");
-  gtk_combo_add_item (GTK_COMBO (combo), "11", "Value 11", "Value 11", "Group 3");
-  gtk_combo_add_item (GTK_COMBO (combo), "12", "Value 12", "Value 12", "Group 3");
-  gtk_combo_add_item (GTK_COMBO (combo), "13", "Value 13", "Value 13", "Group 3");
-  gtk_combo_add_item (GTK_COMBO (combo), "14", "Value 14", "Value 14", "Group 3");
-  gtk_combo_add_item (GTK_COMBO (combo), "15", "Value 15", NULL,       "Group 3");
-  gtk_combo_add_item (GTK_COMBO (combo), "16", "Value 16", NULL,       "Group 3");
-  gtk_combo_add_item (GTK_COMBO (combo), "17", "Value 17", NULL,       "Group 3");
-  gtk_combo_add_item (GTK_COMBO (combo), "18", "Value 18", NULL,       "Group 3");
+  gtk_combo_add_item (GTK_COMBO (combo),  "1",  "Value 1");
+  gtk_combo_add_item (GTK_COMBO (combo),  "2",  "Value 2");
+  gtk_combo_add_item (GTK_COMBO (combo),  "3",  "Value 3");
+  gtk_combo_add_item (GTK_COMBO (combo),  "4",  "Value 4");
+  gtk_combo_add_item (GTK_COMBO (combo),  "5",  "Value 5");
+  gtk_combo_add_item (GTK_COMBO (combo),  "6",  "Value 6");
+  gtk_combo_add_item (GTK_COMBO (combo),  "7",  "Value 7");
+  gtk_combo_add_item (GTK_COMBO (combo),  "8",  "Value 8");
+  gtk_combo_add_item (GTK_COMBO (combo),  "9",  "Value 9");
+  gtk_combo_add_item (GTK_COMBO (combo), "10", "Value 10");
+  gtk_combo_add_item (GTK_COMBO (combo), "11", "Value 11");
+  gtk_combo_add_item (GTK_COMBO (combo), "12", "Value 12");
+  gtk_combo_add_item (GTK_COMBO (combo), "13", "Value 13");
+  gtk_combo_add_item (GTK_COMBO (combo), "14", "Value 14");
+  gtk_combo_add_item (GTK_COMBO (combo), "15", "Value 15");
+  gtk_combo_add_item (GTK_COMBO (combo), "16", "Value 16");
+  gtk_combo_add_item (GTK_COMBO (combo), "17", "Value 17");
+  gtk_combo_add_item (GTK_COMBO (combo), "18", "Value 18");
+  gtk_combo_item_set_sort_key (GTK_COMBO (combo),  "1",  "Value 01");
+  gtk_combo_item_set_sort_key (GTK_COMBO (combo),  "2",  "Value 02");
+  gtk_combo_item_set_sort_key (GTK_COMBO (combo),  "3",  "Value 03");
+  gtk_combo_item_set_sort_key (GTK_COMBO (combo),  "4",  "Value 04");
+  gtk_combo_item_set_sort_key (GTK_COMBO (combo),  "5",  "Value 05");
+  gtk_combo_item_set_sort_key (GTK_COMBO (combo),  "6",  "Value 06");
+  gtk_combo_item_set_sort_key (GTK_COMBO (combo),  "7",  "Value 07");
+  gtk_combo_item_set_sort_key (GTK_COMBO (combo),  "8",  "Value 08");
+  gtk_combo_item_set_sort_key (GTK_COMBO (combo),  "9",  "Value 09");
+  gtk_combo_item_set_sort_key (GTK_COMBO (combo), "10",  "Value 10");
+  gtk_combo_item_set_sort_key (GTK_COMBO (combo), "11",  "Value 11");
+  gtk_combo_item_set_sort_key (GTK_COMBO (combo), "12",  "Value 12");
+  gtk_combo_item_set_sort_key (GTK_COMBO (combo), "13",  "Value 13");
+  gtk_combo_item_set_sort_key (GTK_COMBO (combo), "14",  "Value 14");
+  gtk_combo_item_set_group_key (GTK_COMBO (combo),  "1",  "Group 1");
+  gtk_combo_item_set_group_key (GTK_COMBO (combo),  "2",  "Group 1");
+  gtk_combo_item_set_group_key (GTK_COMBO (combo),  "3",  "Group 1");
+  gtk_combo_item_set_group_key (GTK_COMBO (combo),  "4",  "Group 1");
+  gtk_combo_item_set_group_key (GTK_COMBO (combo),  "5",  "Group 2");
+  gtk_combo_item_set_group_key (GTK_COMBO (combo),  "6",  "Group 2");
+  gtk_combo_item_set_group_key (GTK_COMBO (combo),  "7",  "Group 2");
+  gtk_combo_item_set_group_key (GTK_COMBO (combo),  "8",  "Group 2");
+  gtk_combo_item_set_group_key (GTK_COMBO (combo),  "9",  "Group 3");
+  gtk_combo_item_set_group_key (GTK_COMBO (combo), "10",  "Group 3");
+  gtk_combo_item_set_group_key (GTK_COMBO (combo), "11",  "Group 3");
+  gtk_combo_item_set_group_key (GTK_COMBO (combo), "12",  "Group 3");
+  gtk_combo_item_set_group_key (GTK_COMBO (combo), "13",  "Group 3");
+  gtk_combo_item_set_group_key (GTK_COMBO (combo), "14",  "Group 3");
+  gtk_combo_item_set_group_key (GTK_COMBO (combo), "15",  "Group 3");
+  gtk_combo_item_set_group_key (GTK_COMBO (combo), "16",  "Group 3");
+  gtk_combo_item_set_group_key (GTK_COMBO (combo), "17",  "Group 3");
+  gtk_combo_item_set_group_key (GTK_COMBO (combo), "18",  "Group 3");
   gtk_combo_set_active (GTK_COMBO (combo), "7");
   button = gtk_button_new_with_label ("Remove active");
   gtk_widget_set_halign (button, GTK_ALIGN_CENTER);
   g_signal_connect (button, "clicked", G_CALLBACK (remove_active), combo);
   gtk_container_add (GTK_CONTAINER (box), button);
+  g_object_bind_property_full (combo, "active",
+                               button, "sensitive",
+                               G_BINDING_SYNC_CREATE,
+                               string_to_bool, NULL, NULL, NULL);
 
   gtk_container_add (GTK_CONTAINER (box), gtk_separator_new (GTK_ORIENTATION_HORIZONTAL));
 
@@ -181,6 +240,10 @@ main (int argc, char *argv[])
   button = gtk_button_new_with_label ("Remove active");
   g_signal_connect (button, "clicked", G_CALLBACK (remove_active), combo);
   gtk_container_add (GTK_CONTAINER (box2), button);
+  g_object_bind_property_full (combo, "active",
+                               button, "sensitive",
+                               G_BINDING_SYNC_CREATE,
+                               string_to_bool, NULL, NULL, NULL);
   button = gtk_check_button_new_with_label ("Allow custom");
   gtk_widget_set_halign (button, GTK_ALIGN_CENTER);
   g_object_bind_property (button, "active",
