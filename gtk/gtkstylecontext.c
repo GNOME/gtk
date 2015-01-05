@@ -419,6 +419,7 @@ gtk_style_context_init (GtkStyleContext *style_context)
   /* Create default info store */
   priv->info = style_info_new ();
   gtk_css_node_declaration_set_state (&priv->info->decl, GTK_STATE_FLAG_DIR_LTR);
+  priv->info->values = g_object_ref (gtk_css_static_style_get_default (priv->screen));
 
   priv->property_cache = g_array_new (FALSE, FALSE, sizeof (PropertyValue));
 
@@ -779,26 +780,19 @@ style_values_lookup (GtkStyleContext *context)
     return info->values;
 
   g_assert (priv->widget != NULL || priv->widget_path != NULL);
+  g_assert (gtk_style_context_is_saved (context));
 
-  if (gtk_style_context_is_saved (context))
+  values = g_hash_table_lookup (priv->style_values, info->decl);
+  if (values)
     {
-      values = g_hash_table_lookup (priv->style_values, info->decl);
-      if (values)
-        {
-          style_info_set_values (info, values);
-          return values;
-        }
-
-      values = build_properties (context, info->decl, style_info_get_parent_style (context, info));
-      g_hash_table_insert (priv->style_values,
-                           gtk_css_node_declaration_ref (info->decl),
-                           g_object_ref (values));
-
+      style_info_set_values (info, values);
+      return values;
     }
-  else
-    {
-      values = build_properties (context, info->decl, style_info_get_parent_style (context, info));
-    }
+
+  values = build_properties (context, info->decl, style_info_get_parent_style (context, info));
+  g_hash_table_insert (priv->style_values,
+                       gtk_css_node_declaration_ref (info->decl),
+                       g_object_ref (values));
   
   style_info_set_values (info, values);
   g_object_unref (values);
@@ -2840,31 +2834,26 @@ _gtk_style_context_validate (GtkStyleContext  *context,
   gtk_style_context_set_invalid (context, FALSE);
 
   info = priv->info;
-  if (info->values)
-    current = g_object_ref (info->values);
-  else
-    current = NULL;
+  current = g_object_ref (info->values);
 
   /* Try to avoid invalidating if we can */
-  if (current == NULL ||
-      gtk_style_context_style_needs_full_revalidate (current, change))
+  if (gtk_style_context_style_needs_full_revalidate (current, change))
     {
-      GtkCssStyle *values;
+      GtkCssStyle *style, *static_style;
 
-      style_info_set_values (info, NULL);
-      values = style_values_lookup (context);
+      static_style = build_properties (context, info->decl, style_info_get_parent_style (context, info));
+      style = gtk_css_animated_style_new (static_style,
+                                          priv->parent ? style_values_lookup (priv->parent) : NULL,
+                                          timestamp,
+                                          GTK_STYLE_PROVIDER_PRIVATE (priv->cascade),
+                                          priv->scale,
+                                          gtk_style_context_should_create_transitions (context) ? current : NULL);
 
-      values = gtk_css_animated_style_new (values,
-                                           priv->parent ? style_values_lookup (priv->parent) : NULL,
-                                           timestamp,
-                                           GTK_STYLE_PROVIDER_PRIVATE (priv->cascade),
-                                           priv->scale,
-                                           gtk_style_context_should_create_transitions (context) ? current : NULL);
-
-      style_info_set_values (info, values);
+      style_info_set_values (info, style);
       _gtk_style_context_update_animating (context);
 
-      g_object_unref (values);
+      g_object_unref (static_style);
+      g_object_unref (style);
     }
   else
     {
@@ -2915,16 +2904,8 @@ _gtk_style_context_validate (GtkStyleContext  *context,
         }
     }
 
-  if (current)
-    {
-      changes = gtk_css_style_get_difference (info->values, current);
-      g_object_unref (current);
-    }
-  else
-    {
-      changes = _gtk_bitmask_new ();
-      changes = _gtk_bitmask_invert_range (changes, 0, _gtk_css_style_property_get_n_properties ());
-    }
+  changes = gtk_css_style_get_difference (info->values, current);
+  g_object_unref (current);
 
   if (!_gtk_bitmask_is_empty (changes))
     gtk_style_context_do_invalidate (context, changes);
@@ -2981,12 +2962,18 @@ void
 gtk_style_context_invalidate (GtkStyleContext *context)
 {
   GtkBitmask *changes;
+  GtkCssStyle *style;
 
   g_return_if_fail (GTK_IS_STYLE_CONTEXT (context));
 
   gtk_style_context_clear_cache (context);
 
-  style_info_set_values (context->priv->info, NULL);
+  /* insta-recalculate the new style here */
+  style = build_properties (context,
+                            context->priv->info->decl,
+                            style_info_get_parent_style (context, context->priv->info));
+  style_info_set_values (context->priv->info, style);
+  g_object_unref (style);
 
   changes = _gtk_bitmask_new ();
   changes = _gtk_bitmask_invert_range (changes,

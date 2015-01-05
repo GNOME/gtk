@@ -33,6 +33,7 @@
 #include "gtkcssstylepropertyprivate.h"
 #include "gtkcsstransitionprivate.h"
 #include "gtkprivate.h"
+#include "gtksettings.h"
 #include "gtkstyleanimationprivate.h"
 #include "gtkstylepropertyprivate.h"
 #include "gtkstyleproviderprivate.h"
@@ -178,6 +179,33 @@ gtk_css_static_style_set_value (GtkCssStaticStyle *style,
 
       g_ptr_array_index (style->sections, id) = gtk_css_section_ref (section);
     }
+}
+
+GtkCssStyle *
+gtk_css_static_style_get_default (GdkScreen *screen)
+{
+  static GQuark style_quark = 0;
+  GtkSettings *settings;
+  GtkCssStyle *result;
+
+  g_return_val_if_fail (GDK_IS_SCREEN (screen), NULL);
+
+  if (style_quark == 0)
+    style_quark = g_quark_from_string ("gtk-default-style");
+
+  settings = gtk_settings_get_for_screen (screen);
+  result = g_object_get_qdata (G_OBJECT (settings), style_quark);
+  if (result)
+    return result;
+
+  result = gtk_css_static_style_new_compute (GTK_STYLE_PROVIDER_PRIVATE (settings),
+                                             NULL,
+                                             gdk_screen_get_monitor_scale_factor (screen,
+                                                 gdk_screen_get_primary_monitor (screen)),
+                                             NULL);
+  g_object_set_qdata_full (G_OBJECT (settings), style_quark, result, g_object_unref);
+
+  return result;
 }
 
 GtkCssStyle *
