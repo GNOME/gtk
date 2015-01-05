@@ -447,6 +447,7 @@ struct _GtkCombo
 
   const gchar *active;
   gchar *placeholder;
+  gchar *custom_text;
   gboolean allow_custom;
 
   GtkWidget *active_label;
@@ -472,7 +473,8 @@ struct _GtkComboClass
 enum {
   PROP_ACTIVE = 1,
   PROP_PLACEHOLDER_TEXT,
-  PROP_ALLOW_CUSTOM
+  PROP_ALLOW_CUSTOM,
+  PROP_CUSTOM_TEXT
 };
 
 static GtkBuildableIface *buildable_parent_iface = NULL;
@@ -505,6 +507,7 @@ gtk_combo_finalize (GObject *object)
   GtkCombo *combo = GTK_COMBO (object);
 
   g_free (combo->placeholder);
+  g_free (combo->custom_text);
 
   G_OBJECT_CLASS (gtk_combo_parent_class)->finalize (object);
 }
@@ -527,6 +530,9 @@ gtk_combo_set_property (GObject      *object,
       break;
     case PROP_ALLOW_CUSTOM:
       gtk_combo_set_allow_custom (combo, g_value_get_boolean (value));
+      break;
+    case PROP_CUSTOM_TEXT:
+      gtk_combo_set_custom_text (combo, g_value_get_string (value));
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -551,6 +557,9 @@ gtk_combo_get_property (GObject    *object,
       break;
     case PROP_ALLOW_CUSTOM:
       g_value_set_boolean (value, gtk_combo_get_allow_custom (combo));
+      break;
+    case PROP_CUSTOM_TEXT:
+      g_value_set_string (value, gtk_combo_get_custom_text (combo));
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -607,6 +616,19 @@ gtk_combo_class_init (GtkComboClass *class)
                                                          P_("Allow custom items"),
                                                          FALSE,
                                                          GTK_PARAM_READWRITE));
+
+  /**
+   * GtkCombo:custom-text:
+   *
+   * The text that is displayed for the custom entry.
+   */
+  g_object_class_install_property (object_class,
+                                   PROP_CUSTOM_TEXT,
+                                   g_param_spec_string ("custom-text",
+                                                        P_("Custom text"),
+                                                        P_("Text to show for the custom entry"),
+                                                        NULL,
+                                                        GTK_PARAM_READWRITE));
 
   gtk_widget_class_set_template_from_resource (widget_class, "/org/gtk/libgtk/ui/gtkcombo.ui");
 
@@ -1680,7 +1702,7 @@ gtk_combo_remove_item (GtkCombo    *combo,
 /**
  * gtk_combo_set_placeholder_text:
  * @combo: a #GtkCombo
- * @text: (allow-none): the placeholder text to use, or %NULL
+ * @text: the placeholder text to use
  *
  * Sets the placeholder text that is displayed in the combo
  * if no item is currently selected.
@@ -1692,11 +1714,12 @@ gtk_combo_set_placeholder_text (GtkCombo    *combo,
                                 const gchar *text)
 {
   g_return_if_fail (GTK_IS_COMBO (combo));
+  g_return_if_fail (text != NULL);
 
   g_free (combo->placeholder);
   combo->placeholder = g_strdup (text);
 
-  if (combo->active == NULL)
+  if (combo->active_label != NULL && combo->active == NULL)
     gtk_label_set_text (GTK_LABEL (combo->active_label), combo->placeholder);
 
   g_object_notify (G_OBJECT (combo), "placeholder-text");
@@ -1767,6 +1790,45 @@ gtk_combo_get_allow_custom (GtkCombo *combo)
 }
 
 /**
+ * gtk_combo_set_custom_text:
+ * @combo: a #GtkCombo
+ * @text: the text to show for the custom entry
+ *
+ * Sets the text that is displayed for the custom entry.
+ *
+ * Since: 3.16
+ */
+void
+gtk_combo_set_custom_text (GtkCombo    *combo,
+                           const gchar *text)
+{
+  g_return_if_fail (GTK_IS_COMBO (combo));
+
+  g_free (combo->custom_text);
+  combo->custom_text = g_strdup (text);
+
+  g_object_notify (G_OBJECT (combo), "custom-text");
+}
+
+/**
+ * gtk_combo_get_custom_text:
+ * @combo: a #GtkCombo
+ *
+ * Gets the text that is displayed for the custom entry.
+ *
+ * Returns: (transfer none): the custom text
+ *
+ * Since: 3.16
+ */
+const gchar *
+gtk_combo_get_custom_text (GtkCombo *combo)
+{
+  g_return_val_if_fail (GTK_IS_COMBO (combo), NULL);
+
+  return combo->custom_text;
+}
+
+/**
  * gtk_combo_add_group:
  * @combo: a #GtkCombo
  * @group: a group ID
@@ -1801,3 +1863,4 @@ gtk_combo_add_group (GtkCombo    *combo,
   gtk_list_box_invalidate_filter (GTK_LIST_BOX (combo->list));
   gtk_list_box_invalidate_sort (GTK_LIST_BOX (combo->list));
 }
+

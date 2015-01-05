@@ -80,6 +80,12 @@ GDK_AVAILABLE_IN_3_16
 gboolean      gtk_combo_get_allow_custom        (GtkCombo       *combo);
 
 GDK_AVAILABLE_IN_3_16
+void          gtk_combo_set_custom_text         (GtkCombo       *combo,
+                                                 const gchar    *text);
+GDK_AVAILABLE_IN_3_16
+const gchar * gtk_combo_get_custom_text         (GtkCombo       *combo);
+
+GDK_AVAILABLE_IN_3_16
 void          gtk_combo_add_group               (GtkCombo       *combo,
                                                  const gchar    *group,
                                                  const gchar    *text,
