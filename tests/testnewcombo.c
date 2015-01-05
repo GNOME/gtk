@@ -43,6 +43,7 @@ const gchar data[] =
   "    <property name='visible'>True</property>"
   "    <property name='halign'>center</property>"
   "    <property name='placeholder-text'>None</property>"
+  "    <property name='custom-text'>Other</property>"
   "    <property name='active'>1</property>"
   "    <items>"
   "      <item translatable='yes' id='1' sort='Value 001'>Value 1</item>"

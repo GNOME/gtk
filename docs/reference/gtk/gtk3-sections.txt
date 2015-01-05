@@ -993,6 +993,8 @@ gtk_combo_get_placeholder_text
 gtk_combo_set_placeholder_text
 gtk_combo_get_allow_custom
 gtk_combo_set_allow_custom
+gtk_combo_get_custom_text
+gtk_combo_set_custom_text
 
 <SUBSECTION Standard>
 GTK_TYPE_COMBO
