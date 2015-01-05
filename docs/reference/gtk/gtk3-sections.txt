@@ -984,11 +984,13 @@ GtkCombo
 gtk_combo_new
 gtk_combo_add_item
 gtk_combo_remove_item
+gtk_combo_item_set_sort_key
+gtk_combo_item_set_group_key
 gtk_combo_add_group
 gtk_combo_get_active
 gtk_combo_set_active
-gtk_combo_get_placeholder
-gtk_combo_set_placeholder
+gtk_combo_get_placeholder_text
+gtk_combo_set_placeholder_text
 gtk_combo_get_allow_custom
 gtk_combo_set_allow_custom
 

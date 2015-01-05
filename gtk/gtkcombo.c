@@ -48,7 +48,7 @@
  * @See_also: #GtkComboBoxText
  *
  * A GtkCombo is a simple variant of a combo box that hides the
- * model-view complexity of #GtkcomboBox and uses popovers.
+ * model-view complexity of #GtkComboBox and uses a popover.
  *
  * To create a GtkCombo, use gtk_combo_new().
  *
@@ -61,9 +61,9 @@
  * If you want to allow the user to enter custom values, use
  * gtk_combo_set_allow_custom().
  *
- * Items can optionally be grouped, by specifying a group id as the last
- * argument to gtk_combo_add_item(). Groups can have display text and sort
- * keys that are different from the group id, by using gtk_combo_box_add_group().
+ * Items can optionally be grouped, by using gtk_combo_item_set_group_key().
+ * Groups can have display text and sort keys that are different from the
+ * group ID, by using gtk_combo_box_add_group().
  *
  * # GtkCombo as GtkBuildable
  *
@@ -330,10 +330,9 @@ gtk_combo_row_set_inverted (GtkComboRow *row,
 
 static GtkWidget *
 gtk_combo_row_new_item (const gchar *id,
-                        const gchar *text,
-                        const gchar *sort)
+                        const gchar *text)
 {
-  return g_object_new (GTK_TYPE_COMBO_ROW, "id", id, "text", text, "sort", sort, NULL);
+  return g_object_new (GTK_TYPE_COMBO_ROW, "id", id, "text", text, NULL);
 }
 
 static GtkWidget *
@@ -472,7 +471,7 @@ struct _GtkComboClass
 
 enum {
   PROP_ACTIVE = 1,
-  PROP_PLACEHOLDER,
+  PROP_PLACEHOLDER_TEXT,
   PROP_ALLOW_CUSTOM
 };
 
@@ -523,8 +522,8 @@ gtk_combo_set_property (GObject      *object,
     case PROP_ACTIVE:
       gtk_combo_set_active (combo, g_value_get_string (value));
       break;
-    case PROP_PLACEHOLDER:
-      gtk_combo_set_placeholder (combo, g_value_get_string (value));
+    case PROP_PLACEHOLDER_TEXT:
+      gtk_combo_set_placeholder_text (combo, g_value_get_string (value));
       break;
     case PROP_ALLOW_CUSTOM:
       gtk_combo_set_allow_custom (combo, g_value_get_boolean (value));
@@ -547,8 +546,8 @@ gtk_combo_get_property (GObject    *object,
     case PROP_ACTIVE:
       g_value_set_string (value, gtk_combo_get_active (combo));
       break;
-    case PROP_PLACEHOLDER:
-      g_value_set_string (value, gtk_combo_get_placeholder (combo));
+    case PROP_PLACEHOLDER_TEXT:
+      g_value_set_string (value, gtk_combo_get_placeholder_text (combo));
       break;
     case PROP_ALLOW_CUSTOM:
       g_value_set_boolean (value, gtk_combo_get_allow_custom (combo));
@@ -578,20 +577,20 @@ gtk_combo_class_init (GtkComboClass *class)
                                    PROP_ACTIVE,
                                    g_param_spec_string ("active",
                                                         P_("Active"),
-                                                        P_("Active ID"),
+                                                        P_("The ID of the active item"),
                                                         NULL,
                                                         GTK_PARAM_READWRITE));
 
   /**
-   * GtkCombo:placeholder:
+   * GtkCombo:placeholder-text:
    *
-   * The text that is displayed if not item is selected.
+   * The text that is displayed if no item is selected.
    */
   g_object_class_install_property (object_class,
-                                   PROP_PLACEHOLDER,
-                                   g_param_spec_string ("placeholder",
-                                                        P_("Placeholder"),
+                                   PROP_PLACEHOLDER_TEXT,
+                                   g_param_spec_string ("placeholder-text",
                                                         P_("Placeholder text"),
+                                                        P_("Text to show when no item is selected"),
                                                         NULL,
                                                         GTK_PARAM_READWRITE));
 
@@ -731,7 +730,13 @@ combo_end_element (GMarkupParseContext *context,
       if (data->is_group)
         gtk_combo_add_group (GTK_COMBO (data->object), data->id, data->string->str, data->sort);
       else
-        gtk_combo_add_item (GTK_COMBO (data->object), data->id, data->string->str, data->sort, data->group);
+        {
+          gtk_combo_add_item (GTK_COMBO (data->object), data->id, data->string->str);
+          if (data->sort)
+            gtk_combo_item_set_sort_key (GTK_COMBO (data->object), data->id, data->sort);
+          if (data->group)
+            gtk_combo_item_set_group_key (GTK_COMBO (data->object), data->id, data->group);
+        }
     }
 
   data->translatable = FALSE;
@@ -965,8 +970,8 @@ typedef struct
 } ForeachData;
 
 static void
-find_item (GtkWidget *row,
-           gpointer   data)
+find_in_group_cb (GtkWidget *row,
+                  gpointer   data)
 {
   ForeachData *d = data;
   const gchar *id;
@@ -984,8 +989,8 @@ find_item (GtkWidget *row,
 }
 
 static void
-find_item_and_group (GtkWidget *row,
-                     gpointer   data)
+find_item_cb (GtkWidget *row,
+              gpointer   data)
 {
   ForeachData *d = data;
   const gchar *id;
@@ -1005,7 +1010,7 @@ find_item_and_group (GtkWidget *row,
       GtkWidget *list;
 
       list = group_get_list (d->combo, group);
-      gtk_container_foreach (GTK_CONTAINER (list), find_item, d);
+      gtk_container_foreach (GTK_CONTAINER (list), find_in_group_cb, d);
 
       if (d->row)
         d->group_row = row;
@@ -1019,32 +1024,26 @@ find_item_and_group (GtkWidget *row,
     d->row = row;
 }
 
-static void
-add_to_list (GtkWidget   *list,
-             const gchar *id,
-             const gchar *text,
-             const gchar *sort)
+static gboolean
+find_item (GtkCombo     *combo,
+           const gchar  *id,
+           GtkWidget   **item,
+           GtkWidget   **group)
 {
   ForeachData data;
 
-  if (text == NULL)
-    text = id;
-
+  data.combo = combo;
   data.id = id;
   data.row = NULL;
-  gtk_container_foreach (GTK_CONTAINER (list), find_item, &data);
+  data.group_row = NULL;
+  gtk_container_foreach (GTK_CONTAINER (combo->list), find_item_cb, &data);
 
-  if (data.row)
-    {
-      gtk_combo_row_set_text (GTK_COMBO_ROW (data.row), text);
-      gtk_combo_row_set_sort (GTK_COMBO_ROW (data.row), sort);
-      gtk_list_box_invalidate_sort (GTK_LIST_BOX (list));
-      gtk_list_box_invalidate_filter (GTK_LIST_BOX (list));
-    }
-  else
-    {
-      gtk_list_box_insert (GTK_LIST_BOX (list), gtk_combo_row_new_item (id, text, sort), -1);
-    }
+  if (item)
+    *item = data.row;
+  if (group)
+    *group = data.group_row;
+
+  return data.row != NULL;
 }
 
 static void
@@ -1062,79 +1061,68 @@ static gboolean
 remove_from_list (GtkCombo    *combo,
                   const gchar *id)
 {
-  ForeachData data;
+  GtkWidget *item;
+  GtkWidget *group;
+  GtkWidget *list;
+  GtkWidget *tab;
 
-  data.id = id;
-  data.row = NULL;
-  data.group_row = NULL;
-  gtk_container_foreach (GTK_CONTAINER (combo->list), find_item_and_group, &data);
+  if (!find_item (combo, id, &item, &group))
+    return FALSE;
 
-  if (data.row)
+  list = gtk_widget_get_parent (item);
+  gtk_container_remove (GTK_CONTAINER (list), item);
+
+  if (group)
     {
-      GtkWidget *list;
-      GtkWidget *tab;
-
-      list = gtk_widget_get_parent (data.row);
-      gtk_container_remove (GTK_CONTAINER (list), data.row);
-
-      if (data.group_row)
+      gint count = 0;
+      gtk_container_foreach (GTK_CONTAINER (list), count_items, &count);
+      if (count == 0)
         {
-          gint count = 0;
-          gtk_container_foreach (GTK_CONTAINER (list), count_items, &count);
-          if (count == 0)
-            {
-              tab = gtk_widget_get_ancestor (list, GTK_TYPE_FRAME);
-              gtk_container_remove (GTK_CONTAINER (combo->stack), tab);
-              gtk_container_remove (GTK_CONTAINER (combo->list), data.group_row);
-            }
-          else
-            collapse (combo, list);
+          tab = gtk_widget_get_ancestor (list, GTK_TYPE_FRAME);
+          gtk_container_remove (GTK_CONTAINER (combo->stack), tab);
+          gtk_container_remove (GTK_CONTAINER (combo->list), group);
         }
       else
         collapse (combo, list);
+     }
+  else
+    collapse (combo, list);
 
-      return TRUE;
-    }
-
-  return FALSE;
+  return TRUE;
 }
 
 static void
 set_active (GtkCombo    *combo,
             const gchar *id)
 {
-  ForeachData data;
+  GtkWidget *item;
+  GtkWidget *group;
 
-  data.combo = combo;
-  data.id = combo->active;
-  data.row = NULL;
-  data.group_row = NULL;
   if (combo->active)
     {
-      gtk_container_foreach (GTK_CONTAINER (combo->list), find_item_and_group, &data);
-      if (data.row)
-        gtk_combo_row_set_active (GTK_COMBO_ROW (data.row), FALSE);
-      if (data.group_row)
-        gtk_combo_row_set_active (GTK_COMBO_ROW (data.group_row), FALSE);
+      find_item (combo, combo->active, &item, &group);
+      if (item)
+        gtk_combo_row_set_active (GTK_COMBO_ROW (item), FALSE);
+      if (group)
+        gtk_combo_row_set_active (GTK_COMBO_ROW (group), FALSE);
     }
 
-  data.id = id;
-  data.row = NULL;
-  data.group_row = NULL;
   if (id)
     {
-      gtk_container_foreach (GTK_CONTAINER (combo->list), find_item_and_group, &data);
-      if (data.row)
-        gtk_combo_row_set_active (GTK_COMBO_ROW (data.row), TRUE);
-      if (data.group_row)
-        gtk_combo_row_set_active (GTK_COMBO_ROW (data.group_row), TRUE);
+      find_item (combo, id, &item, &group);
+      if (item)
+        gtk_combo_row_set_active (GTK_COMBO_ROW (item), TRUE);
+      if (group)
+        gtk_combo_row_set_active (GTK_COMBO_ROW (group), TRUE);
     }
+  else
+    item = NULL;
 
-  if (data.row)
+  if (item)
     {
-      combo->active = gtk_combo_row_get_id (GTK_COMBO_ROW (data.row));
+      combo->active = gtk_combo_row_get_id (GTK_COMBO_ROW (item));
       gtk_label_set_text (GTK_LABEL (combo->active_label),
-                          gtk_combo_row_get_text (GTK_COMBO_ROW (data.row)));
+                          gtk_combo_row_get_text (GTK_COMBO_ROW (item)));
     }
   else
     {
@@ -1192,7 +1180,7 @@ custom_entry_done (GtkWidget *widget,
   text = gtk_entry_get_text (GTK_ENTRY (combo->custom_entry));
   if (text[0] != '\0')
     {
-      gtk_combo_add_item (combo, text, NULL, NULL, NULL);
+      gtk_combo_add_item (combo, text, text);
       gtk_combo_set_active (combo, text);
       gtk_entry_set_text (GTK_ENTRY (combo->custom_entry), "");
       gtk_widget_hide (combo->popover);
@@ -1530,7 +1518,7 @@ gtk_combo_get_active (GtkCombo *combo)
 /**
  * gtk_combo_set_active:
  * @combo: a #GtkCombo
- * @id: the ID to select
+ * @id: (allow-none): the ID to select, or %NULL
  *
  * Sets the active ID to @id. If @id is not the ID
  * of an item of combo, no item will be selected
@@ -1551,42 +1539,116 @@ gtk_combo_set_active (GtkCombo    *combo,
  * gtk_combo_add_item:
  * @combo: a #GtkCombo
  * @id: the ID for the item to add
- * @text: (allow-none): the text to display for the item
- * @sort: (allow-none): a sort key for the item
- * @group: (allow-none): the group for the item
+ * @text: the text to display for the item
  *
  * Adds an item to the combo.
  *
  * If an item with this ID already exists, its display text
- * and sort key will be updated with the new values.
- *
- * If @text is %NULL, the @id will be used to display the item.
- * If @sort is %NULL, the item will be sorted according to @text.
+ * will be updated with the new values.
  *
  * Since: 3.16
  */
 void
 gtk_combo_add_item (GtkCombo    *combo,
                     const gchar *id,
-                    const gchar *text,
-                    const gchar *sort,
-                    const gchar *group)
+                    const gchar *text)
 {
   GtkWidget *list;
+  GtkWidget *item;
 
   g_return_if_fail (GTK_IS_COMBO (combo));
+  g_return_if_fail (id != NULL);
+  g_return_if_fail (text != NULL);
 
-  if (group)
+  if (find_item (combo, id, &item, NULL))
     {
-      ensure_group (combo, group);
-      list = group_get_list (combo, group);
+      list = gtk_widget_get_parent (item);
+      gtk_combo_row_set_text (GTK_COMBO_ROW (item), text);
+      gtk_list_box_invalidate_filter (GTK_LIST_BOX (list));
     }
   else
-    list = combo->list;
-  add_to_list (list, id, text, sort);
+    {
+      list = combo->list;
+      item = gtk_combo_row_new_item (id, text);
+      gtk_list_box_insert (GTK_LIST_BOX (list), item, -1);
+    }
+
   collapse (combo, list);
 }
 
+/**
+ * gtk_combo_item_set_sort_key:
+ * @combo: a #GtkCombo
+ * @id: the ID of an item in @combo
+ * @sort: the sort key to use for the item
+ *
+ * Associates a sort key with the item identified by @id.
+ * If no sort key is set, items are sorted according to
+ * their display text.
+ *
+ * Since: 3.16
+ */
+void
+gtk_combo_item_set_sort_key (GtkCombo    *combo,
+                             const gchar *id,
+                             const gchar *sort)
+{
+  GtkWidget *item;
+
+  g_return_if_fail (GTK_IS_COMBO (combo));
+  g_return_if_fail (id != NULL);
+
+  if (find_item (combo, id, &item, NULL))
+    {
+      gtk_combo_row_set_sort (GTK_COMBO_ROW (item), sort);
+      gtk_list_box_invalidate_sort (GTK_LIST_BOX (gtk_widget_get_parent (item)));
+    }
+  else
+    {
+      g_warning ("GtkCombo: no item with ID '%s' found", id);
+    }
+}
+
+/**
+ * gtk_combo_item_set_group_key:
+ * @combo: a #GtkCombo
+ * @id: the ID of an item in @combo
+ * @group: the ID of the group to place the item in
+ *
+ * Places the item identified by @id in a group.
+ * By default, items are not grouped.
+ *
+ * Since: 3.16
+ */
+void
+gtk_combo_item_set_group_key (GtkCombo    *combo,
+                              const gchar *id,
+                              const gchar *group)
+{
+  GtkWidget *item;
+  GtkWidget *list;
+
+  g_return_if_fail (GTK_IS_COMBO (combo));
+  g_return_if_fail (id != NULL);
+
+  if (!find_item (combo, id, &item, NULL))
+    {
+      g_warning ("GtkCombo: no item with ID '%s' found", id);
+      return;
+    }
+
+  if (g_strcmp0 (GTK_COMBO_ROW (item)->group, group) == 0)
+    return;
+
+  g_object_ref (item);
+
+  remove_from_list (combo, id);
+  ensure_group (combo, group);
+  list = group_get_list (combo, group);
+  gtk_list_box_insert (GTK_LIST_BOX (list), item, -1);
+
+  g_object_unref (item);
+}
 /**
  * gtk_combo_remove_item:
  * @combo: a #GtkCombo
@@ -1597,6 +1659,9 @@ gtk_combo_add_item (GtkCombo    *combo,
  * If the item with the this ID is currently selected,
  * no item will be selected after this call.
  *
+ * If the removed item was the last one in its group,
+ * the group will be removed as well.
+ *
  * Since: 3.16
  */
 void
@@ -1604,16 +1669,16 @@ gtk_combo_remove_item (GtkCombo    *combo,
                        const gchar *id)
 {
   g_return_if_fail (GTK_IS_COMBO (combo));
-
-  if (!remove_from_list (combo, id))
-    return;
+  g_return_if_fail (id != NULL);
 
   if (g_strcmp0 (id, combo->active) == 0)
     set_active (combo, NULL);
+
+  remove_from_list (combo, id);
 }
 
 /**
- * gtk_combo_set_placeholder:
+ * gtk_combo_set_placeholder_text:
  * @combo: a #GtkCombo
  * @text: (allow-none): the placeholder text to use, or %NULL
  *
@@ -1623,8 +1688,8 @@ gtk_combo_remove_item (GtkCombo    *combo,
  * Since: 3.16
  */
 void
-gtk_combo_set_placeholder (GtkCombo    *combo,
-                           const gchar *text)
+gtk_combo_set_placeholder_text (GtkCombo    *combo,
+                                const gchar *text)
 {
   g_return_if_fail (GTK_IS_COMBO (combo));
 
@@ -1634,11 +1699,11 @@ gtk_combo_set_placeholder (GtkCombo    *combo,
   if (combo->active == NULL)
     gtk_label_set_text (GTK_LABEL (combo->active_label), combo->placeholder);
 
-  g_object_notify (G_OBJECT (combo), "placeholder");
+  g_object_notify (G_OBJECT (combo), "placeholder-text");
 }
 
 /**
- * gtk_combo_get_placeholder:
+ * gtk_combo_get_placeholder_text:
  * @combo: a #GtkCombo
  *
  * Gets the placholder text that is displayed in the combo
@@ -1649,7 +1714,7 @@ gtk_combo_set_placeholder (GtkCombo    *combo,
  * Since: 3.16
  */
 const gchar *
-gtk_combo_get_placeholder (GtkCombo *combo)
+gtk_combo_get_placeholder_text (GtkCombo *combo)
 {
   g_return_val_if_fail (GTK_IS_COMBO (combo), NULL);
 
@@ -1705,7 +1770,7 @@ gtk_combo_get_allow_custom (GtkCombo *combo)
  * gtk_combo_add_group:
  * @combo: a #GtkCombo
  * @group: a group ID
- * @text: (allow-none): An optional display text for the group
+ * @text: An display text for the group
  * @sort: (allow-none): An optional sort key for the group
  *
  * Associates a display text and sort key with a group of items.
@@ -1721,6 +1786,8 @@ gtk_combo_add_group (GtkCombo    *combo,
   GtkWidget *header, *item;
 
   g_return_if_fail (GTK_IS_COMBO (combo));
+  g_return_if_fail (group != NULL);
+  g_return_if_fail (text != NULL);
 
   ensure_group (combo, group);
 

@@ -38,47 +38,52 @@ typedef struct _GtkCombo             GtkCombo;
 typedef struct _GtkComboClass        GtkComboClass;
 
 GDK_AVAILABLE_IN_3_16
-GType         gtk_combo_get_type         (void) G_GNUC_CONST;
+GType         gtk_combo_get_type                (void) G_GNUC_CONST;
 
 GDK_AVAILABLE_IN_3_16
-GtkWidget *   gtk_combo_new              (void);
+GtkWidget *   gtk_combo_new                     (void);
 
 GDK_AVAILABLE_IN_3_16
-const gchar * gtk_combo_get_active       (GtkCombo    *combo);
+const gchar * gtk_combo_get_active              (GtkCombo       *combo);
 
 GDK_AVAILABLE_IN_3_16
-void          gtk_combo_set_active       (GtkCombo    *combo,
-                                          const gchar *id);
+void          gtk_combo_set_active              (GtkCombo       *combo,
+                                                 const gchar    *id);
 
 GDK_AVAILABLE_IN_3_16
-void          gtk_combo_add_item         (GtkCombo    *combo,
-                                          const gchar *id,
-                                          const gchar *text,
-                                          const gchar *sort,
-                                          const gchar *group);
+void          gtk_combo_add_item                (GtkCombo       *combo,
+                                                 const gchar    *id,
+                                                 const gchar    *text);
+GDK_AVAILABLE_IN_3_16
+void          gtk_combo_remove_item             (GtkCombo       *combo,
+                                                 const gchar    *id);
 
 GDK_AVAILABLE_IN_3_16
-void          gtk_combo_remove_item      (GtkCombo    *combo,
-                                          const gchar *id);
+void          gtk_combo_item_set_sort_key       (GtkCombo       *combo,
+                                                 const gchar    *id,
+                                                 const gchar    *sort);
+GDK_AVAILABLE_IN_3_16
+void          gtk_combo_item_set_group_key      (GtkCombo       *combo,
+                                                 const gchar    *id,
+                                                 const gchar    *group);
 
 GDK_AVAILABLE_IN_3_16
-const gchar * gtk_combo_get_placeholder  (GtkCombo    *combo);
+void          gtk_combo_set_placeholder_text    (GtkCombo       *combo,
+                                                 const gchar    *text);
+GDK_AVAILABLE_IN_3_16
+const gchar * gtk_combo_get_placeholder_text    (GtkCombo       *combo);
 
 GDK_AVAILABLE_IN_3_16
-void          gtk_combo_set_placeholder  (GtkCombo    *combo,
-                                          const gchar *text);
+void          gtk_combo_set_allow_custom        (GtkCombo       *combo,
+                                                 gboolean        allow);
+GDK_AVAILABLE_IN_3_16
+gboolean      gtk_combo_get_allow_custom        (GtkCombo       *combo);
 
 GDK_AVAILABLE_IN_3_16
-gboolean      gtk_combo_get_allow_custom (GtkCombo    *combo);
-GDK_AVAILABLE_IN_3_16
-void          gtk_combo_set_allow_custom (GtkCombo    *combo,
-                                          gboolean     allow);
-
-GDK_AVAILABLE_IN_3_16
-void          gtk_combo_add_group        (GtkCombo    *combo,
-                                          const gchar *group,
-                                          const gchar *text,
-                                          const gchar *sort);
+void          gtk_combo_add_group               (GtkCombo       *combo,
+                                                 const gchar    *group,
+                                                 const gchar    *text,
+                                                 const gchar    *sort);
 
 G_END_DECLS
 
