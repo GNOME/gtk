@@ -145,6 +145,7 @@ struct PropertyValue
 struct GtkStyleInfo
 {
   GtkCssNodeDeclaration *decl;
+  GtkStyleInfo *parent;
   GtkCssStyle *values;
 };
 
@@ -329,6 +330,25 @@ style_info_free (GtkStyleInfo *info)
   g_slice_free (GtkStyleInfo, info);
 }
 
+static GtkCssStyle *
+style_info_get_parent_style (GtkStyleContext *context,
+                             GtkStyleInfo    *info)
+{
+  GtkStyleContextPrivate *priv;
+
+  g_assert (info->parent == NULL || info->parent->values != NULL);
+
+  if (info->parent)
+    return info->parent->values;
+
+  priv = context->priv;
+
+  if (priv->parent)
+    return style_values_lookup (priv->parent);
+
+  return NULL;
+}
+
 static void
 gtk_style_context_pop_style_info (GtkStyleContext *context)
 {
@@ -339,17 +359,6 @@ gtk_style_context_pop_style_info (GtkStyleContext *context)
   style_info_free (priv->info);
   priv->info = priv->saved_nodes->data;
   priv->saved_nodes = g_slist_remove (priv->saved_nodes, priv->info);
-}
-
-static GtkStyleInfo *
-style_info_copy (GtkStyleInfo *info)
-{
-  GtkStyleInfo *copy;
-
-  copy = style_info_new ();
-  copy->decl = gtk_css_node_declaration_ref (info->decl);
-
-  return copy;
 }
 
 static void
@@ -649,10 +658,22 @@ gtk_style_context_is_saved (GtkStyleContext *context)
   return context->priv->saved_nodes != NULL;
 }
 
+static GtkStyleInfo *
+gtk_style_context_get_root (GtkStyleContext *context)
+{
+  GtkStyleContextPrivate *priv;
+
+  priv = context->priv;
+
+  if (priv->saved_nodes != NULL)
+    return g_slist_last (priv->saved_nodes)->data;
+  else
+    return priv->info;
+}
+
 static GtkWidgetPath *
 create_query_path (GtkStyleContext              *context,
-                   const GtkCssNodeDeclaration  *decl,
-                   GtkCssStyle                 **out_parent)
+                   const GtkCssNodeDeclaration  *decl)
 {
   GtkStyleContextPrivate *priv;
   GtkWidgetPath *path;
@@ -663,20 +684,18 @@ create_query_path (GtkStyleContext              *context,
   length = gtk_widget_path_length (path);
   if (gtk_style_context_is_saved (context))
     {
-      GtkStyleInfo *root = g_slist_last (context->priv->saved_nodes)->data;
+      GtkStyleInfo *root = gtk_style_context_get_root (context);
 
       if (length > 0)
         gtk_css_node_declaration_add_to_widget_path (root->decl, path, length - 1);
 
       gtk_widget_path_append_type (path, length > 0 ? gtk_widget_path_iter_get_object_type (path, length - 1) : G_TYPE_NONE);
       gtk_css_node_declaration_add_to_widget_path (decl, path, length);
-      *out_parent = root->values;
     }
   else
     {
       if (length > 0)
         gtk_css_node_declaration_add_to_widget_path (decl, path, length - 1);
-      *out_parent = priv->parent ? style_values_lookup (priv->parent) : NULL;
     }
 
   return path;
@@ -686,16 +705,17 @@ static GtkCssStyle *
 update_properties (GtkStyleContext             *context,
                    GtkCssStyle                 *style,
                    const GtkCssNodeDeclaration *decl,
+                   GtkCssStyle                 *parent,
                    const GtkBitmask            *parent_changes)
 {
   GtkStyleContextPrivate *priv;
   GtkCssMatcher matcher;
   GtkWidgetPath *path;
-  GtkCssStyle *result, *parent;
+  GtkCssStyle *result;
 
   priv = context->priv;
 
-  path = create_query_path (context, decl, &parent);
+  path = create_query_path (context, decl);
 
   if (!_gtk_css_matcher_init (&matcher, path))
     {
@@ -716,16 +736,17 @@ update_properties (GtkStyleContext             *context,
 
 static GtkCssStyle *
 build_properties (GtkStyleContext             *context,
-                  const GtkCssNodeDeclaration *decl)
+                  const GtkCssNodeDeclaration *decl,
+                  GtkCssStyle                 *parent)
 {
   GtkStyleContextPrivate *priv;
   GtkCssMatcher matcher;
   GtkWidgetPath *path;
-  GtkCssStyle *style, *parent;
+  GtkCssStyle *style;
 
   priv = context->priv;
 
-  path = create_query_path (context, decl, &parent);
+  path = create_query_path (context, decl);
 
   if (_gtk_css_matcher_init (&matcher, path))
     style = gtk_css_static_style_new_compute (GTK_STYLE_PROVIDER_PRIVATE (priv->cascade),
@@ -768,7 +789,7 @@ style_values_lookup (GtkStyleContext *context)
           return values;
         }
 
-      values = build_properties (context, info->decl);
+      values = build_properties (context, info->decl, style_info_get_parent_style (context, info));
       g_hash_table_insert (priv->style_values,
                            gtk_css_node_declaration_ref (info->decl),
                            g_object_ref (values));
@@ -776,7 +797,7 @@ style_values_lookup (GtkStyleContext *context)
     }
   else
     {
-      values = build_properties (context, info->decl);
+      values = build_properties (context, info->decl, style_info_get_parent_style (context, info));
     }
   
   style_info_set_values (info, values);
@@ -800,7 +821,7 @@ style_values_lookup_for_state (GtkStyleContext *context,
 
   decl = gtk_css_node_declaration_ref (context->priv->info->decl);
   gtk_css_node_declaration_set_state (&decl, state);
-  values = build_properties (context, decl);
+  values = build_properties (context, decl, style_info_get_parent_style (context, context->priv->info));
   gtk_css_node_declaration_unref (decl);
 
   return values;
@@ -1491,6 +1512,7 @@ void
 gtk_style_context_save (GtkStyleContext *context)
 {
   GtkStyleContextPrivate *priv;
+  GtkStyleInfo *info;
 
   g_return_if_fail (GTK_IS_STYLE_CONTEXT (context));
 
@@ -1501,9 +1523,12 @@ gtk_style_context_save (GtkStyleContext *context)
   if (!gtk_style_context_is_saved (context))
     style_values_lookup (context);
 
-  priv->saved_nodes = g_slist_prepend (priv->saved_nodes, priv->info);
+  info = style_info_new ();
+  info->decl = gtk_css_node_declaration_ref (priv->info->decl);
+  info->parent = gtk_style_context_get_root (context);
 
-  priv->info = style_info_copy (priv->info);
+  priv->saved_nodes = g_slist_prepend (priv->saved_nodes, priv->info);
+  priv->info = info;
 }
 
 /**
@@ -2722,12 +2747,14 @@ gtk_style_context_update_cache (GtkStyleContext  *context,
 {
   GtkStyleContextPrivate *priv;
   GHashTableIter iter;
+  GtkCssStyle *parent;
   gpointer key, value;
 
   if (_gtk_bitmask_is_empty (parent_changes))
     return;
 
   priv = context->priv;
+  parent = gtk_style_context_get_root (context)->values;
 
   g_hash_table_iter_init (&iter, priv->style_values);
   while (g_hash_table_iter_next (&iter, &key, &value))
@@ -2741,7 +2768,7 @@ gtk_style_context_update_cache (GtkStyleContext  *context,
         }
       else
         {
-          style = update_properties (context, style, decl, parent_changes);
+          style = update_properties (context, style, decl, parent, parent_changes);
 
           g_hash_table_iter_replace (&iter, style);
         }
@@ -2849,7 +2876,11 @@ _gtk_style_context_validate (GtkStyleContext  *context,
             {
 	      GtkCssStyle *new_base;
               
-              new_base = update_properties (context, GTK_CSS_ANIMATED_STYLE (current)->style, info->decl, parent_changes);
+              new_base = update_properties (context,
+                                            GTK_CSS_ANIMATED_STYLE (current)->style,
+                                            info->decl,
+                                            style_info_get_parent_style (context, info),
+                                            parent_changes);
               new_values = gtk_css_animated_style_new_advance (GTK_CSS_ANIMATED_STYLE (current),
                                                                new_base,
                                                                timestamp);
@@ -2857,7 +2888,11 @@ _gtk_style_context_validate (GtkStyleContext  *context,
             }
           else
             {
-	      new_values = update_properties (context, current, info->decl, parent_changes);
+	      new_values = update_properties (context,
+                                              current,
+                                              info->decl,
+                                              style_info_get_parent_style (context, info),
+                                              parent_changes);
             }
 
           style_info_set_values (info, new_values);
