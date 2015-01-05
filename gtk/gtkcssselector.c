@@ -1780,7 +1780,7 @@ gtk_css_selector_tree_get_change (const GtkCssSelectorTree *tree,
   if (!gtk_css_selector_match (&tree->selector, matcher))
     return 0;
 
-  if (tree->selector.class->is_simple)
+  if (!tree->selector.class->is_simple)
     return gtk_css_selector_tree_collect_change (tree);
 
   for (prev = gtk_css_selector_tree_get_previous (tree);
