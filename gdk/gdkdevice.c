@@ -57,6 +57,7 @@ struct _GdkAxisInfo
 
 enum {
   CHANGED,
+  TOOL_CHANGED,
   LAST_SIGNAL
 };
 
@@ -341,6 +342,24 @@ gdk_device_class_init (GdkDeviceClass *klass)
                   0, NULL, NULL,
                   g_cclosure_marshal_VOID__VOID,
                   G_TYPE_NONE, 0);
+
+  /**
+   * GdkDevice::tool-changed:
+   * @device: the #GdkDevice that changed.
+   * @tool: The new current tool
+   *
+   * The ::tool-changed signal is emitted on pen/eraser
+   * #GdkDevice<!-- -->s whenever tools enter or leave proximity.
+   *
+   * Since: 3.22
+   */
+  signals[TOOL_CHANGED] =
+    g_signal_new (g_intern_static_string ("tool-changed"),
+                  G_TYPE_FROM_CLASS (object_class),
+                  G_SIGNAL_RUN_LAST,
+                  0, NULL, NULL,
+                  g_cclosure_marshal_VOID__BOXED,
+                  G_TYPE_NONE, 1, GDK_TYPE_DEVICE_TOOL);
 }
 
 static void
@@ -387,6 +406,8 @@ gdk_device_dispose (GObject *object)
 
       g_object_unref (associated);
     }
+
+  g_clear_object (&device->last_tool);
 
   G_OBJECT_CLASS (gdk_device_parent_class)->dispose (object);
 }
@@ -2081,6 +2102,17 @@ gdk_device_tool_new (guint64 serial)
   return g_object_new (GDK_TYPE_DEVICE_TOOL,
                        "serial", serial,
                        NULL);
+}
+
+void
+gdk_device_update_tool (GdkDevice     *device,
+                        GdkDeviceTool *tool)
+{
+  g_return_if_fail (GDK_IS_DEVICE (device));
+  g_return_if_fail (gdk_device_get_device_type (device) != GDK_DEVICE_TYPE_MASTER);
+
+  if (g_set_object (&device->last_tool, tool))
+    g_signal_emit (device, signals[TOOL_CHANGED], 0, tool);
 }
 
 /**

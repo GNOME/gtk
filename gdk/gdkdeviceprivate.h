@@ -76,6 +76,7 @@ struct _GdkDevice
   gchar *product_id;
 
   GdkSeat *seat;
+  GdkDeviceTool *last_tool;
 };
 
 struct _GdkDeviceClass
@@ -198,6 +199,8 @@ void  gdk_device_set_seat  (GdkDevice *device,
 
 /* Device tools */
 GdkDeviceTool *gdk_device_tool_new    (guint64        serial);
+void           gdk_device_update_tool (GdkDevice     *device,
+                                       GdkDeviceTool *tool);
 
 G_END_DECLS
 
