@@ -44,10 +44,16 @@ GDK_AVAILABLE_IN_3_16
 GtkWidget *   gtk_combo_new                     (void);
 
 GDK_AVAILABLE_IN_3_16
-const gchar * gtk_combo_get_active              (GtkCombo       *combo);
+const gchar * gtk_combo_get_selected_item       (GtkCombo       *combo);
 
 GDK_AVAILABLE_IN_3_16
-void          gtk_combo_set_active              (GtkCombo       *combo,
+const gchar **gtk_combo_get_selected            (GtkCombo       *combo);
+
+GDK_AVAILABLE_IN_3_16
+void          gtk_combo_select_item             (GtkCombo       *combo,
+                                                 const gchar    *id);
+GDK_AVAILABLE_IN_3_16
+void          gtk_combo_unselect_item           (GtkCombo       *combo,
                                                  const gchar    *id);
 
 GDK_AVAILABLE_IN_3_16
@@ -72,6 +78,12 @@ void          gtk_combo_item_set_group_key      (GtkCombo       *combo,
                                                  const gchar    *group);
 
 GDK_AVAILABLE_IN_3_16
+void          gtk_combo_add_group               (GtkCombo       *combo,
+                                                 const gchar    *group,
+                                                 const gchar    *text,
+                                                 const gchar    *sort);
+
+GDK_AVAILABLE_IN_3_16
 void          gtk_combo_set_placeholder_text    (GtkCombo       *combo,
                                                  const gchar    *text);
 GDK_AVAILABLE_IN_3_16
@@ -90,10 +102,11 @@ GDK_AVAILABLE_IN_3_16
 const gchar * gtk_combo_get_custom_text         (GtkCombo       *combo);
 
 GDK_AVAILABLE_IN_3_16
-void          gtk_combo_add_group               (GtkCombo       *combo,
-                                                 const gchar    *group,
-                                                 const gchar    *text,
-                                                 const gchar    *sort);
+void              gtk_combo_set_selection_mode  (GtkCombo               *combo,
+                                                 GtkSelectionMode        mode);
+GDK_AVAILABLE_IN_3_16
+GtkSelectionMode  gtk_combo_get_selection_mode  (GtkCombo               *combo);
+
 
 G_END_DECLS
 

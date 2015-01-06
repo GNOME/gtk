@@ -28,6 +28,7 @@
 #include "gtkbutton.h"
 #include "gtkcontainer.h"
 #include "gtkentry.h"
+#include "gtkenums.h"
 #include "gtkframe.h"
 #include "gtklabel.h"
 #include "gtklistbox.h"
@@ -37,6 +38,7 @@
 #include "gtksearchentry.h"
 #include "gtkseparator.h"
 #include "gtkstack.h"
+#include "gtktypebuiltins.h"
 #include "gtkintl.h"
 #include "gtkprivate.h"
 
@@ -54,9 +56,9 @@
  *
  * You can add items to a GtkCombo using gtk_combo_add_item() and remove
  * them with gtk_combo_remove_item(). Each item has an ID that is returned
- * as the value of the #GtkCombo:active property when the item is currently
- * selected, an optional text that is used to display the item, and an
- * optional sort key that is used to sort the items.
+ * as the value of the #GtkCombo:selected property when the item is
+ * currently selected, an optional text that is used to display the item,
+ * and an optional sort key that is used to sort the items.
  *
  * If you want to allow the user to enter custom values, use
  * gtk_combo_set_allow_custom().
@@ -437,6 +439,8 @@ static GtkWidget *group_get_item     (GtkCombo       *combo,
                                       const gchar    *group);
 static void       ensure_group       (GtkCombo       *combo,
                                       const gchar    *group);
+static void       set_selected       (GtkCombo       *combo,
+                                      const gchar   **ids);
 
 static void     gtk_combo_buildable_init (GtkBuildableIface *iface);
 
@@ -445,12 +449,13 @@ struct _GtkCombo
 {
   GtkBin parent;
 
-  const gchar *active;
+  GPtrArray *selected;
   gchar *placeholder;
   gchar *custom_text;
   gboolean allow_custom;
+  GtkSelectionMode selection_mode;
 
-  GtkWidget *active_label;
+  GtkWidget *selected_label;
   GtkWidget *popover;
   GtkWidget *scrolled_window;
   GtkWidget *list;
@@ -471,10 +476,11 @@ struct _GtkComboClass
 };
 
 enum {
-  PROP_ACTIVE = 1,
+  PROP_SELECTED = 1,
   PROP_PLACEHOLDER_TEXT,
   PROP_ALLOW_CUSTOM,
-  PROP_CUSTOM_TEXT
+  PROP_CUSTOM_TEXT,
+  PROP_SELECTION_MODE
 };
 
 static GtkBuildableIface *buildable_parent_iface = NULL;
@@ -487,6 +493,11 @@ static void
 gtk_combo_init (GtkCombo *combo)
 {
   g_type_ensure (GTK_TYPE_COMBO_ROW);
+
+  combo->selected = g_ptr_array_new ();
+  g_ptr_array_add (combo->selected, NULL);
+
+  combo->selection_mode = GTK_SELECTION_BROWSE;
 
   gtk_widget_init_template (GTK_WIDGET (combo));
 
@@ -508,6 +519,7 @@ gtk_combo_finalize (GObject *object)
 
   g_free (combo->placeholder);
   g_free (combo->custom_text);
+  g_ptr_array_free (combo->selected, TRUE);
 
   G_OBJECT_CLASS (gtk_combo_parent_class)->finalize (object);
 }
@@ -522,8 +534,8 @@ gtk_combo_set_property (GObject      *object,
 
   switch (prop_id)
     {
-    case PROP_ACTIVE:
-      gtk_combo_set_active (combo, g_value_get_string (value));
+    case PROP_SELECTED:
+      set_selected (combo, (const gchar **)g_value_get_boxed (value));
       break;
     case PROP_PLACEHOLDER_TEXT:
       gtk_combo_set_placeholder_text (combo, g_value_get_string (value));
@@ -533,6 +545,9 @@ gtk_combo_set_property (GObject      *object,
       break;
     case PROP_CUSTOM_TEXT:
       gtk_combo_set_custom_text (combo, g_value_get_string (value));
+      break;
+    case PROP_SELECTION_MODE:
+      gtk_combo_set_selection_mode (combo, g_value_get_enum (value));
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -549,8 +564,8 @@ gtk_combo_get_property (GObject    *object,
 
   switch (prop_id)
     {
-    case PROP_ACTIVE:
-      g_value_set_string (value, gtk_combo_get_active (combo));
+    case PROP_SELECTED:
+      g_value_set_boxed (value, (gconstpointer)combo->selected->pdata);
       break;
     case PROP_PLACEHOLDER_TEXT:
       g_value_set_string (value, gtk_combo_get_placeholder_text (combo));
@@ -560,6 +575,9 @@ gtk_combo_get_property (GObject    *object,
       break;
     case PROP_CUSTOM_TEXT:
       g_value_set_string (value, gtk_combo_get_custom_text (combo));
+      break;
+    case PROP_SELECTION_MODE:
+      g_value_set_enum (value, gtk_combo_get_selection_mode (combo));
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -577,18 +595,18 @@ gtk_combo_class_init (GtkComboClass *class)
   object_class->get_property = gtk_combo_get_property;
 
   /**
-   * GtkCombo:active:
+   * GtkCombo:selected:
    *
-   * The ID of the currently selected item, or %NULL
-   * if no item is currently selected.
+   * The IDs of the currently selected items, as a
+   * %NULL-terminated array of strings.
    */
   g_object_class_install_property (object_class,
-                                   PROP_ACTIVE,
-                                   g_param_spec_string ("active",
-                                                        P_("Active"),
-                                                        P_("The ID of the active item"),
-                                                        NULL,
-                                                        GTK_PARAM_READWRITE));
+                                   PROP_SELECTED,
+                                   g_param_spec_boxed ("selected",
+                                                       P_("Selected items"),
+                                                       P_("The IDs of the selected items"),
+                                                       G_TYPE_STRV,
+                                                       GTK_PARAM_READWRITE));
 
   /**
    * GtkCombo:placeholder-text:
@@ -630,9 +648,18 @@ gtk_combo_class_init (GtkComboClass *class)
                                                         NULL,
                                                         GTK_PARAM_READWRITE));
 
+  g_object_class_install_property (object_class,
+                                   PROP_SELECTION_MODE,
+                                   g_param_spec_enum ("selection-mode",
+                                                      P_("Selection mode"),
+                                                      P_("The selection mode"),
+                                                      GTK_TYPE_SELECTION_MODE,
+                                                      GTK_SELECTION_BROWSE,
+                                                      GTK_PARAM_READWRITE));
+
   gtk_widget_class_set_template_from_resource (widget_class, "/org/gtk/libgtk/ui/gtkcombo.ui");
 
-  gtk_widget_class_bind_template_child (widget_class, GtkCombo, active_label);
+  gtk_widget_class_bind_template_child (widget_class, GtkCombo, selected_label);
   gtk_widget_class_bind_template_child (widget_class, GtkCombo, popover);
   gtk_widget_class_bind_template_child (widget_class, GtkCombo, scrolled_window);
   gtk_widget_class_bind_template_child (widget_class, GtkCombo, list);
@@ -1114,53 +1141,13 @@ remove_from_list (GtkCombo    *combo,
 }
 
 static void
-set_active (GtkCombo    *combo,
-            const gchar *id)
-{
-  GtkWidget *item;
-  GtkWidget *group;
-
-  if (combo->active)
-    {
-      find_item (combo, combo->active, &item, &group);
-      if (item)
-        gtk_combo_row_set_active (GTK_COMBO_ROW (item), FALSE);
-      if (group)
-        gtk_combo_row_set_active (GTK_COMBO_ROW (group), FALSE);
-    }
-
-  if (id)
-    {
-      find_item (combo, id, &item, &group);
-      if (item)
-        gtk_combo_row_set_active (GTK_COMBO_ROW (item), TRUE);
-      if (group)
-        gtk_combo_row_set_active (GTK_COMBO_ROW (group), TRUE);
-    }
-  else
-    item = NULL;
-
-  if (item)
-    {
-      combo->active = gtk_combo_row_get_id (GTK_COMBO_ROW (item));
-      gtk_label_set_text (GTK_LABEL (combo->active_label),
-                          gtk_combo_row_get_text (GTK_COMBO_ROW (item)));
-    }
-  else
-    {
-      combo->active = NULL;
-      gtk_label_set_text (GTK_LABEL (combo->active_label), combo->placeholder);
-    }
-
-
-  g_object_notify (G_OBJECT (combo), "active");
-}
-
-static void
 list_row_activated (GtkListBox    *list,
                     GtkListBoxRow *row,
                     GtkCombo      *combo)
 {
+  const gchar *group;
+  const gchar *id;
+
   if ((GtkWidget*)row == list_get_show_more_item (GTK_WIDGET (list)))
     {
       expand (combo, GTK_WIDGET (list));
@@ -1174,23 +1161,30 @@ list_row_activated (GtkListBox    *list,
       return;
     }
 
-  if (GTK_IS_COMBO_ROW (row))
+  if (!GTK_IS_COMBO_ROW (row))
+    return;
+
+  group = gtk_combo_row_get_group (GTK_COMBO_ROW (row));
+  if (group)
     {
-      const gchar *group;
-
-      group = gtk_combo_row_get_group (GTK_COMBO_ROW (row));
-      if (group)
-        {
-          if (g_strcmp0 (group, "list") != 0)
-            collapse (combo, group_get_list (combo, group));
-          gtk_stack_set_visible_child_name (GTK_STACK (combo->stack), group);
-          return;
-        }
-
-      set_active (combo, gtk_combo_row_get_id (GTK_COMBO_ROW (row)));
+      if (g_strcmp0 (group, "list") != 0)
+        collapse (combo, group_get_list (combo, group));
+      gtk_stack_set_visible_child_name (GTK_STACK (combo->stack), group);
+      return;
     }
 
-  gtk_widget_hide (combo->popover);
+  id = gtk_combo_row_get_id (GTK_COMBO_ROW (row));
+  if (GTK_COMBO_ROW (row)->active)
+    {
+      if (combo->selection_mode != GTK_SELECTION_BROWSE)
+        gtk_combo_unselect_item (combo, id);
+    }
+  else
+    {
+      gtk_combo_select_item (combo, id);
+    }
+
+  /* FIXME: hide the popover ? */
 }
 
 static void
@@ -1203,9 +1197,9 @@ custom_entry_done (GtkWidget *widget,
   if (text[0] != '\0')
     {
       gtk_combo_add_item (combo, text, text);
-      gtk_combo_set_active (combo, text);
+      gtk_combo_select_item (combo, text);
       gtk_entry_set_text (GTK_ENTRY (combo->custom_entry), "");
-      gtk_widget_hide (combo->popover);
+      gtk_stack_set_visible_child_name (GTK_STACK (combo->stack), "list");
     }
 }
 
@@ -1519,42 +1513,239 @@ gtk_combo_new (void)
 }
 
 /**
- * gtk_combo_get_active:
+ * gtk_combo_get_selected_item:
  * @combo: a #GtkCombo
  *
  * Gets the ID of the currently selected item.
  *
- * Returns: (transfer none): the active ID, or %NULL if no
+ * Returns: (transfer none): the ID of the selected item, or %NULL if no
  *   item is selected
  *
  * Since: 3.16
  */
 const gchar *
-gtk_combo_get_active (GtkCombo *combo)
+gtk_combo_get_selected_item (GtkCombo *combo)
 {
   g_return_val_if_fail (GTK_IS_COMBO (combo), NULL);
 
-  return combo->active;
+  return (const gchar *)combo->selected->pdata[0];
+}
+
+const gchar **
+gtk_combo_get_selected (GtkCombo *combo)
+{
+  g_return_val_if_fail (GTK_IS_COMBO (combo), NULL);
+
+  return (const gchar **)combo->selected->pdata;
+}
+
+typedef struct
+{
+  GtkCombo *combo;
+  gint count;
+} UpdateActiveData;
+
+static void
+update_active_cb (GtkWidget *row,
+                  gpointer   data)
+{
+  UpdateActiveData *d = data;
+  const gchar *group;
+  const gchar *id;
+
+  if (!GTK_IS_COMBO_ROW (row))
+    return;
+
+  group = gtk_combo_row_get_group (GTK_COMBO_ROW (row));
+  if (group &&
+      g_strcmp0 (group, "list") != 0 &&
+      g_strcmp0 (group, "custom") != 0)
+    {
+      GtkWidget *list;
+      UpdateActiveData d2;
+
+      d2.combo = d->combo;
+      d2.count = 0;
+
+      list = group_get_list (d->combo, group);
+      gtk_container_foreach (GTK_CONTAINER (list), update_active_cb, &d2);
+
+      gtk_combo_row_set_active (GTK_COMBO_ROW (row), d2.count > 0);
+      d->count += d2.count;
+    }
+
+  id = gtk_combo_row_get_id (GTK_COMBO_ROW (row));
+  if (id != NULL)
+    {
+      gint i;
+
+      for (i = 0; i < d->combo->selected->len; i++)
+        {
+          if (g_ptr_array_index (d->combo->selected, i) == id)
+            break;
+        }
+      gtk_combo_row_set_active (GTK_COMBO_ROW (row), i < d->combo->selected->len);
+      d->count += i < d->combo->selected->len ? 1 : 0;
+    }
+}
+
+static void
+update_active_rows (GtkCombo *combo)
+{
+  UpdateActiveData data;
+
+  data.combo = combo;
+  data.count = 0;
+  gtk_container_foreach (GTK_CONTAINER (combo->list), update_active_cb, &data);
+  g_assert (data.count + 1 == combo->selected->len);
+}
+
+static void
+update_selected_label (GtkCombo *combo)
+{
+  if (combo->selected->len == 0)
+    {
+      gtk_label_set_text (GTK_LABEL (combo->selected_label), combo->placeholder);
+    }
+  else
+    {
+      GString *str;
+      const gchar *id;
+      const gchar *text;
+      gint i;
+
+      str = g_string_new ("");
+      for (i = 0; i < combo->selected->len; i++)
+        {
+          id = (const gchar *)g_ptr_array_index (combo->selected, i);
+          if (id == NULL)
+            continue;
+
+          if (i > 0)
+            g_string_append (str, ", ");
+
+          text = gtk_combo_item_get_text (combo, id);
+          g_string_append (str, text);
+        }
+      gtk_label_set_text (GTK_LABEL (combo->selected_label), str->str);
+      g_string_free (str, TRUE);
+    }
+}
+
+static void
+set_selected (GtkCombo     *combo,
+              const gchar **ids)
+{
+  gint i;
+  GtkWidget *item;
+  const gchar *id;
+
+  g_ptr_array_set_size (combo->selected, 0);
+  for (i = 0; ids[i]; i++)
+    {
+      find_item (combo, ids[i], &item, NULL);
+      if (item == NULL)
+        {
+          g_warning ("GtkCombo: no item with ID '%s' found", ids[i]);
+          continue;
+        }
+
+      id = gtk_combo_row_get_id (GTK_COMBO_ROW (item));
+
+      if (i > 0 && combo->selection_mode != GTK_SELECTION_MULTIPLE)
+        {
+          g_warning ("GtkCombo: ignoring extra item '%s' in single selection mode", id);
+          continue;
+        }
+
+      g_ptr_array_add (combo->selected, (gpointer)id);
+    }
+  g_ptr_array_add (combo->selected, NULL);
+
+  update_active_rows (combo);
+  update_selected_label (combo);
+  g_object_notify (G_OBJECT (combo), "selected");
 }
 
 /**
- * gtk_combo_set_active:
+ * gtk_combo_select_item:
  * @combo: a #GtkCombo
- * @id: (allow-none): the ID to select, or %NULL
+ * @id: the ID to select
  *
- * Sets the active ID to @id. If @id is not the ID
- * of an item of combo, no item will be selected
+ * Selects the item with the given ID. If the combo does
+ * not contain an item with this id, no item will be selected
  * after this call.
  *
  * Since: 3.16
  */
 void
-gtk_combo_set_active (GtkCombo    *combo,
-                      const gchar *id)
+gtk_combo_select_item (GtkCombo    *combo,
+                       const gchar *id)
 {
-  g_return_if_fail (GTK_IS_COMBO (combo));
+  GtkWidget *item;
+  gint i;
 
-  set_active (combo, id);
+  g_return_if_fail (GTK_IS_COMBO (combo));
+  g_return_if_fail (id != NULL);
+
+  find_item (combo, id, &item, NULL);
+  if (item == NULL)
+    {
+      g_warning ("GtkCombo: no item with ID '%s' found", id);
+      return;
+    }
+
+  id = gtk_combo_row_get_id (GTK_COMBO_ROW (item));
+
+  for (i = 0; i < combo->selected->len; i++)
+    {
+      if (g_ptr_array_index (combo->selected, i) == id)
+        return;
+    }
+
+  if (combo->selection_mode != GTK_SELECTION_MULTIPLE)
+    g_ptr_array_set_size (combo->selected, 1);
+
+  g_ptr_array_index (combo->selected, combo->selected->len - 1) = (gpointer)id;
+  g_ptr_array_add (combo->selected, NULL);
+
+  update_active_rows (combo);
+  update_selected_label (combo);
+  g_object_notify (G_OBJECT (combo), "selected");
+}
+
+void
+gtk_combo_unselect_item (GtkCombo    *combo,
+                         const gchar *id)
+{
+  GtkWidget *item;
+  gint i;
+
+  g_return_if_fail (GTK_IS_COMBO (combo));
+  g_return_if_fail (id != NULL);
+
+  find_item (combo, id, &item, NULL);
+  if (item == NULL)
+    {
+      g_warning ("GtkCombo: no item with ID '%s' found", id);
+      return;
+    }
+
+  id = gtk_combo_row_get_id (GTK_COMBO_ROW (item));
+
+  for (i = 0; i < combo->selected->len; i++)
+    {
+      if (g_ptr_array_index (combo->selected, i) == id)
+        break;
+    }
+  if (i == combo->selected->len)
+    return;
+
+  g_ptr_array_remove_index (combo->selected, i);
+
+  update_active_rows (combo);
+  update_selected_label (combo);
+  g_object_notify (G_OBJECT (combo), "selected");
 }
 
 /**
@@ -1605,6 +1796,7 @@ gtk_combo_item_get_text (GtkCombo    *combo,
   GtkWidget *item;
 
   g_return_val_if_fail (GTK_IS_COMBO (combo), NULL);
+  g_return_val_if_fail (id != NULL, NULL);
 
   if (!find_item (combo, id, &item, NULL))
     return NULL;
@@ -1707,9 +1899,7 @@ gtk_combo_remove_item (GtkCombo    *combo,
   g_return_if_fail (GTK_IS_COMBO (combo));
   g_return_if_fail (id != NULL);
 
-  if (g_strcmp0 (id, combo->active) == 0)
-    set_active (combo, NULL);
-
+  gtk_combo_unselect_item (combo, id);
   remove_from_list (combo, id);
 }
 
@@ -1733,8 +1923,8 @@ gtk_combo_set_placeholder_text (GtkCombo    *combo,
   g_free (combo->placeholder);
   combo->placeholder = g_strdup (text);
 
-  if (combo->active_label != NULL && combo->active == NULL)
-    gtk_label_set_text (GTK_LABEL (combo->active_label), combo->placeholder);
+  if (combo->selected_label != NULL && combo->selected == NULL)
+    gtk_label_set_text (GTK_LABEL (combo->selected_label), combo->placeholder);
 
   g_object_notify (G_OBJECT (combo), "placeholder-text");
 }
@@ -1878,3 +2068,25 @@ gtk_combo_add_group (GtkCombo    *combo,
   gtk_list_box_invalidate_sort (GTK_LIST_BOX (combo->list));
 }
 
+void
+gtk_combo_set_selection_mode (GtkCombo         *combo,
+                              GtkSelectionMode  mode)
+{
+  g_return_if_fail (GTK_IS_COMBO (combo));
+  g_return_if_fail (mode != GTK_SELECTION_NONE);
+
+  if (combo->selection_mode == mode)
+    return;
+
+  combo->selection_mode = mode;
+
+  g_object_notify (G_OBJECT (combo), "selection-mode");
+}
+
+GtkSelectionMode
+gtk_combo_get_selection_mode (GtkCombo *combo)
+{
+  g_return_val_if_fail (GTK_IS_COMBO (combo), GTK_SELECTION_BROWSE);
+
+  return combo->selection_mode;
+}

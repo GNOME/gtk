@@ -13,8 +13,9 @@
             <property name="orientation">horizontal</property>
             <property name="spacing">6</property>
             <child type="center">
-              <object class="GtkLabel" id="active_label">
+              <object class="GtkLabel" id="selected_label">
                 <property name="visible">True</property>
+                <property name="ellipsize">end</property>
               </object>
             </child>
             <child>
