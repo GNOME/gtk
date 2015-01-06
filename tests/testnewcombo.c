@@ -15,18 +15,18 @@ add_one (GtkButton *button, gpointer data)
   sort = g_strdup_printf ("Value %03d", count);
   gtk_combo_add_item (GTK_COMBO (data), id, text);
   gtk_combo_item_set_sort_key (GTK_COMBO (data), id, sort);
-  gtk_combo_set_active (GTK_COMBO (data), id);
+  gtk_combo_select_item (GTK_COMBO (data), id);
   g_free (id);
   g_free (text);
   g_free (sort);
 }
 
 static void
-remove_active (GtkButton *button, gpointer data)
+remove_selected (GtkButton *button, gpointer data)
 {
   const gchar *id;
 
-  id = gtk_combo_get_active (GTK_COMBO (data));
+  id = gtk_combo_get_selected_item (GTK_COMBO (data));
   if (id != NULL)
     gtk_combo_remove_item (GTK_COMBO (data), id);
 }
@@ -34,7 +34,13 @@ remove_active (GtkButton *button, gpointer data)
 static void
 select_a (GtkButton *button, gpointer data)
 {
-  gtk_combo_set_active (GTK_COMBO (data), "1");
+  gtk_combo_select_item (GTK_COMBO (data), "1");
+}
+
+static void
+unselect_a (GtkButton *button, gpointer data)
+{
+  gtk_combo_unselect_item (GTK_COMBO (data), "1");
 }
 
 const gchar data[] =
@@ -44,7 +50,7 @@ const gchar data[] =
   "    <property name='halign'>center</property>"
   "    <property name='placeholder-text'>None</property>"
   "    <property name='custom-text'>Other</property>"
-  "    <property name='active'>1</property>"
+  "    <property name='selection-mode'>multiple</property>"
   "    <items>"
   "      <item translatable='yes' id='1' sort='Value 001'>Value 1</item>"
   "      <item translatable='yes' id='2' sort='Value 002'>Value 2</item>"
@@ -55,16 +61,20 @@ const gchar data[] =
   "    <groups>"
   "      <group id='1' translatable='yes'>Group 1</group>"
   "    </groups>"
+  "    <property name='selected'>1</property>"
   "  </object>"
   "</interface>";
 
 static gboolean
-string_to_bool (GBinding     *binding,
-                const GValue *from_value,
-                GValue       *to_value,
-                gpointer      data)
+selected_to_bool (GBinding     *binding,
+                  const GValue *from_value,
+                  GValue       *to_value,
+                  gpointer      data)
 {
-  g_value_set_boolean (to_value, g_value_get_string (from_value) != NULL);
+  const gchar * const *ids;
+
+  ids = g_value_get_boxed (from_value);
+  g_value_set_boolean (to_value, ids[0] != NULL);
   return TRUE;
 }
 
@@ -74,17 +84,40 @@ selected_to_string (GBinding     *binding,
                     GValue       *to_value,
                     gpointer      data)
 {
-  const gchar *id;
-  const gchar *text;
+  gchar **ids;
+  gchar *text;
 
-  id = g_value_get_string (from_value);
-
-  if (id != NULL)
-    text = gtk_combo_item_get_text (GTK_COMBO (g_binding_get_source (binding)), id);
-  else
-    text = "";
-
+  ids = g_value_get_boxed (from_value);
+  text = g_strjoinv (", ", ids);
   g_value_set_string (to_value, text);
+  g_free (text);
+
+  return TRUE;
+}
+
+static gboolean
+selected_to_text (GBinding     *binding,
+                  const GValue *from_value,
+                  GValue       *to_value,
+                  gpointer      data)
+{
+  const gchar * const *ids;
+  GString *str;
+  gint i;
+
+  str = g_string_new ("");
+  ids = g_value_get_boxed (from_value);
+  for (i = 0; ids[i]; i++)
+    {
+      const gchar *text;
+      if (i > 0)
+        g_string_append (str, ", ");
+      text = gtk_combo_item_get_text (GTK_COMBO (g_binding_get_source (binding)), ids[i]);
+      g_string_append (str, text);
+    }
+
+  g_value_set_string (to_value, str->str);
+  g_string_free (str, TRUE);
 
   return TRUE;
 }
@@ -116,7 +149,7 @@ main (int argc, char *argv[])
   gtk_combo_add_item (GTK_COMBO (combo), "2", "Value 2");
   gtk_combo_add_item (GTK_COMBO (combo), "3", "Value 3");
   gtk_combo_set_placeholder_text (GTK_COMBO (combo), "None");
-  gtk_combo_set_active (GTK_COMBO (combo), "1");
+  gtk_combo_select_item (GTK_COMBO (combo), "1");
 
   gtk_container_add (GTK_CONTAINER (box), gtk_separator_new (GTK_ORIENTATION_HORIZONTAL));
 
@@ -150,7 +183,7 @@ main (int argc, char *argv[])
   gtk_combo_item_set_sort_key (GTK_COMBO (combo), "10",  "Value 10");
   gtk_combo_item_set_sort_key (GTK_COMBO (combo), "11",  "Value 11");
   gtk_combo_set_placeholder_text (GTK_COMBO (combo), "None");
-  gtk_combo_set_active (GTK_COMBO (combo), "1");
+  gtk_combo_select_item (GTK_COMBO (combo), "1");
 
   gtk_container_add (GTK_CONTAINER (box), gtk_separator_new (GTK_ORIENTATION_HORIZONTAL));
 
@@ -166,7 +199,7 @@ main (int argc, char *argv[])
   gtk_combo_add_item (GTK_COMBO (combo), "3", "Value 3");
   gtk_combo_set_placeholder_text (GTK_COMBO (combo), "None");
   gtk_combo_set_allow_custom (GTK_COMBO (combo), TRUE);
-  gtk_combo_set_active (GTK_COMBO (combo), "1");
+  gtk_combo_select_item (GTK_COMBO (combo), "1");
 
   gtk_container_add (GTK_CONTAINER (box), gtk_separator_new (GTK_ORIENTATION_HORIZONTAL));
 
@@ -228,15 +261,15 @@ main (int argc, char *argv[])
   gtk_combo_item_set_group_key (GTK_COMBO (combo), "16",  "Group 3");
   gtk_combo_item_set_group_key (GTK_COMBO (combo), "17",  "Group 3");
   gtk_combo_item_set_group_key (GTK_COMBO (combo), "18",  "Group 3");
-  gtk_combo_set_active (GTK_COMBO (combo), "7");
-  button = gtk_button_new_with_label ("Remove active");
+  gtk_combo_select_item (GTK_COMBO (combo), "7");
+  button = gtk_button_new_with_label ("Remove selected");
   gtk_widget_set_halign (button, GTK_ALIGN_CENTER);
-  g_signal_connect (button, "clicked", G_CALLBACK (remove_active), combo);
+  g_signal_connect (button, "clicked", G_CALLBACK (remove_selected), combo);
   gtk_container_add (GTK_CONTAINER (box), button);
-  g_object_bind_property_full (combo, "active",
+  g_object_bind_property_full (combo, "selected",
                                button, "sensitive",
                                G_BINDING_SYNC_CREATE,
-                               string_to_bool, NULL, NULL, NULL);
+                               selected_to_bool, NULL, NULL, NULL);
 
   gtk_container_add (GTK_CONTAINER (box), gtk_separator_new (GTK_ORIENTATION_HORIZONTAL));
 
@@ -259,13 +292,16 @@ main (int argc, char *argv[])
   button = gtk_button_new_with_label ("Select 1");
   g_signal_connect (button, "clicked", G_CALLBACK (select_a), combo);
   gtk_container_add (GTK_CONTAINER (box2), button);
-  button = gtk_button_new_with_label ("Remove active");
-  g_signal_connect (button, "clicked", G_CALLBACK (remove_active), combo);
+  button = gtk_button_new_with_label ("Unselect 1");
+  g_signal_connect (button, "clicked", G_CALLBACK (unselect_a), combo);
   gtk_container_add (GTK_CONTAINER (box2), button);
-  g_object_bind_property_full (combo, "active",
+  button = gtk_button_new_with_label ("Remove selected");
+  g_signal_connect (button, "clicked", G_CALLBACK (remove_selected), combo);
+  gtk_container_add (GTK_CONTAINER (box2), button);
+  g_object_bind_property_full (combo, "selected",
                                button, "sensitive",
                                G_BINDING_SYNC_CREATE,
-                               string_to_bool, NULL, NULL, NULL);
+                               selected_to_bool, NULL, NULL, NULL);
   button = gtk_check_button_new_with_label ("Allow custom");
   gtk_widget_set_halign (button, GTK_ALIGN_CENTER);
   g_object_bind_property (button, "active",
@@ -279,9 +315,11 @@ main (int argc, char *argv[])
   label = gtk_label_new ("Active:");
   gtk_container_add (GTK_CONTAINER (box2), label);
   label = gtk_label_new ("");
-  g_object_bind_property (combo, "active",
-                          label, "label",
-                          G_BINDING_SYNC_CREATE);
+  gtk_label_set_ellipsize (GTK_LABEL (label), PANGO_ELLIPSIZE_END);
+  g_object_bind_property_full (combo, "selected",
+                               label, "label",
+                               G_BINDING_SYNC_CREATE,
+                               selected_to_string, NULL, NULL, NULL);
   gtk_container_add (GTK_CONTAINER (box2), label);
   box2 = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 10);
   gtk_widget_set_halign (box2, GTK_ALIGN_CENTER);
@@ -289,10 +327,11 @@ main (int argc, char *argv[])
   label = gtk_label_new ("Label:");
   gtk_container_add (GTK_CONTAINER (box2), label);
   label = gtk_label_new ("");
+  gtk_label_set_ellipsize (GTK_LABEL (label), PANGO_ELLIPSIZE_END);
   g_object_bind_property_full (combo, "selected",
                                label, "label",
                                G_BINDING_SYNC_CREATE,
-                               selected_to_string, NULL, NULL, NULL);
+                               selected_to_text, NULL, NULL, NULL);
   gtk_container_add (GTK_CONTAINER (box2), label);
 
   gtk_widget_show_all (window);
