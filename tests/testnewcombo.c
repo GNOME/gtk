@@ -68,6 +68,27 @@ string_to_bool (GBinding     *binding,
   return TRUE;
 }
 
+static gboolean
+selected_to_string (GBinding     *binding,
+                    const GValue *from_value,
+                    GValue       *to_value,
+                    gpointer      data)
+{
+  const gchar *id;
+  const gchar *text;
+
+  id = g_value_get_string (from_value);
+
+  if (id != NULL)
+    text = gtk_combo_item_get_text (GTK_COMBO (g_binding_get_source (binding)), id);
+  else
+    text = "";
+
+  g_value_set_string (to_value, text);
+
+  return TRUE;
+}
+
 int
 main (int argc, char *argv[])
 {
@@ -261,6 +282,17 @@ main (int argc, char *argv[])
   g_object_bind_property (combo, "active",
                           label, "label",
                           G_BINDING_SYNC_CREATE);
+  gtk_container_add (GTK_CONTAINER (box2), label);
+  box2 = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 10);
+  gtk_widget_set_halign (box2, GTK_ALIGN_CENTER);
+  gtk_container_add (GTK_CONTAINER (box), box2);
+  label = gtk_label_new ("Label:");
+  gtk_container_add (GTK_CONTAINER (box2), label);
+  label = gtk_label_new ("");
+  g_object_bind_property_full (combo, "selected",
+                               label, "label",
+                               G_BINDING_SYNC_CREATE,
+                               selected_to_string, NULL, NULL, NULL);
   gtk_container_add (GTK_CONTAINER (box2), label);
 
   gtk_widget_show_all (window);
