@@ -184,6 +184,7 @@ struct _GdkEventPrivate
   gpointer   windowing_data;
   GdkDevice *device;
   GdkDevice *source_device;
+  GdkDeviceTool *tool;
 };
 
 typedef struct _GdkWindowPaint GdkWindowPaint;

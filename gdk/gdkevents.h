@@ -1309,6 +1309,13 @@ GDK_AVAILABLE_IN_ALL
 gboolean gdk_setting_get                (const gchar    *name,
                                          GValue         *value);
 
+GDK_AVAILABLE_IN_3_16
+GdkDeviceTool *gdk_event_get_device_tool (const GdkEvent *event);
+
+GDK_AVAILABLE_IN_3_16
+void           gdk_event_set_device_tool (GdkEvent       *event,
+                                          GdkDeviceTool  *tool);
+
 G_END_DECLS
 
 #endif /* __GDK_EVENTS_H__ */
