@@ -39,4 +39,12 @@
       </object>
     </child>
   </object>
+  <object class="GtkSizeGroup">
+    <property name="mode">vertical</property>
+    <property name="ignore-hidden">False</property>
+    <widgets>
+      <widget name="header"/>
+      <widget name="show_more"/>
+    </widgets>
+  </object>
 </interface>

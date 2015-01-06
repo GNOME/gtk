@@ -184,4 +184,12 @@
       <widget name="stack"/>
     </widgets>
   </object>
+  <object class="GtkSizeGroup">
+    <property name="mode">vertical</property>
+    <property name="ignore-hidden">False</property>
+    <widgets>
+      <widget name="show_more"/>
+      <widget name="add_custom"/>
+    </widgets>
+  </object>
 </interface>
