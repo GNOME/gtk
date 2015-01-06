@@ -747,6 +747,9 @@ gdk_device_list_axes
 gdk_device_get_axis_value
 gdk_device_get_last_event_window
 
+<SUBSECTION>
+gdk_device_tool_get_serial
+
 <SUBSECTION Standard>
 GDK_TYPE_AXIS_USE
 GDK_TYPE_EXTENSION_MODE

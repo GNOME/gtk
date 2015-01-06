@@ -43,6 +43,11 @@
 
 typedef struct _GdkAxisInfo GdkAxisInfo;
 
+struct _GdkDeviceTool
+{
+  guint serial;
+};
+
 struct _GdkAxisInfo
 {
   GdkAtom label;
@@ -285,6 +290,12 @@ gdk_device_dispose (GObject *object)
     {
       g_array_free (device->axes, TRUE);
       device->axes = NULL;
+    }
+
+  if (device->tools)
+    {
+      g_ptr_array_free (device->tools, TRUE);
+      device->tools = NULL;
     }
 
   g_free (device->name);
@@ -1756,4 +1767,87 @@ gdk_device_get_last_event_window (GdkDevice *device)
   info = _gdk_display_get_pointer_info (display, device);
 
   return info->window_under_pointer;
+}
+
+static GdkDeviceTool *
+gdk_device_tool_copy (GdkDeviceTool *tool)
+{
+  return tool;
+}
+
+static void
+gdk_device_tool_free (GdkDeviceTool *tool)
+{
+  /* Nothing to free here, memory is owned by GdkDevice */
+}
+
+G_DEFINE_BOXED_TYPE (GdkDeviceTool, gdk_device_tool,
+                     gdk_device_tool_copy, gdk_device_tool_free);
+
+GdkDeviceTool *
+gdk_device_tool_new (guint serial)
+{
+  GdkDeviceTool *tool;
+
+  tool = g_new0 (GdkDeviceTool, 1);
+  tool->serial = serial;
+
+  return tool;
+}
+
+void
+gdk_device_add_tool (GdkDevice     *device,
+                     GdkDeviceTool *tool)
+{
+  g_return_if_fail (GDK_IS_DEVICE (device));
+  g_return_if_fail (gdk_device_get_device_type (device) != GDK_DEVICE_TYPE_MASTER);
+  g_return_if_fail (tool != NULL);
+
+  if (!device->tools)
+    device->tools = g_ptr_array_new_with_free_func ((GDestroyNotify) g_free);
+
+  g_ptr_array_add (device->tools, tool);
+}
+
+GdkDeviceTool *
+gdk_device_lookup_tool (GdkDevice *device,
+                        guint      serial)
+{
+  GdkDeviceTool *tool;
+  guint i;
+
+  g_return_val_if_fail (GDK_IS_DEVICE (device), NULL);
+  g_return_val_if_fail (gdk_device_get_device_type (device) != GDK_DEVICE_TYPE_MASTER, NULL);
+
+  if (!device->tools)
+    return NULL;
+
+  for (i = 0; i < device->tools->len; i++)
+    {
+      tool = g_ptr_array_index (device->tools, i);
+
+      if (tool->serial == serial)
+        return tool;
+    }
+
+  return NULL;
+}
+
+/**
+ * gdk_device_tool_get_serial:
+ * @tool: a #GdkDeviceTool
+ *
+ * Gets the serial of this tool, this value can be used to identify a
+ * physical tool (eg. a tablet pen) across program executions.
+ *
+ * Returns: The serial ID for this tool
+ *
+ * Since: 3.16
+ **/
+guint
+gdk_device_tool_get_serial (GdkDeviceTool *tool)
+{
+  g_return_val_if_fail (tool != NULL, 0);
+
+  return tool->serial;
 }
