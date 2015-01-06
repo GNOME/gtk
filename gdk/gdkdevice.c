@@ -2003,3 +2003,101 @@ gdk_device_get_axes (GdkDevice *device)
 
   return device->axis_flags;
 }
+
+G_DEFINE_TYPE (GdkDeviceTool, gdk_device_tool, G_TYPE_OBJECT)
+
+enum {
+  TOOL_PROP_0,
+  TOOL_PROP_SERIAL,
+  N_TOOL_PROPS
+};
+
+GParamSpec *tool_props[N_TOOL_PROPS] = { 0 };
+
+static void
+gdk_device_tool_set_property (GObject      *object,
+                              guint         prop_id,
+                              const GValue *value,
+                              GParamSpec   *pspec)
+{
+  GdkDeviceTool *tool = GDK_DEVICE_TOOL (object);
+
+  switch (prop_id)
+    {
+    case TOOL_PROP_SERIAL:
+      tool->serial = g_value_get_uint64 (value);
+      break;
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+      break;
+    }
+}
+
+static void
+gdk_device_tool_get_property (GObject    *object,
+                              guint       prop_id,
+                              GValue     *value,
+                              GParamSpec *pspec)
+{
+  GdkDeviceTool *tool = GDK_DEVICE_TOOL (object);
+
+  switch (prop_id)
+    {
+    case TOOL_PROP_SERIAL:
+      g_value_set_uint64 (value, tool->serial);
+      break;
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+      break;
+    }
+}
+
+static void
+gdk_device_tool_class_init (GdkDeviceToolClass *klass)
+{
+  GObjectClass *object_class = G_OBJECT_CLASS (klass);
+
+  object_class->set_property = gdk_device_tool_set_property;
+  object_class->get_property = gdk_device_tool_get_property;
+
+  tool_props[TOOL_PROP_SERIAL] = g_param_spec_uint64 ("serial",
+                                                      "Serial",
+                                                      "Serial number",
+                                                      0, G_MAXUINT64, 0,
+                                                      G_PARAM_READWRITE |
+                                                      G_PARAM_CONSTRUCT_ONLY);
+
+  g_object_class_install_properties (object_class, N_TOOL_PROPS, tool_props);
+}
+
+static void
+gdk_device_tool_init (GdkDeviceTool *tool)
+{
+}
+
+GdkDeviceTool *
+gdk_device_tool_new (guint64 serial)
+{
+  return g_object_new (GDK_TYPE_DEVICE_TOOL,
+                       "serial", serial,
+                       NULL);
+}
+
+/**
+ * gdk_device_tool_get_serial:
+ * @tool: a #GdkDeviceTool
+ *
+ * Gets the serial of this tool, this value can be used to identify a
+ * physical tool (eg. a tablet pen) across program executions.
+ *
+ * Returns: The serial ID for this tool
+ *
+ * Since: 3.22
+ **/
+guint
+gdk_device_tool_get_serial (GdkDeviceTool *tool)
+{
+  g_return_val_if_fail (tool != NULL, 0);
+
+  return tool->serial;
+}
