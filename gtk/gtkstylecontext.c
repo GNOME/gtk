@@ -2948,7 +2948,6 @@ _gtk_style_context_validate (GtkStyleContext  *context,
                                           gtk_style_context_should_create_transitions (context) ? current : NULL);
 
       style_info_set_values (info, style);
-      _gtk_style_context_update_animating (context);
 
       g_object_unref (static_style);
       g_object_unref (style);
@@ -2995,12 +2994,10 @@ _gtk_style_context_validate (GtkStyleContext  *context,
                                                            timestamp);
           style_info_set_values (info, new_values);
           g_object_unref (new_values);
-
-          if (!GTK_IS_CSS_ANIMATED_STYLE (info->values) ||
-              gtk_css_animated_style_is_static (GTK_CSS_ANIMATED_STYLE (info->values)))
-            _gtk_style_context_update_animating (context);
         }
     }
+
+  _gtk_style_context_update_animating (context);
 
   changes = gtk_css_style_get_difference (info->values, current);
   g_object_unref (current);
