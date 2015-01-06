@@ -59,6 +59,10 @@ void          gtk_combo_remove_item             (GtkCombo       *combo,
                                                  const gchar    *id);
 
 GDK_AVAILABLE_IN_3_16
+const gchar  *gtk_combo_item_get_text           (GtkCombo       *combo,
+                                                 const gchar    *id);
+
+GDK_AVAILABLE_IN_3_16
 void          gtk_combo_item_set_sort_key       (GtkCombo       *combo,
                                                  const gchar    *id,
                                                  const gchar    *sort);

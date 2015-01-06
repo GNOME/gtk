@@ -1598,6 +1598,20 @@ gtk_combo_add_item (GtkCombo    *combo,
   collapse (combo, list);
 }
 
+const gchar *
+gtk_combo_item_get_text (GtkCombo    *combo,
+                         const gchar *id)
+{
+  GtkWidget *item;
+
+  g_return_val_if_fail (GTK_IS_COMBO (combo), NULL);
+
+  if (!find_item (combo, id, &item, NULL))
+    return NULL;
+
+  return GTK_COMBO_ROW (item)->text;
+}
+
 /**
  * gtk_combo_item_set_sort_key:
  * @combo: a #GtkCombo
