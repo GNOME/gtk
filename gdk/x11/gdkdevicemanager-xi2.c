@@ -1377,6 +1377,7 @@ gdk_x11_device_manager_xi2_translate_event (GdkEventTranslator *translator,
             source_device = g_hash_table_lookup (device_manager->id_table,
                                                  GUINT_TO_POINTER (xev->sourceid));
             gdk_event_set_source_device (event, source_device);
+            gdk_event_set_device_tool (event, source_device->last_tool);
 
             event->button.axes = translate_axes (event->button.device,
                                                  event->button.x,
@@ -1481,6 +1482,7 @@ gdk_x11_device_manager_xi2_translate_event (GdkEventTranslator *translator,
 
         event->motion.device = device;
         gdk_event_set_source_device (event, source_device);
+        gdk_event_set_device_tool (event, source_device->last_tool);
 
         event->motion.state = _gdk_x11_device_xi2_translate_state (&xev->mods, &xev->buttons, &xev->group);
 
