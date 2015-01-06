@@ -828,12 +828,14 @@ list_header_func (GtkListBoxRow *row,
                   GtkListBoxRow *before,
                   gpointer       data)
 {
-  GtkWidget *ret = NULL;
-
-  if (before && !gtk_list_box_row_get_header (row))
+  if (before != NULL)
     {
-      ret = gtk_separator_new (GTK_ORIENTATION_HORIZONTAL);
-      gtk_list_box_row_set_header (row, ret);
+      if (gtk_list_box_row_get_header (row) == NULL)
+        gtk_list_box_row_set_header (row, gtk_separator_new (GTK_ORIENTATION_HORIZONTAL));
+    }
+  else
+    {
+      gtk_list_box_row_set_header (row, NULL);
     }
 }
 
