@@ -32,6 +32,7 @@
 #include <X11/Xlib.h>
 #include <X11/Xutil.h>
 #include <X11/extensions/XInput2.h>
+#include <X11/Xatom.h>
 
 #include <string.h>
 
@@ -543,6 +544,7 @@ gdk_x11_device_manager_xi2_constructed (GObject *object)
   screen = gdk_display_get_default_screen (display);
   XISetMask (mask, XI_HierarchyChanged);
   XISetMask (mask, XI_DeviceChanged);
+  XISetMask (mask, XI_PropertyEvent);
 
   event_mask.deviceid = XIAllDevices;
   event_mask.mask_len = sizeof (mask);
@@ -773,6 +775,68 @@ handle_device_changed (GdkX11DeviceManagerXI2 *device_manager,
 
   if (source_device)
     _gdk_device_xi2_reset_scroll_valuators (GDK_X11_DEVICE_XI2 (source_device));
+}
+
+static guint
+device_get_tool_serial (GdkDevice *device)
+{
+  GdkDisplay *display;
+  gulong nitems, bytes_after;
+  guint serial_id = 0;
+  guint32 *data;
+  int rc, format;
+  Atom type;
+
+  display = gdk_device_get_display (device);
+
+  gdk_x11_display_error_trap_push (display);
+
+  rc = XIGetProperty (GDK_DISPLAY_XDISPLAY (display),
+                      gdk_x11_device_get_id (device),
+                      gdk_x11_get_xatom_by_name_for_display (display, "Wacom Serial IDs"),
+                      0, 4, False, XA_INTEGER, &type, &format, &nitems, &bytes_after,
+                      (guchar **) &data);
+  gdk_x11_display_error_trap_pop_ignored (display);
+
+  if (rc != Success)
+    return 0;
+
+  if (type == XA_INTEGER && format == 32 && nitems >= 4)
+    serial_id = data[3];
+
+  XFree (data);
+
+  return serial_id;
+}
+
+static void
+handle_property_change (GdkX11DeviceManagerXI2 *device_manager,
+                        XIPropertyEvent        *ev)
+{
+  GdkDevice *device;
+
+  device = g_hash_table_lookup (device_manager->id_table,
+                                GUINT_TO_POINTER (ev->deviceid));
+
+  if (ev->property == gdk_x11_get_xatom_by_name ("Wacom Serial IDs"))
+    {
+      GdkDeviceTool *tool = NULL;
+      guint serial_id;
+
+      if (ev->what != XIPropertyDeleted)
+        {
+          serial_id = device_get_tool_serial (device);
+          tool = gdk_device_lookup_tool (device, serial_id);
+
+          if (!tool && serial_id > 0)
+            {
+              tool = gdk_device_tool_new (serial_id);
+              gdk_device_add_tool (device, tool);
+            }
+        }
+
+      gdk_device_update_tool (device, tool);
+    }
 }
 
 static GdkCrossingMode
@@ -1167,6 +1231,11 @@ gdk_x11_device_manager_xi2_translate_event (GdkEventTranslator *translator,
     case XI_DeviceChanged:
       handle_device_changed (device_manager,
                              (XIDeviceChangedEvent *) ev);
+      return_val = FALSE;
+      break;
+    case XI_PropertyEvent:
+      handle_property_change (device_manager,
+                              (XIPropertyEvent *) ev);
       return_val = FALSE;
       break;
     case XI_KeyPress:
