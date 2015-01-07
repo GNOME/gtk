@@ -2842,7 +2842,7 @@ gtk_style_context_update_cache (GtkStyleContext  *context,
   GtkCssStyle *parent;
   gpointer key, value;
 
-  if (_gtk_bitmask_is_empty (parent_changes))
+  if (change == 0 && _gtk_bitmask_is_empty (parent_changes))
     return;
 
   priv = context->priv;
@@ -2951,6 +2951,8 @@ _gtk_style_context_validate (GtkStyleContext  *context,
 
       g_object_unref (static_style);
       g_object_unref (style);
+  
+      gtk_style_context_clear_cache (context);
     }
   else
     {
