@@ -55,7 +55,6 @@ gtk_color_selection_dialog_get_type
 gtk_color_selection_get_type
 gtk_combo_box_get_type
 gtk_combo_box_text_get_type
-gtk_combo_get_type
 gtk_container_get_type
 gtk_css_provider_get_type
 gtk_dialog_get_type
@@ -132,6 +131,8 @@ gtk_mount_operation_get_type
 gtk_notebook_get_type
 gtk_numerable_icon_get_type
 gtk_offscreen_window_get_type
+gtk_option_button_get_type
+gtk_option_list_get_type
 gtk_orientable_get_type
 gtk_overlay_get_type
 gtk_page_setup_get_type

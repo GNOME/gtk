@@ -978,36 +978,57 @@ gtk_combo_box_text_get_type
 </SECTION>
 
 <SECTION>
-<FILE>gtkcombo</FILE>
-<TITLE>GtkCombo</TITLE>
-GtkCombo
-gtk_combo_new
-gtk_combo_add_item
-gtk_combo_remove_item
-gtk_combo_item_set_sort_key
-gtk_combo_item_set_group_key
-gtk_combo_add_group
-gtk_combo_get_active
-gtk_combo_set_active
-gtk_combo_get_placeholder_text
-gtk_combo_set_placeholder_text
-gtk_combo_get_allow_custom
-gtk_combo_set_allow_custom
-gtk_combo_get_custom_text
-gtk_combo_set_custom_text
+<FILE>gtkoptionlist</FILE>
+<TITLE>GtkOptionList</TITLE>
+GtkOptionList
+gtk_option_list_new
+gtk_option_list_add_item
+gtk_option_list_remove_item
+gtk_option_list_item_get_text
+gtk_option_list_item_set_sort_key
+gtk_option_list_item_set_group_key
+gtk_option_list_add_group
+gtk_option_list_get_selected_items
+gtk_option_list_select_item
+gtk_option_list_unselect_item
+gtk_option_list_get_allow_custom
+gtk_option_list_set_allow_custom
+gtk_option_list_get_custom_text
+gtk_option_list_set_custom_text
+gtk_option_list_handle_key_event
 
 <SUBSECTION Standard>
-GTK_TYPE_COMBO
-GTK_COMBO
-GTK_IS_COMBO
-GTK_COMBO_CLASS
-GTK_IS_COMBO_CLASS
-GTK_COMBO_GET_CLASS
+GTK_TYPE_OPTION_LIST
+GTK_OPTION_LIST
+GTK_IS_OPTION_LIST
+GTK_OPTION_LIST_CLASS
+GTK_IS_OPTION_LIST_CLASS
+GTK_OPTION_LIST_GET_CLASS
 
 <SUBSECTION Private>
-gtk_combo_get_type
+gtk_option_list_get_type
 </SECTION>
 
+<SECTION>
+<FILE>gtkoptionbutton</FILE>
+<TITLE>GtkOptionButton</TITLE>
+GtkOptionButton
+gtk_option_button_new
+gtk_option_button_get_option_list
+gtk_option_button_get_placeholder_text
+gtk_option_button_set_placeholder_text
+
+<SUBSECTION Standard>
+GTK_TYPE_OPTION_BUTTON
+GTK_OPTION_BUTTON
+GTK_IS_OPTION_BUTTON
+GTK_OPTION_BUTTON_CLASS
+GTK_IS_OPTION_BUTTON_CLASS
+GTK_OPTION_BUTTON_GET_CLASS
+
+<SUBSECTION Private>
+gtk_option_button_get_type
+</SECTION>
 
 <SECTION>
 <FILE>gtkcontainer</FILE>
