@@ -76,7 +76,6 @@
 #include <gtk/gtkcolorchooserdialog.h>
 #include <gtk/gtkcolorchooserwidget.h>
 #include <gtk/gtkcolorutils.h>
-#include <gtk/gtkcombo.h>
 #include <gtk/gtkcombobox.h>
 #include <gtk/gtkcomboboxtext.h>
 #include <gtk/gtkcontainer.h>
@@ -147,6 +146,8 @@
 #include <gtk/gtkmountoperation.h>
 #include <gtk/gtknotebook.h>
 #include <gtk/gtkoffscreenwindow.h>
+#include <gtk/gtkoptionbutton.h>
+#include <gtk/gtkoptionlist.h>
 #include <gtk/gtkorientable.h>
 #include <gtk/gtkoverlay.h>
 #include <gtk/gtkpagesetup.h>

@@ -341,6 +341,9 @@ gtk/ui/gtkfontchooserwidget.ui
 gtk/ui/gtkinfobar.ui
 gtk/ui/gtklockbutton.ui
 gtk/ui/gtkmessagedialog.ui
+gtk/ui/gtkoptionlist.ui
+gtk/ui/gtkoptionlistrow.ui
+gtk/ui/gtkoptionlisttab.ui
 gtk/ui/gtkpagesetupunixdialog.ui
 gtk/ui/gtkpathbar.ui
 gtk/ui/gtkplacesviewrow.ui

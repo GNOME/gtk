@@ -159,7 +159,6 @@ gtk_public_h_sources = 		\
 	gtkcolorchooserwidget.h	\
 	gtkcolorchooserdialog.h	\
 	gtkcolorutils.h		\
-	gtkcombo.h		\
 	gtkcombobox.h		\
 	gtkcomboboxtext.h	\
 	gtkcontainer.h		\
@@ -231,6 +230,8 @@ gtk_public_h_sources = 		\
 	gtkmountoperation.h	\
 	gtknotebook.h		\
 	gtkoffscreenwindow.h	\
+	gtkoptionbutton.h	\
+	gtkoptionlist.h		\
 	gtkorientable.h		\
 	gtkoverlay.h		\
 	gtkpagesetup.h		\
@@ -609,7 +610,6 @@ gtk_base_c_sources = 		\
 	gtkcolorscale.c		\
 	gtkcolorswatch.c	\
 	gtkcolorutils.c		\
-	gtkcombo.c		\
 	gtkcombobox.c		\
 	gtkcomboboxtext.c	\
 	gtkcontainer.c		\
@@ -753,6 +753,8 @@ gtk_base_c_sources = 		\
 	gtkmountoperation.c	\
 	gtknotebook.c		\
 	gtkoffscreenwindow.c	\
+	gtkoptionbutton.c	\
+	gtkoptionlist.c		\
 	gtkorientable.c		\
 	gtkoverlay.c		\
 	gtkpagesetup.c		\
@@ -1081,10 +1083,7 @@ templates =				\
 	ui/gtkassistant.ui		\
 	ui/gtkcolorchooserdialog.ui	\
 	ui/gtkcoloreditor.ui		\
-	ui/gtkcombo.ui			\
 	ui/gtkcombobox.ui		\
-	ui/gtkcomborow.ui		\
-	ui/gtkcombotab.ui		\
 	ui/gtkdialog.ui			\
 	ui/gtkfilechooserbutton.ui	\
 	ui/gtkfilechooserwidget.ui	\
@@ -1094,7 +1093,11 @@ templates =				\
 	ui/gtkfontchooserwidget.ui	\
 	ui/gtkinfobar.ui		\
 	ui/gtklockbutton.ui		\
-	ui/gtkmessagedialog.ui	\
+	ui/gtkmessagedialog.ui		\
+	ui/gtkoptionbutton.ui		\
+	ui/gtkoptionlist.ui		\
+	ui/gtkoptionlistrow.ui		\
+	ui/gtkoptionlisttab.ui		\
 	ui/gtkpagesetupunixdialog.ui	\
 	ui/gtkpathbar.ui		\
 	ui/gtkplacesview.ui		\
