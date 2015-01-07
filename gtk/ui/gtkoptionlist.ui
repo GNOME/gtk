@@ -1,47 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface domain="gtk30">
   <!-- interface-requires gtk+ 3.10 -->
-  <template class="GtkCombo" parent="GtkBin">
+  <template class="GtkOptionList" parent="GtkBin">
     <property name="custom-text" translatable="yes">Custom Entry</property>
-    <child>
-      <object class="GtkToggleButton" id="button">
-        <property name="visible">True</property>
-        <signal name="key-press-event" handler="button_key_press"/>
-        <child>
-          <object class="GtkBox">
-            <property name="visible">True</property>
-            <property name="orientation">horizontal</property>
-            <property name="spacing">6</property>
-            <child type="center">
-              <object class="GtkLabel" id="selected_label">
-                <property name="visible">True</property>
-                <property name="ellipsize">end</property>
-              </object>
-            </child>
-            <child>
-              <object class="GtkImage">
-                <property name="visible">True</property>
-                <property name="halign">end</property>
-                <property name="valign">center</property>
-                <property name="icon-name">pan-down-symbolic</property>
-                <property name="icon-size">1</property>
-              </object>
-              <packing>
-                <property name="pack-type">end</property>
-              </packing>
-            </child>
-          </object>
-        </child>
-      </object>
-    </child>
-  </template>
-  <object class="GtkPopover" id="popover">
-    <property name="relative-to">button</property>
-    <property name="position">bottom</property>
-    <property name="modal">True</property>
-    <property name="visible" bind-source="button" bind-property="active" bind-flags="bidirectional"/>
-    <signal name="hide" handler="reset_popover"/>
-    <signal name="key-press-event" handler="popover_key_press"/>
+    <signal name="unmap" handler="reset" swapped="yes"/>
     <child>
       <object class="GtkStack" id="stack">
         <property name="visible">True</property>
@@ -62,6 +24,7 @@
                     <property name="width-chars">15</property>
                     <property name="max-width-chars">15</property>
                     <signal name="search-changed" handler="search_changed"/>
+                    <signal name="grab-focus" handler="search_focus_grabbed" after="yes"/>
                   </object>
                 </child>
               </object>
@@ -87,6 +50,7 @@
                     </child>
                     <child>
                       <object class="GtkListBoxRow" id="show_more">
+                        <property name="no-show-all">True</property>
                         <child>
                           <object class="GtkImage">
                             <property name="visible">True</property>
@@ -100,10 +64,11 @@
                       </object>
                     </child>
                     <child>
-                      <object class="GtkComboRow" id="add_custom">
-                        <property name="visible">False</property>
+                      <object class="GtkOptionListRow" id="add_custom">
+                        <property name="no-show-all">True</property>
                         <property name="group">custom</property>
-                        <property name="text" bind-source="GtkCombo" bind-property="custom-text" bind-flags="sync-create"/>
+                        <property name="text" bind-source="GtkOptionList" bind-property="custom-text" bind-flags="sync-create"/>
+                        <property name="visible" bind-source="GtkOptionList" bind-property="allow-custom" bind-flags="sync-create"/>
                       </object>
                     </child>
                   </object>
@@ -126,9 +91,9 @@
                 <property name="width-request">100</property>
                 <signal name="row-activated" handler="list_row_activated"/>
                 <child>
-                  <object class="GtkComboRow" id="back_to_list">
+                  <object class="GtkOptionListRow" id="back_to_list">
                     <property name="group">list</property>
-                    <property name="text" bind-source="GtkCombo" bind-property="custom-text" bind-flags="sync-create"/>
+                    <property name="text" bind-source="GtkOptionList" bind-property="custom-text" bind-flags="sync-create"/>
                     <property name="inverted">True</property>
                   </object>
                 </child>
@@ -170,20 +135,13 @@
         </child>
       </object>
     </child>
-  </object>
+  </template>
   <object class="GtkSizeGroup">
     <property name="mode">horizontal</property>
     <property name="ignore-hidden">False</property>
     <widgets>
       <widget name="search_entry"/>
       <widget name="scrolled_window"/>
-    </widgets>
-  </object>
-  <object class="GtkSizeGroup">
-    <property name="mode">horizontal</property>
-    <widgets>
-      <widget name="button"/>
-      <widget name="stack"/>
     </widgets>
   </object>
   <object class="GtkSizeGroup">

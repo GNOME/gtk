@@ -340,9 +340,9 @@ gtk/ui/gtkapplication-quartz.ui.h
 gtk/ui/gtkassistant.ui.h
 gtk/ui/gtkcolorchooserdialog.ui.h
 gtk/ui/gtkcoloreditor.ui.h
-gtk/ui/gtkcombo.ui.h
-gtk/ui/gtkcomborow.ui.h
-gtk/ui/gtkcombotab.ui.h
+gtk/ui/gtkoptionlist.ui.h
+gtk/ui/gtkoptionlistrow.ui.h
+gtk/ui/gtkoptionlisttab.ui.h
 gtk/ui/gtkdialog.ui.h
 gtk/ui/gtkfilechooserbutton.ui.h
 gtk/ui/gtkfilechooserdialog.ui.h
@@ -353,6 +353,7 @@ gtk/ui/gtkfontchooserwidget.ui.h
 gtk/ui/gtkinfobar.ui.h
 gtk/ui/gtklockbutton.ui.h
 gtk/ui/gtkmessagedialog.ui.h
+gtk/ui/gtkoptionbutton.ui.h
 gtk/ui/gtkpagesetupunixdialog.ui.h
 gtk/ui/gtkpathbar.ui.h
 gtk/ui/gtkprintunixdialog.ui.h

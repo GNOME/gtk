@@ -14,14 +14,14 @@
             <property name="visible">True</property>
             <property name="selection-mode">none</property>
             <child>
-              <object class="GtkComboRow" id="header">
+              <object class="GtkOptionListRow" id="header">
                 <property name="group">list</property>
                 <property name="inverted">True</property>
               </object>
             </child>
             <child>
               <object class="GtkListBoxRow" id="show_more">
-                <property name="visible">True</property>
+                <property name="no-show-all">True</property>
                 <child>
                   <object class="GtkImage">
                     <property name="visible">True</property>

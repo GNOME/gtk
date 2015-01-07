@@ -92,12 +92,12 @@ noinst_PROGRAMS =  $(TEST_PROGS)	\
 	testmenubutton			\
 	testmountoperation		\
 	testmultidisplay		\
-	testnewcombo			\
 	testnotebookdnd			\
 	testnumerableicon		\
 	testnouiprint			\
 	testoffscreen			\
 	testoffscreenwindow		\
+	testoptionlist			\
 	testorientable			\
 	testoverlay			\
 	testoverlaystyleclass		\
@@ -235,12 +235,12 @@ testlockbutton_DEPENDENCIES = $(TEST_DEPS)
 testmenubutton_DEPENDENCIES = $(TEST_DEPS)
 testmountoperation_DEPENDENCIES = $(TEST_DEPS)
 testmultidisplay_DEPENDENCIES = $(TEST_DEPS)
-testnewcombo_DEPENDENCIES = $(TEST_DEPS)
 testnotebookdnd_DEPENDENCIES = $(TEST_DEPS)
 testnouiprint_DEPENDENCIES = $(TEST_DEPS)
 testnumerableicon_DEPENDENCIES = $(TEST_DEPS)
 testoffscreen_DEPENDENCIES = $(TEST_DEPS)
 testoffscreenwindow_DEPENDENCIES = $(TEST_DEPS)
+testoptionlist_DEPENDENCIES = $(TEST_DEPS)
 testappchooser_DEPENDENCIES = $(TEST_DEPS)
 testappchooserbutton_DEPENDENCIES = $(TEST_DEPS)
 testorientable_DEPENDENCIES = $(TEST_DEPS)

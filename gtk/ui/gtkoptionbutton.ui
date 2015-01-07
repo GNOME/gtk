@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface domain="gtk30">
+  <!-- interface-requires gtk+ 3.10 -->
+  <template class="GtkOptionButton" parent="GtkBin">
+    <child>
+      <object class="GtkToggleButton" id="button">
+        <property name="visible">True</property>
+        <signal name="key-press-event" handler="button_key_press"/>
+        <child>
+          <object class="GtkBox">
+            <property name="visible">True</property>
+            <property name="orientation">horizontal</property>
+            <property name="spacing">6</property>
+            <child type="center">
+              <object class="GtkLabel" id="label">
+                <property name="visible">True</property>
+                <property name="ellipsize">end</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkImage">
+                <property name="visible">True</property>
+                <property name="halign">end</property>
+                <property name="valign">center</property>
+                <property name="icon-name">pan-down-symbolic</property>
+                <property name="icon-size">1</property>
+              </object>
+              <packing>
+                <property name="pack-type">end</property>
+              </packing>
+            </child>
+          </object>
+        </child>
+      </object>
+    </child>
+  </template>
+  <object class="GtkPopover" id="popover">
+    <property name="relative-to">button</property>
+    <property name="position">bottom</property>
+    <property name="modal">True</property>
+    <property name="visible" bind-source="button" bind-property="active" bind-flags="bidirectional"/>
+    <signal name="key-press-event" handler="popover_key_press"/>
+    <child>
+      <object class="GtkOptionList" id="list">
+        <property name="visible">True</property>
+        <signal name="notify::selected" handler="selected_changed"/>
+      </object>
+    </child>
+  </object>
+  <object class="GtkSizeGroup">
+    <property name="mode">horizontal</property>
+    <widgets>
+      <widget name="button"/>
+      <widget name="list"/>
+    </widgets>
+  </object>
+</interface>
