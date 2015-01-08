@@ -288,7 +288,7 @@ redraw_transient (GdkWindow *window)
   gdk_window_invalidate_rect (GDK_MIR_WINDOW_IMPL (window->impl)->transient_for, &r, FALSE);
 }
 
-/* Remove once we have proper transient window support. */
+/* TODO: Remove once we have proper transient window support. */
 static gboolean
 should_render_in_parent (GdkWindow *window)
 {

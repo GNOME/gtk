@@ -292,6 +292,47 @@ handle_key_event (GdkWindow *window, const MirKeyEvent *event)
     }
 }
 
+/* TODO: Remove once we have proper transient window support. */
+typedef struct
+{
+  GdkWindow *except;
+  gdouble    x;
+  gdouble    y;
+  guint32    time;
+} LeaveInfo;
+
+/* TODO: Remove once we have proper transient window support. */
+/*
+ * leave_windows_except:
+ *
+ * Generate a leave event for every window except the one the cursor is in.
+ */
+static void
+leave_windows_except (GdkWindow *window,
+                      gpointer   user_data)
+{
+  LeaveInfo info = *((LeaveInfo *) user_data);
+
+  info.x -= window->x;
+  info.y -= window->y;
+
+  _gdk_mir_window_transient_children_foreach (window, leave_windows_except, &info);
+
+  if (window != info.except)
+    {
+      GdkMirWindowImpl *impl = GDK_MIR_WINDOW_IMPL (window->impl);
+      gboolean cursor_inside;
+      MirMotionButton button_state;
+
+      _gdk_mir_window_impl_get_cursor_state (impl, NULL, NULL, &cursor_inside, &button_state);
+
+      if (cursor_inside)
+        generate_crossing_event (window, GDK_LEAVE_NOTIFY, info.x, info.y, info.time);
+
+      _gdk_mir_window_impl_set_cursor_state (impl, info.x, info.y, FALSE, button_state);
+    }
+}
+
 static void
 handle_motion_event (GdkWindow *window, const MirMotionEvent *event)
 {
@@ -313,36 +354,85 @@ handle_motion_event (GdkWindow *window, const MirMotionEvent *event)
   modifier_state = get_modifier_state (event->modifiers, event->button_state);
   event_time = NANO_TO_MILLI (event->event_time);
 
-  /* Update which window has focus */
-  _gdk_mir_pointer_set_location (get_pointer (window), x, y, window, modifier_state);
-  switch (event->action)
+  /* TODO: Remove once we have proper transient window support. */
+  if (event->action == mir_motion_action_hover_exit)
     {
-    case mir_motion_action_down:
-    case mir_motion_action_up:
-      event_type = event->action == mir_motion_action_down ? GDK_BUTTON_PRESS : GDK_BUTTON_RELEASE;
-      changed_button_state = button_state ^ event->button_state;
-      if (changed_button_state == 0 || (changed_button_state & mir_motion_button_primary) != 0)
-        generate_button_event (window, event_type, x, y, GDK_BUTTON_PRIMARY, modifier_state, event_time);
-      if ((changed_button_state & mir_motion_button_secondary) != 0)
-        generate_button_event (window, event_type, x, y, GDK_BUTTON_SECONDARY, modifier_state, event_time);
-      if ((changed_button_state & mir_motion_button_tertiary) != 0)
-        generate_button_event (window, event_type, x, y, GDK_BUTTON_MIDDLE, modifier_state, event_time);
-      button_state = event->button_state;
-      break;
-    case mir_motion_action_scroll:
-      generate_scroll_event (window, x, y, event->pointer_coordinates[0].hscroll, event->pointer_coordinates[0].vscroll, modifier_state, event_time);
-      break;
-    case mir_motion_action_move: // move with button
-    case mir_motion_action_hover_move: // move without button
-      generate_motion_event (window, x, y, modifier_state, event_time);
-      break;
-    case mir_motion_action_hover_exit:
-      cursor_inside = FALSE;
-      generate_crossing_event (window, GDK_LEAVE_NOTIFY, x, y, event_time);
-      break;
+      LeaveInfo info;
+
+      info.x = x;
+      info.y = y;
+      info.time = event_time;
+      info.except = window;
+
+      /* Leave all transient children from leaf to root, except the root since we do it later. */
+      _gdk_mir_window_transient_children_foreach (window, leave_windows_except, &info);
+    }
+  else
+    {
+      LeaveInfo info;
+
+      info.x = x;
+      info.y = y;
+      info.time = event_time;
+      info.except = _gdk_mir_window_get_visible_transient_child (window, x, y, &x, &y);
+
+      /* Leave all transient children from leaf to root, except the pointer window since we enter it. */
+      _gdk_mir_window_transient_children_foreach (window, leave_windows_except, &info);
+
+      window = info.except;
+
+      if (window)
+        {
+          /* Enter the pointer window. */
+          gboolean cursor_inside_pointer_window;
+
+          impl = GDK_MIR_WINDOW_IMPL (window->impl);
+          _gdk_mir_window_impl_get_cursor_state (impl, NULL, NULL, &cursor_inside_pointer_window, NULL);
+
+          if (!cursor_inside_pointer_window)
+            {
+              generate_crossing_event (window, GDK_ENTER_NOTIFY, x, y, event_time);
+              _gdk_mir_window_impl_set_cursor_state (impl, x, y, TRUE, event->button_state);
+            }
+        }
     }
 
-  _gdk_mir_window_impl_set_cursor_state (impl, x, y, cursor_inside, button_state);
+  if (window)
+    {
+      /* Update which window has focus */
+      _gdk_mir_pointer_set_location (get_pointer (window), x, y, window, modifier_state);
+      switch (event->action)
+        {
+        case mir_motion_action_down:
+        case mir_motion_action_up:
+          event_type = event->action == mir_motion_action_down ? GDK_BUTTON_PRESS : GDK_BUTTON_RELEASE;
+          changed_button_state = button_state ^ event->button_state;
+          if (changed_button_state == 0 || (changed_button_state & mir_motion_button_primary) != 0)
+            generate_button_event (window, event_type, x, y, GDK_BUTTON_PRIMARY, modifier_state, event_time);
+          if ((changed_button_state & mir_motion_button_secondary) != 0)
+            generate_button_event (window, event_type, x, y, GDK_BUTTON_SECONDARY, modifier_state, event_time);
+          if ((changed_button_state & mir_motion_button_tertiary) != 0)
+            generate_button_event (window, event_type, x, y, GDK_BUTTON_MIDDLE, modifier_state, event_time);
+          button_state = event->button_state;
+          break;
+        case mir_motion_action_scroll:
+          generate_scroll_event (window, x, y, event->pointer_coordinates[0].hscroll, event->pointer_coordinates[0].vscroll, modifier_state, event_time);
+          break;
+        case mir_motion_action_move: // move with button
+        case mir_motion_action_hover_move: // move without button
+          generate_motion_event (window, x, y, modifier_state, event_time);
+          break;
+        case mir_motion_action_hover_exit:
+          if (cursor_inside)
+            {
+              cursor_inside = FALSE;
+              generate_crossing_event (window, GDK_LEAVE_NOTIFY, x, y, event_time);
+            }
+          break;
+        }
+
+      _gdk_mir_window_impl_set_cursor_state (impl, x, y, cursor_inside, button_state);
+    }
 }
 
 static void
