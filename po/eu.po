@@ -4,15 +4,15 @@
 # Joseba Bidaurrazaga van Dierdonck <gcpbivaj@lg.ehu.es>, 1999-2000.
 # Hizkuntza Politikarako Sailburuordetza <hizpol@ej-gv.es>, 2004.
 # Iñaki Larrañaga Murgoitio <dooteo@zundan.com>, 2004, 2005, 2006, 2007, 2008, 2009, 2010.
-# Iñaki Larrañaga Murgoitio <dooteo@zundan.com>, 2011, 2012, 2013, 2014.
+# Iñaki Larrañaga Murgoitio <dooteo@zundan.com>, 2011, 2012, 2013, 2014, 2015.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ master\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gtk"
 "%2b&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2014-12-31 17:42+0100\n"
-"PO-Revision-Date: 2014-12-31 17:45+0100\n"
+"POT-Creation-Date: 2015-01-08 18:26+0100\n"
+"PO-Revision-Date: 2015-01-08 18:31+0100\n"
 "Last-Translator: Iñaki Larrañaga Murgoitio <dooteo@zundan.com>\n"
 "Language-Team: Basque <librezale@librezale.org>\n"
 "Language: eu\n"
@@ -1728,7 +1728,7 @@ msgstr "Kudeatu gabeko etiketa: <%s>"
 #. * text direction of RTL and specify "calendar:YM", then the year
 #. * will appear to the right of the month.
 #.
-#: ../gtk/gtkcalendar.c:798
+#: ../gtk/gtkcalendar.c:804
 msgid "calendar:MY"
 msgstr "calendar:YM"
 
@@ -1736,7 +1736,7 @@ msgstr "calendar:YM"
 #. * first day of the week to calendar:week_start:1 if you want Monday
 #. * to be the first day of the week, and so on.
 #.
-#: ../gtk/gtkcalendar.c:836
+#: ../gtk/gtkcalendar.c:842
 msgid "calendar:week_start:0"
 msgstr "calendar:week_start:1"
 
@@ -1745,7 +1745,7 @@ msgstr "calendar:week_start:1"
 #. *
 #. * If you don't understand this, leave it as "2000"
 #.
-#: ../gtk/gtkcalendar.c:1862
+#: ../gtk/gtkcalendar.c:1868
 msgctxt "year measurement template"
 msgid "2000"
 msgstr "2000"
@@ -1760,7 +1760,7 @@ msgstr "2000"
 #. * digits. That needs support from your system and locale definition
 #. * too.
 #.
-#: ../gtk/gtkcalendar.c:1893 ../gtk/gtkcalendar.c:2571
+#: ../gtk/gtkcalendar.c:1899 ../gtk/gtkcalendar.c:2577
 #, c-format
 msgctxt "calendar:day:digits"
 msgid "%d"
@@ -1776,7 +1776,7 @@ msgstr "%d"
 #. * digits. That needs support from your system and locale definition
 #. * too.
 #.
-#: ../gtk/gtkcalendar.c:1925 ../gtk/gtkcalendar.c:2437
+#: ../gtk/gtkcalendar.c:1931 ../gtk/gtkcalendar.c:2443
 #, c-format
 msgctxt "calendar:week:digits"
 msgid "%d"
@@ -1792,7 +1792,7 @@ msgstr "%d"
 #. *
 #. * "%Y" is appropriate for most locales.
 #.
-#: ../gtk/gtkcalendar.c:2216
+#: ../gtk/gtkcalendar.c:2222
 msgctxt "calendar year format"
 msgid "%Y"
 msgstr "%Y"
@@ -3580,7 +3580,7 @@ msgstr "GBUA bisuala"
 
 #: ../gtk/inspector/general.ui.h:6
 msgid "Composited"
-msgstr ""
+msgstr "Konposatua"
 
 #: ../gtk/inspector/general.ui.h:7
 msgid "GL Version"
@@ -3668,9 +3668,8 @@ msgid "Frame rate"
 msgstr "Fotograma-emaria"
 
 #: ../gtk/inspector/misc-info.ui.h:14
-#, fuzzy
 msgid "Accessible role"
-msgstr "Egiteko erabilgarria"
+msgstr "Portaera erabilgarria"
 
 #: ../gtk/inspector/misc-info.ui.h:15
 msgid "Mapped"
@@ -3868,7 +3867,7 @@ msgstr "Mota"
 
 #: ../gtk/inspector/statistics.ui.h:2
 msgid "Self 1"
-msgstr ""
+msgstr "Norberarena 1"
 
 #: ../gtk/inspector/statistics.ui.h:3
 msgid "Cumulative 1"
@@ -3876,7 +3875,7 @@ msgstr "1. metakorra"
 
 #: ../gtk/inspector/statistics.ui.h:4
 msgid "Self 2"
-msgstr ""
+msgstr "Norberarena 2"
 
 #: ../gtk/inspector/statistics.ui.h:5
 msgid "Cumulative 2"
@@ -3884,7 +3883,7 @@ msgstr "2. metakorra"
 
 #: ../gtk/inspector/statistics.ui.h:6
 msgid "Self"
-msgstr ""
+msgstr "Norberarena"
 
 #: ../gtk/inspector/statistics.ui.h:7
 msgid "Cumulative"
@@ -3930,19 +3929,16 @@ msgid "GTK+ Theme"
 msgstr "GTK+ gaia"
 
 #: ../gtk/inspector/visual.ui.h:2
-#, fuzzy
 msgid "Dark Variant"
 msgstr "Aldaera iluna"
 
 #: ../gtk/inspector/visual.ui.h:3
-#, fuzzy
 msgid "Cursor Theme"
-msgstr "Ikonoen gaia"
+msgstr "Kurtsorearen gaia"
 
 #: ../gtk/inspector/visual.ui.h:4
-#, fuzzy
 msgid "Cursor Size"
-msgstr "%d tamaina pertsonalizatua"
+msgstr "Kurtsorearen tamaina"
 
 #: ../gtk/inspector/visual.ui.h:5
 msgid "Icon Theme"
@@ -3989,7 +3985,6 @@ msgid "Recording"
 msgstr "Grabazioa"
 
 #: ../gtk/inspector/visual.ui.h:16
-#, fuzzy
 msgid "Show Graphic Updates"
 msgstr "Erakutsi eguneraketa grafikoak"
 
@@ -4022,12 +4017,10 @@ msgid "Disabled"
 msgstr "Desgaituta"
 
 #: ../gtk/inspector/visual.ui.h:24
-#, fuzzy
 msgid "Software GL"
 msgstr "Software bidezko GL"
 
 #: ../gtk/inspector/visual.ui.h:25
-#, fuzzy
 msgid "Software Surfaces"
 msgstr "Software bidezko gainazalerak"
 
@@ -4085,7 +4078,7 @@ msgstr "CSSa"
 
 #: ../gtk/inspector/window.ui.h:16
 msgid "Size Groups"
-msgstr ""
+msgstr "Taldeen tamaina"
 
 #: ../gtk/inspector/window.ui.h:17
 msgid "Data"
@@ -4101,7 +4094,7 @@ msgstr "Keinuak"
 
 #: ../gtk/inspector/window.ui.h:21
 msgid "Magnifier"
-msgstr ""
+msgstr "Lupa"
 
 #: ../gtk/inspector/window.ui.h:22
 msgid "Objects"
@@ -4871,7 +4864,7 @@ msgstr "#9 gutun-azala"
 #: ../gtk/paper_names_offsets.c:153
 msgctxt "paper size"
 msgid "Oficio"
-msgstr ""
+msgstr "Oficio"
 
 #: ../gtk/paper_names_offsets.c:154
 msgctxt "paper size"
