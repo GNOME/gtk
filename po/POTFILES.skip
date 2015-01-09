@@ -242,6 +242,8 @@ testsuite/reftests/sizegroups-evolution-identity-page.ref.ui
 testsuite/reftests/sizegroups-evolution-identity-page.ui
 testsuite/reftests/sizegroups-get-preferred-null.ref.ui
 testsuite/reftests/sizegroups-get-preferred-null.ui
+testsuite/reftests/style-context-save-inheritance.ref.ui
+testsuite/reftests/style-context-save-inheritance.ui
 testsuite/reftests/textview-margins.ref.ui
 testsuite/reftests/textview-margins.ui
 testsuite/reftests/toplevel-vs-popup.ref.ui
