@@ -97,6 +97,12 @@ void            gtk_popover_bind_model      (GtkPopover            *popover,
                                              GMenuModel            *model,
                                              const gchar           *action_namespace);
 
+GDK_AVAILABLE_IN_3_16
+void            gtk_popover_set_transitions_enabled (GtkPopover *popover,
+                                                     gboolean    transitions_enabled);
+GDK_AVAILABLE_IN_3_16
+gboolean        gtk_popover_get_transitions_enabled (GtkPopover *popover);
+
 G_END_DECLS
 
 #endif /* __GTK_POPOVER_H__ */

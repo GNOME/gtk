@@ -7965,6 +7965,8 @@ gtk_popover_set_position
 gtk_popover_get_position
 gtk_popover_set_modal
 gtk_popover_get_modal
+gtk_popover_set_transitions_enabled
+gtk_popover_get_transitions_enabled
 <SUBSECTION Private>
 gtk_popover_get_type
 </SECTION>
