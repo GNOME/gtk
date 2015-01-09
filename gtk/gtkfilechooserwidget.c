@@ -529,6 +529,9 @@ static void     search_entry_activate_cb     (GtkEntry              *entry,
 					      gpointer               data);
 static void     settings_load                (GtkFileChooserWidget *impl);
 
+static void     show_filters                 (GtkFileChooserWidget *impl,
+                                              gboolean               show);
+
 static void     recent_start_loading         (GtkFileChooserWidget *impl);
 static void     recent_stop_loading          (GtkFileChooserWidget *impl);
 static void     recent_clear_model           (GtkFileChooserWidget *impl,
@@ -2211,7 +2214,8 @@ set_extra_widget (GtkFileChooserWidget *impl,
   else
     gtk_widget_hide (priv->extra_align);
 
-  update_extra_and_filters (impl);
+  /* Calls update_extra_and_filters */
+  show_filters (impl, priv->filters != NULL);
 }
 
 static void
