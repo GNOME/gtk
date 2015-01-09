@@ -391,10 +391,16 @@ gtk_scrolled_window_leave_notify (GtkWidget *widget,
 {
   GtkScrolledWindowPrivate *priv = GTK_SCROLLED_WINDOW (widget)->priv;
 
-  indicator_set_over (&priv->hindicator, FALSE);
-  indicator_start_fade (&priv->hindicator, 0.0);
-  indicator_set_over (&priv->vindicator, FALSE);
-  indicator_start_fade (&priv->vindicator, 0.0);
+  if (priv->hindicator.enabled)
+    {
+      indicator_set_over (&priv->hindicator, FALSE);
+      indicator_start_fade (&priv->hindicator, 0.0);
+    }
+  if (priv->vindicator.enabled)
+    {
+      indicator_set_over (&priv->vindicator, FALSE);
+      indicator_start_fade (&priv->vindicator, 0.0);
+    }
 
   return GDK_EVENT_PROPAGATE;
 }
@@ -1040,12 +1046,17 @@ captured_event_cb (GtkWidget *widget,
   GdkDevice *source_device;
   gboolean indicator_close;
 
+  sw = GTK_SCROLLED_WINDOW (widget);
+  priv = sw->priv;
+
+  if (!priv->hindicator.enabled &&
+      !priv->vindicator.enabled)
+    return GDK_EVENT_PROPAGATE;
+
   if (event->type != GDK_MOTION_NOTIFY &&
       event->type != GDK_LEAVE_NOTIFY)
     return GDK_EVENT_PROPAGATE;
 
-  sw = GTK_SCROLLED_WINDOW (widget);
-  priv = sw->priv;
   source_device = gdk_event_get_source_device (event);
   input_source = gdk_device_get_source (source_device);
 
