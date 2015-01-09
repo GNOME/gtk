@@ -53,7 +53,7 @@
  *
  * |[<!-- language="C" -->
  *   GtkWidget *box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 6);
- *   GtkWidget *icon = gtk_image_new_from_icon_name ("folder-music-symbolic, GTK_ICON_SIZE_MENU);
+ *   GtkWidget *icon = gtk_image_new_from_icon_name ("folder-music-symbolic", GTK_ICON_SIZE_MENU);
  *   GtkWidget *label = gtk_label_new ("Music");
  *   GtkWidget *menu_item = gtk_menu_item_new ();
  *
