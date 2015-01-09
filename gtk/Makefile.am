@@ -397,6 +397,7 @@ gtk_private_h_sources =		\
 	gtkcsskeyframesprivate.h	\
 	gtkcsslookupprivate.h	\
 	gtkcssmatcherprivate.h	\
+	gtkcssnodeprivate.h		\
 	gtkcssnodedeclarationprivate.h	\
 	gtkcssnumbervalueprivate.h	\
 	gtkcssparserprivate.h	\
@@ -627,6 +628,7 @@ gtk_base_c_sources = 		\
 	gtkcsskeyframes.c	\
 	gtkcsslookup.c		\
 	gtkcssmatcher.c		\
+	gtkcssnode.c		\
 	gtkcssnodedeclaration.c	\
 	gtkcssnumbervalue.c	\
 	gtkcssparser.c		\
