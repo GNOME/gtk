@@ -689,6 +689,12 @@ gettext_initialization (void)
 }
 
 static void
+default_display_notify_cb (GdkDisplayManager *dm)
+{
+  _gtk_accessibility_init ();
+}
+
+static void
 do_post_parse_initialization (int    *argc,
                               char ***argv)
 {
@@ -719,11 +725,8 @@ do_post_parse_initialization (int    *argc,
 
   _gtk_accel_map_init ();
 
-  /* Set the 'initialized' flag.
-   */
   gtk_initialized = TRUE;
 
-  /* load gtk modules */
   if (gtk_modules_string)
     {
       _gtk_modules_init (argc, argv, gtk_modules_string->str);
@@ -734,7 +737,9 @@ do_post_parse_initialization (int    *argc,
       _gtk_modules_init (argc, argv, NULL);
     }
 
-  _gtk_accessibility_init ();
+  g_signal_connect (gdk_display_manager_get (), "notify::default-display",
+                    G_CALLBACK (default_display_notify_cb),
+                    NULL);
 }
 
 
