@@ -168,6 +168,11 @@ gtk_cell_renderer_pixbuf_class_init (GtkCellRendererPixbufClass *class)
 							P_("Pixbuf for closed expander"),
 							GDK_TYPE_PIXBUF,
 							GTK_PARAM_READWRITE));
+  /**
+   * GtkCellRendererPixbuf:surface:
+   *
+   * Since: 3.10
+   */
   g_object_class_install_property (object_class,
 				   PROP_SURFACE,
 				   g_param_spec_boxed ("surface",
