@@ -167,7 +167,6 @@
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="hscrollbar_policy">never</property>
-                        <property name="vscrollbar_policy">always</property>
                         <property name="shadow_type">none</property>
                         <child>
                           <object class="GtkTreeView" id="browse_files_tree_view">
