@@ -57,7 +57,6 @@
                             <property name="visible">True</property>
                             <property name="halign">end</property>
                             <property name="valign">baseline</property>
-                            <signal name="changed" handler="theme_changed"/>
                           </object>
                           <packing>
                             <property name="expand">True</property>
@@ -124,7 +123,6 @@
                             <property name="visible">True</property>
                             <property name="halign">end</property>
                             <property name="valign">baseline</property>
-                            <signal name="changed" handler="cursors_changed"/>
                           </object>
                           <packing>
                             <property name="expand">True</property>
@@ -193,7 +191,6 @@
                             <property name="visible">True</property>
                             <property name="halign">end</property>
                             <property name="valign">baseline</property>
-                            <signal name="changed" handler="icons_changed"/>
                           </object>
                           <packing>
                             <property name="expand">True</property>
