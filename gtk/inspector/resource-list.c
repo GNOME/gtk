@@ -83,6 +83,7 @@ load_resources_recurse (GtkInspectorResourceList *sl,
   gchar **names;
   gint i;
   GtkTreeIter iter;
+  guint64 stored_size;
 
   names = g_resources_enumerate_children (path, 0, NULL);
   for (i = 0; names[i]; i++)
@@ -124,9 +125,10 @@ load_resources_recurse (GtkInspectorResourceList *sl,
           *size_out += size;
         }
 
+      stored_size = size;
       gtk_tree_store_set (sl->priv->model, &iter,
                           COLUMN_COUNT, count,
-                          COLUMN_SIZE, size,
+                          COLUMN_SIZE, stored_size,
                           -1);
 
       g_free (p);
@@ -147,6 +149,7 @@ populate_details (GtkInspectorResourceList *rl,
   gconstpointer data;
   gint count;
   gsize size;
+  guint64 stored_size;
   GError *error = NULL;
   gchar *markup;
 
@@ -157,8 +160,9 @@ populate_details (GtkInspectorResourceList *rl,
                       COLUMN_PATH, &path,
                       COLUMN_NAME, &name,
                       COLUMN_COUNT, &count,
-                      COLUMN_SIZE, &size,
+                      COLUMN_SIZE, &stored_size,
                       -1);
+  size = stored_size;
 
    if (g_str_has_suffix (path, "/"))
      {
@@ -192,7 +196,7 @@ populate_details (GtkInspectorResourceList *rl,
       text = g_format_size (size);
       gtk_label_set_text (GTK_LABEL (rl->priv->size_label), text);
       g_free (text);
-       
+
       if (g_content_type_is_a (type, "text/*"))
         {
           gtk_text_buffer_set_text (rl->priv->buffer, data, -1);
@@ -340,10 +344,12 @@ size_data_func (GtkTreeViewColumn *col,
                 GtkTreeIter       *iter,
                 gpointer           data)
 {
-  gint size;
+  gsize size;
+  guint64 stored_size;
   gchar *text;
 
-  gtk_tree_model_get (model, iter, COLUMN_SIZE, &size, -1);
+  gtk_tree_model_get (model, iter, COLUMN_SIZE, &stored_size, -1);
+  size = stored_size;
   text = g_format_size (size);
   g_object_set (cell, "text", text, NULL);
   g_free (text);
