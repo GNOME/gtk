@@ -36,6 +36,7 @@ struct _GtkInspectorMiscInfoPrivate {
 
   GObject *object;
 
+  GtkWidget *address;
   GtkWidget *refcount_row;
   GtkWidget *refcount;
   GtkWidget *state_row;
@@ -258,7 +259,7 @@ show_focus_widget (GtkWidget *button, GtkInspectorMiscInfo *sl)
 
   widget = gtk_window_get_focus (GTK_WINDOW (sl->priv->object));
   if (widget)
-    show_object (sl, G_OBJECT (widget), "properties"); 
+    show_object (sl, G_OBJECT (widget), "properties");
 }
 
 static void
@@ -277,13 +278,17 @@ update_info (gpointer data)
   GtkInspectorMiscInfo *sl = data;
   gchar *tmp;
 
+  tmp = g_strdup_printf ("%p", sl->priv->object);
+  gtk_label_set_text (GTK_LABEL (sl->priv->address), tmp);
+  g_free (tmp);
+
   if (G_IS_OBJECT (sl->priv->object))
     {
       tmp = g_strdup_printf ("%d", sl->priv->object->ref_count);
       gtk_label_set_text (GTK_LABEL (sl->priv->refcount), tmp);
       g_free (tmp);
     }
-  
+
   if (GTK_IS_WIDGET (sl->priv->object))
     {
       AtkObject *accessible;
@@ -549,6 +554,7 @@ gtk_inspector_misc_info_class_init (GtkInspectorMiscInfoClass *klass)
                            GTK_TYPE_WIDGET, G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY));
 
   gtk_widget_class_set_template_from_resource (widget_class, "/org/gtk/libgtk/inspector/misc-info.ui");
+  gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorMiscInfo, address);
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorMiscInfo, refcount_row);
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorMiscInfo, refcount);
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorMiscInfo, state_row);

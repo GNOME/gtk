@@ -1,3 +1,4 @@
+N_("Address");
 N_("Reference count");
 N_("State");
 N_("Buildable ID");
