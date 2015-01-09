@@ -1064,7 +1064,7 @@ captured_event_cb (GtkWidget *widget,
 
       if (!indicator_close)
         {
-          /* Otherwise check the vertical scrollbar */
+          /* Otherwise check the horizontal scrollbar */
           check_update_scrollbar_proximity (sw, &priv->hindicator, event);
         }
       else
