@@ -198,7 +198,9 @@
                                 <property name="title" translatable="yes">Name</property>
                                 <property name="expand">True</property>
                                 <child>
-                                  <object class="GtkCellRendererPixbuf" id="list_pixbuf_renderer"/>
+                                  <object class="GtkCellRendererPixbuf" id="list_pixbuf_renderer">
+                                    <property name="xpad">6</property>
+                                  </object>
                                 </child>
                                 <child>
                                   <object class="GtkCellRendererText" id="list_name_renderer">
