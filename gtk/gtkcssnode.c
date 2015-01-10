@@ -19,6 +19,13 @@
 
 #include "gtkcssnodeprivate.h"
 
+struct _GtkCssNode
+{
+  GtkCssNodeDeclaration *decl;
+  GtkCssNode            *parent;
+  GtkCssStyle           *style;
+};
+
 GtkCssNode *
 gtk_css_node_new (void)
 {
@@ -30,6 +37,18 @@ gtk_css_node_new (void)
   return cssnode;
 }
 
+GtkCssNode *
+gtk_css_node_copy (GtkCssNode *cssnode)
+{
+  GtkCssNode *copy;
+
+  copy = gtk_css_node_new ();
+  gtk_css_node_declaration_unref (copy->decl);
+  copy->decl = gtk_css_node_declaration_ref (cssnode->decl);
+
+  return copy;
+}
+
 void
 gtk_css_node_free (GtkCssNode *cssnode)
 {
@@ -37,6 +56,13 @@ gtk_css_node_free (GtkCssNode *cssnode)
     g_object_unref (cssnode->style);
   gtk_css_node_declaration_unref (cssnode->decl);
   g_slice_free (GtkCssNode, cssnode);
+}
+
+void
+gtk_css_node_set_parent (GtkCssNode *cssnode,
+                         GtkCssNode *parent)
+{
+  cssnode->parent = parent;
 }
 
 GtkCssNode *
@@ -67,3 +93,123 @@ gtk_css_node_get_style (GtkCssNode *cssnode)
   return cssnode->style;
 }
 
+void
+gtk_css_node_set_widget_type (GtkCssNode *cssnode,
+                              GType       widget_type)
+{
+  gtk_css_node_declaration_set_type (&cssnode->decl, widget_type);
+}
+
+GType
+gtk_css_node_get_widget_type (GtkCssNode *cssnode)
+{
+  return gtk_css_node_declaration_get_type (cssnode->decl);
+}
+
+gboolean
+gtk_css_node_set_id (GtkCssNode *cssnode,
+                     const char *id)
+{
+  return gtk_css_node_declaration_set_id (&cssnode->decl, id);
+}
+
+const char *
+gtk_css_node_get_id (GtkCssNode *cssnode)
+{
+  return gtk_css_node_declaration_get_id (cssnode->decl);
+}
+
+gboolean
+gtk_css_node_set_state (GtkCssNode    *cssnode,
+                        GtkStateFlags  state_flags)
+{
+  return gtk_css_node_declaration_set_state (&cssnode->decl, state_flags);
+}
+
+GtkStateFlags
+gtk_css_node_get_state (GtkCssNode *cssnode)
+{
+  return gtk_css_node_declaration_get_state (cssnode->decl);
+}
+
+void
+gtk_css_node_set_junction_sides (GtkCssNode       *cssnode,
+                                 GtkJunctionSides  junction_sides)
+{
+  gtk_css_node_declaration_set_junction_sides (&cssnode->decl, junction_sides);
+}
+
+GtkJunctionSides
+gtk_css_node_get_junction_sides (GtkCssNode *cssnode)
+{
+  return gtk_css_node_declaration_get_junction_sides (cssnode->decl);
+}
+
+gboolean
+gtk_css_node_add_class (GtkCssNode *cssnode,
+                        GQuark      style_class)
+{
+  return gtk_css_node_declaration_add_class (&cssnode->decl, style_class);
+}
+
+gboolean
+gtk_css_node_remove_class (GtkCssNode *cssnode,
+                           GQuark      style_class)
+{
+  return gtk_css_node_declaration_remove_class (&cssnode->decl, style_class);
+}
+
+gboolean
+gtk_css_node_has_class (GtkCssNode *cssnode,
+                        GQuark      style_class)
+{
+  return gtk_css_node_declaration_has_class (cssnode->decl, style_class);
+}
+
+GList *
+gtk_css_node_list_classes (GtkCssNode *cssnode)
+{
+  return gtk_css_node_declaration_list_classes (cssnode->decl);
+}
+
+gboolean
+gtk_css_node_add_region (GtkCssNode     *cssnode,
+                         GQuark          region,
+                         GtkRegionFlags  flags)
+{
+  return gtk_css_node_declaration_add_region (&cssnode->decl, region, flags);
+}
+
+gboolean
+gtk_css_node_remove_region (GtkCssNode *cssnode,
+                            GQuark      region)
+{
+  return gtk_css_node_declaration_remove_region (&cssnode->decl, region);
+}
+
+gboolean
+gtk_css_node_has_region (GtkCssNode     *cssnode,
+                         GQuark          region,
+                         GtkRegionFlags *out_flags)
+{
+  return gtk_css_node_declaration_has_region (cssnode->decl, region, out_flags);
+}
+
+GList *
+gtk_css_node_list_regions (GtkCssNode *cssnode)
+{
+  return gtk_css_node_declaration_list_regions (cssnode->decl);
+}
+
+
+const GtkCssNodeDeclaration *
+gtk_css_node_get_declaration (GtkCssNode *cssnode)
+{
+  return cssnode->decl;
+}
+
+GtkCssNodeDeclaration *
+gtk_css_node_dup_declaration (GtkCssNode *cssnode)
+{
+  return gtk_css_node_declaration_ref (cssnode->decl);
+}

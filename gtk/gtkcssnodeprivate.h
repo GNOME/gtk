@@ -25,18 +25,48 @@ G_BEGIN_DECLS
 
 typedef struct _GtkCssNode GtkCssNode;
 
-struct _GtkCssNode
-{
-  GtkCssNodeDeclaration *decl;
-  GtkCssNode            *parent;
-  GtkCssStyle           *style;
-};
-
 GtkCssNode *            gtk_css_node_new                (void);
+GtkCssNode *            gtk_css_node_copy               (GtkCssNode            *cssnode);
 
 void                    gtk_css_node_free               (GtkCssNode            *cssnode);
 
+void                    gtk_css_node_set_parent         (GtkCssNode            *cssnode,
+                                                         GtkCssNode            *parent);
 GtkCssNode *            gtk_css_node_get_parent         (GtkCssNode            *cssnode);
+
+void                    gtk_css_node_set_widget_type    (GtkCssNode            *cssnode,
+                                                         GType                  widget_type);
+GType                   gtk_css_node_get_widget_type    (GtkCssNode            *cssnode);
+gboolean                gtk_css_node_set_id             (GtkCssNode            *cssnode,
+                                                         const char            *id);
+const char *            gtk_css_node_get_id             (GtkCssNode            *cssnode);
+gboolean                gtk_css_node_set_state          (GtkCssNode            *cssnode,
+                                                         GtkStateFlags          state_flags);
+GtkStateFlags           gtk_css_node_get_state          (GtkCssNode            *cssnode);
+void                    gtk_css_node_set_junction_sides (GtkCssNode            *cssnode,
+                                                         GtkJunctionSides       junction_sides);
+GtkJunctionSides        gtk_css_node_get_junction_sides (GtkCssNode            *cssnode);
+gboolean                gtk_css_node_add_class          (GtkCssNode            *cssnode,
+                                                         GQuark                 style_class);
+gboolean                gtk_css_node_remove_class       (GtkCssNode            *cssnode,
+                                                         GQuark                 style_class);
+gboolean                gtk_css_node_has_class          (GtkCssNode            *cssnode,
+                                                         GQuark                 style_class);
+GList *                 gtk_css_node_list_classes       (GtkCssNode            *cssnode);
+gboolean                gtk_css_node_add_region         (GtkCssNode            *cssnode,
+                                                         GQuark                 region,
+                                                         GtkRegionFlags         flags);
+gboolean                gtk_css_node_remove_region      (GtkCssNode            *cssnode,
+                                                         GQuark                 region);
+gboolean                gtk_css_node_has_region         (GtkCssNode            *cssnode,
+                                                         GQuark                 region,
+                                                         GtkRegionFlags        *out_flags);
+GList *                 gtk_css_node_list_regions       (GtkCssNode            *cssnode);
+
+const GtkCssNodeDeclaration *
+                        gtk_css_node_get_declaration    (GtkCssNode            *cssnode);
+GtkCssNodeDeclaration * gtk_css_node_dup_declaration    (GtkCssNode            *cssnode);
+
 
 GtkCssStyle *           gtk_css_node_get_style          (GtkCssNode            *cssnode);
 void                    gtk_css_node_set_style          (GtkCssNode            *cssnode,
