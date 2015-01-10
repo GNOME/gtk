@@ -23,12 +23,34 @@
 
 G_BEGIN_DECLS
 
-typedef struct _GtkCssNode GtkCssNode;
+#define GTK_TYPE_CSS_NODE           (gtk_css_node_get_type ())
+#define GTK_CSS_NODE(obj)           (G_TYPE_CHECK_INSTANCE_CAST (obj, GTK_TYPE_CSS_NODE, GtkCssNode))
+#define GTK_CSS_NODE_CLASS(cls)     (G_TYPE_CHECK_CLASS_CAST (cls, GTK_TYPE_CSS_NODE, GtkCssNodeClass))
+#define GTK_IS_CSS_NODE(obj)        (G_TYPE_CHECK_INSTANCE_TYPE (obj, GTK_TYPE_CSS_NODE))
+#define GTK_IS_CSS_NODE_CLASS(obj)  (G_TYPE_CHECK_CLASS_TYPE (obj, GTK_TYPE_CSS_NODE))
+#define GTK_CSS_NODE_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS ((obj), GTK_TYPE_CSS_NODE, GtkCssNodeClass))
+
+typedef struct _GtkCssNode           GtkCssNode;
+typedef struct _GtkCssNodeClass      GtkCssNodeClass;
+
+struct _GtkCssNode
+{
+  GObject object;
+
+  GtkCssNodeDeclaration *decl;
+  GtkCssNode            *parent;
+  GtkCssStyle           *style;
+};
+
+struct _GtkCssNodeClass
+{
+  GObjectClass object_class;
+};
+
+GType                   gtk_css_node_get_type           (void) G_GNUC_CONST;
 
 GtkCssNode *            gtk_css_node_new                (void);
 GtkCssNode *            gtk_css_node_copy               (GtkCssNode            *cssnode);
-
-void                    gtk_css_node_free               (GtkCssNode            *cssnode);
 
 void                    gtk_css_node_set_parent         (GtkCssNode            *cssnode,
                                                          GtkCssNode            *parent);

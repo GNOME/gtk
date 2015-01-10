@@ -316,7 +316,7 @@ gtk_style_context_pop_style_node (GtkStyleContext *context)
 
   g_return_if_fail (priv->saved_nodes != NULL);
 
-  gtk_css_node_free (priv->cssnode);
+  g_object_unref (priv->cssnode);
   priv->cssnode = priv->saved_nodes->data;
   priv->saved_nodes = g_slist_remove (priv->saved_nodes, priv->cssnode);
 }
@@ -529,7 +529,7 @@ gtk_style_context_finalize (GObject *object)
 
   while (priv->saved_nodes)
     gtk_style_context_pop_style_node (style_context);
-  gtk_css_node_free (priv->cssnode);
+  g_object_unref (priv->cssnode);
 
   gtk_style_context_clear_property_cache (style_context);
   g_array_free (priv->property_cache, TRUE);

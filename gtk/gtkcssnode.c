@@ -19,22 +19,38 @@
 
 #include "gtkcssnodeprivate.h"
 
-struct _GtkCssNode
+G_DEFINE_TYPE (GtkCssNode, gtk_css_node, G_TYPE_OBJECT)
+
+static void
+gtk_css_node_finalize (GObject *object)
 {
-  GtkCssNodeDeclaration *decl;
-  GtkCssNode            *parent;
-  GtkCssStyle           *style;
-};
+  GtkCssNode *cssnode = GTK_CSS_NODE (object);
+
+  if (cssnode->style)
+    g_object_unref (cssnode->style);
+  gtk_css_node_declaration_unref (cssnode->decl);
+
+  G_OBJECT_CLASS (gtk_css_node_parent_class)->finalize (object);
+}
+
+static void
+gtk_css_node_class_init (GtkCssNodeClass *klass)
+{
+  GObjectClass *object_class = G_OBJECT_CLASS (klass);
+
+  object_class->finalize = gtk_css_node_finalize;
+}
+
+static void
+gtk_css_node_init (GtkCssNode *cssnode)
+{
+  cssnode->decl = gtk_css_node_declaration_new ();
+}
 
 GtkCssNode *
 gtk_css_node_new (void)
 {
-  GtkCssNode *cssnode;
-
-  cssnode = g_slice_new0 (GtkCssNode);
-  cssnode->decl = gtk_css_node_declaration_new ();
-
-  return cssnode;
+  return g_object_new (GTK_TYPE_CSS_NODE, NULL);
 }
 
 GtkCssNode *
@@ -47,15 +63,6 @@ gtk_css_node_copy (GtkCssNode *cssnode)
   copy->decl = gtk_css_node_declaration_ref (cssnode->decl);
 
   return copy;
-}
-
-void
-gtk_css_node_free (GtkCssNode *cssnode)
-{
-  if (cssnode->style)
-    g_object_unref (cssnode->style);
-  gtk_css_node_declaration_unref (cssnode->decl);
-  g_slice_free (GtkCssNode, cssnode);
 }
 
 void
