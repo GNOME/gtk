@@ -1688,14 +1688,33 @@ start_drop_feedback (GtkPlacesSidebar        *sidebar,
       if (need_feedback_row)
         {
           GtkTreeIter iter;
+          GtkTreeIter iter_prev;
+          GtkTreePath *path_prev;
+          gint new_bookmark_col_index;
+          SectionType section_type;
+
+          /* Use column index of previous bookmark to calculate index for "new bookmark" */
+          path_prev = gtk_tree_path_new_from_indices (sidebar->new_bookmark_index - 1, -1);
+          if (gtk_tree_model_get_iter (GTK_TREE_MODEL (sidebar->store), &iter_prev, path_prev))
+            gtk_tree_model_get (GTK_TREE_MODEL (sidebar->store), &iter_prev,
+                                PLACES_SIDEBAR_COLUMN_SECTION_TYPE, &section_type,
+                                PLACES_SIDEBAR_COLUMN_INDEX, &new_bookmark_col_index, -1);
+
+          if (section_type != SECTION_BOOKMARKS)
+            new_bookmark_col_index = 0;
+          else
+            new_bookmark_col_index++;
 
           sidebar->new_bookmark_index = new_bookmark_index;
           gtk_list_store_insert_with_values (sidebar->store, &iter, sidebar->new_bookmark_index,
                                              PLACES_SIDEBAR_COLUMN_ROW_TYPE, PLACES_DROP_FEEDBACK,
                                              PLACES_SIDEBAR_COLUMN_SECTION_TYPE, SECTION_BOOKMARKS,
                                              PLACES_SIDEBAR_COLUMN_NAME, _("New bookmark"),
+                                             PLACES_SIDEBAR_COLUMN_INDEX, new_bookmark_col_index,
                                              PLACES_SIDEBAR_COLUMN_NO_EJECT, TRUE,
                                              -1);
+
+          gtk_tree_path_free (path_prev);
         }
 
       new_path = gtk_tree_path_new_from_indices (sidebar->new_bookmark_index, -1);
