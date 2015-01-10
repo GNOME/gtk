@@ -1906,6 +1906,8 @@ GtkTreeView.view {
         color: #638db9; }
     GtkTreeView.view:insensitive:backdrop {
       color: #5d6767; }
+  GtkTreeView.view.separator:backdrop {
+    color: rgba(0, 0, 0, 0.1); }
   GtkTreeView.view:backdrop {
     border-left-color: #666a6a;
     border-top: #393f3f; }
