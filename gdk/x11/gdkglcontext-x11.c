@@ -739,10 +739,19 @@ create_gl3_context (GdkDisplay   *display,
                     GLXFBConfig   config,
                     GdkGLContext *share)
 {
+  /* There are no profiles before OpenGL 3.2.
+   *
+   * The GLX_ARB_create_context_profile spec says:
+   *
+   *   If the requested OpenGL version is less than 3.2,
+   *   GLX_CONTEXT_PROFILE_MASK_ARB is ignored and the functionality
+   *   of the context is determined solely by the requested version.
+   *
+   * Which means we can ask for the CORE_PROFILE_BIT without asking for
+   * a 3.2 version.
+   */
   static const int attrib_list[] = {
-    GLX_CONTEXT_PROFILE_MASK_ARB,  GLX_CONTEXT_CORE_PROFILE_BIT_ARB,
-    GLX_CONTEXT_MAJOR_VERSION_ARB, 3,
-    GLX_CONTEXT_MINOR_VERSION_ARB, 2,
+    GLX_CONTEXT_PROFILE_MASK_ARB, GLX_CONTEXT_CORE_PROFILE_BIT_ARB,
     None,
   };
 
@@ -1074,17 +1083,21 @@ gdk_x11_window_create_gl_context (GdkWindow    *window,
 
   dpy = gdk_x11_display_get_xdisplay (display);
 
-  /* we check for the GLX_ARB_create_context_profile extension
-   * while validating the PixelFormat.
+  /* we check for the presence of the GLX_ARB_create_context_profile
+   * extension before checking for a GLXFBConfig.
    */
   if (profile == GDK_GL_PROFILE_3_2_CORE)
-    glx_context = create_gl3_context (display, config, share);
+    {
+      GDK_NOTE (OPENGL, g_print ("Creating core GLX context\n"));
+      glx_context = create_gl3_context (display, config, share);
+    }
   else
     {
       /* GDK_GL_PROFILE_DEFAULT is currently
        * equivalent to the LEGACY profile
        */
       profile = GDK_GL_PROFILE_LEGACY;
+      GDK_NOTE (OPENGL, g_print ("Creating legacy GLX context\n"));
       glx_context = create_gl_context (display, config, share);
     }
 
