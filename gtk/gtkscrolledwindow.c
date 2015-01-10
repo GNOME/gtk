@@ -167,7 +167,6 @@ typedef struct
   GdkWindow *window;
   gboolean   dragging;
   gboolean   over;
-  gboolean   enabled;
   gint64     last_scroll_time;
   guint      conceil_timer;
 
@@ -391,13 +390,10 @@ gtk_scrolled_window_leave_notify (GtkWidget        *widget,
 {
   GtkScrolledWindowPrivate *priv = GTK_SCROLLED_WINDOW (widget)->priv;
 
-  if (priv->hindicator.enabled)
+  if (priv->use_indicators)
     {
       indicator_set_over (&priv->hindicator, FALSE);
       indicator_start_fade (&priv->hindicator, 0.0);
-    }
-  if (priv->vindicator.enabled)
-    {
       indicator_set_over (&priv->vindicator, FALSE);
       indicator_start_fade (&priv->vindicator, 0.0);
     }
@@ -1049,8 +1045,7 @@ captured_event_cb (GtkWidget *widget,
   sw = GTK_SCROLLED_WINDOW (widget);
   priv = sw->priv;
 
-  if (!priv->hindicator.enabled &&
-      !priv->vindicator.enabled)
+  if (!priv->use_indicators)
     return GDK_EVENT_PROPAGATE;
 
   if (event->type != GDK_MOTION_NOTIFY &&
@@ -2749,7 +2744,7 @@ gtk_scrolled_window_size_allocate (GtkWidget     *widget,
             }
 	}
 
-      if (priv->hindicator.enabled)
+      if (priv->use_indicators)
         {
           gdk_window_move_resize (priv->hindicator.window,
                                   child_allocation.x,
@@ -2808,7 +2803,7 @@ gtk_scrolled_window_size_allocate (GtkWidget     *widget,
             }
         }
 
-      if (priv->vindicator.enabled)
+      if (priv->use_indicators)
         {
           gdk_window_move_resize (priv->vindicator.window,
                                   child_allocation.x,
@@ -3788,7 +3783,7 @@ maybe_hide_indicator (gpointer data)
   Indicator *indicator = data;
 
   if (g_get_monotonic_time () - indicator->last_scroll_time >= INDICATOR_FADE_OUT_DELAY * 1000 &&
-      indicator->enabled && !indicator->over && !indicator->dragging)
+      !indicator->over && !indicator->dragging)
     indicator_start_fade (indicator, 0.0);
 
   return G_SOURCE_CONTINUE;
@@ -3799,8 +3794,7 @@ indicator_value_changed (GtkAdjustment *adjustment,
                          Indicator     *indicator)
 {
   indicator->last_scroll_time = g_get_monotonic_time ();
-  if (indicator->enabled)
-    indicator_start_fade (indicator, 1.0);
+  indicator_start_fade (indicator, 1.0);
 }
 
 static void
@@ -3827,7 +3821,6 @@ setup_indicator (GtkScrolledWindow *scrolled_window,
   context = gtk_widget_get_style_context (scrollbar);
   adjustment = gtk_range_get_adjustment (GTK_RANGE (scrollbar));
 
-  indicator->enabled = TRUE;
   indicator->scrollbar = scrollbar;
 
   g_object_ref (scrollbar);
@@ -3867,8 +3860,6 @@ remove_indicator (GtkScrolledWindow *scrolled_window,
   gtk_style_context_remove_class (context, "overlay-indicator");
   g_signal_handlers_disconnect_by_func (context, indicator_style_changed, indicator);
   g_signal_handlers_disconnect_by_func (adjustment, indicator_value_changed, indicator);
-  indicator->enabled = FALSE;
-
   if (indicator->conceil_timer)
     {
       g_source_remove (indicator->conceil_timer);
