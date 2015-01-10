@@ -157,6 +157,7 @@
 #define INDICATOR_FADE_OUT_DELAY 2000
 #define INDICATOR_FADE_OUT_DURATION 1000
 #define INDICATOR_FADE_OUT_TIME 500
+#define INDICATOR_CLOSE_DISTANCE 50
 
 /* Scrolled off indication */
 #define UNDERSHOOT_SIZE 40
@@ -990,11 +991,11 @@ event_close_to_indicator (GtkScrolledWindow *sw,
     }
 
   if ((indicator == &priv->hindicator &&
-       y >= win_y - 50 &&
-       y < win_y + indicator_alloc.height + 50) ||
+       y >= win_y - INDICATOR_CLOSE_DISTANCE &&
+       y < win_y + indicator_alloc.height + INDICATOR_CLOSE_DISTANCE) ||
       (indicator == &priv->vindicator &&
-       x >= win_x - 50 &&
-       x < win_x + indicator_alloc.width + 50))
+       x >= win_x - INDICATOR_CLOSE_DISTANCE  &&
+       x < win_x + indicator_alloc.width + INDICATOR_CLOSE_DISTANCE))
     return TRUE;
 
   return FALSE;
