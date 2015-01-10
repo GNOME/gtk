@@ -394,9 +394,7 @@ gtk_scrolled_window_leave_notify (GtkWidget        *widget,
   if (priv->use_indicators)
     {
       indicator_set_over (&priv->hindicator, FALSE);
-      indicator_start_fade (&priv->hindicator, 0.0);
       indicator_set_over (&priv->vindicator, FALSE);
-      indicator_start_fade (&priv->vindicator, 0.0);
     }
 
   return GDK_EVENT_PROPAGATE;
