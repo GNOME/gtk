@@ -440,7 +440,7 @@ gtk_scrolled_window_class_init (GtkScrolledWindowClass *class)
 
   class->scroll_child = gtk_scrolled_window_scroll_child;
   class->move_focus_out = gtk_scrolled_window_move_focus_out;
-  
+
   g_object_class_install_property (gobject_class,
                                    PROP_HADJUSTMENT,
                                    g_param_spec_object ("hadjustment",
@@ -1040,7 +1040,6 @@ captured_event_cb (GtkWidget *widget,
   GtkScrolledWindow *sw;
   GdkInputSource input_source;
   GdkDevice *source_device;
-  gboolean indicator_close;
 
   sw = GTK_SCROLLED_WINDOW (widget);
   priv = sw->priv;
@@ -1064,17 +1063,18 @@ captured_event_cb (GtkWidget *widget,
       indicator_start_fade (&priv->hindicator, 1.0);
       indicator_start_fade (&priv->vindicator, 1.0);
 
-      /* Check whether we're hovering close to the vertical scrollbar */
-      indicator_close = check_update_scrollbar_proximity (sw, &priv->vindicator,
-                                                          event);
-
-      if (!indicator_close)
+      if (strstr (gdk_device_get_name (source_device), "TrackPoint"))
         {
-          /* Otherwise check the horizontal scrollbar */
-          check_update_scrollbar_proximity (sw, &priv->hindicator, event);
+          indicator_set_over (&priv->hindicator, TRUE);
+          indicator_set_over (&priv->vindicator, TRUE);
         }
       else
-        indicator_set_over (&priv->hindicator, FALSE);
+        {
+          if (!check_update_scrollbar_proximity (sw, &priv->vindicator, event))
+            check_update_scrollbar_proximity (sw, &priv->hindicator, event);
+          else
+            indicator_set_over (&priv->hindicator, FALSE);
+        }
     }
   else if (event->type == GDK_LEAVE_NOTIFY &&
            event->crossing.mode == GDK_CROSSING_UNGRAB)
