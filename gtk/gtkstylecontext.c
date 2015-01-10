@@ -3072,6 +3072,9 @@ gtk_style_context_invalidate (GtkStyleContext *context)
   gtk_css_node_set_values (context->priv->cssnode, style);
   g_object_unref (style);
 
+  if (!gtk_style_context_is_saved (context))
+    _gtk_style_context_update_animating (context);
+
   changes = _gtk_bitmask_new ();
   changes = _gtk_bitmask_invert_range (changes,
                                        0,
