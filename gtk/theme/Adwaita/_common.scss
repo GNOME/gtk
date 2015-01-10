@@ -1349,6 +1349,10 @@ GtkTreeView.view {
     &:backdrop { color: $backdrop_insensitive_color; }
   }
 
+  &.separator:backdrop {
+    color: transparentize(black, 0.9);
+  }
+
   &:backdrop {
     border-left-color: mix($backdrop_fg_color, $backdrop_bg_color, 50%);
     border-top: $backdrop_bg_color;
