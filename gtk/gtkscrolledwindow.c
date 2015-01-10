@@ -3890,64 +3890,16 @@ remove_indicator (GtkScrolledWindow *scrolled_window,
   indicator->current_pos = 1.0;
 }
 
-static gboolean
-device_manager_has_mouse (GdkDeviceManager *dm)
-{
-  GdkDevice *cp;
-  GList *slaves, *s;
-  GdkDevice *device;
-  gboolean found;
-
-  found = FALSE;
-
-  cp = gdk_device_manager_get_client_pointer (dm);
-  slaves = gdk_device_list_slave_devices (cp);
-  for (s = slaves; s; s = s->next)
-    {
-      device = s->data;
-
-      if (gdk_device_get_source (device) != GDK_SOURCE_MOUSE)
-        continue;
-
-      if (strstr (gdk_device_get_name (device), "XTEST"))
-        continue;
-
-      if (strstr (gdk_device_get_name (device), "TrackPoint"))
-        continue;
-
-      if (g_object_get_data (G_OBJECT (device), "removed"))
-        continue;
-
-      found = TRUE;
-      break;
-    }
-  g_list_free (slaves);
-
-  return found;
-}
-
 static void
 gtk_scrolled_window_update_use_indicators (GtkScrolledWindow *scrolled_window)
 {
   GtkScrolledWindowPrivate *priv = scrolled_window->priv;
   gboolean use_indicators;
-  const gchar *env_overlay_scrolling;
-  const gchar *env_test_touchscreen;
 
-  env_overlay_scrolling = g_getenv ("GTK_OVERLAY_SCROLLING");
-  env_test_touchscreen = g_getenv ("GTK_TEST_TOUCHSCREEN");
-  if (!priv->overlay_scrolling || g_strcmp0 (env_overlay_scrolling, "0") == 0)
+  use_indicators = priv->overlay_scrolling;
+
+  if (g_strcmp0 (g_getenv ("GTK_OVERLAY_SCROLLING"), "0") == 0)
     use_indicators = FALSE;
-  else if ((gtk_get_debug_flags () & GTK_DEBUG_TOUCHSCREEN) != 0 ||
-           env_test_touchscreen != NULL ||
-           g_strcmp0 (env_overlay_scrolling, "1") == 0)
-    use_indicators = TRUE;
-  else
-    {
-      GdkDeviceManager *dm;
-      dm = gdk_display_get_device_manager (gtk_widget_get_display (GTK_WIDGET (scrolled_window)));
-      use_indicators = !device_manager_has_mouse (dm);
-    }
 
   if (priv->use_indicators != use_indicators)
     {
@@ -3969,31 +3921,10 @@ gtk_scrolled_window_update_use_indicators (GtkScrolledWindow *scrolled_window)
 }
 
 static void
-gtk_scrolled_window_device_added (GdkDeviceManager  *dm,
-                                  GdkDevice         *device,
-                                  GtkScrolledWindow *scrolled_window)
-{
-  gtk_scrolled_window_update_use_indicators (scrolled_window);
-}
-
-static void
-gtk_scrolled_window_device_removed (GdkDeviceManager  *dm,
-                                    GdkDevice         *device,
-                                    GtkScrolledWindow *scrolled_window)
-{
-  /* Work around the fact that ::device-removed is emitted
-   * before the device is removed from the list.
-   */
-  g_object_set_data (G_OBJECT (device), "removed", GINT_TO_POINTER (1));
-  gtk_scrolled_window_update_use_indicators (scrolled_window);
-}
-
-static void
 gtk_scrolled_window_realize (GtkWidget *widget)
 {
   GtkScrolledWindow *scrolled_window = GTK_SCROLLED_WINDOW (widget);
   GtkScrolledWindowPrivate *priv = scrolled_window->priv;
-  GdkDeviceManager *dm;
   GdkWindow *window;
   GtkAllocation allocation;
   GdkWindowAttr attributes;
@@ -4027,12 +3958,6 @@ gtk_scrolled_window_realize (GtkWidget *widget)
   priv->vindicator.scrollbar = priv->vscrollbar;
 
   gtk_scrolled_window_update_use_indicators (scrolled_window);
-
-  dm = gdk_display_get_device_manager (gtk_widget_get_display (widget));
-  g_signal_connect (dm, "device-added",
-                    G_CALLBACK (gtk_scrolled_window_device_added), scrolled_window);
-  g_signal_connect (dm, "device-removed",
-                    G_CALLBACK (gtk_scrolled_window_device_removed), scrolled_window);
 }
 
 static void
@@ -4040,11 +3965,6 @@ gtk_scrolled_window_unrealize (GtkWidget *widget)
 {
   GtkScrolledWindow *scrolled_window = GTK_SCROLLED_WINDOW (widget);
   GtkScrolledWindowPrivate *priv = scrolled_window->priv;
-  GdkDeviceManager *dm;
-
-  dm = gdk_display_get_device_manager (gtk_widget_get_display (widget));
-  g_signal_handlers_disconnect_by_func (dm, gtk_scrolled_window_device_added, scrolled_window);
-  g_signal_handlers_disconnect_by_func (dm, gtk_scrolled_window_device_removed, scrolled_window);
 
   gtk_widget_set_parent_window (priv->hscrollbar, NULL);
   gtk_widget_unregister_window (widget, priv->hindicator.window);
