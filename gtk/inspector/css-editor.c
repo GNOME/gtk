@@ -209,7 +209,17 @@ save_clicked (GtkToolButton         *button,
 static void
 apply_system_font (GtkInspectorCssEditor *ce)
 {
-  GSettings *s = g_settings_new ("org.gnome.desktop.interface");
+  GSettingsSchemaSource *source;
+  GSettingsSchema *schema;
+  GSettings *s;
+
+  source = g_settings_schema_source_get_default ();
+  schema = g_settings_schema_source_lookup (source, "org.gnome.desktop.interace", FALSE);
+  if (schema == NULL)
+    return;
+
+  s = g_settings_new_full (schema, NULL, NULL);
+
   gchar *font_name = g_settings_get_string (s, "monospace-font-name");
   PangoFontDescription *font_desc = pango_font_description_from_string (font_name);
 
@@ -358,7 +368,6 @@ destroy_provider (GtkInspectorCssEditor *ce)
                          NULL);
     }
 }
-  
 
 static void
 gtk_inspector_css_editor_init (GtkInspectorCssEditor *ce)
