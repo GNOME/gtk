@@ -3014,7 +3014,7 @@ gtk_drag_get_icon (GtkDragSourceInfo  *info,
            */
           save_icon_window = info->icon_window;
           save_hot_x = info->hot_x;
-          save_hot_y = info->hot_x;
+          save_hot_y = info->hot_y;
           save_destroy_icon = info->destroy_icon;
 
           info->icon_window = NULL;
