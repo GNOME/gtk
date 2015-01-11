@@ -912,9 +912,7 @@ GtkComboBox {
   GtkComboBox .menuitem {
     text-shadow: none; }
   GtkComboBox .separator.vertical, GtkComboBox GtkPlacesSidebar.sidebar .view .vertical.separator, GtkPlacesSidebar.sidebar .view GtkComboBox .vertical.separator {
-    -GtkWidget-wide-separators: true;
-    -GtkWidget-horizontal-separator: 0;
-    -GtkWidget-vertical-separator: 0; }
+    -GtkWidget-wide-separators: true; }
   GtkComboBox.combobox-entry .entry {
     border-radius: 3px 0 0 3px; }
     GtkComboBox.combobox-entry .entry:dir(rtl) {
@@ -1925,9 +1923,7 @@ GtkScrolledWindow GtkViewport.frame {
 GtkPlacesSidebar.sidebar .view .separator:backdrop {
   color: #7f7f7f; }
   GtkFileChooserButton .separator.vertical, GtkFileChooserButton GtkPlacesSidebar.sidebar .view .vertical.separator, GtkPlacesSidebar.sidebar .view GtkFileChooserButton .vertical.separator, GtkFontButton .separator.vertical, GtkFontButton GtkPlacesSidebar.sidebar .view .vertical.separator, GtkPlacesSidebar.sidebar .view GtkFontButton .vertical.separator {
-    -GtkWidget-wide-separators: true;
-    -GtkWidget-horizontal-separator: 0;
-    -GtkWidget-vertical-separator: 0; }
+    -GtkWidget-wide-separators: true; }
 
 /*********
  * Lists *
