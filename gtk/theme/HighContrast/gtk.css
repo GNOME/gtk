@@ -1924,11 +1924,7 @@ GtkScrolledWindow GtkViewport.frame {
 .separator, GtkPlacesSidebar.sidebar .view .separator,
 GtkPlacesSidebar.sidebar .view .separator:backdrop {
   color: #7f7f7f; }
-  GtkFileChooserButton .separator, GtkFileChooserButton GtkPlacesSidebar.sidebar .view .separator, GtkPlacesSidebar.sidebar .view GtkFileChooserButton .separator,
-  GtkFileChooserButton GtkPlacesSidebar.sidebar .view .separator:backdrop,
-  GtkPlacesSidebar.sidebar .view GtkFileChooserButton .separator:backdrop, GtkFontButton .separator, GtkFontButton GtkPlacesSidebar.sidebar .view .separator, GtkPlacesSidebar.sidebar .view GtkFontButton .separator,
-  GtkFontButton GtkPlacesSidebar.sidebar .view .separator:backdrop,
-  GtkPlacesSidebar.sidebar .view GtkFontButton .separator:backdrop {
+  GtkFileChooserButton .separator.vertical, GtkFileChooserButton GtkPlacesSidebar.sidebar .view .vertical.separator, GtkPlacesSidebar.sidebar .view GtkFileChooserButton .vertical.separator, GtkFontButton .separator.vertical, GtkFontButton GtkPlacesSidebar.sidebar .view .vertical.separator, GtkPlacesSidebar.sidebar .view GtkFontButton .vertical.separator {
     -GtkWidget-wide-separators: true;
     -GtkWidget-horizontal-separator: 0;
     -GtkWidget-vertical-separator: 0; }
