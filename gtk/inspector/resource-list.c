@@ -60,6 +60,7 @@ load_resources_recurse (GtkInspectorResourceList *sl,
   gchar **names;
   gint i;
   GtkTreeIter iter;
+  guint64 stored_size;
 
   names = g_resources_enumerate_children (path, 0, NULL);
   for (i = 0; names[i]; i++)
@@ -97,9 +98,10 @@ load_resources_recurse (GtkInspectorResourceList *sl,
           g_resources_get_info (p, 0, &size, NULL, NULL);
         }
 
+      stored_size = size;
       gtk_tree_store_set (sl->priv->model, &iter,
                           COLUMN_COUNT, count,
-                          COLUMN_SIZE, size,
+                          COLUMN_SIZE, stored_size,
                           -1);
       *count_out += count;
       *size_out += size;
@@ -125,6 +127,7 @@ selection_changed (GtkTreeSelection         *selection,
       gconstpointer data;
       gint count;
       gsize size;
+      guint64 stored_size;
       GError *error = NULL;
 
       gtk_widget_hide (rl->priv->info_grid);
@@ -133,8 +136,9 @@ selection_changed (GtkTreeSelection         *selection,
                           COLUMN_PATH, &path,
                           COLUMN_NAME, &name,
                           COLUMN_COUNT, &count,
-                          COLUMN_SIZE, &size,
+                          COLUMN_SIZE, &stored_size,
                           -1);
+      size = stored_size;
 
       if (g_str_has_suffix (path, "/"))
         {
