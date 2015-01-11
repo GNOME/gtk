@@ -494,7 +494,7 @@ gdk_wayland_drag_context_undo_grab (GdkDragContext *context)
       event->button.button = button;
       event->button.time = GDK_CURRENT_TIME;
       event->button.x = event->button.x_root = x;
-      event->button.y = event->button.x_root = y;
+      event->button.y = event->button.y_root = y;
     }
   else
     return;
