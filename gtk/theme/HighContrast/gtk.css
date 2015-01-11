@@ -911,9 +911,7 @@ GtkComboBox {
     color: #7f7f7f; }
   GtkComboBox .menuitem {
     text-shadow: none; }
-  GtkComboBox .separator, GtkComboBox GtkPlacesSidebar.sidebar .view .separator, GtkPlacesSidebar.sidebar .view GtkComboBox .separator,
-  GtkComboBox GtkPlacesSidebar.sidebar .view .separator:backdrop,
-  GtkPlacesSidebar.sidebar .view GtkComboBox .separator:backdrop {
+  GtkComboBox .separator.vertical, GtkComboBox GtkPlacesSidebar.sidebar .view .vertical.separator, GtkPlacesSidebar.sidebar .view GtkComboBox .vertical.separator {
     -GtkWidget-wide-separators: true;
     -GtkWidget-horizontal-separator: 0;
     -GtkWidget-vertical-separator: 0; }
