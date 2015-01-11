@@ -1044,8 +1044,6 @@ GtkComboBox {
   .separator.vertical {
     // always disable separators
     -GtkWidget-wide-separators: true;
-    -GtkWidget-horizontal-separator: 0;
-    -GtkWidget-vertical-separator: 0;
   }
   &.combobox-entry .entry { @extend %linked; }
   &.combobox-entry .button, &.combobox-entry .button:backdrop {
@@ -2567,8 +2565,6 @@ GtkScrolledWindow {
   GtkFontButton &.vertical {
     // always disable separators
     -GtkWidget-wide-separators: true;
-    -GtkWidget-horizontal-separator: 0;
-    -GtkWidget-vertical-separator: 0;
   }
 }
 
