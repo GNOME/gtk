@@ -477,11 +477,6 @@ else
   fi
 fi
 
-
-AC_DEFINE_UNQUOTED(GTK_COMPILED_WITH_DEBUGGING, "${enable_debug}",
-                   [Define if debugging is enabled])
-
-
 # Build time sanity check...
 AM_SANITY_CHECK
 
