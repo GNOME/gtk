@@ -1093,7 +1093,7 @@ gtk_cell_renderer_set_padding (GtkCellRenderer *cell,
   GtkCellRendererPrivate *priv;
 
   g_return_if_fail (GTK_IS_CELL_RENDERER (cell));
-  g_return_if_fail (xpad >= 0 && xpad >= 0);
+  g_return_if_fail (xpad >= 0 && ypad >= 0);
 
   priv = cell->priv;
 
