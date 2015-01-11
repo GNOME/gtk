@@ -438,7 +438,6 @@ $_dot_color: $selected_bg_color;
   .primary-toolbar & { icon-shadow: none; } // tango icons don't need added shadows
 //  .separator {
 //    -GtkWidget-wide-separators: true;
-//    -GtkWidget-horizontal-separator: 0;
 //   }
   .linked > &,
   .linked > &:hover,
@@ -758,8 +757,6 @@ GtkComboBox {
   .separator.vertical {
     // always disable separators
     -GtkWidget-wide-separators: true;
-    -GtkWidget-horizontal-separator: 0;
-    -GtkWidget-vertical-separator: 0;
   }
   &.combobox-entry .entry {
     border-radius: 3px 0 0 3px;
@@ -1780,8 +1777,6 @@ GtkScrolledWindow {
   GtkFontButton &.vertical {
     // always disable separators
     -GtkWidget-wide-separators: true;
-    -GtkWidget-horizontal-separator: 0;
-    -GtkWidget-vertical-separator: 0;
   }
 }
 
