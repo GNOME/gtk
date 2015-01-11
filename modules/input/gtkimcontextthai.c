@@ -195,7 +195,7 @@ get_previous_char (GtkIMContextThai *context_thai, gint offset)
       if (offset == 0)
         {
           prev_char = g_utf8_get_char_validated (q, p - q);
-          if (prev_char < 0)
+          if (prev_char == (gunichar)-1 || prev_char == (gunichar)-2)
             prev_char = 0;
         }
       g_free (surrounding);
