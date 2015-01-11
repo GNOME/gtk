@@ -1,3 +1,32 @@
+Overview of Changes in GTK+ 3.14.6 to 3.14.7
+============================================
+
+* Bugs fixed:
+ 477454 libgtk crashed in gtk_notebook_button_release
+ 705582 gtk_recent_manager_init fails to check settings==NULL
+ 735122 GtkApplication: fix global menubar on Mac OS
+ 739038 gtk_recent_manager_set_filename: assertion failed: (priv->fil...
+ 739729 Bookmarks in sidebar sometimes randomly change their order
+ 741130 Entry completion with multiple cells can size wrong on first ...
+ 741652 Leaking menus when attaching to a button
+ 741702 Right margin not respected with RTL text in non-wrapping mode...
+ 741827 Typo in testsuite/reftests/Makefile.am causes build failure o...
+ 741897 documentation fix
+ 741969 GTK_STOCK_COPY
+ 742010 GtkLabel eats thumb-button clicks
+ 742170 cut/copy/paste binding entries are registered 2x
+ 742311 On cellrenderertext, notify for "size" and "size-points" prop...
+ 742343 Hide scrollbar in GtkFileChooser if appropriate
+ 742631 Left padding on File Chooser List
+ 742653 gtkfilechooserwidget: When using an extra widget, show or hid...
+ 742664 Portabilitiy issues with GTK-Inspector 32-bit and non-gnome3 ...
+        GtkFileChooser: Don't crash if invisible files are deleted
+
+* Translation updates:
+ British English
+ Kannada
+
+
 Overview of Changes in GTK+ 3.14.5 to 3.14.6
 ============================================
 
