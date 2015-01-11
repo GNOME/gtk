@@ -3573,6 +3573,8 @@ microphone-sensitivity-medium-symbolic</property>
                                           <item>Range</item>
                                           <item>All</item>
                                           <item>Current</item>
+                                          <item>-</item>
+                                          <item>None</item>
                                         </items>
                                       </object>
                                     </child>
@@ -3591,7 +3593,7 @@ microphone-sensitivity-medium-symbolic</property>
                                       </object>
                                     </child>
                                     <child>
-                                      <object class="GtkButton">
+                                      <object class="GtkButton" id="print_button">
                                         <property name="visible">True</property>
                                         <property name="label">Print</property>
                                       </object>

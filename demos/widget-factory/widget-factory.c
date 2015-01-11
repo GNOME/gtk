@@ -308,27 +308,37 @@ on_page_combo_changed (GtkComboBox *combo,
 {
   GtkWidget *from;
   GtkWidget *to;
+  GtkWidget *print;
 
   from = GTK_WIDGET (g_object_get_data (G_OBJECT (combo), "range_from_spin"));
   to = GTK_WIDGET (g_object_get_data (G_OBJECT (combo), "range_to_spin"));
+  print = GTK_WIDGET (g_object_get_data (G_OBJECT (combo), "print_button"));
 
   switch (gtk_combo_box_get_active (combo))
     {
     case 0: /* Range */
       gtk_widget_set_sensitive (from, TRUE);
       gtk_widget_set_sensitive (to, TRUE);
+      gtk_widget_set_sensitive (print, TRUE);
       break;
     case 1: /* All */
       gtk_widget_set_sensitive (from, FALSE);
       gtk_widget_set_sensitive (to, FALSE);
       gtk_spin_button_set_value (GTK_SPIN_BUTTON (from), 1);
       gtk_spin_button_set_value (GTK_SPIN_BUTTON (to), 99);
+      gtk_widget_set_sensitive (print, TRUE);
       break;
     case 2: /* Current */
       gtk_widget_set_sensitive (from, FALSE);
       gtk_widget_set_sensitive (to, FALSE);
       gtk_spin_button_set_value (GTK_SPIN_BUTTON (from), 7);
       gtk_spin_button_set_value (GTK_SPIN_BUTTON (to), 7);
+      gtk_widget_set_sensitive (print, TRUE);
+      break;
+    case 4:
+      gtk_widget_set_sensitive (from, FALSE);
+      gtk_widget_set_sensitive (to, FALSE);
+      gtk_widget_set_sensitive (print, FALSE);
       break;
     default:;
     }
@@ -342,8 +352,8 @@ on_range_from_changed (GtkSpinButton *from)
 
   to = GTK_SPIN_BUTTON (g_object_get_data (G_OBJECT (from), "range_to_spin"));
 
-  v1 = gtk_spin_button_get_value_as_int (from);  
-  v2 = gtk_spin_button_get_value_as_int (to);  
+  v1 = gtk_spin_button_get_value_as_int (from);
+  v2 = gtk_spin_button_get_value_as_int (to);
 
   if (v1 > v2)
     gtk_spin_button_set_value (to, v1);
@@ -357,8 +367,8 @@ on_range_to_changed (GtkSpinButton *to)
 
   from = GTK_SPIN_BUTTON (g_object_get_data (G_OBJECT (to), "range_from_spin"));
 
-  v1 = gtk_spin_button_get_value_as_int (from);  
-  v2 = gtk_spin_button_get_value_as_int (to);  
+  v1 = gtk_spin_button_get_value_as_int (from);
+  v2 = gtk_spin_button_get_value_as_int (to);
 
   if (v1 > v2)
     gtk_spin_button_set_value (from, v2);
@@ -718,7 +728,7 @@ populate_colors (GtkWidget *widget)
   GdkRGBA rgba;
 
   gtk_list_box_set_header_func (GTK_LIST_BOX (widget), update_title_header, NULL, NULL);
-                             
+
   for (i = 0; i < G_N_ELEMENTS (colors); i++)
     {
       row = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 20);
@@ -1099,6 +1109,21 @@ osd_frame_button_press (GtkWidget *frame, GdkEventButton *event, gpointer data)
   return GDK_EVENT_STOP;
 }
 
+static gboolean
+page_combo_separator_func (GtkTreeModel *model,
+                           GtkTreeIter  *iter,
+                           gpointer      data)
+{
+  gchar *text;
+  gboolean res;
+
+  gtk_tree_model_get (model, iter, 0, &text, -1);
+  res = g_strcmp0 (text, "-") == 0;
+  g_free (text);
+
+  return res;
+}
+
 static void
 activate (GApplication *app)
 {
@@ -1107,6 +1132,7 @@ activate (GApplication *app)
   GtkWidget *widget;
   GtkWidget *widget2;
   GtkWidget *widget3;
+  GtkWidget *widget4;
   GtkWidget *stack;
   GtkWidget *dialog;
   GtkAdjustment *adj;
@@ -1254,12 +1280,15 @@ activate (GApplication *app)
   populate_colors ((GtkWidget *)gtk_builder_get_object (builder, "munsell"));
 
   widget = (GtkWidget *)gtk_builder_get_object (builder, "page_combo");
+  gtk_combo_box_set_row_separator_func (GTK_COMBO_BOX (widget), page_combo_separator_func, NULL, NULL);
   widget2 = (GtkWidget *)gtk_builder_get_object (builder, "range_from_spin");
   widget3 = (GtkWidget *)gtk_builder_get_object (builder, "range_to_spin");
+  widget4 = (GtkWidget *)gtk_builder_get_object (builder, "print_button");
   g_object_set_data (G_OBJECT (widget), "range_from_spin", widget2);
   g_object_set_data (G_OBJECT (widget3), "range_from_spin", widget2);
   g_object_set_data (G_OBJECT (widget), "range_to_spin", widget3);
   g_object_set_data (G_OBJECT (widget2), "range_to_spin", widget3);
+  g_object_set_data (G_OBJECT (widget), "print_button", widget4);
 
   set_accel (GTK_APPLICATION (app), GTK_WIDGET (gtk_builder_get_object (builder, "quitmenuitem")));
   set_accel (GTK_APPLICATION (app), GTK_WIDGET (gtk_builder_get_object (builder, "deletemenuitem")));
