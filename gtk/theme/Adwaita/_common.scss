@@ -1041,7 +1041,7 @@ GtkComboBox {
     color: $backdrop_insensitive_color;
   }
   .menuitem { text-shadow: none; }
-  .separator {
+  .separator.vertical {
     // always disable separators
     -GtkWidget-wide-separators: true;
     -GtkWidget-horizontal-separator: 0;
