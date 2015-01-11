@@ -1786,7 +1786,7 @@ gtk_builder_value_from_string (GtkBuilder   *builder,
       gunichar c;
       g_value_init (value, G_TYPE_UINT);
       c = g_utf8_get_char_validated (string, strlen (string));
-      if (c > 0)
+      if (c != 0 && c != (gunichar)-1 && c != (gunichar)-2)
         g_value_set_uint (value, c);
       return TRUE;
     }
