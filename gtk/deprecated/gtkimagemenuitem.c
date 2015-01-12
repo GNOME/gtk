@@ -672,22 +672,35 @@ gtk_image_menu_item_activatable_interface_init (GtkActivatableIface  *iface)
   iface->sync_action_properties = gtk_image_menu_item_sync_action_properties;
 }
 
+static GtkWidget *
+gtk_image_menu_item_ensure_image (GtkImageMenuItem *item)
+{
+  GtkWidget *image;
+
+  image = gtk_image_menu_item_get_image (item);
+  if (!GTK_IS_IMAGE (image))
+    {
+      image = gtk_image_new ();
+      gtk_widget_show (image);
+      gtk_image_menu_item_set_image (item, image);
+    }
+
+  return image;
+}
+
 static gboolean
 activatable_update_stock_id (GtkImageMenuItem *image_menu_item, GtkAction *action)
 {
-  GtkWidget   *image;
   const gchar *stock_id  = gtk_action_get_stock_id (action);
-
-  image = gtk_image_menu_item_get_image (image_menu_item);
 
   G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
 
-  if (GTK_IS_IMAGE (image) &&
-      stock_id && gtk_icon_factory_lookup_default (stock_id))
+  if (stock_id && gtk_icon_factory_lookup_default (stock_id))
     {
-      G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
+      GtkWidget *image;
+
+      image = gtk_image_menu_item_ensure_image (image_menu_item);
       gtk_image_set_from_stock (GTK_IMAGE (image), stock_id, GTK_ICON_SIZE_MENU);
-      G_GNUC_END_IGNORE_DEPRECATIONS;
       return TRUE;
     }
 
@@ -699,7 +712,6 @@ activatable_update_stock_id (GtkImageMenuItem *image_menu_item, GtkAction *actio
 static gboolean
 activatable_update_gicon (GtkImageMenuItem *image_menu_item, GtkAction *action)
 {
-  GtkWidget   *image;
   GIcon       *icon = gtk_action_get_gicon (action);
   const gchar *stock_id;
   gboolean     ret = FALSE;
@@ -708,11 +720,11 @@ activatable_update_gicon (GtkImageMenuItem *image_menu_item, GtkAction *action)
 
   G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
 
-  image = gtk_image_menu_item_get_image (image_menu_item);
-
-  if (icon && GTK_IS_IMAGE (image) &&
-      !(stock_id && gtk_icon_factory_lookup_default (stock_id)))
+  if (icon && !(stock_id && gtk_icon_factory_lookup_default (stock_id)))
     {
+      GtkWidget *image;
+
+      image = gtk_image_menu_item_ensure_image (image_menu_item);
       gtk_image_set_from_gicon (GTK_IMAGE (image), icon, GTK_ICON_SIZE_MENU);
       ret = TRUE;
     }
@@ -722,20 +734,21 @@ activatable_update_gicon (GtkImageMenuItem *image_menu_item, GtkAction *action)
   return ret;
 }
 
-static void
+static gboolean
 activatable_update_icon_name (GtkImageMenuItem *image_menu_item, GtkAction *action)
 {
-  GtkWidget   *image;
   const gchar *icon_name = gtk_action_get_icon_name (action);
 
-  image = gtk_image_menu_item_get_image (image_menu_item);
-
-  if (GTK_IS_IMAGE (image) &&
-      (gtk_image_get_storage_type (GTK_IMAGE (image)) == GTK_IMAGE_EMPTY ||
-       gtk_image_get_storage_type (GTK_IMAGE (image)) == GTK_IMAGE_ICON_NAME))
+  if (icon_name)
     {
+      GtkWidget *image;
+
+      image = gtk_image_menu_item_ensure_image (image_menu_item);
       gtk_image_set_from_icon_name (GTK_IMAGE (image), icon_name, GTK_ICON_SIZE_MENU);
+      return TRUE;
     }
+
+  return FALSE;
 }
 
 static void
@@ -767,7 +780,6 @@ gtk_image_menu_item_sync_action_properties (GtkActivatable *activatable,
                                             GtkAction      *action)
 {
   GtkImageMenuItem *image_menu_item;
-  GtkWidget *image;
   gboolean   use_appearance;
 
   image_menu_item = GTK_IMAGE_MENU_ITEM (activatable);
@@ -780,21 +792,6 @@ gtk_image_menu_item_sync_action_properties (GtkActivatable *activatable,
   use_appearance = gtk_activatable_get_use_action_appearance (activatable);
   if (!use_appearance)
     return;
-
-  image = gtk_image_menu_item_get_image (image_menu_item);
-  if (image && !GTK_IS_IMAGE (image))
-    {
-      gtk_image_menu_item_set_image (image_menu_item, NULL);
-      image = NULL;
-    }
-
-  if (!image)
-    {
-      image = gtk_image_new ();
-      gtk_widget_show (image);
-      gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (activatable),
-                                     image);
-    }
 
   if (!activatable_update_stock_id (image_menu_item, action) &&
       !activatable_update_gicon (image_menu_item, action))
