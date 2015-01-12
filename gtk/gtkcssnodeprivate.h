@@ -45,12 +45,12 @@ struct _GtkCssNode
 struct _GtkCssNodeClass
 {
   GObjectClass object_class;
+
+  GtkWidgetPath *       (* create_widget_path)          (GtkCssNode            *cssnode);
+  const GtkWidgetPath * (* get_widget_path)             (GtkCssNode            *cssnode);
 };
 
 GType                   gtk_css_node_get_type           (void) G_GNUC_CONST;
-
-GtkCssNode *            gtk_css_node_new                (void);
-GtkCssNode *            gtk_css_node_copy               (GtkCssNode            *cssnode);
 
 void                    gtk_css_node_set_parent         (GtkCssNode            *cssnode,
                                                          GtkCssNode            *parent);
@@ -93,6 +93,9 @@ GtkCssNodeDeclaration * gtk_css_node_dup_declaration    (GtkCssNode            *
 GtkCssStyle *           gtk_css_node_get_style          (GtkCssNode            *cssnode);
 void                    gtk_css_node_set_style          (GtkCssNode            *cssnode,
                                                          GtkCssStyle           *style);
+
+GtkWidgetPath *         gtk_css_node_create_widget_path (GtkCssNode            *cssnode);
+const GtkWidgetPath *   gtk_css_node_get_widget_path    (GtkCssNode            *cssnode);
 
 G_END_DECLS
 

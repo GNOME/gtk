@@ -33,36 +33,33 @@ gtk_css_node_finalize (GObject *object)
   G_OBJECT_CLASS (gtk_css_node_parent_class)->finalize (object);
 }
 
+static GtkWidgetPath *
+gtk_css_node_real_create_widget_path (GtkCssNode *cssnode)
+{
+  return gtk_widget_path_new ();
+}
+
+static const GtkWidgetPath *
+gtk_css_node_real_get_widget_path (GtkCssNode *cssnode)
+{
+  return NULL;
+}
+
 static void
 gtk_css_node_class_init (GtkCssNodeClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
 
   object_class->finalize = gtk_css_node_finalize;
+
+  klass->create_widget_path = gtk_css_node_real_create_widget_path;
+  klass->get_widget_path = gtk_css_node_real_get_widget_path;
 }
 
 static void
 gtk_css_node_init (GtkCssNode *cssnode)
 {
   cssnode->decl = gtk_css_node_declaration_new ();
-}
-
-GtkCssNode *
-gtk_css_node_new (void)
-{
-  return g_object_new (GTK_TYPE_CSS_NODE, NULL);
-}
-
-GtkCssNode *
-gtk_css_node_copy (GtkCssNode *cssnode)
-{
-  GtkCssNode *copy;
-
-  copy = gtk_css_node_new ();
-  gtk_css_node_declaration_unref (copy->decl);
-  copy->decl = gtk_css_node_declaration_ref (cssnode->decl);
-
-  return copy;
 }
 
 void
@@ -220,3 +217,16 @@ gtk_css_node_dup_declaration (GtkCssNode *cssnode)
 {
   return gtk_css_node_declaration_ref (cssnode->decl);
 }
+
+GtkWidgetPath *
+gtk_css_node_create_widget_path (GtkCssNode *cssnode)
+{
+  return GTK_CSS_NODE_GET_CLASS (cssnode)->create_widget_path (cssnode);
+}
+
+const GtkWidgetPath *
+gtk_css_node_get_widget_path (GtkCssNode *cssnode)
+{
+  return GTK_CSS_NODE_GET_CLASS (cssnode)->get_widget_path (cssnode);
+}
+

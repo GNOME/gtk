@@ -401,6 +401,7 @@ gtk_private_h_sources =		\
 	gtkcssnodedeclarationprivate.h	\
 	gtkcssnumbervalueprivate.h	\
 	gtkcssparserprivate.h	\
+	gtkcsspathnodeprivate.h	\
 	gtkcsspositionvalueprivate.h	\
 	gtkcssproviderprivate.h	\
 	gtkcssrepeatvalueprivate.h	\
@@ -416,10 +417,12 @@ gtk_private_h_sources =		\
 	gtkcssstyleprivate.h 	\
 	gtkcssstylepropertyprivate.h \
 	gtkcsstransformvalueprivate.h	\
+	gtkcsstransientnodeprivate.h	\
 	gtkcsstransitionprivate.h	\
 	gtkcsstypedvalueprivate.h	\
 	gtkcssunsetvalueprivate.h	\
 	gtkcssvalueprivate.h	\
+	gtkcsswidgetnodeprivate.h	\
 	gtkcustompaperunixdialog.h \
 	gtkdialogprivate.h 	\
 	gtkentryprivate.h	\
@@ -632,6 +635,7 @@ gtk_base_c_sources = 		\
 	gtkcssnodedeclaration.c	\
 	gtkcssnumbervalue.c	\
 	gtkcssparser.c		\
+	gtkcsspathnode.c	\
 	gtkcsspositionvalue.c	\
 	gtkcssprovider.c	\
 	gtkcssrepeatvalue.c	\
@@ -649,11 +653,13 @@ gtk_base_c_sources = 		\
 	gtkcssstyleproperty.c	\
 	gtkcssstylepropertyimpl.c \
 	gtkcsstransformvalue.c	\
+	gtkcsstransientnode.c	\
 	gtkcsstransition.c	\
 	gtkcsstypedvalue.c	\
 	gtkcssunsetvalue.c	\
-	gtkcssvalue.c		\
 	gtkcsstypes.c		\
+	gtkcssvalue.c		\
+	gtkcsswidgetnode.c	\
 	gtkdialog.c		\
 	gtkdrawingarea.c	\
 	gtkeditable.c		\
