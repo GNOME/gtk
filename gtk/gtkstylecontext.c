@@ -877,7 +877,6 @@ style_values_lookup (GtkStyleContext *context)
   if (cssnode->values)
     return cssnode->values;
 
-  g_assert (priv->widget != NULL || priv->widget_path != NULL);
   g_assert (gtk_style_context_is_saved (context));
 
   values = g_hash_table_lookup (priv->style_values, cssnode->decl);
@@ -1194,15 +1193,11 @@ GtkCssSection *
 gtk_style_context_get_section (GtkStyleContext *context,
                                const gchar     *property)
 {
-  GtkStyleContextPrivate *priv;
   GtkCssStyle *values;
   GtkStyleProperty *prop;
 
   g_return_val_if_fail (GTK_IS_STYLE_CONTEXT (context), NULL);
   g_return_val_if_fail (property != NULL, NULL);
-
-  priv = context->priv;
-  g_return_val_if_fail (priv->widget != NULL || priv->widget_path != NULL, NULL);
 
   prop = _gtk_style_property_lookup (property);
   if (!GTK_IS_CSS_STYLE_PROPERTY (prop))
@@ -2284,14 +2279,10 @@ GtkIconSet *
 gtk_style_context_lookup_icon_set (GtkStyleContext *context,
                                    const gchar     *stock_id)
 {
-  GtkStyleContextPrivate *priv;
   GtkIconSet *icon_set;
 
   g_return_val_if_fail (GTK_IS_STYLE_CONTEXT (context), NULL);
   g_return_val_if_fail (stock_id != NULL, NULL);
-
-  priv = context->priv;
-  g_return_val_if_fail (priv->widget != NULL || priv->widget_path != NULL, NULL);
 
   G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
 
@@ -2674,7 +2665,6 @@ gtk_style_context_notify_state_change (GtkStyleContext *context,
   g_return_if_fail (GTK_IS_STYLE_CONTEXT (context));
   g_return_if_fail (GDK_IS_WINDOW (window));
   g_return_if_fail (state > GTK_STATE_NORMAL && state <= GTK_STATE_FOCUSED);
-  g_return_if_fail (context->priv->widget != NULL || context->priv->widget_path != NULL);
 }
 
 /**
@@ -3356,14 +3346,10 @@ const PangoFontDescription *
 gtk_style_context_get_font (GtkStyleContext *context,
                             GtkStateFlags    state)
 {
-  GtkStyleContextPrivate *priv;
   GHashTable *hash;
   PangoFontDescription *description, *previous;
 
   g_return_val_if_fail (GTK_IS_STYLE_CONTEXT (context), NULL);
-
-  priv = context->priv;
-  g_return_val_if_fail (priv->widget != NULL || priv->widget_path != NULL, NULL);
 
   /* Yuck, fonts are created on-demand but we don't return a ref.
    * Do bad things to achieve this requirement */
