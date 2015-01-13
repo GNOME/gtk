@@ -2030,6 +2030,7 @@ G_DEFINE_TYPE (GdkDeviceTool, gdk_device_tool, G_TYPE_OBJECT)
 enum {
   TOOL_PROP_0,
   TOOL_PROP_SERIAL,
+  TOOL_PROP_TOOL_TYPE,
   N_TOOL_PROPS
 };
 
@@ -2047,6 +2048,9 @@ gdk_device_tool_set_property (GObject      *object,
     {
     case TOOL_PROP_SERIAL:
       tool->serial = g_value_get_uint64 (value);
+      break;
+    case TOOL_PROP_TOOL_TYPE:
+      tool->type = g_value_get_enum (value);
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -2066,6 +2070,9 @@ gdk_device_tool_get_property (GObject    *object,
     {
     case TOOL_PROP_SERIAL:
       g_value_set_uint64 (value, tool->serial);
+      break;
+    case TOOL_PROP_TOOL_TYPE:
+      g_value_set_enum (value, tool->type);
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -2087,6 +2094,13 @@ gdk_device_tool_class_init (GdkDeviceToolClass *klass)
                                                       0, G_MAXUINT64, 0,
                                                       G_PARAM_READWRITE |
                                                       G_PARAM_CONSTRUCT_ONLY);
+  tool_props[TOOL_PROP_TOOL_TYPE] = g_param_spec_enum ("tool-type",
+                                                       "Tool type",
+                                                       "Tool type",
+                                                       GDK_TYPE_DEVICE_TOOL_TYPE,
+                                                       GDK_DEVICE_TOOL_TYPE_UNKNOWN,
+                                                       G_PARAM_READWRITE |
+                                                       G_PARAM_CONSTRUCT_ONLY);
 
   g_object_class_install_properties (object_class, N_TOOL_PROPS, tool_props);
 }
@@ -2097,10 +2111,12 @@ gdk_device_tool_init (GdkDeviceTool *tool)
 }
 
 GdkDeviceTool *
-gdk_device_tool_new (guint64 serial)
+gdk_device_tool_new (guint64           serial,
+                     GdkDeviceToolType type)
 {
   return g_object_new (GDK_TYPE_DEVICE_TOOL,
                        "serial", serial,
+                       "tool-type", type,
                        NULL);
 }
 
@@ -2132,4 +2148,23 @@ gdk_device_tool_get_serial (GdkDeviceTool *tool)
   g_return_val_if_fail (tool != NULL, 0);
 
   return tool->serial;
+}
+
+/**
+ * gdk_device_tool_get_tool_type:
+ * @tool: a #GdkDeviceTool
+ *
+ * Gets the #GdkDeviceToolType of the tool.
+ *
+ * Returns: The physical type for this tool. This can be used to figure out what
+ * sort of pen is being used, such as an airbrush or a pencil.
+ *
+ * Since: 3.22
+ **/
+GdkDeviceToolType
+gdk_device_tool_get_tool_type (GdkDeviceTool *tool)
+{
+  g_return_val_if_fail (tool != NULL, GDK_DEVICE_TOOL_TYPE_UNKNOWN);
+
+  return tool->type;
 }
