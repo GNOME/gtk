@@ -2870,7 +2870,8 @@ gtk_style_context_update_cache (GtkStyleContext  *context,
 }
 
 static gboolean
-gtk_style_context_should_create_transitions (GtkStyleContext *context)
+gtk_style_context_should_create_transitions (GtkStyleContext *context,
+                                             GtkCssStyle     *previous_style)
 {
   GtkStyleContextPrivate *priv;
   gboolean animate;
@@ -2881,6 +2882,9 @@ gtk_style_context_should_create_transitions (GtkStyleContext *context)
     return FALSE;
 
   if (!gtk_widget_get_mapped (priv->widget))
+    return FALSE;
+
+  if (previous_style == gtk_css_static_style_get_default (priv->screen))
     return FALSE;
 
   g_object_get (gtk_widget_get_settings (context->priv->widget),
@@ -2945,7 +2949,7 @@ _gtk_style_context_validate (GtkStyleContext  *context,
                                           timestamp,
                                           GTK_STYLE_PROVIDER_PRIVATE (priv->cascade),
                                           priv->scale,
-                                          gtk_style_context_should_create_transitions (context) ? current : NULL);
+                                          gtk_style_context_should_create_transitions (context, current) ? current : NULL);
 
       gtk_css_node_set_values (cssnode, style);
 
