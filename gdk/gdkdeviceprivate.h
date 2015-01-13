@@ -37,6 +37,7 @@ struct _GdkDeviceTool
 {
   GObject parent_instance;
   guint64 serial;
+  GdkDeviceToolType type;
 };
 
 struct _GdkDeviceToolClass
@@ -198,7 +199,8 @@ void  gdk_device_set_seat  (GdkDevice *device,
                             GdkSeat   *seat);
 
 /* Device tools */
-GdkDeviceTool *gdk_device_tool_new    (guint64        serial);
+GdkDeviceTool *gdk_device_tool_new    (guint64            serial,
+                                       GdkDeviceToolType  type);
 void           gdk_device_update_tool (GdkDevice     *device,
                                        GdkDeviceTool *tool);
 

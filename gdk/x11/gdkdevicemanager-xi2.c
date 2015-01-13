@@ -1022,7 +1022,8 @@ handle_property_change (GdkX11DeviceManagerXI2 *device_manager,
 
           if (!tool && serial_id > 0)
             {
-              tool = gdk_device_tool_new (serial_id);
+              tool = gdk_device_tool_new (serial_id,
+                                          GDK_DEVICE_TOOL_TYPE_UNKNOWN);
               gdk_seat_default_add_tool (GDK_SEAT_DEFAULT (seat), tool);
             }
         }
