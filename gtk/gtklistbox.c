@@ -363,6 +363,7 @@ gtk_list_box_finalize (GObject *obj)
 
   g_clear_object (&priv->adjustment);
   g_clear_object (&priv->drag_highlighted_row);
+  g_clear_object (&priv->multipress_gesture);
 
   g_sequence_free (priv->children);
   g_hash_table_unref (priv->header_hash);
