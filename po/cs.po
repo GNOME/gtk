@@ -1409,16 +1409,13 @@ msgstr "Neplatná velikost %s\n"
 #. * contains the name of the license as link text.
 #.
 #: ../gtk/gtkaboutdialog.c:114
-#, fuzzy, c-format
-#| msgid ""
-#| "This program comes with ABSOLUTELY NO WARRANTY.\n"
-#| "See the <a href=\"%s\">%s</a> for details."
+#, c-format
 msgid ""
 "This program comes with absolutely no warranty.\n"
 "See the <a href=\"%s\">%s</a> for details."
 msgstr ""
-"Tento program je rozšiřován BEZ JAKÉKOLIV ZÁRUKY.\n"
-"Podrobnosti naleznete na <a href=\"%s\">%s</a>."
+"Tento program je šířen bez jakékoliv záruky.\n"
+"Podrobnosti naleznete v <a href=\"%s\">%s</a>."
 
 #: ../gtk/gtkaboutdialog.c:118 ../gtk/resources/ui/gtkaboutdialog.ui.h:3
 msgid "License"
