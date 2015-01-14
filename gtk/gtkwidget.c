@@ -11907,7 +11907,6 @@ gtk_widget_dispose (GObject *object)
 {
   GtkWidget *widget = GTK_WIDGET (object);
   GtkWidgetPrivate *priv = widget->priv;
-  GList *l;
 
   if (priv->parent)
     gtk_container_remove (GTK_CONTAINER (priv->parent), widget);
@@ -11929,15 +11928,6 @@ gtk_widget_dispose (GObject *object)
 
   while (priv->attached_windows)
     gtk_window_set_attached_to (priv->attached_windows->data, NULL);
-
-  for (l = priv->event_controllers; l; l = l->next)
-    {
-      EventControllerData *data = l->data;
-      if (data->controller)
-        _gtk_widget_remove_controller (widget, data->controller);
-    }
-  g_list_free_full (priv->event_controllers, g_free);
-  priv->event_controllers = NULL;
 
   G_OBJECT_CLASS (gtk_widget_parent_class)->dispose (object);
 }
@@ -12133,6 +12123,7 @@ gtk_widget_finalize (GObject *object)
   GtkWidgetPrivate *priv = widget->priv;
   GtkWidgetAuxInfo *aux_info;
   GtkAccessible *accessible;
+  GList *l;
 
   gtk_grab_remove (widget);
 
@@ -12158,6 +12149,15 @@ gtk_widget_finalize (GObject *object)
     }
 
   _gtk_size_request_cache_free (&priv->requests);
+
+  for (l = priv->event_controllers; l; l = l->next)
+    {
+      EventControllerData *data = l->data;
+      if (data->controller)
+        _gtk_widget_remove_controller (widget, data->controller);
+    }
+  g_list_free_full (priv->event_controllers, g_free);
+  priv->event_controllers = NULL;
 
   if (g_object_is_floating (object))
     g_warning ("A floating object was finalized. This means that someone\n"
