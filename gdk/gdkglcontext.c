@@ -238,7 +238,7 @@ gdk_gl_context_upload_texture (GdkGLContext    *context,
 
   glPixelStorei (GL_UNPACK_ALIGNMENT, 4);
   glPixelStorei (GL_UNPACK_ROW_LENGTH, cairo_image_surface_get_stride (image_surface)/4);
-  glTexImage2D (texture_target, 0, 4, width, height, 0, GL_BGRA, GL_UNSIGNED_INT_8_8_8_8_REV,
+  glTexImage2D (texture_target, 0, GL_RGBA, width, height, 0, GL_BGRA, GL_UNSIGNED_INT_8_8_8_8_REV,
                 cairo_image_surface_get_data (image_surface));
   glPixelStorei (GL_UNPACK_ROW_LENGTH, 0);
 }

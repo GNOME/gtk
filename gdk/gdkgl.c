@@ -235,8 +235,8 @@ gdk_gl_texture_quads (GdkGLContext *paint_context,
   glActiveTexture (GL_TEXTURE0);
   glUniform1i(program->map_location, 0); /* Use texture unit 0 */
 
-  glEnableVertexAttribArray (0);
-  glEnableVertexAttribArray (1);
+  glEnableVertexAttribArray (program->position_location);
+  glEnableVertexAttribArray (program->uv_location);
   glBindBuffer (GL_ARRAY_BUFFER, paint_data->tmp_vertex_buffer);
 
   glVertexAttribPointer (program->position_location, 2, GL_FLOAT, GL_FALSE, sizeof(float) * 4, NULL);
@@ -272,8 +272,8 @@ gdk_gl_texture_quads (GdkGLContext *paint_context,
 
   g_free (vertex_buffer_data);
 
-  glDisableVertexAttribArray (0);
-  glDisableVertexAttribArray (1);
+  glDisableVertexAttribArray (program->position_location);
+  glDisableVertexAttribArray (program->uv_location);
 }
 
 /* x,y,width,height describes a rectangle in the gl render buffer
@@ -519,7 +519,6 @@ gdk_cairo_draw_from_gl (cairo_t              *cr,
       glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 
       glEnable (GL_SCISSOR_TEST);
-      glEnable (GL_TEXTURE_2D);
 
       gdk_window_get_unscaled_size (impl_window, NULL, &unscaled_window_height);
 
@@ -587,8 +586,6 @@ gdk_cairo_draw_from_gl (cairo_t              *cr,
       if (alpha_size != 0)
         glDisable (GL_BLEND);
 
-      glDisable (GL_TEXTURE_2D);
-
 #undef FLIP_Y
 
     }
@@ -644,6 +641,7 @@ gdk_cairo_draw_from_gl (cairo_t              *cr,
 
   if (clip_region)
     cairo_region_destroy (clip_region);
+
 }
 
 /* This is always called with the paint context current */
@@ -664,7 +662,6 @@ gdk_gl_texture_from_surface (cairo_surface_t *surface,
   float umax, vmax;
   gboolean use_texture_rectangle;
   guint target;
-
   paint_context = gdk_gl_context_get_current ();
   if ((_gdk_gl_flags & GDK_GL_SOFTWARE_DRAW_SURFACE) == 0 &&
       paint_context &&
@@ -692,7 +689,6 @@ gdk_gl_texture_from_surface (cairo_surface_t *surface,
     target = GL_TEXTURE_2D;
 
   glBindTexture (target, texture_id);
-  glEnable (target);
   glEnable (GL_SCISSOR_TEST);
 
   glTexParameteri (target, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
@@ -750,8 +746,6 @@ gdk_gl_texture_from_surface (cairo_surface_t *surface,
       }
     }
 
-
   glDisable (GL_SCISSOR_TEST);
-  glDisable (target);
   glDeleteTextures (1, &texture_id);
 }

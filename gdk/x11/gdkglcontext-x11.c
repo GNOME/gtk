@@ -752,6 +752,8 @@ create_gl3_context (GdkDisplay   *display,
    */
   static const int attrib_list[] = {
     GLX_CONTEXT_PROFILE_MASK_ARB, GLX_CONTEXT_CORE_PROFILE_BIT_ARB,
+    GLX_CONTEXT_MAJOR_VERSION_ARB, 3,
+    GLX_CONTEXT_MINOR_VERSION_ARB, 2,
     None,
   };
 

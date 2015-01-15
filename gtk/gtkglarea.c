@@ -539,8 +539,6 @@ gtk_gl_area_post_render (GtkGLArea *area)
 
   if (priv->auto_render)
     invalidate[i++] = GL_COLOR_ATTACHMENT0;
-
-  glInvalidateFramebuffer (GL_FRAMEBUFFER, i, invalidate);
 }
 
 
