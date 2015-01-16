@@ -752,19 +752,15 @@ scrolled_window_drag_begin_cb (GtkScrolledWindow *scrolled_window,
 static void
 gtk_scrolled_window_invalidate_overshoot (GtkScrolledWindow *scrolled_window)
 {
-  GtkAllocation child_allocation, allocation;
+  GtkAllocation child_allocation;
   gint overshoot_x, overshoot_y;
   GdkRectangle rect;
 
   if (!_gtk_scrolled_window_get_overshoot (scrolled_window, &overshoot_x, &overshoot_y))
     return;
 
-  gtk_widget_get_allocation (GTK_WIDGET (scrolled_window), &allocation);
   gtk_scrolled_window_relative_allocation (GTK_WIDGET (scrolled_window),
                                            &child_allocation);
-  child_allocation.x += allocation.x;
-  child_allocation.y += allocation.y;
-
   if (overshoot_x != 0)
     {
       if (overshoot_x < 0)
