@@ -1884,8 +1884,46 @@ column-header.button.dnd { // for treeview-like derive widgets
   -GtkRange-stepper-spacing: 0;
   -GtkRange-trough-under-steppers: 1;
 
+  $_slider_margin: 3px;
+  $_slider_fine_tune_margin: 4px;
+
   .button {
     border: none;
+  }
+
+  &.overlay-indicator {
+    &:not(.dragging):not(.hovering) { // Overlay scrolling indicator
+      opacity: 0.3;
+
+      -GtkRange-slider-width: 5px;
+
+      .slider {
+        margin: 0;
+        background-color: $fg_color;
+        border: 1px solid if($variant==light, white, black);
+        background-clip: padding-box;
+      }
+
+      .trough {
+        border-style: none;
+        background-color: transparent;
+      }
+
+      // w/o the following margin tweaks the slider shrinks when hovering/dragging
+      &.vertical .slider {
+        margin-top: $_slider_margin - 1px;
+        margin-bottom: $_slider_margin - 1px;
+      }
+
+      &.horizontal .slider {
+        margin-left: $_slider_margin - 1px;
+        margin-right: $_slider_margin - 1px;
+      }
+
+    }
+
+    &.dragging,
+    &.hovering { opacity: 0.7; }
   }
 
   // trough coloring
@@ -1901,10 +1939,7 @@ column-header.button.dnd { // for treeview-like derive widgets
 
   // slider coloring
   .slider {
-    border-color: transparent;
-    border-style: solid;
     background-color: mix($fg_color, $bg_color, 40%);
-    background-clip: padding-box; // needed since we use the borders as margins
 
     &:hover { background-color: mix($fg_color, $bg_color, 60%); }
 
@@ -1917,56 +1952,32 @@ column-header.button.dnd { // for treeview-like derive widgets
     }
   }
 
-  &.overlay-indicator { // Overlay scrolling indicator
-    -GtkRange-slider-width: 8px;
 
-    .slider {
-      background-color: transparentize($fg_color, 0.7);
-      border-width: 2px;
-      border-radius: 100px;
-    }
-
-    .trough {
-      border-color: transparent;
-      background-color: transparent;
-    }
-
-    &.dragging,
-    &.hovering {
-      -GtkRange-slider-width: 13;
-
-      .slider { border-width: 1px; }
-
-      .trough {
-        border-color: transparentize($borders_color, 0.3);
-        background-color: transparentize($scrollbar_bg_color, 0.3);
-      }
-
-      &.fine-tune {
-
-        .slider { border-width: 3px; }
-
-        .trough { background-color: if($variant=='light', darken($scrollbar_bg_color, 3%), lighten($scrollbar_bg_color, 3%)); }
-      }
-    }
-  }
-
-  // borders and margins
+  // sizing
   .slider {
-    border-width: 3px;
     border-radius: 100px;
+    margin: $_slider_margin;
   }
 
-  &.fine-tune .slider { border-width: 4px; }
+  &.fine-tune .slider { margin: $_slider_fine_tune_margin; }
 
   &.vertical {
 
     .slider {
-      margin-left: 1px;
+      margin-left: 1px + $_slider_margin;
 
       &:dir(rtl) {
-        margin-left: 0;
-        margin-right: 1px;
+        margin-left: $_slider_margin;
+        margin-right: 1px + $_slider_margin;
+      }
+    }
+
+    &.fine-tune .slider {
+      margin-left: 1px + $_slider_fine_tune_margin;
+
+      &:dir(rtl) {
+        margin-left: $_slider_fine_tune_margin;
+        margin-right: 1px + $_slider_fine_tune_margin;
       }
     }
 
@@ -1982,9 +1993,9 @@ column-header.button.dnd { // for treeview-like derive widgets
 
   &.horizontal {
 
-    .slider {
-      margin-top: 1px;
-    }
+    .slider { margin-top: 1px + $_slider_margin; }
+
+    &.fine-tune .slider { margin-top: 1px + $_slider_fine_tune_margin; }
 
     .trough { border-top-style: solid; }
   }
