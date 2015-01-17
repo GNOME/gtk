@@ -29,7 +29,7 @@
 
 G_BEGIN_DECLS
 
-void gtk_theming_background_render  (GtkStyleContext      *context,
+void gtk_theming_background_render  (GtkCssStyle          *style,
                                      cairo_t              *cr,
                                      gdouble               x,
                                      gdouble               y,

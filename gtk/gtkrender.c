@@ -500,7 +500,7 @@ gtk_do_render_background (GtkStyleContext *context,
                           gdouble          width,
                           gdouble          height)
 {
-  gtk_theming_background_render (context,
+  gtk_theming_background_render (gtk_style_context_lookup_style (context),
                                  cr,
                                  x, y,
                                  width, height,
@@ -1615,7 +1615,7 @@ gtk_do_render_extension (GtkStyleContext *context,
       break;
     }
 
-  gtk_theming_background_render (context, 
+  gtk_theming_background_render (gtk_style_context_lookup_style (context),
                                  cr,
                                  x, y,
                                  width, height,
