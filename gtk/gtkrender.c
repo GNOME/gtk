@@ -23,7 +23,6 @@
 #include <math.h>
 
 #include "gtkcsscornervalueprivate.h"
-#include "gtkcssenginevalueprivate.h"
 #include "gtkcssenumvalueprivate.h"
 #include "gtkcssimagebuiltinprivate.h"
 #include "gtkcssimagevalueprivate.h"
