@@ -360,8 +360,7 @@ init_cursors (GtkInspectorVisual *vis)
 {
   GHashTable *t;
   GHashTableIter iter;
-  gchar *theme, *current_theme, *path;
-  gint i, pos;
+  gchar *theme, *path;
 
   t = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, NULL);
 
