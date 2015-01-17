@@ -400,8 +400,7 @@ gtk_do_render_arrow (GtkStyleContext *context,
                      gdouble          size)
 {
   double line_width;
-  GtkStateFlags state;
-  GdkRGBA color;
+  const GdkRGBA *color;
 
   if (render_icon_image (context, cr, x, y, size, size))
     return;
@@ -425,9 +424,8 @@ gtk_do_render_arrow (GtkStyleContext *context,
   cairo_rel_line_to (cr, size / 2.0, size / 2.0);
   cairo_rel_line_to (cr, - size / 2.0, size / 2.0);
 
-  state = gtk_style_context_get_state (context);
-  gtk_style_context_get_color (context, state, &color);
-  gdk_cairo_set_source_rgba (cr, &color);
+  color = _gtk_css_rgba_value_get_rgba (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_COLOR));
+  gdk_cairo_set_source_rgba (cr, color);
   cairo_stroke (cr);
 
   cairo_restore (cr);
@@ -1258,19 +1256,17 @@ gtk_do_render_layout (GtkStyleContext *context,
                       gdouble          y,
                       PangoLayout     *layout)
 {
-  GdkRGBA fg_color;
-  GtkStateFlags flags;
+  const GdkRGBA *fg_color;
 
   cairo_save (cr);
-  flags = gtk_style_context_get_state (context);
-  gtk_style_context_get_color (context, flags, &fg_color);
+  fg_color = _gtk_css_rgba_value_get_rgba (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_COLOR));
 
   prepare_context_for_layout (cr, x, y, layout);
 
   _gtk_css_shadows_value_paint_layout (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_TEXT_SHADOW),
                                        cr, layout);
 
-  gdk_cairo_set_source_rgba (cr, &fg_color);
+  gdk_cairo_set_source_rgba (cr, fg_color);
   pango_cairo_show_layout (cr, layout);
 
   cairo_restore (cr);
@@ -1315,13 +1311,11 @@ gtk_do_render_line (GtkStyleContext *context,
                     gdouble          x1,
                     gdouble          y1)
 {
-  GdkRGBA color;
-  GtkStateFlags flags;
+  const GdkRGBA *color;
 
-  flags = gtk_style_context_get_state (context);
   cairo_save (cr);
 
-  gtk_style_context_get_color (context, flags, &color);
+  color = _gtk_css_rgba_value_get_rgba (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_COLOR));
 
   cairo_set_line_cap (cr, CAIRO_LINE_CAP_SQUARE);
   cairo_set_line_width (cr, 1);
@@ -1329,7 +1323,7 @@ gtk_do_render_line (GtkStyleContext *context,
   cairo_move_to (cr, x0 + 0.5, y0 + 0.5);
   cairo_line_to (cr, x1 + 0.5, y1 + 0.5);
 
-  gdk_cairo_set_source_rgba (cr, &color);
+  gdk_cairo_set_source_rgba (cr, color);
   cairo_stroke (cr);
 
   cairo_restore (cr);
@@ -2120,14 +2114,12 @@ render_spinner (GtkStyleContext *context,
                 gdouble          width,
                 gdouble          height)
 {
-  GtkStateFlags state;
-  GdkRGBA color;
+  const GdkRGBA *color;
   gdouble radius;
 
-  state = gtk_style_context_get_state (context);
   radius = MIN (width / 2, height / 2);
 
-  gtk_style_context_get_color (context, state, &color);
+  color = _gtk_css_rgba_value_get_rgba (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_COLOR));
 
   cairo_save (cr);
   cairo_translate (cr, x + width / 2, y + height / 2);
@@ -2137,7 +2129,7 @@ render_spinner (GtkStyleContext *context,
                                         radius,
                                         -1);
 
-  gdk_cairo_set_source_rgba (cr, &color);
+  gdk_cairo_set_source_rgba (cr, color);
   gtk_render_paint_spinner (cr, radius, -1);
 
   cairo_restore (cr);
