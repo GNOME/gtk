@@ -115,31 +115,31 @@ _gtk_rounded_box_apply_border_radius (GtkRoundedBox *box,
 }
 
 void
-_gtk_rounded_box_apply_border_radius_for_context (GtkRoundedBox    *box,
-                                                  GtkStyleContext  *context,
-                                                  GtkJunctionSides  junction)
+_gtk_rounded_box_apply_border_radius_for_style (GtkRoundedBox    *box,
+                                                GtkCssStyle      *style,
+                                                GtkJunctionSides  junction)
 {
   GtkCssValue *corner[4];
 
-  corner[GTK_CSS_TOP_LEFT] = _gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_BORDER_TOP_LEFT_RADIUS);
-  corner[GTK_CSS_TOP_RIGHT] = _gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_BORDER_TOP_RIGHT_RADIUS);
-  corner[GTK_CSS_BOTTOM_LEFT] = _gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_BORDER_BOTTOM_LEFT_RADIUS);
-  corner[GTK_CSS_BOTTOM_RIGHT] = _gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_BORDER_BOTTOM_RIGHT_RADIUS);
+  corner[GTK_CSS_TOP_LEFT] = gtk_css_style_get_value (style, GTK_CSS_PROPERTY_BORDER_TOP_LEFT_RADIUS);
+  corner[GTK_CSS_TOP_RIGHT] = gtk_css_style_get_value (style, GTK_CSS_PROPERTY_BORDER_TOP_RIGHT_RADIUS);
+  corner[GTK_CSS_BOTTOM_LEFT] = gtk_css_style_get_value (style, GTK_CSS_PROPERTY_BORDER_BOTTOM_LEFT_RADIUS);
+  corner[GTK_CSS_BOTTOM_RIGHT] = gtk_css_style_get_value (style, GTK_CSS_PROPERTY_BORDER_BOTTOM_RIGHT_RADIUS);
 
   _gtk_rounded_box_apply_border_radius (box, corner, junction);
 }
 
 void
-_gtk_rounded_box_apply_outline_radius_for_context (GtkRoundedBox    *box,
-                                                   GtkStyleContext  *context,
-                                                   GtkJunctionSides  junction)
+_gtk_rounded_box_apply_outline_radius_for_style (GtkRoundedBox    *box,
+                                                 GtkCssStyle      *style,
+                                                 GtkJunctionSides  junction)
 {
   GtkCssValue *corner[4];
 
-  corner[GTK_CSS_TOP_LEFT] = _gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_OUTLINE_TOP_LEFT_RADIUS);
-  corner[GTK_CSS_TOP_RIGHT] = _gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_OUTLINE_TOP_RIGHT_RADIUS);
-  corner[GTK_CSS_BOTTOM_LEFT] = _gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_OUTLINE_BOTTOM_LEFT_RADIUS);
-  corner[GTK_CSS_BOTTOM_RIGHT] = _gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_OUTLINE_BOTTOM_RIGHT_RADIUS);
+  corner[GTK_CSS_TOP_LEFT] = gtk_css_style_get_value (style, GTK_CSS_PROPERTY_OUTLINE_TOP_LEFT_RADIUS);
+  corner[GTK_CSS_TOP_RIGHT] = gtk_css_style_get_value (style, GTK_CSS_PROPERTY_OUTLINE_TOP_RIGHT_RADIUS);
+  corner[GTK_CSS_BOTTOM_LEFT] = gtk_css_style_get_value (style, GTK_CSS_PROPERTY_OUTLINE_BOTTOM_LEFT_RADIUS);
+  corner[GTK_CSS_BOTTOM_RIGHT] = gtk_css_style_get_value (style, GTK_CSS_PROPERTY_OUTLINE_BOTTOM_RIGHT_RADIUS);
 
   _gtk_rounded_box_apply_border_radius (box, corner, junction);
 }

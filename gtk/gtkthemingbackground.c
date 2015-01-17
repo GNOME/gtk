@@ -278,7 +278,7 @@ _gtk_theming_background_init_context (GtkThemingBackground *bg,
    * right now we just shrink to the default.
    */
   _gtk_rounded_box_init_rect (&bg->boxes[GTK_CSS_AREA_BORDER_BOX], 0, 0, width, height);
-  _gtk_rounded_box_apply_border_radius_for_context (&bg->boxes[GTK_CSS_AREA_BORDER_BOX], bg->context, junction);
+  _gtk_rounded_box_apply_border_radius_for_style (&bg->boxes[GTK_CSS_AREA_BORDER_BOX], gtk_style_context_lookup_style (bg->context), junction);
 
   bg->boxes[GTK_CSS_AREA_PADDING_BOX] = bg->boxes[GTK_CSS_AREA_BORDER_BOX];
   _gtk_rounded_box_shrink (&bg->boxes[GTK_CSS_AREA_PADDING_BOX],

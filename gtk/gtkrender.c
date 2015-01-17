@@ -939,7 +939,7 @@ render_frame_internal (GtkStyleContext  *context,
       colors[3] = *_gtk_css_rgba_value_get_rgba (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_BORDER_LEFT_COLOR));
 
       _gtk_rounded_box_init_rect (&border_box, x, y, width, height);
-      _gtk_rounded_box_apply_border_radius_for_context (&border_box, context, junction);
+      _gtk_rounded_box_apply_border_radius_for_style (&border_box, gtk_style_context_lookup_style (context), junction);
 
       render_border (cr, &border_box, border_width, hidden_side, colors, border_style);
     }
@@ -1185,7 +1185,7 @@ gtk_do_render_focus (GtkStyleContext *context,
                                - border_width[GTK_CSS_RIGHT] - offset,
                                - border_width[GTK_CSS_LEFT] - offset,
                                - border_width[GTK_CSS_BOTTOM] - offset);
-      _gtk_rounded_box_apply_outline_radius_for_context (&border_box, context, GTK_JUNCTION_NONE);
+      _gtk_rounded_box_apply_outline_radius_for_style (&border_box, gtk_style_context_lookup_style (context), GTK_JUNCTION_NONE);
 
       render_border (cr, &border_box, border_width, 0, colors, border_style);
     }
@@ -2477,7 +2477,7 @@ gtk_render_content_path (GtkStyleContext *context,
   g_return_if_fail (cr != NULL);
 
   _gtk_rounded_box_init_rect (&box, x, y, width, height);
-  _gtk_rounded_box_apply_border_radius_for_context (&box, context, 0);
+  _gtk_rounded_box_apply_border_radius_for_style (&box, gtk_style_context_lookup_style (context), 0);
 
   _gtk_rounded_box_shrink (&box,
                            _gtk_css_number_value_get (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_BORDER_TOP_WIDTH), 100)
