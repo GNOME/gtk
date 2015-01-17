@@ -39,7 +39,7 @@ struct _GtkBorderImage {
 };
 
 gboolean          _gtk_border_image_init             (GtkBorderImage       *image,
-                                                      GtkStyleContext      *context);
+                                                      GtkCssStyle          *style);
 
 void              _gtk_border_image_render           (GtkBorderImage       *image,
                                                       const double          border_width[4],

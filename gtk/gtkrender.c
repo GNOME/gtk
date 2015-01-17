@@ -909,7 +909,7 @@ render_frame_internal (GtkStyleContext  *context,
   border_width[2] = _gtk_css_number_value_get (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_BORDER_BOTTOM_WIDTH), 100);
   border_width[3] = _gtk_css_number_value_get (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_BORDER_LEFT_WIDTH), 100);
 
-  if (_gtk_border_image_init (&border_image, context))
+  if (_gtk_border_image_init (&border_image, gtk_style_context_lookup_style (context)))
     {
       _gtk_border_image_render (&border_image, border_width, cr, x, y, width, height);
     }
