@@ -42,9 +42,7 @@ enum
 {
   COLUMN_NAME,
   COLUMN_VALUE,
-  COLUMN_LOCATION,
-  COLUMN_URI,
-  COLUMN_LINE
+  COLUMN_LOCATION
 };
 
 struct _GtkInspectorStylePropListPrivate
@@ -308,8 +306,6 @@ populate (GtkInspectorStylePropList *self)
       GtkCssSection *section;
       gchar *location;
       gchar *value;
-      gchar *uri;
-      guint start_line, end_line;
 
       prop = _gtk_css_style_property_lookup_by_id (i);
       name = _gtk_style_property_get_name (GTK_STYLE_PROPERTY (prop));
@@ -320,59 +316,18 @@ populate (GtkInspectorStylePropList *self)
 
       section = gtk_css_style_get_section (style, i);
       if (section)
-        {
-          location = _gtk_css_section_to_string (section);
-          GFileInfo *info;
-          GFile *file;
-          const gchar *path;
-
-          start_line = gtk_css_section_get_start_line (section);
-          end_line = gtk_css_section_get_end_line (section);
-
-          file = gtk_css_section_get_file (section);
-          if (file)
-            {
-              info = g_file_query_info (file, G_FILE_ATTRIBUTE_STANDARD_DISPLAY_NAME, 0, NULL, NULL);
-
-              if (info)
-                path = g_file_info_get_display_name (info);
-              else
-                path = "<broken file>";
-
-              uri = g_file_get_uri (file);
-            }
-          else
-            {
-              info = NULL;
-              path = "<data>";
-              uri = NULL;
-            }
-
-          if (end_line != start_line)
-            location = g_strdup_printf ("%s:%u-%u", path, start_line + 1, end_line + 1);
-          else
-            location = g_strdup_printf ("%s:%u", path, start_line + 1);
-          if (info)
-            g_object_unref (info);
-        }
+        location = _gtk_css_section_to_string (section);
       else
-        {
-          location = NULL;
-          uri = NULL;
-          start_line = -1;
-        }
+        location = NULL;
 
       gtk_list_store_set (priv->model,
                           iter,
                           COLUMN_VALUE, value,
                           COLUMN_LOCATION, location,
-                          COLUMN_URI, uri,
-                          COLUMN_LINE, start_line + 1,
                           -1);
 
       g_free (location);
       g_free (value);
-      g_free (uri);
     }
 }
 
