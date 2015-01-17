@@ -20,11 +20,12 @@
  */
 
 #include <config.h>
-#include <cairo-gobject.h>
 
+#include "gtkrenderborderprivate.h"
+
+#include <cairo-gobject.h>
 #include <math.h>
 
-#include "gtkborderimageprivate.h"
 #include "gtkcssbordervalueprivate.h"
 #include "gtkcssimagevalueprivate.h"
 #include "gtkcssnumbervalueprivate.h"

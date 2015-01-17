@@ -27,7 +27,6 @@
 #include "gtkcssshorthandpropertyprivate.h"
 #include "gtkcsstypedvalueprivate.h"
 #include "gtkcsstypesprivate.h"
-#include "gtkborderimageprivate.h"
 
 #include "gtkprivatetypebuiltins.h"
 #include "gtkstylepropertyprivate.h"

@@ -19,8 +19,8 @@
  * License along with this library. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef __GTK_BORDER_IMAGE_H__
-#define __GTK_BORDER_IMAGE_H__
+#ifndef __GTK_RENDER_BORDER_H__
+#define __GTK_RENDER_BORDER_H__
 
 #include "gtkborder.h"
 #include "gtkcssimageprivate.h"
@@ -51,4 +51,4 @@ void              _gtk_border_image_render           (GtkBorderImage       *imag
 
 G_END_DECLS
 
-#endif /* __GTK_BORDER_IMAGE_H__ */
+#endif /* __GTK_RENDER_BORDER_H__ */

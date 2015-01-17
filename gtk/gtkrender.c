@@ -22,7 +22,6 @@
 
 #include <math.h>
 
-#include "gtkborderimageprivate.h"
 #include "gtkcsscornervalueprivate.h"
 #include "gtkcssenginevalueprivate.h"
 #include "gtkcssenumvalueprivate.h"
@@ -34,6 +33,7 @@
 #include "gtkcsstransformvalueprivate.h"
 #include "gtkhslaprivate.h"
 #include "gtkrenderbackgroundprivate.h"
+#include "gtkrenderborderprivate.h"
 #include "gtkstylecontextprivate.h"
 
 #include "fallback-c89.c"

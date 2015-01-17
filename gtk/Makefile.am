@@ -353,7 +353,6 @@ gtk_private_h_sources =		\
 	gtkbitmaskprivate.h	\
 	gtkbitmaskprivateimpl.h	\
 	gtkbookmarksmanager.h	\
-	gtkborderimageprivate.h \
 	gtkboxprivate.h         \
 	gtkbuilderprivate.h	\
 	gtkbuttonprivate.h	\
@@ -478,6 +477,7 @@ gtk_private_h_sources =		\
 	gtkrecentchooserprivate.h \
 	gtkrecentchooserutils.h	\
 	gtkrenderbackgroundprivate.h \
+	gtkrenderborderprivate.h \
 	gtkrenderprivate.h	\
 	gtkresources.h		\
 	gtkroundedboxprivate.h	\
@@ -554,7 +554,6 @@ gtk_base_c_sources = 		\
 	gtkbindings.c		\
 	gtkbookmarksmanager.c	\
 	gtkborder.c		\
-	gtkborderimage.c	\
 	gtkbox.c		\
 	gtkbuildable.c		\
 	gtkbuilder.c		\
@@ -762,6 +761,7 @@ gtk_base_c_sources = 		\
 	gtkrecentmanager.c	\
 	gtkrender.c		\
 	gtkrenderbackground.c	\
+	gtkrenderborder.c	\
 	gtkresources.c		\
 	gtkrevealer.c		\
 	gtkroundedbox.c		\
