@@ -27,6 +27,9 @@
 
 #include "gtkcssproviderprivate.h"
 #include "gtkcssstylepropertyprivate.h"
+#include "gtkcsssectionprivate.h"
+#include "gtkcssstyleprivate.h"
+#include "gtkcssvalueprivate.h"
 #include "gtkliststore.h"
 #include "gtksettings.h"
 #include "gtktreeview.h"
@@ -286,82 +289,16 @@ gtk_inspector_style_prop_list_class_init (GtkInspectorStylePropListClass *klass)
   gtk_widget_class_bind_template_callback (widget_class, search_close_clicked);
 }
 
-static gchar *
-strip_property (const gchar *property)
-{
-  gchar **split;
-  gchar *value;
-
-  split = g_strsplit_set (property, ":;", 3);
-  if (!split[0] || !split[1])
-    value = g_strdup ("");
-  else
-    value = g_strdup (split[1]);
-
-  g_strfreev (split);
-
-  return value;
-}
-
-static gchar *
-get_css_content (GtkInspectorStylePropList *self,
-                 GFile                     *file,
-                 guint                      start_line,
-                 guint                      end_line)
-{
-  GtkInspectorStylePropListPrivate *priv = self->priv;
-  guint i;
-  guint contents_lines;
-  gchar *value, *property;
-  gchar **contents;
-
-  contents = g_hash_table_lookup (priv->css_files, file);
-  if (!contents)
-    {
-      gchar *tmp;
-
-      if (g_file_load_contents (file, NULL, &tmp, NULL, NULL, NULL))
-        {
-          contents = g_strsplit_set (tmp, "\n\r", -1);
-          g_free (tmp);
-        }
-      else
-        {
-          contents =  g_strsplit ("", "", -1);
-        }
-
-      g_object_ref (file);
-      g_hash_table_insert (priv->css_files, file, contents);
-    }
-
-  contents_lines = g_strv_length (contents);
-  property = g_strdup ("");
-  for (i = start_line; (i < end_line + 1) && (i < contents_lines); ++i)
-    {
-      gchar *s1, *s2;
-
-      s1 = g_strdup (contents[i]);
-      s1 = g_strstrip (s1);
-      s2 = g_strconcat (property, s1, NULL);
-      g_free (property);
-      g_free (s1);
-      property = s2;
-    }
-
-  value = strip_property (property);
-  g_free (property);
-
-  return value;
-}
-
 static void
 populate (GtkInspectorStylePropList *self)
 {
   GtkInspectorStylePropListPrivate *priv = self->priv;
   GtkStyleContext *context;
+  GtkCssStyle *style;
   gint i;
 
   context = gtk_widget_get_style_context (priv->widget);
+  style = gtk_style_context_lookup_style (context);
 
   for (i = 0; i < _gtk_css_style_property_get_n_properties (); i++)
     {
@@ -379,9 +316,12 @@ populate (GtkInspectorStylePropList *self)
 
       iter = (GtkTreeIter *)g_hash_table_lookup (priv->prop_iters, name);
 
-      section = gtk_style_context_get_section (context, name);
+      value = _gtk_css_value_to_string (gtk_css_style_get_value (style, i));
+
+      section = gtk_css_style_get_section (style, i);
       if (section)
         {
+          location = _gtk_css_section_to_string (section);
           GFileInfo *info;
           GFile *file;
           const gchar *path;
@@ -400,14 +340,12 @@ populate (GtkInspectorStylePropList *self)
                 path = "<broken file>";
 
               uri = g_file_get_uri (file);
-              value = get_css_content (self, file, start_line, end_line);
             }
           else
             {
               info = NULL;
               path = "<data>";
               uri = NULL;
-              value = NULL;
             }
 
           if (end_line != start_line)
@@ -420,7 +358,6 @@ populate (GtkInspectorStylePropList *self)
       else
         {
           location = NULL;
-          value = NULL;
           uri = NULL;
           start_line = -1;
         }
