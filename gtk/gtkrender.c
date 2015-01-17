@@ -1130,29 +1130,29 @@ gtk_render_expander (GtkStyleContext *context,
 }
 
 static void
-gtk_do_render_focus (GtkStyleContext *context,
-                     cairo_t         *cr,
-                     gdouble          x,
-                     gdouble          y,
-                     gdouble          width,
-                     gdouble          height)
+gtk_css_style_render_focus (GtkCssStyle *style,
+                            cairo_t     *cr,
+                            gdouble      x,
+                            gdouble      y,
+                            gdouble      width,
+                            gdouble      height)
 {
   GtkBorderStyle border_style[4];
   GtkRoundedBox border_box;
   double border_width[4];
   GdkRGBA colors[4];
 
-  border_style[0] = _gtk_css_border_style_value_get (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_OUTLINE_STYLE));
+  border_style[0] = _gtk_css_border_style_value_get (gtk_css_style_get_value (style, GTK_CSS_PROPERTY_OUTLINE_STYLE));
   if (border_style[0] != GTK_BORDER_STYLE_NONE)
     {
       int offset;
 
       border_style[1] = border_style[2] = border_style[3] = border_style[0];
-      border_width[0] = _gtk_css_number_value_get (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_OUTLINE_WIDTH), 100);
+      border_width[0] = _gtk_css_number_value_get (gtk_css_style_get_value (style, GTK_CSS_PROPERTY_OUTLINE_WIDTH), 100);
       border_width[3] = border_width[2] = border_width[1] = border_width[0];
-      colors[0] = *_gtk_css_rgba_value_get_rgba (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_OUTLINE_COLOR));
+      colors[0] = *_gtk_css_rgba_value_get_rgba (gtk_css_style_get_value (style, GTK_CSS_PROPERTY_OUTLINE_COLOR));
       colors[3] = colors[2] = colors[1] = colors[0];
-      offset = _gtk_css_number_value_get (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_OUTLINE_OFFSET), 100);
+      offset = _gtk_css_number_value_get (gtk_css_style_get_value (style, GTK_CSS_PROPERTY_OUTLINE_OFFSET), 100);
 
       _gtk_rounded_box_init_rect (&border_box, x, y, width, height);
       _gtk_rounded_box_shrink (&border_box,
@@ -1160,7 +1160,7 @@ gtk_do_render_focus (GtkStyleContext *context,
                                - border_width[GTK_CSS_RIGHT] - offset,
                                - border_width[GTK_CSS_LEFT] - offset,
                                - border_width[GTK_CSS_BOTTOM] - offset);
-      _gtk_rounded_box_apply_outline_radius_for_style (&border_box, gtk_style_context_lookup_style (context), GTK_JUNCTION_NONE);
+      _gtk_rounded_box_apply_outline_radius_for_style (&border_box, style, GTK_JUNCTION_NONE);
 
       render_border (cr, &border_box, border_width, 0, colors, border_style);
     }
@@ -1200,7 +1200,9 @@ gtk_render_focus (GtkStyleContext *context,
   cairo_save (cr);
   cairo_new_path (cr);
 
-  gtk_do_render_focus (context, cr, x, y, width, height);
+  gtk_css_style_render_focus (gtk_style_context_lookup_style (context),
+                              cr,
+                              x, y, width, height);
 
   cairo_restore (cr);
 }
