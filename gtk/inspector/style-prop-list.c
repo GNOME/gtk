@@ -47,7 +47,6 @@ enum
 
 struct _GtkInspectorStylePropListPrivate
 {
-  GHashTable *css_files;
   GtkListStore *model;
   GtkWidget *widget;
   GtkWidget *tree;
@@ -203,8 +202,6 @@ gtk_inspector_style_prop_list_init (GtkInspectorStylePropList *pl)
                                         GTK_SORT_ASCENDING);
   gtk_tree_view_set_search_entry (GTK_TREE_VIEW (pl->priv->tree),
                                   GTK_ENTRY (pl->priv->search_entry));
-  pl->priv->css_files = g_hash_table_new_full (g_file_hash, (GEqualFunc) g_file_equal,
-                                           g_object_unref, (GDestroyNotify) g_strfreev);
 
   pl->priv->prop_iters = g_hash_table_new_full (g_str_hash,
                                                 g_str_equal,
@@ -247,7 +244,6 @@ finalize (GObject *object)
 {
   GtkInspectorStylePropList *pl = GTK_INSPECTOR_STYLE_PROP_LIST (object);
 
-  g_hash_table_unref (pl->priv->css_files);
   g_hash_table_unref (pl->priv->prop_iters);
 
   G_OBJECT_CLASS (gtk_inspector_style_prop_list_parent_class)->finalize (object);
