@@ -492,21 +492,6 @@ color_shade (const GdkRGBA *color,
   _gdk_rgba_init_from_hsla (color_return, &hsla);
 }
 
-static void
-gtk_do_render_background (GtkStyleContext *context,
-                          cairo_t         *cr,
-                          gdouble          x,
-                          gdouble          y,
-                          gdouble          width,
-                          gdouble          height)
-{
-  gtk_theming_background_render (gtk_style_context_lookup_style (context),
-                                 cr,
-                                 x, y,
-                                 width, height,
-                                 gtk_style_context_get_junction_sides (context));
-}
-
 /**
  * gtk_render_background:
  * @context: a #GtkStyleContext
@@ -542,7 +527,9 @@ gtk_render_background (GtkStyleContext *context,
   cairo_save (cr);
   cairo_new_path (cr);
 
-  gtk_do_render_background (context, cr, x, y, width, height);
+  gtk_css_style_render_background (gtk_style_context_lookup_style (context),
+                                   cr, x, y, width, height,
+                                   gtk_style_context_get_junction_sides (context));
 
   cairo_restore (cr);
 }
@@ -892,24 +879,24 @@ render_border (cairo_t       *cr,
 }
 
 static void
-render_frame_internal (GtkStyleContext  *context,
-                       cairo_t          *cr,
-                       gdouble           x,
-                       gdouble           y,
-                       gdouble           width,
-                       gdouble           height,
-                       guint             hidden_side,
-                       GtkJunctionSides  junction)
+gtk_css_style_render_frame (GtkCssStyle      *style,
+                            cairo_t          *cr,
+                            gdouble           x,
+                            gdouble           y,
+                            gdouble           width,
+                            gdouble           height,
+                            guint             hidden_side,
+                            GtkJunctionSides  junction)
 {
   GtkBorderImage border_image;
   double border_width[4];
 
-  border_width[0] = _gtk_css_number_value_get (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_BORDER_TOP_WIDTH), 100);
-  border_width[1] = _gtk_css_number_value_get (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_BORDER_RIGHT_WIDTH), 100);
-  border_width[2] = _gtk_css_number_value_get (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_BORDER_BOTTOM_WIDTH), 100);
-  border_width[3] = _gtk_css_number_value_get (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_BORDER_LEFT_WIDTH), 100);
+  border_width[0] = _gtk_css_number_value_get (gtk_css_style_get_value (style, GTK_CSS_PROPERTY_BORDER_TOP_WIDTH), 100);
+  border_width[1] = _gtk_css_number_value_get (gtk_css_style_get_value (style, GTK_CSS_PROPERTY_BORDER_RIGHT_WIDTH), 100);
+  border_width[2] = _gtk_css_number_value_get (gtk_css_style_get_value (style, GTK_CSS_PROPERTY_BORDER_BOTTOM_WIDTH), 100);
+  border_width[3] = _gtk_css_number_value_get (gtk_css_style_get_value (style, GTK_CSS_PROPERTY_BORDER_LEFT_WIDTH), 100);
 
-  if (_gtk_border_image_init (&border_image, gtk_style_context_lookup_style (context)))
+  if (_gtk_border_image_init (&border_image, style))
     {
       _gtk_border_image_render (&border_image, border_width, cr, x, y, width, height);
     }
@@ -926,40 +913,23 @@ render_frame_internal (GtkStyleContext  *context,
           border_width[3] == 0)
         return;
 
-      border_style[0] = _gtk_css_border_style_value_get (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_BORDER_TOP_STYLE));
-      border_style[1] = _gtk_css_border_style_value_get (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_BORDER_RIGHT_STYLE));
-      border_style[2] = _gtk_css_border_style_value_get (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_BORDER_BOTTOM_STYLE));
-      border_style[3] = _gtk_css_border_style_value_get (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_BORDER_LEFT_STYLE));
+      border_style[0] = _gtk_css_border_style_value_get (gtk_css_style_get_value (style, GTK_CSS_PROPERTY_BORDER_TOP_STYLE));
+      border_style[1] = _gtk_css_border_style_value_get (gtk_css_style_get_value (style, GTK_CSS_PROPERTY_BORDER_RIGHT_STYLE));
+      border_style[2] = _gtk_css_border_style_value_get (gtk_css_style_get_value (style, GTK_CSS_PROPERTY_BORDER_BOTTOM_STYLE));
+      border_style[3] = _gtk_css_border_style_value_get (gtk_css_style_get_value (style, GTK_CSS_PROPERTY_BORDER_LEFT_STYLE));
 
       hide_border_sides (border_width, border_style, hidden_side);
 
-      colors[0] = *_gtk_css_rgba_value_get_rgba (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_BORDER_TOP_COLOR));
-      colors[1] = *_gtk_css_rgba_value_get_rgba (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_BORDER_RIGHT_COLOR));
-      colors[2] = *_gtk_css_rgba_value_get_rgba (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_BORDER_BOTTOM_COLOR));
-      colors[3] = *_gtk_css_rgba_value_get_rgba (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_BORDER_LEFT_COLOR));
+      colors[0] = *_gtk_css_rgba_value_get_rgba (gtk_css_style_get_value (style, GTK_CSS_PROPERTY_BORDER_TOP_COLOR));
+      colors[1] = *_gtk_css_rgba_value_get_rgba (gtk_css_style_get_value (style, GTK_CSS_PROPERTY_BORDER_RIGHT_COLOR));
+      colors[2] = *_gtk_css_rgba_value_get_rgba (gtk_css_style_get_value (style, GTK_CSS_PROPERTY_BORDER_BOTTOM_COLOR));
+      colors[3] = *_gtk_css_rgba_value_get_rgba (gtk_css_style_get_value (style, GTK_CSS_PROPERTY_BORDER_LEFT_COLOR));
 
       _gtk_rounded_box_init_rect (&border_box, x, y, width, height);
-      _gtk_rounded_box_apply_border_radius_for_style (&border_box, gtk_style_context_lookup_style (context), junction);
+      _gtk_rounded_box_apply_border_radius_for_style (&border_box, style, junction);
 
       render_border (cr, &border_box, border_width, hidden_side, colors, border_style);
     }
-}
-
-static void
-gtk_do_render_frame (GtkStyleContext *context,
-                     cairo_t         *cr,
-                     gdouble          x,
-                     gdouble          y,
-                     gdouble          width,
-                     gdouble          height)
-{
-  GtkJunctionSides junction;
-
-  junction = gtk_style_context_get_junction_sides (context);
-
-  render_frame_internal (context, cr,
-                         x, y, width, height,
-                         0, junction);
 }
 
 /**
@@ -997,7 +967,12 @@ gtk_render_frame (GtkStyleContext *context,
   cairo_save (cr);
   cairo_new_path (cr);
 
-  gtk_do_render_frame (context, cr, x, y, width, height);
+  gtk_css_style_render_frame (gtk_style_context_lookup_style (context),
+                              cr,
+                              x, y, width, height,
+                              0,
+                              gtk_style_context_get_junction_sides (context));
+
 
   cairo_restore (cr);
 }
@@ -1376,8 +1351,21 @@ gtk_do_render_slider (GtkStyleContext *context,
                       gdouble          height,
                       GtkOrientation   orientation)
 {
-  gtk_do_render_background (context, cr, x, y, width, height);
-  gtk_do_render_frame (context, cr, x, y, width, height);
+  GtkCssStyle *style;
+  GtkJunctionSides junction;
+
+  style = gtk_style_context_lookup_style (context);
+  junction = gtk_style_context_get_junction_sides (context);
+
+  gtk_css_style_render_background (style,
+                                   cr,
+                                   x, y, width, height,
+                                   junction);
+  gtk_css_style_render_frame (style,
+                              cr,
+                              x, y, width, height,
+                              0,
+                              junction);
 }
 
 /**
@@ -1424,32 +1412,30 @@ gtk_render_slider (GtkStyleContext *context,
 }
 
 static void
-gtk_do_render_frame_gap (GtkStyleContext *context,
-                         cairo_t         *cr,
-                         gdouble          x,
-                         gdouble          y,
-                         gdouble          width,
-                         gdouble          height,
-                         GtkPositionType  gap_side,
-                         gdouble          xy0_gap,
-                         gdouble          xy1_gap)
+gtk_css_style_render_frame_gap (GtkCssStyle     *style,
+                                cairo_t         *cr,
+                                gdouble          x,
+                                gdouble          y,
+                                gdouble          width,
+                                gdouble          height,
+                                GtkPositionType  gap_side,
+                                gdouble          xy0_gap,
+                                gdouble          xy1_gap,
+                                GtkJunctionSides junction)
 {
-  GtkJunctionSides junction;
   gint border_width;
   GtkCssValue *corner[4];
   gdouble x0, y0, x1, y1, xc = 0.0, yc = 0.0, wc = 0.0, hc = 0.0;
   GtkBorder border;
 
-  junction = gtk_style_context_get_junction_sides (context);
-
-  border.top = _gtk_css_number_value_get (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_BORDER_TOP_WIDTH), 100);
-  border.right = _gtk_css_number_value_get (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_BORDER_RIGHT_WIDTH), 100);
-  border.bottom = _gtk_css_number_value_get (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_BORDER_BOTTOM_WIDTH), 100);
-  border.left = _gtk_css_number_value_get (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_BORDER_LEFT_WIDTH), 100);
-  corner[GTK_CSS_TOP_LEFT] = _gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_BORDER_TOP_LEFT_RADIUS);
-  corner[GTK_CSS_TOP_RIGHT] = _gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_BORDER_TOP_RIGHT_RADIUS);
-  corner[GTK_CSS_BOTTOM_LEFT] = _gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_BORDER_BOTTOM_LEFT_RADIUS);
-  corner[GTK_CSS_BOTTOM_RIGHT] = _gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_BORDER_BOTTOM_RIGHT_RADIUS);
+  border.top = _gtk_css_number_value_get (gtk_css_style_get_value (style, GTK_CSS_PROPERTY_BORDER_TOP_WIDTH), 100);
+  border.right = _gtk_css_number_value_get (gtk_css_style_get_value (style, GTK_CSS_PROPERTY_BORDER_RIGHT_WIDTH), 100);
+  border.bottom = _gtk_css_number_value_get (gtk_css_style_get_value (style, GTK_CSS_PROPERTY_BORDER_BOTTOM_WIDTH), 100);
+  border.left = _gtk_css_number_value_get (gtk_css_style_get_value (style, GTK_CSS_PROPERTY_BORDER_LEFT_WIDTH), 100);
+  corner[GTK_CSS_TOP_LEFT] = gtk_css_style_get_value (style, GTK_CSS_PROPERTY_BORDER_TOP_LEFT_RADIUS);
+  corner[GTK_CSS_TOP_RIGHT] = gtk_css_style_get_value (style, GTK_CSS_PROPERTY_BORDER_TOP_RIGHT_RADIUS);
+  corner[GTK_CSS_BOTTOM_LEFT] = gtk_css_style_get_value (style, GTK_CSS_PROPERTY_BORDER_BOTTOM_LEFT_RADIUS);
+  corner[GTK_CSS_BOTTOM_RIGHT] = gtk_css_style_get_value (style, GTK_CSS_PROPERTY_BORDER_BOTTOM_RIGHT_RADIUS);
 
   border_width = MIN (MIN (border.top, border.bottom),
                       MIN (border.left, border.right));
@@ -1518,9 +1504,9 @@ gtk_do_render_frame_gap (GtkStyleContext *context,
   cairo_rectangle (cr, x0, yc + hc, x1 - x0, y1 - (yc + hc));
   cairo_clip (cr);
 
-  render_frame_internal (context, cr,
-                         x, y, width, height,
-                         0, junction);
+  gtk_css_style_render_frame (style, cr,
+                              x, y, width, height,
+                              0, junction);
 
   cairo_restore (cr);
 }
@@ -1576,21 +1562,24 @@ gtk_render_frame_gap (GtkStyleContext *context,
   cairo_save (cr);
   cairo_new_path (cr);
 
-  gtk_do_render_frame_gap (context, cr,
-                           x, y, width, height, gap_side,
-                           xy0_gap, xy1_gap);
+  gtk_css_style_render_frame_gap (gtk_style_context_lookup_style (context),
+                                  cr,
+                                  x, y, width, height, gap_side,
+                                  xy0_gap, xy1_gap,
+                                  gtk_style_context_get_junction_sides (context));
+
 
   cairo_restore (cr);
 }
 
 static void
-gtk_do_render_extension (GtkStyleContext *context,
-                         cairo_t         *cr,
-                         gdouble          x,
-                         gdouble          y,
-                         gdouble          width,
-                         gdouble          height,
-                         GtkPositionType  gap_side)
+gtk_css_style_render_extension (GtkCssStyle     *style,
+                                cairo_t         *cr,
+                                gdouble          x,
+                                gdouble          y,
+                                gdouble          width,
+                                gdouble          height,
+                                GtkPositionType  gap_side)
 {
   GtkJunctionSides junction = 0;
   guint hidden_side = 0;
@@ -1615,15 +1604,15 @@ gtk_do_render_extension (GtkStyleContext *context,
       break;
     }
 
-  gtk_theming_background_render (gtk_style_context_lookup_style (context),
-                                 cr,
-                                 x, y,
-                                 width, height,
-                                 junction);
+  gtk_css_style_render_background (style,
+                                   cr,
+                                   x, y,
+                                   width, height,
+                                   junction);
 
-  render_frame_internal (context, cr,
-                         x, y, width, height,
-                         hidden_side, junction);
+  gtk_css_style_render_frame (style, cr,
+                              x, y, width, height,
+                              hidden_side, junction);
 }
 
 /**
@@ -1664,7 +1653,10 @@ gtk_render_extension (GtkStyleContext *context,
   cairo_save (cr);
   cairo_new_path (cr);
 
-  gtk_do_render_extension (context, cr, x, y, width, height, gap_side);
+  gtk_css_style_render_extension (gtk_style_context_lookup_style (context),
+                                  cr,
+                                  x, y, width, height,
+                                  gap_side);
 
   cairo_restore (cr);
 }

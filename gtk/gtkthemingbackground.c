@@ -292,13 +292,13 @@ _gtk_theming_background_init_style (GtkThemingBackground *bg,
 }
 
 void
-gtk_theming_background_render (GtkCssStyle      *style,
-                               cairo_t          *cr,
-                               gdouble           x,
-                               gdouble           y,
-                               gdouble           width,
-                               gdouble           height,
-                               GtkJunctionSides  junction)
+gtk_css_style_render_background (GtkCssStyle      *style,
+                                 cairo_t          *cr,
+                                 gdouble           x,
+                                 gdouble           y,
+                                 gdouble           width,
+                                 gdouble           height,
+                                 GtkJunctionSides  junction)
 {
   GtkThemingBackground bg;
   gint idx;

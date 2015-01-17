@@ -23,19 +23,18 @@
 #include <glib-object.h>
 #include <cairo.h>
 
-#include "gtkcssimageprivate.h"
-#include "gtkroundedboxprivate.h"
+#include "gtkcsstypesprivate.h"
 #include "gtktypes.h"
 
 G_BEGIN_DECLS
 
-void gtk_theming_background_render  (GtkCssStyle          *style,
-                                     cairo_t              *cr,
-                                     gdouble               x,
-                                     gdouble               y,
-                                     gdouble               width,
-                                     gdouble               height,
-                                     GtkJunctionSides      junction);
+void gtk_css_style_render_background  (GtkCssStyle          *style,
+                                       cairo_t              *cr,
+                                       gdouble               x,
+                                       gdouble               y,
+                                       gdouble               width,
+                                       gdouble               height,
+                                       GtkJunctionSides      junction);
 
 G_END_DECLS
 
