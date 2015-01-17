@@ -21,7 +21,7 @@
 
 #include "config.h"
 
-#include "gtkthemingbackgroundprivate.h"
+#include "gtkrenderbackgroundprivate.h"
 
 #include "gtkcssarrayvalueprivate.h"
 #include "gtkcssbgsizevalueprivate.h"

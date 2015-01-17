@@ -477,6 +477,7 @@ gtk_private_h_sources =		\
 	gtkrecentchooserdefault.h \
 	gtkrecentchooserprivate.h \
 	gtkrecentchooserutils.h	\
+	gtkrenderbackgroundprivate.h \
 	gtkrenderprivate.h	\
 	gtkresources.h		\
 	gtkroundedboxprivate.h	\
@@ -503,7 +504,6 @@ gtk_private_h_sources =		\
 	gtktexttagprivate.h	\
 	gtktexttypes.h		\
 	gtktextutil.h		\
-	gtkthemingbackgroundprivate.h \
 	gtktrashmonitor.h	\
 	gtktogglebuttonprivate.h \
 	gtktoolbarprivate.h	\
@@ -761,6 +761,7 @@ gtk_base_c_sources = 		\
 	gtkrecentfilter.c	\
 	gtkrecentmanager.c	\
 	gtkrender.c		\
+	gtkrenderbackground.c	\
 	gtkresources.c		\
 	gtkrevealer.c		\
 	gtkroundedbox.c		\
@@ -809,7 +810,6 @@ gtk_base_c_sources = 		\
 	gtktexttypes.c		\
 	gtktextutil.c		\
 	gtktextview.c		\
-	gtkthemingbackground.c  \
 	gtktogglebutton.c	\
 	gtktoggletoolbutton.c	\
 	gtktoolbar.c		\

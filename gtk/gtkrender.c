@@ -33,8 +33,8 @@
 #include "gtkcssshadowsvalueprivate.h"
 #include "gtkcsstransformvalueprivate.h"
 #include "gtkhslaprivate.h"
+#include "gtkrenderbackgroundprivate.h"
 #include "gtkstylecontextprivate.h"
-#include "gtkthemingbackgroundprivate.h"
 
 #include "fallback-c89.c"
 

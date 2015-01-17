@@ -17,8 +17,8 @@
  * License along with this library. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef __GTK_THEMING_BACKGROUND_PRIVATE_H__
-#define __GTK_THEMING_BACKGROUND_PRIVATE_H__
+#ifndef __GTK_RENDER_BACKGROUND_PRIVATE_H__
+#define __GTK_RENDER_BACKGROUND_PRIVATE_H__
 
 #include <glib-object.h>
 #include <cairo.h>
@@ -38,4 +38,4 @@ void gtk_css_style_render_background  (GtkCssStyle          *style,
 
 G_END_DECLS
 
-#endif /* __GTK_THEMING_BACKGROUND_PRIVATE_H__ */
+#endif /* __GTK_RENDER_BACKGROUND_PRIVATE_H__ */
