@@ -27,6 +27,7 @@
 #include "gtkcssbgsizevalueprivate.h"
 #include "gtkcssenumvalueprivate.h"
 #include "gtkcssimagevalueprivate.h"
+#include "gtkcssnumbervalueprivate.h"
 #include "gtkcssshadowsvalueprivate.h"
 #include "gtkcsspositionvalueprivate.h"
 #include "gtkcssrepeatvalueprivate.h"
@@ -257,11 +258,16 @@ _gtk_theming_background_init_context (GtkThemingBackground *bg,
                                       double                height,
                                       GtkJunctionSides      junction)
 {
-  GtkStateFlags flags = gtk_style_context_get_state (bg->context);
   GtkBorder border, padding;
 
-  gtk_style_context_get_border (bg->context, flags, &border);
-  gtk_style_context_get_padding (bg->context, flags, &padding);
+  border.top = _gtk_css_number_value_get (_gtk_style_context_peek_property (bg->context, GTK_CSS_PROPERTY_BORDER_TOP_WIDTH), 100);
+  border.right = _gtk_css_number_value_get (_gtk_style_context_peek_property (bg->context, GTK_CSS_PROPERTY_BORDER_RIGHT_WIDTH), 100);
+  border.bottom = _gtk_css_number_value_get (_gtk_style_context_peek_property (bg->context, GTK_CSS_PROPERTY_BORDER_BOTTOM_WIDTH), 100);
+  border.left = _gtk_css_number_value_get (_gtk_style_context_peek_property (bg->context, GTK_CSS_PROPERTY_BORDER_LEFT_WIDTH), 100);
+  padding.top = _gtk_css_number_value_get (_gtk_style_context_peek_property (bg->context, GTK_CSS_PROPERTY_PADDING_TOP), 100);
+  padding.right = _gtk_css_number_value_get (_gtk_style_context_peek_property (bg->context, GTK_CSS_PROPERTY_PADDING_RIGHT), 100);
+  padding.bottom = _gtk_css_number_value_get (_gtk_style_context_peek_property (bg->context, GTK_CSS_PROPERTY_PADDING_BOTTOM), 100);
+  padding.left = _gtk_css_number_value_get (_gtk_style_context_peek_property (bg->context, GTK_CSS_PROPERTY_PADDING_LEFT), 100);
 
   /* In the CSS box model, by default the background positioning area is
    * the padding-box, i.e. all the border-box minus the borders themselves,
