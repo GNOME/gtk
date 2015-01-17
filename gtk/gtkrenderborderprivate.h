@@ -28,26 +28,20 @@
 
 G_BEGIN_DECLS
 
-typedef struct _GtkBorderImage GtkBorderImage;
-
-struct _GtkBorderImage {
-  GtkCssImage *source;
-
-  GtkCssValue *slice;
-  GtkCssValue *width;
-  GtkCssValue *repeat;
-};
-
-gboolean          _gtk_border_image_init             (GtkBorderImage       *image,
-                                                      GtkCssStyle          *style);
-
-void              _gtk_border_image_render           (GtkBorderImage       *image,
-                                                      const double          border_width[4],
-                                                      cairo_t              *cr,
-                                                      gdouble               x,
-                                                      gdouble               y,
-                                                      gdouble               width,
-                                                      gdouble               height);
+void    gtk_css_style_render_border     (GtkCssStyle            *style,
+                                         cairo_t                *cr,
+                                         gdouble                 x,
+                                         gdouble                 y,
+                                         gdouble                 width,
+                                         gdouble                 height,
+                                         guint                   hidden_side,
+                                         GtkJunctionSides        junction);
+void    gtk_css_style_render_outline    (GtkCssStyle            *style,
+                                         cairo_t                *cr,
+                                         gdouble                 x,
+                                         gdouble                 y,
+                                         gdouble                 width,
+                                         gdouble                 height);
 
 G_END_DECLS
 

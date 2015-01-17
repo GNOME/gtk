@@ -533,404 +533,6 @@ gtk_render_background (GtkStyleContext *context,
   cairo_restore (cr);
 }
 
-static void
-hide_border_sides (double         border[4],
-                   GtkBorderStyle border_style[4],
-                   guint          hidden_side)
-{
-  guint i;
-
-  for (i = 0; i < 4; i++)
-    {
-      if (hidden_side & (1 << i) ||
-          border_style[i] == GTK_BORDER_STYLE_NONE ||
-          border_style[i] == GTK_BORDER_STYLE_HIDDEN)
-        border[i] = 0;
-    }
-}
-
-static void
-render_frame_fill (cairo_t       *cr,
-                   GtkRoundedBox *border_box,
-                   const double   border_width[4],
-                   GdkRGBA        colors[4],
-                   guint          hidden_side)
-{
-  GtkRoundedBox padding_box;
-  guint i, j;
-
-  padding_box = *border_box;
-  _gtk_rounded_box_shrink (&padding_box,
-                           border_width[GTK_CSS_TOP],
-                           border_width[GTK_CSS_RIGHT],
-                           border_width[GTK_CSS_BOTTOM],
-                           border_width[GTK_CSS_LEFT]);
-
-  if (hidden_side == 0 &&
-      gdk_rgba_equal (&colors[0], &colors[1]) &&
-      gdk_rgba_equal (&colors[0], &colors[2]) &&
-      gdk_rgba_equal (&colors[0], &colors[3]))
-    {
-      gdk_cairo_set_source_rgba (cr, &colors[0]);
-
-      _gtk_rounded_box_path (border_box, cr);
-      _gtk_rounded_box_path (&padding_box, cr);
-      cairo_fill (cr);
-    }
-  else
-    {
-      for (i = 0; i < 4; i++) 
-        {
-          if (hidden_side & (1 << i))
-            continue;
-
-          for (j = 0; j < 4; j++)
-            { 
-              if (hidden_side & (1 << j))
-                continue;
-
-              if (i == j || 
-                  (gdk_rgba_equal (&colors[i], &colors[j])))
-                {
-                  /* We were already painted when i == j */
-                  if (i > j)
-                    break;
-
-                  if (j == 0)
-                    _gtk_rounded_box_path_top (border_box, &padding_box, cr);
-                  else if (j == 1)
-                    _gtk_rounded_box_path_right (border_box, &padding_box, cr);
-                  else if (j == 2)
-                    _gtk_rounded_box_path_bottom (border_box, &padding_box, cr);
-                  else if (j == 3)
-                    _gtk_rounded_box_path_left (border_box, &padding_box, cr);
-                }
-            }
-          /* We were already painted when i == j */
-          if (i > j)
-            continue;
-
-          gdk_cairo_set_source_rgba (cr, &colors[i]);
-
-          cairo_fill (cr);
-        }
-    }
-}
-
-static void
-set_stroke_style (cairo_t        *cr,
-                  double          line_width,
-                  GtkBorderStyle  style,
-                  double          length)
-{
-  double segments[2];
-  double n;
-
-  cairo_set_line_width (cr, line_width);
-
-  if (style == GTK_BORDER_STYLE_DOTTED)
-    {
-      n = round (0.5 * length / line_width);
-
-      segments[0] = 0;
-      segments[1] = n ? length / n : 2;
-      cairo_set_dash (cr, segments, G_N_ELEMENTS (segments), 0);
-
-      cairo_set_line_cap (cr, CAIRO_LINE_CAP_ROUND);
-      cairo_set_line_join (cr, CAIRO_LINE_JOIN_ROUND);
-    }
-  else
-    {
-      n = length / line_width;
-      /* Optimize the common case of an integer-sized rectangle
-       * Again, we care about focus rectangles.
-       */
-      if (n == nearbyint (n))
-        {
-          segments[0] = 1;
-          segments[1] = 2;
-        }
-      else
-        {
-          n = round ((1. / 3) * n);
-
-          segments[0] = n ? (1. / 3) * length / n : 1;
-          segments[1] = 2 * segments[0];
-        }
-      cairo_set_dash (cr, segments, G_N_ELEMENTS (segments), 0);
-
-      cairo_set_line_cap (cr, CAIRO_LINE_CAP_SQUARE);
-      cairo_set_line_join (cr, CAIRO_LINE_JOIN_MITER);
-    }
-}
-
-static void
-render_frame_stroke (cairo_t       *cr,
-                     GtkRoundedBox *border_box,
-                     const double   border_width[4],
-                     GdkRGBA        colors[4],
-                     guint          hidden_side,
-                     GtkBorderStyle stroke_style)
-{
-  gboolean different_colors, different_borders;
-  GtkRoundedBox stroke_box;
-  guint i;
-
-  different_colors = !gdk_rgba_equal (&colors[0], &colors[1]) ||
-                     !gdk_rgba_equal (&colors[0], &colors[2]) ||
-                     !gdk_rgba_equal (&colors[0], &colors[3]);
-  different_borders = border_width[0] != border_width[1] ||
-                      border_width[0] != border_width[2] ||
-                      border_width[0] != border_width[3] ;
-
-  stroke_box = *border_box;
-  _gtk_rounded_box_shrink (&stroke_box,
-                           border_width[GTK_CSS_TOP] / 2.0,
-                           border_width[GTK_CSS_RIGHT] / 2.0,
-                           border_width[GTK_CSS_BOTTOM] / 2.0,
-                           border_width[GTK_CSS_LEFT] / 2.0);
-
-  if (!different_colors && !different_borders && hidden_side == 0)
-    {
-      double length = 0;
-
-      /* FAST PATH:
-       * Mostly expected to trigger for focus rectangles */
-      for (i = 0; i < 4; i++) 
-        {
-          length += _gtk_rounded_box_guess_length (&stroke_box, i);
-          _gtk_rounded_box_path_side (&stroke_box, cr, i);
-        }
-
-      gdk_cairo_set_source_rgba (cr, &colors[0]);
-      set_stroke_style (cr, border_width[0], stroke_style, length);
-      cairo_stroke (cr);
-    }
-  else
-    {
-      GtkRoundedBox padding_box;
-
-      padding_box = *border_box;
-      _gtk_rounded_box_path (&padding_box, cr);
-      _gtk_rounded_box_shrink (&padding_box,
-                               border_width[GTK_CSS_TOP],
-                               border_width[GTK_CSS_RIGHT],
-                               border_width[GTK_CSS_BOTTOM],
-                               border_width[GTK_CSS_LEFT]);
-
-      for (i = 0; i < 4; i++) 
-        {
-          if (hidden_side & (1 << i))
-            continue;
-
-          cairo_save (cr);
-
-          if (i == 0)
-            _gtk_rounded_box_path_top (border_box, &padding_box, cr);
-          else if (i == 1)
-            _gtk_rounded_box_path_right (border_box, &padding_box, cr);
-          else if (i == 2)
-            _gtk_rounded_box_path_bottom (border_box, &padding_box, cr);
-          else if (i == 3)
-            _gtk_rounded_box_path_left (border_box, &padding_box, cr);
-          cairo_clip (cr);
-
-          _gtk_rounded_box_path_side (&stroke_box, cr, i);
-
-          gdk_cairo_set_source_rgba (cr, &colors[i]);
-          set_stroke_style (cr,
-                            border_width[i],
-                            stroke_style,
-                            _gtk_rounded_box_guess_length (&stroke_box, i));
-          cairo_stroke (cr);
-
-          cairo_restore (cr);
-        }
-    }
-}
-
-static void
-render_border (cairo_t       *cr,
-               GtkRoundedBox *border_box,
-               const double   border_width[4],
-               guint          hidden_side,
-               GdkRGBA        colors[4],
-               GtkBorderStyle border_style[4])
-{
-  guint i, j;
-
-  cairo_save (cr);
-
-  cairo_set_fill_rule (cr, CAIRO_FILL_RULE_EVEN_ODD);
-
-  for (i = 0; i < 4; i++)
-    {
-      if (hidden_side & (1 << i))
-        continue;
-
-      /* NB: code below divides by this value */
-      /* a border smaller than this will not noticably modify
-       * pixels on screen, and since we don't compare with 0,
-       * we'll use this value */
-      if (border_width[i] < 1.0 / 1024)
-        continue;
-
-      switch (border_style[i])
-        {
-        case GTK_BORDER_STYLE_NONE:
-        case GTK_BORDER_STYLE_HIDDEN:
-        case GTK_BORDER_STYLE_SOLID:
-          break;
-        case GTK_BORDER_STYLE_INSET:
-          if (i == 1 || i == 2)
-            color_shade (&colors[i], 1.8, &colors[i]);
-          break;
-        case GTK_BORDER_STYLE_OUTSET:
-          if (i == 0 || i == 3)
-            color_shade (&colors[i], 1.8, &colors[i]);
-          break;
-        case GTK_BORDER_STYLE_DOTTED:
-        case GTK_BORDER_STYLE_DASHED:
-          {
-            guint dont_draw = hidden_side;
-
-            for (j = 0; j < 4; j++)
-              {
-                if (border_style[j] == border_style[i])
-                  hidden_side |= (1 << j);
-                else
-                  dont_draw |= (1 << j);
-              }
-            
-            render_frame_stroke (cr, border_box, border_width, colors, dont_draw, border_style[i]);
-          }
-          break;
-        case GTK_BORDER_STYLE_DOUBLE:
-          {
-            GtkRoundedBox other_box;
-            double other_border[4];
-            guint dont_draw = hidden_side;
-
-            for (j = 0; j < 4; j++)
-              {
-                if (border_style[j] == GTK_BORDER_STYLE_DOUBLE)
-                  hidden_side |= (1 << j);
-                else
-                  dont_draw |= (1 << j);
-                
-                other_border[i] = border_width[i] / 3;
-              }
-            
-            render_frame_fill (cr, border_box, other_border, colors, dont_draw);
-            
-            other_box = *border_box;
-            _gtk_rounded_box_shrink (&other_box,
-                                     2 * other_border[GTK_CSS_TOP],
-                                     2 * other_border[GTK_CSS_RIGHT],
-                                     2 * other_border[GTK_CSS_BOTTOM],
-                                     2 * other_border[GTK_CSS_LEFT]);
-            render_frame_fill (cr, &other_box, other_border, colors, dont_draw);
-          }
-          break;
-        case GTK_BORDER_STYLE_GROOVE:
-        case GTK_BORDER_STYLE_RIDGE:
-          {
-            GtkRoundedBox other_box;
-            GdkRGBA other_colors[4];
-            guint dont_draw = hidden_side;
-            double other_border[4];
-
-            for (j = 0; j < 4; j++)
-              {
-                other_colors[j] = colors[j];
-                if ((j == 0 || j == 3) ^ (border_style[j] == GTK_BORDER_STYLE_RIDGE))
-                  color_shade (&other_colors[j], 1.8, &other_colors[j]);
-                else
-                  color_shade (&colors[j], 1.8, &colors[j]);
-                if (border_style[j] == GTK_BORDER_STYLE_GROOVE ||
-                    border_style[j] == GTK_BORDER_STYLE_RIDGE)
-                  hidden_side |= (1 << j);
-                else
-                  dont_draw |= (1 << j);
-                other_border[i] = border_width[i] / 2;
-              }
-            
-            render_frame_fill (cr, border_box, other_border, colors, dont_draw);
-            
-            other_box = *border_box;
-            _gtk_rounded_box_shrink (&other_box,
-                                     other_border[GTK_CSS_TOP],
-                                     other_border[GTK_CSS_RIGHT],
-                                     other_border[GTK_CSS_BOTTOM],
-                                     other_border[GTK_CSS_LEFT]);
-            render_frame_fill (cr, &other_box, other_border, other_colors, dont_draw);
-          }
-          break;
-        default:
-          g_assert_not_reached ();
-          break;
-        }
-    }
-  
-  render_frame_fill (cr, border_box, border_width, colors, hidden_side);
-
-  cairo_restore (cr);
-}
-
-static void
-gtk_css_style_render_frame (GtkCssStyle      *style,
-                            cairo_t          *cr,
-                            gdouble           x,
-                            gdouble           y,
-                            gdouble           width,
-                            gdouble           height,
-                            guint             hidden_side,
-                            GtkJunctionSides  junction)
-{
-  GtkBorderImage border_image;
-  double border_width[4];
-
-  border_width[0] = _gtk_css_number_value_get (gtk_css_style_get_value (style, GTK_CSS_PROPERTY_BORDER_TOP_WIDTH), 100);
-  border_width[1] = _gtk_css_number_value_get (gtk_css_style_get_value (style, GTK_CSS_PROPERTY_BORDER_RIGHT_WIDTH), 100);
-  border_width[2] = _gtk_css_number_value_get (gtk_css_style_get_value (style, GTK_CSS_PROPERTY_BORDER_BOTTOM_WIDTH), 100);
-  border_width[3] = _gtk_css_number_value_get (gtk_css_style_get_value (style, GTK_CSS_PROPERTY_BORDER_LEFT_WIDTH), 100);
-
-  if (_gtk_border_image_init (&border_image, style))
-    {
-      _gtk_border_image_render (&border_image, border_width, cr, x, y, width, height);
-    }
-  else
-    {
-      GtkBorderStyle border_style[4];
-      GtkRoundedBox border_box;
-      GdkRGBA colors[4];
-
-      /* Optimize the most common case of "This widget has no border" */
-      if (border_width[0] == 0 &&
-          border_width[1] == 0 &&
-          border_width[2] == 0 &&
-          border_width[3] == 0)
-        return;
-
-      border_style[0] = _gtk_css_border_style_value_get (gtk_css_style_get_value (style, GTK_CSS_PROPERTY_BORDER_TOP_STYLE));
-      border_style[1] = _gtk_css_border_style_value_get (gtk_css_style_get_value (style, GTK_CSS_PROPERTY_BORDER_RIGHT_STYLE));
-      border_style[2] = _gtk_css_border_style_value_get (gtk_css_style_get_value (style, GTK_CSS_PROPERTY_BORDER_BOTTOM_STYLE));
-      border_style[3] = _gtk_css_border_style_value_get (gtk_css_style_get_value (style, GTK_CSS_PROPERTY_BORDER_LEFT_STYLE));
-
-      hide_border_sides (border_width, border_style, hidden_side);
-
-      colors[0] = *_gtk_css_rgba_value_get_rgba (gtk_css_style_get_value (style, GTK_CSS_PROPERTY_BORDER_TOP_COLOR));
-      colors[1] = *_gtk_css_rgba_value_get_rgba (gtk_css_style_get_value (style, GTK_CSS_PROPERTY_BORDER_RIGHT_COLOR));
-      colors[2] = *_gtk_css_rgba_value_get_rgba (gtk_css_style_get_value (style, GTK_CSS_PROPERTY_BORDER_BOTTOM_COLOR));
-      colors[3] = *_gtk_css_rgba_value_get_rgba (gtk_css_style_get_value (style, GTK_CSS_PROPERTY_BORDER_LEFT_COLOR));
-
-      _gtk_rounded_box_init_rect (&border_box, x, y, width, height);
-      _gtk_rounded_box_apply_border_radius_for_style (&border_box, style, junction);
-
-      render_border (cr, &border_box, border_width, hidden_side, colors, border_style);
-    }
-}
-
 /**
  * gtk_render_frame:
  * @context: a #GtkStyleContext
@@ -966,11 +568,11 @@ gtk_render_frame (GtkStyleContext *context,
   cairo_save (cr);
   cairo_new_path (cr);
 
-  gtk_css_style_render_frame (gtk_style_context_lookup_style (context),
-                              cr,
-                              x, y, width, height,
-                              0,
-                              gtk_style_context_get_junction_sides (context));
+  gtk_css_style_render_border (gtk_style_context_lookup_style (context),
+                               cr,
+                               x, y, width, height,
+                               0,
+                               gtk_style_context_get_junction_sides (context));
 
 
   cairo_restore (cr);
@@ -1128,43 +730,6 @@ gtk_render_expander (GtkStyleContext *context,
   cairo_restore (cr);
 }
 
-static void
-gtk_css_style_render_focus (GtkCssStyle *style,
-                            cairo_t     *cr,
-                            gdouble      x,
-                            gdouble      y,
-                            gdouble      width,
-                            gdouble      height)
-{
-  GtkBorderStyle border_style[4];
-  GtkRoundedBox border_box;
-  double border_width[4];
-  GdkRGBA colors[4];
-
-  border_style[0] = _gtk_css_border_style_value_get (gtk_css_style_get_value (style, GTK_CSS_PROPERTY_OUTLINE_STYLE));
-  if (border_style[0] != GTK_BORDER_STYLE_NONE)
-    {
-      int offset;
-
-      border_style[1] = border_style[2] = border_style[3] = border_style[0];
-      border_width[0] = _gtk_css_number_value_get (gtk_css_style_get_value (style, GTK_CSS_PROPERTY_OUTLINE_WIDTH), 100);
-      border_width[3] = border_width[2] = border_width[1] = border_width[0];
-      colors[0] = *_gtk_css_rgba_value_get_rgba (gtk_css_style_get_value (style, GTK_CSS_PROPERTY_OUTLINE_COLOR));
-      colors[3] = colors[2] = colors[1] = colors[0];
-      offset = _gtk_css_number_value_get (gtk_css_style_get_value (style, GTK_CSS_PROPERTY_OUTLINE_OFFSET), 100);
-
-      _gtk_rounded_box_init_rect (&border_box, x, y, width, height);
-      _gtk_rounded_box_shrink (&border_box,
-                               - border_width[GTK_CSS_TOP] - offset,
-                               - border_width[GTK_CSS_RIGHT] - offset,
-                               - border_width[GTK_CSS_LEFT] - offset,
-                               - border_width[GTK_CSS_BOTTOM] - offset);
-      _gtk_rounded_box_apply_outline_radius_for_style (&border_box, style, GTK_JUNCTION_NONE);
-
-      render_border (cr, &border_box, border_width, 0, colors, border_style);
-    }
-}
-
 /**
  * gtk_render_focus:
  * @context: a #GtkStyleContext
@@ -1199,9 +764,9 @@ gtk_render_focus (GtkStyleContext *context,
   cairo_save (cr);
   cairo_new_path (cr);
 
-  gtk_css_style_render_focus (gtk_style_context_lookup_style (context),
-                              cr,
-                              x, y, width, height);
+  gtk_css_style_render_outline (gtk_style_context_lookup_style (context),
+                                cr,
+                                x, y, width, height);
 
   cairo_restore (cr);
 }
@@ -1362,11 +927,11 @@ gtk_do_render_slider (GtkStyleContext *context,
                                    cr,
                                    x, y, width, height,
                                    junction);
-  gtk_css_style_render_frame (style,
-                              cr,
-                              x, y, width, height,
-                              0,
-                              junction);
+  gtk_css_style_render_border (style,
+                               cr,
+                               x, y, width, height,
+                               0,
+                               junction);
 }
 
 /**
@@ -1505,9 +1070,9 @@ gtk_css_style_render_frame_gap (GtkCssStyle     *style,
   cairo_rectangle (cr, x0, yc + hc, x1 - x0, y1 - (yc + hc));
   cairo_clip (cr);
 
-  gtk_css_style_render_frame (style, cr,
-                              x, y, width, height,
-                              0, junction);
+  gtk_css_style_render_border (style, cr,
+                               x, y, width, height,
+                               0, junction);
 
   cairo_restore (cr);
 }
@@ -1611,9 +1176,9 @@ gtk_css_style_render_extension (GtkCssStyle     *style,
                                    width, height,
                                    junction);
 
-  gtk_css_style_render_frame (style, cr,
-                              x, y, width, height,
-                              hidden_side, junction);
+  gtk_css_style_render_border (style, cr,
+                               x, y, width, height,
+                               hidden_side, junction);
 }
 
 /**
