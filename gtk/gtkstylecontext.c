@@ -200,7 +200,6 @@ static void gtk_style_context_impl_get_property (GObject      *object,
                                                  guint         prop_id,
                                                  GValue       *value,
                                                  GParamSpec   *pspec);
-static GtkCssStyle *style_values_lookup(GtkStyleContext *context);
 
 
 static void gtk_style_context_disconnect_update (GtkStyleContext *context);
@@ -344,7 +343,7 @@ gtk_css_node_get_parent_style (GtkStyleContext *context,
   priv = context->priv;
 
   if (priv->parent)
-    return style_values_lookup (priv->parent);
+    return gtk_style_context_lookup_style (priv->parent);
 
   return NULL;
 }
@@ -512,7 +511,7 @@ gtk_style_context_should_animate (GtkStyleContext *context)
   if (!gtk_widget_get_mapped (priv->widget))
     return FALSE;
 
-  values = style_values_lookup (context);
+  values = gtk_style_context_lookup_style (context);
   if (!GTK_IS_CSS_ANIMATED_STYLE (values) ||
       gtk_css_animated_style_is_static (GTK_CSS_ANIMATED_STYLE (values)))
     return FALSE;
@@ -866,8 +865,8 @@ build_properties (GtkStyleContext             *context,
   return style;
 }
 
-static GtkCssStyle *
-style_values_lookup (GtkStyleContext *context)
+GtkCssStyle *
+gtk_style_context_lookup_style (GtkStyleContext *context)
 {
   GtkStyleContextPrivate *priv;
   GtkCssStyle *values;
@@ -901,14 +900,14 @@ style_values_lookup (GtkStyleContext *context)
 }
 
 static GtkCssStyle *
-style_values_lookup_for_state (GtkStyleContext *context,
-                               GtkStateFlags    state)
+gtk_style_context_lookup_style_for_state (GtkStyleContext *context,
+                                          GtkStateFlags    state)
 {
   GtkCssNodeDeclaration *decl;
   GtkCssStyle *values;
 
   if (gtk_css_node_declaration_get_state (context->priv->cssnode->decl) == state)
-    return g_object_ref (style_values_lookup (context));
+    return g_object_ref (gtk_style_context_lookup_style (context));
 
   if (g_getenv ("GTK_STYLE_CONTEXT_WARNING"))
     g_warning ("State does not match current state");
@@ -1209,7 +1208,7 @@ gtk_style_context_get_section (GtkStyleContext *context,
   if (!GTK_IS_CSS_STYLE_PROPERTY (prop))
     return NULL;
 
-  values = style_values_lookup (context);
+  values = gtk_style_context_lookup_style (context);
   return gtk_css_style_get_section (values, _gtk_css_style_property_get_id (GTK_CSS_STYLE_PROPERTY (prop)));
 }
 
@@ -1263,7 +1262,7 @@ gtk_style_context_get_property (GtkStyleContext *context,
       return;
     }
 
-  values = style_values_lookup_for_state (context, state);
+  values = gtk_style_context_lookup_style_for_state (context, state);
   _gtk_style_property_query (prop, value, gtk_style_context_query_func, values);
   g_object_unref (values);
 }
@@ -1652,7 +1651,7 @@ gtk_style_context_save (GtkStyleContext *context)
   /* Make sure we have the style existing. It is the
    * parent of the new saved node after all. */
   if (!gtk_style_context_is_saved (context))
-    style_values_lookup (context);
+    gtk_style_context_lookup_style (context);
 
   cssnode = gtk_css_node_new ();
   cssnode->decl = gtk_css_node_declaration_ref (priv->cssnode->decl);
@@ -2024,7 +2023,7 @@ GtkCssValue *
 _gtk_style_context_peek_property (GtkStyleContext *context,
                                   guint            property_id)
 {
-  GtkCssStyle *values = style_values_lookup (context);
+  GtkCssStyle *values = gtk_style_context_lookup_style (context);
 
   return gtk_css_style_get_value (values, property_id);
 }
@@ -2986,7 +2985,7 @@ _gtk_style_context_validate (GtkStyleContext  *context,
 
       static_style = build_properties (context, cssnode->decl, TRUE, gtk_css_node_get_parent_style (context, cssnode));
       style = gtk_css_animated_style_new (static_style,
-                                          priv->parent ? style_values_lookup (priv->parent) : NULL,
+                                          priv->parent ? gtk_style_context_lookup_style (priv->parent) : NULL,
                                           timestamp,
                                           GTK_STYLE_PROVIDER_PRIVATE (priv->cascade),
                                           priv->scale,
@@ -3905,8 +3904,8 @@ gtk_gradient_resolve_for_context (GtkGradient     *gradient,
 
   return _gtk_gradient_resolve_full (gradient,
                                      GTK_STYLE_PROVIDER_PRIVATE (priv->cascade),
-                                     style_values_lookup (context),
-                                     priv->parent ? style_values_lookup (priv->parent) : NULL,
+                                     gtk_style_context_lookup_style (context),
+                                     priv->parent ? gtk_style_context_lookup_style (priv->parent) : NULL,
                                      &ignored);
 }
 

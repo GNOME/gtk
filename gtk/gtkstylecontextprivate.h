@@ -36,6 +36,7 @@ const char *    gtk_style_context_get_id                     (GtkStyleContext *c
 const GtkBitmask *
                 _gtk_style_context_get_changes               (GtkStyleContext *context);
 
+GtkCssStyle *   gtk_style_context_lookup_style               (GtkStyleContext *context);
 GtkCssValue   * _gtk_style_context_peek_property             (GtkStyleContext *context,
                                                               guint            property_id);
 const GValue * _gtk_style_context_peek_style_property        (GtkStyleContext *context,
