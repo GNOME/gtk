@@ -1593,11 +1593,13 @@ gtk_style_context_get_parent (GtkStyleContext *context)
  * gtk_style_context_save:
  * @context: a #GtkStyleContext
  *
- * Saves the @context state, so all modifications done through
+ * Saves the @context state, so temporary modifications done through
  * gtk_style_context_add_class(), gtk_style_context_remove_class(),
- * gtk_style_context_add_region(), gtk_style_context_remove_region()
- * or gtk_style_context_set_junction_sides() can be reverted in one
- * go through gtk_style_context_restore().
+ * gtk_style_context_set_state(), etc. can quickly be reverted
+ * in one go through gtk_style_context_restore().
+ *
+ * The matching call to gtk_style_context_restore() must be done
+ * before GTK returns to the main loop.
  *
  * Since: 3.0
  **/
@@ -2926,12 +2928,19 @@ _gtk_style_context_validate (GtkStyleContext  *context,
   if (!priv->invalid && change == 0 && _gtk_bitmask_is_empty (parent_changes))
     return;
 
-  g_assert (!gtk_style_context_is_saved (context));
+  if (G_UNLIKELY (gtk_style_context_is_saved (context)))
+    {
+      g_warning ("unmatched gtk_style_context_save/restore() detected while validating context for %s %p",
+                 priv->widget ? gtk_widget_get_name (priv->widget) : "widget path",
+                 priv->widget ? (gpointer) priv->widget : (gpointer) priv->widget_path);
+      cssnode = gtk_style_context_get_root (context);
+    }
+  else
+    cssnode = priv->cssnode;
 
   priv->pending_changes = 0;
   gtk_style_context_set_invalid (context, FALSE);
 
-  cssnode = priv->cssnode;
   current = g_object_ref (cssnode->values);
 
   /* Try to avoid invalidating if we can */
@@ -2946,13 +2955,13 @@ _gtk_style_context_validate (GtkStyleContext  *context,
                                           GTK_STYLE_PROVIDER_PRIVATE (priv->cascade),
                                           priv->scale,
                                           gtk_style_context_should_create_transitions (context, current) ? current : NULL);
+  
+      gtk_style_context_clear_cache (context);
 
       gtk_css_node_set_values (cssnode, style);
 
       g_object_unref (static_style);
       g_object_unref (style);
-  
-      gtk_style_context_clear_cache (context);
     }
   else
     {
