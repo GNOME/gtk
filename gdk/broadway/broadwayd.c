@@ -456,10 +456,11 @@ main (int argc, char *argv[])
   if (display == NULL)
     {
 #ifdef G_OS_UNIX
-      display = ":0";
-#else
-      display = ":tcp";
+      if (g_unix_socket_address_abstract_names_supported ())
+        display = ":0";
+      else
 #endif
+        display = ":tcp";
     }
 
   if (g_str_has_prefix (display, ":tcp"))
