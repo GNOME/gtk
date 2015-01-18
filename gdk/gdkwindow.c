@@ -2737,7 +2737,7 @@ gdk_window_get_paint_gl_context (GdkWindow *window, GError **error)
   if (window->impl_window->gl_paint_context == NULL)
     {
       window->impl_window->gl_paint_context =
-        GDK_WINDOW_IMPL_GET_CLASS (window->impl)->create_gl_context (window,
+        GDK_WINDOW_IMPL_GET_CLASS (window->impl)->create_gl_context (window->impl_window,
                                                                      TRUE,
                                                                      GDK_GL_PROFILE_3_2_CORE,
                                                                      NULL,
@@ -2748,7 +2748,7 @@ gdk_window_get_paint_gl_context (GdkWindow *window, GError **error)
         {
           g_clear_error (error);
           window->impl_window->gl_paint_context =
-            GDK_WINDOW_IMPL_GET_CLASS (window->impl)->create_gl_context (window,
+            GDK_WINDOW_IMPL_GET_CLASS (window->impl)->create_gl_context (window->impl_window,
                                                                          TRUE,
                                                                          GDK_GL_PROFILE_DEFAULT,
                                                                          NULL,
@@ -2790,7 +2790,7 @@ gdk_window_create_gl_context (GdkWindow    *window,
   if (paint_context == NULL)
     return NULL;
 
-  return GDK_WINDOW_IMPL_GET_CLASS (window->impl)->create_gl_context (window,
+  return GDK_WINDOW_IMPL_GET_CLASS (window->impl)->create_gl_context (window->impl_window,
 								      FALSE,
                                                                       profile,
                                                                       paint_context,
