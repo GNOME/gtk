@@ -2462,7 +2462,6 @@ operation_mode_set_browse (GtkFileChooserWidget *impl)
   GtkFileChooserWidgetPrivate *priv = impl->priv;
 
   location_bar_update (impl);
-
   gtk_search_bar_set_search_mode (GTK_SEARCH_BAR (priv->search_bar), FALSE);
 }
 
@@ -2474,7 +2473,6 @@ operation_mode_set_search (GtkFileChooserWidget *impl)
   g_assert (priv->search_model == NULL);
 
   search_setup_widgets (impl);
-
   gtk_search_bar_set_search_mode (GTK_SEARCH_BAR (priv->search_bar), TRUE);
 }
 
@@ -6895,27 +6893,16 @@ location_set_user_text (GtkFileChooserWidget *impl,
 static void
 location_popup_handler (GtkFileChooserWidget *impl,
 			const gchar           *path)
-{ 
+{
   GtkFileChooserWidgetPrivate *priv = impl->priv;
 
   if (priv->operation_mode != OPERATION_MODE_BROWSE)
     {
-      GtkWidget *widget_to_focus;
-
       operation_mode_set (impl, OPERATION_MODE_BROWSE);
-      
       if (priv->current_folder)
         change_folder_and_display_error (impl, priv->current_folder, FALSE);
-
-      if (priv->location_mode == LOCATION_MODE_PATH_BAR)
-        widget_to_focus = priv->browse_files_tree_view;
-      else
-        widget_to_focus = priv->location_entry;
-
-      gtk_widget_grab_focus (widget_to_focus);
-      return; 
     }
-  
+
   if (priv->action == GTK_FILE_CHOOSER_ACTION_OPEN ||
       priv->action == GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER)
     {
