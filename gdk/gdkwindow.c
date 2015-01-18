@@ -5895,10 +5895,10 @@ gdk_window_scroll (GdkWindow *window,
  * Since: 2.8
  */
 void
-gdk_window_move_region (GdkWindow       *window,
-			const cairo_region_t *region,
-			gint             dx,
-			gint             dy)
+gdk_window_move_region (GdkWindow            *window,
+                        const cairo_region_t *region,
+                        gint                  dx,
+                        gint                  dy)
 {
   cairo_region_t *expose_area;
 
@@ -5924,10 +5924,12 @@ gdk_window_move_region (GdkWindow       *window,
  * @window: a #GdkWindow
  * @color: a #GdkColor
  *
- * Sets the background color of @window. (However, when using GTK+,
- * set the background of a widget with gtk_widget_modify_bg() - if
- * you’re an application - or gtk_style_set_background() - if you're
- * implementing a custom widget.)
+ * Sets the background color of @window.
+ *
+ * However, when using GTK+, influence the background of a widget
+ * using a style class or CSS — if you’re an application — or with
+ * gtk_style_context_set_background() — if you're implementing a
+ * custom widget.
  *
  * See also gdk_window_set_background_pattern().
  *
@@ -5991,7 +5993,7 @@ gdk_window_set_background_rgba (GdkWindow     *window,
  * when the window is obscured then exposed.
  */
 void
-gdk_window_set_background_pattern (GdkWindow *window,
+gdk_window_set_background_pattern (GdkWindow       *window,
                                    cairo_pattern_t *pattern)
 {
   g_return_if_fail (GDK_IS_WINDOW (window));
