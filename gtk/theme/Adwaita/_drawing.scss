@@ -243,6 +243,7 @@
     border-color: if($c!=$bg_color, _border_color($c), $borders_color);
     background-image: linear-gradient(to bottom,
                                       darken($c,9%),
+                                      darken($c,6.6%) 40%,
                                       darken($c,5%));
     @include _button_text_shadow($tc,darken($c,10%));
     @include _shadows(inset 0 1px transparentize(black, 0.93),
