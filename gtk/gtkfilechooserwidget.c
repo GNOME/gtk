@@ -250,7 +250,6 @@ struct _GtkFileChooserWidgetPrivate {
   GtkWidget *extra_widget;
 
   GtkWidget *location_entry_box;
-  GtkWidget *location_label;
   GtkWidget *location_entry;
   LocationMode location_mode;
 
@@ -1971,6 +1970,9 @@ location_entry_create (GtkFileChooserWidget *impl)
   if (!priv->location_entry)
     {
       priv->location_entry = _gtk_file_chooser_entry_new (TRUE);
+      if (priv->action == GTK_FILE_CHOOSER_ACTION_OPEN ||
+          priv->action == GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER)
+        gtk_entry_set_placeholder_text (GTK_ENTRY (priv->location_entry), _("Location"));
       g_signal_connect (priv->location_entry, "changed",
                         G_CALLBACK (location_entry_changed_cb), impl);
     }
@@ -2086,7 +2088,6 @@ location_switch_to_filename_entry (GtkFileChooserWidget *impl)
     {
       location_entry_create (impl);
       gtk_box_pack_start (GTK_BOX (priv->location_entry_box), priv->location_entry, TRUE, TRUE, 0);
-      gtk_label_set_mnemonic_widget (GTK_LABEL (priv->location_label), priv->location_entry);
     }
 
   /* Configure the entry */
@@ -7425,7 +7426,6 @@ gtk_file_chooser_widget_class_init (GtkFileChooserWidgetClass *class)
   gtk_widget_class_bind_template_child_private (widget_class, GtkFileChooserWidget, extra_align);
   gtk_widget_class_bind_template_child_private (widget_class, GtkFileChooserWidget, extra_and_filters);
   gtk_widget_class_bind_template_child_private (widget_class, GtkFileChooserWidget, location_entry_box);
-  gtk_widget_class_bind_template_child_private (widget_class, GtkFileChooserWidget, location_label);
   gtk_widget_class_bind_template_child_private (widget_class, GtkFileChooserWidget, search_bar);
   gtk_widget_class_bind_template_child_private (widget_class, GtkFileChooserWidget, search_entry);
   gtk_widget_class_bind_template_child_private (widget_class, GtkFileChooserWidget, list_name_column);

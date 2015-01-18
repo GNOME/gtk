@@ -105,19 +105,6 @@
                             <property name="spacing">12</property>
                             <property name="border_width">6</property>
                             <child>
-                              <object class="GtkLabel" id="location_label">
-                                <property name="visible">True</property>
-                                <property name="can_focus">False</property>
-                                <property name="label" translatable="yes">_Location:</property>
-                                <property name="use_underline">True</property>
-                              </object>
-                              <packing>
-                                <property name="expand">False</property>
-                                <property name="fill">False</property>
-                                <property name="position">0</property>
-                              </packing>
-                            </child>
-                            <child>
                               <placeholder/>
                             </child>
                           </object>
