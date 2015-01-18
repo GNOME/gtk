@@ -6369,7 +6369,7 @@ gdk_window_get_origin (GdkWindow *window,
  *
  * Obtains the position of a window position in root
  * window coordinates. This is similar to
- * gdk_window_get_origin() but allows you go pass
+ * gdk_window_get_origin() but allows you to pass
  * in any position in the window, not just the origin.
  *
  * Since: 2.18
