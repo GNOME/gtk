@@ -2479,16 +2479,20 @@ operation_mode_set_search (GtkFileChooserWidget *impl)
 static void
 operation_mode_set_recent (GtkFileChooserWidget *impl)
 {
-  location_bar_update (impl);
+  GtkFileChooserWidgetPrivate *priv = impl->priv;
+  GFile *file;
 
+  location_bar_update (impl);
   recent_start_loading (impl);
+  file = g_file_new_for_uri ("recent:///");
+  gtk_places_sidebar_set_location (GTK_PLACES_SIDEBAR (priv->places_sidebar), file);
+  g_object_unref (file);
 }
 
 static void
 operation_mode_set (GtkFileChooserWidget *impl, OperationMode mode)
 {
   GtkFileChooserWidgetPrivate *priv = impl->priv;
-  GFile *file;
 
   operation_mode_stop (impl, priv->operation_mode);
 
@@ -2510,9 +2514,6 @@ operation_mode_set (GtkFileChooserWidget *impl, OperationMode mode)
 
     case OPERATION_MODE_RECENT:
       operation_mode_set_recent (impl);
-      file = g_file_new_for_uri ("recent:///");
-      gtk_places_sidebar_set_location (GTK_PLACES_SIDEBAR (priv->places_sidebar), file);
-      g_object_unref (file);
       break;
 
     default:
