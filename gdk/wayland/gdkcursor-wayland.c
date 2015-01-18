@@ -216,7 +216,7 @@ _gdk_wayland_cursor_get_buffer (GdkCursor *cursor,
                                 int       *hotspot_y,
                                 int       *w,
                                 int       *h,
-				int       *scale)
+                                int       *scale)
 {
   GdkWaylandCursor *wayland_cursor = GDK_WAYLAND_CURSOR (cursor);
 
