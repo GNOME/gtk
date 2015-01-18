@@ -2171,9 +2171,13 @@ location_toggle_popup_handler (GtkFileChooserWidget *impl)
    * browse_header_box container, so there's no point in switching
    * to it.
    */
-  if (priv->operation_mode == OPERATION_MODE_SEARCH ||
-      priv->operation_mode == OPERATION_MODE_RECENT)
+  if (priv->operation_mode == OPERATION_MODE_SEARCH)
     return;
+
+  if (priv->operation_mode == OPERATION_MODE_RECENT &&
+      (priv->action == GTK_FILE_CHOOSER_ACTION_OPEN ||
+       priv->action == GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER))
+    operation_mode_set (impl, OPERATION_MODE_BROWSE);
 
   /* If the file entry is not visible, show it.
    * If it is visible, turn it off only if it is focused.  Otherwise, switch to the entry.
