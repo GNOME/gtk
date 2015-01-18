@@ -63,7 +63,7 @@
                           <object class="GtkBox" id="browse_path_bar_hbox">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="spacing">12</property>
+                            <property name="spacing">6</property>
                             <property name="border_width">6</property>
                             <child>
                               <object class="GtkPathBar" id="browse_path_bar">
@@ -79,11 +79,46 @@
                             </child>
                             <child>
                               <object class="GtkButton" id="browse_new_folder_button">
-                                <property name="label" translatable="yes">Create Fo_lder</property>
+                                <property name="tooltip-text" translatable="yes">Create Folder</property>
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">True</property>
                                 <property name="use_underline">True</property>
                                 <signal name="clicked" handler="new_folder_button_clicked" swapped="no"/>
+                                <style>
+                                  <class name="image-button"/>
+                                </style>
+                                <child>
+                                  <object class="GtkImage">
+                                    <property name="visible">True</property>
+                                    <property name="icon-name">list-add-symbolic</property>
+                                    <property name="icon-size">1</property>
+                                  </object>
+                                </child>
+                              </object>
+                              <packing>
+                                <property name="expand">False</property>
+                                <property name="fill">False</property>
+                                <property name="pack_type">end</property>
+                                <property name="position">1</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <object class="GtkButton">
+                                <property name="visible">True</property>
+                                <property name="tooltip-text" translatable="yes">Search</property>
+                                <property name="can_focus">True</property>
+                                <property name="receives_default">True</property>
+                                <signal name="clicked" handler="search_button_clicked_cb" swapped="yes"/>
+                                <style>
+                                  <class name="image-button"/>
+                                </style>
+                                <child>
+                                  <object class="GtkImage">
+                                    <property name="visible">True</property>
+                                    <property name="icon-name">edit-find-symbolic</property>
+                                    <property name="icon-size">1</property>
+                                  </object>
+                                </child>
                               </object>
                               <packing>
                                 <property name="expand">False</property>
@@ -102,14 +137,80 @@
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="no-show-all">True</property>
-                            <property name="spacing">12</property>
+                            <property name="spacing">6</property>
                             <property name="border_width">6</property>
                             <child>
-                              <placeholder/>
+                              <object class="GtkButton">
+                                <property name="visible">True</property>
+                                <property name="tooltip-text" translatable="yes">Search</property>
+                                <property name="can_focus">True</property>
+                                <property name="receives_default">True</property>
+                                <signal name="clicked" handler="search_button_clicked_cb" swapped="yes"/>
+                                <style>
+                                  <class name="image-button"/>
+                                </style>
+                                <child>
+                                  <object class="GtkImage">
+                                    <property name="visible">True</property>
+                                    <property name="icon-name">edit-find-symbolic</property>
+                                    <property name="icon-size">1</property>
+                                  </object>
+                                </child>
+                              </object>
+                              <packing>
+                                <property name="expand">False</property>
+                                <property name="fill">False</property>
+                                <property name="pack_type">end</property>
+                                <property name="position">1</property>
+                              </packing>
                             </child>
                           </object>
                           <packing>
                             <property name="name">location</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkBox" id="search_entry_box">
+                            <property name="visible">True</property>
+                            <property name="can_focus">False</property>
+                            <property name="no-show-all">True</property>
+                            <property name="spacing">6</property>
+                            <property name="border_width">6</property>
+                            <child>
+                              <object class="GtkSearchEntry" id="search_entry">
+                                <property name="visible">True</property>
+                                <property name="hexpand">True</property>
+                                <signal name="search-changed" handler="search_entry_activate_cb" swapped="no"/>
+                              </object>
+                            </child>
+                            <child>
+                              <object class="GtkButton">
+                                <property name="visible">True</property>
+                                <property name="tooltip-text" translatable="yes">Browse</property>
+                                <property name="can_focus">True</property>
+                                <property name="receives_default">True</property>
+                                <signal name="clicked" handler="location_button_clicked_cb" swapped="true"/>
+                                <style>
+                                  <class name="image-button"/>
+                                </style>
+                                <child>
+                                  <object class="GtkImage">
+                                    <property name="visible">True</property>
+                                    <property name="icon-name">folder-symbolic</property>
+                                    <property name="icon-size">1</property>
+                                  </object>
+                                </child>
+                              </object>
+                              <packing>
+                                <property name="expand">False</property>
+                                <property name="fill">False</property>
+                                <property name="pack_type">end</property>
+                                <property name="position">1</property>
+                              </packing>
+                            </child>
+                          </object>
+                          <packing>
+                            <property name="name">search</property>
                           </packing>
                         </child>
                       </object>
@@ -124,24 +225,6 @@
                     <property name="expand">False</property>
                     <property name="fill">False</property>
                     <property name="position">0</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkSearchBar" id="search_bar">
-                    <property name="visible">True</property>
-                    <property name="border_width">0</property>
-                    <child>
-                      <object class="GtkSearchEntry" id="search_entry">
-                        <property name="visible">True</property>
-                        <property name="hexpand">True</property>
-                        <signal name="search-changed" handler="search_entry_activate_cb" swapped="no"/>
-                      </object>
-                    </child>
-                  </object>
-                  <packing>
-                    <property name="expand">False</property>
-                    <property name="fill">False</property>
-                    <property name="position">1</property>
                   </packing>
                 </child>
                 <child>

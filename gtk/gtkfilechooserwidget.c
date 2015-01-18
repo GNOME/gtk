@@ -229,7 +229,6 @@ struct _GtkFileChooserWidgetPrivate {
   StartupMode startup_mode;
 
   /* OPERATION_MODE_SEARCH */
-  GtkWidget *search_bar;
   GtkWidget *search_entry;
   GtkSearchEngine *search_engine;
   GtkQuery *search_query;
@@ -1972,7 +1971,14 @@ location_entry_create (GtkFileChooserWidget *impl)
       priv->location_entry = _gtk_file_chooser_entry_new (TRUE);
       if (priv->action == GTK_FILE_CHOOSER_ACTION_OPEN ||
           priv->action == GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER)
-        gtk_entry_set_placeholder_text (GTK_ENTRY (priv->location_entry), _("Location"));
+        {
+#if 0
+          gtk_entry_set_icon_from_icon_name (GTK_ENTRY (priv->location_entry), GTK_ENTRY_ICON_PRIMARY, "folder-symbolic");
+          gtk_entry_set_icon_activatable (GTK_ENTRY (priv->location_entry), GTK_ENTRY_ICON_PRIMARY, FALSE);
+#endif
+          gtk_entry_set_placeholder_text (GTK_ENTRY (priv->location_entry), _("Location"));
+        }
+
       g_signal_connect (priv->location_entry, "changed",
                         G_CALLBACK (location_entry_changed_cb), impl);
     }
@@ -2457,8 +2463,12 @@ operation_mode_stop (GtkFileChooserWidget *impl, OperationMode mode)
 static void
 operation_mode_set_enter_location (GtkFileChooserWidget *impl)
 {
+  GtkFileChooserWidgetPrivate *priv = impl->priv;
+
   location_mode_set (impl, LOCATION_MODE_FILENAME_ENTRY);
   location_bar_update (impl);
+  gtk_stack_set_visible_child_name (GTK_STACK (priv->browse_header_stack), "pathbar");
+  gtk_widget_set_sensitive (priv->filter_combo, TRUE);
 }
 
 static void
@@ -2467,7 +2477,8 @@ operation_mode_set_browse (GtkFileChooserWidget *impl)
   GtkFileChooserWidgetPrivate *priv = impl->priv;
 
   location_bar_update (impl);
-  gtk_search_bar_set_search_mode (GTK_SEARCH_BAR (priv->search_bar), FALSE);
+  gtk_stack_set_visible_child_name (GTK_STACK (priv->browse_header_stack), "pathbar");
+  gtk_widget_set_sensitive (priv->filter_combo, TRUE);
 }
 
 static void
@@ -2477,8 +2488,11 @@ operation_mode_set_search (GtkFileChooserWidget *impl)
 
   g_assert (priv->search_model == NULL);
 
+  location_bar_update (impl);
   search_setup_widgets (impl);
-  gtk_search_bar_set_search_mode (GTK_SEARCH_BAR (priv->search_bar), TRUE);
+  gtk_stack_set_visible_child_name (GTK_STACK (priv->browse_header_stack), "search");
+  gtk_widget_set_sensitive (priv->filter_combo, FALSE);
+  gtk_entry_grab_focus_without_selecting (GTK_ENTRY (priv->search_entry));
 }
 
 static void
@@ -2492,6 +2506,8 @@ operation_mode_set_recent (GtkFileChooserWidget *impl)
   file = g_file_new_for_uri ("recent:///");
   gtk_places_sidebar_set_location (GTK_PLACES_SIDEBAR (priv->places_sidebar), file);
   g_object_unref (file);
+  gtk_stack_set_visible_child_name (GTK_STACK (priv->browse_header_stack), "pathbar");
+  gtk_widget_set_sensitive (priv->filter_combo, TRUE);
 }
 
 static void
@@ -6248,39 +6264,16 @@ search_entry_activate_cb (GtkEntry *entry,
   search_start_query (impl, text);
 }
 
-static gboolean
-focus_entry_idle_cb (GtkFileChooserWidget *impl)
+static void
+search_button_clicked_cb (GtkFileChooserWidget *impl)
 {
-  GtkFileChooserWidgetPrivate *priv = impl->priv;
-
-  gdk_threads_enter ();
-  
-  g_source_destroy (priv->focus_entry_idle);
-  priv->focus_entry_idle = NULL;
-
-  if (priv->search_entry)
-    gtk_widget_grab_focus (priv->search_entry);
-
-  gdk_threads_leave ();
-
-  return FALSE;
+  operation_mode_set (impl, OPERATION_MODE_SEARCH);
 }
 
 static void
-focus_search_entry_in_idle (GtkFileChooserWidget *impl)
+location_button_clicked_cb (GtkFileChooserWidget *impl)
 {
-  GtkFileChooserWidgetPrivate *priv = impl->priv;
-
-  /* bgo#634558 - When the user clicks on the Search entry in the shortcuts
-   * pane, we get a selection-changed signal and we set up the search widgets.
-   * However, gtk_tree_view_button_press() focuses the treeview *after* making
-   * the change to the selection.  So, we need to re-focus the search entry
-   * after the treeview has finished doing its work; we'll do that in an idle
-   * handler.
-   */
-
-  if (!priv->focus_entry_idle)
-    priv->focus_entry_idle = add_idle_while_impl_is_alive (impl, G_CALLBACK (focus_entry_idle_cb));
+  operation_mode_set (impl, OPERATION_MODE_BROWSE);
 }
 
 /* Hides the path bar and creates the search entry */
@@ -6307,8 +6300,6 @@ search_setup_widgets (GtkFileChooserWidget *impl)
           priv->search_query = NULL;
         }
     }
-
-  focus_search_entry_in_idle (impl);
 
   /* FMQ: hide the filter combo? */
 }
@@ -6977,15 +6968,7 @@ desktop_folder_handler (GtkFileChooserWidget *impl)
 static void
 search_shortcut_handler (GtkFileChooserWidget *impl)
 {
-  GtkFileChooserWidgetPrivate *priv = impl->priv;
-
   operation_mode_set (impl, OPERATION_MODE_SEARCH);
-
-  /* we want the entry widget to grab the focus the first
-   * time, not the browse_files_tree_view widget.
-   */
-  if (priv->search_entry)
-    gtk_widget_grab_focus (priv->search_entry);
 }
 
 /* Handler for the "recent-shortcut" keybinding signal */
@@ -7426,7 +7409,6 @@ gtk_file_chooser_widget_class_init (GtkFileChooserWidgetClass *class)
   gtk_widget_class_bind_template_child_private (widget_class, GtkFileChooserWidget, extra_align);
   gtk_widget_class_bind_template_child_private (widget_class, GtkFileChooserWidget, extra_and_filters);
   gtk_widget_class_bind_template_child_private (widget_class, GtkFileChooserWidget, location_entry_box);
-  gtk_widget_class_bind_template_child_private (widget_class, GtkFileChooserWidget, search_bar);
   gtk_widget_class_bind_template_child_private (widget_class, GtkFileChooserWidget, search_entry);
   gtk_widget_class_bind_template_child_private (widget_class, GtkFileChooserWidget, list_name_column);
   gtk_widget_class_bind_template_child_private (widget_class, GtkFileChooserWidget, list_pixbuf_renderer);
@@ -7454,6 +7436,8 @@ gtk_file_chooser_widget_class_init (GtkFileChooserWidgetClass *class)
   gtk_widget_class_bind_template_callback (widget_class, places_sidebar_show_error_message_cb);
   gtk_widget_class_bind_template_callback (widget_class, places_sidebar_show_enter_location_cb);
   gtk_widget_class_bind_template_callback (widget_class, search_entry_activate_cb);
+  gtk_widget_class_bind_template_callback (widget_class, search_button_clicked_cb);
+  gtk_widget_class_bind_template_callback (widget_class, location_button_clicked_cb);
 }
 
 static void
