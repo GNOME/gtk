@@ -25,6 +25,19 @@
 
 G_BEGIN_DECLS
 
+typedef enum {
+  GTK_CSS_IMAGE_BUILTIN_NONE,
+  GTK_CSS_IMAGE_BUILTIN_CHECK,
+  GTK_CSS_IMAGE_BUILTIN_OPTION,
+  GTK_CSS_IMAGE_BUILTIN_ARROW,
+  GTK_CSS_IMAGE_BUILTIN_EXPANDER_HORIZONTAL,
+  GTK_CSS_IMAGE_BUILTIN_EXPANDER_VERTICAL,
+  GTK_CSS_IMAGE_BUILTIN_GRIP,
+  GTK_CSS_IMAGE_BUILTIN_PANE_SEPARATOR,
+  GTK_CSS_IMAGE_BUILTIN_HANDLE,
+  GTK_CSS_IMAGE_BUILTIN_SPINNER
+} GtkCssImageBuiltinType;
+
 #define GTK_TYPE_CSS_IMAGE_BUILTIN           (gtk_css_image_builtin_get_type ())
 #define GTK_CSS_IMAGE_BUILTIN(obj)           (G_TYPE_CHECK_INSTANCE_CAST (obj, GTK_TYPE_CSS_IMAGE_BUILTIN, GtkCssImageBuiltin))
 #define GTK_CSS_IMAGE_BUILTIN_CLASS(cls)     (G_TYPE_CHECK_CLASS_CAST (cls, GTK_TYPE_CSS_IMAGE_BUILTIN, GtkCssImageBuiltinClass))
@@ -48,6 +61,18 @@ struct _GtkCssImageBuiltinClass
 GType          gtk_css_image_builtin_get_type              (void) G_GNUC_CONST;
 
 GtkCssImage *  gtk_css_image_builtin_new                   (void);
+
+void           gtk_css_image_builtin_draw                  (GtkCssImage                 *image,
+                                                            cairo_t                     *cr,
+                                                            double                       width,
+                                                            double                       height,
+                                                            GtkCssImageBuiltinType       image_type,
+                                                            GtkStateFlags                state,
+                                                            GtkJunctionSides             sides,
+                                                            const GdkRGBA               *fg_color,
+                                                            const GdkRGBA               *bg_color,
+                                                            const GdkRGBA               *border_color,
+                                                            int                          border_width);
 
 G_END_DECLS
 

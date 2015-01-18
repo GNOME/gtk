@@ -94,112 +94,42 @@ gtk_do_render_check (GtkStyleContext *context,
                      gdouble          width,
                      gdouble          height)
 {
-  const GdkRGBA *fg_color, *bg_color;
-  GtkStateFlags flags;
-  gint exterior_size, interior_size, thickness, pad;
   GtkBorderStyle border_style;
-  GtkBorder border;
   gint border_width;
 
   if (render_icon_image (context, cr, x, y, width, height))
     return;
 
-  flags = gtk_style_context_get_state (context);
-  cairo_save (cr);
-
-  fg_color = _gtk_css_rgba_value_get_rgba (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_COLOR));
-  bg_color = _gtk_css_rgba_value_get_rgba (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_BACKGROUND_COLOR));
-  border.top = _gtk_css_number_value_get (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_BORDER_TOP_WIDTH), 100);
-  border.right = _gtk_css_number_value_get (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_BORDER_RIGHT_WIDTH), 100);
-  border.bottom = _gtk_css_number_value_get (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_BORDER_BOTTOM_WIDTH), 100);
-  border.left = _gtk_css_number_value_get (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_BORDER_LEFT_WIDTH), 100);
   border_style = _gtk_css_border_style_value_get (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_BORDER_TOP_STYLE));
-
-  border_width = MIN (MIN (border.top, border.bottom),
-                      MIN (border.left, border.right));
-  exterior_size = MIN (width, height);
-
-  if (exterior_size % 2 == 0) /* Ensure odd */
-    exterior_size -= 1;
-
-  /* FIXME: thickness */
-  thickness = 1;
-  pad = thickness + MAX (1, (exterior_size - 2 * thickness) / 9);
-  interior_size = MAX (1, exterior_size - 2 * pad);
-
-  if (interior_size < 7)
-    {
-      interior_size = 7;
-      pad = MAX (0, (exterior_size - interior_size) / 2);
-    }
-
-  x -= (1 + exterior_size - (gint) width) / 2;
-  y -= (1 + exterior_size - (gint) height) / 2;
-
   if (border_style == GTK_BORDER_STYLE_SOLID)
     {
-      const GdkRGBA *border_color;
+      GtkBorder border;
 
-      cairo_set_line_width (cr, border_width);
-      border_color = _gtk_css_rgba_value_get_rgba (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_BORDER_TOP_COLOR));
+      border.top = _gtk_css_number_value_get (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_BORDER_TOP_WIDTH), 100);
+      border.right = _gtk_css_number_value_get (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_BORDER_RIGHT_WIDTH), 100);
+      border.bottom = _gtk_css_number_value_get (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_BORDER_BOTTOM_WIDTH), 100);
+      border.left = _gtk_css_number_value_get (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_BORDER_LEFT_WIDTH), 100);
 
-      cairo_rectangle (cr, x + 0.5, y + 0.5, exterior_size - 1, exterior_size - 1);
-      gdk_cairo_set_source_rgba (cr, bg_color);
-      cairo_fill_preserve (cr);
-
-      gdk_cairo_set_source_rgba (cr, border_color);
-      cairo_stroke (cr);
-    }
-
-  gdk_cairo_set_source_rgba (cr, fg_color);
-
-  if (flags & GTK_STATE_FLAG_INCONSISTENT)
-    {
-      int line_thickness = MAX (1, (3 + interior_size * 2) / 7);
-
-      cairo_rectangle (cr,
-		       x + pad,
-		       y + pad + (1 + interior_size - line_thickness) / 2,
-		       interior_size,
-		       line_thickness);
-      cairo_fill (cr);
+      border_width = MIN (MIN (border.top, border.bottom),
+                          MIN (border.left, border.right));
     }
   else
     {
-      if (flags & GTK_STATE_FLAG_CHECKED)
-        {
-          cairo_translate (cr,
-                           x + pad, y + pad);
-
-          cairo_scale (cr, interior_size / 7., interior_size / 7.);
-
-          cairo_rectangle (cr, 0, 0, 7, 7);
-          cairo_clip (cr);
-
-          cairo_move_to  (cr, 7.0, 0.0);
-          cairo_line_to  (cr, 7.5, 1.0);
-          cairo_curve_to (cr, 5.3, 2.0,
-                          4.3, 4.0,
-                          3.5, 7.0);
-          cairo_curve_to (cr, 3.0, 5.7,
-                          1.3, 4.7,
-                          0.0, 4.7);
-          cairo_line_to  (cr, 0.2, 3.5);
-          cairo_curve_to (cr, 1.1, 3.5,
-                          2.3, 4.3,
-                          3.0, 5.0);
-          cairo_curve_to (cr, 1.0, 3.9,
-                          2.4, 4.1,
-                          3.2, 4.9);
-          cairo_curve_to (cr, 3.5, 3.1,
-                          5.2, 2.0,
-                          7.0, 0.0);
-
-          cairo_fill (cr);
-        }
+      border_width = 0;
     }
 
-  cairo_restore (cr);
+  cairo_translate (cr, x, y);
+
+  gtk_css_image_builtin_draw (_gtk_css_image_value_get_image (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_ICON_SOURCE)),
+                              cr,
+                              width, height,
+                              GTK_CSS_IMAGE_BUILTIN_OPTION,
+                              gtk_style_context_get_state (context),
+                              gtk_style_context_get_junction_sides (context),
+                              _gtk_css_rgba_value_get_rgba (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_COLOR)),
+                              _gtk_css_rgba_value_get_rgba (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_BACKGROUND_COLOR)),
+                              _gtk_css_rgba_value_get_rgba (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_BORDER_TOP_COLOR)),
+                              border_width);
 }
 
 /**
@@ -253,106 +183,42 @@ gtk_do_render_option (GtkStyleContext *context,
                       gdouble          width,
                       gdouble          height)
 {
-  GtkStateFlags flags;
-  const GdkRGBA *fg_color, *bg_color;
-  gint exterior_size, interior_size, pad, thickness, border_width;
   GtkBorderStyle border_style;
-  GtkBorder border;
+  gint border_width;
 
   if (render_icon_image (context, cr, x, y, width, height))
     return;
 
-  flags = gtk_style_context_get_state (context);
-
-  cairo_save (cr);
-
-  fg_color = _gtk_css_rgba_value_get_rgba (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_COLOR));
-  bg_color = _gtk_css_rgba_value_get_rgba (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_BACKGROUND_COLOR));
-  border.top = _gtk_css_number_value_get (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_BORDER_TOP_WIDTH), 100);
-  border.right = _gtk_css_number_value_get (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_BORDER_RIGHT_WIDTH), 100);
-  border.bottom = _gtk_css_number_value_get (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_BORDER_BOTTOM_WIDTH), 100);
-  border.left = _gtk_css_number_value_get (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_BORDER_LEFT_WIDTH), 100);
   border_style = _gtk_css_border_style_value_get (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_BORDER_TOP_STYLE));
-
-  exterior_size = MIN (width, height);
-  border_width = MIN (MIN (border.top, border.bottom),
-                      MIN (border.left, border.right));
-
-  if (exterior_size % 2 == 0) /* Ensure odd */
-    exterior_size -= 1;
-
-  x -= (1 + exterior_size - width) / 2;
-  y -= (1 + exterior_size - height) / 2;
-
   if (border_style == GTK_BORDER_STYLE_SOLID)
     {
-      const GdkRGBA *border_color;
+      GtkBorder border;
 
-      cairo_set_line_width (cr, border_width);
-      border_color = _gtk_css_rgba_value_get_rgba (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_BORDER_TOP_COLOR));
+      border.top = _gtk_css_number_value_get (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_BORDER_TOP_WIDTH), 100);
+      border.right = _gtk_css_number_value_get (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_BORDER_RIGHT_WIDTH), 100);
+      border.bottom = _gtk_css_number_value_get (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_BORDER_BOTTOM_WIDTH), 100);
+      border.left = _gtk_css_number_value_get (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_BORDER_LEFT_WIDTH), 100);
 
-      cairo_new_sub_path (cr);
-      cairo_arc (cr,
-                 x + exterior_size / 2.,
-                 y + exterior_size / 2.,
-                 (exterior_size - 1) / 2.,
-                 0, 2 * G_PI);
-
-      gdk_cairo_set_source_rgba (cr, bg_color);
-      cairo_fill_preserve (cr);
-
-      gdk_cairo_set_source_rgba (cr, border_color);
-      cairo_stroke (cr);
+      border_width = MIN (MIN (border.top, border.bottom),
+                          MIN (border.left, border.right));
     }
-
-  gdk_cairo_set_source_rgba (cr, fg_color);
-
-  /* FIXME: thickness */
-  thickness = 1;
-
-  if (flags & GTK_STATE_FLAG_INCONSISTENT)
+  else
     {
-      gint line_thickness;
-
-      pad = thickness + MAX (1, (exterior_size - 2 * thickness) / 9);
-      interior_size = MAX (1, exterior_size - 2 * pad);
-
-      if (interior_size < 7)
-        {
-          interior_size = 7;
-          pad = MAX (0, (exterior_size - interior_size) / 2);
-        }
-
-      line_thickness = MAX (1, (3 + interior_size * 2) / 7);
-
-      cairo_rectangle (cr,
-                       x + pad,
-                       y + pad + (interior_size - line_thickness) / 2.,
-                       interior_size,
-                       line_thickness);
-      cairo_fill (cr);
-    }
-  if (flags & GTK_STATE_FLAG_CHECKED)
-    {
-      pad = thickness + MAX (1, 2 * (exterior_size - 2 * thickness) / 9);
-      interior_size = MAX (1, exterior_size - 2 * pad);
-
-      if (interior_size < 5)
-        {
-          interior_size = 7;
-          pad = MAX (0, (exterior_size - interior_size) / 2);
-        }
-
-      cairo_new_sub_path (cr);
-      cairo_arc (cr,
-                 x + pad + interior_size / 2.,
-                 y + pad + interior_size / 2.,
-                 interior_size / 2.,
-                 0, 2 * G_PI);
-      cairo_fill (cr);
+      border_width = 0;
     }
 
-  cairo_restore (cr);
+  cairo_translate (cr, x, y);
+
+  gtk_css_image_builtin_draw (_gtk_css_image_value_get_image (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_ICON_SOURCE)),
+                              cr,
+                              width, height,
+                              GTK_CSS_IMAGE_BUILTIN_CHECK,
+                              gtk_style_context_get_state (context),
+                              gtk_style_context_get_junction_sides (context),
+                              _gtk_css_rgba_value_get_rgba (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_COLOR)),
+                              _gtk_css_rgba_value_get_rgba (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_BACKGROUND_COLOR)),
+                              _gtk_css_rgba_value_get_rgba (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_BORDER_TOP_COLOR)),
+                              border_width);
 }
 
 /**
@@ -404,36 +270,44 @@ gtk_do_render_arrow (GtkStyleContext *context,
                      gdouble          y,
                      gdouble          size)
 {
-  double line_width;
-  const GdkRGBA *color;
+  GtkBorderStyle border_style;
+  gint border_width;
 
   if (render_icon_image (context, cr, x, y, size, size))
     return;
 
-  cairo_save (cr);
+  border_style = _gtk_css_border_style_value_get (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_BORDER_TOP_STYLE));
+  if (border_style == GTK_BORDER_STYLE_SOLID)
+    {
+      GtkBorder border;
 
-  line_width = size / 3.0 / sqrt (2);
-  cairo_set_line_width (cr, line_width);
-  cairo_set_line_join (cr, CAIRO_LINE_JOIN_ROUND);
-  cairo_set_line_cap (cr, CAIRO_LINE_CAP_ROUND);
+      border.top = _gtk_css_number_value_get (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_BORDER_TOP_WIDTH), 100);
+      border.right = _gtk_css_number_value_get (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_BORDER_RIGHT_WIDTH), 100);
+      border.bottom = _gtk_css_number_value_get (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_BORDER_BOTTOM_WIDTH), 100);
+      border.left = _gtk_css_number_value_get (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_BORDER_LEFT_WIDTH), 100);
+
+      border_width = MIN (MIN (border.top, border.bottom),
+                          MIN (border.left, border.right));
+    }
+  else
+    {
+      border_width = 0;
+    }
 
   cairo_translate (cr, x + size / 2.0, y + size / 2.0);
   cairo_rotate (cr, angle - G_PI_2);
-  cairo_translate (cr, size / 4.0, 0);
+  cairo_translate (cr, - size / 2.0, - size / 2.0);
 
-  cairo_scale (cr,
-               (size / (size + line_width)),
-               (size / (size + line_width)));
-
-  cairo_move_to (cr, -size / 2.0, -size / 2.0);
-  cairo_rel_line_to (cr, size / 2.0, size / 2.0);
-  cairo_rel_line_to (cr, - size / 2.0, size / 2.0);
-
-  color = _gtk_css_rgba_value_get_rgba (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_COLOR));
-  gdk_cairo_set_source_rgba (cr, color);
-  cairo_stroke (cr);
-
-  cairo_restore (cr);
+  gtk_css_image_builtin_draw (_gtk_css_image_value_get_image (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_ICON_SOURCE)),
+                              cr,
+                              size, size,
+                              GTK_CSS_IMAGE_BUILTIN_ARROW,
+                              gtk_style_context_get_state (context),
+                              gtk_style_context_get_junction_sides (context),
+                              _gtk_css_rgba_value_get_rgba (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_COLOR)),
+                              _gtk_css_rgba_value_get_rgba (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_BACKGROUND_COLOR)),
+                              _gtk_css_rgba_value_get_rgba (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_BORDER_TOP_COLOR)),
+                              border_width);
 }
 
 /**
@@ -477,18 +351,6 @@ gtk_render_arrow (GtkStyleContext *context,
 
   gtk_style_context_restore (context);
   cairo_restore (cr);
-}
-
-static void
-color_shade (const GdkRGBA *color,
-             gdouble        factor,
-             GdkRGBA       *color_return)
-{
-  GtkHSLA hsla;
-
-  _gtk_hsla_init_from_rgba (&hsla, color);
-  _gtk_hsla_shade (&hsla, &hsla, factor);
-  _gdk_rgba_init_from_hsla (color_return, &hsla);
 }
 
 /**
@@ -586,107 +448,44 @@ gtk_do_render_expander (GtkStyleContext *context,
                         gdouble          width,
                         gdouble          height)
 {
-  GtkStateFlags flags;
-  const GdkRGBA *outline_color, *fg_color;
-  double vertical_overshoot;
-  int diameter;
-  double radius;
-  double interp;		/* interpolation factor for center position */
-  double x_double_horz, y_double_horz;
-  double x_double_vert, y_double_vert;
-  double x_double, y_double;
-  gdouble angle;
-  gint line_width;
-  gboolean is_rtl;
-  gdouble progress;
+  GtkBorderStyle border_style;
+  gint border_width;
 
   if (render_icon_image (context, cr, x, y, width, height))
     return;
 
-  cairo_save (cr);
-  flags = gtk_style_context_get_state (context);
-
-  fg_color = _gtk_css_rgba_value_get_rgba (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_COLOR));
-  outline_color = _gtk_css_rgba_value_get_rgba (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_BORDER_TOP_COLOR));
-
-  is_rtl = (gtk_style_context_get_state (context) & GTK_STATE_FLAG_DIR_RTL);
-  line_width = 1;
-  progress = (flags & GTK_STATE_FLAG_CHECKED) ? 1 : 0;
-
-  if (!gtk_style_context_has_class (context, GTK_STYLE_CLASS_HORIZONTAL))
+  border_style = _gtk_css_border_style_value_get (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_BORDER_TOP_STYLE));
+  if (border_style == GTK_BORDER_STYLE_SOLID)
     {
-      if (is_rtl)
-        angle = (G_PI) - ((G_PI / 2) * progress);
-      else
-        angle = (G_PI / 2) * progress;
+      GtkBorder border;
+
+      border.top = _gtk_css_number_value_get (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_BORDER_TOP_WIDTH), 100);
+      border.right = _gtk_css_number_value_get (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_BORDER_RIGHT_WIDTH), 100);
+      border.bottom = _gtk_css_number_value_get (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_BORDER_BOTTOM_WIDTH), 100);
+      border.left = _gtk_css_number_value_get (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_BORDER_LEFT_WIDTH), 100);
+
+      border_width = MIN (MIN (border.top, border.bottom),
+                          MIN (border.left, border.right));
     }
   else
     {
-      if (is_rtl)
-        angle = (G_PI / 2) + ((G_PI / 2) * progress);
-      else
-        angle = (G_PI / 2) - ((G_PI / 2) * progress);
+      border_width = 0;
     }
 
-  interp = progress;
+  cairo_translate (cr, x, y);
 
-  /* Compute distance that the stroke extends beyonds the end
-   * of the triangle we draw.
-   */
-  vertical_overshoot = line_width / 2.0 * (1. / tan (G_PI / 8));
-
-  /* For odd line widths, we end the vertical line of the triangle
-   * at a half pixel, so we round differently.
-   */
-  if (line_width % 2 == 1)
-    vertical_overshoot = ceil (0.5 + vertical_overshoot) - 0.5;
-  else
-    vertical_overshoot = ceil (vertical_overshoot);
-
-  /* Adjust the size of the triangle we draw so that the entire stroke fits
-   */
-  diameter = (gint) MAX (3, width - 2 * vertical_overshoot);
-
-  /* If the line width is odd, we want the diameter to be even,
-   * and vice versa, so force the sum to be odd. This relationship
-   * makes the point of the triangle look right.
-   */
-  diameter -= (1 - (diameter + line_width) % 2);
-
-  radius = diameter / 2.;
-
-  /* Adjust the center so that the stroke is properly aligned with
-   * the pixel grid. The center adjustment is different for the
-   * horizontal and vertical orientations. For intermediate positions
-   * we interpolate between the two.
-   */
-  x_double_vert = floor ((x + width / 2) - (radius + line_width) / 2.) + (radius + line_width) / 2.;
-  y_double_vert = (y + height / 2) - 0.5;
-
-  x_double_horz = (x + width / 2) - 0.5;
-  y_double_horz = floor ((y + height / 2) - (radius + line_width) / 2.) + (radius + line_width) / 2.;
-
-  x_double = x_double_vert * (1 - interp) + x_double_horz * interp;
-  y_double = y_double_vert * (1 - interp) + y_double_horz * interp;
-
-  cairo_translate (cr, x_double, y_double);
-  cairo_rotate (cr, angle);
-
-  cairo_move_to (cr, - radius / 2., - radius);
-  cairo_line_to (cr,   radius / 2.,   0);
-  cairo_line_to (cr, - radius / 2.,   radius);
-  cairo_close_path (cr);
-
-  cairo_set_line_width (cr, line_width);
-
-  gdk_cairo_set_source_rgba (cr, fg_color);
-
-  cairo_fill_preserve (cr);
-
-  gdk_cairo_set_source_rgba (cr, outline_color);
-  cairo_stroke (cr);
-
-  cairo_restore (cr);
+  gtk_css_image_builtin_draw (_gtk_css_image_value_get_image (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_ICON_SOURCE)),
+                              cr,
+                              width, height,
+                              gtk_style_context_has_class (context, "horizontal")
+                              ? GTK_CSS_IMAGE_BUILTIN_EXPANDER_HORIZONTAL
+                              : GTK_CSS_IMAGE_BUILTIN_EXPANDER_VERTICAL,
+                              gtk_style_context_get_state (context),
+                              gtk_style_context_get_junction_sides (context),
+                              _gtk_css_rgba_value_get_rgba (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_COLOR)),
+                              _gtk_css_rgba_value_get_rgba (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_BACKGROUND_COLOR)),
+                              _gtk_css_rgba_value_get_rgba (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_BORDER_TOP_COLOR)),
+                              border_width);
 }
 
 /**
@@ -1228,62 +1027,6 @@ gtk_render_extension (GtkStyleContext *context,
 }
 
 static void
-render_dot (cairo_t       *cr,
-            const GdkRGBA *lighter,
-            const GdkRGBA *darker,
-            gdouble        x,
-            gdouble        y,
-            gdouble        size)
-{
-  size = CLAMP ((gint) size, 2, 3);
-
-  if (size == 2)
-    {
-      gdk_cairo_set_source_rgba (cr, lighter);
-      cairo_rectangle (cr, x, y, 1, 1);
-      cairo_rectangle (cr, x + 1, y + 1, 1, 1);
-      cairo_fill (cr);
-    }
-  else if (size == 3)
-    {
-      gdk_cairo_set_source_rgba (cr, lighter);
-      cairo_rectangle (cr, x, y, 2, 1);
-      cairo_rectangle (cr, x, y, 1, 2);
-      cairo_fill (cr);
-
-      gdk_cairo_set_source_rgba (cr, darker);
-      cairo_rectangle (cr, x + 1, y + 1, 2, 1);
-      cairo_rectangle (cr, x + 2, y, 1, 2);
-      cairo_fill (cr);
-    }
-}
-
-static void
-add_path_line (cairo_t        *cr,
-               gdouble         x1,
-               gdouble         y1,
-               gdouble         x2,
-               gdouble         y2)
-{
-  /* Adjust endpoints */
-  if (y1 == y2)
-    {
-      y1 += 0.5;
-      y2 += 0.5;
-      x2 += 1;
-    }
-  else if (x1 == x2)
-    {
-      x1 += 0.5;
-      x2 += 0.5;
-      y2 += 1;
-    }
-
-  cairo_move_to (cr, x1, y1);
-  cairo_line_to (cr, x2, y2);
-}
-
-static void
 gtk_do_render_handle (GtkStyleContext *context,
                       cairo_t         *cr,
                       gdouble          x,
@@ -1291,10 +1034,9 @@ gtk_do_render_handle (GtkStyleContext *context,
                       gdouble          width,
                       gdouble          height)
 {
-  const GdkRGBA *bg_color;
-  GdkRGBA lighter, darker;
-  GtkJunctionSides sides;
-  gint xx, yy;
+  GtkCssImageBuiltinType type;
+  GtkBorderStyle border_style;
+  gint border_width;
 
   gtk_render_background (context, cr, x, y, width, height);
   gtk_render_frame (context, cr, x, y, width, height);
@@ -1302,282 +1044,43 @@ gtk_do_render_handle (GtkStyleContext *context,
   if (render_icon_image (context, cr, x, y, width, height))
     return;
 
-  cairo_save (cr);
-
-  cairo_set_line_width (cr, 1.0);
-  sides = gtk_style_context_get_junction_sides (context);
-  bg_color = _gtk_css_rgba_value_get_rgba (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_BACKGROUND_COLOR));
-
-  color_shade (bg_color, 0.7, &darker);
-  color_shade (bg_color, 1.3, &lighter);
-
-  if (gtk_style_context_has_class (context, GTK_STYLE_CLASS_GRIP))
+  border_style = _gtk_css_border_style_value_get (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_BORDER_TOP_STYLE));
+  if (border_style == GTK_BORDER_STYLE_SOLID)
     {
-      /* reduce confusing values to a meaningful state */
-      if ((sides & (GTK_JUNCTION_CORNER_TOPLEFT | GTK_JUNCTION_CORNER_BOTTOMRIGHT)) == (GTK_JUNCTION_CORNER_TOPLEFT | GTK_JUNCTION_CORNER_BOTTOMRIGHT))
-        sides &= ~GTK_JUNCTION_CORNER_TOPLEFT;
+      GtkBorder border;
 
-      if ((sides & (GTK_JUNCTION_CORNER_TOPRIGHT | GTK_JUNCTION_CORNER_BOTTOMLEFT)) == (GTK_JUNCTION_CORNER_TOPRIGHT | GTK_JUNCTION_CORNER_BOTTOMLEFT))
-        sides &= ~GTK_JUNCTION_CORNER_TOPRIGHT;
+      border.top = _gtk_css_number_value_get (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_BORDER_TOP_WIDTH), 100);
+      border.right = _gtk_css_number_value_get (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_BORDER_RIGHT_WIDTH), 100);
+      border.bottom = _gtk_css_number_value_get (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_BORDER_BOTTOM_WIDTH), 100);
+      border.left = _gtk_css_number_value_get (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_BORDER_LEFT_WIDTH), 100);
 
-      if (sides == 0)
-        sides = GTK_JUNCTION_CORNER_BOTTOMRIGHT;
-
-      /* align drawing area to the connected side */
-      if (sides == GTK_JUNCTION_LEFT)
-        {
-          if (height < width)
-            width = height;
-        }
-      else if (sides == GTK_JUNCTION_CORNER_TOPLEFT)
-        {
-          if (width < height)
-            height = width;
-          else if (height < width)
-            width = height;
-        }
-      else if (sides == GTK_JUNCTION_CORNER_BOTTOMLEFT)
-        {
-          /* make it square, aligning to bottom left */
-          if (width < height)
-            {
-              y += (height - width);
-              height = width;
-            }
-          else if (height < width)
-            width = height;
-        }
-      else if (sides == GTK_JUNCTION_RIGHT)
-        {
-          /* aligning to right */
-          if (height < width)
-            {
-              x += (width - height);
-              width = height;
-            }
-        }
-      else if (sides == GTK_JUNCTION_CORNER_TOPRIGHT)
-        {
-          if (width < height)
-            height = width;
-          else if (height < width)
-            {
-              x += (width - height);
-              width = height;
-            }
-        }
-      else if (sides == GTK_JUNCTION_CORNER_BOTTOMRIGHT)
-        {
-          /* make it square, aligning to bottom right */
-          if (width < height)
-            {
-              y += (height - width);
-              height = width;
-            }
-          else if (height < width)
-            {
-              x += (width - height);
-              width = height;
-            }
-        }
-      else if (sides == GTK_JUNCTION_TOP)
-        {
-          if (width < height)
-            height = width;
-        }
-      else if (sides == GTK_JUNCTION_BOTTOM)
-        {
-          /* align to bottom */
-          if (width < height)
-            {
-              y += (height - width);
-              height = width;
-            }
-        }
-      else
-        g_assert_not_reached ();
-
-      if (sides == GTK_JUNCTION_LEFT ||
-          sides == GTK_JUNCTION_RIGHT)
-        {
-          gint xi;
-
-          xi = x;
-
-          while (xi < x + width)
-            {
-              gdk_cairo_set_source_rgba (cr, &lighter);
-              add_path_line (cr, x, y, x, y + height);
-              cairo_stroke (cr);
-              xi++;
-
-              gdk_cairo_set_source_rgba (cr, &darker);
-              add_path_line (cr, xi, y, xi, y + height);
-              cairo_stroke (cr);
-              xi += 2;
-            }
-        }
-      else if (sides == GTK_JUNCTION_TOP ||
-               sides == GTK_JUNCTION_BOTTOM)
-        {
-          gint yi;
-
-          yi = y;
-
-          while (yi < y + height)
-            {
-              gdk_cairo_set_source_rgba (cr, &lighter);
-              add_path_line (cr, x, yi, x + width, yi);
-              cairo_stroke (cr);
-              yi++;
-
-              gdk_cairo_set_source_rgba (cr, &darker);
-              add_path_line (cr, x, yi, x + width, yi);
-              cairo_stroke (cr);
-              yi += 2;
-            }
-        }
-      else if (sides == GTK_JUNCTION_CORNER_TOPLEFT)
-        {
-          gint xi, yi;
-
-          xi = x + width;
-          yi = y + height;
-
-          while (xi > x + 3)
-            {
-              gdk_cairo_set_source_rgba (cr, &darker);
-              add_path_line (cr, xi, y, x, yi);
-              cairo_stroke (cr);
-
-              --xi;
-              --yi;
-
-              add_path_line (cr, xi, y, x, yi);
-              cairo_stroke (cr);
-
-              --xi;
-              --yi;
-
-              gdk_cairo_set_source_rgba (cr, &lighter);
-              add_path_line (cr, xi, y, x, yi);
-              cairo_stroke (cr);
-
-              xi -= 3;
-              yi -= 3;
-            }
-        }
-      else if (sides == GTK_JUNCTION_CORNER_TOPRIGHT)
-        {
-          gint xi, yi;
-
-          xi = x;
-          yi = y + height;
-
-          while (xi < (x + width - 3))
-            {
-              gdk_cairo_set_source_rgba (cr, &lighter);
-              add_path_line (cr, xi, y, x + width, yi);
-              cairo_stroke (cr);
-
-              ++xi;
-              --yi;
-
-              gdk_cairo_set_source_rgba (cr, &darker);
-              add_path_line (cr, xi, y, x + width, yi);
-              cairo_stroke (cr);
-
-              ++xi;
-              --yi;
-
-              add_path_line (cr, xi, y, x + width, yi);
-              cairo_stroke (cr);
-
-              xi += 3;
-              yi -= 3;
-            }
-        }
-      else if (sides == GTK_JUNCTION_CORNER_BOTTOMLEFT)
-        {
-          gint xi, yi;
-
-          xi = x + width;
-          yi = y;
-
-          while (xi > x + 3)
-            {
-              gdk_cairo_set_source_rgba (cr, &darker);
-              add_path_line (cr, x, yi, xi, y + height);
-              cairo_stroke (cr);
-
-              --xi;
-              ++yi;
-
-              add_path_line (cr, x, yi, xi, y + height);
-              cairo_stroke (cr);
-
-              --xi;
-              ++yi;
-
-              gdk_cairo_set_source_rgba (cr, &lighter);
-              add_path_line (cr, x, yi, xi, y + height);
-              cairo_stroke (cr);
-
-              xi -= 3;
-              yi += 3;
-            }
-        }
-      else if (sides == GTK_JUNCTION_CORNER_BOTTOMRIGHT)
-        {
-          gint xi, yi;
-
-          xi = x;
-          yi = y;
-
-          while (xi < (x + width - 3))
-            {
-              gdk_cairo_set_source_rgba (cr, &lighter);
-              add_path_line (cr, xi, y + height, x + width, yi);
-              cairo_stroke (cr);
-
-              ++xi;
-              ++yi;
-
-              gdk_cairo_set_source_rgba (cr, &darker);
-              add_path_line (cr, xi, y + height, x + width, yi);
-              cairo_stroke (cr);
-
-              ++xi;
-              ++yi;
-
-              add_path_line (cr, xi, y + height, x + width, yi);
-              cairo_stroke (cr);
-
-              xi += 3;
-              yi += 3;
-            }
-        }
-    }
-  else if (gtk_style_context_has_class (context, GTK_STYLE_CLASS_PANE_SEPARATOR))
-    {
-      if (width > height)
-        for (xx = x + width / 2 - 15; xx <= x + width / 2 + 15; xx += 5)
-          render_dot (cr, &lighter, &darker, xx, y + height / 2 - 1, 3);
-      else
-        for (yy = y + height / 2 - 15; yy <= y + height / 2 + 15; yy += 5)
-          render_dot (cr, &lighter, &darker, x + width / 2 - 1, yy, 3);
+      border_width = MIN (MIN (border.top, border.bottom),
+                          MIN (border.left, border.right));
     }
   else
     {
-      for (yy = y; yy < y + height; yy += 3)
-        for (xx = x; xx < x + width; xx += 6)
-          {
-            render_dot (cr, &lighter, &darker, xx, yy, 2);
-            render_dot (cr, &lighter, &darker, xx + 3, yy + 1, 2);
-          }
+      border_width = 0;
     }
 
-  cairo_restore (cr);
+  cairo_translate (cr, x, y);
+
+  if (gtk_style_context_has_class (context, GTK_STYLE_CLASS_GRIP))
+    type = GTK_CSS_IMAGE_BUILTIN_GRIP;
+  else if (gtk_style_context_has_class (context, GTK_STYLE_CLASS_PANE_SEPARATOR))
+    type = GTK_CSS_IMAGE_BUILTIN_PANE_SEPARATOR;
+  else
+    type = GTK_CSS_IMAGE_BUILTIN_HANDLE;
+
+  gtk_css_image_builtin_draw (_gtk_css_image_value_get_image (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_ICON_SOURCE)),
+                              cr,
+                              width, height,
+                              type,
+                              gtk_style_context_get_state (context),
+                              gtk_style_context_get_junction_sides (context),
+                              _gtk_css_rgba_value_get_rgba (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_COLOR)),
+                              _gtk_css_rgba_value_get_rgba (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_BACKGROUND_COLOR)),
+                              _gtk_css_rgba_value_get_rgba (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_BORDER_TOP_COLOR)),
+                              border_width);
 }
 
 /**
@@ -1672,35 +1175,6 @@ gtk_render_paint_spinner (cairo_t *cr,
 }
 
 static void
-render_spinner (GtkStyleContext *context,
-                cairo_t         *cr,
-                gdouble          x,
-                gdouble          y,
-                gdouble          width,
-                gdouble          height)
-{
-  const GdkRGBA *color;
-  gdouble radius;
-
-  radius = MIN (width / 2, height / 2);
-
-  color = _gtk_css_rgba_value_get_rgba (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_COLOR));
-
-  cairo_save (cr);
-  cairo_translate (cr, x + width / 2, y + height / 2);
-
-  _gtk_css_shadows_value_paint_spinner (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_ICON_SHADOW),
-                                        cr,
-                                        radius,
-                                        -1);
-
-  gdk_cairo_set_source_rgba (cr, color);
-  gtk_render_paint_spinner (cr, radius, -1);
-
-  cairo_restore (cr);
-}
-
-static void
 gtk_do_render_activity (GtkStyleContext *context,
                         cairo_t         *cr,
                         gdouble          x,
@@ -1708,10 +1182,42 @@ gtk_do_render_activity (GtkStyleContext *context,
                         gdouble          width,
                         gdouble          height)
 {
+  GtkBorderStyle border_style;
+  gint border_width;
+
   if (render_icon_image (context, cr, x, y, width, height))
     return;
 
-  render_spinner (context, cr, x, y, width, height);
+  border_style = _gtk_css_border_style_value_get (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_BORDER_TOP_STYLE));
+  if (border_style == GTK_BORDER_STYLE_SOLID)
+    {
+      GtkBorder border;
+
+      border.top = _gtk_css_number_value_get (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_BORDER_TOP_WIDTH), 100);
+      border.right = _gtk_css_number_value_get (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_BORDER_RIGHT_WIDTH), 100);
+      border.bottom = _gtk_css_number_value_get (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_BORDER_BOTTOM_WIDTH), 100);
+      border.left = _gtk_css_number_value_get (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_BORDER_LEFT_WIDTH), 100);
+
+      border_width = MIN (MIN (border.top, border.bottom),
+                          MIN (border.left, border.right));
+    }
+  else
+    {
+      border_width = 0;
+    }
+
+  cairo_translate (cr, x, y);
+
+  gtk_css_image_builtin_draw (_gtk_css_image_value_get_image (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_ICON_SOURCE)),
+                              cr,
+                              width, height,
+                              GTK_CSS_IMAGE_BUILTIN_SPINNER,
+                              gtk_style_context_get_state (context),
+                              gtk_style_context_get_junction_sides (context),
+                              _gtk_css_rgba_value_get_rgba (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_COLOR)),
+                              _gtk_css_rgba_value_get_rgba (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_BACKGROUND_COLOR)),
+                              _gtk_css_rgba_value_get_rgba (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_BORDER_TOP_COLOR)),
+                              border_width);
 }
 
 /**
