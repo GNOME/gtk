@@ -7456,6 +7456,7 @@ post_process_ui (GtkFileChooserWidget *impl)
   GtkTreeSelection *selection;
   GtkCellRenderer  *cell;
   GList            *cells;
+  GFile            *file;
 
   /* Some qdata, qdata can't be set with GtkBuilder */
   g_object_set_data (G_OBJECT (impl->priv->browse_files_tree_view), "fmq-name", "file_list");
@@ -7501,6 +7502,9 @@ post_process_ui (GtkFileChooserWidget *impl)
 
   /* Set the GtkPathBar file system backend */
   _gtk_path_bar_set_file_system (GTK_PATH_BAR (impl->priv->browse_path_bar), impl->priv->file_system);
+  file = g_file_new_for_path ("/");
+  _gtk_path_bar_set_file (GTK_PATH_BAR (impl->priv->browse_path_bar), file, FALSE);
+  g_object_unref (file);
 
   /* Set the fixed size icon renderer, this requires
    * that priv->icon_size be already setup.
