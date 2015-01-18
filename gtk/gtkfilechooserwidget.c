@@ -2540,6 +2540,7 @@ update_appearance (GtkFileChooserWidget *impl)
       priv->action == GTK_FILE_CHOOSER_ACTION_CREATE_FOLDER)
     {
       save_widgets_create (impl);
+      gtk_places_sidebar_set_show_enter_location (GTK_PLACES_SIDEBAR (priv->places_sidebar), FALSE);
 
       if (priv->select_multiple)
 	{
@@ -2552,6 +2553,7 @@ update_appearance (GtkFileChooserWidget *impl)
 	   priv->action == GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER)
     {
       save_widgets_destroy (impl);
+      gtk_places_sidebar_set_show_enter_location (GTK_PLACES_SIDEBAR (priv->places_sidebar), TRUE);
       location_mode_set (impl, priv->location_mode);
     }
 
