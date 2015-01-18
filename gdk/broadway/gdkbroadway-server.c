@@ -544,13 +544,13 @@ map_named_shm (char *name, gsize size)
 
 #ifdef HAVE_POSIX_FALLOCATE
   res = posix_fallocate (fd, 0, size);
-  if (res != 0)
+  if (res != 0 && errno == ENOSPC)
     {
       shm_unlink (name);
       g_error ("Not enough shared memory for window surface");
     }
 #endif
-  
+
   ptr = mmap(0, size, PROT_READ|PROT_WRITE, MAP_SHARED, fd, 0);
 
   (void) close(fd);
