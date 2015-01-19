@@ -134,7 +134,6 @@ gtk_do_render_check (GtkStyleContext *context,
                               cr,
                               width, height,
                               image_type,
-                              gtk_style_context_get_junction_sides (context),
                               _gtk_css_rgba_value_get_rgba (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_COLOR)),
                               _gtk_css_rgba_value_get_rgba (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_BACKGROUND_COLOR)),
                               _gtk_css_rgba_value_get_rgba (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_BORDER_TOP_COLOR)),
@@ -232,7 +231,6 @@ gtk_do_render_option (GtkStyleContext *context,
                               cr,
                               width, height,
                               image_type,
-                              gtk_style_context_get_junction_sides (context),
                               _gtk_css_rgba_value_get_rgba (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_COLOR)),
                               _gtk_css_rgba_value_get_rgba (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_BACKGROUND_COLOR)),
                               _gtk_css_rgba_value_get_rgba (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_BORDER_TOP_COLOR)),
@@ -320,7 +318,6 @@ gtk_do_render_arrow (GtkStyleContext *context,
                               cr,
                               size, size,
                               GTK_CSS_IMAGE_BUILTIN_ARROW,
-                              gtk_style_context_get_junction_sides (context),
                               _gtk_css_rgba_value_get_rgba (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_COLOR)),
                               _gtk_css_rgba_value_get_rgba (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_BACKGROUND_COLOR)),
                               _gtk_css_rgba_value_get_rgba (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_BORDER_TOP_COLOR)),
@@ -521,7 +518,6 @@ gtk_do_render_expander (GtkStyleContext *context,
                               cr,
                               width, height,
                               image_type,
-                              gtk_style_context_get_junction_sides (context),
                               _gtk_css_rgba_value_get_rgba (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_COLOR)),
                               _gtk_css_rgba_value_get_rgba (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_BACKGROUND_COLOR)),
                               _gtk_css_rgba_value_get_rgba (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_BORDER_TOP_COLOR)),
@@ -1105,17 +1101,42 @@ gtk_do_render_handle (GtkStyleContext *context,
   cairo_translate (cr, x, y);
 
   if (gtk_style_context_has_class (context, GTK_STYLE_CLASS_GRIP))
-    type = GTK_CSS_IMAGE_BUILTIN_GRIP;
+    {
+      GtkJunctionSides sides = gtk_style_context_get_junction_sides (context);
+
+      /* order is important here for when too many (or too few) sides are set */
+      if ((sides & GTK_JUNCTION_CORNER_BOTTOMRIGHT) == GTK_JUNCTION_CORNER_BOTTOMRIGHT)
+        type = GTK_CSS_IMAGE_BUILTIN_GRIP_BOTTOMRIGHT;
+      else if ((sides & GTK_JUNCTION_CORNER_TOPRIGHT) == GTK_JUNCTION_CORNER_TOPRIGHT)
+        type = GTK_CSS_IMAGE_BUILTIN_GRIP_TOPRIGHT;
+      else if ((sides & GTK_JUNCTION_CORNER_BOTTOMLEFT) == GTK_JUNCTION_CORNER_BOTTOMLEFT)
+        type = GTK_CSS_IMAGE_BUILTIN_GRIP_BOTTOMLEFT;
+      else if ((sides & GTK_JUNCTION_CORNER_TOPLEFT) == GTK_JUNCTION_CORNER_TOPLEFT)
+        type = GTK_CSS_IMAGE_BUILTIN_GRIP_TOPLEFT;
+      else if (sides & GTK_JUNCTION_RIGHT)
+        type = GTK_CSS_IMAGE_BUILTIN_GRIP_RIGHT;
+      else if (sides & GTK_JUNCTION_BOTTOM)
+        type = GTK_CSS_IMAGE_BUILTIN_GRIP_BOTTOM;
+      else if (sides & GTK_JUNCTION_TOP)
+        type = GTK_CSS_IMAGE_BUILTIN_GRIP_TOP;
+      else if (sides & GTK_JUNCTION_LEFT)
+        type = GTK_CSS_IMAGE_BUILTIN_GRIP_LEFT;
+      else
+        type = GTK_CSS_IMAGE_BUILTIN_GRIP_BOTTOMRIGHT;
+    }
   else if (gtk_style_context_has_class (context, GTK_STYLE_CLASS_PANE_SEPARATOR))
-    type = GTK_CSS_IMAGE_BUILTIN_PANE_SEPARATOR;
+    {
+      type = GTK_CSS_IMAGE_BUILTIN_PANE_SEPARATOR;
+    }
   else
-    type = GTK_CSS_IMAGE_BUILTIN_HANDLE;
+    {
+      type = GTK_CSS_IMAGE_BUILTIN_HANDLE;
+    }
 
   gtk_css_image_builtin_draw (_gtk_css_image_value_get_image (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_ICON_SOURCE)),
                               cr,
                               width, height,
                               type,
-                              gtk_style_context_get_junction_sides (context),
                               _gtk_css_rgba_value_get_rgba (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_COLOR)),
                               _gtk_css_rgba_value_get_rgba (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_BACKGROUND_COLOR)),
                               _gtk_css_rgba_value_get_rgba (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_BORDER_TOP_COLOR)),
@@ -1251,7 +1272,6 @@ gtk_do_render_activity (GtkStyleContext *context,
                               cr,
                               width, height,
                               GTK_CSS_IMAGE_BUILTIN_SPINNER,
-                              gtk_style_context_get_junction_sides (context),
                               _gtk_css_rgba_value_get_rgba (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_COLOR)),
                               _gtk_css_rgba_value_get_rgba (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_BACKGROUND_COLOR)),
                               _gtk_css_rgba_value_get_rgba (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_BORDER_TOP_COLOR)),

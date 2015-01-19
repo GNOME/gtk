@@ -413,12 +413,12 @@ add_path_line (cairo_t        *cr,
 }
 
 void
-gtk_css_image_builtin_draw_grip (GtkCssImage      *image,
-                                 cairo_t          *cr,
-                                 double            width,
-                                 double            height,
-                                 GtkJunctionSides  sides,
-                                 const GdkRGBA    *bg_color)
+gtk_css_image_builtin_draw_grip (GtkCssImage            *image,
+                                 cairo_t                *cr,
+                                 double                  width,
+                                 double                  height,
+                                 GtkCssImageBuiltinType  image_type,
+                                 const GdkRGBA          *bg_color)
 {
   GdkRGBA lighter, darker;
 
@@ -427,30 +427,20 @@ gtk_css_image_builtin_draw_grip (GtkCssImage      *image,
   color_shade (bg_color, 0.7, &darker);
   color_shade (bg_color, 1.3, &lighter);
 
-  /* reduce confusing values to a meaningful state */
-  if ((sides & (GTK_JUNCTION_CORNER_TOPLEFT | GTK_JUNCTION_CORNER_BOTTOMRIGHT)) == (GTK_JUNCTION_CORNER_TOPLEFT | GTK_JUNCTION_CORNER_BOTTOMRIGHT))
-    sides &= ~GTK_JUNCTION_CORNER_TOPLEFT;
-
-  if ((sides & (GTK_JUNCTION_CORNER_TOPRIGHT | GTK_JUNCTION_CORNER_BOTTOMLEFT)) == (GTK_JUNCTION_CORNER_TOPRIGHT | GTK_JUNCTION_CORNER_BOTTOMLEFT))
-    sides &= ~GTK_JUNCTION_CORNER_TOPRIGHT;
-
-  if (sides == 0)
-    sides = GTK_JUNCTION_CORNER_BOTTOMRIGHT;
-
   /* align drawing area to the connected side */
-  if (sides == GTK_JUNCTION_LEFT)
+  if (image_type == GTK_CSS_IMAGE_BUILTIN_GRIP_LEFT)
     {
       if (height < width)
         width = height;
     }
-  else if (sides == GTK_JUNCTION_CORNER_TOPLEFT)
+  else if (image_type == GTK_CSS_IMAGE_BUILTIN_GRIP_TOPLEFT)
     {
       if (width < height)
         height = width;
       else if (height < width)
         width = height;
     }
-  else if (sides == GTK_JUNCTION_CORNER_BOTTOMLEFT)
+  else if (image_type == GTK_CSS_IMAGE_BUILTIN_GRIP_BOTTOMLEFT)
     {
       /* make it square, aligning to bottom left */
       if (width < height)
@@ -461,7 +451,7 @@ gtk_css_image_builtin_draw_grip (GtkCssImage      *image,
       else if (height < width)
         width = height;
     }
-  else if (sides == GTK_JUNCTION_RIGHT)
+  else if (image_type == GTK_CSS_IMAGE_BUILTIN_GRIP_RIGHT)
     {
       /* aligning to right */
       if (height < width)
@@ -470,7 +460,7 @@ gtk_css_image_builtin_draw_grip (GtkCssImage      *image,
           width = height;
         }
     }
-  else if (sides == GTK_JUNCTION_CORNER_TOPRIGHT)
+  else if (image_type == GTK_CSS_IMAGE_BUILTIN_GRIP_TOPRIGHT)
     {
       if (width < height)
         height = width;
@@ -480,7 +470,7 @@ gtk_css_image_builtin_draw_grip (GtkCssImage      *image,
           width = height;
         }
     }
-  else if (sides == GTK_JUNCTION_CORNER_BOTTOMRIGHT)
+  else if (image_type == GTK_CSS_IMAGE_BUILTIN_GRIP_BOTTOMRIGHT)
     {
       /* make it square, aligning to bottom right */
       if (width < height)
@@ -494,12 +484,12 @@ gtk_css_image_builtin_draw_grip (GtkCssImage      *image,
           width = height;
         }
     }
-  else if (sides == GTK_JUNCTION_TOP)
+  else if (image_type == GTK_CSS_IMAGE_BUILTIN_GRIP_TOP)
     {
       if (width < height)
         height = width;
     }
-  else if (sides == GTK_JUNCTION_BOTTOM)
+  else if (image_type == GTK_CSS_IMAGE_BUILTIN_GRIP_BOTTOM)
     {
       /* align to bottom */
       if (width < height)
@@ -511,8 +501,8 @@ gtk_css_image_builtin_draw_grip (GtkCssImage      *image,
   else
     g_assert_not_reached ();
 
-  if (sides == GTK_JUNCTION_LEFT ||
-      sides == GTK_JUNCTION_RIGHT)
+  if (image_type == GTK_CSS_IMAGE_BUILTIN_GRIP_LEFT ||
+      image_type == GTK_CSS_IMAGE_BUILTIN_GRIP_RIGHT)
     {
       gint xi;
 
@@ -531,8 +521,8 @@ gtk_css_image_builtin_draw_grip (GtkCssImage      *image,
           xi += 2;
         }
     }
-  else if (sides == GTK_JUNCTION_TOP ||
-           sides == GTK_JUNCTION_BOTTOM)
+  else if (image_type == GTK_CSS_IMAGE_BUILTIN_GRIP_TOP ||
+           image_type == GTK_CSS_IMAGE_BUILTIN_GRIP_BOTTOM)
     {
       gint yi;
 
@@ -551,7 +541,7 @@ gtk_css_image_builtin_draw_grip (GtkCssImage      *image,
           yi += 2;
         }
     }
-  else if (sides == GTK_JUNCTION_CORNER_TOPLEFT)
+  else if (image_type == GTK_CSS_IMAGE_BUILTIN_GRIP_TOPLEFT)
     {
       gint xi, yi;
 
@@ -581,7 +571,7 @@ gtk_css_image_builtin_draw_grip (GtkCssImage      *image,
           yi -= 3;
         }
     }
-  else if (sides == GTK_JUNCTION_CORNER_TOPRIGHT)
+  else if (image_type == GTK_CSS_IMAGE_BUILTIN_GRIP_TOPRIGHT)
     {
       gint xi, yi;
 
@@ -611,7 +601,7 @@ gtk_css_image_builtin_draw_grip (GtkCssImage      *image,
           yi -= 3;
         }
     }
-  else if (sides == GTK_JUNCTION_CORNER_BOTTOMLEFT)
+  else if (image_type == GTK_CSS_IMAGE_BUILTIN_GRIP_BOTTOMLEFT)
     {
       gint xi, yi;
 
@@ -641,7 +631,7 @@ gtk_css_image_builtin_draw_grip (GtkCssImage      *image,
           yi += 3;
         }
     }
-  else if (sides == GTK_JUNCTION_CORNER_BOTTOMRIGHT)
+  else if (image_type == GTK_CSS_IMAGE_BUILTIN_GRIP_BOTTOMRIGHT)
     {
       gint xi, yi;
 
@@ -845,7 +835,6 @@ gtk_css_image_builtin_draw (GtkCssImage            *image,
                             double                  width,
                             double                  height,
                             GtkCssImageBuiltinType  image_type,
-                            GtkJunctionSides        sides,
                             const GdkRGBA *         fg_color,
                             const GdkRGBA *         bg_color,
                             const GdkRGBA *         border_color,
@@ -931,10 +920,17 @@ gtk_css_image_builtin_draw (GtkCssImage            *image,
                                          FALSE, TRUE, TRUE,
                                          fg_color, border_color);
     break;
-  case GTK_CSS_IMAGE_BUILTIN_GRIP:
+  case GTK_CSS_IMAGE_BUILTIN_GRIP_TOPLEFT:
+  case GTK_CSS_IMAGE_BUILTIN_GRIP_TOP:
+  case GTK_CSS_IMAGE_BUILTIN_GRIP_TOPRIGHT:
+  case GTK_CSS_IMAGE_BUILTIN_GRIP_RIGHT:
+  case GTK_CSS_IMAGE_BUILTIN_GRIP_BOTTOMRIGHT:
+  case GTK_CSS_IMAGE_BUILTIN_GRIP_BOTTOM:
+  case GTK_CSS_IMAGE_BUILTIN_GRIP_BOTTOMLEFT:
+  case GTK_CSS_IMAGE_BUILTIN_GRIP_LEFT:
     gtk_css_image_builtin_draw_grip (image, cr,
                                      width, height,
-                                     sides,
+                                     image_type,
                                      bg_color);
     break;
   case GTK_CSS_IMAGE_BUILTIN_PANE_SEPARATOR:
