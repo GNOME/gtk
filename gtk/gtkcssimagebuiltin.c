@@ -219,6 +219,7 @@ gtk_css_image_builtin_draw_arrow (GtkCssImage            *image,
                                   cairo_t                *cr,
                                   double                  width,
                                   double                  height,
+                                  GtkCssImageBuiltinType  image_type,
                                   const GdkRGBA *         color)
 {
   double line_width;
@@ -226,7 +227,25 @@ gtk_css_image_builtin_draw_arrow (GtkCssImage            *image,
 
   size = MIN (width, height);
 
-  cairo_translate (cr, width / 2.0 + size / 4.0, height / 2.0);
+  cairo_translate (cr, width / 2.0, height / 2.0);
+  switch (image_type)
+  {
+    case GTK_CSS_IMAGE_BUILTIN_ARROW_UP:
+      break;
+    case GTK_CSS_IMAGE_BUILTIN_ARROW_DOWN:
+      cairo_rotate (cr, G_PI);
+      break;
+    case GTK_CSS_IMAGE_BUILTIN_ARROW_LEFT:
+      cairo_rotate (cr, 3 * G_PI / 2);
+      break;
+    case GTK_CSS_IMAGE_BUILTIN_ARROW_RIGHT:
+      cairo_rotate (cr, G_PI / 2);
+      break;
+    default:
+      g_assert_not_reached ();
+      break;
+  }
+  cairo_translate (cr, size / 4.0, 0);
 
   line_width = size / 3.0 / sqrt (2);
   cairo_set_line_width (cr, line_width);
@@ -867,9 +886,13 @@ gtk_css_image_builtin_draw (GtkCssImage            *image,
                                        fg_color, bg_color,
                                        border_color, border_width);
     break;
-  case GTK_CSS_IMAGE_BUILTIN_ARROW:
+  case GTK_CSS_IMAGE_BUILTIN_ARROW_UP:
+  case GTK_CSS_IMAGE_BUILTIN_ARROW_DOWN:
+  case GTK_CSS_IMAGE_BUILTIN_ARROW_LEFT:
+  case GTK_CSS_IMAGE_BUILTIN_ARROW_RIGHT:
     gtk_css_image_builtin_draw_arrow (image, cr,
                                       width, height,
+                                      image_type,
                                       fg_color);
     break;
   case GTK_CSS_IMAGE_BUILTIN_EXPANDER_HORIZONTAL_LEFT:

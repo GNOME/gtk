@@ -287,7 +287,31 @@ gtk_do_render_arrow (GtkStyleContext *context,
                      gdouble          size)
 {
   GtkBorderStyle border_style;
+  GtkCssImageBuiltinType image_type;
   gint border_width;
+
+  /* map [0, 2 * pi) to [0, 4) */
+  angle = round (2 * angle / G_PI);
+
+  switch (((int) angle) & 3)
+  {
+  case 0:
+    image_type = GTK_CSS_IMAGE_BUILTIN_ARROW_UP;
+    break;
+  case 1:
+    image_type = GTK_CSS_IMAGE_BUILTIN_ARROW_RIGHT;
+    break;
+  case 2:
+    image_type = GTK_CSS_IMAGE_BUILTIN_ARROW_DOWN;
+    break;
+  case 3:
+    image_type = GTK_CSS_IMAGE_BUILTIN_ARROW_LEFT;
+    break;
+  default:
+    g_assert_not_reached ();
+    image_type = GTK_CSS_IMAGE_BUILTIN_ARROW_UP;
+    break;
+  }
 
   if (render_icon_image (context, cr, x, y, size, size))
     return;
@@ -310,14 +334,12 @@ gtk_do_render_arrow (GtkStyleContext *context,
       border_width = 0;
     }
 
-  cairo_translate (cr, x + size / 2.0, y + size / 2.0);
-  cairo_rotate (cr, angle - G_PI_2);
-  cairo_translate (cr, - size / 2.0, - size / 2.0);
+  cairo_translate (cr, x, y);
 
   gtk_css_image_builtin_draw (_gtk_css_image_value_get_image (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_ICON_SOURCE)),
                               cr,
                               size, size,
-                              GTK_CSS_IMAGE_BUILTIN_ARROW,
+                              image_type,
                               _gtk_css_rgba_value_get_rgba (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_COLOR)),
                               _gtk_css_rgba_value_get_rgba (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_BACKGROUND_COLOR)),
                               _gtk_css_rgba_value_get_rgba (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_BORDER_TOP_COLOR)),
