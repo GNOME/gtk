@@ -183,19 +183,20 @@ create_mir_surface (GdkDisplay *display,
                     gint height,
                     MirBufferUsage buffer_usage)
 {
-  MirSurfaceParameters parameters;
+  MirSurfaceSpec *spec;
   MirConnection *connection;
-
-  parameters.name = g_get_prgname ();
-  parameters.width = width;
-  parameters.height = height;
-  parameters.pixel_format = _gdk_mir_display_get_pixel_format (display, buffer_usage);
-  parameters.buffer_usage = buffer_usage;
-  parameters.output_id = mir_display_output_id_invalid;
+  MirPixelFormat format;
+  MirSurface *surface;
 
   connection = gdk_mir_display_get_mir_connection (display);
+  format = _gdk_mir_display_get_pixel_format (display, buffer_usage);
+  spec = mir_connection_create_spec_for_normal_surface (connection, width, height, format);
+  mir_surface_spec_set_name (spec, g_get_prgname ());
+  mir_surface_spec_set_buffer_usage (spec, buffer_usage);
+  surface = mir_surface_create_sync (spec);
+  mir_surface_spec_release (spec);
 
-  return mir_connection_create_surface_sync (connection, &parameters);
+  return surface;
 }
 
 static void
