@@ -2174,10 +2174,6 @@ location_toggle_popup_handler (GtkFileChooserWidget *impl)
 {
   GtkFileChooserWidgetPrivate *priv = impl->priv;
 
-  /* when in search or recent files mode, we are not showing the
-   * browse_header_box container, so there's no point in switching
-   * to it.
-   */
   if (priv->operation_mode == OPERATION_MODE_SEARCH)
     return;
 
@@ -2465,10 +2461,10 @@ operation_mode_set_enter_location (GtkFileChooserWidget *impl)
 {
   GtkFileChooserWidgetPrivate *priv = impl->priv;
 
-  location_mode_set (impl, LOCATION_MODE_FILENAME_ENTRY);
+  gtk_stack_set_visible_child_name (GTK_STACK (priv->browse_header_stack), "location");
   location_bar_update (impl);
-  gtk_stack_set_visible_child_name (GTK_STACK (priv->browse_header_stack), "pathbar");
   gtk_widget_set_sensitive (priv->filter_combo, TRUE);
+  location_mode_set (impl, LOCATION_MODE_FILENAME_ENTRY);
 }
 
 static void
@@ -2476,8 +2472,8 @@ operation_mode_set_browse (GtkFileChooserWidget *impl)
 {
   GtkFileChooserWidgetPrivate *priv = impl->priv;
 
-  location_bar_update (impl);
   gtk_stack_set_visible_child_name (GTK_STACK (priv->browse_header_stack), "pathbar");
+  location_bar_update (impl);
   gtk_widget_set_sensitive (priv->filter_combo, TRUE);
 }
 
@@ -2488,11 +2484,11 @@ operation_mode_set_search (GtkFileChooserWidget *impl)
 
   g_assert (priv->search_model == NULL);
 
+  gtk_stack_set_visible_child_name (GTK_STACK (priv->browse_header_stack), "search");
   location_bar_update (impl);
   search_setup_widgets (impl);
-  gtk_stack_set_visible_child_name (GTK_STACK (priv->browse_header_stack), "search");
-  gtk_widget_set_sensitive (priv->filter_combo, FALSE);
   gtk_entry_grab_focus_without_selecting (GTK_ENTRY (priv->search_entry));
+  gtk_widget_set_sensitive (priv->filter_combo, FALSE);
 }
 
 static void
@@ -2501,12 +2497,12 @@ operation_mode_set_recent (GtkFileChooserWidget *impl)
   GtkFileChooserWidgetPrivate *priv = impl->priv;
   GFile *file;
 
+  gtk_stack_set_visible_child_name (GTK_STACK (priv->browse_header_stack), "pathbar");
   location_bar_update (impl);
   recent_start_loading (impl);
   file = g_file_new_for_uri ("recent:///");
   gtk_places_sidebar_set_location (GTK_PLACES_SIDEBAR (priv->places_sidebar), file);
   g_object_unref (file);
-  gtk_stack_set_visible_child_name (GTK_STACK (priv->browse_header_stack), "pathbar");
   gtk_widget_set_sensitive (priv->filter_combo, TRUE);
 }
 
