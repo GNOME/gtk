@@ -2948,7 +2948,7 @@ _gtk_style_context_validate (GtkStyleContext  *context,
     {
       GtkCssStyle *style, *static_style;
 
-      static_style = build_properties (context, cssnode->decl, FALSE, gtk_css_node_get_parent_style (context, cssnode));
+      static_style = build_properties (context, cssnode->decl, TRUE, gtk_css_node_get_parent_style (context, cssnode));
       style = gtk_css_animated_style_new (static_style,
                                           priv->parent ? style_values_lookup (priv->parent) : NULL,
                                           timestamp,
