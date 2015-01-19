@@ -1791,6 +1791,9 @@ gtk_path_bar_get_info_callback (GCancellable *cancellable,
   const gchar *display_name;
   gboolean is_hidden;
 
+  if (g_error_matches (error, G_IO_ERROR, G_IO_ERROR_CANCELLED))
+    return;
+
   if (cancellable != file_info->path_bar->priv->get_info_cancellable)
     {
       gtk_path_bar_set_file_finish (file_info, FALSE);
@@ -1876,6 +1879,7 @@ _gtk_path_bar_set_file (GtkPathBar      *path_bar,
                                "standard::display-name,standard::is-hidden,standard::is-backup",
                                gtk_path_bar_get_info_callback,
                                info);
+
 }
 
 /* FIXME: This should be a construct-only property */
