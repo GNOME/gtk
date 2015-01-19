@@ -305,8 +305,8 @@ gtk_tree_set_row_drag_data (GtkSelectionData *selection_data,
 /**
  * gtk_tree_get_row_drag_data:
  * @selection_data: a #GtkSelectionData
- * @tree_model: (out): a #GtkTreeModel
- * @path: (out): row in @tree_model
+ * @tree_model: (nullable) (optional) (transfer none) (out): a #GtkTreeModel
+ * @path: (nullable) (optional) (out): row in @tree_model
  * 
  * Obtains a @tree_model and @path from selection data of target type
  * %GTK_TREE_MODEL_ROW. Normally called from a drag_data_received handler.
