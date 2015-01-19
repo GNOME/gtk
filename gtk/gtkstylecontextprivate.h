@@ -29,6 +29,10 @@ G_BEGIN_DECLS
 
 void            _gtk_style_context_set_widget                (GtkStyleContext *context,
                                                               GtkWidget       *widget);
+void            gtk_style_context_set_id                     (GtkStyleContext *context,
+                                                              const char      *id);
+const char *    gtk_style_context_get_id                     (GtkStyleContext *context);
+
 const GtkBitmask *
                 _gtk_style_context_get_changes               (GtkStyleContext *context);
 

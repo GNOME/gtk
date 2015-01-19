@@ -33,6 +33,7 @@ struct _GtkCssNodeDeclaration {
   guint refcount;
   GtkJunctionSides junction_sides;
   GType type;
+  const /* interened */ char *id;
   GtkStateFlags state;
   guint n_classes;
   guint n_regions;
@@ -178,6 +179,27 @@ GType
 gtk_css_node_declaration_get_type (const GtkCssNodeDeclaration *decl)
 {
   return decl->type;
+}
+
+gboolean
+gtk_css_node_declaration_set_id (GtkCssNodeDeclaration **decl,
+                                 const char             *id)
+{
+  id = g_intern_string (id);
+
+  if ((*decl)->id == id)
+    return FALSE;
+
+  gtk_css_node_declaration_make_writable (decl);
+  (*decl)->id = id;
+
+  return TRUE;
+}
+
+const char *
+gtk_css_node_declaration_get_id (const GtkCssNodeDeclaration *decl)
+{
+  return decl->id;
 }
 
 gboolean
@@ -447,6 +469,8 @@ gtk_css_node_declaration_hash (gconstpointer elem)
   guint hash, i;
   
   hash = (guint) decl->type;
+  hash <<= 5;
+  hash ^= GPOINTER_TO_UINT (decl->id);
 
   classes = get_classes (decl);
   for (i = 0; i < decl->n_classes; i++)
@@ -486,6 +510,9 @@ gtk_css_node_declaration_equal (gconstpointer elem1,
     return FALSE;
 
   if (decl1->state != decl2->state)
+    return FALSE;
+
+  if (decl1->id != decl2->id)
     return FALSE;
 
   if (decl1->n_classes != decl2->n_classes)

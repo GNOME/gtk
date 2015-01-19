@@ -1338,6 +1338,42 @@ gtk_style_context_get (GtkStyleContext *context,
   va_end (args);
 }
 
+/*
+ * gtk_style_context_set_id:
+ * @context: a #GtkStyleContext
+ * @id: (allow-none): the id to use or %NULL for none.
+ *
+ * Sets the CSS ID to be used when rendering with any
+ * of the gtk_render_*() functions.
+ **/
+void
+gtk_style_context_set_id (GtkStyleContext *context,
+                          const char      *id)
+{
+  g_return_if_fail (GTK_IS_STYLE_CONTEXT (context));
+
+  if (!gtk_css_node_declaration_set_id (&context->priv->cssnode->decl, id))
+    return;
+
+  gtk_style_context_queue_invalidate_internal (context, GTK_CSS_CHANGE_ID);
+}
+
+/*
+ * gtk_style_context_get_id:
+ * @context: a #GtkStyleContext
+ *
+ * Returns the CSS ID used when rendering.
+ *
+ * Returns: the ID or %NULL if no ID is set.
+ **/
+const char *
+gtk_style_context_get_id (GtkStyleContext *context)
+{
+  g_return_val_if_fail (GTK_IS_STYLE_CONTEXT (context), NULL);
+
+  return gtk_css_node_declaration_get_id (context->priv->cssnode->decl);
+}
+
 /**
  * gtk_style_context_set_state:
  * @context: a #GtkStyleContext

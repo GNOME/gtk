@@ -8712,7 +8712,8 @@ gtk_widget_set_name (GtkWidget	 *widget,
   g_free (priv->name);
   priv->name = new_name;
 
-  _gtk_widget_invalidate_style_context (widget, GTK_CSS_CHANGE_NAME);
+  if (priv->context)
+    gtk_style_context_set_id (priv->context, priv->name);
 
   g_object_notify (G_OBJECT (widget), "name");
 }
@@ -16370,6 +16371,7 @@ gtk_widget_get_style_context (GtkWidget *widget)
 
       priv->context = gtk_style_context_new ();
 
+      gtk_style_context_set_id (priv->context, priv->name);
       gtk_style_context_set_state (priv->context, priv->state_flags);
       gtk_style_context_set_scale (priv->context, gtk_widget_get_scale_factor (widget));
 
