@@ -1,3 +1,110 @@
+Overview of Changes in GTK+ 3.15.4
+==================================
+
+* GtkTextView
+ - Allow to customize multi-click behaviors, using the new
+   ::extend-selection signal
+ - Selection can now be extended by scrolling
+ - Better behavior and appearance for text selection with touch
+
+* GtkApplication:
+ - Use app menu fallback with ssh connections
+ - Provide a mechanism to hide unnecessary app menu items
+   on OS X, so a single menu file can be used across platforms
+
+* GtkCalendar:
+ - Show other months in a different color under Adwaita again
+ - Ensure we always show a bit of the other month on both ends
+
+* GtkScrolledWindow
+ - Make overlay scrollbars more dynamic
+
+* GtkFileChooser:
+ - Make bookmark DND insert at the right location
+ - Make '~' and '/' work in recent mode
+ - Make Ctrl-L work in recent mode
+ - Re-integrate search
+
+* CSS:
+ - Performance improvements
+
+* GtkInspector:
+ - Add a magnifier for the selected widget
+ - Show more display information
+ - Show memory address of objects
+
+* Wayland:
+ - Use subsurfaces for popovers, so popovers can extend beyond the
+   window boundaries
+ - Prefer the Wayland backend over X11 if both are available
+
+* GL:
+ - Fix interaction with hi-dpi
+ - Add OpenGL support to the Windows backend
+
+* Bugs:
+ 111503 Customization of text selection bounds on double click
+ 301835 should the calendar start on the 1st of month?
+ 477454 libgtk crashed in gtk_notebook_button_release
+ 671802 no menu fallback with ssh -X or sudo
+ 671895 gtk_print_context_get_hard_margins needs to take into account page...
+ 674537 GtkMenuPositionFunc: x and y should be "inout"
+ 705582 gtk_recent_manager_init fails to check settings==NULL
+ 710612 [PATCH] Allow to extend selection with mouse scrollwheel
+ 738338 quartz: NSWindow NULL check in get_scale_factor
+ 738891 Use GDK_WINDOW_SUBSURFACE for popovers
+ 739038 gtk_recent_manager_set_filename: assertion failed: (priv->filename...
+ 740758 Add getters for device vendor/product IDs
+ 740795 GDK: Add OpenGL Support for Windows
+ 741259 gtkmodelmenuitem: force icon scaling
+ 741569 Minor theme bug: square progress bars
+ 741610 Finish up support for macos menubar
+ 741652 Leaking menus when attaching to a button
+ 741702 Right margin not respected with RTL text in non-wrapping mode only
+ 741827 typo in testsuite/reftests/Makefile.am causes build failure on Min...
+ 741897 documentation fix
+ 741969 GTK_STOCK_COPY
+ 742010 GtkLabel eats thumb-button clicks
+ 742170 cut/copy/paste binding entries are registered 2x
+ 742181 "show images in menus" causes weird padding outside GNOME
+ 742243 GtkScrolledWindow draws overshoot at the wrong position
+ 742311 On cellrenderertext, notify for "size" and "size-points" propertie...
+ 742343 Hide scrollbar in GtkFileChooser if appropriate
+ 742518 object overview should include the pointer to the object in memory
+ 742631 Left padding on File Chooser List
+ 742653 gtkfilechooserwidget: When using an extra widget, show or hide the...
+ 742664 Portabilitiy issues with GTK-Inspector 32-bit and non-gnome3 desktop
+ 742702 GtkTreeView separator has wrong color if not active
+ 742704 GtkComboBox: Separators not visible with Adwaita
+ 742727 nautilus adding bookmark by dragging appear always at top
+ 742764 Fix check for 'y' padding in gtk_cell_renderer_set_padding()
+ 742771 Properly ignore BadWindow and BadDrawable in get_child_info_handler()
+ 742774 Properly check result of g_utf8_get_char_validated()
+ 742778 Fix accessible_class->widget_set initialization
+ 742785 Fix event->button.y_root when using mouse buttons and dnd canceled
+ 742786 Fix save_hot_y init in gtk_drag_get_icon()
+ 742940 Adjust annotations of gtk_status_icon_position_menu to match GtkMe...
+ 742980 cannot start broadway on FreeBSD
+ 743037 Typo in gdk_window_get_root_coords documentation
+ 743101 commit 77b876fa breaks zathura
+ 743117 / and ~ Don't work in filechooser's recent mode
+ 743157 gtk3-demo editable cells treeview problem
+
+* Translation updates:
+ Basque
+ British English
+ Czech
+ Galician
+ German
+ Greek
+ Hebrew
+ Hungarian
+ Icelandic
+ Russian
+ Spanish
+ Vietnamese
+
+
 Overview of Changes in GTK+ 3.15.3
 ==================================
 
