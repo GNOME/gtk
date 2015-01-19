@@ -94,10 +94,8 @@ gtk_do_render_check (GtkStyleContext *context,
                      gdouble          width,
                      gdouble          height)
 {
-  GtkBorderStyle border_style;
   GtkStateFlags state;
   GtkCssImageBuiltinType image_type;
-  gint border_width;
 
   state = gtk_style_context_get_state (context);
   if (state & GTK_STATE_FLAG_INCONSISTENT)
@@ -110,34 +108,12 @@ gtk_do_render_check (GtkStyleContext *context,
   if (render_icon_image (context, cr, x, y, width, height))
     return;
 
-  border_style = _gtk_css_border_style_value_get (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_BORDER_TOP_STYLE));
-  if (border_style == GTK_BORDER_STYLE_SOLID)
-    {
-      GtkBorder border;
-
-      border.top = _gtk_css_number_value_get (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_BORDER_TOP_WIDTH), 100);
-      border.right = _gtk_css_number_value_get (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_BORDER_RIGHT_WIDTH), 100);
-      border.bottom = _gtk_css_number_value_get (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_BORDER_BOTTOM_WIDTH), 100);
-      border.left = _gtk_css_number_value_get (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_BORDER_LEFT_WIDTH), 100);
-
-      border_width = MIN (MIN (border.top, border.bottom),
-                          MIN (border.left, border.right));
-    }
-  else
-    {
-      border_width = 0;
-    }
-
   cairo_translate (cr, x, y);
 
   gtk_css_image_builtin_draw (_gtk_css_image_value_get_image (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_ICON_SOURCE)),
                               cr,
                               width, height,
-                              image_type,
-                              _gtk_css_rgba_value_get_rgba (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_COLOR)),
-                              _gtk_css_rgba_value_get_rgba (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_BACKGROUND_COLOR)),
-                              _gtk_css_rgba_value_get_rgba (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_BORDER_TOP_COLOR)),
-                              border_width);
+                              image_type);
 }
 
 /**
@@ -191,10 +167,8 @@ gtk_do_render_option (GtkStyleContext *context,
                       gdouble          width,
                       gdouble          height)
 {
-  GtkBorderStyle border_style;
   GtkStateFlags state;
   GtkCssImageBuiltinType image_type;
-  gint border_width;
 
   state = gtk_style_context_get_state (context);
   if (state & GTK_STATE_FLAG_INCONSISTENT)
@@ -207,34 +181,12 @@ gtk_do_render_option (GtkStyleContext *context,
   if (render_icon_image (context, cr, x, y, width, height))
     return;
 
-  border_style = _gtk_css_border_style_value_get (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_BORDER_TOP_STYLE));
-  if (border_style == GTK_BORDER_STYLE_SOLID)
-    {
-      GtkBorder border;
-
-      border.top = _gtk_css_number_value_get (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_BORDER_TOP_WIDTH), 100);
-      border.right = _gtk_css_number_value_get (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_BORDER_RIGHT_WIDTH), 100);
-      border.bottom = _gtk_css_number_value_get (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_BORDER_BOTTOM_WIDTH), 100);
-      border.left = _gtk_css_number_value_get (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_BORDER_LEFT_WIDTH), 100);
-
-      border_width = MIN (MIN (border.top, border.bottom),
-                          MIN (border.left, border.right));
-    }
-  else
-    {
-      border_width = 0;
-    }
-
   cairo_translate (cr, x, y);
 
   gtk_css_image_builtin_draw (_gtk_css_image_value_get_image (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_ICON_SOURCE)),
                               cr,
                               width, height,
-                              image_type,
-                              _gtk_css_rgba_value_get_rgba (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_COLOR)),
-                              _gtk_css_rgba_value_get_rgba (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_BACKGROUND_COLOR)),
-                              _gtk_css_rgba_value_get_rgba (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_BORDER_TOP_COLOR)),
-                              border_width);
+                              image_type);
 }
 
 /**
@@ -286,9 +238,7 @@ gtk_do_render_arrow (GtkStyleContext *context,
                      gdouble          y,
                      gdouble          size)
 {
-  GtkBorderStyle border_style;
   GtkCssImageBuiltinType image_type;
-  gint border_width;
 
   /* map [0, 2 * pi) to [0, 4) */
   angle = round (2 * angle / G_PI);
@@ -316,34 +266,12 @@ gtk_do_render_arrow (GtkStyleContext *context,
   if (render_icon_image (context, cr, x, y, size, size))
     return;
 
-  border_style = _gtk_css_border_style_value_get (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_BORDER_TOP_STYLE));
-  if (border_style == GTK_BORDER_STYLE_SOLID)
-    {
-      GtkBorder border;
-
-      border.top = _gtk_css_number_value_get (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_BORDER_TOP_WIDTH), 100);
-      border.right = _gtk_css_number_value_get (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_BORDER_RIGHT_WIDTH), 100);
-      border.bottom = _gtk_css_number_value_get (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_BORDER_BOTTOM_WIDTH), 100);
-      border.left = _gtk_css_number_value_get (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_BORDER_LEFT_WIDTH), 100);
-
-      border_width = MIN (MIN (border.top, border.bottom),
-                          MIN (border.left, border.right));
-    }
-  else
-    {
-      border_width = 0;
-    }
-
   cairo_translate (cr, x, y);
 
   gtk_css_image_builtin_draw (_gtk_css_image_value_get_image (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_ICON_SOURCE)),
                               cr,
                               size, size,
-                              image_type,
-                              _gtk_css_rgba_value_get_rgba (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_COLOR)),
-                              _gtk_css_rgba_value_get_rgba (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_BACKGROUND_COLOR)),
-                              _gtk_css_rgba_value_get_rgba (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_BORDER_TOP_COLOR)),
-                              border_width);
+                              image_type);
 }
 
 /**
@@ -484,10 +412,8 @@ gtk_do_render_expander (GtkStyleContext *context,
                         gdouble          width,
                         gdouble          height)
 {
-  GtkBorderStyle border_style;
   GtkCssImageBuiltinType image_type;
   GtkStateFlags state;
-  gint border_width;
 
   state = gtk_style_context_get_state (context);
   if (gtk_style_context_has_class (context, "horizontal"))
@@ -516,34 +442,12 @@ gtk_do_render_expander (GtkStyleContext *context,
   if (render_icon_image (context, cr, x, y, width, height))
     return;
 
-  border_style = _gtk_css_border_style_value_get (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_BORDER_TOP_STYLE));
-  if (border_style == GTK_BORDER_STYLE_SOLID)
-    {
-      GtkBorder border;
-
-      border.top = _gtk_css_number_value_get (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_BORDER_TOP_WIDTH), 100);
-      border.right = _gtk_css_number_value_get (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_BORDER_RIGHT_WIDTH), 100);
-      border.bottom = _gtk_css_number_value_get (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_BORDER_BOTTOM_WIDTH), 100);
-      border.left = _gtk_css_number_value_get (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_BORDER_LEFT_WIDTH), 100);
-
-      border_width = MIN (MIN (border.top, border.bottom),
-                          MIN (border.left, border.right));
-    }
-  else
-    {
-      border_width = 0;
-    }
-
   cairo_translate (cr, x, y);
 
   gtk_css_image_builtin_draw (_gtk_css_image_value_get_image (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_ICON_SOURCE)),
                               cr,
                               width, height,
-                              image_type,
-                              _gtk_css_rgba_value_get_rgba (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_COLOR)),
-                              _gtk_css_rgba_value_get_rgba (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_BACKGROUND_COLOR)),
-                              _gtk_css_rgba_value_get_rgba (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_BORDER_TOP_COLOR)),
-                              border_width);
+                              image_type);
 }
 
 /**
@@ -1093,32 +997,12 @@ gtk_do_render_handle (GtkStyleContext *context,
                       gdouble          height)
 {
   GtkCssImageBuiltinType type;
-  GtkBorderStyle border_style;
-  gint border_width;
 
   gtk_render_background (context, cr, x, y, width, height);
   gtk_render_frame (context, cr, x, y, width, height);
 
   if (render_icon_image (context, cr, x, y, width, height))
     return;
-
-  border_style = _gtk_css_border_style_value_get (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_BORDER_TOP_STYLE));
-  if (border_style == GTK_BORDER_STYLE_SOLID)
-    {
-      GtkBorder border;
-
-      border.top = _gtk_css_number_value_get (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_BORDER_TOP_WIDTH), 100);
-      border.right = _gtk_css_number_value_get (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_BORDER_RIGHT_WIDTH), 100);
-      border.bottom = _gtk_css_number_value_get (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_BORDER_BOTTOM_WIDTH), 100);
-      border.left = _gtk_css_number_value_get (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_BORDER_LEFT_WIDTH), 100);
-
-      border_width = MIN (MIN (border.top, border.bottom),
-                          MIN (border.left, border.right));
-    }
-  else
-    {
-      border_width = 0;
-    }
 
   cairo_translate (cr, x, y);
 
@@ -1158,11 +1042,7 @@ gtk_do_render_handle (GtkStyleContext *context,
   gtk_css_image_builtin_draw (_gtk_css_image_value_get_image (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_ICON_SOURCE)),
                               cr,
                               width, height,
-                              type,
-                              _gtk_css_rgba_value_get_rgba (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_COLOR)),
-                              _gtk_css_rgba_value_get_rgba (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_BACKGROUND_COLOR)),
-                              _gtk_css_rgba_value_get_rgba (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_BORDER_TOP_COLOR)),
-                              border_width);
+                              type);
 }
 
 /**
@@ -1264,40 +1144,15 @@ gtk_do_render_activity (GtkStyleContext *context,
                         gdouble          width,
                         gdouble          height)
 {
-  GtkBorderStyle border_style;
-  gint border_width;
-
   if (render_icon_image (context, cr, x, y, width, height))
     return;
-
-  border_style = _gtk_css_border_style_value_get (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_BORDER_TOP_STYLE));
-  if (border_style == GTK_BORDER_STYLE_SOLID)
-    {
-      GtkBorder border;
-
-      border.top = _gtk_css_number_value_get (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_BORDER_TOP_WIDTH), 100);
-      border.right = _gtk_css_number_value_get (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_BORDER_RIGHT_WIDTH), 100);
-      border.bottom = _gtk_css_number_value_get (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_BORDER_BOTTOM_WIDTH), 100);
-      border.left = _gtk_css_number_value_get (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_BORDER_LEFT_WIDTH), 100);
-
-      border_width = MIN (MIN (border.top, border.bottom),
-                          MIN (border.left, border.right));
-    }
-  else
-    {
-      border_width = 0;
-    }
 
   cairo_translate (cr, x, y);
 
   gtk_css_image_builtin_draw (_gtk_css_image_value_get_image (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_ICON_SOURCE)),
                               cr,
                               width, height,
-                              GTK_CSS_IMAGE_BUILTIN_SPINNER,
-                              _gtk_css_rgba_value_get_rgba (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_COLOR)),
-                              _gtk_css_rgba_value_get_rgba (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_BACKGROUND_COLOR)),
-                              _gtk_css_rgba_value_get_rgba (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_BORDER_TOP_COLOR)),
-                              border_width);
+                              GTK_CSS_IMAGE_BUILTIN_SPINNER);
 }
 
 /**

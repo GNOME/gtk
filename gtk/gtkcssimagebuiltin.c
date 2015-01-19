@@ -21,6 +21,10 @@
 
 #include "gtkcssimagebuiltinprivate.h"
 
+#include "gtkcssenumvalueprivate.h"
+#include "gtkcssnumbervalueprivate.h"
+#include "gtkcssrgbavalueprivate.h"
+#include "gtkcssstyleprivate.h"
 #include "gtkhslaprivate.h"
 #include "gtkrenderprivate.h"
 
@@ -33,17 +37,14 @@ G_DEFINE_TYPE (GtkCssImageBuiltin, gtk_css_image_builtin, GTK_TYPE_CSS_IMAGE)
 static GtkCssImage *the_one_true_image;
 
 static void
-gtk_css_image_builtin_draw_check (GtkCssImage            *image,
-                                  cairo_t                *cr,
-                                  double                  width,
-                                  double                  height,
-                                  gboolean                checked,
-                                  gboolean                inconsistent,
-                                  const GdkRGBA *         fg_color,
-                                  const GdkRGBA *         bg_color,
-                                  const GdkRGBA *         border_color,
-                                  int                     border_width)
+gtk_css_image_builtin_draw_check (GtkCssImage *image,
+                                  cairo_t     *cr,
+                                  double       width,
+                                  double       height,
+                                  gboolean     checked,
+                                  gboolean     inconsistent)
 {
+  GtkCssImageBuiltin *builtin = GTK_CSS_IMAGE_BUILTIN (image);
   gint x, y, exterior_size, interior_size, thickness, pad;
 
   exterior_size = MIN (width, height);
@@ -65,19 +66,19 @@ gtk_css_image_builtin_draw_check (GtkCssImage            *image,
   x = - (1 + exterior_size - (gint) width) / 2;
   y = - (1 + exterior_size - (gint) height) / 2;
 
-  if (border_width > 0)
+  if (builtin->border_width > 0)
     {
-      cairo_set_line_width (cr, border_width);
+      cairo_set_line_width (cr, builtin->border_width);
 
       cairo_rectangle (cr, x + 0.5, y + 0.5, exterior_size - 1, exterior_size - 1);
-      gdk_cairo_set_source_rgba (cr, bg_color);
+      gdk_cairo_set_source_rgba (cr, &builtin->bg_color);
       cairo_fill_preserve (cr);
 
-      gdk_cairo_set_source_rgba (cr, border_color);
+      gdk_cairo_set_source_rgba (cr, &builtin->border_color);
       cairo_stroke (cr);
     }
 
-  gdk_cairo_set_source_rgba (cr, fg_color);
+  gdk_cairo_set_source_rgba (cr, &builtin->fg_color);
 
   if (inconsistent)
     {
@@ -127,17 +128,14 @@ gtk_css_image_builtin_draw_check (GtkCssImage            *image,
 }
 
 static void
-gtk_css_image_builtin_draw_option (GtkCssImage            *image,
-                                   cairo_t                *cr,
-                                   double                  width,
-                                   double                  height,
-                                   gboolean                checked,
-                                   gboolean                inconsistent,
-                                   const GdkRGBA *         fg_color,
-                                   const GdkRGBA *         bg_color,
-                                   const GdkRGBA *         border_color,
-                                   int                     border_width)
+gtk_css_image_builtin_draw_option (GtkCssImage *image,
+                                   cairo_t     *cr,
+                                   double       width,
+                                   double       height,
+                                   gboolean     checked,
+                                   gboolean     inconsistent)
 {
+  GtkCssImageBuiltin *builtin = GTK_CSS_IMAGE_BUILTIN (image);
   gint x, y, exterior_size, interior_size, thickness, pad;
 
   exterior_size = MIN (width, height);
@@ -148,9 +146,9 @@ gtk_css_image_builtin_draw_option (GtkCssImage            *image,
   x = - (1 + exterior_size - width) / 2;
   y = - (1 + exterior_size - height) / 2;
 
-  if (border_width > 0)
+  if (builtin->border_width > 0)
     {
-      cairo_set_line_width (cr, border_width);
+      cairo_set_line_width (cr, builtin->border_width);
 
       cairo_new_sub_path (cr);
       cairo_arc (cr,
@@ -159,14 +157,14 @@ gtk_css_image_builtin_draw_option (GtkCssImage            *image,
                  (exterior_size - 1) / 2.,
                  0, 2 * G_PI);
 
-      gdk_cairo_set_source_rgba (cr, bg_color);
+      gdk_cairo_set_source_rgba (cr, &builtin->bg_color);
       cairo_fill_preserve (cr);
 
-      gdk_cairo_set_source_rgba (cr, border_color);
+      gdk_cairo_set_source_rgba (cr, &builtin->border_color);
       cairo_stroke (cr);
     }
 
-  gdk_cairo_set_source_rgba (cr, fg_color);
+  gdk_cairo_set_source_rgba (cr, &builtin->fg_color);
 
   /* FIXME: thickness */
   thickness = 1;
@@ -219,9 +217,9 @@ gtk_css_image_builtin_draw_arrow (GtkCssImage            *image,
                                   cairo_t                *cr,
                                   double                  width,
                                   double                  height,
-                                  GtkCssImageBuiltinType  image_type,
-                                  const GdkRGBA *         color)
+                                  GtkCssImageBuiltinType  image_type)
 {
+  GtkCssImageBuiltin *builtin = GTK_CSS_IMAGE_BUILTIN (image);
   double line_width;
   double size;
 
@@ -260,21 +258,20 @@ gtk_css_image_builtin_draw_arrow (GtkCssImage            *image,
   cairo_rel_line_to (cr, size / 2.0, size / 2.0);
   cairo_rel_line_to (cr, - size / 2.0, size / 2.0);
 
-  gdk_cairo_set_source_rgba (cr, color);
+  gdk_cairo_set_source_rgba (cr, &builtin->fg_color);
   cairo_stroke (cr);
 }
 
 static void
-gtk_css_image_builtin_draw_expander (GtkCssImage            *image,
-                                     cairo_t                *cr,
-                                     double                  width,
-                                     double                  height,
-                                     gboolean                horizontal,
-                                     gboolean                is_rtl,
-                                     gboolean                expanded,
-                                     const GdkRGBA *         fg_color,
-                                     const GdkRGBA *         border_color)
+gtk_css_image_builtin_draw_expander (GtkCssImage *image,
+                                     cairo_t     *cr,
+                                     double       width,
+                                     double       height,
+                                     gboolean     horizontal,
+                                     gboolean     is_rtl,
+                                     gboolean     expanded)
 {
+  GtkCssImageBuiltin *builtin = GTK_CSS_IMAGE_BUILTIN (image);
   double vertical_overshoot;
   int diameter;
   double radius;
@@ -355,11 +352,11 @@ gtk_css_image_builtin_draw_expander (GtkCssImage            *image,
 
   cairo_set_line_width (cr, line_width);
 
-  gdk_cairo_set_source_rgba (cr, fg_color);
+  gdk_cairo_set_source_rgba (cr, &builtin->fg_color);
 
   cairo_fill_preserve (cr);
 
-  gdk_cairo_set_source_rgba (cr, border_color);
+  gdk_cairo_set_source_rgba (cr, &builtin->border_color);
   cairo_stroke (cr);
 }
 
@@ -436,15 +433,15 @@ gtk_css_image_builtin_draw_grip (GtkCssImage            *image,
                                  cairo_t                *cr,
                                  double                  width,
                                  double                  height,
-                                 GtkCssImageBuiltinType  image_type,
-                                 const GdkRGBA          *bg_color)
+                                 GtkCssImageBuiltinType  image_type)
 {
+  GtkCssImageBuiltin *builtin = GTK_CSS_IMAGE_BUILTIN (image);
   GdkRGBA lighter, darker;
 
   cairo_set_line_width (cr, 1.0);
 
-  color_shade (bg_color, 0.7, &darker);
-  color_shade (bg_color, 1.3, &lighter);
+  color_shade (&builtin->bg_color, 0.7, &darker);
+  color_shade (&builtin->bg_color, 1.3, &lighter);
 
   /* align drawing area to the connected side */
   if (image_type == GTK_CSS_IMAGE_BUILTIN_GRIP_LEFT)
@@ -683,19 +680,19 @@ gtk_css_image_builtin_draw_grip (GtkCssImage            *image,
 }
 
 void
-gtk_css_image_builtin_draw_pane_separator (GtkCssImage   *image,
-                                           cairo_t       *cr,
-                                           double         width,
-                                           double         height,
-                                           const GdkRGBA *bg_color)
+gtk_css_image_builtin_draw_pane_separator (GtkCssImage *image,
+                                           cairo_t     *cr,
+                                           double       width,
+                                           double       height)
 {
+  GtkCssImageBuiltin *builtin = GTK_CSS_IMAGE_BUILTIN (image);
   GdkRGBA lighter, darker;
   gint xx, yy;
 
   cairo_set_line_width (cr, 1.0);
 
-  color_shade (bg_color, 0.7, &darker);
-  color_shade (bg_color, 1.3, &lighter);
+  color_shade (&builtin->bg_color, 0.7, &darker);
+  color_shade (&builtin->bg_color, 1.3, &lighter);
 
   if (width > height)
     for (xx = width / 2 - 15; xx <= width / 2 + 15; xx += 5)
@@ -706,19 +703,19 @@ gtk_css_image_builtin_draw_pane_separator (GtkCssImage   *image,
 }
 
 void
-gtk_css_image_builtin_draw_handle (GtkCssImage   *image,
-                                   cairo_t       *cr,
-                                   double         width,
-                                   double         height,
-                                   const GdkRGBA *bg_color)
+gtk_css_image_builtin_draw_handle (GtkCssImage *image,
+                                   cairo_t     *cr,
+                                   double       width,
+                                   double       height)
 {
+  GtkCssImageBuiltin *builtin = GTK_CSS_IMAGE_BUILTIN (image);
   GdkRGBA lighter, darker;
   gint xx, yy;
 
   cairo_set_line_width (cr, 1.0);
 
-  color_shade (bg_color, 0.7, &darker);
-  color_shade (bg_color, 1.3, &lighter);
+  color_shade (&builtin->bg_color, 0.7, &darker);
+  color_shade (&builtin->bg_color, 1.3, &lighter);
 
   for (yy = 0; yy < height; yy += 3)
     for (xx = 0; xx < width; xx += 6)
@@ -729,12 +726,12 @@ gtk_css_image_builtin_draw_handle (GtkCssImage   *image,
 }
 
 static void
-gtk_css_image_builtin_draw_spinner (GtkCssImage     *image,
-                                    cairo_t         *cr,
-                                    double           width,
-                                    double           height,
-                                    const GdkRGBA   *color)
+gtk_css_image_builtin_draw_spinner (GtkCssImage *image,
+                                    cairo_t     *cr,
+                                    double       width,
+                                    double       height)
 {
+  GtkCssImageBuiltin *builtin = GTK_CSS_IMAGE_BUILTIN (image);
   gdouble radius;
 
   radius = MIN (width / 2, height / 2);
@@ -742,7 +739,7 @@ gtk_css_image_builtin_draw_spinner (GtkCssImage     *image,
   cairo_save (cr);
   cairo_translate (cr, width / 2, height / 2);
 
-  gdk_cairo_set_source_rgba (cr, color);
+  gdk_cairo_set_source_rgba (cr, &builtin->fg_color);
   gtk_render_paint_spinner (cr, radius, -1);
 
   cairo_restore (cr);
@@ -783,28 +780,50 @@ gtk_css_image_builtin_compute (GtkCssImage             *image,
                                guint                    property_id,
                                GtkStyleProviderPrivate *provider,
                                int                      scale,
-                               GtkCssStyle    *values,
-                               GtkCssStyle    *parent_values,
+                               GtkCssStyle             *style,
+                               GtkCssStyle             *parent_style,
                                GtkCssDependencies      *dependencies)
 {
-  return g_object_ref (image);
+  GtkCssImageBuiltin *result;
+  GtkBorderStyle border_style;
+
+  result = g_object_new (GTK_TYPE_CSS_IMAGE_BUILTIN, NULL);
+
+  border_style = _gtk_css_border_style_value_get (gtk_css_style_get_value (style, GTK_CSS_PROPERTY_BORDER_TOP_STYLE));
+  if (border_style == GTK_BORDER_STYLE_SOLID)
+    {
+      GtkBorder border;
+
+      border.top = _gtk_css_number_value_get (gtk_css_style_get_value (style, GTK_CSS_PROPERTY_BORDER_TOP_WIDTH), 100);
+      border.right = _gtk_css_number_value_get (gtk_css_style_get_value (style, GTK_CSS_PROPERTY_BORDER_RIGHT_WIDTH), 100);
+      border.bottom = _gtk_css_number_value_get (gtk_css_style_get_value (style, GTK_CSS_PROPERTY_BORDER_BOTTOM_WIDTH), 100);
+      border.left = _gtk_css_number_value_get (gtk_css_style_get_value (style, GTK_CSS_PROPERTY_BORDER_LEFT_WIDTH), 100);
+
+      result->border_width = MIN (MIN (border.top, border.bottom),
+                                  MIN (border.left, border.right));
+    }
+
+  result->fg_color = *_gtk_css_rgba_value_get_rgba (gtk_css_style_get_value (style, GTK_CSS_PROPERTY_COLOR));
+  result->bg_color = *_gtk_css_rgba_value_get_rgba (gtk_css_style_get_value (style, GTK_CSS_PROPERTY_BACKGROUND_COLOR));
+  result->border_color = *_gtk_css_rgba_value_get_rgba (gtk_css_style_get_value (style, GTK_CSS_PROPERTY_BORDER_TOP_COLOR));
+
+  /* XXX: We also depend on other values, but I guess we cannot express that */
+  *dependencies = GTK_CSS_DEPENDS_ON_COLOR;
+
+  return GTK_CSS_IMAGE (result);
 }
 
 static gboolean
 gtk_css_image_builtin_equal (GtkCssImage *image1,
                              GtkCssImage *image2)
 {
-  return TRUE;
-}
+  GtkCssImageBuiltin *builtin1 = GTK_CSS_IMAGE_BUILTIN (image1);
+  GtkCssImageBuiltin *builtin2 = GTK_CSS_IMAGE_BUILTIN (image2);
 
-static GtkCssImage *
-gtk_css_image_builtin_transition (GtkCssImage *start,
-                                  GtkCssImage *end,
-                                  guint        property_id,
-                                  double       progress)
-{
-  /* builtin images always look the same, so start == end */
-  return g_object_ref (start);
+  return gdk_rgba_equal (&builtin1->fg_color, &builtin2->fg_color)
+      && gdk_rgba_equal (&builtin1->bg_color, &builtin2->bg_color)
+      && gdk_rgba_equal (&builtin1->border_color, &builtin2->border_color)
+      && builtin1->border_width == builtin2->border_width;
 }
 
 static void
@@ -827,7 +846,6 @@ gtk_css_image_builtin_class_init (GtkCssImageBuiltinClass *klass)
   image_class->print = gtk_css_image_builtin_print;
   image_class->compute = gtk_css_image_builtin_compute;
   image_class->equal = gtk_css_image_builtin_equal;
-  image_class->transition = gtk_css_image_builtin_transition;
 
   object_class->dispose = gtk_css_image_builtin_dispose;
 }
@@ -835,6 +853,10 @@ gtk_css_image_builtin_class_init (GtkCssImageBuiltinClass *klass)
 static void
 gtk_css_image_builtin_init (GtkCssImageBuiltin *builtin)
 {
+  /* white background */
+  builtin->bg_color.red = builtin->bg_color.green = builtin->bg_color.blue = builtin->bg_color.alpha = 1.0;
+  /* black foreground */
+  builtin->fg_color.alpha = 1.0;
 }
 
 GtkCssImage *
@@ -853,11 +875,7 @@ gtk_css_image_builtin_draw (GtkCssImage            *image,
                             cairo_t                *cr,
                             double                  width,
                             double                  height,
-                            GtkCssImageBuiltinType  image_type,
-                            const GdkRGBA *         fg_color,
-                            const GdkRGBA *         bg_color,
-                            const GdkRGBA *         border_color,
-                            int                     border_width)
+                            GtkCssImageBuiltinType  image_type)
 {
   switch (image_type)
   {
@@ -872,9 +890,7 @@ gtk_css_image_builtin_draw (GtkCssImage            *image,
     gtk_css_image_builtin_draw_check (image, cr,
                                       width, height,
                                       image_type == GTK_CSS_IMAGE_BUILTIN_CHECK_CHECKED,
-                                      image_type == GTK_CSS_IMAGE_BUILTIN_CHECK_INCONSISTENT,
-                                      fg_color, bg_color,
-                                      border_color, border_width);
+                                      image_type == GTK_CSS_IMAGE_BUILTIN_CHECK_INCONSISTENT);
     break;
   case GTK_CSS_IMAGE_BUILTIN_OPTION:
   case GTK_CSS_IMAGE_BUILTIN_OPTION_CHECKED:
@@ -882,9 +898,7 @@ gtk_css_image_builtin_draw (GtkCssImage            *image,
     gtk_css_image_builtin_draw_option (image, cr,
                                        width, height,
                                        image_type == GTK_CSS_IMAGE_BUILTIN_OPTION_CHECKED,
-                                       image_type == GTK_CSS_IMAGE_BUILTIN_OPTION_INCONSISTENT,
-                                       fg_color, bg_color,
-                                       border_color, border_width);
+                                       image_type == GTK_CSS_IMAGE_BUILTIN_OPTION_INCONSISTENT);
     break;
   case GTK_CSS_IMAGE_BUILTIN_ARROW_UP:
   case GTK_CSS_IMAGE_BUILTIN_ARROW_DOWN:
@@ -892,56 +906,47 @@ gtk_css_image_builtin_draw (GtkCssImage            *image,
   case GTK_CSS_IMAGE_BUILTIN_ARROW_RIGHT:
     gtk_css_image_builtin_draw_arrow (image, cr,
                                       width, height,
-                                      image_type,
-                                      fg_color);
+                                      image_type);
     break;
   case GTK_CSS_IMAGE_BUILTIN_EXPANDER_HORIZONTAL_LEFT:
     gtk_css_image_builtin_draw_expander (image, cr,
                                          width, height,
-                                         TRUE, FALSE, FALSE,
-                                         fg_color, border_color);
+                                         TRUE, FALSE, FALSE);
     break;
   case GTK_CSS_IMAGE_BUILTIN_EXPANDER_VERTICAL_LEFT:
     gtk_css_image_builtin_draw_expander (image, cr,
                                          width, height,
-                                         FALSE, FALSE, FALSE,
-                                         fg_color, border_color);
+                                         FALSE, FALSE, FALSE);
     break;
   case GTK_CSS_IMAGE_BUILTIN_EXPANDER_HORIZONTAL_RIGHT:
     gtk_css_image_builtin_draw_expander (image, cr,
                                          width, height,
-                                         TRUE, TRUE, FALSE,
-                                         fg_color, border_color);
+                                         TRUE, TRUE, FALSE);
     break;
   case GTK_CSS_IMAGE_BUILTIN_EXPANDER_VERTICAL_RIGHT:
     gtk_css_image_builtin_draw_expander (image, cr,
                                          width, height,
-                                         FALSE, TRUE, FALSE,
-                                         fg_color, border_color);
+                                         FALSE, TRUE, FALSE);
     break;
   case GTK_CSS_IMAGE_BUILTIN_EXPANDER_HORIZONTAL_LEFT_EXPANDED:
     gtk_css_image_builtin_draw_expander (image, cr,
                                          width, height,
-                                         TRUE, FALSE, TRUE,
-                                         fg_color, border_color);
+                                         TRUE, FALSE, TRUE);
     break;
   case GTK_CSS_IMAGE_BUILTIN_EXPANDER_VERTICAL_LEFT_EXPANDED:
     gtk_css_image_builtin_draw_expander (image, cr,
                                          width, height,
-                                         FALSE, FALSE, TRUE,
-                                         fg_color, border_color);
+                                         FALSE, FALSE, TRUE);
     break;
   case GTK_CSS_IMAGE_BUILTIN_EXPANDER_HORIZONTAL_RIGHT_EXPANDED:
     gtk_css_image_builtin_draw_expander (image, cr,
                                          width, height,
-                                         TRUE, TRUE, TRUE,
-                                         fg_color, border_color);
+                                         TRUE, TRUE, TRUE);
     break;
   case GTK_CSS_IMAGE_BUILTIN_EXPANDER_VERTICAL_RIGHT_EXPANDED:
     gtk_css_image_builtin_draw_expander (image, cr,
                                          width, height,
-                                         FALSE, TRUE, TRUE,
-                                         fg_color, border_color);
+                                         FALSE, TRUE, TRUE);
     break;
   case GTK_CSS_IMAGE_BUILTIN_GRIP_TOPLEFT:
   case GTK_CSS_IMAGE_BUILTIN_GRIP_TOP:
@@ -953,23 +958,19 @@ gtk_css_image_builtin_draw (GtkCssImage            *image,
   case GTK_CSS_IMAGE_BUILTIN_GRIP_LEFT:
     gtk_css_image_builtin_draw_grip (image, cr,
                                      width, height,
-                                     image_type,
-                                     bg_color);
+                                     image_type);
     break;
   case GTK_CSS_IMAGE_BUILTIN_PANE_SEPARATOR:
     gtk_css_image_builtin_draw_pane_separator (image, cr,
-                                               width, height,
-                                               bg_color);
+                                               width, height);
     break;
   case GTK_CSS_IMAGE_BUILTIN_HANDLE:
     gtk_css_image_builtin_draw_handle (image, cr,
-                                       width, height,
-                                       bg_color);
+                                       width, height);
     break;
   case GTK_CSS_IMAGE_BUILTIN_SPINNER:
     gtk_css_image_builtin_draw_spinner (image, cr,
-                                        width, height,
-                                        fg_color);
+                                        width, height);
     break;
   }
 }

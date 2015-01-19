@@ -70,7 +70,12 @@ typedef struct _GtkCssImageBuiltinClass      GtkCssImageBuiltinClass;
 
 struct _GtkCssImageBuiltin
 {
-  GtkCssImage parent;
+  GtkCssImage   parent;
+
+  GdkRGBA       fg_color;
+  GdkRGBA       bg_color;
+  GdkRGBA       border_color;
+  int           border_width;
 };
 
 struct _GtkCssImageBuiltinClass
@@ -86,11 +91,7 @@ void           gtk_css_image_builtin_draw                  (GtkCssImage         
                                                             cairo_t                     *cr,
                                                             double                       width,
                                                             double                       height,
-                                                            GtkCssImageBuiltinType       image_type,
-                                                            const GdkRGBA               *fg_color,
-                                                            const GdkRGBA               *bg_color,
-                                                            const GdkRGBA               *border_color,
-                                                            int                          border_width);
+                                                            GtkCssImageBuiltinType       image_type);
 
 G_END_DECLS
 
