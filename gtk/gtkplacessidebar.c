@@ -4009,7 +4009,6 @@ gtk_places_sidebar_init (GtkPlacesSidebar *sidebar)
   /* tree view */
   tree_view = GTK_TREE_VIEW (gtk_tree_view_new ());
   gtk_tree_view_set_headers_visible (tree_view, FALSE);
-  gtk_widget_set_margin_top (GTK_WIDGET (tree_view), 4);
 
   gtk_tree_view_set_row_separator_func (tree_view,
                                         row_separator_func,
