@@ -877,6 +877,12 @@ gtk_css_image_builtin_draw (GtkCssImage            *image,
                             double                  height,
                             GtkCssImageBuiltinType  image_type)
 {
+  if (!GTK_IS_CSS_IMAGE_BUILTIN (image))
+    {
+      _gtk_css_image_draw (image, cr, width, height);
+      return;
+    }
+
   switch (image_type)
   {
   default:

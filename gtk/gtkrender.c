@@ -37,13 +37,14 @@
 
 #include "fallback-c89.c"
 
-static gboolean
-render_icon_image (GtkStyleContext *context,
-                   cairo_t         *cr,
-                   double           x,
-                   double           y,
-                   double           width,
-                   double           height)
+static void
+render_icon_image (GtkStyleContext        *context,
+                   cairo_t                *cr,
+                   double                  x,
+                   double                  y,
+                   double                  width,
+                   double                  height,
+                   GtkCssImageBuiltinType  builtin_type)
 {
   const GtkCssValue *shadows;
   cairo_matrix_t matrix, transform_matrix;
@@ -51,10 +52,7 @@ render_icon_image (GtkStyleContext *context,
 
   image = _gtk_css_image_value_get_image (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_ICON_SOURCE));
   if (image == NULL)
-    return TRUE;
-
-  if (GTK_IS_CSS_IMAGE_BUILTIN (image))
-    return FALSE;
+    return;
 
   shadows = _gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_ICON_SHADOW);
 
@@ -70,20 +68,18 @@ render_icon_image (GtkStyleContext *context,
       if (_gtk_css_shadows_value_is_none (shadows))
         {
           cairo_transform (cr, &matrix);
-          _gtk_css_image_draw (image, cr, width, height);
+          gtk_css_image_builtin_draw (image, cr, width, height, builtin_type);
         }
       else
         {
           cairo_push_group (cr);
           cairo_transform (cr, &matrix);
-          _gtk_css_image_draw (image, cr, width, height);
+          gtk_css_image_builtin_draw (image, cr, width, height, builtin_type);
           cairo_pop_group_to_source (cr);
           _gtk_css_shadows_value_paint_icon (shadows, cr);
           cairo_paint (cr);
         }
     }
-
-  return TRUE;
 }
 
 static void
@@ -105,15 +101,7 @@ gtk_do_render_check (GtkStyleContext *context,
   else
     image_type = GTK_CSS_IMAGE_BUILTIN_CHECK;
 
-  if (render_icon_image (context, cr, x, y, width, height))
-    return;
-
-  cairo_translate (cr, x, y);
-
-  gtk_css_image_builtin_draw (_gtk_css_image_value_get_image (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_ICON_SOURCE)),
-                              cr,
-                              width, height,
-                              image_type);
+  render_icon_image (context, cr, x, y, width, height, image_type);
 }
 
 /**
@@ -178,15 +166,7 @@ gtk_do_render_option (GtkStyleContext *context,
   else
     image_type = GTK_CSS_IMAGE_BUILTIN_OPTION;
 
-  if (render_icon_image (context, cr, x, y, width, height))
-    return;
-
-  cairo_translate (cr, x, y);
-
-  gtk_css_image_builtin_draw (_gtk_css_image_value_get_image (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_ICON_SOURCE)),
-                              cr,
-                              width, height,
-                              image_type);
+  render_icon_image (context, cr, x, y, width, height, image_type);
 }
 
 /**
@@ -263,15 +243,7 @@ gtk_do_render_arrow (GtkStyleContext *context,
     break;
   }
 
-  if (render_icon_image (context, cr, x, y, size, size))
-    return;
-
-  cairo_translate (cr, x, y);
-
-  gtk_css_image_builtin_draw (_gtk_css_image_value_get_image (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_ICON_SOURCE)),
-                              cr,
-                              size, size,
-                              image_type);
+  render_icon_image (context, cr, x, y, size, size, image_type);
 }
 
 /**
@@ -439,15 +411,7 @@ gtk_do_render_expander (GtkStyleContext *context,
                      : GTK_CSS_IMAGE_BUILTIN_EXPANDER_VERTICAL_LEFT;
     }
 
-  if (render_icon_image (context, cr, x, y, width, height))
-    return;
-
-  cairo_translate (cr, x, y);
-
-  gtk_css_image_builtin_draw (_gtk_css_image_value_get_image (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_ICON_SOURCE)),
-                              cr,
-                              width, height,
-                              image_type);
+  render_icon_image (context, cr, x, y, width, height, image_type);
 }
 
 /**
@@ -1001,11 +965,6 @@ gtk_do_render_handle (GtkStyleContext *context,
   gtk_render_background (context, cr, x, y, width, height);
   gtk_render_frame (context, cr, x, y, width, height);
 
-  if (render_icon_image (context, cr, x, y, width, height))
-    return;
-
-  cairo_translate (cr, x, y);
-
   if (gtk_style_context_has_class (context, GTK_STYLE_CLASS_GRIP))
     {
       GtkJunctionSides sides = gtk_style_context_get_junction_sides (context);
@@ -1039,10 +998,7 @@ gtk_do_render_handle (GtkStyleContext *context,
       type = GTK_CSS_IMAGE_BUILTIN_HANDLE;
     }
 
-  gtk_css_image_builtin_draw (_gtk_css_image_value_get_image (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_ICON_SOURCE)),
-                              cr,
-                              width, height,
-                              type);
+  render_icon_image (context, cr, x, y, width, height, type);
 }
 
 /**
@@ -1136,25 +1092,6 @@ gtk_render_paint_spinner (cairo_t *cr,
   cairo_restore (cr);
 }
 
-static void
-gtk_do_render_activity (GtkStyleContext *context,
-                        cairo_t         *cr,
-                        gdouble          x,
-                        gdouble          y,
-                        gdouble          width,
-                        gdouble          height)
-{
-  if (render_icon_image (context, cr, x, y, width, height))
-    return;
-
-  cairo_translate (cr, x, y);
-
-  gtk_css_image_builtin_draw (_gtk_css_image_value_get_image (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_ICON_SOURCE)),
-                              cr,
-                              width, height,
-                              GTK_CSS_IMAGE_BUILTIN_SPINNER);
-}
-
 /**
  * gtk_render_activity:
  * @context: a #GtkStyleContext
@@ -1187,7 +1124,7 @@ gtk_render_activity (GtkStyleContext *context,
   cairo_save (cr);
   cairo_new_path (cr);
 
-  gtk_do_render_activity (context, cr, x, y, width, height);
+  render_icon_image (context, cr, x, y, width, height, GTK_CSS_IMAGE_BUILTIN_SPINNER);
 
   cairo_restore (cr);
 }
