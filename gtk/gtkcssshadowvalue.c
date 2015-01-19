@@ -542,29 +542,6 @@ _gtk_css_shadow_value_paint_icon (const GtkCssValue *shadow,
   cairo_pattern_destroy (pattern);
 }
 
-void
-_gtk_css_shadow_value_paint_spinner (const GtkCssValue *shadow,
-                                     cairo_t           *cr,
-                                     gdouble            radius,
-                                     gdouble            progress)
-{
-  g_return_if_fail (shadow->class == &GTK_CSS_VALUE_SHADOW);
-
-  cairo_save (cr);
-
-  gdk_cairo_set_source_rgba (cr, _gtk_css_rgba_value_get_rgba (shadow->color));
-  cr = gtk_css_shadow_value_start_drawing (shadow, cr);
-
-  cairo_translate (cr,
-                   _gtk_css_number_value_get (shadow->hoffset, 0),
-                   _gtk_css_number_value_get (shadow->voffset, 0));
-  gtk_render_paint_spinner (cr, radius, progress);
-
-  cr = gtk_css_shadow_value_finish_drawing (shadow, cr);
-
-  cairo_restore (cr);
-}
-
 gboolean
 _gtk_css_shadow_value_get_inset (const GtkCssValue *shadow)
 {

@@ -1042,56 +1042,6 @@ gtk_render_handle (GtkStyleContext *context,
   cairo_restore (cr);
 }
 
-void
-gtk_render_paint_spinner (cairo_t *cr,
-                          gdouble  radius,
-                          gdouble  progress)
-{
-  guint num_steps, step;
-  gdouble half;
-  gint i;
-
-  num_steps = 12;
-
-  if (progress >= 0)
-    step = (guint) (progress * num_steps);
-  else
-    step = 0;
-
-  cairo_save (cr);
-
-  cairo_set_operator (cr, CAIRO_OPERATOR_OVER);
-  cairo_set_line_width (cr, 2.0);
-
-  half = num_steps / 2;
-
-  for (i = 0; i < num_steps; i++)
-    {
-      gint inset = 0.7 * radius;
-
-      /* transparency is a function of time and intial value */
-      gdouble t = 1.0 - (gdouble) ((i + step) % num_steps) / num_steps;
-      gdouble xscale = - sin (i * G_PI / half);
-      gdouble yscale = - cos (i * G_PI / half);
-
-      cairo_push_group (cr);
-
-      cairo_move_to (cr,
-                     (radius - inset) * xscale,
-                     (radius - inset) * yscale);
-      cairo_line_to (cr,
-                     radius * xscale,
-                     radius * yscale);
-
-      cairo_stroke (cr);
-
-      cairo_pop_group_to_source (cr);
-      cairo_paint_with_alpha (cr, t);
-    }
-
-  cairo_restore (cr);
-}
-
 /**
  * gtk_render_activity:
  * @context: a #GtkStyleContext

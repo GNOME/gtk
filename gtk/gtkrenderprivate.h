@@ -28,8 +28,5 @@ void        gtk_render_content_path  (GtkStyleContext   *context,
                                       double             y,
                                       double             width,
                                       double             height);
-void        gtk_render_paint_spinner (cairo_t           *cr,
-                                      gdouble            radius,
-                                      gdouble            progress);
 
 #endif /* __GTK_RENDER_PRIVATE_H__ */

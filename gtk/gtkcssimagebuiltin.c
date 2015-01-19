@@ -732,17 +732,44 @@ gtk_css_image_builtin_draw_spinner (GtkCssImage *image,
                                     double       height)
 {
   GtkCssImageBuiltin *builtin = GTK_CSS_IMAGE_BUILTIN (image);
+  guint num_steps;
   gdouble radius;
+  gdouble half;
+  gint i;
 
   radius = MIN (width / 2, height / 2);
 
-  cairo_save (cr);
   cairo_translate (cr, width / 2, height / 2);
 
-  gdk_cairo_set_source_rgba (cr, &builtin->fg_color);
-  gtk_render_paint_spinner (cr, radius, -1);
+  num_steps = 12;
 
-  cairo_restore (cr);
+  cairo_set_line_width (cr, 2.0);
+
+  half = num_steps / 2;
+
+  for (i = 0; i < num_steps; i++)
+    {
+      gint inset = 0.7 * radius;
+      /* transparency is a function of time and intial value */
+      gdouble t = 1.0 - (gdouble) i / num_steps;
+      gdouble xscale = - sin (i * G_PI / half);
+      gdouble yscale = - cos (i * G_PI / half);
+
+      cairo_move_to (cr,
+                     (radius - inset) * xscale,
+                     (radius - inset) * yscale);
+      cairo_line_to (cr,
+                     radius * xscale,
+                     radius * yscale);
+
+      cairo_set_source_rgba (cr,
+                             builtin->fg_color.red,
+                             builtin->fg_color.green,
+                             builtin->fg_color.blue,
+                             builtin->fg_color.alpha * t);
+
+      cairo_stroke (cr);
+    }
 }
 
 static void

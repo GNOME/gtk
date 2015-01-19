@@ -282,22 +282,6 @@ _gtk_css_shadows_value_paint_icon (const GtkCssValue *shadows,
 }
 
 void
-_gtk_css_shadows_value_paint_spinner (const GtkCssValue *shadows,
-                                      cairo_t           *cr,
-                                      gdouble            radius,
-                                      gdouble            progress)
-{
-  guint i;
-
-  g_return_if_fail (shadows->class == &GTK_CSS_VALUE_SHADOWS);
-
-  for (i = 0; i < shadows->len; i++)
-    {
-      _gtk_css_shadow_value_paint_spinner (shadows->values[i], cr, radius, progress);
-    }
-}
-
-void
 _gtk_css_shadows_value_paint_box (const GtkCssValue   *shadows,
                                   cairo_t             *cr,
                                   const GtkRoundedBox *padding_box,
