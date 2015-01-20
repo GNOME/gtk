@@ -10,7 +10,7 @@
 
 m4_define([gtk_major_version], [3])
 m4_define([gtk_minor_version], [15])
-m4_define([gtk_micro_version], [3])
+m4_define([gtk_micro_version], [4])
 m4_define([gtk_interface_age], [0])
 m4_define([gtk_binary_age],
           [m4_eval(100 * gtk_minor_version + gtk_micro_version)])
