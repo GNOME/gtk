@@ -1532,7 +1532,6 @@ static void
 gtk_image_size_allocate (GtkWidget     *widget,
                          GtkAllocation *allocation)
 {
-  GtkBorder extents;
   GtkAllocation clip;
 
   GTK_WIDGET_CLASS (gtk_image_parent_class)->size_allocate (widget, allocation);
@@ -1540,11 +1539,13 @@ gtk_image_size_allocate (GtkWidget     *widget,
   /* XXX: This is not strictly correct, we could compute the area
    * actually occupied by the image, but I'm lazy...
    */
-  _gtk_css_shadows_value_get_extents (_gtk_style_context_peek_property (gtk_widget_get_style_context (widget), GTK_CSS_PROPERTY_ICON_SHADOW), &extents);
-  clip.x = allocation->x - extents.left;
-  clip.width = allocation->width + extents.left + extents.right;
-  clip.y = allocation->y - extents.top;
-  clip.height = allocation->height + extents.top + extents.bottom;
+  _gtk_style_context_get_icon_extents (gtk_widget_get_style_context (widget),
+                                       &clip,
+                                       allocation->x,
+                                       allocation->y,
+                                       allocation->width,
+                                       allocation->height);
+
   _gtk_widget_set_simple_clip (widget, &clip);
 }
 
