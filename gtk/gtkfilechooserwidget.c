@@ -4286,6 +4286,7 @@ update_current_folder_mount_enclosing_volume_cb (GCancellable        *cancellabl
   change_folder_and_display_error (impl, data->file, data->clear_entry);
 
 out:
+  g_object_unref (data->impl);
   g_object_unref (data->file);
   g_free (data);
 
@@ -4440,6 +4441,7 @@ update_current_folder_get_info_cb (GCancellable *cancellable,
   g_signal_emit_by_name (impl, "selection-changed", 0);
 
 out:
+  g_object_unref (data->impl);
   g_object_unref (data->file);
   g_free (data);
 
@@ -4480,7 +4482,7 @@ gtk_file_chooser_widget_update_current_folder (GtkFileChooser    *chooser,
 
   /* Test validity of path here.  */
   data = g_new0 (struct UpdateCurrentFolderData, 1);
-  data->impl = impl;
+  data->impl = g_object_ref (impl);
   data->file = g_object_ref (file);
   data->keep_trail = keep_trail;
   data->clear_entry = clear_entry;
