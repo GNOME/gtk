@@ -26,7 +26,9 @@ Overview of Changes in GTK+ 3.15.4
  - Re-integrate search
 
 * CSS:
+ - Introduce immutable style nodes
  - Performance improvements
+ - Reduced memory consumption
 
 * GtkInspector:
  - Add a magnifier for the selected widget
@@ -89,6 +91,7 @@ Overview of Changes in GTK+ 3.15.4
  743101 commit 77b876fa breaks zathura
  743117 / and ~ Don't work in filechooser's recent mode
  743157 gtk3-demo editable cells treeview problem
+ 742646 DnD images not shown
 
 * Translation updates:
  Basque
@@ -100,6 +103,7 @@ Overview of Changes in GTK+ 3.15.4
  Hebrew
  Hungarian
  Icelandic
+ Lithuanian
  Russian
  Spanish
  Vietnamese
