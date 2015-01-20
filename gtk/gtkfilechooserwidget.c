@@ -254,14 +254,10 @@ struct _GtkFileChooserWidgetPrivate {
   LocationMode location_mode;
 
   /* Handles */
-  GSList *loading_shortcuts;
-  GSList *reload_icon_cancellables;
   GCancellable *file_list_drag_data_received_cancellable;
   GCancellable *update_current_folder_cancellable;
   GCancellable *should_respond_get_info_cancellable;
   GCancellable *file_exists_get_info_cancellable;
-  GCancellable *update_from_entry_cancellable;
-  GCancellable *shortcuts_activate_iter_cancellable;
 
   LoadState load_state;
   ReloadState reload_state;
@@ -2782,31 +2778,8 @@ static void
 cancel_all_operations (GtkFileChooserWidget *impl)
 {
   GtkFileChooserWidgetPrivate *priv = impl->priv;
-  GSList *l;
 
   pending_select_files_free (impl);
-
-  if (priv->reload_icon_cancellables)
-    {
-      for (l = priv->reload_icon_cancellables; l; l = l->next)
-        {
-	  GCancellable *cancellable = G_CANCELLABLE (l->data);
-	  g_cancellable_cancel (cancellable);
-        }
-      g_slist_free (priv->reload_icon_cancellables);
-      priv->reload_icon_cancellables = NULL;
-    }
-
-  if (priv->loading_shortcuts)
-    {
-      for (l = priv->loading_shortcuts; l; l = l->next)
-        {
-	  GCancellable *cancellable = G_CANCELLABLE (l->data);
-	  g_cancellable_cancel (cancellable);
-        }
-      g_slist_free (priv->loading_shortcuts);
-      priv->loading_shortcuts = NULL;
-    }
 
   if (priv->file_list_drag_data_received_cancellable)
     {
@@ -2830,18 +2803,6 @@ cancel_all_operations (GtkFileChooserWidget *impl)
     {
       g_cancellable_cancel (priv->file_exists_get_info_cancellable);
       priv->file_exists_get_info_cancellable = NULL;
-    }
-
-  if (priv->update_from_entry_cancellable)
-    {
-      g_cancellable_cancel (priv->update_from_entry_cancellable);
-      priv->update_from_entry_cancellable = NULL;
-    }
-
-  if (priv->shortcuts_activate_iter_cancellable)
-    {
-      g_cancellable_cancel (priv->shortcuts_activate_iter_cancellable);
-      priv->shortcuts_activate_iter_cancellable = NULL;
     }
 
   search_stop_searching (impl, TRUE);
