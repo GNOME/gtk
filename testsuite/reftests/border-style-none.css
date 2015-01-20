@@ -1,7 +1,6 @@
 * {
+  all: unset;
   border-color: red;
-  border-image: none;
-  background-image: none;
 }
 
 GtkButton {
