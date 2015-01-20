@@ -3137,57 +3137,12 @@ gtk_drag_set_icon_widget (GdkDragContext *context,
 }
 
 static void
-icon_window_realize (GtkWidget     *window,
-                     GtkIconHelper *helper)
+gtk_drag_draw_icon_pattern (GtkWidget *window,
+                            cairo_t   *cr,
+                            gpointer   pattern)
 {
-  cairo_surface_t *surface;
-  cairo_pattern_t *pattern;
-  cairo_t *cr;
-  GdkPixbuf *pixbuf;
-
-  pixbuf = _gtk_icon_helper_ensure_pixbuf (helper, gtk_widget_get_style_context (window));
-  surface = gdk_window_create_similar_surface (gtk_widget_get_window (window),
-                                               CAIRO_CONTENT_COLOR,
-                                               gdk_pixbuf_get_width (pixbuf),
-                                               gdk_pixbuf_get_height (pixbuf));
-
-  cr = cairo_create (surface);
-  cairo_push_group_with_content (cr, CAIRO_CONTENT_COLOR_ALPHA);
-  gdk_cairo_set_source_pixbuf (cr, pixbuf, 0, 0);
+  cairo_set_source (cr, pattern);
   cairo_paint (cr);
-  cairo_set_operator (cr, CAIRO_OPERATOR_SATURATE);
-  cairo_paint (cr);
-  cairo_pop_group_to_source (cr);
-  cairo_paint (cr);
-  cairo_destroy (cr);
-
-  pattern = cairo_pattern_create_for_surface (surface);
-  gdk_window_set_background_pattern (gtk_widget_get_window (window), pattern);
-  cairo_pattern_destroy (pattern);
-
-  cairo_surface_destroy (surface);
-
-  if (gdk_pixbuf_get_has_alpha (pixbuf))
-    {
-      cairo_region_t *region;
-
-      surface = cairo_image_surface_create (CAIRO_FORMAT_A1,
-                                            gdk_pixbuf_get_width (pixbuf),
-                                            gdk_pixbuf_get_height (pixbuf));
-      
-      cr = cairo_create (surface);
-      gdk_cairo_set_source_pixbuf (cr, pixbuf, 0, 0);
-      cairo_paint (cr);
-      cairo_destroy (cr);
-
-      region = gdk_cairo_region_create_from_surface (surface);
-      gtk_widget_shape_combine_region (window, region);
-      cairo_region_destroy (region);
-
-      cairo_surface_destroy (surface);
-    }
-
-  g_object_unref (pixbuf);
 }
 
 static void
@@ -3243,14 +3198,62 @@ set_icon_helper (GdkDragContext *context,
     }
   else
     {
+      cairo_surface_t *surface;
+      cairo_pattern_t *pattern;
+      cairo_t *cr;
+      GdkPixbuf *pixbuf;
+
       gtk_widget_set_size_request (window, width, height);
 
-      g_signal_connect_closure (window, "realize",
-                                g_cclosure_new (G_CALLBACK (icon_window_realize),
-                                                g_object_ref (helper),
-                                                (GClosureNotify)g_object_unref),
-                                FALSE);
-                    
+      pixbuf = _gtk_icon_helper_ensure_pixbuf (helper, gtk_widget_get_style_context (window));
+      surface = gdk_window_create_similar_surface (gdk_screen_get_root_window (screen),
+                                                   CAIRO_CONTENT_COLOR,
+                                                   gdk_pixbuf_get_width (pixbuf),
+                                                   gdk_pixbuf_get_height (pixbuf));
+
+      cr = cairo_create (surface);
+      cairo_push_group_with_content (cr, CAIRO_CONTENT_COLOR_ALPHA);
+      gdk_cairo_set_source_pixbuf (cr, pixbuf, 0, 0);
+      cairo_paint (cr);
+      cairo_set_operator (cr, CAIRO_OPERATOR_SATURATE);
+      cairo_paint (cr);
+      cairo_pop_group_to_source (cr);
+      cairo_paint (cr);
+      cairo_destroy (cr);
+
+      pattern = cairo_pattern_create_for_surface (surface);
+
+      cairo_surface_destroy (surface);
+
+      if (gdk_pixbuf_get_has_alpha (pixbuf))
+        {
+          cairo_region_t *region;
+
+          surface = cairo_image_surface_create (CAIRO_FORMAT_A1,
+                                                gdk_pixbuf_get_width (pixbuf),
+                                                gdk_pixbuf_get_height (pixbuf));
+          
+          cr = cairo_create (surface);
+          gdk_cairo_set_source_pixbuf (cr, pixbuf, 0, 0);
+          cairo_paint (cr);
+          cairo_destroy (cr);
+
+          region = gdk_cairo_region_create_from_surface (surface);
+          gtk_widget_shape_combine_region (window, region);
+          cairo_region_destroy (region);
+
+          cairo_surface_destroy (surface);
+        }
+
+      g_object_unref (pixbuf);
+
+      g_signal_connect_data (window,
+                             "draw",
+                             G_CALLBACK (gtk_drag_draw_icon_pattern),
+                             pattern,
+                             (GClosureNotify) cairo_pattern_destroy,
+                             G_CONNECT_AFTER);
+
       gtk_drag_set_icon_window (context, window, hot_x, hot_y, TRUE);
    }
 }
@@ -3451,8 +3454,12 @@ gtk_drag_set_icon_surface (GdkDragContext  *context,
       cairo_pattern_set_matrix (pattern, &matrix);
     }
 
-  gdk_window_set_background_pattern (gtk_widget_get_window (window), pattern);
-  cairo_pattern_destroy (pattern);
+  g_signal_connect_data (window,
+                         "draw",
+                         G_CALLBACK (gtk_drag_draw_icon_pattern),
+                         pattern,
+                         (GClosureNotify) cairo_pattern_destroy,
+                         G_CONNECT_AFTER);
 
   gtk_drag_set_icon_window (context, window, extents.x, extents.y, TRUE);
 }
