@@ -478,6 +478,7 @@ gtk_private_h_sources =		\
 	gtkrecentchooserutils.h	\
 	gtkrenderbackgroundprivate.h \
 	gtkrenderborderprivate.h \
+	gtkrendericonprivate.h	\
 	gtkrenderprivate.h	\
 	gtkresources.h		\
 	gtkroundedboxprivate.h	\
@@ -762,6 +763,7 @@ gtk_base_c_sources = 		\
 	gtkrender.c		\
 	gtkrenderbackground.c	\
 	gtkrenderborder.c	\
+	gtkrendericon.c		\
 	gtkresources.c		\
 	gtkrevealer.c		\
 	gtkroundedbox.c		\

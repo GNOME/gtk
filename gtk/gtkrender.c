@@ -33,54 +33,10 @@
 #include "gtkhslaprivate.h"
 #include "gtkrenderbackgroundprivate.h"
 #include "gtkrenderborderprivate.h"
+#include "gtkrendericonprivate.h"
 #include "gtkstylecontextprivate.h"
 
 #include "fallback-c89.c"
-
-static void
-render_icon_image (GtkStyleContext        *context,
-                   cairo_t                *cr,
-                   double                  x,
-                   double                  y,
-                   double                  width,
-                   double                  height,
-                   GtkCssImageBuiltinType  builtin_type)
-{
-  const GtkCssValue *shadows;
-  cairo_matrix_t matrix, transform_matrix;
-  GtkCssImage *image;
-
-  image = _gtk_css_image_value_get_image (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_ICON_SOURCE));
-  if (image == NULL)
-    return;
-
-  shadows = _gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_ICON_SHADOW);
-
-  cairo_translate (cr, x, y);
-
-  if (_gtk_css_transform_value_get_matrix (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_ICON_TRANSFORM), &transform_matrix))
-    {
-      /* XXX: Implement -gtk-icon-transform-origin instead of hardcoding "50% 50%" here */
-      cairo_matrix_init_translate (&matrix, width / 2, height / 2);
-      cairo_matrix_multiply (&matrix, &transform_matrix, &matrix);
-      cairo_matrix_translate (&matrix, - width / 2, - height / 2);
-
-      if (_gtk_css_shadows_value_is_none (shadows))
-        {
-          cairo_transform (cr, &matrix);
-          gtk_css_image_builtin_draw (image, cr, width, height, builtin_type);
-        }
-      else
-        {
-          cairo_push_group (cr);
-          cairo_transform (cr, &matrix);
-          gtk_css_image_builtin_draw (image, cr, width, height, builtin_type);
-          cairo_pop_group_to_source (cr);
-          _gtk_css_shadows_value_paint_icon (shadows, cr);
-          cairo_paint (cr);
-        }
-    }
-}
 
 static void
 gtk_do_render_check (GtkStyleContext *context,
@@ -101,7 +57,7 @@ gtk_do_render_check (GtkStyleContext *context,
   else
     image_type = GTK_CSS_IMAGE_BUILTIN_CHECK;
 
-  render_icon_image (context, cr, x, y, width, height, image_type);
+  gtk_css_style_render_icon (gtk_style_context_lookup_style (context), cr, x, y, width, height, image_type);
 }
 
 /**
@@ -166,7 +122,7 @@ gtk_do_render_option (GtkStyleContext *context,
   else
     image_type = GTK_CSS_IMAGE_BUILTIN_OPTION;
 
-  render_icon_image (context, cr, x, y, width, height, image_type);
+  gtk_css_style_render_icon (gtk_style_context_lookup_style (context), cr, x, y, width, height, image_type);
 }
 
 /**
@@ -243,7 +199,7 @@ gtk_do_render_arrow (GtkStyleContext *context,
     break;
   }
 
-  render_icon_image (context, cr, x, y, size, size, image_type);
+  gtk_css_style_render_icon (gtk_style_context_lookup_style (context), cr, x, y, size, size, image_type);
 }
 
 /**
@@ -411,7 +367,7 @@ gtk_do_render_expander (GtkStyleContext *context,
                      : GTK_CSS_IMAGE_BUILTIN_EXPANDER_VERTICAL_LEFT;
     }
 
-  render_icon_image (context, cr, x, y, width, height, image_type);
+  gtk_css_style_render_icon (gtk_style_context_lookup_style (context), cr, x, y, width, height, image_type);
 }
 
 /**
@@ -998,7 +954,7 @@ gtk_do_render_handle (GtkStyleContext *context,
       type = GTK_CSS_IMAGE_BUILTIN_HANDLE;
     }
 
-  render_icon_image (context, cr, x, y, width, height, type);
+  gtk_css_style_render_icon (gtk_style_context_lookup_style (context), cr, x, y, width, height, type);
 }
 
 /**
@@ -1074,7 +1030,7 @@ gtk_render_activity (GtkStyleContext *context,
   cairo_save (cr);
   cairo_new_path (cr);
 
-  render_icon_image (context, cr, x, y, width, height, GTK_CSS_IMAGE_BUILTIN_SPINNER);
+  gtk_css_style_render_icon (gtk_style_context_lookup_style (context), cr, x, y, width, height, GTK_CSS_IMAGE_BUILTIN_SPINNER);
 
   cairo_restore (cr);
 }
