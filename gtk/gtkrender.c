@@ -1193,24 +1193,6 @@ gtk_render_icon_pixbuf (GtkStyleContext     *context,
   return gtk_do_render_icon_pixbuf (context, source, size);
 }
 
-static void
-gtk_do_render_icon (GtkStyleContext *context,
-                    cairo_t         *cr,
-                    GdkPixbuf       *pixbuf,
-                    gdouble          x,
-                    gdouble          y)
-{
-  cairo_save (cr);
-
-  gdk_cairo_set_source_pixbuf (cr, pixbuf, x, y);
-
-  _gtk_css_shadows_value_paint_icon (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_ICON_SHADOW), cr);
-
-  cairo_paint (cr);
-
-  cairo_restore (cr);
-}
-
 /**
  * gtk_render_icon:
  * @context: a #GtkStyleContext
@@ -1230,31 +1212,22 @@ gtk_render_icon (GtkStyleContext *context,
                  gdouble          x,
                  gdouble          y)
 {
+  cairo_surface_t *surface;
+
   g_return_if_fail (GTK_IS_STYLE_CONTEXT (context));
   g_return_if_fail (cr != NULL);
 
   cairo_save (cr);
   cairo_new_path (cr);
 
-  gtk_do_render_icon (context, cr, pixbuf, x, y);
+  surface = gdk_cairo_surface_create_from_pixbuf (pixbuf, 1, NULL);
 
-  cairo_restore (cr);
-}
+  gtk_css_style_render_icon_surface (gtk_style_context_lookup_style (context),
+                                     cr,
+                                     surface,
+                                     x, y);
 
-static void
-gtk_do_render_icon_surface (GtkStyleContext *context,
-                            cairo_t         *cr,
-                            cairo_surface_t *surface,
-                            gdouble          x,
-                            gdouble          y)
-{
-  cairo_save (cr);
-
-  cairo_set_source_surface (cr, surface, x, y);
-
-  _gtk_css_shadows_value_paint_icon (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_ICON_SHADOW), cr);
-
-  cairo_paint (cr);
+  cairo_surface_destroy (surface);
 
   cairo_restore (cr);
 }
@@ -1284,7 +1257,10 @@ gtk_render_icon_surface (GtkStyleContext *context,
   cairo_save (cr);
   cairo_new_path (cr);
 
-  gtk_do_render_icon_surface (context, cr, surface, x, y);
+  gtk_css_style_render_icon_surface (gtk_style_context_lookup_style (context),
+                                     cr,
+                                     surface,
+                                     x, y);
 
   cairo_restore (cr);
 }

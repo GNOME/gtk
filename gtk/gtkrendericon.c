@@ -74,3 +74,21 @@ gtk_css_style_render_icon (GtkCssStyle            *style,
     }
 }
 
+void
+gtk_css_style_render_icon_surface (GtkCssStyle            *style,
+                                   cairo_t                *cr,
+                                   cairo_surface_t        *surface,
+                                   double                  x,
+                                   double                  y)
+{
+  g_return_if_fail (GTK_IS_CSS_STYLE (style));
+  g_return_if_fail (cr != NULL);
+  g_return_if_fail (surface != NULL);
+
+  cairo_set_source_surface (cr, surface, x, y);
+
+  _gtk_css_shadows_value_paint_icon (gtk_css_style_get_value (style, GTK_CSS_PROPERTY_ICON_SHADOW), cr);
+
+  cairo_paint (cr);
+}
+
