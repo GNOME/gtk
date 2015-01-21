@@ -243,7 +243,6 @@ gtk_css_image_builtin_draw_arrow (GtkCssImage            *image,
       g_assert_not_reached ();
       break;
   }
-  cairo_translate (cr, size / 4.0, 0);
 
   line_width = size / 3.0 / sqrt (2);
   cairo_set_line_width (cr, line_width);
@@ -254,9 +253,9 @@ gtk_css_image_builtin_draw_arrow (GtkCssImage            *image,
                (size / (size + line_width)),
                (size / (size + line_width)));
 
-  cairo_move_to (cr, -size / 2.0, -size / 2.0);
+  cairo_move_to (cr, -size / 2.0, size / 4.0);
+  cairo_rel_line_to (cr, size / 2.0, -size / 2.0);
   cairo_rel_line_to (cr, size / 2.0, size / 2.0);
-  cairo_rel_line_to (cr, - size / 2.0, size / 2.0);
 
   gdk_cairo_set_source_rgba (cr, &builtin->fg_color);
   cairo_stroke (cr);
