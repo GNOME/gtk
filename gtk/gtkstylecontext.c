@@ -3288,23 +3288,25 @@ gtk_style_context_get_border (GtkStyleContext *context,
                               GtkStateFlags    state,
                               GtkBorder       *border)
 {
-  int top, left, bottom, right;
+  GtkCssStyle *style;
+  double top, left, bottom, right;
 
   g_return_if_fail (border != NULL);
   g_return_if_fail (GTK_IS_STYLE_CONTEXT (context));
 
-  gtk_style_context_get (context,
-                         state,
-                         "border-top-width", &top,
-                         "border-left-width", &left,
-                         "border-bottom-width", &bottom,
-                         "border-right-width", &right,
-                         NULL);
+  style = gtk_style_context_lookup_style_for_state (context, state);
+
+  top = _gtk_css_number_value_get (gtk_css_style_get_value (style, GTK_CSS_PROPERTY_BORDER_TOP_WIDTH), 100);
+  right = _gtk_css_number_value_get (gtk_css_style_get_value (style, GTK_CSS_PROPERTY_BORDER_RIGHT_WIDTH), 100);
+  bottom = _gtk_css_number_value_get (gtk_css_style_get_value (style, GTK_CSS_PROPERTY_BORDER_BOTTOM_WIDTH), 100);
+  left = _gtk_css_number_value_get (gtk_css_style_get_value (style, GTK_CSS_PROPERTY_BORDER_LEFT_WIDTH), 100);
 
   border->top = top;
   border->left = left;
   border->bottom = bottom;
   border->right = right;
+
+  g_object_unref (style);
 }
 
 /**
@@ -3323,23 +3325,25 @@ gtk_style_context_get_padding (GtkStyleContext *context,
                                GtkStateFlags    state,
                                GtkBorder       *padding)
 {
-  int top, left, bottom, right;
+  GtkCssStyle *style;
+  double top, left, bottom, right;
 
   g_return_if_fail (padding != NULL);
   g_return_if_fail (GTK_IS_STYLE_CONTEXT (context));
 
-  gtk_style_context_get (context,
-                         state,
-                         "padding-top", &top,
-                         "padding-left", &left,
-                         "padding-bottom", &bottom,
-                         "padding-right", &right,
-                         NULL);
+  style = gtk_style_context_lookup_style_for_state (context, state);
+
+  top = _gtk_css_number_value_get (gtk_css_style_get_value (style, GTK_CSS_PROPERTY_PADDING_TOP), 100);
+  right = _gtk_css_number_value_get (gtk_css_style_get_value (style, GTK_CSS_PROPERTY_PADDING_RIGHT), 100);
+  bottom = _gtk_css_number_value_get (gtk_css_style_get_value (style, GTK_CSS_PROPERTY_PADDING_BOTTOM), 100);
+  left = _gtk_css_number_value_get (gtk_css_style_get_value (style, GTK_CSS_PROPERTY_PADDING_LEFT), 100);
 
   padding->top = top;
   padding->left = left;
   padding->bottom = bottom;
   padding->right = right;
+
+  g_object_unref (style);
 }
 
 /**
@@ -3358,23 +3362,25 @@ gtk_style_context_get_margin (GtkStyleContext *context,
                               GtkStateFlags    state,
                               GtkBorder       *margin)
 {
-  int top, left, bottom, right;
+  GtkCssStyle *style;
+  double top, left, bottom, right;
 
   g_return_if_fail (margin != NULL);
   g_return_if_fail (GTK_IS_STYLE_CONTEXT (context));
 
-  gtk_style_context_get (context,
-                         state,
-                         "margin-top", &top,
-                         "margin-left", &left,
-                         "margin-bottom", &bottom,
-                         "margin-right", &right,
-                         NULL);
+  style = gtk_style_context_lookup_style_for_state (context, state);
+
+  top = _gtk_css_number_value_get (gtk_css_style_get_value (style, GTK_CSS_PROPERTY_MARGIN_TOP), 100);
+  right = _gtk_css_number_value_get (gtk_css_style_get_value (style, GTK_CSS_PROPERTY_MARGIN_RIGHT), 100);
+  bottom = _gtk_css_number_value_get (gtk_css_style_get_value (style, GTK_CSS_PROPERTY_MARGIN_BOTTOM), 100);
+  left = _gtk_css_number_value_get (gtk_css_style_get_value (style, GTK_CSS_PROPERTY_MARGIN_LEFT), 100);
 
   margin->top = top;
   margin->left = left;
   margin->bottom = bottom;
   margin->right = right;
+
+  g_object_unref (style);
 }
 
 /**
