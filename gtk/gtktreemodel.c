@@ -2400,7 +2400,7 @@ gtk_tree_row_reference_new_proxy (GObject      *proxy,
  * Returns a path that the row reference currently points to,
  * or %NULL if the path pointed to is no longer valid.
  *
- * Returns: a current path, or %NULL
+ * Returns: (nullable) (transfer full): a current path, or %NULL
  */
 GtkTreePath *
 gtk_tree_row_reference_get_path (GtkTreeRowReference *reference)
