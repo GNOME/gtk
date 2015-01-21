@@ -156,63 +156,6 @@ _gtk_css_style_property_assign (GtkStyleProperty   *property,
   _gtk_css_value_unref (css_value);
 }
 
-static gboolean
-_gtk_css_style_property_query_special_case (GtkCssStyleProperty *property,
-                                            GValue              *value,
-                                            GtkStyleQueryFunc    query_func,
-                                            gpointer             query_data)
-{
-  GtkBorderStyle border_style;
-
-  switch (property->id)
-    {
-      case GTK_CSS_PROPERTY_BORDER_TOP_WIDTH:
-        border_style = _gtk_css_border_style_value_get (query_func (GTK_CSS_PROPERTY_BORDER_TOP_STYLE, query_data));
-        if (border_style == GTK_BORDER_STYLE_NONE || border_style == GTK_BORDER_STYLE_HIDDEN)
-          {
-            g_value_init (value, G_TYPE_INT);
-            return TRUE;
-          }
-        break;
-      case GTK_CSS_PROPERTY_BORDER_RIGHT_WIDTH:
-        border_style = _gtk_css_border_style_value_get (query_func (GTK_CSS_PROPERTY_BORDER_RIGHT_STYLE, query_data));
-        if (border_style == GTK_BORDER_STYLE_NONE || border_style == GTK_BORDER_STYLE_HIDDEN)
-          {
-            g_value_init (value, G_TYPE_INT);
-            return TRUE;
-          }
-        break;
-      case GTK_CSS_PROPERTY_BORDER_BOTTOM_WIDTH:
-        border_style = _gtk_css_border_style_value_get (query_func (GTK_CSS_PROPERTY_BORDER_BOTTOM_STYLE, query_data));
-        if (border_style == GTK_BORDER_STYLE_NONE || border_style == GTK_BORDER_STYLE_HIDDEN)
-          {
-            g_value_init (value, G_TYPE_INT);
-            return TRUE;
-          }
-        break;
-      case GTK_CSS_PROPERTY_BORDER_LEFT_WIDTH:
-        border_style = _gtk_css_border_style_value_get (query_func (GTK_CSS_PROPERTY_BORDER_LEFT_STYLE, query_data));
-        if (border_style == GTK_BORDER_STYLE_NONE || border_style == GTK_BORDER_STYLE_HIDDEN)
-          {
-            g_value_init (value, G_TYPE_INT);
-            return TRUE;
-          }
-        break;
-      case GTK_CSS_PROPERTY_OUTLINE_WIDTH:
-        border_style = _gtk_css_border_style_value_get (query_func (GTK_CSS_PROPERTY_OUTLINE_STYLE, query_data));
-        if (border_style == GTK_BORDER_STYLE_NONE || border_style == GTK_BORDER_STYLE_HIDDEN)
-          {
-            g_value_init (value, G_TYPE_INT);
-            return TRUE;
-          }
-        break;
-      default:
-        break;
-    }
-
-  return FALSE;
-}
-
 static void
 _gtk_css_style_property_query (GtkStyleProperty   *property,
                                GValue             *value,
@@ -221,10 +164,6 @@ _gtk_css_style_property_query (GtkStyleProperty   *property,
 {
   GtkCssStyleProperty *style_property = GTK_CSS_STYLE_PROPERTY (property);
   GtkCssValue *css_value;
-  
-  /* I don't like this special case being here in this generic code path, but no idea where else to put it. */
-  if (_gtk_css_style_property_query_special_case (style_property, value, query_func, query_data))
-    return;
 
   css_value = (* query_func) (GTK_CSS_STYLE_PROPERTY (property)->id, query_data);
   if (css_value == NULL)
