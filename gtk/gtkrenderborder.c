@@ -344,9 +344,7 @@ hide_border_sides (double         border[4],
 
   for (i = 0; i < 4; i++)
     {
-      if (hidden_side & (1 << i) ||
-          border_style[i] == GTK_BORDER_STYLE_NONE ||
-          border_style[i] == GTK_BORDER_STYLE_HIDDEN)
+      if (hidden_side & (1 << i))
         border[i] = 0;
     }
 }
