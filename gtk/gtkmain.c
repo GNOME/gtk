@@ -812,7 +812,7 @@ gtk_set_debug_flags (guint flags)
 }
 
 /**
- * gtk_get_option_group: (skip)
+ * gtk_get_option_group:
  * @open_default_display: whether to open the default display
  *     when parsing the commandline arguments
  *
