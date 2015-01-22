@@ -159,6 +159,8 @@ testsuite/reftests/background-size-keywords.ref.ui
 testsuite/reftests/background-size-keywords.ui
 testsuite/reftests/background-size.ref.ui
 testsuite/reftests/background-size.ui
+testsuite/reftests/border-corner-zero-width-rendering.ref.ui
+testsuite/reftests/border-corner-zero-width-rendering.ui
 testsuite/reftests/border-image-gradient.ref.ui
 testsuite/reftests/border-image-gradient.ui
 testsuite/reftests/border-image-url.ref.ui
