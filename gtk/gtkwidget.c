@@ -15546,6 +15546,29 @@ gtk_widget_set_clip (GtkWidget           *widget,
 
   priv = widget->priv;
 
+#ifdef G_ENABLE_DEBUG
+  if (gtk_get_debug_flags () & GTK_DEBUG_GEOMETRY)
+    {
+      gint depth;
+      GtkWidget *parent;
+      const gchar *name;
+
+      depth = 0;
+      parent = widget;
+      while (parent)
+	{
+	  depth++;
+	  parent = gtk_widget_get_parent (parent);
+	}
+
+      name = g_type_name (G_OBJECT_TYPE (G_OBJECT (widget)));
+      g_print ("gtk_widget_set_clip:      %*s%s %d %d %d %d\n",
+	       2 * depth, " ", name,
+	       clip->x, clip->y,
+	       clip->width, clip->height);
+    }
+#endif /* G_ENABLE_DEBUG */
+
   priv->clip = *clip;
 }
 
