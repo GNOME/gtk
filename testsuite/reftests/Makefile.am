@@ -126,6 +126,9 @@ testdata = \
 	border-color-default.css \
 	border-color-default.ref.ui \
 	border-color-default.ui \
+	border-corner-zero-width-rendering.css \
+	border-corner-zero-width-rendering.ref.ui \
+	border-corner-zero-width-rendering.ui \
 	border-half-pixel.css \
 	border-half-pixel.ref.ui \
 	border-half-pixel.ui \

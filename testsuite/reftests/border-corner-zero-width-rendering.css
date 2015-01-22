@@ -1,0 +1,33 @@
+* {
+  all: unset;
+}
+
+.background {
+  background-color: khaki;
+  color: purple;
+}
+
+.button {
+  border-radius: 10px;
+  padding: 5px;
+}
+
+.top {
+  border-top: 5px solid khaki;
+  padding-top: 0px;
+}
+
+.right {
+  border-right: 5px solid khaki;
+  padding-right: 0px;
+}
+
+.bottom {
+  border-bottom: 5px solid khaki;
+  padding-bottom: 0px;
+}
+
+.left {
+  border-left: 5px solid khaki;
+  padding-left: 0px;
+}
