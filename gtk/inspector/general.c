@@ -126,6 +126,7 @@ append_extension_row (GtkInspectorGeneral *gen,
   GtkWidget *row, *box, *label, *check;
 
   row = gtk_list_box_row_new ();
+  gtk_list_box_row_set_activatable (GTK_LIST_BOX_ROW (row), FALSE);
   box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 40);
   g_object_set (box, "margin", 10, NULL);
   gtk_container_add (GTK_CONTAINER (row), box);
