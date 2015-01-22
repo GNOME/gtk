@@ -1148,6 +1148,8 @@ gtk_header_bar_size_allocate (GtkWidget     *widget,
       child_allocation.width = end_width - priv->spacing;
       gtk_widget_size_allocate (priv->titlebar_end_box, &child_allocation);
     }
+
+  _gtk_widget_set_simple_clip (widget, NULL);
 }
 
 /**
