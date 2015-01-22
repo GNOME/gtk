@@ -15578,7 +15578,8 @@ union_with_clip (GtkWidget *widget,
 {
   GtkAllocation widget_clip;
 
-  if (!gtk_widget_is_drawable (widget))
+  if (!gtk_widget_is_visible (widget) ||
+      !gtk_widget_get_child_visible (widget))
     return;
 
   gtk_widget_get_clip (widget, &widget_clip);
