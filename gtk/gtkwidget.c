@@ -15610,26 +15610,42 @@ _gtk_widget_set_simple_clip (GtkWidget     *widget,
                              GtkAllocation *content_clip)
 {
   GtkStyleContext *context;
-  GtkAllocation clip;
+  GtkAllocation clip, allocation;
   GtkBorder extents;
 
   context = gtk_widget_get_style_context (widget);
 
-  gtk_widget_get_allocation (widget, &clip);
+  gtk_widget_get_allocation (widget, &allocation);
 
   _gtk_css_shadows_value_get_extents (_gtk_style_context_peek_property (context,
                                                                         GTK_CSS_PROPERTY_BOX_SHADOW),
                                       &extents);
+
+  clip = allocation;
   clip.x -= extents.left;
   clip.y -= extents.top;
   clip.width += extents.left + extents.right;
   clip.height += extents.top + extents.bottom;
 
   if (content_clip)
-  gdk_rectangle_union (content_clip, &clip, &clip);
+    gdk_rectangle_union (content_clip, &clip, &clip);
 
   if (GTK_IS_CONTAINER (widget))
-    gtk_container_forall (GTK_CONTAINER (widget), union_with_clip, &clip);
+    {
+      if (gtk_widget_get_has_window (widget))
+        {
+          clip.x -= allocation.x;
+          clip.y -= allocation.y;
+        }
+
+      gtk_container_forall (GTK_CONTAINER (widget), union_with_clip, &clip);
+
+      if (gtk_widget_get_has_window (widget))
+        {
+          clip.x += allocation.x;
+          clip.y += allocation.y;
+        }
+    }
 
   gtk_widget_set_clip (widget, &clip);
 }
