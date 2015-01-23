@@ -3392,11 +3392,14 @@ gtk_drag_set_icon_surface (GdkDragContext  *context,
   has_rgba =
     rgba_visual != NULL &&
     gdk_screen_is_composited (screen);
+
+
+  gtk_window_set_screen (GTK_WINDOW (window), screen);
+
   if (has_rgba)
     gtk_widget_set_visual (GTK_WIDGET (window), rgba_visual);
 
   gtk_window_set_type_hint (GTK_WINDOW (window), GDK_WINDOW_TYPE_HINT_DND);
-  gtk_window_set_screen (GTK_WINDOW (window), screen);
   set_can_change_screen (window, TRUE);
 
 #ifdef GDK_WINDOWING_WAYLAND
