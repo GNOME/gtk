@@ -793,22 +793,29 @@ update_properties (GtkStyleContext             *context,
 static GtkCssStyle *
 build_properties (GtkStyleContext             *context,
                   GtkCssNode                  *cssnode,
-                  const GtkCssNodeDeclaration *decl)
+                  gboolean                     override_state,
+                  GtkStateFlags                state)
 {
   GtkStyleContextPrivate *priv;
+  const GtkCssNodeDeclaration *decl;
   GtkCssMatcher matcher;
   GtkWidgetPath *path;
   GtkCssStyle *parent;
   GtkCssStyle *style;
 
   priv = context->priv;
+  decl = gtk_css_node_get_declaration (cssnode);
   parent = gtk_css_node_get_parent_style (context, cssnode);
 
   style = lookup_in_global_parent_cache (context, parent, decl);
   if (style)
     return g_object_ref (style);
 
-  path = create_query_path (context, decl, cssnode == gtk_style_context_get_root (context));
+  path = create_query_path (context,
+                            decl,
+                            cssnode == gtk_style_context_get_root (context));
+  if (override_state)
+    gtk_widget_path_iter_set_state (path, -1, state);
 
   if (_gtk_css_matcher_init (&matcher, path))
     style = gtk_css_static_style_new_compute (GTK_STYLE_PROVIDER_PRIVATE (priv->cascade),
@@ -841,7 +848,7 @@ gtk_style_context_lookup_style (GtkStyleContext *context)
   if (values)
     return values;
 
-  values = build_properties (context, cssnode, gtk_css_node_get_declaration (cssnode));
+  values = build_properties (context, cssnode, FALSE, 0);
   
   gtk_css_node_set_style (cssnode, values);
   g_object_unref (values);
@@ -866,7 +873,7 @@ gtk_style_context_lookup_style_for_state (GtkStyleContext *context,
   gtk_css_node_declaration_set_state (&decl, state);
   values = build_properties (context,
                              context->priv->cssnode,
-                             decl);
+                             TRUE, state);
   gtk_css_node_declaration_unref (decl);
 
   return values;
@@ -2955,7 +2962,7 @@ _gtk_style_context_validate (GtkStyleContext  *context,
     {
       GtkCssStyle *style, *static_style;
 
-      static_style = build_properties (context, cssnode, gtk_css_node_get_declaration (cssnode));
+      static_style = build_properties (context, cssnode, FALSE, 0);
       style = gtk_css_animated_style_new (static_style,
                                           priv->parent ? gtk_style_context_lookup_style (priv->parent) : NULL,
                                           timestamp,
@@ -3083,7 +3090,8 @@ gtk_style_context_invalidate (GtkStyleContext *context)
   root = gtk_style_context_get_root (context);
   style = build_properties (context,
                             root,
-                            gtk_css_node_get_declaration (root));
+                            FALSE,
+                            0);
   gtk_css_node_set_style (root, style);
   g_object_unref (style);
 
