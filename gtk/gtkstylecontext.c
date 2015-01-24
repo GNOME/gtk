@@ -751,24 +751,26 @@ store_in_global_parent_cache (GtkStyleContext             *context,
 
 static GtkCssStyle *
 update_properties (GtkStyleContext             *context,
+                   GtkCssNode                  *cssnode,
                    GtkCssStyle                 *style,
-                   const GtkCssNodeDeclaration *decl,
-                   gboolean                     is_root,
-                   GtkCssStyle                 *parent,
                    const GtkBitmask            *parent_changes)
 {
   GtkStyleContextPrivate *priv;
+  const GtkCssNodeDeclaration *decl;
   GtkCssMatcher matcher;
   GtkWidgetPath *path;
+  GtkCssStyle *parent;
   GtkCssStyle *result;
 
   priv = context->priv;
+  parent = gtk_css_node_get_parent_style (context, cssnode);
+  decl = gtk_css_node_get_declaration (cssnode);
 
   result = lookup_in_global_parent_cache (context, parent, decl);
   if (result)
     return g_object_ref (result);
 
-  path = create_query_path (context, decl, is_root);
+  path = create_query_path (context, decl, TRUE);
 
   if (!_gtk_css_matcher_init (&matcher, path))
     {
@@ -2981,10 +2983,8 @@ _gtk_style_context_validate (GtkStyleContext  *context,
 	      GtkCssStyle *new_base;
               
               new_base = update_properties (context,
+                                            cssnode,
                                             GTK_CSS_ANIMATED_STYLE (current)->style,
-                                            gtk_css_node_get_declaration (cssnode),
-                                            TRUE,
-                                            gtk_css_node_get_parent_style (context, cssnode),
                                             parent_changes);
               new_values = gtk_css_animated_style_new_advance (GTK_CSS_ANIMATED_STYLE (current),
                                                                new_base,
@@ -2994,10 +2994,8 @@ _gtk_style_context_validate (GtkStyleContext  *context,
           else
             {
 	      new_values = update_properties (context,
+                                              cssnode,
                                               current,
-                                              gtk_css_node_get_declaration (cssnode),
-                                              TRUE,
-                                              gtk_css_node_get_parent_style (context, cssnode),
                                               parent_changes);
             }
 
