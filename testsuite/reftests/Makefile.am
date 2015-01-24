@@ -420,6 +420,8 @@ testdata = \
 	textview-margins.ui \
 	toplevel-vs-popup.ref.ui \
 	toplevel-vs-popup.ui \
+	treeview-crash-too-wide.ref.ui \
+	treeview-crash-too-wide.ui \
 	treeview-fixed-height.css \
 	treeview-fixed-height.ref.ui \
 	treeview-fixed-height.ui \
