@@ -64,6 +64,7 @@
 #include "gtkrecentfilter.h"
 #include "gtkrecentmanager.h"
 #include "gtkscrolledwindow.h"
+#include "gtksearchentry.h"
 #include "gtkseparatormenuitem.h"
 #include "gtksettings.h"
 #include "gtksizegroup.h"
@@ -418,7 +419,9 @@ static void     gtk_file_chooser_widget_hierarchy_changed (GtkWidget          *w
 							    GtkWidget          *previous_toplevel);
 static void     gtk_file_chooser_widget_style_updated  (GtkWidget             *widget);
 static void     gtk_file_chooser_widget_screen_changed (GtkWidget             *widget,
-							 GdkScreen             *previous_screen);
+                                                        GdkScreen             *previous_screen);
+static gboolean gtk_file_chooser_widget_key_press_event (GtkWidget            *widget,
+                                                         GdkEventKey          *event);
 
 static gboolean       gtk_file_chooser_widget_set_current_folder 	   (GtkFileChooser    *chooser,
 									    GFile             *folder,
@@ -1235,6 +1238,22 @@ browse_files_key_press_event_cb (GtkWidget   *widget,
 	    }
         }
     }
+
+  return FALSE;
+}
+
+static gboolean
+gtk_file_chooser_widget_key_press_event (GtkWidget   *widget,
+                                         GdkEventKey *event)
+{
+  GtkFileChooserWidget *impl = (GtkFileChooserWidget *) widget;
+  GtkFileChooserWidgetPrivate *priv = impl->priv;
+
+  if (priv->operation_mode != OPERATION_MODE_SEARCH)
+    operation_mode_set (impl, OPERATION_MODE_SEARCH);
+
+  if (gtk_search_entry_handle_event (GTK_SEARCH_ENTRY (priv->search_entry), (GdkEvent *)event))
+    return TRUE;
 
   return FALSE;
 }
@@ -6247,8 +6266,6 @@ search_entry_activate_cb (GtkEntry *entry,
   const char *text;
 
   text = gtk_entry_get_text (GTK_ENTRY (priv->search_entry));
-  if (strlen (text) == 0)
-    return;
 
   /* reset any existing query object */
   if (priv->search_query)
@@ -6256,6 +6273,9 @@ search_entry_activate_cb (GtkEntry *entry,
       g_object_unref (priv->search_query);
       priv->search_query = NULL;
     }
+
+  if (strlen (text) == 0)
+    return;
 
   search_start_query (impl, text);
 }
@@ -7039,6 +7059,7 @@ gtk_file_chooser_widget_class_init (GtkFileChooserWidgetClass *class)
   widget_class->hierarchy_changed = gtk_file_chooser_widget_hierarchy_changed;
   widget_class->style_updated = gtk_file_chooser_widget_style_updated;
   widget_class->screen_changed = gtk_file_chooser_widget_screen_changed;
+  widget_class->key_press_event = gtk_file_chooser_widget_key_press_event;
 
   /*
    * Signals
