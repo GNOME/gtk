@@ -154,7 +154,6 @@ struct _GtkStyleContextPrivate
   GtkStyleCascade *cascade;
   GtkStyleContext *parent;
   GSList *children;
-  GHashTable *style_values;
   GtkCssNode *cssnode;
   GSList *saved_nodes;
   GArray *property_cache;
@@ -369,11 +368,6 @@ gtk_style_context_init (GtkStyleContext *style_context)
   priv = style_context->priv =
     gtk_style_context_get_instance_private (style_context);
 
-  priv->style_values = g_hash_table_new_full (gtk_css_node_declaration_hash,
-                                              gtk_css_node_declaration_equal,
-                                              (GDestroyNotify) gtk_css_node_declaration_unref,
-                                              g_object_unref);
-
   priv->screen = gdk_screen_get_default ();
 
   /* Create default info store */
@@ -526,8 +520,6 @@ gtk_style_context_finalize (GObject *object)
   gtk_style_context_clear_parent (style_context);
 
   gtk_style_context_set_cascade (style_context, NULL);
-
-  g_hash_table_destroy (priv->style_values);
 
   while (priv->saved_nodes)
     gtk_style_context_pop_style_node (style_context);
@@ -835,7 +827,6 @@ GtkCssStyle *
 gtk_style_context_lookup_style (GtkStyleContext *context)
 {
   GtkStyleContextPrivate *priv;
-  GtkCssNodeDeclaration *decl;
   GtkCssStyle *values;
   GtkCssNode *cssnode;
 
@@ -847,26 +838,10 @@ gtk_style_context_lookup_style (GtkStyleContext *context)
   if (values)
     return values;
 
-  if (!gtk_style_context_is_saved (context))
-    {
-      values = build_properties (context, gtk_css_node_get_declaration (cssnode), TRUE, gtk_css_node_get_parent_style (context, cssnode));
-    }
-  else
-    {
-      decl = gtk_css_node_dup_declaration (cssnode);
-      values = g_hash_table_lookup (priv->style_values, decl);
-      if (values)
-        {
-          gtk_css_node_set_style (cssnode, values);
-          gtk_css_node_declaration_unref (decl);
-          return values;
-        }
-
-      values = build_properties (context, decl, FALSE, gtk_css_node_get_parent_style (context, cssnode));
-      g_hash_table_insert (priv->style_values,
-                           decl,
-                           g_object_ref (values));
-    }
+  values = build_properties (context,
+                             gtk_css_node_get_declaration (cssnode),
+                             !gtk_style_context_is_saved (context),
+                             gtk_css_node_get_parent_style (context, cssnode));
   
   gtk_css_node_set_style (cssnode, values);
   g_object_unref (values);
@@ -980,7 +955,7 @@ _gtk_style_context_set_widget (GtkStyleContext *context,
       g_object_unref (priv->cssnode);
       priv->cssnode = gtk_css_widget_node_new (widget);
       gtk_css_node_set_state (priv->cssnode, GTK_STATE_FLAG_DIR_LTR);
-      gtk_css_node_set_style (priv->cssnode, gtk_css_static_style_get_default (priv->screen));
+      gtk_css_node_set_style (priv->cssnode, gtk_css_static_style_get_default ());
     }
 
   if (widget)
@@ -2841,7 +2816,6 @@ gtk_style_context_clear_cache (GtkStyleContext *context)
     {
       gtk_css_node_set_style (l->data, NULL);
     }
-  g_hash_table_remove_all (priv->style_values);
 
   gtk_style_context_clear_property_cache (context);
 }
@@ -2884,43 +2858,6 @@ gtk_style_context_style_needs_full_revalidate (GtkCssStyle  *style,
     return TRUE;
   else
     return FALSE;
-}
-
-static void
-gtk_style_context_update_cache (GtkStyleContext  *context,
-                                GtkCssChange      change,
-                                const GtkBitmask *parent_changes)
-{
-  GtkStyleContextPrivate *priv;
-  GHashTableIter iter;
-  GtkCssStyle *parent;
-  gpointer key, value;
-
-  if (change == 0 && _gtk_bitmask_is_empty (parent_changes))
-    return;
-
-  priv = context->priv;
-  parent = gtk_css_node_get_style (gtk_style_context_get_root (context));
-
-  g_hash_table_iter_init (&iter, priv->style_values);
-  while (g_hash_table_iter_next (&iter, &key, &value))
-    {
-      const GtkCssNodeDeclaration *decl = key;
-      GtkCssStyle *style = value;
-
-      if (gtk_style_context_style_needs_full_revalidate (style, change))
-        {
-          g_hash_table_iter_remove (&iter);
-        }
-      else
-        {
-          style = update_properties (context, style, decl, FALSE, parent, parent_changes);
-
-          g_hash_table_iter_replace (&iter, style);
-        }
-    }
-
-  gtk_style_context_clear_property_cache (context);
 }
 
 static gboolean
@@ -3090,7 +3027,7 @@ _gtk_style_context_validate (GtkStyleContext  *context,
 
   change = _gtk_css_change_for_child (change);
   
-  gtk_style_context_update_cache (context, change, changes);
+  gtk_style_context_clear_property_cache (context);
 
   for (list = priv->children; list; list = list->next)
     {
