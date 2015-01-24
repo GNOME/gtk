@@ -5576,8 +5576,8 @@ gtk_tree_view_draw (GtkWidget *widget,
 
       view_rect.x = 0;
       view_rect.y = gtk_tree_view_get_effective_header_height (tree_view);
-      view_rect.width = gdk_window_get_width (tree_view->priv->bin_window);
-      view_rect.height = gdk_window_get_height (tree_view->priv->bin_window);
+      view_rect.width = gtk_widget_get_allocated_width (widget);
+      view_rect.height = gtk_widget_get_allocated_height (widget) - view_rect.y;
 
       gdk_window_get_position (tree_view->priv->bin_window, &canvas_rect.x, &canvas_rect.y);
       canvas_rect.y = -gtk_adjustment_get_value (tree_view->priv->vadjustment);
