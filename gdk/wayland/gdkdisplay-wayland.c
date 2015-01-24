@@ -355,7 +355,7 @@ gdk_wayland_display_get_default_group (GdkDisplay *display)
 static gboolean
 gdk_wayland_display_supports_selection_notification (GdkDisplay *display)
 {
-  return TRUE;
+  return FALSE;
 }
 
 static gboolean
