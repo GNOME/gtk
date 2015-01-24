@@ -27,11 +27,23 @@ static GtkWidgetPath *
 gtk_css_widget_node_create_widget_path (GtkCssNode *node)
 {
   GtkCssWidgetNode *widget_node = GTK_CSS_WIDGET_NODE (node);
+  GtkWidgetPath *path;
+  guint length;
 
   if (widget_node->widget == NULL)
-    return gtk_widget_path_new ();
+    path = gtk_widget_path_new ();
+  else
+    path = _gtk_widget_create_path (widget_node->widget);
+  
+  length = gtk_widget_path_length (path);
+  if (length > 0)
+    {
+      gtk_css_node_declaration_add_to_widget_path (gtk_css_node_get_declaration (node),
+                                                   path,
+                                                   length - 1);
+    }
 
-  return _gtk_widget_create_path (widget_node->widget);
+  return path;
 }
 
 static const GtkWidgetPath *

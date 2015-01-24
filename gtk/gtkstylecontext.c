@@ -625,37 +625,6 @@ gtk_style_context_get_root (GtkStyleContext *context)
     return priv->cssnode;
 }
 
-static GtkWidgetPath *
-create_query_path (GtkStyleContext              *context,
-                   const GtkCssNodeDeclaration  *decl,
-                   gboolean                      is_root)
-{
-  GtkCssNode *root;
-  GtkWidgetPath *path;
-  guint length;
-
-  root = gtk_style_context_get_root (context);
-
-  path = gtk_css_node_create_widget_path (root);
-  length = gtk_widget_path_length (path);
-  if (!is_root)
-    {
-
-      if (length > 0)
-        gtk_css_node_declaration_add_to_widget_path (gtk_css_node_get_declaration (root), path, length - 1);
-
-      gtk_widget_path_append_type (path, length > 0 ? gtk_widget_path_iter_get_object_type (path, length - 1) : G_TYPE_NONE);
-      gtk_css_node_declaration_add_to_widget_path (decl, path, length);
-    }
-  else
-    {
-      if (length > 0)
-        gtk_css_node_declaration_add_to_widget_path (decl, path, length - 1);
-    }
-
-  return path;
-}
-
 static gboolean
 gtk_style_context_has_custom_cascade (GtkStyleContext *context)
 {
@@ -770,7 +739,7 @@ update_properties (GtkStyleContext             *context,
   if (result)
     return g_object_ref (result);
 
-  path = create_query_path (context, decl, TRUE);
+  path = gtk_css_node_create_widget_path (cssnode);
 
   if (!_gtk_css_matcher_init (&matcher, path))
     {
@@ -811,9 +780,7 @@ build_properties (GtkStyleContext             *context,
   if (style)
     return g_object_ref (style);
 
-  path = create_query_path (context,
-                            decl,
-                            cssnode == gtk_style_context_get_root (context));
+  path = gtk_css_node_create_widget_path (cssnode);
   if (override_state)
     gtk_widget_path_iter_set_state (path, -1, state);
 
@@ -1634,6 +1601,7 @@ gtk_style_context_save (GtkStyleContext *context)
 
   cssnode = gtk_css_transient_node_new (priv->cssnode);
   gtk_css_node_set_parent (cssnode, gtk_style_context_get_root (context));
+  gtk_css_node_set_widget_type (cssnode, gtk_css_node_get_widget_type (priv->cssnode));
 
   priv->saved_nodes = g_slist_prepend (priv->saved_nodes, priv->cssnode);
   priv->cssnode = cssnode;
