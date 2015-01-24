@@ -4661,6 +4661,8 @@ gdk_window_get_device_position_double (GdkWindow       *window,
   g_return_val_if_fail (GDK_IS_DEVICE (device), NULL);
   g_return_val_if_fail (gdk_device_get_source (device) != GDK_SOURCE_KEYBOARD, NULL);
 
+  tmp_x = tmp_y = 0;
+  tmp_mask = 0;
   normal_child = GDK_WINDOW_IMPL_GET_CLASS (window->impl)->get_device_state (window,
                                                                              device,
                                                                              &tmp_x, &tmp_y,
