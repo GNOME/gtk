@@ -1027,8 +1027,8 @@ gtk_drag_update_cursor (GtkDragSourceInfo *info)
  * @context: the drag context
  * @target: the target (form of the data) to retrieve
  * @time_: a timestamp for retrieving the data. This will
- *   generally be the time received in a #GtkWidget::drag-motion"
- *   or #GtkWidget::drag-drop" signal
+ *   generally be the time received in a #GtkWidget::drag-motion
+ *   or #GtkWidget::drag-drop signal
  *
  * Gets the data associated with a drag. When the data
  * is received or the retrieval fails, GTK+ will emit a
