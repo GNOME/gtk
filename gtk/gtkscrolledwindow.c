@@ -260,6 +260,7 @@ enum
   SCROLL_CHILD,
   MOVE_FOCUS_OUT,
   EDGE_OVERSHOT,
+  EDGE_REACHED,
   LAST_SIGNAL
 };
 
@@ -656,9 +657,8 @@ gtk_scrolled_window_class_init (GtkScrolledWindowClass *class)
    * makes the scrolledwindow firmly surpass (ie. with some edge resistance)
    * the lower or upper limits defined by the adjustment in that orientation.
    *
-   * If a similar behavior without edge resistance is desired, one alternative
-   * may be to check on #GtkAdjustment::value-changed that the value equals
-   * either #GtkAdjustment:lower or #GtkAdjustment:upper - #GtkAdjustment:page-size.
+   * A similar behavior without edge resistance is provided by the
+   * #GtkScrolledWindow::edge-reached signal.
    *
    * Note: The @pos argument is LTR/RTL aware, so callers should be aware too
    * if intending to provide behavior on horizontal edges.
@@ -667,6 +667,31 @@ gtk_scrolled_window_class_init (GtkScrolledWindowClass *class)
    */
   signals[EDGE_OVERSHOT] =
     g_signal_new (I_("edge-overshot"),
+                  G_TYPE_FROM_CLASS (gobject_class),
+                  G_SIGNAL_RUN_LAST, 0,
+                  NULL, NULL,
+                  g_cclosure_marshal_generic,
+                  G_TYPE_NONE, 1, GTK_TYPE_POSITION_TYPE);
+
+  /**
+   * GtkScrolledWindow::edge-reached:
+   * @scrolled_window: a #GtkScrolledWindow
+   * @pos: edge side that was reached
+   *
+   * The ::edge-reached signal is emitted whenever user-initiated scrolling
+   * makes the scrolledwindow exactly reaches the lower or upper limits
+   * defined by the adjustment in that orientation.
+   *
+   * A similar behavior with edge resistance is provided by the
+   * #GtkScrolledWindow::edge-overshot signal.
+   *
+   * Note: The @pos argument is LTR/RTL aware, so callers should be aware too
+   * if intending to provide behavior on horizontal edges.
+   *
+   * Since: 3.16
+   */
+  signals[EDGE_REACHED] =
+    g_signal_new (I_("edge-reached"),
                   G_TYPE_FROM_CLASS (gobject_class),
                   G_SIGNAL_RUN_LAST, 0,
                   NULL, NULL,
@@ -3216,11 +3241,48 @@ gtk_scrolled_window_adjustment_changed (GtkAdjustment *adjustment,
 }
 
 static void
+maybe_emit_edge_reached (GtkScrolledWindow *scrolled_window,
+			 GtkAdjustment *adjustment)
+{
+  GtkScrolledWindowPrivate *priv = scrolled_window->priv;
+  gdouble value, lower, upper, page_size;
+  GtkPositionType edge_pos;
+  gboolean vertical;
+
+  if (adjustment == gtk_range_get_adjustment (GTK_RANGE (priv->hscrollbar)))
+    vertical = FALSE;
+  else if (adjustment == gtk_range_get_adjustment (GTK_RANGE (priv->vscrollbar)))
+    vertical = TRUE;
+  else
+    return;
+
+  value = gtk_adjustment_get_value (adjustment);
+  lower = gtk_adjustment_get_lower (adjustment);
+  upper = gtk_adjustment_get_upper (adjustment);
+  page_size = gtk_adjustment_get_page_size (adjustment);
+
+  if (value == lower)
+    edge_pos = vertical ? GTK_POS_TOP: GTK_POS_LEFT;
+  else if (value == upper - page_size)
+    edge_pos = vertical ? GTK_POS_BOTTOM : GTK_POS_RIGHT;
+  else
+    return;
+
+  if (!vertical &&
+      gtk_widget_get_direction (GTK_WIDGET (scrolled_window)) == GTK_TEXT_DIR_RTL)
+    edge_pos = (edge_pos == GTK_POS_LEFT) ? GTK_POS_RIGHT : GTK_POS_LEFT;
+
+  g_signal_emit (scrolled_window, signals[EDGE_REACHED], 0, edge_pos);
+}
+
+static void
 gtk_scrolled_window_adjustment_value_changed (GtkAdjustment *adjustment,
                                               gpointer       user_data)
 {
   GtkScrolledWindow *scrolled_window = user_data;
   GtkScrolledWindowPrivate *priv = scrolled_window->priv;
+
+  maybe_emit_edge_reached (scrolled_window, adjustment);
 
   /* Allow overshooting for kinetic scrolling operations */
   if (priv->drag_device || priv->deceleration_id)

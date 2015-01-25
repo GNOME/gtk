@@ -80,6 +80,14 @@ edge_overshot (GtkScrolledWindow *sw,
     }
 }
 
+static void
+edge_reached (GtkScrolledWindow *sw,
+	      GtkPositionType    pos,
+	      GtkListBox        *list)
+{
+  g_print ("Reached the edge at pos %d!\n", pos);
+}
+
 int
 main (int argc, char *argv[])
 {
@@ -120,6 +128,7 @@ main (int argc, char *argv[])
   populate_list (GTK_LIST_BOX (list));
 
   g_signal_connect (sw, "edge-overshot", G_CALLBACK (edge_overshot), list);
+  g_signal_connect (sw, "edge-reached", G_CALLBACK (edge_reached), list);
 
   gtk_widget_show_all (win);
 
