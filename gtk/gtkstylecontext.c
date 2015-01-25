@@ -161,8 +161,6 @@ struct _GtkStyleContextPrivate
   guint frame_clock_update_id;
   GdkFrameClock *frame_clock;
 
-  GtkCssChange pending_changes;
-
   const GtkBitmask *invalidating_context;
   guint animating : 1;
   guint invalid : 1;
@@ -846,7 +844,7 @@ gtk_style_context_lookup_style_for_state (GtkStyleContext *context,
   return values;
 }
 
-static void
+void
 gtk_style_context_set_invalid (GtkStyleContext *context,
                                gboolean         invalid)
 {
@@ -2850,7 +2848,25 @@ _gtk_style_context_validate (GtkStyleContext  *context,
 
   priv = context->priv;
 
-  change |= priv->pending_changes;
+  if (G_UNLIKELY (gtk_style_context_is_saved (context)))
+    {
+      cssnode = gtk_style_context_get_root (context);
+      if (GTK_IS_CSS_WIDGET_NODE (cssnode))
+        {
+          GtkWidget *widget = gtk_css_widget_node_get_widget (GTK_CSS_WIDGET_NODE (cssnode));
+          g_warning ("unmatched gtk_style_context_save/restore() detected while validating context for %s %p",
+                     gtk_widget_get_name (widget), widget);
+        }
+      else
+        {
+          g_warning ("unmatched gtk_style_context_save/restore() detected while validating context");
+        }
+    }
+  else
+    cssnode = priv->cssnode;
+
+  if (GTK_IS_CSS_WIDGET_NODE (cssnode))
+    change |= gtk_css_widget_node_reset_change (GTK_CSS_WIDGET_NODE (cssnode));
   
   /* If you run your application with
    *   GTK_DEBUG=no-css-cache
@@ -2870,24 +2886,6 @@ _gtk_style_context_validate (GtkStyleContext  *context,
   if (!priv->invalid && change == 0 && _gtk_bitmask_is_empty (parent_changes))
     return;
 
-  if (G_UNLIKELY (gtk_style_context_is_saved (context)))
-    {
-      cssnode = gtk_style_context_get_root (context);
-      if (GTK_IS_CSS_WIDGET_NODE (cssnode))
-        {
-          GtkWidget *widget = gtk_css_widget_node_get_widget (GTK_CSS_WIDGET_NODE (cssnode));
-          g_warning ("unmatched gtk_style_context_save/restore() detected while validating context for %s %p",
-                     gtk_widget_get_name (widget), widget);
-        }
-      else
-        {
-          g_warning ("unmatched gtk_style_context_save/restore() detected while validating context");
-        }
-    }
-  else
-    cssnode = priv->cssnode;
-
-  priv->pending_changes = 0;
   gtk_style_context_set_invalid (context, FALSE);
 
   current = gtk_css_node_get_style (cssnode);
@@ -2975,16 +2973,6 @@ _gtk_style_context_validate (GtkStyleContext  *context,
     }
 
   _gtk_bitmask_free (changes);
-}
-
-void
-_gtk_style_context_invalidate_root_node (GtkStyleContext *context,
-                                         GtkCssChange     change)
-{
-  GtkStyleContextPrivate *priv = context->priv;
-
-  priv->pending_changes |= change;
-  gtk_style_context_set_invalid (context, TRUE);
 }
 
 void

@@ -31,11 +31,13 @@ gtk_css_widget_node_invalidate (GtkCssNode   *node,
   GtkCssWidgetNode *widget_node = GTK_CSS_WIDGET_NODE (node);
   GtkStyleContext *context;
 
+  widget_node->pending_changes |= change;
+
   if (widget_node->widget == NULL)
     return;
 
   context = gtk_widget_get_style_context (widget_node->widget);
-  _gtk_style_context_invalidate_root_node (context, change);
+  gtk_style_context_set_invalid (context, TRUE);
 }
 
 static GtkWidgetPath *
@@ -119,3 +121,17 @@ gtk_css_widget_node_get_widget (GtkCssWidgetNode *node)
 
   return node->widget;
 }
+
+GtkCssChange
+gtk_css_widget_node_reset_change (GtkCssWidgetNode *node)
+{
+  GtkCssChange result;
+
+  gtk_internal_return_val_if_fail (GTK_IS_CSS_WIDGET_NODE (node), 0);
+
+  result = node->pending_changes;
+  node->pending_changes = 0;
+
+  return result;
+}
+

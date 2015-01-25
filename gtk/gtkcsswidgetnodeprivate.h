@@ -38,6 +38,8 @@ struct _GtkCssWidgetNode
   GtkCssNode node;
 
   GtkWidget *widget;
+
+  GtkCssChange pending_changes;
 };
 
 struct _GtkCssWidgetNodeClass
@@ -45,13 +47,15 @@ struct _GtkCssWidgetNodeClass
   GtkCssNodeClass node_class;
 };
 
-GType                   gtk_css_widget_node_get_type         (void) G_GNUC_CONST;
+GType                   gtk_css_widget_node_get_type            (void) G_GNUC_CONST;
 
-GtkCssNode *            gtk_css_widget_node_new              (GtkWidget         *widget);
+GtkCssNode *            gtk_css_widget_node_new                 (GtkWidget              *widget);
 
-void                    gtk_css_widget_node_widget_destroyed (GtkCssWidgetNode  *node);
+void                    gtk_css_widget_node_widget_destroyed    (GtkCssWidgetNode       *node);
 
-GtkWidget *             gtk_css_widget_node_get_widget       (GtkCssWidgetNode  *node);
+GtkWidget *             gtk_css_widget_node_get_widget          (GtkCssWidgetNode       *node);
+
+GtkCssChange            gtk_css_widget_node_reset_change        (GtkCssWidgetNode       *node);
 
 G_END_DECLS
 
