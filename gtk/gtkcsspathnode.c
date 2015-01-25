@@ -19,8 +19,25 @@
 
 #include "gtkcsspathnodeprivate.h"
 #include "gtkprivate.h"
+#include "gtkstylecontextprivate.h"
 
 G_DEFINE_TYPE (GtkCssPathNode, gtk_css_path_node, GTK_TYPE_CSS_NODE)
+
+static void
+gtk_css_path_node_invalidate (GtkCssNode   *node,
+                              GtkCssChange  change)
+{
+  GtkCssPathNode *path_node = GTK_CSS_PATH_NODE (node);
+
+  gtk_css_node_set_style (node, NULL);
+
+  if (path_node->context)
+    {
+      G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
+      gtk_style_context_invalidate (path_node->context);
+      G_GNUC_END_IGNORE_DEPRECATIONS;
+    }
+}
 
 static GtkWidgetPath *
 gtk_css_path_node_real_create_widget_path (GtkCssNode *node)
@@ -58,6 +75,7 @@ gtk_css_path_node_class_init (GtkCssPathNodeClass *klass)
 {
   GtkCssNodeClass *node_class = GTK_CSS_NODE_CLASS (klass);
 
+  node_class->invalidate = gtk_css_path_node_invalidate;
   node_class->create_widget_path = gtk_css_path_node_real_create_widget_path;
   node_class->get_widget_path = gtk_css_path_node_real_get_widget_path;
 }
@@ -68,9 +86,16 @@ gtk_css_path_node_init (GtkCssPathNode *cssnode)
 }
 
 GtkCssNode *
-gtk_css_path_node_new (void)
+gtk_css_path_node_new (GtkStyleContext *context)
 {
-  return g_object_new (GTK_TYPE_CSS_PATH_NODE, NULL);
+  GtkCssPathNode *node;
+  
+  g_return_val_if_fail (context == NULL || GTK_IS_STYLE_CONTEXT (context), NULL);
+
+  node = g_object_new (GTK_TYPE_CSS_PATH_NODE, NULL);
+  node->context = context;
+
+  return GTK_CSS_NODE (node);
 }
 
 void
@@ -89,6 +114,8 @@ gtk_css_path_node_set_widget_path (GtkCssPathNode *node,
     gtk_widget_path_ref (path);
 
   node->path = path;
+
+  gtk_css_node_invalidate (GTK_CSS_NODE (node), GTK_CSS_CHANGE_ANY);
 }
 
 GtkWidgetPath *

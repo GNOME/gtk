@@ -33,6 +33,12 @@ gtk_css_node_finalize (GObject *object)
   G_OBJECT_CLASS (gtk_css_node_parent_class)->finalize (object);
 }
 
+static void
+gtk_css_node_real_invalidate (GtkCssNode   *cssnode,
+                              GtkCssChange  change)
+{
+}
+
 static GtkWidgetPath *
 gtk_css_node_real_create_widget_path (GtkCssNode *cssnode)
 {
@@ -52,6 +58,7 @@ gtk_css_node_class_init (GtkCssNodeClass *klass)
 
   object_class->finalize = gtk_css_node_finalize;
 
+  klass->invalidate = gtk_css_node_real_invalidate;
   klass->create_widget_path = gtk_css_node_real_create_widget_path;
   klass->get_widget_path = gtk_css_node_real_get_widget_path;
 }
@@ -101,7 +108,8 @@ void
 gtk_css_node_set_widget_type (GtkCssNode *cssnode,
                               GType       widget_type)
 {
-  gtk_css_node_declaration_set_type (&cssnode->decl, widget_type);
+  if (gtk_css_node_declaration_set_type (&cssnode->decl, widget_type))
+    gtk_css_node_invalidate (cssnode, GTK_CSS_CHANGE_NAME);
 }
 
 GType
@@ -110,11 +118,12 @@ gtk_css_node_get_widget_type (GtkCssNode *cssnode)
   return gtk_css_node_declaration_get_type (cssnode->decl);
 }
 
-gboolean
+void
 gtk_css_node_set_id (GtkCssNode *cssnode,
                      const char *id)
 {
-  return gtk_css_node_declaration_set_id (&cssnode->decl, id);
+  if (gtk_css_node_declaration_set_id (&cssnode->decl, id))
+    gtk_css_node_invalidate (cssnode, GTK_CSS_CHANGE_ID);
 }
 
 const char *
@@ -123,11 +132,12 @@ gtk_css_node_get_id (GtkCssNode *cssnode)
   return gtk_css_node_declaration_get_id (cssnode->decl);
 }
 
-gboolean
+void
 gtk_css_node_set_state (GtkCssNode    *cssnode,
                         GtkStateFlags  state_flags)
 {
-  return gtk_css_node_declaration_set_state (&cssnode->decl, state_flags);
+  if (gtk_css_node_declaration_set_state (&cssnode->decl, state_flags))
+    gtk_css_node_invalidate (cssnode, GTK_CSS_CHANGE_STATE);
 }
 
 GtkStateFlags
@@ -149,18 +159,20 @@ gtk_css_node_get_junction_sides (GtkCssNode *cssnode)
   return gtk_css_node_declaration_get_junction_sides (cssnode->decl);
 }
 
-gboolean
+void
 gtk_css_node_add_class (GtkCssNode *cssnode,
                         GQuark      style_class)
 {
-  return gtk_css_node_declaration_add_class (&cssnode->decl, style_class);
+  if (gtk_css_node_declaration_add_class (&cssnode->decl, style_class))
+    gtk_css_node_invalidate (cssnode, GTK_CSS_CHANGE_CLASS);
 }
 
-gboolean
+void
 gtk_css_node_remove_class (GtkCssNode *cssnode,
                            GQuark      style_class)
 {
-  return gtk_css_node_declaration_remove_class (&cssnode->decl, style_class);
+  if (gtk_css_node_declaration_remove_class (&cssnode->decl, style_class))
+    gtk_css_node_invalidate (cssnode, GTK_CSS_CHANGE_CLASS);
 }
 
 gboolean
@@ -176,19 +188,21 @@ gtk_css_node_list_classes (GtkCssNode *cssnode)
   return gtk_css_node_declaration_list_classes (cssnode->decl);
 }
 
-gboolean
+void
 gtk_css_node_add_region (GtkCssNode     *cssnode,
                          GQuark          region,
                          GtkRegionFlags  flags)
 {
-  return gtk_css_node_declaration_add_region (&cssnode->decl, region, flags);
+  if (gtk_css_node_declaration_add_region (&cssnode->decl, region, flags))
+    gtk_css_node_invalidate (cssnode, GTK_CSS_CHANGE_REGION);
 }
 
-gboolean
+void
 gtk_css_node_remove_region (GtkCssNode *cssnode,
                             GQuark      region)
 {
-  return gtk_css_node_declaration_remove_region (&cssnode->decl, region);
+  if (gtk_css_node_declaration_remove_region (&cssnode->decl, region))
+    gtk_css_node_invalidate (cssnode, GTK_CSS_CHANGE_REGION);
 }
 
 gboolean
@@ -216,6 +230,13 @@ GtkCssNodeDeclaration *
 gtk_css_node_dup_declaration (GtkCssNode *cssnode)
 {
   return gtk_css_node_declaration_ref (cssnode->decl);
+}
+
+void
+gtk_css_node_invalidate (GtkCssNode   *cssnode,
+                         GtkCssChange  change)
+{
+  GTK_CSS_NODE_GET_CLASS (cssnode)->invalidate (cssnode, change);
 }
 
 GtkWidgetPath *

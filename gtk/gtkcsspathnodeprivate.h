@@ -37,6 +37,7 @@ struct _GtkCssPathNode
 {
   GtkCssNode node;
 
+  GtkStyleContext *context;
   GtkWidgetPath *path;
 };
 
@@ -47,7 +48,7 @@ struct _GtkCssPathNodeClass
 
 GType                   gtk_css_path_node_get_type         (void) G_GNUC_CONST;
 
-GtkCssNode *            gtk_css_path_node_new              (void);
+GtkCssNode *            gtk_css_path_node_new              (GtkStyleContext *context);
 
 void                    gtk_css_path_node_set_widget_path  (GtkCssPathNode *node,
                                                             GtkWidgetPath  *path);

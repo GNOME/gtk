@@ -48,6 +48,8 @@ struct _GtkCssNodeClass
 
   GtkWidgetPath *       (* create_widget_path)          (GtkCssNode            *cssnode);
   const GtkWidgetPath * (* get_widget_path)             (GtkCssNode            *cssnode);
+  void                  (* invalidate)                  (GtkCssNode            *cssnode,
+                                                         GtkCssChange           change);
 };
 
 GType                   gtk_css_node_get_type           (void) G_GNUC_CONST;
@@ -59,26 +61,26 @@ GtkCssNode *            gtk_css_node_get_parent         (GtkCssNode            *
 void                    gtk_css_node_set_widget_type    (GtkCssNode            *cssnode,
                                                          GType                  widget_type);
 GType                   gtk_css_node_get_widget_type    (GtkCssNode            *cssnode);
-gboolean                gtk_css_node_set_id             (GtkCssNode            *cssnode,
+void                    gtk_css_node_set_id             (GtkCssNode            *cssnode,
                                                          const char            *id);
 const char *            gtk_css_node_get_id             (GtkCssNode            *cssnode);
-gboolean                gtk_css_node_set_state          (GtkCssNode            *cssnode,
+void                    gtk_css_node_set_state          (GtkCssNode            *cssnode,
                                                          GtkStateFlags          state_flags);
 GtkStateFlags           gtk_css_node_get_state          (GtkCssNode            *cssnode);
 void                    gtk_css_node_set_junction_sides (GtkCssNode            *cssnode,
                                                          GtkJunctionSides       junction_sides);
 GtkJunctionSides        gtk_css_node_get_junction_sides (GtkCssNode            *cssnode);
-gboolean                gtk_css_node_add_class          (GtkCssNode            *cssnode,
+void                    gtk_css_node_add_class          (GtkCssNode            *cssnode,
                                                          GQuark                 style_class);
-gboolean                gtk_css_node_remove_class       (GtkCssNode            *cssnode,
+void                    gtk_css_node_remove_class       (GtkCssNode            *cssnode,
                                                          GQuark                 style_class);
 gboolean                gtk_css_node_has_class          (GtkCssNode            *cssnode,
                                                          GQuark                 style_class);
 GList *                 gtk_css_node_list_classes       (GtkCssNode            *cssnode);
-gboolean                gtk_css_node_add_region         (GtkCssNode            *cssnode,
+void                    gtk_css_node_add_region         (GtkCssNode            *cssnode,
                                                          GQuark                 region,
                                                          GtkRegionFlags         flags);
-gboolean                gtk_css_node_remove_region      (GtkCssNode            *cssnode,
+void                    gtk_css_node_remove_region      (GtkCssNode            *cssnode,
                                                          GQuark                 region);
 gboolean                gtk_css_node_has_region         (GtkCssNode            *cssnode,
                                                          GQuark                 region,
@@ -94,6 +96,8 @@ GtkCssStyle *           gtk_css_node_get_style          (GtkCssNode            *
 void                    gtk_css_node_set_style          (GtkCssNode            *cssnode,
                                                          GtkCssStyle           *style);
 
+void                    gtk_css_node_invalidate         (GtkCssNode            *cssnode,
+                                                         GtkCssChange           change);
 GtkWidgetPath *         gtk_css_node_create_widget_path (GtkCssNode            *cssnode);
 const GtkWidgetPath *   gtk_css_node_get_widget_path    (GtkCssNode            *cssnode);
 

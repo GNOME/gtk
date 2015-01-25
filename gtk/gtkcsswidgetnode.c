@@ -19,9 +19,24 @@
 
 #include "gtkcsswidgetnodeprivate.h"
 #include "gtkprivate.h"
+#include "gtkstylecontextprivate.h"
 #include "gtkwidgetprivate.h"
 
 G_DEFINE_TYPE (GtkCssWidgetNode, gtk_css_widget_node, GTK_TYPE_CSS_NODE)
+
+static void
+gtk_css_widget_node_invalidate (GtkCssNode   *node,
+                                GtkCssChange  change)
+{
+  GtkCssWidgetNode *widget_node = GTK_CSS_WIDGET_NODE (node);
+  GtkStyleContext *context;
+
+  if (widget_node->widget == NULL)
+    return;
+
+  context = gtk_widget_get_style_context (widget_node->widget);
+  _gtk_style_context_invalidate_root_node (context, change);
+}
 
 static GtkWidgetPath *
 gtk_css_widget_node_create_widget_path (GtkCssNode *node)
@@ -62,6 +77,7 @@ gtk_css_widget_node_class_init (GtkCssWidgetNodeClass *klass)
 {
   GtkCssNodeClass *node_class = GTK_CSS_NODE_CLASS (klass);
 
+  node_class->invalidate = gtk_css_widget_node_invalidate;
   node_class->create_widget_path = gtk_css_widget_node_create_widget_path;
   node_class->get_widget_path = gtk_css_widget_node_get_widget_path;
 }

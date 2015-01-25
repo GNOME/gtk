@@ -48,6 +48,8 @@ void           _gtk_style_context_validate                   (GtkStyleContext *c
                                                               const GtkBitmask*parent_changes);
 void           _gtk_style_context_queue_invalidate           (GtkStyleContext *context,
                                                               GtkCssChange     change);
+void           _gtk_style_context_invalidate_root_node       (GtkStyleContext *context,
+                                                              GtkCssChange     change);
 gboolean       _gtk_style_context_check_region_name          (const gchar     *str);
 
 gboolean       _gtk_style_context_resolve_color              (GtkStyleContext    *context,

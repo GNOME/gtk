@@ -356,7 +356,7 @@ gtk_style_context_set_cascade (GtkStyleContext *context,
 
   priv->cascade = cascade;
 
-  if (cascade)
+  if (cascade && priv->cssnode != NULL)
     gtk_style_context_cascade_changed (cascade, context);
 }
 
@@ -370,14 +370,14 @@ gtk_style_context_init (GtkStyleContext *style_context)
 
   priv->screen = gdk_screen_get_default ();
 
-  /* Create default info store */
-  priv->cssnode = gtk_css_path_node_new ();
-  gtk_css_node_set_state (priv->cssnode, GTK_STATE_FLAG_DIR_LTR);
-
   priv->property_cache = g_array_new (FALSE, FALSE, sizeof (PropertyValue));
 
   gtk_style_context_set_cascade (style_context,
                                  _gtk_settings_get_style_cascade (gtk_settings_get_for_screen (priv->screen), 1));
+
+  /* Create default info store */
+  priv->cssnode = gtk_css_path_node_new (style_context);
+  gtk_css_node_set_state (priv->cssnode, GTK_STATE_FLAG_DIR_LTR);
 }
 
 static void
@@ -873,24 +873,6 @@ gtk_style_context_set_invalid (GtkStyleContext *context,
     }
 }
 
-static void
-gtk_style_context_queue_invalidate_internal (GtkStyleContext *context,
-                                             GtkCssChange     change)
-{
-  GtkStyleContextPrivate *priv = context->priv;
-  GtkCssNode *cssnode = priv->cssnode;
-
-  if (gtk_style_context_is_saved (context))
-    {
-      gtk_css_node_set_style (cssnode, NULL);
-    }
-  else
-    {
-      _gtk_style_context_queue_invalidate (context, change);
-      /* XXX: We need to invalidate siblings here somehow */
-    }
-}
-
 /**
  * gtk_style_context_new:
  *
@@ -1291,10 +1273,7 @@ gtk_style_context_set_id (GtkStyleContext *context,
 {
   g_return_if_fail (GTK_IS_STYLE_CONTEXT (context));
 
-  if (!gtk_css_node_set_id (context->priv->cssnode, id))
-    return;
-
-  gtk_style_context_queue_invalidate_internal (context, GTK_CSS_CHANGE_ID);
+  gtk_css_node_set_id (context->priv->cssnode, id);
 }
 
 /*
@@ -1332,14 +1311,11 @@ gtk_style_context_set_state (GtkStyleContext *context,
 
   old_flags = gtk_css_node_get_state (context->priv->cssnode);
 
-  if (!gtk_css_node_set_state (context->priv->cssnode, flags))
-    return;
+  gtk_css_node_set_state (context->priv->cssnode, flags);
 
   if (((old_flags ^ flags) & (GTK_STATE_FLAG_DIR_LTR | GTK_STATE_FLAG_DIR_RTL)) &&
       !gtk_style_context_is_saved (context))
     g_object_notify (G_OBJECT (context), "direction");
-  
-  gtk_style_context_queue_invalidate_internal (context, GTK_CSS_CHANGE_STATE);
 }
 
 /**
@@ -1486,8 +1462,6 @@ gtk_style_context_set_path (GtkStyleContext *context,
       gtk_css_path_node_set_widget_path (GTK_CSS_PATH_NODE (root), NULL);
       gtk_css_node_set_widget_type (root, G_TYPE_NONE);
     }
-
-  _gtk_style_context_queue_invalidate (context, GTK_CSS_CHANGE_ANY);
 }
 
 /**
@@ -1668,8 +1642,7 @@ gtk_style_context_add_class (GtkStyleContext *context,
   priv = context->priv;
   class_quark = g_quark_from_string (class_name);
 
-  if (gtk_css_node_add_class (priv->cssnode, class_quark))
-    gtk_style_context_queue_invalidate_internal (context, GTK_CSS_CHANGE_CLASS);
+  gtk_css_node_add_class (priv->cssnode, class_quark);
 }
 
 /**
@@ -1698,8 +1671,7 @@ gtk_style_context_remove_class (GtkStyleContext *context,
 
   priv = context->priv;
 
-  if (gtk_css_node_remove_class (priv->cssnode, class_quark))
-    gtk_style_context_queue_invalidate_internal (context, GTK_CSS_CHANGE_CLASS);
+  gtk_css_node_remove_class (priv->cssnode, class_quark);
 }
 
 /**
@@ -1873,8 +1845,7 @@ gtk_style_context_add_region (GtkStyleContext *context,
   priv = context->priv;
   region_quark = g_quark_from_string (region_name);
 
-  if (gtk_css_node_add_region (priv->cssnode, region_quark, flags))
-    gtk_style_context_queue_invalidate_internal (context, GTK_CSS_CHANGE_REGION);
+  gtk_css_node_add_region (priv->cssnode, region_quark, flags);
 }
 
 /**
@@ -1905,8 +1876,7 @@ gtk_style_context_remove_region (GtkStyleContext *context,
 
   priv = context->priv;
 
-  if (gtk_css_node_remove_region (priv->cssnode, region_quark))
-    gtk_style_context_queue_invalidate_internal (context, GTK_CSS_CHANGE_REGION);
+  gtk_css_node_remove_region (priv->cssnode, region_quark);
 }
 
 /**
@@ -3008,27 +2978,23 @@ _gtk_style_context_validate (GtkStyleContext  *context,
 }
 
 void
+_gtk_style_context_invalidate_root_node (GtkStyleContext *context,
+                                         GtkCssChange     change)
+{
+  GtkStyleContextPrivate *priv = context->priv;
+
+  priv->pending_changes |= change;
+  gtk_style_context_set_invalid (context, TRUE);
+}
+
+void
 _gtk_style_context_queue_invalidate (GtkStyleContext *context,
                                      GtkCssChange     change)
 {
-  GtkStyleContextPrivate *priv;
-
   g_return_if_fail (GTK_IS_STYLE_CONTEXT (context));
   g_return_if_fail (change != 0);
 
-  priv = context->priv;
-
-  if (GTK_IS_CSS_WIDGET_NODE (priv->cssnode))
-    {
-      priv->pending_changes |= change;
-      gtk_style_context_set_invalid (context, TRUE);
-    }
-  else if (GTK_IS_CSS_PATH_NODE (priv->cssnode))
-    {
-      G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
-      gtk_style_context_invalidate (context);
-      G_GNUC_END_IGNORE_DEPRECATIONS;
-    }
+  gtk_css_node_invalidate (gtk_style_context_get_root (context), change);
 }
 
 /**
