@@ -305,6 +305,8 @@ gtk_style_context_pop_style_node (GtkStyleContext *context)
 
   g_return_if_fail (priv->saved_nodes != NULL);
 
+  if (GTK_IS_CSS_TRANSIENT_NODE (priv->cssnode))
+    gtk_css_node_set_parent (priv->cssnode, NULL);
   g_object_unref (priv->cssnode);
   priv->cssnode = priv->saved_nodes->data;
   priv->saved_nodes = g_slist_remove (priv->saved_nodes, priv->cssnode);

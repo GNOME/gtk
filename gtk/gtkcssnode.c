@@ -24,6 +24,19 @@
 G_DEFINE_TYPE (GtkCssNode, gtk_css_node, G_TYPE_OBJECT)
 
 static void
+gtk_css_node_dispose (GObject *object)
+{
+  GtkCssNode *cssnode = GTK_CSS_NODE (object);
+
+  while (cssnode->first_child)
+    {
+      gtk_css_node_set_parent (cssnode->first_child, NULL);
+    }
+
+  G_OBJECT_CLASS (gtk_css_node_parent_class)->dispose (object);
+}
+
+static void
 gtk_css_node_finalize (GObject *object)
 {
   GtkCssNode *cssnode = GTK_CSS_NODE (object);
@@ -58,6 +71,7 @@ gtk_css_node_class_init (GtkCssNodeClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
 
+  object_class->dispose = gtk_css_node_dispose;
   object_class->finalize = gtk_css_node_finalize;
 
   klass->invalidate = gtk_css_node_real_invalidate;
@@ -77,6 +91,9 @@ gtk_css_node_set_parent (GtkCssNode *node,
 {
   if (node->parent == parent)
     return;
+
+  /* Take a reference here so the whole function has a reference */
+  g_object_ref (node);
 
   if (node->parent != NULL)
     {
@@ -98,6 +115,8 @@ gtk_css_node_set_parent (GtkCssNode *node,
       node->parent = NULL;
       node->next_sibling = NULL;
       node->previous_sibling = NULL;
+
+      g_object_unref (node);
     }
 
   if (parent)
@@ -121,6 +140,9 @@ gtk_css_node_set_parent (GtkCssNode *node,
     }
 
   gtk_css_node_invalidate (node, GTK_CSS_CHANGE_ANY_PARENT | GTK_CSS_CHANGE_ANY_SIBLING);
+
+  if (node->parent == NULL)
+    g_object_unref (node);
 }
 
 GtkCssNode *
