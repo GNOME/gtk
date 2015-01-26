@@ -19,6 +19,8 @@
 
 #include "gtkcssnodeprivate.h"
 
+#include "gtkcsstransientnodeprivate.h"
+
 G_DEFINE_TYPE (GtkCssNode, gtk_css_node, G_TYPE_OBJECT)
 
 static void
@@ -70,16 +72,85 @@ gtk_css_node_init (GtkCssNode *cssnode)
 }
 
 void
-gtk_css_node_set_parent (GtkCssNode *cssnode,
+gtk_css_node_set_parent (GtkCssNode *node,
                          GtkCssNode *parent)
 {
-  cssnode->parent = parent;
+  if (node->parent == parent)
+    return;
+
+  if (node->parent != NULL)
+    {
+      if (!GTK_IS_CSS_TRANSIENT_NODE (node))
+        {
+          if (node->previous_sibling)
+            node->previous_sibling->next_sibling = node->next_sibling;
+          else
+            node->parent->first_child = node->next_sibling;
+
+          if (node->next_sibling)
+            node->next_sibling->previous_sibling = node->previous_sibling;
+          else
+            node->parent->last_child = node->previous_sibling;
+
+          node->parent->n_children--;
+        }
+
+      node->parent = NULL;
+      node->next_sibling = NULL;
+      node->previous_sibling = NULL;
+    }
+
+  if (parent)
+    {
+      node->parent = parent;
+
+      if (!GTK_IS_CSS_TRANSIENT_NODE (node))
+        {
+          parent->n_children++;
+
+          if (parent->last_child)
+            {
+              parent->last_child->next_sibling = node;
+              node->previous_sibling = parent->last_child;
+            }
+          parent->last_child = node;
+
+          if (parent->first_child == NULL)
+            parent->first_child = node;
+        }
+    }
+
+  gtk_css_node_invalidate (node, GTK_CSS_CHANGE_ANY_PARENT | GTK_CSS_CHANGE_ANY_SIBLING);
 }
 
 GtkCssNode *
 gtk_css_node_get_parent (GtkCssNode *cssnode)
 {
   return cssnode->parent;
+}
+
+GtkCssNode *
+gtk_css_node_get_first_child (GtkCssNode *cssnode)
+{
+  return cssnode->first_child;
+}
+
+GtkCssNode *
+gtk_css_node_get_last_child (GtkCssNode *cssnode)
+{
+  return cssnode->last_child;
+}
+
+GtkCssNode *
+gtk_css_node_get_previous_sibling (GtkCssNode *cssnode)
+{
+  return cssnode->previous_sibling;
+}
+
+GtkCssNode *
+gtk_css_node_get_next_sibling (GtkCssNode *cssnode)
+{
+  return cssnode->next_sibling;
 }
 
 void

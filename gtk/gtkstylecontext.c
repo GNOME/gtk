@@ -288,22 +288,14 @@ static GtkCssStyle *
 gtk_css_node_get_parent_style (GtkStyleContext *context,
                                GtkCssNode      *cssnode)
 {
-  GtkStyleContextPrivate *priv;
   GtkCssNode *parent;
 
   parent = gtk_css_node_get_parent (cssnode);
 
-  g_assert (parent == NULL || gtk_css_node_get_style (parent) != NULL);
-
-  if (parent)
-    return gtk_css_node_get_style (parent);
-
-  priv = context->priv;
-
-  if (priv->parent)
-    return gtk_style_context_lookup_style (priv->parent);
-
-  return NULL;
+  if (parent == NULL)
+    return NULL;
+  
+  return gtk_css_node_get_style (parent);
 }
 
 static void
@@ -1513,6 +1505,12 @@ gtk_style_context_set_parent (GtkStyleContext *context,
       g_object_ref (parent);
       if (priv->invalid)
         gtk_style_context_set_invalid (parent, TRUE);
+      gtk_css_node_set_parent (gtk_style_context_get_root (context),
+                               gtk_style_context_get_root (parent));
+    }
+  else
+    {
+      gtk_css_node_set_parent (gtk_style_context_get_root (context), NULL);
     }
 
   gtk_style_context_clear_parent (context);

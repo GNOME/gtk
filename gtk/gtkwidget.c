@@ -16444,11 +16444,11 @@ gtk_widget_get_style_context (GtkWidget *widget)
       if (frame_clock)
         gtk_style_context_set_frame_clock (priv->context, frame_clock);
 
+      _gtk_style_context_set_widget (priv->context, widget);
+
       if (priv->parent)
         gtk_style_context_set_parent (priv->context,
                                       gtk_widget_get_style_context (priv->parent));
-
-      _gtk_style_context_set_widget (priv->context, widget);
     }
 
   return widget->priv->context;
