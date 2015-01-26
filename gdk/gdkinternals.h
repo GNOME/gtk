@@ -240,6 +240,7 @@ struct _GdkWindow
   guint in_update : 1;
   guint geometry_dirty : 1;
   guint event_compression : 1;
+  guint frame_clock_events_paused : 1;
 
   /* The GdkWindow that has the impl, ref:ed if another window.
    * This ref is required to keep the wrapper of the impl window alive
