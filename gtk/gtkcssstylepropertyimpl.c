@@ -45,6 +45,7 @@
 #include "gtkcsscornervalueprivate.h"
 #include "gtkcsseasevalueprivate.h"
 #include "gtkcssenginevalueprivate.h"
+#include "gtkcssiconthemevalueprivate.h"
 #include "gtkcssimageprivate.h"
 #include "gtkcssimagebuiltinprivate.h"
 #include "gtkcssimagegradientprivate.h"
@@ -945,6 +946,15 @@ background_position_parse (GtkCssStyleProperty *property,
   return _gtk_css_array_value_parse (parser, _gtk_css_position_value_parse);
 }
 
+static GtkCssValue *
+icon_theme_value_parse (GtkCssStyleProperty *property,
+		        GtkCssParser        *parser)
+{
+  _gtk_css_parser_error (parser, "Only 'inherit', 'initial' or 'unset' are allowed");
+
+  return NULL;
+}
+
 /*** REGISTRATION ***/
 
 void
@@ -975,6 +985,15 @@ _gtk_css_style_property_init_properties (void)
 
   /* properties that aren't referenced when computing values
    * start here */
+  gtk_css_style_property_register        ("-gtk-icon-theme",
+                                          GTK_CSS_PROPERTY_ICON_THEME,
+                                          G_TYPE_NONE,
+                                          GTK_STYLE_PROPERTY_INHERIT,
+                                          GTK_CSS_AFFECTS_ICON,
+                                          icon_theme_value_parse,
+                                          NULL,
+                                          NULL,
+                                          _gtk_css_icon_theme_value_new());
   gtk_css_style_property_register        ("background-color",
                                           GTK_CSS_PROPERTY_BACKGROUND_COLOR,
                                           GDK_TYPE_RGBA,
