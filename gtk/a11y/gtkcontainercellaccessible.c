@@ -82,7 +82,7 @@ gtk_container_cell_widget_set (GtkAccessible *accessible)
   for (l = container->priv->children; l; l = l->next)
     gtk_accessible_set_widget (l->data, gtk_accessible_get_widget (accessible));
 
-  GTK_ACCESSIBLE_CLASS (gtk_container_cell_accessible_parent_class)->widget_unset (accessible);
+  GTK_ACCESSIBLE_CLASS (gtk_container_cell_accessible_parent_class)->widget_set (accessible);
 }
 
 static void
