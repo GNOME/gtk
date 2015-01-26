@@ -371,6 +371,8 @@ void
 _gdk_input_wintab_init_check (GdkDeviceManager *_device_manager)
 {
   GdkDeviceManagerWin32 *device_manager = (GdkDeviceManagerWin32 *)_device_manager;
+  GdkDisplay *display = gdk_device_manager_get_display (_device_manager);
+  GdkWindow *root = gdk_screen_get_root_window (gdk_display_get_default_screen (display));
   static gboolean wintab_initialized = FALSE;
   GdkDeviceWintab *device;
   GdkWindowAttr wa;
@@ -459,7 +461,7 @@ _gdk_input_wintab_init_check (GdkDeviceManager *_device_manager)
   wa.x = -100;
   wa.y = -100;
   wa.window_type = GDK_WINDOW_TOPLEVEL;
-  if ((wintab_window = gdk_window_new (NULL, &wa, GDK_WA_X|GDK_WA_Y)) == NULL)
+  if ((wintab_window = gdk_window_new (root, &wa, GDK_WA_X | GDK_WA_Y)) == NULL)
     {
       g_warning ("gdk_input_wintab_init: gdk_window_new failed");
       return;
