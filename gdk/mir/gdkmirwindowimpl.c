@@ -527,6 +527,7 @@ gdk_mir_window_impl_move_resize (GdkWindow *window,
   g_printerr ("\n");
   */
   GdkMirWindowImpl *impl = GDK_MIR_WINDOW_IMPL (window->impl);
+  gboolean recreate_surface = FALSE;
 
   /* Redraw parent where we moved from */
   if (should_render_in_parent (window))
@@ -540,10 +541,11 @@ gdk_mir_window_impl_move_resize (GdkWindow *window,
           window->x = x;
           window->y = y;
         }
-      else
+      else if (x != impl->transient_x || y != impl->transient_y)
         {
           impl->transient_x = x;
           impl->transient_y = y;
+          recreate_surface = TRUE;
         }
     }
 
@@ -553,13 +555,14 @@ gdk_mir_window_impl_move_resize (GdkWindow *window,
     /* We accept any resize */
     window->width = width;
     window->height = height;
-
-    if (impl->surface)
-      {
-        ensure_no_surface (window);
-        ensure_surface (window);
-      }
+    recreate_surface = TRUE;
   }
+
+  if (recreate_surface && impl->surface)
+    {
+      ensure_no_surface (window);
+      ensure_surface (window);
+    }
 
   /* Redraw parent where we moved to */
   if (should_render_in_parent (window))
