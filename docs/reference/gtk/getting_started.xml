@@ -5,6 +5,21 @@
 <chapter id="gtk-getting-started" xmlns:xi="http://www.w3.org/2003/XInclude">
   <title>Getting Started with GTK+</title>
 
+  <para>GTK+ is a <ulink url="http://en.wikipedia.org/wiki/Widget_toolkit">
+  widget toolkit</ulink>. Each user interface created by 
+  GTK+ consists of widgets. This is implemented in C using 
+  <link linkend="gobject">GObject</link>, an object-oriented framework for C.
+  Widgets are organized in a hierachy. The window widget is the main container.
+  The user interface is then built by adding buttons, drop-down menus, input 
+  fields, and other widgets to the window.
+  If you are creating advanced or complex user interfaces it is recommended to
+  use #GtkBuilder and its GTK-specific markup description language, instead of
+  assembling the interface manually. You can also use a visual user interface
+  editor, like <ulink url="https://glade.gnome.org/">Glade</ulink>.</para>
+  
+  <para>GTK+ is event-driven. The toolkit listens for events such as
+  a click on a button, and passes the event to your application.</para>
+
   <para>This chapter contains some tutorial information to get you
   started with GTK+ programming. It assumes that you have GTK+, its
   dependencies and a C compiler installed and ready to use. If you
