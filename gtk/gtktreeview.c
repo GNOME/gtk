@@ -5289,14 +5289,14 @@ G_GNUC_END_IGNORE_DEPRECATIONS
 
 	  if (draw_hgrid_lines)
 	    {
-	      if (background_area.y > 0)
+	      if (background_area.y >= clip.y)
                 gtk_tree_view_draw_line (tree_view, cr,
                                          GTK_TREE_VIEW_GRID_LINE,
                                          background_area.x, background_area.y,
                                          background_area.x + background_area.width,
 			                 background_area.y);
 
-	      if (y_offset + max_height >= clip.height)
+	      if (background_area.y + max_height < clip.y + clip.height)
                 gtk_tree_view_draw_line (tree_view, cr,
                                          GTK_TREE_VIEW_GRID_LINE,
                                          background_area.x, background_area.y + max_height,
