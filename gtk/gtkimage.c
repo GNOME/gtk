@@ -29,6 +29,7 @@
 #include <cairo-gobject.h>
 
 #include "gtkcontainer.h"
+#include "gtkcssstylepropertyprivate.h"
 #include "gtkiconhelperprivate.h"
 #include "gtkimageprivate.h"
 #include "deprecated/gtkiconfactory.h"
@@ -1873,12 +1874,19 @@ icon_theme_changed (GtkImage *image)
 static void
 gtk_image_style_updated (GtkWidget *widget)
 {
+  static GtkBitmask *affects_icon = NULL;
   GtkImage *image = GTK_IMAGE (widget);
   GtkImagePrivate *priv = image->priv;
+  const GtkBitmask *changes;
 
   GTK_WIDGET_CLASS (gtk_image_parent_class)->style_updated (widget);
 
-  icon_theme_changed (image);
+  if (G_UNLIKELY (affects_icon == NULL))
+    affects_icon = _gtk_css_style_property_get_mask_affecting (GTK_CSS_AFFECTS_ICON);
+
+  changes = _gtk_style_context_get_changes (gtk_widget_get_style_context (widget));
+  if (changes == NULL || _gtk_bitmask_intersects (changes, affects_icon))
+    icon_theme_changed (image);
   priv->baseline_align = 0.0;
 }
 
