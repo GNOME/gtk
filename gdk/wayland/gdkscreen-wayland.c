@@ -110,6 +110,7 @@ free_monitor (gpointer data)
   if (monitor == NULL)
     return;
 
+  wl_output_destroy (monitor->output);
   g_free (monitor->output_name);
   g_free (monitor->manufacturer);
 
