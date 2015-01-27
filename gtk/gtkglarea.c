@@ -322,8 +322,21 @@ gtk_gl_area_real_create_context (GtkGLArea *area)
   GError *error = NULL;
   GdkGLContext *context;
 
-  context = gdk_window_create_gl_context (gtk_widget_get_window (widget), priv->profile, &priv->error);
-  gtk_gl_area_set_error (area, error);
+  context = gdk_window_create_gl_context (gtk_widget_get_window (widget), priv->profile, &error);
+  if (priv->error != NULL)
+    {
+      gtk_gl_area_set_error (area, error);
+      g_clear_object (&context);
+      return NULL;
+    }
+
+  gdk_gl_context_realize (context, &error);
+  if (priv->error != NULL)
+    {
+      gtk_gl_area_set_error (area, error);
+      g_clear_object (&context);
+      return NULL;
+    }
 
   return context;
 }

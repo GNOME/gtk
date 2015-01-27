@@ -534,6 +534,185 @@ gdk_x11_gl_context_texture_from_surface (GdkGLContext *paint_context,
   return TRUE;
 }
 
+static XVisualInfo *
+find_xvisinfo_for_fbconfig (GdkDisplay  *display,
+                            GLXFBConfig  config)
+{
+  Display *dpy = gdk_x11_display_get_xdisplay (display);
+
+  return glXGetVisualFromFBConfig (dpy, config);
+}
+
+static GLXContext
+create_gl3_context (GdkDisplay   *display,
+                    GLXFBConfig   config,
+                    GdkGLContext *share)
+{
+  /* There are no profiles before OpenGL 3.2.
+   *
+   * The GLX_ARB_create_context_profile spec says:
+   *
+   *   If the requested OpenGL version is less than 3.2,
+   *   GLX_CONTEXT_PROFILE_MASK_ARB is ignored and the functionality
+   *   of the context is determined solely by the requested version.
+   *
+   * Which means we can ask for the CORE_PROFILE_BIT without asking for
+   * a 3.2 version.
+   */
+  static const int attrib_list[] = {
+    GLX_CONTEXT_PROFILE_MASK_ARB, GLX_CONTEXT_CORE_PROFILE_BIT_ARB,
+    GLX_CONTEXT_MAJOR_VERSION_ARB, 3,
+    GLX_CONTEXT_MINOR_VERSION_ARB, 2,
+    None,
+  };
+
+  GdkX11GLContext *context_x11 = NULL;
+
+  if (share != NULL)
+    context_x11 = GDK_X11_GL_CONTEXT (share);
+
+  return glXCreateContextAttribsARB (gdk_x11_display_get_xdisplay (display),
+                                     config,
+                                     context_x11 != NULL ? context_x11->glx_context : NULL,
+                                     True,
+                                     attrib_list);
+}
+
+static GLXContext
+create_gl_context (GdkDisplay   *display,
+                   GLXFBConfig   config,
+                   GdkGLContext *share)
+{
+  GdkX11GLContext *context_x11 = NULL;
+
+  if (share != NULL)
+    context_x11 = GDK_X11_GL_CONTEXT (share);
+
+  return glXCreateNewContext (gdk_x11_display_get_xdisplay (display),
+                              config,
+                              GLX_RGBA_TYPE,
+                              context_x11 != NULL ? context_x11->glx_context : NULL,
+                              True);
+}
+
+static gboolean
+gdk_x11_gl_context_realize (GdkGLContext  *context,
+                            GError       **error)
+{
+  GdkDisplay *display;
+  GdkX11GLContext *context_x11;
+  GLXWindow drawable;
+  XVisualInfo *xvisinfo;
+  Display *dpy;
+  DrawableInfo *info;
+  GdkGLProfile profile;
+  GdkGLContext *share;
+  GdkWindow *window;
+
+  window = gdk_gl_context_get_window (context);
+  display = gdk_window_get_display (window);
+  dpy = gdk_x11_display_get_xdisplay (display);
+  context_x11 = GDK_X11_GL_CONTEXT (context);
+  profile = gdk_gl_context_get_profile (context);
+  share = gdk_gl_context_get_shared_context (context);
+
+  /* we check for the presence of the GLX_ARB_create_context_profile
+   * extension before checking for a GLXFBConfig.
+   */
+  if (profile == GDK_GL_PROFILE_3_2_CORE)
+    {
+      GDK_NOTE (OPENGL, g_print ("Creating core GLX context\n"));
+      context_x11->glx_context = create_gl3_context (display, context_x11->glx_config, share);
+    }
+  else
+    {
+      /* GDK_GL_PROFILE_DEFAULT is currently
+       * equivalent to the LEGACY profile
+       */
+      profile = GDK_GL_PROFILE_LEGACY;
+      GDK_NOTE (OPENGL, g_print ("Creating legacy GLX context\n"));
+      context_x11->glx_context = create_gl_context (display, context_x11->glx_config, share);
+    }
+
+  if (context_x11->glx_context == NULL)
+    {
+      g_set_error_literal (error, GDK_GL_ERROR,
+                           GDK_GL_ERROR_NOT_AVAILABLE,
+                           _("Unable to create a GL context"));
+      return FALSE;
+    }
+
+  xvisinfo = find_xvisinfo_for_fbconfig (display, context_x11->glx_config);
+
+  info = get_glx_drawable_info (window->impl_window);
+  if (info == NULL)
+    {
+      XSetWindowAttributes attrs;
+      unsigned long mask;
+
+      gdk_x11_display_error_trap_push (display);
+
+      info = g_slice_new0 (DrawableInfo);
+      info->display = display;
+      info->last_frame_counter = 0;
+
+      attrs.override_redirect = True;
+      attrs.colormap = XCreateColormap (dpy, DefaultRootWindow (dpy), xvisinfo->visual, AllocNone);
+      attrs.border_pixel = 0;
+      mask = CWOverrideRedirect | CWColormap | CWBorderPixel;
+      info->dummy_xwin = XCreateWindow (dpy, DefaultRootWindow (dpy),
+                                        -100, -100, 1, 1,
+                                        0,
+                                        xvisinfo->depth,
+                                        CopyFromParent,
+                                        xvisinfo->visual,
+                                        mask,
+                                        &attrs);
+      XMapWindow(dpy, info->dummy_xwin);
+
+      if (GDK_X11_DISPLAY (display)->glx_version >= 13)
+        {
+          info->glx_drawable = glXCreateWindow (dpy, context_x11->glx_config,
+                                                gdk_x11_window_get_xid (window->impl_window),
+                                                NULL);
+          info->dummy_glx = glXCreateWindow (dpy, context_x11->glx_config, info->dummy_xwin, NULL);
+        }
+
+      if (gdk_x11_display_error_trap_pop (display))
+        {
+          g_set_error_literal (error, GDK_GL_ERROR,
+                               GDK_GL_ERROR_NOT_AVAILABLE,
+                               _("Unable to create a GL context"));
+
+          XFree (xvisinfo);
+          drawable_info_free (info);
+          glXDestroyContext (dpy, context_x11->glx_context);
+          context_x11->glx_context = NULL;
+
+          return FALSE;
+        }
+
+      set_glx_drawable_info (window->impl_window, info);
+    }
+
+  XFree (xvisinfo);
+
+  if (context_x11->is_attached)
+    drawable = info->glx_drawable ? info->glx_drawable : gdk_x11_window_get_xid (window->impl_window);
+  else
+    drawable = info->dummy_glx ? info->dummy_glx : info->dummy_xwin;
+
+  context_x11->is_direct = glXIsDirect (dpy, context_x11->glx_context);
+  context_x11->drawable = drawable;
+
+  GDK_NOTE (OPENGL,
+            g_print ("Realized GLX context[%p], %s\n",
+                     context_x11->glx_context,
+                     context_x11->is_direct ? "direct" : "indirect"));
+
+  return TRUE;
+}
+
 static void
 gdk_x11_gl_context_dispose (GObject *gobject)
 {
@@ -562,6 +741,7 @@ gdk_x11_gl_context_class_init (GdkX11GLContextClass *klass)
   GdkGLContextClass *context_class = GDK_GL_CONTEXT_CLASS (klass);
   GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
 
+  context_class->realize = gdk_x11_gl_context_realize;
   context_class->end_frame = gdk_x11_gl_context_end_frame;
   context_class->texture_from_surface = gdk_x11_gl_context_texture_from_surface;
 
@@ -645,11 +825,10 @@ gdk_x11_screen_init_gl (GdkScreen *screen)
 #define MAX_GLX_ATTRS   30
 
 static gboolean
-find_fbconfig_for_visual (GdkDisplay        *display,
-			  GdkVisual         *visual,
-                          GLXFBConfig       *fb_config_out,
-                          XVisualInfo      **visinfo_out,
-                          GError           **error)
+find_fbconfig_for_visual (GdkDisplay   *display,
+			  GdkVisual    *visual,
+                          GLXFBConfig  *fb_config_out,
+                          GError      **error)
 {
   static int attrs[MAX_GLX_ATTRS];
   Display *dpy = gdk_x11_display_get_xdisplay (display);
@@ -710,16 +889,15 @@ find_fbconfig_for_visual (GdkDisplay        *display,
         continue;
 
       if (visinfo->visualid != xvisual_id)
-        continue;
+        {
+          XFree (visinfo);
+          continue;
+        }
 
       if (fb_config_out != NULL)
         *fb_config_out = configs[i];
 
-      if (visinfo_out != NULL)
-        *visinfo_out = visinfo;
-      else
-        XFree (visinfo);
-
+      XFree (visinfo);
       retval = TRUE;
       goto out;
     }
@@ -732,58 +910,6 @@ out:
   XFree (configs);
 
   return retval;
-}
-
-static GLXContext
-create_gl3_context (GdkDisplay   *display,
-                    GLXFBConfig   config,
-                    GdkGLContext *share)
-{
-  /* There are no profiles before OpenGL 3.2.
-   *
-   * The GLX_ARB_create_context_profile spec says:
-   *
-   *   If the requested OpenGL version is less than 3.2,
-   *   GLX_CONTEXT_PROFILE_MASK_ARB is ignored and the functionality
-   *   of the context is determined solely by the requested version.
-   *
-   * Which means we can ask for the CORE_PROFILE_BIT without asking for
-   * a 3.2 version.
-   */
-  static const int attrib_list[] = {
-    GLX_CONTEXT_PROFILE_MASK_ARB, GLX_CONTEXT_CORE_PROFILE_BIT_ARB,
-    GLX_CONTEXT_MAJOR_VERSION_ARB, 3,
-    GLX_CONTEXT_MINOR_VERSION_ARB, 2,
-    None,
-  };
-
-  GdkX11GLContext *context_x11 = NULL;
-
-  if (share != NULL)
-    context_x11 = GDK_X11_GL_CONTEXT (share);
-
-  return glXCreateContextAttribsARB (gdk_x11_display_get_xdisplay (display),
-                                     config,
-                                     context_x11 != NULL ? context_x11->glx_context : NULL,
-                                     True,
-                                     attrib_list);
-}
-
-static GLXContext
-create_gl_context (GdkDisplay   *display,
-                   GLXFBConfig   config,
-                   GdkGLContext *share)
-{
-  GdkX11GLContext *context_x11 = NULL;
-
-  if (share != NULL)
-    context_x11 = GDK_X11_GL_CONTEXT (share);
-
-  return glXCreateNewContext (gdk_x11_display_get_xdisplay (display),
-                              config,
-                              GLX_RGBA_TYPE,
-                              context_x11 != NULL ? context_x11->glx_context : NULL,
-                              True);
 }
 
 struct glvisualinfo {
@@ -951,11 +1077,12 @@ save_cached_gl_visuals (GdkDisplay *display, int system, int rgba)
   visualdata[1] = rgba;
 
   gdk_x11_display_error_trap_push (display);
-  XChangeProperty(dpy, DefaultRootWindow (dpy), gdk_x11_get_xatom_by_name_for_display (display, "GDK_VISUALS"),
-                  XA_INTEGER, 32, PropModeReplace, (unsigned char *)visualdata, 2);
+  XChangeProperty (dpy, DefaultRootWindow (dpy),
+                   gdk_x11_get_xatom_by_name_for_display (display, "GDK_VISUALS"),
+                   XA_INTEGER, 32, PropModeReplace,
+                   (unsigned char *)visualdata, 2);
   gdk_x11_display_error_trap_pop_ignored (display);
 }
-
 
 void
 _gdk_x11_screen_update_visuals_for_gl (GdkScreen *screen)
@@ -1038,26 +1165,23 @@ _gdk_x11_screen_update_visuals_for_gl (GdkScreen *screen)
                           x11_screen->rgba_visual ? gdk_x11_visual_get_xvisual (x11_screen->rgba_visual)->visualid : 0);
 }
 
-
 GdkGLContext *
 gdk_x11_window_create_gl_context (GdkWindow    *window,
-				  gboolean      attached,
-				  GdkGLProfile  profile,
-				  GdkGLContext *share,
-				  GError      **error)
+                                  gboolean      attached,
+                                  GdkGLProfile  profile,
+                                  GdkGLContext *share,
+                                  GError      **error)
 {
   GdkDisplay *display;
   GdkX11GLContext *context;
   GdkVisual *visual;
   GLXFBConfig config;
-  GLXContext glx_context;
-  GLXWindow drawable;
-  gboolean is_direct;
-  XVisualInfo *xvisinfo;
-  Display *dpy;
-  DrawableInfo *info;
 
   display = gdk_window_get_display (window);
+
+  /* GDK_GL_PROFILE_DEFAULT is currently equivalent to the LEGACY profile */
+  if (profile == GDK_GL_PROFILE_DEFAULT)
+    profile = GDK_GL_PROFILE_LEGACY;
 
   if (!gdk_x11_screen_init_gl (gdk_window_get_screen (window)))
     {
@@ -1079,100 +1203,8 @@ gdk_x11_window_create_gl_context (GdkWindow    *window,
     }
 
   visual = gdk_window_get_visual (window);
-
-  if (!find_fbconfig_for_visual (display, visual, &config, &xvisinfo, error))
+  if (!find_fbconfig_for_visual (display, visual, &config, error))
     return NULL;
-
-  dpy = gdk_x11_display_get_xdisplay (display);
-
-  /* we check for the presence of the GLX_ARB_create_context_profile
-   * extension before checking for a GLXFBConfig.
-   */
-  if (profile == GDK_GL_PROFILE_3_2_CORE)
-    {
-      GDK_NOTE (OPENGL, g_print ("Creating core GLX context\n"));
-      glx_context = create_gl3_context (display, config, share);
-    }
-  else
-    {
-      /* GDK_GL_PROFILE_DEFAULT is currently
-       * equivalent to the LEGACY profile
-       */
-      profile = GDK_GL_PROFILE_LEGACY;
-      GDK_NOTE (OPENGL, g_print ("Creating legacy GLX context\n"));
-      glx_context = create_gl_context (display, config, share);
-    }
-
-  if (glx_context == NULL)
-    {
-      g_set_error_literal (error, GDK_GL_ERROR,
-                           GDK_GL_ERROR_NOT_AVAILABLE,
-                           _("Unable to create a GL context"));
-      return NULL;
-    }
-
-  is_direct = glXIsDirect (dpy, glx_context);
-
-  info = get_glx_drawable_info (window->impl_window);
-  if (info == NULL)
-    {
-      XSetWindowAttributes attrs;
-      unsigned long mask;
-
-      gdk_x11_display_error_trap_push (display);
-
-      info = g_slice_new0 (DrawableInfo);
-      info->display = display;
-      info->last_frame_counter = 0;
-
-      attrs.override_redirect = True;
-      attrs.colormap = XCreateColormap (dpy, DefaultRootWindow (dpy), xvisinfo->visual, AllocNone);
-      attrs.border_pixel = 0;
-      mask = CWOverrideRedirect | CWColormap | CWBorderPixel;
-      info->dummy_xwin = XCreateWindow (dpy, DefaultRootWindow (dpy),
-					-100, -100, 1, 1,
-					0,
-					xvisinfo->depth,
-					CopyFromParent,
-					xvisinfo->visual,
-					mask,
-					&attrs);
-      XMapWindow(dpy, info->dummy_xwin);
-
-      if (GDK_X11_DISPLAY (display)->glx_version >= 13)
-	{
-	  info->glx_drawable = glXCreateWindow (dpy, config,
-						gdk_x11_window_get_xid (window->impl_window),
-						NULL);
-	  info->dummy_glx = glXCreateWindow (dpy, config, info->dummy_xwin, NULL);
-	}
-
-      if (gdk_x11_display_error_trap_pop (display))
-	{
-	  g_set_error_literal (error, GDK_GL_ERROR,
-			       GDK_GL_ERROR_NOT_AVAILABLE,
-			       _("Unable to create a GL context"));
-
-	  drawable_info_free (info);
-	  glXDestroyContext (dpy, glx_context);
-
-	  return NULL;
-	}
-
-      set_glx_drawable_info (window->impl_window, info);
-    }
-
-  XFree (xvisinfo);
-
-  if (attached)
-    drawable = info->glx_drawable ? info->glx_drawable : gdk_x11_window_get_xid (window->impl_window);
-  else
-    drawable = info->dummy_glx ? info->dummy_glx : info->dummy_xwin;
-
-  GDK_NOTE (OPENGL,
-            g_print ("Created GLX context[%p], %s\n",
-                     glx_context,
-                     is_direct ? "direct" : "indirect"));
 
   context = g_object_new (GDK_TYPE_X11_GL_CONTEXT,
                           "display", display,
@@ -1183,10 +1215,7 @@ gdk_x11_window_create_gl_context (GdkWindow    *window,
 
   context->profile = profile;
   context->glx_config = config;
-  context->glx_context = glx_context;
-  context->drawable = drawable;
   context->is_attached = attached;
-  context->is_direct = is_direct;
 
   return GDK_GL_CONTEXT (context);
 }

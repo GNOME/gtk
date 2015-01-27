@@ -1116,7 +1116,6 @@ GdkGLContext * gdk_window_create_gl_context    (GdkWindow      *window,
                                                 GdkGLProfile    profile,
                                                 GError        **error);
 
-
 G_END_DECLS
 
 #endif /* __GDK_WINDOW_H__ */

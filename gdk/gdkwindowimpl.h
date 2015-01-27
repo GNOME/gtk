@@ -296,13 +296,15 @@ struct _GdkWindowImplClass
                                            GdkGLProfile    profile,
                                            GdkGLContext   *share,
                                            GError        **error);
+  gboolean     (* realize_gl_context)     (GdkWindow      *window,
+                                           GdkGLContext   *context,
+                                           GError        **error);
   void         (*invalidate_for_new_frame)(GdkWindow      *window,
                                            cairo_region_t *update_area);
 };
 
 /* Interface Functions */
 GType gdk_window_impl_get_type (void) G_GNUC_CONST;
-
 
 G_END_DECLS
 

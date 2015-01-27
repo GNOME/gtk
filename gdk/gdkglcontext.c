@@ -89,6 +89,7 @@ typedef struct {
   guint use_texture_rectangle : 1;
   guint has_gl_framebuffer_blit : 1;
   guint has_frame_terminator : 1;
+  guint extensions_checked : 1;
 
   GdkGLContextPaintData *paint_data;
 } GdkGLContextPrivate;
@@ -389,11 +390,46 @@ gdk_gl_context_has_frame_terminator (GdkGLContext *context)
   return priv->has_frame_terminator;
 }
 
+/**
+ * gdk_gl_context_realize:
+ * @context: a #GdkGLContext
+ * @error: return location for a #GError
+ *
+ * Realizes the given #GdkGLContext.
+ *
+ * It is safe to call this function on a realized #GdkGLContext.
+ *
+ * Returns: %TRUE if the context is realized
+ *
+ * Since: 3.16
+ */
+gboolean
+gdk_gl_context_realize (GdkGLContext  *context,
+                        GError       **error)
+{
+  GdkGLContextPrivate *priv = gdk_gl_context_get_instance_private (context);
+
+  g_return_val_if_fail (GDK_IS_GL_CONTEXT (context), FALSE);
+
+  if (priv->realized)
+    return priv->realized;
+
+  priv->realized = GDK_GL_CONTEXT_GET_CLASS (context)->realize (context, error);
+
+  return priv->realized;
+}
+
 static void
-gdk_gl_context_realize (GdkGLContext *context)
+gdk_gl_context_check_extensions (GdkGLContext *context)
 {
   GdkGLContextPrivate *priv = gdk_gl_context_get_instance_private (context);
   gboolean has_npot, has_texture_rectangle;
+
+  if (!priv->realized)
+    return;
+
+  if (priv->extensions_checked)
+    return;
 
   has_npot = epoxy_has_gl_extension ("GL_ARB_texture_non_power_of_two");
   has_texture_rectangle = epoxy_has_gl_extension ("GL_ARB_texture_rectangle");
@@ -401,7 +437,7 @@ gdk_gl_context_realize (GdkGLContext *context)
   priv->has_gl_framebuffer_blit = epoxy_has_gl_extension ("GL_EXT_framebuffer_blit");
   priv->has_frame_terminator = epoxy_has_gl_extension ("GL_GREMEDY_frame_terminator");
 
-  if (_gdk_gl_flags & GDK_GL_TEXTURE_RECTANGLE)
+  if (G_UNLIKELY (_gdk_gl_flags & GDK_GL_TEXTURE_RECTANGLE))
     priv->use_texture_rectangle = TRUE;
   else if (has_npot)
     priv->use_texture_rectangle = FALSE;
@@ -410,7 +446,7 @@ gdk_gl_context_realize (GdkGLContext *context)
   else
     g_warning ("GL implementation doesn't support any form of non-power-of-two textures");
 
-  priv->realized = TRUE;
+  priv->extensions_checked = TRUE;
 }
 
 /**
@@ -433,11 +469,24 @@ gdk_gl_context_make_current (GdkGLContext *context)
   if (current == context)
     return;
 
+  /* we need to realize the GdkGLContext if it wasn't explicitly realized */
+  if (!priv->realized)
+    {
+      GError *error = NULL;
+
+      gdk_gl_context_realize (context, &error);
+      if (error != NULL)
+        {
+          g_critical ("Could not realize the GL context: %s", error->message);
+          g_error_free (error);
+          return;
+        }
+    }
+
   if (gdk_display_make_gl_context_current (priv->display, context))
     {
       g_private_replace (&thread_current_context, g_object_ref (context));
-      if (!priv->realized)
-        gdk_gl_context_realize (context);
+      gdk_gl_context_check_extensions (context);
     }
 }
 
