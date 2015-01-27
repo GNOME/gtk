@@ -100,6 +100,47 @@ gdk_wayland_window_invalidate_for_new_frame (GdkWindow      *window,
     }
 }
 
+static gboolean
+gdk_wayland_gl_context_realize (GdkGLContext *context,
+                                GError      **error)
+{
+  GdkWaylandGLContext *context_wayland = GDK_WAYLAND_GL_CONTEXT (context);
+  GdkDisplay *display = gdk_gl_context_get_display (context);
+  GdkGLContext *share = gdk_gl_context_get_shared_context (context);
+  GdkGLProfile profile = gdk_gl_context_get_profile (context);
+  GdkWaylandDisplay *display_wayland = GDK_WAYLAND_DISPLAY (display);
+  EGLContext ctx;
+  EGLint context_attribs[3];
+  int i;
+
+  i = 0;
+  if (profile == GDK_GL_PROFILE_3_2_CORE)
+    {
+      context_attribs[i++] = EGL_CONTEXT_OPENGL_PROFILE_MASK_KHR;
+      context_attribs[i++] = EGL_CONTEXT_OPENGL_CORE_PROFILE_BIT_KHR;
+    }
+  context_attribs[i++] = EGL_NONE;
+
+  ctx = eglCreateContext (display_wayland->egl_display,
+                          context_wayland->egl_config,
+                          share != NULL ? GDK_WAYLAND_GL_CONTEXT (share)->egl_context
+                                        : EGL_NO_CONTEXT,
+                          context_attribs);
+  if (ctx == NULL)
+    {
+      g_set_error_literal (error, GDK_GL_ERROR,
+                           GDK_GL_ERROR_NOT_AVAILABLE,
+                           _("Unable to create a GL context"));
+      return FALSE;
+    }
+
+  GDK_NOTE (OPENGL, g_print ("Created EGL context[%p]\n", ctx));
+
+  context_wayland->egl_context = ctx;
+
+  return TRUE;
+}
+
 static void
 gdk_wayland_gl_context_end_frame (GdkGLContext *context,
                                   cairo_region_t *painted,
@@ -142,11 +183,13 @@ gdk_wayland_gl_context_end_frame (GdkGLContext *context,
 static void
 gdk_wayland_gl_context_class_init (GdkWaylandGLContextClass *klass)
 {
-  GdkGLContextClass *context_class = GDK_GL_CONTEXT_CLASS (klass);
   GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
+  GdkGLContextClass *context_class = GDK_GL_CONTEXT_CLASS (klass);
 
-  context_class->end_frame = gdk_wayland_gl_context_end_frame;
   gobject_class->dispose = gdk_x11_gl_context_dispose;
+
+  context_class->realize = gdk_wayland_gl_context_realize;
+  context_class->end_frame = gdk_wayland_gl_context_end_frame;
 }
 
 static void
@@ -213,9 +256,9 @@ gdk_wayland_display_init_gl (GdkDisplay *display)
 #define MAX_EGL_ATTRS   30
 
 static gboolean
-find_eglconfig_for_window (GdkWindow        *window,
-                           EGLConfig         *egl_config_out,
-                           GError           **error)
+find_eglconfig_for_window (GdkWindow  *window,
+                           EGLConfig  *egl_config_out,
+                           GError    **error)
 {
   GdkDisplay *display = gdk_window_get_display (window);
   GdkWaylandDisplay *display_wayland = GDK_WAYLAND_DISPLAY (display);
@@ -294,10 +337,7 @@ gdk_wayland_window_create_gl_context (GdkWindow     *window,
   GdkDisplay *display = gdk_window_get_display (window);
   GdkWaylandDisplay *display_wayland = GDK_WAYLAND_DISPLAY (display);
   GdkWaylandGLContext *context;
-  EGLContext ctx;
   EGLConfig config;
-  int i;
-  EGLint context_attribs[3];
 
   if (!gdk_wayland_display_init_gl (display))
     {
@@ -322,29 +362,6 @@ gdk_wayland_window_create_gl_context (GdkWindow     *window,
   if (!find_eglconfig_for_window (window, &config, error))
     return NULL;
 
-  i = 0;
-  if (profile == GDK_GL_PROFILE_3_2_CORE)
-    {
-      context_attribs[i++] = EGL_CONTEXT_OPENGL_PROFILE_MASK_KHR;
-      context_attribs[i++] = EGL_CONTEXT_OPENGL_CORE_PROFILE_BIT_KHR;
-    }
-  context_attribs[i++] = EGL_NONE;
-
-  ctx = eglCreateContext (display_wayland->egl_display,
-                          config,
-                          share ? GDK_WAYLAND_GL_CONTEXT (share)->egl_context : EGL_NO_CONTEXT,
-                          context_attribs);
-  if (ctx == NULL)
-    {
-      g_set_error_literal (error, GDK_GL_ERROR,
-                           GDK_GL_ERROR_NOT_AVAILABLE,
-                           _("Unable to create a GL context"));
-      return NULL;
-    }
-
-  GDK_NOTE (OPENGL,
-            g_print ("Created EGL context[%p]\n", ctx));
-
   context = g_object_new (GDK_TYPE_WAYLAND_GL_CONTEXT,
                           "display", display,
                           "window", window,
@@ -353,7 +370,6 @@ gdk_wayland_window_create_gl_context (GdkWindow     *window,
                           NULL);
 
   context->egl_config = config;
-  context->egl_context = ctx;
   context->is_attached = attached;
 
   return GDK_GL_CONTEXT (context);

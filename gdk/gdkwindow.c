@@ -2724,8 +2724,11 @@ gdk_window_ref_impl_surface (GdkWindow *window)
 }
 
 GdkGLContext *
-gdk_window_get_paint_gl_context (GdkWindow *window, GError **error)
+gdk_window_get_paint_gl_context (GdkWindow  *window,
+                                 GError    **error)
 {
+  GError *internal_error = NULL;
+
   if (_gdk_gl_flags & GDK_GL_DISABLE)
     {
       g_set_error_literal (error, GDK_GL_ERROR,
@@ -2741,19 +2744,34 @@ gdk_window_get_paint_gl_context (GdkWindow *window, GError **error)
                                                                      TRUE,
                                                                      GDK_GL_PROFILE_3_2_CORE,
                                                                      NULL,
-                                                                     error);
+                                                                     &internal_error);
       if (window->impl_window->gl_paint_context == NULL &&
-          g_error_matches (*error, GDK_GL_ERROR,
+          g_error_matches (internal_error, GDK_GL_ERROR,
                            GDK_GL_ERROR_UNSUPPORTED_PROFILE))
         {
-          g_clear_error (error);
+          g_clear_error (&internal_error);
           window->impl_window->gl_paint_context =
             GDK_WINDOW_IMPL_GET_CLASS (window->impl)->create_gl_context (window->impl_window,
                                                                          TRUE,
                                                                          GDK_GL_PROFILE_DEFAULT,
                                                                          NULL,
-                                                                         error);
+                                                                         &internal_error);
         }
+    }
+
+  if (internal_error != NULL)
+    {
+      g_propagate_error (error, internal_error);
+      g_clear_object (&(window->impl_window->gl_paint_context));
+      return NULL;
+    }
+
+  gdk_gl_context_realize (window->impl_window->gl_paint_context, &internal_error);
+  if (internal_error != NULL)
+    {
+      g_propagate_error (error, internal_error);
+      g_clear_object (&(window->impl_window->gl_paint_context));
+      return NULL;
     }
 
   return window->impl_window->gl_paint_context;
@@ -2770,6 +2788,9 @@ gdk_window_get_paint_gl_context (GdkWindow *window, GError **error)
  * is disconnected from any particular window or surface.
  *
  * If the creation of the #GdkGLContext failed, @error will be set.
+ *
+ * Before using the returned #GdkGLContext, you will need to
+ * call gdk_gl_context_make_current().
  *
  * Returns: (transfer full): the newly created #GdkGLContext, or
  * %NULL on error

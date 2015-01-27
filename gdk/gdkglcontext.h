@@ -43,18 +43,24 @@ GDK_AVAILABLE_IN_3_16
 GType gdk_gl_context_get_type (void) G_GNUC_CONST;
 
 GDK_AVAILABLE_IN_3_16
-GdkDisplay *            gdk_gl_context_get_display      (GdkGLContext *context);
+GdkDisplay *            gdk_gl_context_get_display              (GdkGLContext  *context);
 GDK_AVAILABLE_IN_3_16
-GdkWindow *             gdk_gl_context_get_window       (GdkGLContext *context);
+GdkWindow *             gdk_gl_context_get_window               (GdkGLContext  *context);
 GDK_AVAILABLE_IN_3_16
-GdkGLProfile            gdk_gl_context_get_profile      (GdkGLContext *context);
+GdkGLProfile            gdk_gl_context_get_profile              (GdkGLContext  *context);
+GDK_AVAILABLE_IN_3_16
+GdkGLContext *          gdk_gl_context_get_shared_context       (GdkGLContext  *context);
 
 GDK_AVAILABLE_IN_3_16
-void                    gdk_gl_context_make_current     (GdkGLContext *context);
+gboolean                gdk_gl_context_realize                  (GdkGLContext  *context,
+                                                                 GError       **error);
+
 GDK_AVAILABLE_IN_3_16
-GdkGLContext *          gdk_gl_context_get_current      (void);
+void                    gdk_gl_context_make_current             (GdkGLContext  *context);
 GDK_AVAILABLE_IN_3_16
-void                    gdk_gl_context_clear_current    (void);
+GdkGLContext *          gdk_gl_context_get_current              (void);
+GDK_AVAILABLE_IN_3_16
+void                    gdk_gl_context_clear_current            (void);
 
 G_END_DECLS
 

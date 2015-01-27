@@ -40,6 +40,9 @@ struct _GdkGLContextClass
 {
   GObjectClass parent_class;
 
+  gboolean (* realize) (GdkGLContext *context,
+                        GError **error);
+
   void (* end_frame)    (GdkGLContext *context,
                          cairo_region_t *painted,
                          cairo_region_t *damage);
