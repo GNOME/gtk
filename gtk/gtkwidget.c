@@ -2268,7 +2268,7 @@ G_GNUC_END_IGNORE_DEPRECATIONS
 		  G_TYPE_NONE, 1,
 		  GDK_TYPE_EVENT | G_SIGNAL_TYPE_STATIC_SCOPE);
   g_signal_set_va_marshaller (widget_signals[EVENT_AFTER], G_TYPE_FROM_CLASS (klass),
-                              _gtk_marshal_BOOLEAN__BOXEDv);
+                              _gtk_marshal_VOID__BOXEDv);
 
   /**
    * GtkWidget::button-press-event:
