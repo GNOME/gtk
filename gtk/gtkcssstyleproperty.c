@@ -406,6 +406,35 @@ _gtk_css_style_property_get_initial_value (GtkCssStyleProperty *property)
   return property->initial_value;
 }
 
+/**
+ * _gtk_css_style_property_get_mask_affecting:
+ * @flags: the flags that are affected
+ *
+ * Computes a bitmask for all properties that have at least one of @flags
+ * set.
+ *
+ * Returns: (transfer: full): A #GtkBitmask with the bit set for every
+ *          property that has at least one of @flags set.
+ */
+GtkBitmask *
+_gtk_css_style_property_get_mask_affecting (GtkCssAffects affects)
+{
+  GtkBitmask *result;
+  guint i;
+
+  result = _gtk_bitmask_new ();
+
+  for (i = 0; i < _gtk_css_style_property_get_n_properties (); i++)
+    {
+      GtkCssStyleProperty *prop = _gtk_css_style_property_lookup_by_id (i);
+
+      if (_gtk_css_style_property_get_affects (prop) & affects)
+        result = _gtk_bitmask_set (result, i, TRUE);
+    }
+
+  return result;
+}
+
 gboolean
 _gtk_css_style_property_changes_affect_size (const GtkBitmask *changes)
 {
