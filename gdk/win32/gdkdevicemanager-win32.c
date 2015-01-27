@@ -886,7 +886,6 @@ _gdk_input_other_event (GdkEvent  *event,
   GdkDeviceManagerWin32 *device_manager;
   GdkDeviceWintab *source_device = NULL;
   GdkDeviceGrabInfo *last_grab;
-  GdkDevice *device = NULL;
   GdkEventMask masktest;
   guint key_state;
   POINT pt;
@@ -908,9 +907,7 @@ _gdk_input_other_event (GdkEvent  *event,
     }
 
   device_manager = GDK_DEVICE_MANAGER_WIN32 (gdk_display_get_device_manager (_gdk_display));
-
-  device = gdk_event_get_device (event);
-  window = gdk_device_get_window_at_position (device, &x, &y);
+  window = gdk_device_get_window_at_position (device_manager->core_pointer, &x, &y);
   if (window == NULL)
     window = _gdk_root;
 
