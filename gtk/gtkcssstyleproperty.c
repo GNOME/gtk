@@ -39,6 +39,7 @@
 enum {
   PROP_0,
   PROP_ANIMATED,
+  PROP_AFFECTS,
   PROP_AFFECTS_SIZE,
   PROP_AFFECTS_FONT,
   PROP_ID,
@@ -84,6 +85,9 @@ gtk_css_style_property_set_property (GObject      *object,
     case PROP_ANIMATED:
       property->animated = g_value_get_boolean (value);
       break;
+    case PROP_AFFECTS:
+      property->affects = g_value_get_flags (value);
+      break;
     case PROP_AFFECTS_SIZE:
       property->affects_size = g_value_get_boolean (value);
       break;
@@ -115,6 +119,9 @@ gtk_css_style_property_get_property (GObject    *object,
     {
     case PROP_ANIMATED:
       g_value_set_boolean (value, property->animated);
+      break;
+    case PROP_AFFECTS:
+      g_value_set_flags (value, property->affects);
       break;
     case PROP_AFFECTS_SIZE:
       g_value_set_boolean (value, property->affects_size);
@@ -224,6 +231,14 @@ _gtk_css_style_property_class_init (GtkCssStylePropertyClass *klass)
                                                          P_("Set if the value can be animated"),
                                                          FALSE,
                                                          G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY));
+  g_object_class_install_property (object_class,
+                                   PROP_AFFECTS,
+                                   g_param_spec_flags ("affects",
+                                                       P_("Affects"),
+                                                       P_("Set if the value affects the sizing of elements"),
+                                                       GTK_TYPE_CSS_AFFECTS,
+                                                       0,
+                                                       G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY));
   g_object_class_install_property (object_class,
                                    PROP_AFFECTS_SIZE,
                                    g_param_spec_boolean ("affects-size",
@@ -365,6 +380,23 @@ _gtk_css_style_property_is_animated (GtkCssStyleProperty *property)
   g_return_val_if_fail (GTK_IS_CSS_STYLE_PROPERTY (property), FALSE);
 
   return property->animated;
+}
+
+/**
+ * _gtk_css_style_property_get_affects:
+ * @property: the property
+ *
+ * Returns all the things this property affects. See @GtkCssAffects for what
+ * the flags mean.
+ *
+ * Returns: The things this property affects.
+ **/
+GtkCssAffects
+_gtk_css_style_property_get_affects (GtkCssStyleProperty *property)
+{
+  g_return_val_if_fail (GTK_IS_CSS_STYLE_PROPERTY (property), 0);
+
+  return property->affects;
 }
 
 /**

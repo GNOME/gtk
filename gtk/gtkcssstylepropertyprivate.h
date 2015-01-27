@@ -47,6 +47,7 @@ struct _GtkCssStyleProperty
 
   GtkCssValue *initial_value;
   guint id;
+  GtkCssAffects affects;
   guint inherit :1;
   guint animated :1;
   guint affects_size :1;
@@ -73,6 +74,7 @@ GtkCssStyleProperty *   _gtk_css_style_property_lookup_by_id    (guint          
 
 gboolean                _gtk_css_style_property_is_inherit      (GtkCssStyleProperty    *property);
 gboolean                _gtk_css_style_property_is_animated     (GtkCssStyleProperty    *property);
+GtkCssAffects           _gtk_css_style_property_get_affects     (GtkCssStyleProperty    *property);
 gboolean                _gtk_css_style_property_affects_size    (GtkCssStyleProperty    *property);
 gboolean                _gtk_css_style_property_affects_font    (GtkCssStyleProperty    *property);
 guint                   _gtk_css_style_property_get_id          (GtkCssStyleProperty    *property);

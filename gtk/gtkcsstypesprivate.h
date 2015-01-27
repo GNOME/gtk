@@ -96,7 +96,7 @@ typedef enum /*< skip >*/ {
  *
  * Note that multiple values can be set.
  */
-typedef enum /*< skip >*/ {
+typedef enum {
   GTK_CSS_AFFECTS_FOREGROUND = (1 << 0),
   GTK_CSS_AFFECTS_BACKGROUND = (1 << 1),
   GTK_CSS_AFFECTS_BORDER = (1 << 2),
