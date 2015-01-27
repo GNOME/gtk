@@ -11,7 +11,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gtk%2b&"
 "keywords=I18N+L10N&component=general\n"
 "POT-Creation-Date: 2015-01-15 10:04+0000\n"
-"PO-Revision-Date: 2015-01-23 13:36+0000\n"
+"PO-Revision-Date: 2015-01-27 14:27+0000\n"
 "Last-Translator: Sveinn í Felli <sv1@fellsnet.is>\n"
 "Language-Team: Icelandic <translation-team-is@lists.sourceforge.net>\n"
 "Language: is\n"
@@ -22,10 +22,10 @@ msgstr ""
 "X-Generator: Lokalize 1.5\n"
 
 #: ../gdk/broadway/gdkbroadway-server.c:143
-#, fuzzy, c-format
+#, c-format
 #| msgid "broadway display type not supported '%s'"
 msgid "Broadway display type not supported: %s"
-msgstr "broadway skjátegund ekki studd '%s'"
+msgstr "broadway skjátegund ekki studd: %s"
 
 #: ../gdk/gdk.c:177
 #, c-format
@@ -88,7 +88,7 @@ msgstr "GDK aflúsunarflögg sem þú vilt fjarlægja"
 
 #: ../gdk/gdkwindow.c:2733
 msgid "GL support disabled via GDK_DEBUG"
-msgstr ""
+msgstr "GL stuðningur gerður óvirkur með GDK_DEBUG"
 
 #.
 #. * Translators, the strings in the “keyboard label” context are
@@ -1699,9 +1699,9 @@ msgid "Text may not appear inside <%s>"
 msgstr "Texti má ekki birtast innan <%s>"
 
 #: ../gtk/gtkbuilderparser.c:340
-#, fuzzy, c-format
+#, c-format
 msgid "Invalid object type '%s' on line %d"
-msgstr "Ógilt skráarheiti: %s"
+msgstr "Ógild tegund hlutar '%s' á línu %d"
 
 #: ../gtk/gtkbuilderparser.c:360
 #, c-format
@@ -1714,26 +1714,26 @@ msgid "Duplicate object ID '%s' on line %d (previously on line %d)"
 msgstr "Tvítekið auðkenni '%s'-hlutar á línu %d (áður á línu %d)"
 
 #: ../gtk/gtkbuilderparser.c:652
-#, fuzzy, c-format
+#, c-format
 msgid "Invalid property: %s.%s on line %d"
-msgstr "Ógilt skráarheiti: %s"
+msgstr "Ógildur eiginleiki: %s.%s á línu %d"
 
 #: ../gtk/gtkbuilderparser.c:775
-#, fuzzy, c-format
+#, c-format
 msgid "Invalid signal '%s' for type '%s' on line %d"
-msgstr "Ógilt skráarheiti: %s"
+msgstr "Ógilt merki '%s' fyrir tegund '%s' á línu %d"
 
 #: ../gtk/gtkbuilderparser.c:1067
-#, fuzzy, c-format
+#, c-format
 #| msgid "Invalid root element: '%s'"
 msgid "Invalid root element: <%s>"
-msgstr "Óheimil rótareigindi: '%s'"
+msgstr "Ógild rótareigindi: <%s>"
 
 #: ../gtk/gtkbuilderparser.c:1110
-#, fuzzy, c-format
+#, c-format
 #| msgid "Unhandled tag: '%s'"
 msgid "Unhandled tag: <%s>"
-msgstr "Ómeðhöndlað merki: ‚%s‘"
+msgstr "Ómeðhöndlað tag: <%s>"
 
 #  Translate to calendar:YM if you want years to be displayed
 #  * before months; otherwise translate to calendar:MY.
@@ -3496,7 +3496,7 @@ msgstr "%d %%"
 
 #: ../gtk/gtkwindow.c:11832
 msgid "Do you want to use GTK+ Inspector?"
-msgstr ""
+msgstr "Viltu nota GTK+ Inspector?"
 
 #: ../gtk/gtkwindow.c:11834
 msgid ""
@@ -3556,7 +3556,7 @@ msgstr "Bæta við klasa"
 
 #: ../gtk/inspector/classes-list.ui.h:2
 msgid "Restore defaults for this widget"
-msgstr ""
+msgstr "Endurheimta sjálfgefið fyrir þennan viðmótshluta"
 
 #: ../gtk/inspector/css-editor.c:90 ../gtk/inspector/css-editor.c:96
 msgid "You can type here any CSS rule recognized by GTK+."
@@ -3570,15 +3570,16 @@ msgstr ""
 
 #: ../gtk/inspector/css-editor.c:92
 msgid "Changes are applied instantly and globally, for the whole application."
-msgstr ""
+msgstr "Breytingar eru framkvæmdar samstundis og víðvært, fyrir allt forritið."
 
 #: ../gtk/inspector/css-editor.c:98
 msgid "Changes are applied instantly, only for this selected widget."
 msgstr ""
+"Breytingar eru framkvæmdar samstundis, aðeins fyrir valda viðmótshlutann."
 
 #: ../gtk/inspector/css-editor.c:160
 msgid "Saving CSS failed"
-msgstr ""
+msgstr "Tókst ekki að vista CSS"
 
 #: ../gtk/inspector/css-editor.c:200
 msgid "_Save"
@@ -3587,11 +3588,11 @@ msgstr "Vi_sta"
 #. vim: set et sw=2 ts=2:
 #: ../gtk/inspector/css-editor.ui.h:1
 msgid "Disable this custom CSS"
-msgstr ""
+msgstr "Gera þetta sérsniðna CSS óvirkt"
 
 #: ../gtk/inspector/css-editor.ui.h:2
 msgid "Save the current CSS"
-msgstr ""
+msgstr "Vista núverandi CSS"
 
 #: ../gtk/inspector/data-list.ui.h:1
 msgid "Show data"
@@ -3614,7 +3615,7 @@ msgstr "X-skjár"
 
 #: ../gtk/inspector/general.ui.h:5
 msgid "RGBA visual"
-msgstr ""
+msgstr "Sjónrænt RGBA"
 
 #: ../gtk/inspector/general.ui.h:6
 #| msgid "Computer"
@@ -3634,18 +3635,16 @@ msgid "Capture"
 msgstr "Upptaka"
 
 #: ../gtk/inspector/gestures.c:130
-#, fuzzy
 msgid "Bubble"
-msgstr "Blaðra"
+msgstr "Bóla"
 
 #: ../gtk/inspector/gestures.c:131 ../gtk/inspector/menu.ui.h:3
-#, fuzzy
 msgid "Target"
 msgstr "Útkoma"
 
 #: ../gtk/inspector/menu.c:93
 msgid "Unnamed section"
-msgstr ""
+msgstr "Nafnlaus hluti"
 
 #. vim: set et sw=2 ts=2:
 #: ../gtk/inspector/menu.ui.h:1 ../gtk/inspector/object-tree.ui.h:3
@@ -3653,36 +3652,31 @@ msgid "Label"
 msgstr "Skýring"
 
 #: ../gtk/inspector/menu.ui.h:2 ../gtk/inspector/prop-editor.c:1300
-#, fuzzy
 msgid "Action"
-msgstr "S_taðsetning:"
+msgstr "Aðgerð"
 
 #: ../gtk/inspector/menu.ui.h:4
-#, fuzzy
 msgid "Icon"
 msgstr "Táknmynd"
 
 #. vim: set et sw=2 ts=2:
 #: ../gtk/inspector/misc-info.ui.h:1
-#, fuzzy
 msgid "Address"
 msgstr "Vistfang"
 
 #: ../gtk/inspector/misc-info.ui.h:2
-#, fuzzy
 #| msgid "Preferences"
 msgid "Reference count"
-msgstr "Kjörstillingar"
+msgstr "Fjöldi tilvísana"
 
 #: ../gtk/inspector/misc-info.ui.h:4
 msgid "Buildable ID"
 msgstr ""
 
 #: ../gtk/inspector/misc-info.ui.h:5
-#, fuzzy
 #| msgid "Default"
 msgid "Default Widget"
-msgstr "Sjálfgefið"
+msgstr "Sjálfgefin skjágræja"
 
 #: ../gtk/inspector/misc-info.ui.h:6 ../gtk/inspector/misc-info.ui.h:8
 #: ../gtk/inspector/prop-editor.c:1003 ../gtk/inspector/prop-editor.c:1183
@@ -3693,7 +3687,7 @@ msgstr "Eiginleikar"
 
 #: ../gtk/inspector/misc-info.ui.h:7
 msgid "Focus Widget"
-msgstr ""
+msgstr "Viðmótshluti (widget) fær virkni"
 
 #: ../gtk/inspector/misc-info.ui.h:9
 msgid "Mnemonic Label"
@@ -3701,7 +3695,7 @@ msgstr ""
 
 #: ../gtk/inspector/misc-info.ui.h:10
 msgid "Allocated size"
-msgstr ""
+msgstr "Úthlutuð stærð"
 
 #: ../gtk/inspector/misc-info.ui.h:11
 msgid "Clip area"
@@ -3725,7 +3719,7 @@ msgstr ""
 
 #: ../gtk/inspector/misc-info.ui.h:16
 msgid "Mapped"
-msgstr ""
+msgstr "Varpað"
 
 #: ../gtk/inspector/misc-info.ui.h:17
 msgid "Realized"
@@ -3741,7 +3735,7 @@ msgstr "Afleiða sýnileg"
 
 #: ../gtk/inspector/object-hierarchy.ui.h:1
 msgid "Object Hierarchy"
-msgstr ""
+msgstr "Stigskipun hluta"
 
 #: ../gtk/inspector/object-tree.ui.h:1
 msgid "Object"
@@ -3752,9 +3746,9 @@ msgid "Style Classes"
 msgstr ""
 
 #: ../gtk/inspector/prop-editor.c:615
-#, fuzzy, c-format
+#, c-format
 msgid "Pointer: %p"
-msgstr "_Prenta"
+msgstr "Bendill: %p"
 
 #: ../gtk/inspector/prop-editor.c:630
 #| msgid "Unknown"
@@ -3770,16 +3764,15 @@ msgstr "Hlutur: %p (%s)"
 #: ../gtk/inspector/prop-editor.c:1056
 #, c-format
 msgid "Uneditable property type: %s"
-msgstr ""
+msgstr "Óbreytanleg gerð eiginleika: %s"
 
 #: ../gtk/inspector/prop-editor.c:1174
 msgid "Attribute mapping"
-msgstr ""
+msgstr "Vörpun eiginda"
 
 #: ../gtk/inspector/prop-editor.c:1179
-#, fuzzy
 msgid "Model:"
-msgstr "_Hamur: "
+msgstr "Gerð:"
 
 #: ../gtk/inspector/prop-editor.c:1180
 #, c-format
@@ -3949,7 +3942,7 @@ msgstr "Uppsöfnun"
 
 #: ../gtk/inspector/statistics.ui.h:8
 msgid "Enable statistics with GOBJECT_DEBUG=instance-count"
-msgstr ""
+msgstr "Virkja tölfræði með GOBJECT_DEBUG=instance-count"
 
 #. this is the header for the location column in the print dialog
 #: ../gtk/inspector/style-prop-list.ui.h:3 ../gtk/ui/gtkprintunixdialog.ui.h:4
@@ -3958,7 +3951,7 @@ msgstr "Staðsetning"
 
 #: ../gtk/inspector/visual.c:263 ../gtk/inspector/visual.c:278
 msgid "Theme is hardcoded by GTK_THEME"
-msgstr ""
+msgstr "Þema er harðkóðað með GTK_THEME"
 
 #: ../gtk/inspector/visual.c:454
 msgid "Backend does not support window scaling"
@@ -3966,13 +3959,15 @@ msgstr "Bakendi styður ekki gluggakvörðun"
 
 #: ../gtk/inspector/visual.c:493
 msgid "Setting is hardcoded by GTK_TEST_TOUCHSCREEN"
-msgstr ""
+msgstr "Stilling er harðkóðuð með GTK_TEST_TOUCHSCREEN"
 
 #: ../gtk/inspector/visual.c:558
 msgid ""
 "Not settable at runtime.\n"
 "Use GDK_GL=always or GDK_GL=disable instead"
 msgstr ""
+"Ekki stillanlegt í upphafi keyrslu.\n"
+"Nota GDK_GL=always eða GDK_GL=disable í staðinn"
 
 #: ../gtk/inspector/visual.c:572 ../gtk/inspector/visual.c:573
 #: ../gtk/inspector/visual.c:574
