@@ -75,6 +75,21 @@
     by the windowing system: it will have a frame, a title bar and window
     controls, depending on the platform.</para>
 
+    <para>A window title is set using gtk_window_set_title(). This function
+    takes a GtkWindow* pointer and a string as input. As our 
+    <varname>window</varname> pointer is a GtkWidget pointer, we need to cast it
+    to GtkWindow*.
+    But instead of casting <varname>window</varname> via 
+    <varname>(GtkWindow*)</varname>, 
+    <varname>window</varname> can be cast using the macro 
+    <varname>GTK_WINDOW()</varname>.
+    <varname>GTK_WINDOW()</varname> will check if the 
+    pointer is an instance of the GtkWindow class, before casting, and emit a
+    warning if the check fails. More information about this convention 
+    can be found 
+    <ulink url="https://developer.gnome.org/gobject/stable/gtype-conventions.html">
+    here</ulink>.</para>
+
     <para>In order to terminate the application when the #GtkWindow is
     destroyed, we connect the #GtkWidget::destroy signal to the gtk_main_quit()
     function. This function will terminate the GTK+ main loop started by calling
