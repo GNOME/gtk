@@ -50,8 +50,6 @@ struct _GtkCssStyleProperty
   GtkCssAffects affects;
   guint inherit :1;
   guint animated :1;
-  guint affects_size :1;
-  guint affects_font :1;
 
   GtkCssStylePropertyParseFunc parse_value;
   GtkCssStylePropertyQueryFunc query_value;
