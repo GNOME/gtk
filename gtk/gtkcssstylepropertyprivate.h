@@ -85,10 +85,6 @@ void                    _gtk_css_style_property_print_value     (GtkCssStyleProp
 
 GtkBitmask *            _gtk_css_style_property_get_mask_affecting
                                                                 (GtkCssAffects           affects);
-gboolean                _gtk_css_style_property_changes_affect_size
-                                                                (const GtkBitmask       *changes);
-gboolean                _gtk_css_style_property_changes_affect_font
-                                                                (const GtkBitmask       *changes);
 
 G_END_DECLS
 

@@ -8700,11 +8700,15 @@ gtk_tree_view_grab_focus (GtkWidget *widget)
 static void
 gtk_tree_view_style_updated (GtkWidget *widget)
 {
+  static GtkBitmask *affects_size = NULL;
   GtkTreeView *tree_view = GTK_TREE_VIEW (widget);
   GList *list;
   GtkTreeViewColumn *column;
   GtkStyleContext *style_context;
   const GtkBitmask *changes;
+
+  if (G_UNLIKELY (affects_size) == NULL)
+    affects_size = _gtk_css_style_property_get_mask_affecting (GTK_CSS_AFFECTS_SIZE | GTK_CSS_AFFECTS_CLIP);
 
   GTK_WIDGET_CLASS (gtk_tree_view_parent_class)->style_updated (widget);
 
@@ -8718,7 +8722,8 @@ gtk_tree_view_style_updated (GtkWidget *widget)
 
   style_context = gtk_widget_get_style_context (widget);
   changes = _gtk_style_context_get_changes (style_context);
-  if (changes == NULL || _gtk_css_style_property_changes_affect_size (changes))
+
+  if (changes == NULL || _gtk_bitmask_intersects (changes, affects_size))
     {
       for (list = tree_view->priv->columns; list; list = list->next)
 	{

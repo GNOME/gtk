@@ -4454,11 +4454,15 @@ gtk_text_view_set_background (GtkTextView *text_view)
 static void
 gtk_text_view_style_updated (GtkWidget *widget)
 {
+  static GtkBitmask *affects_font = NULL;
   GtkTextView *text_view;
   GtkTextViewPrivate *priv;
   PangoContext *ltr_context, *rtl_context;
   GtkStyleContext *style_context;
   const GtkBitmask *changes;
+
+  if (G_UNLIKELY (affects_font) == NULL)
+    affects_font = _gtk_css_style_property_get_mask_affecting (GTK_CSS_AFFECTS_FONT);
 
   text_view = GTK_TEXT_VIEW (widget);
   priv = text_view->priv;
@@ -4473,7 +4477,8 @@ gtk_text_view_style_updated (GtkWidget *widget)
 
   style_context = gtk_widget_get_style_context (widget);
   changes = _gtk_style_context_get_changes (style_context);
-  if ((changes == NULL || _gtk_css_style_property_changes_affect_font (changes)) &&
+
+  if ((changes == NULL || _gtk_bitmask_intersects (changes, affects_font)) &&
       priv->layout && priv->layout->default_style)
     {
       gtk_text_view_set_attributes_from_style (text_view,

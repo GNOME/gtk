@@ -47,9 +47,6 @@ enum {
 
 G_DEFINE_TYPE (GtkCssStyleProperty, _gtk_css_style_property, GTK_TYPE_STYLE_PROPERTY)
 
-static GtkBitmask *_properties_affecting_size = NULL;
-static GtkBitmask *_properties_affecting_font = NULL;
-
 static GtkCssStylePropertyClass *gtk_css_style_property_class = NULL;
 
 static void
@@ -60,12 +57,6 @@ gtk_css_style_property_constructed (GObject *object)
 
   property->id = klass->style_properties->len;
   g_ptr_array_add (klass->style_properties, property);
-
-  if (property->affects & (GTK_CSS_AFFECTS_SIZE | GTK_CSS_AFFECTS_CLIP))
-    _properties_affecting_size = _gtk_bitmask_set (_properties_affecting_size, property->id, TRUE);
-
-  if (property->affects & GTK_CSS_AFFECTS_FONT)
-    _properties_affecting_font = _gtk_bitmask_set (_properties_affecting_font, property->id, TRUE);
 
   G_OBJECT_CLASS (_gtk_css_style_property_parent_class)->constructed (object);
 }
@@ -253,9 +244,6 @@ _gtk_css_style_property_class_init (GtkCssStylePropertyClass *klass)
 
   klass->style_properties = g_ptr_array_new ();
 
-  _properties_affecting_size = _gtk_bitmask_new ();
-  _properties_affecting_font = _gtk_bitmask_new ();
-
   gtk_css_style_property_class = klass;
 }
 
@@ -435,14 +423,3 @@ _gtk_css_style_property_get_mask_affecting (GtkCssAffects affects)
   return result;
 }
 
-gboolean
-_gtk_css_style_property_changes_affect_size (const GtkBitmask *changes)
-{
-  return _gtk_bitmask_intersects (changes, _properties_affecting_size);
-}
-
-gboolean
-_gtk_css_style_property_changes_affect_font (const GtkBitmask *changes)
-{
-  return _gtk_bitmask_intersects (changes, _properties_affecting_font);
-}

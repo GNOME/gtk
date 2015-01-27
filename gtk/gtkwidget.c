@@ -8229,7 +8229,12 @@ gtk_widget_real_style_updated (GtkWidget *widget)
 
       if (widget->priv->anchored)
         {
-          if (changes == NULL || _gtk_css_style_property_changes_affect_size (changes))
+          static GtkBitmask *affects_size = NULL;
+
+          if (G_UNLIKELY (affects_size) == NULL)
+            affects_size = _gtk_css_style_property_get_mask_affecting (GTK_CSS_AFFECTS_SIZE | GTK_CSS_AFFECTS_CLIP);
+
+          if (changes == NULL || _gtk_bitmask_intersects (changes, affects_size))
             gtk_widget_queue_resize (widget);
           else
             gtk_widget_queue_draw (widget);
