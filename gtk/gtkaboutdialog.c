@@ -1926,7 +1926,7 @@ follow_if_link (GtkAboutDialog *about,
           GtkStateFlags state = gtk_widget_get_state_flags (GTK_WIDGET (about));
           gtk_style_context_get_color (context, state | GTK_STATE_FLAG_VISITED, &visited_link_color);
 
-          g_object_set (G_OBJECT (tag), "foreground-rgba", visited_link_color, NULL);
+          g_object_set (G_OBJECT (tag), "foreground-rgba", &visited_link_color, NULL);
 
           priv->visited_links = g_slist_prepend (priv->visited_links, g_strdup (uri));
         }
