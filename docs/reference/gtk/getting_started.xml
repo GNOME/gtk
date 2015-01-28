@@ -12,7 +12,7 @@
   Widgets are organized in a hierachy. The window widget is the main container.
   The user interface is then built by adding buttons, drop-down menus, input 
   fields, and other widgets to the window.
-  If you are creating advanced or complex user interfaces it is recommended to
+  If you are creating complex user interfaces it is recommended to
   use #GtkBuilder and its GTK-specific markup description language, instead of
   assembling the interface manually. You can also use a visual user interface
   editor, like <ulink url="https://glade.gnome.org/">Glade</ulink>.</para>
@@ -30,8 +30,8 @@
   <section>
     <title>Basics</title>
 
-    <para>To begin our introduction to GTK, we'll start with the simplest
-    program possible. This program will create an empty 200 × 200 pixel
+    <para>To begin our introduction to GTK, we'll start with a simple
+    signal-based Gtk application. This program will create an empty 200 × 200 pixel
     window.</para>
 
     <informalfigure>
@@ -43,7 +43,7 @@
     </informalfigure>
 
     <informalexample>
-      <para>Create a new file with the following content named example-0.c.</para>
+      <para>Create a new file with the following content named <filename>example-0.c.</filename></para>
       <programlisting><xi:include href="../../../../examples/window-default.c" parse="text"><xi:fallback>FIXME: MISSING XINCLUDE CONTENT</xi:fallback></xi:include></programlisting>
     </informalexample>
 
@@ -67,36 +67,50 @@
     by third party code. The compiler will abort with an error if any other
     header is directly included.</para></warning>
 
-    <para>We then proceed into the <function>main</function>() function of the
-    application, and we declare a <varname>window</varname> variable as a pointer
-    of type #GtkWidget.</para>
+    <para>In a GTK+ application, the purpose of the main() function is to
+    create a #GtkApplication object and run it. In this example a
+    #GtkApplication pointer named <varname>app</varname> is called and then
+    initialized using gtk_application_new().</para>
 
-    <para>The following line will call gtk_init(), which
-    is the initialization function for GTK+; this function will set up GTK+,
-    the type system, the connection to the windowing environment, etc. The
-    gtk_init() takes as arguments the pointers to the command line arguments
+    <para>When creating a #GtkApplication
+    you need to pick an application identifier (a name)
+    and input to gtk_application_new() as parameter.
+    For this example <varname>org.gtk.example</varname> is used
+    but for choosing an identifier for your application see
+    <ulink url="https://wiki.gnome.org/HowDoI/ChooseApplicationID">this guide</ulink>.
+    Lastly gtk_application_new() takes a GApplicationFlags as input for your 
+    application, if your application would have special needs.
+    </para>
+
+    <para>Next the
+    <ulink url="https://wiki.gnome.org/HowDoI/GtkApplication">activate signal</ulink>
+    is connected to the activate() function above the main() functions.
+    The <varname>activate</varname> signal will be sent
+    when your application is launched with
+    g_application_run() on the line below.
+    The gtk_application_run() also takes as arguments the pointers to the command line arguments
     counter and string array; this allows GTK+ to parse specific command line
     arguments that control the behavior of GTK+ itself. The parsed arguments
     will be removed from the array, leaving the unrecognized ones for your
-    application to parse.</para>
+    application to parse.
+    </para>
 
-    <note><para>For more information on which command line arguments GTK+
-    recognizes, please refer to the <link linkend="gtk-running">Running GTK+
-    Applications</link> section in this reference.</para></note>
-
-    <para>The call to gtk_window_new() will create a new #GtkWindow and store
-    it inside the <varname>window</varname> variable. The type of the window
-    is %GTK_WINDOW_TOPLEVEL, which means that the #GtkWindow will be managed
-    by the windowing system: it will have a frame, a title bar and window
-    controls, depending on the platform.</para>
+    <para>Within g_application_run the activate() signal is sent and
+    we then proceed into the <function>activate</function>() function of the
+    application. Inside the activate() function we want to construct
+    our GTK window, so that a window is shown when the application
+    is launched. The call to gtk_application_window_new() will
+    createa a new #GtkWindow and store it inside the
+    <varname>window</varname> pointer. The window will have a frame,
+    a title bar, and window controls depending on the platform.</para>
 
     <para>A window title is set using gtk_window_set_title(). This function
-    takes a GtkWindow* pointer and a string as input. As our 
+    takes a GtkWindow* pointer and a string as input. As our
     <varname>window</varname> pointer is a GtkWidget pointer, we need to cast it
     to GtkWindow*.
-    But instead of casting <varname>window</varname> via 
+    But instead of casting <varname>window</varname> via
     <varname>(GtkWindow*)</varname>, 
-    <varname>window</varname> can be cast using the macro 
+    <varname>window</varname> can be cast using the macro
     <varname>GTK_WINDOW()</varname>.
     <varname>GTK_WINDOW()</varname> will check if the 
     pointer is an instance of the GtkWindow class, before casting, and emit a
@@ -105,22 +119,14 @@
     <ulink url="https://developer.gnome.org/gobject/stable/gtype-conventions.html">
     here</ulink>.</para>
 
-    <para>In order to terminate the application when the #GtkWindow is
-    destroyed, we connect the #GtkWidget::destroy signal to the gtk_main_quit()
-    function. This function will terminate the GTK+ main loop started by calling
-    gtk_main() later. The #GtkWidget::destroy signal is emitted when a widget is
-    destroyed, either by explicitly calling gtk_widget_destroy() or when the
-    widget is unparented. Top-level #GtkWindow<!-- -->s are also destroyed when
-    the Close window control button is clicked.</para>
+    <para>Finally the window size is set using gtk_window_set_default_size and
+    the window is then shown by GTK via gtk_widget_show_all().</para>
 
-    <para>#GtkWidget<!-- -->s are hidden by default. By calling gtk_widget_show()
-    on a #GtkWidget we are asking GTK+ to set the visibility attribute so that it
-    can be displayed. All this work is done after the main loop has been
-    started.</para>
-
-    <para>The last line of interest is the call to gtk_main(). This function will
-    start the GTK+ main loop and will block the control flow of the
-    main() until the gtk_main_quit() function is called.</para>
+    <para>When you exit the window, by for example pressing the X,
+    the g_application_run() in the main loop returns with a number
+    which is saved inside an integer named "status". Afterwards, the
+    #GtkApplication object is freed from memory with g_object_unref().
+    Finally the status integer is returned and the GTK application exits.</para>
 
     <para>While the program is running, GTK+ is receiving
     <firstterm>events</firstterm>. These are typically input events caused by
