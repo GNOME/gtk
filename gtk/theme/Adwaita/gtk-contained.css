@@ -3972,6 +3972,8 @@ GtkCalendar {
 
 .message-dialog {
   -GtkDialog-button-spacing: 0; }
+  .message-dialog.background {
+    background-color: #ededed; }
   .message-dialog .titlebar {
     border-style: none;
     box-shadow: inset 0 1px white; }
