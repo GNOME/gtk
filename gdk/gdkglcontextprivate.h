@@ -74,11 +74,6 @@ typedef struct {
   GdkGLContextProgram *current_program;
 } GdkGLContextPaintData;
 
-void                    gdk_gl_context_get_required_version     (GdkGLContext   *context,
-                                                                 int            *major,
-                                                                 int            *minor);
-gboolean                gdk_gl_context_get_debug_enabled        (GdkGLContext   *context);
-gboolean                gdk_gl_context_get_forward_compatible   (GdkGLContext   *context);
 GdkGLContextPaintData * gdk_gl_context_get_paint_data           (GdkGLContext   *context);
 gboolean                gdk_gl_context_use_texture_rectangle    (GdkGLContext   *context);
 gboolean                gdk_gl_context_has_framebuffer_blit     (GdkGLContext   *context);
