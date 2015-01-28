@@ -2621,7 +2621,13 @@ gtk_file_chooser_widget_set_property (GObject      *object,
       if (g_value_get_boolean (value))
         operation_mode_set (impl, OPERATION_MODE_SEARCH);
       else
-        operation_mode_set (impl, OPERATION_MODE_BROWSE);
+        {
+          operation_mode_set (impl, OPERATION_MODE_BROWSE);
+          if (priv->current_folder)
+            change_folder_and_display_error (impl, priv->current_folder, FALSE);
+          else
+            switch_to_home_dir (impl);
+        }
       break;
 
     case GTK_FILE_CHOOSER_PROP_ACTION:
