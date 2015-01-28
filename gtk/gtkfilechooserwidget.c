@@ -6271,7 +6271,7 @@ search_entry_activate_cb (GtkFileChooserWidget *impl)
 static void
 search_entry_stop_cb (GtkFileChooserWidget *impl)
 {
-  operation_mode_set (impl, OPERATION_MODE_BROWSE);
+  g_object_set (impl, "search-mode", FALSE, NULL);
 }
 
 /* Hides the path bar and creates the search entry */
