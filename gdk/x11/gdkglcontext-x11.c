@@ -1195,7 +1195,7 @@ gdk_x11_window_create_gl_context (GdkWindow    *window,
 
   /* GDK_GL_PROFILE_DEFAULT is currently equivalent to the LEGACY profile */
   if (profile == GDK_GL_PROFILE_DEFAULT)
-    profile = GDK_GL_PROFILE_LEGACY;
+    profile = GDK_GL_PROFILE_3_2_CORE;
 
   if (!gdk_x11_screen_init_gl (gdk_window_get_screen (window)))
     {
