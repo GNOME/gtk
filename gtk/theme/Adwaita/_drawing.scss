@@ -592,57 +592,35 @@
   $_undershoot_color: transparentize($fg_color, 0.6);
   $_undershoot_base: transparentize($base_color, 0.5);
 
-  $_1st_gradient_dir: bottom left;
-  $_2nd_gradient_dir: bottom right;
-  $_gradient_size: 13px 7px;
-  $_line_size: 100% 1px;
+  $_gradient_dir: left;
+  $_dash_bg_size: 10px 1px;
+  $_base_bg_size: 10px 3px;
   $_gradient_repeat: repeat-x;
-  $_background_position: left top;
+  $_bg_pos: center $p;
 
   background-color: transparent; // shouldn't be needed, but better to be sure;
 
-  @if $p==top { box-shadow: 0 -1px $borders_color; } // vars are already set for top undershoot, there's just a box shadow to
-                                                     // to cover the treeview lighter border, in the other cases it shouldn't be
-                                                     // a problem
-
-  @else if $p==bottom {
-    $_1st_gradient_dir: top left;
-    $_2nd_gradient_dir: top right;
-    $_background_position: bottom left;
-  }
-
-  @else { // left
-    $_1st_gradient_dir: bottom right;
-    $_2nd_gradient_dir: top right;
-    $_gradient_size: 7px 13px;
-    $_line_size: 1px 100%;
+  @if ($p == left) or ($p == right) {
+    $_gradient_dir: top;
+    $_dash_bg_size: 1px 10px;
+    $_base_bg_size: 3px 10px;
     $_gradient_repeat: repeat-y;
-    $_background_position: left top;
-
-    @if $p==right {
-      $_1st_gradient_dir: bottom left;
-      $_2nd_gradient_dir: top left;
-      $_background_position: right top;
-    }
+    $_bg_pos: $p center;
   }
 
-  background-image: linear-gradient(to $_1st_gradient_dir, // first half triangle - colored
-                                    $_undershoot_color 18%,
-                                    transparentize($_undershoot_color, 1) 25%),
-                    linear-gradient(to $_2nd_gradient_dir, // second half triangle - colored
-                                    $_undershoot_color 18%,
-                                    transparentize($_undershoot_color, 1) 25%),
-                    linear-gradient(to $_1st_gradient_dir, // first half triangle - as a base
-                                    $_undershoot_base 18%,
-                                    transparentize($_undershoot_base, 1) 25%),
-                    linear-gradient(to $_2nd_gradient_dir, // second half triangle - as a base
-                                    $_undershoot_base 18%,
-                                    transparentize($_undershoot_base, 1) 25%),
-                    linear-gradient(to top, $_undershoot_base); // this is just a line
+  background-image: linear-gradient(to $_gradient_dir, // this is the dash
+                                    transparentize($_undershoot_color, 1) 10%,
+                                    $_undershoot_color 10%,
+                                    $_undershoot_color 60%,
+                                    transparentize($_undershoot_color, 1) 60%),
+                    linear-gradient(to $_gradient_dir, // this is the dash base
+                                    $_undershoot_base 70%,
+                                    transparentize($_undershoot_base, 1) 70%);
 
   border-#{$p}: 1px solid transparent;
-  background-size: $_gradient_size, $_gradient_size, $_gradient_size, $_gradient_size, $_line_size;
-  background-repeat: $_gradient_repeat, $_gradient_repeat, $_gradient_repeat, $_gradient_repeat, no-repeat;
-  background-position: $_background_position;
-  background-origin: border-box, border-box, padding-box, padding-box, border-box;
+  padding-#{$p}: 1px;
+  background-size: $_dash_bg_size, $_base_bg_size;
+  background-repeat: $_gradient_repeat;
+  background-origin: content-box, padding-box;
+  background-position: $_bg_pos;
 }

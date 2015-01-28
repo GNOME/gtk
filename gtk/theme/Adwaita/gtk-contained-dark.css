@@ -4415,37 +4415,40 @@ GtkVolumeButton.button, .header-bar GtkVolumeButton.button.titlebutton,
 
 .undershoot.top {
   background-color: transparent;
-  box-shadow: 0 -1px #1c1f1f;
-  background-image: linear-gradient(to bottom left, rgba(238, 238, 236, 0.4) 18%, rgba(238, 238, 236, 0) 25%), linear-gradient(to bottom right, rgba(238, 238, 236, 0.4) 18%, rgba(238, 238, 236, 0) 25%), linear-gradient(to bottom left, rgba(41, 41, 41, 0.5) 18%, rgba(41, 41, 41, 0) 25%), linear-gradient(to bottom right, rgba(41, 41, 41, 0.5) 18%, rgba(41, 41, 41, 0) 25%), linear-gradient(to top, rgba(41, 41, 41, 0.5));
+  background-image: linear-gradient(to left, rgba(238, 238, 236, 0) 10%, rgba(238, 238, 236, 0.4) 10%, rgba(238, 238, 236, 0.4) 60%, rgba(238, 238, 236, 0) 60%), linear-gradient(to left, rgba(41, 41, 41, 0.5) 70%, rgba(41, 41, 41, 0) 70%);
   border-top: 1px solid transparent;
-  background-size: 13px 7px, 13px 7px, 13px 7px, 13px 7px, 100% 1px;
-  background-repeat: repeat-x, repeat-x, repeat-x, repeat-x, no-repeat;
-  background-position: left top;
-  background-origin: border-box, border-box, padding-box, padding-box, border-box; }
+  padding-top: 1px;
+  background-size: 10px 1px, 10px 3px;
+  background-repeat: repeat-x;
+  background-origin: content-box, padding-box;
+  background-position: center top; }
 .undershoot.bottom {
   background-color: transparent;
-  background-image: linear-gradient(to top left, rgba(238, 238, 236, 0.4) 18%, rgba(238, 238, 236, 0) 25%), linear-gradient(to top right, rgba(238, 238, 236, 0.4) 18%, rgba(238, 238, 236, 0) 25%), linear-gradient(to top left, rgba(41, 41, 41, 0.5) 18%, rgba(41, 41, 41, 0) 25%), linear-gradient(to top right, rgba(41, 41, 41, 0.5) 18%, rgba(41, 41, 41, 0) 25%), linear-gradient(to top, rgba(41, 41, 41, 0.5));
+  background-image: linear-gradient(to left, rgba(238, 238, 236, 0) 10%, rgba(238, 238, 236, 0.4) 10%, rgba(238, 238, 236, 0.4) 60%, rgba(238, 238, 236, 0) 60%), linear-gradient(to left, rgba(41, 41, 41, 0.5) 70%, rgba(41, 41, 41, 0) 70%);
   border-bottom: 1px solid transparent;
-  background-size: 13px 7px, 13px 7px, 13px 7px, 13px 7px, 100% 1px;
-  background-repeat: repeat-x, repeat-x, repeat-x, repeat-x, no-repeat;
-  background-position: bottom left;
-  background-origin: border-box, border-box, padding-box, padding-box, border-box; }
+  padding-bottom: 1px;
+  background-size: 10px 1px, 10px 3px;
+  background-repeat: repeat-x;
+  background-origin: content-box, padding-box;
+  background-position: center bottom; }
 .undershoot.left {
   background-color: transparent;
-  background-image: linear-gradient(to bottom right, rgba(238, 238, 236, 0.4) 18%, rgba(238, 238, 236, 0) 25%), linear-gradient(to top right, rgba(238, 238, 236, 0.4) 18%, rgba(238, 238, 236, 0) 25%), linear-gradient(to bottom right, rgba(41, 41, 41, 0.5) 18%, rgba(41, 41, 41, 0) 25%), linear-gradient(to top right, rgba(41, 41, 41, 0.5) 18%, rgba(41, 41, 41, 0) 25%), linear-gradient(to top, rgba(41, 41, 41, 0.5));
+  background-image: linear-gradient(to top, rgba(238, 238, 236, 0) 10%, rgba(238, 238, 236, 0.4) 10%, rgba(238, 238, 236, 0.4) 60%, rgba(238, 238, 236, 0) 60%), linear-gradient(to top, rgba(41, 41, 41, 0.5) 70%, rgba(41, 41, 41, 0) 70%);
   border-left: 1px solid transparent;
-  background-size: 7px 13px, 7px 13px, 7px 13px, 7px 13px, 1px 100%;
-  background-repeat: repeat-y, repeat-y, repeat-y, repeat-y, no-repeat;
-  background-position: left top;
-  background-origin: border-box, border-box, padding-box, padding-box, border-box; }
+  padding-left: 1px;
+  background-size: 1px 10px, 3px 10px;
+  background-repeat: repeat-y;
+  background-origin: content-box, padding-box;
+  background-position: left center; }
 .undershoot.right {
   background-color: transparent;
-  background-image: linear-gradient(to bottom left, rgba(238, 238, 236, 0.4) 18%, rgba(238, 238, 236, 0) 25%), linear-gradient(to top left, rgba(238, 238, 236, 0.4) 18%, rgba(238, 238, 236, 0) 25%), linear-gradient(to bottom left, rgba(41, 41, 41, 0.5) 18%, rgba(41, 41, 41, 0) 25%), linear-gradient(to top left, rgba(41, 41, 41, 0.5) 18%, rgba(41, 41, 41, 0) 25%), linear-gradient(to top, rgba(41, 41, 41, 0.5));
+  background-image: linear-gradient(to top, rgba(238, 238, 236, 0) 10%, rgba(238, 238, 236, 0.4) 10%, rgba(238, 238, 236, 0.4) 60%, rgba(238, 238, 236, 0) 60%), linear-gradient(to top, rgba(41, 41, 41, 0.5) 70%, rgba(41, 41, 41, 0) 70%);
   border-right: 1px solid transparent;
-  background-size: 7px 13px, 7px 13px, 7px 13px, 7px 13px, 1px 100%;
-  background-repeat: repeat-y, repeat-y, repeat-y, repeat-y, no-repeat;
-  background-position: right top;
-  background-origin: border-box, border-box, padding-box, padding-box, border-box; }
+  padding-right: 1px;
+  background-size: 1px 10px, 3px 10px;
+  background-repeat: repeat-y;
+  background-origin: content-box, padding-box;
+  background-position: right center; }
 .undershoot.sidebar {
   background-color: transparent; }
 
