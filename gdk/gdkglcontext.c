@@ -426,18 +426,22 @@ gdk_gl_context_set_debug_enabled (GdkGLContext *context,
   priv->debug_enabled = enabled;
 }
 
-/*< private >
+/**
  * gdk_gl_context_get_debug_enabled:
  * @context: a #GdkGLContext
  *
  * Retrieves the value set using gdk_gl_context_set_debug_enabled().
  *
  * Returns: %TRUE if debugging is enabled
+ *
+ * Since: 3.16
  */
 gboolean
 gdk_gl_context_get_debug_enabled (GdkGLContext *context)
 {
   GdkGLContextPrivate *priv = gdk_gl_context_get_instance_private (context);
+
+  g_return_val_if_fail (GDK_IS_GL_CONTEXT (context), FALSE);
 
   return priv->debug_enabled;
 }
@@ -472,18 +476,22 @@ gdk_gl_context_set_forward_compatible (GdkGLContext *context,
   priv->forward_compatible = compatible;
 }
 
-/*< private >
+/**
  * gdk_gl_context_get_forward_compatible:
  * @context: a #GdkGLContext
  *
  * Retrieves the value set using gdk_gl_context_set_forward_compatible().
  *
  * Returns: %TRUE if the context should be forward compatible
+ *
+ * Since: 3.16
  */
 gboolean
 gdk_gl_context_get_forward_compatible (GdkGLContext *context)
 {
   GdkGLContextPrivate *priv = gdk_gl_context_get_instance_private (context);
+
+  g_return_val_if_fail (GDK_IS_GL_CONTEXT (context), FALSE);
 
   return priv->forward_compatible;
 }
@@ -520,7 +528,7 @@ gdk_gl_context_set_required_version (GdkGLContext *context,
   priv->minor = minor;
 }
 
-/*< private >
+/**
  * gdk_gl_context_get_required_version:
  * @context: a #GdkGLContext
  * @major: (out) (nullable): return location for the major version to request
@@ -528,6 +536,8 @@ gdk_gl_context_set_required_version (GdkGLContext *context,
  *
  * Retrieves the major and minor version requested by calling
  * gdk_gl_context_set_required_version().
+ *
+ * Since: 3.16
  */
 void
 gdk_gl_context_get_required_version (GdkGLContext *context,
