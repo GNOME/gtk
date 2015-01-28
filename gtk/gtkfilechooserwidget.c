@@ -6260,18 +6260,6 @@ search_entry_activate_cb (GtkEntry *entry,
   search_start_query (impl, text);
 }
 
-static void
-search_button_clicked_cb (GtkFileChooserWidget *impl)
-{
-  operation_mode_set (impl, OPERATION_MODE_SEARCH);
-}
-
-static void
-location_button_clicked_cb (GtkFileChooserWidget *impl)
-{
-  operation_mode_set (impl, OPERATION_MODE_BROWSE);
-}
-
 /* Hides the path bar and creates the search entry */
 static void
 search_setup_widgets (GtkFileChooserWidget *impl)
@@ -7440,8 +7428,6 @@ gtk_file_chooser_widget_class_init (GtkFileChooserWidgetClass *class)
   gtk_widget_class_bind_template_callback (widget_class, places_sidebar_show_error_message_cb);
   gtk_widget_class_bind_template_callback (widget_class, places_sidebar_show_enter_location_cb);
   gtk_widget_class_bind_template_callback (widget_class, search_entry_activate_cb);
-  gtk_widget_class_bind_template_callback (widget_class, search_button_clicked_cb);
-  gtk_widget_class_bind_template_callback (widget_class, location_button_clicked_cb);
 }
 
 static void
