@@ -355,7 +355,7 @@ gdk_cairo_draw_from_gl (cairo_t              *cr,
 
   if (source_type == GL_RENDERBUFFER)
     {
-      glBindRenderbufferEXT (GL_RENDERBUFFER_EXT, source);
+      glBindRenderbuffer (GL_RENDERBUFFER, source);
       glGetRenderbufferParameteriv (GL_RENDERBUFFER, GL_RENDERBUFFER_ALPHA_SIZE,  &alpha_size);
     }
   else if (source_type == GL_TEXTURE)
