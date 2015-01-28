@@ -2189,6 +2189,13 @@ $asset_suffix: if($variant=='dark', '-dark', '');
   &:selected, &:hover { icon-shadow: none; }
 }
 
+//content view (grid/list)
+
+.content-view {
+  background-color: darken($bg_color,7%);
+  &:backdrop { background-color: darken($bg_color,7%); }
+}
+
 //selection-mode
 @each $s,$as in ('','-selectionmode'),
                   (':hover', '-hover-selectionmode'),

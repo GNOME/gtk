@@ -2903,6 +2903,11 @@ GtkSwitch {
   .list-row .check:hover, list-row .radio:selected, list-row .radio:hover {
     icon-shadow: none; }
 
+.content-view {
+  background-color: #282c2c; }
+  .content-view:backdrop {
+    background-color: #282c2c; }
+
 .view.content-view.check {
   icon-shadow: none;
   -gtk-icon-source: -gtk-scaled(url("assets/checkbox-selectionmode.png"), url("assets/checkbox-selectionmode@2.png"));
