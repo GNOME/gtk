@@ -4461,7 +4461,7 @@ gtk_text_view_style_updated (GtkWidget *widget)
   GtkStyleContext *style_context;
   const GtkBitmask *changes;
 
-  if (G_UNLIKELY (affects_font) == NULL)
+  if (G_UNLIKELY (affects_font == NULL))
     affects_font = _gtk_css_style_property_get_mask_affecting (GTK_CSS_AFFECTS_FONT);
 
   text_view = GTK_TEXT_VIEW (widget);

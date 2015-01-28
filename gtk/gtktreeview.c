@@ -8707,7 +8707,7 @@ gtk_tree_view_style_updated (GtkWidget *widget)
   GtkStyleContext *style_context;
   const GtkBitmask *changes;
 
-  if (G_UNLIKELY (affects_size) == NULL)
+  if (G_UNLIKELY (affects_size == NULL))
     affects_size = _gtk_css_style_property_get_mask_affecting (GTK_CSS_AFFECTS_SIZE | GTK_CSS_AFFECTS_CLIP);
 
   GTK_WIDGET_CLASS (gtk_tree_view_parent_class)->style_updated (widget);
