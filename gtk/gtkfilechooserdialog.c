@@ -30,6 +30,9 @@
 #include "gtktypebuiltins.h"
 #include "gtkintl.h"
 #include "gtksettings.h"
+#include "gtktogglebutton.h"
+#include "gtkstylecontext.h"
+#include "gtkheaderbar.h"
 #include "gtkdialogprivate.h"
 
 #include <stdarg.h>
@@ -200,6 +203,7 @@ struct _GtkFileChooserDialogPrivate
 
   /* for use with GtkFileChooserEmbed */
   gboolean response_requested;
+  gboolean search_setup;
 };
 
 static void     gtk_file_chooser_dialog_set_property (GObject               *object,
@@ -470,6 +474,41 @@ gtk_file_chooser_dialog_get_property (GObject         *object,
 }
 
 static void
+setup_search (GtkFileChooserDialog *dialog)
+{
+  gboolean use_header;
+
+  if (dialog->priv->search_setup)
+    return;
+
+  dialog->priv->search_setup = TRUE;
+
+  g_object_get (dialog, "use-header-bar", &use_header, NULL);
+  if (use_header)
+    {
+      GtkWidget *button;
+      GtkWidget *image;
+      GtkWidget *header;
+
+      button = gtk_toggle_button_new ();
+      gtk_widget_set_valign (button, GTK_ALIGN_CENTER);
+      image = gtk_image_new_from_icon_name ("edit-find-symbolic", GTK_ICON_SIZE_MENU);
+      gtk_container_add (GTK_CONTAINER (button), image);
+      gtk_style_context_add_class (gtk_widget_get_style_context (button), "image-button");
+      gtk_style_context_remove_class (gtk_widget_get_style_context (button), "text-button");
+      gtk_widget_show (image);
+      gtk_widget_show (button);
+
+      header = gtk_dialog_get_header_bar (GTK_DIALOG (dialog));
+      gtk_header_bar_pack_end (GTK_HEADER_BAR (header), button);
+
+      g_object_bind_property (button, "active",
+                              dialog->priv->widget, "search-mode",
+                              G_BINDING_BIDIRECTIONAL);
+    }
+}
+
+static void
 ensure_default_response (GtkFileChooserDialog *dialog)
 {
   GtkWidget *widget;
@@ -486,6 +525,7 @@ gtk_file_chooser_dialog_map (GtkWidget *widget)
   GtkFileChooserDialog *dialog = GTK_FILE_CHOOSER_DIALOG (widget);
   GtkFileChooserDialogPrivate *priv = dialog->priv;
 
+  setup_search (dialog);
   ensure_default_response (dialog);
 
   _gtk_file_chooser_embed_initial_focus (GTK_FILE_CHOOSER_EMBED (priv->widget));
@@ -599,7 +639,7 @@ gtk_file_chooser_dialog_new (const gchar         *title,
 {
   GtkWidget *result;
   va_list varargs;
-  
+
   va_start (varargs, first_button_text);
   result = gtk_file_chooser_dialog_new_valist (title, parent, action,
 					       first_button_text,
