@@ -1253,6 +1253,9 @@ gtk_file_chooser_widget_key_press_event (GtkWidget   *widget,
       return TRUE;
     }
 
+  if (GTK_WIDGET_CLASS (gtk_file_chooser_widget_parent_class)->key_press_event (widget, event))
+    return TRUE;
+
   return FALSE;
 }
 
