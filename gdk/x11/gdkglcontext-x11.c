@@ -546,34 +546,27 @@ find_xvisinfo_for_fbconfig (GdkDisplay  *display,
 static GLXContext
 create_gl3_context (GdkDisplay   *display,
                     GLXFBConfig   config,
-                    GdkGLContext *share)
+                    GdkGLContext *share,
+                    int           flags,
+                    int           major,
+                    int           minor)
 {
-  /* There are no profiles before OpenGL 3.2.
-   *
-   * The GLX_ARB_create_context_profile spec says:
-   *
-   *   If the requested OpenGL version is less than 3.2,
-   *   GLX_CONTEXT_PROFILE_MASK_ARB is ignored and the functionality
-   *   of the context is determined solely by the requested version.
-   *
-   * Which means we can ask for the CORE_PROFILE_BIT without asking for
-   * a 3.2 version.
-   */
-  static const int attrib_list[] = {
+  int attrib_list[] = {
     GLX_CONTEXT_PROFILE_MASK_ARB, GLX_CONTEXT_CORE_PROFILE_BIT_ARB,
-    GLX_CONTEXT_MAJOR_VERSION_ARB, 3,
-    GLX_CONTEXT_MINOR_VERSION_ARB, 2,
+    GLX_CONTEXT_MAJOR_VERSION_ARB, major,
+    GLX_CONTEXT_MINOR_VERSION_ARB, minor,
+    GLX_CONTEXT_FLAGS_ARB, flags,
     None,
   };
 
-  GdkX11GLContext *context_x11 = NULL;
+  GdkX11GLContext *share_x11 = NULL;
 
   if (share != NULL)
-    context_x11 = GDK_X11_GL_CONTEXT (share);
+    share_x11 = GDK_X11_GL_CONTEXT (share);
 
   return glXCreateContextAttribsARB (gdk_x11_display_get_xdisplay (display),
                                      config,
-                                     context_x11 != NULL ? context_x11->glx_context : NULL,
+                                     share_x11 != NULL ? share_x11->glx_context : NULL,
                                      True,
                                      attrib_list);
 }
@@ -583,15 +576,15 @@ create_gl_context (GdkDisplay   *display,
                    GLXFBConfig   config,
                    GdkGLContext *share)
 {
-  GdkX11GLContext *context_x11 = NULL;
+  GdkX11GLContext *share_x11 = NULL;
 
   if (share != NULL)
-    context_x11 = GDK_X11_GL_CONTEXT (share);
+    share_x11 = GDK_X11_GL_CONTEXT (share);
 
   return glXCreateNewContext (gdk_x11_display_get_xdisplay (display),
                               config,
                               GLX_RGBA_TYPE,
-                              context_x11 != NULL ? context_x11->glx_context : NULL,
+                              share_x11 != NULL ? share_x11->glx_context : NULL,
                               True);
 }
 
@@ -616,20 +609,41 @@ gdk_x11_gl_context_realize (GdkGLContext  *context,
   profile = gdk_gl_context_get_profile (context);
   share = gdk_gl_context_get_shared_context (context);
 
+  /* GDK_GL_PROFILE_DEFAULT is currently equivalent to the LEGACY profile */
+  if (profile == GDK_GL_PROFILE_DEFAULT)
+    profile = GDK_GL_PROFILE_LEGACY;
+
   /* we check for the presence of the GLX_ARB_create_context_profile
    * extension before checking for a GLXFBConfig.
    */
   if (profile == GDK_GL_PROFILE_3_2_CORE)
     {
-      GDK_NOTE (OPENGL, g_print ("Creating core GLX context\n"));
-      context_x11->glx_context = create_gl3_context (display, context_x11->glx_config, share);
+      gboolean debug_bit, compat_bit;
+      int major, minor, flags;
+
+      gdk_gl_context_get_required_version (context, &major, &minor);
+      debug_bit = gdk_gl_context_get_debug_enabled (context);
+      compat_bit = gdk_gl_context_get_forward_compatible (context);
+
+      flags = 0;
+      if (debug_bit)
+        flags |= GLX_CONTEXT_DEBUG_BIT_ARB;
+      if (compat_bit)
+        flags |= GLX_CONTEXT_FORWARD_COMPATIBLE_BIT_ARB;
+
+      GDK_NOTE (OPENGL,
+                g_print ("Creating core GLX context (version:%d.%d, debug:%s, forward:%s)\n",
+                         major, minor,
+                         debug_bit ? "yes" : "no",
+                         compat_bit ? "yes" : "no"));
+
+      context_x11->glx_context = create_gl3_context (display,
+                                                     context_x11->glx_config,
+                                                     share,
+                                                     flags, major, minor);
     }
   else
     {
-      /* GDK_GL_PROFILE_DEFAULT is currently
-       * equivalent to the LEGACY profile
-       */
-      profile = GDK_GL_PROFILE_LEGACY;
       GDK_NOTE (OPENGL, g_print ("Creating legacy GLX context\n"));
       context_x11->glx_context = create_gl_context (display, context_x11->glx_config, share);
     }
