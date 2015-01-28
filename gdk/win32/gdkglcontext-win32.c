@@ -505,9 +505,8 @@ _gdk_win32_gl_context_realize (GdkGLContext *context,
       return FALSE;
     }
 
-  /* GDK_GL_PROFILE_DEFAULT is the same as GDK_GL_PROFILE_LEGACY for now */
   if (profile == GDK_GL_PROFILE_DEFAULT)
-    profile = GDK_GL_PROFILE_LEGACY;
+    profile = GDK_GL_PROFILE_3_2_CORE;
 
   if (profile == GDK_GL_PROFILE_3_2_CORE)
     {

@@ -368,7 +368,7 @@ gdk_wayland_window_create_gl_context (GdkWindow     *window,
     }
 
   if (profile == GDK_GL_PROFILE_DEFAULT)
-    profile = GDK_GL_PROFILE_LEGACY;
+    profile = GDK_GL_PROFILE_3_2_CORE;
 
   if (profile == GDK_GL_PROFILE_3_2_CORE &&
       !display_wayland->have_egl_khr_create_context)
