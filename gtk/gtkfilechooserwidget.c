@@ -1246,11 +1246,12 @@ gtk_file_chooser_widget_key_press_event (GtkWidget   *widget,
   GtkFileChooserWidget *impl = (GtkFileChooserWidget *) widget;
   GtkFileChooserWidgetPrivate *priv = impl->priv;
 
-  if (priv->operation_mode != OPERATION_MODE_SEARCH)
-    operation_mode_set (impl, OPERATION_MODE_SEARCH);
-
   if (gtk_search_entry_handle_event (GTK_SEARCH_ENTRY (priv->search_entry), (GdkEvent *)event))
-    return TRUE;
+    {
+      if (priv->operation_mode != OPERATION_MODE_SEARCH)
+        operation_mode_set (impl, OPERATION_MODE_SEARCH);
+      return TRUE;
+    }
 
   return FALSE;
 }
