@@ -439,17 +439,17 @@ gtk_gl_area_allocate_buffers (GtkGLArea *area)
 
   if (priv->render_buffer)
     {
-      glBindRenderbufferEXT (GL_RENDERBUFFER_EXT, priv->render_buffer);
-      glRenderbufferStorageEXT (GL_RENDERBUFFER_EXT, GL_RGB8, width, height);
+      glBindRenderbuffer (GL_RENDERBUFFER, priv->render_buffer);
+      glRenderbufferStorage (GL_RENDERBUFFER, GL_RGB8, width, height);
     }
 
   if (priv->has_depth_buffer || priv->has_stencil_buffer)
     {
-      glBindRenderbufferEXT (GL_RENDERBUFFER_EXT, priv->depth_stencil_buffer);
+      glBindRenderbuffer (GL_RENDERBUFFER, priv->depth_stencil_buffer);
       if (priv->has_stencil_buffer)
-        glRenderbufferStorageEXT (GL_RENDERBUFFER_EXT, GL_DEPTH24_STENCIL8_EXT, width, height);
+        glRenderbufferStorage (GL_RENDERBUFFER, GL_DEPTH24_STENCIL8, width, height);
       else
-        glRenderbufferStorageEXT (GL_RENDERBUFFER_EXT, GL_DEPTH_COMPONENT24, width, height);
+        glRenderbufferStorage (GL_RENDERBUFFER, GL_DEPTH_COMPONENT24, width, height);
     }
 
   priv->needs_render = TRUE;
