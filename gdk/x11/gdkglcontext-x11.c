@@ -609,10 +609,6 @@ gdk_x11_gl_context_realize (GdkGLContext  *context,
   profile = gdk_gl_context_get_profile (context);
   share = gdk_gl_context_get_shared_context (context);
 
-  /* GDK_GL_PROFILE_DEFAULT is currently equivalent to the LEGACY profile */
-  if (profile == GDK_GL_PROFILE_DEFAULT)
-    profile = GDK_GL_PROFILE_LEGACY;
-
   /* we check for the presence of the GLX_ARB_create_context_profile
    * extension before checking for a GLXFBConfig.
    */
@@ -1193,7 +1189,7 @@ gdk_x11_window_create_gl_context (GdkWindow    *window,
 
   display = gdk_window_get_display (window);
 
-  /* GDK_GL_PROFILE_DEFAULT is currently equivalent to the LEGACY profile */
+  /* GDK_GL_PROFILE_DEFAULT is currently equivalent to the 3_2_CORE profile */
   if (profile == GDK_GL_PROFILE_DEFAULT)
     profile = GDK_GL_PROFILE_3_2_CORE;
 

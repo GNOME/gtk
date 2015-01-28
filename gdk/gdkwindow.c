@@ -2742,21 +2742,9 @@ gdk_window_get_paint_gl_context (GdkWindow  *window,
       window->impl_window->gl_paint_context =
         GDK_WINDOW_IMPL_GET_CLASS (window->impl)->create_gl_context (window->impl_window,
                                                                      TRUE,
-                                                                     GDK_GL_PROFILE_3_2_CORE,
+                                                                     GDK_GL_PROFILE_DEFAULT,
                                                                      NULL,
                                                                      &internal_error);
-      if (window->impl_window->gl_paint_context == NULL &&
-          g_error_matches (internal_error, GDK_GL_ERROR,
-                           GDK_GL_ERROR_UNSUPPORTED_PROFILE))
-        {
-          g_clear_error (&internal_error);
-          window->impl_window->gl_paint_context =
-            GDK_WINDOW_IMPL_GET_CLASS (window->impl)->create_gl_context (window->impl_window,
-                                                                         TRUE,
-                                                                         GDK_GL_PROFILE_DEFAULT,
-                                                                         NULL,
-                                                                         &internal_error);
-        }
     }
 
   if (internal_error != NULL)

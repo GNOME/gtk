@@ -553,11 +553,6 @@ gdk_gl_context_get_required_version (GdkGLContext *context,
       switch (priv->profile)
         {
         case GDK_GL_PROFILE_DEFAULT:
-        case GDK_GL_PROFILE_LEGACY:
-          if (major != NULL)
-            *major = 1;
-          break;
-
         case GDK_GL_PROFILE_3_2_CORE:
           if (major != NULL)
             *major = 3;
@@ -572,11 +567,6 @@ gdk_gl_context_get_required_version (GdkGLContext *context,
       switch (priv->profile)
         {
         case GDK_GL_PROFILE_DEFAULT:
-        case GDK_GL_PROFILE_LEGACY:
-          if (minor != NULL)
-            *minor = 0;
-          break;
-
         case GDK_GL_PROFILE_3_2_CORE:
           if (minor != NULL)
             *minor = 2;
@@ -740,7 +730,7 @@ gdk_gl_context_get_profile (GdkGLContext *context)
 {
   GdkGLContextPrivate *priv = gdk_gl_context_get_instance_private (context);
 
-  g_return_val_if_fail (GDK_IS_GL_CONTEXT (context), GDK_GL_PROFILE_LEGACY);
+  g_return_val_if_fail (GDK_IS_GL_CONTEXT (context), GDK_GL_PROFILE_DEFAULT);
 
   return priv->profile;
 }
