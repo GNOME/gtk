@@ -2509,6 +2509,7 @@ operation_mode_set_search (GtkFileChooserWidget *impl)
   search_setup_widgets (impl);
   gtk_entry_grab_focus_without_selecting (GTK_ENTRY (priv->search_entry));
   gtk_widget_set_sensitive (priv->filter_combo, FALSE);
+  gtk_places_sidebar_set_location (GTK_PLACES_SIDEBAR (priv->places_sidebar), NULL);
 }
 
 static void
