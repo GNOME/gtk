@@ -589,32 +589,60 @@
 // top, bottom, right, left
 //
 
-  $_shadow_color: if($variant == 'light', transparentize(black, 0.7), transparentize(black, 0.5));
+  $_undershoot_color: transparentize($fg_color, 0.6);
+  $_undershoot_base: transparentize($base_color, 0.5);
+
+  $_1st_gradient_dir: bottom left;
+  $_2nd_gradient_dir: bottom right;
+  $_gradient_size: 13px 7px;
+  $_line_size: 100% 1px;
+  $_gradient_repeat: repeat-x;
+  $_background_position: left top;
 
   background-color: transparent; // shouldn't be needed, but better to be sure;
 
-  @if $p==top {
-    background-image: linear-gradient(to bottom, $_shadow_color,
-                                                 transparentize($_shadow_color, 0.5) 3px,
-                                                 transparent);
-  }
+  @if $p==top { box-shadow: 0 -1px $borders_color; } // vars are already set for top undershoot, there's just a box shadow to
+                                                     // to cover the treeview lighter border, in the other cases it shouldn't be
+                                                     // a problem
 
   @else if $p==bottom {
-
-    background-image: linear-gradient(to top, transparentize(black, 0.5),
-                                              transparentize(black, 0.8) 3%,
-                                              transparent,
-                                              transparentize(black, 0.98) 25%,
-                                              transparent);
+    $_1st_gradient_dir: top left;
+    $_2nd_gradient_dir: top right;
+    $_background_position: bottom left;
   }
 
-  @else {
-    $_dir: left;
+  @else { // left
+    $_1st_gradient_dir: bottom right;
+    $_2nd_gradient_dir: top right;
+    $_gradient_size: 7px 13px;
+    $_line_size: 1px 100%;
+    $_gradient_repeat: repeat-y;
+    $_background_position: left top;
 
-    @if $p==left { $_dir: right; }
-
-    background-image: linear-gradient(to $_dir, $_shadow_color,
-                                                transparentize($_shadow_color, 0.7) 2px,
-                                                transparent);
+    @if $p==right {
+      $_1st_gradient_dir: bottom left;
+      $_2nd_gradient_dir: top left;
+      $_background_position: right top;
+    }
   }
+
+  background-image: linear-gradient(to $_1st_gradient_dir, // first half triangle - colored
+                                    $_undershoot_color 18%,
+                                    transparentize($_undershoot_color, 1) 25%),
+                    linear-gradient(to $_2nd_gradient_dir, // second half triangle - colored
+                                    $_undershoot_color 18%,
+                                    transparentize($_undershoot_color, 1) 25%),
+                    linear-gradient(to $_1st_gradient_dir, // first half triangle - as a base
+                                    $_undershoot_base 18%,
+                                    transparentize($_undershoot_base, 1) 25%),
+                    linear-gradient(to $_2nd_gradient_dir, // second half triangle - as a base
+                                    $_undershoot_base 18%,
+                                    transparentize($_undershoot_base, 1) 25%),
+                    linear-gradient(to top, $_undershoot_base); // this is just a line
+
+  border-#{$p}: 1px solid transparent;
+  background-size: $_gradient_size, $_gradient_size, $_gradient_size, $_gradient_size, $_line_size;
+  background-repeat: $_gradient_repeat, $_gradient_repeat, $_gradient_repeat, $_gradient_repeat, no-repeat;
+  background-position: $_background_position;
+  background-origin: border-box, border-box, padding-box, padding-box, border-box;
 }
