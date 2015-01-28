@@ -526,8 +526,7 @@ static void     search_clear_model           (GtkFileChooserWidget *impl,
 					      gboolean               remove_from_treeview);
 static gboolean search_should_respond        (GtkFileChooserWidget *impl);
 static GSList  *search_get_selected_files    (GtkFileChooserWidget *impl);
-static void     search_entry_activate_cb     (GtkEntry              *entry, 
-					      gpointer               data);
+static void     search_entry_activate_cb     (GtkFileChooserWidget *impl);
 static void     settings_load                (GtkFileChooserWidget *impl);
 
 static void     show_filters                 (GtkFileChooserWidget *impl,
@@ -5926,7 +5925,7 @@ gtk_file_chooser_widget_should_respond (GtkFileChooserEmbed *chooser_embed)
     }
   else if (priv->operation_mode == OPERATION_MODE_SEARCH && priv->toplevel_last_focus_widget == priv->search_entry)
     {
-      search_entry_activate_cb (GTK_ENTRY (priv->search_entry), impl);
+      search_entry_activate_cb (impl);
       return FALSE;
     }
   else if (priv->location_entry && priv->toplevel_last_focus_widget == priv->location_entry)
@@ -6238,10 +6237,8 @@ search_start_query (GtkFileChooserWidget *impl,
  * entry; starts the query
  */
 static void
-search_entry_activate_cb (GtkEntry *entry,
-			  gpointer data)
+search_entry_activate_cb (GtkFileChooserWidget *impl)
 {
-  GtkFileChooserWidget *impl = GTK_FILE_CHOOSER_WIDGET (data);
   GtkFileChooserWidgetPrivate *priv = impl->priv;
   const char *text;
 
