@@ -594,7 +594,7 @@
 
   $_gradient_dir: left;
   $_dash_bg_size: 10px 1px;
-  $_base_bg_size: 10px 3px;
+  $_base_bg_size: 10px 1px;
   $_gradient_repeat: repeat-x;
   $_bg_pos: center $p;
 
@@ -603,19 +603,17 @@
   @if ($p == left) or ($p == right) {
     $_gradient_dir: top;
     $_dash_bg_size: 1px 10px;
-    $_base_bg_size: 3px 10px;
+    $_base_bg_size: 1px 10px;
     $_gradient_repeat: repeat-y;
     $_bg_pos: $p center;
   }
 
   background-image: linear-gradient(to $_gradient_dir, // this is the dash
-                                    transparentize($_undershoot_color, 1) 10%,
-                                    $_undershoot_color 10%,
-                                    $_undershoot_color 60%,
-                                    transparentize($_undershoot_color, 1) 60%),
+                                    $_undershoot_color 50%,
+                                    transparentize($_undershoot_color, 1) 50%),
                     linear-gradient(to $_gradient_dir, // this is the dash base
-                                    $_undershoot_base 70%,
-                                    transparentize($_undershoot_base, 1) 70%);
+                                    $_undershoot_base 50%,
+                                    transparentize($_undershoot_base, 1) 50%);
 
   border-#{$p}: 1px solid transparent;
   padding-#{$p}: 1px;
