@@ -4790,7 +4790,9 @@ gtk_places_sidebar_set_location (GtkPlacesSidebar *sidebar,
 
   if (sidebar->current_location != NULL)
     g_object_unref (sidebar->current_location);
-  sidebar->current_location = g_object_ref (location);
+  sidebar->current_location = location;
+  if (sidebar->current_location != NULL)
+    g_object_ref (sidebar->current_location);
 
   if (location == NULL)
           goto out;
