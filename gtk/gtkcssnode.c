@@ -23,6 +23,16 @@
 
 G_DEFINE_TYPE (GtkCssNode, gtk_css_node, G_TYPE_OBJECT)
 
+void
+gtk_css_node_set_invalid (GtkCssNode *node,
+                          gboolean    invalid)
+{
+  if (node->invalid == invalid)
+    return;
+
+  GTK_CSS_NODE_GET_CLASS (node)->set_invalid (node, invalid);
+}
+
 static void
 gtk_css_node_dispose (GObject *object)
 {
@@ -54,6 +64,16 @@ gtk_css_node_real_invalidate (GtkCssNode   *cssnode,
 {
 }
 
+static void
+gtk_css_node_real_set_invalid (GtkCssNode *node,
+                               gboolean    invalid)
+{
+  node->invalid = invalid;
+
+  if (invalid && node->parent)
+    gtk_css_node_set_invalid (node->parent, invalid);
+}
+
 static GtkWidgetPath *
 gtk_css_node_real_create_widget_path (GtkCssNode *cssnode)
 {
@@ -75,6 +95,7 @@ gtk_css_node_class_init (GtkCssNodeClass *klass)
   object_class->finalize = gtk_css_node_finalize;
 
   klass->invalidate = gtk_css_node_real_invalidate;
+  klass->set_invalid = gtk_css_node_real_set_invalid;
   klass->create_widget_path = gtk_css_node_real_create_widget_path;
   klass->get_widget_path = gtk_css_node_real_get_widget_path;
 }
@@ -137,6 +158,9 @@ gtk_css_node_set_parent (GtkCssNode *node,
           if (parent->first_child == NULL)
             parent->first_child = node;
         }
+
+      if (node->invalid)
+        gtk_css_node_set_invalid (parent, TRUE);
     }
 
   gtk_css_node_invalidate (node, GTK_CSS_CHANGE_ANY_PARENT | GTK_CSS_CHANGE_ANY_SIBLING);
@@ -330,6 +354,8 @@ gtk_css_node_invalidate (GtkCssNode   *cssnode,
                          GtkCssChange  change)
 {
   GTK_CSS_NODE_GET_CLASS (cssnode)->invalidate (cssnode, change);
+
+  gtk_css_node_set_invalid (cssnode, TRUE);
 }
 
 GtkWidgetPath *

@@ -163,7 +163,6 @@ struct _GtkStyleContextPrivate
 
   const GtkBitmask *invalidating_context;
   guint animating : 1;
-  guint invalid : 1;
 };
 
 enum {
@@ -838,33 +837,6 @@ gtk_style_context_lookup_style_for_state (GtkStyleContext *context,
   return values;
 }
 
-void
-gtk_style_context_set_invalid (GtkStyleContext *context,
-                               gboolean         invalid)
-{
-  GtkStyleContextPrivate *priv;
-  
-  priv = context->priv;
-
-  if (priv->invalid == invalid)
-    return;
-
-  priv->invalid = invalid;
-
-  if (invalid)
-    {
-      GtkWidget *widget;
-
-      G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
-      if (GTK_IS_CSS_WIDGET_NODE (priv->cssnode) &&
-          GTK_IS_RESIZE_CONTAINER (widget = gtk_css_widget_node_get_widget (GTK_CSS_WIDGET_NODE (priv->cssnode))))
-        _gtk_container_queue_restyle (GTK_CONTAINER (widget));
-      else if (priv->parent)
-        gtk_style_context_set_invalid (priv->parent, TRUE);
-      G_GNUC_END_IGNORE_DEPRECATIONS;
-    }
-}
-
 /**
  * gtk_style_context_new:
  *
@@ -1505,8 +1477,6 @@ gtk_style_context_set_parent (GtkStyleContext *context,
     {
       parent->priv->children = g_slist_prepend (parent->priv->children, context);
       g_object_ref (parent);
-      if (priv->invalid)
-        gtk_style_context_set_invalid (parent, TRUE);
       gtk_css_node_set_parent (gtk_style_context_get_root (context),
                                gtk_style_context_get_root (parent));
     }
@@ -2883,10 +2853,10 @@ _gtk_style_context_validate (GtkStyleContext  *context,
   if (G_UNLIKELY (gtk_get_debug_flags () & GTK_DEBUG_NO_CSS_CACHE))
     change = GTK_CSS_CHANGE_ANY;
 
-  if (!priv->invalid && change == 0 && _gtk_bitmask_is_empty (parent_changes))
+  if (!cssnode->invalid && change == 0 && _gtk_bitmask_is_empty (parent_changes))
     return;
 
-  gtk_style_context_set_invalid (context, FALSE);
+  gtk_css_node_set_invalid (cssnode, FALSE);
 
   current = gtk_css_node_get_style (cssnode);
   if (current == NULL)

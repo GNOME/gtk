@@ -18,6 +18,8 @@
 #include "config.h"
 
 #include "gtkcsswidgetnodeprivate.h"
+
+#include "gtkcontainerprivate.h"
 #include "gtkprivate.h"
 #include "gtkstylecontextprivate.h"
 #include "gtkwidgetprivate.h"
@@ -29,15 +31,26 @@ gtk_css_widget_node_invalidate (GtkCssNode   *node,
                                 GtkCssChange  change)
 {
   GtkCssWidgetNode *widget_node = GTK_CSS_WIDGET_NODE (node);
-  GtkStyleContext *context;
 
   widget_node->pending_changes |= change;
+}
 
-  if (widget_node->widget == NULL)
-    return;
+static void
+gtk_css_widget_node_set_invalid (GtkCssNode *node,
+                                 gboolean    invalid)
+{
+  GtkCssWidgetNode *widget_node = GTK_CSS_WIDGET_NODE (node);
 
-  context = gtk_widget_get_style_context (widget_node->widget);
-  gtk_style_context_set_invalid (context, TRUE);
+  GTK_CSS_NODE_CLASS (gtk_css_widget_node_parent_class)->set_invalid (node, invalid);
+
+  G_GNUC_BEGIN_IGNORE_DEPRECATIONS
+  if (invalid && 
+      gtk_css_node_get_parent (node) == NULL &&
+      GTK_IS_RESIZE_CONTAINER (widget_node->widget))
+    {
+      _gtk_container_queue_restyle (GTK_CONTAINER (widget_node->widget));
+    }
+  G_GNUC_END_IGNORE_DEPRECATIONS
 }
 
 static GtkWidgetPath *
@@ -80,6 +93,7 @@ gtk_css_widget_node_class_init (GtkCssWidgetNodeClass *klass)
   GtkCssNodeClass *node_class = GTK_CSS_NODE_CLASS (klass);
 
   node_class->invalidate = gtk_css_widget_node_invalidate;
+  node_class->set_invalid = gtk_css_widget_node_set_invalid;
   node_class->create_widget_path = gtk_css_widget_node_create_widget_path;
   node_class->get_widget_path = gtk_css_widget_node_get_widget_path;
 }

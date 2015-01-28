@@ -39,6 +39,13 @@ gtk_css_path_node_invalidate (GtkCssNode   *node,
     }
 }
 
+static void
+gtk_css_path_node_set_invalid (GtkCssNode *node,
+                               gboolean    invalid)
+{
+  /* path nodes are always valid */
+}
+
 static GtkWidgetPath *
 gtk_css_path_node_real_create_widget_path (GtkCssNode *node)
 {
@@ -76,6 +83,7 @@ gtk_css_path_node_class_init (GtkCssPathNodeClass *klass)
   GtkCssNodeClass *node_class = GTK_CSS_NODE_CLASS (klass);
 
   node_class->invalidate = gtk_css_path_node_invalidate;
+  node_class->set_invalid = gtk_css_path_node_set_invalid;
   node_class->create_widget_path = gtk_css_path_node_real_create_widget_path;
   node_class->get_widget_path = gtk_css_path_node_real_get_widget_path;
 }

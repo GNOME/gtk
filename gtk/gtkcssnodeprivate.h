@@ -46,6 +46,8 @@ struct _GtkCssNode
 
   GtkCssNodeDeclaration *decl;
   GtkCssStyle           *style;
+
+  guint                  invalid :1;    /* set if node or a child is invalid */
 };
 
 struct _GtkCssNodeClass
@@ -56,6 +58,8 @@ struct _GtkCssNodeClass
   const GtkWidgetPath * (* get_widget_path)             (GtkCssNode            *cssnode);
   void                  (* invalidate)                  (GtkCssNode            *cssnode,
                                                          GtkCssChange           change);
+  void                  (* set_invalid)                 (GtkCssNode            *node,
+                                                         gboolean               invalid);
 };
 
 GType                   gtk_css_node_get_type           (void) G_GNUC_CONST;
@@ -108,6 +112,8 @@ void                    gtk_css_node_set_style          (GtkCssNode            *
 
 void                    gtk_css_node_invalidate         (GtkCssNode            *cssnode,
                                                          GtkCssChange           change);
+void                    gtk_css_node_set_invalid        (GtkCssNode            *node,
+                                                         gboolean               invalid);
 GtkWidgetPath *         gtk_css_node_create_widget_path (GtkCssNode            *cssnode);
 const GtkWidgetPath *   gtk_css_node_get_widget_path    (GtkCssNode            *cssnode);
 
