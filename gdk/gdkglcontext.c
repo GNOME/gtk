@@ -85,11 +85,16 @@ typedef struct {
   GdkGLContext *shared_context;
   GdkGLProfile profile;
 
+  int major;
+  int minor;
+
   guint realized : 1;
   guint use_texture_rectangle : 1;
   guint has_gl_framebuffer_blit : 1;
   guint has_frame_terminator : 1;
   guint extensions_checked : 1;
+  guint debug_enabled : 1;
+  guint forward_compatible : 1;
 
   GdkGLContextPaintData *paint_data;
 } GdkGLContextPrivate;
@@ -388,6 +393,186 @@ gdk_gl_context_has_frame_terminator (GdkGLContext *context)
   GdkGLContextPrivate *priv = gdk_gl_context_get_instance_private (context);
 
   return priv->has_frame_terminator;
+}
+
+/**
+ * gdk_gl_context_set_debug_enabled:
+ * @context: a #GdkGLContext
+ * @enabled: whether to enable debugging in the context
+ *
+ * Sets whether the #GdkGLContext should perform extra validations and
+ * run time checking. This is useful during development, but has
+ * additional overhead.
+ *
+ * The #GdkGLContext must not be realized.
+ *
+ * This function has effect only on #GdkGLContexts created using
+ * the %GDK_GL_PROFILE_3_2_CORE profile.
+ *
+ * Since: 3.16
+ */
+void
+gdk_gl_context_set_debug_enabled (GdkGLContext *context,
+                                  gboolean      enabled)
+{
+  GdkGLContextPrivate *priv = gdk_gl_context_get_instance_private (context);
+
+  g_return_if_fail (GDK_IS_GL_CONTEXT (context));
+  g_return_if_fail (!priv->realized);
+  g_return_if_fail (priv->profile == GDK_GL_PROFILE_3_2_CORE);
+
+  enabled = !!enabled;
+
+  priv->debug_enabled = enabled;
+}
+
+/*< private >
+ * gdk_gl_context_get_debug_enabled:
+ * @context: a #GdkGLContext
+ *
+ * Retrieves the value set using gdk_gl_context_set_debug_enabled().
+ *
+ * Returns: %TRUE if debugging is enabled
+ */
+gboolean
+gdk_gl_context_get_debug_enabled (GdkGLContext *context)
+{
+  GdkGLContextPrivate *priv = gdk_gl_context_get_instance_private (context);
+
+  return priv->debug_enabled;
+}
+
+/**
+ * gdk_gl_context_set_forward_compatible:
+ * @context: a #GdkGLContext
+ * @compatible: whether the context should be forward compatible
+ *
+ * Sets whether the #GdkGLContext should be forward compatible.
+ *
+ * Forward compatibile contexts must not support OpenGL functionality that
+ * has been marked as deprecated in the requested version; non-forward
+ * compatible contexts, on the other hand, must support both deprecated and
+ * non deprecated functionality.
+ *
+ * The #GdkGLContext must not be realized.
+ *
+ * This function has effect only on #GdkGLContexts created using
+ * the %GDK_GL_PROFILE_3_2_CORE profile.
+ *
+ * Since: 3.16
+ */
+void
+gdk_gl_context_set_forward_compatible (GdkGLContext *context,
+                                       gboolean      compatible)
+{
+  GdkGLContextPrivate *priv = gdk_gl_context_get_instance_private (context);
+
+  compatible = !!compatible;
+
+  priv->forward_compatible = compatible;
+}
+
+/*< private >
+ * gdk_gl_context_get_forward_compatible:
+ * @context: a #GdkGLContext
+ *
+ * Retrieves the value set using gdk_gl_context_set_forward_compatible().
+ *
+ * Returns: %TRUE if the context should be forward compatible
+ */
+gboolean
+gdk_gl_context_get_forward_compatible (GdkGLContext *context)
+{
+  GdkGLContextPrivate *priv = gdk_gl_context_get_instance_private (context);
+
+  return priv->forward_compatible;
+}
+
+/**
+ * gdk_gl_context_set_required_version:
+ * @context: a #GdkGLContext
+ * @major: the major version to request
+ * @minor: the minor version to request
+ *
+ * Sets the major and minor version of OpenGL to request.
+ *
+ * Setting @major and @minor to zero will use the default values.
+ *
+ * The #GdkGLContext must not be realized.
+ *
+ * This function has effect only on #GdkGLContexts created using
+ * the %GDK_GL_PROFILE_3_2_CORE profile.
+ *
+ * Since: 3.16
+ */
+void
+gdk_gl_context_set_required_version (GdkGLContext *context,
+                                     int           major,
+                                     int           minor)
+{
+  GdkGLContextPrivate *priv = gdk_gl_context_get_instance_private (context);
+
+  g_return_if_fail (GDK_IS_GL_CONTEXT (context));
+  g_return_if_fail (!priv->realized);
+  g_return_if_fail (priv->profile == GDK_GL_PROFILE_3_2_CORE);
+
+  priv->major = major;
+  priv->minor = minor;
+}
+
+/*< private >
+ * gdk_gl_context_get_required_version:
+ * @context: a #GdkGLContext
+ * @major: (out) (nullable): return location for the major version to request
+ * @minor: (out) (nullable): return location for the minor version to request
+ *
+ * Retrieves the major and minor version requested by calling
+ * gdk_gl_context_set_required_version().
+ */
+void
+gdk_gl_context_get_required_version (GdkGLContext *context,
+                                     int          *major,
+                                     int          *minor)
+{
+  GdkGLContextPrivate *priv = gdk_gl_context_get_instance_private (context);
+
+  if (major != NULL && priv->major > 0)
+    *major = priv->major;
+  else
+    {
+      switch (priv->profile)
+        {
+        case GDK_GL_PROFILE_DEFAULT:
+        case GDK_GL_PROFILE_LEGACY:
+          if (major != NULL)
+            *major = 1;
+          break;
+
+        case GDK_GL_PROFILE_3_2_CORE:
+          if (major != NULL)
+            *major = 3;
+          break;
+        }
+    }
+
+  if (minor != NULL && priv->minor > 0)
+    *minor = priv->minor;
+  else
+    {
+      switch (priv->profile)
+        {
+        case GDK_GL_PROFILE_DEFAULT:
+        case GDK_GL_PROFILE_LEGACY:
+          if (minor != NULL)
+            *minor = 0;
+          break;
+
+        case GDK_GL_PROFILE_3_2_CORE:
+          if (minor != NULL)
+            *minor = 2;
+          break;
+        }
+    }
 }
 
 /**
