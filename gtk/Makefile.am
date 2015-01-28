@@ -1405,10 +1405,13 @@ gtk.gresource.xml: Makefile.am
 	  n=`basename $$f`; \
 	  $(ECHO) "    <file compressed=\"true\">ui/$$n</file>" >> $@; \
 	done; \
-	for s in 16x16 22x22 24x24 32x32; do \
-	  for f in $(srcdir)/resources/icons/$$s/actions/*.png; do \
-	    n=`basename $$f`; \
-	    $(ECHO) "    <file>icons/$$s/actions/$$n</file>" >> $@; \
+	shopt -s nullglob; \
+	for s in 16x16 22x22 24x24 32x32 48x48; do \
+	  for c in actions status; do \
+	    for f in $(srcdir)/resources/icons/$$s/$$c/*.png; do \
+	      n=`basename $$f`; \
+	      $(ECHO) "    <file>icons/$$s/$$c/$$n</file>" >> $@; \
+	    done; \
 	  done; \
 	done; \
 	$(ECHO) "  </gresource>" >> $@; \
