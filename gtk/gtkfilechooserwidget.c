@@ -163,6 +163,9 @@ _gtk_file_chooser_profile_log (const char *func, int indent, const char *msg1, c
 #define profile_msg(x, y)
 #endif
 
+enum {
+  PROP_SEARCH_MODE = 1
+};
 
 typedef enum {
   LOAD_EMPTY,			/* There is no model */
@@ -2523,9 +2526,11 @@ static void
 operation_mode_set (GtkFileChooserWidget *impl, OperationMode mode)
 {
   GtkFileChooserWidgetPrivate *priv = impl->priv;
+  OperationMode old_mode;
 
   operation_mode_stop (impl, priv->operation_mode);
 
+  old_mode = priv->operation_mode;
   priv->operation_mode = mode;
 
   switch (priv->operation_mode)
@@ -2550,6 +2555,9 @@ operation_mode_set (GtkFileChooserWidget *impl, OperationMode mode)
       g_assert_not_reached ();
       return;
     }
+
+  if ((old_mode == OPERATION_MODE_SEARCH) != (mode == OPERATION_MODE_SEARCH))
+    g_object_notify (G_OBJECT (impl), "search-mode");
 }
 
 /* This function is basically a do_all function.
@@ -2608,6 +2616,13 @@ gtk_file_chooser_widget_set_property (GObject      *object,
 
   switch (prop_id)
     {
+    case PROP_SEARCH_MODE:
+      if (g_value_get_boolean (value))
+        operation_mode_set (impl, OPERATION_MODE_SEARCH);
+      else
+        operation_mode_set (impl, OPERATION_MODE_BROWSE);
+      break;
+
     case GTK_FILE_CHOOSER_PROP_ACTION:
       {
 	GtkFileChooserAction action = g_value_get_enum (value);
@@ -2721,6 +2736,10 @@ gtk_file_chooser_widget_get_property (GObject    *object,
 
   switch (prop_id)
     {
+    case PROP_SEARCH_MODE:
+      g_value_set_boolean (value, priv->operation_mode == OPERATION_MODE_SEARCH);
+      break;
+
     case GTK_FILE_CHOOSER_PROP_ACTION:
       g_value_set_enum (value, priv->action);
       break;
@@ -7361,6 +7380,13 @@ gtk_file_chooser_widget_class_init (GtkFileChooserWidgetClass *class)
 				  quick_bookmark_keyvals[i], GDK_MOD1_MASK,
 				  "quick-bookmark",
 				  1, G_TYPE_INT, i);
+
+  g_object_class_install_property (gobject_class, PROP_SEARCH_MODE,
+                                   g_param_spec_boolean ("search-mode",
+                                                         P_("Search mode"),
+                                                         P_("Search mode"),
+                                                         FALSE,
+                                                         G_PARAM_READWRITE));
 
   _gtk_file_chooser_install_properties (gobject_class);
 
