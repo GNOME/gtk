@@ -3298,8 +3298,4 @@ GtkVolumeButton.button { padding: 8px; }
   &.right {
     @include undershoot(right);
   }
-
-  &.sidebar {
-    background-color: transparent; // otherwise it get inherited
-  }
 }
