@@ -3263,6 +3263,7 @@ GtkVolumeButton.button { padding: 8px; }
 }
 
 // This is used by GtkScrolledWindow, when content is touch-dragged past boundaries.
+// This draws a box on top of the content, the size changes programmatically.
 .overshoot {
   &.top {
     @include overshoot(top);
@@ -3282,7 +3283,8 @@ GtkVolumeButton.button { padding: 8px; }
   }
 }
 
-.undershoot {  //FIXME: the dark variant needs love
+// Overflow indication, works similarly to the overshoot, the size if fixed tho.
+.undershoot { 
   &.top {
     @include undershoot(top);
   }
