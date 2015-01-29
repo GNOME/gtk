@@ -1126,8 +1126,7 @@ dnd_select_folder_get_info_cb (GCancellable *cancellable,
       data->selected =
 	(((data->action == GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER && is_folder) ||
 	  (data->action == GTK_FILE_CHOOSER_ACTION_OPEN && !is_folder)) &&
-	 gtk_file_chooser_select_file (GTK_FILE_CHOOSER (data->button->priv->dialog),
-				       data->file, NULL));
+	 gtk_file_chooser_select_file (GTK_FILE_CHOOSER (data->button), data->file, NULL));
     }
   else
     data->selected = FALSE;
@@ -1217,8 +1216,7 @@ gtk_file_chooser_button_drag_data_received (GtkWidget	     *widget,
     case TEXT_PLAIN:
       text = (char*) gtk_selection_data_get_text (data);
       file = g_file_new_for_uri (text);
-      gtk_file_chooser_select_file (GTK_FILE_CHOOSER (priv->dialog), file,
-				    NULL);
+      gtk_file_chooser_select_file (GTK_FILE_CHOOSER (priv->dialog), file, NULL);
       g_object_unref (file);
       g_free (text);
       g_signal_emit (button, file_chooser_button_signals[FILE_SET], 0);
