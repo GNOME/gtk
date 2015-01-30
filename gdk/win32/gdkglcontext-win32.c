@@ -405,7 +405,12 @@ _gdk_win32_display_init_gl (GdkDisplay *display,
 }
 
 static HGLRC
-_create_gl_context (HDC hdc, GdkGLContext *share, GdkGLProfile profile)
+_create_gl_context (HDC hdc,
+                    GdkGLContext *share,
+                    GdkGLProfile profile,
+                    int flags,
+                    int major,
+                    int minor)
 {
   HGLRC hglrc;
 
@@ -420,8 +425,9 @@ _create_gl_context (HDC hdc, GdkGLContext *share, GdkGLProfile profile)
 
       gint attribs[] = {
         WGL_CONTEXT_PROFILE_MASK_ARB,  WGL_CONTEXT_CORE_PROFILE_BIT_ARB,
-        WGL_CONTEXT_MAJOR_VERSION_ARB, 3,
-        WGL_CONTEXT_MINOR_VERSION_ARB, 2,
+        WGL_CONTEXT_MAJOR_VERSION_ARB, major,
+        WGL_CONTEXT_MINOR_VERSION_ARB, minor,
+        WGL_CONTEXT_FLAGS_ARB, flags,
         0
       };
 
@@ -442,7 +448,9 @@ _create_gl_context (HDC hdc, GdkGLContext *share, GdkGLProfile profile)
   else
     {
       /* for legacy WGL, we can't share lists during context creation,
-       * so do so immediately afterwards
+       * so do so immediately afterwards.
+       * The flags, and major and minor versions of WGL to request
+       * for are ignored for a legacy context.
        */
       if (share != NULL)
         {
@@ -497,18 +505,51 @@ _gdk_win32_gl_context_realize (GdkGLContext *context,
       return FALSE;
     }
 
+  /* GDK_GL_PROFILE_DEFAULT is the same as GDK_GL_PROFILE_LEGACY for now */
+  if (profile == GDK_GL_PROFILE_DEFAULT)
+    profile = GDK_GL_PROFILE_LEGACY;
+
   if (profile == GDK_GL_PROFILE_3_2_CORE)
-    GDK_NOTE (OPENGL, g_print ("Creating core WGL context\n"));
+    {
+      gboolean debug_bit, compat_bit;
+
+      /* request flags and specific versions for core (3.2+) WGL context */
+      gint flags = 0;
+      gint glver_major = 0;
+      gint glver_minor = 0;
+
+      gdk_gl_context_get_required_version (context, &glver_major, &glver_minor);
+      debug_bit = gdk_gl_context_get_debug_enabled (context);
+      compat_bit = gdk_gl_context_get_forward_compatible (context);
+
+      if (debug_bit)
+        flags |= WGL_CONTEXT_DEBUG_BIT_ARB;
+      if (compat_bit)
+        flags |= WGL_CONTEXT_FORWARD_COMPATIBLE_BIT_ARB;
+
+      GDK_NOTE (OPENGL,
+                g_print ("Creating core WGL context (version:%d.%d, debug:%s, forward:%s)\n",
+                major, minor,
+                debug_bit ? "yes" : "no",
+                compat_bit ? "yes" : "no"));
+
+      hglrc = _create_gl_context (context_win32->gl_hdc,
+                                  share,
+                                  profile,
+                                  flags,
+                                  glver_major,
+                                  glver_minor);
+    }
   else
     {
-      /* GDK_GL_PROFILE_DEFAULT is the same as GDK_GL_PROFILE_LEGACY for now */
       GDK_NOTE (OPENGL, g_print ("Creating legacy WGL context\n"));
-      profile = GDK_GL_PROFILE_LEGACY;
-    }
 
-  hglrc = _create_gl_context (context_win32->gl_hdc,
-                              share,
-                              profile);
+      /* flags, glver_major, glver_minor are ignored unless we are using WGL 3.2+ core contexts */
+      hglrc = _create_gl_context (context_win32->gl_hdc,
+                                  share,
+                                  profile,
+                                  0, 0, 0);
+    }
 
   if (hglrc == NULL)
     {
