@@ -20,6 +20,7 @@
 #include "gtkcssnodeprivate.h"
 
 #include "gtkcsstransientnodeprivate.h"
+#include "gtkdebug.h"
 
 G_DEFINE_TYPE (GtkCssNode, gtk_css_node, G_TYPE_OBJECT)
 
@@ -74,6 +75,15 @@ gtk_css_node_real_set_invalid (GtkCssNode *node,
     gtk_css_node_set_invalid (node->parent, invalid);
 }
 
+static GtkBitmask *
+gtk_css_node_real_validate (GtkCssNode       *cssnode,
+                            gint64            timestamp,
+                            GtkCssChange      change,
+                            const GtkBitmask *parent_changes)
+{
+  return _gtk_bitmask_new ();
+}
+
 static GtkWidgetPath *
 gtk_css_node_real_create_widget_path (GtkCssNode *cssnode)
 {
@@ -95,6 +105,7 @@ gtk_css_node_class_init (GtkCssNodeClass *klass)
   object_class->finalize = gtk_css_node_finalize;
 
   klass->invalidate = gtk_css_node_real_invalidate;
+  klass->validate = gtk_css_node_real_validate;
   klass->set_invalid = gtk_css_node_real_set_invalid;
   klass->create_widget_path = gtk_css_node_real_create_widget_path;
   klass->get_widget_path = gtk_css_node_real_get_widget_path;
@@ -356,6 +367,49 @@ gtk_css_node_invalidate (GtkCssNode   *cssnode,
   GTK_CSS_NODE_GET_CLASS (cssnode)->invalidate (cssnode, change);
 
   gtk_css_node_set_invalid (cssnode, TRUE);
+}
+
+void
+gtk_css_node_validate (GtkCssNode            *cssnode,
+                       gint64                 timestamp,
+                       GtkCssChange           change,
+                       const GtkBitmask      *parent_changes)
+{
+  GtkCssNode *child;
+  GtkBitmask *changes;
+
+  /* If you run your application with
+   *   GTK_DEBUG=no-css-cache
+   * every invalidation will purge the cache and completely query
+   * everything anew form the cache. This is slow (in particular
+   * when animating), but useful for figuring out bugs.
+   *
+   * We achieve that by pretending that everything that could have
+   * changed has and so we of course totally need to redo everything.
+   *
+   * Note that this also completely revalidates child widgets all
+   * the time.
+   */
+  if (G_UNLIKELY (gtk_get_debug_flags () & GTK_DEBUG_NO_CSS_CACHE))
+    change = GTK_CSS_CHANGE_ANY;
+
+  if (!cssnode->invalid && change == 0 && _gtk_bitmask_is_empty (parent_changes))
+    return;
+
+  gtk_css_node_set_invalid (cssnode, FALSE);
+
+  changes = GTK_CSS_NODE_GET_CLASS (cssnode)->validate (cssnode, timestamp, change, parent_changes);
+
+  change = _gtk_css_change_for_child (change);
+
+  for (child = gtk_css_node_get_first_child (cssnode);
+       child;
+       child = gtk_css_node_get_next_sibling (child))
+    {
+      gtk_css_node_validate (child, timestamp, change, changes);
+    }
+
+  _gtk_bitmask_free (changes);
 }
 
 GtkWidgetPath *

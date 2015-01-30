@@ -60,6 +60,10 @@ struct _GtkCssNodeClass
                                                          GtkCssChange           change);
   void                  (* set_invalid)                 (GtkCssNode            *node,
                                                          gboolean               invalid);
+  GtkBitmask *          (* validate)                    (GtkCssNode            *cssnode,
+                                                         gint64                 timestamp,
+                                                         GtkCssChange           change,
+                                                         const GtkBitmask      *parent_changes);
 };
 
 GType                   gtk_css_node_get_type           (void) G_GNUC_CONST;
@@ -112,6 +116,10 @@ void                    gtk_css_node_set_style          (GtkCssNode            *
 
 void                    gtk_css_node_invalidate         (GtkCssNode            *cssnode,
                                                          GtkCssChange           change);
+void                    gtk_css_node_validate           (GtkCssNode            *cssnode,
+                                                         gint64                 timestamp,
+                                                         GtkCssChange           change,
+                                                         const GtkBitmask      *parent_changes);
 void                    gtk_css_node_set_invalid        (GtkCssNode            *node,
                                                          gboolean               invalid);
 GtkWidgetPath *         gtk_css_node_create_widget_path (GtkCssNode            *cssnode);

@@ -44,7 +44,8 @@ GtkCssValue   * _gtk_style_context_peek_property             (GtkStyleContext *c
 const GValue * _gtk_style_context_peek_style_property        (GtkStyleContext *context,
                                                               GType            widget_type,
                                                               GParamSpec      *pspec);
-void           _gtk_style_context_validate                   (GtkStyleContext *context,
+GtkBitmask *   _gtk_style_context_validate                   (GtkStyleContext *context,
+                                                              GtkCssNode      *cssnode,
                                                               gint64           timestamp,
                                                               GtkCssChange     change,
                                                               const GtkBitmask*parent_changes);

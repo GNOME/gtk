@@ -5849,10 +5849,10 @@ gtk_window_show (GtkWidget *widget)
   need_resize = _gtk_widget_get_alloc_needed (widget) || !gtk_widget_get_realized (widget);
 
   empty = _gtk_bitmask_new ();
-  _gtk_style_context_validate (gtk_widget_get_style_context (widget),
-                               g_get_monotonic_time (),
-                               0,
-                               empty);
+  gtk_css_node_validate (gtk_style_context_get_root (gtk_widget_get_style_context (widget)),
+                         g_get_monotonic_time (),
+                         0,
+                         empty);
   _gtk_bitmask_free (empty);
 
   if (need_resize)

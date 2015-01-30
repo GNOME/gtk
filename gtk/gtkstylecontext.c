@@ -2802,61 +2802,18 @@ gtk_style_context_should_create_transitions (GtkStyleContext *context,
   return animate;
 }
 
-void
+GtkBitmask *
 _gtk_style_context_validate (GtkStyleContext  *context,
+                             GtkCssNode       *cssnode,
                              gint64            timestamp,
                              GtkCssChange      change,
                              const GtkBitmask *parent_changes)
 {
   GtkStyleContextPrivate *priv;
-  GtkCssNode *cssnode;
   GtkCssStyle *current;
   GtkBitmask *changes;
-  GSList *list;
-
-  g_return_if_fail (GTK_IS_STYLE_CONTEXT (context));
 
   priv = context->priv;
-
-  if (G_UNLIKELY (gtk_style_context_is_saved (context)))
-    {
-      cssnode = gtk_style_context_get_root (context);
-      if (GTK_IS_CSS_WIDGET_NODE (cssnode))
-        {
-          GtkWidget *widget = gtk_css_widget_node_get_widget (GTK_CSS_WIDGET_NODE (cssnode));
-          g_warning ("unmatched gtk_style_context_save/restore() detected while validating context for %s %p",
-                     gtk_widget_get_name (widget), widget);
-        }
-      else
-        {
-          g_warning ("unmatched gtk_style_context_save/restore() detected while validating context");
-        }
-    }
-  else
-    cssnode = priv->cssnode;
-
-  if (GTK_IS_CSS_WIDGET_NODE (cssnode))
-    change |= gtk_css_widget_node_reset_change (GTK_CSS_WIDGET_NODE (cssnode));
-  
-  /* If you run your application with
-   *   GTK_DEBUG=no-css-cache
-   * every invalidation will purge the cache and completely query
-   * everything anew form the cache. This is slow (in particular
-   * when animating), but useful for figuring out bugs.
-   *
-   * We achieve that by pretending that everything that could have
-   * changed has and so we of course totally need to redo everything.
-   *
-   * Note that this also completely revalidates child widgets all
-   * the time.
-   */
-  if (G_UNLIKELY (gtk_get_debug_flags () & GTK_DEBUG_NO_CSS_CACHE))
-    change = GTK_CSS_CHANGE_ANY;
-
-  if (!cssnode->invalid && change == 0 && _gtk_bitmask_is_empty (parent_changes))
-    return;
-
-  gtk_css_node_set_invalid (cssnode, FALSE);
 
   current = gtk_css_node_get_style (cssnode);
   if (current == NULL)
@@ -2933,16 +2890,9 @@ _gtk_style_context_validate (GtkStyleContext  *context,
   if (!_gtk_bitmask_is_empty (changes))
     gtk_style_context_do_invalidate (context, changes);
 
-  change = _gtk_css_change_for_child (change);
-  
   gtk_style_context_clear_property_cache (context);
 
-  for (list = priv->children; list; list = list->next)
-    {
-      _gtk_style_context_validate (list->data, timestamp, change, changes);
-    }
-
-  _gtk_bitmask_free (changes);
+  return changes;
 }
 
 /**

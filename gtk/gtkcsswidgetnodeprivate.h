@@ -55,8 +55,6 @@ void                    gtk_css_widget_node_widget_destroyed    (GtkCssWidgetNod
 
 GtkWidget *             gtk_css_widget_node_get_widget          (GtkCssWidgetNode       *node);
 
-GtkCssChange            gtk_css_widget_node_reset_change        (GtkCssWidgetNode       *node);
-
 G_END_DECLS
 
 #endif /* __GTK_CSS_WIDGET_NODE_PRIVATE_H__ */

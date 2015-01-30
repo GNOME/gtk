@@ -53,6 +53,27 @@ gtk_css_widget_node_set_invalid (GtkCssNode *node,
   G_GNUC_END_IGNORE_DEPRECATIONS
 }
 
+static GtkBitmask *
+gtk_css_widget_node_validate (GtkCssNode       *node,
+                              gint64            timestamp,
+                              GtkCssChange      change,
+                              const GtkBitmask *parent_changes)
+{
+  GtkCssWidgetNode *widget_node = GTK_CSS_WIDGET_NODE (node);
+
+  change |= widget_node->pending_changes;
+  widget_node->pending_changes = 0;
+
+  if (widget_node->widget == NULL)
+    return _gtk_bitmask_new ();
+
+  return _gtk_style_context_validate (gtk_widget_get_style_context (widget_node->widget),
+                                      node,
+                                      timestamp,
+                                      change,
+                                      parent_changes);
+}
+
 static GtkWidgetPath *
 gtk_css_widget_node_create_widget_path (GtkCssNode *node)
 {
@@ -93,6 +114,7 @@ gtk_css_widget_node_class_init (GtkCssWidgetNodeClass *klass)
   GtkCssNodeClass *node_class = GTK_CSS_NODE_CLASS (klass);
 
   node_class->invalidate = gtk_css_widget_node_invalidate;
+  node_class->validate = gtk_css_widget_node_validate;
   node_class->set_invalid = gtk_css_widget_node_set_invalid;
   node_class->create_widget_path = gtk_css_widget_node_create_widget_path;
   node_class->get_widget_path = gtk_css_widget_node_get_widget_path;
@@ -134,18 +156,5 @@ gtk_css_widget_node_get_widget (GtkCssWidgetNode *node)
   gtk_internal_return_val_if_fail (GTK_IS_CSS_WIDGET_NODE (node), NULL);
 
   return node->widget;
-}
-
-GtkCssChange
-gtk_css_widget_node_reset_change (GtkCssWidgetNode *node)
-{
-  GtkCssChange result;
-
-  gtk_internal_return_val_if_fail (GTK_IS_CSS_WIDGET_NODE (node), 0);
-
-  result = node->pending_changes;
-  node->pending_changes = 0;
-
-  return result;
 }
 
