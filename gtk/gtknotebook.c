@@ -3711,6 +3711,7 @@ gtk_notebook_drag_begin (GtkWidget        *widget,
                     G_CALLBACK (on_drag_icon_draw), notebook);
 
   gtk_drag_set_icon_widget (context, priv->dnd_window, -2, -2);
+  g_object_set_data (G_OBJECT (priv->dnd_window), "drag-context", context);
 }
 
 static void
@@ -5052,7 +5053,17 @@ gtk_notebook_real_remove (GtkNotebook *notebook,
     }
 
   if (priv->detached_tab == list->data)
-    priv->detached_tab = NULL;
+    {
+      priv->detached_tab = NULL;
+
+      if (priv->operation == DRAG_OPERATION_DETACH)
+        {
+          GdkDragContext *context;
+
+          context = (GdkDragContext *)g_object_get_data (G_OBJECT (priv->dnd_window), "drag-context");
+          gtk_drag_cancel (context);
+        }
+    }
   if (priv->prelight_tab == list->data)
     update_prelight_tab (notebook, NULL);
   if (priv->switch_tab == list)
