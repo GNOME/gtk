@@ -5047,6 +5047,8 @@ gtk_notebook_real_remove (GtkNotebook *notebook,
       priv->cur_page = NULL;
       if (next_list && !destroying)
         gtk_notebook_switch_page (notebook, GTK_NOTEBOOK_PAGE (next_list));
+      if (priv->operation == DRAG_OPERATION_REORDER)
+        gtk_notebook_stop_reorder (notebook);
     }
 
   if (priv->detached_tab == list->data)
