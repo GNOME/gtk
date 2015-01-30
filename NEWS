@@ -1,3 +1,54 @@
+Overview of Changes in GTK+ 3.15.5
+==================================
+
+* GtkSearchEntry has gained ::next-match, ::previous-match
+  and ::stop-search signals and a gtk_search_entry_handle_event()
+  function, which help in providing a richer search experience
+  and make search entries usable outside of GtkSearchBar.
+
+* GtkFileChooser:
+ - The search has been reintegrated in the UI, there is now
+   a toggle button on the header bar to go to search mode,
+   in addition to the Alt-S shortcut.
+ - The file chooser button now accepts files by drag-and-drop properly.
+
+* CSS:
+ - Performance improvements
+
+* Bugs fixed:
+ 712752 GtkClipboard: add _get_default and _get_primary
+ 725164 [crash] update_current_folder_get_info_cb at gtkfilechooserwidget.c
+ 732051 Crash can result if a child widget is destroyed while its tab is...
+ 735316 Default font antialiasing results in wrong behavior on OS X
+ 740336 Wrong (white) background colour in notes grid
+ 740613 XConvertSelection crashes Gtk+ apps
+ 742636 Freeze if window closed while resume-events pending
+ 742953 GdkGLContext will not create a core context
+ 743146 Crash in gdk_gl_texture_from_surface() when a GtkGLArea is packe...
+ 743193 Fix transfer annotation for tree_model parameter of gtk_tree_get...
+ 743229 clipboard: support selection notification on wayland
+ 743257 Popover not dismissed on clicking the header bar
+ 743286 Mention that the path returned by gtk_tree_row_reference_get_pat...
+ 743330 Wintab initialization glitches
+ 743341 GtkImage does not correctly reflect icon theme changes.
+ 743393 DND icons don't work in the inspector
+ 743422 valgrind: Conditional jump or move depends on uninitialised valu...
+ 743451 Drag and drop on GtkFileChooserButton doesn't work
+ 743592 crash on link click in about dialogue
+ 743593 GtkWidget's va_marshaller for "event-after" signal is incorrect
+ 743633 gdkscreen-wayland: Don't leak wl_output objects
+ 743638 getting-started: Update example-0.c to use GtkApplication
+ 743647 image-missing is missing from libgtk's resources
+ 743659 All folders hidden after returning from search mode in GtkFileCh...
+ 743660 Pressing Ctrl should not start a search in the file chooser
+ 743680 getting-started: update Basics section to correspond to example-...
+
+* Translation updates:
+ Hebrew
+ Hungarian
+ Icelandic
+
+
 Overview of Changes in GTK+ 3.15.4
 ==================================
 
