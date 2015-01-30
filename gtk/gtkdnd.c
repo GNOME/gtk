@@ -1926,6 +1926,7 @@ gtk_drag_find_widget (GtkWidget           *widget,
                 }
 
               info->widget = widget;
+              g_object_add_weak_pointer (G_OBJECT (widget), (gpointer *) &info->widget);
             }
         }
 
@@ -3577,7 +3578,6 @@ _gtk_drag_source_handle_event (GtkWidget *widget,
     case GDK_DRAG_STATUS:
       {
         GdkCursor *cursor;
-
         if (info->proxy_dest)
           {
             if (!event->dnd.send_event)
