@@ -163,6 +163,8 @@ void              _gtk_widget_remove_controller            (GtkWidget           
 GList *           _gtk_widget_list_controllers             (GtkWidget           *widget,
                                                             GtkPropagationPhase  phase);
 
+void              gtk_drag_cancel                          (GdkDragContext *context);
+
 G_END_DECLS
 
 #endif /* __GTK_WIDGET_PRIVATE_H__ */
