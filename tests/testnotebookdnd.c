@@ -119,6 +119,20 @@ on_notebook_drag_begin (GtkWidget      *widget,
     }
 }
 
+static gboolean
+remove_in_idle (gpointer data)
+{
+  GtkWidget *child = data;
+  GtkWidget *parent = gtk_widget_get_parent (child);
+  GtkWidget *tab_label;
+
+  tab_label = gtk_notebook_get_tab_label (GTK_NOTEBOOK (parent), child);
+  g_print ("Removing tab: %s\n", gtk_label_get_text (GTK_LABEL (tab_label)));
+  gtk_container_remove (GTK_CONTAINER (parent), child);
+
+  return G_SOURCE_REMOVE;
+}
+
 static void
 on_button_drag_data_received (GtkWidget        *widget,
                               GdkDragContext   *context,
@@ -129,16 +143,11 @@ on_button_drag_data_received (GtkWidget        *widget,
                               guint             time,
                               gpointer          user_data)
 {
-  GtkWidget *source, *tab_label;
   GtkWidget **child;
 
-  source = gtk_drag_get_source_widget (context);
   child = (void*) gtk_selection_data_get_data (data);
 
-  tab_label = gtk_notebook_get_tab_label (GTK_NOTEBOOK (source), *child);
-  g_print ("Removing tab: %s\n", gtk_label_get_text (GTK_LABEL (tab_label)));
-
-  gtk_container_remove (GTK_CONTAINER (source), *child);
+  g_idle_add (remove_in_idle, *child);
 }
 
 static GtkWidget*
@@ -226,7 +235,7 @@ create_trash_button (void)
 {
   GtkWidget *button;
 
-  button = gtk_button_new_with_label ("_Delete");
+  button = gtk_button_new_with_mnemonic ("_Delete");
 
   gtk_drag_dest_set (button,
                      GTK_DEST_DEFAULT_MOTION | GTK_DEST_DEFAULT_DROP,
