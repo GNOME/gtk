@@ -315,7 +315,7 @@ static void
 gtk_style_context_cascade_changed (GtkStyleCascade *cascade,
                                    GtkStyleContext *context)
 {
-  _gtk_style_context_queue_invalidate (context, GTK_CSS_CHANGE_SOURCE);
+  gtk_css_node_invalidate (gtk_style_context_get_root (context), GTK_CSS_CHANGE_SOURCE);
 }
 
 static void
@@ -375,7 +375,7 @@ static void
 gtk_style_context_update (GdkFrameClock  *clock,
                           GtkStyleContext *context)
 {
-  _gtk_style_context_queue_invalidate (context, GTK_CSS_CHANGE_ANIMATE);
+  gtk_css_node_invalidate (gtk_style_context_get_root (context), GTK_CSS_CHANGE_ANIMATE);
 }
 
 static gboolean
@@ -603,7 +603,7 @@ gtk_style_context_is_saved (GtkStyleContext *context)
   return context->priv->saved_nodes != NULL;
 }
 
-static GtkCssNode *
+GtkCssNode *
 gtk_style_context_get_root (GtkStyleContext *context)
 {
   GtkStyleContextPrivate *priv;
@@ -889,7 +889,7 @@ _gtk_style_context_set_widget (GtkStyleContext *context,
 
   _gtk_style_context_update_animating (context);
 
-  _gtk_style_context_queue_invalidate (context, GTK_CSS_CHANGE_ANY_SELF);
+  gtk_css_node_invalidate (gtk_style_context_get_root (context), GTK_CSS_CHANGE_ANY_SELF);
 }
 
 /**
@@ -1490,7 +1490,7 @@ gtk_style_context_set_parent (GtkStyleContext *context,
   priv->parent = parent;
 
   g_object_notify (G_OBJECT (context), "parent");
-  _gtk_style_context_queue_invalidate (context, GTK_CSS_CHANGE_ANY_PARENT | GTK_CSS_CHANGE_ANY_SIBLING);
+  gtk_css_node_invalidate (gtk_style_context_get_root (context), GTK_CSS_CHANGE_ANY_PARENT | GTK_CSS_CHANGE_ANY_SIBLING);
 }
 
 /**
@@ -2943,16 +2943,6 @@ _gtk_style_context_validate (GtkStyleContext  *context,
     }
 
   _gtk_bitmask_free (changes);
-}
-
-void
-_gtk_style_context_queue_invalidate (GtkStyleContext *context,
-                                     GtkCssChange     change)
-{
-  g_return_if_fail (GTK_IS_STYLE_CONTEXT (context));
-  g_return_if_fail (change != 0);
-
-  gtk_css_node_invalidate (gtk_style_context_get_root (context), change);
 }
 
 /**

@@ -20,6 +20,7 @@
 
 #include "gtkstylecontext.h"
 
+#include "gtkcssnodeprivate.h"
 #include "gtkicontheme.h"
 #include "gtkstyleproviderprivate.h"
 #include "gtkbitmaskprivate.h"
@@ -29,6 +30,7 @@ G_BEGIN_DECLS
 
 void            _gtk_style_context_set_widget                (GtkStyleContext *context,
                                                               GtkWidget       *widget);
+GtkCssNode *    gtk_style_context_get_root                   (GtkStyleContext *context);
 void            gtk_style_context_set_id                     (GtkStyleContext *context,
                                                               const char      *id);
 const char *    gtk_style_context_get_id                     (GtkStyleContext *context);
@@ -46,8 +48,6 @@ void           _gtk_style_context_validate                   (GtkStyleContext *c
                                                               gint64           timestamp,
                                                               GtkCssChange     change,
                                                               const GtkBitmask*parent_changes);
-void           _gtk_style_context_queue_invalidate           (GtkStyleContext *context,
-                                                              GtkCssChange     change);
 gboolean       _gtk_style_context_check_region_name          (const gchar     *str);
 
 gboolean       _gtk_style_context_resolve_color              (GtkStyleContext    *context,

@@ -16465,7 +16465,7 @@ _gtk_widget_invalidate_style_context (GtkWidget    *widget,
   if (priv->context == NULL)
     return;
 
-  _gtk_style_context_queue_invalidate (priv->context, change);
+  gtk_css_node_invalidate (gtk_style_context_get_root (priv->context), change);
 }
 
 /**
