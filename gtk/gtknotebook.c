@@ -162,6 +162,7 @@ struct _GtkNotebookPrivate
   guint          click_child        : 3;
   guint          during_detach      : 1;
   guint          during_reorder     : 1;
+  guint          remove_in_detach   : 1;
   guint          focus_out          : 1; /* Flag used by ::move-focus-out implementation */
   guint          has_scrolled       : 1;
   guint          in_child           : 3;
@@ -3956,7 +3957,9 @@ do_detach_tab (GtkNotebook     *from,
                            "detachable", &detachable,
                            NULL);
 
+  from->priv->remove_in_detach = TRUE;
   gtk_container_remove (GTK_CONTAINER (from), child);
+  from->priv->remove_in_detach = FALSE;
 
   gtk_widget_get_allocation (GTK_WIDGET (to), &to_allocation);
   to_priv->mouse_x = x + to_allocation.x;
@@ -5046,7 +5049,7 @@ gtk_notebook_real_remove (GtkNotebook *notebook,
       priv->cur_page = NULL;
       if (next_list && !destroying)
         gtk_notebook_switch_page (notebook, GTK_NOTEBOOK_PAGE (next_list));
-      if (priv->operation == DRAG_OPERATION_REORDER)
+      if (priv->operation == DRAG_OPERATION_REORDER && !priv->remove_in_detach)
         gtk_notebook_stop_reorder (notebook);
     }
 
@@ -5054,7 +5057,7 @@ gtk_notebook_real_remove (GtkNotebook *notebook,
     {
       priv->detached_tab = NULL;
 
-      if (priv->operation == DRAG_OPERATION_DETACH)
+      if (priv->operation == DRAG_OPERATION_DETACH && !priv->remove_in_detach)
         {
           GdkDragContext *context;
 
