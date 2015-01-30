@@ -245,7 +245,7 @@ static void gtk_drag_drop                      (GtkDragSourceInfo *info,
 static void gtk_drag_drop_finished             (GtkDragSourceInfo *info,
                                                 GtkDragResult      result,
                                                 guint              time);
-static void gtk_drag_cancel                    (GtkDragSourceInfo *info,
+static void gtk_drag_cancel_internal           (GtkDragSourceInfo *info,
                                                 GtkDragResult      result,
                                                 guint32            time);
 
@@ -4226,9 +4226,9 @@ gtk_drag_end (GtkDragSourceInfo *info,
  * or programmatically.
  */
 static void
-gtk_drag_cancel (GtkDragSourceInfo *info,
-                 GtkDragResult      result,
-                 guint32            time)
+gtk_drag_cancel_internal (GtkDragSourceInfo *info,
+                          GtkDragResult      result,
+                          guint32            time)
 {
   gtk_drag_end (info, time);
   gdk_drag_abort (info->context, time);
@@ -4285,7 +4285,7 @@ gtk_drag_key_cb (GtkWidget   *widget,
       switch (event->keyval)
         {
         case GDK_KEY_Escape:
-          gtk_drag_cancel (info, GTK_DRAG_RESULT_USER_CANCELLED, event->time);
+          gtk_drag_cancel_internal (info, GTK_DRAG_RESULT_USER_CANCELLED, event->time);
           return TRUE;
 
         case GDK_KEY_space:
@@ -4301,7 +4301,7 @@ gtk_drag_key_cb (GtkWidget   *widget,
             }
           else
             {
-              gtk_drag_cancel (info, GTK_DRAG_RESULT_NO_TARGET, event->time);
+              gtk_drag_cancel_internal (info, GTK_DRAG_RESULT_NO_TARGET, event->time);
             }
 
           return TRUE;
@@ -4368,7 +4368,7 @@ gtk_drag_grab_broken_event_cb (GtkWidget          *widget,
       || event->grab_window == gtk_widget_get_window (info->ipc_widget))
     return FALSE;
 
-  gtk_drag_cancel (info, GTK_DRAG_RESULT_GRAB_BROKEN, gtk_get_current_event_time ());
+  gtk_drag_cancel_internal (info, GTK_DRAG_RESULT_GRAB_BROKEN, gtk_get_current_event_time ());
   return TRUE;
 }
 
@@ -4385,9 +4385,10 @@ gtk_drag_grab_notify_cb (GtkWidget *widget,
   if (gtk_widget_device_is_shadowed (widget, pointer))
     {
       /* We have to block callbacks to avoid recursion here, because
-         gtk_drag_cancel calls gtk_grab_remove (via gtk_drag_end) */
+       * gtk_drag_cancel_internal calls gtk_grab_remove (via gtk_drag_end)
+       */
       g_signal_handlers_block_by_func (widget, gtk_drag_grab_notify_cb, data);
-      gtk_drag_cancel (info, GTK_DRAG_RESULT_GRAB_BROKEN, gtk_get_current_event_time ());
+      gtk_drag_cancel_internal (info, GTK_DRAG_RESULT_GRAB_BROKEN, gtk_get_current_event_time ());
       g_signal_handlers_unblock_by_func (widget, gtk_drag_grab_notify_cb, data);
     }
 }
@@ -4411,7 +4412,7 @@ gtk_drag_button_release_cb (GtkWidget      *widget,
     }
   else
     {
-      gtk_drag_cancel (info, GTK_DRAG_RESULT_NO_TARGET, event->time);
+      gtk_drag_cancel_internal (info, GTK_DRAG_RESULT_NO_TARGET, event->time);
     }
 
   return TRUE;
@@ -4463,4 +4464,35 @@ gtk_drag_check_threshold (GtkWidget *widget,
   
   return (ABS (current_x - start_x) > drag_threshold ||
           ABS (current_y - start_y) > drag_threshold);
+}
+
+/**
+ * gtk_drag_cancel:
+ * @context: a #GdkDragContext, as e.g. returned by gtk_drag_begin_with_coordinates()
+ *
+ * Cancels an ongoing drag operation on the source side.
+ *
+ * If you want to be able to cancel a drag operation in this way,
+ * you need to keep a pointer to the drag context, either from an
+ * explicit call to gtk_drag_begin_with_coordinates(), or by
+ * connecting to #GtkWidget::drag-begin.
+ *
+ * If @context does not refer to an ongoing drag operation, this
+ * function does nothing.
+ *
+ * If a drag is cancelled in this way, the @result argument of
+ * #GtkWidget::drag-failed is set to @GTK_DRAG_RESULT_ERROR.
+ *
+ * Since: 3.16
+ */
+void
+gtk_drag_cancel (GdkDragContext *context)
+{
+  GtkDragSourceInfo *info;
+
+  g_return_if_fail (GDK_IS_DRAG_CONTEXT (context));
+
+  info = gtk_drag_get_source_info (context, FALSE);
+  if (info != NULL)
+    gtk_drag_cancel_internal (info, GTK_DRAG_RESULT_ERROR, gtk_get_current_event_time ());
 }

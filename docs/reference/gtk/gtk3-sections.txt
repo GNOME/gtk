@@ -6536,6 +6536,7 @@ gtk_drag_unhighlight
 <SUBSECTION Source Side>
 gtk_drag_begin
 gtk_drag_begin_with_coordinates
+gtk_drag_cancel
 gtk_drag_set_icon_widget
 gtk_drag_set_icon_pixbuf
 gtk_drag_set_icon_stock

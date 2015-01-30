@@ -203,6 +203,9 @@ GdkDragContext *gtk_drag_begin (GtkWidget         *widget,
 				gint               button,
 				GdkEvent          *event);
 
+GDK_AVAILABLE_IN_3_16
+void gtk_drag_cancel           (GdkDragContext *context);
+
 /* Set the image being dragged around
  */
 GDK_AVAILABLE_IN_ALL
