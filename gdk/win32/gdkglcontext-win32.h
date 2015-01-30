@@ -40,6 +40,7 @@ struct _GdkWin32GLContext
   /* WGL Context Items */
   HGLRC hglrc;
   HDC gl_hdc;
+  guint need_alpha_bits : 1;
 
   /* other items */
   guint is_attached : 1;
@@ -71,6 +72,10 @@ _gdk_win32_gl_context_end_frame (GdkGLContext *context,
 gboolean
 _gdk_win32_display_make_gl_context_current (GdkDisplay *display,
                                             GdkGLContext *context);
+
+gboolean
+_gdk_win32_gl_context_realize (GdkGLContext *context,
+                               GError **error);
 
 G_END_DECLS
 
