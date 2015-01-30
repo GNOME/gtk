@@ -3934,15 +3934,23 @@ gtk_drag_anim_destroy (GtkDragAnim *anim)
 static gboolean
 gtk_drag_anim_timeout (gpointer data)
 {
-  GtkWidget *icon_window;
   GtkDragAnim *anim = data;
   GtkDragSourceInfo *info = anim->info;
-  GtkWidget *widget = info->widget;
-  GdkFrameClock *frame_clock = gtk_widget_get_frame_clock (widget);
-  gint64 current_time = gdk_frame_clock_get_frame_time (frame_clock);
+  GtkWidget *icon_window;
+  GdkFrameClock *frame_clock;
+  gint64 current_time;
   int hot_x, hot_y;
-  double f = (current_time - anim->start_time) / (double) ANIM_TIME;
+  double f;
   double t;
+
+  frame_clock = gtk_widget_get_frame_clock (info->widget);
+
+  if (!frame_clock)
+    return G_SOURCE_REMOVE;
+
+  current_time = gdk_frame_clock_get_frame_time (frame_clock);
+
+  f = (current_time - anim->start_time) / (double) ANIM_TIME;
 
   if (f >= 1.0)
     return G_SOURCE_REMOVE;
