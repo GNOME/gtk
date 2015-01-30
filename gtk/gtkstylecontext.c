@@ -153,7 +153,6 @@ struct _GtkStyleContextPrivate
   guint cascade_changed_id;
   GtkStyleCascade *cascade;
   GtkStyleContext *parent;
-  GSList *children;
   GtkCssNode *cssnode;
   GSList *saved_nodes;
   GArray *property_cache;
@@ -489,7 +488,6 @@ gtk_style_context_clear_parent (GtkStyleContext *context)
 
   if (priv->parent)
     {
-      priv->parent->priv->children = g_slist_remove (priv->parent->priv->children, context);
       g_object_unref (priv->parent);
     }
 }
@@ -504,9 +502,6 @@ gtk_style_context_finalize (GObject *object)
   priv = style_context->priv;
 
   gtk_style_context_stop_animating (style_context);
-
-  /* children hold a reference to us */
-  g_assert (priv->children == NULL);
 
   gtk_style_context_clear_parent (style_context);
 
@@ -1475,7 +1470,6 @@ gtk_style_context_set_parent (GtkStyleContext *context,
 
   if (parent)
     {
-      parent->priv->children = g_slist_prepend (parent->priv->children, context);
       g_object_ref (parent);
       gtk_css_node_set_parent (gtk_style_context_get_root (context),
                                gtk_style_context_get_root (parent));
