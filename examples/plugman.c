@@ -267,16 +267,19 @@ disable_plugin (const gchar *name)
   plugin_menu = find_plugin_menu ();
   if (plugin_menu)
     {
-      const gchar *id;
       gint i;
 
       for (i = 0; i < g_menu_model_get_n_items (plugin_menu); i++)
         {
-           if (g_menu_model_get_item_attribute (plugin_menu, i, "id", "s", &id) &&
-               g_strcmp0 (id, name) == 0)
+           gchar *id;
+           if (g_menu_model_get_item_attribute (plugin_menu, i, "id", "s", &id))
              {
-               g_menu_remove (G_MENU (plugin_menu), i);
-               g_print ("Menus of '%s' plugin removed\n", name);
+               if (g_strcmp0 (id, name) == 0)
+                 {
+                   g_menu_remove (G_MENU (plugin_menu), i);
+                   g_print ("Menus of '%s' plugin removed\n", name);
+                 }
+               g_free (id);
              }
         }
     }
