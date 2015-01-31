@@ -21,6 +21,8 @@
 
 #include "gtkcssimagescaledprivate.h"
 
+#include "gtkstyleproviderprivate.h"
+
 G_DEFINE_TYPE (GtkCssImageScaled, _gtk_css_image_scaled, GTK_TYPE_CSS_IMAGE)
 
 static int
@@ -94,15 +96,15 @@ static GtkCssImage *
 gtk_css_image_scaled_compute (GtkCssImage             *image,
 			      guint                    property_id,
 			      GtkStyleProviderPrivate *provider,
-			      int                      scale,
-			      GtkCssStyle    *values,
-			      GtkCssStyle    *parent_values,
+			      GtkCssStyle             *style,
+			      GtkCssStyle             *parent_style,
 			      GtkCssDependencies      *dependencies)
 {
   GtkCssImageScaled *scaled = GTK_CSS_IMAGE_SCALED (image);
   GtkCssImageScaled *copy;
-  int i;
+  int i, scale;
 
+  scale = _gtk_style_provider_private_get_scale (provider);
   scale = MAX(MIN (scale, scaled->n_images), 1);
 
   if (scaled->scale == scale)
@@ -119,9 +121,8 @@ gtk_css_image_scaled_compute (GtkCssImage             *image,
             copy->images[i] = _gtk_css_image_compute (scaled->images[i],
                                                       property_id,
                                                       provider,
-                                                      scale,
-                                                      values,
-                                                      parent_values,
+                                                      style,
+                                                      parent_style,
                                                       dependencies);
           else
             copy->images[i] = g_object_ref (scaled->images[i]);

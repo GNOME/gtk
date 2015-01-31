@@ -105,7 +105,6 @@ _gtk_css_lookup_set (GtkCssLookup  *lookup,
 void
 _gtk_css_lookup_resolve (GtkCssLookup            *lookup,
                          GtkStyleProviderPrivate *provider,
-			 int                      scale,
                          GtkCssStaticStyle       *style,
                          GtkCssStyle             *parent_style)
 {
@@ -124,7 +123,6 @@ _gtk_css_lookup_resolve (GtkCssLookup            *lookup,
           _gtk_bitmask_get (lookup->missing, i))
         gtk_css_static_style_compute_value (GTK_CSS_STATIC_STYLE (style),
                                             provider,
-                                            scale,
                                             parent_style,
                                             i,
                                             lookup->values[i].value,

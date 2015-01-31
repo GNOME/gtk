@@ -66,32 +66,31 @@ static GtkCssValue *
 gtk_css_value_shadow_compute (GtkCssValue             *shadow,
                               guint                    property_id,
                               GtkStyleProviderPrivate *provider,
-			      int                      scale,
-                              GtkCssStyle    *values,
-                              GtkCssStyle    *parent_values,
+                              GtkCssStyle             *style,
+                              GtkCssStyle             *parent_style,
                               GtkCssDependencies      *dependencies)
 {
   GtkCssValue *hoffset, *voffset, *radius, *spread, *color;
   GtkCssDependencies child_deps;
 
   child_deps = 0;
-  hoffset = _gtk_css_value_compute (shadow->hoffset, property_id, provider, scale, values, parent_values, &child_deps);
+  hoffset = _gtk_css_value_compute (shadow->hoffset, property_id, provider, style, parent_style, &child_deps);
   *dependencies = _gtk_css_dependencies_union (*dependencies, child_deps);
 
   child_deps = 0;
-  voffset = _gtk_css_value_compute (shadow->voffset, property_id, provider, scale, values, parent_values, &child_deps);
+  voffset = _gtk_css_value_compute (shadow->voffset, property_id, provider, style, parent_style, &child_deps);
   *dependencies = _gtk_css_dependencies_union (*dependencies, child_deps);
 
   child_deps = 0;
-  radius = _gtk_css_value_compute (shadow->radius, property_id, provider, scale, values, parent_values, &child_deps);
+  radius = _gtk_css_value_compute (shadow->radius, property_id, provider, style, parent_style, &child_deps);
   *dependencies = _gtk_css_dependencies_union (*dependencies, child_deps);
 
   child_deps = 0;
-  spread = _gtk_css_value_compute (shadow->spread, property_id, provider, scale, values, parent_values, &child_deps),
+  spread = _gtk_css_value_compute (shadow->spread, property_id, provider, style, parent_style, &child_deps),
   *dependencies = _gtk_css_dependencies_union (*dependencies, child_deps);
 
   child_deps = 0;
-  color = _gtk_css_value_compute (shadow->color, property_id, provider, scale, values, parent_values, &child_deps);
+  color = _gtk_css_value_compute (shadow->color, property_id, provider, style, parent_style, &child_deps);
   *dependencies = _gtk_css_dependencies_union (*dependencies, child_deps);
 
   return gtk_css_shadow_value_new (hoffset, voffset, radius, spread, shadow->inset, color);

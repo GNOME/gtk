@@ -825,7 +825,6 @@ update_properties (GtkStyleContext             *context,
                                             parent_changes,
                                             GTK_STYLE_PROVIDER_PRIVATE (priv->cascade),
                                             &matcher,
-                                            _gtk_style_cascade_get_scale (priv->cascade),
                                             parent);
 
   gtk_widget_path_free (path);
@@ -857,12 +856,10 @@ build_properties (GtkStyleContext             *context,
   if (_gtk_css_matcher_init (&matcher, path))
     style = gtk_css_static_style_new_compute (GTK_STYLE_PROVIDER_PRIVATE (priv->cascade),
                                               &matcher,
-                                              _gtk_style_cascade_get_scale (priv->cascade),
                                               parent);
   else
     style = gtk_css_static_style_new_compute (GTK_STYLE_PROVIDER_PRIVATE (priv->cascade),
                                               NULL,
-                                              _gtk_style_cascade_get_scale (priv->cascade),
                                               parent);
 
   gtk_widget_path_free (path);
@@ -3011,7 +3008,6 @@ _gtk_style_context_validate (GtkStyleContext  *context,
                                           priv->parent ? gtk_style_context_lookup_style (priv->parent) : NULL,
                                           timestamp,
                                           GTK_STYLE_PROVIDER_PRIVATE (priv->cascade),
-                                          _gtk_style_cascade_get_scale (priv->cascade),
                                           gtk_style_context_should_create_transitions (context, current) ? current : NULL);
   
       gtk_style_context_clear_cache (context);

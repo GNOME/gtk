@@ -437,7 +437,6 @@ _gtk_css_keyframes_print (GtkCssKeyframes *keyframes,
 GtkCssKeyframes *
 _gtk_css_keyframes_compute (GtkCssKeyframes         *keyframes,
                             GtkStyleProviderPrivate *provider,
-			    int                      scale,
                             GtkCssStyle             *style,
                             GtkCssStyle             *parent_style)
 {
@@ -466,7 +465,6 @@ _gtk_css_keyframes_compute (GtkCssKeyframes         *keyframes,
           KEYFRAMES_VALUE (resolved, k, p) =  _gtk_css_value_compute (KEYFRAMES_VALUE (keyframes, k, p),
                                                                       resolved->property_ids[p],
                                                                       provider,
-								      scale,
                                                                       style,
                                                                       parent_style,
                                                                       NULL);

@@ -41,9 +41,8 @@ static GtkCssValue *
 gtk_css_value_enum_compute (GtkCssValue             *value,
                             guint                    property_id,
                             GtkStyleProviderPrivate *provider,
-			    int                      scale,
-                            GtkCssStyle    *values,
-                            GtkCssStyle    *parent_values,
+                            GtkCssStyle             *style,
+                            GtkCssStyle             *parent_style,
                             GtkCssDependencies      *dependencies)
 {
   return _gtk_css_value_ref (value);
@@ -165,9 +164,8 @@ static GtkCssValue *
 gtk_css_value_font_size_compute (GtkCssValue             *value,
                                  guint                    property_id,
                                  GtkStyleProviderPrivate *provider,
-				 int                      scale,
-                                 GtkCssStyle    *values,
-                                 GtkCssStyle    *parent_values,
+                                 GtkCssStyle             *style,
+                                 GtkCssStyle             *parent_style,
                                  GtkCssDependencies      *dependencies)
 {
   double font_size;
@@ -200,8 +198,8 @@ gtk_css_value_font_size_compute (GtkCssValue             *value,
       break;
     case GTK_CSS_FONT_SIZE_SMALLER:
       *dependencies = GTK_CSS_DEPENDS_ON_PARENT;
-      if (parent_values)
-        font_size = _gtk_css_number_value_get (gtk_css_style_get_value (parent_values, GTK_CSS_PROPERTY_FONT_SIZE), 100);
+      if (parent_style)
+        font_size = _gtk_css_number_value_get (gtk_css_style_get_value (parent_style, GTK_CSS_PROPERTY_FONT_SIZE), 100);
       else
         font_size = _gtk_css_font_size_get_default (provider);
       /* XXX: This is what WebKit does... */
@@ -209,8 +207,8 @@ gtk_css_value_font_size_compute (GtkCssValue             *value,
       break;
     case GTK_CSS_FONT_SIZE_LARGER:
       *dependencies = GTK_CSS_DEPENDS_ON_PARENT;
-      if (parent_values)
-        font_size = _gtk_css_number_value_get (gtk_css_style_get_value (parent_values, GTK_CSS_PROPERTY_FONT_SIZE), 100);
+      if (parent_style)
+        font_size = _gtk_css_number_value_get (gtk_css_style_get_value (parent_style, GTK_CSS_PROPERTY_FONT_SIZE), 100);
       else
         font_size = _gtk_css_font_size_get_default (provider);
       /* XXX: This is what WebKit does... */

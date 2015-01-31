@@ -123,9 +123,8 @@ static GtkCssImage *
 gtk_css_image_url_compute (GtkCssImage             *image,
                            guint                    property_id,
                            GtkStyleProviderPrivate *provider,
-			   int                      scale,
-                           GtkCssStyle    *values,
-                           GtkCssStyle    *parent_values,
+                           GtkCssStyle             *style,
+                           GtkCssStyle             *parent_style,
                            GtkCssDependencies      *dependencies)
 {
   GtkCssImageUrl *url = GTK_CSS_IMAGE_URL (image);

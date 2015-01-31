@@ -60,18 +60,15 @@ GType                   gtk_css_static_style_get_type           (void) G_GNUC_CO
 GtkCssStyle *           gtk_css_static_style_get_default        (void);
 GtkCssStyle *           gtk_css_static_style_new_compute        (GtkStyleProviderPrivate *provider,
                                                                  const GtkCssMatcher    *matcher,
-                                                                 int                     scale,
                                                                  GtkCssStyle            *parent);
 GtkCssStyle *           gtk_css_static_style_new_update         (GtkCssStaticStyle      *style,
                                                                  const GtkBitmask       *parent_changes,
                                                                  GtkStyleProviderPrivate *provider,
                                                                  const GtkCssMatcher    *matcher,
-                                                                 int                     scale,
                                                                  GtkCssStyle            *parent);
 
 void                    gtk_css_static_style_compute_value      (GtkCssStaticStyle      *style,
                                                                  GtkStyleProviderPrivate*provider,
-								 int                     scale,
                                                                  GtkCssStyle            *parent_style,
                                                                  guint                   id,
                                                                  GtkCssValue            *specified,

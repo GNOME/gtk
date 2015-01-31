@@ -39,9 +39,8 @@ static GtkCssValue *
 gtk_css_value_engine_compute (GtkCssValue             *value,
                               guint                    property_id,
                               GtkStyleProviderPrivate *provider,
-			      int                      scale,
-                              GtkCssStyle    *values,
-                              GtkCssStyle    *parent_values,
+                              GtkCssStyle             *style,
+                              GtkCssStyle             *parent_style,
                               GtkCssDependencies      *dependencies)
 {
   return _gtk_css_value_ref (value);

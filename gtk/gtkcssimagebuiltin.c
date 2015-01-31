@@ -805,7 +805,6 @@ static GtkCssImage *
 gtk_css_image_builtin_compute (GtkCssImage             *image,
                                guint                    property_id,
                                GtkStyleProviderPrivate *provider,
-                               int                      scale,
                                GtkCssStyle             *style,
                                GtkCssStyle             *parent_style,
                                GtkCssDependencies      *dependencies)

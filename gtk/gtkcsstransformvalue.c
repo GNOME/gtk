@@ -231,9 +231,8 @@ gtk_css_transform_compute (GtkCssTransform         *dest,
                            GtkCssTransform         *src,
                            guint                    property_id,
                            GtkStyleProviderPrivate *provider,
-                           int                      scale,
-                           GtkCssStyle    *values,
-                           GtkCssStyle    *parent_values,
+                           GtkCssStyle    *style,
+                           GtkCssStyle    *parent_style,
                            GtkCssDependencies      *dependencies)
 {
   GtkCssDependencies x_deps, y_deps;
@@ -246,33 +245,33 @@ gtk_css_transform_compute (GtkCssTransform         *dest,
       return TRUE;
     case GTK_CSS_TRANSFORM_TRANSLATE:
       x_deps = y_deps = 0;
-      dest->translate.x = _gtk_css_value_compute (src->translate.x, property_id, provider, scale, values, parent_values, &x_deps);
-      dest->translate.y = _gtk_css_value_compute (src->translate.y, property_id, provider, scale, values, parent_values, &y_deps);
+      dest->translate.x = _gtk_css_value_compute (src->translate.x, property_id, provider, style, parent_style, &x_deps);
+      dest->translate.y = _gtk_css_value_compute (src->translate.y, property_id, provider, style, parent_style, &y_deps);
       *dependencies = _gtk_css_dependencies_union (x_deps, y_deps);
       return dest->translate.x == src->translate.x
           && dest->translate.y == src->translate.y;
     case GTK_CSS_TRANSFORM_ROTATE:
-      dest->rotate.rotate = _gtk_css_value_compute (src->rotate.rotate, property_id, provider, scale, values, parent_values, dependencies);
+      dest->rotate.rotate = _gtk_css_value_compute (src->rotate.rotate, property_id, provider, style, parent_style, dependencies);
       return dest->rotate.rotate == src->rotate.rotate;
     case GTK_CSS_TRANSFORM_SCALE:
       x_deps = y_deps = 0;
-      dest->scale.x = _gtk_css_value_compute (src->scale.x, property_id, provider, scale, values, parent_values, &x_deps);
-      dest->scale.y = _gtk_css_value_compute (src->scale.y, property_id, provider, scale, values, parent_values, &y_deps);
+      dest->scale.x = _gtk_css_value_compute (src->scale.x, property_id, provider, style, parent_style, &x_deps);
+      dest->scale.y = _gtk_css_value_compute (src->scale.y, property_id, provider, style, parent_style, &y_deps);
       *dependencies = _gtk_css_dependencies_union (x_deps, y_deps);
       return dest->scale.x == src->scale.x
           && dest->scale.y == src->scale.y;
     case GTK_CSS_TRANSFORM_SKEW:
       x_deps = y_deps = 0;
-      dest->skew.x = _gtk_css_value_compute (src->skew.x, property_id, provider, scale, values, parent_values, &x_deps);
-      dest->skew.y = _gtk_css_value_compute (src->skew.y, property_id, provider, scale, values, parent_values, &y_deps);
+      dest->skew.x = _gtk_css_value_compute (src->skew.x, property_id, provider, style, parent_style, &x_deps);
+      dest->skew.y = _gtk_css_value_compute (src->skew.y, property_id, provider, style, parent_style, &y_deps);
       *dependencies = _gtk_css_dependencies_union (x_deps, y_deps);
       return dest->skew.x == src->skew.x
           && dest->skew.y == src->skew.y;
     case GTK_CSS_TRANSFORM_SKEW_X:
-      dest->skew_x.skew = _gtk_css_value_compute (src->skew_x.skew, property_id, provider, scale, values, parent_values, dependencies);
+      dest->skew_x.skew = _gtk_css_value_compute (src->skew_x.skew, property_id, provider, style, parent_style, dependencies);
       return dest->skew_x.skew == src->skew_x.skew;
     case GTK_CSS_TRANSFORM_SKEW_Y:
-      dest->skew_y.skew = _gtk_css_value_compute (src->skew_y.skew, property_id, provider, scale, values, parent_values, dependencies);
+      dest->skew_y.skew = _gtk_css_value_compute (src->skew_y.skew, property_id, provider, style, parent_style, dependencies);
       return dest->skew_y.skew == src->skew_y.skew;
     case GTK_CSS_TRANSFORM_NONE:
     default:
@@ -285,9 +284,8 @@ static GtkCssValue *
 gtk_css_value_transform_compute (GtkCssValue             *value,
                                  guint                    property_id,
                                  GtkStyleProviderPrivate *provider,
-			         int                      scale,
-                                 GtkCssStyle    *values,
-                                 GtkCssStyle    *parent_values,
+                                 GtkCssStyle             *style,
+                                 GtkCssStyle             *parent_style,
                                  GtkCssDependencies      *dependencies)
 {
   GtkCssDependencies transform_deps;
@@ -308,9 +306,8 @@ gtk_css_value_transform_compute (GtkCssValue             *value,
                                              &value->transforms[i],
                                              property_id,
                                              provider,
-                                             scale,
-                                             values,
-                                             parent_values,
+                                             style,
+                                             parent_style,
                                              &transform_deps);
       *dependencies = _gtk_css_dependencies_union (*dependencies, transform_deps);
     }

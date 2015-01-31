@@ -198,7 +198,6 @@ gtk_css_static_style_get_default (void)
 
   result = gtk_css_static_style_new_compute (GTK_STYLE_PROVIDER_PRIVATE (settings),
                                              NULL,
-                                             1,
                                              NULL);
   g_object_set_qdata_full (G_OBJECT (settings), style_quark, result, g_object_unref);
 
@@ -208,7 +207,6 @@ gtk_css_static_style_get_default (void)
 GtkCssStyle *
 gtk_css_static_style_new_compute (GtkStyleProviderPrivate *provider,
                                   const GtkCssMatcher     *matcher,
-                                  int                      scale,
                                   GtkCssStyle             *parent)
 {
   GtkCssStaticStyle *result;
@@ -229,7 +227,6 @@ gtk_css_static_style_new_compute (GtkStyleProviderPrivate *provider,
 
   _gtk_css_lookup_resolve (lookup, 
                            provider,
-			   scale,
                            result,
                            parent);
 
@@ -243,7 +240,6 @@ gtk_css_static_style_new_update (GtkCssStaticStyle       *style,
                                  const GtkBitmask        *parent_changes,
                                  GtkStyleProviderPrivate *provider,
                                  const GtkCssMatcher     *matcher,
-                                 int                      scale,
                                  GtkCssStyle             *parent)
 {
   GtkCssStaticStyle *result;
@@ -295,7 +291,6 @@ gtk_css_static_style_new_update (GtkCssStaticStyle       *style,
 
   _gtk_css_lookup_resolve (lookup, 
                            provider,
-                           scale,
                            result,
                            parent);
 
@@ -308,7 +303,6 @@ gtk_css_static_style_new_update (GtkCssStaticStyle       *style,
 void
 gtk_css_static_style_compute_value (GtkCssStaticStyle       *style,
                                     GtkStyleProviderPrivate *provider,
-                                    int                      scale,
                                     GtkCssStyle             *parent_style,
                                     guint                    id,
                                     GtkCssValue             *specified,
@@ -338,7 +332,7 @@ gtk_css_static_style_compute_value (GtkCssStaticStyle       *style,
   else
     _gtk_css_value_ref (specified);
 
-  value = _gtk_css_value_compute (specified, id, provider, scale, GTK_CSS_STYLE (style), parent_style, &dependencies);
+  value = _gtk_css_value_compute (specified, id, provider, GTK_CSS_STYLE (style), parent_style, &dependencies);
 
   gtk_css_static_style_set_value (style, id, value, section);
 

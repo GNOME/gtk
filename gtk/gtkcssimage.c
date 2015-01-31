@@ -64,9 +64,8 @@ static GtkCssImage *
 gtk_css_image_real_compute (GtkCssImage             *image,
                             guint                    property_id,
                             GtkStyleProviderPrivate *provider,
-			    int                      scale,
-                            GtkCssStyle    *values,
-                            GtkCssStyle    *parent_values,
+                            GtkCssStyle             *style,
+                            GtkCssStyle             *parent_style,
                             GtkCssDependencies      *dependencies)
 {
   return g_object_ref (image);
@@ -149,17 +148,16 @@ GtkCssImage *
 _gtk_css_image_compute (GtkCssImage             *image,
                         guint                    property_id,
                         GtkStyleProviderPrivate *provider,
-			int                      scale,
-                        GtkCssStyle    *values,
-                        GtkCssStyle    *parent_values,
+                        GtkCssStyle             *style,
+                        GtkCssStyle             *parent_style,
                         GtkCssDependencies      *dependencies)
 {
   GtkCssDependencies unused;
   GtkCssImageClass *klass;
 
   g_return_val_if_fail (GTK_IS_CSS_IMAGE (image), NULL);
-  g_return_val_if_fail (GTK_IS_CSS_STYLE (values), NULL);
-  g_return_val_if_fail (parent_values == NULL || GTK_IS_CSS_STYLE (parent_values), NULL);
+  g_return_val_if_fail (GTK_IS_CSS_STYLE (style), NULL);
+  g_return_val_if_fail (parent_style == NULL || GTK_IS_CSS_STYLE (parent_style), NULL);
 
   if (dependencies == NULL)
     dependencies = &unused;
@@ -167,7 +165,7 @@ _gtk_css_image_compute (GtkCssImage             *image,
 
   klass = GTK_CSS_IMAGE_GET_CLASS (image);
 
-  return klass->compute (image, property_id, provider, scale, values, parent_values, dependencies);
+  return klass->compute (image, property_id, provider, style, parent_style, dependencies);
 }
 
 GtkCssImage *

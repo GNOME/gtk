@@ -127,3 +127,17 @@ _gtk_style_provider_private_get_settings (GtkStyleProviderPrivate *provider)
   return iface->get_settings (provider);
 }
 
+int
+_gtk_style_provider_private_get_scale (GtkStyleProviderPrivate *provider)
+{
+  GtkStyleProviderPrivateInterface *iface;
+
+  g_return_val_if_fail (GTK_IS_STYLE_PROVIDER_PRIVATE (provider), 1);
+
+  iface = GTK_STYLE_PROVIDER_PRIVATE_GET_INTERFACE (provider);
+
+  if (!iface->get_scale)
+    return 1;
+
+  return iface->get_scale (provider);
+}

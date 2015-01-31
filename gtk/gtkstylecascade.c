@@ -174,6 +174,14 @@ gtk_style_cascade_get_color (GtkStyleProviderPrivate *provider,
   return NULL;
 }
 
+static int
+gtk_style_cascade_get_scale (GtkStyleProviderPrivate *provider)
+{
+  GtkStyleCascade *cascade = GTK_STYLE_CASCADE (provider);
+
+  return cascade->scale;
+}
+
 static GtkCssKeyframes *
 gtk_style_cascade_get_keyframes (GtkStyleProviderPrivate *provider,
                                  const char              *name)
@@ -235,6 +243,7 @@ gtk_style_cascade_provider_private_iface_init (GtkStyleProviderPrivateInterface 
 {
   iface->get_color = gtk_style_cascade_get_color;
   iface->get_settings = gtk_style_cascade_get_settings;
+  iface->get_scale = gtk_style_cascade_get_scale;
   iface->get_keyframes = gtk_style_cascade_get_keyframes;
   iface->lookup = gtk_style_cascade_lookup;
 }

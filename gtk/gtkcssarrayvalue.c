@@ -46,9 +46,8 @@ static GtkCssValue *
 gtk_css_value_array_compute (GtkCssValue             *value,
                              guint                    property_id,
                              GtkStyleProviderPrivate *provider,
-			     int                      scale,
-                             GtkCssStyle    *values,
-                             GtkCssStyle    *parent_values,
+                             GtkCssStyle             *style,
+                             GtkCssStyle             *parent_style,
                              GtkCssDependencies      *dependencies)
 {
   GtkCssValue *result;
@@ -59,7 +58,7 @@ gtk_css_value_array_compute (GtkCssValue             *value,
   result = NULL;
   for (i = 0; i < value->n_values; i++)
     {
-      i_value =  _gtk_css_value_compute (value->values[i], property_id, provider, scale, values, parent_values, &child_deps);
+      i_value =  _gtk_css_value_compute (value->values[i], property_id, provider, style, parent_style, &child_deps);
 
       *dependencies = _gtk_css_dependencies_union (*dependencies, child_deps);
 

@@ -37,24 +37,22 @@ static GtkCssValue *
 gtk_css_value_inherit_compute (GtkCssValue             *value,
                                guint                    property_id,
                                GtkStyleProviderPrivate *provider,
-			       int                      scale,
-                               GtkCssStyle    *values,
-                               GtkCssStyle    *parent_values,
+                               GtkCssStyle             *style,
+                               GtkCssStyle             *parent_style,
                                GtkCssDependencies      *dependencies)
 {
-  if (parent_values)
+  if (parent_style)
     {
       *dependencies = GTK_CSS_EQUALS_PARENT;
-      return _gtk_css_value_ref (gtk_css_style_get_value (parent_values, property_id));
+      return _gtk_css_value_ref (gtk_css_style_get_value (parent_style, property_id));
     }
   else
     {
       return _gtk_css_value_compute (_gtk_css_initial_value_get (),
                                      property_id,
                                      provider,
-				     scale,
-                                     values,
-                                     parent_values,
+                                     style,
+                                     parent_style,
                                      dependencies);
     }
 }

@@ -38,9 +38,8 @@ static GtkCssValue *
 gtk_css_value_unset_compute (GtkCssValue             *value,
                              guint                    property_id,
                              GtkStyleProviderPrivate *provider,
-			     int                      scale,
-                             GtkCssStyle    *values,
-                             GtkCssStyle    *parent_values,
+                             GtkCssStyle             *style,
+                             GtkCssStyle             *parent_style,
                              GtkCssDependencies      *dependencies)
 {
   GtkCssStyleProperty *property;
@@ -56,9 +55,8 @@ gtk_css_value_unset_compute (GtkCssValue             *value,
   return _gtk_css_value_compute (unset_value,
                                  property_id,
                                  provider,
-				 scale,
-                                 values,
-                                 parent_values,
+                                 style,
+                                 parent_style,
                                  dependencies);
 }
 

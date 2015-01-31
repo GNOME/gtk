@@ -41,9 +41,8 @@ static GtkCssValue *
 gtk_css_value_initial_compute (GtkCssValue             *value,
                                guint                    property_id,
                                GtkStyleProviderPrivate *provider,
-			       int                      scale,
-                               GtkCssStyle    *values,
-                               GtkCssStyle    *parent_values,
+                               GtkCssStyle             *style,
+                               GtkCssStyle             *parent_style,
                                GtkCssDependencies      *dependencies)
 {
   GtkSettings *settings;
@@ -94,9 +93,8 @@ gtk_css_value_initial_compute (GtkCssValue             *value,
   return _gtk_css_value_compute (_gtk_css_style_property_get_initial_value (_gtk_css_style_property_lookup_by_id (property_id)),
                                  property_id,
                                  provider,
-				 scale,
-                                 values,
-                                 parent_values,
+                                 style,
+                                 parent_style,
                                  dependencies);
 }
 
