@@ -21,6 +21,7 @@
 
 #include "gtkcsstransientnodeprivate.h"
 #include "gtkdebug.h"
+#include "gtksettingsprivate.h"
 
 G_DEFINE_TYPE (GtkCssNode, gtk_css_node, G_TYPE_OBJECT)
 
@@ -96,6 +97,15 @@ gtk_css_node_real_get_widget_path (GtkCssNode *cssnode)
   return NULL;
 }
 
+static GtkStyleProviderPrivate *
+gtk_css_node_real_get_style_provider (GtkCssNode *cssnode)
+{
+  if (cssnode->parent)
+    return gtk_css_node_get_style_provider (cssnode->parent);
+
+  return GTK_STYLE_PROVIDER_PRIVATE (_gtk_settings_get_style_cascade (gtk_settings_get_default (), 1));
+}
+
 static void
 gtk_css_node_class_init (GtkCssNodeClass *klass)
 {
@@ -109,6 +119,7 @@ gtk_css_node_class_init (GtkCssNodeClass *klass)
   klass->set_invalid = gtk_css_node_real_set_invalid;
   klass->create_widget_path = gtk_css_node_real_create_widget_path;
   klass->get_widget_path = gtk_css_node_real_get_widget_path;
+  klass->get_style_provider = gtk_css_node_real_get_style_provider;
 }
 
 static void
@@ -424,3 +435,8 @@ gtk_css_node_get_widget_path (GtkCssNode *cssnode)
   return GTK_CSS_NODE_GET_CLASS (cssnode)->get_widget_path (cssnode);
 }
 
+GtkStyleProviderPrivate *
+gtk_css_node_get_style_provider (GtkCssNode *cssnode)
+{
+  return GTK_CSS_NODE_GET_CLASS (cssnode)->get_style_provider (cssnode);
+}

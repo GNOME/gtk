@@ -108,6 +108,17 @@ gtk_css_widget_node_get_widget_path (GtkCssNode *node)
   return gtk_widget_get_path (widget_node->widget);
 }
 
+static GtkStyleProviderPrivate *
+gtk_css_widget_node_get_style_provider (GtkCssNode *node)
+{
+  GtkCssWidgetNode *widget_node = GTK_CSS_WIDGET_NODE (node);
+
+  if (widget_node->widget == NULL)
+    return GTK_CSS_NODE_CLASS (gtk_css_widget_node_parent_class)->get_style_provider (node);
+
+  return gtk_style_context_get_style_provider (gtk_widget_get_style_context (widget_node->widget));
+}
+
 static void
 gtk_css_widget_node_class_init (GtkCssWidgetNodeClass *klass)
 {
@@ -118,6 +129,7 @@ gtk_css_widget_node_class_init (GtkCssWidgetNodeClass *klass)
   node_class->set_invalid = gtk_css_widget_node_set_invalid;
   node_class->create_widget_path = gtk_css_widget_node_create_widget_path;
   node_class->get_widget_path = gtk_css_widget_node_get_widget_path;
+  node_class->get_style_provider = gtk_css_widget_node_get_style_provider;
 }
 
 static void

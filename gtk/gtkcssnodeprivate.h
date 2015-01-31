@@ -56,6 +56,7 @@ struct _GtkCssNodeClass
 
   GtkWidgetPath *       (* create_widget_path)          (GtkCssNode            *cssnode);
   const GtkWidgetPath * (* get_widget_path)             (GtkCssNode            *cssnode);
+  GtkStyleProviderPrivate *(* get_style_provider)       (GtkCssNode            *cssnode);
   void                  (* invalidate)                  (GtkCssNode            *cssnode,
                                                          GtkCssChange           change);
   void                  (* set_invalid)                 (GtkCssNode            *node,
@@ -124,6 +125,7 @@ void                    gtk_css_node_set_invalid        (GtkCssNode            *
                                                          gboolean               invalid);
 GtkWidgetPath *         gtk_css_node_create_widget_path (GtkCssNode            *cssnode);
 const GtkWidgetPath *   gtk_css_node_get_widget_path    (GtkCssNode            *cssnode);
+GtkStyleProviderPrivate *gtk_css_node_get_style_provider(GtkCssNode            *cssnode);
 
 G_END_DECLS
 

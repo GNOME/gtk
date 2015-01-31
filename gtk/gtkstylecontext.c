@@ -611,6 +611,12 @@ gtk_style_context_get_root (GtkStyleContext *context)
     return priv->cssnode;
 }
 
+GtkStyleProviderPrivate *
+gtk_style_context_get_style_provider (GtkStyleContext *context)
+{
+  return GTK_STYLE_PROVIDER_PRIVATE (context->priv->cascade);
+}
+
 static gboolean
 gtk_style_context_has_custom_cascade (GtkStyleContext *context)
 {
@@ -710,14 +716,12 @@ update_properties (GtkStyleContext             *context,
                    GtkCssStyle                 *style,
                    const GtkBitmask            *parent_changes)
 {
-  GtkStyleContextPrivate *priv;
   const GtkCssNodeDeclaration *decl;
   GtkCssMatcher matcher;
   GtkWidgetPath *path;
   GtkCssStyle *parent;
   GtkCssStyle *result;
 
-  priv = context->priv;
   parent = gtk_css_node_get_parent_style (context, cssnode);
   decl = gtk_css_node_get_declaration (cssnode);
 
@@ -734,7 +738,7 @@ update_properties (GtkStyleContext             *context,
 
   result = gtk_css_static_style_new_update (GTK_CSS_STATIC_STYLE (style),
                                             parent_changes,
-                                            GTK_STYLE_PROVIDER_PRIVATE (priv->cascade),
+                                            gtk_css_node_get_style_provider (cssnode),
                                             &matcher,
                                             parent);
 
@@ -751,14 +755,12 @@ build_properties (GtkStyleContext             *context,
                   gboolean                     override_state,
                   GtkStateFlags                state)
 {
-  GtkStyleContextPrivate *priv;
   const GtkCssNodeDeclaration *decl;
   GtkCssMatcher matcher;
   GtkWidgetPath *path;
   GtkCssStyle *parent;
   GtkCssStyle *style;
 
-  priv = context->priv;
   decl = gtk_css_node_get_declaration (cssnode);
   parent = gtk_css_node_get_parent_style (context, cssnode);
 
@@ -771,11 +773,11 @@ build_properties (GtkStyleContext             *context,
     gtk_widget_path_iter_set_state (path, -1, state);
 
   if (_gtk_css_matcher_init (&matcher, path))
-    style = gtk_css_static_style_new_compute (GTK_STYLE_PROVIDER_PRIVATE (priv->cascade),
+    style = gtk_css_static_style_new_compute (gtk_css_node_get_style_provider (cssnode),
                                               &matcher,
                                               parent);
   else
-    style = gtk_css_static_style_new_compute (GTK_STYLE_PROVIDER_PRIVATE (priv->cascade),
+    style = gtk_css_static_style_new_compute (gtk_css_node_get_style_provider (cssnode),
                                               NULL,
                                               parent);
 
@@ -2823,7 +2825,7 @@ _gtk_style_context_validate (GtkStyleContext  *context,
       style = gtk_css_animated_style_new (static_style,
                                           priv->parent ? gtk_style_context_lookup_style (priv->parent) : NULL,
                                           timestamp,
-                                          GTK_STYLE_PROVIDER_PRIVATE (priv->cascade),
+                                          gtk_css_node_get_style_provider (cssnode),
                                           gtk_style_context_should_create_transitions (context, current) ? current : NULL);
   
       gtk_style_context_clear_cache (context);
