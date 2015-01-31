@@ -921,14 +921,20 @@ gtk_image_set_from_file   (GtkImage    *image,
   GtkImagePrivate *priv;
   GdkPixbufAnimation *anim;
   gint scale_factor;
-  
+  gint old_width, old_height;
+  gint new_width, new_height;
+  GtkStyleContext *context;
+
   g_return_if_fail (GTK_IS_IMAGE (image));
 
   priv = image->priv;
 
   g_object_freeze_notify (G_OBJECT (image));
-  
-  gtk_image_clear (image);
+
+  context = gtk_widget_get_style_context (GTK_WIDGET (image));
+  _gtk_icon_helper_get_size (priv->icon_helper, context, &old_width, &old_height);
+
+  gtk_image_reset (image);
 
   if (filename == NULL)
     {
@@ -941,9 +947,7 @@ gtk_image_set_from_file   (GtkImage    *image,
 
   if (anim == NULL)
     {
-      gtk_image_set_from_icon_name (image,
-                                    "image-missing",
-                                    DEFAULT_ICON_SIZE);
+      gtk_image_set_from_icon_name (image, "image-missing", DEFAULT_ICON_SIZE);
       g_object_thaw_notify (G_OBJECT (image));
       return;
     }
@@ -964,7 +968,16 @@ gtk_image_set_from_file   (GtkImage    *image,
   g_object_unref (anim);
 
   priv->filename = g_strdup (filename);
-  
+
+  _gtk_icon_helper_get_size (priv->icon_helper, context, &new_width, &new_height);
+  if (gtk_widget_get_visible (GTK_WIDGET (image)))
+    {
+      if (old_width != new_width || old_height != new_height)
+        gtk_widget_queue_resize (GTK_WIDGET (image));
+      else
+        gtk_widget_queue_draw (GTK_WIDGET (image));
+    }
+
   g_object_thaw_notify (G_OBJECT (image));
 }
 
@@ -1001,9 +1014,7 @@ gtk_image_set_from_resource (GtkImage    *image,
 
   if (animation == NULL)
     {
-      gtk_image_set_from_icon_name (image,
-                                    "image-missing",
-                                    DEFAULT_ICON_SIZE);
+      gtk_image_set_from_icon_name (image, "image-missing", DEFAULT_ICON_SIZE);
       g_object_thaw_notify (G_OBJECT (image));
       return;
     }
@@ -1037,22 +1048,36 @@ gtk_image_set_from_pixbuf (GtkImage  *image,
                            GdkPixbuf *pixbuf)
 {
   GtkImagePrivate *priv;
+  gint old_width, old_height;
+  gint new_width, new_height;
+  GtkStyleContext *context;
 
   g_return_if_fail (GTK_IS_IMAGE (image));
-  g_return_if_fail (pixbuf == NULL ||
-                    GDK_IS_PIXBUF (pixbuf));
+  g_return_if_fail (pixbuf == NULL || GDK_IS_PIXBUF (pixbuf));
 
   priv = image->priv;
 
   g_object_freeze_notify (G_OBJECT (image));
-  
-  gtk_image_clear (image);
+
+  context = gtk_widget_get_style_context (GTK_WIDGET (image));
+  _gtk_icon_helper_get_size (priv->icon_helper, context, &old_width, &old_height);
+
+  gtk_image_reset (image);
 
   if (pixbuf != NULL)
     _gtk_icon_helper_set_pixbuf (priv->icon_helper, pixbuf);
 
+  _gtk_icon_helper_get_size (priv->icon_helper, context, &new_width, &new_height);
+  if (gtk_widget_get_visible (GTK_WIDGET (image)))
+    {
+      if (old_width != new_width || old_height != new_height)
+        gtk_widget_queue_resize (GTK_WIDGET (image));
+      else
+        gtk_widget_queue_draw (GTK_WIDGET (image));
+    }
+
   g_object_notify (G_OBJECT (image), "pixbuf");
-  
+
   g_object_thaw_notify (G_OBJECT (image));
 }
 
@@ -1152,6 +1177,9 @@ gtk_image_set_from_animation (GtkImage           *image,
                               GdkPixbufAnimation *animation)
 {
   GtkImagePrivate *priv;
+  gint old_width, old_height;
+  gint new_width, new_height;
+  GtkStyleContext *context;
 
   g_return_if_fail (GTK_IS_IMAGE (image));
   g_return_if_fail (animation == NULL ||
@@ -1164,7 +1192,10 @@ gtk_image_set_from_animation (GtkImage           *image,
   if (animation)
     g_object_ref (animation);
 
-  gtk_image_clear (image);
+  context = gtk_widget_get_style_context (GTK_WIDGET (image));
+  _gtk_icon_helper_get_size (priv->icon_helper, context, &old_width, &old_height);
+
+  gtk_image_reset (image);
 
   if (animation != NULL)
     {
@@ -1173,7 +1204,16 @@ gtk_image_set_from_animation (GtkImage           *image,
     }
 
   g_object_notify (G_OBJECT (image), "pixbuf-animation");
-  
+
+  _gtk_icon_helper_get_size (priv->icon_helper, context, &new_width, &new_height);
+  if (gtk_widget_get_visible (GTK_WIDGET (image)))
+    {
+      if (old_width != new_width || old_height != new_height)
+        gtk_widget_queue_resize (GTK_WIDGET (image));
+      else
+        gtk_widget_queue_draw (GTK_WIDGET (image));
+    }
+
   g_object_thaw_notify (G_OBJECT (image));
 }
 
@@ -1194,6 +1234,9 @@ gtk_image_set_from_icon_name  (GtkImage       *image,
 {
   GtkImagePrivate *priv;
   gchar *new_name;
+  gint old_width, old_height;
+  gint new_width, new_height;
+  GtkStyleContext *context;
 
   g_return_if_fail (GTK_IS_IMAGE (image));
 
@@ -1202,7 +1245,11 @@ gtk_image_set_from_icon_name  (GtkImage       *image,
   g_object_freeze_notify (G_OBJECT (image));
 
   new_name = g_strdup (icon_name);
-  gtk_image_clear (image);
+
+  context = gtk_widget_get_style_context (GTK_WIDGET (image));
+  _gtk_icon_helper_get_size (priv->icon_helper, context, &old_width, &old_height);
+
+  gtk_image_reset (image);
 
   if (new_name)
     {
@@ -1212,7 +1259,16 @@ gtk_image_set_from_icon_name  (GtkImage       *image,
 
   g_object_notify (G_OBJECT (image), "icon-name");
   g_object_notify (G_OBJECT (image), "icon-size");
-  
+
+  _gtk_icon_helper_get_size (priv->icon_helper, context, &new_width, &new_height);
+  if (gtk_widget_get_visible (GTK_WIDGET (image)))
+    {
+      if (old_width != new_width || old_height != new_height)
+        gtk_widget_queue_resize (GTK_WIDGET (image));
+      else
+        gtk_widget_queue_draw (GTK_WIDGET (image));
+    }
+
   g_object_thaw_notify (G_OBJECT (image));
 }
 
@@ -1232,6 +1288,9 @@ gtk_image_set_from_gicon  (GtkImage       *image,
 			   GtkIconSize     size)
 {
   GtkImagePrivate *priv;
+  gint old_width, old_height;
+  gint new_width, new_height;
+  GtkStyleContext *context;
 
   g_return_if_fail (GTK_IS_IMAGE (image));
 
@@ -1242,7 +1301,10 @@ gtk_image_set_from_gicon  (GtkImage       *image,
   if (icon)
     g_object_ref (icon);
 
-  gtk_image_clear (image);
+  context = gtk_widget_get_style_context (GTK_WIDGET (image));
+  _gtk_icon_helper_get_size (priv->icon_helper, context, &old_width, &old_height);
+
+  gtk_image_reset (image);
 
   if (icon)
     {
@@ -1252,7 +1314,16 @@ gtk_image_set_from_gicon  (GtkImage       *image,
 
   g_object_notify (G_OBJECT (image), "gicon");
   g_object_notify (G_OBJECT (image), "icon-size");
-  
+
+  _gtk_icon_helper_get_size (priv->icon_helper, context, &new_width, &new_height);
+  if (gtk_widget_get_visible (GTK_WIDGET (image)))
+    {
+      if (old_width != new_width || old_height != new_height)
+        gtk_widget_queue_resize (GTK_WIDGET (image));
+      else
+        gtk_widget_queue_draw (GTK_WIDGET (image));
+    }
+
   g_object_thaw_notify (G_OBJECT (image));
 }
 
@@ -1270,6 +1341,9 @@ gtk_image_set_from_surface (GtkImage       *image,
 			    cairo_surface_t *surface)
 {
   GtkImagePrivate *priv;
+  gint old_width, old_height;
+  gint new_width, new_height;
+  GtkStyleContext *context;
 
   g_return_if_fail (GTK_IS_IMAGE (image));
 
@@ -1280,7 +1354,10 @@ gtk_image_set_from_surface (GtkImage       *image,
   if (surface)
     cairo_surface_reference (surface);
 
-  gtk_image_clear (image);
+  context = gtk_widget_get_style_context (GTK_WIDGET (image));
+  _gtk_icon_helper_get_size (priv->icon_helper, context, &old_width, &old_height);
+
+  gtk_image_reset (image);
 
   if (surface)
     {
@@ -1289,7 +1366,16 @@ gtk_image_set_from_surface (GtkImage       *image,
     }
 
   g_object_notify (G_OBJECT (image), "surface");
-  
+
+  _gtk_icon_helper_get_size (priv->icon_helper, context, &new_width, &new_height);
+  if (gtk_widget_get_visible (GTK_WIDGET (image)))
+    {
+      if (old_width != new_width || old_height != new_height)
+        gtk_widget_queue_resize (GTK_WIDGET (image));
+      else
+        gtk_widget_queue_draw (GTK_WIDGET (image));
+    }
+
   g_object_thaw_notify (G_OBJECT (image));
 }
 
