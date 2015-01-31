@@ -276,6 +276,8 @@ style_provider_data_clear (gpointer data_)
 static void
 _gtk_style_cascade_init (GtkStyleCascade *cascade)
 {
+  cascade->scale = 1;
+
   cascade->providers = g_array_new (FALSE, FALSE, sizeof (GtkStyleProviderData));
   g_array_set_clear_func (cascade->providers, style_provider_data_clear);
 }
@@ -373,3 +375,24 @@ _gtk_style_cascade_remove_provider (GtkStyleCascade  *cascade,
     }
 }
 
+void
+_gtk_style_cascade_set_scale (GtkStyleCascade *cascade,
+                              int              scale)
+{
+  g_return_if_fail (GTK_IS_STYLE_CASCADE (cascade));
+
+  if (cascade->scale == scale)
+    return;
+
+  cascade->scale = scale;
+
+  _gtk_style_provider_private_changed (GTK_STYLE_PROVIDER_PRIVATE (cascade));
+}
+
+int
+_gtk_style_cascade_get_scale (GtkStyleCascade *cascade)
+{
+  g_return_val_if_fail (GTK_IS_STYLE_CASCADE (cascade), 1);
+
+  return cascade->scale;
+}

@@ -165,7 +165,6 @@ struct _GtkStyleContextPrivate
   GtkCssNode *cssnode;
   GSList *saved_nodes;
   GArray *property_cache;
-  gint scale;
 
   guint frame_clock_update_id;
   GdkFrameClock *frame_clock;
@@ -819,7 +818,7 @@ update_properties (GtkStyleContext             *context,
                                             parent_changes,
                                             GTK_STYLE_PROVIDER_PRIVATE (priv->cascade),
                                             &matcher,
-                                            priv->scale,
+                                            _gtk_style_cascade_get_scale (priv->cascade),
                                             parent);
 
   gtk_widget_path_free (path);
@@ -851,12 +850,12 @@ build_properties (GtkStyleContext             *context,
   if (_gtk_css_matcher_init (&matcher, path))
     style = gtk_css_static_style_new_compute (GTK_STYLE_PROVIDER_PRIVATE (priv->cascade),
                                               &matcher,
-                                              priv->scale,
+                                              _gtk_style_cascade_get_scale (priv->cascade),
                                               parent);
   else
     style = gtk_css_static_style_new_compute (GTK_STYLE_PROVIDER_PRIVATE (priv->cascade),
                                               NULL,
-                                              priv->scale,
+                                              _gtk_style_cascade_get_scale (priv->cascade),
                                               parent);
 
   gtk_widget_path_free (path);
@@ -1432,14 +1431,26 @@ void
 gtk_style_context_set_scale (GtkStyleContext *context,
                              gint             scale)
 {
+  GtkStyleContextPrivate *priv;
+
   g_return_if_fail (GTK_IS_STYLE_CONTEXT (context));
 
-  if (context->priv->scale == scale)
+  priv = context->priv;
+
+  if (scale == _gtk_style_cascade_get_scale (priv->cascade))
     return;
 
-  context->priv->scale = scale;
+  if (priv->cascade == _gtk_settings_get_style_cascade (gtk_settings_get_for_screen (priv->screen)))
+    {
+      GtkStyleCascade *new_cascade;
+      
+      new_cascade = _gtk_style_cascade_new ();
+      _gtk_style_cascade_set_parent (new_cascade, priv->cascade);
+      gtk_style_context_set_cascade (context, new_cascade);
+      g_object_unref (new_cascade);
+    }
 
-  _gtk_style_context_queue_invalidate (context, GTK_CSS_CHANGE_SOURCE);
+  _gtk_style_cascade_set_scale (priv->cascade, scale);
 }
 
 /**
@@ -1457,7 +1468,7 @@ gtk_style_context_get_scale (GtkStyleContext *context)
 {
   g_return_val_if_fail (GTK_IS_STYLE_CONTEXT (context), 0);
 
-  return context->priv->scale;
+  return _gtk_style_cascade_get_scale (context->priv->cascade);
 }
 
 /**
@@ -2990,7 +3001,7 @@ _gtk_style_context_validate (GtkStyleContext  *context,
                                           priv->parent ? gtk_style_context_lookup_style (priv->parent) : NULL,
                                           timestamp,
                                           GTK_STYLE_PROVIDER_PRIVATE (priv->cascade),
-                                          priv->scale,
+                                          _gtk_style_cascade_get_scale (priv->cascade),
                                           gtk_style_context_should_create_transitions (context, current) ? current : NULL);
   
       gtk_style_context_clear_cache (context);

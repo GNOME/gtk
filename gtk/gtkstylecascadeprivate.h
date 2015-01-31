@@ -39,6 +39,7 @@ struct _GtkStyleCascade
 
   GtkStyleCascade *parent;
   GArray *providers;
+  int scale;
 };
 
 struct _GtkStyleCascadeClass
@@ -52,6 +53,9 @@ GtkStyleCascade *     _gtk_style_cascade_new                    (void);
 
 void                  _gtk_style_cascade_set_parent             (GtkStyleCascade     *cascade,
                                                                  GtkStyleCascade     *parent);
+void                  _gtk_style_cascade_set_scale              (GtkStyleCascade     *cascade,
+                                                                 int                  scale);
+int                   _gtk_style_cascade_get_scale              (GtkStyleCascade     *cascade);
 
 void                  _gtk_style_cascade_add_provider           (GtkStyleCascade     *cascade,
                                                                  GtkStyleProvider    *provider,
