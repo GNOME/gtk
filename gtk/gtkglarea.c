@@ -525,24 +525,6 @@ gtk_gl_area_delete_buffers (GtkGLArea *area)
 }
 
 static void
-gtk_gl_area_post_render (GtkGLArea *area)
-{
-  GtkGLAreaPrivate *priv = gtk_gl_area_get_instance_private (area);
-  GLenum invalidate[4];
-  int i = 0;
-
-  if (priv->has_depth_buffer)
-    invalidate[i++] = GL_DEPTH_ATTACHMENT;
-
-  if (priv->has_stencil_buffer)
-    invalidate[i++] = GL_STENCIL_ATTACHMENT;
-
-  if (priv->auto_render)
-    invalidate[i++] = GL_COLOR_ATTACHMENT0;
-}
-
-
-static void
 gtk_gl_area_unrealize (GtkWidget *widget)
 {
   GtkGLArea *area = GTK_GL_AREA (widget);
@@ -698,7 +680,6 @@ gtk_gl_area_draw (GtkWidget *widget,
                               priv->texture ? GL_TEXTURE : GL_RENDERBUFFER,
                               scale, 0, 0, w, h);
       gtk_gl_area_make_current (area);
-      gtk_gl_area_post_render (area);
     }
   else
     {
