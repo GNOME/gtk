@@ -1,3 +1,33 @@
+Overview of Changes in GTK+ 3.14.7 to 3.14.8
+============================================
+
+* Bugs fixed:
+ 613833 Unnecessary queue_resize() for GtkImage
+ 732051 Crash can result if a child widget is destroyed while its tab is...
+ 735316 Default font antialiasing results in wrong behavior on OS X
+ 740613 XConvertSelection crashes Gtk+ apps
+ 741259 gtkmodelmenuitem: force icon scaling
+ 742181 "show images in menus" causes weird padding outside GNOME
+ 742636 Freeze if window closed while resume-events pending
+ 742664 Portabilitiy issues with GTK-Inspector 32-bit and non-gnome3 des...
+ 742727 nautilus adding bookmark by dragging appear always at top
+ 742764 Fix check for 'y' padding in gtk_cell_renderer_set_padding()
+ 742771 Properly ignore BadWindow and BadDrawable in get_child_info_hand...
+ 742774 Properly check result of g_utf8_get_char_validated()
+ 742785 Fix event->button.y_root when using mouse buttons and dnd canceled
+ 742786 Fix save_hot_y init in gtk_drag_get_icon()
+ 742980 cannot start broadway on FreeBSD
+ 743229 clipboard: support selection notification on wayland
+ 743330 Wintab initialization glitches
+ 743422 valgrind: Conditional jump or move depends on uninitialised valu...
+ 743451 Drag and drop on GtkFileChooserButton doesn't work
+ 743592 crash on link click in about dialogue
+ 743593 GtkWidget's va_marshaller for "event-after" signal is incorrect
+
+* Translation updates:
+ Icelandic
+
+
 Overview of Changes in GTK+ 3.14.6 to 3.14.7
 ============================================
 
