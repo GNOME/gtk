@@ -334,6 +334,32 @@ get_device_ids (GdkDisplay    *display,
   return TRUE;
 }
 
+static gboolean
+is_touchpad_device (GdkDisplay   *display,
+                    XIDeviceInfo *info)
+{
+  gulong nitems, bytes_after;
+  guint32 *data;
+  int rc, format;
+  Atom type;
+
+  gdk_x11_display_error_trap_push (display);
+
+  rc = XIGetProperty (GDK_DISPLAY_XDISPLAY (display),
+                      info->deviceid,
+                      gdk_x11_get_xatom_by_name_for_display (display, "libinput Tapping Enabled"),
+                      0, 1, False, XA_INTEGER, &type, &format, &nitems, &bytes_after,
+                      (guchar **) &data);
+  gdk_x11_display_error_trap_pop_ignored (display);
+
+  if (rc != Success || type != XA_INTEGER || format != 8 || nitems != 1)
+    return FALSE;
+
+  XFree (data);
+
+  return TRUE;
+}
+
 static GdkDevice *
 create_device (GdkDeviceManager *device_manager,
                GdkDisplay       *display,
@@ -349,6 +375,8 @@ create_device (GdkDeviceManager *device_manager,
 
   if (dev->use == XIMasterKeyboard || dev->use == XISlaveKeyboard)
     input_source = GDK_SOURCE_KEYBOARD;
+  else if (is_touchpad_device (display, dev))
+    input_source = GDK_SOURCE_TOUCHPAD;
   else if (dev->use == XISlavePointer &&
            is_touch_device (dev->classes, dev->num_classes, &touch_source, &num_touches))
     input_source = touch_source;
