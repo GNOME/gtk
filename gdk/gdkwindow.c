@@ -9947,7 +9947,7 @@ gdk_window_set_event_compression (GdkWindow *window,
 {
   g_return_if_fail (GDK_IS_WINDOW (window));
 
-  window->event_compression = event_compression;
+  window->event_compression = !!event_compression;
 }
 
 /**
