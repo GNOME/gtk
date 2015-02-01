@@ -147,7 +147,6 @@ AC_PROG_MKDIR_P
 AC_PROG_INSTALL
 AC_PROG_MAKE_SET
 
-
 GETTEXT_PACKAGE=gtk30
 AC_SUBST(GETTEXT_PACKAGE)
 AC_DEFINE_UNQUOTED(GETTEXT_PACKAGE, "$GETTEXT_PACKAGE",
@@ -1906,7 +1905,6 @@ gtk/makefile.msc
 gtk/gtkversion.h
 gtk/gtk-win32.rc
 gtk/libgtk3.manifest
-util/Makefile
 libgail-util/Makefile
 modules/Makefile
 modules/input/Makefile
