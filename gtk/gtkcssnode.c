@@ -365,12 +365,6 @@ gtk_css_node_get_declaration (GtkCssNode *cssnode)
   return cssnode->decl;
 }
 
-GtkCssNodeDeclaration *
-gtk_css_node_dup_declaration (GtkCssNode *cssnode)
-{
-  return gtk_css_node_declaration_ref (cssnode->decl);
-}
-
 void
 gtk_css_node_invalidate (GtkCssNode   *cssnode,
                          GtkCssChange  change)

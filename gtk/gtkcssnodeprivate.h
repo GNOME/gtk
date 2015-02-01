@@ -108,7 +108,6 @@ GList *                 gtk_css_node_list_regions       (GtkCssNode            *
 
 const GtkCssNodeDeclaration *
                         gtk_css_node_get_declaration    (GtkCssNode            *cssnode);
-GtkCssNodeDeclaration * gtk_css_node_dup_declaration    (GtkCssNode            *cssnode);
 
 
 GtkCssStyle *           gtk_css_node_get_style          (GtkCssNode            *cssnode);

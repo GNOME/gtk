@@ -754,9 +754,7 @@ update_properties (GtkCssNode       *cssnode,
 }
 
 static GtkCssStyle *
-build_properties (GtkCssNode    *cssnode,
-                  gboolean       override_state,
-                  GtkStateFlags  state)
+build_properties (GtkCssNode *cssnode)
 {
   const GtkCssNodeDeclaration *decl;
   GtkCssMatcher matcher;
@@ -772,8 +770,6 @@ build_properties (GtkCssNode    *cssnode,
     return g_object_ref (style);
 
   path = gtk_css_node_create_widget_path (cssnode);
-  if (override_state)
-    gtk_widget_path_iter_set_state (path, -1, state);
 
   if (_gtk_css_matcher_init (&matcher, path))
     style = gtk_css_static_style_new_compute (gtk_css_node_get_style_provider (cssnode),
@@ -806,7 +802,7 @@ gtk_style_context_lookup_style (GtkStyleContext *context)
   if (values)
     return values;
 
-  values = build_properties (cssnode, FALSE, 0);
+  values = build_properties (cssnode);
   
   gtk_css_node_set_style (cssnode, values);
   g_object_unref (values);
@@ -818,20 +814,35 @@ static GtkCssStyle *
 gtk_style_context_lookup_style_for_state (GtkStyleContext *context,
                                           GtkStateFlags    state)
 {
-  GtkCssNodeDeclaration *decl;
+  GtkCssNode *node;
   GtkCssStyle *values;
 
   if (gtk_css_node_get_state (context->priv->cssnode) == state)
     return g_object_ref (gtk_style_context_lookup_style (context));
 
   if (g_getenv ("GTK_STYLE_CONTEXT_WARNING"))
-    g_warning ("State does not match current state");
+    {
+      GtkCssNode *root = gtk_style_context_get_root (context);
 
-  decl = gtk_css_node_dup_declaration (context->priv->cssnode);
-  gtk_css_node_declaration_set_state (&decl, state);
-  values = build_properties (context->priv->cssnode,
-                             TRUE, state);
-  gtk_css_node_declaration_unref (decl);
+      if (GTK_IS_CSS_WIDGET_NODE (root))
+        {
+          GtkWidget *widget = gtk_css_widget_node_get_widget (GTK_CSS_WIDGET_NODE (root));
+          g_warning ("State %u for %s %p doesn't match state %u set via gtk_style_context_set_state ()",
+                     state, gtk_widget_get_name (widget), widget, gtk_css_node_get_state (context->priv->cssnode));
+        }
+      else
+        {
+          g_warning ("State %u for context %p doesn't match state %u set via gtk_style_context_set_state ()",
+                     state, context, gtk_css_node_get_state (context->priv->cssnode));
+        }
+    }
+
+  node = gtk_css_transient_node_new (context->priv->cssnode);
+  gtk_css_node_set_parent (node, gtk_css_node_get_parent (context->priv->cssnode));
+  gtk_css_node_set_state (node, state);
+  values = build_properties (node);
+  gtk_css_node_set_parent (node, NULL);
+  g_object_unref (node);
 
   return values;
 }
@@ -2823,7 +2834,7 @@ _gtk_style_context_validate (GtkStyleContext  *context,
     {
       GtkCssStyle *style, *static_style;
 
-      static_style = build_properties (cssnode, FALSE, 0);
+      static_style = build_properties (cssnode);
       style = gtk_css_animated_style_new (static_style,
                                           priv->parent ? gtk_style_context_lookup_style (priv->parent) : NULL,
                                           timestamp,
@@ -2916,9 +2927,7 @@ gtk_style_context_invalidate (GtkStyleContext *context)
   gtk_css_node_set_style (context->priv->cssnode, NULL);
 
   root = gtk_style_context_get_root (context);
-  style = build_properties (root,
-                            FALSE,
-                            0);
+  style = build_properties (root);
   gtk_css_node_set_style (root, style);
   g_object_unref (style);
 
