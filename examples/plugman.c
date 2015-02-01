@@ -359,7 +359,7 @@ configure_plugins (GSimpleAction *action,
     {
       g_warning ("%s", error->message);
       g_error_free (error);
-      return;
+      goto out;
     }
 
   dialog = (GtkWidget *)gtk_builder_get_object (builder, "plugin-dialog");
@@ -373,6 +373,9 @@ configure_plugins (GSimpleAction *action,
   g_signal_connect (dialog, "response", G_CALLBACK (gtk_widget_destroy), NULL);
 
   gtk_window_present (GTK_WINDOW (dialog));
+
+out:
+  g_object_unref (builder);
 }
 
 static GActionEntry app_entries[] = {
