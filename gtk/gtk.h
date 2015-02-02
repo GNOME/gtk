@@ -276,6 +276,8 @@
 #include <gtk/deprecated/gtkvseparator.h>
 #endif /* GTK_DISABLE_DEPRECATED */
 
+#include <gtk/gtk-autocleanups.h>
+
 #undef __GTK_H_INSIDE__
 
 #endif /* __GTK_H__ */

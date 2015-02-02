@@ -25,7 +25,7 @@
 #endif
 
 #include <gtk/gtkgesture.h>
-#include <gtk/gtk.h>
+#include <gtk/gtkwidget.h>
 
 G_BEGIN_DECLS
 

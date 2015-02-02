@@ -79,6 +79,8 @@
 #include <gtk/a11y/gtkwidgetaccessible.h>
 #include <gtk/a11y/gtkwindowaccessible.h>
 
+#include <gtk/a11y/gtk-a11y-autocleanups.h>
+
 #undef __GTK_A11Y_H_INSIDE__
 
 #endif /* __GTK_A11Y_H__ */

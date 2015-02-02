@@ -107,6 +107,7 @@ include $(srcdir)/inspector/Makefile.inc
 
 gtk_public_h_sources = 		\
 	gtk.h			\
+	gtk-autocleanups.h	\
 	gtkx.h			\
 	gtk-a11y.h		\
 	gtkaboutdialog.h	\
