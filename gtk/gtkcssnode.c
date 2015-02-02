@@ -60,6 +60,168 @@ gtk_css_node_finalize (GObject *object)
   G_OBJECT_CLASS (gtk_css_node_parent_class)->finalize (object);
 }
 
+static gboolean
+may_use_global_parent_cache (GtkCssNode *node)
+{
+  GtkCssNode *parent;
+  
+  parent = gtk_css_node_get_parent (node);
+  if (parent == NULL)
+    return FALSE;
+
+  if (gtk_css_node_get_style_provider (node) != gtk_css_node_get_style_provider (parent))
+    return FALSE;
+
+  return TRUE;
+}
+
+static GtkCssStyle *
+lookup_in_global_parent_cache (GtkCssNode                  *node,
+                               GtkCssStyle                 *parent,
+                               const GtkCssNodeDeclaration *decl)
+{
+  GHashTable *cache;
+  GtkCssStyle *style;
+
+  if (parent == NULL ||
+      !may_use_global_parent_cache (node))
+    return NULL;
+
+  cache = g_object_get_data (G_OBJECT (parent), "gtk-global-cache");
+  if (cache == NULL)
+    return NULL;
+
+  style = g_hash_table_lookup (cache, decl);
+
+  return style;
+}
+
+static gboolean
+may_be_stored_in_parent_cache (GtkCssStyle *style)
+{
+  GtkCssChange change;
+
+  change = gtk_css_static_style_get_change (GTK_CSS_STATIC_STYLE (style));
+
+  /* The cache is shared between all children of the parent, so if a
+   * style depends on a sibling it is not independant of the child.
+   */
+  if (change & GTK_CSS_CHANGE_ANY_SIBLING)
+    return FALSE;
+
+  /* Again, the cache is shared between all children of the parent.
+   * If the position is relevant, no child has the same style.
+   */
+  if (change & GTK_CSS_CHANGE_POSITION)
+    return FALSE;
+
+  return TRUE;
+}
+
+static void
+store_in_global_parent_cache (GtkCssNode                  *node,
+                              GtkCssStyle                 *parent,
+                              const GtkCssNodeDeclaration *decl,
+                              GtkCssStyle                 *style)
+{
+  GHashTable *cache;
+
+  g_assert (GTK_IS_CSS_STATIC_STYLE (style));
+
+  if (parent == NULL ||
+      !may_use_global_parent_cache (node))
+    return;
+
+  if (!may_be_stored_in_parent_cache (style))
+    return;
+
+  cache = g_object_get_data (G_OBJECT (parent), "gtk-global-cache");
+  if (cache == NULL)
+    {
+      cache = g_hash_table_new_full (gtk_css_node_declaration_hash,
+                                     gtk_css_node_declaration_equal,
+                                     (GDestroyNotify) gtk_css_node_declaration_unref,
+                                     g_object_unref);
+      g_object_set_data_full (G_OBJECT (parent), "gtk-global-cache", cache, (GDestroyNotify) g_hash_table_destroy);
+    }
+
+  g_hash_table_insert (cache,
+                       gtk_css_node_declaration_ref ((GtkCssNodeDeclaration *) decl),
+                       g_object_ref (style));
+}
+
+GtkCssStyle *
+gtk_css_node_update_style (GtkCssNode       *cssnode,
+                           GtkCssStyle      *style,
+                           const GtkBitmask *parent_changes)
+{
+  const GtkCssNodeDeclaration *decl;
+  GtkCssMatcher matcher;
+  GtkWidgetPath *path;
+  GtkCssStyle *parent;
+  GtkCssStyle *result;
+
+  parent = cssnode->parent ? cssnode->parent->style : NULL;
+  decl = gtk_css_node_get_declaration (cssnode);
+
+  result = lookup_in_global_parent_cache (cssnode, parent, decl);
+  if (result)
+    return g_object_ref (result);
+
+  path = gtk_css_node_create_widget_path (cssnode);
+
+  if (!_gtk_css_matcher_init (&matcher, path))
+    {
+      g_assert_not_reached ();
+    }
+
+  result = gtk_css_static_style_new_update (GTK_CSS_STATIC_STYLE (style),
+                                            parent_changes,
+                                            gtk_css_node_get_style_provider (cssnode),
+                                            &matcher,
+                                            parent);
+
+  gtk_widget_path_free (path);
+
+  store_in_global_parent_cache (cssnode, parent, decl, style);
+
+  return result;
+}
+
+GtkCssStyle *
+gtk_css_node_create_style (GtkCssNode *cssnode)
+{
+  const GtkCssNodeDeclaration *decl;
+  GtkCssMatcher matcher;
+  GtkWidgetPath *path;
+  GtkCssStyle *parent;
+  GtkCssStyle *style;
+
+  decl = gtk_css_node_get_declaration (cssnode);
+  parent = cssnode->parent ? cssnode->parent->style : NULL;
+
+  style = lookup_in_global_parent_cache (cssnode, parent, decl);
+  if (style)
+    return g_object_ref (style);
+
+  path = gtk_css_node_create_widget_path (cssnode);
+
+  if (_gtk_css_matcher_init (&matcher, path))
+    style = gtk_css_static_style_new_compute (gtk_css_node_get_style_provider (cssnode),
+                                              &matcher,
+                                              parent);
+  else
+    style = gtk_css_static_style_new_compute (gtk_css_node_get_style_provider (cssnode),
+                                              NULL,
+                                              parent);
+
+  gtk_widget_path_free (path);
+
+  store_in_global_parent_cache (cssnode, parent, decl, style);
+
+  return style;
+}
+
 static void
 gtk_css_node_real_invalidate (GtkCssNode   *cssnode,
                               GtkCssChange  change)
