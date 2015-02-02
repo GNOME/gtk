@@ -1184,6 +1184,9 @@ if test "x$enable_x11_backend" = xyes; then
     if $PKG_CONFIG --exists "xrandr >= 1.2.99" ; then
       AC_DEFINE(HAVE_RANDR, 1, [Have the Xrandr extension library])
 
+      if $PKG_CONFIG --exists "xrandr >= 1.5.0" ; then
+        AC_DEFINE(HAVE_RANDR15, 1, [Have the Xrandr 1.5 extension library])
+      fi
       X_PACKAGES="$X_PACKAGES xrandr"
       X_EXTENSIONS="$X_EXTENSIONS XRANDR"
     elif test x"$enable_xrandr" = xyes; then

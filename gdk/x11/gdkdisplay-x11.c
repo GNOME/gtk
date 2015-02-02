@@ -1397,6 +1397,7 @@ _gdk_x11_display_open (const gchar *display_name)
   /* RandR must be initialized before we initialize the screens */
   display_x11->have_randr12 = FALSE;
   display_x11->have_randr13 = FALSE;
+  display_x11->have_randr15 = FALSE;
 #ifdef HAVE_RANDR
   if (XRRQueryExtension (display_x11->xdisplay,
 			 &display_x11->xrandr_event_base, &ignore))
@@ -1409,6 +1410,10 @@ _gdk_x11_display_open (const gchar *display_name)
 	  display_x11->have_randr12 = TRUE;
 	  if (minor >= 3 || major > 1)
 	      display_x11->have_randr13 = TRUE;
+#ifdef HAVE_RANDR15
+	  if (minor >= 5 || major > 1)
+	      display_x11->have_randr15 = TRUE;
+#endif
       }
 
        gdk_x11_register_standard_event_type (display, display_x11->xrandr_event_base, RRNumberEvents);
