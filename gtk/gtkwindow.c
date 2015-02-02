@@ -5895,8 +5895,7 @@ popover_unmap (GtkWidget        *widget,
 {
   if (popover->window)
     {
-      if (gtk_widget_is_visible (popover->widget))
-        gtk_widget_unmap (popover->widget);
+      gtk_widget_unmap (popover->widget);
       gdk_window_hide (popover->window);
     }
 
