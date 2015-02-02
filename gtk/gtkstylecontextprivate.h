@@ -46,11 +46,10 @@ GtkCssValue   * _gtk_style_context_peek_property             (GtkStyleContext *c
 const GValue * _gtk_style_context_peek_style_property        (GtkStyleContext *context,
                                                               GType            widget_type,
                                                               GParamSpec      *pspec);
-GtkBitmask *   _gtk_style_context_validate                   (GtkStyleContext *context,
-                                                              GtkCssNode      *cssnode,
-                                                              gint64           timestamp,
-                                                              GtkCssChange     change,
-                                                              const GtkBitmask*parent_changes);
+gboolean        gtk_style_context_should_create_transitions  (GtkStyleContext *context,
+                                                              GtkCssStyle     *previous_style);
+void            gtk_style_context_validate                   (GtkStyleContext *context,
+                                                              const GtkBitmask*changes);
 gboolean       _gtk_style_context_check_region_name          (const gchar     *str);
 
 gboolean       _gtk_style_context_resolve_color              (GtkStyleContext    *context,
