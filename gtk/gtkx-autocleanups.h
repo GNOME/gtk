@@ -1,5 +1,5 @@
 /* GTK - The GIMP Toolkit
- * Copyright (C) 2011 Red Hat, Inc.
+ * Copyright (C) 1995-1997 Peter Mattis, Spencer Kimball and Josh MacDonald
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -15,22 +15,13 @@
  * License along with this library. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef __GTK_X_H__
-#define __GTK_X_H__
-
-#if defined (GTK_COMPILATION)
-#error "<gtk/gtkx.h> must not be included by GTK+ headers."
+#if !defined (__GTKX_H_INSIDE__) && !defined (GTK_COMPILATION)
+#error "Only <gtk/gtkx.h> can be included directly."
 #endif
 
-#define __GTKX_H_INSIDE__
+#ifndef __GI_SCANNER__
 
-#include <gtk/gtk.h>
+G_DEFINE_AUTOPTR_CLEANUP_FUNC(GtkSocket, g_object_unref)
+G_DEFINE_AUTOPTR_CLEANUP_FUNC(GtkPlug, g_object_unref)
 
-#include <gtk/gtksocket.h>
-#include <gtk/gtkplug.h>
-
-#include <gtk/gtkx-autocleanups.h>
-
-#undef __GTKX_H_INSIDE__
-
-#endif /* __GTK_X_H__ */
+#endif

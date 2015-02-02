@@ -109,6 +109,7 @@ gtk_public_h_sources = 		\
 	gtk.h			\
 	gtk-autocleanups.h	\
 	gtkx.h			\
+	gtkx-autocleanups.h	\
 	gtk-a11y.h		\
 	gtkaboutdialog.h	\
 	gtkaccelgroup.h		\
