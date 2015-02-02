@@ -111,6 +111,10 @@
  * manager may not honor the inhibitor, but it can be expected to
  * inform the user about the negative consequences of ending the
  * session while inhibitors are present.
+ *
+ * ## See Also ## {#seealso}
+ * HowDoI: [Using GtkApplication] (https://wiki.gnome.org/HowDoI/GtkApplication)
+ * [Getting Started with GTK+: Basics] (https://developer.gnome.org/gtk3/stable/gtk-getting-started.html#id-1.2.3.3) 
  */
 
 enum {
