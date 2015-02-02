@@ -61,6 +61,7 @@ LDADD = 					\
 #
 gdk_public_h_sources = 				\
 	gdk.h					\
+	gdk-autocleanup.h			\
 	gdkapplaunchcontext.h			\
 	gdkcairo.h				\
 	gdkcursor.h				\

@@ -62,6 +62,8 @@
 #include <gdk/deprecated/gdkcolor.h>
 #endif
 
+#include <gdk/gdk-autocleanup.h>
+
 #undef __GDK_H_INSIDE__
 
 #endif /* __GDK_H__ */

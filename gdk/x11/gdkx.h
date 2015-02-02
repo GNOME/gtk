@@ -52,6 +52,8 @@
 #include <gdk/x11/gdkx11visual.h>
 #include <gdk/x11/gdkx11window.h>
 
+#include <gdk/x11/gdkx-autocleanups.h>
+
 #undef __GDKX_H_INSIDE__
 
 #endif /* __GDK_X_H__ */
