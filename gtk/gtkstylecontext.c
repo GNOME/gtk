@@ -53,6 +53,8 @@
 #include "deprecated/gtkgradientprivate.h"
 #include "deprecated/gtksymboliccolorprivate.h"
 
+#include "fallback-c89.c"
+
 /**
  * SECTION:gtkstylecontext
  * @Short_description: Rendering UI elements
