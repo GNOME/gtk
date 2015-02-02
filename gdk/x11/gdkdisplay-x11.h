@@ -87,6 +87,7 @@ struct _GdkDisplayX11
   gint xdamage_event_base;
 
   gboolean have_randr13;
+  gboolean have_randr15;
   gint xrandr_event_base;
 
   /* If the SECURITY extension is in place, whether this client holds 
