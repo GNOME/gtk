@@ -11695,6 +11695,11 @@ _gtk_window_remove_popover (GtkWindow *window,
   if (!data)
     return;
 
+  g_object_ref (popover);
+  gtk_widget_unparent (popover);
+
+  popover_unmap (popover, data);
+
   if (gtk_widget_get_realized (GTK_WIDGET (window)))
     popover_unrealize (popover, data, window);
 
@@ -11704,6 +11709,7 @@ _gtk_window_remove_popover (GtkWindow *window,
   _gtk_container_accessible_remove_child (GTK_CONTAINER_ACCESSIBLE (accessible),
                                           gtk_widget_get_accessible (popover), -1);
   popover_destroy (data);
+  g_object_unref (popover);
 }
 
 void
