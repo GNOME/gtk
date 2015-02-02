@@ -323,6 +323,7 @@ gtk_unix_print_public_h_sources = 	\
 	gtkprintunixdialog.h		\
 	gtkprinter.h			\
 	gtkprintjob.h			\
+	gtkunixprint-autocleanups.h	\
 	gtkunixprint.h
 endif
 

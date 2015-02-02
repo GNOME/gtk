@@ -1,4 +1,5 @@
-/* GtkUnixPrint
+/* GTK - The GIMP Toolkit
+ * Copyright (C) 1995-1997 Peter Mattis, Spencer Kimball and Josh MacDonald
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -7,25 +8,21 @@
  *
  * This library is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.	 See the GNU
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
  * Lesser General Public License for more details.
  *
  * You should have received a copy of the GNU Lesser General Public
  * License along with this library. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef __GTK_UNIX_PRINT_H__
-#define __GTK_UNIX_PRINT_H__
+#if !defined (__GTK_UNIX_PRINT_H_INSIDE__) && !defined (GTK_COMPILATION)
+#error "Only <gtk/gtkunixprint.h> can be included directly."
+#endif
 
-#define __GTK_UNIX_PRINT_H_INSIDE__
+#ifndef __GI_SCANNER__
 
-#include <gtk/gtkpagesetupunixdialog.h>
-#include <gtk/gtkprinter.h>
-#include <gtk/gtkprintjob.h>
-#include <gtk/gtkprintunixdialog.h>
+G_DEFINE_AUTOPTR_CLEANUP_FUNC(GtkPrintJob, g_object_unref)
+G_DEFINE_AUTOPTR_CLEANUP_FUNC(GtkPrinter, g_object_unref)
+G_DEFINE_AUTOPTR_CLEANUP_FUNC(GtkPrintUnixDialog, g_object_unref)
 
-#include <gtk/gtkunixprint-autocleanups.h>
-
-#undef __GTK_UNIX_PRINT_H_INSIDE__
-
-#endif /* __GTK_UNIX_PRINT_H__ */
+#endif
