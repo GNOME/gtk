@@ -62,6 +62,7 @@ libgdkinclude_HEADERS = 	\
 	gdkx.h
 
 libgdkx11include_HEADERS = 	\
+	gdkx-autocleanups.h	\
 	gdkx11applaunchcontext.h \
 	gdkx11cursor.h		\
 	gdkx11device.h		\
