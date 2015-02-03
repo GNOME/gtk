@@ -1446,6 +1446,9 @@ _gtk_popover_parent_hierarchy_changed (GtkWidget  *widget,
 
   g_object_ref (popover);
 
+  if (gtk_widget_has_grab (GTK_WIDGET (popover)))
+    gtk_popover_apply_modality (popover, FALSE);
+
   if (priv->window)
     _gtk_window_remove_popover (priv->window, GTK_WIDGET (popover));
 
