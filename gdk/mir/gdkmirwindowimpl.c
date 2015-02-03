@@ -199,6 +199,15 @@ create_mir_surface (GdkDisplay *display,
   return surface;
 }
 
+/* TODO: Remove once we have proper transient window support. */
+static gboolean
+should_render_in_parent (GdkWindow *window)
+{
+  GdkMirWindowImpl *impl = GDK_MIR_WINDOW_IMPL (window->impl);
+
+  return impl->transient_for && gdk_window_get_window_type (window) != GDK_WINDOW_TOPLEVEL;
+}
+
 static void
 ensure_surface_full (GdkWindow *window,
                      MirBufferUsage buffer_usage)
@@ -207,7 +216,7 @@ ensure_surface_full (GdkWindow *window,
   MirEventDelegate event_delegate = { event_cb, NULL };
   GdkMirWindowReference *window_ref;
 
-  if (impl->surface)
+  if (impl->surface || should_render_in_parent (window))
     return;
 
   /* no destroy notify -- we must leak for now
@@ -287,15 +296,6 @@ redraw_transient (GdkWindow *window)
   r.width = window->width;
   r.height = window->height;
   gdk_window_invalidate_rect (GDK_MIR_WINDOW_IMPL (window->impl)->transient_for, &r, FALSE);
-}
-
-/* TODO: Remove once we have proper transient window support. */
-static gboolean
-should_render_in_parent (GdkWindow *window)
-{
-  GdkMirWindowImpl *impl = GDK_MIR_WINDOW_IMPL (window->impl);
-
-  return impl->transient_for && gdk_window_get_window_type (window) != GDK_WINDOW_TOPLEVEL;
 }
 
 static void
