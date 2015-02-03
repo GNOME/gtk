@@ -36,7 +36,7 @@ some additional commandline options.
 
 <para>
 A list of modules to load in addition to those specified in the 
-<envar>GTK_MODULES</envar> environment variable and the 
+<envar>GTK2_MODULES</envar> environment variable and the 
 <literal>gtk-modules</literal> setting.
 </para>
 </formalpara>
@@ -196,14 +196,24 @@ additional environment variables.
 </formalpara>
 
 <formalpara>
-  <title><envar>GTK_MODULES</envar></title>
+  <title><envar>GTK2_MODULES</envar></title>
 
   <para>
     A list of modules to load. Note that GTK+ also allows to specify modules to load via a commandline option (<option>--gtk-module</option>) and with the <literal>gtk-modules</literal> setting.
   </para>
+</formalpara>
+
+<formalpara>
+  <title><envar>GTK_MODULES</envar></title>
+
+  <para>
+      A list of modules to load in addition to the ones in the <envar>GTK_MODULES</envar> variable.
+  </para>
   <warning>
     Note that this environment variable is read by GTK+ 3 too,
     which may not have the same set of modules available for loading.
+    Use <envar>GTK2_MODULES</envar> for modules that are only compatible
+    with GTK+ 2.
   </warning>
 </formalpara>
 
