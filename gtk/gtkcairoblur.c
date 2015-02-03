@@ -194,14 +194,11 @@ void
 _gtk_cairo_blur_surface (cairo_surface_t* surface,
                          double           radius_d)
 {
-  cairo_format_t format;
   int radius = radius_d;
 
   g_return_if_fail (surface != NULL);
   g_return_if_fail (cairo_surface_get_type (surface) == CAIRO_SURFACE_TYPE_IMAGE);
-
-  format = cairo_image_surface_get_format (surface);
-  g_return_if_fail (format == CAIRO_FORMAT_A8);
+  g_return_if_fail (cairo_image_surface_get_format (surface) == CAIRO_FORMAT_A8);
 
   if (radius == 0)
     return;
