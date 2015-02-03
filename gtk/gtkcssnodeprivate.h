@@ -47,7 +47,9 @@ struct _GtkCssNode
   GtkCssNodeDeclaration *decl;
   GtkCssStyle           *style;
 
-  guint                  invalid :1;    /* set if node or a child is invalid */
+  GtkCssChange           pending_changes;       /* changes that accumulated since the style was last computed */
+
+  guint                  invalid :1;            /* set if node or a child is invalid */
 };
 
 struct _GtkCssNodeClass

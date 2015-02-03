@@ -531,6 +531,8 @@ void
 gtk_css_node_invalidate (GtkCssNode   *cssnode,
                          GtkCssChange  change)
 {
+  cssnode->pending_changes |= change;
+
   GTK_CSS_NODE_GET_CLASS (cssnode)->invalidate (cssnode, change);
 
   gtk_css_node_set_invalid (cssnode, TRUE);
@@ -564,6 +566,9 @@ gtk_css_node_validate (GtkCssNode            *cssnode,
     return;
 
   gtk_css_node_set_invalid (cssnode, FALSE);
+
+  change |= cssnode->pending_changes;
+  cssnode->pending_changes = 0;
 
   changes = GTK_CSS_NODE_GET_CLASS (cssnode)->validate (cssnode, timestamp, change, parent_changes);
 

@@ -38,8 +38,6 @@ struct _GtkCssWidgetNode
   GtkCssNode node;
 
   GtkWidget *widget;
-
-  GtkCssChange pending_changes;
 };
 
 struct _GtkCssWidgetNodeClass

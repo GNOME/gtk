@@ -32,15 +32,6 @@
 G_DEFINE_TYPE (GtkCssWidgetNode, gtk_css_widget_node, GTK_TYPE_CSS_NODE)
 
 static void
-gtk_css_widget_node_invalidate (GtkCssNode   *node,
-                                GtkCssChange  change)
-{
-  GtkCssWidgetNode *widget_node = GTK_CSS_WIDGET_NODE (node);
-
-  widget_node->pending_changes |= change;
-}
-
-static void
 gtk_css_widget_node_set_invalid (GtkCssNode *node,
                                  gboolean    invalid)
 {
@@ -85,9 +76,6 @@ gtk_css_widget_node_validate (GtkCssNode       *node,
   GtkStyleContext *context;
   GtkBitmask *changes;
   GtkCssStyle *style;
-
-  change |= widget_node->pending_changes;
-  widget_node->pending_changes = 0;
 
   if (widget_node->widget == NULL)
     return _gtk_bitmask_new ();
@@ -218,7 +206,6 @@ gtk_css_widget_node_class_init (GtkCssWidgetNodeClass *klass)
 {
   GtkCssNodeClass *node_class = GTK_CSS_NODE_CLASS (klass);
 
-  node_class->invalidate = gtk_css_widget_node_invalidate;
   node_class->validate = gtk_css_widget_node_validate;
   node_class->set_invalid = gtk_css_widget_node_set_invalid;
   node_class->create_widget_path = gtk_css_widget_node_create_widget_path;
