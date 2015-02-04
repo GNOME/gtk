@@ -23,13 +23,6 @@
 G_DEFINE_TYPE (GtkCssTransientNode, gtk_css_transient_node, GTK_TYPE_CSS_NODE)
 
 static void
-gtk_css_transient_node_invalidate (GtkCssNode   *node,
-                                   GtkCssChange  change)
-{
-  gtk_css_node_set_style (node, NULL);
-}
-
-static void
 gtk_css_transient_node_set_invalid (GtkCssNode *node,
                                     gboolean    invalid)
 {
@@ -71,7 +64,6 @@ gtk_css_transient_node_class_init (GtkCssTransientNodeClass *klass)
 {
   GtkCssNodeClass *node_class = GTK_CSS_NODE_CLASS (klass);
 
-  node_class->invalidate = gtk_css_transient_node_invalidate;
   node_class->set_invalid = gtk_css_transient_node_set_invalid;
   node_class->create_widget_path = gtk_css_transient_node_create_widget_path;
   node_class->get_widget_path = gtk_css_transient_node_get_widget_path;

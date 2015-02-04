@@ -31,6 +31,14 @@
 
 G_DEFINE_TYPE (GtkCssWidgetNode, gtk_css_widget_node, GTK_TYPE_CSS_NODE)
 
+static GtkCssStyle *
+gtk_css_widget_node_update_style (GtkCssNode   *cssnode,
+                                  GtkCssChange  pending_change,
+                                  GtkCssStyle  *old_style)
+{
+  return NULL;
+}
+
 static void
 gtk_css_widget_node_set_invalid (GtkCssNode *node,
                                  gboolean    invalid)
@@ -206,6 +214,7 @@ gtk_css_widget_node_class_init (GtkCssWidgetNodeClass *klass)
 {
   GtkCssNodeClass *node_class = GTK_CSS_NODE_CLASS (klass);
 
+  node_class->update_style = gtk_css_widget_node_update_style;
   node_class->validate = gtk_css_widget_node_validate;
   node_class->set_invalid = gtk_css_widget_node_set_invalid;
   node_class->create_widget_path = gtk_css_widget_node_create_widget_path;

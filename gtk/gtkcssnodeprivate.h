@@ -59,8 +59,10 @@ struct _GtkCssNodeClass
   GtkWidgetPath *       (* create_widget_path)          (GtkCssNode            *cssnode);
   const GtkWidgetPath * (* get_widget_path)             (GtkCssNode            *cssnode);
   GtkStyleProviderPrivate *(* get_style_provider)       (GtkCssNode            *cssnode);
-  void                  (* invalidate)                  (GtkCssNode            *cssnode,
-                                                         GtkCssChange           change);
+  GtkCssStyle *         (* update_style)                (GtkCssNode            *cssnode,
+                                                         GtkCssChange           pending_changes,
+                                                         GtkCssStyle           *old_style);
+  void                  (* invalidate)                  (GtkCssNode            *node);
   void                  (* set_invalid)                 (GtkCssNode            *node,
                                                          gboolean               invalid);
   GtkBitmask *          (* validate)                    (GtkCssNode            *cssnode,

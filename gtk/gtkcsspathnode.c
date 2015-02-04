@@ -24,12 +24,9 @@
 G_DEFINE_TYPE (GtkCssPathNode, gtk_css_path_node, GTK_TYPE_CSS_NODE)
 
 static void
-gtk_css_path_node_invalidate (GtkCssNode   *node,
-                              GtkCssChange  change)
+gtk_css_path_node_invalidate (GtkCssNode *node)
 {
   GtkCssPathNode *path_node = GTK_CSS_PATH_NODE (node);
-
-  gtk_css_node_set_style (node, NULL);
 
   if (path_node->context)
     {

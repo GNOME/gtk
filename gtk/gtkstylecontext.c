@@ -608,24 +608,8 @@ gtk_style_context_has_custom_cascade (GtkStyleContext *context)
 GtkCssStyle *
 gtk_style_context_lookup_style (GtkStyleContext *context)
 {
-  GtkStyleContextPrivate *priv;
-  GtkCssStyle *values;
-  GtkCssNode *cssnode;
-
-  priv = context->priv;
-  cssnode = priv->cssnode;
-
-  /* Current data in use is cached, just return it */
-  values = gtk_css_node_get_style (cssnode);
-  if (values)
-    return values;
-
-  values = gtk_css_node_create_style (cssnode);
-  
-  gtk_css_node_set_style (cssnode, values);
-  g_object_unref (values);
-
-  return values;
+  /* Code will recreate style if it was changed */
+  return gtk_css_node_get_style (context->priv->cssnode);
 }
 
 static GtkCssStyle *
@@ -702,7 +686,6 @@ _gtk_style_context_set_widget (GtkStyleContext *context,
       g_object_unref (priv->cssnode);
       priv->cssnode = gtk_css_widget_node_new (widget);
       gtk_css_node_set_state (priv->cssnode, GTK_STATE_FLAG_DIR_LTR);
-      gtk_css_node_set_style (priv->cssnode, gtk_css_static_style_get_default ());
     }
 
   if (widget)

@@ -222,9 +222,16 @@ gtk_css_node_create_style (GtkCssNode *cssnode)
   return style;
 }
 
+static GtkCssStyle *
+gtk_css_node_real_update_style (GtkCssNode   *cssnode,
+                                GtkCssChange  pending_change,
+                                GtkCssStyle  *old_style)
+{
+  return gtk_css_node_create_style (cssnode);
+}
+
 static void
-gtk_css_node_real_invalidate (GtkCssNode   *cssnode,
-                              GtkCssChange  change)
+gtk_css_node_real_invalidate (GtkCssNode *node)
 {
 }
 
@@ -276,6 +283,7 @@ gtk_css_node_class_init (GtkCssNodeClass *klass)
   object_class->dispose = gtk_css_node_dispose;
   object_class->finalize = gtk_css_node_finalize;
 
+  klass->update_style = gtk_css_node_real_update_style;
   klass->invalidate = gtk_css_node_real_invalidate;
   klass->validate = gtk_css_node_real_validate;
   klass->set_invalid = gtk_css_node_real_set_invalid;
@@ -288,6 +296,8 @@ static void
 gtk_css_node_init (GtkCssNode *cssnode)
 {
   cssnode->decl = gtk_css_node_declaration_new ();
+
+  cssnode->style = g_object_ref (gtk_css_static_style_get_default ());
 }
 
 void
@@ -402,6 +412,21 @@ gtk_css_node_set_style (GtkCssNode  *cssnode,
 GtkCssStyle *
 gtk_css_node_get_style (GtkCssNode *cssnode)
 {
+  GtkCssStyle *new_style;
+
+  if (cssnode->pending_changes)
+    {
+      new_style = GTK_CSS_NODE_GET_CLASS (cssnode)->update_style (cssnode,
+                                                                  cssnode->pending_changes,
+                                                                  cssnode->style);
+      if (new_style)
+        {
+          gtk_css_node_set_style (cssnode, new_style);
+          g_object_unref (new_style);
+          cssnode->pending_changes = 0;
+        }
+    }
+
   return cssnode->style;
 }
 
@@ -533,7 +558,7 @@ gtk_css_node_invalidate (GtkCssNode   *cssnode,
 {
   cssnode->pending_changes |= change;
 
-  GTK_CSS_NODE_GET_CLASS (cssnode)->invalidate (cssnode, change);
+  GTK_CSS_NODE_GET_CLASS (cssnode)->invalidate (cssnode);
 
   gtk_css_node_set_invalid (cssnode, TRUE);
 }
