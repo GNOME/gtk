@@ -45,6 +45,7 @@ mkdir $(CopyDir)\include\gtk-$(ApiVersion)\gtk\a11y&#x0D;&#x0A;
 mkdir $(CopyDir)\include\gtk-$(ApiVersion)\gtk\deprecated&#x0D;&#x0A;
 copy ..\..\..\gdk\win32\gdkwin32.h $(CopyDir)\include\gtk-$(ApiVersion)\gdk&#x0D;&#x0A;
 copy ..\..\..\gdk\gdk.h $(CopyDir)\include\gtk-3.0\gdk\gdk.h&#x0D;&#x0A;
+copy ..\..\..\gdk\gdk-autocleanup.h $(CopyDir)\include\gtk-3.0\gdk\gdk-autocleanup.h&#x0D;&#x0A;
 copy ..\..\..\gdk\gdkapplaunchcontext.h $(CopyDir)\include\gtk-3.0\gdk\gdkapplaunchcontext.h&#x0D;&#x0A;
 copy ..\..\..\gdk\gdkcairo.h $(CopyDir)\include\gtk-3.0\gdk\gdkcairo.h&#x0D;&#x0A;
 copy ..\..\..\gdk\gdkcursor.h $(CopyDir)\include\gtk-3.0\gdk\gdkcursor.h&#x0D;&#x0A;
@@ -88,7 +89,9 @@ copy ..\..\..\gdk\win32\gdkwin32misc.h $(CopyDir)\include\gtk-3.0\gdk\win32\gdkw
 copy ..\..\..\gdk\win32\gdkwin32screen.h $(CopyDir)\include\gtk-3.0\gdk\win32\gdkwin32screen.h&#x0D;&#x0A;
 copy ..\..\..\gdk\win32\gdkwin32window.h $(CopyDir)\include\gtk-3.0\gdk\win32\gdkwin32window.h&#x0D;&#x0A;
 copy ..\..\..\gtk\gtk.h $(CopyDir)\include\gtk-3.0\gtk\gtk.h&#x0D;&#x0A;
+copy ..\..\..\gtk\gtk-autocleanups.h $(CopyDir)\include\gtk-3.0\gtk\gtk-autocleanups.h&#x0D;&#x0A;
 copy ..\..\..\gtk\gtkx.h $(CopyDir)\include\gtk-3.0\gtk\gtkx.h&#x0D;&#x0A;
+copy ..\..\..\gtk\gtkx-autocleanups.h $(CopyDir)\include\gtk-3.0\gtk\gtkx-autocleanups.h&#x0D;&#x0A;
 copy ..\..\..\gtk\gtk-a11y.h $(CopyDir)\include\gtk-3.0\gtk\gtk-a11y.h&#x0D;&#x0A;
 copy ..\..\..\gtk\gtkaboutdialog.h $(CopyDir)\include\gtk-3.0\gtk\gtkaboutdialog.h&#x0D;&#x0A;
 copy ..\..\..\gtk\gtkaccelgroup.h $(CopyDir)\include\gtk-3.0\gtk\gtkaccelgroup.h&#x0D;&#x0A;
@@ -299,6 +302,7 @@ copy ..\..\..\gtk\gtkwindowgroup.h $(CopyDir)\include\gtk-3.0\gtk\gtkwindowgroup
 copy ..\..\..\gtk\gtktextlayout.h $(CopyDir)\include\gtk-3.0\gtk\gtktextlayout.h&#x0D;&#x0A;
 copy ..\..\..\gtk\gtktypebuiltins.h $(CopyDir)\include\gtk-3.0\gtk\gtktypebuiltins.h&#x0D;&#x0A;
 copy ..\..\..\gtk\gtkversion.h $(CopyDir)\include\gtk-3.0\gtk\gtkversion.h&#x0D;&#x0A;
+copy ..\..\..\gtk\a11y\gtk-a11y-autocleanups.h $(CopyDir)\include\gtk-3.0\gtk\a11y\gtk-a11y-autocleanups.h&#x0D;&#x0A;
 copy ..\..\..\gtk\a11y\gtkarrowaccessible.h $(CopyDir)\include\gtk-3.0\gtk\a11y\gtkarrowaccessible.h&#x0D;&#x0A;
 copy ..\..\..\gtk\a11y\gtkbooleancellaccessible.h $(CopyDir)\include\gtk-3.0\gtk\a11y\gtkbooleancellaccessible.h&#x0D;&#x0A;
 copy ..\..\..\gtk\a11y\gtkbuttonaccessible.h $(CopyDir)\include\gtk-3.0\gtk\a11y\gtkbuttonaccessible.h&#x0D;&#x0A;

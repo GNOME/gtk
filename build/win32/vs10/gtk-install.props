@@ -43,6 +43,7 @@ mkdir $(CopyDir)\include\gtk-$(ApiVersion)\gtk\a11y
 mkdir $(CopyDir)\include\gtk-$(ApiVersion)\gtk\deprecated
 copy ..\..\..\gdk\win32\gdkwin32.h $(CopyDir)\include\gtk-$(ApiVersion)\gdk
 copy ..\..\..\gdk\gdk.h $(CopyDir)\include\gtk-3.0\gdk\gdk.h
+copy ..\..\..\gdk\gdk-autocleanup.h $(CopyDir)\include\gtk-3.0\gdk\gdk-autocleanup.h
 copy ..\..\..\gdk\gdkapplaunchcontext.h $(CopyDir)\include\gtk-3.0\gdk\gdkapplaunchcontext.h
 copy ..\..\..\gdk\gdkcairo.h $(CopyDir)\include\gtk-3.0\gdk\gdkcairo.h
 copy ..\..\..\gdk\gdkcursor.h $(CopyDir)\include\gtk-3.0\gdk\gdkcursor.h
@@ -86,7 +87,9 @@ copy ..\..\..\gdk\win32\gdkwin32misc.h $(CopyDir)\include\gtk-3.0\gdk\win32\gdkw
 copy ..\..\..\gdk\win32\gdkwin32screen.h $(CopyDir)\include\gtk-3.0\gdk\win32\gdkwin32screen.h
 copy ..\..\..\gdk\win32\gdkwin32window.h $(CopyDir)\include\gtk-3.0\gdk\win32\gdkwin32window.h
 copy ..\..\..\gtk\gtk.h $(CopyDir)\include\gtk-3.0\gtk\gtk.h
+copy ..\..\..\gtk\gtk-autocleanups.h $(CopyDir)\include\gtk-3.0\gtk\gtk-autocleanups.h
 copy ..\..\..\gtk\gtkx.h $(CopyDir)\include\gtk-3.0\gtk\gtkx.h
+copy ..\..\..\gtk\gtkx-autocleanups.h $(CopyDir)\include\gtk-3.0\gtk\gtkx-autocleanups.h
 copy ..\..\..\gtk\gtk-a11y.h $(CopyDir)\include\gtk-3.0\gtk\gtk-a11y.h
 copy ..\..\..\gtk\gtkaboutdialog.h $(CopyDir)\include\gtk-3.0\gtk\gtkaboutdialog.h
 copy ..\..\..\gtk\gtkaccelgroup.h $(CopyDir)\include\gtk-3.0\gtk\gtkaccelgroup.h
@@ -297,6 +300,7 @@ copy ..\..\..\gtk\gtkwindowgroup.h $(CopyDir)\include\gtk-3.0\gtk\gtkwindowgroup
 copy ..\..\..\gtk\gtktextlayout.h $(CopyDir)\include\gtk-3.0\gtk\gtktextlayout.h
 copy ..\..\..\gtk\gtktypebuiltins.h $(CopyDir)\include\gtk-3.0\gtk\gtktypebuiltins.h
 copy ..\..\..\gtk\gtkversion.h $(CopyDir)\include\gtk-3.0\gtk\gtkversion.h
+copy ..\..\..\gtk\a11y\gtk-a11y-autocleanups.h $(CopyDir)\include\gtk-3.0\gtk\a11y\gtk-a11y-autocleanups.h
 copy ..\..\..\gtk\a11y\gtkarrowaccessible.h $(CopyDir)\include\gtk-3.0\gtk\a11y\gtkarrowaccessible.h
 copy ..\..\..\gtk\a11y\gtkbooleancellaccessible.h $(CopyDir)\include\gtk-3.0\gtk\a11y\gtkbooleancellaccessible.h
 copy ..\..\..\gtk\a11y\gtkbuttonaccessible.h $(CopyDir)\include\gtk-3.0\gtk\a11y\gtkbuttonaccessible.h
