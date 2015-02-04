@@ -420,7 +420,6 @@ gtk_style_context_init (GtkStyleContext *style_context)
   /* Create default info store */
   priv->cssnode = gtk_css_node_new ();
   gtk_css_node_declaration_set_state (&priv->cssnode->decl, GTK_STATE_FLAG_DIR_LTR);
-  priv->cssnode->values = g_object_ref (gtk_css_static_style_get_default ());
 
   priv->property_cache = g_array_new (FALSE, FALSE, sizeof (PropertyValue));
 
@@ -880,8 +879,6 @@ gtk_style_context_lookup_style (GtkStyleContext *context)
   /* Current data in use is cached, just return it */
   if (cssnode->values)
     return cssnode->values;
-
-  g_assert (gtk_style_context_is_saved (context));
 
   values = g_hash_table_lookup (priv->style_values, cssnode->decl);
   if (values)
@@ -2978,7 +2975,10 @@ _gtk_style_context_validate (GtkStyleContext  *context,
   priv->pending_changes = 0;
   gtk_style_context_set_invalid (context, FALSE);
 
-  current = g_object_ref (cssnode->values);
+  current = cssnode->values;
+  if (current == NULL)
+    current = gtk_css_static_style_get_default ();
+  g_object_ref (current);
 
   /* Try to avoid invalidating if we can */
   if (gtk_style_context_style_needs_full_revalidate (current, change))
