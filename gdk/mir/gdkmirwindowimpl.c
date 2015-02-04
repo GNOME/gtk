@@ -919,13 +919,12 @@ gdk_mir_window_impl_set_transient_for (GdkWindow *window,
       window->x = impl->transient_x;
       window->y = impl->transient_y;
 
+      /* Remove surface if we had made one before this was set */
+      ensure_no_surface (window);
+
       /* Redraw onto parent */
       redraw_transient (window);
     }
-
-  /* Remove surface if we had made one before this was set */
-  if (should_render_in_parent (window))
-    ensure_no_surface (window);
 }
 
 /* TODO: Remove once we have proper transient window support. */
