@@ -3108,17 +3108,19 @@ gtk_style_context_invalidate (GtkStyleContext *context)
 {
   GtkBitmask *changes;
   GtkCssStyle *style;
+  GtkCssNode *root;
 
   g_return_if_fail (GTK_IS_STYLE_CONTEXT (context));
 
   gtk_style_context_clear_cache (context);
+  gtk_css_node_set_values (context->priv->cssnode, NULL);
 
-  /* insta-recalculate the new style here */
+  root = gtk_style_context_get_root (context);
   style = build_properties (context,
-                            context->priv->cssnode->decl,
-                            !gtk_style_context_is_saved (context),
-                            gtk_css_node_get_parent_style (context, context->priv->cssnode));
-  gtk_css_node_set_values (context->priv->cssnode, style);
+                            root->decl,
+                            TRUE,
+                            gtk_css_node_get_parent_style (context, root));
+  gtk_css_node_set_values (root, style);
   g_object_unref (style);
 
   if (!gtk_style_context_is_saved (context))
