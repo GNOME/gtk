@@ -14,7 +14,7 @@ EXTRA_DIST +=	\
 	gtk3-demo-application.vcproj	\
 	gtk3-icon-browser.vcproj	\
 	gailutil.vcproj	\
-	install.vcproj	\
+	gtk-install.vcproj	\
 	broadwayd.vcproj	\
 	gdk-broadway.vcproj	\
 	gtk-build-defines.vsprops	\
