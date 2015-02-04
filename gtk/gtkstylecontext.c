@@ -420,7 +420,7 @@ gtk_style_context_init (GtkStyleContext *style_context)
   /* Create default info store */
   priv->cssnode = gtk_css_node_new ();
   gtk_css_node_declaration_set_state (&priv->cssnode->decl, GTK_STATE_FLAG_DIR_LTR);
-  priv->cssnode->values = g_object_ref (gtk_css_static_style_get_default (priv->screen));
+  priv->cssnode->values = g_object_ref (gtk_css_static_style_get_default ());
 
   priv->property_cache = g_array_new (FALSE, FALSE, sizeof (PropertyValue));
 
@@ -2919,7 +2919,7 @@ gtk_style_context_should_create_transitions (GtkStyleContext *context,
   if (!gtk_widget_get_mapped (priv->widget))
     return FALSE;
 
-  if (previous_style == gtk_css_static_style_get_default (priv->screen))
+  if (previous_style == gtk_css_static_style_get_default ())
     return FALSE;
 
   g_object_get (gtk_widget_get_settings (context->priv->widget),

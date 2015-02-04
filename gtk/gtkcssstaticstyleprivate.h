@@ -57,7 +57,7 @@ struct _GtkCssStaticStyleClass
 
 GType                   gtk_css_static_style_get_type           (void) G_GNUC_CONST;
 
-GtkCssStyle *           gtk_css_static_style_get_default        (GdkScreen              *screen);
+GtkCssStyle *           gtk_css_static_style_get_default        (void);
 GtkCssStyle *           gtk_css_static_style_new_compute        (GtkStyleProviderPrivate *provider,
                                                                  const GtkCssMatcher    *matcher,
                                                                  int                     scale,
