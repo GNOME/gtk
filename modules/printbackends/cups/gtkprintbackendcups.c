@@ -729,8 +729,24 @@ gtk_print_backend_cups_print_stream (GtkPrintBackend         *print_backend,
   ps->job = g_object_ref (job);
   ps->http = http;
 
-  request->need_auth_info = cups_printer->auth_info_required != NULL;
-  request->auth_info_required = g_strdupv (cups_printer->auth_info_required);
+  request->need_auth_info = FALSE;
+  request->auth_info_required = NULL;
+
+  /* Check if auth_info_required is set and if it should be handled.
+   * The cups libraries handle the ticket exchange for "negotiate". */
+  if (cups_printer->auth_info_required != NULL &&
+      g_strv_length (cups_printer->auth_info_required) == 1 &&
+      g_strcmp0 (cups_printer->auth_info_required[0], "negotiate") == 0)
+    {
+      GTK_NOTE (PRINTING,
+                g_print ("CUPS Backend: Ignoring auth-info-required \"%s\"\n",
+                         cups_printer->auth_info_required[0]));
+    }
+  else if (cups_printer->auth_info_required != NULL)
+    {
+      request->need_auth_info = TRUE;
+      request->auth_info_required = g_strdupv (cups_printer->auth_info_required);
+    }
 
   cups_request_execute (GTK_PRINT_BACKEND_CUPS (print_backend),
                         request,
