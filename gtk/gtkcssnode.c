@@ -19,9 +19,14 @@
 
 #include "gtkcssnodeprivate.h"
 
+#include "gtkcssanimatedstyleprivate.h"
 #include "gtkcsstransientnodeprivate.h"
 #include "gtkdebug.h"
 #include "gtksettingsprivate.h"
+
+/* When these change we do a full restyling. Otherwise we try to figure out
+ * if we need to change things. */
+#define GTK_CSS_RADICAL_CHANGE (GTK_CSS_CHANGE_NAME | GTK_CSS_CHANGE_CLASS | GTK_CSS_CHANGE_SOURCE)
 
 G_DEFINE_TYPE (GtkCssNode, gtk_css_node, G_TYPE_OBJECT)
 
@@ -222,11 +227,31 @@ gtk_css_node_create_style (GtkCssNode *cssnode)
   return style;
 }
 
+static gboolean
+gtk_css_style_needs_recreation (GtkCssStyle  *style,
+                                GtkCssChange  change)
+{
+  /* Try to avoid invalidating if we can */
+  if (change & GTK_CSS_RADICAL_CHANGE)
+    return TRUE;
+
+  if (GTK_IS_CSS_ANIMATED_STYLE (style))
+    style = GTK_CSS_ANIMATED_STYLE (style)->style;
+
+  if (gtk_css_static_style_get_change (GTK_CSS_STATIC_STYLE (style)) & change)
+    return TRUE;
+  else
+    return FALSE;
+}
+
 static GtkCssStyle *
 gtk_css_node_real_update_style (GtkCssNode   *cssnode,
                                 GtkCssChange  pending_change,
                                 GtkCssStyle  *old_style)
 {
+  if (!gtk_css_style_needs_recreation (old_style, pending_change))
+    return g_object_ref (old_style);
+
   return gtk_css_node_create_style (cssnode);
 }
 
