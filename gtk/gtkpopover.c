@@ -1591,12 +1591,15 @@ _gtk_popover_set_scrollable (GtkPopover    *popover,
           g_object_unref (priv->hadj);
           priv->hadj = NULL;
         }
+
+      g_object_unref (priv->parent_scrollable);
     }
 
   priv->parent_scrollable = scrollable;
 
   if (scrollable)
     {
+      g_object_ref (scrollable);
       priv->vadj = gtk_scrollable_get_vadjustment (scrollable);
       priv->hadj = gtk_scrollable_get_hadjustment (scrollable);
 
