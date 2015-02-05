@@ -23,6 +23,7 @@
 #include "gtkcssnumbervalueprivate.h"
 #include "gtkcssstringvalueprivate.h"
 #include "gtkcssstylepropertyprivate.h"
+#include "gtksettingsprivate.h"
 #include "gtkstyleproviderprivate.h"
 
 struct _GtkCssValue {
@@ -49,6 +50,18 @@ gtk_css_value_initial_compute (GtkCssValue             *value,
 
   switch (property_id)
     {
+    case GTK_CSS_PROPERTY_DPI:
+      settings = _gtk_style_provider_private_get_settings (provider);
+      if (settings)
+        {
+          GdkScreen *screen = _gtk_settings_get_screen (settings);
+          double resolution = gdk_screen_get_resolution (screen);
+
+          if (resolution > 0.0)
+            return _gtk_css_number_value_new (resolution, GTK_CSS_NUMBER);
+        }
+      break;
+
     case GTK_CSS_PROPERTY_FONT_FAMILY:
       settings = _gtk_style_provider_private_get_settings (provider);
       if (settings)
