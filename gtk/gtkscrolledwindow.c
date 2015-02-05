@@ -1090,7 +1090,13 @@ captured_event_cb (GtkWidget *widget,
       indicator_start_fade (&priv->hindicator, 1.0);
       indicator_start_fade (&priv->vindicator, 1.0);
 
-      if (strstr (gdk_device_get_name (source_device), "TrackPoint"))
+      if ((event->motion.state &
+           (GDK_BUTTON1_MASK | GDK_BUTTON2_MASK | GDK_BUTTON3_MASK)) != 0)
+        {
+          indicator_set_over (&priv->hindicator, FALSE);
+          indicator_set_over (&priv->vindicator, FALSE);
+        }
+      else if (strstr (gdk_device_get_name (source_device), "TrackPoint"))
         {
           indicator_set_over (&priv->hindicator, TRUE);
           indicator_set_over (&priv->vindicator, TRUE);
