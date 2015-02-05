@@ -84,7 +84,9 @@
  * on Win32 doesn’t allow to embed arbitrary widgets.
  *
  * GtkStatusIcon has been deprecated in 3.14. You should consider using
- * notifications or more modern platform-specific APIs instead.
+ * notifications or more modern platform-specific APIs instead. GLib provides
+ * the #GNotification API which works well with #GtkApplication. Also see this
+ * [HowDoI](https://wiki.gnome.org/HowDoI/GNotification).
  */
 
 
