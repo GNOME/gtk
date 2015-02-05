@@ -723,6 +723,13 @@ background_image_value_assign (GtkCssStyleProperty *property,
 }
 
 static GtkCssValue *
+dpi_parse (GtkCssStyleProperty *property,
+	   GtkCssParser        *parser)
+{
+  return _gtk_css_number_value_parse (parser, GTK_CSS_PARSE_NUMBER);
+}
+
+static GtkCssValue *
 font_size_parse (GtkCssStyleProperty *property,
                  GtkCssParser        *parser)
 {
@@ -941,7 +948,7 @@ background_position_parse (GtkCssStyleProperty *property,
 void
 _gtk_css_style_property_init_properties (void)
 {
-  /* Initialize "color" and "font-size" first,
+  /* Initialize "color", "-gtk-dpi" and "font-size" first,
    * so that when computing values later they are
    * done first. That way, 'currentColor' and font
    * sizes in em can be looked up properly */
@@ -953,6 +960,15 @@ _gtk_css_style_property_init_properties (void)
                                           color_query,
                                           color_assign,
                                           _gtk_css_color_value_new_rgba (1, 1, 1, 1));
+  gtk_css_style_property_register        ("-gtk-dpi",
+                                          GTK_CSS_PROPERTY_DPI,
+                                          G_TYPE_NONE,
+                                          GTK_STYLE_PROPERTY_INHERIT | GTK_STYLE_PROPERTY_ANIMATED,
+                                          GTK_CSS_AFFECTS_FONT | GTK_CSS_AFFECTS_TEXT | GTK_CSS_AFFECTS_SIZE,
+                                          dpi_parse,
+                                          NULL,
+                                          NULL,
+                                          _gtk_css_number_value_new (96.0, GTK_CSS_NUMBER));
   gtk_css_style_property_register        ("font-size",
                                           GTK_CSS_PROPERTY_FONT_SIZE,
                                           G_TYPE_DOUBLE,

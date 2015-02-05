@@ -10263,6 +10263,12 @@ update_pango_context (GtkWidget    *widget,
 			      PANGO_DIRECTION_LTR : PANGO_DIRECTION_RTL);
 
   pango_font_description_free (font_desc);
+
+  pango_cairo_context_set_resolution (context,
+                                      _gtk_css_number_value_get (
+                                          _gtk_style_context_peek_property (style_context,
+                                                                            GTK_CSS_PROPERTY_DPI),
+                                          100));
 }
 
 static void
@@ -10279,8 +10285,6 @@ gtk_widget_update_pango_context (GtkWidget *widget)
       screen = gtk_widget_get_screen_unchecked (widget);
       if (screen)
 	{
-	  pango_cairo_context_set_resolution (context,
-					      gdk_screen_get_resolution (screen));
 	  pango_cairo_context_set_font_options (context,
 						gdk_screen_get_font_options (screen));
 	}
