@@ -964,7 +964,6 @@ _gtk_css_style_property_init_properties (void)
                                           GTK_CSS_PROPERTY_DPI,
                                           G_TYPE_NONE,
                                           GTK_STYLE_PROPERTY_INHERIT | GTK_STYLE_PROPERTY_ANIMATED,
-                                          GTK_CSS_AFFECTS_FONT | GTK_CSS_AFFECTS_TEXT | GTK_CSS_AFFECTS_SIZE,
                                           dpi_parse,
                                           NULL,
                                           NULL,
