@@ -73,7 +73,6 @@ gdk_win32_gl_context_class_init (GdkWin32GLContextClass *klass)
   GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
 
   context_class->end_frame = _gdk_win32_gl_context_end_frame;
-  context_class->upload_texture = _gdk_win32_gl_context_upload_texture;
 
   gobject_class->dispose = _gdk_win32_gl_context_dispose;
 }
@@ -187,22 +186,6 @@ _gdk_win32_window_invalidate_for_new_frame (GdkWindow *window,
          buffer is fully up-to-date for the swapbuffer */
       cairo_region_union_rectangle (update_area, &window_rect);
     }
-}
-
-void
-_gdk_win32_gl_context_upload_texture (GdkGLContext *context,
-                                      cairo_surface_t *image_surface,
-                                      int width,
-                                      int height,
-                                      guint texture_target)
-{
-  g_return_if_fail (GDK_WIN32_IS_GL_CONTEXT (context));
-
-  glPixelStorei (GL_UNPACK_ALIGNMENT, 4);
-  glPixelStorei (GL_UNPACK_ROW_LENGTH, cairo_image_surface_get_stride (image_surface)/4);
-  glTexImage2D (texture_target, 0, GL_RGBA, width, height, 0, GL_BGRA, GL_UNSIGNED_BYTE,
-                cairo_image_surface_get_data (image_surface));
-  glPixelStorei (GL_UNPACK_ROW_LENGTH, 0);
 }
 
 typedef struct
