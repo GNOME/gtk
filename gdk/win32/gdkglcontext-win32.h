@@ -68,13 +68,6 @@ _gdk_win32_gl_context_end_frame (GdkGLContext *context,
                                  cairo_region_t *painted,
                                  cairo_region_t *damage);
 
-void
-_gdk_win32_gl_context_upload_texture (GdkGLContext *context,
-                                      cairo_surface_t *image_surface,
-                                      int width,
-                                      int height,
-                                      guint texture_target);
-
 gboolean
 _gdk_win32_display_make_gl_context_current (GdkDisplay *display,
                                             GdkGLContext *context);
