@@ -38,7 +38,8 @@ gboolean            _gtk_settings_parse_convert              (GtkRcPropertyParse
                                                               GParamSpec             *pspec,
                                                               GValue                 *dest_value);
 GdkScreen          *_gtk_settings_get_screen                 (GtkSettings            *settings);
-GtkStyleCascade    *_gtk_settings_get_style_cascade          (GtkSettings            *settings);
+GtkStyleCascade    *_gtk_settings_get_style_cascade          (GtkSettings            *settings,
+                                                              gint                    scale);
 
 typedef enum
 {

@@ -121,7 +121,7 @@ struct _GtkSettingsPrivate
   GData *queued_settings;      /* of type GtkSettingsValue* */
   GtkSettingsPropertyValue *property_values;
   GdkScreen *screen;
-  GtkStyleCascade *style_cascade;
+  GSList *style_cascades;
   GtkCssProvider *theme_provider;
   GtkCssProvider *key_theme_provider;
 };
@@ -294,7 +294,7 @@ gtk_settings_init (GtkSettings *settings)
   g_datalist_init (&priv->queued_settings);
   object_list = g_slist_prepend (object_list, settings);
 
-  priv->style_cascade = _gtk_style_cascade_new ();
+  priv->style_cascades = g_slist_prepend (NULL, _gtk_style_cascade_new ());
   priv->theme_provider = gtk_css_provider_new ();
 
   /* build up property array for all yet existing properties and queue
@@ -1745,24 +1745,46 @@ gtk_settings_finalize (GObject *object)
 
   settings_update_provider (priv->screen, &priv->theme_provider, NULL);
   settings_update_provider (priv->screen, &priv->key_theme_provider, NULL);
-  g_clear_object (&priv->style_cascade);
+  g_slist_free_full (priv->style_cascades, g_object_unref);
 
   G_OBJECT_CLASS (gtk_settings_parent_class)->finalize (object);
 }
 
 GtkStyleCascade *
-_gtk_settings_get_style_cascade (GtkSettings *settings)
+_gtk_settings_get_style_cascade (GtkSettings *settings,
+                                 gint         scale)
 {
+  GtkSettingsPrivate *priv = settings->priv;
+  GtkStyleCascade *new_cascade;
+  GSList *list;
+
   g_return_val_if_fail (GTK_IS_SETTINGS (settings), NULL);
 
-  return settings->priv->style_cascade;
+  for (list = priv->style_cascades; list; list = list->next)
+    {
+      if (_gtk_style_cascade_get_scale (list->data) == scale)
+        return list->data;
+    }
+
+  /* We are guaranteed to have the special cascade with scale == 1.
+   * It's created in gtk_settings_init()
+   */
+  g_assert (scale != 1);
+
+  new_cascade = _gtk_style_cascade_new ();
+  _gtk_style_cascade_set_parent (new_cascade, _gtk_settings_get_style_cascade (settings, 1));
+  _gtk_style_cascade_set_scale (new_cascade, scale);
+
+  priv->style_cascades = g_slist_prepend (priv->style_cascades, new_cascade);
+
+  return new_cascade;
 }
 
 static void
 settings_init_style (GtkSettings *settings)
 {
   static GtkCssProvider *css_provider = NULL;
-  GtkSettingsPrivate *priv = settings->priv;
+  GtkStyleCascade *cascade;
 
   /* Add provider for user file */
   if (G_UNLIKELY (!css_provider))
@@ -1782,15 +1804,16 @@ settings_init_style (GtkSettings *settings)
       g_free (css_path);
     }
 
-  _gtk_style_cascade_add_provider (priv->style_cascade,
+  cascade = _gtk_settings_get_style_cascade (settings, 1);
+  _gtk_style_cascade_add_provider (cascade,
                                    GTK_STYLE_PROVIDER (css_provider),
                                    GTK_STYLE_PROVIDER_PRIORITY_USER);
 
-  _gtk_style_cascade_add_provider (priv->style_cascade,
+  _gtk_style_cascade_add_provider (cascade,
                                    GTK_STYLE_PROVIDER (settings),
                                    GTK_STYLE_PROVIDER_PRIORITY_SETTINGS);
 
-  _gtk_style_cascade_add_provider (priv->style_cascade,
+  _gtk_style_cascade_add_provider (cascade,
                                    GTK_STYLE_PROVIDER (settings->priv->theme_provider),
                                    GTK_STYLE_PROVIDER_PRIORITY_SETTINGS);
 
