@@ -46,9 +46,22 @@ gtk_css_widget_node_queue_validate (GtkCssNode *node)
 
   G_GNUC_BEGIN_IGNORE_DEPRECATIONS
   if (GTK_IS_RESIZE_CONTAINER (widget_node->widget))
-    {
-      _gtk_container_queue_restyle (GTK_CONTAINER (widget_node->widget));
-    }
+    widget_node->validate_cb_id = gtk_widget_add_tick_callback (widget_node->widget,
+                                                                (GtkTickCallback) _gtk_container_queue_restyle,
+                                                                NULL,
+                                                                NULL);
+  G_GNUC_END_IGNORE_DEPRECATIONS
+}
+
+static void
+gtk_css_widget_node_dequeue_validate (GtkCssNode *node)
+{
+  GtkCssWidgetNode *widget_node = GTK_CSS_WIDGET_NODE (node);
+
+  G_GNUC_BEGIN_IGNORE_DEPRECATIONS
+  if (GTK_IS_RESIZE_CONTAINER (widget_node->widget))
+    gtk_widget_remove_tick_callback (widget_node->widget,
+                                     widget_node->validate_cb_id);
   G_GNUC_END_IGNORE_DEPRECATIONS
 }
 
@@ -204,6 +217,7 @@ gtk_css_widget_node_class_init (GtkCssWidgetNodeClass *klass)
   node_class->update_style = gtk_css_widget_node_update_style;
   node_class->validate = gtk_css_widget_node_validate;
   node_class->queue_validate = gtk_css_widget_node_queue_validate;
+  node_class->dequeue_validate = gtk_css_widget_node_dequeue_validate;
   node_class->create_widget_path = gtk_css_widget_node_create_widget_path;
   node_class->get_widget_path = gtk_css_widget_node_get_widget_path;
   node_class->get_style_provider = gtk_css_widget_node_get_style_provider;

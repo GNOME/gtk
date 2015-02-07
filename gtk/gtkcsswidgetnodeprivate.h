@@ -38,6 +38,7 @@ struct _GtkCssWidgetNode
   GtkCssNode node;
 
   GtkWidget *widget;
+  guint validate_cb_id;
 };
 
 struct _GtkCssWidgetNodeClass
