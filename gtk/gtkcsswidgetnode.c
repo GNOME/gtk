@@ -58,20 +58,39 @@ gtk_css_widget_node_set_invalid (GtkCssNode *node,
 }
 
 static gboolean
-gtk_css_style_needs_full_revalidate (GtkCssStyle  *style,
-                                     GtkCssChange  change)
+gtk_css_static_style_needs_revalidate (GtkCssStaticStyle  *style,
+                                       GtkCssChange        change)
 {
   /* Try to avoid invalidating if we can */
   if (change & GTK_CSS_RADICAL_CHANGE)
     return TRUE;
 
-  if (GTK_IS_CSS_ANIMATED_STYLE (style))
-    style = GTK_CSS_ANIMATED_STYLE (style)->style;
-
-  if (gtk_css_static_style_get_change (GTK_CSS_STATIC_STYLE (style)) & change)
+  if (gtk_css_static_style_get_change (style) & change)
     return TRUE;
   else
     return FALSE;
+}
+
+static GtkCssStyle *
+validate_static_style (GtkCssNode       *node,
+                       GtkCssStyle      *style,
+                       GtkCssChange      change,
+                       const GtkBitmask *parent_changes)
+{
+  if (gtk_css_static_style_needs_revalidate (GTK_CSS_STATIC_STYLE (style), change))
+    {
+      return gtk_css_node_create_style (node);
+    }
+  else if (!_gtk_bitmask_is_empty (parent_changes))
+    {
+      return gtk_css_node_update_style (node,
+                                        style,
+                                        parent_changes);
+    }
+  else
+    {
+      return g_object_ref (style);
+    }
 }
 
 static GtkBitmask *
@@ -83,7 +102,8 @@ gtk_css_widget_node_validate (GtkCssNode       *node,
   GtkCssWidgetNode *widget_node = GTK_CSS_WIDGET_NODE (node);
   GtkStyleContext *context;
   GtkBitmask *changes;
-  GtkCssStyle *style;
+  GtkCssStyle *style, *static_style;
+  GtkCssStyle *new_style, *new_static_style;
 
   if (widget_node->widget == NULL)
     return _gtk_bitmask_new ();
@@ -92,72 +112,44 @@ gtk_css_widget_node_validate (GtkCssNode       *node,
   style = gtk_css_node_get_style (node);
   if (style == NULL)
     style = gtk_css_static_style_get_default ();
-  g_object_ref (style);
 
-  /* Try to avoid invalidating if we can */
-  if (gtk_css_style_needs_full_revalidate (style, change))
+  if (GTK_IS_CSS_ANIMATED_STYLE (style))
     {
-      GtkCssStyle *new_style, *static_style;
-      GtkCssNode *parent;
+      static_style = GTK_CSS_ANIMATED_STYLE (style)->style;
+    }
+  else
+    {
+      static_style = style;
+    }
 
-      parent = gtk_css_node_get_parent (node);
+  new_static_style = validate_static_style (node, static_style, change, parent_changes);
 
-      static_style = gtk_css_node_create_style (node);
-      new_style = gtk_css_animated_style_new (static_style,
+  if (new_static_style != static_style)
+    {
+      GtkCssNode *parent = gtk_css_node_get_parent (node);
+      new_style = gtk_css_animated_style_new (new_static_style,
                                               parent ? gtk_css_node_get_style (parent) : NULL,
                                               timestamp,
                                               gtk_css_node_get_style_provider (node),
                                               gtk_style_context_should_create_transitions (context, style) ? style : NULL);
       
-      gtk_css_node_set_style (node, new_style);
-
-      g_object_unref (static_style);
-      g_object_unref (new_style);
+      g_object_unref (new_static_style);
+    }
+  else if (GTK_IS_CSS_ANIMATED_STYLE (style))
+    {
+      new_style = gtk_css_animated_style_new_advance (GTK_CSS_ANIMATED_STYLE (style),
+                                                      static_style,
+                                                      timestamp);
     }
   else
     {
-      if (!_gtk_bitmask_is_empty (parent_changes))
-        {
-          GtkCssStyle *new_values;
-
-          if (GTK_IS_CSS_ANIMATED_STYLE (style))
-            {
-	      GtkCssStyle *new_base;
-              
-              new_base = gtk_css_node_update_style (node,
-                                                    GTK_CSS_ANIMATED_STYLE (style)->style,
-                                                    parent_changes);
-              new_values = gtk_css_animated_style_new_advance (GTK_CSS_ANIMATED_STYLE (style),
-                                                               new_base,
-                                                               timestamp);
-              g_object_unref (new_base);
-            }
-          else
-            {
-	      new_values = gtk_css_node_update_style (node,
-                                                      style,
-                                                      parent_changes);
-            }
-
-          gtk_css_node_set_style (node, new_values);
-          g_object_unref (new_values);
-        }
-      else if ((change & GTK_CSS_CHANGE_ANIMATE) &&
-               GTK_IS_CSS_ANIMATED_STYLE (style))
-        {
-          GtkCssStyle *new_values;
-
-          new_values = gtk_css_animated_style_new_advance (GTK_CSS_ANIMATED_STYLE (style),
-                                                           GTK_CSS_ANIMATED_STYLE (style)->style,
-                                                           timestamp);
-          gtk_css_node_set_style (node, new_values);
-          g_object_unref (new_values);
-        }
+      new_style = g_object_ref (style);
     }
 
-  changes = gtk_css_style_get_difference (gtk_css_node_get_style (node), style);
+  changes = gtk_css_style_get_difference (new_style, style);
 
-  g_object_unref (style);
+  gtk_css_node_set_style (node, new_style);
+  g_object_unref (new_style);
 
   gtk_style_context_validate (context, changes);
 

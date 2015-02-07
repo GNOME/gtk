@@ -24,6 +24,17 @@
 G_DEFINE_TYPE (GtkCssPathNode, gtk_css_path_node, GTK_TYPE_CSS_NODE)
 
 static void
+gtk_css_path_node_finalize (GObject *object)
+{
+  GtkCssPathNode *node = GTK_CSS_PATH_NODE (object);
+
+  if (node->path)
+    gtk_widget_path_unref (node->path);
+
+  G_OBJECT_CLASS (gtk_css_path_node_parent_class)->finalize (object);
+}
+
+static void
 gtk_css_path_node_invalidate (GtkCssNode *node)
 {
   GtkCssPathNode *path_node = GTK_CSS_PATH_NODE (node);
@@ -89,6 +100,9 @@ static void
 gtk_css_path_node_class_init (GtkCssPathNodeClass *klass)
 {
   GtkCssNodeClass *node_class = GTK_CSS_NODE_CLASS (klass);
+  GObjectClass *object_class = G_OBJECT_CLASS (klass);
+
+  object_class->finalize = gtk_css_path_node_finalize;
 
   node_class->invalidate = gtk_css_path_node_invalidate;
   node_class->set_invalid = gtk_css_path_node_set_invalid;
