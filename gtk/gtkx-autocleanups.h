@@ -19,9 +19,13 @@
 #error "Only <gtk/gtkx.h> can be included directly."
 #endif
 
+#ifdef GDK_WINDOWING_X11
+
 #ifndef __GI_SCANNER__
 
 G_DEFINE_AUTOPTR_CLEANUP_FUNC(GtkSocket, g_object_unref)
 G_DEFINE_AUTOPTR_CLEANUP_FUNC(GtkPlug, g_object_unref)
+
+#endif
 
 #endif
