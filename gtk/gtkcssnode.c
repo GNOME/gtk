@@ -37,8 +37,25 @@ gtk_css_node_set_invalid (GtkCssNode *node,
   if (node->invalid == invalid)
     return;
 
-  GTK_CSS_NODE_GET_CLASS (node)->set_invalid (node, invalid);
+  if (GTK_IS_CSS_TRANSIENT_NODE (node))
+    return;
+
+  node->invalid = invalid;
+
+  if (node->parent)
+    {
+      if (invalid)
+        gtk_css_node_set_invalid (node->parent, TRUE);
+    }
+  else
+    {
+      if (invalid)
+        GTK_CSS_NODE_GET_CLASS (node)->queue_validate (node);
+      else
+        GTK_CSS_NODE_GET_CLASS (node)->dequeue_validate (node);
+    }
 }
+
 
 static void
 gtk_css_node_dispose (GObject *object)
@@ -49,6 +66,8 @@ gtk_css_node_dispose (GObject *object)
     {
       gtk_css_node_set_parent (cssnode->first_child, NULL);
     }
+
+  gtk_css_node_set_invalid (cssnode, FALSE);
 
   G_OBJECT_CLASS (gtk_css_node_parent_class)->dispose (object);
 }
@@ -261,13 +280,13 @@ gtk_css_node_real_invalidate (GtkCssNode *node)
 }
 
 static void
-gtk_css_node_real_set_invalid (GtkCssNode *node,
-                               gboolean    invalid)
+gtk_css_node_real_queue_validate (GtkCssNode *node)
 {
-  node->invalid = invalid;
+}
 
-  if (invalid && node->parent)
-    gtk_css_node_set_invalid (node->parent, invalid);
+static void
+gtk_css_node_real_dequeue_validate (GtkCssNode *node)
+{
 }
 
 static GtkBitmask *
@@ -311,7 +330,8 @@ gtk_css_node_class_init (GtkCssNodeClass *klass)
   klass->update_style = gtk_css_node_real_update_style;
   klass->invalidate = gtk_css_node_real_invalidate;
   klass->validate = gtk_css_node_real_validate;
-  klass->set_invalid = gtk_css_node_real_set_invalid;
+  klass->queue_validate = gtk_css_node_real_queue_validate;
+  klass->dequeue_validate = gtk_css_node_real_dequeue_validate;
   klass->create_widget_path = gtk_css_node_real_create_widget_path;
   klass->get_widget_path = gtk_css_node_real_get_widget_path;
   klass->get_style_provider = gtk_css_node_real_get_style_provider;
@@ -323,6 +343,20 @@ gtk_css_node_init (GtkCssNode *cssnode)
   cssnode->decl = gtk_css_node_declaration_new ();
 
   cssnode->style = g_object_ref (gtk_css_static_style_get_default ());
+}
+
+static void
+gtk_css_node_parent_was_unset (GtkCssNode *node)
+{
+  if (node->invalid)
+    GTK_CSS_NODE_GET_CLASS (node)->queue_validate (node);
+}
+
+static void
+gtk_css_node_parent_will_be_set (GtkCssNode *node)
+{
+  if (node->invalid)
+    GTK_CSS_NODE_GET_CLASS (node)->dequeue_validate (node);
 }
 
 void
@@ -357,10 +391,16 @@ gtk_css_node_set_parent (GtkCssNode *node,
       node->previous_sibling = NULL;
 
       g_object_unref (node);
+
+      if (parent == NULL)
+        gtk_css_node_parent_was_unset (node);
     }
 
   if (parent)
     {
+      if (node->parent == NULL)
+        gtk_css_node_parent_will_be_set (node);
+
       node->parent = parent;
 
       if (!GTK_IS_CSS_TRANSIENT_NODE (node))

@@ -63,8 +63,8 @@ struct _GtkCssNodeClass
                                                          GtkCssChange           pending_changes,
                                                          GtkCssStyle           *old_style);
   void                  (* invalidate)                  (GtkCssNode            *node);
-  void                  (* set_invalid)                 (GtkCssNode            *node,
-                                                         gboolean               invalid);
+  void                  (* queue_validate)              (GtkCssNode            *node);
+  void                  (* dequeue_validate)            (GtkCssNode            *node);
   GtkBitmask *          (* validate)                    (GtkCssNode            *cssnode,
                                                          gint64                 timestamp,
                                                          GtkCssChange           change,
