@@ -49,7 +49,7 @@ struct _GtkCssNode
 
   GtkCssChange           pending_changes;       /* changes that accumulated since the style was last computed */
 
-  guint                  invalid :1;            /* set if node or a child is invalid */
+  guint                  invalid :1;            /* node or a child needs to be validated (even if just for animation) */
 };
 
 struct _GtkCssNodeClass

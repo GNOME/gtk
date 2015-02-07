@@ -156,6 +156,10 @@ gtk_css_widget_node_validate (GtkCssNode       *node,
 
   changes = gtk_css_style_get_difference (new_style, style);
 
+  if (GTK_IS_CSS_ANIMATED_STYLE (new_style) &&
+      !gtk_css_animated_style_is_static (GTK_CSS_ANIMATED_STYLE (new_style)))
+    gtk_css_node_set_invalid (node, TRUE);
+
   gtk_css_node_set_style (node, new_style);
   g_object_unref (new_style);
 

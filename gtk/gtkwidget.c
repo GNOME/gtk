@@ -5056,9 +5056,6 @@ gtk_widget_map (GtkWidget *widget)
       if (!gtk_widget_get_has_window (widget))
         gdk_window_invalidate_rect (priv->window, &priv->clip, FALSE);
 
-      if (widget->priv->context)
-        _gtk_style_context_update_animating (widget->priv->context);
-
       gtk_widget_pop_verify_invariants (widget);
     }
 }
@@ -5087,9 +5084,6 @@ gtk_widget_unmap (GtkWidget *widget)
       if (!gtk_widget_get_has_window (widget))
 	gdk_window_invalidate_rect (priv->window, &priv->clip, FALSE);
       _gtk_tooltip_hide (widget);
-
-      if (widget->priv->context)
-        _gtk_style_context_update_animating (widget->priv->context);
 
       g_signal_emit (widget, widget_signals[UNMAP], 0);
 

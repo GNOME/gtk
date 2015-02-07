@@ -150,11 +150,9 @@ struct _GtkStyleContextPrivate
   GSList *saved_nodes;
   GArray *property_cache;
 
-  guint frame_clock_update_id;
   GdkFrameClock *frame_clock;
 
   const GtkBitmask *invalidating_context;
-  guint animating : 1;
 };
 
 enum {
@@ -183,9 +181,6 @@ static void gtk_style_context_impl_get_property (GObject      *object,
                                                  GValue       *value,
                                                  GParamSpec   *pspec);
 
-
-static void gtk_style_context_disconnect_update (GtkStyleContext *context);
-static void gtk_style_context_connect_update    (GtkStyleContext *context);
 
 G_DEFINE_TYPE_WITH_PRIVATE (GtkStyleContext, gtk_style_context, G_TYPE_OBJECT)
 
@@ -350,117 +345,6 @@ gtk_style_context_init (GtkStyleContext *style_context)
 }
 
 static void
-gtk_style_context_update (GdkFrameClock  *clock,
-                          GtkStyleContext *context)
-{
-  gtk_css_node_invalidate (gtk_style_context_get_root (context), GTK_CSS_CHANGE_ANIMATE);
-}
-
-static gboolean
-gtk_style_context_is_animating (GtkStyleContext *context)
-{
-  GtkStyleContextPrivate *priv = context->priv;
-
-  return priv->animating;
-}
-
-static void
-gtk_style_context_disconnect_update (GtkStyleContext *context)
-{
-  GtkStyleContextPrivate *priv = context->priv;
-
-  if (priv->frame_clock && priv->frame_clock_update_id)
-    {
-      g_signal_handler_disconnect (priv->frame_clock,
-                                   priv->frame_clock_update_id);
-      priv->frame_clock_update_id = 0;
-      gdk_frame_clock_end_updating (priv->frame_clock);
-    }
-}
-
-static void
-gtk_style_context_connect_update (GtkStyleContext *context)
-{
-  GtkStyleContextPrivate *priv = context->priv;
-
-  if (priv->frame_clock && priv->frame_clock_update_id == 0)
-    {
-      priv->frame_clock_update_id = g_signal_connect (priv->frame_clock,
-                                                      "update",
-                                                      G_CALLBACK (gtk_style_context_update),
-                                                      context);
-      gdk_frame_clock_begin_updating (priv->frame_clock);
-    }
-}
-
-static void
-gtk_style_context_stop_animating (GtkStyleContext *context)
-{
-  GtkStyleContextPrivate *priv = context->priv;
-
-  if (!gtk_style_context_is_animating (context))
-    return;
-
-  priv->animating = FALSE;
-
-  gtk_style_context_disconnect_update (context);
-}
-
-static void
-gtk_style_context_start_animating (GtkStyleContext *context)
-{
-  GtkStyleContextPrivate *priv = context->priv;
-
-  if (gtk_style_context_is_animating (context))
-    return;
-
-  priv->animating = TRUE;
-
-  gtk_style_context_connect_update (context);
-}
-
-static gboolean
-gtk_style_context_should_animate (GtkStyleContext *context)
-{
-  GtkStyleContextPrivate *priv;
-  GtkWidget *widget;
-  GtkCssStyle *values;
-  gboolean animate;
-
-  priv = context->priv;
-
-  if (!GTK_IS_CSS_WIDGET_NODE (priv->cssnode))
-    return FALSE;
-
-  widget = gtk_css_widget_node_get_widget (GTK_CSS_WIDGET_NODE (priv->cssnode));
-  if (widget == NULL)
-    return FALSE;
-
-  if (!gtk_widget_get_mapped (widget))
-    return FALSE;
-
-  values = gtk_style_context_lookup_style (context);
-  if (!GTK_IS_CSS_ANIMATED_STYLE (values) ||
-      gtk_css_animated_style_is_static (GTK_CSS_ANIMATED_STYLE (values)))
-    return FALSE;
-
-  g_object_get (gtk_widget_get_settings (widget),
-                "gtk-enable-animations", &animate,
-                NULL);
-
-  return animate;
-}
-
-void
-_gtk_style_context_update_animating (GtkStyleContext *context)
-{
-  if (gtk_style_context_should_animate (context))
-    gtk_style_context_start_animating (context);
-  else
-    gtk_style_context_stop_animating (context);
-}
-
-static void
 gtk_style_context_clear_parent (GtkStyleContext *context)
 {
   GtkStyleContextPrivate *priv = context->priv;
@@ -479,8 +363,6 @@ gtk_style_context_finalize (GObject *object)
 
   style_context = GTK_STYLE_CONTEXT (object);
   priv = style_context->priv;
-
-  gtk_style_context_stop_animating (style_context);
 
   gtk_style_context_clear_parent (style_context);
 
@@ -697,8 +579,6 @@ _gtk_style_context_set_widget (GtkStyleContext *context,
       gtk_css_node_set_widget_type (priv->cssnode, G_TYPE_NONE);
       gtk_css_widget_node_widget_destroyed (GTK_CSS_WIDGET_NODE (priv->cssnode));
     }
-
-  _gtk_style_context_update_animating (context);
 
   gtk_css_node_invalidate (gtk_style_context_get_root (context), GTK_CSS_CHANGE_ANY_SELF);
 }
@@ -2148,17 +2028,11 @@ gtk_style_context_set_frame_clock (GtkStyleContext *context,
   if (priv->frame_clock == frame_clock)
     return;
 
-  if (priv->animating)
-    gtk_style_context_disconnect_update (context);
-
   if (priv->frame_clock)
     g_object_unref (priv->frame_clock);
   priv->frame_clock = frame_clock;
   if (priv->frame_clock)
     g_object_ref (priv->frame_clock);
-
-  if (priv->animating)
-    gtk_style_context_connect_update (context);
 
   g_object_notify (G_OBJECT (context), "paint-clock");
 }
@@ -2599,8 +2473,6 @@ void
 gtk_style_context_validate (GtkStyleContext  *context,
                             const GtkBitmask *changes)
 {
-  _gtk_style_context_update_animating (context);
-
   if (!_gtk_bitmask_is_empty (changes))
     gtk_style_context_do_invalidate (context, changes);
 
@@ -2635,9 +2507,6 @@ gtk_style_context_invalidate (GtkStyleContext *context)
   style = gtk_css_node_create_style (root);
   gtk_css_node_set_style (root, style);
   g_object_unref (style);
-
-  if (!gtk_style_context_is_saved (context))
-    _gtk_style_context_update_animating (context);
 
   changes = _gtk_bitmask_new ();
   changes = _gtk_bitmask_invert_range (changes,
