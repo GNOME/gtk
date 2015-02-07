@@ -250,6 +250,8 @@ testsuite/reftests/textview-margins.ref.ui
 testsuite/reftests/textview-margins.ui
 testsuite/reftests/toplevel-vs-popup.ref.ui
 testsuite/reftests/toplevel-vs-popup.ui
+testsuite/reftests/treeview-crash-too-wide.ref.ui
+testsuite/reftests/treeview-crash-too-wide.ui
 testsuite/reftests/treeview-fixed-height.ref.ui
 testsuite/reftests/treeview-fixed-height.ui
 testsuite/reftests/treeview-headers-hidden.ref.ui
