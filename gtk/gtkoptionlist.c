@@ -382,21 +382,45 @@ static gboolean
 gtk_option_list_row_matches (GtkOptionListRow *row,
                              const gchar      *match)
 {
-  gchar *row_text;
-  gchar *search_text;
-  gchar *hit;
+  gchar *hit = NULL;
+  PangoAttrList *attrs = NULL;
+  gboolean ret = TRUE;
 
-  if (match[0] == '\0')
-    return TRUE;
+  if (match[0] != '\0')
+    {
+      gchar *row_text;
+      gchar *search_text;
 
-  row_text = g_utf8_strdown (row->text, -1);
-  search_text = g_utf8_strdown (match, -1);
-  hit = strstr (row_text, search_text);
+      row_text = g_utf8_strdown (row->text, -1);
+      search_text = g_utf8_strdown (match, -1);
 
-  g_free (row_text);
-  g_free (search_text);
+      hit = strstr (row_text, search_text);
+      ret = hit != NULL;
 
-  return hit != NULL;
+      if (hit != NULL)
+        {
+          gint offset;
+          gint length;
+          PangoAttribute *attr;
+
+          /* FIXME: this is not utf8 safe */
+          offset = hit - row_text;
+          length = strlen (match);
+
+          attrs = pango_attr_list_new ();
+          attr = pango_attr_underline_new (PANGO_UNDERLINE_SINGLE);
+          attr->start_index = offset;
+          attr->end_index = offset + length;
+          pango_attr_list_insert (attrs, attr);
+        }
+
+      g_free (row_text);
+      g_free (search_text);
+    }
+
+  gtk_label_set_attributes (GTK_LABEL (row->label), attrs);
+
+  return ret;
 }
 
 static const gchar *
