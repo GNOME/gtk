@@ -23,8 +23,8 @@ msgstr ""
 "Project-Id-Version: gtk+.master\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gtk"
 "%2b&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2015-01-14 10:05+0000\n"
-"PO-Revision-Date: 2015-01-14 15:00+0300\n"
+"POT-Creation-Date: 2015-02-08 10:14+0000\n"
+"PO-Revision-Date: 2015-02-09 00:31+0300\n"
 "Last-Translator: Stas Solovey <whats_up@tut.by>\n"
 "Language-Team: Русский <gnome-cyr@gnome.org>\n"
 "Language: ru\n"
@@ -35,7 +35,7 @@ msgstr ""
 "%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2)\n"
 "X-Generator: Gtranslator 2.91.6\n"
 
-#: ../gdk/broadway/gdkbroadway-server.c:143
+#: ../gdk/broadway/gdkbroadway-server.c:144
 #, c-format
 msgid "Broadway display type not supported: %s"
 msgstr "Тип дисплея broadway не поддерживается: «%s»"
@@ -444,32 +444,32 @@ msgctxt "keyboard label"
 msgid "Suspend"
 msgstr "Ждущий режим"
 
-#: ../gdk/mir/gdkmirwindowimpl.c:1308 ../gdk/mir/gdkmirwindowimpl.c:1318
+#: ../gdk/mir/gdkmirwindowimpl.c:1368 ../gdk/mir/gdkmirwindowimpl.c:1378
 #: ../gdk/wayland/gdkglcontext-wayland.c:263
 #: ../gdk/wayland/gdkglcontext-wayland.c:273
-#: ../gdk/win32/gdkglcontext-win32.c:527 ../gdk/x11/gdkglcontext-x11.c:700
+#: ../gdk/win32/gdkglcontext-win32.c:510 ../gdk/x11/gdkglcontext-x11.c:700
 msgid "No available configurations for the given pixel format"
 msgstr "Нет доступных конфигураций для данного формата пикселя"
 
-#: ../gdk/mir/gdkmirwindowimpl.c:1350
+#: ../gdk/mir/gdkmirwindowimpl.c:1410
 #: ../gdk/wayland/gdkglcontext-wayland.c:306
-#: ../gdk/win32/gdkglcontext-win32.c:505 ../gdk/x11/gdkglcontext-x11.c:1064
+#: ../gdk/win32/gdkglcontext-win32.c:488 ../gdk/x11/gdkglcontext-x11.c:1066
 msgid "No GL implementation is available"
 msgstr "Нет доступной реализации GL"
 
-#: ../gdk/mir/gdkmirwindowimpl.c:1362
+#: ../gdk/mir/gdkmirwindowimpl.c:1422
 #: ../gdk/wayland/gdkglcontext-wayland.c:318
 msgid "3.2 core GL profile is not available on EGL implementation"
 msgstr ""
 
-#: ../gdk/mir/gdkmirwindowimpl.c:1385
+#: ../gdk/mir/gdkmirwindowimpl.c:1445
 #: ../gdk/wayland/gdkglcontext-wayland.c:341
-#: ../gdk/win32/gdkglcontext-win32.c:541 ../gdk/x11/gdkglcontext-x11.c:1108
-#: ../gdk/x11/gdkglcontext-x11.c:1152
+#: ../gdk/win32/gdkglcontext-win32.c:524 ../gdk/x11/gdkglcontext-x11.c:1110
+#: ../gdk/x11/gdkglcontext-x11.c:1154
 msgid "Unable to create a GL context"
-msgstr ""
+msgstr "Невозможно создать контекст GL"
 
-#: ../gdk/win32/gdkglcontext-win32.c:514
+#: ../gdk/win32/gdkglcontext-win32.c:497
 msgid ""
 "The WGL_ARB_create_context extension needed to create 3.2 core profiles is "
 "not available"
@@ -528,7 +528,7 @@ msgstr[2] "Открывается %d элементов"
 msgid "No available configurations for the given RGBA pixel format"
 msgstr ""
 
-#: ../gdk/x11/gdkglcontext-x11.c:1073
+#: ../gdk/x11/gdkglcontext-x11.c:1075
 msgid ""
 "The GLX_ARB_create_context_profile extension needed to create 3.2 core "
 "profiles is not available"
@@ -1220,11 +1220,11 @@ msgstr ""
 
 #: ../gtk/deprecated/gtkcolorseldialog.c:191
 #: ../gtk/deprecated/gtkfontsel.c:1689 ../gtk/gtkfilechooserbutton.c:794
-#: ../gtk/gtkfilechooserwidget.c:5266 ../gtk/gtkmessagedialog.c:944
+#: ../gtk/gtkfilechooserwidget.c:5294 ../gtk/gtkmessagedialog.c:944
 #: ../gtk/gtkmessagedialog.c:957 ../gtk/gtkmountoperation.c:543
 #: ../gtk/gtkpagesetupunixdialog.c:196 ../gtk/gtkprintbackend.c:763
 #: ../gtk/gtkprinteroptionwidget.c:545 ../gtk/gtkprintunixdialog.c:665
-#: ../gtk/gtkprintunixdialog.c:733 ../gtk/gtkwindow.c:11844
+#: ../gtk/gtkprintunixdialog.c:733 ../gtk/gtkwindow.c:11850
 #: ../gtk/inspector/css-editor.c:199 ../gtk/ui/gtkappchooserdialog.ui.h:2
 #: ../gtk/ui/gtkassistant.ui.h:5 ../gtk/ui/gtkcolorchooserdialog.ui.h:2
 #: ../gtk/ui/gtkfontchooserdialog.ui.h:2
@@ -1276,7 +1276,7 @@ msgstr "_Применить"
 
 #: ../gtk/deprecated/gtkfontsel.c:1698 ../gtk/gtkmessagedialog.c:936
 #: ../gtk/gtkmessagedialog.c:958 ../gtk/gtkprintbackend.c:764
-#: ../gtk/gtkwindow.c:11845 ../gtk/inspector/classes-list.c:127
+#: ../gtk/gtkwindow.c:11851 ../gtk/inspector/classes-list.c:127
 msgid "_OK"
 msgstr "_OK"
 
@@ -1609,7 +1609,7 @@ msgstr "Выбрать приложение"
 #: ../gtk/gtkappchooserdialog.c:205
 #, c-format
 msgid "Opening “%s”."
-msgstr "Открывается «%s»"
+msgstr "Открывается «%s»."
 
 #: ../gtk/gtkappchooserdialog.c:206
 #, c-format
@@ -1620,7 +1620,7 @@ msgstr "Не найдены приложения для «%s»"
 #: ../gtk/gtkappchooserdialog.c:212
 #, c-format
 msgid "Opening “%s” files."
-msgstr "Открывает файлы «%s»"
+msgstr "Открывает файлы «%s»."
 
 #: ../gtk/gtkappchooserdialog.c:214
 #, c-format
@@ -1682,10 +1682,12 @@ msgid "Element <%s> not allowed at toplevel"
 msgstr "Элемент <%s> не может использоваться для верхнего уровня"
 
 #: ../gtk/gtkbuilder-menus.c:317
+#, c-format
 msgid "Text may not appear inside <%s>"
 msgstr "Текст может не отображаться внутри элемента <%s>"
 
 #: ../gtk/gtkbuilderparser.c:340
+#, c-format
 msgid "Invalid object type '%s' on line %d"
 msgstr "Недопустимый тип объекта «%s» в строке %d"
 
@@ -1706,14 +1708,17 @@ msgid "Invalid property: %s.%s on line %d"
 msgstr "Недопустимое свойство: %s.%s в строке %d"
 
 #: ../gtk/gtkbuilderparser.c:775
+#, c-format
 msgid "Invalid signal '%s' for type '%s' on line %d"
 msgstr "Недопустимый сигнал «%s» для типа «%s» в строке %d"
 
 #: ../gtk/gtkbuilderparser.c:1067
+#, c-format
 msgid "Invalid root element: <%s>"
 msgstr "Некорректный корневой элемент: <%s>"
 
 #: ../gtk/gtkbuilderparser.c:1110
+#, c-format
 msgid "Unhandled tag: <%s>"
 msgstr "Необработанный тег: <%s>"
 
@@ -2126,25 +2131,25 @@ msgid "Paper Margins"
 msgstr "Поля страницы"
 
 #: ../gtk/gtkentry.c:9626 ../gtk/gtkentry.c:9779 ../gtk/gtklabel.c:6596
-#: ../gtk/gtktextview.c:9032 ../gtk/gtktextview.c:9220
+#: ../gtk/gtktextview.c:9037 ../gtk/gtktextview.c:9225
 msgid "Cu_t"
 msgstr "В_ырезать"
 
 #: ../gtk/gtkentry.c:9630 ../gtk/gtkentry.c:9782 ../gtk/gtklabel.c:6597
-#: ../gtk/gtktextview.c:9036 ../gtk/gtktextview.c:9224
+#: ../gtk/gtktextview.c:9041 ../gtk/gtktextview.c:9229
 msgid "_Copy"
 msgstr "_Копировать"
 
 #: ../gtk/gtkentry.c:9634 ../gtk/gtkentry.c:9785 ../gtk/gtklabel.c:6598
-#: ../gtk/gtktextview.c:9038 ../gtk/gtktextview.c:9226
+#: ../gtk/gtktextview.c:9043 ../gtk/gtktextview.c:9231
 msgid "_Paste"
 msgstr "Вст_авить"
 
-#: ../gtk/gtkentry.c:9637 ../gtk/gtklabel.c:6600 ../gtk/gtktextview.c:9041
+#: ../gtk/gtkentry.c:9637 ../gtk/gtklabel.c:6600 ../gtk/gtktextview.c:9046
 msgid "_Delete"
 msgstr "_Удалить"
 
-#: ../gtk/gtkentry.c:9648 ../gtk/gtklabel.c:6609 ../gtk/gtktextview.c:9055
+#: ../gtk/gtkentry.c:9648 ../gtk/gtklabel.c:6609 ../gtk/gtktextview.c:9060
 msgid "Select _All"
 msgstr "Выделить вс_ё"
 
@@ -2168,7 +2173,7 @@ msgstr "(Нет)"
 msgid "_Open"
 msgstr "_Открыть"
 
-#: ../gtk/gtkfilechooserbutton.c:2139
+#: ../gtk/gtkfilechooserbutton.c:2137
 msgid "Other…"
 msgstr "Другой…"
 
@@ -2181,15 +2186,15 @@ msgstr "Другой…"
 msgid "%1$s on %2$s"
 msgstr "%1$s на %2$s"
 
-#: ../gtk/gtkfilechooserwidget.c:332
+#: ../gtk/gtkfilechooserwidget.c:328
 msgid "Type name of new folder"
 msgstr "Введите имя новой папки"
 
-#: ../gtk/gtkfilechooserwidget.c:736
+#: ../gtk/gtkfilechooserwidget.c:734
 msgid "The folder could not be created"
 msgstr "Не удалось создать папку"
 
-#: ../gtk/gtkfilechooserwidget.c:749
+#: ../gtk/gtkfilechooserwidget.c:747
 msgid ""
 "The folder could not be created, as a file with the same name already "
 "exists.  Try using a different name for the folder, or rename the file first."
@@ -2197,129 +2202,135 @@ msgstr ""
 "Папка не может быть создана, так как файл с таким именем уже существует.  "
 "Выберите другое имя для папки, или переименуйте файл."
 
-#: ../gtk/gtkfilechooserwidget.c:763
+#: ../gtk/gtkfilechooserwidget.c:761
 msgid "You need to choose a valid filename."
 msgstr "Необходимо выбрать корректное имя файла."
 
-#: ../gtk/gtkfilechooserwidget.c:766
+#: ../gtk/gtkfilechooserwidget.c:764
 #, c-format
 msgid "Cannot create a file under %s as it is not a folder"
 msgstr "Невозможно создать файл в %s, так как это не папка"
 
-#: ../gtk/gtkfilechooserwidget.c:774
+#: ../gtk/gtkfilechooserwidget.c:772
 msgid "Cannot create file as the filename is too long"
 msgstr "Невозможно создать файл: имя файла слишком длинное"
 
-#: ../gtk/gtkfilechooserwidget.c:775
+#: ../gtk/gtkfilechooserwidget.c:773
 msgid "Try using a shorter name."
 msgstr "Используйте более короткое имя."
 
-#: ../gtk/gtkfilechooserwidget.c:785
+#: ../gtk/gtkfilechooserwidget.c:783
 msgid "You may only select folders"
 msgstr "Можно выбирать только папки"
 
-#: ../gtk/gtkfilechooserwidget.c:786
+#: ../gtk/gtkfilechooserwidget.c:784
 msgid "The item that you selected is not a folder try using a different item."
 msgstr "Выбранный элемент не является папкой. Выберите другой элемент."
 
-#: ../gtk/gtkfilechooserwidget.c:794
+#: ../gtk/gtkfilechooserwidget.c:792
 msgid "Invalid file name"
 msgstr "Недопустимое имя файла"
 
-#: ../gtk/gtkfilechooserwidget.c:804
+#: ../gtk/gtkfilechooserwidget.c:802
 msgid "The folder contents could not be displayed"
 msgstr "Не удалось отобразить содержимое папки"
 
-#: ../gtk/gtkfilechooserwidget.c:1463
+#: ../gtk/gtkfilechooserwidget.c:1481
 msgid "Could not select file"
 msgstr "Не удалось выделить файл"
 
-#: ../gtk/gtkfilechooserwidget.c:1693
+#: ../gtk/gtkfilechooserwidget.c:1711
 msgid "_Visit File"
 msgstr "_Перейти к файлу"
 
-#: ../gtk/gtkfilechooserwidget.c:1696
+#: ../gtk/gtkfilechooserwidget.c:1714
 msgid "_Copy Location"
 msgstr "Копировать _адрес"
 
-#: ../gtk/gtkfilechooserwidget.c:1699
+#: ../gtk/gtkfilechooserwidget.c:1717
 msgid "_Add to Bookmarks"
 msgstr "_Добавить в закладки"
 
-#: ../gtk/gtkfilechooserwidget.c:1706
+#: ../gtk/gtkfilechooserwidget.c:1724
 msgid "Show _Hidden Files"
 msgstr "Показывать _скрытые файлы"
 
-#: ../gtk/gtkfilechooserwidget.c:1709
+#: ../gtk/gtkfilechooserwidget.c:1727
 msgid "Show _Size Column"
 msgstr "Показывать _размер"
 
-#: ../gtk/gtkfilechooserwidget.c:1712
+#: ../gtk/gtkfilechooserwidget.c:1730
 msgid "Sort _Folders before Files"
 msgstr ""
 
+#. this is the header for the location column in the print dialog
+#: ../gtk/gtkfilechooserwidget.c:1999 ../gtk/inspector/style-prop-list.ui.h:3
+#: ../gtk/ui/gtkprintunixdialog.ui.h:4
+msgid "Location"
+msgstr "Расположение"
+
 #. Label
-#: ../gtk/gtkfilechooserwidget.c:2011
+#: ../gtk/gtkfilechooserwidget.c:2039
 msgid "_Name:"
 msgstr "_Имя:"
 
-#: ../gtk/gtkfilechooserwidget.c:3688
+#: ../gtk/gtkfilechooserwidget.c:3714
 #, c-format
 msgid "Could not read the contents of %s"
 msgstr "Не удалось прочитать содержимое %s"
 
-#: ../gtk/gtkfilechooserwidget.c:3692
+#: ../gtk/gtkfilechooserwidget.c:3718
 msgid "Could not read the contents of the folder"
 msgstr "Не удалось прочитать содержимое папки"
 
-#: ../gtk/gtkfilechooserwidget.c:3799
+#: ../gtk/gtkfilechooserwidget.c:3825
 msgid "%H:%M"
 msgstr "%H:%M"
 
-#: ../gtk/gtkfilechooserwidget.c:3799
+#: ../gtk/gtkfilechooserwidget.c:3825
 msgid "%-I:%M %P"
 msgstr "%-I:%M %P"
 
-#: ../gtk/gtkfilechooserwidget.c:3801
+#: ../gtk/gtkfilechooserwidget.c:3827
 msgid "Yesterday at %H:%M"
 msgstr "Вчера в %H:%M"
 
-#: ../gtk/gtkfilechooserwidget.c:3801
+#: ../gtk/gtkfilechooserwidget.c:3827
 msgid "Yesterday at %-I:%M %P"
 msgstr "Вчера в %-I:%M %P"
 
 #. Translators: We don't know whether this printer is
 #. * available to print to.
-#: ../gtk/gtkfilechooserwidget.c:4000 ../gtk/inspector/prop-editor.c:1569
+#: ../gtk/gtkfilechooserwidget.c:4026 ../gtk/inspector/prop-editor.c:1569
 #: ../modules/printbackends/cloudprint/gtkprintbackendcloudprint.c:748
 msgid "Unknown"
 msgstr "Неизвестен"
 
-#: ../gtk/gtkfilechooserwidget.c:4473
+#: ../gtk/gtkfilechooserwidget.c:4501
 msgid "Cannot change to folder because it is not local"
 msgstr "Не удалось перейти в папку, так как она не является локальной"
 
-#: ../gtk/gtkfilechooserwidget.c:5259 ../gtk/gtkprintunixdialog.c:656
+#: ../gtk/gtkfilechooserwidget.c:5287 ../gtk/gtkprintunixdialog.c:656
 #, c-format
 msgid "A file named “%s” already exists.  Do you want to replace it?"
 msgstr "Файл с именем «%s» уже существует. Заменить его?"
 
-#: ../gtk/gtkfilechooserwidget.c:5262 ../gtk/gtkprintunixdialog.c:660
+#: ../gtk/gtkfilechooserwidget.c:5290 ../gtk/gtkprintunixdialog.c:660
 #, c-format
 msgid ""
 "The file already exists in “%s”.  Replacing it will overwrite its contents."
 msgstr ""
 "Файл уже существует в «%s». Его замена приведёт к перезаписи содержимого."
 
-#: ../gtk/gtkfilechooserwidget.c:5267 ../gtk/gtkprintunixdialog.c:668
+#: ../gtk/gtkfilechooserwidget.c:5295 ../gtk/gtkprintunixdialog.c:668
 msgid "_Replace"
 msgstr "_Заменить"
 
-#: ../gtk/gtkfilechooserwidget.c:6086
+#: ../gtk/gtkfilechooserwidget.c:6114
 msgid "Could not start the search process"
 msgstr "Не удалось начать поиск"
 
-#: ../gtk/gtkfilechooserwidget.c:6087
+#: ../gtk/gtkfilechooserwidget.c:6115
 msgid ""
 "The program was not able to create a connection to the indexer daemon. "
 "Please make sure it is running."
@@ -2327,7 +2338,7 @@ msgstr ""
 "Не удалось соединиться с сервисом индексированного поиска. Проверьте, что "
 "сервис запущен."
 
-#: ../gtk/gtkfilechooserwidget.c:6101
+#: ../gtk/gtkfilechooserwidget.c:6129
 msgid "Could not send the search request"
 msgstr "Не удалось послать запрос на поиск"
 
@@ -2351,18 +2362,16 @@ msgstr "Выберите шрифт"
 #. Translators, these strings are names for various 'standard' cover
 #. * pages that the printing system may support.
 #.
-#: ../gtk/gtkfontbutton.c:1182 ../gtk/inspector/general.c:225
-#: ../gtk/inspector/general.c:226 ../gtk/inspector/gestures.c:128
+#: ../gtk/gtkfontbutton.c:1182 ../gtk/inspector/general.c:226
+#: ../gtk/inspector/general.c:227 ../gtk/inspector/gestures.c:128
 #: ../gtk/inspector/prop-editor.c:1200 ../gtk/inspector/size-groups.c:252
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:5203
 msgid "None"
 msgstr "Нет"
 
 #: ../gtk/gtkglarea.c:296
-#, fuzzy
-#| msgid "Getting printer information failed"
 msgid "OpenGL context creation failed"
-msgstr "Не удалось получить информацию о принтере"
+msgstr "Не удалось создать контекст OpenGL"
 
 #: ../gtk/gtkheaderbar.c:414
 msgid "Application menu"
@@ -2373,6 +2382,7 @@ msgid "Close"
 msgstr "Закрыть"
 
 #: ../gtk/gtkicontheme.c:2308 ../gtk/gtkicontheme.c:2372
+#, c-format
 msgid "Icon '%s' not present in theme %s"
 msgstr "Значок «%s» не присутствует в теме %s"
 
@@ -2541,16 +2551,16 @@ msgstr "Установить указанные отладочные флаги 
 msgid "GTK+ debugging flags to unset"
 msgstr "Сбросить указанные отладочные флаги GTK+"
 
-#: ../gtk/gtkmain.c:765
+#: ../gtk/gtkmain.c:776
 #, c-format
 msgid "Cannot open display: %s"
 msgstr "Не удалось открыть дисплей: %s"
 
-#: ../gtk/gtkmain.c:831
+#: ../gtk/gtkmain.c:842
 msgid "GTK+ Options"
 msgstr "Параметры GTK+"
 
-#: ../gtk/gtkmain.c:831
+#: ../gtk/gtkmain.c:842
 msgid "Show GTK+ Options"
 msgstr "Показать параметры GTK+"
 
@@ -2559,7 +2569,7 @@ msgstr "Показать параметры GTK+"
 #. * Do *not* translate it to "predefinito:LTR", if it
 #. * it isn't default:LTR or default:RTL it will not work
 #.
-#: ../gtk/gtkmain.c:1155
+#: ../gtk/gtkmain.c:1166
 msgid "default:LTR"
 msgstr "default:LTR"
 
@@ -2659,7 +2669,7 @@ msgstr "Z Shell"
 msgid "Cannot end process with PID %d: %s"
 msgstr "Не удалось завершить процесс с PID %d: %s"
 
-#: ../gtk/gtknotebook.c:5128 ../gtk/gtknotebook.c:7856
+#: ../gtk/gtknotebook.c:5144 ../gtk/gtknotebook.c:7872
 #, c-format
 msgid "Page %u"
 msgstr "Страница %u"
@@ -2751,6 +2761,7 @@ msgstr "Открыть корзину"
 
 #: ../gtk/gtkplacessidebar.c:1077 ../gtk/gtkplacessidebar.c:1105
 #: ../gtk/gtkplacessidebar.c:1313
+#, c-format
 msgid "Mount and open “%s”"
 msgstr "Смонтировать и открыть «%s»"
 
@@ -2827,6 +2838,7 @@ msgid "_Lock Drive"
 msgstr "_Заблокировать диск"
 
 #: ../gtk/gtkplacessidebar.c:2328 ../gtk/gtkplacessidebar.c:3224
+#, c-format
 msgid "Unable to start “%s”"
 msgstr "Не удалось запустить «%s»"
 
@@ -2836,14 +2848,17 @@ msgid "Unable to access “%s”"
 msgstr "Не удалось получить доступ к «%s»"
 
 #: ../gtk/gtkplacessidebar.c:2668
+#, c-format
 msgid "Unable to unmount “%s”"
 msgstr "Не удалось размонтировать «%s»"
 
 #: ../gtk/gtkplacessidebar.c:2929
+#, c-format
 msgid "Unable to stop “%s”"
 msgstr "Не удалось остановить «%s»"
 
 #: ../gtk/gtkplacessidebar.c:2958
+#, c-format
 msgid "Unable to eject “%s”"
 msgstr "Не удалось извлечь «%s»"
 
@@ -2853,6 +2868,7 @@ msgid "Unable to eject %s"
 msgstr "Не удалось извлечь %s"
 
 #: ../gtk/gtkplacessidebar.c:3174
+#, c-format
 msgid "Unable to poll “%s” for media changes"
 msgstr "Не удалось опросить «%s» об изменении носителей"
 
@@ -2892,7 +2908,7 @@ msgstr "_Извлечь"
 msgid "_Detect Media"
 msgstr "Определить _носитель"
 
-#: ../gtk/gtkplacessidebar.c:4154
+#: ../gtk/gtkplacessidebar.c:4153
 msgid "Computer"
 msgstr "Компьютер"
 
@@ -3191,6 +3207,7 @@ msgid "No items found"
 msgstr "Элементы не найдены"
 
 #: ../gtk/gtkrecentchoosermenu.c:534 ../gtk/gtkrecentchoosermenu.c:590
+#, c-format
 msgid "No recently used resource found with URI '%s'"
 msgstr "Недавно использовавшийся ресурс не найден по URI «%s»"
 
@@ -3238,7 +3255,7 @@ msgstr ""
 "Не найдено ни одного зарегистрированного приложения с названием «%s» для "
 "элемента с URI «%s»"
 
-#: ../gtk/gtksearchentry.c:238
+#: ../gtk/gtksearchentry.c:369
 msgid "Search"
 msgstr "Поиск"
 
@@ -3441,11 +3458,11 @@ msgctxt "volume percentage"
 msgid "%d %%"
 msgstr "%d %%"
 
-#: ../gtk/gtkwindow.c:11832
+#: ../gtk/gtkwindow.c:11838
 msgid "Do you want to use GTK+ Inspector?"
 msgstr "Хотите использовать инспектор GTK+?"
 
-#: ../gtk/gtkwindow.c:11834
+#: ../gtk/gtkwindow.c:11840
 msgid ""
 "GTK+ Inspector is an interactive debugger that lets you explore and modify "
 "the internals of any GTK+ application. Using it may cause the application to "
@@ -3455,7 +3472,7 @@ msgstr ""
 "изменять внутренние данные любого приложения GTK+. Использование инспектора "
 "может привести к зависанию или аварийному завершению приложения."
 
-#: ../gtk/gtkwindow.c:11839
+#: ../gtk/gtkwindow.c:11845
 msgid "Don't show this message again"
 msgstr "Не показывать это сообщение снова"
 
@@ -3474,7 +3491,7 @@ msgstr "Префикс"
 
 #: ../gtk/inspector/actions.ui.h:2 ../gtk/inspector/classes-list.ui.h:3
 #: ../gtk/inspector/object-tree.ui.h:2 ../gtk/inspector/signals-list.ui.h:3
-#: ../gtk/ui/gtkfilechooserwidget.ui.h:4
+#: ../gtk/ui/gtkfilechooserwidget.ui.h:3
 msgid "Name"
 msgstr "Имя"
 
@@ -3556,21 +3573,16 @@ msgid "GDK Backend"
 msgstr "Движок GDK"
 
 #: ../gtk/inspector/general.ui.h:4
-#, fuzzy
-#| msgctxt "keyboard label"
-#| msgid "Display"
 msgid "X display"
-msgstr "Монитор"
+msgstr "Дисплей X"
 
 #: ../gtk/inspector/general.ui.h:5
 msgid "RGBA visual"
 msgstr ""
 
 #: ../gtk/inspector/general.ui.h:6
-#, fuzzy
-#| msgid "Computer"
 msgid "Composited"
-msgstr "Компьютер"
+msgstr "Скомпоновано"
 
 #: ../gtk/inspector/general.ui.h:7
 msgid "GL Version"
@@ -3612,15 +3624,14 @@ msgstr "Действие"
 msgid "Icon"
 msgstr "Значок"
 
-#: ../gtk/inspector/misc-info.ui.h:1"
+#. vim: set et sw=2 ts=2:
+#: ../gtk/inspector/misc-info.ui.h:1
 msgid "Address"
 msgstr "Адрес"
 
 #: ../gtk/inspector/misc-info.ui.h:2
-#, fuzzy
-#| msgid "Preferences"
 msgid "Reference count"
-msgstr "Параметры"
+msgstr "Количество обращений"
 
 #: ../gtk/inspector/misc-info.ui.h:4
 msgid "Buildable ID"
@@ -3693,7 +3704,7 @@ msgstr "Иерархия объектов"
 msgid "Object"
 msgstr "Объект"
 
-#: ../gtk/inspector/object-tree.ui.h:4 ../gtk/inspector/window.ui.h:13"
+#: ../gtk/inspector/object-tree.ui.h:4 ../gtk/inspector/window.ui.h:13
 msgid "Style Classes"
 msgstr "Классы стилей"
 
@@ -3805,7 +3816,7 @@ msgstr "Путь"
 msgid "Count"
 msgstr "Счётчик"
 
-#: ../gtk/inspector/resource-list.ui.h:3 ../gtk/ui/gtkfilechooserwidget.ui.h:5
+#: ../gtk/inspector/resource-list.ui.h:3 ../gtk/ui/gtkfilechooserwidget.ui.h:4
 msgid "Size"
 msgstr "Размер"
 
@@ -3862,6 +3873,7 @@ msgstr "Вертикальный"
 msgid "Both"
 msgstr "Оба"
 
+#. vim: set et sw=2 ts=2:
 #: ../gtk/inspector/statistics.ui.h:1
 msgid "Type"
 msgstr "Тип"
@@ -3894,31 +3906,26 @@ msgstr ""
 msgid "Enable statistics with GOBJECT_DEBUG=instance-count"
 msgstr ""
 
-#. this is the header for the location column in the print dialog
-#: ../gtk/inspector/style-prop-list.ui.h:3 ../gtk/ui/gtkprintunixdialog.ui.h:4
-msgid "Location"
-msgstr "Расположение"
-
 #: ../gtk/inspector/visual.c:263 ../gtk/inspector/visual.c:278
 msgid "Theme is hardcoded by GTK_THEME"
 msgstr "Тема жёстко задана с помощью GTK_THEME"
 
-#: ../gtk/inspector/visual.c:454
+#: ../gtk/inspector/visual.c:453
 msgid "Backend does not support window scaling"
 msgstr "Движок не поддерживает масштабирование окон"
 
-#: ../gtk/inspector/visual.c:493
+#: ../gtk/inspector/visual.c:492
 msgid "Setting is hardcoded by GTK_TEST_TOUCHSCREEN"
 msgstr "Параметр жёстко задан с помощью GTK_TEST_TOUCHSCREEN"
 
-#: ../gtk/inspector/visual.c:558
+#: ../gtk/inspector/visual.c:557
 msgid ""
 "Not settable at runtime.\n"
 "Use GDK_GL=always or GDK_GL=disable instead"
 msgstr ""
 
-#: ../gtk/inspector/visual.c:572 ../gtk/inspector/visual.c:573
-#: ../gtk/inspector/visual.c:574
+#: ../gtk/inspector/visual.c:571 ../gtk/inspector/visual.c:572
+#: ../gtk/inspector/visual.c:573
 msgid "GL rendering is disabled"
 msgstr "Рендеринг GL выключен"
 
@@ -4468,12 +4475,12 @@ msgstr "SRA2"
 #: ../gtk/paper_names_offsets.c:74
 msgctxt "paper size"
 msgid "SRA3"
-msgstr ""
+msgstr "SRA3"
 
 #: ../gtk/paper_names_offsets.c:75
 msgctxt "paper size"
 msgid "SRA4"
-msgstr ""
+msgstr "SRA3"
 
 #: ../gtk/paper_names_offsets.c:76
 msgctxt "paper size"
@@ -4660,7 +4667,7 @@ msgctxt "paper size"
 msgid "7×9 Envelope"
 msgstr "Конверт 7×9"
 
-#: ../gtk/paper_names_offsets.c:113"
+#: ../gtk/paper_names_offsets.c:113
 msgctxt "paper size"
 msgid "8×10 Envelope"
 msgstr "Конверт 8×10"
@@ -4863,7 +4870,7 @@ msgstr "Конверт №9"
 #: ../gtk/paper_names_offsets.c:153
 msgctxt "paper size"
 msgid "Oficio"
-msgstr ""
+msgstr "Oficio"
 
 #: ../gtk/paper_names_offsets.c:154
 msgctxt "paper size"
@@ -4893,7 +4900,7 @@ msgstr "Широкий формат"
 #: ../gtk/paper_names_offsets.c:159
 msgctxt "paper size"
 msgid "Photo L"
-msgstr ""
+msgstr "Photo L"
 
 #: ../gtk/paper_names_offsets.c:160
 msgctxt "paper size"
@@ -5225,6 +5232,7 @@ msgstr "Пароль:"
 
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:1123
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:1414
+#, c-format
 msgid "Authentication is required to print document “%s” on printer %s"
 msgstr ""
 "Для печати документа «%s» на принтере %s требуется проверить права доступа"
@@ -5235,6 +5243,7 @@ msgid "Authentication is required to print a document on %s"
 msgstr "Для печати документа на принтере %s требуется проверить права доступа"
 
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:1129
+#, c-format
 msgid "Authentication is required to get attributes of job “%s”"
 msgstr ""
 "Для получения параметров задания «%s» требуется проверить права доступа"
@@ -5278,6 +5287,7 @@ msgid "Domain:"
 msgstr "Домен:"
 
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:1416
+#, c-format
 msgid "Authentication is required to print document “%s”"
 msgstr ""
 "Для печати документа на принтере «%s» требуется проверить права доступа"
@@ -5293,54 +5303,66 @@ msgstr ""
 "Для печати этого документа на принтере требуется проверить права доступа"
 
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:1860
+#, c-format
 msgid "Printer “%s” is low on toner."
 msgstr "В принтере «%s» заканчивается тонер."
 
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:1861
+#, c-format
 msgid "Printer “%s” has no toner left."
 msgstr "В принтере «%s» закончился тонер."
 
 #. Translators: "Developer" like on photo development context
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:1863
+#, c-format
 msgid "Printer “%s” is low on developer."
 msgstr "В принтере «%s» заканчивается проявитель."
 
 #. Translators: "Developer" like on photo development context
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:1865
+#, c-format
 msgid "Printer “%s” is out of developer."
 msgstr "В принтере «%s» закончился проявитель."
 
 #. Translators: "marker" is one color bin of the printer
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:1867
+#, c-format
 msgid "Printer “%s” is low on at least one marker supply."
 msgstr "В принтере «%s» заканчивается один из тонеров."
 
 #. Translators: "marker" is one color bin of the printer
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:1869
+#, c-format
 msgid "Printer “%s” is out of at least one marker supply."
 msgstr "В принтере «%s» закончился один из тонеров."
 
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:1870
+#, c-format
 msgid "The cover is open on printer “%s”."
 msgstr "В принтере «%s» открыта крышка."
 
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:1871
+#, c-format
 msgid "The door is open on printer “%s”."
 msgstr "В принтере «%s» открыта дверца."
 
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:1872
+#, c-format
 msgid "Printer “%s” is low on paper."
 msgstr "В принтере «%s» заканчивается бумага."
 
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:1873
+#, c-format
 msgid "Printer “%s” is out of paper."
 msgstr "В принтере «%s» закончилась бумага."
 
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:1874
+#, c-format
 msgid "Printer “%s” is currently offline."
 msgstr "Принтер «%s» в данный момент отключён."
 
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:1875
+#, c-format
 msgid "There is a problem on printer “%s”."
 msgstr "Неполадка с принтером «%s»."
 
@@ -5551,6 +5573,7 @@ msgstr "Время начала печати"
 #. * 230.4x142.9"
 #.
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:5362
+#, c-format
 msgid "Custom %s×%s"
 msgstr "Особый %s×%s"
 
@@ -5753,22 +5776,19 @@ msgid "Saturation"
 msgstr "Насыщенность"
 
 #: ../gtk/ui/gtkfilechooserwidget.ui.h:1
-msgid "Create Fo_lder"
-msgstr "Создать п_апку"
+#| msgid "Create Fo_lder"
+msgid "Create Folder"
+msgstr "Создать папку"
 
 #: ../gtk/ui/gtkfilechooserwidget.ui.h:2
-msgid "_Location:"
-msgstr "_Расположение:"
-
-#: ../gtk/ui/gtkfilechooserwidget.ui.h:3
 msgid "Files"
 msgstr "Файлы"
 
-#: ../gtk/ui/gtkfilechooserwidget.ui.h:6
+#: ../gtk/ui/gtkfilechooserwidget.ui.h:5
 msgid "Modified"
 msgstr "Изменён"
 
-#: ../gtk/ui/gtkfilechooserwidget.ui.h:7
+#: ../gtk/ui/gtkfilechooserwidget.ui.h:6
 msgid "Select which types of files are shown"
 msgstr "Выбрать отображаемые типы файлов"
 
