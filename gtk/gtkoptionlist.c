@@ -378,6 +378,27 @@ gtk_option_list_row_get_id (GtkOptionListRow *row)
   return row->id;
 }
 
+static gboolean
+gtk_option_list_row_matches (GtkOptionListRow *row,
+                             const gchar      *match)
+{
+  gchar *row_text;
+  gchar *search_text;
+  gchar *hit;
+
+  if (match[0] == '\0')
+    return TRUE;
+
+  row_text = g_utf8_strdown (row->text, -1);
+  search_text = g_utf8_strdown (match, -1);
+  hit = strstr (row_text, search_text);
+
+  g_free (row_text);
+  g_free (search_text);
+
+  return hit != NULL;
+}
+
 static const gchar *
 gtk_option_list_row_get_text (GtkOptionListRow *row)
 {
@@ -869,13 +890,8 @@ list_filter_func (GtkListBoxRow *row,
 {
   GtkOptionList *ol = data;
   const gchar *text;
-  gchar *row_text;
-  gchar *search_text;
-  gboolean ret;
 
   text = gtk_entry_get_text (GTK_ENTRY (ol->search_entry));
-  if (text[0] == '\0')
-    return TRUE;
 
   if (!GTK_IS_OPTION_LIST_ROW (row))
     return TRUE;
@@ -883,13 +899,7 @@ list_filter_func (GtkListBoxRow *row,
   if (gtk_option_list_row_get_group (GTK_OPTION_LIST_ROW (row)))
     return TRUE;
 
-  row_text = g_utf8_strdown (gtk_option_list_row_get_text (GTK_OPTION_LIST_ROW (row)), -1);
-  search_text = g_utf8_strdown (text, -1);
-  ret = strstr (row_text, search_text) != NULL;
-  g_free (row_text);
-  g_free (search_text);
-
-  return ret;
+  return gtk_option_list_row_matches (GTK_OPTION_LIST_ROW (row), text);
 }
 
 static GtkWidget *
