@@ -126,7 +126,6 @@ void                    gtk_css_node_invalidate         (GtkCssNode            *
                                                          GtkCssChange           change);
 void                    gtk_css_node_validate           (GtkCssNode            *cssnode,
                                                          gint64                 timestamp,
-                                                         GtkCssChange           change,
                                                          const GtkBitmask      *parent_changes);
 void                    gtk_css_node_set_invalid        (GtkCssNode            *node,
                                                          gboolean               invalid);

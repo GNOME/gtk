@@ -1855,7 +1855,6 @@ gtk_container_idle_sizer (GdkFrameClock *clock,
       container->priv->restyle_pending = FALSE;
       gtk_css_node_validate (gtk_style_context_get_root (gtk_widget_get_style_context (GTK_WIDGET (container))),
                              current_time,
-                             0,
                              empty);
 
       _gtk_bitmask_free (empty);
