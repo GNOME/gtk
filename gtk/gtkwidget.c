@@ -60,6 +60,7 @@
 #include "gtksizerequest.h"
 #include "gtkstylecontextprivate.h"
 #include "gtkcssprovider.h"
+#include "gtkcsswidgetnodeprivate.h"
 #include "gtkmodifierstyle.h"
 #include "gtkversion.h"
 #include "gtkdebug.h"
@@ -557,6 +558,7 @@ struct _GtkWidgetPrivate
    * the font to use for text.
    */
   GtkStyle *style;
+  GtkCssNode *cssnode;
   GtkStyleContext *context;
 
   /* Widget's path for styling */
@@ -733,7 +735,8 @@ struct _GtkStateData
 static void	gtk_widget_base_class_init	(gpointer            g_class);
 static void	gtk_widget_class_init		(GtkWidgetClass     *klass);
 static void	gtk_widget_base_class_finalize	(GtkWidgetClass     *klass);
-static void	gtk_widget_init			(GtkWidget          *widget);
+static void     gtk_widget_init                  (GTypeInstance     *instance,
+                                                  gpointer           g_class);
 static void	gtk_widget_set_property		 (GObject           *object,
 						  guint              prop_id,
 						  const GValue      *value,
@@ -992,7 +995,7 @@ gtk_widget_get_type (void)
 	NULL,		/* class_init */
 	sizeof (GtkWidget),
 	0,		/* n_preallocs */
-	(GInstanceInitFunc) gtk_widget_init,
+	gtk_widget_init,
 	NULL,		/* value_table */
       };
 
@@ -4454,8 +4457,9 @@ _gtk_widget_cancel_sequence (GtkWidget        *widget,
 }
 
 static void
-gtk_widget_init (GtkWidget *widget)
+gtk_widget_init (GTypeInstance *instance, gpointer g_class)
 {
+  GtkWidget *widget = GTK_WIDGET (instance);
   GtkWidgetPrivate *priv;
 
   widget->priv = gtk_widget_get_instance_private (widget); 
@@ -4505,6 +4509,11 @@ gtk_widget_init (GtkWidget *widget)
   priv->need_compute_expand = FALSE;
 
   _gtk_size_request_cache_init (&priv->requests);
+
+  priv->cssnode = gtk_css_widget_node_new (widget);
+  gtk_css_node_set_state (priv->cssnode, GTK_STATE_FLAG_DIR_LTR);
+  /* need to set correct type here, and only class has the correct type here */
+  gtk_css_node_set_widget_type (priv->cssnode, G_TYPE_FROM_CLASS (g_class));
 
   G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
   priv->style = gtk_widget_get_default_style ();
@@ -4738,6 +4747,7 @@ gtk_widget_unparent (GtkWidget *widget)
   gtk_widget_unset_state_flags (widget, GTK_STATE_FLAG_BACKDROP);
   if (priv->context)
     gtk_style_context_set_parent (priv->context, NULL);
+  gtk_css_node_set_parent (widget->priv->cssnode, NULL);
 
   _gtk_widget_update_parent_muxer (widget);
 
@@ -9524,6 +9534,8 @@ gtk_widget_set_parent (GtkWidget *widget,
   data.flags_to_unset = 0;
   gtk_widget_propagate_state (widget, &data);
 
+  if (gtk_css_node_get_parent (widget->priv->cssnode) == NULL)
+    gtk_css_node_set_parent (widget->priv->cssnode, parent->priv->cssnode);
   if (priv->context)
     gtk_style_context_set_parent (priv->context,
                                   gtk_widget_get_style_context (parent));
@@ -12175,11 +12187,11 @@ gtk_widget_finalize (GObject *object)
   if (priv->path)
     gtk_widget_path_free (priv->path);
 
+  gtk_css_widget_node_widget_destroyed (GTK_CSS_WIDGET_NODE (priv->cssnode));
+  g_object_unref (priv->cssnode);
+
   if (priv->context)
-    {
-      _gtk_style_context_set_widget (priv->context, NULL);
-      g_object_unref (priv->context);
-    }
+    g_object_unref (priv->context);
 
   _gtk_size_request_cache_free (&priv->requests);
 
@@ -16424,7 +16436,7 @@ gtk_widget_get_style_context (GtkWidget *widget)
       GdkScreen *screen;
       GdkFrameClock *frame_clock;
 
-      priv->context = gtk_style_context_new ();
+      priv->context = gtk_style_context_new_for_node (priv->cssnode);
 
       gtk_style_context_set_id (priv->context, priv->name);
       gtk_style_context_set_state (priv->context, priv->state_flags);
@@ -16437,8 +16449,6 @@ gtk_widget_get_style_context (GtkWidget *widget)
       frame_clock = gtk_widget_get_frame_clock (widget);
       if (frame_clock)
         gtk_style_context_set_frame_clock (priv->context, frame_clock);
-
-      _gtk_style_context_set_widget (priv->context, widget);
 
       if (priv->parent)
         gtk_style_context_set_parent (priv->context,

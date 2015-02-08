@@ -28,8 +28,8 @@
 
 G_BEGIN_DECLS
 
-void            _gtk_style_context_set_widget                (GtkStyleContext *context,
-                                                              GtkWidget       *widget);
+GtkStyleContext *gtk_style_context_new_for_node              (GtkCssNode      *node);
+
 GtkCssNode *    gtk_style_context_get_root                   (GtkStyleContext *context);
 void            gtk_style_context_set_id                     (GtkStyleContext *context,
                                                               const char      *id);

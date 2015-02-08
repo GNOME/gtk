@@ -551,36 +551,21 @@ gtk_style_context_new (void)
   return g_object_new (GTK_TYPE_STYLE_CONTEXT, NULL);
 }
 
-void
-_gtk_style_context_set_widget (GtkStyleContext *context,
-                               GtkWidget       *widget)
+GtkStyleContext *
+gtk_style_context_new_for_node (GtkCssNode *node)
 {
   GtkStyleContextPrivate *priv;
+  GtkStyleContext *context;
 
-  g_return_if_fail (GTK_IS_STYLE_CONTEXT (context));
-  g_return_if_fail (widget == NULL || GTK_IS_WIDGET (widget));
-  g_return_if_fail (!gtk_style_context_is_saved (context));
+  g_return_val_if_fail (GTK_IS_CSS_NODE (node), NULL);
+
+  context = gtk_style_context_new ();
 
   priv = context->priv;
+  g_object_unref (priv->cssnode);
+  priv->cssnode = g_object_ref (node);
 
-  if (!GTK_IS_CSS_WIDGET_NODE (priv->cssnode))
-    {
-      g_object_unref (priv->cssnode);
-      priv->cssnode = gtk_css_widget_node_new (widget);
-      gtk_css_node_set_state (priv->cssnode, GTK_STATE_FLAG_DIR_LTR);
-    }
-
-  if (widget)
-    {
-      gtk_css_node_set_widget_type (priv->cssnode, G_OBJECT_TYPE (widget));
-    }
-  else
-    {
-      gtk_css_node_set_widget_type (priv->cssnode, G_TYPE_NONE);
-      gtk_css_widget_node_widget_destroyed (GTK_CSS_WIDGET_NODE (priv->cssnode));
-    }
-
-  gtk_css_node_invalidate (gtk_style_context_get_root (context), GTK_CSS_CHANGE_ANY_SELF);
+  return context;
 }
 
 /**
@@ -1166,9 +1151,11 @@ gtk_style_context_set_parent (GtkStyleContext *context,
 
   if (parent)
     {
+      GtkCssNode *root = gtk_style_context_get_root (context);
       g_object_ref (parent);
-      gtk_css_node_set_parent (gtk_style_context_get_root (context),
-                               gtk_style_context_get_root (parent));
+
+      if (gtk_css_node_get_parent (root) == NULL)
+        gtk_css_node_set_parent (root, gtk_style_context_get_root (parent));
     }
   else
     {
