@@ -2232,10 +2232,10 @@ gtk_label_set_text (GtkLabel    *label,
 /**
  * gtk_label_set_attributes:
  * @label: a #GtkLabel
- * @attrs: a #PangoAttrList
- * 
+ * @attrs: (allow-none): a #PangoAttrList, or %NULL
+ *
  * Sets a #PangoAttrList; the attributes in the list are applied to the
- * label text. 
+ * label text.
  *
  * The attributes set with this function will be applied
  * and merged with any other attributes previously effected by way
