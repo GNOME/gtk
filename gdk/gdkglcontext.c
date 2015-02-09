@@ -49,6 +49,14 @@
  * #GdkWindow, which you typically get during the realize call
  * of a widget.
  *
+ * A #GdkGLContext is not realized until either gdk_gl_context_make_current(),
+ * or until it is realized using gdk_gl_context_realize(). It is possible to
+ * specify details of the GL context like the OpenGL version to be used, or
+ * whether the GL context should have extra state validation enabled after
+ * calling gdk_window_create_gl_context() by calling gdk_gl_context_realize().
+ * If the realization fails you have the option to change the settings of the
+ * #GdkGLContext and try again.
+ *
  * ## Using a GdkGLContext ##
  *
  * You will need to make the #GdkGLContext the current context
@@ -404,10 +412,8 @@ gdk_gl_context_has_frame_terminator (GdkGLContext *context)
  * run time checking. This is useful during development, but has
  * additional overhead.
  *
- * The #GdkGLContext must not be realized.
- *
- * This function has effect only on #GdkGLContexts created using
- * the %GDK_GL_PROFILE_3_2_CORE profile.
+ * The #GdkGLContext must not be realized or made current prior to
+ * calling this function.
  *
  * Since: 3.16
  */
@@ -457,10 +463,8 @@ gdk_gl_context_get_debug_enabled (GdkGLContext *context)
  * compatible contexts, on the other hand, must support both deprecated and
  * non deprecated functionality.
  *
- * The #GdkGLContext must not be realized.
- *
- * This function has effect only on #GdkGLContexts created using
- * the %GDK_GL_PROFILE_3_2_CORE profile.
+ * The #GdkGLContext must not be realized or made current prior to calling
+ * this function.
  *
  * Since: 3.16
  */
@@ -508,10 +512,8 @@ gdk_gl_context_get_forward_compatible (GdkGLContext *context)
  *
  * Setting @major and @minor to zero will use the default values.
  *
- * The #GdkGLContext must not be realized.
- *
- * This function has effect only on #GdkGLContexts created using
- * the %GDK_GL_PROFILE_3_2_CORE profile.
+ * The #GdkGLContext must not be realized or made current prior to calling
+ * this function.
  *
  * Since: 3.16
  */
