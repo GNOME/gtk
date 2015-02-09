@@ -550,6 +550,8 @@ gtk_list_box_set_header_func
 gtk_list_box_set_sort_func
 gtk_list_box_drag_highlight_row
 gtk_list_box_drag_unhighlight_row
+GtkListBoxCreateWidgetFunc
+gtk_list_box_bind_model
 
 gtk_list_box_row_new
 gtk_list_box_row_changed

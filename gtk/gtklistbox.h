@@ -169,6 +169,20 @@ typedef void (*GtkListBoxUpdateHeaderFunc) (GtkListBoxRow *row,
                                             GtkListBoxRow *before,
                                             gpointer       user_data);
 
+/**
+ * GtkListBoxCreateWidgetFunc:
+ * @item: the item from the model for which to create a widget for
+ *
+ * Called for list boxes that are bound to a #GListModel with
+ * gtk_list_box_bind_model() for each item that gets added to the model.
+ *
+ * Returns: a #GtkWidget that represents @item
+ *
+ * Since: 3.16
+ */
+typedef GtkWidget * (*GtkListBoxCreateWidgetFunc) (gpointer item,
+                                                   gpointer user_data);
+
 GDK_AVAILABLE_IN_3_10
 GType      gtk_list_box_row_get_type      (void) G_GNUC_CONST;
 GDK_AVAILABLE_IN_3_10
@@ -286,6 +300,12 @@ GDK_AVAILABLE_IN_3_10
 GtkWidget*     gtk_list_box_new                          (void);
 
 
+GDK_AVAILABLE_IN_3_16
+void           gtk_list_box_bind_model                   (GtkListBox                   *box,
+                                                          GListModel                   *model,
+                                                          GtkListBoxCreateWidgetFunc    create_widget_func,
+                                                          gpointer                      user_data,
+                                                          GDestroyNotify                user_data_free_func);
 
 G_END_DECLS
 
