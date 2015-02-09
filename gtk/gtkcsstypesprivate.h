@@ -23,7 +23,8 @@
 
 G_BEGIN_DECLS
 
-/* forward declaration for GtkCssValue */
+typedef union _GtkCssMatcher GtkCssMatcher;
+typedef struct _GtkCssNode GtkCssNode;
 typedef struct _GtkCssStyle GtkCssStyle;
 typedef struct _GtkStyleProviderPrivate GtkStyleProviderPrivate; /* dummy typedef */
 

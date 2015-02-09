@@ -19,7 +19,8 @@
 #define __GTK_CSS_NODE_PRIVATE_H__
 
 #include "gtkcssnodedeclarationprivate.h"
-#include "gtkcssstyleprivate.h"
+#include "gtkbitmaskprivate.h"
+#include "gtkcsstypesprivate.h"
 
 G_BEGIN_DECLS
 
@@ -56,6 +57,9 @@ struct _GtkCssNodeClass
 {
   GObjectClass object_class;
 
+  gboolean              (* init_matcher)                (GtkCssNode            *cssnode,
+                                                         GtkCssMatcher         *matcher,
+                                                         GtkWidgetPath        **path);
   GtkWidgetPath *       (* create_widget_path)          (GtkCssNode            *cssnode);
   const GtkWidgetPath * (* get_widget_path)             (GtkCssNode            *cssnode);
   GtkStyleProviderPrivate *(* get_style_provider)       (GtkCssNode            *cssnode);
@@ -129,6 +133,10 @@ void                    gtk_css_node_validate           (GtkCssNode            *
                                                          const GtkBitmask      *parent_changes);
 void                    gtk_css_node_set_invalid        (GtkCssNode            *node,
                                                          gboolean               invalid);
+
+gboolean                gtk_css_node_init_matcher       (GtkCssNode            *cssnode,
+                                                         GtkCssMatcher         *matcher,
+                                                         GtkWidgetPath        **path);
 GtkWidgetPath *         gtk_css_node_create_widget_path (GtkCssNode            *cssnode);
 const GtkWidgetPath *   gtk_css_node_get_widget_path    (GtkCssNode            *cssnode);
 GtkStyleProviderPrivate *gtk_css_node_get_style_provider(GtkCssNode            *cssnode);

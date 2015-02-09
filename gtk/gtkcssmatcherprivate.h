@@ -24,7 +24,6 @@
 
 G_BEGIN_DECLS
 
-typedef union _GtkCssMatcher GtkCssMatcher;
 typedef struct _GtkCssMatcherSuperset GtkCssMatcherSuperset;
 typedef struct _GtkCssMatcherWidgetPath GtkCssMatcherWidgetPath;
 typedef struct _GtkCssMatcherClass GtkCssMatcherClass;

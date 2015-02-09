@@ -192,9 +192,7 @@ gtk_css_node_update_style (GtkCssNode       *cssnode,
   if (result)
     return g_object_ref (result);
 
-  path = gtk_css_node_create_widget_path (cssnode);
-
-  if (!_gtk_css_matcher_init (&matcher, path))
+  if (!gtk_css_node_init_matcher (cssnode, &matcher, &path))
     {
       g_assert_not_reached ();
     }
@@ -205,7 +203,8 @@ gtk_css_node_update_style (GtkCssNode       *cssnode,
                                             &matcher,
                                             parent);
 
-  gtk_widget_path_free (path);
+  if (path)
+    gtk_widget_path_free (path);
 
   store_in_global_parent_cache (cssnode, parent, decl, style);
 
@@ -228,9 +227,7 @@ gtk_css_node_create_style (GtkCssNode *cssnode)
   if (style)
     return g_object_ref (style);
 
-  path = gtk_css_node_create_widget_path (cssnode);
-
-  if (_gtk_css_matcher_init (&matcher, path))
+  if (gtk_css_node_init_matcher (cssnode, &matcher, &path))
     style = gtk_css_static_style_new_compute (gtk_css_node_get_style_provider (cssnode),
                                               &matcher,
                                               parent);
@@ -239,7 +236,8 @@ gtk_css_node_create_style (GtkCssNode *cssnode)
                                               NULL,
                                               parent);
 
-  gtk_widget_path_free (path);
+  if (path)
+    gtk_widget_path_free (path);
 
   store_in_global_parent_cache (cssnode, parent, decl, style);
 
@@ -298,6 +296,32 @@ gtk_css_node_real_validate (GtkCssNode       *cssnode,
   return _gtk_bitmask_new ();
 }
 
+gboolean
+gtk_css_node_real_init_matcher (GtkCssNode     *cssnode,
+                                GtkCssMatcher  *matcher,
+                                GtkWidgetPath **path_out)
+{
+  GtkWidgetPath *path;
+  
+  path = gtk_css_node_create_widget_path (cssnode);
+
+  if (!_gtk_css_matcher_init (matcher, path))
+    {
+      gtk_widget_path_free (path);
+      return FALSE;
+    }
+
+  if (path_out == NULL)
+    {
+      gtk_widget_path_free (path);
+      g_assert_not_reached ();
+      return FALSE;
+    }
+
+  *path_out = path;
+  return TRUE;
+}
+
 static GtkWidgetPath *
 gtk_css_node_real_create_widget_path (GtkCssNode *cssnode)
 {
@@ -332,6 +356,7 @@ gtk_css_node_class_init (GtkCssNodeClass *klass)
   klass->validate = gtk_css_node_real_validate;
   klass->queue_validate = gtk_css_node_real_queue_validate;
   klass->dequeue_validate = gtk_css_node_real_dequeue_validate;
+  klass->init_matcher = gtk_css_node_real_init_matcher;
   klass->create_widget_path = gtk_css_node_real_create_widget_path;
   klass->get_widget_path = gtk_css_node_real_get_widget_path;
   klass->get_style_provider = gtk_css_node_real_get_style_provider;
@@ -691,6 +716,17 @@ gtk_css_node_validate (GtkCssNode            *cssnode,
     }
 
   _gtk_bitmask_free (changes);
+}
+
+gboolean
+gtk_css_node_init_matcher (GtkCssNode     *cssnode,
+                           GtkCssMatcher  *matcher,
+                           GtkWidgetPath **path_out)
+{
+  if (path_out)
+    *path_out = NULL;
+
+  return GTK_CSS_NODE_GET_CLASS (cssnode)->init_matcher (cssnode, matcher, path_out);
 }
 
 GtkWidgetPath *
