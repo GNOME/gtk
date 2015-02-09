@@ -102,7 +102,7 @@ init_shaders (GLuint *program_out,
   int status;
   GBytes *source;
 
-  source = g_resources_lookup_data ("/shaders/glarea-vertex.glsl", 0, NULL);
+  source = g_resources_lookup_data ("/glarea/glarea-vertex.glsl", 0, NULL);
   vertex = create_shader (GL_VERTEX_SHADER, g_bytes_get_data (source, NULL));
   g_bytes_unref (source);
 
@@ -112,7 +112,7 @@ init_shaders (GLuint *program_out,
       return;
     }
 
-  source = g_resources_lookup_data ("/shaders/glarea-fragment.glsl", 0, NULL);
+  source = g_resources_lookup_data ("/glarea/glarea-fragment.glsl", 0, NULL);
   fragment = create_shader (GL_FRAGMENT_SHADER, g_bytes_get_data (source, NULL));
   g_bytes_unref (source);
 
