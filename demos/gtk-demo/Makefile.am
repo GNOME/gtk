@@ -136,6 +136,8 @@ RESOURCES =				\
 	brick2.png			\
 	background.jpg			\
 	floppybuddy.gif			\
+	glarea-fragment.glsl		\
+	glarea-vertex.glsl		\
 	gnome-applets.png		\
 	gnome-calendar.png		\
 	gnome-foot.png			\

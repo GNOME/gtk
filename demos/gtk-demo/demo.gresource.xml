@@ -140,4 +140,8 @@
   <gresource prefix="/popover">
     <file>popover.ui</file>
   </gresource>
+  <gresource prefix="/shaders">
+    <file>glarea-fragment.glsl</file>
+    <file>glarea-vertex.glsl</file>
+  </gresource>
 </gresources>
