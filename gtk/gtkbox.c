@@ -77,6 +77,7 @@
 
 #include "gtkbox.h"
 #include "gtkboxprivate.h"
+#include "gtkcssnodeprivate.h"
 #include "gtkintl.h"
 #include "gtkorientable.h"
 #include "gtkorientableprivate.h"
@@ -1434,17 +1435,25 @@ gtk_box_buildable_init (GtkBuildableIface *iface)
 }
 
 static void
-gtk_box_invalidate_order_foreach (GtkWidget *widget)
+gtk_box_invalidate_order_foreach (GtkWidget *widget,
+                                  gpointer   prev)
 {
-  _gtk_widget_invalidate_style_context (widget, GTK_CSS_CHANGE_POSITION | GTK_CSS_CHANGE_SIBLING_POSITION);
+  GtkCssNode **previous = prev;
+  GtkCssNode *cur = gtk_widget_get_css_node (widget);
+
+  if (*previous)
+    gtk_css_node_set_after (cur, *previous);
+
+  *previous = cur;
 }
 
 static void
 gtk_box_invalidate_order (GtkBox *box)
 {
+  GtkCssNode *previous = NULL;
   gtk_container_foreach (GTK_CONTAINER (box),
-                         (GtkCallback) gtk_box_invalidate_order_foreach,
-                         NULL);
+                         gtk_box_invalidate_order_foreach,
+                         &previous);
 }
 
 static void
@@ -1490,8 +1499,8 @@ gtk_box_pack (GtkBox      *box,
 
   gtk_widget_freeze_child_notify (child);
 
-  gtk_box_invalidate_order (box);
   gtk_widget_set_parent (child, GTK_WIDGET (box));
+  gtk_box_invalidate_order (box);
 
   g_signal_connect (child, "notify::visible",
                     G_CALLBACK (box_child_visibility_notify_cb), box);

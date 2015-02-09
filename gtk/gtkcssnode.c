@@ -473,6 +473,30 @@ gtk_css_node_set_parent (GtkCssNode *node,
   gtk_css_node_reposition (node, parent, parent ? parent->last_child : NULL);
 }
 
+void
+gtk_css_node_set_after (GtkCssNode *cssnode,
+                        GtkCssNode *previous_sibling)
+{
+  if (cssnode->previous_sibling == previous_sibling)
+    return;
+
+  gtk_css_node_reposition (cssnode,
+                           previous_sibling->parent,
+                           previous_sibling);
+}
+
+void
+gtk_css_node_set_before (GtkCssNode *cssnode,
+                         GtkCssNode *next_sibling)
+{
+  if (cssnode->next_sibling == next_sibling)
+    return;
+
+  gtk_css_node_reposition (cssnode,
+                           next_sibling->parent,
+                           next_sibling->previous_sibling);
+}
+
 GtkCssNode *
 gtk_css_node_get_parent (GtkCssNode *cssnode)
 {

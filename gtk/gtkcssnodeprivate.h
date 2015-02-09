@@ -78,6 +78,10 @@ GType                   gtk_css_node_get_type           (void) G_GNUC_CONST;
 
 void                    gtk_css_node_set_parent         (GtkCssNode            *cssnode,
                                                          GtkCssNode            *parent);
+void                    gtk_css_node_set_after          (GtkCssNode            *cssnode,
+                                                         GtkCssNode            *previous_sibling);
+void                    gtk_css_node_set_before         (GtkCssNode            *cssnode,
+                                                         GtkCssNode            *next_sibling);
 GtkCssNode *            gtk_css_node_get_parent         (GtkCssNode            *cssnode);
 GtkCssNode *            gtk_css_node_get_first_child    (GtkCssNode            *cssnode);
 GtkCssNode *            gtk_css_node_get_last_child     (GtkCssNode            *cssnode);
