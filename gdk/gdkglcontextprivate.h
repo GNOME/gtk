@@ -49,11 +49,6 @@ struct _GdkGLContextClass
   gboolean (* texture_from_surface) (GdkGLContext    *context,
                                      cairo_surface_t *surface,
                                      cairo_region_t  *region);
-  void (* upload_texture) (GdkGLContext    *context,
-                           cairo_surface_t *image_surface,
-                           int              width,
-                           int              height,
-                           guint            texture_target);
 };
 
 typedef struct {
@@ -74,13 +69,18 @@ typedef struct {
   GdkGLContextProgram *current_program;
 } GdkGLContextPaintData;
 
-GdkGLContextPaintData * gdk_gl_context_get_paint_data           (GdkGLContext   *context);
-gboolean                gdk_gl_context_use_texture_rectangle    (GdkGLContext   *context);
-gboolean                gdk_gl_context_has_framebuffer_blit     (GdkGLContext   *context);
-gboolean                gdk_gl_context_has_frame_terminator     (GdkGLContext   *context);
-void                    gdk_gl_context_end_frame                (GdkGLContext   *context,
-                                                                 cairo_region_t *painted,
-                                                                 cairo_region_t *damage);
+void                    gdk_gl_context_upload_texture           (GdkGLContext    *context,
+                                                                 cairo_surface_t *image_surface,
+                                                                 int              width,
+                                                                 int              height,
+                                                                 guint            texture_target);
+GdkGLContextPaintData * gdk_gl_context_get_paint_data           (GdkGLContext    *context);
+gboolean                gdk_gl_context_use_texture_rectangle    (GdkGLContext    *context);
+gboolean                gdk_gl_context_has_framebuffer_blit     (GdkGLContext    *context);
+gboolean                gdk_gl_context_has_frame_terminator     (GdkGLContext    *context);
+void                    gdk_gl_context_end_frame                (GdkGLContext    *context,
+                                                                 cairo_region_t  *painted,
+                                                                 cairo_region_t  *damage);
 
 G_END_DECLS
 

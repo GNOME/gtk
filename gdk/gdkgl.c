@@ -716,8 +716,7 @@ gdk_gl_texture_from_surface (cairo_surface_t *surface,
       e.height *= sy;
       image = cairo_surface_map_to_image (surface, &e);
 
-      /* We might have a different alignment, stride or format, so allow overriding here if needed */
-      GDK_GL_CONTEXT_GET_CLASS (paint_context)->upload_texture (paint_context, image, e.width, e.height, target);
+      gdk_gl_context_upload_texture (paint_context, image, e.width, e.height, target);
 
       cairo_surface_unmap_image (surface, image);
 
@@ -745,6 +744,8 @@ gdk_gl_texture_from_surface (cairo_surface_t *surface,
         gdk_gl_texture_quads (paint_context, target, 1, &quad);
       }
     }
+
+#undef FLIP_Y
 
   glDisable (GL_SCISSOR_TEST);
   glDeleteTextures (1, &texture_id);

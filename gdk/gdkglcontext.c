@@ -240,8 +240,7 @@ gdk_gl_context_get_property (GObject    *gobject,
     }
 }
 
-/* Default implementation of upload_texture() for gdk_gl_texture_from_surface() */
-static void
+void
 gdk_gl_context_upload_texture (GdkGLContext    *context,
                                cairo_surface_t *image_surface,
                                int              width,
@@ -331,9 +330,6 @@ gdk_gl_context_class_init (GdkGLContextClass *klass)
   gobject_class->get_property = gdk_gl_context_get_property;
   gobject_class->dispose = gdk_gl_context_dispose;
   gobject_class->finalize = gdk_gl_context_finalize;
-
-  /* Default Implementation of upload_texture() for gdk_gl_texture_from_surface() */
-  klass->upload_texture = gdk_gl_context_upload_texture;
 
   g_object_class_install_properties (gobject_class, LAST_PROP, obj_pspecs);
 }
