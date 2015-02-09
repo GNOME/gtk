@@ -178,10 +178,8 @@ gtk_css_widget_node_init_matcher (GtkCssNode     *node,
   if (widget_node->widget == NULL)
     return FALSE;
 
-  *path_out = _gtk_widget_create_path (widget_node->widget);
-
   return _gtk_css_matcher_init (matcher,
-                                *path_out,
+                                gtk_widget_get_path (widget_node->widget),
                                 gtk_css_node_get_declaration (node));
 }
 
