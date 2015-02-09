@@ -571,23 +571,6 @@ create_gl3_context (GdkDisplay   *display,
                                      attrib_list);
 }
 
-static GLXContext
-create_gl_context (GdkDisplay   *display,
-                   GLXFBConfig   config,
-                   GdkGLContext *share)
-{
-  GdkX11GLContext *share_x11 = NULL;
-
-  if (share != NULL)
-    share_x11 = GDK_X11_GL_CONTEXT (share);
-
-  return glXCreateNewContext (gdk_x11_display_get_xdisplay (display),
-                              config,
-                              GLX_RGBA_TYPE,
-                              share_x11 != NULL ? share_x11->glx_context : NULL,
-                              True);
-}
-
 static gboolean
 gdk_x11_gl_context_realize (GdkGLContext  *context,
                             GError       **error)
@@ -640,8 +623,10 @@ gdk_x11_gl_context_realize (GdkGLContext  *context,
     }
   else
     {
-      GDK_NOTE (OPENGL, g_print ("Creating legacy GLX context\n"));
-      context_x11->glx_context = create_gl_context (display, context_x11->glx_config, share);
+      g_set_error_literal (error, GDK_GL_ERROR,
+                           GDK_GL_ERROR_UNSUPPORTED_PROFILE,
+                           _("Unsupported profile for a GL context"));
+      return FALSE;
     }
 
   if (context_x11->glx_context == NULL)
