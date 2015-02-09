@@ -305,7 +305,7 @@ gtk_css_node_real_init_matcher (GtkCssNode     *cssnode,
   
   path = gtk_css_node_create_widget_path (cssnode);
 
-  if (!_gtk_css_matcher_init (matcher, path))
+  if (!_gtk_css_matcher_init (matcher, path, NULL))
     {
       gtk_widget_path_free (path);
       return FALSE;

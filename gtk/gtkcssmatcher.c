@@ -19,6 +19,7 @@
 
 #include "gtkcssmatcherprivate.h"
 
+#include "gtkcssnodedeclarationprivate.h"
 #include "gtkwidgetpath.h"
 
 /* GTK_CSS_MATCHER_WIDGET_PATH */
@@ -31,6 +32,7 @@ gtk_css_matcher_widget_path_get_parent (GtkCssMatcher       *matcher,
     return FALSE;
 
   matcher->path.klass = child->path.klass;
+  matcher->path.decl = NULL;
   matcher->path.path = child->path.path;
   matcher->path.index = child->path.index - 1;
   matcher->path.sibling_index = gtk_widget_path_iter_get_sibling_index (matcher->path.path, matcher->path.index);
@@ -46,6 +48,7 @@ gtk_css_matcher_widget_path_get_previous (GtkCssMatcher       *matcher,
     return FALSE;
 
   matcher->path.klass = next->path.klass;
+  matcher->path.decl = NULL;
   matcher->path.path = next->path.path;
   matcher->path.index = next->path.index;
   matcher->path.sibling_index = next->path.sibling_index - 1;
@@ -58,6 +61,9 @@ gtk_css_matcher_widget_path_get_state (const GtkCssMatcher *matcher)
 {
   const GtkWidgetPath *siblings;
   
+  if (matcher->path.decl)
+    return gtk_css_node_declaration_get_state (matcher->path.decl);
+
   siblings = gtk_widget_path_iter_get_siblings (matcher->path.path, matcher->path.index);
   if (siblings && matcher->path.sibling_index != gtk_widget_path_iter_get_sibling_index (matcher->path.path, matcher->path.index))
     return gtk_widget_path_iter_get_state (siblings, matcher->path.sibling_index);
@@ -84,6 +90,10 @@ gtk_css_matcher_widget_path_has_class (const GtkCssMatcher *matcher,
 {
   const GtkWidgetPath *siblings;
   
+  if (matcher->path.decl &&
+      gtk_css_node_declaration_has_class (matcher->path.decl, class_name))
+    return TRUE;
+
   siblings = gtk_widget_path_iter_get_siblings (matcher->path.path, matcher->path.index);
   if (siblings && matcher->path.sibling_index != gtk_widget_path_iter_get_sibling_index (matcher->path.path, matcher->path.index))
     return gtk_widget_path_iter_has_qclass (siblings, matcher->path.sibling_index, class_name);
@@ -111,6 +121,16 @@ gtk_css_matcher_widget_path_has_regions (const GtkCssMatcher *matcher)
   GSList *regions;
   gboolean result;
 
+  if (matcher->path.decl)
+    {
+      GList *list = gtk_css_node_declaration_list_regions (matcher->path.decl);
+      if (list)
+        {
+          g_list_free (list);
+          return TRUE;
+        }
+    }
+
 G_GNUC_BEGIN_IGNORE_DEPRECATIONS
   siblings = gtk_widget_path_iter_get_siblings (matcher->path.path, matcher->path.index);
   if (siblings && matcher->path.sibling_index != gtk_widget_path_iter_get_sibling_index (matcher->path.path, matcher->path.index))
@@ -132,6 +152,14 @@ gtk_css_matcher_widget_path_has_region (const GtkCssMatcher *matcher,
   const GtkWidgetPath *siblings;
   GtkRegionFlags region_flags;
   
+  if (matcher->path.decl)
+    {
+      GQuark q = g_quark_try_string (region);
+
+      if (q && gtk_css_node_declaration_has_region (matcher->path.decl, q, &region_flags))
+        goto found;
+    }
+
 G_GNUC_BEGIN_IGNORE_DEPRECATIONS
   siblings = gtk_widget_path_iter_get_siblings (matcher->path.path, matcher->path.index);
   if (siblings && matcher->path.sibling_index != gtk_widget_path_iter_get_sibling_index (matcher->path.path, matcher->path.index))
@@ -144,12 +172,13 @@ G_GNUC_BEGIN_IGNORE_DEPRECATIONS
       if (!gtk_widget_path_iter_has_region (matcher->path.path, matcher->path.index, region, &region_flags))
         return FALSE;
     }
+G_GNUC_END_IGNORE_DEPRECATIONS
 
+found:
   if ((flags & region_flags) != flags)
     return FALSE;
 
   return TRUE;
-G_GNUC_END_IGNORE_DEPRECATIONS
 }
 
 static gboolean
@@ -195,13 +224,15 @@ static const GtkCssMatcherClass GTK_CSS_MATCHER_WIDGET_PATH = {
 };
 
 gboolean
-_gtk_css_matcher_init (GtkCssMatcher       *matcher,
-                       const GtkWidgetPath *path)
+_gtk_css_matcher_init (GtkCssMatcher               *matcher,
+                       const GtkWidgetPath         *path,
+                       const GtkCssNodeDeclaration *decl)
 {
   if (gtk_widget_path_length (path) == 0)
     return FALSE;
 
   matcher->path.klass = &GTK_CSS_MATCHER_WIDGET_PATH;
+  matcher->path.decl = decl;
   matcher->path.path = path;
   matcher->path.index = gtk_widget_path_length (path) - 1;
   matcher->path.sibling_index = gtk_widget_path_iter_get_sibling_index (path, matcher->path.index);

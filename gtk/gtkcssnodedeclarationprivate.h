@@ -18,13 +18,11 @@
 #ifndef __GTK_CSS_NODE_DECLARATION_PRIVATE_H__
 #define __GTK_CSS_NODE_DECLARATION_PRIVATE_H__
 
+#include "gtkcsstypesprivate.h"
 #include "gtkenums.h"
 #include "gtkwidgetpath.h"
 
 G_BEGIN_DECLS
-
-typedef struct _GtkCssNodeDeclaration GtkCssNodeDeclaration;
-
 
 GtkCssNodeDeclaration * gtk_css_node_declaration_new                    (void);
 GtkCssNodeDeclaration * gtk_css_node_declaration_ref                    (GtkCssNodeDeclaration         *decl);

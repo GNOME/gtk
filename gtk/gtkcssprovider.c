@@ -1695,7 +1695,7 @@ gtk_css_provider_get_style_property (GtkStyleProvider *provider,
       gtk_widget_path_iter_set_state (path, -1, state);
     }
 
-  if (!_gtk_css_matcher_init (&matcher, path))
+  if (!_gtk_css_matcher_init (&matcher, path, NULL))
     {
       gtk_widget_path_unref (path);
       return FALSE;
