@@ -526,10 +526,9 @@ gdk_gl_context_set_required_version (GdkGLContext *context,
 
   g_return_if_fail (GDK_IS_GL_CONTEXT (context));
   g_return_if_fail (!priv->realized);
-  g_return_if_fail (priv->profile == GDK_GL_PROFILE_3_2_CORE);
 
-  priv->major = major;
-  priv->minor = minor;
+  priv->major = MAX (major, 3);
+  priv->minor = MAX (minor, 2);
 }
 
 /**
@@ -549,34 +548,24 @@ gdk_gl_context_get_required_version (GdkGLContext *context,
                                      int          *minor)
 {
   GdkGLContextPrivate *priv = gdk_gl_context_get_instance_private (context);
+  int maj, min;
 
-  if (major != NULL && priv->major > 0)
-    *major = priv->major;
-  else
-    {
-      switch (priv->profile)
-        {
-        case GDK_GL_PROFILE_DEFAULT:
-        case GDK_GL_PROFILE_3_2_CORE:
-          if (major != NULL)
-            *major = 3;
-          break;
-        }
-    }
+  g_return_if_fail (GDK_IS_GL_CONTEXT (context));
 
-  if (minor != NULL && priv->minor > 0)
-    *minor = priv->minor;
+  if (priv->major > 0)
+    maj = priv->major;
   else
-    {
-      switch (priv->profile)
-        {
-        case GDK_GL_PROFILE_DEFAULT:
-        case GDK_GL_PROFILE_3_2_CORE:
-          if (minor != NULL)
-            *minor = 2;
-          break;
-        }
-    }
+    maj = 3;
+
+  if (priv->minor > 0)
+    min = priv->minor;
+  else
+    min = 2;
+
+  if (major != NULL)
+    *major = maj;
+  if (minor != NULL)
+    *minor = min;
 }
 
 /**
@@ -601,7 +590,7 @@ gdk_gl_context_realize (GdkGLContext  *context,
   g_return_val_if_fail (GDK_IS_GL_CONTEXT (context), FALSE);
 
   if (priv->realized)
-    return priv->realized;
+    return TRUE;
 
   priv->realized = GDK_GL_CONTEXT_GET_CLASS (context)->realize (context, error);
 
