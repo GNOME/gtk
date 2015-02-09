@@ -91,26 +91,6 @@ create_shader (int         type,
   return shader;
 }
 
-/* The code for the vertex shader we are going to use */
-static const char *vertex_shader_code =
-"#version 330\n" \
-"\n" \
-"layout(location = 0) in vec4 position;\n" \
-"uniform mat4 mvp;\n"
-"void main() {\n" \
-"  gl_Position = mvp * position;\n" \
-"}";
-
-/* The code for the fragment shader we are going to use */
-static const char *fragment_shader_code =
-"#version 330\n" \
-"\n" \
-"out vec4 outputColor;\n" \
-"void main() {\n" \
-"  float lerpVal = gl_FragCoord.y / 400.0f;\n" \
-"  outputColor = mix(vec4(1.0f, 0.85f, 0.35f, 1.0f), vec4(0.2f, 0.2f, 0.2f, 1.0f), lerpVal);\n" \
-"}";
-
 /* Initialize the shaders and link them into a program */
 static void
 init_shaders (GLuint *program_out,
@@ -120,15 +100,22 @@ init_shaders (GLuint *program_out,
   GLuint program = 0;
   GLuint mvp = 0;
   int status;
+  GBytes *source;
 
-  vertex = create_shader (GL_VERTEX_SHADER, vertex_shader_code);
+  source = g_resources_lookup_data ("/shaders/glarea-vertex.glsl", 0, NULL);
+  vertex = create_shader (GL_VERTEX_SHADER, g_bytes_get_data (source, NULL));
+  g_bytes_unref (source);
+
   if (vertex == 0)
     {
       *program_out = 0;
       return;
     }
 
-  fragment = create_shader (GL_FRAGMENT_SHADER, fragment_shader_code);
+  source = g_resources_lookup_data ("/shaders/glarea-fragment.glsl", 0, NULL);
+  fragment = create_shader (GL_FRAGMENT_SHADER, g_bytes_get_data (source, NULL));
+  g_bytes_unref (source);
+
   if (fragment == 0)
     {
       glDeleteShader (vertex);
