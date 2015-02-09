@@ -181,6 +181,7 @@ static void gtk_style_context_impl_get_property (GObject      *object,
                                                  GValue       *value,
                                                  GParamSpec   *pspec);
 
+static GtkCssNode * gtk_style_context_get_root (GtkStyleContext *context);
 
 G_DEFINE_TYPE_WITH_PRIVATE (GtkStyleContext, gtk_style_context, G_TYPE_OBJECT)
 
@@ -459,7 +460,7 @@ gtk_style_context_is_saved (GtkStyleContext *context)
   return context->priv->saved_nodes != NULL;
 }
 
-GtkCssNode *
+static GtkCssNode *
 gtk_style_context_get_root (GtkStyleContext *context)
 {
   GtkStyleContextPrivate *priv;

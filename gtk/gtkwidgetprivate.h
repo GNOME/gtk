@@ -32,6 +32,7 @@
 
 G_BEGIN_DECLS
 
+GtkCssNode *  gtk_widget_get_css_node       (GtkWidget *widget);
 void         _gtk_widget_set_visible_flag   (GtkWidget *widget,
                                              gboolean   visible);
 gboolean     _gtk_widget_get_in_reparent    (GtkWidget *widget);

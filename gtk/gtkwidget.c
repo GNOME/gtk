@@ -16413,6 +16413,12 @@ _gtk_widget_style_context_invalidated (GtkWidget *widget)
     }
 }
 
+GtkCssNode *
+gtk_widget_get_css_node (GtkWidget *widget)
+{
+  return widget->priv->cssnode;
+}
+
 /**
  * gtk_widget_get_style_context:
  * @widget: a #GtkWidget
@@ -16466,10 +16472,7 @@ _gtk_widget_invalidate_style_context (GtkWidget    *widget,
 
   priv = widget->priv;
 
-  if (priv->context == NULL)
-    return;
-
-  gtk_css_node_invalidate (gtk_style_context_get_root (priv->context), change);
+  gtk_css_node_invalidate (priv->cssnode, change);
 }
 
 /**
