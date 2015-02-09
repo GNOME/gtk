@@ -253,7 +253,7 @@ gtk_css_matcher_node_get_parent (GtkCssMatcher       *matcher,
   if (node == NULL)
     return FALSE;
 
-  return gtk_css_node_init_matcher (node, matcher, NULL);
+  return gtk_css_node_init_matcher (node, matcher);
 }
 
 static gboolean
@@ -266,7 +266,7 @@ gtk_css_matcher_node_get_previous (GtkCssMatcher       *matcher,
   if (node == NULL)
     return FALSE;
 
-  return gtk_css_node_init_matcher (node, matcher, NULL);
+  return gtk_css_node_init_matcher (node, matcher);
 }
 
 static GtkStateFlags

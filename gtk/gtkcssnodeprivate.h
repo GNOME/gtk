@@ -58,8 +58,7 @@ struct _GtkCssNodeClass
   GObjectClass object_class;
 
   gboolean              (* init_matcher)                (GtkCssNode            *cssnode,
-                                                         GtkCssMatcher         *matcher,
-                                                         GtkWidgetPath        **path);
+                                                         GtkCssMatcher         *matcher);
   GtkWidgetPath *       (* create_widget_path)          (GtkCssNode            *cssnode);
   const GtkWidgetPath * (* get_widget_path)             (GtkCssNode            *cssnode);
   GtkStyleProviderPrivate *(* get_style_provider)       (GtkCssNode            *cssnode);
@@ -135,8 +134,7 @@ void                    gtk_css_node_set_invalid        (GtkCssNode            *
                                                          gboolean               invalid);
 
 gboolean                gtk_css_node_init_matcher       (GtkCssNode            *cssnode,
-                                                         GtkCssMatcher         *matcher,
-                                                         GtkWidgetPath        **path);
+                                                         GtkCssMatcher         *matcher);
 GtkWidgetPath *         gtk_css_node_create_widget_path (GtkCssNode            *cssnode);
 const GtkWidgetPath *   gtk_css_node_get_widget_path    (GtkCssNode            *cssnode);
 GtkStyleProviderPrivate *gtk_css_node_get_style_provider(GtkCssNode            *cssnode);

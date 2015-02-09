@@ -170,8 +170,7 @@ gtk_css_widget_node_validate (GtkCssNode       *node,
 
 gboolean
 gtk_css_widget_node_init_matcher (GtkCssNode     *node,
-                                  GtkCssMatcher  *matcher,
-                                  GtkWidgetPath **path_out)
+                                  GtkCssMatcher  *matcher)
 {
   GtkCssWidgetNode *widget_node = GTK_CSS_WIDGET_NODE (node);
 

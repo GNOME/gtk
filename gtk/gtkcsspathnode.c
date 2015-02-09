@@ -49,8 +49,7 @@ gtk_css_path_node_invalidate (GtkCssNode *node)
 
 gboolean
 gtk_css_path_node_real_init_matcher (GtkCssNode     *node,
-                                     GtkCssMatcher  *matcher,
-                                     GtkWidgetPath **path_out)
+                                     GtkCssMatcher  *matcher)
 {
   GtkCssPathNode *path_node = GTK_CSS_PATH_NODE (node);
 

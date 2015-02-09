@@ -181,7 +181,6 @@ gtk_css_node_update_style (GtkCssNode       *cssnode,
 {
   const GtkCssNodeDeclaration *decl;
   GtkCssMatcher matcher;
-  GtkWidgetPath *path;
   GtkCssStyle *parent;
   GtkCssStyle *result;
 
@@ -192,7 +191,7 @@ gtk_css_node_update_style (GtkCssNode       *cssnode,
   if (result)
     return g_object_ref (result);
 
-  if (!gtk_css_node_init_matcher (cssnode, &matcher, &path))
+  if (!gtk_css_node_init_matcher (cssnode, &matcher))
     {
       g_assert_not_reached ();
     }
@@ -202,9 +201,6 @@ gtk_css_node_update_style (GtkCssNode       *cssnode,
                                             gtk_css_node_get_style_provider (cssnode),
                                             &matcher,
                                             parent);
-
-  if (path)
-    gtk_widget_path_free (path);
 
   store_in_global_parent_cache (cssnode, parent, decl, style);
 
@@ -216,7 +212,6 @@ gtk_css_node_create_style (GtkCssNode *cssnode)
 {
   const GtkCssNodeDeclaration *decl;
   GtkCssMatcher matcher;
-  GtkWidgetPath *path;
   GtkCssStyle *parent;
   GtkCssStyle *style;
 
@@ -227,7 +222,7 @@ gtk_css_node_create_style (GtkCssNode *cssnode)
   if (style)
     return g_object_ref (style);
 
-  if (gtk_css_node_init_matcher (cssnode, &matcher, &path))
+  if (gtk_css_node_init_matcher (cssnode, &matcher))
     style = gtk_css_static_style_new_compute (gtk_css_node_get_style_provider (cssnode),
                                               &matcher,
                                               parent);
@@ -235,9 +230,6 @@ gtk_css_node_create_style (GtkCssNode *cssnode)
     style = gtk_css_static_style_new_compute (gtk_css_node_get_style_provider (cssnode),
                                               NULL,
                                               parent);
-
-  if (path)
-    gtk_widget_path_free (path);
 
   store_in_global_parent_cache (cssnode, parent, decl, style);
 
@@ -298,8 +290,7 @@ gtk_css_node_real_validate (GtkCssNode       *cssnode,
 
 gboolean
 gtk_css_node_real_init_matcher (GtkCssNode     *cssnode,
-                                GtkCssMatcher  *matcher,
-                                GtkWidgetPath **path_out)
+                                GtkCssMatcher  *matcher)
 {
   _gtk_css_matcher_node_init (matcher, cssnode);
 
@@ -704,13 +695,9 @@ gtk_css_node_validate (GtkCssNode            *cssnode,
 
 gboolean
 gtk_css_node_init_matcher (GtkCssNode     *cssnode,
-                           GtkCssMatcher  *matcher,
-                           GtkWidgetPath **path_out)
+                           GtkCssMatcher  *matcher)
 {
-  if (path_out)
-    *path_out = NULL;
-
-  return GTK_CSS_NODE_GET_CLASS (cssnode)->init_matcher (cssnode, matcher, path_out);
+  return GTK_CSS_NODE_GET_CLASS (cssnode)->init_matcher (cssnode, matcher);
 }
 
 GtkWidgetPath *
