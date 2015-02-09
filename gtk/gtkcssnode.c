@@ -301,24 +301,8 @@ gtk_css_node_real_init_matcher (GtkCssNode     *cssnode,
                                 GtkCssMatcher  *matcher,
                                 GtkWidgetPath **path_out)
 {
-  GtkWidgetPath *path;
-  
-  path = gtk_css_node_create_widget_path (cssnode);
+  _gtk_css_matcher_node_init (matcher, cssnode);
 
-  if (!_gtk_css_matcher_init (matcher, path, NULL))
-    {
-      gtk_widget_path_free (path);
-      return FALSE;
-    }
-
-  if (path_out == NULL)
-    {
-      gtk_widget_path_free (path);
-      g_assert_not_reached ();
-      return FALSE;
-    }
-
-  *path_out = path;
   return TRUE;
 }
 
