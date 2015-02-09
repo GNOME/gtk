@@ -359,6 +359,110 @@ gtk_css_node_parent_will_be_set (GtkCssNode *node)
     GTK_CSS_NODE_GET_CLASS (node)->dequeue_validate (node);
 }
 
+static void
+gtk_css_node_unlink_from_siblings (GtkCssNode *node)
+{
+  if (GTK_IS_CSS_TRANSIENT_NODE (node))
+    return;
+
+  if (node->previous_sibling)
+    node->previous_sibling->next_sibling = node->next_sibling;
+  else
+    node->parent->first_child = node->next_sibling;
+
+  if (node->next_sibling)
+    node->next_sibling->previous_sibling = node->previous_sibling;
+  else
+    node->parent->last_child = node->previous_sibling;
+
+  node->previous_sibling = NULL;
+  node->next_sibling = NULL;
+}
+
+static void
+gtk_css_node_link_to_siblings (GtkCssNode *node,
+                               GtkCssNode *new_previous)
+{
+  if (GTK_IS_CSS_TRANSIENT_NODE (node))
+    return;
+
+  if (new_previous)
+    {
+      node->previous_sibling = new_previous;
+      node->next_sibling = new_previous->next_sibling;
+      new_previous->next_sibling = node;
+    }
+  else
+    {
+      node->next_sibling = node->parent->first_child;
+      node->parent->first_child = node;
+    }
+
+  if (node->next_sibling)
+    node->next_sibling->previous_sibling = node;
+  else
+    node->parent->last_child = node;
+}
+
+static void
+gtk_css_node_set_children_changed (GtkCssNode *node)
+{
+  if (node->children_changed)
+    return;
+
+  node->children_changed = TRUE;
+  gtk_css_node_set_invalid (node, TRUE);
+}
+
+static void
+gtk_css_node_reposition (GtkCssNode *node,
+                         GtkCssNode *parent,
+                         GtkCssNode *previous)
+{
+  g_assert (! (parent == NULL && previous != NULL));
+
+  /* Take a reference here so the whole function has a reference */
+  g_object_ref (node);
+
+  if (node->parent != NULL)
+    gtk_css_node_unlink_from_siblings (node);
+
+  if (node->parent != parent)
+    {
+      if (node->parent == NULL)
+        {
+          gtk_css_node_parent_will_be_set (node);
+        }
+      else
+        {
+          g_object_unref (node);
+          gtk_css_node_set_children_changed (node->parent);
+        }
+
+      node->parent = parent;
+
+      if (parent)
+        {
+          gtk_css_node_set_children_changed (parent);
+          g_object_ref (node);
+
+          if (node->invalid)
+            gtk_css_node_set_invalid (parent, TRUE);
+        }
+      else
+        {
+          gtk_css_node_parent_was_unset (node);
+        }
+    }
+
+  if (parent)
+    gtk_css_node_link_to_siblings (node, previous);
+
+  gtk_css_node_invalidate (node, GTK_CSS_CHANGE_ANY_PARENT | GTK_CSS_CHANGE_ANY_SIBLING);
+
+  g_object_unref (node);
+}
+
 void
 gtk_css_node_set_parent (GtkCssNode *node,
                          GtkCssNode *parent)
@@ -366,66 +470,7 @@ gtk_css_node_set_parent (GtkCssNode *node,
   if (node->parent == parent)
     return;
 
-  /* Take a reference here so the whole function has a reference */
-  g_object_ref (node);
-
-  if (node->parent != NULL)
-    {
-      if (!GTK_IS_CSS_TRANSIENT_NODE (node))
-        {
-          if (node->previous_sibling)
-            node->previous_sibling->next_sibling = node->next_sibling;
-          else
-            node->parent->first_child = node->next_sibling;
-
-          if (node->next_sibling)
-            node->next_sibling->previous_sibling = node->previous_sibling;
-          else
-            node->parent->last_child = node->previous_sibling;
-
-          node->parent->n_children--;
-        }
-
-      node->parent = NULL;
-      node->next_sibling = NULL;
-      node->previous_sibling = NULL;
-
-      g_object_unref (node);
-
-      if (parent == NULL)
-        gtk_css_node_parent_was_unset (node);
-    }
-
-  if (parent)
-    {
-      if (node->parent == NULL)
-        gtk_css_node_parent_will_be_set (node);
-
-      node->parent = parent;
-
-      if (!GTK_IS_CSS_TRANSIENT_NODE (node))
-        {
-          parent->n_children++;
-
-          if (parent->last_child)
-            {
-              parent->last_child->next_sibling = node;
-              node->previous_sibling = parent->last_child;
-            }
-          parent->last_child = node;
-
-          if (parent->first_child == NULL)
-            parent->first_child = node;
-        }
-
-      if (node->invalid)
-        gtk_css_node_set_invalid (parent, TRUE);
-    }
-
-  gtk_css_node_invalidate (node, GTK_CSS_CHANGE_ANY_PARENT | GTK_CSS_CHANGE_ANY_SIBLING);
-
-  if (node->parent == NULL)
-    g_object_unref (node);
+  gtk_css_node_reposition (node, parent, parent ? parent->last_child : NULL);
 }
 
 GtkCssNode *
@@ -638,6 +683,11 @@ gtk_css_node_propagate_pending_changes (GtkCssNode *cssnode)
     return;
 
   change = _gtk_css_change_for_child (cssnode->pending_changes);
+  if (cssnode->children_changed)
+    {
+      change |= GTK_CSS_CHANGE_POSITION | GTK_CSS_CHANGE_ANY_SIBLING;
+      cssnode->children_changed = FALSE;
+    }
 
   for (child = gtk_css_node_get_first_child (cssnode);
        child;
@@ -671,10 +721,10 @@ gtk_css_node_validate (GtkCssNode            *cssnode,
   if (G_UNLIKELY (gtk_get_debug_flags () & GTK_DEBUG_NO_CSS_CACHE))
     change = GTK_CSS_CHANGE_ANY;
 
+  gtk_css_node_propagate_pending_changes (cssnode);
+
   if (!cssnode->invalid && change == 0 && _gtk_bitmask_is_empty (parent_changes))
     return;
-
-  gtk_css_node_propagate_pending_changes (cssnode);
 
   gtk_css_node_set_invalid (cssnode, FALSE);
 

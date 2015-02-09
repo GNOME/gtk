@@ -43,7 +43,6 @@ struct _GtkCssNode
   GtkCssNode *next_sibling;
   GtkCssNode *first_child;
   GtkCssNode *last_child;
-  guint n_children;
 
   GtkCssNodeDeclaration *decl;
   GtkCssStyle           *style;
@@ -51,6 +50,7 @@ struct _GtkCssNode
   GtkCssChange           pending_changes;       /* changes that accumulated since the style was last computed */
 
   guint                  invalid :1;            /* node or a child needs to be validated (even if just for animation) */
+  guint                  children_changed :1;   /* the children changed since last validation */
 };
 
 struct _GtkCssNodeClass
