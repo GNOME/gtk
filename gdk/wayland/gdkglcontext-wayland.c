@@ -100,6 +100,8 @@ gdk_wayland_window_invalidate_for_new_frame (GdkWindow      *window,
     }
 }
 
+#define N_EGL_ATTRS     16
+
 static gboolean
 gdk_wayland_gl_context_realize (GdkGLContext *context,
                                 GError      **error)
@@ -110,36 +112,46 @@ gdk_wayland_gl_context_realize (GdkGLContext *context,
   GdkGLProfile profile = gdk_gl_context_get_profile (context);
   GdkWaylandDisplay *display_wayland = GDK_WAYLAND_DISPLAY (display);
   EGLContext ctx;
-  EGLint context_attribs[16];
-  int i;
+  EGLint context_attribs[N_EGL_ATTRS];
+  int major, minor, flags;
+  gboolean debug_bit, forward_bit;
+  int i = 0;
 
-  i = 0;
-  if (profile == GDK_GL_PROFILE_3_2_CORE)
+  if (profile != GDK_GL_PROFILE_3_2_CORE)
     {
-      int major, minor, flags;
-      gboolean debug_bit, forward_bit;
-
-      gdk_gl_context_get_required_version (context, &major, &minor);
-      debug_bit = gdk_gl_context_get_debug_enabled (context);
-      forward_bit = gdk_gl_context_get_forward_compatible (context);
-
-      flags = 0;
-
-      if (debug_bit)
-        flags |= EGL_CONTEXT_OPENGL_DEBUG_BIT_KHR;
-      if (forward_bit)
-        flags |= EGL_CONTEXT_OPENGL_FORWARD_COMPATIBLE_BIT_KHR;
-
-      context_attribs[i++] = EGL_CONTEXT_OPENGL_PROFILE_MASK_KHR;
-      context_attribs[i++] = EGL_CONTEXT_OPENGL_CORE_PROFILE_BIT_KHR;
-      context_attribs[i++] = EGL_CONTEXT_MAJOR_VERSION_KHR;
-      context_attribs[i++] = major;
-      context_attribs[i++] = EGL_CONTEXT_MINOR_VERSION_KHR;
-      context_attribs[i++] = minor;
-      context_attribs[i++] = EGL_CONTEXT_FLAGS_KHR;
-      context_attribs[i++] = flags;
+      g_set_error_literal (error, GDK_GL_ERROR,
+                           GDK_GL_ERROR_UNSUPPORTED_PROFILE,
+                           _("Unsupported profile for a GL context"));
+      return FALSE;
     }
+
+  gdk_gl_context_get_required_version (context, &major, &minor);
+  debug_bit = gdk_gl_context_get_debug_enabled (context);
+  forward_bit = gdk_gl_context_get_forward_compatible (context);
+
+  flags = 0;
+
+  if (debug_bit)
+    flags |= EGL_CONTEXT_OPENGL_DEBUG_BIT_KHR;
+  if (forward_bit)
+    flags |= EGL_CONTEXT_OPENGL_FORWARD_COMPATIBLE_BIT_KHR;
+
+  /* We want a core profile */
+  context_attribs[i++] = EGL_CONTEXT_OPENGL_PROFILE_MASK_KHR;
+  context_attribs[i++] = EGL_CONTEXT_OPENGL_CORE_PROFILE_BIT_KHR;
+
+  /* Specify the version */
+  context_attribs[i++] = EGL_CONTEXT_MAJOR_VERSION_KHR;
+  context_attribs[i++] = major;
+  context_attribs[i++] = EGL_CONTEXT_MINOR_VERSION_KHR;
+  context_attribs[i++] = minor;
+
+  /* Specify the flags */
+  context_attribs[i++] = EGL_CONTEXT_FLAGS_KHR;
+  context_attribs[i++] = flags;
+
   context_attribs[i++] = EGL_NONE;
+  g_assert (i < N_EGL_ATTRS);
 
   ctx = eglCreateContext (display_wayland->egl_display,
                           context_wayland->egl_config,
