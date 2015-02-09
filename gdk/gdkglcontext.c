@@ -419,7 +419,6 @@ gdk_gl_context_set_debug_enabled (GdkGLContext *context,
 
   g_return_if_fail (GDK_IS_GL_CONTEXT (context));
   g_return_if_fail (!priv->realized);
-  g_return_if_fail (priv->profile == GDK_GL_PROFILE_3_2_CORE);
 
   enabled = !!enabled;
 
@@ -470,6 +469,9 @@ gdk_gl_context_set_forward_compatible (GdkGLContext *context,
                                        gboolean      compatible)
 {
   GdkGLContextPrivate *priv = gdk_gl_context_get_instance_private (context);
+
+  g_return_if_fail (GDK_IS_GL_CONTEXT (context));
+  g_return_if_fail (!priv->realized);
 
   compatible = !!compatible;
 
