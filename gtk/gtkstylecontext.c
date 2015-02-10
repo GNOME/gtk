@@ -883,17 +883,24 @@ gtk_style_context_lookup_style (GtkStyleContext *context)
   if (cssnode->values)
     return cssnode->values;
 
-  values = g_hash_table_lookup (priv->style_values, cssnode->decl);
-  if (values)
+  if (!gtk_style_context_is_saved (context))
     {
-      gtk_css_node_set_values (cssnode, values);
-      return values;
+      values = build_properties (context, cssnode->decl, TRUE, gtk_css_node_get_parent_style (context, cssnode));
     }
+  else
+    {
+      values = g_hash_table_lookup (priv->style_values, cssnode->decl);
+      if (values)
+        {
+          gtk_css_node_set_values (cssnode, values);
+          return values;
+        }
 
-  values = build_properties (context, cssnode->decl, FALSE, gtk_css_node_get_parent_style (context, cssnode));
-  g_hash_table_insert (priv->style_values,
-                       gtk_css_node_declaration_ref (cssnode->decl),
-                       g_object_ref (values));
+      values = build_properties (context, cssnode->decl, FALSE, gtk_css_node_get_parent_style (context, cssnode));
+      g_hash_table_insert (priv->style_values,
+                           gtk_css_node_declaration_ref (cssnode->decl),
+                           g_object_ref (values));
+    }
   
   gtk_css_node_set_values (cssnode, values);
   g_object_unref (values);
