@@ -1,0 +1,32 @@
+* {
+  all: unset;
+  color: transparent;
+}
+
+GtkBox *:nth-child(1) {
+  background-color: red;
+}
+
+GtkBox *:nth-child(2) {
+  background-color: orange;
+}
+
+GtkBox *:nth-child(3) {
+  background-color: yellow;
+}
+
+GtkBox *:nth-child(4) {
+  background-color: lime;
+}
+
+GtkBox *:nth-child(5) {
+  background-color: blue;
+}
+
+GtkBox *:nth-child(6) {
+  background-color: indigo;
+}
+
+GtkBox *:nth-child(7) {
+  background-color: darkViolet;
+}
