@@ -201,7 +201,7 @@ draw_axes_info (cairo_t       *cr,
                 AxesInfo      *info,
                 GtkAllocation *allocation)
 {
-  gdouble pressure, tilt_x, tilt_y, wheel;
+  gdouble pressure, tilt_x, tilt_y, distance, wheel;
   GdkAxisFlags axes = gdk_device_get_axes (info->last_source);
 
   cairo_save (cr);
@@ -245,6 +245,33 @@ draw_axes_info (cairo_t       *cr,
                            &tilt_y);
 
       render_arrow (cr, tilt_x * 100, tilt_y * 100, "Tilt");
+    }
+
+  if (axes & GDK_AXIS_FLAG_DISTANCE)
+    {
+      double dashes[] = { 5.0, 5.0 };
+      cairo_text_extents_t extents;
+
+      gdk_device_get_axis (info->last_source, info->axes, GDK_AXIS_DISTANCE,
+                           &distance);
+
+      cairo_save (cr);
+
+      cairo_move_to (cr, distance * 100, 0);
+
+      cairo_set_source_rgb (cr, 0.0, 0.0, 0.0);
+      cairo_set_dash (cr, dashes, 2, 0.0);
+      cairo_arc (cr, 0, 0, distance * 100, 0, 2 * G_PI);
+      cairo_stroke (cr);
+
+      cairo_move_to (cr, 0, -distance * 100);
+      cairo_text_extents (cr, "Distance", &extents);
+      cairo_rel_move_to (cr, -extents.width / 2, 0);
+      cairo_show_text (cr, "Distance");
+
+      cairo_move_to (cr, 0, 0);
+
+      cairo_restore (cr);
     }
 
   if (axes & GDK_AXIS_FLAG_WHEEL)
