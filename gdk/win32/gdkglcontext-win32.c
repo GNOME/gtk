@@ -395,15 +395,14 @@ _create_gl_context (HDC hdc,
                     int major,
                     int minor)
 {
-  HGLRC hglrc;
+  /* we still need a legacy WGL context first for all cases */
+  HGLRC hglrc_base;
 
-  /* we need a legacy context first, for all cases */
-  hglrc = wglCreateContext (hdc);
-
-  /* Create a WGL 3.2 context, the legacy context *is* needed here */
+  /* Create the WGL Core (3.2+) context, the legacy context *is* needed here */
   if (profile == GDK_GL_PROFILE_3_2_CORE)
     {
-      HGLRC hglrc_32;
+      /* This is the actual WGL context that we want */
+      HGLRC hglrc;
       GdkWin32GLContext *context_win32;
 
       gint attribs[] = {
@@ -414,34 +413,25 @@ _create_gl_context (HDC hdc,
         0
       };
 
-      if (!wglMakeCurrent (hdc, hglrc))
+      hglrc_base = wglCreateContext (hdc);
+
+      if (!wglMakeCurrent (hdc, hglrc_base))
         return NULL;
 
       if (share != NULL)
         context_win32 = GDK_WIN32_GL_CONTEXT (share);
 
-      hglrc_32 = wglCreateContextAttribsARB (hdc,
-                                             share != NULL ? context_win32->hglrc : NULL,
-                                             attribs);
+      hglrc = wglCreateContextAttribsARB (hdc,
+                                          share != NULL ? context_win32->hglrc : NULL,
+                                          attribs);
 
       wglMakeCurrent (NULL, NULL);
-      wglDeleteContext (hglrc);
-      return hglrc_32;
-    }
-  else
-    {
-      /* for legacy WGL, we can't share lists during context creation,
-       * so do so immediately afterwards.
-       * The flags, and major and minor versions of WGL to request
-       * for are ignored for a legacy context.
-       */
-      if (share != NULL)
-        {
-          HGLRC hglrc_shared = GDK_WIN32_GL_CONTEXT (share)->hglrc;
-          wglShareLists (hglrc_shared, hglrc);
-        }
+      wglDeleteContext (hglrc_base);
       return hglrc;
     }
+  else
+    /* Should not get here anyways, for now */
+    return NULL;
 }
 
 static gboolean
@@ -524,13 +514,12 @@ _gdk_win32_gl_context_realize (GdkGLContext *context,
     }
   else
     {
-      GDK_NOTE (OPENGL, g_print ("Creating legacy WGL context\n"));
+      g_set_error_literal (error,
+                           GDK_GL_ERROR,
+                           GDK_GL_ERROR_UNSUPPORTED_PROFILE,
+                           _("Unsupported profile for a GL context"));
 
-      /* flags, glver_major, glver_minor are ignored unless we are using WGL 3.2+ core contexts */
-      hglrc = _create_gl_context (context_win32->gl_hdc,
-                                  share,
-                                  profile,
-                                  0, 0, 0);
+      return FALSE;
     }
 
   if (hglrc == NULL)
