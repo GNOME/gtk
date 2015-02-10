@@ -168,7 +168,8 @@ static void                 gtk_list_box_add_move_binding             (GtkBindin
                                                                        GtkMovementStep      step,
                                                                        gint                 count);
 static void                 gtk_list_box_update_cursor                (GtkListBox          *box,
-                                                                       GtkListBoxRow       *row);
+                                                                       GtkListBoxRow       *row,
+                                                                       gboolean             grab_focus);
 static void                 gtk_list_box_select_and_activate          (GtkListBox          *box,
                                                                        GtkListBoxRow       *row);
 static void                 gtk_list_box_update_prelight              (GtkListBox          *box,
@@ -1380,11 +1381,13 @@ ensure_row_visible (GtkListBox    *box,
 
 static void
 gtk_list_box_update_cursor (GtkListBox    *box,
-                            GtkListBoxRow *row)
+                            GtkListBoxRow *row,
+                            gboolean grab_focus)
 {
   BOX_PRIV (box)->cursor_row = row;
-  ensure_row_visible (box, row); 
-  gtk_widget_grab_focus (GTK_WIDGET (row));
+  ensure_row_visible (box, row);
+  if (grab_focus)
+    gtk_widget_grab_focus (GTK_WIDGET (row));
   gtk_widget_queue_draw (GTK_WIDGET (row));
   _gtk_list_box_accessible_update_cursor (box, row);
 }
@@ -1549,7 +1552,7 @@ gtk_list_box_update_selection (GtkListBox    *box,
 {
   GtkListBoxPrivate *priv = BOX_PRIV (box);
 
-  gtk_list_box_update_cursor (box, row);
+  gtk_list_box_update_cursor (box, row, TRUE);
 
   if (priv->selection_mode == GTK_SELECTION_NONE)
     return;
@@ -1624,7 +1627,7 @@ gtk_list_box_select_and_activate (GtkListBox    *box,
   if (row != NULL)
     {
       gtk_list_box_select_row_internal (box, row);
-      gtk_list_box_update_cursor (box, row);
+      gtk_list_box_update_cursor (box, row, TRUE);
       gtk_list_box_activate (box, row);
     }
 }
@@ -2850,7 +2853,7 @@ gtk_list_box_move_cursor (GtkListBox      *box,
 
   get_current_selection_modifiers (GTK_WIDGET (box), &modify, &extend);
 
-  gtk_list_box_update_cursor (box, row);
+  gtk_list_box_update_cursor (box, row, TRUE);
   if (!modify)
     gtk_list_box_update_selection (box, row, FALSE, extend);
 }
@@ -2900,7 +2903,7 @@ gtk_list_box_row_set_focus (GtkListBoxRow *row)
   get_current_selection_modifiers (GTK_WIDGET (row), &modify, &extend);
 
   if (modify)
-    gtk_list_box_update_cursor (box, row);
+    gtk_list_box_update_cursor (box, row, TRUE);
   else
     gtk_list_box_update_selection (box, row, FALSE, FALSE);
 }
@@ -3459,6 +3462,18 @@ gtk_list_box_row_finalize (GObject *obj)
 }
 
 static void
+gtk_list_box_row_grab_focus (GtkWidget *widget)
+{
+  GtkListBoxRow *row = GTK_LIST_BOX_ROW (widget);
+  GtkListBox *box = gtk_list_box_row_get_box (row);
+
+  if (BOX_PRIV (box)->cursor_row != row)
+    gtk_list_box_update_cursor (box, row, FALSE);
+
+  GTK_WIDGET_CLASS (gtk_list_box_row_parent_class)->grab_focus (widget);
+}
+
+static void
 gtk_list_box_row_class_init (GtkListBoxRowClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
@@ -3479,6 +3494,7 @@ gtk_list_box_row_class_init (GtkListBoxRowClass *klass)
   widget_class->get_preferred_width_for_height = gtk_list_box_row_get_preferred_width_for_height;
   widget_class->size_allocate = gtk_list_box_row_size_allocate;
   widget_class->focus = gtk_list_box_row_focus;
+  widget_class->grab_focus = gtk_list_box_row_grab_focus;
 
   klass->activate = gtk_list_box_row_activate;
 
