@@ -89,8 +89,8 @@ typedef struct _GtkTextAppearance GtkTextAppearance;
 struct _GtkTextAppearance
 {
   /*< public >*/
-  GdkColor bg_color;
-  GdkColor fg_color;
+  GdkColor bg_color; /* pixel is taken for underline color */
+  GdkColor fg_color; /* pixel is taken for strikethrough color */
 
   /* super/subscript rise, can be negative */
   gint rise;

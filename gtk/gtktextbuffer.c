@@ -4793,9 +4793,37 @@ get_tag_for_attributes (PangoAttrIterator *iter)
   if (attr)
     g_object_set (tag, "underline", ((PangoAttrInt*)attr)->value, NULL);
 
+  attr = pango_attr_iterator_get (iter, PANGO_ATTR_UNDERLINE_COLOR);
+  if (attr)
+    {
+      PangoColor *color;
+      GdkRGBA rgba;
+
+      color = &((PangoAttrColor*)attr)->color;
+      rgba.red = color->red / 65535.;
+      rgba.green = color->green / 65535.;
+      rgba.blue = color->blue / 65535.;
+      rgba.alpha = 1.;
+      g_object_set (tag, "underline-rgba", &rgba, NULL);
+    }
+
   attr = pango_attr_iterator_get (iter, PANGO_ATTR_STRIKETHROUGH);
   if (attr)
     g_object_set (tag, "strikethrough", (gboolean) (((PangoAttrInt*)attr)->value != 0), NULL);
+
+  attr = pango_attr_iterator_get (iter, PANGO_ATTR_STRIKETHROUGH_COLOR);
+  if (attr)
+    {
+      PangoColor *color;
+      GdkRGBA rgba;
+
+      color = &((PangoAttrColor*)attr)->color;
+      rgba.red = color->red / 65535.;
+      rgba.green = color->green / 65535.;
+      rgba.blue = color->blue / 65535.;
+      rgba.alpha = 1.;
+      g_object_set (tag, "strikethrough-rgba", &rgba, NULL);
+    }
 
   attr = pango_attr_iterator_get (iter, PANGO_ATTR_RISE);
   if (attr)

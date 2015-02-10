@@ -74,6 +74,7 @@
 #include <stdlib.h>
 #include <string.h>
 
+#include "gtktextattributesprivate.h"
 #include "gtktexttag.h"
 #include "gtktexttypes.h"
 #include "gtktexttagtable.h"
@@ -119,8 +120,10 @@ enum {
   PROP_LEFT_MARGIN,
   PROP_INDENT,
   PROP_STRIKETHROUGH,
+  PROP_STRIKETHROUGH_RGBA,
   PROP_RIGHT_MARGIN,
   PROP_UNDERLINE,
+  PROP_UNDERLINE_RGBA,
   PROP_RISE,
   PROP_BACKGROUND_FULL_HEIGHT,
   PROP_LANGUAGE,
@@ -154,8 +157,10 @@ enum {
   PROP_LEFT_MARGIN_SET,
   PROP_INDENT_SET,
   PROP_STRIKETHROUGH_SET,
+  PROP_STRIKETHROUGH_RGBA_SET,
   PROP_RIGHT_MARGIN_SET,
   PROP_UNDERLINE_SET,
+  PROP_UNDERLINE_RGBA_SET,
   PROP_RISE_SET,
   PROP_BACKGROUND_FULL_HEIGHT_SET,
   PROP_LANGUAGE_SET,
@@ -518,7 +523,43 @@ gtk_text_tag_class_init (GtkTextTagClass *klass)
                                                       PANGO_TYPE_UNDERLINE,
                                                       PANGO_UNDERLINE_NONE,
                                                       GTK_PARAM_READWRITE));
-  
+
+  /**
+   * GtkTextTag:underline-rgba:
+   *
+   * This property modifies the color of underlines. If not set, underlines
+   * will use the forground color.
+   *
+   * If #GtkTextTag:underline is set to %PANGO_UNDERLINE_ERROR, an alternate
+   * color may be applied instead of the foreground. Setting this property
+   * will always override those defaults.
+   *
+   * Since: 3.18
+   */
+  g_object_class_install_property (object_class,
+                                   PROP_UNDERLINE_RGBA,
+                                   g_param_spec_boxed ("underline-rgba",
+                                                       P_("Underline RGBA"),
+                                                       P_("Color of underline for this text"),
+                                                       GDK_TYPE_RGBA,
+                                                       GTK_PARAM_READWRITE));
+
+  /**
+   * GtkTextTag:strikethrough-rgba:
+   *
+   * This property modifies the color of strikeouts. If not set, strikeouts
+   * will use the forground color.
+   *
+   * Since: 3.18
+   */
+  g_object_class_install_property (object_class,
+                                   PROP_STRIKETHROUGH_RGBA,
+                                   g_param_spec_boxed ("strikethrough-rgba",
+                                                       P_("Strike-through RGBA"),
+                                                       P_("Color of strike-through for this text"),
+                                                       GDK_TYPE_RGBA,
+                                                       GTK_PARAM_READWRITE));
+
   g_object_class_install_property (object_class,
                                    PROP_WRAP_MODE,
                                    g_param_spec_enum ("wrap-mode",
@@ -746,6 +787,28 @@ gtk_text_tag_class_init (GtkTextTagClass *klass)
                 P_("Underline set"),
                 P_("Whether this tag affects underlining"));
 
+  /**
+   * GtkTextTag:underline-rgba-set:
+   *
+   * If the #GtkTextTag:underline-rgba property has been set.
+   *
+   * Since: 3.18
+   */
+  ADD_SET_PROP ("underline-rgba-set", PROP_UNDERLINE_RGBA_SET,
+                P_("Underline RGBA set"),
+                P_("Whether this tag affects underlining color"));
+
+  /**
+   * GtkTextTag:strikethrough-rgba-set:
+   *
+   * If the #GtkTextTag:strikethrough-rgba property has been set.
+   *
+   * Since: 3.18
+   */
+  ADD_SET_PROP ("strikethrough-rgba-set", PROP_STRIKETHROUGH_RGBA_SET,
+                P_("Strikethrough RGBA set"),
+                P_("Whether this tag affects strikethrough color"));
+
   ADD_SET_PROP ("wrap-mode-set", PROP_WRAP_MODE_SET,
                 P_("Wrap mode set"),
                 P_("Whether this tag affects line wrap mode"));
@@ -860,6 +923,66 @@ copy_gdk_color_to_rgba (GdkColor *src,
   dest->green = src->green / 65535.;
   dest->blue  = src->blue / 65535.;
   dest->alpha = 1;
+}
+
+static void
+set_underline_rgba (GtkTextTag    *tag,
+                    const GdkRGBA *rgba)
+{
+  GtkTextTagPrivate *priv = tag->priv;
+
+  if (rgba)
+    {
+      GTK_TEXT_APPEARANCE_SET_UNDERLINE_RGBA (&priv->values->appearance, rgba);
+
+      if (!GTK_TEXT_APPEARANCE_GET_UNDERLINE_RGBA_SET (&priv->values->appearance))
+        {
+          GTK_TEXT_APPEARANCE_SET_UNDERLINE_RGBA_SET (&priv->values->appearance, TRUE);
+          g_object_notify (G_OBJECT (tag), "underline-rgba-set");
+        }
+    }
+  else
+    {
+      GdkRGBA black = { 0 };
+
+      GTK_TEXT_APPEARANCE_SET_UNDERLINE_RGBA (&priv->values->appearance, &black);
+
+      if (GTK_TEXT_APPEARANCE_GET_UNDERLINE_RGBA_SET (&priv->values->appearance))
+        {
+          GTK_TEXT_APPEARANCE_SET_UNDERLINE_RGBA_SET (&priv->values->appearance, FALSE);
+          g_object_notify (G_OBJECT (tag), "underline-rgba-set");
+        }
+    }
+}
+
+static void
+set_strikethrough_rgba (GtkTextTag    *tag,
+                        const GdkRGBA *rgba)
+{
+  GtkTextTagPrivate *priv = tag->priv;
+
+  if (rgba)
+    {
+      GTK_TEXT_APPEARANCE_SET_STRIKETHROUGH_RGBA (&priv->values->appearance, rgba);
+
+      if (!GTK_TEXT_APPEARANCE_GET_STRIKETHROUGH_RGBA_SET (&priv->values->appearance))
+        {
+          GTK_TEXT_APPEARANCE_SET_STRIKETHROUGH_RGBA_SET (&priv->values->appearance, TRUE);
+          g_object_notify (G_OBJECT (tag), "strikethrough-rgba-set");
+        }
+    }
+  else
+    {
+      GdkRGBA black = { 0 };
+
+      GTK_TEXT_APPEARANCE_SET_STRIKETHROUGH_RGBA (&priv->values->appearance, &black);
+
+      if (GTK_TEXT_APPEARANCE_GET_STRIKETHROUGH_RGBA_SET (&priv->values->appearance))
+        {
+          GTK_TEXT_APPEARANCE_SET_STRIKETHROUGH_RGBA_SET (&priv->values->appearance, FALSE);
+          g_object_notify (G_OBJECT (tag), "strikethrough-rgba-set");
+        }
+    }
 }
 
 static void
@@ -1409,6 +1532,13 @@ gtk_text_tag_set_property (GObject      *object,
       g_object_notify (object, "strikethrough-set");
       break;
 
+    case PROP_STRIKETHROUGH_RGBA:
+      {
+        GdkRGBA *color = g_value_get_boxed (value);
+        set_strikethrough_rgba (text_tag, color);
+      }
+      break;
+
     case PROP_RIGHT_MARGIN:
       priv->right_margin_set = TRUE;
       priv->values->right_margin = g_value_get_int (value);
@@ -1420,6 +1550,13 @@ gtk_text_tag_set_property (GObject      *object,
       priv->underline_set = TRUE;
       priv->values->appearance.underline = g_value_get_enum (value);
       g_object_notify (object, "underline-set");
+      break;
+
+    case PROP_UNDERLINE_RGBA:
+      {
+        GdkRGBA *color = g_value_get_boxed (value);
+        set_underline_rgba (text_tag, color);
+      }
       break;
 
     case PROP_RISE:
@@ -1593,6 +1730,11 @@ gtk_text_tag_set_property (GObject      *object,
       priv->strikethrough_set = g_value_get_boolean (value);
       break;
 
+    case PROP_STRIKETHROUGH_RGBA_SET:
+      GTK_TEXT_APPEARANCE_SET_STRIKETHROUGH_RGBA_SET (&priv->values->appearance,
+                                                      g_value_get_boolean (value));
+      break;
+
     case PROP_RIGHT_MARGIN_SET:
       priv->right_margin_set = g_value_get_boolean (value);
       size_changed = TRUE;
@@ -1600,6 +1742,11 @@ gtk_text_tag_set_property (GObject      *object,
 
     case PROP_UNDERLINE_SET:
       priv->underline_set = g_value_get_boolean (value);
+      break;
+
+    case PROP_UNDERLINE_RGBA_SET:
+      GTK_TEXT_APPEARANCE_SET_UNDERLINE_RGBA_SET (&priv->values->appearance,
+                                                  g_value_get_boolean (value));
       break;
 
     case PROP_RISE_SET:
@@ -1790,12 +1937,32 @@ gtk_text_tag_get_property (GObject      *object,
       g_value_set_boolean (value, priv->values->appearance.strikethrough);
       break;
 
+    case PROP_STRIKETHROUGH_RGBA:
+      if (GTK_TEXT_APPEARANCE_GET_STRIKETHROUGH_RGBA_SET (&priv->values->appearance))
+        {
+          GdkRGBA rgba;
+
+          GTK_TEXT_APPEARANCE_GET_STRIKETHROUGH_RGBA (&priv->values->appearance, &rgba);
+          g_value_set_boxed (value, &rgba);
+        }
+      break;
+
     case PROP_RIGHT_MARGIN:
       g_value_set_int (value, priv->values->right_margin);
       break;
 
     case PROP_UNDERLINE:
       g_value_set_enum (value, priv->values->appearance.underline);
+      break;
+
+    case PROP_UNDERLINE_RGBA:
+      if (GTK_TEXT_APPEARANCE_GET_UNDERLINE_RGBA_SET (&priv->values->appearance))
+        {
+          GdkRGBA rgba;
+
+          GTK_TEXT_APPEARANCE_GET_UNDERLINE_RGBA (&priv->values->appearance, &rgba);
+          g_value_set_boxed (value, &rgba);
+        }
       break;
 
     case PROP_RISE:
@@ -1901,12 +2068,22 @@ gtk_text_tag_get_property (GObject      *object,
       g_value_set_boolean (value, priv->strikethrough_set);
       break;
 
+    case PROP_STRIKETHROUGH_RGBA_SET:
+      g_value_set_boolean (value,
+                           GTK_TEXT_APPEARANCE_GET_STRIKETHROUGH_RGBA_SET (&priv->values->appearance));
+      break;
+
     case PROP_RIGHT_MARGIN_SET:
       g_value_set_boolean (value, priv->right_margin_set);
       break;
 
     case PROP_UNDERLINE_SET:
       g_value_set_boolean (value, priv->underline_set);
+      break;
+
+    case PROP_UNDERLINE_RGBA_SET:
+      g_value_set_boolean (value,
+                           GTK_TEXT_APPEARANCE_GET_UNDERLINE_RGBA_SET (&priv->values->appearance));
       break;
 
     case PROP_RISE_SET:
