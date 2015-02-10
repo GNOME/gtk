@@ -4869,6 +4869,8 @@ gtk_widget_show (GtkWidget *widget)
             gtk_widget_queue_compute_expand (widget->priv->parent);
         }
 
+      gtk_css_node_set_visible (widget->priv->cssnode, TRUE);
+
       g_signal_emit (widget, widget_signals[SHOW], 0);
       g_object_notify (G_OBJECT (widget), "visible");
 
@@ -4966,6 +4968,8 @@ gtk_widget_hide (GtkWidget *widget)
         {
           gtk_widget_queue_compute_expand (widget);
         }
+
+      gtk_css_node_set_visible (widget->priv->cssnode, FALSE);
 
       g_signal_emit (widget, widget_signals[HIDE], 0);
       if (!gtk_widget_is_toplevel (widget))

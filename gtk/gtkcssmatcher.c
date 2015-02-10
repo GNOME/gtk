@@ -256,13 +256,33 @@ gtk_css_matcher_node_get_parent (GtkCssMatcher       *matcher,
   return gtk_css_node_init_matcher (node, matcher);
 }
 
+static GtkCssNode *
+get_previous_visible_sibling (GtkCssNode *node)
+{
+  do {
+    node = gtk_css_node_get_previous_sibling (node);
+  } while (node && !gtk_css_node_get_visible (node));
+
+  return node;
+}
+
+static GtkCssNode *
+get_next_visible_sibling (GtkCssNode *node)
+{
+  do {
+    node = gtk_css_node_get_next_sibling (node);
+  } while (node && !gtk_css_node_get_visible (node));
+
+  return node;
+}
+
 static gboolean
 gtk_css_matcher_node_get_previous (GtkCssMatcher       *matcher,
                                    const GtkCssMatcher *next)
 {
   GtkCssNode *node;
   
-  node = gtk_css_node_get_previous_sibling (next->node.node);
+  node = get_previous_visible_sibling (next->node.node);
   if (node == NULL)
     return FALSE;
 
@@ -340,7 +360,7 @@ gtk_css_matcher_node_nth_child (GtkCssNode *node,
       if (node == NULL)
         return FALSE;
 
-      node = gtk_css_node_get_previous_sibling (node);
+      node = get_previous_visible_sibling (node);
     }
 
   if (a == 0)
@@ -352,7 +372,7 @@ gtk_css_matcher_node_nth_child (GtkCssNode *node,
   while (node)
     {
       b++;
-      node = gtk_css_node_get_previous_sibling (node);
+      node = get_previous_visible_sibling (node);
     }
 
   return b % a == 0;
@@ -368,7 +388,7 @@ gtk_css_matcher_node_nth_last_child (GtkCssNode *node,
       if (node == NULL)
         return FALSE;
 
-      node = gtk_css_node_get_next_sibling (node);
+      node = get_next_visible_sibling (node);
     }
 
   if (a == 0)
@@ -380,7 +400,7 @@ gtk_css_matcher_node_nth_last_child (GtkCssNode *node,
   while (node)
     {
       b++;
-      node = gtk_css_node_get_next_sibling (node);
+      node = get_next_visible_sibling (node);
     }
 
   return b % a == 0;

@@ -49,6 +49,7 @@ struct _GtkCssNode
 
   GtkCssChange           pending_changes;       /* changes that accumulated since the style was last computed */
 
+  guint                  visible :1;            /* node will be skipped when validating or computing styles */
   guint                  invalid :1;            /* node or a child needs to be validated (even if just for animation) */
   guint                  children_changed :1;   /* the children changed since last validation */
 };
@@ -87,6 +88,10 @@ GtkCssNode *            gtk_css_node_get_first_child    (GtkCssNode            *
 GtkCssNode *            gtk_css_node_get_last_child     (GtkCssNode            *cssnode);
 GtkCssNode *            gtk_css_node_get_previous_sibling(GtkCssNode           *cssnode);
 GtkCssNode *            gtk_css_node_get_next_sibling   (GtkCssNode            *cssnode);
+
+void                    gtk_css_node_set_visible        (GtkCssNode            *cssnode,
+                                                         gboolean               visible);
+gboolean                gtk_css_node_get_visible        (GtkCssNode            *cssnode);
 
 void                    gtk_css_node_set_widget_type    (GtkCssNode            *cssnode,
                                                          GType                  widget_type);

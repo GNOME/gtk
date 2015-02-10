@@ -294,6 +294,8 @@ gtk_css_widget_node_new (GtkWidget *widget)
 
   result = g_object_new (GTK_TYPE_CSS_WIDGET_NODE, NULL);
   result->widget = widget;
+  gtk_css_node_set_visible (GTK_CSS_NODE (result),
+                            gtk_widget_get_visible (widget));
 
   return GTK_CSS_NODE (result);
 }

@@ -44,7 +44,7 @@ gtk_css_node_set_invalid (GtkCssNode *node,
 
   if (node->parent)
     {
-      if (invalid)
+      if (invalid && node->visible)
         gtk_css_node_set_invalid (node->parent, TRUE);
     }
   else
@@ -343,6 +343,8 @@ gtk_css_node_init (GtkCssNode *cssnode)
   cssnode->decl = gtk_css_node_declaration_new ();
 
   cssnode->style = g_object_ref (gtk_css_static_style_get_default ());
+
+  cssnode->visible = TRUE;
 }
 
 static void
@@ -436,17 +438,19 @@ gtk_css_node_reposition (GtkCssNode *node,
       else
         {
           g_object_unref (node);
-          gtk_css_node_set_children_changed (node->parent);
+          if (node->visible)
+            gtk_css_node_set_children_changed (node->parent);
         }
 
       node->parent = parent;
 
       if (parent)
         {
-          gtk_css_node_set_children_changed (parent);
+          if (node->visible)
+            gtk_css_node_set_children_changed (parent);
           g_object_ref (node);
 
-          if (node->invalid)
+          if (node->invalid && node->visible)
             gtk_css_node_set_invalid (parent, TRUE);
         }
       else
@@ -562,6 +566,25 @@ gtk_css_node_get_style (GtkCssNode *cssnode)
     }
 
   return cssnode->style;
+}
+
+void
+gtk_css_node_set_visible (GtkCssNode *cssnode,
+                          gboolean    visible)
+{
+  if (cssnode->visible == visible)
+    return;
+
+  cssnode->visible = visible;
+
+  if (cssnode->parent)
+    gtk_css_node_set_children_changed (cssnode->parent);
+}
+
+gboolean
+gtk_css_node_get_visible (GtkCssNode *cssnode)
+{
+  return cssnode->visible;
 }
 
 void
@@ -761,7 +784,8 @@ gtk_css_node_validate (GtkCssNode            *cssnode,
        child;
        child = gtk_css_node_get_next_sibling (child))
     {
-      gtk_css_node_validate (child, timestamp, changes);
+      if (child->visible)
+        gtk_css_node_validate (child, timestamp, changes);
     }
 
   _gtk_bitmask_free (changes);
