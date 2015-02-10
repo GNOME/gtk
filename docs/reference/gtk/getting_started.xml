@@ -100,7 +100,7 @@
     application. Inside the activate() function we want to construct
     our GTK window, so that a window is shown when the application
     is launched. The call to gtk_application_window_new() will
-    createa a new #GtkWindow and store it inside the
+    create a new #GtkWindow and store it inside the
     <varname>window</varname> pointer. The window will have a frame,
     a title bar, and window controls depending on the platform.</para>
 
@@ -164,6 +164,47 @@
       </literallayout>
     </para>
   </section>
+
+  <para>As seen above, example-1.c builds further upon example-0.c by adding a
+  button to our window, with the label "Hello World". Two new GtkWidget pointers
+  are declared to accomplish this, <varname>button</varname> and
+  <varname>button_box</varname>. The button_box variable is created to store a
+  #GtkButtonBox which is GTK+'s way of controlling the size and layout of buttons.
+  The #GtkButtonBox is created and assigned to gtk_button_box_new() which takes a
+  #GtkOrientation enum as parameter. The buttons which this box will contain can
+  either be stored horizontally or vertically but this does not matter in this
+  particular case as we are dealing with only one button. After initializing
+  button_box with horizontal orientation, the code adds the button_box widget to the
+  window widget using gtk_container_add().</para>
+
+  <para>Next the <varname>button</varname> variable is initialized in similar manner.
+  gtk_button_new_with_label() is called which returns a GtkButton to be stored inside
+  <varname>button</varname>. Afterwards <varname>button</varname> is added to
+  our <varname>button_box</varname>.
+  Using g_signal_connect the button is connected to a function in our app called
+  print_hello(), so that when the button is clicked, GTK will call this function.
+  As the print_hello() function does not use any data as input, NULL is passed
+  to it. print_hello() calls g_print() with the string "Hello World"
+  which will print Hello World in a terminal if the GTK application was started
+  from one.</para>
+
+  <para>After connecting print_hello(), another signal is connected to the "clicked" state
+  of the button using g_signal_connect_swapped(). This functions is similar to
+  a g_signal_connect() with the difference lying in how the callback function is
+  treated. g_signal_connect_swapped() allow you to specify what the callback
+  function should take as parameter by letting you pass it as data. In this case
+  the function being called back is gtk_widget_destroy() and the <varname>window</varname>
+  pointer is passed to it. This has the effect that when the button is clicked,
+  the whole GTK window is destroyed. In contrast if a normal g_signal_connect() were used
+  to connect the "clicked" signal with gtk_widget_destroy(), then the <varname>button</varname>
+  itself would have been destroyed, not the window.
+  More information about creating buttons can be found
+  <ulink url="https://wiki.gnome.org/HowDoI/Buttons">here</ulink>.
+  </para>
+
+  <para>The rest of the code in example-1.c is identical to example-0.c. Next
+  section will elaborate further on how to add several GtkWidgets to your GTK
+  application.</para>
 
   <section>
     <title>Packing</title>
