@@ -24,7 +24,7 @@
 
 typedef struct {
   GdkDevice *last_source;
-  GHashTable *axes; /* axis label atom -> value */
+  gdouble *axes;
   GdkRGBA color;
   gdouble x;
   gdouble y;
@@ -59,8 +59,6 @@ axes_info_new (void)
 
   info = g_new0 (AxesInfo, 1);
   gdk_rgba_parse (&info->color, colors[cur_color]);
-  info->axes = g_hash_table_new_full (NULL, NULL, NULL,
-                                      (GDestroyNotify) g_free);
 
   cur_color = (cur_color + 1) % G_N_ELEMENTS (colors);
 
@@ -70,30 +68,7 @@ axes_info_new (void)
 static void
 axes_info_free (AxesInfo *info)
 {
-  g_hash_table_destroy (info->axes);
   g_free (info);
-}
-
-static gboolean
-axes_info_lookup (AxesInfo    *info,
-                  const gchar *axis_label,
-                  gdouble     *value)
-{
-  gdouble *val;
-  GdkAtom atom;
-
-  atom = gdk_atom_intern (axis_label, FALSE);
-
-  if (atom == GDK_NONE)
-    return FALSE;
-
-  val = g_hash_table_lookup (info->axes, GDK_ATOM_TO_POINTER (atom));
-
-  if (!val)
-    return FALSE;
-
-  *value = *val;
-  return TRUE;
 }
 
 static EventData *
@@ -121,13 +96,11 @@ static void
 update_axes_from_event (GdkEvent  *event,
                         EventData *data)
 {
-  GdkDevice *device, *source_device;
+  GdkDevice *source_device;
   GdkEventSequence *sequence;
-  gdouble x, y, value;
-  GList *l, *axes;
+  gdouble x, y;
   AxesInfo *info;
 
-  device = gdk_event_get_device (event);
   source_device = gdk_event_get_source_device (event);
   sequence = gdk_event_get_event_sequence (event);
 
@@ -163,10 +136,7 @@ update_axes_from_event (GdkEvent  *event,
     }
 
   if (info->last_source != source_device)
-    {
-      g_hash_table_remove_all (info->axes);
-      info->last_source = source_device;
-    }
+    info->last_source = source_device;
 
   if (event->type == GDK_TOUCH_BEGIN ||
       event->type == GDK_TOUCH_UPDATE ||
@@ -174,8 +144,6 @@ update_axes_from_event (GdkEvent  *event,
       event->type == GDK_BUTTON_PRESS ||
       event->type == GDK_BUTTON_RELEASE)
     {
-      axes = gdk_device_list_axes (device);
-
       if (sequence && event->touch.emulating_pointer)
         {
           if (data->pointer_info)
@@ -183,21 +151,12 @@ update_axes_from_event (GdkEvent  *event,
           data->pointer_info = NULL;
         }
 
-      for (l = axes; l; l = l->next)
-        {
-          gdouble *ptr;
+      if (info->axes)
+        g_free (info->axes);
 
-          /* All those event types are compatible wrt axes position in the struct */
-          if (!gdk_device_get_axis_value (device, event->motion.axes,
-                                          l->data, &value))
-            continue;
-
-          ptr = g_new0 (gdouble, 1);
-          *ptr = value;
-          g_hash_table_insert (info->axes, GDK_ATOM_TO_POINTER (l->data), ptr);
-        }
-
-      g_list_free (axes);
+      info->axes =
+        g_memdup (event->motion.axes,
+                  sizeof(gdouble) * gdk_device_get_n_axes (source_device));
     }
 
   if (gdk_event_get_coords (event, &x, &y))
@@ -243,6 +202,7 @@ draw_axes_info (cairo_t       *cr,
                 GtkAllocation *allocation)
 {
   gdouble pressure, tilt_x, tilt_y, wheel;
+  GdkAxisFlags axes = gdk_device_get_axes (info->last_source);
 
   cairo_save (cr);
 
@@ -257,9 +217,12 @@ draw_axes_info (cairo_t       *cr,
 
   cairo_translate (cr, info->x, info->y);
 
-  if (axes_info_lookup (info, "Abs Pressure", &pressure))
+  if (axes & GDK_AXIS_FLAG_PRESSURE)
     {
       cairo_pattern_t *pattern;
+
+      gdk_device_get_axis (info->last_source, info->axes, GDK_AXIS_PRESSURE,
+                           &pressure);
 
       pattern = cairo_pattern_create_radial (0, 0, 0, 0, 0, 100);
       cairo_pattern_add_color_stop_rgba (pattern, pressure, 1, 0, 0, pressure);
@@ -273,12 +236,22 @@ draw_axes_info (cairo_t       *cr,
       cairo_pattern_destroy (pattern);
     }
 
-  if (axes_info_lookup (info, "Abs Tilt X", &tilt_x) &&
-      axes_info_lookup (info, "Abs Tilt Y", &tilt_y))
-    render_arrow (cr, tilt_x * 100, tilt_y * 100, "Tilt");
-
-  if (axes_info_lookup (info, "Abs Wheel", &wheel))
+  if (axes & GDK_AXIS_FLAG_XTILT &&
+      axes & GDK_AXIS_FLAG_YTILT)
     {
+      gdk_device_get_axis (info->last_source, info->axes, GDK_AXIS_XTILT,
+                           &tilt_x);
+      gdk_device_get_axis (info->last_source, info->axes, GDK_AXIS_YTILT,
+                           &tilt_y);
+
+      render_arrow (cr, tilt_x * 100, tilt_y * 100, "Tilt");
+    }
+
+  if (axes & GDK_AXIS_FLAG_WHEEL)
+    {
+      gdk_device_get_axis (info->last_source, info->axes, GDK_AXIS_WHEEL,
+                           &wheel);
+
       cairo_save (cr);
       cairo_set_line_width (cr, 10);
       cairo_set_source_rgba (cr, 0, 0, 0, 0.5);
