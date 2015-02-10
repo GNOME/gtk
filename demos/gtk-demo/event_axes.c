@@ -31,7 +31,7 @@ typedef struct {
 } AxesInfo;
 
 typedef struct {
-  AxesInfo *pointer_info;
+  GHashTable *pointer_info; /* GdkDevice -> AxesInfo */
   GHashTable *touch_info; /* GdkEventSequence -> AxesInfo */
 } EventData;
 
@@ -77,6 +77,8 @@ event_data_new (void)
   EventData *data;
 
   data = g_new0 (EventData, 1);
+  data->pointer_info = g_hash_table_new_full (NULL, NULL, NULL,
+                                              (GDestroyNotify) axes_info_free);
   data->touch_info = g_hash_table_new_full (NULL, NULL, NULL,
                                             (GDestroyNotify) axes_info_free);
 
@@ -86,8 +88,7 @@ event_data_new (void)
 static void
 event_data_free (EventData *data)
 {
-  if (data->pointer_info)
-    axes_info_free (data->pointer_info);
+  g_hash_table_destroy (data->pointer_info);
   g_hash_table_destroy (data->touch_info);
   g_free (data);
 }
@@ -96,11 +97,12 @@ static void
 update_axes_from_event (GdkEvent  *event,
                         EventData *data)
 {
-  GdkDevice *source_device;
+  GdkDevice *device, *source_device;
   GdkEventSequence *sequence;
   gdouble x, y;
   AxesInfo *info;
 
+  device = gdk_event_get_device (event);
   source_device = gdk_event_get_source_device (event);
   sequence = gdk_event_get_event_sequence (event);
 
@@ -112,17 +114,19 @@ update_axes_from_event (GdkEvent  *event,
     }
   else if (event->type == GDK_LEAVE_NOTIFY)
     {
-      if (data->pointer_info)
-        axes_info_free (data->pointer_info);
-      data->pointer_info = NULL;
+      g_hash_table_remove (data->pointer_info, device);
       return;
     }
 
   if (!sequence)
     {
-      if (!data->pointer_info)
-        data->pointer_info = axes_info_new ();
-      info = data->pointer_info;
+      info = g_hash_table_lookup (data->pointer_info, device);
+
+      if (!info)
+        {
+          info = axes_info_new ();
+          g_hash_table_insert (data->pointer_info, device, info);
+        }
     }
   else
     {
@@ -145,11 +149,7 @@ update_axes_from_event (GdkEvent  *event,
       event->type == GDK_BUTTON_RELEASE)
     {
       if (sequence && event->touch.emulating_pointer)
-        {
-          if (data->pointer_info)
-            axes_info_free (data->pointer_info);
-          data->pointer_info = NULL;
-        }
+        g_hash_table_remove (data->pointer_info, device);
 
       if (info->axes)
         g_free (info->axes);
@@ -341,7 +341,7 @@ draw_cb (GtkWidget *widget,
 {
   EventData *data = user_data;
   GtkAllocation allocation;
-  AxesInfo *touch_info;
+  AxesInfo *info;
   GHashTableIter iter;
   gpointer key, value;
   gint y = 0;
@@ -349,27 +349,37 @@ draw_cb (GtkWidget *widget,
   gtk_widget_get_allocation (widget, &allocation);
 
   /* Draw Abs info */
-  if (data->pointer_info)
-    draw_axes_info (cr, data->pointer_info, &allocation);
+  g_hash_table_iter_init (&iter, data->pointer_info);
+
+  while (g_hash_table_iter_next (&iter, NULL, &value))
+    {
+      info = value;
+      draw_axes_info (cr, info, &allocation);
+    }
 
   g_hash_table_iter_init (&iter, data->touch_info);
 
   while (g_hash_table_iter_next (&iter, NULL, &value))
     {
-      touch_info = value;
-      draw_axes_info (cr, touch_info, &allocation);
+      info = value;
+      draw_axes_info (cr, info, &allocation);
     }
 
   /* Draw name, color legend and misc data */
-  if (data->pointer_info)
-    draw_device_info (widget, cr, NULL, &y, data->pointer_info);
+  g_hash_table_iter_init (&iter, data->pointer_info);
+
+  while (g_hash_table_iter_next (&iter, NULL, &value))
+    {
+      info = value;
+      draw_device_info (widget, cr, NULL, &y, info);
+    }
 
   g_hash_table_iter_init (&iter, data->touch_info);
 
   while (g_hash_table_iter_next (&iter, &key, &value))
     {
-      touch_info = value;
-      draw_device_info (widget, cr, key, &y, touch_info);
+      info = value;
+      draw_device_info (widget, cr, key, &y, info);
     }
 
   return FALSE;
