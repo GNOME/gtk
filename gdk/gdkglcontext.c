@@ -523,8 +523,21 @@ gdk_gl_context_set_required_version (GdkGLContext *context,
   g_return_if_fail (GDK_IS_GL_CONTEXT (context));
   g_return_if_fail (!priv->realized);
 
+  /* this will take care of the default */
+  if (major == 0 && minor == 0)
+    {
+      priv->major = 0;
+      priv->minor = 0;
+      return;
+    }
+
   priv->major = MAX (major, 3);
-  priv->minor = MAX (minor, 2);
+
+  /* we only support versions ≥ 3.2 */
+  if (priv->major == 3)
+    priv->minor = MAX (minor, 2);
+  else
+    priv->minor = minor;
 }
 
 /**
