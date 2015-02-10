@@ -1682,6 +1682,16 @@ gdk_wayland_window_set_icon_name (GdkWindow   *window,
 static void
 gdk_wayland_window_iconify (GdkWindow *window)
 {
+  GdkWindowImplWayland *impl = GDK_WINDOW_IMPL_WAYLAND (window->impl);
+
+  if (GDK_WINDOW_DESTROYED (window) ||
+      !WINDOW_IS_TOPLEVEL_OR_FOREIGN (window))
+    return;
+
+  if (!impl->xdg_surface)
+    return;
+
+  xdg_surface_set_minimized (impl->xdg_surface);
 }
 
 static void
