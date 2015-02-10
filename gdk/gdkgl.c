@@ -146,7 +146,7 @@ bind_vao (GdkGLContextPaintData *paint_data)
 static void
 use_texture_2d_program (GdkGLContextPaintData *paint_data)
 {
-  const char *vertex_shader_code =
+  static const char *vertex_shader_code =
     "#version 150\n"
     "uniform sampler2D map;"
     "attribute vec2 position;\n"
@@ -156,7 +156,7 @@ use_texture_2d_program (GdkGLContextPaintData *paint_data)
     "  gl_Position = vec4(position, 0, 1);\n"
     "  vUv = uv;\n"
     "}\n";
-  const char *fragment_shader_code =
+  static const char *fragment_shader_code =
     "#version 150\n"
     "varying vec2 vUv;\n"
     "uniform sampler2D map;\n"
@@ -177,7 +177,7 @@ use_texture_2d_program (GdkGLContextPaintData *paint_data)
 static void
 use_texture_rect_program (GdkGLContextPaintData *paint_data)
 {
-  const char *vertex_shader_code =
+  static const char *vertex_shader_code =
     "#version 150\n"
     "uniform sampler2DRect map;"
     "attribute vec2 position;\n"
@@ -187,7 +187,7 @@ use_texture_rect_program (GdkGLContextPaintData *paint_data)
     "  gl_Position = vec4(position, 0, 1);\n"
     "  vUv = uv;\n"
     "}\n";
-  const char *fragment_shader_code =
+  static const char *fragment_shader_code =
     "#version 150\n"
     "varying vec2 vUv;\n"
     "uniform sampler2DRect map;\n"
