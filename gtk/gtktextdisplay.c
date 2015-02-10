@@ -75,6 +75,7 @@
 
 #define GTK_TEXT_USE_INTERNAL_UNSUPPORTED_API
 #include "config.h"
+#include "gtktextattributesprivate.h"
 #include "gtktextdisplay.h"
 #include "gtkwidgetprivate.h"
 #include "gtkstylecontextprivate.h"
@@ -204,9 +205,25 @@ gtk_text_renderer_prepare_run (PangoRenderer  *renderer,
     fg_rgba = appearance->rgba[1];
 
   text_renderer_set_rgba (text_renderer, PANGO_RENDER_PART_FOREGROUND, fg_rgba);
-  text_renderer_set_rgba (text_renderer, PANGO_RENDER_PART_STRIKETHROUGH, fg_rgba);
 
-  if (appearance->underline == PANGO_UNDERLINE_ERROR)
+  if (GTK_TEXT_APPEARANCE_GET_STRIKETHROUGH_RGBA_SET (appearance))
+    {
+      GdkRGBA rgba;
+
+      GTK_TEXT_APPEARANCE_GET_STRIKETHROUGH_RGBA (appearance, &rgba);
+      text_renderer_set_rgba (text_renderer, PANGO_RENDER_PART_STRIKETHROUGH, &rgba);
+    }
+  else
+    text_renderer_set_rgba (text_renderer, PANGO_RENDER_PART_STRIKETHROUGH, fg_rgba);
+
+  if (GTK_TEXT_APPEARANCE_GET_UNDERLINE_RGBA_SET (appearance))
+    {
+      GdkRGBA rgba;
+
+      GTK_TEXT_APPEARANCE_GET_UNDERLINE_RGBA (appearance, &rgba);
+      text_renderer_set_rgba (text_renderer, PANGO_RENDER_PART_UNDERLINE, &rgba);
+    }
+  else if (appearance->underline == PANGO_UNDERLINE_ERROR)
     {
       if (!text_renderer->error_color)
         {
