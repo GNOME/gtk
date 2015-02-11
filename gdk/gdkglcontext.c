@@ -492,6 +492,7 @@ gdk_gl_context_set_required_version (GdkGLContext *context,
                                      int           major,
                                      int           minor)
 {
+  int version;
   GdkGLContextPrivate *priv = gdk_gl_context_get_instance_private (context);
 
   g_return_if_fail (GDK_IS_GL_CONTEXT (context));
@@ -505,13 +506,15 @@ gdk_gl_context_set_required_version (GdkGLContext *context,
       return;
     }
 
-  priv->major = MAX (major, 3);
-
-  /* we only support versions ≥ 3.2 */
-  if (priv->major == 3)
-    priv->minor = MAX (minor, 2);
-  else
-    priv->minor = minor;
+  /* Enforce a minimum context version number of 3.2 */
+  version = (major * 100) + minor;
+  if (version < 302)
+    {
+      g_warning ("gdk_gl_context_set_required_version - GL context versions less than 3.2 are not supported.");
+      version = 302;
+    }
+  priv->major = version / 100;
+  priv->minor = version % 100;
 }
 
 /**
