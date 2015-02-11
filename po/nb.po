@@ -1,14 +1,14 @@
 # Norwegian bokmål translation of gtk+.
 # Copyright (C) 1998-2004, 2005 Free Software Foundation, Inc.
-# Kjartan Maraas <kmaraas@gnome.org>, 1998-2014.
+# Kjartan Maraas <kmaraas@gnome.org>, 1998-2015.
 # Terance Edward Sola <terance@lyse.net>, 2005.
 # Torstein Adolf Winterseth <kvikende@fsfe.org>, 2010.
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 3.16.x\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-02-08 19:29+0100\n"
-"PO-Revision-Date: 2015-02-08 19:34+0100\n"
+"POT-Creation-Date: 2015-02-11 16:35+0100\n"
+"PO-Revision-Date: 2015-02-11 16:37+0100\n"
 "Last-Translator: Kjartan Maraas <kmaraas@gnome.org>\n"
 "Language-Team: Norwegian bokmål <i18n-nb@lister.ping.uio.no>\n"
 "Language: no\n"
@@ -80,7 +80,7 @@ msgstr "FLAGG"
 msgid "GDK debugging flags to unset"
 msgstr "Feilsøkingsflagg som skal fjernes for GDK"
 
-#: ../gdk/gdkwindow.c:2733
+#: ../gdk/gdkwindow.c:2736
 msgid "GL support disabled via GDK_DEBUG"
 msgstr "GL-støtte slått av via GDK_DEBUG"
 
@@ -427,35 +427,42 @@ msgid "Suspend"
 msgstr "Hvilemodus"
 
 #: ../gdk/mir/gdkmirwindowimpl.c:1368 ../gdk/mir/gdkmirwindowimpl.c:1378
-#: ../gdk/wayland/gdkglcontext-wayland.c:263
-#: ../gdk/wayland/gdkglcontext-wayland.c:273
-#: ../gdk/win32/gdkglcontext-win32.c:510 ../gdk/x11/gdkglcontext-x11.c:700
+#: ../gdk/wayland/gdkglcontext-wayland.c:338
+#: ../gdk/wayland/gdkglcontext-wayland.c:348
+#: ../gdk/win32/gdkglcontext-win32.c:477 ../gdk/x11/gdkglcontext-x11.c:874
 msgid "No available configurations for the given pixel format"
 msgstr "Ingen tilgjengelige konfigurasjoner for oppgitt pikselformat"
 
 #: ../gdk/mir/gdkmirwindowimpl.c:1410
-#: ../gdk/wayland/gdkglcontext-wayland.c:306
-#: ../gdk/win32/gdkglcontext-win32.c:488 ../gdk/x11/gdkglcontext-x11.c:1066
+#: ../gdk/wayland/gdkglcontext-wayland.c:378
+#: ../gdk/win32/gdkglcontext-win32.c:570 ../gdk/x11/gdkglcontext-x11.c:1185
 msgid "No GL implementation is available"
 msgstr "Ingen GL-implementasjon tilgjengelig"
 
 #: ../gdk/mir/gdkmirwindowimpl.c:1422
-#: ../gdk/wayland/gdkglcontext-wayland.c:318
+#: ../gdk/wayland/gdkglcontext-wayland.c:390
 msgid "3.2 core GL profile is not available on EGL implementation"
 msgstr "3.2 kjerne GL-profil er ikke tilgjengelig på EGL-implementasjonen"
 
 #: ../gdk/mir/gdkmirwindowimpl.c:1445
-#: ../gdk/wayland/gdkglcontext-wayland.c:341
-#: ../gdk/win32/gdkglcontext-win32.c:524 ../gdk/x11/gdkglcontext-x11.c:1110
-#: ../gdk/x11/gdkglcontext-x11.c:1154
+#: ../gdk/wayland/gdkglcontext-wayland.c:165
+#: ../gdk/win32/gdkglcontext-win32.c:529 ../gdk/x11/gdkglcontext-x11.c:636
+#: ../gdk/x11/gdkglcontext-x11.c:680
 msgid "Unable to create a GL context"
 msgstr "Kan ikke lage et GL-kontekst"
 
-#: ../gdk/win32/gdkglcontext-win32.c:497
+#: ../gdk/wayland/gdkglcontext-wayland.c:124
+#: ../gdk/win32/gdkglcontext-win32.c:520 ../gdk/x11/gdkglcontext-x11.c:628
+msgid "Unsupported profile for a GL context"
+msgstr "Ikke støttet profil for en GL-kontekst"
+
+#: ../gdk/win32/gdkglcontext-win32.c:581
 msgid ""
 "The WGL_ARB_create_context extension needed to create 3.2 core profiles is "
 "not available"
-msgstr "WGL_ARB_create_context-utvidelsen som kreves for å lage kjerneprofiler for versjon 3.2 er ikke tilgjengelig"
+msgstr ""
+"WGL_ARB_create_context-utvidelsen som kreves for å lage kjerneprofiler for "
+"versjon 3.2 er ikke tilgjengelig"
 
 #. Description of --sync in --help output
 #: ../gdk/win32/gdkmain-win32.c:53
@@ -504,12 +511,12 @@ msgid_plural "Opening %d Items"
 msgstr[0] "Åpner %d oppføring"
 msgstr[1] "Åpner %d oppføringer"
 
-#: ../gdk/x11/gdkglcontext-x11.c:729
+#: ../gdk/x11/gdkglcontext-x11.c:902
 #, c-format
 msgid "No available configurations for the given RGBA pixel format"
 msgstr "Ingen tilgjengelige konfigurasjoner for oppgitt RGBA-pikselformat"
 
-#: ../gdk/x11/gdkglcontext-x11.c:1075
+#: ../gdk/x11/gdkglcontext-x11.c:1194
 msgid ""
 "The GLX_ARB_create_context_profile extension needed to create 3.2 core "
 "profiles is not available"
@@ -3505,7 +3512,7 @@ msgstr "Gjenopprett forvalg for denne komponenten"
 
 #: ../gtk/inspector/css-editor.c:90 ../gtk/inspector/css-editor.c:96
 msgid "You can type here any CSS rule recognized by GTK+."
-msgstr ""
+msgstr "Du kan skrive enhver CSS-regel som støttes av GTK+ her."
 
 #: ../gtk/inspector/css-editor.c:91 ../gtk/inspector/css-editor.c:97
 msgid ""
@@ -3876,30 +3883,32 @@ msgstr "Kumulativ"
 
 #: ../gtk/inspector/statistics.ui.h:8
 msgid "Enable statistics with GOBJECT_DEBUG=instance-count"
-msgstr ""
+msgstr "Slå på statistikk med GOBJECT_DEBUG=instance-count"
 
 #: ../gtk/inspector/visual.c:263 ../gtk/inspector/visual.c:278
 msgid "Theme is hardcoded by GTK_THEME"
-msgstr ""
+msgstr "Tema er hardkodet av GTK_THEME"
 
 #: ../gtk/inspector/visual.c:453
 msgid "Backend does not support window scaling"
-msgstr ""
+msgstr "Motor støtter ikke skalering av vindu"
 
 #: ../gtk/inspector/visual.c:492
 msgid "Setting is hardcoded by GTK_TEST_TOUCHSCREEN"
-msgstr ""
+msgstr "Innstillingen er hardkodet av GTK_TEST_TOUCHSCREEN"
 
 #: ../gtk/inspector/visual.c:557
 msgid ""
 "Not settable at runtime.\n"
 "Use GDK_GL=always or GDK_GL=disable instead"
 msgstr ""
+"Kan ikke settes ved kjøring.\n"
+"Bruk GDK_GL=always eller GDK_GL=disable i stedet"
 
 #: ../gtk/inspector/visual.c:571 ../gtk/inspector/visual.c:572
 #: ../gtk/inspector/visual.c:573
 msgid "GL rendering is disabled"
-msgstr ""
+msgstr "GL-tegning er slått av"
 
 #. vim: set et sw=2 ts=2:
 #: ../gtk/inspector/visual.ui.h:1
