@@ -172,7 +172,7 @@ gdk_registry_handle_global(void *data, struct wl_registry *registry, uint32_t id
       wl_registry_bind(display_wayland->wl_registry, id, &wl_output_interface, MIN (version, 2));
     _gdk_wayland_screen_add_output(display_wayland->screen, id, output, MIN (version, 2));
   } else if (strcmp(interface, "wl_seat") == 0) {
-    seat = wl_registry_bind(display_wayland->wl_registry, id, &wl_seat_interface, 4);
+    seat = wl_registry_bind(display_wayland->wl_registry, id, &wl_seat_interface, MIN (version, 4));
     _gdk_wayland_device_manager_add_seat (gdk_display->device_manager, id, seat);
   } else if (strcmp(interface, "wl_data_device_manager") == 0) {
       display_wayland->data_device_manager =
