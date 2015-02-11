@@ -41,7 +41,7 @@ AC_CANONICAL_HOST
 m4_define([gtk_binary_version], [3.0.0])
 
 # required versions of other packages
-m4_define([glib_required_version], [2.43.0])
+m4_define([glib_required_version], [2.43.4])
 m4_define([pango_required_version], [1.36.7])
 m4_define([atk_required_version], [2.15.1])
 m4_define([cairo_required_version], [1.14.0])
