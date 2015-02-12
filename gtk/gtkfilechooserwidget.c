@@ -77,6 +77,8 @@
 #include "gtkorientable.h"
 #include "gtkwindowgroup.h"
 #include "gtkintl.h"
+#include "gtkshow.h"
+#include "gtkmain.h"
 
 #include <cairo-gobject.h>
 #include <errno.h>
@@ -218,6 +220,7 @@ struct _GtkFileChooserWidgetPrivate {
   GtkWidget *browse_files_popup_menu_size_column_item;
   GtkWidget *browse_files_popup_menu_copy_file_location_item;
   GtkWidget *browse_files_popup_menu_visit_file_item;
+  GtkWidget *browse_files_popup_menu_open_folder_item;
   GtkWidget *browse_files_popup_menu_sort_directories_item;
   GtkWidget *browse_new_folder_button;
   GtkWidget *browse_path_bar_hbox;
@@ -1426,6 +1429,30 @@ visit_file_cb (GtkMenuItem *item,
   g_slist_free (files);
 }
 
+/* Callback used when the "Open this folder" menu item is activated */
+static void
+open_folder_cb (GtkMenuItem          *item,
+	        GtkFileChooserWidget *impl)
+{
+  GSList *files;
+
+  files = search_get_selected_files (impl);
+
+  /* Sigh, just use the first one */
+  if (files)
+    {
+      GFile *file = files->data;
+      gchar *uri;
+
+      uri = g_file_get_uri (file);
+      gtk_show_uri (gtk_widget_get_screen (GTK_WIDGET (impl)), uri, gtk_get_current_event_time (), NULL);
+      g_free (uri);
+    }
+
+  g_slist_foreach (files, (GFunc) g_object_unref, NULL);
+  g_slist_free (files);
+}
+
 /* callback used when the "Show Hidden Files" menu item is toggled */
 static void
 show_hidden_toggled_cb (GtkCheckMenuItem      *item,
@@ -1659,6 +1686,9 @@ check_file_list_menu_sensitivity (GtkFileChooserWidget *impl)
     gtk_widget_set_sensitive (priv->browse_files_popup_menu_add_shortcut_item, active && all_folders);
   if (priv->browse_files_popup_menu_visit_file_item)
     gtk_widget_set_sensitive (priv->browse_files_popup_menu_visit_file_item, active);
+
+  if (priv->browse_files_popup_menu_open_folder_item)
+    gtk_widget_set_visible (priv->browse_files_popup_menu_open_folder_item, (num_selected == 1) && all_folders);
 }
 
 static GtkWidget *
@@ -1710,6 +1740,9 @@ file_list_build_popup_menu (GtkFileChooserWidget *impl)
 
   priv->browse_files_popup_menu_visit_file_item		= file_list_add_menu_item (impl, _("_Visit File"),
 											 G_CALLBACK (visit_file_cb));
+
+  priv->browse_files_popup_menu_open_folder_item = file_list_add_menu_item (impl, _("_Open With File Manager"),
+											 G_CALLBACK (open_folder_cb));
 
   priv->browse_files_popup_menu_copy_file_location_item	= file_list_add_menu_item (impl, _("_Copy Location"),
 											 G_CALLBACK (copy_file_location_cb));
