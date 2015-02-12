@@ -1291,6 +1291,9 @@ GdkGLContext
 gdk_gl_context_get_display
 gdk_gl_context_get_window
 gdk_gl_context_get_shared_context
+gdk_gl_context_get_version
+
+<SUBSECTION>
 gdk_gl_context_set_required_version
 gdk_gl_context_get_required_version
 gdk_gl_context_set_debug_enabled
@@ -1300,6 +1303,8 @@ gdk_gl_context_get_forward_compatible
 GdkGLProfile
 gdk_gl_context_set_profile
 gdk_gl_context_get_profile
+
+<SUBSECTION>
 GdkGLError
 gdk_gl_context_realize
 gdk_gl_context_make_current
