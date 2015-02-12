@@ -40,7 +40,6 @@ struct _GdkX11GLContext
 {
   GdkGLContext parent_instance;
 
-  GdkGLProfile profile;
   GLXContext glx_context;
   GLXFBConfig glx_config;
   GLXDrawable drawable;

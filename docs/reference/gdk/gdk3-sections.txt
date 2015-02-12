@@ -1300,9 +1300,6 @@ gdk_gl_context_set_debug_enabled
 gdk_gl_context_get_debug_enabled
 gdk_gl_context_set_forward_compatible
 gdk_gl_context_get_forward_compatible
-GdkGLProfile
-gdk_gl_context_set_profile
-gdk_gl_context_get_profile
 
 <SUBSECTION>
 GdkGLError

@@ -109,25 +109,12 @@ gdk_wayland_gl_context_realize (GdkGLContext *context,
   GdkWaylandGLContext *context_wayland = GDK_WAYLAND_GL_CONTEXT (context);
   GdkDisplay *display = gdk_gl_context_get_display (context);
   GdkGLContext *share = gdk_gl_context_get_shared_context (context);
-  GdkGLProfile profile = gdk_gl_context_get_profile (context);
   GdkWaylandDisplay *display_wayland = GDK_WAYLAND_DISPLAY (display);
   EGLContext ctx;
   EGLint context_attribs[N_EGL_ATTRS];
   int major, minor, flags;
   gboolean debug_bit, forward_bit;
   int i = 0;
-
-  /* default profile means 3.2 core profile */
-  if (profile == GDK_GL_PROFILE_DEFAULT)
-    profile = GDK_GL_PROFILE_3_2_CORE;
-
-  if (profile != GDK_GL_PROFILE_3_2_CORE)
-    {
-      g_set_error_literal (error, GDK_GL_ERROR,
-                           GDK_GL_ERROR_UNSUPPORTED_PROFILE,
-                           _("Unsupported profile for a GL context"));
-      return FALSE;
-    }
 
   gdk_gl_context_get_required_version (context, &major, &minor);
   debug_bit = gdk_gl_context_get_debug_enabled (context);
@@ -386,7 +373,7 @@ gdk_wayland_window_create_gl_context (GdkWindow     *window,
     {
       g_set_error_literal (error, GDK_GL_ERROR,
                            GDK_GL_ERROR_UNSUPPORTED_PROFILE,
-                           _("3.2 core GL profile is not available on EGL implementation"));
+                           _("Core GL is not available on EGL implementation"));
       return NULL;
     }
 

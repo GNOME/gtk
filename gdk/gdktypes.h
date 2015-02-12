@@ -434,22 +434,6 @@ struct _GdkPoint
 };
 
 /**
- * GdkGLProfile:
- * @GDK_GL_PROFILE_DEFAULT: The default profile.
- * @GDK_GL_PROFILE_3_2_CORE: Use the OpenGL core profile, with
- *   a minimum required version of 3.2; this is the default
- *   profile.
- *
- * The profile to be used when creating a #GdkGLContext.
- *
- * Since: 3.16
- */
-typedef enum {
-  GDK_GL_PROFILE_DEFAULT,
-  GDK_GL_PROFILE_3_2_CORE
-} GdkGLProfile;
-
-/**
  * GdkGLError:
  * @GDK_GL_ERROR_NOT_AVAILABLE: OpenGL support is not available
  * @GDK_GL_ERROR_UNSUPPORTED_FORMAT: The requested visual format is not supported

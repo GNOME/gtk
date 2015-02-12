@@ -98,7 +98,6 @@
  */
 
 typedef struct {
-  GdkGLProfile profile;
   GdkGLContext *context;
   GdkWindow *event_window;
   GError *error;
@@ -125,7 +124,6 @@ enum {
   PROP_0,
 
   PROP_CONTEXT,
-  PROP_PROFILE,
   PROP_HAS_ALPHA,
   PROP_HAS_DEPTH_BUFFER,
   PROP_HAS_STENCIL_BUFFER,
@@ -188,10 +186,6 @@ gtk_gl_area_set_property (GObject      *gobject,
       gtk_gl_area_set_has_stencil_buffer (self, g_value_get_boolean (value));
       break;
 
-    case PROP_PROFILE:
-      gtk_gl_area_set_profile (self, g_value_get_enum (value));
-      break;
-
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (gobject, prop_id, pspec);
     }
@@ -225,10 +219,6 @@ gtk_gl_area_get_property (GObject    *gobject,
 
     case PROP_CONTEXT:
       g_value_set_object (value, priv->context);
-      break;
-
-    case PROP_PROFILE:
-      g_value_set_enum (value, priv->profile);
       break;
 
     default:
@@ -312,7 +302,6 @@ gtk_gl_area_real_create_context (GtkGLArea *area)
   gdk_gl_context_set_required_version (context,
                                        priv->required_gl_version / 10,
                                        priv->required_gl_version % 10);
-  gdk_gl_context_set_profile (context, priv->profile);
 
   gdk_gl_context_realize (context, &error);
   if (priv->error != NULL)
@@ -736,24 +725,6 @@ gtk_gl_area_class_init (GtkGLAreaClass *klass)
                          G_PARAM_STATIC_STRINGS);
 
   /**
-   * GdkGLArea:profile:
-   *
-   * The #GdkGLProfile to use to create the GL context for the area.
-   *
-   * Since: 3.16
-   */
-  obj_props[PROP_PROFILE] =
-    g_param_spec_enum ("profile",
-                       P_("Profile"),
-                       P_("The GL profile to use for the GL context"),
-                       GDK_TYPE_GL_PROFILE,
-                       GDK_GL_PROFILE_DEFAULT,
-                       G_PARAM_READWRITE |
-                       G_PARAM_CONSTRUCT |
-                       G_PARAM_EXPLICIT_NOTIFY |
-                       G_PARAM_STATIC_STRINGS);
-
-  /**
    * GtkGLArea:auto-render:
    *
    * If set to %TRUE the #GtkGLArea::render signal will be emitted every time
@@ -899,7 +870,7 @@ gtk_gl_area_class_init (GtkGLAreaClass *klass)
    * realized, and allows you to override how the GL context is
    * created. This is useful when you want to reuse an existing GL
    * context, or if you want to try creating different kinds of GL
-   * profiles.
+   * options.
    *
    * If context creation fails then the signal handler can use
    * gtk_gl_area_set_error() to register a more detailed error
@@ -928,7 +899,6 @@ gtk_gl_area_init (GtkGLArea *area)
   gtk_widget_set_has_window (GTK_WIDGET (area), FALSE);
   gtk_widget_set_app_paintable (GTK_WIDGET (area), TRUE);
 
-  priv->profile = GDK_GL_PROFILE_DEFAULT;
   priv->auto_render = TRUE;
   priv->needs_render = TRUE;
   priv->required_gl_version = 0;
@@ -1041,54 +1011,6 @@ gtk_gl_area_get_required_version (GtkGLArea *area,
     *major = priv->required_gl_version / 10;
   if (minor != NULL)
     *minor = priv->required_gl_version % 10;
-}
-
-/**
- * gtk_gl_area_get_profile:
- * @area: a #GtkGLArea
- *
- * Returns the profile that will be used to create the GL context for the area.
- *
- * Returns: a #GdkGLProfile
- *
- * Since: 3.16
- */
-GdkGLProfile
-gtk_gl_area_get_profile (GtkGLArea *area)
-{
-  GtkGLAreaPrivate *priv = gtk_gl_area_get_instance_private (area);
-
-  g_return_val_if_fail (GTK_IS_GL_AREA (area), FALSE);
-
-  return priv->profile;
-}
-
-/**
- * gtk_gl_area_set_profile:
- * @area: a #GtkGLArea
- * @profile: a #GdkGLProfile
- *
- * Sets the profile type to be used when creating the context for the widget.
- *
- * This function must be called before the area has been realized.
- *
- * Since: 3.16
- */
-void
-gtk_gl_area_set_profile (GtkGLArea    *area,
-                         GdkGLProfile  profile)
-{
-  GtkGLAreaPrivate *priv = gtk_gl_area_get_instance_private (area);
-
-  g_return_if_fail (GTK_IS_GL_AREA (area));
-  g_return_if_fail (!gtk_widget_get_realized (GTK_WIDGET (area)));
-
-  if (priv->profile != profile)
-    {
-      priv->profile = profile;
-
-      g_object_notify (G_OBJECT (area), "profile");
-    }
 }
 
 /**

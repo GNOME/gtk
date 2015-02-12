@@ -581,59 +581,37 @@ gdk_x11_gl_context_realize (GdkGLContext  *context,
   XVisualInfo *xvisinfo;
   Display *dpy;
   DrawableInfo *info;
-  GdkGLProfile profile;
   GdkGLContext *share;
   GdkWindow *window;
+  gboolean debug_bit, compat_bit;
+  int major, minor, flags;
 
   window = gdk_gl_context_get_window (context);
   display = gdk_window_get_display (window);
   dpy = gdk_x11_display_get_xdisplay (display);
   context_x11 = GDK_X11_GL_CONTEXT (context);
-  profile = gdk_gl_context_get_profile (context);
   share = gdk_gl_context_get_shared_context (context);
 
-  /* default means 3.2 core profile */
-  if (profile == GDK_GL_PROFILE_DEFAULT)
-    profile = GDK_GL_PROFILE_3_2_CORE;
+  gdk_gl_context_get_required_version (context, &major, &minor);
+  debug_bit = gdk_gl_context_get_debug_enabled (context);
+  compat_bit = gdk_gl_context_get_forward_compatible (context);
 
-  /* we check for the presence of the GLX_ARB_create_context_profile
-   * extension before checking for a GLXFBConfig when creating the
-   * GdkX11GLContext instance in gdk_x11_window_create_gl_context().
-   */
-  if (profile == GDK_GL_PROFILE_3_2_CORE)
-    {
-      gboolean debug_bit, compat_bit;
-      int major, minor, flags;
+  flags = 0;
+  if (debug_bit)
+    flags |= GLX_CONTEXT_DEBUG_BIT_ARB;
+  if (compat_bit)
+    flags |= GLX_CONTEXT_FORWARD_COMPATIBLE_BIT_ARB;
 
-      gdk_gl_context_get_required_version (context, &major, &minor);
-      debug_bit = gdk_gl_context_get_debug_enabled (context);
-      compat_bit = gdk_gl_context_get_forward_compatible (context);
+  GDK_NOTE (OPENGL,
+            g_print ("Creating core GLX context (version:%d.%d, debug:%s, forward:%s)\n",
+                     major, minor,
+                     debug_bit ? "yes" : "no",
+                     compat_bit ? "yes" : "no"));
 
-      flags = 0;
-      if (debug_bit)
-        flags |= GLX_CONTEXT_DEBUG_BIT_ARB;
-      if (compat_bit)
-        flags |= GLX_CONTEXT_FORWARD_COMPATIBLE_BIT_ARB;
-
-      GDK_NOTE (OPENGL,
-                g_print ("Creating core GLX context (version:%d.%d, debug:%s, forward:%s)\n",
-                         major, minor,
-                         debug_bit ? "yes" : "no",
-                         compat_bit ? "yes" : "no"));
-
-      context_x11->glx_context = create_gl3_context (display,
-                                                     context_x11->glx_config,
-                                                     share,
-                                                     flags, major, minor);
-    }
-  else
-    {
-      g_set_error_literal (error, GDK_GL_ERROR,
-                           GDK_GL_ERROR_UNSUPPORTED_PROFILE,
-                           _("Unsupported profile for a GL context"));
-      return FALSE;
-    }
-
+  context_x11->glx_context = create_gl3_context (display,
+                                                 context_x11->glx_config,
+                                                 share,
+                                                 flags, major, minor);
   if (context_x11->glx_context == NULL)
     {
       g_set_error_literal (error, GDK_GL_ERROR,
@@ -1191,8 +1169,7 @@ gdk_x11_window_create_gl_context (GdkWindow    *window,
       g_set_error_literal (error, GDK_GL_ERROR,
                            GDK_GL_ERROR_UNSUPPORTED_PROFILE,
                            _("The GLX_ARB_create_context_profile extension "
-                             "needed to create 3.2 core profiles is not "
-                             "available"));
+                             "needed to create core profiles is not available"));
       return NULL;
     }
 

@@ -35,7 +35,6 @@ gdk_mir_gl_context_realize (GdkGLContext *context,
   GdkMirGLContext *context_mir = GDK_MIR_GL_CONTEXT (context);
   GdkDisplay *display = gdk_gl_context_get_display (context);
   GdkGLContext *share = gdk_gl_context_get_shared_context (context);
-  GdkGLProfile profile = gdk_gl_context_get_profile (context);
   EGLContext ctx;
   EGLint context_attribs[N_EGL_ATTRS];
   int major, minor, flags;
@@ -47,18 +46,6 @@ gdk_mir_gl_context_realize (GdkGLContext *context,
       g_set_error_literal (error, GDK_GL_ERROR,
                            GDK_GL_ERROR_NOT_AVAILABLE,
                            _("No GL implementation is available"));
-      return FALSE;
-    }
-
-  /* "default profile" means 3.2 core profile */
-  if (profile == GDK_GL_PROFILE_DEFAULT)
-    profile = GDK_GL_PROFILE_3_2_CORE;
-
-  if (profile != GDK_GL_PROFILE_3_2_CORE)
-    {
-      g_set_error_literal (error, GDK_GL_ERROR,
-                           GDK_GL_ERROR_UNSUPPORTED_PROFILE,
-                           _("Unsupported profile for a GL context"));
       return FALSE;
     }
 
