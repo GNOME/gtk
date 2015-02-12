@@ -2485,6 +2485,7 @@ gtk_notebook_prepend_page_menu
 gtk_notebook_insert_page
 gtk_notebook_insert_page_menu
 gtk_notebook_remove_page
+gtk_notebook_detach_tab
 gtk_notebook_page_num
 gtk_notebook_next_page
 gtk_notebook_prev_page
