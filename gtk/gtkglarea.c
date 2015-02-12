@@ -105,6 +105,8 @@ typedef struct {
 
   gboolean have_buffers;
 
+  int required_gl_version;
+
   guint frame_buffer;
   guint render_buffer;
   guint texture;
@@ -166,31 +168,28 @@ gtk_gl_area_set_property (GObject      *gobject,
                           const GValue *value,
                           GParamSpec   *pspec)
 {
+  GtkGLArea *self = GTK_GL_AREA (gobject);
+
   switch (prop_id)
     {
     case PROP_AUTO_RENDER:
-      gtk_gl_area_set_auto_render (GTK_GL_AREA(gobject),
-                                   g_value_get_boolean (value));
+      gtk_gl_area_set_auto_render (self, g_value_get_boolean (value));
       break;
 
     case PROP_HAS_ALPHA:
-      gtk_gl_area_set_has_alpha (GTK_GL_AREA(gobject),
-                                 g_value_get_boolean (value));
+      gtk_gl_area_set_has_alpha (self, g_value_get_boolean (value));
       break;
 
     case PROP_HAS_DEPTH_BUFFER:
-      gtk_gl_area_set_has_depth_buffer (GTK_GL_AREA(gobject),
-                                        g_value_get_boolean (value));
+      gtk_gl_area_set_has_depth_buffer (self, g_value_get_boolean (value));
       break;
 
     case PROP_HAS_STENCIL_BUFFER:
-      gtk_gl_area_set_has_stencil_buffer (GTK_GL_AREA(gobject),
-                                        g_value_get_boolean (value));
+      gtk_gl_area_set_has_stencil_buffer (self, g_value_get_boolean (value));
       break;
 
     case PROP_PROFILE:
-      gtk_gl_area_set_profile (GTK_GL_AREA(gobject),
-                               g_value_get_enum (value));
+      gtk_gl_area_set_profile (self, g_value_get_enum (value));
       break;
 
     default:
@@ -310,6 +309,9 @@ gtk_gl_area_real_create_context (GtkGLArea *area)
       return NULL;
     }
 
+  gdk_gl_context_set_required_version (context,
+                                       priv->required_gl_version / 10,
+                                       priv->required_gl_version % 10);
   gdk_gl_context_set_profile (context, priv->profile);
 
   gdk_gl_context_realize (context, &error);
@@ -929,6 +931,7 @@ gtk_gl_area_init (GtkGLArea *area)
   priv->profile = GDK_GL_PROFILE_DEFAULT;
   priv->auto_render = TRUE;
   priv->needs_render = TRUE;
+  priv->required_gl_version = 0;
 }
 
 /**
@@ -991,6 +994,56 @@ gtk_gl_area_get_error (GtkGLArea *area)
 }
 
 /**
+ * gtk_gl_area_set_required_version:
+ * @area: a #GtkGLArea
+ *
+ * Sets the required version of OpenGL to be used when creating the context
+ * for the widget.
+ *
+ * This function must be called before the area has been realized.
+ *
+ * Since: 3.16
+ */
+void
+gtk_gl_area_set_required_version (GtkGLArea *area,
+                                  int        major,
+                                  int        minor)
+{
+  GtkGLAreaPrivate *priv = gtk_gl_area_get_instance_private (area);
+
+  g_return_if_fail (GTK_IS_GL_AREA (area));
+  g_return_if_fail (!gtk_widget_get_realized (GTK_WIDGET (area)));
+
+  priv->required_gl_version = major * 10 + minor;
+}
+
+/**
+ * gtk_gl_area_get_required_version:
+ * @area: a #GtkGLArea
+ * @major: (out): return location for the required major version
+ * @minor: (out): return location for the required minor version
+ *
+ * Retrieves the required version of OpenGL set
+ * using gtk_gl_area_set_required_version().
+ *
+ * Since: 3.16
+ */
+void
+gtk_gl_area_get_required_version (GtkGLArea *area,
+                                  int       *major,
+                                  int       *minor)
+{
+  GtkGLAreaPrivate *priv = gtk_gl_area_get_instance_private (area);
+
+  g_return_if_fail (GTK_IS_GL_AREA (area));
+
+  if (major != NULL)
+    *major = priv->required_gl_version / 10;
+  if (minor != NULL)
+    *minor = priv->required_gl_version % 10;
+}
+
+/**
  * gtk_gl_area_get_profile:
  * @area: a #GtkGLArea
  *
@@ -1028,6 +1081,7 @@ gtk_gl_area_set_profile (GtkGLArea    *area,
   GtkGLAreaPrivate *priv = gtk_gl_area_get_instance_private (area);
 
   g_return_if_fail (GTK_IS_GL_AREA (area));
+  g_return_if_fail (!gtk_widget_get_realized (GTK_WIDGET (area)));
 
   if (priv->profile != profile)
     {
