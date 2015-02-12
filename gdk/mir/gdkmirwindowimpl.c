@@ -1409,7 +1409,7 @@ gdk_mir_window_impl_create_gl_context (GdkWindow     *window,
     }
 
   if (profile == GDK_GL_PROFILE_DEFAULT)
-    profile = GDK_GL_PROFILE_LEGACY;
+    profile = GDK_GL_PROFILE_3_2_CORE;
 
   if (profile == GDK_GL_PROFILE_3_2_CORE &&
       !_gdk_mir_display_have_egl_khr_create_context (display))
