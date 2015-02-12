@@ -48,7 +48,7 @@ m4_define([cairo_required_version], [1.14.0])
 m4_define([gdk_pixbuf_required_version], [2.30.0])
 m4_define([introspection_required_version], [1.39.0])
 m4_define([wayland_required_version], [1.5.91])
-m4_define([mirclient_required_version], [0.9.0])
+m4_define([mirclient_required_version], [0.11.0])
 m4_define([epoxy_required_version], [1.0])
 GLIB_REQUIRED_VERSION=glib_required_version
 PANGO_REQUIRED_VERSION=pango_required_version
