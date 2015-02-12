@@ -8214,24 +8214,24 @@ gtk_gesture_zoom_get_type
 </SECTION>
 
 <SECTION>
-<FILE>gtksidebar</FILE>
-GtkSidebar
-GtkSidebarClass
-gtk_sidebar_new
-gtk_sidebar_set_stack
-gtk_sidebar_get_stack
+<FILE>gtkstacksidebar</FILE>
+GtkStackSidebar
+GtkStackSidebarClass
+gtk_stack_sidebar_new
+gtk_stack_sidebar_set_stack
+gtk_stack_sidebar_get_stack
 
 <SUBSECTION Standard>
 GTK_TYPE_SIDEBAR
-GTK_SIDEBAR
-GTK_SIDEBAR_CLASS
+GTK_STACK_SIDEBAR
+GTK_STACK_SIDEBAR_CLASS
 GTK_IS_SIDEBAR
 GTK_IS_SIDEBAR_CLASS
-GTK_SIDEBAR_GET_CLASS
+GTK_STACK_SIDEBAR_GET_CLASS
 
 <SUBSECTION Private>
-GtkSidebarPrivate
-gtk_sidebar_get_type
+GtkStackSidebarPrivate
+gtk_stack_sidebar_get_type
 </SECTION>
 
 <SECTION>

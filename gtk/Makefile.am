@@ -269,7 +269,7 @@ gtk_public_h_sources = 		\
 	gtkseparatortoolitem.h	\
 	gtksettings.h		\
 	gtkshow.h		\
-	gtksidebar.h		\
+	gtkstacksidebar.h	\
 	gtksizegroup.h		\
 	gtksizerequest.h	\
 	gtksocket.h		\
@@ -787,7 +787,7 @@ gtk_base_c_sources = 		\
 	gtksizerequest.c	\
 	gtksizerequestcache.c	\
 	gtkshow.c		\
-	gtksidebar.c		\
+	gtkstacksidebar.c	\
 	gtkspinbutton.c		\
 	gtkspinner.c		\
 	gtkstack.c		\

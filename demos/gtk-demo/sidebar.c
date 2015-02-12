@@ -1,9 +1,9 @@
-/* Sidebar
+/* Stack Sidebar
  *
- * GtkSidebar provides an automatic sidebar widget to control navigation
- * of a GtkStack object. This widget automatically updates it content
- * based on what is presently available in the GtkStack object, and
- * using the "title" child property to set the display labels.
+ * GtkStackSidebar provides an automatic sidebar widget to control
+ * navigation of a GtkStack object. This widget automatically updates it
+ * content based on what is presently available in the GtkStack object,
+ * and using the "title" child property to set the display labels.
  */
 
 #include <glib/gi18n.h>
@@ -21,7 +21,7 @@ do_sidebar (GtkWidget *do_widget)
   GtkWidget *header;
   const gchar* pages[] = {
     "Welcome to GTK+",
-    "GtkSidebar Widget",
+    "GtkStackSidebar Widget",
     "Automatic navigation",
     "Consistent appearance",
     "Scrolling",
@@ -43,18 +43,18 @@ do_sidebar (GtkWidget *do_widget)
       header = gtk_header_bar_new ();
       gtk_header_bar_set_show_close_button (GTK_HEADER_BAR(header), TRUE);
       gtk_window_set_titlebar (GTK_WINDOW(window), header);
-      gtk_window_set_title (GTK_WINDOW(window), "Sidebar demo");
+      gtk_window_set_title (GTK_WINDOW(window), "Stack Sidebar demo");
 
       g_signal_connect (window, "destroy",
                         G_CALLBACK (gtk_widget_destroyed), &window);
 
       box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
-      sidebar = gtk_sidebar_new ();
+      sidebar = gtk_stack_sidebar_new ();
       gtk_box_pack_start (GTK_BOX (box), sidebar, FALSE, FALSE, 0);
 
       stack = gtk_stack_new ();
       gtk_stack_set_transition_type (GTK_STACK (stack), GTK_STACK_TRANSITION_TYPE_SLIDE_UP_DOWN);
-      gtk_sidebar_set_stack (GTK_SIDEBAR (sidebar), GTK_STACK (stack));
+      gtk_stack_sidebar_set_stack (GTK_STACK_SIDEBAR (sidebar), GTK_STACK (stack));
 
       /* Separator between sidebar and stack */
       widget = gtk_separator_new (GTK_ORIENTATION_VERTICAL);

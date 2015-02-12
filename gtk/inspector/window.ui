@@ -233,7 +233,7 @@
                     <property name="visible">True</property>
                     <property name="orientation">horizontal</property>
                     <child>
-                      <object class="GtkSidebar">
+                      <object class="GtkStackSidebar">
                         <property name="visible">True</property>
                         <property name="stack">object_details</property>
                       </object>

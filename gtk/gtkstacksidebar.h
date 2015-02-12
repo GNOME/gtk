@@ -19,8 +19,8 @@
  *      Ikey Doherty <michael.i.doherty@intel.com>
  */
 
-#ifndef __GTK_SIDEBAR_H__
-#define __GTK_SIDEBAR_H__
+#ifndef __GTK_STACK_SIDEBAR_H__
+#define __GTK_STACK_SIDEBAR_H__
 
 #if !defined (__GTK_H_INSIDE__) && !defined (GTK_COMPILATION)
 #error "Only <gtk/gtk.h> can be included directly."
@@ -31,23 +31,23 @@
 
 G_BEGIN_DECLS
 
-#define GTK_TYPE_SIDEBAR                 (gtk_sidebar_get_type ())
-#define GTK_SIDEBAR(obj)                 (G_TYPE_CHECK_INSTANCE_CAST ((obj), GTK_TYPE_SIDEBAR, GtkSidebar))
-#define GTK_IS_SIDEBAR(obj)              (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GTK_TYPE_SIDEBAR))
-#define GTK_SIDEBAR_CLASS(klass)         (G_TYPE_CHECK_CLASS_CAST ((klass), GTK_TYPE_SIDEBAR, GtkSidebarClass))
-#define GTK_IS_SIDEBAR_CLASS(klass)      (G_TYPE_CHECK_CLASS_TYPE ((klass), GTK_TYPE_SIDEBAR))
-#define GTK_SIDEBAR_GET_CLASS(obj)       (G_TYPE_INSTANCE_GET_CLASS ((obj), GTK_TYPE_SIDEBAR, GtkSidebarClass))
+#define GTK_TYPE_STACK_SIDEBAR           (gtk_stack_sidebar_get_type ())
+#define GTK_STACK_SIDEBAR(obj)           (G_TYPE_CHECK_INSTANCE_CAST ((obj), GTK_TYPE_STACK_SIDEBAR, GtkStackSidebar))
+#define GTK_IS_SIDEBAR(obj)              (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GTK_TYPE_STACK_SIDEBAR))
+#define GTK_STACK_SIDEBAR_CLASS(klass)   (G_TYPE_CHECK_CLASS_CAST ((klass), GTK_TYPE_STACK_SIDEBAR, GtkStackSidebarClass))
+#define GTK_IS_SIDEBAR_CLASS(klass)      (G_TYPE_CHECK_CLASS_TYPE ((klass), GTK_TYPE_STACK_SIDEBAR))
+#define GTK_STACK_SIDEBAR_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS ((obj), GTK_TYPE_STACK_SIDEBAR, GtkStackSidebarClass))
 
-typedef struct _GtkSidebar        GtkSidebar;
-typedef struct _GtkSidebarPrivate GtkSidebarPrivate;
-typedef struct _GtkSidebarClass   GtkSidebarClass;
+typedef struct _GtkStackSidebar        GtkStackSidebar;
+typedef struct _GtkStackSidebarPrivate GtkStackSidebarPrivate;
+typedef struct _GtkStackSidebarClass   GtkStackSidebarClass;
 
-struct _GtkSidebar
+struct _GtkStackSidebar
 {
   GtkBin parent;
 };
 
-struct _GtkSidebarClass
+struct _GtkStackSidebarClass
 {
   GtkBinClass parent_class;
 
@@ -59,15 +59,15 @@ struct _GtkSidebarClass
 };
 
 GDK_AVAILABLE_IN_3_16
-GType       gtk_sidebar_get_type  (void) G_GNUC_CONST;
+GType       gtk_stack_sidebar_get_type  (void) G_GNUC_CONST;
 GDK_AVAILABLE_IN_3_16
-GtkWidget * gtk_sidebar_new       (void);
+GtkWidget * gtk_stack_sidebar_new       (void);
 GDK_AVAILABLE_IN_3_16
-void        gtk_sidebar_set_stack (GtkSidebar *sidebar,
-                                   GtkStack   *stack);
+void        gtk_stack_sidebar_set_stack (GtkStackSidebar *sidebar,
+                                         GtkStack        *stack);
 GDK_AVAILABLE_IN_3_16
-GtkStack *  gtk_sidebar_get_stack (GtkSidebar *sidebar);
+GtkStack *  gtk_stack_sidebar_get_stack (GtkStackSidebar *sidebar);
 
 G_END_DECLS
 
-#endif /* __GTK_SIDEBAR_H__ */
+#endif /* __GTK_STACK_SIDEBAR_H__ */

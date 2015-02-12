@@ -137,8 +137,8 @@ main (gint argc,
   gtk_widget_set_halign (stack, GTK_ALIGN_START);
 
   /* Add sidebar before stack */
-  sidebar = gtk_sidebar_new ();
-  gtk_sidebar_set_stack (GTK_SIDEBAR (sidebar), GTK_STACK (stack));
+  sidebar = gtk_stack_sidebar_new ();
+  gtk_stack_sidebar_set_stack (GTK_STACK_SIDEBAR (sidebar), GTK_STACK (stack));
   layout = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
   gtk_box_pack_start (GTK_BOX (layout), sidebar, FALSE, FALSE, 0);
   gtk_box_pack_start (GTK_BOX (layout), stack, TRUE, TRUE, 0);

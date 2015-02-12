@@ -3400,7 +3400,7 @@ microphone-sensitivity-medium-symbolic</property>
                             <property name="visible">True</property>
                             <property name="orientation">horizontal</property>
                             <child>
-                              <object class="GtkSidebar">
+                              <object class="GtkStackSidebar">
                                 <property name="visible">True</property>
                                 <property name="stack">sidebar_stack</property>
                               </object>

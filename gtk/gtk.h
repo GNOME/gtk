@@ -184,7 +184,7 @@
 #include <gtk/gtkseparatortoolitem.h>
 #include <gtk/gtksettings.h>
 #include <gtk/gtkshow.h>
-#include <gtk/gtksidebar.h>
+#include <gtk/gtkstacksidebar.h>
 #include <gtk/gtksizegroup.h>
 #include <gtk/gtksizerequest.h>
 #include <gtk/gtkspinbutton.h>

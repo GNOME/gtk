@@ -283,7 +283,7 @@ gtk_OBJECTS = \
 	gtkseparatortoolitem.obj \
 	gtksettings.obj \
 	gtkshow.obj \
-	gtksidebar.obj \
+	gtkstacksidebar.obj \
 	gtksizegroup.obj \
 	gtksizerequest.obj \
 	gtkspinbutton.obj \
@@ -476,7 +476,7 @@ gtk_public_h_sources = 		\
 	gtkseparatortoolitem.h	\
 	gtksettings.h		\
 	gtkshow.h		\
-	gtksidebar.h		\
+	gtkstacksidebar.h	\
 	gtksizegroup.h		\
 	gtksizerequest.h	\
 	gtksocket.h		\

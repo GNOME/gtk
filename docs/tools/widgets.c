@@ -1407,8 +1407,8 @@ create_sidebar (void)
   gtk_widget_show (view);
   gtk_stack_add_titled (GTK_STACK (stack), view, "page2", "Page 2");
 
-  sidebar = gtk_sidebar_new ();
-  gtk_sidebar_set_stack (GTK_SIDEBAR (sidebar), GTK_STACK (stack));
+  sidebar = gtk_stack_sidebar_new ();
+  gtk_stack_sidebar_set_stack (GTK_STACK_SIDEBAR (sidebar), GTK_STACK (stack));
 
   frame = gtk_frame_new (NULL);
   hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
