@@ -12,6 +12,7 @@ gdk/gdkpango.c
 gdk/gdkscreen.c
 gdk/gdkwindow.c
 gdk/keyname-table.h
+gdk/mir/gdkmirglcontext.c
 gdk/mir/gdkmirwindowimpl.c
 gdk/wayland/gdkglcontext-wayland.c
 gdk/win32/gdkglcontext-win32.c
