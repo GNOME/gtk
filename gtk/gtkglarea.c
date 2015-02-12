@@ -89,32 +89,12 @@
  *   }
  * ]|
  *
- * The `draw_an_object()` function draws a 2D, gold-colored
- * triangle:
+ * If you need to initialize OpenGL state, e.g. buffer objects or
+ * shadres, you should use the #GtkWidget::realize signal; you
+ * can use the #GtkWidget::unrealize signal to clean up.
  *
- * |[<!-- language="C" -->
- *   static void
- *   draw_an_object (void)
- *   {
- *     // set the color
- *     glColor3f (1.0f, 0.85f, 0.35f);
- *
- *     // draw our triangle
- *     glBegin (GL_TRIANGLES);
- *     {
- *       glVertex3f ( 0.0f,  0.6f,  0.0f);
- *       glVertex3f (-0.2f, -0.3f,  0.0f);
- *       glVertex3f ( 0.2f, -0.3f,  0.0f);
- *     }
- *     glEnd ();
- *   }
- * ]|
- *
- * This is an extremely simple example; in a real-world application you
- * would probably replace the immediate mode drawing with persistent
- * geometry primitives, like a Vertex Buffer Object, and only redraw what
- * changed in your scene.
- *
+ * If you need to change the options for creating the #GdkGLContext
+ * you should use the #GtkGLArea::create-context signal.
  */
 
 typedef struct {
@@ -1036,7 +1016,8 @@ gtk_gl_area_get_profile (GtkGLArea *area)
  * @profile: a #GdkGLProfile
  *
  * Sets the profile type to be used when creating the context for the widget.
- * This must be called before the are has been realized.
+ *
+ * This function must be called before the area has been realized.
  *
  * Since: 3.16
  */
