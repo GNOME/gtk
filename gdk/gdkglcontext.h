@@ -47,8 +47,6 @@ GdkDisplay *            gdk_gl_context_get_display              (GdkGLContext  *
 GDK_AVAILABLE_IN_3_16
 GdkWindow *             gdk_gl_context_get_window               (GdkGLContext  *context);
 GDK_AVAILABLE_IN_3_16
-GdkGLProfile            gdk_gl_context_get_profile              (GdkGLContext  *context);
-GDK_AVAILABLE_IN_3_16
 GdkGLContext *          gdk_gl_context_get_shared_context       (GdkGLContext  *context);
 
 GDK_AVAILABLE_IN_3_16
@@ -69,11 +67,15 @@ void                    gdk_gl_context_set_forward_compatible   (GdkGLContext  *
                                                                  gboolean       compatible);
 GDK_AVAILABLE_IN_3_16
 gboolean                gdk_gl_context_get_forward_compatible   (GdkGLContext  *context);
+GDK_AVAILABLE_IN_3_16
+void                    gdk_gl_context_set_profile              (GdkGLContext  *context,
+                                                                 GdkGLProfile   profile);
+GDK_AVAILABLE_IN_3_16
+GdkGLProfile            gdk_gl_context_get_profile              (GdkGLContext  *context);
 
 GDK_AVAILABLE_IN_3_16
 gboolean                gdk_gl_context_realize                  (GdkGLContext  *context,
                                                                  GError       **error);
-
 GDK_AVAILABLE_IN_3_16
 void                    gdk_gl_context_make_current             (GdkGLContext  *context);
 GDK_AVAILABLE_IN_3_16

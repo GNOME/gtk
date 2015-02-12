@@ -461,7 +461,6 @@ _gdk_win32_gl_context_realize (GdkGLContext *context,
 {
   GdkGLContext *share = gdk_gl_context_get_shared_context (context);
   GdkGLProfile profile = gdk_gl_context_get_profile (context);
-
   GdkWin32GLContext *context_win32 = GDK_WIN32_GL_CONTEXT (context);
 
   /* These are the real WGL context items that we will want to use later */
@@ -543,7 +542,6 @@ _gdk_win32_gl_context_realize (GdkGLContext *context,
 GdkGLContext *
 _gdk_win32_window_create_gl_context (GdkWindow *window,
                                      gboolean attached,
-                                     GdkGLProfile profile,
                                      GdkGLContext *share,
                                      GError **error)
 {
@@ -572,9 +570,7 @@ _gdk_win32_window_create_gl_context (GdkWindow *window,
     }
 
   /* We first check whether we have WGL_ARB_create_context... */
-
-  if (profile == GDK_GL_PROFILE_3_2_CORE &&
-      !display_win32->hasWglARBCreateContext)
+  if (!display_win32->hasWglARBCreateContext)
     {
       g_set_error_literal (error, GDK_GL_ERROR,
                            GDK_GL_ERROR_UNSUPPORTED_PROFILE,
@@ -593,7 +589,6 @@ _gdk_win32_window_create_gl_context (GdkWindow *window,
   context = g_object_new (GDK_TYPE_WIN32_GL_CONTEXT,
                           "display", display,
                           "window", window,
-                          "profile", profile,
                           "shared-context", share,
                           NULL);
 

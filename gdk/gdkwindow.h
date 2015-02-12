@@ -1113,7 +1113,6 @@ gboolean  gdk_window_show_window_menu          (GdkWindow      *window,
 
 GDK_AVAILABLE_IN_3_16
 GdkGLContext * gdk_window_create_gl_context    (GdkWindow      *window,
-                                                GdkGLProfile    profile,
                                                 GError        **error);
 
 G_END_DECLS

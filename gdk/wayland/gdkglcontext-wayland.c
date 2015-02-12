@@ -117,6 +117,10 @@ gdk_wayland_gl_context_realize (GdkGLContext *context,
   gboolean debug_bit, forward_bit;
   int i = 0;
 
+  /* default profile means 3.2 core profile */
+  if (profile == GDK_GL_PROFILE_DEFAULT)
+    profile = GDK_GL_PROFILE_3_2_CORE;
+
   if (profile != GDK_GL_PROFILE_3_2_CORE)
     {
       g_set_error_literal (error, GDK_GL_ERROR,
@@ -362,7 +366,6 @@ find_eglconfig_for_window (GdkWindow  *window,
 GdkGLContext *
 gdk_wayland_window_create_gl_context (GdkWindow     *window,
 				      gboolean       attached,
-                                      GdkGLProfile   profile,
                                       GdkGLContext  *share,
                                       GError       **error)
 {
@@ -379,11 +382,7 @@ gdk_wayland_window_create_gl_context (GdkWindow     *window,
       return NULL;
     }
 
-  if (profile == GDK_GL_PROFILE_DEFAULT)
-    profile = GDK_GL_PROFILE_3_2_CORE;
-
-  if (profile == GDK_GL_PROFILE_3_2_CORE &&
-      !display_wayland->have_egl_khr_create_context)
+  if (!display_wayland->have_egl_khr_create_context)
     {
       g_set_error_literal (error, GDK_GL_ERROR,
                            GDK_GL_ERROR_UNSUPPORTED_PROFILE,
@@ -397,7 +396,6 @@ gdk_wayland_window_create_gl_context (GdkWindow     *window,
   context = g_object_new (GDK_TYPE_WAYLAND_GL_CONTEXT,
                           "display", display,
                           "window", window,
-                          "profile", profile,
                           "shared-context", share,
                           NULL);
 

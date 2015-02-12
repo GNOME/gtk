@@ -60,7 +60,6 @@ struct _GdkX11GLContextClass
 gboolean        gdk_x11_screen_init_gl                          (GdkScreen         *screen);
 GdkGLContext *  gdk_x11_window_create_gl_context                (GdkWindow         *window,
 								 gboolean           attached,
-                                                                 GdkGLProfile       profile,
                                                                  GdkGLContext      *share,
                                                                  GError           **error);
 void            gdk_x11_window_invalidate_for_new_frame         (GdkWindow         *window,

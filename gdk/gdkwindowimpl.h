@@ -293,7 +293,6 @@ struct _GdkWindowImplClass
                                            GdkEvent       *event);
   GdkGLContext *(*create_gl_context)      (GdkWindow      *window,
 					   gboolean        attached,
-                                           GdkGLProfile    profile,
                                            GdkGLContext   *share,
                                            GError        **error);
   gboolean     (* realize_gl_context)     (GdkWindow      *window,

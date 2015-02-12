@@ -201,7 +201,7 @@ gdk_gl_context_set_property (GObject      *gobject,
       break;
 
     case PROP_PROFILE:
-      priv->profile = g_value_get_enum (value);
+      gdk_gl_context_set_profile (GDK_GL_CONTEXT (gobject), g_value_get_enum (value));
       break;
 
     default:
@@ -307,7 +307,6 @@ gdk_gl_context_class_init (GdkGLContextClass *klass)
                        GDK_TYPE_GL_PROFILE,
                        GDK_GL_PROFILE_DEFAULT,
                        G_PARAM_READWRITE |
-                       G_PARAM_CONSTRUCT_ONLY |
                        G_PARAM_STATIC_STRINGS);
 
   /**
@@ -731,10 +730,39 @@ gdk_gl_context_get_window (GdkGLContext *context)
 }
 
 /**
+ * gdk_gl_context_set_profile:
+ * @context: a #GdkGLContext
+ * @profile: the profile for the context
+ *
+ * Sets the profile used when realizing the context.
+ *
+ * The #GdkGLContext must not be realized or made current prior to calling
+ * this function.
+ *
+ * Since: 3.16
+ */
+void
+gdk_gl_context_set_profile (GdkGLContext *context,
+                            GdkGLProfile  profile)
+{
+  GdkGLContextPrivate *priv = gdk_gl_context_get_instance_private (context);
+
+  g_return_if_fail (GDK_IS_GL_CONTEXT (context));
+  g_return_if_fail (!priv->realized);
+
+  if (priv->profile != profile)
+    {
+      priv->profile = profile;
+
+      g_object_notify_by_pspec (G_OBJECT (context), obj_pspecs[PROP_PROFILE]);
+    }
+}
+
+/**
  * gdk_gl_context_get_profile:
  * @context: a #GdkGLContext
  *
- * Retrieves the #GdkGLProfile that @context was created for.
+ * Retrieves the #GdkGLProfile set using gdk_gl_context_set_profile().
  *
  * Returns: a #GdkGLProfile
  *

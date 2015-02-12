@@ -1392,7 +1392,6 @@ find_eglconfig_for_window (GdkWindow  *window,
 static GdkGLContext *
 gdk_mir_window_impl_create_gl_context (GdkWindow     *window,
                                        gboolean       attached,
-                                       GdkGLProfile   profile,
                                        GdkGLContext  *share,
                                        GError       **error)
 {
@@ -1408,11 +1407,7 @@ gdk_mir_window_impl_create_gl_context (GdkWindow     *window,
       return NULL;
     }
 
-  if (profile == GDK_GL_PROFILE_DEFAULT)
-    profile = GDK_GL_PROFILE_3_2_CORE;
-
-  if (profile == GDK_GL_PROFILE_3_2_CORE &&
-      !_gdk_mir_display_have_egl_khr_create_context (display))
+  if (!_gdk_mir_display_have_egl_khr_create_context (display))
     {
       g_set_error_literal (error, GDK_GL_ERROR,
                            GDK_GL_ERROR_UNSUPPORTED_PROFILE,
@@ -1426,7 +1421,6 @@ gdk_mir_window_impl_create_gl_context (GdkWindow     *window,
   context = g_object_new (GDK_TYPE_MIR_GL_CONTEXT,
                           "display", display,
                           "window", window,
-                          "profile", profile,
                           "shared-context", share,
                           NULL);
 

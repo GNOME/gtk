@@ -56,7 +56,6 @@ struct _GdkWin32GLContextClass
 GdkGLContext *
 _gdk_win32_window_create_gl_context (GdkWindow *window,
                                      gboolean attached,
-                                     GdkGLProfile profile,
                                      GdkGLContext *share,
                                      GError **error);
 

@@ -50,6 +50,10 @@ gdk_mir_gl_context_realize (GdkGLContext *context,
       return FALSE;
     }
 
+  /* "default profile" means 3.2 core profile */
+  if (profile == GDK_GL_PROFILE_DEFAULT)
+    profile = GDK_GL_PROFILE_3_2_CORE;
+
   if (profile != GDK_GL_PROFILE_3_2_CORE)
     {
       g_set_error_literal (error, GDK_GL_ERROR,
