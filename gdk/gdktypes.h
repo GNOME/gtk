@@ -436,7 +436,9 @@ struct _GdkPoint
 /**
  * GdkGLProfile:
  * @GDK_GL_PROFILE_DEFAULT: The default profile.
- * @GDK_GL_PROFILE_3_2_CORE: Use core 3.2 GL profiles
+ * @GDK_GL_PROFILE_3_2_CORE: Use the OpenGL core profile, with
+ *   a minimum required version of 3.2; this is the default
+ *   profile.
  *
  * The profile to be used when creating a #GdkGLContext.
  *
