@@ -17,8 +17,8 @@ msgstr ""
 "Project-Id-Version: gtk+.master\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gtk"
 "%2b&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2015-01-19 14:24+0000\n"
-"PO-Revision-Date: 2015-01-19 18:20+0100\n"
+"POT-Creation-Date: 2015-02-10 10:11+0000\n"
+"PO-Revision-Date: 2015-02-10 19:12+0100\n"
 "Last-Translator: Daniel Mustieles <daniel.mustieles@gmail.com>\n"
 "Language-Team: Español; Castellano <gnome-es-list@gnome.org>\n"
 "Language: \n"
@@ -91,7 +91,7 @@ msgstr "OPCIONES"
 msgid "GDK debugging flags to unset"
 msgstr "Opciones de depuración GTK+ que quitar"
 
-#: ../gdk/gdkwindow.c:2733
+#: ../gdk/gdkwindow.c:2736
 msgid "GL support disabled via GDK_DEBUG"
 msgstr "Soporte de GL desactivado mediante GDK_DEBUG"
 
@@ -437,33 +437,39 @@ msgctxt "keyboard label"
 msgid "Suspend"
 msgstr "Suspender"
 
-#: ../gdk/mir/gdkmirwindowimpl.c:1308 ../gdk/mir/gdkmirwindowimpl.c:1318
-#: ../gdk/wayland/gdkglcontext-wayland.c:263
-#: ../gdk/wayland/gdkglcontext-wayland.c:273
-#: ../gdk/win32/gdkglcontext-win32.c:527 ../gdk/x11/gdkglcontext-x11.c:700
+#: ../gdk/mir/gdkmirwindowimpl.c:1368 ../gdk/mir/gdkmirwindowimpl.c:1378
+#: ../gdk/wayland/gdkglcontext-wayland.c:338
+#: ../gdk/wayland/gdkglcontext-wayland.c:348
+#: ../gdk/win32/gdkglcontext-win32.c:477 ../gdk/x11/gdkglcontext-x11.c:874
 msgid "No available configurations for the given pixel format"
 msgstr "No hay ninguna configuración disponible para el formato de píxel dado"
 
-#: ../gdk/mir/gdkmirwindowimpl.c:1350
-#: ../gdk/wayland/gdkglcontext-wayland.c:306
-#: ../gdk/win32/gdkglcontext-win32.c:505 ../gdk/x11/gdkglcontext-x11.c:1064
+#: ../gdk/mir/gdkmirwindowimpl.c:1410
+#: ../gdk/wayland/gdkglcontext-wayland.c:378
+#: ../gdk/win32/gdkglcontext-win32.c:570 ../gdk/x11/gdkglcontext-x11.c:1185
 msgid "No GL implementation is available"
 msgstr "No hay ninguna implementación de GL disponible"
 
-#: ../gdk/mir/gdkmirwindowimpl.c:1362
-#: ../gdk/wayland/gdkglcontext-wayland.c:318
+#: ../gdk/mir/gdkmirwindowimpl.c:1422
+#: ../gdk/wayland/gdkglcontext-wayland.c:390
 msgid "3.2 core GL profile is not available on EGL implementation"
 msgstr ""
 "El perfil 3.2 del núcleo de GL no está disponible en la implementación de EGL"
 
-#: ../gdk/mir/gdkmirwindowimpl.c:1385
-#: ../gdk/wayland/gdkglcontext-wayland.c:341
-#: ../gdk/win32/gdkglcontext-win32.c:541 ../gdk/x11/gdkglcontext-x11.c:1108
-#: ../gdk/x11/gdkglcontext-x11.c:1152
+#: ../gdk/mir/gdkmirwindowimpl.c:1445
+#: ../gdk/wayland/gdkglcontext-wayland.c:165
+#: ../gdk/win32/gdkglcontext-win32.c:529 ../gdk/x11/gdkglcontext-x11.c:636
+#: ../gdk/x11/gdkglcontext-x11.c:680
 msgid "Unable to create a GL context"
 msgstr "No se pudo crear un contexto GL"
 
-#: ../gdk/win32/gdkglcontext-win32.c:514
+#: ../gdk/wayland/gdkglcontext-wayland.c:124
+#: ../gdk/win32/gdkglcontext-win32.c:520 ../gdk/x11/gdkglcontext-x11.c:628
+#| msgid "Unsupported icon type"
+msgid "Unsupported profile for a GL context"
+msgstr "Perfil soportado para un contexto GL"
+
+#: ../gdk/win32/gdkglcontext-win32.c:581
 msgid ""
 "The WGL_ARB_create_context extension needed to create 3.2 core profiles is "
 "not available"
@@ -518,13 +524,13 @@ msgid_plural "Opening %d Items"
 msgstr[0] "Abriendo %d elemento"
 msgstr[1] "Abriendo %d elementos"
 
-#: ../gdk/x11/gdkglcontext-x11.c:729
+#: ../gdk/x11/gdkglcontext-x11.c:902
 #, c-format
 msgid "No available configurations for the given RGBA pixel format"
 msgstr ""
 "No hay ninguna configuración disponible para el formato de píxel RGBA dado"
 
-#: ../gdk/x11/gdkglcontext-x11.c:1073
+#: ../gdk/x11/gdkglcontext-x11.c:1194
 msgid ""
 "The GLX_ARB_create_context_profile extension needed to create 3.2 core "
 "profiles is not available"
@@ -1224,11 +1230,11 @@ msgstr ""
 
 #: ../gtk/deprecated/gtkcolorseldialog.c:191
 #: ../gtk/deprecated/gtkfontsel.c:1689 ../gtk/gtkfilechooserbutton.c:794
-#: ../gtk/gtkfilechooserwidget.c:5284 ../gtk/gtkmessagedialog.c:944
+#: ../gtk/gtkfilechooserwidget.c:5294 ../gtk/gtkmessagedialog.c:944
 #: ../gtk/gtkmessagedialog.c:957 ../gtk/gtkmountoperation.c:543
 #: ../gtk/gtkpagesetupunixdialog.c:196 ../gtk/gtkprintbackend.c:763
 #: ../gtk/gtkprinteroptionwidget.c:545 ../gtk/gtkprintunixdialog.c:665
-#: ../gtk/gtkprintunixdialog.c:733 ../gtk/gtkwindow.c:11844
+#: ../gtk/gtkprintunixdialog.c:733 ../gtk/gtkwindow.c:11850
 #: ../gtk/inspector/css-editor.c:199 ../gtk/ui/gtkappchooserdialog.ui.h:2
 #: ../gtk/ui/gtkassistant.ui.h:5 ../gtk/ui/gtkcolorchooserdialog.ui.h:2
 #: ../gtk/ui/gtkfontchooserdialog.ui.h:2
@@ -1282,7 +1288,7 @@ msgstr "_Aplicar"
 
 #: ../gtk/deprecated/gtkfontsel.c:1698 ../gtk/gtkmessagedialog.c:936
 #: ../gtk/gtkmessagedialog.c:958 ../gtk/gtkprintbackend.c:764
-#: ../gtk/gtkwindow.c:11845 ../gtk/inspector/classes-list.c:127
+#: ../gtk/gtkwindow.c:11851 ../gtk/inspector/classes-list.c:127
 msgid "_OK"
 msgstr "_Aceptar"
 
@@ -2138,25 +2144,25 @@ msgid "Paper Margins"
 msgstr "Márgenes del papel"
 
 #: ../gtk/gtkentry.c:9626 ../gtk/gtkentry.c:9779 ../gtk/gtklabel.c:6596
-#: ../gtk/gtktextview.c:9032 ../gtk/gtktextview.c:9220
+#: ../gtk/gtktextview.c:9037 ../gtk/gtktextview.c:9225
 msgid "Cu_t"
 msgstr "Cor_tar"
 
 #: ../gtk/gtkentry.c:9630 ../gtk/gtkentry.c:9782 ../gtk/gtklabel.c:6597
-#: ../gtk/gtktextview.c:9036 ../gtk/gtktextview.c:9224
+#: ../gtk/gtktextview.c:9041 ../gtk/gtktextview.c:9229
 msgid "_Copy"
 msgstr "_Copiar"
 
 #: ../gtk/gtkentry.c:9634 ../gtk/gtkentry.c:9785 ../gtk/gtklabel.c:6598
-#: ../gtk/gtktextview.c:9038 ../gtk/gtktextview.c:9226
+#: ../gtk/gtktextview.c:9043 ../gtk/gtktextview.c:9231
 msgid "_Paste"
 msgstr "_Pegar"
 
-#: ../gtk/gtkentry.c:9637 ../gtk/gtklabel.c:6600 ../gtk/gtktextview.c:9041
+#: ../gtk/gtkentry.c:9637 ../gtk/gtklabel.c:6600 ../gtk/gtktextview.c:9046
 msgid "_Delete"
 msgstr "_Eliminar"
 
-#: ../gtk/gtkentry.c:9648 ../gtk/gtklabel.c:6609 ../gtk/gtktextview.c:9055
+#: ../gtk/gtkentry.c:9648 ../gtk/gtklabel.c:6609 ../gtk/gtktextview.c:9060
 msgid "Select _All"
 msgstr "Seleccionar _todo"
 
@@ -2181,7 +2187,7 @@ msgstr "(Ninguno)"
 msgid "_Open"
 msgstr "_Abrir"
 
-#: ../gtk/gtkfilechooserbutton.c:2139
+#: ../gtk/gtkfilechooserbutton.c:2137
 msgid "Other…"
 msgstr "Otro…"
 
@@ -2194,7 +2200,7 @@ msgstr "Otro…"
 msgid "%1$s on %2$s"
 msgstr "%1$s en %2$s"
 
-#: ../gtk/gtkfilechooserwidget.c:330
+#: ../gtk/gtkfilechooserwidget.c:328
 msgid "Type name of new folder"
 msgstr "Teclee el nombre de la carpeta nueva"
 
@@ -2245,102 +2251,102 @@ msgstr "Nombre de archivo no válido"
 msgid "The folder contents could not be displayed"
 msgstr "No se pudo mostrar el contenido de la carpeta"
 
-#: ../gtk/gtkfilechooserwidget.c:1461
+#: ../gtk/gtkfilechooserwidget.c:1481
 msgid "Could not select file"
 msgstr "No se pudo seleccionar el archivo"
 
-#: ../gtk/gtkfilechooserwidget.c:1691
+#: ../gtk/gtkfilechooserwidget.c:1711
 msgid "_Visit File"
 msgstr "_Visitar archivo"
 
-#: ../gtk/gtkfilechooserwidget.c:1694
+#: ../gtk/gtkfilechooserwidget.c:1714
 msgid "_Copy Location"
 msgstr "Copiar _ubicación"
 
-#: ../gtk/gtkfilechooserwidget.c:1697
+#: ../gtk/gtkfilechooserwidget.c:1717
 msgid "_Add to Bookmarks"
 msgstr "_Añadir a los marcadores"
 
-#: ../gtk/gtkfilechooserwidget.c:1704
+#: ../gtk/gtkfilechooserwidget.c:1724
 msgid "Show _Hidden Files"
 msgstr "Mostrar archivos _ocultos"
 
-#: ../gtk/gtkfilechooserwidget.c:1707
+#: ../gtk/gtkfilechooserwidget.c:1727
 msgid "Show _Size Column"
 msgstr "Mostrar columna de _tamaño"
 
-#: ../gtk/gtkfilechooserwidget.c:1710
+#: ../gtk/gtkfilechooserwidget.c:1730
 msgid "Sort _Folders before Files"
 msgstr "Ordenar _carpetas antes que archivos"
 
 #. this is the header for the location column in the print dialog
-#: ../gtk/gtkfilechooserwidget.c:1979 ../gtk/inspector/style-prop-list.ui.h:3
+#: ../gtk/gtkfilechooserwidget.c:1999 ../gtk/inspector/style-prop-list.ui.h:3
 #: ../gtk/ui/gtkprintunixdialog.ui.h:4
 msgid "Location"
 msgstr "Lugar"
 
 #. Label
-#: ../gtk/gtkfilechooserwidget.c:2019
+#: ../gtk/gtkfilechooserwidget.c:2039
 msgid "_Name:"
 msgstr "_Nombre:"
 
-#: ../gtk/gtkfilechooserwidget.c:3706
+#: ../gtk/gtkfilechooserwidget.c:3714
 #, c-format
 msgid "Could not read the contents of %s"
 msgstr "No se pudo leer el contenido de %s"
 
-#: ../gtk/gtkfilechooserwidget.c:3710
+#: ../gtk/gtkfilechooserwidget.c:3718
 msgid "Could not read the contents of the folder"
 msgstr "No se pudo leer el contenido del la carpeta"
 
-#: ../gtk/gtkfilechooserwidget.c:3817
+#: ../gtk/gtkfilechooserwidget.c:3825
 msgid "%H:%M"
 msgstr "%H:%M"
 
-#: ../gtk/gtkfilechooserwidget.c:3817
+#: ../gtk/gtkfilechooserwidget.c:3825
 msgid "%-I:%M %P"
 msgstr "%-I:%M %P"
 
-#: ../gtk/gtkfilechooserwidget.c:3819
+#: ../gtk/gtkfilechooserwidget.c:3827
 msgid "Yesterday at %H:%M"
 msgstr "Ayer a las %H:%M"
 
-#: ../gtk/gtkfilechooserwidget.c:3819
+#: ../gtk/gtkfilechooserwidget.c:3827
 msgid "Yesterday at %-I:%M %P"
 msgstr "Ayer a las %-I:%M %P"
 
 #. Translators: We don't know whether this printer is
 #. * available to print to.
-#: ../gtk/gtkfilechooserwidget.c:4018 ../gtk/inspector/prop-editor.c:1569
+#: ../gtk/gtkfilechooserwidget.c:4026 ../gtk/inspector/prop-editor.c:1569
 #: ../modules/printbackends/cloudprint/gtkprintbackendcloudprint.c:748
 msgid "Unknown"
 msgstr "Desconocido"
 
-#: ../gtk/gtkfilechooserwidget.c:4491
+#: ../gtk/gtkfilechooserwidget.c:4501
 msgid "Cannot change to folder because it is not local"
 msgstr "No se pudo cambiar a la carpeta porque no es local"
 
-#: ../gtk/gtkfilechooserwidget.c:5277 ../gtk/gtkprintunixdialog.c:656
+#: ../gtk/gtkfilechooserwidget.c:5287 ../gtk/gtkprintunixdialog.c:656
 #, c-format
 msgid "A file named “%s” already exists.  Do you want to replace it?"
 msgstr "Ya existe un archivo llamado «%s». ¿Quiere reemplazarlo?"
 
-#: ../gtk/gtkfilechooserwidget.c:5280 ../gtk/gtkprintunixdialog.c:660
+#: ../gtk/gtkfilechooserwidget.c:5290 ../gtk/gtkprintunixdialog.c:660
 #, c-format
 msgid ""
 "The file already exists in “%s”.  Replacing it will overwrite its contents."
 msgstr ""
 "El archivo ya existe en «%s». Si lo reemplaza sobrescribirá su contenido."
 
-#: ../gtk/gtkfilechooserwidget.c:5285 ../gtk/gtkprintunixdialog.c:668
+#: ../gtk/gtkfilechooserwidget.c:5295 ../gtk/gtkprintunixdialog.c:668
 msgid "_Replace"
 msgstr "_Reemplazar"
 
-#: ../gtk/gtkfilechooserwidget.c:6104
+#: ../gtk/gtkfilechooserwidget.c:6114
 msgid "Could not start the search process"
 msgstr "No se ha podido iniciar el proceso de búsqueda"
 
-#: ../gtk/gtkfilechooserwidget.c:6105
+#: ../gtk/gtkfilechooserwidget.c:6115
 msgid ""
 "The program was not able to create a connection to the indexer daemon. "
 "Please make sure it is running."
@@ -2348,7 +2354,7 @@ msgstr ""
 "El programa no pudo de crear una conexión con el demonio indexador. "
 "Asegúrese de que se está ejecutando."
 
-#: ../gtk/gtkfilechooserwidget.c:6119
+#: ../gtk/gtkfilechooserwidget.c:6129
 msgid "Could not send the search request"
 msgstr "No se ha podido enviar la petición de búsqueda"
 
@@ -2373,8 +2379,8 @@ msgstr "Escoja una tipografía"
 #. Translators, these strings are names for various 'standard' cover
 #. * pages that the printing system may support.
 #.
-#: ../gtk/gtkfontbutton.c:1182 ../gtk/inspector/general.c:225
-#: ../gtk/inspector/general.c:226 ../gtk/inspector/gestures.c:128
+#: ../gtk/gtkfontbutton.c:1182 ../gtk/inspector/general.c:226
+#: ../gtk/inspector/general.c:227 ../gtk/inspector/gestures.c:128
 #: ../gtk/inspector/prop-editor.c:1200 ../gtk/inspector/size-groups.c:252
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:5203
 msgid "None"
@@ -2563,16 +2569,16 @@ msgstr "Opciones de depuración GTK+ a poner"
 msgid "GTK+ debugging flags to unset"
 msgstr "Opciones de depuración GTK+ a quitar"
 
-#: ../gtk/gtkmain.c:765
+#: ../gtk/gtkmain.c:776
 #, c-format
 msgid "Cannot open display: %s"
 msgstr "No se puede abrir el visor: %s"
 
-#: ../gtk/gtkmain.c:831
+#: ../gtk/gtkmain.c:842
 msgid "GTK+ Options"
 msgstr "Opciones GTK+"
 
-#: ../gtk/gtkmain.c:831
+#: ../gtk/gtkmain.c:842
 msgid "Show GTK+ Options"
 msgstr "Mostrar opciones GTK+"
 
@@ -2581,7 +2587,7 @@ msgstr "Mostrar opciones GTK+"
 #. * Do *not* translate it to "predefinito:LTR", if it
 #. * it isn't default:LTR or default:RTL it will not work
 #.
-#: ../gtk/gtkmain.c:1155
+#: ../gtk/gtkmain.c:1166
 msgid "default:LTR"
 msgstr "default:LTR"
 
@@ -2682,7 +2688,7 @@ msgstr "Shell Z"
 msgid "Cannot end process with PID %d: %s"
 msgstr "No se puede finalizar el proceso con PID %d: %s"
 
-#: ../gtk/gtknotebook.c:5128 ../gtk/gtknotebook.c:7856
+#: ../gtk/gtknotebook.c:5144 ../gtk/gtknotebook.c:7872
 #, c-format
 msgid "Page %u"
 msgstr "Página %u"
@@ -2920,7 +2926,7 @@ msgstr "_Expulsar"
 msgid "_Detect Media"
 msgstr "_Detectar medio"
 
-#: ../gtk/gtkplacessidebar.c:4154
+#: ../gtk/gtkplacessidebar.c:4153
 msgid "Computer"
 msgstr "Equipo"
 
@@ -3267,8 +3273,7 @@ msgstr ""
 "No se encontró ninguna aplicación registrada con el nombre «%s» para el "
 "elemento con el URI «%s»"
 
-#: ../gtk/gtksearchentry.c:238 ../gtk/ui/gtkfilechooserwidget.ui.h:2
-#: ../gtk/ui/gtkfilechooserwidget.ui.h:3
+#: ../gtk/gtksearchentry.c:369
 msgid "Search"
 msgstr "Buscar"
 
@@ -3470,11 +3475,11 @@ msgctxt "volume percentage"
 msgid "%d %%"
 msgstr "%d %%"
 
-#: ../gtk/gtkwindow.c:11832
+#: ../gtk/gtkwindow.c:11838
 msgid "Do you want to use GTK+ Inspector?"
 msgstr "¿Quiere usar el inspector de GTK+?"
 
-#: ../gtk/gtkwindow.c:11834
+#: ../gtk/gtkwindow.c:11840
 msgid ""
 "GTK+ Inspector is an interactive debugger that lets you explore and modify "
 "the internals of any GTK+ application. Using it may cause the application to "
@@ -3484,7 +3489,7 @@ msgstr ""
 "modificar los aspectos internos de cualquier aplicación de GTK+. Al usarlo "
 "puede hacer que la aplicación falle o se cierre."
 
-#: ../gtk/gtkwindow.c:11839
+#: ../gtk/gtkwindow.c:11845
 msgid "Don't show this message again"
 msgstr "No mostrar este mensaje de nuevo"
 
@@ -3503,7 +3508,7 @@ msgstr "Prefijo"
 
 #: ../gtk/inspector/actions.ui.h:2 ../gtk/inspector/classes-list.ui.h:3
 #: ../gtk/inspector/object-tree.ui.h:2 ../gtk/inspector/signals-list.ui.h:3
-#: ../gtk/ui/gtkfilechooserwidget.ui.h:6
+#: ../gtk/ui/gtkfilechooserwidget.ui.h:3
 msgid "Name"
 msgstr "Nombre"
 
@@ -3825,7 +3830,7 @@ msgstr "Ruta"
 msgid "Count"
 msgstr "Cuenta"
 
-#: ../gtk/inspector/resource-list.ui.h:3 ../gtk/ui/gtkfilechooserwidget.ui.h:7
+#: ../gtk/inspector/resource-list.ui.h:3 ../gtk/ui/gtkfilechooserwidget.ui.h:4
 msgid "Size"
 msgstr "Tamaño"
 
@@ -5787,24 +5792,18 @@ msgstr "Saturación"
 
 # C en conflicto con Cancelar
 #: ../gtk/ui/gtkfilechooserwidget.ui.h:1
-#| msgid "Create Fo_lder"
 msgid "Create Folder"
 msgstr "Crear carpeta"
 
-#: ../gtk/ui/gtkfilechooserwidget.ui.h:4
-#| msgid "Browse Network"
-msgid "Browse"
-msgstr "Examinar"
-
-#: ../gtk/ui/gtkfilechooserwidget.ui.h:5
+#: ../gtk/ui/gtkfilechooserwidget.ui.h:2
 msgid "Files"
 msgstr "Archivos"
 
-#: ../gtk/ui/gtkfilechooserwidget.ui.h:8
+#: ../gtk/ui/gtkfilechooserwidget.ui.h:5
 msgid "Modified"
 msgstr "Modificado"
 
-#: ../gtk/ui/gtkfilechooserwidget.ui.h:9
+#: ../gtk/ui/gtkfilechooserwidget.ui.h:6
 msgid "Select which types of files are shown"
 msgstr "Seleccionar qué tipos de archivos se muestran"
 
@@ -6100,6 +6099,10 @@ msgstr "Bajar volumen"
 #: ../gtk/ui/gtkvolumebutton.ui.h:6
 msgid "Decreases the volume"
 msgstr "Disminuye el volumen"
+
+#~| msgid "Browse Network"
+#~ msgid "Browse"
+#~ msgstr "Examinar"
 
 #~ msgid "_Location:"
 #~ msgstr "_Lugar:"
@@ -6734,9 +6737,6 @@ msgstr "Disminuye el volumen"
 
 #~ msgid "Compressed icons are not supported"
 #~ msgstr "Los iconos comprimidos no están soportados"
-
-#~ msgid "Unsupported icon type"
-#~ msgstr "Tipo de icono no soportado"
 
 #~ msgid "Not enough memory to load ICO file"
 #~ msgstr "No hay memoria suficiente para cargar el archivo ICO"
