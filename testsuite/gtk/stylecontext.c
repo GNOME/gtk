@@ -307,6 +307,51 @@ G_GNUC_END_IGNORE_DEPRECATIONS
   gtk_widget_destroy (window);
 }
 
+void
+test_set_widget_path_saved (void)
+{
+  GtkWidgetPath *path;
+  GtkCssProvider *provider;
+  GtkStyleContext *context;
+  GtkBorder padding;
+
+  context = gtk_style_context_new ();
+
+  provider = gtk_css_provider_new ();
+  gtk_style_context_add_provider (context,
+                                  GTK_STYLE_PROVIDER (provider),
+                                  GTK_STYLE_PROVIDER_PRIORITY_USER);
+  gtk_css_provider_load_from_data (provider,
+                                   "GtkWindow * { padding: 1px; }\n"
+                                   ".foo * { padding: 2px; }\n",
+                                   -1,
+                                   NULL);
+
+  path = gtk_widget_path_new ();
+  gtk_widget_path_append_type (path, GTK_TYPE_WINDOW);
+  gtk_style_context_set_path (context, path);
+
+  gtk_style_context_get_padding (context, gtk_style_context_get_state (context), &padding);
+  g_assert_cmpint (padding.top, ==, 0);
+
+  gtk_style_context_save (context);
+  gtk_style_context_get_padding (context, gtk_style_context_get_state (context), &padding);
+  g_assert_cmpint (padding.top, ==, 1);
+
+  gtk_widget_path_iter_add_class (path, -1, "foo");
+  gtk_style_context_set_path (context, path);
+  gtk_style_context_get_padding (context, gtk_style_context_get_state (context), &padding);
+  g_assert_cmpint (padding.top, ==, 2);
+
+  gtk_style_context_restore (context);
+  gtk_style_context_get_padding (context, gtk_style_context_get_state (context), &padding);
+  g_assert_cmpint (padding.top, ==, 0);
+
+  gtk_widget_path_free (path);
+  g_object_unref (provider);
+  g_object_unref (context);
+}
+
 int
 main (int argc, char *argv[])
 {
@@ -318,6 +363,7 @@ main (int argc, char *argv[])
   g_test_add_func ("/style/match", test_match);
   g_test_add_func ("/style/basic", test_basic_properties);
   g_test_add_func ("/style/invalidate-saved", test_invalidate_saved);
+  g_test_add_func ("/style/set-widget-path-saved", test_set_widget_path_saved);
 
   return g_test_run ();
 }
