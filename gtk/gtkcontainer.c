@@ -1847,14 +1847,12 @@ gtk_container_idle_sizer (GdkFrameClock *clock,
   if (container->priv->restyle_pending)
     {
       GtkBitmask *empty;
-      gint64 current_time;
 
       empty = _gtk_bitmask_new ();
-      current_time = g_get_monotonic_time ();
 
       container->priv->restyle_pending = FALSE;
       gtk_css_node_validate (gtk_widget_get_css_node (GTK_WIDGET (container)),
-                             current_time,
+                             gdk_frame_clock_get_frame_time (gtk_widget_get_frame_clock (GTK_WIDGET (container))),
                              empty);
 
       _gtk_bitmask_free (empty);
