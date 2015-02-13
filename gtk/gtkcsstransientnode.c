@@ -64,6 +64,7 @@ gtk_css_transient_node_class_init (GtkCssTransientNodeClass *klass)
 static void
 gtk_css_transient_node_init (GtkCssTransientNode *cssnode)
 {
+  gtk_css_node_set_visible (GTK_CSS_NODE (cssnode), FALSE);
 }
 
 GtkCssNode *

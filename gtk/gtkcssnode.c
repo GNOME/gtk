@@ -20,7 +20,6 @@
 #include "gtkcssnodeprivate.h"
 
 #include "gtkcssanimatedstyleprivate.h"
-#include "gtkcsstransientnodeprivate.h"
 #include "gtkdebug.h"
 #include "gtksettingsprivate.h"
 
@@ -35,9 +34,6 @@ gtk_css_node_set_invalid (GtkCssNode *node,
                           gboolean    invalid)
 {
   if (node->invalid == invalid)
-    return;
-
-  if (GTK_IS_CSS_TRANSIENT_NODE (node))
     return;
 
   node->invalid = invalid;
@@ -55,7 +51,6 @@ gtk_css_node_set_invalid (GtkCssNode *node,
         GTK_CSS_NODE_GET_CLASS (node)->dequeue_validate (node);
     }
 }
-
 
 static void
 gtk_css_node_dispose (GObject *object)
@@ -364,9 +359,6 @@ gtk_css_node_parent_will_be_set (GtkCssNode *node)
 static void
 gtk_css_node_unlink_from_siblings (GtkCssNode *node)
 {
-  if (GTK_IS_CSS_TRANSIENT_NODE (node))
-    return;
-
   if (node->previous_sibling)
     node->previous_sibling->next_sibling = node->next_sibling;
   else
@@ -385,9 +377,6 @@ static void
 gtk_css_node_link_to_siblings (GtkCssNode *node,
                                GtkCssNode *new_previous)
 {
-  if (GTK_IS_CSS_TRANSIENT_NODE (node))
-    return;
-
   if (new_previous)
     {
       node->previous_sibling = new_previous;
