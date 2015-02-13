@@ -495,12 +495,6 @@ idle_do_action (gpointer data)
   gail_button = GAIL_BUTTON (data);
   gail_button->action_idle_handler = 0;
   widget = GTK_ACCESSIBLE (gail_button)->widget;
-  tmp_event.button.type = GDK_BUTTON_RELEASE;
-  tmp_event.button.window = widget->window;
-  tmp_event.button.button = 1;
-  tmp_event.button.send_event = TRUE;
-  tmp_event.button.time = GDK_CURRENT_TIME;
-  tmp_event.button.axes = NULL;
 
   g_object_ref (gail_button);
 
@@ -511,7 +505,15 @@ idle_do_action (gpointer data)
       return FALSE;
     }
   else
-    gtk_widget_event (widget, &tmp_event);
+    {
+      tmp_event.button.type = GDK_BUTTON_RELEASE;
+      tmp_event.button.window = widget->window;
+      tmp_event.button.button = 1;
+      tmp_event.button.send_event = TRUE;
+      tmp_event.button.time = GDK_CURRENT_TIME;
+      tmp_event.button.axes = NULL;
+      gtk_widget_event (widget, &tmp_event);
+    }
 
   button = GTK_BUTTON (widget); 
   while (!g_queue_is_empty (gail_button->action_queue)) 
