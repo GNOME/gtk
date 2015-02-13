@@ -1295,11 +1295,12 @@ pango_start_element (GMarkupParseContext *context,
 	}
 
       attr = attribute_from_text (data->builder, name, value, error);
-      attr->start_index = start_val;
-      attr->end_index   = end_val;
 
       if (attr)
 	{
+          attr->start_index = start_val;
+          attr->end_index   = end_val;
+
 	  if (!data->attrs)
 	    data->attrs = pango_attr_list_new ();
 
