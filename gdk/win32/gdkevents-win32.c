@@ -1069,7 +1069,7 @@ fill_key_event_string (GdkEvent *event)
 static GdkFilterReturn
 apply_event_filters (GdkWindow  *window,
 		     MSG        *msg,
-		     GList      *filters)
+		     GList      **filters)
 {
   GdkFilterReturn result = GDK_FILTER_CONTINUE;
   GdkEvent *event;
@@ -1087,15 +1087,36 @@ apply_event_filters (GdkWindow  *window,
    */
   node = _gdk_event_queue_append (_gdk_display, event);
   
-  tmp_list = filters;
+  tmp_list = *filters;
   while (tmp_list)
     {
       GdkEventFilter *filter = (GdkEventFilter *) tmp_list->data;
-      
-      tmp_list = tmp_list->next;
+      GList *node;
+
+      if ((filter->flags & GDK_EVENT_FILTER_REMOVED) != 0)
+        {
+          tmp_list = tmp_list->next;
+          continue;
+        }
+
+      filter->ref_count++;
       result = filter->function (msg, event, filter->data);
-      if (result !=  GDK_FILTER_CONTINUE)
-	break;
+
+      /* get the next node after running the function since the
+         function may add or remove a next node */
+      node = tmp_list;
+      tmp_list = tmp_list->next;
+
+      filter->ref_count--;
+      if (filter->ref_count == 0)
+        {
+          *filters = g_list_remove_link (*filters, node);
+          g_list_free_1 (node);
+          g_free (filter);
+        }
+
+      if (result != GDK_FILTER_CONTINUE)
+        break;
     }
 
   if (result == GDK_FILTER_CONTINUE || result == GDK_FILTER_REMOVE)
@@ -2075,7 +2096,7 @@ gdk_event_translate (MSG  *msg,
     {
       /* Apply global filters */
 
-      GdkFilterReturn result = apply_event_filters (NULL, msg, _gdk_default_filters);
+      GdkFilterReturn result = apply_event_filters (NULL, msg, &_gdk_default_filters);
       
       /* If result is GDK_FILTER_CONTINUE, we continue as if nothing
        * happened. If it is GDK_FILTER_REMOVE or GDK_FILTER_TRANSLATE,
@@ -2121,7 +2142,7 @@ gdk_event_translate (MSG  *msg,
     {
       /* Apply per-window filters */
 
-      GdkFilterReturn result = apply_event_filters (window, msg, ((GdkWindowObject *) window)->filters);
+      GdkFilterReturn result = apply_event_filters (window, msg, &((GdkWindowObject *) window)->filters);
 
       if (result == GDK_FILTER_REMOVE || result == GDK_FILTER_TRANSLATE)
 	{
