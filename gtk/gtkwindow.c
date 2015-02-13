@@ -1457,6 +1457,9 @@ multipress_gesture_pressed_cb (GtkGestureMultiPress *gesture,
 
   event_widget = gtk_get_event_widget ((GdkEvent*) event);
 
+  if (region == GTK_WINDOW_REGION_TITLE)
+    gdk_window_raise (gtk_widget_get_window (widget));
+
   switch (region)
     {
     case GTK_WINDOW_REGION_CONTENT:
