@@ -18,6 +18,7 @@
 #include "config.h"
 
 #include "gtkcsspathnodeprivate.h"
+#include "gtkcssstylepropertyprivate.h"
 #include "gtkprivate.h"
 #include "gtkstylecontextprivate.h"
 
@@ -41,9 +42,16 @@ gtk_css_path_node_invalidate (GtkCssNode *node)
 
   if (path_node->context)
     {
-      G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
-      gtk_style_context_invalidate (path_node->context);
-      G_GNUC_END_IGNORE_DEPRECATIONS;
+      GtkBitmask *changes;
+
+      changes = _gtk_bitmask_new ();
+      changes = _gtk_bitmask_invert_range (changes,
+                                           0,
+                                           _gtk_css_style_property_get_n_properties ());
+
+      gtk_style_context_validate (path_node->context, changes);
+
+      _gtk_bitmask_free (changes);
     }
 }
 
