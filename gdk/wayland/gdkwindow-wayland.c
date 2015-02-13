@@ -644,7 +644,7 @@ static void
 gdk_wayland_window_sync_parent (GdkWindow *window)
 {
   GdkWindowImplWayland *impl = GDK_WINDOW_IMPL_WAYLAND (window->impl);
-  struct wl_surface *parent_surface;
+  struct xdg_surface *parent_surface;
 
   if (!impl->xdg_surface)
     return;
@@ -657,7 +657,7 @@ gdk_wayland_window_sync_parent (GdkWindow *window)
       if (!impl_parent->surface)
         return;
 
-      parent_surface = impl_parent->surface;
+      parent_surface = impl_parent->xdg_surface;
     }
   else
     parent_surface = NULL;
@@ -925,8 +925,7 @@ gdk_wayland_window_create_xdg_surface (GdkWindow *window)
 
 static void
 xdg_popup_done (void             *data,
-                struct xdg_popup *xdg_popup,
-                uint32_t          serial)
+                struct xdg_popup *xdg_popup)
 {
   GdkWindow *window = GDK_WINDOW (data);
 
@@ -995,8 +994,7 @@ gdk_wayland_window_get_fake_root_coords (GdkWindow *window,
 static void
 gdk_wayland_window_create_xdg_popup (GdkWindow            *window,
                                      GdkWindow            *parent,
-                                     struct wl_seat       *seat,
-                                     uint32_t              flags)
+                                     struct wl_seat       *seat)
 {
   GdkWaylandDisplay *display_wayland = GDK_WAYLAND_DISPLAY (gdk_window_get_display (window));
   GdkWindowImplWayland *impl = GDK_WINDOW_IMPL_WAYLAND (window->impl);
@@ -1031,7 +1029,7 @@ gdk_wayland_window_create_xdg_popup (GdkWindow            *window,
                                              parent_impl->surface,
                                              seat,
                                              _gdk_wayland_device_get_last_implicit_grab_serial (device, NULL),
-                                             x, y, flags);
+                                             x, y);
 
   xdg_popup_add_listener (impl->xdg_popup, &xdg_popup_listener, window);
 }
@@ -1125,7 +1123,9 @@ gdk_wayland_window_map (GdkWindow *window)
                impl->hint == GDK_WINDOW_TYPE_HINT_DROPDOWN_MENU ||
                impl->hint == GDK_WINDOW_TYPE_HINT_COMBO))
             {
-              gdk_wayland_window_create_xdg_popup (window, transient_for, grab_input_seat, 0);
+              gdk_wayland_window_create_xdg_popup (window,
+						   transient_for,
+						   grab_input_seat);
               goto mapped;
             }
         }
