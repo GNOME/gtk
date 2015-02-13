@@ -459,6 +459,11 @@ _gdk_win32_gl_context_realize (GdkGLContext *context,
   gint pixel_format;
   gboolean debug_bit, compat_bit;
 
+  /* request flags and specific versions for core (3.2+) WGL context */
+  gint flags = 0;
+  gint glver_major = 0;
+  gint glver_minor = 0;
+
   if (!_set_pixformat_for_hdc (context_win32->gl_hdc,
                                &pixel_format,
                                context_win32->need_alpha_bits))
@@ -468,12 +473,6 @@ _gdk_win32_gl_context_realize (GdkGLContext *context,
                            _("No available configurations for the given pixel format"));
       return FALSE;
     }
-
-
-  /* request flags and specific versions for core (3.2+) WGL context */
-  gint flags = 0;
-  gint glver_major = 0;
-  gint glver_minor = 0;
 
   gdk_gl_context_get_required_version (context, &glver_major, &glver_minor);
   debug_bit = gdk_gl_context_get_debug_enabled (context);
