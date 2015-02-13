@@ -38,6 +38,9 @@ gtk_css_widget_node_update_style (GtkCssNode   *cssnode,
                                   GtkCssChange  pending_change,
                                   GtkCssStyle  *old_style)
 {
+  if (old_style == NULL)
+    return GTK_CSS_NODE_CLASS (gtk_css_widget_node_parent_class)->update_style (cssnode, pending_change, old_style);
+
   return NULL;
 }
 
