@@ -7,23 +7,17 @@ print_hello (GtkWidget *widget,
   g_print ("Hello World\n");
 }
 
-int
-main (int   argc,
-      char *argv[])
+static void
+activate (GtkApplication *app,
+          gpointer        user_data)
 {
   GtkWidget *window;
   GtkWidget *grid;
   GtkWidget *button;
 
-  /* This is called in all GTK applications. Arguments are parsed
-   * from the command line and are returned to the application.
-   */
-  gtk_init (&argc, &argv);
-
   /* create a new window, and set its title */
-  window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
-  gtk_window_set_title (GTK_WINDOW (window), "Grid");
-  g_signal_connect (window, "destroy", G_CALLBACK (gtk_main_quit), NULL);
+  window = gtk_application_window_new (app);
+  gtk_window_set_title (GTK_WINDOW (window), "Window");
   gtk_container_set_border_width (GTK_CONTAINER (window), 10);
 
   /* Here we construct the container that is going pack our buttons */
@@ -49,7 +43,7 @@ main (int   argc,
   gtk_grid_attach (GTK_GRID (grid), button, 1, 0, 1, 1);
 
   button = gtk_button_new_with_label ("Quit");
-  g_signal_connect (button, "clicked", G_CALLBACK (gtk_main_quit), NULL);
+  g_signal_connect_swapped (button, "clicked", G_CALLBACK (gtk_widget_destroy), window);
 
   /* Place the Quit button in the grid cell (0, 1), and make it
    * span 2 columns.
@@ -63,11 +57,19 @@ main (int   argc,
    */
   gtk_widget_show_all (window);
 
-  /* All GTK applications must have a gtk_main(). Control ends here
-   * and waits for an event to occur (like a key press or a mouse event),
-   * until gtk_main_quit() is called.
-   */
-  gtk_main ();
+}
 
-  return 0;
+int
+main (int    argc,
+      char **argv)
+{
+  GtkApplication *app;
+  int status;
+
+  app = gtk_application_new ("org.gtk.example", G_APPLICATION_FLAGS_NONE);
+  g_signal_connect (app, "activate", G_CALLBACK (activate), NULL);
+  status = g_application_run (G_APPLICATION (app), argc, argv);
+  g_object_unref (app);
+
+  return status;
 }

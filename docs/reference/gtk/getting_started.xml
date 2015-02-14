@@ -169,9 +169,8 @@
     <title>Packing</title>
 
     <para>When creating an application, you'll want to put more than one widget
-    inside a window. Our first helloworld example only used one widget so we
-    could simply use a gtk_container_add() call to "pack" the widget into the
-    window. But when you want to put more than one widget into a window, it
+    inside a window.
+    When you want to put more than one widget into a window, it
     it becomes important to control how each widget is positioned and sized.
     This is where packing comes in.</para>
 
