@@ -241,13 +241,14 @@ gtk_css_node_real_dequeue_validate (GtkCssNode *node)
 {
 }
 
-static gboolean
+static GtkCssStyle *
 gtk_css_node_real_validate (GtkCssNode       *cssnode,
+                            GtkCssStyle      *current_style,
                             gint64            timestamp,
                             GtkCssChange      change,
                             gboolean          parent_changed)
 {
-  return FALSE;
+  return NULL;
 }
 
 gboolean
@@ -707,6 +708,7 @@ gtk_css_node_validate (GtkCssNode            *cssnode,
 {
   GtkCssChange change;
   GtkCssNode *child;
+  GtkCssStyle *new_style;
   gboolean changed;
 
   /* If you run your application with
@@ -734,7 +736,17 @@ gtk_css_node_validate (GtkCssNode            *cssnode,
   change = cssnode->pending_changes;
   cssnode->pending_changes = 0;
 
-  changed = GTK_CSS_NODE_GET_CLASS (cssnode)->validate (cssnode, timestamp, change, parent_changed);
+  new_style = GTK_CSS_NODE_GET_CLASS (cssnode)->validate (cssnode, cssnode->style, timestamp, change, parent_changed);
+  if (new_style)
+    {
+      gtk_css_node_set_style (cssnode, new_style);
+      g_object_unref (new_style);
+      changed = TRUE;
+    }
+  else
+    {
+      changed = FALSE;
+    }
 
   for (child = gtk_css_node_get_first_child (cssnode);
        child;
