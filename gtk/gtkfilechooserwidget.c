@@ -67,6 +67,7 @@
 #include "gtksettings.h"
 #include "gtksizegroup.h"
 #include "gtksizerequest.h"
+#include "gtktogglebutton.h"
 #include "gtktoolbar.h"
 #include "gtktoolbutton.h"
 #include "gtktooltip.h"
@@ -235,6 +236,7 @@ struct _GtkFileChooserWidgetPrivate {
 
   /* OPERATION_MODE_SEARCH */
   GtkWidget *search_entry;
+  GtkWidget *current_location_radio;
   GtkSearchEngine *search_engine;
   GtkQuery *search_query;
   GtkFileSystemModel *search_model;
@@ -2539,6 +2541,7 @@ static void
 operation_mode_set_search (GtkFileChooserWidget *impl)
 {
   GtkFileChooserWidgetPrivate *priv = impl->priv;
+  gchar *current;
 
   g_assert (priv->search_model == NULL);
 
@@ -2548,6 +2551,12 @@ operation_mode_set_search (GtkFileChooserWidget *impl)
   gtk_entry_grab_focus_without_selecting (GTK_ENTRY (priv->search_entry));
   gtk_places_sidebar_set_location (GTK_PLACES_SIDEBAR (priv->places_sidebar), NULL);
   gtk_widget_set_sensitive (priv->filter_combo, FALSE);
+  if (priv->current_folder)
+    current = g_file_get_basename (priv->current_folder);
+  else
+    current = g_strdup (_("Home"));
+  gtk_button_set_label (GTK_BUTTON (priv->current_location_radio), current);
+  g_free (current);
 
   gtk_tree_view_column_set_visible (priv->list_location_column, TRUE);
 }
@@ -6257,7 +6266,7 @@ search_setup_model (GtkFileChooserWidget *impl)
 /* Creates a new query with the specified text and launches it */
 static void
 search_start_query (GtkFileChooserWidget *impl,
-		    const gchar           *query_text)
+		    const gchar          *query_text)
 {
   GtkFileChooserWidgetPrivate *priv = impl->priv;
 
@@ -6281,7 +6290,16 @@ search_start_query (GtkFileChooserWidget *impl,
       priv->search_query = _gtk_query_new ();
       _gtk_query_set_text (priv->search_query, query_text);
     }
-  
+
+  if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (priv->current_location_radio)) &&
+      priv->current_folder)
+    {
+      gchar *location;
+      location = g_file_get_uri (priv->current_folder);
+      _gtk_query_set_location (priv->search_query, location);
+      g_free (location);
+    }
+
   _gtk_search_engine_set_query (priv->search_engine, priv->search_query);
 
   g_signal_connect (priv->search_engine, "hits-added",
@@ -7478,6 +7496,7 @@ gtk_file_chooser_widget_class_init (GtkFileChooserWidgetClass *class)
   gtk_widget_class_bind_template_child_private (widget_class, GtkFileChooserWidget, extra_and_filters);
   gtk_widget_class_bind_template_child_private (widget_class, GtkFileChooserWidget, location_entry_box);
   gtk_widget_class_bind_template_child_private (widget_class, GtkFileChooserWidget, search_entry);
+  gtk_widget_class_bind_template_child_private (widget_class, GtkFileChooserWidget, current_location_radio);
   gtk_widget_class_bind_template_child_private (widget_class, GtkFileChooserWidget, list_name_column);
   gtk_widget_class_bind_template_child_private (widget_class, GtkFileChooserWidget, list_pixbuf_renderer);
   gtk_widget_class_bind_template_child_private (widget_class, GtkFileChooserWidget, list_name_renderer);

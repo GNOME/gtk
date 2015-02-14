@@ -134,6 +134,30 @@
                                 <signal name="stop-search" handler="search_entry_stop_cb" swapped="yes"/>
                               </object>
                             </child>
+                            <child>
+                              <object class="GtkBox">
+                                <property name="visible">True</property>
+                                <style>
+                                  <class name="linked"/>
+                                </style>
+                                <child>
+                                  <object class="GtkRadioButton" id="current_location_radio">
+                                    <property name="visible">True</property>
+                                    <property name="draw-indicator">False</property>
+                                    <property name="label" translatable="yes">Home</property>
+                                    <signal name="toggled" handler="search_entry_activate_cb" swapped="yes"/>
+                                  </object>
+                                </child>
+                                <child>
+                                  <object class="GtkRadioButton">
+                                    <property name="visible">True</property>
+                                    <property name="draw-indicator">False</property>
+                                    <property name="group">current_location_radio</property>
+                                    <property name="label" translatable="yes">All Files</property>
+                                  </object>
+                                </child>
+                              </object>
+                            </child>
                           </object>
                           <packing>
                             <property name="name">search</property>

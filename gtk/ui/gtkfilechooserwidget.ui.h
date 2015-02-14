@@ -1,4 +1,6 @@
 N_("Create Folder");
+N_("Home");
+N_("All Files");
 N_("Files");
 N_("Name");
 N_("Size");
