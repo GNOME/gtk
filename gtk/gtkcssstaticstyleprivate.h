@@ -42,11 +42,6 @@ struct _GtkCssStaticStyle
   GPtrArray             *values;               /* the values */
   GPtrArray             *sections;             /* sections the values are defined in */
 
-  GtkBitmask            *depends_on_parent;    /* values that depend on parent values */
-  GtkBitmask            *equals_parent;        /* values that equal their parent values */
-  GtkBitmask            *depends_on_color;     /* values that depend on the color property */
-  GtkBitmask            *depends_on_font_size; /* values that depend on the font-size property */
-
   GtkCssChange           change;               /* change as returned by value lookup */
 };
 
@@ -59,11 +54,6 @@ GType                   gtk_css_static_style_get_type           (void) G_GNUC_CO
 
 GtkCssStyle *           gtk_css_static_style_get_default        (void);
 GtkCssStyle *           gtk_css_static_style_new_compute        (GtkStyleProviderPrivate *provider,
-                                                                 const GtkCssMatcher    *matcher,
-                                                                 GtkCssStyle            *parent);
-GtkCssStyle *           gtk_css_static_style_new_update         (GtkCssStaticStyle      *style,
-                                                                 const GtkBitmask       *parent_changes,
-                                                                 GtkStyleProviderPrivate *provider,
                                                                  const GtkCssMatcher    *matcher,
                                                                  GtkCssStyle            *parent);
 

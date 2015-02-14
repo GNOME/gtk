@@ -170,39 +170,6 @@ store_in_global_parent_cache (GtkCssNode                  *node,
 }
 
 GtkCssStyle *
-gtk_css_node_update_style (GtkCssNode       *cssnode,
-                           GtkCssStyle      *style,
-                           const GtkBitmask *parent_changes)
-{
-  const GtkCssNodeDeclaration *decl;
-  GtkCssMatcher matcher;
-  GtkCssStyle *parent;
-  GtkCssStyle *result;
-
-  parent = cssnode->parent ? cssnode->parent->style : NULL;
-  decl = gtk_css_node_get_declaration (cssnode);
-
-  result = lookup_in_global_parent_cache (cssnode, parent, decl);
-  if (result)
-    return g_object_ref (result);
-
-  if (!gtk_css_node_init_matcher (cssnode, &matcher))
-    {
-      g_assert_not_reached ();
-    }
-
-  result = gtk_css_static_style_new_update (GTK_CSS_STATIC_STYLE (style),
-                                            parent_changes,
-                                            gtk_css_node_get_style_provider (cssnode),
-                                            &matcher,
-                                            parent);
-
-  store_in_global_parent_cache (cssnode, parent, decl, style);
-
-  return result;
-}
-
-GtkCssStyle *
 gtk_css_node_create_style (GtkCssNode *cssnode)
 {
   const GtkCssNodeDeclaration *decl;

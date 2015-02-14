@@ -66,28 +66,6 @@ gtk_css_static_style_get_section (GtkCssStyle *style,
   return g_ptr_array_index (sstyle->sections, id);
 }
 
-/* Compute the bitmask of potentially changed properties if the parent has changed
- * the passed in ones.
- * This is for example needed when changes in the "color" property will affect
- * all properties using "currentColor" as a color.
- */
-static GtkBitmask *
-gtk_css_static_style_compute_dependencies (GtkCssStaticStyle *style,
-                                           const GtkBitmask  *parent_changes)
-{
-  GtkCssStaticStyle *sstyle = GTK_CSS_STATIC_STYLE (style);
-  GtkBitmask *changes;
-
-  changes = _gtk_bitmask_copy (parent_changes);
-  changes = _gtk_bitmask_intersect (changes, sstyle->depends_on_parent);
-  if (_gtk_bitmask_get (changes, GTK_CSS_PROPERTY_COLOR))
-    changes = _gtk_bitmask_union (changes, sstyle->depends_on_color);
-  if (_gtk_bitmask_get (changes, GTK_CSS_PROPERTY_FONT_SIZE))
-    changes = _gtk_bitmask_union (changes, sstyle->depends_on_font_size);
-
-  return changes;
-}
-
 static void
 gtk_css_static_style_dispose (GObject *object)
 {
@@ -108,26 +86,12 @@ gtk_css_static_style_dispose (GObject *object)
 }
 
 static void
-gtk_css_static_style_finalize (GObject *object)
-{
-  GtkCssStaticStyle *style = GTK_CSS_STATIC_STYLE (object);
-
-  _gtk_bitmask_free (style->depends_on_parent);
-  _gtk_bitmask_free (style->equals_parent);
-  _gtk_bitmask_free (style->depends_on_color);
-  _gtk_bitmask_free (style->depends_on_font_size);
-
-  G_OBJECT_CLASS (gtk_css_static_style_parent_class)->finalize (object);
-}
-
-static void
 gtk_css_static_style_class_init (GtkCssStaticStyleClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
   GtkCssStyleClass *style_class = GTK_CSS_STYLE_CLASS (klass);
 
   object_class->dispose = gtk_css_static_style_dispose;
-  object_class->finalize = gtk_css_static_style_finalize;
 
   style_class->get_value = gtk_css_static_style_get_value;
   style_class->get_section = gtk_css_static_style_get_section;
@@ -136,10 +100,6 @@ gtk_css_static_style_class_init (GtkCssStaticStyleClass *klass)
 static void
 gtk_css_static_style_init (GtkCssStaticStyle *style)
 {
-  style->depends_on_parent = _gtk_bitmask_new ();
-  style->equals_parent = _gtk_bitmask_new ();
-  style->depends_on_color = _gtk_bitmask_new ();
-  style->depends_on_font_size = _gtk_bitmask_new ();
 }
 
 static void
@@ -235,71 +195,6 @@ gtk_css_static_style_new_compute (GtkStyleProviderPrivate *provider,
   return GTK_CSS_STYLE (result);
 }
 
-GtkCssStyle *
-gtk_css_static_style_new_update (GtkCssStaticStyle       *style,
-                                 const GtkBitmask        *parent_changes,
-                                 GtkStyleProviderPrivate *provider,
-                                 const GtkCssMatcher     *matcher,
-                                 GtkCssStyle             *parent)
-{
-  GtkCssStaticStyle *result;
-  GtkCssLookup *lookup;
-  GtkBitmask *changes;
-  guint i;
-
-  gtk_internal_return_val_if_fail (GTK_IS_CSS_STATIC_STYLE (style), NULL);
-  gtk_internal_return_val_if_fail (parent_changes != NULL, NULL);
-  gtk_internal_return_val_if_fail (GTK_IS_STYLE_PROVIDER_PRIVATE (provider), NULL);
-  gtk_internal_return_val_if_fail (matcher != NULL, NULL);
-
-  changes = gtk_css_static_style_compute_dependencies (style, parent_changes);
-  if (_gtk_bitmask_is_empty (changes))
-    {
-      _gtk_bitmask_free (changes);
-      return g_object_ref (style);
-    }
-
-  result = g_object_new (GTK_TYPE_CSS_STATIC_STYLE, NULL);
-
-  result->change = style->change;
-  result->depends_on_parent = _gtk_bitmask_subtract (_gtk_bitmask_union (result->depends_on_parent, style->depends_on_parent),
-                                                     changes);
-  result->equals_parent = _gtk_bitmask_subtract (_gtk_bitmask_union (result->equals_parent, style->equals_parent),
-                                                 changes);
-  result->depends_on_color = _gtk_bitmask_subtract (_gtk_bitmask_union (result->depends_on_color, style->depends_on_color),
-                                                    changes);
-  result->depends_on_font_size = _gtk_bitmask_subtract (_gtk_bitmask_union (result->depends_on_font_size, style->depends_on_font_size),
-                                                        changes);
-
-  for (i = 0; i < style->values->len; i++)
-    {
-      if (_gtk_bitmask_get (changes, i))
-        continue;
-
-      gtk_css_static_style_set_value (result,
-                                      i,
-                                      gtk_css_static_style_get_value (GTK_CSS_STYLE (style), i),
-                                      gtk_css_static_style_get_section (GTK_CSS_STYLE (style), i));
-    }
-
-  lookup = _gtk_css_lookup_new (changes);
-
-  _gtk_style_provider_private_lookup (provider,
-                                      matcher,
-                                      lookup,
-                                      NULL);
-
-  _gtk_css_lookup_resolve (lookup, 
-                           provider,
-                           result,
-                           parent);
-
-  _gtk_css_lookup_free (lookup);
-  _gtk_bitmask_free (changes);
-
-  return GTK_CSS_STYLE (result);
-}
-
 void
 gtk_css_static_style_compute_value (GtkCssStaticStyle       *style,
                                     GtkStyleProviderPrivate *provider,
@@ -335,15 +230,6 @@ gtk_css_static_style_compute_value (GtkCssStaticStyle       *style,
   value = _gtk_css_value_compute (specified, id, provider, GTK_CSS_STYLE (style), parent_style, &dependencies);
 
   gtk_css_static_style_set_value (style, id, value, section);
-
-  if (dependencies & (GTK_CSS_DEPENDS_ON_PARENT | GTK_CSS_EQUALS_PARENT))
-    style->depends_on_parent = _gtk_bitmask_set (style->depends_on_parent, id, TRUE);
-  if (dependencies & (GTK_CSS_EQUALS_PARENT))
-    style->equals_parent = _gtk_bitmask_set (style->equals_parent, id, TRUE);
-  if (dependencies & (GTK_CSS_DEPENDS_ON_COLOR))
-    style->depends_on_color = _gtk_bitmask_set (style->depends_on_color, id, TRUE);
-  if (dependencies & (GTK_CSS_DEPENDS_ON_FONT_SIZE))
-    style->depends_on_font_size = _gtk_bitmask_set (style->depends_on_font_size, id, TRUE);
 
   _gtk_css_value_unref (value);
   _gtk_css_value_unref (specified);

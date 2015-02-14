@@ -90,15 +90,10 @@ validate_static_style (GtkCssNode       *node,
                        GtkCssChange      change,
                        const GtkBitmask *parent_changes)
 {
-  if (gtk_css_static_style_needs_revalidate (GTK_CSS_STATIC_STYLE (style), change))
+  if (gtk_css_static_style_needs_revalidate (GTK_CSS_STATIC_STYLE (style), change) ||
+      !_gtk_bitmask_is_empty (parent_changes))
     {
       return gtk_css_node_create_style (node);
-    }
-  else if (!_gtk_bitmask_is_empty (parent_changes))
-    {
-      return gtk_css_node_update_style (node,
-                                        style,
-                                        parent_changes);
     }
   else
     {

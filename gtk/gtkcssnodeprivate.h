@@ -130,9 +130,6 @@ GtkCssStyle *           gtk_css_node_get_style          (GtkCssNode            *
 void                    gtk_css_node_set_style          (GtkCssNode            *cssnode,
                                                          GtkCssStyle           *style);
 GtkCssStyle *           gtk_css_node_create_style       (GtkCssNode            *cssnode);
-GtkCssStyle *           gtk_css_node_update_style       (GtkCssNode            *cssnode,
-                                                         GtkCssStyle           *style,
-                                                         const GtkBitmask      *parent_changes);
 
 void                    gtk_css_node_invalidate         (GtkCssNode            *cssnode,
                                                          GtkCssChange           change);
