@@ -241,13 +241,13 @@ gtk_css_node_real_dequeue_validate (GtkCssNode *node)
 {
 }
 
-static GtkBitmask *
+static gboolean
 gtk_css_node_real_validate (GtkCssNode       *cssnode,
                             gint64            timestamp,
                             GtkCssChange      change,
-                            const GtkBitmask *parent_changes)
+                            gboolean          parent_changed)
 {
-  return _gtk_bitmask_new ();
+  return FALSE;
 }
 
 gboolean
@@ -703,11 +703,11 @@ gtk_css_node_propagate_pending_changes (GtkCssNode *cssnode)
 void
 gtk_css_node_validate (GtkCssNode            *cssnode,
                        gint64                 timestamp,
-                       const GtkBitmask      *parent_changes)
+                       gboolean               parent_changed)
 {
   GtkCssChange change;
   GtkCssNode *child;
-  GtkBitmask *changes;
+  gboolean changed;
 
   /* If you run your application with
    *   GTK_DEBUG=no-css-cache
@@ -726,7 +726,7 @@ gtk_css_node_validate (GtkCssNode            *cssnode,
 
   gtk_css_node_propagate_pending_changes (cssnode);
 
-  if (!cssnode->invalid && change == 0 && _gtk_bitmask_is_empty (parent_changes))
+  if (!cssnode->invalid && change == 0 && !parent_changed)
     return;
 
   gtk_css_node_set_invalid (cssnode, FALSE);
@@ -734,17 +734,15 @@ gtk_css_node_validate (GtkCssNode            *cssnode,
   change = cssnode->pending_changes;
   cssnode->pending_changes = 0;
 
-  changes = GTK_CSS_NODE_GET_CLASS (cssnode)->validate (cssnode, timestamp, change, parent_changes);
+  changed = GTK_CSS_NODE_GET_CLASS (cssnode)->validate (cssnode, timestamp, change, parent_changed);
 
   for (child = gtk_css_node_get_first_child (cssnode);
        child;
        child = gtk_css_node_get_next_sibling (child))
     {
       if (child->visible)
-        gtk_css_node_validate (child, timestamp, changes);
+        gtk_css_node_validate (child, timestamp, changed);
     }
-
-  _gtk_bitmask_free (changes);
 }
 
 gboolean

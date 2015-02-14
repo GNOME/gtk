@@ -88,10 +88,10 @@ static GtkCssStyle *
 validate_static_style (GtkCssNode       *node,
                        GtkCssStyle      *style,
                        GtkCssChange      change,
-                       const GtkBitmask *parent_changes)
+                       gboolean          parent_changed)
 {
   if (gtk_css_static_style_needs_revalidate (GTK_CSS_STATIC_STYLE (style), change) ||
-      !_gtk_bitmask_is_empty (parent_changes))
+      parent_changed)
     {
       return gtk_css_node_create_style (node);
     }
@@ -101,20 +101,21 @@ validate_static_style (GtkCssNode       *node,
     }
 }
 
-static GtkBitmask *
+static gboolean
 gtk_css_widget_node_validate (GtkCssNode       *node,
                               gint64            timestamp,
                               GtkCssChange      change,
-                              const GtkBitmask *parent_changes)
+                              gboolean          parent_changed)
 {
   GtkCssWidgetNode *widget_node = GTK_CSS_WIDGET_NODE (node);
   GtkStyleContext *context;
   GtkBitmask *changes;
   GtkCssStyle *style, *static_style;
   GtkCssStyle *new_style, *new_static_style;
+  gboolean result;
 
   if (widget_node->widget == NULL)
-    return _gtk_bitmask_new ();
+    return FALSE;
 
   context = gtk_widget_get_style_context (widget_node->widget);
   style = gtk_css_node_get_style (node);
@@ -130,7 +131,7 @@ gtk_css_widget_node_validate (GtkCssNode       *node,
       static_style = style;
     }
 
-  new_static_style = validate_static_style (node, static_style, change, parent_changes);
+  new_static_style = validate_static_style (node, static_style, change, parent_changed);
 
   if (new_static_style != static_style)
     {
@@ -165,7 +166,10 @@ gtk_css_widget_node_validate (GtkCssNode       *node,
 
   gtk_style_context_validate (context, changes);
 
-  return changes;
+  result = !_gtk_bitmask_is_empty (changes);
+  _gtk_bitmask_free (changes);
+
+  return result;
 }
 
 typedef GtkWidgetPath * (* GetPathForChildFunc) (GtkContainer *, GtkWidget *);
