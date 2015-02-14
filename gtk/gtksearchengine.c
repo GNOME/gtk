@@ -100,18 +100,27 @@ _gtk_search_engine_new (void)
 #ifdef HAVE_TRACKER
   engine = _gtk_search_engine_tracker_new ();
   if (engine)
-    return engine;
+    {
+      g_debug ("Using Tracker search engine");
+      return engine;
+    }
 #endif
   
 #ifdef GDK_WINDOWING_QUARTZ
   engine = _gtk_search_engine_quartz_new ();
   if (engine)
-    return engine;
+    {
+      g_debug ("Using Quartz search engine");
+      return engine;
+    }
 #endif
 
   if (g_thread_supported ())
-    engine = _gtk_search_engine_simple_new ();
-  
+    {
+      g_debug ("Using simple search engine");
+      engine = _gtk_search_engine_simple_new ();
+    }
+
   return engine;
 }
 
