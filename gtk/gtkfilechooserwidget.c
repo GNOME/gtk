@@ -527,7 +527,6 @@ static void     search_stop_searching        (GtkFileChooserWidget *impl,
                                               gboolean               remove_query);
 static void     search_clear_model           (GtkFileChooserWidget *impl, 
 					      gboolean               remove_from_treeview);
-static gboolean search_should_respond        (GtkFileChooserWidget *impl);
 static GSList  *search_get_selected_files    (GtkFileChooserWidget *impl);
 static void     search_entry_activate_cb     (GtkFileChooserWidget *impl);
 static void     search_entry_stop_cb         (GtkFileChooserWidget *impl);
@@ -5215,7 +5214,7 @@ switch_folder_foreach_cb (GtkTreeModel      *model,
 
   closure = data;
 
-  closure->file = _gtk_file_system_model_get_file (closure->impl->priv->browse_files_model, iter);
+  closure->file = _gtk_file_system_model_get_file (GTK_FILE_SYSTEM_MODEL (model), iter);
   closure->num_selected++;
 }
 
@@ -5782,12 +5781,6 @@ gtk_file_chooser_widget_should_respond (GtkFileChooserEmbed *chooser_embed)
 
       g_assert (priv->action >= GTK_FILE_CHOOSER_ACTION_OPEN && priv->action <= GTK_FILE_CHOOSER_ACTION_CREATE_FOLDER);
 
-      if (priv->operation_mode == OPERATION_MODE_SEARCH)
-	{
-	  retval = search_should_respond (impl);
-	  goto out;
-	}
-
       if (priv->operation_mode == OPERATION_MODE_RECENT)
 	{
 	  if (priv->action == GTK_FILE_CHOOSER_ACTION_SAVE)
@@ -6057,21 +6050,6 @@ search_get_selected_files (GtkFileChooserWidget *impl)
   result = g_slist_reverse (result);
 
   return result;
-}
-
-/* Called from ::should_respond().  We return whether there are selected files
- * in the search list.
- */
-static gboolean
-search_should_respond (GtkFileChooserWidget *impl)
-{
-  GtkFileChooserWidgetPrivate *priv = impl->priv;
-  GtkTreeSelection *selection;
-
-  g_assert (priv->operation_mode == OPERATION_MODE_SEARCH);
-
-  selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (priv->browse_files_tree_view));
-  return (gtk_tree_selection_count_selected_rows (selection) != 0);
 }
 
 /* Adds one hit from the search engine to the search_model */
