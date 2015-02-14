@@ -42,8 +42,7 @@ gtk_css_value_initial_compute (GtkCssValue             *value,
                                guint                    property_id,
                                GtkStyleProviderPrivate *provider,
                                GtkCssStyle             *style,
-                               GtkCssStyle             *parent_style,
-                               GtkCssDependencies      *dependencies)
+                               GtkCssStyle             *parent_style)
 {
   GtkSettings *settings;
 
@@ -94,8 +93,7 @@ gtk_css_value_initial_compute (GtkCssValue             *value,
                                  property_id,
                                  provider,
                                  style,
-                                 parent_style,
-                                 dependencies);
+                                 parent_style);
 }
 
 static gboolean

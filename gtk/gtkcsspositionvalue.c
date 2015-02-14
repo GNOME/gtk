@@ -41,15 +41,12 @@ gtk_css_value_position_compute (GtkCssValue             *position,
                                 guint                    property_id,
                                 GtkStyleProviderPrivate *provider,
                                 GtkCssStyle             *style,
-                                GtkCssStyle             *parent_style,
-                                GtkCssDependencies      *dependencies)
+                                GtkCssStyle             *parent_style)
 {
   GtkCssValue *x, *y;
-  GtkCssDependencies x_deps, y_deps;
 
-  x = _gtk_css_value_compute (position->x, property_id, provider, style, parent_style, &x_deps);
-  y = _gtk_css_value_compute (position->y, property_id, provider, style, parent_style, &y_deps);
-  *dependencies = _gtk_css_dependencies_union (x_deps, y_deps);
+  x = _gtk_css_value_compute (position->x, property_id, provider, style, parent_style);
+  y = _gtk_css_value_compute (position->y, property_id, provider, style, parent_style);
   if (x == position->x && y == position->y)
     {
       _gtk_css_value_unref (x);

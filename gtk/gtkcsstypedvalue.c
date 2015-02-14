@@ -39,12 +39,11 @@ gtk_css_value_typed_compute (GtkCssValue             *value,
                              guint                    property_id,
                              GtkStyleProviderPrivate *provider,
                              GtkCssStyle             *style,
-                             GtkCssStyle             *parent_style,
-                             GtkCssDependencies      *dependencies)
+                             GtkCssStyle             *parent_style)
 {
   GtkCssCustomProperty *custom = GTK_CSS_CUSTOM_PROPERTY (_gtk_css_style_property_lookup_by_id (property_id));
 
-  return _gtk_css_style_funcs_compute_value (provider, style, parent_style, custom->pspec->value_type, value, dependencies);
+  return _gtk_css_style_funcs_compute_value (provider, style, parent_style, custom->pspec->value_type, value);
 }
 
 static gboolean

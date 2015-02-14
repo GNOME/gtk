@@ -203,7 +203,6 @@ gtk_css_static_style_compute_value (GtkCssStaticStyle       *style,
                                     GtkCssValue             *specified,
                                     GtkCssSection           *section)
 {
-  GtkCssDependencies dependencies;
   GtkCssValue *value;
 
   gtk_internal_return_if_fail (GTK_IS_CSS_STATIC_STYLE (style));
@@ -227,7 +226,7 @@ gtk_css_static_style_compute_value (GtkCssStaticStyle       *style,
   else
     _gtk_css_value_ref (specified);
 
-  value = _gtk_css_value_compute (specified, id, provider, GTK_CSS_STYLE (style), parent_style, &dependencies);
+  value = _gtk_css_value_compute (specified, id, provider, GTK_CSS_STYLE (style), parent_style);
 
   gtk_css_static_style_set_value (style, id, value, section);
 

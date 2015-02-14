@@ -46,11 +46,9 @@ gtk_css_value_border_compute (GtkCssValue             *value,
                               guint                    property_id,
                               GtkStyleProviderPrivate *provider,
                               GtkCssStyle             *style,
-                              GtkCssStyle             *parent_style,
-                              GtkCssDependencies      *dependencies)
+                              GtkCssStyle             *parent_style)
 {
   GtkCssValue *computed;
-  GtkCssDependencies child_deps;
   gboolean changed = FALSE;
   guint i;
 
@@ -61,8 +59,7 @@ gtk_css_value_border_compute (GtkCssValue             *value,
     {
       if (value->values[i])
         {
-          computed->values[i] = _gtk_css_value_compute (value->values[i], property_id, provider, style, parent_style, &child_deps);
-          *dependencies = _gtk_css_dependencies_union (*dependencies, child_deps);
+          computed->values[i] = _gtk_css_value_compute (value->values[i], property_id, provider, style, parent_style);
           changed |= (computed->values[i] != value->values[i]);
         }
     }

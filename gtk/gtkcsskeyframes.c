@@ -466,8 +466,7 @@ _gtk_css_keyframes_compute (GtkCssKeyframes         *keyframes,
                                                                       resolved->property_ids[p],
                                                                       provider,
                                                                       style,
-                                                                      parent_style,
-                                                                      NULL);
+                                                                      parent_style);
         }
     }
 

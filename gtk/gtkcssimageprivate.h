@@ -59,8 +59,7 @@ struct _GtkCssImageClass
                                                     guint                       property_id,
                                                     GtkStyleProviderPrivate    *provider,
                                                     GtkCssStyle                *style,
-                                                    GtkCssStyle                *parent_style,
-                                                    GtkCssDependencies         *dependencies);
+                                                    GtkCssStyle                *parent_style);
   /* compare two images for equality */
   gboolean     (* equal)                           (GtkCssImage                *image1,
                                                     GtkCssImage                *image2);
@@ -96,8 +95,7 @@ GtkCssImage *  _gtk_css_image_compute              (GtkCssImage                *
                                                     guint                       property_id,
                                                     GtkStyleProviderPrivate    *provider,
                                                     GtkCssStyle                *style,
-                                                    GtkCssStyle                *parent_style,
-                                                    GtkCssDependencies         *dependencies);
+                                                    GtkCssStyle                *parent_style);
 gboolean       _gtk_css_image_equal                (GtkCssImage                *image1,
                                                     GtkCssImage                *image2);
 GtkCssImage *  _gtk_css_image_transition           (GtkCssImage                *start,

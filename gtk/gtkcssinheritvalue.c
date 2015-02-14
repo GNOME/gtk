@@ -38,12 +38,10 @@ gtk_css_value_inherit_compute (GtkCssValue             *value,
                                guint                    property_id,
                                GtkStyleProviderPrivate *provider,
                                GtkCssStyle             *style,
-                               GtkCssStyle             *parent_style,
-                               GtkCssDependencies      *dependencies)
+                               GtkCssStyle             *parent_style)
 {
   if (parent_style)
     {
-      *dependencies = GTK_CSS_EQUALS_PARENT;
       return _gtk_css_value_ref (gtk_css_style_get_value (parent_style, property_id));
     }
   else
@@ -52,8 +50,7 @@ gtk_css_value_inherit_compute (GtkCssValue             *value,
                                      property_id,
                                      provider,
                                      style,
-                                     parent_style,
-                                     dependencies);
+                                     parent_style);
     }
 }
 

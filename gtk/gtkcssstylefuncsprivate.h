@@ -32,8 +32,7 @@ GtkCssValue *       _gtk_css_style_funcs_compute_value     (GtkStyleProviderPriv
                                                             GtkCssStyle             *style,
                                                             GtkCssStyle             *parent_style,
 							    GType                    target_type,
-                                                            GtkCssValue             *specified,
-                                                            GtkCssDependencies      *dependencies);
+                                                            GtkCssValue             *specified);
 
 G_END_DECLS
 

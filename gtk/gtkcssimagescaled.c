@@ -97,8 +97,7 @@ gtk_css_image_scaled_compute (GtkCssImage             *image,
 			      guint                    property_id,
 			      GtkStyleProviderPrivate *provider,
 			      GtkCssStyle             *style,
-			      GtkCssStyle             *parent_style,
-			      GtkCssDependencies      *dependencies)
+			      GtkCssStyle             *parent_style)
 {
   GtkCssImageScaled *scaled = GTK_CSS_IMAGE_SCALED (image);
   GtkCssImageScaled *copy;
@@ -122,8 +121,7 @@ gtk_css_image_scaled_compute (GtkCssImage             *image,
                                                       property_id,
                                                       provider,
                                                       style,
-                                                      parent_style,
-                                                      dependencies);
+                                                      parent_style);
           else
             copy->images[i] = g_object_ref (scaled->images[i]);
         }

@@ -40,8 +40,7 @@ gtk_css_value_engine_compute (GtkCssValue             *value,
                               guint                    property_id,
                               GtkStyleProviderPrivate *provider,
                               GtkCssStyle             *style,
-                              GtkCssStyle             *parent_style,
-                              GtkCssDependencies      *dependencies)
+                              GtkCssStyle             *parent_style)
 {
   return _gtk_css_value_ref (value);
 }

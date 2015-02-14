@@ -58,8 +58,7 @@ typedef void             (* GtkStylePrintFunc)             (const GValue        
 typedef GtkCssValue *    (* GtkStyleComputeFunc)           (GtkStyleProviderPrivate *provider,
                                                             GtkCssStyle             *values,
                                                             GtkCssStyle             *parent_values,
-                                                            GtkCssValue             *specified,
-                                                            GtkCssDependencies      *dependencies);
+                                                            GtkCssValue             *specified);
 
 static void
 register_conversion_function (GType               type,
@@ -185,8 +184,7 @@ static GtkCssValue *
 rgba_value_compute (GtkStyleProviderPrivate *provider,
                     GtkCssStyle             *values,
                     GtkCssStyle             *parent_values,
-                    GtkCssValue             *specified,
-                    GtkCssDependencies      *dependencies)
+                    GtkCssValue             *specified)
 {
   GdkRGBA white = { 1, 1, 1, 1 };
   const GValue *value;
@@ -205,8 +203,6 @@ rgba_value_compute (GtkStyleProviderPrivate *provider,
       val = _gtk_css_color_value_resolve (_gtk_symbolic_color_get_css_value (symbolic),
                                           provider,
                                           gtk_css_style_get_value (values, GTK_CSS_PROPERTY_COLOR),
-                                          GTK_CSS_DEPENDS_ON_COLOR,
-                                          dependencies,
                                           NULL);
       if (val != NULL)
         {
@@ -284,8 +280,7 @@ static GtkCssValue *
 color_value_compute (GtkStyleProviderPrivate *provider,
                      GtkCssStyle             *values,
                      GtkCssStyle             *parent_values,
-                     GtkCssValue             *specified,
-                     GtkCssDependencies      *dependencies)
+                     GtkCssValue             *specified)
 {
   GdkColor color = { 0, 65535, 65535, 65535 };
   const GValue *value;
@@ -302,8 +297,6 @@ color_value_compute (GtkStyleProviderPrivate *provider,
       val = _gtk_css_color_value_resolve (_gtk_symbolic_color_get_css_value (g_value_get_boxed (value)),
                                           provider,
                                           gtk_css_style_get_value (values, GTK_CSS_PROPERTY_COLOR),
-                                          GTK_CSS_DEPENDS_ON_COLOR,
-                                          dependencies,
                                           NULL);
       if (val != NULL)
         {
@@ -849,8 +842,7 @@ static GtkCssValue *
 pattern_value_compute (GtkStyleProviderPrivate *provider,
                        GtkCssStyle             *values,
                        GtkCssStyle             *parent_values,
-                       GtkCssValue             *specified,
-                       GtkCssDependencies      *dependencies)
+                       GtkCssValue             *specified)
 {
   const GValue *value = _gtk_css_typed_value_get (specified);
 
@@ -861,7 +853,7 @@ pattern_value_compute (GtkStyleProviderPrivate *provider,
       GValue new_value = G_VALUE_INIT;
       cairo_pattern_t *gradient;
 
-      gradient = _gtk_gradient_resolve_full (g_value_get_boxed (value), provider, values, parent_values, dependencies);
+      gradient = _gtk_gradient_resolve_full (g_value_get_boxed (value), provider, values, parent_values);
 
       g_value_init (&new_value, CAIRO_GOBJECT_TYPE_PATTERN);
       g_value_take_boxed (&new_value, gradient);
@@ -1142,8 +1134,6 @@ _gtk_css_style_funcs_print_value (const GValue *value,
  * @parent_values: Values to look up inherited values from
  * @target_type: Type the resulting value should have
  * @specified: the value to use for the computation
- * @dependencies: (out): Value initialized with 0 to take the dependencies
- *     of the returned value
  *
  * Converts the @specified value into the @computed value using the
  * information in @context. The values must have matching types, ie
@@ -1157,15 +1147,13 @@ _gtk_css_style_funcs_compute_value (GtkStyleProviderPrivate *provider,
                                     GtkCssStyle             *style,
                                     GtkCssStyle             *parent_style,
                                     GType                    target_type,
-                                    GtkCssValue             *specified,
-                                    GtkCssDependencies      *dependencies)
+                                    GtkCssValue             *specified)
 {
   GtkStyleComputeFunc func;
 
   g_return_val_if_fail (GTK_IS_STYLE_PROVIDER (provider), NULL);
   g_return_val_if_fail (GTK_IS_CSS_STYLE (style), NULL);
   g_return_val_if_fail (parent_style == NULL || GTK_IS_CSS_STYLE (parent_style), NULL);
-  g_return_val_if_fail (*dependencies == 0, NULL);
 
   gtk_css_style_funcs_init ();
 
@@ -1176,7 +1164,7 @@ _gtk_css_style_funcs_compute_value (GtkStyleProviderPrivate *provider,
                                 GSIZE_TO_POINTER (g_type_fundamental (target_type)));
 
   if (func)
-    return func (provider, style, parent_style, specified, dependencies);
+    return func (provider, style, parent_style, specified);
   else
     return _gtk_css_value_ref (specified);
 }

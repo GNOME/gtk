@@ -65,13 +65,6 @@ typedef enum { /*< skip >*/
                                    GTK_CSS_CHANGE_PARENT_POSITION | GTK_CSS_CHANGE_PARENT_SIBLING_POSITION | \
                                    GTK_CSS_CHANGE_PARENT_STATE | GTK_CSS_CHANGE_PARENT_SIBLING_STATE)
 
-typedef enum /*< skip >*/ {
-  GTK_CSS_DEPENDS_ON_PARENT = (1 << 0),
-  GTK_CSS_EQUALS_PARENT = (1 << 1),
-  GTK_CSS_DEPENDS_ON_COLOR = (1 << 2),
-  GTK_CSS_DEPENDS_ON_FONT_SIZE = (1 << 3)
-} GtkCssDependencies;
-
 /*
  * GtkCssAffects:
  * @GTK_CSS_AFFECTS_FOREGROUND: The foreground rendering is affected.
@@ -281,8 +274,6 @@ typedef enum /*< skip >*/ {
 
 GtkCssChange            _gtk_css_change_for_sibling              (GtkCssChange       match);
 GtkCssChange            _gtk_css_change_for_child                (GtkCssChange       match);
-GtkCssDependencies      _gtk_css_dependencies_union              (GtkCssDependencies first,
-                                                                  GtkCssDependencies second);
 
 /* for lack of better place to put it */
 /* mirror what cairo does */

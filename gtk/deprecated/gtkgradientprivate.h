@@ -25,9 +25,8 @@ G_BEGIN_DECLS
 
 cairo_pattern_t *       _gtk_gradient_resolve_full            (GtkGradient             *gradient,
                                                                GtkStyleProviderPrivate *provider,
-                                                               GtkCssStyle    *values,
-                                                               GtkCssStyle    *parent_values,
-                                                               GtkCssDependencies      *dependencies);
+                                                               GtkCssStyle             *style,
+                                                               GtkCssStyle             *parent_style);
 
 GtkGradient *           _gtk_gradient_transition              (GtkGradient             *start,
                                                                GtkGradient             *end,

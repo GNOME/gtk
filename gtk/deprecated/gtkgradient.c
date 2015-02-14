@@ -305,18 +305,16 @@ gtk_gradient_resolve (GtkGradient         *gradient,
 cairo_pattern_t *
 _gtk_gradient_resolve_full (GtkGradient             *gradient,
                             GtkStyleProviderPrivate *provider,
-                            GtkCssStyle    *values,
-                            GtkCssStyle    *parent_values,
-                            GtkCssDependencies      *dependencies)
+                            GtkCssStyle             *style,
+                            GtkCssStyle             *parent_style)
 {
   cairo_pattern_t *pattern;
   guint i;
 
   g_return_val_if_fail (gradient != NULL, NULL);
   g_return_val_if_fail (GTK_IS_STYLE_PROVIDER (provider), NULL);
-  g_return_val_if_fail (GTK_IS_CSS_STYLE (values), NULL);
-  g_return_val_if_fail (parent_values == NULL || GTK_IS_CSS_STYLE (parent_values), NULL);
-  g_return_val_if_fail (*dependencies == 0, NULL);
+  g_return_val_if_fail (GTK_IS_CSS_STYLE (style), NULL);
+  g_return_val_if_fail (parent_style == NULL || GTK_IS_CSS_STYLE (parent_style), NULL);
 
   if (gradient->radius0 == 0 && gradient->radius1 == 0)
     pattern = cairo_pattern_create_linear (gradient->x0, gradient->y0,
@@ -332,21 +330,17 @@ _gtk_gradient_resolve_full (GtkGradient             *gradient,
       ColorStop *stop;
       GtkCssValue *val;
       GdkRGBA rgba;
-      GtkCssDependencies stop_deps;
 
       stop = &g_array_index (gradient->stops, ColorStop, i);
 
       /* if color resolving fails, assume transparency */
       val = _gtk_css_color_value_resolve (_gtk_symbolic_color_get_css_value (stop->color),
                                           provider,
-                                          gtk_css_style_get_value (values, GTK_CSS_PROPERTY_COLOR),
-                                          GTK_CSS_DEPENDS_ON_COLOR,
-                                          &stop_deps,
+                                          gtk_css_style_get_value (style, GTK_CSS_PROPERTY_COLOR),
                                           NULL);
       if (val)
         {
           rgba = *_gtk_css_rgba_value_get_rgba (val);
-          *dependencies = _gtk_css_dependencies_union (*dependencies, stop_deps);
           _gtk_css_value_unref (val);
         }
       else

@@ -806,8 +806,7 @@ gtk_css_image_builtin_compute (GtkCssImage             *image,
                                guint                    property_id,
                                GtkStyleProviderPrivate *provider,
                                GtkCssStyle             *style,
-                               GtkCssStyle             *parent_style,
-                               GtkCssDependencies      *dependencies)
+                               GtkCssStyle             *parent_style)
 {
   GtkCssImageBuiltin *result;
   GtkBorderStyle border_style;
@@ -831,9 +830,6 @@ gtk_css_image_builtin_compute (GtkCssImage             *image,
   result->fg_color = *_gtk_css_rgba_value_get_rgba (gtk_css_style_get_value (style, GTK_CSS_PROPERTY_COLOR));
   result->bg_color = *_gtk_css_rgba_value_get_rgba (gtk_css_style_get_value (style, GTK_CSS_PROPERTY_BACKGROUND_COLOR));
   result->border_color = *_gtk_css_rgba_value_get_rgba (gtk_css_style_get_value (style, GTK_CSS_PROPERTY_BORDER_TOP_COLOR));
-
-  /* XXX: We also depend on other values, but I guess we cannot express that */
-  *dependencies = GTK_CSS_DEPENDS_ON_COLOR;
 
   return GTK_CSS_IMAGE (result);
 }

@@ -53,8 +53,7 @@ gboolean       _gtk_style_context_check_region_name          (const gchar     *s
 
 gboolean       _gtk_style_context_resolve_color              (GtkStyleContext    *context,
                                                               GtkCssValue        *color,
-                                                              GdkRGBA            *result,
-                                                              GtkCssDependencies *dependencies);
+                                                              GdkRGBA            *result);
 void           _gtk_style_context_get_cursor_color           (GtkStyleContext    *context,
                                                               GdkRGBA            *primary_color,
                                                               GdkRGBA            *secondary_color);

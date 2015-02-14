@@ -42,8 +42,7 @@ gtk_css_value_enum_compute (GtkCssValue             *value,
                             guint                    property_id,
                             GtkStyleProviderPrivate *provider,
                             GtkCssStyle             *style,
-                            GtkCssStyle             *parent_style,
-                            GtkCssDependencies      *dependencies)
+                            GtkCssStyle             *parent_style)
 {
   return _gtk_css_value_ref (value);
 }
@@ -165,8 +164,7 @@ gtk_css_value_font_size_compute (GtkCssValue             *value,
                                  guint                    property_id,
                                  GtkStyleProviderPrivate *provider,
                                  GtkCssStyle             *style,
-                                 GtkCssStyle             *parent_style,
-                                 GtkCssDependencies      *dependencies)
+                                 GtkCssStyle             *parent_style)
 {
   double font_size;
 
@@ -197,7 +195,6 @@ gtk_css_value_font_size_compute (GtkCssValue             *value,
       font_size = _gtk_css_font_size_get_default (provider) * 2;
       break;
     case GTK_CSS_FONT_SIZE_SMALLER:
-      *dependencies = GTK_CSS_DEPENDS_ON_PARENT;
       if (parent_style)
         font_size = _gtk_css_number_value_get (gtk_css_style_get_value (parent_style, GTK_CSS_PROPERTY_FONT_SIZE), 100);
       else
@@ -206,7 +203,6 @@ gtk_css_value_font_size_compute (GtkCssValue             *value,
       font_size /= 1.2;
       break;
     case GTK_CSS_FONT_SIZE_LARGER:
-      *dependencies = GTK_CSS_DEPENDS_ON_PARENT;
       if (parent_style)
         font_size = _gtk_css_number_value_get (gtk_css_style_get_value (parent_style, GTK_CSS_PROPERTY_FONT_SIZE), 100);
       else
@@ -376,16 +372,13 @@ gtk_css_value_font_weight_compute (GtkCssValue             *value,
                                    guint                    property_id,
                                    GtkStyleProviderPrivate *provider,
                                    GtkCssStyle             *style,
-                                   GtkCssStyle             *parent_style,
-                                   GtkCssDependencies      *dependencies)
+                                   GtkCssStyle             *parent_style)
 {
   PangoWeight new_weight;
   int parent_value;
 
   if (value->value >= 0)
     return _gtk_css_value_ref (value);
-
-  *dependencies = GTK_CSS_DEPENDS_ON_PARENT;
 
   if (parent_style)
     parent_value = gtk_css_style_get_value (parent_style, property_id)->value;

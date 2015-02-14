@@ -82,11 +82,3 @@ _gtk_css_change_for_child (GtkCssChange match)
   return gtk_css_change_translate (match, table, G_N_ELEMENTS (table)); 
 }
 
-GtkCssDependencies
-_gtk_css_dependencies_union (GtkCssDependencies first,
-                             GtkCssDependencies second)
-{
-  return (first  & ~GTK_CSS_EQUALS_PARENT) | ((first  & GTK_CSS_EQUALS_PARENT) ? GTK_CSS_DEPENDS_ON_PARENT : 0)
-       | (second & ~GTK_CSS_EQUALS_PARENT) | ((second & GTK_CSS_EQUALS_PARENT) ? GTK_CSS_DEPENDS_ON_PARENT : 0);
-}
-

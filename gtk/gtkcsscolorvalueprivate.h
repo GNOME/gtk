@@ -46,8 +46,6 @@ GtkCssValue *   _gtk_css_color_value_parse              (GtkCssParser   *parser)
 GtkCssValue *   _gtk_css_color_value_resolve            (GtkCssValue             *color,
                                                          GtkStyleProviderPrivate *provider,
                                                          GtkCssValue             *current,
-                                                         GtkCssDependencies       current_deps,
-                                                         GtkCssDependencies      *dependencies,
                                                          GSList                  *cycle_list);
 
 
