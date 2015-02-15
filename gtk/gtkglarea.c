@@ -90,7 +90,7 @@
  * ]|
  *
  * If you need to initialize OpenGL state, e.g. buffer objects or
- * shadres, you should use the #GtkWidget::realize signal; you
+ * shaders, you should use the #GtkWidget::realize signal; you
  * can use the #GtkWidget::unrealize signal to clean up.
  *
  * If you need to change the options for creating the #GdkGLContext
