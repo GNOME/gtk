@@ -368,15 +368,68 @@ _gtk_css_font_variant_value_get (const GtkCssValue *value)
 
 /* PangoWeight */
 
+#define BOLDER -1
+#define LIGHTER -2
+
+static GtkCssValue *
+gtk_css_value_font_weight_compute (GtkCssValue             *value,
+                                   guint                    property_id,
+                                   GtkStyleProviderPrivate *provider,
+                                   GtkCssStyle             *style,
+                                   GtkCssStyle             *parent_style,
+                                   GtkCssDependencies      *dependencies)
+{
+  PangoWeight new_weight;
+  int parent_value;
+
+  if (value->value >= 0)
+    return _gtk_css_value_ref (value);
+
+  *dependencies = GTK_CSS_DEPENDS_ON_PARENT;
+
+  if (parent_style)
+    parent_value = gtk_css_style_get_value (parent_style, property_id)->value;
+  else
+    parent_value = 400;
+
+  if (value->value == BOLDER)
+    {
+      if (parent_value < 400)
+        new_weight = PANGO_WEIGHT_NORMAL;
+      else if (parent_value < 600)
+        new_weight = PANGO_WEIGHT_BOLD;
+      else
+        new_weight = PANGO_WEIGHT_HEAVY;
+    }
+  else if (value->value == LIGHTER)
+    {
+      if (parent_value > 700)
+        new_weight = PANGO_WEIGHT_BOLD;
+      else if (parent_value > 500)
+        new_weight = PANGO_WEIGHT_NORMAL;
+      else
+        new_weight = PANGO_WEIGHT_THIN;
+    }
+  else
+    {
+      g_assert_not_reached ();
+      new_weight = PANGO_WEIGHT_NORMAL;
+    }
+
+  return _gtk_css_font_weight_value_new (new_weight);
+}
+
 static const GtkCssValueClass GTK_CSS_VALUE_FONT_WEIGHT = {
   gtk_css_value_enum_free,
-  gtk_css_value_enum_compute,
+  gtk_css_value_font_weight_compute,
   gtk_css_value_enum_equal,
   gtk_css_value_enum_transition,
   gtk_css_value_enum_print
 };
 
 static GtkCssValue font_weight_values[] = {
+  { &GTK_CSS_VALUE_FONT_WEIGHT, 1, BOLDER, "bolder" },
+  { &GTK_CSS_VALUE_FONT_WEIGHT, 1, LIGHTER, "lighter" },
   { &GTK_CSS_VALUE_FONT_WEIGHT, 1, PANGO_WEIGHT_THIN, "100" },
   { &GTK_CSS_VALUE_FONT_WEIGHT, 1, PANGO_WEIGHT_ULTRALIGHT, "200" },
   { &GTK_CSS_VALUE_FONT_WEIGHT, 1, PANGO_WEIGHT_LIGHT, "300" },
@@ -396,7 +449,7 @@ _gtk_css_font_weight_value_new (PangoWeight font_weight)
 
   w = ((font_weight + 50) / 100) * 100;
 
-  for (i = 0; i < G_N_ELEMENTS (font_weight_values); i++)
+  for (i = 2; i < G_N_ELEMENTS (font_weight_values); i++)
     {
       if (font_weight_values[i].value == w)
         return _gtk_css_value_ref (&font_weight_values[i]);
@@ -433,6 +486,9 @@ _gtk_css_font_weight_value_get (const GtkCssValue *value)
 
   return value->value;
 }
+
+#undef BOLDER
+#undef LIGHTER
 
 /* PangoStretch */
 
