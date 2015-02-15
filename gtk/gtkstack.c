@@ -1023,6 +1023,7 @@ set_visible_child (GtkStack               *stack,
       focus = gtk_window_get_focus (GTK_WINDOW (toplevel));
       if (focus &&
           priv->visible_child &&
+          priv->visible_child->widget &&
           gtk_widget_is_ancestor (focus, priv->visible_child->widget))
         {
           contains_focus = TRUE;
