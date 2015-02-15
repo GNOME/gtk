@@ -12,8 +12,8 @@ msgstr ""
 "Project-Id-Version: gtk+ master\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gtk"
 "%2b&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2015-01-30 10:07+0000\n"
-"PO-Revision-Date: 2015-01-30 22:25+0100\n"
+"POT-Creation-Date: 2015-02-15 10:10+0000\n"
+"PO-Revision-Date: 2015-02-15 13:33+0100\n"
 "Last-Translator: Balázs Úr <urbalazs@gmail.com>\n"
 "Language-Team: Hungarian <openscope at gmail dot com>\n"
 "Language: hu\n"
@@ -86,7 +86,7 @@ msgstr "JELZŐK"
 msgid "GDK debugging flags to unset"
 msgstr "Kikapcsolandó GDK jelzőbitek"
 
-#: ../gdk/gdkwindow.c:2733
+#: ../gdk/gdkwindow.c:2736
 msgid "GL support disabled via GDK_DEBUG"
 msgstr "GL támogatás letiltva a GDK_DEBUG beállításon keresztül"
 
@@ -432,38 +432,44 @@ msgctxt "keyboard label"
 msgid "Suspend"
 msgstr "Felfüggesztés"
 
-#: ../gdk/mir/gdkmirwindowimpl.c:1308 ../gdk/mir/gdkmirwindowimpl.c:1318
-#: ../gdk/wayland/gdkglcontext-wayland.c:263
-#: ../gdk/wayland/gdkglcontext-wayland.c:273
-#: ../gdk/win32/gdkglcontext-win32.c:527 ../gdk/x11/gdkglcontext-x11.c:700
-msgid "No available configurations for the given pixel format"
-msgstr "Nincs elérhető beállítás a megadott képpontformátumhoz"
-
-#: ../gdk/mir/gdkmirwindowimpl.c:1350
-#: ../gdk/wayland/gdkglcontext-wayland.c:306
-#: ../gdk/win32/gdkglcontext-win32.c:505 ../gdk/x11/gdkglcontext-x11.c:1066
+#: ../gdk/mir/gdkmirglcontext.c:48 ../gdk/mir/gdkmirwindowimpl.c:1406
+#: ../gdk/wayland/gdkglcontext-wayland.c:368
+#: ../gdk/win32/gdkglcontext-win32.c:541 ../gdk/x11/gdkglcontext-x11.c:1163
 msgid "No GL implementation is available"
 msgstr "Nem érhető el GL megvalósítás"
 
-#: ../gdk/mir/gdkmirwindowimpl.c:1362
-#: ../gdk/wayland/gdkglcontext-wayland.c:318
-msgid "3.2 core GL profile is not available on EGL implementation"
-msgstr "A 3.2-es alap GL profil nem érhető el az EGL megvalósításban"
-
-#: ../gdk/mir/gdkmirwindowimpl.c:1385
-#: ../gdk/wayland/gdkglcontext-wayland.c:341
-#: ../gdk/win32/gdkglcontext-win32.c:541 ../gdk/x11/gdkglcontext-x11.c:1110
-#: ../gdk/x11/gdkglcontext-x11.c:1154
+#: ../gdk/mir/gdkmirglcontext.c:89 ../gdk/wayland/gdkglcontext-wayland.c:156
+#: ../gdk/win32/gdkglcontext-win32.c:501 ../gdk/x11/gdkglcontext-x11.c:619
+#: ../gdk/x11/gdkglcontext-x11.c:663
 msgid "Unable to create a GL context"
 msgstr "Nem lehet létrehozni GL környezetet"
 
-#: ../gdk/win32/gdkglcontext-win32.c:514
+#: ../gdk/mir/gdkmirwindowimpl.c:1368 ../gdk/mir/gdkmirwindowimpl.c:1378
+#: ../gdk/wayland/gdkglcontext-wayland.c:329
+#: ../gdk/wayland/gdkglcontext-wayland.c:339
+#: ../gdk/win32/gdkglcontext-win32.c:473 ../gdk/x11/gdkglcontext-x11.c:857
+msgid "No available configurations for the given pixel format"
+msgstr "Nincs elérhető beállítás a megadott képpontformátumhoz"
+
+#: ../gdk/mir/gdkmirwindowimpl.c:1414
+msgid "3.2 core GL profile is not available on EGL implementation"
+msgstr "A 3.2-es alap GL profil nem érhető el az EGL megvalósításban"
+
+#: ../gdk/wayland/gdkglcontext-wayland.c:376
+#| msgid "3.2 core GL profile is not available on EGL implementation"
+msgid "Core GL is not available on EGL implementation"
+msgstr "Az alap GL nem érhető el az EGL megvalósításban"
+
+#: ../gdk/win32/gdkglcontext-win32.c:550
+#| msgid ""
+#| "The WGL_ARB_create_context extension needed to create 3.2 core profiles "
+#| "is not available"
 msgid ""
-"The WGL_ARB_create_context extension needed to create 3.2 core profiles is "
-"not available"
+"The WGL_ARB_create_context extension needed to create core profiles is not "
+"available"
 msgstr ""
-"A 3.2-es alapprofilok létrehozásához szükséges WGL_ARB_create_context "
-"kiterjesztés nem érhető el"
+"Az alapprofilok létrehozásához szükséges WGL_ARB_create_context kiterjesztés "
+"nem érhető el"
 
 #. Description of --sync in --help output
 #: ../gdk/win32/gdkmain-win32.c:53
@@ -512,18 +518,21 @@ msgid_plural "Opening %d Items"
 msgstr[0] "%d elem megnyitása"
 msgstr[1] "%d elem megnyitása"
 
-#: ../gdk/x11/gdkglcontext-x11.c:729
+#: ../gdk/x11/gdkglcontext-x11.c:885
 #, c-format
 msgid "No available configurations for the given RGBA pixel format"
 msgstr "Nincs elérhető beállítás a megadott RGBA képpontformátumhoz"
 
-#: ../gdk/x11/gdkglcontext-x11.c:1075
+#: ../gdk/x11/gdkglcontext-x11.c:1171
+#| msgid ""
+#| "The GLX_ARB_create_context_profile extension needed to create 3.2 core "
+#| "profiles is not available"
 msgid ""
-"The GLX_ARB_create_context_profile extension needed to create 3.2 core "
-"profiles is not available"
+"The GLX_ARB_create_context_profile extension needed to create core profiles "
+"is not available"
 msgstr ""
-"A 3.2-es alapprofilok létrehozásához szükséges "
-"GLX_ARB_create_context_profile kiterjesztés nem érhető el"
+"Az alapprofilok létrehozásához szükséges GLX_ARB_create_context_profile "
+"kiterjesztés nem érhető el"
 
 #: ../gtk/a11y/gtkbooleancellaccessible.c:43
 msgctxt "Action description"
@@ -1214,11 +1223,11 @@ msgstr ""
 
 #: ../gtk/deprecated/gtkcolorseldialog.c:191
 #: ../gtk/deprecated/gtkfontsel.c:1689 ../gtk/gtkfilechooserbutton.c:794
-#: ../gtk/gtkfilechooserwidget.c:5294 ../gtk/gtkmessagedialog.c:944
+#: ../gtk/gtkfilechooserwidget.c:5373 ../gtk/gtkmessagedialog.c:944
 #: ../gtk/gtkmessagedialog.c:957 ../gtk/gtkmountoperation.c:543
 #: ../gtk/gtkpagesetupunixdialog.c:196 ../gtk/gtkprintbackend.c:763
 #: ../gtk/gtkprinteroptionwidget.c:545 ../gtk/gtkprintunixdialog.c:665
-#: ../gtk/gtkprintunixdialog.c:733 ../gtk/gtkwindow.c:11845
+#: ../gtk/gtkprintunixdialog.c:733 ../gtk/gtkwindow.c:11853
 #: ../gtk/inspector/css-editor.c:199 ../gtk/ui/gtkappchooserdialog.ui.h:2
 #: ../gtk/ui/gtkassistant.ui.h:5 ../gtk/ui/gtkcolorchooserdialog.ui.h:2
 #: ../gtk/ui/gtkfontchooserdialog.ui.h:2
@@ -1270,7 +1279,7 @@ msgstr "_Alkalmaz"
 
 #: ../gtk/deprecated/gtkfontsel.c:1698 ../gtk/gtkmessagedialog.c:936
 #: ../gtk/gtkmessagedialog.c:958 ../gtk/gtkprintbackend.c:764
-#: ../gtk/gtkwindow.c:11846 ../gtk/inspector/classes-list.c:127
+#: ../gtk/gtkwindow.c:11854 ../gtk/inspector/classes-list.c:127
 msgid "_OK"
 msgstr "_OK"
 
@@ -2182,15 +2191,15 @@ msgstr "Egyéb…"
 msgid "%1$s on %2$s"
 msgstr "%1$s ezen: %2$s"
 
-#: ../gtk/gtkfilechooserwidget.c:328
+#: ../gtk/gtkfilechooserwidget.c:334
 msgid "Type name of new folder"
 msgstr "Adja meg az új mappa nevét"
 
-#: ../gtk/gtkfilechooserwidget.c:734
+#: ../gtk/gtkfilechooserwidget.c:741
 msgid "The folder could not be created"
 msgstr "A mappa nem hozható létre"
 
-#: ../gtk/gtkfilechooserwidget.c:747
+#: ../gtk/gtkfilechooserwidget.c:754
 msgid ""
 "The folder could not be created, as a file with the same name already "
 "exists.  Try using a different name for the folder, or rename the file first."
@@ -2198,120 +2207,129 @@ msgstr ""
 "A mappát nem lehet létrehozni, mivel már létezik egy fájl ugyanezen a néven. "
 "Próbáljon más nevet adni a mappának vagy nevezze át a fájlt."
 
-#: ../gtk/gtkfilechooserwidget.c:761
+#: ../gtk/gtkfilechooserwidget.c:768
 msgid "You need to choose a valid filename."
 msgstr "Érvényes fájlnevet válasszon."
 
-#: ../gtk/gtkfilechooserwidget.c:764
+#: ../gtk/gtkfilechooserwidget.c:771
 #, c-format
 msgid "Cannot create a file under %s as it is not a folder"
 msgstr "Nem hozható létre fájl %s alatt, mert az nem mappa"
 
-#: ../gtk/gtkfilechooserwidget.c:772
+#: ../gtk/gtkfilechooserwidget.c:779
 msgid "Cannot create file as the filename is too long"
 msgstr "Nem hozható létre a fájl, mert a neve túl hosszú"
 
-#: ../gtk/gtkfilechooserwidget.c:773
+#: ../gtk/gtkfilechooserwidget.c:780
 msgid "Try using a shorter name."
 msgstr "Próbáljon meg rövidebb nevet használni."
 
-#: ../gtk/gtkfilechooserwidget.c:783
+#: ../gtk/gtkfilechooserwidget.c:790
 msgid "You may only select folders"
 msgstr "Csak mappákat választhat ki"
 
-#: ../gtk/gtkfilechooserwidget.c:784
+#: ../gtk/gtkfilechooserwidget.c:791
 msgid "The item that you selected is not a folder try using a different item."
 msgstr "A kiválasztott elem nem mappa, próbáljon másik elemet használni."
 
-#: ../gtk/gtkfilechooserwidget.c:792
+#: ../gtk/gtkfilechooserwidget.c:799
 msgid "Invalid file name"
 msgstr "Érvénytelen fájlnév"
 
-#: ../gtk/gtkfilechooserwidget.c:802
+#: ../gtk/gtkfilechooserwidget.c:809
 msgid "The folder contents could not be displayed"
 msgstr "A mappa tartalma nem jeleníthető meg"
 
-#: ../gtk/gtkfilechooserwidget.c:1481
+#: ../gtk/gtkfilechooserwidget.c:1512
 msgid "Could not select file"
 msgstr "Nem sikerült kijelölni a fájlt"
 
-#: ../gtk/gtkfilechooserwidget.c:1711
+#: ../gtk/gtkfilechooserwidget.c:1745
 msgid "_Visit File"
 msgstr "_Fájl megjelenítése"
 
-#: ../gtk/gtkfilechooserwidget.c:1714
+#: ../gtk/gtkfilechooserwidget.c:1748
+msgid "_Open With File Manager"
+msgstr "_Megnyitás a fájlkezelővel"
+
+#: ../gtk/gtkfilechooserwidget.c:1751
 msgid "_Copy Location"
 msgstr "Hely _másolása"
 
-#: ../gtk/gtkfilechooserwidget.c:1717
+#: ../gtk/gtkfilechooserwidget.c:1754
 msgid "_Add to Bookmarks"
 msgstr "Hozzá_adás a könyvjelzőkhöz"
 
-#: ../gtk/gtkfilechooserwidget.c:1724
+#: ../gtk/gtkfilechooserwidget.c:1761
 msgid "Show _Hidden Files"
 msgstr "_Rejtett fájlok megjelenítése"
 
-#: ../gtk/gtkfilechooserwidget.c:1727
+#: ../gtk/gtkfilechooserwidget.c:1764
 msgid "Show _Size Column"
 msgstr "_Méret oszlop megjelenítése"
 
-#: ../gtk/gtkfilechooserwidget.c:1730
+#: ../gtk/gtkfilechooserwidget.c:1767
 msgid "Sort _Folders before Files"
 msgstr "_Mappák rendezése a fájlok előtt"
 
 #. this is the header for the location column in the print dialog
-#: ../gtk/gtkfilechooserwidget.c:1999 ../gtk/inspector/style-prop-list.ui.h:3
-#: ../gtk/ui/gtkprintunixdialog.ui.h:4
+#: ../gtk/gtkfilechooserwidget.c:2037 ../gtk/inspector/style-prop-list.ui.h:3
+#: ../gtk/ui/gtkfilechooserwidget.ui.h:8 ../gtk/ui/gtkprintunixdialog.ui.h:4
 msgid "Location"
 msgstr "Hely"
 
 #. Label
-#: ../gtk/gtkfilechooserwidget.c:2039
+#: ../gtk/gtkfilechooserwidget.c:2077
 msgid "_Name:"
 msgstr "_Név:"
 
-#: ../gtk/gtkfilechooserwidget.c:3714
+#: ../gtk/gtkfilechooserwidget.c:2557 ../gtk/gtkfilechooserwidget.c:4094
+#: ../gtk/gtkplacessidebar.c:968 ../gtk/ui/gtkfilechooserwidget.ui.h:2
+msgid "Home"
+msgstr "Saját mappa"
+
+#: ../gtk/gtkfilechooserwidget.c:3764
 #, c-format
 msgid "Could not read the contents of %s"
 msgstr "Nem sikerült „%s” tartalmát beolvasni"
 
-#: ../gtk/gtkfilechooserwidget.c:3718
+#: ../gtk/gtkfilechooserwidget.c:3768
 msgid "Could not read the contents of the folder"
 msgstr "Nem sikerült beolvasni a mappa tartalmát"
 
-#: ../gtk/gtkfilechooserwidget.c:3825
+#: ../gtk/gtkfilechooserwidget.c:3875
 msgid "%H:%M"
 msgstr "%k.%M"
 
-#: ../gtk/gtkfilechooserwidget.c:3825
+#: ../gtk/gtkfilechooserwidget.c:3875
 msgid "%-I:%M %P"
 msgstr "%l.%M %P"
 
-#: ../gtk/gtkfilechooserwidget.c:3827
+#: ../gtk/gtkfilechooserwidget.c:3877
 msgid "Yesterday at %H:%M"
 msgstr "Tegnap %k.%M"
 
-#: ../gtk/gtkfilechooserwidget.c:3827
+#: ../gtk/gtkfilechooserwidget.c:3877
 msgid "Yesterday at %-I:%M %P"
 msgstr "Tegnap %k.%M %P"
 
 #. Translators: We don't know whether this printer is
 #. * available to print to.
-#: ../gtk/gtkfilechooserwidget.c:4026 ../gtk/inspector/prop-editor.c:1569
+#: ../gtk/gtkfilechooserwidget.c:4076 ../gtk/inspector/prop-editor.c:1569
 #: ../modules/printbackends/cloudprint/gtkprintbackendcloudprint.c:748
 msgid "Unknown"
 msgstr "Ismeretlen"
 
-#: ../gtk/gtkfilechooserwidget.c:4501
+#: ../gtk/gtkfilechooserwidget.c:4580
 msgid "Cannot change to folder because it is not local"
 msgstr "Nem lehet megváltoztatni a mappát, mert az nem helyi"
 
-#: ../gtk/gtkfilechooserwidget.c:5287 ../gtk/gtkprintunixdialog.c:656
+#: ../gtk/gtkfilechooserwidget.c:5366 ../gtk/gtkprintunixdialog.c:656
 #, c-format
 msgid "A file named “%s” already exists.  Do you want to replace it?"
 msgstr "A(z) „%s” nevű fájl már létezik. Le akarja cserélni?"
 
-#: ../gtk/gtkfilechooserwidget.c:5290 ../gtk/gtkprintunixdialog.c:660
+#: ../gtk/gtkfilechooserwidget.c:5369 ../gtk/gtkprintunixdialog.c:660
 #, c-format
 msgid ""
 "The file already exists in “%s”.  Replacing it will overwrite its contents."
@@ -2319,15 +2337,15 @@ msgstr ""
 "A fájl már létezik a(z) „%s” helyen. Lecserélésével a tartalma felül lesz "
 "írva."
 
-#: ../gtk/gtkfilechooserwidget.c:5295 ../gtk/gtkprintunixdialog.c:668
+#: ../gtk/gtkfilechooserwidget.c:5374 ../gtk/gtkprintunixdialog.c:668
 msgid "_Replace"
 msgstr "_Csere"
 
-#: ../gtk/gtkfilechooserwidget.c:6114
+#: ../gtk/gtkfilechooserwidget.c:6172
 msgid "Could not start the search process"
 msgstr "Nem lehet elindítani a keresési folyamatot"
 
-#: ../gtk/gtkfilechooserwidget.c:6115
+#: ../gtk/gtkfilechooserwidget.c:6173
 msgid ""
 "The program was not able to create a connection to the indexer daemon. "
 "Please make sure it is running."
@@ -2335,7 +2353,7 @@ msgstr ""
 "A program nem volt képes kapcsolatot létrehozni az indexelő démonhoz. "
 "Győződjön meg róla, hogy az fut."
 
-#: ../gtk/gtkfilechooserwidget.c:6129
+#: ../gtk/gtkfilechooserwidget.c:6187
 msgid "Could not send the search request"
 msgstr "Nem lehet elküldeni a keresési kérést"
 
@@ -2366,7 +2384,7 @@ msgstr "Válasszon betűkészletet"
 msgid "None"
 msgstr "Nincs"
 
-#: ../gtk/gtkglarea.c:296
+#: ../gtk/gtkglarea.c:265
 msgid "OpenGL context creation failed"
 msgstr "Az OpenGL környezet létrehozása meghiúsult"
 
@@ -2374,7 +2392,7 @@ msgstr "Az OpenGL környezet létrehozása meghiúsult"
 msgid "Application menu"
 msgstr "Alkalmazásmenü"
 
-#: ../gtk/gtkheaderbar.c:476 ../gtk/gtkwindow.c:8525
+#: ../gtk/gtkheaderbar.c:476 ../gtk/gtkwindow.c:8527
 msgid "Close"
 msgstr "Bezárás"
 
@@ -2550,16 +2568,16 @@ msgstr "Beállítandó Gtk+ debug jelzőbitek"
 msgid "GTK+ debugging flags to unset"
 msgstr "Kikapcsolandó Gtk+ jelzőbitek"
 
-#: ../gtk/gtkmain.c:765
+#: ../gtk/gtkmain.c:776
 #, c-format
 msgid "Cannot open display: %s"
 msgstr "Nem nyitható meg a megjelenítő: %s"
 
-#: ../gtk/gtkmain.c:831
+#: ../gtk/gtkmain.c:842
 msgid "GTK+ Options"
 msgstr "GTK+ beállításai"
 
-#: ../gtk/gtkmain.c:831
+#: ../gtk/gtkmain.c:842
 msgid "Show GTK+ Options"
 msgstr "GTK+ beállítások megjelenítése"
 
@@ -2568,7 +2586,7 @@ msgstr "GTK+ beállítások megjelenítése"
 #. * Do *not* translate it to "predefinito:LTR", if it
 #. * it isn't default:LTR or default:RTL it will not work
 #.
-#: ../gtk/gtkmain.c:1155
+#: ../gtk/gtkmain.c:1166
 msgid "default:LTR"
 msgstr "default:LTR"
 
@@ -2669,7 +2687,7 @@ msgstr "Z Shell"
 msgid "Cannot end process with PID %d: %s"
 msgstr "Nem fejeztethető be a(z) %d azonosítójú folyamat: %s"
 
-#: ../gtk/gtknotebook.c:5128 ../gtk/gtknotebook.c:7856
+#: ../gtk/gtknotebook.c:5165 ../gtk/gtknotebook.c:7893
 #, c-format
 msgid "Page %u"
 msgstr "%u. oldal"
@@ -2730,10 +2748,6 @@ msgstr "Legutóbbi"
 #: ../gtk/gtkplacessidebar.c:959
 msgid "Recent files"
 msgstr "Legutóbbi fájlok"
-
-#: ../gtk/gtkplacessidebar.c:968
-msgid "Home"
-msgstr "Saját mappa"
 
 #: ../gtk/gtkplacessidebar.c:970
 msgid "Open your personal folder"
@@ -3457,11 +3471,11 @@ msgctxt "volume percentage"
 msgid "%d %%"
 msgstr "%d %%"
 
-#: ../gtk/gtkwindow.c:11833
+#: ../gtk/gtkwindow.c:11841
 msgid "Do you want to use GTK+ Inspector?"
 msgstr "Szeretné használni a GTK+ vizsgálót?"
 
-#: ../gtk/gtkwindow.c:11835
+#: ../gtk/gtkwindow.c:11843
 msgid ""
 "GTK+ Inspector is an interactive debugger that lets you explore and modify "
 "the internals of any GTK+ application. Using it may cause the application to "
@@ -3471,7 +3485,7 @@ msgstr ""
 "alkalmazás belső működésének felfedezését és módosítását. A használata miatt "
 "az alkalmazás hibásan működhet vagy összeomolhat."
 
-#: ../gtk/gtkwindow.c:11840
+#: ../gtk/gtkwindow.c:11848
 msgid "Don't show this message again"
 msgstr "Ne jelenjen meg többé ez az üzenet"
 
@@ -3490,7 +3504,7 @@ msgstr "Előtag"
 
 #: ../gtk/inspector/actions.ui.h:2 ../gtk/inspector/classes-list.ui.h:3
 #: ../gtk/inspector/object-tree.ui.h:2 ../gtk/inspector/signals-list.ui.h:3
-#: ../gtk/ui/gtkfilechooserwidget.ui.h:3
+#: ../gtk/ui/gtkfilechooserwidget.ui.h:5
 msgid "Name"
 msgstr "Név"
 
@@ -3811,7 +3825,7 @@ msgstr "Útvonal"
 msgid "Count"
 msgstr "Szám"
 
-#: ../gtk/inspector/resource-list.ui.h:3 ../gtk/ui/gtkfilechooserwidget.ui.h:4
+#: ../gtk/inspector/resource-list.ui.h:3 ../gtk/ui/gtkfilechooserwidget.ui.h:6
 msgid "Size"
 msgstr "Méret"
 
@@ -5774,19 +5788,23 @@ msgid "Saturation"
 msgstr "Telítettség"
 
 #: ../gtk/ui/gtkfilechooserwidget.ui.h:1
-#| msgid "Create Fo_lder"
 msgid "Create Folder"
 msgstr "Mappa létrehozása"
 
-#: ../gtk/ui/gtkfilechooserwidget.ui.h:2
+#: ../gtk/ui/gtkfilechooserwidget.ui.h:3
+#| msgid "Files"
+msgid "All Files"
+msgstr "Minden fájl"
+
+#: ../gtk/ui/gtkfilechooserwidget.ui.h:4
 msgid "Files"
 msgstr "Fájlok"
 
-#: ../gtk/ui/gtkfilechooserwidget.ui.h:5
+#: ../gtk/ui/gtkfilechooserwidget.ui.h:7
 msgid "Modified"
 msgstr "Módosítva"
 
-#: ../gtk/ui/gtkfilechooserwidget.ui.h:6
+#: ../gtk/ui/gtkfilechooserwidget.ui.h:9
 msgid "Select which types of files are shown"
 msgstr "Válassza ki, hogy milyen típusú fájlok jelenjenek meg"
 
