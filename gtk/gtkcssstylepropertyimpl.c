@@ -1049,7 +1049,7 @@ _gtk_css_style_property_init_properties (void)
   gtk_css_style_property_register        ("font-weight",
                                           GTK_CSS_PROPERTY_FONT_WEIGHT,
                                           PANGO_TYPE_WEIGHT,
-                                          GTK_STYLE_PROPERTY_INHERIT,
+                                          GTK_STYLE_PROPERTY_INHERIT | GTK_STYLE_PROPERTY_ANIMATED,
                                           GTK_CSS_AFFECTS_FONT | GTK_CSS_AFFECTS_TEXT,
                                           parse_pango_weight,
                                           query_pango_weight,

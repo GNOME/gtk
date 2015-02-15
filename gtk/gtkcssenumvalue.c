@@ -419,11 +419,27 @@ gtk_css_value_font_weight_compute (GtkCssValue             *value,
   return _gtk_css_font_weight_value_new (new_weight);
 }
 
+static GtkCssValue *
+gtk_css_value_font_weight_transition (GtkCssValue *start,
+                                      GtkCssValue *end,
+                                      guint        property_id,
+                                      double       progress)
+{
+  PangoWeight new_weight;
+
+  if (start->value < 0 || end->value < 0)
+    return NULL;
+
+  new_weight = (start->value + end->value + 50) / 200 * 100;
+
+  return _gtk_css_font_weight_value_new (new_weight);
+}
+
 static const GtkCssValueClass GTK_CSS_VALUE_FONT_WEIGHT = {
   gtk_css_value_enum_free,
   gtk_css_value_font_weight_compute,
   gtk_css_value_enum_equal,
-  gtk_css_value_enum_transition,
+  gtk_css_value_font_weight_transition,
   gtk_css_value_enum_print
 };
 
