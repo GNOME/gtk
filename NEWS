@@ -1,3 +1,37 @@
+Overview of Changes in GTK+ 3.15.7
+==================================
+
+* GtkListBox now supports models with gtk_list_box_bind_model
+
+* GtkNotebook has a new function to support tab dnd
+
+* GtkSidebar was renamed to GtkStackSidebar to better convey what it does
+
+* GtkFileChooser now has a location column for search
+
+* GdkGLProfile has been removed
+
+* Bugs
+ 695945 implement minimize / maximize functionality
+ 708320 listbox: Update the cursor row when the row's child gets focus
+ 741946 OpenGL context should allow for GL attribute selection
+ 743350 main: Make gtk_get_option_group() available to bindings
+ 744148 gtk: x: fix compilation without x11 backend
+ 744172 Wayland: Clients won't work on compositors that support wl_seat < 4
+ 744204 File chooser in gedit try to open directory instead of navigatin...
+ 744394 GtkGLArea documentation does not reflect changes in the api
+ 744400 Add specific CSS class for the close/minimize/maximize button
+ 744407 Can't support core 3.2 gl context on llvmpipe
+ 744455 wayland: Update to xdg-shell unstable v5
+
+* Translation updates:
+ Hungarian
+ Norwegian bokmål
+ Slovenian
+ Spanish
+ Turkish
+
+
 Overview of Changes in GTK+ 3.15.5
 ==================================
 
@@ -18,8 +52,6 @@ Overview of Changes in GTK+ 3.15.5
 
 * GtkScrolledWindow has gained a new ::edge-reached signal, which
   triggers when the edge of the scrollable area is reached.
-
-* GtkSidebar was renamed to GtkStackSidebar to better convey what it does
 
 * CSS:
  - Performance improvements
