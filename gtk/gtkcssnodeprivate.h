@@ -93,6 +93,8 @@ struct _GtkCssNodeClass
 
 GType                   gtk_css_node_get_type           (void) G_GNUC_CONST;
 
+GtkCssNode *            gtk_css_node_new                (void);
+
 void                    gtk_css_node_set_parent         (GtkCssNode            *cssnode,
                                                          GtkCssNode            *parent);
 void                    gtk_css_node_insert_after       (GtkCssNode            *parent,
