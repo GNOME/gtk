@@ -947,23 +947,23 @@ subparser_end (GMarkupParseContext *context,
   if (data->subparser->parser->end_element)
     data->subparser->parser->end_element (context, element_name,
 					  data->subparser->data, error);
-  
-  if (!strcmp (data->subparser->start, element_name) == 0)
+
+  if (strcmp (data->subparser->start, element_name) != 0)
     return;
-    
+
   gtk_buildable_custom_tag_end (GTK_BUILDABLE (data->subparser->object),
 				data->builder,
 				data->subparser->child,
 				element_name,
 				data->subparser->data);
   g_free (data->subparser->parser);
-      
+
   if (GTK_BUILDABLE_GET_IFACE (data->subparser->object)->custom_finished)
     data->custom_finalizers = g_slist_prepend (data->custom_finalizers,
 					       data->subparser);
   else
     free_subparser (data->subparser);
-  
+
   data->subparser = NULL;
 }
 
