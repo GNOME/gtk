@@ -375,6 +375,8 @@ man_MANS = gtk-query-immodules-2.0.1 gtk-update-icon-cache.1 gtk-builder-convert
 
 BUILT_EXTRA_DIST = $(man_MANS)
 
+DISTCLEANFILES = $(man_MANS)
+
 endif
 
 dist-hook-local: $(BUILT_EXTRA_DIST)
