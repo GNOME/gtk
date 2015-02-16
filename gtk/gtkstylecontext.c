@@ -1179,6 +1179,37 @@ gtk_style_context_get_parent (GtkStyleContext *context)
   return context->priv->parent;
 }
 
+/*
+ * gtk_style_context_save_to_node:
+ * @context: a #GtkStyleContext
+ * @node: the node to save to
+ *
+ * Saves the @context state, so temporary modifications done through
+ * gtk_style_context_add_class(), gtk_style_context_remove_class(),
+ * gtk_style_context_set_state(), etc. and rendering using
+ * gtk_render_background() or similar functions are done using the
+ * given @node.
+ *
+ * To undo, call gtk_style_context_restore().
+ *
+ * The matching call to gtk_style_context_restore() must be done
+ * before GTK returns to the main loop.
+ **/
+void
+gtk_style_context_save_to_node (GtkStyleContext *context,
+                                GtkCssNode      *node)
+{
+  GtkStyleContextPrivate *priv;
+
+  g_return_if_fail (GTK_IS_STYLE_CONTEXT (context));
+  g_return_if_fail (GTK_IS_CSS_NODE (node));
+
+  priv = context->priv;
+
+  priv->saved_nodes = g_slist_prepend (priv->saved_nodes, priv->cssnode);
+  priv->cssnode = g_object_ref (node);
+}
+
 void
 gtk_style_context_save_named (GtkStyleContext *context,
                               const char      *name)
@@ -1198,8 +1229,9 @@ gtk_style_context_save_named (GtkStyleContext *context,
   if (name)
     gtk_css_node_set_name (cssnode, g_intern_string (name));
 
-  priv->saved_nodes = g_slist_prepend (priv->saved_nodes, priv->cssnode);
-  priv->cssnode = cssnode;
+  gtk_style_context_save_to_node (context, cssnode);
+
+  g_object_unref (cssnode);
 }
 
 /**

@@ -38,6 +38,8 @@ GtkStyleProviderPrivate *
 
 void            gtk_style_context_save_named                 (GtkStyleContext *context,
                                                               const char      *name);
+void            gtk_style_context_save_to_node               (GtkStyleContext *context,
+                                                              GtkCssNode      *node);
 
 const GtkBitmask *
                 _gtk_style_context_get_changes               (GtkStyleContext *context);
