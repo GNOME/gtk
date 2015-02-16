@@ -742,7 +742,7 @@ gtk_gl_area_class_init (GtkGLAreaClass *klass)
   obj_props[PROP_AUTO_RENDER] =
     g_param_spec_boolean ("auto-render",
                           P_("Auto render"),
-                          P_("Whether the gl area renders on each redraw"),
+                          P_("Whether the GtkGLArea renders on each redraw"),
                           TRUE,
                           GTK_PARAM_READWRITE |
                           G_PARAM_STATIC_STRINGS |
@@ -763,7 +763,7 @@ gtk_gl_area_class_init (GtkGLAreaClass *klass)
   obj_props[PROP_HAS_ALPHA] =
     g_param_spec_boolean ("has-alpha",
                           P_("Has alpha"),
-                          P_("Whether the gl area color buffer has an alpha component"),
+                          P_("Whether the color buffer has an alpha component"),
                           FALSE,
                           GTK_PARAM_READWRITE |
                           G_PARAM_STATIC_STRINGS |
