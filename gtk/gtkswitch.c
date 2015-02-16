@@ -992,11 +992,13 @@ gtk_switch_class_init (GtkSwitchClass *klass)
 static void
 gtk_switch_init (GtkSwitch *self)
 {
+  GtkSwitchPrivate *priv;
   GtkStyleContext *context;
   GtkGesture *gesture;
 
-  self->priv = gtk_switch_get_instance_private (self);
-  self->priv->use_action_appearance = TRUE;
+  priv = self->priv = gtk_switch_get_instance_private (self);
+
+  priv->use_action_appearance = TRUE;
   gtk_widget_set_has_window (GTK_WIDGET (self), FALSE);
   gtk_widget_set_can_focus (GTK_WIDGET (self), TRUE);
 
@@ -1009,7 +1011,7 @@ gtk_switch_init (GtkSwitch *self)
                     G_CALLBACK (gtk_switch_multipress_gesture_released), self);
   gtk_event_controller_set_propagation_phase (GTK_EVENT_CONTROLLER (gesture),
                                               GTK_PHASE_BUBBLE);
-  self->priv->multipress_gesture = gesture;
+  priv->multipress_gesture = gesture;
 
   gesture = gtk_gesture_pan_new (GTK_WIDGET (self),
                                  GTK_ORIENTATION_HORIZONTAL);
@@ -1021,7 +1023,7 @@ gtk_switch_init (GtkSwitch *self)
                     G_CALLBACK (gtk_switch_pan_gesture_drag_end), self);
   gtk_event_controller_set_propagation_phase (GTK_EVENT_CONTROLLER (gesture),
                                               GTK_PHASE_BUBBLE);
-  self->priv->pan_gesture = gesture;
+  priv->pan_gesture = gesture;
 
   context = gtk_widget_get_style_context (GTK_WIDGET (self));
   gtk_style_context_add_class (context, GTK_STYLE_CLASS_TROUGH);
