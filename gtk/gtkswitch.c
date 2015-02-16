@@ -67,7 +67,6 @@ struct _GtkSwitchPrivate
   GtkGesture *multipress_gesture;
 
   gint handle_x;
-  gint offset;
   gint64 start_time;
   gint64 end_time;
   guint tick_id;
@@ -150,16 +149,22 @@ gtk_switch_on_frame_clock_update (GtkWidget     *widget,
   if (now < priv->end_time)
     {
       gdouble t;
-      gint dest_offset;
+      gint dest_offset, start_offset;
 
       if (priv->is_active)
-        dest_offset = 0;
+        {
+          start_offset = gtk_widget_get_allocated_width (GTK_WIDGET (sw)) / 2;
+          dest_offset = 0;
+        }
       else
-        dest_offset = gtk_widget_get_allocated_width (GTK_WIDGET (sw)) / 2;
+        {
+          start_offset = 0;
+          dest_offset = gtk_widget_get_allocated_width (GTK_WIDGET (sw)) / 2;
+        }
 
       t = (now - priv->start_time) / (gdouble) (priv->end_time - priv->start_time);
       t = ease_out_cubic (t);
-      priv->handle_x = priv->offset + t * (dest_offset - priv->offset);
+      priv->handle_x = start_offset + t * (dest_offset - start_offset);
     }
   else
     {
@@ -188,7 +193,6 @@ gtk_switch_begin_toggle_animation (GtkSwitch *sw)
       GdkFrameClock *clock = gtk_widget_get_frame_clock (GTK_WIDGET (sw));
       priv->start_time = gdk_frame_clock_get_frame_time (clock);
       priv->end_time = priv->start_time + 1000 * ANIMATION_DURATION;
-      priv->offset = priv->handle_x;
       if (priv->tick_id == 0)
         priv->tick_id = gtk_widget_add_tick_callback (GTK_WIDGET (sw),
                                                       gtk_switch_on_frame_clock_update,
@@ -212,11 +216,6 @@ gtk_switch_multipress_gesture_pressed (GtkGestureMultiPress *gesture,
 
   gtk_widget_get_allocation (GTK_WIDGET (sw), &allocation);
   gtk_gesture_set_state (GTK_GESTURE (gesture), GTK_EVENT_SEQUENCE_CLAIMED);
-
-  if (priv->is_active)
-    priv->offset = allocation.width / 2;
-  else
-    priv->offset = 0;
 
   /* If the press didn't happen in the draggable handle,
    * cancel the pan gesture right away
@@ -251,7 +250,6 @@ gtk_switch_pan_gesture_pan (GtkGesturePan   *gesture,
 {
   GtkWidget *widget = GTK_WIDGET (sw);
   GtkSwitchPrivate *priv = sw->priv;
-  GtkAllocation allocation;
   GtkStyleContext *context;
   GtkStateFlags state;
   GtkBorder padding;
@@ -261,7 +259,6 @@ gtk_switch_pan_gesture_pan (GtkGesturePan   *gesture,
     offset = -offset;
 
   gtk_gesture_set_state (GTK_GESTURE (gesture), GTK_EVENT_SEQUENCE_CLAIMED);
-  position = priv->offset + offset;
 
   context = gtk_widget_get_style_context (widget);
   state = gtk_widget_get_state_flags (widget);
@@ -272,9 +269,12 @@ gtk_switch_pan_gesture_pan (GtkGesturePan   *gesture,
   gtk_style_context_get_padding (context, state, &padding);
   gtk_style_context_restore (context);
 
-  gtk_widget_get_allocation (widget, &allocation);
+  width = gtk_widget_get_allocated_width (widget);
 
-  width = allocation.width;
+  if (priv->is_active)
+    position = width / 2 + offset;
+  else
+    position = offset;
 
   /* constrain the handle within the trough width */
   if (position > (width / 2) - padding.right)
