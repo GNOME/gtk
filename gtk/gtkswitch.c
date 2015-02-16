@@ -42,15 +42,18 @@
 #include "gtkswitch.h"
 
 #include "deprecated/gtkactivatable.h"
+#include "deprecated/gtktoggleaction.h"
 #include "gtkintl.h"
 #include "gtkprivate.h"
-#include "deprecated/gtktoggleaction.h"
 #include "gtkwidget.h"
 #include "gtkmarshalers.h"
 #include "gtkapplicationprivate.h"
 #include "gtkactionable.h"
 #include "a11y/gtkswitchaccessible.h"
 #include "gtkactionhelper.h"
+#include "gtkcssnodeprivate.h"
+#include "gtkcssstylepropertyprivate.h"
+#include "gtkstylecontextprivate.h"
 #include "gtkwidgetprivate.h"
 
 #include "fallback-c89.c"
@@ -65,6 +68,8 @@ struct _GtkSwitchPrivate
 
   GtkGesture *pan_gesture;
   GtkGesture *multipress_gesture;
+
+  GtkCssNode *slider_node;
 
   double handle_pos;
   gint64 start_time;
@@ -254,9 +259,7 @@ gtk_switch_pan_gesture_pan (GtkGesturePan   *gesture,
   context = gtk_widget_get_style_context (widget);
   state = gtk_widget_get_state_flags (widget);
 
-  gtk_style_context_save (context);
-  gtk_style_context_remove_class (context, GTK_STYLE_CLASS_TROUGH);
-  gtk_style_context_add_class (context, GTK_STYLE_CLASS_SLIDER);
+  gtk_style_context_save_to_node (context, priv->slider_node);
   gtk_style_context_get_padding (context, state, &padding);
   gtk_style_context_restore (context);
 
@@ -348,6 +351,8 @@ gtk_switch_get_preferred_width (GtkWidget *widget,
                                 gint      *minimum,
                                 gint      *natural)
 {
+  GtkSwitch *self;
+  GtkSwitchPrivate *priv;
   GtkStyleContext *context;
   GtkStateFlags state;
   GtkBorder padding;
@@ -355,13 +360,12 @@ gtk_switch_get_preferred_width (GtkWidget *widget,
   PangoLayout *layout;
   PangoRectangle logical_rect;
 
+  self = GTK_SWITCH (widget);
+  priv = self->priv;
   context = gtk_widget_get_style_context (widget);
   state = gtk_style_context_get_state (context);
 
-  gtk_style_context_save (context);
-
-  gtk_style_context_remove_class (context, GTK_STYLE_CLASS_TROUGH);
-  gtk_style_context_add_class (context, GTK_STYLE_CLASS_SLIDER);
+  gtk_style_context_save_to_node (context, priv->slider_node);
   gtk_style_context_get_padding (context, state, &padding);
 
   width = padding.left + padding.right;
@@ -400,6 +404,8 @@ gtk_switch_get_preferred_height (GtkWidget *widget,
                                  gint      *minimum,
                                  gint      *natural)
 {
+  GtkSwitch *self;
+  GtkSwitchPrivate *priv;
   GtkStyleContext *context;
   GtkStateFlags state;
   GtkBorder padding;
@@ -408,13 +414,13 @@ gtk_switch_get_preferred_height (GtkWidget *widget,
   PangoRectangle logical_rect;
   gchar *str;
 
+  self = GTK_SWITCH (widget);
+  priv = self->priv;
   context = gtk_widget_get_style_context (widget);
   state = gtk_style_context_get_state (context);
 
-  gtk_style_context_save (context);
+  gtk_style_context_save_to_node (context, priv->slider_node);
 
-  gtk_style_context_remove_class (context, GTK_STYLE_CLASS_TROUGH);
-  gtk_style_context_add_class (context, GTK_STYLE_CLASS_SLIDER);
   gtk_style_context_get_padding (context, state, &padding);
 
   height = padding.top + padding.bottom;
@@ -543,9 +549,7 @@ gtk_switch_paint_handle (GtkWidget    *widget,
 {
   GtkStyleContext *context = gtk_widget_get_style_context (widget);
 
-  gtk_style_context_save (context);
-  gtk_style_context_remove_class (context, GTK_STYLE_CLASS_TROUGH);
-  gtk_style_context_add_class (context, GTK_STYLE_CLASS_SLIDER);
+  gtk_style_context_save_to_node (context, GTK_SWITCH (widget)->priv->slider_node);
 
   gtk_render_slider (context, cr,
                      box->x, box->y,
@@ -572,10 +576,7 @@ gtk_switch_draw (GtkWidget *widget,
   context = gtk_widget_get_style_context (widget);
   state = gtk_widget_get_state_flags (widget);
 
-  gtk_style_context_save (context);
-
-  gtk_style_context_remove_class (context, GTK_STYLE_CLASS_TROUGH);
-  gtk_style_context_add_class (context, GTK_STYLE_CLASS_SLIDER);
+  gtk_style_context_save_to_node (context, priv->slider_node);
 
   gtk_style_context_get_padding (context, state, &padding);
 
@@ -849,6 +850,26 @@ state_set (GtkSwitch *sw, gboolean state)
 }
 
 static void
+node_style_changed_cb (GtkCssNode  *node,
+                       GtkCssStyle *old_style,
+                       GtkCssStyle *new_style,
+                       GtkWidget    *widget)
+{
+  GtkBitmask *changes = gtk_css_style_get_difference (old_style, new_style);
+  static GtkBitmask *affects_size = NULL;
+
+  if (G_UNLIKELY (affects_size == NULL))
+    affects_size = _gtk_css_style_property_get_mask_affecting (GTK_CSS_AFFECTS_SIZE | GTK_CSS_AFFECTS_CLIP);
+
+  if (_gtk_bitmask_intersects (changes, affects_size))
+    gtk_widget_queue_resize (widget);
+  else
+    gtk_widget_queue_draw (widget);
+
+  _gtk_bitmask_free (changes);
+}
+
+static void
 gtk_switch_class_init (GtkSwitchClass *klass)
 {
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
@@ -995,12 +1016,22 @@ gtk_switch_init (GtkSwitch *self)
   GtkSwitchPrivate *priv;
   GtkStyleContext *context;
   GtkGesture *gesture;
+  GtkCssNode *widget_node;
 
   priv = self->priv = gtk_switch_get_instance_private (self);
 
   priv->use_action_appearance = TRUE;
   gtk_widget_set_has_window (GTK_WIDGET (self), FALSE);
   gtk_widget_set_can_focus (GTK_WIDGET (self), TRUE);
+
+  widget_node = gtk_widget_get_css_node (GTK_WIDGET (self));
+  priv->slider_node = gtk_css_node_new ();
+  gtk_css_node_set_widget_type (priv->slider_node, GTK_TYPE_SWITCH);
+  gtk_css_node_add_class (priv->slider_node, g_quark_from_string (GTK_STYLE_CLASS_SLIDER));
+  gtk_css_node_set_parent (priv->slider_node, widget_node);
+  gtk_css_node_set_state (priv->slider_node, gtk_css_node_get_state (widget_node));
+  g_signal_connect_object (priv->slider_node, "style-changed", G_CALLBACK (node_style_changed_cb), self, 0);
+  g_object_unref (priv->slider_node);
 
   gesture = gtk_gesture_multi_press_new (GTK_WIDGET (self));
   gtk_gesture_single_set_touch_only (GTK_GESTURE_SINGLE (gesture), FALSE);

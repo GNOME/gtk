@@ -579,6 +579,12 @@ gtk_css_node_init (GtkCssNode *cssnode)
   cssnode->visible = TRUE;
 }
 
+GtkCssNode *
+gtk_css_node_new (void)
+{
+  return g_object_new (GTK_TYPE_CSS_NODE, NULL);
+}
+
 static GdkFrameClock *
 gtk_css_node_get_frame_clock_or_null (GtkCssNode *cssnode)
 {
