@@ -68,8 +68,6 @@ struct _GtkSwitchPrivate
 
   gint handle_x;
   gint offset;
-  gint drag_start;
-  gint drag_threshold;
   gint64 start_time;
   gint64 end_time;
   guint tick_id;
