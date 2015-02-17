@@ -6326,7 +6326,7 @@ popover_realize (GtkWidget        *widget,
   if (GDK_IS_WAYLAND_DISPLAY (gtk_widget_get_display (widget)))
     {
       attributes.window_type = GDK_WINDOW_SUBSURFACE;
-      parent_window = gdk_screen_get_root_window (gtk_widget_get_screen (widget));
+      parent_window = gdk_screen_get_root_window (gtk_widget_get_screen (GTK_WIDGET (window)));
     }
   else
 #endif
