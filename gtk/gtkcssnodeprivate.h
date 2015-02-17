@@ -139,6 +139,8 @@ void                    gtk_css_node_set_style          (GtkCssNode            *
                                                          GtkCssStyle           *style);
 GtkCssStyle *           gtk_css_node_create_style       (GtkCssNode            *cssnode);
 
+void                    gtk_css_node_invalidate_style_provider
+                                                        (GtkCssNode            *cssnode);
 void                    gtk_css_node_invalidate         (GtkCssNode            *cssnode,
                                                          GtkCssChange           change);
 void                    gtk_css_node_validate           (GtkCssNode            *cssnode,

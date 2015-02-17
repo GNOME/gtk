@@ -289,7 +289,7 @@ static void
 gtk_style_context_cascade_changed (GtkStyleCascade *cascade,
                                    GtkStyleContext *context)
 {
-  gtk_css_node_invalidate (gtk_style_context_get_root (context), GTK_CSS_CHANGE_SOURCE);
+  gtk_css_node_invalidate_style_provider (gtk_style_context_get_root (context));
 }
 
 static void

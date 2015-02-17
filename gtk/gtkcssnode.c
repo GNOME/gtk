@@ -438,6 +438,9 @@ gtk_css_node_reposition (GtkCssNode *node,
         {
           gtk_css_node_parent_was_unset (node);
         }
+
+      if (gtk_css_node_get_style_provider_or_null (node) == NULL)
+        gtk_css_node_invalidate_style_provider (node);
     }
 
   if (parent)
@@ -734,6 +737,22 @@ const GtkCssNodeDeclaration *
 gtk_css_node_get_declaration (GtkCssNode *cssnode)
 {
   return cssnode->decl;
+}
+
+void
+gtk_css_node_invalidate_style_provider (GtkCssNode *cssnode)
+{
+  GtkCssNode *child;
+
+  gtk_css_node_invalidate (cssnode, GTK_CSS_CHANGE_SOURCE);
+
+  for (child = cssnode->first_child;
+       child;
+       child = child->next_sibling)
+    {
+      if (gtk_css_node_get_style_provider_or_null (child) == NULL)
+        gtk_css_node_invalidate_style_provider (child);
+    }
 }
 
 void
