@@ -382,7 +382,11 @@ _gdk_wayland_drop_context_new (GdkDevice             *device,
 void
 gdk_wayland_drop_context_update_targets (GdkDragContext *context)
 {
-  GdkDisplay *display = gdk_window_get_display (context->source_window);
+  GdkDisplay *display;
+  GdkDevice *device;
+
+  device = gdk_drag_context_get_device (context);
+  display = gdk_device_get_display (device);
   g_list_free (context->targets);
   context->targets = g_list_copy (gdk_wayland_selection_get_targets (display));
 }
