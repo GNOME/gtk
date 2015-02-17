@@ -52,6 +52,12 @@ struct _GtkCssNode
   guint                  visible :1;            /* node will be skipped when validating or computing styles */
   guint                  invalid :1;            /* node or a child needs to be validated (even if just for animation) */
   guint                  children_changed :1;   /* the children changed since last validation */
+  /* Two invariants hold for this variable:
+   * style_is_invalid == TRUE  =>  next_sibling->style_is_invalid == TRUE
+   * style_is_invalid == FALSE =>  first_child->style_is_invalid == TRUE
+   * So if a valid style is computed, one has to previously ensure that the parent's and the previous sibling's style
+   * are valid. This allows both validation and invalidation to run in O(nodes-in-tree) */
+  guint                  style_is_invalid :1;   /* the style needs to be recomputed */
 };
 
 struct _GtkCssNodeClass

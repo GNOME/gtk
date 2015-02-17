@@ -374,6 +374,22 @@ gtk_css_node_set_children_changed (GtkCssNode *node)
 }
 
 static void
+gtk_css_node_invalidate_style (GtkCssNode *cssnode)
+{
+  if (cssnode->style_is_invalid)
+    return;
+
+  cssnode->style_is_invalid = TRUE;
+  gtk_css_node_set_invalid (cssnode, TRUE);
+  
+  if (cssnode->first_child)
+    gtk_css_node_invalidate_style (cssnode->first_child);
+  
+  if (cssnode->next_sibling)
+    gtk_css_node_invalidate_style (cssnode->next_sibling);
+}
+
+static void
 gtk_css_node_reposition (GtkCssNode *node,
                          GtkCssNode *parent,
                          GtkCssNode *previous)
@@ -382,6 +398,9 @@ gtk_css_node_reposition (GtkCssNode *node,
 
   /* Take a reference here so the whole function has a reference */
   g_object_ref (node);
+
+  if (node->next_sibling)
+    gtk_css_node_invalidate_style (node->next_sibling);
 
   if (node->parent != NULL)
     gtk_css_node_unlink_from_siblings (node);
@@ -418,6 +437,9 @@ gtk_css_node_reposition (GtkCssNode *node,
 
   if (parent)
     gtk_css_node_link_to_siblings (node, previous);
+
+  if (node->next_sibling)
+    gtk_css_node_invalidate_style (node->next_sibling);
 
   gtk_css_node_invalidate (node, GTK_CSS_CHANGE_ANY_PARENT | GTK_CSS_CHANGE_ANY_SIBLING);
 
@@ -504,23 +526,66 @@ gtk_css_node_set_style (GtkCssNode  *cssnode,
   cssnode->style = style;
 }
 
-GtkCssStyle *
-gtk_css_node_get_style (GtkCssNode *cssnode)
+static void
+gtk_css_node_propagate_pending_changes (GtkCssNode *cssnode)
+{
+  GtkCssChange change, child_change;
+  GtkCssNode *child;
+
+  if (!cssnode->invalid)
+    return;
+
+  change = _gtk_css_change_for_child (cssnode->pending_changes);
+  if (cssnode->children_changed)
+    {
+      change |= GTK_CSS_CHANGE_POSITION | GTK_CSS_CHANGE_ANY_SIBLING;
+      cssnode->children_changed = FALSE;
+    }
+
+  for (child = gtk_css_node_get_first_child (cssnode);
+       child;
+       child = gtk_css_node_get_next_sibling (child))
+    {
+      child_change = child->pending_changes;
+      gtk_css_node_invalidate (child, change);
+      if (child->visible)
+        change |= _gtk_css_change_for_sibling (child_change);
+    }
+}
+
+static void
+gtk_css_node_ensure_style (GtkCssNode *cssnode)
 {
   GtkCssStyle *new_style;
 
-  if (cssnode->pending_changes)
+  if (!cssnode->style_is_invalid)
+    return;
+
+  if (cssnode->parent)
+    gtk_css_node_ensure_style (cssnode->parent);
+
+  if (cssnode->previous_sibling)
+    gtk_css_node_ensure_style (cssnode->previous_sibling);
+
+  gtk_css_node_propagate_pending_changes (cssnode);
+
+  new_style = GTK_CSS_NODE_GET_CLASS (cssnode)->update_style (cssnode,
+                                                              cssnode->pending_changes,
+                                                              cssnode->style);
+  if (new_style)
     {
-      new_style = GTK_CSS_NODE_GET_CLASS (cssnode)->update_style (cssnode,
-                                                                  cssnode->pending_changes,
-                                                                  cssnode->style);
-      if (new_style)
-        {
-          gtk_css_node_set_style (cssnode, new_style);
-          g_object_unref (new_style);
-          cssnode->pending_changes = 0;
-        }
+      gtk_css_node_set_style (cssnode, new_style);
+      g_object_unref (new_style);
+      cssnode->pending_changes = 0;
     }
+  
+  cssnode->style_is_invalid = FALSE;
+}
+
+GtkCssStyle *
+gtk_css_node_get_style (GtkCssNode *cssnode)
+{
+  gtk_css_node_ensure_style (cssnode);
 
   return cssnode->style;
 }
@@ -674,31 +739,7 @@ gtk_css_node_invalidate (GtkCssNode   *cssnode,
 
   GTK_CSS_NODE_GET_CLASS (cssnode)->invalidate (cssnode);
 
-  gtk_css_node_set_invalid (cssnode, TRUE);
-}
-
-static void
-gtk_css_node_propagate_pending_changes (GtkCssNode *cssnode)
-{
-  GtkCssChange change;
-  GtkCssNode *child;
-
-  if (!cssnode->invalid)
-    return;
-
-  change = _gtk_css_change_for_child (cssnode->pending_changes);
-  if (cssnode->children_changed)
-    {
-      change |= GTK_CSS_CHANGE_POSITION | GTK_CSS_CHANGE_ANY_SIBLING;
-      cssnode->children_changed = FALSE;
-    }
-
-  for (child = gtk_css_node_get_first_child (cssnode);
-       child;
-       child = gtk_css_node_get_next_sibling (child))
-    {
-      gtk_css_node_invalidate (child, change);
-    }
+  gtk_css_node_invalidate_style (cssnode);
 }
 
 void
@@ -735,6 +776,7 @@ gtk_css_node_validate (GtkCssNode            *cssnode,
 
   change = cssnode->pending_changes;
   cssnode->pending_changes = 0;
+  cssnode->style_is_invalid = FALSE;
 
   new_style = GTK_CSS_NODE_GET_CLASS (cssnode)->validate (cssnode, cssnode->style, timestamp, change, parent_changed);
   if (new_style)
