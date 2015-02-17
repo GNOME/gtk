@@ -4031,6 +4031,41 @@ gtk_scrolled_window_realize (GtkWidget *widget)
 }
 
 static void
+indicator_reset (Indicator *indicator)
+{
+  if (indicator->conceil_timer)
+    {
+      g_source_remove (indicator->conceil_timer);
+      indicator->conceil_timer = 0;
+    }
+
+  if (indicator->over_timeout_id)
+    {
+      g_source_remove (indicator->over_timeout_id);
+      indicator->over_timeout_id = 0;
+    }
+
+  if (indicator->scrollbar && indicator->tick_id)
+    {
+      gtk_widget_remove_tick_callback (indicator->scrollbar,
+                                       indicator->tick_id);
+      indicator->tick_id = 0;
+    }
+
+  if (indicator->window)
+    {
+      gdk_window_destroy (indicator->window);
+      indicator->window = NULL;
+    }
+
+  indicator->scrollbar = NULL;
+  indicator->dragging = FALSE;
+  indicator->over = FALSE;
+  indicator->current_pos = indicator->source_pos = indicator->target_pos = 0;
+  indicator->start_time = indicator->end_time = indicator->last_scroll_time = 0;
+}
+
+static void
 gtk_scrolled_window_unrealize (GtkWidget *widget)
 {
   GtkScrolledWindow *scrolled_window = GTK_SCROLLED_WINDOW (widget);
@@ -4038,13 +4073,11 @@ gtk_scrolled_window_unrealize (GtkWidget *widget)
 
   gtk_widget_set_parent_window (priv->hscrollbar, NULL);
   gtk_widget_unregister_window (widget, priv->hindicator.window);
-  gdk_window_destroy (priv->hindicator.window);
-  priv->hindicator.window = NULL;
+  indicator_reset (&priv->hindicator);
 
   gtk_widget_set_parent_window (priv->vscrollbar, NULL);
   gtk_widget_unregister_window (widget, priv->vindicator.window);
-  gdk_window_destroy (priv->vindicator.window);
-  priv->vindicator.window = NULL;
+  indicator_reset (&priv->hindicator);
 
   GTK_WIDGET_CLASS (gtk_scrolled_window_parent_class)->unrealize (widget);
 }
