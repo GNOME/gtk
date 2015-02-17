@@ -107,7 +107,7 @@ gtk_css_path_node_get_style_provider (GtkCssNode *node)
   GtkCssPathNode *path_node = GTK_CSS_PATH_NODE (node);
 
   if (path_node->context == NULL)
-    return GTK_CSS_NODE_CLASS (gtk_css_path_node_parent_class)->get_style_provider (node);
+    return NULL;
 
   return gtk_style_context_get_style_provider (path_node->context);
 }

@@ -262,7 +262,7 @@ gtk_css_widget_node_get_style_provider (GtkCssNode *node)
   GtkCssWidgetNode *widget_node = GTK_CSS_WIDGET_NODE (node);
 
   if (widget_node->widget == NULL)
-    return GTK_CSS_NODE_CLASS (gtk_css_widget_node_parent_class)->get_style_provider (node);
+    return NULL;
 
   return gtk_style_context_get_style_provider (gtk_widget_get_style_context (widget_node->widget));
 }

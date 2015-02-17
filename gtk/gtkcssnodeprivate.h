@@ -68,6 +68,7 @@ struct _GtkCssNodeClass
                                                          GtkCssMatcher         *matcher);
   GtkWidgetPath *       (* create_widget_path)          (GtkCssNode            *cssnode);
   const GtkWidgetPath * (* get_widget_path)             (GtkCssNode            *cssnode);
+  /* get style provider to use or NULL to use parent's */
   GtkStyleProviderPrivate *(* get_style_provider)       (GtkCssNode            *cssnode);
   GtkCssStyle *         (* update_style)                (GtkCssNode            *cssnode,
                                                          GtkCssChange           pending_changes,
