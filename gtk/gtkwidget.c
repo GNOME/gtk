@@ -575,7 +575,7 @@ struct _GtkWidgetPrivate
 
   /* The widget's window or its parent window if it does
    * not have a window. (Which will be indicated by the
-   * GTK_NO_WINDOW flag being set).
+   * no_window field being set).
    */
   GdkWindow *window;
   GList *registered_windows;
@@ -5655,9 +5655,9 @@ gtk_widget_queue_draw_region (GtkWidget            *widget,
  *
  * The region here is specified in widget coordinates.
  * Widget coordinates are a bit odd; for historical reasons, they are
- * defined as @widget->window coordinates for widgets that are not
- * #GTK_NO_WINDOW widgets, and are relative to @widget->allocation.x,
- * @widget->allocation.y for widgets that are #GTK_NO_WINDOW widgets.
+ * defined as @widget->window coordinates for widgets that return %TRUE for
+ * gtk_widget_get_has_window(), and are relative to @widget->allocation.x,
+ * @widget->allocation.y otherwise.
  *
  * @width or @height may be 0, in this case this function does
  * nothing. Negative values for @width and @height are not allowed.
@@ -7580,8 +7580,8 @@ gtk_cairo_transform_to_window (cairo_t   *cr,
  * Very rarely-used function. This function is used to emit
  * an expose event on a widget. This function is not normally used
  * directly. The only time it is used is when propagating an expose
- * event to a child %NO_WINDOW widget, and that is normally done
- * using gtk_container_propagate_draw().
+ * event to a windowless child widget (gtk_widget_get_has_window() is %FALSE),
+ * and that is normally done using gtk_container_propagate_draw().
  *
  * If you want to force an area of a window to be redrawn,
  * use gdk_window_invalidate_rect() or gdk_window_invalidate_region().
@@ -8000,17 +8000,15 @@ gtk_widget_intersect (GtkWidget	         *widget,
  * @widget: a #GtkWidget
  * @region: a #cairo_region_t, in the same coordinate system as
  *          @widget->allocation. That is, relative to @widget->window
- *          for %NO_WINDOW widgets; relative to the parent window
- *          of @widget->window for widgets with their own window.
+ *          for widgets which return %FALSE from gtk_widget_get_has_window();
+ *          relative to the parent window of @widget->window otherwise.
  *
  * Computes the intersection of a @widget’s area and @region, returning
  * the intersection. The result may be empty, use cairo_region_is_empty() to
  * check.
  *
  * Returns: A newly allocated region holding the intersection of @widget
- *     and @region. The coordinates of the return value are relative to
- *     @widget->window for %NO_WINDOW widgets, and relative to the parent
- *     window of @widget->window for widgets with their own window.
+ *     and @region.
  *
  * Deprecated: 3.14: Use gtk_widget_get_allocation() and
  *     cairo_region_intersect_rectangle() to get the same behavior.
@@ -11148,7 +11146,8 @@ gtk_widget_set_events (GtkWidget *widget,
  * so be careful. This function must be called while a widget is
  * unrealized. Consider gtk_widget_add_device_events() for widgets that are
  * already realized, or if you want to preserve the existing event
- * mask. This function can’t be used with #GTK_NO_WINDOW widgets;
+ * mask. This function can’t be used with windowless widgets (which return
+ * %FALSE from gtk_widget_get_has_window());
  * to get events on those widgets, place them inside a #GtkEventBox
  * and receive events on the event box.
  *
@@ -11592,9 +11591,9 @@ gtk_widget_get_device_events (GtkWidget *widget,
  *
  * Obtains the location of the mouse pointer in widget coordinates.
  * Widget coordinates are a bit odd; for historical reasons, they are
- * defined as @widget->window coordinates for widgets that are not
- * #GTK_NO_WINDOW widgets, and are relative to @widget->allocation.x,
- * @widget->allocation.y for widgets that are #GTK_NO_WINDOW widgets.
+ * defined as @widget->window coordinates for widgets that return %TRUE for
+ * gtk_widget_get_has_window(); and are relative to @widget->allocation.x,
+ * @widget->allocation.y otherwise.
  *
  * Deprecated: 3.4: Use gdk_window_get_device_position() instead.
  **/

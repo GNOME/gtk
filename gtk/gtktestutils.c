@@ -172,7 +172,8 @@ gtk_test_widget_wait_for_draw (GtkWidget *widget)
  *
  * This function will generate keyboard press and release events in
  * the middle of the first GdkWindow found that belongs to @widget.
- * For %GTK_NO_WINDOW widgets like GtkButton, this will often be an
+ * For windowless widgets like #GtkButton (which returns %FALSE from
+ * gtk_widget_get_has_window()), this will often be an
  * input-only event window. For other widgets, this is usually widget->window.
  * Certain caveats should be considered when using this function, in
  * particular because the mouse pointer is warped to the key press
@@ -208,7 +209,8 @@ gtk_test_widget_send_key (GtkWidget      *widget,
  * This function will generate a @button click (button press and button
  * release event) in the middle of the first GdkWindow found that belongs
  * to @widget.
- * For %GTK_NO_WINDOW widgets like GtkButton, this will often be an
+ * For windowless widgets like #GtkButton (which returns %FALSE from
+ * gtk_widget_get_has_window()), this will often be an
  * input-only event window. For other widgets, this is usually widget->window.
  * Certain caveats should be considered when using this function, in
  * particular because the mouse pointer is warped to the button click

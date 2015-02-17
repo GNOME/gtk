@@ -5898,7 +5898,8 @@ gtk_label_get_layout (GtkLabel *label)
  * into coordinates inside the #PangoLayout, e.g. to take some action
  * if some part of the label is clicked. Of course you will need to
  * create a #GtkEventBox to receive the events, and pack the label
- * inside it, since labels are a #GTK_NO_WINDOW widget. Remember
+ * inside it, since labels are windowless (they return %FALSE from
+ * gtk_widget_get_has_window()). Remember
  * when using the #PangoLayout functions you need to convert to
  * and from pixels using PANGO_PIXELS() or #PANGO_SCALE.
  **/
