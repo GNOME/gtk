@@ -4,21 +4,21 @@
 ]>
 <refentry id="chap-input-handling">
 <refmeta>
-<refentrytitle>The GTK+ Input Handling Model</refentrytitle>
+<refentrytitle>The GTK+ Input and Event Handling Model</refentrytitle>
 <manvolnum>3</manvolnum>
 <refmiscinfo>GTK Library</refmiscinfo>
 </refmeta>
 
 <refnamediv>
-<refname>The GTK+ Input Handling Model</refname>
+<refname>The GTK+ Input and Event Handling Model</refname>
 <refpurpose>
-    GTK+ input handling in detail
+    GTK+ input and event handling in detail
 </refpurpose>
 </refnamediv>
 
 
   <refsect1 id="input-overview">
-    <title>Overview of GTK+ input handling</title>
+    <title>Overview of GTK+ input and event handling</title>
 
   <para>
    This chapter describes in detail how GTK+ handles input. If you are interested
