@@ -253,7 +253,6 @@ gtk_gl_area_realize (GtkWidget *widget)
                                        &attributes, attributes_mask);
   gtk_widget_register_window (widget, priv->event_window);
 
-
   g_clear_error (&priv->error);
   priv->context = NULL;
   g_signal_emit (area, area_signals[CREATE_CONTEXT], 0, &priv->context);
@@ -292,10 +291,11 @@ gtk_gl_area_real_create_context (GtkGLArea *area)
   GdkGLContext *context;
 
   context = gdk_window_create_gl_context (gtk_widget_get_window (widget), &error);
-  if (priv->error != NULL)
+  if (error != NULL)
     {
       gtk_gl_area_set_error (area, error);
       g_clear_object (&context);
+      g_clear_error (&error);
       return NULL;
     }
 
@@ -304,10 +304,11 @@ gtk_gl_area_real_create_context (GtkGLArea *area)
                                        priv->required_gl_version % 10);
 
   gdk_gl_context_realize (context, &error);
-  if (priv->error != NULL)
+  if (error != NULL)
     {
       gtk_gl_area_set_error (area, error);
       g_clear_object (&context);
+      g_clear_error (&error);
       return NULL;
     }
 
@@ -524,13 +525,12 @@ gtk_gl_area_unrealize (GtkWidget *widget)
           gtk_gl_area_delete_buffers (area);
         }
 
-      /* Make sure to destroy if current */
+      /* Make sure to unset the context if current */
       if (priv->context == gdk_gl_context_get_current ())
         gdk_gl_context_clear_current ();
-      g_object_unref (priv->context);
-      priv->context = NULL;
     }
 
+  g_clear_object (&priv->context);
   g_clear_error (&priv->error);
 
   if (priv->event_window != NULL)
@@ -622,7 +622,7 @@ gtk_gl_area_draw (GtkWidget *widget,
   int w, h, scale;
   GLenum status;
 
-  if (priv->context == NULL)
+  if (priv->error != NULL)
     {
       gtk_gl_area_draw_error_screen (area,
                                      cr,
