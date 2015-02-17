@@ -3905,10 +3905,10 @@ gdk_window_process_updates (GdkWindow *window,
 {
   g_return_if_fail (GDK_IS_WINDOW (window));
 
-  return gdk_window_process_updates_with_mode (window,
-                                               update_children ?
-                                               PROCESS_UPDATES_WITH_ALL_CHILDREN :
-                                               PROCESS_UPDATES_NO_RECURSE);
+  gdk_window_process_updates_with_mode (window,
+                                        update_children ?
+                                        PROCESS_UPDATES_WITH_ALL_CHILDREN :
+                                        PROCESS_UPDATES_NO_RECURSE);
 }
 
 static void
@@ -11123,7 +11123,7 @@ gdk_window_set_opaque_region (GdkWindow      *window,
   impl_class = GDK_WINDOW_IMPL_GET_CLASS (window->impl);
 
   if (impl_class->set_opaque_region)
-    return impl_class->set_opaque_region (window, region);
+    impl_class->set_opaque_region (window, region);
 }
 
 /**
