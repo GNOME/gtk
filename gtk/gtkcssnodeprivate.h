@@ -70,8 +70,11 @@ struct _GtkCssNodeClass
   const GtkWidgetPath * (* get_widget_path)             (GtkCssNode            *cssnode);
   /* get style provider to use or NULL to use parent's */
   GtkStyleProviderPrivate *(* get_style_provider)       (GtkCssNode            *cssnode);
+  /* get frame clock or NULL (only relevant for root node) */
+  GdkFrameClock *       (* get_frame_clock)             (GtkCssNode            *cssnode);
   GtkCssStyle *         (* update_style)                (GtkCssNode            *cssnode,
                                                          GtkCssChange           pending_changes,
+                                                         gint64                 timestamp,
                                                          GtkCssStyle           *old_style);
   void                  (* invalidate)                  (GtkCssNode            *node);
   void                  (* queue_validate)              (GtkCssNode            *node);
@@ -140,6 +143,9 @@ GtkCssStyle *           gtk_css_node_create_style       (GtkCssNode            *
 
 void                    gtk_css_node_invalidate_style_provider
                                                         (GtkCssNode            *cssnode);
+void                    gtk_css_node_invalidate_frame_clock
+                                                        (GtkCssNode            *cssnode,
+                                                         gboolean               just_timestamp);
 void                    gtk_css_node_invalidate         (GtkCssNode            *cssnode,
                                                          GtkCssChange           change);
 void                    gtk_css_node_validate           (GtkCssNode            *cssnode,

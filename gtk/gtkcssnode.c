@@ -226,6 +226,7 @@ gtk_css_style_needs_recreation (GtkCssStyle  *style,
 static GtkCssStyle *
 gtk_css_node_real_update_style (GtkCssNode   *cssnode,
                                 GtkCssChange  pending_change,
+                                gint64        timestamp,
                                 GtkCssStyle  *old_style)
 {
   if (!gtk_css_style_needs_recreation (old_style, pending_change))
@@ -285,6 +286,12 @@ gtk_css_node_real_get_style_provider (GtkCssNode *cssnode)
   return NULL;
 }
 
+static GdkFrameClock *
+gtk_css_node_real_get_frame_clock (GtkCssNode *cssnode)
+{
+  return NULL;
+}
+
 static void
 gtk_css_node_class_init (GtkCssNodeClass *klass)
 {
@@ -302,6 +309,7 @@ gtk_css_node_class_init (GtkCssNodeClass *klass)
   klass->create_widget_path = gtk_css_node_real_create_widget_path;
   klass->get_widget_path = gtk_css_node_real_get_widget_path;
   klass->get_style_provider = gtk_css_node_real_get_style_provider;
+  klass->get_frame_clock = gtk_css_node_real_get_frame_clock;
 }
 
 static void
@@ -312,6 +320,27 @@ gtk_css_node_init (GtkCssNode *cssnode)
   cssnode->style = g_object_ref (gtk_css_static_style_get_default ());
 
   cssnode->visible = TRUE;
+}
+
+static GdkFrameClock *
+gtk_css_node_get_frame_clock_or_null (GtkCssNode *cssnode)
+{
+  while (cssnode->parent)
+    cssnode = cssnode->parent;
+
+  return GTK_CSS_NODE_GET_CLASS (cssnode)->get_frame_clock (cssnode);
+}
+
+static gint64
+gtk_css_node_get_timestamp (GtkCssNode *cssnode)
+{
+  GdkFrameClock *frameclock;
+
+  frameclock = gtk_css_node_get_frame_clock_or_null (cssnode);
+  if (frameclock == NULL)
+    return 0;
+
+  return gdk_frame_clock_get_frame_time (frameclock);
 }
 
 static void
@@ -440,6 +469,7 @@ gtk_css_node_reposition (GtkCssNode *node,
 
       if (gtk_css_node_get_style_provider_or_null (node) == NULL)
         gtk_css_node_invalidate_style_provider (node);
+      gtk_css_node_invalidate (node, GTK_CSS_CHANGE_TIMESTAMP | GTK_CSS_CHANGE_ANIMATIONS);
     }
 
   if (parent)
@@ -560,22 +590,30 @@ gtk_css_node_propagate_pending_changes (GtkCssNode *cssnode,
     }
 }
 
+static gboolean
+gtk_css_node_needs_new_style (GtkCssNode *cssnode)
+{
+  return cssnode->style_is_invalid;
+}
+
 static void
-gtk_css_node_ensure_style (GtkCssNode *cssnode)
+gtk_css_node_ensure_style (GtkCssNode *cssnode,
+                           gint64      current_time)
 {
   GtkCssStyle *new_style;
 
-  if (!cssnode->style_is_invalid)
+  if (!gtk_css_node_needs_new_style (cssnode))
     return;
 
   if (cssnode->parent)
-    gtk_css_node_ensure_style (cssnode->parent);
+    gtk_css_node_ensure_style (cssnode->parent, current_time);
 
   if (cssnode->previous_sibling)
-    gtk_css_node_ensure_style (cssnode->previous_sibling);
+    gtk_css_node_ensure_style (cssnode->previous_sibling, current_time);
 
   new_style = GTK_CSS_NODE_GET_CLASS (cssnode)->update_style (cssnode,
                                                               cssnode->pending_changes,
+                                                              current_time,
                                                               cssnode->style);
 
   gtk_css_node_propagate_pending_changes (cssnode, new_style != NULL);
@@ -593,7 +631,12 @@ gtk_css_node_ensure_style (GtkCssNode *cssnode)
 GtkCssStyle *
 gtk_css_node_get_style (GtkCssNode *cssnode)
 {
-  gtk_css_node_ensure_style (cssnode);
+  if (gtk_css_node_needs_new_style (cssnode))
+    {
+      gint64 timestamp = gtk_css_node_get_timestamp (cssnode);
+
+      gtk_css_node_ensure_style (cssnode, timestamp);
+    }
 
   return cssnode->style;
 }
@@ -753,6 +796,20 @@ gtk_css_node_invalidate_style_provider (GtkCssNode *cssnode)
       if (gtk_css_node_get_style_provider_or_null (child) == NULL)
         gtk_css_node_invalidate_style_provider (child);
     }
+}
+
+void
+gtk_css_node_invalidate_frame_clock (GtkCssNode *cssnode,
+                                     gboolean    just_timestamp)
+{
+  /* frame clock is handled by the top level */
+  if (cssnode->parent)
+    return;
+
+  if (just_timestamp)
+    gtk_css_node_invalidate (cssnode, GTK_CSS_CHANGE_TIMESTAMP);
+  else
+    gtk_css_node_invalidate (cssnode, GTK_CSS_CHANGE_TIMESTAMP | GTK_CSS_CHANGE_ANIMATIONS);
 }
 
 void

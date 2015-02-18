@@ -5446,6 +5446,8 @@ gtk_widget_connect_frame_clock (GtkWidget     *widget,
       gdk_frame_clock_begin_updating (frame_clock);
     }
 
+  gtk_css_node_invalidate_frame_clock (priv->cssnode, FALSE);
+
   if (priv->context)
     gtk_style_context_set_frame_clock (priv->context, frame_clock);
 }
@@ -5458,6 +5460,8 @@ gtk_widget_disconnect_frame_clock (GtkWidget     *widget,
 
   if (GTK_IS_CONTAINER (widget))
     _gtk_container_stop_idle_sizer (GTK_CONTAINER (widget));
+
+  gtk_css_node_invalidate_frame_clock (priv->cssnode, FALSE);
 
   if (priv->clock_tick_id)
     {

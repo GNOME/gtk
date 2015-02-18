@@ -36,12 +36,26 @@ G_DEFINE_TYPE (GtkCssWidgetNode, gtk_css_widget_node, GTK_TYPE_CSS_NODE)
 static GtkCssStyle *
 gtk_css_widget_node_update_style (GtkCssNode   *cssnode,
                                   GtkCssChange  pending_change,
+                                  gint64        timestamp,
                                   GtkCssStyle  *old_style)
 {
   if (old_style == NULL)
-    return GTK_CSS_NODE_CLASS (gtk_css_widget_node_parent_class)->update_style (cssnode, pending_change, old_style);
+    return GTK_CSS_NODE_CLASS (gtk_css_widget_node_parent_class)->update_style (cssnode, pending_change, timestamp, old_style);
 
   return NULL;
+}
+
+static gboolean
+gtk_css_widget_node_queue_callback (GtkWidget     *widget,
+                                    GdkFrameClock *frame_clock,
+                                    gpointer       user_data)
+{
+  GtkCssNode *node = user_data;
+  
+  gtk_css_node_invalidate_frame_clock (node, TRUE);
+  _gtk_container_queue_restyle (GTK_CONTAINER (widget));
+
+  return G_SOURCE_CONTINUE;
 }
 
 static void
@@ -52,8 +66,8 @@ gtk_css_widget_node_queue_validate (GtkCssNode *node)
   G_GNUC_BEGIN_IGNORE_DEPRECATIONS
   if (GTK_IS_RESIZE_CONTAINER (widget_node->widget))
     widget_node->validate_cb_id = gtk_widget_add_tick_callback (widget_node->widget,
-                                                                (GtkTickCallback) _gtk_container_queue_restyle,
-                                                                NULL,
+                                                                gtk_css_widget_node_queue_callback,
+                                                                node,
                                                                 NULL);
   G_GNUC_END_IGNORE_DEPRECATIONS
 }
@@ -128,7 +142,7 @@ gtk_css_widget_node_validate (GtkCssNode       *node,
 
   new_static_style = validate_static_style (node, static_style, change);
 
-  if (new_static_style != static_style)
+  if (new_static_style != static_style || (change & GTK_CSS_CHANGE_ANIMATIONS))
     {
       GtkCssNode *parent = gtk_css_node_get_parent (node);
       new_style = gtk_css_animated_style_new (new_static_style,
@@ -139,7 +153,7 @@ gtk_css_widget_node_validate (GtkCssNode       *node,
       
       g_object_unref (new_static_style);
     }
-  else if (GTK_IS_CSS_ANIMATED_STYLE (style))
+  else if (GTK_IS_CSS_ANIMATED_STYLE (style) && (change & GTK_CSS_CHANGE_TIMESTAMP))
     {
       new_style = gtk_css_animated_style_new_advance (GTK_CSS_ANIMATED_STYLE (style),
                                                       static_style,
@@ -264,6 +278,17 @@ gtk_css_widget_node_get_style_provider (GtkCssNode *node)
   return gtk_style_context_get_style_provider (gtk_widget_get_style_context (widget_node->widget));
 }
 
+static GdkFrameClock *
+gtk_css_widget_node_get_frame_clock (GtkCssNode *node)
+{
+  GtkCssWidgetNode *widget_node = GTK_CSS_WIDGET_NODE (node);
+
+  if (widget_node->widget == NULL)
+    return NULL;
+
+  return gtk_widget_get_frame_clock (widget_node->widget);
+}
+
 static void
 gtk_css_widget_node_class_init (GtkCssWidgetNodeClass *klass)
 {
@@ -277,6 +302,7 @@ gtk_css_widget_node_class_init (GtkCssWidgetNodeClass *klass)
   node_class->create_widget_path = gtk_css_widget_node_create_widget_path;
   node_class->get_widget_path = gtk_css_widget_node_get_widget_path;
   node_class->get_style_provider = gtk_css_widget_node_get_style_provider;
+  node_class->get_frame_clock = gtk_css_widget_node_get_frame_clock;
 }
 
 static void

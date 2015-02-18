@@ -51,8 +51,9 @@ typedef enum { /*< skip >*/
   GTK_CSS_CHANGE_PARENT_SIBLING_STATE     = (1 << 15),
   /* add more */
   GTK_CSS_CHANGE_SOURCE                   = (1 << 16),
-  GTK_CSS_CHANGE_ANIMATE                  = (1 << 17),
-  GTK_CSS_CHANGE_PARENT_STYLE             = (1 << 18),
+  GTK_CSS_CHANGE_PARENT_STYLE             = (1 << 17),
+  GTK_CSS_CHANGE_TIMESTAMP                = (1 << 18),
+  GTK_CSS_CHANGE_ANIMATIONS               = (1 << 19),
 
   GTK_CSS_CHANGE_RESERVED_BIT             = (1 << 31) /* Used internally in gtkcssselector.c */
 } GtkCssChange;
