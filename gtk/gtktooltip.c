@@ -35,6 +35,7 @@
 #include "gtksizerequest.h"
 #include "gtkstylecontext.h"
 #include "gtkwindowprivate.h"
+#include "gtkaccessible.h"
 
 
 #ifdef GDK_WINDOWING_WAYLAND
@@ -170,6 +171,7 @@ gtk_tooltip_init (GtkTooltip *tooltip)
   GtkWidget *box;
   GtkWidget *image;
   GtkWidget *label;
+  AtkObject *atk_obj;
 
   tooltip->timeout_id = 0;
   tooltip->browse_mode_timeout_id = 0;
@@ -194,6 +196,10 @@ gtk_tooltip_init (GtkTooltip *tooltip)
   _gtk_window_request_csd (GTK_WINDOW (window));
   context = gtk_widget_get_style_context (window);
   gtk_style_context_add_class (context, GTK_STYLE_CLASS_TOOLTIP);
+
+  atk_obj = gtk_widget_get_accessible (window);
+  if (GTK_IS_ACCESSIBLE (atk_obj))
+    atk_object_set_role (atk_obj, ATK_ROLE_TOOL_TIP);
 
   /* FIXME: don't hardcode the padding */
   box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 6);
