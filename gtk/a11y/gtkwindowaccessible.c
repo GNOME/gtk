@@ -90,25 +90,16 @@ gtk_window_accessible_initialize (AtkObject *obj,
                                   gpointer   data)
 {
   GtkWidget *widget = GTK_WIDGET (data);
-  const gchar *name;
 
   ATK_OBJECT_CLASS (gtk_window_accessible_parent_class)->initialize (obj, data);
 
   g_signal_connect (data, "window-state-event", G_CALLBACK (window_state_event_cb), NULL);
   _gtk_widget_accessible_set_layer (GTK_WIDGET_ACCESSIBLE (obj), ATK_LAYER_WINDOW);
 
-  name = gtk_widget_get_name (widget);
-
-  if (!g_strcmp0 (name, "gtk-tooltip"))
-    obj->role = ATK_ROLE_TOOL_TIP;
-  else if (gtk_window_get_window_type (GTK_WINDOW (widget)) == GTK_WINDOW_POPUP)
+  if (gtk_window_get_window_type (GTK_WINDOW (widget)) == GTK_WINDOW_POPUP)
     obj->role = ATK_ROLE_WINDOW;
   else
     obj->role = ATK_ROLE_FRAME;
-
-  /* Notify that tooltip is showing */
-  if (obj->role == ATK_ROLE_TOOL_TIP && gtk_widget_get_mapped (widget))
-    atk_object_notify_state_change (obj, ATK_STATE_SHOWING, 1);
 }
 
 static GtkWidget *
