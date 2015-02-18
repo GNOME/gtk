@@ -1060,6 +1060,7 @@ Suspendisse feugiat quam quis dolor accumsan cursus.</property>
                           <object class="GtkFileChooserButton" id="filechooserbutton1">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
+                            <property name="local_only">False</property>
                           </object>
                           <packing>
                             <property name="expand">False</property>
