@@ -28,6 +28,7 @@ IGNORE_HFILES= 			\
 	gdkprivate.h		\
 	gdk*private.h		\
 	keyname-table.h		\
+	wayland/xdg-shell-client-protocol.h \
 	win32			\
 	x11			\
 	quartz

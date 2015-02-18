@@ -26,6 +26,8 @@ IGNORE_HFILES=				\
 	gtkactionobservable.h		\
 	gtk9slice.h			\
 	gtkanimationdescription.h	\
+	gtkdbusgenerated.c		\
+	gtkdbusgenerated.h		\
 	gtkdebug.h			\
 	gtkactionhelper.h		\
 	gtkapplicationprivate.h		\
