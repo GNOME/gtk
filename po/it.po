@@ -11,8 +11,8 @@ msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gtk%2b&keywords=I18N"
 "+L10N&component=general\n"
-"POT-Creation-Date: 2015-02-17 10:56+0000\n"
-"PO-Revision-Date: 2015-02-17 14:42+0100\n"
+"POT-Creation-Date: 2015-02-17 22:14+0000\n"
+"PO-Revision-Date: 2015-02-18 09:14+0100\n"
 "Last-Translator: Milo Casagrande <milo@milo.name>\n"
 "Language-Team: Italian <tp@lists.linux.it>\n"
 "Language: it\n"
@@ -548,8 +548,7 @@ msgid "No available configurations for the given RGBA pixel format"
 msgstr ""
 
 #: ../gdk/x11/gdkglcontext-x11.c:1171
-msgid ""
-"The GLX_ARB_create_context_profile extension needed to create core profiles is not available"
+msgid "The GLX_ARB_create_context_profile extension needed to create core profiles is not available"
 msgstr ""
 
 #: ../gtk/a11y/gtkbooleancellaccessible.c:43
@@ -1105,17 +1104,17 @@ msgstr "Commuta lo switch"
 
 #: ../gtk/deprecated/gtkcolorsel.c:423
 msgid ""
-"Select the color you want from the outer ring. Select the darkness or lightness of that "
-"color using the inner triangle."
+"Select the color you want from the outer ring. Select the darkness or lightness of that color "
+"using the inner triangle."
 msgstr ""
-"Selezionare la tonalità di colore tramite l'anello esterno e la luminosità tramite il "
-"triangolo interno."
+"Selezionare la tonalità di colore tramite l'anello esterno e la luminosità tramite il triangolo "
+"interno."
 
 #: ../gtk/deprecated/gtkcolorsel.c:449
 msgid "Click the eyedropper, then click a color anywhere on your screen to select that color."
 msgstr ""
-"Fare clic sul contagocce, quindi fare clic su un punto qualsiasi dello schermo per "
-"selezionare il colore di quel punto."
+"Fare clic sul contagocce, quindi fare clic su un punto qualsiasi dello schermo per selezionare il "
+"colore di quel punto."
 
 #: ../gtk/deprecated/gtkcolorsel.c:459
 msgid "_Hue:"
@@ -1180,14 +1179,14 @@ msgstr "_Nome colore:"
 #: ../gtk/deprecated/gtkcolorsel.c:514
 #, fuzzy
 #| msgid ""
-#| "You can enter an HTML-style hexadecimal color value, or simply a color name such as "
-#| "'orange' in this entry."
+#| "You can enter an HTML-style hexadecimal color value, or simply a color name such as 'orange' "
+#| "in this entry."
 msgid ""
-"You can enter an HTML-style hexadecimal color value, or simply a color name such as "
-"“orange” in this entry."
+"You can enter an HTML-style hexadecimal color value, or simply a color name such as “orange” in "
+"this entry."
 msgstr ""
-"È possibile inserire il valore esadecimale (in stile HTML) del colore o semplicemente il "
-"nome del colore come ad esempio \"orange\"."
+"È possibile inserire il valore esadecimale (in stile HTML) del colore o semplicemente il nome del "
+"colore come ad esempio \"orange\"."
 
 #: ../gtk/deprecated/gtkcolorsel.c:546
 msgid "_Palette:"
@@ -1200,26 +1199,26 @@ msgstr "Anello dei colori"
 #: ../gtk/deprecated/gtkcolorsel.c:1070
 #, fuzzy
 #| msgid ""
-#| "The previously-selected color, for comparison to the color you're selecting now. You can "
-#| "drag this color to a palette entry, or select this color as current by dragging it to "
-#| "the other color swatch alongside."
+#| "The previously-selected color, for comparison to the color you're selecting now. You can drag "
+#| "this color to a palette entry, or select this color as current by dragging it to the other "
+#| "color swatch alongside."
 msgid ""
-"The previously-selected color, for comparison to the color you’re selecting now. You can "
-"drag this color to a palette entry, or select this color as current by dragging it to the "
-"other color swatch alongside."
+"The previously-selected color, for comparison to the color you’re selecting now. You can drag "
+"this color to a palette entry, or select this color as current by dragging it to the other color "
+"swatch alongside."
 msgstr ""
-"Il colore selezionato in precedenza, per un confronto con il colore che si sta selezionando "
-"ora. È possibile trascinare questo colore in una posizione della tavolozza o selezionarlo "
-"come corrente trascinandolo sul colore che si vuole sostituire."
+"Il colore selezionato in precedenza, per un confronto con il colore che si sta selezionando ora. "
+"È possibile trascinare questo colore in una posizione della tavolozza o selezionarlo come "
+"corrente trascinandolo sul colore che si vuole sostituire."
 
 #: ../gtk/deprecated/gtkcolorsel.c:1076
 #, fuzzy
 #| msgid ""
-#| "The color you've chosen. You can drag this color to a palette entry to save it for use "
-#| "in the future."
+#| "The color you've chosen. You can drag this color to a palette entry to save it for use in the "
+#| "future."
 msgid ""
-"The color you’ve chosen. You can drag this color to a palette entry to save it for use in "
-"the future."
+"The color you’ve chosen. You can drag this color to a palette entry to save it for use in the "
+"future."
 msgstr ""
 "Il colore selezionato. È possibile trascinarlo su una posizione della tavolozza per averlo "
 "disponibile in futuro."
@@ -1246,15 +1245,15 @@ msgstr "_Salva il colore in questa posizione"
 #: ../gtk/deprecated/gtkcolorsel.c:1694
 #, fuzzy
 #| msgid ""
-#| "Click this palette entry to make it the current color. To change this entry, drag a "
-#| "color swatch here or right-click it and select \"Save color here.\""
+#| "Click this palette entry to make it the current color. To change this entry, drag a color "
+#| "swatch here or right-click it and select \"Save color here.\""
 msgid ""
-"Click this palette entry to make it the current color. To change this entry, drag a color "
-"swatch here or right-click it and select “Save color here.”"
+"Click this palette entry to make it the current color. To change this entry, drag a color swatch "
+"here or right-click it and select “Save color here.”"
 msgstr ""
-"Fare clic su questo elemento della tavolozza per renderlo il colore corrente. Per cambiare "
-"questo elemento, trascinare qui il colore desiderato o fare clic col pulsante destro per "
-"selezionare «Salva il colore in questa posizione»."
+"Fare clic su questo elemento della tavolozza per renderlo il colore corrente. Per cambiare questo "
+"elemento, trascinare qui il colore desiderato o fare clic col pulsante destro per selezionare "
+"«Salva il colore in questa posizione»."
 
 #: ../gtk/deprecated/gtkcolorseldialog.c:191 ../gtk/deprecated/gtkfontsel.c:1689
 #: ../gtk/gtkfilechooserbutton.c:794 ../gtk/gtkfilechooserwidget.c:5373
@@ -1290,7 +1289,7 @@ msgstr "Selezione colore"
 #. can set it. Remember that some fonts only have capital letters.
 #: ../gtk/deprecated/gtkfontsel.c:121
 msgid "abcdefghijk ABCDEFGHIJK"
-msgstr "abcde ABCDE àèìòù €"
+msgstr "abcde ABCDE àèìòù ÀÈÌÒÙ €"
 
 #: ../gtk/deprecated/gtkfontsel.c:386
 msgid "_Family:"
@@ -1315,9 +1314,8 @@ msgstr "_Anteprima:"
 msgid "_Apply"
 msgstr "A_pplica"
 
-#: ../gtk/deprecated/gtkfontsel.c:1698 ../gtk/gtkmessagedialog.c:936
-#: ../gtk/gtkmessagedialog.c:958 ../gtk/gtkprintbackend.c:764 ../gtk/gtkwindow.c:11854
-#: ../gtk/inspector/classes-list.c:127
+#: ../gtk/deprecated/gtkfontsel.c:1698 ../gtk/gtkmessagedialog.c:936 ../gtk/gtkmessagedialog.c:958
+#: ../gtk/gtkprintbackend.c:764 ../gtk/gtkwindow.c:11854 ../gtk/inspector/classes-list.c:127
 msgid "_OK"
 msgstr "_OK"
 
@@ -1541,8 +1539,8 @@ msgstr "Riconoscimenti"
 msgid "_License"
 msgstr "Licenza"
 
-#: ../gtk/gtkaboutdialog.c:716 ../gtk/gtkcustompaperunixdialog.c:329
-#: ../gtk/gtkmessagedialog.c:940 ../gtk/ui/gtkassistant.ui.h:6
+#: ../gtk/gtkaboutdialog.c:716 ../gtk/gtkcustompaperunixdialog.c:329 ../gtk/gtkmessagedialog.c:940
+#: ../gtk/ui/gtkassistant.ui.h:6
 msgid "_Close"
 msgstr "_Chiudi"
 
@@ -2183,18 +2181,18 @@ msgstr "_Destro:"
 msgid "Paper Margins"
 msgstr "Margini carta"
 
-#: ../gtk/gtkentry.c:9626 ../gtk/gtkentry.c:9779 ../gtk/gtklabel.c:6596
-#: ../gtk/gtktextview.c:9037 ../gtk/gtktextview.c:9225
+#: ../gtk/gtkentry.c:9626 ../gtk/gtkentry.c:9779 ../gtk/gtklabel.c:6596 ../gtk/gtktextview.c:9037
+#: ../gtk/gtktextview.c:9225
 msgid "Cu_t"
 msgstr "_Taglia"
 
-#: ../gtk/gtkentry.c:9630 ../gtk/gtkentry.c:9782 ../gtk/gtklabel.c:6597
-#: ../gtk/gtktextview.c:9041 ../gtk/gtktextview.c:9229
+#: ../gtk/gtkentry.c:9630 ../gtk/gtkentry.c:9782 ../gtk/gtklabel.c:6597 ../gtk/gtktextview.c:9041
+#: ../gtk/gtktextview.c:9229
 msgid "_Copy"
 msgstr "_Copia"
 
-#: ../gtk/gtkentry.c:9634 ../gtk/gtkentry.c:9785 ../gtk/gtklabel.c:6598
-#: ../gtk/gtktextview.c:9043 ../gtk/gtktextview.c:9231
+#: ../gtk/gtkentry.c:9634 ../gtk/gtkentry.c:9785 ../gtk/gtklabel.c:6598 ../gtk/gtktextview.c:9043
+#: ../gtk/gtktextview.c:9231
 msgid "_Paste"
 msgstr "_Incolla"
 
@@ -2252,8 +2250,8 @@ msgid ""
 "The folder could not be created, as a file with the same name already exists.  Try using a "
 "different name for the folder, or rename the file first."
 msgstr ""
-"Non è possibile creare la cartella, poiché esiste già un file con lo stesso nome. Provare a "
-"usare un nome diverso per la cartella o rinominare prima il file."
+"Non è possibile creare la cartella, poiché esiste già un file con lo stesso nome. Provare a usare "
+"un nome diverso per la cartella o rinominare prima il file."
 
 #: ../gtk/gtkfilechooserwidget.c:768
 msgid "You need to choose a valid filename."
@@ -2352,19 +2350,19 @@ msgstr "Impossibile leggere il contenuto della cartella"
 
 #: ../gtk/gtkfilechooserwidget.c:3875
 msgid "%H:%M"
-msgstr "%-k:%M"
+msgstr "%H:%M"
 
 #: ../gtk/gtkfilechooserwidget.c:3875
 msgid "%-I:%M %P"
-msgstr "%-l:%M %P"
+msgstr "%I:%M %P"
 
 #: ../gtk/gtkfilechooserwidget.c:3877
 msgid "Yesterday at %H:%M"
-msgstr "Ieri alle %-k:%M"
+msgstr "Ieri alle %H:%M"
 
 #: ../gtk/gtkfilechooserwidget.c:3877
 msgid "Yesterday at %-I:%M %P"
-msgstr "Ieri alle %-l:%M %P"
+msgstr "Ieri alle %I:%M %P"
 
 #. Translators: We don't know whether this printer is
 #. * available to print to.
@@ -2385,8 +2383,7 @@ msgstr "Esiste già un file con nome «%s». Sostituirlo?"
 #: ../gtk/gtkfilechooserwidget.c:5369 ../gtk/gtkprintunixdialog.c:660
 #, c-format
 msgid "The file already exists in “%s”.  Replacing it will overwrite its contents."
-msgstr ""
-"Il file esiste già in «%s». Scegliendo di sostituirlo il suo contenuto verrà sovrascritto."
+msgstr "Il file esiste già in «%s». Scegliendo di sostituirlo il suo contenuto verrà sovrascritto."
 
 #: ../gtk/gtkfilechooserwidget.c:5374 ../gtk/gtkprintunixdialog.c:668
 msgid "_Replace"
@@ -2399,11 +2396,11 @@ msgstr "Impossibile avviare il processo di ricerca"
 #: ../gtk/gtkfilechooserwidget.c:6173
 #, fuzzy
 #| msgid ""
-#| "The program was not able to create a connection to the indexer daemon.  Please make sure "
-#| "it is running."
+#| "The program was not able to create a connection to the indexer daemon.  Please make sure it is "
+#| "running."
 msgid ""
-"The program was not able to create a connection to the indexer daemon. Please make sure it "
-"is running."
+"The program was not able to create a connection to the indexer daemon. Please make sure it is "
+"running."
 msgstr ""
 "Il programma non è stato in grado di creare una connessione al demone di indicizzazione. "
 "Assicurarsi che sia in esecuzione."
@@ -2434,8 +2431,7 @@ msgstr "Selezione tipo di carattere"
 #.
 #: ../gtk/gtkfontbutton.c:1182 ../gtk/inspector/general.c:226 ../gtk/inspector/general.c:227
 #: ../gtk/inspector/gestures.c:128 ../gtk/inspector/prop-editor.c:1200
-#: ../gtk/inspector/size-groups.c:252
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:5203
+#: ../gtk/inspector/size-groups.c:252 ../modules/printbackends/cups/gtkprintbackendcups.c:5203
 msgid "None"
 msgstr "Nessuna"
 
@@ -2829,8 +2825,7 @@ msgstr "Cestino"
 msgid "Open the trash"
 msgstr "Apre il cestino"
 
-#: ../gtk/gtkplacessidebar.c:1077 ../gtk/gtkplacessidebar.c:1105
-#: ../gtk/gtkplacessidebar.c:1313
+#: ../gtk/gtkplacessidebar.c:1077 ../gtk/gtkplacessidebar.c:1105 ../gtk/gtkplacessidebar.c:1313
 #, c-format
 msgid "Mount and open “%s”"
 msgstr "Monta e apre «%s»"
@@ -3087,8 +3082,7 @@ msgid "Out of paper"
 msgstr "Carta terminata"
 
 #. Translators: this is a printer status.
-#: ../gtk/gtkprintoperation-win32.c:620
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2495
+#: ../gtk/gtkprintoperation-win32.c:620 ../modules/printbackends/cups/gtkprintbackendcups.c:2495
 msgid "Paused"
 msgstr "In pausa"
 
@@ -3304,9 +3298,8 @@ msgctxt "recent menu label"
 msgid "%d. %s"
 msgstr "%d. %s"
 
-#: ../gtk/gtkrecentmanager.c:1042 ../gtk/gtkrecentmanager.c:1055
-#: ../gtk/gtkrecentmanager.c:1192 ../gtk/gtkrecentmanager.c:1202
-#: ../gtk/gtkrecentmanager.c:1254 ../gtk/gtkrecentmanager.c:1263
+#: ../gtk/gtkrecentmanager.c:1042 ../gtk/gtkrecentmanager.c:1055 ../gtk/gtkrecentmanager.c:1192
+#: ../gtk/gtkrecentmanager.c:1202 ../gtk/gtkrecentmanager.c:1254 ../gtk/gtkrecentmanager.c:1263
 #: ../gtk/gtkrecentmanager.c:1278
 #, c-format
 msgid "Unable to find an item with URI '%s'"
@@ -3448,8 +3441,7 @@ msgstr "I dati serializzati sono malformati"
 
 #: ../gtk/gtktextbufferserialize.c:1886
 msgid "Serialized data is malformed. First section isn't GTKTEXTBUFFERCONTENTS-0001"
-msgstr ""
-"I dati serializzati sono malformati. La prima sezione non è GTKTEXTBUFFERCONTENTS-0001"
+msgstr "I dati serializzati sono malformati. La prima sezione non è GTKTEXTBUFFERCONTENTS-0001"
 
 # Per MS è simbolo di formattazione
 #: ../gtk/gtktextutil.c:57
@@ -3531,8 +3523,8 @@ msgstr "Usare GTK+ Inspector?"
 
 #: ../gtk/gtkwindow.c:11843
 msgid ""
-"GTK+ Inspector is an interactive debugger that lets you explore and modify the internals of "
-"any GTK+ application. Using it may cause the application to break or crash."
+"GTK+ Inspector is an interactive debugger that lets you explore and modify the internals of any "
+"GTK+ application. Using it may cause the application to break or crash."
 msgstr ""
 "Inspector GTK+ è un debugger interattivo che consente di esplorare e modificare qualsiasi "
 "applicazione GTK+. L'utilizzo di questo strumento potrebbe causare la chiusura inaspettata "
@@ -3596,12 +3588,11 @@ msgstr "È possibile digitare qui qualsiasi regola CSS riconosciuta da GTK+."
 
 #: ../gtk/inspector/css-editor.c:91 ../gtk/inspector/css-editor.c:97
 #, fuzzy
-#| msgid ""
-#| "You can temporarily disable this custom CSS by clicking on the \"Pause\" button above."
+#| msgid "You can temporarily disable this custom CSS by clicking on the \"Pause\" button above."
 msgid "You can temporarily disable this custom CSS by clicking on the “Pause” button above."
 msgstr ""
-"È possibile disabilitare temporaneamente questo CSS personalizzato facendo clic sul "
-"pulsante \"Pausa\"."
+"È possibile disabilitare temporaneamente questo CSS personalizzato facendo clic sul pulsante "
+"\"Pausa\"."
 
 #: ../gtk/inspector/css-editor.c:92
 msgid "Changes are applied instantly and globally, for the whole application."
@@ -4560,15 +4551,11 @@ msgid "RA2"
 msgstr "RA2"
 
 #: ../gtk/paper_names_offsets.c:69
-#| msgctxt "paper size"
-#| msgid "A3"
 msgctxt "paper size"
 msgid "RA3"
 msgstr "RA3"
 
 #: ../gtk/paper_names_offsets.c:70
-#| msgctxt "paper size"
-#| msgid "A4"
 msgctxt "paper size"
 msgid "RA4"
 msgstr "RA4"
@@ -4774,8 +4761,6 @@ msgid "5×7"
 msgstr "5×7"
 
 #: ../gtk/paper_names_offsets.c:111
-#| msgctxt "paper size"
-#| msgid "6x9 Envelope"
 msgctxt "paper size"
 msgid "6×9 Envelope"
 msgstr "Busta 6×9"
@@ -4786,8 +4771,6 @@ msgid "7×9 Envelope"
 msgstr "Busta 7×9"
 
 #: ../gtk/paper_names_offsets.c:113
-#| msgctxt "paper size"
-#| msgid "#10 Envelope"
 msgctxt "paper size"
 msgid "8×10 Envelope"
 msgstr "Busta 8×10"
@@ -4798,8 +4781,6 @@ msgid "9×11 Envelope"
 msgstr "Busta 9×11"
 
 #: ../gtk/paper_names_offsets.c:115
-#| msgctxt "paper size"
-#| msgid "#12 Envelope"
 msgctxt "paper size"
 msgid "9×12 Envelope"
 msgstr "Busta 9×12"
@@ -5969,8 +5950,7 @@ msgstr "Famiglia carattere"
 #: ../gtk/ui/gtkfontchooserwidget.ui.h:3
 msgid "No fonts matched your search. You can revise your search and try again."
 msgstr ""
-"Nessun tipo di carattere corrisponde a quanto cercato. Cambiare la ricerca e provare di "
-"nuovo."
+"Nessun tipo di carattere corrisponde a quanto cercato. Cambiare la ricerca e provare di nuovo."
 
 #: ../gtk/ui/gtkpagesetupunixdialog.ui.h:2
 msgid "_Format for:"
