@@ -25,7 +25,7 @@
 
 /* When these change we do a full restyling. Otherwise we try to figure out
  * if we need to change things. */
-#define GTK_CSS_RADICAL_CHANGE (GTK_CSS_CHANGE_NAME | GTK_CSS_CHANGE_CLASS | GTK_CSS_CHANGE_SOURCE)
+#define GTK_CSS_RADICAL_CHANGE (GTK_CSS_CHANGE_NAME | GTK_CSS_CHANGE_CLASS | GTK_CSS_CHANGE_SOURCE | GTK_CSS_CHANGE_PARENT_STYLE)
 
 G_DEFINE_TYPE (GtkCssNode, gtk_css_node, G_TYPE_OBJECT)
 
@@ -253,8 +253,7 @@ static GtkCssStyle *
 gtk_css_node_real_validate (GtkCssNode       *cssnode,
                             GtkCssStyle      *current_style,
                             gint64            timestamp,
-                            GtkCssChange      change,
-                            gboolean          parent_changed)
+                            GtkCssChange      change)
 {
   return NULL;
 }
@@ -535,13 +534,11 @@ gtk_css_node_set_style (GtkCssNode  *cssnode,
 }
 
 static void
-gtk_css_node_propagate_pending_changes (GtkCssNode *cssnode)
+gtk_css_node_propagate_pending_changes (GtkCssNode *cssnode,
+                                        gboolean    style_changed)
 {
   GtkCssChange change, child_change;
   GtkCssNode *child;
-
-  if (!cssnode->invalid)
-    return;
 
   change = _gtk_css_change_for_child (cssnode->pending_changes);
   if (cssnode->children_changed)
@@ -549,6 +546,8 @@ gtk_css_node_propagate_pending_changes (GtkCssNode *cssnode)
       change |= GTK_CSS_CHANGE_POSITION | GTK_CSS_CHANGE_ANY_SIBLING;
       cssnode->children_changed = FALSE;
     }
+  if (style_changed)
+    change |= GTK_CSS_CHANGE_PARENT_STYLE;
 
   for (child = gtk_css_node_get_first_child (cssnode);
        child;
@@ -579,7 +578,7 @@ gtk_css_node_ensure_style (GtkCssNode *cssnode)
                                                               cssnode->pending_changes,
                                                               cssnode->style);
 
-  gtk_css_node_propagate_pending_changes (cssnode);
+  gtk_css_node_propagate_pending_changes (cssnode, new_style != NULL);
 
   if (new_style)
     {
@@ -769,8 +768,7 @@ gtk_css_node_invalidate (GtkCssNode   *cssnode,
 
 void
 gtk_css_node_validate (GtkCssNode            *cssnode,
-                       gint64                 timestamp,
-                       gboolean               parent_changed)
+                       gint64                 timestamp)
 {
   GtkCssNode *child;
   GtkCssStyle *new_style;
@@ -791,14 +789,14 @@ gtk_css_node_validate (GtkCssNode            *cssnode,
   if (G_UNLIKELY (gtk_get_debug_flags () & GTK_DEBUG_NO_CSS_CACHE))
     cssnode->pending_changes |= GTK_CSS_CHANGE_ANY;
 
-  if (!cssnode->invalid && cssnode->pending_changes == 0 && !parent_changed)
+  if (!cssnode->invalid && cssnode->pending_changes == 0)
     return;
 
   gtk_css_node_set_invalid (cssnode, FALSE);
 
   cssnode->style_is_invalid = FALSE;
 
-  new_style = GTK_CSS_NODE_GET_CLASS (cssnode)->validate (cssnode, cssnode->style, timestamp, cssnode->pending_changes, parent_changed);
+  new_style = GTK_CSS_NODE_GET_CLASS (cssnode)->validate (cssnode, cssnode->style, timestamp, cssnode->pending_changes);
   if (new_style)
     {
       gtk_css_node_set_style (cssnode, new_style);
@@ -810,7 +808,7 @@ gtk_css_node_validate (GtkCssNode            *cssnode,
       changed = FALSE;
     }
 
-  gtk_css_node_propagate_pending_changes (cssnode);
+  gtk_css_node_propagate_pending_changes (cssnode, changed);
   cssnode->pending_changes = 0;
 
   for (child = gtk_css_node_get_first_child (cssnode);
@@ -818,7 +816,7 @@ gtk_css_node_validate (GtkCssNode            *cssnode,
        child = gtk_css_node_get_next_sibling (child))
     {
       if (child->visible)
-        gtk_css_node_validate (child, timestamp, changed);
+        gtk_css_node_validate (child, timestamp);
     }
 }
 

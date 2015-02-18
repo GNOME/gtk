@@ -29,7 +29,7 @@
 
 /* When these change we do a full restyling. Otherwise we try to figure out
  * if we need to change things. */
-#define GTK_CSS_RADICAL_CHANGE (GTK_CSS_CHANGE_NAME | GTK_CSS_CHANGE_CLASS | GTK_CSS_CHANGE_SOURCE)
+#define GTK_CSS_RADICAL_CHANGE (GTK_CSS_CHANGE_NAME | GTK_CSS_CHANGE_CLASS | GTK_CSS_CHANGE_SOURCE | GTK_CSS_CHANGE_PARENT_STYLE)
 
 G_DEFINE_TYPE (GtkCssWidgetNode, gtk_css_widget_node, GTK_TYPE_CSS_NODE)
 
@@ -87,11 +87,9 @@ gtk_css_static_style_needs_revalidate (GtkCssStaticStyle  *style,
 static GtkCssStyle *
 validate_static_style (GtkCssNode       *node,
                        GtkCssStyle      *style,
-                       GtkCssChange      change,
-                       gboolean          parent_changed)
+                       GtkCssChange      change)
 {
-  if (gtk_css_static_style_needs_revalidate (GTK_CSS_STATIC_STYLE (style), change) ||
-      parent_changed)
+  if (gtk_css_static_style_needs_revalidate (GTK_CSS_STATIC_STYLE (style), change))
     {
       return gtk_css_node_create_style (node);
     }
@@ -105,8 +103,7 @@ static GtkCssStyle *
 gtk_css_widget_node_validate (GtkCssNode       *node,
                               GtkCssStyle      *style,
                               gint64            timestamp,
-                              GtkCssChange      change,
-                              gboolean          parent_changed)
+                              GtkCssChange      change)
 {
   GtkCssWidgetNode *widget_node = GTK_CSS_WIDGET_NODE (node);
   GtkStyleContext *context;
@@ -129,7 +126,7 @@ gtk_css_widget_node_validate (GtkCssNode       *node,
       static_style = style;
     }
 
-  new_static_style = validate_static_style (node, static_style, change, parent_changed);
+  new_static_style = validate_static_style (node, static_style, change);
 
   if (new_static_style != static_style)
     {

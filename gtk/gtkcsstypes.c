@@ -57,7 +57,8 @@ _gtk_css_change_for_sibling (GtkCssChange match)
     { GTK_CSS_CHANGE_POSITION, GTK_CSS_CHANGE_SIBLING_POSITION },
     { GTK_CSS_CHANGE_STATE, GTK_CSS_CHANGE_SIBLING_STATE },
     { GTK_CSS_CHANGE_SOURCE, 0 },
-    { GTK_CSS_CHANGE_ANIMATE, 0 }
+    { GTK_CSS_CHANGE_ANIMATE, 0 },
+    { GTK_CSS_CHANGE_PARENT_STYLE, 0 }
   };
 
   return gtk_css_change_translate (match, table, G_N_ELEMENTS (table)); 
@@ -76,7 +77,8 @@ _gtk_css_change_for_child (GtkCssChange match)
     { GTK_CSS_CHANGE_SIBLING_POSITION, GTK_CSS_CHANGE_PARENT_SIBLING_POSITION },
     { GTK_CSS_CHANGE_SIBLING_STATE, GTK_CSS_CHANGE_PARENT_SIBLING_STATE },
     { GTK_CSS_CHANGE_SOURCE, 0 },
-    { GTK_CSS_CHANGE_ANIMATE, 0 }
+    { GTK_CSS_CHANGE_ANIMATE, 0 },
+    { GTK_CSS_CHANGE_PARENT_STYLE, 0 }
   };
 
   return gtk_css_change_translate (match, table, G_N_ELEMENTS (table)); 

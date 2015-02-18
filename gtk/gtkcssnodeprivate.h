@@ -79,8 +79,7 @@ struct _GtkCssNodeClass
   GtkCssStyle *         (* validate)                    (GtkCssNode            *cssnode,
                                                          GtkCssStyle           *current_style,
                                                          gint64                 timestamp,
-                                                         GtkCssChange           change,
-                                                         gboolean               parent_changed);
+                                                         GtkCssChange           change);
 };
 
 GType                   gtk_css_node_get_type           (void) G_GNUC_CONST;
@@ -144,8 +143,7 @@ void                    gtk_css_node_invalidate_style_provider
 void                    gtk_css_node_invalidate         (GtkCssNode            *cssnode,
                                                          GtkCssChange           change);
 void                    gtk_css_node_validate           (GtkCssNode            *cssnode,
-                                                         gint64                 timestamp,
-                                                         gboolean               parent_changed);
+                                                         gint64                 timestamp);
 void                    gtk_css_node_set_invalid        (GtkCssNode            *node,
                                                          gboolean               invalid);
 
