@@ -17,8 +17,8 @@ msgstr ""
 "Project-Id-Version: gtk+.master\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gtk"
 "%2b&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2015-02-17 10:11+0000\n"
-"PO-Revision-Date: 2015-02-10 19:12+0100\n"
+"POT-Creation-Date: 2015-02-17 22:14+0000\n"
+"PO-Revision-Date: 2015-02-18 10:55+0100\n"
 "Last-Translator: Daniel Mustieles <daniel.mustieles@gmail.com>\n"
 "Language-Team: Español; Castellano <gnome-es-list@gnome.org>\n"
 "Language: \n"
@@ -462,14 +462,11 @@ msgstr ""
 "El perfil 3.2 del núcleo de GL no está disponible en la implementación de EGL"
 
 #: ../gdk/wayland/gdkglcontext-wayland.c:376
-#, fuzzy
 #| msgid "3.2 core GL profile is not available on EGL implementation"
 msgid "Core GL is not available on EGL implementation"
-msgstr ""
-"El perfil 3.2 del núcleo de GL no está disponible en la implementación de EGL"
+msgstr "El núcleo de GL no está disponible en la implementación de EGL"
 
 #: ../gdk/win32/gdkglcontext-win32.c:550
-#, fuzzy
 #| msgid ""
 #| "The WGL_ARB_create_context extension needed to create 3.2 core profiles "
 #| "is not available"
@@ -477,8 +474,8 @@ msgid ""
 "The WGL_ARB_create_context extension needed to create core profiles is not "
 "available"
 msgstr ""
-"La extensión WGL_ARB_create_context necesaria para crear perfiles 3.2 del "
-"núcleo no está disponible"
+"La extensión WGL_ARB_create_context necesaria para crear perfiles no está "
+"disponible"
 
 #. Description of --sync in --help output
 #: ../gdk/win32/gdkmain-win32.c:53
@@ -534,7 +531,6 @@ msgstr ""
 "No hay ninguna configuración disponible para el formato de píxel RGBA dado"
 
 #: ../gdk/x11/gdkglcontext-x11.c:1171
-#, fuzzy
 #| msgid ""
 #| "The GLX_ARB_create_context_profile extension needed to create 3.2 core "
 #| "profiles is not available"
@@ -543,7 +539,7 @@ msgid ""
 "is not available"
 msgstr ""
 "La extensión GLX_ARB_create_context_profile necesaria para crear perfiles "
-"3.2 no está disponible"
+"del núcleo no está disponible"
 
 #: ../gtk/a11y/gtkbooleancellaccessible.c:43
 msgctxt "Action description"
@@ -2268,7 +2264,7 @@ msgstr "_Visitar archivo"
 
 #: ../gtk/gtkfilechooserwidget.c:1748
 msgid "_Open With File Manager"
-msgstr ""
+msgstr "_Abrir con el gestor de archivos"
 
 #: ../gtk/gtkfilechooserwidget.c:1751
 msgid "_Copy Location"
@@ -2402,7 +2398,7 @@ msgstr "Escoja una tipografía"
 msgid "None"
 msgstr "Ninguna"
 
-#: ../gtk/gtkglarea.c:265
+#: ../gtk/gtkglarea.c:264
 msgid "OpenGL context creation failed"
 msgstr "Falló al crear el contexto de OpenGL"
 
@@ -5808,10 +5804,9 @@ msgid "Create Folder"
 msgstr "Crear carpeta"
 
 #: ../gtk/ui/gtkfilechooserwidget.ui.h:3
-#, fuzzy
 #| msgid "Files"
 msgid "All Files"
-msgstr "Archivos"
+msgstr "Todos los archivos"
 
 #: ../gtk/ui/gtkfilechooserwidget.ui.h:4
 msgid "Files"
