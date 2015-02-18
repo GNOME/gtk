@@ -11,8 +11,8 @@ msgstr ""
 "Project-Id-Version: gtk+-properties master\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gtk"
 "%2b&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2015-02-15 10:11+0000\n"
-"PO-Revision-Date: 2015-02-15 13:35+0100\n"
+"POT-Creation-Date: 2015-02-18 10:16+0000\n"
+"PO-Revision-Date: 2015-02-18 23:02+0100\n"
 "Last-Translator: Balázs Úr <urbalazs@gmail.com>\n"
 "Language-Team: Hungarian <openscope at googlegroups dot com>\n"
 "Language: hu\n"
@@ -897,7 +897,7 @@ msgstr "A buboréksúgó tartalma a tálcaikonhoz"
 
 #: ../gtk/deprecated/gtkstatusicon.c:435 ../gtk/gtkcolorbutton.c:181
 #: ../gtk/gtkfilechooserbutton.c:445 ../gtk/gtkfontbutton.c:443
-#: ../gtk/gtkheaderbar.c:1859 ../gtk/gtkprintjob.c:132 ../gtk/gtkstack.c:457
+#: ../gtk/gtkheaderbar.c:1862 ../gtk/gtkprintjob.c:132 ../gtk/gtkstack.c:457
 #: ../gtk/gtktreeviewcolumn.c:322
 msgid "Title"
 msgstr "Cím"
@@ -1044,7 +1044,7 @@ msgstr "A művelet proxyjai választóművelet-proxyknak nézzenek-e ki"
 #: ../gtk/deprecated/gtktoggleaction.c:137 ../gtk/gtkcellrendererspinner.c:125
 #: ../gtk/gtkcheckmenuitem.c:122 ../gtk/gtkmenu.c:555
 #: ../gtk/gtkmodelbutton.c:895 ../gtk/gtkmodelbutton.c:896
-#: ../gtk/gtkspinner.c:119 ../gtk/gtkswitch.c:906 ../gtk/gtktogglebutton.c:179
+#: ../gtk/gtkspinner.c:119 ../gtk/gtkswitch.c:879 ../gtk/gtktogglebutton.c:179
 #: ../gtk/gtktoggletoolbutton.c:127
 msgid "Active"
 msgstr "Aktív"
@@ -1291,11 +1291,11 @@ msgstr "művelet célértéke"
 msgid "The parameter for action invocations"
 msgstr "A művelethívások paramétere"
 
-#: ../gtk/gtkactionbar.c:250 ../gtk/gtkbox.c:329 ../gtk/gtkheaderbar.c:1844
+#: ../gtk/gtkactionbar.c:250 ../gtk/gtkbox.c:329 ../gtk/gtkheaderbar.c:1847
 msgid "Pack type"
 msgstr "Csomag típusa"
 
-#: ../gtk/gtkactionbar.c:251 ../gtk/gtkbox.c:330 ../gtk/gtkheaderbar.c:1845
+#: ../gtk/gtkactionbar.c:251 ../gtk/gtkbox.c:330 ../gtk/gtkheaderbar.c:1848
 msgid ""
 "A GtkPackType indicating whether the child is packed with reference to the "
 "start or end of the parent"
@@ -1303,14 +1303,14 @@ msgstr ""
 "Egy GtkPackType, amely azt jelzi, hogy a gyermekben a hivatkozás a szülő "
 "elejére vagy végére mutat"
 
-#: ../gtk/gtkactionbar.c:257 ../gtk/gtkbox.c:336 ../gtk/gtkheaderbar.c:1851
+#: ../gtk/gtkactionbar.c:257 ../gtk/gtkbox.c:336 ../gtk/gtkheaderbar.c:1854
 #: ../gtk/gtknotebook.c:775 ../gtk/gtkpaned.c:337 ../gtk/gtkpopover.c:1387
 #: ../gtk/gtkpopovermenu.c:375 ../gtk/gtkstack.c:471
 #: ../gtk/gtktoolitemgroup.c:1674
 msgid "Position"
 msgstr "Pozíció"
 
-#: ../gtk/gtkactionbar.c:258 ../gtk/gtkbox.c:337 ../gtk/gtkheaderbar.c:1852
+#: ../gtk/gtkactionbar.c:258 ../gtk/gtkbox.c:337 ../gtk/gtkheaderbar.c:1855
 #: ../gtk/gtknotebook.c:776 ../gtk/gtkpopovermenu.c:376 ../gtk/gtkstack.c:472
 msgid "The index of the child in the parent"
 msgstr "A gyermek indexe a szülőben"
@@ -1656,12 +1656,12 @@ msgid "If TRUE, the child will not be subject to homogeneous sizing"
 msgstr "Ha az értéke TRUE, akkor a gyermek nem lesz homogén méretezés alanya"
 
 #: ../gtk/gtkbox.c:256 ../gtk/gtkcellareabox.c:310 ../gtk/gtkexpander.c:299
-#: ../gtk/gtkheaderbar.c:1885 ../gtk/gtkiconview.c:516
+#: ../gtk/gtkheaderbar.c:1888 ../gtk/gtkiconview.c:516
 #: ../gtk/gtktreeviewcolumn.c:280
 msgid "Spacing"
 msgstr "Távolság"
 
-#: ../gtk/gtkbox.c:257 ../gtk/gtkheaderbar.c:1886
+#: ../gtk/gtkbox.c:257 ../gtk/gtkheaderbar.c:1889
 msgid "The amount of space between children"
 msgstr "A gyermekek közötti távolság"
 
@@ -4116,16 +4116,18 @@ msgid "Auto render"
 msgstr "Automatikus megjelenítés"
 
 #: ../gtk/gtkglarea.c:745
-msgid "Whether the gl area renders on each redraw"
-msgstr "A gl terület jelenjen-e meg minden újrarajzoláskor"
+#| msgid "Whether the gl area renders on each redraw"
+msgid "Whether the GtkGLArea renders on each redraw"
+msgstr "A GtkGLArea jelenjen-e meg minden újrarajzoláskor"
 
 #: ../gtk/gtkglarea.c:765
 msgid "Has alpha"
 msgstr "Van alfája"
 
 #: ../gtk/gtkglarea.c:766
-msgid "Whether the gl area color buffer has an alpha component"
-msgstr "A gl terület színpufferének van-e alfa összetevője"
+#| msgid "Whether the gl area color buffer has an alpha component"
+msgid "Whether the color buffer has an alpha component"
+msgstr "A színpuffernek van-e alfa összetevője"
 
 #: ../gtk/gtkglarea.c:782
 msgid "Has depth buffer"
@@ -4188,55 +4190,55 @@ msgstr "Magasság"
 msgid "The number of rows that a child spans"
 msgstr "A sorok száma, amelyeket a gyermek átfog"
 
-#: ../gtk/gtkheaderbar.c:1860
+#: ../gtk/gtkheaderbar.c:1863
 msgid "The title to display"
 msgstr "A megjelenítendő cím"
 
-#: ../gtk/gtkheaderbar.c:1867
+#: ../gtk/gtkheaderbar.c:1870
 msgid "Subtitle"
 msgstr "Felirat"
 
-#: ../gtk/gtkheaderbar.c:1868
+#: ../gtk/gtkheaderbar.c:1871
 msgid "The subtitle to display"
 msgstr "A megjelenítendő felirat"
 
-#: ../gtk/gtkheaderbar.c:1875
+#: ../gtk/gtkheaderbar.c:1878
 msgid "Custom Title"
 msgstr "Egyéni cím"
 
-#: ../gtk/gtkheaderbar.c:1876
+#: ../gtk/gtkheaderbar.c:1879
 msgid "Custom title widget to display"
 msgstr "A megjelenítendő egyéni cím felületi elem"
 
-#: ../gtk/gtkheaderbar.c:1904
+#: ../gtk/gtkheaderbar.c:1907
 msgid "Show decorations"
 msgstr "Dekorációk megjelenítése"
 
-#: ../gtk/gtkheaderbar.c:1905
+#: ../gtk/gtkheaderbar.c:1908
 msgid "Whether to show window decorations"
 msgstr "Megjelenjenek-e az ablakdekorációk"
 
-#: ../gtk/gtkheaderbar.c:1924 ../gtk/gtksettings.c:1576
+#: ../gtk/gtkheaderbar.c:1927 ../gtk/gtksettings.c:1576
 msgid "Decoration Layout"
 msgstr "Dekoráció elrendezése"
 
-#: ../gtk/gtkheaderbar.c:1925 ../gtk/gtksettings.c:1577
+#: ../gtk/gtkheaderbar.c:1928 ../gtk/gtksettings.c:1577
 msgid "The layout for window decorations"
 msgstr "Az ablakdekorációk elrendezése"
 
-#: ../gtk/gtkheaderbar.c:1939
+#: ../gtk/gtkheaderbar.c:1942
 msgid "Decoration Layout Set"
 msgstr "Dekoráció elrendezése beállítva"
 
-#: ../gtk/gtkheaderbar.c:1940
+#: ../gtk/gtkheaderbar.c:1943
 msgid "Whether the decoration-layout property has been set"
 msgstr "A Dekoráció elrendezése tulajdonság be van-e állítva"
 
-#: ../gtk/gtkheaderbar.c:1955
+#: ../gtk/gtkheaderbar.c:1958
 msgid "Has Subtitle"
 msgstr "Van felirata"
 
-#: ../gtk/gtkheaderbar.c:1956
+#: ../gtk/gtkheaderbar.c:1959
 msgid "Whether to reserve space for a subtitle"
 msgstr "Kell-e helyet foglalni a feliratnak"
 
@@ -5943,7 +5945,7 @@ msgstr "Kerekítési számjegyek"
 msgid "The number of digits to round the value to."
 msgstr "Az érték kerekítése ennyi számjegyre."
 
-#: ../gtk/gtkrange.c:529 ../gtk/gtkswitch.c:954
+#: ../gtk/gtkrange.c:529 ../gtk/gtkswitch.c:927
 msgid "Slider Width"
 msgstr "Csúszka szélessége"
 
@@ -7138,7 +7140,6 @@ msgid "Stack"
 msgstr "Verem"
 
 #: ../gtk/gtkstacksidebar.c:445
-#| msgid "Associated stack for this GtkSidebar"
 msgid "Associated stack for this GtkStackSidebar"
 msgstr "Ehhez a GtkStackSidebar elemhez társított verem"
 
@@ -7326,19 +7327,19 @@ msgstr "Érték típusa"
 msgid "The value type returned by GtkStyleContext"
 msgstr "A GtkStyleContext által visszadott értéktípus"
 
-#: ../gtk/gtkswitch.c:907
+#: ../gtk/gtkswitch.c:880
 msgid "Whether the switch is on or off"
 msgstr "A kapcsoló be vagy ki van-e kapcsolva"
 
-#: ../gtk/gtkswitch.c:921
+#: ../gtk/gtkswitch.c:894
 msgid "State"
 msgstr "Állapot"
 
-#: ../gtk/gtkswitch.c:922
+#: ../gtk/gtkswitch.c:895
 msgid "The backend state"
 msgstr "A háttérprogram állapota"
 
-#: ../gtk/gtkswitch.c:955
+#: ../gtk/gtkswitch.c:928
 msgid "The minimum width of the handle"
 msgstr "A fogantyú minimális szélessége"
 
