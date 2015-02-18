@@ -309,7 +309,7 @@ scale_set_type (GtkColorScale     *scale,
         atk_object_set_name (atk_obj, C_("Color channel", "Hue"));
       else if (type == GTK_COLOR_SCALE_ALPHA)
         atk_object_set_name (atk_obj, C_("Color channel", "Alpha"));
-      atk_object_set_role (gtk_widget_get_accessible (GTK_WIDGET (scale)), ATK_ROLE_COLOR_CHOOSER);
+      atk_object_set_role (atk_obj, ATK_ROLE_COLOR_CHOOSER);
     }
 }
 
