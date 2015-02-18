@@ -174,6 +174,7 @@ expand_content_files = 				\
 	drawing-model.xml			\
 	getting_started.xml			\
 	glossary.xml				\
+	input-handling.xml			\
 	migrating-2to3.xml			\
 	migrating-checklist.sgml		\
 	migrating-unique-GtkApplication.xml	\

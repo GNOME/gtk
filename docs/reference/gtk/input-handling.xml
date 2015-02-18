@@ -87,53 +87,140 @@
     </para>
   </refsect2>
 
-  <refsect2>
+  <refsect2 id="event-propagation">
     <title>Event propagation</title>
 
     <para>
-      When GTK+ receives an event, it determines the target widget that
-      it is directed to. Unless grabs are involved, this is done by finding
-      the widget to which the window of the event belongs.
+      For widgets which have a #GdkWindow set, events are received from the
+      windowing system and passed to gtk_main_do_event(). See its documentation
+      for details of what it does: compression of enter/leave events,
+      identification of the widget receiving the event, pushing the event onto a
+      stack for gtk_get_current_event(), and propagating the event to the
+      widget.
     </para>
 
     <para>
-      The event is then propagated from the toplevel window down to the 
-      target widget. In this phase, which is known as the “capture” phase,
-      gestures that are attached with GTK_PHASE_CAPTURE get a chance
-      to react to the event.
+      When a GDK backend produces an input event, it is tied to a #GdkDevice and
+      a #GdkWindow, which in turn represents a windowing system surface in the
+      backend. If a widget has grabbed the current input device, or all input
+      devices, the event is propagated to that #GtkWidget. Otherwise, it is
+      propagated to the the #GtkWidget which called gtk_widget_register_window()
+      on the #GdkWindow receiving the event.
+    </para>
+
+    <para>
+      Grabs are implemented for each input device, and globally. A grab for a
+      specific input device (gtk_device_grab_add()), is sent events in
+      preference to a global grab (gtk_grab_add()). Input grabs only have effect
+      within the #GtkWindowGroup containing the #GtkWidget which registered the
+      event’s #GdkWindow. If this #GtkWidget is a child of the grab widget, the
+      event is propagated to the child — this is the basis for propagating
+      events within modal dialogs.
+    </para>
+
+    <para>
+      An event is propagated to a widget using gtk_propagate_event().
+      Propagation differs between event types: key events (%GDK_KEY_PRESS,
+      %GDK_KEY_RELEASE) are delivered to the top-level #GtkWindow; other events
+      are propagated down and up the widget hierarchy in three phases (see
+      #GtkPropagationPhase).
+    </para>
+
+    <para>
+      For key events, the top-level window’s default #GtkWindow::key-press-event
+      and #GtkWindow::key-release-event signal handlers handle mnemonics and
+      accelerators first. Other key presses are then passed to
+      gtk_window_propagate_key_event() which propagates the event upwards from
+      the window’s current focus widget (gtk_window_get_focus()) to the
+      top-level.
+    </para>
+
+    <para>
+      For other events, in the first phase (the “capture” phase) the event is
+      delivered to each widget from the top-most (for example, the top-level
+      #GtkWindow or grab widget) down to the target #GtkWidget.
+      <link linkend="event-controllers-and-gestures">Gestures</link> that are
+      attached with %GTK_PHASE_CAPTURE get a chance to react to the event.
     </para>
 
     <para>
       After the “capture” phase, the widget that was intended to be the
-      destination of the event will let run gestures attached to it with
-      GTK_PHASE_TARGET. This is known as the “target” phase, and does only
-      happen on that widget.
+      destination of the event will run gestures attached to it with
+      %GTK_PHASE_TARGET. This is known as the “target” phase, and only
+      happens on that widget.
     </para>
 
     <para>
-      Next, the appropriate event signal is emitted for the event in question,
-      e.g. “motion-notify-event”. Handling these signals was the primary
-      way to handle input in GTK+ widgets before gestures were introduced.
-      The signals are emitted from the target widget up to the toplevel,
-      until a signal handler indicates that it has handled the event, by
-      returning GDK_EVENT_STOP.
+      Next, the #GtkWidget::event signal is emitted, then the appropriate signal
+      for the event in question, for example #GtkWidget::motion-notify-event.
+      Handling these signals was the primary way to handle input in GTK+ widgets
+      before gestures were introduced. If the widget is realized, the
+      #GtkWidget::event-after signal is emitted. The signals are emitted from
+      the target widget up to the top-level, as part of the “bubble” phase.
     </para>
 
     <para>
       The default handlers for the event signals send the event
-      to gestures that are attached with GTK_PHASE_BUBBLE. Therefore,
+      to gestures that are attached with %GTK_PHASE_BUBBLE. Therefore,
       gestures in the “bubble” phase are only used if the widget does
       not have its own event handlers, or takes care to chain up to the
-      default GtkWidget handlers.
+      default #GtkWidget handlers.
     </para>
 
     <para>
-      Anytime during the propagation phase, a widget may indicate that a
+      Events are not delivered to a widget which is insensitive or unmapped.
+    </para>
+
+    <para>
+      Any time during the propagation phase, a widget may indicate that a
       received event was consumed and propagation should therefore be stopped.
-      In traditional event handlers, this is hinted by returning GDK_EVENT_STOP,
-      if gestures are used, this may happen when the widget tells the gesture
+      In traditional event handlers, this is hinted by returning %GDK_EVENT_STOP.
+      If gestures are used, this may happen when the widget tells the gesture
       to claim the event touch sequence (or the pointer events) for its own. See the
       "gesture states" section below to know more of the latter.
+    </para>
+  </refsect2>
+
+  <refsect2 id="event-masks">
+    <title>Event masks</title>
+
+    <para>
+      Each widget instance has a basic event mask and another per input device,
+      which determine the types of input event it receives. Each event mask set
+      on a widget is added to the corresponding (basic or per-device) event mask
+      for the widget’s #GdkWindow, and all child #GdkWindows.
+    </para>
+
+    <para>
+      If a widget is windowless (gtk_widget_get_has_window() returns %FALSE) and
+      an application wants to receive custom events on it, it must be placed
+      inside a #GtkEventBox to receive the events, and an appropriate event mask
+      must be set on the box. When implementing a widget, use a %GDK_INPUT_ONLY
+      #GdkWindow to receive the events instead.
+    </para>
+
+    <para>
+      Filtering events against event masks happens inside #GdkWindow, which
+      exposes event masks to the windowing system to reduce the number of events
+      GDK receives from it. On receiving an event, it is filtered against the
+      #GdkWindow’s mask for the input device, if set. Otherwise, it is filtered
+      against the #GdkWindow’s basic event mask.
+    </para>
+
+    <para>
+      This means that widgets must add to the event mask for each event type
+      they expect to receive, using gtk_widget_set_events() or
+      gtk_widget_add_events() to preserve the existing mask. Widgets which are
+      aware of floating devices should use gtk_widget_set_device_events() or
+      gtk_widget_add_device_events(), and must explicitly enable the device
+      using gtk_widget_set_device_enabled(). See the #GdkDeviceManager
+      documentation for more information.
+    </para>
+
+    <para>
+      All standard widgets set the event mask for all events they expect to
+      receive, and it is not necessary to modify this. Masks should be set when
+      implementing a new widget.
     </para>
   </refsect2>
 
@@ -209,7 +296,7 @@
     <!-- mnemonics, accelerators, bindings -->
   </refsect2>
 
-  <refsect2>
+  <refsect2 id="event-controllers-and-gestures">
     <title>Event controllers and gestures</title>
 
     <para>

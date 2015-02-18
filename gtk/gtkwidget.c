@@ -11301,7 +11301,8 @@ gtk_widget_add_events_internal (GtkWidget *widget,
  * @events: an event mask, see #GdkEventMask
  *
  * Adds the events in the bitfield @events to the event mask for
- * @widget. See gtk_widget_set_events() for details.
+ * @widget. See gtk_widget_set_events() and the
+ * [input handling overview][event-masks] for details.
  **/
 void
 gtk_widget_add_events (GtkWidget *widget,
@@ -11534,9 +11535,8 @@ gtk_widget_get_settings (GtkWidget *widget)
  * gtk_widget_get_events:
  * @widget: a #GtkWidget
  *
- * Returns the event mask for the widget (a bitfield containing flags
- * from the #GdkEventMask enumeration). These are the events that the widget
- * will receive.
+ * Returns the event mask (see #GdkEventMask) for the widget. These are the
+ * events that the widget will receive.
  *
  * Note: Internally, the widget event mask will be the logical OR of the event
  * mask set through gtk_widget_set_events() or gtk_widget_add_events(), and the

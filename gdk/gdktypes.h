@@ -372,6 +372,9 @@ typedef enum
  * Most of these masks map onto one or more of the #GdkEventType event types
  * above.
  *
+ * See the [input handling overview][chap-input-handling] for details of
+ * [event masks][event-masks] and [event propagation][event-propagation].
+ *
  * %GDK_POINTER_MOTION_HINT_MASK is deprecated. It is a special mask
  * to reduce the number of %GDK_MOTION_NOTIFY events received. When using
  * %GDK_POINTER_MOTION_HINT_MASK, fewer %GDK_MOTION_NOTIFY events will

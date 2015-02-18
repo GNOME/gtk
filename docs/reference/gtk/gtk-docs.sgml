@@ -25,7 +25,7 @@
     <xi:include href="resources.sgml" />
     <xi:include href="xml/question_index.sgml" />
     <xi:include href="drawing-model.xml" />
-    <xi:include href="input-handling.xml" />
+    <xi:include href="xml/input-handling.xml" />
   </part>
 
 

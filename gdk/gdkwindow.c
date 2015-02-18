@@ -5425,6 +5425,8 @@ gdk_window_withdraw (GdkWindow *window)
  * including #GDK_BUTTON_PRESS_MASK means the window should report button
  * press events. The event mask is the bitwise OR of values from the
  * #GdkEventMask enumeration.
+ *
+ * See the [input handling overview][event-masks] for details.
  **/
 void
 gdk_window_set_events (GdkWindow       *window,
@@ -5494,6 +5496,8 @@ gdk_window_get_events (GdkWindow *window)
  * including #GDK_BUTTON_PRESS_MASK means the window should report button
  * press events. The event mask is the bitwise OR of values from the
  * #GdkEventMask enumeration.
+ *
+ * See the [input handling overview][event-masks] for details.
  *
  * Since: 3.0
  **/
