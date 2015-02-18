@@ -575,11 +575,12 @@ gtk_css_node_ensure_style (GtkCssNode *cssnode)
   if (cssnode->previous_sibling)
     gtk_css_node_ensure_style (cssnode->previous_sibling);
 
-  gtk_css_node_propagate_pending_changes (cssnode);
-
   new_style = GTK_CSS_NODE_GET_CLASS (cssnode)->update_style (cssnode,
                                                               cssnode->pending_changes,
                                                               cssnode->style);
+
+  gtk_css_node_propagate_pending_changes (cssnode);
+
   if (new_style)
     {
       gtk_css_node_set_style (cssnode, new_style);
@@ -771,7 +772,6 @@ gtk_css_node_validate (GtkCssNode            *cssnode,
                        gint64                 timestamp,
                        gboolean               parent_changed)
 {
-  GtkCssChange change;
   GtkCssNode *child;
   GtkCssStyle *new_style;
   gboolean changed;
@@ -789,20 +789,16 @@ gtk_css_node_validate (GtkCssNode            *cssnode,
    * the time.
    */
   if (G_UNLIKELY (gtk_get_debug_flags () & GTK_DEBUG_NO_CSS_CACHE))
-    change = GTK_CSS_CHANGE_ANY;
+    cssnode->pending_changes |= GTK_CSS_CHANGE_ANY;
 
-  gtk_css_node_propagate_pending_changes (cssnode);
-
-  if (!cssnode->invalid && change == 0 && !parent_changed)
+  if (!cssnode->invalid && cssnode->pending_changes == 0 && !parent_changed)
     return;
 
   gtk_css_node_set_invalid (cssnode, FALSE);
 
-  change = cssnode->pending_changes;
-  cssnode->pending_changes = 0;
   cssnode->style_is_invalid = FALSE;
 
-  new_style = GTK_CSS_NODE_GET_CLASS (cssnode)->validate (cssnode, cssnode->style, timestamp, change, parent_changed);
+  new_style = GTK_CSS_NODE_GET_CLASS (cssnode)->validate (cssnode, cssnode->style, timestamp, cssnode->pending_changes, parent_changed);
   if (new_style)
     {
       gtk_css_node_set_style (cssnode, new_style);
@@ -813,6 +809,9 @@ gtk_css_node_validate (GtkCssNode            *cssnode,
     {
       changed = FALSE;
     }
+
+  gtk_css_node_propagate_pending_changes (cssnode);
+  cssnode->pending_changes = 0;
 
   for (child = gtk_css_node_get_first_child (cssnode);
        child;
