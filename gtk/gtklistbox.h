@@ -172,6 +172,7 @@ typedef void (*GtkListBoxUpdateHeaderFunc) (GtkListBoxRow *row,
 /**
  * GtkListBoxCreateWidgetFunc:
  * @item: the item from the model for which to create a widget for
+ * @user_data: (closure): user data
  *
  * Called for list boxes that are bound to a #GListModel with
  * gtk_list_box_bind_model() for each item that gets added to the model.

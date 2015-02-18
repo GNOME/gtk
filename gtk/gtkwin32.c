@@ -75,7 +75,7 @@ find_first_manifest (HMODULE  module_handle,
   return TRUE;
 }
 
-/**
+/*
  * Grabs the first manifest it finds in libgtk3 (which is expected to be the
  * common-controls-6.0.0.0 manifest we embedded to enable visual styles),
  * uses it to create a process-default activation context, activates that

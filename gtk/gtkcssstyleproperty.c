@@ -401,7 +401,7 @@ _gtk_css_style_property_get_initial_value (GtkCssStyleProperty *property)
  * Computes a bitmask for all properties that have at least one of @flags
  * set.
  *
- * Returns: (transfer: full): A #GtkBitmask with the bit set for every
+ * Returns: (transfer full): A #GtkBitmask with the bit set for every
  *          property that has at least one of @flags set.
  */
 GtkBitmask *

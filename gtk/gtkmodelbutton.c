@@ -42,7 +42,7 @@
  *
  * GtkModelButton is a button class that can use a #GAction as its model.
  * In contrast to #GtkToggleButton or #GtkRadioButton, which can also
- * be backed by a #Gaction via the #GtkActionable:action-name property,
+ * be backed by a #GAction via the #GtkActionable:action-name property,
  * GtkModelButton will adapt its appearance according to the kind of
  * action it is backed by, and appear either as a plain, check or
  * radio button.
