@@ -460,10 +460,15 @@ software_button_clicked_cb (GtkButton           *button,
 static void
 ensure_software_button (GtkAppChooserDialog *self)
 {
-  if (g_find_program_in_path ("gnome-software"))
+  gchar *path;
+
+  path = g_find_program_in_path ("gnome-software");
+  if (path != NULL)
     gtk_widget_show (self->priv->software_button);
   else
     gtk_widget_hide (self->priv->software_button);
+
+  g_free (path);
 }
 
 static void
