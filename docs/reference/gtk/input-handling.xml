@@ -64,20 +64,20 @@
      GDK translates these raw windowing system events into #GdkEvents.
      Typical input events are:
      <simplelist>
-       <member>GdkEventButton</member>
-       <member>GdkEventMotion</member>
-       <member>GdkEventCrossing</member>
-       <member>GdkEventKey</member>
-       <member>GdkEventFocus</member>
-       <member>GdkEventTouch</member>
+       <member>#GdkEventButton</member>
+       <member>#GdkEventMotion</member>
+       <member>#GdkEventCrossing</member>
+       <member>#GdkEventKey</member>
+       <member>#GdkEventFocus</member>
+       <member>#GdkEventTouch</member>
      </simplelist>
     </para>
     <para>
       Additionally, GDK/GTK synthesizes other signals to let know whether
       grabs (system-wide or in-app) are taking input away:
       <simplelist>
-	<member>GdkEventGrabBroken</member>
-	<member>GtkWidget::grab-notify</member>
+	<member>#GdkEventGrabBroken</member>
+	<member>#GtkWidget::grab-notify</member>
       </simplelist>
     </para>
     <para>
@@ -228,26 +228,26 @@
     <title>Touch events</title>
 
     <para>
-      Touch events are emitted as events of type GDK_TOUCH_BEGIN, GDK_TOUCH_UPDATE or
-      GDK_TOUCH_END, those events contain an “event sequence” that univocally identifies
+      Touch events are emitted as events of type %GDK_TOUCH_BEGIN, %GDK_TOUCH_UPDATE or
+      %GDK_TOUCH_END, those events contain an “event sequence” that univocally identifies
       the physical touch until it is lifted from the device.
     </para>
 
     <para>
       On some windowing platforms, multitouch devices perform pointer emulation, this works
       by granting a “pointer emulating” hint to one of the currently interacting touch
-      sequences, which will be reported on every GdkEventTouch event from that sequence. By
-      default, if a widget didn't request touch events by setting GDK_TOUCH_MASK on its
-      event mask and didn't override GtkWidget::touch-event, GTK+ will transform these
-      “pointer emulating” events into semantically similar GdkEventButton and GdkEventMotion
-      events. Depending on GDK_TOUCH_MASK being in the event mask or not, non-pointer-emulating
+      sequences, which will be reported on every #GdkEventTouch event from that sequence. By
+      default, if a widget didn't request touch events by setting %GDK_TOUCH_MASK on its
+      event mask and didn't override #GtkWidget::touch-event, GTK+ will transform these
+      “pointer emulating” events into semantically similar #GdkEventButton and #GdkEventMotion
+      events. Depending on %GDK_TOUCH_MASK being in the event mask or not, non-pointer-emulating
       sequences could still trigger gestures or just get filtered out, regardless of the widget
       not handling those directly.
     </para>
 
     <para>
-      If the widget sets GDK_TOUCH_MASK on its event mask and doesn't chain up on
-      GtkWidget::touch-event, only touch events will be received, and no pointer emulation
+      If the widget sets %GDK_TOUCH_MASK on its event mask and doesn't chain up on
+      #GtkWidget::touch-event, only touch events will be received, and no pointer emulation
       will be performed.
     </para>
   </refsect2>
@@ -258,11 +258,11 @@
     <para>
       Grabs are a method to claim all input events from a device, they happen
       either implicitly on pointer and touch devices, or explicitly. Implicit grabs
-      happen on user interaction, when a GdkEventButtonPress happens, all events from
-      then on, until after the corresponding GdkEventButtonRelease, will be reported
+      happen on user interaction, when a #GdkEventButtonPress happens, all events from
+      then on, until after the corresponding #GdkEventButtonRelease, will be reported
       to the widget that got the first event. Likewise, on touch events, every
-      GdkEventSequence will deliver only events to the widget that received its
-      GDK_TOUCH_BEGIN event.
+      #GdkEventSequence will deliver only events to the widget that received its
+      %GDK_TOUCH_BEGIN event.
     </para>
 
     <para>
@@ -279,8 +279,8 @@
       point somewhere else, even while the pointer/touch device is already grabbed.
       This makes it necessary for widgets to handle the cancellation of any ongoing
       interaction. Depending on whether a GTK or GDK grab is causing this, the
-      widget will respectively receive a GtkWidget::grab-notify signal, or a
-      GdkEventGrabBroken event.
+      widget will respectively receive a #GtkWidget::grab-notify signal, or a
+      #GdkEventGrabBroken event.
     </para>
 
     <para>
@@ -301,7 +301,7 @@
 
     <para>
       Event controllers are standalone objects that can perform specific actions
-      upon received GdkEvents. These are tied to a GtkWidget, and can be told of
+      upon received #GdkEvents. These are tied to a #GtkWidget, and can be told of
       the event propagation phase at which they will manage the events.
     </para>
 
@@ -357,7 +357,7 @@
       Alternatively, or at a later point in time, the widget may choose to deny the touch
       sequences, thus letting those go through again in event propagation. When this happens
       in the capture phase, and if there are no other claiming gestures in the widget,
-      a GDK_TOUCH_BEGIN/GDK_BUTTON_PRESS event will be emulated and
+      a %GDK_TOUCH_BEGIN/%GDK_BUTTON_PRESS event will be emulated and
       propagated downwards, in order to preserve consistency.
     </para>
 
