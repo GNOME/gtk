@@ -129,17 +129,15 @@ close_window (void)
   gtk_main_quit ();
 }
 
-int
-main (int   argc,
-      char *argv[])
+static void
+activate (GtkApplication *app,
+          gpointer        user_data)
 {
   GtkWidget *window;
   GtkWidget *frame;
-  GtkWidget *da;
+  GtkWidget *drawing_area;
 
-  gtk_init (&argc, &argv);
-
-  window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+  window = gtk_application_window_new (app);
   gtk_window_set_title (GTK_WINDOW (window), "Drawing Area");
 
   g_signal_connect (window, "destroy", G_CALLBACK (close_window), NULL);
@@ -150,35 +148,46 @@ main (int   argc,
   gtk_frame_set_shadow_type (GTK_FRAME (frame), GTK_SHADOW_IN);
   gtk_container_add (GTK_CONTAINER (window), frame);
 
-  da = gtk_drawing_area_new ();
+  drawing_area = gtk_drawing_area_new ();
   /* set a minimum size */
-  gtk_widget_set_size_request (da, 100, 100);
+  gtk_widget_set_size_request (drawing_area, 100, 100);
 
-  gtk_container_add (GTK_CONTAINER (frame), da);
+  gtk_container_add (GTK_CONTAINER (frame), drawing_area);
 
   /* Signals used to handle the backing surface */
-  g_signal_connect (da, "draw",
+  g_signal_connect (drawing_area, "draw",
                     G_CALLBACK (draw_cb), NULL);
-  g_signal_connect (da,"configure-event",
+  g_signal_connect (drawing_area,"configure-event",
                     G_CALLBACK (configure_event_cb), NULL);
 
   /* Event signals */
-  g_signal_connect (da, "motion-notify-event",
+  g_signal_connect (drawing_area, "motion-notify-event",
                     G_CALLBACK (motion_notify_event_cb), NULL);
-  g_signal_connect (da, "button-press-event",
+  g_signal_connect (drawing_area, "button-press-event",
                     G_CALLBACK (button_press_event_cb), NULL);
 
   /* Ask to receive events the drawing area doesn't normally
    * subscribe to. In particular, we need to ask for the
    * button press and motion notify events that want to handle.
    */
-  gtk_widget_set_events (da, gtk_widget_get_events (da)
-                             | GDK_BUTTON_PRESS_MASK
-                             | GDK_POINTER_MOTION_MASK);
+  gtk_widget_set_events (drawing_area, gtk_widget_get_events (drawing_area)
+                                     | GDK_BUTTON_PRESS_MASK
+                                     | GDK_POINTER_MOTION_MASK);
 
   gtk_widget_show_all (window);
+}
 
-  gtk_main ();
+int
+main (int    argc,
+      char **argv)
+{
+  GtkApplication *app;
+  int status;
 
-  return 0;
+  app = gtk_application_new ("org.gtk.example", G_APPLICATION_FLAGS_NONE);
+  g_signal_connect (app, "activate", G_CALLBACK (activate), NULL);
+  status = g_application_run (G_APPLICATION (app), argc, argv);
+  g_object_unref (app);
+
+  return status;
 }
