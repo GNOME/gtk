@@ -3081,6 +3081,7 @@ gtk_drag_set_icon_window (GdkDragContext *context,
                           gboolean        destroy_on_release)
 {
   GtkDragSourceInfo *info;
+  GdkDisplay *display;
 
   info = gtk_drag_get_source_info (context, FALSE);
   if (info == NULL)
@@ -3099,6 +3100,19 @@ gtk_drag_set_icon_window (GdkDragContext *context,
   info->hot_x = hot_x;
   info->hot_y = hot_y;
   info->destroy_icon = destroy_on_release;
+
+  display = gdk_window_get_display (gdk_drag_context_get_source_window (context));
+
+#ifdef GDK_WINDOWING_WAYLAND
+  if (GTK_IS_WINDOW (widget) && GDK_IS_WAYLAND_DISPLAY (display))
+    {
+      if (gtk_widget_get_realized (widget))
+        gtk_widget_unrealize (widget);
+
+      gtk_window_set_hardcoded_window (GTK_WINDOW (widget),
+                                       gdk_wayland_drag_context_get_dnd_window (context));
+    }
+#endif
 
   if (widget && info->icon_helper)
     g_clear_object (&info->icon_helper);
@@ -3175,12 +3189,6 @@ set_icon_helper (GdkDragContext *context,
   _gtk_icon_helper_get_size (helper, 
                              gtk_widget_get_style_context (window),
                              &width, &height);
-
-#ifdef GDK_WINDOWING_WAYLAND
-  if (GDK_IS_WAYLAND_DISPLAY (display))
-    gtk_window_set_hardcoded_window (GTK_WINDOW (window),
-                                     gdk_wayland_drag_context_get_dnd_window (context));
-#endif
 
   if (!force_window &&
       gtk_drag_can_use_rgba_cursor (display, width + 2, height + 2))
@@ -3402,12 +3410,6 @@ gtk_drag_set_icon_surface (GdkDragContext  *context,
 
   gtk_window_set_type_hint (GTK_WINDOW (window), GDK_WINDOW_TYPE_HINT_DND);
   set_can_change_screen (window, TRUE);
-
-#ifdef GDK_WINDOWING_WAYLAND
-  if (GDK_IS_WAYLAND_DISPLAY (gdk_screen_get_display (screen)))
-    gtk_window_set_hardcoded_window (GTK_WINDOW (window),
-                                     gdk_wayland_drag_context_get_dnd_window (context));
-#endif
 
   gtk_widget_set_events (window, GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK);
   gtk_widget_set_app_paintable (window, TRUE);
