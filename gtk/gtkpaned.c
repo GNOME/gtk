@@ -1158,9 +1158,9 @@ gtk_paned_get_preferred_size (GtkWidget      *widget,
   GtkPanedPrivate *priv = paned->priv;
 
   if (orientation == priv->orientation)
-    return gtk_paned_get_preferred_size_for_orientation (widget, size, minimum, natural);
+    gtk_paned_get_preferred_size_for_orientation (widget, size, minimum, natural);
   else
-    return gtk_paned_get_preferred_size_for_opposite_orientation (widget, size, minimum, natural);
+    gtk_paned_get_preferred_size_for_opposite_orientation (widget, size, minimum, natural);
 }
 
 static void

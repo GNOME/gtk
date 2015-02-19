@@ -82,7 +82,7 @@ _gtk_css_shorthand_property_query (GtkStyleProperty   *property,
 {
   GtkCssShorthandProperty *shorthand = GTK_CSS_SHORTHAND_PROPERTY (property);
 
-  return shorthand->query (shorthand, value, query_func, query_data);
+  shorthand->query (shorthand, value, query_func, query_data);
 }
 
 static GtkCssValue *

@@ -38,7 +38,7 @@ static inline void
 _gtk_bitmask_free (GtkBitmask *mask)
 {
   if (_gtk_bitmask_is_allocated (mask))
-    return _gtk_allocated_bitmask_free (mask);
+    _gtk_allocated_bitmask_free (mask);
 }
 
 static inline char *
@@ -55,7 +55,7 @@ static inline void
 _gtk_bitmask_print (const GtkBitmask *mask,
                     GString          *string)
 {
-  return _gtk_allocated_bitmask_print (mask, string);
+  _gtk_allocated_bitmask_print (mask, string);
 }
 
 static inline GtkBitmask *
