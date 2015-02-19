@@ -203,51 +203,6 @@
   </section>
 
   <section>
-    <title>Drawing</title>
-
-    <para>Many widgets, like buttons, do all their drawing themselves. You
-    just tell them the label you want to see, and they figure out what font
-    to use, draw the button outline and focus rectangle, etc. Sometimes, it
-    is necessary to do some custom drawing. In that case, a #GtkDrawingArea
-    might be the right widget to use. It offers a canvas on which you can
-    draw by connecting to the #GtkWidget::draw signal.
-    </para>
-
-    <para>The contents of a widget often need to be partially or fully redrawn,
-    e.g. when another window is moved and uncovers part of the widget, or
-    when tie window containing it is resized. It is also possible to explicitly
-    cause part or all of the widget to be redrawn, by calling
-    gtk_widget_queue_draw() or its variants. GTK+ takes care of most of the
-    details by providing a ready-to-use cairo context to the ::draw signal
-    handler.</para>
-
-    <para>The following example shows a ::draw signal handler. It is a bit
-    more complicated than the previous examples, since it also demonstrates
-    input event handling by means of ::button-press and ::motion-notify
-    handlers.</para>
-
-    <informalfigure>
-      <mediaobject>
-        <imageobject>
-          <imagedata fileref="drawing.png" format="PNG"/>
-        </imageobject>
-      </mediaobject>
-    </informalfigure>
-
-    <example id="gtk-getting-started-drawing">
-      <title>Drawing in response to input</title>
-      <para>Create a new file with the following content named example-3.c.</para>
-      <programlisting><xi:include href="../../../../examples/drawing.c" parse="text"><xi:fallback>FIXME: MISSING XINCLUDE CONTENT</xi:fallback></xi:include></programlisting>
-    </example>
-    <para>
-      You can compile the program above with GCC using:
-      <literallayout>
-        <literal>gcc `pkg-config --cflags gtk+-3.0` -o example-3 example-3.c `pkg-config --libs gtk+-3.0`</literal>
-      </literallayout>
-    </para>
-  </section>
-
-  <section>
     <title>Building user interfaces</title>
 
     <para>When construcing a more complicated user interface, with dozens
@@ -1041,4 +996,50 @@ example_app_window_init (ExampleAppWindow *win)
       here.</para>
     </section>
   </section>
+
+  <section>
+    <title>Custom Drawing</title>
+
+    <para>Many widgets, like buttons, do all their drawing themselves. You
+    just tell them the label you want to see, and they figure out what font
+    to use, draw the button outline and focus rectangle, etc. Sometimes, it
+    is necessary to do some custom drawing. In that case, a #GtkDrawingArea
+    might be the right widget to use. It offers a canvas on which you can
+    draw by connecting to the #GtkWidget::draw signal.
+    </para>
+
+    <para>The contents of a widget often need to be partially or fully redrawn,
+    e.g. when another window is moved and uncovers part of the widget, or
+    when tie window containing it is resized. It is also possible to explicitly
+    cause part or all of the widget to be redrawn, by calling
+    gtk_widget_queue_draw() or its variants. GTK+ takes care of most of the
+    details by providing a ready-to-use cairo context to the ::draw signal
+    handler.</para>
+
+    <para>The following example shows a ::draw signal handler. It is a bit
+    more complicated than the previous examples, since it also demonstrates
+    input event handling by means of ::button-press and ::motion-notify
+    handlers.</para>
+
+    <informalfigure>
+      <mediaobject>
+        <imageobject>
+          <imagedata fileref="drawing.png" format="PNG"/>
+        </imageobject>
+      </mediaobject>
+    </informalfigure>
+
+    <example id="gtk-getting-started-drawing">
+      <title>Drawing in response to input</title>
+      <para>Create a new file with the following content named example-3.c.</para>
+      <programlisting><xi:include href="../../../../examples/drawing.c" parse="text"><xi:fallback>FIXME: MISSING XINCLUDE CONTENT</xi:fallback></xi:include></programlisting>
+    </example>
+    <para>
+      You can compile the program above with GCC using:
+      <literallayout>
+        <literal>gcc `pkg-config --cflags gtk+-3.0` -o example-3 example-3.c `pkg-config --libs gtk+-3.0`</literal>
+      </literallayout>
+    </para>
+  </section>
+
 </chapter>
