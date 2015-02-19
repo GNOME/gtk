@@ -215,7 +215,7 @@ _gtk_style_property_query (GtkStyleProperty  *property,
 
   klass = GTK_STYLE_PROPERTY_GET_CLASS (property);
 
-  return klass->query (property, value, query_func, query_data);
+  klass->query (property, value, query_func, query_data);
 }
 
 void
