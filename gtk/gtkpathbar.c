@@ -1849,9 +1849,9 @@ gtk_path_bar_get_info_callback (GCancellable *cancellable,
 }
 
 void
-_gtk_path_bar_set_file (GtkPathBar      *path_bar,
-                        GFile           *file,
-                        const gboolean   keep_trail)
+_gtk_path_bar_set_file (GtkPathBar *path_bar,
+                        GFile      *file,
+                        gboolean    keep_trail)
 {
   struct SetFileInfo *info;
 
