@@ -6424,10 +6424,10 @@ cups_printer_get_hard_margins (GtkPrinter *printer,
     }
   else if (cups_printer->media_margin_default_set)
     {
-      *left = cups_printer->media_left_margin_default;
-      *bottom = cups_printer->media_bottom_margin_default;
-      *right = cups_printer->media_right_margin_default;
-      *top = cups_printer->media_top_margin_default;
+      *left = POINTS_PER_INCH * cups_printer->media_left_margin_default / MM_PER_INCH;
+      *bottom = POINTS_PER_INCH * cups_printer->media_bottom_margin_default / MM_PER_INCH;
+      *right = POINTS_PER_INCH * cups_printer->media_right_margin_default / MM_PER_INCH;
+      *top = POINTS_PER_INCH * cups_printer->media_top_margin_default / MM_PER_INCH;
       result = TRUE;
     }
 
