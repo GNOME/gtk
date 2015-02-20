@@ -2464,12 +2464,9 @@ gtk_scrolled_window_allocate_child (GtkScrolledWindow *swindow,
 				    GtkAllocation     *relative_allocation)
 {
   GtkWidget     *widget = GTK_WIDGET (swindow), *child;
-  GtkAllocation  allocation;
   GtkAllocation  child_allocation;
 
   child = gtk_bin_get_child (GTK_BIN (widget));
-
-  gtk_widget_get_allocation (widget, &allocation);
 
   gtk_scrolled_window_relative_allocation (widget, relative_allocation);
 
