@@ -231,7 +231,7 @@ row_activated (GtkTreeView *tv,
 
   gtk_widget_show (popover);
 
-  g_signal_connect (popover, "hide", G_CALLBACK (gtk_widget_destroy), NULL);
+  g_signal_connect (popover, "unmap", G_CALLBACK (gtk_widget_destroy), NULL);
 
   g_free (name);
 }
