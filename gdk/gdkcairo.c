@@ -202,6 +202,7 @@ gdk_cairo_set_source_pixbuf (cairo_t         *cr,
   cairo_format_t format;
   cairo_surface_t *surface;
   static const cairo_user_data_key_t key;
+  cairo_status_t status;
   int j;
 
   if (n_channels == 3)
@@ -215,8 +216,13 @@ gdk_cairo_set_source_pixbuf (cairo_t         *cr,
                                                  format,
                                                  width, height, cairo_stride);
 
-  cairo_surface_set_user_data (surface, &key,
-			       cairo_pixels, (cairo_destroy_func_t)g_free);
+  status = cairo_surface_set_user_data (surface, &key,
+                                        cairo_pixels, (cairo_destroy_func_t)g_free);
+  if (status != CAIRO_STATUS_SUCCESS)
+    {
+      g_free (cairo_pixels);
+      goto out;
+    }
 
   for (j = height; j; j--)
     {
@@ -274,6 +280,7 @@ gdk_cairo_set_source_pixbuf (cairo_t         *cr,
       cairo_pixels += cairo_stride;
     }
 
+out:
   cairo_set_source_surface (cr, surface, pixbuf_x, pixbuf_y);
   cairo_surface_destroy (surface);
 }
