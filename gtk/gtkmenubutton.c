@@ -442,10 +442,16 @@ gtk_menu_button_button_press_event (GtkWidget      *widget,
 
   if (event->button == GDK_BUTTON_PRIMARY)
     {
-      if (priv->menu)
+      /* Filter out double/triple clicks */
+      if (event->type != GDK_BUTTON_PRESS)
+        return TRUE;
+
+      if (priv->menu && !gtk_widget_get_visible (priv->menu))
         popup_menu (menu_button, event);
-      else if (priv->popover)
+      else if (priv->popover && !gtk_widget_get_visible (priv->popover))
         gtk_widget_show (priv->popover);
+      else
+        return TRUE;
 
       gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (widget), TRUE);
 
