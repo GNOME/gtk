@@ -410,6 +410,9 @@ gtk_css_animated_style_new (GtkCssStyle             *base_style,
   gtk_internal_return_val_if_fail (GTK_IS_STYLE_PROVIDER (provider), NULL);
   gtk_internal_return_val_if_fail (previous_style == NULL || GTK_IS_CSS_STYLE (previous_style), NULL);
 
+  if (timestamp == 0)
+    return g_object_ref (base_style);
+
   animations = NULL;
 
   if (previous_style != NULL)
@@ -441,6 +444,9 @@ gtk_css_animated_style_new_advance (GtkCssAnimatedStyle *source,
   gtk_internal_return_val_if_fail (GTK_IS_CSS_ANIMATED_STYLE (source), NULL);
   gtk_internal_return_val_if_fail (GTK_IS_CSS_STYLE (base), NULL);
   
+  if (timestamp == 0)
+    return g_object_ref (source->style);
+
   animations = NULL;
   for (l = source->animations; l; l = l->next)
     {
