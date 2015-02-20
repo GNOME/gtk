@@ -89,7 +89,6 @@ gtk_css_widget_node_should_create_transitions (GtkCssWidgetNode *widget_node,
                                                GtkCssStyle      *previous_style)
 {
   GtkWidget *widget;
-  gboolean animate;
 
   widget = widget_node->widget;
   if (widget == NULL)
@@ -101,11 +100,7 @@ gtk_css_widget_node_should_create_transitions (GtkCssWidgetNode *widget_node,
   if (previous_style == gtk_css_static_style_get_default ())
     return FALSE;
 
-  g_object_get (gtk_widget_get_settings (widget),
-                "gtk-enable-animations", &animate,
-                NULL);
-
-  return animate;
+  return TRUE;
 }
 
 static gboolean
@@ -306,8 +301,15 @@ static GdkFrameClock *
 gtk_css_widget_node_get_frame_clock (GtkCssNode *node)
 {
   GtkCssWidgetNode *widget_node = GTK_CSS_WIDGET_NODE (node);
+  gboolean animate;
 
   if (widget_node->widget == NULL)
+    return NULL;
+
+  g_object_get (gtk_widget_get_settings (widget_node->widget),
+                "gtk-enable-animations", &animate,
+                NULL);
+  if (animate == FALSE)
     return NULL;
 
   return gtk_widget_get_frame_clock (widget_node->widget);
