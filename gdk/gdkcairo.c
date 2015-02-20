@@ -185,6 +185,9 @@ gdk_cairo_surface_paint_pixbuf (cairo_surface_t *surface,
   int n_channels;
   int j;
 
+  if (cairo_surface_status (surface) != CAIRO_STATUS_SUCCESS)
+    return;
+
   /* This function can't just copy any pixbuf to any surface, be
    * sure to read the invariants here before calling it */
 

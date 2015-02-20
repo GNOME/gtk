@@ -18,10 +18,11 @@ LDADD = 				\
 #TEST_PROGS              += check-gdk-cairo
 
 TEST_PROGS += 				\
-	rgba				\
-	encoding			\
+	cairo				\
 	display				\
+	encoding			\
 	keysyms				\
+	rgba				\
 	$(NULL)
 
 CLEANFILES = 			\
