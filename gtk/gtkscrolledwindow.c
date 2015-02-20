@@ -2494,7 +2494,7 @@ gtk_scrolled_window_allocate_scrollbar (GtkScrolledWindow *scrolled_window,
 
   priv = scrolled_window->priv;
 
-  gtk_scrolled_window_allocate_child (scrolled_window, &content_allocation);
+  gtk_scrolled_window_relative_allocation (widget, &content_allocation);
   sb_spacing = _gtk_scrolled_window_get_scrollbar_spacing (scrolled_window);
   gtk_widget_get_preferred_height (priv->hscrollbar, &sb_height, NULL);
   gtk_widget_get_preferred_width (priv->vscrollbar, &sb_width, NULL);
