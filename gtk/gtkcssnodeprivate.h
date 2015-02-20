@@ -148,8 +148,7 @@ void                    gtk_css_node_invalidate_frame_clock
                                                          gboolean               just_timestamp);
 void                    gtk_css_node_invalidate         (GtkCssNode            *cssnode,
                                                          GtkCssChange           change);
-void                    gtk_css_node_validate           (GtkCssNode            *cssnode,
-                                                         gint64                 timestamp);
+void                    gtk_css_node_validate           (GtkCssNode            *cssnode);
 void                    gtk_css_node_set_invalid        (GtkCssNode            *node,
                                                          gboolean               invalid);
 

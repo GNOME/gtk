@@ -824,8 +824,8 @@ gtk_css_node_invalidate (GtkCssNode   *cssnode,
 }
 
 void
-gtk_css_node_validate (GtkCssNode            *cssnode,
-                       gint64                 timestamp)
+gtk_css_node_validate_internal (GtkCssNode *cssnode,
+                                gint64      timestamp)
 {
   GtkCssNode *child;
   GtkCssStyle *new_style;
@@ -873,8 +873,18 @@ gtk_css_node_validate (GtkCssNode            *cssnode,
        child = gtk_css_node_get_next_sibling (child))
     {
       if (child->visible)
-        gtk_css_node_validate (child, timestamp);
+        gtk_css_node_validate_internal (child, timestamp);
     }
+}
+
+void
+gtk_css_node_validate (GtkCssNode *cssnode)
+{
+  gint64 timestamp;
+
+  timestamp = gtk_css_node_get_timestamp (cssnode);
+
+  gtk_css_node_validate_internal (cssnode, timestamp);
 }
 
 gboolean

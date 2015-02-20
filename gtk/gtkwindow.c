@@ -5847,8 +5847,7 @@ gtk_window_show (GtkWidget *widget)
 
   need_resize = _gtk_widget_get_alloc_needed (widget) || !gtk_widget_get_realized (widget);
 
-  gtk_css_node_validate (gtk_widget_get_css_node (widget),
-                         g_get_monotonic_time ());
+  gtk_css_node_validate (gtk_widget_get_css_node (widget));
 
   if (need_resize)
     {
