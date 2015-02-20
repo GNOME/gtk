@@ -2424,36 +2424,6 @@ gtk_style_context_do_invalidate (GtkStyleContext  *context,
   priv->invalidating_context = NULL;
 }
 
-gboolean
-gtk_style_context_should_create_transitions (GtkStyleContext *context,
-                                             GtkCssStyle     *previous_style)
-{
-  GtkStyleContextPrivate *priv;
-  GtkWidget *widget;
-  gboolean animate;
-
-  priv = context->priv;
-
-  if (GTK_IS_CSS_WIDGET_NODE (priv->cssnode))
-    return FALSE;
-
-  widget = gtk_css_widget_node_get_widget (GTK_CSS_WIDGET_NODE (priv->cssnode));
-  if (widget == NULL)
-    return FALSE;
-
-  if (!gtk_widget_get_mapped (widget))
-    return FALSE;
-
-  if (previous_style == gtk_css_static_style_get_default ())
-    return FALSE;
-
-  g_object_get (gtk_widget_get_settings (widget),
-                "gtk-enable-animations", &animate,
-                NULL);
-
-  return animate;
-}
-
 void
 gtk_style_context_validate (GtkStyleContext  *context,
                             const GtkBitmask *changes)

@@ -85,6 +85,30 @@ gtk_css_widget_node_dequeue_validate (GtkCssNode *node)
 }
 
 static gboolean
+gtk_css_widget_node_should_create_transitions (GtkCssWidgetNode *widget_node,
+                                               GtkCssStyle      *previous_style)
+{
+  GtkWidget *widget;
+  gboolean animate;
+
+  widget = widget_node->widget;
+  if (widget == NULL)
+    return FALSE;
+
+  if (!gtk_widget_get_mapped (widget))
+    return FALSE;
+
+  if (previous_style == gtk_css_static_style_get_default ())
+    return FALSE;
+
+  g_object_get (gtk_widget_get_settings (widget),
+                "gtk-enable-animations", &animate,
+                NULL);
+
+  return animate;
+}
+
+static gboolean
 gtk_css_static_style_needs_revalidate (GtkCssStaticStyle  *style,
                                        GtkCssChange        change)
 {
@@ -149,7 +173,7 @@ gtk_css_widget_node_validate (GtkCssNode       *node,
                                               parent ? gtk_css_node_get_style (parent) : NULL,
                                               timestamp,
                                               gtk_css_node_get_style_provider (node),
-                                              gtk_style_context_should_create_transitions (context, style) ? style : NULL);
+                                              gtk_css_widget_node_should_create_transitions (widget_node, style) ? style : NULL);
       
       g_object_unref (new_static_style);
     }
