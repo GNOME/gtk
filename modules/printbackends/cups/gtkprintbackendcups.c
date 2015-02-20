@@ -2614,15 +2614,10 @@ cups_request_printer_info_cb (GtkPrintBackendCups *cups_backend,
           set_info_state_message (info);
 
           printer = gtk_print_backend_find_printer (backend, info->printer_name);
-          if (printer != NULL &&
-              GTK_PRINTER_CUPS (printer)->ppd_file == NULL)
-            {
-              g_object_ref (printer);
-            }
+          if (printer != NULL)
+            g_object_ref (printer);
           else
-            {
-              goto done;
-            }
+            goto done;
 
           if (info->got_printer_type &&
               info->default_printer &&
@@ -3647,23 +3642,7 @@ cups_request_ppd_cb (GtkPrintBackendCups *print_backend,
   GTK_PRINTER_CUPS (printer)->reading_ppd = FALSE;
   print_backend->reading_ppds--;
 
-#ifdef HAVE_CUPS_API_1_6
-  fstat (g_io_channel_unix_get_fd (data->ppd_io), &data_info);
-  /* Standalone Avahi printers and raw printers don't have PPD files or have
-     empty PPD files. Try to get printer details via IPP. */
-  if (data_info.st_size == 0 ||
-      (gtk_cups_result_is_error (result) &&
-       (GTK_PRINTER_CUPS (printer)->avahi_browsed ||
-        ((gtk_cups_result_get_error_type (result) == GTK_CUPS_ERROR_HTTP) &&
-         (gtk_cups_result_get_error_status (result) == HTTP_NOT_FOUND)))))
-    {
-      cups_request_printer_info (GTK_PRINTER_CUPS (printer)->printer_uri,
-                                 GTK_PRINTER_CUPS (printer)->hostname,
-                                 GTK_PRINTER_CUPS (printer)->port,
-                                 GTK_PRINT_BACKEND_CUPS (gtk_printer_get_backend (printer)));
-      goto done;
-    }
-#else
+#ifndef HAVE_CUPS_API_1_6
   if (gtk_cups_result_is_error (result))
     {
       gboolean success = FALSE;
@@ -3683,12 +3662,36 @@ cups_request_ppd_cb (GtkPrintBackendCups *print_backend,
     }
 #endif
 
+  if (!gtk_cups_result_is_error (result))
+    {
+      /* let ppdOpenFd take over the ownership of the open file */
+      g_io_channel_seek_position (data->ppd_io, 0, G_SEEK_SET, NULL);
+      data->printer->ppd_file = ppdOpenFd (dup (g_io_channel_unix_get_fd (data->ppd_io)));
+      ppdLocalize (data->printer->ppd_file);
+      ppdMarkDefaults (data->printer->ppd_file);
+    }
 
-  /* let ppdOpenFd take over the ownership of the open file */
-  g_io_channel_seek_position (data->ppd_io, 0, G_SEEK_SET, NULL);
-  data->printer->ppd_file = ppdOpenFd (dup (g_io_channel_unix_get_fd (data->ppd_io)));
-  ppdLocalize (data->printer->ppd_file);
-  ppdMarkDefaults (data->printer->ppd_file);
+#ifdef HAVE_CUPS_API_1_6
+  fstat (g_io_channel_unix_get_fd (data->ppd_io), &data_info);
+  /*
+   * Standalone Avahi printers and raw printers don't have PPD files or have
+   * empty PPD files. Try to get printer details via IPP.
+   * Always do this for Avahi printers.
+   */
+  if (data_info.st_size == 0 ||
+      GTK_PRINTER_CUPS (printer)->avahi_browsed ||
+      (gtk_cups_result_is_error (result) &&
+       ((gtk_cups_result_get_error_type (result) == GTK_CUPS_ERROR_HTTP) &&
+         (gtk_cups_result_get_error_status (result) == HTTP_NOT_FOUND))))
+    {
+      cups_request_printer_info (GTK_PRINTER_CUPS (printer)->printer_uri,
+                                 GTK_PRINTER_CUPS (printer)->hostname,
+                                 GTK_PRINTER_CUPS (printer)->port,
+                                 GTK_PRINT_BACKEND_CUPS (gtk_printer_get_backend (printer)));
+
+      goto done;
+    }
+#endif
 
   gtk_printer_set_has_details (printer, TRUE);
   g_signal_emit_by_name (printer, "details-acquired", TRUE);
