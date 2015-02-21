@@ -726,7 +726,7 @@ wndproc (HWND   hwnd,
 	  GtkStatusIconPrivate *priv = status_icon->priv;
 
 	  priv->nid.hWnd = hwnd;
-	  priv->nid.uID = GPOINTER_TO_UINT (status_icon);
+	  priv->nid.uID = status_icon_id++;
 	  priv->nid.uCallbackMessage = WM_GTK_TRAY_NOTIFICATION;
 	  priv->nid.uFlags = NIF_MESSAGE;
 
