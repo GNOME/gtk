@@ -579,6 +579,9 @@ gtk_css_node_propagate_pending_changes (GtkCssNode *cssnode,
   if (style_changed)
     change |= GTK_CSS_CHANGE_PARENT_STYLE;
 
+  if (!cssnode->invalid && change == 0)
+    return;
+
   for (child = gtk_css_node_get_first_child (cssnode);
        child;
        child = gtk_css_node_get_next_sibling (child))
