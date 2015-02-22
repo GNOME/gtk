@@ -11,8 +11,8 @@ msgstr ""
 "Project-Id-Version: gtk+-properties master\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gtk"
 "%2b&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2015-02-18 10:16+0000\n"
-"PO-Revision-Date: 2015-02-18 23:02+0100\n"
+"POT-Creation-Date: 2015-02-22 19:45+0000\n"
+"PO-Revision-Date: 2015-02-22 22:18+0100\n"
 "Last-Translator: Balázs Úr <urbalazs@gmail.com>\n"
 "Language-Team: Hungarian <openscope at googlegroups dot com>\n"
 "Language: hu\n"
@@ -1304,7 +1304,7 @@ msgstr ""
 "elejére vagy végére mutat"
 
 #: ../gtk/gtkactionbar.c:257 ../gtk/gtkbox.c:336 ../gtk/gtkheaderbar.c:1854
-#: ../gtk/gtknotebook.c:775 ../gtk/gtkpaned.c:337 ../gtk/gtkpopover.c:1387
+#: ../gtk/gtknotebook.c:775 ../gtk/gtkpaned.c:337 ../gtk/gtkpopover.c:1594
 #: ../gtk/gtkpopovermenu.c:375 ../gtk/gtkstack.c:471
 #: ../gtk/gtktoolitemgroup.c:1674
 msgid "Position"
@@ -1383,11 +1383,11 @@ msgstr "Alap elem megjelenítése"
 msgid "Whether the combobox should show the default application on top"
 msgstr "A legördülő lista tetején megjelenjen-e az alap alkalmazás"
 
-#: ../gtk/gtkappchooserbutton.c:646 ../gtk/gtkappchooserdialog.c:678
+#: ../gtk/gtkappchooserbutton.c:646 ../gtk/gtkappchooserdialog.c:683
 msgid "Heading"
 msgstr "Címsor"
 
-#: ../gtk/gtkappchooserbutton.c:647 ../gtk/gtkappchooserdialog.c:679
+#: ../gtk/gtkappchooserbutton.c:647 ../gtk/gtkappchooserdialog.c:684
 msgid "The text to show at the top of the dialog"
 msgstr "A párbeszédablak tetején megjelenítendő szöveg"
 
@@ -1399,11 +1399,11 @@ msgstr "Tartalom típusa"
 msgid "The content type used by the open with object"
 msgstr "A megnyitás ezzel objektum által használt tartalomtípus"
 
-#: ../gtk/gtkappchooserdialog.c:664
+#: ../gtk/gtkappchooserdialog.c:669
 msgid "GFile"
 msgstr "GFile"
 
-#: ../gtk/gtkappchooserdialog.c:665
+#: ../gtk/gtkappchooserdialog.c:670
 msgid "The GFile used by the app chooser dialog"
 msgstr "Az alkalmazásválasztó párbeszédablak által használt GFile"
 
@@ -4116,7 +4116,6 @@ msgid "Auto render"
 msgstr "Automatikus megjelenítés"
 
 #: ../gtk/gtkglarea.c:745
-#| msgid "Whether the gl area renders on each redraw"
 msgid "Whether the GtkGLArea renders on each redraw"
 msgstr "A GtkGLArea jelenjen-e meg minden újrarajzoláskor"
 
@@ -4125,7 +4124,6 @@ msgid "Has alpha"
 msgstr "Van alfája"
 
 #: ../gtk/gtkglarea.c:766
-#| msgid "Whether the gl area color buffer has an alpha component"
 msgid "Whether the color buffer has an alpha component"
 msgstr "A színpuffernek van-e alfa összetevője"
 
@@ -4744,51 +4742,51 @@ msgstr "Belső térköz"
 msgid "Amount of border space between the menubar shadow and the menu items"
 msgstr "A menüsor árnyéka és a menüelemek közötti szegélyterület"
 
-#: ../gtk/gtkmenubutton.c:512
+#: ../gtk/gtkmenubutton.c:518
 msgid "Popup"
 msgstr "Felbukkanó"
 
-#: ../gtk/gtkmenubutton.c:513
+#: ../gtk/gtkmenubutton.c:519
 msgid "The dropdown menu."
 msgstr "A legördülő menü."
 
-#: ../gtk/gtkmenubutton.c:532
+#: ../gtk/gtkmenubutton.c:538
 msgid "Menu model"
 msgstr "Menümodell"
 
-#: ../gtk/gtkmenubutton.c:533
+#: ../gtk/gtkmenubutton.c:539
 msgid "The model from which the popup is made."
 msgstr "A modell, amelyből a felbukkanó készül."
 
-#: ../gtk/gtkmenubutton.c:546
+#: ../gtk/gtkmenubutton.c:552
 msgid "Align with"
 msgstr "Igazítás ehhez"
 
-#: ../gtk/gtkmenubutton.c:547
+#: ../gtk/gtkmenubutton.c:553
 msgid "The parent widget which the menu should align with."
 msgstr "Szülő felületi elem, amelyhez a menüt igazítani kell"
 
-#: ../gtk/gtkmenubutton.c:561 ../gtk/gtkstylecontext.c:257
+#: ../gtk/gtkmenubutton.c:567 ../gtk/gtkstylecontext.c:257
 msgid "Direction"
 msgstr "Irány"
 
-#: ../gtk/gtkmenubutton.c:562
+#: ../gtk/gtkmenubutton.c:568
 msgid "The direction the arrow should point."
 msgstr "Az irány, amerre a nyílnak mutatnia kell."
 
-#: ../gtk/gtkmenubutton.c:578
+#: ../gtk/gtkmenubutton.c:584
 msgid "Use a popover"
 msgstr "Popover használata"
 
-#: ../gtk/gtkmenubutton.c:579
+#: ../gtk/gtkmenubutton.c:585
 msgid "Use a popover instead of a menu"
 msgstr "Popover használata menü helyett"
 
-#: ../gtk/gtkmenubutton.c:593
+#: ../gtk/gtkmenubutton.c:599
 msgid "Popover"
 msgstr "Popover"
 
-#: ../gtk/gtkmenubutton.c:594
+#: ../gtk/gtkmenubutton.c:600
 msgid "The popover"
 msgstr "a popover"
 
@@ -5435,33 +5433,43 @@ msgstr "Foglalat ablaka"
 msgid "The window of the socket the plug is embedded in"
 msgstr "A foglalat ablaka, amelybe a csatoló be van ágyazva"
 
-#: ../gtk/gtkpopover.c:1359
+#: ../gtk/gtkpopover.c:1566
 msgid "Relative to"
 msgstr "Ehhez viszonyítva"
 
-#: ../gtk/gtkpopover.c:1360
+#: ../gtk/gtkpopover.c:1567
 msgid "Widget the bubble window points to"
 msgstr "Felületi elem, amelyre a buborékablak mutat"
 
-#: ../gtk/gtkpopover.c:1373
+#: ../gtk/gtkpopover.c:1580
 msgid "Pointing to"
 msgstr "Erre mutatva"
 
-#: ../gtk/gtkpopover.c:1374
+#: ../gtk/gtkpopover.c:1581
 msgid "Rectangle the bubble window points to"
 msgstr "Téglalap, amelyre a buborékablak mutat"
 
-#: ../gtk/gtkpopover.c:1388
+#: ../gtk/gtkpopover.c:1595
 msgid "Position to place the bubble window"
 msgstr "Pozíció, ahova a buborékablak kerül"
 
-#: ../gtk/gtkpopover.c:1403 ../gtk/gtkwindow.c:753
+#: ../gtk/gtkpopover.c:1610 ../gtk/gtkwindow.c:753
 msgid "Modal"
 msgstr "Kizárólagos"
 
-#: ../gtk/gtkpopover.c:1404
+#: ../gtk/gtkpopover.c:1611
 msgid "Whether the popover is modal"
 msgstr "A popover kizárólagos-e"
+
+#: ../gtk/gtkpopover.c:1625
+#| msgid "Transition type"
+msgid "Transitions enabled"
+msgstr "Átmenetek engedélyezve"
+
+#: ../gtk/gtkpopover.c:1626
+#| msgid "Whether the action is enabled."
+msgid "Whether show/hide transitions are enabled or not"
+msgstr "A megjelenítés/elrejtés átmenetek engedélyezve vannak-e vagy sem"
 
 #: ../gtk/gtkpopovermenu.c:350
 msgid "Visible submenu"
