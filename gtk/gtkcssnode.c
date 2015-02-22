@@ -35,7 +35,7 @@ gtk_css_node_get_style_provider_or_null (GtkCssNode *cssnode)
   return GTK_CSS_NODE_GET_CLASS (cssnode)->get_style_provider (cssnode);
 }
 
-void
+static void
 gtk_css_node_set_invalid (GtkCssNode *node,
                           gboolean    invalid)
 {
@@ -295,13 +295,9 @@ gtk_css_node_real_dequeue_validate (GtkCssNode *node)
 {
 }
 
-static GtkCssStyle *
-gtk_css_node_real_validate (GtkCssNode       *cssnode,
-                            GtkCssStyle      *current_style,
-                            gint64            timestamp,
-                            GtkCssChange      change)
+static void
+gtk_css_node_real_validate (GtkCssNode *node)
 {
-  return NULL;
 }
 
 gboolean
@@ -876,8 +872,6 @@ gtk_css_node_validate_internal (GtkCssNode *cssnode,
                                 gint64      timestamp)
 {
   GtkCssNode *child;
-  GtkCssStyle *new_style;
-  gboolean changed;
 
   /* If you run your application with
    *   GTK_DEBUG=no-css-cache
@@ -894,27 +888,18 @@ gtk_css_node_validate_internal (GtkCssNode *cssnode,
   if (G_UNLIKELY (gtk_get_debug_flags () & GTK_DEBUG_NO_CSS_CACHE))
     cssnode->pending_changes |= GTK_CSS_CHANGE_ANY;
 
-  if (!cssnode->invalid && cssnode->pending_changes == 0)
+  if (!cssnode->invalid)
     return;
 
+  gtk_css_node_ensure_style (cssnode, timestamp);
+
+  /* need to set to FALSE then to TRUE here to make it chain up */
   gtk_css_node_set_invalid (cssnode, FALSE);
+  if (GTK_IS_CSS_ANIMATED_STYLE (cssnode->style) &&
+      !gtk_css_animated_style_is_static (GTK_CSS_ANIMATED_STYLE (cssnode->style)))
+    gtk_css_node_set_invalid (cssnode, TRUE);
 
-  cssnode->style_is_invalid = FALSE;
-
-  new_style = GTK_CSS_NODE_GET_CLASS (cssnode)->validate (cssnode, cssnode->style, timestamp, cssnode->pending_changes);
-  if (new_style)
-    {
-      gtk_css_node_set_style (cssnode, new_style);
-      g_object_unref (new_style);
-      changed = TRUE;
-    }
-  else
-    {
-      changed = FALSE;
-    }
-
-  gtk_css_node_propagate_pending_changes (cssnode, changed);
-  cssnode->pending_changes = 0;
+  GTK_CSS_NODE_GET_CLASS (cssnode)->validate (cssnode);
 
   for (child = gtk_css_node_get_first_child (cssnode);
        child;
