@@ -461,6 +461,7 @@ check_compact_table (GtkIMContextSimple           *context_simple,
   GTK_NOTE (MISC, g_print ("compact: %d ", *seq_index));
   seq = NULL;
   match = FALSE;
+  value = 0;
 
   for (i = n_compose - 1; i < table->max_seq_len; i++)
     {
