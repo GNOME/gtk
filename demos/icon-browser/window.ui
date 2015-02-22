@@ -109,6 +109,7 @@
                     <property name="visible">True</property>
                     <property name="model">filter_model</property>
                     <property name="selection-mode">none</property>
+                    <property name="activate-on-single-click">True</property>
                     <signal name="item_activated" handler="item_activated"/>
                     <child>
                       <object class="GtkCellRendererPixbuf" id="cell">
