@@ -58,11 +58,31 @@ search_text_changed (GtkEntry *entry, IconBrowserWindow *win)
   gtk_tree_model_filter_refilter (win->filter_model);
 }
 
+static GdkPixbuf *
+get_icon (GtkWidget *image, const gchar *name, gint size)
+{
+  GtkIconInfo *info;
+  GtkStyleContext *context;
+  GdkPixbuf *pixbuf;
+
+  context = gtk_widget_get_style_context (image);
+  info = gtk_icon_theme_lookup_icon (gtk_icon_theme_get_default (), name, size, 0);
+  pixbuf = gtk_icon_info_load_symbolic_for_context (info, context, NULL, NULL);
+  g_object_unref (info);
+
+  return pixbuf;
+}
+
 static void
 set_image (GtkWidget *image, const gchar *name, gint size)
 {
+  GdkPixbuf *pixbuf;
+
   gtk_image_set_from_icon_name (GTK_IMAGE (image), name, 1);
   gtk_image_set_pixel_size (GTK_IMAGE (image), size);
+  pixbuf = get_icon (image, name, size);
+  gtk_drag_source_set_icon_pixbuf (gtk_widget_get_parent (image), pixbuf);
+  g_object_unref (pixbuf);
 }
 
 static void
@@ -83,7 +103,7 @@ item_activated (GtkIconView *icon_view, GtkTreePath *path, IconBrowserWindow *wi
                       column, &name,
                       ICON_STORE_DESCRIPTION_COLUMN, &description,
                       -1);
-      
+
   if (name == NULL || !gtk_icon_theme_has_icon (gtk_icon_theme_get_default (), name))
     {
       g_free (description);
@@ -741,6 +761,40 @@ search_mode_toggled (GObject *searchbar, GParamSpec *pspec, IconBrowserWindow *w
 }
 
 static void
+get_image_data (GtkWidget        *widget,
+                GdkDragContext   *context,
+                GtkSelectionData *selection,
+                guint             target_info,
+                guint             time,
+                gpointer          data)
+{
+  GtkWidget *image;
+  const gchar *name;
+  gint size;
+  GdkPixbuf *pixbuf;
+
+  image = gtk_bin_get_child (GTK_BIN (widget));
+
+  gtk_image_get_icon_name (GTK_IMAGE (image), &name, NULL);
+  size = gtk_image_get_pixel_size (GTK_IMAGE (image));
+
+  pixbuf = get_icon (image, name, size);
+  gtk_selection_data_set_pixbuf (selection, pixbuf);
+  g_object_unref (pixbuf);
+}
+
+static void
+setup_image_dnd (GtkWidget *image)
+{
+  GtkWidget *parent;
+
+  parent = gtk_widget_get_parent (image);
+  gtk_drag_source_set (parent, GDK_BUTTON1_MASK, NULL, 0, GDK_ACTION_COPY);
+  gtk_drag_source_add_image_targets (parent);
+  g_signal_connect (parent, "drag-data-get", G_CALLBACK (get_image_data), NULL);
+}
+
+static void
 icon_browser_window_init (IconBrowserWindow *win)
 {
   GtkTargetList *list;
@@ -760,6 +814,12 @@ icon_browser_window_init (IconBrowserWindow *win)
                                           GDK_ACTION_COPY);
 
   gtk_target_table_free (targets, n_targets);
+
+  setup_image_dnd (win->image1);
+  setup_image_dnd (win->image2);
+  setup_image_dnd (win->image3);
+  setup_image_dnd (win->image4);
+  setup_image_dnd (win->image5);
 
   win->contexts = g_hash_table_new_full (g_str_hash, g_str_equal, NULL, g_free);
 
