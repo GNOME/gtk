@@ -72,11 +72,6 @@ set_image (GtkWidget *image, const gchar *name, gint size)
 }
 
 static void
-selection_changed (GtkIconView *icon_view, IconBrowserWindow *win)
-{
-}
-
-static void
 item_activated (GtkIconView *icon_view, GtkTreePath *path, IconBrowserWindow *win)
 {
   GtkTreeIter iter;
@@ -759,7 +754,6 @@ icon_browser_window_init (IconBrowserWindow *win)
   gtk_tree_model_filter_set_visible_func (win->filter_model, icon_visible_func, win, NULL);
   gtk_window_set_transient_for (GTK_WINDOW (win->details), GTK_WINDOW (win));
 
-
   g_signal_connect (win->searchbar, "notify::search-mode-enabled",
                     G_CALLBACK (search_mode_toggled), win);
 
@@ -794,7 +788,6 @@ icon_browser_window_class_init (IconBrowserWindowClass *class)
   gtk_widget_class_bind_template_child (GTK_WIDGET_CLASS (class), IconBrowserWindow, description);
 
   gtk_widget_class_bind_template_callback (GTK_WIDGET_CLASS (class), search_text_changed);
-  gtk_widget_class_bind_template_callback (GTK_WIDGET_CLASS (class), selection_changed);
   gtk_widget_class_bind_template_callback (GTK_WIDGET_CLASS (class), item_activated);
   gtk_widget_class_bind_template_callback (GTK_WIDGET_CLASS (class), selected_context_changed);
   gtk_widget_class_bind_template_callback (GTK_WIDGET_CLASS (class), symbolic_toggled);

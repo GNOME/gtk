@@ -108,7 +108,7 @@
                   <object class="GtkIconView" id="list">
                     <property name="visible">True</property>
                     <property name="model">filter_model</property>
-                    <signal name="selection_changed" handler="selection_changed"/>
+                    <property name="selection-mode">none</property>
                     <signal name="item_activated" handler="item_activated"/>
                     <child>
                       <object class="GtkCellRendererPixbuf" id="cell">
