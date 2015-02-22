@@ -34,6 +34,7 @@
 #include "gtkadjustmentprivate.h"
 #include "gtkcolorscaleprivate.h"
 #include "gtkintl.h"
+#include "gtkgesturelongpressprivate.h"
 #include "gtkmain.h"
 #include "gtkmarshalers.h"
 #include "gtkorientableprivate.h"
@@ -782,6 +783,7 @@ gtk_range_init (GtkRange *range)
                     G_CALLBACK (gtk_range_multipress_gesture_released), range);
 
   priv->long_press_gesture = gtk_gesture_long_press_new (GTK_WIDGET (range));
+  g_object_set (priv->long_press_gesture, "delay-factor", 2.0, NULL);
   gtk_gesture_group (priv->drag_gesture, priv->long_press_gesture);
   g_signal_connect (priv->long_press_gesture, "pressed",
                     G_CALLBACK (gtk_range_long_press_gesture_pressed), range);
