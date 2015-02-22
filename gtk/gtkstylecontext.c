@@ -2386,22 +2386,6 @@ gtk_style_context_pop_animatable_region (GtkStyleContext *context)
 }
 
 static void
-gtk_style_context_clear_cache (GtkStyleContext *context)
-{
-  GtkStyleContextPrivate *priv;
-  GSList *l;
-
-  priv = context->priv;
-
-  for (l = priv->saved_nodes; l; l = l->next)
-    {
-      gtk_css_node_set_style (l->data, NULL);
-    }
-
-  gtk_style_context_clear_property_cache (context);
-}
-
-static void
 gtk_style_context_do_invalidate (GtkStyleContext  *context,
                                  const GtkBitmask *changes)
 {
@@ -2450,18 +2434,10 @@ void
 gtk_style_context_invalidate (GtkStyleContext *context)
 {
   GtkBitmask *changes;
-  GtkCssStyle *style;
-  GtkCssNode *root;
 
   g_return_if_fail (GTK_IS_STYLE_CONTEXT (context));
 
-  gtk_style_context_clear_cache (context);
-  gtk_css_node_set_style (context->priv->cssnode, NULL);
-
-  root = gtk_style_context_get_root (context);
-  style = gtk_css_node_create_style (root);
-  gtk_css_node_set_style (root, style);
-  g_object_unref (style);
+  gtk_style_context_clear_property_cache (context);
 
   changes = _gtk_bitmask_new ();
   changes = _gtk_bitmask_invert_range (changes,

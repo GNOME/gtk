@@ -592,7 +592,7 @@ gtk_css_node_get_next_sibling (GtkCssNode *cssnode)
   return cssnode->next_sibling;
 }
 
-void
+static void
 gtk_css_node_set_style (GtkCssNode  *cssnode,
                         GtkCssStyle *style)
 {
