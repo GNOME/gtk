@@ -873,7 +873,7 @@ _gdk_quartz_display_create_window_impl (GdkDisplay    *display,
 
   impl->view = NULL;
 
-  switch (attributes->window_type)
+  switch (window->window_type)
     {
     case GDK_WINDOW_TOPLEVEL:
     case GDK_WINDOW_TEMP:
@@ -901,8 +901,9 @@ _gdk_quartz_display_create_window_impl (GdkDisplay    *display,
                                    window->width,
                                    window->height);
 
-        if (attributes->window_type == GDK_WINDOW_TEMP ||
-            attributes->type_hint == GDK_WINDOW_TYPE_HINT_SPLASHSCREEN)
+        if (window->window_type == GDK_WINDOW_TEMP ||
+            ((attributes_mask & GDK_WA_TYPE_HINT) &&
+              attributes->type_hint == GDK_WINDOW_TYPE_HINT_SPLASHSCREEN))
           {
             style_mask = NSBorderlessWindowMask;
           }
