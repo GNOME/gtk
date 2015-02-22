@@ -49,11 +49,16 @@ enum {
   N_SIGNALS
 };
 
+enum {
+  PROP_DELAY_FACTOR = 1
+};
+
 struct _GtkGestureLongPressPrivate
 {
   gdouble initial_x;
   gdouble initial_y;
 
+  gdouble delay_factor;
   guint timeout_id;
   guint delay;
   guint cancelled : 1;
@@ -67,6 +72,10 @@ G_DEFINE_TYPE_WITH_PRIVATE (GtkGestureLongPress, gtk_gesture_long_press, GTK_TYP
 static void
 gtk_gesture_long_press_init (GtkGestureLongPress *gesture)
 {
+  GtkGestureLongPressPrivate *priv;
+
+  priv = gtk_gesture_long_press_get_instance_private (GTK_GESTURE_LONG_PRESS (gesture));
+  priv->delay_factor = 1.0;
 }
 
 static gboolean
@@ -121,7 +130,10 @@ gtk_gesture_long_press_begin (GtkGesture       *gesture,
 
   widget = gtk_event_controller_get_widget (GTK_EVENT_CONTROLLER (gesture));
   g_object_get (gtk_widget_get_settings (widget),
-		"gtk-long-press-time", &delay, NULL);
+                "gtk-long-press-time", &delay,
+                NULL);
+
+  delay = (gint)(priv->delay_factor * delay);
 
   gtk_gesture_get_point (gesture, sequence,
                          &priv->initial_x, &priv->initial_y);
@@ -206,20 +218,73 @@ gtk_gesture_long_press_finalize (GObject *object)
 }
 
 static void
+gtk_gesture_long_press_get_property (GObject    *object,
+                                     guint       property_id,
+                                     GValue     *value,
+                                     GParamSpec *pspec)
+{
+  GtkGestureLongPressPrivate *priv;
+
+  priv = gtk_gesture_long_press_get_instance_private (GTK_GESTURE_LONG_PRESS (object));
+
+  switch (property_id)
+    {
+    case PROP_DELAY_FACTOR:
+      g_value_set_double (value, priv->delay_factor);
+      break;
+
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, property_id, pspec);
+      break;
+    }
+}
+
+static void
+gtk_gesture_long_press_set_property (GObject      *object,
+                                     guint         property_id,
+                                     const GValue *value,
+                                     GParamSpec   *pspec)
+{
+  GtkGestureLongPressPrivate *priv;
+
+  priv = gtk_gesture_long_press_get_instance_private (GTK_GESTURE_LONG_PRESS (object));
+
+  switch (property_id)
+    {
+    case PROP_DELAY_FACTOR:
+      priv->delay_factor = g_value_get_double (value);
+      break;
+
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, property_id, pspec);
+      break;
+    }
+}
+
+static void
 gtk_gesture_long_press_class_init (GtkGestureLongPressClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
   GtkGestureClass *gesture_class = GTK_GESTURE_CLASS (klass);
 
   object_class->finalize = gtk_gesture_long_press_finalize;
+  object_class->get_property = gtk_gesture_long_press_get_property;
+  object_class->set_property = gtk_gesture_long_press_set_property;
 
   gesture_class->check = gtk_gesture_long_press_check;
   gesture_class->begin = gtk_gesture_long_press_begin;
   gesture_class->update = gtk_gesture_long_press_update;
   gesture_class->end = gtk_gesture_long_press_end;
   gesture_class->cancel = gtk_gesture_long_press_cancel;
-  gesture_class->sequence_state_changed =
-    gtk_gesture_long_press_sequence_state_changed;
+  gesture_class->sequence_state_changed = gtk_gesture_long_press_sequence_state_changed;
+
+  g_object_class_install_property (object_class,
+                                   PROP_DELAY_FACTOR,
+                                   g_param_spec_double ("delay-factor",
+                                                        P_("Delay factor"),
+                                                        P_("Factor by which to modify the default timeout"),
+                                                        0.5, 2.0, 1.0,
+                                                        G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 
   /**
    * GtkGestureLongPress::pressed:
