@@ -52,6 +52,16 @@ gtk_css_transient_node_get_widget_path (GtkCssNode *node)
   return gtk_css_node_get_widget_path (parent);
 }
 
+static GtkCssStyle *
+gtk_css_transient_node_update_style (GtkCssNode   *cssnode,
+                                     GtkCssChange  change,
+                                     gint64        timestamp,
+                                     GtkCssStyle  *style)
+{
+  /* This should get rid of animations */
+  return GTK_CSS_NODE_CLASS (gtk_css_transient_node_parent_class)->update_style (cssnode, change, 0, style);
+}
+
 static void
 gtk_css_transient_node_class_init (GtkCssTransientNodeClass *klass)
 {
@@ -59,6 +69,7 @@ gtk_css_transient_node_class_init (GtkCssTransientNodeClass *klass)
 
   node_class->create_widget_path = gtk_css_transient_node_create_widget_path;
   node_class->get_widget_path = gtk_css_transient_node_get_widget_path;
+  node_class->update_style = gtk_css_transient_node_update_style;
 }
 
 static void

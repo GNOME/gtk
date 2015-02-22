@@ -207,6 +207,12 @@ gtk_css_node_create_style (GtkCssNode *cssnode)
 }
 
 static gboolean
+should_create_transitions (GtkCssChange change)
+{
+  return (change & GTK_CSS_CHANGE_ANIMATIONS) == 0;
+}
+
+static gboolean
 gtk_css_style_needs_recreation (GtkCssStyle  *style,
                                 GtkCssChange  change)
 {
@@ -225,14 +231,53 @@ gtk_css_style_needs_recreation (GtkCssStyle  *style,
 
 static GtkCssStyle *
 gtk_css_node_real_update_style (GtkCssNode   *cssnode,
-                                GtkCssChange  pending_change,
+                                GtkCssChange  change,
                                 gint64        timestamp,
-                                GtkCssStyle  *old_style)
+                                GtkCssStyle  *style)
 {
-  if (!gtk_css_style_needs_recreation (old_style, pending_change))
-    return g_object_ref (old_style);
+  GtkCssStyle *static_style, *new_static_style, *new_style;
 
-  return gtk_css_node_create_style (cssnode);
+  if (GTK_IS_CSS_ANIMATED_STYLE (style))
+    {
+      static_style = GTK_CSS_ANIMATED_STYLE (style)->style;
+    }
+  else
+    {
+      static_style = style;
+    }
+
+  if (gtk_css_style_needs_recreation (static_style, change))
+    new_static_style = gtk_css_node_create_style (cssnode);
+  else
+    new_static_style = g_object_ref (static_style);
+
+  if (new_static_style != static_style || (change & GTK_CSS_CHANGE_ANIMATIONS))
+    {
+      GtkCssNode *parent = gtk_css_node_get_parent (cssnode);
+      new_style = gtk_css_animated_style_new (new_static_style,
+                                              parent ? gtk_css_node_get_style (parent) : NULL,
+                                              timestamp,
+                                              gtk_css_node_get_style_provider (cssnode),
+                                              should_create_transitions (change) ? style : NULL);
+    }
+  else if (GTK_IS_CSS_ANIMATED_STYLE (style) && (change & GTK_CSS_CHANGE_TIMESTAMP))
+    {
+      new_style = gtk_css_animated_style_new_advance (GTK_CSS_ANIMATED_STYLE (style),
+                                                      static_style,
+                                                      timestamp);
+    }
+  else
+    {
+      new_style = g_object_ref (style);
+    }
+
+  if (GTK_IS_CSS_ANIMATED_STYLE (new_style) &&
+      !gtk_css_animated_style_is_static (GTK_CSS_ANIMATED_STYLE (new_style)))
+    gtk_css_node_set_invalid (cssnode, TRUE);
+
+  g_object_unref (new_static_style);
+
+  return new_style;
 }
 
 static void

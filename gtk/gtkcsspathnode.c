@@ -101,6 +101,16 @@ gtk_css_path_node_real_get_widget_path (GtkCssNode *node)
   return path_node->path;
 }
 
+static GtkCssStyle *
+gtk_css_path_node_update_style (GtkCssNode   *cssnode,
+                                GtkCssChange  change,
+                                gint64        timestamp,
+                                GtkCssStyle  *style)
+{
+  /* This should get rid of animations */
+  return GTK_CSS_NODE_CLASS (gtk_css_path_node_parent_class)->update_style (cssnode, change, 0, style);
+}
+
 static GtkStyleProviderPrivate *
 gtk_css_path_node_get_style_provider (GtkCssNode *node)
 {
@@ -121,6 +131,7 @@ gtk_css_path_node_class_init (GtkCssPathNodeClass *klass)
   object_class->finalize = gtk_css_path_node_finalize;
 
   node_class->invalidate = gtk_css_path_node_invalidate;
+  node_class->update_style = gtk_css_path_node_update_style;
   node_class->init_matcher = gtk_css_path_node_real_init_matcher;
   node_class->create_widget_path = gtk_css_path_node_real_create_widget_path;
   node_class->get_widget_path = gtk_css_path_node_real_get_widget_path;
