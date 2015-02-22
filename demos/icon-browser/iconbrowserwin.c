@@ -1,6 +1,7 @@
 #include <string.h>
 #include "iconbrowserapp.h"
 #include "iconbrowserwin.h"
+#include "iconstore.h"
 #include <gtk/gtk.h>
 
 typedef struct
@@ -42,13 +43,6 @@ struct _IconBrowserWindowClass
   GtkApplicationWindowClass parent_class;
 };
 
-enum {
-  NAME_COLUMN,
-  SYMBOLIC_NAME_COLUMN,
-  DESCRIPTION_COLUMN,
-  CONTEXT_COLUMN
-};
-
 G_DEFINE_TYPE(IconBrowserWindow, icon_browser_window, GTK_TYPE_APPLICATION_WINDOW);
 
 static void
@@ -82,12 +76,12 @@ item_activated (GtkIconView *icon_view, GtkTreePath *path, IconBrowserWindow *wi
   gtk_tree_model_get_iter (GTK_TREE_MODEL (win->filter_model), &iter, path);
 
   if (win->symbolic)
-    column = SYMBOLIC_NAME_COLUMN;
+    column = ICON_STORE_SYMBOLIC_NAME_COLUMN;
   else
-    column = NAME_COLUMN;
+    column = ICON_STORE_NAME_COLUMN;
   gtk_tree_model_get (GTK_TREE_MODEL (win->filter_model), &iter,
                       column, &name,
-                      DESCRIPTION_COLUMN, &description,
+                      ICON_STORE_DESCRIPTION_COLUMN, &description,
                       -1);
       
   if (name == NULL || !gtk_icon_theme_has_icon (gtk_icon_theme_get_default (), name))
@@ -141,10 +135,10 @@ add_icon (IconBrowserWindow *win,
       symbolic_name = NULL;
     }
   gtk_list_store_insert_with_values (win->store, NULL, -1,
-                                     NAME_COLUMN, regular_name,
-                                     SYMBOLIC_NAME_COLUMN, symbolic_name,
-                                     DESCRIPTION_COLUMN, description,
-                                     CONTEXT_COLUMN, context,
+                                     ICON_STORE_NAME_COLUMN, regular_name,
+                                     ICON_STORE_SYMBOLIC_NAME_COLUMN, symbolic_name,
+                                     ICON_STORE_DESCRIPTION_COLUMN, description,
+                                     ICON_STORE_CONTEXT_COLUMN, context,
                                      -1);
 }
 
@@ -697,13 +691,13 @@ icon_visible_func (GtkTreeModel *model,
   search_text = gtk_entry_get_text (GTK_ENTRY (win->searchentry));
 
   if (win->symbolic)
-    column = SYMBOLIC_NAME_COLUMN;
+    column = ICON_STORE_SYMBOLIC_NAME_COLUMN;
   else
-    column = NAME_COLUMN;
+    column = ICON_STORE_NAME_COLUMN;
 
   gtk_tree_model_get (model, iter,
                       column, &name,
-                      CONTEXT_COLUMN, &context,
+                      ICON_STORE_CONTEXT_COLUMN, &context,
                       -1);
   if (!name)
     visible = FALSE;
@@ -726,9 +720,11 @@ symbolic_toggled (GtkToggleButton *toggle, IconBrowserWindow *win)
   win->symbolic = gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (toggle));
 
   if (win->symbolic)
-    column = SYMBOLIC_NAME_COLUMN;
+    column = ICON_STORE_SYMBOLIC_NAME_COLUMN;
   else
-    column = NAME_COLUMN;
+    column = ICON_STORE_NAME_COLUMN;
+
+  icon_store_set_text_column (ICON_STORE (win->store), column);
 
   gtk_cell_layout_set_attributes (GTK_CELL_LAYOUT (win->list), win->cell, "icon-name", column, NULL);
   gtk_cell_layout_set_attributes (GTK_CELL_LAYOUT (win->list), win->text_cell, "text", column, NULL);
@@ -747,7 +743,23 @@ search_mode_toggled (GObject *searchbar, GParamSpec *pspec, IconBrowserWindow *w
 static void
 icon_browser_window_init (IconBrowserWindow *win)
 {
+  GtkTargetList *list;
+  GtkTargetEntry *targets;
+  gint n_targets;
+
   gtk_widget_init_template (GTK_WIDGET (win));
+
+  list = gtk_target_list_new (NULL, 0);
+  gtk_target_list_add_text_targets (list, 0);
+  targets = gtk_target_table_new_from_list (list, &n_targets);
+  gtk_target_list_unref (list);
+
+  gtk_icon_view_enable_model_drag_source (GTK_ICON_VIEW (win->list),
+                                          GDK_BUTTON1_MASK,
+                                          targets, n_targets,
+                                          GDK_ACTION_COPY);
+
+  gtk_target_table_free (targets, n_targets);
 
   win->contexts = g_hash_table_new_full (g_str_hash, g_str_equal, NULL, g_free);
 
@@ -765,6 +777,8 @@ icon_browser_window_init (IconBrowserWindow *win)
 static void
 icon_browser_window_class_init (IconBrowserWindowClass *class)
 {
+  g_type_ensure (ICON_STORE_TYPE);
+
   gtk_widget_class_set_template_from_resource (GTK_WIDGET_CLASS (class),
                                                "/org/gtk/iconbrowser/window.ui");
 

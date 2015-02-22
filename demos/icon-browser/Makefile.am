@@ -20,6 +20,7 @@ gtk3_icon_browser_SOURCES = \
 	main.c \
 	iconbrowserapp.c iconbrowserapp.h \
 	iconbrowserwin.c iconbrowserwin.h \
+	iconstore.c iconstore.h \
 	resources.c
 
 BUILT_SOURCES = \

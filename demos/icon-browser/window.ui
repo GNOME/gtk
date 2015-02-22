@@ -1,13 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
   <!-- interface-requires gtk+ 3.8 -->
-  <object class="GtkListStore" id="store">
-    <columns>
-      <column type="gchararray"/>
-      <column type="gchararray"/>
-      <column type="gchararray"/>
-      <column type="gchararray"/>
-    </columns>
+  <object class="IconStore" id="store">
   </object>
   <object class="GtkTreeModelFilter" id="filter_model">
     <property name="child_model">store</property>
