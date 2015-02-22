@@ -82,6 +82,9 @@ gtk_css_style_get_difference (GtkCssStyle *style,
   GtkBitmask *result;
   guint i, len;
 
+  if (style == other)
+    return _gtk_bitmask_new ();
+
   result = _gtk_bitmask_new ();
   len = _gtk_css_style_property_get_n_properties ();
   for (i = 0; i < len; i++)
