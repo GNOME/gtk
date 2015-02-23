@@ -9,8 +9,8 @@ msgstr ""
 "Project-Id-Version: gtk+ 3.3.11\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gtk"
 "%2b&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2015-01-30 22:11+0000\n"
-"PO-Revision-Date: 2015-02-18 20:21+0800\n"
+"POT-Creation-Date: 2015-02-21 11:06+0000\n"
+"PO-Revision-Date: 2015-02-21 22:42+0800\n"
 "Last-Translator: Chao-Hsiung Liao <j_h_liau@yahoo.com.tw>\n"
 "Language-Team: <>\n"
 "Language: zh_TW\n"
@@ -84,7 +84,7 @@ msgstr "旗標"
 msgid "GDK debugging flags to unset"
 msgstr "準備去除的 GDK 偵錯旗標"
 
-#: ../gdk/gdkwindow.c:2733
+#: ../gdk/gdkwindow.c:2736
 msgid "GL support disabled via GDK_DEBUG"
 msgstr "GL 支援已透過 GDK_DEBUG 停用"
 
@@ -430,36 +430,38 @@ msgctxt "keyboard label"
 msgid "Suspend"
 msgstr "暫停"
 
-#: ../gdk/mir/gdkmirwindowimpl.c:1308 ../gdk/mir/gdkmirwindowimpl.c:1318
-#: ../gdk/wayland/gdkglcontext-wayland.c:263
-#: ../gdk/wayland/gdkglcontext-wayland.c:273
-#: ../gdk/win32/gdkglcontext-win32.c:527 ../gdk/x11/gdkglcontext-x11.c:700
-msgid "No available configurations for the given pixel format"
-msgstr "指定的像素格式沒有可用的組態"
-
-#: ../gdk/mir/gdkmirwindowimpl.c:1350
-#: ../gdk/wayland/gdkglcontext-wayland.c:306
-#: ../gdk/win32/gdkglcontext-win32.c:505 ../gdk/x11/gdkglcontext-x11.c:1066
+#: ../gdk/mir/gdkmirglcontext.c:48 ../gdk/mir/gdkmirwindowimpl.c:1406
+#: ../gdk/wayland/gdkglcontext-wayland.c:368
+#: ../gdk/win32/gdkglcontext-win32.c:541 ../gdk/x11/gdkglcontext-x11.c:1163
 msgid "No GL implementation is available"
 msgstr "沒有 GL 實作可用"
 
-#: ../gdk/mir/gdkmirwindowimpl.c:1362
-#: ../gdk/wayland/gdkglcontext-wayland.c:318
-msgid "3.2 core GL profile is not available on EGL implementation"
-msgstr "3.2 核心 GL 設定檔在 EGL 實作中無法使用"
-
-#: ../gdk/mir/gdkmirwindowimpl.c:1385
-#: ../gdk/wayland/gdkglcontext-wayland.c:341
-#: ../gdk/win32/gdkglcontext-win32.c:541 ../gdk/x11/gdkglcontext-x11.c:1110
-#: ../gdk/x11/gdkglcontext-x11.c:1154
+#: ../gdk/mir/gdkmirglcontext.c:89 ../gdk/wayland/gdkglcontext-wayland.c:156
+#: ../gdk/win32/gdkglcontext-win32.c:501 ../gdk/x11/gdkglcontext-x11.c:619
+#: ../gdk/x11/gdkglcontext-x11.c:663
 msgid "Unable to create a GL context"
 msgstr "無法建立 GL 脈絡"
 
-#: ../gdk/win32/gdkglcontext-win32.c:514
+#: ../gdk/mir/gdkmirwindowimpl.c:1368 ../gdk/mir/gdkmirwindowimpl.c:1378
+#: ../gdk/wayland/gdkglcontext-wayland.c:329
+#: ../gdk/wayland/gdkglcontext-wayland.c:339
+#: ../gdk/win32/gdkglcontext-win32.c:473 ../gdk/x11/gdkglcontext-x11.c:857
+msgid "No available configurations for the given pixel format"
+msgstr "指定的像素格式沒有可用的組態"
+
+#: ../gdk/mir/gdkmirwindowimpl.c:1414
+msgid "3.2 core GL profile is not available on EGL implementation"
+msgstr "3.2 核心 GL 設定檔在 EGL 實作中無法使用"
+
+#: ../gdk/wayland/gdkglcontext-wayland.c:376
+msgid "Core GL is not available on EGL implementation"
+msgstr "核心 GL 在 EGL 實作中無法使用"
+
+#: ../gdk/win32/gdkglcontext-win32.c:550
 msgid ""
-"The WGL_ARB_create_context extension needed to create 3.2 core profiles is "
-"not available"
-msgstr "建立 3.2 核心設定檔所需的 WGL_ARB_create_context 擴充功能無法使用"
+"The WGL_ARB_create_context extension needed to create core profiles is not "
+"available"
+msgstr "建立核心設定檔所需的 WGL_ARB_create_context 擴充功能無法使用"
 
 #. Description of --sync in --help output
 #: ../gdk/win32/gdkmain-win32.c:53
@@ -507,17 +509,16 @@ msgid "Opening %d Item"
 msgid_plural "Opening %d Items"
 msgstr[0] "正在開啟 %d 個項目"
 
-#: ../gdk/x11/gdkglcontext-x11.c:729
+#: ../gdk/x11/gdkglcontext-x11.c:885
 #, c-format
 msgid "No available configurations for the given RGBA pixel format"
 msgstr "指定的 RGBA 像素格式沒有可用的組態"
 
-#: ../gdk/x11/gdkglcontext-x11.c:1075
+#: ../gdk/x11/gdkglcontext-x11.c:1171
 msgid ""
-"The GLX_ARB_create_context_profile extension needed to create 3.2 core "
-"profiles is not available"
-msgstr ""
-"建立 3.2 核心設定檔所需的 GLX_ARB_create_context_profile 擴充功能無法使用"
+"The GLX_ARB_create_context_profile extension needed to create core profiles "
+"is not available"
+msgstr "建立核心設定檔所需的 GLX_ARB_create_context_profile 擴充功能無法使用"
 
 #: ../gtk/a11y/gtkbooleancellaccessible.c:43
 msgctxt "Action description"
@@ -652,15 +653,15 @@ msgctxt "Stock label"
 msgid "_Close"
 msgstr "關閉(_C)"
 
-#: ../gtk/a11y/gtkimageaccessible.c:59 ../gtk/gtkheaderbar.c:435
+#: ../gtk/a11y/gtkimageaccessible.c:59 ../gtk/gtkheaderbar.c:436
 msgid "Minimize"
 msgstr "最小化"
 
-#: ../gtk/a11y/gtkimageaccessible.c:60 ../gtk/gtkheaderbar.c:458
+#: ../gtk/a11y/gtkimageaccessible.c:60 ../gtk/gtkheaderbar.c:460
 msgid "Maximize"
 msgstr "最大化"
 
-#: ../gtk/a11y/gtkimageaccessible.c:61 ../gtk/gtkheaderbar.c:458
+#: ../gtk/a11y/gtkimageaccessible.c:61 ../gtk/gtkheaderbar.c:460
 msgid "Restore"
 msgstr "還原"
 
@@ -1200,11 +1201,11 @@ msgstr ""
 
 #: ../gtk/deprecated/gtkcolorseldialog.c:191
 #: ../gtk/deprecated/gtkfontsel.c:1689 ../gtk/gtkfilechooserbutton.c:794
-#: ../gtk/gtkfilechooserwidget.c:5294 ../gtk/gtkmessagedialog.c:944
+#: ../gtk/gtkfilechooserwidget.c:5373 ../gtk/gtkmessagedialog.c:944
 #: ../gtk/gtkmessagedialog.c:957 ../gtk/gtkmountoperation.c:543
 #: ../gtk/gtkpagesetupunixdialog.c:196 ../gtk/gtkprintbackend.c:763
 #: ../gtk/gtkprinteroptionwidget.c:545 ../gtk/gtkprintunixdialog.c:665
-#: ../gtk/gtkprintunixdialog.c:733 ../gtk/gtkwindow.c:11845
+#: ../gtk/gtkprintunixdialog.c:733 ../gtk/gtkwindow.c:11853
 #: ../gtk/inspector/css-editor.c:199 ../gtk/ui/gtkappchooserdialog.ui.h:2
 #: ../gtk/ui/gtkassistant.ui.h:5 ../gtk/ui/gtkcolorchooserdialog.ui.h:2
 #: ../gtk/ui/gtkfontchooserdialog.ui.h:2
@@ -1256,7 +1257,7 @@ msgstr "套用(_A)"
 
 #: ../gtk/deprecated/gtkfontsel.c:1698 ../gtk/gtkmessagedialog.c:936
 #: ../gtk/gtkmessagedialog.c:958 ../gtk/gtkprintbackend.c:764
-#: ../gtk/gtkwindow.c:11846 ../gtk/inspector/classes-list.c:127
+#: ../gtk/gtkwindow.c:11854 ../gtk/inspector/classes-list.c:127
 msgid "_OK"
 msgstr "確定(_O)"
 
@@ -2109,26 +2110,26 @@ msgstr "右(_R):"
 msgid "Paper Margins"
 msgstr "紙張邊界"
 
-#: ../gtk/gtkentry.c:9626 ../gtk/gtkentry.c:9779 ../gtk/gtklabel.c:6596
+#: ../gtk/gtkentry.c:9626 ../gtk/gtkentry.c:9779 ../gtk/gtklabel.c:6597
 #: ../gtk/gtktextview.c:9037 ../gtk/gtktextview.c:9225
 msgid "Cu_t"
 msgstr "剪下(_T)"
 
-#: ../gtk/gtkentry.c:9630 ../gtk/gtkentry.c:9782 ../gtk/gtklabel.c:6597
+#: ../gtk/gtkentry.c:9630 ../gtk/gtkentry.c:9782 ../gtk/gtklabel.c:6598
 #: ../gtk/gtktextview.c:9041 ../gtk/gtktextview.c:9229
 msgid "_Copy"
 msgstr "複製(_C)"
 
-#: ../gtk/gtkentry.c:9634 ../gtk/gtkentry.c:9785 ../gtk/gtklabel.c:6598
+#: ../gtk/gtkentry.c:9634 ../gtk/gtkentry.c:9785 ../gtk/gtklabel.c:6599
 #: ../gtk/gtktextview.c:9043 ../gtk/gtktextview.c:9231
 msgid "_Paste"
 msgstr "貼上(_P)"
 
-#: ../gtk/gtkentry.c:9637 ../gtk/gtklabel.c:6600 ../gtk/gtktextview.c:9046
+#: ../gtk/gtkentry.c:9637 ../gtk/gtklabel.c:6601 ../gtk/gtktextview.c:9046
 msgid "_Delete"
 msgstr "刪除(_D)"
 
-#: ../gtk/gtkentry.c:9648 ../gtk/gtklabel.c:6609 ../gtk/gtktextview.c:9060
+#: ../gtk/gtkentry.c:9648 ../gtk/gtklabel.c:6610 ../gtk/gtktextview.c:9060
 msgid "Select _All"
 msgstr "全部選取(_A)"
 
@@ -2165,15 +2166,15 @@ msgstr "其他…"
 msgid "%1$s on %2$s"
 msgstr "%1$s 於 %2$s"
 
-#: ../gtk/gtkfilechooserwidget.c:328
+#: ../gtk/gtkfilechooserwidget.c:334
 msgid "Type name of new folder"
 msgstr "請輸入新資料夾名稱"
 
-#: ../gtk/gtkfilechooserwidget.c:734
+#: ../gtk/gtkfilechooserwidget.c:741
 msgid "The folder could not be created"
 msgstr "無法建立資料夾"
 
-#: ../gtk/gtkfilechooserwidget.c:747
+#: ../gtk/gtkfilechooserwidget.c:754
 msgid ""
 "The folder could not be created, as a file with the same name already "
 "exists.  Try using a different name for the folder, or rename the file first."
@@ -2181,140 +2182,149 @@ msgstr ""
 "此資料夾無法建立，因為已有相同名稱的檔案存在。試著使用不同的資料夾名稱，或者"
 "先重新命名該檔案。"
 
-#: ../gtk/gtkfilechooserwidget.c:761
+#: ../gtk/gtkfilechooserwidget.c:768
 msgid "You need to choose a valid filename."
 msgstr "您需要選擇有效的檔案名稱"
 
-#: ../gtk/gtkfilechooserwidget.c:764
+#: ../gtk/gtkfilechooserwidget.c:771
 #, c-format
 msgid "Cannot create a file under %s as it is not a folder"
 msgstr "不能在 %s 下建立檔案，因為它不是資料夾"
 
-#: ../gtk/gtkfilechooserwidget.c:772
+#: ../gtk/gtkfilechooserwidget.c:779
 msgid "Cannot create file as the filename is too long"
 msgstr "不能建立檔案，因為檔案名稱太長"
 
-#: ../gtk/gtkfilechooserwidget.c:773
+#: ../gtk/gtkfilechooserwidget.c:780
 msgid "Try using a shorter name."
 msgstr "試著使用較短的名稱。"
 
-#: ../gtk/gtkfilechooserwidget.c:783
+#: ../gtk/gtkfilechooserwidget.c:790
 msgid "You may only select folders"
 msgstr "您只能選取資料夾"
 
-#: ../gtk/gtkfilechooserwidget.c:784
+#: ../gtk/gtkfilechooserwidget.c:791
 msgid "The item that you selected is not a folder try using a different item."
 msgstr "您所選取的項目不是資料夾；請試著使用不同的項目。"
 
-#: ../gtk/gtkfilechooserwidget.c:792
+#: ../gtk/gtkfilechooserwidget.c:799
 msgid "Invalid file name"
 msgstr "無效的檔案名稱"
 
-#: ../gtk/gtkfilechooserwidget.c:802
+#: ../gtk/gtkfilechooserwidget.c:809
 msgid "The folder contents could not be displayed"
 msgstr "無法顯示資料夾內容"
 
-#: ../gtk/gtkfilechooserwidget.c:1481
+#: ../gtk/gtkfilechooserwidget.c:1512
 msgid "Could not select file"
 msgstr "無法選取檔案"
 
-#: ../gtk/gtkfilechooserwidget.c:1711
+#: ../gtk/gtkfilechooserwidget.c:1745
 msgid "_Visit File"
 msgstr "查閱檔案(_V)"
 
-#: ../gtk/gtkfilechooserwidget.c:1714
+#: ../gtk/gtkfilechooserwidget.c:1748
+msgid "_Open With File Manager"
+msgstr "以檔案管理程式開啟(_O)"
+
+#: ../gtk/gtkfilechooserwidget.c:1751
 msgid "_Copy Location"
 msgstr "複製位置(_C)"
 
-#: ../gtk/gtkfilechooserwidget.c:1717
+#: ../gtk/gtkfilechooserwidget.c:1754
 msgid "_Add to Bookmarks"
 msgstr "加入書籤(_A)"
 
-#: ../gtk/gtkfilechooserwidget.c:1724
+#: ../gtk/gtkfilechooserwidget.c:1761
 msgid "Show _Hidden Files"
 msgstr "顯示隱藏檔(_H)"
 
-#: ../gtk/gtkfilechooserwidget.c:1727
+#: ../gtk/gtkfilechooserwidget.c:1764
 msgid "Show _Size Column"
 msgstr "顯示大小欄位(_S)"
 
-#: ../gtk/gtkfilechooserwidget.c:1730
+#: ../gtk/gtkfilechooserwidget.c:1767
 msgid "Sort _Folders before Files"
 msgstr "永遠在檔案前先列出資料夾(_F)"
 
 #. this is the header for the location column in the print dialog
-#: ../gtk/gtkfilechooserwidget.c:1999 ../gtk/inspector/style-prop-list.ui.h:3
-#: ../gtk/ui/gtkprintunixdialog.ui.h:4
+#: ../gtk/gtkfilechooserwidget.c:2037 ../gtk/inspector/style-prop-list.ui.h:3
+#: ../gtk/ui/gtkfilechooserwidget.ui.h:8 ../gtk/ui/gtkprintunixdialog.ui.h:4
 msgid "Location"
 msgstr "位置"
 
 #. Label
-#: ../gtk/gtkfilechooserwidget.c:2039
+#: ../gtk/gtkfilechooserwidget.c:2077
 msgid "_Name:"
 msgstr "名稱(_N):"
 
-#: ../gtk/gtkfilechooserwidget.c:3714
+#: ../gtk/gtkfilechooserwidget.c:2557 ../gtk/gtkfilechooserwidget.c:4094
+#: ../gtk/gtkplacessidebar.c:968 ../gtk/ui/gtkfilechooserwidget.ui.h:2
+msgid "Home"
+msgstr "家目錄"
+
+#: ../gtk/gtkfilechooserwidget.c:3764
 #, c-format
 msgid "Could not read the contents of %s"
 msgstr "無法讀取 %s 的內容"
 
-#: ../gtk/gtkfilechooserwidget.c:3718
+#: ../gtk/gtkfilechooserwidget.c:3768
 msgid "Could not read the contents of the folder"
 msgstr "無法讀取資料夾的內容"
 
-#: ../gtk/gtkfilechooserwidget.c:3825
+#: ../gtk/gtkfilechooserwidget.c:3875
 msgid "%H:%M"
 msgstr "%H:%M"
 
-#: ../gtk/gtkfilechooserwidget.c:3825
+#: ../gtk/gtkfilechooserwidget.c:3875
 msgid "%-I:%M %P"
 msgstr "%P %-I:%M"
 
-#: ../gtk/gtkfilechooserwidget.c:3827
+#: ../gtk/gtkfilechooserwidget.c:3877
 msgid "Yesterday at %H:%M"
 msgstr "昨天 %H:%M"
 
-#: ../gtk/gtkfilechooserwidget.c:3827
+#: ../gtk/gtkfilechooserwidget.c:3877
 msgid "Yesterday at %-I:%M %P"
 msgstr "昨天%P %-I:%M"
 
 #. Translators: We don't know whether this printer is
 #. * available to print to.
-#: ../gtk/gtkfilechooserwidget.c:4026 ../gtk/inspector/prop-editor.c:1569
+#: ../gtk/gtkfilechooserwidget.c:4076 ../gtk/inspector/prop-editor.c:1569
 #: ../modules/printbackends/cloudprint/gtkprintbackendcloudprint.c:748
 msgid "Unknown"
 msgstr "不明"
 
-#: ../gtk/gtkfilechooserwidget.c:4501
+#: ../gtk/gtkfilechooserwidget.c:4580
 msgid "Cannot change to folder because it is not local"
 msgstr "無法進入資料夾，因為它不是本地資料夾"
 
-#: ../gtk/gtkfilechooserwidget.c:5287 ../gtk/gtkprintunixdialog.c:656
+#: ../gtk/gtkfilechooserwidget.c:5366 ../gtk/gtkprintunixdialog.c:656
 #, c-format
 msgid "A file named “%s” already exists.  Do you want to replace it?"
 msgstr "已存在名為“%s”的檔案。您想要取代它嗎？"
 
-#: ../gtk/gtkfilechooserwidget.c:5290 ../gtk/gtkprintunixdialog.c:660
+#: ../gtk/gtkfilechooserwidget.c:5369 ../gtk/gtkprintunixdialog.c:660
 #, c-format
 msgid ""
 "The file already exists in “%s”.  Replacing it will overwrite its contents."
 msgstr "該檔案已存在於“%s”。取代它會覆蓋它的內容。"
 
-#: ../gtk/gtkfilechooserwidget.c:5295 ../gtk/gtkprintunixdialog.c:668
+#: ../gtk/gtkfilechooserwidget.c:5374 ../gtk/gtkprintunixdialog.c:668
 msgid "_Replace"
 msgstr "取代(_R)"
 
-#: ../gtk/gtkfilechooserwidget.c:6114
+#: ../gtk/gtkfilechooserwidget.c:6172
 msgid "Could not start the search process"
 msgstr "無法開始搜尋程序"
 
-#: ../gtk/gtkfilechooserwidget.c:6115
+#: ../gtk/gtkfilechooserwidget.c:6173
 msgid ""
 "The program was not able to create a connection to the indexer daemon. "
 "Please make sure it is running."
 msgstr "此程式無法建立至 indexer 伺服程式的連線。請確認它是否已執行。"
 
-#: ../gtk/gtkfilechooserwidget.c:6129
+#: ../gtk/gtkfilechooserwidget.c:6187
 msgid "Could not send the search request"
 msgstr "無法傳送搜尋要求"
 
@@ -2345,7 +2355,7 @@ msgstr "請選擇字型"
 msgid "None"
 msgstr "沒有"
 
-#: ../gtk/gtkglarea.c:296
+#: ../gtk/gtkglarea.c:264
 msgid "OpenGL context creation failed"
 msgstr "OpenGL 脈絡建立失敗"
 
@@ -2353,7 +2363,7 @@ msgstr "OpenGL 脈絡建立失敗"
 msgid "Application menu"
 msgstr "應用程式選單"
 
-#: ../gtk/gtkheaderbar.c:476 ../gtk/gtkwindow.c:8525
+#: ../gtk/gtkheaderbar.c:479 ../gtk/gtkwindow.c:8527
 msgid "Close"
 msgstr "關閉"
 
@@ -2403,12 +2413,12 @@ msgid "Error"
 msgstr "錯誤"
 
 #. Open Link
-#: ../gtk/gtklabel.c:6577
+#: ../gtk/gtklabel.c:6578
 msgid "_Open Link"
 msgstr "開啟連結(_O)"
 
 #. Copy Link Address
-#: ../gtk/gtklabel.c:6586
+#: ../gtk/gtklabel.c:6587
 msgid "Copy _Link Address"
 msgstr "複製連結位址(_L)"
 
@@ -2527,16 +2537,16 @@ msgstr "準備設定的 GTK+ 偵錯旗標"
 msgid "GTK+ debugging flags to unset"
 msgstr "準備去除的 GTK+ 偵錯旗標"
 
-#: ../gtk/gtkmain.c:765
+#: ../gtk/gtkmain.c:776
 #, c-format
 msgid "Cannot open display: %s"
 msgstr "無法開啟畫面：%s"
 
-#: ../gtk/gtkmain.c:831
+#: ../gtk/gtkmain.c:842
 msgid "GTK+ Options"
 msgstr "GTK+ 選項"
 
-#: ../gtk/gtkmain.c:831
+#: ../gtk/gtkmain.c:842
 msgid "Show GTK+ Options"
 msgstr "顯示 GTK+ 選項"
 
@@ -2545,11 +2555,11 @@ msgstr "顯示 GTK+ 選項"
 #. * Do *not* translate it to "predefinito:LTR", if it
 #. * it isn't default:LTR or default:RTL it will not work
 #.
-#: ../gtk/gtkmain.c:1155
+#: ../gtk/gtkmain.c:1166
 msgid "default:LTR"
 msgstr "default:LTR"
 
-#: ../gtk/gtkmenubutton.c:655 ../gtk/inspector/window.ui.h:19
+#: ../gtk/gtkmenubutton.c:661 ../gtk/inspector/window.ui.h:19
 msgid "Menu"
 msgstr "選單"
 
@@ -2645,7 +2655,7 @@ msgstr "Z Shell"
 msgid "Cannot end process with PID %d: %s"
 msgstr "不能結束 PID 為 %d 的程序：%s"
 
-#: ../gtk/gtknotebook.c:5144 ../gtk/gtknotebook.c:7872
+#: ../gtk/gtknotebook.c:5165 ../gtk/gtknotebook.c:7893
 #, c-format
 msgid "Page %u"
 msgstr "第 %u 頁"
@@ -2706,10 +2716,6 @@ msgstr "最近開啟"
 #: ../gtk/gtkplacessidebar.c:959
 msgid "Recent files"
 msgstr "最近開啟檔案"
-
-#: ../gtk/gtkplacessidebar.c:968
-msgid "Home"
-msgstr "家目錄"
 
 #: ../gtk/gtkplacessidebar.c:970
 msgid "Open your personal folder"
@@ -3236,7 +3242,7 @@ msgstr "搜尋"
 #. * glyphs then use MEDIUM VERTICAL BAR (U+2759) as the text for
 #. * the state
 #.
-#: ../gtk/gtkswitch.c:401 ../gtk/gtkswitch.c:453 ../gtk/gtkswitch.c:633
+#: ../gtk/gtkswitch.c:379 ../gtk/gtkswitch.c:431 ../gtk/gtkswitch.c:606
 msgctxt "switch"
 msgid "ON"
 msgstr "開"
@@ -3244,7 +3250,7 @@ msgstr "開"
 #. Translators: if the "off" state label requires more than three
 #. * glyphs then use WHITE CIRCLE (U+25CB) as the text for the state
 #.
-#: ../gtk/gtkswitch.c:409 ../gtk/gtkswitch.c:454 ../gtk/gtkswitch.c:648
+#: ../gtk/gtkswitch.c:387 ../gtk/gtkswitch.c:432 ../gtk/gtkswitch.c:621
 msgctxt "switch"
 msgid "OFF"
 msgstr "關"
@@ -3426,11 +3432,11 @@ msgctxt "volume percentage"
 msgid "%d %%"
 msgstr "%d %%"
 
-#: ../gtk/gtkwindow.c:11833
+#: ../gtk/gtkwindow.c:11841
 msgid "Do you want to use GTK+ Inspector?"
 msgstr "您是否定要使用 GTK+ 檢查器？"
 
-#: ../gtk/gtkwindow.c:11835
+#: ../gtk/gtkwindow.c:11843
 msgid ""
 "GTK+ Inspector is an interactive debugger that lets you explore and modify "
 "the internals of any GTK+ application. Using it may cause the application to "
@@ -3439,7 +3445,7 @@ msgstr ""
 "GTK+ 檢查器是一個互動式除錯程式，讓您可以從任何 GTK+ 應用程式中探索並修改內"
 "部。使用它可能造成應用程式中斷或當機。"
 
-#: ../gtk/gtkwindow.c:11840
+#: ../gtk/gtkwindow.c:11848
 msgid "Don't show this message again"
 msgstr "不要再顯示這個訊息"
 
@@ -3458,7 +3464,7 @@ msgstr "前綴"
 
 #: ../gtk/inspector/actions.ui.h:2 ../gtk/inspector/classes-list.ui.h:3
 #: ../gtk/inspector/object-tree.ui.h:2 ../gtk/inspector/signals-list.ui.h:3
-#: ../gtk/ui/gtkfilechooserwidget.ui.h:3
+#: ../gtk/ui/gtkfilechooserwidget.ui.h:5
 msgid "Name"
 msgstr "名稱"
 
@@ -3777,7 +3783,7 @@ msgstr "路徑"
 msgid "Count"
 msgstr "計數"
 
-#: ../gtk/inspector/resource-list.ui.h:3 ../gtk/ui/gtkfilechooserwidget.ui.h:4
+#: ../gtk/inspector/resource-list.ui.h:3 ../gtk/ui/gtkfilechooserwidget.ui.h:6
 msgid "Size"
 msgstr "大小"
 
@@ -4042,7 +4048,6 @@ msgid "Style Properties"
 msgstr "樣式屬性"
 
 #: ../gtk/inspector/window.ui.h:15 ../gtk/inspector/window.ui.h:25
-#| msgid "CLASS"
 msgid "CSS"
 msgstr "CSS"
 
@@ -4412,15 +4417,11 @@ msgid "RA2"
 msgstr "RA2"
 
 #: ../gtk/paper_names_offsets.c:69
-#| msgctxt "paper size"
-#| msgid "A3"
 msgctxt "paper size"
 msgid "RA3"
 msgstr "RA3"
 
 #: ../gtk/paper_names_offsets.c:70
-#| msgctxt "paper size"
-#| msgid "A4"
 msgctxt "paper size"
 msgid "RA4"
 msgstr "RA4"
@@ -5742,15 +5743,19 @@ msgstr "飽和度"
 msgid "Create Folder"
 msgstr "建立資料夾"
 
-#: ../gtk/ui/gtkfilechooserwidget.ui.h:2
+#: ../gtk/ui/gtkfilechooserwidget.ui.h:3
+msgid "All Files"
+msgstr "所有的檔案"
+
+#: ../gtk/ui/gtkfilechooserwidget.ui.h:4
 msgid "Files"
 msgstr "檔案"
 
-#: ../gtk/ui/gtkfilechooserwidget.ui.h:5
+#: ../gtk/ui/gtkfilechooserwidget.ui.h:7
 msgid "Modified"
 msgstr "已修改"
 
-#: ../gtk/ui/gtkfilechooserwidget.ui.h:6
+#: ../gtk/ui/gtkfilechooserwidget.ui.h:9
 msgid "Select which types of files are shown"
 msgstr "選擇顯示哪種類型的檔案"
 
