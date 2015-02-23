@@ -5451,7 +5451,21 @@ gtk_icon_theme_lookup_by_gicon_for_scale (GtkIconTheme       *icon_theme,
           if (file != NULL)
             {
               info->icon_file = g_object_ref (file);
-              info->filename = g_file_get_path (file);
+              info->is_resource = g_file_has_uri_scheme (file, "resource");
+
+              if (info->is_resource)
+                {
+                  gchar *uri;
+
+                  uri = g_file_get_uri (file);
+                  info->filename = g_strdup (uri + 11); /* resource:// */
+                  g_free (uri);
+                }
+              else
+                {
+                  info->filename = g_file_get_path (file);
+                }
+
               info->is_svg = suffix_from_name (info->filename) == ICON_SUFFIX_SVG;
             }
         }
