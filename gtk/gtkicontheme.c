@@ -3859,7 +3859,7 @@ icon_info_ensure_scale_and_pixbuf (GtkIconInfo *icon_info)
         {
           gint size;
 
-          if (icon_info->forced_size)
+          if (icon_info->forced_size || icon_info->dir_type == ICON_THEME_DIR_UNTHEMED)
             size = scaled_desired_size;
           else
             size = icon_info->dir_size * dir_scale * icon_info->scale;
@@ -3889,7 +3889,7 @@ icon_info_ensure_scale_and_pixbuf (GtkIconInfo *icon_info)
             {
               gint size;
 
-              if (icon_info->forced_size)
+              if (icon_info->forced_size || icon_info->dir_type == ICON_THEME_DIR_UNTHEMED)
                 size = scaled_desired_size;
               else
                 size = icon_info->dir_size * dir_scale * icon_info->scale;
