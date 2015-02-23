@@ -2437,7 +2437,12 @@ gtk_range_long_press_gesture_pressed (GtkGestureLongPress *gesture,
                                       gdouble              y,
                                       GtkRange            *range)
 {
-  update_zoom_state (range, TRUE);
+  if (!range->priv->zoom)
+    {
+      /* unset initial position so it can be calculated */
+      range->priv->slide_initial_slider_position = -1;
+      update_zoom_state (range, TRUE);
+    }
 }
 
 static void
