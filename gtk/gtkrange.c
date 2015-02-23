@@ -2437,10 +2437,21 @@ gtk_range_long_press_gesture_pressed (GtkGestureLongPress *gesture,
                                       gdouble              y,
                                       GtkRange            *range)
 {
-  if (!range->priv->zoom)
+  GtkRangePrivate *priv = range->priv;
+
+  if (!priv->zoom)
     {
-      /* unset initial position so it can be calculated */
-      range->priv->slide_initial_slider_position = -1;
+      if (priv->orientation == GTK_ORIENTATION_VERTICAL)
+        {
+          priv->slide_initial_slider_position = priv->slider.y;
+          priv->slide_initial_coordinate_delta = y - priv->slider.y;
+        }
+      else
+        {
+          priv->slide_initial_slider_position = priv->slider.x;
+          priv->slide_initial_coordinate_delta = x - priv->slider.x;
+        }
+
       update_zoom_state (range, TRUE);
     }
 }
