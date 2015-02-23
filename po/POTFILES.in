@@ -151,6 +151,7 @@ gtk/gtkfontchooserdialog.c
 gtk/gtkfontchooserwidget.c
 gtk/gtkframe.c
 gtk/gtkgesture.c
+gtk/gtkgesturelongpress.c
 gtk/gtkgesturepan.c
 gtk/gtkgesturesingle.c
 gtk/gtkglarea.c
