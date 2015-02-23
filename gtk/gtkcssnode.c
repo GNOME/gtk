@@ -177,7 +177,7 @@ store_in_global_parent_cache (GtkCssNode                  *node,
                        g_object_ref (style));
 }
 
-GtkCssStyle *
+static GtkCssStyle *
 gtk_css_node_create_style (GtkCssNode *cssnode)
 {
   const GtkCssNodeDeclaration *decl;

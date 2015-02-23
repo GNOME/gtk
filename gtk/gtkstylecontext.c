@@ -525,7 +525,7 @@ gtk_style_context_lookup_style_for_state (GtkStyleContext *context,
   node = gtk_css_transient_node_new (context->priv->cssnode);
   gtk_css_node_set_parent (node, gtk_css_node_get_parent (context->priv->cssnode));
   gtk_css_node_set_state (node, state);
-  values = gtk_css_node_create_style (node);
+  values = g_object_ref (gtk_css_node_get_style (node));
   gtk_css_node_set_parent (node, NULL);
   g_object_unref (node);
 
