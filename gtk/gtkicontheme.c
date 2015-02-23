@@ -195,6 +195,7 @@ typedef struct
 {
   char *dir;
   time_t mtime; /* 0 == not existing or not a dir */
+  gboolean exists;
 
   GtkIconCache *cache;
 } IconThemeDirMtime;
@@ -921,9 +922,15 @@ insert_theme (GtkIconTheme *icon_theme, const char *theme_name)
       dir_mtime->cache = NULL;
       dir_mtime->dir = path;
       if (g_stat (path, &stat_buf) == 0 && S_ISDIR (stat_buf.st_mode))
-	dir_mtime->mtime = stat_buf.st_mtime;
+	{
+	  dir_mtime->mtime = stat_buf.st_mtime;
+	  dir_mtime->exists = TRUE;
+	}
       else
-	dir_mtime->mtime = 0;
+	{
+	  dir_mtime->mtime = 0;
+	  dir_mtime->exists = FALSE;
+	}
 
       priv->dir_mtimes = g_list_prepend (priv->dir_mtimes, dir_mtime);
     }
@@ -1073,11 +1080,13 @@ load_themes (GtkIconTheme *icon_theme)
       
       dir_mtime->dir = g_strdup (dir);
       dir_mtime->mtime = 0;
+      dir_mtime->exists = FALSE;
       dir_mtime->cache = NULL;
 
       if (g_stat (dir, &stat_buf) != 0 || !S_ISDIR (stat_buf.st_mode))
 	continue;
       dir_mtime->mtime = stat_buf.st_mtime;
+      dir_mtime->exists = TRUE;
 
       dir_mtime->cache = _gtk_icon_cache_new_for_path (dir);
       if (dir_mtime->cache != NULL)
@@ -1901,12 +1910,12 @@ rescan_themes (GtkIconTheme *icon_theme)
       stat_res = g_stat (dir_mtime->dir, &stat_buf);
 
       /* dir mtime didn't change */
-      if (stat_res == 0 &&
+      if (stat_res == 0 && dir_mtime->exists &&
 	  S_ISDIR (stat_buf.st_mode) &&
 	  dir_mtime->mtime == stat_buf.st_mtime)
 	continue;
       /* didn't exist before, and still doesn't */
-      if (dir_mtime->mtime == 0 &&
+      if (!dir_mtime->exists &&
 	  (stat_res != 0 || !S_ISDIR (stat_buf.st_mode)))
 	continue;
 
@@ -2547,7 +2556,7 @@ theme_subdir_load (GtkIconTheme *icon_theme,
     {
       dir_mtime = (IconThemeDirMtime *)d->data;
 
-      if (dir_mtime->mtime == 0)
+      if (!dir_mtime->exists)
 	continue; /* directory doesn't exist */
 
        full_dir = g_build_filename (dir_mtime->dir, subdir, NULL);
