@@ -1087,8 +1087,10 @@ captured_event_cb (GtkWidget *widget,
 
   if (event->type == GDK_MOTION_NOTIFY)
     {
-      indicator_start_fade (&priv->hindicator, 1.0);
-      indicator_start_fade (&priv->vindicator, 1.0);
+      if (priv->hscrollbar_visible)
+        indicator_start_fade (&priv->hindicator, 1.0);
+      if (priv->vscrollbar_visible)
+        indicator_start_fade (&priv->vindicator, 1.0);
 
       if ((event->motion.state &
            (GDK_BUTTON1_MASK | GDK_BUTTON2_MASK | GDK_BUTTON3_MASK)) != 0)
