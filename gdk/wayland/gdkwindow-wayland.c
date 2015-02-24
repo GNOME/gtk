@@ -140,7 +140,8 @@ struct _GdkWindowImplWaylandClass
 
 static void gdk_wayland_window_configure (GdkWindow *window,
                                           int        width,
-                                          int        height);
+                                          int        height,
+                                          int        scale);
 
 GType _gdk_window_impl_wayland_get_type (void);
 
@@ -162,7 +163,8 @@ _gdk_window_impl_wayland_init (GdkWindowImplWayland *impl)
 static void
 gdk_wayland_window_update_size (GdkWindow *window,
                                 int32_t    width,
-                                int32_t    height)
+                                int32_t    height,
+                                int        scale)
 {
   GdkWindowImplWayland *impl = GDK_WINDOW_IMPL_WAYLAND (window->impl);
   GdkRectangle area;
@@ -176,6 +178,7 @@ gdk_wayland_window_update_size (GdkWindow *window,
 
   window->width = width;
   window->height = height;
+  impl->scale = scale;
 
   if (impl->egl_window)
     wl_egl_window_resize (impl->egl_window, width, height, 0, 0);
@@ -418,13 +421,10 @@ window_update_scale (GdkWindow *window)
       scale = MAX (scale, output_scale);
     }
 
-  if (scale != impl->scale)
-    {
-      impl->scale = scale;
-
-      /* Notify app that scale changed */
-      gdk_wayland_window_configure (window, window->width, window->height);
-    }
+  /* Notify app that scale changed */
+  gdk_wayland_window_configure (window,
+                                window->width, window->height,
+                                scale);
 }
 
 static void
@@ -621,12 +621,16 @@ gdk_window_impl_wayland_finalize (GObject *object)
 static void
 gdk_wayland_window_configure (GdkWindow *window,
                               int        width,
-                              int        height)
+                              int        height,
+                              int        scale)
 {
+  GdkWindowImplWayland *impl = GDK_WINDOW_IMPL_WAYLAND (window->impl);
   GdkDisplay *display;
   GdkEvent *event;
 
-  if (window->width == width && window->height == height)
+  if (window->width == width &&
+      window->height == height &&
+      impl->scale == scale)
     return;
 
   event = gdk_event_new (GDK_CONFIGURE);
@@ -635,7 +639,7 @@ gdk_wayland_window_configure (GdkWindow *window,
   event->configure.width = width;
   event->configure.height = height;
 
-  gdk_wayland_window_update_size (window, width, height);
+  gdk_wayland_window_update_size (window, width, height, scale);
   _gdk_window_update_size (window);
 
   display = gdk_window_get_display (window);
@@ -859,7 +863,7 @@ xdg_surface_configure (void               *data,
                                  &width,
                                  &height);
 
-      gdk_wayland_window_configure (window, width, height);
+      gdk_wayland_window_configure (window, width, height, impl->scale);
     }
 
   wl_array_for_each(p, states)
@@ -1312,12 +1316,10 @@ gdk_window_wayland_move_resize (GdkWindow *window,
                                 gint       width,
                                 gint       height)
 {
+  GdkWindowImplWayland *impl = GDK_WINDOW_IMPL_WAYLAND (window->impl);
+
   if (with_move)
     {
-      GdkWindowImplWayland *impl;
-
-      impl = GDK_WINDOW_IMPL_WAYLAND (window->impl);
-
       /* Each toplevel has in its own "root" coordinate system */
       if (GDK_WINDOW_TYPE (window) != GDK_WINDOW_TOPLEVEL)
         {
@@ -1336,7 +1338,7 @@ gdk_window_wayland_move_resize (GdkWindow *window,
    * just move the window - don't update its size
    */
   if (width > 0 && height > 0)
-    gdk_wayland_window_configure (window, width, height);
+    gdk_wayland_window_configure (window, width, height, impl->scale);
 }
 
 static void
@@ -2074,7 +2076,7 @@ gdk_wayland_window_set_shadow_width (GdkWindow *window,
     (impl->margin_left + impl->margin_right) + (left + right);
   new_height = window->height -
     (impl->margin_top + impl->margin_bottom) + (top + bottom);
-  gdk_wayland_window_configure (window, new_width, new_height);
+  gdk_wayland_window_configure (window, new_width, new_height, impl->scale);
 
   impl->margin_left = left;
   impl->margin_right = right;
