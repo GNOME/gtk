@@ -207,7 +207,7 @@ _gtk_allocated_bitmask_subtract (GtkBitmask       *mask,
                                  const GtkBitmask *other)
 {
   GtkBitmask other_allocated;
-  guint i;
+  guint i, len;
 
   g_return_val_if_fail (mask != NULL, NULL);
   g_return_val_if_fail (other != NULL, NULL);
@@ -215,9 +215,10 @@ _gtk_allocated_bitmask_subtract (GtkBitmask       *mask,
   mask = gtk_bitmask_ensure_allocated (mask);
   ENSURE_ALLOCATED (other, other_allocated);
 
-  for (i = 0; i < other->len; i++)
+  len = MIN (mask->len, other->len);
+  for (i = 0; i < len; i++)
     {
-      mask->data[i] |= ~other->data[i];
+      mask->data[i] &= ~other->data[i];
     }
 
   return gtk_allocated_bitmask_shrink (mask);
