@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+.HEAD.he\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-02-16 22:22+0200\n"
-"PO-Revision-Date: 2015-02-16 22:22+0200\n"
+"POT-Creation-Date: 2015-02-24 19:30+0200\n"
+"PO-Revision-Date: 2015-02-24 19:31+0200\n"
 "Last-Translator: Yosef Or Boczko <yoseforb@gmail.com>\n"
 "Language-Team: עברית <>\n"
 "Language: he\n"
@@ -1036,7 +1036,7 @@ msgstr "Whether the proxies for this action look like radio action proxies"
 #: ../gtk/deprecated/gtktoggleaction.c:137 ../gtk/gtkcellrendererspinner.c:125
 #: ../gtk/gtkcheckmenuitem.c:122 ../gtk/gtkmenu.c:555
 #: ../gtk/gtkmodelbutton.c:895 ../gtk/gtkmodelbutton.c:896
-#: ../gtk/gtkspinner.c:119 ../gtk/gtkswitch.c:906 ../gtk/gtktogglebutton.c:179
+#: ../gtk/gtkspinner.c:119 ../gtk/gtkswitch.c:879 ../gtk/gtktogglebutton.c:179
 #: ../gtk/gtktoggletoolbutton.c:127
 msgid "Active"
 msgstr "Active"
@@ -1294,14 +1294,14 @@ msgstr ""
 "start or end of the parent"
 
 #: ../gtk/gtkactionbar.c:257 ../gtk/gtkbox.c:336 ../gtk/gtkheaderbar.c:1854
-#: ../gtk/gtknotebook.c:775 ../gtk/gtkpaned.c:337 ../gtk/gtkpopover.c:1387
+#: ../gtk/gtknotebook.c:778 ../gtk/gtkpaned.c:337 ../gtk/gtkpopover.c:1594
 #: ../gtk/gtkpopovermenu.c:375 ../gtk/gtkstack.c:471
 #: ../gtk/gtktoolitemgroup.c:1674
 msgid "Position"
 msgstr "Position"
 
 #: ../gtk/gtkactionbar.c:258 ../gtk/gtkbox.c:337 ../gtk/gtkheaderbar.c:1855
-#: ../gtk/gtknotebook.c:776 ../gtk/gtkpopovermenu.c:376 ../gtk/gtkstack.c:472
+#: ../gtk/gtknotebook.c:779 ../gtk/gtkpopovermenu.c:376 ../gtk/gtkstack.c:472
 msgid "The index of the child in the parent"
 msgstr "The index of the child in the parent"
 
@@ -1374,11 +1374,11 @@ msgstr "Show default item"
 msgid "Whether the combobox should show the default application on top"
 msgstr "Whether the combobox should show the default application on top"
 
-#: ../gtk/gtkappchooserbutton.c:646 ../gtk/gtkappchooserdialog.c:678
+#: ../gtk/gtkappchooserbutton.c:646 ../gtk/gtkappchooserdialog.c:683
 msgid "Heading"
 msgstr "Heading"
 
-#: ../gtk/gtkappchooserbutton.c:647 ../gtk/gtkappchooserdialog.c:679
+#: ../gtk/gtkappchooserbutton.c:647 ../gtk/gtkappchooserdialog.c:684
 msgid "The text to show at the top of the dialog"
 msgstr "The text to show at the top of the dialog"
 
@@ -1390,11 +1390,11 @@ msgstr "Content type"
 msgid "The content type used by the open with object"
 msgstr "The content type used by the open with object"
 
-#: ../gtk/gtkappchooserdialog.c:664
+#: ../gtk/gtkappchooserdialog.c:669
 msgid "GFile"
 msgstr "GFile"
 
-#: ../gtk/gtkappchooserdialog.c:665
+#: ../gtk/gtkappchooserdialog.c:670
 msgid "The GFile used by the app chooser dialog"
 msgstr "The GFile used by the app chooser dialog"
 
@@ -2328,7 +2328,7 @@ msgstr "The vertical text alignment, from 0 (top) to 1 (bottom)."
 
 #: ../gtk/gtkcellrendererprogress.c:226 ../gtk/gtklevelbar.c:1022
 #: ../gtk/gtkmodelbutton.c:926 ../gtk/gtkprogressbar.c:159
-#: ../gtk/gtkrange.c:436
+#: ../gtk/gtkrange.c:439
 msgid "Inverted"
 msgstr "Inverted"
 
@@ -2336,7 +2336,7 @@ msgstr "Inverted"
 msgid "Invert the direction in which the progress bar grows"
 msgstr "Invert the direction in which the progress bar grows"
 
-#: ../gtk/gtkcellrendererspin.c:113 ../gtk/gtkrange.c:428
+#: ../gtk/gtkcellrendererspin.c:113 ../gtk/gtkrange.c:431
 #: ../gtk/gtkscalebutton.c:210 ../gtk/gtkspinbutton.c:347
 msgid "Adjustment"
 msgstr "Adjustment"
@@ -4056,6 +4056,14 @@ msgstr "Number of points needed to trigger the gesture"
 msgid "GdkWindow to receive events about"
 msgstr "GdkWindow to receive events about"
 
+#: ../gtk/gtkgesturelongpress.c:284
+msgid "Delay factor"
+msgstr "Delay factor"
+
+#: ../gtk/gtkgesturelongpress.c:285
+msgid "Factor by which to modify the default timeout"
+msgstr "Factor by which to modify the default timeout"
+
 #: ../gtk/gtkgesturepan.c:238
 msgid "Allowed orientations"
 msgstr "Allowed orientations"
@@ -4716,51 +4724,51 @@ msgstr "Internal padding"
 msgid "Amount of border space between the menubar shadow and the menu items"
 msgstr "Amount of border space between the menubar shadow and the menu items"
 
-#: ../gtk/gtkmenubutton.c:512
+#: ../gtk/gtkmenubutton.c:518
 msgid "Popup"
 msgstr "Popup"
 
-#: ../gtk/gtkmenubutton.c:513
+#: ../gtk/gtkmenubutton.c:519
 msgid "The dropdown menu."
 msgstr "The dropdown menu."
 
-#: ../gtk/gtkmenubutton.c:532
+#: ../gtk/gtkmenubutton.c:538
 msgid "Menu model"
 msgstr "Menu model"
 
-#: ../gtk/gtkmenubutton.c:533
+#: ../gtk/gtkmenubutton.c:539
 msgid "The model from which the popup is made."
 msgstr "The model from which the popup is made."
 
-#: ../gtk/gtkmenubutton.c:546
+#: ../gtk/gtkmenubutton.c:552
 msgid "Align with"
 msgstr "Align with"
 
-#: ../gtk/gtkmenubutton.c:547
+#: ../gtk/gtkmenubutton.c:553
 msgid "The parent widget which the menu should align with."
 msgstr "The parent widget which the menu should align with."
 
-#: ../gtk/gtkmenubutton.c:561 ../gtk/gtkstylecontext.c:257
+#: ../gtk/gtkmenubutton.c:567 ../gtk/gtkstylecontext.c:257
 msgid "Direction"
 msgstr "Direction"
 
-#: ../gtk/gtkmenubutton.c:562
+#: ../gtk/gtkmenubutton.c:568
 msgid "The direction the arrow should point."
 msgstr "The direction the arrow should point."
 
-#: ../gtk/gtkmenubutton.c:578
+#: ../gtk/gtkmenubutton.c:584
 msgid "Use a popover"
 msgstr "Use a popover"
 
-#: ../gtk/gtkmenubutton.c:579
+#: ../gtk/gtkmenubutton.c:585
 msgid "Use a popover instead of a menu"
 msgstr "Use a popover instead of a menu"
 
-#: ../gtk/gtkmenubutton.c:593
+#: ../gtk/gtkmenubutton.c:599
 msgid "Popover"
 msgstr "Popover"
 
-#: ../gtk/gtkmenubutton.c:594
+#: ../gtk/gtkmenubutton.c:600
 msgid "The popover"
 msgstr "The popover"
 
@@ -5088,51 +5096,51 @@ msgstr "Are we showing a dialog"
 msgid "The screen where this window will be displayed."
 msgstr "The screen where this window will be displayed."
 
-#: ../gtk/gtknotebook.c:700
+#: ../gtk/gtknotebook.c:703
 msgid "Page"
 msgstr "Page"
 
-#: ../gtk/gtknotebook.c:701
+#: ../gtk/gtknotebook.c:704
 msgid "The index of the current page"
 msgstr "The index of the current page"
 
-#: ../gtk/gtknotebook.c:709
+#: ../gtk/gtknotebook.c:712
 msgid "Tab Position"
 msgstr "Tab Position"
 
-#: ../gtk/gtknotebook.c:710
+#: ../gtk/gtknotebook.c:713
 msgid "Which side of the notebook holds the tabs"
 msgstr "Which side of the notebook holds the tabs"
 
-#: ../gtk/gtknotebook.c:717
+#: ../gtk/gtknotebook.c:720
 msgid "Show Tabs"
 msgstr "Show Tabs"
 
-#: ../gtk/gtknotebook.c:718
+#: ../gtk/gtknotebook.c:721
 msgid "Whether tabs should be shown"
 msgstr "Whether tabs should be shown"
 
-#: ../gtk/gtknotebook.c:724
+#: ../gtk/gtknotebook.c:727
 msgid "Show Border"
 msgstr "Show Border"
 
-#: ../gtk/gtknotebook.c:725
+#: ../gtk/gtknotebook.c:728
 msgid "Whether the border should be shown"
 msgstr "Whether the border should be shown"
 
-#: ../gtk/gtknotebook.c:731
+#: ../gtk/gtknotebook.c:734
 msgid "Scrollable"
 msgstr "Scrollable"
 
-#: ../gtk/gtknotebook.c:732
+#: ../gtk/gtknotebook.c:735
 msgid "If TRUE, scroll arrows are added if there are too many tabs to fit"
 msgstr "If TRUE, scroll arrows are added if there are too many tabs to fit"
 
-#: ../gtk/gtknotebook.c:738
+#: ../gtk/gtknotebook.c:741
 msgid "Enable Popup"
 msgstr "Enable Popup"
 
-#: ../gtk/gtknotebook.c:739
+#: ../gtk/gtknotebook.c:742
 msgid ""
 "If TRUE, pressing the right mouse button on the notebook pops up a menu that "
 "you can use to go to a page"
@@ -5140,135 +5148,135 @@ msgstr ""
 "If TRUE, pressing the right mouse button on the notebook pops up a menu that "
 "you can use to go to a page"
 
-#: ../gtk/gtknotebook.c:753
+#: ../gtk/gtknotebook.c:756
 msgid "Group Name"
 msgstr "Group Name"
 
-#: ../gtk/gtknotebook.c:754
+#: ../gtk/gtknotebook.c:757
 msgid "Group name for tab drag and drop"
 msgstr "Group name for tab drag and drop"
 
-#: ../gtk/gtknotebook.c:761
+#: ../gtk/gtknotebook.c:764
 msgid "Tab label"
 msgstr "Tab label"
 
-#: ../gtk/gtknotebook.c:762
+#: ../gtk/gtknotebook.c:765
 msgid "The string displayed on the child's tab label"
 msgstr "The string displayed on the child's tab label"
 
-#: ../gtk/gtknotebook.c:768
+#: ../gtk/gtknotebook.c:771
 msgid "Menu label"
 msgstr "Menu label"
 
-#: ../gtk/gtknotebook.c:769
+#: ../gtk/gtknotebook.c:772
 msgid "The string displayed in the child's menu entry"
 msgstr "The string displayed in the child's menu entry"
 
-#: ../gtk/gtknotebook.c:782
+#: ../gtk/gtknotebook.c:785
 msgid "Tab expand"
 msgstr "Tab expand"
 
-#: ../gtk/gtknotebook.c:783
+#: ../gtk/gtknotebook.c:786
 msgid "Whether to expand the child's tab"
 msgstr "Whether to expand the child's tab"
 
-#: ../gtk/gtknotebook.c:789
+#: ../gtk/gtknotebook.c:792
 msgid "Tab fill"
 msgstr "Tab fill"
 
-#: ../gtk/gtknotebook.c:790
+#: ../gtk/gtknotebook.c:793
 msgid "Whether the child's tab should fill the allocated area"
 msgstr "Whether the child's tab should fill the allocated area"
 
-#: ../gtk/gtknotebook.c:797
+#: ../gtk/gtknotebook.c:800
 msgid "Tab reorderable"
 msgstr "Tab reorderable"
 
-#: ../gtk/gtknotebook.c:798
+#: ../gtk/gtknotebook.c:801
 msgid "Whether the tab is reorderable by user action"
 msgstr "Whether the tab is reorderable by user action"
 
-#: ../gtk/gtknotebook.c:804
+#: ../gtk/gtknotebook.c:807
 msgid "Tab detachable"
 msgstr "Tab detachable"
 
-#: ../gtk/gtknotebook.c:805
+#: ../gtk/gtknotebook.c:808
 msgid "Whether the tab is detachable"
 msgstr "Whether the tab is detachable"
 
-#: ../gtk/gtknotebook.c:820 ../gtk/gtkscrollbar.c:101
+#: ../gtk/gtknotebook.c:823 ../gtk/gtkscrollbar.c:101
 msgid "Secondary backward stepper"
 msgstr "Secondary backward stepper"
 
-#: ../gtk/gtknotebook.c:821
+#: ../gtk/gtknotebook.c:824
 msgid ""
 "Display a second backward arrow button on the opposite end of the tab area"
 msgstr ""
 "Display a second backward arrow button on the opposite end of the tab area"
 
-#: ../gtk/gtknotebook.c:836 ../gtk/gtkscrollbar.c:108
+#: ../gtk/gtknotebook.c:839 ../gtk/gtkscrollbar.c:108
 msgid "Secondary forward stepper"
 msgstr "Secondary forward stepper"
 
-#: ../gtk/gtknotebook.c:837
+#: ../gtk/gtknotebook.c:840
 msgid ""
 "Display a second forward arrow button on the opposite end of the tab area"
 msgstr ""
 "Display a second forward arrow button on the opposite end of the tab area"
 
-#: ../gtk/gtknotebook.c:851 ../gtk/gtkscrollbar.c:87
+#: ../gtk/gtknotebook.c:854 ../gtk/gtkscrollbar.c:87
 msgid "Backward stepper"
 msgstr "Backward stepper"
 
-#: ../gtk/gtknotebook.c:852 ../gtk/gtkscrollbar.c:88
+#: ../gtk/gtknotebook.c:855 ../gtk/gtkscrollbar.c:88
 msgid "Display the standard backward arrow button"
 msgstr "Display the standard backward arrow button"
 
-#: ../gtk/gtknotebook.c:866 ../gtk/gtkscrollbar.c:94
+#: ../gtk/gtknotebook.c:869 ../gtk/gtkscrollbar.c:94
 msgid "Forward stepper"
 msgstr "Forward stepper"
 
-#: ../gtk/gtknotebook.c:867 ../gtk/gtkscrollbar.c:95
+#: ../gtk/gtknotebook.c:870 ../gtk/gtkscrollbar.c:95
 msgid "Display the standard forward arrow button"
 msgstr "Display the standard forward arrow button"
 
-#: ../gtk/gtknotebook.c:881
+#: ../gtk/gtknotebook.c:884
 msgid "Tab overlap"
 msgstr "Tab overlap"
 
-#: ../gtk/gtknotebook.c:882
+#: ../gtk/gtknotebook.c:885
 msgid "Size of tab overlap area"
 msgstr "Size of tab overlap area"
 
-#: ../gtk/gtknotebook.c:897
+#: ../gtk/gtknotebook.c:900
 msgid "Tab curvature"
 msgstr "Tab curvature"
 
-#: ../gtk/gtknotebook.c:898
+#: ../gtk/gtknotebook.c:901
 msgid "Size of tab curvature"
 msgstr "Size of tab curvature"
 
-#: ../gtk/gtknotebook.c:914
+#: ../gtk/gtknotebook.c:917
 msgid "Arrow spacing"
 msgstr "Arrow spacing"
 
-#: ../gtk/gtknotebook.c:915
+#: ../gtk/gtknotebook.c:918
 msgid "Scroll arrow spacing"
 msgstr "Scroll arrow spacing"
 
-#: ../gtk/gtknotebook.c:931
+#: ../gtk/gtknotebook.c:934
 msgid "Initial gap"
 msgstr "Initial gap"
 
-#: ../gtk/gtknotebook.c:932
+#: ../gtk/gtknotebook.c:935
 msgid "Initial gap before the first tab"
 msgstr "Initial gap before the first tab"
 
-#: ../gtk/gtknotebook.c:950
+#: ../gtk/gtknotebook.c:953
 msgid "Tab gap"
 msgstr "Tab gap"
 
-#: ../gtk/gtknotebook.c:951
+#: ../gtk/gtknotebook.c:954
 msgid "Active tab is drawn with a gap at the bottom"
 msgstr "Active tab is drawn with a gap at the bottom"
 
@@ -5404,33 +5412,41 @@ msgstr "Socket Window"
 msgid "The window of the socket the plug is embedded in"
 msgstr "The window of the socket the plug is embedded in"
 
-#: ../gtk/gtkpopover.c:1359
+#: ../gtk/gtkpopover.c:1566
 msgid "Relative to"
 msgstr "Relative to"
 
-#: ../gtk/gtkpopover.c:1360
+#: ../gtk/gtkpopover.c:1567
 msgid "Widget the bubble window points to"
 msgstr "Widget the bubble window points to"
 
-#: ../gtk/gtkpopover.c:1373
+#: ../gtk/gtkpopover.c:1580
 msgid "Pointing to"
 msgstr "Pointing to"
 
-#: ../gtk/gtkpopover.c:1374
+#: ../gtk/gtkpopover.c:1581
 msgid "Rectangle the bubble window points to"
 msgstr "Rectangle the bubble window points to"
 
-#: ../gtk/gtkpopover.c:1388
+#: ../gtk/gtkpopover.c:1595
 msgid "Position to place the bubble window"
 msgstr "Position to place the bubble window"
 
-#: ../gtk/gtkpopover.c:1403 ../gtk/gtkwindow.c:753
+#: ../gtk/gtkpopover.c:1610 ../gtk/gtkwindow.c:753
 msgid "Modal"
 msgstr "Modal"
 
-#: ../gtk/gtkpopover.c:1404
+#: ../gtk/gtkpopover.c:1611
 msgid "Whether the popover is modal"
 msgstr "Whether the popover is modal"
+
+#: ../gtk/gtkpopover.c:1625
+msgid "Transitions enabled"
+msgstr "Transitions enabled"
+
+#: ../gtk/gtkpopover.c:1626
+msgid "Whether show/hide transitions are enabled or not"
+msgstr "Whether show/hide transitions are enabled or not"
 
 #: ../gtk/gtkpopovermenu.c:350
 msgid "Visible submenu"
@@ -5845,19 +5861,19 @@ msgstr "The radio menu item whose group this widget belongs to."
 msgid "The radio tool button whose group this button belongs to."
 msgstr "The radio tool button whose group this button belongs to."
 
-#: ../gtk/gtkrange.c:429
+#: ../gtk/gtkrange.c:432
 msgid "The GtkAdjustment that contains the current value of this range object"
 msgstr "The GtkAdjustment that contains the current value of this range object"
 
-#: ../gtk/gtkrange.c:437
+#: ../gtk/gtkrange.c:440
 msgid "Invert direction slider moves to increase range value"
 msgstr "Invert direction slider moves to increase range value"
 
-#: ../gtk/gtkrange.c:444
+#: ../gtk/gtkrange.c:447
 msgid "Lower stepper sensitivity"
 msgstr "Lower stepper sensitivity"
 
-#: ../gtk/gtkrange.c:445
+#: ../gtk/gtkrange.c:448
 msgid ""
 "The sensitivity policy for the stepper that points to the adjustment's lower "
 "side"
@@ -5865,11 +5881,11 @@ msgstr ""
 "The sensitivity policy for the stepper that points to the adjustment's lower "
 "side"
 
-#: ../gtk/gtkrange.c:453
+#: ../gtk/gtkrange.c:456
 msgid "Upper stepper sensitivity"
 msgstr "Upper stepper sensitivity"
 
-#: ../gtk/gtkrange.c:454
+#: ../gtk/gtkrange.c:457
 msgid ""
 "The sensitivity policy for the stepper that points to the adjustment's upper "
 "side"
@@ -5877,95 +5893,95 @@ msgstr ""
 "The sensitivity policy for the stepper that points to the adjustment's upper "
 "side"
 
-#: ../gtk/gtkrange.c:471
+#: ../gtk/gtkrange.c:474
 msgid "Show Fill Level"
 msgstr "Show Fill Level"
 
-#: ../gtk/gtkrange.c:472
+#: ../gtk/gtkrange.c:475
 msgid "Whether to display a fill level indicator graphics on trough."
 msgstr "Whether to display a fill level indicator graphics on trough."
 
-#: ../gtk/gtkrange.c:488
+#: ../gtk/gtkrange.c:491
 msgid "Restrict to Fill Level"
 msgstr "Restrict to Fill Level"
 
-#: ../gtk/gtkrange.c:489
+#: ../gtk/gtkrange.c:492
 msgid "Whether to restrict the upper boundary to the fill level."
 msgstr "Whether to restrict the upper boundary to the fill level."
 
-#: ../gtk/gtkrange.c:504
+#: ../gtk/gtkrange.c:507
 msgid "Fill Level"
 msgstr "Fill Level"
 
-#: ../gtk/gtkrange.c:505
+#: ../gtk/gtkrange.c:508
 msgid "The fill level."
 msgstr "The fill level."
 
-#: ../gtk/gtkrange.c:522
+#: ../gtk/gtkrange.c:525
 msgid "Round Digits"
 msgstr "Round Digits"
 
-#: ../gtk/gtkrange.c:523
+#: ../gtk/gtkrange.c:526
 msgid "The number of digits to round the value to."
 msgstr "The number of digits to round the value to."
 
-#: ../gtk/gtkrange.c:529 ../gtk/gtkswitch.c:954
+#: ../gtk/gtkrange.c:532 ../gtk/gtkswitch.c:927
 msgid "Slider Width"
 msgstr "Slider Width"
 
-#: ../gtk/gtkrange.c:530
+#: ../gtk/gtkrange.c:533
 msgid "Width of scrollbar or scale thumb"
 msgstr "Width of scrollbar or scale thumb"
 
-#: ../gtk/gtkrange.c:537
+#: ../gtk/gtkrange.c:540
 msgid "Trough Border"
 msgstr "Trough Border"
 
-#: ../gtk/gtkrange.c:538
+#: ../gtk/gtkrange.c:541
 msgid "Spacing between thumb/steppers and outer trough bevel"
 msgstr "Spacing between thumb/steppers and outer trough bevel"
 
-#: ../gtk/gtkrange.c:545
+#: ../gtk/gtkrange.c:548
 msgid "Stepper Size"
 msgstr "Stepper Size"
 
-#: ../gtk/gtkrange.c:546
+#: ../gtk/gtkrange.c:549
 msgid "Length of step buttons at ends"
 msgstr "Length of step buttons at ends"
 
-#: ../gtk/gtkrange.c:559
+#: ../gtk/gtkrange.c:562
 msgid "Stepper Spacing"
 msgstr "Stepper Spacing"
 
-#: ../gtk/gtkrange.c:560
+#: ../gtk/gtkrange.c:563
 msgid "Spacing between step buttons and thumb"
 msgstr "Spacing between step buttons and thumb"
 
-#: ../gtk/gtkrange.c:567
+#: ../gtk/gtkrange.c:570
 msgid "Arrow X Displacement"
 msgstr "Arrow X Displacement"
 
-#: ../gtk/gtkrange.c:568
+#: ../gtk/gtkrange.c:571
 msgid ""
 "How far in the x direction to move the arrow when the button is depressed"
 msgstr ""
 "How far in the x direction to move the arrow when the button is depressed"
 
-#: ../gtk/gtkrange.c:575
+#: ../gtk/gtkrange.c:578
 msgid "Arrow Y Displacement"
 msgstr "Arrow Y Displacement"
 
-#: ../gtk/gtkrange.c:576
+#: ../gtk/gtkrange.c:579
 msgid ""
 "How far in the y direction to move the arrow when the button is depressed"
 msgstr ""
 "How far in the y direction to move the arrow when the button is depressed"
 
-#: ../gtk/gtkrange.c:592
+#: ../gtk/gtkrange.c:595
 msgid "Trough Under Steppers"
 msgstr "Trough Under Steppers"
 
-#: ../gtk/gtkrange.c:593
+#: ../gtk/gtkrange.c:596
 msgid ""
 "Whether to draw trough for full length of range or exclude the steppers and "
 "spacing"
@@ -5973,11 +5989,11 @@ msgstr ""
 "Whether to draw trough for full length of range or exclude the steppers and "
 "spacing"
 
-#: ../gtk/gtkrange.c:606
+#: ../gtk/gtkrange.c:609
 msgid "Arrow scaling"
 msgstr "Arrow scaling"
 
-#: ../gtk/gtkrange.c:607
+#: ../gtk/gtkrange.c:610
 msgid "Arrow scaling with regard to scroll button size"
 msgstr "Arrow scaling with regard to scroll button size"
 
@@ -7266,19 +7282,19 @@ msgstr "Value type"
 msgid "The value type returned by GtkStyleContext"
 msgstr "The value type returned by GtkStyleContext"
 
-#: ../gtk/gtkswitch.c:907
+#: ../gtk/gtkswitch.c:880
 msgid "Whether the switch is on or off"
 msgstr "Whether the switch is on or off"
 
-#: ../gtk/gtkswitch.c:921
+#: ../gtk/gtkswitch.c:894
 msgid "State"
 msgstr "State"
 
-#: ../gtk/gtkswitch.c:922
+#: ../gtk/gtkswitch.c:895
 msgid "The backend state"
 msgstr "The backend state"
 
-#: ../gtk/gtkswitch.c:955
+#: ../gtk/gtkswitch.c:928
 msgid "The minimum width of the handle"
 msgstr "The minimum width of the handle"
 
