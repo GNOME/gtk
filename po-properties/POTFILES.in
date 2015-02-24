@@ -297,11 +297,14 @@ gtk/paper_names_offsets.c
 gtk/updateiconcache.c
 modules/input/gtkimcontextxim.c
 modules/input/imam-et.c
+modules/input/imbroadway.c
 modules/input/imcedilla.c
 modules/input/imcyrillic-translit.c
+modules/input/imime.c
 modules/input/iminuktitut.c
 modules/input/imipa.c
 modules/input/immultipress.c
+modules/input/imquartz.c
 modules/input/imthai.c
 modules/input/imti-er.c
 modules/input/imti-et.c
