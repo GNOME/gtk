@@ -195,10 +195,12 @@ _gdk_wayland_screen_create_root_window (GdkScreen *screen,
                                         int        width,
                                         int        height)
 {
+  GdkWaylandDisplay *wayland_display =
+    GDK_WAYLAND_DISPLAY (gdk_screen_get_display (screen));
   GdkWindow *window;
   GdkWindowImplWayland *impl;
 
-  window = _gdk_display_create_window (gdk_screen_get_display (screen));
+  window = _gdk_display_create_window (GDK_DISPLAY (wayland_display));
   window->impl = g_object_new (GDK_TYPE_WINDOW_IMPL_WAYLAND, NULL);
   window->impl_window = window;
   window->visual = gdk_screen_get_system_visual (screen);
@@ -206,10 +208,9 @@ _gdk_wayland_screen_create_root_window (GdkScreen *screen,
   impl = GDK_WINDOW_IMPL_WAYLAND (window->impl);
 
   impl->wrapper = GDK_WINDOW (window);
-  if (gdk_screen_get_n_monitors(screen) > 0)
+  if (wayland_display->compositor_version >= WL_SURFACE_HAS_BUFFER_SCALE &&
+      gdk_screen_get_n_monitors(screen) > 0)
     impl->scale = gdk_screen_get_monitor_scale_factor (screen, 0);
-  else
-    impl->scale = 1;
 
   /* logical 1x1 fake buffer */
   impl->cairo_surface =
@@ -405,7 +406,6 @@ window_update_scale (GdkWindow *window)
   if (wayland_display->compositor_version < WL_SURFACE_HAS_BUFFER_SCALE)
     {
       /* We can't set the scale on this surface */
-      impl->scale = 1;
       return;
     }
 
@@ -446,6 +446,7 @@ _gdk_wayland_display_create_window_impl (GdkDisplay    *display,
                                          GdkWindowAttr *attributes,
                                          gint           attributes_mask)
 {
+  GdkWaylandDisplay *wayland_display = GDK_WAYLAND_DISPLAY (display);
   GdkWindowImplWayland *impl;
   GdkFrameClock *frame_clock;
   const char *title;
@@ -468,7 +469,8 @@ _gdk_wayland_display_create_window_impl (GdkDisplay    *display,
   g_object_ref (window);
 
   /* More likely to be right than just assuming 1 */
-  impl->scale = gdk_screen_get_monitor_scale_factor (screen, 0);
+  if (wayland_display->compositor_version >= WL_SURFACE_HAS_BUFFER_SCALE)
+    impl->scale = gdk_screen_get_monitor_scale_factor (screen, 0);
 
   impl->title = NULL;
 
