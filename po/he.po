@@ -12,8 +12,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+.HEAD.he\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-02-16 22:19+0200\n"
-"PO-Revision-Date: 2015-02-16 22:21+0200\n"
+"POT-Creation-Date: 2015-02-24 15:03+0200\n"
+"PO-Revision-Date: 2015-02-24 15:03+0200\n"
 "Last-Translator: Yosef Or Boczko <yoseforb@gmail.com>\n"
 "Language-Team: עברית <>\n"
 "Language: he\n"
@@ -2176,26 +2176,26 @@ msgstr "_ימין:"
 msgid "Paper Margins"
 msgstr "שולי נייר"
 
-#: ../gtk/gtkentry.c:9626 ../gtk/gtkentry.c:9779 ../gtk/gtklabel.c:6596
+#: ../gtk/gtkentry.c:9626 ../gtk/gtkentry.c:9779 ../gtk/gtklabel.c:6597
 #: ../gtk/gtktextview.c:9037 ../gtk/gtktextview.c:9225
 msgid "Cu_t"
 msgstr "_גזירה"
 
-#: ../gtk/gtkentry.c:9630 ../gtk/gtkentry.c:9782 ../gtk/gtklabel.c:6597
+#: ../gtk/gtkentry.c:9630 ../gtk/gtkentry.c:9782 ../gtk/gtklabel.c:6598
 #: ../gtk/gtktextview.c:9041 ../gtk/gtktextview.c:9229
 msgid "_Copy"
 msgstr "ה_עתקה"
 
-#: ../gtk/gtkentry.c:9634 ../gtk/gtkentry.c:9785 ../gtk/gtklabel.c:6598
+#: ../gtk/gtkentry.c:9634 ../gtk/gtkentry.c:9785 ../gtk/gtklabel.c:6599
 #: ../gtk/gtktextview.c:9043 ../gtk/gtktextview.c:9231
 msgid "_Paste"
 msgstr "ה_דבקה"
 
-#: ../gtk/gtkentry.c:9637 ../gtk/gtklabel.c:6600 ../gtk/gtktextview.c:9046
+#: ../gtk/gtkentry.c:9637 ../gtk/gtklabel.c:6601 ../gtk/gtktextview.c:9046
 msgid "_Delete"
 msgstr "מ_חיקה"
 
-#: ../gtk/gtkentry.c:9648 ../gtk/gtklabel.c:6609 ../gtk/gtktextview.c:9060
+#: ../gtk/gtkentry.c:9648 ../gtk/gtklabel.c:6610 ../gtk/gtktextview.c:9060
 msgid "Select _All"
 msgstr "בחירת ה_כול"
 
@@ -2423,7 +2423,7 @@ msgstr "בחירת גופן"
 msgid "None"
 msgstr "ללא"
 
-#: ../gtk/gtkglarea.c:265
+#: ../gtk/gtkglarea.c:264
 msgid "OpenGL context creation failed"
 msgstr "OpenGL context creation failed"
 
@@ -2435,32 +2435,33 @@ msgstr "תפריט יישום"
 msgid "Close"
 msgstr "סגירה"
 
-#: ../gtk/gtkicontheme.c:2308 ../gtk/gtkicontheme.c:2372
+#: ../gtk/gtkicontheme.c:2314 ../gtk/gtkicontheme.c:2378
 #, c-format
 msgid "Icon '%s' not present in theme %s"
 msgstr "Icon '%s' not present in theme %s"
 
-#: ../gtk/gtkicontheme.c:4010 ../gtk/gtkicontheme.c:4377
+#: ../gtk/gtkicontheme.c:4016 ../gtk/gtkicontheme.c:4383
 msgid "Failed to load icon"
 msgstr "טעינת הסמל נכשלה"
 
-#: ../gtk/gtkimmodule.c:538
+#: ../gtk/gtkimmodule.c:539
+msgctxt "input method menu"
 msgid "Simple"
 msgstr "פשוט"
 
-# hebrew note: "תיקייה" is "folder", but there is no better word for
-# "directory"
-#: ../gtk/gtkimmulticontext.c:611
-msgctxt "input method menu"
-msgid "System"
-msgstr "מערכת"
-
-#: ../gtk/gtkimmulticontext.c:621
+#: ../gtk/gtkimmodule.c:555
 msgctxt "input method menu"
 msgid "None"
 msgstr "ללא"
 
-#: ../gtk/gtkimmulticontext.c:704
+# hebrew note: "תיקייה" is "folder", but there is no better word for
+# "directory"
+#: ../gtk/gtkimmulticontext.c:609
+msgctxt "input method menu"
+msgid "System"
+msgstr "מערכת"
+
+#: ../gtk/gtkimmulticontext.c:688
 #, c-format
 msgctxt "input method menu"
 msgid "System (%s)"
@@ -2483,12 +2484,12 @@ msgid "Error"
 msgstr "שגיאה"
 
 #. Open Link
-#: ../gtk/gtklabel.c:6577
+#: ../gtk/gtklabel.c:6578
 msgid "_Open Link"
 msgstr "_פתיחת קישור"
 
 #. Copy Link Address
-#: ../gtk/gtklabel.c:6586
+#: ../gtk/gtklabel.c:6587
 msgid "Copy _Link Address"
 msgstr "העתקת כתובת ה_קישור"
 
@@ -2629,7 +2630,7 @@ msgstr "Show GTK+ Options"
 msgid "default:LTR"
 msgstr "default:RTL"
 
-#: ../gtk/gtkmenubutton.c:655 ../gtk/inspector/window.ui.h:19
+#: ../gtk/gtkmenubutton.c:661 ../gtk/inspector/window.ui.h:19
 msgid "Menu"
 msgstr "תפריט"
 
@@ -3314,7 +3315,7 @@ msgstr "חיפוש"
 #. * glyphs then use MEDIUM VERTICAL BAR (U+2759) as the text for
 #. * the state
 #.
-#: ../gtk/gtkswitch.c:401 ../gtk/gtkswitch.c:453 ../gtk/gtkswitch.c:633
+#: ../gtk/gtkswitch.c:379 ../gtk/gtkswitch.c:431 ../gtk/gtkswitch.c:606
 msgctxt "switch"
 msgid "ON"
 msgstr "❙"
@@ -3322,7 +3323,7 @@ msgstr "❙"
 #. Translators: if the "off" state label requires more than three
 #. * glyphs then use WHITE CIRCLE (U+25CB) as the text for the state
 #.
-#: ../gtk/gtkswitch.c:409 ../gtk/gtkswitch.c:454 ../gtk/gtkswitch.c:648
+#: ../gtk/gtkswitch.c:387 ../gtk/gtkswitch.c:432 ../gtk/gtkswitch.c:621
 msgctxt "switch"
 msgid "OFF"
 msgstr "○"
@@ -5183,56 +5184,67 @@ msgstr ""
 
 #. ID
 #: ../modules/input/imam-et.c:452
+msgctxt "input method menu"
 msgid "Amharic (EZ+)"
 msgstr "אמהרית (EZ+‎)"
 
 #. ID
 #: ../modules/input/imcedilla.c:90
+msgctxt "input method menu"
 msgid "Cedilla"
 msgstr "סדיליה"
 
 #. ID
 #: ../modules/input/imcyrillic-translit.c:215
+msgctxt "input menthod menu"
 msgid "Cyrillic (Transliterated)"
 msgstr "קרילית (מתועתקת)"
 
 #. ID
 #: ../modules/input/iminuktitut.c:125
+msgctxt "input method menu"
 msgid "Inuktitut (Transliterated)"
 msgstr "אינוקטיטוט (מתועתקת)"
 
 #. ID
 #: ../modules/input/imipa.c:143
+msgctxt "input method menu"
 msgid "IPA"
 msgstr "האלפבית הפונטי הלאומי (IPA)"
 
 #. ID
 #: ../modules/input/immultipress.c:30
+msgctxt "input method menu"
 msgid "Multipress"
 msgstr "ריבוי לחיצות"
 
 #. ID
 #: ../modules/input/imthai.c:33
+msgctxt "input method menu"
 msgid "Thai-Lao"
 msgstr "לאו-תאית"
 
 #. ID
 #: ../modules/input/imti-er.c:451
+msgctxt "input method menu"
 msgid "Tigrigna-Eritrean (EZ+)"
 msgstr "תיגרינית אריתראית (EZ+‎)"
 
 #. ID
 #: ../modules/input/imti-et.c:451
+msgctxt "input method menu"
 msgid "Tigrigna-Ethiopian (EZ+)"
 msgstr "תיגרינית אתיופית (EZ+‎)"
 
 #. ID
 #: ../modules/input/imviqr.c:242
+msgctxt "input method menu"
 msgid "Vietnamese (VIQR)"
 msgstr "וייטנאמית (VIQR)"
 
 #. ID
 #: ../modules/input/imxim.c:26
+msgctxt "input method menu"
 msgid "X Input Method"
 msgstr "שיטת הקלט של X"
 
