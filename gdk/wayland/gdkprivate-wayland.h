@@ -219,6 +219,7 @@ cairo_surface_t * _gdk_wayland_display_create_shm_surface (GdkWaylandDisplay *di
 struct wl_buffer *_gdk_wayland_shm_surface_get_wl_buffer (cairo_surface_t *surface);
 void _gdk_wayland_shm_surface_set_busy (cairo_surface_t *surface);
 gboolean _gdk_wayland_shm_surface_get_busy (cairo_surface_t *surface);
+gboolean _gdk_wayland_is_shm_surface (cairo_surface_t *surface);
 
 GdkWaylandSelection * gdk_wayland_display_get_selection (GdkDisplay *display);
 GdkWaylandSelection * gdk_wayland_selection_new (void);

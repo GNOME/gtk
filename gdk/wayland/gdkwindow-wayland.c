@@ -393,6 +393,8 @@ on_frame_clock_after_paint (GdkFrameClock *clock,
   if (!impl->pending_commit)
     return;
 
+  g_assert (_gdk_wayland_is_shm_surface (impl->cairo_surface));
+
   impl->pending_commit = FALSE;
   impl->pending_frame_counter = gdk_frame_clock_get_frame_counter (clock);
 
@@ -522,6 +524,8 @@ gdk_wayland_window_attach_image (GdkWindow *window)
   if (GDK_WINDOW_DESTROYED (window))
     return;
 
+  g_assert (_gdk_wayland_is_shm_surface (impl->cairo_surface));
+
   /* Attach this new buffer to the surface */
   wl_surface_attach (impl->surface,
                      _gdk_wayland_shm_surface_get_wl_buffer (impl->cairo_surface),
@@ -539,7 +543,21 @@ static void
 gdk_wayland_window_ensure_cairo_surface (GdkWindow *window)
 {
   GdkWindowImplWayland *impl = GDK_WINDOW_IMPL_WAYLAND (window->impl);
-  if (!impl->cairo_surface)
+
+  /* If we are drawing using OpenGL then we only need a logical 1x1 surface. */
+  if (impl->egl_window)
+    {
+      if (impl->cairo_surface &&
+          _gdk_wayland_is_shm_surface (impl->cairo_surface))
+        cairo_surface_destroy (impl->cairo_surface);
+
+      impl->cairo_surface = cairo_image_surface_create (CAIRO_FORMAT_ARGB32,
+                                                        impl->scale,
+                                                        impl->scale);
+      cairo_surface_set_device_scale (impl->cairo_surface,
+                                      impl->scale, impl->scale);
+    }
+  else if (!impl->cairo_surface)
     {
       GdkWaylandDisplay *display_wayland = GDK_WAYLAND_DISPLAY (gdk_window_get_display (impl->wrapper));
 
@@ -582,7 +600,10 @@ gdk_window_impl_wayland_begin_paint (GdkWindow *window)
 {
   GdkWindowImplWayland *impl = GDK_WINDOW_IMPL_WAYLAND (window->impl);
   gdk_wayland_window_ensure_cairo_surface (window);
-  return _gdk_wayland_shm_surface_get_busy (impl->cairo_surface);
+  if (_gdk_wayland_is_shm_surface (impl->cairo_surface))
+    return _gdk_wayland_shm_surface_get_busy (impl->cairo_surface);
+  else
+    return FALSE;
 }
 
 static void

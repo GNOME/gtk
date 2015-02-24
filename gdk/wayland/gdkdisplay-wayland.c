@@ -834,6 +834,12 @@ _gdk_wayland_shm_surface_get_busy (cairo_surface_t *surface)
   return data->busy;
 }
 
+gboolean
+_gdk_wayland_is_shm_surface (cairo_surface_t *surface)
+{
+  return cairo_surface_get_user_data (surface, &gdk_wayland_cairo_key) != NULL;
+}
+
 GdkWaylandSelection *
 gdk_wayland_display_get_selection (GdkDisplay *display)
 {
