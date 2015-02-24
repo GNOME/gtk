@@ -634,7 +634,7 @@ gtk_im_multicontext_append_menuitems (GtkIMMulticontext *context,
 		   * GTK+. Input method may have a name in the GTK+
 		   * message catalog.
 		   */
-		  translated_name = C_("input method menu", contexts[i]->context_name);
+		  translated_name = g_dpgettext2 (GETTEXT_PACKAGE, "input method menu", contexts[i]->context_name);
 		}
 	      else
 		{
@@ -646,7 +646,7 @@ gtk_im_multicontext_append_menuitems (GtkIMMulticontext *context,
 		  g_warning ("Input method %s should not use GTK's translation domain %s",
 			     contexts[i]->context_id, GETTEXT_PACKAGE);
 		  /* Try translating the name in GTK+'s domain */
-		  translated_name = _(contexts[i]->context_name);
+		  translated_name = g_dpgettext2 (GETTEXT_PACKAGE, "input method menu", contexts[i]->context_name);
 		}
 	    }
 	  else if (contexts[i]->domain_dirname && contexts[i]->domain_dirname[0])
