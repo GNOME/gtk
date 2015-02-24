@@ -27,7 +27,7 @@
  */
 static const GtkIMContextInfo info = { 
   CONTEXT_ID,		   /* ID */
-  N_("Multipress"),     /* Human readable name */
+  NC_("input method menu", "Multipress"),     /* Human readable name */
   GETTEXT_PACKAGE,	   /* Translation domain. Defined in configure.ac */
   MULTIPRESS_LOCALEDIR,	   /* Dir for bindtextdomain (not strictly needed for "gtk+"). Defined in the Makefile.am */
   ""			   /* Languages for which this module is the default */

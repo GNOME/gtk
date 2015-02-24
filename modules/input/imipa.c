@@ -140,7 +140,7 @@ ipa_init (GtkIMContextSimple *im_context)
 
 static const GtkIMContextInfo ipa_info = { 
   "ipa",		   /* ID */
-  N_("IPA"),                       /* Human readable name */
+  NC_("input method menu", "IPA"), /* Human readable name */
   GETTEXT_PACKAGE,		   /* Translation domain */
    GTK_LOCALEDIR,		   /* Dir for bindtextdomain (not strictly needed for "gtk+") */
   ""			           /* Languages for which this module is the default */

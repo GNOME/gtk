@@ -38,8 +38,6 @@
  */
 
 
-#define NONE_ID "gtk-im-context-none"
-
 struct _GtkIMMulticontextPrivate
 {
   GtkIMContext          *slave;
@@ -274,12 +272,12 @@ gtk_im_multicontext_get_slave (GtkIMMulticontext *multicontext)
 
       priv->context_id = g_strdup (get_effective_context_id (multicontext));
 
-      if (g_strcmp0 (priv->context_id, NONE_ID) == 0)
-        return NULL;
-
       slave = _gtk_im_module_create (priv->context_id);
-      gtk_im_multicontext_set_slave (multicontext, slave, FALSE);
-      g_object_unref (slave);
+      if (slave)
+        {
+          gtk_im_multicontext_set_slave (multicontext, slave, FALSE);
+          g_object_unref (slave);
+        }
     }
 
   return priv->slave;
@@ -618,19 +616,6 @@ gtk_im_multicontext_append_menuitems (GtkIMMulticontext *context,
   gtk_widget_show (menuitem);
   gtk_menu_shell_append (menushell, menuitem);
 
-  menuitem = gtk_radio_menu_item_new_with_label (group, C_("input method menu", "None"));
-  if (g_strcmp0 (priv->context_id_aux, NONE_ID) == 0)
-    gtk_check_menu_item_set_active (GTK_CHECK_MENU_ITEM (menuitem), TRUE);
-  g_object_set_data (G_OBJECT (menuitem), I_("gtk-context-id"), NONE_ID);
-  g_signal_connect (menuitem, "activate", G_CALLBACK (activate_cb), context);
-  gtk_widget_show (menuitem);
-  gtk_menu_shell_append (menushell, menuitem);
-  group = gtk_radio_menu_item_get_group (GTK_RADIO_MENU_ITEM (menuitem));
-  
-  menuitem = gtk_separator_menu_item_new ();
-  gtk_widget_show (menuitem);
-  gtk_menu_shell_append (menushell, menuitem);
-
   _gtk_im_module_list (&contexts, &n_contexts);
 
   for (i = 0; i < n_contexts; i++)
@@ -649,7 +634,7 @@ gtk_im_multicontext_append_menuitems (GtkIMMulticontext *context,
 		   * GTK+. Input method may have a name in the GTK+
 		   * message catalog.
 		   */
-		  translated_name = _(contexts[i]->context_name);
+		  translated_name = C_("input method menu", contexts[i]->context_name);
 		}
 	      else
 		{
@@ -688,9 +673,8 @@ gtk_im_multicontext_append_menuitems (GtkIMMulticontext *context,
 #else
       translated_name = contexts[i]->context_name;
 #endif
-      menuitem = gtk_radio_menu_item_new_with_label (group,
-						     translated_name);
-      
+      menuitem = gtk_radio_menu_item_new_with_label (group, translated_name);
+
       if ((priv->context_id_aux &&
            strcmp (contexts[i]->context_id, priv->context_id_aux) == 0))
         gtk_check_menu_item_set_active (GTK_CHECK_MENU_ITEM (menuitem), TRUE);
@@ -704,10 +688,10 @@ gtk_im_multicontext_append_menuitems (GtkIMMulticontext *context,
           text = g_strdup_printf (C_("input method menu", "System (%s)"), translated_name);
           gtk_label_set_text (GTK_LABEL (label), text);
           g_free (text);
-        }     
- 
+        }
+
       group = gtk_radio_menu_item_get_group (GTK_RADIO_MENU_ITEM (menuitem));
-      
+
       g_object_set_data (G_OBJECT (menuitem), I_("gtk-context-id"),
 			 (char *)contexts[i]->context_id);
       g_signal_connect (menuitem, "activate",

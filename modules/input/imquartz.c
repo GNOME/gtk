@@ -55,7 +55,7 @@ static GObjectClass *parent_class;
 static const GtkIMContextInfo imquartz_info =
 {
   "quartz",
-  "Mac OS X Quartz",
+  NC_("input method menu", "Mac OS X Quartz"),
   GETTEXT_PACKAGE,
   GTK_LOCALEDIR,
   "ja:ko:zh:*",

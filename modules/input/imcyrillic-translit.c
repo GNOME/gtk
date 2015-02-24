@@ -212,7 +212,7 @@ cyrillic_translit_init (GtkIMContextSimple *im_context)
 
 static const GtkIMContextInfo cyrillic_translit_info = { 
   "cyrillic_translit",		   /* ID */
-  N_("Cyrillic (Transliterated)"), /* Human readable name */
+  NC_("input menthod menu", "Cyrillic (Transliterated)"), /* Human readable name */
   GETTEXT_PACKAGE,		   /* Translation domain */
    GTK_LOCALEDIR,		   /* Dir for bindtextdomain (not strictly needed for "gtk+") */
   ""			           /* Languages for which this module is the default */

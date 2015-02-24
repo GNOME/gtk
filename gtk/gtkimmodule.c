@@ -65,6 +65,7 @@
 #include "deprecated/gtkrc.h"
 
 #define SIMPLE_ID "gtk-im-context-simple"
+#define NONE_ID   "gtk-im-context-none"
 
 /**
  * GtkIMContextInfo:
@@ -520,7 +521,7 @@ compare_gtkimcontextinfo_name(const GtkIMContextInfo **a,
  *            The structures it points are statically allocated and should
  *            not be modified or freed.
  * @n_contexts: the length of the array stored in @contexts
- * 
+ *
  * List all available types of input method context
  */
 void
@@ -535,7 +536,23 @@ _gtk_im_module_list (const GtkIMContextInfo ***contexts,
 #endif
 		GtkIMContextInfo simple_context_info = {
     SIMPLE_ID,
-    N_("Simple"),
+    NC_("input method menu", "Simple"),
+    GETTEXT_PACKAGE,
+#ifdef GTK_LOCALEDIR
+    GTK_LOCALEDIR,
+#else
+    "",
+#endif
+    ""
+  };
+
+  static
+#ifndef G_OS_WIN32
+	  const
+#endif
+		GtkIMContextInfo none_context_info = {
+    NONE_ID,
+    NC_("input method menu", "None"),
     GETTEXT_PACKAGE,
 #ifdef GTK_LOCALEDIR
     GTK_LOCALEDIR,
@@ -561,19 +578,22 @@ _gtk_im_module_list (const GtkIMContextInfo ***contexts,
        */
       simple_context_info.domain_dirname = g_strdup (simple_context_info.domain_dirname);
       correct_localedir_prefix ((char **) &simple_context_info.domain_dirname);
+      none_context_info.domain_dirname = g_strdup (none_context_info.domain_dirname);
+      correct_localedir_prefix ((char **) &none_context_info.domain_dirname);
     }
 #endif
 
   if (n_contexts)
-    *n_contexts = (n_loaded_contexts + 1);
+    *n_contexts = n_loaded_contexts + 2;
 
   if (contexts)
     {
       GSList *tmp_list;
       int i;
-      
-      *contexts = g_new (const GtkIMContextInfo *, n_loaded_contexts + 1);
 
+      *contexts = g_new (const GtkIMContextInfo *, n_loaded_contexts + 2);
+
+      (*contexts)[n++] = &none_context_info;
       (*contexts)[n++] = &simple_context_info;
 
       tmp_list = modules_list;
@@ -583,12 +603,12 @@ _gtk_im_module_list (const GtkIMContextInfo ***contexts,
 
 	  for (i=0; i<module->n_contexts; i++)
 	    (*contexts)[n++] = module->contexts[i];
-	  
+  
 	  tmp_list = tmp_list->next;
 	}
 
-      /* fisrt element (Default) should always be at top */
-      qsort ((*contexts)+1, n-1, sizeof (GtkIMContextInfo *), (GCompareFunc)compare_gtkimcontextinfo_name);
+      /* first elements (Simple and None) should always be at top */
+      qsort ((*contexts)+2, n-2, sizeof (GtkIMContextInfo *), (GCompareFunc)compare_gtkimcontextinfo_name);
     }
 }
 
@@ -607,7 +627,10 @@ _gtk_im_module_create (const gchar *context_id)
 {
   GtkIMModule *im_module;
   GtkIMContext *context = NULL;
-  
+
+  if (strcmp (context_id, NONE_ID) == 0)
+    return NULL;
+
   if (!contexts_hash)
     gtk_im_module_initialize ();
 
@@ -625,12 +648,12 @@ _gtk_im_module_create (const gchar *context_id)
 	      context = im_module->create (context_id);
 	      g_type_module_unuse (G_TYPE_MODULE (im_module));
 	    }
-	  
+
 	  if (!context)
 	    g_warning ("Loading IM context type '%s' failed", context_id);
 	}
     }
-  
+
   if (!context)
      return gtk_im_context_simple_new ();
   else
@@ -694,6 +717,8 @@ lookup_immodule (gchar **immodules_list)
     {
       if (g_strcmp0 (*immodules_list, SIMPLE_ID) == 0)
         return SIMPLE_ID;
+      else if (g_strcmp0 (*immodules_list, NONE_ID) == 0)
+        return NONE_ID;
       else
 	{
 	  gboolean found;

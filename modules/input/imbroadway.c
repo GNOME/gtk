@@ -48,7 +48,7 @@ static GObjectClass *parent_class;
 static const GtkIMContextInfo imbroadway_info =
 {
   "broadway",      /* ID */
-  "Broadway",      /* Human readable name */
+  NC_("input method menu", "Broadway"),      /* Human readable name */
   GETTEXT_PACKAGE, /* Translation domain */
   GTK_LOCALEDIR,   /* Dir for bindtextdomain (not strictly needed for "gtk+") */
   "",              /* Languages for which this module is the default */

@@ -448,7 +448,7 @@ ti_er_init (GtkIMContextSimple *im_context)
 
 static const GtkIMContextInfo ti_er_info = { 
   "ti_er",		   /* ID */
-  N_("Tigrigna-Eritrean (EZ+)"),         /* Human readable name */
+  NC_("input method menu", "Tigrigna-Eritrean (EZ+)"), /* Human readable name */
   GETTEXT_PACKAGE,	   /* Translation domain */
    GTK_LOCALEDIR,	   /* Dir for bindtextdomain (not strictly needed for "gtk+") */
   "ti"			   /* Languages for which this module is the default */
