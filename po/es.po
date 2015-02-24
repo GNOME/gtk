@@ -17,8 +17,8 @@ msgstr ""
 "Project-Id-Version: gtk+.master\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gtk"
 "%2b&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2015-02-17 22:14+0000\n"
-"PO-Revision-Date: 2015-02-18 10:55+0100\n"
+"POT-Creation-Date: 2015-02-24 10:15+0000\n"
+"PO-Revision-Date: 2015-02-24 18:21+0100\n"
 "Last-Translator: Daniel Mustieles <daniel.mustieles@gmail.com>\n"
 "Language-Team: Español; Castellano <gnome-es-list@gnome.org>\n"
 "Language: \n"
@@ -462,14 +462,10 @@ msgstr ""
 "El perfil 3.2 del núcleo de GL no está disponible en la implementación de EGL"
 
 #: ../gdk/wayland/gdkglcontext-wayland.c:376
-#| msgid "3.2 core GL profile is not available on EGL implementation"
 msgid "Core GL is not available on EGL implementation"
 msgstr "El núcleo de GL no está disponible en la implementación de EGL"
 
 #: ../gdk/win32/gdkglcontext-win32.c:550
-#| msgid ""
-#| "The WGL_ARB_create_context extension needed to create 3.2 core profiles "
-#| "is not available"
 msgid ""
 "The WGL_ARB_create_context extension needed to create core profiles is not "
 "available"
@@ -531,9 +527,6 @@ msgstr ""
 "No hay ninguna configuración disponible para el formato de píxel RGBA dado"
 
 #: ../gdk/x11/gdkglcontext-x11.c:1171
-#| msgid ""
-#| "The GLX_ARB_create_context_profile extension needed to create 3.2 core "
-#| "profiles is not available"
 msgid ""
 "The GLX_ARB_create_context_profile extension needed to create core profiles "
 "is not available"
@@ -2146,26 +2139,26 @@ msgstr "_Derecho:"
 msgid "Paper Margins"
 msgstr "Márgenes del papel"
 
-#: ../gtk/gtkentry.c:9626 ../gtk/gtkentry.c:9779 ../gtk/gtklabel.c:6596
+#: ../gtk/gtkentry.c:9626 ../gtk/gtkentry.c:9779 ../gtk/gtklabel.c:6597
 #: ../gtk/gtktextview.c:9037 ../gtk/gtktextview.c:9225
 msgid "Cu_t"
 msgstr "Cor_tar"
 
-#: ../gtk/gtkentry.c:9630 ../gtk/gtkentry.c:9782 ../gtk/gtklabel.c:6597
+#: ../gtk/gtkentry.c:9630 ../gtk/gtkentry.c:9782 ../gtk/gtklabel.c:6598
 #: ../gtk/gtktextview.c:9041 ../gtk/gtktextview.c:9229
 msgid "_Copy"
 msgstr "_Copiar"
 
-#: ../gtk/gtkentry.c:9634 ../gtk/gtkentry.c:9785 ../gtk/gtklabel.c:6598
+#: ../gtk/gtkentry.c:9634 ../gtk/gtkentry.c:9785 ../gtk/gtklabel.c:6599
 #: ../gtk/gtktextview.c:9043 ../gtk/gtktextview.c:9231
 msgid "_Paste"
 msgstr "_Pegar"
 
-#: ../gtk/gtkentry.c:9637 ../gtk/gtklabel.c:6600 ../gtk/gtktextview.c:9046
+#: ../gtk/gtkentry.c:9637 ../gtk/gtklabel.c:6601 ../gtk/gtktextview.c:9046
 msgid "_Delete"
 msgstr "_Eliminar"
 
-#: ../gtk/gtkentry.c:9648 ../gtk/gtklabel.c:6609 ../gtk/gtktextview.c:9060
+#: ../gtk/gtkentry.c:9648 ../gtk/gtklabel.c:6610 ../gtk/gtktextview.c:9060
 msgid "Select _All"
 msgstr "Seleccionar _todo"
 
@@ -2410,31 +2403,33 @@ msgstr "Menú de la aplicación"
 msgid "Close"
 msgstr "Cerrar"
 
-#: ../gtk/gtkicontheme.c:2308 ../gtk/gtkicontheme.c:2372
+#: ../gtk/gtkicontheme.c:2314 ../gtk/gtkicontheme.c:2378
 #, c-format
 msgid "Icon '%s' not present in theme %s"
 msgstr "El icono «%s» no está presente en el tema %s"
 
-#: ../gtk/gtkicontheme.c:4010 ../gtk/gtkicontheme.c:4377
+#: ../gtk/gtkicontheme.c:4016 ../gtk/gtkicontheme.c:4383
 msgid "Failed to load icon"
 msgstr "No se pudo cargar el icono"
 
-#: ../gtk/gtkimmodule.c:538
+#: ../gtk/gtkimmodule.c:539
+#| msgid "Simple"
+msgctxt "input method menu"
 msgid "Simple"
 msgstr "Simple"
 
-#: ../gtk/gtkimmulticontext.c:611
-msgctxt "input method menu"
-msgid "System"
-msgstr "Sistema"
-
 # src/file-manager/fm-icon-text-window.c:85
-#: ../gtk/gtkimmulticontext.c:621
+#: ../gtk/gtkimmodule.c:555
 msgctxt "input method menu"
 msgid "None"
 msgstr "Ninguno"
 
-#: ../gtk/gtkimmulticontext.c:704
+#: ../gtk/gtkimmulticontext.c:609
+msgctxt "input method menu"
+msgid "System"
+msgstr "Sistema"
+
+#: ../gtk/gtkimmulticontext.c:688
 #, c-format
 msgctxt "input method menu"
 msgid "System (%s)"
@@ -2457,12 +2452,12 @@ msgid "Error"
 msgstr "Error"
 
 #. Open Link
-#: ../gtk/gtklabel.c:6577
+#: ../gtk/gtklabel.c:6578
 msgid "_Open Link"
 msgstr "_Abrir enlace"
 
 #. Copy Link Address
-#: ../gtk/gtklabel.c:6586
+#: ../gtk/gtklabel.c:6587
 msgid "Copy _Link Address"
 msgstr "Copiar la dirección del _enlace"
 
@@ -2603,7 +2598,7 @@ msgstr "Mostrar opciones GTK+"
 msgid "default:LTR"
 msgstr "default:LTR"
 
-#: ../gtk/gtkmenubutton.c:655 ../gtk/inspector/window.ui.h:19
+#: ../gtk/gtkmenubutton.c:661 ../gtk/inspector/window.ui.h:19
 msgid "Menu"
 msgstr "Menú"
 
@@ -5166,56 +5161,78 @@ msgstr ""
 
 #. ID
 #: ../modules/input/imam-et.c:452
+#| msgid "Amharic (EZ+)"
+msgctxt "input method menu"
 msgid "Amharic (EZ+)"
 msgstr "Amhárico (EZ+)"
 
 #. ID
 #: ../modules/input/imcedilla.c:90
+#| msgid "Cedilla"
+msgctxt "input method menu"
 msgid "Cedilla"
 msgstr "Cedilla"
 
 #. ID
 #: ../modules/input/imcyrillic-translit.c:215
+#| msgid "Cyrillic (Transliterated)"
+msgctxt "input menthod menu"
 msgid "Cyrillic (Transliterated)"
 msgstr "Cirílico (Transliterado)"
 
 #. ID
 #: ../modules/input/iminuktitut.c:125
+#| msgid "Inuktitut (Transliterated)"
+msgctxt "input method menu"
 msgid "Inuktitut (Transliterated)"
 msgstr "Inuktitut (Transliterado)"
 
 #. ID
 #: ../modules/input/imipa.c:143
+#| msgid "IPA"
+msgctxt "input method menu"
 msgid "IPA"
 msgstr "IPA"
 
 #. ID
 #: ../modules/input/immultipress.c:30
+#| msgid "Multipress"
+msgctxt "input method menu"
 msgid "Multipress"
 msgstr "Pulsación múltiple"
 
 #. ID
 #: ../modules/input/imthai.c:33
+#| msgid "Thai-Lao"
+msgctxt "input method menu"
 msgid "Thai-Lao"
 msgstr "Thai-Lao"
 
 #. ID
 #: ../modules/input/imti-er.c:451
+#| msgid "Tigrigna-Eritrean (EZ+)"
+msgctxt "input method menu"
 msgid "Tigrigna-Eritrean (EZ+)"
 msgstr "Tigrigna-Eritreo (EZ+)"
 
 #. ID
 #: ../modules/input/imti-et.c:451
+#| msgid "Tigrigna-Ethiopian (EZ+)"
+msgctxt "input method menu"
 msgid "Tigrigna-Ethiopian (EZ+)"
 msgstr "Tigrigna-Etíope (EZ+)"
 
 #. ID
 #: ../modules/input/imviqr.c:242
+#| msgid "Vietnamese (VIQR)"
+msgctxt "input method menu"
 msgid "Vietnamese (VIQR)"
 msgstr "Vietnamita (VIQR)"
 
 #. ID
 #: ../modules/input/imxim.c:26
+#| msgid "X Input Method"
+msgctxt "input method menu"
 msgid "X Input Method"
 msgstr "Método de entrada X"
 
@@ -5804,7 +5821,6 @@ msgid "Create Folder"
 msgstr "Crear carpeta"
 
 #: ../gtk/ui/gtkfilechooserwidget.ui.h:3
-#| msgid "Files"
 msgid "All Files"
 msgstr "Todos los archivos"
 
