@@ -877,9 +877,6 @@ gdk_wayland_window_create_surface (GdkWindow *window)
 
   gdk_wayland_window_sync_opaque_region (window);
   gdk_wayland_window_sync_input_region (window);
-
-  if (GDK_WINDOW_TYPE (window) == GDK_WINDOW_SUBSURFACE)
-    gdk_wayland_window_create_subsurface (window);
 }
 
 static void
@@ -1213,6 +1210,9 @@ gdk_wayland_window_show (GdkWindow *window,
 
   if (!impl->surface)
     gdk_wayland_window_create_surface (window);
+
+  if (GDK_WINDOW_TYPE (window) == GDK_WINDOW_SUBSURFACE)
+    gdk_wayland_window_create_subsurface (window);
 
   gdk_wayland_window_map (window);
 
@@ -1691,7 +1691,7 @@ gdk_wayland_window_set_transient_for (GdkWindow *window,
           impl->subsurface = NULL;
         }
 
-      if (parent)
+      if (parent && gdk_window_is_visible (window))
         gdk_wayland_window_create_subsurface (window);
     }
 }
