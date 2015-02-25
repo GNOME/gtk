@@ -1567,12 +1567,6 @@ gtk_main_do_event (GdkEvent *event)
       event_widget = gtk_get_event_widget (event);
     }
 
-  if (GTK_IS_WINDOW (event_widget))
-    {
-      if (_gtk_window_check_handle_wm_event (event))
-        return;
-    }
-
   window_group = gtk_main_get_window_group (event_widget);
   device = gdk_event_get_device (event);
 
@@ -1582,6 +1576,14 @@ gtk_main_do_event (GdkEvent *event)
 
   if (!grab_widget)
     grab_widget = gtk_window_group_get_current_grab (window_group);
+
+  if (GTK_IS_WINDOW (event_widget) ||
+      (grab_widget && grab_widget != event_widget &&
+       !gtk_widget_is_ancestor (event_widget, grab_widget)))
+    {
+      if (_gtk_window_check_handle_wm_event (event))
+        return;
+    }
 
   /* Find out the topmost widget where captured event propagation
    * should start, which is the widget holding the GTK+ grab
