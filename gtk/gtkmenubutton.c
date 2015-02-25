@@ -132,6 +132,7 @@ struct _GtkMenuButtonPrivate
   GtkWidget *arrow_widget;
   GtkArrowType arrow_type;
   gboolean use_popover;
+  guint press_handled : 1;
 };
 
 enum
@@ -405,60 +406,39 @@ popup_menu (GtkMenuButton  *menu_button,
 }
 
 static void
-gtk_menu_button_toggled (GtkToggleButton *button)
+gtk_menu_button_clicked (GtkButton *button)
 {
   GtkMenuButton *menu_button = GTK_MENU_BUTTON (button);
   GtkMenuButtonPrivate *priv = menu_button->priv;
-  gboolean active;
+  gboolean active = TRUE;
 
-  active = gtk_toggle_button_get_active (button);
-
-  if (priv->menu)
+  if (priv->menu && !gtk_widget_get_visible (priv->menu))
     {
-      if (active)
-        {
-          if (!gtk_widget_get_visible (priv->menu))
-            {
-              /* we get here only when the menu is activated by a key
-               * press, so that we can select the first menu item
-               */
-              popup_menu (menu_button, NULL);
-              gtk_menu_shell_select_first (GTK_MENU_SHELL (priv->menu), FALSE);
-            }
-        }
-      else
-        gtk_menu_shell_deactivate (GTK_MENU_SHELL (priv->menu));
+      GdkEvent *event;
+
+      event = gtk_get_current_event ();
+
+      popup_menu (menu_button,
+                  (event && event->type != GDK_BUTTON_RELEASE) ?
+                  (GdkEventButton *) event : NULL);
+
+      if (!event ||
+          event->type == GDK_KEY_PRESS ||
+          event->type == GDK_KEY_RELEASE)
+        gtk_menu_shell_select_first (GTK_MENU_SHELL (priv->menu), FALSE);
+
+      if (event)
+        gdk_event_free (event);
     }
-  else if (priv->popover)
-    gtk_widget_set_visible (priv->popover, active);
-}
+  else if (priv->popover && !gtk_widget_get_visible (priv->popover))
+    gtk_widget_show (priv->popover);
+  else
+    active = FALSE;
 
-static gboolean
-gtk_menu_button_button_press_event (GtkWidget      *widget,
-                                    GdkEventButton *event)
-{
-  GtkMenuButton *menu_button = GTK_MENU_BUTTON (widget);
-  GtkMenuButtonPrivate *priv = menu_button->priv;
+  GTK_BUTTON_CLASS (gtk_menu_button_parent_class)->clicked (button);
 
-  if (event->button == GDK_BUTTON_PRIMARY)
-    {
-      /* Filter out double/triple clicks */
-      if (event->type != GDK_BUTTON_PRESS)
-        return TRUE;
-
-      if (priv->menu && !gtk_widget_get_visible (priv->menu))
-        popup_menu (menu_button, event);
-      else if (priv->popover && !gtk_widget_get_visible (priv->popover))
-        gtk_widget_show (priv->popover);
-      else
-        return TRUE;
-
-      gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (widget), TRUE);
-
-      return TRUE;
-    }
-
-  return GTK_WIDGET_CLASS (gtk_menu_button_parent_class)->button_press_event (widget, event);
+  gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (button), active);
+  gtk_toggle_button_toggled (GTK_TOGGLE_BUTTON (button));
 }
 
 static void
@@ -491,19 +471,18 @@ gtk_menu_button_class_init (GtkMenuButtonClass *klass)
   GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
   GtkContainerClass *container_class = GTK_CONTAINER_CLASS (klass);
-  GtkToggleButtonClass *toggle_button_class = GTK_TOGGLE_BUTTON_CLASS (klass);
+  GtkButtonClass *button_class = GTK_BUTTON_CLASS (klass);
 
   gobject_class->set_property = gtk_menu_button_set_property;
   gobject_class->get_property = gtk_menu_button_get_property;
   gobject_class->dispose = gtk_menu_button_dispose;
 
   widget_class->state_flags_changed = gtk_menu_button_state_flags_changed;
-  widget_class->button_press_event = gtk_menu_button_button_press_event;
 
   container_class->add = gtk_menu_button_add;
   container_class->remove = gtk_menu_button_remove;
 
-  toggle_button_class->toggled = gtk_menu_button_toggled;
+  button_class->clicked = gtk_menu_button_clicked;
 
   /**
    * GtkMenuButton:popup:
