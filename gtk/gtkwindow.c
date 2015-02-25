@@ -5948,16 +5948,12 @@ static void
 popover_map (GtkWidget        *widget,
              GtkWindowPopover *popover)
 {
-  if (popover->window)
+  if (popover->window && gtk_widget_get_visible (popover->widget))
     {
       gdk_window_show (popover->window);
-
-      if (gtk_widget_get_visible (popover->widget))
-        {
-          gtk_widget_map (popover->widget);
-          popover->unmap_id = g_signal_connect (popover->widget, "unmap",
-                                                G_CALLBACK (popover_unmap), popover);
-        }
+      gtk_widget_map (popover->widget);
+      popover->unmap_id = g_signal_connect (popover->widget, "unmap",
+                                            G_CALLBACK (popover_unmap), popover);
     }
 }
 
