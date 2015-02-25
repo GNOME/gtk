@@ -588,12 +588,12 @@ gtk_css_node_get_next_sibling (GtkCssNode *cssnode)
   return cssnode->next_sibling;
 }
 
-static void
+static gboolean
 gtk_css_node_set_style (GtkCssNode  *cssnode,
                         GtkCssStyle *style)
 {
   if (cssnode->style == style)
-    return;
+    return FALSE;
 
   if (style)
     g_object_ref (style);
@@ -602,6 +602,8 @@ gtk_css_node_set_style (GtkCssNode  *cssnode,
     g_object_unref (cssnode->style);
 
   cssnode->style = style;
+
+  return TRUE;
 }
 
 static void
@@ -645,6 +647,7 @@ gtk_css_node_ensure_style (GtkCssNode *cssnode,
                            gint64      current_time)
 {
   GtkCssStyle *new_style;
+  gboolean style_changed;
 
   if (!gtk_css_node_needs_new_style (cssnode))
     return;
@@ -660,15 +663,12 @@ gtk_css_node_ensure_style (GtkCssNode *cssnode,
                                                               current_time,
                                                               cssnode->style);
 
-  gtk_css_node_propagate_pending_changes (cssnode, new_style != NULL);
+  style_changed = gtk_css_node_set_style (cssnode, new_style);
+  g_object_unref (new_style);
 
-  if (new_style)
-    {
-      gtk_css_node_set_style (cssnode, new_style);
-      g_object_unref (new_style);
-      cssnode->pending_changes = 0;
-    }
-  
+  gtk_css_node_propagate_pending_changes (cssnode, style_changed);
+
+  cssnode->pending_changes = 0;
   cssnode->style_is_invalid = FALSE;
 }
 
