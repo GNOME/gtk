@@ -109,6 +109,7 @@ struct _GdkWindowImplWayland
   unsigned int mapped : 1;
   unsigned int use_custom_surface : 1;
   unsigned int pending_commit : 1;
+  unsigned int awaiting_frame : 1;
   GdkWindowTypeHint hint;
   GdkWindow *transient_for;
 
@@ -324,6 +325,10 @@ frame_callback (void               *data,
   if (GDK_WINDOW_DESTROYED (window))
     return;
 
+  if (!impl->awaiting_frame)
+    return;
+
+  impl->awaiting_frame = FALSE;
   _gdk_frame_clock_thaw (clock);
 
   timings = gdk_frame_clock_get_timings (clock, impl->pending_frame_counter);
@@ -401,6 +406,7 @@ on_frame_clock_after_paint (GdkFrameClock *clock,
 
   impl->pending_commit = FALSE;
   impl->pending_frame_counter = gdk_frame_clock_get_frame_counter (clock);
+  impl->awaiting_frame = TRUE;
 
   callback = wl_surface_frame (impl->surface);
   wl_callback_add_listener (callback, &frame_listener, window);
@@ -1263,6 +1269,12 @@ gdk_wayland_window_hide_surface (GdkWindow *window)
         {
           wl_subsurface_destroy (impl->subsurface);
           impl->subsurface = NULL;
+        }
+
+      if (impl->awaiting_frame)
+        {
+          impl->awaiting_frame = FALSE;
+          _gdk_frame_clock_thaw (gdk_window_get_frame_clock (window));
         }
 
       wl_surface_destroy (impl->surface);
