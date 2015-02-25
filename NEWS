@@ -1,3 +1,26 @@
+Overview of Changes in GTK+ 3.14.8 to 3.14.9
+============================================
+
+* GtkScrolledWindow
+ - Avoid 'jumping' when zoom scrolling kicks in
+ - Make zoom scrolling less easy to trigger
+
+* Bugs fixed:
+ 743323 avahi-discovered CUPS printers don't work
+ 744172 Wayland: Clients won't work on compositors that support wl_...
+ 744683 Tooltips should have ATK_ROLE_TOOL_TIP (like they did before)
+ 744942 quartz: Avoid segfaulting when calling gdk_window_ensure_native
+ 744991 Fix loading of GResource SVGs
+ 745052 Icon theme code assumes directories with mtime 0 don't exist
+        Fix crash and miscalculation in css bitmask manipulation
+        Fix a crash due to too large surfaces
+        Update on text scale factor changes
+
+* Translation updates:
+ Slovenian
+ Turkish
+
+
 Overview of Changes in GTK+ 3.14.7 to 3.14.8
 ============================================
 
