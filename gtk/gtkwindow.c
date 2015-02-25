@@ -233,11 +233,10 @@ struct _GtkWindowPrivate
   guint    fullscreen                : 1;
   guint    tiled                     : 1;
 
-  guint    drag_possible             : 1;
-
   guint    use_subsurface            : 1;
 
   GtkGesture *multipress_gesture;
+  GtkGesture *drag_gesture;
 
   GdkWindow *hardcoded_window;
 };
@@ -1435,8 +1434,10 @@ multipress_gesture_pressed_cb (GtkGestureMultiPress *gesture,
   if (!event)
     return;
 
+  if (n_press > 1)
+    gtk_gesture_set_state (priv->drag_gesture, GTK_EVENT_SEQUENCE_DENIED);
+
   region = get_active_region_type (window, (GdkEventAny*) event, x, y);
-  priv->drag_possible = FALSE;
 
   if (button == GDK_BUTTON_SECONDARY && region == GTK_WINDOW_REGION_TITLE)
     {
@@ -1476,8 +1477,6 @@ multipress_gesture_pressed_cb (GtkGestureMultiPress *gesture,
     case GTK_WINDOW_REGION_TITLE:
       if (n_press == 2)
         gtk_window_titlebar_action (window, event, button, n_press);
-      if (n_press == 1)
-        priv->drag_possible = TRUE;
 
       if (gtk_widget_has_grab (widget))
         gtk_gesture_set_sequence_state (GTK_GESTURE (gesture),
@@ -1502,41 +1501,71 @@ multipress_gesture_pressed_cb (GtkGestureMultiPress *gesture,
 }
 
 static void
-multipress_gesture_stopped_cb (GtkGestureMultiPress *gesture,
-                               GtkWindow            *window)
+drag_gesture_begin_cb (GtkGestureDrag *gesture,
+                       gdouble         x,
+                       gdouble         y,
+                       GtkWindow      *window)
 {
   GdkEventSequence *sequence;
-  GtkWindowPrivate *priv;
+  GtkWindowRegion region;
   const GdkEvent *event;
-  gdouble x, y;
+  GtkWidget *event_widget;
 
-  if (!gtk_gesture_is_active (GTK_GESTURE (gesture)))
-    return;
-
-  /* The gesture is active, but stopped, so a too long
-   * press happened, or one drifting out of the threshold
-   */
-  priv = gtk_window_get_instance_private (window);
   sequence = gtk_gesture_single_get_current_sequence (GTK_GESTURE_SINGLE (gesture));
   event = gtk_gesture_get_last_event (GTK_GESTURE (gesture), sequence);
-  gtk_gesture_get_point (GTK_GESTURE (gesture), sequence, &x, &y);
 
-  if (priv->drag_possible)
+  if (!event)
+    return;
+
+  event_widget = gtk_get_event_widget ((GdkEvent *) event);
+
+  if (event_widget != GTK_WIDGET (window) &&
+      !gtk_widget_has_grab (event_widget) &&
+      _gtk_widget_consumes_motion (event_widget))
+    gtk_gesture_set_state (GTK_GESTURE (gesture), GTK_EVENT_SEQUENCE_DENIED);
+  else
     {
-      gdouble x_root, y_root;
+      region = get_active_region_type (window, (GdkEventAny*) event, x, y);
 
-      gtk_gesture_set_sequence_state (GTK_GESTURE (gesture),
-                                      sequence, GTK_EVENT_SEQUENCE_CLAIMED);
-      gdk_event_get_root_coords (event, &x_root, &y_root);
-      gdk_window_begin_move_drag_for_device (gtk_widget_get_window (GTK_WIDGET (window)),
-                                             gdk_event_get_device ((GdkEvent*) event),
-                                             GDK_BUTTON_PRIMARY,
-                                             x_root, y_root,
-                                             gdk_event_get_time (event));
+      if (region != GTK_WINDOW_REGION_TITLE)
+        gtk_gesture_set_state (GTK_GESTURE (gesture), GTK_EVENT_SEQUENCE_DENIED);
     }
+}
 
-  gtk_event_controller_reset (GTK_EVENT_CONTROLLER (gesture));
-  priv->drag_possible = FALSE;
+static void
+drag_gesture_update_cb (GtkGestureDrag *gesture,
+                        gdouble         offset_x,
+                        gdouble         offset_y,
+                        GtkWindow      *window)
+{
+  gint double_click_distance;
+  GtkSettings *settings;
+
+  settings = gtk_widget_get_settings (GTK_WIDGET (window));
+  g_object_get (settings,
+                "gtk-double-click-distance", &double_click_distance,
+                NULL);
+
+  if (ABS (offset_x) > double_click_distance ||
+      ABS (offset_y) > double_click_distance)
+    {
+      gdouble start_x, start_y;
+      gint x_root, y_root;
+
+      gtk_gesture_set_state (GTK_GESTURE (gesture), GTK_EVENT_SEQUENCE_CLAIMED);
+
+      gtk_gesture_drag_get_start_point (gesture, &start_x, &start_y);
+      gdk_window_get_root_coords (gtk_widget_get_window (GTK_WIDGET (window)),
+                                  start_x, start_y, &x_root, &y_root);
+
+      gdk_window_begin_move_drag_for_device (gtk_widget_get_window (GTK_WIDGET (window)),
+                                             gtk_gesture_get_device (GTK_GESTURE (gesture)),
+                                             gtk_gesture_single_get_current_button (GTK_GESTURE_SINGLE (gesture)),
+                                             x_root, y_root,
+                                             gtk_get_current_event_time ());
+
+      gtk_event_controller_reset (GTK_EVENT_CONTROLLER (gesture));
+    }
 }
 
 static void
@@ -1632,8 +1661,14 @@ gtk_window_constructed (GObject *object)
                                                   GTK_PHASE_NONE);
       g_signal_connect (priv->multipress_gesture, "pressed",
                         G_CALLBACK (multipress_gesture_pressed_cb), object);
-      g_signal_connect (priv->multipress_gesture, "stopped",
-                        G_CALLBACK (multipress_gesture_stopped_cb), object);
+
+      priv->drag_gesture = gtk_gesture_drag_new (GTK_WIDGET (object));
+      gtk_event_controller_set_propagation_phase (GTK_EVENT_CONTROLLER (priv->drag_gesture),
+                                                  GTK_PHASE_CAPTURE);
+      g_signal_connect (priv->drag_gesture, "drag-begin",
+                        G_CALLBACK (drag_gesture_begin_cb), object);
+      g_signal_connect (priv->drag_gesture, "drag-update",
+                        G_CALLBACK (drag_gesture_update_cb), object);
     }
 }
 
@@ -7766,8 +7801,10 @@ get_active_region_type (GtkWindow *window, GdkEventAny *event, gint x, gint y)
 
 static gboolean
 gtk_window_handle_wm_event (GtkWindow *window,
-                            GdkEvent  *event)
+                            GdkEvent  *event,
+                            gboolean   run_drag)
 {
+  gboolean retval = GDK_EVENT_PROPAGATE;
   GtkWindowPrivate *priv;
 
   if (event->type == GDK_BUTTON_PRESS || event->type == GDK_BUTTON_RELEASE ||
@@ -7776,12 +7813,16 @@ gtk_window_handle_wm_event (GtkWindow *window,
     {
       priv = window->priv;
 
+      if (run_drag && priv->drag_gesture)
+        retval |= gtk_event_controller_handle_event (GTK_EVENT_CONTROLLER (priv->drag_gesture),
+                                                     (const GdkEvent*) event);
+
       if (priv->multipress_gesture)
-        return gtk_event_controller_handle_event (GTK_EVENT_CONTROLLER (priv->multipress_gesture),
-                                                  (const GdkEvent*) event);
+        retval |= gtk_event_controller_handle_event (GTK_EVENT_CONTROLLER (priv->multipress_gesture),
+                                                     (const GdkEvent*) event);
     }
 
-  return GDK_EVENT_PROPAGATE;
+  return retval;
 }
 
 gboolean
@@ -7791,6 +7832,9 @@ _gtk_window_check_handle_wm_event (GdkEvent *event)
   GtkWidget *widget;
 
   widget = gtk_get_event_widget (event);
+
+  if (!GTK_IS_WINDOW (widget))
+    widget = gtk_widget_get_toplevel (widget);
 
   if (!GTK_IS_WINDOW (widget))
     return GDK_EVENT_PROPAGATE;
@@ -7808,7 +7852,7 @@ _gtk_window_check_handle_wm_event (GdkEvent *event)
   if (gtk_widget_event (widget, event))
     return GDK_EVENT_STOP;
 
-  return gtk_window_handle_wm_event (GTK_WINDOW (widget), event);
+  return gtk_window_handle_wm_event (GTK_WINDOW (widget), event, TRUE);
 }
 
 static gboolean
@@ -7816,7 +7860,7 @@ gtk_window_event (GtkWidget *widget,
                   GdkEvent  *event)
 {
   if (widget != gtk_get_event_widget (event))
-    return gtk_window_handle_wm_event (GTK_WINDOW (widget), event);
+    return gtk_window_handle_wm_event (GTK_WINDOW (widget), event, FALSE);
 
   return GDK_EVENT_PROPAGATE;
 }

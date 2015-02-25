@@ -17278,3 +17278,32 @@ _gtk_widget_list_controllers (GtkWidget           *widget,
 
   return retval;
 }
+
+gboolean
+_gtk_widget_consumes_motion (GtkWidget *widget)
+{
+  EventControllerData *data;
+  GtkWidgetPrivate *priv;
+  gboolean consumes_motion = FALSE;
+  GList *l;
+
+  g_return_val_if_fail (GTK_IS_WIDGET (widget), NULL);
+
+  priv = widget->priv;
+
+  for (l = priv->event_controllers; l; l = l->next)
+    {
+      data = l->data;
+
+      if (data->controller == NULL)
+        continue;
+
+      if (!GTK_IS_GESTURE_SINGLE (data->controller))
+        consumes_motion = TRUE;
+      else if (GTK_IS_GESTURE_DRAG (data->controller) ||
+               GTK_IS_GESTURE_SWIPE (data->controller))
+        consumes_motion = TRUE;
+    }
+
+  return consumes_motion;
+}
