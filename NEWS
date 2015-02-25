@@ -1,3 +1,27 @@
+Overview of Changes from GTK+ 2.24.26 to 2.24.27
+================================================
+
+* Bug fixes:
+ 696505 Segfault on Windows x64: gtkstatusicon.c tries to put 64-bit...
+ 745052 Icon theme code assumes directories with mtime 0 don't exist
+        Don't leak pixel data in some error paths
+ 745536 gdk: Fix GdkWindowFilter internal refcounting
+
+
+Overview of Changes from GTK+ 2.24.25 to 2.24.26
+================================================
+
+* Bug fixes:
+ 635380 gdk_event_apply_filters is unsafe against changes ...
+ 738837 region leak
+ 741060 Graphical artifacts drawn on Win32 since 4ecbef0791d4
+ 741959 text input broken on OS X 10.5 from 2.24.19 onwards
+ 743544 gtk2 autogen.sh fails with automake 1.15
+ 743917 Gtk modules must be compatible with both gtk 2 and 3
+        gailbutton: Avoid a possible NULL dereference
+        label: Avoid a possible NULL dereference
+
+
 Overview of Changes from GTK+ 2.24.24 to 2.24.25
 ================================================
 
