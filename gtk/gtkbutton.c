@@ -147,6 +147,8 @@ static void gtk_button_state_changed   (GtkWidget             *widget,
 					GtkStateType           previous_state);
 static void gtk_button_grab_notify     (GtkWidget             *widget,
 					gboolean               was_grabbed);
+static void gtk_button_do_release      (GtkButton             *button,
+                                        gboolean               emit_clicked);
 
 static void gtk_button_actionable_iface_init     (GtkActionableInterface *iface);
 static void gtk_button_activatable_interface_init(GtkActivatableIface  *iface);
@@ -645,6 +647,14 @@ multipress_gesture_update_cb (GtkGesture       *gesture,
 }
 
 static void
+multipress_gesture_cancel_cb (GtkGesture       *gesture,
+                              GdkEventSequence *sequence,
+                              GtkButton        *button)
+{
+  gtk_button_do_release (button, FALSE);
+}
+
+static void
 gtk_button_init (GtkButton *button)
 {
   GtkButtonPrivate *priv;
@@ -683,6 +693,7 @@ gtk_button_init (GtkButton *button)
   g_signal_connect (priv->gesture, "pressed", G_CALLBACK (multipress_pressed_cb), button);
   g_signal_connect (priv->gesture, "released", G_CALLBACK (multipress_released_cb), button);
   g_signal_connect (priv->gesture, "update", G_CALLBACK (multipress_gesture_update_cb), button);
+  g_signal_connect (priv->gesture, "cancel", G_CALLBACK (multipress_gesture_cancel_cb), button);
   gtk_event_controller_set_propagation_phase (GTK_EVENT_CONTROLLER (priv->gesture), GTK_PHASE_BUBBLE);
 }
 
