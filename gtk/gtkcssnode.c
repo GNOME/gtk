@@ -860,6 +860,12 @@ void
 gtk_css_node_invalidate (GtkCssNode   *cssnode,
                          GtkCssChange  change)
 {
+  if (!cssnode->invalid)
+    change &= ~GTK_CSS_CHANGE_TIMESTAMP;
+
+  if (change == 0)
+    return;
+
   cssnode->pending_changes |= change;
 
   GTK_CSS_NODE_GET_CLASS (cssnode)->invalidate (cssnode);
