@@ -97,6 +97,8 @@ struct _GtkPrinterCups
   gboolean supports_copies;
   gboolean supports_collate;
   gboolean supports_number_up;
+  char   **covers;
+  int      number_of_covers;
 };
 
 struct _GtkPrinterCupsClass

@@ -138,9 +138,6 @@ struct _GtkPrintBackendCups
   GtkCupsConnectionTest *cups_connection_test;
   gint  reading_ppds;
 
-  char **covers;
-  int    number_of_covers;
-
   GList      *requests;
   GHashTable *auth;
   gchar      *username;
@@ -811,9 +808,6 @@ gtk_print_backend_cups_init (GtkPrintBackendCups *backend_cups)
   backend_cups->auth = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, overwrite_and_free);
   backend_cups->authentication_lock = FALSE;
 
-  backend_cups->covers = NULL;
-  backend_cups->number_of_covers = 0;
-
   backend_cups->default_printer_poll = 0;
   backend_cups->cups_connection_test = NULL;
 
@@ -856,9 +850,6 @@ gtk_print_backend_cups_finalize (GObject *object)
 
   g_free (backend_cups->default_printer);
   backend_cups->default_printer = NULL;
-
-  g_strfreev (backend_cups->covers);
-  backend_cups->number_of_covers = 0;
 
   gtk_cups_connection_test_free (backend_cups->cups_connection_test);
   backend_cups->cups_connection_test = NULL;
@@ -1987,7 +1978,17 @@ typedef struct
   gboolean  media_margin_default_set;
   gchar    *sides_default;
   GList    *sides_supported;
+  char    **covers;
+  int       number_of_covers;
 } PrinterSetupInfo;
+
+static void
+printer_setup_info_free (PrinterSetupInfo *info)
+{
+  g_free (info->state_msg);
+  g_strfreev (info->covers);
+  g_slice_free (PrinterSetupInfo, info);
+}
 
 static void
 get_ipp_version (const char *ipp_version_string,
@@ -2143,14 +2144,11 @@ cups_printer_handle_attribute (GtkPrintBackendCups *cups_backend,
     }
   else if (strcmp (ippGetName (attr), "job-sheets-supported") == 0)
     {
-      if (cups_backend->covers == NULL)
-	{
-	  cups_backend->number_of_covers = ippGetCount (attr);
-	  cups_backend->covers = g_new (char *, cups_backend->number_of_covers + 1);
-	  for (i = 0; i < cups_backend->number_of_covers; i++)
-	    cups_backend->covers[i] = g_strdup (ippGetString (attr, i, NULL));
-	  cups_backend->covers[cups_backend->number_of_covers] = NULL;
-	}
+      info->number_of_covers = ippGetCount (attr);
+      info->covers = g_new (char *, info->number_of_covers + 1);
+      for (i = 0; i < info->number_of_covers; i++)
+        info->covers[i] = g_strdup (ippGetString (attr, i, NULL));
+      info->covers[info->number_of_covers] = NULL;
     }
   else if (strcmp (ippGetName (attr), "job-sheets-default") == 0)
     {
@@ -2641,6 +2639,8 @@ cups_request_printer_info_cb (GtkPrintBackendCups *cups_backend,
           GTK_PRINTER_CUPS (printer)->supports_copies = info->supports_copies;
           GTK_PRINTER_CUPS (printer)->supports_collate = info->supports_collate;
           GTK_PRINTER_CUPS (printer)->supports_number_up = info->supports_number_up;
+          GTK_PRINTER_CUPS (printer)->number_of_covers = info->number_of_covers;
+          GTK_PRINTER_CUPS (printer)->covers = g_strdupv (info->covers);
           status_changed = gtk_printer_set_job_count (printer, info->job_count);
           status_changed |= gtk_printer_set_location (printer, info->location);
           status_changed |= gtk_printer_set_description (printer, info->description);
@@ -2683,8 +2683,7 @@ done:
       set_default_printer (cups_backend, cups_backend->avahi_default_printer);
     }
 
-  g_free (info->state_msg);
-  g_slice_free (PrinterSetupInfo, info);
+  printer_setup_info_free (info);
 
   gdk_threads_leave ();
 }
@@ -2829,8 +2828,7 @@ create_cups_printer_from_avahi_data (AvahiConnectionTestData *data)
       g_object_unref (printer);
     }
 
-  g_free (info->state_msg);
-  g_slice_free (PrinterSetupInfo, info);
+  printer_setup_info_free (info);
 }
 
 static void
@@ -3453,6 +3451,8 @@ cups_request_printer_list_cb (GtkPrintBackendCups *cups_backend,
       GTK_PRINTER_CUPS (printer)->supports_copies = info->supports_copies;
       GTK_PRINTER_CUPS (printer)->supports_collate = info->supports_collate;
       GTK_PRINTER_CUPS (printer)->supports_number_up = info->supports_number_up;
+      GTK_PRINTER_CUPS (printer)->number_of_covers = info->number_of_covers;
+      GTK_PRINTER_CUPS (printer)->covers = g_strdupv (info->covers);
       status_changed = gtk_printer_set_job_count (printer, info->job_count);
       status_changed |= gtk_printer_set_location (printer, info->location);
       status_changed |= gtk_printer_set_description (printer,
@@ -3471,8 +3471,7 @@ cups_request_printer_list_cb (GtkPrintBackendCups *cups_backend,
 
       /* The ref is held by GtkPrintBackend, in add_printer() */
       g_object_unref (printer);
-      g_free (info->state_msg);
-      g_slice_free (PrinterSetupInfo, info);
+      printer_setup_info_free (info);
 
       if (attr == NULL)
         break;
@@ -5244,7 +5243,7 @@ cups_printer_get_options (GtkPrinter           *printer,
           g_object_unref (option);
         }
 
-      num_of_covers = backend->number_of_covers;
+      num_of_covers = cups_printer->number_of_covers;
       cover = g_new (char *, num_of_covers + 1);
       cover[num_of_covers] = NULL;
       cover_display = g_new (char *, num_of_covers + 1);
@@ -5254,7 +5253,7 @@ cups_printer_get_options (GtkPrinter           *printer,
 
       for (i = 0; i < num_of_covers; i++)
         {
-          cover[i] = g_strdup (backend->covers[i]);
+          cover[i] = g_strdup (cups_printer->covers[i]);
           value = NULL;
           for (j = 0; j < G_N_ELEMENTS (cover_default); j++)
             if (strcmp (cover_default[j], cover[i]) == 0)
@@ -5262,7 +5261,7 @@ cups_printer_get_options (GtkPrinter           *printer,
                 value = cover_display_default[j];
                 break;
               }
-          cover_display[i] = (value != NULL) ? g_strdup (value) : g_strdup (backend->covers[i]);
+          cover_display[i] = (value != NULL) ? g_strdup (value) : g_strdup (cups_printer->covers[i]);
         }
 
       for (i = 0; i < num_of_covers; i++)
