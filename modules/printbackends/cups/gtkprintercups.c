@@ -125,6 +125,8 @@ gtk_printer_cups_init (GtkPrinterCups *printer)
   printer->supports_copies = FALSE;
   printer->supports_collate = FALSE;
   printer->supports_number_up = FALSE;
+  printer->number_of_covers = 0;
+  printer->covers = NULL;
 }
 
 static void
@@ -165,6 +167,8 @@ gtk_printer_cups_finalize (GObject *object)
   g_free (printer->avahi_type);
   g_free (printer->avahi_domain);
 #endif
+
+  g_strfreev (printer->covers);
 
   if (printer->ppd_file)
     ppdClose (printer->ppd_file);
