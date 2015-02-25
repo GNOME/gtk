@@ -17,8 +17,8 @@ msgstr ""
 "Project-Id-Version: gtk+.master\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gtk"
 "%2b&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2015-02-24 10:15+0000\n"
-"PO-Revision-Date: 2015-02-24 18:21+0100\n"
+"POT-Creation-Date: 2015-02-24 22:14+0000\n"
+"PO-Revision-Date: 2015-02-25 11:00+0100\n"
 "Last-Translator: Daniel Mustieles <daniel.mustieles@gmail.com>\n"
 "Language-Team: Español; Castellano <gnome-es-list@gnome.org>\n"
 "Language: \n"
@@ -2413,7 +2413,6 @@ msgid "Failed to load icon"
 msgstr "No se pudo cargar el icono"
 
 #: ../gtk/gtkimmodule.c:539
-#| msgid "Simple"
 msgctxt "input method menu"
 msgid "Simple"
 msgstr "Simple"
@@ -5161,77 +5160,82 @@ msgstr ""
 
 #. ID
 #: ../modules/input/imam-et.c:452
-#| msgid "Amharic (EZ+)"
 msgctxt "input method menu"
 msgid "Amharic (EZ+)"
 msgstr "Amhárico (EZ+)"
 
 #. ID
+#: ../modules/input/imbroadway.c:51
+msgctxt "input method menu"
+msgid "Broadway"
+msgstr "Broadway"
+
+#. ID
 #: ../modules/input/imcedilla.c:90
-#| msgid "Cedilla"
 msgctxt "input method menu"
 msgid "Cedilla"
 msgstr "Cedilla"
 
 #. ID
 #: ../modules/input/imcyrillic-translit.c:215
-#| msgid "Cyrillic (Transliterated)"
 msgctxt "input menthod menu"
 msgid "Cyrillic (Transliterated)"
 msgstr "Cirílico (Transliterado)"
 
+#: ../modules/input/imime.c:30
+msgctxt "input method menu"
+msgid "Windows IME"
+msgstr "Windows IME"
+
 #. ID
 #: ../modules/input/iminuktitut.c:125
-#| msgid "Inuktitut (Transliterated)"
 msgctxt "input method menu"
 msgid "Inuktitut (Transliterated)"
 msgstr "Inuktitut (Transliterado)"
 
 #. ID
 #: ../modules/input/imipa.c:143
-#| msgid "IPA"
 msgctxt "input method menu"
 msgid "IPA"
 msgstr "IPA"
 
 #. ID
 #: ../modules/input/immultipress.c:30
-#| msgid "Multipress"
 msgctxt "input method menu"
 msgid "Multipress"
 msgstr "Pulsación múltiple"
 
+#: ../modules/input/imquartz.c:58
+msgctxt "input method menu"
+msgid "Mac OS X Quartz"
+msgstr "Mac OS X Quartz"
+
 #. ID
 #: ../modules/input/imthai.c:33
-#| msgid "Thai-Lao"
 msgctxt "input method menu"
 msgid "Thai-Lao"
 msgstr "Thai-Lao"
 
 #. ID
 #: ../modules/input/imti-er.c:451
-#| msgid "Tigrigna-Eritrean (EZ+)"
 msgctxt "input method menu"
 msgid "Tigrigna-Eritrean (EZ+)"
 msgstr "Tigrigna-Eritreo (EZ+)"
 
 #. ID
 #: ../modules/input/imti-et.c:451
-#| msgid "Tigrigna-Ethiopian (EZ+)"
 msgctxt "input method menu"
 msgid "Tigrigna-Ethiopian (EZ+)"
 msgstr "Tigrigna-Etíope (EZ+)"
 
 #. ID
 #: ../modules/input/imviqr.c:242
-#| msgid "Vietnamese (VIQR)"
 msgctxt "input method menu"
 msgid "Vietnamese (VIQR)"
 msgstr "Vietnamita (VIQR)"
 
 #. ID
 #: ../modules/input/imxim.c:26
-#| msgid "X Input Method"
 msgctxt "input method menu"
 msgid "X Input Method"
 msgstr "Método de entrada X"
