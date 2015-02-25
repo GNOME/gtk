@@ -119,7 +119,8 @@ template_headers = $(templates:.ui=.ui.h)
 EXTRA_DIST += 				\
 	inspector.gresource.xml 	\
 	$(resource_files) 		\
-	$(templates)
+	$(templates)			\
+	$(template_headers)
 
 MAINTAINERCLEANFILES =			\
 	resources.c			\
