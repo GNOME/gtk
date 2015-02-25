@@ -1373,8 +1373,9 @@ _gtk_gesture_cancel_sequence (GtkGesture       *gesture,
     return FALSE;
 
   g_signal_emit (gesture, signals[CANCEL], 0, sequence);
-  _gtk_gesture_check_recognized (gesture, sequence);
   _gtk_gesture_remove_point (gesture, data->event);
+  _gtk_gesture_check_recognized (gesture, sequence);
+
   return TRUE;
 }
 
