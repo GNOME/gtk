@@ -13,7 +13,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gtk"
 "%2b&keywords=I18N+L10N&component=general\n"
 "POT-Creation-Date: 2015-02-24 18:09+0000\n"
-"PO-Revision-Date: 2015-02-24 19:56+0100\n"
+"PO-Revision-Date: 2015-02-25 20:25+0100\n"
 "Last-Translator: Matej Urbančič <mateju@svn.gnome.org>\n"
 "Language-Team: Slovenian GNOME Translation Team <gnome-si@googlegroups.com>\n"
 "Language: sl_SI\n"
@@ -26,9 +26,9 @@ msgstr ""
 "X-Generator: Poedit 1.5.4\n"
 
 #: ../gdk/broadway/gdkbroadway-server.c:144
-#, fuzzy, c-format
+#, c-format
 msgid "broadway display type not supported '%s'"
-msgstr "Vrsta datoteke %s (%s) ni podprta"
+msgstr "vrsta zaslona ni podprta '%s'"
 
 #: ../gdk/gdk.c:165
 #, c-format
@@ -1105,7 +1105,6 @@ msgid "Color _name:"
 msgstr "_Ime barve:"
 
 #: ../gtk/deprecated/gtkcolorsel.c:514
-#, fuzzy
 msgid ""
 "You can enter an HTML-style hexadecimal color value, or simply a color name "
 "such as 'orange' in this entry."
@@ -1122,7 +1121,6 @@ msgid "Color Wheel"
 msgstr "Barvni krog"
 
 #: ../gtk/deprecated/gtkcolorsel.c:1070
-#, fuzzy
 msgid ""
 "The previously-selected color, for comparison to the color you're selecting "
 "now. You can drag this color to a palette entry, or select this color as "
@@ -1133,7 +1131,6 @@ msgstr ""
 "vlečenjem na drug vzorec."
 
 #: ../gtk/deprecated/gtkcolorsel.c:1076
-#, fuzzy
 msgid ""
 "The color you've chosen. You can drag this color to a palette entry to save "
 "it for use in the future."
@@ -1142,7 +1139,6 @@ msgstr ""
 "kasnejšo uporabo."
 
 #: ../gtk/deprecated/gtkcolorsel.c:1082
-#, fuzzy
 msgid ""
 "The previously-selected color, for comparison to the color you're selecting "
 "now."
@@ -1157,7 +1153,6 @@ msgid "_Save color here"
 msgstr "_Shrani barvo sem"
 
 #: ../gtk/deprecated/gtkcolorsel.c:1694
-#, fuzzy
 msgid ""
 "Click this palette entry to make it the current color. To change this entry, "
 "drag a color swatch here or right-click it and select \"Save color here.\""
@@ -1375,13 +1370,13 @@ msgstr "Neveljavna velikost %s\n"
 #. * contains the name of the license as link text.
 #.
 #: ../gtk/gtkaboutdialog.c:114
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "This program comes with ABSOLUTELY NO WARRANTY.\n"
 "See the <a href=\"%s\">%s</a> for details."
 msgstr ""
-"Ta program je objavljen BREZ VSAKRŠNE GARANCIJE; za več podrobnosti obiščite "
-"<a href=\"%s\">%s</a>"
+"Ta program je objavljen BREZ VSAKRŠNE GARANCIJE.\n"
+"Za več podrobnosti obiščite <a href=\"%s\">%s</a>."
 
 #: ../gtk/gtkaboutdialog.c:118 ../gtk/resources/ui/gtkaboutdialog.ui.h:3
 msgid "License"
@@ -1635,7 +1630,7 @@ msgid "Element <%s> not allowed at toplevel"
 msgstr "Predmet <%s> ni dovoljen na vrhnji ravni"
 
 #: ../gtk/gtkbuilder-menus.c:317
-#, fuzzy, c-format
+#, c-format
 msgid "text may not appear inside <%s>"
 msgstr "besedilo se ne sme pojaviti znotraj <%s>"
 
@@ -1660,12 +1655,12 @@ msgid "Invalid property: %s.%s on line %d"
 msgstr "Neveljavna lastnost: %s.%s v vrstici %d"
 
 #: ../gtk/gtkbuilderparser.c:775
-#, fuzzy, c-format
+#, c-format
 msgid "Invalid signal `%s' for type `%s' on line %d"
 msgstr "Neveljaven signal `%s' za vrsto `%s' v vrstici %d"
 
 #: ../gtk/gtkbuilderparser.c:1067
-#, fuzzy, c-format
+#, c-format
 msgid "Invalid root element: '%s'"
 msgstr "Neveljaven korenski predmet: '%s'"
 
@@ -2274,13 +2269,12 @@ msgid "Could not start the search process"
 msgstr "Postopka iskanja ni mogoče začeti"
 
 #: ../gtk/gtkfilechooserwidget.c:6051
-#, fuzzy
 msgid ""
 "The program was not able to create a connection to the indexer daemon.  "
 "Please make sure it is running."
 msgstr ""
 "Povezave z ozadnjim programom za ustvarjanje kazala ni mogoče ustvariti. "
-"Preverite, če je le-ta zagnan."
+"Preverite, če je ta zagnan."
 
 #: ../gtk/gtkfilechooserwidget.c:6065
 msgid "Could not send the search request"
@@ -2805,9 +2799,9 @@ msgid "Unable to eject %s"
 msgstr "Ni mogoče izvreči %s"
 
 #: ../gtk/gtkplacessidebar.c:3172
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to poll %s for media changes"
-msgstr "Ni mogoče preveriti %s za spremembe medija"
+msgstr "Ni mogoče preveriti %s za spremembe nosilca"
 
 #: ../gtk/gtkplacessidebar.c:3470
 msgid "Open in New _Tab"
@@ -3138,9 +3132,9 @@ msgid "No items found"
 msgstr "Ni najdenih predmetov"
 
 #: ../gtk/gtkrecentchoosermenu.c:534 ../gtk/gtkrecentchoosermenu.c:590
-#, fuzzy, c-format
+#, c-format
 msgid "No recently used resource found with URI `%s'"
-msgstr "Nobenih nedavno uporabljenih virov ni najdenih z URI-jem '%s'"
+msgstr "Ni nedavno uporabljenih virov z naslovom URI `%s'"
 
 #: ../gtk/gtkrecentchoosermenu.c:789
 #, c-format
@@ -3395,6 +3389,8 @@ msgid ""
 "the internals of any GTK+ application. Using it may cause the application to "
 "break or crash."
 msgstr ""
+"Nadzornik GTK+ je razhroščevalnik, ki omogoča raziskovanje in spreminjanje "
+"nastavitev GTK+. Neustrezna raba lahko povzroči nedelovanje okolja."
 
 #: ../gtk/inspector/action-editor.c:281
 msgid "Activate"
@@ -3458,6 +3454,8 @@ msgid ""
 "You can temporarily disable this custom CSS by clicking on the \"Pause\" "
 "button above."
 msgstr ""
+"S klikom na gumb \"Premor\" se začasno onemogoči izvajanje slogov CSS po "
+"meri."
 
 #: ../gtk/inspector/css-editor.c:91
 msgid "Changes are applied instantly and globally, for the whole application."
@@ -3714,9 +3712,8 @@ msgid "Location"
 msgstr "Mesto"
 
 #: ../gtk/inspector/visual.c:239 ../gtk/inspector/visual.c:254
-#, fuzzy
 msgid "Theme is hardcoded by GTK_THEME"
-msgstr "Osnovno ime privzete teme, ki jo uporablja gtk+."
+msgstr "Tema je vključena v privzeto temo GTK_THEME"
 
 #: ../gtk/inspector/visual.c:354
 msgid "Backend does not support window scaling"
@@ -3724,7 +3721,7 @@ msgstr "Ozadnji program ne podpira prilagajanja velikosti okna"
 
 #: ../gtk/inspector/visual.c:393
 msgid "Setting is hardcoded by GTK_TEST_TOUCHSCREEN"
-msgstr ""
+msgstr "Nastavitev je vključena v privzeto vrednost GTK_TEST_TOUCHSCREEN"
 
 #. vim: set et sw=2 ts=2:
 #: ../gtk/inspector/visual.ui.h:1
@@ -4885,9 +4882,9 @@ msgstr "Geslo:"
 
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:1082
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:1373
-#, fuzzy, c-format
+#, c-format
 msgid "Authentication is required to print document '%s' on printer %s"
-msgstr "Za tiskanje dokumenta '%s' na tiskalniku %s je potrebna overitev"
+msgstr "Za tiskanje dokumenta '%s' na tiskalniku %s je zahtevana overitev."
 
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:1084
 #, c-format
@@ -4895,9 +4892,9 @@ msgid "Authentication is required to print a document on %s"
 msgstr "Za tiskanje dokumenta na %s je zahtevana overitev"
 
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:1088
-#, fuzzy, c-format
+#, c-format
 msgid "Authentication is required to get attributes of job '%s'"
-msgstr "Za pridobitev atributov posla '%s' je potrebna overitev"
+msgstr "Za pridobitev atributov posla '%s' je zahtevana overitev."
 
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:1090
 msgid "Authentication is required to get attributes of a job"
@@ -4937,9 +4934,9 @@ msgid "Domain:"
 msgstr "Domena:"
 
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:1375
-#, fuzzy, c-format
+#, c-format
 msgid "Authentication is required to print document '%s'"
-msgstr "Za tiskanje dokumenta '%s'  je potreba overitev"
+msgstr "Za tiskanje  dokumenta '%s'  je zahtevana overitev."
 
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:1380
 #, c-format
