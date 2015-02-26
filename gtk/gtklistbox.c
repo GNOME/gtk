@@ -3487,6 +3487,8 @@ gtk_list_box_row_grab_focus (GtkWidget *widget)
   GtkListBoxRow *row = GTK_LIST_BOX_ROW (widget);
   GtkListBox *box = gtk_list_box_row_get_box (row);
 
+  g_return_if_fail (box != NULL);
+
   if (BOX_PRIV (box)->cursor_row != row)
     gtk_list_box_update_cursor (box, row, FALSE);
 
