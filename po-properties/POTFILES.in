@@ -231,12 +231,12 @@ gtk/gtkselection.c
 gtk/gtkseparator.c
 gtk/gtkseparatortoolitem.c
 gtk/gtksettings.c
-gtk/gtkstacksidebar.c
 gtk/gtksizegroup.c
 gtk/gtksocket.c
 gtk/gtkspinbutton.c
 gtk/gtkspinner.c
 gtk/gtkstack.c
+gtk/gtkstacksidebar.c
 gtk/gtkstackswitcher.c
 gtk/gtkstatusbar.c
 gtk/gtkstylecontext.c
