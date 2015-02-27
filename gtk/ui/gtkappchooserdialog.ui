@@ -108,4 +108,11 @@
     <property name="receives_default">True</property>
     <signal name="clicked" handler="software_button_clicked_cb" swapped="no"/>
   </object>
+  <object class="GtkSizeGroup" id="buttons">
+    <property name="mode">vertical</property>
+    <widgets>
+      <widget name="cancel_button"/>
+      <widget name="ok_button"/>
+    </widgets>
+  </object>
 </interface>
