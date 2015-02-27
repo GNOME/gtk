@@ -1742,15 +1742,11 @@ gdk_wayland_window_deiconify (GdkWindow *window)
 static void
 gdk_wayland_window_stick (GdkWindow *window)
 {
-  if (GDK_WINDOW_DESTROYED (window))
-    return;
 }
 
 static void
 gdk_wayland_window_unstick (GdkWindow *window)
 {
-  if (GDK_WINDOW_DESTROYED (window))
-    return;
 }
 
 static void
@@ -1822,10 +1818,6 @@ gdk_wayland_window_set_keep_below (GdkWindow *window, gboolean setting)
 static GdkWindow *
 gdk_wayland_window_get_group (GdkWindow *window)
 {
-  if (GDK_WINDOW_DESTROYED (window) ||
-      !WINDOW_IS_TOPLEVEL (window))
-    return NULL;
-
   return NULL;
 }
 
