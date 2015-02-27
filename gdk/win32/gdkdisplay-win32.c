@@ -357,7 +357,7 @@ inner_clipboard_window_procedure (HWND   hwnd,
         success = OpenClipboard (hwnd);
         if (!success)
           {
-            g_warning ("Failed to OpenClibpboard on window handle %p", hwnd);
+            g_warning ("Failed to OpenClipboard on window handle %p", hwnd);
             return 0;
           }
 
