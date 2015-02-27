@@ -355,7 +355,12 @@ inner_clipboard_window_procedure (HWND   hwnd,
         GdkWindow *owner;
 
         success = OpenClipboard (hwnd);
-        g_return_val_if_fail (success, 0);
+        if (!success)
+          {
+            g_warning ("Failed to OpenClibpboard on window handle %p", hwnd);
+            return 0;
+          }
+
         hwndOwner = GetClipboardOwner ();
         owner = gdk_win32_window_lookup_for_display (_gdk_display, hwndOwner);
         if (owner == NULL)
