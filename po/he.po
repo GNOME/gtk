@@ -12,8 +12,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+.HEAD.he\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-02-24 15:03+0200\n"
-"PO-Revision-Date: 2015-02-24 15:03+0200\n"
+"POT-Creation-Date: 2015-02-27 16:46+0200\n"
+"PO-Revision-Date: 2015-02-27 16:46+0200\n"
 "Last-Translator: Yosef Or Boczko <yoseforb@gmail.com>\n"
 "Language-Team: עברית <>\n"
 "Language: he\n"
@@ -1220,16 +1220,12 @@ msgstr ""
 #: ../gtk/gtkpagesetupunixdialog.c:196 ../gtk/gtkprintbackend.c:763
 #: ../gtk/gtkprinteroptionwidget.c:545 ../gtk/gtkprintunixdialog.c:665
 #: ../gtk/gtkprintunixdialog.c:733 ../gtk/gtkwindow.c:11853
-#: ../gtk/inspector/css-editor.c:199 ../gtk/ui/gtkappchooserdialog.ui.h:2
-#: ../gtk/ui/gtkassistant.ui.h:5 ../gtk/ui/gtkcolorchooserdialog.ui.h:2
-#: ../gtk/ui/gtkfontchooserdialog.ui.h:2
+#: ../gtk/inspector/css-editor.c:199
 msgid "_Cancel"
 msgstr "_ביטול"
 
 #: ../gtk/deprecated/gtkcolorseldialog.c:195
-#: ../gtk/gtkprinteroptionwidget.c:546 ../gtk/ui/gtkappchooserdialog.ui.h:3
-#: ../gtk/ui/gtkcolorchooserdialog.ui.h:3
-#: ../gtk/ui/gtkfontchooserdialog.ui.h:3
+#: ../gtk/gtkprinteroptionwidget.c:546
 msgid "_Select"
 msgstr "ב_חירה"
 
@@ -1265,7 +1261,6 @@ msgid "_Preview:"
 msgstr "_תצוגה מקדימה:"
 
 #: ../gtk/deprecated/gtkfontsel.c:1693 ../gtk/gtkpagesetupunixdialog.c:197
-#: ../gtk/ui/gtkassistant.ui.h:1
 msgid "_Apply"
 msgstr "ה_חלה"
 
@@ -1479,7 +1474,7 @@ msgstr ""
 "תכנית זו מופצת ללא שום אחריות.\n"
 "ניתן לבקר בכתובת <a href=\"%s\">%s</a> לפרטים."
 
-#: ../gtk/gtkaboutdialog.c:118 ../gtk/ui/gtkaboutdialog.ui.h:3
+#: ../gtk/gtkaboutdialog.c:118
 msgid "License"
 msgstr "רישיון"
 
@@ -1540,7 +1535,7 @@ msgid "_License"
 msgstr "_רישיון"
 
 #: ../gtk/gtkaboutdialog.c:716 ../gtk/gtkcustompaperunixdialog.c:329
-#: ../gtk/gtkmessagedialog.c:940 ../gtk/ui/gtkassistant.ui.h:6
+#: ../gtk/gtkmessagedialog.c:940
 msgid "_Close"
 msgstr "_סגירה"
 
@@ -1552,7 +1547,7 @@ msgstr "לא ניתן להציג את הקישור"
 msgid "Website"
 msgstr "אתר אינטרנט"
 
-#: ../gtk/gtkaboutdialog.c:1092 ../gtk/ui/gtkapplication-quartz.ui.h:1
+#: ../gtk/gtkaboutdialog.c:1092
 #, c-format
 msgid "About %s"
 msgstr "על אודות %s"
@@ -1647,38 +1642,38 @@ msgstr "לוכסן אחורי"
 msgid "Other application…"
 msgstr "יישום אחר…"
 
-#: ../gtk/gtkappchooserdialog.c:203 ../gtk/gtkappchooserdialog.c:210
-#: ../gtk/gtkappchooserdialog.c:227 ../gtk/ui/gtkappchooserdialog.ui.h:1
+#: ../gtk/gtkappchooserdialog.c:206 ../gtk/gtkappchooserdialog.c:213
+#: ../gtk/gtkappchooserdialog.c:230
 msgid "Select Application"
 msgstr "בחירת יישום"
 
 #. Translators: %s is a filename
-#: ../gtk/gtkappchooserdialog.c:205
+#: ../gtk/gtkappchooserdialog.c:208
 #, c-format
 msgid "Opening “%s”."
 msgstr "פתיחת %s."
 
-#: ../gtk/gtkappchooserdialog.c:206
+#: ../gtk/gtkappchooserdialog.c:209
 #, c-format
 msgid "No applications found for “%s”"
 msgstr "לא נמצאו יישומים עבור „%s“"
 
 #. Translators: %s is a file type description
-#: ../gtk/gtkappchooserdialog.c:212
+#: ../gtk/gtkappchooserdialog.c:215
 #, c-format
 msgid "Opening “%s” files."
 msgstr "פתיחת קובצי „%s”."
 
-#: ../gtk/gtkappchooserdialog.c:214
+#: ../gtk/gtkappchooserdialog.c:217
 #, c-format
 msgid "No applications found for “%s” files"
 msgstr "לא נמצאו יישומים עבור קובצי „%s“"
 
-#: ../gtk/gtkappchooserdialog.c:307
+#: ../gtk/gtkappchooserdialog.c:310
 msgid "Forget association"
 msgstr "מחיקת השיוך"
 
-#: ../gtk/gtkappchooserdialog.c:450
+#: ../gtk/gtkappchooserdialog.c:453
 msgid "Failed to start GNOME Software"
 msgstr "נכשלה הפעלת GNOME תכנה"
 
@@ -2211,7 +2206,7 @@ msgstr "נא לבחור קובץ"
 msgid "Desktop"
 msgstr "שולחן עבודה"
 
-#: ../gtk/gtkfilechooserbutton.c:105 ../gtk/ui/gtkfilechooserbutton.ui.h:1
+#: ../gtk/gtkfilechooserbutton.c:105
 msgid "(None)"
 msgstr "(ללא)"
 
@@ -2313,9 +2308,7 @@ msgstr "הצגת _רוחב העמודה"
 msgid "Sort _Folders before Files"
 msgstr "סידור _תיקיות לפני קבצים"
 
-#. this is the header for the location column in the print dialog
-#: ../gtk/gtkfilechooserwidget.c:2037 ../gtk/inspector/style-prop-list.ui.h:3
-#: ../gtk/ui/gtkfilechooserwidget.ui.h:8 ../gtk/ui/gtkprintunixdialog.ui.h:4
+#: ../gtk/gtkfilechooserwidget.c:2037
 msgid "Location"
 msgstr "מיקום"
 
@@ -2325,7 +2318,7 @@ msgid "_Name:"
 msgstr "_שם:"
 
 #: ../gtk/gtkfilechooserwidget.c:2557 ../gtk/gtkfilechooserwidget.c:4094
-#: ../gtk/gtkplacessidebar.c:968 ../gtk/ui/gtkfilechooserwidget.ui.h:2
+#: ../gtk/gtkplacessidebar.c:968
 msgid "Home"
 msgstr "תיקיית הבית"
 
@@ -2419,7 +2412,7 @@ msgstr "בחירת גופן"
 #: ../gtk/gtkfontbutton.c:1182 ../gtk/inspector/general.c:226
 #: ../gtk/inspector/general.c:227 ../gtk/inspector/gestures.c:128
 #: ../gtk/inspector/prop-editor.c:1200 ../gtk/inspector/size-groups.c:252
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:5203
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:5205
 msgid "None"
 msgstr "ללא"
 
@@ -2551,11 +2544,11 @@ msgstr "ה_עתקת כתובת"
 msgid "Invalid URI"
 msgstr "כתובת לא תקנית"
 
-#: ../gtk/gtklockbutton.c:272 ../gtk/ui/gtklockbutton.ui.h:1
+#: ../gtk/gtklockbutton.c:272
 msgid "Lock"
 msgstr "נעילה"
 
-#: ../gtk/gtklockbutton.c:281 ../gtk/ui/gtklockbutton.ui.h:2
+#: ../gtk/gtklockbutton.c:281
 msgid "Unlock"
 msgstr "שחרור"
 
@@ -2630,7 +2623,7 @@ msgstr "Show GTK+ Options"
 msgid "default:LTR"
 msgstr "default:RTL"
 
-#: ../gtk/gtkmenubutton.c:661 ../gtk/inspector/window.ui.h:19
+#: ../gtk/gtkmenubutton.c:661
 msgid "Menu"
 msgstr "תפריט"
 
@@ -2726,7 +2719,7 @@ msgstr "מעטפת Z"
 msgid "Cannot end process with PID %d: %s"
 msgstr "לא ניתן לסיים את התהליך בעל המזהה %d: ‏%s"
 
-#: ../gtk/gtknotebook.c:5165 ../gtk/gtknotebook.c:7893
+#: ../gtk/gtknotebook.c:5212 ../gtk/gtknotebook.c:7940
 #, c-format
 msgid "Page %u"
 msgstr "עמוד %u"
@@ -2763,8 +2756,7 @@ msgstr ""
 msgid "Manage Custom Sizes…"
 msgstr "ניהול גדלים מותאמים…"
 
-#: ../gtk/gtkpagesetupunixdialog.c:900 ../gtk/ui/gtkpagesetupunixdialog.ui.h:1
-#: ../gtk/ui/gtkprintunixdialog.ui.h:44
+#: ../gtk/gtkpagesetupunixdialog.c:900
 msgid "Page Setup"
 msgstr "הגדרות עמוד"
 
@@ -3072,7 +3064,7 @@ msgstr "חסר נייר"
 
 #. Translators: this is a printer status.
 #: ../gtk/gtkprintoperation-win32.c:620
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2495
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2493
 msgid "Paused"
 msgstr "מופסק"
 
@@ -3140,42 +3132,42 @@ msgstr "נתוני המדפסת מתקבלים…"
 #. * multiple pages on a sheet when printing
 #.
 #: ../gtk/gtkprintunixdialog.c:3096
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:5152
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:5154
 msgid "Left to right, top to bottom"
 msgstr "שמאל לימין, מלמעלה למטה"
 
 #: ../gtk/gtkprintunixdialog.c:3096
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:5152
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:5154
 msgid "Left to right, bottom to top"
 msgstr "שמאל לימין, מלמטה למעלה"
 
 #: ../gtk/gtkprintunixdialog.c:3097
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:5153
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:5155
 msgid "Right to left, top to bottom"
 msgstr "ימין לשמאל, מלמעלה למטה"
 
 #: ../gtk/gtkprintunixdialog.c:3097
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:5153
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:5155
 msgid "Right to left, bottom to top"
 msgstr "ימין לשמאל, מלמטה למעלה"
 
 #: ../gtk/gtkprintunixdialog.c:3098
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:5154
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:5156
 msgid "Top to bottom, left to right"
 msgstr "מלמעלה למטה, משמאל לימין"
 
 #: ../gtk/gtkprintunixdialog.c:3098
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:5154
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:5156
 msgid "Top to bottom, right to left"
 msgstr "מלמעלה למטה, מימין לשמאל"
 
 #: ../gtk/gtkprintunixdialog.c:3099
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:5155
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:5157
 msgid "Bottom to top, left to right"
 msgstr "מלמטה למעלה, משמאל לימין"
 
 #: ../gtk/gtkprintunixdialog.c:3099
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:5155
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:5157
 msgid "Bottom to top, right to left"
 msgstr "מלמטה למעלה, מימין לשמאל"
 
@@ -3183,7 +3175,7 @@ msgstr "מלמטה למעלה, מימין לשמאל"
 #. * dialog that controls in what order multiple pages are arranged
 #.
 #: ../gtk/gtkprintunixdialog.c:3103 ../gtk/gtkprintunixdialog.c:3116
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:5232
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:5234
 msgid "Page Ordering"
 msgstr "סדר דפים"
 
@@ -3528,28 +3520,9 @@ msgstr "לא להציג הודעה זו שוב"
 msgid "Activate"
 msgstr "פעיל"
 
-#: ../gtk/inspector/action-editor.c:302 ../gtk/inspector/actions.ui.h:5
-#: ../gtk/inspector/misc-info.ui.h:3
+#: ../gtk/inspector/action-editor.c:302
 msgid "State"
 msgstr "מצב"
-
-#: ../gtk/inspector/actions.ui.h:1 ../gtk/inspector/general.ui.h:3
-msgid "Prefix"
-msgstr "תחילית"
-
-#: ../gtk/inspector/actions.ui.h:2 ../gtk/inspector/classes-list.ui.h:3
-#: ../gtk/inspector/object-tree.ui.h:2 ../gtk/inspector/signals-list.ui.h:3
-#: ../gtk/ui/gtkfilechooserwidget.ui.h:5
-msgid "Name"
-msgstr "שם"
-
-#: ../gtk/inspector/actions.ui.h:3
-msgid "Enabled"
-msgstr "מאופשר"
-
-#: ../gtk/inspector/actions.ui.h:4
-msgid "Parameter Type"
-msgstr "סוג פרמטר"
 
 #: ../gtk/inspector/classes-list.c:124
 msgid "New class"
@@ -3562,15 +3535,6 @@ msgstr "ביטול"
 #: ../gtk/inspector/classes-list.c:135
 msgid "Class name"
 msgstr "שם מחלקה"
-
-#. vim: set et sw=2 ts=2:
-#: ../gtk/inspector/classes-list.ui.h:1
-msgid "Add a class"
-msgstr "הוספת מחלקה"
-
-#: ../gtk/inspector/classes-list.ui.h:2
-msgid "Restore defaults for this widget"
-msgstr "לשחזר בררת מחדל ליישומון זה"
 
 #: ../gtk/inspector/css-editor.c:90 ../gtk/inspector/css-editor.c:96
 msgid "You can type here any CSS rule recognized by GTK+."
@@ -3598,48 +3562,6 @@ msgstr "ארע כשל בשמירת CSS"
 msgid "_Save"
 msgstr "_שמירה"
 
-#. vim: set et sw=2 ts=2:
-#: ../gtk/inspector/css-editor.ui.h:1
-msgid "Disable this custom CSS"
-msgstr "השבתת CSS מותאם זה"
-
-#: ../gtk/inspector/css-editor.ui.h:2
-msgid "Save the current CSS"
-msgstr "שמירת CSS נוכחי"
-
-#: ../gtk/inspector/data-list.ui.h:1
-msgid "Show data"
-msgstr "הצגת מידע"
-
-#. vim: set et sw=2 ts=2:
-#: ../gtk/inspector/general.ui.h:1
-msgid "GTK+ Version"
-msgstr "גרסת GTK+‎"
-
-#: ../gtk/inspector/general.ui.h:2
-msgid "GDK Backend"
-msgstr "GDK Backend"
-
-#: ../gtk/inspector/general.ui.h:4
-msgid "X display"
-msgstr "תצוגת X"
-
-#: ../gtk/inspector/general.ui.h:5
-msgid "RGBA visual"
-msgstr "‏RGBA חזותי"
-
-#: ../gtk/inspector/general.ui.h:6
-msgid "Composited"
-msgstr "מורכב"
-
-#: ../gtk/inspector/general.ui.h:7
-msgid "GL Version"
-msgstr "גרסת GL"
-
-#: ../gtk/inspector/general.ui.h:8
-msgid "GL Vendor"
-msgstr "ספק GL"
-
 #: ../gtk/inspector/gestures.c:129
 msgid "Capture"
 msgstr "לכידה"
@@ -3648,110 +3570,13 @@ msgstr "לכידה"
 msgid "Bubble"
 msgstr "בועה"
 
-#: ../gtk/inspector/gestures.c:131 ../gtk/inspector/menu.ui.h:3
+#: ../gtk/inspector/gestures.c:131
 msgid "Target"
 msgstr "יעד"
 
 #: ../gtk/inspector/menu.c:93
 msgid "Unnamed section"
 msgstr "קטע ללא שם"
-
-#. vim: set et sw=2 ts=2:
-#: ../gtk/inspector/menu.ui.h:1 ../gtk/inspector/object-tree.ui.h:3
-msgid "Label"
-msgstr "תווית"
-
-#: ../gtk/inspector/menu.ui.h:2 ../gtk/inspector/prop-editor.c:1300
-msgid "Action"
-msgstr "פעולה"
-
-#: ../gtk/inspector/menu.ui.h:4
-msgid "Icon"
-msgstr "צלמית"
-
-#. vim: set et sw=2 ts=2:
-#: ../gtk/inspector/misc-info.ui.h:1
-msgid "Address"
-msgstr "כתובת"
-
-#: ../gtk/inspector/misc-info.ui.h:2
-msgid "Reference count"
-msgstr "מונה הפניות"
-
-#: ../gtk/inspector/misc-info.ui.h:4
-msgid "Buildable ID"
-msgstr "מזהה Buildable"
-
-#: ../gtk/inspector/misc-info.ui.h:5
-msgid "Default Widget"
-msgstr "יישומון בררת מחדל"
-
-#: ../gtk/inspector/misc-info.ui.h:6 ../gtk/inspector/misc-info.ui.h:8
-#: ../gtk/inspector/prop-editor.c:1003 ../gtk/inspector/prop-editor.c:1183
-#: ../gtk/inspector/prop-editor.c:1308 ../gtk/inspector/prop-editor.c:1419
-#: ../gtk/inspector/window.ui.h:8
-msgid "Properties"
-msgstr "מאפיינים"
-
-#: ../gtk/inspector/misc-info.ui.h:7
-msgid "Focus Widget"
-msgstr "יישומון ממוקד"
-
-#: ../gtk/inspector/misc-info.ui.h:9
-msgid "Mnemonic Label"
-msgstr "תווית מואצת"
-
-#: ../gtk/inspector/misc-info.ui.h:10
-msgid "Allocated size"
-msgstr "גודל הקצאה"
-
-#: ../gtk/inspector/misc-info.ui.h:11
-msgid "Clip area"
-msgstr "אזור מחסנית"
-
-#: ../gtk/inspector/misc-info.ui.h:12
-msgid "Tick callback"
-msgstr "רגע התקשרות"
-
-#: ../gtk/inspector/misc-info.ui.h:13
-msgid "Frame count"
-msgstr "מונה מסגרת"
-
-#: ../gtk/inspector/misc-info.ui.h:14
-msgid "Frame rate"
-msgstr "הקף מסגרת"
-
-#: ../gtk/inspector/misc-info.ui.h:15
-msgid "Accessible role"
-msgstr "כלל נגישות"
-
-#: ../gtk/inspector/misc-info.ui.h:16
-msgid "Mapped"
-msgstr "ממופה"
-
-#: ../gtk/inspector/misc-info.ui.h:17
-msgid "Realized"
-msgstr "מימוש"
-
-#: ../gtk/inspector/misc-info.ui.h:18
-msgid "Is Toplevel"
-msgstr "עליון"
-
-#: ../gtk/inspector/misc-info.ui.h:19
-msgid "Child Visible"
-msgstr "ילד נראה"
-
-#: ../gtk/inspector/object-hierarchy.ui.h:1
-msgid "Object Hierarchy"
-msgstr "היררכיית Object"
-
-#: ../gtk/inspector/object-tree.ui.h:1
-msgid "Object"
-msgstr "עצם"
-
-#: ../gtk/inspector/object-tree.ui.h:4 ../gtk/inspector/window.ui.h:13
-msgid "Style Classes"
-msgstr "מחלקות סגנון"
 
 #: ../gtk/inspector/prop-editor.c:615
 #, c-format
@@ -3767,6 +3592,11 @@ msgstr "לא ידוע"
 #, c-format
 msgid "Object: %p (%s)"
 msgstr "עצם: %p ‏(%s)"
+
+#: ../gtk/inspector/prop-editor.c:1003 ../gtk/inspector/prop-editor.c:1183
+#: ../gtk/inspector/prop-editor.c:1308 ../gtk/inspector/prop-editor.c:1419
+msgid "Properties"
+msgstr "מאפיינים"
 
 #: ../gtk/inspector/prop-editor.c:1056
 #, c-format
@@ -3789,6 +3619,10 @@ msgstr "%p ‏(%s)"
 #: ../gtk/inspector/prop-editor.c:1190
 msgid "Column:"
 msgstr "עמודה:"
+
+#: ../gtk/inspector/prop-editor.c:1300
+msgid "Action"
+msgstr "פעולה"
 
 #: ../gtk/inspector/prop-editor.c:1304
 #, c-format
@@ -3831,68 +3665,9 @@ msgstr "ערכת נושא"
 msgid "XSettings"
 msgstr "XSettings"
 
-#. vim: set et:
-#: ../gtk/inspector/prop-list.ui.h:1 ../gtk/inspector/style-prop-list.ui.h:1
-msgid "Property"
-msgstr "מאפיין"
-
-#: ../gtk/inspector/prop-list.ui.h:2 ../gtk/inspector/style-prop-list.ui.h:2
-#: ../gtk/ui/gtkcoloreditor.ui.h:9
-msgid "Value"
-msgstr "ערך"
-
-#: ../gtk/inspector/prop-list.ui.h:3
-msgid "Attribute"
-msgstr "תכונה"
-
-#: ../gtk/inspector/prop-list.ui.h:4 ../gtk/inspector/signals-list.ui.h:6
-msgid "Defined At"
-msgstr "הגדרה"
-
-#: ../gtk/inspector/resource-list.ui.h:1
-msgid "Path"
-msgstr "נתיב"
-
-#: ../gtk/inspector/resource-list.ui.h:2 ../gtk/inspector/signals-list.ui.h:5
-msgid "Count"
-msgstr "מונה"
-
-#: ../gtk/inspector/resource-list.ui.h:3 ../gtk/ui/gtkfilechooserwidget.ui.h:6
-msgid "Size"
-msgstr "גודל"
-
-#: ../gtk/inspector/resource-list.ui.h:4
-msgid "Name:"
-msgstr "שם:"
-
-#: ../gtk/inspector/resource-list.ui.h:5
-msgid "Type:"
-msgstr "סוג:"
-
-#: ../gtk/inspector/resource-list.ui.h:6
-msgid "Size:"
-msgstr "גודל:"
-
-#: ../gtk/inspector/selector.ui.h:1 ../gtk/inspector/window.ui.h:12
-msgid "Selector"
-msgstr "בורר"
-
 #: ../gtk/inspector/signals-list.c:111
 msgid "Yes"
 msgstr "כן"
-
-#. vim: set et sw=2 ts=2:
-#: ../gtk/inspector/signals-list.ui.h:1
-msgid "Trace signal emissions on this object"
-msgstr "מעקב אחרי אותות הנפלטים על עצם זה"
-
-#: ../gtk/inspector/signals-list.ui.h:2
-msgid "Clear log"
-msgstr "פינוי יומן"
-
-#: ../gtk/inspector/signals-list.ui.h:4
-msgid "Connected"
-msgstr "מחובר"
 
 #: ../gtk/inspector/size-groups.c:224
 msgid "Ignore hidden"
@@ -3913,39 +3688,6 @@ msgstr "אנכי"
 #: ../gtk/inspector/size-groups.c:255
 msgid "Both"
 msgstr "שניהם"
-
-#. vim: set et sw=2 ts=2:
-#: ../gtk/inspector/statistics.ui.h:1
-msgid "Type"
-msgstr "סוג"
-
-#: ../gtk/inspector/statistics.ui.h:2
-msgid "Self 1"
-msgstr "עצמי 1"
-
-#: ../gtk/inspector/statistics.ui.h:3
-msgid "Cumulative 1"
-msgstr "מצטבר 1"
-
-#: ../gtk/inspector/statistics.ui.h:4
-msgid "Self 2"
-msgstr "עצמי 2"
-
-#: ../gtk/inspector/statistics.ui.h:5
-msgid "Cumulative 2"
-msgstr "מצטבר 2"
-
-#: ../gtk/inspector/statistics.ui.h:6
-msgid "Self"
-msgstr "עצמי"
-
-#: ../gtk/inspector/statistics.ui.h:7
-msgid "Cumulative"
-msgstr "מצטבר"
-
-#: ../gtk/inspector/statistics.ui.h:8
-msgid "Enable statistics with GOBJECT_DEBUG=instance-count"
-msgstr "ניתן לאפשר סטטיסטיקה עם GOBJECT_DEBUG=instance-count"
 
 #: ../gtk/inspector/visual.c:263 ../gtk/inspector/visual.c:278
 msgid "Theme is hardcoded by GTK_THEME"
@@ -3971,199 +3713,6 @@ msgstr ""
 #: ../gtk/inspector/visual.c:573
 msgid "GL rendering is disabled"
 msgstr "תִּצּוּג GL מושבת"
-
-#. vim: set et sw=2 ts=2:
-#: ../gtk/inspector/visual.ui.h:1
-msgid "GTK+ Theme"
-msgstr "ערכת GTK+‎"
-
-#: ../gtk/inspector/visual.ui.h:2
-msgid "Dark Variant"
-msgstr "הֶגְוֵן כהה"
-
-#: ../gtk/inspector/visual.ui.h:3
-msgid "Cursor Theme"
-msgstr "ערכת סמן"
-
-#: ../gtk/inspector/visual.ui.h:4
-msgid "Cursor Size"
-msgstr "גודל סמן"
-
-#: ../gtk/inspector/visual.ui.h:5
-msgid "Icon Theme"
-msgstr "ערכת סמלילים"
-
-#: ../gtk/inspector/visual.ui.h:6 ../gtk/ui/gtkfontbutton.ui.h:1
-msgid "Font"
-msgstr "גופן"
-
-#: ../gtk/inspector/visual.ui.h:7
-msgid "Text Direction"
-msgstr "כיוון טקסט"
-
-#: ../gtk/inspector/visual.ui.h:8
-msgid "Left-to-Right"
-msgstr "שמאל לימין"
-
-#: ../gtk/inspector/visual.ui.h:9
-msgid "Right-to-Left"
-msgstr "ימין לשמאל"
-
-#: ../gtk/inspector/visual.ui.h:10
-msgid "Window scaling"
-msgstr "קנה מידה"
-
-#: ../gtk/inspector/visual.ui.h:11
-msgid "Animations"
-msgstr "הנפשות"
-
-#: ../gtk/inspector/visual.ui.h:12
-msgid "Rendering Mode"
-msgstr "מצב תִּצּוּג"
-
-#: ../gtk/inspector/visual.ui.h:13
-msgid "Similar"
-msgstr "דומה"
-
-#: ../gtk/inspector/visual.ui.h:14
-msgid "Image"
-msgstr "תמונה"
-
-#: ../gtk/inspector/visual.ui.h:15
-msgid "Recording"
-msgstr "רישום"
-
-#: ../gtk/inspector/visual.ui.h:16
-msgid "Show Graphic Updates"
-msgstr "הצגת עדכונים גרפיים"
-
-#: ../gtk/inspector/visual.ui.h:17
-msgid "Show Baselines"
-msgstr "הצגת קווי בסיס (Baselines)"
-
-#: ../gtk/inspector/visual.ui.h:18
-msgid "Show Pixel Cache"
-msgstr "הצגת מטמון פיקסל"
-
-#: ../gtk/inspector/visual.ui.h:19
-msgid "Simulate touchscreen"
-msgstr "הדמיית מסך מגע"
-
-#: ../gtk/inspector/visual.ui.h:20
-msgid "GL Rendering"
-msgstr "תִּצּוּג GL"
-
-#: ../gtk/inspector/visual.ui.h:21
-msgid "When needed"
-msgstr "כאשר נצרך"
-
-#: ../gtk/inspector/visual.ui.h:22
-msgid "Always"
-msgstr "תמיד"
-
-#: ../gtk/inspector/visual.ui.h:23
-msgid "Disabled"
-msgstr "מושבת"
-
-#: ../gtk/inspector/visual.ui.h:24
-msgid "Software GL"
-msgstr "תכנת GL"
-
-#: ../gtk/inspector/visual.ui.h:25
-msgid "Software Surfaces"
-msgstr "משטחי תכנה"
-
-#: ../gtk/inspector/visual.ui.h:26
-msgid "Texture Rectangle Extension"
-msgstr "הרחבת מרקם מלבן"
-
-#. vim: set et sw=2 ts=2:
-#: ../gtk/inspector/window.ui.h:1
-msgid "Select an Object"
-msgstr "בחירת עצם"
-
-#: ../gtk/inspector/window.ui.h:2 ../gtk/inspector/window.ui.h:5
-msgid "Show Details"
-msgstr "הצגת פרטים"
-
-#: ../gtk/inspector/window.ui.h:3
-msgid "Show all Objects"
-msgstr "הצגת כל העצמים"
-
-#: ../gtk/inspector/window.ui.h:4
-msgid "Collect Statistics"
-msgstr "איסוף סטטיסטיקות"
-
-#: ../gtk/inspector/window.ui.h:6
-msgid "Show all Resources"
-msgstr "הצגת כל המשאבים"
-
-#. Translators: "Miscellaneous" is the label for a button, that opens
-#. up an extra panel of settings in a print dialog.
-#: ../gtk/inspector/window.ui.h:7
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:4267
-msgid "Miscellaneous"
-msgstr "שונות"
-
-#: ../gtk/inspector/window.ui.h:9
-msgid "Signals"
-msgstr "אותות"
-
-#: ../gtk/inspector/window.ui.h:10
-msgid "Child Properties"
-msgstr "מאפייני ילד"
-
-#: ../gtk/inspector/window.ui.h:11
-msgid "Hierarchy"
-msgstr "היררכייה"
-
-#: ../gtk/inspector/window.ui.h:14
-msgid "Style Properties"
-msgstr "מאפייני סגנון"
-
-#: ../gtk/inspector/window.ui.h:15 ../gtk/inspector/window.ui.h:25
-msgid "CSS"
-msgstr "CSS"
-
-#: ../gtk/inspector/window.ui.h:16
-msgid "Size Groups"
-msgstr "קבוצות גודל "
-
-#: ../gtk/inspector/window.ui.h:17
-msgid "Data"
-msgstr "מידע"
-
-#: ../gtk/inspector/window.ui.h:18
-msgid "Actions"
-msgstr "פעולות"
-
-#: ../gtk/inspector/window.ui.h:20
-msgid "Gestures"
-msgstr "מחוות"
-
-#: ../gtk/inspector/window.ui.h:21
-msgid "Magnifier"
-msgstr "זכוכית מגדלת"
-
-#: ../gtk/inspector/window.ui.h:22
-msgid "Objects"
-msgstr "עצמים"
-
-#: ../gtk/inspector/window.ui.h:23
-msgid "Statistics"
-msgstr "סטטיסטיקה"
-
-#: ../gtk/inspector/window.ui.h:24
-msgid "Resources"
-msgstr "מאשבים"
-
-#: ../gtk/inspector/window.ui.h:26
-msgid "Visual"
-msgstr "חזותי"
-
-#: ../gtk/inspector/window.ui.h:27 ../gtk/ui/gtkprintunixdialog.ui.h:24
-msgid "General"
-msgstr "כללי"
 
 #: ../gtk/paper_names_offsets.c:4
 msgctxt "paper size"
@@ -5189,6 +4738,12 @@ msgid "Amharic (EZ+)"
 msgstr "אמהרית (EZ+‎)"
 
 #. ID
+#: ../modules/input/imbroadway.c:51
+msgctxt "input method menu"
+msgid "Broadway"
+msgstr "Broadway"
+
+#. ID
 #: ../modules/input/imcedilla.c:90
 msgctxt "input method menu"
 msgid "Cedilla"
@@ -5199,6 +4754,11 @@ msgstr "סדיליה"
 msgctxt "input menthod menu"
 msgid "Cyrillic (Transliterated)"
 msgstr "קרילית (מתועתקת)"
+
+#: ../modules/input/imime.c:30
+msgctxt "input method menu"
+msgid "Windows IME"
+msgstr "Windows IME"
 
 #. ID
 #: ../modules/input/iminuktitut.c:125
@@ -5217,6 +4777,11 @@ msgstr "האלפבית הפונטי הלאומי (IPA)"
 msgctxt "input method menu"
 msgid "Multipress"
 msgstr "ריבוי לחיצות"
+
+#: ../modules/input/imquartz.c:58
+msgctxt "input method menu"
+msgid "Mac OS X Quartz"
+msgstr "Mac OS X Quartz"
 
 #. ID
 #: ../modules/input/imthai.c:33
@@ -5273,251 +4838,257 @@ msgstr "לא פעיל"
 msgid "Pages per _sheet:"
 msgstr "מספר העמודים ב_דף"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1083
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1392
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1074
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1383
 msgid "Username:"
 msgstr "שם משתמש:"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1084
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1401
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1075
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1392
 msgid "Password:"
 msgstr "ססמה:"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1123
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1414
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1114
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1405
 #, c-format
 msgid "Authentication is required to print document “%s” on printer %s"
 msgstr "נדרש אימות כדי להדפיס את המסמך „%s” במדפסת %s"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1125
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1116
 #, c-format
 msgid "Authentication is required to print a document on %s"
 msgstr "נדרש אימות כדי להדפיס מסמך באמצעות %s"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1129
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1120
 #, c-format
 msgid "Authentication is required to get attributes of job “%s”"
 msgstr "נדרש אימות כדי לקבל את מאפייני המשימה „%s”"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1131
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1122
 msgid "Authentication is required to get attributes of a job"
 msgstr "נדרש אימות כדי לקבל את מאפייני המשימה"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1135
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1126
 #, c-format
 msgid "Authentication is required to get attributes of printer %s"
 msgstr "נדרש אימות כדי לקבל את מאפייני המדפסת %s"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1137
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1128
 msgid "Authentication is required to get attributes of a printer"
 msgstr "נדרש אימות כדי לקבל את מאפייני המדפסת"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1140
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1131
 #, c-format
 msgid "Authentication is required to get default printer of %s"
 msgstr "נדרש אימות כדי לקבל את מדפסת ברירת המחדל של %s"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1143
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1134
 #, c-format
 msgid "Authentication is required to get printers from %s"
 msgstr "נדרש אימות כדי לקבל מדפסות מ־%s"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1148
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1139
 #, c-format
 msgid "Authentication is required to get a file from %s"
 msgstr "נדרש אימות כדי לקבל את הקובץ מ־%s"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1150
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1141
 #, c-format
 msgid "Authentication is required on %s"
 msgstr "%s דורש אימות"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1386
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1377
 msgid "Domain:"
 msgstr "מתחם:"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1416
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1407
 #, c-format
 msgid "Authentication is required to print document “%s”"
 msgstr "נדרש אימות כדי להדפיס את המסמך „%s”"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1421
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1412
 #, c-format
 msgid "Authentication is required to print this document on printer %s"
 msgstr "נדרש אימות כדי להדפיס מסמך זה למדפסת %s"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1423
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1414
 msgid "Authentication is required to print this document"
 msgstr "נדרש אימות כדי להדפיס מסמך זה"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1860
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1851
 #, c-format
 msgid "Printer “%s” is low on toner."
 msgstr "במדפסת „%s” חסר דיו."
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1861
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1852
 #, c-format
 msgid "Printer “%s” has no toner left."
 msgstr "במדפסת „%s” לא נשאר דיו."
 
 #. Translators: "Developer" like on photo development context
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1863
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1854
 #, c-format
 msgid "Printer “%s” is low on developer."
 msgstr "המדפסת „%s” דלה בחומרי פיתוח."
 
 #. Translators: "Developer" like on photo development context
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1865
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1856
 #, c-format
 msgid "Printer “%s” is out of developer."
 msgstr "למדפסת „%s” אזלו חומרי הפיתוח."
 
 #. Translators: "marker" is one color bin of the printer
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1867
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1858
 #, c-format
 msgid "Printer “%s” is low on at least one marker supply."
 msgstr "למדפסת „%s” כמעט אזל לפחות אחד מחומרי ההדפסה."
 
 #. Translators: "marker" is one color bin of the printer
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1869
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1860
 #, c-format
 msgid "Printer “%s” is out of at least one marker supply."
 msgstr "במדפסת „%s” אזל לפחות אחד מחומרי ההדפסה."
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1870
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1861
 #, c-format
 msgid "The cover is open on printer “%s”."
 msgstr "המכסה פתוח במדפסת „%s”."
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1871
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1862
 #, c-format
 msgid "The door is open on printer “%s”."
 msgstr "הדלת פתוחה במדפסת „%s”."
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1872
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1863
 #, c-format
 msgid "Printer “%s” is low on paper."
 msgstr "במדפסת „%s” חסר נייר."
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1873
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1864
 #, c-format
 msgid "Printer “%s” is out of paper."
 msgstr "במדפסת „%s” אין נייר"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1874
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1865
 #, c-format
 msgid "Printer “%s” is currently offline."
 msgstr "המדפסת „%s” אינה מקוונת נכון לעכשיו."
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1875
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1866
 #, c-format
 msgid "There is a problem on printer “%s”."
 msgstr "קיימת בעיה במדפסת „%s”."
 
 #. Translators: this is a printer status.
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2492
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2490
 msgid "Paused; Rejecting Jobs"
 msgstr "מופסק; דוחה עבודות"
 
 #. Translators: this is a printer status.
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2498
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2496
 msgid "Rejecting Jobs"
 msgstr "דוחה עבודות"
 
 #. Translators: this string connects multiple printer states together.
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2540
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2538
 msgid "; "
 msgstr "; "
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:4218
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:4285
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:4220
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:4287
 msgid "Two Sided"
 msgstr "שני צדדים"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:4219
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:4221
 msgid "Paper Type"
 msgstr "סוג נייר"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:4220
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:4222
 msgid "Paper Source"
 msgstr "מקור נייר"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:4221
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:4223
 msgid "Output Tray"
 msgstr "מגש פלט"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:4222
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:4224
 msgid "Resolution"
 msgstr "רזולוציה"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:4223
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:4225
 msgid "GhostScript pre-filtering"
 msgstr "סינון קדם של GhostScript"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:4232
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:4234
 msgid "One Sided"
 msgstr "צד אחד"
 
 #. Translators: this is an option of "Two Sided"
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:4234
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:4236
 msgid "Long Edge (Standard)"
 msgstr "הצד הארוך (תקני)"
 
 #. Translators: this is an option of "Two Sided"
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:4236
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:4238
 msgid "Short Edge (Flip)"
 msgstr "הצד הקצר (היפוך)"
 
 #. Translators: this is an option of "Paper Source"
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:4238
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:4240
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:4248
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:4242
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:4250
 msgid "Auto Select"
 msgstr "בחירה אוטומטית"
 
 #. Translators: this is an option of "Paper Source"
 #. Translators: this is an option of "Resolution"
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:4242
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:4244
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:4246
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:4250
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:4757
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:4248
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:4252
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:4759
 msgid "Printer Default"
 msgstr "בררת מחדל עבור המדפסת"
 
 #. Translators: this is an option of "GhostScript"
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:4252
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:4254
 msgid "Embed GhostScript fonts only"
 msgstr "הטמעת גופני PostScript בלבד"
 
 #. Translators: this is an option of "GhostScript"
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:4254
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:4256
 msgid "Convert to PS level 1"
 msgstr "המרה ל־PS רמה 1"
 
 #. Translators: this is an option of "GhostScript"
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:4256
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:4258
 msgid "Convert to PS level 2"
 msgstr "המרה ל־PS רמה 2"
 
 #. Translators: this is an option of "GhostScript"
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:4258
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:4260
 msgid "No pre-filtering"
 msgstr "אין סינון קדם"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:4293
+#. Translators: "Miscellaneous" is the label for a button, that opens
+#. up an extra panel of settings in a print dialog.
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:4269
+msgid "Miscellaneous"
+msgstr "שונות"
+
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:4295
 msgctxt "sides"
 msgid "One Sided"
 msgstr "חד צדדי"
 
 #. Translators: this is an option of "Two Sided"
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:4295
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:4297
 msgctxt "sides"
 msgid "Long Edge (Standard)"
 msgstr "צד ארוך (תקני)"
 
 #. Translators: this is an option of "Two Sided"
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:4297
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:4299
 msgctxt "sides"
 msgid "Short Edge (Flip)"
 msgstr "צד קצר (היפוך)"
@@ -5525,78 +5096,78 @@ msgstr "צד קצר (היפוך)"
 #. Translators: These strings name the possible values of the
 #. * job priority option in the print dialog
 #.
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:5147
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:5149
 msgid "Urgent"
 msgstr "דחוף"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:5147
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:5149
 msgid "High"
 msgstr "גבוה"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:5147
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:5149
 msgid "Medium"
 msgstr "בינוני"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:5147
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:5149
 msgid "Low"
 msgstr "נמוך"
 
 #. Translators, this string is used to label the job priority option
 #. * in the print dialog
 #.
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:5177
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:5179
 msgid "Job Priority"
 msgstr "עדיפות המשימה"
 
 #. Translators, this string is used to label the billing info entry
 #. * in the print dialog
 #.
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:5188
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:5190
 msgid "Billing Info"
 msgstr "נתוני חיוב"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:5203
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:5205
 msgid "Classified"
 msgstr "מסווג"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:5203
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:5205
 msgid "Confidential"
 msgstr "חסוי"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:5203
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:5205
 msgid "Secret"
 msgstr "סודי"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:5203
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:5205
 msgid "Standard"
 msgstr "רגיל"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:5203
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:5205
 msgid "Top Secret"
 msgstr "סודי ביותר"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:5203
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:5205
 msgid "Unclassified"
 msgstr "לא מסווג"
 
 #. Translators, this string is used to label the pages-per-sheet option
 #. * in the print dialog
 #.
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:5214
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:5216
 msgid "Pages per Sheet"
 msgstr "מספר העמודים בדף"
 
 #. Translators, this is the label used for the option in the print
 #. * dialog that controls the front cover page.
 #.
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:5274
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:5276
 msgid "Before"
 msgstr "לפני"
 
 #. Translators, this is the label used for the option in the print
 #. * dialog that controls the back cover page.
 #.
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:5289
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:5291
 msgid "After"
 msgstr "אחרי"
 
@@ -5604,14 +5175,14 @@ msgstr "אחרי"
 #. * a print job is printed. Possible values are 'now', a specified time,
 #. * or 'on hold'
 #.
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:5309
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:5311
 msgid "Print at"
 msgstr "זמן הדפסה"
 
 #. Translators: this is the name of the option that allows the user
 #. * to specify a time when a print job will be printed.
 #.
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:5320
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:5322
 msgid "Print at time"
 msgstr "הדפסה בזמן"
 
@@ -5620,33 +5191,33 @@ msgstr "הדפסה בזמן"
 #. * the width and height in points. E.g: "Custom
 #. * 230.4x142.9"
 #.
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:5362
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:5364
 #, c-format
 msgid "Custom %s×%s"
 msgstr "מותאם אישית ‎%s‏×%s"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:5463
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:5465
 msgid "Printer Profile"
 msgstr "פרופיל מדפסת"
 
 #. TRANSLATORS: this is when color profile information is unavailable
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:5470
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:5472
 msgid "Unavailable"
 msgstr "לא זמין"
 
 #. TRANSLATORS: when we're running an old CUPS, and
 #. * it hasn't registered the device with colord
-#: ../modules/printbackends/cups/gtkprintercups.c:258
+#: ../modules/printbackends/cups/gtkprintercups.c:262
 msgid "Color management unavailable"
 msgstr "ניהול צבעים אינו זמין"
 
 #. TRANSLATORS: when there is no color profile available
-#: ../modules/printbackends/cups/gtkprintercups.c:270
+#: ../modules/printbackends/cups/gtkprintercups.c:274
 msgid "No profile available"
 msgstr "אין פרופיל זמין"
 
 #. TRANSLATORS: when the color profile has no title
-#: ../modules/printbackends/cups/gtkprintercups.c:281
+#: ../modules/printbackends/cups/gtkprintercups.c:285
 msgid "Unspecified profile"
 msgstr "פרופיל בלתי מוגדר"
 
@@ -5727,418 +5298,620 @@ msgstr "פלט-בדיקה.%s"
 msgid "Print to Test Printer"
 msgstr "הדפסה למדפסת בדיקה"
 
-#: ../gtk/ui/gtkaboutdialog.ui.h:1
-msgid "About"
-msgstr "על אודות"
+#~ msgid "Prefix"
+#~ msgstr "תחילית"
 
-#: ../gtk/ui/gtkaboutdialog.ui.h:2
-msgid "Credits"
-msgstr "תודות"
+#~ msgid "Name"
+#~ msgstr "שם"
 
-#: ../gtk/ui/gtkappchooserdialog.ui.h:4
-msgid "_View All Applications"
-msgstr "ה_צגת כל היישומים"
+#~ msgid "Enabled"
+#~ msgstr "מאופשר"
 
-#: ../gtk/ui/gtkappchooserdialog.ui.h:5
-msgid "_Find New Applications"
-msgstr "_חיפוש יישומים חדשים"
+#~ msgid "Parameter Type"
+#~ msgstr "סוג פרמטר"
 
-#: ../gtk/ui/gtkappchooserwidget.ui.h:1
-msgid "No applications found."
-msgstr "לא נמצאו יישומים."
+#~ msgid "Add a class"
+#~ msgstr "הוספת מחלקה"
 
-#: ../gtk/ui/gtkapplication-quartz.ui.h:2
-msgid "Preferences"
-msgstr "העדפות"
+#~ msgid "Restore defaults for this widget"
+#~ msgstr "לשחזר בררת מחדל ליישומון זה"
 
-#: ../gtk/ui/gtkapplication-quartz.ui.h:3
-msgid "Services"
-msgstr "שירותים"
+#~ msgid "Disable this custom CSS"
+#~ msgstr "השבתת CSS מותאם זה"
 
-#: ../gtk/ui/gtkapplication-quartz.ui.h:4
-#, c-format
-msgid "Hide %s"
-msgstr "הסתרת %s"
+#~ msgid "Save the current CSS"
+#~ msgstr "שמירת CSS נוכחי"
 
-#: ../gtk/ui/gtkapplication-quartz.ui.h:5
-msgid "Hide Others"
-msgstr "הסתרת אחרים"
+#~ msgid "Show data"
+#~ msgstr "הצגת מידע"
 
-#: ../gtk/ui/gtkapplication-quartz.ui.h:6
-msgid "Show All"
-msgstr "הצגת הכל"
+#~ msgid "GTK+ Version"
+#~ msgstr "גרסת GTK+‎"
 
-#: ../gtk/ui/gtkapplication-quartz.ui.h:7
-#, c-format
-msgid "Quit %s"
-msgstr "יציאה %s"
+#~ msgid "GDK Backend"
+#~ msgstr "GDK Backend"
 
-#: ../gtk/ui/gtkassistant.ui.h:2
-msgid "_Next"
-msgstr "_הבא"
+#~ msgid "X display"
+#~ msgstr "תצוגת X"
 
-#: ../gtk/ui/gtkassistant.ui.h:3
-msgid "_Back"
-msgstr "ה_קודם"
+#~ msgid "RGBA visual"
+#~ msgstr "‏RGBA חזותי"
 
-#: ../gtk/ui/gtkassistant.ui.h:4
-msgid "_Finish"
-msgstr "_סיום"
+#~ msgid "Composited"
+#~ msgstr "מורכב"
 
-#: ../gtk/ui/gtkcolorchooserdialog.ui.h:1
-msgid "Select a Color"
-msgstr "נא לבחור בצבע"
+#~ msgid "GL Version"
+#~ msgstr "גרסת GL"
 
-#: ../gtk/ui/gtkcoloreditor.ui.h:1
-msgid "Color Name"
-msgstr "שם הצבע"
+#~ msgid "GL Vendor"
+#~ msgstr "ספק GL"
 
-#: ../gtk/ui/gtkcoloreditor.ui.h:2
-msgctxt "Color channel"
-msgid "A"
-msgstr "A"
+#~ msgid "Label"
+#~ msgstr "תווית"
 
-#: ../gtk/ui/gtkcoloreditor.ui.h:3
-msgid "Alpha"
-msgstr "שקיפות"
+#~ msgid "Icon"
+#~ msgstr "צלמית"
 
-#: ../gtk/ui/gtkcoloreditor.ui.h:4
-msgctxt "Color channel"
-msgid "H"
-msgstr "H"
+#~ msgid "Address"
+#~ msgstr "כתובת"
 
-#: ../gtk/ui/gtkcoloreditor.ui.h:5
-msgid "Hue"
-msgstr "גוון"
+#~ msgid "Reference count"
+#~ msgstr "מונה הפניות"
 
-#: ../gtk/ui/gtkcoloreditor.ui.h:6
-msgctxt "Color Channel"
-msgid "S"
-msgstr "S"
+#~ msgid "Buildable ID"
+#~ msgstr "מזהה Buildable"
 
-#: ../gtk/ui/gtkcoloreditor.ui.h:7
-msgctxt "Color Channel"
-msgid "V"
-msgstr "V"
+#~ msgid "Default Widget"
+#~ msgstr "יישומון בררת מחדל"
 
-#: ../gtk/ui/gtkcoloreditor.ui.h:8
-msgid "Saturation"
-msgstr "רוויה"
+#~ msgid "Focus Widget"
+#~ msgstr "יישומון ממוקד"
 
-#: ../gtk/ui/gtkfilechooserwidget.ui.h:1
-msgid "Create Folder"
-msgstr "יצירת תיקייה"
+#~ msgid "Mnemonic Label"
+#~ msgstr "תווית מואצת"
+
+#~ msgid "Allocated size"
+#~ msgstr "גודל הקצאה"
+
+#~ msgid "Clip area"
+#~ msgstr "אזור מחסנית"
+
+#~ msgid "Tick callback"
+#~ msgstr "רגע התקשרות"
+
+#~ msgid "Frame count"
+#~ msgstr "מונה מסגרת"
+
+#~ msgid "Frame rate"
+#~ msgstr "הקף מסגרת"
+
+#~ msgid "Accessible role"
+#~ msgstr "כלל נגישות"
+
+#~ msgid "Mapped"
+#~ msgstr "ממופה"
+
+#~ msgid "Realized"
+#~ msgstr "מימוש"
+
+#~ msgid "Is Toplevel"
+#~ msgstr "עליון"
+
+#~ msgid "Child Visible"
+#~ msgstr "ילד נראה"
+
+#~ msgid "Object Hierarchy"
+#~ msgstr "היררכיית Object"
+
+#~ msgid "Object"
+#~ msgstr "עצם"
+
+#~ msgid "Style Classes"
+#~ msgstr "מחלקות סגנון"
+
+#~ msgid "Property"
+#~ msgstr "מאפיין"
+
+#~ msgid "Value"
+#~ msgstr "ערך"
+
+#~ msgid "Attribute"
+#~ msgstr "תכונה"
+
+#~ msgid "Defined At"
+#~ msgstr "הגדרה"
+
+#~ msgid "Path"
+#~ msgstr "נתיב"
+
+#~ msgid "Count"
+#~ msgstr "מונה"
+
+#~ msgid "Size"
+#~ msgstr "גודל"
+
+#~ msgid "Name:"
+#~ msgstr "שם:"
+
+#~ msgid "Type:"
+#~ msgstr "סוג:"
+
+#~ msgid "Size:"
+#~ msgstr "גודל:"
+
+#~ msgid "Selector"
+#~ msgstr "בורר"
+
+#~ msgid "Trace signal emissions on this object"
+#~ msgstr "מעקב אחרי אותות הנפלטים על עצם זה"
+
+#~ msgid "Clear log"
+#~ msgstr "פינוי יומן"
+
+#~ msgid "Connected"
+#~ msgstr "מחובר"
+
+#~ msgid "Type"
+#~ msgstr "סוג"
+
+#~ msgid "Self 1"
+#~ msgstr "עצמי 1"
+
+#~ msgid "Cumulative 1"
+#~ msgstr "מצטבר 1"
+
+#~ msgid "Self 2"
+#~ msgstr "עצמי 2"
+
+#~ msgid "Cumulative 2"
+#~ msgstr "מצטבר 2"
+
+#~ msgid "Self"
+#~ msgstr "עצמי"
+
+#~ msgid "Cumulative"
+#~ msgstr "מצטבר"
+
+#~ msgid "Enable statistics with GOBJECT_DEBUG=instance-count"
+#~ msgstr "ניתן לאפשר סטטיסטיקה עם GOBJECT_DEBUG=instance-count"
+
+#~ msgid "GTK+ Theme"
+#~ msgstr "ערכת GTK+‎"
+
+#~ msgid "Dark Variant"
+#~ msgstr "הֶגְוֵן כהה"
+
+#~ msgid "Cursor Theme"
+#~ msgstr "ערכת סמן"
+
+#~ msgid "Cursor Size"
+#~ msgstr "גודל סמן"
+
+#~ msgid "Icon Theme"
+#~ msgstr "ערכת סמלילים"
+
+#~ msgid "Font"
+#~ msgstr "גופן"
+
+#~ msgid "Text Direction"
+#~ msgstr "כיוון טקסט"
+
+#~ msgid "Left-to-Right"
+#~ msgstr "שמאל לימין"
+
+#~ msgid "Right-to-Left"
+#~ msgstr "ימין לשמאל"
+
+#~ msgid "Window scaling"
+#~ msgstr "קנה מידה"
+
+#~ msgid "Animations"
+#~ msgstr "הנפשות"
+
+#~ msgid "Rendering Mode"
+#~ msgstr "מצב תִּצּוּג"
+
+#~ msgid "Similar"
+#~ msgstr "דומה"
+
+#~ msgid "Image"
+#~ msgstr "תמונה"
+
+#~ msgid "Recording"
+#~ msgstr "רישום"
+
+#~ msgid "Show Graphic Updates"
+#~ msgstr "הצגת עדכונים גרפיים"
+
+#~ msgid "Show Baselines"
+#~ msgstr "הצגת קווי בסיס (Baselines)"
+
+#~ msgid "Show Pixel Cache"
+#~ msgstr "הצגת מטמון פיקסל"
+
+#~ msgid "Simulate touchscreen"
+#~ msgstr "הדמיית מסך מגע"
+
+#~ msgid "GL Rendering"
+#~ msgstr "תִּצּוּג GL"
+
+#~ msgid "When needed"
+#~ msgstr "כאשר נצרך"
+
+#~ msgid "Always"
+#~ msgstr "תמיד"
+
+#~ msgid "Disabled"
+#~ msgstr "מושבת"
+
+#~ msgid "Software GL"
+#~ msgstr "תכנת GL"
+
+#~ msgid "Software Surfaces"
+#~ msgstr "משטחי תכנה"
+
+#~ msgid "Texture Rectangle Extension"
+#~ msgstr "הרחבת מרקם מלבן"
+
+#~ msgid "Select an Object"
+#~ msgstr "בחירת עצם"
+
+#~ msgid "Show Details"
+#~ msgstr "הצגת פרטים"
+
+#~ msgid "Show all Objects"
+#~ msgstr "הצגת כל העצמים"
+
+#~ msgid "Collect Statistics"
+#~ msgstr "איסוף סטטיסטיקות"
+
+#~ msgid "Show all Resources"
+#~ msgstr "הצגת כל המשאבים"
+
+#~ msgid "Signals"
+#~ msgstr "אותות"
+
+#~ msgid "Child Properties"
+#~ msgstr "מאפייני ילד"
+
+#~ msgid "Hierarchy"
+#~ msgstr "היררכייה"
+
+#~ msgid "Style Properties"
+#~ msgstr "מאפייני סגנון"
+
+#~ msgid "CSS"
+#~ msgstr "CSS"
+
+#~ msgid "Size Groups"
+#~ msgstr "קבוצות גודל "
+
+#~ msgid "Data"
+#~ msgstr "מידע"
+
+#~ msgid "Actions"
+#~ msgstr "פעולות"
+
+#~ msgid "Gestures"
+#~ msgstr "מחוות"
+
+#~ msgid "Magnifier"
+#~ msgstr "זכוכית מגדלת"
+
+#~ msgid "Objects"
+#~ msgstr "עצמים"
+
+#~ msgid "Statistics"
+#~ msgstr "סטטיסטיקה"
+
+#~ msgid "Resources"
+#~ msgstr "מאשבים"
+
+#~ msgid "Visual"
+#~ msgstr "חזותי"
+
+#~ msgid "General"
+#~ msgstr "כללי"
+
+#~ msgid "About"
+#~ msgstr "על אודות"
+
+#~ msgid "Credits"
+#~ msgstr "תודות"
+
+#~ msgid "_View All Applications"
+#~ msgstr "ה_צגת כל היישומים"
+
+#~ msgid "_Find New Applications"
+#~ msgstr "_חיפוש יישומים חדשים"
+
+#~ msgid "No applications found."
+#~ msgstr "לא נמצאו יישומים."
+
+#~ msgid "Preferences"
+#~ msgstr "העדפות"
+
+#~ msgid "Services"
+#~ msgstr "שירותים"
+
+#~ msgid "Hide %s"
+#~ msgstr "הסתרת %s"
+
+#~ msgid "Hide Others"
+#~ msgstr "הסתרת אחרים"
+
+#~ msgid "Show All"
+#~ msgstr "הצגת הכל"
+
+#~ msgid "Quit %s"
+#~ msgstr "יציאה %s"
+
+#~ msgid "_Next"
+#~ msgstr "_הבא"
+
+#~ msgid "_Back"
+#~ msgstr "ה_קודם"
+
+#~ msgid "_Finish"
+#~ msgstr "_סיום"
+
+#~ msgid "Select a Color"
+#~ msgstr "נא לבחור בצבע"
+
+#~ msgid "Color Name"
+#~ msgstr "שם הצבע"
+
+#~ msgctxt "Color channel"
+#~ msgid "A"
+#~ msgstr "A"
+
+#~ msgid "Alpha"
+#~ msgstr "שקיפות"
+
+#~ msgctxt "Color channel"
+#~ msgid "H"
+#~ msgstr "H"
+
+#~ msgid "Hue"
+#~ msgstr "גוון"
+
+#~ msgctxt "Color Channel"
+#~ msgid "S"
+#~ msgstr "S"
+
+#~ msgctxt "Color Channel"
+#~ msgid "V"
+#~ msgstr "V"
+
+#~ msgid "Saturation"
+#~ msgstr "רוויה"
+
+#~ msgid "Create Folder"
+#~ msgstr "יצירת תיקייה"
 
 # hebrew note: "תיקייה" is "folder", but there is no better word for
 # "directory"
-#: ../gtk/ui/gtkfilechooserwidget.ui.h:3
-msgid "All Files"
-msgstr "כל הקבצים"
+#~ msgid "All Files"
+#~ msgstr "כל הקבצים"
 
 # hebrew note: "תיקייה" is "folder", but there is no better word for
 # "directory"
-#: ../gtk/ui/gtkfilechooserwidget.ui.h:4
-msgid "Files"
-msgstr "קבצים"
-
-#: ../gtk/ui/gtkfilechooserwidget.ui.h:7
-msgid "Modified"
-msgstr "שונה"
-
-#: ../gtk/ui/gtkfilechooserwidget.ui.h:9
-msgid "Select which types of files are shown"
-msgstr "בחירה בסוגי הקבצים שיוצגו"
-
-#: ../gtk/ui/gtkfontchooserdialog.ui.h:1
-msgid "Select Font"
-msgstr "בחירת גופן"
-
-#: ../gtk/ui/gtkfontchooserwidget.ui.h:1
-msgid "Search font name"
-msgstr "חיפוש שם הגופן"
-
-#: ../gtk/ui/gtkfontchooserwidget.ui.h:2
-msgid "Font Family"
-msgstr "משפחת הגופנים"
-
-#: ../gtk/ui/gtkfontchooserwidget.ui.h:3
-msgid "No fonts matched your search. You can revise your search and try again."
-msgstr "אין שום גופנים התואמים לביטוי שחיפשת. ניתן לשנות את הביטוי ולנסות שוב."
-
-#: ../gtk/ui/gtkpagesetupunixdialog.ui.h:2
-msgid "_Format for:"
-msgstr "_תצורה עבור:"
-
-#: ../gtk/ui/gtkpagesetupunixdialog.ui.h:3
-#: ../gtk/ui/gtkprintunixdialog.ui.h:38
-msgid "_Paper size:"
-msgstr "_גודל הנייר:"
-
-#: ../gtk/ui/gtkpagesetupunixdialog.ui.h:4
-msgid "_Orientation:"
-msgstr "_כיווניות:"
-
-#: ../gtk/ui/gtkpagesetupunixdialog.ui.h:5
-#: ../gtk/ui/gtkprintunixdialog.ui.h:40
-msgid "Portrait"
-msgstr "לאורך"
-
-#: ../gtk/ui/gtkpagesetupunixdialog.ui.h:6
-#: ../gtk/ui/gtkprintunixdialog.ui.h:42
-msgid "Reverse portrait"
-msgstr "לאורך הפוך"
-
-#: ../gtk/ui/gtkpagesetupunixdialog.ui.h:7
-#: ../gtk/ui/gtkprintunixdialog.ui.h:41
-msgid "Landscape"
-msgstr "לרוחב"
-
-#: ../gtk/ui/gtkpagesetupunixdialog.ui.h:8
-#: ../gtk/ui/gtkprintunixdialog.ui.h:43
-msgid "Reverse landscape"
-msgstr "לרוחב הפוך"
-
-#: ../gtk/ui/gtkpathbar.ui.h:1
-msgid "Down Path"
-msgstr "נתיב מטה"
-
-#: ../gtk/ui/gtkpathbar.ui.h:2
-msgid "Up Path"
-msgstr "נתיב מעלה"
-
-#: ../gtk/ui/gtkprintunixdialog.ui.h:1
-msgid "Printer"
-msgstr "מדפסת"
-
-#. this is the header for the printer status column in the print dialog
-#: ../gtk/ui/gtkprintunixdialog.ui.h:7
-msgid "Status"
-msgstr "מצב"
-
-#: ../gtk/ui/gtkprintunixdialog.ui.h:8
-msgid "Range"
-msgstr "טווח"
-
-#: ../gtk/ui/gtkprintunixdialog.ui.h:9
-msgid "_All Pages"
-msgstr "כל ה_דפים"
-
-#: ../gtk/ui/gtkprintunixdialog.ui.h:10
-msgid "C_urrent Page"
-msgstr "_הדף הנוכחי"
-
-#: ../gtk/ui/gtkprintunixdialog.ui.h:11
-msgid "Se_lection"
-msgstr "_בחירה"
-
-#: ../gtk/ui/gtkprintunixdialog.ui.h:12
-msgid "Pag_es:"
-msgstr "_דפים:"
-
-#: ../gtk/ui/gtkprintunixdialog.ui.h:13 ../gtk/ui/gtkprintunixdialog.ui.h:15
-#: ../gtk/ui/gtkprintunixdialog.ui.h:18
-msgid ""
-"Specify one or more page ranges,\n"
-" e.g. 1–3, 7, 11"
-msgstr ""
-"ניתן לציין טווח דפים אחד או יותר,\n"
-" לדוגמה: ‎1–3,7,11"
-
-#: ../gtk/ui/gtkprintunixdialog.ui.h:17
-msgid "Pages"
-msgstr "דפים"
-
-#: ../gtk/ui/gtkprintunixdialog.ui.h:20
-msgid "Copies"
-msgstr "עותקים"
-
-#: ../gtk/ui/gtkprintunixdialog.ui.h:21
-msgid "Copie_s:"
-msgstr "_עותקים:"
-
-#: ../gtk/ui/gtkprintunixdialog.ui.h:22
-msgid "C_ollate"
-msgstr "_איסוף"
-
-#: ../gtk/ui/gtkprintunixdialog.ui.h:23
-msgid "_Reverse"
-msgstr "הי_פוך"
-
-#: ../gtk/ui/gtkprintunixdialog.ui.h:25
-msgid "Layout"
-msgstr "פריסה"
-
-#: ../gtk/ui/gtkprintunixdialog.ui.h:26
-msgid "T_wo-sided:"
-msgstr "דו־_צדדי:"
-
-#: ../gtk/ui/gtkprintunixdialog.ui.h:27
-msgid "Pages per _side:"
-msgstr "מספר _עמודים בכל צד:"
-
-#: ../gtk/ui/gtkprintunixdialog.ui.h:28
-msgid "Page or_dering:"
-msgstr "_סדר הדפים:"
-
-#: ../gtk/ui/gtkprintunixdialog.ui.h:29
-msgid "_Only print:"
-msgstr "ה_דפסה בלבד:"
-
-#: ../gtk/ui/gtkprintunixdialog.ui.h:30
-msgid "All sheets"
-msgstr "כל הדפים"
-
-#: ../gtk/ui/gtkprintunixdialog.ui.h:31
-msgid "Even sheets"
-msgstr "דפים זוגיים"
-
-#: ../gtk/ui/gtkprintunixdialog.ui.h:32
-msgid "Odd sheets"
-msgstr "דפים אי זוגיים"
-
-#: ../gtk/ui/gtkprintunixdialog.ui.h:33
-msgid "Sc_ale:"
-msgstr "_התאמה:"
-
-#: ../gtk/ui/gtkprintunixdialog.ui.h:34
-msgid "Paper"
-msgstr "נייר"
-
-#: ../gtk/ui/gtkprintunixdialog.ui.h:35
-msgid "Paper _type:"
-msgstr "_סוג נייר:"
-
-#: ../gtk/ui/gtkprintunixdialog.ui.h:36
-msgid "Paper _source:"
-msgstr "מ_קור נייר:"
-
-#: ../gtk/ui/gtkprintunixdialog.ui.h:37
-msgid "Output t_ray:"
-msgstr "_מגש פלט:"
-
-#: ../gtk/ui/gtkprintunixdialog.ui.h:39
-msgid "Or_ientation:"
-msgstr "_כיווניות:"
-
-#: ../gtk/ui/gtkprintunixdialog.ui.h:45
-msgid "Job Details"
-msgstr "פרטי המשימה"
-
-#: ../gtk/ui/gtkprintunixdialog.ui.h:46
-msgid "Pri_ority:"
-msgstr "_עדיפות:"
-
-#: ../gtk/ui/gtkprintunixdialog.ui.h:47
-msgid "_Billing info:"
-msgstr "_נתוני חיוב:"
-
-#: ../gtk/ui/gtkprintunixdialog.ui.h:48
-msgid "Print Document"
-msgstr "הדפסת מסמך"
-
-#. this is one of the choices for the print at option in the print dialog
-#: ../gtk/ui/gtkprintunixdialog.ui.h:51
-msgid "_Now"
-msgstr "_כעת"
-
-#. this is one of the choices for the print at option in the print dialog. It also serves as the label for an entry that allows the user to enter a time.
-#: ../gtk/ui/gtkprintunixdialog.ui.h:54
-msgid "A_t:"
-msgstr "_ב:"
-
-#. Ability to parse the am/pm format depends on actual locale. You can remove the am/pm values below for your locale if they are not supported.
-#: ../gtk/ui/gtkprintunixdialog.ui.h:55 ../gtk/ui/gtkprintunixdialog.ui.h:59
-#: ../gtk/ui/gtkprintunixdialog.ui.h:61 ../gtk/ui/gtkprintunixdialog.ui.h:65
-#: ../gtk/ui/gtkprintunixdialog.ui.h:68
-msgid ""
-"Specify the time of print,\n"
-" e.g. 15∶30, 2∶35 pm, 14∶15∶20, 11∶46∶30 am, 4 pm"
-msgstr ""
-"ציון זמן ההדפסה,\n"
-"לדוגמה: 15:30‏, ‎,2:35 pm ‏14:15:20, ‎11:46:30 am, ‏4‎ pm"
-
-#: ../gtk/ui/gtkprintunixdialog.ui.h:67
-msgid "Time of print"
-msgstr "זמן ההדפסה"
-
-#. this is one of the choices for the print at option in the print dialog. It means that the print job will not be printed until it explicitly gets 'released'.
-#: ../gtk/ui/gtkprintunixdialog.ui.h:72
-msgid "On _hold"
-msgstr "בהמ_תנה"
-
-#: ../gtk/ui/gtkprintunixdialog.ui.h:73 ../gtk/ui/gtkprintunixdialog.ui.h:74
-msgid "Hold the job until it is explicitly released"
-msgstr "החזקת המשימה עד שתשוחרר מפורשות"
-
-#: ../gtk/ui/gtkprintunixdialog.ui.h:75
-msgid "Add Cover Page"
-msgstr "הוספת עמוד שער"
-
-#. this is the label used for the option in the print dialog that controls the front cover page.
-#: ../gtk/ui/gtkprintunixdialog.ui.h:78
-msgid "Be_fore:"
-msgstr "ל_פני:"
-
-#. this is the label used for the option in the print dialog that controls the back cover page.
-#: ../gtk/ui/gtkprintunixdialog.ui.h:81
-msgid "_After:"
-msgstr "א_חרי:"
-
-#: ../gtk/ui/gtkprintunixdialog.ui.h:82
-msgid "Job"
-msgstr "משימה"
-
-#. This will appear as a tab label in the print dialog.
-#: ../gtk/ui/gtkprintunixdialog.ui.h:85
-msgid "Image Quality"
-msgstr "איכות תמונה"
-
-#. This will appear as a tab label in the print dialog.
-#: ../gtk/ui/gtkprintunixdialog.ui.h:88
-msgid "Color"
-msgstr "צבע"
-
-#. This will appear as a tab label in the print dialog.
-#. It's a typographical term, as in "Binding and finishing"
-#: ../gtk/ui/gtkprintunixdialog.ui.h:92
-msgid "Finishing"
-msgstr "גימור"
-
-#: ../gtk/ui/gtkprintunixdialog.ui.h:93
-msgid "Advanced"
-msgstr "מתקדם"
-
-#: ../gtk/ui/gtkprintunixdialog.ui.h:94
-msgid "Some of the settings in the dialog conflict"
-msgstr "חלק מההגדרות בתיבת הדו־שיח מתנגשות"
-
-#: ../gtk/ui/gtkrecentchooserdefault.ui.h:1
-msgid "Select which type of documents are shown"
-msgstr "יש לבחור אילו סוגי מסמכים יוצגו"
-
-#: ../gtk/ui/gtkvolumebutton.ui.h:1
-msgid "Volume"
-msgstr "עצמת שמע"
-
-#: ../gtk/ui/gtkvolumebutton.ui.h:2
-msgid "Turns volume up or down"
-msgstr "מגביר או מנמיך את עצמת השמע"
-
-#: ../gtk/ui/gtkvolumebutton.ui.h:3
-msgid "Volume Up"
-msgstr "הגברת העצמה"
-
-#: ../gtk/ui/gtkvolumebutton.ui.h:4
-msgid "Increases the volume"
-msgstr "מגביר את העצמה"
-
-#: ../gtk/ui/gtkvolumebutton.ui.h:5
-msgid "Volume Down"
-msgstr "הנמכת העצמה"
-
-#: ../gtk/ui/gtkvolumebutton.ui.h:6
-msgid "Decreases the volume"
-msgstr "מנמיך את העצמה"
+#~ msgid "Files"
+#~ msgstr "קבצים"
+
+#~ msgid "Modified"
+#~ msgstr "שונה"
+
+#~ msgid "Select which types of files are shown"
+#~ msgstr "בחירה בסוגי הקבצים שיוצגו"
+
+#~ msgid "Select Font"
+#~ msgstr "בחירת גופן"
+
+#~ msgid "Search font name"
+#~ msgstr "חיפוש שם הגופן"
+
+#~ msgid "Font Family"
+#~ msgstr "משפחת הגופנים"
+
+#~ msgid ""
+#~ "No fonts matched your search. You can revise your search and try again."
+#~ msgstr ""
+#~ "אין שום גופנים התואמים לביטוי שחיפשת. ניתן לשנות את הביטוי ולנסות שוב."
+
+#~ msgid "_Format for:"
+#~ msgstr "_תצורה עבור:"
+
+#~ msgid "_Paper size:"
+#~ msgstr "_גודל הנייר:"
+
+#~ msgid "_Orientation:"
+#~ msgstr "_כיווניות:"
+
+#~ msgid "Portrait"
+#~ msgstr "לאורך"
+
+#~ msgid "Reverse portrait"
+#~ msgstr "לאורך הפוך"
+
+#~ msgid "Landscape"
+#~ msgstr "לרוחב"
+
+#~ msgid "Reverse landscape"
+#~ msgstr "לרוחב הפוך"
+
+#~ msgid "Down Path"
+#~ msgstr "נתיב מטה"
+
+#~ msgid "Up Path"
+#~ msgstr "נתיב מעלה"
+
+#~ msgid "Printer"
+#~ msgstr "מדפסת"
+
+#~ msgid "Status"
+#~ msgstr "מצב"
+
+#~ msgid "Range"
+#~ msgstr "טווח"
+
+#~ msgid "_All Pages"
+#~ msgstr "כל ה_דפים"
+
+#~ msgid "C_urrent Page"
+#~ msgstr "_הדף הנוכחי"
+
+#~ msgid "Se_lection"
+#~ msgstr "_בחירה"
+
+#~ msgid "Pag_es:"
+#~ msgstr "_דפים:"
+
+#~ msgid ""
+#~ "Specify one or more page ranges,\n"
+#~ " e.g. 1–3, 7, 11"
+#~ msgstr ""
+#~ "ניתן לציין טווח דפים אחד או יותר,\n"
+#~ " לדוגמה: ‎1–3,7,11"
+
+#~ msgid "Pages"
+#~ msgstr "דפים"
+
+#~ msgid "Copies"
+#~ msgstr "עותקים"
+
+#~ msgid "Copie_s:"
+#~ msgstr "_עותקים:"
+
+#~ msgid "C_ollate"
+#~ msgstr "_איסוף"
+
+#~ msgid "_Reverse"
+#~ msgstr "הי_פוך"
+
+#~ msgid "Layout"
+#~ msgstr "פריסה"
+
+#~ msgid "T_wo-sided:"
+#~ msgstr "דו־_צדדי:"
+
+#~ msgid "Pages per _side:"
+#~ msgstr "מספר _עמודים בכל צד:"
+
+#~ msgid "Page or_dering:"
+#~ msgstr "_סדר הדפים:"
+
+#~ msgid "_Only print:"
+#~ msgstr "ה_דפסה בלבד:"
+
+#~ msgid "All sheets"
+#~ msgstr "כל הדפים"
+
+#~ msgid "Even sheets"
+#~ msgstr "דפים זוגיים"
+
+#~ msgid "Odd sheets"
+#~ msgstr "דפים אי זוגיים"
+
+#~ msgid "Sc_ale:"
+#~ msgstr "_התאמה:"
+
+#~ msgid "Paper"
+#~ msgstr "נייר"
+
+#~ msgid "Paper _type:"
+#~ msgstr "_סוג נייר:"
+
+#~ msgid "Paper _source:"
+#~ msgstr "מ_קור נייר:"
+
+#~ msgid "Output t_ray:"
+#~ msgstr "_מגש פלט:"
+
+#~ msgid "Or_ientation:"
+#~ msgstr "_כיווניות:"
+
+#~ msgid "Job Details"
+#~ msgstr "פרטי המשימה"
+
+#~ msgid "Pri_ority:"
+#~ msgstr "_עדיפות:"
+
+#~ msgid "_Billing info:"
+#~ msgstr "_נתוני חיוב:"
+
+#~ msgid "Print Document"
+#~ msgstr "הדפסת מסמך"
+
+#~ msgid "_Now"
+#~ msgstr "_כעת"
+
+#~ msgid "A_t:"
+#~ msgstr "_ב:"
+
+#~ msgid ""
+#~ "Specify the time of print,\n"
+#~ " e.g. 15∶30, 2∶35 pm, 14∶15∶20, 11∶46∶30 am, 4 pm"
+#~ msgstr ""
+#~ "ציון זמן ההדפסה,\n"
+#~ "לדוגמה: 15:30‏, ‎,2:35 pm ‏14:15:20, ‎11:46:30 am, ‏4‎ pm"
+
+#~ msgid "Time of print"
+#~ msgstr "זמן ההדפסה"
+
+#~ msgid "On _hold"
+#~ msgstr "בהמ_תנה"
+
+#~ msgid "Hold the job until it is explicitly released"
+#~ msgstr "החזקת המשימה עד שתשוחרר מפורשות"
+
+#~ msgid "Add Cover Page"
+#~ msgstr "הוספת עמוד שער"
+
+#~ msgid "Be_fore:"
+#~ msgstr "ל_פני:"
+
+#~ msgid "_After:"
+#~ msgstr "א_חרי:"
+
+#~ msgid "Job"
+#~ msgstr "משימה"
+
+#~ msgid "Image Quality"
+#~ msgstr "איכות תמונה"
+
+#~ msgid "Color"
+#~ msgstr "צבע"
+
+#~ msgid "Finishing"
+#~ msgstr "גימור"
+
+#~ msgid "Advanced"
+#~ msgstr "מתקדם"
+
+#~ msgid "Some of the settings in the dialog conflict"
+#~ msgstr "חלק מההגדרות בתיבת הדו־שיח מתנגשות"
+
+#~ msgid "Select which type of documents are shown"
+#~ msgstr "יש לבחור אילו סוגי מסמכים יוצגו"
+
+#~ msgid "Volume"
+#~ msgstr "עצמת שמע"
+
+#~ msgid "Turns volume up or down"
+#~ msgstr "מגביר או מנמיך את עצמת השמע"
+
+#~ msgid "Volume Up"
+#~ msgstr "הגברת העצמה"
+
+#~ msgid "Increases the volume"
+#~ msgstr "מגביר את העצמה"
+
+#~ msgid "Volume Down"
+#~ msgstr "הנמכת העצמה"
+
+#~ msgid "Decreases the volume"
+#~ msgstr "מנמיך את העצמה"
 
 #~ msgid "Browse"
 #~ msgstr "עיון"
