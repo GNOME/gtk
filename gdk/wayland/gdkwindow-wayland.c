@@ -953,6 +953,12 @@ gdk_wayland_window_create_xdg_surface (GdkWindow *window)
   gdk_wayland_window_sync_parent (window);
   gdk_wayland_window_sync_title (window);
   gdk_wayland_window_sync_margin (window);
+
+  if (window->state & GDK_WINDOW_STATE_MAXIMIZED)
+    xdg_surface_set_maximized (impl->xdg_surface);
+  if (window->state & GDK_WINDOW_STATE_FULLSCREEN)
+    xdg_surface_set_fullscreen (impl->xdg_surface, NULL);
+
   xdg_surface_set_app_id (impl->xdg_surface, gdk_get_program_class ());
 }
 
@@ -1757,10 +1763,10 @@ gdk_wayland_window_maximize (GdkWindow *window)
   if (GDK_WINDOW_DESTROYED (window))
     return;
 
-  if (!impl->xdg_surface)
-    return;
-
-  xdg_surface_set_maximized (impl->xdg_surface);
+  if (impl->xdg_surface)
+    xdg_surface_set_maximized (impl->xdg_surface);
+  else
+    gdk_synthesize_window_state (window, 0, GDK_WINDOW_STATE_MAXIMIZED);
 }
 
 static void
@@ -1771,10 +1777,10 @@ gdk_wayland_window_unmaximize (GdkWindow *window)
   if (GDK_WINDOW_DESTROYED (window))
     return;
 
-  if (!impl->xdg_surface)
-    return;
-
-  xdg_surface_unset_maximized (impl->xdg_surface);
+  if (impl->xdg_surface)
+    xdg_surface_unset_maximized (impl->xdg_surface);
+  else
+    gdk_synthesize_window_state (window, GDK_WINDOW_STATE_MAXIMIZED, 0);
 }
 
 static void
@@ -1785,10 +1791,10 @@ gdk_wayland_window_fullscreen (GdkWindow *window)
   if (GDK_WINDOW_DESTROYED (window))
     return;
 
-  if (!impl->xdg_surface)
-    return;
-
-  xdg_surface_set_fullscreen (impl->xdg_surface, NULL);
+  if (impl->xdg_surface)
+    xdg_surface_set_fullscreen (impl->xdg_surface, NULL);
+  else
+    gdk_synthesize_window_state (window, 0, GDK_WINDOW_STATE_FULLSCREEN);
 }
 
 static void
@@ -1799,10 +1805,10 @@ gdk_wayland_window_unfullscreen (GdkWindow *window)
   if (GDK_WINDOW_DESTROYED (window))
     return;
 
-  if (!impl->xdg_surface)
-    return;
-
-  xdg_surface_unset_fullscreen (impl->xdg_surface);
+  if (impl->xdg_surface)
+    xdg_surface_unset_fullscreen (impl->xdg_surface);
+  else
+    gdk_synthesize_window_state (window, GDK_WINDOW_STATE_FULLSCREEN, 0);
 }
 
 static void
