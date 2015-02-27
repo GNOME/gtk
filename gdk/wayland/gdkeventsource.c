@@ -20,6 +20,7 @@
 #include "gdkinternals.h"
 #include "gdkprivate-wayland.h"
 
+#include <stdlib.h>
 #include <errno.h>
 
 typedef struct _GdkWaylandEventSource {
@@ -160,11 +161,17 @@ _gdk_wayland_display_queue_events (GdkDisplay *display)
   if (source->pfd.revents & G_IO_IN)
     {
       if (wl_display_dispatch (display_wayland->wl_display) < 0)
-        g_error ("Error dispatching display: %s", g_strerror (errno));
+        {
+          g_warning ("Error %d (%s) dispatching to Wayland display.",
+                     errno, g_strerror (errno));
+          exit (1);
+        }
     }
 
   if (source->pfd.revents & (G_IO_ERR | G_IO_HUP))
-    g_error ("Lost connection to wayland compositor");
-
+    {
+      g_warning ("Lost connection to Wayland compositor.");
+      exit (1);
+    }
   source->pfd.revents = 0;
 }
