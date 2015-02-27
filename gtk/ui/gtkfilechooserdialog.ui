@@ -53,4 +53,7 @@
       </object>
     </child>
   </template>
+  <object class="GtkSizeGroup" id="buttons">
+    <property name="mode">vertical</property>
+  </object>
 </interface>

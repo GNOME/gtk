@@ -201,6 +201,8 @@ struct _GtkFileChooserDialogPrivate
 {
   GtkWidget *widget;
 
+  GtkSizeGroup *buttons;
+
   /* for use with GtkFileChooserEmbed */
   gboolean response_requested;
   gboolean search_setup;
@@ -256,6 +258,7 @@ gtk_file_chooser_dialog_class_init (GtkFileChooserDialogClass *class)
 					       "/org/gtk/libgtk/ui/gtkfilechooserdialog.ui");
 
   gtk_widget_class_bind_template_child_private (widget_class, GtkFileChooserDialog, widget);
+  gtk_widget_class_bind_template_child_private (widget_class, GtkFileChooserDialog, buttons);
   gtk_widget_class_bind_template_callback (widget_class, response_cb);
   gtk_widget_class_bind_template_callback (widget_class, file_chooser_widget_file_activated);
   gtk_widget_class_bind_template_callback (widget_class, file_chooser_widget_default_size_changed);
@@ -474,6 +477,15 @@ gtk_file_chooser_dialog_get_property (GObject         *object,
 }
 
 static void
+add_button (GtkWidget *button, gpointer data)
+{
+  GtkFileChooserDialog *dialog = data;
+
+  if (GTK_IS_BUTTON (button))
+    gtk_size_group_add_widget (dialog->priv->buttons, button);
+}
+
+static void
 setup_search (GtkFileChooserDialog *dialog)
 {
   gboolean use_header;
@@ -505,6 +517,8 @@ setup_search (GtkFileChooserDialog *dialog)
       g_object_bind_property (button, "active",
                               dialog->priv->widget, "search-mode",
                               G_BINDING_BIDIRECTIONAL);
+
+      gtk_container_forall (GTK_CONTAINER (header), add_button, dialog);
     }
 }
 
