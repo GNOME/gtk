@@ -57,6 +57,7 @@
 #include "gtkheaderbar.h"
 #include "gtkdialogprivate.h"
 #include "gtksearchbar.h"
+#include "gtksizegroup.h"
 
 #include <string.h>
 #include <glib/gi18n-lib.h>
@@ -79,6 +80,8 @@ struct _GtkAppChooserDialogPrivate {
   GtkWidget *app_chooser_widget;
   GtkWidget *show_more_button;
   GtkWidget *software_button;
+
+  GtkSizeGroup *buttons;
 
   gboolean show_more_clicked;
   gboolean dismissed;
@@ -494,6 +497,7 @@ setup_search (GtkAppChooserDialog *self)
 
       header = gtk_dialog_get_header_bar (GTK_DIALOG (self));
       gtk_header_bar_pack_end (GTK_HEADER_BAR (header), button);
+      gtk_size_group_add_widget (self->priv->buttons, button);
 
       g_object_bind_property (button, "active",
                               self->priv->search_bar, "search-mode-enabled",
@@ -696,6 +700,7 @@ gtk_app_chooser_dialog_class_init (GtkAppChooserDialogClass *klass)
   gtk_widget_class_bind_template_child_private (widget_class, GtkAppChooserDialog, inner_box);
   gtk_widget_class_bind_template_child_private (widget_class, GtkAppChooserDialog, search_bar);
   gtk_widget_class_bind_template_child_private (widget_class, GtkAppChooserDialog, search_entry);
+  gtk_widget_class_bind_template_child_private (widget_class, GtkAppChooserDialog, buttons);
   gtk_widget_class_bind_template_callback (widget_class, show_more_button_clicked_cb);
   gtk_widget_class_bind_template_callback (widget_class, software_button_clicked_cb);
 }
