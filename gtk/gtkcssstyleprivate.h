@@ -54,6 +54,8 @@ struct _GtkCssStyleClass
    * Optional: default impl will just return NULL */
   GtkCssSection *       (* get_section)                         (GtkCssStyle            *style,
                                                                  guint                   id);
+  /* TRUE if this style will require changes based on timestamp */
+  gboolean              (* is_static)                           (GtkCssStyle            *style);
 };
 
 GType                   gtk_css_style_get_type                  (void) G_GNUC_CONST;
@@ -64,6 +66,7 @@ GtkCssSection *         gtk_css_style_get_section               (GtkCssStyle    
                                                                  guint                   id);
 GtkBitmask *            gtk_css_style_get_difference            (GtkCssStyle            *style,
                                                                  GtkCssStyle            *other);
+gboolean                gtk_css_style_is_static                 (GtkCssStyle            *style);
 
 char *                  gtk_css_style_to_string                 (GtkCssStyle            *style);
 void                    gtk_css_style_print                     (GtkCssStyle            *style,

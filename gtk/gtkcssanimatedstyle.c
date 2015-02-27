@@ -63,6 +63,21 @@ gtk_css_animated_style_get_section (GtkCssStyle *style,
   return gtk_css_style_get_section (animated->style, id);
 }
 
+static gboolean
+gtk_css_animated_style_is_static (GtkCssStyle *style)
+{
+  GtkCssAnimatedStyle *animated = GTK_CSS_ANIMATED_STYLE (style);
+  GSList *list;
+
+  for (list = animated->animations; list; list = list->next)
+    {
+      if (!_gtk_style_animation_is_static (list->data, animated->current_time))
+        return FALSE;
+    }
+
+  return TRUE;
+}
+
 static void
 gtk_css_animated_style_dispose (GObject *object)
 {
@@ -101,6 +116,7 @@ gtk_css_animated_style_class_init (GtkCssAnimatedStyleClass *klass)
 
   style_class->get_value = gtk_css_animated_style_get_value;
   style_class->get_section = gtk_css_animated_style_get_section;
+  style_class->is_static = gtk_css_animated_style_is_static;
 }
 
 static void
@@ -471,20 +487,4 @@ gtk_css_animated_style_new_advance (GtkCssAnimatedStyle *source,
   gtk_css_animated_style_apply_animations (result, timestamp);
 
   return GTK_CSS_STYLE (result);
-}
-
-gboolean
-gtk_css_animated_style_is_static (GtkCssAnimatedStyle *style)
-{
-  GSList *list;
-
-  gtk_internal_return_val_if_fail (GTK_IS_CSS_ANIMATED_STYLE (style), TRUE);
-
-  for (list = style->animations; list; list = list->next)
-    {
-      if (!_gtk_style_animation_is_static (list->data, style->current_time))
-        return FALSE;
-    }
-
-  return TRUE;
 }

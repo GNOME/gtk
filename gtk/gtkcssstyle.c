@@ -46,10 +46,17 @@ gtk_css_style_real_get_section (GtkCssStyle *style,
   return NULL;
 }
 
+static gboolean
+gtk_css_style_real_is_static (GtkCssStyle *style)
+{
+  return TRUE;
+}
+
 static void
 gtk_css_style_class_init (GtkCssStyleClass *klass)
 {
   klass->get_section = gtk_css_style_real_get_section;
+  klass->is_static = gtk_css_style_real_is_static;
 }
 
 static void
@@ -96,6 +103,15 @@ gtk_css_style_get_difference (GtkCssStyle *style,
 
   return result;
 }
+
+gboolean
+gtk_css_style_is_static (GtkCssStyle *style)
+{
+  gtk_internal_return_val_if_fail (GTK_IS_CSS_STYLE (style), TRUE);
+
+  return GTK_CSS_STYLE_GET_CLASS (style)->is_static (style);
+}
+
 
 void
 gtk_css_style_print (GtkCssStyle *style,

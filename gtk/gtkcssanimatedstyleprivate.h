@@ -68,8 +68,6 @@ void                    gtk_css_animated_style_set_animated_value(GtkCssAnimated
 GtkCssValue *           gtk_css_animated_style_get_intrinsic_value (GtkCssAnimatedStyle *style,
                                                                  guint                   id);
 
-gboolean                gtk_css_animated_style_is_static        (GtkCssAnimatedStyle    *style);
-
 G_END_DECLS
 
 #endif /* __GTK_CSS_ANIMATED_STYLE_PRIVATE_H__ */

@@ -271,8 +271,7 @@ gtk_css_node_real_update_style (GtkCssNode   *cssnode,
       new_style = g_object_ref (style);
     }
 
-  if (GTK_IS_CSS_ANIMATED_STYLE (new_style) &&
-      !gtk_css_animated_style_is_static (GTK_CSS_ANIMATED_STYLE (new_style)))
+  if (!gtk_css_style_is_static (new_style))
     gtk_css_node_set_invalid (cssnode, TRUE);
 
   g_object_unref (new_static_style);
@@ -901,8 +900,7 @@ gtk_css_node_validate_internal (GtkCssNode *cssnode,
 
   /* need to set to FALSE then to TRUE here to make it chain up */
   gtk_css_node_set_invalid (cssnode, FALSE);
-  if (GTK_IS_CSS_ANIMATED_STYLE (cssnode->style) &&
-      !gtk_css_animated_style_is_static (GTK_CSS_ANIMATED_STYLE (cssnode->style)))
+  if (!gtk_css_style_is_static (cssnode->style))
     gtk_css_node_set_invalid (cssnode, TRUE);
 
   GTK_CSS_NODE_GET_CLASS (cssnode)->validate (cssnode);
