@@ -1284,7 +1284,7 @@ gtk_css_provider_class_init (GtkCssProviderClass *klass)
    * @section: section the error happened in
    * @error: The parsing error
    *
-   * Signals that a parsing error occured. the @path, @line and @position
+   * Signals that a parsing error occurred. the @path, @line and @position
    * describe the actual location of the error as accurately as possible.
    *
    * Parsing errors are never fatal, so the parsing will resume after
@@ -2771,7 +2771,7 @@ gtk_css_provider_load_internal (GtkCssProvider *css_provider,
  *
  * Returns: %TRUE. The return value is deprecated and %FALSE will only be
  *     returned for backwards compatibility reasons if an @error is not 
- *     %NULL and a loading error occured. To track errors while loading
+ *     %NULL and a loading error occurred. To track errors while loading
  *     CSS, connect to the #GtkCssProvider::parsing-error signal.
  **/
 gboolean
@@ -2819,7 +2819,7 @@ gtk_css_provider_load_from_data (GtkCssProvider  *css_provider,
  *
  * Returns: %TRUE. The return value is deprecated and %FALSE will only be
  *     returned for backwards compatibility reasons if an @error is not 
- *     %NULL and a loading error occured. To track errors while loading
+ *     %NULL and a loading error occurred. To track errors while loading
  *     CSS, connect to the #GtkCssProvider::parsing-error signal.
  **/
 gboolean
@@ -2852,7 +2852,7 @@ gtk_css_provider_load_from_file (GtkCssProvider  *css_provider,
  *
  * Returns: %TRUE. The return value is deprecated and %FALSE will only be
  *     returned for backwards compatibility reasons if an @error is not 
- *     %NULL and a loading error occured. To track errors while loading
+ *     %NULL and a loading error occurred. To track errors while loading
  *     CSS, connect to the #GtkCssProvider::parsing-error signal.
  **/
 gboolean
