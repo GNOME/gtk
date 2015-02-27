@@ -2408,7 +2408,7 @@ set_info_state_message (PrinterSetupInfo *info)
 {
   gint i;
 
-  if (info->state_msg && strlen (info->state_msg) == 0)
+  if (info->state_msg == NULL || strlen (info->state_msg) == 0)
     {
       gchar *tmp_msg2 = NULL;
       if (info->is_paused && !info->is_accepting_jobs)
@@ -2663,7 +2663,10 @@ create_cups_printer_from_avahi_data (AvahiConnectionTestData *data)
   info->printer_uri = data->printer_uri;
 
   if (data->got_printer_state)
-    info->state = data->printer_state;
+    {
+      info->state = data->printer_state;
+      info->is_paused = info->state == IPP_PRINTER_STOPPED;
+    }
 
   info->got_printer_type = data->got_printer_type;
   if (data->got_printer_type)
