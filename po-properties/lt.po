@@ -16,8 +16,8 @@ msgstr ""
 "Project-Id-Version: lt\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gtk"
 "%2b&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2015-02-09 10:12+0000\n"
-"PO-Revision-Date: 2015-02-09 22:57+0200\n"
+"POT-Creation-Date: 2015-02-27 21:27+0000\n"
+"PO-Revision-Date: 2015-02-28 00:01+0200\n"
 "Last-Translator: Aurimas Černius <aurisc4@gmail.com>\n"
 "Language-Team: Lietuvių <gnome-lt@lists.akl.lt>\n"
 "Language: lt\n"
@@ -29,7 +29,7 @@ msgstr ""
 "X-Generator: Gtranslator 2.91.6\n"
 
 #: ../gdk/gdkapplaunchcontext.c:127 ../gdk/gdkcursor.c:139
-#: ../gdk/gdkdevicemanager.c:181 ../gdk/gdkglcontext.c:260
+#: ../gdk/gdkdevicemanager.c:181 ../gdk/gdkglcontext.c:264
 msgid "Display"
 msgstr "Vaizduoklis"
 
@@ -125,34 +125,23 @@ msgstr "Numatytas ekranas"
 msgid "The default display for GDK"
 msgstr "Numatytas GDK ekranas"
 
-#: ../gdk/gdkglcontext.c:261
+#: ../gdk/gdkglcontext.c:265
 msgid "The GDK display the context is from"
 msgstr "Šio konteksto GDK vaizduoklis"
 
-#: ../gdk/gdkglcontext.c:276 ../gtk/gtkwidget.c:1448
+#: ../gdk/gdkglcontext.c:280 ../gtk/gtkwidget.c:1448
 msgid "Window"
 msgstr "Langas"
 
-#: ../gdk/gdkglcontext.c:277
+#: ../gdk/gdkglcontext.c:281
 msgid "The GDK window bound to the GL context"
 msgstr "Su GL kontekstu susietas GDK langas"
 
-#: ../gdk/gdkglcontext.c:292 ../gtk/gtkglarea.c:750
-msgid "Profile"
-msgstr "Profilis"
-
-#: ../gdk/gdkglcontext.c:293
-#| msgid "The Cell Area this context was created for"
-msgid "The GL profile the context was created for"
-msgstr "GL profilis, kuriam sukurtas šis kontekstas"
-
-#: ../gdk/gdkglcontext.c:309
-#| msgid "Style context"
+#: ../gdk/gdkglcontext.c:296
 msgid "Shared context"
 msgstr "Bendras kontekstas"
 
-#: ../gdk/gdkglcontext.c:310
-#| msgid "The Cell Area this context was created for"
+#: ../gdk/gdkglcontext.c:297
 msgid "The GL context this context share data with"
 msgstr "GL kontekstas, su kuriuo šis kontekstas dalinasi duomenimis"
 
@@ -907,7 +896,7 @@ msgstr "Dėklo piktogramos paaiškinimo turinys"
 
 #: ../gtk/deprecated/gtkstatusicon.c:435 ../gtk/gtkcolorbutton.c:181
 #: ../gtk/gtkfilechooserbutton.c:445 ../gtk/gtkfontbutton.c:443
-#: ../gtk/gtkheaderbar.c:1859 ../gtk/gtkprintjob.c:132 ../gtk/gtkstack.c:457
+#: ../gtk/gtkheaderbar.c:1862 ../gtk/gtkprintjob.c:132 ../gtk/gtkstack.c:457
 #: ../gtk/gtktreeviewcolumn.c:322
 msgid "Title"
 msgstr "Pavadinimas"
@@ -1053,7 +1042,7 @@ msgstr "Ar šio veiksmo tarpinės turi atrodyti kaip perjungimo veiksmų tarpin�
 #: ../gtk/deprecated/gtktoggleaction.c:137 ../gtk/gtkcellrendererspinner.c:125
 #: ../gtk/gtkcheckmenuitem.c:122 ../gtk/gtkmenu.c:555
 #: ../gtk/gtkmodelbutton.c:895 ../gtk/gtkmodelbutton.c:896
-#: ../gtk/gtkspinner.c:119 ../gtk/gtkswitch.c:906 ../gtk/gtktogglebutton.c:179
+#: ../gtk/gtkspinner.c:119 ../gtk/gtkswitch.c:879 ../gtk/gtktogglebutton.c:179
 #: ../gtk/gtktoggletoolbutton.c:127
 msgid "Active"
 msgstr "Aktyvus"
@@ -1164,12 +1153,10 @@ msgid "Comments about the program"
 msgstr "Pastabos apie programą"
 
 #: ../gtk/gtkaboutdialog.c:410
-#| msgid "License Type"
 msgid "License"
 msgstr "Licencija"
 
 #: ../gtk/gtkaboutdialog.c:411
-#| msgid "The license type of the program"
 msgid "The license of the program"
 msgstr "Programos licencija"
 
@@ -1299,11 +1286,11 @@ msgstr "veiksmo tikslo vertė."
 msgid "The parameter for action invocations"
 msgstr "Prametras veiksmų iškvietimams"
 
-#: ../gtk/gtkactionbar.c:250 ../gtk/gtkbox.c:329 ../gtk/gtkheaderbar.c:1844
+#: ../gtk/gtkactionbar.c:250 ../gtk/gtkbox.c:329 ../gtk/gtkheaderbar.c:1847
 msgid "Pack type"
 msgstr "Paketo tipas"
 
-#: ../gtk/gtkactionbar.c:251 ../gtk/gtkbox.c:330 ../gtk/gtkheaderbar.c:1845
+#: ../gtk/gtkactionbar.c:251 ../gtk/gtkbox.c:330 ../gtk/gtkheaderbar.c:1848
 msgid ""
 "A GtkPackType indicating whether the child is packed with reference to the "
 "start or end of the parent"
@@ -1311,14 +1298,14 @@ msgstr ""
 "GtkPackType požymis rodantis ar vaikinis elementas supakuotas su nuoroda į "
 "tėvinio elemento pradžią, ar pabaigą"
 
-#: ../gtk/gtkactionbar.c:257 ../gtk/gtkbox.c:336 ../gtk/gtkheaderbar.c:1851
-#: ../gtk/gtknotebook.c:775 ../gtk/gtkpaned.c:337 ../gtk/gtkpopover.c:1387
+#: ../gtk/gtkactionbar.c:257 ../gtk/gtkbox.c:336 ../gtk/gtkheaderbar.c:1854
+#: ../gtk/gtknotebook.c:775 ../gtk/gtkpaned.c:337 ../gtk/gtkpopover.c:1594
 #: ../gtk/gtkpopovermenu.c:375 ../gtk/gtkstack.c:471
 #: ../gtk/gtktoolitemgroup.c:1674
 msgid "Position"
 msgstr "Pozicija"
 
-#: ../gtk/gtkactionbar.c:258 ../gtk/gtkbox.c:337 ../gtk/gtkheaderbar.c:1852
+#: ../gtk/gtkactionbar.c:258 ../gtk/gtkbox.c:337 ../gtk/gtkheaderbar.c:1855
 #: ../gtk/gtknotebook.c:776 ../gtk/gtkpopovermenu.c:376 ../gtk/gtkstack.c:472
 msgid "The index of the child in the parent"
 msgstr "Vaikinio elemento indeksas tėviniame elemente"
@@ -1392,11 +1379,11 @@ msgstr "Rodyti numatytąjį elementą"
 msgid "Whether the combobox should show the default application on top"
 msgstr "Ar pasirinkimo elementas turi rodyti numatytąją programą viršuje"
 
-#: ../gtk/gtkappchooserbutton.c:646 ../gtk/gtkappchooserdialog.c:678
+#: ../gtk/gtkappchooserbutton.c:646 ../gtk/gtkappchooserdialog.c:687
 msgid "Heading"
 msgstr "Antraštė"
 
-#: ../gtk/gtkappchooserbutton.c:647 ../gtk/gtkappchooserdialog.c:679
+#: ../gtk/gtkappchooserbutton.c:647 ../gtk/gtkappchooserdialog.c:688
 msgid "The text to show at the top of the dialog"
 msgstr "Tekstas, rodomas dialogo viršuje"
 
@@ -1408,11 +1395,11 @@ msgstr "Turinio tipas"
 msgid "The content type used by the open with object"
 msgstr "Turinio tipas, naudojamas atveriant su objektu"
 
-#: ../gtk/gtkappchooserdialog.c:664
+#: ../gtk/gtkappchooserdialog.c:673
 msgid "GFile"
 msgstr "GFile"
 
-#: ../gtk/gtkappchooserdialog.c:665
+#: ../gtk/gtkappchooserdialog.c:674
 msgid "The GFile used by the app chooser dialog"
 msgstr "GFile, naudojamas programų pasirinkimo dialoge"
 
@@ -1666,12 +1653,12 @@ msgstr ""
 "Jei TEIGIAMA, vaikinis objektas nepaisomas esant vienalyčiam dydžio keitimui"
 
 #: ../gtk/gtkbox.c:256 ../gtk/gtkcellareabox.c:310 ../gtk/gtkexpander.c:299
-#: ../gtk/gtkheaderbar.c:1885 ../gtk/gtkiconview.c:516
+#: ../gtk/gtkheaderbar.c:1888 ../gtk/gtkiconview.c:516
 #: ../gtk/gtktreeviewcolumn.c:280
 msgid "Spacing"
 msgstr "Tarpai"
 
-#: ../gtk/gtkbox.c:257 ../gtk/gtkheaderbar.c:1886
+#: ../gtk/gtkbox.c:257 ../gtk/gtkheaderbar.c:1889
 msgid "The amount of space between children"
 msgstr "Tarpas tarp vaikinių objektų"
 
@@ -2348,7 +2335,7 @@ msgstr "Vertikalus lygiavimas, nuo 0 (viršus) iki 1 (apačia)."
 
 #: ../gtk/gtkcellrendererprogress.c:226 ../gtk/gtklevelbar.c:1022
 #: ../gtk/gtkmodelbutton.c:926 ../gtk/gtkprogressbar.c:159
-#: ../gtk/gtkrange.c:436
+#: ../gtk/gtkrange.c:439
 msgid "Inverted"
 msgstr "Inversinis"
 
@@ -2356,7 +2343,7 @@ msgstr "Inversinis"
 msgid "Invert the direction in which the progress bar grows"
 msgstr "Apsukti pažangos juostos augimo kryptį"
 
-#: ../gtk/gtkcellrendererspin.c:113 ../gtk/gtkrange.c:428
+#: ../gtk/gtkcellrendererspin.c:113 ../gtk/gtkrange.c:431
 #: ../gtk/gtkscalebutton.c:210 ../gtk/gtkspinbutton.c:347
 msgid "Adjustment"
 msgstr "Slankiklis"
@@ -2799,7 +2786,7 @@ msgstr "Nepastovi būsena"
 msgid "The inconsistent state of the button"
 msgstr "Nepastovi mygtuko padėtis"
 
-#: ../gtk/gtkcellrenderertoggle.c:153 ../gtk/gtklistbox.c:3506
+#: ../gtk/gtkcellrenderertoggle.c:153 ../gtk/gtklistbox.c:3544
 msgid "Activatable"
 msgstr "Aktyvinama"
 
@@ -2962,7 +2949,7 @@ msgstr "RGBA spalva"
 msgid "Color as RGBA"
 msgstr "Spalva kaip RGBA"
 
-#: ../gtk/gtkcolorswatch.c:729 ../gtk/gtklabel.c:838 ../gtk/gtklistbox.c:3520
+#: ../gtk/gtkcolorswatch.c:729 ../gtk/gtklabel.c:838 ../gtk/gtklistbox.c:3558
 msgid "Selectable"
 msgstr "Pasirenkamas"
 
@@ -3161,7 +3148,6 @@ msgid "Set if the value can be animated"
 msgstr "Nustatyta, jei vertė gali būti animuota"
 
 #: ../gtk/gtkcssstyleproperty.c:214
-#| msgid "Affects size"
 msgid "Affects"
 msgstr "Įtakoja"
 
@@ -3895,8 +3881,7 @@ msgid ""
 "folders."
 msgstr "Ar failų parinkiklis atvėrimo veiksenoje siūlys kurti naujus aplankus."
 
-#: ../gtk/gtkfilechooserwidget.c:7389 ../gtk/gtkfilechooserwidget.c:7390
-#| msgid "Search Mode Enabled"
+#: ../gtk/gtkfilechooserwidget.c:7468 ../gtk/gtkfilechooserwidget.c:7469
 msgid "Search mode"
 msgstr "Paieškos veiksena"
 
@@ -3916,21 +3901,21 @@ msgstr "Y padėtis"
 msgid "Y position of child widget"
 msgstr "Vaikinio objekto Y padėtis"
 
-#: ../gtk/gtkflowbox.c:3666 ../gtk/gtkiconview.c:400 ../gtk/gtklistbox.c:421
+#: ../gtk/gtkflowbox.c:3666 ../gtk/gtkiconview.c:400 ../gtk/gtklistbox.c:442
 #: ../gtk/gtktreeselection.c:131
 msgid "Selection mode"
 msgstr "Pasirinkimo veiksena"
 
-#: ../gtk/gtkflowbox.c:3667 ../gtk/gtkiconview.c:401 ../gtk/gtklistbox.c:422
+#: ../gtk/gtkflowbox.c:3667 ../gtk/gtkiconview.c:401 ../gtk/gtklistbox.c:443
 msgid "The selection mode"
 msgstr "Pasirinkimo modelis"
 
-#: ../gtk/gtkflowbox.c:3680 ../gtk/gtkiconview.c:657 ../gtk/gtklistbox.c:429
+#: ../gtk/gtkflowbox.c:3680 ../gtk/gtkiconview.c:657 ../gtk/gtklistbox.c:450
 #: ../gtk/gtktreeview.c:1214
 msgid "Activate on Single Click"
 msgstr "Aktyvinti vienu paspaudimu"
 
-#: ../gtk/gtkflowbox.c:3681 ../gtk/gtkiconview.c:658 ../gtk/gtklistbox.c:430
+#: ../gtk/gtkflowbox.c:3681 ../gtk/gtkiconview.c:658 ../gtk/gtklistbox.c:451
 #: ../gtk/gtktreeview.c:1215
 msgid "Activate row on a single click"
 msgstr "Aktyvinti eilutę vienu paspaudimu"
@@ -4073,6 +4058,15 @@ msgstr "Reikalingas taškų skaičius gestui sukelti"
 msgid "GdkWindow to receive events about"
 msgstr "GdkWindow, apie kūrį gauti įvykius"
 
+#: ../gtk/gtkgesturelongpress.c:284
+#| msgid "Scale factor"
+msgid "Delay factor"
+msgstr "Delsos faktorius"
+
+#: ../gtk/gtkgesturelongpress.c:285
+msgid "Factor by which to modify the default timeout"
+msgstr "Faktorius, kuriuo pakeisti numatytąjį laikotarpį"
+
 #: ../gtk/gtkgesturepan.c:238
 msgid "Allowed orientations"
 msgstr "Leidžiamos orientacijos"
@@ -4097,56 +4091,45 @@ msgstr "Mygtuko numeris"
 msgid "Button number to listen to"
 msgstr "Mygtuko, kurio klausytis, numeris"
 
-#: ../gtk/gtkglarea.c:735
-#| msgid "Content type"
+#: ../gtk/gtkglarea.c:721
 msgid "Context"
 msgstr "Kontekstas"
 
-#: ../gtk/gtkglarea.c:736
-#| msgid "Style context"
+#: ../gtk/gtkglarea.c:722
 msgid "The GL context"
 msgstr "GL kontekstas"
 
-#: ../gtk/gtkglarea.c:751
-#| msgid "The icon name to use for the printer"
-msgid "The GL profile to use for the GL context"
-msgstr "GL profilis, naudojamas GL kontekstui"
-
-#: ../gtk/gtkglarea.c:776
-#| msgid "Text to render"
+#: ../gtk/gtkglarea.c:744
 msgid "Auto render"
 msgstr "Automatinis piešimas"
 
-#: ../gtk/gtkglarea.c:777
-#| msgid "Whether the column can be reordered around the headers"
-msgid "Whether the gl area renders on each redraw"
-msgstr "Ar gl sritis piešiama kiekvienam perpiešimui"
+#: ../gtk/gtkglarea.c:745
+#| msgid "Whether the gl area renders on each redraw"
+msgid "Whether the GtkGLArea renders on each redraw"
+msgstr "Ar GtkGLArea sritis piešiama kiekvienam perpiešimui"
 
-#: ../gtk/gtkglarea.c:797
-#| msgid "Use alpha"
+#: ../gtk/gtkglarea.c:765
 msgid "Has alpha"
 msgstr "Turi alfa kanalą"
 
-#: ../gtk/gtkglarea.c:798
-#| msgid "Whether to give the color an alpha value"
-msgid "Whether the gl area color buffer has an alpha component"
-msgstr "Ar gl srities spalvos buferis turi alfa komponentę"
+#: ../gtk/gtkglarea.c:766
+#| msgid "Whether the gl area color buffer has an alpha component"
+msgid "Whether the color buffer has an alpha component"
+msgstr "Ar spalvos buferis turi alfa komponentę"
 
-#: ../gtk/gtkglarea.c:814
+#: ../gtk/gtkglarea.c:782
 msgid "Has depth buffer"
 msgstr "Turi gylio buferį"
 
-#: ../gtk/gtkglarea.c:815
-#| msgid "Whether the spinner is active"
+#: ../gtk/gtkglarea.c:783
 msgid "Whether a depth buffer is allocated"
 msgstr "Ar suktukas gylio buferis"
 
-#: ../gtk/gtkglarea.c:831
+#: ../gtk/gtkglarea.c:799
 msgid "Has stencil buffer"
 msgstr "Turi trafareto buferį"
 
-#: ../gtk/gtkglarea.c:832
-#| msgid "Whether the spinner is active"
+#: ../gtk/gtkglarea.c:800
 msgid "Whether a stencil buffer is allocated"
 msgstr "Ar suktukas trafareto buferis"
 
@@ -4195,55 +4178,55 @@ msgstr "Aukštis"
 msgid "The number of rows that a child spans"
 msgstr "Vaiko apimamų eilučių skaičius lentelėje"
 
-#: ../gtk/gtkheaderbar.c:1860
+#: ../gtk/gtkheaderbar.c:1863
 msgid "The title to display"
 msgstr "Rodomas pavadinimas"
 
-#: ../gtk/gtkheaderbar.c:1867
+#: ../gtk/gtkheaderbar.c:1870
 msgid "Subtitle"
 msgstr "Antraeilis pavadinimas"
 
-#: ../gtk/gtkheaderbar.c:1868
+#: ../gtk/gtkheaderbar.c:1871
 msgid "The subtitle to display"
 msgstr "Rodomas antraeilis pavadinimas"
 
-#: ../gtk/gtkheaderbar.c:1875
+#: ../gtk/gtkheaderbar.c:1878
 msgid "Custom Title"
 msgstr "Pasirinktinis pavadinimas"
 
-#: ../gtk/gtkheaderbar.c:1876
+#: ../gtk/gtkheaderbar.c:1879
 msgid "Custom title widget to display"
 msgstr "Pasirinktinis rodomas pavadinimo elementas"
 
-#: ../gtk/gtkheaderbar.c:1904
+#: ../gtk/gtkheaderbar.c:1907
 msgid "Show decorations"
 msgstr "Rodyti dekoracijas"
 
-#: ../gtk/gtkheaderbar.c:1905
+#: ../gtk/gtkheaderbar.c:1908
 msgid "Whether to show window decorations"
 msgstr "Ar rodyti lango dekoracijas"
 
-#: ../gtk/gtkheaderbar.c:1924 ../gtk/gtksettings.c:1576
+#: ../gtk/gtkheaderbar.c:1927 ../gtk/gtksettings.c:1576
 msgid "Decoration Layout"
 msgstr "Dekoracijų išdėstymas"
 
-#: ../gtk/gtkheaderbar.c:1925 ../gtk/gtksettings.c:1577
+#: ../gtk/gtkheaderbar.c:1928 ../gtk/gtksettings.c:1577
 msgid "The layout for window decorations"
 msgstr "Lango dekoracijų išdėstymas"
 
-#: ../gtk/gtkheaderbar.c:1939
+#: ../gtk/gtkheaderbar.c:1942
 msgid "Decoration Layout Set"
 msgstr "Dekoracijų išdėstymas nustatytas"
 
-#: ../gtk/gtkheaderbar.c:1940
+#: ../gtk/gtkheaderbar.c:1943
 msgid "Whether the decoration-layout property has been set"
 msgstr "Ar savybė decoration-layout buvo nustatyta"
 
-#: ../gtk/gtkheaderbar.c:1955
+#: ../gtk/gtkheaderbar.c:1958
 msgid "Has Subtitle"
 msgstr "Turi antraeilį pavadinimą"
 
-#: ../gtk/gtkheaderbar.c:1956
+#: ../gtk/gtkheaderbar.c:1959
 msgid "Whether to reserve space for a subtitle"
 msgstr "Ar rezervuoti vietą antraeiliam pavadinimui"
 
@@ -4470,10 +4453,6 @@ msgid "Justification"
 msgstr "Abipusė lygiuotė"
 
 #: ../gtk/gtklabel.c:761
-#| msgid ""
-#| "The alignment of the lines in the text of the label relative to each "
-#| "other. This does NOT affect the alignment of the label within its "
-#| "allocation. See GtkMisc::xalign for that"
 msgid ""
 "The alignment of the lines in the text of the label relative to each other. "
 "This does NOT affect the alignment of the label within its allocation. See "
@@ -4650,11 +4629,11 @@ msgstr "Lankytas"
 msgid "Whether this link has been visited."
 msgstr "Ar šiame tinklalapyje jau lankytasi."
 
-#: ../gtk/gtklistbox.c:3507
+#: ../gtk/gtklistbox.c:3545
 msgid "Whether this row can be activated"
 msgstr "Ar ši eilutė gali būti suaktyvinta"
 
-#: ../gtk/gtklistbox.c:3521
+#: ../gtk/gtklistbox.c:3559
 msgid "Whether this row can be selected"
 msgstr "Ar ši eilutė gali būti pažymėta"
 
@@ -4721,7 +4700,6 @@ msgid "magnification"
 msgstr "didinimas"
 
 #: ../gtk/gtkmagnifier.c:286 ../gtk/gtkmagnifier.c:287
-#| msgid "Resize"
 msgid "resize"
 msgstr "keisti dydį"
 
@@ -4753,51 +4731,51 @@ msgstr "Vidinis apvalkalas"
 msgid "Amount of border space between the menubar shadow and the menu items"
 msgstr "Tarpas tarp meniu šešėlių ir meniu elementų"
 
-#: ../gtk/gtkmenubutton.c:512
+#: ../gtk/gtkmenubutton.c:518
 msgid "Popup"
 msgstr "Iššokantis langas"
 
-#: ../gtk/gtkmenubutton.c:513
+#: ../gtk/gtkmenubutton.c:519
 msgid "The dropdown menu."
 msgstr "Išskleidžiamas meniu."
 
-#: ../gtk/gtkmenubutton.c:532
+#: ../gtk/gtkmenubutton.c:538
 msgid "Menu model"
 msgstr "Meniu modelis"
 
-#: ../gtk/gtkmenubutton.c:533
+#: ../gtk/gtkmenubutton.c:539
 msgid "The model from which the popup is made."
 msgstr "Modelis, iš kurio kuriamas iššokantis elementas."
 
-#: ../gtk/gtkmenubutton.c:546
+#: ../gtk/gtkmenubutton.c:552
 msgid "Align with"
 msgstr "Lygiuoti su"
 
-#: ../gtk/gtkmenubutton.c:547
+#: ../gtk/gtkmenubutton.c:553
 msgid "The parent widget which the menu should align with."
 msgstr "Tėvinis elementas, su kuriuo turi lygiuosi meniu."
 
-#: ../gtk/gtkmenubutton.c:561 ../gtk/gtkstylecontext.c:257
+#: ../gtk/gtkmenubutton.c:567 ../gtk/gtkstylecontext.c:257
 msgid "Direction"
 msgstr "Kryptis"
 
-#: ../gtk/gtkmenubutton.c:562
+#: ../gtk/gtkmenubutton.c:568
 msgid "The direction the arrow should point."
 msgstr "Kryptis, į kurią rodyklė turėtų rodyti."
 
-#: ../gtk/gtkmenubutton.c:578
+#: ../gtk/gtkmenubutton.c:584
 msgid "Use a popover"
 msgstr "Naudoti iššokanti elementą"
 
-#: ../gtk/gtkmenubutton.c:579
+#: ../gtk/gtkmenubutton.c:585
 msgid "Use a popover instead of a menu"
 msgstr "Vietoj meniu naudoti iššokantį elementą"
 
-#: ../gtk/gtkmenubutton.c:593
+#: ../gtk/gtkmenubutton.c:599
 msgid "Popover"
 msgstr "Iššokantis elementas"
 
-#: ../gtk/gtkmenubutton.c:594
+#: ../gtk/gtkmenubutton.c:600
 msgid "The popover"
 msgstr "Iššokantis elementas"
 
@@ -5064,32 +5042,26 @@ msgid "Role"
 msgstr "Rolė"
 
 #: ../gtk/gtkmodelbutton.c:851
-#| msgid "The toggle state of the button"
 msgid "The role of this button"
 msgstr "Šio mygtuko rolė"
 
 #: ../gtk/gtkmodelbutton.c:867
-#| msgid "The icon size"
 msgid "The icon"
 msgstr "Piktograma"
 
 #: ../gtk/gtkmodelbutton.c:881
-#| msgid "Show text"
 msgid "The text"
 msgstr "Tekstas"
 
 #: ../gtk/gtkmodelbutton.c:910
-#| msgid "Menu model"
 msgid "Menu name"
 msgstr "Meniu pavadinimas"
 
 #: ../gtk/gtkmodelbutton.c:911
-#| msgid "The name of the selected font"
 msgid "The name of the menu to open"
 msgstr "Atveriamo meniu pavadinimas"
 
 #: ../gtk/gtkmodelbutton.c:927
-#| msgid "Whether the menu has a tearoff item"
 msgid "Whether the menu is a parent"
 msgstr "Ar meniu yra tėvas"
 
@@ -5098,17 +5070,14 @@ msgid "Centered"
 msgstr "Centruotas"
 
 #: ../gtk/gtkmodelbutton.c:942
-#| msgid "Whether to wrap the license text."
 msgid "Whether to center the contents"
 msgstr "Ar centruoti turinį"
 
 #: ../gtk/gtkmodelbutton.c:957
-#| msgid "Icon"
 msgid "Iconic"
 msgstr "Piktograminis"
 
 #: ../gtk/gtkmodelbutton.c:958
-#| msgid "Whether to wrap the license text."
 msgid "Whether to prefer the icon over text"
 msgstr "Ar teikti pirmenybę piktogramai, o ne tekstui"
 
@@ -5349,12 +5318,10 @@ msgid "Largest possible value for the \"position\" property"
 msgstr "Didžiausia galima „position“ savybės reikšmė"
 
 #: ../gtk/gtkpaned.c:396
-#| msgid "Width of handle"
 msgid "Wide Handle"
 msgstr "Plati rankenėlė"
 
 #: ../gtk/gtkpaned.c:397
-#| msgid "Whether the window frame should have a close button"
 msgid "Whether the paned should have a prominent handle"
 msgstr "Ar polangis turėtų turėti iškilią rankenėlę"
 
@@ -5448,46 +5415,53 @@ msgstr "Lizdo langas"
 msgid "The window of the socket the plug is embedded in"
 msgstr "Langas lizdo, į kurį integruotas kištukas"
 
-#: ../gtk/gtkpopover.c:1359
+#: ../gtk/gtkpopover.c:1566
 msgid "Relative to"
 msgstr "Santykinis su"
 
-#: ../gtk/gtkpopover.c:1360
+#: ../gtk/gtkpopover.c:1567
 msgid "Widget the bubble window points to"
 msgstr "Langas, į kurį rodo burbulo langas"
 
-#: ../gtk/gtkpopover.c:1373
+#: ../gtk/gtkpopover.c:1580
 msgid "Pointing to"
 msgstr "Rodo į"
 
-#: ../gtk/gtkpopover.c:1374
+#: ../gtk/gtkpopover.c:1581
 msgid "Rectangle the bubble window points to"
 msgstr "Stačiakampis, į kurį rodo burbulo langas"
 
-#: ../gtk/gtkpopover.c:1388
+#: ../gtk/gtkpopover.c:1595
 msgid "Position to place the bubble window"
 msgstr "Padėtis, kur rodyti burbulo langą"
 
-#: ../gtk/gtkpopover.c:1403 ../gtk/gtkwindow.c:753
+#: ../gtk/gtkpopover.c:1610 ../gtk/gtkwindow.c:753
 msgid "Modal"
 msgstr "Modalinis"
 
-#: ../gtk/gtkpopover.c:1404
+#: ../gtk/gtkpopover.c:1611
 msgid "Whether the popover is modal"
 msgstr "Ar iššokantis langas yra modalinis"
 
+#: ../gtk/gtkpopover.c:1625
+#| msgid "Transition type"
+msgid "Transitions enabled"
+msgstr "Perėjimai įjungti"
+
+#: ../gtk/gtkpopover.c:1626
+#| msgid "Whether the action is enabled."
+msgid "Whether show/hide transitions are enabled or not"
+msgstr "Ar rodymo ir slėpimo perėjimai įjungti"
+
 #: ../gtk/gtkpopovermenu.c:350
-#| msgid "Visible Focus"
 msgid "Visible submenu"
 msgstr "Matomas po-meniu"
 
 #: ../gtk/gtkpopovermenu.c:351
-#| msgid "The name of the child page"
 msgid "The name of the visible submenu"
 msgstr "Matomo po-meniu pavadinimas"
 
 #: ../gtk/gtkpopovermenu.c:368
-#| msgid "The name of the widget"
 msgid "The name of the submenu"
 msgstr "Po-meniu pavadinimas"
 
@@ -5896,133 +5870,133 @@ msgstr "Meniu žymimoji akutė, kurios grupei priklauso šis objektas."
 msgid "The radio tool button whose group this button belongs to."
 msgstr "Žymimoji akutė, kurios grupei priklauso šis objektas."
 
-#: ../gtk/gtkrange.c:429
+#: ../gtk/gtkrange.c:432
 msgid "The GtkAdjustment that contains the current value of this range object"
 msgstr ""
 "GtkAdjustment kintamasis, kuris saugo dabartinę objekto srities reikšmę"
 
-#: ../gtk/gtkrange.c:437
+#: ../gtk/gtkrange.c:440
 msgid "Invert direction slider moves to increase range value"
 msgstr "Pakeisti juostos judėjimo kryptį"
 
-#: ../gtk/gtkrange.c:444
+#: ../gtk/gtkrange.c:447
 msgid "Lower stepper sensitivity"
 msgstr "Žingsnio atgal jautrumas"
 
-#: ../gtk/gtkrange.c:445
+#: ../gtk/gtkrange.c:448
 msgid ""
 "The sensitivity policy for the stepper that points to the adjustment's lower "
 "side"
 msgstr "Žingsnių, mažinančių lauko reikšmę, dydis"
 
-#: ../gtk/gtkrange.c:453
+#: ../gtk/gtkrange.c:456
 msgid "Upper stepper sensitivity"
 msgstr "Žingsnio į priekį jautrumas"
 
-#: ../gtk/gtkrange.c:454
+#: ../gtk/gtkrange.c:457
 msgid ""
 "The sensitivity policy for the stepper that points to the adjustment's upper "
 "side"
 msgstr "Žingsnių, didinančių lauko reikšmę, dydis"
 
-#: ../gtk/gtkrange.c:471
+#: ../gtk/gtkrange.c:474
 msgid "Show Fill Level"
 msgstr "Rodyti pilnumo lygį"
 
-#: ../gtk/gtkrange.c:472
+#: ../gtk/gtkrange.c:475
 msgid "Whether to display a fill level indicator graphics on trough."
 msgstr "Ar rodyti pilnumo lygio indikatoriaus paveikslėlį įduboje."
 
-#: ../gtk/gtkrange.c:488
+#: ../gtk/gtkrange.c:491
 msgid "Restrict to Fill Level"
 msgstr "Apriboti užpildymo lygiu"
 
-#: ../gtk/gtkrange.c:489
+#: ../gtk/gtkrange.c:492
 msgid "Whether to restrict the upper boundary to the fill level."
 msgstr "Ar apriboti viršutinį rėžį užpildymo lygiu"
 
-#: ../gtk/gtkrange.c:504
+#: ../gtk/gtkrange.c:507
 msgid "Fill Level"
 msgstr "Užpildymo lygis"
 
-#: ../gtk/gtkrange.c:505
+#: ../gtk/gtkrange.c:508
 msgid "The fill level."
 msgstr "Užpildymo lygis."
 
-#: ../gtk/gtkrange.c:522
+#: ../gtk/gtkrange.c:525
 msgid "Round Digits"
 msgstr "Apvalinimo skaitmenys"
 
-#: ../gtk/gtkrange.c:523
+#: ../gtk/gtkrange.c:526
 msgid "The number of digits to round the value to."
 msgstr "Skaitmenų skaičius reikšmės apvalinimui."
 
-#: ../gtk/gtkrange.c:529 ../gtk/gtkswitch.c:954
+#: ../gtk/gtkrange.c:532 ../gtk/gtkswitch.c:927
 msgid "Slider Width"
 msgstr "Juostos plotis"
 
-#: ../gtk/gtkrange.c:530
+#: ../gtk/gtkrange.c:533
 msgid "Width of scrollbar or scale thumb"
 msgstr "Persukimo juostos plotis arba mastelis"
 
-#: ../gtk/gtkrange.c:537
+#: ../gtk/gtkrange.c:540
 msgid "Trough Border"
 msgstr "Tarpinis rėmelis"
 
-#: ../gtk/gtkrange.c:538
+#: ../gtk/gtkrange.c:541
 msgid "Spacing between thumb/steppers and outer trough bevel"
 msgstr "Tarpas tarp peržiūros/navigacijos ir išorinio rėmelio"
 
-#: ../gtk/gtkrange.c:545
+#: ../gtk/gtkrange.c:548
 msgid "Stepper Size"
 msgstr "Žingsnio dydis"
 
-#: ../gtk/gtkrange.c:546
+#: ../gtk/gtkrange.c:549
 msgid "Length of step buttons at ends"
 msgstr "Prasukimo mygtukų ilgis"
 
-#: ../gtk/gtkrange.c:559
+#: ../gtk/gtkrange.c:562
 msgid "Stepper Spacing"
 msgstr "Žingsnio protarpis"
 
-#: ../gtk/gtkrange.c:560
+#: ../gtk/gtkrange.c:563
 msgid "Spacing between step buttons and thumb"
 msgstr "Tarpas tarp navigacijos mygtukų ir peržiūros"
 
-#: ../gtk/gtkrange.c:567
+#: ../gtk/gtkrange.c:570
 msgid "Arrow X Displacement"
 msgstr "Rodyklės X atitraukimas"
 
-#: ../gtk/gtkrange.c:568
+#: ../gtk/gtkrange.c:571
 msgid ""
 "How far in the x direction to move the arrow when the button is depressed"
 msgstr "Kaip toli patraukti rodyklę horizontaliai, kai mygtukas atleistas"
 
-#: ../gtk/gtkrange.c:575
+#: ../gtk/gtkrange.c:578
 msgid "Arrow Y Displacement"
 msgstr "Rodyklės Y atitraukimas"
 
-#: ../gtk/gtkrange.c:576
+#: ../gtk/gtkrange.c:579
 msgid ""
 "How far in the y direction to move the arrow when the button is depressed"
 msgstr "Kaip toli patraukti rodyklę vertikaliai, kai mygtukas atleistas"
 
-#: ../gtk/gtkrange.c:592
+#: ../gtk/gtkrange.c:595
 msgid "Trough Under Steppers"
 msgstr "Įduba po žingsniais"
 
-#: ../gtk/gtkrange.c:593
+#: ../gtk/gtkrange.c:596
 msgid ""
 "Whether to draw trough for full length of range or exclude the steppers and "
 "spacing"
 msgstr ""
 "Ar piešti įdubą visam intervalui, ar išskaičiuoti žingsnius ir paraštes"
 
-#: ../gtk/gtkrange.c:606
+#: ../gtk/gtkrange.c:609
 msgid "Arrow scaling"
 msgstr "Rodyklės mastelis"
 
-#: ../gtk/gtkrange.c:607
+#: ../gtk/gtkrange.c:610
 msgid "Arrow scaling with regard to scroll button size"
 msgstr "Rodyklės dydis, atsižvelgiant į slinkties mygtuko didį"
 
@@ -6367,12 +6341,10 @@ msgid "Kinetic scrolling mode."
 msgstr "Kinetinio slinkimo veiksena."
 
 #: ../gtk/gtkscrolledwindow.c:598
-#| msgid "Kinetic Scrolling"
 msgid "Overlay Scrolling"
 msgstr "Uždangos slinkimas"
 
 #: ../gtk/gtkscrolledwindow.c:599
-#| msgid "Kinetic scrolling mode."
 msgid "Overlay scrolling mode"
 msgstr "Uždangos slinkimo veiksena"
 
@@ -7123,15 +7095,6 @@ msgstr ""
 "Maksimalus laikas mygtuko/lietimo paspaudimui, kai galima laikyti ilgu "
 "paspaudimu (milisekundėmis)"
 
-#: ../gtk/gtksidebar.c:443 ../gtk/gtkstackswitcher.c:522
-#: ../gtk/gtkstackswitcher.c:523
-msgid "Stack"
-msgstr "Krūva"
-
-#: ../gtk/gtksidebar.c:444
-msgid "Associated stack for this GtkSidebar"
-msgstr "Susieta GtkSidebar krūva"
-
 #: ../gtk/gtksizegroup.c:323 ../gtk/gtktreeselection.c:130
 msgid "Mode"
 msgstr "Veiksena"
@@ -7213,22 +7176,18 @@ msgid "Homogeneous sizing"
 msgstr "Vienalyčiai dydžiai"
 
 #: ../gtk/gtkstack.c:410
-#| msgid "Horizontal options"
 msgid "Horizontally homogeneous"
 msgstr "Horizontaliai vienalytis"
 
 #: ../gtk/gtkstack.c:410
-#| msgid "Homogeneous sizing"
 msgid "Horizontally homogeneous sizing"
 msgstr "Horizontaliai vienodas didinimas"
 
 #: ../gtk/gtkstack.c:422
-#| msgid "Vertical options"
 msgid "Vertically homogeneous"
 msgstr "Vertikaliai vienalytis"
 
 #: ../gtk/gtkstack.c:422
-#| msgid "Homogeneous sizing"
 msgid "Vertically homogeneous sizing"
 msgstr "Vertikaliai vienodas didinimas"
 
@@ -7280,6 +7239,16 @@ msgstr "Reikia dėmesio"
 msgid "Whether this page needs attention"
 msgstr "Ar šiam puslapiui reikia dėmesio"
 
+#: ../gtk/gtkstacksidebar.c:444 ../gtk/gtkstackswitcher.c:522
+#: ../gtk/gtkstackswitcher.c:523
+msgid "Stack"
+msgstr "Krūva"
+
+#: ../gtk/gtkstacksidebar.c:445
+#| msgid "Associated stack for this GtkSidebar"
+msgid "Associated stack for this GtkStackSidebar"
+msgstr "Su šiuo GtkStackSidebar susieta krūva"
+
 #: ../gtk/gtkstatusbar.c:166
 msgid "Style of bevel around the statusbar text"
 msgstr "Rėmelio, aplink būklės juostos tekstą, stilius"
@@ -7320,19 +7289,19 @@ msgstr "Vertės tipas"
 msgid "The value type returned by GtkStyleContext"
 msgstr "Reikšmės tipas, kurį grąžina GtkStyleContext"
 
-#: ../gtk/gtkswitch.c:907
+#: ../gtk/gtkswitch.c:880
 msgid "Whether the switch is on or off"
 msgstr "Ar jungiklis įjungtas, ar išjungtas"
 
-#: ../gtk/gtkswitch.c:921
+#: ../gtk/gtkswitch.c:894
 msgid "State"
 msgstr "Būsena"
 
-#: ../gtk/gtkswitch.c:922
+#: ../gtk/gtkswitch.c:895
 msgid "The backend state"
 msgstr "Realizacijos būsena"
 
-#: ../gtk/gtkswitch.c:955
+#: ../gtk/gtkswitch.c:928
 msgid "The minimum width of the handle"
 msgstr "Minimalus rankenėlės plotis"
 
@@ -7580,17 +7549,14 @@ msgid "Paragraph background RGBA as a GdkRGBA"
 msgstr "Pastraipos fono RGBA kaip GdkRGBA"
 
 #: ../gtk/gtktexttag.c:619
-#| msgid "Use Fallback"
 msgid "Fallback"
 msgstr "Atsarginė veiksena"
 
 #: ../gtk/gtktexttag.c:620
-#| msgid "Whether the action is enabled."
 msgid "Whether font fallback is enabled."
 msgstr "Ar įjungtas atsarginis šriftas."
 
 #: ../gtk/gtktexttag.c:634
-#| msgid "Header Spacing"
 msgid "Letter Spacing"
 msgstr "Tarpai tarp raidžių"
 
@@ -7699,22 +7665,18 @@ msgid "Whether this tag affects the paragraph background color"
 msgstr "Ar ši žyma keičia pastraipos fono spalvą"
 
 #: ../gtk/gtktexttag.c:766
-#| msgid "Use Fallback"
 msgid "Fallback set"
 msgstr "Atsarginė veiksena nustatyta"
 
 #: ../gtk/gtktexttag.c:767
-#| msgid "Whether this tag affects the font family"
 msgid "Whether this tag affects font fallback"
 msgstr "Ar ši žyma veikia atsarginė šriftą"
 
 #: ../gtk/gtktexttag.c:770
-#| msgid "Left margin set"
 msgid "Letter spacing set"
 msgstr "Tarpai tarp raidžių nustatyti"
 
 #: ../gtk/gtktexttag.c:771
-#| msgid "Whether this tag affects the left margin"
 msgid "Whether this tag affects letter spacing"
 msgstr "Ar žyma veikia tarpus tarp raidžių"
 
@@ -7775,7 +7737,6 @@ msgid "Monospace"
 msgstr "Lygiaplotis"
 
 #: ../gtk/gtktextview.c:929
-#| msgid "Whether to use symbolic icons"
 msgid "Whether to use a monospace font"
 msgstr "Ar naudoti lygiaplotį šriftą"
 
@@ -9068,6 +9029,17 @@ msgstr "Spalvų profilio pavadinimas"
 #: ../modules/printbackends/cups/gtkprintercups.c:94
 msgid "The title of the color profile to use"
 msgstr "Naudotino spalvų profilio pavadinimas"
+
+#~ msgid "Profile"
+#~ msgstr "Profilis"
+
+#~| msgid "The Cell Area this context was created for"
+#~ msgid "The GL profile the context was created for"
+#~ msgstr "GL profilis, kuriam sukurtas šis kontekstas"
+
+#~| msgid "The icon name to use for the printer"
+#~ msgid "The GL profile to use for the GL context"
+#~ msgstr "GL profilis, naudojamas GL kontekstui"
 
 #~ msgid "Affects font"
 #~ msgstr "Įtakoja šriftą"
