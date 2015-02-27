@@ -11,8 +11,8 @@ msgstr ""
 "Project-Id-Version: gtk+-properties master\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gtk"
 "%2b&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2015-02-22 19:45+0000\n"
-"PO-Revision-Date: 2015-02-22 22:18+0100\n"
+"POT-Creation-Date: 2015-02-27 18:38+0000\n"
+"PO-Revision-Date: 2015-02-27 22:17+0100\n"
 "Last-Translator: Balázs Úr <urbalazs@gmail.com>\n"
 "Language-Team: Hungarian <openscope at googlegroups dot com>\n"
 "Language: hu\n"
@@ -1383,11 +1383,11 @@ msgstr "Alap elem megjelenítése"
 msgid "Whether the combobox should show the default application on top"
 msgstr "A legördülő lista tetején megjelenjen-e az alap alkalmazás"
 
-#: ../gtk/gtkappchooserbutton.c:646 ../gtk/gtkappchooserdialog.c:683
+#: ../gtk/gtkappchooserbutton.c:646 ../gtk/gtkappchooserdialog.c:687
 msgid "Heading"
 msgstr "Címsor"
 
-#: ../gtk/gtkappchooserbutton.c:647 ../gtk/gtkappchooserdialog.c:684
+#: ../gtk/gtkappchooserbutton.c:647 ../gtk/gtkappchooserdialog.c:688
 msgid "The text to show at the top of the dialog"
 msgstr "A párbeszédablak tetején megjelenítendő szöveg"
 
@@ -1399,11 +1399,11 @@ msgstr "Tartalom típusa"
 msgid "The content type used by the open with object"
 msgstr "A megnyitás ezzel objektum által használt tartalomtípus"
 
-#: ../gtk/gtkappchooserdialog.c:669
+#: ../gtk/gtkappchooserdialog.c:673
 msgid "GFile"
 msgstr "GFile"
 
-#: ../gtk/gtkappchooserdialog.c:670
+#: ../gtk/gtkappchooserdialog.c:674
 msgid "The GFile used by the app chooser dialog"
 msgstr "Az alkalmazásválasztó párbeszédablak által használt GFile"
 
@@ -2337,7 +2337,7 @@ msgstr "A függőleges szövegigazítás, 0 (felül) és 1 (alul) között."
 
 #: ../gtk/gtkcellrendererprogress.c:226 ../gtk/gtklevelbar.c:1022
 #: ../gtk/gtkmodelbutton.c:926 ../gtk/gtkprogressbar.c:159
-#: ../gtk/gtkrange.c:436
+#: ../gtk/gtkrange.c:439
 msgid "Inverted"
 msgstr "Fordított"
 
@@ -2345,7 +2345,7 @@ msgstr "Fordított"
 msgid "Invert the direction in which the progress bar grows"
 msgstr "A folyamatjelző növekedési irányának megfordítása"
 
-#: ../gtk/gtkcellrendererspin.c:113 ../gtk/gtkrange.c:428
+#: ../gtk/gtkcellrendererspin.c:113 ../gtk/gtkrange.c:431
 #: ../gtk/gtkscalebutton.c:210 ../gtk/gtkspinbutton.c:347
 msgid "Adjustment"
 msgstr "Igazítás"
@@ -2790,7 +2790,7 @@ msgstr "Inkonzisztens állapot"
 msgid "The inconsistent state of the button"
 msgstr "A gomb inkonzisztens állapota"
 
-#: ../gtk/gtkcellrenderertoggle.c:153 ../gtk/gtklistbox.c:3542
+#: ../gtk/gtkcellrenderertoggle.c:153 ../gtk/gtklistbox.c:3544
 msgid "Activatable"
 msgstr "Aktiválható"
 
@@ -2953,7 +2953,7 @@ msgstr "RGBA szín"
 msgid "Color as RGBA"
 msgstr "Szín RGBA-ként"
 
-#: ../gtk/gtkcolorswatch.c:729 ../gtk/gtklabel.c:838 ../gtk/gtklistbox.c:3556
+#: ../gtk/gtkcolorswatch.c:729 ../gtk/gtklabel.c:838 ../gtk/gtklistbox.c:3558
 msgid "Selectable"
 msgstr "Kijelölhető"
 
@@ -4079,6 +4079,15 @@ msgstr "A mozdulat aktiválásához szükséges pontok száma"
 msgid "GdkWindow to receive events about"
 msgstr "Események fogadása ezen GdkWindow-ról"
 
+#: ../gtk/gtkgesturelongpress.c:284
+#| msgid "Scale factor"
+msgid "Delay factor"
+msgstr "Késleltetési tényező"
+
+#: ../gtk/gtkgesturelongpress.c:285
+msgid "Factor by which to modify the default timeout"
+msgstr "Együttható, amellyel módosítandó az alapértelmezett időkorlát"
+
 #: ../gtk/gtkgesturepan.c:238
 msgid "Allowed orientations"
 msgstr "Engedélyezett tájolások"
@@ -4640,11 +4649,11 @@ msgstr "Látogatott"
 msgid "Whether this link has been visited."
 msgstr "A hivatkozás meg lett-e látogatva."
 
-#: ../gtk/gtklistbox.c:3543
+#: ../gtk/gtklistbox.c:3545
 msgid "Whether this row can be activated"
 msgstr "A sor aktiválható-e"
 
-#: ../gtk/gtklistbox.c:3557
+#: ../gtk/gtklistbox.c:3559
 msgid "Whether this row can be selected"
 msgstr "A sor kijelölhető-e"
 
@@ -5462,12 +5471,10 @@ msgid "Whether the popover is modal"
 msgstr "A popover kizárólagos-e"
 
 #: ../gtk/gtkpopover.c:1625
-#| msgid "Transition type"
 msgid "Transitions enabled"
 msgstr "Átmenetek engedélyezve"
 
 #: ../gtk/gtkpopover.c:1626
-#| msgid "Whether the action is enabled."
 msgid "Whether show/hide transitions are enabled or not"
 msgstr "A megjelenítés/elrejtés átmenetek engedélyezve vannak-e vagy sem"
 
@@ -5893,121 +5900,121 @@ msgstr ""
 msgid "The radio tool button whose group this button belongs to."
 msgstr "Az a rádiógomb, amely csoportjához ez a gomb tartozik."
 
-#: ../gtk/gtkrange.c:429
+#: ../gtk/gtkrange.c:432
 msgid "The GtkAdjustment that contains the current value of this range object"
 msgstr "A tartományobjektum aktuális értékét tartalmazó GtkAdjustment"
 
-#: ../gtk/gtkrange.c:437
+#: ../gtk/gtkrange.c:440
 msgid "Invert direction slider moves to increase range value"
 msgstr "Csúszka irányának megfordítása a tartományérték növeléséhez"
 
-#: ../gtk/gtkrange.c:444
+#: ../gtk/gtkrange.c:447
 msgid "Lower stepper sensitivity"
 msgstr "Alsó léptető érzékenysége"
 
-#: ../gtk/gtkrange.c:445
+#: ../gtk/gtkrange.c:448
 msgid ""
 "The sensitivity policy for the stepper that points to the adjustment's lower "
 "side"
 msgstr "A beállítások alsó oldalára mutató léptető érzékenységi irányelve"
 
-#: ../gtk/gtkrange.c:453
+#: ../gtk/gtkrange.c:456
 msgid "Upper stepper sensitivity"
 msgstr "Felső léptető érzékenysége"
 
-#: ../gtk/gtkrange.c:454
+#: ../gtk/gtkrange.c:457
 msgid ""
 "The sensitivity policy for the stepper that points to the adjustment's upper "
 "side"
 msgstr "A beállítások felső oldalára mutató léptető érzékenységi irányelve"
 
-#: ../gtk/gtkrange.c:471
+#: ../gtk/gtkrange.c:474
 msgid "Show Fill Level"
 msgstr "Kitöltési szint megjelenítése"
 
-#: ../gtk/gtkrange.c:472
+#: ../gtk/gtkrange.c:475
 msgid "Whether to display a fill level indicator graphics on trough."
 msgstr "A vályúban megjelenítendő-e kitöltésszint-jelző."
 
-#: ../gtk/gtkrange.c:488
+#: ../gtk/gtkrange.c:491
 msgid "Restrict to Fill Level"
 msgstr "Korlátozás a kitöltési szintre"
 
-#: ../gtk/gtkrange.c:489
+#: ../gtk/gtkrange.c:492
 msgid "Whether to restrict the upper boundary to the fill level."
 msgstr "A felső szegély korlátozása a kitöltési szintre."
 
-#: ../gtk/gtkrange.c:504
+#: ../gtk/gtkrange.c:507
 msgid "Fill Level"
 msgstr "Kitöltési szint"
 
-#: ../gtk/gtkrange.c:505
+#: ../gtk/gtkrange.c:508
 msgid "The fill level."
 msgstr "A kitöltés szintje."
 
-#: ../gtk/gtkrange.c:522
+#: ../gtk/gtkrange.c:525
 msgid "Round Digits"
 msgstr "Kerekítési számjegyek"
 
-#: ../gtk/gtkrange.c:523
+#: ../gtk/gtkrange.c:526
 msgid "The number of digits to round the value to."
 msgstr "Az érték kerekítése ennyi számjegyre."
 
-#: ../gtk/gtkrange.c:529 ../gtk/gtkswitch.c:927
+#: ../gtk/gtkrange.c:532 ../gtk/gtkswitch.c:927
 msgid "Slider Width"
 msgstr "Csúszka szélessége"
 
-#: ../gtk/gtkrange.c:530
+#: ../gtk/gtkrange.c:533
 msgid "Width of scrollbar or scale thumb"
 msgstr "A görgetősáv vagy átméretező szélessége"
 
-#: ../gtk/gtkrange.c:537
+#: ../gtk/gtkrange.c:540
 msgid "Trough Border"
 msgstr "Vályúszegély"
 
-#: ../gtk/gtkrange.c:538
+#: ../gtk/gtkrange.c:541
 msgid "Spacing between thumb/steppers and outer trough bevel"
 msgstr "A léptetők és a külső vályú élkidolgozás közötti távolság"
 
-#: ../gtk/gtkrange.c:545
+#: ../gtk/gtkrange.c:548
 msgid "Stepper Size"
 msgstr "Léptető mérete"
 
-#: ../gtk/gtkrange.c:546
+#: ../gtk/gtkrange.c:549
 msgid "Length of step buttons at ends"
 msgstr "A végeken látható léptetőgombok hossza"
 
-#: ../gtk/gtkrange.c:559
+#: ../gtk/gtkrange.c:562
 msgid "Stepper Spacing"
 msgstr "Léptető távolság"
 
-#: ../gtk/gtkrange.c:560
+#: ../gtk/gtkrange.c:563
 msgid "Spacing between step buttons and thumb"
 msgstr "A léptetőgombok és a csúszka közötti távolság"
 
-#: ../gtk/gtkrange.c:567
+#: ../gtk/gtkrange.c:570
 msgid "Arrow X Displacement"
 msgstr "Nyíl X elcsúsztatás"
 
-#: ../gtk/gtkrange.c:568
+#: ../gtk/gtkrange.c:571
 msgid ""
 "How far in the x direction to move the arrow when the button is depressed"
 msgstr "Milyen messzire mozduljon el X irányba a nyíl a gomb lenyomására"
 
-#: ../gtk/gtkrange.c:575
+#: ../gtk/gtkrange.c:578
 msgid "Arrow Y Displacement"
 msgstr "Nyíl Y elcsúsztatás"
 
-#: ../gtk/gtkrange.c:576
+#: ../gtk/gtkrange.c:579
 msgid ""
 "How far in the y direction to move the arrow when the button is depressed"
 msgstr "Milyen messzire mozduljon el Y irányba a nyíl a gomb lenyomására"
 
-#: ../gtk/gtkrange.c:592
+#: ../gtk/gtkrange.c:595
 msgid "Trough Under Steppers"
 msgstr "Vályú a léptetők alatt"
 
-#: ../gtk/gtkrange.c:593
+#: ../gtk/gtkrange.c:596
 msgid ""
 "Whether to draw trough for full length of range or exclude the steppers and "
 "spacing"
@@ -6015,11 +6022,11 @@ msgstr ""
 "A vályú megrajzolása a tartomány teljes hosszában, vagy a léptetők és "
 "távolság kihagyása"
 
-#: ../gtk/gtkrange.c:606
+#: ../gtk/gtkrange.c:609
 msgid "Arrow scaling"
 msgstr "Nyíl méretezése"
 
-#: ../gtk/gtkrange.c:607
+#: ../gtk/gtkrange.c:610
 msgid "Arrow scaling with regard to scroll button size"
 msgstr "Nyíl méretezése a gördítőgomb méretét figyelembe véve"
 
