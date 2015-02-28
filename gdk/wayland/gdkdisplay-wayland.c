@@ -132,6 +132,9 @@ xdg_shell_ping (void             *data,
 
   _gdk_wayland_display_update_serial (wayland_display, serial);
 
+  GDK_NOTE (EVENTS,
+            g_message ("ping, shell %p, serial %u\n", xdg_shell, serial));
+
   xdg_shell_pong (xdg_shell, serial);
 }
 
@@ -150,6 +153,9 @@ gdk_registry_handle_global (void               *data,
   GdkDisplay *gdk_display = GDK_DISPLAY_OBJECT (data);
   struct wl_seat *seat;
   struct wl_output *output;
+
+  GDK_NOTE (MISC,
+            g_message ("add global %u, interface %s, version %u", id, interface, version));
 
   if (strcmp (interface, "wl_compositor") == 0)
     {
@@ -209,6 +215,7 @@ gdk_registry_handle_global_remove (void               *data,
   GdkWaylandDisplay *display_wayland = data;
   GdkDisplay *display = GDK_DISPLAY (display_wayland);
 
+  GDK_NOTE (MISC, g_message ("remove global %u", id));
   _gdk_wayland_device_manager_remove_seat (display->device_manager, id);
   _gdk_wayland_screen_remove_output (display_wayland->screen, id);
 
@@ -232,6 +239,8 @@ _gdk_wayland_display_open (const gchar *display_name)
   struct wl_display *wl_display;
   GdkDisplay *display;
   GdkWaylandDisplay *display_wayland;
+
+  GDK_NOTE (MISC, g_message ("opening display %s", display_name ? display_name : ""));
 
   /* If this variable is unset then wayland initialisation will surely
    * fail, logging a fatal error in the process.  Save ourselves from

@@ -571,11 +571,15 @@ emit_selection_owner_change_forall (GdkAtom atom)
 static void
 data_device_data_offer (void                  *data,
                         struct wl_data_device *data_device,
-                        struct wl_data_offer  *_offer)
+                        struct wl_data_offer  *offer)
 {
   GdkWaylandDeviceData *device = (GdkWaylandDeviceData *)data;
-  gdk_wayland_selection_set_offer (device->display, _offer);
 
+  GDK_NOTE (EVENTS,
+            g_message ("data device data offer, data device %p, offer %p",
+                       data_device, offer));
+
+  gdk_wayland_selection_set_offer (device->display, offer);
   emit_selection_owner_change_forall (gdk_atom_intern_static_string ("GdkWaylandSelection"));
 }
 
@@ -596,8 +600,9 @@ data_device_enter (void                  *data,
   if (!GDK_IS_WINDOW (dest_window))
     return;
 
-  g_debug (G_STRLOC ": %s data_device = %p serial = %u, surface = %p, x = %d y = %d, offer = %p",
-           G_STRFUNC, data_device, serial, surface, x, y, offer);
+  GDK_NOTE (EVENTS,
+            g_message ("data device enter, data device %p serial %u, surface %p, x %d y %d, offer %p",
+                       data_device, serial, surface, x, y, offer));
 
   /* Update pointer state, so device state queries work during DnD */
   device->pointer_focus = g_object_ref (dest_window);
@@ -629,8 +634,8 @@ data_device_leave (void                  *data,
 {
   GdkWaylandDeviceData *device = (GdkWaylandDeviceData *) data;
 
-  g_debug (G_STRLOC ": %s data_device = %p",
-           G_STRFUNC, data_device);
+  GDK_NOTE (EVENTS,
+            g_message ("data device leave, data device %p", data_device));
 
   if (!gdk_drag_context_get_dest_window (device->drop_context))
     return;
@@ -677,8 +682,8 @@ data_device_drop (void                  *data,
   GdkWaylandDeviceData *device = (GdkWaylandDeviceData *) data;
   GdkWindow *local_dnd_owner;
 
-  g_debug (G_STRLOC ": %s data_device = %p",
-           G_STRFUNC, data_device);
+  GDK_NOTE (EVENTS,
+            g_message ("data device drop, data device %p", data_device));
 
   local_dnd_owner = gdk_selection_owner_get_for_display (device->display, gdk_drag_get_selection (device->drop_context));
 
@@ -701,8 +706,9 @@ data_device_selection (void                  *data,
 {
   GdkWaylandDeviceData *device = (GdkWaylandDeviceData *) data;
 
-  g_debug (G_STRLOC ": %s wl_data_device = %p wl_data_offer = %p",
-           G_STRFUNC, wl_data_device, offer);
+  GDK_NOTE (EVENTS,
+            g_message ("data device selection, data device %p, data offer %p",
+                       wl_data_device, offer));
 
   gdk_wayland_selection_set_offer (device->display, offer);
   emit_selection_owner_change_forall (gdk_atom_intern_static_string ("CLIPBOARD"));
@@ -861,8 +867,8 @@ pointer_handle_motion (void              *data,
                    &event->motion.y_root);
 
   GDK_NOTE (EVENTS,
-            g_message ("motion %d %d, state %d",
-                       sx, sy, event->button.state));
+            g_message ("motion %d %d, device %p state %d",
+                       sx, sy, device, event->button.state));
 
   _gdk_wayland_display_deliver_event (device->display, event);
 }
@@ -926,9 +932,11 @@ pointer_handle_button (void              *data,
     device->modifiers &= ~modifier;
 
   GDK_NOTE (EVENTS,
-	    g_message ("button %d %s, state %d",
+	    g_message ("button %d %s, device %p state %d",
 		       event->button.button,
-		       state ? "press" : "release", event->button.state));
+		       state ? "press" : "release",
+                       device,
+                       event->button.state));
 
   _gdk_wayland_display_deliver_event (device->display, event);
 }
@@ -982,8 +990,8 @@ pointer_handle_axis (void              *data,
                    &event->scroll.y_root);
 
   GDK_NOTE (EVENTS,
-            g_message ("scroll %f %f",
-                       event->scroll.delta_x, event->scroll.delta_y));
+            g_message ("scroll %f %f, device %p",
+                       event->scroll.delta_x, event->scroll.delta_y, device));
 
   _gdk_wayland_display_deliver_event (device->display, event);
 }
@@ -1034,7 +1042,7 @@ keyboard_handle_enter (void               *data,
   gdk_event_set_source_device (event, device->keyboard);
 
   GDK_NOTE (EVENTS,
-            g_message ("focus int, device %p surface %p",
+            g_message ("focus in, device %p surface %p",
                        device, device->keyboard_focus));
 
   _gdk_wayland_display_deliver_event (device->display, event);
@@ -1568,6 +1576,12 @@ seat_handle_capabilities (void                    *data,
   GdkWaylandDeviceData *device = data;
   GdkWaylandDeviceManager *device_manager = GDK_WAYLAND_DEVICE_MANAGER (device->device_manager);
 
+  GDK_NOTE (MISC,
+            g_message ("seat %p with %s%s%s", seat,
+                       (caps & WL_SEAT_CAPABILITY_POINTER) ? " pointer, " : "",
+                       (caps & WL_SEAT_CAPABILITY_KEYBOARD) ? " keyboard, " : "",
+                       (caps & WL_SEAT_CAPABILITY_TOUCH) ? " touch" : ""));
+
   if ((caps & WL_SEAT_CAPABILITY_POINTER) && !device->wl_pointer)
     {
       device->wl_pointer = wl_seat_get_pointer (seat);
@@ -1691,6 +1705,8 @@ seat_handle_name (void           *data,
                   const char     *name)
 {
   /* We don't care about the name. */
+  GDK_NOTE (MISC,
+            g_message ("seat %p name %s", seat, name));
 }
 
 static const struct wl_seat_listener seat_listener = {
