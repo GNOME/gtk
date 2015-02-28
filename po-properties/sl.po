@@ -15,8 +15,8 @@ msgstr ""
 "Project-Id-Version: gtk+-properties master\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gtk"
 "%2b&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2015-02-24 09:57+0000\n"
-"PO-Revision-Date: 2015-02-24 18:59+0100\n"
+"POT-Creation-Date: 2015-02-28 19:00+0000\n"
+"PO-Revision-Date: 2015-02-28 20:31+0100\n"
 "Last-Translator: Matej Urbančič <mateju@svn.gnome.org>\n"
 "Language-Team: Slovenščina <gnome-si@googlegroups.com>\n"
 "Language: Slovenian\n"
@@ -1360,11 +1360,11 @@ msgstr "Pokaži privzeti predmet"
 msgid "Whether the combobox should show the default application on top"
 msgstr "Ali naj spustno polje pokaže privzete programe na vrhu"
 
-#: ../gtk/gtkappchooserbutton.c:647 ../gtk/gtkappchooserdialog.c:678
+#: ../gtk/gtkappchooserbutton.c:647 ../gtk/gtkappchooserdialog.c:683
 msgid "Heading"
 msgstr "Naslov"
 
-#: ../gtk/gtkappchooserbutton.c:648 ../gtk/gtkappchooserdialog.c:679
+#: ../gtk/gtkappchooserbutton.c:648 ../gtk/gtkappchooserdialog.c:684
 msgid "The text to show at the top of the dialog"
 msgstr "Besedilo, prikazano na vrhu pogovornega okna"
 
@@ -1376,11 +1376,11 @@ msgstr "Vrsta vsebine"
 msgid "The content type used by the open with object"
 msgstr "Vrsta vsebine, ki jo uporablja predmet za odpiranje"
 
-#: ../gtk/gtkappchooserdialog.c:664
+#: ../gtk/gtkappchooserdialog.c:669
 msgid "GFile"
 msgstr "GFile"
 
-#: ../gtk/gtkappchooserdialog.c:665
+#: ../gtk/gtkappchooserdialog.c:670
 msgid "The GFile used by the app chooser dialog"
 msgstr "Predmet GFile, ki ga uporablja pogovorno okno za izbor programa"
 
@@ -2319,7 +2319,7 @@ msgid "The vertical text alignment, from 0 (top) to 1 (bottom)."
 msgstr "Navpična poravnava besedila, od 0 (zgoraj) do 1 (spodaj)."
 
 #: ../gtk/gtkcellrendererprogress.c:225 ../gtk/gtklevelbar.c:1009
-#: ../gtk/gtkprogressbar.c:159 ../gtk/gtkrange.c:447
+#: ../gtk/gtkprogressbar.c:159 ../gtk/gtkrange.c:448
 msgid "Inverted"
 msgstr "Preobrnjeno"
 
@@ -2327,7 +2327,7 @@ msgstr "Preobrnjeno"
 msgid "Invert the direction in which the progress bar grows"
 msgstr "Obrni smer, v katero narašča vrstica napredka"
 
-#: ../gtk/gtkcellrendererspin.c:113 ../gtk/gtkrange.c:439
+#: ../gtk/gtkcellrendererspin.c:113 ../gtk/gtkrange.c:440
 #: ../gtk/gtkscalebutton.c:210 ../gtk/gtkspinbutton.c:347
 msgid "Adjustment"
 msgstr "Prilagoditev"
@@ -4053,6 +4053,14 @@ msgstr "Število točk, ki sprožijo potezo"
 msgid "GdkWindow to receive events about"
 msgstr "Predmet GtkWindow, ki prejme dogodke"
 
+#: ../gtk/gtkgesturelongpress.c:284
+msgid "Delay factor"
+msgstr "Faktor zamika"
+
+#: ../gtk/gtkgesturelongpress.c:285
+msgid "Factor by which to modify the default timeout"
+msgstr "Faktor, ki določa spreminjanje privzete nastavitve časovnega zamika"
+
 #: ../gtk/gtkgesturepan.c:238
 msgid "Allowed orientations"
 msgstr "Dovoljene usmeritve"
@@ -5744,121 +5752,121 @@ msgstr "Predmet izbirnega menija, katerega skupini pripada gradnik."
 msgid "The radio tool button whose group this button belongs to."
 msgstr "Orodni izbirni gumb, katerega skupini pripada gradnik."
 
-#: ../gtk/gtkrange.c:440
+#: ../gtk/gtkrange.c:441
 msgid "The GtkAdjustment that contains the current value of this range object"
 msgstr "GtkAdjustment, ki vsebuje trenutno vrednost tega predmeta"
 
-#: ../gtk/gtkrange.c:448
+#: ../gtk/gtkrange.c:449
 msgid "Invert direction slider moves to increase range value"
 msgstr "Obrni smer, v katero vodoravni drsnik povečuje obseg"
 
-#: ../gtk/gtkrange.c:455
+#: ../gtk/gtkrange.c:456
 msgid "Lower stepper sensitivity"
 msgstr "Občutljivost spodnjega koračnika"
 
-#: ../gtk/gtkrange.c:456
+#: ../gtk/gtkrange.c:457
 msgid ""
 "The sensitivity policy for the stepper that points to the adjustment's lower "
 "side"
 msgstr "Pravila občutljivosti koračnika, ki kaže na spodnjo stran prilagoditve"
 
-#: ../gtk/gtkrange.c:464
+#: ../gtk/gtkrange.c:465
 msgid "Upper stepper sensitivity"
 msgstr "Občutljivost zgornjega koračnika"
 
-#: ../gtk/gtkrange.c:465
+#: ../gtk/gtkrange.c:466
 msgid ""
 "The sensitivity policy for the stepper that points to the adjustment's upper "
 "side"
 msgstr "Pravila občutljivosti koračnika, ki kaže na zgornjo stran prilagoditve"
 
-#: ../gtk/gtkrange.c:482
+#: ../gtk/gtkrange.c:483
 msgid "Show Fill Level"
 msgstr "Pokaži raven polnjenja"
 
-#: ../gtk/gtkrange.c:483
+#: ../gtk/gtkrange.c:484
 msgid "Whether to display a fill level indicator graphics on trough."
 msgstr "Ali naj bo prikazan kazalnik ravni polnjenja zareze."
 
-#: ../gtk/gtkrange.c:499
+#: ../gtk/gtkrange.c:500
 msgid "Restrict to Fill Level"
 msgstr "Omejitev ravni polnjenja"
 
-#: ../gtk/gtkrange.c:500
+#: ../gtk/gtkrange.c:501
 msgid "Whether to restrict the upper boundary to the fill level."
 msgstr "Ali naj bo omejen zgornji rob ravni polnjenja"
 
-#: ../gtk/gtkrange.c:515
+#: ../gtk/gtkrange.c:516
 msgid "Fill Level"
 msgstr "Raven polnjenja"
 
-#: ../gtk/gtkrange.c:516
+#: ../gtk/gtkrange.c:517
 msgid "The fill level."
 msgstr "Raven polnjenja."
 
-#: ../gtk/gtkrange.c:533
+#: ../gtk/gtkrange.c:534
 msgid "Round Digits"
 msgstr "Zaokroževanje števil"
 
-#: ../gtk/gtkrange.c:534
+#: ../gtk/gtkrange.c:535
 msgid "The number of digits to round the value to."
 msgstr "Število števk za zaokroževanje vrednosti."
 
-#: ../gtk/gtkrange.c:540 ../gtk/gtkswitch.c:957
+#: ../gtk/gtkrange.c:541 ../gtk/gtkswitch.c:957
 msgid "Slider Width"
 msgstr "Širina vodoravnega drsnika"
 
-#: ../gtk/gtkrange.c:541
+#: ../gtk/gtkrange.c:542
 msgid "Width of scrollbar or scale thumb"
 msgstr "Širina drsnika ali gumba za povečavo"
 
-#: ../gtk/gtkrange.c:548
+#: ../gtk/gtkrange.c:549
 msgid "Trough Border"
 msgstr "Zarezan rob"
 
-#: ../gtk/gtkrange.c:549
+#: ../gtk/gtkrange.c:550
 msgid "Spacing between thumb/steppers and outer trough bevel"
 msgstr "Razmik med gumbom/koračnikom in zunanjo zarezo obrobe"
 
-#: ../gtk/gtkrange.c:556
+#: ../gtk/gtkrange.c:557
 msgid "Stepper Size"
 msgstr "Velikost koračnika"
 
-#: ../gtk/gtkrange.c:557
+#: ../gtk/gtkrange.c:558
 msgid "Length of step buttons at ends"
 msgstr "Dolžina koračnih gumbov na koncih"
 
-#: ../gtk/gtkrange.c:570
+#: ../gtk/gtkrange.c:571
 msgid "Stepper Spacing"
 msgstr "Razmik koračnika"
 
-#: ../gtk/gtkrange.c:571
+#: ../gtk/gtkrange.c:572
 msgid "Spacing between step buttons and thumb"
 msgstr "Razmik med gumbi korakov in sličico"
 
-#: ../gtk/gtkrange.c:578
+#: ../gtk/gtkrange.c:579
 msgid "Arrow X Displacement"
 msgstr "Premik puščice po osi X"
 
-#: ../gtk/gtkrange.c:579
+#: ../gtk/gtkrange.c:580
 msgid ""
 "How far in the x direction to move the arrow when the button is depressed"
 msgstr "Kako daleč v smeri X naj se premakne puščica, ko je gumb spuščen"
 
-#: ../gtk/gtkrange.c:586
+#: ../gtk/gtkrange.c:587
 msgid "Arrow Y Displacement"
 msgstr "Premik puščice po osi Y"
 
-#: ../gtk/gtkrange.c:587
+#: ../gtk/gtkrange.c:588
 msgid ""
 "How far in the y direction to move the arrow when the button is depressed"
 msgstr "Kako daleč v smeri Y naj se premakne puščica, ko je gumb spuščen"
 
-#: ../gtk/gtkrange.c:603
+#: ../gtk/gtkrange.c:604
 msgid "Trough Under Steppers"
 msgstr "Zareza pod koračniki"
 
-#: ../gtk/gtkrange.c:604
+#: ../gtk/gtkrange.c:605
 msgid ""
 "Whether to draw trough for full length of range or exclude the steppers and "
 "spacing"
@@ -5866,11 +5874,11 @@ msgstr ""
 "Ali naj se izriše zareza skozi celotno dolžino območja ali pa se izloči "
 "koračnike in presledke"
 
-#: ../gtk/gtkrange.c:617
+#: ../gtk/gtkrange.c:618
 msgid "Arrow scaling"
 msgstr "Prilagajanje velikosti puščice"
 
-#: ../gtk/gtkrange.c:618
+#: ../gtk/gtkrange.c:619
 msgid "Arrow scaling with regard to scroll button size"
 msgstr "Prilagajanje puščic v povezavi z velikostjo drsnih gumbov"
 
