@@ -841,6 +841,23 @@ gtk_css_node_invalidate_style_provider (GtkCssNode *cssnode)
     }
 }
 
+static void
+gtk_css_node_invalidate_timestamp (GtkCssNode *cssnode)
+{
+  GtkCssNode *child;
+
+  if (!cssnode->invalid)
+    return;
+
+  if (!gtk_css_style_is_static (cssnode->style))
+    gtk_css_node_invalidate (cssnode, GTK_CSS_CHANGE_TIMESTAMP);
+
+  for (child = cssnode->first_child; child; child = child->next_sibling)
+    {
+      gtk_css_node_invalidate_timestamp (child);
+    }
+}
+
 void
 gtk_css_node_invalidate_frame_clock (GtkCssNode *cssnode,
                                      gboolean    just_timestamp)
@@ -849,10 +866,10 @@ gtk_css_node_invalidate_frame_clock (GtkCssNode *cssnode,
   if (cssnode->parent)
     return;
 
-  if (just_timestamp)
-    gtk_css_node_invalidate (cssnode, GTK_CSS_CHANGE_TIMESTAMP);
-  else
-    gtk_css_node_invalidate (cssnode, GTK_CSS_CHANGE_TIMESTAMP | GTK_CSS_CHANGE_ANIMATIONS);
+  gtk_css_node_invalidate_timestamp (cssnode);
+
+  if (!just_timestamp)
+    gtk_css_node_invalidate (cssnode, GTK_CSS_CHANGE_ANIMATIONS);
 }
 
 void
