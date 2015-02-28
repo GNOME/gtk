@@ -50,7 +50,7 @@
  * use filename matching instead. This doesn’t use the content of the
  * file however.
  */
-#undef FTS_MATCHING
+#define FTS_MATCHING
 
 /*
  * GtkSearchEngineTracker object
@@ -391,6 +391,8 @@ gtk_search_engine_tracker_start (GtkSearchEngine *engine)
 #endif /* FTS_MATCHING */
 
   tracker->priv->query_pending = TRUE;
+
+  g_debug ("SearchEngineTracker: query: %s", sparql->str);
 
   get_query_results (tracker, sparql->str, query_callback, tracker);
 
