@@ -95,7 +95,8 @@ gdk_wayland_window_invalidate_for_new_frame (GdkWindow      *window,
       window_rect.height = gdk_window_get_height (window);
 
       /* If nothing else is known, repaint everything so that the back
-         buffer is fully up-to-date for the swapbuffer */
+       * buffer is fully up-to-date for the swapbuffer
+       */
       cairo_region_union_rectangle (update_area, &window_rect);
     }
 }
@@ -165,7 +166,7 @@ gdk_wayland_gl_context_realize (GdkGLContext *context,
 }
 
 static void
-gdk_wayland_gl_context_end_frame (GdkGLContext *context,
+gdk_wayland_gl_context_end_frame (GdkGLContext   *context,
                                   cairo_region_t *painted,
                                   cairo_region_t *damage)
 {
@@ -180,7 +181,7 @@ gdk_wayland_gl_context_end_frame (GdkGLContext *context,
   egl_surface = gdk_wayland_window_get_egl_surface (window->impl_window,
                                                     context_wayland->egl_config);
 
-  // TODO: Use eglSwapBuffersWithDamageEXT if available
+  /* TODO: Use eglSwapBuffersWithDamageEXT if available */
   if (display_wayland->have_egl_swap_buffers_with_damage)
     {
       int i, j, n_rects = cairo_region_num_rectangles (damage);

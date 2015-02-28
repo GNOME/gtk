@@ -33,7 +33,8 @@ typedef struct _GdkWaylandEventSource {
 static GList *event_sources = NULL;
 
 static gboolean
-gdk_event_source_prepare(GSource *base, gint *timeout)
+gdk_event_source_prepare (GSource *base,
+                          gint    *timeout)
 {
   GdkWaylandEventSource *source = (GdkWaylandEventSource *) base;
   GdkWaylandDisplay *display = (GdkWaylandDisplay *) source->display;
@@ -60,7 +61,7 @@ gdk_event_source_prepare(GSource *base, gint *timeout)
 }
 
 static gboolean
-gdk_event_source_check(GSource *base)
+gdk_event_source_check (GSource *base)
 {
   GdkWaylandEventSource *source = (GdkWaylandEventSource *) base;
 
@@ -72,9 +73,9 @@ gdk_event_source_check(GSource *base)
 }
 
 static gboolean
-gdk_event_source_dispatch(GSource *base,
-			  GSourceFunc callback,
-			  gpointer data)
+gdk_event_source_dispatch (GSource     *base,
+			   GSourceFunc  callback,
+			   gpointer     data)
 {
   GdkWaylandEventSource *source = (GdkWaylandEventSource *) base;
   GdkDisplay *display = source->display;
@@ -110,7 +111,8 @@ static GSourceFuncs wl_glib_source_funcs = {
 };
 
 void
-_gdk_wayland_display_deliver_event (GdkDisplay *display, GdkEvent *event)
+_gdk_wayland_display_deliver_event (GdkDisplay *display,
+                                    GdkEvent   *event)
 {
   GList *node;
 

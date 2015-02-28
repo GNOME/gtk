@@ -19,7 +19,7 @@
  * Modified by the GTK+ Team and others 1997-2000.  See the AUTHORS
  * file for a list of people on the GTK+ Team.  See the ChangeLog
  * files for a list of changes.  These files are distributed with
- * GTK+ at ftp://ftp.gtk.org/pub/gtk/. 
+ * GTK+ at ftp://ftp.gtk.org/pub/gtk/.
  */
 
 #include "config.h"
@@ -83,7 +83,8 @@ _gdk_wayland_display_finalize_cursors (GdkWaylandDisplay *display)
 }
 
 static gboolean
-set_cursor_from_theme (GdkWaylandCursor *cursor, struct wl_cursor_theme *theme)
+set_cursor_from_theme (GdkWaylandCursor       *cursor,
+                       struct wl_cursor_theme *theme)
 {
   struct wl_cursor *c;
 

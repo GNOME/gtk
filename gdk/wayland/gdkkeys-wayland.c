@@ -250,7 +250,7 @@ get_xkb_modifiers (struct xkb_keymap *xkb_keymap,
   if (state & GDK_MOD1_MASK)
     mods |= 1 << xkb_keymap_mod_get_index (xkb_keymap, XKB_MOD_NAME_ALT);
   if (state & GDK_MOD2_MASK)
-    mods |= 1 << xkb_keymap_mod_get_index (xkb_keymap, "Mod2");
+    mods |= 1 << xkb_keymap_mod_get_index (xkb_keymap, XKB_MOD_NAME_NUM);
   if (state & GDK_MOD3_MASK)
     mods |= 1 << xkb_keymap_mod_get_index (xkb_keymap, "Mod3");
   if (state & GDK_MOD4_MASK)
@@ -275,7 +275,7 @@ get_gdk_modifiers (struct xkb_keymap *xkb_keymap,
     state |= GDK_CONTROL_MASK;
   if (mods & (1 << xkb_keymap_mod_get_index (xkb_keymap, XKB_MOD_NAME_ALT)))
     state |= GDK_MOD1_MASK;
-  if (mods & (1 << xkb_keymap_mod_get_index (xkb_keymap, "Mod2")))
+  if (mods & (1 << xkb_keymap_mod_get_index (xkb_keymap, XKB_MOD_NAME_NUM)))
     state |= GDK_MOD2_MASK;
   if (mods & (1 << xkb_keymap_mod_get_index (xkb_keymap, "Mod3")))
     state |= GDK_MOD3_MASK;
@@ -457,7 +457,7 @@ update_direction (GdkWaylandKeymap *keymap)
 }
 
 GdkKeymap *
-_gdk_wayland_keymap_new ()
+_gdk_wayland_keymap_new (void)
 {
   GdkWaylandKeymap *keymap;
   struct xkb_context *context;
@@ -494,12 +494,12 @@ _gdk_wayland_keymap_update_from_fd (GdkKeymap *keymap,
 
   context = xkb_context_new (0);
 
-  map_str = mmap(NULL, size, PROT_READ, MAP_SHARED, fd, 0);
+  map_str = mmap (NULL, size, PROT_READ, MAP_SHARED, fd, 0);
   if (map_str == MAP_FAILED)
     {
       close(fd);
       return;
-  }
+    }
 
   xkb_keymap = xkb_keymap_new_from_string (context, map_str, format, 0);
   munmap (map_str, size);
@@ -523,12 +523,14 @@ _gdk_wayland_keymap_update_from_fd (GdkKeymap *keymap,
   update_direction (keymap_wayland);
 }
 
-struct xkb_keymap *_gdk_wayland_keymap_get_xkb_keymap (GdkKeymap *keymap)
+struct xkb_keymap *
+_gdk_wayland_keymap_get_xkb_keymap (GdkKeymap *keymap)
 {
   return GDK_WAYLAND_KEYMAP (keymap)->xkb_keymap;
 }
 
-struct xkb_state *_gdk_wayland_keymap_get_xkb_state (GdkKeymap *keymap)
+struct xkb_state *
+_gdk_wayland_keymap_get_xkb_state (GdkKeymap *keymap)
 {
   return GDK_WAYLAND_KEYMAP (keymap)->xkb_state;
 }

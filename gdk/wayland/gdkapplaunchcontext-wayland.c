@@ -32,15 +32,15 @@
 
 static char *
 gdk_wayland_app_launch_context_get_startup_notify_id (GAppLaunchContext *context,
-						      GAppInfo          *info, 
-						      GList             *files)
+                                                      GAppInfo          *info,
+                                                      GList             *files)
 {
   return NULL;
 }
 
 static void
-gdk_wayland_app_launch_context_launch_failed (GAppLaunchContext *context, 
-					      const char        *startup_notify_id)
+gdk_wayland_app_launch_context_launch_failed (GAppLaunchContext *context,
+                                              const char        *startup_notify_id)
 {
 }
 

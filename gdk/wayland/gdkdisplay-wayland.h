@@ -1,7 +1,7 @@
 /*
  * gdkdisplay-wayland.h
- * 
- * Copyright 2001 Sun Microsystems Inc. 
+ *
+ * Copyright 2001 Sun Microsystems Inc.
  *
  * Erwann Chenede <erwann.chenede@sun.com>
  *
@@ -99,4 +99,4 @@ struct _GdkWaylandDisplayClass
 
 G_END_DECLS
 
-#endif				/* __GDK_WAYLAND_DISPLAY__ */
+#endif  /* __GDK_WAYLAND_DISPLAY__ */
