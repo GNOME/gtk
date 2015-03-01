@@ -8,15 +8,15 @@
 # Michal Bukovjan <bukm@centrum.cz>, 2002.
 # Miloslav Trmac <mitr@volny.cz>, 2003, 2004, 2005.
 # Petr Kovar <pknbe@volny.cz>, 2008, 2009, 2010, 2011, 2012, 2013, 2014.
-# Marek Černocký <marek@manet.cz>, 2012, 2013, 2014.
+# Marek Černocký <marek@manet.cz>, 2012, 2013, 2014, 2015.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-properties\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gtk"
 "%2b&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2014-10-25 20:39+0000\n"
-"PO-Revision-Date: 2014-09-30 13:07+0200\n"
+"POT-Creation-Date: 2015-03-01 10:07+0000\n"
+"PO-Revision-Date: 2015-03-01 18:23+0100\n"
 "Last-Translator: Marek Černocký <marek@manet.cz>\n"
 "Language-Team: Czech <gnome-cs-list@gnome.org>\n"
 "Language: cs\n"
@@ -195,7 +195,8 @@ msgstr "Popis"
 
 #: ../gtk/deprecated/gtkaction.c:265
 msgid "The label used for menu items and buttons that activate this action."
-msgstr "Popis používaný pro položky menu a tlačítka, která aktivují tuto akci."
+msgstr ""
+"Popis používaný pro položky nabídky a tlačítka, která aktivují tuto akci."
 
 #: ../gtk/deprecated/gtkaction.c:284
 msgid "Short label"
@@ -226,18 +227,18 @@ msgid "GIcon"
 msgstr "GIcon"
 
 #: ../gtk/deprecated/gtkaction.c:343 ../gtk/deprecated/gtkstatusicon.c:270
-#: ../gtk/gtkcellrendererpixbuf.c:258 ../gtk/gtkimage.c:343
+#: ../gtk/gtkcellrendererpixbuf.c:263 ../gtk/gtkimage.c:343
 msgid "The GIcon being displayed"
 msgstr "Zobrazovaná GIcon"
 
 #: ../gtk/deprecated/gtkaction.c:365 ../gtk/deprecated/gtkstatusicon.c:253
-#: ../gtk/gtkcellrendererpixbuf.c:223 ../gtk/gtkimage.c:325
+#: ../gtk/gtkcellrendererpixbuf.c:228 ../gtk/gtkimage.c:325
 #: ../gtk/gtkprinter.c:170 ../gtk/gtkwindow.c:859
 msgid "Icon Name"
 msgstr "Název ikony"
 
 #: ../gtk/deprecated/gtkaction.c:366 ../gtk/deprecated/gtkstatusicon.c:254
-#: ../gtk/gtkcellrendererpixbuf.c:224 ../gtk/gtkimage.c:326
+#: ../gtk/gtkcellrendererpixbuf.c:229 ../gtk/gtkimage.c:326
 msgid "The name of the icon from the icon theme"
 msgstr "Název ikony z motivu ikon"
 
@@ -262,8 +263,8 @@ msgid ""
 "When TRUE, toolitem proxies for this action are represented in the toolbar "
 "overflow menu."
 msgstr ""
-"Je-li TRUE, proxy toolitem pro tuto akci jsou reprezentovány v menu "
-"přetečení lišty nástrojů."
+"Je-li ZAPNUTO, zástupci nástrojových položek pro tuto akci jsou "
+"reprezentováni v přetékající nabídce nástrojové lišty."
 
 #: ../gtk/deprecated/gtkaction.c:417 ../gtk/gtktoolitem.c:186
 msgid "Visible when vertical"
@@ -295,7 +296,7 @@ msgstr "Skrýt, je-li prázdná"
 
 #: ../gtk/deprecated/gtkaction.c:452
 msgid "When TRUE, empty menu proxies for this action are hidden."
-msgstr "Je-li TRUE, jsou prázdné proxy menu pro tuto akci skryty."
+msgstr "Je-li ZAPNUTO, jsou prázdní zástupci nabídky pro tuto akci skryti."
 
 #: ../gtk/deprecated/gtkaction.c:466 ../gtk/deprecated/gtkactiongroup.c:214
 #: ../gtk/gtkcellrenderer.c:301 ../gtk/gtkwidget.c:1277
@@ -625,7 +626,7 @@ msgstr "Widget obrázku"
 
 #: ../gtk/deprecated/gtkimagemenuitem.c:169
 msgid "Child widget to appear next to the menu text"
-msgstr "Widget potomka zobrazovaný vedle textu menu"
+msgstr "Widget potomka zobrazovaný vedle textu nabídky"
 
 #: ../gtk/deprecated/gtkimagemenuitem.c:185 ../gtk/gtkbutton.c:264
 msgid "Use stock"
@@ -781,7 +782,7 @@ msgstr "Název souboru"
 msgid "Filename to load and display"
 msgstr "Název souboru, který načíst a zobrazit"
 
-#: ../gtk/deprecated/gtkstatusicon.c:245 ../gtk/gtkcellrendererpixbuf.c:187
+#: ../gtk/deprecated/gtkstatusicon.c:245 ../gtk/gtkcellrendererpixbuf.c:192
 #: ../gtk/gtkimage.c:260
 msgid "Stock ID"
 msgstr "Standardní ID"
@@ -798,7 +799,7 @@ msgstr "Typ uložení"
 msgid "The representation being used for image data"
 msgstr "Reprezentace používaná pro data obrázku"
 
-#: ../gtk/deprecated/gtkstatusicon.c:286 ../gtk/gtkcellrendererpixbuf.c:195
+#: ../gtk/deprecated/gtkstatusicon.c:286 ../gtk/gtkcellrendererpixbuf.c:200
 #: ../gtk/gtkcellrendererspinner.c:159 ../gtk/gtkrecentmanager.c:307
 msgid "Size"
 msgstr "Velikost"
@@ -1072,11 +1073,11 @@ msgstr "Velikost pixelů, ke které by měly být ikony přinuceny, nebo nula"
 
 #: ../gtk/deprecated/gtkuimanager.c:460 ../gtk/gtkcombobox.c:834
 msgid "Add tearoffs to menus"
-msgstr "Přidat položku přemístění do menu"
+msgstr "Přidat do nabídky položku pro odtržení"
 
 #: ../gtk/deprecated/gtkuimanager.c:461
 msgid "Whether tearoff menu items should be added to menus"
-msgstr "Jestli mají být do menu přidávány položky pro odtržení"
+msgstr "Jestli mají být do nabídky přidávány položky pro odtržení"
 
 #: ../gtk/deprecated/gtkuimanager.c:468
 msgid "Merged UI definition"
@@ -1231,7 +1232,7 @@ msgstr "Widget akcelerátoru"
 msgid "The widget to be monitored for accelerator changes"
 msgstr "Widget, který sledovat pro změny akcelerátoru"
 
-#: ../gtk/gtkaccessible.c:156 ../gtk/gtkeventcontroller.c:155
+#: ../gtk/gtkaccessible.c:156 ../gtk/gtkeventcontroller.c:157
 #: ../gtk/gtktreeviewcolumn.c:347
 msgid "Widget"
 msgstr "Widget"
@@ -1269,13 +1270,13 @@ msgstr ""
 "konci rodiče"
 
 #: ../gtk/gtkactionbar.c:257 ../gtk/gtkbox.c:336 ../gtk/gtkheaderbar.c:1803
-#: ../gtk/gtknotebook.c:774 ../gtk/gtkpaned.c:336 ../gtk/gtkpopover.c:1317
+#: ../gtk/gtknotebook.c:775 ../gtk/gtkpaned.c:336 ../gtk/gtkpopover.c:1317
 #: ../gtk/gtkstack.c:433 ../gtk/gtktoolitemgroup.c:1674
 msgid "Position"
 msgstr "Pozice"
 
 #: ../gtk/gtkactionbar.c:258 ../gtk/gtkbox.c:337 ../gtk/gtkheaderbar.c:1804
-#: ../gtk/gtknotebook.c:775 ../gtk/gtkstack.c:434
+#: ../gtk/gtknotebook.c:776 ../gtk/gtkstack.c:434
 msgid "The index of the child in the parent"
 msgstr "Index potomka v rodiči"
 
@@ -1348,11 +1349,11 @@ msgstr "Zobrazit výchozí prvek"
 msgid "Whether the combobox should show the default application on top"
 msgstr "Jestli by mělo kombinované pole zobrazit výchozí aplikaci nahoře"
 
-#: ../gtk/gtkappchooserbutton.c:647 ../gtk/gtkappchooserdialog.c:678
+#: ../gtk/gtkappchooserbutton.c:647 ../gtk/gtkappchooserdialog.c:683
 msgid "Heading"
 msgstr "Nadpis"
 
-#: ../gtk/gtkappchooserbutton.c:648 ../gtk/gtkappchooserdialog.c:679
+#: ../gtk/gtkappchooserbutton.c:648 ../gtk/gtkappchooserdialog.c:684
 msgid "The text to show at the top of the dialog"
 msgstr "Text zobrazený ve vrchní části dialogového okna"
 
@@ -1364,59 +1365,59 @@ msgstr "Typ obsahu"
 msgid "The content type used by the open with object"
 msgstr "Typ obsahu použitý otevřením s objektem"
 
-#: ../gtk/gtkappchooserdialog.c:664
+#: ../gtk/gtkappchooserdialog.c:669
 msgid "GFile"
 msgstr "GFile"
 
-#: ../gtk/gtkappchooserdialog.c:665
+#: ../gtk/gtkappchooserdialog.c:670
 msgid "The GFile used by the app chooser dialog"
 msgstr "GFile použité dialogovým oknem výběru v aplikaci"
 
-#: ../gtk/gtkappchooserwidget.c:966
+#: ../gtk/gtkappchooserwidget.c:959
 msgid "Show default app"
 msgstr "Zobrazit výchozí aplikaci"
 
-#: ../gtk/gtkappchooserwidget.c:967
+#: ../gtk/gtkappchooserwidget.c:960
 msgid "Whether the widget should show the default application"
 msgstr "Jestli by měl widget zobrazit výchozí aplikaci"
 
-#: ../gtk/gtkappchooserwidget.c:981
+#: ../gtk/gtkappchooserwidget.c:974
 msgid "Show recommended apps"
 msgstr "Zobrazit doporučené aplikace"
 
-#: ../gtk/gtkappchooserwidget.c:982
+#: ../gtk/gtkappchooserwidget.c:975
 msgid "Whether the widget should show recommended applications"
 msgstr "Jestli by měl widget zobrazit doporučené aplikace"
 
-#: ../gtk/gtkappchooserwidget.c:996
+#: ../gtk/gtkappchooserwidget.c:989
 msgid "Show fallback apps"
 msgstr "Zobrazit záložní aplikace"
 
-#: ../gtk/gtkappchooserwidget.c:997
+#: ../gtk/gtkappchooserwidget.c:990
 msgid "Whether the widget should show fallback applications"
 msgstr "Jestli by měl widget zobrazit záložní aplikace"
 
-#: ../gtk/gtkappchooserwidget.c:1009
+#: ../gtk/gtkappchooserwidget.c:1002
 msgid "Show other apps"
 msgstr "Zobrazit další aplikace"
 
-#: ../gtk/gtkappchooserwidget.c:1010
+#: ../gtk/gtkappchooserwidget.c:1003
 msgid "Whether the widget should show other applications"
 msgstr "Jestli by měl widget zobrazit další aplikace"
 
-#: ../gtk/gtkappchooserwidget.c:1023
+#: ../gtk/gtkappchooserwidget.c:1016
 msgid "Show all apps"
 msgstr "Zobrazit všechny aplikace"
 
-#: ../gtk/gtkappchooserwidget.c:1024
+#: ../gtk/gtkappchooserwidget.c:1017
 msgid "Whether the widget should show all applications"
 msgstr "Jestli by měl widget zobrazit všechny aplikace"
 
-#: ../gtk/gtkappchooserwidget.c:1038
+#: ../gtk/gtkappchooserwidget.c:1031
 msgid "Widget's default text"
 msgstr "Výchozí text widgetu"
 
-#: ../gtk/gtkappchooserwidget.c:1039
+#: ../gtk/gtkappchooserwidget.c:1032
 msgid "The default text appearing when there are no applications"
 msgstr "Výchozí text, který se zobrazí v případě neexistence aplikací"
 
@@ -1442,7 +1443,7 @@ msgstr "Lišta nabídky"
 
 #: ../gtk/gtkapplication.c:946
 msgid "The GMenuModel for the menubar"
-msgstr "GMenuModel lišty nabídky"
+msgstr "GMenuModel nabídkové lišty"
 
 #: ../gtk/gtkapplication.c:952
 msgid "Active window"
@@ -1768,7 +1769,7 @@ msgstr "Posun potomka podle X"
 #: ../gtk/gtkbutton.c:517
 msgid ""
 "How far in the x direction to move the child when the button is depressed"
-msgstr "O kolik posunout potomka ve směru osy X při stisku tlačítka"
+msgstr "O kolik posunout potomka ve směru osy X při zmáčknutí tlačítka"
 
 #: ../gtk/gtkbutton.c:524
 msgid "Child Y Displacement"
@@ -1777,7 +1778,7 @@ msgstr "Posun potomka podle Y"
 #: ../gtk/gtkbutton.c:525
 msgid ""
 "How far in the y direction to move the child when the button is depressed"
-msgstr "O kolik posunout potomka ve směru osy Y při stisku tlačítka"
+msgstr "O kolik posunout potomka ve směru osy Y při zmáčknutí tlačítka"
 
 #: ../gtk/gtkbutton.c:541
 msgid "Displace focus"
@@ -1791,7 +1792,7 @@ msgstr ""
 "Jestli vlastnosti child_displacement_x/_y properties mají mít také vliv na "
 "obdélník zaměření"
 
-#: ../gtk/gtkbutton.c:558 ../gtk/gtkentry.c:836 ../gtk/gtkentry.c:2044
+#: ../gtk/gtkbutton.c:558 ../gtk/gtkentry.c:836 ../gtk/gtkentry.c:2051
 msgid "Inner Border"
 msgstr "Vnitřní okraj"
 
@@ -2212,39 +2213,39 @@ msgstr "Pixbuf zavřeného rozbalovače"
 msgid "Pixbuf for closed expander"
 msgstr "Pixbuf pro zavřený rozbalovač"
 
-#: ../gtk/gtkcellrendererpixbuf.c:174
+#: ../gtk/gtkcellrendererpixbuf.c:179
 msgid "surface"
 msgstr "povrch"
 
-#: ../gtk/gtkcellrendererpixbuf.c:175
+#: ../gtk/gtkcellrendererpixbuf.c:180
 msgid "The surface to render"
 msgstr "Povrch, který vykreslovat"
 
-#: ../gtk/gtkcellrendererpixbuf.c:188
+#: ../gtk/gtkcellrendererpixbuf.c:193
 msgid "The stock ID of the stock icon to render"
 msgstr "Standardní ID zobrazované standardní ikony"
 
-#: ../gtk/gtkcellrendererpixbuf.c:196
+#: ../gtk/gtkcellrendererpixbuf.c:201
 msgid "The GtkIconSize value that specifies the size of the rendered icon"
 msgstr "Hodnota GtkIconSize, která určuje velikost zobrazované ikony"
 
-#: ../gtk/gtkcellrendererpixbuf.c:205
+#: ../gtk/gtkcellrendererpixbuf.c:210
 msgid "Detail"
 msgstr "Detail"
 
-#: ../gtk/gtkcellrendererpixbuf.c:206
+#: ../gtk/gtkcellrendererpixbuf.c:211
 msgid "Render detail to pass to the theme engine"
 msgstr "Detail zobrazení předávaný systému motivů"
 
-#: ../gtk/gtkcellrendererpixbuf.c:239
+#: ../gtk/gtkcellrendererpixbuf.c:244
 msgid "Follow State"
 msgstr "Sledovat stav"
 
-#: ../gtk/gtkcellrendererpixbuf.c:240
+#: ../gtk/gtkcellrendererpixbuf.c:245
 msgid "Whether the rendered pixbuf should be colorized according to the state"
 msgstr "Jestli se má vykreslovaný pixbuf obarvovat podle stavu"
 
-#: ../gtk/gtkcellrendererpixbuf.c:257 ../gtk/gtkimage.c:342
+#: ../gtk/gtkcellrendererpixbuf.c:262 ../gtk/gtkimage.c:342
 #: ../gtk/gtkwindow.c:807
 msgid "Icon"
 msgstr "Ikona"
@@ -2297,7 +2298,7 @@ msgid "The vertical text alignment, from 0 (top) to 1 (bottom)."
 msgstr "Svislé zarovnání textu, od 0 (nahoře) do 1 (dole)."
 
 #: ../gtk/gtkcellrendererprogress.c:225 ../gtk/gtklevelbar.c:1009
-#: ../gtk/gtkprogressbar.c:159 ../gtk/gtkrange.c:447
+#: ../gtk/gtkprogressbar.c:159 ../gtk/gtkrange.c:448
 msgid "Inverted"
 msgstr "Obrácený"
 
@@ -2305,7 +2306,7 @@ msgstr "Obrácený"
 msgid "Invert the direction in which the progress bar grows"
 msgstr "Obrátit směr růstu ukazatele průběhu"
 
-#: ../gtk/gtkcellrendererspin.c:113 ../gtk/gtkrange.c:439
+#: ../gtk/gtkcellrendererspin.c:113 ../gtk/gtkrange.c:440
 #: ../gtk/gtkscalebutton.c:210 ../gtk/gtkspinbutton.c:347
 msgid "Adjustment"
 msgstr "Zarovnání"
@@ -2747,7 +2748,7 @@ msgstr "Nekonzistentní stav"
 msgid "The inconsistent state of the button"
 msgstr "Nekonzistentní stav tlačítka"
 
-#: ../gtk/gtkcellrenderertoggle.c:153 ../gtk/gtklistbox.c:3498
+#: ../gtk/gtkcellrenderertoggle.c:153 ../gtk/gtklistbox.c:3499
 msgid "Activatable"
 msgstr "Aktivovatelné"
 
@@ -2834,7 +2835,7 @@ msgstr "Mezera okolo zaškrtnutí nebo indikátoru přepínače"
 
 #: ../gtk/gtkcheckmenuitem.c:123
 msgid "Whether the menu item is checked"
-msgstr "Jestli je položka menu označena"
+msgstr "Jestli je položka nabídky zaškrtnuta"
 
 #: ../gtk/gtkcheckmenuitem.c:130 ../gtk/gtktogglebutton.c:186
 msgid "Inconsistent"
@@ -2846,11 +2847,11 @@ msgstr "Jestli zobrazovat stav „nekonzistentní“"
 
 #: ../gtk/gtkcheckmenuitem.c:138
 msgid "Draw as radio menu item"
-msgstr "Kreslit jako přepínací položku menu"
+msgstr "Vykreslit jako přepínací položku nabídky"
 
 #: ../gtk/gtkcheckmenuitem.c:139
 msgid "Whether the menu item looks like a radio menu item"
-msgstr "Jestli položka menu vypadá jako přepínací položka menu"
+msgstr "Jestli položka nabídky vypadá jako přepínací položka nabídky"
 
 #: ../gtk/gtkcolorbutton.c:166 ../gtk/gtkcolorchooser.c:87
 msgid "Use alpha"
@@ -2908,7 +2909,7 @@ msgstr "Barva RGBA"
 msgid "Color as RGBA"
 msgstr "Barva v podobě RGBA"
 
-#: ../gtk/gtkcolorswatch.c:763 ../gtk/gtklabel.c:798 ../gtk/gtklistbox.c:3512
+#: ../gtk/gtkcolorswatch.c:763 ../gtk/gtklabel.c:798 ../gtk/gtklistbox.c:3513
 msgid "Selectable"
 msgstr "Vybratelný"
 
@@ -3052,7 +3053,7 @@ msgstr "Vypadá jako seznam"
 #: ../gtk/gtkcombobox.c:1022
 msgid "Whether dropdowns should look like lists rather than menus"
 msgstr ""
-"Jestli mají rozbalené roletové seznamy vypadat jako seznamy a ne jako menu"
+"Jestli mají rozbalené roletové seznamy vypadat jako seznamy a ne jako nabídky"
 
 #: ../gtk/gtkcombobox.c:1038
 msgid "Arrow Size"
@@ -3270,7 +3271,7 @@ msgid ""
 "dialog) when Enter is pressed"
 msgstr ""
 "Jestli aktivovat výchozí widget (například výchozí tlačítko dialogu) při "
-"stisku Enter"
+"zmáčknutí Enter"
 
 #: ../gtk/gtkentry.c:859
 msgid "Width in chars"
@@ -3338,8 +3339,7 @@ msgstr "Varování funkce Caps Lock"
 
 #: ../gtk/gtkentry.c:1014
 msgid "Whether password entries will show a warning when Caps Lock is on"
-msgstr ""
-"Jestli pole s hesly zobrazí varování, pokud byla stisknuta klávesa Caps Lock"
+msgstr "Jestli pole s hesly zobrazí varování, pokud je zapnut Caps Lock"
 
 #: ../gtk/gtkentry.c:1028
 msgid "Progress Fraction"
@@ -3570,7 +3570,7 @@ msgstr "Okraje probíhajícího"
 msgid "Border around the progress bar"
 msgstr "Okraje okolo ukazatele průběhu"
 
-#: ../gtk/gtkentry.c:2045
+#: ../gtk/gtkentry.c:2052
 msgid "Border between text and frame."
 msgstr "Okraj mezi textem a rámem."
 
@@ -3663,15 +3663,15 @@ msgstr ""
 "Jestli je okno eventbox chytající události nad oknem widgetu potomka místo "
 "pod ním."
 
-#: ../gtk/gtkeventcontroller.c:156
+#: ../gtk/gtkeventcontroller.c:158
 msgid "Widget the gesture relates to"
 msgstr "Widget, ke kterému se vztahuje gesto"
 
-#: ../gtk/gtkeventcontroller.c:170
+#: ../gtk/gtkeventcontroller.c:172
 msgid "Propagation phase"
 msgstr "Fáze přenosu"
 
-#: ../gtk/gtkeventcontroller.c:171
+#: ../gtk/gtkeventcontroller.c:173
 msgid "Propagation phase at which this controller is run"
 msgstr "Fáze přenosu, během které tento řadič běží"
 
@@ -3774,7 +3774,7 @@ msgstr "Filtr"
 msgid "The current filter for selecting which files are displayed"
 msgstr "Aktuální filtr pro výběr, které soubory se zobrazují"
 
-#: ../gtk/gtkfilechooser.c:388 ../gtk/gtkplacessidebar.c:4525
+#: ../gtk/gtkfilechooser.c:388 ../gtk/gtkplacessidebar.c:4600
 msgid "Local Only"
 msgstr "Jen místní"
 
@@ -3871,21 +3871,21 @@ msgstr "Pozice Y"
 msgid "Y position of child widget"
 msgstr "Pozice widgetu potomka na ose Y"
 
-#: ../gtk/gtkflowbox.c:3664 ../gtk/gtkiconview.c:400 ../gtk/gtklistbox.c:415
+#: ../gtk/gtkflowbox.c:3664 ../gtk/gtkiconview.c:400 ../gtk/gtklistbox.c:416
 #: ../gtk/gtktreeselection.c:131
 msgid "Selection mode"
 msgstr "Režim výběru"
 
-#: ../gtk/gtkflowbox.c:3665 ../gtk/gtkiconview.c:401 ../gtk/gtklistbox.c:416
+#: ../gtk/gtkflowbox.c:3665 ../gtk/gtkiconview.c:401 ../gtk/gtklistbox.c:417
 msgid "The selection mode"
 msgstr "Režim výběru"
 
-#: ../gtk/gtkflowbox.c:3678 ../gtk/gtkiconview.c:657 ../gtk/gtklistbox.c:423
+#: ../gtk/gtkflowbox.c:3678 ../gtk/gtkiconview.c:657 ../gtk/gtklistbox.c:424
 #: ../gtk/gtktreeview.c:1210
 msgid "Activate on Single Click"
 msgstr "Aktivovat jedním kliknutím"
 
-#: ../gtk/gtkflowbox.c:3679 ../gtk/gtkiconview.c:658 ../gtk/gtklistbox.c:424
+#: ../gtk/gtkflowbox.c:3679 ../gtk/gtkiconview.c:658 ../gtk/gtklistbox.c:425
 #: ../gtk/gtktreeview.c:1211
 msgid "Activate row on a single click"
 msgstr "Aktivovat řádek jedním kliknutím"
@@ -4026,6 +4026,16 @@ msgstr "Počet bodů potřebných ke spuštění gesta"
 #: ../gtk/gtkgesture.c:712 ../gtk/gtkgesture.c:713
 msgid "GdkWindow to receive events about"
 msgstr "GdkWindow, o kterém se mají získat události"
+
+#: ../gtk/gtkgesturelongpress.c:284
+#| msgid "Scale factor"
+msgid "Delay factor"
+msgstr "Faktor prodlevy"
+
+#: ../gtk/gtkgesturelongpress.c:285
+#, fuzzy
+msgid "Factor by which to modify the default timeout"
+msgstr "Faktor, kterým se upravuje výchozí časový limit"
 
 #: ../gtk/gtkgesturepan.c:238
 msgid "Allowed orientations"
@@ -4425,7 +4435,7 @@ msgstr "Widget akcelerátoru"
 
 #: ../gtk/gtklabel.c:815
 msgid "The widget to be activated when the label's mnemonic key is pressed"
-msgstr "Widget aktivovaný při stisku klávesové zkratky popisu"
+msgstr "Widget aktivovaný při zmáčknutí klávesové zkratky popisu"
 
 #: ../gtk/gtklabel.c:861
 msgid ""
@@ -4547,11 +4557,11 @@ msgstr "Navštívený"
 msgid "Whether this link has been visited."
 msgstr "Jestli byl tento odkaz navštíven."
 
-#: ../gtk/gtklistbox.c:3499
+#: ../gtk/gtklistbox.c:3500
 msgid "Whether this row can be activated"
 msgstr "Jestli lze tento řádek aktivovat"
 
-#: ../gtk/gtklistbox.c:3513
+#: ../gtk/gtklistbox.c:3514
 msgid "Whether this row can be selected"
 msgstr "Jestli lze tento řádek vybrat"
 
@@ -4624,7 +4634,7 @@ msgstr "Směr balení"
 
 #: ../gtk/gtkmenubar.c:191
 msgid "The pack direction of the menubar"
-msgstr "Směr balení lišty menu"
+msgstr "Směr balení nabídkové lišty"
 
 #: ../gtk/gtkmenubar.c:207
 msgid "Child Pack direction"
@@ -4632,11 +4642,11 @@ msgstr "Směr balení potomků"
 
 #: ../gtk/gtkmenubar.c:208
 msgid "The child pack direction of the menubar"
-msgstr "Směr balení potomků lišty menu"
+msgstr "Směr balení potomků nabídkové lišty"
 
 #: ../gtk/gtkmenubar.c:217
 msgid "Style of bevel around the menubar"
-msgstr "Styl rámu okolo lišty menu"
+msgstr "Styl rámu okolo nabídkové lišty"
 
 #: ../gtk/gtkmenubar.c:233 ../gtk/gtktoolbar.c:590
 msgid "Internal padding"
@@ -4644,7 +4654,7 @@ msgstr "Interní doplnění"
 
 #: ../gtk/gtkmenubar.c:234
 msgid "Amount of border space between the menubar shadow and the menu items"
-msgstr "Velikost místa mezi stínem lišty menu a položkami menu"
+msgstr "Velikost místa mezi stínem nabídkové lišty a položkami nabídky"
 
 #: ../gtk/gtkmenubutton.c:511
 msgid "Popup"
@@ -4725,7 +4735,7 @@ msgid ""
 "A title that may be displayed by the window manager when this menu is torn-"
 "off"
 msgstr ""
-"Titulek, který může být zobrazen správcem oken, když je toto menu odtrženo"
+"Titulek, který může být zobrazen správcem oken, když je tato nabídka odtržena"
 
 #: ../gtk/gtkmenu.c:635
 msgid "Tearoff State"
@@ -4733,7 +4743,7 @@ msgstr "Stav odtrhnutí"
 
 #: ../gtk/gtkmenu.c:636
 msgid "A boolean that indicates whether the menu is torn-off"
-msgstr "Booleovská hodnota, která určuje, jestli je menu odtrženo"
+msgstr "Booleovská hodnota, která určuje, jestli je nabídka odtržena"
 
 #: ../gtk/gtkmenu.c:650
 msgid "Monitor"
@@ -4769,7 +4779,7 @@ msgstr "Svislé doplnění"
 
 #: ../gtk/gtkmenu.c:707
 msgid "Extra space at the top and bottom of the menu"
-msgstr "Místo navíc nad a pod menu"
+msgstr "Místo navíc nad a pod nabídkou"
 
 #: ../gtk/gtkmenu.c:716
 msgid "Vertical Offset"
@@ -4779,7 +4789,8 @@ msgstr "Svislé posunutí"
 msgid ""
 "When the menu is a submenu, position it this number of pixels offset "
 "vertically"
-msgstr "Když menu je podmenu, umístit je svisle posunuté o tolik pixelů"
+msgstr ""
+"Když je nabídka podnabídkou, umístit je svisle posunutou o tolik pixelů"
 
 #: ../gtk/gtkmenu.c:725
 msgid "Horizontal Offset"
@@ -4789,7 +4800,8 @@ msgstr "Vodorovné posunutí"
 msgid ""
 "When the menu is a submenu, position it this number of pixels offset "
 "horizontally"
-msgstr "Když menu je podmenu, umístit je vodorovně posunuté o tolik pixelů"
+msgstr ""
+"Když nabídka podnabídkou, umístit je vodorovně posunutou o tolik pixelů"
 
 #: ../gtk/gtkmenu.c:734
 msgid "Double Arrows"
@@ -4883,15 +4895,16 @@ msgstr "Vzít zaměření"
 #: ../gtk/gtkmenushell.c:416
 msgid "A boolean that determines whether the menu grabs the keyboard focus"
 msgstr ""
-"Booleovská hodnota, která určuje, jestli menu zachycuje zaměření klávesnice"
+"Pravdivostní hodnota, která určuje, jestli nabídka zachycuje zaměření "
+"klávesnice"
 
 #: ../gtk/gtkmenutoolbutton.c:266
 msgid "Menu"
-msgstr "Menu"
+msgstr "Nabídka"
 
 #: ../gtk/gtkmenutoolbutton.c:267
 msgid "The dropdown menu"
-msgstr "Rozbalovací menu"
+msgstr "Rozbalovací nabídka"
 
 #: ../gtk/gtkmessagedialog.c:174
 msgid "label border"
@@ -4974,187 +4987,187 @@ msgstr "Zda je zobrazováno dialogové okno"
 msgid "The screen where this window will be displayed."
 msgstr "Obrazovka, na které se toto okno zobrazí."
 
-#: ../gtk/gtknotebook.c:699
+#: ../gtk/gtknotebook.c:700
 msgid "Page"
 msgstr "Strana"
 
-#: ../gtk/gtknotebook.c:700
+#: ../gtk/gtknotebook.c:701
 msgid "The index of the current page"
 msgstr "Index aktuální strany"
 
-#: ../gtk/gtknotebook.c:708
+#: ../gtk/gtknotebook.c:709
 msgid "Tab Position"
 msgstr "Umístění karty"
 
-#: ../gtk/gtknotebook.c:709
+#: ../gtk/gtknotebook.c:710
 msgid "Which side of the notebook holds the tabs"
 msgstr "Která strana notesu obsahuje karty"
 
-#: ../gtk/gtknotebook.c:716
+#: ../gtk/gtknotebook.c:717
 msgid "Show Tabs"
 msgstr "Zobrazovat karty"
 
-#: ../gtk/gtknotebook.c:717
+#: ../gtk/gtknotebook.c:718
 msgid "Whether tabs should be shown"
 msgstr "Jestli se mají zobrazovat karty"
 
-#: ../gtk/gtknotebook.c:723
+#: ../gtk/gtknotebook.c:724
 msgid "Show Border"
 msgstr "Zobrazovat okraj"
 
-#: ../gtk/gtknotebook.c:724
+#: ../gtk/gtknotebook.c:725
 msgid "Whether the border should be shown"
 msgstr "Jestli se má zobrazovat okraj"
 
-#: ../gtk/gtknotebook.c:730
+#: ../gtk/gtknotebook.c:731
 msgid "Scrollable"
 msgstr "Posunovatelné"
 
-#: ../gtk/gtknotebook.c:731
+#: ../gtk/gtknotebook.c:732
 msgid "If TRUE, scroll arrows are added if there are too many tabs to fit"
 msgstr "Je-li zapnuto, jsou přidány posuvné šipky, pokud je příliš mnoho karet"
 
-#: ../gtk/gtknotebook.c:737
-msgid "Enable Popup"
-msgstr "Povolit kontextové menu"
-
 #: ../gtk/gtknotebook.c:738
+msgid "Enable Popup"
+msgstr "Povolit kontextové nabídky"
+
+#: ../gtk/gtknotebook.c:739
 msgid ""
 "If TRUE, pressing the right mouse button on the notebook pops up a menu that "
 "you can use to go to a page"
 msgstr ""
-"Je-li zapnuto, stisk pravého tlačítka myši na notesu se zobrazí menu, které "
-"můžete použít pro přechod mezi stránkami"
+"Je-li zapnuto, zmáčknutí pravého tlačítka myši na notesu se zobrazí nabídky, "
+"které můžete použít pro přechod mezi stránkami"
 
-#: ../gtk/gtknotebook.c:752
+#: ../gtk/gtknotebook.c:753
 msgid "Group Name"
 msgstr "Název skupiny"
 
-#: ../gtk/gtknotebook.c:753
+#: ../gtk/gtknotebook.c:754
 msgid "Group name for tab drag and drop"
 msgstr "Název skupiny táhnutí a puštění karet"
 
-#: ../gtk/gtknotebook.c:760
+#: ../gtk/gtknotebook.c:761
 msgid "Tab label"
 msgstr "Popisek karty"
 
-#: ../gtk/gtknotebook.c:761
+#: ../gtk/gtknotebook.c:762
 msgid "The string displayed on the child's tab label"
 msgstr "Řetězec zobrazovaný na popisku karty potomka"
 
-#: ../gtk/gtknotebook.c:767
+#: ../gtk/gtknotebook.c:768
 msgid "Menu label"
 msgstr "Popisek nabídky"
 
-#: ../gtk/gtknotebook.c:768
+#: ../gtk/gtknotebook.c:769
 msgid "The string displayed in the child's menu entry"
-msgstr "Řetězec zobrazovaný v položce menu potomka"
+msgstr "Řetězec zobrazovaný v položce nabídky potomka"
 
-#: ../gtk/gtknotebook.c:781
+#: ../gtk/gtknotebook.c:782
 msgid "Tab expand"
 msgstr "Rozbalit kartu"
 
-#: ../gtk/gtknotebook.c:782
+#: ../gtk/gtknotebook.c:783
 msgid "Whether to expand the child's tab"
 msgstr "Jestli rozbalovat kartu potomků"
 
-#: ../gtk/gtknotebook.c:788
+#: ../gtk/gtknotebook.c:789
 msgid "Tab fill"
 msgstr "Vyplnění kartami"
 
-#: ../gtk/gtknotebook.c:789
+#: ../gtk/gtknotebook.c:790
 msgid "Whether the child's tab should fill the allocated area"
 msgstr "Jestli by měla karta potomků vyplnit přidělený prostor"
 
-#: ../gtk/gtknotebook.c:796
+#: ../gtk/gtknotebook.c:797
 msgid "Tab reorderable"
 msgstr "Karta s měnitelným pořadím"
 
-#: ../gtk/gtknotebook.c:797
+#: ../gtk/gtknotebook.c:798
 msgid "Whether the tab is reorderable by user action"
 msgstr "Jestli má karta měnitelné pořadí z důvodu uživatelské akce"
 
-#: ../gtk/gtknotebook.c:803
+#: ../gtk/gtknotebook.c:804
 msgid "Tab detachable"
 msgstr "Odpojitelná karta"
 
-#: ../gtk/gtknotebook.c:804
+#: ../gtk/gtknotebook.c:805
 msgid "Whether the tab is detachable"
 msgstr "Jestli je karta odpojitelná"
 
-#: ../gtk/gtknotebook.c:819 ../gtk/gtkscrollbar.c:101
+#: ../gtk/gtknotebook.c:820 ../gtk/gtkscrollbar.c:101
 msgid "Secondary backward stepper"
 msgstr "Druhotná šipka pro krok dozadu"
 
-#: ../gtk/gtknotebook.c:820
+#: ../gtk/gtknotebook.c:821
 msgid ""
 "Display a second backward arrow button on the opposite end of the tab area"
 msgstr ""
 "Zobrazovat tlačítko s druhou šipkou vzad na opačném konci oblasti karet"
 
-#: ../gtk/gtknotebook.c:835 ../gtk/gtkscrollbar.c:108
+#: ../gtk/gtknotebook.c:836 ../gtk/gtkscrollbar.c:108
 msgid "Secondary forward stepper"
 msgstr "Druhotná šipka pro krok dopředu"
 
-#: ../gtk/gtknotebook.c:836
+#: ../gtk/gtknotebook.c:837
 msgid ""
 "Display a second forward arrow button on the opposite end of the tab area"
 msgstr ""
 "Zobrazovat tlačítko s druhou šipkou vpřed na opačném konci oblasti karet"
 
-#: ../gtk/gtknotebook.c:850 ../gtk/gtkscrollbar.c:87
+#: ../gtk/gtknotebook.c:851 ../gtk/gtkscrollbar.c:87
 msgid "Backward stepper"
 msgstr "Šipka pro krok vzad"
 
-#: ../gtk/gtknotebook.c:851 ../gtk/gtkscrollbar.c:88
+#: ../gtk/gtknotebook.c:852 ../gtk/gtkscrollbar.c:88
 msgid "Display the standard backward arrow button"
 msgstr "Zobrazovat tlačítko se standardní šipkou vzad"
 
-#: ../gtk/gtknotebook.c:865 ../gtk/gtkscrollbar.c:94
+#: ../gtk/gtknotebook.c:866 ../gtk/gtkscrollbar.c:94
 msgid "Forward stepper"
 msgstr "Šipka pro krok vpřed"
 
-#: ../gtk/gtknotebook.c:866 ../gtk/gtkscrollbar.c:95
+#: ../gtk/gtknotebook.c:867 ../gtk/gtkscrollbar.c:95
 msgid "Display the standard forward arrow button"
 msgstr "Zobrazovat tlačítko se standardní šipkou vpřed"
 
-#: ../gtk/gtknotebook.c:880
+#: ../gtk/gtknotebook.c:881
 msgid "Tab overlap"
 msgstr "Překryv karty"
 
-#: ../gtk/gtknotebook.c:881
+#: ../gtk/gtknotebook.c:882
 msgid "Size of tab overlap area"
 msgstr "Velikost překryvné oblasti karty"
 
-#: ../gtk/gtknotebook.c:896
+#: ../gtk/gtknotebook.c:897
 msgid "Tab curvature"
 msgstr "Zakřivení karet"
 
-#: ../gtk/gtknotebook.c:897
+#: ../gtk/gtknotebook.c:898
 msgid "Size of tab curvature"
 msgstr "Velikost zakřivení karty"
 
-#: ../gtk/gtknotebook.c:913
+#: ../gtk/gtknotebook.c:914
 msgid "Arrow spacing"
 msgstr "Rozestup šipky"
 
-#: ../gtk/gtknotebook.c:914
+#: ../gtk/gtknotebook.c:915
 msgid "Scroll arrow spacing"
 msgstr "Rozestup šipky posunu"
 
-#: ../gtk/gtknotebook.c:930
+#: ../gtk/gtknotebook.c:931
 msgid "Initial gap"
 msgstr "Počáteční mezera"
 
-#: ../gtk/gtknotebook.c:931
+#: ../gtk/gtknotebook.c:932
 msgid "Initial gap before the first tab"
 msgstr "Počáteční mezera před první kartou"
 
-#: ../gtk/gtknotebook.c:949
+#: ../gtk/gtknotebook.c:950
 msgid "Tab gap"
 msgstr "Mezera karty"
 
-#: ../gtk/gtknotebook.c:950
+#: ../gtk/gtknotebook.c:951
 msgid "Active tab is drawn with a gap at the bottom"
 msgstr "Aktivní karta je vykreslena s mezerou v dolní části"
 
@@ -5215,19 +5228,19 @@ msgstr "Zmenšovat"
 msgid "If TRUE, the child can be made smaller than its requisition"
 msgstr "Je-li zapnuto, může být potomek menší, než jeho požadavek"
 
-#: ../gtk/gtkplacessidebar.c:4494
+#: ../gtk/gtkplacessidebar.c:4569
 msgid "Location to Select"
 msgstr "Umístění, které se má vybrat"
 
-#: ../gtk/gtkplacessidebar.c:4495
+#: ../gtk/gtkplacessidebar.c:4570
 msgid "The location to highlight in the sidebar"
 msgstr "Umístění, které se má zvýraznit v postranní liště"
 
-#: ../gtk/gtkplacessidebar.c:4500
+#: ../gtk/gtkplacessidebar.c:4575
 msgid "Open Flags"
 msgstr "Otevírací příznaky"
 
-#: ../gtk/gtkplacessidebar.c:4501
+#: ../gtk/gtkplacessidebar.c:4576
 msgid ""
 "Modes in which the calling application can open locations selected in the "
 "sidebar"
@@ -5235,19 +5248,19 @@ msgstr ""
 "Režimy, ve kterých volající aplikace může otevřít umístění vybrané v "
 "postranní liště"
 
-#: ../gtk/gtkplacessidebar.c:4507
+#: ../gtk/gtkplacessidebar.c:4582
 msgid "Show 'Desktop'"
 msgstr "Zobrazovat „Plochu“"
 
-#: ../gtk/gtkplacessidebar.c:4508
+#: ../gtk/gtkplacessidebar.c:4583
 msgid "Whether the sidebar includes a builtin shortcut to the Desktop folder"
 msgstr "Jestli má postranní panel obsahovat zabudovaný odkaz na složku Plocha"
 
-#: ../gtk/gtkplacessidebar.c:4513
+#: ../gtk/gtkplacessidebar.c:4588
 msgid "Show 'Connect to Server'"
 msgstr "Zobrazovat „Připojit k serveru“"
 
-#: ../gtk/gtkplacessidebar.c:4514
+#: ../gtk/gtkplacessidebar.c:4589
 msgid ""
 "Whether the sidebar includes a builtin shortcut to a 'Connect to server' "
 "dialog"
@@ -5255,17 +5268,17 @@ msgstr ""
 "Jestli má postranní panel obsahovat zabudovaný odkaz na dialogové okno "
 "„Připojit k serveru“"
 
-#: ../gtk/gtkplacessidebar.c:4519
+#: ../gtk/gtkplacessidebar.c:4594
 msgid "Show 'Enter Location'"
 msgstr "Zobrazit „Zadat umístění“"
 
-#: ../gtk/gtkplacessidebar.c:4520
+#: ../gtk/gtkplacessidebar.c:4595
 msgid ""
 "Whether the sidebar includes a builtin shortcut to manually enter a location"
 msgstr ""
 "Jestli má postranní panel obsahovat zabudovaný odkaz na ruční zadání umístění"
 
-#: ../gtk/gtkplacessidebar.c:4526
+#: ../gtk/gtkplacessidebar.c:4601
 msgid "Whether the sidebar only includes local files"
 msgstr "Jestli má postranní panel obsahovat jen místní soubory"
 
@@ -5711,132 +5724,132 @@ msgstr "Položka přepínacího tlačítka, do jejíž skupiny patří tento wid
 msgid "The radio tool button whose group this button belongs to."
 msgstr "Přepínací tlačítko, do jehož skupiny patří toto tlačítko."
 
-#: ../gtk/gtkrange.c:440
+#: ../gtk/gtkrange.c:441
 msgid "The GtkAdjustment that contains the current value of this range object"
 msgstr "GtkAdjustment, který obsahuje aktuální hodnotu tohoto objektu rozsahu"
 
-#: ../gtk/gtkrange.c:448
+#: ../gtk/gtkrange.c:449
 msgid "Invert direction slider moves to increase range value"
 msgstr "Obrátit směr pohybu posuvníku pro zvýšení hodnoty rozsahu"
 
-#: ../gtk/gtkrange.c:455
+#: ../gtk/gtkrange.c:456
 msgid "Lower stepper sensitivity"
 msgstr "Nižší kroková citlivost"
 
-#: ../gtk/gtkrange.c:456
+#: ../gtk/gtkrange.c:457
 msgid ""
 "The sensitivity policy for the stepper that points to the adjustment's lower "
 "side"
 msgstr "Pravidlo citlivosti krokování, které míří ke spodní straně zarovnání"
 
-#: ../gtk/gtkrange.c:464
+#: ../gtk/gtkrange.c:465
 msgid "Upper stepper sensitivity"
 msgstr "Vyšší kroková citlivost"
 
-#: ../gtk/gtkrange.c:465
+#: ../gtk/gtkrange.c:466
 msgid ""
 "The sensitivity policy for the stepper that points to the adjustment's upper "
 "side"
 msgstr "Pravidlo citlivosti krokování, které míří k horní straně zarovnání"
 
-#: ../gtk/gtkrange.c:482
+#: ../gtk/gtkrange.c:483
 msgid "Show Fill Level"
 msgstr "Zobrazit úroveň zaplnění"
 
-#: ../gtk/gtkrange.c:483
+#: ../gtk/gtkrange.c:484
 msgid "Whether to display a fill level indicator graphics on trough."
 msgstr "Zda zobrazovat indikátor úrovně zaplnění v korytě."
 
-#: ../gtk/gtkrange.c:499
+#: ../gtk/gtkrange.c:500
 msgid "Restrict to Fill Level"
 msgstr "Omezit na úroveň zaplnění"
 
-#: ../gtk/gtkrange.c:500
+#: ../gtk/gtkrange.c:501
 msgid "Whether to restrict the upper boundary to the fill level."
 msgstr "Zda omezit horní hranici k úrovni zaplnění."
 
-#: ../gtk/gtkrange.c:515
+#: ../gtk/gtkrange.c:516
 msgid "Fill Level"
 msgstr "Úroveň zaplnění"
 
-#: ../gtk/gtkrange.c:516
+#: ../gtk/gtkrange.c:517
 msgid "The fill level."
 msgstr "Úroveň zaplnění."
 
-#: ../gtk/gtkrange.c:533
+#: ../gtk/gtkrange.c:534
 msgid "Round Digits"
 msgstr "Zaokrouhlené číslice"
 
-#: ../gtk/gtkrange.c:534
+#: ../gtk/gtkrange.c:535
 msgid "The number of digits to round the value to."
 msgstr "Počet číslic, na který se má hodnota zaokrouhlit."
 
-#: ../gtk/gtkrange.c:540 ../gtk/gtkswitch.c:957
+#: ../gtk/gtkrange.c:541 ../gtk/gtkswitch.c:957
 msgid "Slider Width"
 msgstr "Šířka ukazovátka"
 
-#: ../gtk/gtkrange.c:541
+#: ../gtk/gtkrange.c:542
 msgid "Width of scrollbar or scale thumb"
 msgstr "Šířka posuvníku nebo ukazovátka"
 
-#: ../gtk/gtkrange.c:548
+#: ../gtk/gtkrange.c:549
 msgid "Trough Border"
 msgstr "Okraje koryta"
 
-#: ../gtk/gtkrange.c:549
+#: ../gtk/gtkrange.c:550
 msgid "Spacing between thumb/steppers and outer trough bevel"
 msgstr "Mezera mezi ukazovátkem/tlačítky a vnějším obrysem koryta"
 
-#: ../gtk/gtkrange.c:556
+#: ../gtk/gtkrange.c:557
 msgid "Stepper Size"
 msgstr "Velikost tlačítek"
 
-#: ../gtk/gtkrange.c:557
+#: ../gtk/gtkrange.c:558
 msgid "Length of step buttons at ends"
 msgstr "Délka tlačítek na koncích pro krokování"
 
-#: ../gtk/gtkrange.c:570
+#: ../gtk/gtkrange.c:571
 msgid "Stepper Spacing"
 msgstr "Mezery mezi tlačítky"
 
-#: ../gtk/gtkrange.c:571
+#: ../gtk/gtkrange.c:572
 msgid "Spacing between step buttons and thumb"
 msgstr "Mezery mezi tlačítky pro krokování a ukazovátkem"
 
-#: ../gtk/gtkrange.c:578
+#: ../gtk/gtkrange.c:579
 msgid "Arrow X Displacement"
 msgstr "Posun šipky X"
 
-#: ../gtk/gtkrange.c:579
+#: ../gtk/gtkrange.c:580
 msgid ""
 "How far in the x direction to move the arrow when the button is depressed"
-msgstr "O kolik posunout šipku ve směru osy X při stisku tlačítka"
+msgstr "O kolik posunout šipku ve směru osy X při zmáčknutí tlačítka"
 
-#: ../gtk/gtkrange.c:586
+#: ../gtk/gtkrange.c:587
 msgid "Arrow Y Displacement"
 msgstr "Posun šipky Y"
 
-#: ../gtk/gtkrange.c:587
+#: ../gtk/gtkrange.c:588
 msgid ""
 "How far in the y direction to move the arrow when the button is depressed"
-msgstr "O kolik posunout šipku ve směru osy Y při stisku tlačítka"
+msgstr "O kolik posunout šipku ve směru osy Y při zmáčknutí tlačítka"
 
-#: ../gtk/gtkrange.c:603
+#: ../gtk/gtkrange.c:604
 msgid "Trough Under Steppers"
 msgstr "Koryto pod kroky"
 
-#: ../gtk/gtkrange.c:604
+#: ../gtk/gtkrange.c:605
 msgid ""
 "Whether to draw trough for full length of range or exclude the steppers and "
 "spacing"
 msgstr ""
 "Zda kreslit koryto u plné délky rozsahu, nebo vyřadit krokování a rozestup"
 
-#: ../gtk/gtkrange.c:617
+#: ../gtk/gtkrange.c:618
 msgid "Arrow scaling"
 msgstr "Škálování šipky"
 
-#: ../gtk/gtkrange.c:618
+#: ../gtk/gtkrange.c:619
 msgid "Arrow scaling with regard to scroll button size"
 msgstr "Škálování šipky s přihlédnutím k velikosti tlačítka posunu"
 
@@ -6290,11 +6303,11 @@ msgstr "Název motivu kláves, který se má načíst"
 
 #: ../gtk/gtksettings.c:483
 msgid "Menu bar accelerator"
-msgstr "Akcelerátor lišty s menu"
+msgstr "Akcelerátor nabídkové lišty"
 
 #: ../gtk/gtksettings.c:484
 msgid "Keybinding to activate the menu bar"
-msgstr "Klávesová zkratka pro aktivaci lišty s menu"
+msgstr "Klávesová zkratka pro aktivaci nabídkové lišty"
 
 #: ../gtk/gtksettings.c:492
 msgid "Drag threshold"
@@ -6319,7 +6332,7 @@ msgstr "Velikosti ikon"
 # FIXME: s/$/)/
 #: ../gtk/gtksettings.c:527
 msgid "List of icon sizes (gtk-menu=16,16:gtk-button=20,20..."
-msgstr "Seznam velikostí ikon (gtk-menu=16,16;gtk-button=20,20…"
+msgstr "Seznam velikostí ikon (gtk-menu=16,16;gtk-button=20,20…)"
 
 #: ../gtk/gtksettings.c:535
 msgid "GTK Modules"
@@ -6442,7 +6455,7 @@ msgstr "Časový limit spuštění"
 
 #: ../gtk/gtksettings.c:674
 msgid "Starting value for timeouts, when button is pressed"
-msgstr "Počáteční hodnota časových limitů, je-li stisknuto tlačítko"
+msgstr "Počáteční hodnota časových limitů, je-li zmáčknuto tlačítko"
 
 #: ../gtk/gtksettings.c:688
 msgid "Repeat timeout"
@@ -6450,7 +6463,7 @@ msgstr "Opakovat časový limit"
 
 #: ../gtk/gtksettings.c:689
 msgid "Repeat value for timeouts, when button is pressed"
-msgstr "Opakovací hodnota časových limitů, je-li stisknuto tlačítko"
+msgstr "Opakovací hodnota časových limitů, je-li zmáčknuto tlačítko"
 
 #: ../gtk/gtksettings.c:703
 msgid "Expand timeout"
@@ -6681,7 +6694,7 @@ msgid ""
 "presses the mnemonic activator."
 msgstr ""
 "Zda se má mnemotechnika automaticky zobrazovat a skrývat, pokud uživatel "
-"stiskne aktivátor mnemotechniky."
+"zmáčkne aktivátor mnemotechniky."
 
 #: ../gtk/gtksettings.c:1251
 msgid "Primary button warps slider"
@@ -6739,19 +6752,19 @@ msgstr "Jak dlouho ukazovat znak posledního vstupu ve skrytých vstupech"
 
 #: ../gtk/gtksettings.c:1359
 msgid "Show menu images"
-msgstr "Zobrazovat v menu obrázky"
+msgstr "Zobrazovat v nabídce obrázky"
 
 #: ../gtk/gtksettings.c:1360
 msgid "Whether images should be shown in menus"
-msgstr "Jestli se mají v menu zobrazovat obrázky"
+msgstr "Jestli se mají v nabídce zobrazovat obrázky"
 
 #: ../gtk/gtksettings.c:1375
 msgid "Delay before drop down menus appear"
-msgstr "Prodleva před zobrazením rozbalovacího menu"
+msgstr "Prodleva před zobrazením rozbalovacího nabídky"
 
 #: ../gtk/gtksettings.c:1376
 msgid "Delay before the submenus of a menu bar appear"
-msgstr "Prodleva před zobrazením podmenu lišty menu"
+msgstr "Prodleva před zobrazením podnabídky v nabídkové liště"
 
 #: ../gtk/gtksettings.c:1395
 msgid "Scrolled Window Placement"
@@ -6773,28 +6786,30 @@ msgstr "Lze měnit akcelerátory"
 msgid ""
 "Whether menu accelerators can be changed by pressing a key over the menu item"
 msgstr ""
-"Jestli mohou akcelerátory menu být změněny stiskem klávesy nad položkou menu"
+"Jestli mohou akcelerátory nabídky být změněny zmáčknutím klávesy nad "
+"položkou nabídky"
 
 #: ../gtk/gtksettings.c:1428
 msgid "Delay before submenus appear"
-msgstr "Prodleva před zobrazením podmenu"
+msgstr "Prodleva před zobrazením podnabídky"
 
 #: ../gtk/gtksettings.c:1429
 msgid ""
 "Minimum time the pointer must stay over a menu item before the submenu appear"
 msgstr ""
-"Minimální doba, kterou musí zůstat ukazatel nad položku menu, než se objeví "
-"podmenu"
+"Minimální doba, kterou musí zůstat ukazatel nad položku nabídky, než se "
+"objeví podnabídka"
 
 #: ../gtk/gtksettings.c:1445
 msgid "Delay before hiding a submenu"
-msgstr "Prodleva před skrytím podmenu"
+msgstr "Prodleva před skrytím podpodnabídky"
 
 #: ../gtk/gtksettings.c:1446
 msgid ""
 "The time before hiding a submenu when the pointer is moving towards the "
 "submenu"
-msgstr "Doba před skrytím podmenu, pokud se ukazatel pohybuje směrem k podmenu"
+msgstr ""
+"Doba před skrytím podnabídky, pokud se ukazatel pohybuje směrem k podnabídce"
 
 #: ../gtk/gtksettings.c:1456
 msgid "Whether to select the contents of a selectable label when it is focused"
@@ -6919,13 +6934,13 @@ msgstr "Zda si GTK+ pamatuje nedávné soubory"
 
 #: ../gtk/gtksettings.c:1700
 msgid "Long press time"
-msgstr "Doba dlouhého stisknutí"
+msgstr "Doba dlouhého zmáčknutí"
 
 #: ../gtk/gtksettings.c:1701
 msgid ""
 "Time for a button/touch press to be considered a long press (in milliseconds)"
 msgstr ""
-"Doba, po které považovat stisknutí tlačítka či dotyk za dlouhé stisknutí (v "
+"Doba, po které považovat zmáčknutí tlačítka či dotyk za dlouhé zmáčknutí (v "
 "milisekundách)"
 
 #: ../gtk/gtksizegroup.c:323 ../gtk/gtktreeselection.c:130
@@ -7057,7 +7072,7 @@ msgstr "Vyžaduje pozornost"
 msgid "Whether this page needs attention"
 msgstr "Jestli tato stránka vyžaduje pozornost"
 
-#: ../gtk/gtkstackswitcher.c:523 ../gtk/gtkstackswitcher.c:524
+#: ../gtk/gtkstackswitcher.c:521 ../gtk/gtkstackswitcher.c:522
 msgid "Stack"
 msgstr "Zásobník"
 
@@ -7525,7 +7540,7 @@ msgstr "Barva, kterou kreslit podtržení indikující chybu"
 
 #: ../gtk/gtktogglebutton.c:179 ../gtk/gtktoggletoolbutton.c:128
 msgid "If the toggle button should be pressed in"
-msgstr "Jestli má být přepínací tlačítko stisknuto"
+msgstr "Jestli má být přepínací tlačítko zmáčknuto"
 
 #: ../gtk/gtktogglebutton.c:187
 msgid "If the toggle button is in an \"in between\" state"
@@ -7626,8 +7641,8 @@ msgid ""
 "If set, an underline in the label property indicates that the next character "
 "should be used for the mnemonic accelerator key in the overflow menu"
 msgstr ""
-"Pokud je nastaveno, znamená podtržítko ve vlastnosti label, že následující "
-"znak se má použít jako klávesová zkratka v menu přetečení"
+"Pokud je nastaveno, znamená podtržítko ve vlastnosti popisku, že následující "
+"znak se má použít jako horká klávesa v přetékající nabídce"
 
 #: ../gtk/gtktoolbutton.c:254
 msgid "Widget to use as the item label"
