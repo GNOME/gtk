@@ -21,6 +21,8 @@
 
 #include "gtkcssanimatedstyleprivate.h"
 #include "gtkdebug.h"
+#include "gtkintl.h"
+#include "gtkmarshalers.h"
 #include "gtksettingsprivate.h"
 
 /* When these change we do a full restyling. Otherwise we try to figure out
@@ -28,6 +30,14 @@
 #define GTK_CSS_RADICAL_CHANGE (GTK_CSS_CHANGE_NAME | GTK_CSS_CHANGE_CLASS | GTK_CSS_CHANGE_SOURCE | GTK_CSS_CHANGE_PARENT_STYLE)
 
 G_DEFINE_TYPE (GtkCssNode, gtk_css_node, G_TYPE_OBJECT)
+
+enum {
+  NODE_ADDED,
+  NODE_REMOVED,
+  LAST_SIGNAL
+};
+
+static guint cssnode_signals[LAST_SIGNAL] = { 0 };
 
 static GtkStyleProviderPrivate *
 gtk_css_node_get_style_provider_or_null (GtkCssNode *cssnode)
@@ -333,6 +343,51 @@ gtk_css_node_real_get_frame_clock (GtkCssNode *cssnode)
 }
 
 static void
+gtk_css_node_real_node_removed (GtkCssNode *parent,
+                                GtkCssNode *node,
+                                GtkCssNode *previous)
+{
+  if (node->previous_sibling)
+    node->previous_sibling->next_sibling = node->next_sibling;
+  else
+    node->parent->first_child = node->next_sibling;
+
+  if (node->next_sibling)
+    node->next_sibling->previous_sibling = node->previous_sibling;
+  else
+    node->parent->last_child = node->previous_sibling;
+
+  node->previous_sibling = NULL;
+  node->next_sibling = NULL;
+  node->parent = NULL;
+}
+
+static void
+gtk_css_node_real_node_added (GtkCssNode *parent,
+                              GtkCssNode *node,
+                              GtkCssNode *new_previous)
+{
+  if (new_previous)
+    {
+      node->previous_sibling = new_previous;
+      node->next_sibling = new_previous->next_sibling;
+      new_previous->next_sibling = node;
+    }
+  else
+    {
+      node->next_sibling = parent->first_child;
+      parent->first_child = node;
+    }
+
+  if (node->next_sibling)
+    node->next_sibling->previous_sibling = node;
+  else
+    parent->last_child = node;
+
+  node->parent = parent;
+}
+
+static void
 gtk_css_node_class_init (GtkCssNodeClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
@@ -350,6 +405,28 @@ gtk_css_node_class_init (GtkCssNodeClass *klass)
   klass->get_widget_path = gtk_css_node_real_get_widget_path;
   klass->get_style_provider = gtk_css_node_real_get_style_provider;
   klass->get_frame_clock = gtk_css_node_real_get_frame_clock;
+
+  klass->node_added = gtk_css_node_real_node_added;
+  klass->node_removed = gtk_css_node_real_node_removed;
+
+  cssnode_signals[NODE_ADDED] =
+    g_signal_new (I_("node-added"),
+		  G_TYPE_FROM_CLASS (object_class),
+		  G_SIGNAL_RUN_LAST,
+                  G_STRUCT_OFFSET (GtkCssNodeClass, node_added),
+		  NULL, NULL,
+		  _gtk_marshal_VOID__OBJECT_OBJECT,
+		  G_TYPE_NONE, 2,
+		  GTK_TYPE_CSS_NODE, GTK_TYPE_CSS_NODE);
+  cssnode_signals[NODE_REMOVED] =
+    g_signal_new (I_("node-removed"),
+		  G_TYPE_FROM_CLASS (object_class),
+		  G_SIGNAL_RUN_LAST,
+                  G_STRUCT_OFFSET (GtkCssNodeClass, node_removed),
+		  NULL, NULL,
+		  _gtk_marshal_VOID__OBJECT_OBJECT,
+		  G_TYPE_NONE, 2,
+		  GTK_TYPE_CSS_NODE, GTK_TYPE_CSS_NODE);
 }
 
 static void
@@ -397,44 +474,6 @@ gtk_css_node_parent_will_be_set (GtkCssNode *node)
     GTK_CSS_NODE_GET_CLASS (node)->dequeue_validate (node);
 }
 
-static void
-gtk_css_node_unlink_from_siblings (GtkCssNode *node)
-{
-  if (node->previous_sibling)
-    node->previous_sibling->next_sibling = node->next_sibling;
-  else
-    node->parent->first_child = node->next_sibling;
-
-  if (node->next_sibling)
-    node->next_sibling->previous_sibling = node->previous_sibling;
-  else
-    node->parent->last_child = node->previous_sibling;
-
-  node->previous_sibling = NULL;
-  node->next_sibling = NULL;
-}
-
-static void
-gtk_css_node_link_to_siblings (GtkCssNode *node,
-                               GtkCssNode *new_previous)
-{
-  if (new_previous)
-    {
-      node->previous_sibling = new_previous;
-      node->next_sibling = new_previous->next_sibling;
-      new_previous->next_sibling = node;
-    }
-  else
-    {
-      node->next_sibling = node->parent->first_child;
-      node->parent->first_child = node;
-    }
-
-  if (node->next_sibling)
-    node->next_sibling->previous_sibling = node;
-  else
-    node->parent->last_child = node;
-}
 
 static void
 gtk_css_node_set_children_changed (GtkCssNode *node)
@@ -464,23 +503,28 @@ gtk_css_node_invalidate_style (GtkCssNode *cssnode)
 
 static void
 gtk_css_node_reposition (GtkCssNode *node,
-                         GtkCssNode *parent,
+                         GtkCssNode *new_parent,
                          GtkCssNode *previous)
 {
-  g_assert (! (parent == NULL && previous != NULL));
+  GtkCssNode *old_parent;
 
+  g_assert (! (new_parent == NULL && previous != NULL));
+
+  old_parent = node->parent;
   /* Take a reference here so the whole function has a reference */
   g_object_ref (node);
 
   if (node->next_sibling)
     gtk_css_node_invalidate_style (node->next_sibling);
 
-  if (node->parent != NULL)
-    gtk_css_node_unlink_from_siblings (node);
-
-  if (node->parent != parent)
+  if (old_parent != NULL)
     {
-      if (node->parent == NULL)
+      g_signal_emit (old_parent, cssnode_signals[NODE_REMOVED], 0, node, node->previous_sibling);
+    }
+
+  if (old_parent != new_parent)
+    {
+      if (old_parent == NULL)
         {
           gtk_css_node_parent_will_be_set (node);
         }
@@ -488,34 +532,34 @@ gtk_css_node_reposition (GtkCssNode *node,
         {
           g_object_unref (node);
           if (node->visible)
-            gtk_css_node_set_children_changed (node->parent);
-        }
-
-      node->parent = parent;
-
-      if (parent)
-        {
-          if (node->visible)
-            gtk_css_node_set_children_changed (parent);
-          g_object_ref (node);
-
-          if (node->pending_changes)
-            parent->needs_propagation = TRUE;
-          if (node->invalid && node->visible)
-            gtk_css_node_set_invalid (parent, TRUE);
-        }
-      else
-        {
-          gtk_css_node_parent_was_unset (node);
+            gtk_css_node_set_children_changed (old_parent);
         }
 
       if (gtk_css_node_get_style_provider_or_null (node) == NULL)
         gtk_css_node_invalidate_style_provider (node);
       gtk_css_node_invalidate (node, GTK_CSS_CHANGE_TIMESTAMP | GTK_CSS_CHANGE_ANIMATIONS);
+
+      if (new_parent)
+        {
+          if (node->visible)
+            gtk_css_node_set_children_changed (new_parent);
+          g_object_ref (node);
+
+          if (node->pending_changes)
+            new_parent->needs_propagation = TRUE;
+          if (node->invalid && node->visible)
+            gtk_css_node_set_invalid (new_parent, TRUE);
+        }
+      else
+        {
+          gtk_css_node_parent_was_unset (node);
+        }
     }
 
-  if (parent)
-    gtk_css_node_link_to_siblings (node, previous);
+  if (new_parent)
+    {
+      g_signal_emit (new_parent, cssnode_signals[NODE_ADDED], 0, node, previous);
+    }
 
   if (node->next_sibling)
     gtk_css_node_invalidate_style (node->next_sibling);

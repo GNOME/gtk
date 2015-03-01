@@ -65,6 +65,13 @@ struct _GtkCssNodeClass
 {
   GObjectClass object_class;
 
+  void                  (* node_added)                  (GtkCssNode            *cssnode,
+                                                         GtkCssNode            *child,
+                                                         GtkCssNode            *previous);
+  void                  (* node_removed)                (GtkCssNode            *cssnode,
+                                                         GtkCssNode            *child,
+                                                         GtkCssNode            *previous);
+
   gboolean              (* init_matcher)                (GtkCssNode            *cssnode,
                                                          GtkCssMatcher         *matcher);
   GtkWidgetPath *       (* create_widget_path)          (GtkCssNode            *cssnode);
