@@ -115,6 +115,8 @@ gtk_event_controller_constructed (GObject *object)
   GtkEventController *controller = GTK_EVENT_CONTROLLER (object);
   GtkEventControllerPrivate *priv;
 
+  G_OBJECT_CLASS (gtk_event_controller_parent_class)->constructed (object);
+
   priv = gtk_event_controller_get_instance_private (controller);
   if (priv->widget)
     _gtk_widget_add_controller (priv->widget, controller);
