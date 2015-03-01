@@ -16,7 +16,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gtk"
 "%2b&keywords=I18N+L10N&component=general\n"
 "POT-Creation-Date: 2015-03-01 10:07+0000\n"
-"PO-Revision-Date: 2015-03-01 18:23+0100\n"
+"PO-Revision-Date: 2015-03-01 18:53+0100\n"
 "Last-Translator: Marek Černocký <marek@manet.cz>\n"
 "Language-Team: Czech <gnome-cs-list@gnome.org>\n"
 "Language: cs\n"
@@ -4033,7 +4033,6 @@ msgid "Delay factor"
 msgstr "Faktor prodlevy"
 
 #: ../gtk/gtkgesturelongpress.c:285
-#, fuzzy
 msgid "Factor by which to modify the default timeout"
 msgstr "Faktor, kterým se upravuje výchozí časový limit"
 
