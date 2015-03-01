@@ -17104,6 +17104,8 @@ _gtk_widget_add_controller (GtkWidget           *widget,
     g_signal_connect (widget, "grab-notify",
                       G_CALLBACK (event_controller_grab_notify), data);
 
+  g_object_add_weak_pointer (G_OBJECT (data->controller), (gpointer *) &data->controller);
+
   if (GTK_IS_GESTURE (controller))
     {
       data->sequence_state_changed_id =

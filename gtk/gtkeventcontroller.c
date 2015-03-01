@@ -75,6 +75,7 @@ gtk_event_controller_set_property (GObject      *object,
     {
     case PROP_WIDGET:
       priv->widget = g_value_get_object (value);
+      g_object_add_weak_pointer (G_OBJECT (priv->widget), (gpointer *) &priv->widget);
       break;
     case PROP_PROPAGATION_PHASE:
       gtk_event_controller_set_propagation_phase (GTK_EVENT_CONTROLLER (object),
