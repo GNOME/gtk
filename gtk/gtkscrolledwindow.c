@@ -1222,6 +1222,12 @@ captured_event_cb (GtkWidget *widget,
   priv = sw->priv;
   source_device = gdk_event_get_source_device (event);
 
+  if (event->type == GDK_SCROLL)
+    {
+      gtk_scrolled_window_cancel_deceleration (sw);
+      return GDK_EVENT_PROPAGATE;
+    }
+
   if (!priv->use_indicators)
     return GDK_EVENT_PROPAGATE;
 
@@ -3183,7 +3189,6 @@ gtk_scrolled_window_scroll_event (GtkWidget      *widget,
     {
       gdouble vel_x, vel_y;
 
-      gtk_scrolled_window_cancel_deceleration (scrolled_window);
       gtk_scrolled_window_invalidate_overshoot (scrolled_window);
 
       if (priv->scroll_events_overshoot_id)
