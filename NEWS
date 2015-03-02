@@ -1,3 +1,49 @@
+Overview of Changes in GTK+ 3.15.10
+===================================
+
+* GtkFileChooser:
+ - Don't start search too eagerly
+ - Use fts with tracker
+ - Make tracker queries more similar to nautilus
+
+GtkWindow:
+ - Improve window dragging on header bars
+
+* Printing:
+ - Make avahi-browsed printers work
+ - Set printer state correctly
+
+* Wayland
+ - Exit cleanly if the compositor goes away
+ - Don't ignore early maximization/fullscreening
+ - Make subsurface popovers work under Weston
+
+* Bugs fixed:
+ 741511 Critical message: NULL is passed to g_object_unref() in spi_...
+ 743323 avahi-discovered CUPS printers don't work
+ 743427 subsurface-using popovers don't work on Weston
+ 744879 Another core dump when clicking the Back button
+ 745225 eventcontroller: Don't crash if the widget is destroyed first
+ 745263 The Open button in the new file chooser is too low/thin
+ 745289 wayland: do not use g_error() on connection errors
+ 745303 Wayland: Initial setup window is not maximised
+ 745344 overlay scrollbar fail
+ 745400 fix a couple of issues in gdkglcontext-win32
+
+* Translation updates
+ Afrikaans
+ Czech
+ Greek
+ Hebrew
+ Hungarian
+ Kazakh
+ Lithuanian
+ Polish
+ Slovak
+ Spanish
+ Vietnamese
+
+
 Overview of Changes in GTK+ 3.15.9
 ==================================
 
