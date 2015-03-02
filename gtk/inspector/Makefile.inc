@@ -4,10 +4,12 @@ inspector_c_sources = 			\
 	inspector/cellrenderergraph.c	\
 	inspector/classes-list.c	\
 	inspector/css-editor.c		\
+	inspector/css-node-tree.c	\
 	inspector/data-list.c		\
 	inspector/general.c		\
 	inspector/gestures.c		\
 	inspector/graphdata.c		\
+	inspector/gtktreemodelcssnode.c	\
 	inspector/init.c		\
 	inspector/inspect-button.c	\
 	inspector/magnifier.c		\
@@ -33,10 +35,12 @@ inspector_h_sources = 			\
 	inspector/cellrenderergraph.h	\
 	inspector/classes-list.h	\
 	inspector/css-editor.h		\
+	inspector/css-node-tree.h	\
 	inspector/data-list.h		\
 	inspector/general.h		\
 	inspector/gestures.h		\
 	inspector/graphdata.h		\
+	inspector/gtktreemodelcssnode.h	\
 	inspector/init.h		\
 	inspector/magnifier.h		\
 	inspector/menu.h		\
@@ -59,6 +63,7 @@ inspector_templates =			\
 	inspector/actions.ui 		\
 	inspector/classes-list.ui 	\
 	inspector/css-editor.ui 	\
+	inspector/css-node-tree.ui	\
 	inspector/data-list.ui 		\
 	inspector/general.ui 		\
 	inspector/magnifier.ui		\

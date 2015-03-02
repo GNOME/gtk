@@ -12,6 +12,7 @@ N_("Hierarchy");
 N_("Selector");
 N_("Style Classes");
 N_("Style Properties");
+N_("CSS nodes");
 N_("CSS");
 N_("Size Groups");
 N_("Data");

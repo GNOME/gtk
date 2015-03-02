@@ -1130,7 +1130,7 @@ gtktypebuiltins.c: $(gtk_public_h_sources) $(a11y_h_sources) $(deprecated_h_sour
 	&& cp xgen-gtbc gtktypebuiltins.c  \
 	&& rm -f xgen-gtbc
 
-gtk.gresource.xml: Makefile.am
+gtk.gresource.xml: Makefile.am inspector/Makefile.inc
 	$(AM_V_GEN) echo "<?xml version='1.0' encoding='UTF-8'?>" > $@; \
 	echo "<gresources>" >> $@; \
 	echo "  <gresource prefix='/org/gtk/libgtk'>" >> $@; \

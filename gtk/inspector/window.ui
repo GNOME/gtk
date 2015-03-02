@@ -320,6 +320,15 @@
                           </packing>
                         </child>
                         <child>
+                          <object class="GtkInspectorCssNodeTree" id="widget_css_node_tree">
+                            <property name="visible">True</property>
+                          </object>
+                          <packing>
+                            <property name="name">css-nodes</property>
+                            <property name="title" translatable="yes">CSS nodes</property>
+                          </packing>
+                        </child>
+                        <child>
                           <object class="GtkInspectorCssEditor" id="widget_css_editor">
                             <property name="global">False</property>
                           </object>

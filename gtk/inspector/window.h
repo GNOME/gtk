@@ -57,6 +57,7 @@ typedef struct
   GtkWidget *style_prop_list;
   GtkWidget *classes_list;
   GtkWidget *widget_css_editor;
+  GtkWidget *widget_css_node_tree;
   GtkWidget *object_hierarchy;
   GtkWidget *size_groups;
   GtkWidget *data_list;
