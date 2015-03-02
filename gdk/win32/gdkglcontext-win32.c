@@ -476,7 +476,7 @@ _gdk_win32_gl_context_realize (GdkGLContext *context,
 
   GDK_NOTE (OPENGL,
             g_print ("Creating core WGL context (version:%d.%d, debug:%s, forward:%s)\n",
-            major, minor,
+            glver_major, glver_minor,
             debug_bit ? "yes" : "no",
             compat_bit ? "yes" : "no"));
 
