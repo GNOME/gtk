@@ -766,6 +766,7 @@ handle_device_changed (GdkX11DeviceManagerXI2 *device_manager,
     {
       _gdk_device_reset_axes (device);
       _gdk_device_xi2_unset_scroll_valuators ((GdkX11DeviceXI2 *) device);
+      gdk_x11_device_xi2_store_axes (GDK_X11_DEVICE_XI2 (device), NULL, 0);
       translate_device_classes (display, device, ev->classes, ev->num_classes);
 
       g_signal_emit_by_name (G_OBJECT (device), "changed");
@@ -868,13 +869,16 @@ translate_axes (GdkDevice       *device,
   axes = g_new0 (gdouble, n_axes);
   vals = valuators->values;
 
-  for (i = 0; i < valuators->mask_len * 8; i++)
+  for (i = 0; i < MIN (valuators->mask_len * 8, n_axes); i++)
     {
       GdkAxisUse use;
       gdouble val;
 
       if (!XIMaskIsSet (valuators->mask, i))
-        continue;
+        {
+          axes[i] = gdk_x11_device_xi2_get_last_axis_value (GDK_X11_DEVICE_XI2 (device), i);
+          continue;
+        }
 
       use = gdk_device_get_axis_use (device, i);
       val = *vals++;
@@ -898,6 +902,8 @@ translate_axes (GdkDevice       *device,
           break;
         }
     }
+
+  gdk_x11_device_xi2_store_axes (GDK_X11_DEVICE_XI2 (device), axes, n_axes);
 
   return axes;
 }
