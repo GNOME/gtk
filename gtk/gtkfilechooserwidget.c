@@ -4030,7 +4030,7 @@ file_system_model_set (GtkFileSystemModel *model,
             }
         }
       else
-        g_value_set_object (value, NULL);
+        g_value_set_boxed (value, NULL);
       break;
     case MODEL_COL_SIZE:
       g_value_set_int64 (value, info ? g_file_info_get_size (info) : 0);
