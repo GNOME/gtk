@@ -4066,11 +4066,14 @@ file_system_model_set (GtkFileSystemModel *model,
         gchar *location;
 
         home_location = g_file_new_for_path (g_get_home_dir ());
-        dir_location = g_file_get_parent (file);
+        if (file)
+          dir_location = g_file_get_parent (file);
+        else
+          dir_location = NULL;
 
-        if (g_file_equal (home_location, dir_location))
+        if (dir_location && g_file_equal (home_location, dir_location))
           location = g_strdup (_("Home"));
-        else if (g_file_has_prefix (dir_location, home_location))
+        else if (dir_location && g_file_has_prefix (dir_location, home_location))
           {
             gchar *relative_path;
 
@@ -4084,7 +4087,8 @@ file_system_model_set (GtkFileSystemModel *model,
 
         g_value_take_string (value, location);
 
-        g_object_unref (dir_location);
+        if (dir_location)
+          g_object_unref (dir_location);
         g_object_unref (home_location);
       }
       break;
