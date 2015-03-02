@@ -51,6 +51,7 @@ struct _GdkX11DeviceXI2
 
   gint device_id;
   GArray *scroll_valuators;
+  gdouble *last_axes;
 };
 
 struct _GdkX11DeviceXI2Class
@@ -157,6 +158,7 @@ gdk_x11_device_xi2_finalize (GObject *object)
   GdkX11DeviceXI2 *device = GDK_X11_DEVICE_XI2 (object);
 
   g_array_free (device->scroll_valuators, TRUE);
+  g_free (device->last_axes);
 
   G_OBJECT_CLASS (gdk_x11_device_xi2_parent_class)->finalize (object);
 }
@@ -890,4 +892,30 @@ _gdk_x11_device_xi2_get_id (GdkX11DeviceXI2 *device)
   g_return_val_if_fail (GDK_IS_X11_DEVICE_XI2 (device), 0);
 
   return device->device_id;
+}
+
+gdouble
+gdk_x11_device_xi2_get_last_axis_value (GdkX11DeviceXI2 *device,
+                                        gint             n_axis)
+{
+  if (n_axis >= gdk_device_get_n_axes (GDK_DEVICE (device)))
+    return 0;
+
+  if (!device->last_axes)
+    return 0;
+
+  return device->last_axes[n_axis];
+}
+
+void
+gdk_x11_device_xi2_store_axes (GdkX11DeviceXI2 *device,
+                               gdouble         *axes,
+                               gint             n_axes)
+{
+  g_free (device->last_axes);
+
+  if (axes && n_axes)
+    device->last_axes = g_memdup (axes, sizeof (gdouble) * n_axes);
+  else
+    device->last_axes = NULL;
 }
