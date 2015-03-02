@@ -219,7 +219,7 @@ gtk_misc_get_property (GObject      *object,
  *
  * Sets the alignment of the widget.
  *
- * Deprecated: 3.14: Use #GtkWidget alignment and margin properties.
+ * Deprecated: 3.14: Use #GtkWidget's alignment (#GtkWidget:halign and #GtkWidget:valign) and margin properties or #GtkLabel's #GtkLabel:xalign and #GtkLabel:yalign properties.
  */
 void
 gtk_misc_set_alignment (GtkMisc *misc,
