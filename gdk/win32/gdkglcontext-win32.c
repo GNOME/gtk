@@ -116,8 +116,6 @@ _gdk_win32_gl_context_end_frame (GdkGLContext *context,
 
   if (context_win32->do_frame_sync)
     {
-      guint32 end_frame_counter = 0;
-
       if (context_win32->do_frame_sync)
         {
           glFinish ();
@@ -156,7 +154,6 @@ _gdk_win32_window_invalidate_for_new_frame (GdkWindow *window,
                                             cairo_region_t *update_area)
 {
   cairo_rectangle_int_t window_rect;
-  unsigned int buffer_age;
   gboolean invalidate_all = FALSE;
   GdkWin32GLContext *context_win32;
   cairo_rectangle_int_t whole_window = { 0, 0, gdk_window_get_width (window), gdk_window_get_height (window) };
@@ -231,7 +228,6 @@ static void
 _get_dummy_window_hwnd (GdkWGLDummy *dummy)
 {
   WNDCLASSEX dummy_wc;
-  HWND dummy_hwnd;
 
   memset (&dummy_wc, 0, sizeof (WNDCLASSEX));
 
@@ -270,10 +266,7 @@ _get_wgl_pfd (HDC hdc,
               const gboolean need_alpha_bits,
               PIXELFORMATDESCRIPTOR *pfd)
 {
-  gint configs;
-  gint i;
   gint best_pf = 0;
-  gboolean alpha_check;
 
   pfd->nSize = sizeof (PIXELFORMATDESCRIPTOR);
   pfd->nVersion = 1;
@@ -338,8 +331,6 @@ _gdk_win32_display_init_gl (GdkDisplay *display,
                             const gboolean need_alpha_bits)
 {
   GdkWin32Display *display_win32 = GDK_WIN32_DISPLAY (display);
-  gint glMajMinVersion;
-  GdkWindowImplWin32 *impl;
   gint best_idx = 0;
   GdkWGLDummy dummy;
 
