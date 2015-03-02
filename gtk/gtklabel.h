@@ -222,7 +222,7 @@ gfloat       gtk_label_get_xalign (GtkLabel *label);
 
 GDK_AVAILABLE_IN_3_16
 void         gtk_label_set_yalign (GtkLabel *label,
-                                   gfloat    xalign);
+                                   gfloat    yalign);
 
 GDK_AVAILABLE_IN_3_16
 gfloat       gtk_label_get_yalign (GtkLabel *label);
