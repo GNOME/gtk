@@ -80,6 +80,8 @@
 #include "gtkintl.h"
 #include "gtkshow.h"
 #include "gtkmain.h"
+#include "gtkscrollable.h"
+#include "gtkadjustment.h"
 
 #include <cairo-gobject.h>
 #include <errno.h>
@@ -923,9 +925,8 @@ new_folder_button_clicked (GtkButton             *button,
   _gtk_file_system_model_add_editable (priv->browse_files_model, &iter);
 
   path = gtk_tree_model_get_path (GTK_TREE_MODEL (priv->browse_files_model), &iter);
-  gtk_tree_view_scroll_to_cell (GTK_TREE_VIEW (priv->browse_files_tree_view),
-				path, priv->list_name_column,
-				FALSE, 0.0, 0.0);
+  gtk_adjustment_set_value (gtk_scrollable_get_hadjustment (GTK_SCROLLABLE (priv->browse_files_tree_view)), 0.0);
+  gtk_adjustment_set_value (gtk_scrollable_get_vadjustment (GTK_SCROLLABLE (priv->browse_files_tree_view)), 0.0);
 
   g_object_set (priv->list_name_renderer, "editable", TRUE, NULL);
   gtk_tree_view_set_cursor (GTK_TREE_VIEW (priv->browse_files_tree_view),
