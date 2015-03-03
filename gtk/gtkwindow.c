@@ -1509,7 +1509,6 @@ drag_gesture_begin_cb (GtkGestureDrag *gesture,
   GdkEventSequence *sequence;
   GtkWindowRegion region;
   const GdkEvent *event;
-  GtkWidget *event_widget;
 
   sequence = gtk_gesture_single_get_current_sequence (GTK_GESTURE_SINGLE (gesture));
   event = gtk_gesture_get_last_event (GTK_GESTURE (gesture), sequence);
@@ -1517,19 +1516,10 @@ drag_gesture_begin_cb (GtkGestureDrag *gesture,
   if (!event)
     return;
 
-  event_widget = gtk_get_event_widget ((GdkEvent *) event);
+  region = get_active_region_type (window, (GdkEventAny*) event, x, y);
 
-  if (event_widget != GTK_WIDGET (window) &&
-      !gtk_widget_has_grab (event_widget) &&
-      _gtk_widget_consumes_motion (event_widget))
+  if (region != GTK_WINDOW_REGION_TITLE)
     gtk_gesture_set_state (GTK_GESTURE (gesture), GTK_EVENT_SEQUENCE_DENIED);
-  else
-    {
-      region = get_active_region_type (window, (GdkEventAny*) event, x, y);
-
-      if (region != GTK_WINDOW_REGION_TITLE)
-        gtk_gesture_set_state (GTK_GESTURE (gesture), GTK_EVENT_SEQUENCE_DENIED);
-    }
 }
 
 static void
@@ -1549,8 +1539,23 @@ drag_gesture_update_cb (GtkGestureDrag *gesture,
   if (ABS (offset_x) > double_click_distance ||
       ABS (offset_y) > double_click_distance)
     {
+      GdkEventSequence *sequence;
       gdouble start_x, start_y;
       gint x_root, y_root;
+      const GdkEvent *event;
+      GtkWidget *event_widget;
+
+      sequence = gtk_gesture_single_get_current_sequence (GTK_GESTURE_SINGLE (gesture));
+      event = gtk_gesture_get_last_event (GTK_GESTURE (gesture), sequence);
+      event_widget = gtk_get_event_widget ((GdkEvent *) event);
+
+      if (event_widget != GTK_WIDGET (window) &&
+          !gtk_widget_has_grab (event_widget) &&
+          _gtk_widget_consumes_motion (event_widget, sequence))
+        {
+          gtk_gesture_set_state (GTK_GESTURE (gesture), GTK_EVENT_SEQUENCE_DENIED);
+          return;
+        }
 
       gtk_gesture_set_state (GTK_GESTURE (gesture), GTK_EVENT_SEQUENCE_CLAIMED);
 

@@ -160,7 +160,8 @@ void              _gtk_widget_remove_controller            (GtkWidget           
                                                             GtkEventController  *controller);
 GList *           _gtk_widget_list_controllers             (GtkWidget           *widget,
                                                             GtkPropagationPhase  phase);
-gboolean          _gtk_widget_consumes_motion              (GtkWidget           *widget);
+gboolean          _gtk_widget_consumes_motion              (GtkWidget           *widget,
+                                                            GdkEventSequence    *sequence);
 
 gboolean          gtk_widget_has_tick_callback             (GtkWidget *widget);
 

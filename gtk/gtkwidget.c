@@ -17284,7 +17284,8 @@ _gtk_widget_list_controllers (GtkWidget           *widget,
 }
 
 gboolean
-_gtk_widget_consumes_motion (GtkWidget *widget)
+_gtk_widget_consumes_motion (GtkWidget        *widget,
+                             GdkEventSequence *sequence)
 {
   EventControllerData *data;
   GtkWidgetPrivate *priv;
@@ -17301,10 +17302,11 @@ _gtk_widget_consumes_motion (GtkWidget *widget)
       if (data->controller == NULL)
         continue;
 
-      if (!GTK_IS_GESTURE_SINGLE (data->controller))
-        return TRUE;
-      else if (GTK_IS_GESTURE_DRAG (data->controller) ||
-               GTK_IS_GESTURE_SWIPE (data->controller))
+      if ((!GTK_IS_GESTURE_SINGLE (data->controller) ||
+           GTK_IS_GESTURE_DRAG (data->controller) ||
+           GTK_IS_GESTURE_SWIPE (data->controller)) &&
+          gtk_gesture_get_sequence_state (GTK_GESTURE (data->controller),
+                                          sequence) != GTK_EVENT_SEQUENCE_DENIED)
         return TRUE;
     }
 
