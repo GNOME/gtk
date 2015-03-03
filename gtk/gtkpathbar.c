@@ -133,12 +133,6 @@ static gboolean gtk_path_bar_scroll               (GtkWidget        *widget,
 static void gtk_path_bar_scroll_up                (GtkPathBar       *path_bar);
 static void gtk_path_bar_scroll_down              (GtkPathBar       *path_bar);
 static void gtk_path_bar_stop_scrolling           (GtkPathBar       *path_bar);
-static gboolean gtk_path_bar_slider_up_defocus    (GtkWidget        *widget,
-						   GdkEventButton   *event,
-						   GtkPathBar       *path_bar);
-static gboolean gtk_path_bar_slider_down_defocus  (GtkWidget        *widget,
-						   GdkEventButton   *event,
-						   GtkPathBar       *path_bar);
 static gboolean gtk_path_bar_slider_button_press  (GtkWidget        *widget,
 						   GdkEventButton   *event,
 						   GtkPathBar       *path_bar);
@@ -258,8 +252,6 @@ gtk_path_bar_class_init (GtkPathBarClass *path_bar_class)
 
   gtk_widget_class_bind_template_callback (widget_class, gtk_path_bar_slider_button_press);
   gtk_widget_class_bind_template_callback (widget_class, gtk_path_bar_slider_button_release);
-  gtk_widget_class_bind_template_callback (widget_class, gtk_path_bar_slider_up_defocus);
-  gtk_widget_class_bind_template_callback (widget_class, gtk_path_bar_slider_down_defocus);
   gtk_widget_class_bind_template_callback (widget_class, gtk_path_bar_scroll_up);
   gtk_widget_class_bind_template_callback (widget_class, gtk_path_bar_scroll_down);
   gtk_widget_class_bind_template_callback (widget_class, on_slider_unmap);
@@ -1080,62 +1072,6 @@ gtk_path_bar_stop_scrolling (GtkPathBar *path_bar)
       path_bar->priv->timer = 0;
       path_bar->priv->need_timer = FALSE;
     }
-}
-
-static gboolean
-gtk_path_bar_slider_up_defocus (GtkWidget      *widget,
-                                    GdkEventButton *event,
-                                    GtkPathBar     *path_bar)
-{
-  GList *list;
-  GList *up_button = NULL;
-
-  if (event->type != GDK_FOCUS_CHANGE)
-    return FALSE;
-
-  for (list = g_list_last (path_bar->priv->button_list); list; list = list->prev)
-    {
-      if (gtk_widget_get_child_visible (BUTTON_DATA (list->data)->button))
-        {
-          up_button = list;
-          break;
-        }
-    }
-
-  /* don't let the focus vanish */
-  if ((!gtk_widget_is_sensitive (path_bar->priv->up_slider_button)) ||
-      (!gtk_widget_get_child_visible (path_bar->priv->up_slider_button)))
-    gtk_widget_grab_focus (BUTTON_DATA (up_button->data)->button);
-
-  return FALSE;
-}
-
-static gboolean
-gtk_path_bar_slider_down_defocus (GtkWidget      *widget,
-                                    GdkEventButton *event,
-                                    GtkPathBar     *path_bar)
-{
-  GList *list;
-  GList *down_button = NULL;
-
-  if (event->type != GDK_FOCUS_CHANGE)
-    return FALSE;
-
-  for (list = path_bar->priv->button_list; list; list = list->next)
-    {
-      if (gtk_widget_get_child_visible (BUTTON_DATA (list->data)->button))
-        {
-          down_button = list;
-          break;
-        }
-    }
-
-  /* don't let the focus vanish */
-  if ((!gtk_widget_is_sensitive (path_bar->priv->down_slider_button)) ||
-      (!gtk_widget_get_child_visible (path_bar->priv->down_slider_button)))
-    gtk_widget_grab_focus (BUTTON_DATA (down_button->data)->button);
-
-  return FALSE;
 }
 
 static gboolean
