@@ -158,7 +158,7 @@
 			>
 			<File RelativePath="..\..\..\demos\icon-browser\iconbrowserapp.c" />
 			<File RelativePath="..\..\..\demos\icon-browser\iconbrowserwin.c" />
-			<File RelativePath="..\..\..\demos\icon-browser\iconstore.c">
+			<File RelativePath="..\..\..\demos\icon-browser\iconstore.c" />
 			<File RelativePath="..\..\..\demos\icon-browser\main.c" />
 			<File RelativePath="..\..\..\demos\icon-browser\resources.c" />
 		</Filter>
