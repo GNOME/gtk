@@ -1051,13 +1051,13 @@ gtk_path_bar_scroll_timeout (GtkPathBar *path_bar)
   if (path_bar->priv->timer)
     {
       if (path_bar->priv->scrolling_up)
-	gtk_path_bar_scroll_up (path_bar);
+        gtk_path_bar_scroll_up (path_bar);
       else if (path_bar->priv->scrolling_down)
-	gtk_path_bar_scroll_down (path_bar);
+        gtk_path_bar_scroll_down (path_bar);
 
       if (path_bar->priv->need_timer) 
-	{
-	  path_bar->priv->need_timer = FALSE;
+        {
+          path_bar->priv->need_timer = FALSE;
 
 	  path_bar->priv->timer = gdk_threads_add_timeout (SCROLL_TIMEOUT * SCROLL_DELAY_FACTOR,
 					   (GSourceFunc)gtk_path_bar_scroll_timeout,
@@ -1065,7 +1065,7 @@ gtk_path_bar_scroll_timeout (GtkPathBar *path_bar)
           g_source_set_name_by_id (path_bar->priv->timer, "[gtk+] gtk_path_bar_scroll_timeout");
 	}
       else
-	retval = TRUE;
+      retval = TRUE;
     }
 
   return retval;
