@@ -1209,7 +1209,6 @@ gtk_tooltip_show_tooltip (GdkDisplay *display)
   GdkWindow *window;
   GtkWidget *tooltip_widget;
   GtkTooltip *tooltip;
-  gboolean has_tooltip;
   gboolean return_value = FALSE;
 
   tooltip = g_object_get_data (G_OBJECT (display),
@@ -1243,8 +1242,6 @@ gtk_tooltip_show_tooltip (GdkDisplay *display)
 
   if (!tooltip_widget)
     return;
-
-  g_object_get (tooltip_widget, "has-tooltip", &has_tooltip, NULL);
 
   return_value = gtk_tooltip_run_requery (&tooltip_widget, tooltip, &x, &y);
   if (!return_value)
