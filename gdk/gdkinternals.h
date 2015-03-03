@@ -299,6 +299,9 @@ extern gchar     *_gdk_display_arg_name;
 void      _gdk_events_queue  (GdkDisplay *display);
 GdkEvent* _gdk_event_unqueue (GdkDisplay *display);
 
+void _gdk_event_filter_unref        (GdkWindow      *window,
+				     GdkEventFilter *filter);
+
 GList* _gdk_event_queue_find_first   (GdkDisplay *display);
 void   _gdk_event_queue_remove_link  (GdkDisplay *display,
 				      GList      *node);

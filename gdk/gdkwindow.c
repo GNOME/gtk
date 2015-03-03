@@ -1931,21 +1931,60 @@ gdk_window_ensure_native (GdkWindow *window)
   return TRUE;
 }
 
+/**
+ * _gdk_event_filter_unref:
+ * @window: (allow-none): A #GdkWindow, or %NULL to be the global window
+ * @filter: A window filter
+ *
+ * Release a reference to @filter.  Note this function may
+ * mutate the list storage, so you need to handle this
+ * if iterating over a list of filters.
+ */
+void
+_gdk_event_filter_unref (GdkWindow       *window,
+                         GdkEventFilter  *filter)
+{
+  GList **filters;
+  GList *tmp_list;
+
+  if (window == NULL)
+    filters = &_gdk_default_filters;
+  else
+    {
+      GdkWindowObject *private;
+      private = (GdkWindowObject *) window;
+      filters = &private->filters;
+    }
+
+  for (tmp_list = *filters; tmp_list; tmp_list = tmp_list->next)
+    {
+      GdkEventFilter *iter_filter = tmp_list->data;
+      GList *node;
+
+      if (iter_filter != filter)
+        continue;
+
+      g_assert (iter_filter->ref_count > 0);
+
+      filter->ref_count--;
+      if (filter->ref_count != 0)
+        continue;
+
+      node = tmp_list;
+      tmp_list = tmp_list->next;
+
+      *filters = g_list_remove_link (*filters, node);
+      g_free (filter);
+      g_list_free_1 (node);
+    }
+}
+
 static void
 window_remove_filters (GdkWindow *window)
 {
   GdkWindowObject *obj = (GdkWindowObject*) window;
-
-  if (obj->filters)
-    {
-      GList *tmp_list;
-
-      for (tmp_list = obj->filters; tmp_list; tmp_list = tmp_list->next)
-	g_free (tmp_list->data);
-
-      g_list_free (obj->filters);
-      obj->filters = NULL;
-    }
+  while (obj->filters)
+    _gdk_event_filter_unref (window, obj->filters->data);
 }
 
 /**
@@ -2600,16 +2639,7 @@ gdk_window_remove_filter (GdkWindow     *window,
       if ((filter->function == function) && (filter->data == data))
         {
           filter->flags |= GDK_EVENT_FILTER_REMOVED;
-          filter->ref_count--;
-          if (filter->ref_count != 0)
-            return;
-
-          if (private)
-            private->filters = g_list_remove_link (private->filters, node);
-          else
-            _gdk_default_filters = g_list_remove_link (_gdk_default_filters, node);
-          g_list_free_1 (node);
-          g_free (filter);
+	  _gdk_event_filter_unref (window, filter);
 
           return;
         }

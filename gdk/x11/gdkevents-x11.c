@@ -96,7 +96,7 @@ struct _GdkEventTypeX11
 
 static gint	 gdk_event_apply_filters (XEvent   *xevent,
 					  GdkEvent *event,
-					  GList    **filters);
+					  GdkWindow *window);
 static gboolean	 gdk_event_translate	 (GdkDisplay *display,
 					  GdkEvent   *event, 
 					  XEvent     *xevent,
@@ -341,12 +341,20 @@ gdk_event_get_graphics_expose (GdkWindow *window)
 static gint
 gdk_event_apply_filters (XEvent *xevent,
 			 GdkEvent *event,
-			 GList **filters)
+			 GdkWindow *window)
 {
   GList *tmp_list;
   GdkFilterReturn result;
   
-  tmp_list = *filters;
+  if (window == NULL)
+    tmp_list = _gdk_default_filters;
+  else
+    {
+      GdkWindowObject *window_private;
+      window_private = (GdkWindowObject *) window;
+      tmp_list = window_private->filters;
+    }
+
   
   while (tmp_list)
     {
@@ -362,18 +370,12 @@ gdk_event_apply_filters (XEvent *xevent,
       filter->ref_count++;
       result = filter->function (xevent, event, filter->data);
 
-      /* get the next node after running the function since the
-         function may add or remove a next node */
-      node = tmp_list;
-      tmp_list = tmp_list->next;
+      /* Protect against unreffing the filter mutating the list */
+      node = tmp_list->next;
 
-      filter->ref_count--;
-      if (filter->ref_count == 0)
-        {
-          *filters = g_list_remove_link (*filters, node);
-          g_list_free_1 (node);
-          g_free (filter);
-        }
+      _gdk_event_filter_unref (window, filter);
+
+      tmp_list = node;
 
       if (result != GDK_FILTER_CONTINUE)
         return result;
@@ -964,8 +966,7 @@ gdk_event_translate (GdkDisplay *display,
     {
       /* Apply global filters */
       GdkFilterReturn result;
-      result = gdk_event_apply_filters (xevent, event,
-                                        &_gdk_default_filters);
+      result = gdk_event_apply_filters (xevent, event, NULL);
       
       if (result != GDK_FILTER_CONTINUE)
         {
@@ -1071,7 +1072,7 @@ gdk_event_translate (GdkDisplay *display,
 	  g_object_ref (filter_window);
 	  
 	  result = gdk_event_apply_filters (xevent, event,
-					    &filter_private->filters);
+					    filter_window);
 	  
 	  g_object_unref (filter_window);
       
