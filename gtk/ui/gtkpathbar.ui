@@ -13,7 +13,6 @@
     </child>
     <signal name="button-press-event" handler="gtk_path_bar_slider_button_press" swapped="no"/>
     <signal name="button-release-event" handler="gtk_path_bar_slider_button_release" swapped="no"/>
-    <signal name="unmap" handler="on_slider_unmap" swapped="no"/>
     <child>
       <object class="GtkImage">
         <property name="visible">True</property>
@@ -37,7 +36,6 @@
     </child>
     <signal name="button-press-event" handler="gtk_path_bar_slider_button_press" swapped="no"/>
     <signal name="button-release-event" handler="gtk_path_bar_slider_button_release" swapped="no"/>
-    <signal name="unmap" handler="on_slider_unmap" swapped="no"/>
     <child>
       <object class="GtkImage">
         <property name="visible">True</property>

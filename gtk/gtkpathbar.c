@@ -152,16 +152,6 @@ static void gtk_path_bar_update_button_appearance (GtkPathBar       *path_bar,
 						   gboolean          current_dir);
 
 static void
-on_slider_unmap (GtkWidget  *widget,
-		 GtkPathBar *path_bar)
-{
-  if (path_bar->priv->timer &&
-      ((widget == path_bar->priv->up_slider_button && path_bar->priv->scrolling_up) ||
-       (widget == path_bar->priv->down_slider_button && path_bar->priv->scrolling_down)))
-    gtk_path_bar_stop_scrolling (path_bar);
-}
-
-static void
 gtk_path_bar_init (GtkPathBar *path_bar)
 {
   GtkStyleContext *context;
@@ -254,7 +244,6 @@ gtk_path_bar_class_init (GtkPathBarClass *path_bar_class)
   gtk_widget_class_bind_template_callback (widget_class, gtk_path_bar_slider_button_release);
   gtk_widget_class_bind_template_callback (widget_class, gtk_path_bar_scroll_up);
   gtk_widget_class_bind_template_callback (widget_class, gtk_path_bar_scroll_down);
-  gtk_widget_class_bind_template_callback (widget_class, on_slider_unmap);
 }
 
 
