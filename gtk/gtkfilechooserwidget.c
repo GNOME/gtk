@@ -6304,6 +6304,9 @@ search_entry_activate_cb (GtkFileChooserWidget *impl)
   GtkFileChooserWidgetPrivate *priv = impl->priv;
   const char *text;
 
+  if (priv->operation_mode != OPERATION_MODE_SEARCH)
+    return;
+
   text = gtk_entry_get_text (GTK_ENTRY (priv->search_entry));
 
   /* reset any existing query object */
