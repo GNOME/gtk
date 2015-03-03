@@ -74,8 +74,8 @@ typedef enum {
 #define BUTTON_DATA(x) ((ButtonData *)(x))
 
 #define SCROLL_DELAY_FACTOR 5
-#define TIMEOUT_INITIAL     500
-#define TIMEOUT_REPEAT      50
+#define INITIAL_SCROLL_TIMEOUT 500
+#define SCROLL_TIMEOUT         50
 
 static guint path_bar_signals [LAST_SIGNAL] = { 0 };
 
@@ -569,7 +569,7 @@ gtk_path_bar_size_allocate (GtkWidget     *widget,
       else
 	first_button = path_bar->priv->button_list;
       need_sliders = TRUE;
-      
+
       /* To see how much space we have, and how many buttons we can display.
        * We start at the first button, count forward until hit the new
        * button, then count backwards.
@@ -679,7 +679,7 @@ gtk_path_bar_size_allocate (GtkWidget     *widget,
 	}
       else if (gtk_widget_get_has_tooltip (child))
 	gtk_widget_set_tooltip_text (child, NULL);
-      
+
       needs_reorder |= gtk_widget_get_child_visible (child) == FALSE;
       gtk_widget_set_child_visible (child, TRUE);
       gtk_widget_size_allocate (child, &child_allocation);
@@ -727,12 +727,12 @@ gtk_path_bar_size_allocate (GtkWidget     *widget,
       needs_reorder |= gtk_widget_get_child_visible (path_bar->priv->up_slider_button) == TRUE;
       gtk_widget_set_child_visible (path_bar->priv->up_slider_button, FALSE);
     }
-      
+
   if (need_sliders)
     {
       child_allocation.width = path_bar->priv->slider_width;
       child_allocation.x = down_slider_offset + allocation->x;
-      
+
       gtk_widget_size_allocate (path_bar->priv->down_slider_button, &child_allocation);
 
       needs_reorder |= gtk_widget_get_child_visible (path_bar->priv->down_slider_button) == FALSE;
@@ -1059,7 +1059,7 @@ gtk_path_bar_scroll_timeout (GtkPathBar *path_bar)
 	{
 	  path_bar->priv->need_timer = FALSE;
 
-	  path_bar->priv->timer = gdk_threads_add_timeout (TIMEOUT_REPEAT * SCROLL_DELAY_FACTOR,
+	  path_bar->priv->timer = gdk_threads_add_timeout (SCROLL_TIMEOUT * SCROLL_DELAY_FACTOR,
 					   (GSourceFunc)gtk_path_bar_scroll_timeout,
 					   path_bar);
           g_source_set_name_by_id (path_bar->priv->timer, "[gtk+] gtk_path_bar_scroll_timeout");
@@ -1139,7 +1139,7 @@ gtk_path_bar_slider_down_defocus (GtkWidget      *widget,
 }
 
 static gboolean
-gtk_path_bar_slider_button_press (GtkWidget      *widget, 
+gtk_path_bar_slider_button_press (GtkWidget      *widget,
 				  GdkEventButton *event,
 				  GtkPathBar     *path_bar)
 {
@@ -1164,7 +1164,7 @@ gtk_path_bar_slider_button_press (GtkWidget      *widget,
   if (!path_bar->priv->timer)
     {
       path_bar->priv->need_timer = TRUE;
-      path_bar->priv->timer = gdk_threads_add_timeout (TIMEOUT_INITIAL,
+      path_bar->priv->timer = gdk_threads_add_timeout (INITIAL_SCROLL_TIMEOUT,
 				       (GSourceFunc)gtk_path_bar_scroll_timeout,
 				       path_bar);
       g_source_set_name_by_id (path_bar->priv->timer, "[gtk+] gtk_path_bar_scroll_timeout");
@@ -1174,7 +1174,7 @@ gtk_path_bar_slider_button_press (GtkWidget      *widget,
 }
 
 static gboolean
-gtk_path_bar_slider_button_release (GtkWidget      *widget, 
+gtk_path_bar_slider_button_release (GtkWidget      *widget,
 				    GdkEventButton *event,
 				    GtkPathBar     *path_bar)
 {
@@ -1222,7 +1222,7 @@ reload_icons (GtkPathBar *path_bar)
 	  gtk_path_bar_update_button_appearance (path_bar, button_data, current_dir);
 	}
     }
-  
+
 }
 
 static void
@@ -1846,7 +1846,7 @@ _gtk_path_bar_set_file (GtkPathBar *path_bar,
 /**
  * _gtk_path_bar_up:
  * @path_bar: a #GtkPathBar
- * 
+ *
  * If the selected button in the pathbar is not the furthest button “up” (in the
  * root direction), act as if the user clicked on the next button up.
  **/
@@ -1873,7 +1873,7 @@ _gtk_path_bar_up (GtkPathBar *path_bar)
 /**
  * _gtk_path_bar_down:
  * @path_bar: a #GtkPathBar
- * 
+ *
  * If the selected button in the pathbar is not the furthest button “down” (in the
  * leaf direction), act as if the user clicked on the next button down.
  **/
