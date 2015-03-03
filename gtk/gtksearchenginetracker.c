@@ -287,8 +287,6 @@ query_callback (GObject      *object,
   GError *error = NULL;
   gint i, n;
 
-  gdk_threads_enter ();
-
   tracker = GTK_SEARCH_ENGINE_TRACKER (user_data);
 
   tracker->priv->query_pending = FALSE;
@@ -298,14 +296,14 @@ query_callback (GObject      *object,
     {
       _gtk_search_engine_error (GTK_SEARCH_ENGINE (tracker), error->message);
       g_error_free (error);
-      gdk_threads_leave ();
+      g_object_unref (tracker);
       return;
     }
 
   if (!reply)
     {
       _gtk_search_engine_finished (GTK_SEARCH_ENGINE (tracker));
-      gdk_threads_leave ();
+      g_object_unref (tracker);
       return;
     }
 
@@ -333,7 +331,7 @@ query_callback (GObject      *object,
   g_variant_unref (reply);
   g_variant_unref (r);
 
-  gdk_threads_leave ();
+  g_object_unref (tracker);
 }
 
 static void
@@ -393,7 +391,7 @@ gtk_search_engine_tracker_start (GtkSearchEngine *engine)
 
   g_debug ("SearchEngineTracker: query: %s", sparql->str);
 
-  get_query_results (tracker, sparql->str, query_callback, tracker);
+  get_query_results (tracker, sparql->str, query_callback, g_object_ref (tracker));
 
   g_string_free (sparql, TRUE);
   g_free (search_text);
