@@ -17077,8 +17077,8 @@ _gtk_widget_has_controller (GtkWidget          *widget,
 }
 
 void
-_gtk_widget_add_controller (GtkWidget           *widget,
-                            GtkEventController  *controller)
+_gtk_widget_add_controller (GtkWidget          *widget,
+                            GtkEventController *controller)
 {
   EventControllerData *data;
   GtkWidgetPrivate *priv;
@@ -17129,6 +17129,8 @@ _gtk_widget_remove_controller (GtkWidget          *widget,
 
   if (!data)
     return;
+
+  g_object_remove_weak_pointer (G_OBJECT (data->controller), (gpointer *) &data->controller);
 
   if (g_signal_handler_is_connected (widget, data->grab_notify_id))
     g_signal_handler_disconnect (widget, data->grab_notify_id);
