@@ -17,6 +17,7 @@
   <ItemGroup>
     <ClCompile Include="..\..\..\demos\icon-browser\iconbrowserapp.c"><Filter>Sources</Filter></ClCompile>
     <ClCompile Include="..\..\..\demos\icon-browser\iconbrowserwin.c"><Filter>Sources</Filter></ClCompile>
+    <ClCompile Include="..\..\..\demos\icon-browser\iconstore.c"><Filter>Sources</Filter></ClCompile>
     <ClCompile Include="..\..\..\demos\icon-browser\main.c"><Filter>Sources</Filter></ClCompile>
     <ClCompile Include="..\..\..\demos\icon-browser\resources.c"><Filter>Sources</Filter></ClCompile>
   </ItemGroup>

@@ -161,6 +161,7 @@
   <ItemGroup>
     <ClCompile Include="..\..\..\demos\icon-browser\iconbrowserapp.c" />
     <ClCompile Include="..\..\..\demos\icon-browser\iconbrowserwin.c" />
+    <ClCompile Include="..\..\..\demos\icon-browser\iconstore.c" />
     <ClCompile Include="..\..\..\demos\icon-browser\main.c" />
     <ClCompile Include="..\..\..\demos\icon-browser\resources.c" />
   </ItemGroup>
