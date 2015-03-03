@@ -14,6 +14,17 @@
 #   ./make-pot properties
 #
 # to generate po-properties/gtk30-properties.pot.
+#
+# Various things can be passed in by environment variables, which
+# are heavily inspired by the variables used in po/Makefile.in.in:
+#
+# XGETTEXT - path of the xgettext binary
+# top_srcdir - the location of the GTK+ checkout
+# srcdir - the directory where POTFILES.in is located (defaults to
+#          $top_srcdir/po or $top_srcdir/po-properties)
+# GETTEXT_PACKAGE - the gettext domain, used for naming the resulting
+#          .pot file (defaults to gtk30 or gtk30-properties)
+# XGETTEXT_KEYWORDS - --keyword arguments to pass to xgettext
 
 
 XGETTEXT="${XGETTEXT:-xgettext}"
