@@ -18,6 +18,9 @@ GtkWindow:
  - Don't ignore early maximization/fullscreening
  - Make subsurface popovers work under Weston
 
+* GL
+ - Port GdkGears example to modern OpenGL
+
 * Bugs fixed:
  741511 Critical message: NULL is passed to g_object_unref() in spi_...
  743323 avahi-discovered CUPS printers don't work
@@ -29,10 +32,14 @@ GtkWindow:
  745303 Wayland: Initial setup window is not maximised
  745344 overlay scrollbar fail
  745400 fix a couple of issues in gdkglcontext-win32
+ 703610 Problems with UC-Logic WA60 tablet
+ 729366 Changes to folder name are not shown when creating new fol...
+ 745315 Overshoot deceleration causes WebKitGTK1 web view to jump ...
 
 * Translation updates
  Afrikaans
  Czech
+ French
  Greek
  Hebrew
  Hungarian
