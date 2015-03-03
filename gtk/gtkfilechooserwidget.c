@@ -8438,8 +8438,6 @@ post_process_ui (GtkFileChooserWidget *impl)
 
   g_list_free (cells);
 
-  /* Set the GtkPathBar file system backend */
-  _gtk_path_bar_set_file_system (GTK_PATH_BAR (impl->priv->browse_path_bar), impl->priv->file_system);
   file = g_file_new_for_path ("/");
   _gtk_path_bar_set_file (GTK_PATH_BAR (impl->priv->browse_path_bar), file, FALSE);
   g_object_unref (file);
