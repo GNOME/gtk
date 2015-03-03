@@ -74,8 +74,8 @@ typedef enum {
 #define BUTTON_DATA(x) ((ButtonData *)(x))
 
 #define SCROLL_DELAY_FACTOR 5
-#define INITIAL_SCROLL_TIMEOUT 500
-#define SCROLL_TIMEOUT         50
+#define INITIAL_SCROLL_TIMEOUT 300
+#define SCROLL_TIMEOUT         150
 
 static guint path_bar_signals [LAST_SIGNAL] = { 0 };
 
