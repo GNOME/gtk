@@ -1,0 +1,61 @@
+#! /bin/bash
+
+# This script extracts the typical xgettext invokation out of
+# po/Makefile.in.in, in order for it to be available as a shell
+# command without the need to autogen first. This is needed for
+# translation tools such as the damn lies website.
+#
+# Call this from your GTK+ checkout directory, like this:
+#
+#   ./make-pot
+#
+# to generate po/gtk30.pot, and like this:
+#
+#   ./make-pot properties
+#
+# to generate po-properties/gtk30-properties.pot.
+
+
+XGETTEXT="${XGETTEXT:-xgettext}"
+top_srcdir="${top_srcdir:-.}"
+
+if test "$1" = "properties"; then
+  srcdir="${srcdir:-$top_srcdir/po-properties}"
+  GETTEXT_PACKAGE="${GETTEXT_PACKAGE:-gtk30-properties}"
+  XGETTEXT_KEYWORDS="${XGETTEXT_KEYWORDS:- --keyword --keyword=P_ }"
+else
+  srcdir="${srcdir:-$top_srcdir/po}"
+  GETTEXT_PACKAGE="${GETTEXT_PACKAGE:-gtk30}"
+  XGETTEXT_KEYWORDS="${XGETTEXT_KEYWORDS:- --keyword=_ --keyword=N_ --keyword=C_:1c,2 --keyword=NC_:1c,2 --keyword=g_dngettext:2,3 }"
+fi
+
+$XGETTEXT --default-domain="$GETTEXT_PACKAGE" \
+          --directory="$top_srcdir" \
+          --add-comments \
+          $XGETTEXT_KEYWORDS \
+          --from-code=utf-8 \
+          --flag=g_dngettext:2:pass-c-format \
+          --flag=g_strdup_printf:1:c-format \
+          --flag=g_string_printf:2:c-format \
+          --flag=g_string_append_printf:2:c-format \
+          --flag=g_error_new:3:c-format \
+          --flag=g_set_error:4:c-format \
+          --flag=g_markup_printf_escaped:1:c-format \
+          --flag=g_log:3:c-format \
+          --flag=g_print:1:c-format \
+          --flag=g_printerr:1:c-format \
+          --flag=g_printf:1:c-format \
+          --flag=g_fprintf:2:c-format \
+          --flag=g_sprintf:2:c-format \
+          --flag=g_snprintf:3:c-format \
+          --flag=g_scanner_error:2:c-format \
+          --flag=g_scanner_warn:2:c-format \
+          --flag=gtk_message_dialog_format_secondary_markup:2:c-format \
+          --flag=gtk_message_dialog_format_secondary_text:2:c-format \
+          --flag=gtk_message_dialog_new:5:c-format \
+          --flag=gtk_message_dialog_new_with_markup:5:c-format \
+          --files-from="$srcdir/POTFILES.in" \
+        && test ! -f "$GETTEXT_PACKAGE.po" \
+           || ( rm -f "$srcdir/$GETTEXT_PACKAGE.pot" \
+                && mv "$GETTEXT_PACKAGE.po" "$srcdir/$GETTEXT_PACKAGE.pot" )
+

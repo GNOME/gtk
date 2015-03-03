@@ -95,13 +95,12 @@ all-yes: $(CATALOGS)
 all-no:
 
 $(srcdir)/$(GETTEXT_PACKAGE).pot: $(POTFILES)
-	$(XGETTEXT) --default-domain=$(GETTEXT_PACKAGE) --directory=$(top_srcdir) \
-	  --add-comments --keyword --keyword=P_ \
-	  --from-code=utf-8 \
-	  --files-from=$(srcdir)/POTFILES.in \
-	&& test ! -f $(GETTEXT_PACKAGE).po \
-	   || ( rm -f $(srcdir)/$(GETTEXT_PACKAGE).pot \
-		&& mv $(GETTEXT_PACKAGE).po $(srcdir)/$(GETTEXT_PACKAGE).pot )
+	XGETTEXT="$(XGETTEXT)" \
+	XGETTEXT_KEYWORDS=$(XGETTEXT_KEYWORDS)" \
+	GETTEXT_PACKAGE="$(GETTEXT_PACKAGE)" \
+	top_srcdir="$(top_srcdir)" \
+	srcdir="$(srcdir)" \
+	$(top_srcdir)/make-pot
 
 install: install-exec install-data
 install-exec:

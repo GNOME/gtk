@@ -21,7 +21,8 @@ EXTRA_DIST +=			\
 	gtk-zip.sh.in		\
 	sanitize-la.sh		\
 	po/README.translators	\
-	po/po2tbl.sed.in
+	po/po2tbl.sed.in	\
+	make-pot
 
 MAINTAINERCLEANFILES = \
 	$(GITIGNORE_MAINTAINERCLEANFILES_TOPLEVEL) \

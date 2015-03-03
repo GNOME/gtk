@@ -16,6 +16,8 @@ GETTEXT_PACKAGE = @GETTEXT_PACKAGE@
 PACKAGE = @PACKAGE@
 VERSION = @VERSION@
 
+XGETTEXT_KEYWORDS= --keyword=_ --keyword=N_ --keyword=C_:1c,2 --keyword=NC_:1c,2 --keyword=g_dngettext:2,3
+
 SHELL = @SHELL@
 @SET_MAKE@
 
@@ -96,34 +98,12 @@ all-yes: $(CATALOGS)
 all-no:
 
 $(srcdir)/$(GETTEXT_PACKAGE).pot: $(POTFILES)
-	$(XGETTEXT) --default-domain=$(GETTEXT_PACKAGE) --directory=$(top_srcdir) \
-	  --add-comments --keyword=_ --keyword=N_ --keyword=C_:1c,2 --keyword=NC_:1c,2 \
-	  --from-code=utf-8 \
-	  --keyword=g_dngettext:2,3 \
-	  --flag=g_dngettext:2:pass-c-format \
-          --flag=g_strdup_printf:1:c-format \
-          --flag=g_string_printf:2:c-format \
-          --flag=g_string_append_printf:2:c-format \
-          --flag=g_error_new:3:c-format \
-          --flag=g_set_error:4:c-format \
-          --flag=g_markup_printf_escaped:1:c-format \
-          --flag=g_log:3:c-format \
-          --flag=g_print:1:c-format \
-          --flag=g_printerr:1:c-format \
-          --flag=g_printf:1:c-format \
-          --flag=g_fprintf:2:c-format \
-          --flag=g_sprintf:2:c-format \
-          --flag=g_snprintf:3:c-format \
-          --flag=g_scanner_error:2:c-format \
-          --flag=g_scanner_warn:2:c-format \
-          --flag=gtk_message_dialog_format_secondary_markup:2:c-format \
-          --flag=gtk_message_dialog_format_secondary_text:2:c-format \
-          --flag=gtk_message_dialog_new:5:c-format \
-          --flag=gtk_message_dialog_new_with_markup:5:c-format \
-	  --files-from=$(srcdir)/POTFILES.in \
-	&& test ! -f $(GETTEXT_PACKAGE).po \
-	   || ( rm -f $(srcdir)/$(GETTEXT_PACKAGE).pot \
-		&& mv $(GETTEXT_PACKAGE).po $(srcdir)/$(GETTEXT_PACKAGE).pot )
+	XGETTEXT="$(XGETTEXT)" \
+	XGETTEXT_KEYWORDS="$(XGETTEXT_KEYWORDS)" \
+	GETTEXT_PACKAGE="$(GETTEXT_PACKAGE)" \
+	top_srcdir="$(top_srcdir)" \
+	srcdir="$(srcdir)" \
+	$(top_srcdir)/make-pot
 
 install: install-exec install-data
 install-exec:
