@@ -53,7 +53,7 @@
 #include "gtkactionhelper.h"
 #include "gtkwidgetprivate.h"
 
-#include <math.h>
+#include "fallback-c89.c"
 
 #define DEFAULT_SLIDER_WIDTH    (36)
 
