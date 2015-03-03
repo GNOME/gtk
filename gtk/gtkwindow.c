@@ -1549,6 +1549,15 @@ drag_gesture_update_cb (GtkGestureDrag *gesture,
       event = gtk_gesture_get_last_event (GTK_GESTURE (gesture), sequence);
       event_widget = gtk_get_event_widget ((GdkEvent *) event);
 
+      /* Check whether the target widget should be left alone at handling
+       * the sequence, this is better done late to give room for gestures
+       * there to go denied.
+       *
+       * Besides claiming gestures, we must bail out too if there's gestures
+       * in the "none" state at this point, as those are still handling events
+       * and can potentially go claimed, and we don't want to stop the target
+       * widget from doing anything.
+       */
       if (event_widget != GTK_WIDGET (window) &&
           !gtk_widget_has_grab (event_widget) &&
           _gtk_widget_consumes_motion (event_widget, sequence))
