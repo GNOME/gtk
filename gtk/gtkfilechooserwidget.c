@@ -6205,7 +6205,7 @@ search_stop_searching (GtkFileChooserWidget *impl,
   if (priv->search_engine)
     {
       _gtk_search_engine_stop (priv->search_engine);
-      
+      g_signal_handlers_disconnect_by_data (priv->search_engine, impl);
       g_object_unref (priv->search_engine);
       priv->search_engine = NULL;
     }
