@@ -1758,9 +1758,11 @@ _gtk_path_bar_set_file (GtkPathBar *path_bar,
   info->parent_file = g_file_get_parent (info->file);
 
   if (path_bar->priv->get_info_cancellable)
-    g_cancellable_cancel (path_bar->priv->get_info_cancellable);
+    {
+      g_cancellable_cancel (path_bar->priv->get_info_cancellable);
+      g_object_unref (path_bar->priv->get_info_cancellable);
+    }
 
-  g_object_unref (path_bar->priv->get_info_cancellable);
   path_bar->priv->get_info_cancellable = g_cancellable_new ();
 
   g_file_query_info_async (file,
