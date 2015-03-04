@@ -3828,6 +3828,20 @@ places_sidebar_sort_func (GtkTreeModel *model,
       g_free (name_a);
       g_free (name_b);
     }
+  else if ((place_type_a == place_type_b) &&
+           (place_type_a == PLACES_BOOKMARK))
+    {
+      gint pos_a, pos_b;
+
+      gtk_tree_model_get (model, iter_a,
+                          PLACES_SIDEBAR_COLUMN_INDEX, &pos_a,
+                          -1);
+      gtk_tree_model_get (model, iter_b,
+                          PLACES_SIDEBAR_COLUMN_INDEX, &pos_b,
+                          -1);
+
+      retval = pos_a - pos_b;
+    }
   else if (place_type_a == PLACES_CONNECT_TO_SERVER)
     {
       retval = 1;
