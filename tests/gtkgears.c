@@ -36,6 +36,8 @@
  */
 
 #define _GNU_SOURCE
+#include "config.h"
+
 #include <math.h>
 #include <stdlib.h>
 #include <string.h>
@@ -46,6 +48,15 @@
 #define STRIPS_PER_TOOTH 7
 #define VERTICES_PER_TOOTH 34
 #define GEAR_VERTEX_STRIDE 6
+
+#ifndef HAVE_SINCOS
+static void
+sincos (double x, double *_sin, double *_cos)
+{
+  *_sin = sin (x);
+  *_cos = cos (x);
+}
+#endif
 
 /**
  * Struct describing the vertices in triangle strip
