@@ -1711,6 +1711,7 @@ gtk_path_bar_get_info_callback (GObject      *source,
    * Now, go on to fetch the info for this directory's parent.
    */
   file_info->file = file_info->parent_file;
+  file_info->parent_file= NULL;
   file_info->first_directory = FALSE;
 
   if (!file_info->file || button_data->is_root)
