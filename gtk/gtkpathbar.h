@@ -19,6 +19,7 @@
 #define __GTK_PATH_BAR_H__
 
 #include "gtkcontainer.h"
+#include "gtkbox.h"
 #include "gtkfilesystem.h"
 
 G_BEGIN_DECLS
@@ -37,14 +38,14 @@ typedef struct _GtkPathBarPrivate GtkPathBarPrivate;
 
 struct _GtkPathBar
 {
-  GtkContainer parent;
+  GtkBox parent;
 
   GtkPathBarPrivate *priv;
 };
 
 struct _GtkPathBarClass
 {
-  GtkContainerClass parent_class;
+  GtkBoxClass parent_class;
 
   void (* path_clicked) (GtkPathBar  *path_bar,
 			 GFile       *file,
