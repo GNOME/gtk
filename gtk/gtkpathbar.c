@@ -43,7 +43,6 @@ struct _GtkPathBarPrivate
 
   GList *button_list;
   GList *first_scrolled_button;
-  GList *fake_root;
   GtkWidget *up_slider_button;
   GtkWidget *down_slider_button;
   guint settings_signal_id;
@@ -90,6 +89,7 @@ struct _ButtonData
 {
   GtkWidget *button;
   ButtonType type;
+  gboolean is_root;
   char *dir_name;
   GFile *file;
   GtkWidget *image;
@@ -98,11 +98,6 @@ struct _ButtonData
   guint ignore_changes : 1;
   guint file_is_hidden : 1;
 };
-/* This macro is used to check if a button can be used as a fake root.
- * All buttons in front of a fake root are automatically hidden when in a
- * directory below a fake root and replaced with the "<" arrow button.
- */
-#define BUTTON_IS_FAKE_ROOT(button) ((button)->type == HOME_BUTTON)
 
 G_DEFINE_TYPE_WITH_PRIVATE (GtkPathBar, gtk_path_bar, GTK_TYPE_CONTAINER)
 
@@ -1049,8 +1044,6 @@ gtk_path_bar_scroll_up (GtkPathBar *path_bar)
     {
       if (list->prev && gtk_widget_get_child_visible (BUTTON_DATA (list->prev->data)->button))
 	{
-	  if (list->prev == path_bar->priv->fake_root)
-	    path_bar->priv->fake_root = NULL;
 	  path_bar->priv->first_scrolled_button = list;
 	  return;
 	}
@@ -1174,7 +1167,7 @@ reload_icons (GtkPathBar *path_bar)
       gboolean current_dir;
 
       button_data = BUTTON_DATA (list->data);
-      if (button_data->type != NORMAL_BUTTON)
+      if (button_data->type != NORMAL_BUTTON || button_data->is_root)
 	{
 	  current_dir = gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (button_data->button));
 	  gtk_path_bar_update_button_appearance (path_bar, button_data, current_dir);
@@ -1234,7 +1227,6 @@ gtk_path_bar_clear_buttons (GtkPathBar *path_bar)
       gtk_container_remove (GTK_CONTAINER (path_bar), BUTTON_DATA (path_bar->priv->button_list->data)->button);
     }
   path_bar->priv->first_scrolled_button = NULL;
-  path_bar->priv->fake_root = NULL;
 }
 
 static void
@@ -1483,6 +1475,7 @@ gtk_path_bar_setup_button_type (ButtonData *button_data,
   else if (gtk_path_bar_is_home_directory (location))
     {
       button_data->type = HOME_BUTTON;
+      button_data->is_root = TRUE;
     }
   else if (gtk_path_bar_is_desktop_directory (location))
     {
@@ -1492,6 +1485,7 @@ gtk_path_bar_setup_button_type (ButtonData *button_data,
     {
       button_data->dir_name = g_mount_get_name (mount);
       button_data->type = MOUNT_BUTTON;
+      button_data->is_root = TRUE;
 
       g_object_unref (mount);
     }
@@ -1595,7 +1589,6 @@ gtk_path_bar_check_parent_path (GtkPathBar         *path_bar,
 {
   GList *list;
   GList *current_path = NULL;
-  gboolean need_new_fake_root = FALSE;
 
   for (list = path_bar->priv->button_list; list; list = list->next)
     {
@@ -1607,28 +1600,10 @@ gtk_path_bar_check_parent_path (GtkPathBar         *path_bar,
 	  current_path = list;
 	  break;
 	}
-      if (list == path_bar->priv->fake_root)
-	need_new_fake_root = TRUE;
     }
 
   if (current_path)
     {
-      if (need_new_fake_root)
-	{
-	  path_bar->priv->fake_root = NULL;
-	  for (list = current_path; list; list = list->next)
-	    {
-	      ButtonData *button_data;
-
-	      button_data = list->data;
-	      if (BUTTON_IS_FAKE_ROOT (button_data))
-		{
-		  path_bar->priv->fake_root = list;
-		  break;
-		}
-	    }
-	}
-
       for (list = path_bar->priv->button_list; list; list = list->next)
 	{
 	  gtk_path_bar_update_button_appearance (path_bar,
@@ -1654,7 +1629,6 @@ struct SetFileInfo
   GFile *parent_file;
   GtkPathBar *path_bar;
   GList *new_buttons;
-  GList *fake_root;
   gboolean first_directory;
 };
 
@@ -1668,7 +1642,6 @@ gtk_path_bar_set_file_finish (struct SetFileInfo *info,
 
       gtk_path_bar_clear_buttons (info->path_bar);
       info->path_bar->priv->button_list = g_list_reverse (info->new_buttons);
-      info->path_bar->priv->fake_root = info->fake_root;
 
       for (l = info->path_bar->priv->button_list; l; l = l->next)
 	{
@@ -1734,16 +1707,13 @@ gtk_path_bar_get_info_callback (GObject      *source,
 
   file_info->new_buttons = g_list_prepend (file_info->new_buttons, button_data);
 
-  if (BUTTON_IS_FAKE_ROOT (button_data))
-    file_info->fake_root = file_info->new_buttons;
-
   /* We have assigned the info for the innermost button, i.e. the deepest directory.
    * Now, go on to fetch the info for this directory's parent.
    */
   file_info->file = file_info->parent_file;
   file_info->first_directory = FALSE;
 
-  if (!file_info->file)
+  if (!file_info->file || button_data->is_root)
     {
       /* No parent?  Okay, we are done. */
       gtk_path_bar_set_file_finish (file_info, TRUE);
