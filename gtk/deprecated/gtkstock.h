@@ -250,7 +250,7 @@ typedef char * GtkStock;
  *
  * The “Delete” item and icon.
  *
- * Deprecated: 3.10: Use the named icon &quot;edit-cut&quot; or the label &quot;_Delete&quot;.
+ * Deprecated: 3.10: Use the named icon &quot;edit-delete&quot; or the label &quot;_Delete&quot;.
  */
 #define GTK_STOCK_DELETE           ((GtkStock)"gtk-delete")
 
@@ -824,7 +824,7 @@ typedef char * GtkStock;
  *
  * The “Paste” item and icon.
  *
- * Deprecated: 3.10: Do not use an icon. Use label &quot;_Paste&quot;.
+ * Deprecated: 3.10: Use named icon &quot;edit-paste&quot; or the label &quot;_Paste&quot;.
  */
 #define GTK_STOCK_PASTE            ((GtkStock)"gtk-paste")
 
