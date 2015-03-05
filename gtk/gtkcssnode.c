@@ -24,6 +24,7 @@
 #include "gtkintl.h"
 #include "gtkmarshalers.h"
 #include "gtksettingsprivate.h"
+#include "gtktypebuiltins.h"
 
 /* When these change we do a full restyling. Otherwise we try to figure out
  * if we need to change things. */
@@ -38,7 +39,18 @@ enum {
   LAST_SIGNAL
 };
 
+enum {
+  PROP_0,
+  PROP_CLASSES,
+  PROP_ID,
+  PROP_STATE,
+  PROP_VISIBLE,
+  PROP_WIDGET_TYPE,
+  NUM_PROPERTIES
+};
+
 static guint cssnode_signals[LAST_SIGNAL] = { 0 };
+static GParamSpec *cssnode_properties[NUM_PROPERTIES];
 
 static GtkStyleProviderPrivate *
 gtk_css_node_get_style_provider_or_null (GtkCssNode *cssnode)
@@ -66,6 +78,76 @@ gtk_css_node_set_invalid (GtkCssNode *node,
         GTK_CSS_NODE_GET_CLASS (node)->queue_validate (node);
       else
         GTK_CSS_NODE_GET_CLASS (node)->dequeue_validate (node);
+    }
+}
+
+static void
+gtk_css_node_get_property (GObject    *object,
+                           guint       property_id,
+                           GValue     *value,
+                           GParamSpec *pspec)
+{
+  GtkCssNode *cssnode = GTK_CSS_NODE (object);
+
+  switch (property_id)
+    {
+    case PROP_CLASSES:
+      g_value_take_boxed (value, gtk_css_node_get_classes (cssnode));
+      break;
+
+    case PROP_ID:
+      g_value_set_string (value, gtk_css_node_get_id (cssnode));
+      break;
+
+    case PROP_STATE:
+      g_value_set_flags (value, gtk_css_node_get_state (cssnode));
+      break;
+
+    case PROP_VISIBLE:
+      g_value_set_boolean (value, gtk_css_node_get_visible (cssnode));
+      break;
+
+    case PROP_WIDGET_TYPE:
+      g_value_set_gtype (value, gtk_css_node_get_widget_type (cssnode));
+      break;
+
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, property_id, pspec);
+    }
+}
+
+static void
+gtk_css_node_set_property (GObject      *object,
+                           guint         property_id,
+                           const GValue *value,
+                           GParamSpec   *pspec)
+{
+  GtkCssNode *cssnode = GTK_CSS_NODE (object);
+
+  switch (property_id)
+    {
+    case PROP_CLASSES:
+      gtk_css_node_set_classes (cssnode, g_value_get_boxed (value));
+      break;
+
+    case PROP_ID:
+      gtk_css_node_set_id (cssnode, g_value_get_string (value));
+      break;
+
+    case PROP_STATE:
+      gtk_css_node_set_state (cssnode, g_value_get_flags (value));
+      break;
+
+    case PROP_VISIBLE:
+      gtk_css_node_set_visible (cssnode, g_value_get_boolean (value));
+      break;
+
+    case PROP_WIDGET_TYPE:
+      gtk_css_node_set_widget_type (cssnode, g_value_get_gtype (value));
+      break;
+
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, property_id, pspec);
     }
 }
 
@@ -404,6 +486,8 @@ gtk_css_node_class_init (GtkCssNodeClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
 
+  object_class->get_property = gtk_css_node_get_property;
+  object_class->set_property = gtk_css_node_set_property;
   object_class->dispose = gtk_css_node_dispose;
   object_class->finalize = gtk_css_node_finalize;
 
@@ -449,6 +533,40 @@ gtk_css_node_class_init (GtkCssNodeClass *klass)
 		  _gtk_marshal_VOID__OBJECT_OBJECT,
 		  G_TYPE_NONE, 2,
 		  GTK_TYPE_CSS_STYLE, GTK_TYPE_CSS_STYLE);
+
+  cssnode_properties[PROP_CLASSES] =
+    g_param_spec_boxed ("classes", "Classes",
+                         "List of classes",
+                         G_TYPE_STRV,
+                         G_PARAM_READWRITE
+                         | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
+  cssnode_properties[PROP_ID] =
+    g_param_spec_string ("id", "ID",
+                         "Unique ID",
+                         NULL,
+                         G_PARAM_READWRITE
+                         | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
+  cssnode_properties[PROP_STATE] =
+    g_param_spec_flags ("state", "State",
+                        "State flags",
+                        GTK_TYPE_STATE_FLAGS,
+                        0,
+                        G_PARAM_READWRITE
+                        | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
+  cssnode_properties[PROP_VISIBLE] =
+    g_param_spec_boolean ("visible", "Visible",
+                          "If other nodes can see this node",
+                          TRUE,
+                          G_PARAM_READWRITE
+                          | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
+  cssnode_properties[PROP_WIDGET_TYPE] =
+    g_param_spec_gtype ("widget-type", "Widget type",
+                        "GType of the widget",
+                        G_TYPE_NONE,
+                        G_PARAM_READWRITE
+                        | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
+
+  g_object_class_install_properties (object_class, NUM_PROPERTIES, cssnode_properties);
 }
 
 static void
@@ -763,6 +881,7 @@ gtk_css_node_set_visible (GtkCssNode *cssnode,
     return;
 
   cssnode->visible = visible;
+  g_object_notify_by_pspec (G_OBJECT (cssnode), cssnode_properties[PROP_VISIBLE]);
 
   if (cssnode->parent)
     gtk_css_node_set_children_changed (cssnode->parent);
@@ -779,7 +898,10 @@ gtk_css_node_set_widget_type (GtkCssNode *cssnode,
                               GType       widget_type)
 {
   if (gtk_css_node_declaration_set_type (&cssnode->decl, widget_type))
-    gtk_css_node_invalidate (cssnode, GTK_CSS_CHANGE_NAME);
+    {
+      gtk_css_node_invalidate (cssnode, GTK_CSS_CHANGE_NAME);
+      g_object_notify_by_pspec (G_OBJECT (cssnode), cssnode_properties[PROP_WIDGET_TYPE]);
+    }
 }
 
 GType
@@ -793,7 +915,10 @@ gtk_css_node_set_id (GtkCssNode *cssnode,
                      const char *id)
 {
   if (gtk_css_node_declaration_set_id (&cssnode->decl, id))
-    gtk_css_node_invalidate (cssnode, GTK_CSS_CHANGE_ID);
+    {
+      gtk_css_node_invalidate (cssnode, GTK_CSS_CHANGE_ID);
+      g_object_notify_by_pspec (G_OBJECT (cssnode), cssnode_properties[PROP_ID]);
+    }
 }
 
 const char *
@@ -807,7 +932,10 @@ gtk_css_node_set_state (GtkCssNode    *cssnode,
                         GtkStateFlags  state_flags)
 {
   if (gtk_css_node_declaration_set_state (&cssnode->decl, state_flags))
-    gtk_css_node_invalidate (cssnode, GTK_CSS_CHANGE_STATE);
+    {
+      gtk_css_node_invalidate (cssnode, GTK_CSS_CHANGE_STATE);
+      g_object_notify_by_pspec (G_OBJECT (cssnode), cssnode_properties[PROP_STATE]);
+    }
 }
 
 GtkStateFlags
@@ -829,12 +957,72 @@ gtk_css_node_get_junction_sides (GtkCssNode *cssnode)
   return gtk_css_node_declaration_get_junction_sides (cssnode->decl);
 }
 
+static void
+gtk_css_node_clear_classes (GtkCssNode *cssnode)
+{
+  GList *list, *l;
+  
+  list = gtk_css_node_declaration_list_classes (cssnode->decl);
+
+  for (l = list; l; l = l->next)
+    {
+      gtk_css_node_remove_class (cssnode, GPOINTER_TO_UINT (l->data));
+    }
+
+  g_list_free (list);
+}
+
+void
+gtk_css_node_set_classes (GtkCssNode  *cssnode,
+                          const char **classes)
+{
+  guint i;
+
+  g_object_freeze_notify (G_OBJECT (cssnode));
+
+  gtk_css_node_clear_classes (cssnode);
+
+  if (classes)
+    {
+      for (i = 0; classes[i] != NULL; i++)
+        {
+          gtk_css_node_add_class (cssnode, g_quark_from_string (classes[i]));
+        }
+    }
+
+  g_object_thaw_notify (G_OBJECT (cssnode));
+}
+
+char **
+gtk_css_node_get_classes (GtkCssNode *cssnode)
+{
+  GList *list, *l;
+  GPtrArray *result;
+  
+  list = gtk_css_node_declaration_list_classes (cssnode->decl);
+  result = g_ptr_array_new ();
+
+  for (l = list; l; l = l->next)
+    {
+      g_ptr_array_add (result, g_strdup (g_quark_to_string (GPOINTER_TO_UINT (l->data))));
+    }
+
+  g_ptr_array_add (result, NULL);
+
+  g_list_free (list);
+
+  return (char **) g_ptr_array_free (result, FALSE);
+}
+
 void
 gtk_css_node_add_class (GtkCssNode *cssnode,
                         GQuark      style_class)
 {
   if (gtk_css_node_declaration_add_class (&cssnode->decl, style_class))
-    gtk_css_node_invalidate (cssnode, GTK_CSS_CHANGE_CLASS);
+    {
+      gtk_css_node_invalidate (cssnode, GTK_CSS_CHANGE_CLASS);
+      g_object_notify_by_pspec (G_OBJECT (cssnode), cssnode_properties[PROP_CLASSES]);
+    }
 }
 
 void
@@ -842,7 +1030,10 @@ gtk_css_node_remove_class (GtkCssNode *cssnode,
                            GQuark      style_class)
 {
   if (gtk_css_node_declaration_remove_class (&cssnode->decl, style_class))
-    gtk_css_node_invalidate (cssnode, GTK_CSS_CHANGE_CLASS);
+    {
+      gtk_css_node_invalidate (cssnode, GTK_CSS_CHANGE_CLASS);
+      g_object_notify_by_pspec (G_OBJECT (cssnode), cssnode_properties[PROP_CLASSES]);
+    }
 }
 
 gboolean

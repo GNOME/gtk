@@ -123,6 +123,9 @@ GtkStateFlags           gtk_css_node_get_state          (GtkCssNode            *
 void                    gtk_css_node_set_junction_sides (GtkCssNode            *cssnode,
                                                          GtkJunctionSides       junction_sides);
 GtkJunctionSides        gtk_css_node_get_junction_sides (GtkCssNode            *cssnode);
+void                    gtk_css_node_set_classes        (GtkCssNode            *cssnode,
+                                                         const char           **classes);
+char **                 gtk_css_node_get_classes        (GtkCssNode            *cssnode);
 void                    gtk_css_node_add_class          (GtkCssNode            *cssnode,
                                                          GQuark                 style_class);
 void                    gtk_css_node_remove_class       (GtkCssNode            *cssnode,
