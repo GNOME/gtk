@@ -3017,6 +3017,11 @@ GtkInfoBar {
       }
     }
   }
+  .label:selected,
+  .label:selected:focus,
+  .label:selected:hover {
+    background-color: darken($selected_bg_color, 10%);
+  }
 }
 
 /************
