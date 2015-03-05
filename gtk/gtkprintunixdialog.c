@@ -726,6 +726,11 @@ gtk_print_unix_dialog_init (GtkPrintUnixDialog *dialog)
   priv->support_selection = FALSE;
   priv->has_selection = FALSE;
 
+  g_type_ensure (GTK_TYPE_PRINTER);
+  g_type_ensure (GTK_TYPE_PRINTER_OPTION);
+  g_type_ensure (GTK_TYPE_PRINTER_OPTION_SET);
+  g_type_ensure (GTK_TYPE_PRINTER_OPTION_WIDGET);
+
   gtk_widget_init_template (GTK_WIDGET (dialog));
   gtk_dialog_set_use_header_bar_from_setting (GTK_DIALOG (dialog));
   gtk_dialog_add_buttons (GTK_DIALOG (dialog),
@@ -737,7 +742,7 @@ gtk_print_unix_dialog_init (GtkPrintUnixDialog *dialog)
   widget = gtk_dialog_get_widget_for_response (GTK_DIALOG (dialog), GTK_RESPONSE_OK);
   gtk_widget_set_sensitive (widget, FALSE);
 
-  /* Treeview auxilary functions need to be setup here  */
+  /* Treeview auxiliary functions need to be setup here */
   gtk_tree_model_filter_set_visible_func (priv->printer_list_filter,
                                           (GtkTreeModelFilterVisibleFunc) is_printer_active,
                                           dialog,
