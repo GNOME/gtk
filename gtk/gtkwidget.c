@@ -16427,6 +16427,13 @@ gtk_widget_get_css_node (GtkWidget *widget)
   return widget->priv->cssnode;
 }
 
+GtkStyleContext *
+_gtk_widget_peek_style_context (GtkWidget *widget)
+{
+  return widget->priv->context;
+}
+
+
 /**
  * gtk_widget_get_style_context:
  * @widget: a #GtkWidget

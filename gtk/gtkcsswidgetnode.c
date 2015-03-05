@@ -22,6 +22,7 @@
 #include "gtkcontainerprivate.h"
 #include "gtkcssanimatedstyleprivate.h"
 #include "gtkprivate.h"
+#include "gtksettingsprivate.h"
 #include "gtkstylecontextprivate.h"
 #include "gtkwidgetprivate.h"
 /* widgets for special casing go here */
@@ -112,9 +113,11 @@ gtk_css_widget_node_validate (GtkCssNode *node)
   if (widget_node->widget == NULL)
     return;
 
-  context = gtk_widget_get_style_context (widget_node->widget);
-
-  gtk_style_context_validate (context, widget_node->accumulated_changes);
+  context = _gtk_widget_peek_style_context (widget_node->widget);
+  if (context)
+    gtk_style_context_validate (context, widget_node->accumulated_changes);
+  else
+    _gtk_widget_style_context_invalidated (widget_node->widget);
   _gtk_bitmask_free (widget_node->accumulated_changes);
   widget_node->accumulated_changes = _gtk_bitmask_new ();
 }
@@ -207,11 +210,19 @@ static GtkStyleProviderPrivate *
 gtk_css_widget_node_get_style_provider (GtkCssNode *node)
 {
   GtkCssWidgetNode *widget_node = GTK_CSS_WIDGET_NODE (node);
+  GtkStyleContext *context;
+  GtkStyleCascade *cascade;
 
   if (widget_node->widget == NULL)
     return NULL;
 
-  return gtk_style_context_get_style_provider (gtk_widget_get_style_context (widget_node->widget));
+  context = _gtk_widget_peek_style_context (widget_node->widget);
+  if (context)
+    return gtk_style_context_get_style_provider (context);
+
+  cascade = _gtk_settings_get_style_cascade (gtk_widget_get_settings (widget_node->widget),
+                                             gtk_widget_get_scale_factor (widget_node->widget));
+  return GTK_STYLE_PROVIDER_PRIVATE (cascade);
 }
 
 static GdkFrameClock *
