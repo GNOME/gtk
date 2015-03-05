@@ -44,25 +44,21 @@ gtk_css_widget_node_finalize (GObject *object)
   G_OBJECT_CLASS (gtk_css_widget_node_parent_class)->finalize (object);
 }
 
-static GtkCssStyle *
-gtk_css_widget_node_update_style (GtkCssNode   *cssnode,
-                                  GtkCssChange  pending_change,
-                                  gint64        timestamp,
-                                  GtkCssStyle  *old_style)
+static void
+gtk_css_widget_node_style_changed (GtkCssNode   *cssnode,
+                                   GtkCssStyle  *old_style,
+                                   GtkCssStyle  *new_style)
 {
   GtkCssWidgetNode *node;
-  GtkCssStyle *new_style;
   GtkBitmask *diff;
 
   node = GTK_CSS_WIDGET_NODE (cssnode);
 
-  new_style = GTK_CSS_NODE_CLASS (gtk_css_widget_node_parent_class)->update_style (cssnode, pending_change, timestamp, old_style);
+  GTK_CSS_NODE_CLASS (gtk_css_widget_node_parent_class)->style_changed (cssnode, old_style, new_style);
 
   diff = gtk_css_style_get_difference (new_style, old_style);
   node->accumulated_changes = _gtk_bitmask_union (node->accumulated_changes, diff);
   _gtk_bitmask_free (diff);
-
-  return new_style;
 }
 
 static gboolean
@@ -250,7 +246,6 @@ gtk_css_widget_node_class_init (GtkCssWidgetNodeClass *klass)
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
 
   object_class->finalize = gtk_css_widget_node_finalize;
-  node_class->update_style = gtk_css_widget_node_update_style;
   node_class->validate = gtk_css_widget_node_validate;
   node_class->queue_validate = gtk_css_widget_node_queue_validate;
   node_class->dequeue_validate = gtk_css_widget_node_dequeue_validate;
@@ -259,6 +254,7 @@ gtk_css_widget_node_class_init (GtkCssWidgetNodeClass *klass)
   node_class->get_widget_path = gtk_css_widget_node_get_widget_path;
   node_class->get_style_provider = gtk_css_widget_node_get_style_provider;
   node_class->get_frame_clock = gtk_css_widget_node_get_frame_clock;
+  node_class->style_changed = gtk_css_widget_node_style_changed;
 }
 
 static void
