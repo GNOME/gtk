@@ -2105,6 +2105,11 @@ GtkInfoBar {
     &:backdrop { @include button(backdrop, $selected_bg_color, $selected_fg_color, $edge: none); }
     &:backdrop:insensitive { @include button(backdrop-insensitive, $selected_bg_color, $selected_fg_color, $edge: none); }
   }
+  .label:selected,
+  .label:selected:focus,
+  .label:selected:hover {
+    background-color: lighten($selected_bg_color, 20%);
+  }
 }
 
 /************

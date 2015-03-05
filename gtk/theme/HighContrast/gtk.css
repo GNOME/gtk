@@ -2293,6 +2293,19 @@ GtkInfoBar {
       color: #7f7f7f;
       border-color: #8b8b8b;
       background-image: linear-gradient(to bottom, #fff); }
+  .info .label:selected,
+  .info .label:selected:focus,
+  .info .label:selected:hover,
+  .question .label:selected,
+  .question .label:selected:focus,
+  .question .label:selected:hover,
+  .warning .label:selected,
+  .warning .label:selected:focus,
+  .warning .label:selected:hover,
+  .error .label:selected,
+  .error .label:selected:focus,
+  .error .label:selected:hover {
+    background-color: #333333; }
 
 /************
  * Tooltips *
