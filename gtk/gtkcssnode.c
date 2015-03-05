@@ -34,6 +34,7 @@ G_DEFINE_TYPE (GtkCssNode, gtk_css_node, G_TYPE_OBJECT)
 enum {
   NODE_ADDED,
   NODE_REMOVED,
+  STYLE_CHANGED,
   LAST_SIGNAL
 };
 
@@ -388,6 +389,17 @@ gtk_css_node_real_node_added (GtkCssNode *parent,
 }
 
 static void
+gtk_css_node_real_style_changed (GtkCssNode  *cssnode,
+                                 GtkCssStyle *old_style,
+                                 GtkCssStyle *new_style)
+{
+  g_object_ref (new_style);
+  g_object_unref (old_style);
+
+  cssnode->style = new_style;
+}
+
+static void
 gtk_css_node_class_init (GtkCssNodeClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
@@ -408,6 +420,7 @@ gtk_css_node_class_init (GtkCssNodeClass *klass)
 
   klass->node_added = gtk_css_node_real_node_added;
   klass->node_removed = gtk_css_node_real_node_removed;
+  klass->style_changed = gtk_css_node_real_style_changed;
 
   cssnode_signals[NODE_ADDED] =
     g_signal_new (I_("node-added"),
@@ -427,6 +440,15 @@ gtk_css_node_class_init (GtkCssNodeClass *klass)
 		  _gtk_marshal_VOID__OBJECT_OBJECT,
 		  G_TYPE_NONE, 2,
 		  GTK_TYPE_CSS_NODE, GTK_TYPE_CSS_NODE);
+  cssnode_signals[STYLE_CHANGED] =
+    g_signal_new (I_("style-changed"),
+		  G_TYPE_FROM_CLASS (object_class),
+		  G_SIGNAL_RUN_LAST,
+                  G_STRUCT_OFFSET (GtkCssNodeClass, style_changed),
+		  NULL, NULL,
+		  _gtk_marshal_VOID__OBJECT_OBJECT,
+		  G_TYPE_NONE, 2,
+		  GTK_TYPE_CSS_STYLE, GTK_TYPE_CSS_STYLE);
 }
 
 static void
@@ -640,14 +662,7 @@ gtk_css_node_set_style (GtkCssNode  *cssnode,
   if (cssnode->style == style)
     return FALSE;
 
-  if (style)
-    g_object_ref (style);
-
-  if (cssnode->style)
-    g_object_unref (cssnode->style);
-
-  cssnode->style = style;
-
+  g_signal_emit (cssnode, cssnode_signals[STYLE_CHANGED], 0, cssnode->style, style);
   return TRUE;
 }
 

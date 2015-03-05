@@ -71,6 +71,9 @@ struct _GtkCssNodeClass
   void                  (* node_removed)                (GtkCssNode            *cssnode,
                                                          GtkCssNode            *child,
                                                          GtkCssNode            *previous);
+  void                  (* style_changed)               (GtkCssNode            *cssnode,
+                                                         GtkCssStyle           *old_style,
+                                                         GtkCssStyle           *new_style);
 
   gboolean              (* init_matcher)                (GtkCssNode            *cssnode,
                                                          GtkCssMatcher         *matcher);
