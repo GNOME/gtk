@@ -9,11 +9,19 @@
 		Name="GtkDoInstall"
 		Value="
 mkdir $(CopyDir)\bin&#x0D;&#x0A;
-copy $(ConfigurationName)\$(PlatformName)\bin\*-vs$(VSVer).dll $(CopyDir)\bin&#x0D;&#x0A;
-copy $(ConfigurationName)\$(PlatformName)\bin\*.exe $(CopyDir)\bin&#x0D;&#x0A;
+copy $(ConfigurationName)\$(PlatformName)\bin\$(GtkDllPrefix)gdk-win32$(GtkDllSuffix).dll $(CopyDir)\bin&#x0D;&#x0A;
+copy $(ConfigurationName)\$(PlatformName)\bin\$(GtkDllPrefix)gdk-win32$(GtkDllSuffix).pdb $(CopyDir)\bin&#x0D;&#x0A;
+copy $(ConfigurationName)\$(PlatformName)\bin\$(GtkDllPrefix)gtk-win32$(GtkDllSuffix).dll $(CopyDir)\bin&#x0D;&#x0A;
+copy $(ConfigurationName)\$(PlatformName)\bin\$(GtkDllPrefix)gtk-win32$(GtkDllSuffix).pdb $(CopyDir)\bin&#x0D;&#x0A;
+copy $(ConfigurationName)\$(PlatformName)\bin\$(GtkDllPrefix)gailutil$(GtkDllSuffix).dll $(CopyDir)\bin&#x0D;&#x0A;
+copy $(ConfigurationName)\$(PlatformName)\bin\$(GtkDllPrefix)gailutil$(GtkDllSuffix).pdb $(CopyDir)\bin&#x0D;&#x0A;
+copy $(ConfigurationName)\$(PlatformName)\bin\gtk-demo.exe $(CopyDir)\bin&#x0D;&#x0A;
+copy $(ConfigurationName)\$(PlatformName)\bin\gtk-demo.pdb $(CopyDir)\bin&#x0D;&#x0A;
 
 mkdir $(CopyDir)\lib&#x0D;&#x0A;
-copy $(ConfigurationName)\$(PlatformName)\bin\*-$(ApiVersion).lib $(CopyDir)\lib&#x0D;&#x0A;
+copy $(ConfigurationName)\$(PlatformName)\bin\gdk-win32-$(ApiVersion).lib $(CopyDir)\lib&#x0D;&#x0A;
+copy $(ConfigurationName)\$(PlatformName)\bin\gtk-win32-$(ApiVersion).lib $(CopyDir)\lib&#x0D;&#x0A;
+copy $(ConfigurationName)\$(PlatformName)\bin\gailutil-$(ApiVersion).lib $(CopyDir)\lib&#x0D;&#x0A;
 
 mkdir $(CopyDir)\include\gtk-$(ApiVersion)\gdk&#x0D;&#x0A;
 copy ..\..\..\gdk\gdk.h $(CopyDir)\include\gtk-$(ApiVersion)\gdk&#x0D;&#x0A;
@@ -274,8 +282,6 @@ mkdir $(CopyDir)\include\gail-1.0\libgail-util&#x0D;&#x0A;
 copy ..\..\..\modules\other\gail\libgail-util\gailmisc.h $(CopyDir)\include\gail-1.0\libgail-util&#x0D;&#x0A;
 copy ..\..\..\modules\other\gail\libgail-util\gailtextutil.h $(CopyDir)\include\gail-1.0\libgail-util&#x0D;&#x0A;
 copy ..\..\..\modules\other\gail\libgail-util\gail-util.h $(CopyDir)\include\gail-1.0\libgail-util&#x0D;&#x0A;
-
-copy $(ConfigurationName)\$(PlatformName)\bin\*-$(ApiVersion).lib $(CopyDir)\lib&#x0D;&#x0A;
 
 mkdir $(Outdir)\lib\gtk-$(ApiVersion)\$(GtkHost)\engines&#x0D;&#x0A;
 copy $(ConfigurationName)\$(PlatformName)\bin\libwimp.dll $(Outdir)\lib\gtk-$(ApiVersion)\$(GtkHost)\engines&#x0D;&#x0A;

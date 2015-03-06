@@ -9,11 +9,19 @@
     <InstalledBins>$(BinDir)\gtk-demo.exe</InstalledBins>
     <GtkDoInstall>
 mkdir $(CopyDir)\bin
-copy "$(BinDir)\*-vs$(VSVer).dll" $(CopyDir)\bin
-copy "$(BinDir)\*.exe" $(CopyDir)\bin
+copy "$(BinDir)\$(GtkDllPrefix)gdk-win32$(GtkDllSuffix).dll" $(CopyDir)\bin
+copy "$(BinDir)\$(GtkDllPrefix)gdk-win32$(GtkDllSuffix).pdb" $(CopyDir)\bin
+copy "$(BinDir)\$(GtkDllPrefix)gtk-win32$(GtkDllSuffix).dll" $(CopyDir)\bin
+copy "$(BinDir)\$(GtkDllPrefix)gtk-win32$(GtkDllSuffix).pdb" $(CopyDir)\bin
+copy "$(BinDir)\$(GtkDllPrefix)gailutil$(GtkDllSuffix).dll" $(CopyDir)\bin
+copy "$(BinDir)\$(GtkDllPrefix)gailutil$(GtkDllSuffix).pdb" $(CopyDir)\bin
+copy "$(BinDir)\gtk-demo.exe" $(CopyDir)\bin
+copy "$(BinDir)\gtk-demo.pdb" $(CopyDir)\bin
 
 mkdir $(CopyDir)\lib
-copy "$(BinDir)\*-$(ApiVersion).lib" $(CopyDir)\lib
+copy "$(BinDir)\gdk-win32-$(ApiVersion).lib" $(CopyDir)\lib
+copy "$(BinDir)\gtk-win32-$(ApiVersion).lib" $(CopyDir)\lib
+copy "$(BinDir)\gailutil-$(ApiVersion).lib" $(CopyDir)\lib
 
 mkdir $(CopyDir)\include\gtk-$(ApiVersion)\gdk
 copy ..\..\..\gdk\gdk.h $(CopyDir)\include\gtk-$(ApiVersion)\gdk
@@ -274,8 +282,6 @@ mkdir $(CopyDir)\include\gail-1.0\libgail-util
 copy ..\..\..\modules\other\gail\libgail-util\gailmisc.h $(CopyDir)\include\gail-1.0\libgail-util
 copy ..\..\..\modules\other\gail\libgail-util\gailtextutil.h $(CopyDir)\include\gail-1.0\libgail-util
 copy ..\..\..\modules\other\gail\libgail-util\gail-util.h $(CopyDir)\include\gail-1.0\libgail-util
-
-copy "$(BinDir)\*-$(ApiVersion).lib" $(CopyDir)\lib
 
 mkdir $(CopyDir)\lib\gtk-$(ApiVersion)\$(GtkHost)\engines
 copy "$(BinDir)\libwimp.dll" $(CopyDir)\lib\gtk-$(ApiVersion)\$(GtkHost)\engines
