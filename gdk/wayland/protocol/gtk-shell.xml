@@ -1,12 +1,20 @@
 <protocol name="gtk">
 
   <interface name="gtk_shell" version="1">
+    <description summary="gtk specific extensions">
+      gtk_shell is a protocol extension providing additional features for
+      clients implementing it. It is not backward compatible, and a client must
+      always only bind to the specific version it implements. If a client binds
+      to a version different from the version the server provides, an error will
+      be raised.
+    </description>
+
     <enum name="capability">
       <entry name="global_app_menu" value="1"/>
       <entry name="global_menu_bar" value="2"/>
       <entry name="desktop_icons" value="3"/>
     </enum>
-    
+
     <event name="capabilities">
       <arg name="capabilities" type="uint"/>
     </event>
