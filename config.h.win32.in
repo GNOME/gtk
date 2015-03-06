@@ -141,6 +141,9 @@
 #define HAVE_ROUND 1
 #endif
 
+/* Define to 1 if sincos() is available */
+/* #undef HAVE_SINCOS */
+
 /* Have the sockaddr_un.sun_len member */
 /* #undef HAVE_SOCKADDR_UN_SUN_LEN */
 
