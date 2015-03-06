@@ -9,573 +9,296 @@
     <InstalledBins>$(BinDir)\gtk-demo.exe</InstalledBins>
     <GtkDoInstall>
 mkdir $(CopyDir)\bin
-
 copy "$(BinDir)\*-vs$(VSVer).dll" $(CopyDir)\bin
-
 copy "$(BinDir)\*.exe" $(CopyDir)\bin
 
-
 mkdir $(CopyDir)\lib
-
 copy "$(BinDir)\*-$(ApiVersion).lib" $(CopyDir)\lib
 
-
 mkdir $(CopyDir)\include\gtk-$(ApiVersion)\gdk
-
 copy ..\..\..\gdk\gdk.h $(CopyDir)\include\gtk-$(ApiVersion)\gdk
-
 copy ..\..\..\gdk\gdkapplaunchcontext.h $(CopyDir)\include\gtk-$(ApiVersion)\gdk
-
 copy ..\..\..\gdk\gdkcairo.h $(CopyDir)\include\gtk-$(ApiVersion)\gdk
-
 copy ..\..\..\gdk\gdkcolor.h $(CopyDir)\include\gtk-$(ApiVersion)\gdk
-
 copy ..\..\..\gdk\gdkcursor.h $(CopyDir)\include\gtk-$(ApiVersion)\gdk
-
 copy ..\..\..\gdk\gdkdisplay.h $(CopyDir)\include\gtk-$(ApiVersion)\gdk
-
 copy ..\..\..\gdk\gdkdisplaymanager.h $(CopyDir)\include\gtk-$(ApiVersion)\gdk
-
 copy ..\..\..\gdk\gdkdnd.h $(CopyDir)\include\gtk-$(ApiVersion)\gdk
-
 copy ..\..\..\gdk\gdkdrawable.h $(CopyDir)\include\gtk-$(ApiVersion)\gdk
-
 copy ..\..\..\gdk\gdkenumtypes.h $(CopyDir)\include\gtk-$(ApiVersion)\gdk
-
 copy ..\..\..\gdk\gdkevents.h $(CopyDir)\include\gtk-$(ApiVersion)\gdk
-
 copy ..\..\..\gdk\gdkfont.h $(CopyDir)\include\gtk-$(ApiVersion)\gdk
-
 copy ..\..\..\gdk\gdkgc.h $(CopyDir)\include\gtk-$(ApiVersion)\gdk
-
 copy ..\..\..\gdk\gdki18n.h $(CopyDir)\include\gtk-$(ApiVersion)\gdk
-
 copy ..\..\..\gdk\gdkimage.h $(CopyDir)\include\gtk-$(ApiVersion)\gdk
-
 copy ..\..\..\gdk\gdkinput.h $(CopyDir)\include\gtk-$(ApiVersion)\gdk
-
 copy ..\..\..\gdk\gdkkeys.h $(CopyDir)\include\gtk-$(ApiVersion)\gdk
-
 copy ..\..\..\gdk\gdkkeysyms.h $(CopyDir)\include\gtk-$(ApiVersion)\gdk
-
 copy ..\..\..\gdk\gdkkeysyms-compat.h $(CopyDir)\include\gtk-$(ApiVersion)\gdk
-
 copy ..\..\..\gdk\gdkpango.h $(CopyDir)\include\gtk-$(ApiVersion)\gdk
-
 copy ..\..\..\gdk\gdkpixbuf.h $(CopyDir)\include\gtk-$(ApiVersion)\gdk
-
 copy ..\..\..\gdk\gdkpixmap.h $(CopyDir)\include\gtk-$(ApiVersion)\gdk
-
 copy ..\..\..\gdk\gdkprivate.h $(CopyDir)\include\gtk-$(ApiVersion)\gdk
-
 copy ..\..\..\gdk\gdkproperty.h $(CopyDir)\include\gtk-$(ApiVersion)\gdk
-
 copy ..\..\..\gdk\gdkregion.h $(CopyDir)\include\gtk-$(ApiVersion)\gdk
-
 copy ..\..\..\gdk\gdkrgb.h $(CopyDir)\include\gtk-$(ApiVersion)\gdk
-
 copy ..\..\..\gdk\gdkscreen.h $(CopyDir)\include\gtk-$(ApiVersion)\gdk
-
 copy ..\..\..\gdk\gdkselection.h $(CopyDir)\include\gtk-$(ApiVersion)\gdk
-
 copy ..\..\..\gdk\gdkspawn.h $(CopyDir)\include\gtk-$(ApiVersion)\gdk
-
 copy ..\..\..\gdk\gdktestutils.h $(CopyDir)\include\gtk-$(ApiVersion)\gdk
-
 copy ..\..\..\gdk\gdktypes.h $(CopyDir)\include\gtk-$(ApiVersion)\gdk
-
 copy ..\..\..\gdk\gdkvisual.h $(CopyDir)\include\gtk-$(ApiVersion)\gdk
-
 copy ..\..\..\gdk\win32\gdkwin32.h $(CopyDir)\include\gtk-$(ApiVersion)\gdk
-
 copy ..\..\..\gdk\gdkwindow.h $(CopyDir)\include\gtk-$(ApiVersion)\gdk
 
-
 mkdir $(CopyDir)\include\gtk-$(ApiVersion)\gtk
-
 copy ..\..\..\gtk\gtk.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk
-
 copy ..\..\..\gtk\gtkaboutdialog.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk
-
 copy ..\..\..\gtk\gtkaccelgroup.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk
-
 copy ..\..\..\gtk\gtkaccellabel.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk
-
 copy ..\..\..\gtk\gtkaccelmap.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk
-
 copy ..\..\..\gtk\gtkaccessible.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk
-
 copy ..\..\..\gtk\gtkaction.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk
-
 copy ..\..\..\gtk\gtkactiongroup.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk
-
 copy ..\..\..\gtk\gtkactivatable.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk
-
 copy ..\..\..\gtk\gtkadjustment.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk
-
 copy ..\..\..\gtk\gtkalignment.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk
-
 copy ..\..\..\gtk\gtkarrow.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk
-
 copy ..\..\..\gtk\gtkaspectframe.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk
-
 copy ..\..\..\gtk\gtkassistant.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk
-
 copy ..\..\..\gtk\gtkbbox.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk
-
 copy ..\..\..\gtk\gtkbin.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk
-
 copy ..\..\..\gtk\gtkbindings.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk
-
 copy ..\..\..\gtk\gtkbox.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk
-
 copy ..\..\..\gtk\gtkbuildable.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk
-
 copy ..\..\..\gtk\gtkbuilder.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk
-
 copy ..\..\..\gtk\gtkbutton.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk
-
 copy ..\..\..\gtk\gtkcalendar.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk
-
 copy ..\..\..\gtk\gtkcelleditable.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk
-
 copy ..\..\..\gtk\gtkcelllayout.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk
-
 copy ..\..\..\gtk\gtkcellrenderer.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk
-
 copy ..\..\..\gtk\gtkcellrendereraccel.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk
-
 copy ..\..\..\gtk\gtkcellrenderercombo.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk
-
 copy ..\..\..\gtk\gtkcellrendererpixbuf.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk
-
 copy ..\..\..\gtk\gtkcellrendererprogress.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk
-
 copy ..\..\..\gtk\gtkcellrendererspin.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk
-
 copy ..\..\..\gtk\gtkcellrendererspinner.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk
-
 copy ..\..\..\gtk\gtkcellrenderertext.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk
-
 copy ..\..\..\gtk\gtkcellrenderertoggle.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk
-
 copy ..\..\..\gtk\gtkcellview.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk
-
 copy ..\..\..\gtk\gtkcheckbutton.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk
-
 copy ..\..\..\gtk\gtkcheckmenuitem.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk
-
 copy ..\..\..\gtk\gtkclipboard.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk
-
 copy ..\..\..\gtk\gtkclist.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk
-
 copy ..\..\..\gtk\gtkcolorbutton.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk
-
 copy ..\..\..\gtk\gtkcolorsel.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk
-
 copy ..\..\..\gtk\gtkcolorseldialog.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk
-
 copy ..\..\..\gtk\gtkcombo.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk
-
 copy ..\..\..\gtk\gtkcombobox.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk
-
 copy ..\..\..\gtk\gtkcomboboxentry.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk
-
 copy ..\..\..\gtk\gtkcomboboxtext.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk
-
 copy ..\..\..\gtk\gtkcontainer.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk
-
 copy ..\..\..\gtk\gtkctree.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk
-
 copy ..\..\..\gtk\gtkcurve.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk
-
 copy ..\..\..\gtk\gtkdebug.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk
-
 copy ..\..\..\gtk\gtkdialog.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk
-
 copy ..\..\..\gtk\gtkdnd.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk
-
 copy ..\..\..\gtk\gtkdrawingarea.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk
-
 copy ..\..\..\gtk\gtkeditable.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk
-
 copy ..\..\..\gtk\gtkentry.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk
-
 copy ..\..\..\gtk\gtkentrybuffer.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk
-
 copy ..\..\..\gtk\gtkentrycompletion.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk
-
 copy ..\..\..\gtk\gtkenums.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk
-
 copy ..\..\..\gtk\gtkeventbox.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk
-
 copy ..\..\..\gtk\gtkexpander.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk
-
 copy ..\..\..\gtk\gtkfilechooser.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk
-
 copy ..\..\..\gtk\gtkfilechooserbutton.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk
-
 copy ..\..\..\gtk\gtkfilechooserdialog.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk
-
 copy ..\..\..\gtk\gtkfilechooserwidget.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk
-
 copy ..\..\..\gtk\gtkfilefilter.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk
-
 copy ..\..\..\gtk\gtkfilesel.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk
-
 copy ..\..\..\gtk\gtkfixed.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk
-
 copy ..\..\..\gtk\gtkfontbutton.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk
-
 copy ..\..\..\gtk\gtkfontsel.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk
-
 copy ..\..\..\gtk\gtkframe.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk
-
 copy ..\..\..\gtk\gtkgamma.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk
-
 copy ..\..\..\gtk\gtkgc.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk
-
 copy ..\..\..\gtk\gtkhandlebox.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk
-
 copy ..\..\..\gtk\gtkhbbox.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk
-
 copy ..\..\..\gtk\gtkhbox.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk
-
 copy ..\..\..\gtk\gtkhpaned.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk
-
 copy ..\..\..\gtk\gtkhruler.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk
-
 copy ..\..\..\gtk\gtkhscale.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk
-
 copy ..\..\..\gtk\gtkhscrollbar.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk
-
 copy ..\..\..\gtk\gtkhseparator.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk
-
 copy ..\..\..\gtk\gtkhsv.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk
-
 copy ..\..\..\gtk\gtkiconfactory.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk
-
 copy ..\..\..\gtk\gtkicontheme.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk
-
 copy ..\..\..\gtk\gtkiconview.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk
-
 copy ..\..\..\gtk\gtkimage.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk
-
 copy ..\..\..\gtk\gtkimagemenuitem.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk
-
 copy ..\..\..\gtk\gtkimcontext.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk
-
 copy ..\..\..\gtk\gtkimcontextsimple.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk
-
 copy ..\..\..\gtk\gtkimmodule.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk
-
 copy ..\..\..\gtk\gtkimmulticontext.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk
-
 copy ..\..\..\gtk\gtkinfobar.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk
-
 copy ..\..\..\gtk\gtkinputdialog.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk
-
 copy ..\..\..\gtk\gtkinvisible.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk
-
 copy ..\..\..\gtk\gtkitem.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk
-
 copy ..\..\..\gtk\gtkitemfactory.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk
-
 copy ..\..\..\gtk\gtklabel.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk
-
 copy ..\..\..\gtk\gtklayout.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk
-
 copy ..\..\..\gtk\gtklinkbutton.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk
-
 copy ..\..\..\gtk\gtklist.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk
-
 copy ..\..\..\gtk\gtklistitem.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk
-
 copy ..\..\..\gtk\gtkliststore.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk
-
 copy ..\..\..\gtk\gtkmain.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk
-
 copy ..\..\..\gtk\gtkmarshal.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk
-
 copy ..\..\..\gtk\gtkmenu.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk
-
 copy ..\..\..\gtk\gtkmenubar.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk
-
 copy ..\..\..\gtk\gtkmenuitem.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk
-
 copy ..\..\..\gtk\gtkmenushell.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk
-
 copy ..\..\..\gtk\gtkmenutoolbutton.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk
-
 copy ..\..\..\gtk\gtkmessagedialog.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk
-
 copy ..\..\..\gtk\gtkmisc.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk
-
 copy ..\..\..\gtk\gtkmodules.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk
-
 copy ..\..\..\gtk\gtkmountoperation.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk
-
 copy ..\..\..\gtk\gtknotebook.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk
-
 copy ..\..\..\gtk\gtkobject.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk
-
 copy ..\..\..\gtk\gtkoffscreenwindow.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk
-
 copy ..\..\..\gtk\gtkoldeditable.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk
-
 copy ..\..\..\gtk\gtkoptionmenu.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk
-
 copy ..\..\..\gtk\gtkorientable.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk
-
 copy ..\..\..\gtk\gtkpagesetup.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk
-
 copy ..\..\..\gtk\gtkpaned.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk
-
 copy ..\..\..\gtk\gtkpapersize.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk
-
 copy ..\..\..\gtk\gtkpixmap.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk
-
 copy ..\..\..\gtk\gtkplug.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk
-
 copy ..\..\..\gtk\gtkpreview.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk
-
 copy ..\..\..\gtk\gtkprintcontext.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk
-
 copy ..\..\..\gtk\gtkprintoperation.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk
-
 copy ..\..\..\gtk\gtkprintoperationpreview.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk
-
 copy ..\..\..\gtk\gtkprintsettings.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk
-
 copy ..\..\..\gtk\gtkprogress.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk
-
 copy ..\..\..\gtk\gtkprogressbar.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk
-
 copy ..\..\..\gtk\gtkradioaction.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk
-
 copy ..\..\..\gtk\gtkradiobutton.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk
-
 copy ..\..\..\gtk\gtkradiomenuitem.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk
-
 copy ..\..\..\gtk\gtkradiotoolbutton.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk
-
 copy ..\..\..\gtk\gtkrange.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk
-
 copy ..\..\..\gtk\gtkrc.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk
-
 copy ..\..\..\gtk\gtkrecentaction.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk
-
 copy ..\..\..\gtk\gtkrecentchooser.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk
-
 copy ..\..\..\gtk\gtkrecentchooserdialog.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk
-
 copy ..\..\..\gtk\gtkrecentchoosermenu.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk
-
 copy ..\..\..\gtk\gtkrecentchooserwidget.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk
-
 copy ..\..\..\gtk\gtkrecentfilter.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk
-
 copy ..\..\..\gtk\gtkrecentmanager.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk
-
 copy ..\..\..\gtk\gtkruler.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk
-
 copy ..\..\..\gtk\gtkscale.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk
-
 copy ..\..\..\gtk\gtkscalebutton.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk
-
 copy ..\..\..\gtk\gtkscrollbar.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk
-
 copy ..\..\..\gtk\gtkscrolledwindow.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk
-
 copy ..\..\..\gtk\gtkselection.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk
-
 copy ..\..\..\gtk\gtkseparator.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk
-
 copy ..\..\..\gtk\gtkseparatormenuitem.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk
-
 copy ..\..\..\gtk\gtkseparatortoolitem.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk
-
 copy ..\..\..\gtk\gtksettings.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk
-
 copy ..\..\..\gtk\gtkshow.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk
-
 copy ..\..\..\gtk\gtksignal.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk
-
 copy ..\..\..\gtk\gtksizegroup.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk
-
 copy ..\..\..\gtk\gtksocket.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk
-
 copy ..\..\..\gtk\gtkspinbutton.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk
-
 copy ..\..\..\gtk\gtkspinner.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk
-
 copy ..\..\..\gtk\gtkstatusbar.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk
-
 copy ..\..\..\gtk\gtkstatusicon.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk
-
 copy ..\..\..\gtk\gtkstock.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk
-
 copy ..\..\..\gtk\gtkstyle.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk
-
 copy ..\..\..\gtk\gtktable.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk
-
 copy ..\..\..\gtk\gtktearoffmenuitem.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk
-
 copy ..\..\..\gtk\gtktestutils.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk
-
 copy ..\..\..\gtk\gtktext.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk
-
 copy ..\..\..\gtk\gtktextbuffer.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk
-
 copy ..\..\..\gtk\gtktextbufferrichtext.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk
-
 copy ..\..\..\gtk\gtktextchild.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk
-
 copy ..\..\..\gtk\gtktextdisplay.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk
-
 copy ..\..\..\gtk\gtktextiter.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk
-
 copy ..\..\..\gtk\gtktextlayout.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk
-
 copy ..\..\..\gtk\gtktextmark.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk
-
 copy ..\..\..\gtk\gtktexttag.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk
-
 copy ..\..\..\gtk\gtktexttagtable.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk
-
 copy ..\..\..\gtk\gtktextview.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk
-
 copy ..\..\..\gtk\gtktipsquery.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk
-
 copy ..\..\..\gtk\gtktoggleaction.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk
-
 copy ..\..\..\gtk\gtktogglebutton.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk
-
 copy ..\..\..\gtk\gtktoggletoolbutton.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk
-
 copy ..\..\..\gtk\gtktoolbar.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk
-
 copy ..\..\..\gtk\gtktoolbutton.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk
-
 copy ..\..\..\gtk\gtktoolitem.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk
-
 copy ..\..\..\gtk\gtktoolitemgroup.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk
-
 copy ..\..\..\gtk\gtktoolpalette.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk
-
 copy ..\..\..\gtk\gtktoolshell.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk
-
 copy ..\..\..\gtk\gtktooltip.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk
-
 copy ..\..\..\gtk\gtktooltips.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk
-
 copy ..\..\..\gtk\gtktree.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk
-
 copy ..\..\..\gtk\gtktreednd.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk
-
 copy ..\..\..\gtk\gtktreeitem.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk
-
 copy ..\..\..\gtk\gtktreemodel.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk
-
 copy ..\..\..\gtk\gtktreemodelfilter.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk
-
 copy ..\..\..\gtk\gtktreemodelsort.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk
-
 copy ..\..\..\gtk\gtktreeselection.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk
-
 copy ..\..\..\gtk\gtktreesortable.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk
-
 copy ..\..\..\gtk\gtktreestore.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk
-
 copy ..\..\..\gtk\gtktreeview.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk
-
 copy ..\..\..\gtk\gtktreeviewcolumn.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk
-
 copy ..\..\..\gtk\gtktypebuiltins.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk
-
 copy ..\..\..\gtk\gtktypeutils.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk
-
 copy ..\..\..\gtk\gtkuimanager.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk
-
 copy ..\..\..\gtk\gtkvbbox.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk
-
 copy ..\..\..\gtk\gtkvbox.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk
-
 copy ..\..\..\gtk\gtkversion.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk
-
 copy ..\..\..\gtk\gtkviewport.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk
-
 copy ..\..\..\gtk\gtkvolumebutton.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk
-
 copy ..\..\..\gtk\gtkvpaned.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk
-
 copy ..\..\..\gtk\gtkvruler.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk
-
 copy ..\..\..\gtk\gtkvscale.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk
-
 copy ..\..\..\gtk\gtkvscrollbar.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk
-
 copy ..\..\..\gtk\gtkvseparator.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk
-
 copy ..\..\..\gtk\gtkwidget.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk
-
 copy ..\..\..\gtk\gtkwindow.h $(CopyDir)\include\gtk-$(ApiVersion)\gtk
 
-
 mkdir $(CopyDir)\lib\gtk-$(ApiVersion)\include
-
 copy ..\..\..\gdk\gdkconfig.h $(CopyDir)\lib\gtk-$(ApiVersion)\include
 
-
 mkdir $(CopyDir)\include\gail-1.0\libgail-util
-
 copy ..\..\..\modules\other\gail\libgail-util\gailmisc.h $(CopyDir)\include\gail-1.0\libgail-util
-
 copy ..\..\..\modules\other\gail\libgail-util\gailtextutil.h $(CopyDir)\include\gail-1.0\libgail-util
-
 copy ..\..\..\modules\other\gail\libgail-util\gail-util.h $(CopyDir)\include\gail-1.0\libgail-util
-
 
 copy "$(BinDir)\*-$(ApiVersion).lib" $(CopyDir)\lib
 
 mkdir $(CopyDir)\lib\gtk-$(ApiVersion)\$(GtkHost)\engines
-
 copy "$(BinDir)\libwimp.dll" $(CopyDir)\lib\gtk-$(ApiVersion)\$(GtkHost)\engines
 
-
 mkdir $(CopyDir)\share\gtk-$(ApiVersion)\demo
-
 copy ..\..\..\demos\gtk-demo\*.png $(CopyDir)\share\gtk-$(ApiVersion)\demo
-
 copy ..\..\..\demos\gtk-demo\*.gif $(CopyDir)\share\gtk-$(ApiVersion)\demo
-
 copy ..\..\..\demos\gtk-demo\*.ui $(CopyDir)\share\gtk-$(ApiVersion)\demo
-
 copy ..\..\..\demos\gtk-demo\*.jpg $(CopyDir)\share\gtk-$(ApiVersion)\demo
-
 copy ..\..\..\demos\gtk-demo\*.c $(CopyDir)\share\gtk-$(ApiVersion)\demo
-
 copy ..\..\..\demos\gtk-demo\*.h $(CopyDir)\share\gtk-$(ApiVersion)\demo
 
 mkdir $(CopyDir)\share\themes\Default\gtk-2.0-key
-
 copy ..\..\..\gtk\gtkrc.key.default $(CopyDir)\share\themes\Default\gtk-2.0-key\gtkrc
 
-
 mkdir $(CopyDir)\share\themes\Emacs\gtk-2.0-key
-
 copy ..\..\..\gtk\gtkrc.key.emacs $(CopyDir)\share\themes\Emacs\gtk-2.0-key\gtkrc
 
-
 mkdir $(CopyDir)\share\themes\MS-Windows\gtk-2.0
-
 copy ..\..\..\modules\engines\ms-windows\Theme\gtk-2.0\gtkrc $(CopyDir)\share\themes\MS-Windows\gtk-2.0
 
-
 mkdir $(CopyDir)\share\themes\Raleigh\gtk-2.0
-
 copy ..\..\..\gtk\gtkrc.default $(CopyDir)\share\themes\Raleigh\gtk-2.0\gtkrc
-
 </GtkDoInstall>
   </PropertyGroup>
   <PropertyGroup>
