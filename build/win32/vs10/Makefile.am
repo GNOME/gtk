@@ -23,4 +23,4 @@ EXTRA_DIST +=	\
 	gailutil.vcxproj.filters	\
 	libwimp.vcxproj	\
 	libwimp.vcxproj.filters	\
-	install.vcxproj
+	gtk-install.vcxproj

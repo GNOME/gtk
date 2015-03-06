@@ -15,4 +15,4 @@ EXTRA_DIST +=	\
 	gtk-demo.vcproj	\
 	gailutil.vcproj	\
 	libwimp.vcproj	\
-	install.vcproj
+	gtk-install.vcproj
