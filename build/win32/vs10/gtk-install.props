@@ -11,26 +11,69 @@
     <GtkDoInstallBin>
 mkdir $(CopyDir)\bin
 mkdir $(CopyDir)\lib
+
+copy "$(BinDir)\$(GtkDllPrefix)gdk$(GtkDllSuffix).dll" $(CopyDir)\bin
+copy "$(BinDir)\$(GtkDllPrefix)gdk$(GtkDllSuffix).pdb" $(CopyDir)\bin
+copy "$(BinDir)\gdk-$(ApiVersion).lib" $(CopyDir)\lib
+
 if "$(Configuration)" == "Release_Broadway" goto DO_BROADWAY_BIN
 if "$(Configuration)" == "Debug_Broadway" goto DO_BROADWAY_BIN
-copy "$(BinDir)\*.dll" $(CopyDir)\bin
-copy "$(BinDir)\*-$(ApiVersion).lib" $(CopyDir)\lib
-copy "$(BinDir)\*.exe" $(CopyDir)\bin
+copy "$(BinDir)\$(GtkDllPrefix)gtk$(GtkDllSuffix).dll" $(CopyDir)\bin
+copy "$(BinDir)\$(GtkDllPrefix)gtk$(GtkDllSuffix).pdb" $(CopyDir)\bin
+copy "$(BinDir)\$(GtkDllPrefix)gailutil$(GtkDllSuffix).dll" $(CopyDir)\bin
+copy "$(BinDir)\$(GtkDllPrefix)gailutil$(GtkDllSuffix).pdb" $(CopyDir)\bin
+copy "$(BinDir)\gtk-$(ApiVersion).lib" $(CopyDir)\lib
+copy "$(BinDir)\gailutil-$(ApiVersion).lib" $(CopyDir)\lib
+copy "$(BinDir)\gtk3-demo.exe" $(CopyDir)\bin
+copy "$(BinDir)\gtk3-demo.pdb" $(CopyDir)\bin
+copy "$(BinDir)\gtk3-demo-application.exe" $(CopyDir)\bin
+copy "$(BinDir)\gtk3-demo-application.pdb" $(CopyDir)\bin
+copy "$(BinDir)\gtk3-icon-browser.exe" $(CopyDir)\bin
+copy "$(BinDir)\gtk3-icon-browser.pdb" $(CopyDir)\bin
+copy "$(BinDir)\gtk-encode-symbolic-svg.exe" $(CopyDir)\bin
+copy "$(BinDir)\gtk-encode-symbolic-svg.pdb" $(CopyDir)\bin
 goto DONE_BIN
+
 :DO_BROADWAY_BIN
-copy "$(BinDir)\$(GtkDllPrefix)gdk$(GtkDllSuffix).dll" $(CopyDir)\bin
-copy "$(BinDir)\gdk-$(ApiVersion).lib" $(CopyDir)\lib
 copy "$(BinDir)\broadwayd.exe" $(CopyDir)\bin
-if "$(Configuration)" == "Release_Broadway" copy .\Release\$(Platform)\bin\$(GtkDllPrefix)gtk$(GtkDllSuffix).dll $(CopyDir)\bin
-if "$(Configuration)" == "Release_Broadway" copy .\Release\$(Platform)\bin\$(GtkDllPrefix)gailutil$(GtkDllSuffix).dll $(CopyDir)\bin
-if "$(Configuration)" == "Release_Broadway" copy .\Release\$(Platform)\bin\gtk-$(ApiVersion).lib $(CopyDir)\lib
-if "$(Configuration)" == "Release_Broadway" copy .\Release\$(Platform)\bin\gailutil-$(ApiVersion).lib $(CopyDir)\lib
-if "$(Configuration)" == "Release_Broadway" copy .\Release\$(Platform)\bin\*.exe $(CopyDir)\bin
-if "$(Configuration)" == "Debug_Broadway" copy .\Debug\$(Platform)\bin\$(GtkDllPrefix)gtk$(GtkDllSuffix).dll $(CopyDir)\bin
-if "$(Configuration)" == "Debug_Broadway" copy .\Debug\$(Platform)\bin\$(GtkDllPrefix)gailutil$(GtkDllSuffix).dll $(CopyDir)\bin
-if "$(Configuration)" == "Debug_Broadway" copy .\Debug\$(Platform)\bin\gtk-$(ApiVersion).lib $(CopyDir)\lib
-if "$(Configuration)" == "Debug_Broadway" copy .\Debug\$(Platform)\bin\gailutil-$(ApiVersion).lib $(CopyDir)\lib
-if "$(Configuration)" == "Debug_Broadway" copy .\Debug\$(Platform)\bin\*.exe $(CopyDir)\bin
+copy "$(BinDir)\broadwayd.pdb" $(CopyDir)\bin
+
+if "$(Configuration)" == "Release_Broadway" goto DO_BROADWAY_RELEASE
+if "$(Configuration)" == "Debug_Broadway" goto DO_BROADWAY_DEBUG
+:DO_BROADWAY_RELEASE
+copy .\Release\$(Platform)\bin\$(GtkDllPrefix)gtk$(GtkDllSuffix).dll $(CopyDir)\bin
+copy .\Release\$(Platform)\bin\$(GtkDllPrefix)gtk$(GtkDllSuffix).pdb $(CopyDir)\bin
+copy .\Release\$(Platform)\bin\$(GtkDllPrefix)gailutil$(GtkDllSuffix).dll $(CopyDir)\bin
+copy .\Release\$(Platform)\bin\$(GtkDllPrefix)gailutil$(GtkDllSuffix).pdb $(CopyDir)\bin
+copy .\Release\$(Platform)\bin\gtk-$(ApiVersion).lib $(CopyDir)\lib
+copy .\Release\$(Platform)\bin\gailutil-$(ApiVersion).lib $(CopyDir)\lib
+copy .\Release\$(Platform)\bin\gtk3-demo.exe $(CopyDir)\bin
+copy .\Release\$(Platform)\bin\gtk3-demo.pdb $(CopyDir)\bin
+copy .\Release\$(Platform)\bin\gtk3-demo-application.exe $(CopyDir)\bin
+copy .\Release\$(Platform)\bin\gtk3-demo-application.pdb $(CopyDir)\bin
+copy .\Release\$(Platform)\bin\gtk3-icon-browser.exe $(CopyDir)\bin
+copy .\Release\$(Platform)\bin\gtk3-icon-browser.pdb $(CopyDir)\bin
+copy .\Release\$(Platform)\bin\gtk-encode-symbolic-svg.exe $(CopyDir)\bin
+copy .\Release\$(Platform)\bin\gtk-encode-symbolic-svg.pdb $(CopyDir)\bin
+
+goto DONE_BIN
+
+:DO_BROADWAY_DEBUG
+copy .\Debug\$(Platform)\bin\$(GtkDllPrefix)gtk$(GtkDllSuffix).dll $(CopyDir)\bin
+copy .\Debug\$(Platform)\bin\$(GtkDllPrefix)gtk$(GtkDllSuffix).pdb $(CopyDir)\bin
+copy .\Debug\$(Platform)\bin\$(GtkDllPrefix)gailutil$(GtkDllSuffix).dll $(CopyDir)\bin
+copy .\Debug\$(Platform)\bin\$(GtkDllPrefix)gailutil$(GtkDllSuffix).pdb $(CopyDir)\bin
+copy .\Debug\$(Platform)\bin\gtk-$(ApiVersion).lib $(CopyDir)\lib
+copy .\Debug\$(Platform)\bin\gailutil-$(ApiVersion).lib $(CopyDir)\lib
+copy .\Debug\$(Platform)\bin\gtk3-demo.exe $(CopyDir)\bin
+copy .\Debug\$(Platform)\bin\gtk3-demo.pdb $(CopyDir)\bin
+copy .\Debug\$(Platform)\bin\gtk3-demo-application.exe $(CopyDir)\bin
+copy .\Debug\$(Platform)\bin\gtk3-demo-application.pdb $(CopyDir)\bin
+copy .\Debug\$(Platform)\bin\gtk3-icon-browser.exe $(CopyDir)\bin
+copy .\Debug\$(Platform)\bin\gtk3-icon-browser.pdb $(CopyDir)\bin
+copy .\Debug\$(Platform)\bin\gtk-encode-symbolic-svg.exe $(CopyDir)\bin
+copy .\Debug\$(Platform)\bin\gtk-encode-symbolic-svg.pdb $(CopyDir)\bin
+
 :DONE_BIN
     </GtkDoInstallBin>
     <GtkDoInstall>
