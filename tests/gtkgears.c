@@ -408,9 +408,9 @@ multiply (GLfloat *m, const GLfloat *n)
 static void
 rotate(GLfloat *m, GLfloat angle, GLfloat x, GLfloat y, GLfloat z)
 {
-   double s, c;
+   double s = sin (angle);
+   double c = cos (angle);
 
-   sincos(angle, &s, &c);
    GLfloat r[16] = {
       x * x * (1 - c) + c,     y * x * (1 - c) + z * s, x * z * (1 - c) - y * s, 0,
       x * y * (1 - c) - z * s, y * y * (1 - c) + c,     y * z * (1 - c) + x * s, 0,
@@ -511,10 +511,9 @@ invert(GLfloat *m)
 void perspective(GLfloat *m, GLfloat fovy, GLfloat aspect, GLfloat zNear, GLfloat zFar)
 {
    GLfloat tmp[16];
-   identity(tmp);
-
    double sine, cosine, cotangent, deltaZ;
    GLfloat radians = fovy / 2 * M_PI / 180;
+   identity(tmp);
 
    deltaZ = zFar - zNear;
    sincos(radians, &sine, &cosine);
