@@ -155,8 +155,7 @@ static void gdk_wayland_window_configure (GdkWindow *window,
                                           int        height,
                                           int        scale);
 
-static void maybe_set_gtk_surface_dbus_properties (GdkWaylandDisplay *display_wayland,
-                                                   GdkWindowImplWayland *impl);
+static void maybe_set_gtk_surface_dbus_properties (GdkWindow *window);
 
 GType _gdk_window_impl_wayland_get_type (void);
 
@@ -1007,7 +1006,7 @@ gdk_wayland_window_create_xdg_surface (GdkWindow *window)
 
   xdg_surface_set_app_id (impl->xdg_surface, app_id);
 
-  maybe_set_gtk_surface_dbus_properties (display_wayland, impl);
+  maybe_set_gtk_surface_dbus_properties (window);
 }
 
 static void
@@ -1629,9 +1628,37 @@ gdk_wayland_window_get_type_hint (GdkWindow *window)
 }
 
 static void
+gdk_wayland_window_init_gtk_surface (GdkWindow *window)
+{
+  GdkWindowImplWayland *impl = GDK_WINDOW_IMPL_WAYLAND (window->impl);
+  GdkWaylandDisplay *display =
+    GDK_WAYLAND_DISPLAY (gdk_window_get_display (window));
+
+  if (impl->gtk_surface != NULL)
+    return;
+  if (impl->xdg_surface == NULL)
+    return;
+  if (display->gtk_shell == NULL)
+    return;
+
+  impl->gtk_surface = gtk_shell_get_gtk_surface (display->gtk_shell,
+                                                 impl->surface);
+}
+
+static void
 gdk_wayland_window_set_modal_hint (GdkWindow *window,
                                    gboolean   modal)
 {
+  GdkWindowImplWayland *impl = GDK_WINDOW_IMPL_WAYLAND (window->impl);
+
+  gdk_wayland_window_init_gtk_surface (window);
+  if (impl->gtk_surface == NULL)
+    return;
+
+  if (modal)
+    gtk_surface_set_modal (impl->gtk_surface);
+  else
+    gtk_surface_unset_modal (impl->gtk_surface);
 }
 
 static void
@@ -2439,9 +2466,10 @@ gdk_wayland_window_set_use_custom_surface (GdkWindow *window)
 }
 
 static void
-maybe_set_gtk_surface_dbus_properties (GdkWaylandDisplay *display_wayland,
-                                       GdkWindowImplWayland *impl)
+maybe_set_gtk_surface_dbus_properties (GdkWindow *window)
 {
+  GdkWindowImplWayland *impl = GDK_WINDOW_IMPL_WAYLAND (window->impl);
+
   if (impl->application.was_set)
     return;
 
@@ -2453,17 +2481,9 @@ maybe_set_gtk_surface_dbus_properties (GdkWaylandDisplay *display_wayland,
       impl->application.unique_bus_name == NULL)
     return;
 
+  gdk_wayland_window_init_gtk_surface (window);
   if (impl->gtk_surface == NULL)
-    {
-      if (impl->xdg_surface == NULL)
-        return;
-
-      if (display_wayland->gtk_shell == NULL)
-        return;
-
-      impl->gtk_surface = gtk_shell_get_gtk_surface (display_wayland->gtk_shell,
-                                                     impl->surface);
-    }
+    return;
 
   gtk_surface_set_dbus_properties (impl->gtk_surface,
                                    impl->application.application_id,
@@ -2484,8 +2504,6 @@ gdk_wayland_window_set_dbus_properties_libgtk_only (GdkWindow  *window,
                                                     const char *application_object_path,
                                                     const char *unique_bus_name)
 {
-  GdkWaylandDisplay *display_wayland =
-    GDK_WAYLAND_DISPLAY (gdk_window_get_display (window));
   GdkWindowImplWayland *impl;
 
   g_return_if_fail (GDK_IS_WAYLAND_WINDOW (window));
@@ -2500,5 +2518,5 @@ gdk_wayland_window_set_dbus_properties_libgtk_only (GdkWindow  *window,
     g_strdup (application_object_path);
   impl->application.unique_bus_name = g_strdup (unique_bus_name);
 
-  maybe_set_gtk_surface_dbus_properties (display_wayland, impl);
+  maybe_set_gtk_surface_dbus_properties (window);
 }

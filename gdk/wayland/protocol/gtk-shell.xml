@@ -1,6 +1,6 @@
 <protocol name="gtk">
 
-  <interface name="gtk_shell" version="1">
+  <interface name="gtk_shell" version="2">
     <description summary="gtk specific extensions">
       gtk_shell is a protocol extension providing additional features for
       clients implementing it. It is not backward compatible, and a client must
@@ -25,7 +25,7 @@
     </request>
   </interface>
 
-  <interface name="gtk_surface" version="1">
+  <interface name="gtk_surface" version="2">
     <request name="set_dbus_properties">
       <arg name="application_id" type="string" allow-null="true"/>
       <arg name="app_menu_path" type="string" allow-null="true"/>
@@ -34,6 +34,9 @@
       <arg name="application_object_path" type="string" allow-null="true"/>
       <arg name="unique_bus_name" type="string" allow-null="true"/>
     </request>
+
+    <request name="set_modal"/>
+    <request name="unset_modal"/>
   </interface>
 
 </protocol>
