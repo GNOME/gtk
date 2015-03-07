@@ -11445,7 +11445,7 @@ gtk_widget_get_ancestor (GtkWidget *widget,
 /**
  * gtk_widget_set_visual:
  * @widget: a #GtkWidget
- * @visual: visual to be used or %NULL to unset a previous one
+ * @visual: (allow-none): visual to be used or %NULL to unset a previous one
  *
  * Sets the visual that should be used for by widget and its children for
  * creating #GdkWindows. The visual must be on the same #GdkScreen as
@@ -11461,14 +11461,13 @@ gtk_widget_set_visual (GtkWidget *widget,
 {
   g_return_if_fail (GTK_IS_WIDGET (widget));
   g_return_if_fail (visual == NULL || GDK_IS_VISUAL (visual));
+
   if (visual)
-    {
-      g_return_if_fail (gtk_widget_get_screen (widget) == gdk_visual_get_screen (visual));
-    }
+    g_return_if_fail (gtk_widget_get_screen (widget) == gdk_visual_get_screen (visual));
 
   g_object_set_qdata_full (G_OBJECT (widget),
                            quark_visual,
-                           g_object_ref (visual),
+                           visual ? g_object_ref (visual) : NULL,
                            g_object_unref);
 }
 
