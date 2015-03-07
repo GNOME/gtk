@@ -3460,17 +3460,17 @@ gtk_scrolled_window_add_with_viewport (GtkScrolledWindow *scrolled_window,
 /*
  * _gtk_scrolled_window_get_spacing:
  * @scrolled_window: a scrolled window
- * 
+ *
  * Gets the spacing between the scrolled window’s scrollbars and
  * the scrolled widget. Used by GtkCombo
- * 
+ *
  * Returns: the spacing, in pixels.
  */
 static gint
 _gtk_scrolled_window_get_scrollbar_spacing (GtkScrolledWindow *scrolled_window)
 {
   GtkScrolledWindowClass *class;
-    
+
   g_return_val_if_fail (GTK_IS_SCROLLED_WINDOW (scrolled_window), 0);
 
   class = GTK_SCROLLED_WINDOW_GET_CLASS (scrolled_window);
@@ -3480,7 +3480,7 @@ _gtk_scrolled_window_get_scrollbar_spacing (GtkScrolledWindow *scrolled_window)
   else
     {
       gint scrollbar_spacing;
-      
+
       gtk_widget_style_get (GTK_WIDGET (scrolled_window),
 			    "scrollbar-spacing", &scrollbar_spacing,
 			    NULL);
@@ -3537,15 +3537,13 @@ gtk_scrolled_window_get_preferred_size (GtkWidget      *widget,
 	    }
 	  else
 	    {
-              gint min_content_width = priv->min_content_width;
-
-	      if (min_content_width >= 0)
+	      if (priv->min_content_width >= 0)
 		{
-		  minimum_req.width = MAX (minimum_req.width, min_content_width);
-		  natural_req.width = MAX (natural_req.width, min_content_width);
+		  minimum_req.width = MAX (minimum_req.width, priv->min_content_width);
+		  natural_req.width = MAX (natural_req.width, priv->min_content_width);
 		  extra_width = -1;
 		}
-	      else if (policy_may_be_visible (priv->vscrollbar_policy))
+	      else if (policy_may_be_visible (priv->vscrollbar_policy) && !priv->use_indicators)
 		{
 		  minimum_req.width += vscrollbar_requisition.width;
 		  natural_req.width += vscrollbar_requisition.width;
@@ -3565,15 +3563,13 @@ gtk_scrolled_window_get_preferred_size (GtkWidget      *widget,
 	    }
 	  else
 	    {
-	      gint min_content_height = priv->min_content_height;
-
-	      if (min_content_height >= 0)
+	      if (priv->min_content_height >= 0)
 		{
-		  minimum_req.height = MAX (minimum_req.height, min_content_height);
-		  natural_req.height = MAX (natural_req.height, min_content_height);
+		  minimum_req.height = MAX (minimum_req.height, priv->min_content_height);
+		  natural_req.height = MAX (natural_req.height, priv->min_content_height);
 		  extra_height = -1;
 		}
-	      else if (policy_may_be_visible (priv->vscrollbar_policy))
+	      else if (policy_may_be_visible (priv->vscrollbar_policy) && !priv->use_indicators)
 		{
 		  minimum_req.height += vscrollbar_requisition.height;
 		  natural_req.height += vscrollbar_requisition.height;
@@ -3638,7 +3634,7 @@ gtk_scrolled_window_get_preferred_size (GtkWidget      *widget,
     }
 }
 
-static void     
+static void
 gtk_scrolled_window_get_preferred_width (GtkWidget *widget,
                                          gint      *minimum_size,
                                          gint      *natural_size)
@@ -3650,7 +3646,7 @@ static void
 gtk_scrolled_window_get_preferred_height (GtkWidget *widget,
                                           gint      *minimum_size,
                                           gint      *natural_size)
-{  
+{
   gtk_scrolled_window_get_preferred_size (widget, GTK_ORIENTATION_VERTICAL, minimum_size, natural_size);
 }
 
