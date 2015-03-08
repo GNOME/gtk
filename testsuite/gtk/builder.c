@@ -2983,6 +2983,48 @@ test_anaconda_signal (void)
   g_object_unref (builder);
 }
 
+static void
+test_file_filter (void)
+{
+  GtkBuilder *builder;
+  GObject *obj;
+  GtkFileFilter *filter;
+  GtkFileFilterInfo info;
+
+  const gchar buffer[] =
+    "<interface>"
+    "  <object class='GtkFileFilter' id='filter1'>"
+    "    <mime-types>"
+    "      <mime-type>text/plain</mime-type>"
+    "      <mime-type>image/*</mime-type>"
+    "    </mime-types>"
+    "    <patterns>"
+    "      <pattern>*.txt</pattern>"
+    "      <pattern>*.png</pattern>"
+    "    </patterns>"
+    "  </object>"
+    "</interface>";
+
+  builder = builder_new_from_string (buffer, -1, NULL);
+  obj = gtk_builder_get_object (builder, "filter1");
+  g_assert (GTK_IS_FILE_FILTER (obj));
+  filter = GTK_FILE_FILTER (obj);
+  g_assert_cmpstr (gtk_file_filter_get_name (filter), ==, "filter1");
+  g_assert (gtk_file_filter_get_needed (filter) & GTK_FILE_FILTER_MIME_TYPE);
+  g_assert (gtk_file_filter_get_needed (filter) & GTK_FILE_FILTER_DISPLAY_NAME);
+
+  info.filename = "test1.txt";
+  info.display_name = "test1.txt";
+  info.contains = GTK_FILE_FILTER_FILENAME | GTK_FILE_FILTER_DISPLAY_NAME;
+  g_assert (gtk_file_filter_filter (filter, &info));
+
+  info.mime_type = "application/x-pdf";
+  info.contains = GTK_FILE_FILTER_MIME_TYPE;
+  g_assert (!gtk_file_filter_filter (filter, &info));
+
+  g_object_unref (builder);
+}
+
 int
 main (int argc, char **argv)
 {
@@ -3036,6 +3078,7 @@ main (int argc, char **argv)
   g_test_add_func ("/Builder/No IDs", test_no_ids);
   g_test_add_func ("/Builder/Property Bindings", test_property_bindings);
   g_test_add_func ("/Builder/anaconda-signal", test_anaconda_signal);
+  g_test_add_func ("/Builder/FileFilter", test_file_filter);
 
   return g_test_run();
 }
