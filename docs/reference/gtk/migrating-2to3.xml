@@ -83,7 +83,7 @@
     widgets have been deprecated. These deprecations are clearly spelled
     out in the API reference, with hints about the recommended replacements.
     The API reference for GTK+ 2 also includes an
-    <ulink url="http://developer.gnome.org/gtk/2.24/api-index-deprecated.html">index</ulink> of all deprecated symbols.
+    <ulink url="https://developer.gnome.org/gtk2/2.24/api-index-deprecated.html">index</ulink> of all deprecated symbols.
   </para>
   <para>
     To verify that your program does not use any deprecated symbols,
