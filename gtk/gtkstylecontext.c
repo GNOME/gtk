@@ -3246,6 +3246,15 @@ gtk_style_context_get_color (GtkStyleContext *context,
  *
  * Gets the background color for a given state.
  *
+ * This function is far less useful than it seems, and it should not be used in
+ * newly written code. CSS has no concept of "background color", as a background
+ * can be an image, or a gradient, or any other pattern including solid colors.
+ *
+ * The only reason why you would call gtk_style_context_get_background_color() is
+ * to use the returned value to draw the background with it; the correct way to
+ * achieve this result is to use gtk_render_background() instead, along with CSS
+ * style classes to modify the color to be rendered.
+ *
  * Since: 3.0
  *
  * Deprecated: 3.16: Use gtk_render_background() instead.
