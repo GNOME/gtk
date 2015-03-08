@@ -9685,7 +9685,12 @@ gtk_widget_override_color (GtkWidget     *widget,
  *
  * Since: 3.0
  *
- * Deprecated:3.16: Use a custom style provider and style classes instead
+ * Deprecated: 3.16: This function is not useful in the context of CSS-based
+ *   rendering. If you wish to change the way a widget renders its background
+ *   you should use a custom CSS style, through an application-specific
+ *   #GtkStyleProvider and a CSS style class. You can also override the default
+ *   drawing of a widget through the #GtkWidget::draw signal, and use Cairo to
+ *   draw a specific color, regardless of the CSS style.
  */
 void
 gtk_widget_override_background_color (GtkWidget     *widget,
@@ -9711,7 +9716,10 @@ gtk_widget_override_background_color (GtkWidget     *widget,
  *
  * Since: 3.0
  *
- * Deprecated:3.16: Use a custom style provider and style classes instead
+ * Deprecated: 3.16: This function is not useful in the context of CSS-based
+ *   rendering. If you wish to change the font a widget uses to render its text
+ *   you should use a custom CSS style, through an application-specific
+ *   #GtkStyleProvider and a CSS style class.
  */
 void
 gtk_widget_override_font (GtkWidget                  *widget,
@@ -9741,7 +9749,10 @@ gtk_widget_override_font (GtkWidget                  *widget,
  *
  * Since: 3.0
  *
- * Deprecated:3.16: Use a custom style provider and style classes instead
+ * Deprecated: 3.16: This function is not useful in the context of CSS-based
+ *   rendering. If you wish to change the color used to render symbolic icons
+ *   you should use a custom CSS style, through an application-specific
+ *   #GtkStyleProvider and a CSS style class.
  */
 void
 gtk_widget_override_symbolic_color (GtkWidget     *widget,
@@ -9776,7 +9787,10 @@ gtk_widget_override_symbolic_color (GtkWidget     *widget,
  *
  * Since: 3.0
  *
- * Deprecated:3.16: Use a custom style provider and style classes instead
+ * Deprecated: 3.16: This function is not useful in the context of CSS-based
+ *   rendering. If you wish to change the color used to render the primary
+ *   and seconday cursors you should use a custom CSS style, through an
+ *   application-specific #GtkStyleProvider and a CSS style class.
  */
 void
 gtk_widget_override_cursor (GtkWidget     *widget,
