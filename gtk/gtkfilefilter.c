@@ -122,6 +122,11 @@ static void gtk_file_filter_finalize   (GObject            *object);
 
 
 static void     gtk_file_filter_buildable_init                 (GtkBuildableIface *iface);
+static void     gtk_file_filter_buildable_set_name             (GtkBuildable *buildable,
+                                                                const gchar  *name);
+static const gchar* gtk_file_filter_buildable_get_name         (GtkBuildable *buildable);
+
+
 static gboolean gtk_file_filter_buildable_custom_tag_start     (GtkBuildable  *buildable,
 								GtkBuilder    *builder,
 								GObject       *child,
@@ -197,6 +202,21 @@ gtk_file_filter_buildable_init (GtkBuildableIface *iface)
 {
   iface->custom_tag_start = gtk_file_filter_buildable_custom_tag_start;
   iface->custom_tag_end = gtk_file_filter_buildable_custom_tag_end;
+  iface->set_name = gtk_file_filter_buildable_set_name;
+  iface->get_name = gtk_file_filter_buildable_get_name;
+}
+
+static void
+gtk_file_filter_buildable_set_name (GtkBuildable *buildable,
+                                    const gchar  *name)
+{
+  gtk_file_filter_set_name (GTK_FILE_FILTER (buildable), name);
+}
+
+static const gchar *
+gtk_file_filter_buildable_get_name (GtkBuildable *buildable)
+{
+  return gtk_file_filter_get_name (GTK_FILE_FILTER (buildable));
 }
 
 typedef enum {
