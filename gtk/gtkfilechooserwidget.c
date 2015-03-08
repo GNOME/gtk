@@ -7154,7 +7154,7 @@ gtk_file_chooser_widget_class_init (GtkFileChooserWidgetClass *class)
    * which gets emitted when the user asks for it.
    *
    * This is used to make the file chooser show a "Location"
-   * prompt when the user pastes #GtkFileChooserWidget.
+   * prompt when the user pastes into a #GtkFileChooserWidget.
    *
    * The default binding for this signal is `Control + V`.
    */
