@@ -829,7 +829,7 @@ update_properties (GtkStyleContext             *context,
 
   gtk_widget_path_free (path);
 
-  store_in_global_parent_cache (context, parent, decl, style);
+  store_in_global_parent_cache (context, parent, decl, result);
 
   return result;
 }
