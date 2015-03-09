@@ -1636,8 +1636,12 @@ gtk_entry_completion_popup (GtkEntryCompletion *completion)
 
   toplevel = gtk_widget_get_toplevel (completion->priv->entry);
   if (GTK_IS_WINDOW (toplevel))
-    gtk_window_group_add_window (gtk_window_get_group (GTK_WINDOW (toplevel)),
-                                 GTK_WINDOW (completion->priv->popup_window));
+    {
+      gtk_window_set_transient_for (GTK_WINDOW (completion->priv->popup_window),
+                                    GTK_WINDOW (toplevel));
+      gtk_window_group_add_window (gtk_window_get_group (GTK_WINDOW (toplevel)),
+                                   GTK_WINDOW (completion->priv->popup_window));
+    }
 
   /* prevent the first row being focused */
   gtk_widget_grab_focus (completion->priv->tree_view);
@@ -2711,9 +2715,6 @@ void
 _gtk_entry_completion_connect (GtkEntryCompletion *completion,
                                GtkEntry           *entry)
 {
-  GtkEntryCompletionPrivate *priv = completion->priv;
-  GtkWidget *toplevel;
-
   completion->priv->entry = GTK_WIDGET (entry);
 
   set_accessible_relation (completion->priv->popup_window,
@@ -2722,10 +2723,4 @@ _gtk_entry_completion_connect (GtkEntryCompletion *completion,
                               completion->priv->entry);
 
   connect_completion_signals (completion);
-
-  toplevel = gtk_widget_get_toplevel (GTK_WIDGET (entry));
-
-  if (gtk_widget_is_toplevel (toplevel))
-    gtk_window_set_transient_for (GTK_WINDOW (priv->popup_window),
-                                  GTK_WINDOW (toplevel));
 }
