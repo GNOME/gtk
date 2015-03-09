@@ -52,7 +52,7 @@
 #include "a11y/gtkswitchaccessible.h"
 #include "gtkactionhelper.h"
 #include "gtkcssnodeprivate.h"
-#include "gtkcssstylepropertyprivate.h"
+#include "gtkcssnodeutilsprivate.h"
 #include "gtkstylecontextprivate.h"
 #include "gtkwidgetprivate.h"
 
@@ -347,56 +347,99 @@ gtk_switch_activate (GtkSwitch *sw)
 }
 
 static void
-gtk_switch_get_preferred_width (GtkWidget *widget,
-                                gint      *minimum,
-                                gint      *natural)
+gtk_switch_get_slider_size (GtkCssNode     *cssnode,
+                             GtkOrientation  orientation,
+                             gint            for_size,
+                             gint           *minimum,
+                             gint           *natural,
+                             gint           *minimum_baseline,
+                             gint           *natural_baseline,
+                             gpointer        data)
 {
-  GtkSwitch *self;
-  GtkSwitchPrivate *priv;
-  GtkStyleContext *context;
-  GtkStateFlags state;
-  GtkBorder padding;
-  gint width, slider_width;
-  PangoLayout *layout;
-  PangoRectangle logical_rect;
-
-  self = GTK_SWITCH (widget);
-  priv = self->priv;
-  context = gtk_widget_get_style_context (widget);
-  state = gtk_style_context_get_state (context);
-
-  gtk_style_context_save_to_node (context, priv->slider_node);
-  gtk_style_context_get_padding (context, state, &padding);
-
-  width = padding.left + padding.right;
-
-  gtk_style_context_restore (context);
+  GtkWidget *widget = GTK_WIDGET (data);
+  gint slider_width;
 
   gtk_widget_style_get (widget,
                         "slider-width", &slider_width,
                         NULL);
+  
+  if (orientation == GTK_ORIENTATION_VERTICAL)
+    slider_width *= 0.6;
+
+  *minimum = slider_width;
+  *natural = slider_width;
+}
+
+static void
+gtk_switch_get_content_size (GtkCssNode     *cssnode,
+                             GtkOrientation  orientation,
+                             gint            for_size,
+                             gint           *minimum,
+                             gint           *natural,
+                             gint           *minimum_baseline,
+                             gint           *natural_baseline,
+                             gpointer        data)
+{
+  GtkWidget *widget;
+  GtkSwitch *self;
+  GtkSwitchPrivate *priv;
+  gint slider_minimum, slider_natural;
+  PangoLayout *layout;
+  PangoRectangle on_rect, off_rect;
+
+  widget = GTK_WIDGET (data);
+  self = GTK_SWITCH (data);
+  priv = self->priv;
+
+  gtk_css_node_get_preferred_size (priv->slider_node,
+                                   orientation,
+                                   -1,
+                                   &slider_minimum, &slider_natural,
+                                   NULL, NULL,
+                                   gtk_switch_get_slider_size,
+                                   self);
 
   /* Translators: if the "on" state label requires more than three
    * glyphs then use MEDIUM VERTICAL BAR (U+2759) as the text for
    * the state
    */
   layout = gtk_widget_create_pango_layout (widget, C_("switch", "ON"));
-  pango_layout_get_extents (layout, NULL, &logical_rect);
-  pango_extents_to_pixels (&logical_rect, NULL);
-  width += MAX (logical_rect.width, slider_width);
+  pango_layout_get_pixel_extents (layout, NULL, &on_rect);
 
   /* Translators: if the "off" state label requires more than three
    * glyphs then use WHITE CIRCLE (U+25CB) as the text for the state
    */
   pango_layout_set_text (layout, C_("switch", "OFF"), -1);
-  pango_layout_get_extents (layout, NULL, &logical_rect);
-  pango_extents_to_pixels (&logical_rect, NULL);
-  width += MAX (logical_rect.width, slider_width);
+  pango_layout_get_pixel_extents (layout, NULL, &off_rect);
 
   g_object_unref (layout);
 
-  *minimum = width;
-  *natural = width;
+  if (orientation == GTK_ORIENTATION_HORIZONTAL)
+    {
+      int text_width = MAX (on_rect.width, off_rect.width);
+      *minimum = 2 * MAX (slider_minimum, text_width);
+      *natural = 2 * MAX (slider_natural, text_width);
+    }
+  else
+    {
+      int text_height = MAX (on_rect.height, off_rect.height);
+      *minimum = MAX (slider_minimum, text_height);
+      *natural = MAX (slider_natural, text_height);
+    }
+}
+
+static void
+gtk_switch_get_preferred_width (GtkWidget *widget,
+                                gint      *minimum,
+                                gint      *natural)
+{
+  gtk_css_node_get_preferred_size (gtk_widget_get_css_node (widget),
+                                   GTK_ORIENTATION_HORIZONTAL,
+                                   -1,
+                                   minimum, natural,
+                                   NULL, NULL,
+                                   gtk_switch_get_content_size,
+                                   widget);
 }
 
 static void
@@ -404,49 +447,34 @@ gtk_switch_get_preferred_height (GtkWidget *widget,
                                  gint      *minimum,
                                  gint      *natural)
 {
-  GtkSwitch *self;
-  GtkSwitchPrivate *priv;
-  GtkStyleContext *context;
-  GtkStateFlags state;
-  GtkBorder padding;
-  gint height, slider_width, min_height;
-  PangoLayout *layout;
-  PangoRectangle logical_rect;
-  gchar *str;
+  gtk_css_node_get_preferred_size (gtk_widget_get_css_node (widget),
+                                   GTK_ORIENTATION_VERTICAL,
+                                   -1,
+                                   minimum, natural,
+                                   NULL, NULL,
+                                   gtk_switch_get_content_size,
+                                   widget);
+}
 
-  self = GTK_SWITCH (widget);
-  priv = self->priv;
-  context = gtk_widget_get_style_context (widget);
-  state = gtk_style_context_get_state (context);
+static void
+gtk_switch_allocate_contents (GtkCssNode          *cssnode,
+                              const GtkAllocation *allocation,
+                              int                  baseline,
+                              GtkAllocation       *out_clip,
+                              gpointer             data)
+{
+  GtkSwitch *self = data;
+  GtkSwitchPrivate *priv = self->priv;
 
-  gtk_style_context_save_to_node (context, priv->slider_node);
-
-  gtk_style_context_get_padding (context, state, &padding);
-
-  height = padding.top + padding.bottom;
-
-  gtk_style_context_restore (context);
-
-  gtk_widget_style_get (widget,
-                        "slider-width", &slider_width,
-                        NULL);
-
-  min_height = slider_width * 0.6;
-
-  str = g_strdup_printf ("%s%s",
-                         C_("switch", "ON"),
-                         C_("switch", "OFF"));
-
-  layout = gtk_widget_create_pango_layout (widget, str);
-  pango_layout_get_extents (layout, NULL, &logical_rect);
-  pango_extents_to_pixels (&logical_rect, NULL);
-  height += MAX (min_height, logical_rect.height);
-
-  g_object_unref (layout);
-  g_free (str);
-
-  *minimum = height;
-  *natural = height;
+  /* We pretend to allocate the full area to the slider. That way both
+   * potential left and right clip overlap gets correctly computed.
+   */
+  gtk_css_node_allocate (priv->slider_node,
+                         allocation,
+                         baseline,
+                         out_clip,
+                         NULL,
+                         NULL);
 }
 
 static void
@@ -454,6 +482,7 @@ gtk_switch_size_allocate (GtkWidget     *widget,
                           GtkAllocation *allocation)
 {
   GtkSwitchPrivate *priv = GTK_SWITCH (widget)->priv;
+  GtkAllocation clip;
 
   gtk_widget_set_allocation (widget, allocation);
 
@@ -464,7 +493,14 @@ gtk_switch_size_allocate (GtkWidget     *widget,
                             allocation->width,
                             allocation->height);
 
-  _gtk_widget_set_simple_clip (widget, NULL);
+  gtk_css_node_allocate (gtk_widget_get_css_node (widget),
+                         allocation,
+                         gtk_widget_get_allocated_baseline (widget),
+                         &clip,
+                         gtk_switch_allocate_contents,
+                         widget);
+  
+  gtk_widget_set_clip (widget, &clip);
 }
 
 static void
@@ -560,45 +596,31 @@ gtk_switch_paint_handle (GtkWidget    *widget,
 }
 
 static gboolean
-gtk_switch_draw (GtkWidget *widget,
-                 cairo_t   *cr)
+gtk_switch_render_slider (GtkCssNode *cssnode,
+                          cairo_t    *cr,
+                          int         width,
+                          int         height,
+                          gpointer    data)
 {
+  GtkWidget *widget = GTK_WIDGET (data);
+  
+  return gtk_widget_has_visible_focus (widget);
+}
+
+static gboolean
+gtk_switch_render_trough (GtkCssNode *cssnode,
+                          cairo_t    *cr,
+                          int         width,
+                          int         height,
+                          gpointer    data)
+{
+  GtkWidget *widget = GTK_WIDGET (data);
   GtkSwitchPrivate *priv = GTK_SWITCH (widget)->priv;
-  GtkStyleContext *context;
-  GdkRectangle handle;
+  GtkStyleContext *context = gtk_widget_get_style_context (widget);
   PangoLayout *layout;
   PangoRectangle rect;
   gint label_x, label_y;
-  GtkBorder padding;
-  GtkStateFlags state;
-  gint x, y, width, height;
-
-  context = gtk_widget_get_style_context (widget);
-  state = gtk_widget_get_state_flags (widget);
-
-  gtk_style_context_save_to_node (context, priv->slider_node);
-
-  gtk_style_context_get_padding (context, state, &padding);
-
-  gtk_style_context_restore (context);
-
-  x = 0;
-  y = 0;
-  width = gtk_widget_get_allocated_width (widget);
-  height = gtk_widget_get_allocated_height (widget);
-
-  gtk_render_background (context, cr, x, y, width, height);
-  gtk_render_frame (context, cr, x, y, width, height);
-
-  width -= padding.left + padding.right;
-  height -= padding.top + padding.bottom;
-
-  x += padding.left;
-  y += padding.top;
-
-  handle.y = y;
-  handle.width = width / 2;
-  handle.height = height;
+  gint slider_offset;
 
   /* Translators: if the "on" state label requires more than three
    * glyphs then use MEDIUM VERTICAL BAR (U+2759) as the text for
@@ -606,11 +628,10 @@ gtk_switch_draw (GtkWidget *widget,
    */
   layout = gtk_widget_create_pango_layout (widget, C_("switch", "ON"));
 
-  pango_layout_get_extents (layout, NULL, &rect);
-  pango_extents_to_pixels (&rect, NULL);
+  pango_layout_get_pixel_extents (layout, NULL, &rect);
 
-  label_x = x +  ((width / 2) - rect.width) / 2;
-  label_y = y + (height - rect.height) / 2;
+  label_x = ((width / 2) - rect.width) / 2;
+  label_y = (height - rect.height) / 2;
 
   gtk_render_layout (context, cr, label_x, label_y, layout);
 
@@ -621,26 +642,40 @@ gtk_switch_draw (GtkWidget *widget,
    */
   layout = gtk_widget_create_pango_layout (widget, C_("switch", "OFF"));
 
-  pango_layout_get_extents (layout, NULL, &rect);
-  pango_extents_to_pixels (&rect, NULL);
+  pango_layout_get_pixel_extents (layout, NULL, &rect);
 
-  label_x = x +  (width / 2) + ((width / 2) - rect.width) / 2;
-  label_y = y + (height - rect.height) / 2;
+  label_x = (width / 2) + ((width / 2) - rect.width) / 2;
+  label_y = (height - rect.height) / 2;
 
   gtk_render_layout (context, cr, label_x, label_y, layout);
 
   g_object_unref (layout);
 
-  handle.x = x + round (priv->handle_pos * width / 2);
+  slider_offset = round (priv->handle_pos * (width - width / 2));
+  cairo_translate (cr, slider_offset, 0);
 
-  gtk_switch_paint_handle (widget, cr, &handle);
+  gtk_css_node_draw (priv->slider_node,
+                     cr,
+                     width / 2,
+                     height,
+                     gtk_switch_render_slider,
+                     widget);
 
-  if (gtk_widget_has_visible_focus (widget))
-    {
-      gtk_render_focus (context, cr,
-                        handle.x, handle.y,
-                        handle.width, handle.height);
-    }
+  cairo_translate (cr, -slider_offset, 0);
+
+  return FALSE;
+}
+
+static gboolean
+gtk_switch_draw (GtkWidget *widget,
+                 cairo_t   *cr)
+{
+  gtk_css_node_draw (gtk_widget_get_css_node (widget),
+                     cr,
+                     gtk_widget_get_allocated_width (widget),
+                     gtk_widget_get_allocated_height (widget),
+                     gtk_switch_render_trough,
+                     widget);
 
   return FALSE;
 }
@@ -850,26 +885,6 @@ state_set (GtkSwitch *sw, gboolean state)
 }
 
 static void
-node_style_changed_cb (GtkCssNode  *node,
-                       GtkCssStyle *old_style,
-                       GtkCssStyle *new_style,
-                       GtkWidget    *widget)
-{
-  GtkBitmask *changes = gtk_css_style_get_difference (old_style, new_style);
-  static GtkBitmask *affects_size = NULL;
-
-  if (G_UNLIKELY (affects_size == NULL))
-    affects_size = _gtk_css_style_property_get_mask_affecting (GTK_CSS_AFFECTS_SIZE | GTK_CSS_AFFECTS_CLIP);
-
-  if (_gtk_bitmask_intersects (changes, affects_size))
-    gtk_widget_queue_resize (widget);
-  else
-    gtk_widget_queue_draw (widget);
-
-  _gtk_bitmask_free (changes);
-}
-
-static void
 gtk_switch_class_init (GtkSwitchClass *klass)
 {
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
@@ -1030,7 +1045,7 @@ gtk_switch_init (GtkSwitch *self)
   gtk_css_node_add_class (priv->slider_node, g_quark_from_string (GTK_STYLE_CLASS_SLIDER));
   gtk_css_node_set_parent (priv->slider_node, widget_node);
   gtk_css_node_set_state (priv->slider_node, gtk_css_node_get_state (widget_node));
-  g_signal_connect_object (priv->slider_node, "style-changed", G_CALLBACK (node_style_changed_cb), self, 0);
+  g_signal_connect_object (priv->slider_node, "style-changed", G_CALLBACK (gtk_css_node_style_changed_for_widget), self, 0);
   g_object_unref (priv->slider_node);
 
   gesture = gtk_gesture_multi_press_new (GTK_WIDGET (self));
