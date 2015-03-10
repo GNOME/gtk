@@ -1330,7 +1330,7 @@ distclean-local:
 if HAVE_INTROSPECTION
 introspection_files = \
     $(filter-out %private.h gtktextdisplay.h gtktextlayout.h gtkx.h, $(gtkinclude_HEADERS) $(a11yinclude_HEADERS) $(deprecatedinclude_HEADERS)) \
-    $(gtk_base_c_sources) \
+    $(filter-out %win32.c %quartz.c, $(gtk_base_c_sources)) \
     gtkprintoperation-unix.c \
     gtktypebuiltins.h \
     gtktypebuiltins.c
