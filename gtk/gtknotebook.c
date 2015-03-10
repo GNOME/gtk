@@ -8186,7 +8186,7 @@ gtk_notebook_query_tab_label_packing (GtkNotebook *notebook,
   g_return_if_fail (GTK_IS_WIDGET (child));
 
   list = CHECK_FIND_CHILD (notebook, child);
-  g_return_if_fail (!list);
+  g_return_if_fail (list != NULL);
 
   if (expand)
     *expand = GTK_NOTEBOOK_PAGE (list)->expand;
