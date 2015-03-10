@@ -3813,9 +3813,6 @@ should_prelight (GtkEntry             *entry,
   if (icon_info->nonactivatable && icon_info->target_list == NULL)
     return FALSE;
 
-  if (icon_info->pressed)
-    return FALSE;
-
   return TRUE;
 }
 
@@ -4362,11 +4359,6 @@ gtk_entry_event (GtkWidget *widget,
     case GDK_BUTTON_PRESS:
     case GDK_2BUTTON_PRESS:
     case GDK_3BUTTON_PRESS:
-      if (should_prelight (GTK_ENTRY (widget), i))
-        {
-          icon_info->prelight = FALSE;
-          gtk_widget_queue_draw (widget);
-        }
 
       priv->start_x = x;
       priv->start_y = y;
@@ -4411,15 +4403,6 @@ gtk_entry_event (GtkWidget *widget,
     case GDK_BUTTON_RELEASE:
       icon_info->pressed = FALSE;
       icon_info->device = NULL;
-
-      if (should_prelight (GTK_ENTRY (widget), i) &&
-          x >= 0 && y >= 0 &&
-          x < gdk_window_get_width (icon_info->window) &&
-          y < gdk_window_get_height (icon_info->window))
-        {
-          icon_info->prelight = TRUE;
-          gtk_widget_queue_draw (widget);
-        }
 
       if (!icon_info->nonactivatable)
         g_signal_emit (widget, signals[ICON_RELEASE], 0, i, event);
