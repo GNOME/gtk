@@ -3955,6 +3955,9 @@ gtk_window_supports_csd (GtkWindow *window)
       if (!gdk_screen_is_composited (screen))
         return FALSE;
 
+      if (!gdk_x11_screen_supports_net_wm_hint (screen, gdk_atom_intern_static_string ("_GTK_FRAME_EXTENTS")))
+        return FALSE;
+
       /* We need a visual with alpha */
       visual = gdk_screen_get_rgba_visual (screen);
       if (!visual)
