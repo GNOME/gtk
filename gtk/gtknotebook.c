@@ -3401,7 +3401,7 @@ scroll_notebook_timer (gpointer data)
   first_tab = gtk_notebook_search_page (notebook, priv->first_tab,
                                         (pointer_position == POINTER_BEFORE) ? STEP_PREV : STEP_NEXT,
                                         TRUE);
-  if (first_tab)
+  if (first_tab && priv->cur_page)
     {
       priv->first_tab = first_tab;
       gtk_notebook_pages_allocate (notebook);
@@ -3692,6 +3692,8 @@ gtk_notebook_drag_begin (GtkWidget        *widget,
       priv->dnd_timer = 0;
     }
 
+  g_assert (priv->cur_page != NULL);
+
   priv->operation = DRAG_OPERATION_DETACH;
   gtk_notebook_pages_allocate (notebook);
 
@@ -3826,6 +3828,8 @@ gtk_notebook_drag_motion (GtkWidget      *widget,
       retval = TRUE;
       goto out;
     }
+
+  g_assert (priv->cur_page != NULL);
 
   stop_scrolling (notebook);
   target = gtk_drag_dest_find_target (widget, context, NULL);
@@ -6095,6 +6099,8 @@ gtk_notebook_calculate_tabs_allocation (GtkNotebook  *notebook,
   gboolean gap_left, packing_changed;
   GtkAllocation child_allocation = { 0, };
   GtkOrientation tab_expand_orientation;
+
+  g_assert (priv->cur_page != NULL);
 
   widget = GTK_WIDGET (notebook);
   container = GTK_CONTAINER (notebook);
