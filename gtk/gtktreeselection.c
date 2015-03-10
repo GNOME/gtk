@@ -1337,8 +1337,9 @@ gtk_tree_selection_real_modify_range (GtkTreeSelection *selection,
       break;
     }
 
-  g_return_val_if_fail (start_node != NULL, FALSE);
-  g_return_val_if_fail (end_node != NULL, FALSE);
+  /* Invalid start or end node? */
+  if (start_node == NULL || end_node == NULL)
+    return dirty;
 
   if (anchor_path)
     _gtk_tree_view_set_anchor_path (priv->tree_view, anchor_path);
