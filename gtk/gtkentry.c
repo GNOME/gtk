@@ -1511,13 +1511,17 @@ gtk_entry_class_init (GtkEntryClass *class)
    * icons prelight on mouseover.
    *
    * Since: 2.16
+   *
+   * Deprecated: 3.18: Activatable icons are always prelit on hover.
+   *   Just don't style the :hover style if you don't want them to
+   *   look different.
    */
   gtk_widget_class_install_style_property (widget_class,
                                            g_param_spec_boolean ("icon-prelight",
                                                                  P_("Icon Prelight"),
                                                                  P_("Whether activatable icons should prelight when hovered"),
                                                                  TRUE,
-                                                                 GTK_PARAM_READABLE|G_PARAM_EXPLICIT_NOTIFY));
+                                                                 GTK_PARAM_READABLE|G_PARAM_EXPLICIT_NOTIFY|G_PARAM_DEPRECATED));
 
   /**
    * GtkEntry:progress-border:
@@ -3802,7 +3806,6 @@ should_prelight (GtkEntry             *entry,
 {
   GtkEntryPrivate *priv = entry->priv;
   EntryIconInfo *icon_info = priv->icons[icon_pos];
-  gboolean prelight;
 
   if (!icon_info)
     return FALSE;
@@ -3813,11 +3816,7 @@ should_prelight (GtkEntry             *entry,
   if (icon_info->pressed)
     return FALSE;
 
-  gtk_widget_style_get (GTK_WIDGET (entry),
-                        "icon-prelight", &prelight,
-                        NULL);
-
-  return prelight;
+  return TRUE;
 }
 
 static void
