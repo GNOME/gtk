@@ -2796,25 +2796,6 @@ gtk_entry_ensure_text_handles (GtkEntry *entry)
                     G_CALLBACK (gtk_entry_handle_drag_finished), entry);
 }
 
-static void
-gtk_entry_prepare_context_for_icon (GtkEntry             *entry,
-                                    GtkStyleContext      *context,
-                                    GtkEntryIconPosition  icon_pos)
-{
-  GtkEntryPrivate *priv = entry->priv;
-  EntryIconInfo *icon_info = priv->icons[icon_pos];
-  GtkStateFlags state;
-
-  state = gtk_css_node_get_state (icon_info->css_node);
-
-  if ((state & GTK_STATE_FLAG_INSENSITIVE) || icon_info->insensitive)
-    state |= GTK_STATE_FLAG_INSENSITIVE;
-
-  gtk_css_node_set_state (icon_info->css_node, state);
-
-  gtk_style_context_save_to_node (context, icon_info->css_node);
-}
-
 static gint
 get_icon_width (GtkEntry             *entry,
                 GtkEntryIconPosition  icon_pos)
@@ -2830,7 +2811,7 @@ get_icon_width (GtkEntry             *entry,
     return 0;
 
   context = gtk_widget_get_style_context (GTK_WIDGET (entry));
-  gtk_entry_prepare_context_for_icon (entry, context, icon_pos);
+  gtk_style_context_save_to_node (context, priv->icons[icon_pos]->css_node);
   state = gtk_style_context_get_state (context);
   gtk_style_context_get_padding (context, state, &padding);
 
@@ -3840,7 +3821,7 @@ draw_icon (GtkWidget            *widget,
   gtk_cairo_transform_to_window (cr, widget, icon_info->window);
 
   context = gtk_widget_get_style_context (widget);
-  gtk_entry_prepare_context_for_icon (entry, context, icon_pos);
+  gtk_style_context_save_to_node (context, priv->icons[icon_pos]->css_node);
   _gtk_icon_helper_get_size (icon_info->icon_helper, context,
                              &pix_width, &pix_height);
   state = gtk_style_context_get_state (context);
@@ -7528,7 +7509,7 @@ gtk_entry_ensure_pixbuf (GtkEntry             *entry,
   GdkPixbuf *pix;
 
   context = gtk_widget_get_style_context (GTK_WIDGET (entry));
-  gtk_entry_prepare_context_for_icon (entry, context, icon_pos);
+  gtk_style_context_save_to_node (context, priv->icons[icon_pos]->css_node);
 
   pix = _gtk_icon_helper_ensure_pixbuf (icon_info->icon_helper,
                                         context);
@@ -9012,11 +8993,13 @@ gtk_entry_set_icon_sensitive (GtkEntry             *entry,
       icon_info->insensitive = !sensitive;
 
       gtk_css_node_remove_state (icon_info->css_node, GTK_STATE_FLAG_PRELIGHT | GTK_STATE_FLAG_ACTIVE);
+      if (!gtk_widget_is_sensitive (GTK_WIDGET (entry)) || icon_info->insensitive)
+        gtk_css_node_add_state (icon_info->css_node, GTK_STATE_FLAG_INSENSITIVE);
+      else
+        gtk_css_node_remove_state (icon_info->css_node, GTK_STATE_FLAG_INSENSITIVE);
 
       if (gtk_widget_get_realized (GTK_WIDGET (entry)))
         update_cursors (GTK_WIDGET (entry));
-
-      gtk_widget_queue_draw (GTK_WIDGET (entry));
 
       g_object_notify (G_OBJECT (entry),
                        icon_pos == GTK_ENTRY_ICON_PRIMARY ? "primary-icon-sensitive" : "secondary-icon-sensitive");
