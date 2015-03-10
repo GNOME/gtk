@@ -2804,18 +2804,12 @@ gtk_entry_prepare_context_for_icon (GtkEntry             *entry,
 {
   GtkEntryPrivate *priv = entry->priv;
   EntryIconInfo *icon_info = priv->icons[icon_pos];
-  GtkWidget *widget;
   GtkStateFlags state;
 
-  widget = GTK_WIDGET (entry);
-  state = gtk_widget_get_state_flags (widget);
-
-  state &= ~(GTK_STATE_FLAG_PRELIGHT);
+  state = gtk_css_node_get_state (icon_info->css_node);
 
   if ((state & GTK_STATE_FLAG_INSENSITIVE) || icon_info->insensitive)
     state |= GTK_STATE_FLAG_INSENSITIVE;
-  else if (icon_info->prelight)
-    state |= GTK_STATE_FLAG_PRELIGHT;
 
   gtk_css_node_set_state (icon_info->css_node, state);
 
@@ -4085,10 +4079,7 @@ gtk_entry_enter_notify (GtkWidget *widget,
       if (icon_info != NULL && event->window == icon_info->window)
         {
           if (should_prelight (entry, i))
-            {
-              icon_info->prelight = TRUE;
-              gtk_widget_queue_draw (widget);
-            }
+            gtk_css_node_add_state (icon_info->css_node, GTK_STATE_FLAG_PRELIGHT);
 
           break;
         }
@@ -4116,10 +4107,7 @@ gtk_entry_leave_notify (GtkWidget        *widget,
             icon_info->pressed = FALSE;
 
           if (should_prelight (entry, i))
-            {
-              icon_info->prelight = FALSE;
-              gtk_widget_queue_draw (widget);
-            }
+            gtk_css_node_remove_state (icon_info->css_node, GTK_STATE_FLAG_PRELIGHT);
 
           break;
         }
@@ -9022,7 +9010,7 @@ gtk_entry_set_icon_sensitive (GtkEntry             *entry,
       icon_info->insensitive = !sensitive;
 
       icon_info->pressed = FALSE;
-      icon_info->prelight = FALSE;
+      gtk_css_node_remove_state (icon_info->css_node, GTK_STATE_FLAG_PRELIGHT);
 
       if (gtk_widget_get_realized (GTK_WIDGET (entry)))
         update_cursors (GTK_WIDGET (entry));
