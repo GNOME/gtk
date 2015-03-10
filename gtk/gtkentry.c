@@ -242,7 +242,6 @@ struct _EntryIconInfo
   guint nonactivatable : 1;
   guint prelight       : 1;
   guint in_drag        : 1;
-  guint pressed        : 1;
 
   GdkDragAction actions;
   GtkTargetList *target_list;
@@ -3206,19 +3205,20 @@ update_state_for_icon_infos (GtkWidget *widget)
   GtkEntry *entry = GTK_ENTRY (widget);
   GtkEntryPrivate *priv = entry->priv;
   GtkStateFlags state;
+#define NOT_INHERITED (GTK_STATE_FLAG_PRELIGHT | GTK_STATE_FLAG_ACTIVE)
 
   cssnode = gtk_widget_get_css_node (widget);
   state = gtk_widget_get_state_flags (widget);
 
   if (priv->icons[GTK_ENTRY_ICON_PRIMARY])
     gtk_css_node_set_state (priv->icons[GTK_ENTRY_ICON_PRIMARY]->css_node,
-                            (state & ~GTK_STATE_FLAG_PRELIGHT)
-                            | (gtk_css_node_get_state (priv->icons[GTK_ENTRY_ICON_PRIMARY]->css_node) & GTK_STATE_FLAG_PRELIGHT)
+                            (state & ~NOT_INHERITED)
+                            | (gtk_css_node_get_state (priv->icons[GTK_ENTRY_ICON_PRIMARY]->css_node) & NOT_INHERITED)
                             | (priv->icons[GTK_ENTRY_ICON_PRIMARY]->insensitive ? GTK_STATE_FLAG_INSENSITIVE : 0));
   if (priv->icons[GTK_ENTRY_ICON_SECONDARY])
     gtk_css_node_set_state (priv->icons[GTK_ENTRY_ICON_SECONDARY]->css_node,
-                            (state & ~GTK_STATE_FLAG_PRELIGHT)
-                            | (gtk_css_node_get_state (priv->icons[GTK_ENTRY_ICON_SECONDARY]->css_node) & GTK_STATE_FLAG_PRELIGHT)
+                            (state & ~NOT_INHERITED)
+                            | (gtk_css_node_get_state (priv->icons[GTK_ENTRY_ICON_SECONDARY]->css_node) & NOT_INHERITED)
                             | (priv->icons[GTK_ENTRY_ICON_SECONDARY]->insensitive ? GTK_STATE_FLAG_INSENSITIVE : 0));
 
   if (state & GTK_STATE_FLAG_DIR_RTL)
@@ -3246,6 +3246,8 @@ update_state_for_icon_infos (GtkWidget *widget)
       gtk_css_node_remove_class (last_node, GTK_STYLE_CLASS_LEFT);
       gtk_css_node_add_class (last_node, GTK_STYLE_CLASS_RIGHT);
     }
+
+#undef NOT_INHERITED
 }
 
 static void
@@ -4104,7 +4106,7 @@ gtk_entry_leave_notify (GtkWidget        *widget,
         {
           /* a grab means that we may never see the button release */
           if (event->mode == GDK_CROSSING_GRAB || event->mode == GDK_CROSSING_GTK_GRAB)
-            icon_info->pressed = FALSE;
+            gtk_css_node_remove_state (icon_info->css_node, GTK_STATE_FLAG_ACTIVE);
 
           if (should_prelight (entry, i))
             gtk_css_node_remove_state (icon_info->css_node, GTK_STATE_FLAG_PRELIGHT);
@@ -4350,7 +4352,7 @@ gtk_entry_event (GtkWidget *widget,
 
       priv->start_x = x;
       priv->start_y = y;
-      icon_info->pressed = TRUE;
+      gtk_css_node_add_state (icon_info->css_node, GTK_STATE_FLAG_ACTIVE);
       icon_info->device = device;
 
       if (!icon_info->nonactivatable)
@@ -4363,7 +4365,7 @@ gtk_entry_event (GtkWidget *widget,
         break;
       /* Fall through */
     case GDK_MOTION_NOTIFY:
-      if (icon_info->pressed &&
+      if ((gtk_css_node_get_state (icon_info->css_node) & GTK_STATE_FLAG_ACTIVE) &&
           icon_info->target_list != NULL &&
               gtk_drag_check_threshold (widget,
                                         priv->start_x,
@@ -4389,7 +4391,7 @@ gtk_entry_event (GtkWidget *widget,
       icon_info->current_sequence = NULL;
       /* Fall through */
     case GDK_BUTTON_RELEASE:
-      icon_info->pressed = FALSE;
+      gtk_css_node_remove_state (icon_info->css_node, GTK_STATE_FLAG_ACTIVE);
       icon_info->device = NULL;
 
       if (!icon_info->nonactivatable)
@@ -9009,8 +9011,7 @@ gtk_entry_set_icon_sensitive (GtkEntry             *entry,
     {
       icon_info->insensitive = !sensitive;
 
-      icon_info->pressed = FALSE;
-      gtk_css_node_remove_state (icon_info->css_node, GTK_STATE_FLAG_PRELIGHT);
+      gtk_css_node_remove_state (icon_info->css_node, GTK_STATE_FLAG_PRELIGHT | GTK_STATE_FLAG_ACTIVE);
 
       if (gtk_widget_get_realized (GTK_WIDGET (entry)))
         update_cursors (GTK_WIDGET (entry));
@@ -9528,7 +9529,7 @@ check_undo_icon_grab (GtkEntry      *entry,
       !gtk_widget_device_is_shadowed (GTK_WIDGET (entry), info->device))
     return;
 
-  info->pressed = FALSE;
+  gtk_css_node_remove_state (info->css_node, GTK_STATE_FLAG_ACTIVE);
   info->current_sequence = NULL;
   info->device = NULL;
 }
