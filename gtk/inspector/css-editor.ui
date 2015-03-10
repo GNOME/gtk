@@ -86,6 +86,8 @@
             <property name="wrap-mode">word</property>
             <property name="monospace">True</property>
             <property name="has-focus">True</property>
+            <property name="left-margin">6</property>
+            <property name="right-margin">6</property>
           </object>
         </child>
       </object>
