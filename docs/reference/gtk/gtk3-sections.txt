@@ -1119,6 +1119,7 @@ gtk_editable_get_type
 <FILE>gtkentry</FILE>
 <TITLE>GtkEntry</TITLE>
 GtkEntry
+GtkEntryClass
 gtk_entry_new
 gtk_entry_new_with_buffer
 gtk_entry_get_buffer
