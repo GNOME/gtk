@@ -951,6 +951,22 @@ gtk_css_node_get_state (GtkCssNode *cssnode)
 }
 
 void
+gtk_css_node_add_state (GtkCssNode    *cssnode,
+                        GtkStateFlags  state_flags)
+{
+  gtk_css_node_set_state (cssnode,
+                          gtk_css_node_get_state (cssnode) | state_flags);
+}
+
+void
+gtk_css_node_remove_state (GtkCssNode    *cssnode,
+                           GtkStateFlags  state_flags)
+{
+  gtk_css_node_set_state (cssnode,
+                          gtk_css_node_get_state (cssnode) & ~state_flags);
+}
+
+void
 gtk_css_node_set_junction_sides (GtkCssNode       *cssnode,
                                  GtkJunctionSides  junction_sides)
 {
