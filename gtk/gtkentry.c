@@ -2815,33 +2815,6 @@ gtk_entry_prepare_context_for_icon (GtkEntry             *entry,
 
   gtk_css_node_set_state (icon_info->css_node, state);
 
-  if (gtk_widget_get_direction (GTK_WIDGET (entry)) == GTK_TEXT_DIR_RTL) 
-    {
-      if (icon_pos == GTK_ENTRY_ICON_PRIMARY)
-        {
-          gtk_css_node_remove_class (icon_info->css_node, GTK_STYLE_CLASS_LEFT);
-          gtk_css_node_add_class (icon_info->css_node, GTK_STYLE_CLASS_RIGHT);
-        }
-      else
-        {
-          gtk_css_node_remove_class (icon_info->css_node, GTK_STYLE_CLASS_RIGHT);
-          gtk_css_node_add_class (icon_info->css_node, GTK_STYLE_CLASS_LEFT);
-        }
-    }
-  else
-    {
-      if (icon_pos == GTK_ENTRY_ICON_PRIMARY)
-        {
-          gtk_css_node_remove_class (icon_info->css_node, GTK_STYLE_CLASS_RIGHT);
-          gtk_css_node_add_class (icon_info->css_node, GTK_STYLE_CLASS_LEFT);
-        }
-      else
-        {
-          gtk_css_node_remove_class (icon_info->css_node, GTK_STYLE_CLASS_LEFT);
-          gtk_css_node_add_class (icon_info->css_node, GTK_STYLE_CLASS_RIGHT);
-        }
-    }
-
   gtk_style_context_save_to_node (context, icon_info->css_node);
 }
 
@@ -3229,6 +3202,55 @@ realize_icon_info (GtkWidget            *widget,
 }
 
 static void
+update_state_for_icon_infos (GtkWidget *widget)
+{
+  GtkCssNode *cssnode, *first_node, *last_node;
+  GtkEntry *entry = GTK_ENTRY (widget);
+  GtkEntryPrivate *priv = entry->priv;
+  GtkStateFlags state;
+
+  cssnode = gtk_widget_get_css_node (widget);
+  state = gtk_widget_get_state_flags (widget);
+
+  if (priv->icons[GTK_ENTRY_ICON_PRIMARY])
+    gtk_css_node_set_state (priv->icons[GTK_ENTRY_ICON_PRIMARY]->css_node,
+                            (state & ~GTK_STATE_FLAG_PRELIGHT)
+                            | (gtk_css_node_get_state (priv->icons[GTK_ENTRY_ICON_PRIMARY]->css_node) & GTK_STATE_FLAG_PRELIGHT)
+                            | (priv->icons[GTK_ENTRY_ICON_PRIMARY]->insensitive ? GTK_STATE_FLAG_INSENSITIVE : 0));
+  if (priv->icons[GTK_ENTRY_ICON_SECONDARY])
+    gtk_css_node_set_state (priv->icons[GTK_ENTRY_ICON_SECONDARY]->css_node,
+                            (state & ~GTK_STATE_FLAG_PRELIGHT)
+                            | (gtk_css_node_get_state (priv->icons[GTK_ENTRY_ICON_SECONDARY]->css_node) & GTK_STATE_FLAG_PRELIGHT)
+                            | (priv->icons[GTK_ENTRY_ICON_SECONDARY]->insensitive ? GTK_STATE_FLAG_INSENSITIVE : 0));
+
+  if (state & GTK_STATE_FLAG_DIR_RTL)
+    {
+      first_node = priv->icons[GTK_ENTRY_ICON_SECONDARY] ? priv->icons[GTK_ENTRY_ICON_SECONDARY]->css_node : NULL;
+      last_node = priv->icons[GTK_ENTRY_ICON_PRIMARY] ? priv->icons[GTK_ENTRY_ICON_PRIMARY]->css_node : NULL;
+    }
+  else
+    {
+      first_node = priv->icons[GTK_ENTRY_ICON_PRIMARY] ? priv->icons[GTK_ENTRY_ICON_PRIMARY]->css_node : NULL;
+      last_node = priv->icons[GTK_ENTRY_ICON_SECONDARY] ? priv->icons[GTK_ENTRY_ICON_SECONDARY]->css_node : NULL;
+    }
+
+  if (first_node)
+    {
+      if (first_node != gtk_css_node_get_first_child (cssnode))
+        gtk_css_node_set_before (first_node, gtk_css_node_get_first_child (cssnode));
+      gtk_css_node_remove_class (first_node, GTK_STYLE_CLASS_RIGHT);
+      gtk_css_node_add_class (first_node, GTK_STYLE_CLASS_LEFT);
+    }
+  if (last_node)
+    {
+      if (last_node != gtk_css_node_get_last_child (cssnode))
+        gtk_css_node_set_after (last_node, gtk_css_node_get_last_child (cssnode));
+      gtk_css_node_remove_class (last_node, GTK_STYLE_CLASS_LEFT);
+      gtk_css_node_add_class (last_node, GTK_STYLE_CLASS_RIGHT);
+    }
+}
+
+static void
 icon_node_style_changed_cb (GtkCssNode  *node,
                             GtkCssStyle *old_style,
                             GtkCssStyle *new_style,
@@ -3271,7 +3293,7 @@ construct_icon_info (GtkWidget            *widget,
   gtk_css_node_add_class (icon_info->css_node, GTK_STYLE_CLASS_IMAGE);
   gtk_css_node_set_parent (icon_info->css_node, widget_node);
   g_signal_connect_object (icon_info->css_node, "style-changed", G_CALLBACK (icon_node_style_changed_cb), widget, 0);
-  gtk_css_node_set_state (icon_info->css_node, gtk_css_node_get_state (widget_node) & ~GTK_STATE_FLAG_PRELIGHT);
+  update_state_for_icon_infos (widget);
 
   if (gtk_widget_get_realized (widget))
     realize_icon_info (widget, icon_pos);
@@ -5118,6 +5140,8 @@ gtk_entry_state_flags_changed (GtkWidget     *widget,
       /* Clear any selection */
       gtk_editable_select_region (GTK_EDITABLE (entry), priv->current_pos, priv->current_pos);
     }
+
+  update_state_for_icon_infos (widget);
 
   gtk_entry_update_cached_style_values (entry);
 }
