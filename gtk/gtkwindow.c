@@ -1487,6 +1487,8 @@ multipress_gesture_pressed_cb (GtkGestureMultiPress *gesture,
         {
           gdouble x_root, y_root;
 
+          gtk_gesture_set_state (GTK_GESTURE (gesture), GTK_EVENT_SEQUENCE_CLAIMED);
+
           gdk_event_get_root_coords (event, &x_root, &y_root);
           gdk_window_begin_resize_drag_for_device (gtk_widget_get_window (widget),
                                                    (GdkWindowEdge) region,
@@ -1494,6 +1496,9 @@ multipress_gesture_pressed_cb (GtkGestureMultiPress *gesture,
                                                    GDK_BUTTON_PRIMARY,
                                                    x_root, y_root,
                                                    gdk_event_get_time (event));
+
+          gtk_event_controller_reset (GTK_EVENT_CONTROLLER (gesture));
+          gtk_event_controller_reset (GTK_EVENT_CONTROLLER (priv->drag_gesture));
         }
 
       break;
@@ -1528,6 +1533,7 @@ drag_gesture_update_cb (GtkGestureDrag *gesture,
                         gdouble         offset_y,
                         GtkWindow      *window)
 {
+  GtkWindowPrivate *priv = window->priv;
   gint double_click_distance;
   GtkSettings *settings;
 
@@ -1579,6 +1585,7 @@ drag_gesture_update_cb (GtkGestureDrag *gesture,
                                              gtk_get_current_event_time ());
 
       gtk_event_controller_reset (GTK_EVENT_CONTROLLER (gesture));
+      gtk_event_controller_reset (GTK_EVENT_CONTROLLER (priv->multipress_gesture));
     }
 }
 
