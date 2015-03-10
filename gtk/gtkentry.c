@@ -34,6 +34,7 @@
 #include "gtkbindings.h"
 #include "gtkcelleditable.h"
 #include "gtkclipboard.h"
+#include "gtkcssnodeutilsprivate.h"
 #include "gtkdebug.h"
 #include "gtkdnd.h"
 #include "gtkentry.h"
@@ -235,6 +236,7 @@ struct _GtkEntryPrivate
 struct _EntryIconInfo
 {
   GdkWindow *window;
+  GtkCssNode *css_node;
   gchar *tooltip;
   guint insensitive    : 1;
   guint nonactivatable : 1;
@@ -2811,25 +2813,36 @@ gtk_entry_prepare_context_for_icon (GtkEntry             *entry,
   else if (icon_info->prelight)
     state |= GTK_STATE_FLAG_PRELIGHT;
 
-  gtk_style_context_save (context);
-
-  gtk_style_context_set_state (context, state);
-  gtk_style_context_add_class (context, GTK_STYLE_CLASS_IMAGE);
+  gtk_css_node_set_state (icon_info->css_node, state);
 
   if (gtk_widget_get_direction (GTK_WIDGET (entry)) == GTK_TEXT_DIR_RTL) 
     {
       if (icon_pos == GTK_ENTRY_ICON_PRIMARY)
-        gtk_style_context_add_class (context, GTK_STYLE_CLASS_RIGHT);
+        {
+          gtk_css_node_remove_class (icon_info->css_node, GTK_STYLE_CLASS_LEFT);
+          gtk_css_node_add_class (icon_info->css_node, GTK_STYLE_CLASS_RIGHT);
+        }
       else
-        gtk_style_context_add_class (context, GTK_STYLE_CLASS_LEFT);
+        {
+          gtk_css_node_remove_class (icon_info->css_node, GTK_STYLE_CLASS_RIGHT);
+          gtk_css_node_add_class (icon_info->css_node, GTK_STYLE_CLASS_LEFT);
+        }
     }
   else
     {
       if (icon_pos == GTK_ENTRY_ICON_PRIMARY)
-        gtk_style_context_add_class (context, GTK_STYLE_CLASS_LEFT);
+        {
+          gtk_css_node_remove_class (icon_info->css_node, GTK_STYLE_CLASS_RIGHT);
+          gtk_css_node_add_class (icon_info->css_node, GTK_STYLE_CLASS_LEFT);
+        }
       else
-        gtk_style_context_add_class (context, GTK_STYLE_CLASS_RIGHT);
+        {
+          gtk_css_node_remove_class (icon_info->css_node, GTK_STYLE_CLASS_LEFT);
+          gtk_css_node_add_class (icon_info->css_node, GTK_STYLE_CLASS_RIGHT);
+        }
     }
+
+  gtk_style_context_save_to_node (context, icon_info->css_node);
 }
 
 static gint
@@ -3002,6 +3015,8 @@ gtk_entry_finalize (GObject *object)
     {
       if ((icon_info = priv->icons[i]) != NULL)
         {
+          g_object_unref (icon_info->css_node);
+
           if (icon_info->target_list != NULL)
             {
               gtk_target_list_unref (icon_info->target_list);
@@ -3213,12 +3228,33 @@ realize_icon_info (GtkWidget            *widget,
 
 }
 
+static void
+icon_node_style_changed_cb (GtkCssNode  *node,
+                            GtkCssStyle *old_style,
+                            GtkCssStyle *new_style,
+                            GtkWidget   *widget)
+{
+  GtkEntry *entry = GTK_ENTRY (widget);
+  GtkEntryPrivate *priv = entry->priv;
+  GtkIconHelper *icon_helper;
+
+  gtk_css_node_style_changed_for_widget (node, old_style, new_style, widget);
+
+  if (priv->icons[GTK_ENTRY_ICON_PRIMARY] && priv->icons[GTK_ENTRY_ICON_PRIMARY]->css_node == node)
+    icon_helper = priv->icons[GTK_ENTRY_ICON_PRIMARY]->icon_helper;
+  else
+    icon_helper = priv->icons[GTK_ENTRY_ICON_SECONDARY]->icon_helper;
+
+  _gtk_icon_helper_invalidate (icon_helper);
+}
+
 static EntryIconInfo*
 construct_icon_info (GtkWidget            *widget, 
                      GtkEntryIconPosition  icon_pos)
 {
   GtkEntry *entry = GTK_ENTRY (widget);
   GtkEntryPrivate *priv = entry->priv;
+  GtkCssNode *widget_node;
   EntryIconInfo *icon_info;
 
   g_return_val_if_fail (priv->icons[icon_pos] == NULL, NULL);
@@ -3228,6 +3264,14 @@ construct_icon_info (GtkWidget            *widget,
 
   icon_info->icon_helper = _gtk_icon_helper_new ();
   _gtk_icon_helper_set_force_scale_pixbuf (icon_info->icon_helper, TRUE);
+
+  icon_info->css_node = gtk_css_node_new ();
+  widget_node = gtk_widget_get_css_node (widget);
+  gtk_css_node_add_class (icon_info->css_node, GTK_STYLE_CLASS_ENTRY);
+  gtk_css_node_add_class (icon_info->css_node, GTK_STYLE_CLASS_IMAGE);
+  gtk_css_node_set_parent (icon_info->css_node, widget_node);
+  g_signal_connect_object (icon_info->css_node, "style-changed", G_CALLBACK (icon_node_style_changed_cb), widget, 0);
+  gtk_css_node_set_state (icon_info->css_node, gtk_css_node_get_state (widget_node) & ~GTK_STATE_FLAG_PRELIGHT);
 
   if (gtk_widget_get_realized (widget))
     realize_icon_info (widget, icon_pos);
@@ -7439,6 +7483,8 @@ gtk_entry_clear (GtkEntry             *entry,
   if (GDK_IS_WINDOW (icon_info->window))
     gdk_window_hide (icon_info->window);
 
+  gtk_css_node_set_visible (icon_info->css_node, FALSE);
+
   storage_type = _gtk_icon_helper_get_storage_type (icon_info->icon_helper);
 
   switch (storage_type)
@@ -8496,6 +8542,8 @@ gtk_entry_set_icon_from_pixbuf (GtkEntry             *entry,
       _gtk_icon_helper_set_icon_size (icon_info->icon_helper,
                                       GTK_ICON_SIZE_MENU);
 
+      gtk_css_node_set_visible (icon_info->css_node, TRUE);
+
       if (icon_pos == GTK_ENTRY_ICON_PRIMARY)
         {
           g_object_notify (G_OBJECT (entry), "primary-icon-pixbuf");
@@ -8561,6 +8609,8 @@ gtk_entry_set_icon_from_stock (GtkEntry             *entry,
   if (new_id != NULL)
     {
       _gtk_icon_helper_set_stock_id (icon_info->icon_helper, new_id, GTK_ICON_SIZE_MENU);
+
+      gtk_css_node_set_visible (icon_info->css_node, TRUE);
 
       if (icon_pos == GTK_ENTRY_ICON_PRIMARY)
         {
@@ -8629,6 +8679,8 @@ gtk_entry_set_icon_from_icon_name (GtkEntry             *entry,
     {
       _gtk_icon_helper_set_icon_name (icon_info->icon_helper, new_name, GTK_ICON_SIZE_MENU);
 
+      gtk_css_node_set_visible (icon_info->css_node, TRUE);
+
       if (icon_pos == GTK_ENTRY_ICON_PRIMARY)
         {
           g_object_notify (G_OBJECT (entry), "primary-icon-name");
@@ -8694,6 +8746,8 @@ gtk_entry_set_icon_from_gicon (GtkEntry             *entry,
   if (icon)
     {
       _gtk_icon_helper_set_gicon (icon_info->icon_helper, icon, GTK_ICON_SIZE_MENU);
+
+      gtk_css_node_set_visible (icon_info->css_node, TRUE);
 
       if (icon_pos == GTK_ENTRY_ICON_PRIMARY)
         {
