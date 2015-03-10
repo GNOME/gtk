@@ -972,7 +972,7 @@ gtk_css_node_clear_classes (GtkCssNode *cssnode)
 
   for (l = list; l; l = l->next)
     {
-      gtk_css_node_remove_class (cssnode, GPOINTER_TO_UINT (l->data));
+      gtk_css_node_remove_class (cssnode, l->data);
     }
 
   g_list_free (list);
@@ -992,7 +992,7 @@ gtk_css_node_set_classes (GtkCssNode  *cssnode,
     {
       for (i = 0; classes[i] != NULL; i++)
         {
-          gtk_css_node_add_class (cssnode, g_quark_from_string (classes[i]));
+          gtk_css_node_add_class (cssnode, classes[i]);
         }
     }
 
@@ -1022,9 +1022,13 @@ gtk_css_node_get_classes (GtkCssNode *cssnode)
 
 void
 gtk_css_node_add_class (GtkCssNode *cssnode,
-                        GQuark      style_class)
+                        const char *style_class)
 {
-  if (gtk_css_node_declaration_add_class (&cssnode->decl, style_class))
+  GQuark class_quark;
+
+  class_quark = g_quark_from_string (style_class);
+
+  if (gtk_css_node_declaration_add_class (&cssnode->decl, class_quark))
     {
       gtk_css_node_invalidate (cssnode, GTK_CSS_CHANGE_CLASS);
       g_object_notify_by_pspec (G_OBJECT (cssnode), cssnode_properties[PROP_CLASSES]);
@@ -1033,9 +1037,15 @@ gtk_css_node_add_class (GtkCssNode *cssnode,
 
 void
 gtk_css_node_remove_class (GtkCssNode *cssnode,
-                           GQuark      style_class)
+                           const char *style_class)
 {
-  if (gtk_css_node_declaration_remove_class (&cssnode->decl, style_class))
+  GQuark class_quark;
+
+  class_quark = g_quark_try_string (style_class);
+  if (class_quark == 0)
+    return;
+
+  if (gtk_css_node_declaration_remove_class (&cssnode->decl, class_quark))
     {
       gtk_css_node_invalidate (cssnode, GTK_CSS_CHANGE_CLASS);
       g_object_notify_by_pspec (G_OBJECT (cssnode), cssnode_properties[PROP_CLASSES]);
@@ -1044,15 +1054,43 @@ gtk_css_node_remove_class (GtkCssNode *cssnode,
 
 gboolean
 gtk_css_node_has_class (GtkCssNode *cssnode,
-                        GQuark      style_class)
+                        const char *style_class)
+{
+  GQuark class_quark;
+
+  class_quark = g_quark_try_string (style_class);
+  if (class_quark == 0)
+    return FALSE;
+
+  return gtk_css_node_has_qclass (cssnode, class_quark);
+}
+
+gboolean
+gtk_css_node_has_qclass (GtkCssNode *cssnode,
+                         GQuark      style_class)
 {
   return gtk_css_node_declaration_has_class (cssnode->decl, style_class);
+}
+
+static void
+quarks_to_strings (GList *list)
+{
+  GList *l;
+
+  for (l = list; l; l = l->next)
+    {
+      l->data = (char *) g_quark_to_string (GPOINTER_TO_UINT (l->data));
+    }
 }
 
 GList *
 gtk_css_node_list_classes (GtkCssNode *cssnode)
 {
-  return gtk_css_node_declaration_list_classes (cssnode->decl);
+  GList *list = gtk_css_node_declaration_list_classes (cssnode->decl);
+
+  quarks_to_strings (list);
+
+  return list;
 }
 
 void

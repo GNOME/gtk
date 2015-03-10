@@ -1042,7 +1042,7 @@ gtk_switch_init (GtkSwitch *self)
   widget_node = gtk_widget_get_css_node (GTK_WIDGET (self));
   priv->slider_node = gtk_css_node_new ();
   gtk_css_node_set_widget_type (priv->slider_node, GTK_TYPE_SWITCH);
-  gtk_css_node_add_class (priv->slider_node, g_quark_from_string (GTK_STYLE_CLASS_SLIDER));
+  gtk_css_node_add_class (priv->slider_node, GTK_STYLE_CLASS_SLIDER);
   gtk_css_node_set_parent (priv->slider_node, widget_node);
   gtk_css_node_set_state (priv->slider_node, gtk_css_node_get_state (widget_node));
   g_signal_connect_object (priv->slider_node, "style-changed", G_CALLBACK (gtk_css_node_style_changed_for_widget), self, 0);

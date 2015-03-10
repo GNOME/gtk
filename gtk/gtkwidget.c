@@ -16339,7 +16339,7 @@ gtk_widget_path_append_for_widget (GtkWidgetPath *path,
       classes = gtk_css_node_list_classes (widget->priv->cssnode);
 
       for (l = classes; l; l = l->next)
-        gtk_widget_path_iter_add_class (path, pos, g_quark_to_string (GPOINTER_TO_UINT (l->data)));
+        gtk_widget_path_iter_add_class (path, pos, l->data);
 
       g_list_free (classes);
     }

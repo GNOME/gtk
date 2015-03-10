@@ -306,7 +306,7 @@ static gboolean
 gtk_css_matcher_node_has_class (const GtkCssMatcher *matcher,
                                 GQuark               class_name)
 {
-  return gtk_css_node_has_class (matcher->node.node, class_name);
+  return gtk_css_node_has_qclass (matcher->node.node, class_name);
 }
 
 static gboolean

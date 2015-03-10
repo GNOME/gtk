@@ -1315,15 +1315,13 @@ gtk_style_context_add_class (GtkStyleContext *context,
                              const gchar     *class_name)
 {
   GtkStyleContextPrivate *priv;
-  GQuark class_quark;
 
   g_return_if_fail (GTK_IS_STYLE_CONTEXT (context));
   g_return_if_fail (class_name != NULL);
 
   priv = context->priv;
-  class_quark = g_quark_from_string (class_name);
 
-  gtk_css_node_add_class (priv->cssnode, class_quark);
+  gtk_css_node_add_class (priv->cssnode, class_name);
 }
 
 /**
@@ -1340,19 +1338,13 @@ gtk_style_context_remove_class (GtkStyleContext *context,
                                 const gchar     *class_name)
 {
   GtkStyleContextPrivate *priv;
-  GQuark class_quark;
 
   g_return_if_fail (GTK_IS_STYLE_CONTEXT (context));
   g_return_if_fail (class_name != NULL);
 
-  class_quark = g_quark_try_string (class_name);
-
-  if (!class_quark)
-    return;
-
   priv = context->priv;
 
-  gtk_css_node_remove_class (priv->cssnode, class_quark);
+  gtk_css_node_remove_class (priv->cssnode, class_name);
 }
 
 /**
@@ -1372,19 +1364,13 @@ gtk_style_context_has_class (GtkStyleContext *context,
                              const gchar     *class_name)
 {
   GtkStyleContextPrivate *priv;
-  GQuark class_quark;
 
   g_return_val_if_fail (GTK_IS_STYLE_CONTEXT (context), FALSE);
   g_return_val_if_fail (class_name != NULL, FALSE);
 
-  class_quark = g_quark_try_string (class_name);
-
-  if (!class_quark)
-    return FALSE;
-
   priv = context->priv;
 
-  return gtk_css_node_has_class (priv->cssnode, class_quark);
+  return gtk_css_node_has_class (priv->cssnode, class_name);
 }
 
 static void
@@ -1415,16 +1401,12 @@ GList *
 gtk_style_context_list_classes (GtkStyleContext *context)
 {
   GtkStyleContextPrivate *priv;
-  GList *classes;
 
   g_return_val_if_fail (GTK_IS_STYLE_CONTEXT (context), NULL);
 
   priv = context->priv;
   
-  classes = gtk_css_node_list_classes (priv->cssnode);
-  quarks_to_strings (classes);
-
-  return classes;
+  return gtk_css_node_list_classes (priv->cssnode);
 }
 
 /**
