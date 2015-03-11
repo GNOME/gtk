@@ -23,6 +23,7 @@
 
 #include <math.h>
 
+#include "gtkcssenumvalueprivate.h"
 #include "gtkiconhelperprivate.h"
 #include "gtkstylecontextprivate.h"
 
@@ -238,14 +239,39 @@ ensure_stated_icon_from_info (GtkIconHelper *self,
 static GtkIconLookupFlags
 get_icon_lookup_flags (GtkIconHelper *self, GtkStyleContext *context)
 {
-  GtkIconLookupFlags flags = GTK_ICON_LOOKUP_USE_BUILTIN;
+  GtkIconLookupFlags flags;
+  GtkCssIconStyle icon_style;
+  GtkStateFlags state;
+
+  state = gtk_style_context_get_state (context);
+  flags = GTK_ICON_LOOKUP_USE_BUILTIN;
 
   if (self->priv->use_fallback)
     flags |= GTK_ICON_LOOKUP_GENERIC_FALLBACK;
   if (self->priv->pixel_size != -1 || self->priv->force_scale_pixbuf)
     flags |= GTK_ICON_LOOKUP_FORCE_SIZE;
 
-  flags |= _gtk_style_context_get_icon_lookup_flags (context);
+  icon_style = _gtk_css_icon_style_value_get (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_ICON_STYLE));
+
+  switch (icon_style)
+    {
+    case GTK_CSS_ICON_STYLE_REGULAR:
+      flags |= GTK_ICON_LOOKUP_FORCE_REGULAR;
+      break;
+    case GTK_CSS_ICON_STYLE_SYMBOLIC:
+      flags |= GTK_ICON_LOOKUP_FORCE_SYMBOLIC;
+      break;
+    case GTK_CSS_ICON_STYLE_REQUESTED:
+      break;
+    default:
+      g_assert_not_reached ();
+      return 0;
+    }
+
+  if (state & GTK_STATE_FLAG_DIR_LTR)
+    flags |= GTK_ICON_LOOKUP_DIR_LTR;
+  else if (state & GTK_STATE_FLAG_DIR_RTL)
+    flags |= GTK_ICON_LOOKUP_DIR_RTL;
 
   return flags;
 }

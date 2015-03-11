@@ -66,7 +66,6 @@ void           _gtk_style_context_get_icon_extents           (GtkStyleContext   
                                                               gint                y,
                                                               gint                width,
                                                               gint                height);
-GtkIconLookupFlags _gtk_style_context_get_icon_lookup_flags  (GtkStyleContext    *context);
 
 /* Accessibility support */
 AtkAttributeSet *_gtk_style_context_get_attributes           (AtkAttributeSet    *attributes,
