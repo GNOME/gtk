@@ -444,7 +444,7 @@ _gtk_icon_helper_ensure_pixbuf (GtkIconHelper *self,
 
     case GTK_IMAGE_STOCK:
       G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
-      icon_set = gtk_style_context_lookup_icon_set (context, self->priv->stock_id);
+      icon_set = gtk_icon_factory_lookup_default (self->priv->stock_id);
       if (icon_set != NULL)
 	ensure_pixbuf_for_icon_set (self, context, icon_set);
       else
@@ -664,7 +664,7 @@ ensure_stated_surface_from_info (GtkIconHelper *self,
 
       G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
 
-      icon_set = gtk_style_context_lookup_icon_set (context, GTK_STOCK_MISSING_IMAGE);
+      icon_set = gtk_icon_factory_lookup_default (GTK_STOCK_MISSING_IMAGE);
 
       destination =
         gtk_icon_set_render_icon_pixbuf (icon_set, context, self->priv->icon_size);
@@ -751,7 +751,7 @@ _gtk_icon_helper_ensure_surface (GtkIconHelper *self,
 
     case GTK_IMAGE_STOCK:
       G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
-      icon_set = gtk_style_context_lookup_icon_set (context, self->priv->stock_id);
+      icon_set = gtk_icon_factory_lookup_default (self->priv->stock_id);
       if (icon_set != NULL)
 	ensure_surface_for_icon_set (self, context, icon_set);
       else
