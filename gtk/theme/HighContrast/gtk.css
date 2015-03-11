@@ -2511,6 +2511,12 @@ GtkColorChooserWidget #add-color-button {
   .window-frame.csd.tooltip {
     border-radius: 5px;
     box-shadow: none; }
+  .window-frame.solid-csd {
+    border-radius: 0;
+    margin: 4px;
+    background-color: #fff;
+    border: solid 1px #8b8b8b;
+    box-shadow: none; }
 
 .button.titlebutton {
   padding: 8px;

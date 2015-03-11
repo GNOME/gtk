@@ -4417,6 +4417,12 @@ GtkVolumeButton.button, .header-bar GtkVolumeButton.button.titlebutton,
   .window-frame.csd.message-dialog {
     border-radius: 7px;
     box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2), 0 0 0 1px rgba(0, 0, 0, 0.13); }
+  .window-frame.solid-csd {
+    border-radius: 0;
+    margin: 4px;
+    background-color: #ededed;
+    border: solid 1px #a8a8a8;
+    box-shadow: none; }
 
 .header-bar .titlebutton.button,
 .titlebar .titlebutton.button {

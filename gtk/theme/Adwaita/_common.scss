@@ -3227,6 +3227,13 @@ GtkVolumeButton.button { padding: 8px; }
                   0 0 0 1px transparentize($_wm_border,0.1);
     }
   }
+  &.solid-csd {
+    border-radius: 0;
+    margin: 4px;
+    background-color: $backdrop_bg_color;
+    border: solid 1px $backdrop_borders_color;
+    box-shadow: none;
+  }
 }
 
 // Window Close button

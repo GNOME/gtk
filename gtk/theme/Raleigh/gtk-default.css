@@ -872,3 +872,12 @@ GtkCalendar.button:hover {
 .window-frame:backdrop {
   box-shadow: 0 2px 5px 1px alpha(black, 0.5);
 }
+
+.window-frame.solid-csd {
+  border-radius: 0;
+  margin: 2px;
+  background-color: @bg_color;
+  border-style: outset;
+  border-width: 2px;
+  box-shadow: none;
+}
