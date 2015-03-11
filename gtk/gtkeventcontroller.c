@@ -131,7 +131,11 @@ gtk_event_controller_dispose (GObject *object)
 
   priv = gtk_event_controller_get_instance_private (controller);
   if (priv->widget)
-    _gtk_widget_remove_controller (priv->widget, controller);
+    {
+      _gtk_widget_remove_controller (priv->widget, controller);
+      g_object_remove_weak_pointer (G_OBJECT (priv->widget), (gpointer *) &priv->widget);
+      priv->widget = NULL;
+    }
 
   G_OBJECT_CLASS (gtk_event_controller_parent_class)->dispose (object);
 }
