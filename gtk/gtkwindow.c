@@ -227,8 +227,7 @@ struct _GtkWindowPrivate
   guint    gravity                   : 5; /* GdkGravity */
   guint    csd_requested             : 1;
   guint    client_decorated          : 1; /* Decorations drawn client-side */
-  guint    custom_title              : 1; /* app-provided titlebar if CSD can't
-                                           * be enabled */
+  guint    use_client_shadow         : 1; /* Decorations use client-side shadows */
   guint    maximized                 : 1;
   guint    fullscreen                : 1;
   guint    tiled                     : 1;
@@ -3947,7 +3946,7 @@ unset_titlebar (GtkWindow *window)
 }
 
 static gboolean
-gtk_window_supports_csd (GtkWindow *window)
+gtk_window_supports_client_shadow (GtkWindow *window)
 {
   GtkWidget *widget = GTK_WIDGET (window);
 
@@ -3997,13 +3996,21 @@ gtk_window_enable_csd (GtkWindow *window)
   GtkWidget *widget = GTK_WIDGET (window);
   GdkVisual *visual;
 
-  /* We need a visual with alpha */
-  visual = gdk_screen_get_rgba_visual (gtk_widget_get_screen (widget));
-  g_assert (visual != NULL);
-  gtk_widget_set_visual (widget, visual);
+  /* We need a visual with alpha for client shadows */
+  if (priv->use_client_shadow)
+    {
+      visual = gdk_screen_get_rgba_visual (gtk_widget_get_screen (widget));
+      if (visual != NULL)
+        gtk_widget_set_visual (widget, visual);
+
+      gtk_style_context_add_class (gtk_widget_get_style_context (widget), GTK_STYLE_CLASS_CSD);
+    }
+  else
+    {
+      gtk_style_context_add_class (gtk_widget_get_style_context (widget), "solid-csd");
+    }
 
   priv->client_decorated = TRUE;
-  gtk_style_context_add_class (gtk_widget_get_style_context (widget), GTK_STYLE_CLASS_CSD);
 }
 
 static void
@@ -4038,7 +4045,6 @@ gtk_window_set_titlebar (GtkWindow *window,
 {
   GtkWidget *widget = GTK_WIDGET (window);
   GtkWindowPrivate *priv = window->priv;
-  GdkVisual *visual;
   gboolean was_mapped;
 
   g_return_if_fail (GTK_IS_WINDOW (window));
@@ -4059,18 +4065,15 @@ gtk_window_set_titlebar (GtkWindow *window,
 
   if (titlebar == NULL)
     {
-      priv->custom_title = FALSE;
       priv->client_decorated = FALSE;
       gtk_style_context_remove_class (gtk_widget_get_style_context (widget), GTK_STYLE_CLASS_CSD);
 
       goto out;
     }
 
-  if (gtk_window_supports_csd (window))
-    gtk_window_enable_csd (window);
-  else
-    priv->custom_title = TRUE;
+  priv->use_client_shadow = gtk_window_supports_client_shadow (window);
 
+  gtk_window_enable_csd (window);
   priv->title_box = titlebar;
   gtk_widget_set_parent (priv->title_box, widget);
   if (GTK_IS_HEADER_BAR (titlebar))
@@ -4079,10 +4082,6 @@ gtk_window_set_titlebar (GtkWindow *window,
                         G_CALLBACK (on_titlebar_title_notify), window);
       on_titlebar_title_notify (GTK_HEADER_BAR (titlebar), NULL, window);
     }
-
-  visual = gdk_screen_get_rgba_visual (gtk_widget_get_screen (widget));
-  if (visual)
-    gtk_widget_set_visual (widget, visual);
 
   gtk_style_context_add_class (gtk_widget_get_style_context (titlebar),
                                GTK_STYLE_CLASS_TITLEBAR);
@@ -4171,8 +4170,6 @@ gtk_window_set_decorated (GtkWindow *window,
         {
           if (priv->client_decorated)
             gdk_window_set_decorations (gdk_window, 0);
-          else if (priv->custom_title)
-            gdk_window_set_decorations (gdk_window, GDK_DECOR_BORDER);
           else
             gdk_window_set_decorations (gdk_window, GDK_DECOR_ALL);
         }
@@ -5809,7 +5806,7 @@ create_decoration (GtkWidget *widget)
   GtkWindow *window = GTK_WINDOW (widget);
   GtkWindowPrivate *priv = window->priv;
 
-  if (!gtk_window_supports_csd (window))
+  if (!gtk_window_supports_client_shadow (window))
     return;
 
   gtk_window_enable_csd (window);
@@ -6632,7 +6629,7 @@ update_border_windows (GtkWindow *window)
                               border.right + handle, border.top + handle);
       gdk_window_move_resize (priv->border_window[GDK_WINDOW_EDGE_SOUTH_WEST],
                               window_border.left - border.left, window_border.top + height - handle,
-                              window_border.left + handle, border.bottom + handle);
+                              border.left + handle, border.bottom + handle);
       gdk_window_move_resize (priv->border_window[GDK_WINDOW_EDGE_SOUTH_EAST],
                               window_border.left + width - handle, window_border.top + height - handle,
                               border.right + handle, border.bottom + handle);
@@ -6898,7 +6895,7 @@ update_realized_window_properties (GtkWindow     *window,
 {
   GtkWindowPrivate *priv = window->priv;
 
-  if (priv->client_decorated)
+  if (priv->client_decorated && priv->use_client_shadow)
     update_shadow_width (window, window_border);
 
   update_opaque_region (window, window_border, child_allocation);
@@ -7041,8 +7038,7 @@ gtk_window_realize (GtkWidget *widget)
                                 GDK_FOCUS_CHANGE_MASK |
                                 GDK_STRUCTURE_MASK);
 
-      if (priv->decorated &&
-          (priv->client_decorated || priv->custom_title))
+      if (priv->decorated && priv->client_decorated)
         attributes.event_mask |= GDK_POINTER_MOTION_MASK;
 
       attributes.type_hint = priv->type_hint;
@@ -7117,8 +7113,6 @@ gtk_window_realize (GtkWidget *widget)
 
   if (!priv->decorated || priv->client_decorated)
     gdk_window_set_decorations (gdk_window, 0);
-  else if (priv->custom_title)
-    gdk_window_set_decorations (gdk_window, GDK_DECOR_BORDER);
 
   if (!priv->deletable)
     gdk_window_set_functions (gdk_window, GDK_FUNC_ALL | GDK_FUNC_CLOSE);
@@ -9695,18 +9689,31 @@ gtk_window_draw (GtkWidget *widget,
 
           add_window_frame_style_class (context);
 
-          gtk_render_background (context, cr,
-                                 window_border.left, window_border.top,
-                                 allocation.width -
-                                 (window_border.left + window_border.right),
-                                 allocation.height -
-                                 (window_border.top + window_border.bottom));
-          gtk_render_frame (context, cr,
-                            window_border.left, window_border.top,
-                            allocation.width -
-                            (window_border.left + window_border.right),
-                            allocation.height -
-                            (window_border.top + window_border.bottom));
+          if (priv->use_client_shadow)
+            {
+              gtk_render_background (context, cr,
+                                     window_border.left, window_border.top,
+                                     allocation.width -
+                                     (window_border.left + window_border.right),
+                                     allocation.height -
+                                     (window_border.top + window_border.bottom));
+              gtk_render_frame (context, cr,
+                                window_border.left, window_border.top,
+                                allocation.width -
+                                (window_border.left + window_border.right),
+                                allocation.height -
+                                (window_border.top + window_border.bottom));
+            }
+          else
+            {
+              gtk_render_background (context, cr, 0, 0,
+                                     allocation.width,
+                                     allocation.height);
+
+              gtk_render_frame (context, cr, 0, 0,
+                                allocation.width,
+                                allocation.height);
+            }
 
           gtk_style_context_restore (context);
         }
@@ -10472,7 +10479,7 @@ gtk_window_set_screen (GtkWindow *window,
     }
   g_object_notify (G_OBJECT (window), "screen");
 
-  if (was_rgba)
+  if (was_rgba && priv->use_client_shadow)
     {
       GdkVisual *visual;
 
