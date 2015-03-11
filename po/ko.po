@@ -13,8 +13,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-03-06 10:10+0000\n"
-"PO-Revision-Date: 2015-03-06 21:52+0900\n"
+"POT-Creation-Date: 2015-03-11 10:18+0000\n"
+"PO-Revision-Date: 2015-03-12 02:52+0900\n"
 "Last-Translator: Changwoo Ryu <cwryu@debian.org>\n"
 "Language-Team: Gnome Korea <gnome-kr@googlegroups.com>\n"
 "Language: Korean\n"
@@ -87,7 +87,7 @@ msgstr "<플래그>"
 msgid "GDK debugging flags to unset"
 msgstr "설정 해제할 GDK 디버깅 플래그"
 
-#: gdk/gdkwindow.c:2736
+#: gdk/gdkwindow.c:2739
 msgid "GL support disabled via GDK_DEBUG"
 msgstr "GDK_DEBUG를 통해 GL 기능을 사용하지 않습니다"
 
@@ -548,7 +548,9 @@ msgstr "주어진 RGBA 픽셀 형식에 대한 설정이 없습니다"
 msgid ""
 "The GLX_ARB_create_context_profile extension needed to create core profiles "
 "is not available"
-msgstr "코어 프로파일을 만드는데 필요한 GLX_ARB_create_context_profile 확장이 없습니다"
+msgstr ""
+"코어 프로파일을 만드는데 필요한 GLX_ARB_create_context_profile 확장이 없습니"
+"다"
 
 #: gtk/a11y/gtkbooleancellaccessible.c:43
 msgctxt "Action description"
@@ -1176,7 +1178,9 @@ msgstr "색 이름(_N):"
 msgid ""
 "You can enter an HTML-style hexadecimal color value, or simply a color name "
 "such as “orange” in this entry."
-msgstr "이 항목에 HTML 방식의 16진수 색 값을 입력하거나, 간단히 “orange”처럼 색 이름을 입력할 수 있습니다."
+msgstr ""
+"이 항목에 HTML 방식의 16진수 색 값을 입력하거나, 간단히 “orange”처럼 색 이름"
+"을 입력할 수 있습니다."
 
 #: gtk/deprecated/gtkcolorsel.c:546
 msgid "_Palette:"
@@ -1223,7 +1227,9 @@ msgstr "색 여기에 저장(_S)"
 msgid ""
 "Click this palette entry to make it the current color. To change this entry, "
 "drag a color swatch here or right-click it and select “Save color here.”"
-msgstr "이 색상표 항목을 클릭해 현재 색을 선택하십시오. 이 항목을 바꾸려면, 색 견본를 여기로 드래그하거나 오른쪽 클릭을 해 “색 여기에 저장”을 선택하십시오."
+msgstr ""
+"이 색상표 항목을 클릭해 현재 색을 선택하십시오. 이 항목을 바꾸려면, 색 견본"
+"를 여기로 드래그하거나 오른쪽 클릭을 해 “색 여기에 저장”을 선택하십시오."
 
 #: gtk/deprecated/gtkcolorseldialog.c:191 gtk/deprecated/gtkfontsel.c:1689
 #: gtk/gtkfilechooserbutton.c:794 gtk/gtkfilechooserwidget.c:5356
@@ -1231,7 +1237,7 @@ msgstr "이 색상표 항목을 클릭해 현재 색을 선택하십시오. 이 
 #: gtk/gtkmountoperation.c:543 gtk/gtkpagesetupunixdialog.c:196
 #: gtk/gtkprintbackend.c:763 gtk/gtkprinteroptionwidget.c:545
 #: gtk/gtkprintunixdialog.c:665 gtk/gtkprintunixdialog.c:738
-#: gtk/gtkwindow.c:11907 gtk/inspector/css-editor.c:199
+#: gtk/gtkwindow.c:11917 gtk/inspector/css-editor.c:199
 #: gtk/ui/gtkappchooserdialog.ui:79 gtk/ui/gtkassistant.ui:169
 #: gtk/ui/gtkcolorchooserdialog.ui:38 gtk/ui/gtkfontchooserdialog.ui:35
 msgid "_Cancel"
@@ -1280,7 +1286,7 @@ msgid "_Apply"
 msgstr "적용(_A)"
 
 #: gtk/deprecated/gtkfontsel.c:1698 gtk/gtkmessagedialog.c:936
-#: gtk/gtkmessagedialog.c:958 gtk/gtkprintbackend.c:764 gtk/gtkwindow.c:11908
+#: gtk/gtkmessagedialog.c:958 gtk/gtkprintbackend.c:764 gtk/gtkwindow.c:11918
 #: gtk/inspector/classes-list.c:127
 msgid "_OK"
 msgstr "확인(_O)"
@@ -2135,31 +2141,31 @@ msgstr "오른쪽(_R):"
 msgid "Paper Margins"
 msgstr "용지 여백"
 
-#: gtk/gtkentry.c:9626 gtk/gtkentry.c:9779 gtk/gtklabel.c:6597
+#: gtk/gtkentry.c:9629 gtk/gtkentry.c:9782 gtk/gtklabel.c:6597
 #: gtk/gtktextview.c:9037 gtk/gtktextview.c:9225
 msgid "Cu_t"
 msgstr "잘라내기(_T)"
 
-#: gtk/gtkentry.c:9630 gtk/gtkentry.c:9782 gtk/gtklabel.c:6598
+#: gtk/gtkentry.c:9633 gtk/gtkentry.c:9785 gtk/gtklabel.c:6598
 #: gtk/gtktextview.c:9041 gtk/gtktextview.c:9229
 msgid "_Copy"
 msgstr "복사(_C)"
 
-#: gtk/gtkentry.c:9634 gtk/gtkentry.c:9785 gtk/gtklabel.c:6599
+#: gtk/gtkentry.c:9637 gtk/gtkentry.c:9788 gtk/gtklabel.c:6599
 #: gtk/gtktextview.c:9043 gtk/gtktextview.c:9231
 msgid "_Paste"
 msgstr "붙여넣기(_P)"
 
-#: gtk/gtkentry.c:9637 gtk/gtklabel.c:6601 gtk/gtktextview.c:9046
+#: gtk/gtkentry.c:9640 gtk/gtklabel.c:6601 gtk/gtktextview.c:9046
 msgid "_Delete"
 msgstr "삭제(_D)"
 
-#: gtk/gtkentry.c:9648 gtk/gtklabel.c:6610 gtk/gtktextview.c:9060
+#: gtk/gtkentry.c:9651 gtk/gtklabel.c:6610 gtk/gtktextview.c:9060
 msgid "Select _All"
 msgstr "모두 선택(_A)"
 
 # Caps Lock 키보드 위에 쓰여 있는 글이므로 번역/음역하지 않는다
-#: gtk/gtkentry.c:10848
+#: gtk/gtkentry.c:10849
 msgid "Caps Lock is on"
 msgstr "Caps Lock이 켜져 있습니다"
 
@@ -2275,7 +2281,7 @@ msgstr "폴더를 파일보다 앞에 정렬(_F)"
 
 #. this is the header for the location column in the print dialog
 #: gtk/gtkfilechooserwidget.c:2018 gtk/inspector/style-prop-list.ui:118
-#: gtk/ui/gtkfilechooserwidget.ui:259 gtk/ui/gtkprintunixdialog.ui:135
+#: gtk/ui/gtkfilechooserwidget.ui:259 gtk/ui/gtkprintunixdialog.ui:137
 msgid "Location"
 msgstr "위치"
 
@@ -2381,7 +2387,7 @@ msgstr "글꼴 고르기"
 #: gtk/gtkfontbutton.c:1182 gtk/inspector/general.c:226
 #: gtk/inspector/general.c:227 gtk/inspector/gestures.c:128
 #: gtk/inspector/prop-editor.c:1200 gtk/inspector/size-groups.c:252
-#: modules/printbackends/cups/gtkprintbackendcups.c:5208
+#: modules/printbackends/cups/gtkprintbackendcups.c:5224
 msgid "None"
 msgstr "없음"
 
@@ -2393,7 +2399,7 @@ msgstr "OpenGL 컨텍스트 만들기 실패"
 msgid "Application menu"
 msgstr "프로그램 메뉴"
 
-#: gtk/gtkheaderbar.c:479 gtk/gtkwindow.c:8581
+#: gtk/gtkheaderbar.c:479 gtk/gtkwindow.c:8591
 msgid "Close"
 msgstr "닫기"
 
@@ -2690,7 +2696,7 @@ msgstr "Z 셸"
 msgid "Cannot end process with PID %d: %s"
 msgstr "PID %d 프로세스를 끝낼 수 없습니다: %s"
 
-#: gtk/gtknotebook.c:5165 gtk/gtknotebook.c:7893
+#: gtk/gtknotebook.c:5167 gtk/gtknotebook.c:7896
 #, c-format
 msgid "Page %u"
 msgstr "%u페이지"
@@ -2727,7 +2733,7 @@ msgid "Manage Custom Sizes…"
 msgstr "사용자 설정 크기 관리…"
 
 #: gtk/gtkpagesetupunixdialog.c:900 gtk/ui/gtkpagesetupunixdialog.ui:31
-#: gtk/ui/gtkprintunixdialog.ui:1029
+#: gtk/ui/gtkprintunixdialog.ui:1031
 msgid "Page Setup"
 msgstr "페이지 설정"
 
@@ -3037,7 +3043,7 @@ msgstr "용지 부족"
 
 #. Translators: this is a printer status.
 #: gtk/gtkprintoperation-win32.c:620
-#: modules/printbackends/cups/gtkprintbackendcups.c:2493
+#: modules/printbackends/cups/gtkprintbackendcups.c:2509
 msgid "Paused"
 msgstr "일시 정지"
 
@@ -3106,42 +3112,42 @@ msgstr "프린터 정보를 받는 중입니다…"
 #. * multiple pages on a sheet when printing
 #.
 #: gtk/gtkprintunixdialog.c:3101
-#: modules/printbackends/cups/gtkprintbackendcups.c:5157
+#: modules/printbackends/cups/gtkprintbackendcups.c:5173
 msgid "Left to right, top to bottom"
 msgstr "왼쪽에서 오른쪽, 위에서 아래"
 
 #: gtk/gtkprintunixdialog.c:3101
-#: modules/printbackends/cups/gtkprintbackendcups.c:5157
+#: modules/printbackends/cups/gtkprintbackendcups.c:5173
 msgid "Left to right, bottom to top"
 msgstr "왼쪽에서 오른쪽, 아래에서 위"
 
 #: gtk/gtkprintunixdialog.c:3102
-#: modules/printbackends/cups/gtkprintbackendcups.c:5158
+#: modules/printbackends/cups/gtkprintbackendcups.c:5174
 msgid "Right to left, top to bottom"
 msgstr "오른쪽에서 왼쪽, 위에서 아래"
 
 #: gtk/gtkprintunixdialog.c:3102
-#: modules/printbackends/cups/gtkprintbackendcups.c:5158
+#: modules/printbackends/cups/gtkprintbackendcups.c:5174
 msgid "Right to left, bottom to top"
 msgstr "오른쪽에서 왼쪽, 아래에서 위"
 
 #: gtk/gtkprintunixdialog.c:3103
-#: modules/printbackends/cups/gtkprintbackendcups.c:5159
+#: modules/printbackends/cups/gtkprintbackendcups.c:5175
 msgid "Top to bottom, left to right"
 msgstr "위에서 아래, 왼쪽에서 오른쪽"
 
 #: gtk/gtkprintunixdialog.c:3103
-#: modules/printbackends/cups/gtkprintbackendcups.c:5159
+#: modules/printbackends/cups/gtkprintbackendcups.c:5175
 msgid "Top to bottom, right to left"
 msgstr "위에서 아래, 오른쪽에서 왼쪽"
 
 #: gtk/gtkprintunixdialog.c:3104
-#: modules/printbackends/cups/gtkprintbackendcups.c:5160
+#: modules/printbackends/cups/gtkprintbackendcups.c:5176
 msgid "Bottom to top, left to right"
 msgstr "아래에서 위, 왼쪽에서 오른쪽"
 
 #: gtk/gtkprintunixdialog.c:3104
-#: modules/printbackends/cups/gtkprintbackendcups.c:5160
+#: modules/printbackends/cups/gtkprintbackendcups.c:5176
 msgid "Bottom to top, right to left"
 msgstr "아래에서 위, 오른쪽에서 왼쪽"
 
@@ -3149,7 +3155,7 @@ msgstr "아래에서 위, 오른쪽에서 왼쪽"
 #. * dialog that controls in what order multiple pages are arranged
 #.
 #: gtk/gtkprintunixdialog.c:3108 gtk/gtkprintunixdialog.c:3121
-#: modules/printbackends/cups/gtkprintbackendcups.c:5237
+#: modules/printbackends/cups/gtkprintbackendcups.c:5253
 msgid "Page Ordering"
 msgstr "페이지 순서"
 
@@ -3476,12 +3482,12 @@ msgctxt "volume percentage"
 msgid "%d %%"
 msgstr "%d %%"
 
-#: gtk/gtkwindow.c:11895
+#: gtk/gtkwindow.c:11905
 #, c-format
 msgid "Do you want to use GTK+ Inspector?"
 msgstr "GTK+ 인스펙터를 사용하시겠습니까?"
 
-#: gtk/gtkwindow.c:11897
+#: gtk/gtkwindow.c:11907
 #, c-format
 msgid ""
 "GTK+ Inspector is an interactive debugger that lets you explore and modify "
@@ -3492,7 +3498,7 @@ msgstr ""
 "그램의 내부 구조를 살펴 보거나 수정할 수 있습니다. GTK+ 인스펙터를 사용했을 "
 "때 프로그램이 멈추거나 이상 동작으로 중지할 수도 있습니다."
 
-#: gtk/gtkwindow.c:11902
+#: gtk/gtkwindow.c:11912
 msgid "Don't show this message again"
 msgstr "이 메시지 다시 보지 않기"
 
@@ -3551,7 +3557,9 @@ msgstr "GTK+에서 인식하는 모든 CSS 규칙을 여기 입력할 수 있습
 msgid ""
 "You can temporarily disable this custom CSS by clicking on the “Pause” "
 "button above."
-msgstr "위의 “일시 중지” 단추를 누르면 사용자 설정 CSS를 일시적으로 사용 중지할 수 있습니다."
+msgstr ""
+"위의 “일시 중지” 단추를 누르면 사용자 설정 CSS를 일시적으로 사용 중지할 수 있"
+"습니다."
 
 #: gtk/inspector/css-editor.c:92
 msgid "Changes are applied instantly and globally, for the whole application."
@@ -4068,7 +4076,7 @@ msgstr "모든 리소스 표시"
 #. Translators: "Miscellaneous" is the label for a button, that opens
 #. up an extra panel of settings in a print dialog.
 #: gtk/inspector/window.ui:257
-#: modules/printbackends/cups/gtkprintbackendcups.c:4272
+#: modules/printbackends/cups/gtkprintbackendcups.c:4288
 msgid "Miscellaneous"
 msgstr "기타"
 
@@ -4128,7 +4136,7 @@ msgstr "리소스"
 msgid "Visual"
 msgstr "겉 모양"
 
-#: gtk/inspector/window.ui:436 gtk/ui/gtkprintunixdialog.ui:497
+#: gtk/inspector/window.ui:436 gtk/ui/gtkprintunixdialog.ui:499
 msgid "General"
 msgstr "일반"
 
@@ -5184,7 +5192,7 @@ msgstr "조건에 맞는 글꼴이 없습니다. 검색 조건을 바꿔서 다�
 msgid "_Format for:"
 msgstr "다음 프린터에 대한 형식(_F):"
 
-#: gtk/ui/gtkpagesetupunixdialog.ui:88 gtk/ui/gtkprintunixdialog.ui:901
+#: gtk/ui/gtkpagesetupunixdialog.ui:88 gtk/ui/gtkprintunixdialog.ui:903
 msgid "_Paper size:"
 msgstr "용지 크기(_P):"
 
@@ -5192,19 +5200,19 @@ msgstr "용지 크기(_P):"
 msgid "_Orientation:"
 msgstr "방향(_O):"
 
-#: gtk/ui/gtkpagesetupunixdialog.ui:179 gtk/ui/gtkprintunixdialog.ui:957
+#: gtk/ui/gtkpagesetupunixdialog.ui:179 gtk/ui/gtkprintunixdialog.ui:959
 msgid "Portrait"
 msgstr "세로 방향"
 
-#: gtk/ui/gtkpagesetupunixdialog.ui:229 gtk/ui/gtkprintunixdialog.ui:959
+#: gtk/ui/gtkpagesetupunixdialog.ui:229 gtk/ui/gtkprintunixdialog.ui:961
 msgid "Reverse portrait"
 msgstr "뒤집힌 세로 방향"
 
-#: gtk/ui/gtkpagesetupunixdialog.ui:279 gtk/ui/gtkprintunixdialog.ui:958
+#: gtk/ui/gtkpagesetupunixdialog.ui:279 gtk/ui/gtkprintunixdialog.ui:960
 msgid "Landscape"
 msgstr "가로 방향"
 
-#: gtk/ui/gtkpagesetupunixdialog.ui:328 gtk/ui/gtkprintunixdialog.ui:960
+#: gtk/ui/gtkpagesetupunixdialog.ui:328 gtk/ui/gtkprintunixdialog.ui:962
 msgid "Reverse landscape"
 msgstr "뒤집힌 가로 방향"
 
@@ -5216,37 +5224,37 @@ msgstr "아래 경로"
 msgid "Up Path"
 msgstr "위 경로"
 
-#: gtk/ui/gtkprintunixdialog.ui:124
+#: gtk/ui/gtkprintunixdialog.ui:126
 msgid "Printer"
 msgstr "프린터"
 
 #. this is the header for the printer status column in the print dialog
-#: gtk/ui/gtkprintunixdialog.ui:146
+#: gtk/ui/gtkprintunixdialog.ui:148
 msgid "Status"
 msgstr "상태"
 
-#: gtk/ui/gtkprintunixdialog.ui:208
+#: gtk/ui/gtkprintunixdialog.ui:210
 msgid "Range"
 msgstr "범위"
 
-#: gtk/ui/gtkprintunixdialog.ui:231
+#: gtk/ui/gtkprintunixdialog.ui:233
 msgid "_All Pages"
 msgstr "모든 페이지(_A)"
 
-#: gtk/ui/gtkprintunixdialog.ui:249
+#: gtk/ui/gtkprintunixdialog.ui:251
 msgid "C_urrent Page"
 msgstr "현재 페이지(_U)"
 
-#: gtk/ui/gtkprintunixdialog.ui:269
+#: gtk/ui/gtkprintunixdialog.ui:271
 msgid "Se_lection"
 msgstr "선택(_L)"
 
-#: gtk/ui/gtkprintunixdialog.ui:288
+#: gtk/ui/gtkprintunixdialog.ui:290
 msgid "Pag_es:"
 msgstr "페이지(_E):"
 
-#: gtk/ui/gtkprintunixdialog.ui:292 gtk/ui/gtkprintunixdialog.ui:313
-#: gtk/ui/gtkprintunixdialog.ui:320
+#: gtk/ui/gtkprintunixdialog.ui:294 gtk/ui/gtkprintunixdialog.ui:315
+#: gtk/ui/gtkprintunixdialog.ui:322
 msgid ""
 "Specify one or more page ranges,\n"
 " e.g. 1–3, 7, 11"
@@ -5254,105 +5262,105 @@ msgstr ""
 "페이지 범위를 지정하십시오.\n"
 " 예) 1–3, 7, 11"
 
-#: gtk/ui/gtkprintunixdialog.ui:319
+#: gtk/ui/gtkprintunixdialog.ui:321
 msgid "Pages"
 msgstr "페이지"
 
-#: gtk/ui/gtkprintunixdialog.ui:361
+#: gtk/ui/gtkprintunixdialog.ui:363
 msgid "Copies"
 msgstr "인쇄 매수"
 
-#: gtk/ui/gtkprintunixdialog.ui:388
+#: gtk/ui/gtkprintunixdialog.ui:390
 msgid "Copie_s:"
 msgstr "인쇄 매수(_S):"
 
-#: gtk/ui/gtkprintunixdialog.ui:418
+#: gtk/ui/gtkprintunixdialog.ui:420
 msgid "C_ollate"
 msgstr "한 부씩 인쇄(_O)"
 
-#: gtk/ui/gtkprintunixdialog.ui:436
+#: gtk/ui/gtkprintunixdialog.ui:438
 msgid "_Reverse"
 msgstr "마지막 페이지부터(_R)"
 
-#: gtk/ui/gtkprintunixdialog.ui:527
+#: gtk/ui/gtkprintunixdialog.ui:529
 msgid "Layout"
 msgstr "배치"
 
-#: gtk/ui/gtkprintunixdialog.ui:554
+#: gtk/ui/gtkprintunixdialog.ui:556
 msgid "T_wo-sided:"
 msgstr "양면(_W):"
 
-#: gtk/ui/gtkprintunixdialog.ui:587
+#: gtk/ui/gtkprintunixdialog.ui:589
 msgid "Pages per _side:"
 msgstr "한 장당 페이지 수(_S):"
 
-#: gtk/ui/gtkprintunixdialog.ui:622
+#: gtk/ui/gtkprintunixdialog.ui:624
 msgid "Page or_dering:"
 msgstr "페이지 순서(_D):"
 
-#: gtk/ui/gtkprintunixdialog.ui:656
+#: gtk/ui/gtkprintunixdialog.ui:658
 msgid "_Only print:"
 msgstr "다음만 인쇄(_O):"
 
-#: gtk/ui/gtkprintunixdialog.ui:676
+#: gtk/ui/gtkprintunixdialog.ui:678
 msgid "All sheets"
 msgstr "모든 페이지"
 
-#: gtk/ui/gtkprintunixdialog.ui:677
+#: gtk/ui/gtkprintunixdialog.ui:679
 msgid "Even sheets"
 msgstr "짝수 페이지"
 
-#: gtk/ui/gtkprintunixdialog.ui:678
+#: gtk/ui/gtkprintunixdialog.ui:680
 msgid "Odd sheets"
 msgstr "홀수 페이지"
 
-#: gtk/ui/gtkprintunixdialog.ui:694
+#: gtk/ui/gtkprintunixdialog.ui:696
 msgid "Sc_ale:"
 msgstr "크기 조정(_A):"
 
-#: gtk/ui/gtkprintunixdialog.ui:775
+#: gtk/ui/gtkprintunixdialog.ui:777
 msgid "Paper"
 msgstr "용지"
 
-#: gtk/ui/gtkprintunixdialog.ui:802
+#: gtk/ui/gtkprintunixdialog.ui:804
 msgid "Paper _type:"
 msgstr "용지 종류(_T):"
 
-#: gtk/ui/gtkprintunixdialog.ui:835
+#: gtk/ui/gtkprintunixdialog.ui:837
 msgid "Paper _source:"
 msgstr "용지 공급(_S):"
 
-#: gtk/ui/gtkprintunixdialog.ui:868
+#: gtk/ui/gtkprintunixdialog.ui:870
 msgid "Output t_ray:"
 msgstr "출력 트레이(_R):"
 
-#: gtk/ui/gtkprintunixdialog.ui:936
+#: gtk/ui/gtkprintunixdialog.ui:938
 msgid "Or_ientation:"
 msgstr "방향(_I):"
 
-#: gtk/ui/gtkprintunixdialog.ui:1054
+#: gtk/ui/gtkprintunixdialog.ui:1056
 msgid "Job Details"
 msgstr "작업 상세 정보"
 
-#: gtk/ui/gtkprintunixdialog.ui:1081
+#: gtk/ui/gtkprintunixdialog.ui:1083
 msgid "Pri_ority:"
 msgstr "우선순위(_O):"
 
-#: gtk/ui/gtkprintunixdialog.ui:1113
+#: gtk/ui/gtkprintunixdialog.ui:1115
 msgid "_Billing info:"
 msgstr "요금 정보(_B):"
 
-#: gtk/ui/gtkprintunixdialog.ui:1169
+#: gtk/ui/gtkprintunixdialog.ui:1171
 msgid "Print Document"
 msgstr "문서 인쇄"
 
 #. this is one of the choices for the print at option in the print dialog
-#: gtk/ui/gtkprintunixdialog.ui:1192
+#: gtk/ui/gtkprintunixdialog.ui:1194
 msgid "_Now"
 msgstr "지금(_N)"
 
 #. this is one of the choices for the print at option in the print dialog. It also serves as the label for an entry that allows the user to enter a time.
-#: gtk/ui/gtkprintunixdialog.ui:1211
+#: gtk/ui/gtkprintunixdialog.ui:1213
 msgid "A_t:"
 msgstr "시각(_T):"
 
@@ -5360,10 +5368,9 @@ msgstr "시각(_T):"
 # ( https://bugzilla.gnome.org/show_bug.cgi?id=568571 )
 #
 #. Ability to parse the am/pm format depends on actual locale. You can remove the am/pm values below for your locale if they are not supported.
-#: gtk/ui/gtkprintunixdialog.ui:1216 gtk/ui/gtkprintunixdialog.ui:1218
-#: gtk/ui/gtkprintunixdialog.ui:1240 gtk/ui/gtkprintunixdialog.ui:1242
-#: gtk/ui/gtkprintunixdialog.ui:1249
-#, fuzzy
+#: gtk/ui/gtkprintunixdialog.ui:1218 gtk/ui/gtkprintunixdialog.ui:1220
+#: gtk/ui/gtkprintunixdialog.ui:1242 gtk/ui/gtkprintunixdialog.ui:1244
+#: gtk/ui/gtkprintunixdialog.ui:1251
 msgid ""
 "Specify the time of print,\n"
 " e.g. 15∶30, 2∶35 pm, 14∶15∶20, 11∶46∶30 am, 4 pm"
@@ -5371,58 +5378,58 @@ msgstr ""
 "인쇄 시각을 지정합니다.\n"
 " 예) 15∶30, 오후 2∶35, 14∶15∶20, 오전 11∶46∶30, 오후 4"
 
-#: gtk/ui/gtkprintunixdialog.ui:1248
+#: gtk/ui/gtkprintunixdialog.ui:1250
 msgid "Time of print"
 msgstr "인쇄 시각"
 
 #. this is one of the choices for the print at option in the print dialog. It means that the print job will not be printed until it explicitly gets 'released'.
-#: gtk/ui/gtkprintunixdialog.ui:1264
+#: gtk/ui/gtkprintunixdialog.ui:1266
 msgid "On _hold"
 msgstr "보류(_H)"
 
-#: gtk/ui/gtkprintunixdialog.ui:1269 gtk/ui/gtkprintunixdialog.ui:1270
+#: gtk/ui/gtkprintunixdialog.ui:1271 gtk/ui/gtkprintunixdialog.ui:1272
 msgid "Hold the job until it is explicitly released"
 msgstr "작업 보류, 직접 보류 상태를 풀 때까지"
 
-#: gtk/ui/gtkprintunixdialog.ui:1314
+#: gtk/ui/gtkprintunixdialog.ui:1316
 msgid "Add Cover Page"
 msgstr "표지 사용"
 
 #. this is the label used for the option in the print dialog that controls the front cover page.
-#: gtk/ui/gtkprintunixdialog.ui:1341
+#: gtk/ui/gtkprintunixdialog.ui:1343
 msgid "Be_fore:"
 msgstr "앞에(_F):"
 
 #. this is the label used for the option in the print dialog that controls the back cover page.
-#: gtk/ui/gtkprintunixdialog.ui:1373
+#: gtk/ui/gtkprintunixdialog.ui:1375
 msgid "_After:"
 msgstr "뒤에(_A):"
 
-#: gtk/ui/gtkprintunixdialog.ui:1429
+#: gtk/ui/gtkprintunixdialog.ui:1431
 msgid "Job"
 msgstr "작업"
 
 #. This will appear as a tab label in the print dialog.
-#: gtk/ui/gtkprintunixdialog.ui:1493
+#: gtk/ui/gtkprintunixdialog.ui:1495
 msgid "Image Quality"
 msgstr "그림 화질"
 
 #. This will appear as a tab label in the print dialog.
-#: gtk/ui/gtkprintunixdialog.ui:1557
+#: gtk/ui/gtkprintunixdialog.ui:1559
 msgid "Color"
 msgstr "색"
 
 #. This will appear as a tab label in the print dialog.
 #. It's a typographical term, as in "Binding and finishing"
-#: gtk/ui/gtkprintunixdialog.ui:1621
+#: gtk/ui/gtkprintunixdialog.ui:1623
 msgid "Finishing"
 msgstr "마무리"
 
-#: gtk/ui/gtkprintunixdialog.ui:1667
+#: gtk/ui/gtkprintunixdialog.ui:1669
 msgid "Advanced"
 msgstr "고급"
 
-#: gtk/ui/gtkprintunixdialog.ui:1696
+#: gtk/ui/gtkprintunixdialog.ui:1698
 msgid "Some of the settings in the dialog conflict"
 msgstr "대화 상자의 설정이 충돌합니다"
 
@@ -5670,251 +5677,251 @@ msgstr "장시간 정지"
 msgid "Pages per _sheet:"
 msgstr "한 장당 페이지 수(_S):"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1074
-#: modules/printbackends/cups/gtkprintbackendcups.c:1383
+#: modules/printbackends/cups/gtkprintbackendcups.c:1090
+#: modules/printbackends/cups/gtkprintbackendcups.c:1399
 msgid "Username:"
 msgstr "사용자 이름:"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1075
-#: modules/printbackends/cups/gtkprintbackendcups.c:1392
+#: modules/printbackends/cups/gtkprintbackendcups.c:1091
+#: modules/printbackends/cups/gtkprintbackendcups.c:1408
 msgid "Password:"
 msgstr "암호:"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1114
-#: modules/printbackends/cups/gtkprintbackendcups.c:1405
+#: modules/printbackends/cups/gtkprintbackendcups.c:1130
+#: modules/printbackends/cups/gtkprintbackendcups.c:1421
 #, c-format
 msgid "Authentication is required to print document “%s” on printer %s"
 msgstr "“%s” 문서를 %s 프린터에서 인쇄하려면 인증이 필요합니다"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1116
+#: modules/printbackends/cups/gtkprintbackendcups.c:1132
 #, c-format
 msgid "Authentication is required to print a document on %s"
 msgstr "%s에서 문서를 인쇄하려면 인증이 필요합니다"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1120
+#: modules/printbackends/cups/gtkprintbackendcups.c:1136
 #, c-format
 msgid "Authentication is required to get attributes of job “%s”"
 msgstr "인쇄 작업 “%s”의 정보를 받으려면 인증이 필요합니다"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1122
+#: modules/printbackends/cups/gtkprintbackendcups.c:1138
 msgid "Authentication is required to get attributes of a job"
 msgstr "인쇄 작업의 정보를 받으려면 인증이 필요합니다"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1126
+#: modules/printbackends/cups/gtkprintbackendcups.c:1142
 #, c-format
 msgid "Authentication is required to get attributes of printer %s"
 msgstr "프린터 '%s'의 정보를 받으려면 인증이 필요합니다"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1128
+#: modules/printbackends/cups/gtkprintbackendcups.c:1144
 msgid "Authentication is required to get attributes of a printer"
 msgstr "프린터의 정보를 받으려면 인증이 필요합니다"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1131
+#: modules/printbackends/cups/gtkprintbackendcups.c:1147
 #, c-format
 msgid "Authentication is required to get default printer of %s"
 msgstr "%s에서 기본 프린터 정보를 받으려면 인증이 필요합니다"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1134
+#: modules/printbackends/cups/gtkprintbackendcups.c:1150
 #, c-format
 msgid "Authentication is required to get printers from %s"
 msgstr "%s에서 프린터 정보를 받으려면 인증이 필요합니다"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1139
+#: modules/printbackends/cups/gtkprintbackendcups.c:1155
 #, c-format
 msgid "Authentication is required to get a file from %s"
 msgstr "%s에서 파일을 받으려면 인증이 필요합니다"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1141
+#: modules/printbackends/cups/gtkprintbackendcups.c:1157
 #, c-format
 msgid "Authentication is required on %s"
 msgstr "%s에 인증이 필요합니다"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1377
+#: modules/printbackends/cups/gtkprintbackendcups.c:1393
 msgid "Domain:"
 msgstr "도메인:"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1407
+#: modules/printbackends/cups/gtkprintbackendcups.c:1423
 #, c-format
 msgid "Authentication is required to print document “%s”"
 msgstr "“%s” 문서를 인쇄하려면 인증이 필요합니다"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1412
+#: modules/printbackends/cups/gtkprintbackendcups.c:1428
 #, c-format
 msgid "Authentication is required to print this document on printer %s"
 msgstr "이 문서를 %s 프린터에서 인쇄하려면 인증이 필요합니다"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1414
+#: modules/printbackends/cups/gtkprintbackendcups.c:1430
 msgid "Authentication is required to print this document"
 msgstr "이 문서를 인쇄하려면 인증이 필요합니다"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1851
+#: modules/printbackends/cups/gtkprintbackendcups.c:1867
 #, c-format
 msgid "Printer “%s” is low on toner."
 msgstr "“%s” 프린터의 토너가 얼마 없습니다."
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1852
+#: modules/printbackends/cups/gtkprintbackendcups.c:1868
 #, c-format
 msgid "Printer “%s” has no toner left."
 msgstr "“%s” 프린터의 토너가 남아있지 않습니다."
 
 #. Translators: "Developer" like on photo development context
-#: modules/printbackends/cups/gtkprintbackendcups.c:1854
+#: modules/printbackends/cups/gtkprintbackendcups.c:1870
 #, c-format
 msgid "Printer “%s” is low on developer."
 msgstr "“%s” 프린터의 디벨로퍼가 얼마 없습니다."
 
 #. Translators: "Developer" like on photo development context
-#: modules/printbackends/cups/gtkprintbackendcups.c:1856
+#: modules/printbackends/cups/gtkprintbackendcups.c:1872
 #, c-format
 msgid "Printer “%s” is out of developer."
 msgstr "“%s” 프린터의 디벨로퍼를 다 사용했습니다."
 
 #. Translators: "marker" is one color bin of the printer
-#: modules/printbackends/cups/gtkprintbackendcups.c:1858
+#: modules/printbackends/cups/gtkprintbackendcups.c:1874
 #, c-format
 msgid "Printer “%s” is low on at least one marker supply."
 msgstr "“%s” 프린터의 마커 용지가 얼마 없습니다."
 
 #. Translators: "marker" is one color bin of the printer
-#: modules/printbackends/cups/gtkprintbackendcups.c:1860
+#: modules/printbackends/cups/gtkprintbackendcups.c:1876
 #, c-format
 msgid "Printer “%s” is out of at least one marker supply."
 msgstr "“%s” 프린터의 마커 용지를 다 사용했습니다."
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1861
+#: modules/printbackends/cups/gtkprintbackendcups.c:1877
 #, c-format
 msgid "The cover is open on printer “%s”."
 msgstr "“%s” 프린터의 덮개가 열렸습니다."
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1862
+#: modules/printbackends/cups/gtkprintbackendcups.c:1878
 #, c-format
 msgid "The door is open on printer “%s”."
 msgstr "“%s” 프린터의 문이 열렸습니다."
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1863
+#: modules/printbackends/cups/gtkprintbackendcups.c:1879
 #, c-format
 msgid "Printer “%s” is low on paper."
 msgstr "“%s” 프린터의 용지가 얼마 없습니다."
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1864
+#: modules/printbackends/cups/gtkprintbackendcups.c:1880
 #, c-format
 msgid "Printer “%s” is out of paper."
 msgstr "“%s” 프린터의 용지를 다 사용했습니다."
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1865
+#: modules/printbackends/cups/gtkprintbackendcups.c:1881
 #, c-format
 msgid "Printer “%s” is currently offline."
 msgstr "“%s” 프린터의 연결이 현재 끊겼습니다."
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1866
+#: modules/printbackends/cups/gtkprintbackendcups.c:1882
 #, c-format
 msgid "There is a problem on printer “%s”."
 msgstr "“%s” 프린터에 문제가 있습니다."
 
 #. Translators: this is a printer status.
-#: modules/printbackends/cups/gtkprintbackendcups.c:2490
+#: modules/printbackends/cups/gtkprintbackendcups.c:2506
 msgid "Paused; Rejecting Jobs"
 msgstr "일시 정지, 작업을 거부하는 중"
 
 #. Translators: this is a printer status.
-#: modules/printbackends/cups/gtkprintbackendcups.c:2496
+#: modules/printbackends/cups/gtkprintbackendcups.c:2512
 msgid "Rejecting Jobs"
 msgstr "작업을 거부하는 중"
 
 #. Translators: this string connects multiple printer states together.
-#: modules/printbackends/cups/gtkprintbackendcups.c:2538
+#: modules/printbackends/cups/gtkprintbackendcups.c:2554
 msgid "; "
 msgstr ", "
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:4223
-#: modules/printbackends/cups/gtkprintbackendcups.c:4290
+#: modules/printbackends/cups/gtkprintbackendcups.c:4239
+#: modules/printbackends/cups/gtkprintbackendcups.c:4306
 msgid "Two Sided"
 msgstr "양면"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:4224
+#: modules/printbackends/cups/gtkprintbackendcups.c:4240
 msgid "Paper Type"
 msgstr "용지 종류"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:4225
+#: modules/printbackends/cups/gtkprintbackendcups.c:4241
 msgid "Paper Source"
 msgstr "용지 공급"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:4226
+#: modules/printbackends/cups/gtkprintbackendcups.c:4242
 msgid "Output Tray"
 msgstr "출력 트레이"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:4227
+#: modules/printbackends/cups/gtkprintbackendcups.c:4243
 msgid "Resolution"
 msgstr "해상도"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:4228
+#: modules/printbackends/cups/gtkprintbackendcups.c:4244
 msgid "GhostScript pre-filtering"
 msgstr "고스트스크립트 미리 필터링"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:4237
+#: modules/printbackends/cups/gtkprintbackendcups.c:4253
 msgid "One Sided"
 msgstr "단면"
 
 #. Translators: this is an option of "Two Sided"
-#: modules/printbackends/cups/gtkprintbackendcups.c:4239
+#: modules/printbackends/cups/gtkprintbackendcups.c:4255
 msgid "Long Edge (Standard)"
 msgstr "긴 방향(표준)"
 
 #. Translators: this is an option of "Two Sided"
-#: modules/printbackends/cups/gtkprintbackendcups.c:4241
+#: modules/printbackends/cups/gtkprintbackendcups.c:4257
 msgid "Short Edge (Flip)"
 msgstr "짧은 방향(거꾸로)"
 
 #. Translators: this is an option of "Paper Source"
-#: modules/printbackends/cups/gtkprintbackendcups.c:4243
-#: modules/printbackends/cups/gtkprintbackendcups.c:4245
-#: modules/printbackends/cups/gtkprintbackendcups.c:4253
+#: modules/printbackends/cups/gtkprintbackendcups.c:4259
+#: modules/printbackends/cups/gtkprintbackendcups.c:4261
+#: modules/printbackends/cups/gtkprintbackendcups.c:4269
 msgid "Auto Select"
 msgstr "자동 선택"
 
 #. Translators: this is an option of "Paper Source"
 #. Translators: this is an option of "Resolution"
-#: modules/printbackends/cups/gtkprintbackendcups.c:4247
-#: modules/printbackends/cups/gtkprintbackendcups.c:4249
-#: modules/printbackends/cups/gtkprintbackendcups.c:4251
-#: modules/printbackends/cups/gtkprintbackendcups.c:4255
-#: modules/printbackends/cups/gtkprintbackendcups.c:4762
+#: modules/printbackends/cups/gtkprintbackendcups.c:4263
+#: modules/printbackends/cups/gtkprintbackendcups.c:4265
+#: modules/printbackends/cups/gtkprintbackendcups.c:4267
+#: modules/printbackends/cups/gtkprintbackendcups.c:4271
+#: modules/printbackends/cups/gtkprintbackendcups.c:4778
 msgid "Printer Default"
 msgstr "프린터 기본값"
 
 #. Translators: this is an option of "GhostScript"
-#: modules/printbackends/cups/gtkprintbackendcups.c:4257
+#: modules/printbackends/cups/gtkprintbackendcups.c:4273
 msgid "Embed GhostScript fonts only"
 msgstr "고스트스크립트 글꼴만 문서에 포함"
 
 #. Translators: this is an option of "GhostScript"
-#: modules/printbackends/cups/gtkprintbackendcups.c:4259
+#: modules/printbackends/cups/gtkprintbackendcups.c:4275
 msgid "Convert to PS level 1"
 msgstr "PS 레벨 1로 변환"
 
 #. Translators: this is an option of "GhostScript"
-#: modules/printbackends/cups/gtkprintbackendcups.c:4261
+#: modules/printbackends/cups/gtkprintbackendcups.c:4277
 msgid "Convert to PS level 2"
 msgstr "PS 레벨 2로 변환"
 
 #. Translators: this is an option of "GhostScript"
-#: modules/printbackends/cups/gtkprintbackendcups.c:4263
+#: modules/printbackends/cups/gtkprintbackendcups.c:4279
 msgid "No pre-filtering"
 msgstr "미리 필터링 기능이 없습니다"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:4298
+#: modules/printbackends/cups/gtkprintbackendcups.c:4314
 msgctxt "sides"
 msgid "One Sided"
 msgstr "단면"
 
 #. Translators: this is an option of "Two Sided"
-#: modules/printbackends/cups/gtkprintbackendcups.c:4300
+#: modules/printbackends/cups/gtkprintbackendcups.c:4316
 msgctxt "sides"
 msgid "Long Edge (Standard)"
 msgstr "긴 방향(표준)"
 
 #. Translators: this is an option of "Two Sided"
-#: modules/printbackends/cups/gtkprintbackendcups.c:4302
+#: modules/printbackends/cups/gtkprintbackendcups.c:4318
 msgctxt "sides"
 msgid "Short Edge (Flip)"
 msgstr "짧은 방향(거꾸로)"
@@ -5922,78 +5929,78 @@ msgstr "짧은 방향(거꾸로)"
 #. Translators: These strings name the possible values of the
 #. * job priority option in the print dialog
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:5152
+#: modules/printbackends/cups/gtkprintbackendcups.c:5168
 msgid "Urgent"
 msgstr "긴급"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:5152
+#: modules/printbackends/cups/gtkprintbackendcups.c:5168
 msgid "High"
 msgstr "높음"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:5152
+#: modules/printbackends/cups/gtkprintbackendcups.c:5168
 msgid "Medium"
 msgstr "중간"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:5152
+#: modules/printbackends/cups/gtkprintbackendcups.c:5168
 msgid "Low"
 msgstr "낮음"
 
 #. Translators, this string is used to label the job priority option
 #. * in the print dialog
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:5182
+#: modules/printbackends/cups/gtkprintbackendcups.c:5198
 msgid "Job Priority"
 msgstr "작업 우선순위"
 
 #. Translators, this string is used to label the billing info entry
 #. * in the print dialog
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:5193
+#: modules/printbackends/cups/gtkprintbackendcups.c:5209
 msgid "Billing Info"
 msgstr "요금 정보"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:5208
+#: modules/printbackends/cups/gtkprintbackendcups.c:5224
 msgid "Classified"
 msgstr "비밀 분류"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:5208
+#: modules/printbackends/cups/gtkprintbackendcups.c:5224
 msgid "Confidential"
 msgstr "기밀"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:5208
+#: modules/printbackends/cups/gtkprintbackendcups.c:5224
 msgid "Secret"
 msgstr "비밀"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:5208
+#: modules/printbackends/cups/gtkprintbackendcups.c:5224
 msgid "Standard"
 msgstr "표준"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:5208
+#: modules/printbackends/cups/gtkprintbackendcups.c:5224
 msgid "Top Secret"
 msgstr "일급 비밀"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:5208
+#: modules/printbackends/cups/gtkprintbackendcups.c:5224
 msgid "Unclassified"
 msgstr "비밀 분류 해제"
 
 #. Translators, this string is used to label the pages-per-sheet option
 #. * in the print dialog
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:5219
+#: modules/printbackends/cups/gtkprintbackendcups.c:5235
 msgid "Pages per Sheet"
 msgstr "한 장당 페이지 수"
 
 #. Translators, this is the label used for the option in the print
 #. * dialog that controls the front cover page.
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:5279
+#: modules/printbackends/cups/gtkprintbackendcups.c:5295
 msgid "Before"
 msgstr "앞에"
 
 #. Translators, this is the label used for the option in the print
 #. * dialog that controls the back cover page.
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:5294
+#: modules/printbackends/cups/gtkprintbackendcups.c:5310
 msgid "After"
 msgstr "뒤에"
 
@@ -6001,14 +6008,14 @@ msgstr "뒤에"
 #. * a print job is printed. Possible values are 'now', a specified time,
 #. * or 'on hold'
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:5314
+#: modules/printbackends/cups/gtkprintbackendcups.c:5330
 msgid "Print at"
 msgstr "인쇄할 때"
 
 #. Translators: this is the name of the option that allows the user
 #. * to specify a time when a print job will be printed.
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:5325
+#: modules/printbackends/cups/gtkprintbackendcups.c:5341
 msgid "Print at time"
 msgstr "인쇄할 시각"
 
@@ -6017,17 +6024,17 @@ msgstr "인쇄할 시각"
 #. * the width and height in points. E.g: "Custom
 #. * 230.4x142.9"
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:5367
+#: modules/printbackends/cups/gtkprintbackendcups.c:5383
 #, c-format
 msgid "Custom %s×%s"
 msgstr "사용자 지정 %s×%s"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:5468
+#: modules/printbackends/cups/gtkprintbackendcups.c:5484
 msgid "Printer Profile"
 msgstr "프린터 프로파일"
 
 #. TRANSLATORS: this is when color profile information is unavailable
-#: modules/printbackends/cups/gtkprintbackendcups.c:5475
+#: modules/printbackends/cups/gtkprintbackendcups.c:5491
 msgid "Unavailable"
 msgstr "없음"
 
