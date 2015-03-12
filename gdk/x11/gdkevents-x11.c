@@ -462,7 +462,7 @@ do_net_wm_state_changes (GdkWindow *window)
     }
   else
     {
-      if (toplevel->have_sticky || toplevel->on_all_desktops)
+      if (toplevel->have_sticky && toplevel->on_all_desktops)
         gdk_synthesize_window_state (window,
                                      0,
                                      GDK_WINDOW_STATE_STICKY);
@@ -543,7 +543,7 @@ gdk_check_wm_desktop_changed (GdkWindow *window)
   if (type != None)
     {
       desktop = (gulong *)data;
-      toplevel->on_all_desktops = (*desktop == 0xFFFFFFFF);
+      toplevel->on_all_desktops = ((*desktop & 0xFFFFFFFF) == 0xFFFFFFFF);
       XFree (desktop);
     }
   else
