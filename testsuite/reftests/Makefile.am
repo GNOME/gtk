@@ -418,6 +418,8 @@ testdata = \
 	textview-margins.css \
 	textview-margins.ref.ui \
 	textview-margins.ui \
+	textview-tags.ref.ui \
+	textview-tags.ui \
 	toplevel-vs-popup.ref.ui \
 	toplevel-vs-popup.ui \
 	treeview-crash-too-wide.ref.ui \
@@ -493,6 +495,7 @@ libreftest_la_SOURCES =			\
 	set-default-direction.c		\
 	statusbar-remove-all.c		\
 	textview-border-windows.c	\
+	textview-tags.c			\
 	$(NULL)
 
 -include $(top_srcdir)/git.mk
