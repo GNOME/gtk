@@ -96,7 +96,7 @@ all-no:
 
 $(srcdir)/$(GETTEXT_PACKAGE).pot: $(POTFILES)
 	XGETTEXT="$(XGETTEXT)" \
-	XGETTEXT_KEYWORDS=$(XGETTEXT_KEYWORDS)" \
+	XGETTEXT_KEYWORDS="$(XGETTEXT_KEYWORDS)" \
 	GETTEXT_PACKAGE="$(GETTEXT_PACKAGE)" \
 	top_srcdir="$(top_srcdir)" \
 	srcdir="$(srcdir)" \
