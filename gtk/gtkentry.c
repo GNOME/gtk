@@ -3488,22 +3488,25 @@ _gtk_entry_get_borders (GtkEntry *entry,
 }
 
 static void
-gtk_entry_get_preferred_width (GtkWidget *widget,
-                               gint      *minimum,
-                               gint      *natural)
+gtk_entry_get_content_width (GtkCssNode     *cssnode,
+                             GtkOrientation  orientation,
+                             gint            for_size,
+                             gint           *minimum,
+                             gint           *natural,
+                             gint           *minimum_baseline,
+                             gint           *natural_baseline,
+                             gpointer        data)
 {
-  GtkEntry *entry = GTK_ENTRY (widget);
+  GtkWidget *widget = GTK_WIDGET(data);
+  GtkEntry *entry = GTK_ENTRY (data);
   GtkEntryPrivate *priv = entry->priv;
   PangoFontMetrics *metrics;
-  GtkBorder borders;
   PangoContext *context;
   gint icon_width, i;
   gint min, nat;
   gint char_width;
   gint digit_width;
   gint char_pixels;
-
-  _gtk_entry_get_borders (entry, &borders);
 
   context = gtk_widget_get_pango_context (widget);
   metrics = pango_context_get_metrics (context,
@@ -3517,14 +3520,14 @@ gtk_entry_get_preferred_width (GtkWidget *widget,
   pango_font_metrics_unref (metrics);
 
   if (priv->width_chars < 0)
-    min = MIN_ENTRY_WIDTH + borders.left + borders.right;
+    min = MIN_ENTRY_WIDTH;
   else
-    min = char_pixels * priv->width_chars + borders.left + borders.right;
+    min = char_pixels * priv->width_chars;
 
   if (priv->max_width_chars < 0)
-    nat = MIN_ENTRY_WIDTH + borders.left + borders.right;
+    nat = MIN_ENTRY_WIDTH;
   else
-    nat = char_pixels * priv->max_width_chars + borders.left + borders.right;
+    nat = char_pixels * priv->max_width_chars;
 
   icon_width = 0;
   for (i = 0; i < MAX_ICONS; i++)
@@ -3538,17 +3541,33 @@ gtk_entry_get_preferred_width (GtkWidget *widget,
 }
 
 static void
-gtk_entry_get_preferred_height_and_baseline_for_width (GtkWidget *widget,
-						       gint       width,
-						       gint      *minimum,
-						       gint      *natural,
-						       gint      *minimum_baseline,
-						       gint      *natural_baseline)
+gtk_entry_get_preferred_width (GtkWidget *widget,
+                               gint      *minimum,
+                               gint      *natural)
 {
-  GtkEntry *entry = GTK_ENTRY (widget);
+  gtk_css_node_get_preferred_size (gtk_widget_get_css_node (widget),
+                                   GTK_ORIENTATION_HORIZONTAL,
+                                   -1,
+                                   minimum, natural,
+                                   NULL, NULL,
+                                   gtk_entry_get_content_width,
+                                   widget);
+}
+
+static void
+gtk_entry_get_content_height (GtkCssNode     *cssnode,
+                              GtkOrientation  orientation,
+                              gint            for_size,
+                              gint           *minimum,
+                              gint           *natural,
+                              gint           *minimum_baseline,
+                              gint           *natural_baseline,
+                              gpointer        data)
+{
+  GtkWidget *widget = GTK_WIDGET(data);
+  GtkEntry *entry = GTK_ENTRY (data);
   GtkEntryPrivate *priv = entry->priv;
   PangoFontMetrics *metrics;
-  GtkBorder borders;
   PangoContext *context;
   gint height, baseline;
   PangoLayout *layout;
@@ -3564,14 +3583,11 @@ gtk_entry_get_preferred_height_and_baseline_for_width (GtkWidget *widget,
   priv->descent = pango_font_metrics_get_descent (metrics);
   pango_font_metrics_unref (metrics);
 
-  _gtk_entry_get_borders (entry, &borders);
   pango_layout_get_pixel_size (layout, NULL, &height);
 
   height = MAX (height, PANGO_PIXELS (priv->ascent + priv->descent));
-  height += borders.top + borders.bottom;
 
   baseline = pango_layout_get_baseline (layout) / PANGO_SCALE;
-  baseline += borders.top;
 
   *minimum = height;
   *natural = height;
@@ -3579,6 +3595,23 @@ gtk_entry_get_preferred_height_and_baseline_for_width (GtkWidget *widget,
     *minimum_baseline = baseline;
   if (natural_baseline)
     *natural_baseline = baseline;
+}
+
+static void
+gtk_entry_get_preferred_height_and_baseline_for_width (GtkWidget *widget,
+						       gint       width,
+						       gint      *minimum,
+						       gint      *natural,
+						       gint      *minimum_baseline,
+						       gint      *natural_baseline)
+{
+  gtk_css_node_get_preferred_size (gtk_widget_get_css_node (widget),
+                                   GTK_ORIENTATION_VERTICAL,
+                                   width,
+                                   minimum, natural,
+                                   minimum_baseline, natural_baseline,
+                                   gtk_entry_get_content_height,
+                                   widget);
 }
 
 static void
