@@ -12,8 +12,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-03-05 10:14+0000\n"
-"PO-Revision-Date: 2015-03-05 13:13+0100\n"
+"POT-Creation-Date: 2015-03-11 22:14+0000\n"
+"PO-Revision-Date: 2015-03-12 10:46+0100\n"
 "Last-Translator: Dušan Kazik <prescott66@gmail.com>\n"
 "Language-Team: Slovak <gnome-sk-list@gnome.org>\n"
 "Language: sk\n"
@@ -87,7 +87,7 @@ msgstr "PRÍZNAKY"
 msgid "GDK debugging flags to unset"
 msgstr "Ladiace príznaky GDK, ktoré sa majú vypnúť"
 
-#: gdk/gdkwindow.c:2736
+#: gdk/gdkwindow.c:2739
 msgid "GL support disabled via GDK_DEBUG"
 msgstr "Podpora GL je zakázaná prostredníctvom GDK_DEBUG"
 
@@ -1188,7 +1188,7 @@ msgstr ""
 #: gtk/gtkfilechooserwidget.c:5356 gtk/gtkmessagedialog.c:944 gtk/gtkmessagedialog.c:957
 #: gtk/gtkmountoperation.c:543 gtk/gtkpagesetupunixdialog.c:196 gtk/gtkprintbackend.c:763
 #: gtk/gtkprinteroptionwidget.c:545 gtk/gtkprintunixdialog.c:665 gtk/gtkprintunixdialog.c:738
-#: gtk/gtkwindow.c:11898 gtk/inspector/css-editor.c:199 gtk/ui/gtkappchooserdialog.ui:79
+#: gtk/gtkwindow.c:11917 gtk/inspector/css-editor.c:199 gtk/ui/gtkappchooserdialog.ui:79
 #: gtk/ui/gtkassistant.ui:169 gtk/ui/gtkcolorchooserdialog.ui:38 gtk/ui/gtkfontchooserdialog.ui:35
 msgid "_Cancel"
 msgstr "_Zrušiť"
@@ -1235,7 +1235,7 @@ msgid "_Apply"
 msgstr "Po_užiť"
 
 #: gtk/deprecated/gtkfontsel.c:1698 gtk/gtkmessagedialog.c:936 gtk/gtkmessagedialog.c:958
-#: gtk/gtkprintbackend.c:764 gtk/gtkwindow.c:11899 gtk/inspector/classes-list.c:127
+#: gtk/gtkprintbackend.c:764 gtk/gtkwindow.c:11918 gtk/inspector/classes-list.c:127
 msgid "_OK"
 msgstr "_Ok"
 
@@ -2097,27 +2097,27 @@ msgstr "_Pravý:"
 msgid "Paper Margins"
 msgstr "Okraje papiera"
 
-#: gtk/gtkentry.c:9626 gtk/gtkentry.c:9779 gtk/gtklabel.c:6597 gtk/gtktextview.c:9037 gtk/gtktextview.c:9225
+#: gtk/gtkentry.c:9629 gtk/gtkentry.c:9782 gtk/gtklabel.c:6597 gtk/gtktextview.c:9037 gtk/gtktextview.c:9225
 msgid "Cu_t"
 msgstr "Vystri_hnúť"
 
-#: gtk/gtkentry.c:9630 gtk/gtkentry.c:9782 gtk/gtklabel.c:6598 gtk/gtktextview.c:9041 gtk/gtktextview.c:9229
+#: gtk/gtkentry.c:9633 gtk/gtkentry.c:9785 gtk/gtklabel.c:6598 gtk/gtktextview.c:9041 gtk/gtktextview.c:9229
 msgid "_Copy"
 msgstr "_Kopírovať"
 
-#: gtk/gtkentry.c:9634 gtk/gtkentry.c:9785 gtk/gtklabel.c:6599 gtk/gtktextview.c:9043 gtk/gtktextview.c:9231
+#: gtk/gtkentry.c:9637 gtk/gtkentry.c:9788 gtk/gtklabel.c:6599 gtk/gtktextview.c:9043 gtk/gtktextview.c:9231
 msgid "_Paste"
 msgstr "_Vložiť"
 
-#: gtk/gtkentry.c:9637 gtk/gtklabel.c:6601 gtk/gtktextview.c:9046
+#: gtk/gtkentry.c:9640 gtk/gtklabel.c:6601 gtk/gtktextview.c:9046
 msgid "_Delete"
 msgstr "O_dstrániť"
 
-#: gtk/gtkentry.c:9648 gtk/gtklabel.c:6610 gtk/gtktextview.c:9060
+#: gtk/gtkentry.c:9651 gtk/gtklabel.c:6610 gtk/gtktextview.c:9060
 msgid "Select _All"
 msgstr "Vybr_ať všetko"
 
-#: gtk/gtkentry.c:10848
+#: gtk/gtkentry.c:10849
 msgid "Caps Lock is on"
 msgstr "Caps Lock je zapnutý"
 
@@ -2234,7 +2234,7 @@ msgstr "Usporiadať _priečinky pred súbormi"
 
 #. this is the header for the location column in the print dialog
 #: gtk/gtkfilechooserwidget.c:2018 gtk/inspector/style-prop-list.ui:118 gtk/ui/gtkfilechooserwidget.ui:259
-#: gtk/ui/gtkprintunixdialog.ui:135
+#: gtk/ui/gtkprintunixdialog.ui:137
 msgid "Location"
 msgstr "Umiestnenie"
 
@@ -2341,7 +2341,7 @@ msgstr "Výber písma"
 #.
 #: gtk/gtkfontbutton.c:1182 gtk/inspector/general.c:226 gtk/inspector/general.c:227
 #: gtk/inspector/gestures.c:128 gtk/inspector/prop-editor.c:1200 gtk/inspector/size-groups.c:252
-#: modules/printbackends/cups/gtkprintbackendcups.c:5208
+#: modules/printbackends/cups/gtkprintbackendcups.c:5224
 msgid "None"
 msgstr "(žiadna)"
 
@@ -2353,7 +2353,7 @@ msgstr "Vytvárania kontextu OpenGL zlyhalo"
 msgid "Application menu"
 msgstr "Ponuka aplikácie"
 
-#: gtk/gtkheaderbar.c:479 gtk/gtkwindow.c:8572
+#: gtk/gtkheaderbar.c:479 gtk/gtkwindow.c:8591
 msgid "Close"
 msgstr "Zavrieť"
 
@@ -2658,7 +2658,7 @@ msgstr "Z shell"
 msgid "Cannot end process with PID %d: %s"
 msgstr "Nedá sa ukončiť proces s PID %d: %s"
 
-#: gtk/gtknotebook.c:5165 gtk/gtknotebook.c:7893
+#: gtk/gtknotebook.c:5171 gtk/gtknotebook.c:7902
 #, c-format
 msgid "Page %u"
 msgstr "Stránka č. %u"
@@ -2694,7 +2694,7 @@ msgstr ""
 msgid "Manage Custom Sizes…"
 msgstr "Správa vlastných veľkostí…"
 
-#: gtk/gtkpagesetupunixdialog.c:900 gtk/ui/gtkpagesetupunixdialog.ui:31 gtk/ui/gtkprintunixdialog.ui:1029
+#: gtk/gtkpagesetupunixdialog.c:900 gtk/ui/gtkpagesetupunixdialog.ui:31 gtk/ui/gtkprintunixdialog.ui:1031
 msgid "Page Setup"
 msgstr "Nastavenie strany"
 
@@ -3015,7 +3015,7 @@ msgid "Out of paper"
 msgstr "Došiel papier"
 
 #. Translators: this is a printer status.
-#: gtk/gtkprintoperation-win32.c:620 modules/printbackends/cups/gtkprintbackendcups.c:2493
+#: gtk/gtkprintoperation-win32.c:620 modules/printbackends/cups/gtkprintbackendcups.c:2509
 msgid "Paused"
 msgstr "Pozastavená"
 
@@ -3082,35 +3082,35 @@ msgstr "Získavajú sa informácie o tlačiarni…"
 #. Translators: These strings name the possible arrangements of
 #. * multiple pages on a sheet when printing
 #.
-#: gtk/gtkprintunixdialog.c:3101 modules/printbackends/cups/gtkprintbackendcups.c:5157
+#: gtk/gtkprintunixdialog.c:3101 modules/printbackends/cups/gtkprintbackendcups.c:5173
 msgid "Left to right, top to bottom"
 msgstr "Zľava doprava, zhora nadol"
 
-#: gtk/gtkprintunixdialog.c:3101 modules/printbackends/cups/gtkprintbackendcups.c:5157
+#: gtk/gtkprintunixdialog.c:3101 modules/printbackends/cups/gtkprintbackendcups.c:5173
 msgid "Left to right, bottom to top"
 msgstr "Zľava doprava, zdola nahor"
 
-#: gtk/gtkprintunixdialog.c:3102 modules/printbackends/cups/gtkprintbackendcups.c:5158
+#: gtk/gtkprintunixdialog.c:3102 modules/printbackends/cups/gtkprintbackendcups.c:5174
 msgid "Right to left, top to bottom"
 msgstr "Sprava doľava, zhora nadol"
 
-#: gtk/gtkprintunixdialog.c:3102 modules/printbackends/cups/gtkprintbackendcups.c:5158
+#: gtk/gtkprintunixdialog.c:3102 modules/printbackends/cups/gtkprintbackendcups.c:5174
 msgid "Right to left, bottom to top"
 msgstr "Sprava doľava, zdola nahor"
 
-#: gtk/gtkprintunixdialog.c:3103 modules/printbackends/cups/gtkprintbackendcups.c:5159
+#: gtk/gtkprintunixdialog.c:3103 modules/printbackends/cups/gtkprintbackendcups.c:5175
 msgid "Top to bottom, left to right"
 msgstr "Zhora nadol, zľava doprava"
 
-#: gtk/gtkprintunixdialog.c:3103 modules/printbackends/cups/gtkprintbackendcups.c:5159
+#: gtk/gtkprintunixdialog.c:3103 modules/printbackends/cups/gtkprintbackendcups.c:5175
 msgid "Top to bottom, right to left"
 msgstr "Zhora nadol, sprava doľava"
 
-#: gtk/gtkprintunixdialog.c:3104 modules/printbackends/cups/gtkprintbackendcups.c:5160
+#: gtk/gtkprintunixdialog.c:3104 modules/printbackends/cups/gtkprintbackendcups.c:5176
 msgid "Bottom to top, left to right"
 msgstr "Zdola nahor, zľava doprava"
 
-#: gtk/gtkprintunixdialog.c:3104 modules/printbackends/cups/gtkprintbackendcups.c:5160
+#: gtk/gtkprintunixdialog.c:3104 modules/printbackends/cups/gtkprintbackendcups.c:5176
 msgid "Bottom to top, right to left"
 msgstr "Zdola nahor, sprava doľava"
 
@@ -3118,7 +3118,7 @@ msgstr "Zdola nahor, sprava doľava"
 #. * dialog that controls in what order multiple pages are arranged
 #.
 #: gtk/gtkprintunixdialog.c:3108 gtk/gtkprintunixdialog.c:3121
-#: modules/printbackends/cups/gtkprintbackendcups.c:5237
+#: modules/printbackends/cups/gtkprintbackendcups.c:5253
 msgid "Page Ordering"
 msgstr "Poradie stránok"
 
@@ -3444,12 +3444,12 @@ msgctxt "volume percentage"
 msgid "%d %%"
 msgstr "%d %%"
 
-#: gtk/gtkwindow.c:11886
+#: gtk/gtkwindow.c:11905
 #, c-format
 msgid "Do you want to use GTK+ Inspector?"
 msgstr "Chcete použiť nástroj Inšpektor GTK+?"
 
-#: gtk/gtkwindow.c:11888
+#: gtk/gtkwindow.c:11907
 #, c-format
 msgid ""
 "GTK+ Inspector is an interactive debugger that lets you explore and modify the internals of any GTK+ "
@@ -3458,7 +3458,7 @@ msgstr ""
 "Inšpektor GTK+ je interaktývny ladiaci nástroj, pomocou ktorého je možné preskúmať a meniť interné "
 "vlastnosti ľubovolnej aplikácie GTK+. Jeho používaním môžete spôsobiť neočakávanie chovanie alebo pád."
 
-#: gtk/gtkwindow.c:11893
+#: gtk/gtkwindow.c:11912
 msgid "Don't show this message again"
 msgstr "Nezobrazovať túto správu znovu"
 
@@ -3559,7 +3559,7 @@ msgstr "X displej"
 
 #: gtk/inspector/general.ui:408
 msgid "RGBA visual"
-msgstr ""
+msgstr "Vizuál RGBA"
 
 #: gtk/inspector/general.ui:442
 msgid "Composited"
@@ -3591,7 +3591,7 @@ msgstr "Nepomenovaná sekcia"
 
 #: gtk/inspector/menu.ui:35 gtk/inspector/object-tree.ui:124
 msgid "Label"
-msgstr "menovka"
+msgstr "Menovka"
 
 #: gtk/inspector/menu.ui:48 gtk/inspector/prop-editor.c:1300
 msgid "Action"
@@ -3629,7 +3629,7 @@ msgstr "Ovládací prvok zamerania"
 
 #: gtk/inspector/misc-info.ui:266
 msgid "Mnemonic Label"
-msgstr ""
+msgstr "Mnemotechnická menovka"
 
 #: gtk/inspector/misc-info.ui:301
 msgid "Allocated size"
@@ -3637,7 +3637,7 @@ msgstr "Obsadená veľkosť"
 
 #: gtk/inspector/misc-info.ui:335
 msgid "Clip area"
-msgstr ""
+msgstr "Oblasť výrezu"
 
 #: gtk/inspector/misc-info.ui:369
 msgid "Tick callback"
@@ -3653,7 +3653,7 @@ msgstr "Frekvencia snímok"
 
 #: gtk/inspector/misc-info.ui:473
 msgid "Accessible role"
-msgstr ""
+msgstr "Úloha v prístupnosti"
 
 #: gtk/inspector/misc-info.ui:507
 msgid "Mapped"
@@ -4032,7 +4032,7 @@ msgstr "Zobrazí všetky zdroje"
 
 #. Translators: "Miscellaneous" is the label for a button, that opens
 #. up an extra panel of settings in a print dialog.
-#: gtk/inspector/window.ui:257 modules/printbackends/cups/gtkprintbackendcups.c:4272
+#: gtk/inspector/window.ui:257 modules/printbackends/cups/gtkprintbackendcups.c:4288
 msgid "Miscellaneous"
 msgstr "Rôzne"
 
@@ -4092,7 +4092,7 @@ msgstr "Zdroje"
 msgid "Visual"
 msgstr "Vizuálne"
 
-#: gtk/inspector/window.ui:436 gtk/ui/gtkprintunixdialog.ui:497
+#: gtk/inspector/window.ui:436 gtk/ui/gtkprintunixdialog.ui:499
 msgid "General"
 msgstr "Všeobecné"
 
@@ -5022,7 +5022,7 @@ msgstr "Zobraziť _všetky aplikácie"
 msgid "_Find New Applications"
 msgstr "_Nájsť nové aplikácie"
 
-#: gtk/ui/gtkappchooserwidget.ui:117
+#: gtk/ui/gtkappchooserwidget.ui:119
 msgid "No applications found."
 msgstr "Neboli nájdené žiadne aplikácie."
 
@@ -5150,7 +5150,7 @@ msgstr "Žiadne písma sa nezhodujú s vaším hľadaním. Upravte hľadanie a s
 msgid "_Format for:"
 msgstr "_Formát pre:"
 
-#: gtk/ui/gtkpagesetupunixdialog.ui:88 gtk/ui/gtkprintunixdialog.ui:901
+#: gtk/ui/gtkpagesetupunixdialog.ui:88 gtk/ui/gtkprintunixdialog.ui:903
 msgid "_Paper size:"
 msgstr "_Veľkosť papiera:"
 
@@ -5158,19 +5158,19 @@ msgstr "_Veľkosť papiera:"
 msgid "_Orientation:"
 msgstr "_Orientácia:"
 
-#: gtk/ui/gtkpagesetupunixdialog.ui:179 gtk/ui/gtkprintunixdialog.ui:957
+#: gtk/ui/gtkpagesetupunixdialog.ui:179 gtk/ui/gtkprintunixdialog.ui:959
 msgid "Portrait"
 msgstr "Na výšku"
 
-#: gtk/ui/gtkpagesetupunixdialog.ui:229 gtk/ui/gtkprintunixdialog.ui:959
+#: gtk/ui/gtkpagesetupunixdialog.ui:229 gtk/ui/gtkprintunixdialog.ui:961
 msgid "Reverse portrait"
 msgstr "Obrátene na výšku"
 
-#: gtk/ui/gtkpagesetupunixdialog.ui:279 gtk/ui/gtkprintunixdialog.ui:958
+#: gtk/ui/gtkpagesetupunixdialog.ui:279 gtk/ui/gtkprintunixdialog.ui:960
 msgid "Landscape"
 msgstr "Na šírku"
 
-#: gtk/ui/gtkpagesetupunixdialog.ui:328 gtk/ui/gtkprintunixdialog.ui:960
+#: gtk/ui/gtkpagesetupunixdialog.ui:328 gtk/ui/gtkprintunixdialog.ui:962
 msgid "Reverse landscape"
 msgstr "Obrátene na šírku"
 
@@ -5182,37 +5182,37 @@ msgstr "Nadol"
 msgid "Up Path"
 msgstr "Nahor"
 
-#: gtk/ui/gtkprintunixdialog.ui:124
+#: gtk/ui/gtkprintunixdialog.ui:126
 msgid "Printer"
 msgstr "Tlačiareň"
 
 #. this is the header for the printer status column in the print dialog
-#: gtk/ui/gtkprintunixdialog.ui:146
+#: gtk/ui/gtkprintunixdialog.ui:148
 msgid "Status"
 msgstr "Stav"
 
-#: gtk/ui/gtkprintunixdialog.ui:208
+#: gtk/ui/gtkprintunixdialog.ui:210
 msgid "Range"
 msgstr "Rozsah"
 
 # stránka je v zdrojovom dokumente, strana je papiera - toto sa týka dokumentu
-#: gtk/ui/gtkprintunixdialog.ui:231
+#: gtk/ui/gtkprintunixdialog.ui:233
 msgid "_All Pages"
 msgstr "Vš_etky stránky"
 
-#: gtk/ui/gtkprintunixdialog.ui:249
+#: gtk/ui/gtkprintunixdialog.ui:251
 msgid "C_urrent Page"
 msgstr "_Aktuálnu stránku"
 
-#: gtk/ui/gtkprintunixdialog.ui:269
+#: gtk/ui/gtkprintunixdialog.ui:271
 msgid "Se_lection"
 msgstr "Vý_ber"
 
-#: gtk/ui/gtkprintunixdialog.ui:288
+#: gtk/ui/gtkprintunixdialog.ui:290
 msgid "Pag_es:"
 msgstr "_Stránky:"
 
-#: gtk/ui/gtkprintunixdialog.ui:292 gtk/ui/gtkprintunixdialog.ui:313 gtk/ui/gtkprintunixdialog.ui:320
+#: gtk/ui/gtkprintunixdialog.ui:294 gtk/ui/gtkprintunixdialog.ui:315 gtk/ui/gtkprintunixdialog.ui:322
 msgid ""
 "Specify one or more page ranges,\n"
 " e.g. 1–3, 7, 11"
@@ -5220,114 +5220,114 @@ msgstr ""
 "Uveďte jeden alebo viac rozsahov stránok,\n"
 " napr. 1–3, 7, 11"
 
-#: gtk/ui/gtkprintunixdialog.ui:319
+#: gtk/ui/gtkprintunixdialog.ui:321
 msgid "Pages"
 msgstr "Stránky"
 
-#: gtk/ui/gtkprintunixdialog.ui:361
+#: gtk/ui/gtkprintunixdialog.ui:363
 msgid "Copies"
 msgstr "Kópií"
 
-#: gtk/ui/gtkprintunixdialog.ui:388
+#: gtk/ui/gtkprintunixdialog.ui:390
 msgid "Copie_s:"
 msgstr "_Kópie:"
 
-#: gtk/ui/gtkprintunixdialog.ui:418
+#: gtk/ui/gtkprintunixdialog.ui:420
 msgid "C_ollate"
 msgstr "Zh_romažďovať"
 
-#: gtk/ui/gtkprintunixdialog.ui:436
+#: gtk/ui/gtkprintunixdialog.ui:438
 msgid "_Reverse"
 msgstr "_Opačne"
 
-#: gtk/ui/gtkprintunixdialog.ui:527
+#: gtk/ui/gtkprintunixdialog.ui:529
 msgid "Layout"
 msgstr "Rozloženie"
 
-#: gtk/ui/gtkprintunixdialog.ui:554
+#: gtk/ui/gtkprintunixdialog.ui:556
 msgid "T_wo-sided:"
 msgstr "O_bojstrannosť:"
 
-#: gtk/ui/gtkprintunixdialog.ui:587
+#: gtk/ui/gtkprintunixdialog.ui:589
 msgid "Pages per _side:"
 msgstr "_Stránok na stranu:"
 
-#: gtk/ui/gtkprintunixdialog.ui:622
+#: gtk/ui/gtkprintunixdialog.ui:624
 msgid "Page or_dering:"
 msgstr "Pora_die stránok:"
 
-#: gtk/ui/gtkprintunixdialog.ui:656
+#: gtk/ui/gtkprintunixdialog.ui:658
 msgid "_Only print:"
 msgstr "Tlačiť _len:"
 
 # stránka je v zdrojovom dokumente, strana je papiera - toto sa týka dokumentu
-#: gtk/ui/gtkprintunixdialog.ui:676
+#: gtk/ui/gtkprintunixdialog.ui:678
 msgid "All sheets"
 msgstr "Všetky listy"
 
-#: gtk/ui/gtkprintunixdialog.ui:677
+#: gtk/ui/gtkprintunixdialog.ui:679
 msgid "Even sheets"
 msgstr "Párne listy"
 
-#: gtk/ui/gtkprintunixdialog.ui:678
+#: gtk/ui/gtkprintunixdialog.ui:680
 msgid "Odd sheets"
 msgstr "Nepárne listy"
 
-#: gtk/ui/gtkprintunixdialog.ui:694
+#: gtk/ui/gtkprintunixdialog.ui:696
 msgid "Sc_ale:"
 msgstr "_Mierka:"
 
-#: gtk/ui/gtkprintunixdialog.ui:775
+#: gtk/ui/gtkprintunixdialog.ui:777
 msgid "Paper"
 msgstr "Papier"
 
-#: gtk/ui/gtkprintunixdialog.ui:802
+#: gtk/ui/gtkprintunixdialog.ui:804
 msgid "Paper _type:"
 msgstr "Typ p_apiera:"
 
-#: gtk/ui/gtkprintunixdialog.ui:835
+#: gtk/ui/gtkprintunixdialog.ui:837
 msgid "Paper _source:"
 msgstr "Zd_roj papiera:"
 
-#: gtk/ui/gtkprintunixdialog.ui:868
+#: gtk/ui/gtkprintunixdialog.ui:870
 msgid "Output t_ray:"
 msgstr "Výstup_ný zberač:"
 
-#: gtk/ui/gtkprintunixdialog.ui:936
+#: gtk/ui/gtkprintunixdialog.ui:938
 msgid "Or_ientation:"
 msgstr "_Orientácia:"
 
-#: gtk/ui/gtkprintunixdialog.ui:1054
+#: gtk/ui/gtkprintunixdialog.ui:1056
 msgid "Job Details"
 msgstr "Podrobnosti úlohy"
 
-#: gtk/ui/gtkprintunixdialog.ui:1081
+#: gtk/ui/gtkprintunixdialog.ui:1083
 msgid "Pri_ority:"
 msgstr "Pri_orita:"
 
 # napr. pri firemných tlačiarňach, kde si musíš potom stránky nad limit zaplatiť...
-#: gtk/ui/gtkprintunixdialog.ui:1113
+#: gtk/ui/gtkprintunixdialog.ui:1115
 msgid "_Billing info:"
 msgstr "Zúčtovacie _informácie:"
 
 # label
-#: gtk/ui/gtkprintunixdialog.ui:1169
+#: gtk/ui/gtkprintunixdialog.ui:1171
 msgid "Print Document"
 msgstr "Tlač dokumentu"
 
 #. this is one of the choices for the print at option in the print dialog
-#: gtk/ui/gtkprintunixdialog.ui:1192
+#: gtk/ui/gtkprintunixdialog.ui:1194
 msgid "_Now"
 msgstr "_Ihneď"
 
 #. this is one of the choices for the print at option in the print dialog. It also serves as the label for an entry that allows the user to enter a time.
-#: gtk/ui/gtkprintunixdialog.ui:1211
+#: gtk/ui/gtkprintunixdialog.ui:1213
 msgid "A_t:"
 msgstr "_V čase:"
 
 #. Ability to parse the am/pm format depends on actual locale. You can remove the am/pm values below for your locale if they are not supported.
-#: gtk/ui/gtkprintunixdialog.ui:1216 gtk/ui/gtkprintunixdialog.ui:1218 gtk/ui/gtkprintunixdialog.ui:1240
-#: gtk/ui/gtkprintunixdialog.ui:1242 gtk/ui/gtkprintunixdialog.ui:1249
+#: gtk/ui/gtkprintunixdialog.ui:1218 gtk/ui/gtkprintunixdialog.ui:1220 gtk/ui/gtkprintunixdialog.ui:1242
+#: gtk/ui/gtkprintunixdialog.ui:1244 gtk/ui/gtkprintunixdialog.ui:1251
 msgid ""
 "Specify the time of print,\n"
 " e.g. 15∶30, 2∶35 pm, 14∶15∶20, 11∶46∶30 am, 4 pm"
@@ -5335,59 +5335,59 @@ msgstr ""
 "Uveďte čas tlače,\n"
 " napríklad 15:30, 14:15:30"
 
-#: gtk/ui/gtkprintunixdialog.ui:1248
+#: gtk/ui/gtkprintunixdialog.ui:1250
 msgid "Time of print"
 msgstr "Čas tlače"
 
 #. this is one of the choices for the print at option in the print dialog. It means that the print job will not be printed until it explicitly gets 'released'.
-#: gtk/ui/gtkprintunixdialog.ui:1264
+#: gtk/ui/gtkprintunixdialog.ui:1266
 msgid "On _hold"
 msgstr "Poz_držané"
 
-#: gtk/ui/gtkprintunixdialog.ui:1269 gtk/ui/gtkprintunixdialog.ui:1270
+#: gtk/ui/gtkprintunixdialog.ui:1271 gtk/ui/gtkprintunixdialog.ui:1272
 msgid "Hold the job until it is explicitly released"
 msgstr "Pozdrží úlohu až do explicitného uvoľnenia"
 
 #  label
-#: gtk/ui/gtkprintunixdialog.ui:1314
+#: gtk/ui/gtkprintunixdialog.ui:1316
 msgid "Add Cover Page"
 msgstr "Pridanie titulnej stránky"
 
 #. this is the label used for the option in the print dialog that controls the front cover page.
-#: gtk/ui/gtkprintunixdialog.ui:1341
+#: gtk/ui/gtkprintunixdialog.ui:1343
 msgid "Be_fore:"
 msgstr "P_red:"
 
 #. this is the label used for the option in the print dialog that controls the back cover page.
-#: gtk/ui/gtkprintunixdialog.ui:1373
+#: gtk/ui/gtkprintunixdialog.ui:1375
 msgid "_After:"
 msgstr "Z_a:"
 
-#: gtk/ui/gtkprintunixdialog.ui:1429
+#: gtk/ui/gtkprintunixdialog.ui:1431
 msgid "Job"
 msgstr "Úloha"
 
 #. This will appear as a tab label in the print dialog.
-#: gtk/ui/gtkprintunixdialog.ui:1493
+#: gtk/ui/gtkprintunixdialog.ui:1495
 msgid "Image Quality"
 msgstr "Kvalita obrazu"
 
 #. This will appear as a tab label in the print dialog.
-#: gtk/ui/gtkprintunixdialog.ui:1557
+#: gtk/ui/gtkprintunixdialog.ui:1559
 msgid "Color"
 msgstr "Farba"
 
 #. This will appear as a tab label in the print dialog.
 #. It's a typographical term, as in "Binding and finishing"
-#: gtk/ui/gtkprintunixdialog.ui:1621
+#: gtk/ui/gtkprintunixdialog.ui:1623
 msgid "Finishing"
 msgstr "Konečná úprava"
 
-#: gtk/ui/gtkprintunixdialog.ui:1667
+#: gtk/ui/gtkprintunixdialog.ui:1669
 msgid "Advanced"
 msgstr "Pokročilé"
 
-#: gtk/ui/gtkprintunixdialog.ui:1696
+#: gtk/ui/gtkprintunixdialog.ui:1698
 msgid "Some of the settings in the dialog conflict"
 msgstr "Niektoré nastavenia v dialógovom okne si odporujú"
 
@@ -5646,251 +5646,251 @@ msgstr "Dlhodobo nepripojená"
 msgid "Pages per _sheet:"
 msgstr "Stránok na _list:"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1074
-#: modules/printbackends/cups/gtkprintbackendcups.c:1383
+#: modules/printbackends/cups/gtkprintbackendcups.c:1090
+#: modules/printbackends/cups/gtkprintbackendcups.c:1399
 msgid "Username:"
 msgstr "Používateľské meno:"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1075
-#: modules/printbackends/cups/gtkprintbackendcups.c:1392
+#: modules/printbackends/cups/gtkprintbackendcups.c:1091
+#: modules/printbackends/cups/gtkprintbackendcups.c:1408
 msgid "Password:"
 msgstr "Heslo:"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1114
-#: modules/printbackends/cups/gtkprintbackendcups.c:1405
+#: modules/printbackends/cups/gtkprintbackendcups.c:1130
+#: modules/printbackends/cups/gtkprintbackendcups.c:1421
 #, c-format
 msgid "Authentication is required to print document “%s” on printer %s"
 msgstr "Na vytlačenie dokumentu „%s“ na tlačiarni %s je potrebné overenie totožnosti"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1116
+#: modules/printbackends/cups/gtkprintbackendcups.c:1132
 #, c-format
 msgid "Authentication is required to print a document on %s"
 msgstr "Na vytlačenie dokumentu na tlačiarni %s je potrebné overenie totožnosti"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1120
+#: modules/printbackends/cups/gtkprintbackendcups.c:1136
 #, c-format
 msgid "Authentication is required to get attributes of job “%s”"
 msgstr "Na získanie vlastností úlohy „%s“ je potrebné overenie totožnosti"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1122
+#: modules/printbackends/cups/gtkprintbackendcups.c:1138
 msgid "Authentication is required to get attributes of a job"
 msgstr "Na získanie vlastností úlohy je potrebné overenie totožnosti"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1126
+#: modules/printbackends/cups/gtkprintbackendcups.c:1142
 #, c-format
 msgid "Authentication is required to get attributes of printer %s"
 msgstr "Na získanie vlastností tlačiarne %s je potrebné overenie totožnosti"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1128
+#: modules/printbackends/cups/gtkprintbackendcups.c:1144
 msgid "Authentication is required to get attributes of a printer"
 msgstr "Na získanie vlastností tlačiarne je potrebné overenie totožnosti"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1131
+#: modules/printbackends/cups/gtkprintbackendcups.c:1147
 #, c-format
 msgid "Authentication is required to get default printer of %s"
 msgstr "Na zistenie predvolenej tlačiarne pre %s je potrebné overenie totožnosti"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1134
+#: modules/printbackends/cups/gtkprintbackendcups.c:1150
 #, c-format
 msgid "Authentication is required to get printers from %s"
 msgstr "Na získanie tlačiarní z %s je potrebné overenie totožnosti"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1139
+#: modules/printbackends/cups/gtkprintbackendcups.c:1155
 #, c-format
 msgid "Authentication is required to get a file from %s"
 msgstr "Na získanie súboru z %s je potrebné overenie totožnosti"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1141
+#: modules/printbackends/cups/gtkprintbackendcups.c:1157
 #, c-format
 msgid "Authentication is required on %s"
 msgstr "Je potrebné overenie totožnosti na %s"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1377
+#: modules/printbackends/cups/gtkprintbackendcups.c:1393
 msgid "Domain:"
 msgstr "Doména:"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1407
+#: modules/printbackends/cups/gtkprintbackendcups.c:1423
 #, c-format
 msgid "Authentication is required to print document “%s”"
 msgstr "Na vytlačenie dokumentu „%s“ je potrebné overenie totožnosti"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1412
+#: modules/printbackends/cups/gtkprintbackendcups.c:1428
 #, c-format
 msgid "Authentication is required to print this document on printer %s"
 msgstr "Na vytlačenie tohto dokumentu na tlačiarni %s je potrebné overenie totožnosti"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1414
+#: modules/printbackends/cups/gtkprintbackendcups.c:1430
 msgid "Authentication is required to print this document"
 msgstr "Na vytlačenie tohto dokumentu je potrebné overenie totožnosti"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1851
+#: modules/printbackends/cups/gtkprintbackendcups.c:1867
 #, c-format
 msgid "Printer “%s” is low on toner."
 msgstr "Tlačiareň „%s“ má málo tonera."
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1852
+#: modules/printbackends/cups/gtkprintbackendcups.c:1868
 #, c-format
 msgid "Printer “%s” has no toner left."
 msgstr "Tlačiarni „%s“ sa minul toner."
 
 #. Translators: "Developer" like on photo development context
-#: modules/printbackends/cups/gtkprintbackendcups.c:1854
+#: modules/printbackends/cups/gtkprintbackendcups.c:1870
 #, c-format
 msgid "Printer “%s” is low on developer."
 msgstr "Tlačiareň „%s“ má málo vývojky."
 
 #. Translators: "Developer" like on photo development context
-#: modules/printbackends/cups/gtkprintbackendcups.c:1856
+#: modules/printbackends/cups/gtkprintbackendcups.c:1872
 #, c-format
 msgid "Printer “%s” is out of developer."
 msgstr "Tlačiarni „%s“ sa minula vývojka."
 
 #. Translators: "marker" is one color bin of the printer
-#: modules/printbackends/cups/gtkprintbackendcups.c:1858
+#: modules/printbackends/cups/gtkprintbackendcups.c:1874
 #, c-format
 msgid "Printer “%s” is low on at least one marker supply."
 msgstr "Tlačiareň „%s“ má málo minimálne jednej farby."
 
 #. Translators: "marker" is one color bin of the printer
-#: modules/printbackends/cups/gtkprintbackendcups.c:1860
+#: modules/printbackends/cups/gtkprintbackendcups.c:1876
 #, c-format
 msgid "Printer “%s” is out of at least one marker supply."
 msgstr "Tlačiarni „%s“ sa minula minimálne jedna farba."
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1861
+#: modules/printbackends/cups/gtkprintbackendcups.c:1877
 #, c-format
 msgid "The cover is open on printer “%s”."
 msgstr "Kryt tlačiarne „%s“ je otvorený."
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1862
+#: modules/printbackends/cups/gtkprintbackendcups.c:1878
 #, c-format
 msgid "The door is open on printer “%s”."
 msgstr "Dvierka tlačiarne „%s“ sú otvorené."
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1863
+#: modules/printbackends/cups/gtkprintbackendcups.c:1879
 #, c-format
 msgid "Printer “%s” is low on paper."
 msgstr "Tlačiareň „%s“ má málo papiera."
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1864
+#: modules/printbackends/cups/gtkprintbackendcups.c:1880
 #, c-format
 msgid "Printer “%s” is out of paper."
 msgstr "Tlačiarni „%s“ sa minul papier."
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1865
+#: modules/printbackends/cups/gtkprintbackendcups.c:1881
 #, c-format
 msgid "Printer “%s” is currently offline."
 msgstr "Tlačiareň „%s“ je momentálne vypnutá."
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1866
+#: modules/printbackends/cups/gtkprintbackendcups.c:1882
 #, c-format
 msgid "There is a problem on printer “%s”."
 msgstr "Na tlačiarni „%s“ sa vyskytol problém."
 
 #. Translators: this is a printer status.
-#: modules/printbackends/cups/gtkprintbackendcups.c:2490
+#: modules/printbackends/cups/gtkprintbackendcups.c:2506
 msgid "Paused; Rejecting Jobs"
 msgstr "Pozastavená, odmieta úlohy"
 
 #. Translators: this is a printer status.
-#: modules/printbackends/cups/gtkprintbackendcups.c:2496
+#: modules/printbackends/cups/gtkprintbackendcups.c:2512
 msgid "Rejecting Jobs"
 msgstr "Odmieta úlohy"
 
 #. Translators: this string connects multiple printer states together.
-#: modules/printbackends/cups/gtkprintbackendcups.c:2538
+#: modules/printbackends/cups/gtkprintbackendcups.c:2554
 msgid "; "
 msgstr "; "
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:4223
-#: modules/printbackends/cups/gtkprintbackendcups.c:4290
+#: modules/printbackends/cups/gtkprintbackendcups.c:4239
+#: modules/printbackends/cups/gtkprintbackendcups.c:4306
 msgid "Two Sided"
 msgstr "Obojstranne"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:4224
+#: modules/printbackends/cups/gtkprintbackendcups.c:4240
 msgid "Paper Type"
 msgstr "Typ papiera"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:4225
+#: modules/printbackends/cups/gtkprintbackendcups.c:4241
 msgid "Paper Source"
 msgstr "Zdroj papiera"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:4226
+#: modules/printbackends/cups/gtkprintbackendcups.c:4242
 msgid "Output Tray"
 msgstr "Výstupné úložisko"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:4227
+#: modules/printbackends/cups/gtkprintbackendcups.c:4243
 msgid "Resolution"
 msgstr "Rozlíšenie"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:4228
+#: modules/printbackends/cups/gtkprintbackendcups.c:4244
 msgid "GhostScript pre-filtering"
 msgstr "Predfiltrovanie GhostScriptom"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:4237
+#: modules/printbackends/cups/gtkprintbackendcups.c:4253
 msgid "One Sided"
 msgstr "Jednostranne"
 
 #. Translators: this is an option of "Two Sided"
-#: modules/printbackends/cups/gtkprintbackendcups.c:4239
+#: modules/printbackends/cups/gtkprintbackendcups.c:4255
 msgid "Long Edge (Standard)"
 msgstr "Dlhý okraj (štandard)"
 
 #. Translators: this is an option of "Two Sided"
-#: modules/printbackends/cups/gtkprintbackendcups.c:4241
+#: modules/printbackends/cups/gtkprintbackendcups.c:4257
 msgid "Short Edge (Flip)"
 msgstr "Krátky okraj (prevrátiť)"
 
 #. Translators: this is an option of "Paper Source"
-#: modules/printbackends/cups/gtkprintbackendcups.c:4243
-#: modules/printbackends/cups/gtkprintbackendcups.c:4245
-#: modules/printbackends/cups/gtkprintbackendcups.c:4253
+#: modules/printbackends/cups/gtkprintbackendcups.c:4259
+#: modules/printbackends/cups/gtkprintbackendcups.c:4261
+#: modules/printbackends/cups/gtkprintbackendcups.c:4269
 msgid "Auto Select"
 msgstr "Automatický výber"
 
 #. Translators: this is an option of "Paper Source"
 #. Translators: this is an option of "Resolution"
-#: modules/printbackends/cups/gtkprintbackendcups.c:4247
-#: modules/printbackends/cups/gtkprintbackendcups.c:4249
-#: modules/printbackends/cups/gtkprintbackendcups.c:4251
-#: modules/printbackends/cups/gtkprintbackendcups.c:4255
-#: modules/printbackends/cups/gtkprintbackendcups.c:4762
+#: modules/printbackends/cups/gtkprintbackendcups.c:4263
+#: modules/printbackends/cups/gtkprintbackendcups.c:4265
+#: modules/printbackends/cups/gtkprintbackendcups.c:4267
+#: modules/printbackends/cups/gtkprintbackendcups.c:4271
+#: modules/printbackends/cups/gtkprintbackendcups.c:4778
 msgid "Printer Default"
 msgstr "Predvolené v tlačiarni"
 
 #. Translators: this is an option of "GhostScript"
-#: modules/printbackends/cups/gtkprintbackendcups.c:4257
+#: modules/printbackends/cups/gtkprintbackendcups.c:4273
 msgid "Embed GhostScript fonts only"
 msgstr "Vložiť len GhostScriptové fonty"
 
 #. Translators: this is an option of "GhostScript"
-#: modules/printbackends/cups/gtkprintbackendcups.c:4259
+#: modules/printbackends/cups/gtkprintbackendcups.c:4275
 msgid "Convert to PS level 1"
 msgstr "Previesť na PS level 1"
 
 #. Translators: this is an option of "GhostScript"
-#: modules/printbackends/cups/gtkprintbackendcups.c:4261
+#: modules/printbackends/cups/gtkprintbackendcups.c:4277
 msgid "Convert to PS level 2"
 msgstr "Previesť na PS level 2"
 
 #. Translators: this is an option of "GhostScript"
-#: modules/printbackends/cups/gtkprintbackendcups.c:4263
+#: modules/printbackends/cups/gtkprintbackendcups.c:4279
 msgid "No pre-filtering"
 msgstr "Žiadne predfiltrovanie"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:4298
+#: modules/printbackends/cups/gtkprintbackendcups.c:4314
 msgctxt "sides"
 msgid "One Sided"
 msgstr "Jednostranne"
 
 #. Translators: this is an option of "Two Sided"
-#: modules/printbackends/cups/gtkprintbackendcups.c:4300
+#: modules/printbackends/cups/gtkprintbackendcups.c:4316
 msgctxt "sides"
 msgid "Long Edge (Standard)"
 msgstr "Dlhý okraj (štandard)"
 
 #. Translators: this is an option of "Two Sided"
-#: modules/printbackends/cups/gtkprintbackendcups.c:4302
+#: modules/printbackends/cups/gtkprintbackendcups.c:4318
 msgctxt "sides"
 msgid "Short Edge (Flip)"
 msgstr "Krátky okraj (prevrátiť)"
@@ -5898,26 +5898,26 @@ msgstr "Krátky okraj (prevrátiť)"
 #. Translators: These strings name the possible values of the
 #. * job priority option in the print dialog
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:5152
+#: modules/printbackends/cups/gtkprintbackendcups.c:5168
 msgid "Urgent"
 msgstr "Urgentná"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:5152
+#: modules/printbackends/cups/gtkprintbackendcups.c:5168
 msgid "High"
 msgstr "Vysoká"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:5152
+#: modules/printbackends/cups/gtkprintbackendcups.c:5168
 msgid "Medium"
 msgstr "Stredná"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:5152
+#: modules/printbackends/cups/gtkprintbackendcups.c:5168
 msgid "Low"
 msgstr "Nízka"
 
 #. Translators, this string is used to label the job priority option
 #. * in the print dialog
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:5182
+#: modules/printbackends/cups/gtkprintbackendcups.c:5198
 msgid "Job Priority"
 msgstr "Priorita úlohy"
 
@@ -5925,52 +5925,52 @@ msgstr "Priorita úlohy"
 #. Translators, this string is used to label the billing info entry
 #. * in the print dialog
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:5193
+#: modules/printbackends/cups/gtkprintbackendcups.c:5209
 msgid "Billing Info"
 msgstr "Zúčtovacie informácie"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:5208
+#: modules/printbackends/cups/gtkprintbackendcups.c:5224
 msgid "Classified"
 msgstr "Prísne tajné"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:5208
+#: modules/printbackends/cups/gtkprintbackendcups.c:5224
 msgid "Confidential"
 msgstr "Dôverné"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:5208
+#: modules/printbackends/cups/gtkprintbackendcups.c:5224
 msgid "Secret"
 msgstr "Tajné"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:5208
+#: modules/printbackends/cups/gtkprintbackendcups.c:5224
 msgid "Standard"
 msgstr "Štandardné"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:5208
+#: modules/printbackends/cups/gtkprintbackendcups.c:5224
 msgid "Top Secret"
 msgstr "Najtajnejšie"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:5208
+#: modules/printbackends/cups/gtkprintbackendcups.c:5224
 msgid "Unclassified"
 msgstr "Nezaradené"
 
 #. Translators, this string is used to label the pages-per-sheet option
 #. * in the print dialog
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:5219
+#: modules/printbackends/cups/gtkprintbackendcups.c:5235
 msgid "Pages per Sheet"
 msgstr "Stránok na list"
 
 #. Translators, this is the label used for the option in the print
 #. * dialog that controls the front cover page.
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:5279
+#: modules/printbackends/cups/gtkprintbackendcups.c:5295
 msgid "Before"
 msgstr "Pred"
 
 #. Translators, this is the label used for the option in the print
 #. * dialog that controls the back cover page.
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:5294
+#: modules/printbackends/cups/gtkprintbackendcups.c:5310
 msgid "After"
 msgstr "Za"
 
@@ -5978,14 +5978,14 @@ msgstr "Za"
 #. * a print job is printed. Possible values are 'now', a specified time,
 #. * or 'on hold'
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:5314
+#: modules/printbackends/cups/gtkprintbackendcups.c:5330
 msgid "Print at"
 msgstr "Kedy tlačiť"
 
 #. Translators: this is the name of the option that allows the user
 #. * to specify a time when a print job will be printed.
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:5325
+#: modules/printbackends/cups/gtkprintbackendcups.c:5341
 msgid "Print at time"
 msgstr "Čas tlače"
 
@@ -5994,17 +5994,17 @@ msgstr "Čas tlače"
 #. * the width and height in points. E.g: "Custom
 #. * 230.4x142.9"
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:5367
+#: modules/printbackends/cups/gtkprintbackendcups.c:5383
 #, c-format
 msgid "Custom %s×%s"
 msgstr "Vlastná %s×%s"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:5468
+#: modules/printbackends/cups/gtkprintbackendcups.c:5484
 msgid "Printer Profile"
 msgstr "Profil tlačiarne"
 
 #. TRANSLATORS: this is when color profile information is unavailable
-#: modules/printbackends/cups/gtkprintbackendcups.c:5475
+#: modules/printbackends/cups/gtkprintbackendcups.c:5491
 msgid "Unavailable"
 msgstr "Nie je k dispozícii"
 
