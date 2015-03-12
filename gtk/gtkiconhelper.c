@@ -288,7 +288,7 @@ ensure_pixbuf_for_gicon (GtkIconHelper *self,
   if (self->priv->rendered_pixbuf)
     return;
 
-  icon_theme = gtk_icon_theme_get_default ();
+  icon_theme = gtk_icon_theme_get_for_screen (gtk_style_context_get_screen (context));
   flags = get_icon_lookup_flags (self, context);
 
   ensure_icon_size (self, context, &width, &height);
@@ -707,7 +707,7 @@ ensure_surface_for_gicon (GtkIconHelper   *self,
   if (!check_invalidate_surface (self, context))
     return;
 
-  icon_theme = gtk_icon_theme_get_default ();
+  icon_theme = gtk_icon_theme_get_for_screen (gtk_style_context_get_screen (context));
   flags = get_icon_lookup_flags (self, context);
 
   ensure_icon_size (self, context, &width, &height);
