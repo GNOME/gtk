@@ -586,6 +586,10 @@ gdk_wayland_display_set_cursor_theme (GdkDisplay  *display,
   g_assert (wayland_display);
   g_assert (wayland_display->shm);
 
+  if (g_strcmp0 (name, wayland_display->cursor_theme_name) == 0 &&
+      wayland_display->cursor_theme_size == size)
+    return;
+
   theme = wl_cursor_theme_load (name, size, wayland_display->shm);
   if (theme == NULL)
     {
