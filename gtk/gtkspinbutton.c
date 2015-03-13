@@ -263,11 +263,6 @@ static void gtk_spin_button_get_text_area_size (GtkEntry *entry,
                                                 gint     *y,
                                                 gint     *width,
                                                 gint     *height);
-static void gtk_spin_button_get_frame_size (GtkEntry *entry,
-                                            gint     *x,
-                                            gint     *y,
-                                            gint     *width,
-                                            gint     *height);
 static void gtk_spin_button_unset_adjustment (GtkSpinButton *spin_button);
 static void gtk_spin_button_set_orientation (GtkSpinButton     *spin_button,
                                              GtkOrientation     orientation);
@@ -335,7 +330,6 @@ gtk_spin_button_class_init (GtkSpinButtonClass *class)
 
   entry_class->activate = gtk_spin_button_activate;
   entry_class->get_text_area_size = gtk_spin_button_get_text_area_size;
-  entry_class->get_frame_size = gtk_spin_button_get_frame_size;
 
   class->input = NULL;
   class->output = NULL;
@@ -1856,32 +1850,6 @@ gtk_spin_button_activate (GtkEntry *entry)
 
   /* Chain up so that entry->activates_default is honored */
   GTK_ENTRY_CLASS (gtk_spin_button_parent_class)->activate (entry);
-}
-
-static void
-gtk_spin_button_get_frame_size (GtkEntry *entry,
-                                gint     *x,
-                                gint     *y,
-                                gint     *width,
-                                gint     *height)
-{
-  GtkSpinButtonPrivate *priv = GTK_SPIN_BUTTON (entry)->priv;
-  gint up_panel_width, up_panel_height;
-  gint down_panel_width, down_panel_height;
-
-  gtk_spin_button_panel_get_size (GTK_SPIN_BUTTON (entry), priv->up_panel, &up_panel_width, &up_panel_height);
-  gtk_spin_button_panel_get_size (GTK_SPIN_BUTTON (entry), priv->down_panel, &down_panel_width, &down_panel_height);
-
-  GTK_ENTRY_CLASS (gtk_spin_button_parent_class)->get_frame_size (entry, x, y, width, height);
-
-  if (priv->orientation == GTK_ORIENTATION_VERTICAL)
-    {
-      if (y)
-        *y += up_panel_height;
-
-      if (height)
-        *height -= up_panel_height + down_panel_height;
-    }
 }
 
 static void

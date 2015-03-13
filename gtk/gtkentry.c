@@ -3584,13 +3584,11 @@ gtk_entry_get_text_area_size (GtkEntry *entry,
 {
   GtkWidget *widget = GTK_WIDGET (entry);
   GtkAllocation allocation;
-  GtkRequisition requisition;
-  gint req_height;
+  gint req_height, unused;
   gint frame_height;
   GtkBorder borders;
 
-  gtk_widget_get_preferred_size (widget, &requisition, NULL);
-  req_height = requisition.height - gtk_widget_get_margin_top (widget) - gtk_widget_get_margin_bottom (widget);
+  gtk_entry_get_preferred_height_and_baseline_for_width (widget, -1, &req_height, &unused, NULL, NULL);
 
   gtk_widget_get_allocation (widget, &allocation);
   _gtk_entry_get_borders (entry, &borders);
@@ -3640,16 +3638,11 @@ gtk_entry_get_frame_size (GtkEntry *entry,
 {
   GtkEntryPrivate *priv = entry->priv;
   GtkAllocation allocation;
-  GtkRequisition requisition;
   GtkWidget *widget = GTK_WIDGET (entry);
-  gint area_height, y_pos;
   gint baseline;
-  gint req_height;
-  GtkBorder borders;
+  gint req_height, req_baseline, unused;
 
-  gtk_widget_get_preferred_size (widget, &requisition, NULL);
-
-  req_height = requisition.height - gtk_widget_get_margin_top (widget) - gtk_widget_get_margin_bottom (widget);
+  gtk_entry_get_preferred_height_and_baseline_for_width (widget, -1, &req_height, &unused, &req_baseline, &unused);
 
   gtk_widget_get_allocation (widget, &allocation);
   baseline = gtk_widget_get_allocated_baseline (widget);
@@ -3666,12 +3659,7 @@ gtk_entry_get_frame_size (GtkEntry *entry,
           if (baseline == -1)
             *y = (allocation.height - req_height) / 2;
           else
-            {
-              _gtk_entry_get_borders (entry, &borders);
-              area_height = req_height - borders.top - borders.bottom;
-              y_pos = ((area_height * PANGO_SCALE - priv->ascent - priv->descent) / 2 + priv->ascent) / PANGO_SCALE;
-              *y = baseline - y_pos - borders.top;
-            }
+            *y = baseline - req_baseline;
         }
 
       *y += allocation.y;
