@@ -173,7 +173,7 @@ _gdk_wayland_cursor_get_buffer (GdkCursor *cursor,
 
       return wl_cursor_image_get_buffer (image);
     }
-  else /* From surface */
+  else if (wayland_cursor->name == NULL) /* From surface */
     {
       *hotspot_x = wayland_cursor->surface.hotspot_x;
       *hotspot_y = wayland_cursor->surface.hotspot_y;
@@ -186,9 +186,9 @@ _gdk_wayland_cursor_get_buffer (GdkCursor *cursor,
 
       if (wayland_cursor->surface.cairo_surface)
         return _gdk_wayland_shm_surface_get_wl_buffer (wayland_cursor->surface.cairo_surface);
-      else
-        return NULL;
     }
+
+  return NULL;
 }
 
 guint
@@ -273,7 +273,6 @@ _gdk_wayland_display_get_cursor_for_name (GdkDisplay  *display,
                           "display", display,
                           NULL);
   private->name = g_strdup (name);
-  private->surface.scale = 1;
 
   /* Blank cursor case */
   if (!name || g_str_equal (name, "blank_cursor"))
