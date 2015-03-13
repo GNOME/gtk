@@ -37,8 +37,6 @@
 #include <string.h>
 #include <errno.h>
 
-#define WL_SURFACE_HAS_BUFFER_SCALE 3
-
 #define WINDOW_IS_TOPLEVEL_OR_FOREIGN(window) \
   (GDK_WINDOW_TYPE (window) != GDK_WINDOW_CHILD &&   \
    GDK_WINDOW_TYPE (window) != GDK_WINDOW_OFFSCREEN)
