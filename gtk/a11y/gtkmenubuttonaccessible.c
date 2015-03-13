@@ -18,6 +18,7 @@
 #include "config.h"
 
 #include <gtk/gtk.h>
+#include <glib/gi18n-lib.h>
 #include "gtkmenubuttonaccessible.h"
 
 
@@ -84,11 +85,29 @@ gtk_menu_button_accessible_ref_child (AtkObject *obj,
   return accessible;
 }
 
+static const gchar *
+gtk_menu_button_accessible_get_name (AtkObject *obj)
+{
+  const gchar *name = NULL;
+  GtkWidget *widget;
+
+  widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (obj));
+  if (widget == NULL)
+    return NULL;
+
+  name = ATK_OBJECT_CLASS (gtk_menu_button_accessible_parent_class)->get_name (obj);
+  if (name != NULL)
+    return name;
+
+  return _("Menu");
+}
+
 static void
 gtk_menu_button_accessible_class_init (GtkMenuButtonAccessibleClass *klass)
 {
   AtkObjectClass *class = ATK_OBJECT_CLASS (klass);
 
+  class->get_name = gtk_menu_button_accessible_get_name;
   class->initialize = gtk_menu_button_accessible_initialize;
   class->get_n_children = gtk_menu_button_accessible_get_n_children;
   class->ref_child = gtk_menu_button_accessible_ref_child;
