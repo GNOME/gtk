@@ -581,6 +581,7 @@ gdk_wayland_display_set_cursor_theme (GdkDisplay  *display,
 {
   GdkWaylandDisplay *wayland_display = GDK_WAYLAND_DISPLAY(display);
   struct wl_cursor_theme *theme;
+  int i;
 
   g_assert (wayland_display);
   g_assert (wayland_display->shm);
@@ -592,11 +593,49 @@ gdk_wayland_display_set_cursor_theme (GdkDisplay  *display,
       return;
     }
 
-  _gdk_wayland_display_update_cursors (wayland_display, theme);
+  for (i = 0; i < GDK_WAYLAND_THEME_SCALES_COUNT; i++)
+    {
+      if (wayland_display->scaled_cursor_themes[i])
+        {
+          wl_cursor_theme_destroy (wayland_display->scaled_cursor_themes[i]);
+          wayland_display->scaled_cursor_themes[i] = NULL;
+        }
+    }
+  wayland_display->scaled_cursor_themes[0] = theme;
+  if (wayland_display->cursor_theme_name != NULL)
+    free (wayland_display->cursor_theme_name);
+  wayland_display->cursor_theme_name = g_strdup (name);
+  wayland_display->cursor_theme_size = size;
 
-  if (wayland_display->cursor_theme != NULL)
-    wl_cursor_theme_destroy (wayland_display->cursor_theme);
-  wayland_display->cursor_theme = theme;
+  _gdk_wayland_display_update_cursors (wayland_display);
+}
+
+struct wl_cursor_theme *
+_gdk_wayland_display_get_scaled_cursor_theme (GdkWaylandDisplay *wayland_display,
+                                              guint              scale)
+{
+  struct wl_cursor_theme *theme;
+
+  g_assert (wayland_display->cursor_theme_name);
+  g_assert (scale <= GDK_WAYLAND_MAX_THEME_SCALE);
+  g_assert (scale >= 1);
+
+  theme = wayland_display->scaled_cursor_themes[scale - 1];
+  if (!theme)
+    {
+      theme = wl_cursor_theme_load (wayland_display->cursor_theme_name,
+                                    wayland_display->cursor_theme_size * scale,
+                                    wayland_display->shm);
+      if (theme == NULL)
+        {
+          g_warning ("Failed to load cursor theme %s with scale %u\n",
+                     wayland_display->cursor_theme_name, scale);
+          return NULL;
+        }
+      wayland_display->scaled_cursor_themes[scale - 1] = theme;
+    }
+
+  return theme;
 }
 
 static void

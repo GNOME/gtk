@@ -59,6 +59,7 @@ struct _GdkWaylandCursor
   } surface;
 
   struct wl_cursor *wl_cursor;
+  int scale;
 };
 
 struct _GdkWaylandCursorClass
@@ -83,11 +84,18 @@ _gdk_wayland_display_finalize_cursors (GdkWaylandDisplay *display)
 }
 
 static gboolean
-set_cursor_from_theme (GdkWaylandCursor       *cursor,
-                       struct wl_cursor_theme *theme)
+_gdk_wayland_cursor_update (GdkWaylandDisplay *wayland_display,
+                            GdkWaylandCursor  *cursor)
 {
   struct wl_cursor *c;
+  struct wl_cursor_theme *theme;
 
+  /* Do nothing if this is not a wl_cursor cursor. */
+  if (cursor->name == NULL)
+    return FALSE;
+
+  theme = _gdk_wayland_display_get_scaled_cursor_theme (wayland_display,
+                                                        cursor->scale);
   c = wl_cursor_theme_get_cursor (theme, cursor->name);
   if (!c)
     {
@@ -106,8 +114,7 @@ set_cursor_from_theme (GdkWaylandCursor       *cursor,
 }
 
 void
-_gdk_wayland_display_update_cursors (GdkWaylandDisplay      *display,
-                                     struct wl_cursor_theme *theme)
+_gdk_wayland_display_update_cursors (GdkWaylandDisplay *display)
 {
   GHashTableIter iter;
   const char *name;
@@ -116,7 +123,7 @@ _gdk_wayland_display_update_cursors (GdkWaylandDisplay      *display,
   g_hash_table_iter_init (&iter, display->cursor_cache);
 
   while (g_hash_table_iter_next (&iter, (gpointer *) &name, (gpointer *) &cursor))
-    set_cursor_from_theme (cursor, theme);
+    _gdk_wayland_cursor_update (display, cursor);
 }
 
 static void
@@ -169,7 +176,7 @@ _gdk_wayland_cursor_get_buffer (GdkCursor *cursor,
 
       *w = image->width;
       *h = image->height;
-      *scale = 1;
+      *scale = wayland_cursor->scale;
 
       return wl_cursor_image_get_buffer (image);
     }
@@ -217,6 +224,28 @@ _gdk_wayland_cursor_get_next_image_index (GdkCursor *cursor,
     return current_image_index;
 }
 
+void
+_gdk_wayland_cursor_set_scale (GdkCursor *cursor,
+                               guint      scale)
+{
+  GdkWaylandDisplay *wayland_display =
+    GDK_WAYLAND_DISPLAY (gdk_cursor_get_display (cursor));
+  GdkWaylandCursor *wayland_cursor = GDK_WAYLAND_CURSOR (cursor);
+
+  if (scale > GDK_WAYLAND_MAX_THEME_SCALE)
+    {
+      g_warning (G_STRLOC ": cursor theme size %u too large", scale);
+      scale = GDK_WAYLAND_MAX_THEME_SCALE;
+    }
+
+  if (wayland_cursor->scale == scale)
+    return;
+
+  wayland_cursor->scale = scale;
+
+  _gdk_wayland_cursor_update (wayland_display, wayland_cursor);
+}
+
 static void
 _gdk_wayland_cursor_class_init (GdkWaylandCursorClass *wayland_cursor_class)
 {
@@ -233,9 +262,15 @@ _gdk_wayland_cursor_init (GdkWaylandCursor *cursor)
 {
 }
 
+static GdkCursor *
+_gdk_wayland_display_get_cursor_for_name_with_scale (GdkDisplay  *display,
+                                                     const gchar *name,
+                                                     guint        scale);
+
 GdkCursor *
-_gdk_wayland_display_get_cursor_for_type (GdkDisplay    *display,
-					  GdkCursorType  cursor_type)
+_gdk_wayland_display_get_cursor_for_type_with_scale (GdkDisplay    *display,
+                                                     GdkCursorType  cursor_type,
+                                                     guint          scale)
 {
   GEnumClass *enum_class;
   GEnumValue *enum_value;
@@ -248,7 +283,9 @@ _gdk_wayland_display_get_cursor_for_type (GdkDisplay    *display,
   g_strdelimit (cursor_name, "-", '_');
   g_type_class_unref (enum_class);
 
-  result = _gdk_wayland_display_get_cursor_for_name (display, cursor_name);
+  result = _gdk_wayland_display_get_cursor_for_name_with_scale (display,
+                                                                cursor_name,
+                                                                scale);
 
   g_free (cursor_name);
 
@@ -256,8 +293,18 @@ _gdk_wayland_display_get_cursor_for_type (GdkDisplay    *display,
 }
 
 GdkCursor *
-_gdk_wayland_display_get_cursor_for_name (GdkDisplay  *display,
-					  const gchar *name)
+_gdk_wayland_display_get_cursor_for_type (GdkDisplay    *display,
+                                          GdkCursorType  cursor_type)
+{
+  return _gdk_wayland_display_get_cursor_for_type_with_scale (display,
+                                                              cursor_type,
+                                                              1);
+}
+
+static GdkCursor *
+_gdk_wayland_display_get_cursor_for_name_with_scale (GdkDisplay  *display,
+                                                     const gchar *name,
+                                                     guint        scale)
 {
   GdkWaylandCursor *private;
   GdkWaylandDisplay *wayland_display = GDK_WAYLAND_DISPLAY (display);
@@ -273,17 +320,25 @@ _gdk_wayland_display_get_cursor_for_name (GdkDisplay  *display,
                           "display", display,
                           NULL);
   private->name = g_strdup (name);
+  private->scale = scale;
 
   /* Blank cursor case */
   if (!name || g_str_equal (name, "blank_cursor"))
     return GDK_CURSOR (private);
 
-  if (!set_cursor_from_theme (private, wayland_display->cursor_theme))
+  if (!_gdk_wayland_cursor_update (wayland_display, private))
     return GDK_CURSOR (private);
 
   /* Insert into cache. */
   g_hash_table_insert (wayland_display->cursor_cache, private->name, g_object_ref (private));
   return GDK_CURSOR (private);
+}
+
+GdkCursor *
+_gdk_wayland_display_get_cursor_for_name (GdkDisplay  *display,
+                                          const gchar *name)
+{
+  return _gdk_wayland_display_get_cursor_for_name_with_scale (display, name, 1);
 }
 
 GdkCursor *

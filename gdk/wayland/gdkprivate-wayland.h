@@ -56,11 +56,16 @@ gboolean           _gdk_wayland_keymap_key_is_modifier (GdkKeymap *keymap,
 
 void       _gdk_wayland_display_init_cursors (GdkWaylandDisplay *display);
 void       _gdk_wayland_display_finalize_cursors (GdkWaylandDisplay *display);
-void       _gdk_wayland_display_update_cursors (GdkWaylandDisplay      *display,
-                                                struct wl_cursor_theme *theme);
+void       _gdk_wayland_display_update_cursors (GdkWaylandDisplay *display);
+
+struct wl_cursor_theme * _gdk_wayland_display_get_scaled_cursor_theme (GdkWaylandDisplay *wayland_display,
+                                                                       guint              scale);
 
 GdkCursor *_gdk_wayland_display_get_cursor_for_type (GdkDisplay    *display,
 						     GdkCursorType  cursor_type);
+GdkCursor *_gdk_wayland_display_get_cursor_for_type_with_scale (GdkDisplay    *display,
+                                                                GdkCursorType  cursor_type,
+                                                                guint          scale);
 GdkCursor *_gdk_wayland_display_get_cursor_for_name (GdkDisplay  *display,
 						     const gchar *name);
 GdkCursor *_gdk_wayland_display_get_cursor_for_surface (GdkDisplay *display,
@@ -86,6 +91,9 @@ struct wl_buffer *_gdk_wayland_cursor_get_buffer (GdkCursor *cursor,
 guint      _gdk_wayland_cursor_get_next_image_index (GdkCursor *cursor,
                                                      guint      current_image_index,
                                                      guint     *next_image_delay);
+
+void       _gdk_wayland_cursor_set_scale (GdkCursor *cursor,
+                                          guint      scale);
 
 GdkDragProtocol _gdk_wayland_window_get_drag_protocol (GdkWindow *window,
 						       GdkWindow **target);

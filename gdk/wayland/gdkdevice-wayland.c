@@ -93,6 +93,8 @@ struct _GdkWaylandDeviceData
   GdkDragContext *drop_context;
 
   struct wl_surface *pointer_surface;
+  guint current_output_scale;
+  GSList *pointer_surface_outputs;
 };
 
 struct _GdkWaylandDevice
@@ -253,7 +255,15 @@ gdk_wayland_device_set_window_cursor (GdkDevice *device,
    * the default cursor
    */
   if (!cursor)
-    cursor = _gdk_wayland_display_get_cursor_for_type (device->display, GDK_LEFT_PTR);
+    {
+      guint scale = wd->current_output_scale;
+      cursor =
+        _gdk_wayland_display_get_cursor_for_type_with_scale (wd->display,
+                                                             GDK_LEFT_PTR,
+                                                             scale);
+    }
+  else
+    _gdk_wayland_cursor_set_scale (cursor, wd->current_output_scale);
 
   if (cursor == wd->cursor)
     return;
@@ -1756,6 +1766,78 @@ init_devices (GdkWaylandDeviceData *device)
   _gdk_device_set_associated_device (device->master_keyboard, device->master_pointer);
 }
 
+static void
+pointer_surface_update_scale (GdkWaylandDeviceData *device)
+{
+  GdkWaylandDisplay *wayland_display = GDK_WAYLAND_DISPLAY (device->display);
+  guint32 scale;
+  GSList *l;
+
+  if (wayland_display->compositor_version < WL_SURFACE_HAS_BUFFER_SCALE)
+    {
+      /* We can't set the scale on this surface */
+      return;
+    }
+
+  scale = 1;
+  for (l = device->pointer_surface_outputs; l != NULL; l = l->next)
+    {
+      guint32 output_scale =
+        _gdk_wayland_screen_get_output_scale (wayland_display->screen,
+                                              l->data);
+      scale = MAX (scale, output_scale);
+    }
+
+  device->current_output_scale = scale;
+
+  if (device->grab_cursor)
+    _gdk_wayland_cursor_set_scale (device->grab_cursor, scale);
+  if (device->cursor)
+    _gdk_wayland_cursor_set_scale (device->cursor, scale);
+
+  gdk_wayland_device_update_window_cursor (device);
+}
+
+static void
+pointer_surface_enter (void              *data,
+                       struct wl_surface *wl_surface,
+                       struct wl_output  *output)
+
+{
+  GdkWaylandDeviceData *device = data;
+
+  GDK_NOTE (EVENTS,
+            g_message ("pointer surface of device %p entered output %p",
+                       device, output));
+
+  device->pointer_surface_outputs =
+    g_slist_append (device->pointer_surface_outputs, output);
+
+  pointer_surface_update_scale (device);
+}
+
+static void
+pointer_surface_leave (void              *data,
+                       struct wl_surface *wl_surface,
+                       struct wl_output  *output)
+{
+  GdkWaylandDeviceData *device = data;
+
+  GDK_NOTE (EVENTS,
+            g_message ("pointer surface of device %p left output %p",
+                       device, output));
+
+  device->pointer_surface_outputs =
+    g_slist_remove (device->pointer_surface_outputs, output);
+
+  pointer_surface_update_scale (device);
+}
+
+static const struct wl_surface_listener pointer_surface_listener = {
+  pointer_surface_enter,
+  pointer_surface_leave
+};
+
 void
 _gdk_wayland_device_manager_add_seat (GdkDeviceManager *device_manager,
                                       guint32           id,
@@ -1786,8 +1868,12 @@ _gdk_wayland_device_manager_add_seat (GdkDeviceManager *device_manager,
   wl_data_device_add_listener (device->data_device,
                                &data_device_listener, device);
 
+  device->current_output_scale = 1;
   device->pointer_surface =
     wl_compositor_create_surface (display_wayland->compositor);
+  wl_surface_add_listener (device->pointer_surface,
+                           &pointer_surface_listener,
+                           device);
 
   init_devices (device);
 }

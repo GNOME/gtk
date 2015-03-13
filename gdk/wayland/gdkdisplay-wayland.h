@@ -42,6 +42,9 @@
 
 G_BEGIN_DECLS
 
+#define GDK_WAYLAND_MAX_THEME_SCALE 2
+#define GDK_WAYLAND_THEME_SCALES_COUNT GDK_WAYLAND_MAX_THEME_SCALE
+
 typedef struct _GdkWaylandSelection GdkWaylandSelection;
 
 struct _GdkWaylandDisplay
@@ -69,7 +72,9 @@ struct _GdkWaylandDisplay
   struct wl_data_device_manager *data_device_manager;
   struct wl_subcompositor *subcompositor;
 
-  struct wl_cursor_theme *cursor_theme;
+  struct wl_cursor_theme *scaled_cursor_themes[GDK_WAYLAND_THEME_SCALES_COUNT];
+  gchar *cursor_theme_name;
+  int cursor_theme_size;
   GHashTable *cursor_cache;
 
   GSource *event_source;
