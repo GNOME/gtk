@@ -870,7 +870,6 @@ gdk_wayland_window_create_surface (GdkWindow *window)
   GdkWaylandDisplay *display_wayland = GDK_WAYLAND_DISPLAY (gdk_window_get_display (window));
 
   impl->surface = wl_compositor_create_surface (display_wayland->compositor);
-  wl_surface_set_user_data (impl->surface, window);
   wl_surface_add_listener (impl->surface, &surface_listener, window);
 
   gdk_wayland_window_sync_opaque_region (window);
