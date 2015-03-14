@@ -7138,7 +7138,7 @@ gtk_label_get_xalign (GtkLabel *label)
 /**
  * gtk_label_set_yalign:
  * @label: a #GtkLabel
- * @xalign: the new yalign value, between 0 and 1
+ * @yalign: the new yalign value, between 0 and 1
  *
  * Sets the #GtkLabel:yalign property for @label.
  *
