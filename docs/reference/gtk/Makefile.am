@@ -19,7 +19,9 @@ HFILE_GLOB=$(top_srcdir)/gtk/*.h
 CFILE_GLOB=$(top_srcdir)/gtk/*.c
 
 # Header files to ignore when scanning
-IGNORE_HFILES=				\
+IGNORE_HFILES = \
+	inspector			\
+	a11y				\
 	gtkaccelgroupprivate.h		\
 	gtkaccelmapprivate.h		\
 	gtkadjustmentprivate.h		\
@@ -165,6 +167,8 @@ IGNORE_HFILES=				\
 	gtkactionobservable.h		\
 	gtk9slice.h			\
 	gtkanimationdescription.h	\
+	gtkbitmaskprivateimpl.h		\
+	gtkbookmarksmanager.h		\
 	gtkdbusgenerated.c		\
 	gtkdbusgenerated.h		\
 	gtkdebug.h			\
@@ -179,15 +183,21 @@ IGNORE_HFILES=				\
 	gtkfilesystemmodel.h		\
 	gtkfilesystemunix.h		\
 	gtkfilesystemwin32.h		\
+	gtkfontchooserutils.h		\
 	gtkiconcache.h			\
         gtkiconcachevalidator.h         \
 	gtkiconthemeparser.h		\
 	gtkintl.h			\
 	gtkkeyhash.h			\
+	gtkkineticscrolling.h		\
 	gtkmarshal.h			\
 	gtkmnemonichash.h		\
+	gtkmenutracker.h		\
+	gtkmenutrackeritem.h		\
+	gtkmenusectionbox.h		\
 	gtkmodelmenu.h			\
 	gtkmodelmenuitem.h		\
+	gtkmodifierstyle.h		\
 	gtkpathbar.h			\
 	gtkprintbackend.h		\
 	gtkprinteroption.h		\
@@ -196,6 +206,7 @@ IGNORE_HFILES=				\
 	gtkprint-win32.h		\
 	gtkprintutils.h			\
 	gtkprivate.h			\
+	gtkprivatetypebuiltins.h	\
 	gtkquery.h			\
 	gtkrbtree.h			\
 	gtkrecentchooserdefault.h	\
@@ -215,8 +226,10 @@ IGNORE_HFILES=				\
 	gtktextutil.h			\
 	gtktimeline.h			\
 	gtkthemes.h			\
+	gtktrashmonitor.h		\
 	gtktrayicon.h			\
 	gtktreedatalist.h		\
+	gtktreemenu.h			\
 	gtktypebuiltins.h		\
 	gtkxembed.h			\
 	gtkwin32embed.h			\
