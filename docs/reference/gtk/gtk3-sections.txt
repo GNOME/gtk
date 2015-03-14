@@ -4375,6 +4375,7 @@ gtk_tree_model_row_inserted
 gtk_tree_model_row_has_child_toggled
 gtk_tree_model_row_deleted
 gtk_tree_model_rows_reordered
+gtk_tree_model_rows_reordered_with_length
 <SUBSECTION Standard>
 GTK_TREE_MODEL
 GTK_IS_TREE_MODEL
@@ -8244,6 +8245,7 @@ gtk_gl_area_new
 gtk_gl_area_get_context
 gtk_gl_area_make_current
 gtk_gl_area_queue_render
+gtk_gl_area_attach_buffers
 gtk_gl_area_set_error
 gtk_gl_area_get_error
 <SUBSECTION>
@@ -8255,6 +8257,8 @@ gtk_gl_area_set_has_stencil_buffer
 gtk_gl_area_get_has_stencil_buffer
 gtk_gl_area_set_auto_render
 gtk_gl_area_get_auto_render
+gtk_gl_area_get_required_version
+gtk_gl_area_set_required_version
 <SUBSECTION Standard>
 GTK_TYPE_GL_AREA
 GTK_GL_AREA
