@@ -20,6 +20,145 @@ CFILE_GLOB=$(top_srcdir)/gtk/*.c
 
 # Header files to ignore when scanning
 IGNORE_HFILES=				\
+	gtkaccelgroupprivate.h		\
+	gtkaccelmapprivate.h		\
+	gtkadjustmentprivate.h		\
+	gtkallocatedbitmaskprivate.h	\
+	gtkappchooserprivate.h		\
+	gtkapplicationprivate.h		\
+	gtkbindingsprivate.h		\
+	gtkbitmaskprivate.h		\
+	gtkboxprivate.h		        \
+	gtkbuilderprivate.h		\
+	gtkbuttonprivate.h		\
+	gtkcairoblurprivate.h		\
+	gtkcellareaboxcontextprivate.h	\
+	gtkclipboardprivate.h		\
+	gtkcolorchooserprivate.h	\
+	gtkcoloreditorprivate.h		\
+	gtkcolorplaneprivate.h		\
+	gtkcolorscaleprivate.h		\
+	gtkcolorswatchprivate.h		\
+	gtkcomboboxprivate.h		\
+	gtkcontainerprivate.h		\
+	gtkcssanimatedstyleprivate.h	\
+	gtkcssanimationprivate.h	\
+	gtkcssarrayvalueprivate.h	\
+	gtkcssbgsizevalueprivate.h	\
+	gtkcssbordervalueprivate.h	\
+	gtkcsscolorvalueprivate.h	\
+	gtkcsscornervalueprivate.h	\
+	gtkcsscustompropertyprivate.h	\
+	gtkcsseasevalueprivate.h	\
+	gtkcssenginevalueprivate.h	\
+	gtkcssenumvalueprivate.h	\
+	gtkcssiconthemevalueprivate.h	\
+	gtkcssimagebuiltinprivate.h	\
+	gtkcssimagecrossfadeprivate.h	\
+	gtkcssimagegradientprivate.h	\
+	gtkcssimageiconthemeprivate.h	\
+	gtkcssimagelinearprivate.h	\
+	gtkcssimageprivate.h		\
+	gtkcssimagescaledprivate.h	\
+	gtkcssimagesurfaceprivate.h	\
+	gtkcssimageurlprivate.h		\
+	gtkcssimagevalueprivate.h	\
+	gtkcssimagewin32private.h	\
+	gtkcssinheritvalueprivate.h	\
+	gtkcssinitialvalueprivate.h	\
+	gtkcsskeyframesprivate.h	\
+	gtkcsslookupprivate.h		\
+	gtkcssmatcherprivate.h		\
+	gtkcssnodedeclarationprivate.h	\
+	gtkcssnumbervalueprivate.h	\
+	gtkcssparserprivate.h		\
+	gtkcsspositionvalueprivate.h	\
+	gtkcssproviderprivate.h		\
+	gtkcssrepeatvalueprivate.h	\
+	gtkcssrgbavalueprivate.h	\
+	gtkcsssectionprivate.h		\
+	gtkcssselectorprivate.h		\
+	gtkcssshadowsvalueprivate.h	\
+	gtkcssshadowvalueprivate.h	\
+	gtkcssshorthandpropertyprivate.h\
+	gtkcssstaticstyleprivate.h	\
+	gtkcssstringvalueprivate.h	\
+	gtkcssstylefuncsprivate.h	\
+	gtkcssstyleprivate.h		\
+	gtkcssstylepropertyprivate.h	\
+	gtkcsstransformvalueprivate.h	\
+	gtkcsstransitionprivate.h	\
+	gtkcsstypedvalueprivate.h	\
+	gtkcsstypesprivate.h		\
+	gtkcssunsetvalueprivate.h	\
+	gtkcssvalueprivate.h		\
+	gtkdialogprivate.h		\
+	gtkentryprivate.h		\
+	gtkeventcontrollerprivate.h	\
+	gtkfilechooserprivate.h		\
+	gtkfontchooserprivate.h		\
+	gtkgesturedragprivate.h		\
+	gtkgesturelongpressprivate.h	\
+	gtkgesturemultipressprivate.h	\
+	gtkgesturepanprivate.h		\
+	gtkgestureprivate.h		\
+	gtkgesturerotateprivate.h	\
+	gtkgesturesingleprivate.h	\
+	gtkgestureswipeprivate.h	\
+	gtkgesturezoomprivate.h		\
+	gtkheaderbarprivate.h		\
+	gtkhslaprivate.h		\
+	gtkiconhelperprivate.h		\
+	gtkiconviewprivate.h		\
+	gtkimageprivate.h		\
+	gtkimmoduleprivate.h		\
+	gtklabelprivate.h		\
+	gtklockbuttonprivate.h		\
+	gtkmagnifierprivate.h		\
+	gtkmenubuttonprivate.h		\
+	gtkmenuitemprivate.h		\
+	gtkmenuprivate.h		\
+	gtkmenushellprivate.h		\
+	gtkmodulesprivate.h		\
+	gtkmountoperationprivate.h	\
+	gtkorientableprivate.h		\
+	gtkpixelcacheprivate.h		\
+	gtkpopoverprivate.h		\
+	gtkprinter-private.h		\
+	gtkprintoperation-private.h	\
+	gtkprivate.h		        \
+	gtkrangeprivate.h		\
+	gtkrecentchooserprivate.h	\
+	gtkrenderbackgroundprivate.h	\
+	gtkrenderborderprivate.h	\
+	gtkrendericonprivate.h		\
+	gtkrenderprivate.h		\
+	gtkroundedboxprivate.h		\
+	gtkscaleprivate.h		\
+	gtksearchentryprivate.h		\
+	gtkselectionprivate.h		\
+	gtksettingsprivate.h		\
+	gtksizegroup-private.h		\
+	gtksizerequestcacheprivate.h	\
+	gtksocketprivate.h		\
+	gtkstyleanimationprivate.h	\
+	gtkstylecascadeprivate.h	\
+	gtkstylecontextprivate.h	\
+	gtkstylepropertyprivate.h	\
+	gtkstyleproviderprivate.h	\
+	gtktextchildprivate.h		\
+	gtktexthandleprivate.h		\
+	gtktextiterprivate.h		\
+	gtktextmarkprivate.h		\
+	gtktexttagprivate.h		\
+	gtktogglebuttonprivate.h	\
+	gtktoolbarprivate.h		\
+	gtktoolpaletteprivate.h		\
+	gtktooltipprivate.h		\
+	gtktreeprivate.h		\
+	gtkwidgetprivate.h		\
+	gtkwin32themeprivate.h		\
+	gtkwindowprivate.h		\
 	fnmatch.h			\
 	gtkactionmuxer.h		\
 	gtkactionobserver.h		\
@@ -30,19 +169,10 @@ IGNORE_HFILES=				\
 	gtkdbusgenerated.h		\
 	gtkdebug.h			\
 	gtkactionhelper.h		\
-	gtkapplicationprivate.h		\
-	gtkbuilderprivate.h		\
-	gtkcolorchooserprivate.h	\
-	gtkcoloreditorprivate.h		\
-	gtkcolorplaneprivate.h		\
-	gtkcolorscaleprivate.h		\
-	gtkcolorswatchprivate.h		\
 	gtkdndcursors.h			\
-	gtkentryprivate.h		\
 	gtkfilechooserdefault.h		\
 	gtkfilechooserembed.h		\
 	gtkfilechooserentry.h		\
-	gtkfilechooserprivate.h		\
 	gtkfilechoosersettings.h	\
 	gtkfilechooserutils.h		\
 	gtkfilesystem.h			\
@@ -55,51 +185,38 @@ IGNORE_HFILES=				\
 	gtkintl.h			\
 	gtkkeyhash.h			\
 	gtkmarshal.h			\
-	gtkmenuprivate.h		\
 	gtkmnemonichash.h		\
 	gtkmodelmenu.h			\
 	gtkmodelmenuitem.h		\
 	gtkpathbar.h			\
-	gtkplugprivate.h		\
 	gtkprintbackend.h		\
 	gtkprinteroption.h		\
 	gtkprinteroptionset.h		\
 	gtkprinteroptionwidget.h	\
-	gtkprinter-private.h		\
 	gtkprint-win32.h		\
 	gtkprintutils.h			\
-	gtkprintoperation-private.h	\
 	gtkprivate.h			\
 	gtkquery.h			\
 	gtkrbtree.h			\
 	gtkrecentchooserdefault.h	\
 	gtkrecentchooserutils.h		\
-	gtkrecentchooserprivate.h	\
 	gtksearchengine.h		\
-	gtksearchenginebeagle.h		\
 	gtksearchenginetracker.h	\
 	gtksearchenginesimple.h		\
 	gtksearchenginequartz.h		\
 	gtksequence.h			\
 	gtksocketprivate.h		\
 	gtktextbtree.h			\
-	gtktextbufferserializ.h		\
-	gtktextchildprivate.h		\
+	gtktextbufferserialize.h	\
 	gtktextdisplay.h		\
-	gtktexthandleprivate.h		\
-	gtktextiterprivate.h		\
 	gtktextlayout.h			\
-	gtktextmarkprivate.h		\
 	gtktextsegment.h		\
-	gtktexttagprivate.h		\
 	gtktexttypes.h			\
 	gtktextutil.h			\
 	gtktimeline.h			\
 	gtkthemes.h			\
 	gtktrayicon.h			\
 	gtktreedatalist.h		\
-	gtktreeprivate.h		\
-	gtktoolpaletteprivate.h		\
 	gtktypebuiltins.h		\
 	gtkxembed.h			\
 	gtkwin32embed.h			\
