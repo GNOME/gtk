@@ -33,9 +33,9 @@ G_BEGIN_DECLS
 
 #define GTK_TYPE_STACK_SIDEBAR           (gtk_stack_sidebar_get_type ())
 #define GTK_STACK_SIDEBAR(obj)           (G_TYPE_CHECK_INSTANCE_CAST ((obj), GTK_TYPE_STACK_SIDEBAR, GtkStackSidebar))
-#define GTK_IS_SIDEBAR(obj)              (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GTK_TYPE_STACK_SIDEBAR))
+#define GTK_IS_STACK_SIDEBAR(obj)        (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GTK_TYPE_STACK_SIDEBAR))
 #define GTK_STACK_SIDEBAR_CLASS(klass)   (G_TYPE_CHECK_CLASS_CAST ((klass), GTK_TYPE_STACK_SIDEBAR, GtkStackSidebarClass))
-#define GTK_IS_SIDEBAR_CLASS(klass)      (G_TYPE_CHECK_CLASS_TYPE ((klass), GTK_TYPE_STACK_SIDEBAR))
+#define GTK_IS_STACK_SIDEBAR_CLASS(klass)(G_TYPE_CHECK_CLASS_TYPE ((klass), GTK_TYPE_STACK_SIDEBAR))
 #define GTK_STACK_SIDEBAR_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS ((obj), GTK_TYPE_STACK_SIDEBAR, GtkStackSidebarClass))
 
 typedef struct _GtkStackSidebar        GtkStackSidebar;
