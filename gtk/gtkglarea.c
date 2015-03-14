@@ -966,6 +966,8 @@ gtk_gl_area_get_error (GtkGLArea *area)
 /**
  * gtk_gl_area_set_required_version:
  * @area: a #GtkGLArea
+ * @major: the major version
+ * @minor: the minor version
  *
  * Sets the required version of OpenGL to be used when creating the context
  * for the widget.
@@ -976,8 +978,8 @@ gtk_gl_area_get_error (GtkGLArea *area)
  */
 void
 gtk_gl_area_set_required_version (GtkGLArea *area,
-                                  int        major,
-                                  int        minor)
+                                  gint       major,
+                                  gint       minor)
 {
   GtkGLAreaPrivate *priv = gtk_gl_area_get_instance_private (area);
 
@@ -1000,8 +1002,8 @@ gtk_gl_area_set_required_version (GtkGLArea *area,
  */
 void
 gtk_gl_area_get_required_version (GtkGLArea *area,
-                                  int       *major,
-                                  int       *minor)
+                                  gint      *major,
+                                  gint      *minor)
 {
   GtkGLAreaPrivate *priv = gtk_gl_area_get_instance_private (area);
 
