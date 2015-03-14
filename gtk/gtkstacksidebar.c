@@ -482,7 +482,7 @@ gtk_stack_sidebar_set_stack (GtkStackSidebar *sidebar,
 {
   GtkStackSidebarPrivate *priv;
 
-  g_return_if_fail (GTK_IS_SIDEBAR (sidebar));
+  g_return_if_fail (GTK_IS_STACK_SIDEBAR (sidebar));
   g_return_if_fail (GTK_IS_STACK (stack) || stack == NULL);
 
   priv = gtk_stack_sidebar_get_instance_private (sidebar);
@@ -525,7 +525,7 @@ gtk_stack_sidebar_get_stack (GtkStackSidebar *sidebar)
 {
   GtkStackSidebarPrivate *priv;
 
-  g_return_val_if_fail (GTK_IS_SIDEBAR (sidebar), NULL);
+  g_return_val_if_fail (GTK_IS_STACK_SIDEBAR (sidebar), NULL);
 
   priv = gtk_stack_sidebar_get_instance_private (sidebar);
 
