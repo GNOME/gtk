@@ -35,6 +35,8 @@
 #include "gtkpopover.h"
 #include "gtkintl.h"
 
+#define INDICATOR_MARGIN 24
+
 /**
  * SECTION:gtkmodelbutton
  * @Short_description: A button that uses a GAction as model
@@ -293,6 +295,7 @@ gtk_model_button_set_iconic (GtkModelButton *button,
       gtk_style_context_remove_class (context, GTK_STYLE_CLASS_MENUITEM);
       gtk_style_context_add_class (context, "image-button");
       gtk_button_set_relief (GTK_BUTTON (button), GTK_RELIEF_NORMAL);
+      g_object_set (G_OBJECT (button->box), "margin", 4, NULL);
     }
   else
     {
@@ -415,7 +418,7 @@ gtk_model_button_get_full_border (GtkModelButton *button,
   border_width = gtk_container_get_border_width (GTK_CONTAINER (button));
 
   gtk_icon_size_lookup (GTK_ICON_SIZE_MENU, &indicator_size, NULL);
-  indicator_spacing = indicator_size / 8;
+  indicator_spacing = indicator_size / 2;
 
   border->left = border_width;
   border->right = border_width;
@@ -425,7 +428,7 @@ gtk_model_button_get_full_border (GtkModelButton *button,
   if (button->iconic)
     *indicator = 0;
   else
-    *indicator = indicator_size + 2 * indicator_spacing;
+    *indicator = indicator_size + indicator_spacing;
 }
 
 static gboolean
@@ -634,7 +637,7 @@ indicator_is_left (GtkWidget *widget)
 
   return ((gtk_widget_get_direction (widget) == GTK_TEXT_DIR_RTL && !button->inverted) ||
           (gtk_widget_get_direction (widget) == GTK_TEXT_DIR_LTR && button->inverted));
-   
+
 }
 
 static void
@@ -660,7 +663,7 @@ gtk_model_button_size_allocate (GtkWidget     *widget,
     {
       GtkBorder border;
       gint indicator;
-          
+
       gtk_model_button_get_full_border (button, &border, &indicator);
 
       if (button->centered)
@@ -722,7 +725,7 @@ gtk_model_button_draw (GtkWidget *widget,
   gtk_icon_size_lookup (GTK_ICON_SIZE_MENU, &indicator_size, NULL);
   indicator_spacing = indicator_size / 8;
 
-  x = width - border_width - indicator_spacing - indicator_size;
+  x = width - border_width - INDICATOR_MARGIN - indicator_size;
 
   if (indicator_is_left (widget))
     x = width - (indicator_size + x);
@@ -777,7 +780,7 @@ gtk_model_button_draw (GtkWidget *widget,
   if (gtk_widget_has_visible_focus (widget))
     {
       GtkBorder border;
- 
+
       gtk_style_context_get_border (context, gtk_style_context_get_state (context), &border);
 
       gtk_render_focus (context, cr,
@@ -861,7 +864,7 @@ gtk_model_button_class_init (GtkModelButtonClass *class)
    *
    * Since: 3.16
    */
-  properties[PROP_ICON] = 
+  properties[PROP_ICON] =
     g_param_spec_object ("icon",
                          P_("Icon"),
                          P_("The icon"),
@@ -968,10 +971,10 @@ gtk_model_button_init (GtkModelButton *button)
 {
   gtk_button_set_relief (GTK_BUTTON (button), GTK_RELIEF_NONE);
   button->box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 6);
-  gtk_widget_set_margin_start (button->box, 12);
-  gtk_widget_set_margin_end (button->box, 12);
-  gtk_widget_set_margin_top (button->box, 3);
-  gtk_widget_set_margin_bottom (button->box, 3);
+  gtk_widget_set_margin_start (button->box, 24);
+  gtk_widget_set_margin_end (button->box, 24);
+  gtk_widget_set_margin_top (button->box, 4);
+  gtk_widget_set_margin_bottom (button->box, 4);
   gtk_widget_set_halign (button->box, GTK_ALIGN_FILL);
   gtk_widget_show (button->box);
   button->image = gtk_image_new ();
