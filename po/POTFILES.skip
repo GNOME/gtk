@@ -207,6 +207,8 @@ testsuite/reftests/style-context-save-inheritance.ref.ui
 testsuite/reftests/style-context-save-inheritance.ui
 testsuite/reftests/textview-margins.ref.ui
 testsuite/reftests/textview-margins.ui
+testsuite/reftests/textview-tags.ref.ui
+testsuite/reftests/textview-tags.ui
 testsuite/reftests/toplevel-vs-popup.ref.ui
 testsuite/reftests/toplevel-vs-popup.ui
 testsuite/reftests/treeview-crash-too-wide.ref.ui

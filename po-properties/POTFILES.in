@@ -30,6 +30,7 @@ gtk/a11y/gtkcomboboxaccessible.c
 gtk/a11y/gtkentryaccessible.c
 gtk/a11y/gtkexpanderaccessible.c
 gtk/a11y/gtkimageaccessible.c
+gtk/a11y/gtkmenubuttonaccessible.c
 gtk/a11y/gtkmenuitemaccessible.c
 gtk/a11y/gtkrenderercellaccessible.c
 gtk/a11y/gtkscalebuttonaccessible.c
