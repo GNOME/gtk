@@ -111,6 +111,7 @@ gtk_cell_renderer_pixbuf_init (GtkCellRendererPixbuf *cellpixbuf)
   priv->icon_helper = _gtk_icon_helper_new ();
   _gtk_icon_helper_set_force_scale_pixbuf (priv->icon_helper, TRUE);
   priv->icon_size = GTK_ICON_SIZE_MENU;
+  priv->follow_state = TRUE;
 }
 
 static void
@@ -237,6 +238,8 @@ gtk_cell_renderer_pixbuf_class_init (GtkCellRendererPixbufClass *class)
    * according to the #GtkCellRendererState.
    *
    * Since: 2.8
+   *
+   * Deprecated: 3.16: Cell renderers always follow state.
    */
   g_object_class_install_property (object_class,
 				   PROP_FOLLOW_STATE,
@@ -244,8 +247,8 @@ gtk_cell_renderer_pixbuf_class_init (GtkCellRendererPixbufClass *class)
  							 P_("Follow State"),
  							 P_("Whether the rendered pixbuf should be "
 							    "colorized according to the state"),
- 							 FALSE,
- 							 GTK_PARAM_READWRITE));
+ 							 TRUE,
+ 							 GTK_PARAM_READWRITE | G_PARAM_DEPRECATED));
 
   /**
    * GtkCellRendererPixbuf:gicon:
@@ -516,7 +519,6 @@ gtk_cell_renderer_pixbuf_render (GtkCellRenderer      *cell,
   GdkRectangle draw_rect;
   gboolean is_expander;
   gint xpad, ypad;
-  GtkStateFlags state;
   GtkIconHelper *icon_helper = NULL;
 
   gtk_cell_renderer_pixbuf_get_size (cell, widget, (GdkRectangle *) cell_area,
@@ -537,12 +539,6 @@ gtk_cell_renderer_pixbuf_render (GtkCellRenderer      *cell,
   context = gtk_widget_get_style_context (widget);
   gtk_style_context_save (context);
 
-  state = gtk_cell_renderer_get_state (cell, widget, flags);
-
-  if (!priv->follow_state)
-    state &= ~(GTK_STATE_FLAG_FOCUSED | GTK_STATE_FLAG_PRELIGHT | GTK_STATE_FLAG_SELECTED);
-
-  gtk_style_context_set_state (context, state);
   gtk_style_context_add_class (context, GTK_STYLE_CLASS_IMAGE);
 
   g_object_get (cell, "is-expander", &is_expander, NULL);
