@@ -36,8 +36,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-03-13 23:52+0100\n"
-"PO-Revision-Date: 2015-03-13 19:49+0100\n"
+"POT-Creation-Date: 2015-03-15 14:46+0100\n"
+"PO-Revision-Date: 2015-03-14 18:58+0100\n"
 "Last-Translator: Ask Hjorth Larsen <asklarsen@gmail.com>\n"
 "Language-Team: Dansk <dansk@dansk-gruppen.dk>\n"
 "Language: da\n"
@@ -2154,30 +2154,30 @@ msgstr "_Højre:"
 msgid "Paper Margins"
 msgstr "Papirmargener"
 
-#: ../gtk/gtkentry.c:9629 ../gtk/gtkentry.c:9782 ../gtk/gtklabel.c:6597
+#: ../gtk/gtkentry.c:9617 ../gtk/gtkentry.c:9770 ../gtk/gtklabel.c:6597
 #: ../gtk/gtktextview.c:9037 ../gtk/gtktextview.c:9225
 msgid "Cu_t"
 msgstr "K_lip"
 
-#: ../gtk/gtkentry.c:9633 ../gtk/gtkentry.c:9785 ../gtk/gtklabel.c:6598
+#: ../gtk/gtkentry.c:9621 ../gtk/gtkentry.c:9773 ../gtk/gtklabel.c:6598
 #: ../gtk/gtktextview.c:9041 ../gtk/gtktextview.c:9229
 msgid "_Copy"
 msgstr "_Kopiér"
 
-#: ../gtk/gtkentry.c:9637 ../gtk/gtkentry.c:9788 ../gtk/gtklabel.c:6599
+#: ../gtk/gtkentry.c:9625 ../gtk/gtkentry.c:9776 ../gtk/gtklabel.c:6599
 #: ../gtk/gtktextview.c:9043 ../gtk/gtktextview.c:9231
 msgid "_Paste"
 msgstr "_Indsæt"
 
-#: ../gtk/gtkentry.c:9640 ../gtk/gtklabel.c:6601 ../gtk/gtktextview.c:9046
+#: ../gtk/gtkentry.c:9628 ../gtk/gtklabel.c:6601 ../gtk/gtktextview.c:9046
 msgid "_Delete"
 msgstr "_Slet"
 
-#: ../gtk/gtkentry.c:9651 ../gtk/gtklabel.c:6610 ../gtk/gtktextview.c:9060
+#: ../gtk/gtkentry.c:9639 ../gtk/gtklabel.c:6610 ../gtk/gtktextview.c:9060
 msgid "Select _All"
 msgstr "Markér _alt"
 
-#: ../gtk/gtkentry.c:10849
+#: ../gtk/gtkentry.c:10837
 msgid "Caps Lock is on"
 msgstr "Caps Lock er slået til"
 
@@ -5305,17 +5305,6 @@ msgstr "test-uddata.%s"
 msgid "Print to Test Printer"
 msgstr "Udskriv til testprinter"
 
-#~ msgid "The license of the program"
-#~ msgstr "Vis licensen for programmet"
-
-#~ msgctxt "progress bar label"
-#~ msgid "%d %%"
-#~ msgstr "%d %%"
-
-#~ msgctxt "volume percentage"
-#~ msgid "%d %%"
-#~ msgstr "%d %%"
-
 #~ msgid "Prefix"
 #~ msgstr "Præfiks"
 
@@ -5327,9 +5316,6 @@ msgstr "Udskriv til testprinter"
 
 #~ msgid "Parameter Type"
 #~ msgstr "Parametertype"
-
-#~ msgid "Choose a widget through the inspector"
-#~ msgstr "Vælg en kontrol gennem inspektøren"
 
 #~ msgid "Add a class"
 #~ msgstr "Tilføj en klasse"
@@ -5352,11 +5338,32 @@ msgstr "Udskriv til testprinter"
 #~ msgid "GDK Backend"
 #~ msgstr "GDK-motor"
 
+#~ msgid "X display"
+#~ msgstr "X-skærm"
+
+#~ msgid "RGBA visual"
+#~ msgstr "RGBA visuel"
+
+#~ msgid "Composited"
+#~ msgstr "Sammensat"
+
+#~ msgid "GL Version"
+#~ msgstr "GL-version"
+
+#~ msgid "GL Vendor"
+#~ msgstr "GL-forhandler"
+
 #~ msgid "Label"
 #~ msgstr "Etiket"
 
 #~ msgid "Icon"
 #~ msgstr "Ikon"
+
+#~ msgid "Address"
+#~ msgstr "Adresse"
+
+#~ msgid "Reference count"
+#~ msgstr "Referencetal"
 
 # ?
 #~ msgid "Buildable ID"
@@ -5368,11 +5375,48 @@ msgstr "Udskriv til testprinter"
 #~ msgid "Focus Widget"
 #~ msgstr "Giv fokus til kontrol"
 
+#~ msgid "Mnemonic Label"
+#~ msgstr "Huskevenlig etiket"
+
 #~ msgid "Allocated size"
 #~ msgstr "Allokeret størrelse"
 
+#~ msgid "Clip area"
+#~ msgstr "Klippeområde"
+
+#~ msgid "Tick callback"
+#~ msgstr "Tilbagekald for tik"
+
+#~ msgid "Frame count"
+#~ msgstr "Antal billeder"
+
+#~ msgid "Frame rate"
+#~ msgstr "Billedrate"
+
+#~ msgid "Accessible role"
+#~ msgstr "Tilgængelig rolle"
+
+# ??
+#~ msgid "Mapped"
+#~ msgstr "Optegnet"
+
+#~ msgid "Realized"
+#~ msgstr "Realiseret"
+
+#~ msgid "Is Toplevel"
+#~ msgstr "Er topniveau"
+
+#~ msgid "Child Visible"
+#~ msgstr "Underelement synligt"
+
 #~ msgid "Object Hierarchy"
 #~ msgstr "Objekthierarki"
+
+#~ msgid "Object"
+#~ msgstr "Objekt"
+
+#~ msgid "Style Classes"
+#~ msgstr "Stilklasser"
 
 #~ msgid "Property"
 #~ msgstr "Egenskab"
@@ -5391,14 +5435,24 @@ msgstr "Udskriv til testprinter"
 #~ msgid "Path"
 #~ msgstr "Sti"
 
+# ??? antal signaler, gætter jeg på.
+#~ msgid "Count"
+#~ msgstr "Antal"
+
+#~ msgid "Size"
+#~ msgstr "Størrelse"
+
+#~ msgid "Name:"
+#~ msgstr "Navn:"
+
 #~ msgid "Type:"
 #~ msgstr "Type:"
 
-#~ msgid "Count:"
-#~ msgstr "Antal:"
-
 #~ msgid "Size:"
 #~ msgstr "Størrelse:"
+
+#~ msgid "Selector"
+#~ msgstr "Vælger"
 
 #~ msgid "Trace signal emissions on this object"
 #~ msgstr "Følg signaludsendelser for dette objekt"
@@ -5409,12 +5463,41 @@ msgstr "Udskriv til testprinter"
 #~ msgid "Connected"
 #~ msgstr "Tilsluttet"
 
-# ??? antal signaler, gætter jeg på.
-#~ msgid "Count"
-#~ msgstr "Antal"
+#~ msgid "Type"
+#~ msgstr "Type"
 
-#~ msgid "Dark variant"
+#~ msgid "Self 1"
+#~ msgstr "Selv 1"
+
+#~ msgid "Cumulative 1"
+#~ msgstr "Kumulativ 1"
+
+#~ msgid "Self 2"
+#~ msgstr "Selv 2"
+
+#~ msgid "Cumulative 2"
+#~ msgstr "Kumulativ 2"
+
+#~ msgid "Self"
+#~ msgstr "Selv"
+
+#~ msgid "Cumulative"
+#~ msgstr "Kumulativ"
+
+#~ msgid "Enable statistics with GOBJECT_DEBUG=instance-count"
+#~ msgstr "Aktivér statistik med GOBJECT_DEBUG=instance-count"
+
+#~ msgid "GTK+ Theme"
+#~ msgstr "GTK+-tema"
+
+#~ msgid "Dark Variant"
 #~ msgstr "Mørk variant"
+
+#~ msgid "Cursor Theme"
+#~ msgstr "Markørtema"
+
+#~ msgid "Cursor Size"
+#~ msgstr "Markørstørrelse"
 
 #~ msgid "Icon Theme"
 #~ msgstr "Ikontema"
@@ -5437,6 +5520,19 @@ msgstr "Udskriv til testprinter"
 #~ msgid "Animations"
 #~ msgstr "Animationer"
 
+#~ msgid "Rendering Mode"
+#~ msgstr "Optegningstilstand"
+
+#~ msgid "Similar"
+#~ msgstr "Lignende"
+
+#~ msgid "Image"
+#~ msgstr "Billede"
+
+# "a recording" eller "is recording".  Begge burde være o.k. med "optagelse"
+#~ msgid "Recording"
+#~ msgstr "Optagelse"
+
 #~ msgid "Show Graphic Updates"
 #~ msgstr "Vis grafiske opdateringer"
 
@@ -5449,38 +5545,56 @@ msgstr "Udskriv til testprinter"
 #~ msgid "Simulate touchscreen"
 #~ msgstr "Simulér berøringsfølsom skærm"
 
-#~ msgid "Object"
-#~ msgstr "Objekt"
+#~ msgid "GL Rendering"
+#~ msgstr "GL-optegning"
 
-#~ msgid "Address"
-#~ msgstr "Adresse"
+#~ msgid "When needed"
+#~ msgstr "Når nødvendigt"
 
-#~ msgid "GTK+ Inspector — %s"
-#~ msgstr "GTK+-inspektør — %s"
+#~ msgid "Always"
+#~ msgstr "Altid"
 
-#~ msgid "Send Widget to Shell"
-#~ msgstr "Send kontrol til skal"
+#~ msgid "Disabled"
+#~ msgstr "Slået fra"
+
+#~ msgid "Software GL"
+#~ msgstr "Software-GL"
+
+#~ msgid "Software Surfaces"
+#~ msgstr "Softwareoverflader"
+
+#~ msgid "Texture Rectangle Extension"
+#~ msgstr "Udvidelse til teksturrektangler"
 
 #~ msgid "Select an Object"
 #~ msgstr "Vælg et objekt"
 
+#~ msgid "Show Details"
+#~ msgstr "Vis detaljer"
+
+#~ msgid "Show all Objects"
+#~ msgstr "Vis alle objekter"
+
+#~ msgid "Collect Statistics"
+#~ msgstr "Indsaml statistik"
+
+#~ msgid "Show all Resources"
+#~ msgstr "Vis alle ressourcer"
+
 #~ msgid "Signals"
 #~ msgstr "Signaler"
-
-#~ msgid "Hierarchy"
-#~ msgstr "Hierarki"
 
 #~ msgid "Child Properties"
 #~ msgstr "Egenskaber for underelementer"
 
-#~ msgid "CSS Classes"
-#~ msgstr "CSS-klasser"
+#~ msgid "Hierarchy"
+#~ msgstr "Hierarki"
 
 #~ msgid "Style Properties"
 #~ msgstr "Stilegenskaber"
 
-#~ msgid "Custom CSS"
-#~ msgstr "Brugertilpasset CSS"
+#~ msgid "CSS"
+#~ msgstr "CSS"
 
 # ?
 #~ msgid "Size Groups"
@@ -5495,8 +5609,14 @@ msgstr "Udskriv til testprinter"
 #~ msgid "Gestures"
 #~ msgstr "Gestusser"
 
+#~ msgid "Magnifier"
+#~ msgstr "Forstørrelsesglas"
+
 #~ msgid "Objects"
 #~ msgstr "Objekter"
+
+#~ msgid "Statistics"
+#~ msgstr "Statistik"
 
 #~ msgid "Resources"
 #~ msgstr "Ressourcer"
@@ -5506,6 +5626,333 @@ msgstr "Udskriv til testprinter"
 
 #~ msgid "General"
 #~ msgstr "Generelt"
+
+#~ msgid "About"
+#~ msgstr "Om"
+
+#~ msgid "Credits"
+#~ msgstr "Bidragydere"
+
+#~ msgid "_View All Applications"
+#~ msgstr "_Vis alle programmer"
+
+#~ msgid "_Find New Applications"
+#~ msgstr "_Find nye programmer"
+
+#~ msgid "No applications found."
+#~ msgstr "Ingen programmer fundet."
+
+#~ msgid "Preferences"
+#~ msgstr "Indstillinger"
+
+#~ msgid "Services"
+#~ msgstr "Tjenester"
+
+#~ msgid "Hide %s"
+#~ msgstr "Skjul %s"
+
+#~ msgid "Hide Others"
+#~ msgstr "Skjul andre"
+
+#~ msgid "Show All"
+#~ msgstr "Vis alle"
+
+#~ msgid "Quit %s"
+#~ msgstr "Afslut %s"
+
+#~ msgid "_Next"
+#~ msgstr "_Næste"
+
+#~ msgid "_Back"
+#~ msgstr "_Forrige"
+
+#~ msgid "_Finish"
+#~ msgstr "_Færdig"
+
+#~ msgid "Select a Color"
+#~ msgstr "Vælg en farve"
+
+#~ msgid "Color Name"
+#~ msgstr "Farvenavn"
+
+#~ msgctxt "Color channel"
+#~ msgid "A"
+#~ msgstr "A"
+
+#~ msgid "Alpha"
+#~ msgstr "Alfa"
+
+#~ msgctxt "Color channel"
+#~ msgid "H"
+#~ msgstr "F"
+
+#~ msgid "Hue"
+#~ msgstr "Farvetone"
+
+# mætning
+#~ msgctxt "Color Channel"
+#~ msgid "S"
+#~ msgstr "M"
+
+# værdi
+#~ msgctxt "Color Channel"
+#~ msgid "V"
+#~ msgstr "V"
+
+#~ msgid "Saturation"
+#~ msgstr "Mætning"
+
+#~ msgid "Create Folder"
+#~ msgstr "Opret mappe"
+
+#~ msgid "All Files"
+#~ msgstr "Alle filer"
+
+#~ msgid "Files"
+#~ msgstr "Filer"
+
+#~ msgid "Modified"
+#~ msgstr "Ændret"
+
+#~ msgid "Select which types of files are shown"
+#~ msgstr "Vælg hvilke typer filer der vises"
+
+#~ msgid "Select Font"
+#~ msgstr "Vælg skrifttype"
+
+#~ msgid "Search font name"
+#~ msgstr "Søg skrifttypenavn"
+
+#~ msgid "Font Family"
+#~ msgstr "Skrifttypefamilie"
+
+#~ msgid ""
+#~ "No fonts matched your search. You can revise your search and try again."
+#~ msgstr ""
+#~ "Ingen skrifttyper passer på din søgning. Du kan revidere din søgning og "
+#~ "prøve igen."
+
+#~ msgid "_Format for:"
+#~ msgstr "_Formatér til:"
+
+#~ msgid "_Paper size:"
+#~ msgstr "_Papirstørrelse:"
+
+#~ msgid "_Orientation:"
+#~ msgstr "_Orientering:"
+
+#~ msgid "Portrait"
+#~ msgstr "Portræt"
+
+#~ msgid "Reverse portrait"
+#~ msgstr "Omvendt portræt"
+
+#~ msgid "Landscape"
+#~ msgstr "Landskab"
+
+#~ msgid "Reverse landscape"
+#~ msgstr "Omvendt landskab"
+
+#~ msgid "Down Path"
+#~ msgstr "Ned ad stien"
+
+# Det er nok når man navigerer og kan se knapper i f.eks. nautilus eller file choosers med f.eks [home] [user] [work], og kan navigere "op og ned"
+#~ msgid "Up Path"
+#~ msgstr "Op ad stien"
+
+#~ msgid "Printer"
+#~ msgstr "Printer"
+
+#~ msgid "Status"
+#~ msgstr "Status"
+
+#~ msgid "Range"
+#~ msgstr "Interval"
+
+#~ msgid "_All Pages"
+#~ msgstr "_Alle sider"
+
+#~ msgid "C_urrent Page"
+#~ msgstr "N_uværende side"
+
+#~ msgid "Se_lection"
+#~ msgstr "_Valg"
+
+#~ msgid "Pag_es:"
+#~ msgstr "Sid_er:"
+
+#~ msgid ""
+#~ "Specify one or more page ranges,\n"
+#~ " e.g. 1–3, 7, 11"
+#~ msgstr ""
+#~ "Angiv et eller flere sideintervaller,\n"
+#~ " f.eks. 1–3, 7, 11"
+
+#~ msgid "Pages"
+#~ msgstr "Sider"
+
+#~ msgid "Copies"
+#~ msgstr "Kopier"
+
+#~ msgid "Copie_s:"
+#~ msgstr "Kopi_er:"
+
+#~ msgid "C_ollate"
+#~ msgstr "_Saml"
+
+#~ msgid "_Reverse"
+#~ msgstr "_Omvendt"
+
+#~ msgid "Layout"
+#~ msgstr "Layout"
+
+#~ msgid "T_wo-sided:"
+#~ msgstr "Do_bbeltsidet:"
+
+#~ msgid "Pages per _side:"
+#~ msgstr "Sider pr. _ark:"
+
+#~ msgid "Page or_dering:"
+#~ msgstr "Sideor_den:"
+
+#~ msgid "_Only print:"
+#~ msgstr "Udskriv _kun:"
+
+#~ msgid "All sheets"
+#~ msgstr "Alle ark"
+
+#~ msgid "Even sheets"
+#~ msgstr "Lige ark"
+
+#~ msgid "Odd sheets"
+#~ msgstr "Ulige ark"
+
+#~ msgid "Sc_ale:"
+#~ msgstr "Sk_ala:"
+
+#~ msgid "Paper"
+#~ msgstr "Papir"
+
+#~ msgid "Paper _type:"
+#~ msgstr "Papir_type:"
+
+#~ msgid "Paper _source:"
+#~ msgstr "Papir_kilde:"
+
+#~ msgid "Output t_ray:"
+#~ msgstr "Udskrifts_bakke:"
+
+#~ msgid "Or_ientation:"
+#~ msgstr "_Orientering:"
+
+#~ msgid "Job Details"
+#~ msgstr "Opgavedetaljer"
+
+#~ msgid "Pri_ority:"
+#~ msgstr "Pri_oritet:"
+
+#~ msgid "_Billing info:"
+#~ msgstr "_Betalingsinformation:"
+
+#~ msgid "Print Document"
+#~ msgstr "Udskriv dokument"
+
+#~ msgid "_Now"
+#~ msgstr "_Nu"
+
+#~ msgid "A_t:"
+#~ msgstr "P_å:"
+
+#~ msgid ""
+#~ "Specify the time of print,\n"
+#~ " e.g. 15∶30, 2∶35 pm, 14∶15∶20, 11∶46∶30 am, 4 pm"
+#~ msgstr ""
+#~ "Angiv udskriftstidspunkt,\n"
+#~ " f.eks. 15:30, 14:15:20"
+
+#~ msgid "Time of print"
+#~ msgstr "Udskriftstidspunkt"
+
+#~ msgid "On _hold"
+#~ msgstr "_Venter"
+
+# ???
+#~ msgid "Hold the job until it is explicitly released"
+#~ msgstr "Lad jobbet vente indtil det eksplicit frigøres"
+
+#~ msgid "Add Cover Page"
+#~ msgstr "Tilføj forside"
+
+#~ msgid "Be_fore:"
+#~ msgstr "F_ør:"
+
+#~ msgid "_After:"
+#~ msgstr "_Efter:"
+
+#~ msgid "Job"
+#~ msgstr "Opgave"
+
+#~ msgid "Image Quality"
+#~ msgstr "Billedkvalitet"
+
+#~ msgid "Color"
+#~ msgstr "Farve"
+
+#~ msgid "Finishing"
+#~ msgstr "Færdiggør"
+
+#~ msgid "Advanced"
+#~ msgstr "Avanceret"
+
+#~ msgid "Some of the settings in the dialog conflict"
+#~ msgstr "Nogle af dialogvinduets indstillinger er i modstrid"
+
+#~ msgid "Select which type of documents are shown"
+#~ msgstr "Vælg hvilken type dokumenter der skal vises"
+
+#~ msgid "Volume"
+#~ msgstr "Lydstyrke"
+
+#~ msgid "Turns volume up or down"
+#~ msgstr "Skruer lydstyrken op eller ned"
+
+#~ msgid "Volume Up"
+#~ msgstr "Lydstyrke op"
+
+#~ msgid "Increases the volume"
+#~ msgstr "Forøger lydstyrken"
+
+#~ msgid "Volume Down"
+#~ msgstr "Lydstyrke ned"
+
+#~ msgid "Decreases the volume"
+#~ msgstr "Reducerer lydstyrken"
+
+#~ msgid "The license of the program"
+#~ msgstr "Vis licensen for programmet"
+
+#~ msgctxt "progress bar label"
+#~ msgid "%d %%"
+#~ msgstr "%d %%"
+
+#~ msgctxt "volume percentage"
+#~ msgid "%d %%"
+#~ msgstr "%d %%"
+
+#~ msgid "Choose a widget through the inspector"
+#~ msgstr "Vælg en kontrol gennem inspektøren"
+
+#~ msgid "Count:"
+#~ msgstr "Antal:"
+
+#~ msgid "GTK+ Inspector — %s"
+#~ msgstr "GTK+-inspektør — %s"
+
+#~ msgid "Send Widget to Shell"
+#~ msgstr "Send kontrol til skal"
+
+#~ msgid "Custom CSS"
+#~ msgstr "Brugertilpasset CSS"
 
 #~ msgctxt "paper size"
 #~ msgid "A0x2"
@@ -5615,309 +6062,8 @@ msgstr "Udskriv til testprinter"
 #~ msgid "5x7"
 #~ msgstr "5x7"
 
-#~ msgid "About"
-#~ msgstr "Om"
-
-#~ msgid "Credits"
-#~ msgstr "Bidragydere"
-
-#~ msgid "_View All Applications"
-#~ msgstr "_Vis alle programmer"
-
-#~ msgid "_Find New Applications"
-#~ msgstr "_Find nye programmer"
-
-#~ msgid "No applications found."
-#~ msgstr "Ingen programmer fundet."
-
-#~ msgid "Preferences"
-#~ msgstr "Indstillinger"
-
-#~ msgid "Services"
-#~ msgstr "Tjenester"
-
-#~ msgid "Hide %s"
-#~ msgstr "Skjul %s"
-
-#~ msgid "Hide Others"
-#~ msgstr "Skjul andre"
-
-#~ msgid "Show All"
-#~ msgstr "Vis alle"
-
-#~ msgid "Quit %s"
-#~ msgstr "Afslut %s"
-
-#~ msgid "_Next"
-#~ msgstr "_Næste"
-
-#~ msgid "_Back"
-#~ msgstr "_Forrige"
-
-#~ msgid "_Finish"
-#~ msgstr "_Færdig"
-
-#~ msgid "Select a Color"
-#~ msgstr "Vælg en farve"
-
-#~ msgid "Color Name"
-#~ msgstr "Farvenavn"
-
-#~ msgctxt "Color channel"
-#~ msgid "A"
-#~ msgstr "A"
-
-#~ msgid "Alpha"
-#~ msgstr "Alfa"
-
-#~ msgctxt "Color channel"
-#~ msgid "H"
-#~ msgstr "F"
-
-#~ msgid "Hue"
-#~ msgstr "Farvetone"
-
-# mætning
-#~ msgctxt "Color Channel"
-#~ msgid "S"
-#~ msgstr "M"
-
-# værdi
-#~ msgctxt "Color Channel"
-#~ msgid "V"
-#~ msgstr "V"
-
-#~ msgid "Saturation"
-#~ msgstr "Mætning"
-
-#~ msgid "Create Fo_lder"
-#~ msgstr "Opret _mappe"
-
 #~ msgid "_Location:"
 #~ msgstr "_Sted:"
-
-#~ msgid "Files"
-#~ msgstr "Filer"
-
-#~ msgid "Size"
-#~ msgstr "Størrelse"
-
-#~ msgid "Modified"
-#~ msgstr "Ændret"
-
-#~ msgid "Select which types of files are shown"
-#~ msgstr "Vælg hvilke typer filer der vises"
-
-#~ msgid "Select Font"
-#~ msgstr "Vælg skrifttype"
-
-#~ msgid "Search font name"
-#~ msgstr "Søg skrifttypenavn"
-
-#~ msgid "Font Family"
-#~ msgstr "Skrifttypefamilie"
-
-#~ msgid ""
-#~ "No fonts matched your search. You can revise your search and try again."
-#~ msgstr ""
-#~ "Ingen skrifttyper passer på din søgning. Du kan revidere din søgning og "
-#~ "prøve igen."
-
-#~ msgid "_Format for:"
-#~ msgstr "_Formatér til:"
-
-#~ msgid "_Paper size:"
-#~ msgstr "_Papirstørrelse:"
-
-#~ msgid "_Orientation:"
-#~ msgstr "_Orientering:"
-
-#~ msgid "Portrait"
-#~ msgstr "Portræt"
-
-#~ msgid "Reverse portrait"
-#~ msgstr "Omvendt portræt"
-
-#~ msgid "Landscape"
-#~ msgstr "Landskab"
-
-#~ msgid "Reverse landscape"
-#~ msgstr "Omvendt landskab"
-
-#~ msgid "Down Path"
-#~ msgstr "Ned ad stien"
-
-# Det er nok når man navigerer og kan se knapper i f.eks. nautilus eller file choosers med f.eks [home] [user] [work], og kan navigere "op og ned"
-#~ msgid "Up Path"
-#~ msgstr "Op ad stien"
-
-#~ msgid "Printer"
-#~ msgstr "Printer"
-
-#~ msgid "Status"
-#~ msgstr "Status"
-
-#~ msgid "Range"
-#~ msgstr "Interval"
-
-#~ msgid "_All Pages"
-#~ msgstr "_Alle sider"
-
-#~ msgid "C_urrent Page"
-#~ msgstr "N_uværende side"
-
-#~ msgid "Se_lection"
-#~ msgstr "_Valg"
-
-#~ msgid "Pag_es:"
-#~ msgstr "Sid_er:"
-
-#~ msgid ""
-#~ "Specify one or more page ranges,\n"
-#~ " e.g. 1-3,7,11"
-#~ msgstr ""
-#~ "Angiv et eller flere intervaller,\n"
-#~ " f.eks. 1-3,7,11"
-
-#~ msgid "Pages"
-#~ msgstr "Sider"
-
-#~ msgid "Copies"
-#~ msgstr "Kopier"
-
-#~ msgid "Copie_s:"
-#~ msgstr "Kopi_er:"
-
-#~ msgid "C_ollate"
-#~ msgstr "_Saml"
-
-#~ msgid "_Reverse"
-#~ msgstr "_Omvendt"
-
-#~ msgid "Layout"
-#~ msgstr "Layout"
-
-#~ msgid "T_wo-sided:"
-#~ msgstr "Do_bbeltsidet:"
-
-#~ msgid "Pages per _side:"
-#~ msgstr "Sider pr. _ark:"
-
-#~ msgid "Page or_dering:"
-#~ msgstr "Sideor_den:"
-
-#~ msgid "_Only print:"
-#~ msgstr "Udskriv _kun:"
-
-#~ msgid "All sheets"
-#~ msgstr "Alle ark"
-
-#~ msgid "Even sheets"
-#~ msgstr "Lige ark"
-
-#~ msgid "Odd sheets"
-#~ msgstr "Ulige ark"
-
-#~ msgid "Sc_ale:"
-#~ msgstr "Sk_ala:"
-
-#~ msgid "Paper"
-#~ msgstr "Papir"
-
-#~ msgid "Paper _type:"
-#~ msgstr "Papir_type:"
-
-#~ msgid "Paper _source:"
-#~ msgstr "Papir_kilde:"
-
-#~ msgid "Output t_ray:"
-#~ msgstr "Udskrifts_bakke:"
-
-#~ msgid "Or_ientation:"
-#~ msgstr "_Orientering:"
-
-#~ msgid "Job Details"
-#~ msgstr "Opgavedetaljer"
-
-#~ msgid "Pri_ority:"
-#~ msgstr "Pri_oritet:"
-
-#~ msgid "_Billing info:"
-#~ msgstr "_Betalingsinformation:"
-
-#~ msgid "Print Document"
-#~ msgstr "Udskriv dokument"
-
-#~ msgid "_Now"
-#~ msgstr "_Nu"
-
-#~ msgid "A_t:"
-#~ msgstr "P_å:"
-
-#~ msgid ""
-#~ "Specify the time of print,\n"
-#~ " e.g. 15:30, 2:35 pm, 14:15:20, 11:46:30 am, 4 pm"
-#~ msgstr ""
-#~ "Angiv udskriftstidspunkt,\n"
-#~ " f.eks. 15:30, 14:15:20"
-
-#~ msgid "Time of print"
-#~ msgstr "Udskriftstidspunkt"
-
-#~ msgid "On _hold"
-#~ msgstr "_Venter"
-
-# ???
-#~ msgid "Hold the job until it is explicitly released"
-#~ msgstr "Lad jobbet vente indtil det eksplicit frigøres"
-
-#~ msgid "Add Cover Page"
-#~ msgstr "Tilføj forside"
-
-#~ msgid "Be_fore:"
-#~ msgstr "F_ør:"
-
-#~ msgid "_After:"
-#~ msgstr "_Efter:"
-
-#~ msgid "Job"
-#~ msgstr "Opgave"
-
-#~ msgid "Image Quality"
-#~ msgstr "Billedkvalitet"
-
-#~ msgid "Color"
-#~ msgstr "Farve"
-
-#~ msgid "Finishing"
-#~ msgstr "Færdiggør"
-
-#~ msgid "Advanced"
-#~ msgstr "Avanceret"
-
-#~ msgid "Some of the settings in the dialog conflict"
-#~ msgstr "Nogle af dialogvinduets indstillinger er i modstrid"
-
-#~ msgid "Select which type of documents are shown"
-#~ msgstr "Vælg hvilken type dokumenter der skal vises"
-
-#~ msgid "Volume"
-#~ msgstr "Lydstyrke"
-
-#~ msgid "Turns volume up or down"
-#~ msgstr "Skruer lydstyrken op eller ned"
-
-#~ msgid "Volume Up"
-#~ msgstr "Lydstyrke op"
-
-#~ msgid "Increases the volume"
-#~ msgstr "Forøger lydstyrken"
-
-#~ msgid "Volume Down"
-#~ msgstr "Lydstyrke ned"
-
-#~ msgid "Decreases the volume"
-#~ msgstr "Reducerer lydstyrken"
 
 #~ msgid "Please select a folder below"
 #~ msgstr "Vælg venligst en mappe nedenunder"
