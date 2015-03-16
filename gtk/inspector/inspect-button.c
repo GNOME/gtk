@@ -190,6 +190,7 @@ clear_flash (GtkInspectorWindow *iw)
     {
       gtk_widget_queue_draw (iw->flash_widget);
       g_signal_handlers_disconnect_by_func (iw->flash_widget, draw_flash, iw);
+      g_signal_handlers_disconnect_by_func (iw->flash_widget, clear_flash, iw);
       iw->flash_widget = NULL;
     }
 }
@@ -203,6 +204,7 @@ start_flash (GtkInspectorWindow *iw,
   iw->flash_count = 1;
   iw->flash_widget = widget;
   g_signal_connect_after (widget, "draw", G_CALLBACK (draw_flash), iw);
+  g_signal_connect_swapped (widget, "unmap", G_CALLBACK (clear_flash), iw);
   gtk_widget_queue_draw (widget);
 }
 
@@ -372,6 +374,7 @@ on_flash_timeout (GtkInspectorWindow *iw)
   if (iw->flash_count == 6)
     {
       g_signal_handlers_disconnect_by_func (iw->flash_widget, draw_flash, iw);
+      g_signal_handlers_disconnect_by_func (iw->flash_widget, clear_flash, iw);
       iw->flash_widget = NULL;
       iw->flash_cnx = 0;
 
@@ -409,6 +412,7 @@ void
 gtk_inspector_stop_highlight (GtkWidget *widget)
 {
   g_signal_handlers_disconnect_by_func (widget, draw_flash, NULL);
+  g_signal_handlers_disconnect_by_func (widget, clear_flash, NULL);
   gtk_widget_queue_draw (widget);
 }
 
