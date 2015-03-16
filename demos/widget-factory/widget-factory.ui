@@ -1571,9 +1571,7 @@ Suspendisse feugiat quam quis dolor accumsan cursus.</property>
                                     <property name="title" translatable="yes">Icon</property>
                                     <property name="reorderable">True</property>
                                     <child>
-                                      <object class="GtkCellRendererPixbuf" id="cellrendererpixbuf1">
-                                        <property name="follow_state">true</property>
-                                      </object>
+                                      <object class="GtkCellRendererPixbuf" id="cellrendererpixbuf1"/>
                                       <attributes>
                                         <attribute name="icon_name">1</attribute>
                                       </attributes>
@@ -3074,9 +3072,7 @@ microphone-sensitivity-medium-symbolic</property>
                                     <property name="selection_mode">multiple</property>
                                     <property name="model">iconsmodel</property>
                                     <child>
-                                      <object class="GtkCellRendererPixbuf" id="iconviewcell">
-                                        <property name="follow-state">True</property>
-                                      </object>
+                                      <object class="GtkCellRendererPixbuf" id="iconviewcell"/>
                                       <attributes>
                                         <attribute name="icon-name">0</attribute>
                                       </attributes>
