@@ -112,9 +112,7 @@
                                 <child>
                                   <object class="GtkTreeViewColumn" id="printer_icon_column">
                                     <child>
-                                      <object class="GtkCellRendererPixbuf" id="printer_icon_renderer">
-                                        <property name="follow-state">True</property>
-                                      </object>
+                                      <object class="GtkCellRendererPixbuf" id="printer_icon_renderer"/>
                                       <attributes>
                                         <attribute name="gicon">0</attribute>
                                       </attributes>
