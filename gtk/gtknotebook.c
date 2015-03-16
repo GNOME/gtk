@@ -4803,7 +4803,7 @@ gtk_notebook_redraw_tabs (GtkNotebook *notebook)
         page->allocation.height - padding.bottom;
       /* fall through */
     case GTK_POS_TOP:
-      redraw_rect.width = allocation.width - 2 * border;
+      redraw_rect.width = MAX (1, allocation.width - 2 * border);
       redraw_rect.height = page->allocation.height + padding.top;
 
       break;
@@ -4814,7 +4814,7 @@ gtk_notebook_redraw_tabs (GtkNotebook *notebook)
       /* fall through */
     case GTK_POS_LEFT:
       redraw_rect.width = page->allocation.width + padding.left;
-      redraw_rect.height = allocation.height - 2 * border;
+      redraw_rect.height = MAX (1, allocation.height - 2 * border);
 
       break;
     }
