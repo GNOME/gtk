@@ -76,9 +76,7 @@
                       <object class="GtkCellRendererText" id="secondary_padding"/>
                     </child>
                     <child>
-                      <object class="GtkCellRendererPixbuf" id="app_icon">
-                        <property name="follow-state">True</property>
-                      </object>
+                      <object class="GtkCellRendererPixbuf" id="app_icon"/>
                       <attributes>
                         <attribute name="gicon">1</attribute>
                       </attributes>
