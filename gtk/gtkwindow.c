@@ -5955,16 +5955,16 @@ static void
 popover_unmap (GtkWidget        *widget,
                GtkWindowPopover *popover)
 {
-  if (popover->window)
-    {
-      gtk_widget_unmap (popover->widget);
-      gdk_window_hide (popover->window);
-    }
-
   if (popover->unmap_id)
     {
       g_signal_handler_disconnect (widget, popover->unmap_id);
       popover->unmap_id = 0;
+    }
+
+  if (popover->window)
+    {
+      gdk_window_hide (popover->window);
+      gtk_widget_unmap (popover->widget);
     }
 }
 
