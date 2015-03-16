@@ -5566,6 +5566,7 @@ gtk_widget_unrealize (GtkWidget *widget)
 {
   g_return_if_fail (GTK_IS_WIDGET (widget));
 
+  g_object_ref (widget);
   gtk_widget_push_verify_invariants (widget);
 
   if (widget->priv->has_shape_mask)
@@ -5592,6 +5593,7 @@ gtk_widget_unrealize (GtkWidget *widget)
     }
 
   gtk_widget_pop_verify_invariants (widget);
+  g_object_unref (widget);
 }
 
 /*****************************************
