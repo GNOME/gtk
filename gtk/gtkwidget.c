@@ -5577,8 +5577,6 @@ gtk_widget_unrealize (GtkWidget *widget)
 
   if (gtk_widget_get_realized (widget))
     {
-      g_object_ref (widget);
-
       if (widget->priv->mapped)
         gtk_widget_unmap (widget);
 
@@ -5588,8 +5586,6 @@ gtk_widget_unrealize (GtkWidget *widget)
       g_signal_emit (widget, widget_signals[UNREALIZE], 0);
       g_assert (!widget->priv->mapped);
       gtk_widget_set_realized (widget, FALSE);
-
-      g_object_unref (widget);
     }
 
   gtk_widget_pop_verify_invariants (widget);
