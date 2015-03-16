@@ -3254,7 +3254,10 @@ GtkVolumeButton.button { padding: 8px; }
   @if $variant == 'light' {
     outline-color: transparentize($selected_fg_color, 0.7);
   }
-  &:backdrop { color: $backdrop_selected_fg_color; }
+  &:backdrop {
+    color: $backdrop_selected_fg_color;
+    background-color: $backdrop_selected_bg_color;
+  }
 }
 
 /* Decouple the font of context menus from their entry/textview */
