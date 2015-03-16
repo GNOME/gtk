@@ -218,7 +218,6 @@ add_columns (GtkTreeView *treeview)
 
   /* column for symbolic icon */
   renderer = gtk_cell_renderer_pixbuf_new ();
-  g_object_set (G_OBJECT (renderer), "follow-state", TRUE, NULL);
   column = gtk_tree_view_column_new_with_attributes ("Symbolic icon",
                                                      renderer,
                                                      "icon-name",
