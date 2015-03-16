@@ -1,3 +1,7 @@
+* {
+  -gtk-icon-style: requested;
+}
+
 .regular {
   -gtk-icon-style: regular;
 }
