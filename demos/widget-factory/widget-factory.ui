@@ -2894,6 +2894,15 @@ microphone-sensitivity-medium-symbolic</property>
                                         <property name="tooltip-text" translatable="yes">Search for it</property>
                                       </object>
                                     </child>
+                                    <child>
+                                      <object class="GtkToolButton">
+                                        <property name="visible">True</property>
+                                        <property name="sensitive">False</property>
+                                        <property name="label" translatable="yes">Insert</property>
+                                        <property name="icon-name">insert-image</property>
+                                        <property name="tooltip-text" translatable="yes">Insert something</property>
+                                      </object>
+                                    </child>
                                   </object>
                                 </child>
                                 <child>
