@@ -69,8 +69,6 @@
  * ]|
  */
 
-#define SUPPORTED_GTK_SHELL_VERSION 1
-
 static void _gdk_wayland_display_load_cursor_theme (GdkWaylandDisplay *wayland_display);
 
 G_DEFINE_TYPE (GdkWaylandDisplay, gdk_wayland_display, GDK_TYPE_DISPLAY)

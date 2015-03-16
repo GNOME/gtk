@@ -42,6 +42,8 @@
 
 #define WL_SURFACE_HAS_BUFFER_SCALE 3
 
+#define SUPPORTED_GTK_SHELL_VERSION 1
+
 #define GDK_WINDOW_IS_WAYLAND(win)    (GDK_IS_WINDOW_IMPL_WAYLAND (((GdkWindow *)win)->impl))
 
 GdkKeymap *_gdk_wayland_keymap_new (void);
