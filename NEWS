@@ -1,3 +1,43 @@
+Overview of Changes in GTK+ 3.15.12
+===================================
+
+* GtkMenuButton:
+ - Improve accessible names
+
+* GtkCellRendererPixbuf:
+ - Always follow state changes, the ::follow-state property
+   is now ignored. This is necessary to make HighContrast
+   and symbolic icons remain visible e.g. in selected rows.
+
+* GtkEntry:
+ - Rework the size allocation code to be less arcane. This
+   changed the semantics of the get_frame_size() vfunc. GtkEntry
+   subclasses that override this vfunc may need adjustment.
+
+* Wayland:
+ - Support hi-dpi cursors
+
+* Bugs fixed:
+ 745829 crash when double-clicking close button while popover...
+ 746141 wayland: Support HiDPI pointer cursors
+ 746192 Insensitive backdrop ToolButtons are not drawn correctly
+ 746201 Sidebar icons are black on black in HighContrast theme
+ 746202 use insensitive color for unfocused selected items
+ 746205 gemfile: needs add source rubygems.org
+ 746282 pixman warnings after recent changes
+ 746301 Opening "Sound" panel generates pixman error
+
+* Translation updates:
+ Bosnian
+ Bulgarian
+ Catalan
+ Danish
+ Punjabi
+ Slovenian
+ Swedish
+ Vietnamese
+
+
 Overview of Changes in GTK+ 3.15.11
 ===================================
 
