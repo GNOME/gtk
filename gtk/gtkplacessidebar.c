@@ -4036,7 +4036,6 @@ gtk_places_sidebar_init (GtkPlacesSidebar *sidebar)
   g_object_set (cell,
                 "xpad", 10,
                 "ypad", 8,
-                "follow-state", TRUE,
                 NULL);
   gtk_tree_view_column_pack_start (col, cell, FALSE);
   gtk_tree_view_column_set_attributes (col, cell,
@@ -4069,7 +4068,6 @@ gtk_places_sidebar_init (GtkPlacesSidebar *sidebar)
                 /* align right, because for some reason gtk+ expands
                    this even though we tell it not to. */
                 "xalign", 1.0,
-                "follow-state", TRUE,
                 "gicon", eject,
                 NULL);
   gtk_tree_view_column_pack_start (col, cell, FALSE);
