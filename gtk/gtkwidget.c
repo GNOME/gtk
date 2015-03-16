@@ -5081,6 +5081,7 @@ gtk_widget_unmap (GtkWidget *widget)
 
   if (gtk_widget_get_mapped (widget))
     {
+      g_object_ref (widget);
       gtk_widget_push_verify_invariants (widget);
 
       if (!gtk_widget_get_has_window (widget))
@@ -5093,6 +5094,7 @@ gtk_widget_unmap (GtkWidget *widget)
       g_signal_emit (widget, widget_signals[UNMAP], 0);
 
       gtk_widget_pop_verify_invariants (widget);
+      g_object_unref (widget);
     }
 }
 
