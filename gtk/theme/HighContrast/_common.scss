@@ -374,8 +374,9 @@ $_dot_color: $selected_bg_color;
     &:active, &.flat:active {
       @include button(insensitive-active);
     }
+
   }
-  &.flat, &.flat:backdrop {
+  &.flat, &.flat:backdrop, &.flat:insensitive:backdrop {
     @extend %undecorated_button;
   }
   //overlay / OSD style
