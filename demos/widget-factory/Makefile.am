@@ -62,6 +62,7 @@ uninstall-update-icon-cache:
 
 EXTRA_DIST += 				\
 	widget-factory.ui 		\
+	widget-factory.css		\
 	menus.ui 			\
 	widget-factory.gresource.xml	\
 	data/source.svg			\

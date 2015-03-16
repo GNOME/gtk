@@ -1157,7 +1157,7 @@ activate (GApplication *app)
   g_type_ensure (my_text_view_get_type ());
 
   provider = gtk_css_provider_new ();
-  gtk_css_provider_load_from_data (provider, ".circular-button { border-radius: 20px; outline-radius: 20px; }", -1, NULL);
+  gtk_css_provider_load_from_resource (provider, "/org/gtk/WidgetFactory/widget-factory.css");
   gtk_style_context_add_provider_for_screen (gdk_screen_get_default (),
                                              GTK_STYLE_PROVIDER (provider),
                                              GTK_STYLE_PROVIDER_PRIORITY_USER);

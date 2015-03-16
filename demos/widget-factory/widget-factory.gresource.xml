@@ -3,6 +3,9 @@
   <gresource prefix="/org/gtk/WidgetFactory">
     <file preprocess="xml-stripblanks">widget-factory.ui</file>
   </gresource>
+  <gresource prefix="/org/gtk/WidgetFactory">
+    <file>widget-factory.css</file>
+  </gresource>
   <gresource prefix="/org/gtk/WidgetFactory/gtk">
     <file preprocess="xml-stripblanks">menus.ui</file>
   </gresource>
