@@ -668,16 +668,19 @@ data_source_cancelled (void                  *data,
   g_debug (G_STRLOC ": %s source = %p",
            G_STRFUNC, source);
 
-  context = gdk_wayland_drag_context_lookup_by_data_source (source);
-  display = gdk_window_get_display (context->source_window);
+  display = gdk_display_get_default ();
 
   if (source == wayland_selection->dnd_source)
-    gdk_wayland_selection_unset_data_source (display, atoms[ATOM_DND]);
+    {
+      gdk_wayland_selection_unset_data_source (display, atoms[ATOM_DND]);
+
+      context = gdk_wayland_drag_context_lookup_by_data_source (source);
+
+      if (context)
+        gdk_wayland_drag_context_undo_grab (context);
+    }
   else if (source == wayland_selection->clipboard_source)
     gdk_wayland_selection_unset_data_source (display, atoms[ATOM_CLIPBOARD]);
-
-  if (context)
-    gdk_wayland_drag_context_undo_grab (context);
 }
 
 static const struct wl_data_source_listener data_source_listener = {
