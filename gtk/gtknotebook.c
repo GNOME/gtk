@@ -4793,6 +4793,8 @@ gtk_notebook_redraw_tabs (GtkNotebook *notebook)
   redraw_rect.y = border;
 
   gtk_widget_get_allocation (widget, &allocation);
+  if (allocation.width <= 1)
+    return;
 
   get_padding_and_border (notebook, &padding);
 
