@@ -2330,7 +2330,10 @@ gtk_popover_bind_model (GtkPopover  *popover,
       gtk_widget_show (stack);
       gtk_container_add (GTK_CONTAINER (popover), stack);
 
-      gtk_menu_section_box_new_toplevel (GTK_STACK (stack), model, action_namespace);
+      gtk_menu_section_box_new_toplevel (GTK_STACK (stack),
+                                         model,
+                                         action_namespace,
+                                         popover);
       gtk_stack_set_visible_child_name (GTK_STACK (stack), "main");
 
       g_signal_connect (popover, "unmap", G_CALLBACK (back_to_main), NULL);
