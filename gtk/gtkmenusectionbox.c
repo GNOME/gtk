@@ -277,7 +277,7 @@ gtk_menu_section_box_insert_func (GtkMenuTrackerItem *item,
       gchar *name;
 
       widget = g_object_new (GTK_TYPE_MODEL_BUTTON,
-                             "menu-name", gtk_menu_tracker_item_get_label (item), 
+                             "menu-name", gtk_menu_tracker_item_get_label (item),
                              NULL);
       g_object_bind_property (item, "label", widget, "text", G_BINDING_SYNC_CREATE);
       g_object_bind_property (item, "icon", widget, "icon", G_BINDING_SYNC_CREATE);
@@ -369,10 +369,39 @@ gtk_menu_section_box_class_init (GtkMenuSectionBoxClass *class)
   G_OBJECT_CLASS (class)->dispose = gtk_menu_section_box_dispose;
 }
 
+static void
+update_popover_position_cb (GObject    *source,
+                            GParamSpec *spec,
+                            gpointer   *user_data)
+{
+  GtkPopover *popover = GTK_POPOVER (source);
+  GtkMenuSectionBox *box = GTK_MENU_SECTION_BOX (user_data);
+
+  GtkPositionType new_pos = gtk_popover_get_position (popover);
+
+  GList *children = gtk_container_get_children (GTK_CONTAINER (gtk_widget_get_parent (GTK_WIDGET (box))));
+  GList *l;
+
+  for (l = children;
+       l != NULL;
+       l = l->next)
+    {
+      GtkWidget *w = l->data;
+
+      if (new_pos == GTK_POS_BOTTOM)
+        gtk_widget_set_valign (w, GTK_ALIGN_START);
+      else if (new_pos == GTK_POS_TOP)
+        gtk_widget_set_valign (w, GTK_ALIGN_END);
+      else
+        gtk_widget_set_valign (w, GTK_ALIGN_CENTER);
+    }
+}
+
 void
 gtk_menu_section_box_new_toplevel (GtkStack    *stack,
                                    GMenuModel  *model,
-                                   const gchar *action_namespace)
+                                   const gchar *action_namespace,
+                                   GtkPopover  *popover)
 {
   GtkMenuSectionBox *box;
 
@@ -383,6 +412,9 @@ gtk_menu_section_box_new_toplevel (GtkStack    *stack,
                                        model, TRUE, FALSE, FALSE, action_namespace,
                                        gtk_menu_section_box_insert_func,
                                        gtk_menu_section_box_remove_func, box);
+
+  g_signal_connect (G_OBJECT (popover), "notify::position", G_CALLBACK (update_popover_position_cb), box);
+
 
   gtk_widget_show (GTK_WIDGET (box));
 }
