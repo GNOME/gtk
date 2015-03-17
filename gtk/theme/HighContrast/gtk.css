@@ -2056,7 +2056,7 @@ GtkExpander {
     -gtk-icon-source: -gtk-icontheme("pan-end-symbolic-rtl"); }
   GtkExpander:hover {
     color: #4d4d4d; }
-  GtkExpander:active {
+  GtkExpander:checked {
     -gtk-icon-source: -gtk-icontheme("pan-down-symbolic"); }
 
 /************

@@ -1852,7 +1852,7 @@ GtkExpander {
   -gtk-icon-source: -gtk-icontheme('pan-end-symbolic');
   &:dir(rtl) { -gtk-icon-source: -gtk-icontheme('pan-end-symbolic-rtl'); }
   &:hover { color: lighten($fg_color,30%); } //only lightens the arrow
-  &:active { -gtk-icon-source: -gtk-icontheme('pan-down-symbolic'); }
+  &:checked { -gtk-icon-source: -gtk-icontheme('pan-down-symbolic'); }
 }
 
 /************
