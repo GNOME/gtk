@@ -1635,7 +1635,8 @@ GtkSwitch {
         border-color: #000;
         background-color: #000;
         box-shadow: none; }
-      GtkSwitch.trough:backdrop:insensitive {
+      GtkSwitch.trough:backdrop:insensitive, GtkSwitch.trough:backdrop:insensitive:active {
+        background-color: white;
         color: #7f7f7f;
         border-color: #7f7f7f; }
   GtkSwitch.slider {

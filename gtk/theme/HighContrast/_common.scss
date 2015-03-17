@@ -1442,7 +1442,8 @@ GtkSwitch {
           background-color: $selected_bg_color;
           box-shadow: none;
         }
-        &:insensitive {
+        &:insensitive, &:insensitive:active {
+          background-color: $insensitive_bg_color;
           color: $backdrop_insensitive_color;
           border-color: $backdrop_insensitive_color;
         }
