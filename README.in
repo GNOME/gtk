@@ -99,6 +99,11 @@ Release notes for 3.16
   has non-scrolling parts similar to treeview headers, there is no need
   to implement this vfunc.
 
+* The GtkSearchEntry widget has gained a number of new signal that
+  are emitted when certain key sequences are seen. In particular, it
+  now handles the Escape key and emits ::stop-search. Applications that
+  expect to handle Escape themselves will need to be updated.
+
 Release notes for 3.14
 ======================
 
