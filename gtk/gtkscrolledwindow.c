@@ -2908,7 +2908,10 @@ gtk_scrolled_window_scroll_event (GtkWidget      *widget,
   gboolean handled = FALSE;
   gdouble delta_x;
   gdouble delta_y;
-  gdouble delta;
+  GdkScrollDirection direction;
+  gboolean shifted;
+
+  shifted = (event->state & GDK_SHIFT_MASK) != 0;
 
   scrolled_window = GTK_SCROLLED_WINDOW (widget);
   priv = scrolled_window->priv;
@@ -2917,6 +2920,15 @@ gtk_scrolled_window_scroll_event (GtkWidget      *widget,
 
   if (gdk_event_get_scroll_deltas ((GdkEvent *) event, &delta_x, &delta_y))
     {
+      if (shifted)
+        {
+          gdouble delta;
+
+          delta = delta_x;
+          delta_x = delta_y;
+          delta_y = delta;
+        }
+
       if (delta_x != 0.0 &&
           may_hscroll (scrolled_window))
         {
@@ -2963,12 +2975,13 @@ gtk_scrolled_window_scroll_event (GtkWidget      *widget,
           handled = TRUE;
         }
     }
-  else
+  else if (gdk_event_get_scroll_direction ((GdkEvent *)event, &direction))
     {
       GtkWidget *range;
       gboolean may_scroll;
 
-      if (event->direction == GDK_SCROLL_UP || event->direction == GDK_SCROLL_DOWN)
+      if ((!shifted && (direction == GDK_SCROLL_UP || direction == GDK_SCROLL_DOWN)) ||
+          (shifted && (direction == GDK_SCROLL_LEFT || direction == GDK_SCROLL_RIGHT)))
         {
           range = priv->vscrollbar;
           may_scroll = may_vscroll (scrolled_window);
@@ -2983,6 +2996,7 @@ gtk_scrolled_window_scroll_event (GtkWidget      *widget,
         {
           GtkAdjustment *adj = gtk_range_get_adjustment (GTK_RANGE (range));
           gdouble new_value;
+          gdouble delta;
 
           delta = _gtk_range_get_wheel_delta (GTK_RANGE (range), event);
 
