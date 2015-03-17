@@ -1861,6 +1861,9 @@ GtkExpander {
  ***********/
 GtkCalendar {
   border: 1px solid $borders_color;
+  &:selected {
+    @extend .view:selected;
+  }
   &.button {
     @extend %undecorated_button;
     padding: 0 4px; //FIXME no effect on these pseudobuttons
