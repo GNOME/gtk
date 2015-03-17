@@ -814,6 +814,7 @@ GtkComboBox {
     background-color: $osd_bg_color;
     border-radius: 6px;
     padding: 12px;
+    .label { color: $osd_fg_color; }
   }
   //searchbar & inline-toolbar
   &.inline-toolbar {
@@ -1535,28 +1536,22 @@ GtkCheckButton.text-button, GtkRadioButton.text-button {
     @include button(normal, $edge: none);
     border-radius: 50%;
     border-color: darken($borders_color,3%);
-    box-shadow: inset 0 1px white,
-                inset 0 #{-2px} $bg_color,
-                inset 0 #{-1px} mix($bg_color,$borders_color,50%);
     &:hover {
       @include button(hover, $edge: none);
       border-color: darken($borders_color,3%);
       border-radius: 50%; // needed for double marks scales
-      box-shadow: inset 0 1px white,
-                  inset 0 #{-2px} white,
-                  inset 0 #{-1px} mix($bg_color,$borders_color,70%);
     }
     &:insensitive {
       border-style: solid; // needed for double marks scales or they'll get
       border-radius: 50%;  // overridden
-      background-image: linear-gradient(to bottom, $insensitive_bg_color);
+      background-image: none;
       box-shadow: none;
     }
     &:backdrop {
       border-style: solid; // needed for double marks scales or they'll get
       border-radius: 50%;  // overridden
       border-color: darken($backdrop_borders_color,3%);
-      background-image: linear-gradient(to bottom, $backdrop_bg_color);
+      background-image: none;
       box-shadow: none;
     }
     &:backdrop:insensitive { @include button(backdrop-insensitive);}
@@ -1574,10 +1569,10 @@ GtkCheckButton.text-button, GtkRadioButton.text-button {
     box-shadow: inset 1px 1px transparentize(black, 0.9);
     &.highlight {
       border-color: $selected_borders_color;
-      background-color: $selected_bg_color;
+      background-color: $success_color;
       &:backdrop {
          border-color: $selected_bg_color;
-         background-color: $selected_bg_color;
+         background-color: desaturate($success_color,100%);
          box-shadow: none;
       }
     }

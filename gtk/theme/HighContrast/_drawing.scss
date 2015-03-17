@@ -124,11 +124,8 @@
   // normal button
   //
     color: $tc;
-    background-image: linear-gradient(to bottom,
-                                  lighten($c,5%),
-                                  $c 40%,
-                                  darken($c,5%)
-                                  );
+    background-image: none;
+    background-color: $c;
 
     @if $c!=$bg_color { @include _button_border_color($c); }
     @else { border-color: $borders_color; }
@@ -139,13 +136,11 @@
   //
   // hovered button
   //
-    color: $tc;
+    color: $tc; //fg_color
+    background-color: $c;
     @if $c!=$bg_color { @include _button_border_color($c); }
     @else { border-color: $borders_color; }
-    background-image: linear-gradient(to bottom,
-                                      lighten($c,14%),
-                                      lighten($c,4%) 40%,
-                                      $c);
+    background-image: none;
 
   }
 
@@ -153,25 +148,20 @@
   //
   // pushed button
   //
+    background-image: none;
+    color: invert($tc);
+    background-color: invert($c);
     @if $c!=$bg_color { @include _button_border_color($c); }
     @else { border-color: $borders_color; }
-    @if $c!=$bg_color {
-      background-image: linear-gradient(to bottom, darken($c,25%));
-      color: $tc;
-    }
-    @else {
-      background-image: linear-gradient(to bottom,
-                                        $borders_color);
-      color: $bg_color;
-    }
   }
   @else if $t==insensitive {
   //
   // insensitive button
   //
     color: $insensitive_fg_color;
+    background-color: $insensitive_bg_color;
     border-color: $insensitive_borders_color;
-    background-image: linear-gradient(to bottom, $insensitive_bg_color);
+    background-image: none;
     text-shadow: none;
     icon-shadow: none;
   }
@@ -181,9 +171,8 @@
   //
     color: $insensitive_fg_color;
     border-color: $insensitive_borders_color;
-    background-image: linear-gradient(to bottom,
-                        mix($insensitive_borders_color,
-                            $insensitive_bg_color, 10%));
+    background-image: none;
+    background-color: $insensitive_bg_color;
   }
 
   @else if $t==backdrop {
@@ -191,9 +180,9 @@
   // backdrop button
   //
     color: if($c!=$bg_color, $tc, $backdrop_fg_color);
+    background-color: if($c!=$bg_color, $c, $backdrop_bg_color);
     border-color: if($c!=$bg_color, $c, $backdrop_borders_color);
-    background-image: linear-gradient(to bottom,
-                                      if($c!=bg_color,$c,$backdrop_bg_color));
+    background-image: none;
     text-shadow: none;
     icon-shadow: none;
   }
@@ -203,9 +192,9 @@
   // backdrop pushed button
   //
     color: $backdrop_fg_color;
+    background-color: $backdrop_bg_color;
     border-color: $backdrop_borders_color;
-    background-image: linear-gradient(to bottom,
-                        mix($backdrop_borders_color,$backdrop_bg_color, 35%));
+    background-image: none;
   }
 
   @else if $t==backdrop-insensitive {
@@ -213,8 +202,9 @@
   // backdrop insensitive button
   //
     color: $backdrop_insensitive_color;
+    background-color: $insensitive_bg_color;
     border-color: $backdrop_borders_color;
-    background-image: linear-gradient(to bottom, $backdrop_bg_color);
+    background-image: none;
   }
 
   @else if $t==backdrop-insensitive-active {
@@ -223,14 +213,15 @@
   //
     color: $backdrop_insensitive_color;
     border-color: $backdrop_borders_color;
-    background-image: linear-gradient(to bottom,
-                        mix($backdrop_borders_color,$backdrop_bg_color, 8%));
+    background-image: none;
+    background-color: mix($backdrop_borders_color,$backdrop_bg_color, 8%);
   }
   
   @else if $t==osd {
   //
   // normal osd button
   //
+    color: $osd_fg_color;
     background-image: none;
     background-color: $osd_bg_color;
     border-color: $osd_borders_color;
@@ -240,7 +231,8 @@
   //
   // active osd button
   //
-    background-color: transparentize(#fff,0.99);
+    color: $osd_fg_color;
+    background-color: lighten($osd_bg_color,30%);
     border-color: $osd_borders_color;
     box-shadow: none;
   }
@@ -248,7 +240,8 @@
   //
   // active osd button
   //
-    background-color: transparentize(#fff,0.97);
+    color: $osd_bg_color;
+    background-color: $osd_fg_color;
     border-color: $osd_borders_color;
     box-shadow: none;
   }
