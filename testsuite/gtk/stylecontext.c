@@ -352,6 +352,20 @@ test_set_widget_path_saved (void)
   g_object_unref (context);
 }
 
+void
+test_widget_path_parent (void)
+{
+  GtkStyleContext *parent, *context;
+
+  parent = gtk_style_context_new ();
+  context = gtk_style_context_new ();
+
+  gtk_style_context_set_parent (context, parent);
+
+  g_object_unref (parent);
+  g_object_unref (context);
+}
+
 int
 main (int argc, char *argv[])
 {
@@ -364,6 +378,7 @@ main (int argc, char *argv[])
   g_test_add_func ("/style/basic", test_basic_properties);
   g_test_add_func ("/style/invalidate-saved", test_invalidate_saved);
   g_test_add_func ("/style/set-widget-path-saved", test_set_widget_path_saved);
+  g_test_add_func ("/style/widget-path-parent", test_widget_path_parent);
 
   return g_test_run ();
 }

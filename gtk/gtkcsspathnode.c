@@ -157,6 +157,17 @@ gtk_css_path_node_new (GtkStyleContext *context)
 }
 
 void
+gtk_css_path_node_unset_context (GtkCssPathNode *node)
+{
+  gtk_internal_return_if_fail (GTK_IS_CSS_PATH_NODE (node));
+  gtk_internal_return_if_fail (node->context != NULL);
+
+  node->context = NULL;
+
+  gtk_css_node_invalidate_style_provider (GTK_CSS_NODE (node));
+}
+
+void
 gtk_css_path_node_set_widget_path (GtkCssPathNode *node,
                                    GtkWidgetPath  *path)
 {

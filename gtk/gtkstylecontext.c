@@ -365,12 +365,15 @@ gtk_style_context_finalize (GObject *object)
   style_context = GTK_STYLE_CONTEXT (object);
   priv = style_context->priv;
 
+  while (priv->saved_nodes)
+    gtk_style_context_pop_style_node (style_context);
+  if (GTK_IS_CSS_PATH_NODE (priv->cssnode))
+    gtk_css_path_node_unset_context (GTK_CSS_PATH_NODE (priv->cssnode));
+
   gtk_style_context_clear_parent (style_context);
 
   gtk_style_context_set_cascade (style_context, NULL);
 
-  while (priv->saved_nodes)
-    gtk_style_context_pop_style_node (style_context);
   g_object_unref (priv->cssnode);
 
   gtk_style_context_clear_property_cache (style_context);
