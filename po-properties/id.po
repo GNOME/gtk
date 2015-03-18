@@ -12,8 +12,8 @@ msgstr ""
 "Project-Id-Version: gtk+-properties gtk-3-14\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gtk"
 "%2b&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2014-10-18 21:02+0000\n"
-"PO-Revision-Date: 2014-09-26 10:11+0700\n"
+"POT-Creation-Date: 2015-03-18 09:54+0000\n"
+"PO-Revision-Date: 2015-03-18 19:24+0700\n"
 "Last-Translator: Andika Triwidada <andika@gmail.com>\n"
 "Language-Team: Indonesian <gnome@i15n.org>\n"
 "Language: id\n"
@@ -22,7 +22,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 "X-Poedit-SourceCharset: UTF-8\n"
-"X-Generator: Poedit 1.6.9\n"
+"X-Generator: Poedit 1.7.5\n"
 
 #: ../gdk/gdkapplaunchcontext.c:127 ../gdk/gdkcursor.c:139
 #: ../gdk/gdkdevicemanager.c:181
@@ -157,11 +157,11 @@ msgstr "Minor"
 msgid "Minor version number"
 msgstr "Nomor versi minor"
 
-#: ../gdk/x11/gdkdevice-xi2.c:142
+#: ../gdk/x11/gdkdevice-xi2.c:143
 msgid "Device ID"
 msgstr "ID Perangkat"
 
-#: ../gdk/x11/gdkdevice-xi2.c:143
+#: ../gdk/x11/gdkdevice-xi2.c:144
 msgid "Device identifier"
 msgstr "Identifair Perangkat"
 
@@ -225,18 +225,18 @@ msgid "GIcon"
 msgstr "GIcon"
 
 #: ../gtk/deprecated/gtkaction.c:343 ../gtk/deprecated/gtkstatusicon.c:270
-#: ../gtk/gtkcellrendererpixbuf.c:258 ../gtk/gtkimage.c:343
+#: ../gtk/gtkcellrendererpixbuf.c:263 ../gtk/gtkimage.c:343
 msgid "The GIcon being displayed"
 msgstr "GIcon yang sedang ditampilkan"
 
 #: ../gtk/deprecated/gtkaction.c:365 ../gtk/deprecated/gtkstatusicon.c:253
-#: ../gtk/gtkcellrendererpixbuf.c:223 ../gtk/gtkimage.c:325
+#: ../gtk/gtkcellrendererpixbuf.c:228 ../gtk/gtkimage.c:325
 #: ../gtk/gtkprinter.c:170 ../gtk/gtkwindow.c:859
 msgid "Icon Name"
 msgstr "Icon Name"
 
 #: ../gtk/deprecated/gtkaction.c:366 ../gtk/deprecated/gtkstatusicon.c:254
-#: ../gtk/gtkcellrendererpixbuf.c:224 ../gtk/gtkimage.c:326
+#: ../gtk/gtkcellrendererpixbuf.c:229 ../gtk/gtkimage.c:326
 msgid "The name of the icon from the icon theme"
 msgstr "Nama ikon dari tema ikon"
 
@@ -785,7 +785,7 @@ msgstr "Nama berkas"
 msgid "Filename to load and display"
 msgstr "Nama berkas yang hendak dibuka dan ditampilkan"
 
-#: ../gtk/deprecated/gtkstatusicon.c:245 ../gtk/gtkcellrendererpixbuf.c:187
+#: ../gtk/deprecated/gtkstatusicon.c:245 ../gtk/gtkcellrendererpixbuf.c:192
 #: ../gtk/gtkimage.c:260
 msgid "Stock ID"
 msgstr "ID stok"
@@ -802,7 +802,7 @@ msgstr "Tipe penyimpanan"
 msgid "The representation being used for image data"
 msgstr "Metode yang digunakan untuk data gambar"
 
-#: ../gtk/deprecated/gtkstatusicon.c:286 ../gtk/gtkcellrendererpixbuf.c:195
+#: ../gtk/deprecated/gtkstatusicon.c:286 ../gtk/gtkcellrendererpixbuf.c:200
 #: ../gtk/gtkcellrendererspinner.c:159 ../gtk/gtkrecentmanager.c:307
 msgid "Size"
 msgstr "Ukuran"
@@ -1238,7 +1238,7 @@ msgstr "Widget Akselerator"
 msgid "The widget to be monitored for accelerator changes"
 msgstr "Widget yang dipantau untuk perubahan akselerator"
 
-#: ../gtk/gtkaccessible.c:156 ../gtk/gtkeventcontroller.c:155
+#: ../gtk/gtkaccessible.c:156 ../gtk/gtkeventcontroller.c:160
 #: ../gtk/gtktreeviewcolumn.c:347
 msgid "Widget"
 msgstr "Widget"
@@ -1276,13 +1276,13 @@ msgstr ""
 "pada awal atau akhir bapaknya"
 
 #: ../gtk/gtkactionbar.c:257 ../gtk/gtkbox.c:336 ../gtk/gtkheaderbar.c:1803
-#: ../gtk/gtknotebook.c:774 ../gtk/gtkpaned.c:336 ../gtk/gtkpopover.c:1317
+#: ../gtk/gtknotebook.c:775 ../gtk/gtkpaned.c:336 ../gtk/gtkpopover.c:1317
 #: ../gtk/gtkstack.c:433 ../gtk/gtktoolitemgroup.c:1674
 msgid "Position"
 msgstr "Posisi"
 
 #: ../gtk/gtkactionbar.c:258 ../gtk/gtkbox.c:337 ../gtk/gtkheaderbar.c:1804
-#: ../gtk/gtknotebook.c:775 ../gtk/gtkstack.c:434
+#: ../gtk/gtknotebook.c:776 ../gtk/gtkstack.c:434
 msgid "The index of the child in the parent"
 msgstr "Indek anak dalam bapak"
 
@@ -1356,11 +1356,11 @@ msgid "Whether the combobox should show the default application on top"
 msgstr ""
 "Menentukan apakah kotak kombo mesti menampilkan aplikasi bawaan di puncak"
 
-#: ../gtk/gtkappchooserbutton.c:647 ../gtk/gtkappchooserdialog.c:678
+#: ../gtk/gtkappchooserbutton.c:647 ../gtk/gtkappchooserdialog.c:683
 msgid "Heading"
 msgstr "Tajuk"
 
-#: ../gtk/gtkappchooserbutton.c:648 ../gtk/gtkappchooserdialog.c:679
+#: ../gtk/gtkappchooserbutton.c:648 ../gtk/gtkappchooserdialog.c:684
 msgid "The text to show at the top of the dialog"
 msgstr "Teks yang ditampilkan di bagian puncak dialog"
 
@@ -1372,59 +1372,59 @@ msgstr "Jenis isi"
 msgid "The content type used by the open with object"
 msgstr "Jenis isi yang dipakai oleh membuka dengan objek"
 
-#: ../gtk/gtkappchooserdialog.c:664
+#: ../gtk/gtkappchooserdialog.c:669
 msgid "GFile"
 msgstr "GFile"
 
-#: ../gtk/gtkappchooserdialog.c:665
+#: ../gtk/gtkappchooserdialog.c:670
 msgid "The GFile used by the app chooser dialog"
 msgstr "GFile yang dipakai oleh dialog pemilih app"
 
-#: ../gtk/gtkappchooserwidget.c:966
+#: ../gtk/gtkappchooserwidget.c:959
 msgid "Show default app"
 msgstr "Tampilkan app bawaan"
 
-#: ../gtk/gtkappchooserwidget.c:967
+#: ../gtk/gtkappchooserwidget.c:960
 msgid "Whether the widget should show the default application"
 msgstr "Menentukan apakah widget mesti menampilkan aplikasi bawaan"
 
-#: ../gtk/gtkappchooserwidget.c:981
+#: ../gtk/gtkappchooserwidget.c:974
 msgid "Show recommended apps"
 msgstr "Tampilkan aplikasi yang disarankan"
 
-#: ../gtk/gtkappchooserwidget.c:982
+#: ../gtk/gtkappchooserwidget.c:975
 msgid "Whether the widget should show recommended applications"
 msgstr "Apalah widget perlu menampilkan aplikasi yang disarankan"
 
-#: ../gtk/gtkappchooserwidget.c:996
+#: ../gtk/gtkappchooserwidget.c:989
 msgid "Show fallback apps"
 msgstr "Tampilkan aplikasi cadangan"
 
-#: ../gtk/gtkappchooserwidget.c:997
+#: ../gtk/gtkappchooserwidget.c:990
 msgid "Whether the widget should show fallback applications"
 msgstr "Apakah widget perlu menampilkan aplikasi cadangan"
 
-#: ../gtk/gtkappchooserwidget.c:1009
+#: ../gtk/gtkappchooserwidget.c:1002
 msgid "Show other apps"
 msgstr "Tampilkan aplikasi lain"
 
-#: ../gtk/gtkappchooserwidget.c:1010
+#: ../gtk/gtkappchooserwidget.c:1003
 msgid "Whether the widget should show other applications"
 msgstr "Apakah widget perlu menampilkan aplikasi lain"
 
-#: ../gtk/gtkappchooserwidget.c:1023
+#: ../gtk/gtkappchooserwidget.c:1016
 msgid "Show all apps"
 msgstr "Tampilkan semua aplikasi"
 
-#: ../gtk/gtkappchooserwidget.c:1024
+#: ../gtk/gtkappchooserwidget.c:1017
 msgid "Whether the widget should show all applications"
 msgstr "Apakah widget perlu menampilkan semua aplikasi"
 
-#: ../gtk/gtkappchooserwidget.c:1038
+#: ../gtk/gtkappchooserwidget.c:1031
 msgid "Widget's default text"
 msgstr "Teks baku widget"
 
-#: ../gtk/gtkappchooserwidget.c:1039
+#: ../gtk/gtkappchooserwidget.c:1032
 msgid "The default text appearing when there are no applications"
 msgstr "Teks baku yang muncul ketika tak ada aplikasi"
 
@@ -1802,7 +1802,7 @@ msgstr ""
 "Menentukan apakah child_displacement_x/y_properties juga mempengaruhi fokus "
 "kotak"
 
-#: ../gtk/gtkbutton.c:558 ../gtk/gtkentry.c:836 ../gtk/gtkentry.c:2044
+#: ../gtk/gtkbutton.c:558 ../gtk/gtkentry.c:836 ../gtk/gtkentry.c:2051
 msgid "Inner Border"
 msgstr "Batas Dalam"
 
@@ -2226,41 +2226,41 @@ msgstr "Ekspander Pixbuf Tutup"
 msgid "Pixbuf for closed expander"
 msgstr "Pixbuf untuk ekspander tertutup"
 
-#: ../gtk/gtkcellrendererpixbuf.c:174
+#: ../gtk/gtkcellrendererpixbuf.c:179
 msgid "surface"
 msgstr "permukaan"
 
-#: ../gtk/gtkcellrendererpixbuf.c:175
+#: ../gtk/gtkcellrendererpixbuf.c:180
 msgid "The surface to render"
 msgstr "Permukaan yang hendak dirender"
 
-#: ../gtk/gtkcellrendererpixbuf.c:188
+#: ../gtk/gtkcellrendererpixbuf.c:193
 msgid "The stock ID of the stock icon to render"
 msgstr "ID stok pada ikon yang hendak digambar"
 
-#: ../gtk/gtkcellrendererpixbuf.c:196
+#: ../gtk/gtkcellrendererpixbuf.c:201
 msgid "The GtkIconSize value that specifies the size of the rendered icon"
 msgstr "Nilai GtkIconSize yang menentukan ukuran dari icon yang digambarkan"
 
-#: ../gtk/gtkcellrendererpixbuf.c:205
+#: ../gtk/gtkcellrendererpixbuf.c:210
 msgid "Detail"
 msgstr "Detail"
 
-#: ../gtk/gtkcellrendererpixbuf.c:206
+#: ../gtk/gtkcellrendererpixbuf.c:211
 msgid "Render detail to pass to the theme engine"
 msgstr "Detil render yang diberikan pada mesin tematik"
 
-#: ../gtk/gtkcellrendererpixbuf.c:239
+#: ../gtk/gtkcellrendererpixbuf.c:244
 msgid "Follow State"
 msgstr "Ikuti Status"
 
-#: ../gtk/gtkcellrendererpixbuf.c:240
+#: ../gtk/gtkcellrendererpixbuf.c:245
 msgid "Whether the rendered pixbuf should be colorized according to the state"
 msgstr ""
 "Menentukan apakah pixbuf yang telah digambar harus diwarnai menurut yang "
 "telah ditentukan"
 
-#: ../gtk/gtkcellrendererpixbuf.c:257 ../gtk/gtkimage.c:342
+#: ../gtk/gtkcellrendererpixbuf.c:262 ../gtk/gtkimage.c:342
 #: ../gtk/gtkwindow.c:807
 msgid "Icon"
 msgstr "Ikon"
@@ -2313,7 +2313,7 @@ msgid "The vertical text alignment, from 0 (top) to 1 (bottom)."
 msgstr "Perataan teks vertikal, bernilai 0 (atas) hingga 1 (bawah)."
 
 #: ../gtk/gtkcellrendererprogress.c:225 ../gtk/gtklevelbar.c:1009
-#: ../gtk/gtkprogressbar.c:159 ../gtk/gtkrange.c:447
+#: ../gtk/gtkprogressbar.c:159 ../gtk/gtkrange.c:448
 msgid "Inverted"
 msgstr "Dibalik"
 
@@ -2321,7 +2321,7 @@ msgstr "Dibalik"
 msgid "Invert the direction in which the progress bar grows"
 msgstr "Balikkan arah berkembangnya bilah kemajuan"
 
-#: ../gtk/gtkcellrendererspin.c:113 ../gtk/gtkrange.c:439
+#: ../gtk/gtkcellrendererspin.c:113 ../gtk/gtkrange.c:440
 #: ../gtk/gtkscalebutton.c:210 ../gtk/gtkspinbutton.c:347
 msgid "Adjustment"
 msgstr "Penyesuaian"
@@ -2766,7 +2766,7 @@ msgstr "Kondisi tidak konsisten"
 msgid "The inconsistent state of the button"
 msgstr "Kondisi tombol tidak konsisten"
 
-#: ../gtk/gtkcellrenderertoggle.c:153 ../gtk/gtklistbox.c:3498
+#: ../gtk/gtkcellrenderertoggle.c:153 ../gtk/gtklistbox.c:3499
 msgid "Activatable"
 msgstr "Dapat diaktifkan"
 
@@ -2928,7 +2928,7 @@ msgstr "Warna RGBA"
 msgid "Color as RGBA"
 msgstr "Warna sebagai RGBA"
 
-#: ../gtk/gtkcolorswatch.c:763 ../gtk/gtklabel.c:798 ../gtk/gtklistbox.c:3512
+#: ../gtk/gtkcolorswatch.c:763 ../gtk/gtklabel.c:798 ../gtk/gtklistbox.c:3513
 msgid "Selectable"
 msgstr "Dapat dipilih"
 
@@ -3592,7 +3592,7 @@ msgstr "Batas Kemajuan"
 msgid "Border around the progress bar"
 msgstr "Batas di sekeliling batang kemajuan"
 
-#: ../gtk/gtkentry.c:2045
+#: ../gtk/gtkentry.c:2052
 msgid "Border between text and frame."
 msgstr "Batas antara teks dan bingkai."
 
@@ -3686,15 +3686,15 @@ msgstr ""
 "Menentukan apakah jendela penjebak kejadian kotak kejadiannya berada di atas "
 "jendela widget anak"
 
-#: ../gtk/gtkeventcontroller.c:156
+#: ../gtk/gtkeventcontroller.c:161
 msgid "Widget the gesture relates to"
 msgstr "Widget yang terkait dengan gestur"
 
-#: ../gtk/gtkeventcontroller.c:170
+#: ../gtk/gtkeventcontroller.c:175
 msgid "Propagation phase"
 msgstr "Fasa propagasi"
 
-#: ../gtk/gtkeventcontroller.c:171
+#: ../gtk/gtkeventcontroller.c:176
 msgid "Propagation phase at which this controller is run"
 msgstr "Fasa propagasi dimana pengendali ini berjalan"
 
@@ -3800,7 +3800,7 @@ msgstr "Penyaring"
 msgid "The current filter for selecting which files are displayed"
 msgstr "Saringan yang telah dipergunakan untuk memilih berkas yang ditampilkan"
 
-#: ../gtk/gtkfilechooser.c:388 ../gtk/gtkplacessidebar.c:4525
+#: ../gtk/gtkfilechooser.c:388 ../gtk/gtkplacessidebar.c:4600
 msgid "Local Only"
 msgstr "Pada Komputer Ini Saja"
 
@@ -3901,21 +3901,21 @@ msgstr "Posisi Y"
 msgid "Y position of child widget"
 msgstr "Posisi Y widget anak"
 
-#: ../gtk/gtkflowbox.c:3664 ../gtk/gtkiconview.c:400 ../gtk/gtklistbox.c:415
+#: ../gtk/gtkflowbox.c:3664 ../gtk/gtkiconview.c:400 ../gtk/gtklistbox.c:416
 #: ../gtk/gtktreeselection.c:131
 msgid "Selection mode"
 msgstr "Moda pilihan"
 
-#: ../gtk/gtkflowbox.c:3665 ../gtk/gtkiconview.c:401 ../gtk/gtklistbox.c:416
+#: ../gtk/gtkflowbox.c:3665 ../gtk/gtkiconview.c:401 ../gtk/gtklistbox.c:417
 msgid "The selection mode"
 msgstr "Moda pilihan"
 
-#: ../gtk/gtkflowbox.c:3678 ../gtk/gtkiconview.c:657 ../gtk/gtklistbox.c:423
+#: ../gtk/gtkflowbox.c:3678 ../gtk/gtkiconview.c:657 ../gtk/gtklistbox.c:424
 #: ../gtk/gtktreeview.c:1210
 msgid "Activate on Single Click"
 msgstr "Aktifkan pada Klik Tunggal"
 
-#: ../gtk/gtkflowbox.c:3679 ../gtk/gtkiconview.c:658 ../gtk/gtklistbox.c:424
+#: ../gtk/gtkflowbox.c:3679 ../gtk/gtkiconview.c:658 ../gtk/gtklistbox.c:425
 #: ../gtk/gtktreeview.c:1211
 msgid "Activate row on a single click"
 msgstr "Aktifkan baris pada klik tunggal"
@@ -4059,6 +4059,14 @@ msgstr "Banyaknya titik yang diperlukan untuk memicu gestur"
 #: ../gtk/gtkgesture.c:712 ../gtk/gtkgesture.c:713
 msgid "GdkWindow to receive events about"
 msgstr "GdkWindow yang akan menerima peristiwa"
+
+#: ../gtk/gtkgesturelongpress.c:284
+msgid "Delay factor"
+msgstr "Faktor tunda"
+
+#: ../gtk/gtkgesturelongpress.c:285
+msgid "Factor by which to modify the default timeout"
+msgstr "Faktor untuk mengubah tenggat waktu baku"
 
 #: ../gtk/gtkgesturepan.c:238
 msgid "Allowed orientations"
@@ -4581,11 +4589,11 @@ msgstr "Telah Dikunjungi"
 msgid "Whether this link has been visited."
 msgstr "Apakah taut ini pernah dikunjungi."
 
-#: ../gtk/gtklistbox.c:3499
+#: ../gtk/gtklistbox.c:3500
 msgid "Whether this row can be activated"
 msgstr "Apakah baris dapat diaktifkan"
 
-#: ../gtk/gtklistbox.c:3513
+#: ../gtk/gtklistbox.c:3514
 msgid "Whether this row can be selected"
 msgstr "Apakah baris dapat dipilih"
 
@@ -5008,185 +5016,185 @@ msgstr "Apakah kita sedang menampilkan suatu dialog?"
 msgid "The screen where this window will be displayed."
 msgstr "Layar tempat jendela ini hendak ditampilkan."
 
-#: ../gtk/gtknotebook.c:699
+#: ../gtk/gtknotebook.c:700
 msgid "Page"
 msgstr "Halaman"
 
-#: ../gtk/gtknotebook.c:700
+#: ../gtk/gtknotebook.c:701
 msgid "The index of the current page"
 msgstr "Indeks halaman saat ini"
 
-#: ../gtk/gtknotebook.c:708
+#: ../gtk/gtknotebook.c:709
 msgid "Tab Position"
 msgstr "Posisi tab"
 
-#: ../gtk/gtknotebook.c:709
+#: ../gtk/gtknotebook.c:710
 msgid "Which side of the notebook holds the tabs"
 msgstr "Lokasi tab pada buku catatan"
 
-#: ../gtk/gtknotebook.c:716
+#: ../gtk/gtknotebook.c:717
 msgid "Show Tabs"
 msgstr "Tampilkan Tab"
 
-#: ../gtk/gtknotebook.c:717
+#: ../gtk/gtknotebook.c:718
 msgid "Whether tabs should be shown"
 msgstr "Apakah tab mesti ditampilkan"
 
-#: ../gtk/gtknotebook.c:723
+#: ../gtk/gtknotebook.c:724
 msgid "Show Border"
 msgstr "Tampilkan Batas"
 
-#: ../gtk/gtknotebook.c:724
+#: ../gtk/gtknotebook.c:725
 msgid "Whether the border should be shown"
 msgstr "Apakah batas mesti ditampilkan"
 
-#: ../gtk/gtknotebook.c:730
+#: ../gtk/gtknotebook.c:731
 msgid "Scrollable"
 msgstr "Dapat discroll"
 
-#: ../gtk/gtknotebook.c:731
+#: ../gtk/gtknotebook.c:732
 msgid "If TRUE, scroll arrows are added if there are too many tabs to fit"
 msgstr ""
 "Bila bernilai TRUE, panah scroll digambar dengan syarat tidak terlalu banyak "
 "tab"
 
-#: ../gtk/gtknotebook.c:737
+#: ../gtk/gtknotebook.c:738
 msgid "Enable Popup"
 msgstr "Tampilkan popup"
 
-#: ../gtk/gtknotebook.c:738
+#: ../gtk/gtknotebook.c:739
 msgid ""
 "If TRUE, pressing the right mouse button on the notebook pops up a menu that "
 "you can use to go to a page"
 msgstr "Bila bernilai TRUE, dengan menekan tombol kanan pada notebook akan men"
 
-#: ../gtk/gtknotebook.c:752
+#: ../gtk/gtknotebook.c:753
 msgid "Group Name"
 msgstr "Nama Grup"
 
-#: ../gtk/gtknotebook.c:753
+#: ../gtk/gtknotebook.c:754
 msgid "Group name for tab drag and drop"
 msgstr "Nama grup bagi tab seret dan jatuhkan"
 
-#: ../gtk/gtknotebook.c:760
+#: ../gtk/gtknotebook.c:761
 msgid "Tab label"
 msgstr "Label tab"
 
-#: ../gtk/gtknotebook.c:761
+#: ../gtk/gtknotebook.c:762
 msgid "The string displayed on the child's tab label"
 msgstr "String yang ditampilkan pada label tab anak"
 
-#: ../gtk/gtknotebook.c:767
+#: ../gtk/gtknotebook.c:768
 msgid "Menu label"
 msgstr "Label menu"
 
-#: ../gtk/gtknotebook.c:768
+#: ../gtk/gtknotebook.c:769
 msgid "The string displayed in the child's menu entry"
 msgstr "String yang ditampilkan pada isian menu anak"
 
-#: ../gtk/gtknotebook.c:781
+#: ../gtk/gtknotebook.c:782
 msgid "Tab expand"
 msgstr "Ekspansi tab"
 
-#: ../gtk/gtknotebook.c:782
+#: ../gtk/gtknotebook.c:783
 msgid "Whether to expand the child's tab"
 msgstr "Apakah tab anak dikembangkan"
 
-#: ../gtk/gtknotebook.c:788
+#: ../gtk/gtknotebook.c:789
 msgid "Tab fill"
 msgstr "Isi penuh tab"
 
-#: ../gtk/gtknotebook.c:789
+#: ../gtk/gtknotebook.c:790
 msgid "Whether the child's tab should fill the allocated area"
 msgstr "Apakah tab anak mesti mengisi penuh area yang dialokasikan"
 
-#: ../gtk/gtknotebook.c:796
+#: ../gtk/gtknotebook.c:797
 msgid "Tab reorderable"
 msgstr "Tab dapat diubah urutan"
 
-#: ../gtk/gtknotebook.c:797
+#: ../gtk/gtknotebook.c:798
 msgid "Whether the tab is reorderable by user action"
 msgstr "Apakah tab dapat diubah urutannya oleh aksi pengguna"
 
-#: ../gtk/gtknotebook.c:803
+#: ../gtk/gtknotebook.c:804
 msgid "Tab detachable"
 msgstr "Tab dapat dilepas"
 
-#: ../gtk/gtknotebook.c:804
+#: ../gtk/gtknotebook.c:805
 msgid "Whether the tab is detachable"
 msgstr "Apakah tab dapat dilepas"
 
-#: ../gtk/gtknotebook.c:819 ../gtk/gtkscrollbar.c:101
+#: ../gtk/gtknotebook.c:820 ../gtk/gtkscrollbar.c:101
 msgid "Secondary backward stepper"
 msgstr "Tangga mundur sekunder"
 
-#: ../gtk/gtknotebook.c:820
+#: ../gtk/gtknotebook.c:821
 msgid ""
 "Display a second backward arrow button on the opposite end of the tab area"
 msgstr "Menampilkan tombol panah mundur sekunder pada sisi ujung area tab"
 
-#: ../gtk/gtknotebook.c:835 ../gtk/gtkscrollbar.c:108
+#: ../gtk/gtknotebook.c:836 ../gtk/gtkscrollbar.c:108
 msgid "Secondary forward stepper"
 msgstr "Tangga maju sekunder"
 
-#: ../gtk/gtknotebook.c:836
+#: ../gtk/gtknotebook.c:837
 msgid ""
 "Display a second forward arrow button on the opposite end of the tab area"
 msgstr "Menampilkan tombol panah maju sekunder pada sisi ujung area tab"
 
-#: ../gtk/gtknotebook.c:850 ../gtk/gtkscrollbar.c:87
+#: ../gtk/gtknotebook.c:851 ../gtk/gtkscrollbar.c:87
 msgid "Backward stepper"
 msgstr "Tangga Mundur"
 
-#: ../gtk/gtknotebook.c:851 ../gtk/gtkscrollbar.c:88
+#: ../gtk/gtknotebook.c:852 ../gtk/gtkscrollbar.c:88
 msgid "Display the standard backward arrow button"
 msgstr "Menampilkan tombol panah mundur standar"
 
-#: ../gtk/gtknotebook.c:865 ../gtk/gtkscrollbar.c:94
+#: ../gtk/gtknotebook.c:866 ../gtk/gtkscrollbar.c:94
 msgid "Forward stepper"
 msgstr "Tangga maju"
 
-#: ../gtk/gtknotebook.c:866 ../gtk/gtkscrollbar.c:95
+#: ../gtk/gtknotebook.c:867 ../gtk/gtkscrollbar.c:95
 msgid "Display the standard forward arrow button"
 msgstr "Menampilkan tombol panah maju standar"
 
-#: ../gtk/gtknotebook.c:880
+#: ../gtk/gtknotebook.c:881
 msgid "Tab overlap"
 msgstr "Pertumpukan tab"
 
-#: ../gtk/gtknotebook.c:881
+#: ../gtk/gtknotebook.c:882
 msgid "Size of tab overlap area"
 msgstr "Ukuran dari wilayah bertumpuknya tab"
 
-#: ../gtk/gtknotebook.c:896
+#: ../gtk/gtknotebook.c:897
 msgid "Tab curvature"
 msgstr "Lengkungan tab"
 
-#: ../gtk/gtknotebook.c:897
+#: ../gtk/gtknotebook.c:898
 msgid "Size of tab curvature"
 msgstr "Ukuran dari lengkungan tab"
 
-#: ../gtk/gtknotebook.c:913
+#: ../gtk/gtknotebook.c:914
 msgid "Arrow spacing"
 msgstr "Jarak panah"
 
-#: ../gtk/gtknotebook.c:914
+#: ../gtk/gtknotebook.c:915
 msgid "Scroll arrow spacing"
 msgstr "Jarak panah penggulung"
 
-#: ../gtk/gtknotebook.c:930
+#: ../gtk/gtknotebook.c:931
 msgid "Initial gap"
 msgstr "Celah awal"
 
-#: ../gtk/gtknotebook.c:931
+#: ../gtk/gtknotebook.c:932
 msgid "Initial gap before the first tab"
 msgstr "Celah awal sebelum tab pertama"
 
-#: ../gtk/gtknotebook.c:949
+#: ../gtk/gtknotebook.c:950
 msgid "Tab gap"
 msgstr "Celah tab"
 
-#: ../gtk/gtknotebook.c:950
+#: ../gtk/gtknotebook.c:951
 msgid "Active tab is drawn with a gap at the bottom"
 msgstr "Tab yang aktif digambar dengan suatu celah di dasar"
 
@@ -5250,19 +5258,19 @@ msgstr "Dapat dikecilkan"
 msgid "If TRUE, the child can be made smaller than its requisition"
 msgstr "Bila bernilai TRUE, anak dapat dibuat lebih kecil ukurannnya"
 
-#: ../gtk/gtkplacessidebar.c:4494
+#: ../gtk/gtkplacessidebar.c:4569
 msgid "Location to Select"
 msgstr "Lokasi untu Dipilih"
 
-#: ../gtk/gtkplacessidebar.c:4495
+#: ../gtk/gtkplacessidebar.c:4570
 msgid "The location to highlight in the sidebar"
 msgstr "Lokasi yang akan disorot di bilah sisi"
 
-#: ../gtk/gtkplacessidebar.c:4500
+#: ../gtk/gtkplacessidebar.c:4575
 msgid "Open Flags"
 msgstr "Flag Buka"
 
-#: ../gtk/gtkplacessidebar.c:4501
+#: ../gtk/gtkplacessidebar.c:4576
 msgid ""
 "Modes in which the calling application can open locations selected in the "
 "sidebar"
@@ -5270,37 +5278,37 @@ msgstr ""
 "Mode dimana aplikasi yang memanggil dapat membuka lokasi yang dipilih pada "
 "bilah sisi"
 
-#: ../gtk/gtkplacessidebar.c:4507
+#: ../gtk/gtkplacessidebar.c:4582
 msgid "Show 'Desktop'"
 msgstr "Tampilkan 'Desktop'"
 
-#: ../gtk/gtkplacessidebar.c:4508
+#: ../gtk/gtkplacessidebar.c:4583
 msgid "Whether the sidebar includes a builtin shortcut to the Desktop folder"
 msgstr "Apakah bilah sisi termasuk pintasan bawaan ke folder Desktop"
 
-#: ../gtk/gtkplacessidebar.c:4513
+#: ../gtk/gtkplacessidebar.c:4588
 msgid "Show 'Connect to Server'"
 msgstr "Tampilkan 'Menyambung ke Server'"
 
-#: ../gtk/gtkplacessidebar.c:4514
+#: ../gtk/gtkplacessidebar.c:4589
 msgid ""
 "Whether the sidebar includes a builtin shortcut to a 'Connect to server' "
 "dialog"
 msgstr ""
 "Apakah bilah sisi memuat pintasan bawaan ke dialog 'Menyambung ke server'"
 
-#: ../gtk/gtkplacessidebar.c:4519
+#: ../gtk/gtkplacessidebar.c:4594
 msgid "Show 'Enter Location'"
 msgstr "Tampilkan 'Masukkan Lokasi'"
 
-#: ../gtk/gtkplacessidebar.c:4520
+#: ../gtk/gtkplacessidebar.c:4595
 msgid ""
 "Whether the sidebar includes a builtin shortcut to manually enter a location"
 msgstr ""
 "Apakah bilah sisi memuat pintasan bawaan ke memasukkan suatu lokasi secara "
 "manual"
 
-#: ../gtk/gtkplacessidebar.c:4526
+#: ../gtk/gtkplacessidebar.c:4601
 msgid "Whether the sidebar only includes local files"
 msgstr "Apakah bilah sisi hanya menyertakan berkas lokal"
 
@@ -5747,127 +5755,127 @@ msgstr "Butir menu radio tempat grup pemilik widget ini."
 msgid "The radio tool button whose group this button belongs to."
 msgstr "Tombol alat radio tempat grup pemilik tombol ini."
 
-#: ../gtk/gtkrange.c:440
+#: ../gtk/gtkrange.c:441
 msgid "The GtkAdjustment that contains the current value of this range object"
 msgstr "GtkAdjustment yang berisi nilai sekarang pada obyek jangkauan"
 
-#: ../gtk/gtkrange.c:448
+#: ../gtk/gtkrange.c:449
 msgid "Invert direction slider moves to increase range value"
 msgstr "Balik arah slider yang bergerak untuk meningkatkan nilai jangkauan"
 
-#: ../gtk/gtkrange.c:455
+#: ../gtk/gtkrange.c:456
 msgid "Lower stepper sensitivity"
 msgstr "Sensitivitas stepper bawah"
 
-#: ../gtk/gtkrange.c:456
+#: ../gtk/gtkrange.c:457
 msgid ""
 "The sensitivity policy for the stepper that points to the adjustment's lower "
 "side"
 msgstr ""
 "Kebijakan sensitivitas bagi stepper yang menunjuk ke pengaturan sisi bawah"
 
-#: ../gtk/gtkrange.c:464
+#: ../gtk/gtkrange.c:465
 msgid "Upper stepper sensitivity"
 msgstr "Sensitivitas stepper atas"
 
-#: ../gtk/gtkrange.c:465
+#: ../gtk/gtkrange.c:466
 msgid ""
 "The sensitivity policy for the stepper that points to the adjustment's upper "
 "side"
 msgstr ""
 "Kebijakan sensitivitas bagi stepper yang menunjuk ke pengaturan sisi atas"
 
-#: ../gtk/gtkrange.c:482
+#: ../gtk/gtkrange.c:483
 msgid "Show Fill Level"
 msgstr "Tampilkan Tingkat Pengisian"
 
-#: ../gtk/gtkrange.c:483
+#: ../gtk/gtkrange.c:484
 msgid "Whether to display a fill level indicator graphics on trough."
 msgstr "Apakah menampilkan grafik indikator tingkat pengisian."
 
-#: ../gtk/gtkrange.c:499
+#: ../gtk/gtkrange.c:500
 msgid "Restrict to Fill Level"
 msgstr "Batasi Tingkat Pengisian"
 
-#: ../gtk/gtkrange.c:500
+#: ../gtk/gtkrange.c:501
 msgid "Whether to restrict the upper boundary to the fill level."
 msgstr "Apakah perlu membatasi batas atas tingkat pengisian."
 
-#: ../gtk/gtkrange.c:515
+#: ../gtk/gtkrange.c:516
 msgid "Fill Level"
 msgstr "Tingkat Pengisian"
 
-#: ../gtk/gtkrange.c:516
+#: ../gtk/gtkrange.c:517
 msgid "The fill level."
 msgstr "Tingkat pengisian."
 
-#: ../gtk/gtkrange.c:533
+#: ../gtk/gtkrange.c:534
 msgid "Round Digits"
 msgstr "Digit Pembulatan"
 
-#: ../gtk/gtkrange.c:534
+#: ../gtk/gtkrange.c:535
 msgid "The number of digits to round the value to."
 msgstr "Nilai dibulatkan ke cacah digit ini."
 
-#: ../gtk/gtkrange.c:540 ../gtk/gtkswitch.c:957
+#: ../gtk/gtkrange.c:541 ../gtk/gtkswitch.c:957
 msgid "Slider Width"
 msgstr "Lebar slider"
 
-#: ../gtk/gtkrange.c:541
+#: ../gtk/gtkrange.c:542
 msgid "Width of scrollbar or scale thumb"
 msgstr "Lebar scrollbar atau patokan skala"
 
-#: ../gtk/gtkrange.c:548
+#: ../gtk/gtkrange.c:549
 msgid "Trough Border"
 msgstr "Batas"
 
-#: ../gtk/gtkrange.c:549
+#: ../gtk/gtkrange.c:550
 msgid "Spacing between thumb/steppers and outer trough bevel"
 msgstr "Besar ruangan antara patokan/tangga dan batas luar"
 
-#: ../gtk/gtkrange.c:556
+#: ../gtk/gtkrange.c:557
 msgid "Stepper Size"
 msgstr "Ukuran tangga"
 
-#: ../gtk/gtkrange.c:557
+#: ../gtk/gtkrange.c:558
 msgid "Length of step buttons at ends"
 msgstr "Panjang tombol tangga pada sisi ujung"
 
-#: ../gtk/gtkrange.c:570
+#: ../gtk/gtkrange.c:571
 msgid "Stepper Spacing"
 msgstr "Ruang isi tangga"
 
-#: ../gtk/gtkrange.c:571
+#: ../gtk/gtkrange.c:572
 msgid "Spacing between step buttons and thumb"
 msgstr "Besar ruangan yang mengisi antara tangga dan patokan"
 
-#: ../gtk/gtkrange.c:578
+#: ../gtk/gtkrange.c:579
 msgid "Arrow X Displacement"
 msgstr "Pemindahan sisi X panah"
 
-#: ../gtk/gtkrange.c:579
+#: ../gtk/gtkrange.c:580
 msgid ""
 "How far in the x direction to move the arrow when the button is depressed"
 msgstr ""
 "Seberapa jauh pada arah x yang digunakan untuk memindahkan panah saat tombol "
 "dilepas"
 
-#: ../gtk/gtkrange.c:586
+#: ../gtk/gtkrange.c:587
 msgid "Arrow Y Displacement"
 msgstr "Pemindahan sisi Y panah"
 
-#: ../gtk/gtkrange.c:587
+#: ../gtk/gtkrange.c:588
 msgid ""
 "How far in the y direction to move the arrow when the button is depressed"
 msgstr ""
 "Seberapa jauh pada arah y yang digunakan untuk memindahkan panah saat tombol "
 "dilepas"
 
-#: ../gtk/gtkrange.c:603
+#: ../gtk/gtkrange.c:604
 msgid "Trough Under Steppers"
 msgstr "Trough Di Bawah Stepper"
 
-#: ../gtk/gtkrange.c:604
+#: ../gtk/gtkrange.c:605
 msgid ""
 "Whether to draw trough for full length of range or exclude the steppers and "
 "spacing"
@@ -5875,11 +5883,11 @@ msgstr ""
 "Apakah menggambar trough sepanjang jangkauan atau mengecualikan stepper dan "
 "jarak"
 
-#: ../gtk/gtkrange.c:617
+#: ../gtk/gtkrange.c:618
 msgid "Arrow scaling"
 msgstr "Penskalaan panah"
 
-#: ../gtk/gtkrange.c:618
+#: ../gtk/gtkrange.c:619
 msgid "Arrow scaling with regard to scroll button size"
 msgstr "Penskalaan panah terhadap ukuran tombol gulir"
 
@@ -7111,7 +7119,7 @@ msgstr "Perlu Perhatian"
 msgid "Whether this page needs attention"
 msgstr "Apakah halaman ini perlu perhatian"
 
-#: ../gtk/gtkstackswitcher.c:523 ../gtk/gtkstackswitcher.c:524
+#: ../gtk/gtkstackswitcher.c:521 ../gtk/gtkstackswitcher.c:522
 msgid "Stack"
 msgstr "Tumpukan"
 
