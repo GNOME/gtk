@@ -1077,7 +1077,6 @@ gtk_do_render_icon_pixbuf (GtkStyleContext     *context,
   GdkPixbuf *scaled;
   GdkPixbuf *stated;
   GdkPixbuf *base_pixbuf;
-  GtkStateFlags state;
   gint width = 1;
   gint height = 1;
   cairo_t *cr;
@@ -1088,8 +1087,6 @@ gtk_do_render_icon_pixbuf (GtkStyleContext     *context,
   G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
   base_pixbuf = gtk_icon_source_get_pixbuf (source);
   G_GNUC_END_IGNORE_DEPRECATIONS;
-
-  state = gtk_style_context_get_state (context);
 
   g_return_val_if_fail (base_pixbuf != NULL, NULL);
 
@@ -1122,9 +1119,9 @@ gtk_do_render_icon_pixbuf (GtkStyleContext     *context,
   image_effect = _gtk_css_image_effect_value_get
     (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_GTK_IMAGE_EFFECT));
 
-  if (image_effect == GTK_CSS_IMAGE_EFFECT_DIM ||
-      state & GTK_STATE_FLAG_INSENSITIVE)
+  switch (image_effect)
     {
+    case GTK_CSS_IMAGE_EFFECT_DIM:
       surface = cairo_image_surface_create (CAIRO_FORMAT_ARGB32,
 					    gdk_pixbuf_get_width (scaled),
 					    gdk_pixbuf_get_height (scaled));
@@ -1139,10 +1136,9 @@ gtk_do_render_icon_pixbuf (GtkStyleContext     *context,
 					    cairo_image_surface_get_width (surface),
 					    cairo_image_surface_get_height (surface));
       cairo_surface_destroy (surface);
-    }
-  else if (image_effect == GTK_CSS_IMAGE_EFFECT_HIGHLIGHT ||
-	   state & GTK_STATE_FLAG_PRELIGHT)
-    {
+      break;
+
+    case GTK_CSS_IMAGE_EFFECT_HIGHLIGHT:
       surface = cairo_image_surface_create (CAIRO_FORMAT_ARGB32,
 					    gdk_pixbuf_get_width (scaled),
 					    gdk_pixbuf_get_height (scaled));
@@ -1158,9 +1154,15 @@ gtk_do_render_icon_pixbuf (GtkStyleContext     *context,
 					    cairo_image_surface_get_width (surface),
 					    cairo_image_surface_get_height (surface));
       cairo_surface_destroy (surface);
+      break;
+
+    default:
+      g_warn_if_reached ();
+      /* fall through */
+    case GTK_CSS_IMAGE_EFFECT_NONE:
+      stated = scaled;
+      break;
     }
-  else
-    stated = scaled;
 
   return stated;
 }
