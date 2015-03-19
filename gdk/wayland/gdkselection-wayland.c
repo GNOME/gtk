@@ -896,9 +896,10 @@ _gdk_wayland_display_convert_selection (GdkDisplay *display,
       return;
     }
 
-  wl_data_offer_accept (wayland_selection->offer,
-                        _gdk_wayland_display_get_serial (GDK_WAYLAND_DISPLAY (display)),
-                        gdk_atom_name (target));
+  if (target != gdk_atom_intern_static_string ("TARGETS"))
+    wl_data_offer_accept (wayland_selection->offer,
+                          _gdk_wayland_display_get_serial (GDK_WAYLAND_DISPLAY (display)),
+                          gdk_atom_name (target));
 
   buffer_data = g_hash_table_lookup (wayland_selection->selection_buffers,
                                      target);
