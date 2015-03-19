@@ -29,6 +29,7 @@ noinst_PROGRAMS =  $(TEST_PROGS)	\
 	animated-resizing		\
 	motion-compression		\
 	scrolling-performance		\
+	blur-performance		\
 	simple				\
 	flicker				\
 	print-editor			\
@@ -177,6 +178,7 @@ animated_resizing_DEPENDENCIES = $(TEST_DEPS)
 flicker_DEPENDENCIES = $(TEST_DEPS)
 motion_compression_DEPENDENCIES = $(TEST_DEPS)
 scrolling_performance_DEPENDENCIES = $(TEST_DEPS)
+blur_performance_DEPENDENCIES = $(TEST_DEPS)
 simple_DEPENDENCIES = $(TEST_DEPS)
 print_editor_DEPENDENCIES = $(TEST_DEPS)
 video_timer_DEPENDENCIES = $(TEST_DEPS)
@@ -299,6 +301,10 @@ scrolling_performance_SOURCES = \
 	frame-stats.h		\
 	variable.c		\
 	variable.h
+
+blur_performance_SOURCES = \
+	blur-performance.c	\
+	../gtk/gtkcairoblur.c
 
 video_timer_SOURCES = 	\
 	video-timer.c	\
