@@ -73,18 +73,37 @@ blur_xspan (guchar *row,
    * only divide down after all three passes. (SSE parallel implementation
    * of the divide step is possible.)
    */
-  for (i = -d + offset; i < row_width + offset; i++)
+
+#define BLUR_ROW_KERNEL(D)                                      \
+  for (i = -(D) + offset; i < row_width + offset; i++)		\
+    {                                                           \
+      if (i >= 0 && i < row_width)                              \
+        sum += row[i];                                          \
+                                                                \
+      if (i >= offset)						\
+	{							\
+	  if (i >= (D))						\
+	    sum -= row[i - (D)];				\
+                                                                \
+	  tmp_buffer[i - offset] = (sum + (D) / 2) / (D);	\
+	}							\
+    }								\
+  break;
+
+  /* We unroll the values for d for radius 2-10 to avoid a generic
+   * divide operation (not radius 1, because its a no-op) */
+  switch (d)
     {
-      if (i >= 0 && i < row_width)
-        sum += row[i];
-
-      if (i >= offset)
-        {
-          if (i >= d)
-            sum -= row[i - d];
-
-          tmp_buffer[i - offset] = (sum + d / 2) / d;
-        }
+    case get_box_filter_size (2): BLUR_ROW_KERNEL (get_box_filter_size (2));
+    case get_box_filter_size (3): BLUR_ROW_KERNEL (get_box_filter_size (3));
+    case get_box_filter_size (4): BLUR_ROW_KERNEL (get_box_filter_size (4));
+    case get_box_filter_size (5): BLUR_ROW_KERNEL (get_box_filter_size (5));
+    case get_box_filter_size (6): BLUR_ROW_KERNEL (get_box_filter_size (6));
+    case get_box_filter_size (7): BLUR_ROW_KERNEL (get_box_filter_size (7));
+    case get_box_filter_size (8): BLUR_ROW_KERNEL (get_box_filter_size (8));
+    case get_box_filter_size (9): BLUR_ROW_KERNEL (get_box_filter_size (9));
+    case get_box_filter_size (10): BLUR_ROW_KERNEL (get_box_filter_size (10));
+    default: BLUR_ROW_KERNEL (d);
     }
 
   memcpy (row, tmp_buffer, row_width);
