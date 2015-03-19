@@ -416,9 +416,11 @@ async_write_data_cb (GObject      *object,
                                                 res, &error);
   if (error)
     {
-      g_warning ("Error writing selection data: %s", error->message);
-      g_error_free (error);
+      if (error->domain != G_IO_ERROR ||
+          error->code != G_IO_ERROR_CANCELLED)
+        g_warning ("Error writing selection data: %s", error->message);
 
+      g_error_free (error);
       async_write_data_free (write_data);
       return;
     }
