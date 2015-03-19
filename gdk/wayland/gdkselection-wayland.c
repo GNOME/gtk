@@ -558,11 +558,11 @@ gdk_wayland_selection_request_target (GdkWaylandSelection *wayland_selection,
   else
     return FALSE;
 
-  if (fd >= 0)
-    wayland_selection->stored_selection.fd = fd;
-
-  if (wayland_selection->source_requested_target == target)
+  if (wayland_selection->stored_selection.fd == fd &&
+      wayland_selection->source_requested_target == target)
     return FALSE;
+
+  wayland_selection->stored_selection.fd = fd;
 
   wayland_selection->source_requested_target = target;
 
