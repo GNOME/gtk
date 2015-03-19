@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 3.16.x\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-02-16 18:32+0100\n"
-"PO-Revision-Date: 2015-02-16 18:33+0100\n"
+"POT-Creation-Date: 2015-03-19 21:11+0100\n"
+"PO-Revision-Date: 2015-03-19 21:13+0100\n"
 "Last-Translator: Kjartan Maraas <kmaraas@gnome.org>\n"
 "Language-Team: Norwegian bokmål <i18n-nb@lister.ping.uio.no>\n"
 "Language: no\n"
@@ -80,7 +80,7 @@ msgstr "FLAGG"
 msgid "GDK debugging flags to unset"
 msgstr "Feilsøkingsflagg som skal fjernes for GDK"
 
-#: ../gdk/gdkwindow.c:2736
+#: ../gdk/gdkwindow.c:2739
 msgid "GL support disabled via GDK_DEBUG"
 msgstr "GL-støtte slått av via GDK_DEBUG"
 
@@ -427,21 +427,21 @@ msgid "Suspend"
 msgstr "Hvilemodus"
 
 #: ../gdk/mir/gdkmirglcontext.c:48 ../gdk/mir/gdkmirwindowimpl.c:1406
-#: ../gdk/wayland/gdkglcontext-wayland.c:368
-#: ../gdk/win32/gdkglcontext-win32.c:541 ../gdk/x11/gdkglcontext-x11.c:1163
+#: ../gdk/wayland/gdkglcontext-wayland.c:369
+#: ../gdk/win32/gdkglcontext-win32.c:532 ../gdk/x11/gdkglcontext-x11.c:1163
 msgid "No GL implementation is available"
 msgstr "Ingen GL-implementasjon tilgjengelig"
 
-#: ../gdk/mir/gdkmirglcontext.c:89 ../gdk/wayland/gdkglcontext-wayland.c:156
-#: ../gdk/win32/gdkglcontext-win32.c:501 ../gdk/x11/gdkglcontext-x11.c:619
+#: ../gdk/mir/gdkmirglcontext.c:89 ../gdk/wayland/gdkglcontext-wayland.c:157
+#: ../gdk/win32/gdkglcontext-win32.c:492 ../gdk/x11/gdkglcontext-x11.c:619
 #: ../gdk/x11/gdkglcontext-x11.c:663
 msgid "Unable to create a GL context"
 msgstr "Kan ikke lage et GL-kontekst"
 
 #: ../gdk/mir/gdkmirwindowimpl.c:1368 ../gdk/mir/gdkmirwindowimpl.c:1378
-#: ../gdk/wayland/gdkglcontext-wayland.c:329
-#: ../gdk/wayland/gdkglcontext-wayland.c:339
-#: ../gdk/win32/gdkglcontext-win32.c:473 ../gdk/x11/gdkglcontext-x11.c:857
+#: ../gdk/wayland/gdkglcontext-wayland.c:330
+#: ../gdk/wayland/gdkglcontext-wayland.c:340
+#: ../gdk/win32/gdkglcontext-win32.c:464 ../gdk/x11/gdkglcontext-x11.c:857
 msgid "No available configurations for the given pixel format"
 msgstr "Ingen tilgjengelige konfigurasjoner for oppgitt pikselformat"
 
@@ -449,15 +449,17 @@ msgstr "Ingen tilgjengelige konfigurasjoner for oppgitt pikselformat"
 msgid "3.2 core GL profile is not available on EGL implementation"
 msgstr "3.2 kjerne GL-profil er ikke tilgjengelig på EGL-implementasjonen"
 
-#: ../gdk/wayland/gdkglcontext-wayland.c:376
+#: ../gdk/wayland/gdkglcontext-wayland.c:377
 msgid "Core GL is not available on EGL implementation"
 msgstr "Core GL er ikke tilgjengelig i EGL-implementasjonen"
 
-#: ../gdk/win32/gdkglcontext-win32.c:550
+#: ../gdk/win32/gdkglcontext-win32.c:541
 msgid ""
 "The WGL_ARB_create_context extension needed to create core profiles is not "
 "available"
-msgstr "WGL_ARB_create_context-utvidelsen som kreves for å lage kjerneprofiler er ikke tilgjengelig"
+msgstr ""
+"WGL_ARB_create_context-utvidelsen som kreves for å lage kjerneprofiler er "
+"ikke tilgjengelig"
 
 #. Description of --sync in --help output
 #: ../gdk/win32/gdkmain-win32.c:53
@@ -515,7 +517,9 @@ msgstr "Ingen tilgjengelige konfigurasjoner for oppgitt RGBA-pikselformat"
 msgid ""
 "The GLX_ARB_create_context_profile extension needed to create core profiles "
 "is not available"
-msgstr "WGL_ARB_create_context-utvidelsen som kreves for å lage kjerneprofiler er ikke tilgjengelig"
+msgstr ""
+"WGL_ARB_create_context-utvidelsen som kreves for å lage kjerneprofiler er "
+"ikke tilgjengelig"
 
 #: ../gtk/a11y/gtkbooleancellaccessible.c:43
 msgctxt "Action description"
@@ -1030,6 +1034,10 @@ msgctxt "Stock label"
 msgid "Zoom _Out"
 msgstr "Zoom _ut"
 
+#: ../gtk/a11y/gtkmenubuttonaccessible.c:102
+msgid "Menu"
+msgstr "Meny"
+
 #: ../gtk/a11y/gtkmenuitemaccessible.c:445
 msgctxt "Action description"
 msgid "Clicks the menuitem"
@@ -1204,21 +1212,17 @@ msgstr ""
 
 #: ../gtk/deprecated/gtkcolorseldialog.c:191
 #: ../gtk/deprecated/gtkfontsel.c:1689 ../gtk/gtkfilechooserbutton.c:794
-#: ../gtk/gtkfilechooserwidget.c:5373 ../gtk/gtkmessagedialog.c:944
+#: ../gtk/gtkfilechooserwidget.c:5356 ../gtk/gtkmessagedialog.c:944
 #: ../gtk/gtkmessagedialog.c:957 ../gtk/gtkmountoperation.c:543
 #: ../gtk/gtkpagesetupunixdialog.c:196 ../gtk/gtkprintbackend.c:763
 #: ../gtk/gtkprinteroptionwidget.c:545 ../gtk/gtkprintunixdialog.c:665
-#: ../gtk/gtkprintunixdialog.c:733 ../gtk/gtkwindow.c:11853
-#: ../gtk/inspector/css-editor.c:199 ../gtk/ui/gtkappchooserdialog.ui.h:2
-#: ../gtk/ui/gtkassistant.ui.h:5 ../gtk/ui/gtkcolorchooserdialog.ui.h:2
-#: ../gtk/ui/gtkfontchooserdialog.ui.h:2
+#: ../gtk/gtkprintunixdialog.c:738 ../gtk/gtkwindow.c:11911
+#: ../gtk/inspector/css-editor.c:199
 msgid "_Cancel"
 msgstr "_Avbryt"
 
 #: ../gtk/deprecated/gtkcolorseldialog.c:195
-#: ../gtk/gtkprinteroptionwidget.c:546 ../gtk/ui/gtkappchooserdialog.ui.h:3
-#: ../gtk/ui/gtkcolorchooserdialog.ui.h:3
-#: ../gtk/ui/gtkfontchooserdialog.ui.h:3
+#: ../gtk/gtkprinteroptionwidget.c:546
 msgid "_Select"
 msgstr "Vel_g"
 
@@ -1254,13 +1258,12 @@ msgid "_Preview:"
 msgstr "_Forhåndsvisning:"
 
 #: ../gtk/deprecated/gtkfontsel.c:1693 ../gtk/gtkpagesetupunixdialog.c:197
-#: ../gtk/ui/gtkassistant.ui.h:1
 msgid "_Apply"
 msgstr "_Bruk"
 
 #: ../gtk/deprecated/gtkfontsel.c:1698 ../gtk/gtkmessagedialog.c:936
 #: ../gtk/gtkmessagedialog.c:958 ../gtk/gtkprintbackend.c:764
-#: ../gtk/gtkwindow.c:11854 ../gtk/inspector/classes-list.c:127
+#: ../gtk/gtkwindow.c:11912 ../gtk/inspector/classes-list.c:127
 msgid "_OK"
 msgstr "_OK"
 
@@ -1416,7 +1419,7 @@ msgstr ""
 "Dette programmet har absolutt ingen garanti.\n"
 "besøk  <a href=«%s»>%s</a> for detaljer."
 
-#: ../gtk/gtkaboutdialog.c:118 ../gtk/ui/gtkaboutdialog.ui.h:3
+#: ../gtk/gtkaboutdialog.c:118
 msgid "License"
 msgstr "Lisens"
 
@@ -1477,7 +1480,7 @@ msgid "_License"
 msgstr "_Lisens"
 
 #: ../gtk/gtkaboutdialog.c:716 ../gtk/gtkcustompaperunixdialog.c:329
-#: ../gtk/gtkmessagedialog.c:940 ../gtk/ui/gtkassistant.ui.h:6
+#: ../gtk/gtkmessagedialog.c:940
 msgid "_Close"
 msgstr "_Lukk"
 
@@ -1489,7 +1492,7 @@ msgstr "Klarte ikke å vise lenke"
 msgid "Website"
 msgstr "Nettsted"
 
-#: ../gtk/gtkaboutdialog.c:1092 ../gtk/ui/gtkapplication-quartz.ui.h:1
+#: ../gtk/gtkaboutdialog.c:1092
 #, c-format
 msgid "About %s"
 msgstr "Om %s"
@@ -1584,38 +1587,38 @@ msgstr "Backslash"
 msgid "Other application…"
 msgstr "Annet program …"
 
-#: ../gtk/gtkappchooserdialog.c:203 ../gtk/gtkappchooserdialog.c:210
-#: ../gtk/gtkappchooserdialog.c:227 ../gtk/ui/gtkappchooserdialog.ui.h:1
+#: ../gtk/gtkappchooserdialog.c:206 ../gtk/gtkappchooserdialog.c:213
+#: ../gtk/gtkappchooserdialog.c:230
 msgid "Select Application"
 msgstr "Velg program"
 
 #. Translators: %s is a filename
-#: ../gtk/gtkappchooserdialog.c:205
+#: ../gtk/gtkappchooserdialog.c:208
 #, c-format
 msgid "Opening “%s”."
 msgstr "Åpne «%s»."
 
-#: ../gtk/gtkappchooserdialog.c:206
+#: ../gtk/gtkappchooserdialog.c:209
 #, c-format
 msgid "No applications found for “%s”"
 msgstr "Ingen programmer funnet for «%s»"
 
 #. Translators: %s is a file type description
-#: ../gtk/gtkappchooserdialog.c:212
+#: ../gtk/gtkappchooserdialog.c:215
 #, c-format
 msgid "Opening “%s” files."
 msgstr "Åpne «%s» filer."
 
-#: ../gtk/gtkappchooserdialog.c:214
+#: ../gtk/gtkappchooserdialog.c:217
 #, c-format
 msgid "No applications found for “%s” files"
 msgstr "Ingen programmer funnet for «%s»-filer"
 
-#: ../gtk/gtkappchooserdialog.c:307
+#: ../gtk/gtkappchooserdialog.c:310
 msgid "Forget association"
 msgstr "Glem kobling"
 
-#: ../gtk/gtkappchooserdialog.c:450
+#: ../gtk/gtkappchooserdialog.c:453
 msgid "Failed to start GNOME Software"
 msgstr "Klarte ikke å starte GNOME programvare"
 
@@ -2060,7 +2063,7 @@ msgid "default:mm"
 msgstr "default:mm"
 
 #. And show the custom paper dialog
-#: ../gtk/gtkcustompaperunixdialog.c:405 ../gtk/gtkprintunixdialog.c:3313
+#: ../gtk/gtkcustompaperunixdialog.c:405 ../gtk/gtkprintunixdialog.c:3318
 msgid "Manage Custom Sizes"
 msgstr "Håndter egendefinerte størrelser"
 
@@ -2113,30 +2116,30 @@ msgstr "Høy_re:"
 msgid "Paper Margins"
 msgstr "Papirmarger"
 
-#: ../gtk/gtkentry.c:9626 ../gtk/gtkentry.c:9779 ../gtk/gtklabel.c:6596
+#: ../gtk/gtkentry.c:9617 ../gtk/gtkentry.c:9770 ../gtk/gtklabel.c:6597
 #: ../gtk/gtktextview.c:9037 ../gtk/gtktextview.c:9225
 msgid "Cu_t"
 msgstr "Klipp u_t"
 
-#: ../gtk/gtkentry.c:9630 ../gtk/gtkentry.c:9782 ../gtk/gtklabel.c:6597
+#: ../gtk/gtkentry.c:9621 ../gtk/gtkentry.c:9773 ../gtk/gtklabel.c:6598
 #: ../gtk/gtktextview.c:9041 ../gtk/gtktextview.c:9229
 msgid "_Copy"
 msgstr "_Kopier"
 
-#: ../gtk/gtkentry.c:9634 ../gtk/gtkentry.c:9785 ../gtk/gtklabel.c:6598
+#: ../gtk/gtkentry.c:9625 ../gtk/gtkentry.c:9776 ../gtk/gtklabel.c:6599
 #: ../gtk/gtktextview.c:9043 ../gtk/gtktextview.c:9231
 msgid "_Paste"
 msgstr "_Lim inn"
 
-#: ../gtk/gtkentry.c:9637 ../gtk/gtklabel.c:6600 ../gtk/gtktextview.c:9046
+#: ../gtk/gtkentry.c:9628 ../gtk/gtklabel.c:6601 ../gtk/gtktextview.c:9046
 msgid "_Delete"
 msgstr "_Slett"
 
-#: ../gtk/gtkentry.c:9648 ../gtk/gtklabel.c:6609 ../gtk/gtktextview.c:9060
+#: ../gtk/gtkentry.c:9639 ../gtk/gtklabel.c:6610 ../gtk/gtktextview.c:9060
 msgid "Select _All"
 msgstr "Velg _alt"
 
-#: ../gtk/gtkentry.c:10848
+#: ../gtk/gtkentry.c:10837
 msgid "Caps Lock is on"
 msgstr "Caps Lock er på"
 
@@ -2148,7 +2151,7 @@ msgstr "Velg en fil"
 msgid "Desktop"
 msgstr "Skrivebord"
 
-#: ../gtk/gtkfilechooserbutton.c:105 ../gtk/ui/gtkfilechooserbutton.ui.h:1
+#: ../gtk/gtkfilechooserbutton.c:105
 msgid "(None)"
 msgstr "(Ingen)"
 
@@ -2169,7 +2172,7 @@ msgstr "Annet …"
 msgid "%1$s on %2$s"
 msgstr "%1$s på %2$s"
 
-#: ../gtk/gtkfilechooserwidget.c:334
+#: ../gtk/gtkfilechooserwidget.c:336
 msgid "Type name of new folder"
 msgstr "Skriv inn navn på ny mappe"
 
@@ -2219,96 +2222,94 @@ msgstr "Ugyldig filnavn"
 msgid "The folder contents could not be displayed"
 msgstr "Mappeinholdet kunne ikke vises"
 
-#: ../gtk/gtkfilechooserwidget.c:1512
+#: ../gtk/gtkfilechooserwidget.c:1491
 msgid "Could not select file"
 msgstr "Klarte ikke å merke filen"
 
-#: ../gtk/gtkfilechooserwidget.c:1745
+#: ../gtk/gtkfilechooserwidget.c:1724
 msgid "_Visit File"
 msgstr "_Gå til fil"
 
-#: ../gtk/gtkfilechooserwidget.c:1748
+#: ../gtk/gtkfilechooserwidget.c:1727
 msgid "_Open With File Manager"
 msgstr "_Åpne med filhåndterer"
 
-#: ../gtk/gtkfilechooserwidget.c:1751
+#: ../gtk/gtkfilechooserwidget.c:1730
 msgid "_Copy Location"
 msgstr "Kopier _adresse"
 
-#: ../gtk/gtkfilechooserwidget.c:1754
+#: ../gtk/gtkfilechooserwidget.c:1733
 msgid "_Add to Bookmarks"
 msgstr "L_egg til i bokmerker"
 
-#: ../gtk/gtkfilechooserwidget.c:1761
+#: ../gtk/gtkfilechooserwidget.c:1740
 msgid "Show _Hidden Files"
 msgstr "Vis sk_julte filer"
 
-#: ../gtk/gtkfilechooserwidget.c:1764
+#: ../gtk/gtkfilechooserwidget.c:1743
 msgid "Show _Size Column"
 msgstr "Vis kolonne for _størrelse"
 
-#: ../gtk/gtkfilechooserwidget.c:1767
+#: ../gtk/gtkfilechooserwidget.c:1746
 msgid "Sort _Folders before Files"
 msgstr "Soroter _mapper før filer"
 
-#. this is the header for the location column in the print dialog
-#: ../gtk/gtkfilechooserwidget.c:2037 ../gtk/inspector/style-prop-list.ui.h:3
-#: ../gtk/ui/gtkfilechooserwidget.ui.h:8 ../gtk/ui/gtkprintunixdialog.ui.h:4
+#: ../gtk/gtkfilechooserwidget.c:2018
 msgid "Location"
 msgstr "Adresse"
 
 #. Label
-#: ../gtk/gtkfilechooserwidget.c:2077
+#: ../gtk/gtkfilechooserwidget.c:2058
 msgid "_Name:"
 msgstr "_Navn:"
 
-#: ../gtk/gtkfilechooserwidget.c:2557 ../gtk/gtkfilechooserwidget.c:4094
-#: ../gtk/gtkplacessidebar.c:968 ../gtk/ui/gtkfilechooserwidget.ui.h:2
+#: ../gtk/gtkfilechooserwidget.c:2538 ../gtk/gtkfilechooserwidget.c:4076
+#: ../gtk/gtkplacessidebar.c:968
 msgid "Home"
 msgstr "Hjem"
 
-#: ../gtk/gtkfilechooserwidget.c:3764
+#: ../gtk/gtkfilechooserwidget.c:3743
 #, c-format
 msgid "Could not read the contents of %s"
 msgstr "Klarte ikke å lese innholdet av %s"
 
-#: ../gtk/gtkfilechooserwidget.c:3768
+#: ../gtk/gtkfilechooserwidget.c:3747
 msgid "Could not read the contents of the folder"
 msgstr "Klarte ikke å lese innholdet i mappen"
 
-#: ../gtk/gtkfilechooserwidget.c:3875
+#: ../gtk/gtkfilechooserwidget.c:3854
 msgid "%H:%M"
 msgstr "%H.%M"
 
-#: ../gtk/gtkfilechooserwidget.c:3875
+#: ../gtk/gtkfilechooserwidget.c:3854
 msgid "%-I:%M %P"
 msgstr "%H.%M"
 
-#: ../gtk/gtkfilechooserwidget.c:3877
+#: ../gtk/gtkfilechooserwidget.c:3856
 msgid "Yesterday at %H:%M"
 msgstr "I går kl. %H.%M"
 
-#: ../gtk/gtkfilechooserwidget.c:3877
+#: ../gtk/gtkfilechooserwidget.c:3856
 msgid "Yesterday at %-I:%M %P"
 msgstr "I går kl. %H.%M"
 
 #. Translators: We don't know whether this printer is
 #. * available to print to.
-#: ../gtk/gtkfilechooserwidget.c:4076 ../gtk/inspector/prop-editor.c:1569
+#: ../gtk/gtkfilechooserwidget.c:4055 ../gtk/inspector/prop-editor.c:1569
 #: ../modules/printbackends/cloudprint/gtkprintbackendcloudprint.c:748
 msgid "Unknown"
 msgstr "Ukjent"
 
-#: ../gtk/gtkfilechooserwidget.c:4580
+#: ../gtk/gtkfilechooserwidget.c:4563
 msgid "Cannot change to folder because it is not local"
 msgstr "Kan ikke gå til mappen fordi den ikke er lokal"
 
-#: ../gtk/gtkfilechooserwidget.c:5366 ../gtk/gtkprintunixdialog.c:656
+#: ../gtk/gtkfilechooserwidget.c:5349 ../gtk/gtkprintunixdialog.c:656
 #, c-format
 msgid "A file named “%s” already exists.  Do you want to replace it?"
 msgstr "En fil med navn «%s» eksisterer allerede. Vil du erstatte den?"
 
-#: ../gtk/gtkfilechooserwidget.c:5369 ../gtk/gtkprintunixdialog.c:660
+#: ../gtk/gtkfilechooserwidget.c:5352 ../gtk/gtkprintunixdialog.c:660
 #, c-format
 msgid ""
 "The file already exists in “%s”.  Replacing it will overwrite its contents."
@@ -2316,15 +2317,15 @@ msgstr ""
 "Filen eksisterer allerede i «%s». Hvis du erstatter denne vil du overskrive "
 "innholdet."
 
-#: ../gtk/gtkfilechooserwidget.c:5374 ../gtk/gtkprintunixdialog.c:668
+#: ../gtk/gtkfilechooserwidget.c:5357 ../gtk/gtkprintunixdialog.c:668
 msgid "_Replace"
 msgstr "E_rstatt"
 
-#: ../gtk/gtkfilechooserwidget.c:6172
+#: ../gtk/gtkfilechooserwidget.c:6155
 msgid "Could not start the search process"
 msgstr "Klarte ikke å starte søkeprosessen"
 
-#: ../gtk/gtkfilechooserwidget.c:6173
+#: ../gtk/gtkfilechooserwidget.c:6156
 msgid ""
 "The program was not able to create a connection to the indexer daemon. "
 "Please make sure it is running."
@@ -2332,7 +2333,7 @@ msgstr ""
 "Programmet kunne ikke opprette en tilkobling til indekseringstjenesten. "
 "Sjekk at denne kjører."
 
-#: ../gtk/gtkfilechooserwidget.c:6187
+#: ../gtk/gtkfilechooserwidget.c:6170
 msgid "Could not send the search request"
 msgstr "Klarte ikke å sende søkeforespørselen"
 
@@ -2359,11 +2360,11 @@ msgstr "Velg en skrift"
 #: ../gtk/gtkfontbutton.c:1182 ../gtk/inspector/general.c:226
 #: ../gtk/inspector/general.c:227 ../gtk/inspector/gestures.c:128
 #: ../gtk/inspector/prop-editor.c:1200 ../gtk/inspector/size-groups.c:252
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:5203
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:5224
 msgid "None"
 msgstr "Ingen"
 
-#: ../gtk/gtkglarea.c:265
+#: ../gtk/gtkglarea.c:264
 msgid "OpenGL context creation failed"
 msgstr "Oppretting av OpenGL-kontekst feilet"
 
@@ -2371,34 +2372,35 @@ msgstr "Oppretting av OpenGL-kontekst feilet"
 msgid "Application menu"
 msgstr "Programmeny"
 
-#: ../gtk/gtkheaderbar.c:479 ../gtk/gtkwindow.c:8527
+#: ../gtk/gtkheaderbar.c:479 ../gtk/gtkwindow.c:8585
 msgid "Close"
 msgstr "Lukk"
 
-#: ../gtk/gtkicontheme.c:2308 ../gtk/gtkicontheme.c:2372
+#: ../gtk/gtkicontheme.c:2314 ../gtk/gtkicontheme.c:2378
 #, c-format
 msgid "Icon '%s' not present in theme %s"
 msgstr "Ikon «%s» finnes ikke i tema %s"
 
-#: ../gtk/gtkicontheme.c:4010 ../gtk/gtkicontheme.c:4377
+#: ../gtk/gtkicontheme.c:4016 ../gtk/gtkicontheme.c:4383
 msgid "Failed to load icon"
 msgstr "Feil under lasting av ikon"
 
-#: ../gtk/gtkimmodule.c:538
+#: ../gtk/gtkimmodule.c:539
+msgctxt "input method menu"
 msgid "Simple"
 msgstr "Enkel"
 
-#: ../gtk/gtkimmulticontext.c:611
-msgctxt "input method menu"
-msgid "System"
-msgstr "System"
-
-#: ../gtk/gtkimmulticontext.c:621
+#: ../gtk/gtkimmodule.c:555
 msgctxt "input method menu"
 msgid "None"
 msgstr "Ingen"
 
-#: ../gtk/gtkimmulticontext.c:704
+#: ../gtk/gtkimmulticontext.c:609
+msgctxt "input method menu"
+msgid "System"
+msgstr "System"
+
+#: ../gtk/gtkimmulticontext.c:688
 #, c-format
 msgctxt "input method menu"
 msgid "System (%s)"
@@ -2421,12 +2423,12 @@ msgid "Error"
 msgstr "Feil"
 
 #. Open Link
-#: ../gtk/gtklabel.c:6577
+#: ../gtk/gtklabel.c:6578
 msgid "_Open Link"
 msgstr "_Åpne lenke"
 
 #. Copy Link Address
-#: ../gtk/gtklabel.c:6586
+#: ../gtk/gtklabel.c:6587
 msgid "Copy _Link Address"
 msgstr "Kopier _lenkas adresse"
 
@@ -2489,11 +2491,11 @@ msgstr "Kopier URL"
 msgid "Invalid URI"
 msgstr "Ugyldig URI"
 
-#: ../gtk/gtklockbutton.c:272 ../gtk/ui/gtklockbutton.ui.h:1
+#: ../gtk/gtklockbutton.c:272
 msgid "Lock"
 msgstr "Lås"
 
-#: ../gtk/gtklockbutton.c:281 ../gtk/ui/gtklockbutton.ui.h:2
+#: ../gtk/gtklockbutton.c:281
 msgid "Unlock"
 msgstr "Lås opp"
 
@@ -2567,10 +2569,6 @@ msgstr "Vis alternativer for GTK+"
 #: ../gtk/gtkmain.c:1166
 msgid "default:LTR"
 msgstr "default:LTR"
-
-#: ../gtk/gtkmenubutton.c:655 ../gtk/inspector/window.ui.h:19
-msgid "Menu"
-msgstr "Meny"
 
 #: ../gtk/gtkmessagedialog.c:948
 msgid "_No"
@@ -2665,7 +2663,7 @@ msgstr "Z Shell"
 msgid "Cannot end process with PID %d: %s"
 msgstr "Kan ikke avslutte prosess med PID %d: %s"
 
-#: ../gtk/gtknotebook.c:5165 ../gtk/gtknotebook.c:7893
+#: ../gtk/gtknotebook.c:5173 ../gtk/gtknotebook.c:7904
 #, c-format
 msgid "Page %u"
 msgstr "Side %u"
@@ -2698,12 +2696,11 @@ msgstr ""
 " Topp: %s %s\n"
 " Bunn: %s %s"
 
-#: ../gtk/gtkpagesetupunixdialog.c:878 ../gtk/gtkprintunixdialog.c:3367
+#: ../gtk/gtkpagesetupunixdialog.c:878 ../gtk/gtkprintunixdialog.c:3372
 msgid "Manage Custom Sizes…"
 msgstr "Håndter egendefinerte størrelser …"
 
-#: ../gtk/gtkpagesetupunixdialog.c:900 ../gtk/ui/gtkpagesetupunixdialog.ui.h:1
-#: ../gtk/ui/gtkprintunixdialog.ui.h:44
+#: ../gtk/gtkpagesetupunixdialog.c:900
 msgid "Page Setup"
 msgstr "Sideoppsett"
 
@@ -2899,7 +2896,7 @@ msgstr "_Løs ut"
 msgid "_Detect Media"
 msgstr "_Gjenkjenn medie"
 
-#: ../gtk/gtkplacessidebar.c:4153
+#: ../gtk/gtkplacessidebar.c:4165
 msgid "Computer"
 msgstr "Datamaskin"
 
@@ -3010,7 +3007,7 @@ msgstr "Tom for papir"
 
 #. Translators: this is a printer status.
 #: ../gtk/gtkprintoperation-win32.c:620
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2495
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2509
 msgid "Paused"
 msgstr "Pause"
 
@@ -3055,19 +3052,19 @@ msgstr "Ugyldig håndtak til PrintDlgEx"
 msgid "Unspecified error"
 msgstr "Uspesifisert feil"
 
-#: ../gtk/gtkprintunixdialog.c:732
+#: ../gtk/gtkprintunixdialog.c:737
 msgid "Pre_view"
 msgstr "Forhånds_visning"
 
-#: ../gtk/gtkprintunixdialog.c:734
+#: ../gtk/gtkprintunixdialog.c:739
 msgid "_Print"
 msgstr "S_kriv ut"
 
-#: ../gtk/gtkprintunixdialog.c:842
+#: ../gtk/gtkprintunixdialog.c:847
 msgid "Getting printer information failed"
 msgstr "Klarte ikke å hente informasjon om skriveren"
 
-#: ../gtk/gtkprintunixdialog.c:2049
+#: ../gtk/gtkprintunixdialog.c:2054
 msgid "Getting printer information…"
 msgstr "Henter informasjon om skriver …"
 
@@ -3077,71 +3074,71 @@ msgstr "Henter informasjon om skriver …"
 #. Translators: These strings name the possible arrangements of
 #. * multiple pages on a sheet when printing
 #.
-#: ../gtk/gtkprintunixdialog.c:3096
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:5152
+#: ../gtk/gtkprintunixdialog.c:3101
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:5173
 msgid "Left to right, top to bottom"
 msgstr "Venstre til høyre, topp til bunn"
 
-#: ../gtk/gtkprintunixdialog.c:3096
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:5152
+#: ../gtk/gtkprintunixdialog.c:3101
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:5173
 msgid "Left to right, bottom to top"
 msgstr "Venstre til høyre, bunn til topp"
 
-#: ../gtk/gtkprintunixdialog.c:3097
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:5153
+#: ../gtk/gtkprintunixdialog.c:3102
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:5174
 msgid "Right to left, top to bottom"
 msgstr "Høyre til venstre, topp til bunn"
 
-#: ../gtk/gtkprintunixdialog.c:3097
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:5153
+#: ../gtk/gtkprintunixdialog.c:3102
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:5174
 msgid "Right to left, bottom to top"
 msgstr "Høyre til venstre, bunn til topp"
 
-#: ../gtk/gtkprintunixdialog.c:3098
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:5154
+#: ../gtk/gtkprintunixdialog.c:3103
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:5175
 msgid "Top to bottom, left to right"
 msgstr "Topp til bunn, venstre til høyre"
 
-#: ../gtk/gtkprintunixdialog.c:3098
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:5154
+#: ../gtk/gtkprintunixdialog.c:3103
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:5175
 msgid "Top to bottom, right to left"
 msgstr "Topp til bunn, høyre til venstre"
 
-#: ../gtk/gtkprintunixdialog.c:3099
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:5155
+#: ../gtk/gtkprintunixdialog.c:3104
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:5176
 msgid "Bottom to top, left to right"
 msgstr "Bunn til topp, venstre til høyre"
 
-#: ../gtk/gtkprintunixdialog.c:3099
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:5155
+#: ../gtk/gtkprintunixdialog.c:3104
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:5176
 msgid "Bottom to top, right to left"
 msgstr "Bunn til topp, høyre til venstre"
 
 #. Translators, this string is used to label the option in the print
 #. * dialog that controls in what order multiple pages are arranged
 #.
-#: ../gtk/gtkprintunixdialog.c:3103 ../gtk/gtkprintunixdialog.c:3116
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:5232
+#: ../gtk/gtkprintunixdialog.c:3108 ../gtk/gtkprintunixdialog.c:3121
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:5253
 msgid "Page Ordering"
 msgstr "Siderekkefølge"
 
-#: ../gtk/gtkprintunixdialog.c:3132
+#: ../gtk/gtkprintunixdialog.c:3137
 msgid "Left to right"
 msgstr "Venstre til høyre"
 
-#: ../gtk/gtkprintunixdialog.c:3133
+#: ../gtk/gtkprintunixdialog.c:3138
 msgid "Right to left"
 msgstr "Høyre til venstre"
 
-#: ../gtk/gtkprintunixdialog.c:3145
+#: ../gtk/gtkprintunixdialog.c:3150
 msgid "Top to bottom"
 msgstr "Topp til bunn"
 
-#: ../gtk/gtkprintunixdialog.c:3146
+#: ../gtk/gtkprintunixdialog.c:3151
 msgid "Bottom to top"
 msgstr "Bunn til topp"
 
-#: ../gtk/gtkprintunixdialog.c:3389
+#: ../gtk/gtkprintunixdialog.c:3394
 msgid "Print"
 msgstr "Skriv ut"
 
@@ -3254,7 +3251,7 @@ msgstr "Søk"
 #. * glyphs then use MEDIUM VERTICAL BAR (U+2759) as the text for
 #. * the state
 #.
-#: ../gtk/gtkswitch.c:401 ../gtk/gtkswitch.c:453 ../gtk/gtkswitch.c:633
+#: ../gtk/gtkswitch.c:379 ../gtk/gtkswitch.c:431 ../gtk/gtkswitch.c:606
 msgctxt "switch"
 msgid "ON"
 msgstr "PÅ"
@@ -3262,7 +3259,7 @@ msgstr "PÅ"
 #. Translators: if the "off" state label requires more than three
 #. * glyphs then use WHITE CIRCLE (U+25CB) as the text for the state
 #.
-#: ../gtk/gtkswitch.c:409 ../gtk/gtkswitch.c:454 ../gtk/gtkswitch.c:648
+#: ../gtk/gtkswitch.c:387 ../gtk/gtkswitch.c:432 ../gtk/gtkswitch.c:621
 msgctxt "switch"
 msgid "OFF"
 msgstr "AV"
@@ -3447,18 +3444,18 @@ msgctxt "volume percentage"
 msgid "%d %%"
 msgstr "%d %%"
 
-#: ../gtk/gtkwindow.c:11841
+#: ../gtk/gtkwindow.c:11899
 msgid "Do you want to use GTK+ Inspector?"
 msgstr "Vil du bruke GTK+ inspektør?"
 
-#: ../gtk/gtkwindow.c:11843
+#: ../gtk/gtkwindow.c:11901
 msgid ""
 "GTK+ Inspector is an interactive debugger that lets you explore and modify "
 "the internals of any GTK+ application. Using it may cause the application to "
 "break or crash."
 msgstr ""
 
-#: ../gtk/gtkwindow.c:11848
+#: ../gtk/gtkwindow.c:11906
 msgid "Don't show this message again"
 msgstr "Ikke vis denne meldingen igjen"
 
@@ -3466,28 +3463,9 @@ msgstr "Ikke vis denne meldingen igjen"
 msgid "Activate"
 msgstr "Aktiver"
 
-#: ../gtk/inspector/action-editor.c:302 ../gtk/inspector/actions.ui.h:5
-#: ../gtk/inspector/misc-info.ui.h:3
+#: ../gtk/inspector/action-editor.c:302
 msgid "State"
 msgstr "Tilstand"
-
-#: ../gtk/inspector/actions.ui.h:1 ../gtk/inspector/general.ui.h:3
-msgid "Prefix"
-msgstr "Prefiks"
-
-#: ../gtk/inspector/actions.ui.h:2 ../gtk/inspector/classes-list.ui.h:3
-#: ../gtk/inspector/object-tree.ui.h:2 ../gtk/inspector/signals-list.ui.h:3
-#: ../gtk/ui/gtkfilechooserwidget.ui.h:5
-msgid "Name"
-msgstr "Navn"
-
-#: ../gtk/inspector/actions.ui.h:3
-msgid "Enabled"
-msgstr "Slått på"
-
-#: ../gtk/inspector/actions.ui.h:4
-msgid "Parameter Type"
-msgstr "Type parameter"
 
 #: ../gtk/inspector/classes-list.c:124
 msgid "New class"
@@ -3500,15 +3478,6 @@ msgstr "Avbryt"
 #: ../gtk/inspector/classes-list.c:135
 msgid "Class name"
 msgstr "Klassenavn"
-
-#. vim: set et sw=2 ts=2:
-#: ../gtk/inspector/classes-list.ui.h:1
-msgid "Add a class"
-msgstr "Legg til en klasse"
-
-#: ../gtk/inspector/classes-list.ui.h:2
-msgid "Restore defaults for this widget"
-msgstr "Gjenopprett forvalg for denne komponenten"
 
 #: ../gtk/inspector/css-editor.c:90 ../gtk/inspector/css-editor.c:96
 msgid "You can type here any CSS rule recognized by GTK+."
@@ -3536,48 +3505,6 @@ msgstr "Lagring av CSS feilet"
 msgid "_Save"
 msgstr "_Lagre"
 
-#. vim: set et sw=2 ts=2:
-#: ../gtk/inspector/css-editor.ui.h:1
-msgid "Disable this custom CSS"
-msgstr "Slå av denne egendefinerte CSSen"
-
-#: ../gtk/inspector/css-editor.ui.h:2
-msgid "Save the current CSS"
-msgstr "Lagre aktiv CSS"
-
-#: ../gtk/inspector/data-list.ui.h:1
-msgid "Show data"
-msgstr "Vis data"
-
-#. vim: set et sw=2 ts=2:
-#: ../gtk/inspector/general.ui.h:1
-msgid "GTK+ Version"
-msgstr "GTK+-versjon"
-
-#: ../gtk/inspector/general.ui.h:2
-msgid "GDK Backend"
-msgstr "GDK-motor"
-
-#: ../gtk/inspector/general.ui.h:4
-msgid "X display"
-msgstr "X-skjerm"
-
-#: ../gtk/inspector/general.ui.h:5
-msgid "RGBA visual"
-msgstr "RGBA-visuell"
-
-#: ../gtk/inspector/general.ui.h:6
-msgid "Composited"
-msgstr "Sammensatt"
-
-#: ../gtk/inspector/general.ui.h:7
-msgid "GL Version"
-msgstr "GL-versjon"
-
-#: ../gtk/inspector/general.ui.h:8
-msgid "GL Vendor"
-msgstr "GL-produsent"
-
 #: ../gtk/inspector/gestures.c:129
 msgid "Capture"
 msgstr "Fang"
@@ -3586,110 +3513,13 @@ msgstr "Fang"
 msgid "Bubble"
 msgstr "Boble"
 
-#: ../gtk/inspector/gestures.c:131 ../gtk/inspector/menu.ui.h:3
+#: ../gtk/inspector/gestures.c:131
 msgid "Target"
 msgstr "Mål"
 
 #: ../gtk/inspector/menu.c:93
 msgid "Unnamed section"
 msgstr "Seksjon uten navn"
-
-#. vim: set et sw=2 ts=2:
-#: ../gtk/inspector/menu.ui.h:1 ../gtk/inspector/object-tree.ui.h:3
-msgid "Label"
-msgstr "Etikett"
-
-#: ../gtk/inspector/menu.ui.h:2 ../gtk/inspector/prop-editor.c:1300
-msgid "Action"
-msgstr "Handling"
-
-#: ../gtk/inspector/menu.ui.h:4
-msgid "Icon"
-msgstr "Ikon"
-
-#. vim: set et sw=2 ts=2:
-#: ../gtk/inspector/misc-info.ui.h:1
-msgid "Address"
-msgstr "Adresse"
-
-#: ../gtk/inspector/misc-info.ui.h:2
-msgid "Reference count"
-msgstr "Referanseteller"
-
-#: ../gtk/inspector/misc-info.ui.h:4
-msgid "Buildable ID"
-msgstr "Byggbar ID"
-
-#: ../gtk/inspector/misc-info.ui.h:5
-msgid "Default Widget"
-msgstr "Forvalgt komponent"
-
-#: ../gtk/inspector/misc-info.ui.h:6 ../gtk/inspector/misc-info.ui.h:8
-#: ../gtk/inspector/prop-editor.c:1003 ../gtk/inspector/prop-editor.c:1183
-#: ../gtk/inspector/prop-editor.c:1308 ../gtk/inspector/prop-editor.c:1419
-#: ../gtk/inspector/window.ui.h:8
-msgid "Properties"
-msgstr "Egenskaper"
-
-#: ../gtk/inspector/misc-info.ui.h:7
-msgid "Focus Widget"
-msgstr "Fokuskomponent"
-
-#: ../gtk/inspector/misc-info.ui.h:9
-msgid "Mnemonic Label"
-msgstr "Hurtitastetikett"
-
-#: ../gtk/inspector/misc-info.ui.h:10
-msgid "Allocated size"
-msgstr "Allokert størrelse"
-
-#: ../gtk/inspector/misc-info.ui.h:11
-msgid "Clip area"
-msgstr "Klippeområde"
-
-#: ../gtk/inspector/misc-info.ui.h:12
-msgid "Tick callback"
-msgstr ""
-
-#: ../gtk/inspector/misc-info.ui.h:13
-msgid "Frame count"
-msgstr "Bildeantall"
-
-#: ../gtk/inspector/misc-info.ui.h:14
-msgid "Frame rate"
-msgstr "Rammehastighet"
-
-#: ../gtk/inspector/misc-info.ui.h:15
-msgid "Accessible role"
-msgstr "Tilgjengelighetsrolle"
-
-#: ../gtk/inspector/misc-info.ui.h:16
-msgid "Mapped"
-msgstr "Tilordnet"
-
-#: ../gtk/inspector/misc-info.ui.h:17
-msgid "Realized"
-msgstr "Realisert"
-
-#: ../gtk/inspector/misc-info.ui.h:18
-msgid "Is Toplevel"
-msgstr "Er toppobjekt"
-
-#: ../gtk/inspector/misc-info.ui.h:19
-msgid "Child Visible"
-msgstr "Underobjekt synlig"
-
-#: ../gtk/inspector/object-hierarchy.ui.h:1
-msgid "Object Hierarchy"
-msgstr "Objekthierarki"
-
-#: ../gtk/inspector/object-tree.ui.h:1
-msgid "Object"
-msgstr "Objekt"
-
-#: ../gtk/inspector/object-tree.ui.h:4 ../gtk/inspector/window.ui.h:13
-msgid "Style Classes"
-msgstr "Stilklasser"
 
 #: ../gtk/inspector/prop-editor.c:615
 #, c-format
@@ -3705,6 +3535,11 @@ msgstr "Ukjent"
 #, c-format
 msgid "Object: %p (%s)"
 msgstr "Objekt: %p (%s)"
+
+#: ../gtk/inspector/prop-editor.c:1003 ../gtk/inspector/prop-editor.c:1183
+#: ../gtk/inspector/prop-editor.c:1308 ../gtk/inspector/prop-editor.c:1419
+msgid "Properties"
+msgstr "Egenskaper"
 
 #: ../gtk/inspector/prop-editor.c:1056
 #, c-format
@@ -3727,6 +3562,10 @@ msgstr "%p (%s)"
 #: ../gtk/inspector/prop-editor.c:1190
 msgid "Column:"
 msgstr "Kolonne:"
+
+#: ../gtk/inspector/prop-editor.c:1300
+msgid "Action"
+msgstr "Handling"
 
 #: ../gtk/inspector/prop-editor.c:1304
 #, c-format
@@ -3769,68 +3608,9 @@ msgstr "Tema"
 msgid "XSettings"
 msgstr "XSettings"
 
-#. vim: set et:
-#: ../gtk/inspector/prop-list.ui.h:1 ../gtk/inspector/style-prop-list.ui.h:1
-msgid "Property"
-msgstr "Egenskap"
-
-#: ../gtk/inspector/prop-list.ui.h:2 ../gtk/inspector/style-prop-list.ui.h:2
-#: ../gtk/ui/gtkcoloreditor.ui.h:9
-msgid "Value"
-msgstr "Verdi"
-
-#: ../gtk/inspector/prop-list.ui.h:3
-msgid "Attribute"
-msgstr "Attributt"
-
-#: ../gtk/inspector/prop-list.ui.h:4 ../gtk/inspector/signals-list.ui.h:6
-msgid "Defined At"
-msgstr "Definert ved"
-
-#: ../gtk/inspector/resource-list.ui.h:1
-msgid "Path"
-msgstr "Sti"
-
-#: ../gtk/inspector/resource-list.ui.h:2 ../gtk/inspector/signals-list.ui.h:5
-msgid "Count"
-msgstr "Antall"
-
-#: ../gtk/inspector/resource-list.ui.h:3 ../gtk/ui/gtkfilechooserwidget.ui.h:6
-msgid "Size"
-msgstr "Størrelse"
-
-#: ../gtk/inspector/resource-list.ui.h:4
-msgid "Name:"
-msgstr "Navn:"
-
-#: ../gtk/inspector/resource-list.ui.h:5
-msgid "Type:"
-msgstr "Type:"
-
-#: ../gtk/inspector/resource-list.ui.h:6
-msgid "Size:"
-msgstr "Størrelse:"
-
-#: ../gtk/inspector/selector.ui.h:1 ../gtk/inspector/window.ui.h:12
-msgid "Selector"
-msgstr "Velger"
-
 #: ../gtk/inspector/signals-list.c:111
 msgid "Yes"
 msgstr "Ja"
-
-#. vim: set et sw=2 ts=2:
-#: ../gtk/inspector/signals-list.ui.h:1
-msgid "Trace signal emissions on this object"
-msgstr "Spor signalutsendelser på dette objektet"
-
-#: ../gtk/inspector/signals-list.ui.h:2
-msgid "Clear log"
-msgstr "Tøm logg"
-
-#: ../gtk/inspector/signals-list.ui.h:4
-msgid "Connected"
-msgstr "Koblet til"
 
 #: ../gtk/inspector/size-groups.c:224
 msgid "Ignore hidden"
@@ -3851,39 +3631,6 @@ msgstr "Vertikal"
 #: ../gtk/inspector/size-groups.c:255
 msgid "Both"
 msgstr "Begge"
-
-#. vim: set et sw=2 ts=2:
-#: ../gtk/inspector/statistics.ui.h:1
-msgid "Type"
-msgstr "Type"
-
-#: ../gtk/inspector/statistics.ui.h:2
-msgid "Self 1"
-msgstr "Selv 1"
-
-#: ../gtk/inspector/statistics.ui.h:3
-msgid "Cumulative 1"
-msgstr "Kumulativ 1"
-
-#: ../gtk/inspector/statistics.ui.h:4
-msgid "Self 2"
-msgstr "Selv 2"
-
-#: ../gtk/inspector/statistics.ui.h:5
-msgid "Cumulative 2"
-msgstr "Kumulativ 2"
-
-#: ../gtk/inspector/statistics.ui.h:6
-msgid "Self"
-msgstr "Selv"
-
-#: ../gtk/inspector/statistics.ui.h:7
-msgid "Cumulative"
-msgstr "Kumulativ"
-
-#: ../gtk/inspector/statistics.ui.h:8
-msgid "Enable statistics with GOBJECT_DEBUG=instance-count"
-msgstr "Slå på statistikk med GOBJECT_DEBUG=instance-count"
 
 #: ../gtk/inspector/visual.c:263 ../gtk/inspector/visual.c:278
 msgid "Theme is hardcoded by GTK_THEME"
@@ -3909,199 +3656,6 @@ msgstr ""
 #: ../gtk/inspector/visual.c:573
 msgid "GL rendering is disabled"
 msgstr "GL-tegning er slått av"
-
-#. vim: set et sw=2 ts=2:
-#: ../gtk/inspector/visual.ui.h:1
-msgid "GTK+ Theme"
-msgstr "GTK+-tema"
-
-#: ../gtk/inspector/visual.ui.h:2
-msgid "Dark Variant"
-msgstr "Mørk variant"
-
-#: ../gtk/inspector/visual.ui.h:3
-msgid "Cursor Theme"
-msgstr "Markørtema"
-
-#: ../gtk/inspector/visual.ui.h:4
-msgid "Cursor Size"
-msgstr "Størrelse på markør"
-
-#: ../gtk/inspector/visual.ui.h:5
-msgid "Icon Theme"
-msgstr "Ikontema"
-
-#: ../gtk/inspector/visual.ui.h:6 ../gtk/ui/gtkfontbutton.ui.h:1
-msgid "Font"
-msgstr "Skrift"
-
-#: ../gtk/inspector/visual.ui.h:7
-msgid "Text Direction"
-msgstr "Tekstretning"
-
-#: ../gtk/inspector/visual.ui.h:8
-msgid "Left-to-Right"
-msgstr "Venstre til høyre"
-
-#: ../gtk/inspector/visual.ui.h:9
-msgid "Right-to-Left"
-msgstr "Høyre til venstre"
-
-#: ../gtk/inspector/visual.ui.h:10
-msgid "Window scaling"
-msgstr "Vinduskalering"
-
-#: ../gtk/inspector/visual.ui.h:11
-msgid "Animations"
-msgstr "Animasjoner"
-
-#: ../gtk/inspector/visual.ui.h:12
-msgid "Rendering Mode"
-msgstr "Gjengivelsesmodus"
-
-#: ../gtk/inspector/visual.ui.h:13
-msgid "Similar"
-msgstr "Lignende"
-
-#: ../gtk/inspector/visual.ui.h:14
-msgid "Image"
-msgstr "Bilde"
-
-#: ../gtk/inspector/visual.ui.h:15
-msgid "Recording"
-msgstr "Opptak"
-
-#: ../gtk/inspector/visual.ui.h:16
-msgid "Show Graphic Updates"
-msgstr "Vis grafiske oppdateringer"
-
-#: ../gtk/inspector/visual.ui.h:17
-msgid "Show Baselines"
-msgstr "Vis utgangspunkter"
-
-#: ../gtk/inspector/visual.ui.h:18
-msgid "Show Pixel Cache"
-msgstr "Vis pikselbuffer"
-
-#: ../gtk/inspector/visual.ui.h:19
-msgid "Simulate touchscreen"
-msgstr "Simuler berøringsskjerm"
-
-#: ../gtk/inspector/visual.ui.h:20
-msgid "GL Rendering"
-msgstr "GL-gjengivelse"
-
-#: ../gtk/inspector/visual.ui.h:21
-msgid "When needed"
-msgstr "Når nødvendig"
-
-#: ../gtk/inspector/visual.ui.h:22
-msgid "Always"
-msgstr "Alltid"
-
-#: ../gtk/inspector/visual.ui.h:23
-msgid "Disabled"
-msgstr "Slått av"
-
-#: ../gtk/inspector/visual.ui.h:24
-msgid "Software GL"
-msgstr "Programvare-GL"
-
-#: ../gtk/inspector/visual.ui.h:25
-msgid "Software Surfaces"
-msgstr "Programvareoverflater"
-
-#: ../gtk/inspector/visual.ui.h:26
-msgid "Texture Rectangle Extension"
-msgstr "Utvidelse for teksturrektangel"
-
-#. vim: set et sw=2 ts=2:
-#: ../gtk/inspector/window.ui.h:1
-msgid "Select an Object"
-msgstr "Velg et objekt"
-
-#: ../gtk/inspector/window.ui.h:2 ../gtk/inspector/window.ui.h:5
-msgid "Show Details"
-msgstr "Vis detaljer"
-
-#: ../gtk/inspector/window.ui.h:3
-msgid "Show all Objects"
-msgstr "Vis alle objekter"
-
-#: ../gtk/inspector/window.ui.h:4
-msgid "Collect Statistics"
-msgstr "Samle statistikk"
-
-#: ../gtk/inspector/window.ui.h:6
-msgid "Show all Resources"
-msgstr "Vis alle ressurser"
-
-#. Translators: "Miscellaneous" is the label for a button, that opens
-#. up an extra panel of settings in a print dialog.
-#: ../gtk/inspector/window.ui.h:7
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:4267
-msgid "Miscellaneous"
-msgstr "Forskjellig"
-
-#: ../gtk/inspector/window.ui.h:9
-msgid "Signals"
-msgstr "Signaler"
-
-#: ../gtk/inspector/window.ui.h:10
-msgid "Child Properties"
-msgstr "Egenskaper for underobjekt"
-
-#: ../gtk/inspector/window.ui.h:11
-msgid "Hierarchy"
-msgstr "Hierarki"
-
-#: ../gtk/inspector/window.ui.h:14
-msgid "Style Properties"
-msgstr "Egenskaper for stil"
-
-#: ../gtk/inspector/window.ui.h:15 ../gtk/inspector/window.ui.h:25
-msgid "CSS"
-msgstr "CSS"
-
-#: ../gtk/inspector/window.ui.h:16
-msgid "Size Groups"
-msgstr "Størrelsesgrupper"
-
-#: ../gtk/inspector/window.ui.h:17
-msgid "Data"
-msgstr "Data"
-
-#: ../gtk/inspector/window.ui.h:18
-msgid "Actions"
-msgstr "Handlinger"
-
-#: ../gtk/inspector/window.ui.h:20
-msgid "Gestures"
-msgstr "Gester"
-
-#: ../gtk/inspector/window.ui.h:21
-msgid "Magnifier"
-msgstr "Forstørrelsesglass"
-
-#: ../gtk/inspector/window.ui.h:22
-msgid "Objects"
-msgstr "Objekter"
-
-#: ../gtk/inspector/window.ui.h:23
-msgid "Statistics"
-msgstr "Statistikk"
-
-#: ../gtk/inspector/window.ui.h:24
-msgid "Resources"
-msgstr "Ressurser"
-
-#: ../gtk/inspector/window.ui.h:26
-msgid "Visual"
-msgstr "Synlig"
-
-#: ../gtk/inspector/window.ui.h:27 ../gtk/ui/gtkprintunixdialog.ui.h:24
-msgid "General"
-msgstr "Generelt"
 
 #: ../gtk/paper_names_offsets.c:4
 msgctxt "paper size"
@@ -5122,56 +4676,83 @@ msgstr ""
 
 #. ID
 #: ../modules/input/imam-et.c:452
+msgctxt "input method menu"
 msgid "Amharic (EZ+)"
-msgstr "Ahmaisk (EZ+)"
+msgstr "Ahmarisk (EZ+)"
+
+#. ID
+#: ../modules/input/imbroadway.c:51
+msgctxt "input method menu"
+msgid "Broadway"
+msgstr "Broadway"
 
 #. ID
 #: ../modules/input/imcedilla.c:90
+msgctxt "input method menu"
 msgid "Cedilla"
 msgstr "Cedilla"
 
 #. ID
 #: ../modules/input/imcyrillic-translit.c:215
+msgctxt "input menthod menu"
 msgid "Cyrillic (Transliterated)"
 msgstr "Kyrillisk (transliterert)"
 
+#: ../modules/input/imime.c:30
+msgctxt "input method menu"
+msgid "Windows IME"
+msgstr "Windows IME"
+
 #. ID
 #: ../modules/input/iminuktitut.c:125
+msgctxt "input method menu"
 msgid "Inuktitut (Transliterated)"
-msgstr "Inukitut (transliterert)"
+msgstr "Inuktitut (transliterert)"
 
 #. ID
 #: ../modules/input/imipa.c:143
+msgctxt "input method menu"
 msgid "IPA"
 msgstr "IPA"
 
 #. ID
 #: ../modules/input/immultipress.c:30
+msgctxt "input method menu"
 msgid "Multipress"
 msgstr "Multipress"
 
+#: ../modules/input/imquartz.c:58
+msgctxt "input method menu"
+msgid "Mac OS X Quartz"
+msgstr "Mac OS X Quartz"
+
 #. ID
 #: ../modules/input/imthai.c:33
+msgctxt "input method menu"
 msgid "Thai-Lao"
 msgstr "Thai-Lao"
 
 #. ID
 #: ../modules/input/imti-er.c:451
+msgctxt "input method menu"
 msgid "Tigrigna-Eritrean (EZ+)"
 msgstr "Tigrigna-Eritreisk (EZ+)"
 
 #. ID
 #: ../modules/input/imti-et.c:451
+msgctxt "input method menu"
 msgid "Tigrigna-Ethiopian (EZ+)"
 msgstr "Tigrigna-Etiopisk (EZ+)"
 
 #. ID
 #: ../modules/input/imviqr.c:242
+msgctxt "input method menu"
 msgid "Vietnamese (VIQR)"
 msgstr "Vietnamesisk (VIQR)"
 
 #. ID
 #: ../modules/input/imxim.c:26
+msgctxt "input method menu"
 msgid "X Input Method"
 msgstr "X-inndatametode"
 
@@ -5200,251 +4781,257 @@ msgstr "Hviler"
 msgid "Pages per _sheet:"
 msgstr "_Sider per ark:"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1083
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1392
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1090
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1399
 msgid "Username:"
 msgstr "Brukernavn:"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1084
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1401
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1091
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1408
 msgid "Password:"
 msgstr "Passord:"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1123
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1414
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1130
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1421
 #, c-format
 msgid "Authentication is required to print document “%s” on printer %s"
 msgstr "Autentisering kreves for å skrive ut dokument «%s» på skriver %s"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1125
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1132
 #, c-format
 msgid "Authentication is required to print a document on %s"
 msgstr "Autentisering kreves for å skrive ut et dokument på %s"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1129
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1136
 #, c-format
 msgid "Authentication is required to get attributes of job “%s”"
 msgstr "Autentisering kreves for å hente attributter for jobb «%s»"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1131
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1138
 msgid "Authentication is required to get attributes of a job"
 msgstr "Autentisering kreves for å hente attributter for en jobb"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1135
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1142
 #, c-format
 msgid "Authentication is required to get attributes of printer %s"
 msgstr "Autentisering kreves for å hente attributter for skriver %s"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1137
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1144
 msgid "Authentication is required to get attributes of a printer"
 msgstr "Autentisering kreves for å hente attributter for en skriver"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1140
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1147
 #, c-format
 msgid "Authentication is required to get default printer of %s"
 msgstr "Autentisering kreves for å hente forvalgt skriver for %s"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1143
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1150
 #, c-format
 msgid "Authentication is required to get printers from %s"
 msgstr "Autentisering kreves for å hente skrivere fra %s"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1148
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1155
 #, c-format
 msgid "Authentication is required to get a file from %s"
 msgstr "Autentisering kreves for å hente en fil fra %s"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1150
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1157
 #, c-format
 msgid "Authentication is required on %s"
 msgstr "Autentisering kreves på %s"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1386
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1393
 msgid "Domain:"
 msgstr "Domene:"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1416
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1423
 #, c-format
 msgid "Authentication is required to print document “%s”"
 msgstr "Autentisering kreves for å skrive ut dokument «%s»"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1421
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1428
 #, c-format
 msgid "Authentication is required to print this document on printer %s"
 msgstr "Autentisering kreves for å skrive ut dette dokumentet på skriver %s"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1423
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1430
 msgid "Authentication is required to print this document"
 msgstr "Autentisering kreves for å skrive ut dette dokumentet"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1860
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1867
 #, c-format
 msgid "Printer “%s” is low on toner."
 msgstr "Skriver «%s» har lite toner."
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1861
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1868
 #, c-format
 msgid "Printer “%s” has no toner left."
 msgstr "Skriver «%s» er tom for toner."
 
 #. Translators: "Developer" like on photo development context
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1863
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1870
 #, c-format
 msgid "Printer “%s” is low on developer."
 msgstr "Skriver «%s» har lite framkallingsmiddel."
 
 #. Translators: "Developer" like on photo development context
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1865
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1872
 #, c-format
 msgid "Printer “%s” is out of developer."
 msgstr "Skriver «%s» er tom for framkallingsmiddel."
 
 #. Translators: "marker" is one color bin of the printer
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1867
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1874
 #, c-format
 msgid "Printer “%s” is low on at least one marker supply."
 msgstr "Skriver «%s» har minst en tonerkassett som snart er tom."
 
 #. Translators: "marker" is one color bin of the printer
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1869
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1876
 #, c-format
 msgid "Printer “%s” is out of at least one marker supply."
 msgstr "Skriver «%s» har minst en tom tonerkassett."
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1870
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1877
 #, c-format
 msgid "The cover is open on printer “%s”."
 msgstr "Lokket er åpent på skriver «%s»."
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1871
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1878
 #, c-format
 msgid "The door is open on printer “%s”."
 msgstr "Døren er åpen på skriver «%s»."
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1872
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1879
 #, c-format
 msgid "Printer “%s” is low on paper."
 msgstr "Skriver «%s» har lite papir."
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1873
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1880
 #, c-format
 msgid "Printer “%s” is out of paper."
 msgstr "Skriver «%s» er tom for papir."
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1874
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1881
 #, c-format
 msgid "Printer “%s” is currently offline."
 msgstr "Skriver «%s» er frakoblet for tiden."
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1875
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1882
 #, c-format
 msgid "There is a problem on printer “%s”."
 msgstr "Det er et problem med skriver «%s»."
 
 #. Translators: this is a printer status.
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2492
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2506
 msgid "Paused; Rejecting Jobs"
 msgstr "Satt på pause. Avviser jobber"
 
 #. Translators: this is a printer status.
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2498
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2512
 msgid "Rejecting Jobs"
 msgstr "Avviser jobber"
 
 #. Translators: this string connects multiple printer states together.
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2540
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2554
 msgid "; "
 msgstr "; "
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:4218
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:4285
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:4239
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:4306
 msgid "Two Sided"
 msgstr "Tosidig"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:4219
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:4240
 msgid "Paper Type"
 msgstr "Papirtype"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:4220
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:4241
 msgid "Paper Source"
 msgstr "Papirkilde"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:4221
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:4242
 msgid "Output Tray"
 msgstr "Utskuff"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:4222
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:4243
 msgid "Resolution"
 msgstr "Oppløsning"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:4223
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:4244
 msgid "GhostScript pre-filtering"
 msgstr "Forhåndsfiltrering med GhostScript"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:4232
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:4253
 msgid "One Sided"
 msgstr "Ensidig"
 
 #. Translators: this is an option of "Two Sided"
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:4234
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:4255
 msgid "Long Edge (Standard)"
 msgstr "Lang kant (standard)"
 
 #. Translators: this is an option of "Two Sided"
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:4236
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:4257
 msgid "Short Edge (Flip)"
 msgstr "Kort kant (vend)"
 
 #. Translators: this is an option of "Paper Source"
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:4238
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:4240
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:4248
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:4259
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:4261
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:4269
 msgid "Auto Select"
 msgstr "Velg automatisk"
 
 #. Translators: this is an option of "Paper Source"
 #. Translators: this is an option of "Resolution"
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:4242
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:4244
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:4246
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:4250
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:4757
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:4263
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:4265
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:4267
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:4271
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:4778
 msgid "Printer Default"
 msgstr "Forvalg for skriver"
 
 #. Translators: this is an option of "GhostScript"
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:4252
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:4273
 msgid "Embed GhostScript fonts only"
 msgstr "Bygg kun inn GhostScript-skrifter"
 
 #. Translators: this is an option of "GhostScript"
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:4254
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:4275
 msgid "Convert to PS level 1"
 msgstr "Konverter til PS nivå 1"
 
 #. Translators: this is an option of "GhostScript"
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:4256
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:4277
 msgid "Convert to PS level 2"
 msgstr "Konverter til PS nivå 2"
 
 #. Translators: this is an option of "GhostScript"
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:4258
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:4279
 msgid "No pre-filtering"
 msgstr "Ingen forhåndsfiltrering"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:4293
+#. Translators: "Miscellaneous" is the label for a button, that opens
+#. up an extra panel of settings in a print dialog.
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:4288
+msgid "Miscellaneous"
+msgstr "Forskjellig"
+
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:4314
 msgctxt "sides"
 msgid "One Sided"
 msgstr "Ensidig"
 
 #. Translators: this is an option of "Two Sided"
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:4295
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:4316
 msgctxt "sides"
 msgid "Long Edge (Standard)"
 msgstr "Lang kant (standard)"
 
 #. Translators: this is an option of "Two Sided"
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:4297
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:4318
 msgctxt "sides"
 msgid "Short Edge (Flip)"
 msgstr "Kort kant (vend)"
@@ -5452,78 +5039,78 @@ msgstr "Kort kant (vend)"
 #. Translators: These strings name the possible values of the
 #. * job priority option in the print dialog
 #.
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:5147
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:5168
 msgid "Urgent"
 msgstr "Haster"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:5147
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:5168
 msgid "High"
 msgstr "Høy"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:5147
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:5168
 msgid "Medium"
 msgstr "Middels"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:5147
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:5168
 msgid "Low"
 msgstr "Lav"
 
 #. Translators, this string is used to label the job priority option
 #. * in the print dialog
 #.
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:5177
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:5198
 msgid "Job Priority"
 msgstr "Prioritet for jobb"
 
 #. Translators, this string is used to label the billing info entry
 #. * in the print dialog
 #.
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:5188
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:5209
 msgid "Billing Info"
 msgstr "Faktureringsinformasjon:"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:5203
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:5224
 msgid "Classified"
 msgstr "Klassifisert"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:5203
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:5224
 msgid "Confidential"
 msgstr "Konfidensiell"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:5203
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:5224
 msgid "Secret"
 msgstr "Hemmelig"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:5203
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:5224
 msgid "Standard"
 msgstr "Vanlig"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:5203
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:5224
 msgid "Top Secret"
 msgstr "Topphemmelig"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:5203
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:5224
 msgid "Unclassified"
 msgstr "Ikke klassifisert"
 
 #. Translators, this string is used to label the pages-per-sheet option
 #. * in the print dialog
 #.
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:5214
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:5235
 msgid "Pages per Sheet"
 msgstr "Sider per ark"
 
 #. Translators, this is the label used for the option in the print
 #. * dialog that controls the front cover page.
 #.
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:5274
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:5295
 msgid "Before"
 msgstr "Før"
 
 #. Translators, this is the label used for the option in the print
 #. * dialog that controls the back cover page.
 #.
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:5289
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:5310
 msgid "After"
 msgstr "Etter"
 
@@ -5531,14 +5118,14 @@ msgstr "Etter"
 #. * a print job is printed. Possible values are 'now', a specified time,
 #. * or 'on hold'
 #.
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:5309
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:5330
 msgid "Print at"
 msgstr "Tidspunkt for utskrift"
 
 #. Translators: this is the name of the option that allows the user
 #. * to specify a time when a print job will be printed.
 #.
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:5320
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:5341
 msgid "Print at time"
 msgstr "Tidspunkt for utskrift"
 
@@ -5547,33 +5134,33 @@ msgstr "Tidspunkt for utskrift"
 #. * the width and height in points. E.g: "Custom
 #. * 230.4x142.9"
 #.
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:5362
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:5383
 #, c-format
 msgid "Custom %s×%s"
 msgstr "Egendefinert %s×%s"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:5463
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:5484
 msgid "Printer Profile"
 msgstr "Skriverprofil"
 
 #. TRANSLATORS: this is when color profile information is unavailable
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:5470
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:5491
 msgid "Unavailable"
 msgstr "Ikke tilgjengelig"
 
 #. TRANSLATORS: when we're running an old CUPS, and
 #. * it hasn't registered the device with colord
-#: ../modules/printbackends/cups/gtkprintercups.c:258
+#: ../modules/printbackends/cups/gtkprintercups.c:262
 msgid "Color management unavailable"
 msgstr "Fargestyring ikke tilgjengelig"
 
 #. TRANSLATORS: when there is no color profile available
-#: ../modules/printbackends/cups/gtkprintercups.c:270
+#: ../modules/printbackends/cups/gtkprintercups.c:274
 msgid "No profile available"
 msgstr "Ingen profil tilgjengelig"
 
 #. TRANSLATORS: when the color profile has no title
-#: ../modules/printbackends/cups/gtkprintercups.c:281
+#: ../modules/printbackends/cups/gtkprintercups.c:285
 msgid "Unspecified profile"
 msgstr "Uspesifisert profil"
 
@@ -5652,411 +5239,606 @@ msgstr "testutfil.%s"
 msgid "Print to Test Printer"
 msgstr "Skriv ut til testskriver"
 
-#: ../gtk/ui/gtkaboutdialog.ui.h:1
-msgid "About"
-msgstr "Om"
-
-#: ../gtk/ui/gtkaboutdialog.ui.h:2
-msgid "Credits"
-msgstr "Bidragsytere"
-
-#: ../gtk/ui/gtkappchooserdialog.ui.h:4
-msgid "_View All Applications"
-msgstr "_Vis alle programmer"
-
-#: ../gtk/ui/gtkappchooserdialog.ui.h:5
-msgid "_Find New Applications"
-msgstr "_Finn nye programmer"
-
-#: ../gtk/ui/gtkappchooserwidget.ui.h:1
-msgid "No applications found."
-msgstr "Ingen programmer funnet."
-
-#: ../gtk/ui/gtkapplication-quartz.ui.h:2
-msgid "Preferences"
-msgstr "Brukervalg"
-
-#: ../gtk/ui/gtkapplication-quartz.ui.h:3
-msgid "Services"
-msgstr "Tjenester"
-
-#: ../gtk/ui/gtkapplication-quartz.ui.h:4
-#, c-format
-msgid "Hide %s"
-msgstr "Skjul %s"
-
-#: ../gtk/ui/gtkapplication-quartz.ui.h:5
-msgid "Hide Others"
-msgstr "Skjul andre"
-
-#: ../gtk/ui/gtkapplication-quartz.ui.h:6
-msgid "Show All"
-msgstr "Vis alle"
-
-#: ../gtk/ui/gtkapplication-quartz.ui.h:7
-#, c-format
-msgid "Quit %s"
-msgstr "Avslutt %s"
-
-#: ../gtk/ui/gtkassistant.ui.h:2
-msgid "_Next"
-msgstr "_Neste"
-
-#: ../gtk/ui/gtkassistant.ui.h:3
-msgid "_Back"
-msgstr "Til_bake"
-
-#: ../gtk/ui/gtkassistant.ui.h:4
-msgid "_Finish"
-msgstr "_Fullfør"
-
-#: ../gtk/ui/gtkcolorchooserdialog.ui.h:1
-msgid "Select a Color"
-msgstr "Velg en farge"
-
-#: ../gtk/ui/gtkcoloreditor.ui.h:1
-msgid "Color Name"
-msgstr "Fargenavn"
-
-#: ../gtk/ui/gtkcoloreditor.ui.h:2
-msgctxt "Color channel"
-msgid "A"
-msgstr "A"
-
-#: ../gtk/ui/gtkcoloreditor.ui.h:3
-msgid "Alpha"
-msgstr "Alpha"
-
-#: ../gtk/ui/gtkcoloreditor.ui.h:4
-msgctxt "Color channel"
-msgid "H"
-msgstr "G"
-
-#: ../gtk/ui/gtkcoloreditor.ui.h:5
-msgid "Hue"
-msgstr "Glød"
-
-#: ../gtk/ui/gtkcoloreditor.ui.h:6
-msgctxt "Color Channel"
-msgid "S"
-msgstr "M"
-
-#: ../gtk/ui/gtkcoloreditor.ui.h:7
-msgctxt "Color Channel"
-msgid "V"
-msgstr "V"
-
-#: ../gtk/ui/gtkcoloreditor.ui.h:8
-msgid "Saturation"
-msgstr "Metning"
-
-#: ../gtk/ui/gtkfilechooserwidget.ui.h:1
-msgid "Create Folder"
-msgstr "Lag mappe"
-
-#: ../gtk/ui/gtkfilechooserwidget.ui.h:3
-msgid "All Files"
-msgstr "Alle filer"
-
-#: ../gtk/ui/gtkfilechooserwidget.ui.h:4
-msgid "Files"
-msgstr "Filer"
-
-#: ../gtk/ui/gtkfilechooserwidget.ui.h:7
-msgid "Modified"
-msgstr "Endret"
-
-#: ../gtk/ui/gtkfilechooserwidget.ui.h:9
-msgid "Select which types of files are shown"
-msgstr "Velg hvilke typer filer som skal vises"
-
-#: ../gtk/ui/gtkfontchooserdialog.ui.h:1
-msgid "Select Font"
-msgstr "Velg skrift"
-
-#: ../gtk/ui/gtkfontchooserwidget.ui.h:1
-msgid "Search font name"
-msgstr "Søk etter skriftnavn"
-
-#: ../gtk/ui/gtkfontchooserwidget.ui.h:2
-msgid "Font Family"
-msgstr "Skriftfamilie"
-
-#: ../gtk/ui/gtkfontchooserwidget.ui.h:3
-msgid "No fonts matched your search. You can revise your search and try again."
-msgstr "Ingen skrifter passet til søket. Du kan endre søket og prøve igjen."
-
-#: ../gtk/ui/gtkpagesetupunixdialog.ui.h:2
-msgid "_Format for:"
-msgstr "_Formater for:"
-
-#: ../gtk/ui/gtkpagesetupunixdialog.ui.h:3
-#: ../gtk/ui/gtkprintunixdialog.ui.h:38
-msgid "_Paper size:"
-msgstr "_Papirstørrelse:"
-
-#: ../gtk/ui/gtkpagesetupunixdialog.ui.h:4
-msgid "_Orientation:"
-msgstr "_Orientering:"
-
-#: ../gtk/ui/gtkpagesetupunixdialog.ui.h:5
-#: ../gtk/ui/gtkprintunixdialog.ui.h:40
-msgid "Portrait"
-msgstr "Portrett"
-
-#: ../gtk/ui/gtkpagesetupunixdialog.ui.h:6
-#: ../gtk/ui/gtkprintunixdialog.ui.h:42
-msgid "Reverse portrait"
-msgstr "Omvendt portrett"
-
-#: ../gtk/ui/gtkpagesetupunixdialog.ui.h:7
-#: ../gtk/ui/gtkprintunixdialog.ui.h:41
-msgid "Landscape"
-msgstr "Landskap"
-
-#: ../gtk/ui/gtkpagesetupunixdialog.ui.h:8
-#: ../gtk/ui/gtkprintunixdialog.ui.h:43
-msgid "Reverse landscape"
-msgstr "Omvendt landskap"
-
-#: ../gtk/ui/gtkpathbar.ui.h:1
-msgid "Down Path"
-msgstr "Sti ned"
-
-#: ../gtk/ui/gtkpathbar.ui.h:2
-msgid "Up Path"
-msgstr "Sti opp"
-
-#: ../gtk/ui/gtkprintunixdialog.ui.h:1
-msgid "Printer"
-msgstr "Skriver"
-
-#. this is the header for the printer status column in the print dialog
-#: ../gtk/ui/gtkprintunixdialog.ui.h:7
-msgid "Status"
-msgstr "Status"
-
-#: ../gtk/ui/gtkprintunixdialog.ui.h:8
-msgid "Range"
-msgstr "Område"
-
-#: ../gtk/ui/gtkprintunixdialog.ui.h:9
-msgid "_All Pages"
-msgstr "_Alle sider"
-
-#: ../gtk/ui/gtkprintunixdialog.ui.h:10
-msgid "C_urrent Page"
-msgstr "D_enne siden"
-
-#: ../gtk/ui/gtkprintunixdialog.ui.h:11
-msgid "Se_lection"
-msgstr "Utva_lg"
-
-#: ../gtk/ui/gtkprintunixdialog.ui.h:12
-msgid "Pag_es:"
-msgstr "Sid_er:"
-
-#: ../gtk/ui/gtkprintunixdialog.ui.h:13 ../gtk/ui/gtkprintunixdialog.ui.h:15
-#: ../gtk/ui/gtkprintunixdialog.ui.h:18
-msgid ""
-"Specify one or more page ranges,\n"
-" e.g. 1–3, 7, 11"
-msgstr ""
-"Oppgi ett eller flere sideområder,\n"
-" f.eks. 1-3, 7, 11"
-
-#: ../gtk/ui/gtkprintunixdialog.ui.h:17
-msgid "Pages"
-msgstr "Sider"
-
-#: ../gtk/ui/gtkprintunixdialog.ui.h:20
-msgid "Copies"
-msgstr "Kopier"
-
-#: ../gtk/ui/gtkprintunixdialog.ui.h:21
-msgid "Copie_s:"
-msgstr "Kopie_r:"
-
-#: ../gtk/ui/gtkprintunixdialog.ui.h:22
-msgid "C_ollate"
-msgstr "Sl_å sammen"
-
-#: ../gtk/ui/gtkprintunixdialog.ui.h:23
-msgid "_Reverse"
-msgstr "_Vend om"
-
-#: ../gtk/ui/gtkprintunixdialog.ui.h:25
-msgid "Layout"
-msgstr "Utforming"
-
-#: ../gtk/ui/gtkprintunixdialog.ui.h:26
-msgid "T_wo-sided:"
-msgstr "_Tosidig:"
-
-#: ../gtk/ui/gtkprintunixdialog.ui.h:27
-msgid "Pages per _side:"
-msgstr "_Sider per side:"
-
-#: ../gtk/ui/gtkprintunixdialog.ui.h:28
-msgid "Page or_dering:"
-msgstr "Siderekkeføl_ge:"
-
-#: ../gtk/ui/gtkprintunixdialog.ui.h:29
-msgid "_Only print:"
-msgstr "Skriv k_un ut:"
-
-#: ../gtk/ui/gtkprintunixdialog.ui.h:30
-msgid "All sheets"
-msgstr "Alle sider"
-
-#: ../gtk/ui/gtkprintunixdialog.ui.h:31
-msgid "Even sheets"
-msgstr "Sider med partall"
-
-#: ../gtk/ui/gtkprintunixdialog.ui.h:32
-msgid "Odd sheets"
-msgstr "Sider med oddetall"
-
-#: ../gtk/ui/gtkprintunixdialog.ui.h:33
-msgid "Sc_ale:"
-msgstr "_Sk_aler:"
-
-#: ../gtk/ui/gtkprintunixdialog.ui.h:34
-msgid "Paper"
-msgstr "Papir"
-
-#: ../gtk/ui/gtkprintunixdialog.ui.h:35
-msgid "Paper _type:"
-msgstr "Papir_type:"
-
-#: ../gtk/ui/gtkprintunixdialog.ui.h:36
-msgid "Paper _source:"
-msgstr "Papir_kilde:"
-
-#: ../gtk/ui/gtkprintunixdialog.ui.h:37
-msgid "Output t_ray:"
-msgstr "U_tskuff:"
-
-#: ../gtk/ui/gtkprintunixdialog.ui.h:39
-msgid "Or_ientation:"
-msgstr "Or_ientering:"
-
-#: ../gtk/ui/gtkprintunixdialog.ui.h:45
-msgid "Job Details"
-msgstr "Detaljer om jobb"
-
-#: ../gtk/ui/gtkprintunixdialog.ui.h:46
-msgid "Pri_ority:"
-msgstr "Pri_oritet:"
-
-#: ../gtk/ui/gtkprintunixdialog.ui.h:47
-msgid "_Billing info:"
-msgstr "_Faktureringsinformasjon:"
-
-#: ../gtk/ui/gtkprintunixdialog.ui.h:48
-msgid "Print Document"
-msgstr "Skriv ut dokument"
-
-#. this is one of the choices for the print at option in the print dialog
-#: ../gtk/ui/gtkprintunixdialog.ui.h:51
-msgid "_Now"
-msgstr "_Nå"
-
-#. this is one of the choices for the print at option in the print dialog. It also serves as the label for an entry that allows the user to enter a time.
-#: ../gtk/ui/gtkprintunixdialog.ui.h:54
-msgid "A_t:"
-msgstr "_Tid:"
-
-#. Ability to parse the am/pm format depends on actual locale. You can remove the am/pm values below for your locale if they are not supported.
-#: ../gtk/ui/gtkprintunixdialog.ui.h:55 ../gtk/ui/gtkprintunixdialog.ui.h:59
-#: ../gtk/ui/gtkprintunixdialog.ui.h:61 ../gtk/ui/gtkprintunixdialog.ui.h:65
-#: ../gtk/ui/gtkprintunixdialog.ui.h:68
-msgid ""
-"Specify the time of print,\n"
-" e.g. 15∶30, 2∶35 pm, 14∶15∶20, 11∶46∶30 am, 4 pm"
-msgstr ""
-"Oppgi tid for utskriften,\n"
-" f.eks. 15:30, 2:35 pm, 14:15:20, 11:46:30 am, 4 pm"
-
-#: ../gtk/ui/gtkprintunixdialog.ui.h:67
-msgid "Time of print"
-msgstr "Tid for utskrift"
-
-#. this is one of the choices for the print at option in the print dialog. It means that the print job will not be printed until it explicitly gets 'released'.
-#: ../gtk/ui/gtkprintunixdialog.ui.h:72
-msgid "On _hold"
-msgstr "På _vent"
-
-#: ../gtk/ui/gtkprintunixdialog.ui.h:73 ../gtk/ui/gtkprintunixdialog.ui.h:74
-msgid "Hold the job until it is explicitly released"
-msgstr "Hold jobben tilbake til den eksplisitt frigis"
-
-#: ../gtk/ui/gtkprintunixdialog.ui.h:75
-msgid "Add Cover Page"
-msgstr "Legg til forside"
-
-#. this is the label used for the option in the print dialog that controls the front cover page.
-#: ../gtk/ui/gtkprintunixdialog.ui.h:78
-msgid "Be_fore:"
-msgstr "_Før:"
-
-#. this is the label used for the option in the print dialog that controls the back cover page.
-#: ../gtk/ui/gtkprintunixdialog.ui.h:81
-msgid "_After:"
-msgstr "_Etter:"
-
-#: ../gtk/ui/gtkprintunixdialog.ui.h:82
-msgid "Job"
-msgstr "Jobb"
-
-#. This will appear as a tab label in the print dialog.
-#: ../gtk/ui/gtkprintunixdialog.ui.h:85
-msgid "Image Quality"
-msgstr "Bildekvalitet"
-
-#. This will appear as a tab label in the print dialog.
-#: ../gtk/ui/gtkprintunixdialog.ui.h:88
-msgid "Color"
-msgstr "Farge"
-
-#. This will appear as a tab label in the print dialog.
-#. It's a typographical term, as in "Binding and finishing"
-#: ../gtk/ui/gtkprintunixdialog.ui.h:92
-msgid "Finishing"
-msgstr "Fullfører"
-
-#: ../gtk/ui/gtkprintunixdialog.ui.h:93
-msgid "Advanced"
-msgstr "Avansert"
-
-#: ../gtk/ui/gtkprintunixdialog.ui.h:94
-msgid "Some of the settings in the dialog conflict"
-msgstr "Noen av innstillingene i dialogen er i konflikt med hverandre"
-
-#: ../gtk/ui/gtkrecentchooserdefault.ui.h:1
-msgid "Select which type of documents are shown"
-msgstr "Velg hvilken type dokumenter som skal vises"
-
-#: ../gtk/ui/gtkvolumebutton.ui.h:1
-msgid "Volume"
-msgstr "Volum"
-
-#: ../gtk/ui/gtkvolumebutton.ui.h:2
-msgid "Turns volume up or down"
-msgstr "Slår volumet opp eller ned"
-
-#: ../gtk/ui/gtkvolumebutton.ui.h:3
-msgid "Volume Up"
-msgstr "Volum opp"
-
-#: ../gtk/ui/gtkvolumebutton.ui.h:4
-msgid "Increases the volume"
-msgstr "Øker volumet"
-
-#: ../gtk/ui/gtkvolumebutton.ui.h:5
-msgid "Volume Down"
-msgstr "Volum ned"
-
-#: ../gtk/ui/gtkvolumebutton.ui.h:6
-msgid "Decreases the volume"
-msgstr "Tar ned volumet"
+#~ msgid "Name"
+#~ msgstr "Navn"
+
+#~ msgid "Enabled"
+#~ msgstr "Slått på"
+
+#~ msgid "Parameter Type"
+#~ msgstr "Type parameter"
+
+#~ msgid "Add a class"
+#~ msgstr "Legg til en klasse"
+
+#~ msgid "Restore defaults for this widget"
+#~ msgstr "Gjenopprett forvalg for denne komponenten"
+
+#~ msgid "Disable this custom CSS"
+#~ msgstr "Slå av denne egendefinerte CSSen"
+
+#~ msgid "Save the current CSS"
+#~ msgstr "Lagre aktiv CSS"
+
+#~ msgid "Show data"
+#~ msgstr "Vis data"
+
+#~ msgid "GTK+ Version"
+#~ msgstr "GTK+-versjon"
+
+#~ msgid "GDK Backend"
+#~ msgstr "GDK-motor"
+
+#~ msgid "X display"
+#~ msgstr "X-skjerm"
+
+#~ msgid "RGBA visual"
+#~ msgstr "RGBA-visuell"
+
+#~ msgid "Composited"
+#~ msgstr "Sammensatt"
+
+#~ msgid "GL Version"
+#~ msgstr "GL-versjon"
+
+#~ msgid "GL Vendor"
+#~ msgstr "GL-produsent"
+
+#~ msgid "Label"
+#~ msgstr "Etikett"
+
+#~ msgid "Icon"
+#~ msgstr "Ikon"
+
+#~ msgid "Address"
+#~ msgstr "Adresse"
+
+#~ msgid "Reference count"
+#~ msgstr "Referanseteller"
+
+#~ msgid "Buildable ID"
+#~ msgstr "Byggbar ID"
+
+#~ msgid "Default Widget"
+#~ msgstr "Forvalgt komponent"
+
+#~ msgid "Focus Widget"
+#~ msgstr "Fokuskomponent"
+
+#~ msgid "Mnemonic Label"
+#~ msgstr "Hurtitastetikett"
+
+#~ msgid "Allocated size"
+#~ msgstr "Allokert størrelse"
+
+#~ msgid "Clip area"
+#~ msgstr "Klippeområde"
+
+#~ msgid "Frame count"
+#~ msgstr "Bildeantall"
+
+#~ msgid "Frame rate"
+#~ msgstr "Rammehastighet"
+
+#~ msgid "Accessible role"
+#~ msgstr "Tilgjengelighetsrolle"
+
+#~ msgid "Mapped"
+#~ msgstr "Tilordnet"
+
+#~ msgid "Realized"
+#~ msgstr "Realisert"
+
+#~ msgid "Is Toplevel"
+#~ msgstr "Er toppobjekt"
+
+#~ msgid "Child Visible"
+#~ msgstr "Underobjekt synlig"
+
+#~ msgid "Object Hierarchy"
+#~ msgstr "Objekthierarki"
+
+#~ msgid "Object"
+#~ msgstr "Objekt"
+
+#~ msgid "Style Classes"
+#~ msgstr "Stilklasser"
+
+#~ msgid "Property"
+#~ msgstr "Egenskap"
+
+#~ msgid "Value"
+#~ msgstr "Verdi"
+
+#~ msgid "Attribute"
+#~ msgstr "Attributt"
+
+#~ msgid "Defined At"
+#~ msgstr "Definert ved"
+
+#~ msgid "Path"
+#~ msgstr "Sti"
+
+#~ msgid "Count"
+#~ msgstr "Antall"
+
+#~ msgid "Size"
+#~ msgstr "Størrelse"
+
+#~ msgid "Name:"
+#~ msgstr "Navn:"
+
+#~ msgid "Type:"
+#~ msgstr "Type:"
+
+#~ msgid "Size:"
+#~ msgstr "Størrelse:"
+
+#~ msgid "Selector"
+#~ msgstr "Velger"
+
+#~ msgid "Trace signal emissions on this object"
+#~ msgstr "Spor signalutsendelser på dette objektet"
+
+#~ msgid "Clear log"
+#~ msgstr "Tøm logg"
+
+#~ msgid "Connected"
+#~ msgstr "Koblet til"
+
+#~ msgid "Type"
+#~ msgstr "Type"
+
+#~ msgid "Self 1"
+#~ msgstr "Selv 1"
+
+#~ msgid "Cumulative 1"
+#~ msgstr "Kumulativ 1"
+
+#~ msgid "Self 2"
+#~ msgstr "Selv 2"
+
+#~ msgid "Cumulative 2"
+#~ msgstr "Kumulativ 2"
+
+#~ msgid "Self"
+#~ msgstr "Selv"
+
+#~ msgid "Cumulative"
+#~ msgstr "Kumulativ"
+
+#~ msgid "Enable statistics with GOBJECT_DEBUG=instance-count"
+#~ msgstr "Slå på statistikk med GOBJECT_DEBUG=instance-count"
+
+#~ msgid "GTK+ Theme"
+#~ msgstr "GTK+-tema"
+
+#~ msgid "Dark Variant"
+#~ msgstr "Mørk variant"
+
+#~ msgid "Cursor Theme"
+#~ msgstr "Markørtema"
+
+#~ msgid "Cursor Size"
+#~ msgstr "Størrelse på markør"
+
+#~ msgid "Icon Theme"
+#~ msgstr "Ikontema"
+
+#~ msgid "Font"
+#~ msgstr "Skrift"
+
+#~ msgid "Text Direction"
+#~ msgstr "Tekstretning"
+
+#~ msgid "Left-to-Right"
+#~ msgstr "Venstre til høyre"
+
+#~ msgid "Right-to-Left"
+#~ msgstr "Høyre til venstre"
+
+#~ msgid "Window scaling"
+#~ msgstr "Vinduskalering"
+
+#~ msgid "Animations"
+#~ msgstr "Animasjoner"
+
+#~ msgid "Rendering Mode"
+#~ msgstr "Gjengivelsesmodus"
+
+#~ msgid "Similar"
+#~ msgstr "Lignende"
+
+#~ msgid "Image"
+#~ msgstr "Bilde"
+
+#~ msgid "Recording"
+#~ msgstr "Opptak"
+
+#~ msgid "Show Graphic Updates"
+#~ msgstr "Vis grafiske oppdateringer"
+
+#~ msgid "Show Baselines"
+#~ msgstr "Vis utgangspunkter"
+
+#~ msgid "Show Pixel Cache"
+#~ msgstr "Vis pikselbuffer"
+
+#~ msgid "Simulate touchscreen"
+#~ msgstr "Simuler berøringsskjerm"
+
+#~ msgid "GL Rendering"
+#~ msgstr "GL-gjengivelse"
+
+#~ msgid "When needed"
+#~ msgstr "Når nødvendig"
+
+#~ msgid "Always"
+#~ msgstr "Alltid"
+
+#~ msgid "Disabled"
+#~ msgstr "Slått av"
+
+#~ msgid "Software GL"
+#~ msgstr "Programvare-GL"
+
+#~ msgid "Software Surfaces"
+#~ msgstr "Programvareoverflater"
+
+#~ msgid "Texture Rectangle Extension"
+#~ msgstr "Utvidelse for teksturrektangel"
+
+#~ msgid "Select an Object"
+#~ msgstr "Velg et objekt"
+
+#~ msgid "Show Details"
+#~ msgstr "Vis detaljer"
+
+#~ msgid "Show all Objects"
+#~ msgstr "Vis alle objekter"
+
+#~ msgid "Collect Statistics"
+#~ msgstr "Samle statistikk"
+
+#~ msgid "Show all Resources"
+#~ msgstr "Vis alle ressurser"
+
+#~ msgid "Signals"
+#~ msgstr "Signaler"
+
+#~ msgid "Child Properties"
+#~ msgstr "Egenskaper for underobjekt"
+
+#~ msgid "Hierarchy"
+#~ msgstr "Hierarki"
+
+#~ msgid "Style Properties"
+#~ msgstr "Egenskaper for stil"
+
+#~ msgid "CSS"
+#~ msgstr "CSS"
+
+#~ msgid "Size Groups"
+#~ msgstr "Størrelsesgrupper"
+
+#~ msgid "Data"
+#~ msgstr "Data"
+
+#~ msgid "Actions"
+#~ msgstr "Handlinger"
+
+#~ msgid "Gestures"
+#~ msgstr "Gester"
+
+#~ msgid "Magnifier"
+#~ msgstr "Forstørrelsesglass"
+
+#~ msgid "Objects"
+#~ msgstr "Objekter"
+
+#~ msgid "Statistics"
+#~ msgstr "Statistikk"
+
+#~ msgid "Resources"
+#~ msgstr "Ressurser"
+
+#~ msgid "Visual"
+#~ msgstr "Synlig"
+
+#~ msgid "General"
+#~ msgstr "Generelt"
+
+#~ msgid "About"
+#~ msgstr "Om"
+
+#~ msgid "Credits"
+#~ msgstr "Bidragsytere"
+
+#~ msgid "_View All Applications"
+#~ msgstr "_Vis alle programmer"
+
+#~ msgid "_Find New Applications"
+#~ msgstr "_Finn nye programmer"
+
+#~ msgid "No applications found."
+#~ msgstr "Ingen programmer funnet."
+
+#~ msgid "Preferences"
+#~ msgstr "Brukervalg"
+
+#~ msgid "Services"
+#~ msgstr "Tjenester"
+
+#~ msgid "Hide %s"
+#~ msgstr "Skjul %s"
+
+#~ msgid "Hide Others"
+#~ msgstr "Skjul andre"
+
+#~ msgid "Show All"
+#~ msgstr "Vis alle"
+
+#~ msgid "Quit %s"
+#~ msgstr "Avslutt %s"
+
+#~ msgid "_Next"
+#~ msgstr "_Neste"
+
+#~ msgid "_Back"
+#~ msgstr "Til_bake"
+
+#~ msgid "_Finish"
+#~ msgstr "_Fullfør"
+
+#~ msgid "Select a Color"
+#~ msgstr "Velg en farge"
+
+#~ msgid "Color Name"
+#~ msgstr "Fargenavn"
+
+#~ msgctxt "Color channel"
+#~ msgid "A"
+#~ msgstr "A"
+
+#~ msgid "Alpha"
+#~ msgstr "Alpha"
+
+#~ msgctxt "Color channel"
+#~ msgid "H"
+#~ msgstr "G"
+
+#~ msgid "Hue"
+#~ msgstr "Glød"
+
+#~ msgctxt "Color Channel"
+#~ msgid "S"
+#~ msgstr "M"
+
+#~ msgctxt "Color Channel"
+#~ msgid "V"
+#~ msgstr "V"
+
+#~ msgid "Saturation"
+#~ msgstr "Metning"
+
+#~ msgid "Create Folder"
+#~ msgstr "Lag mappe"
+
+#~ msgid "All Files"
+#~ msgstr "Alle filer"
+
+#~ msgid "Files"
+#~ msgstr "Filer"
+
+#~ msgid "Modified"
+#~ msgstr "Endret"
+
+#~ msgid "Select which types of files are shown"
+#~ msgstr "Velg hvilke typer filer som skal vises"
+
+#~ msgid "Select Font"
+#~ msgstr "Velg skrift"
+
+#~ msgid "Search font name"
+#~ msgstr "Søk etter skriftnavn"
+
+#~ msgid "Font Family"
+#~ msgstr "Skriftfamilie"
+
+#~ msgid ""
+#~ "No fonts matched your search. You can revise your search and try again."
+#~ msgstr "Ingen skrifter passet til søket. Du kan endre søket og prøve igjen."
+
+#~ msgid "_Format for:"
+#~ msgstr "_Formater for:"
+
+#~ msgid "_Paper size:"
+#~ msgstr "_Papirstørrelse:"
+
+#~ msgid "_Orientation:"
+#~ msgstr "_Orientering:"
+
+#~ msgid "Portrait"
+#~ msgstr "Portrett"
+
+#~ msgid "Reverse portrait"
+#~ msgstr "Omvendt portrett"
+
+#~ msgid "Landscape"
+#~ msgstr "Landskap"
+
+#~ msgid "Reverse landscape"
+#~ msgstr "Omvendt landskap"
+
+#~ msgid "Down Path"
+#~ msgstr "Sti ned"
+
+#~ msgid "Up Path"
+#~ msgstr "Sti opp"
+
+#~ msgid "Printer"
+#~ msgstr "Skriver"
+
+#~ msgid "Status"
+#~ msgstr "Status"
+
+#~ msgid "Range"
+#~ msgstr "Område"
+
+#~ msgid "_All Pages"
+#~ msgstr "_Alle sider"
+
+#~ msgid "C_urrent Page"
+#~ msgstr "D_enne siden"
+
+#~ msgid "Se_lection"
+#~ msgstr "Utva_lg"
+
+#~ msgid "Pag_es:"
+#~ msgstr "Sid_er:"
+
+#~ msgid ""
+#~ "Specify one or more page ranges,\n"
+#~ " e.g. 1–3, 7, 11"
+#~ msgstr ""
+#~ "Oppgi ett eller flere sideområder,\n"
+#~ " f.eks. 1-3, 7, 11"
+
+#~ msgid "Pages"
+#~ msgstr "Sider"
+
+#~ msgid "Copies"
+#~ msgstr "Kopier"
+
+#~ msgid "Copie_s:"
+#~ msgstr "Kopie_r:"
+
+#~ msgid "C_ollate"
+#~ msgstr "Sl_å sammen"
+
+#~ msgid "_Reverse"
+#~ msgstr "_Vend om"
+
+#~ msgid "Layout"
+#~ msgstr "Utforming"
+
+#~ msgid "T_wo-sided:"
+#~ msgstr "_Tosidig:"
+
+#~ msgid "Pages per _side:"
+#~ msgstr "_Sider per side:"
+
+#~ msgid "Page or_dering:"
+#~ msgstr "Siderekkeføl_ge:"
+
+#~ msgid "_Only print:"
+#~ msgstr "Skriv k_un ut:"
+
+#~ msgid "All sheets"
+#~ msgstr "Alle sider"
+
+#~ msgid "Even sheets"
+#~ msgstr "Sider med partall"
+
+#~ msgid "Odd sheets"
+#~ msgstr "Sider med oddetall"
+
+#~ msgid "Sc_ale:"
+#~ msgstr "_Sk_aler:"
+
+#~ msgid "Paper"
+#~ msgstr "Papir"
+
+#~ msgid "Paper _type:"
+#~ msgstr "Papir_type:"
+
+#~ msgid "Paper _source:"
+#~ msgstr "Papir_kilde:"
+
+#~ msgid "Output t_ray:"
+#~ msgstr "U_tskuff:"
+
+#~ msgid "Or_ientation:"
+#~ msgstr "Or_ientering:"
+
+#~ msgid "Job Details"
+#~ msgstr "Detaljer om jobb"
+
+#~ msgid "Pri_ority:"
+#~ msgstr "Pri_oritet:"
+
+#~ msgid "_Billing info:"
+#~ msgstr "_Faktureringsinformasjon:"
+
+#~ msgid "Print Document"
+#~ msgstr "Skriv ut dokument"
+
+#~ msgid "_Now"
+#~ msgstr "_Nå"
+
+#~ msgid "A_t:"
+#~ msgstr "_Tid:"
+
+#~ msgid ""
+#~ "Specify the time of print,\n"
+#~ " e.g. 15∶30, 2∶35 pm, 14∶15∶20, 11∶46∶30 am, 4 pm"
+#~ msgstr ""
+#~ "Oppgi tid for utskriften,\n"
+#~ " f.eks. 15:30, 2:35 pm, 14:15:20, 11:46:30 am, 4 pm"
+
+#~ msgid "Time of print"
+#~ msgstr "Tid for utskrift"
+
+#~ msgid "On _hold"
+#~ msgstr "På _vent"
+
+#~ msgid "Hold the job until it is explicitly released"
+#~ msgstr "Hold jobben tilbake til den eksplisitt frigis"
+
+#~ msgid "Add Cover Page"
+#~ msgstr "Legg til forside"
+
+#~ msgid "Be_fore:"
+#~ msgstr "_Før:"
+
+#~ msgid "_After:"
+#~ msgstr "_Etter:"
+
+#~ msgid "Job"
+#~ msgstr "Jobb"
+
+#~ msgid "Image Quality"
+#~ msgstr "Bildekvalitet"
+
+#~ msgid "Color"
+#~ msgstr "Farge"
+
+#~ msgid "Finishing"
+#~ msgstr "Fullfører"
+
+#~ msgid "Advanced"
+#~ msgstr "Avansert"
+
+#~ msgid "Some of the settings in the dialog conflict"
+#~ msgstr "Noen av innstillingene i dialogen er i konflikt med hverandre"
+
+#~ msgid "Select which type of documents are shown"
+#~ msgstr "Velg hvilken type dokumenter som skal vises"
+
+#~ msgid "Volume"
+#~ msgstr "Volum"
+
+#~ msgid "Turns volume up or down"
+#~ msgstr "Slår volumet opp eller ned"
+
+#~ msgid "Volume Up"
+#~ msgstr "Volum opp"
+
+#~ msgid "Increases the volume"
+#~ msgstr "Øker volumet"
+
+#~ msgid "Volume Down"
+#~ msgstr "Volum ned"
+
+#~ msgid "Decreases the volume"
+#~ msgstr "Tar ned volumet"
