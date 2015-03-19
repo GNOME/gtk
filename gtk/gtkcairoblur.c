@@ -25,6 +25,19 @@
 #include <math.h>
 #include <string.h>
 
+/*
+ * Gets the size for a single box blur.
+ *
+ * Much of this, the 3 * sqrt(2 * pi) / 4, is the known value for
+ * approximating a Gaussian using box blurs.  This yields quite a good
+ * approximation for a Gaussian.  For more details, see:
+ * http://www.w3.org/TR/SVG11/filters.html#feGaussianBlurElement
+ * https://bugzilla.mozilla.org/show_bug.cgi?id=590039#c19
+ */
+#define GAUSSIAN_SCALE_FACTOR ((3.0 * sqrt(2 * G_PI) / 4))
+
+#define get_box_filter_size(radius) ((int)(GAUSSIAN_SCALE_FACTOR * radius))
+
 /* This applies a single box blur pass to a horizontal range of pixels;
  * since the box blur has the same weight for all pixels, we can
  * implement an efficient sliding window algorithm where we add
@@ -138,23 +151,6 @@ flip_buffer (guchar *dst_buffer,
             dst_buffer[i * height + j] = src_buffer[j * width + i];
       }
 #undef BLOCK_SIZE
-}
-
-/*
- * Gets the size for a single box blur.
- *
- * Much of this, the 3 * sqrt(2 * pi) / 4, is the known value for
- * approximating a Gaussian using box blurs.  This yields quite a good
- * approximation for a Gaussian.  For more details, see:
- * http://www.w3.org/TR/SVG11/filters.html#feGaussianBlurElement
- * https://bugzilla.mozilla.org/show_bug.cgi?id=590039#c19
- */
-#define GAUSSIAN_SCALE_FACTOR ((3.0 * sqrt(2 * G_PI) / 4))
-
-static int
-get_box_filter_size (double radius)
-{
-  return GAUSSIAN_SCALE_FACTOR * radius;
 }
 
 static void
