@@ -13,6 +13,8 @@ N_("Tick callback");
 N_("Frame count");
 N_("Frame rate");
 N_("Accessible role");
+N_("Accessible name");
+N_("Accessible description");
 N_("Mapped");
 N_("Realized");
 N_("Is Toplevel");
