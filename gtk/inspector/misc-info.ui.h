@@ -8,6 +8,8 @@ N_("Mnemonic Label");
 N_("Allocated size");
 N_("Clip area");
 N_("Accessible role");
+N_("Accessible name");
+N_("Accessible description");
 N_("Mapped");
 N_("Realized");
 N_("Is Toplevel");
