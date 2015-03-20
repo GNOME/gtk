@@ -150,9 +150,9 @@
   &:backdrop:selected {
     @extend %selected_items;
   }
- &:insensitive {
-   color: $insensitive_fg_color;
- }
+  &:insensitive, &:backdrop:insensitive {
+    color: $insensitive_fg_color;
+  }
 }
 
 /*********************
@@ -579,11 +579,13 @@ $_dot_color: $selected_bg_color;
 .menuitem.button.flat {
   @extend %undecorated_button;
   outline-offset: -1px;
-  &:hover { background-color: mix($fg_color,$bg_color,10%); }
-  &:selected { @extend %selected_items; }
-  &:backdrop, &:backdrop:hover {
+  &:hover, &:selected { @extend %selected_items; }
+  &:backdrop {
+    color: $backdrop_fg_color;
     @extend %undecorated_button;
+    &:hover { color: $selected_fg_color; background-color: selected_bg_color; }
   }
+  &:insensitive { color: $insensitive_fg_color; }
 }
 
 GtkColorButton.button { padding: 4px; } // Uniform padding on the
@@ -651,7 +653,7 @@ GtkColorButton.button { padding: 4px; } // Uniform padding on the
     }
     &:backdrop:insensitive {
       background-image: none;
-      color: transparentize($backdrop_insensitive_color,0.7);
+      color: transparentize($insensitive_fg_color,0.7);
       border-width: 0 0 0 1px; // It is needed or it gets overridden
       &:dir(rtl) { border-width: 0 1px 0 0; }
     }
@@ -756,7 +758,7 @@ GtkComboBox {
     icon-shadow: none;
   }
   &:backdrop:insensitive {
-    color: $backdrop_insensitive_color;
+    color: $insensitive_fg_color;
   }
   .menuitem { text-shadow: none; }
   .separator.vertical {
@@ -1037,7 +1039,7 @@ GtkTreeView.view.progressbar { //Progressbar in treeview cells
     }
     &:insensitive {
       color: $insensitive_fg_color;
-      &:backdrop { color: $backdrop_insensitive_color; }
+      &:backdrop { color: $insensitive_fg_color; }
     }
     &:backdrop, &:backdrop:hover {
       color: $backdrop_fg_color;
@@ -1309,7 +1311,7 @@ GtkTreeView.view.progressbar { //Progressbar in treeview cells
       font-weight: bold;
       color: $insensitive_fg_color; /* color: inherit doesn't work here */
       &:backdrop, &.prelight-page:backdrop {
-        color: mix($backdrop_fg_color, $backdrop_insensitive_color, 50%);
+        color: $insensitive_fg_color;
       }
     }
     &.prelight-page GtkLabel, GtkLabel.prelight-page {
@@ -1447,8 +1449,8 @@ GtkSwitch {
         }
         &:insensitive, &:insensitive:active {
           background-color: $insensitive_bg_color;
-          color: $backdrop_insensitive_color;
-          border-color: $backdrop_insensitive_color;
+          color: $insensitive_fg_color;
+          border-color: $insensitive_fg_color;
         }
       }
     }
@@ -1490,30 +1492,30 @@ GtkCheckButton.text-button, GtkRadioButton.text-button {
 @each $w,$a in ('check', 'checkbox'),
                ('radio','radio') {
   .#{$w} {
-    color: transparentize($fg_color,0.9);
+    color: $fg_color;
     background-image: none;
     -gtk-icon-source: -gtk-icontheme('#{$a}-symbolic');
-    &:hover { color: $borders_color; }
+    &:hover { color: mix($fg_color, $bg_color, 80%) }
     &:checked, &:active {
       -gtk-icon-source: -gtk-icontheme('#{$a}-checked-symbolic');
       color: $fg_color;
-      &:hover { color: $borders_color; }
+      &:hover { color: mix($fg_color, $bg_color, 80%); }
       &:insensitive {
         color: $insensitive_fg_color;
-        &:backdrop { color: $backdrop_insensitive_color; }
+        &:backdrop { color: $insensitive_fg_color; }
       }
       &:backdrop { color: $backdrop_fg_color; }
     }
     &:insensitive {
-      color: transparentize($insensitive_fg_color,0.9);
-      &:backdrop { color: transparent; }
+      color: $insensitive_fg_color;
+      &:backdrop { color: $insensitive_fg_color; }
     }
     &:inconsistent {
       -gtk-icon-source: -gtk-icontheme('#{$a}-mixed-symbolic');
     }
     &:backdrop {
-      color: transparentize($backdrop_fg_color,0.9);
-      &:selected { color: transparentize($backdrop_base_color,0.9); }
+      color: $backdrop_fg_color;
+      &:selected { color: $backdrop_fg_color; }
     }
   }
 }
@@ -1593,7 +1595,7 @@ GtkCheckButton.text-button, GtkRadioButton.text-button {
       box-shadow: none;
     }
     &:backdrop:insensitive, .hilight:backdrop:insensitive {
-      border-color: $backdrop_insensitive_color;
+      border-color: $insensitive_fg_color;
       background-color: $backdrop_bg_color;
     }
   }
@@ -1629,7 +1631,7 @@ GtkProgressBar {
     font-size: 83%;
     color: transparentize($fg_color, 0.6);
     &:backdrop {
-      color: $backdrop_insensitive_color;
+      color: $insensitive_fg_color;
     }
 }
 
@@ -1746,7 +1748,7 @@ GtkLevelBar.vertical {
   background-color: $selected_bg_color;
   color: $selected_fg_color;
   outline-color: transparentize($selected_fg_color, 0.7);
-  &:backdrop { color: $backdrop_base_color; }
+  &:backdrop { background-color: $borders_color; color: $selected_fg_color; }
 }
 
 /**********

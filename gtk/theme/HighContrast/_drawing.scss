@@ -69,7 +69,7 @@
     box-shadow: 0 1px transparentize(white,1);
   }
   @if $t==backdrop-insensitive {
-    color: $backdrop_insensitive_color;
+    color: $insensitive_fg_color;
     background-image: linear-gradient(to bottom, $backdrop_bg_color);
     box-shadow: 0 1px transparentize(white,1);
   }
@@ -191,8 +191,8 @@
   //
   // backdrop pushed button
   //
-    color: $backdrop_fg_color;
-    background-color: $backdrop_bg_color;
+    color: invert($backdrop_fg_color);
+    background-color: $backdrop_borders_color;
     border-color: $backdrop_borders_color;
     background-image: none;
   }
@@ -201,7 +201,7 @@
   //
   // backdrop insensitive button
   //
-    color: $backdrop_insensitive_color;
+    color: $insensitive_fg_color;
     background-color: $insensitive_bg_color;
     border-color: $backdrop_borders_color;
     background-image: none;
@@ -211,7 +211,7 @@
   //
   // backdrop insensitive pushed button
   //
-    color: $backdrop_insensitive_color;
+    color: $insensitive_fg_color;
     border-color: $backdrop_borders_color;
     background-image: none;
     background-color: mix($backdrop_borders_color,$backdrop_bg_color, 8%);

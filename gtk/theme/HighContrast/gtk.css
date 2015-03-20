@@ -174,8 +174,9 @@
     border: none;
     box-shadow: none; }
 
-.label:insensitive {
-  color: #7f7f7f; }
+.label:insensitive, .label:backdrop:insensitive {
+  color: #7f7f7f;
+  background-color: white; }
 
 /*********************
  * Spinner Animation *
@@ -468,8 +469,8 @@
     .button:backdrop:active, .button:backdrop:checked, .button.flat:backdrop:active, .button.flat:backdrop:checked {
       border-width: 2px;
       border-style: solid;
-      color: #000;
-      background-color: #fff;
+      color: white;
+      background-color: #8b8b8b;
       border-color: #8b8b8b;
       background-image: none; }
     .button:backdrop:insensitive, .button.flat:backdrop:insensitive {
@@ -685,8 +686,8 @@
   .inline-toolbar GtkToolButton > .button:backdrop:active {
     border-width: 2px;
     border-style: solid;
-    color: #000;
-    background-color: #fff;
+    color: white;
+    background-color: #8b8b8b;
     border-color: #8b8b8b;
     background-image: none; }
   .inline-toolbar GtkToolButton > .button:backdrop:insensitive {
@@ -766,7 +767,7 @@
   border-radius: 3px;
   border-style: solid; }
 
-.button.flat, .button.flat:backdrop, .button.flat:insensitive:backdrop, .menuitem.button.flat, .menuitem.button.flat:backdrop, .menuitem.button.flat:backdrop:hover, .button:link, .button:visited, .button:link:hover, .button:link:active, .button:visited:hover, .button:visited:active, .button:link:backdrop, .button:visited:backdrop, .notebook tab .button, .list-row.button, .list-row.button:backdrop:hover, GtkCalendar.button, GtkCalendar.button:hover, GtkCalendar.button:backdrop, GtkCalendar.button:backdrop:hover {
+.button.flat, .button.flat:backdrop, .button.flat:insensitive:backdrop, .menuitem.button.flat, .menuitem.button.flat:backdrop, .button:link, .button:visited, .button:link:hover, .button:link:active, .button:visited:hover, .button:visited:active, .button:link:backdrop, .button:visited:backdrop, .notebook tab .button, .list-row.button, .list-row.button:backdrop:hover, GtkCalendar.button, GtkCalendar.button:hover, GtkCalendar.button:backdrop, GtkCalendar.button:backdrop:hover {
   border-color: transparent;
   background-color: transparent;
   background-image: none;
@@ -777,8 +778,13 @@
 /* menu buttons */
 .menuitem.button.flat {
   outline-offset: -1px; }
-  .menuitem.button.flat:hover {
-    background-color: #e5e5e5; }
+  .menuitem.button.flat:backdrop {
+    color: #000; }
+    .menuitem.button.flat:backdrop:hover {
+      color: #fff;
+      background-color: selected_bg_color; }
+  .menuitem.button.flat:insensitive {
+    color: #7f7f7f; }
 
 GtkColorButton.button {
   padding: 4px; }
@@ -1526,7 +1532,7 @@ GtkTreeView.view.progressbar {
       color: #7f7f7f;
       /* color: inherit doesn't work here */ }
       .notebook tab GtkLabel:backdrop, .notebook tab GtkLabel.prelight-page:backdrop {
-        color: #3f3f3f; }
+        color: #7f7f7f; }
     .notebook tab.prelight-page GtkLabel, .notebook tab GtkLabel.prelight-page {
       color: #3f3f3f; }
     .notebook tab.active-page GtkLabel, .notebook tab GtkLabel.active-page {
@@ -1697,16 +1703,16 @@ GtkCheckButton.text-button, GtkRadioButton.text-button {
   outline-offset: 0; }
 
 .check {
-  color: rgba(0, 0, 0, 0.1);
+  color: #000;
   background-image: none;
   -gtk-icon-source: -gtk-icontheme("checkbox-symbolic"); }
   .check:hover {
-    color: #7f7f7f; }
+    color: #323232; }
   .check:checked, .check:active {
     -gtk-icon-source: -gtk-icontheme("checkbox-checked-symbolic");
     color: #000; }
     .check:checked:hover, .check:active:hover {
-      color: #7f7f7f; }
+      color: #323232; }
     .check:checked:insensitive, .check:active:insensitive {
       color: #7f7f7f; }
       .check:checked:insensitive:backdrop, .check:active:insensitive:backdrop {
@@ -1714,27 +1720,27 @@ GtkCheckButton.text-button, GtkRadioButton.text-button {
     .check:checked:backdrop, .check:active:backdrop {
       color: #000; }
   .check:insensitive {
-    color: rgba(127, 127, 127, 0.1); }
+    color: #7f7f7f; }
     .check:insensitive:backdrop {
-      color: transparent; }
+      color: #7f7f7f; }
   .check:inconsistent {
     -gtk-icon-source: -gtk-icontheme("checkbox-mixed-symbolic"); }
   .check:backdrop {
-    color: rgba(0, 0, 0, 0.1); }
+    color: #000; }
     .check:backdrop:selected {
-      color: rgba(255, 255, 255, 0.1); }
+      color: #000; }
 
 .radio {
-  color: rgba(0, 0, 0, 0.1);
+  color: #000;
   background-image: none;
   -gtk-icon-source: -gtk-icontheme("radio-symbolic"); }
   .radio:hover {
-    color: #7f7f7f; }
+    color: #323232; }
   .radio:checked, .radio:active {
     -gtk-icon-source: -gtk-icontheme("radio-checked-symbolic");
     color: #000; }
     .radio:checked:hover, .radio:active:hover {
-      color: #7f7f7f; }
+      color: #323232; }
     .radio:checked:insensitive, .radio:active:insensitive {
       color: #7f7f7f; }
       .radio:checked:insensitive:backdrop, .radio:active:insensitive:backdrop {
@@ -1742,15 +1748,15 @@ GtkCheckButton.text-button, GtkRadioButton.text-button {
     .radio:checked:backdrop, .radio:active:backdrop {
       color: #000; }
   .radio:insensitive {
-    color: rgba(127, 127, 127, 0.1); }
+    color: #7f7f7f; }
     .radio:insensitive:backdrop {
-      color: transparent; }
+      color: #7f7f7f; }
   .radio:inconsistent {
     -gtk-icon-source: -gtk-icontheme("radio-mixed-symbolic"); }
   .radio:backdrop {
-    color: rgba(0, 0, 0, 0.1); }
+    color: #000; }
     .radio:backdrop:selected {
-      color: rgba(255, 255, 255, 0.1); }
+      color: #000; }
 
 /************
  * GtkScale *
@@ -1970,11 +1976,12 @@ GtkLevelBar.vertical {
     .level-bar.fill-block.empty-fill-block:backdrop {
       border-color: rgba(0, 0, 0, 0.15); }
 
-.view:selected, GtkCalendar:selected, .view:selected:focus, GtkCalendar:focus:selected, .view:selected:hover, GtkCalendar:hover:selected, .label:selected, .label:selected:focus, .label:selected:hover, .label:backdrop:selected, .entry:selected, .entry:selected:focus, .menuitem.button.flat:selected, .sidebar:selected, GtkPlacesSidebar.sidebar .view:selected, GtkPlacesSidebar.sidebar GtkCalendar:selected {
+.view:selected, GtkCalendar:selected, .view:selected:focus, GtkCalendar:focus:selected, .view:selected:hover, GtkCalendar:hover:selected, .label:selected, .label:selected:focus, .label:selected:hover, .label:backdrop:selected, .entry:selected, .entry:selected:focus, .menuitem.button.flat:hover, .menuitem.button.flat:selected, .sidebar:selected, GtkPlacesSidebar.sidebar .view:selected, GtkPlacesSidebar.sidebar GtkCalendar:selected {
   background-color: #000;
   color: #fff;
   outline-color: rgba(255, 255, 255, 0.3); }
-  .view:backdrop:selected, GtkCalendar:backdrop:selected, GtkCalendar:backdrop:focus:selected, GtkCalendar:backdrop:hover:selected, .label:backdrop:selected, .entry:backdrop:selected, .menuitem.button.flat:backdrop:selected, .sidebar:backdrop:selected, GtkPlacesSidebar.sidebar .view:backdrop:selected, GtkPlacesSidebar.sidebar GtkCalendar:backdrop:selected {
+  .view:backdrop:selected, GtkCalendar:backdrop:selected, GtkCalendar:backdrop:focus:selected, GtkCalendar:backdrop:hover:selected, .label:backdrop:selected, .entry:backdrop:selected, .menuitem.button.flat:backdrop:hover, .menuitem.button.flat:backdrop:selected, .sidebar:backdrop:selected, GtkPlacesSidebar.sidebar .view:backdrop:selected, GtkPlacesSidebar.sidebar GtkCalendar:backdrop:selected {
+    background-color: #7f7f7f;
     color: #fff; }
 
 /**********
