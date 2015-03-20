@@ -143,13 +143,16 @@
   }
 }
 
-GtkLabel {
+.label {
   &:selected,
   &:selected:focus,
   &:selected:hover,
   &:backdrop:selected {
     @extend %selected_items;
   }
+ &:insensitive {
+   color: $insensitive_fg_color;
+ }
 }
 
 /*********************
