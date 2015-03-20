@@ -344,6 +344,14 @@ gtk_css_shadow_value_start_drawing (const GtkCssValue *shadow,
   radius = _gtk_css_number_value_get (shadow->radius, 0);
   clip_radius = _gtk_cairo_blur_compute_pixels (radius);
 
+  if (blur_flags & GTK_BLUR_REPEAT)
+    {
+      if (!blur_x)
+        clip_rect.width = 1;
+      if (!blur_y)
+        clip_rect.height = 1;
+    }
+
   /* Create a larger surface to center the blur. */
   surface = cairo_surface_create_similar_image (cairo_get_target (cr),
                                                 CAIRO_FORMAT_A8,
@@ -366,6 +374,20 @@ gtk_css_shadow_value_start_drawing (const GtkCssValue *shadow,
   return blur_cr;
 }
 
+void
+mask_surface_repeat (cairo_t         *cr,
+                     cairo_surface_t *surface)
+{
+    cairo_pattern_t *pattern;
+
+    pattern = cairo_pattern_create_for_surface (surface);
+    cairo_pattern_set_extend (pattern, CAIRO_EXTEND_REPEAT);
+
+    cairo_mask (cr, pattern);
+
+    cairo_pattern_destroy (pattern);
+}
+
 static cairo_t *
 gtk_css_shadow_value_finish_drawing (const GtkCssValue *shadow,
                                      cairo_t           *cr,
@@ -386,7 +408,10 @@ gtk_css_shadow_value_finish_drawing (const GtkCssValue *shadow,
   _gtk_cairo_blur_surface (surface, radius, blur_flags);
 
   gdk_cairo_set_source_rgba (original_cr, _gtk_css_rgba_value_get_rgba (shadow->color));
-  cairo_mask_surface (original_cr, surface, 0, 0);
+  if (blur_flags & GTK_BLUR_REPEAT)
+    mask_surface_repeat (original_cr, surface);
+  else
+    cairo_mask_surface (original_cr, surface, 0, 0);
 
   cairo_destroy (cr);
 
@@ -756,7 +781,7 @@ _gtk_css_shadow_value_paint_box (const GtkCssValue   *shadow,
       /* Then the sides */
       for (i = 0; i < 4; i++)
 	{
-          GtkBlurFlags blur_flags = 0;
+          GtkBlurFlags blur_flags = GTK_BLUR_REPEAT;
 
 	  if (i == GTK_CSS_TOP || i == GTK_CSS_BOTTOM)
 	    {
