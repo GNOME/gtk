@@ -32,7 +32,8 @@ G_BEGIN_DECLS
 typedef enum {
   GTK_BLUR_NONE = 0,
   GTK_BLUR_X = 1<<0,
-  GTK_BLUR_Y = 1<<1
+  GTK_BLUR_Y = 1<<1,
+  GTK_BLUR_REPEAT = 1<<2
 } GtkBlurFlags;
 
 void            _gtk_cairo_blur_surface         (cairo_surface_t *surface,
