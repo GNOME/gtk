@@ -543,7 +543,7 @@ add_data_tab (const gchar *demoname)
            * not an image. Let's try something else then.
            */
           g_object_ref_sink (widget);
-          gtk_widget_destroy (widget);
+          g_object_unref (widget);
 
           bytes = g_resources_lookup_data (resource_name, 0, NULL);
           g_assert (bytes);
