@@ -173,27 +173,34 @@ flip_buffer (guchar *dst_buffer,
 }
 
 static void
-_boxblur (guchar  *buffer,
-          int      width,
-          int      height,
-          int      radius)
+_boxblur (guchar      *buffer,
+          int          width,
+          int          height,
+          int          radius,
+          GtkBlurFlags flags)
 {
   guchar *flipped_buffer;
   int d = get_box_filter_size (radius);
 
   flipped_buffer = g_malloc (width * height);
 
-  /* Step 1: swap rows and columns */
-  flip_buffer (flipped_buffer, buffer, width, height);
+  if (flags & GTK_BLUR_Y)
+    {
+      /* Step 1: swap rows and columns */
+      flip_buffer (flipped_buffer, buffer, width, height);
 
-  /* Step 2: blur rows (really columns) */
-  blur_rows (flipped_buffer, buffer, height, width, d);
+      /* Step 2: blur rows (really columns) */
+      blur_rows (flipped_buffer, buffer, height, width, d);
 
-  /* Step 3: swap rows and columns */
-  flip_buffer (buffer, flipped_buffer, height, width);
+      /* Step 3: swap rows and columns */
+      flip_buffer (buffer, flipped_buffer, height, width);
+    }
 
-  /* Step 4: blur rows */
-  blur_rows (buffer, flipped_buffer, width, height, d);
+  if (flags & GTK_BLUR_X)
+    {
+      /* Step 4: blur rows */
+      blur_rows (buffer, flipped_buffer, width, height, d);
+    }
 
   g_free (flipped_buffer);
 }
@@ -207,7 +214,8 @@ _boxblur (guchar  *buffer,
  */
 void
 _gtk_cairo_blur_surface (cairo_surface_t* surface,
-                         double           radius_d)
+                         double           radius_d,
+                         GtkBlurFlags     flags)
 {
   int radius = radius_d;
 
@@ -220,13 +228,16 @@ _gtk_cairo_blur_surface (cairo_surface_t* surface,
   if (radius <= 1)
     return;
 
+  if ((flags & (GTK_BLUR_X|GTK_BLUR_Y)) == 0)
+    return;
+
   /* Before we mess with the surface, execute any pending drawing. */
   cairo_surface_flush (surface);
 
   _boxblur (cairo_image_surface_get_data (surface),
             cairo_image_surface_get_stride (surface),
             cairo_image_surface_get_height (surface),
-            radius);
+            radius, flags);
 
   /* Inform cairo we altered the surface contents. */
   cairo_surface_mark_dirty (surface);
