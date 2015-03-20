@@ -215,7 +215,9 @@ _gtk_cairo_blur_surface (cairo_surface_t* surface,
   g_return_if_fail (cairo_surface_get_type (surface) == CAIRO_SURFACE_TYPE_IMAGE);
   g_return_if_fail (cairo_image_surface_get_format (surface) == CAIRO_FORMAT_A8);
 
-  if (radius == 0)
+  /* The code doesn't actually do any blurring for radius 1, as it
+   * ends up with box filter size 1 */
+  if (radius <= 1)
     return;
 
   /* Before we mess with the surface, execute any pending drawing. */

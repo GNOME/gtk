@@ -313,7 +313,10 @@ static gboolean
 needs_blur (const GtkCssValue *shadow)
 {
   double radius = _gtk_css_number_value_get (shadow->radius, 0);
-  if (radius == 0.0)
+
+  /* The code doesn't actually do any blurring for radius 1, as it
+   * ends up with box filter size 1 */
+  if (radius <= 1.0)
     return FALSE;
 
   return TRUE;
