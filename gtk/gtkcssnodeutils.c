@@ -63,6 +63,16 @@ get_number (GtkCssStyle *style,
 }
 
 static void
+get_box_margin (GtkCssStyle *style,
+                GtkBorder   *margin)
+{
+  margin->top = get_number (style, GTK_CSS_PROPERTY_MARGIN_TOP);
+  margin->left = get_number (style, GTK_CSS_PROPERTY_MARGIN_LEFT);
+  margin->bottom = get_number (style, GTK_CSS_PROPERTY_MARGIN_BOTTOM);
+  margin->right = get_number (style, GTK_CSS_PROPERTY_MARGIN_RIGHT);
+}
+
+static void
 get_box_border (GtkCssStyle *style,
                 GtkBorder   *border)
 {
@@ -113,26 +123,27 @@ gtk_css_node_get_preferred_size (GtkCssNode         *cssnode,
                                  gpointer            get_content_size_data)
 {
   GtkCssStyle *style;
-  GtkBorder border, padding;
+  GtkBorder margin, border, padding;
   int min_size, extra_size, extra_opposite, extra_baseline;
 
   if (!get_content_size_func)
     get_content_size_func = get_content_size_func_default;
   style = gtk_css_node_get_style (cssnode);
+  get_box_margin (style, &margin);
   get_box_border (style, &border);
   get_box_padding (style, &padding);
   if (orientation == GTK_ORIENTATION_HORIZONTAL)
     {
-      extra_size = border.left + border.right + padding.left + padding.right;
-      extra_opposite = border.top + border.bottom + padding.top + padding.bottom;
-      extra_baseline = border.left + padding.left;
+      extra_size = margin.left + margin.right + border.left + border.right + padding.left + padding.right;
+      extra_opposite = margin.top + margin.bottom + border.top + border.bottom + padding.top + padding.bottom;
+      extra_baseline = margin.left + border.left + padding.left;
       min_size = get_number (style, GTK_CSS_PROPERTY_MIN_WIDTH);
     }
   else
     {
-      extra_size = border.top + border.bottom + padding.top + padding.bottom;
-      extra_opposite = border.left + border.right + padding.left + padding.right;
-      extra_baseline = border.top + padding.top;
+      extra_size = margin.top + margin.bottom + border.top + border.bottom + padding.top + padding.bottom;
+      extra_opposite = margin.left + margin.right + border.left + border.right + padding.left + padding.right;
+      extra_baseline = margin.top + border.top + padding.top;
       min_size = get_number (style, GTK_CSS_PROPERTY_MIN_HEIGHT);
     }
 
@@ -184,7 +195,7 @@ gtk_css_node_allocate (GtkCssNode             *cssnode,
                        gpointer                allocate_data)
 {
   GtkAllocation content_allocation, clip;
-  GtkBorder border, padding, shadow, extents;
+  GtkBorder margin, border, padding, shadow, extents;
   GtkCssStyle *style;
 
   if (out_clip == NULL)
@@ -192,12 +203,13 @@ gtk_css_node_allocate (GtkCssNode             *cssnode,
   if (!allocate_func)
     allocate_func = allocate_func_default;
   style = gtk_css_node_get_style (cssnode);
+  get_box_margin (style, &margin);
   get_box_border (style, &border);
   get_box_padding (style, &padding);
-  extents.top = border.top + padding.top;
-  extents.right = border.right + padding.right;
-  extents.bottom = border.bottom + padding.bottom;
-  extents.left = border.left + padding.left;
+  extents.top = margin.top + border.top + padding.top;
+  extents.right = margin.right + border.right + padding.right;
+  extents.bottom = margin.bottom + border.bottom + padding.bottom;
+  extents.left = margin.left + border.left + padding.left;
 
   content_allocation.x = allocation->x + extents.left;
   content_allocation.y = allocation->y + extents.top;
@@ -212,10 +224,10 @@ gtk_css_node_allocate (GtkCssNode             *cssnode,
   allocate_func (cssnode, &content_allocation, baseline,  out_clip, allocate_data);
 
   _gtk_css_shadows_value_get_extents (gtk_css_style_get_value (style, GTK_CSS_PROPERTY_BOX_SHADOW), &shadow);
-  out_clip->x -= extents.left + shadow.left;
-  out_clip->y -= extents.top + shadow.top;
-  out_clip->width += extents.left + extents.right + shadow.left + shadow.right;
-  out_clip->height += extents.top + extents.bottom + shadow.top + shadow.bottom;
+  out_clip->x -= extents.left + shadow.left - margin.left;
+  out_clip->y -= extents.top + shadow.top - margin.top;
+  out_clip->width += extents.left + extents.right + shadow.left + shadow.right - margin.left - margin.right;
+  out_clip->height += extents.top + extents.bottom + shadow.top + shadow.bottom - margin.top - margin.bottom;
 }
 
 static gboolean
@@ -236,7 +248,7 @@ gtk_css_node_draw (GtkCssNode         *cssnode,
                    GtkCssNodeDrawFunc  draw_contents_func,
                    gpointer            draw_contents_data)
 {
-  GtkBorder border, padding;
+  GtkBorder margin, border, padding;
   gboolean draw_focus;
   GtkCssStyle *style;
   int contents_width, contents_height;
@@ -244,26 +256,45 @@ gtk_css_node_draw (GtkCssNode         *cssnode,
   if (draw_contents_func == NULL)
     draw_contents_func = draw_contents_func_default;
   style = gtk_css_node_get_style (cssnode);
+  get_box_margin (style, &margin);
   get_box_border (style, &border);
   get_box_padding (style, &padding);
 
-  gtk_css_style_render_background (style, cr, 0, 0, width, height, gtk_css_node_get_junction_sides (cssnode));
-  gtk_css_style_render_border (style, cr, 0, 0, width, height, 0, gtk_css_node_get_junction_sides (cssnode));
+  gtk_css_style_render_background (style,
+                                   cr,
+                                   margin.left,
+                                   margin.top,
+                                   width - margin.left - margin.right,
+                                   height - margin.top - margin.bottom,
+                                   gtk_css_node_get_junction_sides (cssnode));
+  gtk_css_style_render_border (style,
+                               cr,
+                               margin.left,
+                               margin.top,
+                               width - margin.left - margin.right,
+                               height - margin.top - margin.bottom,
+                               0,
+                               gtk_css_node_get_junction_sides (cssnode));
 
   cairo_translate (cr,
-                   border.left + padding.left,
-                   border.top + padding.top);
-  contents_width = width - border.left - border.right - padding.left - padding.right;
-  contents_height = height - border.top - border.bottom - padding.top - padding.bottom;
+                   margin.left + border.left + padding.left,
+                   margin.top + border.top + padding.top);
+  contents_width = width - margin.left - margin.right - border.left - border.right - padding.left - padding.right;
+  contents_height = height - margin.top - margin.bottom - border.top - border.bottom - padding.top - padding.bottom;
 
   draw_focus = draw_contents_func (cssnode, cr, contents_width, contents_height, draw_contents_data);
 
   cairo_translate (cr,
-                   - (border.left + padding.left),
-                   - (border.top + padding.top));
+                   - (margin.left + border.left + padding.left),
+                   - (margin.top + border.top + padding.top));
 
   if (draw_focus)
-    gtk_css_style_render_outline (style, cr, 0, 0, width, height);
+    gtk_css_style_render_outline (style,
+                                  cr,
+                                  margin.left,
+                                  margin.top,
+                                  width - margin.left - margin.right,
+                                  height - margin.top - margin.bottom);
 }
 
 
