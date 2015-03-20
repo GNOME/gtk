@@ -39,6 +39,7 @@ typedef enum {
 static char *arg_output_dir = NULL;
 static char *arg_base_dir = NULL;
 static char *arg_direction = NULL;
+static char *arg_compare_dir = NULL;
 
 static const GOptionEntry test_args[] = {
   { "output",         'o', 0, G_OPTION_ARG_FILENAME, &arg_output_dir,
@@ -47,6 +48,8 @@ static const GOptionEntry test_args[] = {
     "Directory to run tests from", "DIR" },
   { "direction",       0, 0, G_OPTION_ARG_STRING, &arg_direction,
     "Set text direction", "ltr|rtl" },
+  { "compare-with",    0, 0, G_OPTION_ARG_FILENAME, &arg_compare_dir,
+    "Directory to compare with", "DIR" },
   { NULL }
 };
 
@@ -175,6 +178,28 @@ get_test_file (const char *test_file,
   return g_string_free (file, FALSE);
 }
 
+static char *
+get_reference_image (const char *ui_file)
+{
+  char *base;
+  char *reference_image;
+
+  if (!arg_compare_dir)
+    return NULL;
+
+  get_components_of_test_file (ui_file, NULL, &base);
+  reference_image = g_strconcat (arg_compare_dir, G_DIR_SEPARATOR_S, base, ".out.png", NULL);
+  g_free (base);
+
+  if (!g_file_test (reference_image, G_FILE_TEST_EXISTS))
+    {
+      g_free (reference_image);
+      return NULL;
+    }
+
+  return reference_image;
+}
+
 static GtkStyleProvider *
 add_extra_css (const char *testname,
                const char *extension)
@@ -234,9 +259,10 @@ test_ui_file (GFile *file)
   provider = add_extra_css (ui_file, ".css");
 
   ui_image = reftest_snapshot_ui_file (ui_file);
-  
-  reference_file = get_test_file (ui_file, ".ref.ui", TRUE);
-  if (reference_file)
+
+  if ((reference_file = get_reference_image (ui_file)) != NULL)
+    reference_image = cairo_image_surface_create_from_png (reference_file);
+  else if ((reference_file = get_test_file (ui_file, ".ref.ui", TRUE)) != NULL)
     reference_image = reftest_snapshot_ui_file (reference_file);
   else
     {
