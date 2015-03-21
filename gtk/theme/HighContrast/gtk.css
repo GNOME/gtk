@@ -175,8 +175,7 @@
     box-shadow: none; }
 
 .label:insensitive, .label:backdrop:insensitive {
-  color: #7f7f7f;
-  background-color: white; }
+  color: #7f7f7f; }
 
 /*********************
  * Spinner Animation *
@@ -782,7 +781,7 @@
     color: #000; }
     .menuitem.button.flat:backdrop:hover {
       color: #fff;
-      background-color: selected_bg_color; }
+      background-color: #000; }
   .menuitem.button.flat:insensitive {
     color: #7f7f7f; }
 
