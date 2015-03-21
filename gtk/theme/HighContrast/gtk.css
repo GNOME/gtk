@@ -175,8 +175,7 @@
     box-shadow: none; }
 
 .label:insensitive, .label:backdrop:insensitive {
-  color: #7f7f7f;
-  background-color: white; }
+  color: #7f7f7f; }
 
 /*********************
  * Spinner Animation *
