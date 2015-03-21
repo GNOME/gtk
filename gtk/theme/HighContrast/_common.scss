@@ -587,7 +587,7 @@ $_dot_color: $selected_bg_color;
   &:backdrop {
     color: $backdrop_fg_color;
     @extend %undecorated_button;
-    &:hover { color: $selected_fg_color; background-color: selected_bg_color; }
+    &:hover { color: $selected_fg_color; background-color: $selected_bg_color; }
   }
   &:insensitive { color: $insensitive_fg_color; }
 }
