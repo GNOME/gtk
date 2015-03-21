@@ -509,6 +509,11 @@ gtk_text_view_accessible_get_character_extents (AtkText      *text,
   GdkWindow *window;
   gint x_widget, y_widget, x_window, y_window;
 
+  *x = 0;
+  *y = 0;
+  *width = 0;
+  *height = 0;
+
   widget = gtk_accessible_get_widget (GTK_ACCESSIBLE (text));
   if (widget == NULL)
     return;
@@ -519,6 +524,9 @@ gtk_text_view_accessible_get_character_extents (AtkText      *text,
   gtk_text_view_get_iter_location (view, &iter, &rectangle);
 
   window = gtk_text_view_get_window (view, GTK_TEXT_WINDOW_WIDGET);
+  if (window == NULL)
+    return;
+
   gdk_window_get_origin (window, &x_widget, &y_widget);
 
   *height = rectangle.height;
