@@ -1033,11 +1033,12 @@ gtk_file_chooser_button_destroy (GtkWidget *widget)
       priv->dialog = NULL;
     }
 
-  if (priv->model && gtk_tree_model_get_iter_first (priv->model, &iter)) do
+  if (priv->model && gtk_tree_model_get_iter_first (priv->model, &iter))
     {
-      model_free_row_data (button, &iter);
+      do
+        model_free_row_data (button, &iter);
+      while (gtk_tree_model_iter_next (priv->model, &iter));
     }
-  while (gtk_tree_model_iter_next (priv->model, &iter));
 
   if (priv->dnd_select_folder_cancellable)
     {
