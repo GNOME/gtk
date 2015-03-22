@@ -344,18 +344,15 @@ gtk_search_bar_get_property (GObject    *object,
     }
 }
 
+static void gtk_search_bar_set_entry (GtkSearchBar *bar,
+                                      GtkEntry     *entry);
+
 static void
 gtk_search_bar_dispose (GObject *object)
 {
   GtkSearchBar *bar = GTK_SEARCH_BAR (object);
-  GtkSearchBarPrivate *priv = gtk_search_bar_get_instance_private (bar);
 
-  if (priv->entry)
-    {
-      g_signal_handlers_disconnect_by_func (priv->entry, entry_key_pressed_event_cb, bar);
-      g_object_remove_weak_pointer (G_OBJECT (priv->entry), (gpointer *) &priv->entry);
-      priv->entry = NULL;
-    }
+  gtk_search_bar_set_entry (bar, NULL);
 
   G_OBJECT_CLASS (gtk_search_bar_parent_class)->dispose (object);
 }
@@ -471,6 +468,35 @@ gtk_search_bar_new (void)
   return g_object_new (GTK_TYPE_SEARCH_BAR, NULL);
 }
 
+static void
+gtk_search_bar_set_entry (GtkSearchBar *bar,
+                          GtkEntry     *entry)
+{
+  GtkSearchBarPrivate *priv = gtk_search_bar_get_instance_private (bar);
+
+  if (priv->entry != NULL)
+    {
+      if (GTK_IS_SEARCH_ENTRY (priv->entry))
+        g_signal_handlers_disconnect_by_func (priv->entry, stop_search_cb, bar);
+      else
+        g_signal_handlers_disconnect_by_func (priv->entry, entry_key_pressed_event_cb, bar);
+      g_object_remove_weak_pointer (G_OBJECT (priv->entry), (gpointer *) &priv->entry);
+    }
+
+  priv->entry = GTK_WIDGET (entry);
+
+  if (priv->entry != NULL)
+    {
+      g_object_add_weak_pointer (G_OBJECT (priv->entry), (gpointer *) &priv->entry);
+      if (GTK_IS_SEARCH_ENTRY (priv->entry))
+        g_signal_connect (priv->entry, "stop-search",
+                          G_CALLBACK (stop_search_cb), bar);
+      else
+        g_signal_connect (priv->entry, "key-press-event",
+                          G_CALLBACK (entry_key_pressed_event_cb), bar);
+    }
+}
+
 /**
  * gtk_search_bar_connect_entry:
  * @bar: a #GtkSearchBar
@@ -487,32 +513,10 @@ void
 gtk_search_bar_connect_entry (GtkSearchBar *bar,
                               GtkEntry     *entry)
 {
-  GtkSearchBarPrivate *priv = gtk_search_bar_get_instance_private (bar);
-
   g_return_if_fail (GTK_IS_SEARCH_BAR (bar));
   g_return_if_fail (entry == NULL || GTK_IS_ENTRY (entry));
 
-  if (priv->entry != NULL)
-    {
-      if (GTK_IS_SEARCH_ENTRY (priv->entry))
-        g_signal_handlers_disconnect_by_func (priv->entry, stop_search_cb, bar);
-      else
-        g_signal_handlers_disconnect_by_func (priv->entry, entry_key_pressed_event_cb, bar);
-      g_object_remove_weak_pointer (G_OBJECT (priv->entry), (gpointer *) &priv->entry);
-      priv->entry = NULL;
-    }
-
-  if (entry != NULL)
-    {
-      priv->entry = GTK_WIDGET (entry);
-      g_object_add_weak_pointer (G_OBJECT (priv->entry), (gpointer *) &priv->entry);
-      if (GTK_IS_SEARCH_ENTRY (priv->entry))
-        g_signal_connect (priv->entry, "stop-search",
-                          G_CALLBACK (stop_search_cb), bar);
-      else
-        g_signal_connect (priv->entry, "key-press-event",
-                          G_CALLBACK (entry_key_pressed_event_cb), bar);
-    }
+  gtk_search_bar_set_entry (bar, entry);
 }
 
 /**
