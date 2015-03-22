@@ -344,11 +344,13 @@ gtk_search_bar_get_property (GObject    *object,
     }
 }
 
+static void gtk_search_bar_set_entry (GtkSearchBar *bar,
+                                      GtkEntry     *entry);
+
 static void
 gtk_search_bar_dispose (GObject *object)
 {
   GtkSearchBar *bar = GTK_SEARCH_BAR (object);
-  GtkSearchBarPrivate *priv = gtk_search_bar_get_instance_private (bar);
 
   gtk_search_bar_set_entry (bar, NULL);
 
