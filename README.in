@@ -76,8 +76,8 @@ Even better are git-formatted patches. (Use git format-patch)
 Release notes for 3.16
 ======================
 
-* GTK+ now includes an OpenGL rendering widget. To support GL on various
-  platforms, GTK+ uses libepoxy.
+* GTK+ now includes an OpenGL rendering widget. To support GL on
+  various platforms, GTK+ uses libepoxy.
 
 * GTK+ no longer uses gtk-update-icon-cache during its build. The
   --enable-gtk2-dependency configure option has been removed.
@@ -99,7 +99,7 @@ Release notes for 3.16
   has non-scrolling parts similar to treeview headers, there is no need
   to implement this vfunc.
 
-* The GtkSearchEntry widget has gained a number of new signal that
+* The GtkSearchEntry widget has gained a number of new signals that
   are emitted when certain key sequences are seen. In particular, it
   now handles the Escape key and emits ::stop-search. Applications that
   expect to handle Escape themselves will need to be updated.
