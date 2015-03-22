@@ -5992,7 +5992,7 @@ gtk_text_view_move_cursor (GtkTextView     *text_view,
       gtk_text_view_move_viewport (text_view, scroll_step, count);
       if ((old_xpos == gtk_adjustment_get_target_value (priv->hadjustment) &&
            old_ypos == gtk_adjustment_get_target_value (priv->vadjustment)) &&
-          leave_direction != -1 &&
+          leave_direction != (GtkDirectionType)-1 &&
           !gtk_widget_keynav_failed (GTK_WIDGET (text_view),
                                      leave_direction))
         {
@@ -6165,7 +6165,7 @@ gtk_text_view_move_cursor (GtkTextView     *text_view,
       if (step == GTK_MOVEMENT_DISPLAY_LINES)
         gtk_text_view_set_virtual_cursor_pos (text_view, cursor_x_pos, -1);
     }
-  else if (leave_direction != -1)
+  else if (leave_direction != (GtkDirectionType)-1)
     {
       if (!gtk_widget_keynav_failed (GTK_WIDGET (text_view),
                                      leave_direction))
