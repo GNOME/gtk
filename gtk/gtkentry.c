@@ -3195,7 +3195,6 @@ realize_icon_info (GtkWidget            *widget,
                                 GDK_BUTTON_RELEASE_MASK |
                                 GDK_BUTTON1_MOTION_MASK |
                                 GDK_BUTTON3_MOTION_MASK |
-                                GDK_POINTER_MOTION_HINT_MASK |
                                 GDK_POINTER_MOTION_MASK |
                                 GDK_ENTER_NOTIFY_MASK |
                             GDK_LEAVE_NOTIFY_MASK);
@@ -3314,7 +3313,6 @@ gtk_entry_realize (GtkWidget *widget)
 			    GDK_BUTTON_RELEASE_MASK |
 			    GDK_BUTTON1_MOTION_MASK |
 			    GDK_BUTTON3_MOTION_MASK |
-			    GDK_POINTER_MOTION_HINT_MASK |
 			    GDK_POINTER_MOTION_MASK |
                             GDK_ENTER_NOTIFY_MASK |
 			    GDK_LEAVE_NOTIFY_MASK);
