@@ -24,6 +24,7 @@
 #if defined(HAVE__NL_PAPER_HEIGHT) && defined(HAVE__NL_PAPER_WIDTH)
 #include <langinfo.h>
 #endif
+#include <math.h>
 
 #include "gtkpapersize.h"
 #include "gtkprintutils.h"
@@ -442,8 +443,8 @@ gtk_paper_size_new_from_ipp (const gchar *ipp_name,
           x_dimension = _gtk_print_convert_from_mm (standard_names_offsets[i].width, GTK_UNIT_POINTS);
           y_dimension = _gtk_print_convert_from_mm (standard_names_offsets[i].height, GTK_UNIT_POINTS);
 
-          if (abs (x_dimension - width) <= PAPER_SIZE_TOLERANCE &&
-              abs (y_dimension - height) <= PAPER_SIZE_TOLERANCE)
+          if (fabs (x_dimension - width) <= PAPER_SIZE_TOLERANCE &&
+              fabs (y_dimension - height) <= PAPER_SIZE_TOLERANCE)
             {
               display_name = g_strdup (g_dpgettext2 (GETTEXT_PACKAGE,
                                                      "paper size",
