@@ -2771,6 +2771,7 @@ gtk_radio_menu_item_new_with_label_from_widget
 gtk_radio_menu_item_new_with_mnemonic_from_widget
 gtk_radio_menu_item_set_group
 gtk_radio_menu_item_get_group
+gtk_radio_menu_item_join_group
 <SUBSECTION Standard>
 GTK_RADIO_MENU_ITEM
 GTK_IS_RADIO_MENU_ITEM

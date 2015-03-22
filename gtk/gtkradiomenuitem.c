@@ -558,3 +558,59 @@ gtk_radio_menu_item_activate (GtkMenuItem *menu_item)
 
   gtk_widget_queue_draw (GTK_WIDGET (radio_menu_item));
 }
+
+/**
+ * gtk_radio_menu_item_join_group:
+ * @radio_menu_item: a #GtkRadioMenuItem
+ * @group_source: (allow-none): a #GtkRadioMenuItem whose group we are
+ *   joining, or %NULL to remove the @radio_menu_item from its current
+ *   group
+ *
+ * Joins a #GtkRadioMenuItem object to the group of another #GtkRadioMenuItem
+ * object.
+ *
+ * This function should be used by language bindings to avoid the memory
+ * manangement of the opaque #GSList of gtk_radio_menu_item_get_group()
+ * and gtk_radio_menu_item_set_group().
+ *
+ * A common way to set up a group of #GtkRadioMenuItem instances is:
+ *
+ * |[
+ *   GtkRadioMenuItem *last_item = NULL;
+ *
+ *   while ( ...more items to add... )
+ *     {
+ *       GtkRadioMenuItem *radio_item;
+ *
+ *       radio_item = gtk_radio_menu_item_new (...);
+ *
+ *       gtk_radio_menu_item_join_group (radio_item, last_item);
+ *       last_item = radio_item;
+ *     }
+ * ]|
+ *
+ * Since: 3.18
+ */
+void
+gtk_radio_menu_item_join_group (GtkRadioMenuItem *radio_menu_item,
+                                GtkRadioMenuItem *group_source)
+{
+  g_return_if_fail (GTK_IS_RADIO_MENU_ITEM (radio_menu_item));
+  g_return_if_fail (group_source == NULL || GTK_IS_RADIO_MENU_ITEM (group_source));
+
+  if (group_source != NULL)
+    {
+      GSList *group = gtk_radio_menu_item_get_group (group_source);
+
+      if (group == NULL)
+        {
+          /* if the group source does not have a group, we force one */
+          gtk_radio_menu_item_set_group (group_source, NULL);
+          group = gtk_radio_menu_item_get_group (group_source);
+        }
+
+      gtk_radio_menu_item_set_group (radio_menu_item, group);
+    }
+  else
+    gtk_radio_menu_item_set_group (radio_menu_item, NULL);
+}

@@ -33,8 +33,7 @@ static GtkWidget *
 create_menu (gint     depth)
 {
   GtkWidget *menu;
-  GtkWidget *menuitem;
-  GSList *group;
+  GtkRadioMenuItem *last_item;
   char buf[32];
   int i, j;
 
@@ -42,20 +41,24 @@ create_menu (gint     depth)
     return NULL;
 
   menu = gtk_menu_new ();
-  group = NULL;
+  last_item = NULL;
 
   for (i = 0, j = 1; i < 5; i++, j++)
     {
+      GtkWidget *menu_item;
+
       sprintf (buf, "item %2d - %d", depth, j);
-      menuitem = gtk_radio_menu_item_new_with_label (group, buf);
-      group = gtk_radio_menu_item_get_group (GTK_RADIO_MENU_ITEM (menuitem));
 
-      gtk_menu_shell_append (GTK_MENU_SHELL (menu), menuitem);
-      gtk_widget_show (menuitem);
+      menu_item = gtk_radio_menu_item_new_with_label_from_widget (NULL, buf);
+      gtk_radio_menu_item_join_group (GTK_RADIO_MENU_ITEM (menu_item), last_item);
+      last_item = GTK_RADIO_MENU_ITEM (menu_item);
+
+      gtk_menu_shell_append (GTK_MENU_SHELL (menu), menu_item);
+      gtk_widget_show (menu_item);
       if (i == 3)
-        gtk_widget_set_sensitive (menuitem, FALSE);
+        gtk_widget_set_sensitive (menu_item, FALSE);
 
-      gtk_menu_item_set_submenu (GTK_MENU_ITEM (menuitem), create_menu (depth - 1));
+      gtk_menu_item_set_submenu (GTK_MENU_ITEM (menu_item), create_menu (depth - 1));
     }
 
   return menu;

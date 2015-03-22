@@ -95,6 +95,10 @@ GDK_AVAILABLE_IN_ALL
 void       gtk_radio_menu_item_set_group                     (GtkRadioMenuItem *radio_menu_item,
 							      GSList           *group);
 
+GDK_AVAILABLE_IN_3_18
+void       gtk_radio_menu_item_join_group                    (GtkRadioMenuItem *radio_menu_item,
+                                                              GtkRadioMenuItem *group_source);
+
 G_END_DECLS
 
 #endif /* __GTK_RADIO_MENU_ITEM_H__ */
