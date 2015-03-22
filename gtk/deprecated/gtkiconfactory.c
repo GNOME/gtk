@@ -2944,17 +2944,17 @@ gtk_icon_factory_buildable_custom_tag_end (GtkBuildable *buildable,
 	    }
 	  if (source_data->icon_name)
 	    gtk_icon_source_set_icon_name (icon_source, source_data->icon_name);
-	  if (source_data->size != -1)
+	  if ((gint)source_data->size != -1)
             {
               gtk_icon_source_set_size (icon_source, source_data->size);
               gtk_icon_source_set_size_wildcarded (icon_source, FALSE);
             }
-	  if (source_data->direction != -1)
+	  if ((gint)source_data->direction != -1)
             {
               gtk_icon_source_set_direction (icon_source, source_data->direction);
               gtk_icon_source_set_direction_wildcarded (icon_source, FALSE);
             }
-	  if (source_data->state != -1)
+	  if ((gint)source_data->state != -1)
             {
               gtk_icon_source_set_state (icon_source, source_data->state);
               gtk_icon_source_set_state_wildcarded (icon_source, FALSE);

@@ -95,7 +95,7 @@ real_add (const GtkStockItem *items,
       gpointer old_key, old_value;
       const GtkStockItem *item = &items[i];
 
-      if (replace_primary && item->modifier == PRIMARY_MODIFIER)
+      if (replace_primary && (guint)item->modifier == PRIMARY_MODIFIER)
         {
           item = gtk_stock_item_copy (item);
           ((GtkStockItem *)item)->modifier = (NON_STATIC_MASK |

@@ -1111,7 +1111,7 @@ gtk_font_selection_size_activate (GtkWidget   *w,
   const gchar *text;
 
   text = gtk_entry_get_text (GTK_ENTRY (priv->size_entry));
-  new_size = MAX (0.1, atof (text) * PANGO_SCALE + 0.5);
+  new_size = (int) MAX (0.1, atof (text) * PANGO_SCALE + 0.5);
 
   if (priv->size != new_size)
     gtk_font_selection_set_size (fontsel, new_size);
@@ -1130,7 +1130,7 @@ gtk_font_selection_size_focus_out (GtkWidget     *w,
   const gchar *text;
 
   text = gtk_entry_get_text (GTK_ENTRY (priv->size_entry));
-  new_size = MAX (0.1, atof (text) * PANGO_SCALE + 0.5);
+  new_size = (int) MAX (0.1, atof (text) * PANGO_SCALE + 0.5);
 
   gtk_font_selection_set_size (fontsel, new_size);
 
