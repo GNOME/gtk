@@ -497,8 +497,8 @@ gtk_widget_path_iter_get_siblings (const GtkWidgetPath *path,
 {
   GtkPathElement *elem;
 
-  g_return_val_if_fail (path != NULL, G_TYPE_INVALID);
-  g_return_val_if_fail (path->elems->len != 0, G_TYPE_INVALID);
+  g_return_val_if_fail (path != NULL, NULL);
+  g_return_val_if_fail (path->elems->len != 0, NULL);
 
   if (pos < 0 || pos >= path->elems->len)
     pos = path->elems->len - 1;
