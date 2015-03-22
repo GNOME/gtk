@@ -207,7 +207,7 @@ static GObject *gtk_print_unix_dialog_buildable_get_internal_child  (GtkBuildabl
                                                                      GtkBuilder   *builder,
                                                                      const gchar  *childname);
 
-static const gchar const common_paper_sizes[][16] = {
+static const gchar common_paper_sizes[][16] = {
   "na_letter",
   "na_legal",
   "iso_a4",
