@@ -36,7 +36,20 @@
  */
 #define GAUSSIAN_SCALE_FACTOR ((3.0 * sqrt(2 * G_PI) / 4))
 
-#define get_box_filter_size(radius) ((int)(GAUSSIAN_SCALE_FACTOR * radius))
+#define get_box_filter_size(radius) ((int)(GAUSSIAN_SCALE_FACTOR * (radius)))
+
+/* Sadly, clang is picky about get_box_filter_size(2) not being a
+ * constant expression, thus we have to use precomputed values.
+ */
+#define BOX_FILTER_SIZE_2 3
+#define BOX_FILTER_SIZE_3 5
+#define BOX_FILTER_SIZE_4 7
+#define BOX_FILTER_SIZE_5 9
+#define BOX_FILTER_SIZE_6 11
+#define BOX_FILTER_SIZE_7 13
+#define BOX_FILTER_SIZE_8 15
+#define BOX_FILTER_SIZE_9 16
+#define BOX_FILTER_SIZE_10 18
 
 /* This applies a single box blur pass to a horizontal range of pixels;
  * since the box blur has the same weight for all pixels, we can
@@ -94,15 +107,15 @@ blur_xspan (guchar *row,
    * divide operation (not radius 1, because its a no-op) */
   switch (d)
     {
-    case get_box_filter_size (2): BLUR_ROW_KERNEL (get_box_filter_size (2));
-    case get_box_filter_size (3): BLUR_ROW_KERNEL (get_box_filter_size (3));
-    case get_box_filter_size (4): BLUR_ROW_KERNEL (get_box_filter_size (4));
-    case get_box_filter_size (5): BLUR_ROW_KERNEL (get_box_filter_size (5));
-    case get_box_filter_size (6): BLUR_ROW_KERNEL (get_box_filter_size (6));
-    case get_box_filter_size (7): BLUR_ROW_KERNEL (get_box_filter_size (7));
-    case get_box_filter_size (8): BLUR_ROW_KERNEL (get_box_filter_size (8));
-    case get_box_filter_size (9): BLUR_ROW_KERNEL (get_box_filter_size (9));
-    case get_box_filter_size (10): BLUR_ROW_KERNEL (get_box_filter_size (10));
+    case BOX_FILTER_SIZE_2: BLUR_ROW_KERNEL (BOX_FILTER_SIZE_2);
+    case BOX_FILTER_SIZE_3: BLUR_ROW_KERNEL (BOX_FILTER_SIZE_3);
+    case BOX_FILTER_SIZE_4: BLUR_ROW_KERNEL (BOX_FILTER_SIZE_4);
+    case BOX_FILTER_SIZE_5: BLUR_ROW_KERNEL (BOX_FILTER_SIZE_5);
+    case BOX_FILTER_SIZE_6: BLUR_ROW_KERNEL (BOX_FILTER_SIZE_6);
+    case BOX_FILTER_SIZE_7: BLUR_ROW_KERNEL (BOX_FILTER_SIZE_7);
+    case BOX_FILTER_SIZE_8: BLUR_ROW_KERNEL (BOX_FILTER_SIZE_8);
+    case BOX_FILTER_SIZE_9: BLUR_ROW_KERNEL (BOX_FILTER_SIZE_9);
+    case BOX_FILTER_SIZE_10: BLUR_ROW_KERNEL (BOX_FILTER_SIZE_10);
     default: BLUR_ROW_KERNEL (d);
     }
 
