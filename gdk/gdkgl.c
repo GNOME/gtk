@@ -52,7 +52,8 @@ get_vertex_type_name (int type)
 }
 
 static guint
-create_shader (int type, const char const *code)
+create_shader (int         type,
+               const char *code)
 {
   guint shader;
   int status;
@@ -85,8 +86,8 @@ create_shader (int type, const char const *code)
 
 static void
 make_program (GdkGLContextProgram *program,
-              const char const *vertex_shader_code,
-              const char const *fragment_shader_code)
+              const char          *vertex_shader_code,
+              const char          *fragment_shader_code)
 {
   guint vertex_shader, fragment_shader;
   int status;
