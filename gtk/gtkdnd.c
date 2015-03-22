@@ -1637,6 +1637,7 @@ _gtk_drag_dest_handle_event (GtkWidget *toplevel,
     case GDK_DRAG_LEAVE:
       if (info->widget)
         {
+          g_object_remove_weak_pointer (G_OBJECT (info->widget), (gpointer *) &info->widget);
           gtk_drag_dest_leave (info->widget, context, event->dnd.time);
           info->widget = NULL;
         }
@@ -1657,6 +1658,7 @@ _gtk_drag_dest_handle_event (GtkWidget *toplevel,
              */
             if (info->widget)
               {
+                g_object_remove_weak_pointer (G_OBJECT (info->widget), (gpointer *) &info->widget);
                 gtk_drag_dest_leave (info->widget, context, event->dnd.time);
                 info->widget = NULL;
               }
@@ -1689,6 +1691,7 @@ _gtk_drag_dest_handle_event (GtkWidget *toplevel,
 
         if (info->widget && !found)
           {
+            g_object_remove_weak_pointer (G_OBJECT (info->widget), (gpointer *) &info->widget);
             gtk_drag_dest_leave (info->widget, context, event->dnd.time);
             info->widget = NULL;
           }
@@ -1918,10 +1921,11 @@ gtk_drag_find_widget (GtkWidget           *widget,
           found = callback (widget, context, x, y, time);
 
           /* If so, send a "drag-leave" to the last widget */
-          if (found)
+          if (found && info->widget != widget)
             {
-              if (info->widget && info->widget != widget)
+              if (info->widget)
                 {
+                  g_object_remove_weak_pointer (G_OBJECT (info->widget), (gpointer *) &info->widget);
                   gtk_drag_dest_leave (info->widget, context, time);
                 }
 
@@ -2011,6 +2015,11 @@ gtk_drag_proxy_begin (GtkWidget       *widget,
 static void
 gtk_drag_dest_info_destroy (gpointer data)
 {
+  GtkDragDestInfo *info = (GtkDragDestInfo *)data;
+  if (info->widget)
+    {
+      g_object_remove_weak_pointer (G_OBJECT (info->widget), (gpointer *) &info->widget);
+    }
   g_slice_free (GtkDragDestInfo, data);
 }
 
