@@ -337,7 +337,7 @@ static GtkCssValue font_variant_values[] = {
 GtkCssValue *
 _gtk_css_font_variant_value_new (PangoVariant font_variant)
 {
-  g_return_val_if_fail (font_variant < G_N_ELEMENTS (font_variant_values), NULL);
+  g_return_val_if_fail ((gint)font_variant < G_N_ELEMENTS (font_variant_values), NULL);
 
   return _gtk_css_value_ref (&font_variant_values[font_variant]);
 }
