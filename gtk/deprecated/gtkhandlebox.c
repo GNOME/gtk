@@ -77,7 +77,7 @@ struct _GtkHandleBoxPrivate
 {
   /* Properties */
   GtkPositionType handle_position;
-  GtkPositionType snap_edge;
+  gint snap_edge;
   GtkShadowType   shadow_type;
   gboolean        child_detached;
   /* Properties */
@@ -1051,7 +1051,7 @@ gtk_handle_box_get_snap_edge (GtkHandleBox *handle_box)
 {
   g_return_val_if_fail (GTK_IS_HANDLE_BOX (handle_box), (GtkPositionType)-1);
 
-  return handle_box->priv->snap_edge;
+  return (GtkPositionType)handle_box->priv->snap_edge;
 }
 
 /**
