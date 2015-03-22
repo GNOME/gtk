@@ -15174,14 +15174,12 @@ gtk_widget_real_set_has_tooltip (GtkWidget *widget,
 	    gdk_window_set_events (priv->window,
 				   gdk_window_get_events (priv->window) |
 				   GDK_LEAVE_NOTIFY_MASK |
-				   GDK_POINTER_MOTION_MASK |
-				   GDK_POINTER_MOTION_HINT_MASK);
+				   GDK_POINTER_MOTION_MASK);
 
 	  if (gtk_widget_get_has_window (widget))
 	      gtk_widget_add_events (widget,
 				     GDK_LEAVE_NOTIFY_MASK |
-				     GDK_POINTER_MOTION_MASK |
-				     GDK_POINTER_MOTION_HINT_MASK);
+				     GDK_POINTER_MOTION_MASK);
 	}
 
       g_object_set_qdata (G_OBJECT (widget), quark_has_tooltip,

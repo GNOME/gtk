@@ -9234,15 +9234,14 @@ text_window_realize (GtkTextWindow *win,
   attributes.y = 0;
   attributes.width = win->allocation.width;
   attributes.height = win->allocation.height;
-  attributes.event_mask = (GDK_EXPOSURE_MASK            |
-                           GDK_SCROLL_MASK              |
-                           GDK_SMOOTH_SCROLL_MASK       |
-                           GDK_KEY_PRESS_MASK           |
-                           GDK_BUTTON_PRESS_MASK        |
-                           GDK_BUTTON_RELEASE_MASK      |
-                           GDK_POINTER_MOTION_MASK      |
-                           GDK_POINTER_MOTION_HINT_MASK |
-                           gtk_widget_get_events (win->widget));
+  attributes.event_mask = gtk_widget_get_events (win->widget)
+                          | GDK_EXPOSURE_MASK
+                          | GDK_SCROLL_MASK
+                          | GDK_SMOOTH_SCROLL_MASK
+                          | GDK_KEY_PRESS_MASK
+                          | GDK_BUTTON_PRESS_MASK
+                          | GDK_BUTTON_RELEASE_MASK
+                          | GDK_POINTER_MOTION_MASK;
 
   win->bin_window = gdk_window_new (win->window,
                                     &attributes,
