@@ -1436,13 +1436,10 @@ create_show_processes_dialog (GtkMountOperation *op,
   gtk_box_pack_start (GTK_BOX (content_area), vbox, TRUE, TRUE, 0);
 
   if (secondary != NULL)
-    {
-      s = g_strdup_printf ("<big><b>%s</b></big>\n\n%s", primary, secondary);
-    }
+    s = g_strdup_printf ("<big><b>%s</b></big>\n\n%s", primary, secondary);
   else
-    {
-      s = g_strdup_printf ("%s", primary);
-    }
+    s = g_strdup_printf ("%s", primary);
+
   g_free (primary);
   label = gtk_label_new (NULL);
   gtk_label_set_markup (GTK_LABEL (label), s);
@@ -1518,8 +1515,8 @@ create_show_processes_dialog (GtkMountOperation *op,
   priv->process_list_store = list_store;
   priv->process_tree_view = tree_view;
   /* set pointers to NULL when dialog goes away */
-  g_object_add_weak_pointer (G_OBJECT (list_store), (gpointer *) &priv->process_list_store);
-  g_object_add_weak_pointer (G_OBJECT (tree_view), (gpointer *) &priv->process_tree_view);
+  g_object_add_weak_pointer (G_OBJECT (priv->process_list_store), (gpointer *) &priv->process_list_store);
+  g_object_add_weak_pointer (G_OBJECT (priv->process_tree_view), (gpointer *) &priv->process_tree_view);
 
   g_object_unref (list_store);
   g_object_ref (op);
