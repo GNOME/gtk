@@ -1785,7 +1785,7 @@ _gtk_print_operation_set_status (GtkPrintOperation *op,
     NC_("print operation status", "Finished with error")
   };
 
-  if (status < 0 || status > GTK_PRINT_STATUS_FINISHED_ABORTED)
+  if (status > GTK_PRINT_STATUS_FINISHED_ABORTED)
     status = GTK_PRINT_STATUS_FINISHED_ABORTED;
 
   if (string == NULL)
