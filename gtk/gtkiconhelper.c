@@ -852,7 +852,7 @@ _gtk_icon_helper_get_size (GtkIconHelper *self,
           width = gdk_pixbuf_animation_get_width (self->priv->animation);
           height = gdk_pixbuf_animation_get_height (self->priv->animation);
         }
-      else if (self->priv->icon_size != -1)
+      else if (self->priv->icon_size != GTK_ICON_SIZE_INVALID)
         {
           ensure_icon_size (self, context, &width, &height);
         }
