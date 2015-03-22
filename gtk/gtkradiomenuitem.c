@@ -284,7 +284,7 @@ gtk_radio_menu_item_new_with_mnemonic (GSList *group,
 
 /**
  * gtk_radio_menu_item_new_from_widget: (constructor)
- * @group: An existing #GtkRadioMenuItem
+ * @group: (allow-none): An existing #GtkRadioMenuItem
  *
  * Creates a new #GtkRadioMenuItem adding it to the same group as @group.
  *
@@ -297,7 +297,7 @@ gtk_radio_menu_item_new_from_widget (GtkRadioMenuItem *group)
 {
   GSList *list = NULL;
   
-  g_return_val_if_fail (GTK_IS_RADIO_MENU_ITEM (group), NULL);
+  g_return_val_if_fail (group == NULL || GTK_IS_RADIO_MENU_ITEM (group), NULL);
 
   if (group)
     list = gtk_radio_menu_item_get_group (group);
@@ -307,8 +307,8 @@ gtk_radio_menu_item_new_from_widget (GtkRadioMenuItem *group)
 
 /**
  * gtk_radio_menu_item_new_with_mnemonic_from_widget: (constructor)
- * @group: An existing #GtkRadioMenuItem
- * @label: the text of the button, with an underscore in front of the
+ * @group: (allow-none): An existing #GtkRadioMenuItem
+ * @label: (allow-none): the text of the button, with an underscore in front of the
  *         mnemonic character
  *
  * Creates a new GtkRadioMenuItem containing a label. The label will be
@@ -327,7 +327,7 @@ gtk_radio_menu_item_new_with_mnemonic_from_widget (GtkRadioMenuItem *group,
 {
   GSList *list = NULL;
 
-  g_return_val_if_fail (GTK_IS_RADIO_MENU_ITEM (group), NULL);
+  g_return_val_if_fail (group == NULL || GTK_IS_RADIO_MENU_ITEM (group), NULL);
 
   if (group)
     list = gtk_radio_menu_item_get_group (group);
@@ -337,8 +337,8 @@ gtk_radio_menu_item_new_with_mnemonic_from_widget (GtkRadioMenuItem *group,
 
 /**
  * gtk_radio_menu_item_new_with_label_from_widget: (constructor)
- * @group: an existing #GtkRadioMenuItem
- * @label: the text for the label
+ * @group: (allow-none): an existing #GtkRadioMenuItem
+ * @label: (allow-none): the text for the label
  *
  * Creates a new GtkRadioMenuItem whose child is a simple GtkLabel.
  * The new #GtkRadioMenuItem is added to the same group as @group.
@@ -353,7 +353,7 @@ gtk_radio_menu_item_new_with_label_from_widget (GtkRadioMenuItem *group,
 {
   GSList *list = NULL;
 
-  g_return_val_if_fail (GTK_IS_RADIO_MENU_ITEM (group), NULL);
+  g_return_val_if_fail (group == NULL || GTK_IS_RADIO_MENU_ITEM (group), NULL);
 
   if (group)
     list = gtk_radio_menu_item_get_group (group);
