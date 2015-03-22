@@ -228,6 +228,8 @@ static gboolean gtk_drag_dest_drop              (GtkWidget        *widget,
                                                  gint              x,
                                                  gint              y,
                                                  guint             time);
+static void     gtk_drag_dest_set_widget        (GtkDragDestInfo  *info,
+                                                 GtkWidget        *widget);
 
 static GtkDragDestInfo *  gtk_drag_get_dest_info     (GdkDragContext *context,
                                                       gboolean        create);
@@ -1637,9 +1639,8 @@ _gtk_drag_dest_handle_event (GtkWidget *toplevel,
     case GDK_DRAG_LEAVE:
       if (info->widget)
         {
-          g_object_remove_weak_pointer (G_OBJECT (info->widget), (gpointer *) &info->widget);
           gtk_drag_dest_leave (info->widget, context, event->dnd.time);
-          info->widget = NULL;
+          gtk_drag_dest_set_widget (info, NULL);
         }
       break;
       
@@ -1658,9 +1659,8 @@ _gtk_drag_dest_handle_event (GtkWidget *toplevel,
              */
             if (info->widget)
               {
-                g_object_remove_weak_pointer (G_OBJECT (info->widget), (gpointer *) &info->widget);
                 gtk_drag_dest_leave (info->widget, context, event->dnd.time);
-                info->widget = NULL;
+                gtk_drag_dest_set_widget (info, NULL);
               }
           }
 
@@ -1691,9 +1691,8 @@ _gtk_drag_dest_handle_event (GtkWidget *toplevel,
 
         if (info->widget && !found)
           {
-            g_object_remove_weak_pointer (G_OBJECT (info->widget), (gpointer *) &info->widget);
             gtk_drag_dest_leave (info->widget, context, event->dnd.time);
-            info->widget = NULL;
+            gtk_drag_dest_set_widget (info, NULL);
           }
         
         /* Send a reply.
@@ -1924,13 +1923,9 @@ gtk_drag_find_widget (GtkWidget           *widget,
           if (found && info->widget != widget)
             {
               if (info->widget)
-                {
-                  g_object_remove_weak_pointer (G_OBJECT (info->widget), (gpointer *) &info->widget);
-                  gtk_drag_dest_leave (info->widget, context, time);
-                }
+                gtk_drag_dest_leave (info->widget, context, time);
 
-              info->widget = widget;
-              g_object_add_weak_pointer (G_OBJECT (widget), (gpointer *) &info->widget);
+              gtk_drag_dest_set_widget (info, widget);
             }
         }
 
@@ -2013,13 +2008,25 @@ gtk_drag_proxy_begin (GtkWidget       *widget,
 }
 
 static void
+gtk_drag_dest_set_widget (GtkDragDestInfo *info,
+                          GtkWidget       *widget)
+{
+  if (info->widget)
+    g_object_remove_weak_pointer (G_OBJECT (info->widget), (gpointer *) &info->widget);
+
+  info->widget = widget;
+
+  if (info->widget)
+    g_object_add_weak_pointer (G_OBJECT (info->widget), (gpointer *) &info->widget);
+}
+
+static void
 gtk_drag_dest_info_destroy (gpointer data)
 {
   GtkDragDestInfo *info = (GtkDragDestInfo *)data;
-  if (info->widget)
-    {
-      g_object_remove_weak_pointer (G_OBJECT (info->widget), (gpointer *) &info->widget);
-    }
+
+  gtk_drag_dest_set_widget (info, NULL);
+
   g_slice_free (GtkDragDestInfo, data);
 }
 
