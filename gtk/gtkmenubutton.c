@@ -890,7 +890,7 @@ set_align_widget_pointer (GtkMenuButton *menu_button,
 
   priv->align_widget = align_widget;
 
-  if (align_widget)
+  if (priv->align_widget)
     g_object_add_weak_pointer (G_OBJECT (priv->align_widget), (gpointer *) &priv->align_widget);
 }
 
