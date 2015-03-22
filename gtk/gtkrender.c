@@ -1187,7 +1187,7 @@ gtk_render_icon_pixbuf (GtkStyleContext     *context,
                         GtkIconSize          size)
 {
   g_return_val_if_fail (GTK_IS_STYLE_CONTEXT (context), NULL);
-  g_return_val_if_fail (size > GTK_ICON_SIZE_INVALID || size == -1, NULL);
+  g_return_val_if_fail (size > GTK_ICON_SIZE_INVALID || size == (GtkIconSize)-1, NULL);
   g_return_val_if_fail (source != NULL, NULL);
 
   return gtk_do_render_icon_pixbuf (context, source, size);
