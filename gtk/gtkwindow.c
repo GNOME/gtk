@@ -5806,7 +5806,8 @@ create_decoration (GtkWidget *widget)
   GtkWindow *window = GTK_WINDOW (widget);
   GtkWindowPrivate *priv = window->priv;
 
-  if (!gtk_window_supports_client_shadow (window))
+  priv->use_client_shadow = gtk_window_supports_client_shadow (window);
+  if (!priv->use_client_shadow)
     return;
 
   gtk_window_enable_csd (window);
