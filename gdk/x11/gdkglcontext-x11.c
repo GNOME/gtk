@@ -461,7 +461,10 @@ gdk_x11_gl_context_texture_from_surface (GdkGLContext *paint_context,
 
   glGenTextures (1, &texture_id);
   glBindTexture (target, texture_id);
-  glEnable (target);
+
+  /* glEnable(GL_TEXTURE_2D) is deprecated */
+  if (target != GL_TEXTURE_2D)
+    glEnable (target);
 
   glTexParameteri (target, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
   glTexParameteri (target, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
@@ -526,7 +529,9 @@ gdk_x11_gl_context_texture_from_surface (GdkGLContext *paint_context,
   glXReleaseTexImageEXT (glx_pixmap->display, glx_pixmap->drawable,
   			 GLX_FRONT_LEFT_EXT);
 
-  glDisable (target);
+  if (target != GL_TEXTURE_2D)
+    glDisable (target);
+
   glDeleteTextures (1, &texture_id);
 
   glx_pixmap_destroy(glx_pixmap);
