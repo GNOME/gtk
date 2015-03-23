@@ -35,9 +35,11 @@ typedef struct
 G_DEFINE_TYPE (GtkApplicationImplWayland, gtk_application_impl_wayland, GTK_TYPE_APPLICATION_IMPL_DBUS)
 
 static void
-gtk_application_impl_wayland_handle_window_map (GtkApplicationImpl *impl,
-                                                GtkWindow          *window)
+gtk_application_impl_wayland_handle_window_realize (GtkApplicationImpl *impl,
+                                                    GtkWindow          *window)
 {
+  GtkApplicationImplClass *impl_class =
+    GTK_APPLICATION_IMPL_CLASS (gtk_application_impl_wayland_parent_class);
   GtkApplicationImplDBus *dbus = (GtkApplicationImplDBus *) impl;
   GdkWindow *gdk_window;
   gchar *window_path;
@@ -54,6 +56,8 @@ gtk_application_impl_wayland_handle_window_map (GtkApplicationImpl *impl,
                                                       window_path, dbus->object_path, dbus->unique_name);
 
   g_free (window_path);
+
+  impl_class->handle_window_realize (impl, window);
 }
 
 static void
@@ -66,5 +70,6 @@ gtk_application_impl_wayland_class_init (GtkApplicationImplWaylandClass *class)
 {
   GtkApplicationImplClass *impl_class = GTK_APPLICATION_IMPL_CLASS (class);
 
-  impl_class->handle_window_map = gtk_application_impl_wayland_handle_window_map;
+  impl_class->handle_window_realize =
+    gtk_application_impl_wayland_handle_window_realize;
 }
