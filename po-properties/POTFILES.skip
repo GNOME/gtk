@@ -60,6 +60,7 @@ gtk/inspector/classes-list.ui
 gtk/inspector/classes-list.ui.h
 gtk/inspector/css-editor.ui
 gtk/inspector/css-editor.ui.h
+gtk/inspector/css-node-tree.ui
 gtk/inspector/data-list.ui
 gtk/inspector/data-list.ui.h
 gtk/inspector/general.ui
@@ -167,6 +168,8 @@ testsuite/reftests/border-image-url.ref.ui
 testsuite/reftests/border-image-url-scaled.ref.ui
 testsuite/reftests/border-image-url-scaled.ui
 testsuite/reftests/border-image-url.ui
+testsuite/reftests/box-order.ref.ui
+testsuite/reftests/box-order.ui
 testsuite/reftests/box-packing.ui
 testsuite/reftests/box-pseudo-classes.ref.ui
 testsuite/reftests/box-pseudo-classes.ui

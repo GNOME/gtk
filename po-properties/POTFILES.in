@@ -118,6 +118,7 @@ gtk/gtkcolorscale.c
 gtk/gtkcolorswatch.c
 gtk/gtkcombobox.c
 gtk/gtkcontainer.c
+gtk/gtkcssnode.c
 gtk/gtkcssprovider.c
 gtk/gtkcssshorthandproperty.c
 gtk/gtkcssstyleproperty.c

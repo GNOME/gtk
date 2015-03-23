@@ -118,6 +118,7 @@ gtk/gtkcolorscale.c
 gtk/gtkcolorswatch.c
 gtk/gtkcombobox.c
 gtk/gtkcontainer.c
+gtk/gtkcssnode.c
 gtk/gtkcssprovider.c
 gtk/gtkcssshorthandproperty.c
 gtk/gtkcssstyleproperty.c
@@ -289,6 +290,7 @@ gtk/inspector/classes-list.c
 gtk/inspector/classes-list.ui
 gtk/inspector/css-editor.c
 gtk/inspector/css-editor.ui
+gtk/inspector/css-node-tree.ui
 gtk/inspector/data-list.ui
 gtk/inspector/general.c
 gtk/inspector/general.ui
