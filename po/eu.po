@@ -1,4 +1,4 @@
-# Basque translation of GTK+.
+# Basque translation of gtk+.
 # Copyright (C) 1999 - 2011 Free Software Foundation, Inc.
 #
 # Joseba Bidaurrazaga van Dierdonck <gcpbivaj@lg.ehu.es>, 1999-2000.
