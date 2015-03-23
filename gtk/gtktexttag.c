@@ -555,8 +555,8 @@ gtk_text_tag_class_init (GtkTextTagClass *klass)
   g_object_class_install_property (object_class,
                                    PROP_STRIKETHROUGH_RGBA,
                                    g_param_spec_boxed ("strikethrough-rgba",
-                                                       P_("Strike-through RGBA"),
-                                                       P_("Color of strike-through for this text"),
+                                                       P_("Strikethrough RGBA"),
+                                                       P_("Color of strikethrough for this text"),
                                                        GDK_TYPE_RGBA,
                                                        GTK_PARAM_READWRITE));
 
