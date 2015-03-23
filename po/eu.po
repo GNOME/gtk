@@ -1,23 +1,23 @@
-# Basque translation of GTK+.
+# Basque translation of gtk+.
 # Copyright (C) 1999 - 2011 Free Software Foundation, Inc.
-#
 #
 # Joseba Bidaurrazaga van Dierdonck <gcpbivaj@lg.ehu.es>, 1999-2000.
 # Hizkuntza Politikarako Sailburuordetza <hizpol@ej-gv.es>, 2004.
 # Iñaki Larrañaga Murgoitio <dooteo@zundan.com>, 2004 - 2015.
+#
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ gtk-3-16\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-03-21 09:55+0000\n"
-"PO-Revision-Date: 2015-03-21 16:57+0100\n"
+"POT-Creation-Date: 2015-03-23 21:10+0000\n"
+"PO-Revision-Date: 2015-03-23 22:15+0100\n"
 "Last-Translator: Iñaki Larrañaga Murgoitio <dooteo@zundan.com>\n"
 "Language-Team: Basque <librezale@librezale.org>\n"
 "Language: eu\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Lokalize 1.4\n"
+"X-Generator: Lokalize 1.5\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 #: gdk/broadway/gdkbroadway-server.c:144
@@ -453,20 +453,16 @@ msgid "3.2 core GL profile is not available on EGL implementation"
 msgstr "3.2 nukleoa GL profila ez dago erabilgarri EGL inplementazioan"
 
 #: gdk/wayland/gdkglcontext-wayland.c:377
-#| msgid "3.2 core GL profile is not available on EGL implementation"
 msgid "Core GL is not available on EGL implementation"
 msgstr "GL nukleoa ez dago erabilgarri EGL inplementazioan"
 
 #: gdk/win32/gdkglcontext-win32.c:541
-#| msgid ""
-#| "The WGL_ARB_create_context extension needed to create 3.2 core profiles "
-#| "is not available"
 msgid ""
 "The WGL_ARB_create_context extension needed to create core profiles is not "
 "available"
 msgstr ""
-"WGL_ARB_create_context_profile hedapenak eskatzen duen nukleoaren "
-"profila ez dago erabilgarri"
+"WGL_ARB_create_context_profile hedapenak eskatzen duen nukleoaren profila ez "
+"dago erabilgarri"
 
 #. Description of --sync in --help output
 #: gdk/win32/gdkmain-win32.c:53
@@ -521,15 +517,12 @@ msgid "No available configurations for the given RGBA pixel format"
 msgstr "Ez dago emandako GBUA pixel formatuaren konfiguraziorik erabilgarri"
 
 #: gdk/x11/gdkglcontext-x11.c:1171
-#| msgid ""
-#| "The GLX_ARB_create_context_profile extension needed to create 3.2 core "
-#| "profiles is not available"
 msgid ""
 "The GLX_ARB_create_context_profile extension needed to create core profiles "
 "is not available"
 msgstr ""
-"GLX_ARB_create_context_profile hedapenak eskatzen duen nukleoaren "
-"profila ez dago erabilgarri"
+"GLX_ARB_create_context_profile hedapenak eskatzen duen nukleoaren profila ez "
+"dago erabilgarri"
 
 #: gtk/a11y/gtkbooleancellaccessible.c:43
 msgctxt "Action description"
@@ -1224,7 +1217,7 @@ msgstr ""
 #: gtk/gtkmountoperation.c:543 gtk/gtkpagesetupunixdialog.c:196
 #: gtk/gtkprintbackend.c:763 gtk/gtkprinteroptionwidget.c:545
 #: gtk/gtkprintunixdialog.c:665 gtk/gtkprintunixdialog.c:738
-#: gtk/gtkwindow.c:11917 gtk/inspector/css-editor.c:199
+#: gtk/gtkwindow.c:11925 gtk/inspector/css-editor.c:199
 #: gtk/ui/gtkappchooserdialog.ui:79 gtk/ui/gtkassistant.ui:169
 #: gtk/ui/gtkcolorchooserdialog.ui:38 gtk/ui/gtkfontchooserdialog.ui:35
 msgid "_Cancel"
@@ -1273,7 +1266,7 @@ msgid "_Apply"
 msgstr "_Aplikatu"
 
 #: gtk/deprecated/gtkfontsel.c:1698 gtk/gtkmessagedialog.c:936
-#: gtk/gtkmessagedialog.c:958 gtk/gtkprintbackend.c:764 gtk/gtkwindow.c:11918
+#: gtk/gtkmessagedialog.c:958 gtk/gtkprintbackend.c:764 gtk/gtkwindow.c:11926
 #: gtk/inspector/classes-list.c:127
 msgid "_OK"
 msgstr "_Ados"
@@ -2132,30 +2125,30 @@ msgstr "E_skuinean:"
 msgid "Paper Margins"
 msgstr "Paper-marjinak"
 
-#: gtk/gtkentry.c:9617 gtk/gtkentry.c:9770 gtk/gtklabel.c:6597
+#: gtk/gtkentry.c:9615 gtk/gtkentry.c:9768 gtk/gtklabel.c:6596
 #: gtk/gtktextview.c:9037 gtk/gtktextview.c:9225
 msgid "Cu_t"
 msgstr "_Ebaki"
 
-#: gtk/gtkentry.c:9621 gtk/gtkentry.c:9773 gtk/gtklabel.c:6598
+#: gtk/gtkentry.c:9619 gtk/gtkentry.c:9771 gtk/gtklabel.c:6597
 #: gtk/gtktextview.c:9041 gtk/gtktextview.c:9229
 msgid "_Copy"
 msgstr "_Kopiatu"
 
-#: gtk/gtkentry.c:9625 gtk/gtkentry.c:9776 gtk/gtklabel.c:6599
+#: gtk/gtkentry.c:9623 gtk/gtkentry.c:9774 gtk/gtklabel.c:6598
 #: gtk/gtktextview.c:9043 gtk/gtktextview.c:9231
 msgid "_Paste"
 msgstr "_Itsatsi"
 
-#: gtk/gtkentry.c:9628 gtk/gtklabel.c:6601 gtk/gtktextview.c:9046
+#: gtk/gtkentry.c:9626 gtk/gtklabel.c:6600 gtk/gtktextview.c:9046
 msgid "_Delete"
 msgstr "E_zabatu"
 
-#: gtk/gtkentry.c:9639 gtk/gtklabel.c:6610 gtk/gtktextview.c:9060
+#: gtk/gtkentry.c:9637 gtk/gtklabel.c:6609 gtk/gtktextview.c:9060
 msgid "Select _All"
 msgstr "Hautatu _denak"
 
-#: gtk/gtkentry.c:10837
+#: gtk/gtkentry.c:10835
 msgid "Caps Lock is on"
 msgstr "Blok.maius. aktibatuta dago"
 
@@ -2175,7 +2168,7 @@ msgstr "(bat ere ez)"
 msgid "_Open"
 msgstr "_Ireki"
 
-#: gtk/gtkfilechooserbutton.c:2137
+#: gtk/gtkfilechooserbutton.c:2138
 msgid "Other…"
 msgstr "Besterik…"
 
@@ -2392,7 +2385,7 @@ msgstr "Huts egin du OpenGL-ren testuingurua sortzean"
 msgid "Application menu"
 msgstr "Aplikazioaren menua"
 
-#: gtk/gtkheaderbar.c:479 gtk/gtkwindow.c:8591
+#: gtk/gtkheaderbar.c:479 gtk/gtkwindow.c:8586
 msgid "Close"
 msgstr "Itxi"
 
@@ -2406,7 +2399,6 @@ msgid "Failed to load icon"
 msgstr "Huts egin du ikonoa kargatzean"
 
 #: gtk/gtkimmodule.c:539
-#| msgid "Simple"
 msgctxt "input method menu"
 msgid "Simple"
 msgstr "Bakuna"
@@ -2444,12 +2436,12 @@ msgid "Error"
 msgstr "Errorea"
 
 #. Open Link
-#: gtk/gtklabel.c:6578
+#: gtk/gtklabel.c:6577
 msgid "_Open Link"
 msgstr "_Ireki esteka"
 
 #. Copy Link Address
-#: gtk/gtklabel.c:6587
+#: gtk/gtklabel.c:6586
 msgid "Copy _Link Address"
 msgstr "Kopiatu _estekaren helbidea"
 
@@ -2686,12 +2678,12 @@ msgstr "Z Shell"
 msgid "Cannot end process with PID %d: %s"
 msgstr "Ezin da %d PID prozesua amaitu: %s"
 
-#: gtk/gtknotebook.c:5171 gtk/gtknotebook.c:7902
+#: gtk/gtknotebook.c:5173 gtk/gtknotebook.c:7904
 #, c-format
 msgid "Page %u"
 msgstr "%u. orrialdea"
 
-#: gtk/gtkpagesetup.c:652 gtk/gtkpapersize.c:985 gtk/gtkpapersize.c:1025
+#: gtk/gtkpagesetup.c:652 gtk/gtkpapersize.c:986 gtk/gtkpapersize.c:1026
 msgid "Not a valid page setup file"
 msgstr "Ez da orria konfiguratzeko baliozko fitxategia"
 
@@ -3277,7 +3269,7 @@ msgstr "Bilatu"
 #. * glyphs then use MEDIUM VERTICAL BAR (U+2759) as the text for
 #. * the state
 #.
-#: gtk/gtkswitch.c:379 gtk/gtkswitch.c:431 gtk/gtkswitch.c:606
+#: gtk/gtkswitch.c:379 gtk/gtkswitch.c:431 gtk/gtkswitch.c:605
 msgctxt "switch"
 msgid "ON"
 msgstr "❙"
@@ -3285,7 +3277,7 @@ msgstr "❙"
 #. Translators: if the "off" state label requires more than three
 #. * glyphs then use WHITE CIRCLE (U+25CB) as the text for the state
 #.
-#: gtk/gtkswitch.c:387 gtk/gtkswitch.c:432 gtk/gtkswitch.c:621
+#: gtk/gtkswitch.c:387 gtk/gtkswitch.c:432 gtk/gtkswitch.c:620
 msgctxt "switch"
 msgid "OFF"
 msgstr "○"
@@ -3470,12 +3462,12 @@ msgctxt "volume percentage"
 msgid "%d %%"
 msgstr " %%%d"
 
-#: gtk/gtkwindow.c:11905
+#: gtk/gtkwindow.c:11913
 #, c-format
 msgid "Do you want to use GTK+ Inspector?"
 msgstr "Nahi duzu GTK+ ikuskatzailea erabiltzea?"
 
-#: gtk/gtkwindow.c:11907
+#: gtk/gtkwindow.c:11915
 #, c-format
 msgid ""
 "GTK+ Inspector is an interactive debugger that lets you explore and modify "
@@ -3486,7 +3478,7 @@ msgstr ""
 "barnekoak arakatzea eta aldatzea baimentzen dizu. Hori erabiltzean "
 "aplikazioa hondatu edo kraskatu dezakezu."
 
-#: gtk/gtkwindow.c:11912
+#: gtk/gtkwindow.c:11920
 msgid "Don't show this message again"
 msgstr "Ez erakutsi mezu hau berriro"
 
@@ -3692,18 +3684,28 @@ msgid "Accessible role"
 msgstr "Portaera erabilgarria"
 
 #: gtk/inspector/misc-info.ui:507
+#| msgid "Accessible role"
+msgid "Accessible name"
+msgstr "Izen erabilgarria"
+
+#: gtk/inspector/misc-info.ui:541
+#| msgid "Accessible role"
+msgid "Accessible description"
+msgstr "Azalpen erabilgarria"
+
+#: gtk/inspector/misc-info.ui:575
 msgid "Mapped"
 msgstr "Mapatuta"
 
-#: gtk/inspector/misc-info.ui:543
+#: gtk/inspector/misc-info.ui:611
 msgid "Realized"
 msgstr "Osatuta"
 
-#: gtk/inspector/misc-info.ui:579
+#: gtk/inspector/misc-info.ui:647
 msgid "Is Toplevel"
 msgstr "Goi-mailakoa da"
 
-#: gtk/inspector/misc-info.ui:615
+#: gtk/inspector/misc-info.ui:683
 msgid "Child Visible"
 msgstr "Umea ikusgai"
 
@@ -3906,7 +3908,7 @@ msgstr "Norberarena"
 msgid "Cumulative"
 msgstr "Metakorra"
 
-#: gtk/inspector/statistics.ui:164
+#: gtk/inspector/statistics.ui:165
 msgid "Enable statistics with GOBJECT_DEBUG=instance-count"
 msgstr "Gaitu estatistikak honekin: GOBJECT_DEBUG=instance-count"
 
@@ -5139,12 +5141,10 @@ msgid "Saturation"
 msgstr "Saturazioa"
 
 #: gtk/ui/gtkfilechooserwidget.ui:82
-#| msgid "Create Fo_lder"
 msgid "Create Folder"
 msgstr "Sortu karpeta"
 
 #: gtk/ui/gtkfilechooserwidget.ui:156
-#| msgid "Files"
 msgid "All Files"
 msgstr "Fitxategi guztiak"
 
@@ -5557,7 +5557,6 @@ msgstr ""
 
 #. ID
 #: modules/input/imam-et.c:452
-#| msgid "Amharic (EZ+)"
 msgctxt "input method menu"
 msgid "Amharic (EZ+)"
 msgstr "Amharica (EZ+)"
@@ -5570,14 +5569,12 @@ msgstr "Broadway"
 
 #. ID
 #: modules/input/imcedilla.c:90
-#| msgid "Cedilla"
 msgctxt "input method menu"
 msgid "Cedilla"
 msgstr "Ze hautsia"
 
 #. ID
 #: modules/input/imcyrillic-translit.c:215
-#| msgid "Cyrillic (Transliterated)"
 msgctxt "input menthod menu"
 msgid "Cyrillic (Transliterated)"
 msgstr "Zirilikoa (Transliteratua)"
@@ -5589,21 +5586,18 @@ msgstr "Windows IME"
 
 #. ID
 #: modules/input/iminuktitut.c:125
-#| msgid "Inuktitut (Transliterated)"
 msgctxt "input method menu"
 msgid "Inuktitut (Transliterated)"
 msgstr "Inuktitutera (Transliteratua)"
 
 #. ID
 #: modules/input/imipa.c:143
-#| msgid "IPA"
 msgctxt "input method menu"
 msgid "IPA"
 msgstr "IPA"
 
 #. ID
 #: modules/input/immultipress.c:30
-#| msgid "Multipress"
 msgctxt "input method menu"
 msgid "Multipress"
 msgstr "Hainbat pultsazio"
@@ -5615,35 +5609,30 @@ msgstr "Mac OS X Quartz"
 
 #. ID
 #: modules/input/imthai.c:33
-#| msgid "Thai-Lao"
 msgctxt "input method menu"
 msgid "Thai-Lao"
 msgstr "Thailandiera-Laosera"
 
 #. ID
 #: modules/input/imti-er.c:451
-#| msgid "Tigrigna-Eritrean (EZ+)"
 msgctxt "input method menu"
 msgid "Tigrigna-Eritrean (EZ+)"
 msgstr "Tigrinyera-Eritrearra (EZ+)"
 
 #. ID
 #: modules/input/imti-et.c:451
-#| msgid "Tigrigna-Ethiopian (EZ+)"
 msgctxt "input method menu"
 msgid "Tigrigna-Ethiopian (EZ+)"
 msgstr " Tigrinyera-Etiopiarra (EZ+)"
 
 #. ID
 #: modules/input/imviqr.c:242
-#| msgid "Vietnamese (VIQR)"
 msgctxt "input method menu"
 msgid "Vietnamese (VIQR)"
 msgstr "Vietnamdarra (VIQR)"
 
 #. ID
 #: modules/input/imxim.c:26
-#| msgid "X Input Method"
 msgctxt "input method menu"
 msgid "X Input Method"
 msgstr "X sarrera-metodoa"
