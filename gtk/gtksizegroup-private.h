@@ -23,26 +23,9 @@
 
 G_BEGIN_DECLS
 
-/*
- * GtkQueueResizeFlags:
- * @GTK_QUEUE_RESIZE_INVALIDATE_ONLY: invalidate all cached sizes
- *  as we would normally do when a widget is queued for resize,
- *  but don’t actually add the toplevel resize container to the
- *  resize queue. Useful if we want to change the size of a widget
- *  see how that would affect the overall layout, then restore
- *  the old size.
- *
- * Flags that affect the operation of queueing a widget for resize.
- */
-typedef enum
-{
-  GTK_QUEUE_RESIZE_INVALIDATE_ONLY = 1 << 0
-} GtkQueueResizeFlags;
-
 GHashTable * _gtk_size_group_get_widget_peers (GtkWidget           *for_widget,
                                                GtkOrientation       orientation);
-void _gtk_size_group_queue_resize             (GtkWidget           *widget,
-                                               GtkQueueResizeFlags  flags);
+void _gtk_size_group_queue_resize             (GtkWidget           *widget);
 
 G_END_DECLS
 

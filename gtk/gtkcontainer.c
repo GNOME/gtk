@@ -1941,34 +1941,6 @@ gtk_container_queue_resize_handler (GtkContainer *container)
     }
 }
 
-static void
-_gtk_container_queue_resize_internal (GtkContainer *container,
-                                      gboolean      invalidate_only)
-{
-  GtkWidget *widget;
-
-  g_return_if_fail (GTK_IS_CONTAINER (container));
-
-  widget = GTK_WIDGET (container);
-
-  do
-    {
-      _gtk_widget_set_alloc_needed (widget, TRUE);
-      _gtk_size_request_cache_clear (_gtk_widget_peek_request_cache (widget));
-
-      G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
-      if (GTK_IS_RESIZE_CONTAINER (widget))
-        break;
-      G_GNUC_END_IGNORE_DEPRECATIONS;
-
-      widget = gtk_widget_get_parent (widget);
-    }
-  while (widget);
-
-  if (widget && !invalidate_only)
-    gtk_container_queue_resize_handler (GTK_CONTAINER (widget));
-}
-
 void
 _gtk_container_queue_restyle (GtkContainer *container)
 {
@@ -1999,20 +1971,28 @@ _gtk_container_queue_restyle (GtkContainer *container)
 void
 _gtk_container_queue_resize (GtkContainer *container)
 {
-  _gtk_container_queue_resize_internal (container, FALSE);
-}
+  GtkWidget *widget;
 
-/**
- * _gtk_container_resize_invalidate:
- * @container: a #GtkContainer
- *
- * Invalidates cached sizes like _gtk_container_queue_resize() but doesn't
- * actually queue the resize container for resize.
- */
-void
-_gtk_container_resize_invalidate (GtkContainer *container)
-{
-  _gtk_container_queue_resize_internal (container, TRUE);
+  g_return_if_fail (GTK_IS_CONTAINER (container));
+
+  widget = GTK_WIDGET (container);
+
+  do
+    {
+      _gtk_widget_set_alloc_needed (widget, TRUE);
+      _gtk_size_request_cache_clear (_gtk_widget_peek_request_cache (widget));
+
+      G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
+      if (GTK_IS_RESIZE_CONTAINER (widget))
+        break;
+      G_GNUC_END_IGNORE_DEPRECATIONS;
+
+      widget = gtk_widget_get_parent (widget);
+    }
+  while (widget);
+
+  if (widget)
+    gtk_container_queue_resize_handler (GTK_CONTAINER (widget));
 }
 
 void
