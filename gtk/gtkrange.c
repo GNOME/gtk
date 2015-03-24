@@ -2111,11 +2111,12 @@ gtk_range_draw (GtkWidget *widget,
           gtk_adjustment_get_upper (priv->adjustment) - gtk_adjustment_get_page_size (priv->adjustment) -
           gtk_adjustment_get_lower (priv->adjustment) != 0)
         {
-          gdouble  fill_level  = priv->fill_level;
-          gint     fill_x      = x;
-          gint     fill_y      = y;
-          gint     fill_width  = width;
-          gint     fill_height = height;
+          gdouble  fill_level      = priv->fill_level;
+          gint     fill_x          = x;
+          gint     fill_y          = y;
+          gint     fill_width      = width;
+          gint     fill_height     = height;
+          gdouble  fill_proportion = 0.0;
 
           gtk_style_context_save (context);
           gtk_style_context_add_class (context, GTK_STYLE_CLASS_PROGRESSBAR);
@@ -2124,33 +2125,36 @@ gtk_range_draw (GtkWidget *widget,
                               gtk_adjustment_get_upper (priv->adjustment) -
                               gtk_adjustment_get_page_size (priv->adjustment));
 
-          if (priv->orientation == GTK_ORIENTATION_HORIZONTAL)
-            {
-              fill_x     = priv->trough.x;
-              fill_width = (priv->slider.width +
-                            (fill_level - gtk_adjustment_get_lower (priv->adjustment)) /
+          fill_proportion = (fill_level - gtk_adjustment_get_lower (priv->adjustment)) /
                             (gtk_adjustment_get_upper (priv->adjustment) -
                              gtk_adjustment_get_lower (priv->adjustment) -
-                             gtk_adjustment_get_page_size (priv->adjustment)) *
-                            (priv->trough.width -
-                             priv->slider.width));
+                             gtk_adjustment_get_page_size (priv->adjustment));
 
-              if (should_invert (range))
-                fill_x += priv->trough.width - fill_width;
+          if (priv->orientation == GTK_ORIENTATION_HORIZONTAL)
+            {
+              if (!should_invert (range))
+                {
+                  fill_x     = priv->slider.x + (priv->slider.width / 2);
+                  fill_width = (width * fill_proportion) - fill_x + x;
+                }
+              else
+                {
+                  fill_x     = x + width * (1.0 - fill_proportion);
+                  fill_width = priv->slider.x + (priv->slider.width / 2) - fill_x;
+                }
             }
           else
             {
-              fill_y      = priv->trough.y;
-              fill_height = (priv->slider.height +
-                             (fill_level - gtk_adjustment_get_lower (priv->adjustment)) /
-                             (gtk_adjustment_get_upper (priv->adjustment) -
-                              gtk_adjustment_get_lower (priv->adjustment) -
-                              gtk_adjustment_get_page_size (priv->adjustment)) *
-                             (priv->trough.height -
-                              priv->slider.height));
-
-              if (should_invert (range))
-                fill_y += priv->trough.height - fill_height;
+              if (!should_invert (range))
+                {
+                  fill_y      = priv->slider.y + (priv->slider.height / 2);
+                  fill_height = (height * fill_proportion) - fill_y + y;
+                }
+              else
+                {
+                  fill_y      = y + height * (1.0 - fill_proportion);
+                  fill_height = priv->slider.y + (priv->slider.height / 2) - fill_y;
+                }
             }
 
           gtk_render_background (context, cr, fill_x, fill_y, fill_width, fill_height);
