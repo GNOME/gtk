@@ -9,10 +9,10 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: Gtk+ master\n"
+"Project-Id-Version: Gtk+ gtk-3-16\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-03-16 02:54+0000\n"
-"PO-Revision-Date: 2015-03-16 14:43+0700\n"
+"POT-Creation-Date: 2015-03-24 00:54+0000\n"
+"PO-Revision-Date: 2015-03-24 14:12+0700\n"
 "Last-Translator: Trần Ngọc Quân <vnwildman@gmail.com>\n"
 "Language-Team: Vietnamese <gnome-vi-list@gnome.org>\n"
 "Language: vi\n"
@@ -24,9 +24,7 @@ msgstr ""
 #: gdk/broadway/gdkbroadway-server.c:144
 #, c-format
 msgid "Broadway display type not supported: %s"
-msgstr ""
-"Không hỗ trợ kiểu hiển thị Broadway (hiển thị qua mạng bằng trình duyệt): "
-"“%s”"
+msgstr "Không hỗ trợ kiểu hiển thị Broadway: “%s”"
 
 #: gdk/gdk.c:177
 #, c-format
@@ -436,7 +434,7 @@ msgstr "Tạm ngưng"
 #: gdk/wayland/gdkglcontext-wayland.c:369 gdk/win32/gdkglcontext-win32.c:532
 #: gdk/x11/gdkglcontext-x11.c:1163
 msgid "No GL implementation is available"
-msgstr "Không có phần thực hiện GL"
+msgstr "Không có phần thực thi GL"
 
 #: gdk/mir/gdkmirglcontext.c:89 gdk/wayland/gdkglcontext-wayland.c:157
 #: gdk/win32/gdkglcontext-win32.c:492 gdk/x11/gdkglcontext-x11.c:619
@@ -534,7 +532,7 @@ msgstr "Chuyển đổi trạng thái giữa bật và tắt của ô"
 #: gtk/a11y/gtkbooleancellaccessible.c:63 gtk/a11y/gtkswitchaccessible.c:89
 msgctxt "Action name"
 msgid "Toggle"
-msgstr "Bật/Tắt"
+msgstr "Bật/tắt"
 
 #: gtk/a11y/gtkbuttonaccessible.c:321 gtk/a11y/gtkmenuitemaccessible.c:436
 msgctxt "Action name"
@@ -1216,7 +1214,7 @@ msgstr ""
 #: gtk/gtkmountoperation.c:543 gtk/gtkpagesetupunixdialog.c:196
 #: gtk/gtkprintbackend.c:763 gtk/gtkprinteroptionwidget.c:545
 #: gtk/gtkprintunixdialog.c:665 gtk/gtkprintunixdialog.c:738
-#: gtk/gtkwindow.c:11917 gtk/inspector/css-editor.c:199
+#: gtk/gtkwindow.c:11925 gtk/inspector/css-editor.c:199
 #: gtk/ui/gtkappchooserdialog.ui:79 gtk/ui/gtkassistant.ui:169
 #: gtk/ui/gtkcolorchooserdialog.ui:38 gtk/ui/gtkfontchooserdialog.ui:35
 msgid "_Cancel"
@@ -1265,7 +1263,7 @@ msgid "_Apply"
 msgstr "Á_p dụng"
 
 #: gtk/deprecated/gtkfontsel.c:1698 gtk/gtkmessagedialog.c:936
-#: gtk/gtkmessagedialog.c:958 gtk/gtkprintbackend.c:764 gtk/gtkwindow.c:11918
+#: gtk/gtkmessagedialog.c:958 gtk/gtkprintbackend.c:764 gtk/gtkwindow.c:11926
 #: gtk/inspector/classes-list.c:127
 msgid "_OK"
 msgstr "_OK"
@@ -2120,30 +2118,30 @@ msgstr "_Phải:"
 msgid "Paper Margins"
 msgstr "Lề giấy"
 
-#: gtk/gtkentry.c:9617 gtk/gtkentry.c:9770 gtk/gtklabel.c:6597
+#: gtk/gtkentry.c:9615 gtk/gtkentry.c:9768 gtk/gtklabel.c:6596
 #: gtk/gtktextview.c:9037 gtk/gtktextview.c:9225
 msgid "Cu_t"
 msgstr "Cắ_t"
 
-#: gtk/gtkentry.c:9621 gtk/gtkentry.c:9773 gtk/gtklabel.c:6598
+#: gtk/gtkentry.c:9619 gtk/gtkentry.c:9771 gtk/gtklabel.c:6597
 #: gtk/gtktextview.c:9041 gtk/gtktextview.c:9229
 msgid "_Copy"
 msgstr "_Chép"
 
-#: gtk/gtkentry.c:9625 gtk/gtkentry.c:9776 gtk/gtklabel.c:6599
+#: gtk/gtkentry.c:9623 gtk/gtkentry.c:9774 gtk/gtklabel.c:6598
 #: gtk/gtktextview.c:9043 gtk/gtktextview.c:9231
 msgid "_Paste"
 msgstr "_Dán"
 
-#: gtk/gtkentry.c:9628 gtk/gtklabel.c:6601 gtk/gtktextview.c:9046
+#: gtk/gtkentry.c:9626 gtk/gtklabel.c:6600 gtk/gtktextview.c:9046
 msgid "_Delete"
 msgstr "_Xóa bỏ"
 
-#: gtk/gtkentry.c:9639 gtk/gtklabel.c:6610 gtk/gtktextview.c:9060
+#: gtk/gtkentry.c:9637 gtk/gtklabel.c:6609 gtk/gtktextview.c:9060
 msgid "Select _All"
 msgstr "Chọn tất _cả"
 
-#: gtk/gtkentry.c:10837
+#: gtk/gtkentry.c:10835
 msgid "Caps Lock is on"
 msgstr "Caps Lock được bật"
 
@@ -2163,7 +2161,7 @@ msgstr "(Không có)"
 msgid "_Open"
 msgstr "_Mở"
 
-#: gtk/gtkfilechooserbutton.c:2137
+#: gtk/gtkfilechooserbutton.c:2138
 msgid "Other…"
 msgstr "Khác…"
 
@@ -2377,7 +2375,7 @@ msgstr "Gặp lỗi khi tạo ngữ cảnh OpenGL"
 msgid "Application menu"
 msgstr "Trình đơn ứng dụng"
 
-#: gtk/gtkheaderbar.c:479 gtk/gtkwindow.c:8591
+#: gtk/gtkheaderbar.c:479 gtk/gtkwindow.c:8586
 msgid "Close"
 msgstr "Đóng"
 
@@ -2428,12 +2426,12 @@ msgid "Error"
 msgstr "Lỗi"
 
 #. Open Link
-#: gtk/gtklabel.c:6578
+#: gtk/gtklabel.c:6577
 msgid "_Open Link"
 msgstr "_Mở liên kết"
 
 #. Copy Link Address
-#: gtk/gtklabel.c:6587
+#: gtk/gtklabel.c:6586
 msgid "Copy _Link Address"
 msgstr "Chép địa chỉ _liên kết"
 
@@ -2669,12 +2667,12 @@ msgstr "Z Shell"
 msgid "Cannot end process with PID %d: %s"
 msgstr "Không thể chấm dứt tiến trình có PID %d: %s"
 
-#: gtk/gtknotebook.c:5171 gtk/gtknotebook.c:7902
+#: gtk/gtknotebook.c:5173 gtk/gtknotebook.c:7904
 #, c-format
 msgid "Page %u"
 msgstr "Trang %u"
 
-#: gtk/gtkpagesetup.c:652 gtk/gtkpapersize.c:985 gtk/gtkpapersize.c:1025
+#: gtk/gtkpagesetup.c:652 gtk/gtkpapersize.c:986 gtk/gtkpapersize.c:1026
 msgid "Not a valid page setup file"
 msgstr "Không phải một tập tin cài đặt trang hợp lệ"
 
@@ -3258,7 +3256,7 @@ msgstr "Tìm kiếm"
 #. * glyphs then use MEDIUM VERTICAL BAR (U+2759) as the text for
 #. * the state
 #.
-#: gtk/gtkswitch.c:379 gtk/gtkswitch.c:431 gtk/gtkswitch.c:606
+#: gtk/gtkswitch.c:379 gtk/gtkswitch.c:431 gtk/gtkswitch.c:605
 msgctxt "switch"
 msgid "ON"
 msgstr "BẬT"
@@ -3266,7 +3264,7 @@ msgstr "BẬT"
 #. Translators: if the "off" state label requires more than three
 #. * glyphs then use WHITE CIRCLE (U+25CB) as the text for the state
 #.
-#: gtk/gtkswitch.c:387 gtk/gtkswitch.c:432 gtk/gtkswitch.c:621
+#: gtk/gtkswitch.c:387 gtk/gtkswitch.c:432 gtk/gtkswitch.c:620
 msgctxt "switch"
 msgid "OFF"
 msgstr "TẮT"
@@ -3456,12 +3454,12 @@ msgctxt "volume percentage"
 msgid "%d %%"
 msgstr "%d %%"
 
-#: gtk/gtkwindow.c:11905
+#: gtk/gtkwindow.c:11913
 #, c-format
 msgid "Do you want to use GTK+ Inspector?"
 msgstr "Bạn có muốn dùng GTK+ Inspector?"
 
-#: gtk/gtkwindow.c:11907
+#: gtk/gtkwindow.c:11915
 #, c-format
 msgid ""
 "GTK+ Inspector is an interactive debugger that lets you explore and modify "
@@ -3471,7 +3469,7 @@ msgstr ""
 "Bộ điều tra GTK+ là một bộ gỡ lỗi tương tác, nó giúp bạn dò tìm và sửa bên "
 "trong một ứng dụng GTK+. Dùng nó có thể gây ra sự đổ vỡ của ứng dụng."
 
-#: gtk/gtkwindow.c:11912
+#: gtk/gtkwindow.c:11920
 msgid "Don't show this message again"
 msgstr "Đừng hiện lời nhắc này nữa"
 
@@ -3676,18 +3674,26 @@ msgid "Accessible role"
 msgstr "Vai trò được tiếp cận"
 
 #: gtk/inspector/misc-info.ui:507
+msgid "Accessible name"
+msgstr "Tên được tiếp cận"
+
+#: gtk/inspector/misc-info.ui:541
+msgid "Accessible description"
+msgstr "Mô tả được tiếp cận"
+
+#: gtk/inspector/misc-info.ui:575
 msgid "Mapped"
 msgstr "Đã ánh xạ"
 
-#: gtk/inspector/misc-info.ui:543
+#: gtk/inspector/misc-info.ui:611
 msgid "Realized"
 msgstr "Hiện thực hóa"
 
-#: gtk/inspector/misc-info.ui:579
+#: gtk/inspector/misc-info.ui:647
 msgid "Is Toplevel"
 msgstr "Là mức đỉnh"
 
-#: gtk/inspector/misc-info.ui:615
+#: gtk/inspector/misc-info.ui:683
 msgid "Child Visible"
 msgstr "Con khả kiến"
 
@@ -3890,7 +3896,7 @@ msgstr "Bản thân"
 msgid "Cumulative"
 msgstr "Tích lũy"
 
-#: gtk/inspector/statistics.ui:164
+#: gtk/inspector/statistics.ui:165
 msgid "Enable statistics with GOBJECT_DEBUG=instance-count"
 msgstr "Bật thống kê bằng GOBJECT_DEBUG=instance-count"
 
@@ -5136,7 +5142,7 @@ msgstr "Tập tin"
 
 #: gtk/ui/gtkfilechooserwidget.ui:249
 msgid "Modified"
-msgstr "Sửa cuối"
+msgstr "Đã sửa đổi"
 
 #: gtk/ui/gtkfilechooserwidget.ui:338
 msgid "Select which types of files are shown"
