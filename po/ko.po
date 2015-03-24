@@ -13,8 +13,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-03-11 10:18+0000\n"
-"PO-Revision-Date: 2015-03-12 02:52+0900\n"
+"POT-Creation-Date: 2015-03-23 22:08+0000\n"
+"PO-Revision-Date: 2015-03-24 09:52+0900\n"
 "Last-Translator: Changwoo Ryu <cwryu@debian.org>\n"
 "Language-Team: Gnome Korea <gnome-kr@googlegroups.com>\n"
 "Language: Korean\n"
@@ -1060,6 +1060,10 @@ msgctxt "Stock label"
 msgid "Zoom _Out"
 msgstr "축소(_O)"
 
+#: gtk/a11y/gtkmenubuttonaccessible.c:102 gtk/inspector/window.ui:356
+msgid "Menu"
+msgstr "메뉴"
+
 #: gtk/a11y/gtkmenuitemaccessible.c:445
 msgctxt "Action description"
 msgid "Clicks the menuitem"
@@ -1237,7 +1241,7 @@ msgstr ""
 #: gtk/gtkmountoperation.c:543 gtk/gtkpagesetupunixdialog.c:196
 #: gtk/gtkprintbackend.c:763 gtk/gtkprinteroptionwidget.c:545
 #: gtk/gtkprintunixdialog.c:665 gtk/gtkprintunixdialog.c:738
-#: gtk/gtkwindow.c:11917 gtk/inspector/css-editor.c:199
+#: gtk/gtkwindow.c:11925 gtk/inspector/css-editor.c:199
 #: gtk/ui/gtkappchooserdialog.ui:79 gtk/ui/gtkassistant.ui:169
 #: gtk/ui/gtkcolorchooserdialog.ui:38 gtk/ui/gtkfontchooserdialog.ui:35
 msgid "_Cancel"
@@ -1286,7 +1290,7 @@ msgid "_Apply"
 msgstr "적용(_A)"
 
 #: gtk/deprecated/gtkfontsel.c:1698 gtk/gtkmessagedialog.c:936
-#: gtk/gtkmessagedialog.c:958 gtk/gtkprintbackend.c:764 gtk/gtkwindow.c:11918
+#: gtk/gtkmessagedialog.c:958 gtk/gtkprintbackend.c:764 gtk/gtkwindow.c:11926
 #: gtk/inspector/classes-list.c:127
 msgid "_OK"
 msgstr "확인(_O)"
@@ -2141,31 +2145,31 @@ msgstr "오른쪽(_R):"
 msgid "Paper Margins"
 msgstr "용지 여백"
 
-#: gtk/gtkentry.c:9629 gtk/gtkentry.c:9782 gtk/gtklabel.c:6597
+#: gtk/gtkentry.c:9615 gtk/gtkentry.c:9768 gtk/gtklabel.c:6596
 #: gtk/gtktextview.c:9037 gtk/gtktextview.c:9225
 msgid "Cu_t"
 msgstr "잘라내기(_T)"
 
-#: gtk/gtkentry.c:9633 gtk/gtkentry.c:9785 gtk/gtklabel.c:6598
+#: gtk/gtkentry.c:9619 gtk/gtkentry.c:9771 gtk/gtklabel.c:6597
 #: gtk/gtktextview.c:9041 gtk/gtktextview.c:9229
 msgid "_Copy"
 msgstr "복사(_C)"
 
-#: gtk/gtkentry.c:9637 gtk/gtkentry.c:9788 gtk/gtklabel.c:6599
+#: gtk/gtkentry.c:9623 gtk/gtkentry.c:9774 gtk/gtklabel.c:6598
 #: gtk/gtktextview.c:9043 gtk/gtktextview.c:9231
 msgid "_Paste"
 msgstr "붙여넣기(_P)"
 
-#: gtk/gtkentry.c:9640 gtk/gtklabel.c:6601 gtk/gtktextview.c:9046
+#: gtk/gtkentry.c:9626 gtk/gtklabel.c:6600 gtk/gtktextview.c:9046
 msgid "_Delete"
 msgstr "삭제(_D)"
 
-#: gtk/gtkentry.c:9651 gtk/gtklabel.c:6610 gtk/gtktextview.c:9060
+#: gtk/gtkentry.c:9637 gtk/gtklabel.c:6609 gtk/gtktextview.c:9060
 msgid "Select _All"
 msgstr "모두 선택(_A)"
 
 # Caps Lock 키보드 위에 쓰여 있는 글이므로 번역/음역하지 않는다
-#: gtk/gtkentry.c:10849
+#: gtk/gtkentry.c:10835
 msgid "Caps Lock is on"
 msgstr "Caps Lock이 켜져 있습니다"
 
@@ -2185,7 +2189,7 @@ msgstr "(없음)"
 msgid "_Open"
 msgstr "열기(_O)"
 
-#: gtk/gtkfilechooserbutton.c:2137
+#: gtk/gtkfilechooserbutton.c:2138
 msgid "Other…"
 msgstr "기타…"
 
@@ -2281,7 +2285,7 @@ msgstr "폴더를 파일보다 앞에 정렬(_F)"
 
 #. this is the header for the location column in the print dialog
 #: gtk/gtkfilechooserwidget.c:2018 gtk/inspector/style-prop-list.ui:118
-#: gtk/ui/gtkfilechooserwidget.ui:259 gtk/ui/gtkprintunixdialog.ui:137
+#: gtk/ui/gtkfilechooserwidget.ui:259 gtk/ui/gtkprintunixdialog.ui:135
 msgid "Location"
 msgstr "위치"
 
@@ -2399,7 +2403,7 @@ msgstr "OpenGL 컨텍스트 만들기 실패"
 msgid "Application menu"
 msgstr "프로그램 메뉴"
 
-#: gtk/gtkheaderbar.c:479 gtk/gtkwindow.c:8591
+#: gtk/gtkheaderbar.c:479 gtk/gtkwindow.c:8586
 msgid "Close"
 msgstr "닫기"
 
@@ -2450,12 +2454,12 @@ msgid "Error"
 msgstr "오류"
 
 #. Open Link
-#: gtk/gtklabel.c:6578
+#: gtk/gtklabel.c:6577
 msgid "_Open Link"
 msgstr "링크 열기(_O)"
 
 #. Copy Link Address
-#: gtk/gtklabel.c:6587
+#: gtk/gtklabel.c:6586
 msgid "Copy _Link Address"
 msgstr "링크 주소 복사(_L)"
 
@@ -2598,10 +2602,6 @@ msgstr "GTK+ 옵션 표시"
 msgid "default:LTR"
 msgstr "default:LTR"
 
-#: gtk/gtkmenubutton.c:640 gtk/inspector/window.ui:356
-msgid "Menu"
-msgstr "메뉴"
-
 #: gtk/gtkmessagedialog.c:948
 msgid "_No"
 msgstr "아니요(_N)"
@@ -2696,12 +2696,12 @@ msgstr "Z 셸"
 msgid "Cannot end process with PID %d: %s"
 msgstr "PID %d 프로세스를 끝낼 수 없습니다: %s"
 
-#: gtk/gtknotebook.c:5167 gtk/gtknotebook.c:7896
+#: gtk/gtknotebook.c:5173 gtk/gtknotebook.c:7904
 #, c-format
 msgid "Page %u"
 msgstr "%u페이지"
 
-#: gtk/gtkpagesetup.c:652 gtk/gtkpapersize.c:985 gtk/gtkpapersize.c:1025
+#: gtk/gtkpagesetup.c:652 gtk/gtkpapersize.c:986 gtk/gtkpapersize.c:1026
 msgid "Not a valid page setup file"
 msgstr "올바른 페이지 설정 파일이 아닙니다"
 
@@ -2733,7 +2733,7 @@ msgid "Manage Custom Sizes…"
 msgstr "사용자 설정 크기 관리…"
 
 #: gtk/gtkpagesetupunixdialog.c:900 gtk/ui/gtkpagesetupunixdialog.ui:31
-#: gtk/ui/gtkprintunixdialog.ui:1031
+#: gtk/ui/gtkprintunixdialog.ui:1029
 msgid "Page Setup"
 msgstr "페이지 설정"
 
@@ -2930,7 +2930,7 @@ msgstr "빼기(_E)"
 msgid "_Detect Media"
 msgstr "미디어 검색(_D)"
 
-#: gtk/gtkplacessidebar.c:4167
+#: gtk/gtkplacessidebar.c:4165
 msgid "Computer"
 msgstr "컴퓨터"
 
@@ -3287,7 +3287,7 @@ msgstr "검색"
 #. * glyphs then use MEDIUM VERTICAL BAR (U+2759) as the text for
 #. * the state
 #.
-#: gtk/gtkswitch.c:379 gtk/gtkswitch.c:431 gtk/gtkswitch.c:606
+#: gtk/gtkswitch.c:379 gtk/gtkswitch.c:431 gtk/gtkswitch.c:605
 msgctxt "switch"
 msgid "ON"
 msgstr "켬"
@@ -3295,7 +3295,7 @@ msgstr "켬"
 #. Translators: if the "off" state label requires more than three
 #. * glyphs then use WHITE CIRCLE (U+25CB) as the text for the state
 #.
-#: gtk/gtkswitch.c:387 gtk/gtkswitch.c:432 gtk/gtkswitch.c:621
+#: gtk/gtkswitch.c:387 gtk/gtkswitch.c:432 gtk/gtkswitch.c:620
 msgctxt "switch"
 msgid "OFF"
 msgstr "끔"
@@ -3482,12 +3482,12 @@ msgctxt "volume percentage"
 msgid "%d %%"
 msgstr "%d %%"
 
-#: gtk/gtkwindow.c:11905
+#: gtk/gtkwindow.c:11913
 #, c-format
 msgid "Do you want to use GTK+ Inspector?"
 msgstr "GTK+ 인스펙터를 사용하시겠습니까?"
 
-#: gtk/gtkwindow.c:11907
+#: gtk/gtkwindow.c:11915
 #, c-format
 msgid ""
 "GTK+ Inspector is an interactive debugger that lets you explore and modify "
@@ -3498,7 +3498,7 @@ msgstr ""
 "그램의 내부 구조를 살펴 보거나 수정할 수 있습니다. GTK+ 인스펙터를 사용했을 "
 "때 프로그램이 멈추거나 이상 동작으로 중지할 수도 있습니다."
 
-#: gtk/gtkwindow.c:11912
+#: gtk/gtkwindow.c:11920
 msgid "Don't show this message again"
 msgstr "이 메시지 다시 보지 않기"
 
@@ -3706,18 +3706,26 @@ msgid "Accessible role"
 msgstr "접근성 역할"
 
 #: gtk/inspector/misc-info.ui:507
+msgid "Accessible name"
+msgstr "접근성 이름"
+
+#: gtk/inspector/misc-info.ui:541
+msgid "Accessible description"
+msgstr "접근성 설명"
+
+#: gtk/inspector/misc-info.ui:575
 msgid "Mapped"
 msgstr "매핑됨"
 
-#: gtk/inspector/misc-info.ui:543
+#: gtk/inspector/misc-info.ui:611
 msgid "Realized"
 msgstr "실재화함"
 
-#: gtk/inspector/misc-info.ui:579
+#: gtk/inspector/misc-info.ui:647
 msgid "Is Toplevel"
 msgstr "최상위 여부"
 
-#: gtk/inspector/misc-info.ui:615
+#: gtk/inspector/misc-info.ui:683
 msgid "Child Visible"
 msgstr "하위 표시"
 
@@ -3920,7 +3928,7 @@ msgstr "자체"
 msgid "Cumulative"
 msgstr "누적"
 
-#: gtk/inspector/statistics.ui:164
+#: gtk/inspector/statistics.ui:165
 msgid "Enable statistics with GOBJECT_DEBUG=instance-count"
 msgstr "GOBJECT_DEBUG=instance-count 변수로 통계 기능 사용"
 
@@ -4136,7 +4144,7 @@ msgstr "리소스"
 msgid "Visual"
 msgstr "겉 모양"
 
-#: gtk/inspector/window.ui:436 gtk/ui/gtkprintunixdialog.ui:499
+#: gtk/inspector/window.ui:436 gtk/ui/gtkprintunixdialog.ui:497
 msgid "General"
 msgstr "일반"
 
@@ -5192,7 +5200,7 @@ msgstr "조건에 맞는 글꼴이 없습니다. 검색 조건을 바꿔서 다�
 msgid "_Format for:"
 msgstr "다음 프린터에 대한 형식(_F):"
 
-#: gtk/ui/gtkpagesetupunixdialog.ui:88 gtk/ui/gtkprintunixdialog.ui:903
+#: gtk/ui/gtkpagesetupunixdialog.ui:88 gtk/ui/gtkprintunixdialog.ui:901
 msgid "_Paper size:"
 msgstr "용지 크기(_P):"
 
@@ -5200,19 +5208,19 @@ msgstr "용지 크기(_P):"
 msgid "_Orientation:"
 msgstr "방향(_O):"
 
-#: gtk/ui/gtkpagesetupunixdialog.ui:179 gtk/ui/gtkprintunixdialog.ui:959
+#: gtk/ui/gtkpagesetupunixdialog.ui:179 gtk/ui/gtkprintunixdialog.ui:957
 msgid "Portrait"
 msgstr "세로 방향"
 
-#: gtk/ui/gtkpagesetupunixdialog.ui:229 gtk/ui/gtkprintunixdialog.ui:961
+#: gtk/ui/gtkpagesetupunixdialog.ui:229 gtk/ui/gtkprintunixdialog.ui:959
 msgid "Reverse portrait"
 msgstr "뒤집힌 세로 방향"
 
-#: gtk/ui/gtkpagesetupunixdialog.ui:279 gtk/ui/gtkprintunixdialog.ui:960
+#: gtk/ui/gtkpagesetupunixdialog.ui:279 gtk/ui/gtkprintunixdialog.ui:958
 msgid "Landscape"
 msgstr "가로 방향"
 
-#: gtk/ui/gtkpagesetupunixdialog.ui:328 gtk/ui/gtkprintunixdialog.ui:962
+#: gtk/ui/gtkpagesetupunixdialog.ui:328 gtk/ui/gtkprintunixdialog.ui:960
 msgid "Reverse landscape"
 msgstr "뒤집힌 가로 방향"
 
@@ -5224,37 +5232,37 @@ msgstr "아래 경로"
 msgid "Up Path"
 msgstr "위 경로"
 
-#: gtk/ui/gtkprintunixdialog.ui:126
+#: gtk/ui/gtkprintunixdialog.ui:124
 msgid "Printer"
 msgstr "프린터"
 
 #. this is the header for the printer status column in the print dialog
-#: gtk/ui/gtkprintunixdialog.ui:148
+#: gtk/ui/gtkprintunixdialog.ui:146
 msgid "Status"
 msgstr "상태"
 
-#: gtk/ui/gtkprintunixdialog.ui:210
+#: gtk/ui/gtkprintunixdialog.ui:208
 msgid "Range"
 msgstr "범위"
 
-#: gtk/ui/gtkprintunixdialog.ui:233
+#: gtk/ui/gtkprintunixdialog.ui:231
 msgid "_All Pages"
 msgstr "모든 페이지(_A)"
 
-#: gtk/ui/gtkprintunixdialog.ui:251
+#: gtk/ui/gtkprintunixdialog.ui:249
 msgid "C_urrent Page"
 msgstr "현재 페이지(_U)"
 
-#: gtk/ui/gtkprintunixdialog.ui:271
+#: gtk/ui/gtkprintunixdialog.ui:269
 msgid "Se_lection"
 msgstr "선택(_L)"
 
-#: gtk/ui/gtkprintunixdialog.ui:290
+#: gtk/ui/gtkprintunixdialog.ui:288
 msgid "Pag_es:"
 msgstr "페이지(_E):"
 
-#: gtk/ui/gtkprintunixdialog.ui:294 gtk/ui/gtkprintunixdialog.ui:315
-#: gtk/ui/gtkprintunixdialog.ui:322
+#: gtk/ui/gtkprintunixdialog.ui:292 gtk/ui/gtkprintunixdialog.ui:313
+#: gtk/ui/gtkprintunixdialog.ui:320
 msgid ""
 "Specify one or more page ranges,\n"
 " e.g. 1–3, 7, 11"
@@ -5262,105 +5270,105 @@ msgstr ""
 "페이지 범위를 지정하십시오.\n"
 " 예) 1–3, 7, 11"
 
-#: gtk/ui/gtkprintunixdialog.ui:321
+#: gtk/ui/gtkprintunixdialog.ui:319
 msgid "Pages"
 msgstr "페이지"
 
-#: gtk/ui/gtkprintunixdialog.ui:363
+#: gtk/ui/gtkprintunixdialog.ui:361
 msgid "Copies"
 msgstr "인쇄 매수"
 
-#: gtk/ui/gtkprintunixdialog.ui:390
+#: gtk/ui/gtkprintunixdialog.ui:388
 msgid "Copie_s:"
 msgstr "인쇄 매수(_S):"
 
-#: gtk/ui/gtkprintunixdialog.ui:420
+#: gtk/ui/gtkprintunixdialog.ui:418
 msgid "C_ollate"
 msgstr "한 부씩 인쇄(_O)"
 
-#: gtk/ui/gtkprintunixdialog.ui:438
+#: gtk/ui/gtkprintunixdialog.ui:436
 msgid "_Reverse"
 msgstr "마지막 페이지부터(_R)"
 
-#: gtk/ui/gtkprintunixdialog.ui:529
+#: gtk/ui/gtkprintunixdialog.ui:527
 msgid "Layout"
 msgstr "배치"
 
-#: gtk/ui/gtkprintunixdialog.ui:556
+#: gtk/ui/gtkprintunixdialog.ui:554
 msgid "T_wo-sided:"
 msgstr "양면(_W):"
 
-#: gtk/ui/gtkprintunixdialog.ui:589
+#: gtk/ui/gtkprintunixdialog.ui:587
 msgid "Pages per _side:"
 msgstr "한 장당 페이지 수(_S):"
 
-#: gtk/ui/gtkprintunixdialog.ui:624
+#: gtk/ui/gtkprintunixdialog.ui:622
 msgid "Page or_dering:"
 msgstr "페이지 순서(_D):"
 
-#: gtk/ui/gtkprintunixdialog.ui:658
+#: gtk/ui/gtkprintunixdialog.ui:656
 msgid "_Only print:"
 msgstr "다음만 인쇄(_O):"
 
-#: gtk/ui/gtkprintunixdialog.ui:678
+#: gtk/ui/gtkprintunixdialog.ui:676
 msgid "All sheets"
 msgstr "모든 페이지"
 
-#: gtk/ui/gtkprintunixdialog.ui:679
+#: gtk/ui/gtkprintunixdialog.ui:677
 msgid "Even sheets"
 msgstr "짝수 페이지"
 
-#: gtk/ui/gtkprintunixdialog.ui:680
+#: gtk/ui/gtkprintunixdialog.ui:678
 msgid "Odd sheets"
 msgstr "홀수 페이지"
 
-#: gtk/ui/gtkprintunixdialog.ui:696
+#: gtk/ui/gtkprintunixdialog.ui:694
 msgid "Sc_ale:"
 msgstr "크기 조정(_A):"
 
-#: gtk/ui/gtkprintunixdialog.ui:777
+#: gtk/ui/gtkprintunixdialog.ui:775
 msgid "Paper"
 msgstr "용지"
 
-#: gtk/ui/gtkprintunixdialog.ui:804
+#: gtk/ui/gtkprintunixdialog.ui:802
 msgid "Paper _type:"
 msgstr "용지 종류(_T):"
 
-#: gtk/ui/gtkprintunixdialog.ui:837
+#: gtk/ui/gtkprintunixdialog.ui:835
 msgid "Paper _source:"
 msgstr "용지 공급(_S):"
 
-#: gtk/ui/gtkprintunixdialog.ui:870
+#: gtk/ui/gtkprintunixdialog.ui:868
 msgid "Output t_ray:"
 msgstr "출력 트레이(_R):"
 
-#: gtk/ui/gtkprintunixdialog.ui:938
+#: gtk/ui/gtkprintunixdialog.ui:936
 msgid "Or_ientation:"
 msgstr "방향(_I):"
 
-#: gtk/ui/gtkprintunixdialog.ui:1056
+#: gtk/ui/gtkprintunixdialog.ui:1054
 msgid "Job Details"
 msgstr "작업 상세 정보"
 
-#: gtk/ui/gtkprintunixdialog.ui:1083
+#: gtk/ui/gtkprintunixdialog.ui:1081
 msgid "Pri_ority:"
 msgstr "우선순위(_O):"
 
-#: gtk/ui/gtkprintunixdialog.ui:1115
+#: gtk/ui/gtkprintunixdialog.ui:1113
 msgid "_Billing info:"
 msgstr "요금 정보(_B):"
 
-#: gtk/ui/gtkprintunixdialog.ui:1171
+#: gtk/ui/gtkprintunixdialog.ui:1169
 msgid "Print Document"
 msgstr "문서 인쇄"
 
 #. this is one of the choices for the print at option in the print dialog
-#: gtk/ui/gtkprintunixdialog.ui:1194
+#: gtk/ui/gtkprintunixdialog.ui:1192
 msgid "_Now"
 msgstr "지금(_N)"
 
 #. this is one of the choices for the print at option in the print dialog. It also serves as the label for an entry that allows the user to enter a time.
-#: gtk/ui/gtkprintunixdialog.ui:1213
+#: gtk/ui/gtkprintunixdialog.ui:1211
 msgid "A_t:"
 msgstr "시각(_T):"
 
@@ -5368,9 +5376,9 @@ msgstr "시각(_T):"
 # ( https://bugzilla.gnome.org/show_bug.cgi?id=568571 )
 #
 #. Ability to parse the am/pm format depends on actual locale. You can remove the am/pm values below for your locale if they are not supported.
-#: gtk/ui/gtkprintunixdialog.ui:1218 gtk/ui/gtkprintunixdialog.ui:1220
-#: gtk/ui/gtkprintunixdialog.ui:1242 gtk/ui/gtkprintunixdialog.ui:1244
-#: gtk/ui/gtkprintunixdialog.ui:1251
+#: gtk/ui/gtkprintunixdialog.ui:1216 gtk/ui/gtkprintunixdialog.ui:1218
+#: gtk/ui/gtkprintunixdialog.ui:1240 gtk/ui/gtkprintunixdialog.ui:1242
+#: gtk/ui/gtkprintunixdialog.ui:1249
 msgid ""
 "Specify the time of print,\n"
 " e.g. 15∶30, 2∶35 pm, 14∶15∶20, 11∶46∶30 am, 4 pm"
@@ -5378,58 +5386,58 @@ msgstr ""
 "인쇄 시각을 지정합니다.\n"
 " 예) 15∶30, 오후 2∶35, 14∶15∶20, 오전 11∶46∶30, 오후 4"
 
-#: gtk/ui/gtkprintunixdialog.ui:1250
+#: gtk/ui/gtkprintunixdialog.ui:1248
 msgid "Time of print"
 msgstr "인쇄 시각"
 
 #. this is one of the choices for the print at option in the print dialog. It means that the print job will not be printed until it explicitly gets 'released'.
-#: gtk/ui/gtkprintunixdialog.ui:1266
+#: gtk/ui/gtkprintunixdialog.ui:1264
 msgid "On _hold"
 msgstr "보류(_H)"
 
-#: gtk/ui/gtkprintunixdialog.ui:1271 gtk/ui/gtkprintunixdialog.ui:1272
+#: gtk/ui/gtkprintunixdialog.ui:1269 gtk/ui/gtkprintunixdialog.ui:1270
 msgid "Hold the job until it is explicitly released"
 msgstr "작업 보류, 직접 보류 상태를 풀 때까지"
 
-#: gtk/ui/gtkprintunixdialog.ui:1316
+#: gtk/ui/gtkprintunixdialog.ui:1314
 msgid "Add Cover Page"
 msgstr "표지 사용"
 
 #. this is the label used for the option in the print dialog that controls the front cover page.
-#: gtk/ui/gtkprintunixdialog.ui:1343
+#: gtk/ui/gtkprintunixdialog.ui:1341
 msgid "Be_fore:"
 msgstr "앞에(_F):"
 
 #. this is the label used for the option in the print dialog that controls the back cover page.
-#: gtk/ui/gtkprintunixdialog.ui:1375
+#: gtk/ui/gtkprintunixdialog.ui:1373
 msgid "_After:"
 msgstr "뒤에(_A):"
 
-#: gtk/ui/gtkprintunixdialog.ui:1431
+#: gtk/ui/gtkprintunixdialog.ui:1429
 msgid "Job"
 msgstr "작업"
 
 #. This will appear as a tab label in the print dialog.
-#: gtk/ui/gtkprintunixdialog.ui:1495
+#: gtk/ui/gtkprintunixdialog.ui:1493
 msgid "Image Quality"
 msgstr "그림 화질"
 
 #. This will appear as a tab label in the print dialog.
-#: gtk/ui/gtkprintunixdialog.ui:1559
+#: gtk/ui/gtkprintunixdialog.ui:1557
 msgid "Color"
 msgstr "색"
 
 #. This will appear as a tab label in the print dialog.
 #. It's a typographical term, as in "Binding and finishing"
-#: gtk/ui/gtkprintunixdialog.ui:1623
+#: gtk/ui/gtkprintunixdialog.ui:1621
 msgid "Finishing"
 msgstr "마무리"
 
-#: gtk/ui/gtkprintunixdialog.ui:1669
+#: gtk/ui/gtkprintunixdialog.ui:1667
 msgid "Advanced"
 msgstr "고급"
 
-#: gtk/ui/gtkprintunixdialog.ui:1698
+#: gtk/ui/gtkprintunixdialog.ui:1696
 msgid "Some of the settings in the dialog conflict"
 msgstr "대화 상자의 설정이 충돌합니다"
 
