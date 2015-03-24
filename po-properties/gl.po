@@ -18,8 +18,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-master-po-properties-gl-77816____.merged\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-03-23 15:15+0000\n"
-"PO-Revision-Date: 2015-03-23 22:07+0200\n"
+"POT-Creation-Date: 2015-03-24 13:34+0000\n"
+"PO-Revision-Date: 2015-03-24 22:59+0200\n"
 "Last-Translator: Fran Dieguez <frandieguez@gnome.org>\n"
 "Language-Team: gnome-l10n-gl@gnome.org\n"
 "Language: gl\n"
@@ -7627,22 +7627,18 @@ msgid "Pixels of blank space between wrapped lines in a paragraph"
 msgstr "Píxeles de espazo en branco entre as liñas axustadas nun parágrafo"
 
 #: gtk/gtktexttag.c:542
-#| msgid "Underline"
 msgid "Underline RGBA"
 msgstr "RGBA baixo a liña"
 
 #: gtk/gtktexttag.c:543
-#| msgid "Style of underline for this text"
 msgid "Color of underline for this text"
 msgstr "Cor debaixo da liña para este texto"
 
 #: gtk/gtktexttag.c:558
-#| msgid "Strikethrough"
 msgid "Strike-through RGBA"
 msgstr "RGBA da liña de riscado"
 
 #: gtk/gtktexttag.c:559
-#| msgid "Whether to strike through the text"
 msgid "Color of strike-through for this text"
 msgstr "cor da liña de riscado para este texto"
 
@@ -7775,22 +7771,18 @@ msgid "Whether this tag affects the right margin"
 msgstr "Indica se esta marca afecta á marxe dereita"
 
 #: gtk/gtktexttag.c:798
-#| msgid "Underline set"
 msgid "Underline RGBA set"
-msgstr ""
+msgstr "Estabelece o subliñado RGBA"
 
 #: gtk/gtktexttag.c:799
-#| msgid "Whether this tag affects underlining"
 msgid "Whether this tag affects underlining color"
 msgstr "Indica se esta marca afecta ao cor de debaixo da liña"
 
 #: gtk/gtktexttag.c:809
-#| msgid "Strikethrough set"
 msgid "Strikethrough RGBA set"
-msgstr ""
+msgstr "Estabelece o riscado RGBA"
 
 #: gtk/gtktexttag.c:810
-#| msgid "Whether this tag affects strikethrough"
 msgid "Whether this tag affects strikethrough color"
 msgstr "Indica se esta marca afecta ao cor da liña de riscado"
 
