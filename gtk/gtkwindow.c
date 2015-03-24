@@ -335,7 +335,6 @@ struct _GtkWindowGeometryInfo
    */
   GdkGeometry    geometry;	/* Geometry hints */
   GdkWindowHints mask;
-  GtkWidget     *widget;	/* subwidget to which hints apply */
   /* from last gtk_window_resize () - if > 0, indicates that
    * we should resize to this size.
    */
@@ -3868,7 +3867,6 @@ gtk_window_get_geometry_info (GtkWindow *window,
       info->last.configure_request.y = 0;
       info->last.configure_request.width = -1;
       info->last.configure_request.height = -1;
-      info->widget = NULL;
       info->mask = 0;
       priv->geometry_info = info;
     }
@@ -3879,7 +3877,9 @@ gtk_window_get_geometry_info (GtkWindow *window,
 /**
  * gtk_window_set_geometry_hints:
  * @window: a #GtkWindow
- * @geometry_widget: (allow-none): widget the geometry hints will be applied to or %NULL
+ * @geometry_widget: (allow-none): widget the geometry hints used to be applied to
+ *   or %NULL. Since 3.18 this argument is ignored and GTK behaves as if %NULL was
+ *   set.
  * @geometry: (allow-none): struct containing geometry information or %NULL
  * @geom_mask: mask indicating which struct fields should be paid attention to
  *
@@ -3902,17 +3902,6 @@ gtk_window_set_geometry_hints (GtkWindow       *window,
 
   info = gtk_window_get_geometry_info (window, TRUE);
   
-  if (info->widget)
-    g_signal_handlers_disconnect_by_func (info->widget,
-					  gtk_widget_destroyed,
-					  &info->widget);
-  
-  info->widget = geometry_widget;
-  if (info->widget)
-    g_signal_connect (geometry_widget, "destroy",
-		      G_CALLBACK (gtk_widget_destroyed),
-		      &info->widget);
-
   if (geometry)
     info->geometry = *geometry;
 
@@ -5648,10 +5637,6 @@ gtk_window_finalize (GObject *object)
 
   if (priv->geometry_info)
     {
-      if (priv->geometry_info->widget)
-	g_signal_handlers_disconnect_by_func (priv->geometry_info->widget,
-					      gtk_widget_destroyed,
-					      &priv->geometry_info->widget);
       g_free (priv->geometry_info);
     }
 
@@ -9523,56 +9508,6 @@ gtk_window_compute_hints (GtkWindow   *window,
       *new_flags = 0;
     }
   
-  if (geometry_info && geometry_info->widget)
-    {
-      /* If the geometry widget is set, then the hints really apply to that
-       * widget. This is pretty much meaningless unless the window layout
-       * is such that the rest of the window adds fixed size borders to
-       * the geometry widget. Our job is to figure the size of the borders;
-       * We do that by asking how big the toplevel would be if the
-       * geometry widget was *really big*.
-       *
-       *  +----------+
-       *  |AAAAAAAAA | At small sizes, the minimum sizes of widgets
-       *  |GGGGG    B| in the border can confuse things
-       *  |GGGGG    B|
-       *  |         B|
-       *  +----------+
-       *
-       *  +-----------+
-       *  |AAAAAAAAA  | When the geometry widget is large, things are
-       *  |GGGGGGGGGGB| clearer.
-       *  |GGGGGGGGGGB|
-       *  |GGGGGGGGGG |
-       *  +-----------+
-       */
-#define TEMPORARY_SIZE 10000 /* 10,000 pixels should be bigger than real widget sizes */
-      GtkRequisition req;
-      int current_width, current_height;
-
-      _gtk_widget_override_size_request (geometry_info->widget,
-					 TEMPORARY_SIZE, TEMPORARY_SIZE,
-					 &current_width, &current_height);
-      gtk_widget_get_preferred_size (widget,
-                                     &req, NULL);
-      _gtk_widget_restore_size_request (geometry_info->widget,
-					current_width, current_height);
-
-      extra_width = req.width - TEMPORARY_SIZE;
-      extra_height = req.height - TEMPORARY_SIZE;
-
-      if (extra_width < 0 || extra_height < 0)
-	{
-	  g_warning("Toplevel size doesn't seem to directly depend on the "
-		    "size of the geometry widget from gtk_window_set_geometry_hints(). "
-		    "The geometry widget might not be in the window, or it might not "
-		    "be packed into the window appropriately");
-	  extra_width = MAX(extra_width, 0);
-	  extra_height = MAX(extra_height, 0);
-	}
-#undef TEMPORARY_SIZE
-    }
-
   /* We don't want to set GDK_HINT_POS in here, we just set it
    * in gtk_window_move_resize() when we want the position
    * honored.
