@@ -235,14 +235,14 @@ gtk_progress_bar_class_init (GtkProgressBarClass *class)
                                            g_param_spec_int ("xspacing",
                                                              P_("X spacing"),
                                                              P_("Extra spacing applied to the width of a progress bar."),
-                                                             0, G_MAXINT, 7,
+                                                             0, G_MAXINT, 2,
                                                              G_PARAM_READWRITE));
 
   gtk_widget_class_install_style_property (widget_class,
                                            g_param_spec_int ("yspacing",
                                                              P_("Y spacing"),
                                                              P_("Extra spacing applied to the height of a progress bar."),
-                                                             0, G_MAXINT, 7,
+                                                             0, G_MAXINT, 2,
                                                              G_PARAM_READWRITE));
 
   /**
@@ -471,7 +471,7 @@ gtk_progress_bar_get_preferred_width (GtkWidget *widget,
   PangoLayout *layout;
   gint width;
   gint xspacing;
-  gint min_width;
+  gint bar_width;
 
   g_return_if_fail (GTK_IS_PROGRESS_BAR (widget));
 
@@ -479,17 +479,18 @@ gtk_progress_bar_get_preferred_width (GtkWidget *widget,
   state = gtk_widget_get_state_flags (widget);
   gtk_style_context_get_padding (style_context, state, &padding);
 
-  gtk_widget_style_get (widget,
-                        "xspacing", &xspacing,
-                        NULL);
-
   pbar = GTK_PROGRESS_BAR (widget);
   priv = pbar->priv;
 
-  width = padding.left + padding.right + xspacing;
+  width = padding.left + padding.right;
 
   if (priv->show_text)
     {
+      gtk_widget_style_get (widget,
+                            "xspacing", &xspacing,
+                            NULL);
+      width += xspacing;
+
       buf = get_current_text (pbar);
       layout = gtk_widget_create_pango_layout (widget, buf);
 
@@ -521,14 +522,14 @@ gtk_progress_bar_get_preferred_width (GtkWidget *widget,
 
   if (priv->orientation == GTK_ORIENTATION_HORIZONTAL)
     gtk_widget_style_get (widget,
-                          "min-horizontal-bar-width", &min_width,
+                          "min-horizontal-bar-width", &bar_width,
                           NULL);
   else
     gtk_widget_style_get (widget,
-                          "min-vertical-bar-width", &min_width,
+                          "min-vertical-bar-width", &bar_width,
                           NULL);
 
-  *minimum = *natural = MAX (min_width, width);
+  *minimum = *natural = width + bar_width;
 }
 
 static void
@@ -546,7 +547,7 @@ gtk_progress_bar_get_preferred_height (GtkWidget *widget,
   PangoLayout *layout;
   gint height;
   gint yspacing;
-  gint min_height;
+  gint bar_height;
 
   g_return_if_fail (GTK_IS_PROGRESS_BAR (widget));
 
@@ -554,17 +555,18 @@ gtk_progress_bar_get_preferred_height (GtkWidget *widget,
   state = gtk_widget_get_state_flags (widget);
   gtk_style_context_get_padding (context, state, &padding);
 
-  gtk_widget_style_get (widget,
-                        "yspacing", &yspacing,
-                        NULL);
-
   pbar = GTK_PROGRESS_BAR (widget);
   priv = pbar->priv;
 
-  height = padding.top + padding.bottom + yspacing;
+  height = padding.top + padding.bottom;
 
   if (priv->show_text)
     {
+      gtk_widget_style_get (widget,
+                            "yspacing", &yspacing,
+                            NULL);
+      height += yspacing;
+
       buf = get_current_text (pbar);
       layout = gtk_widget_create_pango_layout (widget, buf);
 
@@ -578,14 +580,14 @@ gtk_progress_bar_get_preferred_height (GtkWidget *widget,
 
   if (priv->orientation == GTK_ORIENTATION_HORIZONTAL)
     gtk_widget_style_get (widget,
-                          "min-horizontal-bar-height", &min_height,
+                          "min-horizontal-bar-height", &bar_height,
                           NULL);
   else
     gtk_widget_style_get (widget,
-                          "min-vertical-bar-height", &min_height,
+                          "min-vertical-bar-height", &bar_height,
                           NULL);
 
-  *minimum = *natural = MAX (min_height, height);
+  *minimum = *natural = height + bar_height;
 }
 
 static gboolean
@@ -883,15 +885,10 @@ gtk_progress_bar_paint_text (GtkProgressBar *pbar,
   PangoLayout *layout;
   PangoRectangle logical_rect;
   GdkRectangle prelight_clip, start_clip, end_clip;
-  gfloat text_xalign = 0.5;
-  gfloat text_yalign = 0.0;
 
   context = gtk_widget_get_style_context (widget);
   state = gtk_widget_get_state_flags (widget);
   gtk_style_context_get_padding (context, state, &padding);
-
-  if (gtk_widget_get_direction (widget) != GTK_TEXT_DIR_LTR)
-    text_xalign = 1.0 - text_xalign;
 
   buf = get_current_text (pbar);
 
@@ -902,8 +899,16 @@ gtk_progress_bar_paint_text (GtkProgressBar *pbar,
 
   pango_layout_get_pixel_extents (layout, NULL, &logical_rect);
 
-  x = padding.left + 1 + text_xalign * (width - padding.left - padding.right - 2 - logical_rect.width);
-  y = padding.top + 1 + text_yalign * (height - padding.top - padding.bottom - 2 - logical_rect.height);
+  if (orientation == GTK_ORIENTATION_HORIZONTAL)
+    {
+      x = padding.left + (width - padding.left - padding.right - 2 - logical_rect.width) / 2;
+      y = padding.top + 1;
+    }
+  else
+    {
+      x = padding.left + 1;
+      y = padding.top + 1 + (height - padding.top - padding.bottom - 2 - logical_rect.height) / 2;
+    }
 
   rect.x = padding.left;
   rect.y = padding.top;
@@ -1026,12 +1031,12 @@ gtk_progress_bar_draw (GtkWidget      *widget,
 
   if (priv->orientation == GTK_ORIENTATION_HORIZONTAL)
     {
-      bar_height = MIN_HORIZONTAL_BAR_HEIGHT;
+      gtk_widget_style_get (widget, "min-horizontal-bar-height", &bar_height, NULL);
       bar_width = width;
     }
   else
     {
-      bar_width = MIN_VERTICAL_BAR_WIDTH;
+      gtk_widget_style_get (widget, "min-vertical-bar-width", &bar_width, NULL);
       bar_height = height;
     }
 
