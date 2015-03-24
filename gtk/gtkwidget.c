@@ -11081,52 +11081,6 @@ gtk_widget_get_size_request (GtkWidget *widget,
 }
 
 /**
- * _gtk_widget_override_size_request:
- * @widget: a #GtkWidget
- * @width: new forced minimum width
- * @height: new forced minimum height
- * @old_width: location to store previous forced minimum width
- * @old_height: location to store previous forced minumum height
- *
- * Temporarily establishes a forced minimum size for a widget; this
- * is used by GtkWindow when calculating the size to add to the
- * window’s geometry widget. Cached sizes for the widget and its
- * parents are invalidated, so that subsequent calls to the size
- * negotiation machinery produce the overriden result, but the
- * widget is not queued for relayout or redraw. The old size must
- * be restored with _gtk_widget_restore_size_request() or things
- * will go screwy.
- */
-void
-_gtk_widget_override_size_request (GtkWidget *widget,
-				   int        width,
-				   int        height,
-				   int       *old_width,
-				   int       *old_height)
-{
-  gtk_widget_get_size_request (widget, old_width, old_height);
-  gtk_widget_set_usize_internal (widget, width, height,
-				 GTK_QUEUE_RESIZE_INVALIDATE_ONLY);
-}
-
-/**
- * _gtk_widget_restore_size_request:
- * @widget: a #GtkWidget
- * @old_width: saved forced minimum size
- * @old_height: saved forced minimum size
- *
- * Undoes the operation of_gtk_widget_override_size_request().
- */
-void
-_gtk_widget_restore_size_request (GtkWidget *widget,
-				  int        old_width,
-				  int        old_height)
-{
-  gtk_widget_set_usize_internal (widget, old_width, old_height,
-				 GTK_QUEUE_RESIZE_INVALIDATE_ONLY);
-}
-
-/**
  * gtk_widget_set_events:
  * @widget: a #GtkWidget
  * @events: event mask
