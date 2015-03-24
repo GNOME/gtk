@@ -54,6 +54,9 @@ gtk_css_widget_node_style_changed (GtkCssNode   *cssnode,
 
   node = GTK_CSS_WIDGET_NODE (cssnode);
 
+  if (node->widget)
+    gtk_widget_clear_path (node->widget);
+
   GTK_CSS_NODE_CLASS (gtk_css_widget_node_parent_class)->style_changed (cssnode, old_style, new_style);
 
   diff = gtk_css_style_get_difference (new_style, old_style);

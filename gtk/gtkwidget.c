@@ -16400,14 +16400,18 @@ gtk_widget_get_path (GtkWidget *widget)
 }
 
 void
-_gtk_widget_style_context_invalidated (GtkWidget *widget)
+gtk_widget_clear_path (GtkWidget *widget)
 {
   if (widget->priv->path)
     {
       gtk_widget_path_free (widget->priv->path);
       widget->priv->path = NULL;
     }
+}
 
+void
+_gtk_widget_style_context_invalidated (GtkWidget *widget)
+{
   if (gtk_widget_get_realized (widget))
     g_signal_emit (widget, widget_signals[STYLE_UPDATED], 0);
   else
