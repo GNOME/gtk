@@ -2056,8 +2056,6 @@ gtk_range_draw (GtkWidget *widget,
             }
           else
             {
-              gboolean is_rtl = gtk_widget_get_direction (widget) == GTK_TEXT_DIR_RTL;
-
               gint trough_change_pos_x = width;
               gint trough_change_pos_y = height;
 
@@ -2072,14 +2070,12 @@ gtk_range_draw (GtkWidget *widget,
 
               gtk_style_context_save (context);
               if (priv->orientation == GTK_ORIENTATION_HORIZONTAL)
-                {
-                  gtk_style_context_add_class (context, GTK_STYLE_CLASS_LEFT);
-
-                  if (!is_rtl)
-                    gtk_style_context_add_class (context, GTK_STYLE_CLASS_HIGHLIGHT);
-                }
+                gtk_style_context_add_class (context, GTK_STYLE_CLASS_LEFT);
               else
                 gtk_style_context_add_class (context, GTK_STYLE_CLASS_TOP);
+
+              if (!should_invert (range))
+                gtk_style_context_add_class (context, GTK_STYLE_CLASS_HIGHLIGHT);
 
               gtk_render_background (context, cr, x, y,
                                      trough_change_pos_x,
@@ -2098,17 +2094,12 @@ gtk_range_draw (GtkWidget *widget,
 
               gtk_style_context_save (context);
               if (priv->orientation == GTK_ORIENTATION_HORIZONTAL)
-                {
-                  gtk_style_context_add_class (context, GTK_STYLE_CLASS_RIGHT);
-
-                  if (is_rtl)
-                    gtk_style_context_add_class (context, GTK_STYLE_CLASS_HIGHLIGHT);
-                }
+                gtk_style_context_add_class (context, GTK_STYLE_CLASS_RIGHT);
               else
-                {
-                  gtk_style_context_add_class (context, GTK_STYLE_CLASS_BOTTOM);
-                  gtk_style_context_add_class (context, GTK_STYLE_CLASS_HIGHLIGHT);
-                }
+                gtk_style_context_add_class (context, GTK_STYLE_CLASS_BOTTOM);
+
+              if (should_invert (range))
+                gtk_style_context_add_class (context, GTK_STYLE_CLASS_HIGHLIGHT);
 
               gtk_render_background (context, cr,
                                      x + trough_change_pos_x, y + trough_change_pos_y,
