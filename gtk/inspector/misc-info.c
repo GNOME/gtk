@@ -354,7 +354,7 @@ update_info (gpointer data)
       frame = gdk_frame_clock_get_frame_counter (clock);
       frame_time = gdk_frame_clock_get_frame_time (clock);
 
-      tmp = g_strdup_printf ("%ld", frame);
+      tmp = g_strdup_printf ("%"G_GINT64_FORMAT, frame);
       gtk_label_set_label (GTK_LABEL (sl->priv->framecount), tmp);
       g_free (tmp);
 
