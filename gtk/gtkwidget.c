@@ -806,8 +806,7 @@ static gboolean              setup_template_child              (GtkWidgetTemplat
 
 static void gtk_widget_set_usize_internal (GtkWidget          *widget,
 					   gint                width,
-					   gint                height,
-					   GtkQueueResizeFlags flags);
+					   gint                height);
 
 static void gtk_widget_add_events_internal (GtkWidget *widget,
                                             GdkDevice *device,
@@ -3671,10 +3670,10 @@ gtk_widget_set_property (GObject         *object,
       gtk_container_add (GTK_CONTAINER (g_value_get_object (value)), widget);
       break;
     case PROP_WIDTH_REQUEST:
-      gtk_widget_set_usize_internal (widget, g_value_get_int (value), -2, 0);
+      gtk_widget_set_usize_internal (widget, g_value_get_int (value), -2);
       break;
     case PROP_HEIGHT_REQUEST:
-      gtk_widget_set_usize_internal (widget, -2, g_value_get_int (value), 0);
+      gtk_widget_set_usize_internal (widget, -2, g_value_get_int (value));
       break;
     case PROP_VISIBLE:
       gtk_widget_set_visible (widget, g_value_get_boolean (value));
@@ -5600,7 +5599,7 @@ gtk_widget_queue_resize (GtkWidget *widget)
   if (_gtk_widget_get_realized (widget))
     gtk_widget_queue_draw (widget);
 
-  _gtk_size_group_queue_resize (widget, 0);
+  _gtk_size_group_queue_resize (widget);
 }
 
 /**
@@ -5617,7 +5616,7 @@ gtk_widget_queue_resize_no_redraw (GtkWidget *widget)
 {
   g_return_if_fail (GTK_IS_WIDGET (widget));
 
-  _gtk_size_group_queue_resize (widget, 0);
+  _gtk_size_group_queue_resize (widget);
 }
 
 /**
@@ -10988,8 +10987,7 @@ gtk_widget_error_bell (GtkWidget *widget)
 static void
 gtk_widget_set_usize_internal (GtkWidget          *widget,
 			       gint                width,
-			       gint                height,
-			       GtkQueueResizeFlags flags)
+			       gint                height)
 {
   GtkWidgetPrivate *priv = widget->priv;
   gboolean changed = FALSE;
@@ -10998,25 +10996,20 @@ gtk_widget_set_usize_internal (GtkWidget          *widget,
 
   if (width > -2 && priv->width != width)
     {
-      if ((flags & GTK_QUEUE_RESIZE_INVALIDATE_ONLY) == 0)
-	g_object_notify_by_pspec (G_OBJECT (widget), widget_props[PROP_WIDTH_REQUEST]);
+      g_object_notify_by_pspec (G_OBJECT (widget), widget_props[PROP_WIDTH_REQUEST]);
       priv->width = width;
       changed = TRUE;
     }
   if (height > -2 && priv->height != height)
     {
-      if ((flags & GTK_QUEUE_RESIZE_INVALIDATE_ONLY) == 0)
-	g_object_notify_by_pspec (G_OBJECT (widget), widget_props[PROP_HEIGHT_REQUEST]);
+      g_object_notify_by_pspec (G_OBJECT (widget), widget_props[PROP_HEIGHT_REQUEST]);
       priv->height = height;
       changed = TRUE;
     }
 
   if (_gtk_widget_get_visible (widget) && changed)
     {
-      if ((flags & GTK_QUEUE_RESIZE_INVALIDATE_ONLY) == 0)
-	gtk_widget_queue_resize (widget);
-      else
-	_gtk_size_group_queue_resize (widget, GTK_QUEUE_RESIZE_INVALIDATE_ONLY);
+      gtk_widget_queue_resize (widget);
     }
 
   g_object_thaw_notify (G_OBJECT (widget));
@@ -11073,7 +11066,7 @@ gtk_widget_set_size_request (GtkWidget *widget,
   if (height == 0)
     height = 1;
 
-  gtk_widget_set_usize_internal (widget, width, height, 0);
+  gtk_widget_set_usize_internal (widget, width, height);
 }
 
 
