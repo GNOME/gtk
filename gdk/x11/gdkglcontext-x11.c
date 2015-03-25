@@ -1212,6 +1212,12 @@ gdk_x11_display_make_gl_context_current (GdkDisplay   *display,
     }
 
   context_x11 = GDK_X11_GL_CONTEXT (context);
+  if (context_x11->glx_context == NULL)
+    {
+      g_critical ("No GLX context associated to the GdkGLContext; you must "
+                  "call gdk_gl_context_realize() first.");
+      return FALSE;
+    }
 
   GDK_NOTE (OPENGL,
             g_print ("Making GLX context current to drawable %lu\n",
