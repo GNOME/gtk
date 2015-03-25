@@ -448,6 +448,11 @@ gtk_gl_area_attach_buffers (GtkGLArea *area)
 {
   GtkGLAreaPrivate *priv = gtk_gl_area_get_instance_private (area);
 
+  g_return_if_fail (GTK_IS_GL_AREA (area));
+
+  if (priv->context == NULL)
+    return;
+
   gtk_gl_area_make_current (area);
 
   if (!priv->have_buffers)
@@ -630,6 +635,9 @@ gtk_gl_area_draw (GtkWidget *widget,
                                      gtk_widget_get_allocated_height (widget));
       return FALSE;
     }
+
+  if (priv->context == NULL)
+    return FALSE;
 
   gtk_gl_area_make_current (area);
 
@@ -1301,6 +1309,6 @@ gtk_gl_area_make_current (GtkGLArea *area)
 
   g_return_if_fail (gtk_widget_get_realized (widget));
 
-  if (priv->context)
+  if (priv->context != NULL)
     gdk_gl_context_make_current (priv->context);
 }
