@@ -158,8 +158,6 @@ gtk_text_cell_accessible_update_cache (GtkCellAccessible *cell)
         {
           g_signal_emit_by_name (cell, "text-changed::delete",
                                  0, text_cell->priv->cell_length);
-          if (obj->name == NULL)
-            g_object_notify (G_OBJECT (obj), "accessible-name");
         }
 
       g_free (text_cell->priv->cell_text);
@@ -170,10 +168,10 @@ gtk_text_cell_accessible_update_cache (GtkCellAccessible *cell)
         {
           g_signal_emit_by_name (cell, "text-changed::insert",
                                  0, text_cell->priv->cell_length);
-
-          if (obj->name == NULL)
-            g_object_notify (G_OBJECT (obj), "accessible-name");
         }
+
+      if (obj->name == NULL)
+        g_object_notify (G_OBJECT (obj), "accessible-name");
     }
 
   g_free (text);
