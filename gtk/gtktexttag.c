@@ -534,7 +534,7 @@ gtk_text_tag_class_init (GtkTextTagClass *klass)
    * color may be applied instead of the foreground. Setting this property
    * will always override those defaults.
    *
-   * Since: 3.18
+   * Since: 3.16
    */
   g_object_class_install_property (object_class,
                                    PROP_UNDERLINE_RGBA,
@@ -550,7 +550,7 @@ gtk_text_tag_class_init (GtkTextTagClass *klass)
    * This property modifies the color of strikeouts. If not set, strikeouts
    * will use the forground color.
    *
-   * Since: 3.18
+   * Since: 3.16
    */
   g_object_class_install_property (object_class,
                                    PROP_STRIKETHROUGH_RGBA,
@@ -792,7 +792,7 @@ gtk_text_tag_class_init (GtkTextTagClass *klass)
    *
    * If the #GtkTextTag:underline-rgba property has been set.
    *
-   * Since: 3.18
+   * Since: 3.16
    */
   ADD_SET_PROP ("underline-rgba-set", PROP_UNDERLINE_RGBA_SET,
                 P_("Underline RGBA set"),
@@ -803,7 +803,7 @@ gtk_text_tag_class_init (GtkTextTagClass *klass)
    *
    * If the #GtkTextTag:strikethrough-rgba property has been set.
    *
-   * Since: 3.18
+   * Since: 3.16
    */
   ADD_SET_PROP ("strikethrough-rgba-set", PROP_STRIKETHROUGH_RGBA_SET,
                 P_("Strikethrough RGBA set"),
