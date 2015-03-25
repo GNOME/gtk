@@ -136,7 +136,6 @@ gtk_text_cell_accessible_update_cache (GtkCellAccessible *cell)
 {
   GtkTextCellAccessible *text_cell = GTK_TEXT_CELL_ACCESSIBLE (cell);
   AtkObject *obj = ATK_OBJECT (cell);
-  gboolean rv = FALSE;
   gint temp_length, text_length;
   gchar *text;
   GtkCellRenderer *renderer;
@@ -153,9 +152,9 @@ gtk_text_cell_accessible_update_cache (GtkCellAccessible *cell)
     text = g_strdup ("");
   text_length = g_utf8_strlen (text, -1);
 
-  if (text_cell->priv->cell_text)
+  if (g_strcmp0 (text_cell->priv->cell_text, text) != 0)
     {
-      if (text == NULL || g_strcmp0 (text_cell->priv->cell_text, text) != 0)
+      if (text_cell->priv->cell_length)
         {
           g_free (text_cell->priv->cell_text);
           temp_length = text_cell->priv->cell_length;
@@ -164,29 +163,22 @@ gtk_text_cell_accessible_update_cache (GtkCellAccessible *cell)
           g_signal_emit_by_name (cell, "text-changed::delete", 0, temp_length);
           if (obj->name == NULL)
             g_object_notify (G_OBJECT (obj), "accessible-name");
-          if (text)
-            rv = TRUE;
         }
-    }
-  else
-    rv = TRUE;
 
-  if (rv)
-    {
       text_cell->priv->cell_text = g_strdup (text);
       text_cell->priv->cell_length = text_length;
+
+      if (text_length)
+        {
+          g_signal_emit_by_name (cell, "text-changed::insert",
+                                 0, text_cell->priv->cell_length);
+
+          if (obj->name == NULL)
+            g_object_notify (G_OBJECT (obj), "accessible-name");
+        }
     }
 
   g_free (text);
-
-  if (rv)
-    {
-      g_signal_emit_by_name (cell, "text-changed::insert",
-                             0, text_cell->priv->cell_length);
-
-      if (obj->name == NULL)
-        g_object_notify (G_OBJECT (obj), "accessible-name");
-    }
 }
 
 static void
