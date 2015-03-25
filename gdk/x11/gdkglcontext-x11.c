@@ -556,17 +556,25 @@ create_gl3_context (GdkDisplay   *display,
     GLX_CONTEXT_FLAGS_ARB, flags,
     None,
   };
+  GLXContext res;
 
   GdkX11GLContext *share_x11 = NULL;
 
   if (share != NULL)
     share_x11 = GDK_X11_GL_CONTEXT (share);
 
-  return glXCreateContextAttribsARB (gdk_x11_display_get_xdisplay (display),
-                                     config,
-                                     share_x11 != NULL ? share_x11->glx_context : NULL,
-                                     True,
-                                     attrib_list);
+  gdk_x11_display_error_trap_push (display);
+
+  res = glXCreateContextAttribsARB (gdk_x11_display_get_xdisplay (display),
+                                    config,
+                                    share_x11 != NULL ? share_x11->glx_context : NULL,
+                                    True,
+                                    attrib_list);
+
+  if (gdk_x11_display_error_trap_pop (display))
+    return NULL;
+
+  return res;
 }
 
 static gboolean
