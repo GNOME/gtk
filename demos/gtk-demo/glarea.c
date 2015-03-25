@@ -220,6 +220,9 @@ realize (GtkWidget *widget)
 {
   gtk_gl_area_make_current (GTK_GL_AREA (widget));
 
+  if (gtk_gl_area_get_error (GTK_GL_AREA (widget)) != NULL)
+    return;
+
   init_buffers (&position_buffer, NULL);
   init_shaders (&program, &mvp_location);
 }
@@ -229,6 +232,9 @@ static void
 unrealize (GtkWidget *widget)
 {
   gtk_gl_area_make_current (GTK_GL_AREA (widget));
+
+  if (gtk_gl_area_get_error (GTK_GL_AREA (widget)) != NULL)
+    return;
 
   glDeleteBuffers (1, &position_buffer);
   glDeleteProgram (program);
@@ -271,6 +277,9 @@ static gboolean
 render (GtkGLArea    *area,
         GdkGLContext *context)
 {
+  if (gtk_gl_area_get_error (area) != NULL)
+    return FALSE;
+
   /* Clear the viewport */
   glClearColor (0.5, 0.5, 0.5, 1.0);
   glClear (GL_COLOR_BUFFER_BIT);
