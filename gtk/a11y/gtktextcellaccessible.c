@@ -136,7 +136,7 @@ gtk_text_cell_accessible_update_cache (GtkCellAccessible *cell)
 {
   GtkTextCellAccessible *text_cell = GTK_TEXT_CELL_ACCESSIBLE (cell);
   AtkObject *obj = ATK_OBJECT (cell);
-  gint temp_length, text_length;
+  gint text_length;
   gchar *text;
   GtkCellRenderer *renderer;
 
@@ -156,15 +156,13 @@ gtk_text_cell_accessible_update_cache (GtkCellAccessible *cell)
     {
       if (text_cell->priv->cell_length)
         {
-          g_free (text_cell->priv->cell_text);
-          temp_length = text_cell->priv->cell_length;
-          text_cell->priv->cell_text = NULL;
-          text_cell->priv->cell_length = 0;
-          g_signal_emit_by_name (cell, "text-changed::delete", 0, temp_length);
+          g_signal_emit_by_name (cell, "text-changed::delete",
+                                 0, text_cell->priv->cell_length);
           if (obj->name == NULL)
             g_object_notify (G_OBJECT (obj), "accessible-name");
         }
 
+      g_free (text_cell->priv->cell_text);
       text_cell->priv->cell_text = g_strdup (text);
       text_cell->priv->cell_length = text_length;
 
