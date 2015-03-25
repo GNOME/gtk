@@ -137,7 +137,7 @@ gtk_text_cell_accessible_update_cache (GtkCellAccessible *cell)
   GtkTextCellAccessible *text_cell = GTK_TEXT_CELL_ACCESSIBLE (cell);
   AtkObject *obj = ATK_OBJECT (cell);
   gboolean rv = FALSE;
-  gint temp_length;
+  gint temp_length, text_length;
   gchar *text;
   GtkCellRenderer *renderer;
 
@@ -148,6 +148,10 @@ gtk_text_cell_accessible_update_cache (GtkCellAccessible *cell)
   g_object_get (cell, "renderer", &renderer, NULL);
   g_object_get (renderer, "text", &text, NULL);
   g_object_unref (renderer);
+
+  if (text == NULL)
+    text = g_strdup ("");
+  text_length = g_utf8_strlen (text, -1);
 
   if (text_cell->priv->cell_text)
     {
@@ -169,16 +173,8 @@ gtk_text_cell_accessible_update_cache (GtkCellAccessible *cell)
 
   if (rv)
     {
-      if (text == NULL)
-        {
-          text_cell->priv->cell_text = g_strdup ("");
-          text_cell->priv->cell_length = 0;
-        }
-      else
-        {
-          text_cell->priv->cell_text = g_strdup (text);
-          text_cell->priv->cell_length = g_utf8_strlen (text, -1);
-        }
+      text_cell->priv->cell_text = g_strdup (text);
+      text_cell->priv->cell_length = text_length;
     }
 
   g_free (text);
