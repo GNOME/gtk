@@ -6456,7 +6456,7 @@ recent_start_loading (GtkFileChooserWidget *impl)
   load_data->items = NULL;
 
   /* begin lazy loading the recent files into the model */
-  priv->load_recent_id = gdk_threads_add_idle_full (G_PRIORITY_HIGH_IDLE + 30,
+  priv->load_recent_id = gdk_threads_add_idle_full (G_PRIORITY_DEFAULT,
                                                     recent_idle_load,
                                                     load_data,
                                                     recent_idle_cleanup);
