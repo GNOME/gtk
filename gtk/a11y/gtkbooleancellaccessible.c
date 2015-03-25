@@ -138,7 +138,7 @@ gtk_boolean_cell_accessible_update_cache (GtkCellAccessible *cell)
     {
       boolean_cell->priv->cell_sensitive = !boolean_cell->priv->cell_sensitive;
 
-      atk_object_notify_state_change (ATK_OBJECT (cell), ATK_STATE_CHECKED, sensitive);
+      atk_object_notify_state_change (ATK_OBJECT (cell), ATK_STATE_SENSITIVE, sensitive);
     }
 }
 
