@@ -3337,8 +3337,6 @@ gdk_event_translate (MSG  *msg,
 	    {
 	      mmi->ptMaxTrackSize.x = moninfo.rcWork.right - moninfo.rcWork.left;
 	      mmi->ptMaxTrackSize.y = moninfo.rcWork.bottom - moninfo.rcWork.top;
-	      mmi->ptMaxPosition.x = moninfo.rcWork.left;
-	      mmi->ptMaxPosition.y = moninfo.rcWork.top;
 	    }
 	  else
 	    {
