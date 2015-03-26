@@ -1838,6 +1838,7 @@ gdk_event_translate (MSG  *msg,
   RECT rect, *drag, orig_drag;
   POINT point;
   MINMAXINFO *mmi;
+  LONG style;
   HWND hwnd;
   HCURSOR hcursor;
   BYTE key_state[256];
@@ -3046,6 +3047,8 @@ gdk_event_translate (MSG  *msg,
 				 mmi->ptMaxPosition.x, mmi->ptMaxPosition.y,
 				 mmi->ptMaxSize.x, mmi->ptMaxSize.y));
 
+      style = GetWindowLong (GDK_WINDOW_HWND (window), GWL_STYLE);
+
       if (impl->hint_flags & GDK_HINT_MIN_SIZE)
 	{
 	  rect.left = rect.top = 0;
@@ -3074,7 +3077,10 @@ gdk_event_translate (MSG  *msg,
 	  mmi->ptMaxTrackSize.x = maxw > 0 && maxw < G_MAXSHORT ? maxw : G_MAXSHORT;
 	  mmi->ptMaxTrackSize.y = maxh > 0 && maxh < G_MAXSHORT ? maxh : G_MAXSHORT;
 	}
-      else
+      /* Assume that these styles are incompatible with CSD,
+       * so there's no reason for us to override the defaults.
+       */
+      else if ((style & (WS_BORDER | WS_THICKFRAME)) == 0)
 	{
 	  HMONITOR winmon;
 	  MONITORINFO moninfo;
