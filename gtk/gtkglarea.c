@@ -91,7 +91,46 @@
  *
  * If you need to initialize OpenGL state, e.g. buffer objects or
  * shaders, you should use the #GtkWidget::realize signal; you
- * can use the #GtkWidget::unrealize signal to clean up.
+ * can use the #GtkWidget::unrealize signal to clean up. Since the
+ * #GdkGLContext creation and initialization may fail, you will
+ * need to check for errors, using gtk_gl_area_get_error(). An example
+ * of how to safely initialize the GL state is:
+ *
+ * |[<!-- language="C" -->
+ *   static void
+ *   on_realize (GtkGLarea *area)
+ *   {
+ *     // We need to make the context current if we want to
+ *     // call GL API
+ *     gtk_gl_area_make_current (area);
+ *
+ *     // If there were errors during the initialization or
+ *     // when trying to make the context current, this
+ *     // function will return a #GError for you to catch
+ *     if (gtk_gl_area_get_error (area) != NULL)
+ *       return;
+ *
+ *     // You can also use gtk_gl_area_set_error() in order
+ *     // to show eventual initialization errors on the
+ *     // GtkGLArea widget itself
+ *     GError *internal_error = NULL;
+ *     init_buffer_objects (&error);
+ *     if (error != NULL)
+ *       {
+ *         gtk_gl_area_set_error (area, error);
+ *         g_error_free (error);
+ *         return;
+ *       }
+ *
+ *     init_shaders (&error);
+ *     if (error != NULL)
+ *       {
+ *         gtk_gl_area_set_error (area, error);
+ *         g_error_free (error);
+ *         return;
+ *       }
+ *   }
+ * ]|
  *
  * If you need to change the options for creating the #GdkGLContext
  * you should use the #GtkGLArea::create-context signal.
