@@ -432,6 +432,11 @@ gdk_x11_gl_context_texture_from_surface (GdkGLContext *paint_context,
   double sx, sy;
   float uscale, vscale;
   GdkTexturedQuad *quads;
+  GdkX11Display *display_x11;
+
+  display_x11 = GDK_X11_DISPLAY (gdk_gl_context_get_display (paint_context));
+  if (!display_x11->has_glx_texture_from_pixmap)
+    return FALSE;
 
   if (cairo_surface_get_type (surface) != CAIRO_SURFACE_TYPE_XLIB)
     return FALSE;
