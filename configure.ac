@@ -1660,11 +1660,34 @@ AM_CONDITIONAL(HAVE_COLORD, test "x$have_colord" = "xyes")
 # Check for libcanberra (only used in examples)
 ##################################################
 
-PKG_CHECK_MODULES(LIBCANBERRA, libcanberra-gtk3,
-                  have_libcanberra=yes, have_libcanberra=no)
-if test "$have_libcanberra" = "yes"; then
-        AC_DEFINE(HAVE_LIBCANBERRA, 1, [define if we have libcanberra])
+AC_ARG_ENABLE(libcanberra,
+              [AS_HELP_STRING([--enable-libcanberra],
+                              [enable libcanberra support in examples [default=auto]])],
+              [enable_libcanberra="$enableval"],
+              [enable_libcanberra=auto])
+
+AC_MSG_CHECKING([whether to use libcanberra])
+if test "$enable_libcanberra" != "no"; then
+  AC_MSG_RESULT([yes])
+else
+  AC_MSG_RESULT([no])
 fi
+
+have_libcanberra=no
+if test "$enable_libcanberra" != "no"; then
+    PKG_CHECK_MODULES(LIBCANBERRA, libcanberra-gtk3,
+                      have_libcanberra=yes, have_libcanberra=no)
+    if test "$enable_libcanberra" = "yes"; then
+        if test "$have_libcanberra" = "no"; then
+            AC_MSG_ERROR([--enable-libcanberra specified, but not available])
+        fi
+    fi
+fi
+
+if test "$have_libcanberra" = "yes"; then
+    AC_DEFINE(HAVE_LIBCANBERRA, 1, [define if we have libcanberra])
+fi
+AM_CONDITIONAL(HAVE_LIBCANBERRA, test "x$have_libcanberra" = "xyes")
 
 ##################################################
 # Checks for gtk-doc and docbook-tools
@@ -1938,6 +1961,7 @@ echo "        Print backends:       $PRINT_BACKENDS"
 echo "        Dynamic modules:      $build_dynamic_modules"
 echo "        Included immodules:   $included_immodules"
 echo "        colord support:       $have_colord"
+echo "        libcanberra support:  $have_libcanberra"
 echo "        Introspection:        $found_introspection"
 echo "        Debugging:            $enable_debug"
 echo "        Documentation:        $enable_gtk_doc"
