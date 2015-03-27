@@ -3610,9 +3610,21 @@ gtk_list_box_bound_model_changed (GListModel *list,
 
       item = g_list_model_get_item (list, position + i);
       widget = priv->create_widget_func (item, priv->create_widget_func_data);
+
+      /* We allow the create_widget_func to either return a full
+       * reference or a floating reference.  If we got the floating
+       * reference, then turn it into a full reference now.  That means
+       * that gtk_list_box_insert() will take another full reference.
+       * Finally, we'll release this full reference below, leaving only
+       * the one held by the box.
+       */
+      if (g_object_is_floating (widget))
+        g_object_ref_sink (widget);
+
       gtk_widget_show_all (widget);
       gtk_list_box_insert (box, widget, position + i);
 
+      g_object_unref (widget);
       g_object_unref (item);
     }
 }
