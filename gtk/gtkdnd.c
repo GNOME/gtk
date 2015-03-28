@@ -4002,6 +4002,7 @@ gtk_drag_remove_icon (GtkDragSourceInfo *info)
   if (info->icon_window)
     {
       gtk_widget_hide (info->icon_window);
+      gtk_widget_set_opacity (info->icon_window, 1.0);
       if (info->destroy_icon)
         gtk_widget_destroy (info->icon_window);
 
