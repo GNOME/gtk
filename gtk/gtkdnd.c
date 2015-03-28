@@ -2531,7 +2531,11 @@ gtk_drag_begin_internal (GtkWidget         *widget,
    * not have set one.
    */
   if (!info->icon_window && !info->icon_helper)
-    info->icon_helper = gtk_drag_source_site_get_icon_helper (site);
+    {
+      info->icon_helper = gtk_drag_source_site_get_icon_helper (site);
+      set_icon_helper (info->context, info->icon_helper,
+                       0, 0, TRUE);
+    }
 
   /* We need to composite the icon into the cursor, if we are
    * not using an icon window.
