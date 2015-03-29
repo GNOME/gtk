@@ -26,6 +26,7 @@
 
 #include "gtkradiobutton.h"
 
+#include "gtkcontainerprivate.h"
 #include "gtkbuttonprivate.h"
 #include "gtklabel.h"
 #include "gtkmarshalers.h"
@@ -592,53 +593,6 @@ gtk_radio_button_destroy (GtkWidget *widget)
   GTK_WIDGET_CLASS (gtk_radio_button_parent_class)->destroy (widget);
 }
 
-static void
-get_coordinates (GtkWidget    *widget,
-		 GtkWidget    *reference,
-		 gint         *x,
-		 gint         *y)
-{
-  GtkAllocation allocation;
-
-  gtk_widget_get_allocation (widget, &allocation);
-  *x = allocation.x + allocation.width / 2;
-  *y = allocation.y + allocation.height / 2;
-
-  gtk_widget_translate_coordinates (widget, reference, *x, *y, x, y);
-}
-
-static gint
-left_right_compare (gconstpointer a,
-		    gconstpointer b,
-		    gpointer      data)
-{
-  gint x1, y1, x2, y2;
-
-  get_coordinates ((GtkWidget *)a, data, &x1, &y1);
-  get_coordinates ((GtkWidget *)b, data, &x2, &y2);
-
-  if (y1 == y2)
-    return (x1 < x2) ? -1 : ((x1 == x2) ? 0 : 1);
-  else
-    return (y1 < y2) ? -1 : 1;
-}
-
-static gint
-up_down_compare (gconstpointer a,
-		 gconstpointer b,
-		 gpointer      data)
-{
-  gint x1, y1, x2, y2;
-  
-  get_coordinates ((GtkWidget *)a, data, &x1, &y1);
-  get_coordinates ((GtkWidget *)b, data, &x2, &y2);
-  
-  if (x1 == x2)
-    return (y1 < y2) ? -1 : ((y1 == y2) ? 0 : 1);
-  else
-    return (x1 < x2) ? -1 : 1;
-}
-
 static gboolean
 gtk_radio_button_focus (GtkWidget         *widget,
 			GtkDirectionType   direction)
@@ -652,45 +606,34 @@ gtk_radio_button_focus (GtkWidget         *widget,
    */
   if (!gtk_toggle_button_get_mode (GTK_TOGGLE_BUTTON (widget)))
     return GTK_WIDGET_CLASS (gtk_radio_button_parent_class)->focus (widget, direction);
-  
+
   if (gtk_widget_is_focus (widget))
     {
-      GSList *focus_list, *tmp_list;
-      GtkWidget *toplevel = gtk_widget_get_toplevel (widget);
+      GList *children, *focus_list, *tmp_list;
+      GtkWidget *toplevel;
       GtkWidget *new_focus = NULL;
+      GSList *l;
 
-      switch (direction)
-	{
-	case GTK_DIR_LEFT:
-	case GTK_DIR_RIGHT:
-	  focus_list = g_slist_copy (priv->group);
-	  focus_list = g_slist_sort_with_data (focus_list, left_right_compare, toplevel);
-	  break;
-	case GTK_DIR_UP:
-	case GTK_DIR_DOWN:
-	  focus_list = g_slist_copy (priv->group);
-	  focus_list = g_slist_sort_with_data (focus_list, up_down_compare, toplevel);
-	  break;
-	case GTK_DIR_TAB_FORWARD:
-	case GTK_DIR_TAB_BACKWARD:
-          /* fall through */
-        default:
-	  return FALSE;
-	}
+      if (direction == GTK_DIR_TAB_FORWARD ||
+          direction == GTK_DIR_TAB_BACKWARD)
+        return FALSE;
 
-      if (direction == GTK_DIR_LEFT || direction == GTK_DIR_UP)
-	focus_list = g_slist_reverse (focus_list);
+      toplevel = gtk_widget_get_toplevel (widget);
+      children = NULL;
+      for (l = priv->group; l; l = l->next)
+        children = g_list_prepend (children, l->data);
 
-      tmp_list = g_slist_find (focus_list, widget);
+      focus_list = _gtk_container_focus_sort (GTK_CONTAINER (toplevel), children, direction, widget);
+      tmp_list = g_list_find (focus_list, widget);
 
       if (tmp_list)
 	{
 	  tmp_list = tmp_list->next;
-	  
+
 	  while (tmp_list)
 	    {
 	      GtkWidget *child = tmp_list->data;
-	      
+
 	      if (gtk_widget_get_mapped (child) && gtk_widget_is_sensitive (child))
 		{
 		  new_focus = child;
@@ -708,18 +651,19 @@ gtk_radio_button_focus (GtkWidget         *widget,
 	  while (tmp_list)
 	    {
 	      GtkWidget *child = tmp_list->data;
-	      
+
 	      if (gtk_widget_get_mapped (child) && gtk_widget_is_sensitive (child))
 		{
 		  new_focus = child;
 		  break;
 		}
-	      
+
 	      tmp_list = tmp_list->next;
 	    }
 	}
-      
-      g_slist_free (focus_list);
+
+      g_list_free (focus_list);
+      g_list_free (children);
 
       if (new_focus)
 	{
@@ -733,12 +677,11 @@ gtk_radio_button_focus (GtkWidget         *widget,
   else
     {
       GtkRadioButton *selected_button = NULL;
-      
+
       /* We accept the focus if, we don't have the focus and
        *  - we are the currently active button in the group
        *  - there is no currently active radio button.
        */
-      
       tmp_slist = priv->group;
       while (tmp_slist)
 	{
@@ -746,7 +689,7 @@ gtk_radio_button_focus (GtkWidget         *widget,
 	    selected_button = tmp_slist->data;
 	  tmp_slist = tmp_slist->next;
 	}
-      
+
       if (selected_button && selected_button != radio_button)
 	return FALSE;
 
