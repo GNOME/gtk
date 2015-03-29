@@ -3626,40 +3626,36 @@ static void
 update_selection_clipboards (GtkTextBuffer *buffer)
 {
   GtkTextBufferPrivate *priv;
-  GSList               *tmp_list = buffer->priv->selection_clipboards;
+  gboolean has_selection;
+  GtkTextIter start;
+  GtkTextIter end;
+  GSList *tmp_list;
 
   priv = buffer->priv;
 
   gtk_text_buffer_get_copy_target_list (buffer);
+  has_selection = gtk_text_buffer_get_selection_bounds (buffer, &start, &end);
+  tmp_list = buffer->priv->selection_clipboards;
 
   while (tmp_list)
     {
-      GtkTextIter start;
-      GtkTextIter end;
-      
       SelectionClipboard *selection_clipboard = tmp_list->data;
       GtkClipboard *clipboard = selection_clipboard->clipboard;
 
-      /* Determine whether we have a selection and adjust X selection
-       * accordingly.
-       */
-      if (!gtk_text_buffer_get_selection_bounds (buffer, &start, &end))
-	{
-	  if (gtk_clipboard_get_owner (clipboard) == G_OBJECT (buffer))
-	    gtk_clipboard_clear (clipboard);
-	}
-      else
-	{
-	  /* Even if we already have the selection, we need to update our
-	   * timestamp.
-	   */
+      if (has_selection)
+        {
+          /* Even if we already have the selection, we need to update our
+           * timestamp.
+           */
           gtk_clipboard_set_with_owner (clipboard,
                                         priv->copy_target_entries,
                                         priv->n_copy_target_entries,
                                         clipboard_get_selection_cb,
                                         clipboard_clear_selection_cb,
                                         G_OBJECT (buffer));
-	}
+        }
+      else if (gtk_clipboard_get_owner (clipboard) == G_OBJECT (buffer))
+        gtk_clipboard_clear (clipboard);
 
       tmp_list = tmp_list->next;
     }
