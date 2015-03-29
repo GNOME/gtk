@@ -24,6 +24,7 @@
         <child>
           <object class="GtkSeparator">
             <property name="visible">True</property>
+            <property name="orientation">vertical</property>
           </object>
         </child>
         <child>
