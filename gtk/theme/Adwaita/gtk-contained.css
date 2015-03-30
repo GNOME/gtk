@@ -4447,8 +4447,7 @@ GtkVolumeButton.button, .header-bar GtkVolumeButton.button.titlebutton,
   outline-color: rgba(255, 255, 255, 0.3); }
   .view:backdrop:selected, GtkCalendar:backdrop:selected, .label:backdrop:selected, .grid-child:backdrop:selected, .entry:backdrop:selected, .menuitem.button.flat:backdrop:selected, .header-bar .menuitem.titlebutton.button:backdrop:selected,
   .titlebar .menuitem.titlebutton.button:backdrop:selected, .list-row:backdrop:selected, .sidebar:backdrop:selected, GtkPlacesSidebar.sidebar .view:backdrop:selected, GtkPlacesSidebar.sidebar GtkCalendar:backdrop:selected {
-    color: #ffffff;
-    background-color: #929292; }
+    color: #ffffff; }
 
 /* Decouple the font of context menus from their entry/textview */
 .touch-selection,
