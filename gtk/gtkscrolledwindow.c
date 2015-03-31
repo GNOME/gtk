@@ -1074,7 +1074,18 @@ captured_event_cb (GtkWidget *widget,
 
   if (event->type == GDK_SCROLL)
     {
-      gtk_scrolled_window_cancel_deceleration (sw);
+      gdouble dx, dy;
+
+      /* The libinput driver may generate a final event with dx=dy=0
+       * after scrolling finished, this is usually an indication that
+       * the deceleration animation just started, so we definitely
+       * shouldn't cancel it.
+       */
+      if (event->scroll.direction != GDK_SCROLL_SMOOTH ||
+          (gdk_event_get_scroll_deltas (event, &dx, &dy) &&
+           ((int) dx != 0 || (int) dy != 0)))
+        gtk_scrolled_window_cancel_deceleration (sw);
+
       return GDK_EVENT_PROPAGATE;
     }
 
