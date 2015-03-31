@@ -167,8 +167,7 @@ typedef struct
 {
   GtkWidget *scrollbar;
   GdkWindow *window;
-  gboolean   dragging;
-  gboolean   over;
+  gboolean   over; /* either mouse over, or while dragging */
   gint64     last_scroll_time;
   guint      conceil_timer;
 
@@ -3900,7 +3899,7 @@ maybe_hide_indicator (gpointer data)
   Indicator *indicator = data;
 
   if (g_get_monotonic_time () - indicator->last_scroll_time >= INDICATOR_FADE_OUT_DELAY * 1000 &&
-      !indicator->over && !indicator->dragging)
+      !indicator->over)
     indicator_start_fade (indicator, 0.0);
 
   return G_SOURCE_CONTINUE;
@@ -3912,16 +3911,6 @@ indicator_value_changed (GtkAdjustment *adjustment,
 {
   indicator->last_scroll_time = g_get_monotonic_time ();
   indicator_start_fade (indicator, 1.0);
-}
-
-static void
-indicator_style_changed (GtkStyleContext *context,
-                         Indicator       *indicator)
-{
-  if (gtk_style_context_has_class (context, "dragging"))
-    indicator->dragging = TRUE;
-  else
-    indicator->dragging = FALSE;
 }
 
 static void
@@ -3947,8 +3936,6 @@ setup_indicator (GtkScrolledWindow *scrolled_window,
   g_object_unref (scrollbar);
 
   gtk_style_context_add_class (context, "overlay-indicator");
-  g_signal_connect (context, "changed",
-                    G_CALLBACK (indicator_style_changed), indicator);
   g_signal_connect (adjustment, "value-changed",
                     G_CALLBACK (indicator_value_changed), indicator);
 
@@ -3975,7 +3962,6 @@ remove_indicator (GtkScrolledWindow *scrolled_window,
   adjustment = gtk_range_get_adjustment (GTK_RANGE (scrollbar));
 
   gtk_style_context_remove_class (context, "overlay-indicator");
-  g_signal_handlers_disconnect_by_func (context, indicator_style_changed, indicator);
   g_signal_handlers_disconnect_by_func (adjustment, indicator_value_changed, indicator);
   if (indicator->conceil_timer)
     {
@@ -4106,7 +4092,6 @@ indicator_reset (Indicator *indicator)
     }
 
   indicator->scrollbar = NULL;
-  indicator->dragging = FALSE;
   indicator->over = FALSE;
   indicator->current_pos = indicator->source_pos = indicator->target_pos = 0;
   indicator->start_time = indicator->end_time = indicator->last_scroll_time = 0;
