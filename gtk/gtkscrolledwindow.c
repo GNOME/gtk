@@ -1067,6 +1067,8 @@ captured_event_cb (GtkWidget *widget,
   GtkScrolledWindow *sw;
   GdkInputSource input_source;
   GdkDevice *source_device;
+  GtkWidget *event_widget;
+  gboolean on_scrollbar;
 
   sw = GTK_SCROLLED_WINDOW (widget);
   priv = sw->priv;
@@ -1091,7 +1093,11 @@ captured_event_cb (GtkWidget *widget,
       input_source != GDK_SOURCE_TOUCHPAD)
     return GDK_EVENT_PROPAGATE;
 
-  if (event->type == GDK_MOTION_NOTIFY)
+  event_widget = gtk_get_event_widget (event);
+  on_scrollbar = (event_widget == priv->hindicator.scrollbar ||
+                  event_widget == priv->vindicator.scrollbar);
+
+  if (event->type == GDK_MOTION_NOTIFY && !on_scrollbar)
     {
       if (priv->hscrollbar_visible)
         indicator_start_fade (&priv->hindicator, 1.0);
@@ -1118,16 +1124,12 @@ captured_event_cb (GtkWidget *widget,
             indicator_set_over (&priv->hindicator, FALSE);
         }
     }
-  else if (event->type == GDK_LEAVE_NOTIFY &&
+  else if (event->type == GDK_LEAVE_NOTIFY && on_scrollbar &&
            event->crossing.mode == GDK_CROSSING_UNGRAB)
     {
-      GtkWidget *scrollbar;
-
-      scrollbar = gtk_get_event_widget (event);
-
-      if (scrollbar == priv->hindicator.scrollbar)
+      if (event_widget == priv->hindicator.scrollbar)
         check_update_scrollbar_proximity (sw, &priv->hindicator, event);
-      else if (scrollbar == priv->vindicator.scrollbar)
+      else if (event_widget == priv->vindicator.scrollbar)
         check_update_scrollbar_proximity (sw, &priv->vindicator, event);
     }
 
