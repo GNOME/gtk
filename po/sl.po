@@ -12,7 +12,7 @@ msgstr ""
 "Project-Id-Version: gtk+ master\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2015-03-15 13:45+0000\n"
-"PO-Revision-Date: 2015-03-15 21:24+0100\n"
+"PO-Revision-Date: 2015-03-31 21:06+0100\n"
 "Last-Translator: Matej Urbančič <mateju@svn.gnome.org>\n"
 "Language-Team: Slovenian GNOME Translation Team <gnome-si@googlegroups.com>\n"
 "Language: sl_SI\n"
@@ -22,7 +22,7 @@ msgstr ""
 "Plural-Forms: nplurals=4; plural=(n%100==1 ? 1 : n%100==2 ? 2 : n%100==3 || n"
 "%100==4 ? 3 : 0);\n"
 "X-Poedit-SourceCharset: utf-8\n"
-"X-Generator: Poedit 1.5.4\n"
+"X-Generator: Poedit 1.7.5\n"
 
 #: gdk/broadway/gdkbroadway-server.c:144
 #, fuzzy, c-format
@@ -443,9 +443,8 @@ msgstr "Na voljo ni nobenega zapisljivega koledarja"
 #: gdk/mir/gdkmirglcontext.c:89 gdk/wayland/gdkglcontext-wayland.c:157
 #: gdk/win32/gdkglcontext-win32.c:492 gdk/x11/gdkglcontext-x11.c:619
 #: gdk/x11/gdkglcontext-x11.c:663
-#, fuzzy
 msgid "Unable to create a GL context"
-msgstr "Ni mogoče ustvariti poročila o hrošču: %s\n"
+msgstr "Ni mogoče ustvariti vsebine GL"
 
 #: gdk/mir/gdkmirwindowimpl.c:1368 gdk/mir/gdkmirwindowimpl.c:1378
 #: gdk/wayland/gdkglcontext-wayland.c:330
@@ -1678,9 +1677,9 @@ msgid "Element <%s> not allowed at toplevel"
 msgstr "Predmet <%s> ni dovoljen na vrhnji ravni"
 
 #: gtk/gtkbuilder-menus.c:317
-#, fuzzy, c-format
+#, c-format
 msgid "Text may not appear inside <%s>"
-msgstr "besedilo se ne sme pojaviti znotraj <%s>"
+msgstr "Besedilo se ne sme pojaviti znotraj <%s>"
 
 #: gtk/gtkbuilderparser.c:340
 #, fuzzy, c-format
@@ -1708,14 +1707,14 @@ msgid "Invalid signal '%s' for type '%s' on line %d"
 msgstr "Neveljaven signal `%s' za vrsto `%s' v vrstici %d"
 
 #: gtk/gtkbuilderparser.c:1067
-#, fuzzy, c-format
+#, c-format
 msgid "Invalid root element: <%s>"
-msgstr "Neveljaven korenski predmet: '%s'"
+msgstr "Neveljaven korenski predmet: <%s>"
 
 #: gtk/gtkbuilderparser.c:1110
-#, fuzzy, c-format
+#, c-format
 msgid "Unhandled tag: <%s>"
-msgstr "Neobravnavana oznaka: '%s'"
+msgstr "Neobravnavana oznaka: <%s>"
 
 #. Translate to calendar:YM if you want years to be displayed
 #. * before months; otherwise translate to calendar:MY.
@@ -2389,16 +2388,15 @@ msgid "Close"
 msgstr "Zapri"
 
 #: gtk/gtkicontheme.c:2314 gtk/gtkicontheme.c:2378
-#, fuzzy, c-format
+#, c-format
 msgid "Icon '%s' not present in theme %s"
-msgstr "Ikona '%s' ni navzoča v temi"
+msgstr "Ikone '%s' v temi %s ni."
 
 #: gtk/gtkicontheme.c:4016 gtk/gtkicontheme.c:4383
 msgid "Failed to load icon"
 msgstr "Ikone ni mogoče naložiti"
 
 #: gtk/gtkimmodule.c:539
-#, fuzzy
 msgctxt "input method menu"
 msgid "Simple"
 msgstr "Enostavno"
@@ -2764,9 +2762,9 @@ msgstr "Odpri smeti"
 
 #: gtk/gtkplacessidebar.c:1077 gtk/gtkplacessidebar.c:1105
 #: gtk/gtkplacessidebar.c:1313
-#, fuzzy, c-format
+#, c-format
 msgid "Mount and open “%s”"
-msgstr "Ni mogoče odpreti priloge \"%s\": %s"
+msgstr "Priklopi in odpri “%s”"
 
 #: gtk/gtkplacessidebar.c:1186
 msgid "Open the contents of the file system"
@@ -2840,7 +2838,7 @@ msgid "_Lock Drive"
 msgstr "_Zakleni pogon"
 
 #: gtk/gtkplacessidebar.c:2328 gtk/gtkplacessidebar.c:3224
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to start “%s”"
 msgstr "Ni mogoče začeti “%s”"
 
@@ -2850,17 +2848,17 @@ msgid "Unable to access “%s”"
 msgstr "Ni mogoč dostop do “%s”"
 
 #: gtk/gtkplacessidebar.c:2668
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to unmount “%s”"
 msgstr "Ni mogoče odstraniti “%s”"
 
 #: gtk/gtkplacessidebar.c:2929
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to stop “%s”"
-msgstr "Ni mogoče odstraniti “%s”"
+msgstr "Ni mogoče zaustaviti “%s”"
 
 #: gtk/gtkplacessidebar.c:2958
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to eject “%s”"
 msgstr "Ni mogoče izvreči “%s”"
 
@@ -3577,9 +3575,8 @@ msgid "GDK Backend"
 msgstr "Ozadnji program GDK"
 
 #: gtk/inspector/general.ui:373
-#, fuzzy
 msgid "X display"
-msgstr "<b>Prikaz</b>"
+msgstr "Zaslon X"
 
 #: gtk/inspector/general.ui:408
 #, fuzzy
@@ -3587,19 +3584,16 @@ msgid "RGBA visual"
 msgstr "hebrejsko predočeno"
 
 #: gtk/inspector/general.ui:442
-#, fuzzy
 msgid "Composited"
-msgstr "Računalnik"
+msgstr "Sestavljeno"
 
 #: gtk/inspector/general.ui:489
-#, fuzzy
 msgid "GL Version"
-msgstr "_Podrobnosti različice"
+msgstr "Različica GL"
 
 #: gtk/inspector/general.ui:524
-#, fuzzy
 msgid "GL Vendor"
-msgstr "Oznaka ponudnika:"
+msgstr "Ponudnik GL"
 
 #: gtk/inspector/gestures.c:129
 msgid "Capture"
@@ -3945,17 +3939,14 @@ msgid "GTK+ Theme"
 msgstr "Tema GTK+"
 
 #: gtk/inspector/visual.ui:82
-#, fuzzy
 msgid "Dark Variant"
-msgstr "Stolpec različice"
+msgstr "Temna različica"
 
 #: gtk/inspector/visual.ui:115
-#, fuzzy
 msgid "Cursor Theme"
 msgstr "Tema kazalke"
 
 #: gtk/inspector/visual.ui:148
-#, fuzzy
 msgid "Cursor Size"
 msgstr "Velikost kazalca"
 
@@ -3988,9 +3979,8 @@ msgid "Animations"
 msgstr "Animacije"
 
 #: gtk/inspector/visual.ui:367
-#, fuzzy
 msgid "Rendering Mode"
-msgstr "Premešani način"
+msgstr "Način izrisovanja"
 
 #: gtk/inspector/visual.ui:380
 msgid "Similar"
@@ -4021,14 +4011,12 @@ msgid "Simulate touchscreen"
 msgstr "Simuliraj zaslon na dotik"
 
 #: gtk/inspector/visual.ui:553
-#, fuzzy
 msgid "GL Rendering"
-msgstr "Vrsta za izrisovanje"
+msgstr "Izrisovanje GL"
 
 #: gtk/inspector/visual.ui:565
-#, fuzzy
 msgid "When needed"
-msgstr "Zahtevano je geslo"
+msgstr "Ko je potrebno"
 
 #: gtk/inspector/visual.ui:566
 msgid "Always"
@@ -4039,14 +4027,12 @@ msgid "Disabled"
 msgstr "Onemogočeno"
 
 #: gtk/inspector/visual.ui:591
-#, fuzzy
 msgid "Software GL"
-msgstr "Na primer: sl.po"
+msgstr "Programski GL"
 
 #: gtk/inspector/visual.ui:625
-#, fuzzy
 msgid "Software Surfaces"
-msgstr "Diagrami: površinski"
+msgstr "Programska površina"
 
 #: gtk/inspector/visual.ui:659
 #, fuzzy
@@ -4058,7 +4044,6 @@ msgid "Select an Object"
 msgstr "Izbor predmeta"
 
 #: gtk/inspector/window.ui:47 gtk/inspector/window.ui:127
-#, fuzzy
 msgid "Show Details"
 msgstr "Pokaži podrobnosti"
 
@@ -5595,21 +5580,18 @@ msgid "Cyrillic (Transliterated)"
 msgstr "cirilični (prečrkovano)"
 
 #: modules/input/imime.c:30
-#, fuzzy
 msgctxt "input method menu"
 msgid "Windows IME"
-msgstr "_Časovni pas:"
+msgstr "Windows IME"
 
 #. ID
 #: modules/input/iminuktitut.c:125
-#, fuzzy
 msgctxt "input method menu"
 msgid "Inuktitut (Transliterated)"
 msgstr "inuktitutski (prečrkovano)"
 
 #. ID
 #: modules/input/imipa.c:143
-#, fuzzy
 msgctxt "input method menu"
 msgid "IPA"
 msgstr "IPA"
@@ -5746,9 +5728,9 @@ msgid "Domain:"
 msgstr "Domena:"
 
 #: modules/printbackends/cups/gtkprintbackendcups.c:1423
-#, fuzzy, c-format
+#, c-format
 msgid "Authentication is required to print document “%s”"
-msgstr "Za tiskanje dokumenta '%s' na tiskalniku %s je potrebna overitev"
+msgstr "Za tiskanje dokumenta “%s” je zahtevana overitev."
 
 #: modules/printbackends/cups/gtkprintbackendcups.c:1428
 #, c-format
@@ -5760,68 +5742,68 @@ msgid "Authentication is required to print this document"
 msgstr "Za tiskanje tega dokumenta je zahtevana overitev"
 
 #: modules/printbackends/cups/gtkprintbackendcups.c:1867
-#, fuzzy, c-format
+#, c-format
 msgid "Printer “%s” is low on toner."
-msgstr "V tiskalniku '%s' je skoraj prazna vsaj ena posoda z barvo."
+msgstr "V tiskalniku “%s” je skoraj prazen toner."
 
 #: modules/printbackends/cups/gtkprintbackendcups.c:1868
-#, fuzzy, c-format
+#, c-format
 msgid "Printer “%s” has no toner left."
-msgstr "V tiskalniku '%s' je prazen toner."
+msgstr "V tiskalniku “%s” je prazen toner."
 
 #. Translators: "Developer" like on photo development context
 #: modules/printbackends/cups/gtkprintbackendcups.c:1870
-#, fuzzy, c-format
+#, c-format
 msgid "Printer “%s” is low on developer."
-msgstr "V tiskalniku '%s' je skoraj prazna vsaj ena posoda z barvo."
+msgstr "V tiskalniku “%s” je skoraj zmanjkalo razvijalca."
 
 #. Translators: "Developer" like on photo development context
 #: modules/printbackends/cups/gtkprintbackendcups.c:1872
-#, fuzzy, c-format
+#, c-format
 msgid "Printer “%s” is out of developer."
-msgstr "Tiskalnik '%s' ima le še nekaj razvijalca."
+msgstr "V tiskalniku “%s” je zmanjkalo razvijalca."
 
 #. Translators: "marker" is one color bin of the printer
 #: modules/printbackends/cups/gtkprintbackendcups.c:1874
-#, fuzzy, c-format
+#, c-format
 msgid "Printer “%s” is low on at least one marker supply."
-msgstr "V tiskalniku '%s' je skoraj prazna vsaj ena kartuša."
+msgstr "V tiskalniku “%s” je skoraj prazna vsaj ena kartuša."
 
 #. Translators: "marker" is one color bin of the printer
 #: modules/printbackends/cups/gtkprintbackendcups.c:1876
-#, fuzzy, c-format
+#, c-format
 msgid "Printer “%s” is out of at least one marker supply."
-msgstr "V tiskalniku '%s' je skoraj prazna vsaj ena kartuša."
+msgstr "V tiskalniku “%s” je prazna vsaj ena kartuša."
 
 #: modules/printbackends/cups/gtkprintbackendcups.c:1877
-#, fuzzy, c-format
+#, c-format
 msgid "The cover is open on printer “%s”."
-msgstr "Tiskalnik '%s' ima odprt pokrov."
+msgstr "Tiskalnik “%s” ima odprt pokrov."
 
 #: modules/printbackends/cups/gtkprintbackendcups.c:1878
-#, fuzzy, c-format
+#, c-format
 msgid "The door is open on printer “%s”."
-msgstr "Tiskalnik '%s' ima odprta vratca."
+msgstr "Tiskalnik “%s” ima odprta vratca."
 
 #: modules/printbackends/cups/gtkprintbackendcups.c:1879
-#, fuzzy, c-format
+#, c-format
 msgid "Printer “%s” is low on paper."
-msgstr "V tiskalniku '%s' je skoraj prazna vsaj ena posoda z barvo."
+msgstr "V tiskalniku “%s” je skoraj zmanjkalo papirja."
 
 #: modules/printbackends/cups/gtkprintbackendcups.c:1880
-#, fuzzy, c-format
+#, c-format
 msgid "Printer “%s” is out of paper."
-msgstr "V tiskalniku '%s' je le še malo papirja."
+msgstr "V tiskalniku “%s” je zmanjkalo papirja."
 
 #: modules/printbackends/cups/gtkprintbackendcups.c:1881
-#, fuzzy, c-format
+#, c-format
 msgid "Printer “%s” is currently offline."
-msgstr "Tiskalnik '%s' trenutno ni povezan."
+msgstr "Tiskalnik “%s” trenutno ni povezan."
 
 #: modules/printbackends/cups/gtkprintbackendcups.c:1882
-#, fuzzy, c-format
+#, c-format
 msgid "There is a problem on printer “%s”."
-msgstr "Prišlo je do težav na tiskalniku '%s'."
+msgstr "Prišlo je do težav na tiskalniku “%s“."
 
 #. Translators: this is a printer status.
 #: modules/printbackends/cups/gtkprintbackendcups.c:2506
