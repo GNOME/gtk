@@ -18,8 +18,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ gtk-3.16\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-03-23 12:44+0000\n"
-"PO-Revision-Date: 2015-03-23 16:06+0100\n"
+"POT-Creation-Date: 2015-04-01 09:18+0000\n"
+"PO-Revision-Date: 2015-04-01 11:50+0200\n"
 "Last-Translator: Marek Černocký <marek@manet.cz>\n"
 "Language-Team: Czech <gnome-cs-list@gnome.org>\n"
 "Language: cs\n"
@@ -441,37 +441,38 @@ msgstr "UspatDoPaměti"
 
 #: gdk/mir/gdkmirglcontext.c:48 gdk/mir/gdkmirwindowimpl.c:1406
 #: gdk/wayland/gdkglcontext-wayland.c:369 gdk/win32/gdkglcontext-win32.c:532
-#: gdk/x11/gdkglcontext-x11.c:1163
-#, fuzzy
+#: gdk/x11/gdkglcontext-x11.c:1176
 msgid "No GL implementation is available"
-msgstr "Žádný profil není k dispozici"
+msgstr "Není k dispozici žádná implementace GL"
 
 #: gdk/mir/gdkmirglcontext.c:89 gdk/wayland/gdkglcontext-wayland.c:157
-#: gdk/win32/gdkglcontext-win32.c:492 gdk/x11/gdkglcontext-x11.c:619
-#: gdk/x11/gdkglcontext-x11.c:663
+#: gdk/win32/gdkglcontext-win32.c:492 gdk/x11/gdkglcontext-x11.c:632
+#: gdk/x11/gdkglcontext-x11.c:676
 msgid "Unable to create a GL context"
-msgstr ""
+msgstr "Nelze vytvořit kontext GL"
 
 #: gdk/mir/gdkmirwindowimpl.c:1368 gdk/mir/gdkmirwindowimpl.c:1378
 #: gdk/wayland/gdkglcontext-wayland.c:330
 #: gdk/wayland/gdkglcontext-wayland.c:340 gdk/win32/gdkglcontext-win32.c:464
-#: gdk/x11/gdkglcontext-x11.c:857
+#: gdk/x11/gdkglcontext-x11.c:870
 msgid "No available configurations for the given pixel format"
-msgstr ""
+msgstr "Není dostupné žádné nastavení pro daný pixelový fotmát"
 
 #: gdk/mir/gdkmirwindowimpl.c:1414
 msgid "3.2 core GL profile is not available on EGL implementation"
-msgstr ""
+msgstr "Profil základního GL 3.2 není k dispozici v implementaci EGL"
 
 #: gdk/wayland/gdkglcontext-wayland.c:377
 msgid "Core GL is not available on EGL implementation"
-msgstr ""
+msgstr "Základní GL není dostupné v implementaci EGL"
 
 #: gdk/win32/gdkglcontext-win32.c:541
 msgid ""
 "The WGL_ARB_create_context extension needed to create core profiles is not "
 "available"
 msgstr ""
+"Rozšíření WGL_ARB_create_context, které je nutné pro vytvoření základního "
+"profilu, není k dispozici"
 
 #. Description of --sync in --help output
 #: gdk/win32/gdkmain-win32.c:53
@@ -521,16 +522,18 @@ msgstr[0] "Otevírání %d položky"
 msgstr[1] "Otevírání %d položek"
 msgstr[2] "Otevírání %d položek"
 
-#: gdk/x11/gdkglcontext-x11.c:885
+#: gdk/x11/gdkglcontext-x11.c:898
 #, c-format
 msgid "No available configurations for the given RGBA pixel format"
-msgstr ""
+msgstr "Není dostupné žádné nastavení pro daný pixelový fotmát RGBA"
 
-#: gdk/x11/gdkglcontext-x11.c:1171
+#: gdk/x11/gdkglcontext-x11.c:1184
 msgid ""
 "The GLX_ARB_create_context_profile extension needed to create core profiles "
 "is not available"
 msgstr ""
+"Rozšíření GLX_ARB_create_context_profile, které je nutné pro vytvoření "
+"základního profilu, není k dispozici"
 
 #: gtk/a11y/gtkbooleancellaccessible.c:43
 msgctxt "Action description"
@@ -1220,7 +1223,7 @@ msgstr ""
 #: gtk/gtkmountoperation.c:543 gtk/gtkpagesetupunixdialog.c:196
 #: gtk/gtkprintbackend.c:763 gtk/gtkprinteroptionwidget.c:545
 #: gtk/gtkprintunixdialog.c:665 gtk/gtkprintunixdialog.c:738
-#: gtk/gtkwindow.c:11924 gtk/inspector/css-editor.c:199
+#: gtk/gtkwindow.c:11925 gtk/inspector/css-editor.c:199
 #: gtk/ui/gtkappchooserdialog.ui:79 gtk/ui/gtkassistant.ui:169
 #: gtk/ui/gtkcolorchooserdialog.ui:38 gtk/ui/gtkfontchooserdialog.ui:35
 msgid "_Cancel"
@@ -1269,7 +1272,7 @@ msgid "_Apply"
 msgstr "_Použít"
 
 #: gtk/deprecated/gtkfontsel.c:1698 gtk/gtkmessagedialog.c:936
-#: gtk/gtkmessagedialog.c:958 gtk/gtkprintbackend.c:764 gtk/gtkwindow.c:11925
+#: gtk/gtkmessagedialog.c:958 gtk/gtkprintbackend.c:764 gtk/gtkwindow.c:11926
 #: gtk/inspector/classes-list.c:127
 msgid "_OK"
 msgstr "_Budiž"
@@ -2239,7 +2242,7 @@ msgstr "Podí_vat se na tento soubor"
 
 #: gtk/gtkfilechooserwidget.c:1727
 msgid "_Open With File Manager"
-msgstr ""
+msgstr "_Otevřít pomocí správce souborů"
 
 #: gtk/gtkfilechooserwidget.c:1730
 msgid "_Copy Location"
@@ -2259,7 +2262,7 @@ msgstr "Z_obrazovat sloupec Velikost"
 
 #: gtk/gtkfilechooserwidget.c:1746
 msgid "Sort _Folders before Files"
-msgstr ""
+msgstr "_Složky řadit před soubory"
 
 #. this is the header for the location column in the print dialog
 #: gtk/gtkfilechooserwidget.c:2018 gtk/inspector/style-prop-list.ui:118
@@ -2372,33 +2375,31 @@ msgstr "Vybrat písmo"
 msgid "None"
 msgstr "Žádné"
 
-#: gtk/gtkglarea.c:264
-#, fuzzy
+#: gtk/gtkglarea.c:303
 msgid "OpenGL context creation failed"
-msgstr "Získávání informací o tiskárně selhalo"
+msgstr "Vytvoření kontextu GL selhalo"
 
 #: gtk/gtkheaderbar.c:414
 msgid "Application menu"
 msgstr "Nabídka aplikace"
 
-#: gtk/gtkheaderbar.c:479 gtk/gtkwindow.c:8585
+#: gtk/gtkheaderbar.c:479 gtk/gtkwindow.c:8586
 msgid "Close"
 msgstr "Zavřít"
 
 #: gtk/gtkicontheme.c:2314 gtk/gtkicontheme.c:2378
-#, fuzzy, c-format
+#, c-format
 msgid "Icon '%s' not present in theme %s"
-msgstr "V motivu není obsažena ikona „%s“"
+msgstr "V motivu %s není obsažena ikona „%s“"
 
 #: gtk/gtkicontheme.c:4016 gtk/gtkicontheme.c:4383
 msgid "Failed to load icon"
 msgstr "Nelze načíst ikonu"
 
 #: gtk/gtkimmodule.c:539
-#, fuzzy
 msgctxt "input method menu"
 msgid "Simple"
-msgstr "Jednoduché"
+msgstr "Jednoduchá"
 
 #: gtk/gtkimmodule.c:555
 msgctxt "input method menu"
@@ -3455,12 +3456,12 @@ msgctxt "volume percentage"
 msgid "%d %%"
 msgstr "%d %%"
 
-#: gtk/gtkwindow.c:11912
+#: gtk/gtkwindow.c:11913
 #, c-format
 msgid "Do you want to use GTK+ Inspector?"
 msgstr "Chcete použít GTK+ Inspector?"
 
-#: gtk/gtkwindow.c:11914
+#: gtk/gtkwindow.c:11915
 #, c-format
 msgid ""
 "GTK+ Inspector is an interactive debugger that lets you explore and modify "
@@ -3471,9 +3472,9 @@ msgstr ""
 "změnit vnitřní strukturu jakékoliv aplikace GTK+. Použití tohoto programu "
 "může vést k přerušení běhu nebo pádu aplikace."
 
-#: gtk/gtkwindow.c:11919
+#: gtk/gtkwindow.c:11920
 msgid "Don't show this message again"
-msgstr ""
+msgstr "Tuto zprávu znovu nezobrazovat"
 
 #: gtk/inspector/action-editor.c:281
 msgid "Activate"
@@ -3572,27 +3573,24 @@ msgid "GDK Backend"
 msgstr "Podpůrná vrstva GDK"
 
 #: gtk/inspector/general.ui:373
-#, fuzzy
 msgid "X display"
-msgstr "Displej"
+msgstr "Displej X"
 
 #: gtk/inspector/general.ui:408
 msgid "RGBA visual"
-msgstr ""
+msgstr "Vizuální RGBA"
 
 #: gtk/inspector/general.ui:442
-#, fuzzy
 msgid "Composited"
-msgstr "Počítač"
+msgstr "Kompozitní"
 
 #: gtk/inspector/general.ui:489
-#, fuzzy
 msgid "GL Version"
-msgstr "Verze GTK+"
+msgstr "Verze GL"
 
 #: gtk/inspector/general.ui:524
 msgid "GL Vendor"
-msgstr ""
+msgstr "Výrobce GL"
 
 #: gtk/inspector/gestures.c:129
 msgid "Capture"
@@ -3627,9 +3625,8 @@ msgid "Address"
 msgstr "Adresa"
 
 #: gtk/inspector/misc-info.ui:76
-#, fuzzy
 msgid "Reference count"
-msgstr "Předvolby"
+msgstr "Počet odkazů"
 
 #: gtk/inspector/misc-info.ui:144
 msgid "Buildable ID"
@@ -3664,7 +3661,7 @@ msgstr "Ořezová oblast"
 
 #: gtk/inspector/misc-info.ui:369
 msgid "Tick callback"
-msgstr ""
+msgstr "Zpětné volání při zaškrtnutí"
 
 #: gtk/inspector/misc-info.ui:405
 msgid "Frame count"
@@ -3711,9 +3708,8 @@ msgid "Object"
 msgstr "Objekt"
 
 #: gtk/inspector/object-tree.ui:139 gtk/inspector/window.ui:312
-#, fuzzy
 msgid "Style Classes"
-msgstr "Třídy CSS"
+msgstr "Třídy stylů"
 
 #: gtk/inspector/prop-editor.c:615
 #, c-format
@@ -3835,9 +3831,8 @@ msgid "Size:"
 msgstr "Velikost:"
 
 #: gtk/inspector/selector.ui:32 gtk/inspector/window.ui:305
-#, fuzzy
 msgid "Selector"
-msgstr "Vybrat"
+msgstr "Volič"
 
 #: gtk/inspector/signals-list.c:111
 msgid "Yes"
@@ -3881,31 +3876,31 @@ msgstr "Typ"
 
 #: gtk/inspector/statistics.ui:68
 msgid "Self 1"
-msgstr ""
+msgstr "Vlastní 1"
 
 #: gtk/inspector/statistics.ui:80
 msgid "Cumulative 1"
-msgstr ""
+msgstr "Kumulatnivní 1"
 
 #: gtk/inspector/statistics.ui:92
 msgid "Self 2"
-msgstr ""
+msgstr "Vlastní 2"
 
 #: gtk/inspector/statistics.ui:104
 msgid "Cumulative 2"
-msgstr ""
+msgstr "Kumulativní 2"
 
 #: gtk/inspector/statistics.ui:116
 msgid "Self"
-msgstr ""
+msgstr "Vlastní"
 
 #: gtk/inspector/statistics.ui:133
 msgid "Cumulative"
-msgstr ""
+msgstr "Kumulativní"
 
 #: gtk/inspector/statistics.ui:165
 msgid "Enable statistics with GOBJECT_DEBUG=instance-count"
-msgstr ""
+msgstr "Povolit statistiky pomocí GOBJECT_DEBUG=instance-count"
 
 #: gtk/inspector/visual.c:263 gtk/inspector/visual.c:278
 msgid "Theme is hardcoded by GTK_THEME"
@@ -3924,11 +3919,13 @@ msgid ""
 "Not settable at runtime.\n"
 "Use GDK_GL=always or GDK_GL=disable instead"
 msgstr ""
+"Není možné nastavit za běhu.\n"
+"Místo toho použijte GDK_GL=always nebo GDK_GL=disable"
 
 #: gtk/inspector/visual.c:571 gtk/inspector/visual.c:572
 #: gtk/inspector/visual.c:573
 msgid "GL rendering is disabled"
-msgstr ""
+msgstr "Vykreslování přes GL je zakázáno"
 
 #: gtk/inspector/visual.ui:49
 msgid "GTK+ Theme"
@@ -3975,22 +3972,20 @@ msgid "Animations"
 msgstr "Animace"
 
 #: gtk/inspector/visual.ui:367
-#, fuzzy
 msgid "Rendering Mode"
-msgstr "Vytváření dat"
+msgstr "Režim vykreslování"
 
 #: gtk/inspector/visual.ui:380
 msgid "Similar"
-msgstr ""
+msgstr "Podobnost"
 
 #: gtk/inspector/visual.ui:381
 msgid "Image"
-msgstr ""
+msgstr "Obraz"
 
 #: gtk/inspector/visual.ui:382
-#, fuzzy
 msgid "Recording"
-msgstr "_Zaznamenávat"
+msgstr "Záznam"
 
 #: gtk/inspector/visual.ui:406
 msgid "Show Graphic Updates"
@@ -4010,55 +4005,51 @@ msgstr "Simulace dotykové obrazovky"
 
 #: gtk/inspector/visual.ui:553
 msgid "GL Rendering"
-msgstr ""
+msgstr "Vykreslování přes GL"
 
 #: gtk/inspector/visual.ui:565
 msgid "When needed"
-msgstr ""
+msgstr "Když je potřeba"
 
 #: gtk/inspector/visual.ui:566
 msgid "Always"
-msgstr ""
+msgstr "Vždy"
 
 #: gtk/inspector/visual.ui:567
-#, fuzzy
 msgid "Disabled"
-msgstr "Vypnuto"
+msgstr "Zakázáno"
 
 #: gtk/inspector/visual.ui:591
 msgid "Software GL"
-msgstr ""
+msgstr "Softwarové GL"
 
 #: gtk/inspector/visual.ui:625
 msgid "Software Surfaces"
-msgstr ""
+msgstr "Softwarové povrchy"
 
 #: gtk/inspector/visual.ui:659
 msgid "Texture Rectangle Extension"
-msgstr ""
+msgstr "Rozšíření pro obdélníkové textury"
 
 #: gtk/inspector/window.ui:24
 msgid "Select an Object"
 msgstr "Vyberte objekt"
 
 #: gtk/inspector/window.ui:47 gtk/inspector/window.ui:127
-#, fuzzy
 msgid "Show Details"
-msgstr "Podrobnosti k úloze"
+msgstr "Zobrazovat podrobnosti"
 
 #: gtk/inspector/window.ui:70
-#, fuzzy
 msgid "Show all Objects"
-msgstr "Vyberte objekt"
+msgstr "Zobrazovat všechny objekty"
 
 #: gtk/inspector/window.ui:100
 msgid "Collect Statistics"
-msgstr ""
+msgstr "Sbírat statistiky"
 
 #: gtk/inspector/window.ui:149
-#, fuzzy
 msgid "Show all Resources"
-msgstr "Zo_brazovat soukromé zdroje"
+msgstr "Zobrazovat všechny prostředky"
 
 #. Translators: "Miscellaneous" is the label for a button, that opens
 #. up an extra panel of settings in a print dialog.
@@ -4105,16 +4096,15 @@ msgstr "Gesta"
 
 #: gtk/inspector/window.ui:373
 msgid "Magnifier"
-msgstr ""
+msgstr "Lupa"
 
 #: gtk/inspector/window.ui:388
 msgid "Objects"
 msgstr "Objekty"
 
 #: gtk/inspector/window.ui:398
-#, fuzzy
 msgid "Statistics"
-msgstr "Stav"
+msgstr "Statistiky"
 
 #: gtk/inspector/window.ui:408
 msgid "Resources"
@@ -4481,12 +4471,12 @@ msgstr "SRA2"
 #: gtk/paper_names_offsets.c:74
 msgctxt "paper size"
 msgid "SRA3"
-msgstr ""
+msgstr "SRA3"
 
 #: gtk/paper_names_offsets.c:75
 msgctxt "paper size"
 msgid "SRA4"
-msgstr ""
+msgstr "SRA4"
 
 #: gtk/paper_names_offsets.c:76
 msgctxt "paper size"
@@ -4876,7 +4866,7 @@ msgstr "Obálka č. 9"
 #: gtk/paper_names_offsets.c:153
 msgctxt "paper size"
 msgid "Oficio"
-msgstr ""
+msgstr "Oficio"
 
 #: gtk/paper_names_offsets.c:154
 msgctxt "paper size"
@@ -4906,7 +4896,7 @@ msgstr "Široký formát"
 #: gtk/paper_names_offsets.c:159
 msgctxt "paper size"
 msgid "Photo L"
-msgstr ""
+msgstr "Photo L"
 
 #: gtk/paper_names_offsets.c:160
 msgctxt "paper size"
@@ -4939,16 +4929,14 @@ msgid "juuro-ku-kai"
 msgstr "juuro-ku-kai"
 
 #: gtk/paper_names_offsets.c:166
-#, fuzzy
 msgctxt "paper size"
 msgid "Large Photo"
-msgstr "Small Photo"
+msgstr "Large Photo"
 
 #: gtk/paper_names_offsets.c:167
-#, fuzzy
 msgctxt "paper size"
 msgid "Medium Photo"
-msgstr "Střední"
+msgstr "Medium Photo"
 
 #: gtk/paper_names_offsets.c:168
 msgctxt "paper size"
@@ -4966,10 +4954,9 @@ msgid "Small Photo"
 msgstr "Small Photo"
 
 #: gtk/paper_names_offsets.c:171
-#, fuzzy
 msgctxt "paper size"
 msgid "Wide Photo"
-msgstr "Široký formát"
+msgstr "Wide Photo"
 
 #: gtk/paper_names_offsets.c:172
 msgctxt "paper size"
@@ -5144,14 +5131,12 @@ msgid "Saturation"
 msgstr "Sytost"
 
 #: gtk/ui/gtkfilechooserwidget.ui:82
-#, fuzzy
 msgid "Create Folder"
-msgstr "V_ytvořit složku"
+msgstr "Vytvořit složku"
 
 #: gtk/ui/gtkfilechooserwidget.ui:156
-#, fuzzy
 msgid "All Files"
-msgstr "Soubory"
+msgstr "Všechny soubory"
 
 #: gtk/ui/gtkfilechooserwidget.ui:199
 msgid "Files"
@@ -5250,13 +5235,12 @@ msgstr "St_rany:"
 
 #: gtk/ui/gtkprintunixdialog.ui:292 gtk/ui/gtkprintunixdialog.ui:313
 #: gtk/ui/gtkprintunixdialog.ui:320
-#, fuzzy
 msgid ""
 "Specify one or more page ranges,\n"
 " e.g. 1–3, 7, 11"
 msgstr ""
 "Zadejte prosím jeden nebo více rozsahů stran,\n"
-"např. 1-3,7,11"
+"např. 1-3, 7, 11"
 
 #: gtk/ui/gtkprintunixdialog.ui:319
 msgid "Pages"
@@ -5364,13 +5348,12 @@ msgstr "_V:"
 #: gtk/ui/gtkprintunixdialog.ui:1216 gtk/ui/gtkprintunixdialog.ui:1218
 #: gtk/ui/gtkprintunixdialog.ui:1240 gtk/ui/gtkprintunixdialog.ui:1242
 #: gtk/ui/gtkprintunixdialog.ui:1249
-#, fuzzy
 msgid ""
 "Specify the time of print,\n"
 " e.g. 15∶30, 2∶35 pm, 14∶15∶20, 11∶46∶30 am, 4 pm"
 msgstr ""
 "Upřesněte čas tisku,\n"
-" např. 15:30, 14:35, 14:15:20, 11:46:30, 16:00"
+" např. 15∶30, 2∶35 pom, 14∶15∶20, 11∶46∶30 am, 16∶00"
 
 #: gtk/ui/gtkprintunixdialog.ui:1248
 msgid "Time of print"
@@ -5565,7 +5548,6 @@ msgstr ""
 
 #. ID
 #: modules/input/imam-et.c:452
-#, fuzzy
 msgctxt "input method menu"
 msgid "Amharic (EZ+)"
 msgstr "Amharština (EZ+)"
@@ -5574,18 +5556,16 @@ msgstr "Amharština (EZ+)"
 #: modules/input/imbroadway.c:51
 msgctxt "input method menu"
 msgid "Broadway"
-msgstr ""
+msgstr "Broadway"
 
 #. ID
 #: modules/input/imcedilla.c:90
-#, fuzzy
 msgctxt "input method menu"
 msgid "Cedilla"
 msgstr "Cédille"
 
 #. ID
 #: modules/input/imcyrillic-translit.c:215
-#, fuzzy
 msgctxt "input menthod menu"
 msgid "Cyrillic (Transliterated)"
 msgstr "Cyrilice (transliterovaná)"
@@ -5593,65 +5573,57 @@ msgstr "Cyrilice (transliterovaná)"
 #: modules/input/imime.c:30
 msgctxt "input method menu"
 msgid "Windows IME"
-msgstr ""
+msgstr "Windows IME"
 
 #. ID
 #: modules/input/iminuktitut.c:125
-#, fuzzy
 msgctxt "input method menu"
 msgid "Inuktitut (Transliterated)"
 msgstr "Inuktitut (transliterovaný)"
 
 #. ID
 #: modules/input/imipa.c:143
-#, fuzzy
 msgctxt "input method menu"
 msgid "IPA"
 msgstr "IPA"
 
 #. ID
 #: modules/input/immultipress.c:30
-#, fuzzy
 msgctxt "input method menu"
 msgid "Multipress"
-msgstr "Multipress"
+msgstr "Více zmáčknutí"
 
 #: modules/input/imquartz.c:58
 msgctxt "input method menu"
 msgid "Mac OS X Quartz"
-msgstr ""
+msgstr "Mac OS X Quartz"
 
 #. ID
 #: modules/input/imthai.c:33
-#, fuzzy
 msgctxt "input method menu"
 msgid "Thai-Lao"
 msgstr "Thajština-laoština"
 
 #. ID
 #: modules/input/imti-er.c:451
-#, fuzzy
 msgctxt "input method menu"
 msgid "Tigrigna-Eritrean (EZ+)"
 msgstr "Tigriňa-Eritrea (EZ+)"
 
 #. ID
 #: modules/input/imti-et.c:451
-#, fuzzy
 msgctxt "input method menu"
 msgid "Tigrigna-Ethiopian (EZ+)"
 msgstr "Tigriňa-Etiopie (EZ+)"
 
 #. ID
 #: modules/input/imviqr.c:242
-#, fuzzy
 msgctxt "input method menu"
 msgid "Vietnamese (VIQR)"
 msgstr "Vietnamština (VIQR)"
 
 #. ID
 #: modules/input/imxim.c:26
-#, fuzzy
 msgctxt "input method menu"
 msgid "X Input Method"
 msgstr "Vstupní metoda X"
@@ -5917,21 +5889,18 @@ msgid "No pre-filtering"
 msgstr "Bez předběžného filtrování"
 
 #: modules/printbackends/cups/gtkprintbackendcups.c:4314
-#, fuzzy
 msgctxt "sides"
 msgid "One Sided"
 msgstr "Jednostranný"
 
 #. Translators: this is an option of "Two Sided"
 #: modules/printbackends/cups/gtkprintbackendcups.c:4316
-#, fuzzy
 msgctxt "sides"
 msgid "Long Edge (Standard)"
 msgstr "Delší okraj (standardní)"
 
 #. Translators: this is an option of "Two Sided"
 #: modules/printbackends/cups/gtkprintbackendcups.c:4318
-#, fuzzy
 msgctxt "sides"
 msgid "Short Edge (Flip)"
 msgstr "Kratší okraj (otočení)"
@@ -6138,3 +6107,12 @@ msgstr "zkušební-výstup.%s"
 #: modules/printbackends/test/gtkprintbackendtest.c:465
 msgid "Print to Test Printer"
 msgstr "Tisknout na zkušební tiskárnu"
+
+#~ msgid "ID"
+#~ msgstr "ID"
+
+#~ msgid "Classes"
+#~ msgstr "Třídy"
+
+#~ msgid "CSS nodes"
+#~ msgstr "Uzly CSS"
