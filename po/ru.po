@@ -22,8 +22,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+.master\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-03-30 21:17+0000\n"
-"PO-Revision-Date: 2015-03-31 01:34+0300\n"
+"POT-Creation-Date: 2015-04-01 09:36+0000\n"
+"PO-Revision-Date: 2015-04-01 15:14+0300\n"
 "Last-Translator: Stas Solovey <whats_up@tut.by>\n"
 "Language-Team: Русский <gnome-cyr@gnome.org>\n"
 "Language: ru\n"
@@ -445,36 +445,38 @@ msgstr "Ждущий режим"
 
 #: gdk/mir/gdkmirglcontext.c:48 gdk/mir/gdkmirwindowimpl.c:1406
 #: gdk/wayland/gdkglcontext-wayland.c:369 gdk/win32/gdkglcontext-win32.c:532
-#: gdk/x11/gdkglcontext-x11.c:1176
+#: gdk/x11/gdkglcontext-x11.c:1174
 msgid "No GL implementation is available"
 msgstr "Нет доступной реализации GL"
 
 #: gdk/mir/gdkmirglcontext.c:89 gdk/wayland/gdkglcontext-wayland.c:157
-#: gdk/win32/gdkglcontext-win32.c:492 gdk/x11/gdkglcontext-x11.c:632
-#: gdk/x11/gdkglcontext-x11.c:676
+#: gdk/win32/gdkglcontext-win32.c:492 gdk/x11/gdkglcontext-x11.c:630
+#: gdk/x11/gdkglcontext-x11.c:674
 msgid "Unable to create a GL context"
 msgstr "Невозможно создать контекст GL"
 
 #: gdk/mir/gdkmirwindowimpl.c:1368 gdk/mir/gdkmirwindowimpl.c:1378
 #: gdk/wayland/gdkglcontext-wayland.c:330
 #: gdk/wayland/gdkglcontext-wayland.c:340 gdk/win32/gdkglcontext-win32.c:464
-#: gdk/x11/gdkglcontext-x11.c:870
+#: gdk/x11/gdkglcontext-x11.c:868
 msgid "No available configurations for the given pixel format"
 msgstr "Нет доступных конфигураций для данного формата пикселя"
 
 #: gdk/mir/gdkmirwindowimpl.c:1414
 msgid "3.2 core GL profile is not available on EGL implementation"
-msgstr ""
+msgstr "Профиль GL «3.2 Core» не доступен в реализации EGL"
 
 #: gdk/wayland/gdkglcontext-wayland.c:377
 msgid "Core GL is not available on EGL implementation"
-msgstr ""
+msgstr "«Core GL» не доступно в реализации EGL"
 
 #: gdk/win32/gdkglcontext-win32.c:541
 msgid ""
 "The WGL_ARB_create_context extension needed to create core profiles is not "
 "available"
 msgstr ""
+"Расширение WGL_ARB_create_context, необходимое для создания основных "
+"профилей, недоступно"
 
 #. Description of --sync in --help output
 #: gdk/win32/gdkmain-win32.c:53
@@ -524,16 +526,18 @@ msgstr[0] "Открывается %d элемент"
 msgstr[1] "Открывается %d элемента"
 msgstr[2] "Открывается %d элементов"
 
-#: gdk/x11/gdkglcontext-x11.c:898
+#: gdk/x11/gdkglcontext-x11.c:896
 #, c-format
 msgid "No available configurations for the given RGBA pixel format"
-msgstr ""
+msgstr "Отсутствуют доступные конфигурации для данного формата пикселя RGBA"
 
-#: gdk/x11/gdkglcontext-x11.c:1184
+#: gdk/x11/gdkglcontext-x11.c:1182
 msgid ""
 "The GLX_ARB_create_context_profile extension needed to create core profiles "
 "is not available"
 msgstr ""
+"Расширение GLX_ARB_create_context_profile, необходимое для создания основных "
+"профилей не доступно"
 
 #: gtk/a11y/gtkbooleancellaccessible.c:43
 msgctxt "Action description"
@@ -1043,7 +1047,7 @@ msgctxt "Stock label"
 msgid "Zoom _Out"
 msgstr "У_меньшить"
 
-#: gtk/a11y/gtkmenubuttonaccessible.c:102 gtk/inspector/window.ui:356
+#: gtk/a11y/gtkmenubuttonaccessible.c:102 gtk/inspector/window.ui:365
 msgid "Menu"
 msgstr "Меню"
 
@@ -1225,7 +1229,7 @@ msgstr ""
 #: gtk/gtkmountoperation.c:543 gtk/gtkpagesetupunixdialog.c:196
 #: gtk/gtkprintbackend.c:763 gtk/gtkprinteroptionwidget.c:545
 #: gtk/gtkprintunixdialog.c:665 gtk/gtkprintunixdialog.c:738
-#: gtk/gtkwindow.c:11925 gtk/inspector/css-editor.c:199
+#: gtk/gtkwindow.c:11919 gtk/inspector/css-editor.c:199
 #: gtk/ui/gtkappchooserdialog.ui:79 gtk/ui/gtkassistant.ui:169
 #: gtk/ui/gtkcolorchooserdialog.ui:38 gtk/ui/gtkfontchooserdialog.ui:35
 msgid "_Cancel"
@@ -1274,7 +1278,7 @@ msgid "_Apply"
 msgstr "_Применить"
 
 #: gtk/deprecated/gtkfontsel.c:1698 gtk/gtkmessagedialog.c:936
-#: gtk/gtkmessagedialog.c:958 gtk/gtkprintbackend.c:764 gtk/gtkwindow.c:11926
+#: gtk/gtkmessagedialog.c:958 gtk/gtkprintbackend.c:764 gtk/gtkwindow.c:11920
 #: gtk/inspector/classes-list.c:127
 msgid "_OK"
 msgstr "_OK"
@@ -2386,7 +2390,7 @@ msgstr "Не удалось создать контекст OpenGL"
 msgid "Application menu"
 msgstr "Меню приложения"
 
-#: gtk/gtkheaderbar.c:479 gtk/gtkwindow.c:8586
+#: gtk/gtkheaderbar.c:479 gtk/gtkwindow.c:8580
 msgid "Close"
 msgstr "Закрыть"
 
@@ -2400,7 +2404,6 @@ msgid "Failed to load icon"
 msgstr "Не удалось загрузить значок"
 
 #: gtk/gtkimmodule.c:539
-#| msgid "Simple"
 msgctxt "input method menu"
 msgid "Simple"
 msgstr "Простой"
@@ -3464,12 +3467,12 @@ msgctxt "volume percentage"
 msgid "%d %%"
 msgstr "%d %%"
 
-#: gtk/gtkwindow.c:11913
+#: gtk/gtkwindow.c:11907
 #, c-format
 msgid "Do you want to use GTK+ Inspector?"
 msgstr "Хотите использовать инспектор GTK+?"
 
-#: gtk/gtkwindow.c:11915
+#: gtk/gtkwindow.c:11909
 #, c-format
 msgid ""
 "GTK+ Inspector is an interactive debugger that lets you explore and modify "
@@ -3480,7 +3483,7 @@ msgstr ""
 "изменять внутренние данные любого приложения GTK+. Использование инспектора "
 "может привести к зависанию или аварийному завершению приложения."
 
-#: gtk/gtkwindow.c:11920
+#: gtk/gtkwindow.c:11914
 msgid "Don't show this message again"
 msgstr "Не показывать это сообщение снова"
 
@@ -3498,8 +3501,8 @@ msgid "Prefix"
 msgstr "Префикс"
 
 #: gtk/inspector/actions.ui:52 gtk/inspector/classes-list.ui:80
-#: gtk/inspector/object-tree.ui:109 gtk/inspector/signals-list.ui:90
-#: gtk/ui/gtkfilechooserwidget.ui:219
+#: gtk/inspector/css-node-tree.ui:17 gtk/inspector/object-tree.ui:109
+#: gtk/inspector/signals-list.ui:90 gtk/ui/gtkfilechooserwidget.ui:219
 msgid "Name"
 msgstr "Имя"
 
@@ -3566,6 +3569,15 @@ msgstr "Выключить этот изменённый CSS"
 msgid "Save the current CSS"
 msgstr "Сохранить текущий CSS"
 
+#: gtk/inspector/css-node-tree.ui:30
+msgid "ID"
+msgstr "ID"
+
+#: gtk/inspector/css-node-tree.ui:43
+#| msgid "Class name"
+msgid "Classes"
+msgstr "Классы"
+
 #: gtk/inspector/data-list.ui:15
 msgid "Show data"
 msgstr "Показать данные"
@@ -3584,7 +3596,7 @@ msgstr "Дисплей X"
 
 #: gtk/inspector/general.ui:408
 msgid "RGBA visual"
-msgstr ""
+msgstr "Визуальный RGBA"
 
 #: gtk/inspector/general.ui:442
 msgid "Composited"
@@ -3658,7 +3670,7 @@ msgstr "Фокусный виджет"
 
 #: gtk/inspector/misc-info.ui:266
 msgid "Mnemonic Label"
-msgstr ""
+msgstr "Мнемоническая метка"
 
 #: gtk/inspector/misc-info.ui:301
 msgid "Allocated size"
@@ -3666,47 +3678,48 @@ msgstr "Занимаемый размер"
 
 #: gtk/inspector/misc-info.ui:335
 msgid "Clip area"
-msgstr ""
+msgstr "Кадрированная область"
 
+# https://blogs.gnome.org/mclasen/2013/11/10/smooth-progress/
 #: gtk/inspector/misc-info.ui:369
 msgid "Tick callback"
-msgstr ""
+msgstr "Плавная обратная связь"
 
 #: gtk/inspector/misc-info.ui:405
 msgid "Frame count"
-msgstr ""
+msgstr "Количество кадров"
 
 #: gtk/inspector/misc-info.ui:439
 msgid "Frame rate"
-msgstr ""
+msgstr "Частота кадров"
 
 #: gtk/inspector/misc-info.ui:473
 msgid "Accessible role"
-msgstr ""
+msgstr "Доступная роль"
 
 #: gtk/inspector/misc-info.ui:507
 msgid "Accessible name"
-msgstr ""
+msgstr "Доступное имя"
 
 #: gtk/inspector/misc-info.ui:541
 msgid "Accessible description"
-msgstr ""
+msgstr "Доступное описание"
 
 #: gtk/inspector/misc-info.ui:575
 msgid "Mapped"
-msgstr ""
+msgstr "Сопоставленный"
 
 #: gtk/inspector/misc-info.ui:611
 msgid "Realized"
-msgstr ""
+msgstr "Реализованный"
 
 #: gtk/inspector/misc-info.ui:647
 msgid "Is Toplevel"
-msgstr ""
+msgstr "На высшем уровне"
 
 #: gtk/inspector/misc-info.ui:683
 msgid "Child Visible"
-msgstr ""
+msgstr "Дочерний элемент видим"
 
 #: gtk/inspector/object-hierarchy.ui:32
 msgid "Object Hierarchy"
@@ -3889,31 +3902,31 @@ msgstr "Тип"
 
 #: gtk/inspector/statistics.ui:68
 msgid "Self 1"
-msgstr ""
+msgstr "Особый 1"
 
 #: gtk/inspector/statistics.ui:80
 msgid "Cumulative 1"
-msgstr ""
+msgstr "Возрастающий 1"
 
 #: gtk/inspector/statistics.ui:92
 msgid "Self 2"
-msgstr ""
+msgstr "Особый 2"
 
 #: gtk/inspector/statistics.ui:104
 msgid "Cumulative 2"
-msgstr ""
+msgstr "Возрастающий 2"
 
 #: gtk/inspector/statistics.ui:116
 msgid "Self"
-msgstr ""
+msgstr "Особый"
 
 #: gtk/inspector/statistics.ui:133
 msgid "Cumulative"
-msgstr ""
+msgstr "Возрастающий"
 
 #: gtk/inspector/statistics.ui:165
 msgid "Enable statistics with GOBJECT_DEBUG=instance-count"
-msgstr ""
+msgstr "Включение статистики с использованием GOBJECT_DEBUG=instance-count"
 
 #: gtk/inspector/visual.c:263 gtk/inspector/visual.c:278
 msgid "Theme is hardcoded by GTK_THEME"
@@ -3932,6 +3945,8 @@ msgid ""
 "Not settable at runtime.\n"
 "Use GDK_GL=always or GDK_GL=disable instead"
 msgstr ""
+"Не устанавливаемое во время выполнения.\n"
+"Вместо этого используйте GDK_GL=always или GDK_GL=disable"
 
 #: gtk/inspector/visual.c:571 gtk/inspector/visual.c:572
 #: gtk/inspector/visual.c:573
@@ -4036,11 +4051,11 @@ msgstr "Программный GL"
 
 #: gtk/inspector/visual.ui:625
 msgid "Software Surfaces"
-msgstr ""
+msgstr "Программные поверхности"
 
 #: gtk/inspector/visual.ui:659
 msgid "Texture Rectangle Extension"
-msgstr ""
+msgstr "Расширение прямоугольных текстур"
 
 #: gtk/inspector/window.ui:24
 msgid "Select an Object"
@@ -4085,47 +4100,51 @@ msgstr "Иерархия"
 msgid "Style Properties"
 msgstr "Свойства стиля"
 
-#: gtk/inspector/window.ui:328 gtk/inspector/window.ui:418
+#: gtk/inspector/window.ui:328
+msgid "CSS nodes"
+msgstr "Узлы CSS"
+
+#: gtk/inspector/window.ui:337 gtk/inspector/window.ui:427
 msgid "CSS"
 msgstr "CSS"
 
-#: gtk/inspector/window.ui:335
+#: gtk/inspector/window.ui:344
 msgid "Size Groups"
 msgstr "Группы выравнивания"
 
-#: gtk/inspector/window.ui:342
+#: gtk/inspector/window.ui:351
 msgid "Data"
 msgstr "Данные"
 
-#: gtk/inspector/window.ui:349
+#: gtk/inspector/window.ui:358
 msgid "Actions"
 msgstr "Действия"
 
-#: gtk/inspector/window.ui:365
+#: gtk/inspector/window.ui:374
 msgid "Gestures"
 msgstr "Жесты"
 
-#: gtk/inspector/window.ui:373
+#: gtk/inspector/window.ui:382
 msgid "Magnifier"
 msgstr "Увеличитель"
 
-#: gtk/inspector/window.ui:388
+#: gtk/inspector/window.ui:397
 msgid "Objects"
 msgstr "Объекты"
 
-#: gtk/inspector/window.ui:398
+#: gtk/inspector/window.ui:407
 msgid "Statistics"
 msgstr "Статистика"
 
-#: gtk/inspector/window.ui:408
+#: gtk/inspector/window.ui:417
 msgid "Resources"
 msgstr "Ресурсы"
 
-#: gtk/inspector/window.ui:427
+#: gtk/inspector/window.ui:436
 msgid "Visual"
 msgstr "Внешний вид"
 
-#: gtk/inspector/window.ui:436 gtk/ui/gtkprintunixdialog.ui:497
+#: gtk/inspector/window.ui:445 gtk/ui/gtkprintunixdialog.ui:497
 msgid "General"
 msgstr "Общие"
 
@@ -5146,7 +5165,6 @@ msgid "Create Folder"
 msgstr "Создать папку"
 
 #: gtk/ui/gtkfilechooserwidget.ui:156
-#| msgid "Files"
 msgid "All Files"
 msgstr "Все файлы"
 
@@ -5560,7 +5578,6 @@ msgstr ""
 
 #. ID
 #: modules/input/imam-et.c:452
-#, fuzzy
 #| msgid "Amharic (EZ+)"
 msgctxt "input method menu"
 msgid "Amharic (EZ+)"
@@ -5570,11 +5587,10 @@ msgstr "Амхарский (EZ+)"
 #: modules/input/imbroadway.c:51
 msgctxt "input method menu"
 msgid "Broadway"
-msgstr ""
+msgstr "Broadway"
 
 #. ID
 #: modules/input/imcedilla.c:90
-#, fuzzy
 #| msgid "Cedilla"
 msgctxt "input method menu"
 msgid "Cedilla"
@@ -5582,28 +5598,25 @@ msgstr "Седиль"
 
 #. ID
 #: modules/input/imcyrillic-translit.c:215
-#, fuzzy
 #| msgid "Cyrillic (Transliterated)"
 msgctxt "input menthod menu"
 msgid "Cyrillic (Transliterated)"
-msgstr "Кириллица (транслитерация)"
+msgstr "Кириллица (Транслитерация)"
 
 #: modules/input/imime.c:30
 msgctxt "input method menu"
 msgid "Windows IME"
-msgstr ""
+msgstr "Windows IME"
 
 #. ID
 #: modules/input/iminuktitut.c:125
-#, fuzzy
 #| msgid "Inuktitut (Transliterated)"
 msgctxt "input method menu"
 msgid "Inuktitut (Transliterated)"
-msgstr "Инуктитут (транслитерация)"
+msgstr "Инуктитут (Транслитерация)"
 
 #. ID
 #: modules/input/imipa.c:143
-#, fuzzy
 #| msgid "IPA"
 msgctxt "input method menu"
 msgid "IPA"
@@ -5611,7 +5624,6 @@ msgstr "МФА (IPA)"
 
 #. ID
 #: modules/input/immultipress.c:30
-#, fuzzy
 #| msgid "Multipress"
 msgctxt "input method menu"
 msgid "Multipress"
@@ -5620,11 +5632,10 @@ msgstr "Мультипресс"
 #: modules/input/imquartz.c:58
 msgctxt "input method menu"
 msgid "Mac OS X Quartz"
-msgstr ""
+msgstr "Mac OS X Quartz"
 
 #. ID
 #: modules/input/imthai.c:33
-#, fuzzy
 #| msgid "Thai-Lao"
 msgctxt "input method menu"
 msgid "Thai-Lao"
@@ -5632,7 +5643,6 @@ msgstr "Тайская-Лаос"
 
 #. ID
 #: modules/input/imti-er.c:451
-#, fuzzy
 #| msgid "Tigrigna-Eritrean (EZ+)"
 msgctxt "input method menu"
 msgid "Tigrigna-Eritrean (EZ+)"
@@ -5640,7 +5650,6 @@ msgstr "Тигринья-Эритрея (EZ+)"
 
 #. ID
 #: modules/input/imti-et.c:451
-#, fuzzy
 #| msgid "Tigrigna-Ethiopian (EZ+)"
 msgctxt "input method menu"
 msgid "Tigrigna-Ethiopian (EZ+)"
@@ -5648,7 +5657,6 @@ msgstr "Тигринья-Эфиопия (EZ+)"
 
 #. ID
 #: modules/input/imviqr.c:242
-#, fuzzy
 #| msgid "Vietnamese (VIQR)"
 msgctxt "input method menu"
 msgid "Vietnamese (VIQR)"
@@ -5656,7 +5664,6 @@ msgstr "Вьетнамский (VIQR)"
 
 #. ID
 #: modules/input/imxim.c:26
-#| msgid "X Input Method"
 msgctxt "input method menu"
 msgid "X Input Method"
 msgstr "Метод X Input"
