@@ -3009,6 +3009,8 @@ gtk_text_view_set_pixels_above_lines (GtkTextView *text_view,
  * @text_view: a #GtkTextView
  * 
  * Gets the default number of pixels to put above paragraphs.
+ * Adding this function with gtk_text_view_get_pixels_below_lines()
+ * is equal to the line space between each paragraph.
  * 
  * Returns: default number of pixels above paragraphs
  **/
@@ -3058,7 +3060,10 @@ gtk_text_view_set_pixels_below_lines (GtkTextView *text_view,
  * @text_view: a #GtkTextView
  * 
  * Gets the value set by gtk_text_view_set_pixels_below_lines().
- * 
+ *
+ * The line space is the sum of the value returned by this function and the
+ * value returned by gtk_text_view_get_pixels_above_lines().
+ *
  * Returns: default number of blank pixels below paragraphs
  **/
 gint
