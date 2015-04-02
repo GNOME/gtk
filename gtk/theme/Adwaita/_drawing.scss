@@ -24,10 +24,8 @@
   @else { @return if($fc==$selected_bg_color, $selected_borders_color, darken($fc,35%)); }
 }
 
-@function entry_focus_glow($fc) {
-  $_focus_glow_color: if($variant=='light', transparentize($fc,0.85),
-                                            transparentize($fc,0.3));
-  @return inset 0 0 0 1px $_focus_glow_color;
+@function entry_focus_shadow($fc) {
+  @return inset 0 0 0 1px $fc;
 }
 
 @function entry_gradient($c) {
@@ -63,13 +61,13 @@
     color: $text_color;
     border-color: $borders_color;
     @include _shadows($_inner_shadows,
-                      entry_focus_glow(transparentize($fc,1)),
+                      entry_focus_shadow(transparentize($fc,1)),
                       $_entry_edge);
     // the second transparent shadow is needed for the transition to work
   }
   @if $t==focus {
     @include _shadows($_inner_shadows,
-                      entry_focus_glow($fc),
+                      entry_focus_shadow($fc),
                       $_entry_edge);
     border-color: entry_focus_border($fc);
   }
@@ -106,7 +104,7 @@
     border-color: $selected_bg_color;
     background-image: linear-gradient(to bottom, transparentize(opacify($osd_borders_color, 1), 0.5));
     background-clip: padding-box;
-    box-shadow: entry_focus_glow($selected_bg_color);
+    box-shadow: entry_focus_shadow($selected_bg_color);
     text-shadow: 0 1px black;
     icon-shadow: 0 1px black;
   }
