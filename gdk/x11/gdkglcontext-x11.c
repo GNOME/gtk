@@ -309,9 +309,9 @@ glx_pixmap_get (cairo_surface_t *surface, guint texture_target)
 {
   Display *display = cairo_xlib_surface_get_display (surface);
   Screen *screen = cairo_xlib_surface_get_screen (surface);
-  Visual *visual = cairo_xlib_surface_get_visual (surface);;
+  Visual *visual = cairo_xlib_surface_get_visual (surface);
   GdkGLXPixmap *glx_pixmap;
-  GLXFBConfig *fbconfigs;
+  GLXFBConfig *fbconfigs, config;
   int nfbconfigs;
   XVisualInfo *visinfo;
   VisualID visualid;
@@ -393,6 +393,7 @@ glx_pixmap_get (cairo_surface_t *surface, guint texture_target)
       if (value == TRUE)
         y_inverted = TRUE;
 
+      config = fbconfigs[i];
       break;
     }
 
@@ -407,7 +408,7 @@ glx_pixmap_get (cairo_surface_t *surface, guint texture_target)
   glx_pixmap = g_slice_new0 (GdkGLXPixmap);
   glx_pixmap->y_inverted = y_inverted;
   glx_pixmap->display = display;
-  glx_pixmap->drawable = glXCreatePixmap (display, fbconfigs[i],
+  glx_pixmap->drawable = glXCreatePixmap (display, config,
 					  cairo_xlib_surface_get_drawable (surface),
 					  pixmap_attributes);
 
