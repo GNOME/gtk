@@ -7,15 +7,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tajik Gnome\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-04-01 21:11+0000\n"
-"PO-Revision-Date: 2015-04-02 10:01+0500\n"
+"POT-Creation-Date: 2015-04-03 21:16+0000\n"
+"PO-Revision-Date: 2015-04-04 10:02+0500\n"
 "Last-Translator: Victor Ibragimov <victor.ibragimov@gmail.com>\n"
 "Language-Team: \n"
 "Language: tg\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 1.6.5\n"
+"X-Generator: Poedit 1.7.5\n"
 
 #: gdk/gdkapplaunchcontext.c:127 gdk/gdkcursor.c:139
 #: gdk/gdkdevicemanager.c:181 gdk/gdkglcontext.c:264
@@ -127,12 +127,10 @@ msgid "The GDK window bound to the GL context"
 msgstr "Маҳдудкунии равзанаи GDK то муҳтавои GL"
 
 #: gdk/gdkglcontext.c:296
-#| msgid "Style context"
 msgid "Shared context"
 msgstr "Муҳтавои муштарак"
 
 #: gdk/gdkglcontext.c:297
-#| msgid "The Cell Area this context was created for"
 msgid "The GL context this context share data with"
 msgstr "Қаринаи GL барои маълумоти қаринаи муштарак"
 
@@ -1141,12 +1139,10 @@ msgid "Comments about the program"
 msgstr "Шарҳҳо дар бораи барнома"
 
 #: gtk/gtkaboutdialog.c:410
-#| msgid "License Type"
 msgid "License"
 msgstr "Иҷозатнома"
 
 #: gtk/gtkaboutdialog.c:411
-#| msgid "The license type of the program"
 msgid "The license of the program"
 msgstr "Иҷозатномаи барнома"
 
@@ -3124,7 +3120,6 @@ msgid "Set if the value can be animated"
 msgstr "Маҷмӯи қиматҳое, ки ба тасвир кашида шудаанд"
 
 #: gtk/gtkcssstyleproperty.c:214
-#| msgid "Affects size"
 msgid "Affects"
 msgstr "Таъсир мерасонад"
 
@@ -3290,7 +3285,6 @@ msgid "Number of characters to leave space for in the entry"
 msgstr "Рақами аломатҳо барои гузоштани фазо дар вурудӣ"
 
 #: gtk/gtkentry.c:878
-#| msgid "Maximum Width In Characters"
 msgid "Maximum width in characters"
 msgstr "Бари ҳадди аксар дар аломатҳо"
 
@@ -3874,7 +3868,6 @@ msgstr ""
 "навро дархост мекунад ё не."
 
 #: gtk/gtkfilechooserwidget.c:7453 gtk/gtkfilechooserwidget.c:7454
-#| msgid "Search Mode Enabled"
 msgid "Search mode"
 msgstr "Ҳолати ҷустуҷӯ"
 
@@ -4039,7 +4032,6 @@ msgid "A widget to display in place of the usual frame label"
 msgstr "Виҷет барои намоишдиҳӣ дар ҷойи барчаспи чорчӯбаи муқаррарӣ"
 
 #: gtk/gtkgesture.c:695
-#| msgid "Number of lines"
 msgid "Number of points"
 msgstr "Миқдори нуқтаҳо"
 
@@ -4054,7 +4046,6 @@ msgid "GdkWindow to receive events about"
 msgstr "Равзанаи GdkWindow барои қпбулкунии рӯйдодҳо"
 
 #: gtk/gtkgesturelongpress.c:284
-#| msgid "Scale factor"
 msgid "Delay factor"
 msgstr "Омили таърих"
 
@@ -4063,7 +4054,6 @@ msgid "Factor by which to modify the default timeout"
 msgstr "Омил барои тағйирдиҳии хотимаи вақти пешфарз"
 
 #: gtk/gtkgesturepan.c:238
-#| msgid "Allow folder creation"
 msgid "Allowed orientations"
 msgstr "Амалҳои иҷозашуда"
 
@@ -4084,7 +4074,6 @@ msgid "Whether the gesture is exclusive"
 msgstr "Оё тобанда фаъол аст ё не"
 
 #: gtk/gtkgesturesingle.c:291
-#| msgid "Button relief"
 msgid "Button number"
 msgstr "Рақами тугма"
 
@@ -4093,17 +4082,14 @@ msgid "Button number to listen to"
 msgstr "Рақами тугма барои шунидан"
 
 #: gtk/gtkglarea.c:768
-#| msgid "Content type"
 msgid "Context"
 msgstr "Қарина"
 
 #: gtk/gtkglarea.c:769
-#| msgid "Style context"
 msgid "The GL context"
 msgstr "Қаринаи GL"
 
 #: gtk/gtkglarea.c:791
-#| msgid "Text to render"
 msgid "Auto render"
 msgstr "Коркарди худкор"
 
@@ -4114,7 +4100,6 @@ msgid "Whether the GtkGLArea renders on each redraw"
 msgstr "Оё зер кардани сарварақ мумкин аст"
 
 #: gtk/gtkglarea.c:812
-#| msgid "Use alpha"
 msgid "Has alpha"
 msgstr "Дорои алфа мебошад"
 
@@ -4723,7 +4708,6 @@ msgid "magnification"
 msgstr "бузургнамоӣ"
 
 #: gtk/gtkmagnifier.c:286 gtk/gtkmagnifier.c:287
-#| msgid "Resize"
 msgid "resize"
 msgstr "тағйир додани андоза"
 
@@ -5009,7 +4993,6 @@ msgid "The dropdown menu"
 msgstr "Менюи зоҳиршаванда"
 
 #: gtk/gtkmessagedialog.c:174
-#| msgid "Image/label border"
 msgid "label border"
 msgstr "Марзи барчасп"
 
@@ -5076,37 +5059,30 @@ msgid "Role"
 msgstr "Вазифа"
 
 #: gtk/gtkmodelbutton.c:851
-#| msgid "The toggle state of the button"
 msgid "The role of this button"
 msgstr "Вазифаи ин тугма"
 
 #: gtk/gtkmodelbutton.c:867
-#| msgid "The icon size"
 msgid "The icon"
 msgstr "Нишона"
 
 #: gtk/gtkmodelbutton.c:881
-#| msgid "Show text"
 msgid "The text"
 msgstr "Матн"
 
 #: gtk/gtkmodelbutton.c:910
-#| msgid "Menu model"
 msgid "Menu name"
 msgstr "Номи меню"
 
 #: gtk/gtkmodelbutton.c:911
-#| msgid "The name of the selected font"
 msgid "The name of the menu to open"
 msgstr "Номи меню барои кушодан"
 
 #: gtk/gtkmodelbutton.c:927
-#| msgid "Whether the menu has a tearoff item"
 msgid "Whether the menu is a parent"
 msgstr "Интихоби менюи асосӣ"
 
 #: gtk/gtkmodelbutton.c:941
-#| msgid "Center Widget"
 msgid "Centered"
 msgstr "Дар марказ"
 
@@ -5117,7 +5093,6 @@ msgid "Whether to center the contents"
 msgstr "Оё матни иҷозатнома печонда мешавад ё на."
 
 #: gtk/gtkmodelbutton.c:957
-#| msgid "Icon"
 msgid "Iconic"
 msgstr "Тасвирӣ"
 
@@ -5448,7 +5423,6 @@ msgstr ""
 "сервер' дар бар мегирад ё не"
 
 #: gtk/gtkplacessidebar.c:4607
-#| msgid "Show decorations"
 msgid "Show 'Enter Location'"
 msgstr "Намоиш додани 'Вориди ҷойгиршавӣ'"
 
@@ -5520,17 +5494,14 @@ msgid "Whether show/hide transitions are enabled or not"
 msgstr "Оё амал фаъол шудааст ё на."
 
 #: gtk/gtkpopovermenu.c:350
-#| msgid "Visible Focus"
 msgid "Visible submenu"
 msgstr "Зерменюи аён"
 
 #: gtk/gtkpopovermenu.c:351
-#| msgid "The name of the child page"
 msgid "The name of the visible submenu"
 msgstr "Номи зерменюи аён"
 
 #: gtk/gtkpopovermenu.c:368
-#| msgid "The name of the widget"
 msgid "The name of the submenu"
 msgstr "Номи зерменю"
 
@@ -6426,7 +6397,6 @@ msgid "Kinetic scrolling mode."
 msgstr "Ҳолати ҳаракатдиҳии кинетикӣ."
 
 #: gtk/gtkscrolledwindow.c:597
-#| msgid "Kinetic Scrolling"
 msgid "Overlay Scrolling"
 msgstr "Ҳаракатдиҳии болопӯш"
 
@@ -7133,23 +7103,23 @@ msgstr "Амали зеркунии дубора ба навори унвон"
 
 #: gtk/gtksettings.c:1596
 msgid "The action to take on titlebar double-click"
-msgstr ""
+msgstr "Амал ҳангоми зеркунии дубора ба навори унвон"
 
 #: gtk/gtksettings.c:1614
 msgid "Titlebar middle-click action"
-msgstr ""
+msgstr "Зеркунии тугмаи мобайни муш ба навори унвон"
 
 #: gtk/gtksettings.c:1615
 msgid "The action to take on titlebar middle-click"
-msgstr ""
+msgstr "Амал ҳангоми зеркунии миёнаи муш ба навори унвон"
 
 #: gtk/gtksettings.c:1633
 msgid "Titlebar right-click action"
-msgstr ""
+msgstr "Амал ҳангоми зеркунии рост ба навори унвон"
 
 #: gtk/gtksettings.c:1634
 msgid "The action to take on titlebar right-click"
-msgstr ""
+msgstr "Амал ҳангоми зеркунии рост ба навори унвон"
 
 #: gtk/gtksettings.c:1656
 msgid "Dialogs use header bar"
@@ -7406,12 +7376,10 @@ msgid "Whether the switch is on or off"
 msgstr "Оё калид фаъол ё хомуш аст"
 
 #: gtk/gtkswitch.c:893
-#| msgid "Status"
 msgid "State"
 msgstr "Вазъият"
 
 #: gtk/gtkswitch.c:894
-#| msgid "Cell background set"
 msgid "The backend state"
 msgstr "Вазъияти пасзаминаӣ"
 
@@ -7624,7 +7592,6 @@ msgid "Pixels of blank space between wrapped lines in a paragraph"
 msgstr "Пикселҳои ҷои холӣ дар байни хатҳои бастабандишуда дар банд"
 
 #: gtk/gtktexttag.c:542
-#| msgid "Underline"
 msgid "Underline RGBA"
 msgstr "RGBA-и зерхаткашӣ"
 
@@ -7688,7 +7655,6 @@ msgid "Paragraph background RGBA as a GdkRGBA"
 msgstr "Пасзаминаи банди RGBA ҳамчун GdkRGBA"
 
 #: gtk/gtktexttag.c:660
-#| msgid "Use Fallback"
 msgid "Fallback"
 msgstr "Ақибнишинӣ"
 
@@ -7699,7 +7665,6 @@ msgid "Whether font fallback is enabled."
 msgstr "Оё амал фаъол шудааст ё на."
 
 #: gtk/gtktexttag.c:675
-#| msgid "Header Spacing"
 msgid "Letter Spacing"
 msgstr "Фосилагузории ҳарфчинӣ"
 
@@ -7777,7 +7742,6 @@ msgid "Whether this tag affects the right margin"
 msgstr "Оё ин барчасп ба ҳошияи рост таъсир мерасонад"
 
 #: gtk/gtktexttag.c:798
-#| msgid "Underline set"
 msgid "Underline RGBA set"
 msgstr "Маҷмӯи зерхаткашии RGBA"
 
@@ -7832,7 +7796,6 @@ msgid "Whether this tag affects the paragraph background color"
 msgstr "Оё ин барчасп ба ранги пасзаминаи банд таъсир мерасонад"
 
 #: gtk/gtktexttag.c:829
-#| msgid "Use Fallback"
 msgid "Fallback set"
 msgstr "Маҷмӯи ақибнишинӣ"
 
@@ -7843,7 +7806,6 @@ msgid "Whether this tag affects font fallback"
 msgstr "Оё ин барчасп ба оилаи шрифт таъсир мерасонад ё не"
 
 #: gtk/gtktexttag.c:833
-#| msgid "Left margin set"
 msgid "Letter spacing set"
 msgstr "Маҷмӯи фосилагузории ҳарфчинӣ"
 
@@ -9216,7 +9178,6 @@ msgid "GtkCloudprintAccount instance"
 msgstr ""
 
 #: modules/printbackends/cloudprint/gtkprintercloudprint.c:147
-#| msgid "Printer"
 msgid "Printer ID"
 msgstr "ID-и принтер"
 
