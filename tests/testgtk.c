@@ -5184,7 +5184,7 @@ create_cursors (GtkWidget *widget)
 
       gtk_widget_show_all (window);
 
-      set_cursor_from_name (entry, darea);
+      gtk_entry_set_text (GTK_ENTRY (entry), "arrow");
     }
   else
     gtk_widget_destroy (window);
