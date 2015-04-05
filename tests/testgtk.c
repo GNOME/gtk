@@ -5006,7 +5006,7 @@ create_cursors (GtkWidget *widget)
 
           g_signal_connect (entry, "changed", 
                             G_CALLBACK (change_cursor_theme), hbox);
-          g_signal_connect (size, "changed", 
+          g_signal_connect (size, "value-changed",
                             G_CALLBACK (change_cursor_theme), hbox);
         }
 
