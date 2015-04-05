@@ -4847,54 +4847,170 @@ cursor_draw (GtkWidget *widget,
   return TRUE;
 }
 
-static void
-set_cursor (GtkWidget *spinner,
-	    GtkWidget *widget)
+static const gchar *cursor_names[] = {
+    "arrow",
+    "bd_double_arrow",
+    "boat",
+    "bottom_left_corner",
+    "bottom_right_corner",
+    "bottom_side",
+    "bottom_tee",
+    "box_spiral",
+    "center_ptr",
+    "circle",
+    "clock",
+    "coffee_mug",
+    "copy",
+    "cross",
+    "crossed_circle",
+    "cross_reverse",
+    "crosshair",
+    "diamond_cross",
+    "dnd-ask",
+    "dnd-copy",
+    "dnd-link",
+    "dnd-move",
+    "dnd-none",
+    "dot",
+    "dotbox",
+    "double_arrow",
+    "draft_large",
+    "draft_small",
+    "draped_box",
+    "exchange",
+    "fd_double_arrow",
+    "fleur",
+    "gobbler",
+    "gumby",
+    "grabbing",
+    "hand",
+    "hand1",
+    "hand2",
+    "heart",
+    "h_double_arrow",
+    "help",
+    "icon",
+    "iron_cross",
+    "left_ptr",
+    "left_ptr_help",
+    "left_ptr_watch",
+    "left_side",
+    "left_tee",
+    "leftbutton",
+    "link",
+    "ll_angle",
+    "lr_angle",
+    "man",
+    "middlebutton",
+    "mouse",
+    "move",
+    "pencil",
+    "pirate",
+    "plus",
+    "question_arrow",
+    "right_ptr",
+    "right_side",
+    "right_tee",
+    "rightbutton",
+    "rtl_logo",
+    "sailboat",
+    "sb_down_arrow",
+    "sb_h_double_arrow",
+    "sb_left_arrow",
+    "sb_right_arrow",
+    "sb_up_arrow",
+    "sb_v_double_arrow",
+    "shuttle",
+    "sizing",
+    "spider",
+    "spraycan",
+    "star",
+    "target",
+    "tcross",
+    "top_left_arrow",
+    "top_left_corner",
+    "top_right_corner",
+    "top_side",
+    "top_tee",
+    "trek",
+    "ul_angle",
+    "umbrella",
+    "ur_angle",
+    "v_double_arrow",
+    "watch",
+    "X_cursor",
+    "xterm"
+};
+
+static GtkTreeModel *
+cursor_model (void)
 {
-  guint c;
-  GdkCursor *cursor;
-  GtkWidget *label;
-  GEnumClass *class;
-  GEnumValue *vals;
+  GtkListStore *store;
+  gint i;
+  store = gtk_list_store_new (1, G_TYPE_STRING);
 
-  c = CLAMP (gtk_spin_button_get_value_as_int (GTK_SPIN_BUTTON (spinner)), 0, 152);
-  c &= 0xfe;
+  for (i = 0; i < G_N_ELEMENTS (cursor_names); i++)
+    gtk_list_store_insert_with_values (store, NULL, -1, 0, cursor_names[i], -1);
 
-  label = g_object_get_data (G_OBJECT (spinner), "user_data");
-  
-  class = g_type_class_ref (GDK_TYPE_CURSOR_TYPE);
-  vals = class->values;
-
-  while (vals && vals->value != c)
-    vals++;
-  if (vals)
-    gtk_label_set_text (GTK_LABEL (label), vals->value_nick);
-  else
-    gtk_label_set_text (GTK_LABEL (label), "<unknown>");
-
-  g_type_class_unref (class);
-
-  cursor = gdk_cursor_new_for_display (gtk_widget_get_display (widget), c);
-  gdk_window_set_cursor (gtk_widget_get_window (widget),
-                         cursor);
-  g_object_unref (cursor);
+  return (GtkTreeModel *)store;
 }
 
 static gint
-cursor_event (GtkWidget          *widget,
-	      GdkEvent           *event,
-	      GtkSpinButton	 *spinner)
+cursor_event (GtkWidget *widget,
+              GdkEvent  *event,
+              GtkWidget *entry)
 {
+  const gchar *name;
+  gint i;
+  const gint n = G_N_ELEMENTS (cursor_names);
+
+  name = (const gchar *)g_object_get_data (G_OBJECT (widget), "name");
+  if (name != NULL)
+    {
+      for (i = 0; i < n; i++)
+        if (strcmp (name, cursor_names[i]) == 0)
+          break;
+    }
+  else
+    i = 0;
+
   if ((event->type == GDK_BUTTON_PRESS) &&
       ((event->button.button == GDK_BUTTON_PRIMARY) ||
        (event->button.button == GDK_BUTTON_SECONDARY)))
     {
-      gtk_spin_button_spin (spinner, event->button.button == GDK_BUTTON_PRIMARY ?
-			    GTK_SPIN_STEP_FORWARD : GTK_SPIN_STEP_BACKWARD, 0);
+      if (event->button.button == GDK_BUTTON_PRIMARY)
+        i = (i + 1) % n;
+      else
+        i = (i + n - 1) % n;
+
+      gtk_entry_set_text (GTK_ENTRY (entry), cursor_names[i]);
+
       return TRUE;
     }
 
   return FALSE;
+}
+
+static void
+set_cursor_from_name (GtkWidget *entry,
+                      GtkWidget *widget)
+{
+  const gchar *name;
+  GdkCursor *cursor;
+
+  name = gtk_entry_get_text (GTK_ENTRY (entry));
+  cursor = gdk_cursor_new_from_name (gtk_widget_get_display (widget), name);
+
+  if (cursor == NULL)
+    {
+      name = NULL;
+      cursor = gdk_cursor_new_for_display (gtk_widget_get_display (widget), GDK_BLANK_CURSOR);
+    }
+
+  gdk_window_set_cursor (gtk_widget_get_window (widget), cursor);
+  g_object_unref (cursor);
+
+  g_object_set_data_full (G_OBJECT (widget), "name", g_strdup (name), g_free);
 }
 
 #ifdef GDK_WINDOWING_X11
@@ -4941,27 +5057,27 @@ create_cursors (GtkWidget *widget)
   GtkWidget *main_vbox;
   GtkWidget *vbox;
   GtkWidget *darea;
-  GtkWidget *spinner;
   GtkWidget *button;
   GtkWidget *label;
   GtkWidget *any;
-  GtkAdjustment *adjustment;
   GtkWidget *entry;
-  GtkWidget *size;  
+  GtkWidget *size;
+  GtkEntryCompletion *completion;
+  GtkTreeModel *model;
   gboolean cursor_demo = FALSE;
 
   if (!window)
     {
       window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
-      gtk_window_set_screen (GTK_WINDOW (window), 
+      gtk_window_set_screen (GTK_WINDOW (window),
 			     gtk_widget_get_screen (widget));
-      
+
       g_signal_connect (window, "destroy",
 			G_CALLBACK (gtk_widget_destroyed),
 			&window);
-      
+
       gtk_window_set_title (GTK_WINDOW (window), "Cursors");
-      
+
       main_vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 5);
       gtk_container_set_border_width (GTK_CONTAINER (main_vbox), 0);
       gtk_container_add (GTK_CONTAINER (window), main_vbox);
@@ -4987,11 +5103,11 @@ create_cursors (GtkWidget *widget)
 
     if (cursor_demo)
         {
-          hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
+          hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 6);
           gtk_container_set_border_width (GTK_CONTAINER (hbox), 5);
           gtk_box_pack_start (GTK_BOX (vbox), hbox, FALSE, TRUE, 0);
 
-          label = gtk_label_new ("Cursor Theme : ");
+          label = gtk_label_new ("Cursor Theme:");
           gtk_widget_set_halign (label, GTK_ALIGN_START);
           gtk_widget_set_valign (label, GTK_ALIGN_CENTER);
           gtk_box_pack_start (GTK_BOX (hbox), label, FALSE, TRUE, 0);
@@ -5004,27 +5120,29 @@ create_cursors (GtkWidget *widget)
           gtk_spin_button_set_value (GTK_SPIN_BUTTON (size), 24.0);
           gtk_box_pack_start (GTK_BOX (hbox), size, TRUE, TRUE, 0);
 
-          g_signal_connect (entry, "changed", 
+          g_signal_connect (entry, "changed",
                             G_CALLBACK (change_cursor_theme), hbox);
           g_signal_connect (size, "value-changed",
                             G_CALLBACK (change_cursor_theme), hbox);
         }
 
-      hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
+      hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 6);
       gtk_container_set_border_width (GTK_CONTAINER (hbox), 5);
       gtk_box_pack_start (GTK_BOX (vbox), hbox, FALSE, TRUE, 0);
 
-      label = gtk_label_new ("Cursor Value : ");
+      label = gtk_label_new ("Cursor Name:");
       gtk_widget_set_halign (label, GTK_ALIGN_START);
       gtk_widget_set_valign (label, GTK_ALIGN_CENTER);
       gtk_box_pack_start (GTK_BOX (hbox), label, FALSE, TRUE, 0);
 
-      adjustment = gtk_adjustment_new (0,
-                                0, 152,
-                                2,
-                                10, 0);
-      spinner = gtk_spin_button_new (adjustment, 0, 0);
-      gtk_box_pack_start (GTK_BOX (hbox), spinner, TRUE, TRUE, 0);
+      entry = gtk_entry_new ();
+      completion = gtk_entry_completion_new ();
+      model = cursor_model ();
+      gtk_entry_completion_set_model (completion, model);
+      gtk_entry_completion_set_text_column (completion, 0);
+      gtk_entry_set_completion (GTK_ENTRY (entry), completion);
+      g_object_unref (model);
+      gtk_box_pack_start (GTK_BOX (hbox), entry, TRUE, TRUE, 0);
 
       frame =
 	g_object_new (gtk_frame_get_type (),
@@ -5043,29 +5161,17 @@ create_cursors (GtkWidget *widget)
 			G_CALLBACK (cursor_draw),
 			NULL);
       gtk_widget_set_events (darea, GDK_EXPOSURE_MASK | GDK_BUTTON_PRESS_MASK);
-      g_signal_connect (darea,
-			"button_press_event",
-			G_CALLBACK (cursor_event),
-			spinner);
+      g_signal_connect (darea, "button_press_event",
+			G_CALLBACK (cursor_event), entry);
       gtk_widget_show (darea);
 
-      g_signal_connect (spinner, "changed",
-			G_CALLBACK (set_cursor),
-			darea);
+      g_signal_connect (entry, "changed",
+                        G_CALLBACK (set_cursor_from_name), darea);
 
-      label = g_object_new (GTK_TYPE_LABEL,
-			      "visible", TRUE,
-			      "label", "XXX",
-			      "parent", vbox,
-			      NULL);
-      gtk_container_child_set (GTK_CONTAINER (vbox), label,
-			       "expand", FALSE,
-			       NULL);
-      g_object_set_data (G_OBJECT (spinner), "user_data", label);
 
       any = gtk_separator_new (GTK_ORIENTATION_HORIZONTAL);
       gtk_box_pack_start (GTK_BOX (main_vbox), any, FALSE, TRUE, 0);
-  
+
       hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
       gtk_container_set_border_width (GTK_CONTAINER (hbox), 10);
       gtk_box_pack_start (GTK_BOX (main_vbox), hbox, FALSE, TRUE, 0);
@@ -5078,7 +5184,7 @@ create_cursors (GtkWidget *widget)
 
       gtk_widget_show_all (window);
 
-      set_cursor (spinner, darea);
+      set_cursor_from_name (entry, darea);
     }
   else
     gtk_widget_destroy (window);
