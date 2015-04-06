@@ -1107,15 +1107,16 @@ captured_event_cb (GtkWidget *widget,
   on_scrollbar = (event_widget == priv->hindicator.scrollbar ||
                   event_widget == priv->vindicator.scrollbar);
 
-  if (event->type == GDK_MOTION_NOTIFY && !on_scrollbar)
+  if (event->type == GDK_MOTION_NOTIFY)
     {
       if (priv->hscrollbar_visible)
         indicator_start_fade (&priv->hindicator, 1.0);
       if (priv->vscrollbar_visible)
         indicator_start_fade (&priv->vindicator, 1.0);
 
-      if ((event->motion.state &
-           (GDK_BUTTON1_MASK | GDK_BUTTON2_MASK | GDK_BUTTON3_MASK)) != 0)
+      if (!on_scrollbar &&
+           (event->motion.state &
+            (GDK_BUTTON1_MASK | GDK_BUTTON2_MASK | GDK_BUTTON3_MASK)) != 0)
         {
           indicator_set_over (&priv->hindicator, FALSE);
           indicator_set_over (&priv->vindicator, FALSE);
