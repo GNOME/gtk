@@ -2509,10 +2509,10 @@ gtk_entry_completion_changed (GtkWidget *widget,
 
   /* (re)install completion timeout */
   if (completion->priv->completion_timeout)
-  {
-    g_source_remove (completion->priv->completion_timeout);
-    completion->priv->completion_timeout = 0;
-  }
+    {
+      g_source_remove (completion->priv->completion_timeout);
+      completion->priv->completion_timeout = 0;
+    }
 
   if (!gtk_entry_get_text (entry))
     return;
