@@ -1198,6 +1198,7 @@ browse_files_key_press_event_cb (GtkWidget   *widget,
 
   if ((event->keyval == GDK_KEY_slash
        || event->keyval == GDK_KEY_KP_Divide
+       || g_unichar_isalnum (gdk_keyval_to_unicode (event->keyval))
 #ifdef G_OS_UNIX
        || event->keyval == GDK_KEY_asciitilde
 #endif
