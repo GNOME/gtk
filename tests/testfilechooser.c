@@ -614,6 +614,9 @@ main (int argc, char **argv)
   gtk_file_filter_add_pattern (filter, "*");
   gtk_file_chooser_add_filter (GTK_FILE_CHOOSER (dialog), filter);
 
+  /* Make this filter the default */
+  gtk_file_chooser_set_filter (GTK_FILE_CHOOSER (dialog), filter);
+
   filter = gtk_file_filter_new ();
   gtk_file_filter_set_name (filter, "No backup files");
   gtk_file_filter_add_custom (filter, GTK_FILE_FILTER_DISPLAY_NAME,
@@ -628,9 +631,6 @@ main (int argc, char **argv)
 
   g_signal_connect (dialog, "notify::filter",
 		    G_CALLBACK (filter_changed), NULL);
-
-  /* Make this filter the default */
-  gtk_file_chooser_set_filter (GTK_FILE_CHOOSER (dialog), filter);
 
   filter = gtk_file_filter_new ();
   gtk_file_filter_set_name (filter, "PNG and JPEG");
