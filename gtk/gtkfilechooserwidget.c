@@ -6965,6 +6965,8 @@ location_popup_handler (GtkFileChooserWidget *impl,
       operation_mode_set (impl, OPERATION_MODE_BROWSE);
       if (priv->current_folder)
         change_folder_and_display_error (impl, priv->current_folder, FALSE);
+      else
+        switch_to_home_dir (impl);
     }
 
   if (priv->action == GTK_FILE_CHOOSER_ACTION_OPEN ||
