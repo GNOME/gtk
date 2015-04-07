@@ -213,7 +213,6 @@ ensure_surface_full (GdkWindow *window,
                      MirBufferUsage buffer_usage)
 {
   GdkMirWindowImpl *impl = GDK_MIR_WINDOW_IMPL (window->impl);
-  MirEventDelegate event_delegate = { event_cb, NULL };
   GdkMirWindowReference *window_ref;
 
   if (impl->surface || should_render_in_parent (window))
@@ -223,8 +222,6 @@ ensure_surface_full (GdkWindow *window,
    * https://bugs.launchpad.net/mir/+bug/1324100
    */
   window_ref = _gdk_mir_event_source_get_window_reference (window);
-
-  event_delegate.context = window_ref;
 
   impl->surface = create_mir_surface (gdk_window_get_display (window),
                                       window->width, window->height,
@@ -240,7 +237,7 @@ ensure_surface_full (GdkWindow *window,
 
   _gdk_mir_event_source_queue (window_ref, &resize_event);
 
-  mir_surface_set_event_handler (impl->surface, &event_delegate); // FIXME: Ignore some events until shown
+  mir_surface_set_event_handler (impl->surface, event_cb, window_ref); // FIXME: Ignore some events until shown
   set_surface_type (impl, impl->surface_type);
   set_surface_state (impl, impl->surface_state);
 }
