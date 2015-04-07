@@ -1,10 +1,62 @@
 Overview of changes in GTK+ 3.16.1
 ==================================
 
+* Improve client-side decorations without a compositor
+
+* Bug fixes:
+ 132197 Horizontal Scrolling Using Modifier Key and Scroll Wheel
+ 402168 Add underline-color and strikethrough-color to GtkTextTag properties
+ 613833 Unnecessary queue_resize() for GtkImage
+ 671362 Fixes for GtkRadioMenuItem
+ 734741 GtkScale's fill-level starts at the very left if show-fill-level is set
+ 737175 most horizontal sliders are inverted when scrolled with mouse wheel
+ 746222 Improve CSD windows without a compositor
+ 746253 has-tooltip property interferes with event-compression
+ 746301 Opening "Sound" panel generates pixman error
+ 746391 inspector: Make it easier to cut'n'paste advice message
+ 746468 gtkcairoblur is slow
+ 746586 critical warnings in a11y if focus widget is destroyed
+ 746602 Invalid writes through dangling weak pointers in DND code cause crashes
+ 746688 GtkProgressBar doesn't respect its style properties
+ 746712 Range ignores the "inverted" property
+ 746746 gtk3-demo 'OpenGL Area' crashes on systems with old OpenGL version
+ 746784 GtkBooleanCellAccessible emits state-changed:checked signals instead...
+ 746817 GtkRadioButton keynav uses wrong succession
+ 746821 W32: Maximized window is obscured by the taskbar
+ 746862 popover clears shadow of underlying widgets
+ 746893 gtk_list_box_bind_model is not introspectable
+ 746904 make it possible to disable libcanberra
+ 746961 new scroll bar "hides" after click+drag+release while mouse is still...
+ 747096 small cleanup in textbuffer clipoard handling
+ 747133 overshoot animation is stopped on libinput-managed touchpads
+ 747305 x11/gl: Use after free in glx_pixmap_get()
+ 747406 Fix indicator proximity checks
+ 747407 Make indicators pop out when needed
+
 * GtkListBox
  - There has been a minor API break on the return value of the
    GtkListBoxCreateWidgetFunc callback.  Previously, we would leak a
    full reference returned by this callback and now we free it.
+
+* Translation updates:
+ Basque
+ Catalan
+ Czech
+ Galician
+ Greek
+ Hebrew
+ Hungarian
+ Italian
+ Korean
+ Lithuanian
+ Polish
+ Russian
+ Slovak
+ Slovenian
+ Spanish
+ Tajik
+ Vietnamese
+
 
 Overview of Changes in GTK+ 3.16.0
 ==================================
