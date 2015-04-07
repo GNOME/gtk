@@ -977,51 +977,77 @@ indicator_set_over (Indicator *indicator,
   gtk_widget_queue_resize (indicator->scrollbar);
 }
 
+static void
+translate_to_widget (GtkWidget *widget,
+                     GdkEvent  *event,
+                     gint      *x,
+                     gint      *y)
+{
+  GtkWidget *event_widget;
+  GdkWindow *event_widget_window;
+  GdkWindow *window;
+  gdouble event_x, event_y;
+  gint wx, wy;
+  GtkAllocation allocation;
+
+  event_widget = gtk_get_event_widget (event);
+  event_widget_window = gtk_widget_get_window (event_widget);
+  gdk_event_get_coords (event, &event_x, &event_y);
+  window = event->any.window;
+  while (window && window != event_widget_window)
+    {
+      gdk_window_get_position (window, &wx, &wy);
+      event_x += wx;
+      event_y += wy;
+      window = gdk_window_get_effective_parent (window);
+    }
+
+  if (!gtk_widget_get_has_window (event_widget))
+    {
+      gtk_widget_get_allocation (event_widget, &allocation);
+      event_x -= allocation.x;
+      event_y -= allocation.y;
+    }
+
+  gtk_widget_translate_coordinates (event_widget, widget,
+                                    (gint)event_x, (gint)event_y,
+                                    x, y);
+}
+
 static gboolean
 event_close_to_indicator (GtkScrolledWindow *sw,
                           Indicator         *indicator,
                           GdkEvent          *event)
 {
-  GtkAllocation alloc, indicator_alloc;
   GtkScrolledWindowPrivate *priv;
-  GtkWidget *event_widget;
-  gint win_x, win_y;
-  gdouble x, y;
+  GtkAllocation indicator_alloc;
+  gint x, y;
   gint distance;
+  gint win_x, win_y;
 
   priv = sw->priv;
-  event_widget = gtk_get_event_widget (event);
-  gdk_event_get_coords (event, &x, &y);
 
-  gtk_widget_get_allocation (GTK_WIDGET (sw), &alloc);
   gtk_widget_get_allocation (indicator->scrollbar, &indicator_alloc);
   gdk_window_get_position (indicator->window, &win_x, &win_y);
-
-  if (event->any.window == indicator->window ||
-      event_widget == indicator->scrollbar)
-    {
-      gint xcoord = x, ycoord = y;
-
-      gtk_widget_translate_coordinates (indicator->scrollbar,
-                                        GTK_WIDGET (sw),
-                                        xcoord, ycoord,
-                                        &xcoord, &ycoord);
-      x = xcoord;
-      y = ycoord;
-    }
+  translate_to_widget (GTK_WIDGET (sw), event, &x, &y);
 
   if (indicator->over)
     distance = INDICATOR_FAR_DISTANCE;
   else
     distance = INDICATOR_CLOSE_DISTANCE;
 
-  if ((indicator == &priv->hindicator &&
-       y >= win_y - distance &&
-       y < win_y + indicator_alloc.height + distance) ||
-      (indicator == &priv->vindicator &&
-       x >= win_x - distance &&
-       x < win_x + indicator_alloc.width + distance))
-    return TRUE;
+  if (indicator == &priv->hindicator)
+    {
+       if (y >= win_y - distance &&
+           y < win_y + indicator_alloc.height + distance)
+         return TRUE;
+    }
+  else if (indicator == &priv->vindicator)
+    {
+      if (x >= win_x - distance &&
+          x < win_x + indicator_alloc.width + distance)
+        return TRUE;
+    }
 
   return FALSE;
 }
