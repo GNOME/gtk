@@ -95,6 +95,9 @@ struct _GdkWaylandDeviceData
   struct wl_surface *pointer_surface;
   guint current_output_scale;
   GSList *pointer_surface_outputs;
+
+  /* Source/dest for non-local dnd */
+  GdkWindow *foreign_dnd_window;
 };
 
 struct _GdkWaylandDevice
@@ -623,8 +626,10 @@ data_device_enter (void                  *data,
 
   dnd_owner = gdk_selection_owner_get_for_display (device->display, gdk_drag_get_selection (device->drop_context));
 
-  if (dnd_owner)
-    _gdk_wayland_drag_context_set_source_window (device->drop_context, dnd_owner);
+  if (!dnd_owner)
+    dnd_owner = device->foreign_dnd_window;
+
+  _gdk_wayland_drag_context_set_source_window (device->drop_context, dnd_owner);
 
   _gdk_wayland_drag_context_set_dest_window (device->drop_context,
                                              dest_window, serial);
@@ -1838,6 +1843,26 @@ static const struct wl_surface_listener pointer_surface_listener = {
   pointer_surface_leave
 };
 
+static GdkWindow *
+create_foreign_dnd_window (GdkDisplay *display)
+{
+  GdkWindowAttr attrs;
+  GdkScreen *screen;
+  guint mask;
+
+  screen = gdk_display_get_default_screen (display);
+
+  attrs.x = attrs.y = 0;
+  attrs.width = attrs.height = 1;
+  attrs.wclass = GDK_INPUT_OUTPUT;
+  attrs.window_type = GDK_WINDOW_TEMP;
+  attrs.visual = gdk_screen_get_system_visual (screen);
+
+  mask = GDK_WA_X | GDK_WA_Y | GDK_WA_VISUAL;
+
+  return gdk_window_new (gdk_screen_get_root_window (screen), &attrs, mask);
+}
+
 void
 _gdk_wayland_device_manager_add_seat (GdkDeviceManager *device_manager,
                                       guint32           id,
@@ -1857,6 +1882,7 @@ _gdk_wayland_device_manager_add_seat (GdkDeviceManager *device_manager,
   device->device_manager = device_manager;
   device->touches = g_hash_table_new_full (NULL, NULL, NULL,
                                            (GDestroyNotify) g_free);
+  device->foreign_dnd_window = create_foreign_dnd_window (display);
   device->wl_seat = wl_seat;
 
   wl_seat_add_listener (device->wl_seat, &seat_listener, device);
@@ -1898,6 +1924,7 @@ _gdk_wayland_device_manager_remove_seat (GdkDeviceManager *manager,
           /* FIXME: destroy data_device */
           g_clear_object (&device->keyboard_settings);
           g_hash_table_destroy (device->touches);
+          gdk_window_destroy (device->foreign_dnd_window);
           g_free (device);
 
           break;
