@@ -350,7 +350,7 @@ gdk_registry_handle_global (void               *data,
   else if (strcmp (interface, "wl_data_device_manager") == 0)
     {
       display_wayland->data_device_manager =
-        wl_registry_bind (display_wayland->wl_registry, id, &wl_data_device_manager_interface, 1);
+        wl_registry_bind (display_wayland->wl_registry, id, &wl_data_device_manager_interface, 3);
     }
   else if (strcmp (interface, "wl_subcompositor") == 0)
     {

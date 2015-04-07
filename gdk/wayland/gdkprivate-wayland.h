@@ -118,8 +118,8 @@ void _gdk_wayland_drag_context_set_coords (GdkDragContext *context,
                                            gdouble         x,
                                            gdouble         y);
 
-void gdk_wayland_drag_context_set_action (GdkDragContext *context,
-                                          GdkDragAction   action);
+void gdk_wayland_drag_context_set_actions (GdkDragContext *context,
+                                           GdkDragAction   actions);
 
 GdkDragContext * gdk_wayland_drag_context_lookup_by_data_source   (struct wl_data_source *source);
 GdkDragContext * gdk_wayland_drag_context_lookup_by_source_window (GdkWindow *window);
@@ -256,6 +256,8 @@ void     gdk_wayland_selection_store   (GdkWindow    *window,
 struct wl_data_source * gdk_wayland_selection_get_data_source (GdkWindow *owner,
                                                                GdkAtom    selection);
 void gdk_wayland_selection_unset_data_source (GdkDisplay *display, GdkAtom selection);
+gboolean gdk_wayland_selection_set_current_offer_actions (GdkDisplay *display,
+                                                          uint32_t    actions);
 
 EGLSurface gdk_wayland_window_get_egl_surface (GdkWindow *window,
                                                EGLConfig config);

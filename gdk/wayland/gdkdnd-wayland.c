@@ -143,11 +143,30 @@ gdk_wayland_drag_context_find_window (GdkDragContext  *context,
   return NULL;
 }
 
-void
-gdk_wayland_drag_context_set_action (GdkDragContext *context,
-                                     GdkDragAction   action)
+static inline uint32_t
+gdk_to_wl_actions (GdkDragAction action)
 {
-  context->suggested_action = context->action = action;
+  uint32_t dnd_actions = 0;
+
+  if (action & (GDK_ACTION_COPY | GDK_ACTION_LINK | GDK_ACTION_PRIVATE))
+    dnd_actions |= WL_DATA_DEVICE_MANAGER_DND_ACTION_COPY;
+  if (action & GDK_ACTION_MOVE)
+    dnd_actions |= WL_DATA_DEVICE_MANAGER_DND_ACTION_MOVE;
+  if (action & GDK_ACTION_ASK)
+    dnd_actions |= WL_DATA_DEVICE_MANAGER_DND_ACTION_ASK;
+
+  return dnd_actions;
+}
+
+void
+gdk_wayland_drag_context_set_actions (GdkDragContext *context,
+                                      GdkDragAction   actions)
+{
+  GdkWaylandDragContext *wayland_context = GDK_WAYLAND_DRAG_CONTEXT (context);
+
+  context->actions = actions;
+  wl_data_source_set_actions (wayland_context->data_source,
+                              gdk_to_wl_actions (actions));
 }
 
 static gboolean
@@ -167,7 +186,7 @@ gdk_wayland_drag_context_drag_motion (GdkDragContext *context,
       _gdk_wayland_drag_context_emit_event (context, GDK_DRAG_STATUS, time);
     }
 
-  gdk_wayland_drag_context_set_action (context, suggested_action);
+  gdk_wayland_drag_context_set_actions (context, possible_actions);
 
   return context->dest_window != NULL;
 }
@@ -195,6 +214,9 @@ gdk_wayland_drop_context_set_status (GdkDragContext *context,
   struct wl_data_offer *wl_offer;
 
   context_wayland = GDK_WAYLAND_DRAG_CONTEXT (context);
+
+  if (!context->dest_window)
+    return;
 
   display = gdk_device_get_display (gdk_drag_context_get_device (context));
   wl_offer = gdk_wayland_selection_get_offer (display,
@@ -231,6 +253,14 @@ gdk_wayland_drag_context_drag_status (GdkDragContext *context,
 				      GdkDragAction   action,
 				      guint32         time_)
 {
+  GdkDisplay *display;
+  uint32_t dnd_actions;
+
+  display = gdk_device_get_display (gdk_drag_context_get_device (context));
+
+  dnd_actions = gdk_to_wl_actions (action);
+  gdk_wayland_selection_set_current_offer_actions (display, dnd_actions);
+
   gdk_wayland_drop_context_set_status (context, action != 0);
 }
 
