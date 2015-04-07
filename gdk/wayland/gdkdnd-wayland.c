@@ -43,7 +43,6 @@ struct _GdkWaylandDragContext
   GdkWindow *dnd_window;
   struct wl_surface *dnd_surface;
   struct wl_data_source *data_source;
-  struct wl_data_offer *offer;
   uint32_t serial;
   gdouble x;
   gdouble y;
@@ -196,8 +195,10 @@ gdk_wayland_drop_context_set_status (GdkDragContext *context,
   struct wl_data_offer *wl_offer;
 
   context_wayland = GDK_WAYLAND_DRAG_CONTEXT (context);
-  display = gdk_window_get_display (context->source_window);
-  wl_offer = gdk_wayland_selection_get_offer (display);
+
+  display = gdk_device_get_display (gdk_drag_context_get_device (context));
+  wl_offer = gdk_wayland_selection_get_offer (display,
+                                              gdk_drag_get_selection (context));
 
   if (!wl_offer)
     return;
@@ -247,10 +248,15 @@ gdk_wayland_drag_context_drop_finish (GdkDragContext *context,
 				      gboolean        success,
 				      guint32         time)
 {
-  GdkDisplay *display = gdk_window_get_display (context->source_window);
+  GdkDisplay *display = gdk_device_get_display (gdk_drag_context_get_device (context));
+  GdkAtom selection;
 
-  if (gdk_selection_owner_get_for_display (display, gdk_drag_get_selection (context)))
-    gdk_wayland_selection_unset_data_source (display, gdk_drag_get_selection (context));
+  selection = gdk_drag_get_selection (context);
+
+  if (gdk_selection_owner_get_for_display (display, selection))
+    gdk_wayland_selection_unset_data_source (display, selection);
+
+  gdk_wayland_selection_set_offer (display, selection, NULL);
 }
 
 static gboolean
@@ -396,7 +402,8 @@ gdk_wayland_drop_context_update_targets (GdkDragContext *context)
   device = gdk_drag_context_get_device (context);
   display = gdk_device_get_display (device);
   g_list_free (context->targets);
-  context->targets = g_list_copy (gdk_wayland_selection_get_targets (display));
+  context->targets = g_list_copy (gdk_wayland_selection_get_targets (display,
+                                                                     gdk_drag_get_selection (context)));
 }
 
 void

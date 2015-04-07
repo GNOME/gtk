@@ -36,6 +36,7 @@
 typedef struct _SelectionBuffer SelectionBuffer;
 typedef struct _StoredSelection StoredSelection;
 typedef struct _AsyncWriteData AsyncWriteData;
+typedef struct _DataOfferData DataOfferData;
 
 struct _SelectionBuffer
 {
@@ -64,6 +65,13 @@ struct _DataSourceData
   GdkAtom selection;
 };
 
+struct _DataOfferData
+{
+  struct wl_data_offer *offer;
+  GList *targets; /* List of GdkAtom */
+  GdkAtom requested_target;
+};
+
 struct _AsyncWriteData
 {
   GOutputStream *stream;
@@ -81,11 +89,10 @@ static GdkAtom atoms[2] = { 0 };
 struct _GdkWaylandSelection
 {
   /* Destination-side data */
-  struct wl_data_offer *offer;
-  GdkAtom source_requested_target;
-
+  DataOfferData *dnd_offer;
+  DataOfferData *clipboard_offer;
+  GHashTable *offers; /* Currently alive offers, Hashtable of wl_data_offer->DataOfferData */
   GHashTable *selection_buffers; /* Hashtable of target_atom->SelectionBuffer */
-  GList *targets; /* List of GdkAtom */
 
   /* Source-side data */
   StoredSelection stored_selection;
@@ -260,6 +267,25 @@ selection_buffer_read (SelectionBuffer *buffer)
                                    buffer);
 }
 
+static DataOfferData *
+data_offer_data_new (struct wl_data_offer *offer)
+{
+  DataOfferData *info;
+
+  info = g_slice_new0 (DataOfferData);
+  info->offer = offer;
+
+  return info;
+}
+
+static void
+data_offer_data_free (DataOfferData *info)
+{
+  wl_data_offer_destroy (info->offer);
+  g_list_free (info->targets);
+  g_slice_free (DataOfferData, info);
+}
+
 GdkWaylandSelection *
 gdk_wayland_selection_new (void)
 {
@@ -271,8 +297,11 @@ gdk_wayland_selection_new (void)
 
   selection = g_new0 (GdkWaylandSelection, 1);
   selection->selection_buffers =
-      g_hash_table_new_full (NULL, NULL, NULL,
-                             (GDestroyNotify) selection_buffer_cancel_and_unref);
+    g_hash_table_new_full (NULL, NULL, NULL,
+                           (GDestroyNotify) selection_buffer_cancel_and_unref);
+  selection->offers =
+    g_hash_table_new_full (NULL, NULL, NULL,
+                           (GDestroyNotify) data_offer_data_free);
   selection->stored_selection.fd = -1;
   selection->source_targets = g_array_new (FALSE, FALSE, sizeof (GdkAtom));
   return selection;
@@ -284,9 +313,7 @@ gdk_wayland_selection_free (GdkWaylandSelection *selection)
   g_hash_table_destroy (selection->selection_buffers);
   g_array_unref (selection->source_targets);
 
-  if (selection->targets)
-    g_list_free (selection->targets);
-
+  g_hash_table_destroy (selection->offers);
   g_free (selection->stored_selection.data);
 
   if (selection->stored_selection.cancellable)
@@ -298,8 +325,6 @@ gdk_wayland_selection_free (GdkWaylandSelection *selection)
   if (selection->stored_selection.fd > 0)
     close (selection->stored_selection.fd);
 
-  if (selection->offer)
-    wl_data_offer_destroy (selection->offer);
   if (selection->clipboard_source)
     wl_data_source_destroy (selection->clipboard_source);
   if (selection->dnd_source)
@@ -314,57 +339,105 @@ data_offer_offer (void                 *data,
                   const char           *type)
 {
   GdkWaylandSelection *selection = data;
+  DataOfferData *info;
   GdkAtom atom = gdk_atom_intern (type, FALSE);
 
-  if (g_list_find (selection->targets, atom))
+  info = g_hash_table_lookup (selection->offers, wl_data_offer);
+
+  if (!info || g_list_find (info->targets, atom))
     return;
 
-  selection->targets = g_list_prepend (selection->targets, atom);
+  info->targets = g_list_prepend (info->targets, atom);
 }
 
 static const struct wl_data_offer_listener data_offer_listener = {
   data_offer_offer,
 };
 
+DataOfferData *
+selection_lookup_offer_by_atom (GdkWaylandSelection *selection,
+                                GdkAtom              selection_atom)
+{
+  if (selection_atom == atoms[ATOM_CLIPBOARD])
+    return selection->clipboard_offer;
+  else if (selection_atom == atoms[ATOM_DND])
+    return selection->dnd_offer;
+  else
+    return NULL;
+}
+
+void
+gdk_wayland_selection_ensure_offer (GdkDisplay           *display,
+                                    struct wl_data_offer *wl_offer)
+{
+  GdkWaylandSelection *selection = gdk_wayland_display_get_selection (display);
+  DataOfferData *info;
+
+  info = g_hash_table_lookup (selection->offers, wl_offer);
+
+  if (!info)
+    {
+      info = data_offer_data_new (wl_offer);
+      g_hash_table_insert (selection->offers, wl_offer, info);
+      wl_data_offer_add_listener (wl_offer,
+                                  &data_offer_listener,
+                                  selection);
+    }
+}
+
 void
 gdk_wayland_selection_set_offer (GdkDisplay           *display,
+                                 GdkAtom               selection_atom,
                                  struct wl_data_offer *wl_offer)
 {
   GdkWaylandSelection *selection = gdk_wayland_display_get_selection (display);
+  struct wl_data_offer *prev_offer;
+  DataOfferData *info;
 
-  if (selection->offer == wl_offer)
-    return;
+  info = g_hash_table_lookup (selection->offers, wl_offer);
 
-  if (selection->offer)
-    wl_data_offer_destroy (selection->offer);
+  prev_offer = gdk_wayland_selection_get_offer (display, selection_atom);
 
-  selection->offer = wl_offer;
+  if (prev_offer)
+    g_hash_table_remove (selection->offers, prev_offer);
 
-  if (wl_offer)
-    wl_data_offer_add_listener (wl_offer,
-                                &data_offer_listener,
-                                selection);
+  if (selection_atom == atoms[ATOM_CLIPBOARD])
+    selection->clipboard_offer = info;
+  else if (selection_atom == atoms[ATOM_DND])
+    selection->dnd_offer = info;
 
   /* Clear all buffers */
   g_hash_table_remove_all (selection->selection_buffers);
-  g_list_free (selection->targets);
-  selection->targets = NULL;
 }
 
 struct wl_data_offer *
-gdk_wayland_selection_get_offer (GdkDisplay *display)
+gdk_wayland_selection_get_offer (GdkDisplay *display,
+                                 GdkAtom     selection_atom)
 {
   GdkWaylandSelection *selection = gdk_wayland_display_get_selection (display);
+  const DataOfferData *info;
 
-  return selection->offer;
+  info = selection_lookup_offer_by_atom (selection, selection_atom);
+
+  if (info)
+    return info->offer;
+
+  return NULL;
 }
 
 GList *
-gdk_wayland_selection_get_targets (GdkDisplay *display)
+gdk_wayland_selection_get_targets (GdkDisplay *display,
+                                   GdkAtom     selection_atom)
 {
   GdkWaylandSelection *selection = gdk_wayland_display_get_selection (display);
+  const DataOfferData *info;
 
-  return selection->targets;
+  info = selection_lookup_offer_by_atom (selection, selection_atom);
+
+  if (info)
+    return info->targets;
+
+  return NULL;
 }
 
 static void
@@ -584,6 +657,7 @@ gdk_wayland_selection_request_target (GdkWaylandSelection *wayland_selection,
                                       GdkAtom              target,
                                       gint                 fd)
 {
+  DataOfferData *offer;
   GdkAtom selection;
 
   if (wayland_selection->clipboard_owner == window)
@@ -593,8 +667,10 @@ gdk_wayland_selection_request_target (GdkWaylandSelection *wayland_selection,
   else
     return FALSE;
 
+  offer = selection_lookup_offer_by_atom (wayland_selection, selection);
+
   if (wayland_selection->stored_selection.fd == fd &&
-      wayland_selection->source_requested_target == target)
+      offer->requested_target == target)
     return FALSE;
 
   /* If we didn't issue gdk_wayland_selection_check_write() yet
@@ -605,8 +681,7 @@ gdk_wayland_selection_request_target (GdkWaylandSelection *wayland_selection,
     close (wayland_selection->stored_selection.fd);
 
   wayland_selection->stored_selection.fd = fd;
-
-  wayland_selection->source_requested_target = target;
+  offer->requested_target = target;
 
   if (window &&
       gdk_wayland_selection_source_handles_target (wayland_selection, target))
@@ -707,8 +782,6 @@ data_source_send (void                  *data,
       _gdk_wayland_drag_context_emit_event (context, GDK_DROP_FINISHED,
                                             GDK_CURRENT_TIME);
     }
-
-  wayland_selection->source_requested_target = GDK_NONE;
 }
 
 static void
@@ -931,9 +1004,14 @@ _gdk_wayland_display_convert_selection (GdkDisplay *display,
 {
   GdkWaylandSelection *wayland_selection = gdk_wayland_display_get_selection (display);
   SelectionBuffer *buffer_data;
+  struct wl_data_offer *offer;
   gchar *mimetype;
+  GList *target_list;
 
-  if (!wayland_selection->offer)
+  offer = gdk_wayland_selection_get_offer (display, selection);
+  target_list = gdk_wayland_selection_get_targets (display, selection);
+
+  if (!offer)
     {
       GdkEvent *event;
 
@@ -954,7 +1032,7 @@ _gdk_wayland_display_convert_selection (GdkDisplay *display,
   mimetype = gdk_atom_name (target);
 
   if (target != gdk_atom_intern_static_string ("TARGETS"))
-    wl_data_offer_accept (wayland_selection->offer,
+    wl_data_offer_accept (offer,
                           _gdk_wayland_display_get_serial (GDK_WAYLAND_DISPLAY (display)),
                           mimetype);
 
@@ -974,17 +1052,16 @@ _gdk_wayland_display_convert_selection (GdkDisplay *display,
           gint i = 0;
           GList *l;
 
-          natoms = g_list_length (wayland_selection->targets);
+          natoms = g_list_length (target_list);
           targets = g_new0 (GdkAtom, natoms);
 
-          for (l = wayland_selection->targets; l; l = l->next)
+          for (l = target_list; l; l = l->next)
             targets[i++] = l->data;
         }
       else
         {
           g_unix_open_pipe (pipe_fd, FD_CLOEXEC, NULL);
-          wl_data_offer_receive (wayland_selection->offer,
-                                 mimetype, pipe_fd[1]);
+          wl_data_offer_receive (offer, mimetype, pipe_fd[1]);
           stream = g_unix_input_stream_new (pipe_fd[0], TRUE);
           close (pipe_fd[1]);
         }

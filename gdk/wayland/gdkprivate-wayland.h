@@ -237,10 +237,15 @@ GdkWaylandSelection * gdk_wayland_display_get_selection (GdkDisplay *display);
 GdkWaylandSelection * gdk_wayland_selection_new (void);
 void gdk_wayland_selection_free (GdkWaylandSelection *selection);
 
+void gdk_wayland_selection_ensure_offer (GdkDisplay           *display,
+                                         struct wl_data_offer *wl_offer);
 void gdk_wayland_selection_set_offer (GdkDisplay           *display,
+                                      GdkAtom               selection,
                                       struct wl_data_offer *wl_offer);
-struct wl_data_offer * gdk_wayland_selection_get_offer (GdkDisplay *display);
-GList * gdk_wayland_selection_get_targets (GdkDisplay *display);
+struct wl_data_offer * gdk_wayland_selection_get_offer (GdkDisplay *display,
+                                                        GdkAtom     selection);
+GList * gdk_wayland_selection_get_targets (GdkDisplay *display,
+                                           GdkAtom     selection);
 
 void     gdk_wayland_selection_store   (GdkWindow    *window,
                                         GdkAtom       type,
