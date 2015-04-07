@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tajik Gnome\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-04-03 21:16+0000\n"
-"PO-Revision-Date: 2015-04-04 10:02+0500\n"
+"POT-Creation-Date: 2015-04-06 23:38+0000\n"
+"PO-Revision-Date: 2015-04-07 10:07+0500\n"
 "Last-Translator: Victor Ibragimov <victor.ibragimov@gmail.com>\n"
 "Language-Team: \n"
 "Language: tg\n"
@@ -3289,10 +3289,8 @@ msgid "Maximum width in characters"
 msgstr "Бари ҳадди аксар дар аломатҳо"
 
 #: gtk/gtkentry.c:879
-#, fuzzy
-#| msgid "The desired maximum width of the label, in characters"
 msgid "The desired maximum width of the entry, in characters"
-msgstr "Бари ҳадди аксари дилхоҳи барчасп, бо аломатҳо"
+msgstr "Бари ҳадди аксари дилхоҳи вуруд, бо аломатҳо"
 
 #: gtk/gtkentry.c:888
 msgid "Scroll offset"
@@ -3672,10 +3670,9 @@ msgstr ""
 "иловагӣ ҳамон тавре, ки баръакси зери он аст ё не"
 
 #: gtk/gtkeventcontroller.c:166
-#, fuzzy
 #| msgid "Widget the bubble window points to"
 msgid "Widget the gesture relates to"
-msgstr "Ишоракунии виҷети равзанаи ҳубобӣ ба"
+msgstr "Виҷети ишораи марбут ба"
 
 #: gtk/gtkeventcontroller.c:180
 msgid "Propagation phase"
@@ -4036,10 +4033,9 @@ msgid "Number of points"
 msgstr "Миқдори нуқтаҳо"
 
 #: gtk/gtkgesture.c:696
-#, fuzzy
 #| msgid "Number of jobs queued in the printer"
 msgid "Number of points needed to trigger the gesture"
-msgstr "Миқдори вазифаҳое, ки дар принтер ба навбат гузошта шудаанд"
+msgstr "Миқдори нуқтаҳои лозимӣ барои иҷрокунии ишора"
 
 #: gtk/gtkgesture.c:712 gtk/gtkgesture.c:713
 msgid "GdkWindow to receive events about"
@@ -4062,16 +4058,14 @@ msgid "Handle only touch events"
 msgstr "Коркарди танҳо мӯйдодҳои ламсӣ"
 
 #: gtk/gtkgesturesingle.c:260
-#, fuzzy
 #| msgid "Whether the widget responds to input"
 msgid "Whether the gesture handles only touch events"
-msgstr "Оё виҷет ба вуруд посух медиҳад"
+msgstr "Имкони коркарди танҳо ҳодисаҳои ламсӣ бо ишораҳо"
 
 #: gtk/gtkgesturesingle.c:276 gtk/gtkgesturesingle.c:277
-#, fuzzy
 #| msgid "Whether the spinner is active"
 msgid "Whether the gesture is exclusive"
-msgstr "Оё тобанда фаъол аст ё не"
+msgstr "Имкони истисно будани ишора"
 
 #: gtk/gtkgesturesingle.c:291
 msgid "Button number"
@@ -4094,40 +4088,35 @@ msgid "Auto render"
 msgstr "Коркарди худкор"
 
 #: gtk/gtkglarea.c:792
-#, fuzzy
 #| msgid "Whether the header can be clicked"
 msgid "Whether the GtkGLArea renders on each redraw"
-msgstr "Оё зер кардани сарварақ мумкин аст"
+msgstr "Имкони коркард бо GtkGLArea дар ҳар нақши тақрорӣ"
 
 #: gtk/gtkglarea.c:812
 msgid "Has alpha"
 msgstr "Дорои алфа мебошад"
 
 #: gtk/gtkglarea.c:813
-#, fuzzy
 #| msgid "Whether to give the color an alpha value"
 msgid "Whether the color buffer has an alpha component"
-msgstr "Оё ба қимати алфа ранг дода шавад "
+msgstr "Имкони доштани унсури алфа дар миёнҷии ранг"
 
 #: gtk/gtkglarea.c:829
 msgid "Has depth buffer"
 msgstr "Дорои миёнҷии чукурӣ"
 
 #: gtk/gtkglarea.c:830
-#, fuzzy
 #| msgid "Whether the spinner is active"
 msgid "Whether a depth buffer is allocated"
-msgstr "Оё тобанда фаъол аст ё не"
+msgstr "Имкони муайянкунии миёнҷии чукурӣ"
 
 #: gtk/gtkglarea.c:846
 msgid "Has stencil buffer"
 msgstr "Дорои миёнҷии намуна"
 
 #: gtk/gtkglarea.c:847
-#, fuzzy
-#| msgid "Whether the spinner is active"
 msgid "Whether a stencil buffer is allocated"
-msgstr "Оё тобанда фаъол аст ё не"
+msgstr "Имкони муайянкунии миёнҷии намуна"
 
 #: gtk/gtkgrid.c:1749
 msgid "Row Homogeneous"
@@ -4449,7 +4438,6 @@ msgid "Justification"
 msgstr "Баробаркунӣ"
 
 #: gtk/gtklabel.c:761
-#, fuzzy
 #| msgid ""
 #| "The alignment of the lines in the text of the label relative to each "
 #| "other. This does NOT affect the alignment of the label within its "
@@ -4459,9 +4447,9 @@ msgid ""
 "This does NOT affect the alignment of the label within its allocation. See "
 "GtkLabel:xalign for that"
 msgstr ""
-"Вобаста ба якдигар мосшавии хатҳо дар матни барчасп. Ин ба мосшавии барчасп "
-"дар дохили тахсисдиҳии худ таъсир намерасонад. барои ин, нигаред ба GtkMisc::"
-"xalign"
+"Москунии хатҳо дар матни барчасп ба ҳамдигар мувофиқ аст. Ин ба москунии "
+"барчасп дар дохили ҷояш таъсир намерасонад. Барои он ба GtkLabel:xalign "
+"нигаред"
 
 #: gtk/gtklabel.c:805
 msgid "Pattern"
@@ -4629,19 +4617,16 @@ msgstr "Боздидшуда"
 
 #: gtk/gtklinkbutton.c:185
 msgid "Whether this link has been visited."
-msgstr "Оё ин пайванд боздид шудааст ё не."
+msgstr "Имкони боздид кардани ин пайванд."
 
 #: gtk/gtklistbox.c:3545
-#, fuzzy
 #| msgid "Whether the header can be clicked"
 msgid "Whether this row can be activated"
-msgstr "Оё зер кардани сарварақ мумкин аст"
+msgstr "Имкони фаъол кардани ин сатр"
 
 #: gtk/gtklistbox.c:3559
-#, fuzzy
-#| msgid "Whether the header can be clicked"
 msgid "Whether this row can be selected"
-msgstr "Оё зер кардани сарварақ мумкин аст"
+msgstr "Имкони интихоб кардани ин сатр"
 
 #: gtk/gtklockbutton.c:262
 msgid "Permission"
@@ -4997,10 +4982,8 @@ msgid "label border"
 msgstr "Марзи барчасп"
 
 #: gtk/gtkmessagedialog.c:175
-#, fuzzy
-#| msgid "Width of border around the label and image in the message dialog"
 msgid "Width of border around the label in the message dialog"
-msgstr "Бари марзи атрофи барчасп ва тасвир дар гуфтугӯи паём"
+msgstr "Бари марзи атрофи барчасп дар равзанаи гуфтугӯи паём"
 
 #: gtk/gtkmessagedialog.c:197
 msgid "Message Buttons"
@@ -5087,20 +5070,17 @@ msgid "Centered"
 msgstr "Дар марказ"
 
 #: gtk/gtkmodelbutton.c:942
-#, fuzzy
-#| msgid "Whether to wrap the license text."
 msgid "Whether to center the contents"
-msgstr "Оё матни иҷозатнома печонда мешавад ё на."
+msgstr "Имкони марказонидани муҳтаво"
 
 #: gtk/gtkmodelbutton.c:957
 msgid "Iconic"
 msgstr "Тасвирӣ"
 
 #: gtk/gtkmodelbutton.c:958
-#, fuzzy
 #| msgid "Whether to wrap the license text."
 msgid "Whether to prefer the icon over text"
-msgstr "Оё матни иҷозатнома печонда мешавад ё на."
+msgstr "Имкони гузоштани нишона ба болои матн"
 
 #: gtk/gtkmountoperation.c:161 gtk/gtkstylecontext.c:274
 msgid "Parent"
@@ -5343,16 +5323,13 @@ msgid "Largest possible value for the \"position\" property"
 msgstr "Қимати эҳтимолии калонтарин барои хусусияти \"position\""
 
 #: gtk/gtkpaned.c:396
-#, fuzzy
-#| msgid "Width of handle"
 msgid "Wide Handle"
-msgstr "Бари даста"
+msgstr "Дастаки васеъ"
 
 #: gtk/gtkpaned.c:397
-#, fuzzy
 #| msgid "Whether the window frame should have a close button"
 msgid "Whether the paned should have a prominent handle"
-msgstr "Оё чорчӯбаи равзана бояд тугмаи пӯшонидан дошта бошад"
+msgstr "Имкони истифодаи дастаки номдор барои чизи васлшуда"
 
 #: gtk/gtkpaned.c:403
 msgid "Handle Size"
@@ -5427,15 +5404,14 @@ msgid "Show 'Enter Location'"
 msgstr "Намоиш додани 'Вориди ҷойгиршавӣ'"
 
 #: gtk/gtkplacessidebar.c:4608
-#, fuzzy
 #| msgid ""
 #| "Whether the sidebar includes a builtin shortcut to a 'Connect to server' "
 #| "dialog"
 msgid ""
 "Whether the sidebar includes a builtin shortcut to manually enter a location"
 msgstr ""
-"Оё навори ҷонибӣ миёнбури дарунсохт ба равзанаи гуфтугӯи  'Пайвастшавӣ ба "
-"сервер' дар бар мегирад ё не"
+"Имкони истифодаи миёнбури васлшуда дар навори ҷонибӣ барои вориди ҷойгиршавӣ "
+"ба таври дастӣ"
 
 #: gtk/gtkplacessidebar.c:4614
 msgid "Whether the sidebar only includes local files"
@@ -5482,16 +5458,13 @@ msgid "Whether the popover is modal"
 msgstr "Мутобиқати кушоиш"
 
 #: gtk/gtkpopover.c:1625
-#, fuzzy
-#| msgid "Transition type"
 msgid "Transitions enabled"
-msgstr "Навъи гузариш"
+msgstr "Интиқолҳо фаъоланд"
 
 #: gtk/gtkpopover.c:1626
-#, fuzzy
 #| msgid "Whether the action is enabled."
 msgid "Whether show/hide transitions are enabled or not"
-msgstr "Оё амал фаъол шудааст ё на."
+msgstr "Имкони фаъол ё хомӯш кардани намоиши/пинҳонкунии интиқолҳо"
 
 #: gtk/gtkpopovermenu.c:350
 msgid "Visible submenu"
@@ -6401,10 +6374,8 @@ msgid "Overlay Scrolling"
 msgstr "Ҳаракатдиҳии болопӯш"
 
 #: gtk/gtkscrolledwindow.c:598
-#, fuzzy
-#| msgid "Kinetic scrolling mode."
 msgid "Overlay scrolling mode"
-msgstr "Ҳолати ҳаракатдиҳии кинетикӣ."
+msgstr "Ҳолати ҳаракатдиҳии болопӯш"
 
 #: gtk/gtksearchbar.c:401
 msgid "Search Mode Enabled"
@@ -7158,15 +7129,12 @@ msgid "Long press time"
 msgstr "Муддати пахши дароз"
 
 #: gtk/gtksettings.c:1707
-#, fuzzy
 #| msgid ""
 #| "Maximum time allowed between two clicks for them to be considered a "
 #| "double click (in milliseconds)"
 msgid ""
 "Time for a button/touch press to be considered a long press (in milliseconds)"
-msgstr ""
-"Замони ҳадди ақали имконпазир байни ду зеркунӣ барои ҳамчун ду бор зеркунӣ "
-"ҳисоб пешбинӣ шудани онҳо (бо миллисония)"
+msgstr "Вақт барои пахши ламсӣ/тугма ҳангоми пахши дароз (дар миллисонияҳо)"
 
 #: gtk/gtksizegroup.c:323 gtk/gtktreeselection.c:130
 msgid "Mode"
@@ -7251,28 +7219,20 @@ msgid "Homogeneous sizing"
 msgstr "Андозабандии якхела"
 
 #: gtk/gtkstack.c:410
-#, fuzzy
-#| msgid "Horizontal options"
 msgid "Horizontally homogeneous"
-msgstr "Имконоти уфуқӣ"
+msgstr "Якхелаи уфуқӣ"
 
 #: gtk/gtkstack.c:410
-#, fuzzy
-#| msgid "Homogeneous sizing"
 msgid "Horizontally homogeneous sizing"
-msgstr "Андозабандии якхела"
+msgstr "Андозабандии якхелаи уфуқӣ"
 
 #: gtk/gtkstack.c:422
-#, fuzzy
-#| msgid "Vertical options"
 msgid "Vertically homogeneous"
-msgstr "Имконоти амудӣ"
+msgstr "Якхелаи амудӣ"
 
 #: gtk/gtkstack.c:422
-#, fuzzy
-#| msgid "Homogeneous sizing"
 msgid "Vertically homogeneous sizing"
-msgstr "Андозабандии якхела"
+msgstr "Андозабандии якхелаи амудӣ"
 
 #: gtk/gtkstack.c:426
 msgid "Visible child"
@@ -7329,7 +7289,7 @@ msgstr "Захира"
 
 #: gtk/gtkstacksidebar.c:445
 msgid "Associated stack for this GtkStackSidebar"
-msgstr ""
+msgstr "Дастаи марбут барои ин GtkStackSidebar"
 
 #: gtk/gtkstatusbar.c:166
 msgid "Style of bevel around the statusbar text"
@@ -7596,22 +7556,16 @@ msgid "Underline RGBA"
 msgstr "RGBA-и зерхаткашӣ"
 
 #: gtk/gtktexttag.c:543
-#, fuzzy
-#| msgid "Style of underline for this text"
 msgid "Color of underline for this text"
-msgstr "Сабки зерхаткашӣ барои ин матн"
+msgstr "Ранги зерхаткашӣ барои ин матн"
 
 #: gtk/gtktexttag.c:558
-#, fuzzy
-#| msgid "Strikethrough"
 msgid "Strike-through RGBA"
-msgstr "Хатзадашуда"
+msgstr "RGBA-и хатзанӣ"
 
 #: gtk/gtktexttag.c:559
-#, fuzzy
-#| msgid "Whether to strike through the text"
 msgid "Color of strike-through for this text"
-msgstr "Оё аз байни матн зарба мезанад ё не"
+msgstr "Ранги хатзадашуда барои ин матн"
 
 #: gtk/gtktexttag.c:567 gtk/gtktextview.c:766
 msgid ""
@@ -7659,10 +7613,8 @@ msgid "Fallback"
 msgstr "Ақибнишинӣ"
 
 #: gtk/gtktexttag.c:661
-#, fuzzy
-#| msgid "Whether the action is enabled."
 msgid "Whether font fallback is enabled."
-msgstr "Оё амал фаъол шудааст ё на."
+msgstr "Имкони фаъол кардани посухи шрифт."
 
 #: gtk/gtktexttag.c:675
 msgid "Letter Spacing"
@@ -7670,7 +7622,7 @@ msgstr "Фосилагузории ҳарфчинӣ"
 
 #: gtk/gtktexttag.c:676
 msgid "Extra spacing between graphemes"
-msgstr ""
+msgstr "Фосилаи иловагӣ байни графемаҳо"
 
 #: gtk/gtktexttag.c:693
 msgid "Margin Accumulates"
@@ -7746,22 +7698,17 @@ msgid "Underline RGBA set"
 msgstr "Маҷмӯи зерхаткашии RGBA"
 
 #: gtk/gtktexttag.c:799
-#, fuzzy
 #| msgid "Whether this tag affects underlining"
 msgid "Whether this tag affects underlining color"
-msgstr "Оё ин барчасп ба зерхаткашӣ таъсир мерасонад"
+msgstr "Имкони расонидани таъсири барчасп ба ранги зерхаткашӣ"
 
 #: gtk/gtktexttag.c:809
-#, fuzzy
-#| msgid "Strikethrough set"
 msgid "Strikethrough RGBA set"
-msgstr "Маҷмӯи хатзанӣ"
+msgstr "Маҷмӯи RGBA хатзанӣ"
 
 #: gtk/gtktexttag.c:810
-#, fuzzy
-#| msgid "Whether this tag affects strikethrough"
 msgid "Whether this tag affects strikethrough color"
-msgstr "Оё ин барчасп ба хатзадашавӣ таъсир мерасонад"
+msgstr "Имкони расонидани таъсири ин барчасп ба ранги хатзанӣ"
 
 #: gtk/gtktexttag.c:813
 msgid "Wrap mode set"
@@ -7800,20 +7747,16 @@ msgid "Fallback set"
 msgstr "Маҷмӯи ақибнишинӣ"
 
 #: gtk/gtktexttag.c:830
-#, fuzzy
-#| msgid "Whether this tag affects the font family"
 msgid "Whether this tag affects font fallback"
-msgstr "Оё ин барчасп ба оилаи шрифт таъсир мерасонад ё не"
+msgstr "Имкони расонидани таъсири ин барчасп ба посухи шрифт"
 
 #: gtk/gtktexttag.c:833
 msgid "Letter spacing set"
 msgstr "Маҷмӯи фосилагузории ҳарфчинӣ"
 
 #: gtk/gtktexttag.c:834
-#, fuzzy
-#| msgid "Whether this tag affects the left margin"
 msgid "Whether this tag affects letter spacing"
-msgstr "Оё ин барчасп ба ҳошияи чап таъсир мерасонад"
+msgstr "Имкони расонидани таъсири ин барчасп ба фосилаи ҳарф"
 
 #: gtk/gtktextview.c:733
 msgid "Pixels Above Lines"
@@ -7872,10 +7815,8 @@ msgid "Monospace"
 msgstr "Фазои яклухт"
 
 #: gtk/gtktextview.c:929
-#, fuzzy
-#| msgid "Whether to use symbolic icons"
 msgid "Whether to use a monospace font"
-msgstr "Оё нишонаҳои рамзӣ истифода шаванд"
+msgstr "Имкони расонидани таъсири ин барчасп ба шрифти яклухт"
 
 #: gtk/gtktextview.c:947
 msgid "Error underline color"
@@ -9175,7 +9116,7 @@ msgstr "Ҳисоби чопи абрӣ"
 
 #: modules/printbackends/cloudprint/gtkprintercloudprint.c:138
 msgid "GtkCloudprintAccount instance"
-msgstr ""
+msgstr "Ҳолати GtkCloudprintAccount"
 
 #: modules/printbackends/cloudprint/gtkprintercloudprint.c:147
 msgid "Printer ID"
