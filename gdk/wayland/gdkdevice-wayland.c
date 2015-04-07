@@ -2247,3 +2247,14 @@ gdk_wayland_device_unset_grab (GdkDevice *gdk_device)
 
   _gdk_wayland_display_deliver_event (gdk_device_get_display (gdk_device), event);
 }
+
+GdkDragContext *
+gdk_wayland_device_get_drop_context (GdkDevice *gdk_device)
+{
+  GdkWaylandDeviceData *device;
+
+  g_return_if_fail (GDK_IS_WAYLAND_DEVICE (gdk_device));
+  device = GDK_WAYLAND_DEVICE (gdk_device)->device;
+
+  return device->drop_context;
+}

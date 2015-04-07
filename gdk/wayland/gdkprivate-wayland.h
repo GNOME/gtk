@@ -184,6 +184,7 @@ uint32_t _gdk_wayland_device_get_last_implicit_grab_serial (GdkWaylandDevice  *d
 struct wl_data_device * gdk_wayland_device_get_data_device (GdkDevice *gdk_device);
 void gdk_wayland_device_set_selection (GdkDevice             *gdk_device,
                                        struct wl_data_source *source);
+GdkDragContext * gdk_wayland_device_get_drop_context (GdkDevice *gdk_device);
 
 void gdk_wayland_device_unset_grab       (GdkDevice        *device);
 
