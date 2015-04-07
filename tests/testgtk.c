@@ -5103,6 +5103,8 @@ create_cursors (GtkWidget *widget)
 
     if (cursor_demo)
         {
+          guint w, h;
+
           hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 6);
           gtk_container_set_border_width (GTK_CONTAINER (hbox), 5);
           gtk_box_pack_start (GTK_BOX (vbox), hbox, FALSE, TRUE, 0);
@@ -5116,7 +5118,8 @@ create_cursors (GtkWidget *widget)
           gtk_entry_set_text (GTK_ENTRY (entry), "default");
           gtk_box_pack_start (GTK_BOX (hbox), entry, FALSE, TRUE, 0);
 
-          size = gtk_spin_button_new_with_range (1.0, 64.0, 1.0);
+          gdk_display_get_maximal_cursor_size (gtk_widget_get_display (vbox), &w, &h);
+          size = gtk_spin_button_new_with_range (1.0, MIN (w, h), 1.0);
           gtk_spin_button_set_value (GTK_SPIN_BUTTON (size), 24.0);
           gtk_box_pack_start (GTK_BOX (hbox), size, TRUE, TRUE, 0);
 
