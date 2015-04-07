@@ -418,6 +418,9 @@ _gdk_wayland_drag_context_set_dest_window (GdkDragContext *context,
                                            GdkWindow      *dest_window,
                                            uint32_t        serial)
 {
+  if (context->dest_window)
+    g_object_unref (context->dest_window);
+
   context->dest_window = dest_window ? g_object_ref (dest_window) : NULL;
   GDK_WAYLAND_DRAG_CONTEXT (context)->serial = serial;
   gdk_wayland_drop_context_update_targets (context);
