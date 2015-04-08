@@ -506,7 +506,9 @@ gtk_application_focus_in_event_cb (GtkWindow      *window,
       priv->windows = g_list_concat (link, priv->windows);
     }
 
-  gtk_application_impl_active_window_changed (application->priv->impl, window);
+  if (application->priv->impl)
+    gtk_application_impl_active_window_changed (application->priv->impl, window);
+
   g_object_notify (G_OBJECT (application), "active-window");
 
   return FALSE;
