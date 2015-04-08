@@ -155,9 +155,6 @@ static void gtk_image_size_allocate        (GtkWidget    *widget,
 static void gtk_image_unmap                (GtkWidget    *widget);
 static void gtk_image_realize              (GtkWidget    *widget);
 static void gtk_image_unrealize            (GtkWidget    *widget);
-static void gtk_image_get_preferred_size   (GtkImage     *image,
-                                            gint         *width_out,
-                                            gint         *height_out);
 static void gtk_image_get_preferred_width  (GtkWidget    *widget,
                                             gint         *minimum,
                                             gint         *natural);
@@ -937,8 +934,8 @@ gtk_image_set_from_file   (GtkImage    *image,
   priv = image->priv;
 
   g_object_freeze_notify (G_OBJECT (image));
-
-  gtk_image_reset (image);
+  
+  gtk_image_clear (image);
 
   if (filename == NULL)
     {
@@ -951,7 +948,9 @@ gtk_image_set_from_file   (GtkImage    *image,
 
   if (anim == NULL)
     {
-      gtk_image_set_from_icon_name (image, "image-missing", DEFAULT_ICON_SIZE);
+      gtk_image_set_from_icon_name (image,
+                                    "image-missing",
+                                    DEFAULT_ICON_SIZE);
       g_object_thaw_notify (G_OBJECT (image));
       return;
     }
@@ -972,21 +971,7 @@ gtk_image_set_from_file   (GtkImage    *image,
   g_object_unref (anim);
 
   priv->filename = g_strdup (filename);
-
-  if (gtk_widget_get_visible (GTK_WIDGET (image)))
-    {
-      gint width, height;
-
-      gtk_image_get_preferred_size (image, &width, &height);
-      if (width != gtk_widget_get_allocated_width (GTK_WIDGET (image)) ||
-          height != gtk_widget_get_allocated_height (GTK_WIDGET (image)))
-        gtk_widget_queue_resize (GTK_WIDGET (image));
-      else
-        gtk_widget_queue_draw (GTK_WIDGET (image));
-    }
-
-  g_object_notify (G_OBJECT (image), "file");
-
+  
   g_object_thaw_notify (G_OBJECT (image));
 }
 
@@ -1023,7 +1008,9 @@ gtk_image_set_from_resource (GtkImage    *image,
 
   if (animation == NULL)
     {
-      gtk_image_set_from_icon_name (image, "image-missing", DEFAULT_ICON_SIZE);
+      gtk_image_set_from_icon_name (image,
+                                    "image-missing",
+                                    DEFAULT_ICON_SIZE);
       g_object_thaw_notify (G_OBJECT (image));
       return;
     }
@@ -1059,28 +1046,17 @@ gtk_image_set_from_pixbuf (GtkImage  *image,
   GtkImagePrivate *priv;
 
   g_return_if_fail (GTK_IS_IMAGE (image));
-  g_return_if_fail (pixbuf == NULL || GDK_IS_PIXBUF (pixbuf));
+  g_return_if_fail (pixbuf == NULL ||
+                    GDK_IS_PIXBUF (pixbuf));
 
   priv = image->priv;
 
   g_object_freeze_notify (G_OBJECT (image));
-
-  gtk_image_reset (image);
+  
+  gtk_image_clear (image);
 
   if (pixbuf != NULL)
     _gtk_icon_helper_set_pixbuf (priv->icon_helper, pixbuf);
-
-  if (gtk_widget_get_visible (GTK_WIDGET (image)))
-    {
-      gint width, height;
-
-      gtk_image_get_preferred_size (image, &width, &height);
-      if (width != gtk_widget_get_allocated_width (GTK_WIDGET (image)) ||
-          height != gtk_widget_get_allocated_height (GTK_WIDGET (image)))
-        gtk_widget_queue_resize (GTK_WIDGET (image));
-      else
-        gtk_widget_queue_draw (GTK_WIDGET (image));
-    }
 
   g_object_notify (G_OBJECT (image), "pixbuf");
   
@@ -1195,24 +1171,12 @@ gtk_image_set_from_animation (GtkImage           *image,
   if (animation)
     g_object_ref (animation);
 
-  gtk_image_reset (image);
+  gtk_image_clear (image);
 
   if (animation != NULL)
     {
       _gtk_icon_helper_set_animation (priv->icon_helper, animation);
       g_object_unref (animation);
-    }
-
-  if (gtk_widget_get_visible (GTK_WIDGET (image)))
-    {
-      gint width, height;
-
-      gtk_image_get_preferred_size (image, &width, &height);
-      if (width != gtk_widget_get_allocated_width (GTK_WIDGET (image)) ||
-          height != gtk_widget_get_allocated_height (GTK_WIDGET (image)))
-        gtk_widget_queue_resize (GTK_WIDGET (image));
-      else
-        gtk_widget_queue_draw (GTK_WIDGET (image));
     }
 
   g_object_notify (G_OBJECT (image), "pixbuf-animation");
@@ -1245,25 +1209,12 @@ gtk_image_set_from_icon_name  (GtkImage       *image,
   g_object_freeze_notify (G_OBJECT (image));
 
   new_name = g_strdup (icon_name);
-
-  gtk_image_reset (image);
+  gtk_image_clear (image);
 
   if (new_name)
     {
       _gtk_icon_helper_set_icon_name (priv->icon_helper, new_name, size);
       g_free (new_name);
-    }
-
-  if (gtk_widget_get_visible (GTK_WIDGET (image)))
-    {
-      gint width, height;
-
-      gtk_image_get_preferred_size (image, &width, &height);
-      if (width != gtk_widget_get_allocated_width (GTK_WIDGET (image)) ||
-          height != gtk_widget_get_allocated_height (GTK_WIDGET (image)))
-        gtk_widget_queue_resize (GTK_WIDGET (image));
-      else
-        gtk_widget_queue_draw (GTK_WIDGET (image));
     }
 
   g_object_notify (G_OBJECT (image), "icon-name");
@@ -1298,24 +1249,12 @@ gtk_image_set_from_gicon  (GtkImage       *image,
   if (icon)
     g_object_ref (icon);
 
-  gtk_image_reset (image);
+  gtk_image_clear (image);
 
   if (icon)
     {
       _gtk_icon_helper_set_gicon (priv->icon_helper, icon, size);
       g_object_unref (icon);
-    }
-
-  if (gtk_widget_get_visible (GTK_WIDGET (image)))
-    {
-      gint width, height;
-
-      gtk_image_get_preferred_size (image, &width, &height);
-      if (width != gtk_widget_get_allocated_width (GTK_WIDGET (image)) ||
-          height != gtk_widget_get_allocated_height (GTK_WIDGET (image)))
-        gtk_widget_queue_resize (GTK_WIDGET (image));
-      else
-        gtk_widget_queue_draw (GTK_WIDGET (image));
     }
 
   g_object_notify (G_OBJECT (image), "gicon");
@@ -1348,24 +1287,12 @@ gtk_image_set_from_surface (GtkImage       *image,
   if (surface)
     cairo_surface_reference (surface);
 
-  gtk_image_reset (image);
+  gtk_image_clear (image);
 
   if (surface)
     {
       _gtk_icon_helper_set_surface (priv->icon_helper, surface);
       cairo_surface_destroy (surface);
-    }
-
-  if (gtk_widget_get_visible (GTK_WIDGET (image)))
-    {
-      gint width, height;
-
-      gtk_image_get_preferred_size (image, &width, &height);
-      if (width != gtk_widget_get_allocated_width (GTK_WIDGET (image)) ||
-          height != gtk_widget_get_allocated_height (GTK_WIDGET (image)))
-        gtk_widget_queue_resize (GTK_WIDGET (image));
-      else
-        gtk_widget_queue_draw (GTK_WIDGET (image));
     }
 
   g_object_notify (G_OBJECT (image), "surface");
