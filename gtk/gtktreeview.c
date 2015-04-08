@@ -2124,6 +2124,7 @@ gtk_tree_view_destroy (GtkWidget *widget)
   GList *list;
 
   gtk_tree_view_stop_editing (tree_view, TRUE);
+  gtk_tree_view_stop_rubber_band (tree_view);
 
   if (tree_view->priv->columns != NULL)
     {
