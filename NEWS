@@ -1,3 +1,16 @@
+Overview of Changes in GTK+ 3.14.12 to 3.14.12
+==============================================
+
+* Bugs fixed:
+ 744589 nautilus bookmarks changing places randomly
+ 747539 popover: Remove signal handlers in dispose
+        Fix unwanted transparency of drag icons
+        Revert "image: Optimize non-resize changes"
+        Avoid a crash in GtkApplication
+        Avoid a crash with tree view rubberbanding
+        Make gtk-update-icon-cache more resilient
+
+
 Overview of Changes in GTK+ 3.14.10 to 3.14.11
 ==============================================
 
