@@ -92,8 +92,6 @@ static void            gtk_plug_show                  (GtkWidget        *widget)
 static void            gtk_plug_hide                  (GtkWidget        *widget);
 static void            gtk_plug_map                   (GtkWidget        *widget);
 static void            gtk_plug_unmap                 (GtkWidget        *widget);
-static void            gtk_plug_size_allocate         (GtkWidget        *widget,
-						       GtkAllocation    *allocation);
 static gboolean        gtk_plug_key_press_event       (GtkWidget        *widget,
 						       GdkEventKey      *event);
 static gboolean        gtk_plug_focus_event           (GtkWidget        *widget,
@@ -177,7 +175,6 @@ gtk_plug_class_init (GtkPlugClass *class)
   widget_class->hide = gtk_plug_hide;
   widget_class->map = gtk_plug_map;
   widget_class->unmap = gtk_plug_unmap;
-  widget_class->size_allocate = gtk_plug_size_allocate;
 
   widget_class->focus = gtk_plug_focus;
 
@@ -1178,43 +1175,6 @@ gtk_plug_unmap (GtkWidget *widget)
     }
   else
     GTK_WIDGET_CLASS (bin_class)->unmap (widget);
-}
-
-static void
-gtk_plug_size_allocate (GtkWidget     *widget,
-			GtkAllocation *allocation)
-{
-  GtkWidget *child;
-
-  if (gtk_widget_is_toplevel (widget))
-    GTK_WIDGET_CLASS (gtk_plug_parent_class)->size_allocate (widget, allocation);
-  else
-    {
-      GtkBin *bin = GTK_BIN (widget);
-
-      gtk_widget_set_allocation (widget, allocation);
-
-      if (gtk_widget_get_realized (widget))
-        gdk_window_move_resize (gtk_widget_get_window (widget),
-				allocation->x, allocation->y,
-				allocation->width, allocation->height);
-
-      child = gtk_bin_get_child (bin);
-
-      if (child != NULL && gtk_widget_get_visible (child))
-	{
-	  GtkAllocation child_allocation;
-	  
-	  child_allocation.x = child_allocation.y = gtk_container_get_border_width (GTK_CONTAINER (widget));
-	  child_allocation.width =
-	    MAX (1, (gint)allocation->width - child_allocation.x * 2);
-	  child_allocation.height =
-	    MAX (1, (gint)allocation->height - child_allocation.y * 2);
-	  
-	  gtk_widget_size_allocate (child, &child_allocation);
-	}
-      
-    }
 }
 
 static gboolean
