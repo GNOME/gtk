@@ -1491,7 +1491,7 @@ build_cache (const gchar *path)
 opentmp:
   if ((fd = g_open (tmp_cache_path, O_WRONLY | O_CREAT | O_EXCL | O_TRUNC | _O_BINARY, mode)) == -1)
     {
-      if (force_update && retry_count == 0)
+      if (retry_count == 0)
         {
           retry_count++;
           g_remove (tmp_cache_path);
