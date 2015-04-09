@@ -25,6 +25,7 @@
 
 #include "gdkwindowimpl.h"
 #include "gdkprivate-quartz.h"
+#include "gdkglcontext-quartz.h"
 #include "gdkquartzscreen.h"
 #include "gdkquartzcursor.h"
 
@@ -2944,6 +2945,7 @@ gdk_window_impl_quartz_class_init (GdkWindowImplQuartzClass *klass)
   impl_class->change_property = _gdk_quartz_window_change_property;
   impl_class->delete_property = _gdk_quartz_window_delete_property;
 
+  impl_class->create_gl_context = gdk_quartz_window_create_gl_context;
 
   impl_quartz_class->get_context = gdk_window_impl_quartz_get_context;
   impl_quartz_class->release_context = gdk_window_impl_quartz_release_context;
