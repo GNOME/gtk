@@ -1036,6 +1036,10 @@ output_handle_geometry (void             *data,
 {
   GdkWaylandMonitor *monitor = (GdkWaylandMonitor *)data;
 
+  GDK_NOTE (MISC,
+            g_message ("handle geometry output %d, position %d %d, phys. size %d %d, manufacturer %s, model %s",
+                       monitor->id, x, y, physical_width, physical_height, make, model));
+
   monitor->geometry.x = x;
   monitor->geometry.y = y;
 
@@ -1058,6 +1062,9 @@ output_handle_done (void             *data,
 {
   GdkWaylandMonitor *monitor = (GdkWaylandMonitor *)data;
 
+  GDK_NOTE (MISC,
+            g_message ("handle done output %d", monitor->id));
+
   g_signal_emit_by_name (monitor->screen, "monitors-changed");
   update_screen_size (monitor->screen);
 }
@@ -1065,12 +1072,17 @@ output_handle_done (void             *data,
 static void
 output_handle_scale (void             *data,
                      struct wl_output *wl_output,
-                     int32_t           factor)
+                     int32_t           scale)
 {
   GdkWaylandMonitor *monitor = (GdkWaylandMonitor *)data;
 
-  monitor->scale = factor;
-  g_signal_emit_by_name (monitor->screen, "monitors-changed");
+  GDK_NOTE (MISC,
+            g_message ("handle scale output %d, scale %d", monitor->id, scale));
+
+  monitor->scale = scale;
+
+  if (monitor->geometry.width != 0 && monitor->version < OUTPUT_VERSION_WITH_DONE)
+    g_signal_emit_by_name (monitor->screen, "monitors-changed");
 }
 
 static void
@@ -1082,6 +1094,10 @@ output_handle_mode (void             *data,
                     int               refresh)
 {
   GdkWaylandMonitor *monitor = (GdkWaylandMonitor *)data;
+
+  GDK_NOTE (MISC,
+            g_message ("handle mode output %d, size %d %d, rate %d",
+                       monitor->id, width, height, refresh));
 
   if ((flags & WL_OUTPUT_MODE_CURRENT) == 0)
     return;
