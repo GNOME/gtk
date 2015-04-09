@@ -419,19 +419,23 @@ _gtk_cell_accessible_state_changed (GtkCellAccessible    *cell,
 /*
  * gtk_cell_accessible_update_cache:
  * @cell: the cell that is changed
+ * @emit_signal: whether or not to notify the ATK bridge
  *
  * Notifies the cell that the values in the data in the row that
  * is used to feed the cell renderer with has changed. The
  * cell_changed function of @cell is called to send update
  * notifications for the properties it takes from its cell
- * renderer.
+ * renderer. If @emit_signal is TRUE, also notify the ATK bridge
+ * of the change. The bridge should be notified when an existing
+ * cell changes; not when a newly-created cell is being set up.
  *
  * Note that there is no higher granularity available about which
  * properties changed, so you will need to make do with this
  * function.
  **/
 void
-_gtk_cell_accessible_update_cache (GtkCellAccessible *cell)
+_gtk_cell_accessible_update_cache (GtkCellAccessible *cell,
+                                   gboolean           emit_signal)
 {
   GtkCellAccessibleClass *klass;
 
@@ -440,5 +444,5 @@ _gtk_cell_accessible_update_cache (GtkCellAccessible *cell)
   klass = GTK_CELL_ACCESSIBLE_GET_CLASS (cell);
 
   if (klass->update_cache)
-    klass->update_cache (cell);
+    klass->update_cache (cell, emit_signal);
 }
