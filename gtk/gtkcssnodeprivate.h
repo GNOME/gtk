@@ -31,7 +31,6 @@ G_BEGIN_DECLS
 #define GTK_IS_CSS_NODE_CLASS(obj)  (G_TYPE_CHECK_CLASS_TYPE (obj, GTK_TYPE_CSS_NODE))
 #define GTK_CSS_NODE_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS ((obj), GTK_TYPE_CSS_NODE, GtkCssNodeClass))
 
-typedef struct _GtkCssNode           GtkCssNode;
 typedef struct _GtkCssNodeClass      GtkCssNodeClass;
 
 struct _GtkCssNode
