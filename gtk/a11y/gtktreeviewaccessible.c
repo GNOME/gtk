@@ -425,7 +425,7 @@ create_cell (GtkTreeView           *treeview,
   cell_info_new (accessible, tree, node, column, cell);
 
   set_cell_data (treeview, accessible, cell);
-  _gtk_cell_accessible_update_cache (cell);
+  _gtk_cell_accessible_update_cache (cell, FALSE);
 
   return cell;
 }
@@ -1705,7 +1705,7 @@ _gtk_tree_view_accessible_changed (GtkTreeView *treeview,
         continue;
 
       set_cell_data (treeview, accessible, cell);
-      _gtk_cell_accessible_update_cache (cell);
+      _gtk_cell_accessible_update_cache (cell, TRUE);
     }
 
   g_signal_emit_by_name (accessible, "visible-data-changed");

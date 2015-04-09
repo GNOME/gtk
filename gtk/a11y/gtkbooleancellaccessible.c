@@ -113,7 +113,8 @@ gtk_boolean_cell_accessible_ref_state_set (AtkObject *accessible)
 }
 
 static void
-gtk_boolean_cell_accessible_update_cache (GtkCellAccessible *cell)
+gtk_boolean_cell_accessible_update_cache (GtkCellAccessible *cell,
+                                          gboolean            emit_signal)
 {
   GtkBooleanCellAccessible *boolean_cell = GTK_BOOLEAN_CELL_ACCESSIBLE (cell);
   gboolean active;
@@ -131,14 +132,16 @@ gtk_boolean_cell_accessible_update_cache (GtkCellAccessible *cell)
     {
       boolean_cell->priv->cell_value = !boolean_cell->priv->cell_value;
 
-      atk_object_notify_state_change (ATK_OBJECT (cell), ATK_STATE_CHECKED, active);
+      if (emit_signal)
+        atk_object_notify_state_change (ATK_OBJECT (cell), ATK_STATE_CHECKED, active);
     }
 
   if (boolean_cell->priv->cell_sensitive != sensitive)
     {
       boolean_cell->priv->cell_sensitive = !boolean_cell->priv->cell_sensitive;
 
-      atk_object_notify_state_change (ATK_OBJECT (cell), ATK_STATE_SENSITIVE, sensitive);
+      if (emit_signal)
+        atk_object_notify_state_change (ATK_OBJECT (cell), ATK_STATE_SENSITIVE, sensitive);
     }
 }
 

@@ -87,7 +87,8 @@ static void             add_attr                        (PangoAttrList  *attr_li
 
 /* Misc */
 
-static void gtk_text_cell_accessible_update_cache       (GtkCellAccessible *cell);
+static void gtk_text_cell_accessible_update_cache       (GtkCellAccessible *cell,
+                                                         gboolean           emit_signal);
 
 static void atk_text_interface_init (AtkTextIface *iface);
 
@@ -132,7 +133,8 @@ gtk_text_cell_accessible_get_name (AtkObject *atk_obj)
 }
 
 static void
-gtk_text_cell_accessible_update_cache (GtkCellAccessible *cell)
+gtk_text_cell_accessible_update_cache (GtkCellAccessible *cell,
+                                       gboolean           emit_signal)
 {
   GtkTextCellAccessible *text_cell = GTK_TEXT_CELL_ACCESSIBLE (cell);
   AtkObject *obj = ATK_OBJECT (cell);
@@ -154,7 +156,7 @@ gtk_text_cell_accessible_update_cache (GtkCellAccessible *cell)
 
   if (g_strcmp0 (text_cell->priv->cell_text, text) != 0)
     {
-      if (text_cell->priv->cell_length)
+      if (text_cell->priv->cell_length && emit_signal)
         {
           g_signal_emit_by_name (cell, "text-changed::delete",
                                  0, text_cell->priv->cell_length);
@@ -164,13 +166,13 @@ gtk_text_cell_accessible_update_cache (GtkCellAccessible *cell)
       text_cell->priv->cell_text = g_strdup (text);
       text_cell->priv->cell_length = text_length;
 
-      if (text_length)
+      if (text_length && emit_signal)
         {
           g_signal_emit_by_name (cell, "text-changed::insert",
                                  0, text_cell->priv->cell_length);
         }
 
-      if (obj->name == NULL)
+      if (obj->name == NULL && emit_signal)
         g_object_notify (G_OBJECT (obj), "accessible-name");
     }
 
