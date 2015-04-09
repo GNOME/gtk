@@ -243,7 +243,10 @@ gtk_popover_dispose (GObject *object)
   gtk_widget_set_visible (GTK_WIDGET (object), FALSE);
 
   if (priv->window)
-    _gtk_window_remove_popover (priv->window, GTK_WIDGET (object));
+    {
+      g_signal_handlers_disconnect_by_data (priv->window, popover);
+      _gtk_window_remove_popover (priv->window, GTK_WIDGET (object));
+    }
 
   priv->window = NULL;
 
