@@ -292,7 +292,7 @@ copy ..\..\..\gtk\gtkseparatormenuitem.h $(CopyDir)\include\gtk-3.0\gtk\gtksepar
 copy ..\..\..\gtk\gtkseparatortoolitem.h $(CopyDir)\include\gtk-3.0\gtk\gtkseparatortoolitem.h
 copy ..\..\..\gtk\gtksettings.h $(CopyDir)\include\gtk-3.0\gtk\gtksettings.h
 copy ..\..\..\gtk\gtkshow.h $(CopyDir)\include\gtk-3.0\gtk\gtkshow.h
-copy ..\..\..\gtk\gtksidebar.h $(CopyDir)\include\gtk-3.0\gtk\gtksidebar.h
+copy ..\..\..\gtk\gtkstacksidebar.h $(CopyDir)\include\gtk-3.0\gtk\gtkstacksidebar.h
 copy ..\..\..\gtk\gtksizegroup.h $(CopyDir)\include\gtk-3.0\gtk\gtksizegroup.h
 copy ..\..\..\gtk\gtksizerequest.h $(CopyDir)\include\gtk-3.0\gtk\gtksizerequest.h
 copy ..\..\..\gtk\gtksocket.h $(CopyDir)\include\gtk-3.0\gtk\gtksocket.h
