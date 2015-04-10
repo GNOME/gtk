@@ -958,9 +958,9 @@ struct FileExistsData
 
 static void
 name_exists_get_info_cb (GCancellable *cancellable,
-			 GFileInfo    *info,
-			 const GError *error,
-			 gpointer      user_data)
+                         GFileInfo    *info,
+                         const GError *error,
+                         gpointer      user_data)
 {
   struct FileExistsData *data = user_data;
   GtkFileChooserWidget *impl = data->impl;
