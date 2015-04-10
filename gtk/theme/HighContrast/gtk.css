@@ -1539,7 +1539,7 @@ GtkTreeView.view.progressbar {
       .notebook tab.active-page GtkLabel:backdrop, .notebook tab GtkLabel.active-page:backdrop {
         color: #000; }
     .notebook tab .button {
-      border: 1px solid transparent;
+      border: 2px solid transparent;
       icon-shadow: none;
       transition: none;
       color: rgba(0, 0, 0, 0.3); }
@@ -1551,7 +1551,7 @@ GtkTreeView.view.progressbar {
         background-color: #fff;
         border-color: #7f7f7f;
         background-image: none;
-        border-width: 1px;
+        border-width: 2px;
         background-image: none;
         box-shadow: none; }
       .notebook tab .button:active {
@@ -1561,11 +1561,11 @@ GtkTreeView.view.progressbar {
         color: white;
         background-color: black;
         border-color: #7f7f7f;
-        border-width: 1px; }
-      .notebook tab .button:backdrop {
+        border-width: 2px; }
+      .notebook tab .button:backdrop, .notebook tab .button:backdrop:hover {
         color: rgba(0, 0, 0, 0.3);
         border-color: transparent;
-        border-width: 1px; }
+        border-width: 2px; }
       .notebook tab .button > GtkImage {
         padding: 2px; }
 
