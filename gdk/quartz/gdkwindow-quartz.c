@@ -26,6 +26,7 @@
 #include "gdkwindowimpl.h"
 #include "gdkprivate-quartz.h"
 #include "gdkglcontext-quartz.h"
+#include "gdkquartzglcontext.h"
 #include "gdkquartzscreen.h"
 #include "gdkquartzcursor.h"
 
@@ -1315,6 +1316,9 @@ move_resize_window_internal (GdkWindow *window,
           cairo_region_destroy (old_region);
         }
     }
+
+  if (window->gl_paint_context != NULL)
+    [GDK_QUARTZ_GL_CONTEXT (window->gl_paint_context)->gl_context update];
 
   GDK_QUARTZ_RELEASE_POOL;
 }
