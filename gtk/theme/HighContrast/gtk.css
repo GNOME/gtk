@@ -1594,7 +1594,7 @@ GtkTreeView.view.progressbar {
     border: none; }
   .scrollbar.slider {
     border-radius: 20px;
-    border: 3px solid transparent;
+    border: 5px solid rgba(127, 127, 127, 0.01);
     background-color: #7f7f7f; }
     .scrollbar.slider:backdrop, .scrollbar.slider:insensitive {
       background-color: #e5e5e5; }
@@ -1603,7 +1603,7 @@ GtkTreeView.view.progressbar {
     .scrollbar.slider:prelight:active {
       background-color: #000; }
     .scrollbar.slider.fine-tune {
-      border-width: 5px; }
+      border-width: 8px; }
       .scrollbar.slider.fine-tune:prelight:active {
         background-color: #000; }
 
