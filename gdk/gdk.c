@@ -130,6 +130,7 @@ static int gdk_initialized = 0;                     /* 1 if the library is initi
                                                      */
 
 static gchar  *gdk_progclass = NULL;
+static gboolean gdk_progclass_overridden;
 
 static GMutex gdk_threads_mutex;
 
@@ -208,6 +209,7 @@ static gboolean
 gdk_arg_class_cb (const char *key, const char *value, gpointer user_data, GError **error)
 {
   gdk_set_program_class (value);
+  gdk_progclass_overridden = TRUE;
 
   return TRUE;
 }
@@ -1025,10 +1027,16 @@ gdk_get_program_class (void)
  * Sets the program class. The X11 backend uses the program class to set
  * the class name part of the `WM_CLASS` property on
  * toplevel windows; see the ICCCM.
+ *
+ * The program class can still be overridden with the --class command
+ * line option.
  */
 void
 gdk_set_program_class (const char *program_class)
 {
+  if (gdk_progclass_overridden)
+    return;
+
   g_free (gdk_progclass);
 
   gdk_progclass = g_strdup (program_class);
