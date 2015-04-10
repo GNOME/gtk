@@ -25,8 +25,6 @@
 
 #include "css-node-tree.h"
 
-#include <strings.h>
-
 #include "gtktreemodelcssnode.h"
 #include <gtk/gtktreeview.h>
 #include "gtk/gtkwidgetprivate.h"
@@ -76,7 +74,7 @@ sort_strv (gconstpointer a,
   char **ap = (char **) a;
   char **bp = (char **) b;
 
-  return strcasecmp (*ap, *bp);
+  return g_ascii_strcasecmp (*ap, *bp);
 }
 
 static void
