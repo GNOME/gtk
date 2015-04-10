@@ -1780,14 +1780,16 @@ void
 gtk_application_handle_window_realize (GtkApplication *application,
                                        GtkWindow      *window)
 {
-  gtk_application_impl_handle_window_realize (application->priv->impl, window);
+  if (application->priv->impl)
+    gtk_application_impl_handle_window_realize (application->priv->impl, window);
 }
 
 void
 gtk_application_handle_window_map (GtkApplication *application,
                                    GtkWindow      *window)
 {
-  gtk_application_impl_handle_window_map (application->priv->impl, window);
+  if (application->priv->impl)
+    gtk_application_impl_handle_window_map (application->priv->impl, window);
 }
 
 /**
