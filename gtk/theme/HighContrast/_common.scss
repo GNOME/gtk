@@ -2,6 +2,8 @@
   @return unquote("alpha(#{$c},#{$a})");
 }
 
+$ease-out-quad: cubic-bezier(0.25, 0.46, 0.45, 0.94);
+
 * {
   padding: 0;
   -GtkToolButton-icon-spacing: 4;
@@ -570,7 +572,6 @@ $_dot_color: $selected_bg_color;
   border-color: transparent;
   background-color: transparent;
   background-image: none;
-  box-shadow: inset 0 1px transparentize(white,1);
   text-shadow: none;
   icon-shadow: none;
 }
@@ -1466,7 +1467,7 @@ GtkSwitch {
                     inset 0 -2px transparentize($bg_color,0.4),
                     inset 0 -1px mix($bg_color,$borders_color,50%);
       }
-      &:active { border: 1px solid $selected_borders_color; }
+      &:active { border-color: $selected_borders_color; }
       &:insensitive { @include button(insensitive, $edge: none); }
       &:backdrop { @include button(backdrop);
         &:active{ border-color: $selected_bg_color; }
@@ -1804,6 +1805,24 @@ GtkScrolledWindow {
   padding: 2px;
 }
 
+.list-row.button,
+.list-row.button:backdrop,
+.list-row.button:backdrop:active,
+.list-row.button:backdrop:checked,
+.list-row.button:backdrop:insensitive,
+.list-row.button:backdrop:insensitive:active,
+.list-row.button:backdrop:insensitive:checked,
+.list-row.button:insensitive:active,
+.list-row.button:insensitive:checked {
+  // reset button inherited stuff
+  @extend %undecorated_button;
+  background-color: transparentize($base_color,1); // for the transition
+  border-style: none; // I need no borders here
+  border-radius: 0;   // and no rounded corners
+  box-shadow: none;   // and no box-shadow
+
+}
+
 .list-row.button {
   @extend %undecorated_button;
   background-color: transparentize($base_color,1); // for the transition
@@ -1811,27 +1830,71 @@ GtkScrolledWindow {
   border-radius: 0;   // and no rounded corners
   box-shadow: none;   // and no box-shadow
   &:hover {
-    background-color: mix(black, $base_color, 5%);
+    background-color: mix($fg_color, $base_color, 5%);
   }
   &:active {
-    box-shadow: inset 0 2px 2px -2px transparentize(black,0.8);
+    box-shadow: inset 0 2px 2px -2px transparentize(black, 0.8);
   }
   &:selected {
-    &:active { box-shadow: inset 0 2px 3px -1px transparentize(black,0.5); }
+    &:active { box-shadow: inset 0 2px 3px -1px transparentize(black, 0.5); }
     &:hover {
-      background-color: mix(black, $selected_bg_color, 10%);
+      background-color: mix($fg_color, $selected_bg_color, 10%);
     }
-  }
-  &:backdrop:hover {
-    @extend %undecorated_button;
+    &:backdrop { background-color: $selected_bg_color; }
   }
 }
 
 .list-row:selected {
-  background-color: $selected_bg_color;
-  color: $selected_fg_color;
-  &:backdrop { color: $backdrop_base_color;}
+  @extend %selected_items;
+  .button {
+    @include button(normal, $edge:none);
+    border-color: $selected_borders_color;
+    &.flat {
+      @include button(undecorated, $edge:none);
+      color: $selected_fg_color;
+    }
+    &:hover {
+      @include button(hover, $edge:none);
+      border-color: $selected_borders_color;
+    }
+    &:active, &:checked {
+      @include button(active, $edge:none);
+      border-color: $selected_borders_color;
+    }
+    &:backdrop, &.flat:backdrop {
+      @include button(backdrop, $edge:none);
+      border-color: $selected_borders_color;
+      &:active, &:checked {
+        @include button(backdrop-active, $edge:none);
+        border-color: $selected_borders_color;
+      }
+      &:insensitive {
+        @include button(backdrop-insensitive, $edge:none);
+        border-color: $selected_borders_color;
+        &:active, &:checked {
+          @include button(backdrop-insensitive-active, $edge:none);
+          border-color: $selected_borders_color;
+        }
+      }
+    }
+    &.flat:backdrop {
+      @include button(undecorated);
+      color: $backdrop_base_color;
+    }
+    &:insensitive {
+      @include button(insensitive, $edge:none);
+      border-color: $selected_borders_color;
+      &:active, &:checked { @include button(insensitive-active, $edge:none); }
+    }
+  }
 }
+
+// transition
+.list-row, list-row.button {
+  transition: all 300ms $ease-out-quad;
+  &:hover { transition: none; }
+}
+
 
 /*********************
  * App Notifications *
