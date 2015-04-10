@@ -367,9 +367,9 @@
       <object class="GtkGrid">
         <property name="visible">True</property>
         <property name="margin">10</property>
-        <property name="column-spacing">10</property>
-        <property name="row-spacing">10</property>
-        <property name="row-homogeneous">True</property>
+        <property name="column-spacing">6</property>
+        <property name="row-spacing">6</property>
+        <property name="row-homogeneous">False</property>
         <child>
           <object class="GtkLabel">
             <property name="visible">True</property>
@@ -388,6 +388,7 @@
         <child>
           <object class="GtkEntry" id="new_folder_name_entry">
             <property name="visible">True</property>
+            <property name="width-chars">25</property>
             <signal name="changed" handler="new_folder_name_changed"/>
           </object>
           <packing>
