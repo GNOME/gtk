@@ -2604,12 +2604,26 @@ GtkScrolledWindow {
   padding: 2px;
 }
 
-.list-row.button {
+.list-row.button,
+.list-row.button:backdrop,
+.list-row.button:backdrop:active,
+.list-row.button:backdrop:checked,
+.list-row.button:backdrop:insensitive,
+.list-row.button:backdrop:insensitive:active,
+.list-row.button:backdrop:insensitive:checked,
+.list-row.button:insensitive:active,
+.list-row.button:insensitive:checked {
+  // reset button inherited stuff
   @extend %undecorated_button;
   background-color: transparentize($base_color,1); // for the transition
   border-style: none; // I need no borders here
   border-radius: 0;   // and no rounded corners
   box-shadow: none;   // and no box-shadow
+
+}
+
+.list-row.button {
+  // let's take care of background colors
   &:hover {
     background-color: mix($fg_color, $base_color, 5%);
   }
@@ -2623,9 +2637,7 @@ GtkScrolledWindow {
     }
     &:backdrop { background-color: $selected_bg_color; }
   }
-  &:backdrop:hover {
-    @extend %undecorated_button;
-  }
+  &:backdrop:hover { background-color: transparent; }
 }
 
 .list-row:selected {

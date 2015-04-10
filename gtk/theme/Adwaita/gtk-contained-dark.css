@@ -1272,7 +1272,15 @@ GtkComboBox.combobox-entry .titlebar .button.titlebutton,
 .titlebar .menu.button.titlebutton, .notebook tab .button, .notebook tab .header-bar .button.titlebutton, .header-bar .notebook tab .button.titlebutton,
 .notebook tab .titlebar .button.titlebutton,
 .titlebar .notebook tab .button.titlebutton, .list-row.button, .header-bar .list-row.button.titlebutton,
-.titlebar .list-row.button.titlebutton, .list-row.button:backdrop:hover, .app-notification .button.flat, .app-notification .header-bar .titlebutton.button, .header-bar .app-notification .titlebutton.button,
+.titlebar .list-row.button.titlebutton,
+.list-row.button:backdrop,
+.list-row.button:backdrop:active,
+.list-row.button:backdrop:checked,
+.list-row.button:backdrop:insensitive,
+.list-row.button:backdrop:insensitive:active,
+.list-row.button:backdrop:insensitive:checked,
+.list-row.button:insensitive:active,
+.list-row.button:insensitive:checked, .app-notification .button.flat, .app-notification .header-bar .titlebutton.button, .header-bar .app-notification .titlebutton.button,
 .app-notification .titlebar .titlebutton.button,
 .titlebar .app-notification .titlebutton.button,
 .app-notification.frame .button.flat, .app-notification .button.flat:backdrop, .app-notification .button.flat:insensitive, .app-notification .button.flat:backdrop:insensitive, .app-notification .header-bar .titlebutton.button:backdrop:insensitive, .header-bar .app-notification .titlebutton.button:backdrop:insensitive,
@@ -3546,21 +3554,32 @@ GtkPlacesSidebar.sidebar .view .separator:backdrop {
   padding: 2px; }
 
 .list-row.button, .header-bar .list-row.button.titlebutton,
-.titlebar .list-row.button.titlebutton {
+.titlebar .list-row.button.titlebutton,
+.list-row.button:backdrop,
+.list-row.button:backdrop:active,
+.list-row.button:backdrop:checked,
+.list-row.button:backdrop:insensitive,
+.list-row.button:backdrop:insensitive:active,
+.list-row.button:backdrop:insensitive:checked,
+.list-row.button:insensitive:active,
+.list-row.button:insensitive:checked {
   background-color: rgba(41, 41, 41, 0);
   border-style: none;
   border-radius: 0;
   box-shadow: none; }
-  .list-row.button:hover {
-    background-color: #323232; }
-  .list-row.button:active {
-    box-shadow: inset 0 2px 2px -2px rgba(0, 0, 0, 0.2); }
-  .list-row.button:selected:active {
-    box-shadow: inset 0 2px 3px -1px rgba(0, 0, 0, 0.5); }
-  .list-row.button:selected:hover {
-    background-color: #356ba4; }
-  .list-row.button:selected:backdrop {
-    background-color: #215d9c; }
+
+.list-row.button:hover {
+  background-color: #323232; }
+.list-row.button:active {
+  box-shadow: inset 0 2px 2px -2px rgba(0, 0, 0, 0.2); }
+.list-row.button:selected:active {
+  box-shadow: inset 0 2px 3px -1px rgba(0, 0, 0, 0.5); }
+.list-row.button:selected:hover {
+  background-color: #356ba4; }
+.list-row.button:selected:backdrop {
+  background-color: #215d9c; }
+.list-row.button:backdrop:hover {
+  background-color: transparent; }
 
 .list-row:selected .button {
   color: #eeeeec;
