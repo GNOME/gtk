@@ -78,22 +78,13 @@
                               </packing>
                             </child>
                             <child>
-                              <object class="GtkButton" id="browse_new_folder_button">
-                                <property name="tooltip-text" translatable="yes">Create Folder</property>
+                              <object class="GtkMenuButton" id="browse_new_folder_button">
+                                <property name="label" translatable="yes">Create _Folder</property>
                                 <property name="can_focus">True</property>
-                                <property name="receives_default">True</property>
+                                <property name="receives_default">False</property>
                                 <property name="use_underline">True</property>
-                                <signal name="clicked" handler="new_folder_button_clicked" swapped="no"/>
-                                <style>
-                                  <class name="image-button"/>
-                                </style>
-                                <child>
-                                  <object class="GtkImage">
-                                    <property name="visible">True</property>
-                                    <property name="icon-name">list-add-symbolic</property>
-                                    <property name="icon-size">1</property>
-                                  </object>
-                                </child>
+                                <property name="popover">new_folder_popover</property>
+                                <signal name="notify::active" handler="new_folder_popover_active"/>
                               </object>
                               <packing>
                                 <property name="expand">False</property>
@@ -371,5 +362,71 @@
       <widget name="browse_path_bar"/>
       <widget name="browse_new_folder_button"/>
     </widgets>
+  </object>
+  <object class="GtkPopover" id="new_folder_popover">
+    <property name="modal">True</property>
+    <child>
+      <object class="GtkGrid">
+        <property name="visible">True</property>
+        <property name="margin">10</property>
+        <property name="column-spacing">6</property>
+        <property name="row-spacing">6</property>
+        <property name="row-homogeneous">False</property>
+        <child>
+          <object class="GtkLabel">
+            <property name="visible">True</property>
+            <property name="label" translatable="yes">Folder Name</property>
+            <property name="halign">start</property>
+            <property name="mnemonic_widget">new_folder_name_entry</property>
+            <attributes>
+              <attribute name="weight" value="bold"/>
+            </attributes>
+          </object>
+          <packing>
+            <property name="left-attach">0</property>
+            <property name="top-attach">0</property>
+            <property name="width">2</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkEntry" id="new_folder_name_entry">
+            <property name="visible">True</property>
+            <property name="width-chars">25</property>
+            <signal name="changed" handler="new_folder_name_changed"/>
+          </object>
+          <packing>
+            <property name="left-attach">0</property>
+            <property name="top-attach">1</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkButton" id="new_folder_create_button">
+            <property name="visible">True</property>
+            <property name="sensitive">False</property>
+            <property name="label" translatable="yes">_Create</property>
+            <property name="use_underline">True</property>
+            <signal name="clicked" handler="new_folder_create_clicked"/>
+            <style>
+              <class name="suggested-action"/>
+            </style>
+          </object>
+          <packing>
+            <property name="left-attach">1</property>
+            <property name="top-attach">1</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkLabel" id="new_folder_error_label">
+            <property name="visible">True</property>
+            <property name="halign">start</property>
+          </object>
+          <packing>
+            <property name="left-attach">0</property>
+            <property name="top-attach">2</property>
+            <property name="width">2</property>
+          </packing>
+        </child>
+      </object>
+    </child>
   </object>
 </interface>

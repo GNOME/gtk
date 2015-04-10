@@ -229,6 +229,10 @@ struct _GtkFileChooserWidgetPrivate {
   GtkWidget *browse_path_bar_hbox;
   GtkSizeGroup *browse_path_bar_size_group;
   GtkWidget *browse_path_bar;
+  GtkWidget *new_folder_name_entry;
+  GtkWidget *new_folder_create_button;
+  GtkWidget *new_folder_error_label;
+  GtkWidget *new_folder_popover;
 
   GtkFileSystemModel *browse_files_model;
   char *browse_files_last_selected_name;
@@ -935,6 +939,159 @@ new_folder_button_clicked (GtkButton             *button,
 			    TRUE);
 
   gtk_tree_path_free (path);
+}
+
+static void
+new_folder_popover_active (GtkWidget            *button,
+                           GParamSpec           *pspec,
+                           GtkFileChooserWidget *impl)
+{
+  GtkFileChooserWidgetPrivate *priv = impl->priv;
+
+  gtk_entry_set_text (GTK_ENTRY (priv->new_folder_name_entry), "");
+  gtk_widget_set_sensitive (priv->new_folder_create_button, FALSE);
+  gtk_label_set_text (GTK_LABEL (priv->new_folder_error_label), "");
+}
+
+struct FileExistsData
+{
+  GtkFileChooserWidget *impl;
+  gboolean file_exists_and_is_not_folder;
+  GFile *parent_file;
+  GFile *file;
+};
+
+static void
+name_exists_get_info_cb (GCancellable *cancellable,
+                         GFileInfo    *info,
+                         const GError *error,
+                         gpointer      user_data)
+{
+  struct FileExistsData *data = user_data;
+  GtkFileChooserWidget *impl = data->impl;
+  GtkFileChooserWidgetPrivate *priv = impl->priv;
+
+  if (cancellable != priv->file_exists_get_info_cancellable)
+    goto out;
+
+  priv->file_exists_get_info_cancellable = NULL;
+
+  if (g_cancellable_is_cancelled (cancellable))
+    goto out;
+
+  if (info != NULL)
+    {
+      const gchar *msg;
+
+      if (_gtk_file_info_consider_as_directory (info))
+        msg = _("A folder with that name already exists");
+      else
+        msg = _("A file with that name already exists");
+
+      gtk_widget_set_sensitive (priv->new_folder_create_button, FALSE);
+      gtk_label_set_text (GTK_LABEL (priv->new_folder_error_label), msg);
+    }
+  else
+    {
+      gtk_widget_set_sensitive (priv->new_folder_create_button, TRUE);
+      gtk_label_set_text (GTK_LABEL (priv->new_folder_error_label), "");
+    }
+
+out:
+  g_object_unref (impl);
+  g_object_unref (data->file);
+  g_object_unref (data->parent_file);
+  g_free (data);
+  g_object_unref (cancellable);
+}
+
+static void
+check_valid_folder_name (GtkFileChooserWidget *impl,
+                         const gchar          *name)
+{
+  GtkFileChooserWidgetPrivate *priv = impl->priv;
+
+  gtk_widget_set_sensitive (priv->new_folder_create_button, FALSE);
+
+  if (name[0] == '\0')
+    gtk_label_set_text (GTK_LABEL (priv->new_folder_error_label), "");
+  else if (strcmp (name, ".") == 0)
+    gtk_label_set_text (GTK_LABEL (priv->new_folder_error_label),
+                        _("A folder cannot be called “.”"));
+  else if (strcmp (name, "..") == 0)
+    gtk_label_set_text (GTK_LABEL (priv->new_folder_error_label),
+                        _("A folder cannot be called “..”"));
+  else if (strchr (name, '/') != NULL)
+    gtk_label_set_text (GTK_LABEL (priv->new_folder_error_label),
+                        _("Folder names cannot contain “/”"));
+  else
+    {
+      GFile *file;
+      GError *error = NULL;
+
+      file = g_file_get_child_for_display_name (priv->current_folder, name, &error);
+      if (file == NULL)
+        {
+          gtk_label_set_text (GTK_LABEL (priv->new_folder_error_label), error->message);
+          g_error_free (error);
+        }
+      else
+        {
+          struct FileExistsData *data;
+
+          gtk_label_set_text (GTK_LABEL (priv->new_folder_error_label), "");
+
+          data = g_new0 (struct FileExistsData, 1);
+          data->impl = g_object_ref (impl);
+          data->parent_file = g_object_ref (priv->current_folder);
+          data->file = g_object_ref (file);
+
+          if (priv->file_exists_get_info_cancellable)
+            g_cancellable_cancel (priv->file_exists_get_info_cancellable);
+
+          priv->file_exists_get_info_cancellable =
+            _gtk_file_system_get_info (priv->file_system,
+                                       file,
+                                       "standard::type",
+                                       name_exists_get_info_cb,
+                                       data);
+
+          g_object_unref (file);
+        }
+    }
+}
+
+static void
+new_folder_name_changed (GtkEntry             *entry,
+                         GtkFileChooserWidget *impl)
+{
+  check_valid_folder_name (impl, gtk_entry_get_text (entry));
+}
+
+static void
+new_folder_create_clicked (GtkButton            *button,
+                           GtkFileChooserWidget *impl)
+{
+  GtkFileChooserWidgetPrivate *priv = impl->priv;
+  GError *error = NULL;
+  GFile *file;
+  const gchar *name;
+
+  name = gtk_entry_get_text (GTK_ENTRY (priv->new_folder_name_entry));
+  file = g_file_get_child_for_display_name (priv->current_folder, name, &error);
+
+  gtk_widget_hide (priv->new_folder_popover);
+
+  if (file)
+    {
+      if (g_file_make_directory (file, NULL, &error))
+        change_folder_and_display_error (impl, file, FALSE);
+      else
+        error_creating_folder_dialog (impl, file, error);
+      g_object_unref (file);
+    }
+  else
+    error_creating_folder_dialog (impl, file, error);
 }
 
 static GSource *
@@ -5482,14 +5639,6 @@ should_respond_after_confirm_overwrite (GtkFileChooserWidget *impl,
     }
 }
 
-struct FileExistsData
-{
-  GtkFileChooserWidget *impl;
-  gboolean file_exists_and_is_not_folder;
-  GFile *parent_file;
-  GFile *file;
-};
-
 static void
 name_entry_get_parent_info_cb (GCancellable *cancellable,
 			       GFileInfo    *info,
@@ -7491,6 +7640,10 @@ gtk_file_chooser_widget_class_init (GtkFileChooserWidgetClass *class)
   gtk_widget_class_bind_template_child_private (widget_class, GtkFileChooserWidget, list_mtime_column);
   gtk_widget_class_bind_template_child_private (widget_class, GtkFileChooserWidget, list_size_column);
   gtk_widget_class_bind_template_child_private (widget_class, GtkFileChooserWidget, list_location_column);
+  gtk_widget_class_bind_template_child_private (widget_class, GtkFileChooserWidget, new_folder_name_entry);
+  gtk_widget_class_bind_template_child_private (widget_class, GtkFileChooserWidget, new_folder_create_button);
+  gtk_widget_class_bind_template_child_private (widget_class, GtkFileChooserWidget, new_folder_error_label);
+  gtk_widget_class_bind_template_child_private (widget_class, GtkFileChooserWidget, new_folder_popover);
 
   /* And a *lot* of callbacks to bind ... */
   gtk_widget_class_bind_template_callback (widget_class, browse_files_key_press_event_cb);
@@ -7513,6 +7666,9 @@ gtk_file_chooser_widget_class_init (GtkFileChooserWidgetClass *class)
   gtk_widget_class_bind_template_callback (widget_class, places_sidebar_show_enter_location_cb);
   gtk_widget_class_bind_template_callback (widget_class, search_entry_activate_cb);
   gtk_widget_class_bind_template_callback (widget_class, search_entry_stop_cb);
+  gtk_widget_class_bind_template_callback (widget_class, new_folder_popover_active);
+  gtk_widget_class_bind_template_callback (widget_class, new_folder_name_changed);
+  gtk_widget_class_bind_template_callback (widget_class, new_folder_create_clicked);
 }
 
 static void
