@@ -305,9 +305,6 @@ struct _GtkFileChooserWidgetPrivate {
 
   guint location_changed_id;
 
-  GSource *edited_idle;
-  char *edited_new_text;
-
   gulong settings_signal_id;
   int icon_size;
 
@@ -659,8 +656,6 @@ gtk_file_chooser_widget_finalize (GObject *object)
 
   g_free (priv->preview_display_name);
 
-  g_free (priv->edited_new_text);
-
   impl->priv = NULL;
 
   G_OBJECT_CLASS (gtk_file_chooser_widget_parent_class)->finalize (object);
@@ -911,36 +906,6 @@ set_preview_widget (GtkFileChooserWidget *impl,
   update_preview_widget_visibility (impl);
 }
 
-/* Callback used when the "New Folder" button is clicked */
-static void
-new_folder_button_clicked (GtkButton             *button,
-			   GtkFileChooserWidget *impl)
-{
-  GtkFileChooserWidgetPrivate *priv = impl->priv;
-  GtkTreeIter iter;
-  GtkTreePath *path;
-
-  if (!priv->browse_files_model)
-    return; /* FIXME: this sucks.  Disable the New Folder button or something. */
-
-  /* Prevent button from being clicked twice */
-  gtk_widget_set_sensitive (priv->browse_new_folder_button, FALSE);
-
-  _gtk_file_system_model_add_editable (priv->browse_files_model, &iter);
-
-  path = gtk_tree_model_get_path (GTK_TREE_MODEL (priv->browse_files_model), &iter);
-  gtk_adjustment_set_value (gtk_scrollable_get_hadjustment (GTK_SCROLLABLE (priv->browse_files_tree_view)), 0.0);
-  gtk_adjustment_set_value (gtk_scrollable_get_vadjustment (GTK_SCROLLABLE (priv->browse_files_tree_view)), 0.0);
-
-  g_object_set (priv->list_name_renderer, "editable", TRUE, NULL);
-  gtk_tree_view_set_cursor (GTK_TREE_VIEW (priv->browse_files_tree_view),
-			    path,
-			    priv->list_name_column,
-			    TRUE);
-
-  gtk_tree_path_free (path);
-}
-
 static void
 new_folder_popover_active (GtkWidget            *button,
                            GParamSpec           *pspec,
@@ -1093,114 +1058,6 @@ new_folder_create_clicked (GtkButton            *button,
   else
     error_creating_folder_dialog (impl, file, error);
 }
-
-static GSource *
-add_idle_while_impl_is_alive (GtkFileChooserWidget *impl, GCallback callback)
-{
-  GSource *source;
-
-  source = g_idle_source_new ();
-  g_source_set_closure (source,
-			g_cclosure_new_object (callback, G_OBJECT (impl)));
-  g_source_attach (source, NULL);
-
-  return source;
-}
-
-/* Idle handler for creating a new folder after editing its name cell, or for
- * canceling the editing.
- */
-static gboolean
-edited_idle_cb (GtkFileChooserWidget *impl)
-{
-  GtkFileChooserWidgetPrivate *priv = impl->priv;
-
-  gdk_threads_enter ();
-  
-  g_source_destroy (priv->edited_idle);
-  priv->edited_idle = NULL;
-
-  _gtk_file_system_model_remove_editable (priv->browse_files_model);
-  g_object_set (priv->list_name_renderer, "editable", FALSE, NULL);
-
-  gtk_widget_set_sensitive (priv->browse_new_folder_button, TRUE);
-
-  if (priv->edited_new_text /* not cancelled? */
-      && (strlen (priv->edited_new_text) != 0)
-      && (strcmp (priv->edited_new_text, DEFAULT_NEW_FOLDER_NAME) != 0)) /* Don't create folder if name is empty or has not been edited */
-    {
-      GError *error = NULL;
-      GFile *file;
-
-      file = g_file_get_child_for_display_name (priv->current_folder,
-						priv->edited_new_text,
-						&error);
-      if (file)
-	{
-	  GError *error = NULL;
-
-	  if (g_file_make_directory (file, NULL, &error))
-	    change_folder_and_display_error (impl, file, FALSE);
-	  else
-	    error_creating_folder_dialog (impl, file, error);
-
-	  g_object_unref (file);
-	}
-      else
-	error_creating_folder_dialog (impl, file, error);
-
-      g_free (priv->edited_new_text);
-      priv->edited_new_text = NULL;
-    }
-
-  gdk_threads_leave ();
-
-  return FALSE;
-}
-
-static void
-queue_edited_idle (GtkFileChooserWidget *impl,
-		   const gchar           *new_text)
-{
-  GtkFileChooserWidgetPrivate *priv = impl->priv;
-
-  /* We create the folder in an idle handler so that we don't modify the tree
-   * just now.
-   */
-
-  if (!priv->edited_idle)
-    priv->edited_idle = add_idle_while_impl_is_alive (impl, G_CALLBACK (edited_idle_cb));
-
-  g_free (priv->edited_new_text);
-  priv->edited_new_text = g_strdup (new_text);
-}
-
-/* Callback used from the text cell renderer when the new folder is named */
-static void
-renderer_edited_cb (GtkCellRendererText   *cell_renderer_text,
-		    const gchar           *path,
-		    const gchar           *new_text,
-		    GtkFileChooserWidget *impl)
-{
-  /* work around bug #154921 */
-  g_object_set (cell_renderer_text, 
-		"mode", GTK_CELL_RENDERER_MODE_INERT, NULL);
-  queue_edited_idle (impl, new_text);
-}
-
-/* Callback used from the text cell renderer when the new folder edition gets
- * canceled.
- */
-static void
-renderer_editing_canceled_cb (GtkCellRendererText   *cell_renderer_text,
-			      GtkFileChooserWidget *impl)
-{
-  /* work around bug #154921 */
-  g_object_set (cell_renderer_text, 
-		"mode", GTK_CELL_RENDERER_MODE_INERT, NULL);
-  queue_edited_idle (impl, NULL);
-}
-
 
 struct selection_check_closure {
   GtkFileChooserWidget *impl;
@@ -7656,10 +7513,7 @@ gtk_file_chooser_widget_class_init (GtkFileChooserWidgetClass *class)
   gtk_widget_class_bind_template_callback (widget_class, file_list_drag_motion_cb);
   gtk_widget_class_bind_template_callback (widget_class, list_selection_changed);
   gtk_widget_class_bind_template_callback (widget_class, list_cursor_changed);
-  gtk_widget_class_bind_template_callback (widget_class, renderer_editing_canceled_cb);
-  gtk_widget_class_bind_template_callback (widget_class, renderer_edited_cb);
   gtk_widget_class_bind_template_callback (widget_class, filter_combo_changed);
-  gtk_widget_class_bind_template_callback (widget_class, new_folder_button_clicked);
   gtk_widget_class_bind_template_callback (widget_class, path_bar_clicked);
   gtk_widget_class_bind_template_callback (widget_class, places_sidebar_open_location_cb);
   gtk_widget_class_bind_template_callback (widget_class, places_sidebar_show_error_message_cb);

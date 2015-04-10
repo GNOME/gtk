@@ -217,8 +217,6 @@
                                 <child>
                                   <object class="GtkCellRendererText" id="list_name_renderer">
                                     <property name="ellipsize">end</property>
-                                    <signal name="edited" handler="renderer_edited_cb" swapped="no"/>
-                                    <signal name="editing-canceled" handler="renderer_editing_canceled_cb" swapped="no"/>
                                   </object>
                                 </child>
                               </object>

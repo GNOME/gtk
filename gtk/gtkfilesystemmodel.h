@@ -87,10 +87,6 @@ void                _gtk_file_system_model_clear_cache      (GtkFileSystemModel 
 void                _gtk_file_system_model_set_filter       (GtkFileSystemModel *model,
                                                              GtkFileFilter      *filter);
 
-void _gtk_file_system_model_add_editable    (GtkFileSystemModel *model,
-					     GtkTreeIter        *iter);
-void _gtk_file_system_model_remove_editable (GtkFileSystemModel *model);
-
 G_END_DECLS
 
 #endif /* __GTK_FILE_SYSTEM_MODEL_H__ */
