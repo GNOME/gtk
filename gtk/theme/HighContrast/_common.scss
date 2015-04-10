@@ -1328,7 +1328,7 @@ GtkTreeView.view.progressbar { //Progressbar in treeview cells
       &:backdrop { color: $backdrop_fg_color; }
     }
     .button { //tab close button
-      border: 1px solid transparent;
+      border: 2px solid transparent;
       @extend %undecorated_button;
       icon-shadow: none;
       transition: none;
@@ -1336,18 +1336,18 @@ GtkTreeView.view.progressbar { //Progressbar in treeview cells
       &:hover {
         color:  $fg_color;
         @include button(hover, $edge: none);
-        border-width: 1px;
+        border-width: 2px;
         background-image: none;
         box-shadow: none;
       }
       &:active {
         @include button(active, $edge: none);
-        border-width: 1px;
+        border-width: 2px;
       }
-      &:backdrop {
+      &:backdrop, &:backdrop:hover {
         color: transparentize($backdrop_fg_color,0.7);
         border-color: transparent;
-        border-width: 1px;
+        border-width: 2px;
       }
       & > GtkImage { // this is a hack which makes tabs grow
         padding: 2px;
