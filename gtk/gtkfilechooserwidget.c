@@ -1645,6 +1645,16 @@ file_list_drag_drop_cb (GtkWidget             *widget,
   return TRUE;
 }
 
+static void
+file_list_drag_begin_cb (GtkWidget            *widget,
+                         GdkDragContext       *context,
+                         GtkFileChooserWidget *impl)
+{
+  gtk_places_sidebar_set_drop_targets_visible (GTK_PLACES_SIDEBAR (impl->priv->places_sidebar),
+                                               TRUE,
+                                               context);
+}
+
 /* Disable the normal tree drag motion handler, it makes it look like you're
    dropping the dragged item onto a tree item */
 static gboolean
@@ -1657,6 +1667,19 @@ file_list_drag_motion_cb (GtkWidget             *widget,
 {
   g_signal_stop_emission_by_name (widget, "drag-motion");
   return TRUE;
+}
+
+static void
+file_list_drag_end_cb (GtkWidget      *widget,
+                       GdkDragContext *context,
+                       gpointer        user_data)
+{
+  GtkFileChooserWidget *impl;
+
+  impl = GTK_FILE_CHOOSER_WIDGET (user_data);
+  gtk_places_sidebar_set_drop_targets_visible (GTK_PLACES_SIDEBAR (impl->priv->places_sidebar),
+                                               FALSE,
+                                               context);
 }
 
 /* Sensitizes the "Copy file’s location" and other context menu items if there is actually
@@ -7518,7 +7541,9 @@ gtk_file_chooser_widget_class_init (GtkFileChooserWidgetClass *class)
   gtk_widget_class_bind_template_callback (widget_class, file_list_query_tooltip_cb);
   gtk_widget_class_bind_template_callback (widget_class, list_button_press_event_cb);
   gtk_widget_class_bind_template_callback (widget_class, list_row_activated);
+  gtk_widget_class_bind_template_callback (widget_class, file_list_drag_begin_cb);
   gtk_widget_class_bind_template_callback (widget_class, file_list_drag_motion_cb);
+  gtk_widget_class_bind_template_callback (widget_class, file_list_drag_end_cb);
   gtk_widget_class_bind_template_callback (widget_class, list_selection_changed);
   gtk_widget_class_bind_template_callback (widget_class, list_cursor_changed);
   gtk_widget_class_bind_template_callback (widget_class, filter_combo_changed);
