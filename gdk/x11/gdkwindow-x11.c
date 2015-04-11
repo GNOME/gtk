@@ -2963,15 +2963,15 @@ gdk_window_x11_set_background (GdkWindow      *window,
     {
       GdkWindow *parent;
 
-      /* X throws BadMatch if the parent has a different visual when
+      /* X throws BadMatch if the parent has a different depth when
        * using ParentRelative */
       parent = gdk_window_get_parent (window);
-      if (parent && gdk_window_get_visual (parent) == gdk_window_get_visual (window))
-        XSetWindowBackgroundPixmap (GDK_WINDOW_XDISPLAY (window),
-                                    GDK_WINDOW_XID (window), ParentRelative);
-      else
+      if (parent && window->depth != parent->depth)
         XSetWindowBackgroundPixmap (GDK_WINDOW_XDISPLAY (window),
                                     GDK_WINDOW_XID (window), None);
+      else
+        XSetWindowBackgroundPixmap (GDK_WINDOW_XDISPLAY (window),
+                                    GDK_WINDOW_XID (window), ParentRelative);
       return;
     }
 
