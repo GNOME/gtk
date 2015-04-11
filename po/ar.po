@@ -7,15 +7,14 @@
 # Djihed Afifi <djihed@gmail.com>, 2006.
 # Seba Barto <nanoosaamar@yahoo.com>, 2006.
 # Anas Afif Emad <anas.e87@gmail.com>, 2008.
-# Khaled Hosny <khaledhosny@eglug.org>, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014.
+# Khaled Hosny <khaledhosny@eglug.org>, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015.
 # Abderrahim Kitouni <a.kitouni@gmail.com>, 2012.
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+.master\n"
-"Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gtk%2b&"
-"keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2014-05-11 02:02+0000\n"
-"PO-Revision-Date: 2014-08-01 03:00+0200\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2015-04-12 01:08+0200\n"
+"PO-Revision-Date: 2015-04-12 01:39+0200\n"
 "Last-Translator: Khaled Hosny <khaledhosny@eglug.org>\n"
 "Language-Team: Arabic <doc@arabeyes.org>\n"
 "Language: ar\n"
@@ -24,56 +23,56 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=6; plural=n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n%100>=3 "
 "&& n%100<=10 ? 3 : n%100>=11 ? 4 : 5;\n"
-"X-Generator: Virtaal 1.0.0-beta1\n"
+"X-Generator: Virtaal 0.7.1\n"
 "X-Project-Style: gnome\n"
 
-#: ../gdk/broadway/gdkbroadway-server.c:141
+#: ../gdk/broadway/gdkbroadway-server.c:144
 #, c-format
-msgid "broadway display type not supported '%s'"
+msgid "Broadway display type not supported: %s"
 msgstr ""
 
-#: ../gdk/gdk.c:165
+#: ../gdk/gdk.c:177
 #, c-format
 msgid "Error parsing option --gdk-debug"
 msgstr "حدث خطأ أثناء تحليل الخيار ‪--gdk-debug‬"
 
-#: ../gdk/gdk.c:185
+#: ../gdk/gdk.c:197
 #, c-format
 msgid "Error parsing option --gdk-no-debug"
 msgstr "حدث خطأ أثناء تحليل الخيار ‪--gdk-no-debug‬"
 
 #. Description of --class=CLASS in --help output
-#: ../gdk/gdk.c:213
+#: ../gdk/gdk.c:225
 msgid "Program class as used by the window manager"
 msgstr "صنف البرنامج كما يستخدمه مدير النوافذ"
 
 #. Placeholder in --class=CLASS in --help output
-#: ../gdk/gdk.c:214
+#: ../gdk/gdk.c:226
 msgid "CLASS"
 msgstr "صنف"
 
 #. Description of --name=NAME in --help output
-#: ../gdk/gdk.c:216
+#: ../gdk/gdk.c:228
 msgid "Program name as used by the window manager"
 msgstr "اسم البرنامج كما يستخدمه مدير النوافذ"
 
 #. Placeholder in --name=NAME in --help output
-#: ../gdk/gdk.c:217
+#: ../gdk/gdk.c:229
 msgid "NAME"
 msgstr "اسم"
 
 #. Description of --display=DISPLAY in --help output
-#: ../gdk/gdk.c:219
+#: ../gdk/gdk.c:231
 msgid "X display to use"
 msgstr "مِعراض س ليستخدم"
 
 #. Placeholder in --display=DISPLAY in --help output
-#: ../gdk/gdk.c:220
+#: ../gdk/gdk.c:232
 msgid "DISPLAY"
 msgstr "مِعراض"
 
 #. Description of --gdk-debug=FLAGS in --help output
-#: ../gdk/gdk.c:223
+#: ../gdk/gdk.c:235
 msgid "GDK debugging flags to set"
 msgstr "شارات تنقيح ج‌د‌ك+ التي ستضبط"
 
@@ -81,14 +80,18 @@ msgstr "شارات تنقيح ج‌د‌ك+ التي ستضبط"
 #. Placeholder in --gdk-no-debug=FLAGS in --help output
 #. Placeholder in --gtk-debug=FLAGS in --help output
 #. Placeholder in --gtk-no-debug=FLAGS in --help output
-#: ../gdk/gdk.c:224 ../gdk/gdk.c:227 ../gtk/gtkmain.c:456 ../gtk/gtkmain.c:459
+#: ../gdk/gdk.c:236 ../gdk/gdk.c:239 ../gtk/gtkmain.c:461 ../gtk/gtkmain.c:464
 msgid "FLAGS"
 msgstr "شارات"
 
 #. Description of --gdk-no-debug=FLAGS in --help output
-#: ../gdk/gdk.c:226
+#: ../gdk/gdk.c:238
 msgid "GDK debugging flags to unset"
 msgstr "شارات تنقيح ج‌د‌ك+ التي ستُصفّر"
+
+#: ../gdk/gdkwindow.c:2733
+msgid "GL support disabled via GDK_DEBUG"
+msgstr ""
 
 #.
 #. * Translators, the strings in the “keyboard label” context are
@@ -432,6 +435,38 @@ msgctxt "keyboard label"
 msgid "Suspend"
 msgstr "تعليق"
 
+#: ../gdk/mir/gdkmirwindowimpl.c:1368 ../gdk/mir/gdkmirwindowimpl.c:1378
+#: ../gdk/wayland/gdkglcontext-wayland.c:263
+#: ../gdk/wayland/gdkglcontext-wayland.c:273
+#: ../gdk/win32/gdkglcontext-win32.c:510 ../gdk/x11/gdkglcontext-x11.c:700
+msgid "No available configurations for the given pixel format"
+msgstr ""
+
+#: ../gdk/mir/gdkmirwindowimpl.c:1410
+#: ../gdk/wayland/gdkglcontext-wayland.c:306
+#: ../gdk/win32/gdkglcontext-win32.c:488 ../gdk/x11/gdkglcontext-x11.c:1066
+#, fuzzy
+msgid "No GL implementation is available"
+msgstr "لا تتوفر أي لاحات"
+
+#: ../gdk/mir/gdkmirwindowimpl.c:1422
+#: ../gdk/wayland/gdkglcontext-wayland.c:318
+msgid "3.2 core GL profile is not available on EGL implementation"
+msgstr ""
+
+#: ../gdk/mir/gdkmirwindowimpl.c:1445
+#: ../gdk/wayland/gdkglcontext-wayland.c:341
+#: ../gdk/win32/gdkglcontext-win32.c:524 ../gdk/x11/gdkglcontext-x11.c:1110
+#: ../gdk/x11/gdkglcontext-x11.c:1154
+msgid "Unable to create a GL context"
+msgstr ""
+
+#: ../gdk/win32/gdkglcontext-win32.c:497
+msgid ""
+"The WGL_ARB_create_context extension needed to create 3.2 core profiles is "
+"not available"
+msgstr ""
+
 #. Description of --sync in --help output
 #: ../gdk/win32/gdkmain-win32.c:53
 msgid "Don't batch GDI requests"
@@ -483,6 +518,17 @@ msgstr[3] "يجري فتح %Id عناصر"
 msgstr[4] "يجري فتح %Id عنصرا"
 msgstr[5] "يجري فتح %Id عنصر"
 
+#: ../gdk/x11/gdkglcontext-x11.c:729
+#, c-format
+msgid "No available configurations for the given RGBA pixel format"
+msgstr ""
+
+#: ../gdk/x11/gdkglcontext-x11.c:1075
+msgid ""
+"The GLX_ARB_create_context_profile extension needed to create 3.2 core "
+"profiles is not available"
+msgstr ""
+
 #: ../gtk/a11y/gtkbooleancellaccessible.c:43
 msgctxt "Action description"
 msgid "Toggles the cell"
@@ -494,13 +540,13 @@ msgctxt "Action name"
 msgid "Toggle"
 msgstr "تبديل"
 
-#: ../gtk/a11y/gtkbuttonaccessible.c:341
-#: ../gtk/a11y/gtkmenuitemaccessible.c:435
+#: ../gtk/a11y/gtkbuttonaccessible.c:321
+#: ../gtk/a11y/gtkmenuitemaccessible.c:436
 msgctxt "Action name"
 msgid "Click"
 msgstr "نقر"
 
-#: ../gtk/a11y/gtkbuttonaccessible.c:350
+#: ../gtk/a11y/gtkbuttonaccessible.c:330
 msgctxt "Action description"
 msgid "Clicks the button"
 msgstr "ينقر الزر"
@@ -517,7 +563,7 @@ msgstr "تحرير"
 
 #: ../gtk/a11y/gtkcellaccessible.c:259
 #: ../gtk/a11y/gtkcolorswatchaccessible.c:149
-#: ../gtk/a11y/gtkentryaccessible.c:1555
+#: ../gtk/a11y/gtkentryaccessible.c:1553
 #: ../gtk/a11y/gtkexpanderaccessible.c:281
 msgctxt "Action name"
 msgid "Activate"
@@ -573,7 +619,7 @@ msgctxt "Action description"
 msgid "Presses the combobox"
 msgstr "يضغط المربع المنسدل"
 
-#: ../gtk/a11y/gtkentryaccessible.c:1564
+#: ../gtk/a11y/gtkentryaccessible.c:1562
 msgctxt "Action description"
 msgid "Activates the entry"
 msgstr "يُنشّط المدخلة"
@@ -616,17 +662,15 @@ msgctxt "Stock label"
 msgid "_Close"
 msgstr "أ_غلق"
 
-#: ../gtk/a11y/gtkimageaccessible.c:59 ../gtk/gtkheaderbar.c:398
-#: ../gtk/gtkwindow.c:8696
+#: ../gtk/a11y/gtkimageaccessible.c:59 ../gtk/gtkheaderbar.c:435
 msgid "Minimize"
 msgstr "صغّر"
 
-#: ../gtk/a11y/gtkimageaccessible.c:60 ../gtk/gtkheaderbar.c:421
-#: ../gtk/gtkwindow.c:8704
+#: ../gtk/a11y/gtkimageaccessible.c:60 ../gtk/gtkheaderbar.c:458
 msgid "Maximize"
 msgstr "كبِّر"
 
-#: ../gtk/a11y/gtkimageaccessible.c:61 ../gtk/gtkheaderbar.c:421
+#: ../gtk/a11y/gtkimageaccessible.c:61 ../gtk/gtkheaderbar.c:458
 msgid "Restore"
 msgstr "استعِد"
 
@@ -997,7 +1041,7 @@ msgctxt "Stock label"
 msgid "Zoom _Out"
 msgstr "_بعّد"
 
-#: ../gtk/a11y/gtkmenuitemaccessible.c:444
+#: ../gtk/a11y/gtkmenuitemaccessible.c:445
 msgctxt "Action description"
 msgid "Clicks the menuitem"
 msgstr "ينقر على عنصر القائمة"
@@ -1113,10 +1157,10 @@ msgstr "ا_سم اللون:"
 #: ../gtk/deprecated/gtkcolorsel.c:514
 msgid ""
 "You can enter an HTML-style hexadecimal color value, or simply a color name "
-"such as 'orange' in this entry."
+"such as “orange” in this entry."
 msgstr ""
 "يمكنك إدخال قيمة لون بالنظام الست عشري و أسلوب HTML، أو اسم لون بكل بساطة "
-"مثل 'orange' في هذه الخانة."
+"مثل ”orange“ في هذه الخانة."
 
 #: ../gtk/deprecated/gtkcolorsel.c:546
 msgid "_Palette:"
@@ -1128,16 +1172,16 @@ msgstr "عجلة الألوان"
 
 #: ../gtk/deprecated/gtkcolorsel.c:1070
 msgid ""
-"The previously-selected color, for comparison to the color you're selecting "
+"The previously-selected color, for comparison to the color you’re selecting "
 "now. You can drag this color to a palette entry, or select this color as "
 "current by dragging it to the other color swatch alongside."
 msgstr ""
 "اللون المُختار سابقًا، للمقارنة باللون الذي اخترتَه الآن. يُمكِنك سحب هذا اللون "
-"لخانة لوحة ألوان، أو جعله كاللون الحالي بسحبه للمربع اللوني."
+"لخانة لوحة ألوان، أو جعله اللون الحالي بسحبه للمربع اللوني الآخر المجاور."
 
 #: ../gtk/deprecated/gtkcolorsel.c:1076
 msgid ""
-"The color you've chosen. You can drag this color to a palette entry to save "
+"The color you’ve chosen. You can drag this color to a palette entry to save "
 "it for use in the future."
 msgstr ""
 "اللون الذي اخترته. تستطيع سحب هذا اللون إلى خانة لوحة الألوان لحفظه حتى "
@@ -1145,12 +1189,12 @@ msgstr ""
 
 #: ../gtk/deprecated/gtkcolorsel.c:1082
 msgid ""
-"The previously-selected color, for comparison to the color you're selecting "
+"The previously-selected color, for comparison to the color you’re selecting "
 "now."
 msgstr "اللون المختار سابقا، لمقارنته مع اللون الذي تختاره الآن."
 
 #: ../gtk/deprecated/gtkcolorsel.c:1086
-msgid "The color you've chosen."
+msgid "The color you’ve chosen."
 msgstr "اللون الذي اخترته."
 
 #: ../gtk/deprecated/gtkcolorsel.c:1490
@@ -1160,26 +1204,28 @@ msgstr "ا_حفظ اللون هنا"
 #: ../gtk/deprecated/gtkcolorsel.c:1694
 msgid ""
 "Click this palette entry to make it the current color. To change this entry, "
-"drag a color swatch here or right-click it and select \"Save color here.\""
+"drag a color swatch here or right-click it and select “Save color here.”"
 msgstr ""
 "انقر خانة لوحة الألوان هذه لجعلها اللون الحالي. لتغيير هذه الخانة اسحب عينة "
-"لون إلى هنا أو انقر الزر الأيمن للفأرة واختر \"احفظ اللون هنا.\""
+"لون إلى هنا أو انقر الزر الأيمن للفأرة و اختر ”احفظ اللون هنا“."
 
 #: ../gtk/deprecated/gtkcolorseldialog.c:191
-#: ../gtk/deprecated/gtkfontsel.c:1689 ../gtk/gtkappchooserdialog.c:706
-#: ../gtk/gtkcolorchooserdialog.c:110 ../gtk/gtkfilechooserbutton.c:803
-#: ../gtk/gtkfilechooserwidget.c:5199 ../gtk/gtkfontchooserdialog.c:155
-#: ../gtk/gtkmessagedialog.c:889 ../gtk/gtkmessagedialog.c:902
-#: ../gtk/gtkmountoperation.c:543 ../gtk/gtkpagesetupunixdialog.c:196
-#: ../gtk/gtkprintbackend.c:747 ../gtk/gtkprinteroptionwidget.c:545
-#: ../gtk/gtkprintunixdialog.c:667 ../gtk/gtkprintunixdialog.c:735
-#: ../gtk/resources/ui/gtkassistant.ui.h:5
+#: ../gtk/deprecated/gtkfontsel.c:1689 ../gtk/gtkfilechooserbutton.c:794
+#: ../gtk/gtkfilechooserwidget.c:5294 ../gtk/gtkmessagedialog.c:944
+#: ../gtk/gtkmessagedialog.c:957 ../gtk/gtkmountoperation.c:543
+#: ../gtk/gtkpagesetupunixdialog.c:196 ../gtk/gtkprintbackend.c:763
+#: ../gtk/gtkprinteroptionwidget.c:545 ../gtk/gtkprintunixdialog.c:665
+#: ../gtk/gtkprintunixdialog.c:733 ../gtk/gtkwindow.c:11850
+#: ../gtk/inspector/css-editor.c:199 ../gtk/ui/gtkappchooserdialog.ui.h:2
+#: ../gtk/ui/gtkassistant.ui.h:5 ../gtk/ui/gtkcolorchooserdialog.ui.h:2
+#: ../gtk/ui/gtkfontchooserdialog.ui.h:2
 msgid "_Cancel"
 msgstr "أ_لغِ"
 
-#: ../gtk/deprecated/gtkcolorseldialog.c:195 ../gtk/gtkappchooserdialog.c:707
-#: ../gtk/gtkcolorchooserdialog.c:111 ../gtk/gtkfontchooserdialog.c:156
-#: ../gtk/gtkprinteroptionwidget.c:546
+#: ../gtk/deprecated/gtkcolorseldialog.c:195
+#: ../gtk/gtkprinteroptionwidget.c:546 ../gtk/ui/gtkappchooserdialog.ui.h:3
+#: ../gtk/ui/gtkcolorchooserdialog.ui.h:3
+#: ../gtk/ui/gtkfontchooserdialog.ui.h:3
 msgid "_Select"
 msgstr "ا_ختر"
 
@@ -1215,18 +1261,28 @@ msgid "_Preview:"
 msgstr "_معاينة:"
 
 #: ../gtk/deprecated/gtkfontsel.c:1693 ../gtk/gtkpagesetupunixdialog.c:197
-#: ../gtk/resources/ui/gtkassistant.ui.h:1
+#: ../gtk/ui/gtkassistant.ui.h:1
 msgid "_Apply"
 msgstr "_طبّق"
 
-#: ../gtk/deprecated/gtkfontsel.c:1698 ../gtk/gtkmessagedialog.c:881
-#: ../gtk/gtkmessagedialog.c:903 ../gtk/gtkprintbackend.c:748
+#: ../gtk/deprecated/gtkfontsel.c:1698 ../gtk/gtkmessagedialog.c:936
+#: ../gtk/gtkmessagedialog.c:958 ../gtk/gtkprintbackend.c:764
+#: ../gtk/gtkwindow.c:11851 ../gtk/inspector/classes-list.c:127
 msgid "_OK"
 msgstr "_نعم"
 
 #: ../gtk/deprecated/gtkfontsel.c:1709
 msgid "Font Selection"
 msgstr "اختيار الخط"
+
+#. Translators: the format here is used to build the string that will be rendered
+#. * in the number emblem.
+#.
+#: ../gtk/deprecated/gtknumerableicon.c:472
+#, c-format
+msgctxt "Number format"
+msgid "%d"
+msgstr "%d"
 
 #: ../gtk/deprecated/gtkstock.c:342
 msgctxt "Stock label"
@@ -1346,144 +1402,118 @@ msgstr "بيانات محارف غير متوقّعة عند السطر %Id ال
 msgid "Empty"
 msgstr "فارغ"
 
-#. *
-#. * SECTION:gtkaboutdialog
-#. * @Short_description: Display information about an application
-#. * @Title: GtkAboutDialog
-#. *
-#. * The GtkAboutDialog offers a simple way to display information about
-#. * a program like its logo, name, copyright, website and license. It is
-#. * also possible to give credits to the authors, documenters, translators
-#. * and artists who have worked on the program. An about dialog is typically
-#. * opened when the user selects the `About` option from
-#. * the `Help` menu. All parts of the dialog are optional.
-#. *
-#. * About dialogs often contain links and email addresses. GtkAboutDialog
-#. * displays these as clickable links. By default, it calls gtk_show_uri()
-#. * when a user clicks one. The behaviour can be overridden with the
-#. * #GtkAboutDialog::activate-link signal.
-#. *
-#. * To make constructing a GtkAboutDialog as convenient as possible, you can
-#. * use the function gtk_show_about_dialog() which constructs and shows a dialog
-#. * and keeps it around so that it can be shown again.
-#. *
-#. * Note that GTK+ sets a default title of `_("About %s")` on the dialog
-#. * window (where \%s is replaced by the name of the application, but in
-#. * order to ensure proper translation of the title, applications should
-#. * set the title property explicitly when constructing a GtkAboutDialog,
-#. * as shown in the following example:
-#. * |[<!-- language="C" -->
-#. * gtk_show_about_dialog (NULL,
-#. *                        "program-name", "ExampleCode",
-#. *                        "logo", example_logo,
-#. *                        "title" _("About ExampleCode"),
-#. *                        NULL);
-#. * ]|
-#. *
-#. * It is also possible to show a #GtkAboutDialog like any other #GtkDialog,
-#. * e.g. using gtk_dialog_run(). In this case, you might need to know that
-#. * the “Close” button returns the #GTK_RESPONSE_CANCEL response id.
-#.
+#: ../gtk/encodesymbolic.c:38
+msgid "Output to this directory instead of cwd"
+msgstr ""
+
+#: ../gtk/encodesymbolic.c:266
+#, fuzzy, c-format
+msgid "Invalid size %s\n"
+msgstr "اسم ملف غير صالح"
+
 #. Translators: this is the license preamble; the string at the end
 #. * contains the name of the license as link text.
 #.
-#: ../gtk/gtkaboutdialog.c:103
+#: ../gtk/gtkaboutdialog.c:114
 #, c-format
-#| msgid ""
-#| "This program comes with ABSOLUTELY NO WARRANTY;\n"
-#| "for details, visit <a href=\"%s\">%s</a>"
 msgid ""
-"This program comes with ABSOLUTELY NO WARRANTY.\n"
+"This program comes with absolutely no warranty.\n"
 "See the <a href=\"%s\">%s</a> for details."
 msgstr ""
 "يأتي هذا البرنامج دون أي ضمانات على الإطلاق.\n"
 "راجع <a href=\"%s\">%s</a> لمزيد من المعلومات."
 
-#: ../gtk/gtkaboutdialog.c:113 ../gtk/gtkaboutdialog.c:434
-#: ../gtk/resources/ui/gtkaboutdialog.ui.h:3
+#: ../gtk/gtkaboutdialog.c:118 ../gtk/ui/gtkaboutdialog.ui.h:3
 msgid "License"
 msgstr "الترخيص"
 
-#: ../gtk/gtkaboutdialog.c:114
-#| msgid "Custom size"
+#: ../gtk/gtkaboutdialog.c:119
 msgid "Custom License"
 msgstr "ترخيص مخصّص"
 
-#: ../gtk/gtkaboutdialog.c:115
+#: ../gtk/gtkaboutdialog.c:120
 msgid "GNU General Public License, version 2 or later"
 msgstr "رخصة جنو العمومية، الإصدارة 2 أو أحدث"
 
-#: ../gtk/gtkaboutdialog.c:116
+#: ../gtk/gtkaboutdialog.c:121
 msgid "GNU General Public License, version 3 or later"
 msgstr "رخصة جنو العمومية، الإصدارة 3 أو أحدث"
 
-#: ../gtk/gtkaboutdialog.c:117
+#: ../gtk/gtkaboutdialog.c:122
 msgid "GNU Lesser General Public License, version 2.1 or later"
 msgstr "رخصة جنو العمومية الصغرى، الإصدارة 2.1 أو أحدث"
 
-#: ../gtk/gtkaboutdialog.c:118
+#: ../gtk/gtkaboutdialog.c:123
 msgid "GNU Lesser General Public License, version 3 or later"
 msgstr "رخصة جنو العمومية الصغرى، الإصدارة 3 أو أحدث"
 
-#: ../gtk/gtkaboutdialog.c:119
+#: ../gtk/gtkaboutdialog.c:124
 msgid "BSD 2-Clause License"
 msgstr "رخصة BSD ثنائية البنود"
 
-#: ../gtk/gtkaboutdialog.c:120
+#: ../gtk/gtkaboutdialog.c:125
 msgid "The MIT License (MIT)"
 msgstr "رخصة MIT"
 
-#: ../gtk/gtkaboutdialog.c:121
+#: ../gtk/gtkaboutdialog.c:126
 msgid "Artistic License 2.0"
 msgstr "الرخصة الفنية 2.0"
 
-#: ../gtk/gtkaboutdialog.c:122
+#: ../gtk/gtkaboutdialog.c:127
 msgid "GNU General Public License, version 2 only"
 msgstr "رخصة جنو العمومية، الإصدارة 2 فقط"
 
-#: ../gtk/gtkaboutdialog.c:123
+#: ../gtk/gtkaboutdialog.c:128
 msgid "GNU General Public License, version 3 only"
 msgstr "رخصة جنو العمومية، الإصدارة 3 فقط"
 
-#: ../gtk/gtkaboutdialog.c:124
+#: ../gtk/gtkaboutdialog.c:129
 msgid "GNU Lesser General Public License, version 2.1 only"
 msgstr "رخصة جنو العمومية الصغرى، الإصدارة 2.1 فقط"
 
-#: ../gtk/gtkaboutdialog.c:125
+#: ../gtk/gtkaboutdialog.c:130
 msgid "GNU Lesser General Public License, version 3 only"
 msgstr "رخصة جنو العمومية الصغرى، الإصدارة 3 فقط"
 
-#: ../gtk/gtkaboutdialog.c:435
-msgid "The license of the program"
-msgstr "ترخيص البرنامج"
+#: ../gtk/gtkaboutdialog.c:699
+msgid "C_redits"
+msgstr "إ_شادات"
 
-#: ../gtk/gtkaboutdialog.c:940
+#: ../gtk/gtkaboutdialog.c:707
+msgid "_License"
+msgstr "ال_ترخيص"
+
+#: ../gtk/gtkaboutdialog.c:716 ../gtk/gtkcustompaperunixdialog.c:329
+#: ../gtk/gtkmessagedialog.c:940 ../gtk/ui/gtkassistant.ui.h:6
+msgid "_Close"
+msgstr "أ_غلق"
+
+#: ../gtk/gtkaboutdialog.c:1005
 msgid "Could not show link"
 msgstr "تعذّر إظهار الوصلة"
 
-#: ../gtk/gtkaboutdialog.c:977
+#: ../gtk/gtkaboutdialog.c:1042
 msgid "Website"
 msgstr "الموقع"
 
-#: ../gtk/gtkaboutdialog.c:1031
-#: ../gtk/resources/ui/gtkapplication-quartz.ui.h:1
+#: ../gtk/gtkaboutdialog.c:1092 ../gtk/ui/gtkapplication-quartz.ui.h:1
 #, c-format
 msgid "About %s"
 msgstr "عنْ %s"
 
-#: ../gtk/gtkaboutdialog.c:2306
+#: ../gtk/gtkaboutdialog.c:2316
 msgid "Created by"
 msgstr "أنشئه"
 
-#: ../gtk/gtkaboutdialog.c:2309
+#: ../gtk/gtkaboutdialog.c:2319
 msgid "Documented by"
 msgstr "وثّقه"
 
-#: ../gtk/gtkaboutdialog.c:2319
+#: ../gtk/gtkaboutdialog.c:2329
 msgid "Translated by"
 msgstr "ترجَمَهُ"
 
-#: ../gtk/gtkaboutdialog.c:2324
+#: ../gtk/gtkaboutdialog.c:2334
 msgid "Artwork by"
 msgstr "جمَّلَهُ"
 
@@ -1492,7 +1522,7 @@ msgstr "جمَّلَهُ"
 #. * translated on keyboards used for your language, don't translate
 #. * this.
 #.
-#: ../gtk/gtkaccellabel.c:160
+#: ../gtk/gtkaccellabel.c:164
 msgctxt "keyboard label"
 msgid "Shift"
 msgstr "Shift"
@@ -1502,7 +1532,7 @@ msgstr "Shift"
 #. * translated on keyboards used for your language, don't translate
 #. * this.
 #.
-#: ../gtk/gtkaccellabel.c:166
+#: ../gtk/gtkaccellabel.c:170
 msgctxt "keyboard label"
 msgid "Ctrl"
 msgstr "Ctrl"
@@ -1512,7 +1542,7 @@ msgstr "Ctrl"
 #. * translated on keyboards used for your language, don't translate
 #. * this.
 #.
-#: ../gtk/gtkaccellabel.c:172
+#: ../gtk/gtkaccellabel.c:176
 msgctxt "keyboard label"
 msgid "Alt"
 msgstr "Alt"
@@ -1522,7 +1552,7 @@ msgstr "Alt"
 #. * translated on keyboards used for your language, don't translate
 #. * this.
 #.
-#: ../gtk/gtkaccellabel.c:802
+#: ../gtk/gtkaccellabel.c:795
 msgctxt "keyboard label"
 msgid "Super"
 msgstr "Super"
@@ -1532,7 +1562,7 @@ msgstr "Super"
 #. * translated on keyboards used for your language, don't translate
 #. * this.
 #.
-#: ../gtk/gtkaccellabel.c:815
+#: ../gtk/gtkaccellabel.c:808
 msgctxt "keyboard label"
 msgid "Hyper"
 msgstr "Hyper"
@@ -1542,55 +1572,49 @@ msgstr "Hyper"
 #. * translated on keyboards used for your language, don't translate
 #. * this.
 #.
-#: ../gtk/gtkaccellabel.c:829
+#: ../gtk/gtkaccellabel.c:822
 msgctxt "keyboard label"
 msgid "Meta"
 msgstr "Meta"
 
-#: ../gtk/gtkaccellabel.c:846
+#: ../gtk/gtkaccellabel.c:839
 msgctxt "keyboard label"
 msgid "Space"
 msgstr "Space"
 
-#: ../gtk/gtkaccellabel.c:849
+#: ../gtk/gtkaccellabel.c:842
 msgctxt "keyboard label"
 msgid "Backslash"
 msgstr "Backslash"
 
-#: ../gtk/gtkappchooserbutton.c:291
+#: ../gtk/gtkappchooserbutton.c:292
 msgid "Other application…"
 msgstr "تطبيق آخر…"
 
 #: ../gtk/gtkappchooserdialog.c:203 ../gtk/gtkappchooserdialog.c:210
-#: ../gtk/gtkappchooserdialog.c:227
-#: ../gtk/resources/ui/gtkappchooserdialog.ui.h:1
-#| msgid "Default Application"
+#: ../gtk/gtkappchooserdialog.c:227 ../gtk/ui/gtkappchooserdialog.ui.h:1
 msgid "Select Application"
 msgstr "اختر تطبيقًا"
 
 #. Translators: %s is a filename
 #: ../gtk/gtkappchooserdialog.c:205
 #, c-format
-#| msgid "Opening %s"
 msgid "Opening “%s”."
 msgstr "يفتح ”%s“."
 
 #: ../gtk/gtkappchooserdialog.c:206
 #, c-format
-#| msgid "No applications available to open “%s”"
 msgid "No applications found for “%s”"
 msgstr "لا توجد أي تطبيقات لفتح ”%s“"
 
 #. Translators: %s is a file type description
 #: ../gtk/gtkappchooserdialog.c:212
 #, c-format
-#| msgid "Opening %s"
 msgid "Opening “%s” files."
 msgstr "يفتح ملفات ”%s“."
 
 #: ../gtk/gtkappchooserdialog.c:214
 #, c-format
-#| msgid "Select an application for “%s” files"
 msgid "No applications found for “%s” files"
 msgstr "لا توجد أي تطبيقات لفتح ملفات ”%s“"
 
@@ -1608,7 +1632,6 @@ msgstr "التطبيق المبدئي"
 
 #: ../gtk/gtkappchooserwidget.c:672
 #, c-format
-#| msgid "No applications available to open “%s”"
 msgid "No applications found for “%s”."
 msgstr "لا توجد أي تطبيقات لفتح ”%s“."
 
@@ -1624,8 +1647,8 @@ msgstr "التطبيقات المتعلقة"
 msgid "Other Applications"
 msgstr "التطبيقات الأخرى"
 
-#: ../gtk/gtkapplicationwindow.c:321 ../gtk/gtkprintoperation-unix.c:481
-#: ../gtk/gtkprintoperation-win32.c:1447
+#: ../gtk/gtkapplicationwindow.c:322 ../gtk/gtkprintoperation-unix.c:481
+#: ../gtk/gtkprintoperation-win32.c:1452 ../gtk/inspector/prop-editor.c:1566
 msgid "Application"
 msgstr "تطبيق"
 
@@ -1639,26 +1662,25 @@ msgstr "العلامة %s ليست في قائمة العلامات"
 msgid "%s already exists in the bookmarks list"
 msgstr "العلامة %s موجودة في قائمة العلامات"
 
-#: ../gtk/gtkbuilder-menus.c:220
+#: ../gtk/gtkbuilder-menus.c:223
 #, c-format
 msgid "Element <%s> not allowed inside <%s>"
 msgstr "العنصر <%s> غير مسموح به داخل <%s>"
 
-#: ../gtk/gtkbuilder-menus.c:225
+#: ../gtk/gtkbuilder-menus.c:228
 #, c-format
 msgid "Element <%s> not allowed at toplevel"
 msgstr "العنصر <%s> غير مسموح به في المستوى الأعلى"
 
-#: ../gtk/gtkbuilder-menus.c:314
+#: ../gtk/gtkbuilder-menus.c:317
 #, c-format
-msgid "text may not appear inside <%s>"
+msgid "Text may not appear inside <%s>"
 msgstr "لا يسمح بالنص داخل <%s>"
 
 #: ../gtk/gtkbuilderparser.c:340
-#, fuzzy, c-format
-#| msgid "Invalid type function on line %d: '%s'"
-msgid "Invalid object type `%s' on line %d"
-msgstr "نوع دالة غير سليم في سطر %d: '%s'"
+#, c-format
+msgid "Invalid object type '%s' on line %d"
+msgstr "نوع كائن غير سليم '%s' في سطر %d"
 
 #: ../gtk/gtkbuilderparser.c:360
 #, c-format
@@ -1672,23 +1694,22 @@ msgstr "معرّف كائن مكرر '%s' في سطر %d (السابق في سط
 
 #: ../gtk/gtkbuilderparser.c:652
 #, fuzzy, c-format
-#| msgid "Invalid type function on line %d: '%s'"
 msgid "Invalid property: %s.%s on line %d"
 msgstr "نوع دالة غير سليم في سطر %d: '%s'"
 
 #: ../gtk/gtkbuilderparser.c:775
-#, c-format
-msgid "Invalid signal `%s' for type `%s' on line %d"
-msgstr ""
+#, fuzzy, c-format
+msgid "Invalid signal '%s' for type '%s' on line %d"
+msgstr "نوع دالة غير سليم في سطر %d: '%s'"
 
 #: ../gtk/gtkbuilderparser.c:1067
-#, c-format
-msgid "Invalid root element: '%s'"
+#, fuzzy, c-format
+msgid "Invalid root element: <%s>"
 msgstr "عنصر جذري غير سليم: %s"
 
 #: ../gtk/gtkbuilderparser.c:1110
-#, c-format
-msgid "Unhandled tag: '%s'"
+#, fuzzy, c-format
+msgid "Unhandled tag: <%s>"
 msgstr "وسم غير معتبر: '%s'"
 
 #. Translate to calendar:YM if you want years to be displayed
@@ -1701,7 +1722,7 @@ msgstr "وسم غير معتبر: '%s'"
 #. * text direction of RTL and specify "calendar:YM", then the year
 #. * will appear to the right of the month.
 #.
-#: ../gtk/gtkcalendar.c:870
+#: ../gtk/gtkcalendar.c:804
 msgid "calendar:MY"
 msgstr "calendar:MY"
 
@@ -1709,7 +1730,7 @@ msgstr "calendar:MY"
 #. * first day of the week to calendar:week_start:1 if you want Monday
 #. * to be the first day of the week, and so on.
 #.
-#: ../gtk/gtkcalendar.c:908
+#: ../gtk/gtkcalendar.c:842
 msgid "calendar:week_start:0"
 msgstr "calendar:week_start:7"
 
@@ -1718,7 +1739,7 @@ msgstr "calendar:week_start:7"
 #. *
 #. * If you don't understand this, leave it as "2000"
 #.
-#: ../gtk/gtkcalendar.c:1922
+#: ../gtk/gtkcalendar.c:1868
 msgctxt "year measurement template"
 msgid "2000"
 msgstr "2000"
@@ -1733,7 +1754,7 @@ msgstr "2000"
 #. * digits. That needs support from your system and locale definition
 #. * too.
 #.
-#: ../gtk/gtkcalendar.c:1953 ../gtk/gtkcalendar.c:2623
+#: ../gtk/gtkcalendar.c:1899 ../gtk/gtkcalendar.c:2577
 #, c-format
 msgctxt "calendar:day:digits"
 msgid "%d"
@@ -1749,7 +1770,7 @@ msgstr "%Id"
 #. * digits. That needs support from your system and locale definition
 #. * too.
 #.
-#: ../gtk/gtkcalendar.c:1985 ../gtk/gtkcalendar.c:2489
+#: ../gtk/gtkcalendar.c:1931 ../gtk/gtkcalendar.c:2443
 #, c-format
 msgctxt "calendar:week:digits"
 msgid "%d"
@@ -1765,7 +1786,7 @@ msgstr "%Id"
 #. *
 #. * "%Y" is appropriate for most locales.
 #.
-#: ../gtk/gtkcalendar.c:2276
+#: ../gtk/gtkcalendar.c:2222
 msgctxt "calendar year format"
 msgid "%Y"
 msgstr "%Y"
@@ -1773,7 +1794,7 @@ msgstr "%Y"
 #. This label is displayed in a treeview cell displaying
 #. * a disabled accelerator key combination.
 #.
-#: ../gtk/gtkcellrendereraccel.c:278
+#: ../gtk/gtkcellrendereraccel.c:274
 msgctxt "Accelerator"
 msgid "Disabled"
 msgstr "معطّل"
@@ -1782,259 +1803,256 @@ msgstr "معطّل"
 #. * an accelerator key combination that is not valid according
 #. * to gtk_accelerator_valid().
 #.
-#: ../gtk/gtkcellrendereraccel.c:288
+#: ../gtk/gtkcellrendereraccel.c:284
 msgctxt "Accelerator"
 msgid "Invalid"
 msgstr "غير صحيح"
 
-#. This label is displayed in a treeview cell displaying
-#. * an accelerator when the cell is clicked to change the
-#. * acelerator.
+#. This label is displayed in a treeview cell displaying an accelerator
+#. * when the cell is clicked to change the acelerator.
 #.
-#: ../gtk/gtkcellrendereraccel.c:412 ../gtk/gtkcellrendereraccel.c:743
+#: ../gtk/gtkcellrendereraccel.c:415 ../gtk/gtkcellrendereraccel.c:509
 msgid "New accelerator…"
 msgstr "اختصار جديد…"
 
-#: ../gtk/gtkcellrendererprogress.c:368 ../gtk/gtkcellrendererprogress.c:458
+#: ../gtk/gtkcellrendererprogress.c:377 ../gtk/gtkcellrendererprogress.c:470
 #, c-format
 msgctxt "progress bar label"
-msgid "%d %%"
-msgstr "%Id ٪"
+msgid "%d %%"
+msgstr "%Id ٪"
 
-#: ../gtk/gtkcolorbutton.c:188 ../gtk/gtkcolorbutton.c:443
+#: ../gtk/gtkcolorbutton.c:183 ../gtk/gtkcolorbutton.c:383
 msgid "Pick a Color"
 msgstr "انتقِ لونًا"
 
-#: ../gtk/gtkcolorchooserwidget.c:287
+#: ../gtk/gtkcolorchooserwidget.c:300
 #, c-format
 msgid "Red %d%%, Green %d%%, Blue %d%%, Alpha %d%%"
 msgstr "أحمر %d%%، أخضر %d%%، أزرق %d%%، ألفا %d%%"
 
-#: ../gtk/gtkcolorchooserwidget.c:293
+#: ../gtk/gtkcolorchooserwidget.c:306
 #, c-format
 msgid "Red %d%%, Green %d%%, Blue %d%%"
 msgstr "أحمر %d%%، أخضر %d%%، أزرق %d%%"
 
-#: ../gtk/gtkcolorchooserwidget.c:370
+#: ../gtk/gtkcolorchooserwidget.c:383
 #, c-format
 msgid "Color: %s"
 msgstr "اللون: %s"
 
-#: ../gtk/gtkcolorchooserwidget.c:429
+#: ../gtk/gtkcolorchooserwidget.c:442
 msgctxt "Color name"
 msgid "Light Scarlet Red"
 msgstr "أحمر قرمزي فاتح"
 
-#: ../gtk/gtkcolorchooserwidget.c:430
+#: ../gtk/gtkcolorchooserwidget.c:443
 msgctxt "Color name"
 msgid "Scarlet Red"
 msgstr "أحمر قرمزي"
 
-#: ../gtk/gtkcolorchooserwidget.c:431
+#: ../gtk/gtkcolorchooserwidget.c:444
 msgctxt "Color name"
 msgid "Dark Scarlet Red"
 msgstr "أحمر قرمزي داكن"
 
-#: ../gtk/gtkcolorchooserwidget.c:432
+#: ../gtk/gtkcolorchooserwidget.c:445
 msgctxt "Color name"
 msgid "Light Orange"
 msgstr "برتقالي فاتح"
 
-#: ../gtk/gtkcolorchooserwidget.c:433
+#: ../gtk/gtkcolorchooserwidget.c:446
 msgctxt "Color name"
 msgid "Orange"
 msgstr "برتقالي"
 
-#: ../gtk/gtkcolorchooserwidget.c:434
+#: ../gtk/gtkcolorchooserwidget.c:447
 msgctxt "Color name"
 msgid "Dark Orange"
 msgstr "برتقالي داكن"
 
-#: ../gtk/gtkcolorchooserwidget.c:435
+#: ../gtk/gtkcolorchooserwidget.c:448
 msgctxt "Color name"
 msgid "Light Butter"
 msgstr "زبدي فاتح"
 
-#: ../gtk/gtkcolorchooserwidget.c:436
+#: ../gtk/gtkcolorchooserwidget.c:449
 msgctxt "Color name"
 msgid "Butter"
 msgstr "زبدي"
 
-#: ../gtk/gtkcolorchooserwidget.c:437
+#: ../gtk/gtkcolorchooserwidget.c:450
 msgctxt "Color name"
 msgid "Dark Butter"
 msgstr "زبدي داكن"
 
-#: ../gtk/gtkcolorchooserwidget.c:438
+#: ../gtk/gtkcolorchooserwidget.c:451
 msgctxt "Color name"
 msgid "Light Chameleon"
 msgstr "حرباء فاتحة"
 
-#: ../gtk/gtkcolorchooserwidget.c:439
+#: ../gtk/gtkcolorchooserwidget.c:452
 msgctxt "Color name"
 msgid "Chameleon"
 msgstr "حرباء"
 
-#: ../gtk/gtkcolorchooserwidget.c:440
+#: ../gtk/gtkcolorchooserwidget.c:453
 msgctxt "Color name"
 msgid "Dark Chameleon"
 msgstr "حرباء داكنة"
 
-#: ../gtk/gtkcolorchooserwidget.c:441
+#: ../gtk/gtkcolorchooserwidget.c:454
 msgctxt "Color name"
 msgid "Light Sky Blue"
 msgstr "أزرق سماوي فاتح"
 
-#: ../gtk/gtkcolorchooserwidget.c:442
+#: ../gtk/gtkcolorchooserwidget.c:455
 msgctxt "Color name"
 msgid "Sky Blue"
 msgstr "أزرق سماوي"
 
-#: ../gtk/gtkcolorchooserwidget.c:443
+#: ../gtk/gtkcolorchooserwidget.c:456
 msgctxt "Color name"
 msgid "Dark Sky Blue"
 msgstr "أزرق سماوي داكن"
 
-#: ../gtk/gtkcolorchooserwidget.c:444
+#: ../gtk/gtkcolorchooserwidget.c:457
 msgctxt "Color name"
 msgid "Light Plum"
 msgstr "برقوقي فاتح"
 
-#: ../gtk/gtkcolorchooserwidget.c:445
+#: ../gtk/gtkcolorchooserwidget.c:458
 msgctxt "Color name"
 msgid "Plum"
 msgstr "برقوقي"
 
-#: ../gtk/gtkcolorchooserwidget.c:446
+#: ../gtk/gtkcolorchooserwidget.c:459
 msgctxt "Color name"
 msgid "Dark Plum"
 msgstr "برقوقي داكن"
 
-#: ../gtk/gtkcolorchooserwidget.c:447
+#: ../gtk/gtkcolorchooserwidget.c:460
 msgctxt "Color name"
 msgid "Light Chocolate"
 msgstr "شوكولاتة فاتح"
 
-#: ../gtk/gtkcolorchooserwidget.c:448
+#: ../gtk/gtkcolorchooserwidget.c:461
 msgctxt "Color name"
 msgid "Chocolate"
 msgstr "شوكولاتة"
 
-#: ../gtk/gtkcolorchooserwidget.c:449
+#: ../gtk/gtkcolorchooserwidget.c:462
 msgctxt "Color name"
 msgid "Dark Chocolate"
 msgstr "شوكولاتة داكن"
 
-#: ../gtk/gtkcolorchooserwidget.c:450
+#: ../gtk/gtkcolorchooserwidget.c:463
 msgctxt "Color name"
 msgid "Light Aluminum 1"
 msgstr "ألومنيوم فاتح 1"
 
-#: ../gtk/gtkcolorchooserwidget.c:451
+#: ../gtk/gtkcolorchooserwidget.c:464
 msgctxt "Color name"
 msgid "Aluminum 1"
 msgstr "ألومنيوم 1"
 
-#: ../gtk/gtkcolorchooserwidget.c:452
+#: ../gtk/gtkcolorchooserwidget.c:465
 msgctxt "Color name"
 msgid "Dark Aluminum 1"
 msgstr "ألومنيوم داكن 1"
 
-#: ../gtk/gtkcolorchooserwidget.c:453
+#: ../gtk/gtkcolorchooserwidget.c:466
 msgctxt "Color name"
 msgid "Light Aluminum 2"
 msgstr "ألومنيوم فاتح 2"
 
-#: ../gtk/gtkcolorchooserwidget.c:454
+#: ../gtk/gtkcolorchooserwidget.c:467
 msgctxt "Color name"
 msgid "Aluminum 2"
 msgstr "ألومنيوم 2"
 
-#: ../gtk/gtkcolorchooserwidget.c:455
+#: ../gtk/gtkcolorchooserwidget.c:468
 msgctxt "Color name"
 msgid "Dark Aluminum 2"
 msgstr "ألومنيوم داكن 2"
 
-#: ../gtk/gtkcolorchooserwidget.c:469
+#: ../gtk/gtkcolorchooserwidget.c:482
 msgctxt "Color name"
 msgid "Black"
 msgstr "أسود"
 
-#: ../gtk/gtkcolorchooserwidget.c:470
+#: ../gtk/gtkcolorchooserwidget.c:483
 msgctxt "Color name"
 msgid "Very Dark Gray"
 msgstr "أسود داكن جدا"
 
-#: ../gtk/gtkcolorchooserwidget.c:471
+#: ../gtk/gtkcolorchooserwidget.c:484
 msgctxt "Color name"
 msgid "Darker Gray"
 msgstr "أسود أدْكن"
 
-#: ../gtk/gtkcolorchooserwidget.c:472
+#: ../gtk/gtkcolorchooserwidget.c:485
 msgctxt "Color name"
 msgid "Dark Gray"
 msgstr "أسود داكن"
 
-#: ../gtk/gtkcolorchooserwidget.c:473
+#: ../gtk/gtkcolorchooserwidget.c:486
 msgctxt "Color name"
 msgid "Medium Gray"
 msgstr "رمادي متوسط"
 
-#: ../gtk/gtkcolorchooserwidget.c:474
+#: ../gtk/gtkcolorchooserwidget.c:487
 msgctxt "Color name"
 msgid "Light Gray"
 msgstr "رمادي فاتح"
 
-#: ../gtk/gtkcolorchooserwidget.c:475
+#: ../gtk/gtkcolorchooserwidget.c:488
 msgctxt "Color name"
 msgid "Lighter Gray"
 msgstr "رمادي أفتح"
 
-#: ../gtk/gtkcolorchooserwidget.c:476
+#: ../gtk/gtkcolorchooserwidget.c:489
 msgctxt "Color name"
 msgid "Very Light Gray"
 msgstr "رمادي فاتح جدا"
 
-#: ../gtk/gtkcolorchooserwidget.c:477
+#: ../gtk/gtkcolorchooserwidget.c:490
 msgctxt "Color name"
 msgid "White"
 msgstr "أبيض"
 
 #. translators: label for the custom section in the color chooser
-#: ../gtk/gtkcolorchooserwidget.c:526
+#: ../gtk/gtkcolorchooserwidget.c:539
 msgid "Custom"
 msgstr "لون مخصّص"
 
-#: ../gtk/gtkcolorchooserwidget.c:533
-#| msgid "Custom color %d: %s"
+#: ../gtk/gtkcolorchooserwidget.c:546
 msgid "Custom color"
 msgstr "لون مخصص"
 
-#: ../gtk/gtkcolorchooserwidget.c:534
-#| msgid "Create custom color"
+#: ../gtk/gtkcolorchooserwidget.c:547
 msgid "Create a custom color"
 msgstr "أنشئ لونًا مخصّصًا"
 
-#: ../gtk/gtkcolorchooserwidget.c:553
+#: ../gtk/gtkcolorchooserwidget.c:566
 #, c-format
 msgid "Custom color %d: %s"
 msgstr "اللون المخصص %d: %s"
 
-#: ../gtk/gtkcolorplane.c:443
+#: ../gtk/gtkcolorplane.c:402
 msgid "Color Plane"
 msgstr "مجال الألوان"
 
-#: ../gtk/gtkcolorscale.c:298
+#: ../gtk/gtkcolorscale.c:309
 msgctxt "Color channel"
 msgid "Hue"
 msgstr "التدرج"
 
-#: ../gtk/gtkcolorscale.c:300
+#: ../gtk/gtkcolorscale.c:311
 msgctxt "Color channel"
 msgid "Alpha"
 msgstr "ألفا"
 
-#: ../gtk/gtkcolorswatch.c:447
+#: ../gtk/gtkcolorswatch.c:449
 msgid "_Customize"
 msgstr "_خصّص"
 
@@ -2044,153 +2062,108 @@ msgstr "_خصّص"
 #. * Do *not* translate it to "predefinito:mm", if it
 #. * it isn't default:mm or default:inch it will not work
 #.
-#: ../gtk/gtkcustompaperunixdialog.c:119
+#: ../gtk/gtkcustompaperunixdialog.c:117
 msgid "default:mm"
 msgstr "default:mm"
 
-#: ../gtk/gtkcustompaperunixdialog.c:334 ../gtk/gtkmessagedialog.c:885
-#: ../gtk/resources/ui/gtkassistant.ui.h:6
-msgid "_Close"
-msgstr "أ_غلق"
-
 #. And show the custom paper dialog
-#: ../gtk/gtkcustompaperunixdialog.c:412 ../gtk/gtkprintunixdialog.c:3315
+#: ../gtk/gtkcustompaperunixdialog.c:405 ../gtk/gtkprintunixdialog.c:3313
 msgid "Manage Custom Sizes"
 msgstr "أدِر المقاسات المخصّصة"
 
-#: ../gtk/gtkcustompaperunixdialog.c:574 ../gtk/gtkpagesetupunixdialog.c:815
+#: ../gtk/gtkcustompaperunixdialog.c:567 ../gtk/gtkpagesetupunixdialog.c:811
 msgid "inch"
 msgstr "بوصة"
 
-#: ../gtk/gtkcustompaperunixdialog.c:576 ../gtk/gtkpagesetupunixdialog.c:813
+#: ../gtk/gtkcustompaperunixdialog.c:569 ../gtk/gtkpagesetupunixdialog.c:809
 msgid "mm"
 msgstr "مم"
 
-#: ../gtk/gtkcustompaperunixdialog.c:622
+#: ../gtk/gtkcustompaperunixdialog.c:615
 msgid "Margins from Printer…"
 msgstr "الحواف من الطابعة…"
 
-#: ../gtk/gtkcustompaperunixdialog.c:788
+#: ../gtk/gtkcustompaperunixdialog.c:781
 #, c-format
 msgid "Custom Size %d"
 msgstr "مقاس مخصّص %Id"
 
-#: ../gtk/gtkcustompaperunixdialog.c:1127
+#: ../gtk/gtkcustompaperunixdialog.c:1120
 msgid "_Width:"
 msgstr "ال_عرض:"
 
-#: ../gtk/gtkcustompaperunixdialog.c:1138
+#: ../gtk/gtkcustompaperunixdialog.c:1131
 msgid "_Height:"
 msgstr "الا_رتفاع:"
 
-#: ../gtk/gtkcustompaperunixdialog.c:1149
+#: ../gtk/gtkcustompaperunixdialog.c:1142
 msgid "Paper Size"
 msgstr "مقاس الورقة"
 
-#: ../gtk/gtkcustompaperunixdialog.c:1158
+#: ../gtk/gtkcustompaperunixdialog.c:1151
 msgid "_Top:"
 msgstr "_فوق:"
 
-#: ../gtk/gtkcustompaperunixdialog.c:1169
+#: ../gtk/gtkcustompaperunixdialog.c:1162
 msgid "_Bottom:"
 msgstr "_تحت:"
 
-#: ../gtk/gtkcustompaperunixdialog.c:1180
+#: ../gtk/gtkcustompaperunixdialog.c:1173
 msgid "_Left:"
 msgstr "_يسار:"
 
-#: ../gtk/gtkcustompaperunixdialog.c:1191
+#: ../gtk/gtkcustompaperunixdialog.c:1184
 msgid "_Right:"
 msgstr "_يمين:"
 
-#: ../gtk/gtkcustompaperunixdialog.c:1230
+#: ../gtk/gtkcustompaperunixdialog.c:1223
 msgid "Paper Margins"
 msgstr "حواف الورق"
 
-#: ../gtk/gtkentry.c:9450 ../gtk/gtkentry.c:9603 ../gtk/gtklabel.c:6270
-#: ../gtk/gtktextview.c:8812 ../gtk/gtktextview.c:9000
+#: ../gtk/gtkentry.c:9626 ../gtk/gtkentry.c:9779 ../gtk/gtklabel.c:6596
+#: ../gtk/gtktextview.c:9037 ../gtk/gtktextview.c:9225
 msgid "Cu_t"
 msgstr "_قصّ"
 
-#: ../gtk/gtkentry.c:9454 ../gtk/gtkentry.c:9606 ../gtk/gtklabel.c:6271
-#: ../gtk/gtktextview.c:8816 ../gtk/gtktextview.c:9004
+#: ../gtk/gtkentry.c:9630 ../gtk/gtkentry.c:9782 ../gtk/gtklabel.c:6597
+#: ../gtk/gtktextview.c:9041 ../gtk/gtktextview.c:9229
 msgid "_Copy"
 msgstr "ا_نسخ"
 
-#: ../gtk/gtkentry.c:9458 ../gtk/gtkentry.c:9609 ../gtk/gtklabel.c:6272
-#: ../gtk/gtktextview.c:8818 ../gtk/gtktextview.c:9006
+#: ../gtk/gtkentry.c:9634 ../gtk/gtkentry.c:9785 ../gtk/gtklabel.c:6598
+#: ../gtk/gtktextview.c:9043 ../gtk/gtktextview.c:9231
 msgid "_Paste"
 msgstr "أ_لصق"
 
-#: ../gtk/gtkentry.c:9461 ../gtk/gtklabel.c:6274 ../gtk/gtktextview.c:8821
+#: ../gtk/gtkentry.c:9637 ../gtk/gtklabel.c:6600 ../gtk/gtktextview.c:9046
 msgid "_Delete"
 msgstr "ا_حذف"
 
-#: ../gtk/gtkentry.c:9472 ../gtk/gtklabel.c:6283 ../gtk/gtktextview.c:8835
+#: ../gtk/gtkentry.c:9648 ../gtk/gtklabel.c:6609 ../gtk/gtktextview.c:9060
 msgid "Select _All"
 msgstr "اختر ال_كل"
 
-#: ../gtk/gtkentry.c:10590
+#: ../gtk/gtkentry.c:10848
 msgid "Caps Lock is on"
 msgstr "زر الحروف العالية مفعّل"
 
-#. *
-#. * SECTION:gtkfilechooserbutton
-#. * @Short_description: A button to launch a file selection dialog
-#. * @Title: GtkFileChooserButton
-#. * @See_also:#GtkFileChooserDialog
-#. *
-#. * The #GtkFileChooserButton is a widget that lets the user select a
-#. * file.  It implements the #GtkFileChooser interface.  Visually, it is a
-#. * file name with a button to bring up a #GtkFileChooserDialog.
-#. * The user can then use that dialog to change the file associated with
-#. * that button.  This widget does not support setting the
-#. * #GtkFileChooser:select-multiple property to %TRUE.
-#. *
-#. * ## Create a button to let the user select a file in /etc
-#. *
-#. * |[<!-- language="C" -->
-#. * {
-#. *   GtkWidget *button;
-#. *
-#. *   button = gtk_file_chooser_button_new (_("Select a file"),
-#. *                                         GTK_FILE_CHOOSER_ACTION_OPEN);
-#. *   gtk_file_chooser_set_current_folder (GTK_FILE_CHOOSER (button),
-#. *                                        "/etc");
-#. * }
-#. * ]|
-#. *
-#. * The #GtkFileChooserButton supports the #GtkFileChooserActions
-#. * %GTK_FILE_CHOOSER_ACTION_OPEN and %GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER.
-#. *
-#. * > The #GtkFileChooserButton will ellipsize the label, and will thus
-#. * > request little horizontal space.  To give the button more space,
-#. * > you should call gtk_widget_get_preferred_size(),
-#. * > gtk_file_chooser_button_set_width_chars(), or pack the button in
-#. * > such a way that other interface elements give space to the
-#. * > widget.
-#.
-#. **************** *
-#. *  Private Macros  *
-#. * ****************
-#: ../gtk/gtkfilechooserbutton.c:102
+#: ../gtk/gtkfilechooserbutton.c:103
 msgid "Select a File"
 msgstr "اختر ملفًا"
 
-#: ../gtk/gtkfilechooserbutton.c:103 ../gtk/gtkplacessidebar.c:855
+#: ../gtk/gtkfilechooserbutton.c:104 ../gtk/gtkplacessidebar.c:983
 msgid "Desktop"
 msgstr "سطح المكتب"
 
-#: ../gtk/gtkfilechooserbutton.c:104
-#: ../gtk/resources/ui/gtkfilechooserbutton.ui.h:1
+#: ../gtk/gtkfilechooserbutton.c:105 ../gtk/ui/gtkfilechooserbutton.ui.h:1
 msgid "(None)"
 msgstr "(لا شيء)"
 
-#: ../gtk/gtkfilechooserbutton.c:805 ../gtk/gtkplacessidebar.c:3203
+#: ../gtk/gtkfilechooserbutton.c:795 ../gtk/gtkplacessidebar.c:3464
 msgid "_Open"
 msgstr "ا_فتح"
 
-#: ../gtk/gtkfilechooserbutton.c:2152
+#: ../gtk/gtkfilechooserbutton.c:2137
 msgid "Other…"
 msgstr "أخرى…"
 
@@ -2203,15 +2176,15 @@ msgstr "أخرى…"
 msgid "%1$s on %2$s"
 msgstr "%1$s على %2$s"
 
-#: ../gtk/gtkfilechooserwidget.c:329
+#: ../gtk/gtkfilechooserwidget.c:328
 msgid "Type name of new folder"
 msgstr "اكتب اسما للمجلد الجديد"
 
-#: ../gtk/gtkfilechooserwidget.c:730
+#: ../gtk/gtkfilechooserwidget.c:734
 msgid "The folder could not be created"
 msgstr "تعذّر إنشاء المجلّد"
 
-#: ../gtk/gtkfilechooserwidget.c:743
+#: ../gtk/gtkfilechooserwidget.c:747
 msgid ""
 "The folder could not be created, as a file with the same name already "
 "exists.  Try using a different name for the folder, or rename the file first."
@@ -2219,132 +2192,141 @@ msgstr ""
 "تعذّر إنشاء المجلد بسبب وجود ملف يحمل نفس الاسم. حاول استخدام اسم آخر للمجلد، "
 "أو غيّر اسم الملف أولا."
 
-#: ../gtk/gtkfilechooserwidget.c:757
+#: ../gtk/gtkfilechooserwidget.c:761
 msgid "You need to choose a valid filename."
 msgstr "عليك اختيار اسم ملف سليم"
 
-#: ../gtk/gtkfilechooserwidget.c:760
+#: ../gtk/gtkfilechooserwidget.c:764
 #, c-format
 msgid "Cannot create a file under %s as it is not a folder"
 msgstr "تعذّر إنشاء ملف داخل %s لأنه ليس مجلدا"
 
-#: ../gtk/gtkfilechooserwidget.c:768
+#: ../gtk/gtkfilechooserwidget.c:772
 msgid "Cannot create file as the filename is too long"
 msgstr "تعذّر إنشاء الملف لأن اسمه طويل جدًا"
 
-#: ../gtk/gtkfilechooserwidget.c:769
+#: ../gtk/gtkfilechooserwidget.c:773
 msgid "Try using a shorter name."
 msgstr "جرب اسمًا أقصر"
 
-#: ../gtk/gtkfilechooserwidget.c:779
+#: ../gtk/gtkfilechooserwidget.c:783
 msgid "You may only select folders"
 msgstr "يمكن اختيار المجلدات فقط"
 
-#: ../gtk/gtkfilechooserwidget.c:780
+#: ../gtk/gtkfilechooserwidget.c:784
 msgid "The item that you selected is not a folder try using a different item."
 msgstr "العنصر الذي اخترته ليس مجلدا، جرب استخدام اسم آخر."
 
-#: ../gtk/gtkfilechooserwidget.c:788
+#: ../gtk/gtkfilechooserwidget.c:792
 msgid "Invalid file name"
 msgstr "اسم ملف غير صالح"
 
-#: ../gtk/gtkfilechooserwidget.c:798
+#: ../gtk/gtkfilechooserwidget.c:802
 msgid "The folder contents could not be displayed"
 msgstr "تعذّر عرض محتويات المجلد."
 
-#: ../gtk/gtkfilechooserwidget.c:1435
+#: ../gtk/gtkfilechooserwidget.c:1481
 msgid "Could not select file"
 msgstr "تعذّر اختيار الملف"
 
-#: ../gtk/gtkfilechooserwidget.c:1665
+#: ../gtk/gtkfilechooserwidget.c:1711
 msgid "_Visit File"
 msgstr "_زُر هذا الملف"
 
-#: ../gtk/gtkfilechooserwidget.c:1668
+#: ../gtk/gtkfilechooserwidget.c:1714
 msgid "_Copy Location"
 msgstr "ا_نسخ الموقع"
 
-#: ../gtk/gtkfilechooserwidget.c:1671
+#: ../gtk/gtkfilechooserwidget.c:1717
 msgid "_Add to Bookmarks"
 msgstr "أ_ضف للعلامات"
 
-#: ../gtk/gtkfilechooserwidget.c:1678
+#: ../gtk/gtkfilechooserwidget.c:1724
 msgid "Show _Hidden Files"
 msgstr "أظهر الملفات ال_مخفيّة"
 
-#: ../gtk/gtkfilechooserwidget.c:1681
+#: ../gtk/gtkfilechooserwidget.c:1727
 msgid "Show _Size Column"
 msgstr "أظهر _عمود الحجم"
 
+#: ../gtk/gtkfilechooserwidget.c:1730
+msgid "Sort _Folders before Files"
+msgstr "رتّب ال_مجلدات قبل الملفات"
+
+#. this is the header for the location column in the print dialog
+#: ../gtk/gtkfilechooserwidget.c:1999 ../gtk/inspector/style-prop-list.ui.h:3
+#: ../gtk/ui/gtkprintunixdialog.ui.h:4
+msgid "Location"
+msgstr "الموقع"
+
 #. Label
-#: ../gtk/gtkfilechooserwidget.c:1973
+#: ../gtk/gtkfilechooserwidget.c:2039
 msgid "_Name:"
 msgstr "الا_سم:"
 
-#: ../gtk/gtkfilechooserwidget.c:3647
+#: ../gtk/gtkfilechooserwidget.c:3714
 #, c-format
 msgid "Could not read the contents of %s"
 msgstr "تعذّرت قراءة محتويات %s"
 
-#: ../gtk/gtkfilechooserwidget.c:3651
+#: ../gtk/gtkfilechooserwidget.c:3718
 msgid "Could not read the contents of the folder"
 msgstr "تعذّرت قراءة محتويات المجلّد"
 
-#: ../gtk/gtkfilechooserwidget.c:3742
+#: ../gtk/gtkfilechooserwidget.c:3825
 msgid "%H:%M"
 msgstr "%OH:%OM"
 
-#: ../gtk/gtkfilechooserwidget.c:3742
+#: ../gtk/gtkfilechooserwidget.c:3825
 msgid "%-I:%M %P"
 msgstr "%-I:%M %P"
 
-#: ../gtk/gtkfilechooserwidget.c:3744
+#: ../gtk/gtkfilechooserwidget.c:3827
 msgid "Yesterday at %H:%M"
 msgstr "أمس في %OH:%OM"
 
-#: ../gtk/gtkfilechooserwidget.c:3744
-#| msgid "Yesterday at %H:%M"
+#: ../gtk/gtkfilechooserwidget.c:3827
 msgid "Yesterday at %-I:%M %P"
 msgstr "أمس في %-I:%M %P"
 
 #. Translators: We don't know whether this printer is
 #. * available to print to.
-#: ../gtk/gtkfilechooserwidget.c:3935
+#: ../gtk/gtkfilechooserwidget.c:4026 ../gtk/inspector/prop-editor.c:1569
 #: ../modules/printbackends/cloudprint/gtkprintbackendcloudprint.c:748
 msgid "Unknown"
 msgstr "مجهول"
 
-#: ../gtk/gtkfilechooserwidget.c:4408
+#: ../gtk/gtkfilechooserwidget.c:4501
 msgid "Cannot change to folder because it is not local"
 msgstr "تعذّر الانتقال إلى المجلّد لأنه غير محلي"
 
-#: ../gtk/gtkfilechooserwidget.c:5192 ../gtk/gtkprintunixdialog.c:658
+#: ../gtk/gtkfilechooserwidget.c:5287 ../gtk/gtkprintunixdialog.c:656
 #, c-format
 msgid "A file named “%s” already exists.  Do you want to replace it?"
 msgstr "هناك ملف باسم ”%s“ موجود حاليا. أتريد استبداله؟"
 
-#: ../gtk/gtkfilechooserwidget.c:5195 ../gtk/gtkprintunixdialog.c:662
+#: ../gtk/gtkfilechooserwidget.c:5290 ../gtk/gtkprintunixdialog.c:660
 #, c-format
 msgid ""
 "The file already exists in “%s”.  Replacing it will overwrite its contents."
 msgstr "الملف موجود بالفعل في ”%s“.  استبداله سيكتب فوق محتواه."
 
-#: ../gtk/gtkfilechooserwidget.c:5200 ../gtk/gtkprintunixdialog.c:670
+#: ../gtk/gtkfilechooserwidget.c:5295 ../gtk/gtkprintunixdialog.c:668
 msgid "_Replace"
 msgstr "است_بدِل"
 
-#: ../gtk/gtkfilechooserwidget.c:6019
+#: ../gtk/gtkfilechooserwidget.c:6114
 msgid "Could not start the search process"
 msgstr "تعذّر تشغيل عملية البحث"
 
-#: ../gtk/gtkfilechooserwidget.c:6020
+#: ../gtk/gtkfilechooserwidget.c:6115
 msgid ""
-"The program was not able to create a connection to the indexer daemon.  "
+"The program was not able to create a connection to the indexer daemon. "
 "Please make sure it is running."
 msgstr ""
-"لم يمكن للبرنامج أن ينشئ اتصالا بخادوم الفهرسة. الرجاء التأكد من أنه مشتغل."
+"تعذّر على البرنامج إنشاء اتصال بخادوم الفهرسة. الرجاء التأكد من أنه مشتغل."
 
-#: ../gtk/gtkfilechooserwidget.c:6034
+#: ../gtk/gtkfilechooserwidget.c:6129
 msgid "Could not send the search request"
 msgstr "تعذّر إرسال طلب البحث"
 
@@ -2357,29 +2339,43 @@ msgstr "تعذّر إرسال طلب البحث"
 msgid "File System"
 msgstr "نظام ملفات"
 
-#: ../gtk/gtkfontbutton.c:353
+#: ../gtk/gtkfontbutton.c:360
 msgid "Sans 12"
 msgstr "Sans 12"
 
-#: ../gtk/gtkfontbutton.c:438 ../gtk/gtkfontbutton.c:568
+#: ../gtk/gtkfontbutton.c:445 ../gtk/gtkfontbutton.c:573
 msgid "Pick a Font"
 msgstr "اختر خطًا"
 
-#: ../gtk/gtkheaderbar.c:377
-#| msgid "Application"
+#. Translators, these strings are names for various 'standard' cover
+#. * pages that the printing system may support.
+#.
+#: ../gtk/gtkfontbutton.c:1182 ../gtk/inspector/general.c:226
+#: ../gtk/inspector/general.c:227 ../gtk/inspector/gestures.c:128
+#: ../gtk/inspector/prop-editor.c:1200 ../gtk/inspector/size-groups.c:252
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:5203
+msgid "None"
+msgstr "لا شيء"
+
+#: ../gtk/gtkglarea.c:296
+#, fuzzy
+msgid "OpenGL context creation failed"
+msgstr "فشل جلب معلومات الطابعة"
+
+#: ../gtk/gtkheaderbar.c:414
 msgid "Application menu"
 msgstr "قائمة التطبيق"
 
-#: ../gtk/gtkheaderbar.c:439 ../gtk/gtkwindow.c:8819
+#: ../gtk/gtkheaderbar.c:476 ../gtk/gtkwindow.c:8524
 msgid "Close"
 msgstr "أغلق"
 
-#: ../gtk/gtkicontheme.c:2121 ../gtk/gtkicontheme.c:2184
-#, c-format
-msgid "Icon '%s' not present in theme"
+#: ../gtk/gtkicontheme.c:2308 ../gtk/gtkicontheme.c:2372
+#, fuzzy, c-format
+msgid "Icon '%s' not present in theme %s"
 msgstr "الأيقونة '%s' غير موجودة في السِمة"
 
-#: ../gtk/gtkicontheme.c:3930
+#: ../gtk/gtkicontheme.c:4010 ../gtk/gtkicontheme.c:4377
 msgid "Failed to load icon"
 msgstr "فشل تحميل الأيقونة"
 
@@ -2403,29 +2399,29 @@ msgctxt "input method menu"
 msgid "System (%s)"
 msgstr "النظام (%s)"
 
-#: ../gtk/gtkinfobar.c:1191 ../gtk/gtkmessagedialog.c:370
+#: ../gtk/gtkinfobar.c:1193 ../gtk/gtkmessagedialog.c:376
 msgid "Information"
 msgstr "معلومات"
 
-#: ../gtk/gtkinfobar.c:1195 ../gtk/gtkmessagedialog.c:374
+#: ../gtk/gtkinfobar.c:1197 ../gtk/gtkmessagedialog.c:380
 msgid "Question"
 msgstr "سؤال"
 
-#: ../gtk/gtkinfobar.c:1199 ../gtk/gtkmessagedialog.c:378
+#: ../gtk/gtkinfobar.c:1201 ../gtk/gtkmessagedialog.c:384
 msgid "Warning"
 msgstr "تحذير"
 
-#: ../gtk/gtkinfobar.c:1203 ../gtk/gtkmessagedialog.c:382
+#: ../gtk/gtkinfobar.c:1205 ../gtk/gtkmessagedialog.c:388
 msgid "Error"
 msgstr "عُطل"
 
 #. Open Link
-#: ../gtk/gtklabel.c:6253
+#: ../gtk/gtklabel.c:6577
 msgid "_Open Link"
 msgstr "ا_فتح الوصلة"
 
 #. Copy Link Address
-#: ../gtk/gtklabel.c:6261
+#: ../gtk/gtklabel.c:6586
 msgid "Copy _Link Address"
 msgstr "ا_نسخ عنوان الوصلة"
 
@@ -2477,19 +2473,19 @@ msgstr "تعذّر تشغيل التّطبيق"
 msgid "%s: error launching application: %s\n"
 msgstr "خطأ أثناء تحميل الأيقونة: %s"
 
-#: ../gtk/gtklinkbutton.c:442
+#: ../gtk/gtklinkbutton.c:443
 msgid "Copy URL"
 msgstr "انسخ المسار"
 
-#: ../gtk/gtklinkbutton.c:605
+#: ../gtk/gtklinkbutton.c:606
 msgid "Invalid URI"
 msgstr "عنوان غير صحيح"
 
-#: ../gtk/gtklockbutton.c:272 ../gtk/resources/ui/gtklockbutton.ui.h:1
+#: ../gtk/gtklockbutton.c:272 ../gtk/ui/gtklockbutton.ui.h:1
 msgid "Lock"
 msgstr "أوصِد"
 
-#: ../gtk/gtklockbutton.c:281 ../gtk/resources/ui/gtklockbutton.ui.h:2
+#: ../gtk/gtklockbutton.c:281 ../gtk/ui/gtklockbutton.ui.h:2
 msgid "Unlock"
 msgstr "افتح"
 
@@ -2518,40 +2514,40 @@ msgstr ""
 "راجع مدير النظام"
 
 #. Description of --gtk-module=MODULES in --help output
-#: ../gtk/gtkmain.c:449
+#: ../gtk/gtkmain.c:454
 msgid "Load additional GTK+ modules"
 msgstr "حمّل وحدات ج‌ت‌ك+ إضافية"
 
 #. Placeholder in --gtk-module=MODULES in --help output
-#: ../gtk/gtkmain.c:450
+#: ../gtk/gtkmain.c:455
 msgid "MODULES"
 msgstr "وحدات"
 
 #. Description of --g-fatal-warnings in --help output
-#: ../gtk/gtkmain.c:452
+#: ../gtk/gtkmain.c:457
 msgid "Make all warnings fatal"
 msgstr "اجعل جميع التحذيرات قاتلة"
 
 #. Description of --gtk-debug=FLAGS in --help output
-#: ../gtk/gtkmain.c:455
+#: ../gtk/gtkmain.c:460
 msgid "GTK+ debugging flags to set"
 msgstr "شارات تنقيح ج‌ت‌ك+ التي ستضبط"
 
 #. Description of --gtk-no-debug=FLAGS in --help output
-#: ../gtk/gtkmain.c:458
+#: ../gtk/gtkmain.c:463
 msgid "GTK+ debugging flags to unset"
 msgstr "شارات تنقيح ج‌ت‌ك+ التي ستُصفّر"
 
-#: ../gtk/gtkmain.c:760
+#: ../gtk/gtkmain.c:776
 #, c-format
 msgid "Cannot open display: %s"
 msgstr "غير قادر على فتح العرض: %s"
 
-#: ../gtk/gtkmain.c:826
+#: ../gtk/gtkmain.c:842
 msgid "GTK+ Options"
 msgstr "خيارات ج‌ت‌ك+"
 
-#: ../gtk/gtkmain.c:826
+#: ../gtk/gtkmain.c:842
 msgid "Show GTK+ Options"
 msgstr "اعرض خيارات ج‌ت‌ك+"
 
@@ -2560,19 +2556,19 @@ msgstr "اعرض خيارات ج‌ت‌ك+"
 #. * Do *not* translate it to "predefinito:LTR", if it
 #. * it isn't default:LTR or default:RTL it will not work
 #.
-#: ../gtk/gtkmain.c:1139
+#: ../gtk/gtkmain.c:1166
 msgid "default:LTR"
 msgstr "default:RTL"
 
-#: ../gtk/gtkmenubutton.c:621
+#: ../gtk/gtkmenubutton.c:655 ../gtk/inspector/window.ui.h:19
 msgid "Menu"
 msgstr "قائمة"
 
-#: ../gtk/gtkmessagedialog.c:893
+#: ../gtk/gtkmessagedialog.c:948
 msgid "_No"
 msgstr "_لا"
 
-#: ../gtk/gtkmessagedialog.c:894
+#: ../gtk/gtkmessagedialog.c:949
 msgid "_Yes"
 msgstr "_نعم"
 
@@ -2660,22 +2656,13 @@ msgstr "صدفة زِد"
 msgid "Cannot end process with PID %d: %s"
 msgstr "تعذّر إنهاء العملية ذات المعرف %d:‏ %s"
 
-#: ../gtk/gtknotebook.c:5119 ../gtk/gtknotebook.c:7843
+#: ../gtk/gtknotebook.c:5144 ../gtk/gtknotebook.c:7872
 #, c-format
 msgid "Page %u"
 msgstr "صفحة %Iu"
 
-#. Translators: the format here is used to build the string that will be rendered
-#. * in the number emblem.
-#.
-#: ../gtk/gtknumerableicon.c:470
-#, c-format
-msgctxt "Number format"
-msgid "%d"
-msgstr "%d"
-
-#: ../gtk/gtkpagesetup.c:644 ../gtk/gtkpapersize.c:850
-#: ../gtk/gtkpapersize.c:890
+#: ../gtk/gtkpagesetup.c:652 ../gtk/gtkpapersize.c:985
+#: ../gtk/gtkpapersize.c:1025
 msgid "Not a valid page setup file"
 msgstr "ملف تثبيت صفحة غير سليم"
 
@@ -2687,7 +2674,7 @@ msgstr "أي طابعة"
 msgid "For portable documents"
 msgstr "للوثائق القابلة للنقل"
 
-#: ../gtk/gtkpagesetupunixdialog.c:833
+#: ../gtk/gtkpagesetupunixdialog.c:829
 #, c-format
 msgid ""
 "Margins:\n"
@@ -2702,217 +2689,222 @@ msgstr ""
 "فوق: %s %s\n"
 "تحت: %s %s"
 
-#: ../gtk/gtkpagesetupunixdialog.c:882 ../gtk/gtkprintunixdialog.c:3369
+#: ../gtk/gtkpagesetupunixdialog.c:878 ../gtk/gtkprintunixdialog.c:3367
 msgid "Manage Custom Sizes…"
 msgstr "أدِر المقاسات المخصّصة…"
 
-#: ../gtk/gtkpagesetupunixdialog.c:904
-#: ../gtk/resources/ui/gtkpagesetupunixdialog.ui.h:1
-#: ../gtk/resources/ui/gtkprintunixdialog.ui.h:44
+#: ../gtk/gtkpagesetupunixdialog.c:900 ../gtk/ui/gtkpagesetupunixdialog.ui.h:1
+#: ../gtk/ui/gtkprintunixdialog.ui.h:44
 msgid "Page Setup"
 msgstr "إعداد الصفحة"
 
-#: ../gtk/gtkpathbar.c:1608
+#: ../gtk/gtkpathbar.c:1627
 msgid "File System Root"
 msgstr "جذر نظام الملفات"
 
-#: ../gtk/gtkplacessidebar.c:452
+#: ../gtk/gtkplacessidebar.c:455
 msgid "Devices"
 msgstr "الأجهزة"
 
-#: ../gtk/gtkplacessidebar.c:460
+#: ../gtk/gtkplacessidebar.c:463
 msgid "Bookmarks"
 msgstr "العلامات"
 
-#: ../gtk/gtkplacessidebar.c:829
+#: ../gtk/gtkplacessidebar.c:957
 msgid "Recent"
 msgstr "مستخدمة مؤخرا"
 
-#: ../gtk/gtkplacessidebar.c:831
+#: ../gtk/gtkplacessidebar.c:959
 msgid "Recent files"
 msgstr "الملفات المستخدمة مؤخرا"
 
-#: ../gtk/gtkplacessidebar.c:840
+#: ../gtk/gtkplacessidebar.c:968
 msgid "Home"
 msgstr "المنزل"
 
-#: ../gtk/gtkplacessidebar.c:842
+#: ../gtk/gtkplacessidebar.c:970
 msgid "Open your personal folder"
 msgstr "افتح مجلدك الشخصي"
 
-#: ../gtk/gtkplacessidebar.c:857
+#: ../gtk/gtkplacessidebar.c:985
 msgid "Open the contents of your desktop in a folder"
 msgstr "افتح محتويات سطح المكتب في مجلد"
 
-#: ../gtk/gtkplacessidebar.c:871
-#| msgid "Location"
+#: ../gtk/gtkplacessidebar.c:999
 msgid "Enter Location"
 msgstr "اكتب موقعًا"
 
-#: ../gtk/gtkplacessidebar.c:873
-#| msgid "Could not run application"
+#: ../gtk/gtkplacessidebar.c:1001
 msgid "Manually enter a location"
 msgstr "اكتب موقعًا"
 
-#: ../gtk/gtkplacessidebar.c:884
+#: ../gtk/gtkplacessidebar.c:1012
 msgid "Trash"
 msgstr "المهملات"
 
-#: ../gtk/gtkplacessidebar.c:886
+#: ../gtk/gtkplacessidebar.c:1014
 msgid "Open the trash"
 msgstr "افتح المهملات"
 
-#: ../gtk/gtkplacessidebar.c:949 ../gtk/gtkplacessidebar.c:977
-#: ../gtk/gtkplacessidebar.c:1215
+#: ../gtk/gtkplacessidebar.c:1077 ../gtk/gtkplacessidebar.c:1105
+#: ../gtk/gtkplacessidebar.c:1313
 #, c-format
-msgid "Mount and open %s"
-msgstr "أوصل وافتح %s"
+msgid "Mount and open “%s”"
+msgstr "أوصل و افتح ”%s“"
 
-#: ../gtk/gtkplacessidebar.c:1058
+#: ../gtk/gtkplacessidebar.c:1186
 msgid "Open the contents of the file system"
 msgstr "افتح محتويات نظام الملفات"
 
-#: ../gtk/gtkplacessidebar.c:1178
+#: ../gtk/gtkplacessidebar.c:1276
 msgid "Network"
 msgstr "الشبكة"
 
-#: ../gtk/gtkplacessidebar.c:1184
+#: ../gtk/gtkplacessidebar.c:1282
 msgid "Browse Network"
 msgstr "تصفّح الشبكة"
 
-#: ../gtk/gtkplacessidebar.c:1186
+#: ../gtk/gtkplacessidebar.c:1284
 msgid "Browse the contents of the network"
 msgstr "تصفّح محتويات الشبكة"
 
-#: ../gtk/gtkplacessidebar.c:1194
+#: ../gtk/gtkplacessidebar.c:1292
 msgid "Connect to Server"
 msgstr "اتصل بخادوم"
 
-#: ../gtk/gtkplacessidebar.c:1196
+#: ../gtk/gtkplacessidebar.c:1294
 msgid "Connect to a network server address"
 msgstr "اتّصل بعنوان خادوم شبكة"
 
-#: ../gtk/gtkplacessidebar.c:1598
+#: ../gtk/gtkplacessidebar.c:1714
 msgid "New bookmark"
 msgstr "علامة جديدة"
 
 #. Adjust start/stop items to reflect the type of the drive
-#: ../gtk/gtkplacessidebar.c:2155 ../gtk/gtkplacessidebar.c:3281
+#: ../gtk/gtkplacessidebar.c:2274 ../gtk/gtkplacessidebar.c:3542
 msgid "_Start"
 msgstr "اب_دأ"
 
-#: ../gtk/gtkplacessidebar.c:2156 ../gtk/gtkplacessidebar.c:3288
+#: ../gtk/gtkplacessidebar.c:2275 ../gtk/gtkplacessidebar.c:3549
 msgid "_Stop"
 msgstr "أو_قف"
 
 #. start() for type G_DRIVE_START_STOP_TYPE_SHUTDOWN is normally not used
-#: ../gtk/gtkplacessidebar.c:2163
+#: ../gtk/gtkplacessidebar.c:2282
 msgid "_Power On"
 msgstr "_شغّل"
 
-#: ../gtk/gtkplacessidebar.c:2164
+#: ../gtk/gtkplacessidebar.c:2283
 msgid "_Safely Remove Drive"
 msgstr "أزِل المشغّل بأ_مان"
 
-#: ../gtk/gtkplacessidebar.c:2168
+#: ../gtk/gtkplacessidebar.c:2287
 msgid "_Connect Drive"
 msgstr "أ_وصل المشغّل"
 
-#: ../gtk/gtkplacessidebar.c:2169
+#: ../gtk/gtkplacessidebar.c:2288
 msgid "_Disconnect Drive"
 msgstr "ا_فصل المشغّل"
 
-#: ../gtk/gtkplacessidebar.c:2173
+#: ../gtk/gtkplacessidebar.c:2292
 msgid "_Start Multi-disk Device"
 msgstr "اب_دأ المشغّل متعدد الأقراص"
 
-#: ../gtk/gtkplacessidebar.c:2174
+#: ../gtk/gtkplacessidebar.c:2293
 msgid "_Stop Multi-disk Device"
 msgstr "أو_قف المشغّل متعدد الأقراص"
 
 #. stop() for type G_DRIVE_START_STOP_TYPE_PASSWORD is normally not used
-#: ../gtk/gtkplacessidebar.c:2179
+#: ../gtk/gtkplacessidebar.c:2298
 msgid "_Unlock Drive"
 msgstr "ا_فتح قفل المشغّل"
 
-#: ../gtk/gtkplacessidebar.c:2180
+#: ../gtk/gtkplacessidebar.c:2299
 msgid "_Lock Drive"
 msgstr "أ_وصد المشغّل"
 
-#: ../gtk/gtkplacessidebar.c:2209 ../gtk/gtkplacessidebar.c:2963
+#: ../gtk/gtkplacessidebar.c:2328 ../gtk/gtkplacessidebar.c:3224
 #, c-format
-msgid "Unable to start %s"
-msgstr "تعذّر بدء %s"
+msgid "Unable to start “%s”"
+msgstr "تعذّر بدء ”%s“"
 
-#: ../gtk/gtkplacessidebar.c:2239
+#: ../gtk/gtkplacessidebar.c:2358
 #, c-format
 msgid "Unable to access “%s”"
 msgstr "تعذّر الوصول إلى ”%s“"
 
-#: ../gtk/gtkplacessidebar.c:2554
+#: ../gtk/gtkplacessidebar.c:2668
 #, c-format
-msgid "Unable to unmount %s"
-msgstr "تعذر فصْل %s"
+msgid "Unable to unmount “%s”"
+msgstr "تعذر فصْل ”%s“"
 
-#: ../gtk/gtkplacessidebar.c:2680
+#: ../gtk/gtkplacessidebar.c:2929
 #, c-format
-msgid "Unable to stop %s"
-msgstr "تعذّر إيقاف %s"
+msgid "Unable to stop “%s”"
+msgstr "تعذّر إيقاف ”%s“"
 
-#: ../gtk/gtkplacessidebar.c:2709 ../gtk/gtkplacessidebar.c:2738
-#: ../gtk/gtkplacessidebar.c:2767
+#: ../gtk/gtkplacessidebar.c:2958
+#, c-format
+msgid "Unable to eject “%s”"
+msgstr "تعذّر إخراج ”%s“"
+
+#: ../gtk/gtkplacessidebar.c:2987 ../gtk/gtkplacessidebar.c:3016
 #, c-format
 msgid "Unable to eject %s"
 msgstr "تعذّر إخراج %s"
 
-#: ../gtk/gtkplacessidebar.c:2913
+#: ../gtk/gtkplacessidebar.c:3174
 #, c-format
-msgid "Unable to poll %s for media changes"
-msgstr "تعذّر جس %s للتأكد من التغيرات في الوسائط"
+msgid "Unable to poll “%s” for media changes"
+msgstr "تعذّر جس ”%s“ للتأكد من التغيرات في الوسائط"
 
-#: ../gtk/gtkplacessidebar.c:3211
+#: ../gtk/gtkplacessidebar.c:3472
 msgid "Open in New _Tab"
 msgstr "افتح في _لسان جديد"
 
-#: ../gtk/gtkplacessidebar.c:3220
+#: ../gtk/gtkplacessidebar.c:3481
 msgid "Open in New _Window"
 msgstr "افتح في _نافذة جديدة"
 
-#: ../gtk/gtkplacessidebar.c:3229
+#: ../gtk/gtkplacessidebar.c:3490
 msgid "_Add Bookmark"
 msgstr "أ_ضف علامة"
 
-#: ../gtk/gtkplacessidebar.c:3235
+#: ../gtk/gtkplacessidebar.c:3496
 msgid "Remove"
 msgstr "احذف"
 
-#: ../gtk/gtkplacessidebar.c:3242
+#: ../gtk/gtkplacessidebar.c:3503
 msgid "Rename…"
 msgstr "غيّر الاسم…"
 
-#: ../gtk/gtkplacessidebar.c:3253
+#: ../gtk/gtkplacessidebar.c:3514
 msgid "_Mount"
 msgstr "أو_صِل"
 
-#: ../gtk/gtkplacessidebar.c:3260
+#: ../gtk/gtkplacessidebar.c:3521
 msgid "_Unmount"
 msgstr "ا_فصل"
 
-#: ../gtk/gtkplacessidebar.c:3267
+#: ../gtk/gtkplacessidebar.c:3528
 msgid "_Eject"
 msgstr "أ_خرج"
 
-#: ../gtk/gtkplacessidebar.c:3274
+#: ../gtk/gtkplacessidebar.c:3535
 msgid "_Detect Media"
 msgstr "_تعرف على الوسائط"
 
-#: ../gtk/gtkplacessidebar.c:3876
+#: ../gtk/gtkplacessidebar.c:4153
 msgid "Computer"
 msgstr "الحاسوب"
 
-#: ../gtk/gtkprintbackend.c:746
+#: ../gtk/gtkprintbackend.c:762
 msgid "Authentication"
 msgstr "الاستيثاق"
+
+#: ../gtk/gtkprintbackend.c:833
+msgid "_Remember password"
+msgstr "_تذكر كلمة السر"
 
 #: ../gtk/gtkprinteroptionwidget.c:542
 msgid "Select a filename"
@@ -2926,75 +2918,75 @@ msgstr "غير متوفر"
 #. * jobs. %s gets replaced by the application name, %d gets replaced
 #. * by the job number.
 #.
-#: ../gtk/gtkprintoperation.c:258
+#: ../gtk/gtkprintoperation.c:259
 #, c-format
 msgid "%s job #%d"
 msgstr "%s مهمّة #%Id"
 
-#: ../gtk/gtkprintoperation.c:1776
+#: ../gtk/gtkprintoperation.c:1777
 msgctxt "print operation status"
 msgid "Initial state"
 msgstr "الحالة الأولية"
 
-#: ../gtk/gtkprintoperation.c:1777
+#: ../gtk/gtkprintoperation.c:1778
 msgctxt "print operation status"
 msgid "Preparing to print"
 msgstr "يحضّر للطباعة"
 
-#: ../gtk/gtkprintoperation.c:1778
+#: ../gtk/gtkprintoperation.c:1779
 msgctxt "print operation status"
 msgid "Generating data"
 msgstr "يولّد البيانات"
 
-#: ../gtk/gtkprintoperation.c:1779
+#: ../gtk/gtkprintoperation.c:1780
 msgctxt "print operation status"
 msgid "Sending data"
 msgstr "يرسل البيانات"
 
-#: ../gtk/gtkprintoperation.c:1780
+#: ../gtk/gtkprintoperation.c:1781
 msgctxt "print operation status"
 msgid "Waiting"
 msgstr "ينتظر"
 
-#: ../gtk/gtkprintoperation.c:1781
+#: ../gtk/gtkprintoperation.c:1782
 msgctxt "print operation status"
 msgid "Blocking on issue"
 msgstr "متعطّل بسبب مشكلة"
 
-#: ../gtk/gtkprintoperation.c:1782
+#: ../gtk/gtkprintoperation.c:1783
 msgctxt "print operation status"
 msgid "Printing"
 msgstr "يطبع"
 
-#: ../gtk/gtkprintoperation.c:1783
+#: ../gtk/gtkprintoperation.c:1784
 msgctxt "print operation status"
 msgid "Finished"
 msgstr "ينهي"
 
-#: ../gtk/gtkprintoperation.c:1784
+#: ../gtk/gtkprintoperation.c:1785
 msgctxt "print operation status"
 msgid "Finished with error"
 msgstr "تم مع خطأ"
 
-#: ../gtk/gtkprintoperation.c:2348
+#: ../gtk/gtkprintoperation.c:2349
 #, c-format
 msgid "Preparing %d"
 msgstr "يحضّر %Id"
 
-#: ../gtk/gtkprintoperation.c:2350 ../gtk/gtkprintoperation.c:2982
+#: ../gtk/gtkprintoperation.c:2351 ../gtk/gtkprintoperation.c:2985
 msgid "Preparing"
 msgstr "يحضّر"
 
-#: ../gtk/gtkprintoperation.c:2353
+#: ../gtk/gtkprintoperation.c:2354
 #, c-format
 msgid "Printing %d"
 msgstr "يطبع %Id"
 
-#: ../gtk/gtkprintoperation.c:3013
+#: ../gtk/gtkprintoperation.c:3016
 msgid "Error creating print preview"
 msgstr "حدث خطأ أثناء إنشاء معاينة الطباعة"
 
-#: ../gtk/gtkprintoperation.c:3016
+#: ../gtk/gtkprintoperation.c:3019
 msgid "The most probable reason is that a temporary file could not be created."
 msgstr "السبب الأكثر احتمالاً هو عدم القدرة على إنشاء ملف مؤقت."
 
@@ -3002,74 +2994,74 @@ msgstr "السبب الأكثر احتمالاً هو عدم القدرة على
 msgid "Error launching preview"
 msgstr "حدث خطأ أثناء بدء المعاينة"
 
-#: ../gtk/gtkprintoperation-win32.c:611
+#: ../gtk/gtkprintoperation-win32.c:616
 msgid "Printer offline"
 msgstr "الطابعة غير متصلة"
 
-#: ../gtk/gtkprintoperation-win32.c:613
+#: ../gtk/gtkprintoperation-win32.c:618
 msgid "Out of paper"
 msgstr "نَفَذ الورق"
 
 #. Translators: this is a printer status.
-#: ../gtk/gtkprintoperation-win32.c:615
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2293
+#: ../gtk/gtkprintoperation-win32.c:620
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2495
 msgid "Paused"
 msgstr "أُلبِث"
 
-#: ../gtk/gtkprintoperation-win32.c:617
+#: ../gtk/gtkprintoperation-win32.c:622
 msgid "Need user intervention"
 msgstr "بحاجة لتدخّل المستخدم"
 
-#: ../gtk/gtkprintoperation-win32.c:717
+#: ../gtk/gtkprintoperation-win32.c:722
 msgid "Custom size"
 msgstr "مقاس مخصصّ"
 
-#: ../gtk/gtkprintoperation-win32.c:1539
+#: ../gtk/gtkprintoperation-win32.c:1544
 msgid "No printer found"
 msgstr "لم يُعثر على أي طابعة"
 
-#: ../gtk/gtkprintoperation-win32.c:1566
+#: ../gtk/gtkprintoperation-win32.c:1571
 msgid "Invalid argument to CreateDC"
 msgstr "معطى غير صحيح لـ CreateDC"
 
-#: ../gtk/gtkprintoperation-win32.c:1602 ../gtk/gtkprintoperation-win32.c:1829
+#: ../gtk/gtkprintoperation-win32.c:1607 ../gtk/gtkprintoperation-win32.c:1853
 msgid "Error from StartDoc"
 msgstr "خطأ من StartDoc "
 
-#: ../gtk/gtkprintoperation-win32.c:1684 ../gtk/gtkprintoperation-win32.c:1707
-#: ../gtk/gtkprintoperation-win32.c:1755
+#: ../gtk/gtkprintoperation-win32.c:1708 ../gtk/gtkprintoperation-win32.c:1731
+#: ../gtk/gtkprintoperation-win32.c:1779
 msgid "Not enough free memory"
 msgstr "الذاكرة الخالية لا تكفي"
 
-#: ../gtk/gtkprintoperation-win32.c:1760
+#: ../gtk/gtkprintoperation-win32.c:1784
 msgid "Invalid argument to PrintDlgEx"
 msgstr "معطى غير صحيح لـ PrintDlgEx"
 
-#: ../gtk/gtkprintoperation-win32.c:1765
+#: ../gtk/gtkprintoperation-win32.c:1789
 msgid "Invalid pointer to PrintDlgEx"
 msgstr "مؤشّر غير صحيح ل PrintDlgEx"
 
-#: ../gtk/gtkprintoperation-win32.c:1770
+#: ../gtk/gtkprintoperation-win32.c:1794
 msgid "Invalid handle to PrintDlgEx"
 msgstr "معالج غير صحيح ل PrintDlgEx"
 
-#: ../gtk/gtkprintoperation-win32.c:1775
+#: ../gtk/gtkprintoperation-win32.c:1799
 msgid "Unspecified error"
 msgstr "خطأ غير محدد"
 
-#: ../gtk/gtkprintunixdialog.c:734
+#: ../gtk/gtkprintunixdialog.c:732
 msgid "Pre_view"
 msgstr "_معاينة"
 
-#: ../gtk/gtkprintunixdialog.c:736
+#: ../gtk/gtkprintunixdialog.c:734
 msgid "_Print"
 msgstr "ا_طبع"
 
-#: ../gtk/gtkprintunixdialog.c:849
+#: ../gtk/gtkprintunixdialog.c:842
 msgid "Getting printer information failed"
 msgstr "فشل جلب معلومات الطابعة"
 
-#: ../gtk/gtkprintunixdialog.c:2051
+#: ../gtk/gtkprintunixdialog.c:2049
 msgid "Getting printer information…"
 msgstr "يجلب معلومات الطابعة…"
 
@@ -3079,104 +3071,110 @@ msgstr "يجلب معلومات الطابعة…"
 #. Translators: These strings name the possible arrangements of
 #. * multiple pages on a sheet when printing
 #.
-#: ../gtk/gtkprintunixdialog.c:3098
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:4780
+#: ../gtk/gtkprintunixdialog.c:3096
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:5152
 msgid "Left to right, top to bottom"
 msgstr "من اليسار لليمين، ومن الأعلى للأسفل"
 
-#: ../gtk/gtkprintunixdialog.c:3098
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:4780
+#: ../gtk/gtkprintunixdialog.c:3096
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:5152
 msgid "Left to right, bottom to top"
 msgstr "من اليسار لليمين، ومن الأسفل للأعلى"
 
-#: ../gtk/gtkprintunixdialog.c:3099
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:4781
+#: ../gtk/gtkprintunixdialog.c:3097
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:5153
 msgid "Right to left, top to bottom"
 msgstr "من اليمين لليسار، ومن الأعلى للأسفل"
 
-#: ../gtk/gtkprintunixdialog.c:3099
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:4781
+#: ../gtk/gtkprintunixdialog.c:3097
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:5153
 msgid "Right to left, bottom to top"
 msgstr "من اليمين لليسار، ومن الأسفل للأعلى"
 
-#: ../gtk/gtkprintunixdialog.c:3100
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:4782
+#: ../gtk/gtkprintunixdialog.c:3098
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:5154
 msgid "Top to bottom, left to right"
 msgstr "من الأعلى للأسفل، ومن اليسار لليمين"
 
-#: ../gtk/gtkprintunixdialog.c:3100
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:4782
+#: ../gtk/gtkprintunixdialog.c:3098
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:5154
 msgid "Top to bottom, right to left"
 msgstr "من الأعلى للأسفل، ومن اليمين لليسار"
 
-#: ../gtk/gtkprintunixdialog.c:3101
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:4783
+#: ../gtk/gtkprintunixdialog.c:3099
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:5155
 msgid "Bottom to top, left to right"
 msgstr "من الأسفل للأعلى، ومن اليسار لليمين"
 
-#: ../gtk/gtkprintunixdialog.c:3101
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:4783
+#: ../gtk/gtkprintunixdialog.c:3099
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:5155
 msgid "Bottom to top, right to left"
 msgstr "من الأسفل للأعلى، ومن اليمين لليسار"
 
 #. Translators, this string is used to label the option in the print
 #. * dialog that controls in what order multiple pages are arranged
 #.
-#: ../gtk/gtkprintunixdialog.c:3105 ../gtk/gtkprintunixdialog.c:3118
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:4860
+#: ../gtk/gtkprintunixdialog.c:3103 ../gtk/gtkprintunixdialog.c:3116
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:5232
 msgid "Page Ordering"
 msgstr "ترتيب الصفحات"
 
-#: ../gtk/gtkprintunixdialog.c:3134
+#: ../gtk/gtkprintunixdialog.c:3132
 msgid "Left to right"
 msgstr "من اليسار لليمين"
 
-#: ../gtk/gtkprintunixdialog.c:3135
+#: ../gtk/gtkprintunixdialog.c:3133
 msgid "Right to left"
 msgstr "من اليمين لليسار"
 
-#: ../gtk/gtkprintunixdialog.c:3147
+#: ../gtk/gtkprintunixdialog.c:3145
 msgid "Top to bottom"
 msgstr "من الأعلى للأسفل"
 
-#: ../gtk/gtkprintunixdialog.c:3148
+#: ../gtk/gtkprintunixdialog.c:3146
 msgid "Bottom to top"
 msgstr "من الأسفل للأعلى"
 
-#: ../gtk/gtkprintunixdialog.c:3391
+#: ../gtk/gtkprintunixdialog.c:3389
 msgid "Print"
 msgstr "اطبع"
 
-#: ../gtk/gtkrecentchooserdefault.c:1050 ../gtk/gtkrecentchooserdefault.c:1087
+#: ../gtk/gtkprogressbar.c:447
+#, c-format
+msgctxt "progress bar label"
+msgid "%.0f %%"
+msgstr "%I.0f ٪"
+
+#: ../gtk/gtkrecentchooserdefault.c:1077 ../gtk/gtkrecentchooserdefault.c:1114
 #, c-format
 msgid "No item for URI '%s' found"
 msgstr "لا يوجد عنصر للعنوان '%s'"
 
-#: ../gtk/gtkrecentchooserdefault.c:1214
+#: ../gtk/gtkrecentchooserdefault.c:1241
 msgid "Untitled filter"
 msgstr "مرشّح من دون عنوان"
 
-#: ../gtk/gtkrecentchooserdefault.c:1544
+#: ../gtk/gtkrecentchooserdefault.c:1564
 msgid "Could not remove item"
 msgstr "تعذّر حذف عنصر"
 
-#: ../gtk/gtkrecentchooserdefault.c:1588
+#: ../gtk/gtkrecentchooserdefault.c:1608
 msgid "Could not clear list"
 msgstr "تعذّر مسح القائمة"
 
-#: ../gtk/gtkrecentchooserdefault.c:1672
+#: ../gtk/gtkrecentchooserdefault.c:1692
 msgid "Copy _Location"
 msgstr "ا_نسخ الموقع"
 
-#: ../gtk/gtkrecentchooserdefault.c:1683
+#: ../gtk/gtkrecentchooserdefault.c:1703
 msgid "_Remove From List"
 msgstr "ا_حذف من القائمة"
 
-#: ../gtk/gtkrecentchooserdefault.c:1690
+#: ../gtk/gtkrecentchooserdefault.c:1710
 msgid "_Clear List"
 msgstr "ا_مسح القائمة"
 
-#: ../gtk/gtkrecentchooserdefault.c:1702
+#: ../gtk/gtkrecentchooserdefault.c:1722
 msgid "Show _Private Resources"
 msgstr "أظهِر الموارِد ال_خاصة"
 
@@ -3190,21 +3188,21 @@ msgstr "أظهِر الموارِد ال_خاصة"
 #. * user appended or prepended custom menu items to the
 #. * recent chooser menu widget.
 #.
-#: ../gtk/gtkrecentchoosermenu.c:355
+#: ../gtk/gtkrecentchoosermenu.c:343
 msgid "No items found"
 msgstr "لم يُعثر على أي عنصر"
 
-#: ../gtk/gtkrecentchoosermenu.c:520 ../gtk/gtkrecentchoosermenu.c:576
+#: ../gtk/gtkrecentchoosermenu.c:534 ../gtk/gtkrecentchoosermenu.c:590
 #, c-format
-msgid "No recently used resource found with URI `%s'"
-msgstr "لا توجد موارد حديثة الاستخدام بالعنوان `%s'"
+msgid "No recently used resource found with URI '%s'"
+msgstr "لا توجد موارد حديثة الاستخدام بالعنوان '%s'"
 
-#: ../gtk/gtkrecentchoosermenu.c:786
+#: ../gtk/gtkrecentchoosermenu.c:789
 #, c-format
 msgid "Open '%s'"
 msgstr "افتح '%s'"
 
-#: ../gtk/gtkrecentchoosermenu.c:816
+#: ../gtk/gtkrecentchoosermenu.c:819
 msgid "Unknown item"
 msgstr "عنصر مجهول"
 
@@ -3213,7 +3211,7 @@ msgstr "عنصر مجهول"
 #. * the %s is the name of the item. Please keep the _ in front
 #. * of the number to give these menu items a mnemonic.
 #.
-#: ../gtk/gtkrecentchoosermenu.c:827
+#: ../gtk/gtkrecentchoosermenu.c:830
 #, c-format
 msgctxt "recent menu label"
 msgid "_%d. %s"
@@ -3222,26 +3220,26 @@ msgstr "_%Id. %s"
 #. This is the format that is used for items in a recent files menu.
 #. * The %d is the number of the item, the %s is the name of the item.
 #.
-#: ../gtk/gtkrecentchoosermenu.c:832
+#: ../gtk/gtkrecentchoosermenu.c:835
 #, c-format
 msgctxt "recent menu label"
 msgid "%d. %s"
 msgstr "%Id. %s"
 
-#: ../gtk/gtkrecentmanager.c:1029 ../gtk/gtkrecentmanager.c:1042
-#: ../gtk/gtkrecentmanager.c:1179 ../gtk/gtkrecentmanager.c:1189
-#: ../gtk/gtkrecentmanager.c:1241 ../gtk/gtkrecentmanager.c:1250
-#: ../gtk/gtkrecentmanager.c:1265
+#: ../gtk/gtkrecentmanager.c:1042 ../gtk/gtkrecentmanager.c:1055
+#: ../gtk/gtkrecentmanager.c:1192 ../gtk/gtkrecentmanager.c:1202
+#: ../gtk/gtkrecentmanager.c:1254 ../gtk/gtkrecentmanager.c:1263
+#: ../gtk/gtkrecentmanager.c:1278
 #, c-format
 msgid "Unable to find an item with URI '%s'"
 msgstr "لا يُمكن العثور على عنصر بالعنوان '%s'"
 
-#: ../gtk/gtkrecentmanager.c:2468
+#: ../gtk/gtkrecentmanager.c:2484
 #, c-format
 msgid "No registered application with name '%s' for item with URI '%s' found"
 msgstr "لا يوجد أي تطبيق مسجّل بالاسم '%s' لعناصر مسار '%s'"
 
-#: ../gtk/gtksearchentry.c:241
+#: ../gtk/gtksearchentry.c:369
 msgid "Search"
 msgstr "ابحث"
 
@@ -3249,7 +3247,7 @@ msgstr "ابحث"
 #. * glyphs then use MEDIUM VERTICAL BAR (U+2759) as the text for
 #. * the state
 #.
-#: ../gtk/gtkswitch.c:344 ../gtk/gtkswitch.c:395 ../gtk/gtkswitch.c:569
+#: ../gtk/gtkswitch.c:401 ../gtk/gtkswitch.c:453 ../gtk/gtkswitch.c:633
 msgctxt "switch"
 msgid "ON"
 msgstr "❙"
@@ -3257,7 +3255,7 @@ msgstr "❙"
 #. Translators: if the "off" state label requires more than three
 #. * glyphs then use WHITE CIRCLE (U+25CB) as the text for the state
 #.
-#: ../gtk/gtkswitch.c:352 ../gtk/gtkswitch.c:396 ../gtk/gtkswitch.c:584
+#: ../gtk/gtkswitch.c:409 ../gtk/gtkswitch.c:454 ../gtk/gtkswitch.c:648
 msgctxt "switch"
 msgid "OFF"
 msgstr "○"
@@ -3272,106 +3270,106 @@ msgstr "حدث خطأ مجهول عند محاولة فتح %s"
 msgid "No deserialize function found for format %s"
 msgstr "لا وظيفة تفكيك موجودة للنوع %s"
 
-#: ../gtk/gtktextbufferserialize.c:800 ../gtk/gtktextbufferserialize.c:826
+#: ../gtk/gtktextbufferserialize.c:806 ../gtk/gtktextbufferserialize.c:832
 #, c-format
 msgid "Both \"id\" and \"name\" were found on the <%s> element"
 msgstr "كلا \"id\" و \"name\" لم يعثر عليهما في العنصر <%s>"
 
-#: ../gtk/gtktextbufferserialize.c:810 ../gtk/gtktextbufferserialize.c:836
+#: ../gtk/gtktextbufferserialize.c:816 ../gtk/gtktextbufferserialize.c:842
 #, c-format
 msgid "The attribute \"%s\" was found twice on the <%s> element"
 msgstr "الصفة \"%s\" معادة مرتان في نفس العنصر <%s>"
 
-#: ../gtk/gtktextbufferserialize.c:852
+#: ../gtk/gtktextbufferserialize.c:858
 #, c-format
 msgid "<%s> element has invalid ID \"%s\""
 msgstr "معرّف العنصر <%s> غير صحيح \"%s\""
 
-#: ../gtk/gtktextbufferserialize.c:862
+#: ../gtk/gtktextbufferserialize.c:868
 #, c-format
 msgid "<%s> element has neither a \"name\" nor an \"id\" attribute"
 msgstr "العنصر <%s> ليس له لا صفة \"name\" ولا \"id\""
 
-#: ../gtk/gtktextbufferserialize.c:949
+#: ../gtk/gtktextbufferserialize.c:955
 #, c-format
 msgid "Attribute \"%s\" repeated twice on the same <%s> element"
 msgstr "الصفة \"%s\" مكررة مرتان في نفس العنصر <%s>"
 
-#: ../gtk/gtktextbufferserialize.c:967 ../gtk/gtktextbufferserialize.c:992
+#: ../gtk/gtktextbufferserialize.c:973 ../gtk/gtktextbufferserialize.c:998
 #, c-format
 msgid "Attribute \"%s\" is invalid on <%s> element in this context"
 msgstr "الصفة \"%s\" خاطئة في العنصر <%s> في هذا السياق"
 
-#: ../gtk/gtktextbufferserialize.c:1031
+#: ../gtk/gtktextbufferserialize.c:1037
 #, c-format
 msgid "Tag \"%s\" has not been defined."
 msgstr "لم يتم تعريف الشّارة \"%s\"."
 
-#: ../gtk/gtktextbufferserialize.c:1043
+#: ../gtk/gtktextbufferserialize.c:1049
 msgid "Anonymous tag found and tags can not be created."
 msgstr "وُجِد وسم مجهول و لا يمكن إنشاؤه."
 
-#: ../gtk/gtktextbufferserialize.c:1054
+#: ../gtk/gtktextbufferserialize.c:1060
 #, c-format
 msgid "Tag \"%s\" does not exist in buffer and tags can not be created."
 msgstr "الوسم \"%s\" غير موجود في النص و لا يمكن إنشاؤه."
 
-#: ../gtk/gtktextbufferserialize.c:1153 ../gtk/gtktextbufferserialize.c:1228
-#: ../gtk/gtktextbufferserialize.c:1333 ../gtk/gtktextbufferserialize.c:1407
+#: ../gtk/gtktextbufferserialize.c:1161 ../gtk/gtktextbufferserialize.c:1236
+#: ../gtk/gtktextbufferserialize.c:1341 ../gtk/gtktextbufferserialize.c:1415
 #, c-format
 msgid "Element <%s> is not allowed below <%s>"
 msgstr "العنصر <%s> غير مسموح به تحت <%s>"
 
-#: ../gtk/gtktextbufferserialize.c:1184
+#: ../gtk/gtktextbufferserialize.c:1192
 #, c-format
 msgid "\"%s\" is not a valid attribute type"
 msgstr "\"%s\" قيمة غير سليمة لصفة"
 
-#: ../gtk/gtktextbufferserialize.c:1192
+#: ../gtk/gtktextbufferserialize.c:1200
 #, c-format
 msgid "\"%s\" is not a valid attribute name"
 msgstr "\"%s\" قيمة غير سليمة لاسم صفة"
 
-#: ../gtk/gtktextbufferserialize.c:1202
+#: ../gtk/gtktextbufferserialize.c:1210
 #, c-format
 msgid ""
 "\"%s\" could not be converted to a value of type \"%s\" for attribute \"%s\""
 msgstr "لا يمكن تحويل \"%s\" إلى قيمة من نوع \"%s\" للخاصية  \"%s\""
 
-#: ../gtk/gtktextbufferserialize.c:1211
+#: ../gtk/gtktextbufferserialize.c:1219
 #, c-format
 msgid "\"%s\" is not a valid value for attribute \"%s\""
 msgstr "\"%s\" قيمة غير سليمة لاسم الصفة \"%s\""
 
-#: ../gtk/gtktextbufferserialize.c:1296
+#: ../gtk/gtktextbufferserialize.c:1304
 #, c-format
 msgid "Tag \"%s\" already defined"
 msgstr "الوسم \"%s\" معرف مسبقًا"
 
-#: ../gtk/gtktextbufferserialize.c:1309
+#: ../gtk/gtktextbufferserialize.c:1317
 #, c-format
 msgid "Tag \"%s\" has invalid priority \"%s\""
 msgstr "الوسم \"%s\" له خاصية غير صالحة \"%s\""
 
-#: ../gtk/gtktextbufferserialize.c:1362
+#: ../gtk/gtktextbufferserialize.c:1370
 #, c-format
 msgid "Outermost element in text must be <text_view_markup> not <%s>"
 msgstr "العنصر العلوي في نص يجب أن يكون <text_view_markup> و ليس <%s>"
 
-#: ../gtk/gtktextbufferserialize.c:1371 ../gtk/gtktextbufferserialize.c:1387
+#: ../gtk/gtktextbufferserialize.c:1379 ../gtk/gtktextbufferserialize.c:1395
 #, c-format
 msgid "A <%s> element has already been specified"
 msgstr "عنصر <%s> تم تحديده بالفعل"
 
-#: ../gtk/gtktextbufferserialize.c:1393
+#: ../gtk/gtktextbufferserialize.c:1401
 msgid "A <text> element can't occur before a <tags> element"
 msgstr "العنصر<text> لا يمكن أن يظهر قبل العنصر <tags>"
 
-#: ../gtk/gtktextbufferserialize.c:1792
+#: ../gtk/gtktextbufferserialize.c:1807
 msgid "Serialized data is malformed"
 msgstr "البيانات المرسلة غير صالحة"
 
-#: ../gtk/gtktextbufferserialize.c:1870
+#: ../gtk/gtktextbufferserialize.c:1886
 msgid ""
 "Serialized data is malformed. First section isn't GTKTEXTBUFFERCONTENTS-0001"
 msgstr "البيانات المرسلة غير صالحة. القسم الأول ليس GTKTEXTBUFFERCONTENTS-0001"
@@ -3416,15 +3414,15 @@ msgstr "_واصل صفري العرض (ZWJ)"
 msgid "ZWNJ Zero width _non-joiner"
 msgstr "_فاصل صفري العرض (ZWNJ)"
 
-#: ../gtk/gtkvolumebutton.c:177
+#: ../gtk/gtkvolumebutton.c:189
 msgid "Adjusts the volume"
 msgstr "يضبط الصوت"
 
-#: ../gtk/gtkvolumebutton.c:220
+#: ../gtk/gtkvolumebutton.c:232
 msgid "Muted"
 msgstr "صامت"
 
-#: ../gtk/gtkvolumebutton.c:224
+#: ../gtk/gtkvolumebutton.c:236
 msgid "Full Volume"
 msgstr "شدة الصوت القصوى"
 
@@ -3433,52 +3431,709 @@ msgstr "شدة الصوت القصوى"
 #. * Translate the "%d" to "%Id" if you want to use localised digits,
 #. * or otherwise translate the "%d" to "%d".
 #.
-#: ../gtk/gtkvolumebutton.c:237
+#: ../gtk/gtkvolumebutton.c:249
 #, c-format
 msgctxt "volume percentage"
-msgid "%d %%"
-msgstr "%Id %%"
+msgid "%d %%"
+msgstr "%Id ٪"
 
-#: ../gtk/gtkwindow.c:8704
-msgid "Unmaximize"
-msgstr "ألغ التكبير"
+#: ../gtk/gtkwindow.c:11838
+msgid "Do you want to use GTK+ Inspector?"
+msgstr "هل تريد استخدام فاحص جتك+؟"
 
-#: ../gtk/gtkwindow.c:8713
-msgid "Move"
-msgstr "انقل"
+#: ../gtk/gtkwindow.c:11840
+msgid ""
+"GTK+ Inspector is an interactive debugger that lets you explore and modify "
+"the internals of any GTK+ application. Using it may cause the application to "
+"break or crash."
+msgstr ""
+"فاحص جتك+ هو منقّح تفاعلي يتيح لك تعديل داخليات أي تطبيق جتك+. استخدامه قد "
+"يسبب تعطّل أو تحطم التطبيق."
 
-#: ../gtk/gtkwindow.c:8719
-msgid "Resize"
-msgstr "غيّر الحجم"
+#: ../gtk/gtkwindow.c:11845
+msgid "Don't show this message again"
+msgstr "لا تعرض هذه الرسالة مرة أخرى"
 
-#: ../gtk/gtkwindow.c:8731
-msgid "Always on Top"
+#: ../gtk/inspector/action-editor.c:281
+msgid "Activate"
+msgstr "نشِّط"
+
+#: ../gtk/inspector/action-editor.c:302 ../gtk/inspector/actions.ui.h:5
+#: ../gtk/inspector/misc-info.ui.h:3
+msgid "State"
+msgstr "الحالة"
+
+#: ../gtk/inspector/actions.ui.h:1 ../gtk/inspector/general.ui.h:3
+msgid "Prefix"
+msgstr "البادئة"
+
+#: ../gtk/inspector/actions.ui.h:2 ../gtk/inspector/classes-list.ui.h:3
+#: ../gtk/inspector/object-tree.ui.h:2 ../gtk/inspector/signals-list.ui.h:3
+#: ../gtk/ui/gtkfilechooserwidget.ui.h:3
+msgid "Name"
+msgstr "الاسم"
+
+#: ../gtk/inspector/actions.ui.h:3
+msgid "Enabled"
+msgstr "مفعّل"
+
+#: ../gtk/inspector/actions.ui.h:4
+msgid "Parameter Type"
+msgstr "نوع المعامل"
+
+#: ../gtk/inspector/classes-list.c:124
+msgid "New class"
+msgstr "صنف جديد"
+
+#: ../gtk/inspector/classes-list.c:128
+msgid "Cancel"
+msgstr "الغِ"
+
+#: ../gtk/inspector/classes-list.c:135
+msgid "Class name"
+msgstr "اسم الصنف"
+
+#. vim: set et sw=2 ts=2:
+#: ../gtk/inspector/classes-list.ui.h:1
+msgid "Add a class"
+msgstr ""
+
+#: ../gtk/inspector/classes-list.ui.h:2
+msgid "Restore defaults for this widget"
+msgstr ""
+
+#: ../gtk/inspector/css-editor.c:90 ../gtk/inspector/css-editor.c:96
+msgid "You can type here any CSS rule recognized by GTK+."
+msgstr ""
+
+#: ../gtk/inspector/css-editor.c:91 ../gtk/inspector/css-editor.c:97
+msgid ""
+"You can temporarily disable this custom CSS by clicking on the “Pause” "
+"button above."
+msgstr ""
+
+#: ../gtk/inspector/css-editor.c:92
+msgid "Changes are applied instantly and globally, for the whole application."
+msgstr ""
+
+#: ../gtk/inspector/css-editor.c:98
+msgid "Changes are applied instantly, only for this selected widget."
+msgstr ""
+
+#: ../gtk/inspector/css-editor.c:160
+msgid "Saving CSS failed"
+msgstr ""
+
+#: ../gtk/inspector/css-editor.c:200
+msgid "_Save"
+msgstr "ا_حفظ"
+
+#. vim: set et sw=2 ts=2:
+#: ../gtk/inspector/css-editor.ui.h:1
+msgid "Disable this custom CSS"
+msgstr ""
+
+#: ../gtk/inspector/css-editor.ui.h:2
+msgid "Save the current CSS"
+msgstr ""
+
+#: ../gtk/inspector/data-list.ui.h:1
+msgid "Show data"
+msgstr ""
+
+#. vim: set et sw=2 ts=2:
+#: ../gtk/inspector/general.ui.h:1
+msgid "GTK+ Version"
+msgstr "إصدارة ج‌ت‌ك+"
+
+#: ../gtk/inspector/general.ui.h:2
+msgid "GDK Backend"
+msgstr "خلفية ج‌دك"
+
+#: ../gtk/inspector/general.ui.h:4
+msgid "X display"
+msgstr "عرض س"
+
+#: ../gtk/inspector/general.ui.h:5
+msgid "RGBA visual"
+msgstr ""
+
+#: ../gtk/inspector/general.ui.h:6
+msgid "Composited"
+msgstr "مُركّب"
+
+#: ../gtk/inspector/general.ui.h:7
+msgid "GL Version"
+msgstr ""
+
+#: ../gtk/inspector/general.ui.h:8
+msgid "GL Vendor"
+msgstr ""
+
+#: ../gtk/inspector/gestures.c:129
+msgid "Capture"
+msgstr ""
+
+#: ../gtk/inspector/gestures.c:130
+msgid "Bubble"
+msgstr ""
+
+#: ../gtk/inspector/gestures.c:131 ../gtk/inspector/menu.ui.h:3
+msgid "Target"
+msgstr ""
+
+#: ../gtk/inspector/menu.c:93
+msgid "Unnamed section"
+msgstr ""
+
+#. vim: set et sw=2 ts=2:
+#: ../gtk/inspector/menu.ui.h:1 ../gtk/inspector/object-tree.ui.h:3
+#, fuzzy
+msgid "Label"
+msgstr "عنوان"
+
+#: ../gtk/inspector/menu.ui.h:2 ../gtk/inspector/prop-editor.c:1300
+#, fuzzy
+msgid "Action"
+msgstr "الموقع"
+
+#: ../gtk/inspector/menu.ui.h:4
+msgid "Icon"
+msgstr ""
+
+#. vim: set et sw=2 ts=2:
+#: ../gtk/inspector/misc-info.ui.h:1
+#, fuzzy
+msgid "Address"
+msgstr "اضغط"
+
+#: ../gtk/inspector/misc-info.ui.h:2
+#, fuzzy
+msgid "Reference count"
+msgstr "التفضيلات"
+
+#: ../gtk/inspector/misc-info.ui.h:4
+msgid "Buildable ID"
+msgstr ""
+
+#: ../gtk/inspector/misc-info.ui.h:5
+#, fuzzy
+msgid "Default Widget"
+msgstr "التطبيق المبدئي"
+
+#: ../gtk/inspector/misc-info.ui.h:6 ../gtk/inspector/misc-info.ui.h:8
+#: ../gtk/inspector/prop-editor.c:1003 ../gtk/inspector/prop-editor.c:1183
+#: ../gtk/inspector/prop-editor.c:1308 ../gtk/inspector/prop-editor.c:1419
+#: ../gtk/inspector/window.ui.h:8
+msgid "Properties"
+msgstr "الخصائص"
+
+#: ../gtk/inspector/misc-info.ui.h:7
+msgid "Focus Widget"
+msgstr ""
+
+#: ../gtk/inspector/misc-info.ui.h:9
+msgid "Mnemonic Label"
+msgstr ""
+
+#: ../gtk/inspector/misc-info.ui.h:10
+msgid "Allocated size"
+msgstr ""
+
+#: ../gtk/inspector/misc-info.ui.h:11
+msgid "Clip area"
+msgstr ""
+
+#: ../gtk/inspector/misc-info.ui.h:12
+msgid "Tick callback"
+msgstr ""
+
+#: ../gtk/inspector/misc-info.ui.h:13
+msgid "Frame count"
+msgstr ""
+
+#: ../gtk/inspector/misc-info.ui.h:14
+msgid "Frame rate"
+msgstr ""
+
+#: ../gtk/inspector/misc-info.ui.h:15
+msgid "Accessible role"
+msgstr ""
+
+#: ../gtk/inspector/misc-info.ui.h:16
+msgid "Mapped"
+msgstr ""
+
+#: ../gtk/inspector/misc-info.ui.h:17
+msgid "Realized"
+msgstr ""
+
+#: ../gtk/inspector/misc-info.ui.h:18
+msgid "Is Toplevel"
+msgstr ""
+
+#: ../gtk/inspector/misc-info.ui.h:19
+msgid "Child Visible"
+msgstr ""
+
+#: ../gtk/inspector/object-hierarchy.ui.h:1
+msgid "Object Hierarchy"
+msgstr ""
+
+#: ../gtk/inspector/object-tree.ui.h:1
+#, fuzzy
+msgid "Object"
+msgstr "أ_خرج"
+
+#: ../gtk/inspector/object-tree.ui.h:4 ../gtk/inspector/window.ui.h:13
+msgid "Style Classes"
+msgstr ""
+
+#: ../gtk/inspector/prop-editor.c:615
+#, fuzzy, c-format
+msgid "Pointer: %p"
+msgstr "الطابعة"
+
+#: ../gtk/inspector/prop-editor.c:630
+#, fuzzy
+msgctxt "type name"
+msgid "Unknown"
+msgstr "مجهول"
+
+#: ../gtk/inspector/prop-editor.c:631
+#, c-format
+msgid "Object: %p (%s)"
+msgstr ""
+
+#: ../gtk/inspector/prop-editor.c:1056
+#, fuzzy, c-format
+msgid "Uneditable property type: %s"
+msgstr "تعذّر إيقاف %s"
+
+#: ../gtk/inspector/prop-editor.c:1174
+msgid "Attribute mapping"
+msgstr ""
+
+#: ../gtk/inspector/prop-editor.c:1179
+msgid "Model:"
+msgstr ""
+
+#: ../gtk/inspector/prop-editor.c:1180
+#, c-format
+msgid "%p (%s)"
+msgstr ""
+
+#: ../gtk/inspector/prop-editor.c:1190
+#, fuzzy
+msgid "Column:"
+msgstr "شدة الصوت"
+
+#: ../gtk/inspector/prop-editor.c:1304
+#, c-format
+msgid "Defined at: %p (%s)"
+msgstr ""
+
+#: ../gtk/inspector/prop-editor.c:1368 ../gtk/inspector/prop-editor.c:1384
+#, fuzzy
+msgid "inverted"
+msgstr "_حوّل"
+
+#: ../gtk/inspector/prop-editor.c:1400
+msgid "bidirectional, inverted"
+msgstr ""
+
+#: ../gtk/inspector/prop-editor.c:1405 ../gtk/inspector/prop-editor.c:1501
+msgid "bidirectional"
+msgstr ""
+
+#: ../gtk/inspector/prop-editor.c:1410
+msgid "Binding:"
+msgstr ""
+
+#: ../gtk/inspector/prop-editor.c:1520
+#, fuzzy
+msgid "Setting:"
+msgstr "يجري بدء %s"
+
+#: ../gtk/inspector/prop-editor.c:1552
+#, fuzzy
+msgid "Source:"
+msgstr "مصدر الورق"
+
+#: ../gtk/inspector/prop-editor.c:1557
+#, fuzzy
+msgid "Default"
+msgstr "default:mm"
+
+#: ../gtk/inspector/prop-editor.c:1560
+msgid "Theme"
+msgstr ""
+
+#: ../gtk/inspector/prop-editor.c:1563
+#, fuzzy
+msgid "XSettings"
+msgstr "يجري بدء %s"
+
+#. vim: set et:
+#: ../gtk/inspector/prop-list.ui.h:1 ../gtk/inspector/style-prop-list.ui.h:1
+#, fuzzy
+msgid "Property"
+msgstr "_الخصائص"
+
+#: ../gtk/inspector/prop-list.ui.h:2 ../gtk/inspector/style-prop-list.ui.h:2
+#: ../gtk/ui/gtkcoloreditor.ui.h:9
+msgid "Value"
+msgstr "القيمة"
+
+#: ../gtk/inspector/prop-list.ui.h:3
+msgid "Attribute"
+msgstr ""
+
+#: ../gtk/inspector/prop-list.ui.h:4 ../gtk/inspector/signals-list.ui.h:6
+msgid "Defined At"
+msgstr ""
+
+#: ../gtk/inspector/resource-list.ui.h:1
+#, fuzzy
+msgid "Path"
+msgstr "المسار العلوي"
+
+#: ../gtk/inspector/resource-list.ui.h:2 ../gtk/inspector/signals-list.ui.h:5
+#, fuzzy
+msgid "Count"
+msgstr "أو_صِل"
+
+#: ../gtk/inspector/resource-list.ui.h:3 ../gtk/ui/gtkfilechooserwidget.ui.h:4
+msgid "Size"
+msgstr "الحجم"
+
+#: ../gtk/inspector/resource-list.ui.h:4
+#, fuzzy
+msgid "Name:"
+msgstr "الا_سم:"
+
+#: ../gtk/inspector/resource-list.ui.h:5
+msgid "Type:"
+msgstr ""
+
+#: ../gtk/inspector/resource-list.ui.h:6
+#, fuzzy
+msgid "Size:"
+msgstr "الحجم"
+
+#: ../gtk/inspector/selector.ui.h:1 ../gtk/inspector/window.ui.h:12
+#, fuzzy
+msgid "Selector"
+msgstr "اختر"
+
+#: ../gtk/inspector/signals-list.c:111
+#, fuzzy
+msgid "Yes"
+msgstr "_نعم"
+
+#. vim: set et sw=2 ts=2:
+#: ../gtk/inspector/signals-list.ui.h:1
+msgid "Trace signal emissions on this object"
+msgstr ""
+
+#: ../gtk/inspector/signals-list.ui.h:2
+#, fuzzy
+msgid "Clear log"
+msgstr "ا_مسح"
+
+#: ../gtk/inspector/signals-list.ui.h:4
+#, fuzzy
+msgid "Connected"
+msgstr "ا_تّصل"
+
+#: ../gtk/inspector/size-groups.c:224
+msgid "Ignore hidden"
+msgstr ""
+
+#: ../gtk/inspector/size-groups.c:242
+msgid "Mode"
+msgstr ""
+
+#: ../gtk/inspector/size-groups.c:253
+msgid "Horizontal"
+msgstr ""
+
+#: ../gtk/inspector/size-groups.c:254
+msgid "Vertical"
+msgstr ""
+
+#: ../gtk/inspector/size-groups.c:255
+msgid "Both"
+msgstr ""
+
+#. vim: set et sw=2 ts=2:
+#: ../gtk/inspector/statistics.ui.h:1
+msgid "Type"
+msgstr ""
+
+#: ../gtk/inspector/statistics.ui.h:2
+msgid "Self 1"
+msgstr ""
+
+#: ../gtk/inspector/statistics.ui.h:3
+msgid "Cumulative 1"
+msgstr ""
+
+#: ../gtk/inspector/statistics.ui.h:4
+msgid "Self 2"
+msgstr ""
+
+#: ../gtk/inspector/statistics.ui.h:5
+msgid "Cumulative 2"
+msgstr ""
+
+#: ../gtk/inspector/statistics.ui.h:6
+msgid "Self"
+msgstr ""
+
+#: ../gtk/inspector/statistics.ui.h:7
+msgid "Cumulative"
+msgstr ""
+
+#: ../gtk/inspector/statistics.ui.h:8
+msgid "Enable statistics with GOBJECT_DEBUG=instance-count"
+msgstr ""
+
+#: ../gtk/inspector/visual.c:263 ../gtk/inspector/visual.c:278
+msgid "Theme is hardcoded by GTK_THEME"
+msgstr ""
+
+#: ../gtk/inspector/visual.c:453
+msgid "Backend does not support window scaling"
+msgstr ""
+
+#: ../gtk/inspector/visual.c:492
+msgid "Setting is hardcoded by GTK_TEST_TOUCHSCREEN"
+msgstr ""
+
+#: ../gtk/inspector/visual.c:557
+msgid ""
+"Not settable at runtime.\n"
+"Use GDK_GL=always or GDK_GL=disable instead"
+msgstr ""
+
+#: ../gtk/inspector/visual.c:571 ../gtk/inspector/visual.c:572
+#: ../gtk/inspector/visual.c:573
+msgid "GL rendering is disabled"
+msgstr ""
+
+#. vim: set et sw=2 ts=2:
+#: ../gtk/inspector/visual.ui.h:1
+msgid "GTK+ Theme"
+msgstr ""
+
+#: ../gtk/inspector/visual.ui.h:2
+#, fuzzy
+msgid "Dark Variant"
+msgstr "برتقالي داكن"
+
+#: ../gtk/inspector/visual.ui.h:3
+msgid "Cursor Theme"
+msgstr ""
+
+#: ../gtk/inspector/visual.ui.h:4
+#, fuzzy
+msgid "Cursor Size"
+msgstr "مقاس مخصّص %Id"
+
+#: ../gtk/inspector/visual.ui.h:5
+msgid "Icon Theme"
+msgstr ""
+
+#: ../gtk/inspector/visual.ui.h:6 ../gtk/ui/gtkfontbutton.ui.h:1
+msgid "Font"
+msgstr "الخطّ"
+
+#: ../gtk/inspector/visual.ui.h:7
+msgid "Text Direction"
+msgstr ""
+
+#: ../gtk/inspector/visual.ui.h:8
+#, fuzzy
+msgid "Left-to-Right"
+msgstr "من اليسار لليمين"
+
+#: ../gtk/inspector/visual.ui.h:9
+#, fuzzy
+msgid "Right-to-Left"
+msgstr "من اليمين لليسار"
+
+#: ../gtk/inspector/visual.ui.h:10
+msgid "Window scaling"
+msgstr ""
+
+#: ../gtk/inspector/visual.ui.h:11
+#, fuzzy
+msgid "Animations"
+msgstr "معلومات"
+
+#: ../gtk/inspector/visual.ui.h:12
+#, fuzzy
+msgid "Rendering Mode"
+msgstr "يولّد البيانات"
+
+#: ../gtk/inspector/visual.ui.h:13
+msgid "Similar"
+msgstr ""
+
+#: ../gtk/inspector/visual.ui.h:14
+msgid "Image"
+msgstr ""
+
+#: ../gtk/inspector/visual.ui.h:15
+#, fuzzy
+msgid "Recording"
+msgstr "س_جّل"
+
+#: ../gtk/inspector/visual.ui.h:16
+msgid "Show Graphic Updates"
+msgstr ""
+
+#: ../gtk/inspector/visual.ui.h:17
+msgid "Show Baselines"
+msgstr ""
+
+#: ../gtk/inspector/visual.ui.h:18
+msgid "Show Pixel Cache"
+msgstr ""
+
+#: ../gtk/inspector/visual.ui.h:19
+msgid "Simulate touchscreen"
+msgstr ""
+
+#: ../gtk/inspector/visual.ui.h:20
+msgid "GL Rendering"
+msgstr ""
+
+#: ../gtk/inspector/visual.ui.h:21
+msgid "When needed"
+msgstr ""
+
+#: ../gtk/inspector/visual.ui.h:22
+#, fuzzy
+msgid "Always"
 msgstr "دائما في القمّة"
 
-#: ../gtk/gtkwindow.c:8743
-msgid "Always on Visible Workspace"
-msgstr "دائما على مساحة العمل المرئية"
+#: ../gtk/inspector/visual.ui.h:23
+#, fuzzy
+msgid "Disabled"
+msgstr "معطّل"
 
-#: ../gtk/gtkwindow.c:8751
-msgid "Only on This Workspace"
-msgstr "فقط على مساحة العمل هذه"
+#: ../gtk/inspector/visual.ui.h:24
+msgid "Software GL"
+msgstr ""
 
-#: ../gtk/gtkwindow.c:8768
-msgid "Move to Workspace Up"
-msgstr "انقل لمساحة العمل فوق"
+#: ../gtk/inspector/visual.ui.h:25
+msgid "Software Surfaces"
+msgstr ""
 
-#: ../gtk/gtkwindow.c:8777
-msgid "Move to Workspace Down"
-msgstr "انقل لمساحة العمل تحت"
+#: ../gtk/inspector/visual.ui.h:26
+msgid "Texture Rectangle Extension"
+msgstr ""
 
-#: ../gtk/gtkwindow.c:8791
-msgid "Move to Another Workspace"
-msgstr "انقل لمساحة عمل أخرى"
+#. vim: set et sw=2 ts=2:
+#: ../gtk/inspector/window.ui.h:1
+#, fuzzy
+msgid "Select an Object"
+msgstr "اختر ملفًا"
 
-#: ../gtk/gtkwindow.c:8799
-#, c-format
-msgid "Workspace %d"
-msgstr "مساحة العمل %d"
+#: ../gtk/inspector/window.ui.h:2 ../gtk/inspector/window.ui.h:5
+#, fuzzy
+msgid "Show Details"
+msgstr "تفاصيل المهمّة"
+
+#: ../gtk/inspector/window.ui.h:3
+msgid "Show all Objects"
+msgstr ""
+
+#: ../gtk/inspector/window.ui.h:4
+msgid "Collect Statistics"
+msgstr ""
+
+#: ../gtk/inspector/window.ui.h:6
+#, fuzzy
+msgid "Show all Resources"
+msgstr "أظهِر الموارِد ال_خاصة"
+
+#. Translators: "Miscellaneous" is the label for a button, that opens
+#. up an extra panel of settings in a print dialog.
+#: ../gtk/inspector/window.ui.h:7
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:4267
+msgid "Miscellaneous"
+msgstr "متفرقات"
+
+#: ../gtk/inspector/window.ui.h:9
+msgid "Signals"
+msgstr ""
+
+#: ../gtk/inspector/window.ui.h:10
+#, fuzzy
+msgid "Child Properties"
+msgstr "_الخصائص"
+
+#: ../gtk/inspector/window.ui.h:11
+#, fuzzy
+msgid "Hierarchy"
+msgstr "ابحث"
+
+#: ../gtk/inspector/window.ui.h:14
+#, fuzzy
+msgid "Style Properties"
+msgstr "_الخصائص"
+
+#: ../gtk/inspector/window.ui.h:15 ../gtk/inspector/window.ui.h:25
+#, fuzzy
+msgid "CSS"
+msgstr "صنف"
+
+#: ../gtk/inspector/window.ui.h:16
+msgid "Size Groups"
+msgstr ""
+
+#: ../gtk/inspector/window.ui.h:17
+msgid "Data"
+msgstr ""
+
+#: ../gtk/inspector/window.ui.h:18
+#, fuzzy
+msgid "Actions"
+msgstr "تطبيق"
+
+#: ../gtk/inspector/window.ui.h:20
+msgid "Gestures"
+msgstr ""
+
+#: ../gtk/inspector/window.ui.h:21
+msgid "Magnifier"
+msgstr ""
+
+#: ../gtk/inspector/window.ui.h:22
+#, fuzzy
+msgid "Objects"
+msgstr "أ_خرج"
+
+#: ../gtk/inspector/window.ui.h:23
+#, fuzzy
+msgid "Statistics"
+msgstr "الحالة"
+
+#: ../gtk/inspector/window.ui.h:24
+#, fuzzy
+msgid "Resources"
+msgstr "_مصدر الورق:"
+
+#: ../gtk/inspector/window.ui.h:26
+msgid "Visual"
+msgstr ""
+
+#: ../gtk/inspector/window.ui.h:27 ../gtk/ui/gtkprintunixdialog.ui.h:24
+msgid "General"
+msgstr "عامّ"
 
 #: ../gtk/paper_names_offsets.c:4
 msgctxt "paper size"
@@ -3487,8 +4142,8 @@ msgstr "asme_f"
 
 #: ../gtk/paper_names_offsets.c:5
 msgctxt "paper size"
-msgid "A0x2"
-msgstr "A0x2"
+msgid "A0×2"
+msgstr "A0×2"
 
 #: ../gtk/paper_names_offsets.c:6
 msgctxt "paper size"
@@ -3497,8 +4152,8 @@ msgstr "A0"
 
 #: ../gtk/paper_names_offsets.c:7
 msgctxt "paper size"
-msgid "A0x3"
-msgstr "A0x3"
+msgid "A0×3"
+msgstr "A0×3"
 
 #: ../gtk/paper_names_offsets.c:8
 msgctxt "paper size"
@@ -3512,13 +4167,13 @@ msgstr "A10"
 
 #: ../gtk/paper_names_offsets.c:10
 msgctxt "paper size"
-msgid "A1x3"
-msgstr "A1x3"
+msgid "A1×3"
+msgstr "A1×3"
 
 #: ../gtk/paper_names_offsets.c:11
 msgctxt "paper size"
-msgid "A1x4"
-msgstr "A1x4"
+msgid "A1×4"
+msgstr "A1×4"
 
 #: ../gtk/paper_names_offsets.c:12
 msgctxt "paper size"
@@ -3527,18 +4182,18 @@ msgstr "A2"
 
 #: ../gtk/paper_names_offsets.c:13
 msgctxt "paper size"
-msgid "A2x3"
-msgstr "A2x3"
+msgid "A2×3"
+msgstr "A2×3"
 
 #: ../gtk/paper_names_offsets.c:14
 msgctxt "paper size"
-msgid "A2x4"
-msgstr "A2x4"
+msgid "A2×4"
+msgstr "A2×4"
 
 #: ../gtk/paper_names_offsets.c:15
 msgctxt "paper size"
-msgid "A2x5"
-msgstr "A2x5"
+msgid "A2×5"
+msgstr "A2×5"
 
 #: ../gtk/paper_names_offsets.c:16
 msgctxt "paper size"
@@ -3552,28 +4207,28 @@ msgstr "‮‪A3‬ أكبر"
 
 #: ../gtk/paper_names_offsets.c:18
 msgctxt "paper size"
-msgid "A3x3"
-msgstr "A3x3"
+msgid "A3×3"
+msgstr "A3×3"
 
 #: ../gtk/paper_names_offsets.c:19
 msgctxt "paper size"
-msgid "A3x4"
-msgstr "A3x4"
+msgid "A3×4"
+msgstr "A3×4"
 
 #: ../gtk/paper_names_offsets.c:20
 msgctxt "paper size"
-msgid "A3x5"
-msgstr "A3x5"
+msgid "A3×5"
+msgstr "A3×5"
 
 #: ../gtk/paper_names_offsets.c:21
 msgctxt "paper size"
-msgid "A3x6"
-msgstr "A3x6"
+msgid "A3×6"
+msgstr "A3×6"
 
 #: ../gtk/paper_names_offsets.c:22
 msgctxt "paper size"
-msgid "A3x7"
-msgstr "A3x7"
+msgid "A3×7"
+msgstr "A3×7"
 
 #: ../gtk/paper_names_offsets.c:23
 msgctxt "paper size"
@@ -3592,38 +4247,38 @@ msgstr "‏‪A4‬ لوحي"
 
 #: ../gtk/paper_names_offsets.c:26
 msgctxt "paper size"
-msgid "A4x3"
-msgstr "A4x3"
+msgid "A4×3"
+msgstr "A4×3"
 
 #: ../gtk/paper_names_offsets.c:27
 msgctxt "paper size"
-msgid "A4x4"
-msgstr "A4x4"
+msgid "A4×4"
+msgstr "A4×4"
 
 #: ../gtk/paper_names_offsets.c:28
 msgctxt "paper size"
-msgid "A4x5"
-msgstr "A4x5"
+msgid "A4×5"
+msgstr "A4×5"
 
 #: ../gtk/paper_names_offsets.c:29
 msgctxt "paper size"
-msgid "A4x6"
-msgstr "A4x6"
+msgid "A4×6"
+msgstr "A4×6"
 
 #: ../gtk/paper_names_offsets.c:30
 msgctxt "paper size"
-msgid "A4x7"
-msgstr "A4x7"
+msgid "A4×7"
+msgstr "A4×7"
 
 #: ../gtk/paper_names_offsets.c:31
 msgctxt "paper size"
-msgid "A4x8"
-msgstr "A4x8"
+msgid "A4×8"
+msgstr "A4×8"
 
 #: ../gtk/paper_names_offsets.c:32
 msgctxt "paper size"
-msgid "A4x9"
-msgstr "A4x9"
+msgid "A4×9"
+msgstr "A4×9"
 
 #: ../gtk/paper_names_offsets.c:33
 msgctxt "paper size"
@@ -3807,495 +4462,585 @@ msgstr "RA2"
 
 #: ../gtk/paper_names_offsets.c:69
 msgctxt "paper size"
+msgid "RA3"
+msgstr "RA3"
+
+#: ../gtk/paper_names_offsets.c:70
+msgctxt "paper size"
+msgid "RA4"
+msgstr "RA4"
+
+#: ../gtk/paper_names_offsets.c:71
+msgctxt "paper size"
 msgid "SRA0"
 msgstr "SRA0"
 
-#: ../gtk/paper_names_offsets.c:70
+#: ../gtk/paper_names_offsets.c:72
 msgctxt "paper size"
 msgid "SRA1"
 msgstr "SRA1"
 
-#: ../gtk/paper_names_offsets.c:71
+#: ../gtk/paper_names_offsets.c:73
 msgctxt "paper size"
 msgid "SRA2"
 msgstr "SRA2"
 
-#: ../gtk/paper_names_offsets.c:72
+#: ../gtk/paper_names_offsets.c:74
+msgctxt "paper size"
+msgid "SRA3"
+msgstr "SRA3"
+
+#: ../gtk/paper_names_offsets.c:75
+msgctxt "paper size"
+msgid "SRA4"
+msgstr "SRA4"
+
+#: ../gtk/paper_names_offsets.c:76
 msgctxt "paper size"
 msgid "JB0"
 msgstr "JB0"
 
-#: ../gtk/paper_names_offsets.c:73
+#: ../gtk/paper_names_offsets.c:77
 msgctxt "paper size"
 msgid "JB1"
 msgstr "JB1"
 
-#: ../gtk/paper_names_offsets.c:74
+#: ../gtk/paper_names_offsets.c:78
 msgctxt "paper size"
 msgid "JB10"
 msgstr "JB10"
 
-#: ../gtk/paper_names_offsets.c:75
+#: ../gtk/paper_names_offsets.c:79
 msgctxt "paper size"
 msgid "JB2"
 msgstr "JB2"
 
-#: ../gtk/paper_names_offsets.c:76
+#: ../gtk/paper_names_offsets.c:80
 msgctxt "paper size"
 msgid "JB3"
 msgstr "JB3"
 
-#: ../gtk/paper_names_offsets.c:77
+#: ../gtk/paper_names_offsets.c:81
 msgctxt "paper size"
 msgid "JB4"
 msgstr "JB4"
 
-#: ../gtk/paper_names_offsets.c:78
+#: ../gtk/paper_names_offsets.c:82
 msgctxt "paper size"
 msgid "JB5"
 msgstr "JB5"
 
-#: ../gtk/paper_names_offsets.c:79
+#: ../gtk/paper_names_offsets.c:83
 msgctxt "paper size"
 msgid "JB6"
 msgstr "JB6"
 
-#: ../gtk/paper_names_offsets.c:80
+#: ../gtk/paper_names_offsets.c:84
 msgctxt "paper size"
 msgid "JB7"
 msgstr "JB7"
 
-#: ../gtk/paper_names_offsets.c:81
+#: ../gtk/paper_names_offsets.c:85
 msgctxt "paper size"
 msgid "JB8"
 msgstr "JB8"
 
-#: ../gtk/paper_names_offsets.c:82
+#: ../gtk/paper_names_offsets.c:86
 msgctxt "paper size"
 msgid "JB9"
 msgstr "JB9"
 
-#: ../gtk/paper_names_offsets.c:83
+#: ../gtk/paper_names_offsets.c:87
 msgctxt "paper size"
 msgid "jis exec"
 msgstr "‏jis تنفيذي"
 
-#: ../gtk/paper_names_offsets.c:84
+#: ../gtk/paper_names_offsets.c:88
 msgctxt "paper size"
 msgid "Choukei 2 Envelope"
 msgstr "مظروف Choukei 2 "
 
-#: ../gtk/paper_names_offsets.c:85
+#: ../gtk/paper_names_offsets.c:89
 msgctxt "paper size"
 msgid "Choukei 3 Envelope"
 msgstr "مظروف  Choukei 3"
 
-#: ../gtk/paper_names_offsets.c:86
+#: ../gtk/paper_names_offsets.c:90
 msgctxt "paper size"
 msgid "Choukei 4 Envelope"
 msgstr "مظروف Choukei 4"
 
-#: ../gtk/paper_names_offsets.c:87
+#: ../gtk/paper_names_offsets.c:91
+msgctxt "paper size"
+msgid "Choukei 40 Envelope"
+msgstr "مظروف Choukei 40"
+
+#: ../gtk/paper_names_offsets.c:92
 msgctxt "paper size"
 msgid "hagaki (postcard)"
 msgstr "‏hagaki (بطاقة بريدية)"
 
-#: ../gtk/paper_names_offsets.c:88
+#: ../gtk/paper_names_offsets.c:93
 msgctxt "paper size"
 msgid "kahu Envelope"
 msgstr "مظروف kahu"
 
-#: ../gtk/paper_names_offsets.c:89
+#: ../gtk/paper_names_offsets.c:94
 msgctxt "paper size"
 msgid "kaku2 Envelope"
 msgstr "مظروف kaku2"
 
-#: ../gtk/paper_names_offsets.c:90
+#: ../gtk/paper_names_offsets.c:95
+msgctxt "paper size"
+msgid "kaku3 Envelope"
+msgstr "مظروف kaku3"
+
+#: ../gtk/paper_names_offsets.c:96
+msgctxt "paper size"
+msgid "kaku4 Envelope"
+msgstr "مظروف kaku4"
+
+#: ../gtk/paper_names_offsets.c:97
+msgctxt "paper size"
+msgid "kaku5 Envelope"
+msgstr "مظروف kaku5"
+
+#: ../gtk/paper_names_offsets.c:98
+msgctxt "paper size"
+msgid "kaku7 Envelope"
+msgstr "مظروف kaku7"
+
+#: ../gtk/paper_names_offsets.c:99
+msgctxt "paper size"
+msgid "kaku8 Envelope"
+msgstr "مظروف kaku8"
+
+#: ../gtk/paper_names_offsets.c:100
 msgctxt "paper size"
 msgid "oufuku (reply postcard)"
 msgstr "‏oufuku (بطاقة رد بريدية)"
 
-#: ../gtk/paper_names_offsets.c:91
+#: ../gtk/paper_names_offsets.c:101
 msgctxt "paper size"
 msgid "you4 Envelope"
 msgstr "مظروف you4"
 
-#: ../gtk/paper_names_offsets.c:92
-msgctxt "paper size"
-msgid "10x11"
-msgstr "10×11"
-
-#: ../gtk/paper_names_offsets.c:93
-msgctxt "paper size"
-msgid "10x13"
-msgstr "10×13"
-
-#: ../gtk/paper_names_offsets.c:94
-msgctxt "paper size"
-msgid "10x14"
-msgstr "10×14"
-
-#: ../gtk/paper_names_offsets.c:95 ../gtk/paper_names_offsets.c:96
-msgctxt "paper size"
-msgid "10x15"
-msgstr "10×15"
-
-#: ../gtk/paper_names_offsets.c:97
-msgctxt "paper size"
-msgid "11x12"
-msgstr "11×12"
-
-#: ../gtk/paper_names_offsets.c:98
-msgctxt "paper size"
-msgid "11x15"
-msgstr "11×15"
-
-#: ../gtk/paper_names_offsets.c:99
-msgctxt "paper size"
-msgid "12x19"
-msgstr "12×19"
-
-#: ../gtk/paper_names_offsets.c:100
-msgctxt "paper size"
-msgid "5x7"
-msgstr "5×7"
-
-#: ../gtk/paper_names_offsets.c:101
-msgctxt "paper size"
-msgid "6x9 Envelope"
-msgstr "مظروف 6×9"
-
 #: ../gtk/paper_names_offsets.c:102
 msgctxt "paper size"
-msgid "7x9 Envelope"
-msgstr "مظروف 7×9"
+msgid "you6 Envelope"
+msgstr "مظروف you6"
 
 #: ../gtk/paper_names_offsets.c:103
 msgctxt "paper size"
-msgid "9x11 Envelope"
-msgstr "مظروف 9×11"
+msgid "10×11"
+msgstr "10×11"
 
 #: ../gtk/paper_names_offsets.c:104
+msgctxt "paper size"
+msgid "10×13"
+msgstr "10×13"
+
+#: ../gtk/paper_names_offsets.c:105
+msgctxt "paper size"
+msgid "10×14"
+msgstr "10×14"
+
+#: ../gtk/paper_names_offsets.c:106
+msgctxt "paper size"
+msgid "10×15"
+msgstr "10×15"
+
+#: ../gtk/paper_names_offsets.c:107
+msgctxt "paper size"
+msgid "11×12"
+msgstr "11×12"
+
+#: ../gtk/paper_names_offsets.c:108
+msgctxt "paper size"
+msgid "11×15"
+msgstr "11×15"
+
+#: ../gtk/paper_names_offsets.c:109
+msgctxt "paper size"
+msgid "12×19"
+msgstr "12×19"
+
+#: ../gtk/paper_names_offsets.c:110
+msgctxt "paper size"
+msgid "5×7"
+msgstr "5×7"
+
+#: ../gtk/paper_names_offsets.c:111
+msgctxt "paper size"
+msgid "6×9 Envelope"
+msgstr "مظروف 6×9"
+
+#: ../gtk/paper_names_offsets.c:112
+msgctxt "paper size"
+msgid "7×9 Envelope"
+msgstr "مظروف 7×9"
+
+#: ../gtk/paper_names_offsets.c:113
+msgctxt "paper size"
+msgid "8×10 Envelope"
+msgstr "مظروف 8×10"
+
+#: ../gtk/paper_names_offsets.c:114
+msgctxt "paper size"
+msgid "9×11 Envelope"
+msgstr "مظروف 9×11"
+
+#: ../gtk/paper_names_offsets.c:115
+msgctxt "paper size"
+msgid "9×12 Envelope"
+msgstr "مظروف 9×12"
+
+#: ../gtk/paper_names_offsets.c:116
 msgctxt "paper size"
 msgid "a2 Envelope"
 msgstr "مظروف a2"
 
-#: ../gtk/paper_names_offsets.c:105
+#: ../gtk/paper_names_offsets.c:117
 msgctxt "paper size"
 msgid "Arch A"
 msgstr "Arch A"
 
-#: ../gtk/paper_names_offsets.c:106
+#: ../gtk/paper_names_offsets.c:118
 msgctxt "paper size"
 msgid "Arch B"
 msgstr "Arch B"
 
-#: ../gtk/paper_names_offsets.c:107
+#: ../gtk/paper_names_offsets.c:119
 msgctxt "paper size"
 msgid "Arch C"
 msgstr "Arch C"
 
-#: ../gtk/paper_names_offsets.c:108
+#: ../gtk/paper_names_offsets.c:120
 msgctxt "paper size"
 msgid "Arch D"
 msgstr "Arch D"
 
-#: ../gtk/paper_names_offsets.c:109
+#: ../gtk/paper_names_offsets.c:121
 msgctxt "paper size"
 msgid "Arch E"
 msgstr "Arch E"
 
-#: ../gtk/paper_names_offsets.c:110
+#: ../gtk/paper_names_offsets.c:122
 msgctxt "paper size"
 msgid "b-plus"
 msgstr "b-plus"
 
-#: ../gtk/paper_names_offsets.c:111
+#: ../gtk/paper_names_offsets.c:123
 msgctxt "paper size"
 msgid "c"
 msgstr "c"
 
-#: ../gtk/paper_names_offsets.c:112
+#: ../gtk/paper_names_offsets.c:124
 msgctxt "paper size"
 msgid "c5 Envelope"
 msgstr "مظروف c5"
 
-#: ../gtk/paper_names_offsets.c:113
+#: ../gtk/paper_names_offsets.c:125
 msgctxt "paper size"
 msgid "d"
 msgstr "d"
 
-#: ../gtk/paper_names_offsets.c:114
+#: ../gtk/paper_names_offsets.c:126
 msgctxt "paper size"
 msgid "e"
 msgstr "e"
 
-#: ../gtk/paper_names_offsets.c:115
+#: ../gtk/paper_names_offsets.c:127
 msgctxt "paper size"
 msgid "edp"
 msgstr "edp"
 
-#: ../gtk/paper_names_offsets.c:116
+#: ../gtk/paper_names_offsets.c:128
 msgctxt "paper size"
 msgid "European edp"
 msgstr "‏edp أوروبي"
 
-#: ../gtk/paper_names_offsets.c:117
+#: ../gtk/paper_names_offsets.c:129
 msgctxt "paper size"
 msgid "Executive"
 msgstr "تنفيذي"
 
-#: ../gtk/paper_names_offsets.c:118
+#: ../gtk/paper_names_offsets.c:130
 msgctxt "paper size"
 msgid "f"
 msgstr "f"
 
-#: ../gtk/paper_names_offsets.c:119
+#: ../gtk/paper_names_offsets.c:131
 msgctxt "paper size"
-msgid "FanFold European"
+msgid "Fan-Fold European"
 msgstr "طية مروحة أوروبي"
 
-#: ../gtk/paper_names_offsets.c:120
+#: ../gtk/paper_names_offsets.c:132
 msgctxt "paper size"
-msgid "FanFold US"
+msgid "Fan-Fold US"
 msgstr "طية مروحة أمريكي"
 
-#: ../gtk/paper_names_offsets.c:121
+#: ../gtk/paper_names_offsets.c:133
 msgctxt "paper size"
-msgid "FanFold German Legal"
+msgid "Fan-Fold German Legal"
 msgstr "طية مروحة ألماني قانوني"
 
-#: ../gtk/paper_names_offsets.c:122
+#: ../gtk/paper_names_offsets.c:134
 msgctxt "paper size"
 msgid "Government Legal"
 msgstr "قانوني حكومي"
 
-#: ../gtk/paper_names_offsets.c:123
+#: ../gtk/paper_names_offsets.c:135
 msgctxt "paper size"
 msgid "Government Letter"
 msgstr "خطاب حكومي"
 
-#: ../gtk/paper_names_offsets.c:124
+#: ../gtk/paper_names_offsets.c:136
 msgctxt "paper size"
-msgid "Index 3x5"
+msgid "Index 3×5"
 msgstr "فهرس 3×5"
 
-#: ../gtk/paper_names_offsets.c:125
+#: ../gtk/paper_names_offsets.c:137
 msgctxt "paper size"
-msgid "Index 4x6 (postcard)"
+msgid "Index 4×6 (postcard)"
 msgstr "فهرس 4×6 (بطاقة بريدية)"
 
-#: ../gtk/paper_names_offsets.c:126
+#: ../gtk/paper_names_offsets.c:138
 msgctxt "paper size"
-msgid "Index 4x6 ext"
-msgstr "فهرس 4×6 ext"
+msgid "Index 4×6 ext"
+msgstr "فهرس 4×6 ممتد"
 
-#: ../gtk/paper_names_offsets.c:127
+#: ../gtk/paper_names_offsets.c:139
 msgctxt "paper size"
-msgid "Index 5x8"
+msgid "Index 5×8"
 msgstr "فهرس 5×8"
 
-#: ../gtk/paper_names_offsets.c:128
+#: ../gtk/paper_names_offsets.c:140
 msgctxt "paper size"
 msgid "Invoice"
 msgstr "فاتورة"
 
-#: ../gtk/paper_names_offsets.c:129
+#: ../gtk/paper_names_offsets.c:141
 msgctxt "paper size"
 msgid "Tabloid"
 msgstr "لوحي"
 
-#: ../gtk/paper_names_offsets.c:130
+#: ../gtk/paper_names_offsets.c:142
 msgctxt "paper size"
 msgid "US Legal"
 msgstr "أمريكي قانوني"
 
-#: ../gtk/paper_names_offsets.c:131
+#: ../gtk/paper_names_offsets.c:143
 msgctxt "paper size"
 msgid "US Legal Extra"
 msgstr "أمريكي قانوني أكبر"
 
-#: ../gtk/paper_names_offsets.c:132
+#: ../gtk/paper_names_offsets.c:144
 msgctxt "paper size"
 msgid "US Letter"
 msgstr "بريد أمريكي"
 
-#: ../gtk/paper_names_offsets.c:133
+#: ../gtk/paper_names_offsets.c:145
 msgctxt "paper size"
 msgid "US Letter Extra"
 msgstr "بريد أمريكي أكبر"
 
-#: ../gtk/paper_names_offsets.c:134
+#: ../gtk/paper_names_offsets.c:146
 msgctxt "paper size"
 msgid "US Letter Plus"
 msgstr "بريد أمريكي زائد"
 
-#: ../gtk/paper_names_offsets.c:135
+#: ../gtk/paper_names_offsets.c:147
 msgctxt "paper size"
 msgid "Monarch Envelope"
 msgstr "ظرف ملكي"
 
-#: ../gtk/paper_names_offsets.c:136
+#: ../gtk/paper_names_offsets.c:148
 msgctxt "paper size"
 msgid "#10 Envelope"
 msgstr "مظروف #1"
 
-#: ../gtk/paper_names_offsets.c:137
+#: ../gtk/paper_names_offsets.c:149
 msgctxt "paper size"
 msgid "#11 Envelope"
 msgstr "مظروف #11"
 
-#: ../gtk/paper_names_offsets.c:138
+#: ../gtk/paper_names_offsets.c:150
 msgctxt "paper size"
 msgid "#12 Envelope"
 msgstr "مظروف #12"
 
-#: ../gtk/paper_names_offsets.c:139
+#: ../gtk/paper_names_offsets.c:151
 msgctxt "paper size"
 msgid "#14 Envelope"
 msgstr "مظروف #14"
 
-#: ../gtk/paper_names_offsets.c:140
+#: ../gtk/paper_names_offsets.c:152
 msgctxt "paper size"
 msgid "#9 Envelope"
 msgstr "مظروف #9"
 
-#: ../gtk/paper_names_offsets.c:141
+#: ../gtk/paper_names_offsets.c:153
+msgctxt "paper size"
+msgid "Oficio"
+msgstr ""
+
+#: ../gtk/paper_names_offsets.c:154
 msgctxt "paper size"
 msgid "Personal Envelope"
 msgstr "مظروف شخصي"
 
-#: ../gtk/paper_names_offsets.c:142
+#: ../gtk/paper_names_offsets.c:155
 msgctxt "paper size"
 msgid "Quarto"
 msgstr "ربعي"
 
-#: ../gtk/paper_names_offsets.c:143
+#: ../gtk/paper_names_offsets.c:156
 msgctxt "paper size"
 msgid "Super A"
 msgstr "‏A فائق"
 
-#: ../gtk/paper_names_offsets.c:144
+#: ../gtk/paper_names_offsets.c:157
 msgctxt "paper size"
 msgid "Super B"
 msgstr "‏B فائق"
 
-#: ../gtk/paper_names_offsets.c:145
+#: ../gtk/paper_names_offsets.c:158
 msgctxt "paper size"
 msgid "Wide Format"
 msgstr "تنسيق عريض"
 
-#: ../gtk/paper_names_offsets.c:146
+#: ../gtk/paper_names_offsets.c:159
+msgctxt "paper size"
+msgid "Photo L"
+msgstr ""
+
+#: ../gtk/paper_names_offsets.c:160
 msgctxt "paper size"
 msgid "Dai-pa-kai"
 msgstr "Dai-pa-kai"
 
-#: ../gtk/paper_names_offsets.c:147
+#: ../gtk/paper_names_offsets.c:161
 msgctxt "paper size"
 msgid "Folio"
 msgstr "Folio"
 
-#: ../gtk/paper_names_offsets.c:148
+#: ../gtk/paper_names_offsets.c:162
 msgctxt "paper size"
 msgid "Folio sp"
 msgstr "Folio sp"
 
-#: ../gtk/paper_names_offsets.c:149
+#: ../gtk/paper_names_offsets.c:163
 msgctxt "paper size"
 msgid "Invite Envelope"
 msgstr "مظروف دعوة"
 
-#: ../gtk/paper_names_offsets.c:150
+#: ../gtk/paper_names_offsets.c:164
 msgctxt "paper size"
 msgid "Italian Envelope"
 msgstr "مظروف إيطالي"
 
-#: ../gtk/paper_names_offsets.c:151
+#: ../gtk/paper_names_offsets.c:165
 msgctxt "paper size"
 msgid "juuro-ku-kai"
 msgstr "juuro-ku-kai"
 
-#: ../gtk/paper_names_offsets.c:152
+#: ../gtk/paper_names_offsets.c:166
+msgctxt "paper size"
+msgid "Large Photo"
+msgstr "صورة كبيرة"
+
+#: ../gtk/paper_names_offsets.c:167
+msgctxt "paper size"
+msgid "Medium Photo"
+msgstr "صورة متوسطة"
+
+#: ../gtk/paper_names_offsets.c:168
 msgctxt "paper size"
 msgid "pa-kai"
 msgstr "pa-kai"
 
-#: ../gtk/paper_names_offsets.c:153
+#: ../gtk/paper_names_offsets.c:169
 msgctxt "paper size"
 msgid "Postfix Envelope"
 msgstr "مظروف Postfix"
 
-#: ../gtk/paper_names_offsets.c:154
+#: ../gtk/paper_names_offsets.c:170
 msgctxt "paper size"
 msgid "Small Photo"
 msgstr "صورة صغيرة"
 
-#: ../gtk/paper_names_offsets.c:155
+#: ../gtk/paper_names_offsets.c:171
+msgctxt "paper size"
+msgid "Wide Photo"
+msgstr "صورة عريضة"
+
+#: ../gtk/paper_names_offsets.c:172
 msgctxt "paper size"
 msgid "prc1 Envelope"
 msgstr "مظروف prc1"
 
-#: ../gtk/paper_names_offsets.c:156
+#: ../gtk/paper_names_offsets.c:173
 msgctxt "paper size"
 msgid "prc10 Envelope"
 msgstr "مظروف prc10"
 
-#: ../gtk/paper_names_offsets.c:157
+#: ../gtk/paper_names_offsets.c:174
 msgctxt "paper size"
 msgid "prc 16k"
 msgstr "prc 16k"
 
-#: ../gtk/paper_names_offsets.c:158
+#: ../gtk/paper_names_offsets.c:175
 msgctxt "paper size"
 msgid "prc2 Envelope"
 msgstr "مظروف prc2"
 
-#: ../gtk/paper_names_offsets.c:159
+#: ../gtk/paper_names_offsets.c:176
 msgctxt "paper size"
 msgid "prc3 Envelope"
 msgstr "مظروف prc3"
 
-#: ../gtk/paper_names_offsets.c:160
+#: ../gtk/paper_names_offsets.c:177
 msgctxt "paper size"
 msgid "prc 32k"
 msgstr "prc 32k"
 
-#: ../gtk/paper_names_offsets.c:161
+#: ../gtk/paper_names_offsets.c:178
 msgctxt "paper size"
 msgid "prc4 Envelope"
 msgstr "مظروف prc4"
 
-#: ../gtk/paper_names_offsets.c:162
+#: ../gtk/paper_names_offsets.c:179
 msgctxt "paper size"
 msgid "prc5 Envelope"
 msgstr "مظروف prc5"
 
-#: ../gtk/paper_names_offsets.c:163
+#: ../gtk/paper_names_offsets.c:180
 msgctxt "paper size"
 msgid "prc6 Envelope"
 msgstr "مظروف prc6"
 
-#: ../gtk/paper_names_offsets.c:164
+#: ../gtk/paper_names_offsets.c:181
 msgctxt "paper size"
 msgid "prc7 Envelope"
 msgstr "مظروف prc7"
 
-#: ../gtk/paper_names_offsets.c:165
+#: ../gtk/paper_names_offsets.c:182
 msgctxt "paper size"
 msgid "prc8 Envelope"
 msgstr "مظروف prc8"
 
-#: ../gtk/paper_names_offsets.c:166
+#: ../gtk/paper_names_offsets.c:183
 msgctxt "paper size"
 msgid "prc9 Envelope"
 msgstr "مظروف prc9"
 
-#: ../gtk/paper_names_offsets.c:167
+#: ../gtk/paper_names_offsets.c:184
 msgctxt "paper size"
 msgid "ROC 16k"
 msgstr "ROC 16k"
 
-#: ../gtk/paper_names_offsets.c:168
+#: ../gtk/paper_names_offsets.c:185
 msgctxt "paper size"
 msgid "ROC 8k"
 msgstr "ROC 8k"
@@ -4368,33 +5113,37 @@ msgid "Don't include image data in the cache"
 msgstr "لا تضع بيانات الصور في المخزن"
 
 #: ../gtk/updateiconcache.c:1655
+msgid "Include image data in the cache"
+msgstr "تضع بيانات الصور في المخزن"
+
+#: ../gtk/updateiconcache.c:1656
 msgid "Output a C header file"
 msgstr "اخرج ملف ترويسة C"
 
-#: ../gtk/updateiconcache.c:1656
+#: ../gtk/updateiconcache.c:1657
 msgid "Turn off verbose output"
 msgstr "اغلق الخرْج المطنب"
 
-#: ../gtk/updateiconcache.c:1657
+#: ../gtk/updateiconcache.c:1658
 msgid "Validate existing icon cache"
 msgstr "تصحيح مخزن الإيقونات الموجود"
 
-#: ../gtk/updateiconcache.c:1724
+#: ../gtk/updateiconcache.c:1725
 #, c-format
 msgid "File not found: %s\n"
 msgstr "الملفّ غير موجود: %s\n"
 
-#: ../gtk/updateiconcache.c:1730
+#: ../gtk/updateiconcache.c:1731
 #, c-format
 msgid "Not a valid icon cache: %s\n"
 msgstr "مخزن إيقونات غير سليم: %s\n"
 
-#: ../gtk/updateiconcache.c:1743
+#: ../gtk/updateiconcache.c:1744
 #, c-format
 msgid "No theme index file.\n"
 msgstr "لا ملف فهرس للسمة.\n"
 
-#: ../gtk/updateiconcache.c:1747
+#: ../gtk/updateiconcache.c:1748
 #, c-format
 msgid ""
 "No theme index file in '%s'.\n"
@@ -4461,8 +5210,6 @@ msgstr "طريقة إدخال س"
 #. Translators: The printer status is online, i.e. it is
 #. * ready to print.
 #: ../modules/printbackends/cloudprint/gtkprintbackendcloudprint.c:744
-#| msgctxt "Stock label"
-#| msgid "_Underline"
 msgid "Online"
 msgstr "تعمل"
 
@@ -4485,325 +5232,330 @@ msgstr "خاملة"
 msgid "Pages per _sheet:"
 msgstr "الصفحات لكل _ورقة :"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1007
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1222
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1083
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1392
 msgid "Username:"
 msgstr "اسم المستخدم:"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1008
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1231
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1084
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1401
 msgid "Password:"
 msgstr "كلمة السر:"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1047
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1244
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1123
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1414
 #, c-format
-msgid "Authentication is required to print document '%s' on printer %s"
-msgstr "الاستيثاق مطلوب لطبع المستند '%s' على الطابعة %s"
+msgid "Authentication is required to print document “%s” on printer %s"
+msgstr "الاستيثاق مطلوب لطبع المستند ”%s“ على الطابعة %s"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1049
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1125
 #, c-format
 msgid "Authentication is required to print a document on %s"
 msgstr "الاستيثاق مطلوب لطبع مستند على %s"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1053
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1129
 #, c-format
-msgid "Authentication is required to get attributes of job '%s'"
-msgstr "الاستيثاق مطلوب لجلب خصائص المهمة '%s'"
+msgid "Authentication is required to get attributes of job “%s”"
+msgstr "الاستيثاق مطلوب لجلب خصائص المهمة ”%s“"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1055
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1131
 msgid "Authentication is required to get attributes of a job"
 msgstr "الاستيثاق مطلوب لجلب خصائص المهمة"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1059
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1135
 #, c-format
 msgid "Authentication is required to get attributes of printer %s"
 msgstr "الاستيثاق مطلوب لجلب خصائص الطابعة %s"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1061
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1137
 msgid "Authentication is required to get attributes of a printer"
 msgstr "الاستيثاق مطلوب لجلب خصائص الطابعة"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1064
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1140
 #, c-format
 msgid "Authentication is required to get default printer of %s"
 msgstr "الاستيثاق مطلوب لمعرفة طابعة %s المبدئية"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1067
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1143
 #, c-format
 msgid "Authentication is required to get printers from %s"
 msgstr "الاستيثاق مطلوب لمعرفة طابعات %s"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1072
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1148
 #, c-format
 msgid "Authentication is required to get a file from %s"
 msgstr "الاستيثاق مطلوب لجلب الملف من %s"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1074
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1150
 #, c-format
 msgid "Authentication is required on %s"
 msgstr "الاستيثاق مطلوب على %s"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1216
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1386
 msgid "Domain:"
 msgstr "النطاق:"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1246
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1416
 #, c-format
-msgid "Authentication is required to print document '%s'"
-msgstr "الاستيثاق مطلوب لطبع المستند '%s'"
+msgid "Authentication is required to print document “%s”"
+msgstr "الاستيثاق مطلوب لطبع المستند ”%s“"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1251
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1421
 #, c-format
 msgid "Authentication is required to print this document on printer %s"
 msgstr "الاستيثاق مطلوب لطبع هذا المستند على الطابعة %s"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1253
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1423
 msgid "Authentication is required to print this document"
 msgstr "الاستيثاق مطلوب لطبع هذا المستند"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1817
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1860
 #, c-format
-msgid "Printer '%s' is low on toner."
-msgstr "حبر الطابعة '%s' منخفض."
+msgid "Printer “%s” is low on toner."
+msgstr "حبر الطابعة ”%s“ منخفض."
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1818
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1861
 #, c-format
-msgid "Printer '%s' has no toner left."
-msgstr "نفذ الحبر من الطابعة '%s'."
-
-#. Translators: "Developer" like on photo development context
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1820
-#, c-format
-msgid "Printer '%s' is low on developer."
-msgstr "مستوى المُحمِّض منخفض في الطابعة '%s'."
+msgid "Printer “%s” has no toner left."
+msgstr "نفذ الحبر من الطابعة ”%s“."
 
 #. Translators: "Developer" like on photo development context
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1822
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1863
 #, c-format
-msgid "Printer '%s' is out of developer."
-msgstr "نفذت المُحمِّض من الطابعة '%s'."
+msgid "Printer “%s” is low on developer."
+msgstr "مستوى المُحمِّض منخفض في الطابعة ”%s“."
+
+#. Translators: "Developer" like on photo development context
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1865
+#, c-format
+msgid "Printer “%s” is out of developer."
+msgstr "نفذت المُحمِّض من الطابعة ”%s“."
 
 #. Translators: "marker" is one color bin of the printer
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1824
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1867
 #, c-format
-msgid "Printer '%s' is low on at least one marker supply."
-msgstr "نقص حبر واحد على الأقل من أقلام الطابعة '%s'."
+msgid "Printer “%s” is low on at least one marker supply."
+msgstr "نقص حبر واحد على الأقل من أقلام الطابعة ”%s“."
 
 #. Translators: "marker" is one color bin of the printer
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1826
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1869
 #, c-format
-msgid "Printer '%s' is out of at least one marker supply."
-msgstr "نفذ حبر واحد على الأقل من أقلام الطابعة '%s'."
+msgid "Printer “%s” is out of at least one marker supply."
+msgstr "نفذ حبر واحد على الأقل من أقلام الطابعة ”%s“."
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1827
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1870
 #, c-format
-msgid "The cover is open on printer '%s'."
-msgstr "غطاء الطابعة '%s' مفتوح."
+msgid "The cover is open on printer “%s”."
+msgstr "غطاء الطابعة ”%s“ مفتوح."
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1828
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1871
 #, c-format
-msgid "The door is open on printer '%s'."
-msgstr "باب الطابعة '%s' مفتوح."
+msgid "The door is open on printer “%s”."
+msgstr "باب الطابعة ”%s“ مفتوح."
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1829
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1872
 #, c-format
-msgid "Printer '%s' is low on paper."
-msgstr "نقص الورق في الطابعة '%s'."
+msgid "Printer “%s” is low on paper."
+msgstr "نقص الورق في الطابعة ”%s“."
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1830
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1873
 #, c-format
-msgid "Printer '%s' is out of paper."
-msgstr "نفذ الورق من الطابعة '%s'."
+msgid "Printer “%s” is out of paper."
+msgstr "نفذ الورق من الطابعة ”%s“."
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1831
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1874
 #, c-format
-msgid "Printer '%s' is currently offline."
-msgstr "الطابعة '%s' غير متصلة حاليا."
+msgid "Printer “%s” is currently offline."
+msgstr "الطابعة ”%s“ غير متصلة حاليا."
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:1832
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:1875
 #, c-format
-msgid "There is a problem on printer '%s'."
-msgstr "هناك مشكلة بالطابعة '%s'."
+msgid "There is a problem on printer “%s”."
+msgstr "هناك مشكلة بالطابعة ”%s“."
 
 #. Translators: this is a printer status.
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2290
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2492
 msgid "Paused; Rejecting Jobs"
 msgstr "مُلبَثة؛ ستُرفض المهام"
 
 #. Translators: this is a printer status.
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2296
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2498
 msgid "Rejecting Jobs"
 msgstr "يجري رفض المهام"
 
 #. Translators: this string connects multiple printer states together.
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:2338
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:2540
 msgid "; "
 msgstr "؛ "
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:4003
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:4218
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:4285
 msgid "Two Sided"
 msgstr "ذو جانبين"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:4004
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:4219
 msgid "Paper Type"
 msgstr "نوع الورق"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:4005
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:4220
 msgid "Paper Source"
 msgstr "مصدر الورق"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:4006
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:4221
 msgid "Output Tray"
 msgstr "لوحة الخرْج"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:4007
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:4222
 msgid "Resolution"
 msgstr "الميز"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:4008
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:4223
 msgid "GhostScript pre-filtering"
 msgstr "ترشيح مسبق في غوست‌سكربت"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:4017
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:4232
 msgid "One Sided"
 msgstr "أحادي الجانب"
 
 #. Translators: this is an option of "Two Sided"
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:4019
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:4234
 msgid "Long Edge (Standard)"
 msgstr "حافة طويلة (قياسي)"
 
 #. Translators: this is an option of "Two Sided"
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:4021
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:4236
 msgid "Short Edge (Flip)"
 msgstr "حافة قصيرة (ملفوف)"
 
 #. Translators: this is an option of "Paper Source"
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:4023
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:4025
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:4033
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:4238
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:4240
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:4248
 msgid "Auto Select"
 msgstr "اختيار تلقائي"
 
 #. Translators: this is an option of "Paper Source"
 #. Translators: this is an option of "Resolution"
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:4027
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:4029
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:4031
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:4035
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:4523
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:4242
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:4244
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:4246
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:4250
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:4757
 msgid "Printer Default"
 msgstr "مبدئي الطابعة"
 
 #. Translators: this is an option of "GhostScript"
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:4037
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:4252
 msgid "Embed GhostScript fonts only"
 msgstr "ادمج خطوط غوست‌سكربت فقط"
 
 #. Translators: this is an option of "GhostScript"
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:4039
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:4254
 msgid "Convert to PS level 1"
 msgstr "حوّل إلى بوستسكربت المستوى ١"
 
 #. Translators: this is an option of "GhostScript"
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:4041
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:4256
 msgid "Convert to PS level 2"
 msgstr "حوّل إلى بوستسكربت المستوى ٢"
 
 #. Translators: this is an option of "GhostScript"
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:4043
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:4258
 msgid "No pre-filtering"
 msgstr "لا ترشيح مسبق"
 
-#. Translators: "Miscellaneous" is the label for a button, that opens
-#. up an extra panel of settings in a print dialog.
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:4052
-msgid "Miscellaneous"
-msgstr "متفرقات"
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:4293
+msgctxt "sides"
+msgid "One Sided"
+msgstr "أحادي الجانب"
+
+#. Translators: this is an option of "Two Sided"
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:4295
+msgctxt "sides"
+msgid "Long Edge (Standard)"
+msgstr "حافة طويلة (قياسي)"
+
+#. Translators: this is an option of "Two Sided"
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:4297
+msgctxt "sides"
+msgid "Short Edge (Flip)"
+msgstr "حافة قصيرة (معكوس)"
 
 #. Translators: These strings name the possible values of the
 #. * job priority option in the print dialog
 #.
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:4775
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:5147
 msgid "Urgent"
 msgstr "عاجِل"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:4775
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:5147
 msgid "High"
 msgstr "عال"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:4775
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:5147
 msgid "Medium"
 msgstr "متوسط"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:4775
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:5147
 msgid "Low"
 msgstr "منخفض"
 
 #. Translators, this string is used to label the job priority option
 #. * in the print dialog
 #.
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:4805
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:5177
 msgid "Job Priority"
 msgstr "أولوية المهمة"
 
 #. Translators, this string is used to label the billing info entry
 #. * in the print dialog
 #.
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:4816
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:5188
 msgid "Billing Info"
 msgstr "معلومات الدفع"
 
-#. Translators, these strings are names for various 'standard' cover
-#. * pages that the printing system may support.
-#.
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:4831
-msgid "None"
-msgstr "لا شيء"
-
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:4831
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:5203
 msgid "Classified"
 msgstr "مصنّف"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:4831
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:5203
 msgid "Confidential"
 msgstr "سرّي"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:4831
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:5203
 msgid "Secret"
 msgstr "سر"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:4831
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:5203
 msgid "Standard"
 msgstr "معياري"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:4831
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:5203
 msgid "Top Secret"
 msgstr "سرّي للغاية"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:4831
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:5203
 msgid "Unclassified"
 msgstr "غير مصنّف"
 
 #. Translators, this string is used to label the pages-per-sheet option
 #. * in the print dialog
 #.
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:4842
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:5214
 msgid "Pages per Sheet"
 msgstr "الصفحات في ورقة"
 
 #. Translators, this is the label used for the option in the print
 #. * dialog that controls the front cover page.
 #.
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:4902
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:5274
 msgid "Before"
 msgstr "قبل"
 
 #. Translators, this is the label used for the option in the print
 #. * dialog that controls the back cover page.
 #.
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:4917
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:5289
 msgid "After"
 msgstr "بعد"
 
@@ -4811,48 +5563,49 @@ msgstr "بعد"
 #. * a print job is printed. Possible values are 'now', a specified time,
 #. * or 'on hold'
 #.
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:4937
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:5309
 msgid "Print at"
 msgstr "اطبع"
 
 #. Translators: this is the name of the option that allows the user
 #. * to specify a time when a print job will be printed.
 #.
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:4948
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:5320
 msgid "Print at time"
 msgstr "اطبع في موعد"
 
-#. Translators: this format is used to display a custom paper
-#. * size. The two placeholders are replaced with the width and height
-#. * in points. E.g: "Custom 230.4x142.9"
+#. Translators: this format is used to display a custom
+#. * paper size. The two placeholders are replaced with
+#. * the width and height in points. E.g: "Custom
+#. * 230.4x142.9"
 #.
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:4983
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:5362
 #, c-format
-msgid "Custom %sx%s"
+msgid "Custom %s×%s"
 msgstr "مخصص %s×‏%s"
 
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:5064
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:5463
 msgid "Printer Profile"
 msgstr "لاحة الطابعة"
 
 #. TRANSLATORS: this is when color profile information is unavailable
-#: ../modules/printbackends/cups/gtkprintbackendcups.c:5071
+#: ../modules/printbackends/cups/gtkprintbackendcups.c:5470
 msgid "Unavailable"
 msgstr "غير متوفرة"
 
 #. TRANSLATORS: when we're running an old CUPS, and
 #. * it hasn't registered the device with colord
-#: ../modules/printbackends/cups/gtkprintercups.c:241
+#: ../modules/printbackends/cups/gtkprintercups.c:258
 msgid "Color management unavailable"
 msgstr "إدارة الألوان غير متاحة"
 
 #. TRANSLATORS: when there is no color profile available
-#: ../modules/printbackends/cups/gtkprintercups.c:253
+#: ../modules/printbackends/cups/gtkprintercups.c:270
 msgid "No profile available"
 msgstr "لا تتوفر أي لاحات"
 
 #. TRANSLATORS: when the color profile has no title
-#: ../modules/printbackends/cups/gtkprintercups.c:264
+#: ../modules/printbackends/cups/gtkprintercups.c:281
 msgid "Unspecified profile"
 msgstr "لاحة غير محددة"
 
@@ -4931,462 +5684,559 @@ msgstr "ناتج-اختبار.%s"
 msgid "Print to Test Printer"
 msgstr "اطبع إلى طابعة اختبار"
 
-#: ../gtk/resources/ui/gtkaboutdialog.ui.h:1
-#| msgctxt "Stock label"
-#| msgid "_About"
+#: ../gtk/ui/gtkaboutdialog.ui.h:1
 msgid "About"
 msgstr "عنْ"
 
-#: ../gtk/resources/ui/gtkaboutdialog.ui.h:2
-#| msgid "C_redits"
+#: ../gtk/ui/gtkaboutdialog.ui.h:2
 msgid "Credits"
 msgstr "إشادات"
 
-#: ../gtk/resources/ui/gtkappchooserdialog.ui.h:2
-msgid "label"
-msgstr "عنوان"
-
-#: ../gtk/resources/ui/gtkappchooserdialog.ui.h:3
-#| msgid "Related Applications"
+#: ../gtk/ui/gtkappchooserdialog.ui.h:4
 msgid "_View All Applications"
 msgstr "أ_ظهر كل التطبيقات"
 
-#: ../gtk/resources/ui/gtkappchooserdialog.ui.h:4
-#| msgid "_Find applications online"
+#: ../gtk/ui/gtkappchooserdialog.ui.h:5
 msgid "_Find New Applications"
 msgstr "اب_حث عن تطبيقات جديدة"
 
-#: ../gtk/resources/ui/gtkappchooserwidget.ui.h:1
-#| msgid "_Find applications online"
+#: ../gtk/ui/gtkappchooserwidget.ui.h:1
 msgid "No applications found."
 msgstr "لا توجد أي تطبيقات."
 
-#: ../gtk/resources/ui/gtkapplication-quartz.ui.h:2
-#| msgctxt "Stock label"
-#| msgid "_Preferences"
+#: ../gtk/ui/gtkapplication-quartz.ui.h:2
 msgid "Preferences"
 msgstr "التفضيلات"
 
-#: ../gtk/resources/ui/gtkapplication-quartz.ui.h:3
-#| msgid "Devices"
+#: ../gtk/ui/gtkapplication-quartz.ui.h:3
 msgid "Services"
 msgstr "الخدمات"
 
-#: ../gtk/resources/ui/gtkapplication-quartz.ui.h:4
+#: ../gtk/ui/gtkapplication-quartz.ui.h:4
 #, c-format
 msgid "Hide %s"
 msgstr "أخفِ %s"
 
-#: ../gtk/resources/ui/gtkapplication-quartz.ui.h:5
+#: ../gtk/ui/gtkapplication-quartz.ui.h:5
 msgid "Hide Others"
 msgstr "أخفِ الآخرين"
 
-#: ../gtk/resources/ui/gtkapplication-quartz.ui.h:6
+#: ../gtk/ui/gtkapplication-quartz.ui.h:6
 msgid "Show All"
 msgstr "أظهر الكل"
 
-#: ../gtk/resources/ui/gtkapplication-quartz.ui.h:7
+#: ../gtk/ui/gtkapplication-quartz.ui.h:7
 #, c-format
-#| msgid "About %s"
 msgid "Quit %s"
 msgstr "أنهِ %s"
 
-#: ../gtk/resources/ui/gtkassistant.ui.h:2
-#| msgctxt "Stock label, media"
-#| msgid "_Next"
+#: ../gtk/ui/gtkassistant.ui.h:2
 msgid "_Next"
 msgstr "أ_مام"
 
-#: ../gtk/resources/ui/gtkassistant.ui.h:3
-#| msgctxt "Stock label, navigation"
-#| msgid "_Back"
+#: ../gtk/ui/gtkassistant.ui.h:3
 msgid "_Back"
 msgstr "خل_ف"
 
-#: ../gtk/resources/ui/gtkassistant.ui.h:4
+#: ../gtk/ui/gtkassistant.ui.h:4
 msgid "_Finish"
 msgstr "أ_نهِ"
 
-#: ../gtk/resources/ui/gtkcolorchooserdialog.ui.h:1
+#: ../gtk/ui/gtkcolorchooserdialog.ui.h:1
 msgid "Select a Color"
 msgstr "اختر لونًا"
 
-#: ../gtk/resources/ui/gtkcoloreditor.ui.h:1
+#: ../gtk/ui/gtkcoloreditor.ui.h:1
 msgid "Color Name"
 msgstr "اسم اللون"
 
-#: ../gtk/resources/ui/gtkcoloreditor.ui.h:2
+#: ../gtk/ui/gtkcoloreditor.ui.h:2
 msgctxt "Color channel"
 msgid "A"
 msgstr "ل"
 
-#: ../gtk/resources/ui/gtkcoloreditor.ui.h:3
+#: ../gtk/ui/gtkcoloreditor.ui.h:3
 msgid "Alpha"
 msgstr "ألفا"
 
-#: ../gtk/resources/ui/gtkcoloreditor.ui.h:4
+#: ../gtk/ui/gtkcoloreditor.ui.h:4
 msgctxt "Color channel"
 msgid "H"
 msgstr "د"
 
-#: ../gtk/resources/ui/gtkcoloreditor.ui.h:5
+#: ../gtk/ui/gtkcoloreditor.ui.h:5
 msgid "Hue"
 msgstr "التدرج"
 
-#: ../gtk/resources/ui/gtkcoloreditor.ui.h:6
+#: ../gtk/ui/gtkcoloreditor.ui.h:6
 msgctxt "Color Channel"
 msgid "S"
 msgstr "ش"
 
-#: ../gtk/resources/ui/gtkcoloreditor.ui.h:7
+#: ../gtk/ui/gtkcoloreditor.ui.h:7
 msgctxt "Color Channel"
 msgid "V"
 msgstr "ق"
 
-#: ../gtk/resources/ui/gtkcoloreditor.ui.h:8
+#: ../gtk/ui/gtkcoloreditor.ui.h:8
 msgid "Saturation"
 msgstr "التشبع"
 
-#: ../gtk/resources/ui/gtkcoloreditor.ui.h:9
-msgid "Value"
-msgstr "القيمة"
+#: ../gtk/ui/gtkfilechooserwidget.ui.h:1
+msgid "Create Folder"
+msgstr "أنشئ مجلّدًا"
 
-#: ../gtk/resources/ui/gtkfilechooserwidget.ui.h:1
-msgid "Create Fo_lder"
-msgstr "أنشئ _مجلّدًا"
-
-#: ../gtk/resources/ui/gtkfilechooserwidget.ui.h:2
-msgid "_Location:"
-msgstr "ال_موقع:"
-
-#: ../gtk/resources/ui/gtkfilechooserwidget.ui.h:3
+#: ../gtk/ui/gtkfilechooserwidget.ui.h:2
 msgid "Files"
 msgstr "ملفات"
 
-#: ../gtk/resources/ui/gtkfilechooserwidget.ui.h:4
-msgid "Name"
-msgstr "الاسم"
-
-#: ../gtk/resources/ui/gtkfilechooserwidget.ui.h:5
-msgid "Size"
-msgstr "الحجم"
-
-#: ../gtk/resources/ui/gtkfilechooserwidget.ui.h:6
+#: ../gtk/ui/gtkfilechooserwidget.ui.h:5
 msgid "Modified"
 msgstr "معدّل"
 
-#: ../gtk/resources/ui/gtkfilechooserwidget.ui.h:7
+#: ../gtk/ui/gtkfilechooserwidget.ui.h:6
 msgid "Select which types of files are shown"
 msgstr "اختر أنواع الملفات التي ستعرض"
 
-#: ../gtk/resources/ui/gtkfontbutton.ui.h:1
-msgid "Font"
-msgstr "الخطّ"
-
-#: ../gtk/resources/ui/gtkfontchooserdialog.ui.h:1
-#| msgid "Se_lection"
+#: ../gtk/ui/gtkfontchooserdialog.ui.h:1
 msgid "Select Font"
 msgstr "اختر خطًا"
 
-#: ../gtk/resources/ui/gtkfontchooserwidget.ui.h:1
+#: ../gtk/ui/gtkfontchooserwidget.ui.h:1
 msgid "Search font name"
 msgstr "ابحث باسم الخط"
 
-#: ../gtk/resources/ui/gtkfontchooserwidget.ui.h:2
+#: ../gtk/ui/gtkfontchooserwidget.ui.h:2
 msgid "Font Family"
 msgstr "عائلة الخطوط"
 
-#: ../gtk/resources/ui/gtkfontchooserwidget.ui.h:3
+#: ../gtk/ui/gtkfontchooserwidget.ui.h:3
 msgid "No fonts matched your search. You can revise your search and try again."
 msgstr "لا خطوط تطابق عبارة البحث، من فضلك راجعها ثم أعِد المحاولة."
 
-#: ../gtk/resources/ui/gtkpagesetupunixdialog.ui.h:2
+#: ../gtk/ui/gtkpagesetupunixdialog.ui.h:2
 msgid "_Format for:"
 msgstr "_صيغة:"
 
-#: ../gtk/resources/ui/gtkpagesetupunixdialog.ui.h:3
-#: ../gtk/resources/ui/gtkprintunixdialog.ui.h:38
+#: ../gtk/ui/gtkpagesetupunixdialog.ui.h:3
+#: ../gtk/ui/gtkprintunixdialog.ui.h:38
 msgid "_Paper size:"
 msgstr "_مقاس الورقة:"
 
-#: ../gtk/resources/ui/gtkpagesetupunixdialog.ui.h:4
+#: ../gtk/ui/gtkpagesetupunixdialog.ui.h:4
 msgid "_Orientation:"
 msgstr "الا_تجاه:"
 
-#: ../gtk/resources/ui/gtkpagesetupunixdialog.ui.h:5
-#: ../gtk/resources/ui/gtkprintunixdialog.ui.h:40
+#: ../gtk/ui/gtkpagesetupunixdialog.ui.h:5
+#: ../gtk/ui/gtkprintunixdialog.ui.h:40
 msgid "Portrait"
 msgstr "طوليّ"
 
-#: ../gtk/resources/ui/gtkpagesetupunixdialog.ui.h:6
-#: ../gtk/resources/ui/gtkprintunixdialog.ui.h:42
+#: ../gtk/ui/gtkpagesetupunixdialog.ui.h:6
+#: ../gtk/ui/gtkprintunixdialog.ui.h:42
 msgid "Reverse portrait"
 msgstr "طوليّ مقلوب"
 
-#: ../gtk/resources/ui/gtkpagesetupunixdialog.ui.h:7
-#: ../gtk/resources/ui/gtkprintunixdialog.ui.h:41
+#: ../gtk/ui/gtkpagesetupunixdialog.ui.h:7
+#: ../gtk/ui/gtkprintunixdialog.ui.h:41
 msgid "Landscape"
 msgstr "عرضيّ"
 
-#: ../gtk/resources/ui/gtkpagesetupunixdialog.ui.h:8
-#: ../gtk/resources/ui/gtkprintunixdialog.ui.h:43
+#: ../gtk/ui/gtkpagesetupunixdialog.ui.h:8
+#: ../gtk/ui/gtkprintunixdialog.ui.h:43
 msgid "Reverse landscape"
 msgstr "عرضيّ مقلوب"
 
-#: ../gtk/resources/ui/gtkpathbar.ui.h:1
+#: ../gtk/ui/gtkpathbar.ui.h:1
 msgid "Down Path"
 msgstr "المسار السفلي"
 
-#: ../gtk/resources/ui/gtkpathbar.ui.h:2
+#: ../gtk/ui/gtkpathbar.ui.h:2
 msgid "Up Path"
 msgstr "المسار العلوي"
 
-#: ../gtk/resources/ui/gtkprintunixdialog.ui.h:1
+#: ../gtk/ui/gtkprintunixdialog.ui.h:1
 msgid "Printer"
 msgstr "الطابعة"
 
-#. this is the header for the location column in the print dialog
-#: ../gtk/resources/ui/gtkprintunixdialog.ui.h:4
-msgid "Location"
-msgstr "الموقع"
-
 #. this is the header for the printer status column in the print dialog
-#: ../gtk/resources/ui/gtkprintunixdialog.ui.h:7
+#: ../gtk/ui/gtkprintunixdialog.ui.h:7
 msgid "Status"
 msgstr "الحالة"
 
-#: ../gtk/resources/ui/gtkprintunixdialog.ui.h:8
+#: ../gtk/ui/gtkprintunixdialog.ui.h:8
 msgid "Range"
 msgstr "المدى"
 
-#: ../gtk/resources/ui/gtkprintunixdialog.ui.h:9
+#: ../gtk/ui/gtkprintunixdialog.ui.h:9
 msgid "_All Pages"
 msgstr "_كل الصفحات"
 
-#: ../gtk/resources/ui/gtkprintunixdialog.ui.h:10
+#: ../gtk/ui/gtkprintunixdialog.ui.h:10
 msgid "C_urrent Page"
 msgstr "الصفحة ال_حالية"
 
-#: ../gtk/resources/ui/gtkprintunixdialog.ui.h:11
+#: ../gtk/ui/gtkprintunixdialog.ui.h:11
 msgid "Se_lection"
 msgstr "ال_تحديد:"
 
-#: ../gtk/resources/ui/gtkprintunixdialog.ui.h:12
+#: ../gtk/ui/gtkprintunixdialog.ui.h:12
 msgid "Pag_es:"
 msgstr "_صفحات:"
 
-#: ../gtk/resources/ui/gtkprintunixdialog.ui.h:13
-#: ../gtk/resources/ui/gtkprintunixdialog.ui.h:15
-#: ../gtk/resources/ui/gtkprintunixdialog.ui.h:18
+#: ../gtk/ui/gtkprintunixdialog.ui.h:13 ../gtk/ui/gtkprintunixdialog.ui.h:15
+#: ../gtk/ui/gtkprintunixdialog.ui.h:18
 msgid ""
 "Specify one or more page ranges,\n"
-" e.g. 1-3,7,11"
+" e.g. 1–3, 7, 11"
 msgstr ""
 "حدد مدى أو أكثر من أرقام الصفحات،\n"
 " مثلا: 1-3,7,11"
 
-#: ../gtk/resources/ui/gtkprintunixdialog.ui.h:17
+#: ../gtk/ui/gtkprintunixdialog.ui.h:17
 msgid "Pages"
 msgstr "صفحات"
 
-#: ../gtk/resources/ui/gtkprintunixdialog.ui.h:20
+#: ../gtk/ui/gtkprintunixdialog.ui.h:20
 msgid "Copies"
 msgstr "نُسَخْ"
 
-#: ../gtk/resources/ui/gtkprintunixdialog.ui.h:21
+#: ../gtk/ui/gtkprintunixdialog.ui.h:21
 msgid "Copie_s:"
 msgstr "نُسَ_خ:"
 
-#: ../gtk/resources/ui/gtkprintunixdialog.ui.h:22
+#: ../gtk/ui/gtkprintunixdialog.ui.h:22
 msgid "C_ollate"
 msgstr "_صفحة بصفحة"
 
-#: ../gtk/resources/ui/gtkprintunixdialog.ui.h:23
+#: ../gtk/ui/gtkprintunixdialog.ui.h:23
 msgid "_Reverse"
 msgstr "م_قلوب"
 
-#: ../gtk/resources/ui/gtkprintunixdialog.ui.h:24
-msgid "General"
-msgstr "عامّ"
-
-#: ../gtk/resources/ui/gtkprintunixdialog.ui.h:25
+#: ../gtk/ui/gtkprintunixdialog.ui.h:25
 msgid "Layout"
 msgstr "التصميم"
 
-#: ../gtk/resources/ui/gtkprintunixdialog.ui.h:26
+#: ../gtk/ui/gtkprintunixdialog.ui.h:26
 msgid "T_wo-sided:"
 msgstr "ذو _وجهين:"
 
-#: ../gtk/resources/ui/gtkprintunixdialog.ui.h:27
+#: ../gtk/ui/gtkprintunixdialog.ui.h:27
 msgid "Pages per _side:"
 msgstr "الصفحات في كل _جهة:"
 
-#: ../gtk/resources/ui/gtkprintunixdialog.ui.h:28
+#: ../gtk/ui/gtkprintunixdialog.ui.h:28
 msgid "Page or_dering:"
 msgstr "_ترتيب الصفحات:"
 
-#: ../gtk/resources/ui/gtkprintunixdialog.ui.h:29
+#: ../gtk/ui/gtkprintunixdialog.ui.h:29
 msgid "_Only print:"
 msgstr "الطباعة _فقط:"
 
-#: ../gtk/resources/ui/gtkprintunixdialog.ui.h:30
+#: ../gtk/ui/gtkprintunixdialog.ui.h:30
 msgid "All sheets"
 msgstr "كل الورقات"
 
-#: ../gtk/resources/ui/gtkprintunixdialog.ui.h:31
+#: ../gtk/ui/gtkprintunixdialog.ui.h:31
 msgid "Even sheets"
 msgstr "الورقات الزوجية"
 
-#: ../gtk/resources/ui/gtkprintunixdialog.ui.h:32
+#: ../gtk/ui/gtkprintunixdialog.ui.h:32
 msgid "Odd sheets"
 msgstr "الورقات الفردية"
 
-#: ../gtk/resources/ui/gtkprintunixdialog.ui.h:33
+#: ../gtk/ui/gtkprintunixdialog.ui.h:33
 msgid "Sc_ale:"
 msgstr "_المقياس:"
 
-#: ../gtk/resources/ui/gtkprintunixdialog.ui.h:34
+#: ../gtk/ui/gtkprintunixdialog.ui.h:34
 msgid "Paper"
 msgstr "ورق"
 
-#: ../gtk/resources/ui/gtkprintunixdialog.ui.h:35
+#: ../gtk/ui/gtkprintunixdialog.ui.h:35
 msgid "Paper _type:"
 msgstr "_نوع الورق:"
 
-#: ../gtk/resources/ui/gtkprintunixdialog.ui.h:36
+#: ../gtk/ui/gtkprintunixdialog.ui.h:36
 msgid "Paper _source:"
 msgstr "_مصدر الورق:"
 
-#: ../gtk/resources/ui/gtkprintunixdialog.ui.h:37
+#: ../gtk/ui/gtkprintunixdialog.ui.h:37
 msgid "Output t_ray:"
 msgstr "_لوحة الخرْج:"
 
-#: ../gtk/resources/ui/gtkprintunixdialog.ui.h:39
+#: ../gtk/ui/gtkprintunixdialog.ui.h:39
 msgid "Or_ientation:"
 msgstr "الا_تجاه:"
 
-#: ../gtk/resources/ui/gtkprintunixdialog.ui.h:45
+#: ../gtk/ui/gtkprintunixdialog.ui.h:45
 msgid "Job Details"
 msgstr "تفاصيل المهمّة"
 
-#: ../gtk/resources/ui/gtkprintunixdialog.ui.h:46
+#: ../gtk/ui/gtkprintunixdialog.ui.h:46
 msgid "Pri_ority:"
 msgstr "الأو_لوية:"
 
-#: ../gtk/resources/ui/gtkprintunixdialog.ui.h:47
+#: ../gtk/ui/gtkprintunixdialog.ui.h:47
 msgid "_Billing info:"
 msgstr " _معلومات الدفع:"
 
-#: ../gtk/resources/ui/gtkprintunixdialog.ui.h:48
+#: ../gtk/ui/gtkprintunixdialog.ui.h:48
 msgid "Print Document"
 msgstr "اطبع المستند"
 
 #. this is one of the choices for the print at option in the print dialog
-#: ../gtk/resources/ui/gtkprintunixdialog.ui.h:51
+#: ../gtk/ui/gtkprintunixdialog.ui.h:51
 msgid "_Now"
 msgstr "الآ_ن"
 
 #. this is one of the choices for the print at option in the print dialog. It also serves as the label for an entry that allows the user to enter a time.
-#: ../gtk/resources/ui/gtkprintunixdialog.ui.h:54
+#: ../gtk/ui/gtkprintunixdialog.ui.h:54
 msgid "A_t:"
 msgstr "_في:"
 
 #. Ability to parse the am/pm format depends on actual locale. You can remove the am/pm values below for your locale if they are not supported.
-#: ../gtk/resources/ui/gtkprintunixdialog.ui.h:55
-#: ../gtk/resources/ui/gtkprintunixdialog.ui.h:59
-#: ../gtk/resources/ui/gtkprintunixdialog.ui.h:61
-#: ../gtk/resources/ui/gtkprintunixdialog.ui.h:65
-#: ../gtk/resources/ui/gtkprintunixdialog.ui.h:68
+#: ../gtk/ui/gtkprintunixdialog.ui.h:55 ../gtk/ui/gtkprintunixdialog.ui.h:59
+#: ../gtk/ui/gtkprintunixdialog.ui.h:61 ../gtk/ui/gtkprintunixdialog.ui.h:65
+#: ../gtk/ui/gtkprintunixdialog.ui.h:68
 msgid ""
 "Specify the time of print,\n"
-" e.g. 15:30, 2:35 pm, 14:15:20, 11:46:30 am, 4 pm"
+" e.g. 15∶30, 2∶35 pm, 14∶15∶20, 11∶46∶30 am, 4 pm"
 msgstr ""
 "حدد وقت الطباعة،\n"
 "مثلا: 15:30، 2:35 م، 14:15:20، 11:46:30 ص، 4 م"
 
-#: ../gtk/resources/ui/gtkprintunixdialog.ui.h:67
+#: ../gtk/ui/gtkprintunixdialog.ui.h:67
 msgid "Time of print"
 msgstr "وقت الطباعة"
 
 #. this is one of the choices for the print at option in the print dialog. It means that the print job will not be printed until it explicitly gets 'released'.
-#: ../gtk/resources/ui/gtkprintunixdialog.ui.h:72
+#: ../gtk/ui/gtkprintunixdialog.ui.h:72
 msgid "On _hold"
 msgstr "قيد الان_تظار"
 
-#: ../gtk/resources/ui/gtkprintunixdialog.ui.h:73
-#: ../gtk/resources/ui/gtkprintunixdialog.ui.h:74
+#: ../gtk/ui/gtkprintunixdialog.ui.h:73 ../gtk/ui/gtkprintunixdialog.ui.h:74
 msgid "Hold the job until it is explicitly released"
 msgstr "احجز المهمّة حتّى تطلق صراحة"
 
-#: ../gtk/resources/ui/gtkprintunixdialog.ui.h:75
+#: ../gtk/ui/gtkprintunixdialog.ui.h:75
 msgid "Add Cover Page"
 msgstr "أضِف صفحة غلاف"
 
 #. this is the label used for the option in the print dialog that controls the front cover page.
-#: ../gtk/resources/ui/gtkprintunixdialog.ui.h:78
+#: ../gtk/ui/gtkprintunixdialog.ui.h:78
 msgid "Be_fore:"
 msgstr "ق_بل:"
 
 #. this is the label used for the option in the print dialog that controls the back cover page.
-#: ../gtk/resources/ui/gtkprintunixdialog.ui.h:81
+#: ../gtk/ui/gtkprintunixdialog.ui.h:81
 msgid "_After:"
 msgstr "ب_عد:"
 
-#: ../gtk/resources/ui/gtkprintunixdialog.ui.h:82
+#: ../gtk/ui/gtkprintunixdialog.ui.h:82
 msgid "Job"
 msgstr "مَهمّة"
 
 #. This will appear as a tab label in the print dialog.
-#: ../gtk/resources/ui/gtkprintunixdialog.ui.h:85
+#: ../gtk/ui/gtkprintunixdialog.ui.h:85
 msgid "Image Quality"
 msgstr "جودة الصورة"
 
 #. This will appear as a tab label in the print dialog.
-#: ../gtk/resources/ui/gtkprintunixdialog.ui.h:88
+#: ../gtk/ui/gtkprintunixdialog.ui.h:88
 msgid "Color"
 msgstr "اللون"
 
 #. This will appear as a tab label in the print dialog.
 #. It's a typographical term, as in "Binding and finishing"
-#: ../gtk/resources/ui/gtkprintunixdialog.ui.h:92
+#: ../gtk/ui/gtkprintunixdialog.ui.h:92
 msgid "Finishing"
 msgstr "يجري الإنهاء"
 
-#: ../gtk/resources/ui/gtkprintunixdialog.ui.h:93
+#: ../gtk/ui/gtkprintunixdialog.ui.h:93
 msgid "Advanced"
 msgstr "متقدّم"
 
-#: ../gtk/resources/ui/gtkprintunixdialog.ui.h:94
+#: ../gtk/ui/gtkprintunixdialog.ui.h:94
 msgid "Some of the settings in the dialog conflict"
 msgstr "بعض الإعدادات في الحوار تتعارض"
 
-#: ../gtk/resources/ui/gtkrecentchooserdefault.ui.h:1
+#: ../gtk/ui/gtkrecentchooserdefault.ui.h:1
 msgid "Select which type of documents are shown"
 msgstr "اختر أنواع المستندات التي ستعرض"
 
-#: ../gtk/resources/ui/gtkvolumebutton.ui.h:1
+#: ../gtk/ui/gtkvolumebutton.ui.h:1
 msgid "Volume"
 msgstr "شدة الصوت"
 
-#: ../gtk/resources/ui/gtkvolumebutton.ui.h:2
+#: ../gtk/ui/gtkvolumebutton.ui.h:2
 msgid "Turns volume up or down"
 msgstr "يرفع أو يخفض الصوت"
 
-#: ../gtk/resources/ui/gtkvolumebutton.ui.h:3
+#: ../gtk/ui/gtkvolumebutton.ui.h:3
 msgid "Volume Up"
 msgstr "ارفع الصوت"
 
-#: ../gtk/resources/ui/gtkvolumebutton.ui.h:4
+#: ../gtk/ui/gtkvolumebutton.ui.h:4
 msgid "Increases the volume"
 msgstr "يرفع الصوت"
 
-#: ../gtk/resources/ui/gtkvolumebutton.ui.h:5
+#: ../gtk/ui/gtkvolumebutton.ui.h:5
 msgid "Volume Down"
 msgstr "أخفض الصوت"
 
-#: ../gtk/resources/ui/gtkvolumebutton.ui.h:6
+#: ../gtk/ui/gtkvolumebutton.ui.h:6
 msgid "Decreases the volume"
 msgstr "يخفض الصوت"
+
+#~ msgid "The license of the program"
+#~ msgstr "ترخيص البرنامج"
+
+#~ msgctxt "progress bar label"
+#~ msgid "%d %%"
+#~ msgstr "%Id ٪"
+
+#~ msgctxt "volume percentage"
+#~ msgid "%d %%"
+#~ msgstr "%Id %%"
+
+#~ msgid "Unmaximize"
+#~ msgstr "ألغ التكبير"
+
+#~ msgid "Move"
+#~ msgstr "انقل"
+
+#~ msgid "Resize"
+#~ msgstr "غيّر الحجم"
+
+#~ msgid "Always on Visible Workspace"
+#~ msgstr "دائما على مساحة العمل المرئية"
+
+#~ msgid "Only on This Workspace"
+#~ msgstr "فقط على مساحة العمل هذه"
+
+#~ msgid "Move to Workspace Up"
+#~ msgstr "انقل لمساحة العمل فوق"
+
+#~ msgid "Move to Workspace Down"
+#~ msgstr "انقل لمساحة العمل تحت"
+
+#~ msgid "Move to Another Workspace"
+#~ msgstr "انقل لمساحة عمل أخرى"
+
+#~ msgid "Workspace %d"
+#~ msgstr "مساحة العمل %d"
+
+#~ msgctxt "paper size"
+#~ msgid "A0x2"
+#~ msgstr "A0x2"
+
+#~ msgctxt "paper size"
+#~ msgid "A0x3"
+#~ msgstr "A0x3"
+
+#~ msgctxt "paper size"
+#~ msgid "A1x3"
+#~ msgstr "A1x3"
+
+#~ msgctxt "paper size"
+#~ msgid "A1x4"
+#~ msgstr "A1x4"
+
+#~ msgctxt "paper size"
+#~ msgid "A2x3"
+#~ msgstr "A2x3"
+
+#~ msgctxt "paper size"
+#~ msgid "A2x4"
+#~ msgstr "A2x4"
+
+#~ msgctxt "paper size"
+#~ msgid "A2x5"
+#~ msgstr "A2x5"
+
+#~ msgctxt "paper size"
+#~ msgid "A3x3"
+#~ msgstr "A3x3"
+
+#~ msgctxt "paper size"
+#~ msgid "A3x4"
+#~ msgstr "A3x4"
+
+#~ msgctxt "paper size"
+#~ msgid "A3x5"
+#~ msgstr "A3x5"
+
+#~ msgctxt "paper size"
+#~ msgid "A3x6"
+#~ msgstr "A3x6"
+
+#~ msgctxt "paper size"
+#~ msgid "A3x7"
+#~ msgstr "A3x7"
+
+#~ msgctxt "paper size"
+#~ msgid "A4x3"
+#~ msgstr "A4x3"
+
+#~ msgctxt "paper size"
+#~ msgid "A4x4"
+#~ msgstr "A4x4"
+
+#~ msgctxt "paper size"
+#~ msgid "A4x5"
+#~ msgstr "A4x5"
+
+#~ msgctxt "paper size"
+#~ msgid "A4x6"
+#~ msgstr "A4x6"
+
+#~ msgctxt "paper size"
+#~ msgid "A4x7"
+#~ msgstr "A4x7"
+
+#~ msgctxt "paper size"
+#~ msgid "A4x8"
+#~ msgstr "A4x8"
+
+#~ msgctxt "paper size"
+#~ msgid "A4x9"
+#~ msgstr "A4x9"
+
+#~ msgctxt "paper size"
+#~ msgid "10x11"
+#~ msgstr "10×11"
+
+#~ msgctxt "paper size"
+#~ msgid "10x13"
+#~ msgstr "10×13"
+
+#~ msgctxt "paper size"
+#~ msgid "10x14"
+#~ msgstr "10×14"
+
+#~ msgctxt "paper size"
+#~ msgid "10x15"
+#~ msgstr "10×15"
+
+#~ msgctxt "paper size"
+#~ msgid "11x12"
+#~ msgstr "11×12"
+
+#~ msgctxt "paper size"
+#~ msgid "11x15"
+#~ msgstr "11×15"
+
+#~ msgctxt "paper size"
+#~ msgid "12x19"
+#~ msgstr "12×19"
+
+#~ msgctxt "paper size"
+#~ msgid "5x7"
+#~ msgstr "5×7"
+
+#~ msgid "_Location:"
+#~ msgstr "ال_موقع:"
 
 #~ msgid "Failed to look for applications online"
 #~ msgstr "فشل البحث عن تطبيق على الإنترنت"
@@ -5434,17 +6284,11 @@ msgstr "يخفض الصوت"
 #~ msgid "Places"
 #~ msgstr "أماكن"
 
-#~ msgid "_License"
-#~ msgstr "ال_ترخيص"
-
 #~ msgid "Show Other Applications"
 #~ msgstr "أظهر التطبيقات الأخرى"
 
 #~ msgid "C_ontinue"
 #~ msgstr "ا_ستمر"
-
-#~ msgid "Go _Back"
-#~ msgstr "عد لل_خلف"
 
 #~ msgid "Type a file name"
 #~ msgstr "اكتب اسم ملف"
