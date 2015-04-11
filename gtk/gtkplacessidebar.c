@@ -121,8 +121,9 @@
 typedef enum {
   DROP_STATE_NORMAL,
   DROP_STATE_NEW_BOOKMARK_FADING_IN,
+  DROP_STATE_NEW_BOOKMARK_FADING_OUT,
   DROP_STATE_NEW_BOOKMARK_ARMED,
-  DROP_STATE_NEW_BOOKMARK_FADING_OUT
+  DROP_STATE_NEW_BOOKMARK_ARMED_PERMANENT,
 } DropState;
 
 struct _GtkPlacesSidebar {
@@ -152,6 +153,7 @@ struct _GtkPlacesSidebar {
   /* DND */
   GList     *drag_list; /* list of GFile */
   gint       drag_data_info;
+  gboolean   dragging_over;
 
   /* volume mounting - delayed open process */
   GtkPlacesOpenFlags go_to_after_mount_open_flags;
@@ -1689,15 +1691,21 @@ show_new_bookmark_row (GtkPlacesSidebar *sidebar,
                                          -1);
     }
 
-   sidebar->drop_state = DROP_STATE_NEW_BOOKMARK_ARMED;
+  /* If the state is permanent, don't change it. Is the application that
+   * controls this */
+  if (sidebar->drop_state != DROP_STATE_NEW_BOOKMARK_ARMED_PERMANENT)
+    sidebar->drop_state = DROP_STATE_NEW_BOOKMARK_ARMED;
 
   /* Highlight the new bookmark row */
-  drop_target_index = gtk_tree_path_get_indices (path)[0];
-  if (drop_target_index == bookmarks_index)
+  if (path != NULL)
     {
-      new_bookmark_path = gtk_tree_path_new_from_indices (bookmarks_index, -1);
-      gtk_tree_view_set_drag_dest_row (sidebar->tree_view, new_bookmark_path, GTK_TREE_VIEW_DROP_INTO_OR_AFTER);
-      gtk_tree_path_free (new_bookmark_path);
+      drop_target_index = gtk_tree_path_get_indices (path)[0];
+      if (drop_target_index == bookmarks_index)
+        {
+          new_bookmark_path = gtk_tree_path_new_from_indices (bookmarks_index, -1);
+          gtk_tree_view_set_drag_dest_row (sidebar->tree_view, new_bookmark_path, GTK_TREE_VIEW_DROP_INTO_OR_AFTER);
+          gtk_tree_path_free (new_bookmark_path);
+        }
     }
 }
 
@@ -1734,6 +1742,8 @@ drag_motion_callback (GtkTreeView      *tree_view,
   gboolean res;
   gboolean drop_as_bookmarks;
   gchar *drop_target_uri = NULL;
+
+  sidebar->dragging_over = TRUE;
 
   action = 0;
   drop_as_bookmarks = FALSE;
@@ -1824,17 +1834,40 @@ drag_motion_callback (GtkTreeView      *tree_view,
   return TRUE;
 }
 
+static void
+on_drag_end (GtkPlacesSidebar *sidebar)
+{
+  g_return_if_fail (GTK_IS_PLACES_SIDEBAR (sidebar));
+
+  free_drag_data (sidebar);
+  /* we could call finalize when disposing the widget */
+  if (sidebar->tree_view != NULL)
+    stop_drop_feedback (sidebar);
+  remove_drop_bookmark_feedback_row (sidebar);
+
+  if (sidebar->drag_leave_timeout_id)
+    g_source_remove (sidebar->drag_leave_timeout_id);
+
+  sidebar->drag_leave_timeout_id = 0;
+  sidebar->drop_state = DROP_STATE_NORMAL;
+  sidebar->dragging_over = FALSE;
+}
+
 static gboolean
 drag_leave_timeout_cb (gpointer data)
 {
   GtkPlacesSidebar *sidebar = GTK_PLACES_SIDEBAR (data);
 
-  free_drag_data (sidebar);
-  stop_drop_feedback (sidebar);
-  remove_drop_bookmark_feedback_row (sidebar);
-
-  sidebar->drag_leave_timeout_id = 0;
-  return FALSE;
+  if (sidebar->drop_state != DROP_STATE_NEW_BOOKMARK_ARMED_PERMANENT)
+    {
+      on_drag_end (sidebar);
+      return FALSE;
+    }
+  else
+    {
+      sidebar->dragging_over = FALSE;
+      return TRUE;
+    }
 }
 
 static void
@@ -1843,6 +1876,8 @@ drag_leave_callback (GtkTreeView      *tree_view,
                      guint             time,
                      GtkPlacesSidebar *sidebar)
 {
+  sidebar->dragging_over = FALSE;
+
   if (sidebar->drag_leave_timeout_id)
     g_source_remove (sidebar->drag_leave_timeout_id);
 
@@ -2081,9 +2116,8 @@ drag_data_received_callback (GtkWidget        *widget,
 
 out:
   sidebar->drop_occured = FALSE;
-  free_drag_data (sidebar);
-  remove_drop_bookmark_feedback_row (sidebar);
   gtk_drag_finish (context, success, FALSE, time);
+  on_drag_end (sidebar);
 
   gtk_tree_path_free (tree_path);
 }
@@ -4405,15 +4439,9 @@ gtk_places_sidebar_dispose (GObject *object)
       sidebar->cancellable = NULL;
     }
 
+  on_drag_end (sidebar);
+
   sidebar->tree_view = NULL;
-
-  if (sidebar->drag_leave_timeout_id)
-    {
-      g_source_remove (sidebar->drag_leave_timeout_id);
-      sidebar->drag_leave_timeout_id = 0;
-    }
-
-  free_drag_data (sidebar);
 
   if (sidebar->bookmarks_manager != NULL)
     {
@@ -5396,4 +5424,54 @@ gtk_places_sidebar_get_nth_bookmark (GtkPlacesSidebar *sidebar,
     }
 
   return file;
+}
+
+/**
+ * gtk_places_sidebar_set_drop_targets_visible:
+ * @sidebar: a places sidebar.
+ * @visible: whether to show the valid targets or not.
+ * @context: drag context used to ask the source about the action that wants to
+ * perform, so hints are more accurate.
+ *
+ * Make the GtkPlacesSidebar show drop targets, so it can show the available drop
+ * targets and a "new bookmark" row. This improves the drag and drop
+ * experience of the user and allow applications to show at once the available
+ * drop targets.
+ * This needs to be called when the application is aware of a drag and when
+ * the applications is aware of the end of a drag.
+ * It's not needed to take care of the drag if it finish in GtkPlacesSidebar, so
+ * it's not needed to conect to their signals to call gtk_places_sidebar_set_drop_targets_visible
+ * manually, just call it when the drag ends on some other widget on your application.
+ *
+ * Since: 3.18
+ */
+void
+gtk_places_sidebar_set_drop_targets_visible (GtkPlacesSidebar *sidebar,
+                                             gboolean          visible,
+                                             GdkDragContext   *context)
+{
+  if (visible)
+    {
+      show_new_bookmark_row (sidebar, NULL);
+      sidebar->drop_state = DROP_STATE_NEW_BOOKMARK_ARMED_PERMANENT;
+    }
+  else
+    {
+      if (sidebar->drop_state == DROP_STATE_NEW_BOOKMARK_ARMED_PERMANENT ||
+          sidebar->drop_state == DROP_STATE_NEW_BOOKMARK_ARMED)
+        {
+          if (!sidebar->dragging_over)
+            {
+              on_drag_end (sidebar);
+            }
+          else
+            {
+              /* In case this is called while we are dragging we need to mark the
+               * drop state as no permanent so the leave timeout can do its job.
+               * This will only happen in applications that call this in a wrong
+               * time */
+              sidebar->drop_state = DROP_STATE_NEW_BOOKMARK_ARMED;
+            }
+        }
+    }
 }

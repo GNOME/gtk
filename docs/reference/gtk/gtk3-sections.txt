@@ -2654,6 +2654,7 @@ gtk_places_sidebar_get_local_only
 gtk_places_sidebar_set_local_only
 gtk_places_sidebar_get_show_enter_location
 gtk_places_sidebar_set_show_enter_location
+gtk_places_sidebar_set_drop_targets_visible
 <SUBSECTION Standard>
 GTK_PLACES_SIDEBAR
 GTK_IS_PLACES_SIDEBAR
