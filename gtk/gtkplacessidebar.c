@@ -1668,19 +1668,23 @@ show_new_bookmark_row (GtkPlacesSidebar *sidebar,
   int bookmarks_index;
   gint drop_target_index;
   GtkTreePath *new_bookmark_path;
+  GIcon *new_bookmark_icon;
 
   bookmarks_index = bookmarks_get_first_index (sidebar);
 
   /* Add the row if it doesn't exists yet */
   if (sidebar->drop_state == DROP_STATE_NORMAL)
     {
+      new_bookmark_icon = g_themed_icon_new ("bookmark-new-symbolic");
       gtk_list_store_insert_with_values (sidebar->store, &iter, bookmarks_index,
                                          PLACES_SIDEBAR_COLUMN_ROW_TYPE, PLACES_DROP_FEEDBACK,
                                          PLACES_SIDEBAR_COLUMN_SECTION_TYPE, SECTION_BOOKMARKS,
+                                         PLACES_SIDEBAR_COLUMN_GICON, new_bookmark_icon,
                                          PLACES_SIDEBAR_COLUMN_NAME, _("New bookmark"),
                                          PLACES_SIDEBAR_COLUMN_INDEX, bookmarks_index,
                                          PLACES_SIDEBAR_COLUMN_NO_EJECT, TRUE,
                                          -1);
+      g_object_unref (new_bookmark_icon);
     }
 
   /* If the state is permanent, don't change it. Is the application that
