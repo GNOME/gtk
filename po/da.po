@@ -36,8 +36,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-03-15 14:46+0100\n"
-"PO-Revision-Date: 2015-03-14 18:58+0100\n"
+"POT-Creation-Date: 2015-04-13 19:24+0200\n"
+"PO-Revision-Date: 2015-04-13 16:16+0200\n"
 "Last-Translator: Ask Hjorth Larsen <asklarsen@gmail.com>\n"
 "Language-Team: Dansk <dansk@dansk-gruppen.dk>\n"
 "Language: da\n"
@@ -457,26 +457,26 @@ msgctxt "keyboard label"
 msgid "Suspend"
 msgstr "Hvile"
 
-#: ../gdk/mir/gdkmirglcontext.c:48 ../gdk/mir/gdkmirwindowimpl.c:1406
+#: ../gdk/mir/gdkmirglcontext.c:48 ../gdk/mir/gdkmirwindowimpl.c:1403
 #: ../gdk/wayland/gdkglcontext-wayland.c:369
-#: ../gdk/win32/gdkglcontext-win32.c:532 ../gdk/x11/gdkglcontext-x11.c:1163
+#: ../gdk/win32/gdkglcontext-win32.c:532 ../gdk/x11/gdkglcontext-x11.c:1175
 msgid "No GL implementation is available"
 msgstr "Der er ingen tilgængelig GL-implementering"
 
 #: ../gdk/mir/gdkmirglcontext.c:89 ../gdk/wayland/gdkglcontext-wayland.c:157
-#: ../gdk/win32/gdkglcontext-win32.c:492 ../gdk/x11/gdkglcontext-x11.c:619
-#: ../gdk/x11/gdkglcontext-x11.c:663
+#: ../gdk/win32/gdkglcontext-win32.c:492 ../gdk/x11/gdkglcontext-x11.c:631
+#: ../gdk/x11/gdkglcontext-x11.c:675
 msgid "Unable to create a GL context"
 msgstr "Kan ikke oprette en GL-kontekst"
 
-#: ../gdk/mir/gdkmirwindowimpl.c:1368 ../gdk/mir/gdkmirwindowimpl.c:1378
+#: ../gdk/mir/gdkmirwindowimpl.c:1365 ../gdk/mir/gdkmirwindowimpl.c:1375
 #: ../gdk/wayland/gdkglcontext-wayland.c:330
 #: ../gdk/wayland/gdkglcontext-wayland.c:340
-#: ../gdk/win32/gdkglcontext-win32.c:464 ../gdk/x11/gdkglcontext-x11.c:857
+#: ../gdk/win32/gdkglcontext-win32.c:464 ../gdk/x11/gdkglcontext-x11.c:869
 msgid "No available configurations for the given pixel format"
 msgstr "Ingen tilgængelige konfigurationer for det givne pixelformat"
 
-#: ../gdk/mir/gdkmirwindowimpl.c:1414
+#: ../gdk/mir/gdkmirwindowimpl.c:1411
 msgid "3.2 core GL profile is not available on EGL implementation"
 msgstr "3.2 kerne-GL-profil er ikke tilgængelig på EGL-implementering"
 
@@ -539,12 +539,12 @@ msgid_plural "Opening %d Items"
 msgstr[0] "Åbner %d element"
 msgstr[1] "Åbner %d elementer"
 
-#: ../gdk/x11/gdkglcontext-x11.c:885
+#: ../gdk/x11/gdkglcontext-x11.c:897
 #, c-format
 msgid "No available configurations for the given RGBA pixel format"
 msgstr "Ingen tilgængelige konfigurationer for det givne RGBA-pixelformat"
 
-#: ../gdk/x11/gdkglcontext-x11.c:1171
+#: ../gdk/x11/gdkglcontext-x11.c:1183
 msgid ""
 "The GLX_ARB_create_context_profile extension needed to create core profiles "
 "is not available"
@@ -1248,11 +1248,11 @@ msgstr ""
 
 #: ../gtk/deprecated/gtkcolorseldialog.c:191
 #: ../gtk/deprecated/gtkfontsel.c:1689 ../gtk/gtkfilechooserbutton.c:794
-#: ../gtk/gtkfilechooserwidget.c:5356 ../gtk/gtkmessagedialog.c:944
+#: ../gtk/gtkfilechooserwidget.c:5371 ../gtk/gtkmessagedialog.c:944
 #: ../gtk/gtkmessagedialog.c:957 ../gtk/gtkmountoperation.c:543
 #: ../gtk/gtkpagesetupunixdialog.c:196 ../gtk/gtkprintbackend.c:763
 #: ../gtk/gtkprinteroptionwidget.c:545 ../gtk/gtkprintunixdialog.c:665
-#: ../gtk/gtkprintunixdialog.c:738 ../gtk/gtkwindow.c:11917
+#: ../gtk/gtkprintunixdialog.c:738 ../gtk/gtkwindow.c:11919
 #: ../gtk/inspector/css-editor.c:199
 msgid "_Cancel"
 msgstr "_Annullér"
@@ -1300,7 +1300,7 @@ msgstr "_Anvend"
 
 #: ../gtk/deprecated/gtkfontsel.c:1698 ../gtk/gtkmessagedialog.c:936
 #: ../gtk/gtkmessagedialog.c:958 ../gtk/gtkprintbackend.c:764
-#: ../gtk/gtkwindow.c:11918 ../gtk/inspector/classes-list.c:127
+#: ../gtk/gtkwindow.c:11920 ../gtk/inspector/classes-list.c:127
 msgid "_OK"
 msgstr "_O.k."
 
@@ -2154,30 +2154,30 @@ msgstr "_Højre:"
 msgid "Paper Margins"
 msgstr "Papirmargener"
 
-#: ../gtk/gtkentry.c:9617 ../gtk/gtkentry.c:9770 ../gtk/gtklabel.c:6597
+#: ../gtk/gtkentry.c:9615 ../gtk/gtkentry.c:9768 ../gtk/gtklabel.c:6628
 #: ../gtk/gtktextview.c:9037 ../gtk/gtktextview.c:9225
 msgid "Cu_t"
 msgstr "K_lip"
 
-#: ../gtk/gtkentry.c:9621 ../gtk/gtkentry.c:9773 ../gtk/gtklabel.c:6598
+#: ../gtk/gtkentry.c:9619 ../gtk/gtkentry.c:9771 ../gtk/gtklabel.c:6629
 #: ../gtk/gtktextview.c:9041 ../gtk/gtktextview.c:9229
 msgid "_Copy"
 msgstr "_Kopiér"
 
-#: ../gtk/gtkentry.c:9625 ../gtk/gtkentry.c:9776 ../gtk/gtklabel.c:6599
+#: ../gtk/gtkentry.c:9623 ../gtk/gtkentry.c:9774 ../gtk/gtklabel.c:6630
 #: ../gtk/gtktextview.c:9043 ../gtk/gtktextview.c:9231
 msgid "_Paste"
 msgstr "_Indsæt"
 
-#: ../gtk/gtkentry.c:9628 ../gtk/gtklabel.c:6601 ../gtk/gtktextview.c:9046
+#: ../gtk/gtkentry.c:9626 ../gtk/gtklabel.c:6632 ../gtk/gtktextview.c:9046
 msgid "_Delete"
 msgstr "_Slet"
 
-#: ../gtk/gtkentry.c:9639 ../gtk/gtklabel.c:6610 ../gtk/gtktextview.c:9060
+#: ../gtk/gtkentry.c:9637 ../gtk/gtklabel.c:6641 ../gtk/gtktextview.c:9060
 msgid "Select _All"
 msgstr "Markér _alt"
 
-#: ../gtk/gtkentry.c:10837
+#: ../gtk/gtkentry.c:10835
 msgid "Caps Lock is on"
 msgstr "Caps Lock er slået til"
 
@@ -2197,7 +2197,7 @@ msgstr "(ingen)"
 msgid "_Open"
 msgstr "_Åbn"
 
-#: ../gtk/gtkfilechooserbutton.c:2137
+#: ../gtk/gtkfilechooserbutton.c:2138
 msgid "Other…"
 msgstr "Andre…"
 
@@ -2210,15 +2210,15 @@ msgstr "Andre…"
 msgid "%1$s on %2$s"
 msgstr "%1$s på %2$s"
 
-#: ../gtk/gtkfilechooserwidget.c:336
+#: ../gtk/gtkfilechooserwidget.c:337
 msgid "Type name of new folder"
 msgstr "Indtast navn på ny mappe"
 
-#: ../gtk/gtkfilechooserwidget.c:741
+#: ../gtk/gtkfilechooserwidget.c:740
 msgid "The folder could not be created"
 msgstr "Mappen kunne ikke oprettes"
 
-#: ../gtk/gtkfilechooserwidget.c:754
+#: ../gtk/gtkfilechooserwidget.c:753
 msgid ""
 "The folder could not be created, as a file with the same name already "
 "exists.  Try using a different name for the folder, or rename the file first."
@@ -2226,127 +2226,151 @@ msgstr ""
 "Mappen kunne ikke oprettes fordi en fil med samme navn allerede findes. Prøv "
 "at brug et andet mappenavn eller omdøb filen."
 
-#: ../gtk/gtkfilechooserwidget.c:768
+#: ../gtk/gtkfilechooserwidget.c:767
 msgid "You need to choose a valid filename."
 msgstr "Du skal vælge et gyldigt filnavn."
 
-#: ../gtk/gtkfilechooserwidget.c:771
+#: ../gtk/gtkfilechooserwidget.c:770
 #, c-format
 msgid "Cannot create a file under %s as it is not a folder"
 msgstr "Kan ikke oprette en fil under %s, da denne ikke er en mappe"
 
-#: ../gtk/gtkfilechooserwidget.c:779
+#: ../gtk/gtkfilechooserwidget.c:778
 msgid "Cannot create file as the filename is too long"
 msgstr "Kan ikke oprette fil, da filnavnet er for langt"
 
-#: ../gtk/gtkfilechooserwidget.c:780
+#: ../gtk/gtkfilechooserwidget.c:779
 msgid "Try using a shorter name."
 msgstr "Prøv at bruge et kortere navn."
 
-#: ../gtk/gtkfilechooserwidget.c:790
+#: ../gtk/gtkfilechooserwidget.c:789
 msgid "You may only select folders"
 msgstr "Du kan kun vælge mapper"
 
-#: ../gtk/gtkfilechooserwidget.c:791
+#: ../gtk/gtkfilechooserwidget.c:790
 msgid "The item that you selected is not a folder try using a different item."
 msgstr "Elementet, du valgte, er ikke en mappe; prøv at vælge noget andet."
 
-#: ../gtk/gtkfilechooserwidget.c:799
+#: ../gtk/gtkfilechooserwidget.c:798
 msgid "Invalid file name"
 msgstr "Ugyldigt filnavn"
 
-#: ../gtk/gtkfilechooserwidget.c:809
+#: ../gtk/gtkfilechooserwidget.c:808
 msgid "The folder contents could not be displayed"
 msgstr "Indholdet af mappen kunne ikke vises"
 
-#: ../gtk/gtkfilechooserwidget.c:1491
+#: ../gtk/gtkfilechooserwidget.c:952
+#, fuzzy
+msgid "A folder with that name already exists"
+msgstr "Genvejen %s findes allerede"
+
+#: ../gtk/gtkfilechooserwidget.c:954
+#, fuzzy
+msgid "A file with that name already exists"
+msgstr "Genvejen %s findes allerede"
+
+#: ../gtk/gtkfilechooserwidget.c:985
+#, fuzzy
+msgid "A folder cannot be called “.”"
+msgstr "Mappen kunne ikke oprettes"
+
+#: ../gtk/gtkfilechooserwidget.c:988
+#, fuzzy
+msgid "A folder cannot be called “..”"
+msgstr "Mappen kunne ikke oprettes"
+
+#: ../gtk/gtkfilechooserwidget.c:991
+msgid "Folder names cannot contain “/”"
+msgstr ""
+
+#: ../gtk/gtkfilechooserwidget.c:1506
 msgid "Could not select file"
 msgstr "Kunne ikke vælge filen"
 
-#: ../gtk/gtkfilechooserwidget.c:1724
+#: ../gtk/gtkfilechooserwidget.c:1739
 msgid "_Visit File"
 msgstr "_Gå til fil"
 
-#: ../gtk/gtkfilechooserwidget.c:1727
+#: ../gtk/gtkfilechooserwidget.c:1742
 msgid "_Open With File Manager"
 msgstr "_Åbn med filhåndtering"
 
-#: ../gtk/gtkfilechooserwidget.c:1730
+#: ../gtk/gtkfilechooserwidget.c:1745
 msgid "_Copy Location"
 msgstr "_Kopiér sted"
 
-#: ../gtk/gtkfilechooserwidget.c:1733
+#: ../gtk/gtkfilechooserwidget.c:1748
 msgid "_Add to Bookmarks"
 msgstr "_Føj til bogmærker"
 
-#: ../gtk/gtkfilechooserwidget.c:1740
+#: ../gtk/gtkfilechooserwidget.c:1755
 msgid "Show _Hidden Files"
 msgstr "Vis _skjulte filer"
 
-#: ../gtk/gtkfilechooserwidget.c:1743
+#: ../gtk/gtkfilechooserwidget.c:1758
 msgid "Show _Size Column"
 msgstr "Vis _størrelseskolonne"
 
-#: ../gtk/gtkfilechooserwidget.c:1746
+#: ../gtk/gtkfilechooserwidget.c:1761
 msgid "Sort _Folders before Files"
 msgstr "Sortér _mapper før filer"
 
-#: ../gtk/gtkfilechooserwidget.c:2018
+#: ../gtk/gtkfilechooserwidget.c:2033
 msgid "Location"
 msgstr "Sted"
 
 #. Label
-#: ../gtk/gtkfilechooserwidget.c:2058
+#: ../gtk/gtkfilechooserwidget.c:2073
 msgid "_Name:"
 msgstr "_Navn:"
 
-#: ../gtk/gtkfilechooserwidget.c:2538 ../gtk/gtkfilechooserwidget.c:4076
+#: ../gtk/gtkfilechooserwidget.c:2553 ../gtk/gtkfilechooserwidget.c:4091
 #: ../gtk/gtkplacessidebar.c:968
 msgid "Home"
 msgstr "Hjem"
 
-#: ../gtk/gtkfilechooserwidget.c:3743
+#: ../gtk/gtkfilechooserwidget.c:3758
 #, c-format
 msgid "Could not read the contents of %s"
 msgstr "Kunne ikke læse indholdet af %s"
 
-#: ../gtk/gtkfilechooserwidget.c:3747
+#: ../gtk/gtkfilechooserwidget.c:3762
 msgid "Could not read the contents of the folder"
 msgstr "Kunne ikke læse indholdet af mappen"
 
-#: ../gtk/gtkfilechooserwidget.c:3854
+#: ../gtk/gtkfilechooserwidget.c:3869
 msgid "%H:%M"
 msgstr "%H:%M"
 
-#: ../gtk/gtkfilechooserwidget.c:3854
+#: ../gtk/gtkfilechooserwidget.c:3869
 msgid "%-I:%M %P"
 msgstr "%-I:%M %P"
 
-#: ../gtk/gtkfilechooserwidget.c:3856
+#: ../gtk/gtkfilechooserwidget.c:3871
 msgid "Yesterday at %H:%M"
 msgstr "I går klokken %H:%M"
 
-#: ../gtk/gtkfilechooserwidget.c:3856
+#: ../gtk/gtkfilechooserwidget.c:3871
 msgid "Yesterday at %-I:%M %P"
 msgstr "I går klokken %-I:%M %P"
 
 #. Translators: We don't know whether this printer is
 #. * available to print to.
-#: ../gtk/gtkfilechooserwidget.c:4055 ../gtk/inspector/prop-editor.c:1569
+#: ../gtk/gtkfilechooserwidget.c:4070 ../gtk/inspector/prop-editor.c:1569
 #: ../modules/printbackends/cloudprint/gtkprintbackendcloudprint.c:748
 msgid "Unknown"
 msgstr "Ukendt"
 
-#: ../gtk/gtkfilechooserwidget.c:4563
+#: ../gtk/gtkfilechooserwidget.c:4578
 msgid "Cannot change to folder because it is not local"
 msgstr "Kan ikke skifte til mappen fordi den ikke er lokal"
 
-#: ../gtk/gtkfilechooserwidget.c:5349 ../gtk/gtkprintunixdialog.c:656
+#: ../gtk/gtkfilechooserwidget.c:5364 ../gtk/gtkprintunixdialog.c:656
 #, c-format
 msgid "A file named “%s” already exists.  Do you want to replace it?"
 msgstr "Der findes allerede en fil som hedder “%s”. Vil du erstatte den?"
 
-#: ../gtk/gtkfilechooserwidget.c:5352 ../gtk/gtkprintunixdialog.c:660
+#: ../gtk/gtkfilechooserwidget.c:5367 ../gtk/gtkprintunixdialog.c:660
 #, c-format
 msgid ""
 "The file already exists in “%s”.  Replacing it will overwrite its contents."
@@ -2354,15 +2378,15 @@ msgstr ""
 "Filen eksisterer allerede i “%s”.  Hvis du erstatter den, vil dens indhold "
 "blive overskrevet."
 
-#: ../gtk/gtkfilechooserwidget.c:5357 ../gtk/gtkprintunixdialog.c:668
+#: ../gtk/gtkfilechooserwidget.c:5372 ../gtk/gtkprintunixdialog.c:668
 msgid "_Replace"
 msgstr "_Erstat"
 
-#: ../gtk/gtkfilechooserwidget.c:6155
+#: ../gtk/gtkfilechooserwidget.c:6162
 msgid "Could not start the search process"
 msgstr "Kunne ikke starte søgeprocessen"
 
-#: ../gtk/gtkfilechooserwidget.c:6156
+#: ../gtk/gtkfilechooserwidget.c:6163
 msgid ""
 "The program was not able to create a connection to the indexer daemon. "
 "Please make sure it is running."
@@ -2370,7 +2394,7 @@ msgstr ""
 "Programmet kunne ikke oprette en forbindelse til indekseringsdæmonen. Sørg "
 "venligst for at den kører."
 
-#: ../gtk/gtkfilechooserwidget.c:6170
+#: ../gtk/gtkfilechooserwidget.c:6177
 msgid "Could not send the search request"
 msgstr "Kunne ikke sende søgeforespørgslen"
 
@@ -2401,7 +2425,7 @@ msgstr "Vælg en skrifttype"
 msgid "None"
 msgstr "Ingen"
 
-#: ../gtk/gtkglarea.c:264
+#: ../gtk/gtkglarea.c:303
 msgid "OpenGL context creation failed"
 msgstr "Kunne ikke oprette OpenGL-kontekst"
 
@@ -2409,7 +2433,7 @@ msgstr "Kunne ikke oprette OpenGL-kontekst"
 msgid "Application menu"
 msgstr "Programmenu"
 
-#: ../gtk/gtkheaderbar.c:479 ../gtk/gtkwindow.c:8591
+#: ../gtk/gtkheaderbar.c:479 ../gtk/gtkwindow.c:8580
 msgid "Close"
 msgstr "Luk"
 
@@ -2460,12 +2484,12 @@ msgid "Error"
 msgstr "Fejl"
 
 #. Open Link
-#: ../gtk/gtklabel.c:6578
+#: ../gtk/gtklabel.c:6609
 msgid "_Open Link"
 msgstr "_Åbn link"
 
 #. Copy Link Address
-#: ../gtk/gtklabel.c:6587
+#: ../gtk/gtklabel.c:6618
 msgid "Copy _Link Address"
 msgstr "Kopiér _linkadresse"
 
@@ -2702,13 +2726,13 @@ msgstr "Z Shell"
 msgid "Cannot end process with PID %d: %s"
 msgstr "Kan ikke afbryde processen med PID %d: %s"
 
-#: ../gtk/gtknotebook.c:5171 ../gtk/gtknotebook.c:7902
+#: ../gtk/gtknotebook.c:5173 ../gtk/gtknotebook.c:7904
 #, c-format
 msgid "Page %u"
 msgstr "Side %u"
 
-#: ../gtk/gtkpagesetup.c:652 ../gtk/gtkpapersize.c:985
-#: ../gtk/gtkpapersize.c:1025
+#: ../gtk/gtkpagesetup.c:652 ../gtk/gtkpapersize.c:986
+#: ../gtk/gtkpapersize.c:1026
 msgid "Not a valid page setup file"
 msgstr "Ikke en gyldig sideopsætningsfil"
 
@@ -2940,7 +2964,7 @@ msgstr "_Skub ud"
 msgid "_Detect Media"
 msgstr "_Søg efter medie"
 
-#: ../gtk/gtkplacessidebar.c:4167
+#: ../gtk/gtkplacessidebar.c:4165
 msgid "Computer"
 msgstr "Computer"
 
@@ -3295,7 +3319,7 @@ msgstr "Søg"
 #. * glyphs then use MEDIUM VERTICAL BAR (U+2759) as the text for
 #. * the state
 #.
-#: ../gtk/gtkswitch.c:379 ../gtk/gtkswitch.c:431 ../gtk/gtkswitch.c:606
+#: ../gtk/gtkswitch.c:379 ../gtk/gtkswitch.c:431 ../gtk/gtkswitch.c:605
 msgctxt "switch"
 msgid "ON"
 msgstr "TIL"
@@ -3303,7 +3327,7 @@ msgstr "TIL"
 #. Translators: if the "off" state label requires more than three
 #. * glyphs then use WHITE CIRCLE (U+25CB) as the text for the state
 #.
-#: ../gtk/gtkswitch.c:387 ../gtk/gtkswitch.c:432 ../gtk/gtkswitch.c:621
+#: ../gtk/gtkswitch.c:387 ../gtk/gtkswitch.c:432 ../gtk/gtkswitch.c:620
 msgctxt "switch"
 msgid "OFF"
 msgstr "FRA"
@@ -3491,11 +3515,11 @@ msgctxt "volume percentage"
 msgid "%d %%"
 msgstr "%d %%"
 
-#: ../gtk/gtkwindow.c:11905
+#: ../gtk/gtkwindow.c:11907
 msgid "Do you want to use GTK+ Inspector?"
 msgstr "Vil du bruge GTK+-inspektøren?"
 
-#: ../gtk/gtkwindow.c:11907
+#: ../gtk/gtkwindow.c:11909
 msgid ""
 "GTK+ Inspector is an interactive debugger that lets you explore and modify "
 "the internals of any GTK+ application. Using it may cause the application to "
@@ -3505,7 +3529,7 @@ msgstr ""
 "bestanddelene af ethvert GTK+-program. Dens brug kan forårsage fejl eller "
 "nedbrud af programmet."
 
-#: ../gtk/gtkwindow.c:11912
+#: ../gtk/gtkwindow.c:11914
 msgid "Don't show this message again"
 msgstr "Vis ikke denne meddelelse igen"
 
@@ -5396,6 +5420,12 @@ msgstr "Udskriv til testprinter"
 #~ msgid "Accessible role"
 #~ msgstr "Tilgængelig rolle"
 
+#~ msgid "Accessible name"
+#~ msgstr "Tilgængeligt navn"
+
+#~ msgid "Accessible description"
+#~ msgstr "Tilgængelig beskrivelse"
+
 # ??
 #~ msgid "Mapped"
 #~ msgstr "Optegnet"
@@ -6201,9 +6231,6 @@ msgstr "Udskriv til testprinter"
 
 #~ msgid "Save in _folder:"
 #~ msgstr "Gem i _mappe:"
-
-#~ msgid "Shortcut %s already exists"
-#~ msgstr "Genvejen %s findes allerede"
 
 #~ msgid "Shortcut %s does not exist"
 #~ msgstr "Genvejen %s findes ikke"
