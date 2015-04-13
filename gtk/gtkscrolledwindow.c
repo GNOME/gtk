@@ -1125,8 +1125,8 @@ captured_event_cb (GtkWidget *widget,
   source_device = gdk_event_get_source_device (event);
   input_source = gdk_device_get_source (source_device);
 
-  if (input_source != GDK_SOURCE_MOUSE &&
-      input_source != GDK_SOURCE_TOUCHPAD)
+  if (input_source == GDK_SOURCE_KEYBOARD ||
+      input_source == GDK_SOURCE_TOUCHSCREEN)
     return GDK_EVENT_PROPAGATE;
 
   event_widget = gtk_get_event_widget (event);
@@ -1147,7 +1147,9 @@ captured_event_cb (GtkWidget *widget,
           indicator_set_over (&priv->hindicator, FALSE);
           indicator_set_over (&priv->vindicator, FALSE);
         }
-      else if (strstr (gdk_device_get_name (source_device), "TrackPoint") ||
+      else if (input_source == GDK_SOURCE_PEN ||
+               input_source == GDK_SOURCE_ERASER ||
+               strstr (gdk_device_get_name (source_device), "TrackPoint") ||
                strstr (gdk_device_get_name (source_device), "DualPoint Stick"))
         {
           indicator_set_over (&priv->hindicator, TRUE);
