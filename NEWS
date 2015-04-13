@@ -1,3 +1,23 @@
+Overview of changes in GTK+ 3.16.2
+==================================
+
+* Bug fixes:
+ 746706 Serious accessible event spewage from Gtk+ table cells
+ 747288 [HighContrast] Insensitive backdrop ListBoxRow have an...
+ 747471 [wayland] gdk_screen_get_monitor_geometry() returns in...
+ 747539 popover: Remove signal handlers in dispose
+ 747608 Scrollbar hiding / unhiding does not work with a stylus
+ 747689 [HighContrast] Selected ListBoxRow’s Label is white on...
+        Avoid a crash in GtkApplication
+        Avoid a crash with GtkTreeview rubberbanding
+        GtkApplication: Prevent more crashes around shutdown
+        Prevent tab close button size changes
+
+* Translation updates:
+ Icelandic
+ Swedish
+
+
 Overview of changes in GTK+ 3.16.1
 ==================================
 
