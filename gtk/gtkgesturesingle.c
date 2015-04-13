@@ -169,6 +169,8 @@ gtk_gesture_single_handle_event (GtkEventController *controller,
       button = event->button.button;
       break;
     case GDK_MOTION_NOTIFY:
+      if (!gtk_gesture_handles_sequence (GTK_GESTURE (controller), sequence))
+        return FALSE;
       if (priv->touch_only && !test_touchscreen && source != GDK_SOURCE_TOUCHSCREEN)
         return FALSE;
 
