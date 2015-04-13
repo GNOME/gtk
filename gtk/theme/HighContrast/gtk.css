@@ -2052,12 +2052,14 @@ GtkPlacesSidebar.sidebar .view .separator:backdrop {
     background-color: #f2f2f2; }
   .list-row.button:active {
     box-shadow: inset 0 2px 2px -2px rgba(0, 0, 0, 0.2); }
-  .list-row.button:selected:active {
-    box-shadow: inset 0 2px 3px -1px rgba(0, 0, 0, 0.5); }
-  .list-row.button:selected:hover {
-    background-color: black; }
-  .list-row.button:selected:backdrop {
+  .list-row.button:selected {
     background-color: #000; }
+    .list-row.button:selected:active {
+      box-shadow: inset 0 2px 3px -1px rgba(0, 0, 0, 0.5); }
+    .list-row.button:selected:hover {
+      background-color: black; }
+    .list-row.button:selected:backdrop {
+      background-color: #7f7f7f; }
 
 .list-row:selected .button {
   border-width: 2px;
