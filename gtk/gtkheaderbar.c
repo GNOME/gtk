@@ -1761,6 +1761,36 @@ gtk_header_bar_unrealize (GtkWidget *widget)
   GTK_WIDGET_CLASS (gtk_header_bar_parent_class)->unrealize (widget);
 }
 
+static gboolean
+window_state_changed (GtkWidget           *window,
+                      GdkEventWindowState *event,
+                      gpointer             data)
+{
+  GtkHeaderBar *bar = GTK_HEADER_BAR (data);
+
+  if (event->changed_mask & (GDK_WINDOW_STATE_FULLSCREEN | GDK_WINDOW_STATE_MAXIMIZED | GDK_WINDOW_STATE_TILED))
+    _gtk_header_bar_update_window_buttons (bar);
+
+  return FALSE;
+}
+
+static void
+gtk_header_bar_hierarchy_changed (GtkWidget *widget,
+                                  GtkWidget *previous_toplevel)
+{
+  GtkWidget *toplevel;
+
+  toplevel = gtk_widget_get_toplevel (widget);
+
+  if (previous_toplevel)
+    g_signal_handlers_disconnect_by_func (previous_toplevel,
+                                          window_state_changed, widget);
+
+  if (toplevel)
+    g_signal_connect_after (toplevel, "window-state-event",
+                            G_CALLBACK (window_state_changed), widget);
+}
+
 static void
 gtk_header_bar_class_init (GtkHeaderBarClass *class)
 {
@@ -1780,6 +1810,7 @@ gtk_header_bar_class_init (GtkHeaderBarClass *class)
   widget_class->draw = gtk_header_bar_draw;
   widget_class->realize = gtk_header_bar_realize;
   widget_class->unrealize = gtk_header_bar_unrealize;
+  widget_class->hierarchy_changed = gtk_header_bar_hierarchy_changed;
 
   container_class->add = gtk_header_bar_add;
   container_class->remove = gtk_header_bar_remove;
