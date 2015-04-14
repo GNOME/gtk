@@ -33,7 +33,7 @@
 #include "gtkcellrenderertext.h"
 #include "gtkcheckmenuitem.h"
 #include "gtkclipboard.h"
-#include "gtkcomboboxtext.h"
+#include "gtkmodelbutton.h"
 #include "gtkentry.h"
 #include "gtkstack.h"
 #include "gtkexpander.h"
@@ -255,6 +255,8 @@ struct _GtkFileChooserWidgetPrivate {
   GtkWidget *extra_and_filters;
   GtkWidget *filter_combo_hbox;
   GtkWidget *filter_combo;
+  GtkWidget *filter_stack;
+  GtkWidget *filter_box;
   GtkWidget *preview_box;
   GtkWidget *preview_label;
   GtkWidget *preview_widget;
@@ -493,9 +495,6 @@ static void location_mode_set  (GtkFileChooserWidget *impl, LocationMode new_mod
 static void set_current_filter   (GtkFileChooserWidget *impl,
 				  GtkFileFilter         *filter);
 static void check_preview_change (GtkFileChooserWidget *impl);
-
-static void filter_combo_changed       (GtkComboBox           *combo_box,
-					GtkFileChooserWidget *impl);
 
 static gboolean list_select_func   (GtkTreeSelection      *selection,
 				    GtkTreeModel          *model,
@@ -5062,6 +5061,8 @@ gtk_file_chooser_widget_add_filter (GtkFileChooser *chooser,
   GtkFileChooserWidget *impl = GTK_FILE_CHOOSER_WIDGET (chooser);
   GtkFileChooserWidgetPrivate *priv = impl->priv;
   const gchar *name;
+  GtkWidget *label;
+  GtkWidget *button;
 
   if (g_slist_find (priv->filters, filter))
     {
@@ -5076,7 +5077,17 @@ gtk_file_chooser_widget_add_filter (GtkFileChooser *chooser,
   if (!name)
     name = "Untitled filter";	/* Place-holder, doesn't need to be marked for translation */
 
-  gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (priv->filter_combo), name);
+  label = gtk_label_new (name);
+  gtk_label_set_xalign (GTK_LABEL (label), 0.0);
+  gtk_widget_show (label);
+  gtk_stack_add_named (GTK_STACK (priv->filter_stack), label, name);
+  button = g_object_new (GTK_TYPE_MODEL_BUTTON,
+                         "visible", TRUE,
+                         "text", name,
+                         "action-name", "file-chooser.set-filter",
+                         "action-target", g_variant_new_string (name),
+                         NULL);
+  gtk_container_add (GTK_CONTAINER (priv->filter_box), button);
 
   if (!g_slist_find (priv->filters, priv->current_filter))
     set_current_filter (impl, filter);
@@ -5090,9 +5101,10 @@ gtk_file_chooser_widget_remove_filter (GtkFileChooser *chooser,
 {
   GtkFileChooserWidget *impl = GTK_FILE_CHOOSER_WIDGET (chooser);
   GtkFileChooserWidgetPrivate *priv = impl->priv;
-  GtkTreeModel *model;
-  GtkTreeIter iter;
   gint filter_index;
+  GtkWidget *child;
+  GList *children, *l;
+  const gchar *name;
 
   filter_index = g_slist_index (priv->filters, filter);
 
@@ -5112,12 +5124,32 @@ gtk_file_chooser_widget_remove_filter (GtkFileChooser *chooser,
 	set_current_filter (impl, NULL);
     }
 
+  name = gtk_file_filter_get_name (filter);
+  child = gtk_stack_get_child_by_name (GTK_STACK (priv->filter_stack), name);
+  if (child)
+    gtk_widget_destroy (child);
+
+  children = gtk_container_get_children (GTK_CONTAINER (priv->filter_box));
+  for (l = children; l; l = l->next)
+    {
+      gchar *text;
+
+      child = l->data;
+      g_object_get (child, "text", &text, NULL);
+      if (g_strcmp0 (text, name) == 0)
+        gtk_widget_destroy (child);
+      g_free (text);
+    }
+  g_list_free (children);
+
+#if 0
   /* Remove row from the combo box */
   model = gtk_combo_box_get_model (GTK_COMBO_BOX (priv->filter_combo));
   if (!gtk_tree_model_iter_nth_child  (model, &iter, NULL, filter_index))
     g_assert_not_reached ();
 
   gtk_list_store_remove (GTK_LIST_STORE (model), &iter);
+#endif
 
   g_object_unref (filter);
 
@@ -6626,9 +6658,12 @@ set_current_filter (GtkFileChooserWidget *impl,
 	  g_object_ref_sink (priv->current_filter);
 	}
 
+#if 0
       if (priv->filters)
-	gtk_combo_box_set_active (GTK_COMBO_BOX (priv->filter_combo),
-				  filter_index);
+	gtk_combo_box_set_active (GTK_COMBO_BOX (priv->filter_combo), filter_index);
+#endif
+      if (priv->filters && filter)
+        gtk_stack_set_visible_child_name (GTK_STACK (priv->filter_stack), gtk_file_filter_get_name (filter));
 
       if (priv->browse_files_model)
         {
@@ -6650,17 +6685,6 @@ set_current_filter (GtkFileChooserWidget *impl,
 
       g_object_notify (G_OBJECT (impl), "filter");
     }
-}
-
-static void
-filter_combo_changed (GtkComboBox           *combo_box,
-		      GtkFileChooserWidget *impl)
-{
-  GtkFileChooserWidgetPrivate *priv = impl->priv;
-  gint new_index = gtk_combo_box_get_active (combo_box);
-  GtkFileFilter *new_filter = g_slist_nth_data (priv->filters, new_index);
-
-  set_current_filter (impl, new_filter);
 }
 
 static void
@@ -7485,6 +7509,8 @@ gtk_file_chooser_widget_class_init (GtkFileChooserWidgetClass *class)
   gtk_widget_class_bind_template_child_private (widget_class, GtkFileChooserWidget, browse_path_bar);
   gtk_widget_class_bind_template_child_private (widget_class, GtkFileChooserWidget, filter_combo_hbox);
   gtk_widget_class_bind_template_child_private (widget_class, GtkFileChooserWidget, filter_combo);
+  gtk_widget_class_bind_template_child_private (widget_class, GtkFileChooserWidget, filter_stack);
+  gtk_widget_class_bind_template_child_private (widget_class, GtkFileChooserWidget, filter_box);
   gtk_widget_class_bind_template_child_private (widget_class, GtkFileChooserWidget, preview_box);
   gtk_widget_class_bind_template_child_private (widget_class, GtkFileChooserWidget, extra_align);
   gtk_widget_class_bind_template_child_private (widget_class, GtkFileChooserWidget, extra_and_filters);
@@ -7513,7 +7539,6 @@ gtk_file_chooser_widget_class_init (GtkFileChooserWidgetClass *class)
   gtk_widget_class_bind_template_callback (widget_class, file_list_drag_motion_cb);
   gtk_widget_class_bind_template_callback (widget_class, list_selection_changed);
   gtk_widget_class_bind_template_callback (widget_class, list_cursor_changed);
-  gtk_widget_class_bind_template_callback (widget_class, filter_combo_changed);
   gtk_widget_class_bind_template_callback (widget_class, path_bar_clicked);
   gtk_widget_class_bind_template_callback (widget_class, places_sidebar_open_location_cb);
   gtk_widget_class_bind_template_callback (widget_class, places_sidebar_show_error_message_cb);
@@ -7526,12 +7551,39 @@ gtk_file_chooser_widget_class_init (GtkFileChooserWidgetClass *class)
 }
 
 static void
+set_filter_action_activate (GSimpleAction *action,
+                            GVariant      *parameter,
+                            gpointer       user_data)
+{
+  GtkFileChooserWidget *impl = GTK_FILE_CHOOSER_WIDGET (user_data);
+  GtkFileChooserWidgetPrivate *priv = impl->priv;
+  const gchar *name;
+  GSList *l;
+
+  g_variant_get (parameter, "&s", &name);
+
+  for (l = priv->filters; l; l = l->next)
+    {
+      GtkFileFilter *filter = GTK_FILE_FILTER (l->data);
+
+      if (g_strcmp0 (gtk_file_filter_get_name (filter), name) == 0)
+        {
+          set_current_filter (impl, filter);
+          return;
+        }
+    }
+}
+
+static GActionEntry entries[] = {
+  { "set-filter", set_filter_action_activate, "s", NULL, NULL }
+};
+
+static void
 post_process_ui (GtkFileChooserWidget *impl)
 {
   GtkTreeSelection *selection;
-  GtkCellRenderer  *cell;
-  GList            *cells;
   GFile            *file;
+  GActionGroup *group;
 
   /* Some qdata, qdata can't be set with GtkBuilder */
   g_object_set_data (G_OBJECT (impl->priv->browse_files_tree_view), "fmq-name", "file_list");
@@ -7561,20 +7613,6 @@ post_process_ui (GtkFileChooserWidget *impl)
   file_list_set_sort_column_ids (impl);
   update_cell_renderer_attributes (impl);
 
-  /* Get the combo's text renderer and set ellipsize parameters,
-   * perhaps GtkComboBoxText should declare the cell renderer
-   * as an 'internal-child', then we could configure it in GtkBuilder
-   * instead of hard coding it here.
-   */
-  cells = gtk_cell_layout_get_cells (GTK_CELL_LAYOUT (impl->priv->filter_combo));
-  g_assert (cells);
-  cell = cells->data;
-  g_object_set (G_OBJECT (cell),
-		"ellipsize", PANGO_ELLIPSIZE_END,
-		NULL);
-
-  g_list_free (cells);
-
   /* Set the GtkPathBar file system backend */
   _gtk_path_bar_set_file_system (GTK_PATH_BAR (impl->priv->browse_path_bar), impl->priv->file_system);
   file = g_file_new_for_path ("/");
@@ -7585,6 +7623,14 @@ post_process_ui (GtkFileChooserWidget *impl)
    * that priv->icon_size be already setup.
    */
   set_icon_cell_renderer_fixed_size (impl);
+
+  group = G_ACTION_GROUP (g_simple_action_group_new ());
+  g_action_map_add_action_entries (G_ACTION_MAP (group),
+                                   entries, G_N_ELEMENTS (entries),
+                                   impl);
+  gtk_widget_insert_action_group (GTK_WIDGET (impl), "file-chooser", group);
+  g_object_unref (group);
+
 }
 
 static void

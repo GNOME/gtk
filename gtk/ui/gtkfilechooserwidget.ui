@@ -321,14 +321,29 @@
             <property name="can_focus">False</property>
             <property name="spacing">12</property>
             <child>
-              <object class="GtkComboBoxText" id="filter_combo">
+              <object class="GtkMenuButton" id="filter_combo">
                 <property name="visible">True</property>
-                <property name="can_focus">False</property>
                 <property name="tooltip_text" translatable="yes">Select which types of files are shown</property>
-                <property name="focus_on_click">False</property>
-                <property name="entry_text_column">0</property>
-                <property name="id_column">1</property>
-                <signal name="changed" handler="filter_combo_changed" swapped="no"/>
+                <property name="popover">filter_popup</property>
+                <child>
+                  <object class="GtkBox">
+                    <property name="visible">True</property>
+                    <property name="orientation">horizontal</property>
+                    <property name="spacing">2</property>
+                    <child>
+                      <object class="GtkStack" id="filter_stack">
+                        <property name="visible">True</property>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkImage">
+                        <property name="visible">True</property>
+                        <property name="icon-name">pan-down-symbolic</property>
+                        <property name="icon-size">1</property>
+                      </object>
+                    </child>
+                  </object>
+                </child>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -424,6 +439,14 @@
             <property name="width">2</property>
           </packing>
         </child>
+      </object>
+    </child>
+  </object>
+  <object class="GtkPopover" id="filter_popup">
+    <child>
+      <object class="GtkBox" id="filter_box">
+        <property name="visible">True</property>
+        <property name="orientation">vertical</property>
       </object>
     </child>
   </object>
