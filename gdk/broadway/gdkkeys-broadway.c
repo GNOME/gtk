@@ -116,6 +116,12 @@ gdk_broadway_keymap_get_num_lock_state (GdkKeymap *keymap)
 }
 
 static gboolean
+gdk_broadway_keymap_get_scroll_lock_state (GdkKeymap *keymap)
+{
+  return FALSE;
+}
+
+static gboolean
 gdk_broadway_keymap_get_entries_for_keyval (GdkKeymap     *keymap,
 					    guint          keyval,
 					    GdkKeymapKey **keys,
@@ -206,6 +212,7 @@ gdk_broadway_keymap_class_init (GdkBroadwayKeymapClass *klass)
   keymap_class->have_bidi_layouts = gdk_broadway_keymap_have_bidi_layouts;
   keymap_class->get_caps_lock_state = gdk_broadway_keymap_get_caps_lock_state;
   keymap_class->get_num_lock_state = gdk_broadway_keymap_get_num_lock_state;
+  keymap_class->get_scroll_lock_state = gdk_broadway_keymap_get_scroll_lock_state;
   keymap_class->get_entries_for_keyval = gdk_broadway_keymap_get_entries_for_keyval;
   keymap_class->get_entries_for_keycode = gdk_broadway_keymap_get_entries_for_keycode;
   keymap_class->lookup_key = gdk_broadway_keymap_lookup_key;

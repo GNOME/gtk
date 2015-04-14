@@ -99,6 +99,13 @@ gdk_mir_keymap_get_num_lock_state (GdkKeymap *keymap)
 }
 
 static gboolean
+gdk_mir_keymap_get_scroll_lock_state (GdkKeymap *keymap)
+{
+  //g_printerr ("gdk_mir_keymap_get_scroll_lock_state\n");
+  return xkb_state_led_name_is_active (GDK_MIR_KEYMAP (keymap)->xkb_state, XKB_LED_NAME_SCROLL);
+}
+
+static gboolean
 gdk_mir_keymap_get_entries_for_keyval (GdkKeymap     *keymap,
                                        guint          keyval,
                                        GdkKeymapKey **keys,
@@ -470,6 +477,7 @@ gdk_mir_keymap_class_init (GdkMirKeymapClass *klass)
   keymap_class->have_bidi_layouts = gdk_mir_keymap_have_bidi_layouts;
   keymap_class->get_caps_lock_state = gdk_mir_keymap_get_caps_lock_state;
   keymap_class->get_num_lock_state = gdk_mir_keymap_get_num_lock_state;
+  keymap_class->get_scroll_lock_state = gdk_mir_keymap_get_scroll_lock_state;
   keymap_class->get_entries_for_keyval = gdk_mir_keymap_get_entries_for_keyval;
   keymap_class->get_entries_for_keycode = gdk_mir_keymap_get_entries_for_keycode;
   keymap_class->lookup_key = gdk_mir_keymap_lookup_key;

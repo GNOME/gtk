@@ -358,6 +358,24 @@ gdk_keymap_get_num_lock_state (GdkKeymap *keymap)
 }
 
 /**
+ * gdk_keymap_get_scroll_lock_state:
+ * @keymap: a #GdkKeymap
+ *
+ * Returns whether the Scroll Lock modifer is locked.
+ *
+ * Returns: %TRUE if Scroll Lock is on
+ *
+ * Since: 3.18
+ */
+gboolean
+gdk_keymap_get_scroll_lock_state (GdkKeymap *keymap)
+{
+  g_return_val_if_fail (GDK_IS_KEYMAP (keymap), FALSE);
+
+  return GDK_KEYMAP_GET_CLASS (keymap)->get_scroll_lock_state (keymap);
+}
+
+/**
  * gdk_keymap_get_modifier_state:
  * @keymap: a #GdkKeymap
  *

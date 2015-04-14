@@ -524,6 +524,13 @@ gdk_quartz_keymap_get_num_lock_state (GdkKeymap *keymap)
 }
 
 static gboolean
+gdk_quartz_keymap_get_scroll_lock_state (GdkKeymap *keymap)
+{
+  /* FIXME: Implement this. */
+  return FALSE;
+}
+
+static gboolean
 gdk_quartz_keymap_get_entries_for_keyval (GdkKeymap     *keymap,
                                           guint          keyval,
                                           GdkKeymapKey **keys,
@@ -864,6 +871,7 @@ gdk_quartz_keymap_class_init (GdkQuartzKeymapClass *klass)
   keymap_class->have_bidi_layouts = gdk_quartz_keymap_have_bidi_layouts;
   keymap_class->get_caps_lock_state = gdk_quartz_keymap_get_caps_lock_state;
   keymap_class->get_num_lock_state = gdk_quartz_keymap_get_num_lock_state;
+  keymap_class->get_scroll_lock_state = gdk_quartz_keymap_get_scroll_lock_state;
   keymap_class->get_entries_for_keyval = gdk_quartz_keymap_get_entries_for_keyval;
   keymap_class->get_entries_for_keycode = gdk_quartz_keymap_get_entries_for_keycode;
   keymap_class->lookup_key = gdk_quartz_keymap_lookup_key;

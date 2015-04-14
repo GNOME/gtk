@@ -36,6 +36,7 @@ struct _GdkKeymapClass
   gboolean (* have_bidi_layouts)        (GdkKeymap *keymap);
   gboolean (* get_caps_lock_state)      (GdkKeymap *keymap);
   gboolean (* get_num_lock_state)       (GdkKeymap *keymap);
+  gboolean (* get_scroll_lock_state)    (GdkKeymap *keymap);
   gboolean (* get_entries_for_keyval)   (GdkKeymap     *keymap,
                                          guint          keyval,
                                          GdkKeymapKey **keys,

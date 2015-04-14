@@ -69,12 +69,14 @@ struct _GdkX11Keymap
   guint lock_keysym;
   GdkModifierType group_switch_mask;
   GdkModifierType num_lock_mask;
+  GdkModifierType scroll_lock_mask;
   GdkModifierType modmap[8];
   PangoDirection current_direction;
-  guint have_direction  : 1;
-  guint have_lock_state : 1;
-  guint caps_lock_state : 1;
-  guint num_lock_state  : 1;
+  guint have_direction    : 1;
+  guint have_lock_state   : 1;
+  guint caps_lock_state   : 1;
+  guint num_lock_state    : 1;
+  guint scroll_lock_state : 1;
   guint modifier_state;
   guint current_serial;
 
@@ -113,6 +115,7 @@ gdk_x11_keymap_init (GdkX11Keymap *keymap)
   keymap->mod_keymap = NULL;
 
   keymap->num_lock_mask = 0;
+  keymap->scroll_lock_mask = 0;
   keymap->group_switch_mask = 0;
   keymap->lock_keysym = GDK_KEY_Caps_Lock;
   keymap->have_direction = FALSE;
@@ -230,6 +233,10 @@ get_xkb (GdkX11Keymap *keymap_x11)
 
   if (keymap_x11->num_lock_mask == 0)
     keymap_x11->num_lock_mask = XkbKeysymToModifiers (KEYMAP_XDISPLAY (GDK_KEYMAP (keymap_x11)), GDK_KEY_Num_Lock);
+
+  if (keymap_x11->scroll_lock_mask == 0)
+    keymap_x11->scroll_lock_mask = XkbKeysymToModifiers (KEYMAP_XDISPLAY (GDK_KEYMAP (keymap_x11)), GDK_KEY_Scroll_Lock);
+
 
   return keymap_x11->xkb_desc;
 }
@@ -353,6 +360,7 @@ update_keymaps (GdkX11Keymap *keymap_x11)
       keymap_x11->lock_keysym = GDK_KEY_VoidSymbol;
       keymap_x11->group_switch_mask = 0;
       keymap_x11->num_lock_mask = 0;
+      keymap_x11->scroll_lock_mask = 0;
 
       for (i = 0; i < 8; i++)
         keymap_x11->modmap[i] = 1 << i;
@@ -426,7 +434,7 @@ update_keymaps (GdkX11Keymap *keymap_x11)
               break;
 
             default:
-              /* Find the Mode_Switch and Num_Lock modifiers. */
+              /* Find the Mode_Switch, Num_Lock and Scroll_Lock modifiers. */
               for (j = 0; j < keymap_x11->keysyms_per_keycode; j++)
                 {
                   if (syms[j] == GDK_KEY_Mode_switch)
@@ -438,6 +446,11 @@ update_keymaps (GdkX11Keymap *keymap_x11)
                     {
                       /* This modifier is used for Num_Lock */
                       keymap_x11->num_lock_mask |= mask;
+                    }
+                  else if (syms[j] == GDK_KEY_Scroll_Lock)
+                    {
+                      /* This modifier is used for Scroll_Lock */
+                      keymap_x11->scroll_lock_mask |= mask;
                     }
                 }
               break;
@@ -594,6 +607,7 @@ update_lock_state (GdkX11Keymap *keymap_x11,
   gboolean have_lock_state;
   gboolean caps_lock_state;
   gboolean num_lock_state;
+  gboolean scroll_lock_state;
   guint modifier_state;
 
   /* ensure keymap_x11->num_lock_mask is initialized */
@@ -602,17 +616,20 @@ update_lock_state (GdkX11Keymap *keymap_x11,
   have_lock_state = keymap_x11->have_lock_state;
   caps_lock_state = keymap_x11->caps_lock_state;
   num_lock_state = keymap_x11->num_lock_state;
+  scroll_lock_state = keymap_x11->scroll_lock_state;
   modifier_state = keymap_x11->modifier_state;
 
   keymap_x11->have_lock_state = TRUE;
   keymap_x11->caps_lock_state = (locked_mods & GDK_LOCK_MASK) != 0;
   keymap_x11->num_lock_state = (locked_mods & keymap_x11->num_lock_mask) != 0;
+  keymap_x11->scroll_lock_state = (locked_mods & keymap_x11->scroll_lock_mask) != 0;
   /* FIXME: sanitize this */
   keymap_x11->modifier_state = (guint)effective_mods;
 
   return !have_lock_state
          || (caps_lock_state != keymap_x11->caps_lock_state)
          || (num_lock_state != keymap_x11->num_lock_state)
+         || (scroll_lock_state != keymap_x11->scroll_lock_state)
          || (modifier_state != keymap_x11->modifier_state);
 }
 
@@ -745,6 +762,16 @@ gdk_x11_keymap_get_num_lock_state (GdkKeymap *keymap)
   ensure_lock_state (keymap);
 
   return keymap_x11->num_lock_state;
+}
+
+static gboolean
+gdk_x11_keymap_get_scroll_lock_state (GdkKeymap *keymap)
+{
+  GdkX11Keymap *keymap_x11 = GDK_X11_KEYMAP (keymap);
+
+  ensure_lock_state (keymap);
+
+  return keymap_x11->scroll_lock_state;
 }
 
 static guint
@@ -1556,6 +1583,7 @@ gdk_x11_keymap_class_init (GdkX11KeymapClass *klass)
   keymap_class->have_bidi_layouts = gdk_x11_keymap_have_bidi_layouts;
   keymap_class->get_caps_lock_state = gdk_x11_keymap_get_caps_lock_state;
   keymap_class->get_num_lock_state = gdk_x11_keymap_get_num_lock_state;
+  keymap_class->get_scroll_lock_state = gdk_x11_keymap_get_scroll_lock_state;
   keymap_class->get_modifier_state = gdk_x11_keymap_get_modifier_state;
   keymap_class->get_entries_for_keyval = gdk_x11_keymap_get_entries_for_keyval;
   keymap_class->get_entries_for_keycode = gdk_x11_keymap_get_entries_for_keycode;
