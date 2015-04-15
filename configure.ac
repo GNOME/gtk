@@ -474,6 +474,7 @@ if test "$enable_mir_backend" = "yes"; then
   GDK_WINDOWING="$GDK_WINDOWING
 #define GDK_WINDOWING_MIR"
   MIR_PACKAGES="$MIR_DEPENDENCIES"
+  have_gio_unix=yes
 
   AM_CONDITIONAL(USE_MIR, true)
 else
