@@ -74,7 +74,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="imm32.lib winmm.lib ws2_32.lib"
+				AdditionalDependencies="imm32.lib winmm.lib ws2_32.lib dwmapi.lib"
 				OutputFile="$(OutDir)\$(GtkDllPrefix)$(ProjectName)$(GtkDllSuffix).dll"
 				LinkIncremental="1"
 				GenerateDebugInformation="true"
@@ -136,7 +136,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="imm32.lib winmm.lib ws2_32.lib"
+				AdditionalDependencies="imm32.lib winmm.lib ws2_32.lib dwmapi.lib"
 				OutputFile="$(OutDir)\$(GtkDllPrefix)$(ProjectName)$(GtkDllSuffix).dll"
 				LinkIncremental="1"
 				GenerateDebugInformation="true"
@@ -202,7 +202,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="imm32.lib winmm.lib ws2_32.lib"
+				AdditionalDependencies="imm32.lib winmm.lib ws2_32.lib dwmapi.lib"
 				OutputFile="$(OutDir)\$(GtkDllPrefix)$(ProjectName)$(GtkDllSuffix).dll"
 				LinkIncremental="1"
 				GenerateDebugInformation="true"
@@ -264,7 +264,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="imm32.lib winmm.lib ws2_32.lib"
+				AdditionalDependencies="imm32.lib winmm.lib ws2_32.lib dwmapi.lib"
 				OutputFile="$(OutDir)\$(GtkDllPrefix)$(ProjectName)$(GtkDllSuffix).dll"
 				LinkIncremental="1"
 				GenerateDebugInformation="true"

@@ -21,6 +21,8 @@
 #include "gdkscreenprivate.h"
 #include "gdkwin32screen.h"
 
+#include <dwmapi.h>
+
 struct _GdkWin32Screen
 {
   GdkScreen parent_instance;
@@ -195,9 +197,18 @@ gdk_win32_screen_get_window_stack (GdkScreen *screen)
 static gboolean
 gdk_win32_screen_is_composited (GdkScreen *screen)
 {
+  gboolean is_composited;
   g_return_val_if_fail (GDK_IS_SCREEN (screen), FALSE);
 
-  return FALSE;
+  /* On Windows 8 and later, DWM (composition) is always enabled */
+  if (_is_win8_or_later)
+    return TRUE;
+  else
+    {
+      if (DwmIsCompositionEnabled (&is_composited) != S_OK)
+        return FALSE;
+      return is_composited;
+    }
 }
 
 static void

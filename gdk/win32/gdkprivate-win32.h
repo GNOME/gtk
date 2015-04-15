@@ -508,4 +508,6 @@ void _gdk_events_init (void);
 void _gdk_input_init  (GdkDisplay *display);
 void _gdk_input_wintab_init_check (GdkDeviceManager *device_manager);
 
+extern gboolean _is_win8_or_later;
+
 #endif /* __GDK_PRIVATE_WIN32_H__ */

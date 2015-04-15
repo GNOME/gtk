@@ -130,6 +130,7 @@ _gdk_win32_windowing_init (void)
   _cf_url = RegisterClipboardFormat ("UniformResourceLocatorW");
   _cf_html_format = RegisterClipboardFormat ("HTML Format");
   _cf_text_html = RegisterClipboardFormat ("text/html");
+  _is_win8_or_later = g_win32_check_windows_version (6, 2, 0, G_WIN32_OS_ANY);
 
   _gdk_win32_selection_init ();
 }
