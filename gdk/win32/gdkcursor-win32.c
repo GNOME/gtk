@@ -821,22 +821,7 @@ _gdk_win32_pixbuf_to_hcursor (GdkPixbuf *pixbuf,
 gboolean
 _gdk_win32_pixbuf_to_hicon_supports_alpha (void)
 {
-  static gboolean is_win_xp=FALSE, is_win_xp_checked=FALSE;
-
-  if (!is_win_xp_checked)
-    {
-      OSVERSIONINFO version;
-
-      is_win_xp_checked = TRUE;
-
-      memset (&version, 0, sizeof (version));
-      version.dwOSVersionInfoSize = sizeof (version);
-      is_win_xp = GetVersionEx (&version)
-	&& version.dwPlatformId == VER_PLATFORM_WIN32_NT
-	&& (version.dwMajorVersion > 5
-	    || (version.dwMajorVersion == 5 && version.dwMinorVersion >= 1));
-    }
-  return is_win_xp;
+  return TRUE;
 }
 
 HICON
