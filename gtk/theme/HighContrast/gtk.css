@@ -1594,7 +1594,7 @@ GtkTreeView.view.progressbar {
     border: none; }
   .scrollbar.slider {
     border-radius: 20px;
-    border: 5px solid rgba(127, 127, 127, 0.01);
+    border: 5px solid transparent;
     background-color: #7f7f7f; }
     .scrollbar.slider:backdrop, .scrollbar.slider:insensitive {
       background-color: #e5e5e5; }

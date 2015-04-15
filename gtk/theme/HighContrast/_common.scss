@@ -1380,7 +1380,7 @@ GtkTreeView.view.progressbar { //Progressbar in treeview cells
   &.trough { @extend .scrollbars-junction; }
   &.slider {
     border-radius: 20px;
-    border: 5px solid transparentize(mix($bg_color, $fg_color, 50%),0.99); //margin :/
+    border: 5px solid transparent; //margin
     background-color: mix($bg_color, $fg_color, 50%);
     &:backdrop, &:insensitive {
       background-color: mix($bg_color, $fg_color, 90%);
