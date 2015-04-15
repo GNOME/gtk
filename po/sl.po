@@ -12,7 +12,7 @@ msgstr ""
 "Project-Id-Version: gtk+ master\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2015-04-11 09:17+0000\n"
-"PO-Revision-Date: 2015-04-11 20:05+0100\n"
+"PO-Revision-Date: 2015-04-15 22:00+0100\n"
 "Last-Translator: Matej Urbančič <mateju@svn.gnome.org>\n"
 "Language-Team: Slovenian GNOME Translation Team <gnome-si@googlegroups.com>\n"
 "Language: sl_SI\n"
@@ -1180,7 +1180,6 @@ msgstr ""
 "vlečenjem na drug vzorec."
 
 #: gtk/deprecated/gtkcolorsel.c:1076
-#, fuzzy
 msgid ""
 "The color you’ve chosen. You can drag this color to a palette entry to save "
 "it for use in the future."
@@ -1189,7 +1188,6 @@ msgstr ""
 "kasnejšo uporabo."
 
 #: gtk/deprecated/gtkcolorsel.c:1082
-#, fuzzy
 msgid ""
 "The previously-selected color, for comparison to the color you’re selecting "
 "now."
@@ -1204,14 +1202,13 @@ msgid "_Save color here"
 msgstr "_Shrani barvo sem"
 
 #: gtk/deprecated/gtkcolorsel.c:1694
-#, fuzzy
 msgid ""
 "Click this palette entry to make it the current color. To change this entry, "
 "drag a color swatch here or right-click it and select “Save color here.”"
 msgstr ""
-"Kliknite na ta vnos palete, da postane trenutna barva. Za spremembo tega "
-"vnosa potegnite sem drugo barvo ali kliknite z desnim gumbom in izberite "
-"\"Shrani barvo sem.\""
+"Kliknite na ta vnos palete za izbor trenutne barva. Za spreminjanje tega "
+"vnosa potegnite na to mesto drugo barvo ali kliknite z desnim gumbom miške "
+"in izberite \"Shrani barvo.\""
 
 #: gtk/deprecated/gtkcolorseldialog.c:191 gtk/deprecated/gtkfontsel.c:1689
 #: gtk/gtkfilechooserbutton.c:794 gtk/gtkfilechooserwidget.c:5356
@@ -2371,9 +2368,8 @@ msgid "None"
 msgstr "Noben"
 
 #: gtk/gtkglarea.c:303
-#, fuzzy
 msgid "OpenGL context creation failed"
-msgstr "Ustvarjanje mape ni uspelo. Vzrok: %s"
+msgstr "Ustvarjanje vsebine OpenGL je spodletelo"
 
 #: gtk/gtkheaderbar.c:414
 msgid "Application menu"
@@ -3469,7 +3465,6 @@ msgstr ""
 "nastavitev GTK+. Neustrezna raba lahko povzroči nedelovanje okolja."
 
 #: gtk/gtkwindow.c:11920
-#, fuzzy
 msgid "Don't show this message again"
 msgstr "Sporočila ne pokaži več"
 
@@ -3624,9 +3619,8 @@ msgid "Address"
 msgstr "Naslov"
 
 #: gtk/inspector/misc-info.ui:76
-#, fuzzy
 msgid "Reference count"
-msgstr "<b>Števec podrejenih procesov</b>"
+msgstr "Števec sklicev"
 
 #: gtk/inspector/misc-info.ui:144
 msgid "Buildable ID"
@@ -3648,23 +3642,20 @@ msgid "Focus Widget"
 msgstr "Gradnik žarišča"
 
 #: gtk/inspector/misc-info.ui:266
-#, fuzzy
 msgid "Mnemonic Label"
-msgstr "oznaka pospeševalnika"
+msgstr "Oznaka pomagala"
 
 #: gtk/inspector/misc-info.ui:301
 msgid "Allocated size"
 msgstr "Dodeljena velikost"
 
 #: gtk/inspector/misc-info.ui:335
-#, fuzzy
 msgid "Clip area"
-msgstr "risalna površina"
+msgstr "Površina predmeta"
 
 #: gtk/inspector/misc-info.ui:369
-#, fuzzy
 msgid "Tick callback"
-msgstr "Povratni telefon"
+msgstr "Označi povratni sklic"
 
 #: gtk/inspector/misc-info.ui:405
 msgid "Frame count"
@@ -3695,9 +3686,8 @@ msgid "Realized"
 msgstr "Realizirano"
 
 #: gtk/inspector/misc-info.ui:647
-#, fuzzy
 msgid "Is Toplevel"
-msgstr "Plavajoča vrhnja raven"
+msgstr "Je vrhnja raven"
 
 #: gtk/inspector/misc-info.ui:683
 msgid "Child Visible"
