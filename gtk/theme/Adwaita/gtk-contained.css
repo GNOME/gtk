@@ -1316,10 +1316,10 @@ GtkComboBox.combobox-entry .titlebar .button.titlebutton,
 GtkColorButton.button, .header-bar GtkColorButton.button.titlebutton,
 .titlebar GtkColorButton.button.titlebutton {
   padding: 5px; }
-  GtkColorButton.button GtkColorSwatch:only-child:first-child:last-child {
+  GtkColorButton.button GtkColorSwatch:first-child:last-child {
     border-radius: 0;
     box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.1), 0 1px white; }
-    GtkColorButton.button GtkColorSwatch:only-child:first-child:last-child:insensitive, GtkColorButton.button GtkColorSwatch:only-child:first-child:last-child:backdrop {
+    GtkColorButton.button GtkColorSwatch:first-child:last-child:insensitive, GtkColorButton.button GtkColorSwatch:first-child:last-child:backdrop {
       box-shadow: none; }
 
 /*********

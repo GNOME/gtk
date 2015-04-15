@@ -816,7 +816,8 @@ $_dot_color: if($variant=='light', $selected_bg_color,
 GtkColorButton.button {
   padding: 5px; // Uniform padding on the GtkColorButton
 
-  GtkColorSwatch:only-child:first-child:last-child { //*-child mess needed since we get overridden by the colorpicker selectors
+  GtkColorSwatch:first-child:last-child { // :first-child:last-child for a specificity bump, it gets overridden by the 
+                                          // colorpicker style, otherwise
     border-radius: 0;
     box-shadow: inset 0 1px 1px transparentize(black, 0.9),
                 _widget_edge();
