@@ -1316,13 +1316,10 @@ GtkComboBox.combobox-entry .titlebar .button.titlebutton,
 GtkColorButton.button, .header-bar GtkColorButton.button.titlebutton,
 .titlebar GtkColorButton.button.titlebutton {
   padding: 5px; }
-  GtkColorButton.button GtkColorSwatch, .header-bar GtkColorButton.button.titlebutton GtkColorSwatch,
-  .titlebar GtkColorButton.button.titlebutton GtkColorSwatch {
+  GtkColorButton.button GtkColorSwatch:only-child:first-child:last-child {
     border-radius: 0;
     box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.1), 0 1px rgba(238, 238, 236, 0.1); }
-    GtkColorButton.button GtkColorSwatch:insensitive, .header-bar GtkColorButton.button.titlebutton GtkColorSwatch:insensitive,
-    .titlebar GtkColorButton.button.titlebutton GtkColorSwatch:insensitive, GtkColorButton.button GtkColorSwatch:backdrop, .header-bar GtkColorButton.button.titlebutton GtkColorSwatch:backdrop,
-    .titlebar GtkColorButton.button.titlebutton GtkColorSwatch:backdrop {
+    GtkColorButton.button GtkColorSwatch:only-child:first-child:last-child:insensitive, GtkColorButton.button GtkColorSwatch:only-child:first-child:last-child:backdrop {
       box-shadow: none; }
 
 /*********
@@ -4250,13 +4247,13 @@ GtkColorSwatch {
   GtkColorSwatch.bottom {
     border-bottom-left-radius: 5px;
     border-bottom-right-radius: 5px; }
-  GtkColorSwatch.left, GtkColorSwatch:first-child, GtkColorSwatch:first-child .overlay {
+  GtkColorSwatch.left, GtkColorSwatch:first-child:not(.overlay), GtkColorSwatch:first-child:not(.top) > .overlay {
     border-top-left-radius: 5px;
     border-bottom-left-radius: 5px; }
-  GtkColorSwatch.right, GtkColorSwatch:last-child, GtkColorSwatch:last-child .overlay {
+  GtkColorSwatch.right, GtkColorSwatch:last-child:not(.overlay), GtkColorSwatch:last-child:not(.bottom) > .overlay {
     border-top-right-radius: 5px;
     border-bottom-right-radius: 5px; }
-  GtkColorSwatch:only-child, GtkColorSwatch:only-child .overlay {
+  GtkColorSwatch:only-child:not(.overlay), GtkColorSwatch:only-child > .overlay {
     border-radius: 5px; }
   GtkColorSwatch:hover, GtkColorSwatch:hover:selected {
     background-image: linear-gradient(135deg, rgba(255, 255, 255, 0.7), rgba(255, 255, 255, 0) 50%);

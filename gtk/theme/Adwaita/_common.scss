@@ -812,9 +812,11 @@ $_dot_color: if($variant=='light', $selected_bg_color,
   }
 }
 
+
 GtkColorButton.button {
   padding: 5px; // Uniform padding on the GtkColorButton
-  GtkColorSwatch {
+
+  GtkColorSwatch:only-child:first-child:last-child { //*-child mess needed since we get overridden by the colorpicker selectors
     border-radius: 0;
     box-shadow: inset 0 1px 1px transparentize(black, 0.9),
                 _widget_edge();
@@ -3090,7 +3092,7 @@ GtkInfoBar {
 
 GtkColorSwatch {
   // This widget is made of two boxes one on top of the other, the lower box is GtkColorSwatch {} the other one
-  // is GtkColorSwatch .overlay {}, GtkColorSwatch has the programmatically set background, so most of the style
+  // is GtkColorSwatch > .overlay {}, GtkColorSwatch has the programmatically set background, so most of the style
   // is applied to the overlay box.
 
   $_colorswatch_shadow: inset 0 1px transparentize(black, 0.9), _widget_edge();
@@ -3117,18 +3119,18 @@ GtkColorSwatch {
     border-bottom-left-radius: 5px;
     border-bottom-right-radius: 5px;
   }
-  &.left, &:first-child, &:first-child .overlay {
+  &.left, &:first-child:not(.overlay), &:first-child:not(.top) > .overlay {
     border-top-left-radius: 5px;
     border-bottom-left-radius: 5px;
   }
-  &.right, &:last-child, &:last-child .overlay {
+  &.right, &:last-child:not(.overlay), &:last-child:not(.bottom) > .overlay {
     border-top-right-radius: 5px;
     border-bottom-right-radius: 5px;
   }
-  &:only-child, &:only-child .overlay {
-    border-radius: 5px;
-  }
-  // nth-child works just on the custom colors row
+  &:only-child:not(.overlay), &:only-child > .overlay { border-radius: 5px; }
+  // nth-child is used for the custom colors row.
+  // the :not() madness is needed since actually the overlay is selectable by GtkColorSwatch > .overlay
+  // and GtkColorSwatch.overlay, I know it's weird, but this is gtk+.
 
   // hover effect
   &:hover,
