@@ -4027,10 +4027,18 @@ GtkPlacesSidebar.sidebar .view {
       color: #e8eef5; }
       GtkPlacesSidebar.sidebar .view .image:selected:backdrop {
         color: #e8eef5; }
+    GtkPlacesSidebar.sidebar .view .image:insensitive {
+      color: #7b7f7f; }
     GtkPlacesSidebar.sidebar .view .image:backdrop {
       color: #7b7f7f; }
+      GtkPlacesSidebar.sidebar .view .image:backdrop:insensitive {
+        color: #555e5e; }
+  GtkPlacesSidebar.sidebar .view:insensitive {
+    color: #939695; }
   GtkPlacesSidebar.sidebar .view:backdrop {
     color: #939695; }
+    GtkPlacesSidebar.sidebar .view:backdrop:insensitive {
+      color: #5d6767; }
 
 .sidebar-item {
   padding: 10px 4px; }

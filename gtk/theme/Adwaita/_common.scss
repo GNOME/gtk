@@ -2935,10 +2935,22 @@ GtkPlacesSidebar.sidebar .view {
       &:backdrop { color: mix($backdrop_selected_fg_color, $selected_bg_color, 90%); }
     }
 
-    &:backdrop { color: mix($backdrop_fg_color, $sidebar_bg_color, 70%); }
+    &:insensitive { color: mix($insensitive_fg_color, $sidebar_bg_color, 70%); }
+
+    &:backdrop {
+      color: mix($backdrop_fg_color, $sidebar_bg_color, 70%);
+
+      &:insensitive { color: mix($backdrop_insensitive_color, $sidebar_bg_color, 70%); }
+    }
   }
 
-  &:backdrop { color: $backdrop_fg_color; }
+  &:insensitive { color: $insensitive_fg_color; }
+
+  &:backdrop {
+    color: $backdrop_fg_color;
+
+    &:insensitive { color: $backdrop_insensitive_color; }
+  }
 
   &:selected {
     @extend %selected_items;
