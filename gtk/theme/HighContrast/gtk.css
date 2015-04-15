@@ -2543,63 +2543,82 @@ GtkInfoBar {
  * Color Chooser *
  *****************/
 GtkColorSwatch {
-  border: 1px solid rgba(0, 0, 0, 0.3);
-  box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.2); }
-  GtkColorSwatch.color-light {
-    color: black;
-    outline-color: rgba(0, 0, 0, 0.3); }
-    GtkColorSwatch.color-light:hover {
-      background-image: linear-gradient(to bottom, rgba(255, 255, 255, 0) 40%, rgba(255, 255, 255, 0.4)); }
-      GtkColorSwatch.color-light:hover:backdrop {
-        background-image: none; }
-  GtkColorSwatch.color-dark {
-    color: white;
-    outline-color: rgba(255, 255, 255, 0.5); }
-    GtkColorSwatch.color-dark:hover {
-      background-image: linear-gradient(to bottom, rgba(255, 255, 255, 0) 40%, rgba(255, 255, 255, 0.2)); }
-      GtkColorSwatch.color-dark:hover:backdrop {
-        background-image: none; }
-  GtkColorSwatch:hover {
-    border-color: rgba(0, 0, 0, 0.5); }
-  GtkColorSwatch:backdrop {
-    border-color: rgba(0, 0, 0, 0.2);
+  box-shadow: inset 0 1px rgba(0, 0, 0, 0.1), _widget_edge(); }
+  :selected GtkColorSwatch {
     box-shadow: none; }
+    :selected GtkColorSwatch.overlay, :selected GtkColorSwatch.overlay:hover {
+      border-color: #fff; }
+  GtkColorSwatch:selected {
+    box-shadow: inset 0 1px rgba(0, 0, 0, 0.1), _widget_edge(); }
   GtkColorSwatch.top {
     border-top-left-radius: 5px;
     border-top-right-radius: 5px; }
   GtkColorSwatch.bottom {
     border-bottom-left-radius: 5px;
     border-bottom-right-radius: 5px; }
-  GtkColorSwatch.left, GtkColorSwatch:first-child {
+  GtkColorSwatch.left, GtkColorSwatch:first-child:not(.overlay), GtkColorSwatch:first-child:not(.top) > .overlay {
     border-top-left-radius: 5px;
     border-bottom-left-radius: 5px; }
-  GtkColorSwatch.right, GtkColorSwatch:last-child {
+  GtkColorSwatch.right, GtkColorSwatch:last-child:not(.overlay), GtkColorSwatch:last-child:not(.bottom) > .overlay {
     border-top-right-radius: 5px;
     border-bottom-right-radius: 5px; }
-  GtkColorSwatch:only-child {
+  GtkColorSwatch:only-child:not(.overlay), GtkColorSwatch:only-child > .overlay {
     border-radius: 5px; }
-  GtkColorSwatch.color-active-badge {
-    border-width: 2px; }
-    GtkColorSwatch.color-active-badge:hover {
+  GtkColorSwatch:hover, GtkColorSwatch:hover:selected {
+    background-image: linear-gradient(135deg, rgba(255, 255, 255, 0.7), rgba(255, 255, 255, 0) 50%);
+    box-shadow: inset 0 1px rgba(255, 255, 255, 0.4), inset 0 -1px rgba(0, 0, 0, 0.4); }
+  GtkColorSwatch:backdrop, GtkColorSwatch:backdrop:selected {
+    background-image: none;
+    box-shadow: none; }
+  GtkColorEditor GtkColorSwatch {
+    border-radius: 3px; }
+    GtkColorEditor GtkColorSwatch:hover {
+      background-image: none;
+      box-shadow: inset 0 1px rgba(0, 0, 0, 0.1), _widget_edge(); }
+    GtkColorEditor GtkColorSwatch:backdrop {
+      box-shadow: none; }
+  GtkColorSwatch.color-dark {
+    color: white;
+    outline-color: rgba(0, 0, 0, 0.3); }
+    GtkColorSwatch.color-dark:backdrop {
+      color: rgba(255, 255, 255, 0.3); }
+  GtkColorSwatch.color-light {
+    color: black;
+    outline-color: rgba(255, 255, 255, 0.5); }
+    GtkColorSwatch.color-light:backdrop {
+      color: rgba(0, 0, 0, 0.3); }
+  GtkColorSwatch.overlay, GtkColorSwatch.overlay:selected {
+    border: 1px solid #7f7f7f; }
+    GtkColorSwatch.overlay:hover, GtkColorSwatch.overlay:selected:hover {
+      border-color: black; }
+  GtkColorSwatch#add-color-button {
+    border-style: solid;
+    border-width: 1px;
+    border-width: 2px;
+    border-style: solid;
+    color: #000;
+    background-image: none;
+    background-color: #fff;
+    border-color: #7f7f7f; }
+    GtkColorSwatch#add-color-button:hover {
+      border-width: 2px;
+      border-style: solid;
+      color: #000;
+      background-color: #fff;
+      border-color: #7f7f7f;
       background-image: none; }
-    GtkColorSwatch.color-active-badge.color-light, GtkColorSwatch.color-active-badge.color-light:hover {
-      color: rgba(0, 0, 0, 0.3);
-      border-color: rgba(0, 0, 0, 0.3); }
-    GtkColorSwatch.color-active-badge.color-dark, GtkColorSwatch.color-active-badge.color-dark:hover {
-      color: rgba(255, 255, 255, 0.5);
-      border-color: rgba(255, 255, 255, 0.5); }
-
-GtkColorChooserWidget #add-color-button {
-  border-color: #bfbfbf;
-  background-color: #bfbfbf;
-  color: #fff;
-  box-shadow: none; }
-  GtkColorChooserWidget #add-color-button:hover {
-    border-color: #7f7f7f;
-    background-color: #7f7f7f; }
-  GtkColorChooserWidget #add-color-button:backdrop {
-    border-color: #c5c5c5;
-    background-color: #c5c5c5; }
+    GtkColorSwatch#add-color-button:backdrop {
+      border-width: 2px;
+      border-style: solid;
+      color: #000;
+      background-color: #fff;
+      border-color: #8b8b8b;
+      background-image: none;
+      text-shadow: none;
+      icon-shadow: none; }
+    GtkColorSwatch#add-color-button .overlay {
+      border-width: 2px;
+      border-style: solid; }
 
 /**********************
  * Window Decorations *
