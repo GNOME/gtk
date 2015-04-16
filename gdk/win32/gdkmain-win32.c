@@ -980,6 +980,7 @@ _gdk_win32_message_to_string (UINT msg)
       CASE (WM_MBUTTONUP);
       CASE (WM_MBUTTONDBLCLK);
       CASE (WM_MOUSEWHEEL);
+      CASE (WM_MOUSEHWHEEL);
       CASE (WM_XBUTTONDOWN);
       CASE (WM_XBUTTONUP);
       CASE (WM_XBUTTONDBLCLK);

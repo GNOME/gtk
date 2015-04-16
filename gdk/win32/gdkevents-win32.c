@@ -2663,6 +2663,7 @@ gdk_event_translate (MSG  *msg,
       break;
 
     case WM_MOUSEWHEEL:
+    case WM_MOUSEHWHEEL:
       GDK_NOTE (EVENTS, g_print (" %d", (short) HIWORD (msg->wParam)));
 
       /* WM_MOUSEWHEEL is delivered to the focus window. Work around
@@ -2713,8 +2714,13 @@ gdk_event_translate (MSG  *msg,
 
       event = gdk_event_new (GDK_SCROLL);
       event->scroll.window = window;
-      event->scroll.direction = (((short) HIWORD (msg->wParam)) > 0) ?
-	GDK_SCROLL_UP : GDK_SCROLL_DOWN;
+
+      if (msg->message == WM_MOUSEWHEEL)
+	  event->scroll.direction = (((short) HIWORD (msg->wParam)) > 0) ?
+	    GDK_SCROLL_UP : GDK_SCROLL_DOWN;
+      else if (msg->message == WM_MOUSEHWHEEL)
+	  event->scroll.direction = (((short) HIWORD (msg->wParam)) > 0) ?
+	    GDK_SCROLL_RIGHT : GDK_SCROLL_LEFT;
       event->scroll.time = _gdk_win32_get_next_tick (msg->time);
       event->scroll.x = (gint16) point.x;
       event->scroll.y = (gint16) point.y;
