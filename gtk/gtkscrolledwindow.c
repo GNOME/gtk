@@ -1109,7 +1109,7 @@ captured_event_cb (GtkWidget *widget,
        */
       if (event->scroll.direction != GDK_SCROLL_SMOOTH ||
           (gdk_event_get_scroll_deltas (event, &dx, &dy) &&
-           ((int) dx != 0 || (int) dy != 0)))
+           (dx != 0 || dy != 0)))
         gtk_scrolled_window_cancel_deceleration (sw);
 
       return GDK_EVENT_PROPAGATE;
