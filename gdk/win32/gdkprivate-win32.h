@@ -90,6 +90,9 @@
 #ifndef WM_APPCOMMAND
 #define WM_APPCOMMAND 0x319
 #endif
+#ifndef WM_MOUSEHWHEEL
+#define WM_MOUSEHWHEEL 0x20E
+#endif
 
 #ifndef CF_DIBV5
 #define CF_DIBV5 17
