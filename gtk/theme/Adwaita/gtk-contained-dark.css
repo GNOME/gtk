@@ -3992,10 +3992,12 @@ GtkCalendar {
     border-right-style: none;
     border-bottom-style: none; }
   .message-dialog.csd .dialog-action-area .button:last-child {
-    border-bottom-right-radius: 7px; }
+    border-bottom-right-radius: 7px;
+    outline-bottom-right-radius: 5px; }
   .message-dialog.csd .dialog-action-area .button:first-child {
     border-left-style: none;
-    border-bottom-left-radius: 7px; }
+    border-bottom-left-radius: 7px;
+    outline-bottom-left-radius: 5px; }
 
 GtkFileChooserDialog .search-bar {
   background-color: #292929;
