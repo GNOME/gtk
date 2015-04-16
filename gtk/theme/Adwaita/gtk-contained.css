@@ -4410,23 +4410,40 @@ GtkColorSwatch {
   GtkColorSwatch:selected {
     box-shadow: inset 0 1px rgba(0, 0, 0, 0.1), 0 1px white; }
   GtkColorSwatch.top {
+    border-top-left-radius: 6px;
+    border-top-right-radius: 6px; }
+  GtkColorSwatch.bottom {
+    border-bottom-left-radius: 6px;
+    border-bottom-right-radius: 6px; }
+  GtkColorSwatch.left, GtkColorSwatch:first-child:not(.overlay):not(.top) {
+    border-top-left-radius: 6px;
+    border-bottom-left-radius: 6px; }
+  GtkColorSwatch.right, GtkColorSwatch:last-child:not(.overlay):not(.bottom) {
+    border-top-right-radius: 6px;
+    border-bottom-right-radius: 6px; }
+  GtkColorSwatch:only-child:not(.overlay) {
+    border-radius: 6px; }
+  GtkColorSwatch.top > .overlay {
     border-top-left-radius: 5px;
     border-top-right-radius: 5px; }
-  GtkColorSwatch.bottom {
+  GtkColorSwatch.bottom > .overlay {
     border-bottom-left-radius: 5px;
     border-bottom-right-radius: 5px; }
-  GtkColorSwatch.left, GtkColorSwatch:first-child:not(.overlay), GtkColorSwatch:first-child:not(.top) > .overlay {
+  GtkColorSwatch:first-child:not(.top) > .overlay {
     border-top-left-radius: 5px;
     border-bottom-left-radius: 5px; }
-  GtkColorSwatch.right, GtkColorSwatch:last-child:not(.overlay), GtkColorSwatch:last-child:not(.bottom) > .overlay {
+  GtkColorSwatch:last-child:not(.bottom) > .overlay {
     border-top-right-radius: 5px;
     border-bottom-right-radius: 5px; }
-  GtkColorSwatch:only-child:not(.overlay), GtkColorSwatch:only-child > .overlay {
+  GtkColorSwatch:only-child > .overlay {
     border-radius: 5px; }
   GtkColorSwatch:hover, GtkColorSwatch:hover:selected {
     background-image: linear-gradient(135deg, rgba(255, 255, 255, 0.7), rgba(255, 255, 255, 0) 50%);
     box-shadow: inset 0 1px rgba(255, 255, 255, 0.4), inset 0 -1px rgba(0, 0, 0, 0.1); }
-  GtkColorSwatch:backdrop, GtkColorSwatch:backdrop:selected {
+    GtkColorSwatch:hover.color-dark, GtkColorSwatch:hover:selected.color-dark {
+      background-image: linear-gradient(135deg, rgba(255, 255, 255, 0.5), rgba(255, 255, 255, 0) 50%); }
+  GtkColorSwatch:backdrop, GtkColorSwatch:backdrop:selected
+  GtkColorSwatch.color-dark:backdrop, GtkColorSwatch.color-dark:backdrop:selected {
     background-image: none;
     box-shadow: none; }
   GtkColorEditor GtkColorSwatch {
