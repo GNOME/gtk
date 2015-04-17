@@ -1896,7 +1896,7 @@ column-header.button.dnd { // for treeview-like derive widgets
 
   &.overlay-indicator {
     &:not(.dragging):not(.hovering) { // Overlay scrolling indicator
-      opacity: 0.3;
+      opacity: 0.4;
 
       -GtkRange-slider-width: 5px;
 
@@ -1942,9 +1942,9 @@ column-header.button.dnd { // for treeview-like derive widgets
 
   // slider coloring
   .slider {
-    background-color: mix($fg_color, $bg_color, 40%);
+    background-color: mix($fg_color, $bg_color, 60%);
 
-    &:hover { background-color: mix($fg_color, $bg_color, 60%); }
+    &:hover { background-color: mix($fg_color, $bg_color, 80%); }
 
     &:prelight:active { background-color: if($variant=='light', darken($selected_bg_color, 10%), lighten($selected_bg_color, 10%));}
 
