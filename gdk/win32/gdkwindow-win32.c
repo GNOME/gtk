@@ -375,8 +375,12 @@ RegisterGdkClass (GdkWindowType wtype, GdkWindowTypeHint wtype_hint)
             {
               wcl.lpszClassName = L"gdkWindowTempShadow";
               wcl.style |= CS_SAVEBITS;
-              wcl.style |= 0x00020000; /* CS_DROPSHADOW */
-
+              if (LOBYTE (g_win32_get_windows_version()) > 0x05 ||
+		  LOWORD (g_win32_get_windows_version()) == 0x0105)
+		{
+		  /* Windows XP (5.1) or above */
+		  wcl.style |= 0x00020000; /* CS_DROPSHADOW */
+		}
               ONCE_PER_CLASS ();
               klassTEMPSHADOW = RegisterClassExW (&wcl);
             }
