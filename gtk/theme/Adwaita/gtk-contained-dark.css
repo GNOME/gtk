@@ -2452,7 +2452,7 @@ column-header .titlebar .button.titlebutton,
   .titlebar .scrollbar .button.titlebutton {
     border: none; }
   .scrollbar.overlay-indicator:not(.dragging):not(.hovering) {
-    opacity: 0.3;
+    opacity: 0.4;
     -GtkRange-slider-width: 5px; }
     .scrollbar.overlay-indicator:not(.dragging):not(.hovering) .slider {
       margin: 0;
@@ -2477,9 +2477,9 @@ column-header .titlebar .button.titlebutton,
       background-color: #323737;
       border-color: #1e2222; }
   .scrollbar .slider {
-    background-color: #818584; }
+    background-color: #a5a8a6; }
     .scrollbar .slider:hover {
-      background-color: #a5a8a6; }
+      background-color: #c9cbc9; }
     .scrollbar .slider:prelight:active {
       background-color: #2a76c6; }
     .scrollbar .slider:backdrop {

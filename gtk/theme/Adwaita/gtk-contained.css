@@ -2458,7 +2458,7 @@ column-header .titlebar .button.titlebutton,
   .titlebar .scrollbar .button.titlebutton {
     border: none; }
   .scrollbar.overlay-indicator:not(.dragging):not(.hovering) {
-    opacity: 0.3;
+    opacity: 0.4;
     -GtkRange-slider-width: 5px; }
     .scrollbar.overlay-indicator:not(.dragging):not(.hovering) .slider {
       margin: 0;
@@ -2483,9 +2483,9 @@ column-header .titlebar .button.titlebutton,
       background-color: #e5e5e5;
       border-color: #a8a8a8; }
   .scrollbar .slider {
-    background-color: #a0a3a3; }
+    background-color: #7a7e7f; }
     .scrollbar .slider:hover {
-      background-color: #7a7e7f; }
+      background-color: #54595a; }
     .scrollbar .slider:prelight:active {
       background-color: #2a76c6; }
     .scrollbar .slider:backdrop {
