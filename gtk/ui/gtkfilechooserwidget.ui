@@ -388,6 +388,7 @@
           <object class="GtkEntry" id="new_folder_name_entry">
             <property name="visible">True</property>
             <property name="width-chars">25</property>
+            <property name="activates_default">True</property>
             <signal name="changed" handler="new_folder_name_changed"/>
           </object>
           <packing>
@@ -401,6 +402,7 @@
             <property name="sensitive">False</property>
             <property name="label" translatable="yes">_Create</property>
             <property name="use_underline">True</property>
+            <property name="can_default">True</property>
             <signal name="clicked" handler="new_folder_create_clicked"/>
             <style>
               <class name="suggested-action"/>

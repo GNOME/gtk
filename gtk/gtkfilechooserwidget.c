@@ -82,6 +82,7 @@
 #include "gtkmain.h"
 #include "gtkscrollable.h"
 #include "gtkadjustment.h"
+#include "gtkpopover.h"
 
 #include <cairo-gobject.h>
 #include <errno.h>
@@ -7588,6 +7589,8 @@ post_process_ui (GtkFileChooserWidget *impl)
    * that priv->icon_size be already setup.
    */
   set_icon_cell_renderer_fixed_size (impl);
+
+  gtk_popover_set_default_widget (GTK_POPOVER (impl->priv->new_folder_popover), impl->priv->new_folder_create_button);
 }
 
 static void

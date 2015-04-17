@@ -2650,6 +2650,7 @@ create_rename_popover (GtkPlacesSidebar *sidebar)
                 "column-spacing", 6,
                 NULL);
   entry = gtk_entry_new ();
+  gtk_entry_set_activates_default (GTK_ENTRY (entry), TRUE);
   g_signal_connect (entry, "changed", G_CALLBACK (rename_entry_changed), sidebar);
   str = g_strdup_printf ("<b>%s</b>", _("Name"));
   label = gtk_label_new (str);
@@ -2658,6 +2659,7 @@ create_rename_popover (GtkPlacesSidebar *sidebar)
   gtk_label_set_mnemonic_widget (GTK_LABEL (label), entry);
   g_free (str);
   button = gtk_button_new_with_mnemonic (_("_Rename"));
+  gtk_widget_set_can_default (button, TRUE);
   gtk_style_context_add_class (gtk_widget_get_style_context (button), "suggested-action");
   g_signal_connect (button, "clicked", G_CALLBACK (do_rename), sidebar);
   error = gtk_label_new ("");
@@ -2667,6 +2669,7 @@ create_rename_popover (GtkPlacesSidebar *sidebar)
   gtk_grid_attach (GTK_GRID (grid), button,1, 1, 1, 1);
   gtk_grid_attach (GTK_GRID (grid), error, 0, 2, 2, 1);
   gtk_widget_show_all (grid);
+  gtk_popover_set_default_widget (GTK_POPOVER (popover), button);
 
   sidebar->rename_popover = popover;
   sidebar->rename_entry = entry;
