@@ -270,7 +270,7 @@ typedef enum
  * @GTK_MESSAGE_WARNING: Non-fatal warning message
  * @GTK_MESSAGE_QUESTION: Question requiring a choice
  * @GTK_MESSAGE_ERROR: Fatal error message
- * @GTK_MESSAGE_OTHER: None of the above, doesn’t get an icon
+ * @GTK_MESSAGE_OTHER: None of the above
  *
  * The type of message being displayed in the dialog.
  */

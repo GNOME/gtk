@@ -580,9 +580,8 @@ gtk_message_dialog_get_property (GObject     *object,
  * @message_format: (allow-none): printf()-style format string, or %NULL
  * @...: arguments for @message_format
  *
- * Creates a new message dialog, which is a simple dialog with an icon
- * indicating the dialog type (error, warning, etc.) and some text the
- * user may want to see. When the user clicks a button a “response”
+ * Creates a new message dialog, which is a simple dialog with some text
+ * the user may want to see. When the user clicks a button a “response”
  * signal is emitted with response IDs from #GtkResponseType. See
  * #GtkDialog for more details.
  *
@@ -642,8 +641,7 @@ gtk_message_dialog_new (GtkWindow     *parent,
  * @message_format: (allow-none): printf()-style format string, or %NULL
  * @...: arguments for @message_format
  *
- * Creates a new message dialog, which is a simple dialog with an icon
- * indicating the dialog type (error, warning, etc.) and some text which
+ * Creates a new message dialog, which is a simple dialog with some text that
  * is marked up with the [Pango text markup language][PangoMarkupFormat].
  * When the user clicks a button a “response” signal is emitted with
  * response IDs from #GtkResponseType. See #GtkDialog for more details.
