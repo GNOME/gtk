@@ -103,6 +103,12 @@ void            gtk_popover_set_transitions_enabled (GtkPopover *popover,
 GDK_AVAILABLE_IN_3_16
 gboolean        gtk_popover_get_transitions_enabled (GtkPopover *popover);
 
+GDK_AVAILABLE_IN_3_18
+void            gtk_popover_set_default_widget (GtkPopover *popover,
+                                                GtkWidget  *widget);
+GDK_AVAILABLE_IN_3_18
+GtkWidget *     gtk_popover_get_default_widget (GtkPopover *popover);
+
 G_END_DECLS
 
 #endif /* __GTK_POPOVER_H__ */

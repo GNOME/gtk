@@ -134,6 +134,8 @@ struct _GtkPopoverPrivate
   GtkWidget *widget;
   GtkWindow *window;
   GtkWidget *prev_focus_widget;
+  GtkWidget *default_widget;
+  GtkWidget *prev_default;
   GtkScrollable *parent_scrollable;
   GtkAdjustment *vadj;
   GtkAdjustment *hadj;
@@ -577,10 +579,17 @@ gtk_popover_set_state (GtkPopover *popover,
 static void
 gtk_popover_map (GtkWidget *widget)
 {
+  GtkPopoverPrivate *priv = GTK_POPOVER (widget)->priv;
+
+  priv->prev_default = gtk_window_get_default_widget (priv->window);
+  g_object_ref (priv->prev_default);
+
   GTK_WIDGET_CLASS (gtk_popover_parent_class)->map (widget);
 
   gdk_window_show (gtk_widget_get_window (widget));
   gtk_popover_update_position (GTK_POPOVER (widget));
+
+  gtk_window_set_default (priv->window, priv->default_widget);
 }
 
 static void
@@ -592,6 +601,9 @@ gtk_popover_unmap (GtkWidget *widget)
 
   gdk_window_hide (gtk_widget_get_window (widget));
   GTK_WIDGET_CLASS (gtk_popover_parent_class)->unmap (widget);
+
+  gtk_window_set_default (priv->window, priv->prev_default);
+  g_clear_object (&priv->prev_default);
 }
 
 static void
@@ -2356,4 +2368,61 @@ gtk_popover_new_from_model (GtkWidget  *relative_to,
   gtk_popover_bind_model (GTK_POPOVER (popover), model, NULL);
 
   return popover;
+}
+
+/**
+ * gtk_popover_set_default_widget:
+ * @popover: a #GtkPopover
+ * @widget: (allow-none): the new default widget, or %NULL
+ *
+ * Sets the widget that should be set as default widget while
+ * the popover is shown (see gtk_window_set_default()). #GtkPopover
+ * remembers the previous default widget and reestablishes it
+ * when the popover is dismissed.
+ *
+ * Since: 3.18
+ */
+void
+gtk_popover_set_default_widget (GtkPopover *popover,
+                                GtkWidget  *widget)
+{
+  GtkPopoverPrivate *priv = popover->priv;
+
+  g_return_if_fail (GTK_IS_POPOVER (popover));
+  g_return_if_fail (widget == NULL || gtk_widget_get_can_default (widget));
+
+  if (priv->default_widget == widget)
+    return;
+
+  if (priv->default_widget)
+    g_object_unref (priv->default_widget);
+
+  priv->default_widget = widget;
+
+  if (priv->default_widget)
+    g_object_ref (priv->default_widget);
+
+  if (gtk_widget_get_mapped (GTK_WIDGET (popover)))
+    gtk_window_set_default (priv->window, priv->default_widget);
+}
+
+/**
+ * gtk_popover_get_default_widget:
+ * @popover: a #GtkPopover
+ *
+ * Gets the widget that should be set as the default while
+ * the popover is shown.
+ *
+ * Returns: (transfer none): the default widget, or %NULL if there is none
+ *
+ * Since: 3.18
+ */
+GtkWidget *
+gtk_popover_get_default_widget (GtkPopover *popover)
+{
+  GtkPopoverPrivate *priv = popover->priv;
+
+  g_return_if_fail (GTK_IS_POPOVER (popover));
+
+  return priv->default_widget;
 }

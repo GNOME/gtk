@@ -8062,6 +8062,8 @@ gtk_popover_set_modal
 gtk_popover_get_modal
 gtk_popover_set_transitions_enabled
 gtk_popover_get_transitions_enabled
+gtk_popover_set_default_widget
+gtk_popover_get_default_widget
 <SUBSECTION Standard>
 GTK_TYPE_POPOVER
 GTK_IS_POPOVER
