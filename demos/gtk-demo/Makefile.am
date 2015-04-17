@@ -171,6 +171,21 @@ uninstall-update-icon-cache:
 	$(AM_V_at)$(POST_UNINSTALL)
 	test -n "$(DESTDIR)" || $(update_icon_cache) "$(iconthemedir)"
 
+# ------------------- MSVC Build Items ----------------
+MSVCPROJS = gtk3-demo gtk3-demo-application
+
+gtk3_demo_FILES = $(gtk3_demo_SOURCES)
+gtk3_demo_EXCLUDES = pagesetup.c
+
+gtk3_demo_application_FILES = $(gtk3_demo_application_SOURCES)
+gtk3_demo_application_EXCLUDES = dummy
+
+include $(top_srcdir)/build/Makefile.msvcproj
+
+dist-hook: \
+	$(top_builddir)/build/win32/vs9/gtk3-demo.vcproj	\
+	$(top_builddir)/build/win32/vs9/gtk3-demo-application.vcproj
+
 DISTCLEANFILES = demos.h demos.h.win32
 
 -include $(top_srcdir)/git.mk

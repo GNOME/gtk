@@ -15,10 +15,6 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ResourceCompile Include="..\..\..\gdk\win32\rc\gdk.rc"><Filter>Resource Files</Filter></ResourceCompile>
-  </ItemGroup>
-  <ItemGroup>
-#include "gdk.vs10.sourcefiles.filters"
-    <ClCompile Include="..\..\..\gdk\gdkkeynames.c"><Filter>Source Files</Filter></ClCompile>
+#include "gdk-broadway.vs10.sourcefiles.filters"
   </ItemGroup>
 </Project>

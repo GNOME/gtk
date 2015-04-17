@@ -1301,37 +1301,30 @@ install-mac-key-theme:
 uninstall-mac-key-theme:
 endif
 
-dist-hook: ../build/win32/vs9/gtk.vcproj ../build/win32/vs10/gtk.vcxproj ../build/win32/vs10/gtk.vcxproj.filters
+# ------------------- MSVC Build Items ----------------
+MSVCPROJS = gtk
 
-../build/win32/vs9/gtk.vcproj: ../build/win32/vs9/gtk.vcprojin
-	for F in `echo $(gtk_base_c_sources) $(gtk_os_win32_c_sources) $(gtk_use_win32_c_sources) $(gtk_dbus_built_sources) | tr '/' '\\'`; do \
-		case $$F in \
-		*.c) echo '   <File RelativePath="..\..\..\gtk\'$$F'" />' \
-		     ;; \
-		esac; \
-	done >libgtk.sourcefiles
-	$(CPP) -P - <$(top_srcdir)/build/win32/vs9/gtk.vcprojin >$@
-	rm libgtk.sourcefiles
+gtk_FILES = \
+	$(gtk_base_c_sources)		\
+	$(gtk_os_win32_c_sources)	\
+	$(gtk_use_win32_c_sources)	\
+	$(gtk_dbus_built_sources)
 
-../build/win32/vs10/gtk.vcxproj: ../build/win32/vs10/gtk.vcxprojin
-	for F in `echo $(gtk_base_c_sources) $(gtk_os_win32_c_sources) $(gtk_use_win32_c_sources) $(gtk_dbus_built_sources) | tr '/' '\\'`; do \
-		case $$F in \
-		*.c) echo '   <ClCompile Include="..\..\..\gtk\'$$F'" />' \
-		     ;; \
-		esac; \
-	done >libgtk.vs10.sourcefiles
-	$(CPP) -P - <$(top_srcdir)/build/win32/vs10/gtk.vcxprojin >$@
-	rm libgtk.vs10.sourcefiles
+gtk_EXCLUDES = dummy
+gtk_HEADERS_DIR = $(gtkincludedir)
 
-../build/win32/vs10/gtk.vcxproj.filters: ../build/win32/vs10/gtk.vcxproj.filtersin
-	for F in `echo $(gtk_base_c_sources) $(gtk_os_win32_c_sources) $(gtk_use_win32_c_sources) $(gtk_dbus_built_sources) | tr '/' '\\'`; do \
-		case $$F in \
-		*.c) echo '   <ClCompile Include="..\..\..\gtk\'$$F'"><Filter>Source Files</Filter></ClCompile>' \
-		     ;; \
-		esac; \
-	done >libgtk.vs10.sourcefiles.filters
-	$(CPP) -P - <$(top_srcdir)/build/win32/vs10/gtk.vcxproj.filtersin >$@
-	rm libgtk.vs10.sourcefiles.filters
+gtk_HEADERS_INST = \
+	$(gtkinclude_HEADERS)	\
+	$(a11y_h_sources)	\
+	$(deprecated_h_sources)
+
+gtk_HEADERS_EXCLUDES = dummy
+
+include $(top_srcdir)/build/Makefile.msvcproj
+
+dist-hook: \
+	$(top_builddir)/build/win32/vs9/gtk.vcproj	\
+	$(top_builddir)/build/win32/vs9/gtk.headers
 
 # Install a RC file for the default GTK+ theme, and key themes
 install-data-local: install-ms-lib install-def-file install-mac-key-theme

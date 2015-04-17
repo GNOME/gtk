@@ -101,4 +101,25 @@ EXTRA_DIST += $(broadway_built_sources)
 
 BUILT_SOURCES = $(broadway_built_sources)
 
+# ------------------- MSVC Build Items ----------------
+MSVCPROJS = gdk-broadway broadwayd
+
+gdk_broadway_FILES = $(libgdk_broadway_la_SOURCES)
+gdk_broadway_EXCLUDES = dummy
+gdk_broadway_HEADERS_DIR = $(libgdkbroadwayincludedir)
+
+gdk_broadway_HEADERS_INST = $(libgdkbroadwayinclude_HEADERS)
+
+gdk_broadway_HEADERS_EXCLUDES = dummy
+
+broadwayd_FILES = $(broadwayd_SOURCES)
+broadwayd_EXCLUDES = dummy
+
+include $(top_srcdir)/build/Makefile.msvcproj
+
+dist-hook: \
+	$(top_builddir)/build/win32/vs9/gdk-broadway.vcproj		\
+	$(top_builddir)/build/win32/vs9/broadwayd.vcproj		\
+	$(top_builddir)/build/win32/vs9/gdk-broadway.headers
+
 -include $(top_srcdir)/git.mk

@@ -433,37 +433,25 @@ stamp-gc-h: $(top_builddir)/config.status
 	$(AM_V_at) cd $(top_builddir) && $(SHELL) ./config.status gdk/gdkconfig.h \
 	&& echo timestamp > gdk/$(@F)
 
-dist-hook: ../build/win32/vs9/gdk.vcproj ../build/win32/vs10/gdk.vcxproj ../build/win32/vs10/gdk.vcxproj.filters
+# ------------------- MSVC Build Items ----------------
+MSVCPROJS = gdk
 
-../build/win32/vs9/gdk.vcproj: ../build/win32/vs9/gdk.vcprojin
-	for F in `echo $(libgdk_3_la_SOURCES) | tr '/' '\\'`; do \
-		case $$F in \
-		*.c) echo '   <File RelativePath="..\..\..\gdk\'$$F'" />' \
-		     ;; \
-		esac; \
-	done >libgdk.sourcefiles
-	$(CPP) -P - <$(top_srcdir)/build/win32/vs9/gdk.vcprojin >$@
-	rm libgdk.sourcefiles
+gdk_FILES = $(libgdk_3_la_SOURCES)
+gdk_EXCLUDES = dummy
+gdk_HEADERS_DIR = $(gdkincludedir)
 
-../build/win32/vs10/gdk.vcxproj: ../build/win32/vs10/gdk.vcxprojin
-	for F in `echo $(libgdk_3_la_SOURCES) | tr '/' '\\'`; do \
-		case $$F in \
-		*.c) echo '   <ClCompile Include="..\..\..\gdk\'$$F'" />' \
-		     ;; \
-		esac; \
-	done >libgdk.vs10.sourcefiles
-	$(CPP) -P - <$(top_srcdir)/build/win32/vs10/gdk.vcxprojin >$@
-	rm libgdk.vs10.sourcefiles
+gdk_HEADERS_INST = \
+	$(gdkinclude_HEADERS)		\
+	$(deprecatedinclude_HEADERS)	\
+	$(nodist_gdkinclude_HEADERS)
 
-../build/win32/vs10/gdk.vcxproj.filters: ../build/win32/vs10/gdk.vcxproj.filtersin
-	for F in `echo $(libgdk_3_la_SOURCES) | tr '/' '\\'`; do \
-		case $$F in \
-		*.c) echo '   <ClCompile Include="..\..\..\gdk\'$$F'"><Filter>Source Files</Filter></ClCompile>' \
-		     ;; \
-		esac; \
-	done >libgdk.vs10.sourcefiles.filters
-	$(CPP) -P - <$(top_srcdir)/build/win32/vs10/gdk.vcxproj.filtersin >$@
-	rm libgdk.vs10.sourcefiles.filters
+gdk_HEADERS_EXCLUDES = dummy
+
+include $(top_srcdir)/build/Makefile.msvcproj
+
+dist-hook: \
+	$(top_builddir)/build/win32/vs9/gdk.vcproj	\
+	$(top_builddir)/build/win32/vs9/gdk.headers
 
 DISTCLEANFILES = gdkconfig.h stamp-gc-h
 
