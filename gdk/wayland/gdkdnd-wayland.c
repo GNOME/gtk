@@ -236,7 +236,8 @@ gdk_wayland_drag_context_drop_reply (GdkDragContext *context,
 				     gboolean        accepted,
 				     guint32         time_)
 {
-  gdk_wayland_drop_context_set_status (context, accepted);
+  if (!accepted)
+    gdk_wayland_drop_context_set_status (context, accepted);
 }
 
 static void
