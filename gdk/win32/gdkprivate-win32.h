@@ -369,7 +369,6 @@ HICON _gdk_win32_pixbuf_to_hicon   (GdkPixbuf *pixbuf);
 HICON _gdk_win32_pixbuf_to_hcursor (GdkPixbuf *pixbuf,
 				    gint       x_hotspot,
 				    gint       y_hotspot);
-gboolean _gdk_win32_pixbuf_to_hicon_supports_alpha (void);
 
 /* GdkDisplay member functions */
 GdkCursor *_gdk_win32_display_get_cursor_for_type (GdkDisplay   *display,

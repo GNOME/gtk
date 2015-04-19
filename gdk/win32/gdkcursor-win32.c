@@ -484,7 +484,7 @@ _gdk_win32_display_supports_cursor_alpha (GdkDisplay    *display)
 {
   g_return_val_if_fail (display == _gdk_display, FALSE);
 
-  return _gdk_win32_pixbuf_to_hicon_supports_alpha ();
+  return TRUE;
 }
 
 gboolean 
@@ -787,7 +787,7 @@ pixbuf_to_hicon (GdkPixbuf *pixbuf,
   if (pixbuf == NULL)
     return NULL;
 
-  if (_gdk_win32_pixbuf_to_hicon_supports_alpha() && gdk_pixbuf_get_has_alpha (pixbuf))
+  if (gdk_pixbuf_get_has_alpha (pixbuf))
     success = pixbuf_to_hbitmaps_alpha_winxp (pixbuf, &ii.hbmColor, &ii.hbmMask);
   else
     success = pixbuf_to_hbitmaps_normal (pixbuf, &ii.hbmColor, &ii.hbmMask);
@@ -816,12 +816,6 @@ _gdk_win32_pixbuf_to_hcursor (GdkPixbuf *pixbuf,
 			      gint       y_hotspot)
 {
   return pixbuf_to_hicon (pixbuf, FALSE, x_hotspot, y_hotspot);
-}
-
-gboolean
-_gdk_win32_pixbuf_to_hicon_supports_alpha (void)
-{
-  return TRUE;
 }
 
 HICON
