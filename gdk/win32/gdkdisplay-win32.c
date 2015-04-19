@@ -341,9 +341,7 @@ inner_clipboard_window_procedure (HWND   hwnd,
 
         return 0;
       }
-#ifdef WM_CLIPBOARDUPDATE
     case WM_CLIPBOARDUPDATE:
-#endif
     case WM_DRAWCLIPBOARD:
       {
         int success;
