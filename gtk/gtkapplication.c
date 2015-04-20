@@ -69,7 +69,7 @@
  * that the GDK lock be held while invoking actions locally with
  * g_action_group_activate_action().  The same applies to actions
  * associated with #GtkApplicationWindow and to the “activate” and
- * 'open' #GApplication methods.
+ * “open” #GApplication methods.
  *
  * ## Automatic resources ## {#automatic-resources}
  *
@@ -113,8 +113,8 @@
  * session while inhibitors are present.
  *
  * ## See Also ## {#seealso}
- * HowDoI: [Using GtkApplication] (https://wiki.gnome.org/HowDoI/GtkApplication)
- * [Getting Started with GTK+: Basics] (https://developer.gnome.org/gtk3/stable/gtk-getting-started.html#id-1.2.3.3) 
+ * [HowDoI: Using GtkApplication](https://wiki.gnome.org/HowDoI/GtkApplication),
+ * [Getting Started with GTK+: Basics](https://developer.gnome.org/gtk3/stable/gtk-getting-started.html#id-1.2.3.3)
  */
 
 enum {
@@ -1128,7 +1128,7 @@ gtk_application_get_window_by_id (GtkApplication *application,
  *
  * The active window is the one that was most recently focused (within
  * the application).  This window may not have the focus at the moment
- * if another application has it -- this is just the most
+ * if another application has it — this is just the most
  * recently-focused window within this application.
  *
  * Returns: (transfer none): the active window
@@ -1371,12 +1371,12 @@ gtk_application_get_app_menu (GtkApplication *application)
  * each window, or at the top of the screen.  In some environments, if
  * both the application menu and the menubar are set, the application
  * menu will be presented as if it were the first item of the menubar.
- * Other environments treat the two as completely separate -- for
- * example, the application menu may be rendered by the desktop shell
- * while the menubar (if set) remains in each individual window.
+ * Other environments treat the two as completely separate — for example,
+ * the application menu may be rendered by the desktop shell while the
+ * menubar (if set) remains in each individual window.
  *
- * Use the base #GActionMap interface to add actions, to respond to the user
- * selecting these menu items.
+ * Use the base #GActionMap interface to add actions, to respond to the
+ * user selecting these menu items.
  *
  * Since: 3.4
  */
@@ -1632,11 +1632,11 @@ normalise_detailed_name (const gchar *detailed_action_name)
  * @application: a #GtkApplication
  * @detailed_action_name: a detailed action name, specifying an action
  *     and target to associate accelerators with
- * @accels: (array zero-terminated=1): a list of accelerators in the format understood by
- *     gtk_accelerator_parse()
+ * @accels: (array zero-terminated=1): a list of accelerators in the format
+ *     understood by gtk_accelerator_parse()
  *
  * Sets zero or more keyboard accelerators that will trigger the
- * given action. The first item in @accels will be the primary 
+ * given action. The first item in @accels will be the primary
  * accelerator, which may be displayed in the UI.
  *
  * To remove all accelerators for an action, use an empty, zero-terminated
