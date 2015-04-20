@@ -884,10 +884,10 @@ gtk_gl_area_class_init (GtkGLAreaClass *klass)
                   GDK_TYPE_GL_CONTEXT);
 
   /**
-   * GtkGLArea::resized:
+   * GtkGLArea::resize:
    * @area: the #GtkGLArea that emitted the signal
    *
-   * The ::resized signal is emitted once when the widget is realized, and
+   * The ::resize signal is emitted once when the widget is realized, and
    * then each time the widget is changed while realized. This is useful
    * in order to keep GL state up to date with the widget size, like for
    * instance camera properties which may depend on the width/height ratio.
