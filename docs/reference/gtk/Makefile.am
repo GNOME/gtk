@@ -71,8 +71,10 @@ IGNORE_HFILES = \
 	gtkcsskeyframesprivate.h	\
 	gtkcsslookupprivate.h		\
 	gtkcssmatcherprivate.h		\
+	gtkcssnodeprivate.h		\
 	gtkcssnodedeclarationprivate.h	\
 	gtkcssnumbervalueprivate.h	\
+	gtkcsspathnodeprivate.h		\
 	gtkcssparserprivate.h		\
 	gtkcsspositionvalueprivate.h	\
 	gtkcssproviderprivate.h		\
@@ -89,11 +91,13 @@ IGNORE_HFILES = \
 	gtkcssstyleprivate.h		\
 	gtkcssstylepropertyprivate.h	\
 	gtkcsstransformvalueprivate.h	\
+	gtkcsstransientnodeprivate.h	\
 	gtkcsstransitionprivate.h	\
 	gtkcsstypedvalueprivate.h	\
 	gtkcsstypesprivate.h		\
 	gtkcssunsetvalueprivate.h	\
 	gtkcssvalueprivate.h		\
+	gtkcsswidgetnodeprivate.h	\
 	gtkdialogprivate.h		\
 	gtkentryprivate.h		\
 	gtkeventcontrollerprivate.h	\
@@ -148,6 +152,7 @@ IGNORE_HFILES = \
 	gtkstylecontextprivate.h	\
 	gtkstylepropertyprivate.h	\
 	gtkstyleproviderprivate.h	\
+	gtktextattributesprivate.h	\
 	gtktextchildprivate.h		\
 	gtktexthandleprivate.h		\
 	gtktextiterprivate.h		\
