@@ -29,35 +29,6 @@
 
 #include "xcursors.h"
 
-#if (defined(__MINGW32__) && (__W32API_MAJOR_VERSION < 3 || (__W32API_MAJOR_VERSION == 3 && __W32API_MINOR_VERSION < 8))) || (defined(_MSC_VER) && (WINVER < 0x0500))
-typedef struct { 
-  DWORD        bV5Size; 
-  LONG         bV5Width; 
-  LONG         bV5Height; 
-  WORD         bV5Planes; 
-  WORD         bV5BitCount; 
-  DWORD        bV5Compression; 
-  DWORD        bV5SizeImage; 
-  LONG         bV5XPelsPerMeter; 
-  LONG         bV5YPelsPerMeter; 
-  DWORD        bV5ClrUsed; 
-  DWORD        bV5ClrImportant; 
-  DWORD        bV5RedMask; 
-  DWORD        bV5GreenMask; 
-  DWORD        bV5BlueMask; 
-  DWORD        bV5AlphaMask; 
-  DWORD        bV5CSType; 
-  CIEXYZTRIPLE bV5Endpoints; 
-  DWORD        bV5GammaRed; 
-  DWORD        bV5GammaGreen; 
-  DWORD        bV5GammaBlue; 
-  DWORD        bV5Intent; 
-  DWORD        bV5ProfileData; 
-  DWORD        bV5ProfileSize; 
-  DWORD        bV5Reserved; 
-} BITMAPV5HEADER;
-#endif
-
 static HCURSOR
 hcursor_from_type (GdkCursorType cursor_type)
 {
