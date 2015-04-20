@@ -26,13 +26,6 @@
 #include "gdkwin32window.h"
 #include "gdkwin32.h"
 
-#define HAVE_MONITOR_INFO
-
-#if defined(_MSC_VER) && (WINVER < 0x500) && (WINVER > 0x0400)
-#include <multimon.h>
-#elif defined(_MSC_VER) && (WINVER <= 0x0400)
-#undef HAVE_MONITOR_INFO
-#endif
 
 static gulong
 gdk_win32_display_get_next_serial (GdkDisplay *display)
@@ -40,7 +33,6 @@ gdk_win32_display_get_next_serial (GdkDisplay *display)
 	return 0;
 }
 
-#ifdef HAVE_MONITOR_INFO
 static BOOL CALLBACK
 count_monitor (HMONITOR hmonitor,
 	       HDC      hdc,
@@ -116,12 +108,10 @@ enum_monitor (HMONITOR hmonitor,
 
   return TRUE;
 }
-#endif /* HAVE_MONITOR_INFO */
 
 void
 _gdk_monitor_init (void)
 {
-#ifdef HAVE_MONITOR_INFO
   gint i, index;
 
   _gdk_num_monitors = 0;
@@ -156,24 +146,6 @@ _gdk_monitor_init (void)
 			       _gdk_monitors[i].rect.x,
 			       _gdk_monitors[i].rect.y));
     }
-#else
-  HDC hDC;
-
-  _gdk_num_monitors = 1;
-  _gdk_monitors = g_renew (GdkWin32Monitor, _gdk_monitors, 1);
-
-  _gdk_monitors[0].name = g_strdup ("DISPLAY");
-  hDC = GetDC (NULL);
-  _gdk_monitors[0].width_mm = GetDeviceCaps (hDC, HORZSIZE);
-  _gdk_monitors[0].height_mm = GetDeviceCaps (hDC, VERTSIZE);
-  ReleaseDC (NULL, hDC);
-  _gdk_monitors[0].rect.x = 0;
-  _gdk_monitors[0].rect.y = 0;
-  _gdk_monitors[0].rect.width = GetSystemMetrics (SM_CXSCREEN);
-  _gdk_monitors[0].rect.height = GetSystemMetrics (SM_CYSCREEN);
-  _gdk_offset_x = 0;
-  _gdk_offset_y = 0;
-#endif
 }
 
 GdkDisplay *
