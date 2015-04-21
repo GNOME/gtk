@@ -39,7 +39,7 @@
  *
  * The action will be looked up in action groups that are found among
  * the widgets ancestors. Most commonly, these will be the actions with
- * the "win" or "app" prefix that are associated with the #GtkApplicationWindow
+ * the “win.” or “app.” prefix that are associated with the #GtkApplicationWindow
  * or "GtkApplication, but other action groups that are added with
  * gtk_widget_insert_action_group() will be consulted as well.
  *
@@ -54,10 +54,10 @@
 
 /**
  * GtkActionableInterface:
- * @get_action_name: virtual pointer for gtk_actionable_get_action_name()
- * @set_action_name: virtual pointer for gtk_actionable_set_action_name()
- * @get_action_target_value: virtual pointer for gtk_actionable_get_action_target_value()
- * @set_action_target_value: virtual pointer for gtk_actionable_set_action_target_value()
+ * @get_action_name: virtual function for gtk_actionable_get_action_name()
+ * @set_action_name: virtual function for gtk_actionable_set_action_name()
+ * @get_action_target_value: virtual function for gtk_actionable_get_action_target_value()
+ * @set_action_target_value: virtual function for gtk_actionable_set_action_target_value()
  *
  * The interface vtable for #GtkActionable.
  **/
@@ -161,7 +161,7 @@ gtk_actionable_get_action_target_value (GtkActionable *actionable)
  * The target value has two purposes.  First, it is used as the
  * parameter to activation of the action associated with the
  * #GtkActionable widget. Second, it is used to determine if the widget
- * should be rendered as “active” - the widget is active if the state
+ * should be rendered as “active” — the widget is active if the state
  * is equal to the given target.
  *
  * Consider the example of associating a set of buttons with a #GAction
