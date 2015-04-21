@@ -96,8 +96,7 @@
  *
  * menubar = G_MENU_MODEL (gtk_builder_get_object (builder,
  *                                                 "menubar"));
- * gtk_application_set_menubar (G_APPLICATION (app),
- *                              menubar);
+ * gtk_application_set_menubar (G_APPLICATION (app), menubar);
  * g_object_unref (builder);
  *
  * ...
@@ -118,7 +117,7 @@
  * Attribute values can be translated using gettext, like other #GtkBuilder
  * content. `<attribute>` elements can be marked for translation with a
  * `translatable="yes"` attribute. It is also possible to specify message
- * context and translator comments,using the context and comments attributes.
+ * context and translator comments, using the context and comments attributes.
  * To make use of this, the #GtkBuilder must have been given the gettext
  * domain to use.
  */
