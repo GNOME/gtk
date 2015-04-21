@@ -25,6 +25,7 @@
 #include "config.h"
 
 #include "gdkrectangle.h"
+#include <cairo-gobject.h>
 
 
 /**
@@ -141,6 +142,36 @@ gdk_rectangle_copy (const GdkRectangle *rectangle)
   return result;
 }
 
-G_DEFINE_BOXED_TYPE (GdkRectangle, gdk_rectangle,
-                     gdk_rectangle_copy,
-                     g_free)
+/* Transforms between identical boxed types.
+ */
+static void
+gdk_rectangle_value_transform_rect (const GValue *src_value, GValue *dest_value)
+{
+  g_value_set_boxed (dest_value, g_value_get_boxed (src_value));
+}
+
+/* Allow GValue transformation between the identical structs
+ * cairo_rectangle_int_t and GdkRectangle.
+ */
+static void
+gdk_rectangle_register_value_transform_funcs (GType gtype_gdk_rectangle)
+{
+  /* This function is called from the first call to gdk_rectangle_get_type(),
+   * before g_once_init_leave() has been called.
+   * If gdk_rectangle_get_type() is called from here (e.g. via
+   * GDK_TYPE_RECTANGLE), the program will wait indefinitely at
+   * g_once_init_enter() in gdk_rectangle_get_type().
+   */
+  g_value_register_transform_func (CAIRO_GOBJECT_TYPE_RECTANGLE_INT,
+                                   gtype_gdk_rectangle,
+                                   gdk_rectangle_value_transform_rect);
+  g_value_register_transform_func (gtype_gdk_rectangle,
+                                   CAIRO_GOBJECT_TYPE_RECTANGLE_INT,
+                                   gdk_rectangle_value_transform_rect);
+}
+
+G_DEFINE_BOXED_TYPE_WITH_CODE (GdkRectangle, gdk_rectangle,
+                               gdk_rectangle_copy,
+                               g_free,
+                               gdk_rectangle_register_value_transform_funcs (g_define_type_id))
+

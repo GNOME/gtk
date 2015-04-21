@@ -76,7 +76,6 @@
 
 #include "config.h"
 #include <gdk/gdk.h>
-#include <cairo-gobject.h>
 #include "gtkpopover.h"
 #include "gtkpopoverprivate.h"
 #include "gtktypebuiltins.h"
@@ -1582,7 +1581,7 @@ gtk_popover_class_init (GtkPopoverClass *klass)
                                    g_param_spec_boxed ("pointing-to",
                                                        P_("Pointing to"),
                                                        P_("Rectangle the bubble window points to"),
-                                                       CAIRO_GOBJECT_TYPE_RECTANGLE_INT,
+                                                       GDK_TYPE_RECTANGLE,
                                                        GTK_PARAM_READWRITE));
   /**
    * GtkPopover:position
