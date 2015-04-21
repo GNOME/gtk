@@ -318,7 +318,7 @@
  * </object>
  * ]|
  *
- * # Building composite widgets from template XML
+ * # Building composite widgets from template XML ## {#composite-templates}
  *
  * GtkWidget exposes some facilities to automate the proceedure
  * of creating composite widgets using #GtkBuilder interface description
