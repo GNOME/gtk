@@ -36,8 +36,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-03-15 14:46+0100\n"
-"PO-Revision-Date: 2015-03-14 18:58+0100\n"
+"POT-Creation-Date: 2015-04-22 00:17+0200\n"
+"PO-Revision-Date: 2015-04-13 16:16+0200\n"
 "Last-Translator: Ask Hjorth Larsen <asklarsen@gmail.com>\n"
 "Language-Team: Dansk <dansk@dansk-gruppen.dk>\n"
 "Language: da\n"
@@ -459,20 +459,20 @@ msgstr "Hvile"
 
 #: ../gdk/mir/gdkmirglcontext.c:48 ../gdk/mir/gdkmirwindowimpl.c:1406
 #: ../gdk/wayland/gdkglcontext-wayland.c:369
-#: ../gdk/win32/gdkglcontext-win32.c:532 ../gdk/x11/gdkglcontext-x11.c:1163
+#: ../gdk/win32/gdkglcontext-win32.c:532 ../gdk/x11/gdkglcontext-x11.c:1177
 msgid "No GL implementation is available"
 msgstr "Der er ingen tilgængelig GL-implementering"
 
 #: ../gdk/mir/gdkmirglcontext.c:89 ../gdk/wayland/gdkglcontext-wayland.c:157
-#: ../gdk/win32/gdkglcontext-win32.c:492 ../gdk/x11/gdkglcontext-x11.c:619
-#: ../gdk/x11/gdkglcontext-x11.c:663
+#: ../gdk/win32/gdkglcontext-win32.c:492 ../gdk/x11/gdkglcontext-x11.c:633
+#: ../gdk/x11/gdkglcontext-x11.c:677
 msgid "Unable to create a GL context"
 msgstr "Kan ikke oprette en GL-kontekst"
 
 #: ../gdk/mir/gdkmirwindowimpl.c:1368 ../gdk/mir/gdkmirwindowimpl.c:1378
 #: ../gdk/wayland/gdkglcontext-wayland.c:330
 #: ../gdk/wayland/gdkglcontext-wayland.c:340
-#: ../gdk/win32/gdkglcontext-win32.c:464 ../gdk/x11/gdkglcontext-x11.c:857
+#: ../gdk/win32/gdkglcontext-win32.c:464 ../gdk/x11/gdkglcontext-x11.c:871
 msgid "No available configurations for the given pixel format"
 msgstr "Ingen tilgængelige konfigurationer for det givne pixelformat"
 
@@ -539,12 +539,12 @@ msgid_plural "Opening %d Items"
 msgstr[0] "Åbner %d element"
 msgstr[1] "Åbner %d elementer"
 
-#: ../gdk/x11/gdkglcontext-x11.c:885
+#: ../gdk/x11/gdkglcontext-x11.c:899
 #, c-format
 msgid "No available configurations for the given RGBA pixel format"
 msgstr "Ingen tilgængelige konfigurationer for det givne RGBA-pixelformat"
 
-#: ../gdk/x11/gdkglcontext-x11.c:1171
+#: ../gdk/x11/gdkglcontext-x11.c:1185
 msgid ""
 "The GLX_ARB_create_context_profile extension needed to create core profiles "
 "is not available"
@@ -1252,7 +1252,7 @@ msgstr ""
 #: ../gtk/gtkmessagedialog.c:957 ../gtk/gtkmountoperation.c:543
 #: ../gtk/gtkpagesetupunixdialog.c:196 ../gtk/gtkprintbackend.c:763
 #: ../gtk/gtkprinteroptionwidget.c:545 ../gtk/gtkprintunixdialog.c:665
-#: ../gtk/gtkprintunixdialog.c:738 ../gtk/gtkwindow.c:11917
+#: ../gtk/gtkprintunixdialog.c:738 ../gtk/gtkwindow.c:11931
 #: ../gtk/inspector/css-editor.c:199
 msgid "_Cancel"
 msgstr "_Annullér"
@@ -1300,7 +1300,7 @@ msgstr "_Anvend"
 
 #: ../gtk/deprecated/gtkfontsel.c:1698 ../gtk/gtkmessagedialog.c:936
 #: ../gtk/gtkmessagedialog.c:958 ../gtk/gtkprintbackend.c:764
-#: ../gtk/gtkwindow.c:11918 ../gtk/inspector/classes-list.c:127
+#: ../gtk/gtkwindow.c:11932 ../gtk/inspector/classes-list.c:127
 msgid "_OK"
 msgstr "_O.k."
 
@@ -2154,30 +2154,30 @@ msgstr "_Højre:"
 msgid "Paper Margins"
 msgstr "Papirmargener"
 
-#: ../gtk/gtkentry.c:9617 ../gtk/gtkentry.c:9770 ../gtk/gtklabel.c:6597
+#: ../gtk/gtkentry.c:9615 ../gtk/gtkentry.c:9768 ../gtk/gtklabel.c:6596
 #: ../gtk/gtktextview.c:9037 ../gtk/gtktextview.c:9225
 msgid "Cu_t"
 msgstr "K_lip"
 
-#: ../gtk/gtkentry.c:9621 ../gtk/gtkentry.c:9773 ../gtk/gtklabel.c:6598
+#: ../gtk/gtkentry.c:9619 ../gtk/gtkentry.c:9771 ../gtk/gtklabel.c:6597
 #: ../gtk/gtktextview.c:9041 ../gtk/gtktextview.c:9229
 msgid "_Copy"
 msgstr "_Kopiér"
 
-#: ../gtk/gtkentry.c:9625 ../gtk/gtkentry.c:9776 ../gtk/gtklabel.c:6599
+#: ../gtk/gtkentry.c:9623 ../gtk/gtkentry.c:9774 ../gtk/gtklabel.c:6598
 #: ../gtk/gtktextview.c:9043 ../gtk/gtktextview.c:9231
 msgid "_Paste"
 msgstr "_Indsæt"
 
-#: ../gtk/gtkentry.c:9628 ../gtk/gtklabel.c:6601 ../gtk/gtktextview.c:9046
+#: ../gtk/gtkentry.c:9626 ../gtk/gtklabel.c:6600 ../gtk/gtktextview.c:9046
 msgid "_Delete"
 msgstr "_Slet"
 
-#: ../gtk/gtkentry.c:9639 ../gtk/gtklabel.c:6610 ../gtk/gtktextview.c:9060
+#: ../gtk/gtkentry.c:9637 ../gtk/gtklabel.c:6609 ../gtk/gtktextview.c:9060
 msgid "Select _All"
 msgstr "Markér _alt"
 
-#: ../gtk/gtkentry.c:10837
+#: ../gtk/gtkentry.c:10835
 msgid "Caps Lock is on"
 msgstr "Caps Lock er slået til"
 
@@ -2197,7 +2197,7 @@ msgstr "(ingen)"
 msgid "_Open"
 msgstr "_Åbn"
 
-#: ../gtk/gtkfilechooserbutton.c:2137
+#: ../gtk/gtkfilechooserbutton.c:2138
 msgid "Other…"
 msgstr "Andre…"
 
@@ -2401,7 +2401,7 @@ msgstr "Vælg en skrifttype"
 msgid "None"
 msgstr "Ingen"
 
-#: ../gtk/gtkglarea.c:264
+#: ../gtk/gtkglarea.c:303
 msgid "OpenGL context creation failed"
 msgstr "Kunne ikke oprette OpenGL-kontekst"
 
@@ -2409,7 +2409,7 @@ msgstr "Kunne ikke oprette OpenGL-kontekst"
 msgid "Application menu"
 msgstr "Programmenu"
 
-#: ../gtk/gtkheaderbar.c:479 ../gtk/gtkwindow.c:8591
+#: ../gtk/gtkheaderbar.c:479 ../gtk/gtkwindow.c:8592
 msgid "Close"
 msgstr "Luk"
 
@@ -2460,12 +2460,12 @@ msgid "Error"
 msgstr "Fejl"
 
 #. Open Link
-#: ../gtk/gtklabel.c:6578
+#: ../gtk/gtklabel.c:6577
 msgid "_Open Link"
 msgstr "_Åbn link"
 
 #. Copy Link Address
-#: ../gtk/gtklabel.c:6587
+#: ../gtk/gtklabel.c:6586
 msgid "Copy _Link Address"
 msgstr "Kopiér _linkadresse"
 
@@ -2702,13 +2702,13 @@ msgstr "Z Shell"
 msgid "Cannot end process with PID %d: %s"
 msgstr "Kan ikke afbryde processen med PID %d: %s"
 
-#: ../gtk/gtknotebook.c:5171 ../gtk/gtknotebook.c:7902
+#: ../gtk/gtknotebook.c:5173 ../gtk/gtknotebook.c:7904
 #, c-format
 msgid "Page %u"
 msgstr "Side %u"
 
-#: ../gtk/gtkpagesetup.c:652 ../gtk/gtkpapersize.c:985
-#: ../gtk/gtkpapersize.c:1025
+#: ../gtk/gtkpagesetup.c:652 ../gtk/gtkpapersize.c:986
+#: ../gtk/gtkpapersize.c:1026
 msgid "Not a valid page setup file"
 msgstr "Ikke en gyldig sideopsætningsfil"
 
@@ -2940,7 +2940,7 @@ msgstr "_Skub ud"
 msgid "_Detect Media"
 msgstr "_Søg efter medie"
 
-#: ../gtk/gtkplacessidebar.c:4167
+#: ../gtk/gtkplacessidebar.c:4165
 msgid "Computer"
 msgstr "Computer"
 
@@ -3295,7 +3295,7 @@ msgstr "Søg"
 #. * glyphs then use MEDIUM VERTICAL BAR (U+2759) as the text for
 #. * the state
 #.
-#: ../gtk/gtkswitch.c:379 ../gtk/gtkswitch.c:431 ../gtk/gtkswitch.c:606
+#: ../gtk/gtkswitch.c:379 ../gtk/gtkswitch.c:431 ../gtk/gtkswitch.c:605
 msgctxt "switch"
 msgid "ON"
 msgstr "TIL"
@@ -3303,7 +3303,7 @@ msgstr "TIL"
 #. Translators: if the "off" state label requires more than three
 #. * glyphs then use WHITE CIRCLE (U+25CB) as the text for the state
 #.
-#: ../gtk/gtkswitch.c:387 ../gtk/gtkswitch.c:432 ../gtk/gtkswitch.c:621
+#: ../gtk/gtkswitch.c:387 ../gtk/gtkswitch.c:432 ../gtk/gtkswitch.c:620
 msgctxt "switch"
 msgid "OFF"
 msgstr "FRA"
@@ -3491,11 +3491,11 @@ msgctxt "volume percentage"
 msgid "%d %%"
 msgstr "%d %%"
 
-#: ../gtk/gtkwindow.c:11905
+#: ../gtk/gtkwindow.c:11919
 msgid "Do you want to use GTK+ Inspector?"
 msgstr "Vil du bruge GTK+-inspektøren?"
 
-#: ../gtk/gtkwindow.c:11907
+#: ../gtk/gtkwindow.c:11921
 msgid ""
 "GTK+ Inspector is an interactive debugger that lets you explore and modify "
 "the internals of any GTK+ application. Using it may cause the application to "
@@ -3505,7 +3505,7 @@ msgstr ""
 "bestanddelene af ethvert GTK+-program. Dens brug kan forårsage fejl eller "
 "nedbrud af programmet."
 
-#: ../gtk/gtkwindow.c:11912
+#: ../gtk/gtkwindow.c:11926
 msgid "Don't show this message again"
 msgstr "Vis ikke denne meddelelse igen"
 
@@ -5395,6 +5395,12 @@ msgstr "Udskriv til testprinter"
 
 #~ msgid "Accessible role"
 #~ msgstr "Tilgængelig rolle"
+
+#~ msgid "Accessible name"
+#~ msgstr "Tilgængeligt navn"
+
+#~ msgid "Accessible description"
+#~ msgstr "Tilgængelig beskrivelse"
 
 # ??
 #~ msgid "Mapped"
