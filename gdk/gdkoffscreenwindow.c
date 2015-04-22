@@ -669,6 +669,12 @@ gdk_offscreen_window_set_opacity (GdkWindow *window, gdouble opacity)
 {
 }
 
+static gboolean
+gdk_offscreen_window_beep (GdkWindow *window)
+{
+  return FALSE;
+}
+
 static void
 gdk_offscreen_window_class_init (GdkOffscreenWindowClass *klass)
 {
@@ -701,7 +707,7 @@ gdk_offscreen_window_class_init (GdkOffscreenWindowClass *klass)
   impl_class->destroy_foreign = NULL;
   impl_class->get_shape = NULL;
   impl_class->get_input_shape = NULL;
-  impl_class->beep = NULL;
+  impl_class->beep = gdk_offscreen_window_beep;
 
   impl_class->focus = NULL;
   impl_class->set_type_hint = NULL;
