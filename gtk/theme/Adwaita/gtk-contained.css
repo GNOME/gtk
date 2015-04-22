@@ -296,7 +296,7 @@ GtkTextView {
 
 .linked.vertical > .entry:not(:last-child) {
   box-shadow: none; }
-.linked.vertical > .entry:focus:not(last-child) {
+.linked.vertical > .entry:focus:not(:last-child) {
   box-shadow: inset 0 0 0 1px #4a90d9; }
 .linked.vertical > .entry:not(:insensitive) + .entry:not(:insensitive) {
   border-top-color: #e2e2e2;
@@ -304,9 +304,11 @@ GtkTextView {
   .linked.vertical > .entry:not(:insensitive) + .entry:not(:insensitive):backdrop {
     border-top-color: #e4e4e4;
     background-image: linear-gradient(to bottom, white); }
-.linked.vertical > .entry:not(:only-child) + .entry:focus {
+.linked.vertical > .entry + .entry:focus:not(:last-child) {
   border-top-color: #4a90d9;
   box-shadow: inset 0 0 0 1px #4a90d9; }
+.linked.vertical > .entry + .entry:focus:last-child {
+  border-top-color: #4a90d9; }
 .linked.vertical > .entry:focus:not(:only-child) + .entry,
 .linked.vertical > .entry:focus:not(:only-child) + .button,
 .linked.vertical > .entry:focus:not(:only-child) + GtkComboBox > .button,
