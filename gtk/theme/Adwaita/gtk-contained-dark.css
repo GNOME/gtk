@@ -227,7 +227,7 @@ GtkTextView {
         border-left-style: solid; }
   .entry.error {
     color: #cc0000;
-    border-color: #cc0000; }
+    border-color: #1a0000; }
     .entry.error:focus {
       background-color: transparent;
       background-image: linear-gradient(to bottom, #1c1f1f, #232525 3px, #292929 90%);
@@ -237,7 +237,7 @@ GtkTextView {
       background-color: #cc0000; }
   .entry.warning {
     color: #f57900;
-    border-color: #f57900; }
+    border-color: #432100; }
     .entry.warning:focus {
       background-color: transparent;
       background-image: linear-gradient(to bottom, #1c1f1f, #232525 3px, #292929 90%);
