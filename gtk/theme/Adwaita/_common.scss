@@ -275,21 +275,14 @@ GtkTextView { // This will get overridden by .view, needed by gedit line numbers
     }
   }
 
-  &.error {
-    color: $error_color;
-    border-color: entry_focus_border($error_color);
-    &:focus { @include entry(focus, $error_color); }
-    &:selected, &:selected:focus {
-      background-color: $error_color;
-    }
-  }
-
-  &.warning {
-    color: $warning_color;
-    border-color: entry_focus_border($warning_color);
-    &:focus { @include entry(focus, $warning_color); }
-    &:selected, &:selected:focus {
-      background-color: $warning_color;
+  // entry error and warning style
+  @each $e_type, $e_color in (error, $error_color),
+                             (warning, $warning_color) {
+    &.#{$e_type} {
+      color: $e_color;
+      border-color: entry_focus_border($e_color);
+      &:focus { @include entry(focus, $e_color); }
+      &:selected, &:selected:focus { background-color: $e_color; }
     }
   }
 
