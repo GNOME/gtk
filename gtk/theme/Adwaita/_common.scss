@@ -300,78 +300,6 @@ GtkTextView { // This will get overridden by .view, needed by gedit line numbers
     &:backdrop { color: mix($backdrop_fg_color, $backdrop_base_color, 80%); }
   }
 
-  .linked.vertical > & { //FIXME comment stuff and make the whole thing smarter.
-    @include entry(normal, $edge: none);
-    background-image: linear-gradient(to bottom, $base_color);
-    border-bottom-color: mix($borders_color, $base_color, 30%);
-    box-shadow: none;
-    @extend %linked_vertical;
-    &:focus {
-      border-color: entry_focus_border($selected_bg_color);
-      box-shadow: entry_focus_shadow($selected_bg_color),
-                  0 -1px 0 0 entry_focus_border($selected_bg_color);
-      @extend %linked_vertical;
-    }
-    &:insensitive {
-      @include entry(insensitive, $edge: none);
-      border-bottom-color: mix($borders_color, $base_color, 30%);
-      @extend %linked_vertical;
-      &:backdrop {
-        @include entry(backdrop-insensitive, $edge: none);
-        border-bottom-color: mix($backdrop_borders_color, $backdrop_base_color, 30%);
-        @extend %linked_vertical;
-      }
-    }
-    &:backdrop {
-      @include entry(backdrop, $edge: none);
-      border-bottom-color: mix($backdrop_borders_color, $backdrop_base_color, 30%);
-      @extend %linked_vertical;
-    }
-    &:first-child {
-      @include entry(normal, $edge: none);
-      border-bottom-color: mix($borders_color, $base_color, 30%);
-      &:focus { @include entry(focus, $edge: none); }
-      &:insensitive {
-        @include entry(insensitive, $edge: none);
-        border-bottom-color: mix($backdrop_borders_color, $backdrop_base_color, 30%);
-        @extend %linked_vertical:first-child;
-        &:backdrop {
-          @include entry(backdrop-insensitive, $edge: none);
-          border-bottom-color: mix($backdrop_borders_color, $backdrop_base_color, 30%);
-          border-top-style: solid;
-        }
-      }
-      &:backdrop {
-        @include entry(backdrop, $edge: none);
-        border-bottom-color: mix($backdrop_borders_color, $backdrop_base_color, 30%);
-        @extend %linked_vertical:first-child;
-      }
-    }
-    &:last-child {
-      @include entry(normal);
-      background-image: linear-gradient(to bottom, $base_color);
-      box-shadow: _widget_edge();
-      &:focus {
-        border-color: entry_focus_border($selected_bg_color);
-        box-shadow: entry_focus_shadow($selected_bg_color),
-                    0 -1px 0 0 entry_focus_border($selected_bg_color),
-                    _widget_edge();
-        @extend %linked_vertical:last-child;
-      }
-      &:insensitive {
-        @include entry(insensitive);
-        @extend %linked_vertical:last-child;
-        &:backdrop {
-          @include entry(backdrop-insensitive);
-          @extend %linked_vertical:last-child;
-        }
-      }
-      &:backdrop {
-        @include entry(backdrop);
-        @extend %linked_vertical:last-child;
-      }
-    }
-  }
   .osd & {
     @include entry(osd);
     &:focus { @include entry(osd-focus); }
@@ -379,6 +307,42 @@ GtkTextView { // This will get overridden by .view, needed by gedit line numbers
     &:insensitive { @include entry(osd-insensitive); }
   }
 }
+
+// Vertically linked entries
+// FIXME: take care of "colored" entries
+.linked.vertical {
+  > .entry { @extend %linked_vertical; }
+
+  // remove the edge hilight
+  > .entry:not(:last-child) { box-shadow: none; }
+  // add back the focus shadow on focused entries
+  > .entry:focus:not(last-child) { box-shadow: entry_focus_shadow(); }
+
+
+  // brighter border between linked entries
+  > .entry:not(:insensitive) + .entry:not(:insensitive) {
+    border-top-color: mix($borders_color, $base_color, 30%);
+    background-image: linear-gradient(to bottom, $base_color);
+    &:backdrop {
+      border-top-color: mix($backdrop_borders_color, $backdrop_base_color, 30%);
+      background-image: linear-gradient(to bottom, $backdrop_base_color);
+    }
+  }
+
+  // color back the top border of a linked focused entry following another entry and add back the focus shadow.
+  // :not(:only-child) is a specificity bump hack.
+  > .entry:not(:only-child) + .entry:focus {
+    border-top-color: entry_focus_border();
+    box-shadow: entry_focus_shadow();
+  }
+
+  // this takes care of coloring the top border of the focused entry subsequent widget
+  > .entry:focus:not(:only-child) + .entry,
+  > .entry:focus:not(:only-child) + .button,
+  > .entry:focus:not(:only-child) + GtkComboBox > .button,
+  > .entry:focus:not(:only-child) + GtkComboBoxText > .button { border-top-color: entry_focus_border(); }
+}
+
 
 /***********
  * Buttons *
@@ -772,18 +736,18 @@ $_dot_color: if($variant=='light', $selected_bg_color,
 
 %linked_vertical_middle {
   border-left-style: solid;
-  border-top-style: none;
+  border-bottom-style: none;
   border-radius: 0;
 }
 
 %linked_vertical{
   @extend %linked_vertical_middle;
   &:first-child {
-    border-style: solid;
     border-radius: 3px 3px 0 0;
   }
   &:last-child {
     border-radius: 0 0 3px 3px;
+    border-style: solid;
   }
   &:only-child {
     border-radius: 3px;

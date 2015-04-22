@@ -253,111 +253,6 @@ GtkTextView {
       color: #215d9c; }
     .entry.image:backdrop {
       color: #7e8080; }
-  .linked.vertical > .entry {
-    background-color: transparent;
-    background-image: linear-gradient(to bottom, #1c1f1f, #232525 3px, #292929 90%);
-    color: white;
-    border-color: #1c1f1f;
-    box-shadow: inset 0 0 0 1px rgba(33, 93, 156, 0);
-    background-image: linear-gradient(to bottom, #292929);
-    border-bottom-color: #252626;
-    box-shadow: none; }
-    .linked.vertical > .entry:focus {
-      border-color: #0f2b48;
-      box-shadow: inset 0 0 0 1px #215d9c, 0 -1px 0 0 #0f2b48; }
-    .linked.vertical > .entry:insensitive {
-      background-color: transparent;
-      background-image: linear-gradient(to bottom, #1c1f1f, #232525 3px, #292929 90%);
-      color: #939695;
-      border-color: #1c1f1f;
-      background-image: linear-gradient(to bottom, #323636);
-      box-shadow: none;
-      border-bottom-color: #252626; }
-      .linked.vertical > .entry:insensitive:backdrop {
-        background-color: transparent;
-        background-image: linear-gradient(to bottom, #1c1f1f, #232525 3px, #292929 90%);
-        color: #5d6767;
-        border-color: #1e2222;
-        background-image: linear-gradient(to bottom, #323636);
-        box-shadow: none;
-        border-bottom-color: #272929; }
-    .linked.vertical > .entry:backdrop {
-      background-color: transparent;
-      background-image: linear-gradient(to bottom, #1c1f1f, #232525 3px, #292929 90%);
-      color: #d4d4d4;
-      border-color: #1e2222;
-      background-image: linear-gradient(to bottom, #2c2c2c);
-      box-shadow: none;
-      border-bottom-color: #272929; }
-    .linked.vertical > .entry:first-child {
-      background-color: transparent;
-      background-image: linear-gradient(to bottom, #1c1f1f, #232525 3px, #292929 90%);
-      color: white;
-      border-color: #1c1f1f;
-      box-shadow: inset 0 0 0 1px rgba(33, 93, 156, 0);
-      border-bottom-color: #252626; }
-      .linked.vertical > .entry:first-child:focus {
-        background-color: transparent;
-        background-image: linear-gradient(to bottom, #1c1f1f, #232525 3px, #292929 90%);
-        box-shadow: inset 0 0 0 1px #215d9c;
-        border-color: #0f2b48; }
-      .linked.vertical > .entry:first-child:insensitive {
-        background-color: transparent;
-        background-image: linear-gradient(to bottom, #1c1f1f, #232525 3px, #292929 90%);
-        color: #939695;
-        border-color: #1c1f1f;
-        background-image: linear-gradient(to bottom, #323636);
-        box-shadow: none;
-        border-bottom-color: #272929; }
-        .linked.vertical > .entry:first-child:insensitive:backdrop {
-          background-color: transparent;
-          background-image: linear-gradient(to bottom, #1c1f1f, #232525 3px, #292929 90%);
-          color: #5d6767;
-          border-color: #1e2222;
-          background-image: linear-gradient(to bottom, #323636);
-          box-shadow: none;
-          border-bottom-color: #272929;
-          border-top-style: solid; }
-      .linked.vertical > .entry:first-child:backdrop {
-        background-color: transparent;
-        background-image: linear-gradient(to bottom, #1c1f1f, #232525 3px, #292929 90%);
-        color: #d4d4d4;
-        border-color: #1e2222;
-        background-image: linear-gradient(to bottom, #2c2c2c);
-        box-shadow: none;
-        border-bottom-color: #272929; }
-    .linked.vertical > .entry:last-child {
-      background-color: transparent;
-      background-image: linear-gradient(to bottom, #1c1f1f, #232525 3px, #292929 90%);
-      color: white;
-      border-color: #1c1f1f;
-      box-shadow: inset 0 0 0 1px rgba(33, 93, 156, 0), 0 1px rgba(238, 238, 236, 0.1);
-      background-image: linear-gradient(to bottom, #292929);
-      box-shadow: 0 1px rgba(238, 238, 236, 0.1); }
-      .linked.vertical > .entry:last-child:focus {
-        border-color: #0f2b48;
-        box-shadow: inset 0 0 0 1px #215d9c, 0 -1px 0 0 #0f2b48, 0 1px rgba(238, 238, 236, 0.1); }
-      .linked.vertical > .entry:last-child:insensitive {
-        background-color: transparent;
-        background-image: linear-gradient(to bottom, #1c1f1f, #232525 3px, #292929 90%);
-        color: #939695;
-        border-color: #1c1f1f;
-        background-image: linear-gradient(to bottom, #323636);
-        box-shadow: 0 1px rgba(238, 238, 236, 0.1); }
-        .linked.vertical > .entry:last-child:insensitive:backdrop {
-          background-color: transparent;
-          background-image: linear-gradient(to bottom, #1c1f1f, #232525 3px, #292929 90%);
-          color: #5d6767;
-          border-color: #1e2222;
-          background-image: linear-gradient(to bottom, #323636);
-          box-shadow: 0 1px rgba(238, 238, 236, 0); }
-      .linked.vertical > .entry:last-child:backdrop {
-        background-color: transparent;
-        background-image: linear-gradient(to bottom, #1c1f1f, #232525 3px, #292929 90%);
-        color: #d4d4d4;
-        border-color: #1e2222;
-        background-image: linear-gradient(to bottom, #2c2c2c);
-        box-shadow: 0 1px rgba(238, 238, 236, 0); }
   .osd .entry {
     background-color: transparent;
     background-image: linear-gradient(to bottom, #1c1f1f, #232525 3px, #292929 90%);
@@ -398,6 +293,25 @@ GtkTextView {
       box-shadow: none;
       text-shadow: none;
       icon-shadow: none; }
+
+.linked.vertical > .entry:not(:last-child) {
+  box-shadow: none; }
+.linked.vertical > .entry:focus:not(last-child) {
+  box-shadow: inset 0 0 0 1px #215d9c; }
+.linked.vertical > .entry:not(:insensitive) + .entry:not(:insensitive) {
+  border-top-color: #252626;
+  background-image: linear-gradient(to bottom, #292929); }
+  .linked.vertical > .entry:not(:insensitive) + .entry:not(:insensitive):backdrop {
+    border-top-color: #272929;
+    background-image: linear-gradient(to bottom, #2c2c2c); }
+.linked.vertical > .entry:not(:only-child) + .entry:focus {
+  border-top-color: #0f2b48;
+  box-shadow: inset 0 0 0 1px #215d9c; }
+.linked.vertical > .entry:focus:not(:only-child) + .entry,
+.linked.vertical > .entry:focus:not(:only-child) + .button,
+.linked.vertical > .entry:focus:not(:only-child) + GtkComboBox > .button,
+.linked.vertical > .entry:focus:not(:only-child) + GtkComboBoxText > .button {
+  border-top-color: #0f2b48; }
 
 /***********
  * Buttons *
@@ -1242,22 +1156,22 @@ GtkComboBox.combobox-entry .titlebar .button.titlebutton,
   border-radius: 3px;
   border-style: solid; }
 
-.linked.vertical > .entry, .linked.vertical > .entry:focus, .linked.vertical > .entry:insensitive, .linked.vertical > .entry:insensitive:backdrop, .linked.vertical > .entry:backdrop, .linked.vertical > .button, .header-bar .linked.vertical > .button.titlebutton,
+.linked.vertical > .entry, .linked.vertical > .button, .header-bar .linked.vertical > .button.titlebutton,
 .titlebar .linked.vertical > .button.titlebutton, .linked.vertical > .button:hover, .linked.vertical > .button:active, .linked.vertical > .button:checked, .linked.vertical > .button:backdrop, .linked.vertical > GtkComboBoxText > .button,
 .linked.vertical > GtkComboBox > .button {
   border-left-style: solid;
-  border-top-style: none;
+  border-bottom-style: none;
   border-radius: 0; }
 
 .linked.vertical > .entry:first-child, .linked.vertical > .button:first-child, .header-bar .linked.vertical > .button.titlebutton:first-child,
 .titlebar .linked.vertical > .button.titlebutton:first-child, .linked.vertical > GtkComboBoxText:first-child > .button,
 .linked.vertical > GtkComboBox:first-child > .button {
-  border-style: solid;
   border-radius: 3px 3px 0 0; }
 .linked.vertical > .entry:last-child, .linked.vertical > .button:last-child, .header-bar .linked.vertical > .button.titlebutton:last-child,
 .titlebar .linked.vertical > .button.titlebutton:last-child, .linked.vertical > GtkComboBoxText:last-child > .button,
 .linked.vertical > GtkComboBox:last-child > .button {
-  border-radius: 0 0 3px 3px; }
+  border-radius: 0 0 3px 3px;
+  border-style: solid; }
 .linked.vertical > .entry:only-child, .linked.vertical > .button:only-child, .header-bar .linked.vertical > .button.titlebutton:only-child,
 .titlebar .linked.vertical > .button.titlebutton:only-child, .linked.vertical > GtkComboBoxText:only-child > .button,
 .linked.vertical > GtkComboBox:only-child > .button {
