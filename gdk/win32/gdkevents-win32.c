@@ -178,7 +178,9 @@ _gdk_win32_get_next_tick (gulong suggested_tick)
 
   if (suggested_tick == 0)
     suggested_tick = GetTickCount ();
-  if (suggested_tick <= cur_tick)
+  /* Ticks eventually wrap around.
+   * This works as long as the interval between ticks is < 2147483648ms */
+  if (suggested_tick <= cur_tick && ((cur_tick - suggested_tick) < 0x7FFFFFFF))
     return cur_tick;
   else
     return cur_tick = suggested_tick;
