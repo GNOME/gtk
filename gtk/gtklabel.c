@@ -32,6 +32,7 @@
 #include "gtkaccellabel.h"
 #include "gtkbindings.h"
 #include "gtkbuildable.h"
+#include "gtkbuilderprivate.h"
 #include "gtkclipboard.h"
 #include "gtkcssshadowsvalueprivate.h"
 #include "gtkdnd.h"
@@ -1556,9 +1557,6 @@ pango_start_element (GMarkupParseContext *context,
 		     GError             **error)
 {
   PangoParserData *data = (PangoParserData*)user_data;
-  GValue val = G_VALUE_INIT;
-  guint i;
-  gint line_number, char_number;
 
   if (strcmp (element_name, "attribute") == 0)
     {
@@ -1568,83 +1566,76 @@ pango_start_element (GMarkupParseContext *context,
       const gchar *start = NULL;
       const gchar *end = NULL;
       guint start_val = 0;
-      guint end_val   = G_MAXUINT;
+      guint end_val = G_MAXUINT;
+      GValue val = G_VALUE_INIT;
 
-      for (i = 0; names[i]; i++)
-	{
-	  if (strcmp (names[i], "name") == 0)
-	    name = values[i];
-	  else if (strcmp (names[i], "value") == 0)
-	    value = values[i];
-	  else if (strcmp (names[i], "start") == 0)
-	    start = values[i];
-	  else if (strcmp (names[i], "end") == 0)
-	    end = values[i];
-	  else
-	    {
-	      g_markup_parse_context_get_position (context,
-						   &line_number,
-						   &char_number);
-	      g_set_error (error,
-			   GTK_BUILDER_ERROR,
-			   GTK_BUILDER_ERROR_INVALID_ATTRIBUTE,
-			   "%s:%d:%d '%s' is not a valid attribute of <%s>",
-			   "<input>",
-			   line_number, char_number, names[i], "attribute");
-	      return;
-	    }
-	}
+      if (!_gtk_builder_check_parent (data->builder, context, "attributes", error))
+        return;
 
-      if (!name || !value)
-	{
-	  g_markup_parse_context_get_position (context,
-					       &line_number,
-					       &char_number);
-	  g_set_error (error,
-		       GTK_BUILDER_ERROR,
-		       GTK_BUILDER_ERROR_MISSING_ATTRIBUTE,
-		       "%s:%d:%d <%s> requires attribute \"%s\"",
-		       "<input>",
-		       line_number, char_number, "attribute",
-		       name ? "value" : "name");
-	  return;
-	}
+      if (!g_markup_collect_attributes (element_name, names, values, error,
+                                        G_MARKUP_COLLECT_STRING, "name", &name,
+                                        G_MARKUP_COLLECT_STRING, "value", &value,
+                                        G_MARKUP_COLLECT_STRING|G_MARKUP_COLLECT_OPTIONAL, "start", &start,
+                                        G_MARKUP_COLLECT_STRING|G_MARKUP_COLLECT_OPTIONAL, "end", &end,
+                                        G_MARKUP_COLLECT_INVALID))
+        {
+          _gtk_builder_prefix_error (data->builder, context, error);
+          return;
+        }
 
       if (start)
-	{
-	  if (!gtk_builder_value_from_string_type (data->builder, G_TYPE_UINT, 
-						   start, &val, error))
-	    return;
-	  start_val = g_value_get_uint (&val);
-	  g_value_unset (&val);
-	}
+        {
+          if (!gtk_builder_value_from_string_type (data->builder, G_TYPE_UINT,
+                                                   start, &val, error))
+            {
+              _gtk_builder_prefix_error (data->builder, context, error);
+              return;
+            }
+          start_val = g_value_get_uint (&val);
+          g_value_unset (&val);
+        }
 
       if (end)
-	{
-	  if (!gtk_builder_value_from_string_type (data->builder, G_TYPE_UINT, 
-						   end, &val, error))
-	    return;
-	  end_val = g_value_get_uint (&val);
-	  g_value_unset (&val);
-	}
+        {
+          if (!gtk_builder_value_from_string_type (data->builder, G_TYPE_UINT,
+                                                   end, &val, error))
+            {
+              _gtk_builder_prefix_error (data->builder, context, error);
+              return;
+            }
+          end_val = g_value_get_uint (&val);
+          g_value_unset (&val);
+        }
 
       attr = attribute_from_text (data->builder, name, value, error);
 
       if (attr)
-	{
+        {
           attr->start_index = start_val;
-          attr->end_index   = end_val;
+          attr->end_index = end_val;
 
-	  if (!data->attrs)
-	    data->attrs = pango_attr_list_new ();
+          if (!data->attrs)
+            data->attrs = pango_attr_list_new ();
 
-	  pango_attr_list_insert (data->attrs, attr);
-	}
+          pango_attr_list_insert (data->attrs, attr);
+        }
     }
   else if (strcmp (element_name, "attributes") == 0)
-    ;
+    {
+      if (!_gtk_builder_check_parent (data->builder, context, "object", error))
+        return;
+
+      if (!g_markup_collect_attributes (element_name, names, values, error,
+                                        G_MARKUP_COLLECT_INVALID, NULL, NULL,
+                                        G_MARKUP_COLLECT_INVALID))
+        _gtk_builder_prefix_error (data->builder, context, error);
+    }
   else
-    g_warning ("Unsupported tag for GtkLabel: %s\n", element_name);
+    {
+      _gtk_builder_error_unhandled_tag (data->builder, context,
+                                        "GtkContainer", element_name,
+                                        error);
+    }
 }
 
 static const GMarkupParser pango_parser =
@@ -1660,7 +1651,7 @@ gtk_label_buildable_custom_tag_start (GtkBuildable     *buildable,
 				      GMarkupParser    *parser,
 				      gpointer         *data)
 {
-  if (buildable_parent_iface->custom_tag_start (buildable, builder, child, 
+  if (buildable_parent_iface->custom_tag_start (buildable, builder, child,
 						tagname, parser, data))
     return TRUE;
 
@@ -1687,7 +1678,7 @@ gtk_label_buildable_custom_finished (GtkBuildable *buildable,
 {
   PangoParserData *data;
 
-  buildable_parent_iface->custom_finished (buildable, builder, child, 
+  buildable_parent_iface->custom_finished (buildable, builder, child,
 					   tagname, user_data);
 
   if (strcmp (tagname, "attributes") == 0)
