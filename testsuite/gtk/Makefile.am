@@ -173,6 +173,11 @@ test_ui =						\
 	ui/test5.ui ui/test5.expected			\
 	ui/test6.ui ui/test6.expected			\
 	ui/test7.ui ui/test7.expected			\
+	ui/label1.ui ui/label1.expected			\
+	ui/label2.ui ui/label2.expected			\
+	ui/label3.ui ui/label3.expected			\
+	ui/label4.ui ui/label4.expected			\
+	ui/label5.ui ui/label5.expected			\
 	$(NULL)
 
 EXTRA_DIST +=				\
