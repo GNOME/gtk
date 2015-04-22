@@ -152,6 +152,9 @@ void _gdk_window_move_resize_child (GdkWindow *window,
 				    gint       width,
 				    gint       height);
 
+gboolean _gdk_win32_window_enable_transparency (GdkWindow *window);
+
+
 /* GdkWindowImpl methods */
 void _gdk_win32_window_scroll (GdkWindow *window,
 			       gint       dx,
@@ -476,6 +479,7 @@ void _gdk_win32_window_delete_property (GdkWindow *window, GdkAtom    property);
 
 /* Stray GdkWin32Screen members */
 GdkVisual *_gdk_win32_screen_get_system_visual (GdkScreen *screen);
+GdkVisual *_gdk_win32_screen_get_rgba_visual (GdkScreen *screen);
 gboolean _gdk_win32_screen_get_setting (GdkScreen   *screen, const gchar *name, GValue *value);
 gint _gdk_win32_screen_visual_get_best_depth (GdkScreen *screen);
 GdkVisualType _gdk_win32_screen_visual_get_best_type (GdkScreen *screen);

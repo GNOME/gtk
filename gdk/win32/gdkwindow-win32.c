@@ -41,6 +41,7 @@
 #include "gdkglcontext-win32.h"
 
 #include <cairo-win32.h>
+#include <dwmapi.h>
 
 static void gdk_window_impl_win32_init       (GdkWindowImplWin32      *window);
 static void gdk_window_impl_win32_class_init (GdkWindowImplWin32Class *klass);
@@ -243,6 +244,51 @@ _gdk_windowing_window_init (GdkScreen *screen)
   gdk_win32_handle_table_insert ((HANDLE *) &impl_win32->handle, _gdk_root);
 
   GDK_NOTE (MISC, g_print ("_gdk_root=%p\n", GDK_WINDOW_HWND (_gdk_root)));
+}
+
+gboolean
+_gdk_win32_window_enable_transparency (GdkWindow *window)
+{
+  DWM_BLURBEHIND blur_behind;
+  HRGN empty_region;
+  HRESULT call_result;
+  HWND parent, thiswindow;
+
+  if (window == NULL || GDK_WINDOW_HWND (window) == NULL)
+    return FALSE;
+
+  if (!gdk_screen_is_composited (gdk_window_get_screen (window)))
+    return FALSE;
+
+  if (window == _gdk_root)
+    return FALSE;
+
+  thiswindow = GDK_WINDOW_HWND (window);
+
+  /* Blurbehind only works on toplevel windows */
+  parent = GetAncestor (thiswindow, GA_PARENT);
+  if (!(GetWindowLong (thiswindow, GWL_STYLE) & WS_POPUP) &&
+      (parent == NULL || parent != GetDesktopWindow ()))
+    return FALSE;
+
+  empty_region = CreateRectRgn (0, 0, -1, -1);
+
+  if (empty_region == NULL)
+    return FALSE;
+
+  memset (&blur_behind, 0, sizeof (blur_behind));
+  blur_behind.dwFlags = DWM_BB_ENABLE | DWM_BB_BLURREGION;
+  blur_behind.hRgnBlur = empty_region;
+  blur_behind.fEnable = TRUE;
+  call_result = DwmEnableBlurBehindWindow (thiswindow, &blur_behind);
+
+  if (!SUCCEEDED (call_result))
+    g_warning ("%s: %s (%p) failed: %" G_GINT32_MODIFIER "x",
+        G_STRLOC, "DwmEnableBlurBehindWindow", thiswindow, (guint32) call_result);
+
+  DeleteObject (empty_region);
+
+  return SUCCEEDED (call_result);
 }
 
 static const gchar *
@@ -490,7 +536,8 @@ _gdk_win32_display_create_window_impl (GdkDisplay    *display,
   window->impl = GDK_WINDOW_IMPL (impl);
 
   if (attributes_mask & GDK_WA_VISUAL)
-    g_assert (gdk_screen_get_system_visual (screen) == attributes->visual);
+    g_assert ((gdk_screen_get_system_visual (screen) == attributes->visual) ||
+              (gdk_screen_get_rgba_visual (screen) == attributes->visual));
 
   impl->override_redirect = override_redirect;
 
@@ -688,6 +735,8 @@ _gdk_win32_display_create_window_impl (GdkDisplay    *display,
 
   if (attributes_mask & GDK_WA_CURSOR)
     gdk_window_set_cursor (window, attributes->cursor);
+
+  _gdk_win32_window_enable_transparency (window);
 }
 
 GdkWindow *
@@ -3347,7 +3396,7 @@ gdk_win32_ref_cairo_surface (GdkWindow *window)
       if (!hdc)
 	return NULL;
 
-      impl->cairo_surface = cairo_win32_surface_create (hdc);
+      impl->cairo_surface = cairo_win32_surface_create_with_format (hdc, CAIRO_FORMAT_ARGB32);
 
       cairo_surface_set_user_data (impl->cairo_surface, &gdk_win32_cairo_key,
 				   impl, gdk_win32_cairo_surface_destroy);

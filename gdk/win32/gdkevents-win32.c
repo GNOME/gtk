@@ -3171,6 +3171,10 @@ gdk_event_translate (MSG  *msg,
       handle_display_change ();
       break;
       
+    case WM_DWMCOMPOSITIONCHANGED:
+      _gdk_win32_window_enable_transparency (window);
+      break;
+      
     case WM_DESTROYCLIPBOARD:
       if (!_ignore_destroy_clipboard)
 	{
