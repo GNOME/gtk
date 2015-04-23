@@ -2594,6 +2594,7 @@ GtkScrolledWindow {
   &:active {
     box-shadow: inset 0 2px 2px -2px transparentize(black, 0.8);
   }
+  &:backdrop:hover { background-color: transparent; }
   &:selected {
     &:active { box-shadow: inset 0 2px 3px -1px transparentize(black, 0.5); }
     &:hover {
@@ -2601,7 +2602,6 @@ GtkScrolledWindow {
     }
     &:backdrop { background-color: $selected_bg_color; }
   }
-  &:backdrop:hover { background-color: transparent; }
 }
 
 .list-row:selected {
