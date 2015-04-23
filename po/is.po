@@ -1,24 +1,25 @@
+# translation of gtk+.gtk-3-14.is.po to
 # Icelandic translation of gtk 2.2
-# Copyright (C) 2003 Free Software Foundation, Inc.
+# Copyright (C) 2003, 2015 Free Software Foundation, Inc.
 # This file is distributed under the same license as the GTK package.
 #
 # Richard Allen <ra@ra.is>, 2003.
 # Sveinn í Felli <sv1@fellsnet.is>, 2015.
 msgid ""
 msgstr ""
-"Project-Id-Version: gtk 2.2\n"
-"Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gtk"
-"%2b&keywords=I18N+L10N&component=general\n"
-"POT-Creation-Date: 2015-01-11 21:44+0000\n"
-"PO-Revision-Date: 2015-01-13 13:39+0000\n"
+"Project-Id-Version: gtk+.gtk-3-14.is\n"
+"Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=gtk%2b&"
+"keywords=I18N+L10N&component=general\n"
+"POT-Creation-Date: 2015-01-08 09:46+0000\n"
+"PO-Revision-Date: 2015-04-23 11:08+0000\n"
 "Last-Translator: Sveinn í Felli <sv1@fellsnet.is>\n"
 "Language-Team: Icelandic <translation-team-is@lists.sourceforge.net>\n"
 "Language: is\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Lokalize 1.5\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Lokalize 1.4\n"
 
 #: ../gdk/broadway/gdkbroadway-server.c:143
 #, c-format
@@ -114,7 +115,7 @@ msgstr "Enter"
 #: ../gdk/keyname-table.h:6846
 msgctxt "keyboard label"
 msgid "Pause"
-msgstr "Pause"
+msgstr "Bíða"
 
 #: ../gdk/keyname-table.h:6847
 msgctxt "keyboard label"
@@ -1072,7 +1073,7 @@ msgstr "Birtustig litsins."
 
 #: ../gtk/deprecated/gtkcolorsel.c:466
 msgid "_Red:"
-msgstr "_Rautt:"
+msgstr "_Rauður:"
 
 #: ../gtk/deprecated/gtkcolorsel.c:467
 msgid "Amount of red light in the color."
@@ -1080,7 +1081,7 @@ msgstr "Magn rauða litsins."
 
 #: ../gtk/deprecated/gtkcolorsel.c:468
 msgid "_Green:"
-msgstr "_Grænt:"
+msgstr "_Grænn:"
 
 #: ../gtk/deprecated/gtkcolorsel.c:469
 msgid "Amount of green light in the color."
@@ -1088,7 +1089,7 @@ msgstr "Magn græna litsins."
 
 #: ../gtk/deprecated/gtkcolorsel.c:470
 msgid "_Blue:"
-msgstr "_Blátt:"
+msgstr "_Blár:"
 
 #: ../gtk/deprecated/gtkcolorsel.c:471
 msgid "Amount of blue light in the color."
@@ -1111,8 +1112,8 @@ msgid ""
 "You can enter an HTML-style hexadecimal color value, or simply a color name "
 "such as 'orange' in this entry."
 msgstr ""
-"Hægt er að slá inn litagildi á formi sextándakerfis eins og í HTML, eða með "
-"því að skrifa einfalt nafn á lit eins og ‚orange‘."
+"Það er hægt að bæta við litum með sextándakerfistölum eins og í HTML eða með "
+"því að skrifa nafn litarins (til dæmis ‚orange‘)."
 
 #: ../gtk/deprecated/gtkcolorsel.c:546
 msgid "_Palette:"
@@ -1159,13 +1160,13 @@ msgid ""
 "Click this palette entry to make it the current color. To change this entry, "
 "drag a color swatch here or right-click it and select \"Save color here.\""
 msgstr ""
-"Smelltu á litasjaldsfærslu til að gera hana að núverandi lit. Til að breyta "
-"færslunni, dragðu þá lit af virka litaspjaldin hingað eða hægri smelltu á "
-"það og veldu „Vista lit hér.“"
+"Smelltu á litaspjaldsfærslu til að gera hana að núverandi lit. Til að breyta "
+"færslunni, dragðu þá lit af virka litaspjaldinu hingað eða hægrismelltu á "
+"spjaldið og veldu „Vista lit hér.“"
 
 #: ../gtk/deprecated/gtkcolorseldialog.c:191
 #: ../gtk/deprecated/gtkfontsel.c:1689 ../gtk/gtkfilechooserbutton.c:794
-#: ../gtk/gtkfilechooserwidget.c:5230 ../gtk/gtkmessagedialog.c:944
+#: ../gtk/gtkfilechooserwidget.c:5226 ../gtk/gtkmessagedialog.c:944
 #: ../gtk/gtkmessagedialog.c:957 ../gtk/gtkmountoperation.c:543
 #: ../gtk/gtkpagesetupunixdialog.c:196 ../gtk/gtkprintbackend.c:763
 #: ../gtk/gtkprinteroptionwidget.c:545 ../gtk/gtkprintunixdialog.c:665
@@ -1203,7 +1204,7 @@ msgstr "abcdefghijk áéýúíóþæðö ABCDEFGHIJK ÁÉÝÚÍÓÞÆÐÖ"
 
 #: ../gtk/deprecated/gtkfontsel.c:386
 msgid "_Family:"
-msgstr "_Fjölskylda:"
+msgstr "L_eturtegund:"
 
 #: ../gtk/deprecated/gtkfontsel.c:393
 msgid "_Style:"
@@ -1217,7 +1218,7 @@ msgstr "S_tærð:"
 #. create the text entry widget
 #: ../gtk/deprecated/gtkfontsel.c:577
 msgid "_Preview:"
-msgstr "_Forsýn:"
+msgstr "_Forskoðun:"
 
 #: ../gtk/deprecated/gtkfontsel.c:1693 ../gtk/gtkpagesetupunixdialog.c:197
 #: ../gtk/resources/ui/gtkassistant.ui.h:1
@@ -1363,7 +1364,7 @@ msgstr "Tómt"
 
 #: ../gtk/encodesymbolic.c:38
 msgid "Output to this directory instead of cwd"
-msgstr ""
+msgstr "Setja úttak í þessa möppu í stað cwd"
 
 #: ../gtk/encodesymbolic.c:266
 #, c-format
@@ -1385,7 +1386,7 @@ msgstr ""
 
 #: ../gtk/gtkaboutdialog.c:118 ../gtk/resources/ui/gtkaboutdialog.ui.h:3
 msgid "License"
-msgstr "Notkunarleyfi"
+msgstr "Notandaleyfi"
 
 #: ../gtk/gtkaboutdialog.c:119
 #| msgid "License"
@@ -1642,9 +1643,9 @@ msgid "text may not appear inside <%s>"
 msgstr "texti má ekki birtast innan <%s>"
 
 #: ../gtk/gtkbuilderparser.c:340
-#, fuzzy, c-format
+#, c-format
 msgid "Invalid object type `%s' on line %d"
-msgstr "Ógilt skráarheiti: %s"
+msgstr "Ógild tegund hlutar '%s' á línu %d"
 
 #: ../gtk/gtkbuilderparser.c:360
 #, c-format
@@ -1657,14 +1658,14 @@ msgid "Duplicate object ID '%s' on line %d (previously on line %d)"
 msgstr "Tvítekið auðkenni '%s'-hlutar á línu %d (áður á línu %d)"
 
 #: ../gtk/gtkbuilderparser.c:652
-#, fuzzy, c-format
+#, c-format
 msgid "Invalid property: %s.%s on line %d"
-msgstr "Ógilt skráarheiti: %s"
+msgstr "Ógildur eiginleiki: %s.%s á línu %d"
 
 #: ../gtk/gtkbuilderparser.c:775
 #, c-format
 msgid "Invalid signal `%s' for type `%s' on line %d"
-msgstr ""
+msgstr "Ógilt merki '%s' fyrir tegund '%s' á línu %d"
 
 #: ../gtk/gtkbuilderparser.c:1067
 #, c-format
@@ -2097,26 +2098,26 @@ msgstr "_Hægri"
 msgid "Paper Margins"
 msgstr "Spássía blaðsins"
 
-#: ../gtk/gtkentry.c:9594 ../gtk/gtkentry.c:9749 ../gtk/gtklabel.c:6535
+#: ../gtk/gtkentry.c:9594 ../gtk/gtkentry.c:9749 ../gtk/gtklabel.c:6530
 #: ../gtk/gtktextview.c:8848 ../gtk/gtktextview.c:9038
 msgid "Cu_t"
 msgstr "_Klippa"
 
-#: ../gtk/gtkentry.c:9598 ../gtk/gtkentry.c:9752 ../gtk/gtklabel.c:6536
+#: ../gtk/gtkentry.c:9598 ../gtk/gtkentry.c:9752 ../gtk/gtklabel.c:6531
 #: ../gtk/gtktextview.c:8852 ../gtk/gtktextview.c:9042
 msgid "_Copy"
 msgstr "_Afrita"
 
-#: ../gtk/gtkentry.c:9602 ../gtk/gtkentry.c:9755 ../gtk/gtklabel.c:6537
+#: ../gtk/gtkentry.c:9602 ../gtk/gtkentry.c:9755 ../gtk/gtklabel.c:6532
 #: ../gtk/gtktextview.c:8854 ../gtk/gtktextview.c:9044
 msgid "_Paste"
 msgstr "_Líma"
 
-#: ../gtk/gtkentry.c:9605 ../gtk/gtklabel.c:6539 ../gtk/gtktextview.c:8857
+#: ../gtk/gtkentry.c:9605 ../gtk/gtklabel.c:6534 ../gtk/gtktextview.c:8857
 msgid "_Delete"
 msgstr "_Eyða"
 
-#: ../gtk/gtkentry.c:9616 ../gtk/gtklabel.c:6548 ../gtk/gtktextview.c:8871
+#: ../gtk/gtkentry.c:9616 ../gtk/gtklabel.c:6543 ../gtk/gtktextview.c:8871
 msgid "Select _All"
 msgstr "Velja _Allt"
 
@@ -2158,11 +2159,11 @@ msgstr "%1$s á %2$s"
 msgid "Type name of new folder"
 msgstr "Settu inn nafn nýrrar möppu"
 
-#: ../gtk/gtkfilechooserwidget.c:733
+#: ../gtk/gtkfilechooserwidget.c:730
 msgid "The folder could not be created"
 msgstr "Það tókst ekki að búa til möppu"
 
-#: ../gtk/gtkfilechooserwidget.c:746
+#: ../gtk/gtkfilechooserwidget.c:743
 msgid ""
 "The folder could not be created, as a file with the same name already "
 "exists.  Try using a different name for the folder, or rename the file first."
@@ -2170,111 +2171,111 @@ msgstr ""
 "Ekki tókst að búa til möppu, þar sem skrá með sama nafni er þegar til. "
 "Reyndu að nota annað nafn fyrir möppuna eða endurnefndu skrána fyrst."
 
-#: ../gtk/gtkfilechooserwidget.c:760
+#: ../gtk/gtkfilechooserwidget.c:757
 msgid "You need to choose a valid filename."
 msgstr "Þú verður að velja gilt skráarheiti."
 
-#: ../gtk/gtkfilechooserwidget.c:763
+#: ../gtk/gtkfilechooserwidget.c:760
 #, c-format
 msgid "Cannot create a file under %s as it is not a folder"
 msgstr "Get ekki búið til skrá undir %s vegna þess að þetta er ekki mappa"
 
-#: ../gtk/gtkfilechooserwidget.c:771
+#: ../gtk/gtkfilechooserwidget.c:768
 msgid "Cannot create file as the filename is too long"
 msgstr "Gat ekki búið til skrá þar sem skráarheitið er of langt"
 
-#: ../gtk/gtkfilechooserwidget.c:772
+#: ../gtk/gtkfilechooserwidget.c:769
 msgid "Try using a shorter name."
 msgstr "Reyndu að nota styttra heiti."
 
-#: ../gtk/gtkfilechooserwidget.c:782
+#: ../gtk/gtkfilechooserwidget.c:779
 msgid "You may only select folders"
 msgstr "Þú getur aðeins valið möppur"
 
-#: ../gtk/gtkfilechooserwidget.c:783
+#: ../gtk/gtkfilechooserwidget.c:780
 msgid "The item that you selected is not a folder try using a different item."
 msgstr "Atriðið sem þú valdir er ekki mappa, reyndu að velja eitthvað annað."
 
-#: ../gtk/gtkfilechooserwidget.c:791
+#: ../gtk/gtkfilechooserwidget.c:788
 msgid "Invalid file name"
 msgstr "Ógilt skráarheiti"
 
-#: ../gtk/gtkfilechooserwidget.c:801
+#: ../gtk/gtkfilechooserwidget.c:798
 msgid "The folder contents could not be displayed"
 msgstr "Gat ekki birt innihald möppunnar"
 
-#: ../gtk/gtkfilechooserwidget.c:1438
+#: ../gtk/gtkfilechooserwidget.c:1435
 msgid "Could not select file"
 msgstr "Gat ekki valið skrá"
 
-#: ../gtk/gtkfilechooserwidget.c:1668
+#: ../gtk/gtkfilechooserwidget.c:1665
 msgid "_Visit File"
 msgstr "S_koða skrá"
 
-#: ../gtk/gtkfilechooserwidget.c:1671
+#: ../gtk/gtkfilechooserwidget.c:1668
 msgid "_Copy Location"
 msgstr "_Afrita staðsetningu"
 
-#: ../gtk/gtkfilechooserwidget.c:1674
+#: ../gtk/gtkfilechooserwidget.c:1671
 msgid "_Add to Bookmarks"
 msgstr "_Bæta við sem bókamerki"
 
-#: ../gtk/gtkfilechooserwidget.c:1681
+#: ../gtk/gtkfilechooserwidget.c:1678
 msgid "Show _Hidden Files"
 msgstr "Sýna _faldar skrár"
 
-#: ../gtk/gtkfilechooserwidget.c:1684
+#: ../gtk/gtkfilechooserwidget.c:1681
 msgid "Show _Size Column"
 msgstr "Sýna dálk fyrir _stærð"
 
 #  Name entry
 #. Label
-#: ../gtk/gtkfilechooserwidget.c:1976
+#: ../gtk/gtkfilechooserwidget.c:1973
 msgid "_Name:"
 msgstr "_Nafn:"
 
-#: ../gtk/gtkfilechooserwidget.c:3652
+#: ../gtk/gtkfilechooserwidget.c:3648
 #, c-format
 msgid "Could not read the contents of %s"
 msgstr "Gat ekki lesið innihald %s"
 
-#: ../gtk/gtkfilechooserwidget.c:3656
+#: ../gtk/gtkfilechooserwidget.c:3652
 msgid "Could not read the contents of the folder"
 msgstr "Gat ekki lesið innihald möppunnar"
 
-#: ../gtk/gtkfilechooserwidget.c:3763
+#: ../gtk/gtkfilechooserwidget.c:3759
 msgid "%H:%M"
 msgstr "%H:%M"
 
-#: ../gtk/gtkfilechooserwidget.c:3763
+#: ../gtk/gtkfilechooserwidget.c:3759
 msgid "%-I:%M %P"
 msgstr "%-I:%M %P"
 
-#: ../gtk/gtkfilechooserwidget.c:3765
+#: ../gtk/gtkfilechooserwidget.c:3761
 msgid "Yesterday at %H:%M"
 msgstr "Í gær klukkan %H:%M"
 
-#: ../gtk/gtkfilechooserwidget.c:3765
+#: ../gtk/gtkfilechooserwidget.c:3761
 msgid "Yesterday at %-I:%M %P"
 msgstr "Í gær klukkan %-I:%M %P"
 
 #. Translators: We don't know whether this printer is
 #. * available to print to.
-#: ../gtk/gtkfilechooserwidget.c:3964 ../gtk/inspector/prop-editor.c:1571
+#: ../gtk/gtkfilechooserwidget.c:3960 ../gtk/inspector/prop-editor.c:1571
 #: ../modules/printbackends/cloudprint/gtkprintbackendcloudprint.c:748
 msgid "Unknown"
 msgstr "Óþekkt"
 
-#: ../gtk/gtkfilechooserwidget.c:4437
+#: ../gtk/gtkfilechooserwidget.c:4433
 msgid "Cannot change to folder because it is not local"
 msgstr "Get ekki skipt yfir í möppu þar sem hún er ekki staðvær"
 
-#: ../gtk/gtkfilechooserwidget.c:5223 ../gtk/gtkprintunixdialog.c:656
+#: ../gtk/gtkfilechooserwidget.c:5219 ../gtk/gtkprintunixdialog.c:656
 #, c-format
 msgid "A file named “%s” already exists.  Do you want to replace it?"
 msgstr "Það er þegar til skrá sem heitir „“%s“. Viltu skipta henni út?"
 
-#: ../gtk/gtkfilechooserwidget.c:5226 ../gtk/gtkprintunixdialog.c:660
+#: ../gtk/gtkfilechooserwidget.c:5222 ../gtk/gtkprintunixdialog.c:660
 #, c-format
 msgid ""
 "The file already exists in “%s”.  Replacing it will overwrite its contents."
@@ -2282,15 +2283,15 @@ msgstr ""
 "Þess skrá er þegar til í „“%s“”. Verði henni skipt út verður skrifað yfir "
 "innihaldið."
 
-#: ../gtk/gtkfilechooserwidget.c:5231 ../gtk/gtkprintunixdialog.c:668
+#: ../gtk/gtkfilechooserwidget.c:5227 ../gtk/gtkprintunixdialog.c:668
 msgid "_Replace"
 msgstr "_Skipta út"
 
-#: ../gtk/gtkfilechooserwidget.c:6050
+#: ../gtk/gtkfilechooserwidget.c:6046
 msgid "Could not start the search process"
 msgstr "Gat ekki byrjað að leita"
 
-#: ../gtk/gtkfilechooserwidget.c:6051
+#: ../gtk/gtkfilechooserwidget.c:6047
 msgid ""
 "The program was not able to create a connection to the indexer daemon.  "
 "Please make sure it is running."
@@ -2298,7 +2299,7 @@ msgstr ""
 "Forritið gat ekki tengst atriðaskráarpúkanum. Vertu viss um að hann sé í "
 "gangi."
 
-#: ../gtk/gtkfilechooserwidget.c:6065
+#: ../gtk/gtkfilechooserwidget.c:6061
 msgid "Could not send the search request"
 msgstr "Gat ekki sent leitarbeiðni"
 
@@ -2314,7 +2315,7 @@ msgstr "Skráakerfi"
 #  Initialize fields
 #: ../gtk/gtkfontbutton.c:358
 msgid "Sans 12"
-msgstr "Sans 12"
+msgstr "sans 12"
 
 #: ../gtk/gtkfontbutton.c:443 ../gtk/gtkfontbutton.c:571
 msgid "Pick a Font"
@@ -2383,12 +2384,12 @@ msgid "Error"
 msgstr "Villa"
 
 #. Open Link
-#: ../gtk/gtklabel.c:6516
+#: ../gtk/gtklabel.c:6511
 msgid "_Open Link"
 msgstr "_Opna tengil"
 
 #. Copy Link Address
-#: ../gtk/gtklabel.c:6525
+#: ../gtk/gtklabel.c:6520
 msgid "Copy _Link Address"
 msgstr "A_frita vistfang tengils"
 
@@ -2631,7 +2632,7 @@ msgstr "Z skelin"
 msgid "Cannot end process with PID %d: %s"
 msgstr "Get ekki slökkt á ferli með PID %d: %s"
 
-#: ../gtk/gtknotebook.c:5126 ../gtk/gtknotebook.c:7854
+#: ../gtk/gtknotebook.c:5128 ../gtk/gtknotebook.c:7856
 #, c-format
 msgid "Page %u"
 msgstr "Síða %u"
@@ -3196,15 +3197,15 @@ msgctxt "recent menu label"
 msgid "%d. %s"
 msgstr "%d. %s"
 
-#: ../gtk/gtkrecentmanager.c:1038 ../gtk/gtkrecentmanager.c:1051
-#: ../gtk/gtkrecentmanager.c:1188 ../gtk/gtkrecentmanager.c:1198
-#: ../gtk/gtkrecentmanager.c:1250 ../gtk/gtkrecentmanager.c:1259
-#: ../gtk/gtkrecentmanager.c:1274
+#: ../gtk/gtkrecentmanager.c:1029 ../gtk/gtkrecentmanager.c:1042
+#: ../gtk/gtkrecentmanager.c:1179 ../gtk/gtkrecentmanager.c:1189
+#: ../gtk/gtkrecentmanager.c:1241 ../gtk/gtkrecentmanager.c:1250
+#: ../gtk/gtkrecentmanager.c:1265
 #, c-format
 msgid "Unable to find an item with URI '%s'"
 msgstr "Fann ekki neitt með slóðinni '%s'"
 
-#: ../gtk/gtkrecentmanager.c:2477
+#: ../gtk/gtkrecentmanager.c:2468
 #, c-format
 msgid "No registered application with name '%s' for item with URI '%s' found"
 msgstr "Ekkert skráð forrit fannst, með heitinu '%s' fyrir slóðina '%s'"
@@ -3413,7 +3414,7 @@ msgstr "%d %%"
 
 #: ../gtk/gtkwindow.c:11742
 msgid "Do you want to use GTK+ Inspector?"
-msgstr ""
+msgstr "Viltu nota GTK+ Inspector?"
 
 #: ../gtk/gtkwindow.c:11744
 msgid ""
@@ -3434,23 +3435,22 @@ msgstr "Staða"
 
 #: ../gtk/inspector/actions.ui.h:1 ../gtk/inspector/general.ui.h:3
 msgid "Prefix"
-msgstr ""
+msgstr "Forskeyti"
 
 #: ../gtk/inspector/actions.ui.h:2 ../gtk/inspector/classes-list.ui.h:3
 #: ../gtk/inspector/signals-list.ui.h:3 ../gtk/inspector/widget-tree.ui.h:2
 #: ../gtk/resources/ui/gtkfilechooserwidget.ui.h:4
 msgid "Name"
-msgstr "Heiti"
+msgstr "Nafn"
 
 #: ../gtk/inspector/actions.ui.h:3
-#, fuzzy
 #| msgid "Disabled"
 msgid "Enabled"
-msgstr "Óvirkur"
+msgstr "Virkt"
 
 #: ../gtk/inspector/actions.ui.h:4
 msgid "Parameter Type"
-msgstr ""
+msgstr "Tegund viðfangs"
 
 #: ../gtk/inspector/button-path.ui.h:1
 msgid "Choose a widget through the inspector"
@@ -3458,48 +3458,49 @@ msgstr ""
 
 #: ../gtk/inspector/classes-list.c:122
 msgid "New class"
-msgstr ""
+msgstr "Nýr klasi"
 
 #: ../gtk/inspector/classes-list.c:126
-#, fuzzy
 msgid "Cancel"
-msgstr "_Hætta við"
+msgstr "Hætta við"
 
 #: ../gtk/inspector/classes-list.c:133
-#, fuzzy
 msgid "Class name"
-msgstr "_Heiti lits:"
+msgstr "Heiti klasa"
 
 #. vim: set et sw=2 ts=2:
 #: ../gtk/inspector/classes-list.ui.h:1
 msgid "Add a class"
-msgstr ""
+msgstr "Bæta við klasa"
 
 #: ../gtk/inspector/classes-list.ui.h:2
 msgid "Restore defaults for this widget"
-msgstr ""
+msgstr "Endurheimta sjálfgefið fyrir þennan viðmótshluta"
 
 #: ../gtk/inspector/css-editor.c:89 ../gtk/inspector/css-editor.c:95
 msgid "You can type here any CSS rule recognized by GTK+."
-msgstr ""
+msgstr "Þú getur skrifað hér hverja þá CSS reglu sem GTK+ þekkir."
 
 #: ../gtk/inspector/css-editor.c:90 ../gtk/inspector/css-editor.c:96
 msgid ""
 "You can temporarily disable this custom CSS by clicking on the \"Pause\" "
 "button above."
 msgstr ""
+"Þú getur gert þetta sérsniðna CSS tímabundið óvirkt með því að smella á "
+"\"Bíða\" hnappinn hér fyrir ofan."
 
 #: ../gtk/inspector/css-editor.c:91
 msgid "Changes are applied instantly and globally, for the whole application."
-msgstr ""
+msgstr "Breytingar eru framkvæmdar samstundis og víðvært, fyrir allt forritið."
 
 #: ../gtk/inspector/css-editor.c:97
 msgid "Changes are applied instantly, only for this selected widget."
 msgstr ""
+"Breytingar eru framkvæmdar samstundis, aðeins fyrir valda viðmótshlutann."
 
 #: ../gtk/inspector/css-editor.c:159
 msgid "Saving CSS failed"
-msgstr ""
+msgstr "Tókst ekki að vista CSS"
 
 #: ../gtk/inspector/css-editor.c:199
 msgid "_Save"
@@ -3508,92 +3509,88 @@ msgstr "Vi_sta"
 #. vim: set et sw=2 ts=2:
 #: ../gtk/inspector/css-editor.ui.h:1
 msgid "Disable this custom CSS"
-msgstr ""
+msgstr "Gera þetta sérsniðna CSS óvirkt"
 
 #: ../gtk/inspector/css-editor.ui.h:2
 msgid "Save the current CSS"
-msgstr ""
+msgstr "Vista núverandi CSS"
 
 #: ../gtk/inspector/data-list.ui.h:1
 msgid "Show data"
-msgstr ""
+msgstr "Sýna gögn"
 
 #. vim: set et sw=2 ts=2:
 #: ../gtk/inspector/general.ui.h:1
 msgid "GTK+ Version"
-msgstr ""
+msgstr "GTK+ útgáfa"
 
 #: ../gtk/inspector/general.ui.h:2
 msgid "GDK Backend"
-msgstr ""
+msgstr "GDK bakendi"
 
 #: ../gtk/inspector/gestures.c:128
 msgid "Capture"
-msgstr ""
+msgstr "Upptaka"
 
 #: ../gtk/inspector/gestures.c:129
 msgid "Bubble"
-msgstr ""
+msgstr "Bóla"
 
 #: ../gtk/inspector/gestures.c:130 ../gtk/inspector/menu.ui.h:3
 msgid "Target"
-msgstr ""
+msgstr "Útkoma"
 
 #: ../gtk/inspector/menu.c:90
 msgid "Unnamed section"
-msgstr ""
+msgstr "Nafnlaus hluti"
 
 #. vim: set et sw=2 ts=2:
 #: ../gtk/inspector/menu.ui.h:1 ../gtk/inspector/widget-tree.ui.h:3
 msgid "Label"
-msgstr ""
+msgstr "Skýring"
 
 #: ../gtk/inspector/menu.ui.h:2 ../gtk/inspector/prop-editor.c:1302
-#, fuzzy
 msgid "Action"
-msgstr "S_taðsetning:"
+msgstr "Aðgerð"
 
 #: ../gtk/inspector/menu.ui.h:4
 msgid "Icon"
-msgstr ""
+msgstr "Táknmynd"
 
 #: ../gtk/inspector/misc-info.ui.h:2
 msgid "Buildable ID"
-msgstr ""
+msgstr "Byggjanlegt auðkenni"
 
 #: ../gtk/inspector/misc-info.ui.h:3
-#, fuzzy
 #| msgid "Default"
 msgid "Default Widget"
-msgstr "Sjálfgefið"
+msgstr "Sjálfgefin skjágræja"
 
 #: ../gtk/inspector/misc-info.ui.h:4 ../gtk/inspector/misc-info.ui.h:6
 #: ../gtk/inspector/prop-editor.c:1005 ../gtk/inspector/prop-editor.c:1185
 #: ../gtk/inspector/prop-editor.c:1310 ../gtk/inspector/prop-editor.c:1421
 #: ../gtk/inspector/window.ui.h:4
-#, fuzzy
 msgid "Properties"
-msgstr "_Eiginleikar"
+msgstr "Eiginleikar"
 
 #: ../gtk/inspector/misc-info.ui.h:5
 msgid "Focus Widget"
-msgstr ""
+msgstr "Viðmótshluti (widget) fær virkni"
 
 #: ../gtk/inspector/misc-info.ui.h:7
 msgid "Allocated size"
-msgstr ""
+msgstr "Úthlutuð stærð"
 
 #: ../gtk/inspector/object-hierarchy.ui.h:1
 msgid "Object Hierarchy"
-msgstr ""
+msgstr "Stigskipun hluta"
 
 #: ../gtk/inspector/prop-editor.c:617
-#, fuzzy, c-format
+#, c-format
 msgid "Pointer: %p"
-msgstr "_Prenta"
+msgstr "Bendill: %p"
 
 #: ../gtk/inspector/prop-editor.c:632
-#, fuzzy
 #| msgid "Unknown"
 msgctxt "type name"
 msgid "Unknown"
@@ -3602,21 +3599,20 @@ msgstr "Óþekkt"
 #: ../gtk/inspector/prop-editor.c:633
 #, c-format
 msgid "Object: %p (%s)"
-msgstr ""
+msgstr "Hlutur: %p (%s)"
 
 #: ../gtk/inspector/prop-editor.c:1058
 #, c-format
 msgid "Uneditable property type: %s"
-msgstr ""
+msgstr "Óbreytanleg gerð eiginleika: %s"
 
 #: ../gtk/inspector/prop-editor.c:1176
 msgid "Attribute mapping"
-msgstr ""
+msgstr "Vörpun eiginda"
 
 #: ../gtk/inspector/prop-editor.c:1181
-#, fuzzy
 msgid "Model:"
-msgstr "_Hamur: "
+msgstr "Gerð:"
 
 #: ../gtk/inspector/prop-editor.c:1182
 #, c-format
@@ -3624,31 +3620,29 @@ msgid "%p (%s)"
 msgstr "%p (%s)"
 
 #: ../gtk/inspector/prop-editor.c:1192
-#, fuzzy
 msgid "Column:"
-msgstr "_Gildi:"
+msgstr "Dálkur:"
 
 #: ../gtk/inspector/prop-editor.c:1306
 #, c-format
 msgid "Defined at: %p (%s)"
-msgstr ""
+msgstr "Skilgreint í: %p (%s)"
 
 #: ../gtk/inspector/prop-editor.c:1370 ../gtk/inspector/prop-editor.c:1386
-#, fuzzy
 msgid "inverted"
-msgstr "_Umbreyta"
+msgstr "viðsnúið"
 
 #: ../gtk/inspector/prop-editor.c:1402
 msgid "bidirectional, inverted"
-msgstr ""
+msgstr "tvíátta, viðsnúið"
 
 #: ../gtk/inspector/prop-editor.c:1407 ../gtk/inspector/prop-editor.c:1503
 msgid "bidirectional"
-msgstr ""
+msgstr "tvíátta"
 
 #: ../gtk/inspector/prop-editor.c:1412
 msgid "Binding:"
-msgstr ""
+msgstr "Binding:"
 
 #: ../gtk/inspector/prop-editor.c:1522
 msgid "Setting:"
@@ -3656,7 +3650,7 @@ msgstr "Stilling:"
 
 #: ../gtk/inspector/prop-editor.c:1554
 msgid "Source:"
-msgstr ""
+msgstr "Uppruni:"
 
 #: ../gtk/inspector/prop-editor.c:1559
 msgid "Default"
@@ -3688,19 +3682,19 @@ msgstr "Eigindi"
 
 #: ../gtk/inspector/prop-list.ui.h:4 ../gtk/inspector/signals-list.ui.h:6
 msgid "Defined At"
-msgstr ""
+msgstr "Skilgreint í"
 
 #: ../gtk/inspector/resource-list.ui.h:1
 msgid "Path"
-msgstr ""
+msgstr "Slóð"
 
 #: ../gtk/inspector/resource-list.ui.h:2
 msgid "Type:"
-msgstr ""
+msgstr "Tegund:"
 
 #: ../gtk/inspector/resource-list.ui.h:3
 msgid "Count:"
-msgstr ""
+msgstr "Talið:"
 
 #: ../gtk/inspector/resource-list.ui.h:4
 #| msgid "Size"
@@ -3754,30 +3748,30 @@ msgstr "Bæði"
 msgid "Location"
 msgstr "Staðsetning"
 
-#: ../gtk/inspector/visual.c:239 ../gtk/inspector/visual.c:254
+#: ../gtk/inspector/visual.c:247 ../gtk/inspector/visual.c:273
 msgid "Theme is hardcoded by GTK_THEME"
-msgstr ""
+msgstr "Þema er harðkóðað með GTK_THEME"
 
-#: ../gtk/inspector/visual.c:354
+#: ../gtk/inspector/visual.c:391
 msgid "Backend does not support window scaling"
-msgstr ""
+msgstr "Bakendi styður ekki gluggakvörðun"
 
-#: ../gtk/inspector/visual.c:393
+#: ../gtk/inspector/visual.c:430
 msgid "Setting is hardcoded by GTK_TEST_TOUCHSCREEN"
-msgstr ""
+msgstr "Stilling er harðkóðuð með GTK_TEST_TOUCHSCREEN"
 
 #. vim: set et sw=2 ts=2:
 #: ../gtk/inspector/visual.ui.h:1
 msgid "GTK+ Theme"
-msgstr ""
+msgstr "GTK+ þema"
 
 #: ../gtk/inspector/visual.ui.h:2
 msgid "Dark variant"
-msgstr ""
+msgstr "Dökkt tilbrigði"
 
 #: ../gtk/inspector/visual.ui.h:3
 msgid "Icon Theme"
-msgstr ""
+msgstr "Táknmyndaþema"
 
 #: ../gtk/inspector/visual.ui.h:4 ../gtk/resources/ui/gtkfontbutton.ui.h:1
 msgid "Font"
@@ -3801,9 +3795,8 @@ msgid "Window scaling"
 msgstr "Gluggakvörðun"
 
 #: ../gtk/inspector/visual.ui.h:9
-#, fuzzy
 msgid "Animations"
-msgstr "S_taðsetning:"
+msgstr "Hreyfingar"
 
 #: ../gtk/inspector/visual.ui.h:10
 msgid "Show Graphic Updates"
@@ -3819,15 +3812,15 @@ msgstr ""
 
 #: ../gtk/inspector/visual.ui.h:13
 msgid "Simulate touchscreen"
-msgstr ""
+msgstr "Herma eftir snertiskjá"
 
 #: ../gtk/inspector/widget-tree.ui.h:1
 msgid "Object"
-msgstr ""
+msgstr "Hlutur"
 
 #: ../gtk/inspector/widget-tree.ui.h:4
 msgid "Address"
-msgstr ""
+msgstr "Vistfang"
 
 #: ../gtk/inspector/window.c:143
 #, c-format
@@ -3852,35 +3845,32 @@ msgstr "Ýmislegt"
 
 #: ../gtk/inspector/window.ui.h:5
 msgid "Signals"
-msgstr ""
+msgstr "Merki"
 
 #: ../gtk/inspector/window.ui.h:6
 msgid "Hierarchy"
-msgstr ""
+msgstr "Stigskipun"
 
 #: ../gtk/inspector/window.ui.h:7
-#, fuzzy
 msgid "Child Properties"
-msgstr "_Eiginleikar"
+msgstr "Afleiðueiginleikar"
 
 #: ../gtk/inspector/window.ui.h:8
 msgid "CSS Classes"
-msgstr ""
+msgstr "CSS klasar"
 
 #: ../gtk/inspector/window.ui.h:9
-#, fuzzy
 msgid "Style Properties"
-msgstr "_Eiginleikar"
+msgstr "Stíleiginleikar"
 
 #: ../gtk/inspector/window.ui.h:10 ../gtk/inspector/window.ui.h:18
 msgid "Custom CSS"
-msgstr ""
+msgstr "Sérsniðið CSS"
 
 #: ../gtk/inspector/window.ui.h:11
-#, fuzzy
 #| msgid "Group"
 msgid "Size Groups"
-msgstr "Hópur"
+msgstr "Stærðarhópar"
 
 #: ../gtk/inspector/window.ui.h:12
 msgid "Data"
@@ -3892,7 +3882,7 @@ msgstr "Aðgerðir"
 
 #: ../gtk/inspector/window.ui.h:15
 msgid "Gestures"
-msgstr ""
+msgstr "Bendingar"
 
 #: ../gtk/inspector/window.ui.h:16
 msgid "Objects"
@@ -4836,14 +4826,14 @@ msgid ""
 "If you really want to create an icon cache here, use --ignore-theme-index.\n"
 msgstr ""
 "Engin þemayfirlitsskrá í '%s‘.\n"
-"Ef þú vilt í alvörunni búa hér til táknmyndaskyndiminni, notaðu "
-"--ignore-theme-index.\n"
+"Ef þú vilt í alvörunni búa hér til táknmyndaskyndiminni, notaðu --ignore-"
+"theme-index.\n"
 
 #  ID
 #. ID
 #: ../modules/input/imam-et.c:452
 msgid "Amharic (EZ+)"
-msgstr "Amharískt (EZ+)"
+msgstr "Amharic (EZ+)"
 
 #  ID
 #. ID
@@ -4855,7 +4845,7 @@ msgstr "Cedilla"
 #. ID
 #: ../modules/input/imcyrillic-translit.c:215
 msgid "Cyrillic (Transliterated)"
-msgstr "Kýrílískt (umritað)"
+msgstr "Cyrillic (Transliterated)"
 
 #  ID
 #. ID
@@ -4883,19 +4873,19 @@ msgstr "Tæ-Laó"
 #. ID
 #: ../modules/input/imti-er.c:451
 msgid "Tigrigna-Eritrean (EZ+)"
-msgstr "Tigrigna-Erítrískt (EZ+)"
+msgstr "Tigrigna-Eritrean (EZ+)"
 
 #  ID
 #. ID
 #: ../modules/input/imti-et.c:451
 msgid "Tigrigna-Ethiopian (EZ+)"
-msgstr "Tigrigna-Eþíópískt (EZ+)"
+msgstr "Tigrigna-Ethiopian (EZ+)"
 
 #  ID
 #. ID
 #: ../modules/input/imviqr.c:242
 msgid "Vietnamese (VIQR)"
-msgstr "Víetnamskt (VIQR)"
+msgstr "Vietnamese (VIQR)"
 
 #  ID
 #. ID
@@ -4942,50 +4932,50 @@ msgstr "Lykilorð:"
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:1373
 #, c-format
 msgid "Authentication is required to print document '%s' on printer %s"
-msgstr "Þú þarft að auðkenna þig til að prenta skjalið '%s' úr prentara %s"
+msgstr "Auðkenningar er krafist til að prenta skjalið “'%s” á prentaranum %s"
 
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:1084
 #, c-format
 msgid "Authentication is required to print a document on %s"
-msgstr "Þú þarft að auðkenna þig til að prenta skjalið með %s"
+msgstr "Auðkenningar er krafist til að prenta skjalið með %s"
 
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:1088
 #, c-format
 msgid "Authentication is required to get attributes of job '%s'"
-msgstr "Þú þarft að auðkenna þig til að sækja upplýsingar um '%s'"
+msgstr "Auðkenningar er krafist til að sækja upplýsingar um verkið ''%s'"
 
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:1090
 msgid "Authentication is required to get attributes of a job"
-msgstr "Þú þarft að auðkenna þig til að sækja upplýsingar um þetta verk"
+msgstr "Auðkenningar er krafist til að sækja upplýsingar um þetta verk"
 
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:1094
 #, c-format
 msgid "Authentication is required to get attributes of printer %s"
-msgstr "Þú þarft að auðkenna þig til að sækja upplýsingar um prentara %s"
+msgstr "Auðkenningar er krafist til að sækja upplýsingar um prentara %s"
 
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:1096
 msgid "Authentication is required to get attributes of a printer"
-msgstr "Þú þarft að auðkenna þig til að sækja upplýsingar prentara"
+msgstr "Auðkenningar er krafist til að sækja upplýsingar prentara"
 
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:1099
 #, c-format
 msgid "Authentication is required to get default printer of %s"
-msgstr "Þú þarft að auðkenna þig til að fá venjulega prentarann frá %s"
+msgstr "Auðkenningar er krafist til að fá sjálfgefinn prentara frá %s"
 
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:1102
 #, c-format
 msgid "Authentication is required to get printers from %s"
-msgstr "Þú þarft að auðkenna þig til að fá prentara frá %s"
+msgstr "Auðkenningar er krafist til að fá prentara frá %s"
 
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:1107
 #, c-format
 msgid "Authentication is required to get a file from %s"
-msgstr "Þú þarft að auðkenna þig til að sækja skrá úr %s"
+msgstr "Auðkenningar er krafist til að sækja skrá úr %s"
 
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:1109
 #, c-format
 msgid "Authentication is required on %s"
-msgstr "Þú þarft að auðkenna þig fyrir %s"
+msgstr "Auðkenningar er krafist fyrir %s"
 
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:1345
 msgid "Domain:"
@@ -4999,11 +4989,11 @@ msgstr "Þú þarft að auðkenna þig til að prenta skjalið ‚%s‘"
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:1380
 #, c-format
 msgid "Authentication is required to print this document on printer %s"
-msgstr "Þú þarft að auðkenna þig til að prenta þetta skjal með prentara %s"
+msgstr "Auðkenningar er krafist til að prenta þetta skjal með prentaranum %s"
 
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:1382
 msgid "Authentication is required to print this document"
-msgstr "Þú þarft að auðkenna þig til að prenta þetta skjal"
+msgstr "Auðkenningar er krafist til að prenta þetta skjal"
 
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:1945
 #, c-format
@@ -5067,7 +5057,7 @@ msgstr "Prentarinn ‚%s‘ er ótengdur."
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:1960
 #, c-format
 msgid "There is a problem on printer '%s'."
-msgstr "Það er vandamál með prentarann ‚%s‘."
+msgstr "Það er vandamál með prentarann '%s'."
 
 #. Translators: this is a printer status.
 #: ../modules/printbackends/cups/gtkprintbackendcups.c:2418
@@ -5470,7 +5460,7 @@ msgstr "Búa til _möppu"
 
 #: ../gtk/resources/ui/gtkfilechooserwidget.ui.h:2
 msgid "_Location:"
-msgstr "_Staðsetning:"
+msgstr "S_taðsetning:"
 
 #: ../gtk/resources/ui/gtkfilechooserwidget.ui.h:3
 msgid "Files"
@@ -5786,982 +5776,4 @@ msgstr "Lækka hljóðstyrk"
 msgid "Decreases the volume"
 msgstr "Lækkar styrk hljóðs"
 
-#~ msgid "The license of the program"
-#~ msgstr "Notandaleyfi þessa forrits"
 
-#~ msgid "Written by"
-#~ msgstr "Skrifað af"
-
-#, fuzzy
-#~ msgid "Num Lock is on"
-#~ msgstr "S_taðsetning:"
-
-#, fuzzy
-#~ msgid "Could not retrieve information about the file"
-#~ msgstr "Óþekkt myndsnið í skránni '%s'"
-
-#, fuzzy
-#~ msgid "Rename..."
-#~ msgstr "_Endurnefna"
-
-#, fuzzy
-#~ msgid "_Places"
-#~ msgstr "_Endurnefna"
-
-#~ msgid "_Add"
-#~ msgstr "_Bæta við"
-
-#~ msgid "_Remove"
-#~ msgstr "_Fjarlægja"
-
-#, fuzzy
-#~ msgid "Type a file name"
-#~ msgstr "Ógilt skráarheiti: %s"
-
-#~ msgid "Save in _folder:"
-#~ msgstr "Vista í _möppu:"
-
-#~ msgid "Create in _folder:"
-#~ msgstr "Búa til í _möppu:"
-
-#, fuzzy
-#~ msgid "Invalid path"
-#~ msgstr "Ógilt Utf-8"
-
-#, fuzzy
-#~ msgid "Sole completion"
-#~ msgstr "Litaval"
-
-#, fuzzy
-#~ msgid "Error creating folder '%s': %s"
-#~ msgstr "Villa við að búa til möppuna \"%s\": %s\n"
-
-#, fuzzy
-#~ msgid "_Save in folder:"
-#~ msgstr "Vista í _möppu:"
-
-#, fuzzy
-#~ msgid "Could not get information for file '%s': %s"
-#~ msgstr "Óþekkt myndsnið í skránni '%s'"
-
-#~ msgid "Failed to open file '%s': %s"
-#~ msgstr "Gat ekki opnað skrána '%s': %s"
-
-#~ msgid ""
-#~ "Failed to load image '%s': reason not known, probably a corrupt image file"
-#~ msgstr ""
-#~ "Gat ekki lesið myndina '%s': skýringin er ókunn en líklega er þetta "
-#~ "gölluð skrá"
-
-#~ msgid "Image file '%s' contains no data"
-#~ msgstr "Myndskráin '%s' inniheldur ekkert"
-
-#~ msgid ""
-#~ "Failed to load animation '%s': reason not known, probably a corrupt "
-#~ "animation file"
-#~ msgstr ""
-#~ "Gat ekki lesið hreyfimyndina '%s': skýringin er ókunn en líklega er þetta "
-#~ "gölluð skrá"
-
-#~ msgid "Unable to load image-loading module: %s: %s"
-#~ msgstr "Gat ekki lesið myndlestrareiningu: %s: %s"
-
-#~ msgid ""
-#~ "Image-loading module %s does not export the proper interface; perhaps "
-#~ "it's from a different GTK version?"
-#~ msgstr ""
-#~ "Myndlestrareiningin %s hefur ekki rétt viðmót. Ef til vill er hún ættuð "
-#~ "úr annari útgáfu af GTK?"
-
-#~ msgid "Image type '%s' is not supported"
-#~ msgstr "Myndgerðin '%s' er ekki studd"
-
-#~ msgid "Couldn't recognize the image file format for file '%s'"
-#~ msgstr "Óþekkt myndsnið í skránni '%s'"
-
-#~ msgid "Unrecognized image file format"
-#~ msgstr "Óþekkt myndsnið"
-
-#~ msgid "Failed to load image '%s': %s"
-#~ msgstr "Gat ekki lesið myndina '%s': %s"
-
-#~ msgid ""
-#~ "This build of gdk-pixbuf does not support saving the image format: %s"
-#~ msgstr ""
-#~ "Þessi útgáfa af gdk-pixbuf styður ekki að vista myndum á sniðinu: %s"
-
-#~ msgid "Failed to open temporary file"
-#~ msgstr "Gat ekki opnað tímabundna skrá"
-
-#~ msgid "Failed to read from temporary file"
-#~ msgstr "Gat ekki lesið úr tímabundnu skránni"
-
-#~ msgid "Failed to open '%s' for writing: %s"
-#~ msgstr "Gat ekki opnað '%s' til skriftar: %s"
-
-#~ msgid ""
-#~ "Failed to close '%s' while writing image, all data may not have been "
-#~ "saved: %s"
-#~ msgstr ""
-#~ "Gat ekki lokað '%s' meðan á skrift stóð. Vera mað að öllum gögnum hafi "
-#~ "ekki verið vistað: %s"
-
-#~ msgid "Insufficient memory to save image into a buffer"
-#~ msgstr "Get ekki frátekið biðminni fyrir myndina"
-
-#, fuzzy
-#~ msgid "Error writing to image stream"
-#~ msgstr "Villa við ritun í myndskrána: %s"
-
-#, fuzzy
-#~ msgid ""
-#~ "Internal error: Image loader module '%s' failed to complete an operation, "
-#~ "but didn't give a reason for the failure"
-#~ msgstr ""
-#~ "Innvær villa: Myndlestrareiningin '%s' gat ekki lesið myndina og gaf enga "
-#~ "skýringu á hversvegna ekki"
-
-#~ msgid "Incremental loading of image type '%s' is not supported"
-#~ msgstr "Lestur hluta mynda af gerðinni '%s' er ekki studdur"
-
-#~ msgid "Image header corrupt"
-#~ msgstr "Haus myndarinnar skemmdur"
-
-#~ msgid "Image format unknown"
-#~ msgstr "Óþekkt myndsnið"
-
-#~ msgid "Image pixel data corrupt"
-#~ msgstr "Myndeiningagögn eru skemmd"
-
-#~ msgid "Unexpected icon chunk in animation"
-#~ msgstr "Óstudd táknmynd í hreyfimyndinni"
-
-#~ msgid "Unsupported animation type"
-#~ msgstr "Óstudd gerð hreyfimyndar"
-
-#~ msgid "Invalid header in animation"
-#~ msgstr "Ógildur haus í hreyfimynd"
-
-#~ msgid "Not enough memory to load animation"
-#~ msgstr "Ekki nægjanlegt minni til að lesa hreyfimyndina"
-
-#~ msgid "Malformed chunk in animation"
-#~ msgstr "Skemmdur bútur í hreyfimyndinni"
-
-#~ msgid "The ANI image format"
-#~ msgstr "ANI myndsniðið"
-
-#~ msgid "BMP image has bogus header data"
-#~ msgstr "BMP myndin er með gölluð gögn í hausnum"
-
-#~ msgid "Not enough memory to load bitmap image"
-#~ msgstr "Ekki nægjanlegt minni til að lesa bitamyndina"
-
-#~ msgid "BMP image has unsupported header size"
-#~ msgstr "BMP myndin er með óstudda stærð hausa"
-
-#~ msgid "Premature end-of-file encountered"
-#~ msgstr "Óvæntur endi skráar"
-
-#, fuzzy
-#~ msgid "Couldn't allocate memory for saving BMP file"
-#~ msgstr "Gat ekki tekið frá minni fyrir JPEG skrána"
-
-#, fuzzy
-#~ msgid "Couldn't write to BMP file"
-#~ msgstr "Gat ekki umbreytt skráarheitinu"
-
-#~ msgid "The BMP image format"
-#~ msgstr "BMP myndsniðið"
-
-#~ msgid "Failure reading GIF: %s"
-#~ msgstr "Gat ekki lesið GIF: %s"
-
-#~ msgid "GIF file was missing some data (perhaps it was truncated somehow?)"
-#~ msgstr "Í GIF myndina vantaði gögn (kanski vantar aftaná skrána?)"
-
-#~ msgid "Internal error in the GIF loader (%s)"
-#~ msgstr "Innvær villa í GIF lesaranum (%s)"
-
-#~ msgid "Stack overflow"
-#~ msgstr "Stakkurinn yfirflæðir"
-
-#~ msgid "GIF image loader cannot understand this image."
-#~ msgstr "GIF lesarinn skilur ekki þessa mynd."
-
-#~ msgid "Bad code encountered"
-#~ msgstr "Ógildur kóði fannst"
-
-#~ msgid "Circular table entry in GIF file"
-#~ msgstr "Töflubendlar í hring í GIF skránni"
-
-#~ msgid "Not enough memory to load GIF file"
-#~ msgstr "Ekki nægjanlegt minni til að lesa GIF skrána"
-
-#, fuzzy
-#~ msgid "Not enough memory to composite a frame in GIF file"
-#~ msgstr "Ekki nægjanlegt minni til að lesa GIF skrána"
-
-#~ msgid "GIF image is corrupt (incorrect LZW compression)"
-#~ msgstr "GIF myndin er skemmd (ógild LZW þjöppun)"
-
-#~ msgid "File does not appear to be a GIF file"
-#~ msgstr "Skráin virðist ekki vera GIF skrá"
-
-#~ msgid "Version %s of the GIF file format is not supported"
-#~ msgstr "Útgáfa %s af GIF sniðinu er ekki studd"
-
-#~ msgid ""
-#~ "GIF image has no global colormap, and a frame inside it has no local "
-#~ "colormap."
-#~ msgstr ""
-#~ "GIF myndin er ekki með víðvært litakort og rammi innan hennar er ekki með "
-#~ "litakort heldur."
-
-#~ msgid "GIF image was truncated or incomplete."
-#~ msgstr "GIF myndin endar óvænt eða er ókláruð."
-
-#~ msgid "The GIF image format"
-#~ msgstr "GIF myndsniðið"
-
-#~ msgid "Invalid header in icon"
-#~ msgstr "Ógildur haus í táknmynd"
-
-#~ msgid "Not enough memory to load icon"
-#~ msgstr "Ekki nægjanlegt vinnsluminni til að lesa táknmynd"
-
-#~ msgid "Icon has zero width"
-#~ msgstr "Táknmyndin hefur breyddina núll"
-
-#~ msgid "Icon has zero height"
-#~ msgstr "Táknmyndin hefur hæðina núll"
-
-#~ msgid "Compressed icons are not supported"
-#~ msgstr "Þjappaðar táknmyndir eru ekki studdar"
-
-#~ msgid "Unsupported icon type"
-#~ msgstr "Óþekkt gerð táknmyndar"
-
-#~ msgid "Not enough memory to load ICO file"
-#~ msgstr "Ekki nægjanlegt minni til að lesa ICO skrá"
-
-#~ msgid "Image too large to be saved as ICO"
-#~ msgstr "Nyndin er of stór til að geta verið vistuð sem ICO"
-
-#~ msgid "Cursor hotspot outside image"
-#~ msgstr "Myndreiturinn er utan myndarinnar"
-
-#~ msgid "Unsupported depth for ICO file: %d"
-#~ msgstr "Þessi dýpt ICO skráa er ekki studd: %d"
-
-#~ msgid "The ICO image format"
-#~ msgstr "ICO skráarsniðið"
-
-#, fuzzy
-#~ msgid "Error reading ICNS image: %s"
-#~ msgstr "Banvæn villa við lestur PNG skráar: %s"
-
-#, fuzzy
-#~ msgid "Could not decode ICNS file"
-#~ msgstr "Litaval"
-
-#, fuzzy
-#~ msgid "The ICNS image format"
-#~ msgstr "ICO skráarsniðið"
-
-#, fuzzy
-#~ msgid "Couldn't allocate memory for stream"
-#~ msgstr "Get ekki tekið frá minni fyrir TGA hausinn"
-
-#, fuzzy
-#~ msgid "Couldn't decode image"
-#~ msgstr "Gat ekki umbreytt skráarheitinu"
-
-#, fuzzy
-#~ msgid "Transformed JPEG2000 has zero width or height"
-#~ msgstr "Umbreytt PNG mynd hefur núll breydd eða hæð."
-
-#, fuzzy
-#~ msgid "Image type currently not supported"
-#~ msgstr "Myndgerðin '%s' er ekki studd"
-
-#, fuzzy
-#~ msgid "Couldn't allocate memory for color profile"
-#~ msgstr "Gat ekki tekið frá minni fyrir JPEG skrána"
-
-#, fuzzy
-#~ msgid "Insufficient memory to open JPEG 2000 file"
-#~ msgstr "Ekki nægjanlegt minni til þess að opna TIFF skrá"
-
-#, fuzzy
-#~ msgid "Couldn't allocate memory to buffer image data"
-#~ msgstr "Get ekki tekið frá minni fyrir IOBuffer gögn"
-
-#, fuzzy
-#~ msgid "The JPEG 2000 image format"
-#~ msgstr "JPEG myndsniðið"
-
-#~ msgid "Error interpreting JPEG image file (%s)"
-#~ msgstr "Villa við lestur JPEG skráar (%s)"
-
-#~ msgid ""
-#~ "Insufficient memory to load image, try exiting some applications to free "
-#~ "memory"
-#~ msgstr ""
-#~ "Ekki nægjanlegt minni til að lesa inn myndina. Þú getur reynt að loka "
-#~ "öðrum forritum til að losa minni"
-
-#~ msgid "Unsupported JPEG color space (%s)"
-#~ msgstr "Óþekkt JPEG litabil (%s)"
-
-#~ msgid "Couldn't allocate memory for loading JPEG file"
-#~ msgstr "Gat ekki tekið frá minni fyrir JPEG skrána"
-
-#, fuzzy
-#~ msgid "Transformed JPEG has zero width or height."
-#~ msgstr "Umbreytt PNG mynd hefur núll breydd eða hæð."
-
-#~ msgid ""
-#~ "JPEG quality must be a value between 0 and 100; value '%s' could not be "
-#~ "parsed."
-#~ msgstr ""
-#~ "Gæði JPEG mynda verður að vera á milli 0 og 100. Gildið '%s' er óþekkt."
-
-#~ msgid ""
-#~ "JPEG quality must be a value between 0 and 100; value '%d' is not allowed."
-#~ msgstr ""
-#~ "Gæði JPEG mynda verður að vera á milli 0 og 100. Gildið '%d' er "
-#~ "óleyfilegt."
-
-#~ msgid "The JPEG image format"
-#~ msgstr "JPEG myndsniðið"
-
-#, fuzzy
-#~ msgid "Couldn't allocate memory for header"
-#~ msgstr "Get ekki tekið frá minni fyrir TGA hausinn"
-
-#, fuzzy
-#~ msgid "Couldn't allocate memory for context buffer"
-#~ msgstr "Gat ekki tekið frá minni fyrir TAG context strúktúrinn"
-
-#, fuzzy
-#~ msgid "Image has invalid width and/or height"
-#~ msgstr "Myndin er með hæð sem er núll"
-
-#, fuzzy
-#~ msgid "Image has unsupported bpp"
-#~ msgstr "BMP myndin er með óstudda stærð hausa"
-
-#, fuzzy
-#~ msgid "Image has unsupported number of %d-bit planes"
-#~ msgstr "BMP myndin er með óstudda stærð hausa"
-
-#, fuzzy
-#~ msgid "Couldn't create new pixbuf"
-#~ msgstr "Gat ekki tekið frá nýjann pixbuf"
-
-#, fuzzy
-#~ msgid "Couldn't allocate memory for line data"
-#~ msgstr "Get ekki tekið frá minni fyrir IOBuffer gögn"
-
-#, fuzzy
-#~ msgid "Couldn't allocate memory for paletted data"
-#~ msgstr "Get ekki tekið frá minni fyrir IOBuffer gögn"
-
-#, fuzzy
-#~ msgid "The PCX image format"
-#~ msgstr "BMP myndsniðið"
-
-#~ msgid "Bits per channel of PNG image is invalid."
-#~ msgstr "Bitar í rás í PNG myndinni er ógilt."
-
-#~ msgid "Transformed PNG has zero width or height."
-#~ msgstr "Umbreytt PNG mynd hefur núll breydd eða hæð."
-
-#~ msgid "Bits per channel of transformed PNG is not 8."
-#~ msgstr "Bitar í rás í umbreyttu PNG myndinni eru ekki 8."
-
-#~ msgid "Transformed PNG not RGB or RGBA."
-#~ msgstr "Umbreytt PNG mynd er ekki á RGB eða RGBA sniði."
-
-#~ msgid "Transformed PNG has unsupported number of channels, must be 3 or 4."
-#~ msgstr ""
-#~ "Umbreytta PNG myndin hefur ógildann fjölda rása. Rásafjöldi verður að "
-#~ "vera 3 eða 4."
-
-#~ msgid "Fatal error in PNG image file: %s"
-#~ msgstr "Banvæn villa í PNG skrá: %s"
-
-#~ msgid "Insufficient memory to load PNG file"
-#~ msgstr "Ekki nægjanlegt minni til að lesa PNG skrá"
-
-#~ msgid ""
-#~ "Insufficient memory to store a %ld by %ld image; try exiting some "
-#~ "applications to reduce memory usage"
-#~ msgstr ""
-#~ "Ekki nægjanlegt minni til að geyma %ld sinnum %ld mynd. Þú getur reynt að "
-#~ "loka öðrum forrinum til að losa minni."
-
-#~ msgid "Fatal error reading PNG image file"
-#~ msgstr "Banvæn villa við lestur PNG skráar"
-
-#~ msgid "Fatal error reading PNG image file: %s"
-#~ msgstr "Banvæn villa við lestur PNG skráar: %s"
-
-#~ msgid ""
-#~ "Keys for PNG text chunks must have at least 1 and at most 79 characters."
-#~ msgstr ""
-#~ "Lyklar í PNG textablokkum verða að hafa að minnsta kosti 1 og mest 79 "
-#~ "stafi."
-
-#~ msgid "Keys for PNG text chunks must be ASCII characters."
-#~ msgstr "Lyklar í PNG textablokkum verða að vera ASCII tákn."
-
-#, fuzzy
-#~ msgid ""
-#~ "PNG compression level must be a value between 0 and 9; value '%s' could "
-#~ "not be parsed."
-#~ msgstr ""
-#~ "Gæði JPEG mynda verður að vera á milli 0 og 100. Gildið '%s' er óþekkt."
-
-#, fuzzy
-#~ msgid ""
-#~ "PNG compression level must be a value between 0 and 9; value '%d' is not "
-#~ "allowed."
-#~ msgstr ""
-#~ "Gæði JPEG mynda verður að vera á milli 0 og 100. Gildið '%d' er "
-#~ "óleyfilegt."
-
-#, fuzzy
-#~ msgid ""
-#~ "Value for PNG text chunk %s cannot be converted to ISO-8859-1 encoding."
-#~ msgstr ""
-#~ "Gildi í PNG textablokkinni %s er ekki hægt að umbreyta í ISO-8859-1."
-
-#~ msgid "The PNG image format"
-#~ msgstr "PNG myndsniðið"
-
-#~ msgid "PNM loader expected to find an integer, but didn't"
-#~ msgstr "PNM myndlesarinn átti von á heiltölu en fekk annað."
-
-#~ msgid "PNM file has an incorrect initial byte"
-#~ msgstr "PNM skráin er með ógilt fyrsta tákn"
-
-#~ msgid "PNM file is not in a recognized PNM subformat"
-#~ msgstr "PNM skráin er ekki gild PNM undirgerð"
-
-#~ msgid "PNM file has an image width of 0"
-#~ msgstr "PNM skráin hefur breyddina 0"
-
-#~ msgid "PNM file has an image height of 0"
-#~ msgstr "PNM skráin hefur hæðina 0"
-
-#~ msgid "Maximum color value in PNM file is 0"
-#~ msgstr "Hámarks litagildi í PNM skrá er 0"
-
-#~ msgid "Maximum color value in PNM file is too large"
-#~ msgstr "hámarks litagildi í PNM skrá er of stórt"
-
-#~ msgid "Raw PNM image type is invalid"
-#~ msgstr "Hráar PNM myndsniðið er ógilt"
-
-#~ msgid "PNM image loader does not support this PNM subformat"
-#~ msgstr "PNM myndlesarinn styður ekki þessa PNM undirgerð"
-
-#~ msgid "Raw PNM formats require exactly one whitespace before sample data"
-#~ msgstr "Hráar PNM myndir verða að hafa eitt orðabil á undan myndgögnunum"
-
-#, fuzzy
-#~ msgid "Cannot allocate memory for loading PNM image"
-#~ msgstr "Get ekki frátekið minni til að lesa PNM mynd"
-
-#~ msgid "Insufficient memory to load PNM context struct"
-#~ msgstr "Ekki nægjanlegt minni til að lesa PNM strúktúr"
-
-#~ msgid "Unexpected end of PNM image data"
-#~ msgstr "Óvæntur endir á PNM gögnum"
-
-#~ msgid "Insufficient memory to load PNM file"
-#~ msgstr "Ekki nægjanlegt minni til að lesa PNM mynd"
-
-#~ msgid "The PNM/PBM/PGM/PPM image format family"
-#~ msgstr "PNM/PBM/PGM/PPM myndsniðið"
-
-#, fuzzy
-#~ msgid "Failed to read QTIF header"
-#~ msgstr "Gat ekki opnað TIFF mynd"
-
-#, fuzzy
-#~ msgid "File error when reading QTIF atom: %s"
-#~ msgstr "Gat ekki lesið GIF: %s"
-
-#, fuzzy
-#~ msgid "Failed to allocate QTIF context structure."
-#~ msgstr "Gat ekki tekið frá minni fyrir TAG context strúktúrinn"
-
-#, fuzzy
-#~ msgid "Failed to create GdkPixbufLoader object."
-#~ msgstr "Gat ekki lesið úr tímabundnu skránni"
-
-#, fuzzy
-#~ msgid "Failed to find an image data atom."
-#~ msgstr "Gat ekki opnað TIFF mynd"
-
-#, fuzzy
-#~ msgid "The QTIF image format"
-#~ msgstr "TIFF myndsniðið"
-
-#~ msgid "RAS image has bogus header data"
-#~ msgstr "RAS myndin er með gallaðann haus"
-
-#~ msgid "RAS image has unknown type"
-#~ msgstr "RAS myndin er með óþekkta gerð"
-
-#~ msgid "unsupported RAS image variation"
-#~ msgstr "óþekkt útgáfa af RAS mynd"
-
-#~ msgid "Not enough memory to load RAS image"
-#~ msgstr "Ekki nægjanlegt minni til að lesa RAS mynd"
-
-#~ msgid "The Sun raster image format"
-#~ msgstr "Sun raster myndsniðið"
-
-#, fuzzy
-#~ msgid "Cannot allocate memory for IOBuffer struct"
-#~ msgstr "Get ekki tekið frá minni fyrir IOBuffer strúktúr"
-
-#, fuzzy
-#~ msgid "Cannot allocate memory for IOBuffer data"
-#~ msgstr "Get ekki tekið frá minni fyrir IOBuffer gögn"
-
-#, fuzzy
-#~ msgid "Cannot realloc IOBuffer data"
-#~ msgstr "Get ekki endurfrátekið IOBuffer gögn"
-
-#, fuzzy
-#~ msgid "Cannot allocate temporary IOBuffer data"
-#~ msgstr "Gat ekki tekið frá tímabundinn IOBuffer"
-
-#, fuzzy
-#~ msgid "Cannot allocate new pixbuf"
-#~ msgstr "Gat ekki tekið frá nýjann pixbuf"
-
-#, fuzzy
-#~ msgid "Image is corrupted or truncated"
-#~ msgstr "GIF myndin endar óvænt eða er ókláruð."
-
-#, fuzzy
-#~ msgid "Cannot allocate colormap structure"
-#~ msgstr "Get ekki tekið frá litakortsstrúktúr"
-
-#, fuzzy
-#~ msgid "Cannot allocate colormap entries"
-#~ msgstr "Gat ekki tekið frá litakortfærslur"
-
-#~ msgid "Unexpected bitdepth for colormap entries"
-#~ msgstr "Ógild litadýpt í færslum litakortsins"
-
-#, fuzzy
-#~ msgid "Cannot allocate TGA header memory"
-#~ msgstr "Get ekki tekið frá minni fyror TGA hausinn"
-
-#~ msgid "TGA image has invalid dimensions"
-#~ msgstr "TGA myndin er með ógilda stærð"
-
-#, fuzzy
-#~ msgid "Cannot allocate memory for TGA context struct"
-#~ msgstr "Gat ekki tekið frá minni fyrir TAG context strúktúrinn"
-
-#~ msgid "Excess data in file"
-#~ msgstr "Auka gögn í skránni"
-
-#~ msgid "The Targa image format"
-#~ msgstr "Targa myndsniðið"
-
-#~ msgid "Could not get image width (bad TIFF file)"
-#~ msgstr "Gat ekki lesið breydd myndarinnar (skemmd TIFF skrá)"
-
-#~ msgid "Could not get image height (bad TIFF file)"
-#~ msgstr "Gat ekki lesið hæð myndarinnar (skemmd TIFF skrá)"
-
-#~ msgid "Width or height of TIFF image is zero"
-#~ msgstr "Hæð eða breydd TIFF myndar er núll"
-
-#~ msgid "Dimensions of TIFF image too large"
-#~ msgstr "Stærð TIFF myndarinnar er of stór"
-
-#~ msgid "Insufficient memory to open TIFF file"
-#~ msgstr "Ekki nægjanlegt minni til þess að opna TIFF skrá"
-
-#~ msgid "Failed to load RGB data from TIFF file"
-#~ msgstr "Gat ekki lesið RGB gögn úr TIFF skrá"
-
-#~ msgid "Failed to open TIFF image"
-#~ msgstr "Gat ekki opnað TIFF mynd"
-
-#~ msgid "TIFFClose operation failed"
-#~ msgstr "TIFFClose aðgerðin brást"
-
-#~ msgid "Failed to load TIFF image"
-#~ msgstr "Gat ekki lesið TIFF mynd"
-
-#, fuzzy
-#~ msgid "Failed to save TIFF image"
-#~ msgstr "Gat ekki opnað TIFF mynd"
-
-#, fuzzy
-#~ msgid "Failed to write TIFF data"
-#~ msgstr "Gat ekki opnað TIFF mynd"
-
-#, fuzzy
-#~ msgid "Couldn't write to TIFF file"
-#~ msgstr "Gat ekki umbreytt skráarheitinu"
-
-#~ msgid "The TIFF image format"
-#~ msgstr "TIFF myndsniðið"
-
-#~ msgid "Image has zero width"
-#~ msgstr "Myndin er með breydd sem er núll"
-
-#~ msgid "Image has zero height"
-#~ msgstr "Myndin er með hæð sem er núll"
-
-#~ msgid "Not enough memory to load image"
-#~ msgstr "Ekki nægjanlegt minni til að lesa myndina"
-
-#~ msgid "Couldn't save the rest"
-#~ msgstr "gat ekki vistað afgangnum"
-
-#~ msgid "The WBMP image format"
-#~ msgstr "WBMP myndsniðið"
-
-#~ msgid "Invalid XBM file"
-#~ msgstr "Ógild XBM skrá"
-
-#~ msgid "Insufficient memory to load XBM image file"
-#~ msgstr "Get ekki frátekið minni fyrir lestur XBM myndar"
-
-#~ msgid "Failed to write to temporary file when loading XBM image"
-#~ msgstr "Gat ekki ritað í tímabundna skrá við lestur XBM myndar"
-
-#~ msgid "The XBM image format"
-#~ msgstr "XBM myndsniðið"
-
-#~ msgid "No XPM header found"
-#~ msgstr "Enginn XPM haus fannst"
-
-#, fuzzy
-#~ msgid "Invalid XPM header"
-#~ msgstr "Ógild XBM skrá"
-
-#~ msgid "XPM file has image width <= 0"
-#~ msgstr "XPM er með breydd sem er <= 0"
-
-#~ msgid "XPM file has image height <= 0"
-#~ msgstr "XPM er með hæð sem er <= 0"
-
-#~ msgid "XPM has invalid number of chars per pixel"
-#~ msgstr "XPM er með ógildann fjölda rása á myndeiningu"
-
-#~ msgid "XPM file has invalid number of colors"
-#~ msgstr "XPM er með ógildann litafjölda"
-
-#, fuzzy
-#~ msgid "Cannot allocate memory for loading XPM image"
-#~ msgstr "Get ekki frátekið minni fyrir lestur XPM myndar"
-
-#, fuzzy
-#~ msgid "Cannot read XPM colormap"
-#~ msgstr "Get ekki lesið XPM litakortið"
-
-#~ msgid "Failed to write to temporary file when loading XPM image"
-#~ msgstr "Gat ekki ritað í tímabundna skrá við lestur XPM myndar"
-
-#~ msgid "The XPM image format"
-#~ msgstr "XPM myndsniðið"
-
-#, fuzzy
-#~ msgid "The EMF image format"
-#~ msgstr "BMP myndsniðið"
-
-#, fuzzy
-#~ msgid "Could not allocate memory: %s"
-#~ msgstr "Get ekki tekið frá minni fyrir TGA hausinn"
-
-#, fuzzy
-#~ msgid "Could not create stream: %s"
-#~ msgstr "Villa við að búa til möppuna \"%s\": %s\n"
-
-#, fuzzy
-#~ msgid "Could not seek stream: %s"
-#~ msgstr "Litaval"
-
-#, fuzzy
-#~ msgid "Could not read from stream: %s"
-#~ msgstr "Villa við að búa til möppuna \"%s\": %s\n"
-
-#, fuzzy
-#~ msgid "Couldn't load bitmap"
-#~ msgstr "Gat ekki umbreytt skráarheitinu"
-
-#, fuzzy
-#~ msgid "Couldn't load metafile"
-#~ msgstr "Gat ekki umbreytt skráarheitinu"
-
-#, fuzzy
-#~ msgid "Unsupported image format for GDI+"
-#~ msgstr "óþekkt útgáfa af RAS mynd"
-
-#, fuzzy
-#~ msgid "Couldn't save"
-#~ msgstr "gat ekki vistað afgangnum"
-
-#, fuzzy
-#~ msgid "The WMF image format"
-#~ msgstr "WBMP myndsniðið"
-
-#~ msgid "Folders"
-#~ msgstr "Möppur"
-
-#~ msgid "Fol_ders"
-#~ msgstr "_Möppur"
-
-#~ msgid "Folder unreadable: %s"
-#~ msgstr "Mappan er ólæsileg: %s"
-
-#~ msgid ""
-#~ "The file \"%s\" resides on another machine (called %s) and may not be "
-#~ "available to this program.\n"
-#~ "Are you sure that you want to select it?"
-#~ msgstr ""
-#~ "Skráin \"%s\" er á annari tölvu (sem heitir %s) og er ef til vill ekki "
-#~ "aðgengileg þessu forriti.\n"
-#~ "Ertu viss um að þú viljir velja hana?"
-
-#~ msgid "_New Folder"
-#~ msgstr "_Ný mappa"
-
-#~ msgid "De_lete File"
-#~ msgstr "E_yða skrá"
-
-#~ msgid "_Rename File"
-#~ msgstr "_Endurnefna skrá"
-
-#~ msgid ""
-#~ "The folder name \"%s\" contains symbols that are not allowed in filenames"
-#~ msgstr "Möppuheitið \"%s\" inniheldur tákn sem ekki má nota í skráarheitum."
-
-#~ msgid "New Folder"
-#~ msgstr "Ný mappa"
-
-#~ msgid "_Folder name:"
-#~ msgstr "_Heiti möppu:"
-
-#~ msgid ""
-#~ "The filename \"%s\" contains symbols that are not allowed in filenames"
-#~ msgstr "Heitið \"%s\" inniheldur tákn sem ekki má nota í skráarheitum"
-
-#, fuzzy
-#~ msgid "Error deleting file '%s': %s"
-#~ msgstr "Villa við að eyða skránni \"%s\": %s"
-
-#~ msgid "Really delete file \"%s\"?"
-#~ msgstr "Virkilega eyða skránni \"%s\" ?"
-
-#~ msgid "Delete File"
-#~ msgstr "Eyða skrá"
-
-#, fuzzy
-#~ msgid "Error renaming file to \"%s\": %s"
-#~ msgstr ""
-#~ "Villa við að endurnefna í \"%s\": %s\n"
-#~ "%s"
-
-#, fuzzy
-#~ msgid "Error renaming file \"%s\": %s"
-#~ msgstr ""
-#~ "Villa við að endurnefna skrána \"%s\": %s\n"
-#~ "%s"
-
-#~ msgid "Error renaming file \"%s\" to \"%s\": %s"
-#~ msgstr "Villa við að endurnefna skrána \"%s\" í \"%s\": %s"
-
-#~ msgid "Rename File"
-#~ msgstr "Endurnefna skrá"
-
-#~ msgid "Rename file \"%s\" to:"
-#~ msgstr "Endurnefna skrána \"%s\" í:"
-
-#, fuzzy
-#~ msgid ""
-#~ "The filename \"%s\" couldn't be converted to UTF-8. (try setting the "
-#~ "environment variable G_FILENAME_ENCODING): %s"
-#~ msgstr ""
-#~ "Ekki var hægt að breyta skráarheitinu \"%s\" í UTF-8 (þú getur reynt að "
-#~ "setja umhverfisbreytuna G_BROKEN_FILENAMES): %s"
-
-#~ msgid "Invalid UTF-8"
-#~ msgstr "Ógilt Utf-8"
-
-#~ msgid "Name too long"
-#~ msgstr "Heitið er of langt"
-
-#~ msgid "Couldn't convert filename"
-#~ msgstr "Gat ekki umbreytt skráarheitinu"
-
-#  The axis listbox
-#, fuzzy
-#~ msgid "Axes"
-#~ msgstr "Á_sar"
-
-#  Keys listbox
-#, fuzzy
-#~ msgid "Keys"
-#~ msgstr "_Lyklar"
-
-#, fuzzy
-#~ msgid "X _tilt:"
-#~ msgstr "X halli"
-
-#, fuzzy
-#~ msgid "Y t_ilt:"
-#~ msgstr "Y halli"
-
-#, fuzzy
-#~ msgid "_Wheel:"
-#~ msgstr "Hjól"
-
-#~ msgid "none"
-#~ msgstr "ekkert"
-
-#~ msgid "(disabled)"
-#~ msgstr "(óvirkt)"
-
-#~ msgid "(unknown)"
-#~ msgstr "(óþekkt)"
-
-#, fuzzy
-#~ msgid "Cl_ear"
-#~ msgstr "_Hreinsa"
-
-#~ msgid "--- No Tip ---"
-#~ msgstr "--- Ekkert --- "
-
-#~ msgid "(Empty)"
-#~ msgstr "(Tóm)"
-
-#, fuzzy
-#~ msgid "Couldn't create pixbuf"
-#~ msgstr "Gat ekki tekið frá nýjann pixbuf"
-
-#, fuzzy
-#~ msgid "%.1f KB"
-#~ msgstr "%.1f K"
-
-#, fuzzy
-#~ msgid "%.1f MB"
-#~ msgstr "%.1f K"
-
-#, fuzzy
-#~ msgid "%.1f GB"
-#~ msgstr "%.1f K"
-
-#, fuzzy
-#~ msgid "Justify|_Center"
-#~ msgstr "_Miðja"
-
-#, fuzzy
-#~ msgid "Media|P_ause"
-#~ msgstr "_Fresta"
-
-#, fuzzy
-#~ msgid "Could not get a stock icon for %s\n"
-#~ msgstr "Óþekkt myndsnið í skránni '%s'"
-
-#, fuzzy
-#~ msgid "Error getting information for '%s': %s"
-#~ msgstr "Villa við að búa til möppuna \"%s\": %s\n"
-
-#, fuzzy
-#~ msgid "_All"
-#~ msgstr "_Fylla"
-
-#~ msgid "Today"
-#~ msgstr "Í dag"
-
-#, fuzzy
-#~ msgid "Location:"
-#~ msgstr "S_taðsetning:"
-
-#~ msgid "PNM image format is invalid"
-#~ msgstr "PNM myndsniðið er ógilt"
-
-#, fuzzy
-#~ msgid "Error creating directory '%s': %s"
-#~ msgstr "Villa við að búa til möppuna \"%s\": %s\n"
-
-#  ID
-#~ msgid "Thai (Broken)"
-#~ msgstr "Thai (Broken)"
-
-#~ msgid ""
-#~ "Error creating folder \"%s\": %s\n"
-#~ "%s"
-#~ msgstr ""
-#~ "Villa við að búa til möppuna \"%s\": %s\n"
-#~ "%s"
-
-#~ msgid "You probably used symbols not allowed in filenames."
-#~ msgstr "Þú notaðir líklega tákn sem ekki má nota í skráarheitum."
-
-#~ msgid ""
-#~ "Error deleting file \"%s\": %s\n"
-#~ "%s"
-#~ msgstr ""
-#~ "Villa við að eyða skránni \"%s\": %s\n"
-#~ "%s"
-
-#~ msgid "It probably contains symbols not allowed in filenames."
-#~ msgstr "Það inniheldur líklega tákn sem ekki má nota í skráarheitum."
-
-#~ msgid ""
-#~ "The file name \"%s\" contains symbols that are not allowed in filenames"
-#~ msgstr "Skráarheitið \"%s\" inniheldur tákn sem ekki má nota í skráarheitum"
-
-#, fuzzy
-#~ msgid "Error getting information for '/': %s"
-#~ msgstr "Villa við að búa til möppuna \"%s\": %s\n"
-
-#, fuzzy
-#~ msgid "Cannot handle PNM files with maximum color values greater than 255"
-#~ msgstr "get ekki lesið PNM skrár sem hafa hámarkslitagildi hærra en 255"
-
-#, fuzzy
-#~ msgid "Could not get information about '%s': %s"
-#~ msgstr "Óþekkt myndsnið í skránni '%s'"
-
-#~ msgid "Folder"
-#~ msgstr "Mappa"
-
-#, fuzzy
-#~ msgid "Cannot change folder"
-#~ msgstr "Búa til í _möppu:"
-
-#, fuzzy
-#~ msgid "Save in Location"
-#~ msgstr "S_taðsetning:"
-
-#~ msgid "X"
-#~ msgstr "X"
-
-#  and clear button
-#~ msgid "clear"
-#~ msgstr "hreinsa"
-
-#, fuzzy
-#~ msgid "Writing %s failed: %s"
-#~ msgstr "Villa við ritun í myndskrána: %s"
-
-#, fuzzy
-#~ msgid "Error getting information for '%s'"
-#~ msgstr "Villa við að búa til möppuna \"%s\": %s\n"
