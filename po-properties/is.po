@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: gtk+-properties.gtk-3-16.is\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2015-03-25 10:09+0000\n"
-"PO-Revision-Date: 2015-04-10 11:04+0000\n"
+"PO-Revision-Date: 2015-04-23 11:28+0000\n"
 "Last-Translator: Sveinn í Felli <sv1@fellsnet.is>\n"
 "Language-Team: Icelandic <translation-team-is@lists.sourceforge.net>\n"
 "Language: is\n"
@@ -4716,7 +4716,6 @@ msgid ""
 msgstr ""
 
 #: gtk/gtkmenu.c:687
-#, fuzzy
 msgid "Horizontal Padding"
 msgstr "Lárétt spássía"
 
@@ -4725,7 +4724,6 @@ msgid "Extra space at the left and right edges of the menu"
 msgstr ""
 
 #: gtk/gtkmenu.c:706
-#, fuzzy
 msgid "Vertical Padding"
 msgstr "Lóðrétt spássía"
 
@@ -5635,9 +5633,8 @@ msgid "Whether the application has a selection"
 msgstr ""
 
 #: gtk/gtkprogressbar.c:167
-#, fuzzy
 msgid "Fraction"
-msgstr "Tugabrot"
+msgstr "Hluti"
 
 #: gtk/gtkprogressbar.c:168
 msgid "The fraction of total work that has been completed"
@@ -5774,7 +5771,6 @@ msgid "Whether to restrict the upper boundary to the fill level."
 msgstr ""
 
 #: gtk/gtkrange.c:507
-#, fuzzy
 msgid "Fill Level"
 msgstr "Uppfyllistig"
 
@@ -6217,9 +6213,8 @@ msgid "Whether to show the close button in the toolbar"
 msgstr ""
 
 #: gtk/gtkseparatortoolitem.c:144
-#, fuzzy
 msgid "Draw"
-msgstr "Jafntefli"
+msgstr "Teikna"
 
 #: gtk/gtkseparatortoolitem.c:145
 msgid "Whether the separator is drawn, or just blank"
@@ -6427,7 +6422,6 @@ msgid ""
 msgstr ""
 
 #: gtk/gtksettings.c:651
-#, fuzzy
 msgid "Show the 'Input Methods' menu"
 msgstr "Sýna valmynd fyrir inntaksaðferðir"
 
@@ -7521,22 +7515,18 @@ msgid "Whether this tag affects letter spacing"
 msgstr "Stillir hvort velja má margar skrár"
 
 #: gtk/gtktextview.c:733
-#, fuzzy
 msgid "Pixels Above Lines"
-msgstr "Punktar fyrir ofan línu"
+msgstr "Mynddílar fyrir ofan línur"
 
 #: gtk/gtktextview.c:741
-#, fuzzy
 msgid "Pixels Below Lines"
-msgstr "Punktar fyrir neðan línur"
+msgstr "Mynddílar fyrir neðan línur"
 
 #: gtk/gtktextview.c:749
-#, fuzzy
 msgid "Pixels Inside Wrap"
-msgstr "Myndeiningar í flettingu"
+msgstr "Mynddílar í flettingu"
 
 #: gtk/gtktextview.c:765
-#, fuzzy
 msgid "Wrap Mode"
 msgstr "Flettihamur"
 
