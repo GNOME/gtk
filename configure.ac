@@ -668,7 +668,7 @@ ALL_LINGUAS="`grep -v '^#' "$srcdir/po/LINGUAS" | tr '\n' ' '`"
 AM_GLIB_GNU_GETTEXT
 
 AC_MSG_CHECKING([whether xgettext supports ui files])
-if $ac_cv_path_XGETTEXT --output=- --language=Glade $srcdir/gtk/ui/gtkfilechooserwidget.ui > /dev/null 2>&1; then
+if $ac_cv_path_XGETTEXT --output=- --color=no --language=Glade $srcdir/gtk/ui/gtkfilechooserwidget.ui > /dev/null 2>&1; then
   AC_MSG_RESULT([yes])
 else
   AC_MSG_RESULT([no])
