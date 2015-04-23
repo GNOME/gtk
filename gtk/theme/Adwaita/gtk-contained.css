@@ -3734,14 +3734,14 @@ GtkPlacesSidebar.sidebar .view .separator:backdrop {
   background-color: #f4f4f4; }
 .list-row.button:active {
   box-shadow: inset 0 2px 2px -2px rgba(0, 0, 0, 0.2); }
+.list-row.button:backdrop:hover {
+  background-color: transparent; }
 .list-row.button:selected:active {
   box-shadow: inset 0 2px 3px -1px rgba(0, 0, 0, 0.5); }
 .list-row.button:selected:hover {
   background-color: #4786c8; }
 .list-row.button:selected:backdrop {
   background-color: #4a90d9; }
-.list-row.button:backdrop:hover {
-  background-color: transparent; }
 
 .list-row:selected .button {
   color: #2e3436;

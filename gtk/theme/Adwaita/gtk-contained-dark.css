@@ -3572,14 +3572,14 @@ GtkPlacesSidebar.sidebar .view .separator:backdrop {
   background-color: #323232; }
 .list-row.button:active {
   box-shadow: inset 0 2px 2px -2px rgba(0, 0, 0, 0.2); }
+.list-row.button:backdrop:hover {
+  background-color: transparent; }
 .list-row.button:selected:active {
   box-shadow: inset 0 2px 3px -1px rgba(0, 0, 0, 0.5); }
 .list-row.button:selected:hover {
   background-color: #356ba4; }
 .list-row.button:selected:backdrop {
   background-color: #215d9c; }
-.list-row.button:backdrop:hover {
-  background-color: transparent; }
 
 .list-row:selected .button {
   color: #eeeeec;
