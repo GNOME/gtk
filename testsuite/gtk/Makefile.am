@@ -178,6 +178,13 @@ test_ui =						\
 	ui/label3.ui ui/label3.expected			\
 	ui/label4.ui ui/label4.expected			\
 	ui/label5.ui ui/label5.expected			\
+	ui/celllayout1.ui ui/celllayout1.expected	\
+	ui/celllayout2.ui ui/celllayout2.expected	\
+	ui/celllayout3.ui ui/celllayout3.expected	\
+	ui/celllayout4.ui ui/celllayout4.expected	\
+	ui/celllayout5.ui ui/celllayout5.expected	\
+	ui/celllayout6.ui ui/celllayout6.expected	\
+	ui/celllayout7.ui ui/celllayout7.expected	\
 	$(NULL)
 
 EXTRA_DIST +=				\
