@@ -47,6 +47,7 @@
 #include "gtkmarshalers.h"
 #include "gtkplug.h"
 #include "gtkbuildable.h"
+#include "gtkbuilderprivate.h"
 #include "gtkwidgetprivate.h"
 #include "gtkcontainerprivate.h"
 #include "gtkintl.h"
@@ -2008,34 +2009,53 @@ gtk_window_buildable_parser_finished (GtkBuildable *buildable,
 
 typedef struct {
   GObject *object;
+  GtkBuilder *builder;
   GSList *items;
 } GSListSubParserData;
 
 static void
-window_start_element (GMarkupParseContext *context,
-			  const gchar         *element_name,
-			  const gchar        **names,
-			  const gchar        **values,
-			  gpointer            user_data,
-			  GError            **error)
+window_start_element (GMarkupParseContext  *context,
+                      const gchar          *element_name,
+                      const gchar         **names,
+                      const gchar         **values,
+                      gpointer              user_data,
+                      GError              **error)
 {
-  guint i;
   GSListSubParserData *data = (GSListSubParserData*)user_data;
 
   if (strcmp (element_name, "group") == 0)
     {
-      for (i = 0; names[i]; i++)
-	{
-	  if (strcmp (names[i], "name") == 0)
-	    data->items = g_slist_prepend (data->items, g_strdup (values[i]));
-	}
+      const gchar *name;
+
+      if (!_gtk_builder_check_parent (data->builder, context, "accel-groups", error))
+        return;
+
+      if (!g_markup_collect_attributes (element_name, names, values, error,
+                                        G_MARKUP_COLLECT_STRING, "name", &name,
+                                        G_MARKUP_COLLECT_INVALID))
+        {
+          _gtk_builder_prefix_error (data->builder, context, error);
+          return;
+        }
+
+      data->items = g_slist_prepend (data->items, g_strdup (name));
     }
   else if (strcmp (element_name, "accel-groups") == 0)
-    return;
-  else
-    g_warning ("Unsupported tag type for GtkWindow: %s\n",
-	       element_name);
+    {
+      if (!_gtk_builder_check_parent (data->builder, context, "object", error))
+        return;
 
+      if (!g_markup_collect_attributes (element_name, names, values, error,
+                                        G_MARKUP_COLLECT_INVALID, NULL, NULL,
+                                        G_MARKUP_COLLECT_INVALID))
+        _gtk_builder_prefix_error (data->builder, context, error);
+    }
+  else
+    {
+      _gtk_builder_error_unhandled_tag (data->builder, context,
+                                        "GtkWindow", element_name,
+                                        error);
+    }
 }
 
 static const GMarkupParser window_parser =
@@ -2045,6 +2065,7 @@ static const GMarkupParser window_parser =
 
 typedef struct {
   GObject *object;
+  GtkBuilder *builder;
   gchar *name;
 } NameSubParserData;
 
@@ -2056,19 +2077,31 @@ focus_start_element (GMarkupParseContext  *context,
                      gpointer              user_data,
                      GError              **error)
 {
-  guint i;
   NameSubParserData *data = (NameSubParserData*)user_data;
 
   if (strcmp (element_name, "initial-focus") == 0)
     {
-      for (i = 0; names[i]; i++)
-	{
-	  if (strcmp (names[i], "name") == 0)
-	    data->name = g_strdup (values[i]);
-	}
+      const gchar *name;
+
+      if (!_gtk_builder_check_parent (data->builder, context, "object", error))
+        return;
+
+      if (!g_markup_collect_attributes (element_name, names, values, error,
+                                        G_MARKUP_COLLECT_STRING, "name", &name,
+                                        G_MARKUP_COLLECT_INVALID))
+        {
+          _gtk_builder_prefix_error (data->builder, context, error);
+          return;
+        }
+
+      data->name = g_strdup (name);
     }
   else
-    g_warning ("Unsupported tag type for GtkWindow: %s\n", element_name);
+    {
+      _gtk_builder_error_unhandled_tag (data->builder, context,
+                                        "GtkWindow", element_name,
+                                        error);
+    }
 }
 
 static const GMarkupParser focus_parser =
@@ -2078,39 +2111,43 @@ static const GMarkupParser focus_parser =
 
 static gboolean
 gtk_window_buildable_custom_tag_start (GtkBuildable  *buildable,
-				       GtkBuilder    *builder,
-				       GObject       *child,
-				       const gchar   *tagname,
-				       GMarkupParser *parser,
-				       gpointer      *data)
+                                       GtkBuilder    *builder,
+                                       GObject       *child,
+                                       const gchar   *tagname,
+                                       GMarkupParser *parser,
+                                       gpointer      *parser_data)
 {
-  if (parent_buildable_iface->custom_tag_start (buildable, builder, child, 
-						tagname, parser, data))
+  if (parent_buildable_iface->custom_tag_start (buildable, builder, child,
+						tagname, parser, parser_data))
     return TRUE;
 
   if (strcmp (tagname, "accel-groups") == 0)
     {
-      GSListSubParserData *parser_data;
+      GSListSubParserData *data;
 
-      parser_data = g_slice_new0 (GSListSubParserData);
-      parser_data->items = NULL;
-      parser_data->object = G_OBJECT (buildable);
+      data = g_slice_new0 (GSListSubParserData);
+      data->items = NULL;
+      data->object = G_OBJECT (buildable);
+      data->builder = builder;
 
       *parser = window_parser;
-      *data = parser_data;
+      *parser_data = data;
+
       return TRUE;
     }
 
   if (strcmp (tagname, "initial-focus") == 0)
     {
-      NameSubParserData *parser_data;
+      NameSubParserData *data;
 
-      parser_data = g_slice_new0 (NameSubParserData);
-      parser_data->name = NULL;
-      parser_data->object = G_OBJECT (buildable);
+      data = g_slice_new0 (NameSubParserData);
+      data->name = NULL;
+      data->object = G_OBJECT (buildable);
+      data->builder = builder;
 
       *parser = focus_parser;
-      *data = parser_data;
+      *parser_data = data;
+
       return TRUE;
     }
 
@@ -2124,7 +2161,7 @@ gtk_window_buildable_custom_finished (GtkBuildable  *buildable,
                                       const gchar   *tagname,
                                       gpointer       user_data)
 {
-  parent_buildable_iface->custom_finished (buildable, builder, child, 
+  parent_buildable_iface->custom_finished (buildable, builder, child,
 					   tagname, user_data);
 
   if (strcmp (tagname, "accel-groups") == 0)
