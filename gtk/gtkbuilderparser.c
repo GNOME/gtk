@@ -243,11 +243,6 @@ parse_requires (ParserData   *data,
   const gchar  *version = NULL;
   gchar       **split;
   gint          i, version_major = 0, version_minor = 0;
-  gint          line_number, char_number;
-
-  g_markup_parse_context_get_position (data->ctx,
-                                       &line_number,
-                                       &char_number);
 
   for (i = 0; names[i] != NULL; i++)
     {
@@ -261,19 +256,21 @@ parse_requires (ParserData   *data,
 
   if (!library || !version)
     {
-      error_missing_attribute (data, element_name, 
+      error_missing_attribute (data, element_name,
 			       version ? "lib" : "version", error);
       return;
     }
 
   if (!(split = g_strsplit (version, ".", 2)) || !split[0] || !split[1])
     {
+      gint line, col;
+
+      g_markup_parse_context_get_position (data->ctx, &line, &col);
       g_set_error (error,
 		   GTK_BUILDER_ERROR,
 		   GTK_BUILDER_ERROR_INVALID_VALUE,
-		   "%s:%d:%d <%s> attribute has malformed value \"%s\"",
-		   data->filename,
-		   line_number, char_number, "version", version);
+		   "%s:%d:%d '%s' attribute has malformed value \"%s\"",
+		   data->filename, line, col, "version", version);
       return;
     }
   version_major = g_ascii_strtoll (split[0], NULL, 10);
