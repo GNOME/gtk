@@ -653,134 +653,164 @@ typedef struct {
   gchar        *child_prop_name;
   gchar        *context;
   gboolean      translatable;
-} PackingPropertiesData;
+} PackingData;
 
 static void
-attributes_start_element (GMarkupParseContext *context,
-                          const gchar         *element_name,
-                          const gchar        **names,
-                          const gchar        **values,
-                          gpointer             user_data,
-                          GError             **error)
+packing_start_element (GMarkupParseContext  *context,
+                       const gchar          *element_name,
+                       const gchar         **names,
+                       const gchar         **values,
+                       gpointer              user_data,
+                       GError              **error)
 {
-  PackingPropertiesData *parser_data = (PackingPropertiesData*)user_data;
-  guint i;
+  PackingData *data = (PackingData*)user_data;
 
   if (strcmp (element_name, "property") == 0)
     {
-      for (i = 0; names[i]; i++)
-        if (strcmp (names[i], "name") == 0)
-          parser_data->child_prop_name = g_strdup (values[i]);
-        else if (strcmp (names[i], "translatable") == 0)
-          {
-            if (!_gtk_builder_boolean_from_string (values[1],
-                                                   &parser_data->translatable,
-                                                   error))
-              return;
-          }
-        else if (strcmp (names[i], "comments") == 0)
-          ; /* for translators */
-        else if (strcmp (names[i], "context") == 0)
-          parser_data->context = g_strdup (values[1]);
-        else
-          g_warning ("Unsupported attribute for GtkContainer Child "
-                     "property: %s\n", names[i]);
+      const gchar *name;
+      gboolean translatable = FALSE;
+      const gchar *ctx = NULL;
+
+      if (!_gtk_builder_check_parent (data->builder, context, "packing", error))
+        return;
+
+      if (!g_markup_collect_attributes (element_name, names, values, error,
+                                        G_MARKUP_COLLECT_STRING, "name", &name,
+                                        G_MARKUP_COLLECT_BOOLEAN|G_MARKUP_COLLECT_OPTIONAL, "translatable", &translatable,
+                                        G_MARKUP_COLLECT_STRING|G_MARKUP_COLLECT_OPTIONAL, "comments", NULL,
+                                        G_MARKUP_COLLECT_STRING|G_MARKUP_COLLECT_OPTIONAL, "context", &ctx,
+                                        G_MARKUP_COLLECT_INVALID))
+       {
+         _gtk_builder_prefix_error (data->builder, context, error);
+         return;
+       }
+
+     data->child_prop_name = g_strdup (name);
+     data->translatable = translatable;
+     data->context = g_strdup (ctx);
     }
   else if (strcmp (element_name, "packing") == 0)
-    return;
+    {
+      if (!_gtk_builder_check_parent (data->builder, context, "child", error))
+        return;
+
+      if (!g_markup_collect_attributes (element_name, names, values, error,
+                                        G_MARKUP_COLLECT_INVALID, NULL, NULL,
+                                        G_MARKUP_COLLECT_INVALID))
+        _gtk_builder_prefix_error (data->builder, context, error);
+    }
   else
-    g_warning ("Unsupported tag for GtkContainer: %s\n", element_name);
+    {
+      _gtk_builder_error_unhandled_tag (data->builder, context,
+                                        "GtkContainer", element_name,
+                                        error);
+    }
 }
 
 static void
-attributes_text_element (GMarkupParseContext *context,
-                         const gchar         *text,
-                         gsize                text_len,
-                         gpointer             user_data,
-                         GError             **error)
+packing_text_element (GMarkupParseContext  *context,
+                      const gchar          *text,
+                      gsize                 text_len,
+                      gpointer              user_data,
+                      GError              **error)
 {
-  PackingPropertiesData *parser_data = (PackingPropertiesData*)user_data;
+  PackingData *data = (PackingData*)user_data;
 
-  if (parser_data->child_prop_name)
-    g_string_append_len (parser_data->string, text, text_len);
+  if (data->child_prop_name)
+    g_string_append_len (data->string, text, text_len);
 }
 
 static void
-attributes_end_element (GMarkupParseContext *context,
-			const gchar         *element_name,
-			gpointer             user_data,
-			GError             **error)
+packing_end_element (GMarkupParseContext  *context,
+                     const gchar          *element_name,
+                     gpointer              user_data,
+                     GError              **error)
 {
-  PackingPropertiesData *parser_data = (PackingPropertiesData*)user_data;
+  PackingData *data = (PackingData*)user_data;
 
   /* translate the string */
-  if (parser_data->string->len && parser_data->translatable)
+  if (data->string->len && data->translatable)
     {
       const gchar *translated;
       const gchar *domain;
 
-      domain = gtk_builder_get_translation_domain (parser_data->builder);
+      domain = gtk_builder_get_translation_domain (data->builder);
 
       translated = _gtk_builder_parser_translate (domain,
-                                                  parser_data->context,
-                                                  parser_data->string->str);
-      g_string_assign (parser_data->string, translated);
+                                                  data->context,
+                                                  data->string->str);
+      g_string_assign (data->string, translated);
     }
 
-  if (parser_data->child_prop_name)
-    gtk_container_buildable_set_child_property (parser_data->container,
-						parser_data->builder,
-						parser_data->child,
-						parser_data->child_prop_name,
-						parser_data->string->str);
+  if (data->child_prop_name)
+    gtk_container_buildable_set_child_property (data->container,
+                                                data->builder,
+                                                data->child,
+                                                data->child_prop_name,
+                                                data->string->str);
 
-  g_string_set_size (parser_data->string, 0);
-  g_free (parser_data->child_prop_name);
-  g_free (parser_data->context);
-  parser_data->child_prop_name = NULL;
-  parser_data->context = NULL;
-  parser_data->translatable = FALSE;
+  g_string_set_size (data->string, 0);
+  g_clear_pointer (&data->child_prop_name, g_free);
+  g_clear_pointer (&data->context, g_free);
+  data->translatable = FALSE;
 }
 
-static const GMarkupParser attributes_parser =
+static const GMarkupParser packing_parser =
   {
-    attributes_start_element,
-    attributes_end_element,
-    attributes_text_element,
+    packing_start_element,
+    packing_end_element,
+    packing_text_element,
   };
 
 typedef struct
   {
     GSList *items;
     GObject *object;
+    GtkBuilder *builder;
   } FocusChainData;
 
 static void
-focus_chain_start_element (GMarkupParseContext *context,
-                           const gchar         *element_name,
-                           const gchar        **names,
-                           const gchar        **values,
-                           gpointer            user_data,
-                           GError            **error)
+focus_chain_start_element (GMarkupParseContext  *context,
+                           const gchar          *element_name,
+                           const gchar         **names,
+                           const gchar         **values,
+                           gpointer              user_data,
+                           GError              **error)
 {
-  guint i;
   FocusChainData *data = (FocusChainData*)user_data;
 
   if (strcmp (element_name, "widget") == 0)
     {
-      for (i = 0; names[i]; i++)
+      const gchar *name;
+
+      if (!_gtk_builder_check_parent (data->builder, context, "focus-chain", error))
+        return;
+
+      if (!g_markup_collect_attributes (element_name, names, values, error,
+                                        G_MARKUP_COLLECT_STRING, "name", &name,
+                                        G_MARKUP_COLLECT_INVALID))
         {
-          if (strcmp (names[i], "name") == 0)
-            data->items = g_slist_prepend (data->items, g_strdup (values[i]));
+          _gtk_builder_prefix_error (data->builder, context, error);
+          return;
         }
+
+      data->items = g_slist_prepend (data->items, g_strdup (name));
     }
   else if (strcmp (element_name, "focus-chain") == 0)
     {
-      return;
+      if (!_gtk_builder_check_parent (data->builder, context, "object", error))
+        return;
+
+      if (!g_markup_collect_attributes (element_name, names, values, error,
+                                        G_MARKUP_COLLECT_INVALID, "", NULL,
+                                        G_MARKUP_COLLECT_INVALID))
+        _gtk_builder_prefix_error (data->builder, context, error);
     }
   else
     {
-      g_warning ("Unsupported type tag for GtkContainer %s\n", element_name);
+      _gtk_builder_error_unhandled_tag (data->builder, context,
+                                        "GtkContainer", element_name,
+                                        error);
     }
 }
 
@@ -795,36 +825,40 @@ gtk_container_buildable_custom_tag_start (GtkBuildable  *buildable,
                                           GObject       *child,
                                           const gchar   *tagname,
                                           GMarkupParser *parser,
-                                          gpointer      *data)
+                                          gpointer      *parser_data)
 {
   if (parent_buildable_iface->custom_tag_start (buildable, builder, child,
-                                                tagname, parser, data))
+                                                tagname, parser, parser_data))
     return TRUE;
 
   if (child && strcmp (tagname, "packing") == 0)
     {
-      PackingPropertiesData *parser_data;
+      PackingData *data;
 
-      parser_data = g_slice_new0 (PackingPropertiesData);
-      parser_data->string = g_string_new ("");
-      parser_data->builder = builder;
-      parser_data->container = GTK_CONTAINER (buildable);
-      parser_data->child = GTK_WIDGET (child);
-      parser_data->child_prop_name = NULL;
+      data = g_slice_new0 (PackingData);
+      data->string = g_string_new ("");
+      data->builder = builder;
+      data->container = GTK_CONTAINER (buildable);
+      data->child = GTK_WIDGET (child);
+      data->child_prop_name = NULL;
 
-      *parser = attributes_parser;
-      *data = parser_data;
+      *parser = packing_parser;
+      *parser_data = data;
+
       return TRUE;
     }
   else if (!child && strcmp (tagname, "focus-chain") == 0)
     {
-      FocusChainData *parser_data;
-      parser_data = g_slice_new0 (FocusChainData);
-      parser_data->items = NULL;
-      parser_data->object = G_OBJECT (buildable);
+      FocusChainData *data;
+
+      data = g_slice_new0 (FocusChainData);
+      data->items = NULL;
+      data->object = G_OBJECT (buildable);
+      data->builder = builder;
 
       *parser = focus_chain_parser;
-      *data = parser_data;
+      *parser_data = data;
+
       return TRUE;
     }
 
@@ -836,19 +870,21 @@ gtk_container_buildable_custom_tag_end (GtkBuildable *buildable,
                                         GtkBuilder   *builder,
                                         GObject      *child,
                                         const gchar  *tagname,
-                                        gpointer     *data)
+                                        gpointer     *parser_data)
 {
   if (strcmp (tagname, "packing") == 0)
     {
-      PackingPropertiesData *parser_data = (PackingPropertiesData*)data;
-      g_string_free (parser_data->string, TRUE);
-      g_slice_free (PackingPropertiesData, parser_data);
+      PackingData *data = (PackingData*)parser_data;
+
+      g_string_free (data->string, TRUE);
+      g_slice_free (PackingData, data);
+
       return;
     }
 
   if (parent_buildable_iface->custom_tag_end)
     parent_buildable_iface->custom_tag_end (buildable, builder,
-                                            child, tagname, data);
+                                            child, tagname, parser_data);
 }
 
 static void
@@ -856,41 +892,41 @@ gtk_container_buildable_custom_finished (GtkBuildable *buildable,
                                          GtkBuilder   *builder,
                                          GObject      *child,
                                          const gchar  *tagname,
-                                         gpointer      data)
+                                         gpointer      parser_data)
 {
    if (strcmp (tagname, "focus-chain") == 0)
     {
-      FocusChainData *parser_data = (FocusChainData*)data;
+      FocusChainData *data = (FocusChainData*)parser_data;
       GSList *l;
       GList *chain;
       GObject *object;
 
       chain = NULL;
-      for (l = parser_data->items; l; l = l->next)
+      for (l = data->items; l; l = l->next)
         {
           object = gtk_builder_get_object (builder, l->data);
           if (!object)
             {
               g_warning ("Unknown object %s specified in focus-chain for %s",
                          (const gchar*)l->data,
-                         gtk_buildable_get_name (GTK_BUILDABLE (parser_data->object)));
+                         gtk_buildable_get_name (GTK_BUILDABLE (data->object)));
               continue;
             }
           chain = g_list_prepend (chain, object);
         }
 
-      gtk_container_set_focus_chain (GTK_CONTAINER (parser_data->object), chain);
+      gtk_container_set_focus_chain (GTK_CONTAINER (data->object), chain);
       g_list_free (chain);
 
-      g_slist_free_full (parser_data->items, g_free);
-      g_slice_free (FocusChainData, parser_data);
+      g_slist_free_full (data->items, g_free);
+      g_slice_free (FocusChainData, data);
 
       return;
     }
 
   if (parent_buildable_iface->custom_finished)
     parent_buildable_iface->custom_finished (buildable, builder,
-                                             child, tagname, data);
+                                             child, tagname, parser_data);
 }
 
 /**
