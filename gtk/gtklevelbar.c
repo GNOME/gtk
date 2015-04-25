@@ -91,6 +91,7 @@
 #include "config.h"
 
 #include "gtkbuildable.h"
+#include "gtkbuilderprivate.h"
 #include "gtkintl.h"
 #include "gtkorientableprivate.h"
 #include "gtklevelbar.h"
@@ -674,6 +675,7 @@ gtk_level_bar_ensure_offsets_in_range (GtkLevelBar *self)
 
 typedef struct {
   GtkLevelBar *self;
+  GtkBuilder *builder;
   GList *offsets;
 } OffsetsParserData;
 
@@ -685,60 +687,51 @@ offset_start_element (GMarkupParseContext  *context,
                       gpointer              user_data,
                       GError              **error)
 {
-  OffsetsParserData *parser_data = user_data;
-  const gchar *name = NULL;
-  const gchar *value_str = NULL;
-  GtkLevelBarOffset *offset;
-  gint line_number, char_number;
-  gint idx;
+  OffsetsParserData *data = user_data;
 
   if (strcmp (element_name, "offsets") == 0)
-    ;
+    {
+      if (!_gtk_builder_check_parent (data->builder, context, "object", error))
+        return;
+
+      if (!g_markup_collect_attributes (element_name, names, values, error,
+                                        G_MARKUP_COLLECT_INVALID, NULL, NULL,
+                                        G_MARKUP_COLLECT_INVALID))
+        _gtk_builder_prefix_error (data->builder, context, error);
+    }
   else if (strcmp (element_name, "offset") == 0)
     {
-      for (idx = 0; names[idx] != NULL; idx++)
-        {
-          if (strcmp (names[idx], "name") == 0)
-            {
-              name = values[idx];
-            }
-          else if (strcmp (names[idx], "value") == 0)
-            {
-              value_str = values[idx];
-            }
-          else
-            {
-              g_markup_parse_context_get_position (context,
-                                                   &line_number,
-                                                   &char_number);
-              g_set_error (error,
-                           GTK_BUILDER_ERROR,
-                           GTK_BUILDER_ERROR_INVALID_ATTRIBUTE,
-                           "%s:%d:%d '%s' is not a valid attribute of <%s>",
-                           "<input>",
-                           line_number, char_number, names[idx], "offset");
+      const gchar *name;
+      const gchar *value;
+      GValue gvalue = G_VALUE_INIT;
+      GtkLevelBarOffset *offset;
 
-              return;
-            }
+      if (!_gtk_builder_check_parent (data->builder, context, "offsets", error))
+        return;
+
+      if (!g_markup_collect_attributes (element_name, names, values, error,
+                                        G_MARKUP_COLLECT_STRING, "name", &name,
+                                        G_MARKUP_COLLECT_STRING, "value", &value,
+                                        G_MARKUP_COLLECT_INVALID))
+        {
+          _gtk_builder_prefix_error (data->builder, context, error);
+          return;
         }
 
-      if (name && value_str)
+      if (!gtk_builder_value_from_string_type (data->builder, G_TYPE_DOUBLE, value, &gvalue, error))
         {
-          offset = gtk_level_bar_offset_new (name, g_ascii_strtod (value_str, NULL));
-          parser_data->offsets = g_list_prepend (parser_data->offsets, offset);
+          _gtk_builder_prefix_error (data->builder, context, error);
+          return;
         }
+
+      offset = gtk_level_bar_offset_new (name, g_value_get_double (&gvalue));
+      data->offsets = g_list_prepend (data->offsets, offset);
     }
   else
     {
-      g_markup_parse_context_get_position (context,
-                                           &line_number,
-                                           &char_number);
-      g_set_error (error,
-                   GTK_BUILDER_ERROR,
-                   GTK_BUILDER_ERROR_UNHANDLED_TAG,
-                   "%s:%d:%d unsupported tag for GtkLevelBar: \"%s\"",
-                   "<input>",
-                   line_number, char_number, element_name);
+      _gtk_builder_error_unhandled_tag (data->builder, context,
+                                        "GtkLevelBar", element_name,
+                                        error);
     }
 }
 
@@ -753,9 +746,9 @@ gtk_level_bar_buildable_custom_tag_start (GtkBuildable  *buildable,
                                           GObject       *child,
                                           const gchar   *tagname,
                                           GMarkupParser *parser,
-                                          gpointer      *data)
+                                          gpointer      *parser_data)
 {
-  OffsetsParserData *parser_data;
+  OffsetsParserData *data;
 
   if (child)
     return FALSE;
@@ -763,12 +756,13 @@ gtk_level_bar_buildable_custom_tag_start (GtkBuildable  *buildable,
   if (strcmp (tagname, "offsets") != 0)
     return FALSE;
 
-  parser_data = g_slice_new0 (OffsetsParserData);
-  parser_data->self = GTK_LEVEL_BAR (buildable);
-  parser_data->offsets = NULL;
+  data = g_slice_new0 (OffsetsParserData);
+  data->self = GTK_LEVEL_BAR (buildable);
+  data->builder = builder;
+  data->offsets = NULL;
 
   *parser = offset_parser;
-  *data = parser_data;
+  *parser_data = data;
 
   return TRUE;
 }
@@ -780,26 +774,25 @@ gtk_level_bar_buildable_custom_finished (GtkBuildable *buildable,
                                          const gchar  *tagname,
                                          gpointer      user_data)
 {
-  OffsetsParserData *parser_data;
+  OffsetsParserData *data = user_data;
   GtkLevelBar *self;
   GtkLevelBarOffset *offset;
   GList *l;
 
-  parser_data = user_data;
-  self = parser_data->self;
+  self = data->self;
 
   if (strcmp (tagname, "offsets") != 0)
     goto out;
 
-  for (l = parser_data->offsets; l != NULL; l = l->next)
+  for (l = data->offsets; l != NULL; l = l->next)
     {
       offset = l->data;
       gtk_level_bar_add_offset_value (self, offset->name, offset->value);
     }
 
  out:
-  g_list_free_full (parser_data->offsets, (GDestroyNotify) gtk_level_bar_offset_free);
-  g_slice_free (OffsetsParserData, parser_data);
+  g_list_free_full (data->offsets, (GDestroyNotify) gtk_level_bar_offset_free);
+  g_slice_free (OffsetsParserData, data);
 }
 
 static void
