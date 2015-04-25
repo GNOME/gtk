@@ -185,6 +185,13 @@ test_ui =						\
 	ui/celllayout5.ui ui/celllayout5.expected	\
 	ui/celllayout6.ui ui/celllayout6.expected	\
 	ui/celllayout7.ui ui/celllayout7.expected	\
+	ui/scale1.ui ui/scale1.expected			\
+	ui/scale2.ui ui/scale2.expected			\
+	ui/scale3.ui ui/scale3.expected			\
+	ui/scale4.ui ui/scale4.expected			\
+	ui/scale5.ui ui/scale5.expected			\
+	ui/scale6.ui ui/scale6.expected			\
+	ui/scale7.ui ui/scale7.expected			\
 	$(NULL)
 
 EXTRA_DIST +=				\
