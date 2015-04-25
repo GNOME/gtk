@@ -14140,21 +14140,20 @@ gtk_widget_buildable_parser_finished (GtkBuildable *buildable,
 
 typedef struct
 {
+  GtkBuilder *builder;
   GSList *actions;
   GSList *relations;
 } AccessibilitySubParserData;
 
 static void
 accessibility_start_element (GMarkupParseContext  *context,
-			     const gchar          *element_name,
-			     const gchar         **names,
-			     const gchar         **values,
-			     gpointer              user_data,
-			     GError              **error)
+                             const gchar          *element_name,
+                             const gchar         **names,
+                             const gchar         **values,
+                             gpointer              user_data,
+                             GError              **error)
 {
   AccessibilitySubParserData *data = (AccessibilitySubParserData*)user_data;
-  guint i;
-  gint line_number, char_number;
 
   if (strcmp (element_name, "relation") == 0)
     {
@@ -14162,106 +14161,46 @@ accessibility_start_element (GMarkupParseContext  *context,
       gchar *type = NULL;
       AtkRelationData *relation;
 
-      for (i = 0; names[i]; i++)
-	{
-	  if (strcmp (names[i], "target") == 0)
-	    target = g_strdup (values[i]);
-	  else if (strcmp (names[i], "type") == 0)
-	    type = g_strdup (values[i]);
-	  else
-	    {
-	      g_markup_parse_context_get_position (context,
-						   &line_number,
-						   &char_number);
-	      g_set_error (error,
-			   GTK_BUILDER_ERROR,
-			   GTK_BUILDER_ERROR_INVALID_ATTRIBUTE,
-			   "%s:%d:%d '%s' is not a valid attribute of <%s>",
-			   "<input>",
-			   line_number, char_number, names[i], "relation");
-	      g_free (target);
-	      g_free (type);
-	      return;
-	    }
-	}
+      if (!_gtk_builder_check_parent (data->builder, context, "accessibility", error))
+        return;
 
-      if (!target || !type)
-	{
-	  g_markup_parse_context_get_position (context,
-					       &line_number,
-					       &char_number);
-	  g_set_error (error,
-		       GTK_BUILDER_ERROR,
-		       GTK_BUILDER_ERROR_MISSING_ATTRIBUTE,
-		       "%s:%d:%d <%s> requires attribute \"%s\"",
-		       "<input>",
-		       line_number, char_number, "relation",
-		       type ? "target" : "type");
-	  g_free (target);
-	  g_free (type);
-	  return;
-	}
+      if (!g_markup_collect_attributes (element_name, names, values, error,
+                                        G_MARKUP_COLLECT_STRING, "target", &target,
+                                        G_MARKUP_COLLECT_STRING, "type", &type,
+                                        G_MARKUP_COLLECT_INVALID))
+        {
+          _gtk_builder_prefix_error (data->builder, context, error);
+          return;
+        }
 
       relation = g_slice_new (AtkRelationData);
-      relation->target = target;
-      relation->type = type;
+      relation->target = g_strdup (target);
+      relation->type = g_strdup (type);
 
       data->relations = g_slist_prepend (data->relations, relation);
     }
   else if (strcmp (element_name, "action") == 0)
     {
-      const gchar *action_name = NULL;
+      const gchar *action_name;
       const gchar *description = NULL;
       const gchar *msg_context = NULL;
       gboolean translatable = FALSE;
       AtkActionData *action;
 
-      for (i = 0; names[i]; i++)
-	{
-	  if (strcmp (names[i], "action_name") == 0)
-	    action_name = values[i];
-	  else if (strcmp (names[i], "description") == 0)
-	    description = values[i];
-          else if (strcmp (names[i], "translatable") == 0)
-            {
-              if (!_gtk_builder_boolean_from_string (values[i], &translatable, error))
-                return;
-            }
-          else if (strcmp (names[i], "comments") == 0)
-            {
-              /* do nothing, comments are for translators */
-            }
-          else if (strcmp (names[i], "context") == 0)
-            msg_context = values[i];
-	  else
-	    {
-	      g_markup_parse_context_get_position (context,
-						   &line_number,
-						   &char_number);
-	      g_set_error (error,
-			   GTK_BUILDER_ERROR,
-			   GTK_BUILDER_ERROR_INVALID_ATTRIBUTE,
-			   "%s:%d:%d '%s' is not a valid attribute of <%s>",
-			   "<input>",
-			   line_number, char_number, names[i], "action");
-	      return;
-	    }
-	}
+      if (!_gtk_builder_check_parent (data->builder, context, "accessibility", error))
+        return;
 
-      if (!action_name)
-	{
-	  g_markup_parse_context_get_position (context,
-					       &line_number,
-					       &char_number);
-	  g_set_error (error,
-		       GTK_BUILDER_ERROR,
-		       GTK_BUILDER_ERROR_MISSING_ATTRIBUTE,
-		       "%s:%d:%d <%s> requires attribute \"%s\"",
-		       "<input>",
-		       line_number, char_number, "action",
-		       "action_name");
-	  return;
-	}
+      if (!g_markup_collect_attributes (element_name, names, values, error,
+                                        G_MARKUP_COLLECT_STRING, "action_name", &action_name,
+                                        G_MARKUP_COLLECT_STRING|G_MARKUP_COLLECT_OPTIONAL, "description", &description,
+                                        G_MARKUP_COLLECT_STRING|G_MARKUP_COLLECT_OPTIONAL, "comments", NULL,
+                                        G_MARKUP_COLLECT_STRING|G_MARKUP_COLLECT_OPTIONAL, "context", &msg_context,
+                                        G_MARKUP_COLLECT_BOOLEAN|G_MARKUP_COLLECT_OPTIONAL, "translatable", &translatable,
+                                        G_MARKUP_COLLECT_INVALID))
+        {
+          _gtk_builder_prefix_error (data->builder, context, error);
+          return;
+        }
 
       action = g_slice_new (AtkActionData);
       action->action_name = g_strdup (action_name);
@@ -14272,9 +14211,21 @@ accessibility_start_element (GMarkupParseContext  *context,
       data->actions = g_slist_prepend (data->actions, action);
     }
   else if (strcmp (element_name, "accessibility") == 0)
-    ;
+    {
+      if (!_gtk_builder_check_parent (data->builder, context, "object", error))
+        return;
+
+      if (!g_markup_collect_attributes (element_name, names, values, error,
+                                        G_MARKUP_COLLECT_INVALID, NULL, NULL,
+                                        G_MARKUP_COLLECT_INVALID))
+        _gtk_builder_prefix_error (data->builder, context, error);
+    }
   else
-    g_warning ("Unsupported tag for GtkWidget: %s\n", element_name);
+    {
+      _gtk_builder_error_unhandled_tag (data->builder, context,
+                                        "GtkWidget", element_name,
+                                        error);
+    }
 }
 
 static void
@@ -14304,6 +14255,7 @@ static const GMarkupParser accessibility_parser =
 typedef struct
 {
   GObject *object;
+  GtkBuilder *builder;
   guint    key;
   guint    modifiers;
   gchar   *signal;
@@ -14311,42 +14263,65 @@ typedef struct
 
 static void
 accel_group_start_element (GMarkupParseContext  *context,
-			   const gchar          *element_name,
-			   const gchar         **names,
-			   const gchar         **values,
-			   gpointer              user_data,
-			   GError              **error)
+                           const gchar          *element_name,
+                           const gchar         **names,
+                           const gchar         **values,
+                           gpointer              user_data,
+                           GError              **error)
 {
-  gint i;
-  guint key = 0;
-  guint modifiers = 0;
-  gchar *signal = NULL;
-  AccelGroupParserData *parser_data = (AccelGroupParserData*)user_data;
+  AccelGroupParserData *data = (AccelGroupParserData*)user_data;
 
-  for (i = 0; names[i]; i++)
+  if (strcmp (element_name, "accelerator") == 0)
     {
-      if (strcmp (names[i], "key") == 0)
-	key = gdk_keyval_from_name (values[i]);
-      else if (strcmp (names[i], "modifiers") == 0)
-	{
-	  if (!_gtk_builder_flags_from_string (GDK_TYPE_MODIFIER_TYPE,
-					       values[i],
-					       &modifiers,
-					       error))
+      const gchar *key_str = NULL;
+      const gchar *signal = NULL;
+      const gchar *modifiers_str = NULL;
+      guint key = 0;
+      guint modifiers = 0;
+
+      if (!_gtk_builder_check_parent (data->builder, context, "object", error))
+        return;
+
+      if (!g_markup_collect_attributes (element_name, names, values, error,
+                                        G_MARKUP_COLLECT_STRING, "key", &key_str,
+                                        G_MARKUP_COLLECT_STRING, "signal", &signal,
+                                        G_MARKUP_COLLECT_STRING|G_MARKUP_COLLECT_OPTIONAL, "modifiers", &modifiers_str,
+                                        G_MARKUP_COLLECT_INVALID))
+        {
+          _gtk_builder_prefix_error (data->builder, context, error);
+          return;
+        }
+
+      key = gdk_keyval_from_name (key_str);
+      if (key == 0)
+        {
+          g_set_error (error,
+                       GTK_BUILDER_ERROR, GTK_BUILDER_ERROR_INVALID_VALUE,
+                       "Could not parse key '%s'", key_str);
+          _gtk_builder_prefix_error (data->builder, context, error);
+          return;
+        }
+
+      if (modifiers_str != NULL)
+        {
+          if (!_gtk_builder_flags_from_string (GDK_TYPE_MODIFIER_TYPE,
+                                               modifiers_str, &modifiers, error))
+            {
+              _gtk_builder_prefix_error (data->builder, context, error);
 	      return;
-	}
-      else if (strcmp (names[i], "signal") == 0)
-	signal = g_strdup (values[i]);
-    }
+            }
+        }
 
-  if (key == 0 || signal == NULL)
-    {
-      g_warning ("<accelerator> requires key and signal attributes");
-      return;
+      data->key = key;
+      data->modifiers = modifiers;
+      data->signal = g_strdup (signal);
     }
-  parser_data->key = key;
-  parser_data->modifiers = modifiers;
-  parser_data->signal = signal;
+  else
+    {
+      _gtk_builder_error_unhandled_tag (data->builder, context,
+                                        "GtkWidget", element_name,
+                                        error);
+    }
 }
 
 static const GMarkupParser accel_group_parser =
@@ -14356,6 +14331,7 @@ static const GMarkupParser accel_group_parser =
 
 typedef struct
 {
+  GtkBuilder *builder;
   GSList *classes;
 } StyleParserData;
 
@@ -14367,25 +14343,41 @@ style_start_element (GMarkupParseContext  *context,
                      gpointer              user_data,
                      GError              **error)
 {
-  StyleParserData *style_data = (StyleParserData *)user_data;
-  gchar *class_name;
+  StyleParserData *data = (StyleParserData *)user_data;
 
   if (strcmp (element_name, "class") == 0)
     {
-      if (g_markup_collect_attributes (element_name,
-                                       names,
-                                       values,
-                                       error,
-                                       G_MARKUP_COLLECT_STRDUP, "name", &class_name,
-                                       G_MARKUP_COLLECT_INVALID))
+      const gchar *name;
+
+      if (!_gtk_builder_check_parent (data->builder, context, "style", error))
+        return;
+
+      if (!g_markup_collect_attributes (element_name, names, values, error,
+                                        G_MARKUP_COLLECT_STRING, "name", &name,
+                                        G_MARKUP_COLLECT_INVALID))
         {
-          style_data->classes = g_slist_append (style_data->classes, class_name);
+          _gtk_builder_prefix_error (data->builder, context, error);
+          return;
         }
+
+      data->classes = g_slist_append (data->classes, g_strdup (name));
     }
   else if (strcmp (element_name, "style") == 0)
-    ;
+    {
+      if (!_gtk_builder_check_parent (data->builder, context, "object", error))
+        return;
+
+      if (!g_markup_collect_attributes (element_name, names, values, error,
+                                        G_MARKUP_COLLECT_INVALID, NULL, NULL,
+                                        G_MARKUP_COLLECT_INVALID))
+        _gtk_builder_prefix_error (data->builder, context, error);
+    }
   else
-    g_warning ("Unsupported tag for GtkWidget: %s\n", element_name);
+    {
+      _gtk_builder_error_unhandled_tag (data->builder, context,
+                                        "GtkWidget", element_name,
+                                        error);
+    }
 }
 
 static const GMarkupParser style_parser =
@@ -14395,40 +14387,49 @@ static const GMarkupParser style_parser =
 
 static gboolean
 gtk_widget_buildable_custom_tag_start (GtkBuildable     *buildable,
-				       GtkBuilder       *builder,
-				       GObject          *child,
-				       const gchar      *tagname,
-				       GMarkupParser    *parser,
-				       gpointer         *data)
+                                       GtkBuilder       *builder,
+                                       GObject          *child,
+                                       const gchar      *tagname,
+                                       GMarkupParser    *parser,
+                                       gpointer         *parser_data)
 {
-  g_assert (buildable);
-
   if (strcmp (tagname, "accelerator") == 0)
     {
-      AccelGroupParserData *parser_data;
+      AccelGroupParserData *data;
 
-      parser_data = g_slice_new0 (AccelGroupParserData);
-      parser_data->object = g_object_ref (buildable);
+      data = g_slice_new0 (AccelGroupParserData);
+      data->object = g_object_ref (buildable);
+      data->builder = builder;
+
       *parser = accel_group_parser;
-      *data = parser_data;
+      *parser_data = data;
+
       return TRUE;
     }
+
   if (strcmp (tagname, "accessibility") == 0)
     {
-      AccessibilitySubParserData *parser_data;
+      AccessibilitySubParserData *data;
 
-      parser_data = g_slice_new0 (AccessibilitySubParserData);
+      data = g_slice_new0 (AccessibilitySubParserData);
+      data->builder = builder;
+
       *parser = accessibility_parser;
-      *data = parser_data;
+      *parser_data = data;
+
       return TRUE;
     }
+
   if (strcmp (tagname, "style") == 0)
     {
-      StyleParserData *parser_data;
+      StyleParserData *data;
 
-      parser_data = g_slice_new0 (StyleParserData);
+      data = g_slice_new0 (StyleParserData);
+      data->builder = builder;
+
       *parser = style_parser;
-      *data = parser_data;
+      *parser_data = data;
+
       return TRUE;
     }
 
@@ -14437,8 +14438,8 @@ gtk_widget_buildable_custom_tag_start (GtkBuildable     *buildable,
 
 void
 _gtk_widget_buildable_finish_accelerator (GtkWidget *widget,
-					  GtkWidget *toplevel,
-					  gpointer   user_data)
+                                          GtkWidget *toplevel,
+                                          gpointer   user_data)
 {
   AccelGroupParserData *accel_data;
   GSList *accel_groups;
@@ -14475,10 +14476,10 @@ _gtk_widget_buildable_finish_accelerator (GtkWidget *widget,
 
 static void
 gtk_widget_buildable_custom_finished (GtkBuildable *buildable,
-				      GtkBuilder   *builder,
-				      GObject      *child,
-				      const gchar  *tagname,
-				      gpointer      user_data)
+                                      GtkBuilder   *builder,
+                                      GObject      *child,
+                                      const gchar  *tagname,
+                                      gpointer      user_data)
 {
   if (strcmp (tagname, "accelerator") == 0)
     {
@@ -14566,9 +14567,9 @@ gtk_widget_buildable_custom_finished (GtkBuildable *buildable,
     }
 }
 
-static GtkSizeRequestMode 
+static GtkSizeRequestMode
 gtk_widget_real_get_request_mode (GtkWidget *widget)
-{ 
+{
   /* By default widgets dont trade size at all. */
   return GTK_SIZE_REQUEST_CONSTANT_SIZE;
 }
