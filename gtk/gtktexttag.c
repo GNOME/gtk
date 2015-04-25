@@ -838,7 +838,7 @@ gtk_text_tag_class_init (GtkTextTagClass *klass)
    * @tag: the #GtkTextTag on which the signal is emitted
    * @object: the object the event was fired from (typically a #GtkTextView)
    * @event: the event which triggered the signal
-   * @iter: a #GtkTextIter pointing at the location the event occured
+   * @iter: a #GtkTextIter pointing at the location the event occurred
    *
    * The ::event signal is emitted when an event occurs on a region of the
    * buffer marked with this tag.

@@ -81,7 +81,7 @@ typedef enum {
 
 /**
  * GtkPrintOperationResult:
- * @GTK_PRINT_OPERATION_RESULT_ERROR: An error has occured.
+ * @GTK_PRINT_OPERATION_RESULT_ERROR: An error has occurred.
  * @GTK_PRINT_OPERATION_RESULT_APPLY: The print settings should be stored.
  * @GTK_PRINT_OPERATION_RESULT_CANCEL: The print operation has been canceled,
  *     the print settings should not be stored.

@@ -3800,7 +3800,7 @@ gtk_text_buffer_paste_clipboard (GtkTextBuffer *buffer,
   /* When pasting with the cursor inside the selection area, you
    * replace the selection with the new text, otherwise, you
    * simply insert the new text at the point where the click
-   * occured, unselecting any selected text. The replace_selection
+   * occurred, unselecting any selected text. The replace_selection
    * flag toggles this behavior.
    */
   data->replace_selection = FALSE;

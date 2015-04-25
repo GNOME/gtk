@@ -2614,7 +2614,7 @@ gdk_win32_window_begin_resize_drag (GdkWindow     *window,
   if (button != 1)
     return;
   
-  /* Must break the automatic grab that occured when the button was
+  /* Must break the automatic grab that occurred when the button was
    * pressed, otherwise it won't work.
    */
   gdk_device_ungrab (device, 0);
@@ -2681,7 +2681,7 @@ gdk_win32_window_begin_move_drag (GdkWindow *window,
   if (button != 1)
     return;
   
-  /* Must break the automatic grab that occured when the button was pressed,
+  /* Must break the automatic grab that occurred when the button was pressed,
    * otherwise it won't work.
    */
   gdk_device_ungrab (device, 0);

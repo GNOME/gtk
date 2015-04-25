@@ -164,7 +164,7 @@ struct _GtkPlacesSidebar {
 
   guint mounting               : 1;
   guint  drag_data_received    : 1;
-  guint drop_occured           : 1;
+  guint drop_occurred          : 1;
   guint show_desktop_set       : 1;
   guint show_desktop           : 1;
   guint show_connect_to_server : 1;
@@ -1982,7 +1982,7 @@ drag_data_received_callback (GtkWidget        *widget,
 
   g_signal_stop_emission_by_name (widget, "drag-data-received");
 
-  if (!sidebar->drop_occured)
+  if (!sidebar->drop_occurred)
     return;
 
   /* Compute position */
@@ -2096,7 +2096,7 @@ drag_data_received_callback (GtkWidget        *widget,
     }
 
 out:
-  sidebar->drop_occured = FALSE;
+  sidebar->drop_occurred = FALSE;
   free_drag_data (sidebar);
   remove_drop_bookmark_feedback_row (sidebar);
   gtk_drag_finish (context, success, FALSE, time);
@@ -2114,7 +2114,7 @@ drag_drop_callback (GtkTreeView      *tree_view,
 {
   gboolean retval = FALSE;
 
-  sidebar->drop_occured = TRUE;
+  sidebar->drop_occurred = TRUE;
   retval = get_drag_data (tree_view, context, time);
   g_signal_stop_emission_by_name (tree_view, "drag-drop");
   return retval;
