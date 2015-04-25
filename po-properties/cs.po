@@ -1646,11 +1646,11 @@ msgstr "Je-li ZAPNUTO, potomka se nebude týkat homogenní změna velikosti"
 #: gtk/gtkbox.c:257 gtk/gtkcellareabox.c:310 gtk/gtkexpander.c:299
 #: gtk/gtkheaderbar.c:1888 gtk/gtkiconview.c:516 gtk/gtktreeviewcolumn.c:280
 msgid "Spacing"
-msgstr "Mezery"
+msgstr "Rozestup"
 
 #: gtk/gtkbox.c:258 gtk/gtkheaderbar.c:1889
 msgid "The amount of space between children"
-msgstr "Velikost prostoru mezi potomky"
+msgstr "Množství místa mezi potomky navzájem"
 
 #: gtk/gtkbox.c:265 gtk/gtkflowbox.c:3694
 msgid "Whether the children should all be the same size"
