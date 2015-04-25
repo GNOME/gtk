@@ -34,6 +34,7 @@
 #include "gtkinfobar.h"
 #include "gtkaccessible.h"
 #include "gtkbuildable.h"
+#include "gtkbuilderprivate.h"
 #include "gtkbbox.h"
 #include "gtkbox.h"
 #include "gtklabel.h"
@@ -978,7 +979,7 @@ gtk_info_bar_response (GtkInfoBar *info_bar,
 typedef struct
 {
   gchar *widget_name;
-  gchar *response_id;
+  gint response_id;
 } ActionWidgetInfo;
 
 typedef struct
@@ -986,57 +987,104 @@ typedef struct
   GtkInfoBar *info_bar;
   GtkBuilder *builder;
   GSList *items;
-  gchar *response;
-} ActionWidgetsSubParserData;
+  gint response_id;
+  gboolean is_text;
+  GString *string;
+} SubParserData;
 
 static void
-attributes_start_element (GMarkupParseContext  *context,
-                          const gchar          *element_name,
-                          const gchar         **names,
-                          const gchar         **values,
-                          gpointer              user_data,
-                          GError              **error)
+parser_start_element (GMarkupParseContext  *context,
+                      const gchar          *element_name,
+                      const gchar         **names,
+                      const gchar         **values,
+                      gpointer              user_data,
+                      GError              **error)
 {
-  ActionWidgetsSubParserData *parser_data = (ActionWidgetsSubParserData*)user_data;
-  guint i;
+  SubParserData *data = (SubParserData*)user_data;
 
   if (strcmp (element_name, "action-widget") == 0)
     {
-      for (i = 0; names[i]; i++)
-        if (strcmp (names[i], "response") == 0)
-          parser_data->response = g_strdup (values[i]);
+      const gchar *response;
+      GValue gvalue = G_VALUE_INIT;
+
+      if (!_gtk_builder_check_parent (data->builder, context, "action-widgets", error))
+        return;
+
+      if (!g_markup_collect_attributes (element_name, names, values, error,
+                                        G_MARKUP_COLLECT_STRING, "response", &response,
+                                        G_MARKUP_COLLECT_INVALID))
+        {
+          _gtk_builder_prefix_error (data->builder, context, error);
+          return;
+        }
+
+      if (!gtk_builder_value_from_string_type (data->builder, GTK_TYPE_RESPONSE_TYPE, response, &gvalue, error))
+        {
+          _gtk_builder_prefix_error (data->builder, context, error);
+          return;
+        }
+
+      data->response_id = g_value_get_enum (&gvalue);
+      data->is_text = TRUE;
+      g_string_set_size (data->string, 0);
     }
   else if (strcmp (element_name, "action-widgets") == 0)
-    return;
+    {
+      if (!_gtk_builder_check_parent (data->builder, context, "object", error))
+        return;
+
+      if (!g_markup_collect_attributes (element_name, names, values, error,
+                                        G_MARKUP_COLLECT_INVALID, NULL, NULL,
+                                        G_MARKUP_COLLECT_INVALID))
+        _gtk_builder_prefix_error (data->builder, context, error);
+    }
   else
-    g_warning ("Unsupported tag for GtkInfoBar: %s\n", element_name);
+    {
+      _gtk_builder_error_unhandled_tag (data->builder, context,
+                                        "GtkInfoBar", element_name,
+                                        error);
+    }
 }
 
 static void
-attributes_text_element (GMarkupParseContext  *context,
-                         const gchar          *text,
-                         gsize                 text_len,
-                         gpointer              user_data,
-                         GError              **error)
+parser_text_element (GMarkupParseContext  *context,
+                     const gchar          *text,
+                     gsize                 text_len,
+                     gpointer              user_data,
+                     GError              **error)
 {
-  ActionWidgetsSubParserData *parser_data = (ActionWidgetsSubParserData*)user_data;
-  ActionWidgetInfo *item;
+  SubParserData *data = (SubParserData*)user_data;
 
-  if (!parser_data->response)
-    return;
-
-  item = g_new (ActionWidgetInfo, 1);
-  item->widget_name = g_strndup (text, text_len);
-  item->response_id = parser_data->response;
-  parser_data->items = g_slist_prepend (parser_data->items, item);
-  parser_data->response = NULL;
+  if (data->is_text)
+    g_string_append_len (data->string, text, text_len);
 }
 
-static const GMarkupParser attributes_parser =
+static void
+parser_end_element (GMarkupParseContext  *context,
+                    const gchar          *element_name,
+                    gpointer              user_data,
+                    GError              **error)
 {
-  attributes_start_element,
-  NULL,
-  attributes_text_element,
+  SubParserData *data = (SubParserData*)user_data;
+
+  if (data->is_text)
+    {
+      ActionWidgetInfo *item;
+
+      item = g_new (ActionWidgetInfo, 1);
+      item->widget_name = g_strdup (data->string->str);
+      item->response_id = data->response_id;
+
+      data->items = g_slist_prepend (data->items, item);
+      data->is_text = FALSE;
+    }
+}
+
+static const GMarkupParser sub_parser =
+{
+  parser_start_element,
+  parser_end_element,
+  parser_text_element,
 };
 
 gboolean
@@ -1045,22 +1093,24 @@ gtk_info_bar_buildable_custom_tag_start (GtkBuildable  *buildable,
                                          GObject       *child,
                                          const gchar   *tagname,
                                          GMarkupParser *parser,
-                                         gpointer      *data)
+                                         gpointer      *parser_data)
 {
-  ActionWidgetsSubParserData *parser_data;
+  SubParserData *data;
 
   if (parent_buildable_iface->custom_tag_start (buildable, builder, child,
-                                                tagname, parser, data))
+                                                tagname, parser, parser_data))
     return TRUE;
 
   if (!child && strcmp (tagname, "action-widgets") == 0)
     {
-      parser_data = g_slice_new0 (ActionWidgetsSubParserData);
-      parser_data->info_bar = GTK_INFO_BAR (buildable);
-      parser_data->items = NULL;
+      data = g_slice_new0 (SubParserData);
+      data->info_bar = GTK_INFO_BAR (buildable);
+      data->builder = builder;
+      data->string = g_string_new ("");
+      data->items = NULL;
 
-      *parser = attributes_parser;
-      *data = parser_data;
+      *parser = sub_parser;
+      *parser_data = data;
       return TRUE;
     }
 
@@ -1075,7 +1125,7 @@ gtk_info_bar_buildable_custom_finished (GtkBuildable *buildable,
                                         gpointer      user_data)
 {
   GSList *l;
-  ActionWidgetsSubParserData *parser_data;
+  SubParserData *data;
   GObject *object;
   GtkInfoBar *info_bar;
   ResponseData *ad;
@@ -1089,10 +1139,10 @@ gtk_info_bar_buildable_custom_finished (GtkBuildable *buildable,
     }
 
   info_bar = GTK_INFO_BAR (buildable);
-  parser_data = (ActionWidgetsSubParserData*)user_data;
-  parser_data->items = g_slist_reverse (parser_data->items);
+  data = (SubParserData*)user_data;
+  data->items = g_slist_reverse (data->items);
 
-  for (l = parser_data->items; l; l = l->next)
+  for (l = data->items; l; l = l->next)
     {
       ActionWidgetInfo *item = l->data;
 
@@ -1106,7 +1156,7 @@ gtk_info_bar_buildable_custom_finished (GtkBuildable *buildable,
         }
 
       ad = get_response_data (GTK_WIDGET (object), TRUE);
-      ad->response_id = atoi (item->response_id);
+      ad->response_id = item->response_id;
 
       if (GTK_IS_BUTTON (object))
         signal_id = g_signal_lookup ("clicked", GTK_TYPE_BUTTON);
@@ -1119,11 +1169,7 @@ gtk_info_bar_buildable_custom_finished (GtkBuildable *buildable,
 
           closure = g_cclosure_new_object (G_CALLBACK (action_widget_activated),
                                            G_OBJECT (info_bar));
-          g_signal_connect_closure_by_id (object,
-                                          signal_id,
-                                          0,
-                                          closure,
-                                          FALSE);
+          g_signal_connect_closure_by_id (object, signal_id, 0, closure, FALSE);
         }
 
       if (ad->response_id == GTK_RESPONSE_HELP)
@@ -1131,11 +1177,12 @@ gtk_info_bar_buildable_custom_finished (GtkBuildable *buildable,
                                             GTK_WIDGET (object), TRUE);
 
       g_free (item->widget_name);
-      g_free (item->response_id);
       g_free (item);
     }
-  g_slist_free (parser_data->items);
-  g_slice_free (ActionWidgetsSubParserData, parser_data);
+
+  g_slist_free (data->items);
+  g_string_free (data->string, TRUE);
+  g_slice_free (SubParserData, data);
 }
 
 /**
