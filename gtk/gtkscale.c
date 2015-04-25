@@ -1690,87 +1690,72 @@ marks_start_element (GMarkupParseContext *context,
                      gpointer             user_data,
                      GError             **error)
 {
-  MarksSubparserData *parser_data = (MarksSubparserData*)user_data;
-  guint i;
-  gint line_number, char_number;
+  MarksSubparserData *data = (MarksSubparserData*)user_data;
 
   if (strcmp (element_name, "marks") == 0)
-   ;
+    {
+      if (!_gtk_builder_check_parent (data->builder, context, "object", error))
+        return;
+
+      if (!g_markup_collect_attributes (element_name, names, values, error,
+                                        G_MARKUP_COLLECT_INVALID, NULL, NULL,
+                                        G_MARKUP_COLLECT_INVALID))
+        _gtk_builder_prefix_error (data->builder, context, error);
+    }
   else if (strcmp (element_name, "mark") == 0)
     {
+      const gchar *value_str;
       gdouble value = 0;
-      gboolean has_value = FALSE;
+      const gchar *position_str = NULL;
       GtkPositionType position = GTK_POS_BOTTOM;
       const gchar *msg_context = NULL;
       gboolean translatable = FALSE;
       MarkData *mark;
 
-      for (i = 0; names[i]; i++)
+      if (!_gtk_builder_check_parent (data->builder, context, "marks", error))
+        return;
+
+      if (!g_markup_collect_attributes (element_name, names, values, error,
+                                        G_MARKUP_COLLECT_STRING, "value", &value_str,
+                                        G_MARKUP_COLLECT_BOOLEAN|G_MARKUP_COLLECT_OPTIONAL, "translatable", &translatable,
+                                        G_MARKUP_COLLECT_STRING|G_MARKUP_COLLECT_OPTIONAL, "comments", NULL,
+                                        G_MARKUP_COLLECT_STRING|G_MARKUP_COLLECT_OPTIONAL, "context", &msg_context,
+                                        G_MARKUP_COLLECT_STRING|G_MARKUP_COLLECT_OPTIONAL, "position", &position_str,
+                                        G_MARKUP_COLLECT_INVALID))
         {
-          if (strcmp (names[i], "translatable") == 0)
-            {
-              if (!_gtk_builder_boolean_from_string (values[i], &translatable, error))
-                return;
-            }
-          else if (strcmp (names[i], "comments") == 0)
-            {
-              /* do nothing, comments are for translators */
-            }
-          else if (strcmp (names[i], "context") == 0)
-            msg_context = values[i];
-          else if (strcmp (names[i], "value") == 0)
-            {
-              GValue gvalue = G_VALUE_INIT;
-
-              if (!gtk_builder_value_from_string_type (parser_data->builder, G_TYPE_DOUBLE, values[i], &gvalue, error))
-                return;
-
-              value = g_value_get_double (&gvalue);
-              has_value = TRUE;
-            }
-          else if (strcmp (names[i], "position") == 0)
-            {
-              GValue gvalue = G_VALUE_INIT;
-
-              if (!gtk_builder_value_from_string_type (parser_data->builder, GTK_TYPE_POSITION_TYPE, values[i], &gvalue, error))
-                return;
-
-              position = g_value_get_enum (&gvalue);
-            }
-          else
-            {
-              g_markup_parse_context_get_position (context,
-                                                   &line_number,
-                                                   &char_number);
-              g_set_error (error,
-                           GTK_BUILDER_ERROR,
-                           GTK_BUILDER_ERROR_INVALID_ATTRIBUTE,
-                           "%s:%d:%d '%s' is not a valid attribute of <%s>",
-                           "<input>",
-                           line_number, char_number, names[i], "mark");
-              return;
-            }
+          _gtk_builder_prefix_error (data->builder, context, error);
+          return;
         }
 
-      if (!has_value)
+      if (value_str != NULL)
         {
-          g_markup_parse_context_get_position (context,
-                                               &line_number,
-                                               &char_number);
-          g_set_error (error,
-                       GTK_BUILDER_ERROR,
-                       GTK_BUILDER_ERROR_MISSING_ATTRIBUTE,
-                       "%s:%d:%d <%s> requires attribute \"%s\"",
-                       "<input>",
-                       line_number, char_number, "mark",
-                       "value");
-          return;
+          GValue gvalue = G_VALUE_INIT;
+
+          if (!gtk_builder_value_from_string_type (data->builder, G_TYPE_DOUBLE, value_str, &gvalue, error))
+            {
+              _gtk_builder_prefix_error (data->builder, context, error);
+              return;
+            }
+
+          value = g_value_get_double (&gvalue);
+        }
+
+      if (position_str != NULL)
+        {
+          GValue gvalue = G_VALUE_INIT;
+
+          if (!gtk_builder_value_from_string_type (data->builder, GTK_TYPE_POSITION_TYPE, position_str, &gvalue, error))
+            {
+              _gtk_builder_prefix_error (data->builder, context, error);
+              return;
+            }
+
+          position = g_value_get_enum (&gvalue);
         }
 
       mark = g_slice_new (MarkData);
       mark->value = value;
-      if (position == GTK_POS_LEFT ||
-          position == GTK_POS_TOP)
+      if (position == GTK_POS_LEFT || position == GTK_POS_TOP)
         mark->position = GTK_POS_TOP;
       else
         mark->position = GTK_POS_BOTTOM;
@@ -1778,20 +1763,13 @@ marks_start_element (GMarkupParseContext *context,
       mark->context = g_strdup (msg_context);
       mark->translatable = translatable;
 
-      parser_data->marks = g_slist_prepend (parser_data->marks, mark);
+      data->marks = g_slist_prepend (data->marks, mark);
     }
   else
     {
-      g_markup_parse_context_get_position (context,
-                                           &line_number,
-                                           &char_number);
-      g_set_error (error,
-                   GTK_BUILDER_ERROR,
-                   GTK_BUILDER_ERROR_MISSING_ATTRIBUTE,
-                   "%s:%d:%d unsupported tag for GtkScale: \"%s\"",
-                   "<input>",
-                   line_number, char_number, element_name);
-      return;
+      _gtk_builder_error_unhandled_tag (data->builder, context,
+                                        "GtkScale", element_name,
+                                        error);
     }
 }
 
@@ -1826,26 +1804,28 @@ gtk_scale_buildable_custom_tag_start (GtkBuildable  *buildable,
                                       GObject       *child,
                                       const gchar   *tagname,
                                       GMarkupParser *parser,
-                                      gpointer      *data)
+                                      gpointer      *parser_data)
 {
-  MarksSubparserData *parser_data;
+  MarksSubparserData *data;
 
   if (child)
     return FALSE;
 
   if (strcmp (tagname, "marks") == 0)
     {
-      parser_data = g_slice_new0 (MarksSubparserData);
-      parser_data->scale = GTK_SCALE (buildable);
-      parser_data->marks = NULL;
+      data = g_slice_new0 (MarksSubparserData);
+      data->scale = GTK_SCALE (buildable);
+      data->builder = builder;
+      data->marks = NULL;
 
       *parser = marks_parser;
-      *data = parser_data;
+      *parser_data = data;
+
       return TRUE;
     }
 
   return parent_buildable_iface->custom_tag_start (buildable, builder, child,
-                                                   tagname, parser, data);
+                                                   tagname, parser, parser_data);
 }
 
 static void
