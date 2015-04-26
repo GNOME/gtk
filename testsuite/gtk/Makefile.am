@@ -192,6 +192,12 @@ test_ui =						\
 	ui/scale5.ui ui/scale5.expected			\
 	ui/scale6.ui ui/scale6.expected			\
 	ui/scale7.ui ui/scale7.expected			\
+	ui/levelbar1.ui ui/levelbar1.expected 		\
+	ui/levelbar2.ui ui/levelbar2.expected 		\
+	ui/levelbar3.ui ui/levelbar3.expected 		\
+	ui/levelbar4.ui ui/levelbar4.expected 		\
+	ui/levelbar5.ui ui/levelbar5.expected 		\
+	ui/levelbar6.ui ui/levelbar6.expected 		\
 	$(NULL)
 
 EXTRA_DIST +=				\
