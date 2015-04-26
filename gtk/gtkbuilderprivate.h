@@ -185,4 +185,17 @@ guint     _gtk_builder_extend_with_template (GtkBuilder    *builder,
 					     gsize          length,
 					     GError       **error);
 
+void _gtk_builder_prefix_error            (GtkBuilder           *builder,
+                                           GMarkupParseContext  *context,
+                                           GError              **error);
+void _gtk_builder_error_unhandled_tag     (GtkBuilder           *builder,
+                                           GMarkupParseContext  *context,
+                                           const gchar          *object,
+                                           const gchar          *element_name,
+                                           GError              **error);
+gboolean _gtk_builder_check_parent        (GtkBuilder           *builder,
+                                           GMarkupParseContext  *context,
+                                           const gchar          *parent_name,
+                                           GError              **error);
+
 #endif /* __GTK_BUILDER_PRIVATE_H__ */

@@ -2606,3 +2606,63 @@ gtk_builder_get_application (GtkBuilder *builder)
 
   return builder->priv->application;
 }
+
+void
+_gtk_builder_prefix_error (GtkBuilder          *builder,
+                           GMarkupParseContext *context,
+                           GError              **error)
+{
+  gint line, col;
+
+  g_markup_parse_context_get_position (context, &line, &col);
+  g_prefix_error (error, "%s:%d:%d ", builder->priv->filename, line, col);
+}
+
+void
+_gtk_builder_error_unhandled_tag (GtkBuilder           *builder,
+                                  GMarkupParseContext  *context,
+                                  const gchar          *object,
+                                  const gchar          *element_name,
+                                  GError              **error)
+{
+  gint line, col;
+
+  g_markup_parse_context_get_position (context, &line, &col);
+  g_set_error (error,
+               GTK_BUILDER_ERROR,
+               GTK_BUILDER_ERROR_UNHANDLED_TAG,
+               "%s:%d:%d Unsupported tag for %s: <%s>",
+               builder->priv->filename, line, col,
+               object, element_name);
+}
+
+gboolean
+_gtk_builder_check_parent (GtkBuilder           *builder,
+                           GMarkupParseContext  *context,
+                           const gchar          *parent_name,
+                           GError              **error)
+{
+  const GSList *stack;
+  gint line, col;
+  const gchar *parent;
+  const gchar *element;
+
+  stack = g_markup_parse_context_get_element_stack (context);
+
+  element = (const gchar *)stack->data;
+  parent = stack->next ? (const gchar *)stack->next->data : "";
+
+  if (g_str_equal (parent_name, parent) ||
+      (g_str_equal (parent_name, "object") && g_str_equal (parent, "template")))
+    return TRUE;
+
+  g_markup_parse_context_get_position (context, &line, &col);
+  g_set_error (error,
+               GTK_BUILDER_ERROR,
+               GTK_BUILDER_ERROR_INVALID_TAG,
+               "%s:%d:%d Can't use <%s> here",
+               builder->priv->filename, line, col, element);
+
+  return FALSE;
+}
+
