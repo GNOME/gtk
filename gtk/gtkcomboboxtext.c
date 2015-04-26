@@ -157,52 +157,64 @@ typedef struct {
 } ItemParserData;
 
 static void
-item_start_element (GMarkupParseContext *context,
-		    const gchar         *element_name,
-		    const gchar        **names,
-		    const gchar        **values,
-		    gpointer             user_data,
-		    GError             **error)
+item_start_element (GMarkupParseContext  *context,
+                    const gchar          *element_name,
+                    const gchar         **names,
+                    const gchar         **values,
+                    gpointer              user_data,
+                    GError              **error)
 {
   ItemParserData *data = (ItemParserData*)user_data;
-  guint i;
 
-  if (strcmp (element_name, "item") == 0)
+  if (strcmp (element_name, "items") == 0)
     {
+      if (!_gtk_builder_check_parent (data->builder, context, "object", error))
+        return;
+
+      if (!g_markup_collect_attributes (element_name, names, values, error,
+                                        G_MARKUP_COLLECT_INVALID, NULL, NULL,
+                                        G_MARKUP_COLLECT_INVALID))
+        _gtk_builder_prefix_error (data->builder, context, error);
+    }
+  else if (strcmp (element_name, "item") == 0)
+    {
+      const gchar *id = NULL;
+      gboolean translatable = FALSE;
+      const gchar *msg_context = NULL;
+
+      if (!_gtk_builder_check_parent (data->builder, context, "items", error))
+        return;
+
+      if (!g_markup_collect_attributes (element_name, names, values, error,
+                                        G_MARKUP_COLLECT_STRING|G_MARKUP_COLLECT_OPTIONAL, "id", &id,
+                                        G_MARKUP_COLLECT_BOOLEAN|G_MARKUP_COLLECT_OPTIONAL, "translatable", &translatable,
+                                        G_MARKUP_COLLECT_STRING|G_MARKUP_COLLECT_OPTIONAL, "comments", NULL,
+                                        G_MARKUP_COLLECT_STRING|G_MARKUP_COLLECT_OPTIONAL, "context", &msg_context,
+                                        G_MARKUP_COLLECT_INVALID))
+        {
+          _gtk_builder_prefix_error (data->builder, context, error);
+          return;
+        }
+
       data->is_text = TRUE;
-
-      for (i = 0; names[i]; i++)
-	{
-	  if (strcmp (names[i], "translatable") == 0)
-	    {
-	      gboolean bval;
-
-	      if (!_gtk_builder_boolean_from_string (values[i], &bval,
-						     error))
-		return;
-
-	      data->translatable = bval;
-	    }
-	  else if (strcmp (names[i], "comments") == 0)
-	    {
-	      /* do nothing, comments are for translators */
-	    }
-	  else if (strcmp (names[i], "context") == 0) 
-	    data->context = g_strdup (values[i]);
-	  else if (strcmp (names[i], "id") == 0)
-	    data->id = g_strdup (values[i]);
-	  else
-	    g_warning ("Unknown custom combo box item attribute: %s", names[i]);
-	}
+      data->translatable = translatable;
+      data->context = g_strdup (msg_context);
+      data->id = g_strdup (id);
+    }
+  else
+    {
+      _gtk_builder_error_unhandled_tag (data->builder, context,
+                                        "GtkComboBoxText", element_name,
+                                        error);
     }
 }
 
 static void
-item_text (GMarkupParseContext *context,
-	   const gchar         *text,
-	   gsize                text_len,
-	   gpointer             user_data,
-	   GError             **error)
+item_text (GMarkupParseContext  *context,
+           const gchar          *text,
+           gsize                 text_len,
+           gpointer              user_data,
+           GError              **error)
 {
   ItemParserData *data = (ItemParserData*)user_data;
 
@@ -211,10 +223,10 @@ item_text (GMarkupParseContext *context,
 }
 
 static void
-item_end_element (GMarkupParseContext *context,
-		  const gchar         *element_name,
-		  gpointer             user_data,
-		  GError             **error)
+item_end_element (GMarkupParseContext  *context,
+                  const gchar          *element_name,
+                  gpointer              user_data,
+                  GError              **error)
 {
   ItemParserData *data = (ItemParserData*)user_data;
 
@@ -236,10 +248,8 @@ item_end_element (GMarkupParseContext *context,
 
   data->translatable = FALSE;
   g_string_set_size (data->string, 0);
-  g_free (data->context);
-  data->context = NULL;
-  g_free (data->id);
-  data->id = NULL;
+  g_clear_pointer (&data->context, g_free);
+  g_clear_pointer (&data->id, g_free);
   data->is_text = FALSE;
 }
 
@@ -251,43 +261,46 @@ static const GMarkupParser item_parser =
   };
 
 static gboolean
-gtk_combo_box_text_buildable_custom_tag_start (GtkBuildable     *buildable,
-					       GtkBuilder       *builder,
-					       GObject          *child,
-					       const gchar      *tagname,
-					       GMarkupParser    *parser,
-					       gpointer         *data)
+gtk_combo_box_text_buildable_custom_tag_start (GtkBuildable  *buildable,
+                                               GtkBuilder    *builder,
+                                               GObject       *child,
+                                               const gchar   *tagname,
+                                               GMarkupParser *parser,
+                                               gpointer      *parser_data)
 {
-  if (buildable_parent_iface->custom_tag_start (buildable, builder, child, 
-						tagname, parser, data))
+  if (buildable_parent_iface->custom_tag_start (buildable, builder, child,
+						tagname, parser, parser_data))
     return TRUE;
 
   if (strcmp (tagname, "items") == 0)
     {
-      ItemParserData *parser_data;
+      ItemParserData *data;
 
-      parser_data = g_slice_new0 (ItemParserData);
-      parser_data->builder = g_object_ref (builder);
-      parser_data->object = g_object_ref (buildable);
-      parser_data->domain = gtk_builder_get_translation_domain (builder);
-      parser_data->string = g_string_new ("");
+      data = g_slice_new0 (ItemParserData);
+      data->builder = g_object_ref (builder);
+      data->object = g_object_ref (buildable);
+      data->domain = gtk_builder_get_translation_domain (builder);
+      data->string = g_string_new ("");
+
       *parser = item_parser;
-      *data = parser_data;
+      *parser_data = data;
+
       return TRUE;
     }
+
   return FALSE;
 }
 
 static void
 gtk_combo_box_text_buildable_custom_finished (GtkBuildable *buildable,
-					      GtkBuilder   *builder,
-					      GObject      *child,
-					      const gchar  *tagname,
-					      gpointer      user_data)
+                                              GtkBuilder   *builder,
+                                              GObject      *child,
+                                              const gchar  *tagname,
+                                              gpointer      user_data)
 {
   ItemParserData *data;
 
-  buildable_parent_iface->custom_finished (buildable, builder, child, 
+  buildable_parent_iface->custom_finished (buildable, builder, child,
 					   tagname, user_data);
 
   if (strcmp (tagname, "items") == 0)
