@@ -160,7 +160,9 @@
  *     <object class="GtkButton" id="button_cancel"/>
  *   </child>
  *   <child type="action">
- *     <object class="GtkButton" id="button_ok"/>
+ *     <object class="GtkButton" id="button_ok">
+ *       <property name="can-default">True</property>
+ *     </object>
  *   </child>
  *   <action-widgets>
  *     <action-widget response="cancel">button_cancel</action-widget>
