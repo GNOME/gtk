@@ -2338,80 +2338,71 @@ typedef struct {
   gint last_row;
   gint n_columns;
   gint row_column;
-  GQuark error_quark;
   gboolean is_data;
   const gchar *domain;
 } SubParserData;
 
 static void
-list_store_start_element (GMarkupParseContext *context,
-			  const gchar         *element_name,
-			  const gchar        **names,
-			  const gchar        **values,
-			  gpointer             user_data,
-			  GError             **error)
+list_store_start_element (GMarkupParseContext  *context,
+                          const gchar          *element_name,
+                          const gchar         **names,
+                          const gchar         **values,
+                          gpointer              user_data,
+                          GError              **error)
 {
-  guint i;
   SubParserData *data = (SubParserData*)user_data;
 
   if (strcmp (element_name, "col") == 0)
     {
-      int i, id = -1;
-      gchar *context = NULL;
+      gint id = -1;
+      const gchar *id_str;
+      const gchar *msg_context = NULL;
       gboolean translatable = FALSE;
       ColInfo *info;
+      GValue val = G_VALUE_INIT;
+
+      if (!_gtk_builder_check_parent (data->builder, context, "row", error))
+        return;
 
       if (data->row_column >= data->n_columns)
         {
-	  g_set_error (error, data->error_quark, 0,
-	  	       "Too many columns, maximum is %d\n", data->n_columns - 1);
+	  g_set_error (error,
+                       GTK_BUILDER_ERROR, GTK_BUILDER_ERROR_INVALID_VALUE,
+	  	       "Too many columns, maximum is %d", data->n_columns - 1);
+          _gtk_builder_prefix_error (data->builder, context, error);
           return;
         }
 
-      for (i = 0; names[i]; i++)
-	if (strcmp (names[i], "id") == 0)
-	  {
-	    errno = 0;
-	    id = atoi (values[i]);
-	    if (errno)
-              {
-	        g_set_error (error, data->error_quark, 0,
-		  	     "the id tag %s could not be converted to an integer",
-			     values[i]);
-                return;
-              }
-	    if (id < 0 || id >= data->n_columns)
-              {
-                g_set_error (error, data->error_quark, 0,
-                             "id value %d out of range", id);
-                return;
-              }
-	  }
-	else if (strcmp (names[i], "translatable") == 0)
-	  {
-	    if (!_gtk_builder_boolean_from_string (values[i], &translatable,
-						   error))
-	      return;
-	  }
-	else if (strcmp (names[i], "comments") == 0)
-	  {
-	    /* do nothing, comments are for translators */
-	  }
-	else if (strcmp (names[i], "context") == 0) 
-	  {
-	    context = g_strdup (values[i]);
-	  }
-
-      if (id == -1)
+      if (!g_markup_collect_attributes (element_name, names, values, error,
+                                        G_MARKUP_COLLECT_STRING, "id", &id_str,
+                                        G_MARKUP_COLLECT_BOOLEAN|G_MARKUP_COLLECT_OPTIONAL, "translatable", &translatable,
+                                        G_MARKUP_COLLECT_STRING|G_MARKUP_COLLECT_OPTIONAL, "comments", NULL,
+                                        G_MARKUP_COLLECT_STRING|G_MARKUP_COLLECT_OPTIONAL, "context", &msg_context,
+                                        G_MARKUP_COLLECT_INVALID))
         {
-	  g_set_error (error, data->error_quark, 0,
-	  	       "<col> needs an id attribute");
+          _gtk_builder_prefix_error (data->builder, context, error);
           return;
         }
-      
+
+      if (!gtk_builder_value_from_string_type (data->builder, G_TYPE_INT, id_str, &val, error))
+        {
+          _gtk_builder_prefix_error (data->builder, context, error);
+          return;
+        }
+
+      id = g_value_get_int (&val);
+      if (id < 0 || id >= data->n_columns)
+        {
+          g_set_error (error,
+                       GTK_BUILDER_ERROR, GTK_BUILDER_ERROR_INVALID_VALUE,
+                       "id value %d out of range", id);
+          _gtk_builder_prefix_error (data->builder, context, error);
+          return;
+        }
+
       info = g_slice_new0 (ColInfo);
       info->translatable = translatable;
-      info->context = context;
+      info->context = g_strdup (msg_context);
       info->id = id;
 
       data->colids[data->row_column] = id;
@@ -2420,52 +2411,80 @@ list_store_start_element (GMarkupParseContext *context,
       data->is_data = TRUE;
     }
   else if (strcmp (element_name, "row") == 0)
-    ;
+    {
+      if (!_gtk_builder_check_parent (data->builder, context, "data", error))
+        return;
+
+      if (!g_markup_collect_attributes (element_name, names, values, error,
+                                        G_MARKUP_COLLECT_INVALID, NULL, NULL,
+                                        G_MARKUP_COLLECT_INVALID))
+        _gtk_builder_prefix_error (data->builder, context, error);
+    }
+  else if (strcmp (element_name, "columns") == 0 ||
+           strcmp (element_name, "data") == 0)
+    {
+      if (!_gtk_builder_check_parent (data->builder, context, "object", error))
+        return;
+
+      if (!g_markup_collect_attributes (element_name, names, values, error,
+                                        G_MARKUP_COLLECT_INVALID, NULL, NULL,
+                                        G_MARKUP_COLLECT_INVALID))
+        _gtk_builder_prefix_error (data->builder, context, error);
+    }
   else if (strcmp (element_name, "column") == 0)
     {
-      for (i = 0; names[i]; i++)
-        if (strcmp (names[i], "type") == 0)
-          data->column_type_names = g_slist_prepend (data->column_type_names,
-                                                     g_strdup (values[i]));
+      const gchar *type;
+
+      if (!_gtk_builder_check_parent (data->builder, context, "columns", error))
+        return;
+
+      if (!g_markup_collect_attributes (element_name, names, values, error,
+                                        G_MARKUP_COLLECT_STRING, "type", &type,
+                                        G_MARKUP_COLLECT_INVALID))
+        {
+          _gtk_builder_prefix_error (data->builder, context, error);
+          return;
+        }
+
+      data->column_type_names = g_slist_prepend (data->column_type_names, g_strdup (type));
     }
-  else if (strcmp (element_name, "columns") == 0)
-    ;
-  else if (strcmp (element_name, "data") == 0)
-    ;
   else
-    g_set_error (error, data->error_quark, 0,
-		 "Unknown start tag: %s", element_name);
+    {
+      _gtk_builder_error_unhandled_tag (data->builder, context,
+                                        "GtkListStore", element_name,
+                                        error);
+    }
 }
 
 static void
-list_store_end_element (GMarkupParseContext *context,
-			const gchar         *element_name,
-			gpointer             user_data,
-			GError             **error)
+list_store_end_element (GMarkupParseContext  *context,
+                        const gchar          *element_name,
+                        gpointer              user_data,
+                        GError              **error)
 {
   SubParserData *data = (SubParserData*)user_data;
 
   g_assert (data->builder);
-  
+
   if (strcmp (element_name, "row") == 0)
     {
       GtkTreeIter iter;
       int i;
 
       gtk_list_store_insert_with_valuesv (GTK_LIST_STORE (data->object),
-					  &iter,
-					  data->last_row,
-					  data->colids,
-					  data->values,
-					  data->row_column);
+                                          &iter,
+                                          data->last_row,
+                                          data->colids,
+                                          data->values,
+                                          data->row_column);
       for (i = 0; i < data->row_column; i++)
-	{
-	  ColInfo *info = data->columns[i];
-	  g_free (info->context);
-	  g_slice_free (ColInfo, info);
-	  data->columns[i] = NULL;
-	  g_value_unset (&data->values[i]);
-	}
+        {
+          ColInfo *info = data->columns[i];
+          g_free (info->context);
+          g_slice_free (ColInfo, info);
+          data->columns[i] = NULL;
+          g_value_unset (&data->values[i]);
+        }
       g_free (data->values);
       data->values = g_new0 (GValue, data->n_columns);
       data->last_row++;
@@ -2482,49 +2501,42 @@ list_store_end_element (GMarkupParseContext *context,
       column_types = g_new0 (GType, g_slist_length (data->column_type_names));
 
       for (l = data->column_type_names, i = 0; l; l = l->next, i++)
-	{
-	  type = gtk_builder_get_type_from_name (data->builder, l->data);
-	  if (type == G_TYPE_INVALID)
-	    {
-	      g_warning ("Unknown type %s specified in treemodel %s",
-			 (const gchar*)l->data,
-			 gtk_buildable_get_name (GTK_BUILDABLE (data->object)));
-	      continue;
-	    }
-	  column_types[i] = type;
+        {
+          type = gtk_builder_get_type_from_name (data->builder, l->data);
+          if (type == G_TYPE_INVALID)
+            {
+              g_warning ("Unknown type %s specified in treemodel %s",
+                         (const gchar*)l->data,
+                         gtk_buildable_get_name (GTK_BUILDABLE (data->object)));
+              continue;
+            }
+          column_types[i] = type;
 
-	  g_free (l->data);
-	}
+          g_free (l->data);
+        }
 
-      gtk_list_store_set_column_types (GTK_LIST_STORE (data->object), i,
-				       column_types);
+      gtk_list_store_set_column_types (GTK_LIST_STORE (data->object), i, column_types);
 
       g_free (column_types);
     }
   else if (strcmp (element_name, "col") == 0)
-    data->is_data = FALSE;
-  else if (strcmp (element_name, "data") == 0)
-    ;
-  else if (strcmp (element_name, "column") == 0)
-    ;
-  else
-    g_set_error (error, data->error_quark, 0,
-		 "Unknown end tag: %s", element_name);
+    {
+      data->is_data = FALSE;
+    }
 }
 
 static void
-list_store_text (GMarkupParseContext *context,
-		 const gchar         *text,
-		 gsize                text_len,
-		 gpointer             user_data,
-		 GError             **error)
+list_store_text (GMarkupParseContext  *context,
+                 const gchar          *text,
+                 gsize                 text_len,
+                 gpointer              user_data,
+                 GError              **error)
 {
   SubParserData *data = (SubParserData*)user_data;
   gint i;
-  GError *tmp_error = NULL;
   gchar *string;
   ColInfo *info;
-  
+
   if (!data->is_data)
     return;
 
@@ -2548,18 +2560,12 @@ list_store_text (GMarkupParseContext *context,
     }
 
   if (!gtk_builder_value_from_string_type (data->builder,
-					   data->column_types[info->id],
-					   string,
-					   &data->values[i],
-					   &tmp_error))
+                                           data->column_types[info->id],
+                                           string,
+                                           &data->values[i],
+                                           error))
     {
-      g_set_error (error,
-		   tmp_error->domain,
-		   tmp_error->code,
-		   "Could not convert '%s' to type %s: %s\n",
-		   text, g_type_name (data->column_types[info->id]),
-		   tmp_error->message);
-      g_error_free (tmp_error);
+      _gtk_builder_prefix_error (data->builder, context, error);
     }
   g_free (string);
 }
@@ -2573,88 +2579,84 @@ static const GMarkupParser list_store_parser =
 
 static gboolean
 gtk_list_store_buildable_custom_tag_start (GtkBuildable  *buildable,
-					   GtkBuilder    *builder,
-					   GObject       *child,
-					   const gchar   *tagname,
-					   GMarkupParser *parser,
-					   gpointer      *data)
+                                           GtkBuilder    *builder,
+                                           GObject       *child,
+                                           const gchar   *tagname,
+                                           GMarkupParser *parser,
+                                           gpointer      *parser_data)
 {
-  SubParserData *parser_data;
+  SubParserData *data;
 
   if (child)
     return FALSE;
 
   if (strcmp (tagname, "columns") == 0)
     {
-
-      parser_data = g_slice_new0 (SubParserData);
-      parser_data->builder = builder;
-      parser_data->object = G_OBJECT (buildable);
-      parser_data->column_type_names = NULL;
+      data = g_slice_new0 (SubParserData);
+      data->builder = builder;
+      data->object = G_OBJECT (buildable);
+      data->column_type_names = NULL;
 
       *parser = list_store_parser;
-      *data = parser_data;
+      *parser_data = data;
+
       return TRUE;
     }
   else if (strcmp (tagname, "data") == 0)
     {
       gint n_columns = gtk_list_store_get_n_columns (GTK_TREE_MODEL (buildable));
       if (n_columns == 0)
-	g_error ("Cannot append data to an empty model");
+        g_error ("Cannot append data to an empty model");
 
-      parser_data = g_slice_new0 (SubParserData);
-      parser_data->builder = builder;
-      parser_data->object = G_OBJECT (buildable);
-      parser_data->values = g_new0 (GValue, n_columns);
-      parser_data->colids = g_new0 (gint, n_columns);
-      parser_data->columns = g_new0 (ColInfo*, n_columns);
-      parser_data->column_types = GTK_LIST_STORE (buildable)->priv->column_headers;
-      parser_data->n_columns = n_columns;
-      parser_data->last_row = 0;
-      parser_data->error_quark = g_quark_from_static_string ("GtkListStore");
-      parser_data->domain = gtk_builder_get_translation_domain (builder);
-      
+      data = g_slice_new0 (SubParserData);
+      data->builder = builder;
+      data->object = G_OBJECT (buildable);
+      data->values = g_new0 (GValue, n_columns);
+      data->colids = g_new0 (gint, n_columns);
+      data->columns = g_new0 (ColInfo*, n_columns);
+      data->column_types = GTK_LIST_STORE (buildable)->priv->column_headers;
+      data->n_columns = n_columns;
+      data->last_row = 0;
+      data->domain = gtk_builder_get_translation_domain (builder);
+
       *parser = list_store_parser;
-      *data = parser_data;
+      *parser_data = data;
+
       return TRUE;
     }
-  else
-    g_warning ("Unknown custom list store tag: %s", tagname);
-  
+
   return FALSE;
 }
 
 static void
 gtk_list_store_buildable_custom_tag_end (GtkBuildable *buildable,
-					 GtkBuilder   *builder,
-					 GObject      *child,
-					 const gchar  *tagname,
-					 gpointer     *data)
+                                         GtkBuilder   *builder,
+                                         GObject      *child,
+                                         const gchar  *tagname,
+                                         gpointer     *parser_data)
 {
-  SubParserData *sub = (SubParserData*)data;
-  
+  SubParserData *data = (SubParserData*)parser_data;
+
   if (strcmp (tagname, "columns") == 0)
     {
-      g_slist_free (sub->column_type_names);
-      g_slice_free (SubParserData, sub);
+      g_slist_free (data->column_type_names);
+      g_slice_free (SubParserData, data);
     }
   else if (strcmp (tagname, "data") == 0)
     {
       int i;
-      for (i = 0; i < sub->n_columns; i++)
-	{
-	  ColInfo *info = sub->columns[i];
-	  if (info)
-	    {
-	      g_free (info->context);
-	      g_slice_free (ColInfo, info);
-	    }
-	}
-      g_free (sub->colids);
-      g_free (sub->columns);
-      g_free (sub->values);
-      g_slice_free (SubParserData, sub);
+      for (i = 0; i < data->n_columns; i++)
+        {
+          ColInfo *info = data->columns[i];
+          if (info)
+            {
+              g_free (info->context);
+              g_slice_free (ColInfo, info);
+            }
+        }
+      g_free (data->colids);
+      g_free (data->columns);
+      g_free (data->values);
+      g_slice_free (SubParserData, data);
     }
-  else
-    g_warning ("Unknown custom list store tag: %s", tagname);
 }
