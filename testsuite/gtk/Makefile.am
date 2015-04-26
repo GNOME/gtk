@@ -198,6 +198,12 @@ test_ui =						\
 	ui/levelbar4.ui ui/levelbar4.expected 		\
 	ui/levelbar5.ui ui/levelbar5.expected 		\
 	ui/levelbar6.ui ui/levelbar6.expected 		\
+	ui/dialog1.ui ui/dialog1.expected 		\
+	ui/dialog2.ui ui/dialog2.expected 		\
+	ui/dialog3.ui ui/dialog3.expected 		\
+	ui/dialog4.ui ui/dialog4.expected 		\
+	ui/dialog5.ui ui/dialog5.expected 		\
+	ui/dialog6.ui ui/dialog6.expected 		\
 	$(NULL)
 
 EXTRA_DIST +=				\

@@ -1,0 +1,13 @@
+<!-- missing attribute in dialog markup -->
+<interface>
+  <object class="GtkDialog">
+    <child type="action">
+      <object class="GtkButton" id="button_ok">
+        <property name="can-default">True</property>
+      </object>
+    </child>
+    <action-widgets>
+      <action-widget>button_ok</action-widget>
+    </action-widgets>
+  </object>
+</interface>
