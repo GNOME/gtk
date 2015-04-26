@@ -204,6 +204,16 @@ test_ui =						\
 	ui/dialog4.ui ui/dialog4.expected 		\
 	ui/dialog5.ui ui/dialog5.expected 		\
 	ui/dialog6.ui ui/dialog6.expected 		\
+	ui/filefilter1.ui ui/filefilter1.expected	\
+	ui/filefilter2.ui ui/filefilter2.expected 	\
+	ui/filefilter3.ui ui/filefilter3.expected 	\
+	ui/filefilter4.ui ui/filefilter4.expected 	\
+	ui/filefilter5.ui ui/filefilter5.expected 	\
+	ui/filefilter6.ui ui/filefilter6.expected 	\
+	ui/filefilter7.ui ui/filefilter7.expected 	\
+	ui/filefilter8.ui ui/filefilter8.expected 	\
+	ui/filefilter9.ui ui/filefilter9.expected 	\
+	ui/filefilter10.ui ui/filefilter10.expected 	\
 	$(NULL)
 
 EXTRA_DIST +=				\
