@@ -1,0 +1,8 @@
+<!-- wrong focus chain widget name attribute -->
+<interface>
+  <object class="GtkBox">
+    <focus-chain>
+      <widget food="good"/>
+    </focus-chain>
+  </object>
+</interface>

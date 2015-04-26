@@ -1,0 +1,11 @@
+<!-- invalid child property attribute -->
+<interface>
+  <object class="GtkBox">
+    <child>
+      <object class="GtkLabel" id="widget1"/>
+      <packing>
+        <property food="good"/>
+      </packing>
+    </child>
+  </object>
+</interface>

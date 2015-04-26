@@ -1,0 +1,10 @@
+<!-- invalid container packing attribute -->
+<interface>
+  <object class="GtkBox">
+    <child>
+      <object class="GtkLabel" id="widget1"/>
+      <packing try="this">
+      </packing>
+    </child>
+  </object>
+</interface>
