@@ -214,6 +214,11 @@ test_ui =						\
 	ui/filefilter8.ui ui/filefilter8.expected 	\
 	ui/filefilter9.ui ui/filefilter9.expected 	\
 	ui/filefilter10.ui ui/filefilter10.expected 	\
+	ui/infobar1.ui ui/infobar1.expected	 	\
+	ui/infobar2.ui ui/infobar2.expected	 	\
+	ui/infobar3.ui ui/infobar3.expected	 	\
+	ui/infobar4.ui ui/infobar4.expected	 	\
+	ui/infobar5.ui ui/infobar5.expected	 	\
 	$(NULL)
 
 EXTRA_DIST +=				\
