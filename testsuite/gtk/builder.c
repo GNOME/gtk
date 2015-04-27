@@ -77,72 +77,52 @@ test_parser (void)
 
   error = NULL;
   gtk_builder_add_from_string (builder, "<xxx/>", -1, &error);
-  g_assert (g_error_matches (error, 
-                             GTK_BUILDER_ERROR,
-                             GTK_BUILDER_ERROR_UNHANDLED_TAG));
+  g_assert_error (error, GTK_BUILDER_ERROR, GTK_BUILDER_ERROR_UNHANDLED_TAG);
   g_error_free (error);
   
   error = NULL;
   gtk_builder_add_from_string (builder, "<interface invalid=\"X\"/>", -1, &error);
-  g_assert (g_error_matches (error,
-                             GTK_BUILDER_ERROR,
-                             GTK_BUILDER_ERROR_INVALID_ATTRIBUTE));
+  g_assert_error (error, GTK_BUILDER_ERROR, GTK_BUILDER_ERROR_INVALID_ATTRIBUTE);
   g_error_free (error);
 
   error = NULL;
   gtk_builder_add_from_string (builder, "<interface><child/></interface>", -1, &error);
-  g_assert (g_error_matches (error,
-                             GTK_BUILDER_ERROR, 
-                             GTK_BUILDER_ERROR_INVALID_TAG));
+  g_assert_error (error, GTK_BUILDER_ERROR, GTK_BUILDER_ERROR_INVALID_TAG);
   g_error_free (error);
 
   error = NULL;
   gtk_builder_add_from_string (builder, "<interface><object class=\"GtkVBox\" id=\"a\"><object class=\"GtkHBox\" id=\"b\"/></object></interface>", -1, &error);
-  g_assert (g_error_matches (error,
-                             GTK_BUILDER_ERROR,
-                             GTK_BUILDER_ERROR_INVALID_TAG));
+  g_assert_error (error, GTK_BUILDER_ERROR, GTK_BUILDER_ERROR_INVALID_TAG);
   g_error_free (error);
 
   error = NULL;
   gtk_builder_add_from_string (builder, "<interface><object class=\"Unknown\" id=\"a\"></object></interface>", -1, &error);
-  g_assert (g_error_matches (error,
-                             GTK_BUILDER_ERROR,
-                             GTK_BUILDER_ERROR_INVALID_VALUE));
+  g_assert_error (error, GTK_BUILDER_ERROR, GTK_BUILDER_ERROR_INVALID_VALUE);
   g_error_free (error);
 
   error = NULL;
   gtk_builder_add_from_string (builder, "<interface><object class=\"GtkWidget\" id=\"a\" constructor=\"none\"></object></interface>", -1, &error);
-  g_assert (g_error_matches (error,
-                             GTK_BUILDER_ERROR,
-                             GTK_BUILDER_ERROR_INVALID_VALUE));
+  g_assert_error (error, GTK_BUILDER_ERROR, GTK_BUILDER_ERROR_INVALID_VALUE);
   g_error_free (error);
 
   error = NULL;
   gtk_builder_add_from_string (builder, "<interface><object class=\"GtkButton\" id=\"a\"><child internal-child=\"foobar\"><object class=\"GtkButton\" id=\"int\"/></child></object></interface>", -1, &error);
-  g_assert (g_error_matches (error,
-                             GTK_BUILDER_ERROR,
-                             GTK_BUILDER_ERROR_INVALID_VALUE));
+  g_assert_error (error, GTK_BUILDER_ERROR, GTK_BUILDER_ERROR_INVALID_VALUE);
   g_error_free (error);
 
   error = NULL;
   gtk_builder_add_from_string (builder, "<interface><object class=\"GtkButton\" id=\"a\"></object><object class=\"GtkButton\" id=\"a\"/></object></interface>", -1, &error);
-  g_assert (g_error_matches (error,
-                             GTK_BUILDER_ERROR,
-                             GTK_BUILDER_ERROR_DUPLICATE_ID));
+  g_assert_error (error, GTK_BUILDER_ERROR, GTK_BUILDER_ERROR_DUPLICATE_ID);
   g_error_free (error);
 
   error = NULL;
   gtk_builder_add_from_string (builder, "<interface><object class=\"GtkButton\" id=\"a\"><property name=\"deafbeef\"></property></object></interface>", -1, &error);
-  g_assert (g_error_matches (error,
-                             GTK_BUILDER_ERROR,
-                             GTK_BUILDER_ERROR_INVALID_PROPERTY));
+  g_assert_error (error, GTK_BUILDER_ERROR, GTK_BUILDER_ERROR_INVALID_PROPERTY);
   g_error_free (error);
   
   error = NULL;
   gtk_builder_add_from_string (builder, "<interface><object class=\"GtkButton\" id=\"a\"><signal name=\"deafbeef\" handler=\"gtk_true\"/></object></interface>", -1, &error);
-  g_assert (g_error_matches (error,
-                             GTK_BUILDER_ERROR,
-                             GTK_BUILDER_ERROR_INVALID_SIGNAL));
+  g_assert_error (error, GTK_BUILDER_ERROR, GTK_BUILDER_ERROR_INVALID_SIGNAL);
   g_error_free (error);
 
   g_object_unref (builder);
@@ -568,7 +548,7 @@ test_list_store (void)
     "      <row>"
     "        <col id=\"0\" translatable=\"yes\">John</col>"
     "        <col id=\"1\" context=\"foo\">Doe</col>"
-    "        <col id=\"2\" comment=\"foobar\">25</col>"
+    "        <col id=\"2\" comments=\"foobar\">25</col>"
     "      </row>"
     "      <row>"
     "        <col id=\"0\">Johan</col>"
@@ -590,7 +570,7 @@ test_list_store (void)
     "      <row>"
     "        <col id=\"1\" context=\"foo\">Doe</col>"
     "        <col id=\"0\" translatable=\"yes\">John</col>"
-    "        <col id=\"2\" comment=\"foobar\">25</col>"
+    "        <col id=\"2\" comments=\"foobar\">25</col>"
     "      </row>"
     "      <row>"
     "        <col id=\"2\">50</col>"
@@ -803,9 +783,7 @@ test_types (void)
   error = NULL;
   builder = gtk_builder_new ();
   gtk_builder_add_from_string (builder, buffer3, -1, &error);
-  g_assert (g_error_matches (error,
-                             GTK_BUILDER_ERROR,
-                             GTK_BUILDER_ERROR_INVALID_TYPE_FUNCTION));
+  g_assert_error (error, GTK_BUILDER_ERROR, GTK_BUILDER_ERROR_INVALID_TYPE_FUNCTION);
   g_error_free (error);
   g_object_unref (builder);
 }
@@ -1743,33 +1721,25 @@ test_value_from_string (void)
   
   g_assert (gtk_builder_value_from_string_type (builder, G_TYPE_BOOLEAN, "blaurgh", &value, &error) == FALSE);
   g_value_unset (&value);
-  g_assert (g_error_matches (error,
-                             GTK_BUILDER_ERROR,
-                             GTK_BUILDER_ERROR_INVALID_VALUE));
+  g_assert_error (error, GTK_BUILDER_ERROR, GTK_BUILDER_ERROR_INVALID_VALUE);
   g_error_free (error);
   error = NULL;
 
   g_assert (gtk_builder_value_from_string_type (builder, G_TYPE_BOOLEAN, "yess", &value, &error) == FALSE);
   g_value_unset (&value);
-  g_assert (g_error_matches (error,
-                             GTK_BUILDER_ERROR,
-                             GTK_BUILDER_ERROR_INVALID_VALUE));
+  g_assert_error (error, GTK_BUILDER_ERROR, GTK_BUILDER_ERROR_INVALID_VALUE);
   g_error_free (error);
   error = NULL;
   
   g_assert (gtk_builder_value_from_string_type (builder, G_TYPE_BOOLEAN, "trueee", &value, &error) == FALSE);
   g_value_unset (&value);
-  g_assert (g_error_matches (error,
-                             GTK_BUILDER_ERROR,
-                             GTK_BUILDER_ERROR_INVALID_VALUE));
+  g_assert_error (error, GTK_BUILDER_ERROR, GTK_BUILDER_ERROR_INVALID_VALUE);
   g_error_free (error);
   error = NULL;
   
   g_assert (gtk_builder_value_from_string_type (builder, G_TYPE_BOOLEAN, "", &value, &error) == FALSE);
   g_value_unset (&value);
-  g_assert (g_error_matches (error,
-                             GTK_BUILDER_ERROR,
-                             GTK_BUILDER_ERROR_INVALID_VALUE));
+  g_assert_error (error, GTK_BUILDER_ERROR, GTK_BUILDER_ERROR_INVALID_VALUE);
   g_error_free (error);
   error = NULL;
   
@@ -1805,17 +1775,13 @@ test_value_from_string (void)
 
   g_assert (gtk_builder_value_from_string_type (builder, G_TYPE_FLOAT, "abc", &value, &error) == FALSE);
   g_value_unset (&value);
-  g_assert (g_error_matches (error,
-                             GTK_BUILDER_ERROR,
-                             GTK_BUILDER_ERROR_INVALID_VALUE));
+  g_assert_error (error, GTK_BUILDER_ERROR, GTK_BUILDER_ERROR_INVALID_VALUE);
   g_error_free (error);
   error = NULL;
 
   g_assert (gtk_builder_value_from_string_type (builder, G_TYPE_INT, "/-+,abc", &value, &error) == FALSE);
   g_value_unset (&value);
-  g_assert (g_error_matches (error,
-                             GTK_BUILDER_ERROR,
-                             GTK_BUILDER_ERROR_INVALID_VALUE));
+  g_assert_error (error, GTK_BUILDER_ERROR, GTK_BUILDER_ERROR_INVALID_VALUE);
   g_error_free (error);
   error = NULL;
 
@@ -1826,17 +1792,13 @@ test_value_from_string (void)
 
   g_assert (gtk_builder_value_from_string_type (builder, GTK_TYPE_WINDOW_TYPE, "sliff", &value, &error) == FALSE);
   g_value_unset (&value);
-  g_assert (g_error_matches (error,
-                             GTK_BUILDER_ERROR,
-                             GTK_BUILDER_ERROR_INVALID_VALUE));
+  g_assert_error (error, GTK_BUILDER_ERROR, GTK_BUILDER_ERROR_INVALID_VALUE);
   g_error_free (error);
   error = NULL;
 
   g_assert (gtk_builder_value_from_string_type (builder, GTK_TYPE_WINDOW_TYPE, "foobar", &value, &error) == FALSE);
   g_value_unset (&value);
-  g_assert (g_error_matches (error,
-                             GTK_BUILDER_ERROR,
-                             GTK_BUILDER_ERROR_INVALID_VALUE));
+  g_assert_error (error, GTK_BUILDER_ERROR, GTK_BUILDER_ERROR_INVALID_VALUE);
   g_error_free (error);
   error = NULL;
   
@@ -1922,31 +1884,6 @@ test_icon_factory (void)
     "    </sources>"
     "  </object>"
     "</interface>";
-#if 0
-  const gchar buffer3[] =
-    "<interface>"
-    "  <object class=\"GtkIconFactory\" id=\"iconfactory1\">"
-    "    <invalid/>"
-    "  </object>"
-    "</interface>";
-  const gchar buffer4[] =
-    "<interface>"
-    "  <object class=\"GtkIconFactory\" id=\"iconfactory1\">"
-    "    <sources>"
-    "      <invalid/>"
-    "    </sources>"
-    "  </object>"
-    "</interface>";
-  const gchar buffer5[] =
-    "<interface>"
-    "  <object class=\"GtkIconFactory\" id=\"iconfactory1\">"
-    "    <sources>"
-    "      <source/>"
-    "    </sources>"
-    "  </object>"
-    "</interface>";
-  GError *error = NULL;
-#endif  
   GObject *factory;
   GtkIconSet *icon_set;
   GtkIconSource *icon_source;
@@ -1992,28 +1929,6 @@ test_icon_factory (void)
 
   g_object_unref (builder);
 
-#if 0
-  error = NULL;
-  gtk_builder_add_from_string (builder, buffer3, -1, &error);
-  g_assert (g_error_matches (error,
-                             GTK_BUILDER_ERROR,
-                             GTK_BUILDER_ERROR_INVALID_TAG));
-  g_error_free (error);
-
-  error = NULL;
-  gtk_builder_add_from_string (builder, buffer4, -1, &error);
-  g_assert (g_error_matches (error,
-                             GTK_BUILDER_ERROR,
-                             GTK_BUILDER_ERROR_INVALID_TAG));
-  g_error_free (error);
-
-  error = NULL;
-  gtk_builder_add_from_string (builder, buffer5, -1, &error);
-  g_assert (g_error_matches (error,
-                             GTK_BUILDER_ERROR,
-                             GTK_BUILDER_ERROR_INVALID_ATTRIBUTE));
-  g_error_free (error);
-#endif
   G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
 
 }
@@ -2116,9 +2031,7 @@ test_pango_attributes (void)
   builder = gtk_builder_new ();
   gtk_builder_add_from_string (builder, err_buffer1, -1, &error);
   label = gtk_builder_get_object (builder, "label1");
-  g_assert (g_error_matches (error,
-                             GTK_BUILDER_ERROR,
-                             GTK_BUILDER_ERROR_MISSING_ATTRIBUTE));
+  g_assert_error (error, G_MARKUP_ERROR, G_MARKUP_ERROR_MISSING_ATTRIBUTE);
   g_object_unref (builder);
   g_error_free (error);
   error = NULL;
@@ -2127,9 +2040,7 @@ test_pango_attributes (void)
   gtk_builder_add_from_string (builder, err_buffer2, -1, &error);
   label = gtk_builder_get_object (builder, "label1");
 
-  g_assert (g_error_matches (error,
-                             GTK_BUILDER_ERROR,
-                             GTK_BUILDER_ERROR_INVALID_ATTRIBUTE));
+  g_assert_error (error, G_MARKUP_ERROR, G_MARKUP_ERROR_UNKNOWN_ATTRIBUTE);
   g_object_unref (builder);
   g_error_free (error);
 }
@@ -2148,9 +2059,7 @@ test_requires (void)
   buffer = g_strdup_printf (buffer_fmt, GTK_MAJOR_VERSION, GTK_MINOR_VERSION + 1);
   builder = gtk_builder_new ();
   gtk_builder_add_from_string (builder, buffer, -1, &error);
-  g_assert (g_error_matches (error,
-                             GTK_BUILDER_ERROR,
-                             GTK_BUILDER_ERROR_VERSION_MISMATCH));
+  g_assert_error (error, GTK_BUILDER_ERROR, GTK_BUILDER_ERROR_VERSION_MISMATCH);
   g_object_unref (builder);
   g_error_free (error);
   g_free (buffer);
@@ -2686,18 +2595,14 @@ test_level_bar (void)
   error = NULL;
   builder = gtk_builder_new ();
   gtk_builder_add_from_string (builder, buffer2, -1, &error);
-  g_assert (g_error_matches (error,
-                             GTK_BUILDER_ERROR,
-                             GTK_BUILDER_ERROR_INVALID_ATTRIBUTE));
+  g_assert_error (error, G_MARKUP_ERROR, G_MARKUP_ERROR_MISSING_ATTRIBUTE);
   g_error_free (error);
   g_object_unref (builder);
 
   error = NULL;
   builder = gtk_builder_new ();
   gtk_builder_add_from_string (builder, buffer3, -1, &error);
-  g_assert (g_error_matches (error,
-                             GTK_BUILDER_ERROR,
-                             GTK_BUILDER_ERROR_UNHANDLED_TAG));
+  g_assert_error (error, GTK_BUILDER_ERROR, GTK_BUILDER_ERROR_UNHANDLED_TAG);
   g_error_free (error);
   g_object_unref (builder);
 }
