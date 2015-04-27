@@ -77,6 +77,24 @@ gtk_css_widget_node_queue_callback (GtkWidget     *widget,
   return G_SOURCE_CONTINUE;
 }
 
+static GtkCssStyle *
+gtk_css_widget_node_update_style (GtkCssNode   *cssnode,
+                                  GtkCssChange  change,
+                                  gint64        timestamp,
+                                  GtkCssStyle  *style)
+{
+  GtkCssWidgetNode *widget_node = GTK_CSS_WIDGET_NODE (cssnode);
+
+  if (widget_node->widget != NULL)
+    {
+      GtkStyleContext *context = _gtk_widget_peek_style_context (widget_node->widget);
+      if (context)
+        gtk_style_context_clear_property_cache (context);
+    }
+
+  return GTK_CSS_NODE_CLASS (gtk_css_widget_node_parent_class)->update_style (cssnode, change, timestamp, style);
+}
+
 static void
 gtk_css_widget_node_queue_validate (GtkCssNode *node)
 {
@@ -249,6 +267,7 @@ gtk_css_widget_node_class_init (GtkCssWidgetNodeClass *klass)
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
 
   object_class->finalize = gtk_css_widget_node_finalize;
+  node_class->update_style = gtk_css_widget_node_update_style;
   node_class->validate = gtk_css_widget_node_validate;
   node_class->queue_validate = gtk_css_widget_node_queue_validate;
   node_class->dequeue_validate = gtk_css_widget_node_dequeue_validate;

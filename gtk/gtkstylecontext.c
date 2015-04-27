@@ -254,7 +254,7 @@ gtk_style_context_class_init (GtkStyleContextClass *klass)
                                                         GTK_PARAM_READWRITE));
 }
 
-static void
+void
 gtk_style_context_clear_property_cache (GtkStyleContext *context)
 {
   GtkStyleContextPrivate *priv = context->priv;
@@ -2417,8 +2417,6 @@ gtk_style_context_validate (GtkStyleContext  *context,
 {
   if (!_gtk_bitmask_is_empty (changes))
     gtk_style_context_do_invalidate (context, changes);
-
-  gtk_style_context_clear_property_cache (context);
 }
 
 /**

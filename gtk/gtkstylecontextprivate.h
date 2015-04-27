@@ -47,6 +47,7 @@ const GValue * _gtk_style_context_peek_style_property        (GtkStyleContext *c
                                                               GParamSpec      *pspec);
 void            gtk_style_context_validate                   (GtkStyleContext *context,
                                                               const GtkBitmask*changes);
+void            gtk_style_context_clear_property_cache       (GtkStyleContext *context);
 gboolean       _gtk_style_context_check_region_name          (const gchar     *str);
 
 gboolean       _gtk_style_context_resolve_color              (GtkStyleContext    *context,
