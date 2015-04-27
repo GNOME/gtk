@@ -361,28 +361,18 @@ GMarkupParser parser = {
   NULL
 };
 
-int
-main (int argc, char *argv[])
+static gboolean
+do_simplify (const gchar *filename)
 {
   GMarkupParseContext *context;
   GError *error = NULL;
   gchar *buffer;
   ParserData data;
 
-  gtk_init (NULL, NULL);
-
-  gtk_test_register_all_types ();
-
-  if (argc < 2)
+  if (!g_file_get_contents (filename, &buffer, NULL, &error))
     {
-      g_printerr ("No file given.\n");
-      return 1;
-    }
-
-  if (!g_file_get_contents (argv[1], &buffer, NULL, &error))
-    {
-      g_printerr ("Failed to read file: %s.\n", error->message);
-      return 1;
+      g_printerr ("Failed to read file: %s\n", error->message);
+      return FALSE;
     }
 
   data.builder = gtk_builder_new ();
@@ -398,9 +388,56 @@ main (int argc, char *argv[])
   context = g_markup_parse_context_new (&parser, G_MARKUP_TREAT_CDATA_AS_TEXT, &data, NULL);
   if (!g_markup_parse_context_parse (context, buffer, -1, &error))
     {
-      g_printerr ("Failed to parse file: %s.\n", error->message);
-      return 1;
+      g_printerr ("Failed to parse file: %s\n", error->message);
+      return FALSE;
     }
+
+  return TRUE;
+}
+
+static gboolean
+do_validate (const gchar *filename)
+{
+  GtkBuilder *builder;
+  GError *error = NULL;
+  gint ret;
+
+  builder = gtk_builder_new ();
+  ret = gtk_builder_add_from_file (builder, filename, &error);
+  g_object_unref (builder);
+
+  if (ret == 0)
+    {
+      g_printerr ("%s\n", error->message);
+      return FALSE;
+    }
+
+  return TRUE;
+}
+
+static void
+usage (void)
+{
+  g_print ("Usage: gtk-builder-tool FILE\n"
+           "Validate and simplify GtkBuilder .ui files.\n");
+  exit (1);
+}
+
+int
+main (int argc, char *argv[])
+{
+  gtk_init (NULL, NULL);
+
+  gtk_test_register_all_types ();
+
+  if (argc < 2)
+    usage ();
+
+  if (!do_validate (argv[1]))
+    return 1;
+
+  if (!do_simplify (argv[1]))
+    return 1;
 
   return 0;
 }
