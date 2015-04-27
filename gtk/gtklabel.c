@@ -1388,7 +1388,7 @@ typedef struct {
 
 static PangoAttribute *
 attribute_from_text (GtkBuilder   *builder,
-		     const gchar  *name, 
+		     const gchar  *name,
 		     const gchar  *value,
 		     GError      **error)
 {
@@ -1444,7 +1444,7 @@ attribute_from_text (GtkBuilder   *builder,
             attribute = pango_attr_underline_new (g_value_get_boolean (&val));
         }
       break;
-    case PANGO_ATTR_STRIKETHROUGH:	
+    case PANGO_ATTR_STRIKETHROUGH:
       if (gtk_builder_value_from_string_type (builder, G_TYPE_BOOLEAN, value, &val, error))
 	attribute = pango_attr_strikethrough_new (g_value_get_boolean (&val));
       break;
@@ -1453,28 +1453,25 @@ attribute_from_text (GtkBuilder   *builder,
 	attribute = pango_attr_gravity_new (g_value_get_enum (&val));
       break;
     case PANGO_ATTR_GRAVITY_HINT:
-      if (gtk_builder_value_from_string_type (builder, PANGO_TYPE_GRAVITY_HINT, 
-					      value, &val, error))
+      if (gtk_builder_value_from_string_type (builder, PANGO_TYPE_GRAVITY_HINT, value, &val, error))
 	attribute = pango_attr_gravity_hint_new (g_value_get_enum (&val));
       break;
-      /* PangoAttrString */	  
+      /* PangoAttrString */
     case PANGO_ATTR_FAMILY:
       attribute = pango_attr_family_new (value);
       g_value_init (&val, G_TYPE_INT);
       break;
 
-      /* PangoAttrSize */	  
+      /* PangoAttrSize */
     case PANGO_ATTR_SIZE:
-      if (gtk_builder_value_from_string_type (builder, G_TYPE_INT, 
-					      value, &val, error))
+      if (gtk_builder_value_from_string_type (builder, G_TYPE_INT, value, &val, error))
 	attribute = pango_attr_size_new (g_value_get_int (&val));
       break;
     case PANGO_ATTR_ABSOLUTE_SIZE:
-      if (gtk_builder_value_from_string_type (builder, G_TYPE_INT, 
-					      value, &val, error))
+      if (gtk_builder_value_from_string_type (builder, G_TYPE_INT, value, &val, error))
 	attribute = pango_attr_size_new_absolute (g_value_get_int (&val));
       break;
-    
+
       /* PangoAttrFontDesc */
     case PANGO_ATTR_FONT_DESC:
       if ((font_desc = pango_font_description_from_string (value)))
@@ -1489,32 +1486,28 @@ G_GNUC_BEGIN_IGNORE_DEPRECATIONS
 
       /* PangoAttrColor */
     case PANGO_ATTR_FOREGROUND:
-      if (gtk_builder_value_from_string_type (builder, GDK_TYPE_COLOR,
-					      value, &val, error))
+      if (gtk_builder_value_from_string_type (builder, GDK_TYPE_COLOR, value, &val, error))
 	{
 	  color = g_value_get_boxed (&val);
 	  attribute = pango_attr_foreground_new (color->red, color->green, color->blue);
 	}
       break;
-    case PANGO_ATTR_BACKGROUND: 
-      if (gtk_builder_value_from_string_type (builder, GDK_TYPE_COLOR, 
-					      value, &val, error))
+    case PANGO_ATTR_BACKGROUND:
+      if (gtk_builder_value_from_string_type (builder, GDK_TYPE_COLOR, value, &val, error))
 	{
 	  color = g_value_get_boxed (&val);
 	  attribute = pango_attr_background_new (color->red, color->green, color->blue);
 	}
       break;
     case PANGO_ATTR_UNDERLINE_COLOR:
-      if (gtk_builder_value_from_string_type (builder, GDK_TYPE_COLOR, 
-					      value, &val, error))
+      if (gtk_builder_value_from_string_type (builder, GDK_TYPE_COLOR, value, &val, error))
 	{
 	  color = g_value_get_boxed (&val);
 	  attribute = pango_attr_underline_color_new (color->red, color->green, color->blue);
 	}
       break;
     case PANGO_ATTR_STRIKETHROUGH_COLOR:
-      if (gtk_builder_value_from_string_type (builder, GDK_TYPE_COLOR, 
-					      value, &val, error))
+      if (gtk_builder_value_from_string_type (builder, GDK_TYPE_COLOR, value, &val, error))
 	{
 	  color = g_value_get_boxed (&val);
 	  attribute = pango_attr_strikethrough_color_new (color->red, color->green, color->blue);
@@ -1522,15 +1515,14 @@ G_GNUC_BEGIN_IGNORE_DEPRECATIONS
       break;
 
 G_GNUC_END_IGNORE_DEPRECATIONS
-      
+
       /* PangoAttrShape */
     case PANGO_ATTR_SHAPE:
       /* Unsupported for now */
       break;
       /* PangoAttrFloat */
     case PANGO_ATTR_SCALE:
-      if (gtk_builder_value_from_string_type (builder, G_TYPE_DOUBLE, 
-					      value, &val, error))
+      if (gtk_builder_value_from_string_type (builder, G_TYPE_DOUBLE, value, &val, error))
 	attribute = pango_attr_scale_new (g_value_get_double (&val));
       break;
 
@@ -1585,8 +1577,7 @@ pango_start_element (GMarkupParseContext *context,
 
       if (start)
         {
-          if (!gtk_builder_value_from_string_type (data->builder, G_TYPE_UINT,
-                                                   start, &val, error))
+          if (!gtk_builder_value_from_string_type (data->builder, G_TYPE_UINT, start, &val, error))
             {
               _gtk_builder_prefix_error (data->builder, context, error);
               return;
@@ -1597,8 +1588,7 @@ pango_start_element (GMarkupParseContext *context,
 
       if (end)
         {
-          if (!gtk_builder_value_from_string_type (data->builder, G_TYPE_UINT,
-                                                   end, &val, error))
+          if (!gtk_builder_value_from_string_type (data->builder, G_TYPE_UINT, end, &val, error))
             {
               _gtk_builder_prefix_error (data->builder, context, error);
               return;
