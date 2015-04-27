@@ -1647,8 +1647,8 @@ GtkSwitch {
       text-shadow: none; }
       GtkSwitch.trough:backdrop:active {
         color: #fff;
-        border-color: #000;
-        background-color: #000;
+        border-color: #8b8b8b;
+        background-color: #8b8b8b;
         box-shadow: none; }
       GtkSwitch.trough:backdrop:insensitive, GtkSwitch.trough:backdrop:insensitive:active {
         background-color: white;
@@ -1692,7 +1692,7 @@ GtkSwitch {
       text-shadow: none;
       icon-shadow: none; }
       GtkSwitch.slider:backdrop:active {
-        border-color: #000; }
+        border-color: #8b8b8b; }
       GtkSwitch.slider:backdrop:insensitive {
         border-width: 2px;
         border-style: solid;

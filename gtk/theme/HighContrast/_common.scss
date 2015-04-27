@@ -1443,9 +1443,9 @@ GtkSwitch {
         box-shadow: none;
         text-shadow: none;
         &:active {
-          color: $backdrop_bg_color;
-          border-color: $selected_bg_color;
-          background-color: $selected_bg_color;
+          color: $selected_fg_color;
+          border-color: $backdrop_borders_color;
+          background-color: $backdrop_borders_color;
           box-shadow: none;
         }
         &:insensitive, &:insensitive:active {
@@ -1470,7 +1470,7 @@ GtkSwitch {
       &:active { border-color: $selected_borders_color; }
       &:insensitive { @include button(insensitive, $edge: none); }
       &:backdrop { @include button(backdrop);
-        &:active{ border-color: $selected_bg_color; }
+        &:active{ border-color: $backdrop_borders_color; }
         &:insensitive {
           @include button(backdrop-insensitive);
         }
