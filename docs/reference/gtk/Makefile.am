@@ -485,7 +485,8 @@ man_MANS = 				\
 	gtk3-demo-application.1		\
 	gtk3-widget-factory.1		\
 	gtk3-icon-browser.1		\
-	broadwayd.1
+	broadwayd.1			\
+	gtk-builder-tool.1
 
 if ENABLE_MAN
 

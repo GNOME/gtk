@@ -1,0 +1,46 @@
+<?xml version="1.0"?>
+<!DOCTYPE refentry PUBLIC "-//OASIS//DTD DocBook XML V4.3//EN"
+               "http://www.oasis-open.org/docbook/xml/4.3/docbookx.dtd" [
+]>
+<refentry id="gtk-builder-tool">
+
+<refentryinfo>
+  <title>gtk-builder-tool</title>
+  <productname>GTK+</productname>
+  <authorgroup>
+    <author>
+      <contrib>Developer</contrib>
+      <firstname>Matthias</firstname>
+      <surname>Clasen</surname>
+    </author>
+  </authorgroup>
+</refentryinfo>
+
+<refmeta>
+  <refentrytitle>gtk-builder-tool</refentrytitle>
+  <manvolnum>1</manvolnum>
+  <refmiscinfo class="manual">User Commands</refmiscinfo>
+</refmeta>
+
+<refnamediv>
+  <refname>gtk-builder-tool</refname>
+  <refpurpose>GtkBuilder file utility</refpurpose>
+</refnamediv>
+
+<refsynopsisdiv>
+<cmdsynopsis>
+<command>gtk-builder-tool</command>
+<arg choice="plain"><replaceable>FILE</replaceable></arg>
+</cmdsynopsis>
+</refsynopsisdiv>
+
+<refsect1><title>Description</title>
+<para>
+  <command>gtk-builder-tool</command> validates and simplifies a GtkBuilder
+  .ui file. Any validation errors are reported on stderr. If the file is
+  valid, it is simplified by removing any properties that are set to their
+  default value. The resulting xml is written to stdout.
+</para>
+</refsect1>
+
+</refentry>

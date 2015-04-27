@@ -404,6 +404,7 @@
     <xi:include href="gtk-query-immodules-3.0.xml" />
     <xi:include href="gtk-update-icon-cache.xml" />
     <xi:include href="gtk-encode-symbolic-svg.xml" />
+    <xi:include href="gtk-builder-tool.xml" />
     <xi:include href="gtk-launch.xml" />
     <xi:include href="broadwayd.xml" />
   </part>
