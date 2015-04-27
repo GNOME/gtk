@@ -2543,13 +2543,13 @@ GtkInfoBar {
  * Color Chooser *
  *****************/
 GtkColorSwatch {
-  box-shadow: inset 0 1px rgba(0, 0, 0, 0.1), _widget_edge(); }
+  box-shadow: inset 0 1px rgba(0, 0, 0, 0.1), 0 1px #fff; }
   :selected GtkColorSwatch {
     box-shadow: none; }
     :selected GtkColorSwatch.overlay, :selected GtkColorSwatch.overlay:hover {
       border-color: #fff; }
   GtkColorSwatch:selected {
-    box-shadow: inset 0 1px rgba(0, 0, 0, 0.1), _widget_edge(); }
+    box-shadow: inset 0 1px rgba(0, 0, 0, 0.1), 0 1px #fff; }
   GtkColorSwatch.top {
     border-top-left-radius: 5px;
     border-top-right-radius: 5px; }
@@ -2574,7 +2574,7 @@ GtkColorSwatch {
     border-radius: 3px; }
     GtkColorEditor GtkColorSwatch:hover {
       background-image: none;
-      box-shadow: inset 0 1px rgba(0, 0, 0, 0.1), _widget_edge(); }
+      box-shadow: inset 0 1px rgba(0, 0, 0, 0.1), 0 1px #fff; }
     GtkColorEditor GtkColorSwatch:backdrop {
       box-shadow: none; }
   GtkColorSwatch.color-dark {
