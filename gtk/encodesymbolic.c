@@ -276,7 +276,7 @@ main (int argc, char **argv)
   symbolic = make_symbolic_pixbuf (path, width, height, &error);
   if (symbolic == NULL)
     {
-      g_printerr ("Can't load file: %s\n", error->message);
+      g_printerr (_("Can't load file: %s\n"), error->message);
       return 1;
     }
 
@@ -304,19 +304,19 @@ main (int argc, char **argv)
 			NULL, &error);
   if (out == NULL)
     {
-      g_printerr ("Can't save file %s: %s\n", pngpath, error->message);
+      g_printerr (_("Can't save file %s: %s\n"), pngpath, error->message);
       return 1;
     }
 
   if (!gdk_pixbuf_save_to_stream (symbolic, G_OUTPUT_STREAM (out), "png", NULL, &error, NULL))
     {
-      g_printerr ("Can't save file %s: %s\n", pngpath, error->message);
+      g_printerr (_("Can't save file %s: %s\n"), pngpath, error->message);
       return 1;
     }
 
   if (!g_output_stream_close (G_OUTPUT_STREAM (out), NULL, &error))
     {
-      g_printerr ("Can't close stream");
+      g_printerr (_("Can't close stream"));
       return 1;
     }
 
