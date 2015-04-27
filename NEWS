@@ -1,4 +1,21 @@
-Overview of Changes in GTK+ 3.14.12 to 3.14.12
+Overview of Changes in GTK+ 3.14.12 to 3.14.13
+==============================================
+
+* Bugs fixed:
+ 737175 most horizontal sliders are inverted when scrolled with wheel
+ 747469 CSD: can't open window menu using right click after moving window
+ 747553 Popovers inside local plugs don't get size_allocate() called
+ 747805 Split Headerbar unmaximize
+ 748061 GtkMessageDialog: Minor documentation update
+ 748341 GdkOffscreenWindow should not segfault on gdk_window_beep()
+        GtkApplication: Prevent more crashes on shutdown
+
+* Translation updates:
+ German
+ Icelandic
+
+
+Overview of Changes in GTK+ 3.14.11 to 3.14.12
 ==============================================
 
 * Bugs fixed:
