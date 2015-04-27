@@ -203,7 +203,6 @@ test_ui =						\
 	ui/dialog3.ui ui/dialog3.expected 		\
 	ui/dialog4.ui ui/dialog4.expected 		\
 	ui/dialog5.ui ui/dialog5.expected 		\
-	ui/dialog6.ui ui/dialog6.expected 		\
 	ui/filefilter1.ui ui/filefilter1.expected	\
 	ui/filefilter2.ui ui/filefilter2.expected 	\
 	ui/filefilter3.ui ui/filefilter3.expected 	\
