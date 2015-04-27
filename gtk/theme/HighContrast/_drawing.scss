@@ -1,6 +1,10 @@
 // Drawing mixins
 
 // generic drawing of more complex things
+@function _widget_edge($c:$borders_edge) {
+// outer highlight "used" on most widgets
+  @return 0 1px $c;
+}
 
 @mixin _shadows($shadow1, $shadow2:none, $shadow3:none, $shadow4:none) {
 //
