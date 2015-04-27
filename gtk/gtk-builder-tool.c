@@ -19,6 +19,8 @@
 
 #include <stdlib.h>
 #include <string.h>
+
+#include <glib/gi18n.h>
 #include <gtk/gtk.h>
 
 
@@ -69,19 +71,18 @@ value_is_default (ParserData *data,
 
   if (pspec == NULL)
     {
-      g_printerr ("P%sroperty %s::%s not found\n", data->packing ? "acking p" : "", class_name, property_name);
+      if (data->packing)
+        g_printerr (_("Packing property %s::%s not found\n"), class_name, property_name);
+      else
+        g_printerr (_("Property %s::%s not found\n"), class_name, property_name);
       return FALSE;
     }
   else if (g_type_is_a (G_PARAM_SPEC_VALUE_TYPE (pspec), G_TYPE_OBJECT))
     return FALSE;
 
-  if (!gtk_builder_value_from_string (data->builder,
-                                      pspec,
-                                      value_string,
-                                      &value,
-                                      &error))
+  if (!gtk_builder_value_from_string (data->builder, pspec, value_string, &value, &error))
     {
-      g_printerr ("Error parsing value: %s\n", error->message);
+      g_printerr (_("Couldn't parse value: %s\n"), error->message);
       g_error_free (error);
       ret = FALSE;
     }
@@ -371,7 +372,7 @@ do_simplify (const gchar *filename)
 
   if (!g_file_get_contents (filename, &buffer, NULL, &error))
     {
-      g_printerr ("Failed to read file: %s\n", error->message);
+      g_printerr (_("Can't load file: %s\n"), error->message);
       return FALSE;
     }
 
@@ -388,7 +389,7 @@ do_simplify (const gchar *filename)
   context = g_markup_parse_context_new (&parser, G_MARKUP_TREAT_CDATA_AS_TEXT, &data, NULL);
   if (!g_markup_parse_context_parse (context, buffer, -1, &error))
     {
-      g_printerr ("Failed to parse file: %s\n", error->message);
+      g_printerr (_("Can't parse file: %s\n"), error->message);
       return FALSE;
     }
 
@@ -418,14 +419,16 @@ do_validate (const gchar *filename)
 static void
 usage (void)
 {
-  g_print ("Usage: gtk-builder-tool FILE\n"
-           "Validate and simplify GtkBuilder .ui files.\n");
+  g_print (_("Usage: gtk-builder-tool FILE\n"
+             "Validate and simplify GtkBuilder .ui files.\n"));
   exit (1);
 }
 
 int
 main (int argc, char *argv[])
 {
+  g_set_prgname ("gtk-builder-tool");
+
   gtk_init (NULL, NULL);
 
   gtk_test_register_all_types ();
