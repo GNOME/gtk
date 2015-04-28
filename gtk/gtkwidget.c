@@ -14061,7 +14061,9 @@ typedef struct
 typedef struct
 {
   gchar *target;
-  gchar *type;
+  AtkRelationType type;
+  gint line;
+  gint col;
 } AtkRelationData;
 
 static void
@@ -14077,7 +14079,6 @@ static void
 free_relation (AtkRelationData *data, gpointer user_data)
 {
   g_free (data->target);
-  g_free (data->type);
   g_slice_free (AtkRelationData, data);
 }
 
@@ -14100,7 +14101,6 @@ gtk_widget_buildable_parser_finished (GtkBuildable *buildable,
       AtkRelationSet *relation_set;
       GSList *l;
       GObject *target;
-      AtkRelationType relation_type;
       AtkObject *target_accessible;
 
       accessible = gtk_widget_get_accessible (GTK_WIDGET (buildable));
@@ -14110,31 +14110,18 @@ gtk_widget_buildable_parser_finished (GtkBuildable *buildable,
 	{
 	  AtkRelationData *relation = (AtkRelationData*)l->data;
 
-	  target = gtk_builder_get_object (builder, relation->target);
+	  target = _gtk_builder_lookup_object (builder, relation->target, relation->line, relation->col);
 	  if (!target)
-	    {
-	      g_warning ("Target object %s in <relation> does not exist",
-			 relation->target);
-	      continue;
-	    }
+	    continue;
 	  target_accessible = gtk_widget_get_accessible (GTK_WIDGET (target));
 	  g_assert (target_accessible != NULL);
 
-	  relation_type = atk_relation_type_for_name (relation->type);
-	  if (relation_type == ATK_RELATION_NULL)
-	    {
-	      g_warning ("<relation> type %s not found",
-			 relation->type);
-	      continue;
-	    }
-	  atk_relation_set_add_relation_by_type (relation_set, relation_type,
-						 target_accessible);
+	  atk_relation_set_add_relation_by_type (relation_set, relation->type, target_accessible);
 	}
       g_object_unref (relation_set);
 
       g_slist_free_full (atk_relations, (GDestroyNotify) free_relation);
-      g_object_set_qdata (G_OBJECT (buildable), quark_builder_atk_relations,
-			  NULL);
+      g_object_set_qdata (G_OBJECT (buildable), quark_builder_atk_relations, NULL);
     }
 }
 
@@ -14160,6 +14147,7 @@ accessibility_start_element (GMarkupParseContext  *context,
       gchar *target = NULL;
       gchar *type = NULL;
       AtkRelationData *relation;
+      AtkRelationType relation_type;
 
       if (!_gtk_builder_check_parent (data->builder, context, "accessibility", error))
         return;
@@ -14173,9 +14161,20 @@ accessibility_start_element (GMarkupParseContext  *context,
           return;
         }
 
+      relation_type = atk_relation_type_for_name (type);
+      if (relation_type == ATK_RELATION_NULL)
+        {
+          g_set_error (error,
+                       GTK_BUILDER_ERROR,
+                       GTK_BUILDER_ERROR_INVALID_VALUE,
+                       "No such relation type: '%s'", type);
+          _gtk_builder_prefix_error (data->builder, context, error);
+          return;
+        }
+
       relation = g_slice_new (AtkRelationData);
       relation->target = g_strdup (target);
-      relation->type = g_strdup (type);
+      relation->type = relation_type;
 
       data->relations = g_slist_prepend (data->relations, relation);
     }
