@@ -1667,6 +1667,8 @@ typedef struct {
   gchar *widget_name;
   gint response_id;
   gboolean is_default;
+  gint line;
+  gint col;
 } ActionWidgetInfo;
 
 typedef struct {
@@ -1678,6 +1680,8 @@ typedef struct {
   gboolean is_text;
   GString *string;
   gboolean in_action_widgets;
+  gint line;
+  gint col;
 } SubParserData;
 
 static void
@@ -1718,6 +1722,7 @@ parser_start_element (GMarkupParseContext *context,
       data->is_default = is_default;
       data->is_text = TRUE;
       g_string_set_size (data->string, 0);
+      g_markup_parse_context_get_position (context, &data->line, &data->col);
     }
   else if (strcmp (element_name, "action-widgets") == 0)
     {
@@ -1768,6 +1773,8 @@ parser_end_element (GMarkupParseContext  *context,
       item->widget_name = g_strdup (data->string->str);
       item->response_id = data->response_id;
       item->is_default = data->is_default;
+      item->line = data->line;
+      item->col = data->col;
 
       data->items = g_slist_prepend (data->items, item);
       data->is_default = FALSE;
@@ -1843,14 +1850,9 @@ gtk_dialog_buildable_custom_finished (GtkBuildable *buildable,
       ActionWidgetInfo *item = l->data;
       gboolean is_action;
 
-      object = gtk_builder_get_object (builder, item->widget_name);
+      object = _gtk_builder_lookup_object (builder, item->widget_name, item->line, item->col);
       if (!object)
-	{
-	  g_warning ("Unknown object %s specified in action-widgets of %s",
-		     item->widget_name,
-		     gtk_buildable_get_name (GTK_BUILDABLE (buildable)));
-	  continue;
-	}
+        continue;
 
       /* If the widget already has reponse data at this point, it
        * was either added by gtk_dialog_add_action_widget(), or via
