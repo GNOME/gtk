@@ -1554,11 +1554,13 @@ GtkComboBox {
   .titlebar .title,
   .header-bar .title {
     font-weight: bold;
-    padding: 0px 12px; }
+    padding-left: 12px;
+    padding-right: 12px; }
   .titlebar .subtitle,
   .header-bar .subtitle {
     font-size: smaller;
-    padding: 0 12px; }
+    padding-left: 12px;
+    padding-right: 12px; }
   .titlebar .header-bar-separator, .titlebar > GtkBox > .separator.vertical,
   GtkPlacesSidebar.sidebar .view .titlebar > GtkBox > .vertical.separator:backdrop,
   .header-bar .header-bar-separator,
