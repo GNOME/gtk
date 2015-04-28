@@ -764,9 +764,27 @@ static const GMarkupParser packing_parser =
 
 typedef struct
   {
+    gchar *name;
+    gint line;
+    gint col;
+  } FocusChainWidget;
+
+static void
+focus_chain_widget_free (gpointer data)
+{
+  FocusChainWidget *fcw = data;
+
+  g_free (fcw->name);
+  g_free (fcw);
+}
+
+typedef struct
+  {
     GSList *items;
     GObject *object;
     GtkBuilder *builder;
+    gint line;
+    gint col;
   } FocusChainData;
 
 static void
@@ -782,6 +800,7 @@ focus_chain_start_element (GMarkupParseContext  *context,
   if (strcmp (element_name, "widget") == 0)
     {
       const gchar *name;
+      FocusChainWidget *fcw;
 
       if (!_gtk_builder_check_parent (data->builder, context, "focus-chain", error))
         return;
@@ -794,7 +813,10 @@ focus_chain_start_element (GMarkupParseContext  *context,
           return;
         }
 
-      data->items = g_slist_prepend (data->items, g_strdup (name));
+      fcw = g_new (FocusChainWidget, 1);
+      fcw->name = g_strdup (name);
+      g_markup_parse_context_get_position (context, &fcw->line, &fcw->col);
+      data->items = g_slist_prepend (data->items, fcw);
     }
   else if (strcmp (element_name, "focus-chain") == 0)
     {
@@ -897,6 +919,7 @@ gtk_container_buildable_custom_finished (GtkBuildable *buildable,
    if (strcmp (tagname, "focus-chain") == 0)
     {
       FocusChainData *data = (FocusChainData*)parser_data;
+      FocusChainWidget *fcw;
       GSList *l;
       GList *chain;
       GObject *object;
@@ -904,21 +927,17 @@ gtk_container_buildable_custom_finished (GtkBuildable *buildable,
       chain = NULL;
       for (l = data->items; l; l = l->next)
         {
-          object = gtk_builder_get_object (builder, l->data);
+          fcw = l->data;
+          object = _gtk_builder_lookup_object (builder, fcw->name, fcw->line, fcw->col);
           if (!object)
-            {
-              g_warning ("Unknown object %s specified in focus-chain for %s",
-                         (const gchar*)l->data,
-                         gtk_buildable_get_name (GTK_BUILDABLE (data->object)));
-              continue;
-            }
+            continue;
           chain = g_list_prepend (chain, object);
         }
 
       gtk_container_set_focus_chain (GTK_CONTAINER (data->object), chain);
       g_list_free (chain);
 
-      g_slist_free_full (data->items, g_free);
+      g_slist_free_full (data->items, focus_chain_widget_free);
       g_slice_free (FocusChainData, data);
 
       return;
