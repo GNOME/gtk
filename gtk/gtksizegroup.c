@@ -644,6 +644,21 @@ _gtk_size_group_queue_resize (GtkWidget           *widget,
 }
 
 typedef struct {
+  gchar *name;
+  gint line;
+  gint col;
+} ItemData;
+
+static void
+item_data_free (gpointer data)
+{
+  ItemData *item_data = data;
+
+  g_free (item_data->name);
+  g_free (item_data);
+}
+
+typedef struct {
   GObject *object;
   GtkBuilder *builder;
   GSList *items;
@@ -662,6 +677,7 @@ size_group_start_element (GMarkupParseContext  *context,
   if (strcmp (element_name, "widget") == 0)
     {
       const gchar *name;
+      ItemData *item_data;
 
       if (!_gtk_builder_check_parent (data->builder, context, "widgets", error))
         return;
@@ -674,7 +690,10 @@ size_group_start_element (GMarkupParseContext  *context,
           return;
         }
 
-      data->items = g_slist_prepend (data->items, g_strdup (name));
+      item_data = g_new (ItemData, 1);
+      item_data->name = g_strdup (name);
+      g_markup_parse_context_get_position (context, &item_data->line, &item_data->col);
+      data->items = g_slist_prepend (data->items, item_data);
     }
   else if (strcmp (element_name, "widgets") == 0)
     {
@@ -739,7 +758,7 @@ gtk_size_group_buildable_custom_finished (GtkBuildable  *buildable,
   GSListSubParserData *data;
   GObject *object;
 
-  if (strcmp (tagname, "widgets"))
+  if (strcmp (tagname, "widgets") != 0)
     return;
 
   data = (GSListSubParserData*)user_data;
@@ -747,18 +766,12 @@ gtk_size_group_buildable_custom_finished (GtkBuildable  *buildable,
 
   for (l = data->items; l; l = l->next)
     {
-      object = gtk_builder_get_object (builder, l->data);
+      ItemData *item_data = l->data;
+      object = _gtk_builder_lookup_object (builder, item_data->name, item_data->line, item_data->col);
       if (!object)
-	{
-	  g_warning ("Unknown object %s specified in sizegroup %s",
-		     (const gchar*)l->data,
-		     gtk_buildable_get_name (GTK_BUILDABLE (data->object)));
-	  continue;
-	}
-      gtk_size_group_add_widget (GTK_SIZE_GROUP (data->object),
-				 GTK_WIDGET (object));
-      g_free (l->data);
+        continue;
+      gtk_size_group_add_widget (GTK_SIZE_GROUP (data->object), GTK_WIDGET (object));
     }
-  g_slist_free (data->items);
+  g_slist_free_full (data->items, item_data_free);
   g_slice_free (GSListSubParserData, data);
 }
