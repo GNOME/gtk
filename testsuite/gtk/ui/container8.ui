@@ -1,0 +1,14 @@
+<!-- test invalid id in container markup -->
+<interface>
+  <object class="GtkBox">
+    <child>
+      <object class="GtkLabel" id="widget1"/>
+      <packing>
+        <property name="expand" translatable="yes" comments="foo" context="bar">True</property>
+      </packing>
+    </child>
+    <focus-chain>
+      <widget name="xyzzy"/>
+    </focus-chain>
+  </object>
+</interface>

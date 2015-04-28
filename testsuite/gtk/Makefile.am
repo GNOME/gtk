@@ -185,6 +185,14 @@ test_ui =						\
 	ui/celllayout5.ui ui/celllayout5.expected	\
 	ui/celllayout6.ui ui/celllayout6.expected	\
 	ui/celllayout7.ui ui/celllayout7.expected	\
+	ui/container1.ui ui/container1.expected		\
+	ui/container2.ui ui/container2.expected		\
+	ui/container3.ui ui/container3.expected		\
+	ui/container4.ui ui/container4.expected		\
+	ui/container5.ui ui/container5.expected		\
+	ui/container6.ui ui/container6.expected		\
+	ui/container7.ui ui/container7.expected		\
+	ui/container8.ui ui/container8.expected		\
 	ui/scale1.ui ui/scale1.expected			\
 	ui/scale2.ui ui/scale2.expected			\
 	ui/scale3.ui ui/scale3.expected			\
