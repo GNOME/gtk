@@ -2706,3 +2706,43 @@ _gtk_builder_check_parent (GtkBuilder           *builder,
 
   return FALSE;
 }
+
+/*< private >
+ * @builder: a #GtkBuilder
+ * @name: object name to look up
+ * @line: line number where @name was encountered
+ * @col: column number where @name was encountered
+ *
+ * Looks up an object by name. Similar to gtk_builder_get_object(),
+ * but sets an error if lookup fails during custom_tag_end,
+ * custom_finished or parser_finished vfuncs.
+ *
+ * The reason for doing things this way is that these vfuncs don't
+ * take a GError** parameter to return an error.
+ *
+ * Returns: the found object
+ */
+GObject *
+_gtk_builder_lookup_object (GtkBuilder  *builder,
+                            const gchar *name,
+                            gint         line,
+                            gint         col)
+{
+  GObject *obj;
+  GError *error = NULL;
+
+  obj = g_hash_table_lookup (builder->priv->objects, name);
+  error = (GError *) g_object_get_data (G_OBJECT (builder), "lookup-error");
+
+  if (!obj && !error)
+    {
+      g_set_error (&error,
+                   GTK_BUILDER_ERROR, GTK_BUILDER_ERROR_INVALID_ID,
+                   "%s:%d:%d Object with ID %s not found",
+                   builder->priv->filename, line, col, name);
+      g_object_set_data_full (G_OBJECT (builder), "lookup-error",
+                              error, (GDestroyNotify)g_error_free);
+    }
+
+  return obj;
+}
