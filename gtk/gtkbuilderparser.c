@@ -941,12 +941,19 @@ subparser_end (GMarkupParseContext *context,
 	       ParserData          *data,
 	       GError             **error)
 {
+  GError *lookup_error;
+
   if (data->subparser->parser->end_element)
     data->subparser->parser->end_element (context, element_name,
 					  data->subparser->data, error);
 
+  if (*error)
+    return;
+
   if (strcmp (data->subparser->start, element_name) != 0)
     return;
+
+  g_object_set_data (G_OBJECT (data->builder), "lookup-error", NULL);
 
   gtk_buildable_custom_tag_end (GTK_BUILDABLE (data->subparser->object),
 				data->builder,
@@ -954,6 +961,13 @@ subparser_end (GMarkupParseContext *context,
 				element_name,
 				data->subparser->data);
   g_free (data->subparser->parser);
+
+  lookup_error = (GError*) g_object_steal_data (G_OBJECT (data->builder), "lookup-error");
+  if (lookup_error)
+    {
+      g_propagate_error (error, lookup_error);
+      return;
+    }
 
   if (GTK_BUILDABLE_GET_IFACE (data->subparser->object)->custom_finished)
     data->custom_finalizers = g_slist_prepend (data->custom_finalizers,
@@ -1385,20 +1399,41 @@ _gtk_builder_parser_parse_buffer (GtkBuilder   *builder,
   for (l = data->custom_finalizers; l; l = l->next)
     {
       SubParser *sub = (SubParser*)l->data;
-      
+      GError *lookup_error;
+
+      g_object_set_data (G_OBJECT (builder), "lookup-error", NULL);
+
       gtk_buildable_custom_finished (GTK_BUILDABLE (sub->object),
                                      builder,
                                      sub->child,
                                      sub->tagname,
                                      sub->data);
+
+      lookup_error = (GError*) g_object_steal_data (G_OBJECT (builder), "lookup-error");
+      if (lookup_error)
+        {
+          g_propagate_error (error, lookup_error);
+          goto out;
+        }
     }
-  
+
   /* Common parser_finished, for all created objects */
   data->finalizers = g_slist_reverse (data->finalizers);
   for (l = data->finalizers; l; l = l->next)
     {
       GtkBuildable *buildable = (GtkBuildable*)l->data;
+      GError *lookup_error;
+
+      g_object_set_data (G_OBJECT (builder), "lookup-error", NULL);
+
       gtk_buildable_parser_finished (GTK_BUILDABLE (buildable), builder);
+
+      lookup_error = (GError*) g_object_steal_data (G_OBJECT (builder), "lookup-error");
+      if (lookup_error)
+        {
+          g_propagate_error (error, lookup_error);
+          goto out;
+        }
     }
 
  out:
