@@ -310,18 +310,18 @@ static void
 gtk_builder_finalize (GObject *object)
 {
   GtkBuilderPrivate *priv = GTK_BUILDER (object)->priv;
-  
+
   g_free (priv->domain);
   g_free (priv->filename);
   g_free (priv->resource_prefix);
-  
+
   g_hash_table_destroy (priv->objects);
   if (priv->callbacks)
     g_hash_table_destroy (priv->callbacks);
 
   g_slist_foreach (priv->signals, (GFunc) _free_signal_info, NULL);
   g_slist_free (priv->signals);
-  
+
   G_OBJECT_CLASS (gtk_builder_parent_class)->finalize (object);
 }
 
@@ -2607,6 +2607,20 @@ gtk_builder_get_application (GtkBuilder *builder)
   return builder->priv->application;
 }
 
+/*< private >
+ * _gtk_builder_prefix_error:
+ * @builder: a #GtkBuilder
+ * @context: the #GMarkupParseContext
+ * @error: an error
+ *
+ * Calls g_prefix_error() to prepend a filename:line:column marker
+ * to the given error. The filename is taken from @builder, and
+ * the line and column are obtained by calling
+ * g_markup_parse_context_get_position().
+ *
+ * This is intended to be called on errors returned by
+ * g_markup_collect_attributes() in a start_element vfunc.
+ */
 void
 _gtk_builder_prefix_error (GtkBuilder          *builder,
                            GMarkupParseContext *context,
@@ -2618,6 +2632,19 @@ _gtk_builder_prefix_error (GtkBuilder          *builder,
   g_prefix_error (error, "%s:%d:%d ", builder->priv->filename, line, col);
 }
 
+/*< private >
+ * _gtk_builder_error_unhandled_tag:
+ * @builder: a #GtkBuilder
+ * @context: the #GMarkupParseContext
+ * @object: name of the object that is being handled
+ * @element_name: name of the element whose start tag is being handled
+ * @error: return location for the error
+ *
+ * Sets @error to a suitable error indicating that an @element_name
+ * tag is not expected in the custom markup for @object.
+ *
+ * This is intended to be called in a start_element vfunc.
+ */
 void
 _gtk_builder_error_unhandled_tag (GtkBuilder           *builder,
                                   GMarkupParseContext  *context,
@@ -2636,6 +2663,20 @@ _gtk_builder_error_unhandled_tag (GtkBuilder           *builder,
                object, element_name);
 }
 
+/*< private >
+ * @builder: a #GtkBuilder
+ * @context: the #GMarkupParseContext
+ * @parent_name: the name of the expected parent element
+ * @error: return location for an error
+ *
+ * Checks that the parent element of the currently handled
+ * start tag is @parent_name and set @error if it isn't.
+ *
+ * This is intended to be called in start_element vfuncs to
+ * ensure that element nesting is as intended.
+ *
+ * Returns: %TRUE if @parent_name is the parent element
+ */
 gboolean
 _gtk_builder_check_parent (GtkBuilder           *builder,
                            GMarkupParseContext  *context,
@@ -2665,4 +2706,3 @@ _gtk_builder_check_parent (GtkBuilder           *builder,
 
   return FALSE;
 }
-
