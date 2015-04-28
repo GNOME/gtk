@@ -978,8 +978,10 @@ gtk_info_bar_response (GtkInfoBar *info_bar,
 
 typedef struct
 {
-  gchar *widget_name;
+  gchar *name;
   gint response_id;
+  gint line;
+  gint col;
 } ActionWidgetInfo;
 
 typedef struct
@@ -990,6 +992,8 @@ typedef struct
   gint response_id;
   gboolean is_text;
   GString *string;
+  gint line;
+  gint col;
 } SubParserData;
 
 static void
@@ -1027,6 +1031,7 @@ parser_start_element (GMarkupParseContext  *context,
       data->response_id = g_value_get_enum (&gvalue);
       data->is_text = TRUE;
       g_string_set_size (data->string, 0);
+      g_markup_parse_context_get_position (context, &data->line, &data->col);
     }
   else if (strcmp (element_name, "action-widgets") == 0)
     {
@@ -1072,8 +1077,10 @@ parser_end_element (GMarkupParseContext  *context,
       ActionWidgetInfo *item;
 
       item = g_new (ActionWidgetInfo, 1);
-      item->widget_name = g_strdup (data->string->str);
+      item->name = g_strdup (data->string->str);
       item->response_id = data->response_id;
+      item->line = data->line;
+      item->col = data->col;
 
       data->items = g_slist_prepend (data->items, item);
       data->is_text = FALSE;
@@ -1146,14 +1153,9 @@ gtk_info_bar_buildable_custom_finished (GtkBuildable *buildable,
     {
       ActionWidgetInfo *item = l->data;
 
-      object = gtk_builder_get_object (builder, item->widget_name);
+      object = _gtk_builder_lookup_object (builder, item->name, item->line, item->col);
       if (!object)
-        {
-          g_warning ("Unknown object %s specified in action-widgets of %s",
-                     item->widget_name,
-                     gtk_buildable_get_name (GTK_BUILDABLE (buildable)));
-          continue;
-        }
+        continue;
 
       ad = get_response_data (GTK_WIDGET (object), TRUE);
       ad->response_id = item->response_id;
@@ -1176,7 +1178,7 @@ gtk_info_bar_buildable_custom_finished (GtkBuildable *buildable,
         gtk_button_box_set_child_secondary (GTK_BUTTON_BOX (info_bar->priv->action_area),
                                             GTK_WIDGET (object), TRUE);
 
-      g_free (item->widget_name);
+      g_free (item->name);
       g_free (item);
     }
 
