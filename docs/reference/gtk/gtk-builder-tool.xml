@@ -30,17 +30,31 @@
 <refsynopsisdiv>
 <cmdsynopsis>
 <command>gtk-builder-tool</command>
+<arg choice="opt"><replaceable>COMMAND</replaceable></arg>
 <arg choice="plain"><replaceable>FILE</replaceable></arg>
 </cmdsynopsis>
 </refsynopsisdiv>
 
 <refsect1><title>Description</title>
 <para>
-  <command>gtk-builder-tool</command> validates and simplifies a GtkBuilder
-  .ui file. Any validation errors are reported on stderr. If the file is
-  valid, it is simplified by removing any properties that are set to their
-  default value. The resulting xml is written to stdout.
+  <command>gtk-builder-tool</command> can perform various operations
+  on GtkBuilder .ui files.
 </para>
+</refsect1>
+
+<refsect1><title>Commands</title>
+  <para>The following commands are understood:</para>
+  <variablelist>
+    <varlistentry>
+    <term><option>validate</option></term>
+      <listitem><para>Validate the .ui file and report errors to stderr.</para></listitem>
+    </varlistentry>
+    <varlistentry>
+    <term><option>simplify</option></term>
+      <listitem><para>Simplify the .ui file by removing properties that
+      are set to their default values and write the resulting XML to stdout.</para></listitem>
+    </varlistentry>
+  </variablelist>
 </refsect1>
 
 </refentry>

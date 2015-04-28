@@ -362,7 +362,7 @@ GMarkupParser parser = {
   NULL
 };
 
-static gboolean
+static void
 do_simplify (const gchar *filename)
 {
   GMarkupParseContext *context;
@@ -373,7 +373,7 @@ do_simplify (const gchar *filename)
   if (!g_file_get_contents (filename, &buffer, NULL, &error))
     {
       g_printerr (_("Can't load file: %s\n"), error->message);
-      return FALSE;
+      exit (1);
     }
 
   data.builder = gtk_builder_new ();
@@ -390,13 +390,11 @@ do_simplify (const gchar *filename)
   if (!g_markup_parse_context_parse (context, buffer, -1, &error))
     {
       g_printerr (_("Can't parse file: %s\n"), error->message);
-      return FALSE;
+      exit (1);
     }
-
-  return TRUE;
 }
 
-static gboolean
+static void
 do_validate (const gchar *filename)
 {
   GtkBuilder *builder;
@@ -410,16 +408,20 @@ do_validate (const gchar *filename)
   if (ret == 0)
     {
       g_printerr ("%s\n", error->message);
-      return FALSE;
+      exit (1);
     }
-
-  return TRUE;
 }
 
 static void
 usage (void)
 {
-  g_print (_("Usage: gtk-builder-tool FILE\n"
+  g_print (_("Usage:\n"
+             "  gtk-builder-tool [COMMAND] FILE\n"
+             "\n"
+             "Commands:\n"
+             "  validate    Validate the file\n"
+             "  simplify    Simplify the file\n"
+             "\n"
              "Validate and simplify GtkBuilder .ui files.\n"));
   exit (1);
 }
@@ -433,14 +435,15 @@ main (int argc, char *argv[])
 
   gtk_test_register_all_types ();
 
-  if (argc < 2)
+  if (argc < 3)
     usage ();
 
-  if (!do_validate (argv[1]))
-    return 1;
-
-  if (!do_simplify (argv[1]))
-    return 1;
+  if (strcmp (argv[1], "validate") == 0)
+    do_validate (argv[2]);
+  else if (strcmp (argv[1], "simplify") == 0)
+    do_simplify (argv[2]);
+  else
+    usage ();
 
   return 0;
 }
