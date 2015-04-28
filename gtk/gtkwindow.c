@@ -1975,6 +1975,29 @@ gtk_window_buildable_set_buildable_property (GtkBuildable *buildable,
     parent_buildable_iface->set_buildable_property (buildable, builder, name, value);
 }
 
+typedef struct {
+  gchar *name;
+  gint line;
+  gint col;
+} ItemData;
+
+static void
+item_data_free (gpointer data)
+{
+  ItemData *item_data = data;
+
+  g_free (item_data->name);
+  g_free (item_data);
+}
+
+static void
+item_list_free (gpointer data)
+{
+  GSList *list = data;
+
+  g_slist_free_full (list, item_data_free);
+}
+
 static void
 gtk_window_buildable_parser_finished (GtkBuildable *buildable,
 				      GtkBuilder   *builder)
@@ -1990,16 +2013,12 @@ gtk_window_buildable_parser_finished (GtkBuildable *buildable,
   accels = g_object_get_qdata (G_OBJECT (buildable), quark_gtk_buildable_accels);
   for (l = accels; l; l = l->next)
     {
-      object = gtk_builder_get_object (builder, l->data);
+      ItemData *data = l->data;
+
+      object = _gtk_builder_lookup_object (builder, data->name, data->line, data->col);
       if (!object)
-	{
-	  g_warning ("Unknown accel group %s specified in window %s",
-		     (const gchar*)l->data, gtk_buildable_get_name (buildable));
-	  continue;
-	}
-      gtk_window_add_accel_group (GTK_WINDOW (buildable),
-				  GTK_ACCEL_GROUP (object));
-      g_free (l->data);
+	continue;
+      gtk_window_add_accel_group (GTK_WINDOW (buildable), GTK_ACCEL_GROUP (object));
     }
 
   g_object_set_qdata (G_OBJECT (buildable), quark_gtk_buildable_accels, NULL);
@@ -2026,6 +2045,7 @@ window_start_element (GMarkupParseContext  *context,
   if (strcmp (element_name, "group") == 0)
     {
       const gchar *name;
+      ItemData *item_data;
 
       if (!_gtk_builder_check_parent (data->builder, context, "accel-groups", error))
         return;
@@ -2038,7 +2058,10 @@ window_start_element (GMarkupParseContext  *context,
           return;
         }
 
-      data->items = g_slist_prepend (data->items, g_strdup (name));
+      item_data = g_new (ItemData, 1);
+      item_data->name = g_strdup (name);
+      g_markup_parse_context_get_position (context, &item_data->line, &item_data->col);
+      data->items = g_slist_prepend (data->items, item_data);
     }
   else if (strcmp (element_name, "accel-groups") == 0)
     {
@@ -2067,6 +2090,8 @@ typedef struct {
   GObject *object;
   GtkBuilder *builder;
   gchar *name;
+  gint line;
+  gint col;
 } NameSubParserData;
 
 static void
@@ -2095,6 +2120,7 @@ focus_start_element (GMarkupParseContext  *context,
         }
 
       data->name = g_strdup (name);
+      g_markup_parse_context_get_position (context, &data->line, &data->col);
     }
   else
     {
@@ -2169,7 +2195,7 @@ gtk_window_buildable_custom_finished (GtkBuildable  *buildable,
       GSListSubParserData *data = (GSListSubParserData*)user_data;
 
       g_object_set_qdata_full (G_OBJECT (buildable), quark_gtk_buildable_accels,
-                               data->items, (GDestroyNotify) g_slist_free);
+                               data->items, (GDestroyNotify) item_list_free);
 
       g_slice_free (GSListSubParserData, data);
     }
@@ -2182,8 +2208,9 @@ gtk_window_buildable_custom_finished (GtkBuildable  *buildable,
         {
           GObject *object;
 
-          object = gtk_builder_get_object (builder, data->name);
-          gtk_window_set_focus (GTK_WINDOW (buildable), GTK_WIDGET (object));
+          object = _gtk_builder_lookup_object (builder, data->name, data->line, data->col);
+          if (object)
+            gtk_window_set_focus (GTK_WINDOW (buildable), GTK_WIDGET (object));
           g_free (data->name);
         }
 
