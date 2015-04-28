@@ -299,6 +299,7 @@ content_files =					\
 	gtk-encode-symbolic-svg.xml		\
 	gtk-launch.xml				\
 	broadwayd.xml				\
+	gtk-builder-tool.xml			\
 	input-handling.xml			\
 	visual_index.xml			\
 	getting_started.xml			\
