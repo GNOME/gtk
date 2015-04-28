@@ -64,6 +64,7 @@ typedef struct _GtkBuilderPrivate GtkBuilderPrivate;
  * @GTK_BUILDER_ERROR_TEMPLATE_MISMATCH: The wrong type was specified in a composite class’s template XML
  * @GTK_BUILDER_ERROR_INVALID_PROPERTY: The specified property is unknown for the object class.
  * @GTK_BUILDER_ERROR_INVALID_SIGNAL: The specified signal is unknown for the object class.
+ * @GTK_BUILDER_ERROR_INVALID_ID: An object id is unknown
  *
  * Error codes that identify various errors that can occur while using
  * #GtkBuilder.
@@ -82,7 +83,8 @@ typedef enum
   GTK_BUILDER_ERROR_OBJECT_TYPE_REFUSED,
   GTK_BUILDER_ERROR_TEMPLATE_MISMATCH,
   GTK_BUILDER_ERROR_INVALID_PROPERTY,
-  GTK_BUILDER_ERROR_INVALID_SIGNAL
+  GTK_BUILDER_ERROR_INVALID_SIGNAL,
+  GTK_BUILDER_ERROR_INVALID_ID
 } GtkBuilderError;
 
 GDK_AVAILABLE_IN_ALL
