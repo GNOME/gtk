@@ -1,3 +1,131 @@
+Overview of Changes in GTK+ 3.17.1
+==================================
+
+* Themes:
+ - Many HighContrast theme improvements
+ - Stronger entry focus in Adwaita
+ - Improve client-side decorations without a compositor
+
+* Scrolling:
+ - Support horizontal wheel scrolling with Shift
+ - Make indicators pop up reliably
+ - Detect more trackpoints
+ - Handle pens, erasers and similar devices
+
+* GtkTextView:
+ - Support underline and strikethrough color
+
+* GtkFileChooser:
+ - Open location entry more easily
+ - Ensure a directory is loaded
+ - Use a popover for new folder names
+
+* GtkBuilder:
+ - Improve error messages
+ - Add a gtk-builder-tool utility for ui file validation
+
+* Inspector:
+ - Show accessible name and description
+ - Add a tab for CSS nodes
+
+* Wayland:
+ - DND and clipboard fixes
+ - Support attached modal dialogs with mutter
+
+* Windows:
+ - Drop XP support
+ - Support horizontal mouse wheel scrolling
+
+* Bugs fixed:
+ 132197 Horizontal Scrolling Using Modifier Key and Scroll Wheel
+ 402168 Add underline-color and strikethrough-color to GtkTextTag properties
+ 671362 Fixes for GtkRadioMenuItem
+ 723394 const parameter to GtkPopover gtk_popover_set_pointing_to
+ 734741 GtkScale's fill-level starts at the very left if show-fill-level is set
+ 737175 most horizontal sliders are inverted when scrolled with mouse wheel
+ 741849 Add GdkScreen->is_composited() for GDK-Win32
+ 745721 wayland: Add support for gtk_window_set_modal
+ 746149 “Close tab” buttons change the tab high on hover when using HighContrast
+ 746188 [HighContrast] insensitive ModelButtons are not drawn insensitive
+ 746202 Provide a stronger focus indication for entries
+ 746301 Opening "Sound" panel generates pixman error
+ 746358 [HighContrast] insensitive active backdrop GtkSwitches should probably...
+ 746368 [HighContrast] the “selected color” mark is always black, even for black
+ 746369 [HighContrast] “no date selection” (white on white)
+ 746370 GtkExpander doesn't show it is expanded when using HighContrast theme
+ 746386 clipboard crash when other client becomes the selection owner
+ 746435 wayland: Use g_get_prgname as the xdg surface application id
+ 746468 gtkcairoblur is slow
+ 746493 [HighContrast] Labels’, RadioButtons’ and CheckButton’s texts are not...
+ 746586 crtical warnings in a11y if focus widget is destroyed
+ 746602 Invalid writes through dangling weak pointers in DND code cause crashes
+ 746668 Some legacy GL calls are still made by X11 backend
+ 746688 GtkProgressBar doesn't respect its style properties
+ 746706 Serious accessible event spewage from Gtk+ table cells
+ 746712 Range ignores the "inverted" property
+ 746746 gtk3-demo 'OpenGL Area' crashes on systems with old OpenGL version
+ 746784 GtkBooleanCellAccessible emits state-changed:checked signals instead...
+ 746817 GtkRadioButton keynav uses wrong succession
+ 746821 W32: Maximized window is obscured by the taskbar
+ 746862 popover clears shadow of underlying widgets
+ 746893 gtk_list_box_bind_model is not introspectable
+ 746904 make it possible to disable libcanberra
+ 746925 [HighContrast] Backdrop active (sensitive) GtkSwitch should look more...
+ 746961 new scroll bar "hides" after click+drag+release while mouse is still...
+ 747096 small cleanup in textbuffer clipoard handling
+ 747121 gtklabel.c: add note about set-markup property in gtk_set_markup()
+ 747133 overshoot animation is stopped on libinput-managed touchpads
+ 747288 [HighContrast] Insensitive backdrop ListBoxRow have an unnecessary border
+ 747305 x11/gl: Use after free in glx_pixmap_get()
+ 747406 Fix indicator proximity checks
+ 747407 Make indicators pop out when needed
+ 747469 CSD: can't open window menu using right click after moving window
+ 747471 [wayland] gdk_screen_get_monitor_geometry() returns invalid geometry
+ 747524 System tray icons fail to redraw correctly on Xfce (without display...
+ 747539 popover: Remove signal handlers in dispose
+ 747553 Popovers inside local plugs don't get size_allocate() called
+ 747560 Redefinition of typedef GtkCssNode
+ 747604 Fix build of gtk/inspector/css-node-tree.c
+ 747608 Scrollbar hiding / unhiding does not work with a stylus
+ 747689 [HighContrast] Selected ListBoxRow’s Label is white on white
+ 747805 Split Headerbar unmaximize
+ 747808 window: fix initial shadow width for maximized/fullscreen windows
+ 747827 firefox scrollbars broken
+ 748013 Adwaita: keyboard navigation outline on first/last button in dialog...
+ 748014 W32: Tilting mousewheel left/right does not scroll horizontally
+ 748061 GtkMessageDialog: Minor documentation update
+ 748156 Code cleanup after xp drop
+ 748341 GdkOffscreenWindow should not segfault on gdk_window_beep()
+ 748346 build: Avoid xgettext crash on MSYS2
+ 748500 GtkSearchEntry docs incorrectly link to themselves
+ 748509 FTBFS: ui/dialog6.ui is not present
+
+* Translation updates:
+ Arabic
+ Basque
+ Brazilian Portuguese
+ Breton
+ Bulgarian
+ Catalan
+ Czech
+ Danish
+ Dutch
+ German
+ Greek
+ Hebrew
+ Hungarian
+ Icelandic
+ Italian
+ Korean
+ Norwegian bokmål
+ Russian
+ Serbian
+ Slovenian
+ Swedish
+ Turkish
+ Ukrainian
+
+
 Overview of Changes in GTK+ 3.15.12
 ===================================
 
