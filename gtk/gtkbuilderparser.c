@@ -700,6 +700,7 @@ parse_property (ParserData   *data,
       binfo->source = g_strdup (bind_source);
       binfo->source_property = g_strdup (bind_property);
       binfo->flags = bind_flags;
+      g_markup_parse_context_get_position (data->ctx, &binfo->line, &binfo->col);
 
       object_info->bindings = g_slist_prepend (object_info->bindings, binfo);
     }
@@ -720,6 +721,7 @@ parse_property (ParserData   *data,
   state_push (data, info);
 
   info->tag.name = element_name;
+  g_markup_parse_context_get_position (data->ctx, &info->line, &info->col);
 }
 
 static void
@@ -941,8 +943,6 @@ subparser_end (GMarkupParseContext *context,
 	       ParserData          *data,
 	       GError             **error)
 {
-  GError *lookup_error;
-
   if (data->subparser->parser->end_element)
     data->subparser->parser->end_element (context, element_name,
 					  data->subparser->data, error);
@@ -953,8 +953,6 @@ subparser_end (GMarkupParseContext *context,
   if (strcmp (data->subparser->start, element_name) != 0)
     return;
 
-  g_object_set_data (G_OBJECT (data->builder), "lookup-error", NULL);
-
   gtk_buildable_custom_tag_end (GTK_BUILDABLE (data->subparser->object),
 				data->builder,
 				data->subparser->child,
@@ -962,12 +960,8 @@ subparser_end (GMarkupParseContext *context,
 				data->subparser->data);
   g_free (data->subparser->parser);
 
-  lookup_error = (GError*) g_object_steal_data (G_OBJECT (data->builder), "lookup-error");
-  if (lookup_error)
-    {
-      g_propagate_error (error, lookup_error);
-      return;
-    }
+  if (_gtk_builder_lookup_failed (data->builder, error))
+    return;
 
   if (GTK_BUILDABLE_GET_IFACE (data->subparser->object)->custom_finished)
     data->custom_finalizers = g_slist_prepend (data->custom_finalizers,
@@ -1352,7 +1346,7 @@ _gtk_builder_parser_parse_buffer (GtkBuilder   *builder,
   const gchar* domain;
   ParserData *data;
   GSList *l;
-  
+
   /* Store the original domain so that interface domain attribute can be
    * applied for the builder and the original domain can be restored after
    * parsing has finished. This allows subparsers to translate elements with
@@ -1393,28 +1387,22 @@ _gtk_builder_parser_parse_buffer (GtkBuilder   *builder,
     goto out;
 
   _gtk_builder_finish (builder);
+  if (_gtk_builder_lookup_failed (builder, error))
+    goto out;
 
   /* Custom parser_finished */
   data->custom_finalizers = g_slist_reverse (data->custom_finalizers);
   for (l = data->custom_finalizers; l; l = l->next)
     {
       SubParser *sub = (SubParser*)l->data;
-      GError *lookup_error;
-
-      g_object_set_data (G_OBJECT (builder), "lookup-error", NULL);
 
       gtk_buildable_custom_finished (GTK_BUILDABLE (sub->object),
                                      builder,
                                      sub->child,
                                      sub->tagname,
                                      sub->data);
-
-      lookup_error = (GError*) g_object_steal_data (G_OBJECT (builder), "lookup-error");
-      if (lookup_error)
-        {
-          g_propagate_error (error, lookup_error);
-          goto out;
-        }
+      if (_gtk_builder_lookup_failed (builder, error))
+        goto out;
     }
 
   /* Common parser_finished, for all created objects */
@@ -1422,18 +1410,10 @@ _gtk_builder_parser_parse_buffer (GtkBuilder   *builder,
   for (l = data->finalizers; l; l = l->next)
     {
       GtkBuildable *buildable = (GtkBuildable*)l->data;
-      GError *lookup_error;
-
-      g_object_set_data (G_OBJECT (builder), "lookup-error", NULL);
 
       gtk_buildable_parser_finished (GTK_BUILDABLE (buildable), builder);
-
-      lookup_error = (GError*) g_object_steal_data (G_OBJECT (builder), "lookup-error");
-      if (lookup_error)
-        {
-          g_propagate_error (error, lookup_error);
-          goto out;
-        }
+      if (_gtk_builder_lookup_failed (builder, error))
+        goto out;
     }
 
  out:

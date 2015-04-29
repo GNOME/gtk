@@ -66,6 +66,8 @@ typedef struct {
   gboolean translatable:1;
   gboolean bound:1;
   gchar *context;
+  gint line;
+  gint col;
 } PropertyInfo;
 
 typedef struct {
@@ -85,6 +87,8 @@ typedef struct
   gchar *source;
   gchar *source_property;
   GBindingFlags flags;
+  gint line;
+  gint col;
 } BindingInfo;
 
 typedef struct {
@@ -201,6 +205,8 @@ GObject * _gtk_builder_lookup_object      (GtkBuilder           *builder,
                                            const gchar          *name,
                                            gint                  line,
                                            gint                  col);
+gboolean _gtk_builder_lookup_failed       (GtkBuilder           *builder,
+                                           GError              **error);
 
 
 #endif /* __GTK_BUILDER_PRIVATE_H__ */

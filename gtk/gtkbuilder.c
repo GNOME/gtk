@@ -445,6 +445,8 @@ typedef struct
   gchar *object;
   GParamSpec *pspec;
   gchar *value;
+  gint line;
+  gint col;
 } DelayedProperty;
 
 static void
@@ -496,6 +498,8 @@ gtk_builder_get_parameters (GtkBuilder  *builder,
               property->pspec = prop->pspec;
               property->object = g_strdup (object_name);
               property->value = g_strdup (prop->data);
+              property->line = prop->line;
+              property->col = prop->col;
               builder->priv->delayed_properties =
                 g_slist_prepend (builder->priv->delayed_properties, property);
               continue;
@@ -899,12 +903,9 @@ gtk_builder_apply_delayed_properties (GtkBuilder *builder)
       object = g_hash_table_lookup (builder->priv->objects, property->object);
       g_assert (object != NULL);
 
-      obj = g_hash_table_lookup (builder->priv->objects, property->value);
+      obj = _gtk_builder_lookup_object (builder, property->value, property->line, property->col);
       if (obj)
         g_object_set (object, property->pspec->name, obj, NULL);
-      else
-        g_warning ("No object called: %s", property->value);
-
 
       g_free (property->value);
       g_free (property->object);
@@ -933,13 +934,11 @@ gtk_builder_create_bindings (GtkBuilder *builder)
       BindingInfo *info = l->data;
       GObject *source;
 
-      if ((source = gtk_builder_get_object (builder, info->source)))
+      source = _gtk_builder_lookup_object (builder, info->source, info->line, info->col);
+      if (source)
         g_object_bind_property (source, info->source_property,
                                 info->target, info->target_pspec->name,
                                 info->flags);
-      else
-        g_warning ("Could not find source object '%s' to bind property '%s'",
-                   info->source, info->source_property);
 
       free_binding_info (info, NULL);
     }
@@ -2745,4 +2744,29 @@ _gtk_builder_lookup_object (GtkBuilder  *builder,
     }
 
   return obj;
+}
+
+/*< private >
+ * _gtk_builder_lookup_failed:
+ * @GtkBuilder: a #GtkBuilder
+ * @error: return location for error
+ *
+ * Finds whether any object lookups have failed.
+ *
+ * Returns: %TRUE if @error has been set
+ */
+gboolean
+_gtk_builder_lookup_failed (GtkBuilder  *builder,
+                            GError     **error)
+{
+  GError *lookup_error;
+
+  lookup_error = (GError*) g_object_steal_data (G_OBJECT (builder), "lookup-error");
+  if (lookup_error)
+    {
+      g_propagate_error (error, lookup_error);
+      return TRUE;
+    }
+
+  return FALSE;
 }
