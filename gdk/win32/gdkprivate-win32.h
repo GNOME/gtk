@@ -26,7 +26,8 @@
 #define __GDK_PRIVATE_WIN32_H__
 
 #ifndef WINVER
-#define WINVER 0x0500
+/* Vista or newer */
+#define WINVER 0x0600
 #endif
 
 #ifndef _WIN32_WINNT
