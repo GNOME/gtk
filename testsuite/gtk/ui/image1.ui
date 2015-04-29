@@ -1,0 +1,6 @@
+
+<interface>
+  <object class="GtkButton">
+    <property name="image">xyzzy</property>
+  </object>
+</interface>

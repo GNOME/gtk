@@ -228,6 +228,8 @@ test_ui =						\
 	ui/infobar4.ui ui/infobar4.expected	 	\
 	ui/infobar5.ui ui/infobar5.expected	 	\
 	ui/infobar6.ui ui/infobar6.expected	 	\
+	ui/image1.ui ui/image1.expected		 	\
+	ui/image2.ui ui/image2.expected		 	\
 	$(NULL)
 
 EXTRA_DIST +=				\
