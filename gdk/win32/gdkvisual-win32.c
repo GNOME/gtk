@@ -20,7 +20,7 @@
  * Modified by the GTK+ Team and others 1997-2000.  See the AUTHORS
  * file for a list of people on the GTK+ Team.  See the ChangeLog
  * files for a list of changes.  These files are distributed with
- * GTK+ at ftp://ftp.gtk.org/pub/gtk/. 
+ * GTK+ at ftp://ftp.gtk.org/pub/gtk/.
  */
 
 #include "config.h"
@@ -75,7 +75,7 @@ _gdk_visual_init_internal (GdkScreen *screen, gboolean is_rgba)
 
       if (max_colors != NULL)
 	_gdk_max_colors = atoi (max_colors);
-      
+
       map_entries = _gdk_max_colors;
 
       if (map_entries >= 16 && map_entries < sizepalette)

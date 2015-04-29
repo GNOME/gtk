@@ -50,7 +50,7 @@ hcursor_from_type (GdkCursorType cursor_type)
       if (cursors[i].builtin)
 	return LoadCursor (NULL, cursors[i].builtin);
     }
-  
+
   w = GetSystemMetrics (SM_CXCURSOR);
   h = GetSystemMetrics (SM_CYCURSOR);
 
@@ -69,13 +69,13 @@ hcursor_from_type (GdkCursorType cursor_type)
 	{
 	  ofs = (y * w) / 8;
 	  j = y * cursors[i].width;
-	  
+
 	  for (x = 0; x < cursors[i].width && x < w ; x++, j++)
 	    {
 	      gint pofs = ofs + x / 8;
 	      guchar data = (cursors[i].data[j/4] & (0xc0 >> (2 * (j%4)))) >> (2 * (3 - (j%4)));
 	      gint bit = 7 - (j % cursors[i].width) % 8;
-	      
+
 	      if (data)
 		{
 		  RESET_BIT (and_plane[pofs], bit);
@@ -100,7 +100,7 @@ hcursor_from_type (GdkCursorType cursor_type)
     WIN32_API_FAILED ("CreateCursor");
   g_free (and_plane);
   g_free (xor_plane);
-  
+
   return rv;
 }
 
@@ -196,7 +196,7 @@ static struct {
   { "wait", IDC_WAIT }
 };
 
-GdkCursor*  
+GdkCursor*
 _gdk_win32_display_get_cursor_for_name (GdkDisplay  *display,
 				        const gchar *name)
 {
@@ -253,7 +253,7 @@ gdk_win32_icon_to_pixbuf_libgtk_only (HICON hicon,
       /* Colour cursor */
 
       gboolean no_alpha;
-      
+
       if (!GDI_CALL (GetDIBits, (hdc, ii.hbmColor, 0, 1, NULL, (BITMAPINFO *)&bmi, DIB_RGB_COLORS)))
 	goto out1;
 
@@ -265,7 +265,7 @@ gdk_win32_icon_to_pixbuf_libgtk_only (HICON hicon,
       bmi.bi.biHeight = -h;
 
       bits = g_malloc0 (4 * w * h);
-      
+
       /* color data */
       if (!GDI_CALL (GetDIBits, (hdc, ii.hbmColor, 0, h, bits, (BITMAPINFO *)&bmi, DIB_RGB_COLORS)))
 	goto out2;
@@ -316,9 +316,9 @@ gdk_win32_icon_to_pixbuf_libgtk_only (HICON hicon,
 
       w = bmi.bi.biWidth;
       h = ABS (bmi.bi.biHeight) / 2;
-      
+
       bits = g_malloc0 (4 * w * h);
-      
+
       /* masks */
       if (!GDI_CALL (GetDIBits, (hdc, ii.hbmMask, 0, h*2, bits, (BITMAPINFO *)&bmi, DIB_RGB_COLORS)))
 	goto out2;
@@ -458,7 +458,7 @@ _gdk_win32_display_supports_cursor_alpha (GdkDisplay    *display)
   return TRUE;
 }
 
-gboolean 
+gboolean
 _gdk_win32_display_supports_cursor_color (GdkDisplay    *display)
 {
   g_return_val_if_fail (display == _gdk_display, FALSE);
@@ -479,13 +479,13 @@ _gdk_win32_display_get_default_cursor_size (GdkDisplay *display,
     *height = GetSystemMetrics (SM_CYCURSOR);
 }
 
-void     
+void
 _gdk_win32_display_get_maximal_cursor_size (GdkDisplay *display,
 					    guint       *width,
 					    guint       *height)
 {
   g_return_if_fail (display == _gdk_display);
-  
+
   if (width)
     *width = GetSystemMetrics (SM_CXCURSOR);
   if (height)
@@ -806,6 +806,6 @@ gdk_win32_cursor_class_init(GdkWin32CursorClass *klass)
   GdkCursorClass *cursor_class = GDK_CURSOR_CLASS (klass);
 
   object_class->finalize = _gdk_win32_cursor_finalize;
-  
+
   cursor_class->get_surface = _gdk_win32_cursor_get_surface;
 }

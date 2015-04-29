@@ -439,7 +439,7 @@ failed:
   return NULL;
 }
 
-static gboolean 
+static gboolean
 gdk_win32_display_request_selection_notification (GdkDisplay *display,
 						  GdkAtom     selection)
 
@@ -486,7 +486,7 @@ gdk_win32_display_store_clipboard (GdkDisplay    *display,
 {
 }
 
-static gboolean 
+static gboolean
 gdk_win32_display_supports_shapes (GdkDisplay *display)
 {
   g_return_val_if_fail (GDK_IS_DISPLAY (display), FALSE);
@@ -631,6 +631,6 @@ gdk_win32_display_class_init (GdkWin32DisplayClass *klass)
   display_class->text_property_to_utf8_list = _gdk_win32_display_text_property_to_utf8_list;
   display_class->utf8_to_string_target = _gdk_win32_display_utf8_to_string_target;
   display_class->make_gl_context_current = _gdk_win32_display_make_gl_context_current;
-  
+
   _gdk_win32_windowing_init ();
 }

@@ -108,7 +108,7 @@ _gdk_device_virtual_set_active (GdkDevice *device,
     return;
 
   virtual->active_device = new_active;
-  
+
   if (gdk_device_get_source (device) != GDK_SOURCE_KEYBOARD)
     {
       _gdk_device_reset_axes (device);
@@ -116,10 +116,10 @@ _gdk_device_virtual_set_active (GdkDevice *device,
       for (i = 0; i < n_axes; i++)
 	{
 	  _gdk_device_get_axis_info (new_active, i,
-				     &label_atom, &use, 
+				     &label_atom, &use,
 				     &min_value, &max_value, &resolution);
 	  _gdk_device_add_axis (device,
-				label_atom, use, 
+				label_atom, use,
 				min_value, max_value, resolution);
 	}
     }

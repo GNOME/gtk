@@ -19,7 +19,7 @@
  * Modified by the GTK+ Team and others 1997-1999.  See the AUTHORS
  * file for a list of people on the GTK+ Team.  See the ChangeLog
  * files for a list of changes.  These files are distributed with
- * GTK+ at ftp://ftp.gtk.org/pub/gtk/. 
+ * GTK+ at ftp://ftp.gtk.org/pub/gtk/.
  */
 
 #ifndef __GDK_WINDOW_WIN32_H__
@@ -84,8 +84,8 @@ struct _GdkWindowImplWin32
   int              hdc_count;
   HBITMAP          saved_dc_bitmap; /* Original bitmap for dc */
 };
- 
-struct _GdkWindowImplWin32Class 
+
+struct _GdkWindowImplWin32Class
 {
   GdkWindowImplClass parent_class;
 };

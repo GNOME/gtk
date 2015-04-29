@@ -89,7 +89,7 @@ gdk_device_manager_win32_class_init (GdkDeviceManagerWin32Class *klass)
 }
 
 static GdkDevice *
-create_pointer (GdkDeviceManager *device_manager, 
+create_pointer (GdkDeviceManager *device_manager,
 		GType g_type,
 		const char *name,
 		GdkDeviceType type)
@@ -106,7 +106,7 @@ create_pointer (GdkDeviceManager *device_manager,
 }
 
 static GdkDevice *
-create_keyboard (GdkDeviceManager *device_manager, 
+create_keyboard (GdkDeviceManager *device_manager,
 		 GType g_type,
 		 const char *name,
 		 GdkDeviceType type)
@@ -408,7 +408,7 @@ _gdk_input_wintab_init_check (GdkDeviceManager *_device_manager)
 
   wintab32_dll_path = g_malloc (n + 1 + strlen (WINTAB32_DLL));
   k = GetSystemDirectory (wintab32_dll_path, n);
-  
+
   if (k == 0 || k > n)
     {
       g_free (wintab32_dll_path);
@@ -706,12 +706,12 @@ gdk_device_manager_win32_constructed (GObject *object)
   GdkDeviceManagerWin32 *device_manager;
 
   device_manager = GDK_DEVICE_MANAGER_WIN32 (object);
-  device_manager->core_pointer = 
+  device_manager->core_pointer =
     create_pointer (GDK_DEVICE_MANAGER (device_manager),
 		    GDK_TYPE_DEVICE_VIRTUAL,
 		    "Virtual Core Pointer",
 		    GDK_DEVICE_TYPE_MASTER);
-  device_manager->system_pointer = 
+  device_manager->system_pointer =
     create_pointer (GDK_DEVICE_MANAGER (device_manager),
 		    GDK_TYPE_DEVICE_WIN32,
 		    "System Aggregated Pointer",
@@ -721,12 +721,12 @@ gdk_device_manager_win32_constructed (GObject *object)
   _gdk_device_set_associated_device (device_manager->system_pointer, device_manager->core_pointer);
   _gdk_device_add_slave (device_manager->core_pointer, device_manager->system_pointer);
 
-  device_manager->core_keyboard = 
+  device_manager->core_keyboard =
     create_keyboard (GDK_DEVICE_MANAGER (device_manager),
 		     GDK_TYPE_DEVICE_VIRTUAL,
 		     "Virtual Core Keyboard",
 		     GDK_DEVICE_TYPE_MASTER);
-  device_manager->system_keyboard = 
+  device_manager->system_keyboard =
     create_keyboard (GDK_DEVICE_MANAGER (device_manager),
 		    GDK_TYPE_DEVICE_WIN32,
 		     "System Aggregated Keyboard",
@@ -754,7 +754,7 @@ gdk_device_manager_win32_list_devices (GdkDeviceManager *device_manager,
       devices = g_list_prepend (devices, device_manager_win32->core_keyboard);
       devices = g_list_prepend (devices, device_manager_win32->core_pointer);
     }
-  else 
+  else
     {
       if (type == GDK_DEVICE_TYPE_SLAVE)
 	{

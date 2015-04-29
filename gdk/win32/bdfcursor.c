@@ -124,7 +124,7 @@ gchar *fname;
 		fclose(f);
 		return -1;
 	}
-	
+
 	p = line;
 	while (fgets(line, sizeof(line), f))
 	{

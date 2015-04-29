@@ -27,7 +27,7 @@
  * win32_x/win32_y < -16383) after scrolling. They needed to be moved
  * back to the real position determined by gdk_window_compute_position().
  * This is handled in gdk_window_postmove().
- * 
+ *
  * The X11 version by Owen Taylor <otaylor@redhat.com>
  * Copyright Red Hat, Inc. 2000
  * Win32 hack by Tor Lillqvist <tml@iki.fi>
@@ -80,15 +80,15 @@ _gdk_window_move_resize_child (GdkWindow *window,
 
   _gdk_win32_window_tmp_unset_parent_bg (window);
   _gdk_win32_window_tmp_unset_bg (window, TRUE);
-  
+
   GDK_NOTE (MISC, g_print ("... SetWindowPos(%p,NULL,%d,%d,%d,%d,"
 			   "NOACTIVATE|NOZORDER)\n",
 			   GDK_WINDOW_HWND (window),
-			   window->x + window->parent->abs_x, window->y + window->parent->abs_y, 
+			   window->x + window->parent->abs_x, window->y + window->parent->abs_y,
 			   width, height));
 
   API_CALL (SetWindowPos, (GDK_WINDOW_HWND (window), NULL,
-			   window->x + window->parent->abs_x, window->y + window->parent->abs_y, 
+			   window->x + window->parent->abs_x, window->y + window->parent->abs_y,
 			   width, height,
 			   SWP_NOACTIVATE | SWP_NOZORDER));
 
