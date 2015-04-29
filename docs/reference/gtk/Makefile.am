@@ -261,6 +261,8 @@ GTKDOC_LIBS = \
 # Extra options to supply to gtkdoc-mkdb
 MKDB_OPTIONS=--output-format=xml --name-space=gtk
 
+MKHTML_OPTIONS="--path=\"$(abs_srcdir):$(top_srcdir)/examples\""
+
 # Extra SGML files that are included by $(DOC_MAIN_SGML_FILE)
 content_files =					\
 	version.xml				\
