@@ -6529,7 +6529,8 @@ static void
 get_shadow_width (GtkWidget *widget,
                   GtkBorder *shadow_width)
 {
-  GtkWindowPrivate *priv = GTK_WINDOW (widget)->priv;
+  GtkWindow *window = GTK_WINDOW (widget);
+  GtkWindowPrivate *priv = window->priv;
   GtkBorder border = { 0 };
   GtkBorder d = { 0 };
   GtkBorder margin;
@@ -6541,7 +6542,8 @@ get_shadow_width (GtkWidget *widget,
   *shadow_width = border;
 
   if (!priv->decorated ||
-      !priv->client_decorated)
+      !gtk_window_should_use_csd (window) ||
+      !gtk_window_supports_client_shadow (window))
     return;
 
   if (priv->maximized ||
