@@ -22,6 +22,7 @@
 
 #include <glib/gi18n.h>
 #include <gtk/gtk.h>
+#include "gtkbuilderprivate.h"
 
 
 typedef struct {
@@ -34,11 +35,11 @@ typedef struct {
   GString *value;
   gboolean unclosed_starttag;
   gint indent;
-} ParserData;
+} MyParserData;
 
 static gboolean
-value_is_default (ParserData *data,
-                  gint        i)
+value_is_default (MyParserData *data,
+                  gint          i)
 {
   GType type;
   GObjectClass *class;
@@ -95,7 +96,7 @@ value_is_default (ParserData *data,
 }
 
 static void
-maybe_emit_property (ParserData *data)
+maybe_emit_property (MyParserData *data)
 {
   gchar *escaped;
   gint i;
@@ -150,7 +151,7 @@ maybe_emit_property (ParserData *data)
 }
 
 static void
-maybe_close_starttag (ParserData *data)
+maybe_close_starttag (MyParserData *data)
 {
   if (data->unclosed_starttag)
     {
@@ -204,7 +205,7 @@ start_element (GMarkupParseContext  *context,
 {
   gint i;
   gchar *escaped;
-  ParserData *data = user_data;
+  MyParserData *data = user_data;
 
   maybe_close_starttag (data);
 
@@ -276,7 +277,7 @@ end_element (GMarkupParseContext  *context,
              gpointer              user_data,
              GError              **error)
 {
-  ParserData *data = user_data;
+  MyParserData *data = user_data;
 
   if (strcmp (element_name, "property") == 0)
     {
@@ -331,7 +332,7 @@ text (GMarkupParseContext  *context,
       gpointer              user_data,
       GError              **error)
 {
-  ParserData *data = user_data;
+  MyParserData *data = user_data;
 
   if (data->value)
     {
@@ -347,7 +348,7 @@ passthrough (GMarkupParseContext  *context,
              gpointer              user_data,
              GError              **error)
 {
-  ParserData *data = user_data;
+  MyParserData *data = user_data;
 
   maybe_close_starttag (data);
 
@@ -368,7 +369,7 @@ do_simplify (const gchar *filename)
   GMarkupParseContext *context;
   GError *error = NULL;
   gchar *buffer;
-  ParserData data;
+  MyParserData data;
 
   if (!g_file_get_contents (filename, &buffer, NULL, &error))
     {
@@ -394,12 +395,106 @@ do_simplify (const gchar *filename)
     }
 }
 
+static GType
+make_fake_type (const gchar *type_name,
+                const gchar *parent_name)
+{
+  GType parent_type;
+  GTypeQuery query;
+
+  parent_type = g_type_from_name (parent_name);
+  if (parent_type == G_TYPE_INVALID)
+    {
+      g_printerr ("Failed to lookup template parent type %s\n", parent_name);
+      exit (1);
+    }
+
+  g_type_query (parent_type, &query);
+  return g_type_register_static_simple (parent_type,
+                                        type_name,
+                                        query.class_size,
+                                        NULL,
+                                        query.instance_size,
+                                        NULL,
+                                        0);
+}
+
+static void
+do_validate_template (const gchar *filename,
+                      const gchar *type_name,
+                      const gchar *parent_name)
+{
+  GType template_type;
+  GtkWidget *widget;
+  GtkBuilder *builder;
+  GError *error = NULL;
+  gint ret;
+
+  /* Only make a fake type if it doesn't exist yet.
+   * This lets us e.g. validate the GtkFileChooserWidget template.
+   */
+  template_type = g_type_from_name (type_name);
+  if (template_type == G_TYPE_INVALID)
+    template_type = make_fake_type (type_name, parent_name);
+
+  widget = g_object_new (template_type, NULL);
+  if (!widget)
+    {
+      g_printerr ("Failed to create an instance of the template type %s\n", type_name);
+      exit (1);
+    }
+
+  builder = gtk_builder_new ();
+  ret = gtk_builder_extend_with_template (builder, widget, template_type, " ", 1, &error);
+  if (ret)
+    ret = gtk_builder_add_from_file (builder, filename, &error);
+  g_object_unref (builder);
+
+  if (ret == 0)
+    {
+      g_printerr ("%s\n", error->message);
+      exit (1);
+    }
+}
+
+static gboolean
+parse_template_error (const gchar  *message,
+                      gchar       **class_name,
+                      gchar       **parent_name)
+{
+  gchar *p;
+
+  if (!strstr (message, "Not expecting to handle a template"))
+    return FALSE;
+
+  p = strstr (message, "(class '");
+  if (p)
+    {
+      *class_name = g_strdup (p + strlen ("(class '"));
+      p = strstr (*class_name, "'");
+      if (p)
+        *p = '\0';
+    }
+  p = strstr (message, ", parent '");
+  if (p)
+    {
+      *parent_name = g_strdup (p + strlen (", parent '"));
+      p = strstr (*parent_name, "'");
+      if (p)
+        *p = '\0';
+    }
+
+  return TRUE;
+}
+
 static void
 do_validate (const gchar *filename)
 {
   GtkBuilder *builder;
   GError *error = NULL;
   gint ret;
+  gchar *class_name = NULL;
+  gchar *parent_name = NULL;
 
   builder = gtk_builder_new ();
   ret = gtk_builder_add_from_file (builder, filename, &error);
@@ -407,8 +502,16 @@ do_validate (const gchar *filename)
 
   if (ret == 0)
     {
-      g_printerr ("%s\n", error->message);
-      exit (1);
+      if (g_error_matches (error, GTK_BUILDER_ERROR, GTK_BUILDER_ERROR_UNHANDLED_TAG)  &&
+          parse_template_error (error->message, &class_name, &parent_name))
+        {
+          do_validate_template (filename, class_name, parent_name);
+        }
+      else
+        {
+          g_printerr ("%s\n", error->message);
+          exit (1);
+        }
     }
 }
 
