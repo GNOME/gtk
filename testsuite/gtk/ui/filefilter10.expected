@@ -1,2 +1,2 @@
 ERROR: gtk-builder-error-quark 1
-Unhandled tag: <warbl>
+<input>:4:13 Unhandled tag: <warbl>

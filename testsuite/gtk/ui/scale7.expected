@@ -1,2 +1,2 @@
 ERROR: gtk-builder-error-quark 1
-Unhandled tag: <foo>
+<input>:6:11 Unhandled tag: <foo>

@@ -1,2 +1,2 @@
 ERROR: gtk-builder-error-quark 1
-Unhandled tag: <random>
+<input>:3:43 Unhandled tag: <random>

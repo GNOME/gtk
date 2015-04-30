@@ -1,2 +1,2 @@
-ERROR: gtk-builder-error-quark 3
-<input>:3:1 'get-type' is not a valid attribute of <object>
+ERROR: g-markup-error-quark 4
+.:3:1 attribute 'get-type' invalid for element 'object'

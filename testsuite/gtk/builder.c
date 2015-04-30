@@ -82,7 +82,7 @@ test_parser (void)
   
   error = NULL;
   gtk_builder_add_from_string (builder, "<interface invalid=\"X\"/>", -1, &error);
-  g_assert_error (error, GTK_BUILDER_ERROR, GTK_BUILDER_ERROR_INVALID_ATTRIBUTE);
+  g_assert_error (error, G_MARKUP_ERROR, G_MARKUP_ERROR_UNKNOWN_ATTRIBUTE);
   g_error_free (error);
 
   error = NULL;
