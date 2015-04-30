@@ -59,7 +59,7 @@ struct _GdkMirWindowImpl
   /* Current button state for checking which buttons are being pressed / released */
   gdouble x;
   gdouble y;
-  MirMotionButton button_state;
+  guint button_state;
 
   /* Surface being rendered to (only exists when window visible) */
   MirSurface *surface;
@@ -113,7 +113,7 @@ _gdk_mir_window_impl_set_cursor_state (GdkMirWindowImpl *impl,
                                        gdouble x,
                                        gdouble y,
                                        gboolean cursor_inside,
-                                       MirMotionButton button_state)
+                                       guint button_state)
 {
   impl->x = x;
   impl->y = y;
@@ -126,7 +126,7 @@ _gdk_mir_window_impl_get_cursor_state (GdkMirWindowImpl *impl,
                                        gdouble *x,
                                        gdouble *y,
                                        gboolean *cursor_inside,
-                                       MirMotionButton *button_state)
+                                       guint *button_state)
 {
   if (x)
     *x = impl->x;
@@ -227,15 +227,19 @@ ensure_surface_full (GdkWindow *window,
                                       window->width, window->height,
                                       buffer_usage);
 
-  MirEvent resize_event;
+  /* FIXME: can't make an initial resize event */
+  // MirEvent *resize_event;
 
   /* Send the initial configure with the size the server gave... */
+  /* FIXME: can't make an initial resize event */
+  /*
   resize_event.resize.type = mir_event_type_resize;
   resize_event.resize.surface_id = 0;
   resize_event.resize.width = window->width;
   resize_event.resize.height = window->height;
 
   _gdk_mir_event_source_queue (window_ref, &resize_event);
+  */
 
   mir_surface_set_event_handler (impl->surface, event_cb, window_ref); // FIXME: Ignore some events until shown
   set_surface_type (impl, impl->surface_type);

@@ -89,9 +89,9 @@ void _gdk_mir_window_impl_set_surface_state (GdkMirWindowImpl *impl, MirSurfaceS
 
 void _gdk_mir_window_impl_set_surface_type (GdkMirWindowImpl *impl, MirSurfaceType type);
 
-void _gdk_mir_window_impl_set_cursor_state (GdkMirWindowImpl *impl, gdouble x, gdouble y, gboolean cursor_inside, MirMotionButton button_state);
+void _gdk_mir_window_impl_set_cursor_state (GdkMirWindowImpl *impl, gdouble x, gdouble y, gboolean cursor_inside, guint button_state);
 
-void _gdk_mir_window_impl_get_cursor_state (GdkMirWindowImpl *impl, gdouble *x, gdouble *y, gboolean *cursor_inside, MirMotionButton *button_state);
+void _gdk_mir_window_impl_get_cursor_state (GdkMirWindowImpl *impl, gdouble *x, gdouble *y, gboolean *cursor_inside, guint *button_state);
 
 GdkMirEventSource *_gdk_mir_display_get_event_source (GdkDisplay *display);
 
@@ -123,9 +123,9 @@ EGLSurface _gdk_mir_window_get_dummy_egl_surface (GdkWindow *window, EGLConfig c
 
 void _gdk_mir_print_modifiers (unsigned int modifiers);
 
-void _gdk_mir_print_key_event (const MirKeyEvent *event);
+void _gdk_mir_print_key_event (const MirInputEvent *event);
 
-void _gdk_mir_print_motion_event (const MirMotionEvent *event);
+void _gdk_mir_print_motion_event (const MirInputEvent *event);
 
 void _gdk_mir_print_surface_event (const MirSurfaceEvent *event);
 
