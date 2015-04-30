@@ -87,6 +87,7 @@ gtk/gtkbuildable.c
 gtk/gtkbuilder.c
 gtk/gtkbuilder-menus.c
 gtk/gtkbuilderparser.c
+gtk/gtk-builder-tool.c
 gtk/gtkbutton.c
 gtk/gtkcalendar.c
 gtk/gtkcellareabox.c

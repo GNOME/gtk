@@ -152,6 +152,7 @@ testsuite/a11y/stack.ui
 testsuite/gtk/filechooser.c
 testsuite/gtk/ui/celllayout1.ui
 testsuite/gtk/ui/container1.ui
+testsuite/gtk/ui/container8.ui
 testsuite/gtk/ui/scale1.ui
 testsuite/reftests/721800-0px-dotted-border.ref.ui
 testsuite/reftests/721800-0px-dotted-border.ui
