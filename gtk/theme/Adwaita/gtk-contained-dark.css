@@ -3375,10 +3375,6 @@ GtkProgressBar {
 /*************
  * Level Bar *
  *************/
-.level-bar.vertical {
-  -GtkLevelBar-min-block-width: 3;
-  -GtkLevelBar-min-block-height: 34; }
-
 .level-bar {
   box-shadow: 0 1px rgba(238, 238, 236, 0.1);
   -GtkLevelBar-min-block-width: 34;
