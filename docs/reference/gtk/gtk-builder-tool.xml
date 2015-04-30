@@ -56,7 +56,7 @@
     </varlistentry>
     <varlistentry>
     <term><option>enumerate</option></term>
-      <listitem><para>List all the named objects that are created in the .ui file.</para></list>
+      <listitem><para>List all the named objects that are created in the .ui file.</para></listitem>
     </varlistentry>
   </variablelist>
 </refsect1>
