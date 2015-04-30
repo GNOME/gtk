@@ -514,11 +514,6 @@ _gdk_win32_window_create_gl_context (GdkWindow *window,
   GdkWin32GLContext *context = NULL;
   GdkVisual *visual = gdk_window_get_visual (window);
 
-  /* XXX: gdk_screen_get_rgba_visual() is not implemented on Windows, so
-   * need_alpha_bits will always be FALSE for now.
-   *
-   * Please see bug https://bugzilla.gnome.org/show_bug.cgi?id=727316
-   */
   gboolean need_alpha_bits = (visual == gdk_screen_get_rgba_visual (gdk_display_get_default_screen (display)));
 
   /* Acquire and store up the Windows-specific HWND and HDC */
@@ -600,8 +595,6 @@ _gdk_win32_display_make_gl_context_current (GdkDisplay *display,
        * happens later anyway, and its up to the compositor to sync that
        * to the vblank. */
       screen = gdk_window_get_screen (window);
-
-      /* XXX: gdk_screen_is_composited () is always FALSE on Windows at the moment */
       do_frame_sync = ! gdk_screen_is_composited (screen);
 
       if (do_frame_sync != context_win32->do_frame_sync)
