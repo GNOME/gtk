@@ -65,115 +65,105 @@ state_pop (ParserData *data)
 #define state_pop_info(data, st) ((st*)state_pop(data))
 
 static void
-error_missing_attribute (ParserData *data,
-                         const gchar *tag,
-                         const gchar *attribute,
-                         GError **error)
+error_missing_attribute (ParserData   *data,
+                         const gchar  *tag,
+                         const gchar  *attribute,
+                         GError      **error)
 {
-  gint line_number, char_number;
+  gint line, col;
 
-  g_markup_parse_context_get_position (data->ctx,
-                                       &line_number,
-                                       &char_number);
+  g_markup_parse_context_get_position (data->ctx, &line, &col);
 
   g_set_error (error,
                GTK_BUILDER_ERROR,
                GTK_BUILDER_ERROR_MISSING_ATTRIBUTE,
                "%s:%d:%d <%s> requires attribute \"%s\"",
-               data->filename,
-               line_number, char_number, tag, attribute);
+               data->filename, line, col, tag, attribute);
 }
 
 static void
-error_invalid_attribute (ParserData *data,
-                         const gchar *tag,
-                         const gchar *attribute,
-                         GError **error)
+error_invalid_attribute (ParserData   *data,
+                         const gchar  *tag,
+                         const gchar  *attribute,
+                         GError      **error)
 {
-  gint line_number, char_number;
+  gint line, col;
 
-  g_markup_parse_context_get_position (data->ctx,
-                                       &line_number,
-                                       &char_number);
+  g_markup_parse_context_get_position (data->ctx, &line, &col);
 
   g_set_error (error,
                GTK_BUILDER_ERROR,
                GTK_BUILDER_ERROR_INVALID_ATTRIBUTE,
                "%s:%d:%d '%s' is not a valid attribute of <%s>",
-               data->filename,
-               line_number, char_number, attribute, tag);
+               data->filename, line, col, attribute, tag);
 }
 
 static void
-error_invalid_tag (ParserData *data,
-		   const gchar *tag,
-		   const gchar *expected,
-		   GError **error)
+error_invalid_tag (ParserData   *data,
+                   const gchar  *tag,
+                   const gchar  *expected,
+                   GError      **error)
 {
-  gint line_number, char_number;
+  gint line, col;
 
-  g_markup_parse_context_get_position (data->ctx,
-                                       &line_number,
-                                       &char_number);
+  g_markup_parse_context_get_position (data->ctx, &line, &col);
 
   if (expected)
     g_set_error (error,
-		 GTK_BUILDER_ERROR,
-		 GTK_BUILDER_ERROR_INVALID_TAG,
-		 "%s:%d:%d '%s' is not a valid tag here, expected a '%s' tag",
-		 data->filename,
-		 line_number, char_number, tag, expected);
+                 GTK_BUILDER_ERROR,
+                 GTK_BUILDER_ERROR_INVALID_TAG,
+                 "%s:%d:%d '%s' is not a valid tag here, expected a '%s' tag",
+                 data->filename, line, col, tag, expected);
   else
     g_set_error (error,
-		 GTK_BUILDER_ERROR,
-		 GTK_BUILDER_ERROR_INVALID_TAG,
-		 "%s:%d:%d '%s' is not a valid tag here",
-		 data->filename,
-		 line_number, char_number, tag);
+                 GTK_BUILDER_ERROR,
+                 GTK_BUILDER_ERROR_INVALID_TAG,
+                 "%s:%d:%d '%s' is not a valid tag here",
+                 data->filename, line, col, tag);
 }
 
 gboolean
 _gtk_builder_boolean_from_string (const gchar  *string,
-				  gboolean     *value,
-				  GError      **error)
+                                  gboolean     *value,
+                                  GError      **error)
 {
   gboolean retval = TRUE;
   int length;
-  
+
   g_assert (string != NULL);
   length = strlen (string);
-  
+
   if (length == 0)
     retval = FALSE;
   else if (length == 1)
     {
       gchar c = g_ascii_tolower (string[0]);
       if (c == 'y' || c == 't' || c == '1')
-	*value = TRUE;
+        *value = TRUE;
       else if (c == 'n' || c == 'f' || c == '0')
-	*value = FALSE;
+        *value = FALSE;
       else
-	retval = FALSE;
+        retval = FALSE;
     }
   else
     {
       gchar *lower = g_ascii_strdown (string, length);
-      
+
       if (strcmp (lower, "yes") == 0 || strcmp (lower, "true") == 0)
-	*value = TRUE;
+        *value = TRUE;
       else if (strcmp (lower, "no") == 0 || strcmp (lower, "false") == 0)
-	*value = FALSE;
+        *value = FALSE;
       else
-	retval = FALSE;
+        retval = FALSE;
       g_free (lower);
     }
-  
+
   if (!retval)
     g_set_error (error,
-		 GTK_BUILDER_ERROR,
-		 GTK_BUILDER_ERROR_INVALID_VALUE,
-		 "could not parse boolean `%s'",
-		 string);
+                 GTK_BUILDER_ERROR,
+                 GTK_BUILDER_ERROR_INVALID_VALUE,
+                 "could not parse boolean `%s'",
+                 string);
 
   return retval;
 }
@@ -181,7 +171,7 @@ _gtk_builder_boolean_from_string (const gchar  *string,
 static GObject *
 builder_construct (ParserData  *data,
                    ObjectInfo  *object_info,
-		   GError     **error)
+                   GError     **error)
 {
   GObject *object;
 
@@ -196,7 +186,7 @@ builder_construct (ParserData  *data,
     {
       object = _gtk_builder_construct (data->builder, object_info, error);
       if (!object)
-	return NULL;
+        return NULL;
     }
   else
     {
@@ -217,26 +207,26 @@ builder_construct (ParserData  *data,
 }
 
 static GType
-_get_type_by_symbol (const gchar* symbol)
+_get_type_by_symbol (const gchar *symbol)
 {
   static GModule *module = NULL;
   GTypeGetFunc func;
-  
+
   if (!module)
     module = g_module_open (NULL, 0);
 
   if (!g_module_symbol (module, symbol, (gpointer)&func))
     return G_TYPE_INVALID;
-  
+
   return func ();
 }
 
 static void
 parse_requires (ParserData   *data,
-		const gchar  *element_name,
-		const gchar **names,
-		const gchar **values,
-		GError      **error)
+                const gchar  *element_name,
+                const gchar **names,
+                const gchar **values,
+                GError      **error)
 {
   RequiresInfo *req_info;
   const gchar  *library = NULL;
@@ -249,15 +239,15 @@ parse_requires (ParserData   *data,
       if (strcmp (names[i], "lib") == 0)
         library = values[i];
       else if (strcmp (names[i], "version") == 0)
-	version = values[i];
+        version = values[i];
       else
-	error_invalid_attribute (data, element_name, names[i], error);
+        error_invalid_attribute (data, element_name, names[i], error);
     }
 
   if (!library || !version)
     {
       error_missing_attribute (data, element_name,
-			       version ? "lib" : "version", error);
+                               version ? "lib" : "version", error);
       return;
     }
 
@@ -267,10 +257,10 @@ parse_requires (ParserData   *data,
 
       g_markup_parse_context_get_position (data->ctx, &line, &col);
       g_set_error (error,
-		   GTK_BUILDER_ERROR,
-		   GTK_BUILDER_ERROR_INVALID_VALUE,
-		   "%s:%d:%d '%s' attribute has malformed value \"%s\"",
-		   data->filename, line, col, "version", version);
+                   GTK_BUILDER_ERROR,
+                   GTK_BUILDER_ERROR_INVALID_VALUE,
+                   "%s:%d:%d '%s' attribute has malformed value \"%s\"",
+                   data->filename, line, col, "version", version);
       return;
     }
   version_major = g_ascii_strtoll (split[0], NULL, 10);
@@ -360,10 +350,10 @@ parse_object (GMarkupParseContext  *context,
             }
         }
       else
-	{
-	  error_invalid_attribute (data, element_name, names[i], error);
-	  return;
-	}
+        {
+          error_invalid_attribute (data, element_name, names[i], error);
+          return;
+        }
     }
 
   if (object_type == G_TYPE_INVALID)
@@ -426,11 +416,11 @@ parse_object (GMarkupParseContext  *context,
 
 static void
 parse_template (GMarkupParseContext  *context,
-		ParserData           *data,
-		const gchar          *element_name,
-		const gchar         **names,
-		const gchar         **values,
-		GError              **error)
+                ParserData           *data,
+                const gchar          *element_name,
+                const gchar         **names,
+                const gchar         **values,
+                GError              **error)
 {
   ObjectInfo *object_info;
   int i;
@@ -443,17 +433,17 @@ parse_template (GMarkupParseContext  *context,
   if (template_type == 0)
     {
       g_set_error (error,
-		   GTK_BUILDER_ERROR,
-		   GTK_BUILDER_ERROR_UNHANDLED_TAG,
-		   "Encountered template definition but not parsing a template.");
+                   GTK_BUILDER_ERROR,
+                   GTK_BUILDER_ERROR_UNHANDLED_TAG,
+                   "Encountered template definition but not parsing a template.");
       return;
     }
   else if (state_peek (data) != NULL)
     {
       g_set_error (error,
-		   GTK_BUILDER_ERROR,
-		   GTK_BUILDER_ERROR_UNHANDLED_TAG,
-		   "Encountered template definition that is not at the top level.");
+                   GTK_BUILDER_ERROR,
+                   GTK_BUILDER_ERROR_UNHANDLED_TAG,
+                   "Encountered template definition that is not at the top level.");
       return;
     }
 
@@ -464,10 +454,10 @@ parse_template (GMarkupParseContext  *context,
       else if (strcmp (names[i], "parent") == 0)
         parent_class = values[i];
       else
-	{
-	  error_invalid_attribute (data, element_name, names[i], error);
-	  return;
-	}
+        {
+          error_invalid_attribute (data, element_name, names[i], error);
+          return;
+        }
     }
 
   if (!object_class)
@@ -480,10 +470,10 @@ parse_template (GMarkupParseContext  *context,
   if (template_type != parsed_type)
     {
       g_set_error (error,
-		   GTK_BUILDER_ERROR,
-		   GTK_BUILDER_ERROR_TEMPLATE_MISMATCH,
-		   "Parsed template definition for type `%s', expected type `%s'.",
-		   object_class, g_type_name (template_type));
+                   GTK_BUILDER_ERROR,
+                   GTK_BUILDER_ERROR_TEMPLATE_MISMATCH,
+                   "Parsed template definition for type `%s', expected type `%s'.",
+                   object_class, g_type_name (template_type));
       return;
     }
 
@@ -499,7 +489,7 @@ parse_template (GMarkupParseContext  *context,
                        "Invalid template parent type `%s'",
                        parent_class);
           return;
-        }      
+        }
       if (parent_type != expected_type)
         {
           g_set_error (error, GTK_BUILDER_ERROR,
@@ -509,7 +499,7 @@ parse_template (GMarkupParseContext  *context,
           return;
         }
     }
-  
+
   ++data->cur_object_level;
 
   object_info = g_slice_new0 (ObjectInfo);
@@ -570,12 +560,12 @@ parse_child (ParserData   *data,
   object_info = state_peek_info (data, ObjectInfo);
   if (!object_info ||
       !(strcmp (object_info->tag.name, "object") == 0 ||
-	strcmp (object_info->tag.name, "template") == 0))
+        strcmp (object_info->tag.name, "template") == 0))
     {
       error_invalid_tag (data, element_name, NULL, error);
       return;
     }
-  
+
   child_info = g_slice_new0 (ChildInfo);
   state_push (data, child_info);
   child_info->tag.name = element_name;
@@ -586,7 +576,7 @@ parse_child (ParserData   *data,
       else if (strcmp (names[i], "internal-child") == 0)
         child_info->internal_child = g_strdup (values[i]);
       else
-	error_invalid_attribute (data, element_name, names[i], error);
+        error_invalid_attribute (data, element_name, names[i], error);
     }
 
   child_info->parent = (CommonInfo*)object_info;
@@ -620,9 +610,9 @@ parse_property (ParserData   *data,
   gint i;
 
   object_info = state_peek_info (data, ObjectInfo);
-  if (!object_info || 
+  if (!object_info ||
       !(strcmp (object_info->tag.name, "object") == 0 ||
-	strcmp (object_info->tag.name, "template") == 0))
+        strcmp (object_info->tag.name, "template") == 0))
     {
       error_invalid_tag (data, element_name, NULL, error);
       return;
@@ -652,38 +642,38 @@ parse_property (ParserData   *data,
             }
         }
       else if (strcmp (names[i], "translatable") == 0)
-	{
-	  if (!_gtk_builder_boolean_from_string (values[i], &translatable,
-						 error))
-	    return;
-	}
+        {
+          if (!_gtk_builder_boolean_from_string (values[i], &translatable,
+                                                 error))
+            return;
+        }
       else if (strcmp (names[i], "comments") == 0)
         {
           /* do nothing, comments are for translators */
         }
-      else if (strcmp (names[i], "context") == 0) 
+      else if (strcmp (names[i], "context") == 0)
         {
           context = values[i];
         }
-      else if (strcmp (names[i], "bind-source") == 0) 
+      else if (strcmp (names[i], "bind-source") == 0)
         {
           bind_source = values[i];
         }
-      else if (strcmp (names[i], "bind-property") == 0) 
+      else if (strcmp (names[i], "bind-property") == 0)
         {
           bind_property = values[i];
         }
-      else if (strcmp (names[i], "bind-flags") == 0) 
+      else if (strcmp (names[i], "bind-flags") == 0)
         {
           if (!_gtk_builder_flags_from_string (G_TYPE_BINDING_FLAGS, values[i],
                                                &bind_flags, error))
             return;
         }
       else
-	{
-	  error_invalid_attribute (data, element_name, names[i], error);
-	  return;
-	}
+        {
+          error_invalid_attribute (data, element_name, names[i], error);
+          return;
+        }
     }
 
   if (!pspec)
@@ -754,7 +744,7 @@ parse_signal (ParserData   *data,
   object_info = state_peek_info (data, ObjectInfo);
   if (!object_info ||
       !(strcmp (object_info->tag.name, "object") == 0 ||
-	strcmp (object_info->tag.name, "template") == 0))
+        strcmp (object_info->tag.name, "template") == 0))
     {
       error_invalid_tag (data, element_name, NULL, error);
       return;
@@ -779,26 +769,26 @@ parse_signal (ParserData   *data,
       else if (strcmp (names[i], "handler") == 0)
         handler = values[i];
       else if (strcmp (names[i], "after") == 0)
-	{
-	  if (!_gtk_builder_boolean_from_string (values[i], &after, error))
-	    return;
-	}
+        {
+          if (!_gtk_builder_boolean_from_string (values[i], &after, error))
+            return;
+        }
       else if (strcmp (names[i], "swapped") == 0)
-	{
-	  if (!_gtk_builder_boolean_from_string (values[i], &swapped, error))
-	    return;
-	  swapped_set = TRUE;
-	}
+        {
+          if (!_gtk_builder_boolean_from_string (values[i], &swapped, error))
+            return;
+          swapped_set = TRUE;
+        }
       else if (strcmp (names[i], "object") == 0)
         object = values[i];
       else if (strcmp (names[i], "last_modification_time") == 0)
-	/* parse but ignore */
-	;
+        /* parse but ignore */
+        ;
       else
-	{
-	  error_invalid_attribute (data, element_name, names[i], error);
-	  return;
-	}
+        {
+          error_invalid_attribute (data, element_name, names[i], error);
+          return;
+        }
     }
 
   if (!id)
@@ -815,7 +805,7 @@ parse_signal (ParserData   *data,
   /* Swapped defaults to FALSE except when object is set */
   if (object && !swapped_set)
     swapped = TRUE;
-  
+
   info = g_slice_new0 (SignalInfo);
   info->id = id;
   info->detail = detail;
@@ -833,7 +823,7 @@ parse_signal (ParserData   *data,
 /* Called by GtkBuilder */
 void
 _free_signal_info (SignalInfo *info,
-                   gpointer user_data)
+                   gpointer    user_data)
 {
   g_free (info->handler);
   g_free (info->connect_object_name);
@@ -843,7 +833,7 @@ _free_signal_info (SignalInfo *info,
 
 static void
 free_requires_info (RequiresInfo *info,
-                    gpointer user_data)
+                    gpointer      user_data)
 {
   g_free (info->library);
   g_slice_free (RequiresInfo, info);
@@ -851,46 +841,46 @@ free_requires_info (RequiresInfo *info,
 
 static void
 parse_interface (ParserData   *data,
-		 const gchar  *element_name,
-		 const gchar **names,
-		 const gchar **values,
-		 GError      **error)
+                 const gchar  *element_name,
+                 const gchar **names,
+                 const gchar **values,
+                 GError      **error)
 {
   int i;
 
   for (i = 0; names[i] != NULL; i++)
     {
       if (strcmp (names[i], "domain") == 0)
-	{
-	  if (data->domain)
-	    {
-	      if (strcmp (data->domain, values[i]) == 0)
-		continue;
-	      else
-		g_warning ("%s: interface domain '%s' overrides "
-			   "programically set domain '%s'",
-			   data->filename,
-			   values[i],
-			   data->domain
-			   );
-	      
-	      g_free (data->domain);
-	    }
-	  
- 	  data->domain = g_strdup (values[i]);
-	  gtk_builder_set_translation_domain (data->builder, data->domain);
-	}
+        {
+          if (data->domain)
+            {
+              if (strcmp (data->domain, values[i]) == 0)
+                continue;
+              else
+                g_warning ("%s: interface domain '%s' overrides "
+                           "programically set domain '%s'",
+                           data->filename,
+                           values[i],
+                           data->domain
+                           );
+
+              g_free (data->domain);
+            }
+
+          data->domain = g_strdup (values[i]);
+          gtk_builder_set_translation_domain (data->builder, data->domain);
+        }
       else
-	error_invalid_attribute (data, "interface", names[i], error);
+        error_invalid_attribute (data, "interface", names[i], error);
     }
 }
 
 static SubParser *
 create_subparser (GObject       *object,
-		  GObject       *child,
-		  const gchar   *element_name,
-		  GMarkupParser *parser,
-		  gpointer       user_data)
+                  GObject       *child,
+                  const gchar   *element_name,
+                  GMarkupParser *parser,
+                  gpointer       user_data)
 {
   SubParser *subparser;
 
@@ -913,12 +903,12 @@ free_subparser (SubParser *subparser)
 }
 
 static gboolean
-subparser_start (GMarkupParseContext *context,
-		 const gchar         *element_name,
-		 const gchar        **names,
-		 const gchar        **values,
-		 ParserData          *data,
-		 GError             **error)
+subparser_start (GMarkupParseContext  *context,
+                 const gchar          *element_name,
+                 const gchar         **names,
+                 const gchar         **values,
+                 ParserData           *data,
+                 GError              **error)
 {
   SubParser *subparser = data->subparser;
 
@@ -929,23 +919,23 @@ subparser_start (GMarkupParseContext *context,
   if (subparser->start)
     {
       if (subparser->parser->start_element)
-	subparser->parser->start_element (context,
-					  element_name, names, values,
-					  subparser->data, error);
+        subparser->parser->start_element (context,
+                                          element_name, names, values,
+                                          subparser->data, error);
       return FALSE;
     }
   return TRUE;
 }
 
 static void
-subparser_end (GMarkupParseContext *context,
-	       const gchar         *element_name,
-	       ParserData          *data,
-	       GError             **error)
+subparser_end (GMarkupParseContext  *context,
+               const gchar          *element_name,
+               ParserData           *data,
+               GError              **error)
 {
   if (data->subparser->parser->end_element)
     data->subparser->parser->end_element (context, element_name,
-					  data->subparser->data, error);
+                                          data->subparser->data, error);
 
   if (*error)
     return;
@@ -954,10 +944,10 @@ subparser_end (GMarkupParseContext *context,
     return;
 
   gtk_buildable_custom_tag_end (GTK_BUILDABLE (data->subparser->object),
-				data->builder,
-				data->subparser->child,
-				element_name,
-				data->subparser->data);
+                                data->builder,
+                                data->subparser->child,
+                                element_name,
+                                data->subparser->data);
   g_free (data->subparser->parser);
 
   if (_gtk_builder_lookup_failed (data->builder, error))
@@ -965,7 +955,7 @@ subparser_end (GMarkupParseContext *context,
 
   if (GTK_BUILDABLE_GET_IFACE (data->subparser->object)->custom_finished)
     data->custom_finalizers = g_slist_prepend (data->custom_finalizers,
-					       data->subparser);
+                                               data->subparser);
   else
     free_subparser (data->subparser);
 
@@ -973,12 +963,12 @@ subparser_end (GMarkupParseContext *context,
 }
 
 static gboolean
-parse_custom (GMarkupParseContext *context,
-	      const gchar         *element_name,
-	      const gchar        **names,
-	      const gchar        **values,
-	      ParserData          *data,
-	      GError             **error)
+parse_custom (GMarkupParseContext  *context,
+              const gchar          *element_name,
+              const gchar         **names,
+              const gchar         **values,
+              ParserData           *data,
+              GError              **error)
 {
   CommonInfo* parent_info;
   GMarkupParser parser;
@@ -995,14 +985,14 @@ parse_custom (GMarkupParseContext *context,
     {
       ObjectInfo* object_info = (ObjectInfo*)parent_info;
       if (!object_info->object)
-	{
-	  object_info->properties = g_slist_reverse (object_info->properties);
-	  object_info->object = _gtk_builder_construct (data->builder,
-							object_info,
-							error);
-	  if (!object_info->object)
-	    return TRUE; /* A GError is already set */
-	}
+        {
+          object_info->properties = g_slist_reverse (object_info->properties);
+          object_info->object = _gtk_builder_construct (data->builder,
+                                                        object_info,
+                                                        error);
+          if (!object_info->object)
+            return TRUE; /* A GError is already set */
+        }
       g_assert (object_info->object);
       object = object_info->object;
       child = NULL;
@@ -1010,9 +1000,9 @@ parse_custom (GMarkupParseContext *context,
   else if (strcmp (parent_info->tag.name, "child") == 0)
     {
       ChildInfo* child_info = (ChildInfo*)parent_info;
-      
+
       _gtk_builder_add (data->builder, child_info);
-      
+
       object = ((ObjectInfo*)child_info->parent)->object;
       child  = child_info->object;
     }
@@ -1020,30 +1010,30 @@ parse_custom (GMarkupParseContext *context,
     return FALSE;
 
   if (!gtk_buildable_custom_tag_start (GTK_BUILDABLE (object),
-				       data->builder,
-				       child,
-				       element_name,
-				       &parser,
-				       &subparser_data))
+                                       data->builder,
+                                       child,
+                                       element_name,
+                                       &parser,
+                                       &subparser_data))
     return FALSE;
-      
+
   data->subparser = create_subparser (object, child, element_name,
-				      &parser, subparser_data);
-  
+                                      &parser, subparser_data);
+
   if (parser.start_element)
     parser.start_element (context,
-			  element_name, names, values,
-			  subparser_data, error);
+                          element_name, names, values,
+                          subparser_data, error);
   return TRUE;
 }
 
 static void
-start_element (GMarkupParseContext *context,
-               const gchar         *element_name,
-               const gchar        **names,
-               const gchar        **values,
-               gpointer             user_data,
-               GError             **error)
+start_element (GMarkupParseContext  *context,
+               const gchar          *element_name,
+               const gchar         **names,
+               const gchar         **values,
+               gpointer              user_data,
+               GError              **error)
 {
   ParserData *data = (ParserData*)user_data;
 
@@ -1067,18 +1057,19 @@ start_element (GMarkupParseContext *context,
 
   if (!data->last_element && strcmp (element_name, "interface") != 0)
     {
-      g_set_error (error, GTK_BUILDER_ERROR, 
-		   GTK_BUILDER_ERROR_UNHANDLED_TAG,
-		   _("Invalid root element: <%s>"),
-		   element_name);
+      g_set_error (error, GTK_BUILDER_ERROR,
+                   GTK_BUILDER_ERROR_UNHANDLED_TAG,
+                   _("Invalid root element: <%s>"),
+                   element_name);
       return;
     }
   data->last_element = element_name;
 
   if (data->subparser)
-    if (!subparser_start (context, element_name, names, values,
-			  data, error))
-      return;
+    {
+      if (!subparser_start (context, element_name, names, values, data, error))
+        return;
+    }
 
   if (strcmp (element_name, "requires") == 0)
     parse_requires (data, element_name, names, values, error);
@@ -1089,7 +1080,6 @@ start_element (GMarkupParseContext *context,
   else if (data->requested_objects && !data->inside_requested_object)
     {
       /* If outside a requested object, simply ignore this tag */
-      return;
     }
   else if (strcmp (element_name, "child") == 0)
     parse_child (data, element_name, names, values, error);
@@ -1107,19 +1097,17 @@ start_element (GMarkupParseContext *context,
        * if clause to avoid an error below.
        */
     }
-  else
-    if (!parse_custom (context, element_name, names, values,
-		       data, error))
-      g_set_error (error, GTK_BUILDER_ERROR, 
-		   GTK_BUILDER_ERROR_UNHANDLED_TAG,
-		   _("Unhandled tag: <%s>"),
-		   element_name);
+  else if (!parse_custom (context, element_name, names, values, data, error))
+    g_set_error (error,
+                 GTK_BUILDER_ERROR,
+                 GTK_BUILDER_ERROR_UNHANDLED_TAG,
+                 _("Unhandled tag: <%s>"), element_name);
 }
 
 const gchar *
 _gtk_builder_parser_translate (const gchar *domain,
-			       const gchar *context,
-			       const gchar *text)
+                               const gchar *context,
+                               const gchar *text)
 {
   const gchar *s;
 
@@ -1131,12 +1119,11 @@ _gtk_builder_parser_translate (const gchar *domain,
   return s;
 }
 
-/* Called for close tags </foo> */
 static void
-end_element (GMarkupParseContext *context,
-             const gchar         *element_name,
-             gpointer             user_data,
-             GError             **error)
+end_element (GMarkupParseContext  *context,
+             const gchar          *element_name,
+             gpointer              user_data,
+             GError              **error)
 {
   ParserData *data = (ParserData*)user_data;
 
@@ -1157,16 +1144,16 @@ end_element (GMarkupParseContext *context,
        * to check thier library versions here.
        */
       if (!strcmp (req_info->library, "gtk+"))
-	{
-	  if (!GTK_CHECK_VERSION (req_info->major, req_info->minor, 0))
-	    g_set_error (error,
-			 GTK_BUILDER_ERROR,
-			 GTK_BUILDER_ERROR_VERSION_MISMATCH,
-			 "%s: required %s version %d.%d, current version is %d.%d",
-			 data->filename, req_info->library,
-			 req_info->major, req_info->minor,
-			 GTK_MAJOR_VERSION, GTK_MINOR_VERSION);
-	}
+        {
+          if (!GTK_CHECK_VERSION (req_info->major, req_info->minor, 0))
+            g_set_error (error,
+                         GTK_BUILDER_ERROR,
+                         GTK_BUILDER_ERROR_VERSION_MISMATCH,
+                         "%s: required %s version %d.%d, current version is %d.%d",
+                         data->filename, req_info->library,
+                         req_info->major, req_info->minor,
+                         GTK_MAJOR_VERSION, GTK_MINOR_VERSION);
+        }
       free_requires_info (req_info, NULL);
     }
   else if (strcmp (element_name, "interface") == 0)
@@ -1175,14 +1162,13 @@ end_element (GMarkupParseContext *context,
   else if (data->requested_objects && !data->inside_requested_object)
     {
       /* If outside a requested object, simply ignore this tag */
-      return;
     }
   else if (strcmp (element_name, "menu") == 0)
     {
       _gtk_builder_menu_end (data);
     }
   else if (strcmp (element_name, "object") == 0 ||
-	   strcmp (element_name, "template") == 0)
+           strcmp (element_name, "template") == 0)
     {
       ObjectInfo *object_info = state_pop_info (data, ObjectInfo);
       ChildInfo* child_info = state_peek_info (data, ChildInfo);
@@ -1202,10 +1188,10 @@ end_element (GMarkupParseContext *context,
 
       object_info->object = builder_construct (data, object_info, error);
       if (!object_info->object)
-	{
-	  free_object_info (object_info);
-	  return;
-	}
+        {
+          free_object_info (object_info);
+          return;
+        }
       if (child_info)
         child_info->object = object_info->object;
 
@@ -1223,7 +1209,7 @@ end_element (GMarkupParseContext *context,
 
       /* Normal properties */
       if (strcmp (info->tag.name, "object") == 0 ||
-	  strcmp (info->tag.name, "template") == 0)
+          strcmp (info->tag.name, "template") == 0)
         {
           ObjectInfo *object_info = (ObjectInfo*)info;
 
@@ -1285,12 +1271,12 @@ text (GMarkupParseContext *context,
   if (data->subparser && data->subparser->start)
     {
       GError *tmp_error = NULL;
-      
+
       if (data->subparser->parser->text)
         data->subparser->parser->text (context, text, text_len,
                                        data->subparser->data, &tmp_error);
       if (tmp_error)
-	g_propagate_error (error, tmp_error);
+        g_propagate_error (error, tmp_error);
       return;
     }
 
@@ -1359,7 +1345,7 @@ _gtk_builder_parser_parse_buffer (GtkBuilder   *builder,
   data->filename = filename;
   data->domain = g_strdup (domain);
   data->object_ids = g_hash_table_new_full (g_str_hash, g_str_equal,
-					    (GDestroyNotify)g_free, NULL);
+                                            (GDestroyNotify)g_free, NULL);
 
   data->requested_objects = NULL;
   if (requested_objs)
@@ -1370,7 +1356,7 @@ _gtk_builder_parser_parse_buffer (GtkBuilder   *builder,
       for (i = 0; requested_objs[i]; ++i)
         {
           data->requested_objects = g_slist_prepend (data->requested_objects,
-                                                     g_strdup (requested_objs[i]));	
+                                                     g_strdup (requested_objs[i]));
         }
     }
   else
@@ -1379,8 +1365,8 @@ _gtk_builder_parser_parse_buffer (GtkBuilder   *builder,
       data->inside_requested_object = TRUE;
     }
 
-  data->ctx = g_markup_parse_context_new (&parser, 
-                                          G_MARKUP_TREAT_CDATA_AS_TEXT, 
+  data->ctx = g_markup_parse_context_new (&parser,
+                                          G_MARKUP_TREAT_CDATA_AS_TEXT,
                                           data, NULL);
 
   if (!g_markup_parse_context_parse (data->ctx, buffer, length, error))
