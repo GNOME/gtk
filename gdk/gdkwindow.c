@@ -3111,7 +3111,6 @@ gdk_window_end_paint (GdkWindow *window)
         {
           surface = gdk_window_ref_impl_surface (window);
           cr = cairo_create (surface);
-          cairo_surface_destroy (surface);
 
           cairo_set_source_surface (cr, window->current_paint.surface, 0, 0);
           gdk_cairo_region (cr, window->current_paint.region);
@@ -3123,6 +3122,7 @@ gdk_window_end_paint (GdkWindow *window)
           cairo_destroy (cr);
 
           cairo_surface_flush (surface);
+          cairo_surface_destroy (surface);
         }
     }
 
