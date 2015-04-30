@@ -515,6 +515,49 @@ do_validate (const gchar *filename)
     }
 }
 
+static const gchar *
+object_get_name (GObject *object)
+{
+  if (GTK_IS_BUILDABLE (object))
+    return gtk_buildable_get_name (GTK_BUILDABLE (object));
+  else
+    return g_object_get_data (object, "gtk-builder-name");
+}
+
+static void
+do_enumerate (const gchar *filename)
+{
+  GtkBuilder *builder;
+  GError *error = NULL;
+  gint ret;
+  GSList *list, *l;
+  GObject *object;
+  const gchar *name;
+
+  builder = gtk_builder_new ();
+  ret = gtk_builder_add_from_file (builder, filename, &error);
+
+  if (ret == 0)
+    {
+      g_printerr ("%s\n", error->message);
+      exit (1);
+    }
+
+  list = gtk_builder_get_objects (builder);
+  for (l = list; l; l = l->next)
+    {
+      object = l->data;
+      name = object_get_name (object);
+      if (g_str_has_prefix (name, "___") && g_str_has_suffix (name, "___"))
+        continue;
+
+      g_print ("%s (%s)\n", name, g_type_name_from_instance ((GTypeInstance*)object));
+    }
+  g_slist_free (list);
+
+  g_object_unref (builder);
+}
+
 static void
 usage (void)
 {
@@ -524,8 +567,9 @@ usage (void)
              "Commands:\n"
              "  validate    Validate the file\n"
              "  simplify    Simplify the file\n"
+             "  enumerate   List all named objects\n"
              "\n"
-             "Validate and simplify GtkBuilder .ui files.\n"));
+             "Perform various tasks on GtkBuilder .ui files.\n"));
   exit (1);
 }
 
@@ -545,6 +589,8 @@ main (int argc, char *argv[])
     do_validate (argv[2]);
   else if (strcmp (argv[1], "simplify") == 0)
     do_simplify (argv[2]);
+  else if (strcmp (argv[1], "enumerate") == 0)
+    do_enumerate (argv[2]);
   else
     usage ();
 

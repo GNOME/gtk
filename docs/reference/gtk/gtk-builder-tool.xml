@@ -54,6 +54,10 @@
       <listitem><para>Simplify the .ui file by removing properties that
       are set to their default values and write the resulting XML to stdout.</para></listitem>
     </varlistentry>
+    <varlistentry>
+    <term><option>enumerate</option></term>
+      <listitem><para>List all the named objects that are created in the .ui file.</para></list>
+    </varlistentry>
   </variablelist>
 </refsect1>
 
