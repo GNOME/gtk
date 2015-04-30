@@ -420,23 +420,28 @@ parse_template (GMarkupParseContext  *context,
 
   template_type = _gtk_builder_get_template_type (data->builder);
 
-  if (template_type == 0)
-    {
-      error_unhandled_tag (data, "template", error);
-      return;
-    }
-  else if (state_peek (data) != NULL)
-    {
-      error_invalid_tag (data, "template", NULL, error);
-      return;
-    }
-
   if (!g_markup_collect_attributes (element_name, names, values, error,
                                     G_MARKUP_COLLECT_STRING, "class", &object_class,
                                     G_MARKUP_COLLECT_STRING|G_MARKUP_COLLECT_OPTIONAL, "parent", &parent_class,
                                     G_MARKUP_COLLECT_INVALID))
     {
       _gtk_builder_prefix_error (data->builder, data->ctx, error);
+      return;
+    }
+
+  if (template_type == 0)
+    {
+      g_set_error (error,
+                   GTK_BUILDER_ERROR,
+                   GTK_BUILDER_ERROR_UNHANDLED_TAG,
+                   "Not expecting to handle a template (class '%s', parent '%s')",
+                   object_class, parent_class ? parent_class : "GtkWidget");
+      _gtk_builder_prefix_error (data->builder, context, error);
+      return;
+    }
+  else if (state_peek (data) != NULL)
+    {
+      error_invalid_tag (data, "template", NULL, error);
       return;
     }
 
