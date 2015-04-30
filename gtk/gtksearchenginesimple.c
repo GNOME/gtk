@@ -21,9 +21,7 @@
 
 #include "config.h"
 
-#ifdef HAVE_FTW_H
-#include <ftw.h>
-#endif
+#include <gio/gio.h>
 
 #include <gdk/gdk.h>
 
@@ -106,7 +104,7 @@ search_thread_data_new (GtkSearchEngineSimple *engine,
     data->path = g_strdup (g_get_home_dir ());
 
   text = _gtk_query_get_text (query);
-  lower = g_ascii_strdown (text, -1);
+  lower = g_utf8_casefold (text, -1);
   data->words = g_strsplit (lower, " ", -1);
   g_free (text);
   g_free (lower);
@@ -114,7 +112,6 @@ search_thread_data_new (GtkSearchEngineSimple *engine,
   return data;
 }
 
-#ifdef HAVE_FTW_H
 static void
 search_thread_data_free (SearchThreadData *data)
 {
@@ -187,56 +184,142 @@ send_batch (SearchThreadData *data)
   data->uri_hits = NULL;
 }
 
-static GPrivate search_thread_data;
+typedef gboolean (VisitFunc) (const char *fpath, gpointer user_data);
+
+static gboolean process_dir    (GFile *dir, GList **new_root_dirs, VisitFunc func, gpointer user_data);
+static GList *  process_dirs   (GList *root_dirs, VisitFunc func, gpointer user_data);
+static void     breadth_search (gchar *root, VisitFunc func, gpointer user_data);
+
+static void
+breadth_search (gchar *root, VisitFunc func, gpointer user_data)
+{
+  GList *subdirs = NULL;
+
+  subdirs = g_list_prepend (subdirs, g_file_new_for_path (root));
+
+  while (subdirs)
+    subdirs = process_dirs (subdirs, func, user_data);
+}
+
+static GList *
+process_dirs (GList *root_dirs, VisitFunc func, gpointer user_data)
+{
+  SearchThreadData *data = (SearchThreadData*) user_data;
+  GList *new_root_dirs = NULL;
+  GList *root;
+  gboolean keep_going = TRUE;
+
+  for (root = root_dirs; root; root = g_list_next (root))
+    {
+      GFile *dir = (GFile *) root->data;
+
+      /* Even if cancelled or stopped, we keep looping to unref the dirs */
+      if (keep_going && !data->cancelled)
+        keep_going = process_dir (dir, &new_root_dirs, func, user_data);
+
+      g_object_unref (dir);
+    }
+
+  if (!keep_going || data->cancelled)
+    {
+      g_list_free_full (new_root_dirs, g_object_unref);
+      new_root_dirs = NULL;
+    }
+
+  g_list_free (root_dirs);
+
+  return g_list_reverse (new_root_dirs);
+}
+
+static gboolean
+process_dir (GFile *dir, GList **new_root_dirs, VisitFunc func, gpointer user_data)
+{
+  GFileEnumerator *direnum;
+  gchar *dirpath;
+  SearchThreadData *data = (SearchThreadData*) user_data;
+
+  direnum = g_file_enumerate_children (dir, G_FILE_ATTRIBUTE_STANDARD_NAME ","
+                                       G_FILE_ATTRIBUTE_STANDARD_TYPE ","
+                                       G_FILE_ATTRIBUTE_STANDARD_IS_HIDDEN ","
+                                       G_FILE_ATTRIBUTE_STANDARD_IS_SYMLINK,
+                                       G_FILE_QUERY_INFO_NOFOLLOW_SYMLINKS,
+                                       NULL, NULL);
+  if (direnum == NULL || data->cancelled)
+    return FALSE;
+
+  dirpath = g_file_get_path (dir);
+
+  while (TRUE)
+    {
+      GFileInfo *info;
+      gchar *fullname;
+      const gchar *basename;
+      gboolean keep_going;
+
+      keep_going = g_file_enumerator_iterate (direnum, &info, NULL, NULL, NULL);
+
+      if (!keep_going || info == NULL || data->cancelled)
+        {
+          g_object_unref (direnum);
+          g_free (dirpath);
+          return keep_going;
+        }
+
+      if (g_file_info_get_is_hidden (info))
+        continue;
+
+      basename = g_file_info_get_name (info);
+      fullname = g_build_filename (dirpath, basename, NULL);
+
+      keep_going = func ((const char *) fullname, user_data);
+
+      g_free (fullname);
+
+      if (!keep_going)
+        {
+          g_object_unref (direnum);
+          g_free (dirpath);
+          return FALSE;
+        }
+
+      if (g_file_info_get_file_type (info) != G_FILE_TYPE_DIRECTORY)
+        continue;
+
+      *new_root_dirs = g_list_prepend (*new_root_dirs,
+                                       g_file_get_child (dir, basename));
+    }
+}
 
 static int
-search_visit_func (const char        *fpath,
-		   const struct stat *sb,
-		   int                typeflag,
-		   struct FTW        *ftwbuf)
+search_visit_func (const char *fpath, gpointer user_data)
 {
   SearchThreadData *data;
   gint i;
-  const gchar *name;
+  gchar *display_basename;
   gchar *lower_name;
   gchar *uri;
   gboolean hit;
-  gboolean is_hidden;
 
-  data = (SearchThreadData*)g_private_get (&search_thread_data);
+  data = (SearchThreadData*) user_data;
 
   if (data->cancelled)
-#ifdef HAVE_GNU_FTW
-    return FTW_STOP;
-#else
-    return 1;
-#endif /* HAVE_GNU_FTW */
+    return FALSE;
 
-  name = strrchr (fpath, '/');
-  if (name)
-    name++;
-  else
-    name = fpath;
+  display_basename = g_filename_display_basename (fpath);
+  lower_name = g_utf8_casefold (display_basename, -1);
+  g_free (display_basename);
 
-  is_hidden = *name == '.';
-
-  hit = FALSE;
-
-  if (!is_hidden)
+  hit = TRUE;
+  for (i = 0; data->words[i] != NULL; i++)
     {
-      lower_name = g_ascii_strdown (name, -1);
-
-      hit = TRUE;
-      for (i = 0; data->words[i] != NULL; i++)
-	{
-	  if (strstr (lower_name, data->words[i]) == NULL)
-	    {
-	      hit = FALSE;
-	      break;
-	    }
-	}
-      g_free (lower_name);
+      if (strstr (lower_name, data->words[i]) == NULL)
+        {
+          hit = FALSE;
+          break;
+        }
     }
+
+  g_free (lower_name);
 
   if (hit)
     {
@@ -249,39 +332,23 @@ search_visit_func (const char        *fpath,
   if (data->n_processed_files > BATCH_SIZE)
     send_batch (data);
 
-#ifdef HAVE_GNU_FTW
-  if (is_hidden)
-    return FTW_SKIP_SUBTREE;
-  else
-    return FTW_CONTINUE;
-#else
-  return 0;
-#endif /* HAVE_GNU_FTW */
+  return TRUE;
 }
-#endif /* HAVE_FTW_H */
 
 static gpointer
 search_thread_func (gpointer user_data)
 {
-#ifdef HAVE_FTW_H
   guint id;
   SearchThreadData *data;
 
   data = user_data;
 
-  g_private_set (&search_thread_data, data);
-
-  nftw (data->path, search_visit_func, 20,
-#ifdef HAVE_GNU_FTW
-        FTW_ACTIONRETVAL |
-#endif
-        FTW_PHYS);
+  breadth_search (data->path, search_visit_func, data);
 
   send_batch (data);
 
   id = gdk_threads_add_idle (search_thread_done_idle, data);
   g_source_set_name_by_id (id, "[gtk+] search_thread_done_idle");
-#endif /* HAVE_FTW_H */
 
   return NULL;
 }
@@ -362,9 +429,5 @@ _gtk_search_engine_simple_init (GtkSearchEngineSimple *engine)
 GtkSearchEngine *
 _gtk_search_engine_simple_new (void)
 {
-#ifdef HAVE_FTW_H
   return g_object_new (GTK_TYPE_SEARCH_ENGINE_SIMPLE, NULL);
-#else
-  return NULL;
-#endif
 }
