@@ -182,12 +182,12 @@ void      _gtk_builder_menu_start (ParserData   *parser_data,
 void      _gtk_builder_menu_end   (ParserData  *parser_data);
 
 GType     _gtk_builder_get_template_type (GtkBuilder *builder);
-guint     _gtk_builder_extend_with_template (GtkBuilder    *builder,
-					     GtkWidget     *widget,
-					     GType          template_type,
-					     const gchar   *buffer,
-					     gsize          length,
-					     GError       **error);
+GDK_AVAILABLE_IN_3_18
+guint     gtk_builder_extend_with_template  (GtkBuilder    *builder,
+                                             GtkWidget     *widget,
+                                             GType          template_type,                                                          const gchar   *buffer,
+                                             gsize          length,
+                                             GError       **error);
 
 void _gtk_builder_prefix_error            (GtkBuilder           *builder,
                                            GMarkupParseContext  *context,

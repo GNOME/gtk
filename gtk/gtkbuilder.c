@@ -1115,15 +1115,17 @@ gtk_builder_add_objects_from_file (GtkBuilder   *builder,
 }
 
 /* Main private entry point for building composite container
- * components from template XML
+ * components from template XML.
+ * This is exported purely to let gtk-builder-tool validate
+ * templates, applications have no need to call this function.
  */
 guint
-_gtk_builder_extend_with_template (GtkBuilder   *builder,
-                                   GtkWidget    *widget,
-                                   GType         template_type,
-                                   const gchar  *buffer,
-                                   gsize         length,
-                                   GError      **error)
+gtk_builder_extend_with_template (GtkBuilder   *builder,
+                                  GtkWidget    *widget,
+                                  GType         template_type,
+                                  const gchar  *buffer,
+                                  gsize         length,
+                                  GError      **error)
 {
   GError *tmp_error;
 
