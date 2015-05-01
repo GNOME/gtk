@@ -31,6 +31,19 @@
 #define HAVE_TRACKER 1
 #endif
 
+struct _GtkSearchEnginePrivate {
+  GtkSearchEngine *native;
+  gboolean native_running;
+  gchar *native_error;
+
+  GtkSearchEngine *simple;
+  gboolean simple_running;
+  gchar *simple_error;
+
+  gboolean running;
+  GHashTable *hits;
+};
+
 enum
 {
   HITS_ADDED,
@@ -42,11 +55,88 @@ enum
 
 static guint signals[LAST_SIGNAL];
 
-G_DEFINE_ABSTRACT_TYPE (GtkSearchEngine, _gtk_search_engine, G_TYPE_OBJECT);
+G_DEFINE_TYPE_WITH_PRIVATE (GtkSearchEngine, _gtk_search_engine, G_TYPE_OBJECT);
+
+static void
+set_query (GtkSearchEngine *engine,
+           GtkQuery        *query)
+{
+  if (engine->priv->native)
+    _gtk_search_engine_set_query (engine->priv->native, query);
+
+  if (engine->priv->simple)
+    _gtk_search_engine_set_query (engine->priv->simple, query);
+}
+
+static void
+start (GtkSearchEngine *engine)
+{
+  g_hash_table_remove_all (engine->priv->hits);
+
+  if (engine->priv->native)
+    {
+      g_clear_pointer (&engine->priv->native_error, g_free);
+      _gtk_search_engine_start (engine->priv->native);
+      engine->priv->native_running = TRUE;
+    }
+
+  if (engine->priv->simple)
+    {
+      g_clear_pointer (&engine->priv->simple_error, g_free);
+      _gtk_search_engine_start (engine->priv->simple);
+      engine->priv->simple_running = TRUE;
+    }
+
+  engine->priv->running = TRUE;
+}
+
+static void
+stop (GtkSearchEngine *engine)
+{
+  if (engine->priv->native)
+    {
+      _gtk_search_engine_stop (engine->priv->native);
+      engine->priv->native_running = FALSE;
+    }
+
+  if (engine->priv->simple)
+    {
+      _gtk_search_engine_stop (engine->priv->simple);
+      engine->priv->simple_running = FALSE;
+    }
+
+  engine->priv->running = FALSE;
+
+  g_hash_table_remove_all (engine->priv->hits);
+}
+
+static void
+finalize (GObject *object)
+{
+  GtkSearchEngine *engine = GTK_SEARCH_ENGINE (object);
+
+  g_clear_object (&engine->priv->native);
+  g_free (engine->priv->native_error);
+
+  g_clear_object (&engine->priv->simple);
+  g_free (engine->priv->simple_error);
+
+  g_clear_pointer (&engine->priv->hits, g_hash_table_unref);
+
+  G_OBJECT_CLASS (_gtk_search_engine_parent_class)->finalize (object);
+}
 
 static void
 _gtk_search_engine_class_init (GtkSearchEngineClass *class)
 {
+  GObjectClass *object_class = G_OBJECT_CLASS (class);
+
+  object_class->finalize = finalize;
+
+  class->set_query = set_query;
+  class->start = start;
+  class->stop = stop;
+
   signals[HITS_ADDED] =
     g_signal_new ("hits-added",
                   G_TYPE_FROM_CLASS (class),
@@ -90,33 +180,143 @@ _gtk_search_engine_class_init (GtkSearchEngineClass *class)
 static void
 _gtk_search_engine_init (GtkSearchEngine *engine)
 {
+  engine->priv = _gtk_search_engine_get_instance_private (engine);
+}
+
+static void
+hits_added (GtkSearchEngine *engine,
+            GList           *hits,
+            gpointer         data)
+{
+  GtkSearchEngine *composite = GTK_SEARCH_ENGINE (data);
+  GList *added, *l;
+
+  added = NULL;
+
+  if (engine == composite->priv->native)
+    g_debug ("Getting hits from native search engine");
+  else if (engine == composite->priv->simple)
+    g_debug ("Getting hits from simple search engine");
+
+  for (l = hits; l; l = l->next)
+    {
+      gchar *hit = l->data;
+
+      if (!g_hash_table_contains (composite->priv->hits, hit))
+        {
+          hit = g_strdup (hit);
+          g_hash_table_add (composite->priv->hits, hit);
+          added = g_list_prepend (added, hit);
+        }
+    }
+
+  if (added)
+    {
+      g_debug ("Passing hits on");
+      _gtk_search_engine_hits_added (composite, added);
+      g_list_free (added);
+    }
+}
+
+static void
+update_status (GtkSearchEngine *engine)
+{
+  gboolean running;
+
+  running = engine->priv->native_running || engine->priv->simple_running;
+
+  if (running != engine->priv->running)
+    {
+      engine->priv->running = running;
+
+      if (!running)
+        {
+          if (engine->priv->native_error)
+            _gtk_search_engine_error (engine, engine->priv->native_error);
+          else if (engine->priv->simple_error)
+            _gtk_search_engine_error (engine, engine->priv->simple_error);
+          else
+            _gtk_search_engine_finished (engine);
+        }
+    }
+}
+
+static void
+finished (GtkSearchEngine *engine,
+          gpointer         data)
+{
+  GtkSearchEngine *composite = GTK_SEARCH_ENGINE (data);
+
+  if (engine == composite->priv->native)
+    composite->priv->native_running = FALSE;
+  else if (engine == composite->priv->simple)
+    composite->priv->simple_running = FALSE;
+
+  update_status (composite);
+}
+
+static void
+error (GtkSearchEngine *engine,
+       const gchar     *message,
+       gpointer         data)
+{
+  GtkSearchEngine *composite = GTK_SEARCH_ENGINE (data);
+
+  if (engine == composite->priv->native)
+    {
+      g_free (composite->priv->native_error);
+      composite->priv->native_error = g_strdup (message);
+      composite->priv->native_running = FALSE;
+    }
+  else if (engine == composite->priv->simple)
+    {
+      g_free (composite->priv->native_error);
+      composite->priv->native_error = g_strdup (message);
+      composite->priv->simple_running = FALSE;
+    }
+
+  update_status (composite);
+}
+
+static void
+connect_engine_signals (GtkSearchEngine *engine,
+                        gpointer         data)
+{
+  g_signal_connect (engine, "hits-added", G_CALLBACK (hits_added), data);
+  g_signal_connect (engine, "finished", G_CALLBACK (finished), data);
+  g_signal_connect (engine, "error", G_CALLBACK (error), data);
 }
 
 GtkSearchEngine *
 _gtk_search_engine_new (void)
 {
-  GtkSearchEngine *engine = NULL;
+  GtkSearchEngine *engine;
+
+  engine = g_object_new (GTK_TYPE_SEARCH_ENGINE, NULL);
 
 #ifdef HAVE_TRACKER
-  engine = _gtk_search_engine_tracker_new ();
-  if (engine)
+  engine->priv->native = _gtk_search_engine_tracker_new ();
+  if (engine->priv->native)
     {
       g_debug ("Using Tracker search engine");
-      return engine;
+      connect_engine_signals (engine->priv->native, engine);
     }
 #endif
 
 #ifdef GDK_WINDOWING_QUARTZ
-  engine = _gtk_search_engine_quartz_new ();
-  if (engine)
+  engine->priv->native = _gtk_search_engine_quartz_new ();
+  if (engine->priv->native)
     {
       g_debug ("Using Quartz search engine");
-      return engine;
+      connect_engine_signals (engine->priv->native, engine);
     }
 #endif
 
+  engine->priv->simple = _gtk_search_engine_simple_new ();
   g_debug ("Using simple search engine");
-  engine = _gtk_search_engine_simple_new ();
+  connect_engine_signals (engine->priv->simple, engine);
+
+  engine->priv->hits = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, NULL);
 
   return engine;
 }
