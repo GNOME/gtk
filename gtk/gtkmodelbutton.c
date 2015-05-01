@@ -35,8 +35,6 @@
 #include "gtkpopover.h"
 #include "gtkintl.h"
 
-#define INDICATOR_MARGIN 24
-
 /**
  * SECTION:gtkmodelbutton
  * @Short_description: A button that uses a GAction as model
@@ -295,7 +293,6 @@ gtk_model_button_set_iconic (GtkModelButton *button,
       gtk_style_context_remove_class (context, GTK_STYLE_CLASS_MENUITEM);
       gtk_style_context_add_class (context, "image-button");
       gtk_button_set_relief (GTK_BUTTON (button), GTK_RELIEF_NORMAL);
-      g_object_set (G_OBJECT (button->box), "margin", 4, NULL);
     }
   else
     {
@@ -725,7 +722,7 @@ gtk_model_button_draw (GtkWidget *widget,
   gtk_icon_size_lookup (GTK_ICON_SIZE_MENU, &indicator_size, NULL);
   indicator_spacing = indicator_size / 8;
 
-  x = width - border_width - INDICATOR_MARGIN - indicator_size;
+  x = width - border_width - indicator_spacing - indicator_size;
 
   if (indicator_is_left (widget))
     x = width - (indicator_size + x);
@@ -971,10 +968,10 @@ gtk_model_button_init (GtkModelButton *button)
 {
   gtk_button_set_relief (GTK_BUTTON (button), GTK_RELIEF_NONE);
   button->box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 6);
-  gtk_widget_set_margin_start (button->box, 24);
-  gtk_widget_set_margin_end (button->box, 24);
-  gtk_widget_set_margin_top (button->box, 4);
-  gtk_widget_set_margin_bottom (button->box, 4);
+  gtk_widget_set_margin_start (button->box, 12);
+  gtk_widget_set_margin_end (button->box, 12);
+  gtk_widget_set_margin_top (button->box, 3);
+  gtk_widget_set_margin_bottom (button->box, 3);
   gtk_widget_set_halign (button->box, GTK_ALIGN_FILL);
   gtk_widget_show (button->box);
   button->image = gtk_image_new ();

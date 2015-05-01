@@ -405,10 +405,7 @@ gtk_menu_section_box_new_toplevel (GtkStack    *stack,
 {
   GtkMenuSectionBox *box;
 
-  box = g_object_new (GTK_TYPE_MENU_SECTION_BOX,
-                      "margin-top", 12,
-                      "margin-bottom", 12,
-                      NULL);
+  box = g_object_new (GTK_TYPE_MENU_SECTION_BOX, "margin", 10,  NULL);
   gtk_stack_add_named (stack, GTK_WIDGET (box), "main");
 
   box->tracker = gtk_menu_tracker_new (GTK_ACTION_OBSERVABLE (_gtk_widget_get_action_muxer (GTK_WIDGET (box), TRUE)),
@@ -431,10 +428,7 @@ gtk_menu_section_box_new_submenu (GtkMenuTrackerItem *item,
   GtkMenuSectionBox *box;
   GtkWidget *button;
 
-  box = g_object_new (GTK_TYPE_MENU_SECTION_BOX,
-                      "margin-top", 12,
-                      "margin-bottom", 12,
-                      NULL);
+  box = g_object_new (GTK_TYPE_MENU_SECTION_BOX, "margin", 10, NULL);
 
   button = g_object_new (GTK_TYPE_MODEL_BUTTON,
                          "menu-name", name,
@@ -486,8 +480,6 @@ gtk_menu_section_box_new_section (GtkMenuTrackerItem *item,
       gtk_orientable_set_orientation (GTK_ORIENTABLE (box->item_box), GTK_ORIENTATION_HORIZONTAL);
       gtk_style_context_add_class (gtk_widget_get_style_context (GTK_WIDGET (box->item_box)), GTK_STYLE_CLASS_LINKED);
       box->iconic = TRUE;
-      gtk_widget_set_margin_start (GTK_WIDGET (box->item_box), 12);
-      gtk_widget_set_margin_end (GTK_WIDGET (box->item_box), 12);
     }
 
   if (label != NULL)
@@ -502,6 +494,12 @@ gtk_menu_section_box_new_section (GtkMenuTrackerItem *item,
       box->separator = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
       g_object_ref_sink (box->separator);
 
+      g_object_set (box->separator,
+                    "margin-start", 12,
+                    "margin-end", 12,
+                    "margin-top", 6,
+                    "margin-bottom", 3,
+                    NULL);
       gtk_container_add (GTK_CONTAINER (box->separator), title);
       gtk_container_add (GTK_CONTAINER (box->separator), separator);
       gtk_widget_show_all (box->separator);
@@ -511,14 +509,14 @@ gtk_menu_section_box_new_section (GtkMenuTrackerItem *item,
       box->separator = separator;
       g_object_ref_sink (box->separator);
 
+      g_object_set (box->separator,
+                    "margin-start", 12,
+                    "margin-end", 12,
+                    "margin-top", 3,
+                    "margin-bottom", 3,
+                    NULL);
       gtk_widget_show (box->separator);
     }
-    g_object_set (box->separator,
-                  "margin-top", 4,
-                  "margin-bottom", 4,
-                  NULL);
-
-
   box->tracker = gtk_menu_tracker_new_for_item_link (item, G_MENU_LINK_SECTION, FALSE, FALSE,
                                                      gtk_menu_section_box_insert_func,
                                                      gtk_menu_section_box_remove_func,
