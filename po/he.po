@@ -12,8 +12,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+.HEAD.he\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-04-29 14:24+0300\n"
-"PO-Revision-Date: 2015-04-29 14:28+0300\n"
+"POT-Creation-Date: 2015-05-01 11:12+0300\n"
+"PO-Revision-Date: 2015-05-01 11:13+0300\n"
 "Last-Translator: Yosef Or Boczko <yoseforb@gmail.com>\n"
 "Language-Team: עברית <>\n"
 "Language: he\n"
@@ -435,8 +435,8 @@ msgctxt "keyboard label"
 msgid "Suspend"
 msgstr "השהיה"
 
-#: gdk/mir/gdkmirglcontext.c:48 gdk/mir/gdkmirwindowimpl.c:1403
-#: gdk/wayland/gdkglcontext-wayland.c:369 gdk/win32/gdkglcontext-win32.c:532
+#: gdk/mir/gdkmirglcontext.c:48 gdk/mir/gdkmirwindowimpl.c:1407
+#: gdk/wayland/gdkglcontext-wayland.c:369 gdk/win32/gdkglcontext-win32.c:527
 #: gdk/x11/gdkglcontext-x11.c:1175
 msgid "No GL implementation is available"
 msgstr "No GL implementation is available"
@@ -447,14 +447,14 @@ msgstr "No GL implementation is available"
 msgid "Unable to create a GL context"
 msgstr "Unable to create a GL context"
 
-#: gdk/mir/gdkmirwindowimpl.c:1365 gdk/mir/gdkmirwindowimpl.c:1375
+#: gdk/mir/gdkmirwindowimpl.c:1369 gdk/mir/gdkmirwindowimpl.c:1379
 #: gdk/wayland/gdkglcontext-wayland.c:330
 #: gdk/wayland/gdkglcontext-wayland.c:340 gdk/win32/gdkglcontext-win32.c:464
 #: gdk/x11/gdkglcontext-x11.c:869
 msgid "No available configurations for the given pixel format"
 msgstr "No available configurations for the given pixel format"
 
-#: gdk/mir/gdkmirwindowimpl.c:1411
+#: gdk/mir/gdkmirwindowimpl.c:1415
 msgid "3.2 core GL profile is not available on EGL implementation"
 msgstr "3.2 core GL profile is not available on EGL implementation"
 
@@ -462,7 +462,7 @@ msgstr "3.2 core GL profile is not available on EGL implementation"
 msgid "Core GL is not available on EGL implementation"
 msgstr "Core GL is not available on EGL implementation"
 
-#: gdk/win32/gdkglcontext-win32.c:541
+#: gdk/win32/gdkglcontext-win32.c:536
 msgid ""
 "The WGL_ARB_create_context extension needed to create core profiles is not "
 "available"
@@ -1214,12 +1214,12 @@ msgstr ""
 "לגרור פיסת צבע לכאן או ללחוץ לחיצה ימנית ולבחור ב„שמור צבע כאן”."
 
 #: gtk/deprecated/gtkcolorseldialog.c:191 gtk/deprecated/gtkfontsel.c:1689
-#: gtk/gtkfilechooserbutton.c:794 gtk/gtkfilechooserwidget.c:5371
+#: gtk/gtkfilechooserbutton.c:794 gtk/gtkfilechooserwidget.c:5375
 #: gtk/gtkmessagedialog.c:942 gtk/gtkmessagedialog.c:955
 #: gtk/gtkmountoperation.c:543 gtk/gtkpagesetupunixdialog.c:196
 #: gtk/gtkprintbackend.c:763 gtk/gtkprinteroptionwidget.c:545
 #: gtk/gtkprintunixdialog.c:665 gtk/gtkprintunixdialog.c:738
-#: gtk/gtkwindow.c:11989 gtk/inspector/css-editor.c:199
+#: gtk/gtkwindow.c:11992 gtk/inspector/css-editor.c:199
 #: gtk/ui/gtkappchooserdialog.ui:79 gtk/ui/gtkassistant.ui:169
 #: gtk/ui/gtkcolorchooserdialog.ui:38 gtk/ui/gtkfontchooserdialog.ui:35
 msgid "_Cancel"
@@ -1268,7 +1268,7 @@ msgid "_Apply"
 msgstr "ה_חלה"
 
 #: gtk/deprecated/gtkfontsel.c:1698 gtk/gtkmessagedialog.c:934
-#: gtk/gtkmessagedialog.c:956 gtk/gtkprintbackend.c:764 gtk/gtkwindow.c:11990
+#: gtk/gtkmessagedialog.c:956 gtk/gtkprintbackend.c:764 gtk/gtkwindow.c:11993
 #: gtk/inspector/classes-list.c:127
 msgid "_OK"
 msgstr "_אישור"
@@ -1413,7 +1413,7 @@ msgstr "Output to this directory instead of cwd"
 msgid "Invalid size %s\n"
 msgstr "Invalid size %s\n"
 
-#: gtk/encodesymbolic.c:279 gtk/gtk-builder-tool.c:375
+#: gtk/encodesymbolic.c:279 gtk/gtk-builder-tool.c:376
 #, c-format
 msgid "Can't load file: %s\n"
 msgstr "Can't load file: %s\n"
@@ -1718,7 +1718,7 @@ msgid "Other Applications"
 msgstr "יישומים אחרים"
 
 #: gtk/gtkapplicationwindow.c:321 gtk/gtkprintoperation-unix.c:481
-#: gtk/gtkprintoperation-win32.c:1452 gtk/inspector/prop-editor.c:1566
+#: gtk/gtkprintoperation-win32.c:1453 gtk/inspector/prop-editor.c:1566
 msgid "Application"
 msgstr "יישום"
 
@@ -1747,27 +1747,27 @@ msgstr "Element <%s> not allowed at toplevel"
 msgid "Text may not appear inside <%s>"
 msgstr "ייתכן שהטקסט לא יופיע בתוך <%s>"
 
-#: gtk/gtk-builder-tool.c:75
+#: gtk/gtk-builder-tool.c:76
 #, c-format
 msgid "Packing property %s::%s not found\n"
 msgstr "Packing property %s::%s not found\n"
 
-#: gtk/gtk-builder-tool.c:77
+#: gtk/gtk-builder-tool.c:78
 #, c-format
 msgid "Property %s::%s not found\n"
 msgstr "Property %s::%s not found\n"
 
-#: gtk/gtk-builder-tool.c:85
+#: gtk/gtk-builder-tool.c:86
 #, c-format
 msgid "Couldn't parse value: %s\n"
 msgstr "Couldn't parse value: %s\n"
 
-#: gtk/gtk-builder-tool.c:392
+#: gtk/gtk-builder-tool.c:393
 #, c-format
 msgid "Can't parse file: %s\n"
 msgstr "Can't parse file: %s\n"
 
-#: gtk/gtk-builder-tool.c:418
+#: gtk/gtk-builder-tool.c:564
 #, c-format
 msgid ""
 "Usage:\n"
@@ -1776,8 +1776,9 @@ msgid ""
 "Commands:\n"
 "  validate    Validate the file\n"
 "  simplify    Simplify the file\n"
+"  enumerate   List all named objects\n"
 "\n"
-"Validate and simplify GtkBuilder .ui files.\n"
+"Perform various tasks on GtkBuilder .ui files.\n"
 msgstr ""
 "Usage:\n"
 "  gtk-builder-tool [COMMAND] FILE\n"
@@ -1785,43 +1786,9 @@ msgstr ""
 "Commands:\n"
 "  validate    Validate the file\n"
 "  simplify    Simplify the file\n"
+"  enumerate   List all named objects\n"
 "\n"
-"Validate and simplify GtkBuilder .ui files.\n"
-
-#: gtk/gtkbuilderparser.c:337
-#, c-format
-msgid "Invalid object type '%s' on line %d"
-msgstr "סוג העצם '%s' שבשורה %d לא תקין"
-
-#: gtk/gtkbuilderparser.c:357
-#, c-format
-msgid "Invalid type function on line %d: '%s'"
-msgstr "סוג הפונקציה שבשורה %d אינו תקין: '%s'"
-
-#: gtk/gtkbuilderparser.c:419 gtk/gtkbuilderparser.c:528
-#, c-format
-msgid "Duplicate object ID '%s' on line %d (previously on line %d)"
-msgstr "מזהה פריט כפול '%s' בשורה %d (לשעבר בשורה %d)"
-
-#: gtk/gtkbuilderparser.c:649
-#, c-format
-msgid "Invalid property: %s.%s on line %d"
-msgstr "מאפיין לא תקין: %s.%s בשורה %d"
-
-#: gtk/gtkbuilderparser.c:772
-#, c-format
-msgid "Invalid signal '%s' for type '%s' on line %d"
-msgstr "אות לא תקין '%s' לסוג '%s' בשורה %d"
-
-#: gtk/gtkbuilderparser.c:1078
-#, c-format
-msgid "Invalid root element: <%s>"
-msgstr "רכיב שורש בלתי תקני: <%s>"
-
-#: gtk/gtkbuilderparser.c:1121
-#, c-format
-msgid "Unhandled tag: <%s>"
-msgstr "תגית בלתי מטופלת: <%s>"
+"Perform various tasks on GtkBuilder .ui files.\n"
 
 #. Translate to calendar:YM if you want years to be displayed
 #. * before months; otherwise translate to calendar:MY.
@@ -2399,73 +2366,73 @@ msgstr "מיקום"
 msgid "_Name:"
 msgstr "_שם:"
 
-#: gtk/gtkfilechooserwidget.c:2553 gtk/gtkfilechooserwidget.c:4091
+#: gtk/gtkfilechooserwidget.c:2553 gtk/gtkfilechooserwidget.c:4095
 #: gtk/gtkplacessidebar.c:968 gtk/ui/gtkfilechooserwidget.ui:138
 msgid "Home"
 msgstr "תיקיית הבית"
 
-#: gtk/gtkfilechooserwidget.c:3758
+#: gtk/gtkfilechooserwidget.c:3762
 #, c-format
 msgid "Could not read the contents of %s"
 msgstr "לא ניתן לקרוא את התוכן של %s"
 
-#: gtk/gtkfilechooserwidget.c:3762
+#: gtk/gtkfilechooserwidget.c:3766
 msgid "Could not read the contents of the folder"
 msgstr "לא ניתן לקרוא את תכני התיקייה"
 
-#: gtk/gtkfilechooserwidget.c:3869
+#: gtk/gtkfilechooserwidget.c:3873
 msgid "%H:%M"
 msgstr "%H:%M"
 
-#: gtk/gtkfilechooserwidget.c:3869
+#: gtk/gtkfilechooserwidget.c:3873
 msgid "%-I:%M %P"
 msgstr "%-I:%M %P"
 
-#: gtk/gtkfilechooserwidget.c:3871
+#: gtk/gtkfilechooserwidget.c:3875
 msgid "Yesterday at %H:%M"
 msgstr "אתמול ב־%H:%M"
 
-#: gtk/gtkfilechooserwidget.c:3871
+#: gtk/gtkfilechooserwidget.c:3875
 msgid "Yesterday at %-I:%M %P"
 msgstr "אתמול ב־%-I:%M %P"
 
 #. Translators: We don't know whether this printer is
 #. * available to print to.
-#: gtk/gtkfilechooserwidget.c:4070 gtk/inspector/prop-editor.c:1569
+#: gtk/gtkfilechooserwidget.c:4074 gtk/inspector/prop-editor.c:1569
 #: modules/printbackends/cloudprint/gtkprintbackendcloudprint.c:748
 msgid "Unknown"
 msgstr "לא ידוע"
 
-#: gtk/gtkfilechooserwidget.c:4578
+#: gtk/gtkfilechooserwidget.c:4582
 msgid "Cannot change to folder because it is not local"
 msgstr "לא ניתן לשנות תיקייה כיוון שהיא איננה מקומית"
 
-#: gtk/gtkfilechooserwidget.c:5364 gtk/gtkprintunixdialog.c:656
+#: gtk/gtkfilechooserwidget.c:5368 gtk/gtkprintunixdialog.c:656
 #, c-format
 msgid "A file named “%s” already exists.  Do you want to replace it?"
 msgstr "כבר קיים קובץ בשם „%s“. האם להחליפו?"
 
-#: gtk/gtkfilechooserwidget.c:5367 gtk/gtkprintunixdialog.c:660
+#: gtk/gtkfilechooserwidget.c:5371 gtk/gtkprintunixdialog.c:660
 #, c-format
 msgid ""
 "The file already exists in “%s”.  Replacing it will overwrite its contents."
 msgstr "הקובץ כבר קיים תחת „%s“. החלפתו תגרום לאיבוד תוכנו."
 
-#: gtk/gtkfilechooserwidget.c:5372 gtk/gtkprintunixdialog.c:668
+#: gtk/gtkfilechooserwidget.c:5376 gtk/gtkprintunixdialog.c:668
 msgid "_Replace"
 msgstr "ה_חלפה"
 
-#: gtk/gtkfilechooserwidget.c:6162
+#: gtk/gtkfilechooserwidget.c:6166
 msgid "Could not start the search process"
 msgstr "לא ניתן להתחיל את תהליך החיפוש"
 
-#: gtk/gtkfilechooserwidget.c:6163
+#: gtk/gtkfilechooserwidget.c:6167
 msgid ""
 "The program was not able to create a connection to the indexer daemon. "
 "Please make sure it is running."
 msgstr "התכנית לא הצליחה ליצור חיבור אל סוכן האינדקס. יש לוודא כי הוא פעיל."
 
-#: gtk/gtkfilechooserwidget.c:6177
+#: gtk/gtkfilechooserwidget.c:6181
 msgid "Could not send the search request"
 msgstr "לא ניתן לשלוח את בקשת החיפוש"
 
@@ -2506,7 +2473,7 @@ msgstr "OpenGL context creation failed"
 msgid "Application menu"
 msgstr "תפריט יישום"
 
-#: gtk/gtkheaderbar.c:479 gtk/gtkwindow.c:8650
+#: gtk/gtkheaderbar.c:479 gtk/gtkwindow.c:8653
 msgid "Close"
 msgstr "סגירה"
 
@@ -3136,58 +3103,58 @@ msgstr "הסיבה ההגיונית ביותר שבגללה לא ניתן היה
 msgid "Error launching preview"
 msgstr "שגיאה בשיגור תצוגה מקדימה"
 
-#: gtk/gtkprintoperation-win32.c:616
+#: gtk/gtkprintoperation-win32.c:617
 msgid "Printer offline"
 msgstr "מדפסת לא זמינה"
 
-#: gtk/gtkprintoperation-win32.c:618
+#: gtk/gtkprintoperation-win32.c:619
 msgid "Out of paper"
 msgstr "חסר נייר"
 
 #. Translators: this is a printer status.
-#: gtk/gtkprintoperation-win32.c:620
+#: gtk/gtkprintoperation-win32.c:621
 #: modules/printbackends/cups/gtkprintbackendcups.c:2509
 msgid "Paused"
 msgstr "מופסק"
 
-#: gtk/gtkprintoperation-win32.c:622
+#: gtk/gtkprintoperation-win32.c:623
 msgid "Need user intervention"
 msgstr "דרושה התערבות המשתמש"
 
-#: gtk/gtkprintoperation-win32.c:722
+#: gtk/gtkprintoperation-win32.c:723
 msgid "Custom size"
 msgstr "גודל מותאם אישית"
 
-#: gtk/gtkprintoperation-win32.c:1544
+#: gtk/gtkprintoperation-win32.c:1545
 msgid "No printer found"
 msgstr "לא נמצאה מדפסת"
 
-#: gtk/gtkprintoperation-win32.c:1571
+#: gtk/gtkprintoperation-win32.c:1572
 msgid "Invalid argument to CreateDC"
 msgstr "Invalid argument to CreateDC"
 
-#: gtk/gtkprintoperation-win32.c:1607 gtk/gtkprintoperation-win32.c:1853
+#: gtk/gtkprintoperation-win32.c:1608 gtk/gtkprintoperation-win32.c:1854
 msgid "Error from StartDoc"
 msgstr "Error from StartDoc"
 
-#: gtk/gtkprintoperation-win32.c:1708 gtk/gtkprintoperation-win32.c:1731
-#: gtk/gtkprintoperation-win32.c:1779
+#: gtk/gtkprintoperation-win32.c:1709 gtk/gtkprintoperation-win32.c:1732
+#: gtk/gtkprintoperation-win32.c:1780
 msgid "Not enough free memory"
 msgstr "אין מספיק זיכרון פנוי"
 
-#: gtk/gtkprintoperation-win32.c:1784
+#: gtk/gtkprintoperation-win32.c:1785
 msgid "Invalid argument to PrintDlgEx"
 msgstr "Invalid argument to PrintDlgEx"
 
-#: gtk/gtkprintoperation-win32.c:1789
+#: gtk/gtkprintoperation-win32.c:1790
 msgid "Invalid pointer to PrintDlgEx"
 msgstr "Invalid pointer to PrintDlgEx"
 
-#: gtk/gtkprintoperation-win32.c:1794
+#: gtk/gtkprintoperation-win32.c:1795
 msgid "Invalid handle to PrintDlgEx"
 msgstr "Invalid handle to PrintDlgEx"
 
-#: gtk/gtkprintoperation-win32.c:1799
+#: gtk/gtkprintoperation-win32.c:1800
 msgid "Unspecified error"
 msgstr "שגיאה בלתי מוגדרת"
 
@@ -3581,12 +3548,12 @@ msgctxt "volume percentage"
 msgid "%d %%"
 msgstr "%d %%"
 
-#: gtk/gtkwindow.c:11977
+#: gtk/gtkwindow.c:11980
 #, c-format
 msgid "Do you want to use GTK+ Inspector?"
 msgstr "האם ברצונך להשתמש במפקח GTK+‎?"
 
-#: gtk/gtkwindow.c:11979
+#: gtk/gtkwindow.c:11982
 #, c-format
 msgid ""
 "GTK+ Inspector is an interactive debugger that lets you explore and modify "
@@ -3596,7 +3563,7 @@ msgstr ""
 "מפקח GTK+‎ הוא מנפה שגיאות הידודי המאפשר לך לחקור ולשנות את הפנים של כל יישום "
 "GTK+‎. שימוש בו יכול לגרום ליישום להישבר או לקרוס."
 
-#: gtk/gtkwindow.c:11984
+#: gtk/gtkwindow.c:11987
 msgid "Don't show this message again"
 msgstr "לא להציג הודעה זו שוב"
 
@@ -6249,6 +6216,27 @@ msgstr "פלט-בדיקה.%s"
 #: modules/printbackends/test/gtkprintbackendtest.c:465
 msgid "Print to Test Printer"
 msgstr "הדפסה למדפסת בדיקה"
+
+#~ msgid "Invalid object type '%s' on line %d"
+#~ msgstr "סוג העצם '%s' שבשורה %d לא תקין"
+
+#~ msgid "Invalid type function on line %d: '%s'"
+#~ msgstr "סוג הפונקציה שבשורה %d אינו תקין: '%s'"
+
+#~ msgid "Duplicate object ID '%s' on line %d (previously on line %d)"
+#~ msgstr "מזהה פריט כפול '%s' בשורה %d (לשעבר בשורה %d)"
+
+#~ msgid "Invalid property: %s.%s on line %d"
+#~ msgstr "מאפיין לא תקין: %s.%s בשורה %d"
+
+#~ msgid "Invalid signal '%s' for type '%s' on line %d"
+#~ msgstr "אות לא תקין '%s' לסוג '%s' בשורה %d"
+
+#~ msgid "Invalid root element: <%s>"
+#~ msgstr "רכיב שורש בלתי תקני: <%s>"
+
+#~ msgid "Unhandled tag: <%s>"
+#~ msgstr "תגית בלתי מטופלת: <%s>"
 
 #~ msgid "Browse"
 #~ msgstr "עיון"
