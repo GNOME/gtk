@@ -179,12 +179,6 @@ gtk_search_engine_quartz_stop (GtkSearchEngine *engine)
   QUARTZ_POOL_RELEASE;
 }
 
-static gboolean
-gtk_search_engine_quartz_is_indexed (GtkSearchEngine *engine)
-{
-  return TRUE;
-}
-
 static void
 gtk_search_engine_quartz_set_query (GtkSearchEngine *engine, 
 				    GtkQuery        *query)
@@ -228,7 +222,6 @@ _gtk_search_engine_quartz_class_init (GtkSearchEngineQuartzClass *class)
   engine_class->set_query = gtk_search_engine_quartz_set_query;
   engine_class->start = gtk_search_engine_quartz_start;
   engine_class->stop = gtk_search_engine_quartz_stop;
-  engine_class->is_indexed = gtk_search_engine_quartz_is_indexed;
 }
 
 static void

@@ -149,15 +149,6 @@ _gtk_search_engine_stop (GtkSearchEngine *engine)
   GTK_SEARCH_ENGINE_GET_CLASS (engine)->stop (engine);
 }
 
-gboolean
-_gtk_search_engine_is_indexed (GtkSearchEngine *engine)
-{
-  g_return_val_if_fail (GTK_IS_SEARCH_ENGINE (engine), FALSE);
-  g_return_val_if_fail (GTK_SEARCH_ENGINE_GET_CLASS (engine)->is_indexed != NULL, FALSE);
-
-  return GTK_SEARCH_ENGINE_GET_CLASS (engine)->is_indexed (engine);
-}
-
 void
 _gtk_search_engine_hits_added (GtkSearchEngine *engine,
                                GList           *hits)
