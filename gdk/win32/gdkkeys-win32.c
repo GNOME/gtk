@@ -143,6 +143,8 @@ handle_special (guint  vk,
       *ksymp = GDK_Meta_L; break;
     case VK_RWIN:
       *ksymp = GDK_Meta_R; break;
+    case VK_DECIMAL:
+      *ksymp = GDK_KP_Decimal; break;
     case VK_APPS:
       *ksymp = GDK_Menu; break;
     case VK_MULTIPLY:
