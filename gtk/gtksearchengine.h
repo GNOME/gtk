@@ -37,7 +37,7 @@ typedef struct _GtkSearchEngine GtkSearchEngine;
 typedef struct _GtkSearchEngineClass GtkSearchEngineClass;
 typedef struct _GtkSearchEnginePrivate GtkSearchEnginePrivate;
 
-struct _GtkSearchEngine 
+struct _GtkSearchEngine
 {
   GObject parent;
 
@@ -53,7 +53,6 @@ struct _GtkSearchEngineClass
 			       GtkQuery        *query);
   void     (*start)           (GtkSearchEngine *engine);
   void     (*stop)            (GtkSearchEngine *engine);
-  gboolean (*is_indexed)      (GtkSearchEngine *engine);
   
   /* Signals */
   void     (*hits_added)      (GtkSearchEngine *engine, 
@@ -73,7 +72,6 @@ void             _gtk_search_engine_set_query       (GtkSearchEngine *engine,
                                                      GtkQuery        *query);
 void	         _gtk_search_engine_start           (GtkSearchEngine *engine);
 void	         _gtk_search_engine_stop            (GtkSearchEngine *engine);
-gboolean         _gtk_search_engine_is_indexed      (GtkSearchEngine *engine);
 
 void	         _gtk_search_engine_hits_added      (GtkSearchEngine *engine, 
 						     GList           *hits);

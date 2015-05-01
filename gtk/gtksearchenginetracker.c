@@ -411,12 +411,6 @@ gtk_search_engine_tracker_stop (GtkSearchEngine *engine)
     }
 }
 
-static gboolean
-gtk_search_engine_tracker_is_indexed (GtkSearchEngine *engine)
-{
-  return TRUE;
-}
-
 static void
 gtk_search_engine_tracker_set_query (GtkSearchEngine *engine,
                                      GtkQuery        *query)
@@ -447,7 +441,6 @@ _gtk_search_engine_tracker_class_init (GtkSearchEngineTrackerClass *class)
   engine_class->set_query = gtk_search_engine_tracker_set_query;
   engine_class->start = gtk_search_engine_tracker_start;
   engine_class->stop = gtk_search_engine_tracker_stop;
-  engine_class->is_indexed = gtk_search_engine_tracker_is_indexed;
 }
 
 static void
