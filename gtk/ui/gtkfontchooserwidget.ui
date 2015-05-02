@@ -31,11 +31,9 @@
     <signal name="value-changed" handler="size_change_cb" swapped="no"/>
   </object>
   <template class="GtkFontChooserWidget" parent="GtkBox">
-    <property name="can_focus">False</property>
     <child>
       <object class="GtkGrid" id="grid1">
         <property name="visible">True</property>
-        <property name="can_focus">False</property>
         <property name="row_spacing">6</property>
         <property name="column_spacing">6</property>
         <child>
@@ -56,7 +54,6 @@
             <property name="left_attach">0</property>
             <property name="top_attach">0</property>
             <property name="width">2</property>
-            <property name="height">1</property>
           </packing>
         </child>
         <child>
@@ -104,12 +101,10 @@
               </object>
             </child>
             <child type="tab">
-              <placeholder/>
             </child>
             <child>
               <object class="GtkLabel" id="empty_list">
                 <property name="visible">True</property>
-                <property name="can_focus">False</property>
                 <property name="halign">center</property>
                 <property name="valign">start</property>
                 <property name="margin_start">12</property>
@@ -123,14 +118,12 @@
               </packing>
             </child>
             <child type="tab">
-              <placeholder/>
             </child>
           </object>
           <packing>
             <property name="left_attach">0</property>
             <property name="top_attach">1</property>
             <property name="width">2</property>
-            <property name="height">1</property>
           </packing>
         </child>
         <child>
@@ -145,7 +138,6 @@
             <property name="left_attach">0</property>
             <property name="top_attach">2</property>
             <property name="width">2</property>
-            <property name="height">1</property>
           </packing>
         </child>
         <child>
@@ -161,8 +153,6 @@
           <packing>
             <property name="left_attach">0</property>
             <property name="top_attach">3</property>
-            <property name="width">1</property>
-            <property name="height">1</property>
           </packing>
         </child>
         <child>
@@ -176,15 +166,11 @@
           <packing>
             <property name="left_attach">1</property>
             <property name="top_attach">3</property>
-            <property name="width">1</property>
-            <property name="height">1</property>
           </packing>
         </child>
       </object>
       <packing>
         <property name="expand">True</property>
-        <property name="fill">True</property>
-        <property name="position">0</property>
       </packing>
     </child>
   </template>
