@@ -2,24 +2,18 @@
 <interface domain="gtk30">
   <!-- interface-requires gtk+ 3.10 -->
   <template class="GtkActionBar" parent="GtkBin">
-    <property name="can_focus">False</property>
     <child>
       <object class="GtkRevealer" id="revealer">
         <property name="visible">True</property>
-        <property name="can_focus">False</property>
         <child>
           <object class="GtkFrame" id="frame">
             <property name="visible">True</property>
-            <property name="can_focus">False</property>
             <style>
               <class name="action-bar"/>
             </style>
             <child>
               <object class="GtkBox" id="box">
                 <property name="visible">True</property>
-                <property name="orientation">horizontal</property>
-                <property name="can_focus">False</property>
-                <property name="border_width">0</property>
                 <property name="spacing">6</property>
               </object>
             </child>
