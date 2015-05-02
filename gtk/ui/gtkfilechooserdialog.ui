@@ -2,42 +2,25 @@
 <interface>
   <!-- interface-requires gtk+ 3.10 -->
   <template class="GtkFileChooserDialog" parent="GtkDialog">
-    <property name="can_focus">False</property>
-    <property name="border_width">0</property>
     <property name="role">GtkFileChooserDialog</property>
     <property name="type_hint">dialog</property>
     <property name="default_width">600</property>
     <signal name="response" handler="response_cb" swapped="no"/>
     <child internal-child="vbox">
       <object class="GtkBox" id="dialog-vbox1">
-        <property name="border_width">0</property>
-        <property name="can_focus">False</property>
         <property name="orientation">vertical</property>
-        <property name="spacing">0</property>
         <child internal-child="action_area">
           <object class="GtkButtonBox" id="dialog-action_area1">
             <property name="border_width">6</property>
-            <property name="can_focus">False</property>
             <property name="layout_style">end</property>
-            <child>
-              <placeholder/>
-            </child>
-            <child>
-              <placeholder/>
-            </child>
           </object>
           <packing>
-            <property name="expand">False</property>
-            <property name="fill">True</property>
             <property name="pack_type">end</property>
-            <property name="position">0</property>
           </packing>
         </child>
         <child>
           <object class="GtkFileChooserWidget" id="widget">
             <property name="visible">True</property>
-            <property name="can_focus">False</property>
-            <property name="border_width">0</property>
             <property name="orientation">vertical</property>
             <signal name="default-size-changed" handler="file_chooser_widget_default_size_changed" swapped="no"/>
             <signal name="file-activated" handler="file_chooser_widget_file_activated" swapped="no"/>
@@ -46,7 +29,6 @@
           </object>
           <packing>
             <property name="expand">True</property>
-            <property name="fill">True</property>
             <property name="position">1</property>
           </packing>
         </child>
