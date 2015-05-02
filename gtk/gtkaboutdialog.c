@@ -2288,6 +2288,7 @@ add_credits_section (GtkAboutDialog  *about,
 
       label = gtk_label_new (str->str);
       gtk_label_set_use_markup (GTK_LABEL (label), TRUE);
+      gtk_label_set_selectable (GTK_LABEL (label), TRUE);
       g_signal_connect_swapped (label, "activate-link",
                                 G_CALLBACK (emit_activate_link), about);
       g_string_free (str, TRUE);
