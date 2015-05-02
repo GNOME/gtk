@@ -163,6 +163,34 @@ needs_explicit_setting (MyParserData *data,
 }
 
 static void
+maybe_start_packing (MyParserData *data)
+{
+  if (data->packing)
+    {
+      if (!data->packing_started)
+        {
+          g_print ("%*s<packing>\n", data->indent, "");
+          data->indent += 2;
+          data->packing_started = TRUE;
+        }
+    }
+}
+
+static void
+maybe_start_cell_packing (MyParserData *data)
+{
+  if (data->cell_packing)
+    {
+      if (!data->cell_packing_started)
+        {
+          g_print ("%*s<cell-packing>\n", data->indent, "");
+          data->indent += 2;
+          data->cell_packing_started = TRUE;
+        }
+    }
+}
+
+static void
 maybe_start_child (MyParserData *data)
 {
   if (data->in_child > 0)
@@ -213,32 +241,15 @@ maybe_emit_property (MyParserData *data)
         }
     }
 
-  if (data->packing)
-    {
-      if (!data->packing_started)
-        {
-          g_print ("%*s<packing>\n", data->indent, "");
-          data->indent += 2;
-          data->packing_started = TRUE;
-        }
-    }
-
-  if (data->cell_packing)
-    {
-      if (!data->cell_packing_started)
-        {
-          g_print ("%*s<cell-packing>\n", data->indent, "");
-          data->indent += 2;
-          data->cell_packing_started = TRUE;
-        }
-    }
+  maybe_start_packing (data);
+  maybe_start_cell_packing (data);
 
   g_print ("%*s<property", data->indent, "");
   for (i = 0; data->attribute_names[i]; i++)
     {
       if (!translatable &&
-          (strcmp (data->attributes_name[i], "comments") == 0 ||
-           strcmp (data->attributes_name[i], "context") == 0))
+          (strcmp (data->attribute_names[i], "comments") == 0 ||
+           strcmp (data->attribute_names[i], "context") == 0))
         continue;
 
       escaped = g_markup_escape_text (data->attribute_values[i], -1);
