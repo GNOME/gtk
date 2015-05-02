@@ -207,6 +207,10 @@ typedef enum
  * reserved values such as %GDK_MODIFIER_RESERVED_13_MASK.  Your code
  * should preserve and ignore them.  You can use %GDK_MODIFIER_MASK to
  * remove all reserved values.
+ *
+ * Also note that the GDK X backend interprets button press events for button
+ * 4-7 as scroll events, so %GDK_BUTTON4_MASK and %GDK_BUTTON5_MASK will never
+ * be set.
  */
 typedef enum
 {
