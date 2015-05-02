@@ -1,0 +1,6 @@
+<!-- non-canonical property name works -->
+<interface>
+  <object class="GtkWindow">
+    <property name="default_width">-1</property>
+  </object>
+</interface>

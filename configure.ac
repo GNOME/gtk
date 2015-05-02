@@ -1912,6 +1912,7 @@ testsuite/css/parser/Makefile
 testsuite/gdk/Makefile
 testsuite/gtk/Makefile
 testsuite/reftests/Makefile
+testsuite/tools/Makefile
 docs/Makefile
 docs/reference/Makefile
 docs/reference/gdk/Makefile

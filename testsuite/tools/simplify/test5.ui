@@ -1,0 +1,12 @@
+<!-- placeholders are stripped -->
+<interface>
+  <object class="GtkWindow">
+    <child>
+      <object class="GtkBox">
+        <child>
+          <placeholder/>
+        </child>
+      </object>
+    </child>
+  </object>
+</interface>

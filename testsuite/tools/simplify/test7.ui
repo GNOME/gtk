@@ -1,0 +1,12 @@
+<!-- default child property gets stripped -->
+<interface>
+  <object class="GtkBox">
+    <child>
+      <object class="GtkLabel">
+      </object>
+      <packing>
+        <property name="expand">False</property>
+      </packing>
+    </child>
+  </object>
+</interface>

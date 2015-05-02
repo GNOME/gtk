@@ -1,0 +1,8 @@
+<!-- default child property gets stripped -->
+<interface>
+  <object class="GtkBox">
+    <child>
+      <object class="GtkLabel"/>
+    </child>
+  </object>
+</interface>

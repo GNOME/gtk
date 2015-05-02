@@ -1,0 +1,27 @@
+#! /bin/sh
+
+GTK_BUILDER_TOOL=${GTK_BUILDER_TOOL:-gtk-builder-tool}
+TEST_DATA_DIR=${TEST_DATA_DIR:-./simplify}
+TEST_RESULT_DIR=${TEST_RESULT_DIR:-/tmp}
+
+shopt -s nullglob
+TESTS=( "$TEST_DATA_DIR"/*.ui )
+
+echo "1..${#TESTS}"
+
+I=1
+for t in ${TESTS[*]}; do
+  name=$(basename $t .ui)
+  expected="$TEST_DATA_DIR/$name.expected"
+  result="$TEST_RESULT_DIR/$name.out"
+
+  $GTK_BUILDER_TOOL simplify $t 2>/dev/null >$result
+
+  if diff "$expected" "$result" > /dev/null; then
+    echo "ok $I $name"
+  else
+    echo "not ok $I $name"
+  fi
+
+  I=$((I+1))
+done

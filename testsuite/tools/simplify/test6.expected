@@ -1,0 +1,5 @@
+<!-- non-canonical property name works -->
+<interface>
+  <object class="GtkWindow">
+  </object>
+</interface>
