@@ -29,7 +29,6 @@
     <property name="model">program_list_store</property>
   </object>
   <template class="GtkAppChooserWidget" parent="GtkBox">
-    <property name="can_focus">False</property>
     <property name="orientation">vertical</property>
     <child>
       <object class="GtkOverlay" id="overlay">
@@ -130,8 +129,6 @@
       </object>
       <packing>
         <property name="expand">True</property>
-        <property name="fill">True</property>
-        <property name="position">0</property>
       </packing>
     </child>
   </template>
