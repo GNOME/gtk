@@ -32,6 +32,8 @@ typedef struct {
   gboolean packing_started;
   gboolean cell_packing;
   gboolean cell_packing_started;
+  gint in_child;
+  gint child_started;
   gchar **attribute_names;
   gchar **attribute_values;
   GString *value;
@@ -158,6 +160,20 @@ needs_explicit_setting (MyParserData *data,
   g_free (canonical_name);
 
   return found;
+}
+
+static void
+maybe_start_child (MyParserData *data)
+{
+  if (data->in_child > 0)
+    {
+      if (data->child_started < data->in_child)
+        {
+          g_print ("%*s<child>\n", data->indent, "");
+          data->indent += 2;
+          data->child_started += 1;
+        }
+    }
 }
 
 static void
@@ -327,6 +343,15 @@ start_element (GMarkupParseContext  *context,
 
       return;
     }
+  else if (strcmp (element_name, "child") == 0)
+    {
+      data->in_child += 1;
+
+      if (attribute_names[0] == NULL)
+        return;
+
+      data->child_started += 1;
+    }
   else if (strcmp (element_name, "attribute") == 0)
     {
       /* attribute in label has no content */
@@ -345,9 +370,15 @@ start_element (GMarkupParseContext  *context,
     {
       data->value = g_string_new ("");
     }
+  else if (strcmp (element_name, "placeholder") == 0)
+    {
+      return;
+    }
   else if (strcmp (element_name, "object") == 0 ||
            strcmp (element_name, "template") == 0)
     {
+      maybe_start_child (data);
+
       for (i = 0; attribute_names[i]; i++)
         {
           if (strcmp (attribute_names[i], "class") == 0)
@@ -400,17 +431,15 @@ end_element (GMarkupParseContext  *context,
       if (!data->cell_packing_started)
         return;
     }
-  else if (data->value != 0)
+  else if (strcmp (element_name, "child") == 0)
     {
-      gchar *escaped;
-
-      escaped = g_markup_escape_text (data->value->str, -1);
-      g_print ("%s%s</%s>\n", data->unclosed_starttag ? ">" : "", escaped, element_name);
-      g_free (escaped);
-      g_string_free (data->value, TRUE);
-      data->value = NULL;
-      data->unclosed_starttag = FALSE;
-      data->indent -= 2;
+      data->in_child -= 1;
+      if (data->child_started == data->in_child)
+        return;
+      data->child_started -= 1;
+    }
+  else if (strcmp (element_name, "placeholder") == 0)
+    {
       return;
     }
   else if (strcmp (element_name, "object") == 0 ||
@@ -420,13 +449,29 @@ end_element (GMarkupParseContext  *context,
       data->classes = g_list_delete_link (data->classes, data->classes);
     }
 
-  data->indent -= 2;
+  if (data->value != NULL)
+    {
+      gchar *escaped;
 
-  if (data->unclosed_starttag)
-    g_print ("/>\n");
+      if (data->unclosed_starttag)
+        g_print (">");
+
+      escaped = g_markup_escape_text (data->value->str, -1);
+      g_print ("%s</%s>\n", escaped, element_name);
+      g_free (escaped);
+
+      g_string_free (data->value, TRUE);
+      data->value = NULL;
+    }
   else
-    g_print ("%*s</%s>\n", data->indent, "", element_name);
+    {
+      if (data->unclosed_starttag)
+        g_print ("/>\n");
+      else
+        g_print ("%*s</%s>\n", data->indent - 2, "", element_name);
+    }
 
+  data->indent -= 2;
   data->unclosed_starttag = FALSE;
 }
 
@@ -491,6 +536,8 @@ do_simplify (const gchar *filename)
   data.packing_started = FALSE;
   data.cell_packing = FALSE;
   data.cell_packing_started = FALSE;
+  data.in_child = 0;
+  data.child_started = 0;
   data.unclosed_starttag = FALSE;
   data.indent = 0;
 
