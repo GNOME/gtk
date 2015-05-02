@@ -40,6 +40,10 @@
   <command>gtk-builder-tool</command> can perform various operations
   on GtkBuilder .ui files.
 </para>
+<para>
+  You should always test the modified .ui files produced by gtk-builder-tool
+  before using them in production.
+</para>
 </refsect1>
 
 <refsect1><title>Commands</title>
@@ -47,16 +51,16 @@
   <variablelist>
     <varlistentry>
     <term><option>validate</option></term>
-      <listitem><para>Validate the .ui file and report errors to stderr.</para></listitem>
+      <listitem><para>Validates the .ui file and report errors to stderr.</para></listitem>
     </varlistentry>
     <varlistentry>
     <term><option>simplify</option></term>
-      <listitem><para>Simplify the .ui file by removing properties that
+      <listitem><para>Simplifies the .ui file by removing properties that
       are set to their default values and write the resulting XML to stdout.</para></listitem>
     </varlistentry>
     <varlistentry>
     <term><option>enumerate</option></term>
-      <listitem><para>List all the named objects that are created in the .ui file.</para></listitem>
+      <listitem><para>Lists all the named objects that are created in the .ui file.</para></listitem>
     </varlistentry>
   </variablelist>
 </refsect1>
