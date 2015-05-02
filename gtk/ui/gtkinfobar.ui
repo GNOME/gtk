@@ -3,55 +3,36 @@
   <!-- interface-requires gtk+ 3.10 -->
   <template class="GtkInfoBar" parent="GtkBox">
     <property name="app_paintable">True</property>
-    <property name="can_focus">False</property>
     <child>
       <object class="GtkRevealer" id="revealer">
         <property name="visible">True</property>
-        <property name="can_focus">False</property>
         <child>
           <object class="GtkBox" id="content">
             <property name="visible">True</property>
-            <property name="can_focus">False</property>
-            <property name="border_width">0</property>
-            <property name="spacing">0</property>
             <child>
               <object class="GtkBox" id="content_area">
                 <property name="visible">True</property>
-                <property name="can_focus">False</property>
                 <property name="border_width">8</property>
                 <property name="spacing">16</property>
                 <property name="hexpand">True</property>
-                <child>
-                  <placeholder/>
-                </child>
               </object>
               <packing>
                 <property name="expand">True</property>
-                <property name="fill">True</property>
-                <property name="position">0</property>
               </packing>
             </child>
             <child>
               <object class="GtkButtonBox" id="action_area">
                 <property name="visible">True</property>
-                <property name="can_focus">False</property>
                 <property name="border_width">6</property>
-                <property name="orientation">horizontal</property>
                 <property name="spacing">6</property>
                 <property name="layout_style">end</property>
-                <child>
-                  <placeholder/>
-                </child>
               </object>
               <packing>
-                <property name="expand">False</property>
-                <property name="fill">True</property>
                 <property name="position">1</property>
               </packing>
             </child>
             <child>
               <object class="GtkButton" id="close_button">
-                <property name="visible">False</property>
                 <property name="can_focus">True</property>
                 <property name="border_width">6</property>
                 <property name="relief">none</property>
@@ -63,14 +44,11 @@
                 <child>
                   <object class="GtkImage" id="close_image">
                     <property name="visible">True</property>
-                    <property name="can_focus">False</property>
                     <property name="icon_name">window-close-symbolic</property>
                   </object>
                 </child>
               </object>
               <packing>
-                <property name="expand">False</property>
-                <property name="fill">True</property>
                 <property name="position">2</property>
               </packing>
             </child>
