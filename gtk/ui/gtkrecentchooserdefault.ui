@@ -70,12 +70,10 @@
     </child>
     <child>
       <object class="GtkBox" id="filter_combo_hbox">
-        <property name="can_focus">False</property>
         <property name="spacing">12</property>
         <child>
           <object class="GtkComboBoxText" id="filter_combo">
             <property name="visible">True</property>
-            <property name="can_focus">False</property>
             <property name="tooltip_text" translatable="yes">Select which type of documents are shown</property>
             <property name="focus_on_click">False</property>
             <property name="entry_text_column">0</property>
@@ -83,14 +81,9 @@
             <signal name="changed" handler="filter_combo_changed_cb" swapped="no"/>
           </object>
           <packing>
-            <property name="expand">False</property>
             <property name="fill">False</property>
             <property name="pack_type">end</property>
-            <property name="position">0</property>
           </packing>
-        </child>
-        <child>
-          <placeholder/>
         </child>
       </object>
       <packing>
