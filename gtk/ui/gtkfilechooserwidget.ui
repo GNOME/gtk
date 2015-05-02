@@ -289,12 +289,6 @@
                       <object class="GtkBox" id="preview_box">
                         <property name="orientation">vertical</property>
                         <property name="spacing">12</property>
-                        <child>
-                          <placeholder/>
-                        </child>
-                        <child>
-                          <placeholder/>
-                        </child>
                       </object>
                       <packing>
                         <property name="fill">False</property>
@@ -349,9 +343,6 @@
                 <property name="fill">False</property>
                 <property name="pack_type">end</property>
               </packing>
-            </child>
-            <child>
-              <placeholder/>
             </child>
           </object>
           <packing>
