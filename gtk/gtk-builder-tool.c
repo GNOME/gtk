@@ -109,6 +109,11 @@ needs_explicit_setting (MyParserData *data,
     const char *property;
     gboolean packing;
   } props[] = {
+    { "GtkAboutDialog", "program-name", 0 },
+    { "GtkCalendar", "year", 0 },
+    { "GtkCalendar", "month", 0 },
+    { "GtkCalendar", "day", 0 },
+    { "GtkPlacesSidebar", "show-desktop", 0 },
     { "GtkRadioButton", "draw-indicator", 0 },
     { "GtkGrid", "left-attach", 1 },
     { "GtkGrid", "top-attach", 1 },
