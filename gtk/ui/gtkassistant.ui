@@ -2,59 +2,38 @@
 <interface domain="gtk30">
   <!-- interface-requires gtk+ 3.10 -->
   <template class="GtkAssistant" parent="GtkWindow">
-    <property name="can_focus">False</property>
     <child type="titlebar">
       <object class="GtkHeaderBar" id="headerbar">
         <property name="visible">True</property>
-        <property name="can_focus">False</property>
-        <property name="show-close-button">False</property>
       </object>
     </child>
     <child>
       <object class="GtkBox" id="main_box">
         <property name="visible">True</property>
-        <property name="can_focus">False</property>
-        <property name="border_width">0</property>
         <property name="spacing">12</property>
         <child>
           <object class="GtkFrame" id="sidebar_frame">
             <property name="visible">True</property>
-            <property name="can_focus">False</property>
-            <property name="label_xalign">0</property>
             <style>
               <class name="sidebar"/>
             </style>
             <child>
               <object class="GtkBox" id="sidebar">
                 <property name="visible">True</property>
-                <property name="can_focus">False</property>
                 <property name="orientation">vertical</property>
                 <property name="spacing">6</property>
-                <child>
-                  <placeholder/>
-                </child>
-                <child>
-                  <placeholder/>
-                </child>
-                <child>
-                  <placeholder/>
-                </child>
               </object>
             </child>
             <child type="label_item">
-              <placeholder/>
             </child>
           </object>
           <packing>
-            <property name="expand">False</property>
             <property name="fill">False</property>
-            <property name="position">0</property>
           </packing>
         </child>
         <child>
           <object class="GtkBox" id="content_box">
             <property name="visible">True</property>
-            <property name="can_focus">False</property>
             <property name="border_width">12</property>
             <property name="orientation">vertical</property>
             <property name="spacing">12</property>
@@ -65,23 +44,16 @@
                 <property name="show_tabs">False</property>
                 <property name="show_border">False</property>
                 <signal name="remove" handler="assistant_remove_page_cb" swapped="no"/>
-                <child>
-                  <placeholder/>
-                </child>
                 <child type="tab">
-                  <placeholder/>
                 </child>
               </object>
               <packing>
                 <property name="expand">True</property>
-                <property name="fill">True</property>
-                <property name="position">0</property>
               </packing>
             </child>
             <child>
               <object class="GtkBox" id="action_area">
                 <property name="visible">True</property>
-                <property name="can_focus">False</property>
                 <property name="halign">end</property>
                 <property name="spacing">6</property>
                 <child>
@@ -98,10 +70,8 @@
                     <signal name="clicked" handler="on_assistant_apply" swapped="no"/>
                   </object>
                   <packing>
-                    <property name="expand">False</property>
                     <property name="fill">False</property>
                     <property name="pack_type">end</property>
-                    <property name="position">0</property>
                   </packing>
                 </child>
                 <child>
@@ -119,7 +89,6 @@
                     <signal name="clicked" handler="on_assistant_forward" swapped="no"/>
                   </object>
                   <packing>
-                    <property name="expand">False</property>
                     <property name="fill">False</property>
                     <property name="pack_type">end</property>
                     <property name="position">1</property>
@@ -139,7 +108,6 @@
                     <signal name="clicked" handler="on_assistant_back" swapped="no"/>
                   </object>
                   <packing>
-                    <property name="expand">False</property>
                     <property name="fill">False</property>
                     <property name="pack_type">end</property>
                     <property name="position">2</property>
@@ -158,7 +126,6 @@
                     <signal name="clicked" handler="on_assistant_last" swapped="no"/>
                   </object>
                   <packing>
-                    <property name="expand">False</property>
                     <property name="fill">False</property>
                     <property name="pack_type">end</property>
                     <property name="position">3</property>
@@ -178,7 +145,6 @@
                     <signal name="clicked" handler="on_assistant_cancel" swapped="no"/>
                   </object>
                   <packing>
-                    <property name="expand">False</property>
                     <property name="fill">False</property>
                     <property name="pack_type">end</property>
                     <property name="position">4</property>
@@ -198,7 +164,6 @@
                     <signal name="clicked" handler="on_assistant_close" swapped="no"/>
                   </object>
                   <packing>
-                    <property name="expand">False</property>
                     <property name="fill">False</property>
                     <property name="pack_type">end</property>
                     <property name="position">5</property>
@@ -206,15 +171,12 @@
                 </child>
               </object>
               <packing>
-                <property name="expand">False</property>
-                <property name="fill">True</property>
                 <property name="position">1</property>
               </packing>
             </child>
           </object>
           <packing>
             <property name="expand">True</property>
-            <property name="fill">True</property>
             <property name="position">1</property>
           </packing>
         </child>
