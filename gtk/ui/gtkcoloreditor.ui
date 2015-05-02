@@ -32,12 +32,10 @@
     <child>
       <object class="GtkOverlay" id="overlay">
         <property name="visible">True</property>
-        <property name="can_focus">False</property>
         <signal name="get-child-position" handler="get_child_position" swapped="no"/>
         <child>
           <object class="GtkGrid" id="grid">
             <property name="visible">True</property>
-            <property name="can_focus">False</property>
             <property name="margin_start">30</property>
             <property name="margin_end">30</property>
             <property name="row_spacing">12</property>
@@ -52,8 +50,6 @@
               <packing>
                 <property name="left_attach">1</property>
                 <property name="top_attach">0</property>
-                <property name="width">1</property>
-                <property name="height">1</property>
               </packing>
             </child>
             <child>
@@ -73,8 +69,6 @@
               <packing>
                 <property name="left_attach">2</property>
                 <property name="top_attach">0</property>
-                <property name="width">1</property>
-                <property name="height">1</property>
               </packing>
             </child>
             <child>
@@ -89,8 +83,6 @@
               <packing>
                 <property name="left_attach">0</property>
                 <property name="top_attach">1</property>
-                <property name="width">1</property>
-                <property name="height">1</property>
               </packing>
             </child>
             <child>
@@ -109,7 +101,6 @@
                 <property name="left_attach">1</property>
                 <property name="top_attach">2</property>
                 <property name="width">2</property>
-                <property name="height">1</property>
               </packing>
             </child>
             <child>
@@ -127,14 +118,7 @@
                 <property name="left_attach">1</property>
                 <property name="top_attach">1</property>
                 <property name="width">2</property>
-                <property name="height">1</property>
               </packing>
-            </child>
-            <child>
-              <placeholder/>
-            </child>
-            <child>
-              <placeholder/>
             </child>
           </object>
         </child>
@@ -147,7 +131,6 @@
     </child>
   </template>
   <object class="GtkBox" id="a_popup">
-    <property name="can_focus">False</property>
     <property name="no_show_all">True</property>
     <style>
       <class name="popover"/>
@@ -157,7 +140,6 @@
     <child>
       <object class="GtkGrid" id="grid4">
         <property name="visible">True</property>
-        <property name="can_focus">False</property>
         <property name="margin_start">12</property>
         <property name="margin_end">12</property>
         <property name="margin_top">12</property>
@@ -166,14 +148,11 @@
         <child>
           <object class="GtkLabel" id="label4">
             <property name="visible">True</property>
-            <property name="can_focus">False</property>
             <property name="label" translatable="yes" context="Color channel">A</property>
           </object>
           <packing>
             <property name="left_attach">0</property>
             <property name="top_attach">0</property>
-            <property name="width">1</property>
-            <property name="height">1</property>
           </packing>
         </child>
         <child>
@@ -193,20 +172,12 @@
           <packing>
             <property name="left_attach">1</property>
             <property name="top_attach">0</property>
-            <property name="width">1</property>
-            <property name="height">1</property>
           </packing>
         </child>
       </object>
-      <packing>
-        <property name="expand">False</property>
-        <property name="fill">True</property>
-        <property name="position">0</property>
-      </packing>
     </child>
   </object>
   <object class="GtkBox" id="h_popup">
-    <property name="can_focus">False</property>
     <property name="no_show_all">True</property>
     <style>
       <class name="popover"/>
@@ -216,7 +187,6 @@
     <child>
       <object class="GtkGrid" id="grid3">
         <property name="visible">True</property>
-        <property name="can_focus">False</property>
         <property name="margin_start">12</property>
         <property name="margin_end">12</property>
         <property name="margin_top">12</property>
@@ -225,14 +195,11 @@
         <child>
           <object class="GtkLabel" id="label3">
             <property name="visible">True</property>
-            <property name="can_focus">False</property>
             <property name="label" translatable="yes" context="Color channel">H</property>
           </object>
           <packing>
             <property name="left_attach">0</property>
             <property name="top_attach">0</property>
-            <property name="width">1</property>
-            <property name="height">1</property>
           </packing>
         </child>
         <child>
@@ -252,20 +219,12 @@
           <packing>
             <property name="left_attach">1</property>
             <property name="top_attach">0</property>
-            <property name="width">1</property>
-            <property name="height">1</property>
           </packing>
         </child>
       </object>
-      <packing>
-        <property name="expand">False</property>
-        <property name="fill">True</property>
-        <property name="position">0</property>
-      </packing>
     </child>
   </object>
   <object class="GtkBox" id="sv_popup">
-    <property name="can_focus">False</property>
     <property name="no_show_all">True</property>
     <style>
       <class name="popover"/>
@@ -275,7 +234,6 @@
     <child>
       <object class="GtkGrid" id="grid2">
         <property name="visible">True</property>
-        <property name="can_focus">False</property>
         <property name="margin_start">12</property>
         <property name="margin_end">12</property>
         <property name="margin_top">12</property>
@@ -285,27 +243,21 @@
         <child>
           <object class="GtkLabel" id="label1">
             <property name="visible">True</property>
-            <property name="can_focus">False</property>
             <property name="label" translatable="yes" context="Color Channel">S</property>
           </object>
           <packing>
             <property name="left_attach">0</property>
             <property name="top_attach">0</property>
-            <property name="width">1</property>
-            <property name="height">1</property>
           </packing>
         </child>
         <child>
           <object class="GtkLabel" id="label2">
             <property name="visible">True</property>
-            <property name="can_focus">False</property>
             <property name="label" translatable="yes" context="Color Channel">V</property>
           </object>
           <packing>
             <property name="left_attach">0</property>
             <property name="top_attach">1</property>
-            <property name="width">1</property>
-            <property name="height">1</property>
           </packing>
         </child>
         <child>
@@ -324,8 +276,6 @@
           <packing>
             <property name="left_attach">1</property>
             <property name="top_attach">0</property>
-            <property name="width">1</property>
-            <property name="height">1</property>
           </packing>
         </child>
         <child>
@@ -345,16 +295,9 @@
           <packing>
             <property name="left_attach">1</property>
             <property name="top_attach">1</property>
-            <property name="width">1</property>
-            <property name="height">1</property>
           </packing>
         </child>
       </object>
-      <packing>
-        <property name="expand">False</property>
-        <property name="fill">True</property>
-        <property name="position">0</property>
-      </packing>
     </child>
   </object>
 </interface>
