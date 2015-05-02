@@ -163,16 +163,19 @@ needs_explicit_setting (MyParserData *data,
 static void
 maybe_emit_property (MyParserData *data)
 {
-  gchar *escaped;
   gint i;
   gboolean bound;
   gboolean translatable;
+  gchar *escaped;
 
   bound = FALSE;
   translatable = FALSE;
   for (i = 0; data->attribute_names[i]; i++)
     {
-      if (strcmp (data->attribute_names[i], "translatable") == 0)
+      if (strcmp (data->attribute_names[i], "bind-source") == 0 ||
+          strcmp (data->attribute_names[i], "bind_source") == 0)
+        bound = TRUE;
+      else if (strcmp (data->attribute_names[i], "translatable") == 0)
         translatable = TRUE;
     }
 
@@ -217,9 +220,10 @@ maybe_emit_property (MyParserData *data)
   g_print ("%*s<property", data->indent, "");
   for (i = 0; data->attribute_names[i]; i++)
     {
-      if (strcmp (data->attribute_names[i], "bind-source") == 0 ||
-          strcmp (data->attribute_names[i], "bind_source") == 0)
-        bound = TRUE;
+      if (!translatable &&
+          (strcmp (data->attributes_name[i], "comments") == 0 ||
+           strcmp (data->attributes_name[i], "context") == 0))
+        continue;
 
       escaped = g_markup_escape_text (data->attribute_values[i], -1);
       g_print (" %s=\"%s\"", data->attribute_names[i], escaped);
