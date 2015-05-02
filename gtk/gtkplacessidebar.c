@@ -66,6 +66,10 @@
 #include "gtktreednd.h"
 #include "gtktypebuiltins.h"
 #include "gtkwindow.h"
+#include "gtkpopover.h"
+#include "gtkgrid.h"
+#include "gtklabel.h"
+#include "gtkbutton.h"
 
 /**
  * SECTION:gtkplacessidebar
@@ -133,6 +137,12 @@ struct _GtkPlacesSidebar {
   GtkTrashMonitor   *trash_monitor;
   GtkSettings       *gtk_settings;
   GFile             *current_location;
+
+  GtkWidget *rename_popover;
+  GtkWidget *rename_entry;
+  GtkWidget *rename_button;
+  GtkWidget *rename_error;
+  gchar *rename_uri;
 
   gulong trash_monitor_changed_id;
 
@@ -2552,13 +2562,156 @@ add_shortcut_cb (GtkMenuItem      *item,
     }
 }
 
+static void
+rename_entry_changed (GtkEntry         *entry,
+                      GtkPlacesSidebar *sidebar)
+{
+  GtkTreeIter iter;
+  PlaceType type;
+  gchar *name;
+  gchar *uri;
+  const gchar *new_name;
+  gboolean found = FALSE;
+
+  new_name = gtk_entry_get_text (GTK_ENTRY (sidebar->rename_entry));
+
+  if (strcmp (new_name, "") == 0)
+    {
+      gtk_widget_set_sensitive (sidebar->rename_button, FALSE);
+      gtk_label_set_label (GTK_LABEL (sidebar->rename_error), "");
+      return;
+    }
+
+  gtk_tree_model_get_iter_first (GTK_TREE_MODEL (sidebar->store), &iter);
+  do {
+    gtk_tree_model_get (GTK_TREE_MODEL (sidebar->store), &iter,
+                        PLACES_SIDEBAR_COLUMN_ROW_TYPE, &type,
+                        PLACES_SIDEBAR_COLUMN_URI, &uri,
+                        PLACES_SIDEBAR_COLUMN_NAME, &name,
+                        -1);
+
+    if ((type == PLACES_XDG_DIR || type == PLACES_BOOKMARK) &&
+        strcmp (uri, sidebar->rename_uri) != 0 &&
+        strcmp (new_name, name) == 0)
+      found = TRUE;
+
+    g_free (name);
+    g_free (uri);
+  } while (gtk_tree_model_iter_next (GTK_TREE_MODEL (sidebar->store), &iter) && !found);
+
+  gtk_widget_set_sensitive (sidebar->rename_button, !found);
+  gtk_label_set_label (GTK_LABEL (sidebar->rename_error),
+                       found ? _("This name is already taken") : "");
+}
+
+static void
+do_rename (GtkButton        *button,
+           GtkPlacesSidebar *sidebar)
+{
+  const gchar *new_text;
+  GFile *file;
+
+  new_text = gtk_entry_get_text (GTK_ENTRY (sidebar->rename_entry));
+
+  file = g_file_new_for_uri (sidebar->rename_uri);
+  if (!_gtk_bookmarks_manager_has_bookmark (sidebar->bookmarks_manager, file))
+    _gtk_bookmarks_manager_insert_bookmark (sidebar->bookmarks_manager, file, -1, NULL);
+
+  _gtk_bookmarks_manager_set_bookmark_label (sidebar->bookmarks_manager, file, new_text, NULL);
+
+  g_object_unref (file);
+
+  g_clear_pointer (&sidebar->rename_uri, g_free);
+
+  gtk_widget_hide (sidebar->rename_popover);
+}
+
+static void
+create_rename_popover (GtkPlacesSidebar *sidebar)
+{
+  GtkWidget *popover;
+  GtkWidget *grid;
+  GtkWidget *label;
+  GtkWidget *entry;
+  GtkWidget *button;
+  GtkWidget *error;
+  gchar *str;
+
+  if (sidebar->rename_popover)
+    return;
+
+  popover = gtk_popover_new (GTK_WIDGET (sidebar));
+  gtk_popover_set_position (GTK_POPOVER (popover), GTK_POS_RIGHT);
+  grid = gtk_grid_new ();
+  gtk_container_add (GTK_CONTAINER (popover), grid);
+  g_object_set (grid,
+                "margin", 10,
+                "row-spacing", 6,
+                "column-spacing", 6,
+                NULL);
+  entry = gtk_entry_new ();
+  g_signal_connect (entry, "changed", G_CALLBACK (rename_entry_changed), sidebar);
+  str = g_strdup_printf ("<b>%s</b>", _("Name"));
+  label = gtk_label_new (str);
+  gtk_widget_set_halign (label, GTK_ALIGN_START);
+  gtk_label_set_use_markup (GTK_LABEL (label), TRUE);
+  gtk_label_set_mnemonic_widget (GTK_LABEL (label), entry);
+  g_free (str);
+  button = gtk_button_new_with_mnemonic (_("_Rename"));
+  gtk_style_context_add_class (gtk_widget_get_style_context (button), "suggested-action");
+  g_signal_connect (button, "clicked", G_CALLBACK (do_rename), sidebar);
+  error = gtk_label_new ("");
+  gtk_widget_set_halign (error, GTK_ALIGN_START);
+  gtk_grid_attach (GTK_GRID (grid), label, 0, 0, 2, 1);
+  gtk_grid_attach (GTK_GRID (grid), entry, 0, 1, 1, 1);
+  gtk_grid_attach (GTK_GRID (grid), button,1, 1, 1, 1);
+  gtk_grid_attach (GTK_GRID (grid), error, 0, 2, 2, 1);
+  gtk_widget_show_all (grid);
+
+  sidebar->rename_popover = popover;
+  sidebar->rename_entry = entry;
+  sidebar->rename_button = button;
+  sidebar->rename_error = error;
+}
+
+static void
+show_rename_popover (GtkPlacesSidebar *sidebar,
+                     GtkTreeIter      *iter)
+{
+  GtkTreeViewColumn *column;
+  GdkRectangle rect;
+  gchar *name;
+  gchar *uri;
+  GtkTreePath *path;
+
+  create_rename_popover (sidebar);
+
+  gtk_tree_model_get (GTK_TREE_MODEL (sidebar->store), iter,
+                      PLACES_SIDEBAR_COLUMN_NAME, &name,
+                      PLACES_SIDEBAR_COLUMN_URI, &uri,
+                      -1);
+
+  if (sidebar->rename_uri)
+    g_free (sidebar->rename_uri);
+  sidebar->rename_uri = uri;
+
+  path = gtk_tree_model_get_path (GTK_TREE_MODEL (sidebar->store), iter);
+  column = gtk_tree_view_get_column (GTK_TREE_VIEW (sidebar->tree_view), 0);
+  gtk_tree_view_get_background_area (GTK_TREE_VIEW (sidebar->tree_view), path, column, &rect);
+  gtk_tree_path_free (path);
+
+  gtk_entry_set_text (GTK_ENTRY (sidebar->rename_entry), name);
+  gtk_popover_set_pointing_to (GTK_POPOVER (sidebar->rename_popover), &rect);
+
+  gtk_widget_show (sidebar->rename_popover);
+  gtk_widget_grab_focus (sidebar->rename_entry);
+}
+
 /* Rename the selected bookmark */
 static void
 rename_selected_bookmark (GtkPlacesSidebar *sidebar)
 {
   GtkTreeIter iter;
-  GtkTreePath *path;
-  GtkTreeViewColumn *column;
   PlaceType type;
 
   if (get_selected_iter (sidebar, &iter))
@@ -2570,12 +2723,7 @@ rename_selected_bookmark (GtkPlacesSidebar *sidebar)
       if (type != PLACES_BOOKMARK && type != PLACES_XDG_DIR)
         return;
 
-      path = gtk_tree_model_get_path (GTK_TREE_MODEL (sidebar->store), &iter);
-      column = gtk_tree_view_get_column (GTK_TREE_VIEW (sidebar->tree_view), 0);
-      g_object_set (sidebar->text_cell_renderer, "editable", TRUE, NULL);
-      gtk_tree_view_set_cursor_on_cell (GTK_TREE_VIEW (sidebar->tree_view),
-                                        path, column, sidebar->text_cell_renderer, TRUE);
-      gtk_tree_path_free (path);
+      show_rename_popover (sidebar, &iter);
     }
 }
 
@@ -3715,43 +3863,6 @@ bookmarks_button_release_event_cb (GtkWidget        *widget,
   return ret;
 }
 
-static void
-bookmarks_edited (GtkCellRenderer  *cell,
-                  gchar            *path_string,
-                  gchar            *new_text,
-                  GtkPlacesSidebar *sidebar)
-{
-  GtkTreePath *path;
-  GtkTreeIter iter;
-  char *uri;
-  GFile *file;
-
-  g_object_set (cell, "editable", FALSE, NULL);
-
-  path = gtk_tree_path_new_from_string (path_string);
-  gtk_tree_model_get_iter (GTK_TREE_MODEL (sidebar->store), &iter, path);
-  gtk_tree_model_get (GTK_TREE_MODEL (sidebar->store), &iter,
-                      PLACES_SIDEBAR_COLUMN_URI, &uri,
-                      -1);
-  gtk_tree_path_free (path);
-
-  file = g_file_new_for_uri (uri);
-  if (!_gtk_bookmarks_manager_has_bookmark (sidebar->bookmarks_manager, file))
-    _gtk_bookmarks_manager_insert_bookmark (sidebar->bookmarks_manager, file, -1, NULL);
-
-  _gtk_bookmarks_manager_set_bookmark_label (sidebar->bookmarks_manager, file, new_text, NULL); /* NULL-GError */
-
-  g_object_unref (file);
-  g_free (uri);
-}
-
-static void
-bookmarks_editing_canceled (GtkCellRenderer  *cell,
-                            GtkPlacesSidebar *sidebar)
-{
-  g_object_set (cell, "editable", FALSE, NULL);
-}
-
 static gboolean
 tree_selection_func (GtkTreeSelection *selection,
                      GtkTreeModel     *model,
@@ -4091,11 +4202,6 @@ gtk_places_sidebar_init (GtkPlacesSidebar *sidebar)
                 "ellipsize-set", TRUE,
                 NULL);
 
-  g_signal_connect (cell, "edited",
-                    G_CALLBACK (bookmarks_edited), sidebar);
-  g_signal_connect (cell, "editing-canceled",
-                    G_CALLBACK (bookmarks_editing_canceled), sidebar);
-
   /* this is required to align the eject buttons to the right */
   gtk_tree_view_column_set_max_width (GTK_TREE_VIEW_COLUMN (col), 24);
   gtk_tree_view_append_column (tree_view, col);
@@ -4339,11 +4445,8 @@ gtk_places_sidebar_dispose (GObject *object)
       sidebar->gtk_settings = NULL;
     }
 
-  if (sidebar->current_location != NULL)
-    {
-        g_object_unref (sidebar->current_location);
-        sidebar->current_location = NULL;
-    }
+  g_clear_object (&sidebar->current_location);
+  g_clear_pointer (&sidebar->rename_uri, g_free);
 
   G_OBJECT_CLASS (gtk_places_sidebar_parent_class)->dispose (object);
 }
