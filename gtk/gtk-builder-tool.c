@@ -166,19 +166,31 @@ maybe_emit_property (MyParserData *data)
   gchar *escaped;
   gint i;
   gboolean bound;
+  gboolean translatable;
 
+  bound = FALSE;
+  translatable = FALSE;
   for (i = 0; data->attribute_names[i]; i++)
     {
-      if (strcmp (data->attribute_names[i], "name") == 0)
+      if (strcmp (data->attribute_names[i], "translatable") == 0)
+        translatable = TRUE;
+    }
+
+  if (!translatable)
+    {
+      for (i = 0; data->attribute_names[i]; i++)
         {
-          if (data->classes == NULL)
-            break;
+          if (strcmp (data->attribute_names[i], "name") == 0)
+            {
+              if (data->classes == NULL)
+                break;
 
-          if (needs_explicit_setting (data, i))
-            break;
+              if (needs_explicit_setting (data, i))
+                break;
 
-          if (value_is_default (data, i))
-            return;
+              if (value_is_default (data, i))
+                return;
+            }
         }
     }
 
@@ -196,13 +208,11 @@ maybe_emit_property (MyParserData *data)
     {
       if (!data->cell_packing_started)
         {
-          g_print ("%*s<packing>\n", data->indent, "");
+          g_print ("%*s<cell-packing>\n", data->indent, "");
           data->indent += 2;
           data->cell_packing_started = TRUE;
         }
     }
-
-  bound = FALSE;
 
   g_print ("%*s<property", data->indent, "");
   for (i = 0; data->attribute_names[i]; i++)
