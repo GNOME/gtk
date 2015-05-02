@@ -8,45 +8,37 @@
     <child>
       <object class="GtkBox" id="box">
         <property name="visible">True</property>
-        <property name="can_focus">False</property>
         <property name="halign">center</property>
         <property name="valign">center</property>
         <property name="spacing">6</property>
         <child>
           <object class="GtkImage" id="image">
             <property name="visible">True</property>
-            <property name="can_focus">False</property>
             <property name="icon_name">image-missing</property>
           </object>
           <packing>
-            <property name="expand">False</property>
             <property name="fill">False</property>
-            <property name="position">0</property>
           </packing>
         </child>
         <child>
           <object class="GtkLabel" id="label_lock">
             <property name="visible">True</property>
-            <property name="can_focus">False</property>
             <property name="no_show_all">True</property>
             <property name="xalign">0</property>
             <property name="label" translatable="yes">Lock</property>
           </object>
           <packing>
-            <property name="expand">False</property>
             <property name="fill">False</property>
             <property name="position">1</property>
           </packing>
         </child>
         <child>
           <object class="GtkLabel" id="label_unlock">
-            <property name="can_focus">False</property>
             <property name="no_show_all">True</property>
             <property name="xalign">0</property>
             <property name="label" translatable="yes">Unlock</property>
           </object>
           <packing>
-            <property name="expand">False</property>
             <property name="fill">False</property>
             <property name="position">2</property>
           </packing>
