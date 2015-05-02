@@ -716,7 +716,7 @@
       <widget name="address_label"/>
       <widget name="refcount_label"/>
       <widget name="state_label"/>
-      <widget namel="buildable_id_label"/>
+      <widget name="buildable_id_label"/>
       <widget name="default_widget_label"/>
       <widget name="focus_widget_label"/>
     </widgets>
