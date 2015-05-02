@@ -95,6 +95,53 @@ value_is_default (MyParserData *data,
   return ret;
 }
 
+/* A number of properties unfortunately can't be omitted even
+ * if they are nominally set to their default value. In many
+ * cases, this is due to subclasses not overriding the default
+ * value from the superclass.
+ */
+static gboolean
+needs_explicit_setting (MyParserData *data,
+                        gint          i)
+{
+  struct _Prop {
+    const char *class;
+    const char *property;
+    gboolean packing;
+  } props[] = {
+    { "GtkRadioButton", "draw-indicator", 0 },
+    { "GtkGrid", "left-attach", 1 },
+    { "GtkGrid", "top-attach", 1 },
+    { NULL, NULL, 0 }
+  };
+  const gchar *class_name;
+  const gchar *property_name;
+  gchar *canonical_name;
+  gboolean found;
+  gint k;
+
+  class_name = (const gchar *)data->classes->data;
+  property_name = (const gchar *)data->attribute_values[i];
+  canonical_name = g_strdup (property_name);
+  g_strdelimit (canonical_name, "_", '-');
+
+  found = FALSE;
+  for (k = 0; props[k].class; k++)
+    {
+      if (strcmp (class_name, props[k].class) == 0 &&
+          strcmp (canonical_name, props[k].property) == 0 &&
+          data->packing == props[k].packing)
+        {
+          found = TRUE;
+          break;
+        }
+    }
+
+  g_free (canonical_name);
+
+  return found;
+}
+
 static void
 maybe_emit_property (MyParserData *data)
 {
@@ -107,6 +154,9 @@ maybe_emit_property (MyParserData *data)
       if (strcmp (data->attribute_names[i], "name") == 0)
         {
           if (data->classes == NULL)
+            break;
+
+          if (needs_explicit_setting (data, i))
             break;
 
           if (value_is_default (data, i))
