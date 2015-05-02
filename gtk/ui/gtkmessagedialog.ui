@@ -2,8 +2,6 @@
 <interface domain="gtk30">
   <!-- interface-requires gtk+ 3.10 -->
   <template class="GtkMessageDialog" parent="GtkDialog">
-    <property name="can_focus">False</property>
-    <property name="border_width">0</property>
     <property name="title"> </property>
     <property name="resizable">False</property>
     <property name="type_hint">dialog</property>
@@ -14,34 +12,26 @@
     <child internal-child="headerbar">
       <object class="GtkHeaderBar" id="headerbar1">
         <property name="visible">True</property>
-        <property name="can_focus">False</property>
-        <property name="show-close-button">False</property>
       </object>
     </child>
     <child internal-child="vbox">
       <object class="GtkBox" id="dialog-vbox1">
-        <property name="can_focus">False</property>
-        <property name="border_width">0</property>
         <property name="orientation">vertical</property>
         <property name="spacing">20</property>
         <child>
           <object class="GtkBox" id="box">
             <property name="visible">True</property>
-            <property name="can_focus">False</property>
-            <property name="border_width">0</property>
             <property name="margin_start">30</property>
             <property name="margin_end">30</property>
             <property name="spacing">30</property>
             <child>
               <object class="GtkBox" id="message_area">
                 <property name="visible">True</property>
-                <property name="can_focus">False</property>
                 <property name="orientation">vertical</property>
                 <property name="spacing">10</property>
                 <child>
                   <object class="GtkLabel" id="label">
                     <property name="visible">True</property>
-                    <property name="can_focus">False</property>
                     <property name="halign">center</property>
                     <property name="valign">start</property>
                     <property name="wrap">True</property>
@@ -49,14 +39,11 @@
                     <property name="max-width-chars">60</property>
                   </object>
                   <packing>
-                    <property name="expand">False</property>
                     <property name="fill">False</property>
-                    <property name="position">0</property>
                   </packing>
                 </child>
                 <child>
                   <object class="GtkLabel" id="secondary_label">
-                    <property name="can_focus">False</property>
                     <property name="no_show_all">True</property>
                     <property name="margin-bottom">2</property>
                     <property name="halign">center</property>
@@ -67,22 +54,18 @@
                   </object>
                   <packing>
                     <property name="expand">True</property>
-                    <property name="fill">True</property>
                     <property name="position">1</property>
                   </packing>
                 </child>
               </object>
               <packing>
                 <property name="expand">True</property>
-                <property name="fill">True</property>
                 <property name="position">1</property>
               </packing>
             </child>
           </object>
           <packing>
-            <property name="expand">False</property>
             <property name="fill">False</property>
-            <property name="position">0</property>
           </packing>
         </child>
       </object>
