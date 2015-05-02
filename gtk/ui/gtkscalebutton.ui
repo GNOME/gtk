@@ -10,7 +10,6 @@
     <child>
       <object class="GtkImage" id="image">
         <property name="visible">True</property>
-        <property name="can_focus">False</property>
         <property name="icon_name">image-missing</property>
         <property name="use-fallback">True</property>
       </object>
@@ -29,7 +28,6 @@
     <child>
       <object class="GtkBox" id="box">
         <property name="visible">True</property>
-        <property name="can_focus">False</property>
         <property name="orientation">vertical</property>
         <property name="margin">4</property>
         <property name="spacing">4</property>
@@ -56,9 +54,7 @@
             <signal name="clicked" handler="cb_button_clicked" swapped="no"/>
           </object>
           <packing>
-            <property name="expand">False</property>
             <property name="fill">False</property>
-            <property name="position">0</property>
           </packing>
         </child>
         <child>
@@ -74,8 +70,6 @@
             <signal name="value-changed" handler="cb_scale_value_changed" swapped="no"/>
           </object>
           <packing>
-            <property name="expand">False</property>
-            <property name="fill">True</property>
             <property name="position">1</property>
           </packing>
         </child>
@@ -102,7 +96,6 @@
             <signal name="clicked" handler="cb_button_clicked" swapped="no"/>
           </object>
           <packing>
-            <property name="expand">False</property>
             <property name="fill">False</property>
             <property name="position">2</property>
           </packing>
