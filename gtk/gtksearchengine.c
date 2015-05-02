@@ -193,11 +193,6 @@ hits_added (GtkSearchEngine *engine,
 
   added = NULL;
 
-  if (engine == composite->priv->native)
-    g_debug ("Getting hits from native search engine");
-  else if (engine == composite->priv->simple)
-    g_debug ("Getting hits from simple search engine");
-
   for (l = hits; l; l = l->next)
     {
       gchar *hit = l->data;
@@ -212,7 +207,6 @@ hits_added (GtkSearchEngine *engine,
 
   if (added)
     {
-      g_debug ("Passing hits on");
       _gtk_search_engine_hits_added (composite, added);
       g_list_free (added);
     }

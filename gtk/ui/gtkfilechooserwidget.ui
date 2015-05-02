@@ -3,26 +3,20 @@
   <!-- interface-requires gtk+ 3.10 -->
   <!-- interface-requires gtkprivate 3.10 -->
   <template class="GtkFileChooserWidget" parent="GtkBox">
-    <property name="can_focus">False</property>
     <property name="orientation">vertical</property>
-    <property name="spacing">0</property>
     <child>
       <object class="GtkBox" id="browse_widgets_box">
         <property name="visible">True</property>
-        <property name="can_focus">False</property>
         <property name="orientation">vertical</property>
-        <property name="spacing">0</property>
         <child>
           <object class="GtkPaned" id="browse_widgets_hpaned">
             <property name="visible">True</property>
             <property name="can_focus">True</property>
-            <property name="border_width">0</property>
             <child>
               <object class="GtkPlacesSidebar" id="places_sidebar">
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="hscrollbar_policy">never</property>
-                <property name="shadow_type">none</property>
                 <property name="local_only">True</property>
                 <property name="show_enter_location">True</property>
                 <style>
@@ -40,15 +34,10 @@
             <child>
               <object class="GtkBox" id="browse_files_box">
                 <property name="visible">True</property>
-                <property name="can_focus">False</property>
                 <property name="orientation">vertical</property>
-                <property name="spacing">0</property>
                 <child>
                   <object class="GtkBox" id="browse_header_box">
-                    <property name="visible">False</property>
-                    <property name="can_focus">False</property>
                     <property name="orientation">vertical</property>
-                    <property name="border_width">0</property>
                     <property name="spacing">12</property>
                     <style>
                       <class name="search-bar"/>
@@ -58,11 +47,9 @@
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
                         <property name="transition-type">crossfade</property>
-                        <property name="transition-duration">200</property>
                         <child>
                           <object class="GtkBox" id="browse_path_bar_hbox">
                             <property name="visible">True</property>
-                            <property name="can_focus">False</property>
                             <property name="spacing">6</property>
                             <property name="border_width">6</property>
                             <child>
@@ -73,21 +60,17 @@
                               </object>
                               <packing>
                                 <property name="expand">True</property>
-                                <property name="fill">True</property>
-                                <property name="position">0</property>
                               </packing>
                             </child>
                             <child>
                               <object class="GtkMenuButton" id="browse_new_folder_button">
                                 <property name="label" translatable="yes">Create _Folder</property>
                                 <property name="can_focus">True</property>
-                                <property name="receives_default">False</property>
                                 <property name="use_underline">True</property>
                                 <property name="popover">new_folder_popover</property>
                                 <signal name="notify::active" handler="new_folder_popover_active"/>
                               </object>
                               <packing>
-                                <property name="expand">False</property>
                                 <property name="fill">False</property>
                                 <property name="pack_type">end</property>
                                 <property name="position">1</property>
@@ -101,7 +84,6 @@
                         <child>
                           <object class="GtkBox" id="location_entry_box">
                             <property name="visible">True</property>
-                            <property name="can_focus">False</property>
                             <property name="no-show-all">True</property>
                             <property name="spacing">6</property>
                             <property name="border_width">6</property>
@@ -113,7 +95,6 @@
                         <child>
                           <object class="GtkBox" id="search_entry_box">
                             <property name="visible">True</property>
-                            <property name="can_focus">False</property>
                             <property name="no-show-all">True</property>
                             <property name="spacing">6</property>
                             <property name="border_width">6</property>
@@ -156,113 +137,156 @@
                         </child>
                       </object>
                       <packing>
-                        <property name="expand">False</property>
                         <property name="fill">False</property>
-                        <property name="position">0</property>
                       </packing>
                     </child>
                   </object>
                   <packing>
-                    <property name="expand">False</property>
                     <property name="fill">False</property>
-                    <property name="position">0</property>
                   </packing>
                 </child>
                 <child>
                   <object class="GtkBox" id="list_and_preview_box">
                     <property name="visible">True</property>
-                    <property name="can_focus">False</property>
                     <property name="spacing">12</property>
                     <child>
-                      <object class="GtkScrolledWindow" id="browse_files_swin">
+                      <object class="GtkStack" id="browse_files_stack">
                         <property name="visible">True</property>
-                        <property name="can_focus">True</property>
-                        <property name="hscrollbar_policy">never</property>
-                        <property name="shadow_type">none</property>
+                        <style>
+                          <class name="view"/>
+                        </style>
                         <child>
-                          <object class="GtkTreeView" id="browse_files_tree_view">
+                          <object class="GtkScrolledWindow" id="browse_files_swin">
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
-                            <property name="has_tooltip">True</property>
-                            <property name="enable-search">False</property>
-                            <child internal-child="accessible">
-                              <object class="AtkObject" id="browse_files_tree_view-atkobject">
-                                <property name="AtkObject::accessible-name" translatable="yes">Files</property>
-                              </object>
-                            </child>
-                            <signal name="button-press-event" handler="list_button_press_event_cb" swapped="no"/>
-                            <signal name="drag-data-received" handler="file_list_drag_data_received_cb" swapped="no"/>
-                            <signal name="drag-drop" handler="file_list_drag_drop_cb" swapped="no"/>
-                            <signal name="drag-motion" handler="file_list_drag_motion_cb" swapped="no"/>
-                            <signal name="key-press-event" handler="browse_files_key_press_event_cb" swapped="no"/>
-                            <signal name="popup-menu" handler="list_popup_menu_cb" swapped="no"/>
-                            <signal name="query-tooltip" handler="file_list_query_tooltip_cb" swapped="no"/>
-                            <signal name="row-activated" handler="list_row_activated" swapped="no"/>
-                            <signal name="cursor-changed" handler="list_cursor_changed" swapped="no"/>
-                            <child internal-child="selection">
-                              <object class="GtkTreeSelection" id="treeview-selection2">
-                                <signal name="changed" handler="list_selection_changed" swapped="no"/>
-                              </object>
-                            </child>
+                            <property name="hscrollbar_policy">never</property>
                             <child>
-                              <object class="GtkTreeViewColumn" id="list_name_column">
-                                <property name="resizable">True</property>
-                                <property name="title" translatable="yes">Name</property>
-                                <property name="expand">True</property>
-                                <child>
-                                  <object class="GtkCellRendererPixbuf" id="list_pixbuf_renderer">
-                                    <property name="xpad">6</property>
+                              <object class="GtkTreeView" id="browse_files_tree_view">
+                                <property name="visible">True</property>
+                                <property name="can_focus">True</property>
+                                <property name="has_tooltip">True</property>
+                                <property name="enable-search">False</property>
+                                <child internal-child="accessible">
+                                  <object class="AtkObject" id="browse_files_tree_view-atkobject">
+                                    <property name="AtkObject::accessible-name" translatable="yes">Files</property>
+                                  </object>
+                                </child>
+                                <signal name="button-press-event" handler="list_button_press_event_cb" swapped="no"/>
+                                <signal name="drag-data-received" handler="file_list_drag_data_received_cb" swapped="no"/>
+                                <signal name="drag-drop" handler="file_list_drag_drop_cb" swapped="no"/>
+                                <signal name="drag-motion" handler="file_list_drag_motion_cb" swapped="no"/>
+                                <signal name="key-press-event" handler="browse_files_key_press_event_cb" swapped="no"/>
+                                <signal name="popup-menu" handler="list_popup_menu_cb" swapped="no"/>
+                                <signal name="query-tooltip" handler="file_list_query_tooltip_cb" swapped="no"/>
+                                <signal name="row-activated" handler="list_row_activated" swapped="no"/>
+                                <signal name="cursor-changed" handler="list_cursor_changed" swapped="no"/>
+                                <child internal-child="selection">
+                                  <object class="GtkTreeSelection" id="treeview-selection2">
+                                    <signal name="changed" handler="list_selection_changed" swapped="no"/>
                                   </object>
                                 </child>
                                 <child>
-                                  <object class="GtkCellRendererText" id="list_name_renderer">
-                                    <property name="ellipsize">end</property>
+                                  <object class="GtkTreeViewColumn" id="list_name_column">
+                                    <property name="resizable">True</property>
+                                    <property name="title" translatable="yes">Name</property>
+                                    <property name="expand">True</property>
+                                    <child>
+                                      <object class="GtkCellRendererPixbuf" id="list_pixbuf_renderer">
+                                        <property name="xpad">6</property>
+                                      </object>
+                                    </child>
+                                    <child>
+                                      <object class="GtkCellRendererText" id="list_name_renderer">
+                                        <property name="ellipsize">end</property>
+                                      </object>
+                                    </child>
                                   </object>
                                 </child>
-                              </object>
-                            </child>
-                            <child>
-                              <object class="GtkTreeViewColumn" id="list_size_column">
-                                <property name="resizable">True</property>
-                                <property name="title" translatable="yes">Size</property>
                                 <child>
-                                  <object class="GtkCellRendererText" id="list_size_renderer">
-                                    <property name="alignment">right</property>
+                                  <object class="GtkTreeViewColumn" id="list_size_column">
+                                    <property name="resizable">True</property>
+                                    <property name="title" translatable="yes">Size</property>
+                                    <child>
+                                      <object class="GtkCellRendererText" id="list_size_renderer">
+                                        <property name="alignment">right</property>
+                                      </object>
+                                    </child>
                                   </object>
                                 </child>
-                              </object>
-                            </child>
-                            <child>
-                              <object class="GtkTreeViewColumn" id="list_mtime_column">
-                                <property name="resizable">True</property>
-                                <property name="title" translatable="yes">Modified</property>
                                 <child>
-                                  <object class="GtkCellRendererText" id="list_mtime_renderer"/>
+                                  <object class="GtkTreeViewColumn" id="list_mtime_column">
+                                    <property name="resizable">True</property>
+                                    <property name="title" translatable="yes">Modified</property>
+                                    <child>
+                                      <object class="GtkCellRendererText" id="list_mtime_renderer"/>
+                                    </child>
+                                  </object>
                                 </child>
-                              </object>
-                            </child>
-                            <child>
-                              <object class="GtkTreeViewColumn" id="list_location_column">
-                                <property name="resizable">True</property>
-                                <property name="visible">False</property>
-                                <property name="title" translatable="yes">Location</property>
                                 <child>
-                                  <object class="GtkCellRendererText" id="list_location_renderer"/>
+                                  <object class="GtkTreeViewColumn" id="list_location_column">
+                                    <property name="resizable">True</property>
+                                    <property name="visible">False</property>
+                                    <property name="title" translatable="yes">Location</property>
+                                    <child>
+                                      <object class="GtkCellRendererText" id="list_location_renderer"/>
+                                    </child>
+                                  </object>
                                 </child>
                               </object>
                             </child>
                           </object>
+                          <packing>
+                            <property name="name">list</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkGrid">
+                            <property name="visible">True</property>
+                            <property name="column_spacing">12</property>
+                            <property name="hexpand">True</property>
+                            <property name="vexpand">True</property>
+                            <property name="halign">center</property>
+                            <property name="valign">center</property>
+                            <style>
+                              <class name="dim-label"/>
+                            </style>
+                            <child>
+                              <object class="GtkImage">
+                                <property name="visible">True</property>
+                                <property name="icon-name">emblem-documents-symbolic</property>
+                                <property name="pixel-size">64</property>
+                              </object>
+                              <packing>
+                                <property name="left_attach">0</property>
+                                <property name="top_attach">0</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <object class="GtkLabel">
+                                <property name="visible">True</property>
+                                <property name="label" translatable="yes">No Files Found</property>
+                                <attributes>
+                                  <attribute name="weight" value="bold"/>
+                                  <attribute name="scale" value="1.2"/>
+                                </attributes>
+                              </object>
+                              <packing>
+                                <property name="left_attach">1</property>
+                                <property name="top_attach">0</property>
+                              </packing>
+                            </child>
+                          </object>
+                          <packing>
+                            <property name="name">empty</property>
+                          </packing>
                         </child>
                       </object>
                       <packing>
                         <property name="expand">True</property>
-                        <property name="fill">True</property>
-                        <property name="position">0</property>
                       </packing>
                     </child>
                     <child>
                       <object class="GtkBox" id="preview_box">
-                        <property name="can_focus">False</property>
                         <property name="orientation">vertical</property>
                         <property name="spacing">12</property>
                         <child>
@@ -273,7 +297,6 @@
                         </child>
                       </object>
                       <packing>
-                        <property name="expand">False</property>
                         <property name="fill">False</property>
                         <property name="position">1</property>
                       </packing>
@@ -281,28 +304,23 @@
                   </object>
                   <packing>
                     <property name="expand">True</property>
-                    <property name="fill">True</property>
                     <property name="position">2</property>
                   </packing>
                 </child>
               </object>
               <packing>
-                <property name="resize">True</property>
                 <property name="shrink">False</property>
               </packing>
             </child>
           </object>
           <packing>
             <property name="expand">True</property>
-            <property name="fill">True</property>
             <property name="position">1</property>
           </packing>
         </child>
       </object>
       <packing>
         <property name="expand">True</property>
-        <property name="fill">True</property>
-        <property name="position">0</property>
       </packing>
     </child>
     <child>
@@ -311,19 +329,16 @@
         <child>
           <object class="GtkBox" id="extra_align">
             <property name="visible">True</property>
-            <property name="can_focus">False</property>
             <property name="spacing">12</property>
           </object>
         </child>
         <child>
           <object class="GtkBox" id="filter_combo_hbox">
             <property name="visible">True</property>
-            <property name="can_focus">False</property>
             <property name="spacing">12</property>
             <child>
               <object class="GtkComboBoxText" id="filter_combo">
                 <property name="visible">True</property>
-                <property name="can_focus">False</property>
                 <property name="tooltip_text" translatable="yes">Select which types of files are shown</property>
                 <property name="focus_on_click">False</property>
                 <property name="entry_text_column">0</property>
@@ -331,10 +346,8 @@
                 <signal name="changed" handler="filter_combo_changed" swapped="no"/>
               </object>
               <packing>
-                <property name="expand">False</property>
                 <property name="fill">False</property>
                 <property name="pack_type">end</property>
-                <property name="position">0</property>
               </packing>
             </child>
             <child>
@@ -347,8 +360,6 @@
         </child>
       </object>
       <packing>
-        <property name="expand">False</property>
-        <property name="fill">True</property>
         <property name="position">1</property>
         <property name="pack_type">end</property>
       </packing>
@@ -362,14 +373,12 @@
     </widgets>
   </object>
   <object class="GtkPopover" id="new_folder_popover">
-    <property name="modal">True</property>
     <child>
       <object class="GtkGrid">
         <property name="visible">True</property>
         <property name="margin">10</property>
         <property name="column-spacing">6</property>
         <property name="row-spacing">6</property>
-        <property name="row-homogeneous">False</property>
         <child>
           <object class="GtkLabel">
             <property name="visible">True</property>
@@ -381,8 +390,6 @@
             </attributes>
           </object>
           <packing>
-            <property name="left-attach">0</property>
-            <property name="top-attach">0</property>
             <property name="width">2</property>
           </packing>
         </child>
@@ -393,7 +400,6 @@
             <signal name="changed" handler="new_folder_name_changed"/>
           </object>
           <packing>
-            <property name="left-attach">0</property>
             <property name="top-attach">1</property>
           </packing>
         </child>
@@ -419,7 +425,6 @@
             <property name="halign">start</property>
           </object>
           <packing>
-            <property name="left-attach">0</property>
             <property name="top-attach">2</property>
             <property name="width">2</property>
           </packing>

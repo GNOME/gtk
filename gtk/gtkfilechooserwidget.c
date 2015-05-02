@@ -216,6 +216,7 @@ struct _GtkFileChooserWidgetPrivate {
   GtkWidget *browse_header_box;
   GtkWidget *browse_header_stack;
   GtkWidget *browse_files_box;
+  GtkWidget *browse_files_stack;
   GtkWidget *browse_files_tree_view;
   GtkWidget *browse_files_popup_menu;
   GtkWidget *browse_files_popup_menu_add_shortcut_item;
@@ -246,6 +247,7 @@ struct _GtkFileChooserWidgetPrivate {
   GtkSearchEngine *search_engine;
   GtkQuery *search_query;
   GtkFileSystemModel *search_model;
+  gboolean search_model_empty;
 
   /* OPERATION_MODE_RECENT */
   GtkRecentManager *recent_manager;
@@ -2025,13 +2027,7 @@ location_entry_create (GtkFileChooserWidget *impl)
       priv->location_entry = _gtk_file_chooser_entry_new (TRUE);
       if (priv->action == GTK_FILE_CHOOSER_ACTION_OPEN ||
           priv->action == GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER)
-        {
-#if 0
-          gtk_entry_set_icon_from_icon_name (GTK_ENTRY (priv->location_entry), GTK_ENTRY_ICON_PRIMARY, "folder-symbolic");
-          gtk_entry_set_icon_activatable (GTK_ENTRY (priv->location_entry), GTK_ENTRY_ICON_PRIMARY, FALSE);
-#endif
-          gtk_entry_set_placeholder_text (GTK_ENTRY (priv->location_entry), _("Location"));
-        }
+        gtk_entry_set_placeholder_text (GTK_ENTRY (priv->location_entry), _("Location"));
 
       g_signal_connect (priv->location_entry, "changed",
                         G_CALLBACK (location_entry_changed_cb), impl);
@@ -2515,6 +2511,7 @@ operation_mode_set_enter_location (GtkFileChooserWidget *impl)
 {
   GtkFileChooserWidgetPrivate *priv = impl->priv;
 
+  gtk_stack_set_visible_child_name (GTK_STACK (priv->browse_files_stack), "list");
   gtk_stack_set_visible_child_name (GTK_STACK (priv->browse_header_stack), "location");
   location_bar_update (impl);
   gtk_widget_set_sensitive (priv->filter_combo, TRUE);
@@ -2527,6 +2524,7 @@ operation_mode_set_browse (GtkFileChooserWidget *impl)
 {
   GtkFileChooserWidgetPrivate *priv = impl->priv;
 
+  gtk_stack_set_visible_child_name (GTK_STACK (priv->browse_files_stack), "list");
   gtk_stack_set_visible_child_name (GTK_STACK (priv->browse_header_stack), "pathbar");
   location_bar_update (impl);
   gtk_widget_set_sensitive (priv->filter_combo, TRUE);
@@ -2541,6 +2539,7 @@ operation_mode_set_search (GtkFileChooserWidget *impl)
 
   g_assert (priv->search_model == NULL);
 
+  gtk_stack_set_visible_child_name (GTK_STACK (priv->browse_files_stack), "list");
   gtk_stack_set_visible_child_name (GTK_STACK (priv->browse_header_stack), "search");
   location_bar_update (impl);
   search_setup_widgets (impl);
@@ -2563,6 +2562,7 @@ operation_mode_set_recent (GtkFileChooserWidget *impl)
   GtkFileChooserWidgetPrivate *priv = impl->priv;
   GFile *file;
 
+  gtk_stack_set_visible_child_name (GTK_STACK (priv->browse_files_stack), "list");
   gtk_stack_set_visible_child_name (GTK_STACK (priv->browse_header_stack), "pathbar");
   location_bar_update (impl);
   recent_start_loading (impl);
@@ -6111,6 +6111,8 @@ search_add_hit (GtkFileChooserWidget *impl,
       return;
     }
 
+  priv->search_model_empty = FALSE;
+
   _gtk_file_system_model_add_and_query_file (priv->search_model,
                                              file,
                                              MODEL_ATTRIBUTES);
@@ -6126,7 +6128,7 @@ search_engine_hits_added_cb (GtkSearchEngine *engine,
 {
   GtkFileChooserWidget *impl;
   GList *l;
-  
+
   impl = GTK_FILE_CHOOSER_WIDGET (data);
 
   for (l = hits; l; l = l->next)
@@ -6139,20 +6141,13 @@ search_engine_finished_cb (GtkSearchEngine *engine,
 			   gpointer         data)
 {
   GtkFileChooserWidget *impl;
-  
-  impl = GTK_FILE_CHOOSER_WIDGET (data);
-  
-#if 0
-  /* EB: setting the model here will avoid loads of row events,
-   * but it'll make the search look like blocked.
-   */
-  gtk_tree_view_set_model (GTK_TREE_VIEW (impl->browse_files_tree_view),
-                           GTK_TREE_MODEL (impl->search_model));
-  file_list_set_sort_column_ids (impl);
-#endif
 
-  /* FMQ: if search was empty, say that we got no hits */
+  impl = GTK_FILE_CHOOSER_WIDGET (data);
+
   set_busy_cursor (impl, FALSE);
+
+  if (impl->priv->search_model_empty)
+    gtk_stack_set_visible_child_name (GTK_STACK (impl->priv->browse_files_stack), "empty");
 }
 
 /* Displays a generic error when we cannot create a GtkSearchEngine.  
@@ -6233,6 +6228,7 @@ search_setup_model (GtkFileChooserWidget *impl)
   priv->search_model = _gtk_file_system_model_new (file_system_model_set,
                                                    impl,
 						   MODEL_COLUMN_TYPES);
+  priv->search_model_empty = TRUE;
 
   gtk_tree_sortable_set_sort_func (GTK_TREE_SORTABLE (priv->search_model),
 				   MODEL_COL_NAME,
@@ -6268,6 +6264,8 @@ search_start_query (GtkFileChooserWidget *impl,
   search_clear_model (impl, TRUE);
   search_setup_model (impl);
   set_busy_cursor (impl, TRUE);
+
+  gtk_stack_set_visible_child_name (GTK_STACK (priv->browse_files_stack), "list");
 
   if (priv->search_engine == NULL)
     priv->search_engine = _gtk_search_engine_new ();
@@ -7478,6 +7476,7 @@ gtk_file_chooser_widget_class_init (GtkFileChooserWidgetClass *class)
   gtk_widget_class_bind_template_child_private (widget_class, GtkFileChooserWidget, browse_widgets_box);
   gtk_widget_class_bind_template_child_private (widget_class, GtkFileChooserWidget, browse_widgets_hpaned);
   gtk_widget_class_bind_template_child_private (widget_class, GtkFileChooserWidget, browse_files_box);
+  gtk_widget_class_bind_template_child_private (widget_class, GtkFileChooserWidget, browse_files_stack);
   gtk_widget_class_bind_template_child_private (widget_class, GtkFileChooserWidget, browse_widgets_box);
   gtk_widget_class_bind_template_child_private (widget_class, GtkFileChooserWidget, places_sidebar);
   gtk_widget_class_bind_template_child_private (widget_class, GtkFileChooserWidget, browse_files_tree_view);
