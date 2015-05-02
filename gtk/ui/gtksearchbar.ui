@@ -3,56 +3,39 @@
   <!-- interface-requires gtk+ 3.10 -->
   <template class="GtkSearchBar" parent="GtkBin">
     <property name="app_paintable">True</property>
-    <property name="can_focus">False</property>
     <child>
       <object class="GtkRevealer" id="revealer">
         <property name="visible">True</property>
-        <property name="can_focus">False</property>
         <property name="hexpand">True</property>
-        <property name="vexpand">False</property>
         <child>
           <object class="GtkBox" id="tool_box">
             <property name="visible">True</property>
-            <property name="can_focus">False</property>
             <property name="border_width">6</property>
             <property name="spacing">6</property>
             <child>
               <object class="GtkBox" id="box_left">
                 <property name="visible">True</property>
-                <property name="can_focus">False</property>
                 <property name="halign">start</property>
                 <property name="hexpand">True</property>
                 <property name="orientation">vertical</property>
-                <child>
-                  <placeholder/>
-                </child>
               </object>
               <packing>
                 <property name="expand">True</property>
-                <property name="fill">True</property>
-                <property name="position">0</property>
               </packing>
             </child>
             <child>
               <object class="GtkBox" id="box_center">
                 <property name="visible">True</property>
-                <property name="can_focus">False</property>
                 <property name="halign">center</property>
                 <property name="orientation">vertical</property>
-                <child>
-                  <placeholder/>
-                </child>
               </object>
               <packing>
-                <property name="expand">False</property>
-                <property name="fill">True</property>
                 <property name="position">1</property>
               </packing>
             </child>
             <child>
               <object class="GtkBox" id="box_right">
                 <property name="visible">True</property>
-                <property name="can_focus">False</property>
                 <property name="halign">end</property>
                 <property name="hexpand">True</property>
                 <property name="orientation">vertical</property>
@@ -69,7 +52,6 @@
                     <child>
                       <object class="GtkImage" id="close_image">
                         <property name="visible">True</property>
-                        <property name="can_focus">False</property>
                         <property name="icon_size">1</property>
                         <property name="icon_name">window-close-symbolic</property>
                       </object>
@@ -77,14 +59,10 @@
                   </object>
                   <packing>
                     <property name="expand">True</property>
-                    <property name="fill">True</property>
-                    <property name="position">0</property>
                   </packing>
                 </child>
               </object>
               <packing>
-                <property name="expand">False</property>
-                <property name="fill">True</property>
                 <property name="position">2</property>
               </packing>
             </child>
