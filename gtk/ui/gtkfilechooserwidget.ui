@@ -400,6 +400,7 @@
             <signal name="changed" handler="new_folder_name_changed"/>
           </object>
           <packing>
+            <property name="left-attach">0</property>
             <property name="top-attach">1</property>
           </packing>
         </child>
