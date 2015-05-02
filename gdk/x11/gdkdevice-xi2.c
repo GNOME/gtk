@@ -762,10 +762,10 @@ _gdk_x11_device_xi2_translate_state (XIModifierState *mods_state,
     {
       gint len, i;
 
-      /* We're only interested in the first 5 buttons */
-      len = MIN (5, buttons_state->mask_len * 8);
+      /* We're only interested in the first 3 buttons */
+      len = MIN (3, buttons_state->mask_len * 8);
 
-      for (i = 0; i < len; i++)
+      for (i = 1; i <= len; i++)
         {
           if (!XIMaskIsSet (buttons_state->mask, i))
             continue;
@@ -780,12 +780,6 @@ _gdk_x11_device_xi2_translate_state (XIModifierState *mods_state,
               break;
             case 3:
               state |= GDK_BUTTON3_MASK;
-              break;
-            case 4:
-              state |= GDK_BUTTON4_MASK;
-              break;
-            case 5:
-              state |= GDK_BUTTON5_MASK;
               break;
             default:
               break;
