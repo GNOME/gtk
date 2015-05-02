@@ -30,6 +30,8 @@ typedef struct {
   GList *classes;
   gboolean packing;
   gboolean packing_started;
+  gboolean cell_packing;
+  gboolean cell_packing_started;
   gchar **attribute_names;
   gchar **attribute_values;
   GString *value;
@@ -65,6 +67,15 @@ value_is_default (MyParserData *data,
   g_strdelimit (canonical_name, "_", '-');
   if (data->packing)
     pspec = gtk_container_class_find_child_property (class, canonical_name);
+  else if (data->cell_packing)
+    {
+      GObjectClass *cell_class;
+
+      /* We're just assuming that the cell layout is using a GtkCellAreaBox. */
+      cell_class = g_type_class_ref (GTK_TYPE_CELL_AREA_BOX);
+      pspec = gtk_cell_area_class_find_cell_property (GTK_CELL_AREA_CLASS (cell_class), canonical_name);
+      g_type_class_unref (cell_class);
+    }
   else
     pspec = g_object_class_find_property (class, canonical_name);
   g_free (canonical_name);
@@ -74,6 +85,8 @@ value_is_default (MyParserData *data,
     {
       if (data->packing)
         g_printerr (_("Packing property %s::%s not found\n"), class_name, property_name);
+      else if (data->cell_packing)
+        g_printerr (_("Cell property %s::%s not found\n"), class_name, property_name);
       else
         g_printerr (_("Property %s::%s not found\n"), class_name, property_name);
       return FALSE;
@@ -176,6 +189,16 @@ maybe_emit_property (MyParserData *data)
           g_print ("%*s<packing>\n", data->indent, "");
           data->indent += 2;
           data->packing_started = TRUE;
+        }
+    }
+
+  if (data->cell_packing)
+    {
+      if (!data->cell_packing_started)
+        {
+          g_print ("%*s<packing>\n", data->indent, "");
+          data->indent += 2;
+          data->cell_packing_started = TRUE;
         }
     }
 
@@ -283,6 +306,13 @@ start_element (GMarkupParseContext  *context,
 
       return;
     }
+  else if (strcmp (element_name, "cell-packing") == 0)
+    {
+      data->cell_packing = TRUE;
+      data->cell_packing_started = FALSE;
+
+      return;
+    }
   else if (strcmp (element_name, "attribute") == 0)
     {
       /* attribute in label has no content */
@@ -348,6 +378,12 @@ end_element (GMarkupParseContext  *context,
     {
       data->packing = FALSE;
       if (!data->packing_started)
+        return;
+    }
+  else if (strcmp (element_name, "cell-packing") == 0)
+    {
+      data->cell_packing = FALSE;
+      if (!data->cell_packing_started)
         return;
     }
   else if (data->value != 0)
@@ -439,6 +475,8 @@ do_simplify (const gchar *filename)
   data.value = NULL;
   data.packing = FALSE;
   data.packing_started = FALSE;
+  data.cell_packing = FALSE;
+  data.cell_packing_started = FALSE;
   data.unclosed_starttag = FALSE;
   data.indent = 0;
 
