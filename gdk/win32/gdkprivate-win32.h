@@ -361,7 +361,7 @@ extern GHashTable	*_format_atom_table;
 /* Hold the result of a delayed rendering */
 extern HGLOBAL		_delayed_rendering_data;
 
-extern HCURSOR _gdk_win32_grab_cursor;
+extern GdkCursor *_gdk_win32_grab_cursor;
 
 HGLOBAL _gdk_win32_selection_convert_to_dib (HGLOBAL  hdata,
 					     GdkAtom  target);

@@ -106,7 +106,7 @@ static gboolean gdk_event_dispatch (GSource     *source,
 static GList *client_filters;	/* Filters for client messages */
 extern gint       _gdk_input_ignore_core;
 
-HCURSOR _gdk_win32_grab_cursor;
+GdkCursor *_gdk_win32_grab_cursor;
 
 static GSourceFuncs event_funcs = {
   gdk_event_prepare,
@@ -1840,7 +1840,7 @@ gdk_event_translate (MSG  *msg,
   MINMAXINFO *mmi;
   LONG style;
   HWND hwnd;
-  HCURSOR hcursor;
+  GdkCursor *cursor;
   BYTE key_state[256];
   HIMC himc;
   WINDOWPOS *windowpos;
@@ -2633,19 +2633,19 @@ gdk_event_translate (MSG  *msg,
 	break;
 
       if (grab_window != NULL && _gdk_win32_grab_cursor != NULL)
-	hcursor = _gdk_win32_grab_cursor;
-      else if (!GDK_WINDOW_DESTROYED (window))
-	hcursor = GDK_WINDOW_IMPL_WIN32 (window->impl)->hcursor;
+	cursor = _gdk_win32_grab_cursor;
+      else if (!GDK_WINDOW_DESTROYED (window) && GDK_WINDOW_IMPL_WIN32 (window->impl)->cursor != NULL)
+	cursor = GDK_WINDOW_IMPL_WIN32 (window->impl)->cursor;
       else
-	hcursor = NULL;
+	cursor = NULL;
 
-      if (hcursor != NULL)
-	{
-	  GDK_NOTE (EVENTS, g_print (" (SetCursor(%p)", hcursor));
-	  SetCursor (hcursor);
-	  return_val = TRUE;
-	  *ret_valp = TRUE;
-	}
+      if (cursor != NULL)
+        {
+	  GDK_NOTE (EVENTS, g_print (" (SetCursor(%p)", cursor));
+	  SetCursor (GDK_WIN32_CURSOR (cursor)->hcursor);
+          return_val = TRUE;
+          *ret_valp = TRUE;
+        }
       break;
 
     case WM_SYSCOMMAND:

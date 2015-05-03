@@ -55,7 +55,7 @@ struct _GdkWindowImplWin32
 
   gint8 toplevel_window_type;
 
-  HCURSOR hcursor;
+  GdkCursor *cursor;
   HICON   hicon_big;
   HICON   hicon_small;
 

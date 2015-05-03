@@ -132,7 +132,7 @@ static void
 gdk_window_impl_win32_init (GdkWindowImplWin32 *impl)
 {
   impl->toplevel_window_type = -1;
-  impl->hcursor = NULL;
+  impl->cursor = NULL;
   impl->hicon_big = NULL;
   impl->hicon_small = NULL;
   impl->hint_flags = 0;
@@ -160,14 +160,7 @@ gdk_window_impl_win32_finalize (GObject *object)
       gdk_win32_handle_table_remove (window_impl->handle);
     }
 
-  if (window_impl->hcursor != NULL)
-    {
-      if (GetCursor () == window_impl->hcursor)
-	SetCursor (NULL);
-
-      GDI_CALL (DestroyCursor, (window_impl->hcursor));
-      window_impl->hcursor = NULL;
-    }
+  g_clear_object (&window_impl->cursor);
 
   if (window_impl->hicon_big != NULL)
     {
@@ -1957,55 +1950,33 @@ gdk_win32_window_set_device_cursor (GdkWindow *window,
                                     GdkCursor *cursor)
 {
   GdkWindowImplWin32 *impl;
-  GdkWin32Cursor *cursor_private;
-  HCURSOR hcursor;
-  HCURSOR hprevcursor;
+  GdkCursor *previous_cursor;
 
   impl = GDK_WINDOW_IMPL_WIN32 (window->impl);
-  cursor_private = (GdkWin32Cursor*) cursor;
 
   if (GDK_WINDOW_DESTROYED (window))
     return;
 
-  if (!cursor)
-    hcursor = NULL;
-  else
-    hcursor = cursor_private->hcursor;
-
   GDK_NOTE (MISC, g_print ("gdk_win32_window_set_cursor: %p: %p\n",
 			   GDK_WINDOW_HWND (window),
-			   hcursor));
+			   cursor));
 
   /* First get the old cursor, if any (we wait to free the old one
    * since it may be the current cursor set in the Win32 API right
    * now).
    */
-  hprevcursor = impl->hcursor;
+  previous_cursor = impl->cursor;
 
   GDK_DEVICE_GET_CLASS (device)->set_window_cursor (device, window, cursor);
 
-  if (hcursor == NULL)
-    impl->hcursor = NULL;
+  if (cursor)
+    impl->cursor = g_object_ref (cursor);
   else
-    {
-      /* We must copy the cursor as it is OK to destroy the GdkCursor
-       * while still in use for some window. See for instance
-       * gimp_change_win_cursor() which calls gdk_window_set_cursor
-       * (win, cursor), and immediately afterwards gdk_cursor_destroy
-       * (cursor).
-       */
-      if ((impl->hcursor = CopyCursor (hcursor)) == NULL)
-	WIN32_API_FAILED ("CopyCursor");
-      GDK_NOTE (MISC, g_print ("... CopyCursor (%p) = %p\n",
-			       hcursor, impl->hcursor));
-    }
+    impl->cursor = NULL;
 
   /* Destroy the previous cursor */
-  if (hprevcursor != NULL)
-    {
-      GDK_NOTE (MISC, g_print ("... DestroyCursor (%p)\n", hprevcursor));
-      API_CALL (DestroyCursor, (hprevcursor));
-    }
+  if (previous_cursor != NULL)
+    g_object_unref (previous_cursor);
 }
 
 static void

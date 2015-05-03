@@ -157,30 +157,23 @@ gdk_device_virtual_set_window_cursor (GdkDevice *device,
 				      GdkWindow *window,
 				      GdkCursor *cursor)
 {
-  GdkWin32Cursor *cursor_private;
   GdkWindow *parent_window;
   GdkWindowImplWin32 *impl;
-  HCURSOR hcursor;
-  HCURSOR hprevcursor;
+  GdkCursor *replacement_cursor;
+  GdkCursor *previous_cursor;
 
   impl = GDK_WINDOW_IMPL_WIN32 (window->impl);
-  cursor_private = (GdkWin32Cursor*) cursor;
 
-  hprevcursor = impl->hcursor;
+  previous_cursor = impl->cursor;
 
-  if (!cursor)
-    hcursor = NULL;
-  else
-    hcursor = cursor_private->hcursor;
-
-  if (hcursor != NULL)
+  if (cursor != NULL && GDK_WIN32_CURSOR (cursor)->hcursor != NULL)
     {
       /* If the pointer is over our window, set new cursor */
       GdkWindow *curr_window = gdk_window_get_device_position (window, device, NULL, NULL, NULL);
 
       if (curr_window == window ||
           (curr_window && window == gdk_window_get_toplevel (curr_window)))
-        SetCursor (hcursor);
+        SetCursor (GDK_WIN32_CURSOR (cursor)->hcursor);
       else
         {
           /* Climb up the tree and find whether our window is the
@@ -188,12 +181,12 @@ gdk_device_virtual_set_window_cursor (GdkDevice *device,
            * new cursor.
            */
           while (curr_window && curr_window->impl &&
-                 !GDK_WINDOW_IMPL_WIN32 (curr_window->impl)->hcursor)
+                 !GDK_WINDOW_IMPL_WIN32 (curr_window->impl)->cursor)
             {
               curr_window = curr_window->parent;
               if (curr_window == GDK_WINDOW (window))
                 {
-                  SetCursor (hcursor);
+                  SetCursor (GDK_WIN32_CURSOR (cursor)->hcursor);
                   break;
                 }
             }
@@ -204,26 +197,26 @@ gdk_device_virtual_set_window_cursor (GdkDevice *device,
    * use before we destroy it, in case we're not over our window but
    * the cursor is still set to our old one.
    */
-  if (hprevcursor != NULL &&
-      GetCursor () == hprevcursor)
+  if (previous_cursor != NULL &&
+      GetCursor () == GDK_WIN32_CURSOR (previous_cursor)->hcursor)
     {
       /* Look for a suitable cursor to use instead */
-      hcursor = NULL;
+      replacement_cursor = NULL;
       parent_window = GDK_WINDOW (window)->parent;
 
-      while (hcursor == NULL)
+      while (replacement_cursor == NULL)
         {
           if (parent_window)
             {
               impl = GDK_WINDOW_IMPL_WIN32 (parent_window->impl);
-              hcursor = impl->hcursor;
+              replacement_cursor = impl->cursor;
               parent_window = parent_window->parent;
             }
           else
-            hcursor = LoadCursor (NULL, IDC_ARROW);
+            replacement_cursor = _gdk_win32_display_get_cursor_for_type (_gdk_display, GDK_LEFT_PTR);
         }
 
-      SetCursor (hcursor);
+      SetCursor (GDK_WIN32_CURSOR (replacement_cursor)->hcursor);
     }
 }
 
@@ -266,31 +259,22 @@ gdk_device_virtual_grab (GdkDevice    *device,
 			 guint32       time_)
 {
   GdkWindowImplWin32 *impl = GDK_WINDOW_IMPL_WIN32 (window->impl);
-  HCURSOR hcursor;
-  GdkWin32Cursor *cursor_private;
-
-  cursor_private = (GdkWin32Cursor*) cursor;
 
   if (gdk_device_get_source (device) != GDK_SOURCE_KEYBOARD)
     {
-      if (!cursor)
-	hcursor = NULL;
-      else if ((hcursor = CopyCursor (cursor_private->hcursor)) == NULL)
-	WIN32_API_FAILED ("CopyCursor");
-
       if (_gdk_win32_grab_cursor != NULL)
 	{
-	  if (GetCursor () == _gdk_win32_grab_cursor)
+	  if (GetCursor () == GDK_WIN32_CURSOR (_gdk_win32_grab_cursor)->hcursor)
 	    SetCursor (NULL);
-	  DestroyCursor (_gdk_win32_grab_cursor);
+	  g_clear_object (&_gdk_win32_grab_cursor);
 	}
 
-      _gdk_win32_grab_cursor = hcursor;
+      _gdk_win32_grab_cursor = cursor;
 
       if (_gdk_win32_grab_cursor != NULL)
-	SetCursor (_gdk_win32_grab_cursor);
-      else if (impl->hcursor != NULL)
-	SetCursor (impl->hcursor);
+	SetCursor (GDK_WIN32_CURSOR (_gdk_win32_grab_cursor)->hcursor);
+      else if (impl->cursor != NULL)
+	SetCursor (GDK_WIN32_CURSOR (impl->cursor)->hcursor);
       else
 	SetCursor (LoadCursor (NULL, IDC_ARROW));
 
@@ -317,9 +301,9 @@ gdk_device_virtual_ungrab (GdkDevice *device,
     {
       if (_gdk_win32_grab_cursor != NULL)
 	{
-	  if (GetCursor () == _gdk_win32_grab_cursor)
+	  if (GetCursor () == GDK_WIN32_CURSOR (_gdk_win32_grab_cursor)->hcursor)
 	    SetCursor (NULL);
-	  DestroyCursor (_gdk_win32_grab_cursor);
+	  g_clear_object (&_gdk_win32_grab_cursor);
 	}
       _gdk_win32_grab_cursor = NULL;
 
