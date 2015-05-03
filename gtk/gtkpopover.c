@@ -582,7 +582,8 @@ gtk_popover_map (GtkWidget *widget)
   GtkPopoverPrivate *priv = GTK_POPOVER (widget)->priv;
 
   priv->prev_default = gtk_window_get_default_widget (priv->window);
-  g_object_ref (priv->prev_default);
+  if (priv->prev_default)
+    g_object_ref (priv->prev_default);
 
   GTK_WIDGET_CLASS (gtk_popover_parent_class)->map (widget);
 
