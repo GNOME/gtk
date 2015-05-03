@@ -75,7 +75,23 @@ typedef struct _GdkPoint              GdkPoint;
  * Defines the position and size of a rectangle. It is identical to
  * #cairo_rectangle_int_t.
  */
+#ifdef __GI_SCANNER__
+/* The introspection scanner is currently unable to lookup how
+ * cairo_rectangle_int_t is actually defined. This prevents
+ * introspection data for the GdkRectangle type to include fields
+ * descriptions. To workaround this issue, we define it with the same
+ * content as cairo_rectangle_int_t, but only under the introspection
+ * define.
+ */
+struct _GdkRectangle
+{
+    int x, y;
+    int width, height;
+};
+typedef struct _GdkRectangle          GdkRectangle;
+#else
 typedef cairo_rectangle_int_t         GdkRectangle;
+#endif
 
 /**
  * GdkAtom:
