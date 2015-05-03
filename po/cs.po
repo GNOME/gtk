@@ -1712,7 +1712,7 @@ msgstr "Vlastnost buňky %s::%s nebyla nalezena\n"
 #: gtk/gtk-builder-tool.c:93
 #, c-format
 msgid "Property %s::%s not found\n"
-msgstr "Vlastnost %s::%s nebyla nalezena"
+msgstr "Vlastnost %s::%s nebyla nalezena\n"
 
 #: gtk/gtk-builder-tool.c:101
 #, c-format
