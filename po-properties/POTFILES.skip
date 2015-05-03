@@ -303,6 +303,7 @@ testsuite/reftests/window-height-for-width.ref.ui
 testsuite/reftests/window-height-for-width.ui
 testsuite/reftests/window-show-contents-on-map.ref.ui
 testsuite/reftests/window-show-contents-on-map.ui
+testsuite/tools/simplify/test3.ui
 tests/visuals/inline-toolbar-horizontal.ui
 tests/visuals/inline-toolbar-vertical.ui
 tests/visuals/linked-buttons-horizontal.ui
