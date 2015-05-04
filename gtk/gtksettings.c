@@ -3030,7 +3030,7 @@ settings_update_font_options (GtkSettings *settings)
 static gboolean
 settings_update_fontconfig (GtkSettings *settings)
 {
-#ifdef GDK_WINDOWING_X11
+#if defined(GDK_WINDOWING_X11) || defined(GDK_WINDOWING_WAYLAND)
   static guint    last_update_timestamp;
   static gboolean last_update_needed;
 
@@ -3064,7 +3064,7 @@ settings_update_fontconfig (GtkSettings *settings)
   return last_update_needed;
 #else
   return FALSE;
-#endif /* GDK_WINDOWING_X11 */
+#endif /* GDK_WINDOWING_X11 || GDK_WINDOWING_WAYLAND */
 }
 
 static void
