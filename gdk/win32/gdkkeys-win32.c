@@ -165,7 +165,7 @@ handle_special (guint  vk,
     case VK_APPS:
       *ksymp = GDK_KEY_Menu; break;
     case VK_DECIMAL:
-      *ksymp = GDK_KP_Decimal; break;
+      *ksymp = GDK_KEY_KP_Decimal; break;
     case VK_MULTIPLY:
       *ksymp = GDK_KEY_KP_Multiply; break;
     case VK_ADD:
