@@ -95,6 +95,8 @@ struct _GtkFontChooserWidgetPrivate
   GtkFontFilterFunc filter_func;
   gpointer          filter_data;
   GDestroyNotify    filter_data_destroy;
+
+  guint last_fontconfig_timestamp;
 };
 
 /* This is the initial fixed height and the top padding of the preview entry */
@@ -633,6 +635,21 @@ gtk_font_chooser_widget_load_fonts (GtkFontChooserWidget *fontchooser)
   gint n_families, i;
   PangoFontFamily **families;
   gchar *family_and_face;
+  guint fontconfig_timestamp;
+
+  g_object_get (gtk_widget_get_settings (GTK_WIDGET (fontchooser)),
+                "gtk-fontconfig-timestamp", &fontconfig_timestamp,
+                NULL);
+
+  /* The fontconfig timestamp is only set on systems with fontconfig; every
+   * other platform will set it to 0. For those systems, we fall back to
+   * reloading the fonts every time.
+   */
+  if (fontconfig_timestamp != 0 &&
+      priv->last_fontconfig_timestamp == fontconfig_timestamp)
+    return;
+
+  priv->last_fontconfig_timestamp = fontconfig_timestamp;
 
   list_store = GTK_LIST_STORE (priv->model);
 
