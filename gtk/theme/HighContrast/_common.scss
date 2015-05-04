@@ -1374,6 +1374,9 @@ GtkTreeView.view.progressbar { //Progressbar in treeview cells
 
   -GtkRange-stepper-spacing: 0;
   -GtkRange-trough-under-steppers: 1;
+  $_slider_margin: 3px;
+  $_slider_fine_tune_margin: 4px;
+  
   .button {
     border: none;
   }
@@ -1397,6 +1400,40 @@ GtkTreeView.view.progressbar { //Progressbar in treeview cells
         background-color: $selected_bg_color;
       }
     }
+  }
+  &.overlay-indicator {
+    &:not(.dragging):not(.hovering) { // Overlay scrolling indicator
+      opacity: 0.4;
+
+      -GtkRange-slider-width: 5px;
+
+      .slider {
+        margin: 0;
+        background-color: $fg_color;
+        border: 1px solid white;
+        background-clip: padding-box;
+      }
+
+      .trough {
+        border-style: none;
+        background-color: transparent;
+      }
+
+      // w/o the following margin tweaks the slider shrinks when hovering/dragging
+      &.vertical .slider {
+        margin-top: $_slider_margin - 1px;
+        margin-bottom: $_slider_margin - 1px;
+      }
+
+      &.horizontal .slider {
+        margin-left: $_slider_margin - 1px;
+        margin-right: $_slider_margin - 1px;
+      }
+
+    }
+
+    &.dragging,
+    &.hovering { opacity: 0.7; }
   }
 }
 

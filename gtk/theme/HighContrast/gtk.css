@@ -1606,6 +1606,25 @@ GtkTreeView.view.progressbar {
       border-width: 8px; }
       .scrollbar.slider.fine-tune:prelight:active {
         background-color: #000; }
+  .scrollbar.overlay-indicator:not(.dragging):not(.hovering) {
+    opacity: 0.4;
+    -GtkRange-slider-width: 5px; }
+    .scrollbar.overlay-indicator:not(.dragging):not(.hovering) .slider {
+      margin: 0;
+      background-color: #000;
+      border: 1px solid white;
+      background-clip: padding-box; }
+    .scrollbar.overlay-indicator:not(.dragging):not(.hovering) .trough {
+      border-style: none;
+      background-color: transparent; }
+    .scrollbar.overlay-indicator:not(.dragging):not(.hovering).vertical .slider {
+      margin-top: 2px;
+      margin-bottom: 2px; }
+    .scrollbar.overlay-indicator:not(.dragging):not(.hovering).horizontal .slider {
+      margin-left: 2px;
+      margin-right: 2px; }
+  .scrollbar.overlay-indicator.dragging, .scrollbar.overlay-indicator.hovering {
+    opacity: 0.7; }
 
 .scrollbars-junction, .scrollbar.trough {
   border-color: transparent;
