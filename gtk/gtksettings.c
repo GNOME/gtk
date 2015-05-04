@@ -16,8 +16,6 @@
  */
 
 
-#define PANGO_ENABLE_BACKEND /* for pango_fc_font_map_cache_clear() */
-
 #include "config.h"
 
 #include <string.h>
