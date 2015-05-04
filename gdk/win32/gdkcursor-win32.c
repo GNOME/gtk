@@ -216,6 +216,7 @@ static struct {
 #endif
   { "help",  IDC_HELP },
   { "ibeam", IDC_IBEAM },
+  { "left_ptr_watch", IDC_APPSTARTING },
   { "sizeall", IDC_SIZEALL },
   { "sizenesw", IDC_SIZENESW },
   { "sizens", IDC_SIZENS },
