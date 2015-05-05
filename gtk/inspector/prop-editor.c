@@ -1592,6 +1592,14 @@ constructed (GObject *object)
   can_modify = ((spec->flags & G_PARAM_WRITABLE) != 0 &&
                 (spec->flags & G_PARAM_CONSTRUCT_ONLY) == 0);
 
+  /*
+   * By reaching this, we already know the property is readable.
+   * Since all we can do for a GObject is dive down into it's properties and
+   * inspect bindings and such, pretend to be mutable.
+   */
+  if (g_type_is_a (spec->value_type, G_TYPE_OBJECT))
+    can_modify = TRUE;
+
   if (!can_modify)
     return;
 
