@@ -58,18 +58,18 @@
  */
 
 
-struct _GtkFontButtonPrivate 
+struct _GtkFontButtonPrivate
 {
   gchar         *title;
 
   gchar         *fontname;
-  
+
   guint         use_font : 1;
   guint         use_size : 1;
   guint         show_style : 1;
   guint         show_size : 1;
   guint         show_preview_entry : 1;
-   
+
   GtkWidget     *font_dialog;
   GtkWidget     *font_label;
   GtkWidget     *size_label;
@@ -78,6 +78,7 @@ struct _GtkFontButtonPrivate
   PangoFontDescription *font_desc;
   PangoFontFamily      *font_family;
   PangoFontFace        *font_face;
+  PangoFontMap         *font_map;
   gint                  font_size;
   gchar                *preview_text;
   GtkFontFilterFunc     font_filter;
@@ -87,7 +88,7 @@ struct _GtkFontButtonPrivate
 };
 
 /* Signals */
-enum 
+enum
 {
   FONT_SET,
   LAST_SIGNAL
@@ -361,7 +362,7 @@ gtk_font_button_take_font_desc (GtkFontButton        *font_button,
 
   if (pango_font_description_get_size_is_absolute (priv->font_desc))
     priv->font_size = pango_font_description_get_size (priv->font_desc);
-  else 
+  else
     priv->font_size = pango_font_description_get_size (priv->font_desc) / PANGO_SCALE;
 
   gtk_font_button_update_font_data (font_button);
@@ -382,6 +383,24 @@ static const PangoFontDescription *
 gtk_font_button_get_font_desc (GtkFontButton *font_button)
 {
   return font_button->priv->font_desc;
+}
+
+static void
+gtk_font_button_set_font_map (GtkFontButton *font_button,
+                              PangoFontMap  *font_map)
+{
+  if (g_set_object (&font_button->priv->font_map, font_map))
+    {
+      PangoContext *context;
+
+      if (!font_map)
+        font_map = pango_cairo_font_map_get_default ();
+
+      context = gtk_widget_get_pango_context (font_button->priv->font_label);
+      pango_context_set_font_map (context, font_map);
+
+      g_object_notify (G_OBJECT (font_button), "font-map");
+    }
 }
 
 static void
@@ -636,6 +655,9 @@ gtk_font_button_set_property (GObject      *object,
     case PROP_SHOW_SIZE:
       gtk_font_button_set_show_size (font_button, g_value_get_boolean (value));
       break;
+    case GTK_FONT_CHOOSER_PROP_FONT_MAP:
+      gtk_font_button_set_font_map (font_button, g_value_get_object (value));
+      break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, param_id, pspec);
       break;
@@ -680,11 +702,14 @@ gtk_font_button_get_property (GObject    *object,
     case PROP_SHOW_SIZE:
       g_value_set_boolean (value, gtk_font_button_get_show_size (font_button));
       break;
+    case GTK_FONT_CHOOSER_PROP_FONT_MAP:
+      g_value_set_object (value, font_button->priv->font_map);
+      break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, param_id, pspec);
       break;
     }
-} 
+}
 
 
 /**
@@ -700,7 +725,7 @@ GtkWidget *
 gtk_font_button_new (void)
 {
   return g_object_new (GTK_TYPE_FONT_BUTTON, NULL);
-} 
+}
 
 /**
  * gtk_font_button_new_with_font:
@@ -1014,6 +1039,8 @@ gtk_font_button_clicked (GtkButton *button)
       priv->font_dialog = gtk_font_chooser_dialog_new (priv->title, NULL);
       font_dialog = GTK_FONT_CHOOSER (font_button->priv->font_dialog);
 
+      if (priv->font_map)
+        gtk_font_chooser_set_font_map (font_dialog, priv->font_map);
       gtk_font_chooser_set_show_preview_entry (font_dialog, priv->show_preview_entry);
 
       if (priv->preview_text)

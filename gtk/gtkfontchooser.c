@@ -107,6 +107,18 @@ gtk_font_chooser_default_init (GtkFontChooserInterface *iface)
                           GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
 
   /**
+   * GtkFontChooser:font-map:
+   *
+   * A custom font map to use for this widget, instead of the
+   * default one.
+   *
+   * Since: 3.18
+   */
+  g_object_interface_install_property (iface,
+      g_param_spec_object ("font-map", P_("Font map"), P_("A custom PangoFontMap"),
+                           PANGO_TYPE_FONT_MAP,
+                           GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
+  /**
    * GtkFontChooser::font-activated:
    * @self: the object which received the signal
    * @fontname: the font name
@@ -414,4 +426,48 @@ _gtk_font_chooser_font_activated (GtkFontChooser *chooser,
   g_return_if_fail (GTK_IS_FONT_CHOOSER (chooser));
 
   g_signal_emit (chooser, chooser_signals[SIGNAL_FONT_ACTIVATED], 0, fontname);
+}
+
+/**
+ * gtk_font_chooser_set_font_map:
+ * @fontchooser: a #GtkFontChooser
+ * @fontmap: (allow-none): a #PangoFontMap
+ *
+ * Sets a custom font map to use for this font chooser widget.
+ * A custom font map can be used to present application-specific
+ * fonts instead of or in addition to the normal system fonts.
+ *
+ * Since: 3.18
+ */
+void
+gtk_font_chooser_set_font_map (GtkFontChooser *fontchooser,
+                               PangoFontMap   *fontmap)
+{
+  g_return_if_fail (GTK_IS_FONT_CHOOSER (fontchooser));
+  g_return_if_fail (fontmap == NULL || PANGO_IS_FONT_MAP (fontmap));
+
+  g_object_set (fontchooser, "font-map", fontmap, NULL);
+}
+
+/**
+ * gtk_font_chooser_get_font_map:
+ * @fontchooser: a #GtkFontChooser
+ *
+ * Gets the custom font map of this font chooser widget,
+ * or %NULL if it does not have one.
+ *
+ * Returns: (transfer full) (allow-none): a #PangoFontMap, or %NULL
+ *
+ * Since: 3.18
+ */
+PangoFontMap *
+gtk_font_chooser_get_font_map (GtkFontChooser *fontchooser)
+{
+  PangoFontMap *fontmap;
+
+  g_return_if_fail (GTK_IS_FONT_CHOOSER (fontchooser));
+
+  g_object_get (fontchooser, "font-map", &fontmap, NULL);
+
+  return fontmap;
 }

@@ -16,6 +16,7 @@
  */
 
 #include <string.h>
+#include <pango/pangofc-fontmap.h>
 #include <gtk/gtk.h>
 
 static gboolean
@@ -71,8 +72,29 @@ main (int argc, char *argv[])
 
   gtk_init (&argc, &argv);
 
-  window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
   font_button = gtk_font_button_new ();
+
+  if (argc > 0)
+    {
+      FcConfig *config;
+      PangoFontMap *fontmap;
+      gint i;
+
+      /* Create a custom font configuration by adding font files specified
+       * on the commandline to the default config.
+       */
+      config = FcInitLoadConfigAndFonts ();
+      for (i = 0; i < argc; i++)
+        FcConfigAppFontAddFile (config, (const FcChar8 *)argv[i]);
+
+      fontmap = pango_cairo_font_map_new_for_font_type (CAIRO_FONT_TYPE_FT);
+      pango_fc_font_map_set_config (PANGO_FC_FONT_MAP (fontmap), config);
+      gtk_font_chooser_set_font_map (GTK_FONT_CHOOSER (font_button), fontmap);
+    }
+
+  gtk_font_button_set_use_font (GTK_FONT_BUTTON (font_button), TRUE);
+
+  window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
   gtk_container_add (GTK_CONTAINER (window), font_button);
   gtk_widget_show_all (window);
 

@@ -112,6 +112,11 @@ void             gtk_font_chooser_set_filter_func          (GtkFontChooser   *fo
                                                             GtkFontFilterFunc filter,
                                                             gpointer          user_data,
                                                             GDestroyNotify    destroy);
+GDK_AVAILABLE_IN_3_18
+void             gtk_font_chooser_set_font_map             (GtkFontChooser   *fontchooser,
+                                                            PangoFontMap     *fontmap);
+GDK_AVAILABLE_IN_3_18
+PangoFontMap *   gtk_font_chooser_get_font_map             (GtkFontChooser   *fontchooser);
 
 G_END_DECLS
 

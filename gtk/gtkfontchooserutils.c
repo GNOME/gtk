@@ -121,6 +121,9 @@ _gtk_font_chooser_install_properties (GObjectClass *klass)
   g_object_class_override_property (klass,
                                     GTK_FONT_CHOOSER_PROP_SHOW_PREVIEW_ENTRY,
                                     "show-preview-entry");
+  g_object_class_override_property (klass,
+                                    GTK_FONT_CHOOSER_PROP_FONT_MAP,
+                                    "font-map");
 }
 
 /**

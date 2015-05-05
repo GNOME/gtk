@@ -1634,6 +1634,8 @@ gtk_font_chooser_get_show_preview_entry
 gtk_font_chooser_set_show_preview_entry
 GtkFontFilterFunc
 gtk_font_chooser_set_filter_func
+gtk_font_chooser_set_font_map
+gtk_font_chooser_get_font_map
 
 <SUBSECTION Standard>
 GtkFontChooserIface
