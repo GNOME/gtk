@@ -2893,7 +2893,8 @@ GtkFileChooserDialog {
 
 .sidebar {
   border: none;
-  background-color: $sidebar_bg_color;
+  // Popover background color
+  background-color: mix($bg_color, $base_color, 50%);
 
   &:backdrop {
     background-color: $backdrop_sidebar_bg_color;
@@ -2904,46 +2905,60 @@ GtkFileChooserDialog {
   }
 }
 
-// Places sidebar is a special case, since the view here have to look like chrome not content, so we override text color
-GtkPlacesSidebar.sidebar .view {
-
-  color: $fg_color;
-  background-color: transparent;
-
-  .separator,
-  .separator:backdrop { @extend .separator; }
-
-  .image { // icons color
-    color: mix($fg_color, $sidebar_bg_color, 70%);
-
-    &:selected {
-      color: mix($selected_fg_color, $selected_bg_color, 90%);
-
-      &:backdrop { color: mix($backdrop_selected_fg_color, $selected_bg_color, 90%); }
-    }
-
-    &:insensitive { color: mix($insensitive_fg_color, $sidebar_bg_color, 70%); }
-
-    &:backdrop {
-      color: mix($backdrop_fg_color, $sidebar_bg_color, 70%);
-
-      &:insensitive { color: mix($backdrop_insensitive_color, $sidebar_bg_color, 70%); }
-    }
+$_placesidebar_icons_opacity: 0.7;
+GtkSidebarRow {
+  // Needs overriding of the GtkListBoxRow padding
+  @at-root .list-row {
+    padding: 0px;
   }
-
-  &:insensitive { color: $insensitive_fg_color; }
-
-  &:backdrop {
-    color: $backdrop_fg_color;
-
-    &:insensitive { color: $backdrop_insensitive_color; }
+  // Using margins/padding directly in the SidebarRow
+  // will make the animation of the new bookmark row jump
+  .sidebar-revealer {
+    padding: 4px 14px 4px 12px;
   }
-
-  &:selected {
-    @extend %selected_items;
+  .sidebar-icon {
+    padding-right: 8px;
+    opacity: $_placesidebar_icons_opacity; // dim the device icons
+  }
+  .sidebar-label {
+    padding-right: 2px;
   }
 }
 
+GtkPlacesSidebar.sidebar {
+  .sidebar-placeholder-row {
+    border: solid 1px $selected_bg_color;
+  }
+  .sidebar-new-bookmark-row {
+    background-color: darken($sidebar_bg_color, 10%);
+  }
+  // Preserve everything else of the list-row class
+  @at-root .list-row.button {
+    // Popover menuitem color
+    &:hover {
+      background-color: mix($fg_color, $bg_color, 10%);
+    }
+  }
+  @at-root .sidebar-button.button { // @at-root needded to not change the specificity making button styling inheritance broken
+                                    // so istead of "GtkPlacesSidebar.sidebar .sidebar-button.button" [specificity 0,0,3,1]
+                                    // the extended selector ".sidebar-button.button" [specificity 0,0,2,0]
+
+    &.image-button { padding: 5px; }
+
+    @extend .button.flat;
+    border-radius: 100%;
+    outline-radius: 100%;
+/*    &:hover:not(:active):not(:backdrop) {
+      background-image: none;
+      background-color: gtkalpha(currentColor, 0.1);
+      border-color: transparentize($borders_color, 1);
+      box-shadow: inset 0 0 transparentize(white, 1);
+      icon-shadow: none;
+    } */
+    &:not(:hover):not(:active) > GtkImage,
+    &:backdrop > GtkImage { opacity: $_placesidebar_icons_opacity };
+  }
+}
 
 .sidebar-item {
   padding: 10px 4px;
@@ -2956,7 +2971,6 @@ GtkPlacesSidebar.sidebar .view {
     background-size: 6px 6px, 0 0;
   }
 }
-
 
 /*********
  * Paned *

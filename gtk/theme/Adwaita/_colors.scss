@@ -30,7 +30,7 @@ $osd_insensitive_bg_color: transparentize(mix($osd_fg_color, opacify($osd_bg_col
 $osd_insensitive_fg_color: mix($osd_fg_color, opacify($osd_bg_color, 1), 50%);
 $osd_borders_color: transparentize(black, 0.3);
 
-$sidebar_bg_color: lighten($bg_color,5%);
+$sidebar_bg_color: lighten($bg_color, 2%);
 
 $tooltip_borders_color: transparentize(white, 0.9);
 
@@ -48,6 +48,6 @@ $backdrop_insensitive_color: if($variant == 'light', darken($backdrop_bg_color, 
 $backdrop_selected_fg_color: $selected_fg_color;
 $backdrop_borders_color: mix($borders_color, $bg_color, 90%);
 $backdrop_dark_fill: mix($backdrop_borders_color, $backdrop_bg_color, 35%);
-$backdrop_sidebar_bg_color: lighten($backdrop_bg_color,5%);
+$backdrop_sidebar_bg_color: lighten($backdrop_bg_color, 2%);
 
 $backdrop_scrollbar_bg_color: darken($backdrop_bg_color, 3%);
