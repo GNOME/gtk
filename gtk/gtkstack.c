@@ -206,6 +206,17 @@ gtk_stack_init (GtkStack *stack)
 }
 
 static void
+gtk_stack_dispose (GObject *obj)
+{
+  GtkStack *stack = GTK_STACK (obj);
+  GtkStackPrivate *priv = gtk_stack_get_instance_private (stack);
+
+  priv->visible_child = NULL;
+
+  G_OBJECT_CLASS (gtk_stack_parent_class)->dispose (obj);
+}
+
+static void
 gtk_stack_finalize (GObject *obj)
 {
   GtkStack *stack = GTK_STACK (obj);
@@ -375,6 +386,7 @@ gtk_stack_class_init (GtkStackClass *klass)
 
   object_class->get_property = gtk_stack_get_property;
   object_class->set_property = gtk_stack_set_property;
+  object_class->dispose = gtk_stack_dispose;
   object_class->finalize = gtk_stack_finalize;
 
   widget_class->size_allocate = gtk_stack_size_allocate;
