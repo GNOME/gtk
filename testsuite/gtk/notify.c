@@ -403,6 +403,10 @@ test_type (gconstpointer data)
       g_type_is_a (type, GTK_TYPE_FILE_CHOOSER_WIDGET) ||
       g_type_is_a (type, GTK_TYPE_PLACES_SIDEBAR))
     return;
+
+  /* These rely on a d-bus session bus */
+  if (g_type_is_a (type, GTK_TYPE_MOUNT_OPERATION))
+    return;
  
   klass = g_type_class_ref (type);
 
