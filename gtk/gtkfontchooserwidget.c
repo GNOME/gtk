@@ -46,6 +46,7 @@
 #include "gtktreeselection.h"
 #include "gtktreeview.h"
 #include "gtkwidget.h"
+#include "gtksettings.h"
 
 /**
  * SECTION:gtkfontchooserwidget
@@ -96,6 +97,7 @@ struct _GtkFontChooserWidgetPrivate
   gpointer          filter_data;
   GDestroyNotify    filter_data_destroy;
 
+  GtkSettings *settings;
   guint last_fontconfig_timestamp;
 };
 
@@ -953,9 +955,19 @@ gtk_font_chooser_widget_screen_changed (GtkWidget *widget,
                                         GdkScreen *previous_screen)
 {
   GtkFontChooserWidget *fontchooser = GTK_FONT_CHOOSER_WIDGET (widget);
+  GtkSettings *settings;
 
   if (GTK_WIDGET_CLASS (gtk_font_chooser_widget_parent_class)->screen_changed)
     GTK_WIDGET_CLASS (gtk_font_chooser_widget_parent_class)->screen_changed (widget, previous_screen);
+
+  if (previous_screen)
+    {
+      settings = gtk_settings_get_for_screen (previous_screen);
+      g_signal_handlers_disconnect_by_func (settings, gtk_font_chooser_widget_load_fonts, widget);
+    }
+  settings = gtk_widget_get_settings (widget);
+  g_signal_connect_object (settings, "notify::gtk-fontconfig-timestamp",
+                           G_CALLBACK (gtk_font_chooser_widget_load_fonts), widget, G_CONNECT_SWAPPED);
 
   if (previous_screen == NULL)
     previous_screen = gdk_screen_get_default ();
