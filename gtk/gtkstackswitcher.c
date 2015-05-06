@@ -300,7 +300,9 @@ populate_switcher (GtkStackSwitcher *self)
   if (widget)
     {
       button = g_hash_table_lookup (priv->buttons, widget);
+      priv->in_child_changed = TRUE;
       gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (button), TRUE);
+      priv->in_child_changed = FALSE;
     }
 }
 
