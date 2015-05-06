@@ -97,7 +97,6 @@ struct _GtkFontChooserWidgetPrivate
   gpointer          filter_data;
   GDestroyNotify    filter_data_destroy;
 
-  GtkSettings *settings;
   guint last_fontconfig_timestamp;
 };
 
