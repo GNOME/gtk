@@ -550,9 +550,28 @@ gdk_mir_event_source_queue_event (GdkDisplay     *display,
                                   GdkWindow      *window,
                                   const MirEvent *event)
 {
+  const MirInputEvent *input_event;
+
   // FIXME: Only generate events if the window wanted them?
   switch (mir_event_get_type (event))
     {
+    case mir_event_type_input:
+      input_event = mir_event_get_input_event (event);
+
+      switch (mir_input_event_get_type (input_event))
+        {
+        case mir_input_event_type_key:
+          handle_key_event (window, input_event);
+          break;
+        case mir_input_event_type_touch:
+          handle_motion_event (window, input_event);
+          break;
+        case mir_input_event_type_pointer:
+          handle_motion_event (window, input_event);
+          break;
+        }
+
+      break;
     case mir_event_type_key:
       handle_key_event (window, mir_event_get_input_event (event));
       break;
