@@ -358,9 +358,6 @@ if test "$enable_x11_backend" = "yes"; then
   # backend names are identical.
   cairo_backends="$cairo_backends cairo-xlib"
   GDK_BACKENDS="$GDK_BACKENDS x11"
-  # Pull in gio-unix for GDesktopAppInfo usage, see at least
-  # gdkapplaunchcontext-x11.c
-  have_gio_unix=yes
   backend_immodules="$backend_immodules,xim"
   GDK_WINDOWING="$GDK_WINDOWING
 #define GDK_WINDOWING_X11"
@@ -394,9 +391,6 @@ if test "x$enable_quartz_backend" = xyes; then
   if test "x$quartz_relocation" = xyes; then
     AC_DEFINE([QUARTZ_RELOCATION], [1], [Use NSBundle functions to determine load paths for libraries, translations, etc.])
   fi
-  # Pull in gio-unix for GDesktopAppInfo usage, see at least
-  # gdkapplaunchcontext-x11.c
-  have_gio_unix=yes
 else
   AM_CONDITIONAL(USE_QUARTZ, false)
 fi
@@ -411,9 +405,6 @@ if test "x$enable_broadway_backend" = xyes; then
   GDK_BACKENDS="$GDK_BACKENDS broadway"
   cairo_backends="$cairo_backends cairo"
   backend_immodules="$backend_immodules,broadway"
-  if test "$os_win32" != "yes"; then
-    have_gio_unix=yes
-  fi
   GDK_WINDOWING="$GDK_WINDOWING
 #define GDK_WINDOWING_BROADWAY"
   GDK_EXTRA_LIBS="$GDK_EXTRA_LIBS -lz"
@@ -441,7 +432,6 @@ if test "$enable_wayland_backend" = "yes"; then
   # For the cairo image backend
   cairo_backends="$cairo_backends cairo"
   GDK_BACKENDS="$GDK_BACKENDS wayland"
-  have_gio_unix=yes
   GDK_WINDOWING="$GDK_WINDOWING
 #define GDK_WINDOWING_WAYLAND"
   WAYLAND_PACKAGES="$WAYLAND_DEPENDENCIES"
@@ -473,7 +463,6 @@ if test "$enable_mir_backend" = "yes"; then
   GDK_WINDOWING="$GDK_WINDOWING
 #define GDK_WINDOWING_MIR"
   MIR_PACKAGES="$MIR_DEPENDENCIES"
-  have_gio_unix=yes
 
   AM_CONDITIONAL(USE_MIR, true)
 else
@@ -1273,6 +1262,11 @@ else
 fi
 
 # Check for gio-unix
+if test "$os_win32" != "yes"; then
+  # Pull in gio-unix for gtk-launch usage, see at least
+  # gtk-launch.c
+  have_gio_unix=yes
+fi
 if test "$have_gio_unix" = "yes"; then
   GDK_GIO_PACKAGE="gio-unix-2.0 >= glib_required_version"
   AC_DEFINE([HAVE_GIO_UNIX], [1],
