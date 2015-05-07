@@ -37,7 +37,7 @@
 #include "gtkintl.h"
 #include "gtklabel.h"
 #include "gtkliststore.h"
-#include "gtknotebook.h"
+#include "gtkstack.h"
 #include "gtkprivate.h"
 #include "gtkscale.h"
 #include "gtkscrolledwindow.h"
@@ -79,7 +79,7 @@ struct _GtkFontChooserWidgetPrivate
   GtkTreeViewColumn *family_face_column;
   GtkCellRenderer *family_face_cell;
   GtkWidget    *list_scrolled_window;
-  GtkWidget    *list_notebook;
+  GtkWidget    *list_stack;
   GtkTreeModel *model;
   GtkTreeModel *filter_model;
 
@@ -512,7 +512,7 @@ row_inserted_cb (GtkTreeModel *model,
   GtkFontChooserWidget *fontchooser = user_data;
   GtkFontChooserWidgetPrivate *priv = fontchooser->priv;
 
-  gtk_notebook_set_current_page (GTK_NOTEBOOK (priv->list_notebook), 0);
+  gtk_stack_set_visible_child_name (GTK_STACK (priv->list_stack), "list");
 }
 
 static void
@@ -524,7 +524,7 @@ row_deleted_cb  (GtkTreeModel *model,
   GtkFontChooserWidgetPrivate *priv = fontchooser->priv;
 
   if (gtk_tree_model_iter_n_children (model, NULL) == 0)
-    gtk_notebook_set_current_page (GTK_NOTEBOOK (priv->list_notebook), 1);
+    gtk_stack_set_visible_child_name (GTK_STACK (priv->list_stack), "empty");
 }
 
 static void
@@ -551,7 +551,7 @@ gtk_font_chooser_widget_class_init (GtkFontChooserWidgetClass *klass)
   gtk_widget_class_bind_template_child_private (widget_class, GtkFontChooserWidget, family_face_column);
   gtk_widget_class_bind_template_child_private (widget_class, GtkFontChooserWidget, family_face_cell);
   gtk_widget_class_bind_template_child_private (widget_class, GtkFontChooserWidget, list_scrolled_window);
-  gtk_widget_class_bind_template_child_private (widget_class, GtkFontChooserWidget, list_notebook);
+  gtk_widget_class_bind_template_child_private (widget_class, GtkFontChooserWidget, list_stack);
   gtk_widget_class_bind_template_child_private (widget_class, GtkFontChooserWidget, model);
   gtk_widget_class_bind_template_child_private (widget_class, GtkFontChooserWidget, filter_model);
   gtk_widget_class_bind_template_child_private (widget_class, GtkFontChooserWidget, preview);
