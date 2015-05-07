@@ -1546,7 +1546,7 @@ column-header.button.dnd { // for treeview-like derive widgets
   border-radius: 5px;
   background-color: mix($bg_color, $base_color, 50%);
 
-  box-shadow: 0 2px 3px transparentize(black, 0.5);
+  box-shadow: 0 1px 2px transparentize(black, 0.7);
 
   &:backdrop {
     box-shadow: none;
