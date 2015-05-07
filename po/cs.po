@@ -3,7 +3,6 @@
 # Copyright (C) 2003, 2004, 2005 Miloslav Trmac <mitr@volny.cz>.
 # Copyright (C) 2006 Lukas Novotny <lukasnov@cvs.gnome.org>.
 # This file is distributed under the same license as the gtk+ package.
-#
 # Stanislav Brabec <utx@k332.feld.cvut.cz>, 1998.
 # Jiří Pavlovský <pavlovsk@ff.cuni.cz>, 1998.
 # Jiří Lebl <jirka@5z.com>, 2002.
@@ -11,23 +10,22 @@
 # Miloslav Trmac <mitr@volny.cz>, 2003, 2004, 2005.
 # Jakub Friedl <jfriedl@suse.cz>, 2006.
 # Lukas Novotny <lukasnov@cvs.gnome.org>, 2006.
-# Petr Kovar <pknbe@volny.cz>, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014.
+# Petr Kovar <pknbe@volny.cz>, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015.
 # Marek Černocký <marek@manet.cz>, 2012, 2013, 2014, 2015.
-#
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2015-05-03 09:32+0000\n"
-"PO-Revision-Date: 2015-05-03 13:45+0200\n"
-"Last-Translator: Marek Černocký <marek@manet.cz>\n"
+"PO-Revision-Date: 2015-05-07 16:17+0200\n"
+"Last-Translator: Petr Kovar <pknbe@volny.cz>\n"
 "Language-Team: Czech <gnome-cs-list@gnome.org>\n"
 "Language: cs\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
-"X-Generator: Gtranslator 2.91.6\n"
+"X-Generator: Virtaal 0.7.1\n"
 "X-Project-Style: gnome\n"
 
 #: gdk/broadway/gdkbroadway-server.c:144
@@ -2438,7 +2436,7 @@ msgstr "Zavřít"
 #: gtk/gtkicontheme.c:2314 gtk/gtkicontheme.c:2378
 #, c-format
 msgid "Icon '%s' not present in theme %s"
-msgstr "V motivu %s není obsažena ikona „%s“"
+msgstr "Ikona „%s“ není obsažena v motivu %s"
 
 #: gtk/gtkicontheme.c:4016 gtk/gtkicontheme.c:4383
 msgid "Failed to load icon"
