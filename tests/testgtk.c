@@ -4848,6 +4848,7 @@ cursor_draw (GtkWidget *widget,
 }
 
 static const gchar *cursor_names[] = {
+    "all-scroll",
     "arrow",
     "bd_double_arrow",
     "boat",
@@ -4882,6 +4883,7 @@ static const gchar *cursor_names[] = {
     "fleur",
     "gobbler",
     "gumby",
+    "grab",
     "grabbing",
     "hand",
     "hand1",
@@ -4937,9 +4939,12 @@ static const gchar *cursor_names[] = {
     "umbrella",
     "ur_angle",
     "v_double_arrow",
+    "vertical-text",
     "watch",
     "X_cursor",
-    "xterm"
+    "xterm",
+    "zoom-in",
+    "zoom-out"
 };
 
 static GtkTreeModel *
