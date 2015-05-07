@@ -6481,7 +6481,7 @@ get_shadow_width (GtkWidget *widget,
   *shadow_width = border;
 
   if (!priv->decorated ||
-      !gtk_window_should_use_csd (window) ||
+      (!gtk_window_should_use_csd (window) && !priv->client_decorated) ||
       !gtk_window_supports_client_shadow (window))
     return;
 
