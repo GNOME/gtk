@@ -40,15 +40,15 @@
  * @Title: GtkProgressBar
  *
  * The #GtkProgressBar is typically used to display the progress of a long
- * running operation.  It provides a visual clue that processing
- * is underway.  The #GtkProgressBar can be used in two different
- * modes: percentage mode and activity mode.
+ * running operation. It provides a visual clue that processing is underway.
+ * The GtkProgressBar can be used in two different modes: percentage mode
+ * and activity mode.
  *
  * When an application can determine how much work needs to take place
  * (e.g. read a fixed number of bytes from a file) and can monitor its
- * progress, it can use the #GtkProgressBar in percentage mode and the user
- * sees a growing bar indicating the percentage of the work that has
- * been completed.  In this mode, the application is required to call
+ * progress, it can use the GtkProgressBar in percentage mode and the
+ * user sees a growing bar indicating the percentage of the work that
+ * has been completed. In this mode, the application is required to call
  * gtk_progress_bar_set_fraction() periodically to update the progress bar.
  *
  * When an application has no accurate way of knowing the amount of work
@@ -58,9 +58,9 @@
  * periodically to update the progress bar.
  *
  * There is quite a bit of flexibility provided to control the appearance
- * of the #GtkProgressBar.  Functions are provided to control the
- * orientation of the bar, optional text can be displayed along with
- * the bar, and the step size used in activity mode can be set.
+ * of the #GtkProgressBar. Functions are provided to control the orientation
+ * of the bar, optional text can be displayed along with the bar, and the
+ * step size used in activity mode can be set.
  */
 
 #define MIN_HORIZONTAL_BAR_WIDTH   150
@@ -188,14 +188,15 @@ gtk_progress_bar_class_init (GtkProgressBarClass *class)
   /**
    * GtkProgressBar:show-text:
    *
-   * Sets whether the progress bar will show text superimposed
-   * over the bar. The shown text is either the value of
+   * Sets whether the progress bar will show a text in addition
+   * to the bar itself. The shown text is either the value of
    * the #GtkProgressBar:text property or, if that is %NULL,
    * the #GtkProgressBar:fraction value, as a percentage.
    *
-   * To make a progress bar that is styled and sized suitably for containing
-   * text (even if the actual text is blank), set #GtkProgressBar:show-text to
-   * %TRUE and #GtkProgressBar:text to the empty string (not %NULL).
+   * To make a progress bar that is styled and sized suitably for
+   * showing text (even if the actual text is blank), set
+   * #GtkProgressBar:show-text to %TRUE and #GtkProgressBar:text
+   * to the empty string (not %NULL).
    *
    * Since: 3.0
    */
@@ -1002,8 +1003,8 @@ gtk_progress_bar_paint_text (GtkProgressBar *pbar,
 }
 
 static gboolean
-gtk_progress_bar_draw (GtkWidget      *widget,
-                       cairo_t        *cr)
+gtk_progress_bar_draw (GtkWidget *widget,
+                       cairo_t   *cr)
 {
   GtkProgressBar *pbar = GTK_PROGRESS_BAR (widget);
   GtkProgressBarPrivate *priv = pbar->priv;
@@ -1165,15 +1166,16 @@ gtk_progress_bar_pulse (GtkProgressBar *pbar)
  * @pbar: a #GtkProgressBar
  * @text: (allow-none): a UTF-8 string, or %NULL
  *
- * Causes the given @text to appear superimposed on the progress bar.
+ * Causes the given @text to appear next to the progress bar.
  *
  * If @text is %NULL and #GtkProgressBar:show-text is %TRUE, the current
  * value of #GtkProgressBar:fraction will be displayed as a percentage.
  *
- * If @text is non-%NULL and #GtkProgressBar:show-text is %TRUE, the text will
- * be displayed. In this case, it will not display the progress percentage.
- * If @text is the empty string, the progress bar will still be styled and sized
- * suitably for containing text, as long as #GtkProgressBar:show-text is %TRUE.
+ * If @text is non-%NULL and #GtkProgressBar:show-text is %TRUE, the text
+ * will be displayed. In this case, it will not display the progress
+ * percentage. If @text is the empty string, the progress bar will still
+ * be styled and sized suitably for containing text, as long as
+ * #GtkProgressBar:show-text is %TRUE.
  */
 void
 gtk_progress_bar_set_text (GtkProgressBar *pbar,
@@ -1202,10 +1204,10 @@ gtk_progress_bar_set_text (GtkProgressBar *pbar,
  * @pbar: a #GtkProgressBar
  * @show_text: whether to show superimposed text
  *
- * Sets whether the progress bar will show text superimposed
- * over the bar. The shown text is either the value of
- * the #GtkProgressBar:text property or, if that is %NULL,
- * the #GtkProgressBar:fraction value, as a percentage.
+ * Sets whether the progress bar will show text next to the bar.
+ * The shown text is either the value of the #GtkProgressBar:text
+ * property or, if that is %NULL, the #GtkProgressBar:fraction value,
+ * as a percentage.
  *
  * To make a progress bar that is styled and sized suitably for containing
  * text (even if the actual text is blank), set #GtkProgressBar:show-text to
@@ -1324,7 +1326,7 @@ gtk_progress_bar_set_inverted (GtkProgressBar *pbar,
  * gtk_progress_bar_get_text:
  * @pbar: a #GtkProgressBar
  *
- * Retrieves the text displayed superimposed on the progress bar,
+ * Retrieves the text that is displayed with the progress bar,
  * if any, otherwise %NULL. The return value is a reference
  * to the text, not a copy of it, so will become invalid
  * if you change the text in the progress bar.
@@ -1393,8 +1395,8 @@ gtk_progress_bar_get_inverted (GtkProgressBar *pbar)
  * @pbar: a #GtkProgressBar
  * @mode: a #PangoEllipsizeMode
  *
- * Sets the mode used to ellipsize (add an ellipsis: "...") the text
- * if there is not enough space to render the entire string.
+ * Sets the mode used to ellipsize (add an ellipsis: "...") the
+ * text if there is not enough space to render the entire string.
  *
  * Since: 2.6
  */
