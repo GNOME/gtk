@@ -684,7 +684,7 @@ error_message (GtkRecentChooserDefault *impl,
 
 static void
 set_busy_cursor (GtkRecentChooserDefault *impl,
-		 gboolean                 show_busy_cursor)
+		 gboolean                 busy)
 {
   GtkWindow *toplevel;
   GdkDisplay *display;
@@ -693,15 +693,19 @@ set_busy_cursor (GtkRecentChooserDefault *impl,
   toplevel = get_toplevel (GTK_WIDGET (impl));
   if (!toplevel || !gtk_widget_get_realized (GTK_WIDGET (toplevel)))
     return;
-  
-  display = gtk_widget_get_display (GTK_WIDGET (toplevel));
-  
-  cursor = NULL;
-  if (show_busy_cursor)
-    cursor = gdk_cursor_new_for_display (display, GDK_WATCH);
 
-  gdk_window_set_cursor (gtk_widget_get_window (GTK_WIDGET (toplevel)),
-                         cursor);
+  display = gtk_widget_get_display (GTK_WIDGET (toplevel));
+
+  if (busy)
+    {
+      cursor = gdk_cursor_new_from_name (display, "left_ptr_watch");
+      if (cursor == NULL)
+        cursor = gdk_cursor_new_for_display (display, GDK_WATCH);
+    }
+  else
+    cursor = NULL;
+
+  gdk_window_set_cursor (gtk_widget_get_window (GTK_WIDGET (toplevel)), cursor);
   gdk_display_flush (display);
 
   if (cursor)
