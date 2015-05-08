@@ -83,6 +83,52 @@ _gdk_wayland_display_finalize_cursors (GdkWaylandDisplay *display)
   g_hash_table_destroy (display->cursor_cache);
 }
 
+static const struct {
+  const gchar *css_name, *traditional_name;
+} name_map[] = {
+  { "default",      "left_ptr" },
+  { "pointer",      "hand" },
+  { "progress",     "left_ptr_watch" },
+  { "wait",         "watch" },
+  { "cell",         "crosshair" },
+  { "crosshair",    "cross" },
+  { "text",         "xterm" },
+  { "alias",        "dnd-link" },
+  { "copy",         "dnd-copy" },
+  { "no-drop",      "dnd-none" },
+  { "not-allowed",  "crossed_circle" },
+  { "grab",         "hand2" },
+  { "col-resize",   "h_double_arrow" },
+  { "row-resize",   "v_double_arrow" },
+  { "n-resize",     "top_side" },
+  { "e-resize",     "right_side" },
+  { "s-resize",     "bottom_side" },
+  { "w-resize",     "left_side" },
+  { "ne-resize",    "top_right_corner" },
+  { "nw-resize",    "top_left_corner" },
+  { "se-resize",    "bottom_right_corner" },
+  { "sw-resize",    "bottom_left_corner" },
+  { "ew-resize",    "h_double_arrow" },
+  { "ns-resize",    "v_double_arrow" },
+  { "nesw-resize",  "fd_double_arrow" },
+  { "nwse-resize",  "bd_double_arrow" },
+  { NULL, NULL }
+};
+
+static const gchar *
+name_fallback (const gchar *name)
+{
+  gint i;
+
+  for (i = 0; name_map[i].css_name; i++)
+    {
+      if (g_str_equal (name_map[i].css_name, name))
+        return name_map[i].traditional_name;
+    }
+
+  return "left_ptr";
+}
+
 static gboolean
 _gdk_wayland_cursor_update (GdkWaylandDisplay *wayland_display,
                             GdkWaylandCursor  *cursor)
@@ -97,6 +143,9 @@ _gdk_wayland_cursor_update (GdkWaylandDisplay *wayland_display,
   theme = _gdk_wayland_display_get_scaled_cursor_theme (wayland_display,
                                                         cursor->scale);
   c = wl_cursor_theme_get_cursor (theme, cursor->name);
+  if (!c)
+    c = wl_cursor_theme_get_cursor (theme, name_fallback (cursor->name));
+
   if (!c)
     {
       g_warning (G_STRLOC ": Unable to load %s from the cursor theme", cursor->name);
@@ -284,7 +333,7 @@ _gdk_wayland_display_get_cursor_for_name_with_scale (GdkDisplay  *display,
   private->scale = scale;
 
   /* Blank cursor case */
-  if (!name || g_str_equal (name, "blank_cursor"))
+  if (!name || g_str_equal (name, "none") || g_str_equal (name, "blank_cursor"))
     return GDK_CURSOR (private);
 
   if (!_gdk_wayland_cursor_update (wayland_display, private))
