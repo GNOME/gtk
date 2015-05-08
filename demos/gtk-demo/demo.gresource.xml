@@ -86,6 +86,7 @@
     <file>css_multiplebgs.c</file>
     <file>css_pixbufs.c</file>
     <file>css_shadows.c</file>
+    <file>cursors.c</file>
     <file>dialog.c</file>
     <file>drawingarea.c</file>
     <file>editable_cells.c</file>

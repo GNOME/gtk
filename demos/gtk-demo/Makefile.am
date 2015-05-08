@@ -17,6 +17,7 @@ demos =						\
 	css_multiplebgs.c			\
 	css_pixbufs.c				\
 	css_shadows.c				\
+	cursors.c				\
 	dialog.c				\
 	drawingarea.c				\
 	editable_cells.c			\
