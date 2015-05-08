@@ -265,45 +265,6 @@ _gdk_wayland_cursor_init (GdkWaylandCursor *cursor)
 static GdkCursor *
 _gdk_wayland_display_get_cursor_for_name_with_scale (GdkDisplay  *display,
                                                      const gchar *name,
-                                                     guint        scale);
-
-GdkCursor *
-_gdk_wayland_display_get_cursor_for_type_with_scale (GdkDisplay    *display,
-                                                     GdkCursorType  cursor_type,
-                                                     guint          scale)
-{
-  GEnumClass *enum_class;
-  GEnumValue *enum_value;
-  gchar *cursor_name;
-  GdkCursor *result;
-
-  enum_class = g_type_class_ref (GDK_TYPE_CURSOR_TYPE);
-  enum_value = g_enum_get_value (enum_class, cursor_type);
-  cursor_name = g_strdup (enum_value->value_nick);
-  g_strdelimit (cursor_name, "-", '_');
-  g_type_class_unref (enum_class);
-
-  result = _gdk_wayland_display_get_cursor_for_name_with_scale (display,
-                                                                cursor_name,
-                                                                scale);
-
-  g_free (cursor_name);
-
-  return result;
-}
-
-GdkCursor *
-_gdk_wayland_display_get_cursor_for_type (GdkDisplay    *display,
-                                          GdkCursorType  cursor_type)
-{
-  return _gdk_wayland_display_get_cursor_for_type_with_scale (display,
-                                                              cursor_type,
-                                                              1);
-}
-
-static GdkCursor *
-_gdk_wayland_display_get_cursor_for_name_with_scale (GdkDisplay  *display,
-                                                     const gchar *name,
                                                      guint        scale)
 {
   GdkWaylandCursor *private;
@@ -339,6 +300,40 @@ _gdk_wayland_display_get_cursor_for_name (GdkDisplay  *display,
                                           const gchar *name)
 {
   return _gdk_wayland_display_get_cursor_for_name_with_scale (display, name, 1);
+}
+
+GdkCursor *
+_gdk_wayland_display_get_cursor_for_type_with_scale (GdkDisplay    *display,
+                                                     GdkCursorType  cursor_type,
+                                                     guint          scale)
+{
+  GEnumClass *enum_class;
+  GEnumValue *enum_value;
+  gchar *cursor_name;
+  GdkCursor *result;
+
+  enum_class = g_type_class_ref (GDK_TYPE_CURSOR_TYPE);
+  enum_value = g_enum_get_value (enum_class, cursor_type);
+  cursor_name = g_strdup (enum_value->value_nick);
+  g_strdelimit (cursor_name, "-", '_');
+  g_type_class_unref (enum_class);
+
+  result = _gdk_wayland_display_get_cursor_for_name_with_scale (display,
+                                                                cursor_name,
+                                                                scale);
+
+  g_free (cursor_name);
+
+  return result;
+}
+
+GdkCursor *
+_gdk_wayland_display_get_cursor_for_type (GdkDisplay    *display,
+                                          GdkCursorType  cursor_type)
+{
+  return _gdk_wayland_display_get_cursor_for_type_with_scale (display,
+                                                              cursor_type,
+                                                              1);
 }
 
 GdkCursor *
