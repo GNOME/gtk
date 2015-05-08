@@ -124,7 +124,12 @@ G_BEGIN_DECLS
  * @GDK_CURSOR_IS_PIXMAP: type of cursors constructed with
  *   gdk_cursor_new_from_pixbuf()
  *
- * The standard cursors available.
+ * Predefined cursors.
+ *
+ * Note that these IDs are directly taken from the X cursor font, and many
+ * of these cursors are either not useful, or are not available on other platforms.
+ *
+ * The recommended way to create cursors is to use gdk_cursor_new_from_name().
  */
 typedef enum
 {

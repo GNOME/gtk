@@ -134,7 +134,42 @@ HTML_IMAGES = 				\
 	images/umbrella.png		\
 	images/ur_angle.png		\
 	images/watch.png		\
-	images/xterm.png
+	images/xterm.png		\
+	images/alias_cursor.png		\
+	images/all_scroll_cursor.png	\
+	images/cell_cursor.png		\
+	images/col_resize_cursor.png	\
+	images/copy_cursor.png		\
+	images/crosshair_cursor.png	\
+	images/default_cursor.png	\
+	images/e_resize_cursor.png	\
+	images/ew_resize_cursor.png	\
+	images/grabbing_cursor.png	\
+	images/grab_cursor.png		\
+	images/hand_cursor.png		\
+	images/help_cursor.png		\
+	images/move_cursor.png		\
+	images/ne_resize_cursor.png	\
+	images/nesw_resize_cursor.png	\
+	images/no_drop_cursor.png	\
+	images/not_allowed_cursor.png	\
+	images/n_resize_cursor.png	\
+	images/ns_resize_cursor.png	\
+	images/nw_resize_cursor.png	\
+	images/nwse_resize_cursor.png	\
+	images/pointer_cursor.png	\
+	images/progress_cursor.png	\
+	images/row_resize_cursor.png	\
+	images/se_resize_cursor.png	\
+	images/s_resize_cursor.png	\
+	images/sw_resize_cursor.png	\
+	images/text_cursor.png		\
+	images/vertical_text_cursor.png	\
+	images/wait_cursor.png		\
+	images/w_resize_cursor.png	\
+	images/X_cursor.png		\
+	images/zoom_in_cursor.png	\
+	images/zoom_out_cursor.png
 
 if ENABLE_DOC_CROSS_REFERENCES
 # Extra options to supply to gtkdoc-fixref
