@@ -38,62 +38,6 @@ add_section (GtkWidget   *box,
   return section;
 }
 
-/* Map css cursor names to cursors commonly available in cursor themes */
-static const struct {
-  const char *css_name, *name;
-} name_map[] = {
-  { "default", "left_ptr" },
-  { "none", NULL },
-  { "help", "help" },
-  { "context-menu", "context-menu" },
-  { "pointer", "hand" },
-  { "progress", "left_ptr_watch" },
-  { "wait", "watch" },
-  { "cell", "crosshair" },
-  { "crosshair", "tcross" },
-  { "text", "xterm" },
-  { "vertical-text", "vertical-text" },
-  { "alias", "dnd-link" },
-  { "copy", "dnd-copy" },
-  { "move", "move" },
-  { "no-drop", "dnd-none" },
-  { "not-allowed", "crossed_circle" },
-  { "grab", "grab" },
-  { "grabbing", "grabbing" },
-  { "all-scroll", "all-scroll" },
-  { "col-resize", "h_double_arrow" },
-  { "row-resize", "v_double_arrow" },
-  { "n-resize", "top_side" },
-  { "e-resize", "right_side" },
-  { "s-resize", "bottom_side" },
-  { "w-resize", "left_side" },
-  { "ne-resize", "top_right_corner" },
-  { "nw-resize", "top_left_corner" },
-  { "sw-resize", "bottom_left_corner" },
-  { "se-resize", "bottom_right_corner" },
-  { "ew-resize", "h_double_arrow" },
-  { "ns-resize", "v_double_arrow" },
-  { "nesw-resize", "fd_double_arrow" },
-  { "nwse-resize", "bd_double_arrow" },
-  { "zoom-in", "zoom-in" },
-  { "zoome-out", "zoom-out" },
-  { NULL, NULL }
-};
-
-static const gchar *
-lookup_name (const gchar *css_name)
-{
-  gint i;
-
-  for (i = 0; name_map[i].css_name; i++)
-    {
-      if (g_strcmp0 (name_map[i].css_name, css_name) == 0)
-        return name_map[i].name;
-    }
-
-  return css_name;
-}
-
 static void
 add_button (GtkWidget   *section,
             const gchar *css_name)
@@ -101,15 +45,9 @@ add_button (GtkWidget   *section,
   GtkWidget *image, *button;
   GdkDisplay *display;
   GdkCursor *cursor;
-  const gchar *name;
-
-  name = lookup_name (css_name);
 
   display = gtk_widget_get_display (section);
-  if (name == NULL)
-    cursor = gdk_cursor_new_for_display (display, GDK_BLANK_CURSOR);
-  else
-    cursor = gdk_cursor_new_from_name (display, name);
+  cursor = gdk_cursor_new_from_name (display, css_name);
   if (cursor == NULL)
     image = gtk_image_new_from_icon_name ("image-missing", GTK_ICON_SIZE_MENU);
   else
