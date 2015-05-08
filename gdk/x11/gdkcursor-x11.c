@@ -319,7 +319,7 @@ gdk_x11_cursor_get_xcursor (GdkCursor *cursor)
 
 #if defined(HAVE_XCURSOR) && defined(HAVE_XFIXES) && XFIXES_MAJOR >= 2
 
-static cairo_surface_t *  
+static cairo_surface_t *
 gdk_x11_cursor_get_surface (GdkCursor *cursor,
 			    gdouble   *x_hot,
 			    gdouble   *y_hot)
@@ -607,6 +607,52 @@ _gdk_x11_display_get_cursor_for_surface (GdkDisplay *display,
   return GDK_CURSOR (private);
 }
 
+static const struct {
+  const gchar *css_name, *traditional_name;
+} name_map[] = {
+  { "default",      "left_ptr" },
+  { "pointer",      "hand" },
+  { "progress",     "left_ptr_watch" },
+  { "wait",         "watch" },
+  { "cell",         "crosshair" },
+  { "crosshair",    "cross" },
+  { "text",         "xterm" },
+  { "alias",        "dnd-link" },
+  { "copy",         "dnd-copy" },
+  { "no-drop",      "dnd-none" },
+  { "not-allowed",  "crossed_circle" },
+  { "grab",         "hand2" },
+  { "col-resize",   "h_double_arrow" },
+  { "row-resize",   "v_double_arrow" },
+  { "n-resize",     "top_side" },
+  { "e-resize",     "right_side" },
+  { "s-resize",     "bottom_side" },
+  { "w-resize",     "left_side" },
+  { "ne-resize",    "top_right_corner" },
+  { "nw-resize",    "top_left_corner" },
+  { "se-resize",    "bottom_right_corner" },
+  { "sw-resize",    "bottom_left_corner" },
+  { "ew-resize",    "h_double_arrow" },
+  { "ns-resize",    "v_double_arrow" },
+  { "nesw-resize",  "fd_double_arrow" },
+  { "nwse-resize",  "bd_double_arrow" },
+  { NULL, NULL }
+};
+
+static const gchar *
+name_fallback (const gchar *name)
+{
+  gint i;
+
+  for (i = 0; name_map[i].css_name; i++)
+    {
+      if (g_str_equal (name_map[i].css_name, name))
+        return name_map[i].traditional_name;
+    }
+
+  return "left_ptr";
+}
+
 GdkCursor*
 _gdk_x11_display_get_cursor_for_name (GdkDisplay  *display,
                                       const gchar *name)
@@ -621,6 +667,9 @@ _gdk_x11_display_get_cursor_for_name (GdkDisplay  *display,
     }
   else
     {
+      if (strcmp (name, "none") == 0)
+        return _gdk_x11_display_get_cursor_for_type (display, GDK_BLANK_CURSOR);
+
       private = find_in_cache (display, GDK_CURSOR_IS_PIXMAP, name);
 
       if (private)
@@ -633,6 +682,10 @@ _gdk_x11_display_get_cursor_for_name (GdkDisplay  *display,
 
       xdisplay = GDK_DISPLAY_XDISPLAY (display);
       xcursor = XcursorLibraryLoadCursor (xdisplay, name);
+      if (xcursor == None)
+        xcursor = XcursorLibraryLoadCursor (xdisplay, name_fallback (name));
+      if (xcursor == None)
+        xcursor = XcursorLibraryLoadCursor (xdisplay, "left_ptr");
       if (xcursor == None)
         return NULL;
     }
