@@ -226,26 +226,6 @@ gdk_cursor_get_cursor_type (GdkCursor *cursor)
  *
  * Creates a new cursor from the set of builtin cursors.
  *
- * Some useful ones are:
- * - ![](right_ptr.png) #GDK_RIGHT_PTR (right-facing arrow)
- * - ![](crosshair.png) #GDK_CROSSHAIR (crosshair)
- * - ![](xterm.png) #GDK_XTERM (I-beam)
- * - ![](watch.png) #GDK_WATCH (busy)
- * - ![](fleur.png) #GDK_FLEUR (for moving objects)
- * - ![](hand1.png) #GDK_HAND1 (a right-pointing hand)
- * - ![](hand2.png) #GDK_HAND2 (a left-pointing hand)
- * - ![](left_side.png) #GDK_LEFT_SIDE (resize left side)
- * - ![](right_side.png) #GDK_RIGHT_SIDE (resize right side)
- * - ![](top_left_corner.png) #GDK_TOP_LEFT_CORNER (resize northwest corner)
- * - ![](top_right_corner.png) #GDK_TOP_RIGHT_CORNER (resize northeast corner)
- * - ![](bottom_left_corner.png) #GDK_BOTTOM_LEFT_CORNER (resize southwest corner)
- * - ![](bottom_right_corner.png) #GDK_BOTTOM_RIGHT_CORNER (resize southeast corner)
- * - ![](top_side.png) #GDK_TOP_SIDE (resize top side)
- * - ![](bottom_side.png) #GDK_BOTTOM_SIDE (resize bottom side)
- * - ![](sb_h_double_arrow.png) #GDK_SB_H_DOUBLE_ARROW (move vertical splitter)
- * - ![](sb_v_double_arrow.png) #GDK_SB_V_DOUBLE_ARROW (move horizontal splitter)
- * - #GDK_BLANK_CURSOR (Blank cursor). Since 2.16
- *
  * Returns: a new #GdkCursor
  *
  * Since: 2.2
