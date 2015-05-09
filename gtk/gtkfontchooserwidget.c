@@ -1252,6 +1252,9 @@ gtk_font_chooser_widget_set_font_map (GtkFontChooserWidget *fontchooser,
       context = gtk_widget_get_pango_context (priv->family_face_list);
       pango_context_set_font_map (context, fontmap);
 
+      context = gtk_widget_get_pango_context (priv->preview);
+      pango_context_set_font_map (context, fontmap);
+
       gtk_font_chooser_widget_load_fonts (fontchooser, TRUE);
 
       g_object_notify (G_OBJECT (fontchooser), "font-map");
