@@ -4234,9 +4234,6 @@ gtk_icon_view_scroll_to_path (GtkIconView *icon_view,
 
       gtk_adjustment_set_value (icon_view->priv->hadjustment,
                                 gtk_adjustment_get_value (icon_view->priv->hadjustment) + offset);
-
-      gtk_adjustment_changed (icon_view->priv->hadjustment);
-      gtk_adjustment_changed (icon_view->priv->vadjustment);
     }
   else
     gtk_icon_view_scroll_to_item (icon_view, item);
@@ -4282,9 +4279,6 @@ gtk_icon_view_scroll_to_item (GtkIconView     *icon_view,
     gtk_adjustment_animate_to_value (hadj,
                                      gtk_adjustment_get_value (hadj)
                                      + x + item_area.x + item_area.width - allocation.width);
-
-  gtk_adjustment_changed (hadj);
-  gtk_adjustment_changed (vadj);
 }
 
 /* GtkCellLayout implementation */
