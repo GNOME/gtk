@@ -281,8 +281,52 @@ GdkCursor*
 _gdk_quartz_display_get_cursor_for_name (GdkDisplay  *display,
                                          const gchar *name)
 {
-  /* FIXME: Implement */
-  return NULL;
+  NSCursor *nscursor;
+
+  if (name == NULL || g_str_equal (name, "none"))
+    return create_blank_cursor ();
+
+  if (g_str_equal (name, "pointer"))
+    nscursor = [NSCursor pointingHandCursor];
+  else if (g_str_equal (name, "context-menu"))
+    nscursor = [NSCursor contextualMenuCursor];
+  else if (g_str_equal (name, "cell"))
+    nscursor = [NSCursor crosshairCursor];
+  else if (g_str_equal (name, "crosshair"))
+    nscursor = [NSCursor crosshairCursor];
+  else if (g_str_equal (name, "text"))
+    nscursor = [NSCursor IBeamCursor];
+  else if (g_str_equal (name, "vertical-text"))
+    nscursor = [NSCursor IBeamCursorForVerticalLayout];
+  else if (g_str_equal (name, "alias"))
+  else if (g_str_equal (name, "copy"))
+    nscursor = [NSCursor dragCopyCursor];
+  else if (g_str_equal (name, "move"))
+  else if (g_str_equal (name, "no-drop"))
+    nscursor = [NSCursor operationNotAllowedCursor];
+  else if (g_str_equal (name, "not-allowed"))
+    nscursor = [NSCursor operationNotAllowedCursor];
+  else if (g_str_equal (name, "grab"))
+    nscursor = [NSCursor openHandCursor];
+  else if (g_str_equal (name, "grabbing"))
+    nscursor = [NSCursor closedHandCursor];
+  else if (g_str_equal (name, "col-resize"))
+    nscursor = [NSCursor resizeLeftRightCursor];
+  else if (g_str_equal (name, "row-resize"))
+    nscursor = [NSCursor resizeUpDownCursor];
+  else if (g_str_equal (name, "n-resize"))
+    nscursor = [NSCursor resizeUpCursor];
+  else if (g_str_equal (name, "e-resize"))
+    nscursor = [NSCursor resizeRightCursor];
+  else if (g_str_equal (name, "s-resize"))
+    nscursor = [NSCursor resizeDownCursor];
+  else if (g_str_equal (name, "w-resize"))
+    nscursor = [NSCursor resizeLeftCursor];
+  else
+    nscursor = [NSCursor arrowCursor];
+
+  [nscursor retain];
+  return gdk_quartz_cursor_new_from_nscursor (nscursor, cursor_type);
 }
 
 G_DEFINE_TYPE (GdkQuartzCursor, gdk_quartz_cursor, GDK_TYPE_CURSOR)
