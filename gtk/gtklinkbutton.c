@@ -298,7 +298,7 @@ set_hand_cursor (GtkWidget *widget,
 
   cursor = NULL;
   if (show_hand)
-    cursor = gdk_cursor_new_for_display (display, GDK_HAND2);
+    cursor = gdk_cursor_new_from_name (display, "pointer");
 
   gdk_window_set_cursor (gtk_widget_get_window (widget), cursor);
   gdk_display_flush (display);

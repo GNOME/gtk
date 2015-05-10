@@ -196,8 +196,7 @@ set_cross_cursor (GtkWidget *widget,
     return;
 
   if (enabled)
-    cursor = gdk_cursor_new_for_display (gtk_widget_get_display (GTK_WIDGET (widget)),
-                                         GDK_CROSSHAIR);
+    cursor = gdk_cursor_new_from_name (gtk_widget_get_display (GTK_WIDGET (widget)), "crosshair");
 
   gdk_window_set_device_cursor (window, device, cursor);
 

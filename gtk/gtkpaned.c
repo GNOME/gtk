@@ -109,7 +109,6 @@ struct _GtkPanedPrivate
   GtkWidget      *saved_focus;
   GtkOrientation  orientation;
 
-  GdkCursorType  cursor_type;
   GdkRectangle   handle_pos;
   GdkWindow     *handle;
 
@@ -787,7 +786,6 @@ gtk_paned_init (GtkPaned *paned)
   priv = paned->priv;
 
   priv->orientation = GTK_ORIENTATION_HORIZONTAL;
-  priv->cursor_type = GDK_SB_H_DOUBLE_ARROW;
 
   priv->child1 = NULL;
   priv->child2 = NULL;
@@ -841,17 +839,11 @@ gtk_paned_set_property (GObject        *object,
           _gtk_orientable_set_style_classes (GTK_ORIENTABLE (paned));
 
           if (priv->orientation == GTK_ORIENTATION_HORIZONTAL)
-            {
-              priv->cursor_type = GDK_SB_H_DOUBLE_ARROW;
-              gtk_gesture_pan_set_orientation (GTK_GESTURE_PAN (priv->pan_gesture),
-                                               GTK_ORIENTATION_HORIZONTAL);
-            }
+            gtk_gesture_pan_set_orientation (GTK_GESTURE_PAN (priv->pan_gesture),
+                                             GTK_ORIENTATION_HORIZONTAL);
           else
-            {
-              priv->cursor_type = GDK_SB_V_DOUBLE_ARROW;
-              gtk_gesture_pan_set_orientation (GTK_GESTURE_PAN (priv->pan_gesture),
-                                               GTK_ORIENTATION_VERTICAL);
-            }
+            gtk_gesture_pan_set_orientation (GTK_GESTURE_PAN (priv->pan_gesture),
+                                             GTK_ORIENTATION_VERTICAL);
 
           /* state_flags_changed updates the cursor */
           gtk_paned_state_flags_changed (GTK_WIDGET (paned), 0);
@@ -1609,8 +1601,9 @@ gtk_paned_realize (GtkWidget *widget)
   attributes_mask = GDK_WA_X | GDK_WA_Y;
   if (gtk_widget_is_sensitive (widget))
     {
-      attributes.cursor = gdk_cursor_new_for_display (gtk_widget_get_display (widget),
-						      priv->cursor_type);
+      attributes.cursor = gdk_cursor_new_from_name (gtk_widget_get_display (widget),
+						    priv->orientation == GTK_ORIENTATION_HORIZONTAL
+                                                    ? "col-resize" : "row-resize");
       attributes_mask |= GDK_WA_CURSOR;
     }
 
@@ -1884,8 +1877,9 @@ gtk_paned_state_flags_changed (GtkWidget     *widget,
   if (gtk_widget_get_realized (widget))
     {
       if (gtk_widget_is_sensitive (widget))
-        cursor = gdk_cursor_new_for_display (gtk_widget_get_display (widget),
-                                             priv->cursor_type);
+        cursor = gdk_cursor_new_from_name (gtk_widget_get_display (widget),
+                                           priv->orientation == GTK_ORIENTATION_HORIZONTAL
+                                           ? "col-resize" : "row-resize");
       else
         cursor = NULL;
 

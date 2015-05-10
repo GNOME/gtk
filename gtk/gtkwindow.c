@@ -7172,15 +7172,10 @@ gtk_window_realize (GtkWidget *widget)
 
   if (priv->client_decorated && priv->type == GTK_WINDOW_TOPLEVEL)
     {
-      GdkCursorType cursor_type[8] = {
-        GDK_TOP_LEFT_CORNER,
-        GDK_TOP_SIDE,
-        GDK_TOP_RIGHT_CORNER,
-        GDK_LEFT_SIDE,
-        GDK_RIGHT_SIDE,
-        GDK_BOTTOM_LEFT_CORNER,
-        GDK_BOTTOM_SIDE,
-        GDK_BOTTOM_RIGHT_CORNER
+      const gchar *cursor[8] = {
+        "nw-resize", "n-resize", "ne-resize",
+        "w-resize",               "e-resize",
+        "sw-resize", "s-resize", "se-resize"
       };
 
       attributes.wclass = GDK_INPUT_ONLY;
@@ -7191,7 +7186,7 @@ gtk_window_realize (GtkWidget *widget)
 
       for (i = 0; i < 8; i++)
         {
-          attributes.cursor = gdk_cursor_new_for_display (gtk_widget_get_display (widget), cursor_type[i]);
+          attributes.cursor = gdk_cursor_new_from_name (gtk_widget_get_display (widget), cursor[i]);
           priv->border_window[i] = gdk_window_new (gdk_window, &attributes, attributes_mask);
           g_object_unref (attributes.cursor);
 

@@ -4080,9 +4080,9 @@ gtk_label_update_cursor (GtkLabel *label)
           display = gtk_widget_get_display (widget);
 
           if (priv->select_info->active_link)
-            cursor = gdk_cursor_new_for_display (display, GDK_HAND2);
+            cursor = gdk_cursor_new_from_name (display, "pointer");
           else if (priv->select_info->selectable)
-            cursor = gdk_cursor_new_for_display (display, GDK_XTERM);
+            cursor = gdk_cursor_new_from_name (display, "text");
           else
             cursor = NULL;
         }

@@ -376,7 +376,7 @@ gtk_inspector_on_inspect (GtkWidget          *button,
     }
 
   display = gdk_display_get_default ();
-  cursor = gdk_cursor_new_for_display (display, GDK_CROSSHAIR);
+  cursor = gdk_cursor_new_from_name (display, "crosshair");
   device = gdk_device_manager_get_client_pointer (gdk_display_get_device_manager (display));
   status = gdk_device_grab (device,
                             gtk_widget_get_window (iw->invisible),

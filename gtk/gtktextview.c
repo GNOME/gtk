@@ -4488,7 +4488,7 @@ gtk_text_view_state_flags_changed (GtkWidget     *widget,
   if (gtk_widget_get_realized (widget))
     {
       if (gtk_widget_is_sensitive (widget))
-        cursor = gdk_cursor_new_for_display (gtk_widget_get_display (widget), GDK_XTERM);
+        cursor = gdk_cursor_new_from_name (gtk_widget_get_display (widget), "text");
       else
         cursor = NULL;
 
@@ -4516,7 +4516,7 @@ set_invisible_cursor (GdkWindow *window)
   GdkCursor *cursor;
 
   display = gdk_window_get_display (window);
-  cursor = gdk_cursor_new_for_display (display, GDK_BLANK_CURSOR);
+  cursor = gdk_cursor_new_from_name (display, "none");
  
   gdk_window_set_cursor (window, cursor);
   
@@ -4539,10 +4539,11 @@ gtk_text_view_unobscure_mouse_cursor (GtkTextView *text_view)
 {
   if (text_view->priv->mouse_cursor_obscured)
     {
+      GdkDisplay *display;
       GdkCursor *cursor;
-      
-      cursor = gdk_cursor_new_for_display (gtk_widget_get_display (GTK_WIDGET (text_view)),
-					   GDK_XTERM);
+
+      display = gtk_widget_get_display (GTK_WIDGET (text_view));
+      cursor = gdk_cursor_new_from_name (display, "text");
       gdk_window_set_cursor (text_view->priv->text_window->bin_window, cursor);
       g_object_unref (cursor);
       text_view->priv->mouse_cursor_obscured = FALSE;
@@ -9433,6 +9434,7 @@ text_window_realize (GtkTextWindow *win,
   GdkWindow *window;
   GdkWindowAttr attributes;
   gint attributes_mask;
+  GdkDisplay *display;
   GdkCursor *cursor;
 
   attributes.window_type = GDK_WINDOW_CHILD;
@@ -9485,12 +9487,11 @@ text_window_realize (GtkTextWindow *win,
     case GTK_TEXT_WINDOW_TEXT:
       if (gtk_widget_is_sensitive (widget))
         {
-          /* I-beam cursor */
-          cursor = gdk_cursor_new_for_display (gdk_window_get_display (window),
-                                               GDK_XTERM);
+          display = gdk_window_get_display (window);
+          cursor = gdk_cursor_new_from_name (display, "text");
           gdk_window_set_cursor (win->bin_window, cursor);
           g_object_unref (cursor);
-        } 
+        }
 
       gtk_im_context_set_client_window (GTK_TEXT_VIEW (widget)->priv->im_context,
                                         win->window);

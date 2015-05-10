@@ -3170,7 +3170,7 @@ update_cursors (GtkWidget *widget)
                (icon_info->nonactivatable && icon_info->target_list == NULL)))
             {
               display = gtk_widget_get_display (widget);
-              cursor = gdk_cursor_new_for_display (display, GDK_XTERM);
+              cursor = gdk_cursor_new_from_name (display, "text");
               gdk_window_set_cursor (icon_info->window, cursor);
               g_object_unref (cursor);
             }

@@ -804,8 +804,8 @@ gtk_about_dialog_realize (GtkWidget *widget)
   GTK_WIDGET_CLASS (gtk_about_dialog_parent_class)->realize (widget);
 
   display = gtk_widget_get_display (widget);
-  priv->hand_cursor = gdk_cursor_new_for_display (display, GDK_HAND2);
-  priv->regular_cursor = gdk_cursor_new_for_display (display, GDK_XTERM);
+  priv->hand_cursor = gdk_cursor_new_from_name (display, "pointer");
+  priv->regular_cursor = gdk_cursor_new_from_name (display, "text");
 }
 
 static void
