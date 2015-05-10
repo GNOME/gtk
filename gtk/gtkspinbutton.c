@@ -2103,6 +2103,7 @@ gtk_spin_button_configure (GtkSpinButton *spin_button,
     adjustment = priv->adjustment;
 
   g_object_freeze_notify (G_OBJECT (spin_button));
+
   if (priv->adjustment != adjustment)
     {
       gtk_spin_button_unset_adjustment (spin_button);
@@ -2132,9 +2133,10 @@ gtk_spin_button_configure (GtkSpinButton *spin_button,
       priv->climb_rate = climb_rate;
       g_object_notify (G_OBJECT (spin_button), "climb-rate");
     }
+
   g_object_thaw_notify (G_OBJECT (spin_button));
 
-  gtk_adjustment_value_changed (adjustment);
+  gtk_spin_button_value_changed (adjustment, spin_button);
 }
 
 /**
