@@ -37,17 +37,11 @@
  *
  * The #GtkAdjustment object represents a value which has an associated lower
  * and upper bound, together with step and page increments, and a page size.
- * It is used within several GTK+ widgets, including
- * #GtkSpinButton, #GtkViewport, and #GtkRange (which is a base class for
- * #GtkHScrollbar, #GtkVScrollbar, #GtkHScale, and #GtkVScale).
+ * It is used within several GTK+ widgets, including #GtkSpinButton, #GtkViewport,
+ * and #GtkRange (which is a base class for #GtkScrollbar and #GtkScale).
  *
  * The #GtkAdjustment object does not update the value itself. Instead
  * it is left up to the owner of the #GtkAdjustment to control the value.
- *
- * The owner of the #GtkAdjustment typically calls the
- * gtk_adjustment_value_changed() and gtk_adjustment_changed() functions
- * after changing the value and its bounds. This results in the emission of the
- * #GtkAdjustment::value-changed or #GtkAdjustment::changed signal respectively.
  */
 
 
@@ -350,6 +344,19 @@ gtk_adjustment_set_property (GObject      *object,
     }
 }
 
+static inline void
+emit_changed (GtkAdjustment *adjustment)
+{
+  g_signal_emit (adjustment, adjustment_signals[CHANGED], 0);
+}
+
+static inline void
+emit_value_changed (GtkAdjustment *adjustment)
+{
+  g_signal_emit (adjustment, adjustment_signals[VALUE_CHANGED], 0);
+  g_object_notify (G_OBJECT (adjustment), "value");
+}
+
 static void
 gtk_adjustment_dispatch_properties_changed (GObject     *object,
                                             guint        n_pspecs,
@@ -377,7 +384,7 @@ gtk_adjustment_dispatch_properties_changed (GObject     *object,
   if (changed)
     {
       adjustment_changed_stamp++;
-      gtk_adjustment_changed (GTK_ADJUSTMENT (object));
+      emit_changed (GTK_ADJUSTMENT (object));
     }
 }
 
@@ -447,7 +454,7 @@ adjustment_set_value (GtkAdjustment *adjustment,
   if (adjustment->priv->value != value)
     {
       adjustment->priv->value = value;
-      gtk_adjustment_value_changed (adjustment);
+      emit_value_changed (adjustment);
     }
 }
 
@@ -856,10 +863,10 @@ gtk_adjustment_configure (GtkAdjustment *adjustment,
   g_object_thaw_notify (G_OBJECT (adjustment));
 
   if (old_stamp == adjustment_changed_stamp)
-    gtk_adjustment_changed (adjustment); /* force emission before ::value-changed */
+    emit_changed (adjustment); /* force emission before ::value-changed */
 
   if (value_changed)
-    gtk_adjustment_value_changed (adjustment);
+    emit_value_changed (adjustment);
 }
 
 /**
@@ -869,13 +876,15 @@ gtk_adjustment_configure (GtkAdjustment *adjustment,
  * Emits a #GtkAdjustment::changed signal from the #GtkAdjustment.
  * This is typically called by the owner of the #GtkAdjustment after it has
  * changed any of the #GtkAdjustment properties other than the value.
+ *
+ * Deprecated: 3.18: GTK+ emits #GtkAdjustment::changed itself whenever any
+ *    of the properties (other than value) change
  */
 void
 gtk_adjustment_changed (GtkAdjustment *adjustment)
 {
   g_return_if_fail (GTK_IS_ADJUSTMENT (adjustment));
-
-  g_signal_emit (adjustment, adjustment_signals[CHANGED], 0);
+  emit_changed (adjustment);
 }
 
 /**
@@ -885,14 +894,15 @@ gtk_adjustment_changed (GtkAdjustment *adjustment)
  * Emits a #GtkAdjustment::value-changed signal from the #GtkAdjustment.
  * This is typically called by the owner of the #GtkAdjustment after it has
  * changed the #GtkAdjustment:value property.
+ *
+ * Deprecated: 3.18: GTK+ emits #GtkAdjustment::value-changed itself whenever
+ *    the value changes
  */
 void
 gtk_adjustment_value_changed (GtkAdjustment *adjustment)
 {
   g_return_if_fail (GTK_IS_ADJUSTMENT (adjustment));
-
-  g_signal_emit (adjustment, adjustment_signals[VALUE_CHANGED], 0);
-  g_object_notify (G_OBJECT (adjustment), "value");
+  emit_value_changed (adjustment);
 }
 
 /**
@@ -938,7 +948,7 @@ gtk_adjustment_clamp_page (GtkAdjustment *adjustment,
     }
 
   if (need_emission)
-    gtk_adjustment_value_changed (adjustment);
+    emit_value_changed (adjustment);
 }
 
 /**
