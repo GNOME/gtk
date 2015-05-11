@@ -2,7 +2,7 @@
  *
  * Demonstrates migrating a window between different displays.
  * A display is a mouse and keyboard with some number of
- * associated monitors. The neat thing about having multiple 
+ * associated monitors. The neat thing about having multiple
  * displays is that they can be on a completely separate
  * computers, as long as there is a network connection to the
  * computer where the application is running.
@@ -26,9 +26,6 @@
  *  - Using GtkDialog
  */
 #include <string.h>
-
-#undef GDK_DISABLE_DEPRECATED
-
 #include <glib/gi18n.h>
 #include <gtk/gtk.h>
 
