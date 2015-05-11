@@ -1,3 +1,41 @@
+Overview of changes in GTK+ 3.16.3
+==================================
+
+* Bug fixes:
+ 737175 most horizontal sliders are inverted when scrolled with mouse...
+ 746916 File chooser search does not work over remote network shares
+ 746925 [HighContrast] Backdrop active (sensitive) GtkSwitch should l...
+ 747634 gdk_set_program_class() breaks --class
+ 747805 Split Headerbar unmaximize
+ 747808 window: fix initial shadow width for maximized/fullscreen win...
+ 748013 Adwaita: keyboard navigation outline on first/last button in ...
+ 748014 W32: Tilting mousewheel left/right does not scroll horizontally
+ 748061 GtkMessageDialog: Minor documentation update
+ 748341 GdkOffscreenWindow should not segfault on gdk_window_beep()
+ 748346 build: Avoid xgettext crash on MSYS2
+ 748500 GtkSearchEntry docs incorrectly link to themselves
+ 748615 GtkWindow: Get the correct shadow width even before window is...
+ 748640 Documentation misses out example source files when not buildi...
+ 748782 fontchooser should reload list of families/styles on theme ch...
+ 748783 Remove PANGO_ENABLE_BACKEND from gtksettings.c
+ 748992 GtkFontChooserWidget: Remove unused struct field
+ 749009 notify test fails without a session bus
+ 749012 GtkStack: Don't emit notify::visible-child during destruction
+ 749021 GtkStackSwitcher: Don't emit notify::visible-child when setti...
+
+
+* Translation updates:
+ Brazilian Portuguese
+ Czech
+ Danish
+ French
+ Icelandic
+ Occitan
+ Russian
+ Slovenian
+ Ukrainian
+
+
 Overview of changes in GTK+ 3.16.2
 ==================================
 
