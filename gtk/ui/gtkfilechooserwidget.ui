@@ -242,7 +242,7 @@
                         <child>
                           <object class="GtkGrid">
                             <property name="visible">True</property>
-                            <property name="column_spacing">12</property>
+                            <property name="row_spacing">12</property>
                             <property name="hexpand">True</property>
                             <property name="vexpand">True</property>
                             <property name="halign">center</property>
@@ -253,7 +253,7 @@
                             <child>
                               <object class="GtkImage">
                                 <property name="visible">True</property>
-                                <property name="icon-name">emblem-documents-symbolic</property>
+                                <property name="icon-name">folder-visiting-symbolic</property>
                                 <property name="pixel-size">64</property>
                               </object>
                               <packing>
@@ -271,8 +271,8 @@
                                 </attributes>
                               </object>
                               <packing>
-                                <property name="left_attach">1</property>
-                                <property name="top_attach">0</property>
+                                <property name="left_attach">0</property>
+                                <property name="top_attach">1</property>
                               </packing>
                             </child>
                           </object>
