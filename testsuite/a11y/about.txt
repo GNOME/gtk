@@ -125,7 +125,8 @@ window1
         <AtkText>
         text: FancyPants
         character count: 10
-        caret offset: 0
+        caret offset: 10
+        selection 0: (0, 10) FancyPants
         default attributes: bg-color: <omitted>
                             bg-full-height: 0
                             direction: <omitted>
@@ -156,7 +157,7 @@ window1
         "panel"
         parent: box
         index: 2
-        state: enabled focusable sensitive showing visible
+        state: enabled sensitive showing visible
         toolkit: gtk
         <AtkComponent>
         layer: widget
@@ -367,7 +368,7 @@ See the GNU General Public License, version 3 or later for details.
             text: This program comes with absolutely no warranty.
 See the GNU General Public License, version 3 or later for details.
             character count: 115
-            caret offset: 0
+            caret offset: 56
             default attributes: bg-color: <omitted>
                                 bg-full-height: 0
                                 direction: <omitted>
@@ -401,7 +402,7 @@ See the GNU General Public License, version 3 or later for details.
             unnamed-GtkLabelAccessibleLinkImpl-4
               "link"
               parent: license_label
-              state: enabled focusable multi-line sensitive showing visible
+              state: enabled focusable focused multi-line sensitive showing visible
               <AtkHyperlinkImpl>
                 <AtkHyperlink>
                 start index: 56
