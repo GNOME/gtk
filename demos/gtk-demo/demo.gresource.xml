@@ -47,6 +47,43 @@
     <file>cssview.css</file>
     <file>reset.css</file>
   </gresource>
+  <gresource prefix="/cursors">
+    <file>alias_cursor.png</file>
+    <file>all_scroll_cursor.png</file>
+    <file>cell_cursor.png</file>
+    <file>col_resize_cursor.png</file>
+    <file>copy_cursor.png</file>
+    <file>crosshair_cursor.png</file>
+    <file>default_cursor.png</file>
+    <file>e_resize_cursor.png</file>
+    <file>ew_resize_cursor.png</file>
+    <file>grabbing_cursor.png</file>
+    <file>grab_cursor.png</file>
+    <file>hand_cursor.png</file>
+    <file>help_cursor.png</file>
+    <file>move_cursor.png</file>
+    <file>ne_resize_cursor.png</file>
+    <file>nesw_resize_cursor.png</file>
+    <file>no_drop_cursor.png</file>
+    <file>none_cursor.png</file>
+    <file>not_allowed_cursor.png</file>
+    <file>n_resize_cursor.png</file>
+    <file>ns_resize_cursor.png</file>
+    <file>nw_resize_cursor.png</file>
+    <file>nwse_resize_cursor.png</file>
+    <file>pointer_cursor.png</file>
+    <file>progress_cursor.png</file>
+    <file>row_resize_cursor.png</file>
+    <file>se_resize_cursor.png</file>
+    <file>s_resize_cursor.png</file>
+    <file>sw_resize_cursor.png</file>
+    <file>text_cursor.png</file>
+    <file>vertical_text_cursor.png</file>
+    <file>wait_cursor.png</file>
+    <file>w_resize_cursor.png</file>
+    <file>zoom_in_cursor.png</file>
+    <file>zoom_out_cursor.png</file>
+  </gresource>
   <gresource prefix="/iconview">
     <file preprocess="to-pixdata">gnome-fs-directory.png</file>
     <file preprocess="to-pixdata">gnome-fs-regular.png</file>

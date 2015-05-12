@@ -51,8 +51,15 @@ add_button (GtkWidget   *section,
   if (cursor == NULL)
     image = gtk_image_new_from_icon_name ("image-missing", GTK_ICON_SIZE_MENU);
   else
-    image = gtk_image_new_from_pixbuf (gdk_cursor_get_image (cursor));
-  gtk_widget_set_size_request (image, 24, 24);
+    {
+      gchar *path;
+
+      path = g_strdup_printf ("/cursors/%s_cursor.png", css_name);
+      g_strdelimit (path, "-", '_');
+      image = gtk_image_new_from_resource (path);
+      g_free (path);
+    }
+  gtk_widget_set_size_request (image, 32, 32);
   button = gtk_button_new ();
   gtk_container_add (GTK_CONTAINER (button), image);
   gtk_style_context_add_class (gtk_widget_get_style_context (button), "image-button");

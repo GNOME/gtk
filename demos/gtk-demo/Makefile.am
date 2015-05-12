@@ -155,7 +155,43 @@ RESOURCES =				\
 	css_pixbufs.css			\
 	css_shadows.css			\
 	cssview.css			\
-	reset.css
+	reset.css			\
+	alias_cursor.png		\
+	all_scroll_cursor.png		\
+	cell_cursor.png			\
+	col_resize_cursor.png		\
+	copy_cursor.png			\
+	crosshair_cursor.png		\
+	default_cursor.png		\
+	e_resize_cursor.png		\
+	ew_resize_cursor.png		\
+	grabbing_cursor.png		\
+	grab_cursor.png			\
+	hand_cursor.png			\
+	help_cursor.png			\
+	move_cursor.png			\
+	ne_resize_cursor.png		\
+	nesw_resize_cursor.png		\
+	none_cursor.png			\
+	no_drop_cursor.png		\
+	not_allowed_cursor.png		\
+	n_resize_cursor.png		\
+	ns_resize_cursor.png		\
+	nw_resize_cursor.png		\
+	nwse_resize_cursor.png		\
+	pointer_cursor.png		\
+	progress_cursor.png		\
+	row_resize_cursor.png		\
+	se_resize_cursor.png		\
+	s_resize_cursor.png		\
+	sw_resize_cursor.png		\
+	text_cursor.png			\
+	vertical_text_cursor.png	\
+	wait_cursor.png			\
+	w_resize_cursor.png		\
+	zoom_in_cursor.png		\
+	zoom_out_cursor.png
+
 
 iconthemedir = $(datadir)/icons/hicolor
 
