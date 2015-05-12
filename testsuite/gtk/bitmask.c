@@ -316,7 +316,7 @@ test_subtract_hardcoded (void)
               left_str++;
             }
 
-          g_print ("%s - %s\n", _gtk_bitmask_to_string (left), _gtk_bitmask_to_string (right));
+          g_test_message ("%s - %s\n", _gtk_bitmask_to_string (left), _gtk_bitmask_to_string (right));
           subtracted = _gtk_bitmask_subtract (_gtk_bitmask_copy (left), right);
 
           assert_cmpmasks (subtracted, expected);
