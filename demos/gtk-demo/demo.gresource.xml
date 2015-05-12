@@ -147,6 +147,7 @@
     <file>offscreen_window.c</file>
     <file>offscreen_window2.c</file>
     <file>overlay.c</file>
+    <file>pagesetup.c</file>
     <file>panes.c</file>
     <file>pickers.c</file>
     <file>pixbufs.c</file>

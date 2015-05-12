@@ -61,6 +61,10 @@ demos =						\
 	transparent.c				\
 	tree_store.c
 
+if OS_UNIX
+demos += pagesetup.c
+endif
+
 AM_CPPFLAGS = \
 	-I$(top_srcdir) 			\
 	-I$(top_builddir)/gdk			\
