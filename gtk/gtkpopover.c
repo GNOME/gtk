@@ -317,6 +317,8 @@ gtk_popover_dispose (GObject *object)
 
   popover_unset_prev_focus (popover);
 
+  g_clear_object (&priv->default_widget);
+
   G_OBJECT_CLASS (gtk_popover_parent_class)->dispose (object);
 }
 
