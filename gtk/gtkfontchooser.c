@@ -485,7 +485,7 @@ gtk_font_chooser_get_font_map (GtkFontChooser *fontchooser)
 {
   PangoFontMap *fontmap;
 
-  g_return_if_fail (GTK_IS_FONT_CHOOSER (fontchooser));
+  g_return_val_if_fail (GTK_IS_FONT_CHOOSER (fontchooser), NULL);
 
   g_object_get (fontchooser, "font-map", &fontmap, NULL);
 
