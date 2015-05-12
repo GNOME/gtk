@@ -1448,11 +1448,28 @@ gtk_box_invalidate_order_foreach (GtkWidget *widget,
 }
 
 static void
+gtk_box_invalidate_order_foreach_reverse (GtkWidget *widget,
+                                          gpointer   prev)
+{
+  GtkCssNode **previous = prev;
+  GtkCssNode *cur = gtk_widget_get_css_node (widget);
+
+  if (*previous)
+    gtk_css_node_set_before (cur, *previous);
+
+  *previous = cur;
+}
+
+static void
 gtk_box_invalidate_order (GtkBox *box)
 {
   GtkCssNode *previous = NULL;
+
   gtk_container_foreach (GTK_CONTAINER (box),
-                         gtk_box_invalidate_order_foreach,
+                         (box->priv->orientation == GTK_ORIENTATION_HORIZONTAL
+                          && gtk_widget_get_direction (GTK_WIDGET (box)) == GTK_TEXT_DIR_RTL)
+                         ? gtk_box_invalidate_order_foreach_reverse
+                         : gtk_box_invalidate_order_foreach,
                          &previous);
 }
 
