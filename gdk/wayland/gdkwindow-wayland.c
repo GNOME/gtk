@@ -495,7 +495,8 @@ _gdk_wayland_display_create_window_impl (GdkDisplay    *display,
   g_object_ref (window);
 
   /* More likely to be right than just assuming 1 */
-  if (wayland_display->compositor_version >= WL_SURFACE_HAS_BUFFER_SCALE)
+  if (wayland_display->compositor_version >= WL_SURFACE_HAS_BUFFER_SCALE &&
+      gdk_screen_get_n_monitors (screen) > 0)
     impl->scale = gdk_screen_get_monitor_scale_factor (screen, 0);
 
   impl->title = NULL;
