@@ -1,3 +1,13 @@
+Overview of Changes from GTK+ 2.24.27 to 2.24.28
+================================================
+
+* Bug fixes:
+ 693738 gtk print dialog shows "Getting printer information failed"...
+ 746064 "sticky" window state reported wrongly on X11
+ 746269 Segfault in gtk_tree_view_move_cursor_page_up_down
+ 748014 W32: Tilting mousewheel left/right does not scroll horizontally
+
+
 Overview of Changes from GTK+ 2.24.26 to 2.24.27
 ================================================
 
