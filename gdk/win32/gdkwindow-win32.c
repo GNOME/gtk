@@ -1972,7 +1972,10 @@ gdk_win32_window_set_device_cursor (GdkWindow *window,
   if (cursor)
     impl->cursor = g_object_ref (cursor);
   else
-    impl->cursor = NULL;
+    /* Use default cursor otherwise. Setting it to NULL will make it use
+     * system-default cursor, which is not controlled by GTK cursor theming.
+     */
+    impl->cursor = _gdk_win32_display_get_cursor_for_type (_gdk_display, GDK_LEFT_PTR);
 
   /* Destroy the previous cursor */
   if (previous_cursor != NULL)

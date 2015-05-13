@@ -26,6 +26,100 @@
 #include "gdkwin32window.h"
 #include "gdkwin32.h"
 
+/**
+ * gdk_win32_display_set_cursor_theme:
+ * @display: (type GdkWin32Display): a #GdkDisplay
+ * @theme: (allow-none) the name of the cursor theme to use, or %NULL to unset
+ *         a previously set value
+ * @size: the cursor size to use, or 0 to keep the previous size
+ *
+ * Sets the cursor theme from which the images for cursor
+ * should be taken.
+ *
+ * If the windowing system supports it, existing cursors created
+ * with gdk_cursor_new(), gdk_cursor_new_for_display() and
+ * gdk_cursor_new_from_name() are updated to reflect the theme
+ * change. Custom cursors constructed with
+ * gdk_cursor_new_from_pixbuf() will have to be handled
+ * by the application (GTK+ applications can learn about
+ * cursor theme changes by listening for change notification
+ * for the corresponding #GtkSetting).
+ *
+ * Since: 3.18
+ */
+void
+gdk_win32_display_set_cursor_theme (GdkDisplay  *display,
+                                    const gchar *name,
+                                    const gint   size)
+{
+  gint cursor_size;
+  gint w, h;
+  Win32CursorTheme *theme;
+  GdkWin32Display *win32_display = GDK_WIN32_DISPLAY (display);
+
+  g_assert (win32_display);
+
+  if (name == NULL)
+    name = "system";
+
+  w = GetSystemMetrics (SM_CXCURSOR);
+  h = GetSystemMetrics (SM_CYCURSOR);
+
+  /* We can load cursors of any size, but SetCursor() will scale them back
+   * to this value. It's possible to break that restrictions with SetSystemCursor(),
+   * but that will override cursors for the whole desktop session.
+   */
+  cursor_size = (w == h) ? w : size;
+
+  if (win32_display->cursor_theme_name != NULL &&
+      g_strcmp0 (name, win32_display->cursor_theme_name) == 0 &&
+      win32_display->cursor_theme_size == cursor_size)
+    return;
+
+  theme = win32_cursor_theme_load (name, cursor_size);
+  if (theme == NULL)
+    {
+      g_warning ("Failed to load cursor theme %s", name);
+      return;
+    }
+
+  if (win32_display->cursor_theme)
+    {
+      win32_cursor_theme_destroy (win32_display->cursor_theme);
+      win32_display->cursor_theme = NULL;
+    }
+
+  win32_display->cursor_theme = theme;
+  g_free (win32_display->cursor_theme_name);
+  win32_display->cursor_theme_name = g_strdup (name);
+  win32_display->cursor_theme_size = cursor_size;
+
+  _gdk_win32_display_update_cursors (win32_display);
+}
+
+Win32CursorTheme *
+_gdk_win32_display_get_cursor_theme (GdkWin32Display *win32_display)
+{
+  Win32CursorTheme *theme;
+
+  g_assert (win32_display->cursor_theme_name);
+
+  theme = win32_display->cursor_theme;
+  if (!theme)
+    {
+      theme = win32_cursor_theme_load (win32_display->cursor_theme_name,
+                                       win32_display->cursor_theme_size);
+      if (theme == NULL)
+        {
+          g_warning ("Failed to load cursor theme %s",
+                     win32_display->cursor_theme_name);
+          return NULL;
+        }
+      win32_display->cursor_theme = theme;
+    }
+
+  return theme;
+}
 
 static gulong
 gdk_win32_display_get_next_serial (GdkDisplay *display)
@@ -542,11 +636,17 @@ gdk_win32_display_dispose (GObject *object)
 static void
 gdk_win32_display_finalize (GObject *object)
 {
+  GdkWin32Display *display_win32 = GDK_WIN32_DISPLAY (object);
+
+  _gdk_win32_display_finalize_cursors (display_win32);
+
+  G_OBJECT_CLASS (gdk_win32_display_parent_class)->finalize (object);
 }
 
 static void
-gdk_win32_display_init(GdkWin32Display *display)
+gdk_win32_display_init (GdkWin32Display *display)
 {
+  _gdk_win32_display_init_cursors (display);
 }
 
 static void

@@ -23,33 +23,57 @@
 #include "gdkcursor.h"
 #include "gdkwin32.h"
 
+#include "gdkdisplay-win32.h"
+
 #ifdef __MINGW32__
 #include <w32api.h>
 #endif
 
 #include "xcursors.h"
 
+typedef struct _DefaultCursor {
+  char *name;
+  char *id;
+} DefaultCursor;
+
+static DefaultCursor default_cursors[] = {
+  { "appstarting", IDC_APPSTARTING },
+  { "arrow", IDC_ARROW },
+  { "cross", IDC_CROSS },
+  { "hand",  IDC_HAND },
+  { "help",  IDC_HELP },
+  { "ibeam", IDC_IBEAM },
+  /* an X cursor name, for compatibility with GTK: */
+  { "left_ptr_watch", IDC_APPSTARTING },
+  { "sizeall", IDC_SIZEALL },
+  { "sizenesw", IDC_SIZENESW },
+  { "sizens", IDC_SIZENS },
+  { "sizenwse", IDC_SIZENWSE },
+  { "sizewe", IDC_SIZEWE },
+  { "uparrow", IDC_UPARROW },
+  { "wait", IDC_WAIT },
+  /* css cursor names: */
+  { "default", IDC_ARROW },
+  { "pointer", IDC_HAND },
+  { "progress", IDC_APPSTARTING },
+  { "crosshair", IDC_CROSS },
+  { "text", IDC_IBEAM },
+  { "move", IDC_SIZEALL },
+  { "not-allowed", IDC_NO },
+  { "ew-resize", IDC_SIZEWE },
+  { "ns-resize", IDC_SIZENS },
+  { "nesw-resize", IDC_SIZENESW },
+  { "nwse-resize", IDC_SIZENWSE }
+};
+
 static HCURSOR
-hcursor_from_type (GdkCursorType cursor_type)
+hcursor_from_x_cursor (gint          i,
+                       GdkCursorType cursor_type)
 {
-  gint i, j, x, y, ofs;
+  gint j, x, y, ofs;
   HCURSOR rv;
   gint w, h;
   guchar *and_plane, *xor_plane;
-
-  if (cursor_type != GDK_BLANK_CURSOR)
-    {
-      for (i = 0; i < G_N_ELEMENTS (cursors); i++)
-	if (cursors[i].type == cursor_type)
-	  break;
-
-      if (i >= G_N_ELEMENTS (cursors) || !cursors[i].name)
-	return NULL;
-
-      /* Use real Win32 cursor if possible */
-      if (cursors[i].builtin)
-	return LoadCursor (NULL, cursors[i].builtin);
-    }
 
   w = GetSystemMetrics (SM_CXCURSOR);
   h = GetSystemMetrics (SM_CYCURSOR);
@@ -79,6 +103,7 @@ hcursor_from_type (GdkCursorType cursor_type)
 	      if (data)
 		{
 		  RESET_BIT (and_plane[pofs], bit);
+
 		  if (data == 1)
 		    SET_BIT (xor_plane[pofs], bit);
 		}
@@ -96,12 +121,305 @@ hcursor_from_type (GdkCursorType cursor_type)
       rv = CreateCursor (_gdk_app_hmodule, 0, 0,
 			 w, h, and_plane, xor_plane);
     }
+
   if (rv == NULL)
     WIN32_API_FAILED ("CreateCursor");
+
   g_free (and_plane);
   g_free (xor_plane);
 
   return rv;
+}
+
+static HCURSOR
+win32_cursor_create_hcursor (Win32Cursor *cursor)
+{
+  HCURSOR result;
+
+  switch (cursor->load_type)
+    {
+      case GDK_WIN32_CURSOR_LOAD_FROM_FILE:
+        result = LoadImageW (NULL,
+                             cursor->resource_name,
+                             IMAGE_CURSOR,
+                             cursor->width,
+                             cursor->height,
+                             cursor->load_flags);
+        break;
+      case GDK_WIN32_CURSOR_LOAD_FROM_RESOURCE_NULL:
+        result = LoadImageA (NULL,
+                             (const gchar *) cursor->resource_name,
+                             IMAGE_CURSOR,
+                             cursor->width,
+                             cursor->height,
+                             cursor->load_flags);
+        break;
+      case GDK_WIN32_CURSOR_LOAD_FROM_RESOURCE_THIS:
+        result = LoadImageA (_gdk_app_hmodule,
+                             (const gchar *) cursor->resource_name,
+                             IMAGE_CURSOR,
+                             cursor->width,
+                             cursor->height,
+                             cursor->load_flags);
+        break;
+      case GDK_WIN32_CURSOR_CREATE:
+        result = hcursor_from_x_cursor (cursor->xcursor_number,
+                                        cursor->cursor_type);
+        break;
+      default:
+        result = NULL;
+    }
+
+  return result;
+}
+
+static Win32Cursor *
+win32_cursor_new (GdkWin32CursorLoadType load_type,
+                  gpointer               resource_name,
+                  gint                   width,
+                  gint                   height,
+                  guint                  load_flags,
+                  gint                   xcursor_number,
+                  GdkCursorType          cursor_type)
+{
+  Win32Cursor *result;
+
+  result = g_new (Win32Cursor, 1);
+  result->load_type = load_type;
+  result->resource_name = resource_name;
+  result->width = width;
+  result->height = height;
+  result->load_flags = load_flags;
+  result->xcursor_number = xcursor_number;
+  result->cursor_type = cursor_type;
+
+  return result;
+}
+
+
+static void
+win32_cursor_destroy (gpointer data)
+{
+  Win32Cursor *cursor = data;
+
+  /* resource_name could be a resource ID (uint16_t stored as a pointer),
+   * which shouldn't be freed.
+   */
+  if (cursor->load_type == GDK_WIN32_CURSOR_LOAD_FROM_FILE)
+    g_free (cursor->resource_name);
+
+  g_free (cursor);
+}
+
+static void
+win32_cursor_theme_load_from (Win32CursorTheme *theme,
+                              gint              size,
+                              const gchar      *dir)
+{
+  GDir *gdir;
+  const gchar *filename;
+  HCURSOR hcursor;
+
+  gdir = g_dir_open (dir, 0, NULL);
+
+  if (gdir == NULL)
+    return;
+
+  while ((filename = g_dir_read_name (gdir)) != NULL)
+    {
+      gchar *fullname;
+      gunichar2 *filenamew;
+      gchar *cursor_name;
+      gchar *dot;
+      Win32Cursor *cursor;
+
+      fullname = g_strconcat (dir, "/", filename, NULL);
+      filenamew = g_utf8_to_utf16 (fullname, -1, NULL, NULL, NULL);
+      g_free (fullname);
+
+      if (filenamew == NULL)
+        continue;
+
+      hcursor = LoadImageW (NULL, filenamew, IMAGE_CURSOR, size, size,
+                            LR_LOADFROMFILE | (size == 0 ? LR_DEFAULTSIZE : 0));
+
+      if (hcursor == NULL)
+        {
+          g_free (filenamew);
+          continue;
+        }
+
+      DestroyCursor (hcursor);
+      dot = strchr (filename, '.');
+
+      cursor_name = dot ? g_strndup (filename, dot - filename) : g_strdup (filename);
+
+      cursor = win32_cursor_new (GDK_WIN32_CURSOR_LOAD_FROM_FILE,
+                                 filenamew,
+                                 size,
+                                 size,
+                                 LR_LOADFROMFILE | (size == 0 ? LR_DEFAULTSIZE : 0),
+                                 0,
+                                 0);
+      g_hash_table_insert (theme->named_cursors, cursor_name, cursor);
+    }
+}
+
+static void
+win32_cursor_theme_load_from_dirs (Win32CursorTheme *theme,
+                                   const gchar      *name,
+                                   gint              size)
+{
+  gchar *theme_dir;
+  const gchar * const *dirs;
+  gint i;
+
+  dirs = g_get_system_data_dirs ();
+
+  /* <prefix>/share/icons */
+  for (i = 0; dirs[i]; i++)
+    {
+      theme_dir = g_strconcat (dirs[i], "/icons/", name, "/cursors", NULL);
+      win32_cursor_theme_load_from (theme, size, theme_dir);
+      g_free (theme_dir);
+    }
+
+  /* ~/.icons */
+  theme_dir = g_strconcat (g_get_home_dir (), "/icons/", name, "/cursors", NULL);
+  win32_cursor_theme_load_from (theme, size, theme_dir);
+  g_free (theme_dir);
+}
+
+static void
+win32_cursor_theme_load_system (Win32CursorTheme *theme,
+                                gint              size)
+{
+  gint i;
+  HCURSOR hcursor;
+  Win32Cursor *cursor;
+
+  for (i = 0; i < G_N_ELEMENTS (cursors); i++)
+    {
+
+      if (cursors[i].name == NULL)
+        break;
+
+      hcursor = NULL;
+
+      /* Prefer W32 cursors */
+      if (cursors[i].builtin)
+        hcursor = LoadImageA (NULL, cursors[i].builtin, IMAGE_CURSOR,
+                              size, size,
+                              LR_SHARED | (size == 0 ? LR_DEFAULTSIZE : 0));
+
+      /* Fall back to X cursors, but only if we've got no theme cursor */
+      if (hcursor == NULL && g_hash_table_lookup (theme->named_cursors, cursors[i].name) == NULL)
+        hcursor = hcursor_from_x_cursor (i, cursors[i].type);
+
+      if (hcursor == NULL)
+        continue;
+
+      DestroyCursor (hcursor);
+      cursor = win32_cursor_new (GDK_WIN32_CURSOR_LOAD_FROM_RESOURCE_NULL,
+                                 (gpointer) cursors[i].builtin,
+                                 size,
+                                 size,
+                                 LR_SHARED | (size == 0 ? LR_DEFAULTSIZE : 0),
+                                 0,
+                                 0);
+      g_hash_table_insert (theme->named_cursors,
+                           g_strdup (cursors[i].name),
+                           cursor);
+    }
+
+  for (i = 0; i < G_N_ELEMENTS (default_cursors); i++)
+    {
+      if (default_cursors[i].name == NULL)
+        break;
+
+      hcursor = LoadImageA (NULL, default_cursors[i].id, IMAGE_CURSOR, size, size,
+                            LR_SHARED | (size == 0 ? LR_DEFAULTSIZE : 0));
+
+      if (hcursor == NULL)
+        continue;
+
+      DestroyCursor (hcursor);
+      cursor = win32_cursor_new (GDK_WIN32_CURSOR_LOAD_FROM_RESOURCE_NULL,
+                                 (gpointer) default_cursors[i].id,
+                                 size,
+                                 size,
+                                 LR_SHARED | (size == 0 ? LR_DEFAULTSIZE : 0),
+                                 0,
+                                 0);
+      g_hash_table_insert (theme->named_cursors,
+                           g_strdup (default_cursors[i].name),
+                           cursor);
+    }
+}
+
+Win32CursorTheme *
+win32_cursor_theme_load (const gchar *name,
+                         gint         size)
+{
+  Win32CursorTheme *result = g_new0 (Win32CursorTheme, 1);
+
+  result->named_cursors = g_hash_table_new_full (g_str_hash,
+                                                 g_str_equal,
+                                                 g_free,
+                                                 win32_cursor_destroy);
+
+  if (strcmp (name, "system") == 0)
+    {
+      win32_cursor_theme_load_from_dirs (result, "Adwaita", size);
+      win32_cursor_theme_load_system (result, size);
+    }
+  else
+    {
+      win32_cursor_theme_load_from_dirs (result, name, size);
+    }
+
+  if (g_hash_table_size (result->named_cursors) > 0)
+    return result;
+
+  win32_cursor_theme_destroy (result);
+  return NULL;
+}
+
+void
+win32_cursor_theme_destroy (Win32CursorTheme *theme)
+{
+  g_hash_table_destroy (theme->named_cursors);
+  g_free (theme);
+}
+
+Win32Cursor *
+win32_cursor_theme_get_cursor (Win32CursorTheme *theme,
+                               const gchar      *name)
+{
+  return g_hash_table_lookup (theme->named_cursors, name);
+}
+
+static HCURSOR
+hcursor_from_type (GdkCursorType cursor_type)
+{
+  gint i = 0;
+
+  if (cursor_type != GDK_BLANK_CURSOR)
+    {
+      for (i = 0; i < G_N_ELEMENTS (cursors); i++)
+	if (cursors[i].type == cursor_type)
+	  break;
+
+      if (i >= G_N_ELEMENTS (cursors) || !cursors[i].name)
+	return NULL;
+
+      /* Use real Win32 cursor if possible */
+      if (cursors[i].builtin)
+        return LoadImageA (NULL, cursors[i].builtin, IMAGE_CURSOR, 0, 0,
+                           LR_SHARED | LR_DEFAULTSIZE);
+    }
+
+  return hcursor_from_x_cursor (i, cursor_type);
 }
 
 struct _GdkWin32CursorClass
@@ -120,14 +438,91 @@ _gdk_win32_cursor_finalize (GObject *object)
     SetCursor (NULL);
 
   if (!DestroyCursor (private->hcursor))
-    WIN32_API_FAILED ("DestroyCursor");
+    g_warning (G_STRLOC ": DestroyCursor (%p) failed: %lu", private->hcursor, GetLastError ());
+
+  g_free (private->name);
 
   G_OBJECT_CLASS (gdk_win32_cursor_parent_class)->finalize (object);
 }
 
+static HCURSOR
+hcursor_idc_from_name (const gchar *name)
+{
+  int i;
+
+  for (i = 0; i < G_N_ELEMENTS (default_cursors); i++)
+    {
+      if (strcmp (default_cursors[i].name, name) != 0)
+        continue;
+
+      return LoadImageA (NULL, default_cursors[i].id, IMAGE_CURSOR, 0, 0,
+                         LR_SHARED | LR_DEFAULTSIZE);
+    }
+
+  return NULL;
+}
+
+static HCURSOR
+hcursor_x_from_name (const gchar *name)
+{
+  gint i;
+
+  for (i = 0; i < G_N_ELEMENTS (cursors); i++)
+    if (cursors[i].name == NULL || strcmp (cursors[i].name, name) == 0)
+      return hcursor_from_x_cursor (i, cursors[i].type);
+
+  return NULL;
+}
+
+static HCURSOR
+hcursor_from_theme (GdkDisplay  *display,
+                    const gchar *name)
+{
+  Win32CursorTheme *theme;
+  Win32Cursor *theme_cursor;
+  GdkWin32Display *win32_display = GDK_WIN32_DISPLAY (display);
+
+  if (name == NULL)
+    return NULL;
+
+  theme = _gdk_win32_display_get_cursor_theme (win32_display);
+  theme_cursor = win32_cursor_theme_get_cursor (theme, name);
+
+  if (theme_cursor == NULL)
+    return NULL;
+
+  return win32_cursor_create_hcursor (theme_cursor);
+}
+
+static HCURSOR
+hcursor_from_name (GdkDisplay  *display,
+                   const gchar *name)
+{
+  HCURSOR hcursor;
+
+  if (strcmp (name, "none") == 0)
+    return hcursor_from_type (GDK_BLANK_CURSOR);
+
+  /* Try current theme first */
+  hcursor = hcursor_from_theme (display, name);
+
+  if (hcursor != NULL)
+    return hcursor;
+
+  hcursor = hcursor_idc_from_name (name);
+
+  if (hcursor != NULL)
+    return hcursor;
+
+  hcursor = hcursor_x_from_name (name);
+
+  return hcursor;
+}
+
 static GdkCursor*
-cursor_new_from_hcursor (HCURSOR       hcursor,
-			 GdkCursorType cursor_type)
+cursor_new_from_hcursor (HCURSOR        hcursor,
+			 const gchar   *name,
+			 GdkCursorType  cursor_type)
 {
   GdkWin32Cursor *private;
   GdkCursor *cursor;
@@ -136,21 +531,120 @@ cursor_new_from_hcursor (HCURSOR       hcursor,
                           "cursor-type", cursor_type,
                           "display", _gdk_display,
 			  NULL);
+
+  private->name = g_strdup (name);
+
   private->hcursor = hcursor;
   cursor = (GdkCursor*) private;
 
   return cursor;
 }
 
+static gboolean
+_gdk_win32_cursor_update (GdkWin32Display *win32_display,
+                          GdkWin32Cursor  *cursor)
+{
+  HCURSOR hcursor = NULL;
+  Win32CursorTheme *theme;
+  Win32Cursor *theme_cursor;
+
+  /* Do nothing if this is not a named cursor. */
+  if (cursor->name == NULL)
+    return FALSE;
+
+  theme = _gdk_win32_display_get_cursor_theme (win32_display);
+  theme_cursor = win32_cursor_theme_get_cursor (theme, cursor->name);
+
+  if (theme_cursor != NULL)
+    hcursor = win32_cursor_create_hcursor (theme_cursor);
+
+  if (hcursor == NULL)
+    {
+      g_warning (G_STRLOC ": Unable to load %s from the cursor theme", cursor->name);
+
+      hcursor = hcursor_idc_from_name (cursor->name);
+
+      if (hcursor == NULL)
+        hcursor = hcursor_x_from_name (cursor->name);
+
+      if (hcursor == NULL)
+        return FALSE;
+    }
+
+  if (GetCursor () == cursor->hcursor)
+    SetCursor (hcursor);
+
+  if (!DestroyCursor (cursor->hcursor))
+    g_warning (G_STRLOC ": DestroyCursor (%p) failed: %lu", cursor->hcursor, GetLastError ());
+
+  cursor->hcursor = hcursor;
+
+  return TRUE;
+}
+
+void
+_gdk_win32_display_update_cursors (GdkWin32Display *display)
+{
+  GHashTableIter iter;
+  const char *name;
+  GdkWin32Cursor *cursor;
+
+  g_hash_table_iter_init (&iter, display->cursor_cache);
+
+  while (g_hash_table_iter_next (&iter, (gpointer *) &name, (gpointer *) &cursor))
+    _gdk_win32_cursor_update (display, cursor);
+}
+
+void
+_gdk_win32_display_init_cursors (GdkWin32Display *display)
+{
+  display->cursor_cache = g_hash_table_new_full (g_str_hash,
+                                                 g_str_equal,
+                                                 NULL,
+                                                 g_object_unref);
+  display->cursor_theme_name = g_strdup ("system");
+}
+
+void
+_gdk_win32_display_finalize_cursors (GdkWin32Display *display)
+{
+  g_free (display->cursor_theme_name);
+
+  if (display->cursor_theme)
+    win32_cursor_theme_destroy (display->cursor_theme);
+
+  g_hash_table_destroy (display->cursor_cache);
+}
+
+
 GdkCursor*
 _gdk_win32_display_get_cursor_for_type (GdkDisplay   *display,
 					GdkCursorType cursor_type)
 {
+  GEnumClass *enum_class;
+  GEnumValue *enum_value;
+  gchar *cursor_name;
   HCURSOR hcursor;
+  GdkCursor *result;
+  GdkWin32Display *win32_display = GDK_WIN32_DISPLAY (display);
 
-  g_return_val_if_fail (display == _gdk_display, NULL);
+  enum_class = g_type_class_ref (GDK_TYPE_CURSOR_TYPE);
+  enum_value = g_enum_get_value (enum_class, cursor_type);
+  cursor_name = g_strdup (enum_value->value_nick);
+  g_strdelimit (cursor_name, "-", '_');
+  g_type_class_unref (enum_class);
 
-  hcursor = hcursor_from_type (cursor_type);
+  result = g_hash_table_lookup (win32_display->cursor_cache, cursor_name);
+  if (result)
+    {
+      g_free (cursor_name);
+      return g_object_ref (result);
+    }
+
+  hcursor = hcursor_from_name (display, cursor_name);
+
+  if (hcursor == NULL)
+    hcursor = hcursor_from_type (cursor_type);
 
   if (hcursor == NULL)
     g_warning ("gdk_cursor_new_for_display: no cursor %d found", cursor_type);
@@ -158,67 +652,62 @@ _gdk_win32_display_get_cursor_for_type (GdkDisplay   *display,
     GDK_NOTE (CURSOR, g_print ("gdk_cursor_new_for_display: %d: %p\n",
 			       cursor_type, hcursor));
 
-  return cursor_new_from_hcursor (hcursor, cursor_type);
+  result = cursor_new_from_hcursor (hcursor, cursor_name, cursor_type);
+
+  if (result == NULL)
+    return result;
+
+  /* Blank cursor case */
+  if (cursor_type == GDK_BLANK_CURSOR ||
+      !cursor_name ||
+      g_str_equal (cursor_name, "none") ||
+      g_str_equal (cursor_name, "blank_cursor"))
+    {
+      g_free (cursor_name);
+      return result;
+    }
+
+  g_hash_table_insert (win32_display->cursor_cache,
+                       cursor_name,
+                       g_object_ref (result));
+
+  return result;
 }
-
-/* FIXME: The named cursors below are presumably not really useful, as
- * the names are Win32-specific. No GTK+ application developed on Unix
- * (and most cross-platform GTK+ apps are developed on Unix) is going
- * to look for cursors under these Win32 names anyway.
- *
- * Would the following make any sense: The ms-windows theme engine
- * calls some (to-be-defined private) API here in gdk/win32 to
- * register the relevant cursors used by the currently active XP
- * visual style under the names that libgtk uses to look for them
- * ("color-picker", "dnd-ask", "dnd-copy", etc), and then when libgtk
- * asks for those we return the ones registered by the ms-windows
- * theme engine, if any.
- */
-
-static struct {
-  char *name;
-  char *id;
-} default_cursors[] = {
-  { "appstarting", IDC_APPSTARTING },
-  { "arrow", IDC_ARROW },
-  { "cross", IDC_CROSS },
-#ifdef IDC_HAND
-  { "hand",  IDC_HAND },
-#endif
-  { "help",  IDC_HELP },
-  { "ibeam", IDC_IBEAM },
-  { "left_ptr_watch", IDC_APPSTARTING },
-  { "sizeall", IDC_SIZEALL },
-  { "sizenesw", IDC_SIZENESW },
-  { "sizens", IDC_SIZENS },
-  { "sizenwse", IDC_SIZENWSE },
-  { "sizewe", IDC_SIZEWE },
-  { "uparrow", IDC_UPARROW },
-  { "wait", IDC_WAIT }
-};
 
 GdkCursor*
 _gdk_win32_display_get_cursor_for_name (GdkDisplay  *display,
 				        const gchar *name)
 {
   HCURSOR hcursor = NULL;
-  int i;
+  GdkCursor *result;
+  GdkWin32Display *win32_display = GDK_WIN32_DISPLAY (display);
 
-  g_return_val_if_fail (display == _gdk_display, NULL);
+  result = g_hash_table_lookup (win32_display->cursor_cache, name);
+  if (result)
+    return g_object_ref (result);
 
-  for (i = 0; i < G_N_ELEMENTS(default_cursors); i++)
-    {
-      if (0 == strcmp(default_cursors[i].name, name))
-        hcursor = LoadCursor (NULL, default_cursors[i].id);
-    }
+  hcursor = hcursor_from_name (display, name);
+
   /* allow to load named cursor resources linked into the executable */
   if (!hcursor)
     hcursor = LoadCursor (_gdk_app_hmodule, name);
 
-  if (hcursor)
-    return cursor_new_from_hcursor (hcursor, GDK_X_CURSOR);
+  if (hcursor == NULL)
+    return NULL;
 
-  return NULL;
+  result = cursor_new_from_hcursor (hcursor, name, GDK_X_CURSOR);
+
+  /* Blank cursor case */
+  if (!name ||
+      g_str_equal (name, "none") ||
+      g_str_equal (name, "blank_cursor"))
+    return result;
+
+  g_hash_table_insert (win32_display->cursor_cache,
+                       g_strdup (name),
+                       g_object_ref (result));
+
+  return result;
 }
 
 GdkPixbuf *
@@ -419,10 +908,10 @@ _gdk_win32_cursor_get_surface (GdkCursor *cursor,
 }
 
 GdkCursor *
-_gdk_win32_display_get_cursor_for_surface (GdkDisplay *display,
-					  cairo_surface_t  *surface,
-					  gdouble          x,
-					  gdouble          y)
+_gdk_win32_display_get_cursor_for_surface (GdkDisplay      *display,
+					   cairo_surface_t *surface,
+					   gdouble          x,
+					   gdouble          y)
 {
   HCURSOR hcursor;
   GdkPixbuf *pixbuf;
@@ -448,7 +937,7 @@ _gdk_win32_display_get_cursor_for_surface (GdkDisplay *display,
   g_object_unref (pixbuf);
   if (!hcursor)
     return NULL;
-  return cursor_new_from_hcursor (hcursor, GDK_CURSOR_IS_PIXMAP);
+  return cursor_new_from_hcursor (hcursor, NULL, GDK_CURSOR_IS_PIXMAP);
 }
 
 gboolean
@@ -473,6 +962,12 @@ _gdk_win32_display_get_default_cursor_size (GdkDisplay *display,
 					    guint       *height)
 {
   g_return_if_fail (display == _gdk_display);
+
+  /* TODO: Use per-monitor DPI functions (8.1 and newer) or
+   * calculate DPI ourselves and use that, assuming that 72 dpi
+   * corresponds to 32x32 cursors. Take into account that DPI
+   * can be artificially increased by the user to make stuff bigger.
+   */
 
   if (width)
     *width = GetSystemMetrics (SM_CXCURSOR);

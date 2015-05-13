@@ -50,6 +50,11 @@ typedef struct _GdkWin32DisplayClass GdkWin32DisplayClass;
 GDK_AVAILABLE_IN_ALL
 GType      gdk_win32_display_get_type            (void);
 
+GDK_AVAILABLE_IN_3_18
+void       gdk_win32_display_set_cursor_theme    (GdkDisplay  *display,
+                                                  const gchar *theme,
+                                                  gint         size);
+
 G_END_DECLS
 
 #endif /* __GDK_WIN32_DISPLAY_H__ */

@@ -37,6 +37,7 @@
 #include <gdk/gdkprivate.h>
 #include <gdk/gdkcursorprivate.h>
 #include <gdk/win32/gdkwindow-win32.h>
+#include <gdk/win32/gdkwin32display.h>
 
 #include "gdkinternals.h"
 
@@ -114,6 +115,8 @@ typedef struct _GdkWin32SingleFont      GdkWin32SingleFont;
 struct _GdkWin32Cursor
 {
   GdkCursor cursor;
+
+  gchar *name;
   HCURSOR hcursor;
 };
 
@@ -373,6 +376,42 @@ HICON _gdk_win32_pixbuf_to_hicon   (GdkPixbuf *pixbuf);
 HICON _gdk_win32_pixbuf_to_hcursor (GdkPixbuf *pixbuf,
 				    gint       x_hotspot,
 				    gint       y_hotspot);
+
+void _gdk_win32_display_init_cursors (GdkWin32Display     *display);
+void _gdk_win32_display_finalize_cursors (GdkWin32Display *display);
+void _gdk_win32_display_update_cursors (GdkWin32Display   *display);
+
+typedef struct _Win32CursorTheme Win32CursorTheme;
+
+struct _Win32CursorTheme {
+  GHashTable *named_cursors;
+};
+
+typedef enum GdkWin32CursorLoadType {
+  GDK_WIN32_CURSOR_LOAD_FROM_FILE = 0,
+  GDK_WIN32_CURSOR_LOAD_FROM_RESOURCE_NULL = 1,
+  GDK_WIN32_CURSOR_LOAD_FROM_RESOURCE_THIS = 2,
+  GDK_WIN32_CURSOR_CREATE = 3,
+} GdkWin32CursorLoadType;
+
+typedef struct _Win32Cursor Win32Cursor;
+
+struct _Win32Cursor {
+  GdkWin32CursorLoadType load_type;
+  gunichar2 *resource_name;
+  gint width;
+  gint height;
+  guint load_flags;
+  gint xcursor_number;
+  GdkCursorType cursor_type;
+};
+
+Win32CursorTheme *win32_cursor_theme_load             (const gchar      *name,
+                                                       gint              size);
+Win32Cursor *     win32_cursor_theme_get_cursor       (Win32CursorTheme *theme,
+                                                       const gchar      *name);
+void              win32_cursor_theme_destroy          (Win32CursorTheme *theme);
+Win32CursorTheme *_gdk_win32_display_get_cursor_theme (GdkWin32Display  *win32_display);
 
 /* GdkDisplay member functions */
 GdkCursor *_gdk_win32_display_get_cursor_for_type (GdkDisplay   *display,

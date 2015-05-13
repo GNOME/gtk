@@ -51,6 +51,10 @@
 #include "quartz/gdkquartz.h"
 #endif
 
+#ifdef GDK_WINDOWING_WIN32
+#include "win32/gdkwin32.h"
+#endif
+
 #ifdef G_OS_WIN32
 #include "gtkwin32themeprivate.h"
 #endif
@@ -2918,7 +2922,7 @@ settings_update_cursor_theme (GtkSettings *settings)
 {
   gchar *theme = NULL;
   gint size = 0;
-#if defined(GDK_WINDOWING_X11) || defined(GDK_WINDOWING_WAYLAND)
+#if defined(GDK_WINDOWING_X11) || defined(GDK_WINDOWING_WAYLAND) || defined(GDK_WINDOWING_WIN32)
   GdkDisplay *display = gdk_screen_get_display (settings->priv->screen);
 #endif
 
@@ -2936,6 +2940,11 @@ settings_update_cursor_theme (GtkSettings *settings)
 #ifdef GDK_WINDOWING_WAYLAND
   if (GDK_IS_WAYLAND_DISPLAY (display))
     gdk_wayland_display_set_cursor_theme (display, theme, size);
+  else
+#endif
+#ifdef GDK_WINDOWING_WIN32
+  if (GDK_IS_WIN32_DISPLAY (display))
+    gdk_win32_display_set_cursor_theme (display, theme, size);
   else
 #endif
     g_warning ("GtkSettings Cursor Theme: Unsupported GDK backend\n");
