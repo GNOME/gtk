@@ -277,56 +277,135 @@ _gdk_quartz_display_get_cursor_for_surface (GdkDisplay      *display,
   return cursor;
 }
 
+/* OS X only exports a number of cursor types in its public NSCursor interface.
+ * By overriding the private _coreCursorType method, we can tell OS X to load
+ * one of its internal cursors instead (since cursor images are loaded on demand
+ * instead of in advance). WebKit does this too.
+ */
+
+@interface gdkCoreCursor : NSCursor {
+@private
+	int type;
+	BOOL override;
+}
+@end
+
+@implementation gdkCoreCursor
+
+- (int)_coreCursorType
+{
+	if (self->override)
+		return self->type;
+	return [super _coreCursorType];
+}
+
+#define CUSTOM_CURSOR_CTOR(name, id) \
+	+ (instancetype)name \
+	{ \
+		gdkCoreCursor *obj; \
+		obj = [self new]; \
+		if (obj) { \
+			obj->override = YES; \
+			obj->type = id; \
+		} \
+		return obj; \
+	}
+CUSTOM_CURSOR_CTOR(gdkHelpCursor, 40)
+CUSTOM_CURSOR_CTOR(gdkProgressCursor, 4)
+/* TODO OS X doesn't seem to have a way to get this. There is an undocumented
+ * method +[NSCursor _waitCursor], but it doesn't actually return this cursor,
+ * but rather some odd low-quality non-animating version of this cursor. Use
+ * the progress cursor instead for now.
+ */
+CUSTOM_CURSOR_CTOR(gdkWaitCursor, 4)
+CUSTOM_CURSOR_CTOR(gdkAliasCursor, 2)
+CUSTOM_CURSOR_CTOR(gdkMoveCursor, 39)
+/* TODO OS X doesn't seem to provide one; copy the move cursor for now
+ *  since it looks similar to what we want. */
+CUSTOM_CURSOR_CTOR(gdkAllScrollCursor, 39)
+CUSTOM_CURSOR_CTOR(gdkNEResizeCursor, 29)
+CUSTOM_CURSOR_CTOR(gdkNWResizeCursor, 33)
+CUSTOM_CURSOR_CTOR(gdkSEResizeCursor, 35)
+CUSTOM_CURSOR_CTOR(gdkSWResizeCursor, 37)
+CUSTOM_CURSOR_CTOR(gdkEWResizeCursor, 28)
+CUSTOM_CURSOR_CTOR(gdkNSResizeCursor, 32)
+CUSTOM_CURSOR_CTOR(gdkNESWResizeCursor, 30)
+CUSTOM_CURSOR_CTOR(gdkNWSEResizeCursor, 34)
+CUSTOM_CURSOR_CTOR(gdkZoomInCursor, 42)
+CUSTOM_CURSOR_CTOR(gdkZoomOutCursor, 43)
+
+@end
+
+struct CursorsByName {
+  const gchar *name;
+  NSString *selector;
+};
+
+static const struct CursorsByName cursors_by_name[] = {
+  /* Link & Status */
+  { "context-menu", @"contextualMenuCursor" },
+  { "help", @"gdkHelpCursor" },
+  { "pointer", @"pointingHandCursor" },
+  { "progress", @"gdkProgressCursor" },
+  { "wait", @"gdkWaitCursor" },
+  /* Selection */
+  { "cell", @"crosshairCursor" },
+  { "crosshair", @"crosshairCursor" },
+  { "text", @"IBeamCursor" },
+  { "vertical-text", @"IBeamCursorForVerticalLayout" },
+  /* Drag & Drop */
+  { "alias", @"gdkAliasCursor" },
+  { "copy", @"dragCopyCursor" },
+  { "move", @"gdkMoveCursor" },
+  { "no-drop", @"operationNotAllowedCursor" },
+  { "not-allowed", @"operationNotAllowedCursor" },
+  { "grab", @"openHandCursor" },
+  { "grabbing", @"closedHandCursor" },
+  /* Resize & Scrolling */
+  { "all-scroll", @"gdkAllScrollCursor" },
+  { "col-resize", @"resizeLeftRightCursor" },
+  { "row-resize", @"resizeUpDownCursor" },
+  { "n-resize", @"resizeUpCursor" },
+  { "e-resize", @"resizeRightCursor" },
+  { "s-resize", @"resizeDownCursor" },
+  { "w-resize", @"resizeLeftCursor" },
+  { "ne-resize", @"gdkNEResizeCursor" },
+  { "nw-resize", @"gdkNWResizeCursor" },
+  { "se-resize", @"gdkSEResizeCursor" },
+  { "sw-resize", @"gdkSWResizeCursor" },
+  { "ew-resize", @"gdkEWResizeCursor" },
+  { "ns-resize", @"gdkNSResizeCursor" },
+  { "nesw-resize", @"gdkNESWResizeCursor" },
+  { "nwse-resize", @"gdkNWSEResizeCursor" },
+  /* Zoom */
+  { "zoom-in", @"gdkZoomInCursor" },
+  { "zoom-out", @"gdkZoomOutCursor" },
+  { NULL, NULL },
+};
+
 GdkCursor*
 _gdk_quartz_display_get_cursor_for_name (GdkDisplay  *display,
                                          const gchar *name)
 {
   NSCursor *nscursor;
+  const struct CursorsByName *test;
+  SEL selector;
 
   if (name == NULL || g_str_equal (name, "none"))
     return create_blank_cursor ();
 
-  if (g_str_equal (name, "pointer"))
-    nscursor = [NSCursor pointingHandCursor];
-  else if (g_str_equal (name, "context-menu"))
-    nscursor = [NSCursor contextualMenuCursor];
-  else if (g_str_equal (name, "cell"))
-    nscursor = [NSCursor crosshairCursor];
-  else if (g_str_equal (name, "crosshair"))
-    nscursor = [NSCursor crosshairCursor];
-  else if (g_str_equal (name, "text"))
-    nscursor = [NSCursor IBeamCursor];
-  else if (g_str_equal (name, "vertical-text"))
-    nscursor = [NSCursor IBeamCursorForVerticalLayout];
-  else if (g_str_equal (name, "alias"))
-  else if (g_str_equal (name, "copy"))
-    nscursor = [NSCursor dragCopyCursor];
-  else if (g_str_equal (name, "move"))
-  else if (g_str_equal (name, "no-drop"))
-    nscursor = [NSCursor operationNotAllowedCursor];
-  else if (g_str_equal (name, "not-allowed"))
-    nscursor = [NSCursor operationNotAllowedCursor];
-  else if (g_str_equal (name, "grab"))
-    nscursor = [NSCursor openHandCursor];
-  else if (g_str_equal (name, "grabbing"))
-    nscursor = [NSCursor closedHandCursor];
-  else if (g_str_equal (name, "col-resize"))
-    nscursor = [NSCursor resizeLeftRightCursor];
-  else if (g_str_equal (name, "row-resize"))
-    nscursor = [NSCursor resizeUpDownCursor];
-  else if (g_str_equal (name, "n-resize"))
-    nscursor = [NSCursor resizeUpCursor];
-  else if (g_str_equal (name, "e-resize"))
-    nscursor = [NSCursor resizeRightCursor];
-  else if (g_str_equal (name, "s-resize"))
-    nscursor = [NSCursor resizeDownCursor];
-  else if (g_str_equal (name, "w-resize"))
-    nscursor = [NSCursor resizeLeftCursor];
-  else
-    nscursor = [NSCursor arrowCursor];
+  // use this selector if nothing found
+  selector = @selector(arrowCursor);
+  for (test = cursors_by_name; test->name != NULL; test++)
+    if (g_str_equal (name, test->name))
+      {
+        selector = NSSelectorFromString(test->selector);
+        break;
+      }
+  nscursor = [[gdkCoreCursor class] performSelector:selector];
 
   [nscursor retain];
-  return gdk_quartz_cursor_new_from_nscursor (nscursor, cursor_type);
+  return gdk_quartz_cursor_new_from_nscursor (nscursor, GDK_CURSOR_IS_PIXMAP);
 }
 
 G_DEFINE_TYPE (GdkQuartzCursor, gdk_quartz_cursor, GDK_TYPE_CURSOR)
