@@ -6,5 +6,5 @@ Icon=gtk3-widget-factory
 Terminal=false
 Type=Application
 StartupNotify=true
-Categories=GTK;
+Categories=Development;GTK;
 NoDisplay=true
