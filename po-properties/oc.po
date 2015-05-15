@@ -3,7 +3,6 @@
 # This file is distributed under the same license as the gtk+ package.
 # 
 # Yannig Marchegay (Kokoyaya) <yannig@marchegay.org>, 2006-2008
-# Cédric Valmary (Tot en Òc) <cvalmary@yahoo.fr>, 2015.
 # Cédric Valmary (Tot en òc) <cvalmary@yahoo.fr>, 2015.
 # 
 # spin button : bouton compteur
