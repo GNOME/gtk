@@ -61,12 +61,6 @@ gchar*    gtk_query_get_location   (GtkQuery    *query);
 void      gtk_query_set_location   (GtkQuery    *query,
                                     const gchar *uri);
 
-GList*    gtk_query_get_mime_types (GtkQuery    *query);
-void      gtk_query_set_mime_types (GtkQuery    *query,
-                                    GList       *mime_types);
-void      gtk_query_add_mime_type  (GtkQuery    *query,
-                                    const gchar *mime_type);
-
 gboolean  gtk_query_matches_string (GtkQuery    *query,
                                     const gchar *string);
 

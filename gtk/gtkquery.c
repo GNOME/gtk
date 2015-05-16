@@ -101,47 +101,6 @@ gtk_query_set_location (GtkQuery    *query,
   query->priv->location_uri = g_strdup (uri);
 }
 
-GList *
-gtk_query_get_mime_types (GtkQuery *query)
-{
-  GList *list, *l;
-  gchar *mime_type;
-
-  list = NULL;
-  for (l = query->priv->mime_types; l; l = l->next)
-    {
-      mime_type = (gchar*)l->data;
-      list = g_list_prepend (list, g_strdup (mime_type));
-    }
-
-  return list;
-}
-
-void
-gtk_query_set_mime_types (GtkQuery *query,
-                          GList    *mime_types)
-{
-  GList *l;
-  gchar *mime_type;
-
-  g_list_free_full (query->priv->mime_types, g_free);
-  query->priv->mime_types = NULL;
-
-  for (l = mime_types; l; l = l->next)
-    {
-      mime_type = (gchar*)l->data;
-      query->priv->mime_types = g_list_prepend (query->priv->mime_types, g_strdup (mime_type));
-    }
-}
-
-void
-gtk_query_add_mime_type (GtkQuery    *query,
-                         const gchar *mime_type)
-{
-  query->priv->mime_types = g_list_prepend (query->priv->mime_types,
-                                            g_strdup (mime_type));
-}
-
 static gchar *
 prepare_string_for_compare (const gchar *string)
 {
