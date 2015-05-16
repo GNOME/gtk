@@ -247,11 +247,6 @@ gboolean gtk_drag_check_threshold (GtkWidget *widget,
 				   gint       current_x,
 				   gint       current_y);
 
-/* Internal functions */
-void _gtk_drag_source_handle_event (GtkWidget *widget,
-				    GdkEvent  *event);
-void _gtk_drag_dest_handle_event (GtkWidget *toplevel,
-				  GdkEvent  *event);
 
 G_END_DECLS
 

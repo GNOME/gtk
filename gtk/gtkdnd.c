@@ -44,6 +44,7 @@
 #endif
 
 #include "gtkdnd.h"
+#include "gtkdndprivate.h"
 #include "gtkiconhelperprivate.h"
 #include "gtkicontheme.h"
 #include "gtkmain.h"

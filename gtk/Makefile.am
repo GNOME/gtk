@@ -425,6 +425,7 @@ gtk_private_h_sources =		\
 	gtkcsswidgetnodeprivate.h	\
 	gtkcustompaperunixdialog.h \
 	gtkdialogprivate.h 	\
+	gtkdndprivate.h		\
 	gtkentryprivate.h	\
 	gtkeventcontrollerprivate.h	\
 	gtkfilechooserembed.h	\

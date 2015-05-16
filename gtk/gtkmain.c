@@ -115,7 +115,7 @@
 #include "gtkbox.h"
 #include "gtkclipboard.h"
 #include "gtkdebug.h"
-#include "gtkdnd.h"
+#include "gtkdndprivate.h"
 #include "gtkmain.h"
 #include "gtkmenu.h"
 #include "gtkmodules.h"
