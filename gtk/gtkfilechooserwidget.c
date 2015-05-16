@@ -6274,8 +6274,8 @@ search_start_query (GtkFileChooserWidget *impl,
 
   if (!priv->search_query)
     {
-      priv->search_query = _gtk_query_new ();
-      _gtk_query_set_text (priv->search_query, query_text);
+      priv->search_query = gtk_query_new ();
+      gtk_query_set_text (priv->search_query, query_text);
     }
 
   if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (priv->current_location_radio)) &&
@@ -6283,7 +6283,7 @@ search_start_query (GtkFileChooserWidget *impl,
     {
       gchar *location;
       location = g_file_get_uri (priv->current_folder);
-      _gtk_query_set_location (priv->search_query, location);
+      gtk_query_set_location (priv->search_query, location);
       g_free (location);
     }
 
@@ -6341,7 +6341,7 @@ search_setup_widgets (GtkFileChooserWidget *impl)
   /* if there already is a query, restart it */
   if (priv->search_query)
     {
-      gchar *query = _gtk_query_get_text (priv->search_query);
+      gchar *query = gtk_query_get_text (priv->search_query);
 
       if (query)
         {

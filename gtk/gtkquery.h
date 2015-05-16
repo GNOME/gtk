@@ -26,18 +26,18 @@
 
 G_BEGIN_DECLS
 
-#define GTK_TYPE_QUERY		(_gtk_query_get_type ())
-#define GTK_QUERY(obj)		(G_TYPE_CHECK_INSTANCE_CAST ((obj), GTK_TYPE_QUERY, GtkQuery))
-#define GTK_QUERY_CLASS(klass)	(G_TYPE_CHECK_CLASS_CAST ((klass), GTK_TYPE_QUERY, GtkQueryClass))
-#define GTK_IS_QUERY(obj)		(G_TYPE_CHECK_INSTANCE_TYPE ((obj), GTK_TYPE_QUERY))
-#define GTK_IS_QUERY_CLASS(klass)	(G_TYPE_CHECK_CLASS_TYPE ((klass), GTK_TYPE_QUERY))
+#define GTK_TYPE_QUERY          (gtk_query_get_type ())
+#define GTK_QUERY(obj)          (G_TYPE_CHECK_INSTANCE_CAST ((obj), GTK_TYPE_QUERY, GtkQuery))
+#define GTK_QUERY_CLASS(klass)  (G_TYPE_CHECK_CLASS_CAST ((klass), GTK_TYPE_QUERY, GtkQueryClass))
+#define GTK_IS_QUERY(obj)               (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GTK_TYPE_QUERY))
+#define GTK_IS_QUERY_CLASS(klass)       (G_TYPE_CHECK_CLASS_TYPE ((klass), GTK_TYPE_QUERY))
 #define GTK_QUERY_GET_CLASS(obj)    (G_TYPE_INSTANCE_GET_CLASS ((obj), GTK_TYPE_QUERY, GtkQueryClass))
 
 typedef struct _GtkQuery GtkQuery;
 typedef struct _GtkQueryClass GtkQueryClass;
 typedef struct _GtkQueryPrivate GtkQueryPrivate;
 
-struct _GtkQuery 
+struct _GtkQuery
 {
   GObject parent;
 
@@ -49,23 +49,23 @@ struct _GtkQueryClass
   GObjectClass parent_class;
 };
 
-GType     _gtk_query_get_type       (void);
+GType     gtk_query_get_type       (void);
 
-GtkQuery* _gtk_query_new            (void);
+GtkQuery* gtk_query_new            (void);
 
-gchar*    _gtk_query_get_text       (GtkQuery    *query);
-void      _gtk_query_set_text       (GtkQuery    *query, 
-				     const gchar *text);
+gchar*    gtk_query_get_text       (GtkQuery    *query);
+void      gtk_query_set_text       (GtkQuery    *query,
+                                    const gchar *text);
 
-gchar*    _gtk_query_get_location   (GtkQuery    *query);
-void      _gtk_query_set_location   (GtkQuery    *query, 
-				     const gchar *uri);
+gchar*    gtk_query_get_location   (GtkQuery    *query);
+void      gtk_query_set_location   (GtkQuery    *query,
+                                    const gchar *uri);
 
-GList*    _gtk_query_get_mime_types (GtkQuery    *query);
-void      _gtk_query_set_mime_types (GtkQuery    *query, 
-				     GList       *mime_types);
-void      _gtk_query_add_mime_type  (GtkQuery    *query, 
-				     const gchar *mime_type);
+GList*    gtk_query_get_mime_types (GtkQuery    *query);
+void      gtk_query_set_mime_types (GtkQuery    *query,
+                                    GList       *mime_types);
+void      gtk_query_add_mime_type  (GtkQuery    *query,
+                                    const gchar *mime_type);
 
 gboolean  gtk_query_matches_string (GtkQuery    *query,
                                     const gchar *string);

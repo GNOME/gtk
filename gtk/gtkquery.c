@@ -32,7 +32,7 @@ struct _GtkQueryPrivate
   gchar **words;
 };
 
-G_DEFINE_TYPE_WITH_PRIVATE (GtkQuery, _gtk_query, G_TYPE_OBJECT)
+G_DEFINE_TYPE_WITH_PRIVATE (GtkQuery, gtk_query, G_TYPE_OBJECT)
 
 static void
 finalize (GObject *object)
@@ -45,40 +45,40 @@ finalize (GObject *object)
   g_free (query->priv->location_uri);
   g_strfreev (query->priv->words);
 
-  G_OBJECT_CLASS (_gtk_query_parent_class)->finalize (object);
+  G_OBJECT_CLASS (gtk_query_parent_class)->finalize (object);
 }
 
 static void
-_gtk_query_class_init (GtkQueryClass *class)
+gtk_query_class_init (GtkQueryClass *class)
 {
   GObjectClass *gobject_class;
-  
+
   gobject_class = G_OBJECT_CLASS (class);
   gobject_class->finalize = finalize;
 }
 
 static void
-_gtk_query_init (GtkQuery *query)
+gtk_query_init (GtkQuery *query)
 {
-  query->priv = _gtk_query_get_instance_private (query);
+  query->priv = gtk_query_get_instance_private (query);
 }
 
 GtkQuery *
-_gtk_query_new (void)
+gtk_query_new (void)
 {
   return g_object_new (GTK_TYPE_QUERY,  NULL);
 }
 
 
 gchar *
-_gtk_query_get_text (GtkQuery *query)
+gtk_query_get_text (GtkQuery *query)
 {
   return g_strdup (query->priv->text);
 }
 
-void 
-_gtk_query_set_text (GtkQuery    *query, 
-		    const gchar *text)
+void
+gtk_query_set_text (GtkQuery    *query,
+                    const gchar *text)
 {
   g_free (query->priv->text);
   query->priv->text = g_strdup (text);
@@ -88,21 +88,21 @@ _gtk_query_set_text (GtkQuery    *query,
 }
 
 gchar *
-_gtk_query_get_location (GtkQuery *query)
+gtk_query_get_location (GtkQuery *query)
 {
   return g_strdup (query->priv->location_uri);
 }
-	
+
 void
-_gtk_query_set_location (GtkQuery    *query, 
-			const gchar *uri)
+gtk_query_set_location (GtkQuery    *query,
+                        const gchar *uri)
 {
   g_free (query->priv->location_uri);
   query->priv->location_uri = g_strdup (uri);
 }
 
 GList *
-_gtk_query_get_mime_types (GtkQuery *query)
+gtk_query_get_mime_types (GtkQuery *query)
 {
   GList *list, *l;
   gchar *mime_type;
@@ -118,8 +118,8 @@ _gtk_query_get_mime_types (GtkQuery *query)
 }
 
 void
-_gtk_query_set_mime_types (GtkQuery *query, 
-			   GList    *mime_types)
+gtk_query_set_mime_types (GtkQuery *query,
+                          GList    *mime_types)
 {
   GList *l;
   gchar *mime_type;
@@ -135,11 +135,11 @@ _gtk_query_set_mime_types (GtkQuery *query,
 }
 
 void
-_gtk_query_add_mime_type (GtkQuery    *query, 
-			  const gchar *mime_type)
+gtk_query_add_mime_type (GtkQuery    *query,
+                         const gchar *mime_type)
 {
   query->priv->mime_types = g_list_prepend (query->priv->mime_types,
-					    g_strdup (mime_type));
+                                            g_strdup (mime_type));
 }
 
 static gchar *

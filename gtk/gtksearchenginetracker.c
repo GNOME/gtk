@@ -356,8 +356,8 @@ gtk_search_engine_tracker_start (GtkSearchEngine *engine)
       return;
     }
 
-  search_text = _gtk_query_get_text (tracker->priv->query);
-  location_uri = _gtk_query_get_location (tracker->priv->query);
+  search_text = gtk_query_get_text (tracker->priv->query);
+  location_uri = gtk_query_get_location (tracker->priv->query);
 
   sparql = g_string_new ("SELECT nie:url(?urn) "
                          "WHERE {"

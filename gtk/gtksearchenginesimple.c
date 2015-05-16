@@ -95,7 +95,7 @@ search_thread_data_new (GtkSearchEngineSimple *engine,
   data->engine = g_object_ref (engine);
   data->directories = g_queue_new ();
   data->query = g_object_ref (query);
-  uri = _gtk_query_get_location (query);
+  uri = gtk_query_get_location (query);
   if (uri != NULL)
     location = g_file_new_for_uri (uri);
   else

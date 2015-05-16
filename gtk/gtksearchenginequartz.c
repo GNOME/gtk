@@ -204,7 +204,7 @@ gtk_search_engine_quartz_set_query (GtkSearchEngine *engine,
   [quartz->priv->ns_query setPredicate:
     [NSPredicate predicateWithFormat:
       [NSString stringWithFormat:@"(kMDItemTextContent LIKE[cd] \"*%s*\")",
-                                 _gtk_query_get_text (query)]]];
+                                 gtk_query_get_text (query)]]];
 
   QUARTZ_POOL_RELEASE;
 }
