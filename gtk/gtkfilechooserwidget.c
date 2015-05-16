@@ -6106,12 +6106,6 @@ search_add_hit (GtkFileChooserWidget *impl,
   if (!file)
     return;
 
-  if (!g_file_is_native (file))
-    {
-      g_object_unref (file);
-      return;
-    }
-
   priv->search_model_empty = FALSE;
 
   _gtk_file_system_model_add_and_query_file (priv->search_model,
