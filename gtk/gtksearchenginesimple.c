@@ -35,16 +35,14 @@
 typedef struct
 {
   GtkSearchEngineSimple *engine;
+  GCancellable *cancellable;
 
-  gchar *path;
-  gchar **words;
-  GList *found_list;
+  GQueue *directories;
 
   gint n_processed_files;
-  GList *uri_hits;
+  GList *hits;
 
-  /* accessed on both threads: */
-  volatile gboolean cancelled;
+  GtkQuery *query;
 } SearchThreadData;
 
 
@@ -77,7 +75,7 @@ gtk_search_engine_simple_dispose (GObject *object)
 
   if (priv->active_search)
     {
-      priv->active_search->cancelled = TRUE;
+      g_cancellable_cancel (priv->active_search->cancellable);
       priv->active_search = NULL;
     }
 
@@ -89,25 +87,22 @@ search_thread_data_new (GtkSearchEngineSimple *engine,
 			GtkQuery              *query)
 {
   SearchThreadData *data;
-  char *text, *lower, *uri;
+  const gchar *uri;
+  GFile *location;
 
   data = g_new0 (SearchThreadData, 1);
 
   data->engine = g_object_ref (engine);
+  data->directories = g_queue_new ();
+  data->query = g_object_ref (query);
   uri = _gtk_query_get_location (query);
   if (uri != NULL)
-    {
-      data->path = g_filename_from_uri (uri, NULL, NULL);
-      g_free (uri);
-    }
-  if (data->path == NULL)
-    data->path = g_strdup (g_get_home_dir ());
+    location = g_file_new_for_uri (uri);
+  else
+    location = g_file_new_for_path (g_get_home_dir ());
+  g_queue_push_tail (data->directories, location);
 
-  text = _gtk_query_get_text (query);
-  lower = g_utf8_casefold (text, -1);
-  data->words = g_strsplit (lower, " ", -1);
-  g_free (text);
-  g_free (lower);
+  data->cancellable = g_cancellable_new ();
 
   return data;
 }
@@ -115,9 +110,12 @@ search_thread_data_new (GtkSearchEngineSimple *engine,
 static void
 search_thread_data_free (SearchThreadData *data)
 {
+  g_queue_foreach (data->directories, (GFunc)g_object_unref, NULL);
+  g_queue_free (data->directories);
+  g_object_unref (data->cancellable);
+  g_object_unref (data->query);
   g_object_unref (data->engine);
-  g_free (data->path);
-  g_strfreev (data->words);
+
   g_free (data);
 }
 
@@ -128,7 +126,7 @@ search_thread_done_idle (gpointer user_data)
 
   data = user_data;
 
-  if (!data->cancelled)
+  if (!g_cancellable_is_cancelled (data->cancellable))
     _gtk_search_engine_finished (GTK_SEARCH_ENGINE (data->engine));
 
   data->engine->priv->active_search = NULL;
@@ -146,15 +144,10 @@ typedef struct
 static gboolean
 search_thread_add_hits_idle (gpointer user_data)
 {
-  SearchHits *hits;
+  SearchHits *hits = user_data;
 
-  hits = user_data;
-
-  if (!hits->thread_data->cancelled)
-    {
-      _gtk_search_engine_hits_added (GTK_SEARCH_ENGINE (hits->thread_data->engine),
-				    hits->uris);
-    }
+  if (!g_cancellable_is_cancelled (hits->thread_data->cancellable))
+    _gtk_search_engine_hits_added (GTK_SEARCH_ENGINE (hits->thread_data->engine), hits->uris);
 
   g_list_free_full (hits->uris, g_free);
   g_free (hits);
@@ -169,183 +162,83 @@ send_batch (SearchThreadData *data)
 
   data->n_processed_files = 0;
 
-  if (data->uri_hits)
+  if (data->hits)
     {
       guint id;
 
       hits = g_new (SearchHits, 1);
-      hits->uris = data->uri_hits;
+      hits->uris = data->hits;
       hits->thread_data = data;
 
       id = gdk_threads_add_idle (search_thread_add_hits_idle, hits);
       g_source_set_name_by_id (id, "[gtk+] search_thread_add_hits_idle");
     }
 
-  data->uri_hits = NULL;
+  data->hits = NULL;
 }
-
-typedef gboolean (VisitFunc) (const char *fpath, gpointer user_data);
-
-static gboolean process_dir    (GFile *dir, GList **new_root_dirs, VisitFunc func, gpointer user_data);
-static GList *  process_dirs   (GList *root_dirs, VisitFunc func, gpointer user_data);
-static void     breadth_search (gchar *root, VisitFunc func, gpointer user_data);
 
 static void
-breadth_search (gchar *root, VisitFunc func, gpointer user_data)
+visit_directory (GFile *dir, SearchThreadData *data)
 {
-  GList *subdirs = NULL;
+  GFileEnumerator *enumerator;
+  GFileInfo *info;
+  GFile *child;
+  const gchar *display_name;
 
-  subdirs = g_list_prepend (subdirs, g_file_new_for_path (root));
+  enumerator = g_file_enumerate_children (dir,
+                                          G_FILE_ATTRIBUTE_STANDARD_NAME ","
+                                          G_FILE_ATTRIBUTE_STANDARD_DISPLAY_NAME ","
+                                          G_FILE_ATTRIBUTE_STANDARD_TYPE ","
+                                          G_FILE_ATTRIBUTE_STANDARD_IS_HIDDEN,
+                                          G_FILE_QUERY_INFO_NOFOLLOW_SYMLINKS,
+                                          data->cancellable, NULL);
+  if (enumerator == NULL)
+    return;
 
-  while (subdirs)
-    subdirs = process_dirs (subdirs, func, user_data);
-}
-
-static GList *
-process_dirs (GList *root_dirs, VisitFunc func, gpointer user_data)
-{
-  SearchThreadData *data = (SearchThreadData*) user_data;
-  GList *new_root_dirs = NULL;
-  GList *root;
-  gboolean keep_going = TRUE;
-
-  for (root = root_dirs; root; root = g_list_next (root))
+  while (g_file_enumerator_iterate (enumerator, &info, &child, data->cancellable, NULL))
     {
-      GFile *dir = (GFile *) root->data;
+      if (info == NULL)
+        break;
 
-      /* Even if cancelled or stopped, we keep looping to unref the dirs */
-      if (keep_going && !data->cancelled)
-        keep_going = process_dir (dir, &new_root_dirs, func, user_data);
-
-      g_object_unref (dir);
-    }
-
-  if (!keep_going || data->cancelled)
-    {
-      g_list_free_full (new_root_dirs, g_object_unref);
-      new_root_dirs = NULL;
-    }
-
-  g_list_free (root_dirs);
-
-  return g_list_reverse (new_root_dirs);
-}
-
-static gboolean
-process_dir (GFile *dir, GList **new_root_dirs, VisitFunc func, gpointer user_data)
-{
-  GFileEnumerator *direnum;
-  gchar *dirpath;
-  SearchThreadData *data = (SearchThreadData*) user_data;
-
-  direnum = g_file_enumerate_children (dir, G_FILE_ATTRIBUTE_STANDARD_NAME ","
-                                       G_FILE_ATTRIBUTE_STANDARD_TYPE ","
-                                       G_FILE_ATTRIBUTE_STANDARD_IS_HIDDEN ","
-                                       G_FILE_ATTRIBUTE_STANDARD_IS_SYMLINK,
-                                       G_FILE_QUERY_INFO_NOFOLLOW_SYMLINKS,
-                                       NULL, NULL);
-  if (direnum == NULL || data->cancelled)
-    return FALSE;
-
-  dirpath = g_file_get_path (dir);
-
-  while (TRUE)
-    {
-      GFileInfo *info;
-      gchar *fullname;
-      const gchar *basename;
-      gboolean keep_going;
-
-      keep_going = g_file_enumerator_iterate (direnum, &info, NULL, NULL, NULL);
-
-      if (!keep_going || info == NULL || data->cancelled)
-        {
-          g_object_unref (direnum);
-          g_free (dirpath);
-          return keep_going;
-        }
+      display_name = g_file_info_get_display_name (info);
+      if (display_name == NULL)
+        continue;
 
       if (g_file_info_get_is_hidden (info))
         continue;
 
-      basename = g_file_info_get_name (info);
-      fullname = g_build_filename (dirpath, basename, NULL);
+      if (gtk_query_matches_string (data->query, display_name))
+        data->hits = g_list_prepend (data->hits, g_file_get_uri (child));
 
-      keep_going = func ((const char *) fullname, user_data);
+      data->n_processed_files++;
+      if (data->n_processed_files > BATCH_SIZE)
+        send_batch (data);
 
-      g_free (fullname);
-
-      if (!keep_going)
-        {
-          g_object_unref (direnum);
-          g_free (dirpath);
-          return FALSE;
-        }
-
-      if (g_file_info_get_file_type (info) != G_FILE_TYPE_DIRECTORY)
-        continue;
-
-      *new_root_dirs = g_list_prepend (*new_root_dirs,
-                                       g_file_get_child (dir, basename));
-    }
-}
-
-static int
-search_visit_func (const char *fpath, gpointer user_data)
-{
-  SearchThreadData *data;
-  gint i;
-  gchar *display_basename;
-  gchar *lower_name;
-  gchar *uri;
-  gboolean hit;
-
-  data = (SearchThreadData*) user_data;
-
-  if (data->cancelled)
-    return FALSE;
-
-  display_basename = g_filename_display_basename (fpath);
-  lower_name = g_utf8_casefold (display_basename, -1);
-  g_free (display_basename);
-
-  hit = TRUE;
-  for (i = 0; data->words[i] != NULL; i++)
-    {
-      if (strstr (lower_name, data->words[i]) == NULL)
-        {
-          hit = FALSE;
-          break;
-        }
+      if (g_file_info_get_file_type (info) == G_FILE_TYPE_DIRECTORY)
+        g_queue_push_tail (data->directories, g_object_ref (child));
     }
 
-  g_free (lower_name);
-
-  if (hit)
-    {
-      uri = g_filename_to_uri (fpath, NULL, NULL);
-      data->uri_hits = g_list_prepend (data->uri_hits, uri);
-    }
-
-  data->n_processed_files++;
-
-  if (data->n_processed_files > BATCH_SIZE)
-    send_batch (data);
-
-  return TRUE;
+  g_object_unref (enumerator);
 }
 
 static gpointer
 search_thread_func (gpointer user_data)
 {
-  guint id;
   SearchThreadData *data;
+  GFile *dir;
+  guint id;
 
   data = user_data;
 
-  breadth_search (data->path, search_visit_func, data);
+  while (!g_cancellable_is_cancelled (data->cancellable) &&
+         (dir = g_queue_pop_head (data->directories)) != NULL)
+    {
+      visit_directory (dir, data);
+      g_object_unref (dir);
+    }
 
-  send_batch (data);
+  if (!g_cancellable_is_cancelled (data->cancellable))
+    send_batch (data);
 
   id = gdk_threads_add_idle (search_thread_done_idle, data);
   g_source_set_name_by_id (id, "[gtk+] search_thread_done_idle");
@@ -383,7 +276,7 @@ gtk_search_engine_simple_stop (GtkSearchEngine *engine)
 
   if (simple->priv->active_search != NULL)
     {
-      simple->priv->active_search->cancelled = TRUE;
+      g_cancellable_cancel (simple->priv->active_search->cancellable);
       simple->priv->active_search = NULL;
     }
 }

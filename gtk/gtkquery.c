@@ -24,11 +24,12 @@
 
 #include "gtkquery.h"
 
-struct _GtkQueryPrivate 
+struct _GtkQueryPrivate
 {
   gchar *text;
   gchar *location_uri;
   GList *mime_types;
+  gchar **words;
 };
 
 G_DEFINE_TYPE_WITH_PRIVATE (GtkQuery, _gtk_query, G_TYPE_OBJECT)
@@ -37,10 +38,12 @@ static void
 finalize (GObject *object)
 {
   GtkQuery *query;
-  
+
   query = GTK_QUERY (object);
-  
+
   g_free (query->priv->text);
+  g_free (query->priv->location_uri);
+  g_strfreev (query->priv->words);
 
   G_OBJECT_CLASS (_gtk_query_parent_class)->finalize (object);
 }
@@ -79,6 +82,9 @@ _gtk_query_set_text (GtkQuery    *query,
 {
   g_free (query->priv->text);
   query->priv->text = g_strdup (text);
+
+  g_strfreev (query->priv->words);
+  query->priv->words = NULL;
 }
 
 gchar *
@@ -136,3 +142,49 @@ _gtk_query_add_mime_type (GtkQuery    *query,
 					    g_strdup (mime_type));
 }
 
+static gchar *
+prepare_string_for_compare (const gchar *string)
+{
+  gchar *normalized, *res;
+
+  normalized = g_utf8_normalize (string, -1, G_NORMALIZE_NFD);
+  res = g_utf8_strdown (normalized, -1);
+  g_free (normalized);
+
+  return res;
+}
+
+gboolean
+gtk_query_matches_string (GtkQuery    *query,
+                          const gchar *string)
+{
+  gchar *prepared;
+  gboolean found;
+  gint i;
+
+  if (!query->priv->text)
+    return FALSE;
+
+  if (!query->priv->words)
+    {
+      prepared = prepare_string_for_compare (query->priv->text);
+      query->priv->words = g_strsplit (prepared, " ", -1);
+      g_free (prepared);
+    }
+
+  prepared = prepare_string_for_compare (string);
+
+  found = TRUE;
+  for (i = 0; query->priv->words[i]; i++)
+    {
+      if (strstr (prepared, query->priv->words[i]) == NULL)
+        {
+          found = FALSE;
+          break;
+        }
+    }
+
+  g_free (prepared);
+
+  return found;
+}

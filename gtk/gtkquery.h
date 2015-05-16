@@ -67,6 +67,9 @@ void      _gtk_query_set_mime_types (GtkQuery    *query,
 void      _gtk_query_add_mime_type  (GtkQuery    *query, 
 				     const gchar *mime_type);
 
+gboolean  gtk_query_matches_string (GtkQuery    *query,
+                                    const gchar *string);
+
 G_END_DECLS
 
 #endif /* __GTK_QUERY_H__ */
