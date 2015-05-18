@@ -74,6 +74,13 @@ struct _GdkWaylandDisplay
 
   GList *async_roundtrips;
 
+  /* Keep track of the ID's of the known globals and their corresponding
+   * names. This way we can check whether an interface is known, and
+   * remove globals given its ID. This table is not expected to be very
+   * large, meaning the lookup by interface name time is insignificant. */
+  GHashTable *known_globals;
+  GList *on_has_globals_closures;
+
   struct wl_cursor_theme *scaled_cursor_themes[GDK_WAYLAND_THEME_SCALES_COUNT];
   gchar *cursor_theme_name;
   int cursor_theme_size;

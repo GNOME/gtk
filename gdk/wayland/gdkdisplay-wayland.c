@@ -171,6 +171,110 @@ static const struct xdg_shell_listener xdg_shell_listener = {
   xdg_shell_ping,
 };
 
+static gboolean
+is_known_global (gpointer key, gpointer value, gpointer user_data)
+{
+  const char *required_global = user_data;
+  const char *known_global = value;
+
+  return g_strcmp0 (required_global, known_global) == 0;
+}
+
+static gboolean
+has_required_globals (GdkWaylandDisplay *display_wayland,
+                      const char *required_globals[])
+{
+  int i = 0;
+
+  while (required_globals[i])
+    {
+      if (g_hash_table_find (display_wayland->known_globals,
+                             is_known_global,
+                             (gpointer)required_globals[i]) == NULL)
+        return FALSE;
+
+      i++;
+    }
+
+  return TRUE;
+}
+
+typedef struct _OnHasGlobalsClosure OnHasGlobalsClosure;
+
+typedef void (*HasGlobalsCallback) (GdkWaylandDisplay *display_wayland,
+                                    OnHasGlobalsClosure *closure);
+
+struct _OnHasGlobalsClosure
+{
+  HasGlobalsCallback handler;
+  const char **required_globals;
+};
+
+static void
+process_on_globals_closures (GdkWaylandDisplay *display_wayland)
+{
+  GList *iter;
+
+  iter = display_wayland->on_has_globals_closures;
+  while (iter != NULL)
+    {
+      GList *next = iter->next;
+      OnHasGlobalsClosure *closure = iter->data;
+
+      if (has_required_globals (display_wayland,
+                                closure->required_globals))
+        {
+          closure->handler (display_wayland, closure);
+          g_free (closure);
+          display_wayland->on_has_globals_closures =
+            g_list_delete_link (display_wayland->on_has_globals_closures, iter);
+        }
+
+      iter = next;
+    }
+}
+
+typedef struct
+{
+  OnHasGlobalsClosure base;
+  uint32_t id;
+  uint32_t version;
+} SeatAddedClosure;
+
+static void
+_gdk_wayland_display_add_seat (GdkWaylandDisplay *display_wayland,
+                               uint32_t id,
+                               uint32_t version)
+{
+  GdkDisplay *gdk_display = GDK_DISPLAY_OBJECT (display_wayland);
+  struct wl_seat *seat;
+
+  seat = wl_registry_bind (display_wayland->wl_registry,
+                           id, &wl_seat_interface, MIN (version, 4));
+  _gdk_wayland_device_manager_add_seat (gdk_display->device_manager,
+                                        id, seat);
+  _gdk_wayland_display_async_roundtrip (display_wayland);
+}
+
+static void
+seat_added_closure_run (GdkWaylandDisplay *display_wayland,
+                        OnHasGlobalsClosure *closure)
+{
+  SeatAddedClosure *seat_added_closure = (SeatAddedClosure*)closure;
+
+  _gdk_wayland_display_add_seat (display_wayland,
+                                 seat_added_closure->id,
+                                 seat_added_closure->version);
+}
+
+static void
+postpone_on_globals_closure (GdkWaylandDisplay *display_wayland,
+                             OnHasGlobalsClosure *closure)
+{
+  display_wayland->on_has_globals_closures =
+    g_list_append (display_wayland->on_has_globals_closures, closure);
+}
+
 static void
 gdk_registry_handle_global (void               *data,
                             struct wl_registry *registry,
@@ -179,9 +283,8 @@ gdk_registry_handle_global (void               *data,
                             uint32_t            version)
 {
   GdkWaylandDisplay *display_wayland = data;
-  GdkDisplay *gdk_display = GDK_DISPLAY_OBJECT (data);
-  struct wl_seat *seat;
   struct wl_output *output;
+  gboolean handled = TRUE;
 
   GDK_NOTE (MISC,
             g_message ("add global %u, interface %s, version %u", id, interface, version));
@@ -226,9 +329,26 @@ gdk_registry_handle_global (void               *data,
     }
   else if (strcmp (interface, "wl_seat") == 0)
     {
-      seat = wl_registry_bind (display_wayland->wl_registry, id, &wl_seat_interface, MIN (version, 4));
-      _gdk_wayland_device_manager_add_seat (gdk_display->device_manager, id, seat);
-      _gdk_wayland_display_async_roundtrip (display_wayland);
+      static const char *required_device_manager_globals[] = {
+        "wl_compositor",
+        "wl_data_device_manager",
+        NULL
+      };
+
+      if (has_required_globals (display_wayland,
+                                required_device_manager_globals))
+        _gdk_wayland_display_add_seat (display_wayland, id, version);
+      else
+        {
+          SeatAddedClosure *closure;
+
+          closure = g_new0 (SeatAddedClosure, 1);
+          closure->base.handler = seat_added_closure_run;
+          closure->base.required_globals = required_device_manager_globals;
+          closure->id = id;
+          closure->version = version;
+          postpone_on_globals_closure (display_wayland, &closure->base);
+        }
     }
   else if (strcmp (interface, "wl_data_device_manager") == 0)
     {
@@ -240,6 +360,14 @@ gdk_registry_handle_global (void               *data,
       display_wayland->subcompositor =
         wl_registry_bind (display_wayland->wl_registry, id, &wl_subcompositor_interface, 1);
     }
+  else
+    handled = FALSE;
+
+  if (handled)
+    g_hash_table_insert (display_wayland->known_globals,
+                         GUINT_TO_POINTER (id), g_strdup (interface));
+
+  process_on_globals_closures (display_wayland);
 }
 
 static void
@@ -253,6 +381,8 @@ gdk_registry_handle_global_remove (void               *data,
   GDK_NOTE (MISC, g_message ("remove global %u", id));
   _gdk_wayland_device_manager_remove_seat (display->device_manager, id);
   _gdk_wayland_screen_remove_output (display_wayland->screen, id);
+
+  g_hash_table_remove (display_wayland->known_globals, GUINT_TO_POINTER (id));
 
   /* FIXME: the object needs to be destroyed here, we're leaking */
 }
@@ -297,6 +427,10 @@ _gdk_wayland_display_open (const gchar *display_name)
   display_wayland->wl_display = wl_display;
   display_wayland->screen = _gdk_wayland_screen_new (display);
   display_wayland->event_source = _gdk_wayland_display_event_source_new (display);
+
+  display_wayland->known_globals =
+    g_hash_table_new_full (NULL, NULL, NULL, g_free);
+
   _gdk_wayland_display_init_cursors (display_wayland);
 
   display_wayland->wl_registry = wl_display_get_registry (display_wayland->wl_display);
@@ -349,6 +483,9 @@ gdk_wayland_display_dispose (GObject *object)
 
   g_list_foreach (display_wayland->async_roundtrips,
                   (GFunc) wl_callback_destroy, NULL);
+
+  g_hash_table_destroy (display_wayland->known_globals);
+  g_list_free_full (display_wayland->on_has_globals_closures, g_free);
 
   G_OBJECT_CLASS (gdk_wayland_display_parent_class)->dispose (object);
 }
