@@ -299,9 +299,6 @@ gdk_registry_handle_global (void               *data,
     {
       display_wayland->shm =
         wl_registry_bind (display_wayland->wl_registry, id, &wl_shm_interface, 1);
-
-      /* SHM interface is prerequisite */
-      _gdk_wayland_display_load_cursor_theme (display_wayland);
     }
   else if (strcmp (interface, "xdg_shell") == 0)
     {
@@ -398,6 +395,27 @@ log_handler (const char *format, va_list args)
   g_logv (G_LOG_DOMAIN, G_LOG_LEVEL_ERROR, format, args);
 }
 
+static void
+load_cursor_theme_closure_run (GdkWaylandDisplay *display_wayland,
+                               OnHasGlobalsClosure *closure)
+{
+  _gdk_wayland_display_load_cursor_theme (display_wayland);
+}
+
+static void
+_gdk_wayland_display_prepare_cursor_themes (GdkWaylandDisplay *display_wayland)
+{
+  OnHasGlobalsClosure *closure;
+  static const char *required_cursor_theme_globals[] = {
+      "wl_shm",
+  };
+
+  closure = g_new0 (OnHasGlobalsClosure, 1);
+  closure->handler = load_cursor_theme_closure_run;
+  closure->required_globals = required_cursor_theme_globals;
+  postpone_on_globals_closure (display_wayland, closure);
+}
+
 GdkDisplay *
 _gdk_wayland_display_open (const gchar *display_name)
 {
@@ -432,6 +450,7 @@ _gdk_wayland_display_open (const gchar *display_name)
     g_hash_table_new_full (NULL, NULL, NULL, g_free);
 
   _gdk_wayland_display_init_cursors (display_wayland);
+  _gdk_wayland_display_prepare_cursor_themes (display_wayland);
 
   display_wayland->wl_registry = wl_display_get_registry (display_wayland->wl_display);
   wl_registry_add_listener (display_wayland->wl_registry, &registry_listener, display_wayland);
