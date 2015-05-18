@@ -34,6 +34,6 @@ gdk_quartz_window_create_gl_context (GdkWindow     *window,
 {
   /* FIXME: implement */
   g_set_error_literal (error, GDK_GL_ERROR, GDK_GL_ERROR_NOT_AVAILABLE,
-                       _("Not implemented on OS X"));
+                       "Not implemented on OS X");
   return NULL;
 }
