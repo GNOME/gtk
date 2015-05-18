@@ -74,6 +74,35 @@ static void _gdk_wayland_display_load_cursor_theme (GdkWaylandDisplay *wayland_d
 G_DEFINE_TYPE (GdkWaylandDisplay, gdk_wayland_display, GDK_TYPE_DISPLAY)
 
 static void
+async_roundtrip_callback (void               *data,
+                          struct wl_callback *callback,
+                          uint32_t            time)
+{
+  GdkWaylandDisplay *display_wayland = data;
+
+  display_wayland->async_roundtrips =
+    g_list_remove (display_wayland->async_roundtrips, callback);
+  wl_callback_destroy (callback);
+}
+
+static const struct wl_callback_listener async_roundrip_listener = {
+  async_roundtrip_callback
+};
+
+static void
+_gdk_wayland_display_async_roundtrip (GdkWaylandDisplay *display_wayland)
+{
+  struct wl_callback *callback;
+
+  callback = wl_display_sync (display_wayland->wl_display);
+  wl_callback_add_listener (callback,
+                            &async_roundrip_listener,
+                            display_wayland);
+  display_wayland->async_roundtrips =
+    g_list_append (display_wayland->async_roundtrips, callback);
+}
+
+static void
 gdk_input_init (GdkDisplay *display)
 {
   GdkWaylandDisplay *display_wayland;
@@ -193,13 +222,13 @@ gdk_registry_handle_global (void               *data,
       output =
         wl_registry_bind (display_wayland->wl_registry, id, &wl_output_interface, MIN (version, 2));
       _gdk_wayland_screen_add_output (display_wayland->screen, id, output, MIN (version, 2));
-      wl_display_roundtrip (display_wayland->wl_display);
+      _gdk_wayland_display_async_roundtrip (display_wayland);
     }
   else if (strcmp (interface, "wl_seat") == 0)
     {
       seat = wl_registry_bind (display_wayland->wl_registry, id, &wl_seat_interface, MIN (version, 4));
       _gdk_wayland_device_manager_add_seat (gdk_display->device_manager, id, seat);
-      wl_display_roundtrip (display_wayland->wl_display);
+      _gdk_wayland_display_async_roundtrip (display_wayland);
     }
   else if (strcmp (interface, "wl_data_device_manager") == 0)
     {
@@ -273,8 +302,18 @@ _gdk_wayland_display_open (const gchar *display_name)
   display_wayland->wl_registry = wl_display_get_registry (display_wayland->wl_display);
   wl_registry_add_listener (display_wayland->wl_registry, &registry_listener, display_wayland);
 
-  /* Wait until the dust has settled during init... */
-  wl_display_roundtrip (display_wayland->wl_display);
+  _gdk_wayland_display_async_roundtrip (display_wayland);
+
+  /* Wait for initializing to complete. This means waiting for all
+   * asynchrounous roundtrips that were triggered during initial roundtrip. */
+  while (g_list_length (display_wayland->async_roundtrips) > 0)
+    {
+      if (wl_display_dispatch (display_wayland->wl_display) < 0)
+        {
+          g_object_unref (display);
+          return NULL;
+        }
+    }
 
   gdk_input_init (display);
 
@@ -307,6 +346,9 @@ gdk_wayland_display_dispose (GObject *object)
       gdk_wayland_selection_free (display_wayland->selection);
       display_wayland->selection = NULL;
     }
+
+  g_list_foreach (display_wayland->async_roundtrips,
+                  (GFunc) wl_callback_destroy, NULL);
 
   G_OBJECT_CLASS (gdk_wayland_display_parent_class)->dispose (object);
 }
