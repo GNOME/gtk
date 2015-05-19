@@ -24,19 +24,8 @@ AC_ARG_ENABLE(gtktest, [  --disable-gtktest       do not try to compile and run 
 
   no_gtk=""
 
-  AC_PATH_PROG(PKG_CONFIG, pkg-config, no)
-
-  if test x$PKG_CONFIG != xno ; then
-    if pkg-config --atleast-pkgconfig-version 0.7 ; then
-      :
-    else
-      echo "*** pkg-config too old; version 0.7 or better required."
-      no_gtk=yes
-      PKG_CONFIG=no
-    fi
-  else
-    no_gtk=yes
-  fi
+  AC_REQUIRE([PKG_PROG_PKG_CONFIG])
+  PKG_PROG_PKG_CONFIG([0.7])
 
   min_gtk_version=ifelse([$1], ,2.0.0,$1)
   AC_MSG_CHECKING(for GTK+ - version >= $min_gtk_version)
