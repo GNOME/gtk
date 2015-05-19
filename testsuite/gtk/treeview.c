@@ -211,6 +211,7 @@ test_row_separator_height (void)
   gtk_container_add (GTK_CONTAINER (window), tree_view);
   gtk_widget_show_all (window);
 
+  gtk_test_widget_wait_for_draw (window);
 
   path = gtk_tree_path_new_from_indices (2, -1);
   gtk_tree_view_get_background_area (GTK_TREE_VIEW (tree_view),
