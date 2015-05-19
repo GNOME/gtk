@@ -1,12 +1,13 @@
-CC = gcc
+CC ?= gcc
 PKGCONFIG = $(shell which pkg-config)
-CFLAGS = `$(PKGCONFIG) --cflags gtk+-3.0`
-LIBS = `$(PKGCONFIG) --libs gtk+-3.0`
-GLIB_COMPILE_RESOURCES = `$(PKGCONFIG) --variable=glib_compile_resources gio-2.0`
+CFLAGS = $(shell $(PKGCONFIG) --cflags gtk+-3.0)
+LIBS = $(shell $(PKGCONFIG) --libs gtk+-3.0)
+GLIB_COMPILE_RESOURCES = $(shell $(PKGCONFIG) --variable=glib_compile_resources gio-2.0)
 
-SRC = resources.c exampleapp.c exampleappwin.c main.c
+SRC = exampleapp.c exampleappwin.c main.c
+BUILT_SRC = resources.c
 
-OBJS = $(SRC:.c=.o)
+OBJS = $(BUILT_SRC:.c=.o) $(SRC:.c=.o)
 
 all: exampleapp
 
@@ -20,6 +21,6 @@ exampleapp: $(OBJS)
 	$(CC) -o $(@F) $(LIBS) $(OBJS)
 
 clean:
-	rm -f resources.c
+	rm -f $(BUILT_SRC)
 	rm -f $(OBJS)
 	rm -f exampleapp

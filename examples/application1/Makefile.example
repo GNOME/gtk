@@ -1,7 +1,7 @@
-CC = gcc
+CC ?= gcc
 PKGCONFIG = $(shell which pkg-config)
-CFLAGS = `$(PKGCONFIG) --cflags gtk+-3.0`
-LIBS = `$(PKGCONFIG) --libs gtk+-3.0`
+CFLAGS = $(shell $(PKGCONFIG) --cflags gtk+-3.0)
+LIBS = $(shell $(PKGCONFIG) --libs gtk+-3.0)
 
 SRC = main.c exampleapp.c exampleappwin.c
 
