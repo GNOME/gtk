@@ -217,6 +217,64 @@
 					/>
 				</FileConfiguration>
 			</File>
+			<File RelativePath="..\..\..\demos\gtk-demo\demos.h.win32">
+				<FileConfiguration Name="Debug|Win32">
+					<Tool Name="VCCustomBuildTool"
+						Description="Copying demos.h from demos.h.win32..."
+						CommandLine="$(CopyDemosH)"
+						Outputs="..\..\..\demos\gtk-demo\demos.h"
+					/>
+				</FileConfiguration>
+				<FileConfiguration Name="Debug_Broadway|Win32">
+					<Tool Name="VCCustomBuildTool"
+						Description="Copying demos.h from demos.h.win32..."
+						CommandLine="$(CopyDemosH)"
+						Outputs="..\..\..\demos\gtk-demo\demos.h"
+					/>
+				</FileConfiguration>
+				<FileConfiguration Name="Release|Win32">
+					<Tool Name="VCCustomBuildTool"
+						Description="Copying demos.h from demos.h.win32..."
+						CommandLine="$(CopyDemosH)"
+						Outputs="..\..\..\demos\gtk-demo\demos.h"
+					/>
+				</FileConfiguration>
+				<FileConfiguration Name="Release_Broadway|Win32">
+					<Tool Name="VCCustomBuildTool"
+						Description="Copying demos.h from demos.h.win32..."
+						CommandLine="$(CopyDemosH)"
+						Outputs="..\..\..\demos\gtk-demo\demos.h"
+					/>
+				</FileConfiguration>
+				<FileConfiguration Name="Debug|x64">
+					<Tool Name="VCCustomBuildTool"
+						Description="Copying demos.h from demos.h.win32..."
+						CommandLine="$(CopyDemosH)"
+						Outputs="..\..\..\demos\gtk-demo\demos.h"
+					/>
+				</FileConfiguration>
+				<FileConfiguration Name="Debug_Broadway|x64">
+					<Tool Name="VCCustomBuildTool"
+						Description="Copying demos.h from demos.h.win32..."
+						CommandLine="$(CopyDemosH)"
+						Outputs="..\..\..\demos\gtk-demo\demos.h"
+					/>
+				</FileConfiguration>
+				<FileConfiguration Name="Release|x64">
+					<Tool Name="VCCustomBuildTool"
+						Description="Copying demos.h from demos.h.win32..."
+						CommandLine="$(CopyDemosH)"
+						Outputs="..\..\..\demos\gtk-demo\demos.h"
+					/>
+				</FileConfiguration>
+				<FileConfiguration Name="Release_Broadway|x64">
+					<Tool Name="VCCustomBuildTool"
+						Description="Copying demos.h from demos.h.win32..."
+						CommandLine="$(CopyDemosH)"
+						Outputs="..\..\..\demos\gtk-demo\demos.h"
+					/>
+				</FileConfiguration>
+			</File>
 		</Filter>
 	</Files>
 	<Globals>

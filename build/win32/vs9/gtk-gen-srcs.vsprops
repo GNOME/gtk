@@ -66,4 +66,8 @@ cd $(SolutionDir)&#x0D;&#x0A;
 		Name="GenerateGtkWin32RC"
 		Value="$(PythonPath)\python ..\process-in-win32.py --gtkwin32rc --gtk3manifest"
 	/>
+	<UserMacro
+		Name="CopyDemosH"
+		Value="copy ..\..\..\demos\gtk-demo\demos.h.win32 ..\..\..\demos\gtk-demo\demos.h"
+	/>
 </VisualStudioPropertySheet>

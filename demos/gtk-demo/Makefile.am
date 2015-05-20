@@ -3,7 +3,7 @@ include $(top_srcdir)/Makefile.decl
 
 ## These should be in the order you want them to appear in the
 ## demo app, which means alphabetized by demo title, not filename
-demos =						\
+demos_base =					\
 	application.c				\
 	assistant.c				\
 	builder.c				\
@@ -63,7 +63,9 @@ demos =						\
 	tree_store.c
 
 if OS_UNIX
-demos += pagesetup.c
+demos = $(demos_base) pagesetup.c
+else
+demos = $(demos_base)
 endif
 
 AM_CPPFLAGS = \
@@ -96,7 +98,8 @@ EXTRA_DIST += 				\
 	data/symbolic-source.svg	\
 	demo.gresource.xml		\
 	$(RESOURCES)			\
-	org.gtk.Demo.gschema.xml
+	org.gtk.Demo.gschema.xml	\
+	demos.h.win32
 
 gsettings_SCHEMAS = \
 	org.gtk.Demo.gschema.xml
@@ -106,11 +109,15 @@ gsettings_SCHEMAS = \
 demos.h: $(demos) geninclude.pl
 	 $(AM_V_GEN) (here=`pwd` ; cd $(srcdir) && $(PERL) $$here/geninclude.pl $(demos)) > demos.h
 
+demos.h.win32: $(demos_base) geninclude.pl
+	 $(AM_V_GEN) (here=`pwd` ; cd $(srcdir) && $(PERL) $$here/geninclude.pl $(demos_base)) > demos.h.win32
+
+nodist_gtk3_demo_SOURCES = demos.h
+
 gtk3_demo_SOURCES = 		\
 	$(demos)		\
 	demo_resources.c	\
-	main.c			\
-	demos.h
+	main.c
 
 gtk3_demo_DEPENDENCIES = $(DEPS)
 gtk3_demo_LDADD = $(LDADDS)
@@ -228,6 +235,6 @@ uninstall-update-icon-cache:
 	$(AM_V_at)$(POST_UNINSTALL)
 	test -n "$(DESTDIR)" || $(update_icon_cache) "$(iconthemedir)"
 
-DISTCLEANFILES = demos.h
+DISTCLEANFILES = demos.h demos.h.win32
 
 -include $(top_srcdir)/git.mk

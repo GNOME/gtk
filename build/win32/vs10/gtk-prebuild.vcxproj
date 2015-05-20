@@ -209,6 +209,32 @@
       <Command Condition="'$(Configuration)|$(Platform)'=='Release_Broadway|x64'">$(GenGdkConfigHBroadway)</Command>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release_Broadway|x64'">..\..\..\gdk\gdkconfig.h;..\..\..\GDK_BROADWAY_BUILD;..\..\..\MSVC_$(Configuration)_Broadway;%(Outputs)</Outputs>
     </CustomBuild>
+    <CustomBuild Include="..\..\..\demos\gtk-demo\demos.h.win32">
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Copying demos.h from demos.h.win32...</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(CopyDemosH)</Command>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">..\..\..\demos\gtk-demo\demos.h;%(Outputs)</Outputs>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug_Broadway|Win32'">Copying demos.h from demos.h.win32...</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug_Broadway|Win32'">$(CopyDemosH)</Command>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug_Broadway|Win32'">..\..\..\demos\gtk-demo\demos.h;%(Outputs)</Outputs>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Copying demos.h from demos.h.win32...</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(CopyDemosH)</Command>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">..\..\..\demos\gtk-demo\demos.h;%(Outputs)</Outputs>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug_Broadway|x64'">Copying demos.h from demos.h.win32...</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug_Broadway|x64'">$(CopyDemosH)</Command>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug_Broadway|x64'">..\..\..\demos\gtk-demo\demos.h;%(Outputs)</Outputs>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Copying demos.h from demos.h.win32...</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(CopyDemosH)</Command>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">..\..\..\demos\gtk-demo\demos.h;%(Outputs)</Outputs>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release_Broadway|Win32'">Copying demos.h from demos.h.win32...</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release_Broadway|Win32'">$(CopyDemosH)</Command>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release_Broadway|Win32'">..\..\..\demos\gtk-demo\demos.h;%(Outputs)</Outputs>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Copying demos.h from demos.h.win32...</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(CopyDemosH)</Command>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">..\..\..\demos\gtk-demo\demos.h;%(Outputs)</Outputs>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release_Broadway|x64'">Copying demos.h from demos.h.win32...</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release_Broadway|x64'">$(CopyDemosH)</Command>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release_Broadway|x64'">..\..\..\demos\gtk-demo\demos.h;%(Outputs)</Outputs>
+    </CustomBuild>
   </ItemGroup>
   <ItemGroup>
   </ItemGroup>

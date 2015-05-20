@@ -65,6 +65,7 @@ $(PythonPath)\python $(GlibEtcInstallRoot)\bin\gdbus-codegen --interface-prefix 
 cd $(SolutionDir)
     </GenerateGtkDbusBuiltSources>
     <GenerateGtkWin32RC>$(PythonPath)\python ..\process-in-win32.py --gtkwin32rc --gtk3manifest</GenerateGtkWin32RC>
+    <CopyDemosH>copy ..\..\..\demos\gtk-demo\demos.h.win32 ..\..\..\demos\gtk-demo\demos.h</CopyDemosH>
   </PropertyGroup>
   <PropertyGroup>
     <_PropertySheetDisplayName>gtkgensrcsprops</_PropertySheetDisplayName>
@@ -84,6 +85,9 @@ cd $(SolutionDir)
     </BuildMacro>
     <BuildMacro Include="GenerateGtkWin32RC">
       <Value>$(GenerateGtkWin32RC)</Value>
+    </BuildMacro>
+    <BuildMacro Include="CopyDemosH">
+      <Value>$(CopyDemosH)</Value>
     </BuildMacro>
   </ItemGroup>
 </Project>
