@@ -277,17 +277,6 @@ ensure_no_surface (GdkWindow *window)
 }
 
 static void
-redraw_transient (GdkWindow *window)
-{
-  GdkRectangle r;
-  r.x = window->x;
-  r.y = window->y;
-  r.width = window->width;
-  r.height = window->height;
-  gdk_window_invalidate_rect (GDK_MIR_WINDOW_IMPL (window->impl)->transient_for, &r, FALSE);
-}
-
-static void
 send_buffer (GdkWindow *window)
 {
   GdkMirWindowImpl *impl = GDK_MIR_WINDOW_IMPL (window->impl);
@@ -362,7 +351,6 @@ static void
 gdk_mir_window_impl_finalize (GObject *object)
 {
   GdkMirWindowImpl *impl = GDK_MIR_WINDOW_IMPL (object);
-  GList *link;
 
   if (impl->background)
     cairo_pattern_destroy (impl->background);
