@@ -184,8 +184,26 @@ _gdk_mir_print_close_event (const MirCloseSurfaceEvent *event)
 void
 _gdk_mir_print_event (const MirEvent *event)
 {
+  const MirInputEvent *input_event;
+
   switch (mir_event_get_type (event))
     {
+    case mir_event_type_input:
+      input_event = mir_event_get_input_event (event);
+
+      switch (mir_input_event_get_type (input_event))
+        {
+          case mir_input_event_type_key:
+            _gdk_mir_print_key_event (mir_event_get_input_event (event));
+            break;
+          case mir_input_event_type_touch:
+            _gdk_mir_print_motion_event (mir_event_get_input_event (event));
+            break;
+          case mir_input_event_type_pointer:
+            _gdk_mir_print_motion_event (mir_event_get_input_event (event));
+            break;
+        }
+      break;
     case mir_event_type_key:
       _gdk_mir_print_key_event (mir_event_get_input_event (event));
       break;
