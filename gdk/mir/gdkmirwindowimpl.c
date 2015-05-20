@@ -155,18 +155,6 @@ set_surface_state (GdkMirWindowImpl *impl,
 }
 
 static void
-set_surface_type (GdkMirWindowImpl *impl,
-                  MirSurfaceType type)
-{
-  if (impl->surface_type == type)
-    return;
-
-  impl->surface_type = type;
-  if (impl->surface)
-    mir_surface_set_type (impl->surface, type);
-}
-
-static void
 event_cb (MirSurface     *surface,
           const MirEvent *event,
           void           *context)
@@ -230,8 +218,6 @@ ensure_surface_full (GdkWindow *window,
   */
 
   mir_surface_set_event_handler (impl->surface, event_cb, window_ref); // FIXME: Ignore some events until shown
-  set_surface_type (impl, impl->surface_type);
-  set_surface_state (impl, impl->surface_state);
 }
 
 static void
@@ -274,6 +260,20 @@ ensure_no_surface (GdkWindow *window)
     }
 
   g_clear_pointer(&impl->surface, mir_surface_release_sync);
+}
+
+static void
+set_surface_type (GdkWindow      *window,
+                  MirSurfaceType  type)
+{
+  GdkMirWindowImpl *impl = GDK_MIR_WINDOW_IMPL (window->impl);
+
+  if (impl->surface_type == type)
+    return;
+
+  impl->surface_type = type;
+
+  ensure_no_surface (window);
 }
 
 static void
@@ -710,7 +710,7 @@ gdk_mir_window_impl_set_type_hint (GdkWindow         *window,
         break;
     }
 
-  set_surface_type (GDK_MIR_WINDOW_IMPL (window->impl), mir_type);
+  set_surface_type (window, mir_type);
 }
 
 static GdkWindowTypeHint
