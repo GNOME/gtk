@@ -173,6 +173,7 @@
 			<File RelativePath="..\..\..\demos\gtk-demo\css_multiplebgs.c" />
 			<File RelativePath="..\..\..\demos\gtk-demo\css_pixbufs.c" />
 			<File RelativePath="..\..\..\demos\gtk-demo\css_shadows.c" />
+			<File RelativePath="..\..\..\demos\gtk-demo\cursors.c" />
 			<File RelativePath="..\..\..\demos\gtk-demo\dialog.c" />
 			<File RelativePath="..\..\..\demos\gtk-demo\drawingarea.c" />
 			<File RelativePath="..\..\..\demos\gtk-demo\editable_cells.c" />

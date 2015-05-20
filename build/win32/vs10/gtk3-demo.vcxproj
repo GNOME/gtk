@@ -182,6 +182,7 @@
     <ClCompile Include="..\..\..\demos\gtk-demo\css_multiplebgs.c" />
     <ClCompile Include="..\..\..\demos\gtk-demo\css_pixbufs.c" />
     <ClCompile Include="..\..\..\demos\gtk-demo\css_shadows.c" />
+    <ClCompile Include="..\..\..\demos\gtk-demo\cursors.c" />
     <ClCompile Include="..\..\..\demos\gtk-demo\dialog.c" />
     <ClCompile Include="..\..\..\demos\gtk-demo\drawingarea.c" />
     <ClCompile Include="..\..\..\demos\gtk-demo\editable_cells.c" />

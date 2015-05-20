@@ -24,6 +24,7 @@
     <ClCompile Include="..\..\..\demos\gtk-demo\css_multiplebgs.c"><Filter>Source Files</Filter></ClCompile>
     <ClCompile Include="..\..\..\demos\gtk-demo\css_pixbufs.c"><Filter>Source Files</Filter></ClCompile>
     <ClCompile Include="..\..\..\demos\gtk-demo\css_shadows.c"><Filter>Source Files</Filter></ClCompile>
+    <ClCompile Include="..\..\..\demos\gtk-demo\cursors.c"><Filter>Source Files</Filter></ClCompile>
     <ClCompile Include="..\..\..\demos\gtk-demo\dialog.c"><Filter>Source Files</Filter></ClCompile>
     <ClCompile Include="..\..\..\demos\gtk-demo\drawingarea.c"><Filter>Source Files</Filter></ClCompile>
     <ClCompile Include="..\..\..\demos\gtk-demo\editable_cells.c"><Filter>Source Files</Filter></ClCompile>
