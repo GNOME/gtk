@@ -383,7 +383,11 @@ handle_motion_event (GdkWindow *window, const MirInputEvent *event)
           if (hscroll > 0.5 || vscroll > 0.5)
             generate_scroll_event (window, x, y, hscroll, vscroll, modifier_state, event_time);
           if (ABS (new_x - x) > 0.5 || ABS (new_y - y) > 0.5)
-            generate_motion_event (window, new_x, new_y, modifier_state, event_time);
+            {
+              generate_motion_event (window, new_x, new_y, modifier_state, event_time);
+              x = new_x;
+              y = new_y;
+            }
 
           break;
         case mir_pointer_action_leave:
