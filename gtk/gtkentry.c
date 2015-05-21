@@ -4640,38 +4640,20 @@ gtk_entry_drag_gesture_update (GtkGestureDrag *gesture,
         {
           gint *ranges;
           gint n_ranges;
-          GdkDragContext *context;
           GtkTargetList  *target_list = gtk_target_list_new (NULL, 0);
           guint actions = priv->editable ? GDK_ACTION_COPY | GDK_ACTION_MOVE : GDK_ACTION_COPY;
-          gchar *text = NULL;
-          cairo_surface_t *surface;
           guint button;
 
           gtk_target_list_add_text_targets (target_list, 0);
 
-          text = _gtk_entry_get_selected_text (entry);
-          surface = _gtk_text_util_create_drag_icon (widget, text, -1);
-
           gtk_entry_get_pixel_ranges (entry, &ranges, &n_ranges);
-          cairo_surface_set_device_offset (surface,
-                                           -(priv->drag_start_x - ranges[0]),
-                                           -(priv->drag_start_y));
 
           button = gtk_gesture_single_get_current_button (GTK_GESTURE_SINGLE (gesture));
-          context = gtk_drag_begin_with_coordinates (widget, target_list, actions,
-                                                     button, (GdkEvent*) event,
-                                                     priv->drag_start_x + ranges[0],
-                                                     priv->drag_start_y);
+          gtk_drag_begin_with_coordinates (widget, target_list, actions,
+                                           button, (GdkEvent*) event,
+                                           priv->drag_start_x + ranges[0],
+                                           priv->drag_start_y);
           g_free (ranges);
-
-          if (surface)
-            gtk_drag_set_icon_surface (context, surface);
-          else
-            gtk_drag_set_icon_default (context);
-
-          if (surface)
-            cairo_surface_destroy (surface);
-          g_free (text);
 
           priv->in_drag = FALSE;
 
@@ -9868,6 +9850,7 @@ gtk_entry_drag_begin (GtkWidget      *widget,
 {
   GtkEntry *entry = GTK_ENTRY (widget);
   GtkEntryPrivate *priv = entry->priv;
+  gchar *text;
   gint i;
 
   for (i = 0; i < MAX_ICONS; i++)
@@ -9886,8 +9869,29 @@ gtk_entry_drag_begin (GtkWidget      *widget,
               gtk_drag_set_icon_pixbuf (context, pix, -2, -2);
 
               g_object_unref (pix);
+              return;
             }
         }
+    }
+
+  text = _gtk_entry_get_selected_text (entry);
+
+  if (text)
+    {
+      gint *ranges, n_ranges;
+      cairo_surface_t *surface;
+
+      surface = _gtk_text_util_create_drag_icon (widget, text, -1);
+
+      gtk_entry_get_pixel_ranges (entry, &ranges, &n_ranges);
+      cairo_surface_set_device_offset (surface,
+                                       -(priv->drag_start_x - ranges[0]),
+                                       -(priv->drag_start_y));
+      g_free (ranges);
+
+      gtk_drag_set_icon_surface (context, surface);
+      cairo_surface_destroy (surface);
+      g_free (text);
     }
 }
 
