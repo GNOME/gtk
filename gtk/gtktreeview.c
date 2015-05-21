@@ -4197,11 +4197,8 @@ gtk_tree_view_vertical_autoscroll (GtkTreeView *tree_view)
     }
   else
     {
-      gdk_window_get_device_position (tree_view->priv->bin_window,
-                                      gdk_device_manager_get_client_pointer (
-                                        gdk_display_get_device_manager (
-                                          gtk_widget_get_display (GTK_WIDGET (tree_view)))),
-                                      NULL, &y, NULL);
+      y = tree_view->priv->event_last_y;
+      gtk_tree_view_convert_widget_to_bin_window_coords (tree_view, 0, y, NULL, &y);
     }
 
   y += tree_view->priv->dy;
@@ -7871,7 +7868,10 @@ static void
 gtk_tree_view_drag_end (GtkWidget      *widget,
                         GdkDragContext *context)
 {
-  /* do nothing */
+  GtkTreeView *tree_view = GTK_TREE_VIEW (widget);
+
+  tree_view->priv->event_last_x = -10000;
+  tree_view->priv->event_last_y = -10000;
 }
 
 /* Default signal implementations for the drag signals */
@@ -7966,6 +7966,8 @@ gtk_tree_view_drag_leave (GtkWidget      *widget,
                           GdkDragContext *context,
                           guint             time)
 {
+  GtkTreeView *tree_view = GTK_TREE_VIEW (widget);
+
   /* unset any highlight row */
   gtk_tree_view_set_drag_dest_row (GTK_TREE_VIEW (widget),
                                    NULL,
@@ -7973,6 +7975,9 @@ gtk_tree_view_drag_leave (GtkWidget      *widget,
 
   remove_scroll_timeout (GTK_TREE_VIEW (widget));
   remove_open_timeout (GTK_TREE_VIEW (widget));
+
+  tree_view->priv->event_last_x = -10000;
+  tree_view->priv->event_last_y = -10000;
 }
 
 
@@ -7995,6 +8000,9 @@ gtk_tree_view_drag_motion (GtkWidget        *widget,
 
   if (!set_destination_row (tree_view, context, x, y, &suggested_action, &target))
     return FALSE;
+
+  tree_view->priv->event_last_x = x;
+  tree_view->priv->event_last_y = y;
 
   gtk_tree_view_get_drag_dest_row (tree_view, &path, &pos);
 
