@@ -540,6 +540,7 @@ static void
 gdk_mir_queued_event_free (GdkMirQueuedEvent *event)
 {
   _gdk_mir_window_reference_unref (event->window_ref);
+  mir_event_unref (event->event);
   g_slice_free (GdkMirQueuedEvent, event);
 }
 
@@ -724,7 +725,7 @@ _gdk_mir_event_source_queue (GdkMirWindowReference *window_ref,
   queued_event = g_slice_new (GdkMirQueuedEvent);
   g_atomic_int_inc (&window_ref->ref_count);
   queued_event->window_ref = window_ref;
-  queued_event->event = event;
+  queued_event->event = mir_event_ref (event);
 
   g_mutex_lock (&source->mir_event_lock);
   g_queue_push_tail (&source->mir_events, queued_event);
