@@ -136,7 +136,9 @@ struct _GtkTextViewPrivate
   guint blink_time;  /* time in msec the cursor has blinked since last user event */
   guint im_spot_idle;
   gchar *im_module;
-  GdkDevice *dnd_device;
+
+  gint dnd_x;
+  gint dnd_y;
 
   GtkTextHandle *text_handle;
   GtkWidget *selection_bubble;
@@ -6837,33 +6839,6 @@ gtk_text_view_unselect (GtkTextView *text_view)
 }
 
 static void
-get_iter_at_pointer (GtkTextView *text_view,
-                     GdkDevice   *device,
-                     GtkTextIter *iter,
-		     gint        *x,
-		     gint        *y)
-{
-  GtkTextViewPrivate *priv;
-  gint xcoord, ycoord;
-  GdkModifierType state;
-
-  priv = text_view->priv;
-
-  gdk_window_get_device_position (priv->text_window->bin_window,
-                                  device, &xcoord, &ycoord, &state);
-
-  gtk_text_layout_get_iter_at_pixel (priv->layout,
-                                     iter,
-                                     xcoord + priv->xoffset,
-                                     ycoord + priv->yoffset);
-  if (x)
-    *x = xcoord;
-
-  if (y)
-    *y = ycoord;
-}
-
-static void
 move_mark_to_pointer_and_scroll (GtkTextView    *text_view,
                                  const gchar    *mark_name)
 {
@@ -6923,20 +6898,22 @@ drag_scan_timeout (gpointer data)
   GtkTextView *text_view;
   GtkTextViewPrivate *priv;
   GtkTextIter newplace;
-  gint x, y;
   gdouble pointer_xoffset, pointer_yoffset;
 
   text_view = GTK_TEXT_VIEW (data);
   priv = text_view->priv;
 
-  get_iter_at_pointer (text_view, priv->dnd_device, &newplace, &x, &y);
+  gtk_text_layout_get_iter_at_pixel (priv->layout,
+                                     &newplace,
+                                     priv->dnd_x + priv->xoffset,
+                                     priv->dnd_y + priv->yoffset);
 
   gtk_text_buffer_move_mark (get_buffer (text_view),
                              priv->dnd_mark,
                              &newplace);
 
-  pointer_xoffset = (gdouble) x / gdk_window_get_width (priv->text_window->bin_window);
-  pointer_yoffset = (gdouble) y / gdk_window_get_height (priv->text_window->bin_window);
+  pointer_xoffset = (gdouble) priv->dnd_x / gdk_window_get_width (priv->text_window->bin_window);
+  pointer_yoffset = (gdouble) priv->dnd_y / gdk_window_get_height (priv->text_window->bin_window);
 
   if (check_scroll (pointer_xoffset, priv->hadjustment) ||
       check_scroll (pointer_yoffset, priv->vadjustment))
@@ -7782,6 +7759,10 @@ static void
 gtk_text_view_drag_end (GtkWidget        *widget,
                         GdkDragContext   *context)
 {
+  GtkTextView *text_view;
+
+  text_view = GTK_TEXT_VIEW (widget);
+  text_view->priv->dnd_x = text_view->priv->dnd_y = -1;
 }
 
 static void
@@ -7868,8 +7849,7 @@ gtk_text_view_drag_leave (GtkWidget        *widget,
 
   gtk_text_mark_set_visible (priv->dnd_mark, FALSE);
 
-  if (priv->dnd_device)
-    priv->dnd_device = NULL;
+  priv->dnd_x = priv->dnd_y = -1;
 
   if (priv->scroll_timeout != 0)
     g_source_remove (priv->scroll_timeout);
@@ -7966,7 +7946,8 @@ gtk_text_view_drag_motion (GtkWidget        *widget,
       gtk_text_mark_set_visible (priv->dnd_mark, FALSE);
     }
 
-  priv->dnd_device = gdk_drag_context_get_device (context);
+  priv->dnd_x = x;
+  priv->dnd_y = y;
 
   if (!priv->scroll_timeout)
   {
