@@ -6208,8 +6208,7 @@ remove_scroll_timeout (GtkIconView *icon_view)
 }
 
 static void
-gtk_icon_view_autoscroll (GtkIconView *icon_view,
-                          GdkDevice   *device)
+gtk_icon_view_autoscroll (GtkIconView *icon_view)
 {
   GdkWindow *window;
   gint px, py, width, height;
@@ -6217,7 +6216,8 @@ gtk_icon_view_autoscroll (GtkIconView *icon_view,
 
   window = gtk_widget_get_window (GTK_WIDGET (icon_view));
 
-  gdk_window_get_device_position (window, device, &px, &py, NULL);
+  px = icon_view->priv->event_last_x;
+  py = icon_view->priv->event_last_y;
   gdk_window_get_geometry (window, NULL, NULL, &width, &height);
 
   /* see if we are near the edge. */
@@ -6238,25 +6238,12 @@ gtk_icon_view_autoscroll (GtkIconView *icon_view,
                               gtk_adjustment_get_value (icon_view->priv->hadjustment) + hoffset);
 }
 
-typedef struct {
-  GtkIconView *icon_view;
-  GdkDevice   *device;
-} DragScrollData;
-
 static gboolean
-drag_scroll_timeout (gpointer datap)
+drag_scroll_timeout (gpointer data)
 {
-  DragScrollData *data = datap;
-
-  gtk_icon_view_autoscroll (data->icon_view, data->device);
+  gtk_icon_view_autoscroll (data);
 
   return TRUE;
-}
-
-static void
-drag_scroll_data_free (DragScrollData *data)
-{
-  g_slice_free (DragScrollData, data);
 }
 
 static gboolean
@@ -6638,6 +6625,9 @@ gtk_icon_view_drag_motion (GtkWidget      *widget,
   if (!set_destination (icon_view, context, x, y, &suggested_action, &target))
     return FALSE;
 
+  icon_view->priv->event_last_x = x;
+  icon_view->priv->event_last_y = y;
+
   gtk_icon_view_get_drag_dest_item (icon_view, &path, &pos);
 
   /* we only know this *after* set_desination_row */
@@ -6652,12 +6642,8 @@ gtk_icon_view_drag_motion (GtkWidget      *widget,
     {
       if (icon_view->priv->scroll_timeout_id == 0)
 	{
-          DragScrollData *data = g_slice_new (DragScrollData);
-          data->icon_view = icon_view;
-          data->device = gdk_drag_context_get_device (context);
-
 	  icon_view->priv->scroll_timeout_id =
-	    gdk_threads_add_timeout_full (G_PRIORITY_DEFAULT, 50, drag_scroll_timeout, data, (GDestroyNotify) drag_scroll_data_free);
+	    gdk_threads_add_timeout (50, drag_scroll_timeout, icon_view);
 	  g_source_set_name_by_id (icon_view->priv->scroll_timeout_id, "[gtk+] drag_scroll_timeout");
 	}
 
