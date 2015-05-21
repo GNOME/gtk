@@ -100,6 +100,12 @@ _gdk_mir_window_impl_set_surface_state (GdkMirWindowImpl *impl, MirSurfaceState 
 }
 
 void
+_gdk_mir_window_impl_set_surface_type (GdkMirWindowImpl *impl,
+                                       MirSurfaceType    type)
+{
+}
+
+void
 _gdk_mir_window_impl_set_cursor_state (GdkMirWindowImpl *impl,
                                        gdouble x,
                                        gdouble y,
