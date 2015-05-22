@@ -3932,6 +3932,16 @@ indicator_stop_fade (Indicator *indicator)
       gtk_widget_remove_tick_callback (indicator->scrollbar, indicator->tick_id);
       indicator->tick_id = 0;
     }
+
+  if (indicator->conceil_timer)
+    {
+      g_source_remove (indicator->conceil_timer);
+      indicator->conceil_timer = 0;
+    }
+
+  gdk_window_hide (indicator->window);
+  indicator->current_pos = indicator->source_pos = indicator->target_pos = 0;
+  indicator->start_time = indicator->end_time = indicator->last_scroll_time = 0;
 }
 
 static gboolean
