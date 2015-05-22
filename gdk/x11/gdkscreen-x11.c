@@ -624,7 +624,7 @@ init_randr15 (GdkScreen *screen)
   int num_rr_monitors;
   int i;
   GArray *monitors;
-  int primary_idx = 0;
+  XID primary_output = None;
 
   if (!display_x11->have_randr15)
     return FALSE;
@@ -651,7 +651,8 @@ init_randr15 (GdkScreen *screen)
       monitor.height_mm = rr_monitors[i].mheight;
       monitor.output = rr_monitors[i].outputs[0];
       if (rr_monitors[i].primary)
-        primary_idx = i;
+        primary_output = monitor.output;
+
       g_array_append_val (monitors, monitor);
     }
   XRRFreeMonitors (rr_monitors);
@@ -661,7 +662,17 @@ init_randr15 (GdkScreen *screen)
   x11_screen->n_monitors = monitors->len;
   x11_screen->monitors = (GdkX11Monitor *) g_array_free (monitors, FALSE);
 
-  x11_screen->primary_monitor = primary_idx;
+  x11_screen->primary_monitor = 0;
+
+  for (i - 0; i < x11_screen->n_monitors; i++)
+    {
+      if (x11_screen->monitors[i].output == primary_output)
+        {
+          x11_screen->primary_monitor = i;
+          break;
+        }
+    }
+
   return x11_screen->n_monitors > 0;
 }
 #endif
