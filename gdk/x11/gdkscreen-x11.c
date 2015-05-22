@@ -664,7 +664,7 @@ init_randr15 (GdkScreen *screen)
 
   x11_screen->primary_monitor = 0;
 
-  for (i - 0; i < x11_screen->n_monitors; i++)
+  for (i = 0; i < x11_screen->n_monitors; i++)
     {
       if (x11_screen->monitors[i].output == primary_output)
         {
