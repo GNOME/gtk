@@ -902,7 +902,6 @@ gtk_stack_transition_cb (GtkWidget     *widget,
 
   if (gtk_stack_set_transition_position (stack, t))
     {
-      gtk_widget_set_opacity (GTK_WIDGET (stack), 1.0);
       priv->tick_id = 0;
       g_object_notify_by_pspec (G_OBJECT (stack), stack_props[PROP_TRANSITION_RUNNING]);
 
