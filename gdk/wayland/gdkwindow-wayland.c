@@ -1108,12 +1108,6 @@ gdk_wayland_window_create_xdg_popup (GdkWindow      *window,
   x = window->x - parent_x;
   y = window->y - parent_y;
 
-  if (parent_impl->xdg_surface)
-    {
-      x -= parent_impl->margin_left;
-      y -= parent_impl->margin_top;
-    }
-
   impl->xdg_popup = xdg_shell_get_xdg_popup (display->xdg_shell,
                                              impl->surface,
                                              parent_impl->surface,
