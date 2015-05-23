@@ -496,6 +496,7 @@ add_place (GtkPlacesSidebar *sidebar,
   GtkTreeIter iter;
   gboolean show_eject, show_unmount;
   gboolean show_eject_button;
+  gchar *tooltip_escaped;
 
   check_heading_for_section (sidebar, section_type);
 
@@ -510,6 +511,8 @@ add_place (GtkPlacesSidebar *sidebar,
   else
     show_eject_button = (show_unmount || show_eject);
 
+  tooltip_escaped = g_markup_escape_text (tooltip, -1);
+
   gtk_list_store_append (sidebar->store, &iter);
   gtk_list_store_set (sidebar->store, &iter,
                       PLACES_SIDEBAR_COLUMN_GICON, icon,
@@ -523,9 +526,11 @@ add_place (GtkPlacesSidebar *sidebar,
                       PLACES_SIDEBAR_COLUMN_EJECT, show_eject_button,
                       PLACES_SIDEBAR_COLUMN_NO_EJECT, !show_eject_button,
                       PLACES_SIDEBAR_COLUMN_BOOKMARK, place_type != PLACES_BOOKMARK,
-                      PLACES_SIDEBAR_COLUMN_TOOLTIP, tooltip,
+                      PLACES_SIDEBAR_COLUMN_TOOLTIP, tooltip_escaped,
                       PLACES_SIDEBAR_COLUMN_SECTION_TYPE, section_type,
                       -1);
+
+  g_free (tooltip_escaped);
 }
 
 static GIcon *
