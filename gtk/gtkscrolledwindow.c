@@ -149,6 +149,7 @@
 #define MAX_OVERSHOOT_DISTANCE 100
 #define DECELERATION_FRICTION 4
 #define OVERSHOOT_FRICTION 20
+#define SCROLL_CAPTURE_THRESHOLD_MS 150
 
 /* Animated scrolling */
 #define ANIMATION_DURATION 200
@@ -180,6 +181,13 @@ typedef struct
   guint      over_timeout_id;
 } Indicator;
 
+typedef struct
+{
+  gdouble dx;
+  gdouble dy;
+  guint32 evtime;
+} ScrollHistoryElem;
+
 struct _GtkScrolledWindowPrivate
 {
   GtkWidget     *hscrollbar;
@@ -207,6 +215,9 @@ struct _GtkScrolledWindowPrivate
   /* Kinetic scrolling */
   GtkGesture *long_press_gesture;
   GtkGesture *swipe_gesture;
+
+  GArray *scroll_history;
+  GdkDevice *scroll_device;
 
   /* These two gestures are mutually exclusive */
   GtkGesture *drag_gesture;
@@ -869,16 +880,16 @@ scrolled_window_drag_end_cb (GtkScrolledWindow *scrolled_window,
 }
 
 static void
-scrolled_window_swipe_cb (GtkScrolledWindow *scrolled_window,
-                          gdouble            x_velocity,
-                          gdouble            y_velocity)
+gtk_scrolled_window_decelerate (GtkScrolledWindow *scrolled_window,
+                                gdouble            x_velocity,
+                                gdouble            y_velocity)
 {
   GtkScrolledWindowPrivate *priv = scrolled_window->priv;
   gboolean overshoot;
 
   overshoot = _gtk_scrolled_window_get_overshoot (scrolled_window, NULL, NULL);
-  priv->x_velocity = -x_velocity;
-  priv->y_velocity = -y_velocity;
+  priv->x_velocity = x_velocity;
+  priv->y_velocity = y_velocity;
 
   /* Zero out vector components for which we don't scroll */
   if (!may_hscroll (scrolled_window))
@@ -891,6 +902,14 @@ scrolled_window_swipe_cb (GtkScrolledWindow *scrolled_window,
       gtk_scrolled_window_start_deceleration (scrolled_window);
       priv->x_velocity = priv->y_velocity = 0;
     }
+}
+
+static void
+scrolled_window_swipe_cb (GtkScrolledWindow *scrolled_window,
+                          gdouble            x_velocity,
+                          gdouble            y_velocity)
+{
+  gtk_scrolled_window_decelerate (scrolled_window, -x_velocity, -y_velocity);
 }
 
 static void
@@ -1114,6 +1133,87 @@ get_scroll_unit (GtkScrolledWindow *sw,
   return scroll_unit;
 }
 
+static void
+scroll_history_push (GtkScrolledWindow *sw,
+                     GdkEventScroll    *event)
+{
+  GtkScrolledWindowPrivate *priv = sw->priv;
+  ScrollHistoryElem new_item;
+  guint i;
+
+  if (event->direction != GDK_SCROLL_SMOOTH)
+    return;
+
+  for (i = 0; i < priv->scroll_history->len; i++)
+    {
+      ScrollHistoryElem *elem;
+
+      elem = &g_array_index (priv->scroll_history, ScrollHistoryElem, i);
+
+      if (elem->evtime >= event->time - SCROLL_CAPTURE_THRESHOLD_MS)
+        break;
+    }
+
+  if (i > 0)
+    g_array_remove_range (priv->scroll_history, 0, i);
+
+  new_item.dx = event->delta_x;
+  new_item.dy = event->delta_y;
+  new_item.evtime = event->time;
+  g_array_append_val (priv->scroll_history, new_item);
+}
+
+static void
+scroll_history_reset (GtkScrolledWindow *sw)
+{
+  GtkScrolledWindowPrivate *priv = sw->priv;
+
+  if (priv->scroll_history->len == 0)
+    return;
+
+  g_array_remove_range (priv->scroll_history, 0,
+                        priv->scroll_history->len);
+}
+
+static gboolean
+scroll_history_finish (GtkScrolledWindow *sw,
+                       gdouble           *velocity_x,
+                       gdouble           *velocity_y)
+{
+  GtkScrolledWindowPrivate *priv = sw->priv;
+  gdouble accum_dx = 0, accum_dy = 0;
+  guint32 first = 0, last = 0;
+  gdouble xunit, yunit;
+  guint i;
+
+  if (priv->scroll_history->len == 0)
+    return FALSE;
+
+  for (i = 0; i < priv->scroll_history->len; i++)
+    {
+      ScrollHistoryElem *elem;
+
+      elem = &g_array_index (priv->scroll_history, ScrollHistoryElem, i);
+      accum_dx += elem->dx;
+      accum_dy += elem->dy;
+      last = elem->evtime;
+
+      if (i == 0)
+        first = elem->evtime;
+    }
+
+  if (last == first)
+    return FALSE;
+
+  xunit = get_scroll_unit (sw, GTK_ORIENTATION_HORIZONTAL);
+  yunit = get_scroll_unit (sw, GTK_ORIENTATION_VERTICAL);
+  *velocity_x = (accum_dx * 1000 * xunit) / (last - first);
+  *velocity_y = (accum_dy * 1000 * yunit) / (last - first);
+  scroll_history_reset (sw);
+
+  return TRUE;
+}
+
 static gboolean
 captured_event_cb (GtkWidget *widget,
                    GdkEvent  *event)
@@ -1127,20 +1227,31 @@ captured_event_cb (GtkWidget *widget,
 
   sw = GTK_SCROLLED_WINDOW (widget);
   priv = sw->priv;
+  source_device = gdk_event_get_source_device (event);
 
   if (event->type == GDK_SCROLL)
     {
-      gdouble dx, dy;
+      gdouble dx, dy, vel_x, vel_y;
 
       /* The libinput driver may generate a final event with dx=dy=0
-       * after scrolling finished, this is usually an indication that
-       * the deceleration animation just started, so we definitely
-       * shouldn't cancel it.
+       * after scrolling finished, start kinetic scrolling when this
+       * happens.
        */
-      if (event->scroll.direction != GDK_SCROLL_SMOOTH ||
-          (gdk_event_get_scroll_deltas (event, &dx, &dy) &&
-           (dx != 0 || dy != 0)))
-        gtk_scrolled_window_cancel_deceleration (sw);
+      gtk_scrolled_window_cancel_deceleration (sw);
+      gdk_event_get_scroll_deltas (event, &dx, &dy);
+
+      if (priv->scroll_device != source_device)
+        {
+          priv->scroll_device = source_device;
+          scroll_history_reset (sw);
+        }
+
+      scroll_history_push (sw, &event->scroll);
+
+      if (event->scroll.direction == GDK_SCROLL_SMOOTH &&
+          dx == 0 && dy == 0 &&
+          scroll_history_finish (sw, &vel_x, &vel_y))
+        gtk_scrolled_window_decelerate (sw, vel_x, vel_y);
 
       return GDK_EVENT_PROPAGATE;
     }
@@ -1152,7 +1263,6 @@ captured_event_cb (GtkWidget *widget,
       event->type != GDK_LEAVE_NOTIFY)
     return GDK_EVENT_PROPAGATE;
 
-  source_device = gdk_event_get_source_device (event);
   input_source = gdk_device_get_source (source_device);
 
   if (input_source == GDK_SOURCE_KEYBOARD ||
@@ -1264,6 +1374,8 @@ gtk_scrolled_window_init (GtkScrolledWindow *scrolled_window)
   g_signal_connect_swapped (priv->long_press_gesture, "cancelled",
                             G_CALLBACK (scrolled_window_long_press_cancelled_cb),
                             scrolled_window);
+
+  priv->scroll_history = g_array_new (FALSE, FALSE, sizeof (ScrollHistoryElem));
 
   gtk_scrolled_window_set_kinetic_scrolling (scrolled_window, TRUE);
   gtk_scrolled_window_set_capture_button_press (scrolled_window, TRUE);
@@ -1877,6 +1989,7 @@ gtk_scrolled_window_destroy (GtkWidget *widget)
   g_clear_object (&priv->drag_gesture);
   g_clear_object (&priv->swipe_gesture);
   g_clear_object (&priv->long_press_gesture);
+  g_clear_pointer (&priv->scroll_history, (GDestroyNotify) g_array_unref);
 
   GTK_WIDGET_CLASS (gtk_scrolled_window_parent_class)->destroy (widget);
 }
@@ -2966,7 +3079,10 @@ start_scroll_deceleration_cb (gpointer user_data)
   GtkScrolledWindowPrivate *priv = scrolled_window->priv;
 
   priv->scroll_events_overshoot_id = 0;
-  gtk_scrolled_window_start_deceleration (scrolled_window);
+
+  if (!priv->deceleration_id)
+    gtk_scrolled_window_start_deceleration (scrolled_window);
+
   return FALSE;
 }
 
