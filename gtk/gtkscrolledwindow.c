@@ -1084,6 +1084,36 @@ check_update_scrollbar_proximity (GtkScrolledWindow *sw,
   return indicator_close;
 }
 
+static gdouble
+get_scroll_unit (GtkScrolledWindow *sw,
+                 GtkOrientation     orientation)
+{
+  gdouble scroll_unit;
+
+#ifndef GDK_WINDOWING_QUARTZ
+  GtkScrolledWindowPrivate *priv = sw->priv;
+  GtkRange *scrollbar;
+  GtkAdjustment *adj;
+  gdouble page_size;
+
+  if (orientation == GTK_ORIENTATION_HORIZONTAL)
+    scrollbar = GTK_RANGE (priv->hscrollbar);
+  else
+    scrollbar = GTK_RANGE (priv->vscrollbar);
+
+  if (!scrollbar)
+    return 0;
+
+  adj = gtk_range_get_adjustment (scrollbar);
+  page_size = gtk_adjustment_get_page_size (adj);
+  scroll_unit = pow (page_size, 2.0 / 3.0);
+#else
+  scroll_unit = 1;
+#endif
+
+  return scroll_unit;
+}
+
 static gboolean
 captured_event_cb (GtkWidget *widget,
                    GdkEvent  *event)
@@ -2976,17 +3006,10 @@ gtk_scrolled_window_scroll_event (GtkWidget      *widget,
         {
           GtkAdjustment *adj;
           gdouble new_value;
-          gdouble page_size;
           gdouble scroll_unit;
 
           adj = gtk_range_get_adjustment (GTK_RANGE (priv->hscrollbar));
-          page_size = gtk_adjustment_get_page_size (adj);
-
-#ifdef GDK_WINDOWING_QUARTZ
-          scroll_unit = 1;
-#else
-          scroll_unit = pow (page_size, 2.0 / 3.0);
-#endif
+          scroll_unit = get_scroll_unit (scrolled_window, GTK_ORIENTATION_HORIZONTAL);
 
           new_value = priv->unclamped_hadj_value + delta_x * scroll_unit;
           _gtk_scrolled_window_set_adjustment_value (scrolled_window, adj,
@@ -2999,17 +3022,10 @@ gtk_scrolled_window_scroll_event (GtkWidget      *widget,
         {
           GtkAdjustment *adj;
           gdouble new_value;
-          gdouble page_size;
           gdouble scroll_unit;
 
           adj = gtk_range_get_adjustment (GTK_RANGE (priv->vscrollbar));
-          page_size = gtk_adjustment_get_page_size (adj);
-
-#ifdef GDK_WINDOWING_QUARTZ
-          scroll_unit = 1;
-#else
-          scroll_unit = pow (page_size, 2.0 / 3.0);
-#endif
+          scroll_unit = get_scroll_unit (scrolled_window, GTK_ORIENTATION_HORIZONTAL);
 
           new_value = priv->unclamped_vadj_value + delta_y * scroll_unit;
           _gtk_scrolled_window_set_adjustment_value (scrolled_window, adj,
