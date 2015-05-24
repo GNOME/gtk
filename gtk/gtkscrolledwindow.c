@@ -3141,7 +3141,7 @@ gtk_scrolled_window_scroll_event (GtkWidget      *widget,
           gdouble scroll_unit;
 
           adj = gtk_range_get_adjustment (GTK_RANGE (priv->vscrollbar));
-          scroll_unit = get_scroll_unit (scrolled_window, GTK_ORIENTATION_HORIZONTAL);
+          scroll_unit = get_scroll_unit (scrolled_window, GTK_ORIENTATION_VERTICAL);
 
           new_value = priv->unclamped_vadj_value + delta_y * scroll_unit;
           _gtk_scrolled_window_set_adjustment_value (scrolled_window, adj,
