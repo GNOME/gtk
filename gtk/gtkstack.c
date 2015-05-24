@@ -1110,9 +1110,6 @@ set_visible_child (GtkStack               *stack,
       transition_type = get_simple_transition_type (i_first, transition_type);
     }
 
-  gtk_widget_queue_resize (GTK_WIDGET (stack));
-  gtk_widget_queue_draw (GTK_WIDGET (stack));
-
   g_object_notify_by_pspec (G_OBJECT (stack), stack_props[PROP_VISIBLE_CHILD]);
   g_object_notify_by_pspec (G_OBJECT (stack),
                             stack_props[PROP_VISIBLE_CHILD_NAME]);
