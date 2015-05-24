@@ -847,6 +847,9 @@ gtk_stack_set_transition_position (GtkStack *stack,
   priv->transition_pos = pos;
   gtk_widget_queue_draw (GTK_WIDGET (stack));
 
+  if (!priv->vhomogeneous || !priv->hhomogeneous)
+    gtk_widget_queue_resize (GTK_WIDGET (stack));
+
   if (priv->bin_window != NULL &&
       is_window_moving_transition (priv->active_transition_type))
     {
@@ -1979,6 +1982,13 @@ gtk_stack_draw_slide (GtkWidget *widget,
       x += priv->last_visible_surface_allocation.x;
       y += priv->last_visible_surface_allocation.y;
 
+
+      if (gtk_widget_get_valign (priv->last_visible_child->widget) == GTK_ALIGN_END &&
+          priv->last_visible_widget_height > allocation.height)
+        y -= priv->last_visible_widget_height - allocation.height;
+      else if (gtk_widget_get_valign (priv->last_visible_child->widget) == GTK_ALIGN_CENTER)
+        y -= (priv->last_visible_widget_height - allocation.height) / 2;
+
       cairo_save (cr);
       cairo_set_source_surface (cr, priv->last_visible_surface, x, y);
       cairo_paint (cr);
@@ -2082,15 +2092,32 @@ gtk_stack_size_allocate (GtkWidget     *widget,
 
   gtk_widget_set_allocation (widget, allocation);
 
-  child_allocation = *allocation;
   child_allocation.x = 0;
   child_allocation.y = 0;
+  child_allocation.width = allocation->width;
+  child_allocation.height = allocation->height;
+
 
   if (priv->last_visible_child)
     gtk_widget_size_allocate (priv->last_visible_child->widget, &child_allocation);
 
   if (priv->visible_child)
-    gtk_widget_size_allocate (priv->visible_child->widget, &child_allocation);
+    {
+      int min, nat;
+      gtk_widget_get_preferred_height_for_width (priv->visible_child->widget,
+                                                 allocation->width,
+                                                 &min, &nat);
+      GtkAlign valign = gtk_widget_get_valign (priv->visible_child->widget);
+      child_allocation.height = MAX (nat, allocation->height);
+      if (valign == GTK_ALIGN_END &&
+          child_allocation.height > allocation->height)
+        child_allocation.y -= nat - allocation->height;
+      else if (valign == GTK_ALIGN_CENTER &&
+               child_allocation.height > allocation->height)
+        child_allocation.y -= (nat - allocation->height) / 2;
+
+      gtk_widget_size_allocate (priv->visible_child->widget, &child_allocation);
+    }
 
    if (gtk_widget_get_realized (widget))
     {
@@ -2102,6 +2129,9 @@ gtk_stack_size_allocate (GtkWidget     *widget,
                               allocation->width, allocation->height);
     }
 }
+
+
+#define LERP(a, b, t) ((a) + (((b) - (a)) * (1.0 - (t))))
 
 static void
 gtk_stack_get_preferred_height (GtkWidget *widget,
@@ -2136,10 +2166,11 @@ gtk_stack_get_preferred_height (GtkWidget *widget,
         }
     }
 
-  if (priv->last_visible_child != NULL)
+  if (priv->last_visible_child != NULL && !priv->vhomogeneous)
     {
-      *minimum_height = MAX (*minimum_height, priv->last_visible_surface_allocation.height);
-      *natural_height = MAX (*natural_height, priv->last_visible_surface_allocation.height);
+      gdouble t = ease_out_cubic (priv->transition_pos);
+      *minimum_height = LERP (*minimum_height, priv->last_visible_widget_height, t);
+      *natural_height = LERP (*natural_height, priv->last_visible_widget_height, t);
     }
 }
 
@@ -2177,10 +2208,11 @@ gtk_stack_get_preferred_height_for_width (GtkWidget *widget,
         }
     }
 
-  if (priv->last_visible_child != NULL)
+  if (priv->last_visible_child != NULL && !priv->vhomogeneous)
     {
-      *minimum_height = MAX (*minimum_height, priv->last_visible_surface_allocation.height);
-      *natural_height = MAX (*natural_height, priv->last_visible_surface_allocation.height);
+      gdouble t = ease_out_cubic (priv->transition_pos);
+      *minimum_height = LERP (*minimum_height, priv->last_visible_widget_height, t);
+      *natural_height = LERP (*natural_height, priv->last_visible_widget_height, t);
     }
 }
 
@@ -2216,10 +2248,11 @@ gtk_stack_get_preferred_width (GtkWidget *widget,
         }
     }
 
-  if (priv->last_visible_child != NULL)
+  if (priv->last_visible_child != NULL && !priv->hhomogeneous)
     {
-      *minimum_width = MAX (*minimum_width, priv->last_visible_surface_allocation.width);
-      *natural_width = MAX (*natural_width, priv->last_visible_surface_allocation.width);
+      gdouble t = ease_out_cubic (priv->transition_pos);
+      *minimum_width = LERP (*minimum_width, priv->last_visible_widget_width, t);
+      *natural_width = LERP (*natural_width, priv->last_visible_widget_width, t);
     }
 }
 
@@ -2256,9 +2289,10 @@ gtk_stack_get_preferred_width_for_height (GtkWidget *widget,
         }
     }
 
-  if (priv->last_visible_child != NULL)
+  if (priv->last_visible_child != NULL && !priv->hhomogeneous)
     {
-      *minimum_width = MAX (*minimum_width, priv->last_visible_surface_allocation.width);
-      *natural_width = MAX (*natural_width, priv->last_visible_surface_allocation.width);
+      gdouble t = ease_out_cubic (priv->transition_pos);
+      *minimum_width = LERP (*minimum_width, priv->last_visible_widget_width, t);
+      *natural_width = LERP (*natural_width, priv->last_visible_widget_width, t);
     }
 }
