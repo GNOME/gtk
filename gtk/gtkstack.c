@@ -858,21 +858,18 @@ gtk_stack_set_transition_position (GtkStack *stack,
 
   done = pos >= 1.0;
 
-  if (done || priv->last_visible_surface != NULL)
-    {
-      if (priv->last_visible_child)
-        {
-          gtk_widget_set_child_visible (priv->last_visible_child->widget, FALSE);
-          priv->last_visible_child = NULL;
-        }
-    }
-
   if (done)
     {
       if (priv->last_visible_surface != NULL)
         {
           cairo_surface_destroy (priv->last_visible_surface);
           priv->last_visible_surface = NULL;
+        }
+
+      if (priv->last_visible_child != NULL)
+        {
+          gtk_widget_set_child_visible (priv->last_visible_child->widget, FALSE);
+          priv->last_visible_child = NULL;
         }
 
       gtk_widget_queue_resize (GTK_WIDGET (stack));
@@ -1421,7 +1418,7 @@ gtk_stack_set_hhomogeneous (GtkStack *stack,
 
   if (priv->hhomogeneous == hhomogeneous)
     return;
-  
+
   priv->hhomogeneous = hhomogeneous;
 
   if (gtk_widget_get_visible (GTK_WIDGET(stack)))
@@ -1475,7 +1472,7 @@ gtk_stack_set_vhomogeneous (GtkStack *stack,
 
   if (priv->vhomogeneous == vhomogeneous)
     return;
-  
+
   priv->vhomogeneous = vhomogeneous;
 
   if (gtk_widget_get_visible (GTK_WIDGET(stack)))
@@ -2008,7 +2005,7 @@ gtk_stack_draw (GtkWidget *widget,
   if (gtk_cairo_should_draw_window (cr, priv->view_window))
     {
       GtkStyleContext *context;
-          
+
       context = gtk_widget_get_style_context (widget);
       gtk_render_background (context,
                              cr,
@@ -2130,9 +2127,9 @@ gtk_stack_get_preferred_height (GtkWidget *widget,
       child = child_info->widget;
 
       if (!priv->vhomogeneous &&
-          (priv->visible_child != child_info &&
-           priv->last_visible_child != child_info))
+           priv->visible_child != child_info)
         continue;
+
       if (gtk_widget_get_visible (child))
         {
           gtk_widget_get_preferred_height (child, &child_min, &child_nat);
@@ -2142,7 +2139,7 @@ gtk_stack_get_preferred_height (GtkWidget *widget,
         }
     }
 
-  if (priv->last_visible_surface != NULL)
+  if (priv->last_visible_child != NULL)
     {
       *minimum_height = MAX (*minimum_height, priv->last_visible_surface_allocation.height);
       *natural_height = MAX (*natural_height, priv->last_visible_surface_allocation.height);
@@ -2171,9 +2168,9 @@ gtk_stack_get_preferred_height_for_width (GtkWidget *widget,
       child = child_info->widget;
 
       if (!priv->vhomogeneous &&
-          (priv->visible_child != child_info &&
-           priv->last_visible_child != child_info))
+           priv->visible_child != child_info)
         continue;
+
       if (gtk_widget_get_visible (child))
         {
           gtk_widget_get_preferred_height_for_width (child, width, &child_min, &child_nat);
@@ -2183,7 +2180,7 @@ gtk_stack_get_preferred_height_for_width (GtkWidget *widget,
         }
     }
 
-  if (priv->last_visible_surface != NULL)
+  if (priv->last_visible_child != NULL)
     {
       *minimum_height = MAX (*minimum_height, priv->last_visible_surface_allocation.height);
       *natural_height = MAX (*natural_height, priv->last_visible_surface_allocation.height);
@@ -2211,8 +2208,7 @@ gtk_stack_get_preferred_width (GtkWidget *widget,
       child = child_info->widget;
 
       if (!priv->hhomogeneous &&
-          (priv->visible_child != child_info &&
-           priv->last_visible_child != child_info))
+           priv->visible_child != child_info)
         continue;
       if (gtk_widget_get_visible (child))
         {
@@ -2223,7 +2219,7 @@ gtk_stack_get_preferred_width (GtkWidget *widget,
         }
     }
 
-  if (priv->last_visible_surface != NULL)
+  if (priv->last_visible_child != NULL)
     {
       *minimum_width = MAX (*minimum_width, priv->last_visible_surface_allocation.width);
       *natural_width = MAX (*natural_width, priv->last_visible_surface_allocation.width);
@@ -2252,8 +2248,7 @@ gtk_stack_get_preferred_width_for_height (GtkWidget *widget,
       child = child_info->widget;
 
       if (!priv->hhomogeneous &&
-          (priv->visible_child != child_info &&
-           priv->last_visible_child != child_info))
+           priv->visible_child != child_info)
         continue;
       if (gtk_widget_get_visible (child))
         {
@@ -2264,7 +2259,7 @@ gtk_stack_get_preferred_width_for_height (GtkWidget *widget,
         }
     }
 
-  if (priv->last_visible_surface != NULL)
+  if (priv->last_visible_child != NULL)
     {
       *minimum_width = MAX (*minimum_width, priv->last_visible_surface_allocation.width);
       *natural_width = MAX (*natural_width, priv->last_visible_surface_allocation.width);
