@@ -898,7 +898,7 @@ gtk_stack_transition_cb (GtkWidget     *widget,
     t = (now - priv->start_time) / (double) (priv->end_time - priv->start_time);
 
   /* Finish animation early if not mapped anymore */
-  if (!gtk_widget_get_mapped (GTK_WIDGET (stack)))
+  if (!gtk_widget_get_mapped (widget))
     t = 1.0;
 
   if (gtk_stack_set_transition_position (stack, t))
