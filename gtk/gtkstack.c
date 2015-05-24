@@ -204,8 +204,6 @@ G_DEFINE_TYPE_WITH_PRIVATE (GtkStack, gtk_stack, GTK_TYPE_CONTAINER)
 static void
 gtk_stack_init (GtkStack *stack)
 {
-  gtk_widget_set_has_window ((GtkWidget*) stack, TRUE);
-  gtk_widget_set_redraw_on_allocate ((GtkWidget*) stack, TRUE);
 }
 
 static void
