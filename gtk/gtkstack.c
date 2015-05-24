@@ -137,6 +137,9 @@ typedef struct {
   gint64 start_time;
   gint64 end_time;
 
+  gint last_visible_widget_width;
+  gint last_visible_widget_height;
+
   GtkStackTransitionType active_transition_type;
 } GtkStackPrivate;
 
@@ -1059,9 +1062,20 @@ set_visible_child (GtkStack               *stack,
   if (priv->visible_child && priv->visible_child->widget)
     {
       if (gtk_widget_is_visible (widget))
-        priv->last_visible_child = priv->visible_child;
+        {
+          int fake;
+          priv->last_visible_child = priv->visible_child;
+          gtk_widget_get_preferred_width (priv->last_visible_child->widget,
+                                          &fake,
+                                          &priv->last_visible_widget_width);
+          gtk_widget_get_preferred_height (priv->last_visible_child->widget,
+                                          &fake,
+                                          &priv->last_visible_widget_height);
+        }
       else
-        gtk_widget_set_child_visible (priv->visible_child->widget, FALSE);
+        {
+          gtk_widget_set_child_visible (priv->visible_child->widget, FALSE);
+        }
     }
 
   priv->visible_child = child_info;
