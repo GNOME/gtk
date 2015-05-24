@@ -1206,7 +1206,7 @@ gtk_stack_add_named (GtkStack   *stack,
 
 static void
 gtk_stack_add (GtkContainer *container,
-              GtkWidget     *child)
+               GtkWidget    *child)
 {
   GtkStack *stack = GTK_STACK (container);
   GtkStackPrivate *priv = gtk_stack_get_instance_private (stack);
@@ -1993,8 +1993,8 @@ gtk_stack_draw_slide (GtkWidget *widget,
 
   if (gtk_cairo_should_draw_window (cr, priv->bin_window))
     gtk_container_propagate_draw (GTK_CONTAINER (stack),
-				  priv->visible_child->widget,
-				  cr);
+                                  priv->visible_child->widget,
+                                  cr);
 }
 
 static gboolean
