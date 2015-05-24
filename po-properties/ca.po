@@ -462,7 +462,7 @@ msgid ""
 "of it to use for the child. 0.0 means none, 1.0 means all"
 msgstr ""
 "Si l'espai horitzontal disponible és més gran que el necessari per al fill, "
-"quant se n'ha d'utilitzar per al fill. 0.0 vol dir res, 1.0 vol dir tot"
+"quan se n'ha d'utilitzar per al fill. 0.0 vol dir res, 1.0 vol dir tot"
 
 #: gtk/deprecated/gtkalignment.c:170
 msgid "Vertical scale"
@@ -719,7 +719,7 @@ msgstr "Alineació Y"
 
 #: gtk/deprecated/gtkmisc.c:115 gtk/gtklabel.c:798
 msgid "The vertical alignment, from 0 (top) to 1 (bottom)"
-msgstr "L'alineació vertical, des de 0 (a dalt) fins 1 (a baix)"
+msgstr "L'alineació vertical, des de 0 (a dalt) fins a 1 (a baix)"
 
 #: gtk/deprecated/gtkmisc.c:124
 msgid "X pad"
@@ -2363,7 +2363,7 @@ msgstr "Alineació y text"
 
 #: gtk/gtkcellrendererprogress.c:215
 msgid "The vertical text alignment, from 0 (top) to 1 (bottom)."
-msgstr "L'alineació vertical, des de 0 (a dalt) fins 1 (a baix)."
+msgstr "L'alineació vertical, des de 0 (a dalt) fins a 1 (a baix)."
 
 #: gtk/gtkcellrendererprogress.c:226 gtk/gtklevelbar.c:1022
 #: gtk/gtkmodelbutton.c:926 gtk/gtkprogressbar.c:159 gtk/gtkrange.c:439
@@ -4606,7 +4606,7 @@ msgstr "Nombre de línies"
 #: gtk/gtklabel.c:1020
 msgid "The desired number of lines, when ellipsizing a wrapping label"
 msgstr ""
-"El nombre de línies desitjades quan es posen punt suspensius a una etiqueta "
+"El nombre de línies desitjades quan es posen punts suspensius a una etiqueta "
 "ajustada"
 
 #: gtk/gtklayout.c:674
@@ -6379,7 +6379,7 @@ msgstr "Emplaçament de la finestra"
 #: gtk/gtkscrolledwindow.c:483
 msgid "Where the contents are located with respect to the scrollbars."
 msgstr ""
-"Si la ubicació del contingut és calcula en relació amb les barres de "
+"Si la ubicació del contingut es calcula en relació amb les barres de "
 "desplaçament."
 
 #: gtk/gtkscrolledwindow.c:502
@@ -7758,7 +7758,7 @@ msgstr "Espaiat de les lletres"
 
 #: gtk/gtktexttag.c:676
 msgid "Extra spacing between graphemes"
-msgstr "Espai entre entre grafemes"
+msgstr "Espai addicional entre grafemes"
 
 #: gtk/gtktexttag.c:693
 msgid "Margin Accumulates"
