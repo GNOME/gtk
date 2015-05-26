@@ -15,6 +15,7 @@ test_simplify = \
 
 EXTRA_DIST += \
 	$(test_simplify)	\
+	test-simplify		\
 	$(NULL)
 
 TESTS_ENVIRONMENT = \
