@@ -1,3 +1,104 @@
+Overview of Changes in GTK+ 3.17.2
+==================================
+
+* GtkFontChooser:
+ - Allow custom font maps, to support application-specific fonts
+ - Improve the 'no search results' page
+
+* GtkFileChooser:
+ - Change simple search engine to search breadth-first
+ - Make the simple search engine use GIO, so it works on
+   remote shares too
+ - Merge results from the tracker and simple search engines
+ - Add a 'no search results' page
+
+* GtkPlacesSidebar:
+ - Use a popover for renaming bookmarks
+
+* GtkPopover:
+ - Add support for default widgets
+
+* GtkScrolledWindow:
+ - Support kinetic scrolling on touchpads
+
+* GtkBuilder:
+ - Improve error reporting
+ - gtk-builder-tool can validate templates
+ - gtk-builder-tool can enumerate named objects
+
+* gtk3-demo:
+ - New cursors demo
+ - New page setup demo
+ - Builder demo ported away from GtkUIManager
+
+* GDK:
+ - Make css cursor names work across backends
+
+* Windows:
+ - Require Vista or newer
+ - Support RGBA windows
+ - Support css cursor names
+ - Support animated cursors
+ - Add cursor theme support. To take advantage of this, you will need
+   a new adwaita-icon-theme with Windows cursors.
+
+* Wayland:
+ - Remove assumptions on ordering of globals in startup
+ - Improve DND support in various places
+ - Support css cursor names
+
+* X11:
+ - Support XRANDR 1.5 monitor objects
+ - Support css cursor names
+
+* OS X:
+ - Support css cursor names
+
+* Bugs fixed:
+ 619493 Mark two functions from GtkAdjustment's public API deprecated
+ 693738 gtk print dialog shows "Getting printer information failed"...
+ 719683 Escaping issue "Failed to set text from markup due to error...
+ 719819 Wayland backend depends on ordering of globals in the displ...
+ 727316 W32: GDK does not support per-pixel alpha-blended windows
+ 744086 configure.ac: Pull gio-unix dependency for all unix builds
+ 746916 File chooser search does not work over remote network shares
+ 747150 hint for vertical writing mode to input method
+ 747634 gdk_set_program_class() breaks --class
+ 747664 GtkEntry:activates-default should work inside of popovers
+ 748234 Useless "Gtk-WARNING **: No object called:" warning message...
+ 748615 GtkWindow: Get the correct shadow width even before window ...
+ 748640 Documentation misses out example source files when not buil...
+ 748771 Add API to attach custom PangoFontMap to a font dialog inst...
+ 748782 fontchooser should reload list of families/styles on theme ...
+ 748783 Remove PANGO_ENABLE_BACKEND from gtksettings.c
+ 748784 GtkProgressBar text cannot be superimposed on the progress bar
+ 748833 Define GdkRectangle structure just for introspection parsing
+ 749009 notify test fails without a session bus
+ 749012 GtkStack: Don't emit notify::visible-child during destruction
+ 749021 GtkStackSwitcher: Don't emit notify::visible-child when set...
+ 749178 quartz: Support css cursor names
+ 749425 Memory leak in GtkWindow
+ 749451 Windows have no border
+ 749593 Miscellaneous test fixes
+ 749679 Avoid device position queries during DnD
+ 749770 Implement kinetic scrolling for libinput-managed devices
+ 748763 warnings when starting drag from GtkEntries
+ 749893 Crash when trying to drag a tab from a populated GtkNotebook...
+
+* Translation updates:
+ Catalan
+ Czech
+ French
+ German
+ Hebrew
+ Hungarian
+ Norwegian bokmål
+ Occitan
+ Polish
+ Russian
+ Slovak
+
+
 Overview of Changes in GTK+ 3.17.1
 ==================================
 
