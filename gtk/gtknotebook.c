@@ -3829,8 +3829,6 @@ gtk_notebook_drag_motion (GtkWidget      *widget,
       goto out;
     }
 
-  g_assert (priv->cur_page != NULL);
-
   stop_scrolling (notebook);
   target = gtk_drag_dest_find_target (widget, context, NULL);
   tab_target = gdk_atom_intern_static_string ("GTK_NOTEBOOK_TAB");
@@ -3844,6 +3842,7 @@ gtk_notebook_drag_motion (GtkWidget      *widget,
       retval = TRUE;
 
       source = GTK_NOTEBOOK (gtk_drag_get_source_widget (context));
+      g_assert (source->priv->cur_page != NULL);
       source_child = source->priv->cur_page->child;
 
       group = notebook->priv->group;
