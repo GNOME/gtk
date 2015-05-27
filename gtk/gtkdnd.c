@@ -4094,7 +4094,6 @@ static void
 gtk_drag_end (GtkDragSourceInfo *info,
               guint32            time)
 {
-  GtkWidget *source_widget = info->widget;
   GdkDevice *pointer, *keyboard;
 
   pointer = gdk_drag_context_get_device (info->context);
@@ -4137,33 +4136,6 @@ gtk_drag_end (GtkDragSourceInfo *info,
   gdk_device_ungrab (pointer, time);
   ungrab_dnd_keys (info->ipc_widget, keyboard, time);
   gtk_device_grab_remove (info->ipc_widget, pointer);
-
-  if (gtk_widget_get_realized (source_widget))
-    {
-      GdkEvent *send_event;
-
-      /* Send on a release pair to the original widget to convince it
-       * to release its grab. We need to call gtk_propagate_event()
-       * here, instead of gtk_widget_event() because widget like
-       * GtkList may expect propagation.
-       */
-
-      send_event = gdk_event_new (GDK_BUTTON_RELEASE);
-      send_event->button.window = g_object_ref (gdk_screen_get_root_window (gtk_widget_get_screen (source_widget)));
-      send_event->button.send_event = TRUE;
-      send_event->button.time = time;
-      send_event->button.x = 0;
-      send_event->button.y = 0;
-      send_event->button.axes = NULL;
-      send_event->button.state = 0;
-      send_event->button.button = info->button;
-      send_event->button.device = pointer;
-      send_event->button.x_root = 0;
-      send_event->button.y_root = 0;
-
-      gtk_propagate_event (source_widget, send_event);
-      gdk_event_free (send_event);
-    }
 }
 
 /* Called on cancellation of a drag, either by the user
