@@ -356,27 +356,23 @@ gtk_css_matcher_node_nth_child (GtkCssNode *node,
                                 int         a,
                                 int         b)
 {
-  while (b-- > 0)
-    {
-      if (node == NULL)
-        return FALSE;
+  int pos, x;
 
-      node = prev_node_func (node);
-    }
+  /* count nodes */
+  for (pos = 0; node != NULL; pos++)
+    node = prev_node_func (node);
+
+  /* solve pos = a * X + b
+   * and return TRUE if X is integer >= 0 */
+  x = pos - b;
 
   if (a == 0)
-    return node == NULL;
-  else if (a == 1)
-    return TRUE;
+    return x == 0;
 
-  b = 0;
-  while (node)
-    {
-      b++;
-      node = prev_node_func (node);
-    }
+  if (x % a)
+    return FALSE;
 
-  return b % a == 0;
+  return x / a > 0;
 }
 
 static gboolean
