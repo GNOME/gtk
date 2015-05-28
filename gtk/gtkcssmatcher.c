@@ -352,6 +352,7 @@ gtk_css_matcher_node_has_region (const GtkCssMatcher *matcher,
 
 static gboolean
 gtk_css_matcher_node_nth_child (GtkCssNode *node,
+                                GtkCssNode *(* prev_node_func) (GtkCssNode *),
                                 int         a,
                                 int         b)
 {
@@ -360,7 +361,7 @@ gtk_css_matcher_node_nth_child (GtkCssNode *node,
       if (node == NULL)
         return FALSE;
 
-      node = get_previous_visible_sibling (node);
+      node = prev_node_func (node);
     }
 
   if (a == 0)
@@ -372,35 +373,7 @@ gtk_css_matcher_node_nth_child (GtkCssNode *node,
   while (node)
     {
       b++;
-      node = get_previous_visible_sibling (node);
-    }
-
-  return b % a == 0;
-}
-
-static gboolean
-gtk_css_matcher_node_nth_last_child (GtkCssNode *node,
-                                     int         a,
-                                     int         b)
-{
-  while (b-- > 0)
-    {
-      if (node == NULL)
-        return FALSE;
-
-      node = get_next_visible_sibling (node);
-    }
-
-  if (a == 0)
-    return node == NULL;
-  else if (a == 1)
-    return TRUE;
-
-  b = 0;
-  while (node)
-    {
-      b++;
-      node = get_next_visible_sibling (node);
+      node = prev_node_func (node);
     }
 
   return b % a == 0;
@@ -412,10 +385,10 @@ gtk_css_matcher_node_has_position (const GtkCssMatcher *matcher,
                                    int                  a,
                                    int                  b)
 {
-  if (forward)
-    return gtk_css_matcher_node_nth_child (matcher->node.node, a, b);
-  else
-    return gtk_css_matcher_node_nth_last_child (matcher->node.node, a, b);
+  return gtk_css_matcher_node_nth_child (matcher->node.node,
+                                         forward ? get_previous_visible_sibling 
+                                                 : get_next_visible_sibling,
+                                         a, b);
 }
 
 static const GtkCssMatcherClass GTK_CSS_MATCHER_NODE = {
