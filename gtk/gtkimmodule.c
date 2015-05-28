@@ -404,6 +404,7 @@ gtk_im_module_initialize (void)
       return;
     }
 
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
   while (!have_error && pango_read_line (file, line_buf))
     {
       const char *p;
@@ -485,6 +486,7 @@ gtk_im_module_initialize (void)
 	  have_error = TRUE;
 	}
     }
+G_GNUC_END_IGNORE_DEPRECATIONS
 
   if (have_error)
     {

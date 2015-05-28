@@ -190,7 +190,9 @@ G_GNUC_END_IGNORE_DEPRECATIONS
 
       g_string_append_printf (contents, "# ModulesPath = %s\n#\n", path);
 
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
       dirs = pango_split_file_list (path);
+G_GNUC_END_IGNORE_DEPRECATIONS
       dirs_done = g_hash_table_new_full (g_str_hash, g_str_equal, NULL, NULL);
 
       for (i = 0; dirs[i]; i++)

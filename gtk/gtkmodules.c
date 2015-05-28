@@ -77,7 +77,9 @@ get_module_path (void)
 
   g_free (default_dir);
 
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
   result = pango_split_file_list (module_path);
+G_GNUC_END_IGNORE_DEPRECATIONS
   g_free (module_path);
 
   return result;
@@ -417,7 +419,9 @@ load_modules (const char *module_str)
 
   GTK_NOTE (MODULES, g_print ("Loading module list: %s\n", module_str));
 
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
   module_names = pango_split_file_list (module_str);
+G_GNUC_END_IGNORE_DEPRECATIONS
   for (i = 0; module_names[i]; i++) 
     module_list = load_module (module_list, module_names[i]);
 
