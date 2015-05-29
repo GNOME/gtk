@@ -144,7 +144,7 @@
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>imm32.lib;winmm.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>imm32.lib;winmm.lib;dwmapi.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <OutputFile>$(OutDir)$(GtkDllPrefix)$(ProjectName)$(GtkDllSuffix).dll</OutputFile>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <ProgramDatabaseFile>$(OutDir)$(GtkDllPrefix)$(ProjectName)$(GtkDllSuffix).pdb</ProgramDatabaseFile>
@@ -187,7 +187,7 @@
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>imm32.lib;winmm.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>imm32.lib;winmm.lib;dwmapi.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <OutputFile>$(OutDir)$(GtkDllPrefix)$(ProjectName)$(GtkDllSuffix).dll</OutputFile>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <ProgramDatabaseFile>$(OutDir)$(GtkDllPrefix)$(ProjectName)$(GtkDllSuffix).pdb</ProgramDatabaseFile>
@@ -234,7 +234,7 @@
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>imm32.lib;winmm.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>imm32.lib;winmm.lib;dwmapi.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <OutputFile>$(OutDir)$(GtkDllPrefix)$(ProjectName)$(GtkDllSuffix).dll</OutputFile>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <ProgramDatabaseFile>$(OutDir)$(GtkDllPrefix)$(ProjectName)$(GtkDllSuffix).pdb</ProgramDatabaseFile>
@@ -277,7 +277,7 @@
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>imm32.lib;winmm.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>imm32.lib;winmm.lib;dwmapi.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <OutputFile>$(OutDir)$(GtkDllPrefix)$(ProjectName)$(GtkDllSuffix).dll</OutputFile>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <ProgramDatabaseFile>$(OutDir)$(GtkDllPrefix)$(ProjectName)$(GtkDllSuffix).pdb</ProgramDatabaseFile>
@@ -314,7 +314,7 @@
     <ResourceCompile Include="..\..\..\gdk\win32\rc\gdk.rc" />
   </ItemGroup>
   <ItemGroup>
-#include "libgdk.vs10.sourcefiles"
+#include "gdk.vs10.sourcefiles"
     <ClCompile Include="..\..\..\gdk\gdkkeynames.c" />
   </ItemGroup>
   <ItemGroup>

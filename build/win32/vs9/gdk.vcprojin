@@ -42,7 +42,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="imm32.lib winmm.lib"
+				AdditionalDependencies="imm32.lib winmm.lib dwmapi.lib"
 				OutputFile="$(OutDir)\$(GtkDllPrefix)$(ProjectName)$(GtkDllSuffix).dll"
 				LinkIncremental="1"
 				GenerateDebugInformation="true"
@@ -104,7 +104,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="imm32.lib winmm.lib"
+				AdditionalDependencies="imm32.lib winmm.lib dwmapi.lib"
 				OutputFile="$(OutDir)\$(GtkDllPrefix)$(ProjectName)$(GtkDllSuffix).dll"
 				LinkIncremental="1"
 				GenerateDebugInformation="true"
@@ -170,7 +170,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="imm32.lib winmm.lib"
+				AdditionalDependencies="imm32.lib winmm.lib dwmapi.lib"
 				OutputFile="$(OutDir)\$(GtkDllPrefix)$(ProjectName)$(GtkDllSuffix).dll"
 				LinkIncremental="1"
 				GenerateDebugInformation="true"
@@ -232,7 +232,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="imm32.lib winmm.lib"
+				AdditionalDependencies="imm32.lib winmm.lib dwmapi.lib"
 				OutputFile="$(OutDir)\$(GtkDllPrefix)$(ProjectName)$(GtkDllSuffix).dll"
 				LinkIncremental="1"
 				GenerateDebugInformation="true"
@@ -297,7 +297,7 @@
 			Filter="cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx"
 			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}"
 			>
-#include "libgdk.sourcefiles"
+#include "gdk.sourcefiles"
 			<File RelativePath="..\..\..\gdk\gdkkeynames.c" />
 		</Filter>
 	</Files>
