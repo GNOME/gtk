@@ -2205,7 +2205,8 @@ GtkCalendar.header column-header .button.titlebutton, column-header .button:hove
 .menubar {
   -GtkWidget-window-dragging: true;
   padding: 0px;
-  box-shadow: inset 0 -1px rgba(0, 0, 0, 0.1); }
+  box-shadow: inset 0 -1px rgba(0, 0, 0, 0.1);
+  background-color: #ededed; }
   .menubar:backdrop {
     background-color: #ededed; }
   .menubar > .menuitem {
