@@ -3660,7 +3660,8 @@ gtk_text_layout_move_iter_visually (GtkTextLayout *layout,
 	 gtk_text_iter_backward_char (iter);
     }
 
-  gtk_text_layout_free_line_display (layout, display);
+  if (display)
+    gtk_text_layout_free_line_display (layout, display);
 
  done:
   
