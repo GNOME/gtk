@@ -2104,10 +2104,12 @@ gtk_stack_size_allocate (GtkWidget     *widget,
   if (priv->visible_child)
     {
       int min, nat;
+      GtkAlign valign;
+
       gtk_widget_get_preferred_height_for_width (priv->visible_child->widget,
                                                  allocation->width,
                                                  &min, &nat);
-      GtkAlign valign = gtk_widget_get_valign (priv->visible_child->widget);
+      valign = gtk_widget_get_valign (priv->visible_child->widget);
       child_allocation.height = MAX (nat, allocation->height);
       if (valign == GTK_ALIGN_END &&
           child_allocation.height > allocation->height)
