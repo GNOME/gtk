@@ -3206,6 +3206,36 @@ switch_to_cwd (GtkFileChooserWidget *impl)
   g_free (current_working_dir);
 }
 
+static gboolean
+recent_files_setting_is_enabled (GtkFileChooserWidget *impl)
+{
+  GtkSettings *settings;
+  gboolean enabled;
+
+  settings = gtk_widget_get_settings (GTK_WIDGET (impl));
+  g_object_get (settings, "gtk-recent-files-enabled", &enabled, NULL);
+
+  return enabled;
+}
+
+static gboolean
+recent_scheme_is_supported (void)
+{
+  const gchar * const *supported;
+
+  supported = g_vfs_get_supported_uri_schemes (g_vfs_get_default ());
+  if (supported != NULL)
+    return g_strv_contains (supported, "recent");
+
+  return FALSE;
+}
+
+static gboolean
+can_show_recent (GtkFileChooserWidget *impl)
+{
+  return recent_files_setting_is_enabled (impl) && recent_scheme_is_supported ();
+}
+
 /* Sets the file chooser to showing Recent Files or $CWD, depending on the
  * user’s settings.
  */
@@ -3217,8 +3247,12 @@ set_startup_mode (GtkFileChooserWidget *impl)
   switch (priv->startup_mode)
     {
     case STARTUP_MODE_RECENT:
-      operation_mode_set (impl, OPERATION_MODE_RECENT);
-      break;
+      if (can_show_recent (impl))
+        {
+          operation_mode_set (impl, OPERATION_MODE_RECENT);
+          break;
+        }
+      /* else fall thru */
 
     case STARTUP_MODE_CWD:
       switch_to_cwd (impl);
