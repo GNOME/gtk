@@ -50,7 +50,6 @@ struct _GtkCssNode
 
   guint                  visible :1;            /* node will be skipped when validating or computing styles */
   guint                  invalid :1;            /* node or a child needs to be validated (even if just for animation) */
-  guint                  children_changed :1;   /* the children changed since last validation */
   guint                  needs_propagation :1;  /* children have state changes that need to be propagated to their siblings */
   /* Two invariants hold for this variable:
    * style_is_invalid == TRUE  =>  next_sibling->style_is_invalid == TRUE

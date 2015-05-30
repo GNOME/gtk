@@ -614,17 +614,6 @@ gtk_css_node_parent_will_be_set (GtkCssNode *node)
     GTK_CSS_NODE_GET_CLASS (node)->dequeue_validate (node);
 }
 
-
-static void
-gtk_css_node_set_children_changed (GtkCssNode *node)
-{
-  if (node->children_changed)
-    return;
-
-  node->children_changed = TRUE;
-  gtk_css_node_set_invalid (node, TRUE);
-}
-
 static void
 gtk_css_node_invalidate_style (GtkCssNode *cssnode)
 {
@@ -655,7 +644,10 @@ gtk_css_node_reposition (GtkCssNode *node,
   g_object_ref (node);
 
   if (node->next_sibling)
-    gtk_css_node_invalidate_style (node->next_sibling);
+    {
+      if (node->visible)
+        gtk_css_node_invalidate (node->next_sibling, GTK_CSS_CHANGE_POSITION | GTK_CSS_CHANGE_ANY_SIBLING);
+    }
 
   if (old_parent != NULL)
     {
@@ -671,8 +663,6 @@ gtk_css_node_reposition (GtkCssNode *node,
       else
         {
           g_object_unref (node);
-          if (node->visible)
-            gtk_css_node_set_children_changed (old_parent);
         }
 
       if (gtk_css_node_get_style_provider_or_null (node) == NULL)
@@ -681,8 +671,6 @@ gtk_css_node_reposition (GtkCssNode *node,
 
       if (new_parent)
         {
-          if (node->visible)
-            gtk_css_node_set_children_changed (new_parent);
           g_object_ref (node);
 
           if (node->pending_changes)
@@ -704,7 +692,7 @@ gtk_css_node_reposition (GtkCssNode *node,
   if (node->next_sibling)
     gtk_css_node_invalidate_style (node->next_sibling);
 
-  gtk_css_node_invalidate (node, GTK_CSS_CHANGE_ANY_PARENT | GTK_CSS_CHANGE_ANY_SIBLING);
+  gtk_css_node_invalidate (node, GTK_CSS_CHANGE_ANY_PARENT | GTK_CSS_CHANGE_POSITION | GTK_CSS_CHANGE_ANY_SIBLING);
 
   g_object_unref (node);
 }
@@ -792,11 +780,6 @@ gtk_css_node_propagate_pending_changes (GtkCssNode *cssnode,
   GtkCssNode *child;
 
   change = _gtk_css_change_for_child (cssnode->pending_changes);
-  if (cssnode->children_changed)
-    {
-      change |= GTK_CSS_CHANGE_POSITION | GTK_CSS_CHANGE_ANY_SIBLING;
-      cssnode->children_changed = FALSE;
-    }
   if (style_changed)
     change |= GTK_CSS_CHANGE_PARENT_STYLE;
 
@@ -883,8 +866,8 @@ gtk_css_node_set_visible (GtkCssNode *cssnode,
   cssnode->visible = visible;
   g_object_notify_by_pspec (G_OBJECT (cssnode), cssnode_properties[PROP_VISIBLE]);
 
-  if (cssnode->parent)
-    gtk_css_node_set_children_changed (cssnode->parent);
+  if (cssnode->next_sibling)
+    gtk_css_node_invalidate (cssnode->next_sibling, GTK_CSS_CHANGE_POSITION | GTK_CSS_CHANGE_ANY_SIBLING);
 }
 
 gboolean
