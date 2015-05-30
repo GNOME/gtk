@@ -325,10 +325,7 @@ gtk_print_backend_load_modules (void)
 
   for (i = 0; backends[i]; i++)
     {
-      g_strchug (backends[i]);
-      g_strchomp (backends[i]);
-      backend = _gtk_print_backend_create (backends[i]);
-      
+      backend = _gtk_print_backend_create (g_strstrip (backends[i]));
       if (backend)
         result = g_list_append (result, backend);
     }
