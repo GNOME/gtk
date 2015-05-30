@@ -61,6 +61,7 @@
 #include "gtkorientableprivate.h"
 #include "gtkintl.h"
 #include "gtkcssnodeprivate.h"
+#include "gtkwidgetprivate.h"
 
 #include "a11y/gtkflowboxaccessibleprivate.h"
 #include "a11y/gtkflowboxchildaccessible.h"
@@ -4008,7 +4009,7 @@ gtk_flow_box_new (void)
 }
 
 static void
-gtk_flow_box_insert_css_node (GtkListBox    *box,
+gtk_flow_box_insert_css_node (GtkFlowBox    *box,
                               GtkWidget     *child,
                               GSequenceIter *iter)
 {
