@@ -565,11 +565,7 @@ recent_files_setting_is_enabled (GtkPlacesSidebar *sidebar)
   GtkSettings *settings;
   gboolean enabled;
 
-  if (gtk_widget_has_screen (GTK_WIDGET (sidebar)))
-    settings = gtk_settings_get_for_screen (gtk_widget_get_screen (GTK_WIDGET (sidebar)));
-  else
-    settings = gtk_settings_get_default ();
-
+  settings = gtk_widget_get_settings (GTK_WIDGET (sidebar));
   g_object_get (settings, "gtk-recent-files-enabled", &enabled, NULL);
 
   return enabled;
@@ -579,17 +575,10 @@ static gboolean
 recent_scheme_is_supported (void)
 {
   const gchar * const *supported;
-  gint i;
 
   supported = g_vfs_get_supported_uri_schemes (g_vfs_get_default ());
-  if (supported == NULL)
-    return FALSE;
-
-  for (i = 0; supported[i] != NULL; i++)
-    {
-      if (strcmp ("recent", supported[i]) == 0)
-        return TRUE;
-    }
+  if (supported != NULL)
+    return g_strv_contains (supported, "recent");
 
   return FALSE;
 }
