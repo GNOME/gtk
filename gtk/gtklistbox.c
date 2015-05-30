@@ -18,6 +18,7 @@
 #include "config.h"
 
 #include "gtkadjustmentprivate.h"
+#include "gtkcssnodeprivate.h"
 #include "gtklistbox.h"
 #include "gtkwidget.h"
 #include "gtkmarshalers.h"
@@ -1166,6 +1167,25 @@ do_sort (GtkListBoxRow *a,
   return priv->sort_func (a, b, priv->sort_func_target);
 }
 
+static void
+gtk_list_box_css_node_foreach (gpointer data,
+                               gpointer user_data)
+{
+  GtkWidget **previous = user_data;
+  GtkWidget *row = data;
+  GtkCssNode *row_node;
+  GtkCssNode *prev_node;
+
+  if (*previous)
+    {
+      prev_node = gtk_widget_get_css_node (*previous);
+      row_node = gtk_widget_get_css_node (row);
+      gtk_css_node_set_after (row_node, prev_node);
+    }
+
+  *previous = row;
+}
+
 /**
  * gtk_list_box_invalidate_sort:
  * @box: a #GtkListBox
@@ -1180,10 +1200,12 @@ void
 gtk_list_box_invalidate_sort (GtkListBox *box)
 {
   GtkListBoxPrivate *priv = BOX_PRIV (box);
+  GtkWidget *previous = NULL;
 
   g_return_if_fail (GTK_IS_LIST_BOX (box));
 
   g_sequence_sort (priv->children, (GCompareDataFunc)do_sort, box);
+  g_sequence_foreach (priv->children, gtk_list_box_css_node_foreach, &previous);
 
   gtk_list_box_invalidate_headers (box);
   gtk_widget_queue_resize (GTK_WIDGET (box));
@@ -2599,6 +2621,27 @@ gtk_list_box_prepend (GtkListBox *box,
   gtk_list_box_insert (box, child, 0);
 }
 
+static void
+gtk_list_box_insert_css_node (GtkListBox    *box,
+                              GtkWidget     *child,
+                              GSequenceIter *iter)
+{
+  GSequenceIter *prev_iter;
+  GtkCssNode *child_node;
+  GtkCssNode *sibling_node;
+  GtkWidget *sibling;
+
+  child_node = gtk_widget_get_css_node (child);
+  prev_iter = g_sequence_iter_prev (iter);
+
+  if (prev_iter != iter)
+    {
+      sibling = g_sequence_get (prev_iter);
+      sibling_node = gtk_widget_get_css_node (sibling);
+      gtk_css_node_set_after (child_node, sibling_node);
+    }
+}
+
 /**
  * gtk_list_box_insert:
  * @box: a #GtkListBox
@@ -2649,6 +2692,8 @@ gtk_list_box_insert (GtkListBox *box,
       current_iter = g_sequence_get_iter_at_pos (priv->children, position);
       iter = g_sequence_insert_before (current_iter, row);
     }
+
+  gtk_list_box_insert_css_node (box, GTK_WIDGET (row), iter);
 
   ROW_PRIV (row)->iter = iter;
   gtk_widget_set_parent (GTK_WIDGET (row), GTK_WIDGET (box));
