@@ -60,6 +60,7 @@
 #include "gtkprivate.h"
 #include "gtkorientableprivate.h"
 #include "gtkintl.h"
+#include "gtkcssnodeprivate.h"
 
 #include "a11y/gtkflowboxaccessibleprivate.h"
 #include "a11y/gtkflowboxchildaccessible.h"
@@ -4006,6 +4007,27 @@ gtk_flow_box_new (void)
   return (GtkWidget *)g_object_new (GTK_TYPE_FLOW_BOX, NULL);
 }
 
+static void
+gtk_flow_box_insert_css_node (GtkListBox    *box,
+                              GtkWidget     *child,
+                              GSequenceIter *iter)
+{
+  GSequenceIter *prev_iter;
+  GtkCssNode *child_node;
+  GtkCssNode *sibling_node;
+  GtkWidget *sibling;
+
+  child_node = gtk_widget_get_css_node (child);
+  prev_iter = g_sequence_iter_prev (iter);
+
+  if (prev_iter != iter)
+    {
+      sibling = g_sequence_get (prev_iter);
+      sibling_node = gtk_widget_get_css_node (sibling);
+      gtk_css_node_set_after (child_node, sibling_node);
+    }
+}
+
 /**
  * gtk_flow_box_insert:
  * @box: a #GtkFlowBox
@@ -4059,6 +4081,8 @@ gtk_flow_box_insert (GtkFlowBox *box,
       pos = g_sequence_get_iter_at_pos (priv->children, position);
       iter = g_sequence_insert_before (pos, child);
     }
+
+  gtk_flow_box_insert_css_node (box, GTK_WIDGET (child), iter);
 
   CHILD_PRIV (child)->iter = iter;
   gtk_widget_set_parent (GTK_WIDGET (child), GTK_WIDGET (box));
@@ -4806,6 +4830,25 @@ gtk_flow_box_sort (GtkFlowBoxChild *a,
   return priv->sort_func (a, b, priv->sort_data);
 }
 
+static void
+gtk_flow_box_css_node_foreach (gpointer data,
+                               gpointer user_data)
+{
+  GtkWidget **previous = user_data;
+  GtkWidget *row = data;
+  GtkCssNode *row_node;
+  GtkCssNode *prev_node;
+
+  if (*previous)
+    {
+      prev_node = gtk_widget_get_css_node (*previous);
+      row_node = gtk_widget_get_css_node (row);
+      gtk_css_node_set_after (row_node, prev_node);
+    }
+
+  *previous = row;
+}
+
 /**
  * gtk_flow_box_invalidate_sort:
  * @box: a #GtkFlowBox
@@ -4821,6 +4864,7 @@ void
 gtk_flow_box_invalidate_sort (GtkFlowBox *box)
 {
   GtkFlowBoxPrivate *priv;
+  GtkWidget *previous = NULL;
 
   g_return_if_fail (GTK_IS_FLOW_BOX (box));
 
@@ -4828,8 +4872,8 @@ gtk_flow_box_invalidate_sort (GtkFlowBox *box)
 
   if (priv->sort_func != NULL)
     {
-      g_sequence_sort (priv->children,
-                       (GCompareDataFunc)gtk_flow_box_sort, box);
+      g_sequence_sort (priv->children, (GCompareDataFunc)gtk_flow_box_sort, box);
+      g_sequence_foreach (priv->children, gtk_flow_box_css_node_foreach, &previous);
       gtk_widget_queue_resize (GTK_WIDGET (box));
     }
 }
