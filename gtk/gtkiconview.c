@@ -1903,7 +1903,7 @@ gtk_icon_view_draw (GtkWidget *widget,
       paint_area.y      = item->cell_area.y      - icon_view->priv->item_padding;
       paint_area.width  = item->cell_area.width  + icon_view->priv->item_padding * 2;
       paint_area.height = item->cell_area.height + icon_view->priv->item_padding * 2;
-      
+
       cairo_save (cr);
 
       cairo_rectangle (cr, paint_area.x, paint_area.y, paint_area.width, paint_area.height);
@@ -1925,10 +1925,7 @@ gtk_icon_view_draw (GtkWidget *widget,
   if (dest_item &&
       dest_pos != GTK_ICON_VIEW_NO_DROP)
     {
-      GtkStyleContext *context;
       GdkRectangle rect = { 0 };
-
-      context = gtk_widget_get_style_context (widget);
 
       switch (dest_pos)
 	{
