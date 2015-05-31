@@ -849,7 +849,6 @@ gtk_tree_model_filter_build_level (GtkTreeModelFilter *filter,
           if (emit_inserted)
             {
               GtkTreePath *f_path;
-              GtkTreeIter f_iter;
               GtkTreeIter children;
 
               f_iter.stamp = filter->priv->stamp;
@@ -915,8 +914,7 @@ gtk_tree_model_filter_build_level (GtkTreeModelFilter *filter,
   f_iter.user_data = new_level;
   f_iter.user_data2 = g_sequence_get (g_sequence_get_begin_iter (new_level->seq));
 
-  gtk_tree_model_filter_real_ref_node (GTK_TREE_MODEL (filter), &f_iter,
-                                       FALSE);
+  gtk_tree_model_filter_real_ref_node (GTK_TREE_MODEL (filter), &f_iter, FALSE);
 }
 
 static void
@@ -1050,7 +1048,7 @@ gtk_tree_model_filter_prune_level (GtkTreeModelFilter *filter,
        siter != end_siter;
        siter = g_sequence_iter_next (siter))
     {
-      FilterElt *elt = g_sequence_get (siter);
+      elt = g_sequence_get (siter);
 
       if (elt->children)
         gtk_tree_model_filter_free_level (filter,
@@ -2153,23 +2151,23 @@ gtk_tree_model_filter_row_inserted (GtkTreeModel *c_model,
       if (gtk_tree_path_get_depth (filter->priv->virtual_root) >=
           gtk_tree_path_get_depth (c_path))
         {
-          gint level;
+          gint depth;
           gint *v_indices, *c_indices;
           gboolean common_prefix = TRUE;
 
-          level = gtk_tree_path_get_depth (c_path) - 1;
+          depth = gtk_tree_path_get_depth (c_path) - 1;
           v_indices = gtk_tree_path_get_indices (filter->priv->virtual_root);
           c_indices = gtk_tree_path_get_indices (c_path);
 
-          for (i = 0; i < level; i++)
+          for (i = 0; i < depth; i++)
             if (v_indices[i] != c_indices[i])
               {
                 common_prefix = FALSE;
                 break;
               }
 
-          if (common_prefix && v_indices[level] >= c_indices[level])
-            (v_indices[level])++;
+          if (common_prefix && v_indices[depth] >= c_indices[depth])
+            (v_indices[depth])++;
         }
     }
 
@@ -2761,27 +2759,27 @@ gtk_tree_model_filter_rows_reordered (GtkTreeModel *c_model,
 	  gtk_tree_path_is_ancestor (c_path, filter->priv->virtual_root))
         {
           gint new_pos = -1;
-          gint length;
-          gint level;
+          gint len;
+          gint depth;
           GtkTreeIter real_c_iter;
 
-          level = gtk_tree_path_get_depth (c_path);
+          depth = gtk_tree_path_get_depth (c_path);
 
           if (c_iter)
             real_c_iter = *c_iter;
           else
             gtk_tree_model_get_iter (c_model, &real_c_iter, c_path);
 
-          length = gtk_tree_model_iter_n_children (c_model, &real_c_iter);
+          len = gtk_tree_model_iter_n_children (c_model, &real_c_iter);
 
-          for (i = 0; i < length; i++)
-            if (new_order[i] == gtk_tree_path_get_indices (filter->priv->virtual_root)[level])
+          for (i = 0; i < len; i++)
+            if (new_order[i] == gtk_tree_path_get_indices (filter->priv->virtual_root)[depth])
               new_pos = i;
 
           if (new_pos < 0)
             return;
 
-          gtk_tree_path_get_indices (filter->priv->virtual_root)[level] = new_pos;
+          gtk_tree_path_get_indices (filter->priv->virtual_root)[depth] = new_pos;
           return;
         }
 
@@ -2846,7 +2844,6 @@ gtk_tree_model_filter_rows_reordered (GtkTreeModel *c_model,
 
   for (i = 0; i < length; i++)
     {
-      FilterElt *elt;
       GSequenceIter *siter;
 
       elt = lookup_elt_with_offset (level->seq, new_order[i], &siter);
