@@ -912,7 +912,7 @@ _gdk_wayland_display_convert_selection (GdkDisplay *display,
     {
       GInputStream *stream = NULL;
       int pipe_fd[2], natoms = 0;
-      GdkAtom *atoms = NULL;
+      GdkAtom *targets = NULL;
 
       if (target == gdk_atom_intern_static_string ("TARGETS"))
         {
@@ -920,10 +920,10 @@ _gdk_wayland_display_convert_selection (GdkDisplay *display,
           GList *l;
 
           natoms = g_list_length (wayland_selection->targets);
-          atoms = g_new0 (GdkAtom, natoms);
+          targets = g_new0 (GdkAtom, natoms);
 
           for (l = wayland_selection->targets; l; l = l->next)
-            atoms[i++] = l->data;
+            targets[i++] = l->data;
         }
       else
         {
@@ -941,11 +941,11 @@ _gdk_wayland_display_convert_selection (GdkDisplay *display,
       if (stream)
         g_object_unref (stream);
 
-      if (atoms)
+      if (targets)
         {
           /* Store directly the local atoms */
-          selection_buffer_append_data (buffer_data, atoms, natoms * sizeof (GdkAtom));
-          g_free (atoms);
+          selection_buffer_append_data (buffer_data, targets, natoms * sizeof (GdkAtom));
+          g_free (targets);
         }
 
       g_hash_table_insert (wayland_selection->selection_buffers,
