@@ -172,7 +172,7 @@ _gtk_xembed_send_message (GdkWindow        *recipient,
  * _gtk_xembed_send_focus_message:
  * @recipient: (allow-none): window to which to send the window, or %NULL
  *             in which case nothing will be sent
- * @message:   type of message
+ * @message_type:   type of message
  * @detail:    detail field of message
  * 
  * Sends a XEMBED message for moving the focus along the focus
@@ -181,19 +181,19 @@ _gtk_xembed_send_message (GdkWindow        *recipient,
  **/
 void
 _gtk_xembed_send_focus_message (GdkWindow        *recipient,
-				XEmbedMessageType message,
+				XEmbedMessageType message_type,
 				glong             detail)
 {
   gulong flags = 0;
 
   if (!recipient)
     return;
-  
+
   g_return_if_fail (GDK_IS_WINDOW (recipient));
-  g_return_if_fail (message == XEMBED_FOCUS_IN ||
-		    message == XEMBED_FOCUS_NEXT ||
-		    message == XEMBED_FOCUS_PREV);
-		    
+  g_return_if_fail (message_type == XEMBED_FOCUS_IN ||
+                    message_type == XEMBED_FOCUS_NEXT ||
+                    message_type == XEMBED_FOCUS_PREV);
+
   if (current_messages)
     {
       GtkXEmbedMessage *message = current_messages->data;
@@ -209,7 +209,7 @@ _gtk_xembed_send_focus_message (GdkWindow        *recipient,
 	}
     }
 
-  _gtk_xembed_send_message (recipient, message, detail, flags, 0);
+  _gtk_xembed_send_message (recipient, message_type, detail, flags, 0);
 }
 
 const char *
