@@ -621,12 +621,9 @@ gtk_tool_palette_size_allocate (GtkWidget     *widget,
   for (i = 0; i < palette->priv->groups->len; ++i)
     {
       GtkToolItemGroupInfo *group = g_ptr_array_index (palette->priv->groups, i);
-      GtkWidget *widget;
 
       if (!group->widget)
         continue;
-
-      widget = GTK_WIDGET (group->widget);
 
       if (gtk_tool_item_group_get_n_items (group->widget))
         {
@@ -649,8 +646,8 @@ gtk_tool_palette_size_allocate (GtkWidget     *widget,
           else
             child_allocation.x = x;
 
-          gtk_widget_size_allocate (widget, &child_allocation);
-          gtk_widget_show (widget);
+          gtk_widget_size_allocate (GTK_WIDGET (group->widget), &child_allocation);
+          gtk_widget_show (GTK_WIDGET (group->widget));
 
           if (GTK_ORIENTATION_VERTICAL == palette->priv->orientation)
             child_allocation.y += child_allocation.height;
@@ -658,7 +655,7 @@ gtk_tool_palette_size_allocate (GtkWidget     *widget,
             x += child_allocation.width;
         }
       else
-        gtk_widget_hide (widget);
+        gtk_widget_hide (GTK_WIDGET (group->widget));
     }
 
   if (GTK_ORIENTATION_VERTICAL == palette->priv->orientation)
