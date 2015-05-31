@@ -164,11 +164,11 @@ gtk_kinetic_scrolling_tick (GtkKineticScrolling *data,
           {
             gtk_kinetic_scrolling_init_overshoot(data,data->lower,data->position,data->velocity);
           }
-        else if(data->position > data->upper)
+        else if (data->position > data->upper)
           {
             gtk_kinetic_scrolling_init_overshoot(data, data->upper, data->position, data->velocity);
           }
-        else if(fabs(data->velocity) < 1)
+        else if (fabs(data->velocity) < 1)
           {
             data->phase = GTK_KINETIC_SCROLLING_PHASE_FINISHED;
             data->position = round(data->position);
@@ -179,23 +179,23 @@ gtk_kinetic_scrolling_tick (GtkKineticScrolling *data,
 
     case GTK_KINETIC_SCROLLING_PHASE_OVERSHOOTING:
       {
-        gdouble exp_part, position;
+        gdouble exp_part, pos;
 
         data->t += time_delta;
         exp_part = exp(-data->overshoot_friction / 2 * data->t);
-        position = exp_part * (data->c1 + data->c2 * data->t);
+        pos = exp_part * (data->c1 + data->c2 * data->t);
 
-        if (position < data->lower - 50 || position > data->upper + 50)
+        if (pos < data->lower - 50 || pos > data->upper + 50)
           {
-            position = CLAMP (position, data->lower - 50, data->upper + 50);
-            gtk_kinetic_scrolling_init_overshoot (data, data->equilibrium_position, position, 0);
+            pos = CLAMP (pos, data->lower - 50, data->upper + 50);
+            gtk_kinetic_scrolling_init_overshoot (data, data->equilibrium_position, pos, 0);
           }
         else
-          data->velocity = data->c2 * exp_part - data->overshoot_friction / 2 * position;
+          data->velocity = data->c2 * exp_part - data->overshoot_friction / 2 * pos;
 
-        data->position = position + data->equilibrium_position;
+        data->position = pos + data->equilibrium_position;
 
-        if(fabs(position) < 0.1)
+        if(fabs (pos) < 0.1)
           {
             data->phase = GTK_KINETIC_SCROLLING_PHASE_FINISHED;
             data->position = data->equilibrium_position;
