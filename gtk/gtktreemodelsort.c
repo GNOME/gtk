@@ -1092,12 +1092,11 @@ gtk_tree_model_sort_rows_reordered (GtkTreeModel *s_model,
 				    gint         *new_order,
 				    gpointer      data)
 {
-  SortElt *elt;
   SortLevel *level;
   GtkTreeIter iter;
+  GtkTreePath *path;
   gint *tmp_array;
   int i, length;
-  GtkTreePath *path;
   GSequenceIter *siter, *end_siter;
   GtkTreeModelSort *tree_model_sort = GTK_TREE_MODEL_SORT (data);
   GtkTreeModelSortPrivate *priv = tree_model_sort->priv;
@@ -1113,6 +1112,8 @@ gtk_tree_model_sort_rows_reordered (GtkTreeModel *s_model,
     }
   else
     {
+      SortElt *elt;
+
       path = gtk_real_tree_model_sort_convert_child_path_to_path (tree_model_sort, s_path, FALSE);
       if (path == NULL)
 	return;
