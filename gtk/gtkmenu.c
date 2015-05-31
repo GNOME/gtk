@@ -2847,10 +2847,8 @@ gtk_menu_size_allocate (GtkWidget     *widget,
 
   x = border_width + padding.left;
   y = border_width + padding.top;
-  width = allocation->width - (2 * border_width) -
-    padding.left - padding.right;
-  height = allocation->height - (2 * border_width) -
-    padding.top - padding.bottom;
+  width = allocation->width - (2 * border_width) - padding.left - padding.right;
+  height = allocation->height - (2 * border_width) - padding.top - padding.bottom;
 
   if (menu_shell->priv->active)
     gtk_menu_scroll_to (menu, priv->scroll_offset);
@@ -2889,7 +2887,6 @@ gtk_menu_size_allocate (GtkWidget     *widget,
 
           if (gtk_widget_get_visible (child))
             {
-              gint i;
               gint l, r, t, b;
 
               get_effective_child_attach (child, &l, &r, &t, &b);
@@ -2926,15 +2923,14 @@ gtk_menu_size_allocate (GtkWidget     *widget,
       /* Resize the item window */
       if (gtk_widget_get_realized (widget))
         {
-          gint i;
-          gint width, height;
+          gint w, h;
 
-          height = 0;
+          h = 0;
           for (i = 0; i < gtk_menu_get_n_rows (menu); i++)
-            height += priv->heights[i];
+            h += priv->heights[i];
 
-          width = gtk_menu_get_n_columns (menu) * base_width;
-          gdk_window_resize (priv->bin_window, width, height);
+          w = gtk_menu_get_n_columns (menu) * base_width;
+          gdk_window_resize (priv->bin_window, w, h);
         }
 
       if (priv->tearoff_active)

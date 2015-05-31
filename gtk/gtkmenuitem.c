@@ -875,7 +875,6 @@ gtk_menu_item_get_preferred_width (GtkWidget *widget,
 
   if (child != NULL && gtk_widget_get_visible (child))
     {
-      GtkMenuItemPrivate *priv = menu_item->priv;
       gint child_min, child_nat;
 
       gtk_widget_get_preferred_width (child, &child_min, &child_nat);
