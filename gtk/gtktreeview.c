@@ -2959,19 +2959,19 @@ gtk_tree_view_size_allocate (GtkWidget     *widget,
   for (tmp_list = tree_view->priv->children; tmp_list; tmp_list = tmp_list->next)
     {
       GtkTreeViewChild *child = tmp_list->data;
-      GtkAllocation allocation;
+      GtkAllocation child_allocation;
       GtkTreePath *path;
       GdkRectangle rect;
 
       /* totally ignore our child's requisition */
       path = _gtk_tree_path_new_from_rbtree (child->tree, child->node);
       gtk_tree_view_get_cell_area (tree_view, path, child->column, &rect);
-      allocation.x = rect.x + child->border.left;
-      allocation.y = rect.y + child->border.top;
-      allocation.width = rect.width - (child->border.left + child->border.right);
-      allocation.height = rect.height - (child->border.top + child->border.bottom);
+      child_allocation.x = rect.x + child->border.left;
+      child_allocation.y = rect.y + child->border.top;
+      child_allocation.width = rect.width - (child->border.left + child->border.right);
+      child_allocation.height = rect.height - (child->border.top + child->border.bottom);
       gtk_tree_path_free (path);
-      gtk_widget_size_allocate (child->widget, &allocation);
+      gtk_widget_size_allocate (child->widget, &child_allocation);
     }
 }
 
@@ -5220,7 +5220,6 @@ G_GNUC_END_IGNORE_DEPRECATIONS
 
               if (gtk_tree_view_draw_expanders (tree_view))
 	        {
-                  int expander_size = gtk_tree_view_get_expander_size (tree_view);
 	          if (!rtl)
 		    cell_area.x += depth * expander_size;
 		  cell_area.width -= depth * expander_size;
@@ -5387,8 +5386,8 @@ G_GNUC_END_IGNORE_DEPRECATIONS
           /* Draw indicator for the drop
            */
           gint highlight_y = -1;
-	  GtkRBTree *tree = NULL;
-	  GtkRBNode *node = NULL;
+	  GtkRBTree *drag_tree = NULL;
+	  GtkRBNode *drag_node = NULL;
 
           gtk_style_context_save (context);
           gtk_style_context_add_class (context, GTK_STYLE_CLASS_DND);
@@ -5407,15 +5406,15 @@ G_GNUC_END_IGNORE_DEPRECATIONS
 
             case GTK_TREE_VIEW_DROP_INTO_OR_BEFORE:
             case GTK_TREE_VIEW_DROP_INTO_OR_AFTER:
-	      _gtk_tree_view_find_node (tree_view, drag_dest_path, &tree, &node);
+	      _gtk_tree_view_find_node (tree_view, drag_dest_path, &drag_tree, &drag_node);
 
-	      if (tree == NULL)
+	      if (drag_tree == NULL)
 		break;
 
               gtk_render_frame (context, cr,
-                                0, gtk_tree_view_get_row_y_offset (tree_view, tree, node),
+                                0, gtk_tree_view_get_row_y_offset (tree_view, drag_tree, drag_node),
                                 gdk_window_get_width (tree_view->priv->bin_window),
-                                gtk_tree_view_get_row_height (tree_view, node));
+                                gtk_tree_view_get_row_height (tree_view, drag_node));
               break;
             }
 
@@ -8440,8 +8439,8 @@ gtk_tree_view_header_focus (GtkTreeView      *tree_view,
 			    gboolean          clamp_column_visible)
 {
   GtkTreeViewColumn *column;
-  GtkWidget *focus_child;
   GtkWidget *button;
+  GtkWidget *focus_child;
   GList *last_column, *first_column;
   GList *tmp_list;
   gboolean rtl;
@@ -8546,9 +8545,6 @@ gtk_tree_view_header_focus (GtkTreeView      *tree_view,
 
       while (tmp_list)
 	{
-	  GtkTreeViewColumn *column;
-	  GtkWidget         *button;
-
 	  if (dir == (rtl ? GTK_DIR_LEFT : GTK_DIR_RIGHT))
 	    tmp_list = tmp_list->next;
 	  else
