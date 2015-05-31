@@ -2506,7 +2506,6 @@ common_render_page (GtkPrintOperation *op,
   else
     {
       GtkPageOrientation  orientation;
-      GtkPageSetup       *page_setup;
       gdouble             paper_width, paper_height;
       gdouble             page_width, page_height;
       gdouble             context_width, context_height;
