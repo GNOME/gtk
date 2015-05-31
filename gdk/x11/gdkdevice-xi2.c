@@ -534,7 +534,7 @@ gdk_x11_device_xi2_window_at_position (GdkDevice       *device,
     {
       gint width, height;
       GList *toplevels, *list;
-      Window pointer_window, root, child;
+      Window pointer_window;
 
       /* FIXME: untrusted clients case not multidevice-safe */
       pointer_window = None;

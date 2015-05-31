@@ -372,17 +372,17 @@ update_keymaps (GdkX11Keymap *keymap_x11)
       for (i = 0; i < map_size; i++)
         {
           /* Get the key code at this point in the map. */
-          gint keycode = keymap_x11->mod_keymap->modifiermap[i];
+          gint code = keymap_x11->mod_keymap->modifiermap[i];
           gint j;
           KeySym *syms;
           guint mask;
 
           /* Ignore invalid keycodes. */
-          if (keycode < keymap_x11->min_keycode ||
-              keycode > keymap_x11->max_keycode)
+          if (code < keymap_x11->min_keycode ||
+              code > keymap_x11->max_keycode)
             continue;
 
-          syms = keymap_x11->keymap + (keycode - keymap_x11->min_keycode) * keymap_x11->keysyms_per_keycode;
+          syms = keymap_x11->keymap + (code - keymap_x11->min_keycode) * keymap_x11->keysyms_per_keycode;
 
           mask = 0;
           for (j = 0; j < keymap_x11->keysyms_per_keycode; j++)
@@ -398,7 +398,7 @@ update_keymaps (GdkX11Keymap *keymap_x11)
                 mask |= GDK_SUPER_MASK;
             }
 
-          keymap_x11->modmap[i/keymap_x11->mod_keymap->max_keypermod] |= mask;
+          keymap_x11->modmap[i / keymap_x11->mod_keymap->max_keypermod] |= mask;
 
           /* The fourth modifier, GDK_MOD1_MASK is 1 << 3.
            * Each group of max_keypermod entries refers to the same modifier.

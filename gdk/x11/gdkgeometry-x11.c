@@ -151,7 +151,7 @@ _gdk_x11_display_free_translate_queue (GdkDisplay *display)
 
 static void
 gdk_window_queue (GdkWindow          *window,
-		  GdkWindowQueueItem *item)
+		  GdkWindowQueueItem *new_item)
 {
   GdkX11Display *display_x11 = GDK_X11_DISPLAY (GDK_WINDOW_DISPLAY (window));
   
@@ -205,13 +205,13 @@ gdk_window_queue (GdkWindow          *window,
 	}
     }
 
-  item->window = window;
-  item->serial = NextRequest (GDK_WINDOW_XDISPLAY (window));
+  new_item->window = window;
+  new_item->serial = NextRequest (GDK_WINDOW_XDISPLAY (window));
   
   g_object_add_weak_pointer (G_OBJECT (window),
-			     (gpointer *)&(item->window));
+			     (gpointer *)&(new_item->window));
 
-  g_queue_push_tail (display_x11->translate_queue, item);
+  g_queue_push_tail (display_x11->translate_queue, new_item);
 }
 
 void

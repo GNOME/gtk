@@ -214,7 +214,6 @@ translate_device_classes (GdkDisplay      *display,
         case XIKeyClass:
           {
             XIKeyClassInfo *key_info = (XIKeyClassInfo *) class_info;
-            gint i;
 
             _gdk_device_set_keys (device, key_info->num_keycodes);
 
@@ -1508,11 +1507,9 @@ gdk_x11_device_manager_xi2_translate_event (GdkEventTranslator *translator,
 
         if (gdk_device_get_mode (event->motion.device) == GDK_MODE_WINDOW)
           {
-            GdkDevice *device = event->motion.device;
-
             /* Update event coordinates from axes */
-            gdk_device_get_axis (device, event->motion.axes, GDK_AXIS_X, &event->motion.x);
-            gdk_device_get_axis (device, event->motion.axes, GDK_AXIS_Y, &event->motion.y);
+            gdk_device_get_axis (event->motion.device, event->motion.axes, GDK_AXIS_X, &event->motion.x);
+            gdk_device_get_axis (event->motion.device, event->motion.axes, GDK_AXIS_Y, &event->motion.y);
           }
       }
       break;

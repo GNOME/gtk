@@ -466,10 +466,9 @@ gdk_x11_device_core_window_at_position (GdkDevice       *device,
     {
       gint width, height;
       GList *toplevels, *list;
-      Window pointer_window, root, child;
+      Window pointer_window;
       int rootx = -1, rooty = -1;
       int winx, winy;
-      unsigned int xmask;
 
       /* FIXME: untrusted clients case not multidevice-safe */
       pointer_window = None;

@@ -610,12 +610,12 @@ _gdk_x11_get_window_child_info (GdkDisplay       *display,
     {
       xResourceReq *resource_req;
       xGetPropertyReq *prop_req;
-      Window window = state.children[i];
+      Window win = state.children[i];
       
       if (get_wm_state)
 	{
 	  GetReq (GetProperty, prop_req);
-	  prop_req->window = window;
+	  prop_req->window = win;
 	  prop_req->property = wm_state_atom;
 	  prop_req->type = AnyPropertyType;
 	  prop_req->delete = False;
@@ -625,10 +625,10 @@ _gdk_x11_get_window_child_info (GdkDisplay       *display,
 	  state.child_states[i].seq[CHILD_INFO_GET_PROPERTY] = dpy->request;
 	}
       
-      GetResReq(GetWindowAttributes, window, resource_req);
+      GetResReq(GetWindowAttributes, win, resource_req);
       state.child_states[i].seq[CHILD_INFO_GET_WA] = dpy->request;
       
-      GetResReq(GetGeometry, window, resource_req);
+      GetResReq(GetGeometry, win, resource_req);
       state.child_states[i].seq[CHILD_INFO_GET_GEOMETRY] = dpy->request;
     }
 
