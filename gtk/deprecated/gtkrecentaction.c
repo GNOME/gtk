@@ -154,9 +154,8 @@ gtk_recent_action_unselect_uri (GtkRecentChooser *chooser,
 
   for (l = priv->choosers; l; l = l->next)
     {
-      GtkRecentChooser *chooser = l->data;
-      
-      gtk_recent_chooser_unselect_uri (chooser, uri);
+      GtkRecentChooser *c = l->data;
+      gtk_recent_chooser_unselect_uri (c, uri);
     }
 }
 

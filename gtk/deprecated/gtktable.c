@@ -1792,10 +1792,10 @@ gtk_table_size_allocate_pass1 (GtkTable *table)
 	      for (col = 0; col < priv->ncols; col++)
 		if (priv->cols[col].shrink)
 		  {
-		    gint allocation = priv->cols[col].allocation;
+		    gint alloc = priv->cols[col].allocation;
 
 		    priv->cols[col].allocation = MAX (1, (gint) priv->cols[col].allocation - extra / nshrink);
-		    extra -= allocation - priv->cols[col].allocation;
+		    extra -= alloc - priv->cols[col].allocation;
 		    nshrink -= 1;
 		    if (priv->cols[col].allocation < 2)
 		      {
@@ -1884,10 +1884,10 @@ gtk_table_size_allocate_pass1 (GtkTable *table)
 	      for (row = 0; row < priv->nrows; row++)
 		if (priv->rows[row].shrink)
 		  {
-		    gint allocation = priv->rows[row].allocation;
+		    gint alloc = priv->rows[row].allocation;
 
 		    priv->rows[row].allocation = MAX (1, (gint) priv->rows[row].allocation - extra / nshrink);
-		    extra -= allocation - priv->rows[row].allocation;
+		    extra -= alloc - priv->rows[row].allocation;
 		    nshrink -= 1;
 		    if (priv->rows[row].allocation < 2)
 		      {

@@ -2952,9 +2952,9 @@ G_GNUC_END_IGNORE_DEPRECATIONS
           if (in_popup && !popup_accels)
 	    {
 	      /* don't show accels in popups */
-	      GtkWidget *child = gtk_bin_get_child (GTK_BIN (info->proxy));
-	      if (GTK_IS_ACCEL_LABEL (child))
-	        g_object_set (child, "accel-closure", NULL, NULL);
+	      GtkWidget *c = gtk_bin_get_child (GTK_BIN (info->proxy));
+	      if (GTK_IS_ACCEL_LABEL (c))
+	        g_object_set (c, "accel-closure", NULL, NULL);
 	    }
         }
       

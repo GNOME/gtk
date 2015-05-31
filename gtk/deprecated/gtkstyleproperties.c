@@ -317,7 +317,7 @@ gtk_style_properties_provider_lookup (GtkStyleProviderPrivate *provider,
     {
       GtkCssStyleProperty *prop = key;
       PropertyData *data = value;
-      GtkCssValue *value;
+      GtkCssValue *val;
       guint id;
 
       id = _gtk_css_style_property_get_id (prop);
@@ -325,11 +325,11 @@ gtk_style_properties_provider_lookup (GtkStyleProviderPrivate *provider,
       if (!_gtk_css_lookup_is_missing (lookup, id))
           continue;
 
-      value = property_data_match_state (data, _gtk_css_matcher_get_state (matcher));
-      if (value == NULL)
+      val = property_data_match_state (data, _gtk_css_matcher_get_state (matcher));
+      if (val == NULL)
         continue;
 
-      _gtk_css_lookup_set (lookup, id, NULL, value);
+      _gtk_css_lookup_set (lookup, id, NULL, val);
     }
 
   if (change)
@@ -846,7 +846,7 @@ gtk_style_properties_merge (GtkStyleProperties       *props,
 {
   GtkStylePropertiesPrivate *priv, *priv_to_merge;
   GHashTableIter iter;
-  gpointer key, value;
+  gpointer key, val;
 
   g_return_if_fail (GTK_IS_STYLE_PROPERTIES (props));
   g_return_if_fail (GTK_IS_STYLE_PROPERTIES (props_to_merge));
@@ -859,13 +859,13 @@ gtk_style_properties_merge (GtkStyleProperties       *props,
     {
       g_hash_table_iter_init (&iter, priv_to_merge->color_map);
 
-      while (g_hash_table_iter_next (&iter, &key, &value))
+      while (g_hash_table_iter_next (&iter, &key, &val))
         {
           const gchar *name;
           GtkSymbolicColor *color;
 
           name = key;
-          color = value;
+          color = val;
 
           if (!replace &&
               g_hash_table_lookup (priv->color_map, name))
@@ -878,9 +878,9 @@ gtk_style_properties_merge (GtkStyleProperties       *props,
   /* Merge symbolic style properties */
   g_hash_table_iter_init (&iter, priv_to_merge->properties);
 
-  while (g_hash_table_iter_next (&iter, &key, &value))
+  while (g_hash_table_iter_next (&iter, &key, &val))
     {
-      PropertyData *prop_to_merge = value;
+      PropertyData *prop_to_merge = val;
       PropertyData *prop;
       guint i;
 
@@ -926,7 +926,6 @@ gtk_style_properties_merge (GtkStyleProperties       *props,
                    value->value != NULL)
             {
               GPtrArray *array, *array_to_merge;
-              gint i;
 
               /* Append the array, mainly thought
                * for the gtk-key-bindings property

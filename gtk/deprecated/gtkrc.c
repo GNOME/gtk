@@ -1090,8 +1090,6 @@ gtk_rc_style_finalize (GObject *object)
 
   if (rc_style->rc_properties)
     {
-      guint i;
-
       for (i = 0; i < rc_style->rc_properties->len; i++)
 	{
 	  GtkRcProperty *node = &g_array_index (rc_style->rc_properties, GtkRcProperty, i);
@@ -1280,8 +1278,6 @@ gtk_rc_style_real_merge (GtkRcStyle *dest,
 
   if (src->rc_properties)
     {
-      guint i;
-
       for (i = 0; i < src->rc_properties->len; i++)
 	insert_rc_property (dest,
 			    &g_array_index (src->rc_properties, GtkRcProperty, i),
