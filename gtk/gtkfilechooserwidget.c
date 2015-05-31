@@ -1566,12 +1566,12 @@ file_list_drag_data_received_get_info_cb (GCancellable *cancellable,
     change_folder_and_display_error (data->impl, data->file, FALSE);
   else
     {
-      GError *error = NULL;
+      GError *local_error = NULL;
 
       gtk_file_chooser_widget_unselect_all (chooser);
-      gtk_file_chooser_widget_select_file (chooser, data->file, &error);
-      if (error)
-	error_selecting_dragged_file_dialog (data->impl, data->file, error);
+      gtk_file_chooser_widget_select_file (chooser, data->file, &local_error);
+      if (local_error)
+	error_selecting_dragged_file_dialog (data->impl, data->file, local_error);
       else
 	browse_files_center_selected_row (data->impl);
     }
@@ -1596,9 +1596,9 @@ file_list_drag_data_received_cb (GtkWidget        *widget,
                                  GtkSelectionData *selection_data,
                                  guint             info,
                                  guint             time_,
-                                 gpointer          data)
+                                 gpointer          user_data)
 {
-  GtkFileChooserWidget *impl = GTK_FILE_CHOOSER_WIDGET (data);
+  GtkFileChooserWidget *impl = GTK_FILE_CHOOSER_WIDGET (user_data);
   GtkFileChooserWidgetPrivate *priv = impl->priv;
   gchar **uris;
   char *uri;
