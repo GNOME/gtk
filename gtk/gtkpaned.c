@@ -2445,7 +2445,7 @@ gtk_paned_get_cycle_chain (GtkPaned          *paned,
   /* Walk the list and expand all the paned widgets. */
   for (list = temp_list; list != NULL; list = list->next)
     {
-      GtkWidget *widget = list->data;
+      widget = list->data;
 
       if (widget)
 	{
@@ -2773,7 +2773,6 @@ gtk_paned_cycle_handle_focus (GtkPaned *paned,
       GtkContainer *container = GTK_CONTAINER (paned);
       GtkPaned *focus;
       GtkPaned *first;
-      GtkPaned *prev, *next;
       GtkWidget *toplevel;
       GtkWidget *focus_child;
 
