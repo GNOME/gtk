@@ -181,7 +181,6 @@ G_GNUC_END_IGNORE_DEPRECATIONS
   if (argc == first_file)  /* No file arguments given */
     {
       char **dirs;
-      int i;
       GHashTable *dirs_done;
 
 G_GNUC_BEGIN_IGNORE_DEPRECATIONS
