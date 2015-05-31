@@ -2108,7 +2108,6 @@ text_buffer_new (GtkAboutDialog  *about,
               gchar *link;
               gchar *uri;
               const gchar *link_type;
-              GtkTextTag *tag;
 
               if (*q1 == '<')
                 {
