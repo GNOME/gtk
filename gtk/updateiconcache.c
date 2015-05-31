@@ -71,14 +71,14 @@ static gchar *var_name = "-";
 
 #include <ftw.h>
 
-static GStatBuf cache_stat;
+static GStatBuf cache_dir_stat;
 static gboolean cache_up_to_date;
 
 static int check_dir_mtime (const char        *dir,
                             const GStatBuf    *sb,
                             int                tf)
 {
-  if (tf != FTW_NS && sb->st_mtime > cache_stat.st_mtime)
+  if (tf != FTW_NS && sb->st_mtime > cache_dir_stat.st_mtime)
     {
       cache_up_to_date = FALSE;
       /* stop tree walk */
@@ -95,7 +95,7 @@ is_cache_up_to_date (const gchar *path)
   gint retval;
 
   cache_path = g_build_filename (path, CACHE_NAME, NULL);
-  retval = g_stat (cache_path, &cache_stat);
+  retval = g_stat (cache_path, &cache_dir_stat);
   g_free (cache_path);
 
   if (retval < 0)
@@ -1167,7 +1167,7 @@ write_bucket (FILE *cache, HashNode *node, int *offset)
       for (i = 0; i < len; i++)
         {
           Image *image = list->data;
-          int image_data_size = get_image_data_size (image);
+          int image_size = get_image_data_size (image);
 
           /* Directory index */
           if (!write_card16 (cache, image->dir_index))
@@ -1178,11 +1178,11 @@ write_bucket (FILE *cache, HashNode *node, int *offset)
             return FALSE;
 
           /* Image data offset */
-          if (image_data_size > 0)
+          if (image_size > 0)
             {
               if (!write_card32 (cache, data_offset))
                 return FALSE;
-              data_offset += image_data_size;
+              data_offset += image_size;
             }
           else
             {
