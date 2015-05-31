@@ -635,13 +635,13 @@ _gtk_css_shadow_value_paint_box (const GtkCssValue   *shadow,
 {
   GtkRoundedBox box, clip_box;
   double spread, radius, clip_radius, x, y, outside;
-  double x1, y1, x2, y2;
+  double x1c, y1c, x2c, y2c;
 
   g_return_if_fail (shadow->class == &GTK_CSS_VALUE_SHADOW);
 
-  cairo_clip_extents (cr, &x1, &y1, &x2, &y2);
-  if ((shadow->inset && !_gtk_rounded_box_intersects_rectangle (padding_box, x1, y1, x2, y2)) ||
-      (!shadow->inset && _gtk_rounded_box_contains_rectangle (padding_box, x1, y1, x2, y2)))
+  cairo_clip_extents (cr, &x1c, &y1c, &x2c, &y2c);
+  if ((shadow->inset && !_gtk_rounded_box_intersects_rectangle (padding_box, x1c, y1c, x2c, y2c)) ||
+      (!shadow->inset && _gtk_rounded_box_contains_rectangle (padding_box, x1c, y1c, x2c, y2c)))
     return;
 
   cairo_save (cr);

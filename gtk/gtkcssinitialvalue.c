@@ -66,7 +66,6 @@ gtk_css_value_initial_compute (GtkCssValue             *value,
         {
           PangoFontDescription *description;
           char *font_name;
-          GtkCssValue *value;
 
           g_object_get (settings, "gtk-font-name", &font_name, NULL);
           description = pango_font_description_from_string (font_name);
@@ -76,9 +75,12 @@ gtk_css_value_initial_compute (GtkCssValue             *value,
 
           if (pango_font_description_get_set_fields (description) & PANGO_FONT_MASK_FAMILY)
             {
-              value = _gtk_css_array_value_new (_gtk_css_string_value_new (pango_font_description_get_family (description)));
+              GtkCssValue *val;
+
+              val = _gtk_css_array_value_new (_gtk_css_string_value_new (pango_font_description_get_family (description)));
               pango_font_description_free (description);
-              return value;
+
+              return val;
             }
  
           pango_font_description_free (description);
