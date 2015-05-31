@@ -6231,7 +6231,7 @@ gtk_entry_create_layout (GtkEntry *entry,
   gint preedit_length = 0;
   PangoAttrList *preedit_attrs = NULL;
 
-  gchar *display;
+  gchar *display_text;
   guint n_bytes;
 
   layout = gtk_widget_create_pango_layout (widget, NULL);
@@ -6241,8 +6241,12 @@ gtk_entry_create_layout (GtkEntry *entry,
                           : pango_attr_list_new ();
 
   placeholder_layout = show_placeholder_text (entry);
-  display = placeholder_layout ? g_strdup (priv->placeholder_text) : _gtk_entry_get_display_text (entry, 0, -1);
-  n_bytes = strlen (display);
+  if (placeholder_layout)
+    display_text = g_strdup (priv->placeholder_text);
+  else
+    display_text = _gtk_entry_get_display_text (entry, 0, -1);
+
+  n_bytes = strlen (display_text);
 
   if (!placeholder_layout && include_preedit)
     {
@@ -6265,21 +6269,21 @@ gtk_entry_create_layout (GtkEntry *entry,
 
   if (preedit_length)
     {
-      GString *tmp_string = g_string_new (display);
-      gint cursor_index = g_utf8_offset_to_pointer (display, priv->current_pos) - display;
+      GString *tmp_string = g_string_new (display_text);
+      gint pos;
 
-      g_string_insert (tmp_string, cursor_index, preedit_string);
+      pos = g_utf8_offset_to_pointer (display_text, priv->current_pos) - display_text;
+      g_string_insert (tmp_string, pos, preedit_string);
       pango_layout_set_text (layout, tmp_string->str, tmp_string->len);
-      pango_attr_list_splice (tmp_attrs, preedit_attrs,
-			      cursor_index, preedit_length);
+      pango_attr_list_splice (tmp_attrs, preedit_attrs, pos, preedit_length);
       g_string_free (tmp_string, TRUE);
     }
   else
     {
       PangoDirection pango_dir;
-      
+
       if (gtk_entry_get_display_mode (entry) == DISPLAY_NORMAL)
-	pango_dir = pango_find_base_dir (display, n_bytes);
+	pango_dir = pango_find_base_dir (display_text, n_bytes);
       else
 	pango_dir = PANGO_DIRECTION_NEUTRAL;
 
@@ -6303,25 +6307,24 @@ gtk_entry_create_layout (GtkEntry *entry,
 	    }
         }
 
-      pango_context_set_base_dir (gtk_widget_get_pango_context (widget),
-				  pango_dir);
+      pango_context_set_base_dir (gtk_widget_get_pango_context (widget), pango_dir);
 
       priv->resolved_dir = pango_dir;
 
-      pango_layout_set_text (layout, display, n_bytes);
+      pango_layout_set_text (layout, display_text, n_bytes);
     }
-      
+
   pango_layout_set_attributes (layout, tmp_attrs);
 
   if (priv->tabs)
     pango_layout_set_tabs (layout, priv->tabs);
 
   g_free (preedit_string);
-  g_free (display);
+  g_free (display_text);
 
   if (preedit_attrs)
     pango_attr_list_unref (preedit_attrs);
-      
+
   pango_attr_list_unref (tmp_attrs);
 
   return layout;
