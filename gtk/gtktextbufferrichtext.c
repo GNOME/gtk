@@ -543,8 +543,8 @@ gtk_text_buffer_deserialize (GtkTextBuffer  *register_buffer,
                              gsize           length,
                              GError        **error)
 {
-  GList    *formats;
-  GList    *list;
+  GList *formats;
+  GList *l;
 
   g_return_val_if_fail (GTK_IS_TEXT_BUFFER (register_buffer), FALSE);
   g_return_val_if_fail (GTK_IS_TEXT_BUFFER (content_buffer), FALSE);
@@ -554,12 +554,11 @@ gtk_text_buffer_deserialize (GtkTextBuffer  *register_buffer,
   g_return_val_if_fail (length > 0, FALSE);
   g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
 
-  formats = g_object_get_qdata (G_OBJECT (register_buffer),
-                                deserialize_quark ());
+  formats = g_object_get_qdata (G_OBJECT (register_buffer), deserialize_quark ());
 
-  for (list = formats; list; list = g_list_next (list))
+  for (l = formats; l; l = l->next)
     {
-      GtkRichTextFormat *fmt = list->data;
+      GtkRichTextFormat *fmt = l->data;
 
       if (fmt->atom == format)
         {

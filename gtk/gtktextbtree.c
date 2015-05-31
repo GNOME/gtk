@@ -5792,7 +5792,7 @@ gtk_text_btree_rebalance (GtkTextBTree *tree,
           GtkTextBTreeNode *other;
           GtkTextBTreeNode *halfwaynode = NULL; /* Initialization needed only */
           GtkTextLine *halfwayline = NULL; /* to prevent cc warnings. */
-          int total_children, first_children, i;
+          int total_children, first_children;
 
           /*
            * Too few children for this GtkTextBTreeNode.  If this is the root then,
@@ -5861,46 +5861,46 @@ gtk_text_btree_rebalance (GtkTextBTree *tree,
             }
           if (node->level == 0)
             {
-              GtkTextLine *line;
+              GtkTextLine *line2;
 
-              for (line = node->children.line, i = 1;
-                   line->next != NULL;
-                   line = line->next, i++)
+              for (line2 = node->children.line, i = 1;
+                   line2->next != NULL;
+                   line2 = line2->next, i++)
                 {
                   if (i == first_children)
                     {
-                      halfwayline = line;
+                      halfwayline = line2;
                     }
                 }
-              line->next = other->children.line;
+              line2->next = other->children.line;
               while (i <= first_children)
                 {
-                  halfwayline = line;
-                  line = line->next;
+                  halfwayline = line2;
+                  line2 = line2->next;
                   i++;
                 }
             }
           else
             {
-              GtkTextBTreeNode *child;
+              GtkTextBTreeNode *child2;
 
-              for (child = node->children.node, i = 1;
-                   child->next != NULL;
-                   child = child->next, i++)
+              for (child2 = node->children.node, i = 1;
+                   child2->next != NULL;
+                   child2 = child2->next, i++)
                 {
                   if (i <= first_children)
                     {
                       if (i == first_children)
                         {
-                          halfwaynode = child;
+                          halfwaynode = child2;
                         }
                     }
                 }
-              child->next = other->children.node;
+              child2->next = other->children.node;
               while (i <= first_children)
                 {
-                  halfwaynode = child;
-                  child = child->next;
+                  halfwaynode = child2;
+                  child2 = child2->next;
                   i++;
                 }
             }
