@@ -132,7 +132,6 @@ enum {
 static GHashTable  *accel_entry_ht = NULL;	/* accel_path -> AccelEntry */
 static GSList      *accel_filters = NULL;
 static gulong	    accel_map_signals[LAST_SIGNAL] = { 0, };
-static GtkAccelMap *accel_map;
 
 /* --- prototypes --- */
 static void do_accel_map_changed (AccelEntry *entry);
@@ -1021,9 +1020,11 @@ gtk_accel_map_class_init (GtkAccelMapClass *accel_map_class)
 }
 
 static void
-gtk_accel_map_init (GtkAccelMap *accel_map)
+gtk_accel_map_init (GtkAccelMap *map)
 {
 }
+
+static GtkAccelMap *accel_map;
 
 /**
  * gtk_accel_map_get:
