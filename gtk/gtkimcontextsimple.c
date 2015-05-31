@@ -961,10 +961,7 @@ gtk_im_context_simple_filter_keypress (GtkIMContext *context,
       (priv->in_hex_sequence && !hex_keyval &&
        !is_hex_start && !is_hex_end && !is_escape && !is_backspace))
     {
-      GdkDisplay *display;
       GdkModifierType no_text_input_mask;
-
-      display = gdk_window_get_display (event->window);
 
       no_text_input_mask =
         gdk_keymap_get_modifier_mask (gdk_keymap_get_for_display (display),
