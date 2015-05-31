@@ -5288,6 +5288,20 @@ destroy_tick_callback_info (GtkWidget           *widget,
 }
 
 static void
+destroy_tick_callbacks (GtkWidget *widget)
+{
+  GtkWidgetPrivate *priv = widget->priv;
+  GList *l;
+
+  for (l = priv->tick_callbacks; l;)
+    {
+      GList *next = l->next;
+      destroy_tick_callback_info (widget, l->data, l);
+      l = next;
+    }
+}
+
+static void
 gtk_widget_on_frame_clock_update (GdkFrameClock *frame_clock,
                                   GtkWidget     *widget)
 {
@@ -12066,7 +12080,6 @@ gtk_widget_real_destroy (GtkWidget *object)
   /* gtk_object_destroy() will already hold a refcount on object */
   GtkWidget *widget = GTK_WIDGET (object);
   GtkWidgetPrivate *priv = widget->priv;
-  GList *l;
 
   if (priv->auto_children)
     {
@@ -12154,12 +12167,7 @@ gtk_widget_real_destroy (GtkWidget *object)
 
   gtk_grab_remove (widget);
 
-  for (l = priv->tick_callbacks; l;)
-    {
-      GList *next = l->next;
-      destroy_tick_callback_info (widget, l->data, l);
-      l = next;
-    }
+  destroy_tick_callbacks (widget);
 
   G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
   if (priv->style)
@@ -12812,14 +12820,14 @@ gtk_widget_propagate_state (GtkWidget    *widget,
 
       if (!gtk_widget_is_sensitive (widget))
         {
-          EventControllerData *data;
+          EventControllerData *controller_data;
           GList *l;
 
           /* Reset all controllers */
           for (l = priv->event_controllers; l; l = l->next)
             {
-              data = l->data;
-              gtk_event_controller_reset (data->controller);
+              controller_data = l->data;
+              gtk_event_controller_reset (controller_data->controller);
             }
         }
 
