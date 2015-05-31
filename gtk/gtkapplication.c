@@ -414,7 +414,6 @@ accels_set_accels_for_action (Accels              *accels,
   if (keys)
     {
       gchar *my_key;
-      gint i;
 
       my_key = g_strdup (action_and_target);
 
