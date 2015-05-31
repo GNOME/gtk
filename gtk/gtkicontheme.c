@@ -1837,7 +1837,6 @@ real_choose_icon (GtkIconTheme       *icon_theme,
       static gboolean check_for_default_theme = TRUE;
       gchar *default_theme_path;
       gboolean found = FALSE;
-      guint i;
 
       if (check_for_default_theme)
         {
