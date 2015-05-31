@@ -62,6 +62,8 @@ static void gtk_drag_source_site_destroy        (gpointer           data);
 static GtkDragSourceInfo *gtk_drag_get_source_info (GdkDragContext *context,
 						    gboolean        create);
 
+static void gtk_drag_drop_finished (GtkDragSourceInfo *info);
+
 extern GdkDragContext *gdk_quartz_drag_source_context (); /* gdk/quartz/gdkdnd-quartz.c */
 
 struct _GtkDragSourceSite 
@@ -1364,6 +1366,23 @@ gtk_drag_begin (GtkWidget         *widget,
 				  actions, button, event, -1, -1);
 }
 
+
+/**
+ * gtk_drag_cancel:
+ * @context: a #GdkDragContext, as e.g. returned by gtk_drag_begin_with_coordinates()
+ *
+ */
+void
+gtk_drag_cancel (GdkDragContext *context)
+{
+  GtkDragSourceInfo *info;
+
+  g_return_if_fail (GDK_IS_DRAG_CONTEXT (context));
+
+  info = gtk_drag_get_source_info (context, FALSE);
+  if (info != NULL)
+    gtk_drag_drop_finished (info);
+}
 
 static gboolean
 gtk_drag_source_event_cb (GtkWidget      *widget,
