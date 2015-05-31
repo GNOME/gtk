@@ -490,16 +490,14 @@ gtk_cloudprint_account_printer (GtkCloudprintAccount *account,
 				gpointer user_data)
 {
   RestProxyCall *call;
+  GTask *task;
   GError *error = NULL;
 
   GTK_NOTE (PRINTING,
 	    g_print ("Cloud Print Backend: (%p) 'printer' REST call for "
 		     "printer id %s", account, printerid));
 
-  GTask *task = g_task_new (G_OBJECT (account),
-			    cancellable,
-			    callback,
-			    user_data);
+  task = g_task_new (G_OBJECT (account), cancellable, callback, user_data);
 
   g_task_set_task_data (task,
 			g_object_ref (account),

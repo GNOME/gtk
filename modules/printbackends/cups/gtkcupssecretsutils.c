@@ -530,13 +530,13 @@ unlock_read_alias_cb (GObject      *source_object,
                       GAsyncResult *res,
                       gpointer      user_data)
 {
-  GTask              *task;
+  GTask *task;
   SecretsServiceData *task_data;
-  GError             *error = NULL;
-  GVariant           *output,
-                     *subresult;
-  gsize               path_len = 0;
-  const gchar        *collection_path;
+  GError *error = NULL;
+  GVariant *output, *subresult;
+  gsize path_len = 0;
+  const gchar *collection_path;
+  const gchar *to_unlock[2];
 
   task = user_data;
   task_data = g_task_get_task_data (task);
@@ -561,11 +561,8 @@ unlock_read_alias_cb (GObject      *source_object,
     }
 
   collection_path = g_variant_get_string (subresult, &path_len);
-
-  const gchar * const to_unlock[] =
-  {
-    collection_path, NULL
-  };
+  to_unlock[0] = collection_path;
+  to_unlock[1] = NULL;
 
   task_data->collection_path = g_strdup (collection_path);
 

@@ -4513,7 +4513,7 @@ value_is_off (const char *value)
 	   strcasecmp (value, "False") == 0);
 }
 
-static char *
+static const char *
 ppd_group_name (ppd_group_t *group)
 {
   return group->name;
@@ -4544,7 +4544,7 @@ available_choices (ppd_file_t     *ppd,
   installed_options = NULL;
   for (i = 0; i < ppd->num_groups; i++)
     {
-      char *name;
+      const char *name;
 
       name = ppd_group_name (&ppd->groups[i]);
       if (strcmp (name, "InstallableOptions") == 0)
@@ -4885,7 +4885,7 @@ strptr_cmp (const void *a,
 
 
 static gboolean
-string_in_table (gchar       *str,
+string_in_table (const gchar *str,
 		 const gchar *table[],
 		 gint         table_len)
 {
@@ -4902,23 +4902,19 @@ handle_option (GtkPrinterOptionSet *set,
 	       GtkPrintSettings    *settings)
 {
   GtkPrinterOption *option;
-  char *name;
+  char *option_name;
   int i;
 
   if (STRING_IN_TABLE (ppd_option->keyword, cups_option_blacklist))
     return;
 
-  name = get_ppd_option_name (ppd_option->keyword);
+  option_name = get_ppd_option_name (ppd_option->keyword);
 
   option = NULL;
   if (ppd_option->ui == PPD_UI_PICKONE)
-    {
-      option = create_pickone_option (ppd_file, ppd_option, name);
-    }
+    option = create_pickone_option (ppd_file, ppd_option, option_name);
   else if (ppd_option->ui == PPD_UI_BOOLEAN)
-    {
-      option = create_boolean_option (ppd_file, ppd_option, name);
-    }
+    option = create_boolean_option (ppd_file, ppd_option, option_name);
 #ifdef PRINT_IGNORED_OPTIONS
   else
     g_warning ("CUPS Backend: Ignoring pickmany setting %s\n", ppd_option->text);
@@ -4926,27 +4922,21 @@ handle_option (GtkPrinterOptionSet *set,
 
   if (option)
     {
-      char *name;
+      const char *name;
 
       name = ppd_group_name (toplevel_group);
-      if (STRING_IN_TABLE (name,
-			   color_group_whitelist) ||
-	  STRING_IN_TABLE (ppd_option->keyword,
-			   color_option_whitelist))
+      if (STRING_IN_TABLE (name, color_group_whitelist) ||
+	  STRING_IN_TABLE (ppd_option->keyword, color_option_whitelist))
 	{
 	  option->group = g_strdup ("ColorPage");
 	}
-      else if (STRING_IN_TABLE (name,
-				image_quality_group_whitelist) ||
-	       STRING_IN_TABLE (ppd_option->keyword,
-				image_quality_option_whitelist))
+      else if (STRING_IN_TABLE (name, image_quality_group_whitelist) ||
+	       STRING_IN_TABLE (ppd_option->keyword, image_quality_option_whitelist))
 	{
 	  option->group = g_strdup ("ImageQualityPage");
 	}
-      else if (STRING_IN_TABLE (name,
-				finishing_group_whitelist) ||
-	       STRING_IN_TABLE (ppd_option->keyword,
-				finishing_option_whitelist))
+      else if (STRING_IN_TABLE (name, finishing_group_whitelist) ||
+	       STRING_IN_TABLE (ppd_option->keyword, finishing_option_whitelist))
 	{
 	  option->group = g_strdup ("FinishingPage");
 	}
@@ -4970,7 +4960,7 @@ handle_option (GtkPrinterOptionSet *set,
       gtk_printer_option_set_add (set, option);
     }
 
-  g_free (name);
+  g_free (option_name);
 }
 
 static void
@@ -4981,7 +4971,7 @@ handle_group (GtkPrinterOptionSet *set,
 	      GtkPrintSettings    *settings)
 {
   gint i;
-  gchar *name;
+  const gchar *name;
 
   /* Ignore installable options */
   name = ppd_group_name (toplevel_group);
@@ -5351,20 +5341,20 @@ cups_printer_get_options (GtkPrinter           *printer,
   if (ppd_file)
     {
       GtkPaperSize *paper_size;
-      ppd_option_t *option;
-      const gchar  *ppd_name;
+      ppd_option_t *ppd_option;
+      const gchar *ppd_name;
 
       ppdMarkDefaults (ppd_file);
 
       paper_size = gtk_page_setup_get_paper_size (page_setup);
 
-      option = ppdFindOption (ppd_file, "PageSize");
-      if (option)
+      ppd_option = ppdFindOption (ppd_file, "PageSize");
+      if (ppd_option)
 	{
 	  ppd_name = gtk_paper_size_get_ppd_name (paper_size);
 
 	  if (ppd_name)
-	    strncpy (option->defchoice, ppd_name, PPD_MAX_NAME);
+	    strncpy (ppd_option->defchoice, ppd_name, PPD_MAX_NAME);
 	  else
 	    {
 	      gchar *custom_name;
@@ -5383,7 +5373,7 @@ cups_printer_get_options (GtkPrinter           *printer,
 	       * 230.4x142.9"
                */
 	      custom_name = g_strdup_printf (_("Custom %s×%s"), width, height);
-	      strncpy (option->defchoice, custom_name, PPD_MAX_NAME);
+	      strncpy (ppd_option->defchoice, custom_name, PPD_MAX_NAME);
 	      g_free (custom_name);
 	    }
 	}
