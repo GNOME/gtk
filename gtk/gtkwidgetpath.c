@@ -332,15 +332,14 @@ gtk_widget_path_to_string (const GtkWidgetPath *path)
       if (elem->state)
         {
           GFlagsClass *fclass;
-          gint i;
 
           fclass = g_type_class_ref (GTK_TYPE_STATE_FLAGS);
-          for (i = 0; i < fclass->n_values; i++)
+          for (j = 0; j < fclass->n_values; j++)
             {
-              if (elem->state & fclass->values[i].value)
+              if (elem->state & fclass->values[j].value)
                 {
                   g_string_append_c (string, ':');
-                  g_string_append (string, fclass->values[i].value_nick);
+                  g_string_append (string, fclass->values[j].value_nick);
                 }
             }
           g_type_class_unref (fclass);
