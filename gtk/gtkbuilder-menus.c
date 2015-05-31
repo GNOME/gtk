@@ -163,11 +163,11 @@ gtk_builder_menu_start_element (GMarkupParseContext  *context,
         {
           const gchar *typestr;
           const gchar *name;
-          const gchar *context;
+          const gchar *ctxt;
 
           if (COLLECT (STRING,             "name", &name,
                        OPTIONAL | BOOLEAN, "translatable", &state->translatable,
-                       OPTIONAL | STRING,  "context", &context,
+                       OPTIONAL | STRING,  "context", &ctxt,
                        OPTIONAL | STRING,  "comments", NULL, /* ignore, just for translators */
                        OPTIONAL | STRING,  "type", &typestr))
             {
@@ -182,7 +182,7 @@ gtk_builder_menu_start_element (GMarkupParseContext  *context,
               state->type = typestr ? g_variant_type_new (typestr) : NULL;
               state->string = g_string_new (NULL);
               state->attribute = g_strdup (name);
-              state->context = g_strdup (context);
+              state->context = g_strdup (ctxt);
 
               gtk_builder_menu_push_frame (state, NULL, NULL);
             }
