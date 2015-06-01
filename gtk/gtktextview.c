@@ -2366,6 +2366,10 @@ gtk_text_view_flush_scroll (GtkTextView *text_view)
                                          scroll->xalign,
                                          scroll->yalign);
 
+  if (text_view->priv->text_handle)
+    gtk_text_view_update_handles (text_view,
+                                  _gtk_text_handle_get_mode (text_view->priv->text_handle));
+
   free_pending_scroll (scroll);
 
   return retval;
