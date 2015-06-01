@@ -463,59 +463,6 @@ gdk_wayland_drag_context_get_data_source (GdkDragContext *context)
   return GDK_WAYLAND_DRAG_CONTEXT (context)->data_source;
 }
 
-void
-gdk_wayland_drag_context_undo_grab (GdkDragContext *context)
-{
-  GdkEventSequence *sequence;
-  GdkModifierType state;
-  GdkDevice *device;
-  GdkEvent *event;
-  guint button;
-  gdouble x, y;
-
-  device = gdk_drag_context_get_device (context);
-  _gdk_wayland_device_get_last_implicit_grab_serial (GDK_WAYLAND_DEVICE (device), &sequence);
-  gdk_window_get_device_position_double (gdk_drag_context_get_source_window (context),
-                                         device, &x, &y, &state);
-
-  if (sequence)
-    {
-      event = gdk_event_new (GDK_TOUCH_END);
-      event->touch.window = g_object_ref (gdk_drag_context_get_source_window (context));
-      event->touch.send_event = TRUE;
-      event->touch.sequence = sequence;
-      event->touch.time = GDK_CURRENT_TIME;
-      event->touch.x = event->touch.x_root = x;
-      event->touch.y = event->touch.y_root = y;
-    }
-  else if (state & (GDK_BUTTON1_MASK | GDK_BUTTON2_MASK | GDK_BUTTON3_MASK))
-    {
-      if (state & GDK_BUTTON1_MASK)
-        button = 1;
-      else if (state & GDK_BUTTON2_MASK)
-        button = 2;
-      else if (state & GDK_BUTTON3_MASK)
-        button = 3;
-      else
-        return;
-
-      event = gdk_event_new (GDK_BUTTON_RELEASE);
-      event->button.window = g_object_ref (gdk_drag_context_get_source_window (context));
-      event->button.send_event = TRUE;
-      event->button.button = button;
-      event->button.time = GDK_CURRENT_TIME;
-      event->button.x = event->button.x_root = x;
-      event->button.y = event->button.y_root = y;
-    }
-  else
-    return;
-
-  gdk_event_set_device (event, device);
-  gdk_event_set_source_device (event, device);
-
-  _gdk_wayland_display_deliver_event (gdk_device_get_display (device), event);
-}
-
 GdkWindow *
 gdk_wayland_drag_context_get_dnd_window (GdkDragContext *context)
 {

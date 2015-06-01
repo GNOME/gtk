@@ -707,12 +707,7 @@ data_device_drop (void                  *data,
   local_dnd_owner = gdk_selection_owner_get_for_display (device->display, gdk_drag_get_selection (device->drop_context));
 
   if (local_dnd_owner)
-    {
-      GdkDragContext *source_context;
-
-      source_context = gdk_wayland_drag_context_lookup_by_source_window (local_dnd_owner);
-      gdk_wayland_drag_context_undo_grab (source_context);
-    }
+    gdk_wayland_device_unset_grab (device->pointer);
 
   _gdk_wayland_drag_context_emit_event (device->drop_context,
                                         GDK_DROP_START, GDK_CURRENT_TIME);
@@ -2102,4 +2097,58 @@ gdk_wayland_device_set_selection (GdkDevice             *gdk_device,
 
   wl_data_device_set_selection (device->data_device, source,
                                 _gdk_wayland_display_get_serial (display_wayland));
+}
+
+void
+gdk_wayland_device_unset_grab (GdkDevice *gdk_device)
+{
+  GdkWaylandDeviceData *device;
+  GdkEventSequence *sequence;
+  GdkModifierType state;
+  GdkEvent *event;
+  guint button;
+  gdouble x, y;
+
+  device = GDK_WAYLAND_DEVICE (gdk_device)->device;
+  _gdk_wayland_device_get_last_implicit_grab_serial (GDK_WAYLAND_DEVICE (gdk_device), &sequence);
+  gdk_window_get_device_position_double (device->pointer_grab_window,
+                                         gdk_device, &x, &y, &state);
+
+  if (sequence)
+    {
+      event = gdk_event_new (GDK_TOUCH_END);
+      event->touch.window = g_object_ref (device->pointer_grab_window);
+      event->touch.send_event = TRUE;
+      event->touch.sequence = sequence;
+      event->touch.time = GDK_CURRENT_TIME;
+      event->touch.x = event->touch.x_root = x;
+      event->touch.y = event->touch.y_root = y;
+    }
+  else if (state & (GDK_BUTTON1_MASK | GDK_BUTTON2_MASK | GDK_BUTTON3_MASK))
+    {
+      if (state & GDK_BUTTON1_MASK)
+        button = 1;
+      else if (state & GDK_BUTTON2_MASK)
+        button = 2;
+      else if (state & GDK_BUTTON3_MASK)
+        button = 3;
+      else
+        return;
+
+      event = gdk_event_new (GDK_BUTTON_RELEASE);
+      event->button.window = g_object_ref (device->pointer_grab_window);
+      event->button.send_event = TRUE;
+      event->button.button = button;
+      event->button.time = GDK_CURRENT_TIME;
+      event->button.x = event->button.x_root = x;
+      event->button.y = event->button.y_root = y;
+    }
+  else
+    return;
+
+  device->button_modifiers = 0;
+  gdk_event_set_device (event, gdk_device);
+  gdk_event_set_source_device (event, gdk_device);
+
+  _gdk_wayland_display_deliver_event (gdk_device_get_display (gdk_device), event);
 }

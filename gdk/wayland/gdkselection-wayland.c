@@ -651,7 +651,7 @@ data_source_send (void                  *data,
 
   if (context)
     {
-      gdk_wayland_drag_context_undo_grab (context);
+      gdk_wayland_device_unset_grab (gdk_drag_context_get_device (context));
       _gdk_wayland_drag_context_emit_event (context, GDK_DROP_FINISHED,
                                             GDK_CURRENT_TIME);
     }
@@ -679,7 +679,7 @@ data_source_cancelled (void                  *data,
       context = gdk_wayland_drag_context_lookup_by_data_source (source);
 
       if (context)
-        gdk_wayland_drag_context_undo_grab (context);
+        gdk_wayland_device_unset_grab (gdk_drag_context_get_device (context));
     }
   else if (source == wayland_selection->clipboard_source)
     gdk_wayland_selection_unset_data_source (display, atoms[ATOM_CLIPBOARD]);
