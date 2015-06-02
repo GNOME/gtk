@@ -314,7 +314,7 @@
     <ResourceCompile Include="..\..\..\gdk\win32\rc\gdk.rc" />
   </ItemGroup>
   <ItemGroup>
-#include "gdk.vs10.sourcefiles"
+#include "libgdk.vs10.sourcefiles"
     <ClCompile Include="..\..\..\gdk\gdkkeynames.c" />
   </ItemGroup>
   <ItemGroup>
