@@ -17,7 +17,7 @@
   -GtkWidget-focus-padding: 2;
   -GtkWidget-focus-line-width: 1;
   -GtkWidget-text-handle-width: 20;
-  -GtkWidget-text-handle-height: 20;
+  -GtkWidget-text-handle-height: 24;
   -GtkDialog-button-spacing: 4;
   -GtkDialog-action-area-border: 0;
   -GtkStatusbar-shadow-type: none;
@@ -2061,10 +2061,31 @@ column-header .titlebar .button.titlebutton,
   border-style: none; }
   .entry.cursor-handle.top,
   .cursor-handle.top {
-    -gtk-icon-source: -gtk-icontheme("selection-start-symbolic"); }
+    -gtk-icon-source: -gtk-scaled(url("assets/text-select-top-dark.png"), url("assets/text-select-top-dark@2.png")); }
   .entry.cursor-handle.bottom,
   .cursor-handle.bottom {
-    -gtk-icon-source: -gtk-icontheme("selection-end-symbolic"); }
+    -gtk-icon-source: -gtk-scaled(url("assets/text-select-bottom-dark.png"), url("assets/text-select-bottom-dark@2.png")); }
+  .entry.cursor-handle.insertion-cursor,
+  .cursor-handle.insertion-cursor {
+    -gtk-icon-source: -gtk-scaled(url("assets/slider-horz-scale-has-marks-above-dark.png"), url("assets/slider-horz-scale-has-marks-above-dark@2.png")); }
+  .entry.cursor-handle.top:hover,
+  .cursor-handle.top:hover {
+    -gtk-icon-source: -gtk-scaled(url("assets/text-select-top-hover-dark.png"), url("assets/text-select-top-hover-dark@2.png")); }
+  .entry.cursor-handle.bottom:hover,
+  .cursor-handle.bottom:hover {
+    -gtk-icon-source: -gtk-scaled(url("assets/text-select-bottom-hover-dark.png"), url("assets/text-select-bottom-hover-dark@2.png")); }
+  .entry.cursor-handle.insertion-cursor:hover,
+  .cursor-handle.insertion-cursor:hover {
+    -gtk-icon-source: -gtk-scaled(url("assets/slider-horz-scale-has-marks-above-hover-dark.png"), url("assets/slider-horz-scale-has-marks-above-hover-dark@2.png")); }
+  .entry.cursor-handle.top:active,
+  .cursor-handle.top:active {
+    -gtk-icon-source: -gtk-scaled(url("assets/text-select-top-active-dark.png"), url("assets/text-select-top-active-dark@2.png")); }
+  .entry.cursor-handle.bottom:active,
+  .cursor-handle.bottom:active {
+    -gtk-icon-source: -gtk-scaled(url("assets/text-select-bottom-active-dark.png"), url("assets/text-select-bottom-active-dark@2.png")); }
+  .entry.cursor-handle.insertion-cursor:active,
+  .cursor-handle.insertion-cursor:active {
+    -gtk-icon-source: -gtk-scaled(url("assets/slider-horz-scale-has-marks-above-active-dark.png"), url("assets/slider-horz-scale-has-marks-above-active-dark@2.png")); }
 
 /*****************
  * Notebooks and *

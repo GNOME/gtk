@@ -3,6 +3,7 @@
 }
 
 $ease-out-quad: cubic-bezier(0.25, 0.46, 0.45, 0.94);
+$asset_suffix: if($variant=='dark', '-dark', '');
 
 * {
   padding: 0;
@@ -36,7 +37,7 @@ $ease-out-quad: cubic-bezier(0.25, 0.46, 0.45, 0.94);
   -GtkWidget-focus-line-width: 1; //
 
   -GtkWidget-text-handle-width: 20;
-  -GtkWidget-text-handle-height: 20;
+  -GtkWidget-text-handle-height: 24;
 
   -GtkDialog-button-spacing: 4;
   -GtkDialog-action-area-border: 0;
@@ -1582,8 +1583,23 @@ column-header.button.dnd { // for treeview-like derive widgets
   background-image: none;
   box-shadow: none;
   border-style: none;
-  &.top { -gtk-icon-source: -gtk-icontheme('selection-start-symbolic'); }
-  &.bottom { -gtk-icon-source: -gtk-icontheme('selection-end-symbolic'); }
+  @each $s,$as in ('',''),
+                      (':hover','-hover'),
+                      (':active','-active') { //no need for insensitive and backdrop
+                        &.top#{$s} { 
+                          $_url: 'assets/text-select-top#{$as}#{$asset_suffix}';
+                          -gtk-icon-source: -gtk-scaled(url('#{$_url}.png'),
+                                            url('#{$_url}@2.png')); }
+                        &.bottom#{$s} { 
+                          $_url: 'assets/text-select-bottom#{$as}#{$asset_suffix}';
+                          -gtk-icon-source: -gtk-scaled(url('#{$_url}.png'),
+                                            url('#{$_url}@2.png')); }
+                        &.insertion-cursor#{$s} {
+                          $_url: 'assets/slider-horz-scale-has-marks-above#{$as}#{$asset_suffix}';
+                          -gtk-icon-source: -gtk-scaled(url('#{$_url}.png'),
+                                            url('#{$_url}@2.png'));
+                        }
+  }
 }
 
 /*****************
@@ -2097,7 +2113,6 @@ GtkSwitch {
 // draw regular check and radio items using our PNG assets
 // all assets are rendered from assets.svg. never add pngs directly
 
-$asset_suffix: if($variant=='dark', '-dark', '');
 @each $w,$a in ('check', 'checkbox'),
                ('radio','radio') {
 
@@ -2328,7 +2343,6 @@ GtkCheckButton.text-button, GtkRadioButton.text-button {
   }
 }
 
-$asset_suffix: if($variant=='dark', '-dark', '');
 @each $d,$dn in ('', 'horz'),
                 ('.vertical', 'vert') {
   @each $w,$we in  ('scale-has-marks-below','scale_marks_below'),
