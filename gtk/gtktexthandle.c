@@ -221,6 +221,15 @@ gtk_text_handle_widget_event (GtkWidget     *widget,
       priv->windows[pos].dragged = FALSE;
       gtk_text_handle_unset_state (handle, pos, GTK_STATE_FLAG_ACTIVE);
     }
+  else if (event->type == GDK_ENTER_NOTIFY)
+    gtk_text_handle_set_state (handle, pos, GTK_STATE_FLAG_PRELIGHT);
+  else if (event->type == GDK_LEAVE_NOTIFY)
+    {
+      if (!priv->windows[pos].dragged &&
+          (event->crossing.mode == GDK_CROSSING_NORMAL ||
+           event->crossing.mode == GDK_CROSSING_UNGRAB))
+        gtk_text_handle_unset_state (handle, pos, GTK_STATE_FLAG_PRELIGHT);
+    }
   else if (event->type == GDK_MOTION_NOTIFY &&
            event->motion.state & GDK_BUTTON1_MASK &&
            priv->windows[pos].dragged)
@@ -277,6 +286,8 @@ _gtk_text_handle_ensure_widget (GtkTextHandle         *handle,
       gtk_widget_set_events (widget,
                              GDK_BUTTON_PRESS_MASK |
                              GDK_BUTTON_RELEASE_MASK |
+                             GDK_ENTER_NOTIFY_MASK |
+                             GDK_LEAVE_NOTIFY_MASK |
                              GDK_POINTER_MOTION_MASK);
 
       g_signal_connect (widget, "draw",
