@@ -1149,7 +1149,7 @@ places_sidebar_open_location_cb (GtkPlacesSidebar *sidebar, GFile *location, Gtk
   GtkFileChooserWidgetPrivate *priv = impl->priv;
   gboolean clear_entry;
 
-  /* In the Save modes, we want to preserve what the uesr typed in the filename
+  /* In the Save modes, we want to preserve what the user typed in the filename
    * entry, so that he may choose another folder without erasing his typed name.
    */
   if (priv->location_entry
@@ -1158,12 +1158,6 @@ places_sidebar_open_location_cb (GtkPlacesSidebar *sidebar, GFile *location, Gtk
     clear_entry = TRUE;
   else
     clear_entry = FALSE;
-
-  /* FIXME-places-sidebar:
-   *
-   * GtkPlacesSidebar doesn't have a Search item anymore.  We should put that function in a toolbar-like button, like
-   * in Nautilus, and do operation_mode_set (impl, OPERATION_MODE_SEARCH);
-   */
 
   location_mode_set (impl, LOCATION_MODE_PATH_BAR);
 
