@@ -1572,7 +1572,6 @@ gtk_paned_create_child_window (GtkPaned  *paned,
   window = gdk_window_new (gtk_widget_get_window (widget),
                            &attributes, attributes_mask);
   gtk_widget_register_window (widget, window);
-  gtk_style_context_set_background (gtk_widget_get_style_context (widget), window);
 
   if (child)
     gtk_widget_set_parent_window (child, window);
@@ -1698,12 +1697,19 @@ gtk_paned_draw (GtkWidget *widget,
 {
   GtkPaned *paned = GTK_PANED (widget);
   GtkPanedPrivate *priv = paned->priv;
+  GtkStyleContext *context = gtk_widget_get_style_context (widget);
+  GtkAllocation allocation;
+
+  gtk_widget_get_allocation (widget, &allocation);
+  gtk_render_background (context, cr,
+                         0, 0,
+                         allocation.width, allocation.height);
 
   if (gtk_cairo_should_draw_window (cr, priv->child1_window))
     {
       cairo_save (cr);
       gtk_cairo_transform_to_window (cr, widget, priv->child1_window);
-      gtk_render_background (gtk_widget_get_style_context (widget),
+      gtk_render_background (context,
                              cr,
                              0, 0,
                              gdk_window_get_width (priv->child1_window),
@@ -1715,7 +1721,7 @@ gtk_paned_draw (GtkWidget *widget,
     {
       cairo_save (cr);
       gtk_cairo_transform_to_window (cr, widget, priv->child2_window);
-      gtk_render_background (gtk_widget_get_style_context (widget),
+      gtk_render_background (context,
                              cr,
                              0, 0,
                              gdk_window_get_width (priv->child2_window),
@@ -1727,12 +1733,8 @@ gtk_paned_draw (GtkWidget *widget,
       priv->child1 && gtk_widget_get_visible (priv->child1) &&
       priv->child2 && gtk_widget_get_visible (priv->child2))
     {
-      GtkStyleContext *context;
       GtkStateFlags state;
-      GtkAllocation allocation;
 
-      gtk_widget_get_allocation (widget, &allocation);
-      context = gtk_widget_get_style_context (widget);
       state = gtk_widget_get_state_flags (widget);
 
       if (gtk_widget_is_focus (widget))
