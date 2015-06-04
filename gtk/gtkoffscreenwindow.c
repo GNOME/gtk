@@ -188,9 +188,6 @@ gtk_offscreen_window_realize (GtkWidget *widget)
   child = gtk_bin_get_child (bin);
   if (child)
     gtk_widget_set_parent_window (child, window);
-
-  gtk_style_context_set_background (gtk_widget_get_style_context (widget),
-                                    window);
 }
 
 static void
