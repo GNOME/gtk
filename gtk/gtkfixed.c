@@ -94,6 +94,7 @@ static void gtk_fixed_get_preferred_height (GtkWidget *widget,
                                             gint      *natural);
 static void gtk_fixed_size_allocate (GtkWidget        *widget,
                                      GtkAllocation    *allocation);
+static void gtk_fixed_style_updated (GtkWidget        *widget);
 static gboolean gtk_fixed_draw      (GtkWidget        *widget,
                                      cairo_t          *cr);
 static void gtk_fixed_add           (GtkContainer     *container,
@@ -133,6 +134,7 @@ gtk_fixed_class_init (GtkFixedClass *class)
   widget_class->get_preferred_height = gtk_fixed_get_preferred_height;
   widget_class->size_allocate = gtk_fixed_size_allocate;
   widget_class->draw = gtk_fixed_draw;
+  widget_class->style_updated = gtk_fixed_style_updated;
 
   container_class->add = gtk_fixed_add;
   container_class->remove = gtk_fixed_remove;
@@ -345,6 +347,31 @@ gtk_fixed_get_child_property (GtkContainer *container,
 }
 
 static void
+set_background (GtkWidget *widget)
+{
+  if (gtk_widget_get_realized (widget))
+    {
+      /* We still need to call gtk_style_context_set_background() here for
+       * GtkFixed, since subclasses like EmacsFixed depend on the X window
+       * background to be set.
+       * This should be revisited next time we have a major API break.
+       */
+      G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
+      gtk_style_context_set_background (gtk_widget_get_style_context (widget),
+                                        gtk_widget_get_window (widget));
+      G_GNUC_END_IGNORE_DEPRECATIONS;
+    }
+}
+
+static void
+gtk_fixed_style_updated (GtkWidget *widget)
+{
+  GTK_WIDGET_CLASS (gtk_fixed_parent_class)->style_updated (widget);
+
+  set_background (widget);
+}
+
+static void
 gtk_fixed_realize (GtkWidget *widget)
 {
   GtkAllocation allocation;
@@ -377,8 +404,7 @@ gtk_fixed_realize (GtkWidget *widget)
       gtk_widget_set_window (widget, window);
       gtk_widget_register_window (widget, window);
 
-      gtk_style_context_set_background (gtk_widget_get_style_context (widget),
-                                        window);
+      set_background (widget);
     }
 }
 
