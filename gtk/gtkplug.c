@@ -235,6 +235,8 @@ static void
 gtk_plug_init (GtkPlug *plug)
 {
   plug->priv = gtk_plug_get_instance_private (plug);
+
+  gtk_window_set_decorated (GTK_WINDOW (plug), FALSE);
 }
 
 /**
