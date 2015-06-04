@@ -168,21 +168,30 @@ gtk_text_handle_widget_draw (GtkWidget     *widget,
 
 static void
 gtk_text_handle_set_state (GtkTextHandle *handle,
+                           gint           pos,
                            GtkStateFlags  state)
 {
-  GtkTextHandlePrivate *priv;
-  gint i;
+  GtkTextHandlePrivate *priv = handle->priv;
 
-  priv = handle->priv;
+  if (!priv->windows[pos].widget)
+    return;
 
-  for (i = 0; i <= GTK_TEXT_HANDLE_POSITION_SELECTION_START; i++)
-    {
-      if (!priv->windows[i].widget)
-        continue;
+  gtk_widget_set_state_flags (priv->windows[pos].widget, state, FALSE);
+  gtk_widget_queue_draw (priv->windows[pos].widget);
+}
 
-      gtk_widget_set_state_flags (priv->windows[i].widget, state, TRUE);
-      gtk_widget_queue_draw (priv->windows[i].widget);
-    }
+static void
+gtk_text_handle_unset_state (GtkTextHandle *handle,
+                             gint           pos,
+                             GtkStateFlags  state)
+{
+  GtkTextHandlePrivate *priv = handle->priv;
+
+  if (!priv->windows[pos].widget)
+    return;
+
+  gtk_widget_unset_state_flags (priv->windows[pos].widget, state);
+  gtk_widget_queue_draw (priv->windows[pos].widget);
 }
 
 static gboolean
@@ -204,13 +213,13 @@ gtk_text_handle_widget_event (GtkWidget     *widget,
       priv->windows[pos].dx = event->button.x;
       priv->windows[pos].dy = event->button.y;
       priv->windows[pos].dragged = TRUE;
-      gtk_text_handle_set_state (handle, GTK_STATE_FLAG_ACTIVE);
+      gtk_text_handle_set_state (handle, pos, GTK_STATE_FLAG_ACTIVE);
     }
   else if (event->type == GDK_BUTTON_RELEASE)
     {
       g_signal_emit (handle, signals[DRAG_FINISHED], 0, pos);
       priv->windows[pos].dragged = FALSE;
-      gtk_text_handle_set_state (handle, GTK_STATE_FLAG_NORMAL);
+      gtk_text_handle_unset_state (handle, pos, GTK_STATE_FLAG_ACTIVE);
     }
   else if (event->type == GDK_MOTION_NOTIFY &&
            event->motion.state & GDK_BUTTON1_MASK &&
