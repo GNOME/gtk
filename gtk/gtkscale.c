@@ -1127,11 +1127,6 @@ gtk_scale_draw (GtkWidget *widget,
                         "value-spacing", &value_spacing,
                         NULL);
 
-  /* We need to chain up _first_ so the various geometry members of
-   * GtkRange struct are updated.
-   */
-  GTK_WIDGET_CLASS (gtk_scale_parent_class)->draw (widget, cr);
-
   if (priv->marks)
     {
       GtkOrientation orientation;
@@ -1161,15 +1156,15 @@ gtk_scale_draw (GtkWidget *widget,
               x1 = marks[i];
               if (mark->position == GTK_POS_TOP)
                 {
-                  y1 = range_rect.y;
-                  y2 = y1 - slider_width / 4;
+                  y1 = range_rect.y + slider_width / 4;
+                  y2 = range_rect.y;
                   min_pos = min_pos_before;
                   max_pos = find_next_pos (widget, m, marks + i, GTK_POS_TOP) - min_sep;
                 }
               else
                 {
-                  y1 = range_rect.y + range_rect.height;
-                  y2 = y1 + slider_width / 4;
+                  y1 = range_rect.y + range_rect.height - slider_width / 4;
+                  y2 = range_rect.y + range_rect.height;
                   min_pos = min_pos_after;
                   max_pos = find_next_pos (widget, m, marks + i, GTK_POS_BOTTOM) - min_sep;
                 }
@@ -1213,15 +1208,15 @@ gtk_scale_draw (GtkWidget *widget,
             {
               if (mark->position == GTK_POS_TOP)
                 {
-                  x1 = range_rect.x;
-                  x2 = range_rect.x - slider_width / 4;
+                  x1 = range_rect.x + slider_width / 4;
+                  x2 = range_rect.x;
                   min_pos = min_pos_before;
                   max_pos = find_next_pos (widget, m, marks + i, GTK_POS_TOP) - min_sep;
                 }
               else
                 {
-                  x1 = range_rect.x + range_rect.width;
-                  x2 = range_rect.x + range_rect.width + slider_width / 4;
+                  x1 = range_rect.x + range_rect.width - slider_width / 4;
+                  x2 = range_rect.x + range_rect.width;
                   min_pos = min_pos_after;
                   max_pos = find_next_pos (widget, m, marks + i, GTK_POS_BOTTOM) - min_sep;
                 }
@@ -1267,6 +1262,8 @@ gtk_scale_draw (GtkWidget *widget,
       g_object_unref (layout);
       g_free (marks);
     }
+
+  GTK_WIDGET_CLASS (gtk_scale_parent_class)->draw (widget, cr);
 
   if (priv->draw_value)
     {
