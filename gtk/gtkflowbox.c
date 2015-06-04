@@ -3092,7 +3092,6 @@ gtk_flow_box_realize (GtkWidget *widget)
                            &attributes, GDK_WA_X | GDK_WA_Y);
   gtk_widget_register_window (GTK_WIDGET (box), window);
   gtk_widget_set_window (GTK_WIDGET (box), window);
-  gtk_style_context_set_background (gtk_widget_get_style_context (GTK_WIDGET (box)), window);
 }
 
 static void
