@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Tajik Gnome\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-06-01 21:44+0000\n"
-"PO-Revision-Date: 2015-06-02 10:19+0500\n"
+"POT-Creation-Date: 2015-06-03 21:44+0000\n"
+"PO-Revision-Date: 2015-06-04 10:40+0500\n"
 "Last-Translator: Victor Ibragimov <victor.ibragimov@gmail.com>\n"
 "Language-Team: \n"
 "Language: tg\n"
@@ -84,7 +84,7 @@ msgstr "Байрақчаҳои ислоҳи хатоҳои GDK барои бек
 
 #: gdk/gdkwindow.c:2739
 msgid "GL support disabled via GDK_DEBUG"
-msgstr ""
+msgstr "Дастгирии GL ба воситаи GDK_DEBUG ғайрифаъол шуд"
 
 #.
 #. * Translators, the strings in the “keyboard label” context are
@@ -428,7 +428,7 @@ msgctxt "keyboard label"
 msgid "Suspend"
 msgstr "Suspend (Таваққуф)"
 
-#: gdk/mir/gdkmirglcontext.c:48 gdk/mir/gdkmirwindowimpl.c:1407
+#: gdk/mir/gdkmirglcontext.c:48 gdk/mir/gdkmirwindowimpl.c:1261
 #: gdk/wayland/gdkglcontext-wayland.c:369 gdk/win32/gdkglcontext-win32.c:527
 #: gdk/x11/gdkglcontext-x11.c:1175
 #, fuzzy
@@ -440,16 +440,16 @@ msgstr "Ягон профил дастрас нест"
 #: gdk/win32/gdkglcontext-win32.c:492 gdk/x11/gdkglcontext-x11.c:631
 #: gdk/x11/gdkglcontext-x11.c:675
 msgid "Unable to create a GL context"
-msgstr ""
+msgstr "Муҳтавои GL эҷод карда намешавад"
 
-#: gdk/mir/gdkmirwindowimpl.c:1369 gdk/mir/gdkmirwindowimpl.c:1379
+#: gdk/mir/gdkmirwindowimpl.c:1223 gdk/mir/gdkmirwindowimpl.c:1233
 #: gdk/wayland/gdkglcontext-wayland.c:330
 #: gdk/wayland/gdkglcontext-wayland.c:340 gdk/win32/gdkglcontext-win32.c:464
 #: gdk/x11/gdkglcontext-x11.c:869
 msgid "No available configurations for the given pixel format"
 msgstr ""
 
-#: gdk/mir/gdkmirwindowimpl.c:1415
+#: gdk/mir/gdkmirwindowimpl.c:1269
 msgid "3.2 core GL profile is not available on EGL implementation"
 msgstr ""
 
@@ -1246,7 +1246,7 @@ msgstr ""
 #: gtk/gtkmountoperation.c:543 gtk/gtkpagesetupunixdialog.c:196
 #: gtk/gtkprintbackend.c:760 gtk/gtkprinteroptionwidget.c:545
 #: gtk/gtkprintunixdialog.c:669 gtk/gtkprintunixdialog.c:742
-#: gtk/gtkwindow.c:12000 gtk/inspector/css-editor.c:199
+#: gtk/gtkwindow.c:12012 gtk/inspector/css-editor.c:199
 #: gtk/ui/gtkappchooserdialog.ui:61 gtk/ui/gtkassistant.ui:136
 #: gtk/ui/gtkcolorchooserdialog.ui:34 gtk/ui/gtkfontchooserdialog.ui:31
 msgid "_Cancel"
@@ -1295,7 +1295,7 @@ msgid "_Apply"
 msgstr "_Татбиқ кардан"
 
 #: gtk/deprecated/gtkfontsel.c:1698 gtk/gtkmessagedialog.c:934
-#: gtk/gtkmessagedialog.c:956 gtk/gtkprintbackend.c:761 gtk/gtkwindow.c:12001
+#: gtk/gtkmessagedialog.c:956 gtk/gtkprintbackend.c:761 gtk/gtkwindow.c:12013
 #: gtk/inspector/classes-list.c:127
 msgid "_OK"
 msgstr "_OK"
@@ -1437,26 +1437,23 @@ msgstr ""
 
 #: gtk/encodesymbolic.c:266
 #, c-format
-#| msgid "Invalid file name"
 msgid "Invalid size %s\n"
 msgstr "Андозаи беэътибор: %s\n"
 
 #: gtk/encodesymbolic.c:279 gtk/gtk-builder-tool.c:537
 #, c-format
-#| msgid "Cannot open display: %s"
 msgid "Can't load file: %s\n"
 msgstr "Файл бор намешавад: %s\n"
 
 #: gtk/encodesymbolic.c:307 gtk/encodesymbolic.c:313
 #, c-format
-#| msgid "Failed to open file %s : %s\n"
 msgid "Can't save file %s: %s\n"
 msgstr "Файли %s захира намешавад: %s\n"
 
 #: gtk/encodesymbolic.c:319
 #, c-format
 msgid "Can't close stream"
-msgstr ""
+msgstr "Ҷараён пӯшида намешавад"
 
 #. Translators: this is the license preamble; the string at the end
 #. * contains the name of the license as link text.
@@ -1566,19 +1563,19 @@ msgstr "Вебсайт"
 msgid "About %s"
 msgstr "Дар бораи %s"
 
-#: gtk/gtkaboutdialog.c:2317
+#: gtk/gtkaboutdialog.c:2316
 msgid "Created by"
 msgstr "Эҷодшуда бо"
 
-#: gtk/gtkaboutdialog.c:2320
+#: gtk/gtkaboutdialog.c:2319
 msgid "Documented by"
 msgstr "Санадгузоришуда бо "
 
-#: gtk/gtkaboutdialog.c:2330
+#: gtk/gtkaboutdialog.c:2329
 msgid "Translated by"
 msgstr "Тарҷумашуда бо:"
 
-#: gtk/gtkaboutdialog.c:2335
+#: gtk/gtkaboutdialog.c:2334
 msgid "Artwork by"
 msgstr "Асар"
 
@@ -1675,15 +1672,14 @@ msgstr "Ягон барнома барои “%s” ёфт нашуд"
 #. Translators: %s is a file type description
 #: gtk/gtkappchooserdialog.c:215
 #, c-format
-#| msgid "Opening %s"
 msgid "Opening “%s” files."
 msgstr "Кушодани файлҳои “%s”."
 
 #: gtk/gtkappchooserdialog.c:217
-#, fuzzy, c-format
+#, c-format
 #| msgid "Select an application for “%s” files"
 msgid "No applications found for “%s” files"
-msgstr "Барномаеро барои файлҳои “%s” интихоб кунед"
+msgstr "Ягон барнома барои файлҳои “%s” ёфт нашуд"
 
 #: gtk/gtkappchooserdialog.c:310
 msgid "Forget association"
@@ -1698,10 +1694,9 @@ msgid "Default Application"
 msgstr "Барномаи пешфарз"
 
 #: gtk/gtkappchooserwidget.c:672
-#, fuzzy, c-format
-#| msgid "No applications available to open “%s”"
+#, c-format
 msgid "No applications found for “%s”."
-msgstr "Ягон барнома барои кушодани “%s” вуҷуд надорад"
+msgstr "Ягон барнома барои “%s” ёфт нашуд."
 
 #: gtk/gtkappchooserwidget.c:755
 msgid "Recommended Applications"
@@ -2195,30 +2190,30 @@ msgstr "_Рост:"
 msgid "Paper Margins"
 msgstr "Ҳошияҳои саҳифа"
 
-#: gtk/gtkentry.c:9597 gtk/gtkentry.c:9750 gtk/gtklabel.c:6611
-#: gtk/gtktextview.c:9018 gtk/gtktextview.c:9206
+#: gtk/gtkentry.c:9600 gtk/gtkentry.c:9753 gtk/gtklabel.c:6611
+#: gtk/gtktextview.c:9022 gtk/gtktextview.c:9210
 msgid "Cu_t"
 msgstr "_Буридан"
 
-#: gtk/gtkentry.c:9601 gtk/gtkentry.c:9753 gtk/gtklabel.c:6612
-#: gtk/gtktextview.c:9022 gtk/gtktextview.c:9210
+#: gtk/gtkentry.c:9604 gtk/gtkentry.c:9756 gtk/gtklabel.c:6612
+#: gtk/gtktextview.c:9026 gtk/gtktextview.c:9214
 msgid "_Copy"
 msgstr "_Нусха бардоштан"
 
-#: gtk/gtkentry.c:9605 gtk/gtkentry.c:9756 gtk/gtklabel.c:6613
-#: gtk/gtktextview.c:9024 gtk/gtktextview.c:9212
+#: gtk/gtkentry.c:9608 gtk/gtkentry.c:9759 gtk/gtklabel.c:6613
+#: gtk/gtktextview.c:9028 gtk/gtktextview.c:9216
 msgid "_Paste"
 msgstr "_Гузоштан"
 
-#: gtk/gtkentry.c:9608 gtk/gtklabel.c:6615 gtk/gtktextview.c:9027
+#: gtk/gtkentry.c:9611 gtk/gtklabel.c:6615 gtk/gtktextview.c:9031
 msgid "_Delete"
 msgstr "_Нест кардан"
 
-#: gtk/gtkentry.c:9619 gtk/gtklabel.c:6624 gtk/gtktextview.c:9041
+#: gtk/gtkentry.c:9622 gtk/gtklabel.c:6624 gtk/gtktextview.c:9045
 msgid "Select _All"
 msgstr "Ҳамаро интихоб _кардан"
 
-#: gtk/gtkentry.c:10839
+#: gtk/gtkentry.c:10842
 msgid "Caps Lock is on"
 msgstr "Caps Lock фаъол аст"
 
@@ -2304,16 +2299,12 @@ msgid "The folder contents could not be displayed"
 msgstr "Мӯҳтавои ҷузвдон намоиш дода намешавад"
 
 #: gtk/gtkfilechooserwidget.c:955
-#, fuzzy
-#| msgid "Shortcut %s already exists"
 msgid "A folder with that name already exists"
-msgstr "Миёнбури %s аллакай вуҷуд дорад"
+msgstr "Ҷузвдон бо ин ном аллакай вуҷуд дорад"
 
 #: gtk/gtkfilechooserwidget.c:957
-#, fuzzy
-#| msgid "Shortcut %s already exists"
 msgid "A file with that name already exists"
-msgstr "Миёнбури %s аллакай вуҷуд дорад"
+msgstr "Файл бо ин ном аллакай вуҷуд дорад"
 
 #: gtk/gtkfilechooserwidget.c:988
 #, fuzzy
@@ -2329,7 +2320,7 @@ msgstr "Ҷузвдон эҷод карда намешавад"
 
 #: gtk/gtkfilechooserwidget.c:994
 msgid "Folder names cannot contain “/”"
-msgstr ""
+msgstr "Номҳои ҷузвдон бояд аломати “/”-ро дар бар нагиранд"
 
 #: gtk/gtkfilechooserwidget.c:1509
 msgid "Could not select file"
@@ -2361,7 +2352,7 @@ msgstr "Намоиш додани _сутуни андоза"
 
 #: gtk/gtkfilechooserwidget.c:1764
 msgid "Sort _Folders before Files"
-msgstr ""
+msgstr "Мураттаб кардани _ҷузвдонҳо пеш аз файлҳо"
 
 #. this is the header for the location column in the print dialog
 #: gtk/gtkfilechooserwidget.c:2031 gtk/inspector/style-prop-list.ui:118
@@ -2476,7 +2467,7 @@ msgstr "Интихоби шрифт"
 #: gtk/gtkfontbutton.c:1209 gtk/inspector/general.c:226
 #: gtk/inspector/general.c:227 gtk/inspector/gestures.c:128
 #: gtk/inspector/prop-editor.c:1200 gtk/inspector/size-groups.c:252
-#: modules/printbackends/cups/gtkprintbackendcups.c:5226
+#: modules/printbackends/cups/gtkprintbackendcups.c:5216
 msgid "None"
 msgstr "Ҳеҷ"
 
@@ -2490,16 +2481,16 @@ msgstr "Маълумоти принтер гирифта нашуд"
 msgid "Application menu"
 msgstr "Менюи барнома"
 
-#: gtk/gtkheaderbar.c:479 gtk/gtkwindow.c:8661
+#: gtk/gtkheaderbar.c:479 gtk/gtkwindow.c:8673
 msgid "Close"
 msgstr "Пӯшидан"
 
-#: gtk/gtkicontheme.c:2314 gtk/gtkicontheme.c:2378
+#: gtk/gtkicontheme.c:2313 gtk/gtkicontheme.c:2377
 #, c-format
 msgid "Icon '%s' not present in theme %s"
 msgstr "Нишонаи '%s' дар мавзӯи %s мавҷуд нест"
 
-#: gtk/gtkicontheme.c:4016 gtk/gtkicontheme.c:4383
+#: gtk/gtkicontheme.c:4015 gtk/gtkicontheme.c:4382
 msgid "Failed to load icon"
 msgstr "Нишона бор карда нашуд"
 
@@ -2857,7 +2848,7 @@ msgstr "Ҷойгиршавиро ворид кунед"
 
 #: gtk/gtkplacessidebar.c:1005
 msgid "Manually enter a location"
-msgstr ""
+msgstr "Ҷойгиршавиеро ба таври дастӣ ворид намоед"
 
 #: gtk/gtkplacessidebar.c:1016
 msgid "Trash"
@@ -2966,7 +2957,6 @@ msgid "Name"
 msgstr "Ном"
 
 #: gtk/gtkplacessidebar.c:2655
-#| msgid "Rename…"
 msgid "_Rename"
 msgstr "_Иваз кардани ном"
 
@@ -3111,7 +3101,7 @@ msgstr "Бо хатогӣ ба анҷом расид"
 msgid "Preparing %d"
 msgstr "Омодасозии  %d"
 
-#: gtk/gtkprintoperation.c:2351 gtk/gtkprintoperation.c:2985
+#: gtk/gtkprintoperation.c:2351 gtk/gtkprintoperation.c:2984
 #, c-format
 msgid "Preparing"
 msgstr "Омодасозӣ"
@@ -3121,12 +3111,12 @@ msgstr "Омодасозӣ"
 msgid "Printing %d"
 msgstr "%d чоп шуда истодааст"
 
-#: gtk/gtkprintoperation.c:3016
+#: gtk/gtkprintoperation.c:3015
 #, c-format
 msgid "Error creating print preview"
 msgstr "Ҳангоми эҷодкунии пешнамоиши чоп хатогӣ ба вуҷуд омадааст"
 
-#: gtk/gtkprintoperation.c:3019
+#: gtk/gtkprintoperation.c:3018
 #, c-format
 msgid "The most probable reason is that a temporary file could not be created."
 msgstr ""
@@ -3215,42 +3205,42 @@ msgstr "Маълумоти принтер гирифта шуда истодаа
 #. * multiple pages on a sheet when printing
 #.
 #: gtk/gtkprintunixdialog.c:3105
-#: modules/printbackends/cups/gtkprintbackendcups.c:5175
+#: modules/printbackends/cups/gtkprintbackendcups.c:5165
 msgid "Left to right, top to bottom"
 msgstr "Аз чап ба рост, аз боло ба поён"
 
 #: gtk/gtkprintunixdialog.c:3105
-#: modules/printbackends/cups/gtkprintbackendcups.c:5175
+#: modules/printbackends/cups/gtkprintbackendcups.c:5165
 msgid "Left to right, bottom to top"
 msgstr "Аз чап ба рост, аз поён ба боло"
 
 #: gtk/gtkprintunixdialog.c:3106
-#: modules/printbackends/cups/gtkprintbackendcups.c:5176
+#: modules/printbackends/cups/gtkprintbackendcups.c:5166
 msgid "Right to left, top to bottom"
 msgstr "Аз рост ба чап, аз боло ба поён"
 
 #: gtk/gtkprintunixdialog.c:3106
-#: modules/printbackends/cups/gtkprintbackendcups.c:5176
+#: modules/printbackends/cups/gtkprintbackendcups.c:5166
 msgid "Right to left, bottom to top"
 msgstr "Аз рост ба чап, аз поён ба боло"
 
 #: gtk/gtkprintunixdialog.c:3107
-#: modules/printbackends/cups/gtkprintbackendcups.c:5177
+#: modules/printbackends/cups/gtkprintbackendcups.c:5167
 msgid "Top to bottom, left to right"
 msgstr "Аз боло ба поён, аз чап ба рост"
 
 #: gtk/gtkprintunixdialog.c:3107
-#: modules/printbackends/cups/gtkprintbackendcups.c:5177
+#: modules/printbackends/cups/gtkprintbackendcups.c:5167
 msgid "Top to bottom, right to left"
 msgstr "Аз боло ба поён, аз рост ба чап"
 
 #: gtk/gtkprintunixdialog.c:3108
-#: modules/printbackends/cups/gtkprintbackendcups.c:5178
+#: modules/printbackends/cups/gtkprintbackendcups.c:5168
 msgid "Bottom to top, left to right"
 msgstr "Аз поён ба боло, аз чап ба рост"
 
 #: gtk/gtkprintunixdialog.c:3108
-#: modules/printbackends/cups/gtkprintbackendcups.c:5178
+#: modules/printbackends/cups/gtkprintbackendcups.c:5168
 msgid "Bottom to top, right to left"
 msgstr "Аз поён ба боло, аз рост ба чап"
 
@@ -3258,7 +3248,7 @@ msgstr "Аз поён ба боло, аз рост ба чап"
 #. * dialog that controls in what order multiple pages are arranged
 #.
 #: gtk/gtkprintunixdialog.c:3112 gtk/gtkprintunixdialog.c:3125
-#: modules/printbackends/cups/gtkprintbackendcups.c:5255
+#: modules/printbackends/cups/gtkprintbackendcups.c:5245
 msgid "Page Ordering"
 msgstr "Тартиби саҳифаҳо"
 
@@ -3405,13 +3395,13 @@ msgctxt "switch"
 msgid "OFF"
 msgstr "ХОМӮШ"
 
-#: gtk/gtktextbufferrichtext.c:649
+#: gtk/gtktextbufferrichtext.c:648
 #, c-format
 msgid "Unknown error when trying to deserialize %s"
 msgstr ""
 "Ҳангоми кӯшиши бекор кардани силсилавии %s хатогии номаълум ба вуҷуд омадааст"
 
-#: gtk/gtktextbufferrichtext.c:708
+#: gtk/gtktextbufferrichtext.c:707
 #, c-format
 msgid "No deserialize function found for format %s"
 msgstr "Барои формати %s ягон функсияи бекор кардани силсилавӣ ёфт нашуд"
@@ -3589,12 +3579,12 @@ msgctxt "volume percentage"
 msgid "%d %%"
 msgstr "%d %%"
 
-#: gtk/gtkwindow.c:11988
+#: gtk/gtkwindow.c:12000
 #, c-format
 msgid "Do you want to use GTK+ Inspector?"
 msgstr ""
 
-#: gtk/gtkwindow.c:11990
+#: gtk/gtkwindow.c:12002
 #, c-format
 msgid ""
 "GTK+ Inspector is an interactive debugger that lets you explore and modify "
@@ -3602,9 +3592,9 @@ msgid ""
 "break or crash."
 msgstr ""
 
-#: gtk/gtkwindow.c:11995
+#: gtk/gtkwindow.c:12007
 msgid "Don't show this message again"
-msgstr ""
+msgstr "Ин паёмро дигар намоиш надиҳед"
 
 #: gtk/inspector/action-editor.c:281
 msgid "Activate"
@@ -3699,13 +3689,10 @@ msgid "GTK+ Version"
 msgstr "Версияи GTK+"
 
 #: gtk/inspector/general.ui:68
-#| msgid "Go _Back"
 msgid "GDK Backend"
 msgstr "Пӯштибонии GDK"
 
 #: gtk/inspector/general.ui:373
-#| msgctxt "keyboard label"
-#| msgid "Display"
 msgid "X display"
 msgstr "Дисплейи X"
 
@@ -3844,11 +3831,10 @@ msgstr "Объект"
 
 #: gtk/inspector/object-tree.ui:139 gtk/inspector/window.ui:312
 msgid "Style Classes"
-msgstr ""
+msgstr "Синфҳои сабк"
 
 #: gtk/inspector/prop-editor.c:615
 #, c-format
-#| msgid "Printer"
 msgid "Pointer: %p"
 msgstr "Нишондиҳанда: %p"
 
@@ -3870,7 +3856,7 @@ msgstr "Манъ кардани %s имконпазир нест"
 
 #: gtk/inspector/prop-editor.c:1174
 msgid "Attribute mapping"
-msgstr ""
+msgstr "Нақшабандии сифат"
 
 #: gtk/inspector/prop-editor.c:1179
 msgid "Model:"
@@ -3882,7 +3868,6 @@ msgid "%p (%s)"
 msgstr "%p (%s)"
 
 #: gtk/inspector/prop-editor.c:1190
-#| msgid "Volume"
 msgid "Column:"
 msgstr "Сутун:"
 
@@ -3911,7 +3896,6 @@ msgid "Binding:"
 msgstr ""
 
 #: gtk/inspector/prop-editor.c:1520
-#| msgid "Starting %s"
 msgid "Setting:"
 msgstr "Танзим:"
 
@@ -3928,13 +3912,10 @@ msgid "Theme"
 msgstr "Мавзӯъ"
 
 #: gtk/inspector/prop-editor.c:1563
-#| msgid "Starting %s"
 msgid "XSettings"
 msgstr "Танзимоти X"
 
 #: gtk/inspector/prop-list.ui:89 gtk/inspector/style-prop-list.ui:86
-#| msgctxt "Stock label"
-#| msgid "_Properties"
 msgid "Property"
 msgstr "Хусусият"
 
@@ -4030,7 +4011,7 @@ msgstr ""
 
 #: gtk/inspector/statistics.ui:80
 msgid "Cumulative 1"
-msgstr ""
+msgstr "Ҷамъшаванда 1"
 
 #: gtk/inspector/statistics.ui:92
 msgid "Self 2"
@@ -4038,7 +4019,7 @@ msgstr ""
 
 #: gtk/inspector/statistics.ui:104
 msgid "Cumulative 2"
-msgstr ""
+msgstr "Ҷамъшаванда 2"
 
 #: gtk/inspector/statistics.ui:116
 msgid "Self"
@@ -4046,7 +4027,7 @@ msgstr ""
 
 #: gtk/inspector/statistics.ui:133
 msgid "Cumulative"
-msgstr ""
+msgstr "Ҷамъшаванда"
 
 #: gtk/inspector/statistics.ui:165
 msgid "Enable statistics with GOBJECT_DEBUG=instance-count"
@@ -4091,10 +4072,8 @@ msgid "Cursor Theme"
 msgstr "Мавзӯи курсор"
 
 #: gtk/inspector/visual.ui:148
-#, fuzzy
-#| msgid "Custom Size %d"
 msgid "Cursor Size"
-msgstr "Андозаи танзимшавандаи %d"
+msgstr "Андозаи курсор"
 
 #: gtk/inspector/visual.ui:183
 msgid "Icon Theme"
@@ -4161,7 +4140,7 @@ msgstr ""
 
 #: gtk/inspector/visual.ui:508
 msgid "Simulate touchscreen"
-msgstr ""
+msgstr "Шабеҳсозии экрани ламсӣ"
 
 #: gtk/inspector/visual.ui:553
 msgid "GL Rendering"
@@ -4246,7 +4225,6 @@ msgid "CSS nodes"
 msgstr "Гиреҳҳои CSS"
 
 #: gtk/inspector/window.ui:337 gtk/inspector/window.ui:427
-#| msgid "CLASS"
 msgid "CSS"
 msgstr "CSS"
 
@@ -4616,15 +4594,11 @@ msgid "RA2"
 msgstr "RA2"
 
 #: gtk/paper_names_offsets.c:69
-#| msgctxt "paper size"
-#| msgid "A3"
 msgctxt "paper size"
 msgid "RA3"
 msgstr "RA3"
 
 #: gtk/paper_names_offsets.c:70
-#| msgctxt "paper size"
-#| msgid "A4"
 msgctxt "paper size"
 msgid "RA4"
 msgstr "RA4"
@@ -4730,8 +4704,6 @@ msgid "Choukei 4 Envelope"
 msgstr "Лифофаи Choukei 4"
 
 #: gtk/paper_names_offsets.c:91
-#| msgctxt "paper size"
-#| msgid "Choukei 4 Envelope"
 msgctxt "paper size"
 msgid "Choukei 40 Envelope"
 msgstr "Лифофаи Choukei 40"
@@ -4752,36 +4724,26 @@ msgid "kaku2 Envelope"
 msgstr "Лифофаи kaku2"
 
 #: gtk/paper_names_offsets.c:95
-#| msgctxt "paper size"
-#| msgid "kaku2 Envelope"
 msgctxt "paper size"
 msgid "kaku3 Envelope"
 msgstr "kaku3 Envelope"
 
 #: gtk/paper_names_offsets.c:96
-#| msgctxt "paper size"
-#| msgid "kaku2 Envelope"
 msgctxt "paper size"
 msgid "kaku4 Envelope"
 msgstr "Лифофаи kaku4"
 
 #: gtk/paper_names_offsets.c:97
-#| msgctxt "paper size"
-#| msgid "kaku2 Envelope"
 msgctxt "paper size"
 msgid "kaku5 Envelope"
 msgstr "Лифофаи kaku5"
 
 #: gtk/paper_names_offsets.c:98
-#| msgctxt "paper size"
-#| msgid "kaku2 Envelope"
 msgctxt "paper size"
 msgid "kaku7 Envelope"
 msgstr "Лифофаи kaku7"
 
 #: gtk/paper_names_offsets.c:99
-#| msgctxt "paper size"
-#| msgid "kaku2 Envelope"
 msgctxt "paper size"
 msgid "kaku8 Envelope"
 msgstr "Лифофаи kaku8"
@@ -4797,8 +4759,6 @@ msgid "you4 Envelope"
 msgstr "Лифофаи you4"
 
 #: gtk/paper_names_offsets.c:102
-#| msgctxt "paper size"
-#| msgid "you4 Envelope"
 msgctxt "paper size"
 msgid "you6 Envelope"
 msgstr "Лифофаи you6"
@@ -4844,36 +4804,26 @@ msgid "5×7"
 msgstr "5×7"
 
 #: gtk/paper_names_offsets.c:111
-#| msgctxt "paper size"
-#| msgid "6x9 Envelope"
 msgctxt "paper size"
 msgid "6×9 Envelope"
 msgstr "Лифофаи 6×9"
 
 #: gtk/paper_names_offsets.c:112
-#| msgctxt "paper size"
-#| msgid "7x9 Envelope"
 msgctxt "paper size"
 msgid "7×9 Envelope"
 msgstr "Лифофаи 7×9"
 
 #: gtk/paper_names_offsets.c:113
-#| msgctxt "paper size"
-#| msgid "#10 Envelope"
 msgctxt "paper size"
 msgid "8×10 Envelope"
 msgstr "Лифофаи 8×10"
 
 #: gtk/paper_names_offsets.c:114
-#| msgctxt "paper size"
-#| msgid "9x11 Envelope"
 msgctxt "paper size"
 msgid "9×11 Envelope"
 msgstr "Лифофаи 9×11"
 
 #: gtk/paper_names_offsets.c:115
-#| msgctxt "paper size"
-#| msgid "#12 Envelope"
 msgctxt "paper size"
 msgid "9×12 Envelope"
 msgstr "Лифофаи 9×12"
@@ -4988,36 +4938,24 @@ msgid "Government Letter"
 msgstr "Government Letter"
 
 #: gtk/paper_names_offsets.c:136
-#, fuzzy
-#| msgctxt "paper size"
-#| msgid "Index 3x5"
 msgctxt "paper size"
 msgid "Index 3×5"
-msgstr "Индекси 3x5"
+msgstr "Индекси 3×5"
 
 #: gtk/paper_names_offsets.c:137
-#, fuzzy
-#| msgctxt "paper size"
-#| msgid "Index 4x6 (postcard)"
 msgctxt "paper size"
 msgid "Index 4×6 (postcard)"
-msgstr "Индекси 4x6 (руқъа)"
+msgstr "Индекси 4×6 (руқъа)"
 
 #: gtk/paper_names_offsets.c:138
-#, fuzzy
-#| msgctxt "paper size"
-#| msgid "Index 4x6 ext"
 msgctxt "paper size"
 msgid "Index 4×6 ext"
-msgstr "Индекси 4x6 ext"
+msgstr "Индекси 4×6 ext"
 
 #: gtk/paper_names_offsets.c:139
-#, fuzzy
-#| msgctxt "paper size"
-#| msgid "Index 5x8"
 msgctxt "paper size"
 msgid "Index 5×8"
-msgstr "Индекси 5x8"
+msgstr "Индекси 5×8"
 
 #: gtk/paper_names_offsets.c:140
 msgctxt "paper size"
@@ -5258,17 +5196,14 @@ msgid "Credits"
 msgstr "Сипосгузорӣ"
 
 #: gtk/ui/gtkappchooserdialog.ui:78
-#| msgid "Related Applications"
 msgid "_View All Applications"
 msgstr "_Намоиш додани ҳамаи барномаҳо"
 
 #: gtk/ui/gtkappchooserdialog.ui:86
-#| msgid "_Find applications online"
 msgid "_Find New Applications"
 msgstr "_Ёфтани барномаҳои нав"
 
 #: gtk/ui/gtkappchooserwidget.ui:116
-#| msgid "_Find applications online"
 msgid "No applications found."
 msgstr "Ягон барнома ёфт нашуд."
 
@@ -5383,7 +5318,6 @@ msgid "Folder Name"
 msgstr "Номи ҷузвдон"
 
 #: gtk/ui/gtkfilechooserwidget.ui:403
-#| msgid "Created by"
 msgid "_Create"
 msgstr "_Эҷод кардан"
 
@@ -6181,78 +6115,78 @@ msgstr "Канори кӯтоҳ (Инъикос)"
 #. Translators: These strings name the possible values of the
 #. * job priority option in the print dialog
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:5170
+#: modules/printbackends/cups/gtkprintbackendcups.c:5160
 msgid "Urgent"
 msgstr "Фаврӣ"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:5170
+#: modules/printbackends/cups/gtkprintbackendcups.c:5160
 msgid "High"
 msgstr "Баланд"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:5170
+#: modules/printbackends/cups/gtkprintbackendcups.c:5160
 msgid "Medium"
 msgstr "Миёна"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:5170
+#: modules/printbackends/cups/gtkprintbackendcups.c:5160
 msgid "Low"
 msgstr "Паст"
 
 #. Translators, this string is used to label the job priority option
 #. * in the print dialog
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:5200
+#: modules/printbackends/cups/gtkprintbackendcups.c:5190
 msgid "Job Priority"
 msgstr "Аввалияти кор"
 
 #. Translators, this string is used to label the billing info entry
 #. * in the print dialog
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:5211
+#: modules/printbackends/cups/gtkprintbackendcups.c:5201
 msgid "Billing Info"
 msgstr "Маълумоти пардохт"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:5226
+#: modules/printbackends/cups/gtkprintbackendcups.c:5216
 msgid "Classified"
 msgstr "Таснифшаванда"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:5226
+#: modules/printbackends/cups/gtkprintbackendcups.c:5216
 msgid "Confidential"
 msgstr "Махфӣ"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:5226
+#: modules/printbackends/cups/gtkprintbackendcups.c:5216
 msgid "Secret"
 msgstr "Махфӣ"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:5226
+#: modules/printbackends/cups/gtkprintbackendcups.c:5216
 msgid "Standard"
 msgstr "Муқаррарӣ"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:5226
+#: modules/printbackends/cups/gtkprintbackendcups.c:5216
 msgid "Top Secret"
 msgstr "Комилан махфӣ"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:5226
+#: modules/printbackends/cups/gtkprintbackendcups.c:5216
 msgid "Unclassified"
 msgstr "Муайяннашуда"
 
 #. Translators, this string is used to label the pages-per-sheet option
 #. * in the print dialog
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:5237
+#: modules/printbackends/cups/gtkprintbackendcups.c:5227
 msgid "Pages per Sheet"
 msgstr "Саҳифаҳо дар як варақ"
 
 #. Translators, this is the label used for the option in the print
 #. * dialog that controls the front cover page.
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:5297
+#: modules/printbackends/cups/gtkprintbackendcups.c:5287
 msgid "Before"
 msgstr "Пеш аз"
 
 #. Translators, this is the label used for the option in the print
 #. * dialog that controls the back cover page.
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:5312
+#: modules/printbackends/cups/gtkprintbackendcups.c:5302
 msgid "After"
 msgstr "Баъд аз"
 
@@ -6260,14 +6194,14 @@ msgstr "Баъд аз"
 #. * a print job is printed. Possible values are 'now', a specified time,
 #. * or 'on hold'
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:5332
+#: modules/printbackends/cups/gtkprintbackendcups.c:5322
 msgid "Print at"
 msgstr "Ҳамаро чоп кардан"
 
 #. Translators: this is the name of the option that allows the user
 #. * to specify a time when a print job will be printed.
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:5343
+#: modules/printbackends/cups/gtkprintbackendcups.c:5333
 msgid "Print at time"
 msgstr "Чоп кардан дар вақти муайян"
 
@@ -6276,18 +6210,17 @@ msgstr "Чоп кардан дар вақти муайян"
 #. * the width and height in points. E.g: "Custom
 #. * 230.4x142.9"
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:5385
+#: modules/printbackends/cups/gtkprintbackendcups.c:5375
 #, c-format
-#| msgid "Custom %sx%s"
 msgid "Custom %s×%s"
 msgstr "Фармоишӣ %s×%s"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:5486
+#: modules/printbackends/cups/gtkprintbackendcups.c:5476
 msgid "Printer Profile"
 msgstr "Профили принтер"
 
 #. TRANSLATORS: this is when color profile information is unavailable
-#: modules/printbackends/cups/gtkprintbackendcups.c:5493
+#: modules/printbackends/cups/gtkprintbackendcups.c:5483
 msgid "Unavailable"
 msgstr "Дастнорас"
 
