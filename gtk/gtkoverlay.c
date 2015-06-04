@@ -156,7 +156,6 @@ gtk_overlay_create_child_window (GtkOverlay *overlay,
   window = gdk_window_new (gtk_widget_get_window (widget),
                            &attributes, attributes_mask);
   gtk_widget_register_window (widget, window);
-  gtk_style_context_set_background (gtk_widget_get_style_context (widget), window);
 
   gdk_window_set_pass_through (window, child->pass_through);
 
