@@ -254,7 +254,6 @@ static void     gtk_menu_handle_scrolling  (GtkMenu          *menu,
                                             gboolean          motion);
 static void     gtk_menu_set_tearoff_hints (GtkMenu          *menu,
                                             gint             width);
-static void     gtk_menu_style_updated     (GtkWidget        *widget);
 static gboolean gtk_menu_focus             (GtkWidget        *widget,
                                             GtkDirectionType direction);
 static gint     gtk_menu_get_popup_delay   (GtkMenuShell     *menu_shell);
@@ -507,7 +506,6 @@ gtk_menu_class_init (GtkMenuClass *class)
   widget_class->show_all = gtk_menu_show_all;
   widget_class->enter_notify_event = gtk_menu_enter_notify;
   widget_class->leave_notify_event = gtk_menu_leave_notify;
-  widget_class->style_updated = gtk_menu_style_updated;
   widget_class->focus = gtk_menu_focus;
   widget_class->can_activate_accel = gtk_menu_real_can_activate_accel;
   widget_class->grab_notify = gtk_menu_grab_notify;
@@ -2475,25 +2473,6 @@ gtk_menu_reorder_child (GtkMenu   *menu,
 }
 
 static void
-gtk_menu_style_updated (GtkWidget *widget)
-{
-  GTK_WIDGET_CLASS (gtk_menu_parent_class)->style_updated (widget);
-
-  if (gtk_widget_get_realized (widget))
-    {
-      GtkMenu *menu = GTK_MENU (widget);
-      GtkMenuPrivate *priv = menu->priv;
-      GtkStyleContext *context;
-
-      context = gtk_widget_get_style_context (widget);
-
-      gtk_style_context_set_background (context, priv->bin_window);
-      gtk_style_context_set_background (context, priv->view_window);
-      gtk_style_context_set_background (context, gtk_widget_get_window (widget));
-    }
-}
-
-static void
 get_arrows_border (GtkMenu   *menu,
                    GtkBorder *border)
 {
@@ -2561,7 +2540,6 @@ gtk_menu_realize (GtkWidget *widget)
   GtkMenu *menu = GTK_MENU (widget);
   GtkMenuPrivate *priv = menu->priv;
   GtkAllocation allocation;
-  GtkStyleContext *context;
   GdkWindow *window;
   GdkWindowAttr attributes;
   gint attributes_mask;
@@ -2596,7 +2574,6 @@ gtk_menu_realize (GtkWidget *widget)
 
   get_menu_padding (widget, &padding);
   border_width = gtk_container_get_border_width (GTK_CONTAINER (widget));
-  context = gtk_widget_get_style_context (widget);
 
   gtk_widget_get_allocation (widget, &allocation);
 
@@ -2643,10 +2620,6 @@ gtk_menu_realize (GtkWidget *widget)
 
       gtk_widget_set_parent_window (child, priv->bin_window);
     }
-
-  gtk_style_context_set_background (context, priv->bin_window);
-  gtk_style_context_set_background (context, priv->view_window);
-  gtk_style_context_set_background (context, window);
 
   if (GTK_MENU_SHELL (widget)->priv->active_menu_item)
     gtk_menu_scroll_item_visible (GTK_MENU_SHELL (widget),
