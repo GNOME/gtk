@@ -260,20 +260,9 @@ GtkTextView { // This will get overridden by .view, needed by gedit line numbers
     &:backdrop { background-color: transparent; }
   }
 
-  .linked > & { //FIXME: use same buttons linking logic and template
-    border-radius: 0;
-    &:first-child {
-      border-top-left-radius: 3px;
-      border-bottom-left-radius: 3px;
-      &:dir(rtl) { border-right-style: none;}
-    }
-    &:last-child {
-      border-top-right-radius: 3px;
-      border-bottom-right-radius: 3px;
-      border-left-style: none;
-      &:dir(rtl) { border-left-style: solid; }
-    }
-  }
+  .linked > & { @extend %linked; }
+
+  .linked > &:focus + * { border-left-color: $selected_bg_color; } // colors the border of the widget following a focused entry
 
   // entry error and warning style
   @each $e_type, $e_color in (error, $error_color),
@@ -519,7 +508,7 @@ $_dot_color: if($variant=='light', $selected_bg_color,
 
   // Suggested and Destructive Action buttons
   @each $b_type, $b_color in (suggested-action, $selected_bg_color),
-                              (destructive-action, $destructive_color) {
+                             (destructive-action, $destructive_color) {
     &.#{$b_type} {
       @include button(normal, $b_color, white);
       &.flat {
@@ -698,32 +687,26 @@ $_dot_color: if($variant=='light', $selected_bg_color,
 .inline-toolbar.toolbar GtkToolButton,
 .inline-toolbar.toolbar GtkToolButton:backdrop {
   & > .button.flat { @extend %linked_middle; }
-  &:dir(rtl) > .button.flat { @extend %linked_middle:dir(rtl); }
   &:first-child > .button.flat { @extend %linked:first-child; }
   &:last-child > .button.flat { @extend %linked:last-child; }
-  &:last-child:dir(rtl) > .button.flat { @extend %linked:last-child:dir(rtl); }
   &:only-child > .button.flat { @extend %linked:only-child; }
 }
 
 %linked_middle {
   border-radius: 0;
-  border-left-style: none;
-  &:dir(rtl) {
-    border-radius: 0; // needed when including %linked_middle:dir(rtl)
-    border-right-style: none;
-    border-left-style: solid
-  }
+  border-right-style: none;
 }
 
 %linked {
   @extend %linked_middle;
   &:first-child {
-    border-radius: 3px 0 0 3px;
-    border-left-style: solid;
+    border-top-left-radius: 3px;
+    border-bottom-left-radius: 3px;
   }
   &:last-child {
-    border-radius: 0 3px 3px 0;
-    &:dir(rtl) { border-right-style: solid; }
+    border-top-right-radius: 3px;
+    border-bottom-right-radius: 3px;
+    border-right-style: solid;
   }
   &:only-child {
     border-radius: 3px;
@@ -732,18 +715,19 @@ $_dot_color: if($variant=='light', $selected_bg_color,
 }
 
 %linked_vertical_middle {
-  border-left-style: solid;
-  border-bottom-style: none;
+  border-style: solid solid none solid;
   border-radius: 0;
 }
 
 %linked_vertical{
   @extend %linked_vertical_middle;
   &:first-child {
-    border-radius: 3px 3px 0 0;
+    border-top-left-radius: 3px;
+    border-top-right-radius: 3px;
   }
   &:last-child {
-    border-radius: 0 0 3px 3px;
+    border-bottom-left-radius: 3px;
+    border-bottom-right-radius: 3px;
     border-style: solid;
   }
   &:only-child {
@@ -1009,29 +993,51 @@ GtkComboBox {
     // always disable separators
     -GtkWidget-wide-separators: true;
   }
-  &.combobox-entry .entry { @extend %linked; }
-  &.combobox-entry .button, &.combobox-entry .button:backdrop {
-    // It is needed to specify the backdrop button or it gets overridden
-    @extend %linked;
+  &.combobox-entry .entry {
+    &:dir(ltr) {
+      border-top-right-radius: 0;
+      border-bottom-right-radius: 0;
+    }
+    &:dir(rtl) {
+      border-top-left-radius: 0;
+      border-bottom-left-radius: 0;
+    }
+  }
+  &.combobox-entry .button {
+    &:dir(ltr) {
+      border-top-left-radius: 0;
+      border-bottom-left-radius: 0;
+      border-left-style: none;
+    }
+    &:dir(rtl) {
+      border-top-right-radius: 0;
+      border-bottom-right-radius: 0;
+      border-right-style: none;
+    }
   }
 }
 
-.linked > GtkComboBox > .button {
+.linked > GtkComboBox > .button,
+.linked > GtkComboBoxText > .button {
   // the combo is a composite widget so the way we do button linkind doesn't
   // work, special case needed. See
   // https://bugzilla.gnome.org/show_bug.cgi?id=733979
-  &:dir(ltr) { @extend %linked_middle; } // specificity bump
-  &:dir(rtl) { @extend %linked_middle:dir(rtl); }
+  &:dir(ltr),
+  &:dir(rtl) { @extend %linked_middle; } // specificity bump
 }
-.linked > GtkComboBox:first-child > .button {
+.linked > GtkComboBox:first-child > .button,
+.linked > GtkComboBoxText:first-child > .button {
   @extend %linked:first-child;
 }
-.linked > GtkComboBox:last-child > .button {
+.linked > GtkComboBox:last-child > .button,
+.linked > GtkComboBoxText:last-child > .button {
   @extend %linked:last-child;
 }
-.linked > GtkComboBox:only-child > .button {
+.linked > GtkComboBox:only-child > .button,
+.linked > GtkComboBoxText:only-child > .button {
   @extend %linked:only-child;
 }
+
 .linked.vertical > GtkComboBoxText > .button,
 .linked.vertical > GtkComboBox > .button { @extend %linked_vertical_middle; }
 .linked.vertical > GtkComboBoxText:first-child > .button,
