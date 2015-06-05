@@ -116,6 +116,7 @@ noinst_PROGRAMS =  $(TEST_PROGS)	\
 	testtoolbar2			\
 	stresstest-toolbar		\
 	testtreechanging                \
+	testtreednd			\
 	testtreeedit			\
 	testtreemodel			\
 	testtreeview			\
@@ -258,6 +259,7 @@ testspinbutton_DEPENDENCIES = $(TEST_DEPS)
 teststatusicon_DEPENDENCIES = $(TEST_DEPS)
 teststockbuttonmenu_DEPENDENCIES = $(TEST_DEPS)
 testtreechanging_DEPENDENCIES =	$(DEPS)
+testtreednd_DEPENDENCIES = $(DEPS)
 testtreeedit_DEPENDENCIES = $(DEPS)
 testtreemodel_DEPENDENCIES = $(DEPS)
 testtreeview_DEPENDENCIES = $(DEPS)
@@ -367,6 +369,9 @@ testgtk_SOURCES =	\
 
 testtreechanging_SOURCES =	\
 	testtreechanging.c
+
+testtreednd_SOURCES = 	\
+	testtreednd.c
 
 testtreeedit_SOURCES = 	\
 	testtreeedit.c
