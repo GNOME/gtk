@@ -32,6 +32,7 @@
 #include "gtkplug.h"
 #include "gtkintl.h"
 #include "gtkprivate.h"
+#include "gtkrender.h"
 #include "gtksocketprivate.h"
 #include "gtkwidgetprivate.h"
 #include "gtkwindowgroup.h"
@@ -92,6 +93,8 @@ static void            gtk_plug_show                  (GtkWidget        *widget)
 static void            gtk_plug_hide                  (GtkWidget        *widget);
 static void            gtk_plug_map                   (GtkWidget        *widget);
 static void            gtk_plug_unmap                 (GtkWidget        *widget);
+static gboolean        gtk_plug_draw                  (GtkWidget        *widget,
+						       cairo_t          *cr);
 static gboolean        gtk_plug_key_press_event       (GtkWidget        *widget,
 						       GdkEventKey      *event);
 static gboolean        gtk_plug_focus_event           (GtkWidget        *widget,
@@ -175,7 +178,7 @@ gtk_plug_class_init (GtkPlugClass *class)
   widget_class->hide = gtk_plug_hide;
   widget_class->map = gtk_plug_map;
   widget_class->unmap = gtk_plug_unmap;
-
+  widget_class->draw = gtk_plug_draw;
   widget_class->focus = gtk_plug_focus;
 
   gtk_widget_class_set_accessible_role (widget_class, ATK_ROLE_PANEL);
@@ -693,6 +696,18 @@ gtk_plug_unrealize (GtkWidget *widget)
   GTK_WIDGET_CLASS (gtk_plug_parent_class)->unrealize (widget);
 }
 
+static gboolean
+gtk_plug_draw (GtkWidget *widget,
+	       cairo_t   *cr)
+{
+  gtk_render_background (gtk_widget_get_style_context (widget), cr,
+                         0, 0,
+                         gtk_widget_get_allocated_width (widget),
+                         gtk_widget_get_allocated_height (widget));
+
+  return GTK_WIDGET_CLASS (gtk_plug_parent_class)->draw (widget, cr);
+}
+
 static void
 xembed_set_info (GdkWindow     *window,
 		 unsigned long  flags)
@@ -1095,9 +1110,6 @@ gtk_plug_realize (GtkWidget *widget)
     }
 
   gtk_widget_register_window (widget, gdk_window);
-
-  gtk_style_context_set_background (gtk_widget_get_style_context (widget),
-                                    gdk_window);
 }
 
 static void
