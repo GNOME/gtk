@@ -1567,6 +1567,11 @@ gtk_main_do_event (GdkEvent *event)
       event_widget = gtk_get_event_widget (event);
     }
 
+  /* Push the event onto a stack of current events for
+   * gtk_current_event_get().
+   */
+  current_events = g_list_prepend (current_events, event);
+
   window_group = gtk_main_get_window_group (event_widget);
   device = gdk_event_get_device (event);
 
@@ -1582,7 +1587,7 @@ gtk_main_do_event (GdkEvent *event)
        !gtk_widget_is_ancestor (event_widget, grab_widget)))
     {
       if (_gtk_window_check_handle_wm_event (event))
-        return;
+        goto cleanup;
     }
 
   /* Find out the topmost widget where captured event propagation
@@ -1607,17 +1612,7 @@ gtk_main_do_event (GdkEvent *event)
    */
   if (device &&
       _gtk_window_group_widget_is_blocked_for_device (window_group, grab_widget, device))
-    {
-      if (rewritten_event)
-        gdk_event_free (rewritten_event);
-
-      return;
-    }
-
-  /* Push the event onto a stack of current events for
-   * gtk_current_event_get().
-   */
-  current_events = g_list_prepend (current_events, event);
+    goto cleanup;
 
   /* Not all events get sent to the grabbing widget.
    * The delete, destroy, expose, focus change and resize
@@ -1793,6 +1788,7 @@ gtk_main_do_event (GdkEvent *event)
       _gtk_tooltip_handle_event (event);
     }
 
+ cleanup:
   tmp_list = current_events;
   current_events = g_list_remove_link (current_events, tmp_list);
   g_list_free_1 (tmp_list);
