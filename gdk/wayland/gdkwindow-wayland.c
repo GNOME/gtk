@@ -108,6 +108,7 @@ struct _GdkWindowImplWayland
   unsigned int use_custom_surface : 1;
   unsigned int pending_commit : 1;
   unsigned int awaiting_frame : 1;
+  unsigned int position_set : 1;
   GdkWindowTypeHint hint;
   GdkWindow *transient_for;
 
@@ -1190,10 +1191,13 @@ gdk_wayland_window_map (GdkWindow *window)
           transient_for = gdk_device_get_window_at_position (impl->grab_device, NULL, NULL);
           transient_for = gdk_window_get_toplevel (transient_for);
 
-          /* start the popup at the position of the device that holds the grab */
-          gdk_window_get_device_position (transient_for,
-                                          impl->grab_device,
-                                          &window->x, &window->y, NULL);
+          /* If the position was not explicitly set, start the popup at the
+           * position of the device that holds the grab.
+           */
+          if (!impl->position_set)
+            gdk_window_get_device_position (transient_for,
+                                            impl->grab_device,
+                                            &window->x, &window->y, NULL);
         }
       else
         transient_for = impl->transient_for;
@@ -1412,6 +1416,7 @@ gdk_window_wayland_move_resize (GdkWindow *window,
         {
           window->x = x;
           window->y = y;
+          impl->position_set = 1;
 
           if (impl->subsurface)
             {
