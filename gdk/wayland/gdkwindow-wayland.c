@@ -1184,12 +1184,42 @@ gdk_wayland_window_map (GdkWindow *window)
       /* Popup menus can appear without a transient parent, which means they
        * cannot be positioned properly on Wayland. This attempts to guess the
        * surface they should be positioned with by finding the surface beneath
-       * the device that created the grab for the popup window
+       * the device that created the grab for the popup window.
        */
       if (!impl->transient_for && impl->hint == GDK_WINDOW_TYPE_HINT_POPUP_MENU)
         {
-          transient_for = gdk_device_get_window_at_position (impl->grab_device, NULL, NULL);
-          transient_for = gdk_window_get_toplevel (transient_for);
+          GdkDevice *grab_device;
+
+          /* The popup menu window is not the grabbed window. This may mean
+           * that a "transfer window" (see gtkmenu.c) is used, and we need
+           * to find that window to get the grab device. If so is the case
+           * the "transfer window" can be retrieved via the
+           * "gdk-attached-grab-window" associated data field.
+           */
+          if (!impl->grab_device)
+            {
+              GdkWindow *attached_grab_window =
+                g_object_get_data (G_OBJECT (window),
+                                   "gdk-attached-grab-window");
+              if (attached_grab_window)
+                {
+                  GdkWindowImplWayland *attached_impl =
+                    GDK_WINDOW_IMPL_WAYLAND (attached_grab_window->impl);
+                  grab_device = attached_impl->grab_device;
+                  transient_for =
+                    gdk_device_get_window_at_position (grab_device,
+                                                       NULL, NULL);
+                }
+            }
+          else
+            {
+              grab_device = impl->grab_device;
+              transient_for =
+                gdk_device_get_window_at_position (grab_device, NULL, NULL);
+            }
+
+          if (transient_for)
+            transient_for = gdk_window_get_toplevel (transient_for);
 
           /* If the position was not explicitly set, start the popup at the
            * position of the device that holds the grab.
