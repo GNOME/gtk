@@ -95,6 +95,12 @@ GDK_AVAILABLE_IN_3_10
 void               gtk_places_sidebar_set_location               (GtkPlacesSidebar   *sidebar,
                                                                   GFile              *location);
 
+GDK_AVAILABLE_IN_3_18
+gboolean           gtk_places_sidebar_get_show_recent            (GtkPlacesSidebar   *sidebar);
+GDK_AVAILABLE_IN_3_18
+void               gtk_places_sidebar_set_show_recent            (GtkPlacesSidebar   *sidebar,
+                                                                  gboolean            show_recent);
+
 GDK_AVAILABLE_IN_3_10
 gboolean           gtk_places_sidebar_get_show_desktop           (GtkPlacesSidebar   *sidebar);
 GDK_AVAILABLE_IN_3_10

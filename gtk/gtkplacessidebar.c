@@ -175,6 +175,8 @@ struct _GtkPlacesSidebar {
   guint mounting               : 1;
   guint  drag_data_received    : 1;
   guint drop_occured           : 1;
+  guint show_recent_set        : 1;
+  guint show_recent            : 1;
   guint show_desktop_set       : 1;
   guint show_desktop           : 1;
   guint show_connect_to_server : 1;
@@ -260,6 +262,7 @@ enum {
 enum {
   PROP_LOCATION = 1,
   PROP_OPEN_FLAGS,
+  PROP_SHOW_RECENT,
   PROP_SHOW_DESKTOP,
   PROP_SHOW_CONNECT_TO_SERVER,
   PROP_SHOW_ENTER_LOCATION,
@@ -586,7 +589,9 @@ recent_scheme_is_supported (void)
 static gboolean
 should_show_recent (GtkPlacesSidebar *sidebar)
 {
-  return recent_files_setting_is_enabled (sidebar) && recent_scheme_is_supported ();
+  return recent_files_setting_is_enabled (sidebar) &&
+         ((sidebar->show_recent_set && sidebar->show_recent) ||
+          (!sidebar->show_recent_set && recent_scheme_is_supported ()));
 }
 
 static gboolean
@@ -4309,6 +4314,10 @@ gtk_places_sidebar_set_property (GObject      *obj,
       gtk_places_sidebar_set_open_flags (sidebar, g_value_get_flags (value));
       break;
 
+    case PROP_SHOW_RECENT:
+      gtk_places_sidebar_set_show_recent (sidebar, g_value_get_boolean (value));
+      break;
+
     case PROP_SHOW_DESKTOP:
       gtk_places_sidebar_set_show_desktop (sidebar, g_value_get_boolean (value));
       break;
@@ -4347,6 +4356,10 @@ gtk_places_sidebar_get_property (GObject    *obj,
 
     case PROP_OPEN_FLAGS:
       g_value_set_flags (value, gtk_places_sidebar_get_open_flags (sidebar));
+      break;
+
+    case PROP_SHOW_RECENT:
+      g_value_set_boolean (value, gtk_places_sidebar_get_show_recent (sidebar));
       break;
 
     case PROP_SHOW_DESKTOP:
@@ -4690,6 +4703,12 @@ gtk_places_sidebar_class_init (GtkPlacesSidebarClass *class)
                               GTK_TYPE_PLACES_OPEN_FLAGS,
                               GTK_PLACES_OPEN_NORMAL,
                               G_PARAM_READWRITE);
+  properties[PROP_SHOW_RECENT] =
+          g_param_spec_boolean ("show-recent",
+                                P_("Show recent files"),
+                                P_("Whether the sidebar includes a builtin shortcut for recent files"),
+                                TRUE,
+                                G_PARAM_READWRITE);
   properties[PROP_SHOW_DESKTOP] =
           g_param_spec_boolean ("show-desktop",
                                 P_("Show 'Desktop'"),
@@ -4978,6 +4997,53 @@ gtk_places_sidebar_get_location (GtkPlacesSidebar *sidebar)
     }
 
   return file;
+}
+
+/**
+ * gtk_places_sidebar_set_show_recent:
+ * @sidebar: a places sidebar
+ * @show_recent: whether to show an item for recent files
+ *
+ * Sets whether the @sidebar should show an item for recent files.
+ * The default value for this option is determined by the desktop
+ * environment, but this function can be used to override it on a
+ * per-application basis.
+ *
+ * Since: 3.18
+ */
+void
+gtk_places_sidebar_set_show_recent (GtkPlacesSidebar *sidebar,
+                                    gboolean          show_recent)
+{
+  g_return_if_fail (GTK_IS_PLACES_SIDEBAR (sidebar));
+
+  sidebar->show_recent_set = TRUE;
+
+  show_recent = !!show_recent;
+  if (sidebar->show_recent != show_recent)
+    {
+      sidebar->show_recent = show_recent;
+      update_places (sidebar);
+      g_object_notify_by_pspec (G_OBJECT (sidebar), properties[PROP_SHOW_RECENT]);
+    }
+}
+
+/**
+ * gtk_places_sidebar_get_show_recent:
+ * @sidebar: a places sidebar
+ *
+ * Returns the value previously set with gtk_places_sidebar_set_show_recent()
+ *
+ * Returns: %TRUE if the sidebar will display a builtin shortcut for recent files
+ *
+ * Since: 3.18
+ */
+gboolean
+gtk_places_sidebar_get_show_recent (GtkPlacesSidebar *sidebar)
+{
+  g_return_val_if_fail (GTK_IS_PLACES_SIDEBAR (sidebar), FALSE);
+
+  return sidebar->show_recent;
 }
 
 /**
