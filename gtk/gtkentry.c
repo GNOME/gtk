@@ -9825,7 +9825,7 @@ bubble_targets_received (GtkClipboard     *clipboard,
 }
 
 static gboolean
-gtk_entry_selection_bubble_popup_cb (gpointer user_data)
+gtk_entry_selection_bubble_popup_show (gpointer user_data)
 {
   GtkEntry *entry = user_data;
 
@@ -9864,7 +9864,7 @@ gtk_entry_selection_bubble_popup_set (GtkEntry *entry)
     g_source_remove (priv->selection_bubble_timeout_id);
 
   priv->selection_bubble_timeout_id =
-    gdk_threads_add_timeout (1000, gtk_entry_selection_bubble_popup_cb, entry);
+    gdk_threads_add_timeout (50, gtk_entry_selection_bubble_popup_show, entry);
   g_source_set_name_by_id (priv->selection_bubble_timeout_id, "[gtk+] gtk_entry_selection_bubble_popup_cb");
 }
 
