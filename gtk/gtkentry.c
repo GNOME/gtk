@@ -9687,25 +9687,37 @@ static void
 activate_bubble_cb (GtkWidget *item,
 	            GtkEntry  *entry)
 {
-  const gchar *signal = g_object_get_data (G_OBJECT (item), "gtk-signal");
-  g_signal_emit_by_name (entry, signal);
+  const gchar *signal;
+
+  signal = g_object_get_data (G_OBJECT (item), "gtk-signal");
   gtk_widget_hide (entry->priv->selection_bubble);
+  if (strcmp (signal, "select-all") == 0)
+    gtk_entry_select_all (entry);
+  else
+    g_signal_emit_by_name (entry, signal);
 }
 
 static void
 append_bubble_action (GtkEntry     *entry,
                       GtkWidget    *toolbar,
                       const gchar  *label,
+                      const gchar  *icon_name,
                       const gchar  *signal,
                       gboolean      sensitive)
 {
-  GtkToolItem *item = gtk_tool_button_new (NULL, label);
-  gtk_tool_button_set_use_underline (GTK_TOOL_BUTTON (item), TRUE);
+  GtkWidget *item, *image;
+
+  item = gtk_button_new ();
+  image = gtk_image_new_from_icon_name (icon_name, GTK_ICON_SIZE_MENU);
+  gtk_widget_show (image);
+  gtk_container_add (GTK_CONTAINER (item), image);
+  gtk_widget_set_tooltip_text (item, label);
+  gtk_style_context_add_class (gtk_widget_get_style_context (item), "image-button");
   g_object_set_data (G_OBJECT (item), I_("gtk-signal"), (char *)signal);
   g_signal_connect (item, "clicked", G_CALLBACK (activate_bubble_cb), entry);
   gtk_widget_set_sensitive (GTK_WIDGET (item), sensitive);
   gtk_widget_show (GTK_WIDGET (item));
-  gtk_toolbar_insert (GTK_TOOLBAR (toolbar), item, -1);
+  gtk_container_add (GTK_CONTAINER (toolbar), item);
 }
 
 static void
@@ -9720,11 +9732,16 @@ bubble_targets_received (GtkClipboard     *clipboard,
   gint start_x, end_x, frame_x, frame_y;
   gboolean has_selection;
   gboolean has_clipboard;
+  gboolean all_selected;
   DisplayMode mode;
+  GtkWidget *box;
   GtkWidget *toolbar;
+  gint length, start, end;
 
-  has_selection = gtk_editable_get_selection_bounds (GTK_EDITABLE (entry),
-                                                     NULL, NULL);
+  has_selection = gtk_editable_get_selection_bounds (GTK_EDITABLE (entry), &start, &end);
+  length = gtk_entry_buffer_get_length (get_buffer (entry));
+  all_selected = (start == 0) && (end == length);
+
   if (!has_selection && !priv->editable)
     {
       priv->selection_bubble_timeout_id = 0;
@@ -9737,30 +9754,34 @@ bubble_targets_received (GtkClipboard     *clipboard,
   priv->selection_bubble = gtk_popover_new (GTK_WIDGET (entry));
   gtk_style_context_add_class (gtk_widget_get_style_context (priv->selection_bubble),
                                GTK_STYLE_CLASS_TOUCH_SELECTION);
-  gtk_popover_set_position (GTK_POPOVER (priv->selection_bubble),
-                            GTK_POS_TOP);
+  gtk_popover_set_position (GTK_POPOVER (priv->selection_bubble), GTK_POS_BOTTOM);
   gtk_popover_set_modal (GTK_POPOVER (priv->selection_bubble), FALSE);
 
-  toolbar = GTK_WIDGET (gtk_toolbar_new ());
-  gtk_toolbar_set_style (GTK_TOOLBAR (toolbar), GTK_TOOLBAR_TEXT);
-  gtk_toolbar_set_show_arrow (GTK_TOOLBAR (toolbar), FALSE);
+  box = gtk_box_new (GTK_ORIENTATION_VERTICAL, 5);
+  g_object_set (box, "margin", 10, NULL);
+  gtk_widget_show (box);
+  toolbar = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 5);
   gtk_widget_show (toolbar);
-  gtk_container_add (GTK_CONTAINER (priv->selection_bubble), toolbar);
+  gtk_container_add (GTK_CONTAINER (priv->selection_bubble), box);
+  gtk_container_add (GTK_CONTAINER (box), toolbar);
 
   has_clipboard = gtk_selection_data_targets_include_text (data);
   mode = gtk_entry_get_display_mode (entry);
 
-  append_bubble_action (entry, toolbar, _("Cu_t"), "cut-clipboard",
-                        priv->editable && has_selection && mode == DISPLAY_NORMAL);
+  if (priv->editable && has_selection && mode == DISPLAY_NORMAL)
+    append_bubble_action (entry, toolbar, _("Select all"), "edit-select-all-symbolic", "select-all", !all_selected);
 
-  append_bubble_action (entry, toolbar, _("_Copy"), "copy-clipboard",
-                        has_selection && mode == DISPLAY_NORMAL);
+  if (priv->editable && has_selection && mode == DISPLAY_NORMAL)
+    append_bubble_action (entry, toolbar, _("Cut"), "edit-cut-symbolic", "cut-clipboard", TRUE);
 
-  append_bubble_action (entry, toolbar, _("_Paste"), "paste-clipboard",
-                        priv->editable && has_clipboard);
+  if (has_selection && mode == DISPLAY_NORMAL)
+    append_bubble_action (entry, toolbar, _("Copy"), "edit-copy-symbolic", "copy-clipboard", TRUE);
+
+  if (priv->editable)
+    append_bubble_action (entry, toolbar, _("Paste"), "edit-paste-symbolic", "paste-clipboard", has_clipboard);
 
   if (priv->populate_all)
-    g_signal_emit (entry, signals[POPULATE_POPUP], 0, toolbar);
+    g_signal_emit (entry, signals[POPULATE_POPUP], 0, box);
 
   gtk_widget_get_allocation (GTK_WIDGET (entry), &allocation);
 
