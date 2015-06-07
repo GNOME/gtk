@@ -1143,25 +1143,30 @@ activate_item (GtkWidget *item, GtkTextView *tv)
 static void
 add_item (GtkTextView *tv,
           GtkWidget   *popup,
-          const gchar *label,
+          const gchar *text,
           const gchar *tag,
           gboolean     set)
 {
-  GtkWidget *item;
+  GtkWidget *item, *label;
 
   if (GTK_IS_MENU (popup))
     {
-      item = gtk_check_menu_item_new_with_label (label);
+      item = gtk_check_menu_item_new ();
       gtk_check_menu_item_set_active (GTK_CHECK_MENU_ITEM (item), set);
       g_signal_connect (item, "toggled", G_CALLBACK (activate_item), tv);
     }
   else
     {
-      item = gtk_check_button_new_with_label (label);
+      item = gtk_check_button_new ();
       gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (item), set);
       g_signal_connect (item, "clicked", G_CALLBACK (activate_item), tv);
     }
 
+  label = gtk_label_new ("");
+  gtk_label_set_xalign (GTK_LABEL (label), 0);
+  gtk_label_set_markup (GTK_LABEL (label), text);
+  gtk_widget_show (label);
+  gtk_container_add (GTK_CONTAINER (item), label);
   g_object_set_data (G_OBJECT (item), "tag", (gpointer)tag);
   gtk_widget_show (item);
   gtk_container_add (GTK_CONTAINER (popup), item);
@@ -1206,9 +1211,9 @@ populate_popup (GtkTextView *tv,
       gtk_container_add (GTK_CONTAINER (popup), item);
     }
 
-  add_item (tv, popup, "Bold", "bold", all_bold);
-  add_item (tv, popup, "Italics", "italic", all_italic);
-  add_item (tv, popup, "Underline", "underline", all_underline);
+  add_item (tv, popup, "<b>Bold</b>", "bold", all_bold);
+  add_item (tv, popup, "<i>Italics</i>", "italic", all_italic);
+  add_item (tv, popup, "<u>Underline</u>", "underline", all_underline);
 }
 
 static void
