@@ -9251,7 +9251,7 @@ bubble_targets_received (GtkClipboard     *clipboard,
 }
 
 static gboolean
-gtk_text_view_selection_bubble_popup_cb (gpointer user_data)
+gtk_text_view_selection_bubble_popup_show (gpointer user_data)
 {
   GtkTextView *text_view = user_data;
   gtk_clipboard_request_contents (gtk_widget_get_clipboard (GTK_WIDGET (text_view),
@@ -9292,7 +9292,7 @@ gtk_text_view_selection_bubble_popup_set (GtkTextView *text_view)
     g_source_remove (priv->selection_bubble_timeout_id);
 
   priv->selection_bubble_timeout_id =
-    gdk_threads_add_timeout (1000, gtk_text_view_selection_bubble_popup_cb,
+    gdk_threads_add_timeout (50, gtk_text_view_selection_bubble_popup_show,
                              text_view);
   g_source_set_name_by_id (priv->selection_bubble_timeout_id, "[gtk+] gtk_text_view_selection_bubble_popup_cb");
 }
