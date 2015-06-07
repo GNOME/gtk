@@ -9284,6 +9284,11 @@ bubble_targets_received (GtkClipboard     *clipboard,
 
   _text_window_to_widget_coords (text_view, &rect.x, &rect.y);
 
+  rect.x -= 5;
+  rect.y -= 5;
+  rect.width += 10;
+  rect.height += 10;
+
   gtk_popover_set_pointing_to (GTK_POPOVER (priv->selection_bubble), &rect);
   gtk_widget_show (priv->selection_bubble);
 }
