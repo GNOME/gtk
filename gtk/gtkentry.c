@@ -9684,6 +9684,31 @@ gtk_entry_popup_menu (GtkWidget *widget)
 }
 
 static void
+show_or_hide_handles (GtkWidget  *popover,
+                      GParamSpec *pspec,
+                      GtkEntry   *entry)
+{
+  gboolean visible;
+  GtkTextHandle *handle;
+  GtkTextHandleMode mode;
+
+  visible = gtk_widget_get_visible (popover);
+
+  handle = entry->priv->text_handle;
+  mode = _gtk_text_handle_get_mode (handle);
+
+  if (mode == GTK_TEXT_HANDLE_MODE_CURSOR)
+    {
+      _gtk_text_handle_set_visible (handle, GTK_TEXT_HANDLE_POSITION_CURSOR, !visible);
+    }
+  else if (mode == GTK_TEXT_HANDLE_MODE_SELECTION)
+    {
+      _gtk_text_handle_set_visible (handle, GTK_TEXT_HANDLE_POSITION_SELECTION_START, !visible);
+      _gtk_text_handle_set_visible (handle, GTK_TEXT_HANDLE_POSITION_SELECTION_END, !visible);
+    }
+}
+
+static void
 activate_bubble_cb (GtkWidget *item,
 	            GtkEntry  *entry)
 {
@@ -9756,6 +9781,8 @@ bubble_targets_received (GtkClipboard     *clipboard,
                                GTK_STYLE_CLASS_TOUCH_SELECTION);
   gtk_popover_set_position (GTK_POPOVER (priv->selection_bubble), GTK_POS_BOTTOM);
   gtk_popover_set_modal (GTK_POPOVER (priv->selection_bubble), FALSE);
+  g_signal_connect (priv->selection_bubble, "notify::visible",
+                    G_CALLBACK (show_or_hide_handles), entry);
 
   box = gtk_box_new (GTK_ORIENTATION_VERTICAL, 5);
   g_object_set (box, "margin", 10, NULL);
