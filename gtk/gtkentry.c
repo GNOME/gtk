@@ -4450,7 +4450,7 @@ gtk_entry_multipress_gesture_pressed (GtkGestureMultiPress *gesture,
   else if (button == GDK_BUTTON_PRIMARY)
     {
       gboolean have_selection = gtk_editable_get_selection_bounds (editable, &sel_start, &sel_end);
-      GtkTextHandleMode mode = GTK_TEXT_HANDLE_MODE_NONE;
+      GtkTextHandleMode mode;
       gboolean is_touchscreen, extend_selection;
       GdkDevice *source;
 
@@ -4458,6 +4458,13 @@ gtk_entry_multipress_gesture_pressed (GtkGestureMultiPress *gesture,
       is_touchscreen = test_touchscreen ||
         (gtk_get_debug_flags () & GTK_DEBUG_TOUCHSCREEN) != 0 ||
         gdk_device_get_source (source) == GDK_SOURCE_TOUCHSCREEN;
+
+      if (!is_touchscreen)
+        mode = GTK_TEXT_HANDLE_MODE_NONE;
+      else if (have_selection)
+        mode = GTK_TEXT_HANDLE_MODE_SELECTION;
+      else
+        mode = GTK_TEXT_HANDLE_MODE_CURSOR;
 
       if (is_touchscreen)
         gtk_entry_ensure_text_handles (entry);
@@ -4476,12 +4483,23 @@ gtk_entry_multipress_gesture_pressed (GtkGestureMultiPress *gesture,
         case 1:
           if (in_selection (entry, x + priv->scroll_offset))
             {
-              /* Click inside the selection - we'll either start a drag, or
-               * clear the selection
-               */
-              priv->in_drag = TRUE;
-              priv->drag_start_x = x + priv->scroll_offset;
-              priv->drag_start_y = y;
+              if (is_touchscreen)
+                {
+                  if (entry->priv->selection_bubble &&
+                      gtk_widget_get_visible (entry->priv->selection_bubble))
+                    gtk_entry_selection_bubble_popup_unset (entry);
+                  else
+                    gtk_entry_selection_bubble_popup_set (entry);
+                }
+              else
+                {
+                  /* Click inside the selection - we'll either start a drag, or
+                   * clear the selection
+                   */
+                  priv->in_drag = TRUE;
+                  priv->drag_start_x = x + priv->scroll_offset;
+                  priv->drag_start_y = y;
+               }
             }
           else if (!extend_selection)
             {
@@ -4756,22 +4774,13 @@ gtk_entry_drag_gesture_end (GtkGestureDrag *gesture,
 
   /* Check whether the drag was cancelled rather than finished */
   if (!gtk_gesture_handles_sequence (GTK_GESTURE (gesture), sequence))
-    {
-      gtk_entry_selection_bubble_popup_unset (entry);
-      return;
-    }
+    return;
 
   event = gtk_gesture_get_last_event (GTK_GESTURE (gesture), sequence);
   source = gdk_event_get_source_device (event);
   is_touchscreen = (test_touchscreen ||
                     (gtk_get_debug_flags () & GTK_DEBUG_TOUCHSCREEN) != 0 ||
                     gdk_device_get_source (source) == GDK_SOURCE_TOUCHSCREEN);
-
-  if (priv->selection_bubble &&
-      gtk_widget_get_visible (priv->selection_bubble))
-    gtk_entry_selection_bubble_popup_unset (entry);
-  else if (is_touchscreen)
-    gtk_entry_selection_bubble_popup_set (entry);
 
   if (in_drag)
     {
@@ -6698,6 +6707,7 @@ gtk_entry_handle_dragged (GtkTextHandle         *handle,
 
   gtk_entry_show_magnifier (entry, x, y);
 }
+
 
 static void
 gtk_entry_handle_drag_finished (GtkTextHandle         *handle,
