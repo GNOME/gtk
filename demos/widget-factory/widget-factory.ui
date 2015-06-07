@@ -162,7 +162,28 @@
       </row>
     </data>
   </object>
+  <object class="GtkTextTagTable" id="tags">
+    <child type="tag">
+      <object class="GtkTextTag">
+        <property name="name">bold</property>
+        <property name="weight">800</property>
+      </object>
+    </child>
+    <child type="tag">
+      <object class="GtkTextTag">
+        <property name="name">italic</property>
+        <property name="style">italic</property>
+      </object>
+    </child>
+    <child type="tag">
+      <object class="GtkTextTag">
+        <property name="name">underline</property>
+        <property name="underline">single</property>
+      </object>
+    </child>
+  </object>
   <object class="GtkTextBuffer" id="textbuffer1">
+    <property name="tag-table">tags</property>
     <property name="text">Lorem ipsum dolor sit amet, consectetur adipiscing elit.
 Nullam fringilla, est ut feugiat ultrices, elit lacus ultricies nibh, id commodo tortor nisi id elit.
 Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos.
@@ -1408,6 +1429,7 @@ Suspendisse feugiat quam quis dolor accumsan cursus.</property>
                                 <property name="wrap_mode">2</property>
                                 <property name="left_margin">10</property>
                                 <property name="right_margin">10</property>
+                                <property name="populate_all">True</property>
                               </object>
                             </child>
                           </object>

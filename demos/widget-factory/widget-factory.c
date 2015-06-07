@@ -1125,6 +1125,93 @@ page_combo_separator_func (GtkTreeModel *model,
 }
 
 static void
+activate_item (GtkWidget *item, GtkTextView *tv)
+{
+  const gchar *tag;
+  GtkTextIter start, end;
+  gboolean active;
+
+  g_object_get (item, "active", &active, NULL);
+  tag = (const gchar *)g_object_get_data (G_OBJECT (item), "tag");
+  gtk_text_buffer_get_selection_bounds (gtk_text_view_get_buffer (tv), &start, &end);
+  if (active)
+    gtk_text_buffer_apply_tag_by_name (gtk_text_view_get_buffer (tv), tag, &start, &end);
+  else
+    gtk_text_buffer_remove_tag_by_name (gtk_text_view_get_buffer (tv), tag, &start, &end);
+}
+
+static void
+add_item (GtkTextView *tv,
+          GtkWidget   *popup,
+          const gchar *label,
+          const gchar *tag,
+          gboolean     set)
+{
+  GtkWidget *item;
+
+  if (GTK_IS_MENU (popup))
+    {
+      item = gtk_check_menu_item_new_with_label (label);
+      gtk_check_menu_item_set_active (GTK_CHECK_MENU_ITEM (item), set);
+      g_signal_connect (item, "toggled", G_CALLBACK (activate_item), tv);
+    }
+  else
+    {
+      item = gtk_check_button_new_with_label (label);
+      gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (item), set);
+      g_signal_connect (item, "clicked", G_CALLBACK (activate_item), tv);
+    }
+
+  g_object_set_data (G_OBJECT (item), "tag", (gpointer)tag);
+  gtk_widget_show (item);
+  gtk_container_add (GTK_CONTAINER (popup), item);
+}
+
+static void
+populate_popup (GtkTextView *tv,
+                GtkWidget   *popup)
+{
+  gboolean has_selection;
+  GtkWidget *item;
+  GtkTextIter start, end, iter;
+  GtkTextTagTable *tags;
+  GtkTextTag *bold, *italic, *underline;
+  gboolean all_bold, all_italic, all_underline;
+
+  has_selection = gtk_text_buffer_get_selection_bounds (gtk_text_view_get_buffer (tv), &start, &end);
+
+  if (!has_selection)
+    return;
+
+  tags = gtk_text_buffer_get_tag_table (gtk_text_view_get_buffer (tv));
+  bold = gtk_text_tag_table_lookup (tags, "bold");
+  italic = gtk_text_tag_table_lookup (tags, "italic");
+  underline = gtk_text_tag_table_lookup (tags, "underline");
+  all_bold = TRUE;
+  all_italic = TRUE;
+  all_underline = TRUE;
+  gtk_text_iter_assign (&iter, &start);
+  while (!gtk_text_iter_equal (&iter, &end))
+    {
+      all_bold &= gtk_text_iter_has_tag (&iter, bold);
+      all_italic &= gtk_text_iter_has_tag (&iter, italic);
+      all_underline &= gtk_text_iter_has_tag (&iter, underline);
+      gtk_text_iter_forward_char (&iter);
+    }
+
+  if (GTK_IS_MENU (popup))
+    {
+      item = gtk_separator_menu_item_new ();
+      gtk_widget_show (item);
+      gtk_container_add (GTK_CONTAINER (popup), item);
+    }
+
+  add_item (tv, popup, "Bold", "bold", all_bold);
+  add_item (tv, popup, "Italics", "italic", all_italic);
+  add_item (tv, popup, "Underline", "underline", all_underline);
+}
+
+static void
 activate (GApplication *app)
 {
   GtkBuilder *builder;
@@ -1326,6 +1413,10 @@ activate (GApplication *app)
   widget = (GtkWidget *)gtk_builder_get_object (builder, "osd_frame");
   widget2 = (GtkWidget *)gtk_builder_get_object (builder, "totem_like_osd");
   g_object_set_data (G_OBJECT (widget), "osd", widget2);
+
+  widget = (GtkWidget *)gtk_builder_get_object (builder, "textview1");
+  g_signal_connect (widget, "populate-popup",
+                    G_CALLBACK (populate_popup), NULL);
 
   gtk_widget_show_all (GTK_WIDGET (window));
 
