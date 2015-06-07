@@ -1586,14 +1586,18 @@ column-header.button.dnd { // for treeview-like derive widgets
   @each $s,$as in ('',''),
                       (':hover','-hover'),
                       (':active','-active') { //no need for insensitive and backdrop
-                        &.top#{$s} { 
+                        &.top#{$s} {
                           $_url: 'assets/text-select-top#{$as}#{$asset_suffix}';
                           -gtk-icon-source: -gtk-scaled(url('#{$_url}.png'),
-                                            url('#{$_url}@2.png')); }
-                        &.bottom#{$s} { 
+                                            url('#{$_url}@2.png'));
+                          padding-left: 10px;
+                        }
+                        &.bottom#{$s} {
                           $_url: 'assets/text-select-bottom#{$as}#{$asset_suffix}';
                           -gtk-icon-source: -gtk-scaled(url('#{$_url}.png'),
-                                            url('#{$_url}@2.png')); }
+                                            url('#{$_url}@2.png'));
+                          padding-right: 10px;
+                        }
                         &.insertion-cursor#{$s} {
                           $_url: 'assets/slider-horz-scale-has-marks-above#{$as}#{$asset_suffix}';
                           -gtk-icon-source: -gtk-scaled(url('#{$_url}.png'),
@@ -3301,9 +3305,36 @@ GtkVolumeButton.button { padding: 8px; }
 }
 
 /* Decouple the font of context menus from their entry/textview */
-.touch-selection,
 .context-menu {
   font: initial;
+}
+
+.touch-selection {
+  font: initial;
+  color: $osd_fg_color;
+  border: none;
+  background-color: $osd_bg_color;
+  background-clip: padding-box;
+  outline-color: transparentize($osd_fg_color, 0.7);
+  box-shadow: none;
+  text-shadow: 0 1px black;
+  icon-shadow: 0 1px black;
+  &:backdrop { text-shadow: none; }
+  & .button {
+    @include button(osd);
+  }
+  & .button:hover {
+      @include button(osd-hover);
+  }
+  & .button:active, & .button:checked {
+      @include button(osd-active);
+  }
+  & .button:insensitive, & .button:backdrop:insensitive {
+      @include button(osd-insensitive);
+  }
+  & .button:backdrop {
+      @include button(osd-backdrop);
+  }
 }
 
 .monospace {
