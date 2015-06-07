@@ -29,6 +29,7 @@ typedef struct _GtkTextHandlePrivate GtkTextHandlePrivate;
 typedef struct _HandleWindow HandleWindow;
 
 enum {
+  DRAG_STARTED,
   HANDLE_DRAGGED,
   DRAG_FINISHED,
   LAST_SIGNAL
@@ -214,6 +215,7 @@ gtk_text_handle_widget_event (GtkWidget     *widget,
       priv->windows[pos].dy = event->button.y;
       priv->windows[pos].dragged = TRUE;
       gtk_text_handle_set_state (handle, pos, GTK_STATE_FLAG_ACTIVE);
+      g_signal_emit (handle, signals[DRAG_STARTED], 0, pos);
     }
   else if (event->type == GDK_BUTTON_RELEASE)
     {
@@ -647,6 +649,14 @@ _gtk_text_handle_class_init (GtkTextHandleClass *klass)
 		  G_TYPE_NONE, 3,
                   GTK_TYPE_TEXT_HANDLE_POSITION,
                   G_TYPE_INT, G_TYPE_INT);
+  signals[DRAG_STARTED] =
+    g_signal_new (I_("drag-started"),
+		  G_OBJECT_CLASS_TYPE (object_class),
+		  G_SIGNAL_RUN_LAST, 0,
+		  NULL, NULL,
+                  g_cclosure_marshal_VOID__ENUM,
+                  G_TYPE_NONE, 1,
+                  GTK_TYPE_TEXT_HANDLE_POSITION);
   signals[DRAG_FINISHED] =
     g_signal_new (I_("drag-finished"),
 		  G_OBJECT_CLASS_TYPE (object_class),
