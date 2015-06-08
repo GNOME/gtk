@@ -4574,7 +4574,8 @@ gtk_entry_multipress_gesture_pressed (GtkGestureMultiPress *gesture,
       gtk_gesture_set_state (priv->drag_gesture,
                              GTK_EVENT_SEQUENCE_CLAIMED);
 
-      gtk_entry_update_handles (entry, mode);
+      if (priv->text_handle)
+        gtk_entry_update_handles (entry, mode);
     }
 
   if (n_press >= 3)
