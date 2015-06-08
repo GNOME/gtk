@@ -620,6 +620,9 @@ static void         gtk_entry_update_cached_style_values(GtkEntry      *entry);
 static gboolean     get_middle_click_paste             (GtkEntry *entry);
 
 /* GtkTextHandle handlers */
+static void         gtk_entry_handle_drag_started      (GtkTextHandle         *handle,
+                                                        GtkTextHandlePosition  pos,
+                                                        GtkEntry              *entry);
 static void         gtk_entry_handle_dragged           (GtkTextHandle         *handle,
                                                         GtkTextHandlePosition  pos,
                                                         gint                   x,
@@ -2785,6 +2788,8 @@ gtk_entry_ensure_text_handles (GtkEntry *entry)
     return;
 
   priv->text_handle = _gtk_text_handle_new (GTK_WIDGET (entry));
+  g_signal_connect (priv->text_handle, "drag-started",
+                    G_CALLBACK (gtk_entry_handle_drag_started), entry);
   g_signal_connect (priv->text_handle, "handle-dragged",
                     G_CALLBACK (gtk_entry_handle_dragged), entry);
   g_signal_connect (priv->text_handle, "drag-finished",
@@ -6698,9 +6703,15 @@ gtk_entry_handle_dragged (GtkTextHandle         *handle,
       selection_bound_pos != priv->selection_bound)
     {
       if (mode == GTK_TEXT_HANDLE_MODE_CURSOR)
-        gtk_entry_set_positions (entry, cursor_pos, cursor_pos);
+        {
+          entry->priv->cursor_handle_dragged = TRUE;
+          gtk_entry_set_positions (entry, cursor_pos, cursor_pos);
+        }
       else
-        gtk_entry_set_positions (entry, cursor_pos, selection_bound_pos);
+        {
+          entry->priv->selection_handle_dragged = TRUE;
+          gtk_entry_set_positions (entry, cursor_pos, selection_bound_pos);
+        }
 
       gtk_entry_update_handles (entry, mode);
     }
@@ -6708,16 +6719,22 @@ gtk_entry_handle_dragged (GtkTextHandle         *handle,
   gtk_entry_show_magnifier (entry, x, y);
 }
 
+static void
+gtk_entry_handle_drag_started (GtkTextHandle         *handle,
+                               GtkTextHandlePosition  pos,
+                               GtkEntry              *entry)
+{
+  entry->priv->cursor_handle_dragged = FALSE;
+  entry->priv->selection_handle_dragged = FALSE;
+}
 
 static void
 gtk_entry_handle_drag_finished (GtkTextHandle         *handle,
                                 GtkTextHandlePosition  pos,
                                 GtkEntry              *entry)
 {
-  if (entry->priv->selection_bubble &&
-      gtk_widget_get_visible (entry->priv->selection_bubble))
-    gtk_entry_selection_bubble_popup_unset (entry);
-  else
+  if (!entry->priv->cursor_handle_dragged &&
+      !entry->priv->selection_handle_dragged)
     gtk_entry_selection_bubble_popup_set (entry);
 
   if (entry->priv->magnifier_popover)
