@@ -264,7 +264,8 @@ struct _GtkIconInfo
 
   SymbolicPixbufCache *symbolic_pixbuf_cache;
 
-  gint symbolic_size;
+  gint symbolic_width;
+  gint symbolic_height;
 };
 
 typedef struct
@@ -3469,7 +3470,8 @@ icon_info_dup (GtkIconInfo *icon_info)
   dup->is_resource = icon_info->is_resource;
   dup->min_size = icon_info->min_size;
   dup->max_size = icon_info->max_size;
-  dup->symbolic_size = icon_info->symbolic_size;
+  dup->symbolic_width = icon_info->symbolic_width;
+  dup->symbolic_height = icon_info->symbolic_height;
 
   return dup;
 }
@@ -4408,9 +4410,11 @@ gtk_icon_info_load_symbolic_svg (GtkIconInfo    *icon_info,
   gchar *css_warning;
   gchar *css_error;
   gchar *data;
-  gchar *size;
+  gchar *width;
+  gchar *height;
   gchar *file_data, *escaped_file_data;
   gsize file_len;
+  gint symbolic_size;
   double alpha;
   gchar alphastr[G_ASCII_DTOSTR_BUF_SIZE];
 
@@ -4441,7 +4445,8 @@ gtk_icon_info_load_symbolic_svg (GtkIconInfo    *icon_info,
   if (!icon_info_ensure_scale_and_pixbuf (icon_info))
     return NULL;
 
-  if (icon_info->symbolic_size == 0)
+  if (icon_info->symbolic_width == 0 ||
+      icon_info->symbolic_height == 0)
     {
       /* Fetch size from the original icon */
       stream = g_memory_input_stream_new_from_data (file_data, file_len, NULL);
@@ -4451,22 +4456,26 @@ gtk_icon_info_load_symbolic_svg (GtkIconInfo    *icon_info,
       if (!pixbuf)
         return NULL;
 
-      icon_info->symbolic_size = MAX (gdk_pixbuf_get_width (pixbuf), gdk_pixbuf_get_height (pixbuf));
+      icon_info->symbolic_width = gdk_pixbuf_get_width (pixbuf);
+      icon_info->symbolic_height = gdk_pixbuf_get_height (pixbuf);
       g_object_unref (pixbuf);
     }
+
+  symbolic_size = MAX (icon_info->symbolic_width, icon_info->symbolic_height);
 
   GTK_NOTE (ICONTHEME,
   if (icon_info->dir_type == ICON_THEME_DIR_UNTHEMED)
     g_print ("Symbolic icon %s is not in an icon theme directory",
              icon_info->key.icon_names ? icon_info->key.icon_names[0] : icon_info->filename);
-  else if (icon_info->dir_size * icon_info->dir_scale != icon_info->symbolic_size)
+  else if (icon_info->dir_size * icon_info->dir_scale != symbolic_size)
     g_print ("Symbolic icon %s of size %d is in an icon theme directory of size %d",
              icon_info->key.icon_names ? icon_info->key.icon_names[0] : icon_info->filename,
-             icon_info->symbolic_size,
+             symbolic_size,
              icon_info->dir_size * icon_info->dir_scale)
   );
 
-  size = g_strdup_printf ("%d", icon_info->symbolic_size);
+  width = g_strdup_printf ("%d", icon_info->symbolic_width);
+  height = g_strdup_printf ("%d", icon_info->symbolic_height);
 
   escaped_file_data = g_markup_escape_text (file_data, file_len);
   g_free (file_data);
@@ -4477,8 +4486,8 @@ gtk_icon_info_load_symbolic_svg (GtkIconInfo    *icon_info,
                       "<svg version=\"1.1\"\n"
                       "     xmlns=\"http://www.w3.org/2000/svg\"\n"
                       "     xmlns:xi=\"http://www.w3.org/2001/XInclude\"\n"
-                      "     width=\"", size, "\"\n"
-                      "     height=\"", size, "\">\n"
+                      "     width=\"", width, "\"\n"
+                      "     height=\"", height, "\">\n"
                       "  <style type=\"text/css\">\n"
                       "    rect,path {\n"
                       "      fill: ", css_fg," !important;\n"
@@ -4501,7 +4510,8 @@ gtk_icon_info_load_symbolic_svg (GtkIconInfo    *icon_info,
   g_free (css_warning);
   g_free (css_error);
   g_free (css_success);
-  g_free (size);
+  g_free (width);
+  g_free (height);
 
   stream = g_memory_input_stream_new_from_data (data, -1, g_free);
   pixbuf = gdk_pixbuf_new_from_stream_at_scale (stream,
