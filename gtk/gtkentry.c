@@ -4536,12 +4536,14 @@ gtk_entry_multipress_gesture_pressed (GtkGestureMultiPress *gesture,
         case 2:
           priv->select_words = TRUE;
           gtk_entry_select_word (entry);
-          mode = GTK_TEXT_HANDLE_MODE_SELECTION;
+          if (is_touchscreen)
+            mode = GTK_TEXT_HANDLE_MODE_SELECTION;
           break;
         case 3:
           priv->select_lines = TRUE;
           gtk_entry_select_line (entry);
-          mode = GTK_TEXT_HANDLE_MODE_SELECTION;
+          if (is_touchscreen)
+            mode = GTK_TEXT_HANDLE_MODE_SELECTION;
           break;
         default:
           break;
@@ -4572,8 +4574,7 @@ gtk_entry_multipress_gesture_pressed (GtkGestureMultiPress *gesture,
       gtk_gesture_set_state (priv->drag_gesture,
                              GTK_EVENT_SEQUENCE_CLAIMED);
 
-      if (is_touchscreen)
-        gtk_entry_update_handles (entry, mode);
+      gtk_entry_update_handles (entry, mode);
     }
 
   if (n_press >= 3)
