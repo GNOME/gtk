@@ -5234,7 +5234,8 @@ gtk_text_view_multipress_gesture_pressed (GtkGestureMultiPress *gesture,
              */
             GtkTextIter start, end;
 
-            handle_mode = GTK_TEXT_HANDLE_MODE_CURSOR;
+            if (is_touchscreen)
+              handle_mode = GTK_TEXT_HANDLE_MODE_CURSOR;
             get_iter_from_gesture (text_view, priv->multipress_gesture,
                                    &iter, NULL, NULL);
 
@@ -5277,9 +5278,10 @@ gtk_text_view_multipress_gesture_pressed (GtkGestureMultiPress *gesture,
         case 2:
         case 3:
           if (is_touchscreen)
-            break;
-
-          handle_mode = GTK_TEXT_HANDLE_MODE_SELECTION;
+            {
+              handle_mode = GTK_TEXT_HANDLE_MODE_SELECTION;
+              break;
+            }
           gtk_text_view_end_selection_drag (text_view);
 
           get_iter_from_gesture (text_view, priv->multipress_gesture,
@@ -5292,11 +5294,8 @@ gtk_text_view_multipress_gesture_pressed (GtkGestureMultiPress *gesture,
           break;
         }
 
-      if (is_touchscreen)
-        {
-          _gtk_text_view_ensure_text_handles (text_view);
-          gtk_text_view_update_handles (text_view, handle_mode);
-        }
+      _gtk_text_view_ensure_text_handles (text_view);
+      gtk_text_view_update_handles (text_view, handle_mode);
     }
 
   if (n_press >= 3)
