@@ -410,6 +410,55 @@ G_GNUC_END_IGNORE_DEPRECATIONS
   return win;
 }
 
+static GtkWidget *
+test_input_stacking (void)
+{
+  GtkWidget *win;
+  GtkWidget *overlay;
+  GtkWidget *label, *entry;
+  GtkWidget *grid;
+  GtkWidget *button;
+  GtkWidget *vbox;
+  int i,j;
+
+  win = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+  gtk_window_set_title (GTK_WINDOW (win), "Input Stacking");
+
+  overlay = gtk_overlay_new ();
+  grid = gtk_grid_new ();
+  gtk_container_add (GTK_CONTAINER (overlay), grid);
+
+  for (j = 0; j < 5; j++)
+    {
+      for (i = 0; i < 5; i++)
+	{
+	  button = gtk_button_new_with_label ("     ");
+	  gtk_widget_set_hexpand (button, TRUE);
+	  gtk_widget_set_vexpand (button, TRUE);
+	  gtk_grid_attach (GTK_GRID (grid), button, i, j, 1, 1);
+	}
+    }
+
+  vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 10);
+  gtk_overlay_add_overlay (GTK_OVERLAY (overlay), vbox);
+  gtk_widget_set_halign (vbox, GTK_ALIGN_CENTER);
+  gtk_widget_set_valign (vbox, GTK_ALIGN_CENTER);
+
+  label = gtk_label_new ("This is some overlaid text\n"
+			 "It does not get input\n"
+			 "But the entry does");
+  gtk_box_pack_start (GTK_BOX (vbox), label, FALSE, FALSE, 8);
+
+  entry = gtk_entry_new ();
+  gtk_box_pack_start (GTK_BOX (vbox), entry, FALSE, FALSE, 8);
+
+
+  gtk_container_add (GTK_CONTAINER (win), overlay);
+
+  return win;
+}
+
+
 int
 main (int argc, char *argv[])
 {
@@ -420,6 +469,7 @@ main (int argc, char *argv[])
   GtkWidget *win5;
   GtkWidget *win6;
   GtkWidget *win7;
+  GtkWidget *win8;
 
   gtk_init (&argc, &argv);
 
@@ -446,6 +496,9 @@ main (int argc, char *argv[])
 
   win7 = test_stacking ();
   gtk_widget_show_all (win7);
+
+  win8 = test_input_stacking ();
+  gtk_widget_show_all (win8);
 
   gtk_main ();
 
