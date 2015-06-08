@@ -9310,11 +9310,16 @@ gtk_widget_get_app_paintable (GtkWidget *widget)
  * pixmap will not happen automatically (as it is done in
  * gdk_window_begin_paint_region()).
  *
- * Since 3.10 this function only works for widgets with native
- * windows.
+ * In 3.10 GTK and GDK have been restructured for translucent drawing. Since
+ * then expose events for double-buffered widgets are culled into a single
+ * event to the toplevel GDK window. If you now unset double buffering, you
+ * will cause a separate rendering pass for every widget. This will likely
+ * cause rendering problems - in particular related to stacking - and usually
+ * increases rrendering times significantly.
  *
- * Deprecated: 3.14: This does not work under non-X11 backends,
- * and it should not be used in newly written code.
+ * Deprecated: 3.14: This function does not work under non-X11 backends or with
+ * non-native windows.
+ * It should not be used in newly written code.
  **/
 void
 gtk_widget_set_double_buffered (GtkWidget *widget,
