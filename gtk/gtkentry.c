@@ -4506,24 +4506,29 @@ gtk_entry_multipress_gesture_pressed (GtkGestureMultiPress *gesture,
                   priv->drag_start_y = y;
                }
             }
-          else if (!extend_selection)
-            {
-              gtk_editable_set_position (editable, tmp_pos);
-            }
           else
             {
-              gtk_entry_reset_im_context (entry);
+              gtk_entry_selection_bubble_popup_unset (entry);
 
-              if (!have_selection) /* select from the current position to the clicked position */
-                sel_start = sel_end = priv->current_pos;
-
-              if (tmp_pos > sel_start && tmp_pos < sel_end)
+              if (!extend_selection)
                 {
-                  /* Truncate current selection, but keep it as big as possible */
-                  if (tmp_pos - sel_start > sel_end - tmp_pos)
-                            gtk_entry_set_positions (entry, sel_start, tmp_pos);
-                  else
-                            gtk_entry_set_positions (entry, tmp_pos, sel_end);
+                  gtk_editable_set_position (editable, tmp_pos);
+                }
+              else
+                {
+                  gtk_entry_reset_im_context (entry);
+
+                  if (!have_selection) /* select from the current position to the clicked position */
+                    sel_start = sel_end = priv->current_pos;
+
+                  if (tmp_pos > sel_start && tmp_pos < sel_end)
+                    {
+                      /* Truncate current selection, but keep it as big as possible */
+                      if (tmp_pos - sel_start > sel_end - tmp_pos)
+                        gtk_entry_set_positions (entry, sel_start, tmp_pos);
+                      else
+                        gtk_entry_set_positions (entry, tmp_pos, sel_end);
+                    }
                 }
             }
 
