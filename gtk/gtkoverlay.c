@@ -71,6 +71,12 @@ enum {
   LAST_SIGNAL
 };
 
+enum
+{
+  CHILD_PROP_0,
+  CHILD_PROP_INDEX
+};
+
 static guint signals[LAST_SIGNAL] = { 0 };
 
 static void gtk_overlay_buildable_init (GtkBuildableIface *iface);
@@ -293,6 +299,9 @@ gtk_overlay_child_allocate (GtkOverlay      *overlay,
 
   if (gtk_widget_get_mapped (GTK_WIDGET (overlay)))
     {
+      /* Note: This calls show every size allocation, which makes
+       * us keep the z-order of the chilren, as gdk_window_show()
+       * does an implicit raise. */
       if (gtk_widget_get_visible (child->widget))
         gdk_window_show (child->window);
       else if (gdk_window_is_visible (child->window))
@@ -485,7 +494,9 @@ gtk_overlay_remove (GtkContainer *container,
   GtkOverlayPrivate *priv = GTK_OVERLAY (container)->priv;
   GtkOverlayChild *child;
   GSList *children;
+  gboolean removed;
 
+  removed = FALSE;
   for (children = priv->children; children; children = children->next)
     {
       child = children->data;
@@ -503,12 +514,93 @@ gtk_overlay_remove (GtkContainer *container,
           priv->children = g_slist_delete_link (priv->children, children);
           g_slice_free (GtkOverlayChild, child);
 
-          return;
+          removed = TRUE;
         }
+      else if (removed)
+        gtk_widget_child_notify (child->widget, "index");
     }
 
   GTK_CONTAINER_CLASS (gtk_overlay_parent_class)->remove (container, widget);
 }
+
+/**
+ * gtk_overlay_reorder_overlay:
+ * @overlay: a #GtkOverlay
+ * @child: the overlaid #GtkWidget to move
+ * @index: the new index for @child in the list of overlay children
+ *   of @overlay, starting from 0. If negative, indicates the end of
+ *   the list
+ *
+ * Moves @child to a new @index in the list of @overlay children.
+ * The list contains overlays in the order that these were
+ * added to @overlay.
+ *
+ * A widget’s index in the @overlay children list determines which order
+ * the children are drawn if they overlap. The first child is drawn at
+ * the bottom. It also affects the default focus chain order.
+ */
+void
+gtk_overlay_reorder_overlay (GtkOverlay     *overlay,
+			     GtkWidget      *child,
+			     gint            index)
+{
+  GtkOverlayPrivate *priv;
+  GSList *old_link;
+  GSList *new_link;
+  GSList *l;
+  GtkOverlayChild *child_info = NULL;
+  gint old_index, i;
+
+  g_return_if_fail (GTK_IS_OVERLAY (overlay));
+  g_return_if_fail (GTK_IS_WIDGET (child));
+
+  priv = GTK_OVERLAY (overlay)->priv;
+
+  old_link = priv->children;
+  old_index = 0;
+  while (old_link)
+    {
+      child_info = old_link->data;
+      if (child_info->widget == child)
+	break;
+
+      old_link = old_link->next;
+      old_index++;
+    }
+
+  g_return_if_fail (old_link != NULL);
+
+  if (index < 0)
+    {
+      new_link = NULL;
+      index = g_slist_length (priv->children) - 1;
+    }
+  else
+    {
+      new_link = g_slist_nth (priv->children, index);
+      index = MIN (index, g_slist_length (priv->children) - 1);
+    }
+
+  if (index == old_index)
+    return;
+
+  priv->children = g_slist_delete_link (priv->children, old_link);
+  priv->children = g_slist_insert_before (priv->children, new_link, child_info);
+
+  for (i = 0, l = priv->children; l != NULL; l = l->next, i++)
+    {
+      GtkOverlayChild *info = l->data;
+      if ((i < index && i < old_index) ||
+          (i > index && i > old_index))
+        continue;
+      gtk_widget_child_notify (info->widget, "index");
+    }
+
+  if (gtk_widget_get_visible (child) &&
+      gtk_widget_get_visible (GTK_WIDGET (overlay)))
+    gtk_widget_queue_resize (GTK_WIDGET (overlay));
+}
+
 
 static void
 gtk_overlay_forall (GtkContainer *overlay,
@@ -535,6 +627,101 @@ gtk_overlay_forall (GtkContainer *overlay,
     }
 }
 
+static GtkOverlayChild *
+gtk_overlay_get_overlay_child (GtkOverlay *overlay,
+			       GtkWidget *child)
+{
+  GtkOverlayPrivate *priv = GTK_OVERLAY (overlay)->priv;
+  GtkOverlayChild *child_info;
+  GSList *children;
+
+  for (children = priv->children; children; children = children->next)
+    {
+      child_info = children->data;
+
+      if (child_info->widget == child)
+	return child_info;
+    }
+
+  return NULL;
+}
+
+static void
+gtk_overlay_set_child_property (GtkContainer *container,
+				GtkWidget    *child,
+				guint         property_id,
+				const GValue *value,
+				GParamSpec   *pspec)
+{
+  GtkOverlay *overlay = GTK_OVERLAY (container);
+  GtkOverlayChild *child_info;
+  GtkWidget *main_widget;
+
+  main_widget = gtk_bin_get_child (GTK_BIN (overlay));
+  if (child == main_widget)
+    child_info = NULL;
+  else
+    {
+      child_info = gtk_overlay_get_overlay_child (overlay, child);
+      if (child_info == NULL)
+	{
+	  GTK_CONTAINER_WARN_INVALID_CHILD_PROPERTY_ID (container, property_id, pspec);
+	  return;
+	}
+    }
+
+  switch (property_id)
+    {
+    case CHILD_PROP_INDEX:
+      if (child_info != NULL)
+	gtk_overlay_reorder_overlay (GTK_OVERLAY (container),
+				     child,
+				     g_value_get_int (value));
+      break;
+
+    default:
+      GTK_CONTAINER_WARN_INVALID_CHILD_PROPERTY_ID (container, property_id, pspec);
+      break;
+    }
+}
+
+static void
+gtk_overlay_get_child_property (GtkContainer *container,
+				GtkWidget    *child,
+				guint         property_id,
+				GValue       *value,
+				GParamSpec   *pspec)
+{
+  GtkOverlay *overlay = GTK_OVERLAY (container);
+  GtkOverlayPrivate *priv = GTK_OVERLAY (overlay)->priv;
+  GtkOverlayChild *child_info;
+  GtkWidget *main_widget;
+
+  main_widget = gtk_bin_get_child (GTK_BIN (overlay));
+  if (child == main_widget)
+    child_info = NULL;
+  else
+    {
+      child_info = gtk_overlay_get_overlay_child (overlay, child);
+      if (child_info == NULL)
+	{
+	  GTK_CONTAINER_WARN_INVALID_CHILD_PROPERTY_ID (container, property_id, pspec);
+	  return;
+	}
+    }
+
+  switch (property_id)
+    {
+    case CHILD_PROP_INDEX:
+      g_value_set_int (value, g_slist_index (priv->children, child_info));
+      break;
+    default:
+      GTK_CONTAINER_WARN_INVALID_CHILD_PROPERTY_ID (container, property_id, pspec);
+      break;
+    }
+}
+
+
 static void
 gtk_overlay_class_init (GtkOverlayClass *klass)
 {
@@ -550,8 +737,17 @@ gtk_overlay_class_init (GtkOverlayClass *klass)
 
   container_class->remove = gtk_overlay_remove;
   container_class->forall = gtk_overlay_forall;
+  container_class->set_child_property = gtk_overlay_set_child_property;
+  container_class->get_child_property = gtk_overlay_get_child_property;
 
   klass->get_child_position = gtk_overlay_get_child_position;
+
+  gtk_container_class_install_child_property (container_class, CHILD_PROP_INDEX,
+					      g_param_spec_int ("index",
+								P_("Index"),
+								P_("The index of the overlay in the parent, -1 for the main child"),
+								-1, G_MAXINT, 0,
+								GTK_PARAM_READWRITE));
 
   /**
    * GtkOverlay::get-child-position:
@@ -669,4 +865,5 @@ gtk_overlay_add_overlay (GtkOverlay *overlay,
   else
     gtk_widget_set_parent (widget, GTK_WIDGET (overlay));
 
+  gtk_widget_child_notify (widget, "index");
 }
