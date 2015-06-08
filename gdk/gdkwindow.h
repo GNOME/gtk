@@ -654,6 +654,12 @@ GDK_AVAILABLE_IN_ALL
 void gdk_window_merge_child_input_shapes   (GdkWindow       *window);
 
 
+GDK_AVAILABLE_IN_3_18
+void gdk_window_set_pass_through (GdkWindow *window,
+				  gboolean pass_through);
+GDK_AVAILABLE_IN_3_18
+gboolean gdk_window_get_pass_through (GdkWindow *window);
+
 /*
  * Check if a window has been shown, and whether all its
  * parents up to a toplevel have been shown, respectively.

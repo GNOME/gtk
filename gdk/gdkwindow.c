@@ -6785,6 +6785,64 @@ gdk_window_set_child_input_shapes (GdkWindow *window)
 }
 
 /**
+ * gdk_window_set_pass_through:
+ * @window: a #GdkWindow
+ * @pass_through: a boolean
+ *
+ * Sets whether input to the window is passed through to the window
+ * below.
+ *
+ * The default value of this is %FALSE, which means that pointer
+ * events that happen inside the window are send first to the window,
+ * but if the event is not selected by the event mask then the event
+ * is sent to the parent window, and so on up the hierarchy.
+ *
+ * If @pass_through is %TRUE then such pointer events happen as if the
+ * window wasn't there at all, and thus will be sent first to any
+ * windows below @window. This is useful if the window is used in a
+ * transparent fashion. In the terminology of the web this would be called
+ * "pointer-events: none".
+ *
+ * Note that a window with @pass_through %TRUE can still have a subwindow
+ * without pass through, so you can get events on a subset of a window. And in
+ * that cases you would get the in-between related events such as the pointer
+ * enter/leave events on its way to the destination window.
+ *
+ * Since: 3.18
+ **/
+void
+gdk_window_set_pass_through (GdkWindow *window,
+			     gboolean pass_through)
+{
+  g_return_if_fail (GDK_IS_WINDOW (window));
+
+  window->pass_through = !!pass_through;
+
+  /* Pointer may have e.g. moved outside window due to the input region change */
+  _gdk_synthesize_crossing_events_for_geometry_change (window);
+}
+
+/**
+ * gdk_window_get_pass_through:
+ * @window: a #GdkWindow
+ * @pass_through: a boolean
+ *
+ * Returns whether input to the window is passed through to the window
+ * below.
+ *
+ * See gdk_window_set_pass_through() for details
+ *
+ * Since: 3.18
+ **/
+gboolean
+gdk_window_get_pass_through (GdkWindow *window)
+{
+  g_return_if_fail (GDK_IS_WINDOW (window));
+
+  return window->pass_through;
+}
+
+/**
  * gdk_window_merge_child_input_shapes:
  * @window: a #GdkWindow
  *
@@ -7133,6 +7191,63 @@ point_in_window (GdkWindow *window,
 			  x, y));
 }
 
+/* Same as point_in_window, except it also takes pass_through and its
+   interaction with child windows into account */
+static gboolean
+point_in_input_window (GdkWindow *window,
+		       gdouble    x,
+		       gdouble    y,
+		       GdkWindow **input_window,
+		       gdouble   *input_window_x,
+		       gdouble   *input_window_y)
+{
+  GdkWindow *sub;
+  double child_x, child_y;
+  GList *l;
+
+  if (!point_in_window (window, x, y))
+    return FALSE;
+
+  if (!window->pass_through)
+    {
+      if (input_window)
+	{
+	  *input_window = window;
+	  *input_window_x = x;
+	  *input_window_y = y;
+	}
+      return TRUE;
+    }
+
+  /* For pass-through, must be over a child input window */
+
+  /* Children is ordered in reverse stack order, i.e. first is topmost */
+  for (l = window->children; l != NULL; l = l->next)
+    {
+      sub = l->data;
+
+      if (!GDK_WINDOW_IS_MAPPED (sub))
+	continue;
+
+      gdk_window_coords_from_parent ((GdkWindow *)sub,
+				     x, y,
+				     &child_x, &child_y);
+      if (point_in_input_window (sub, child_x, child_y,
+				 input_window, input_window_x, input_window_y))
+	{
+	  if (input_window)
+	    gdk_window_coords_to_parent (sub,
+					 *input_window_x,
+					 *input_window_y,
+					 input_window_x,
+					 input_window_y);
+	  return TRUE;
+	}
+    }
+
+  return FALSE;
+}
+
 static GdkWindow *
 convert_native_coords_to_toplevel (GdkWindow *window,
 				   gdouble    child_x,
@@ -7226,7 +7341,8 @@ _gdk_window_find_child_at (GdkWindow *window,
 	  gdk_window_coords_from_parent ((GdkWindow *)sub,
                                          x, y,
                                          &child_x, &child_y);
-	  if (point_in_window (sub, child_x, child_y))
+	  if (point_in_input_window (sub, child_x, child_y,
+				     NULL, NULL, NULL))
 	    return (GdkWindow *)sub;
 	}
 
@@ -7249,7 +7365,7 @@ _gdk_window_find_descendant_at (GdkWindow *window,
 				gdouble   *found_x,
 				gdouble   *found_y)
 {
-  GdkWindow *sub;
+  GdkWindow *sub, *input_window;
   gdouble child_x, child_y;
   GList *l;
   gboolean found;
@@ -7270,11 +7386,12 @@ _gdk_window_find_descendant_at (GdkWindow *window,
 	      gdk_window_coords_from_parent ((GdkWindow *)sub,
                                              x, y,
                                              &child_x, &child_y);
-	      if (point_in_window (sub, child_x, child_y))
+	      if (point_in_input_window (sub, child_x, child_y,
+					 &input_window, &child_x, &child_y))
 		{
 		  x = child_x;
 		  y = child_y;
-		  window = sub;
+		  window = input_window;
 		  found = TRUE;
 		  break;
 		}
