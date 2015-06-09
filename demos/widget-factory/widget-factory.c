@@ -1159,6 +1159,7 @@ add_item (GtkTextView *tv,
     {
       item = gtk_check_button_new ();
       gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (item), set);
+      gtk_button_set_focus_on_click (GTK_BUTTON (item), FALSE);
       g_signal_connect (item, "clicked", G_CALLBACK (activate_item), tv);
     }
 
