@@ -9195,6 +9195,7 @@ append_bubble_action (GtkTextView  *text_view,
   GtkWidget *item, *image;
 
   item = gtk_button_new ();
+  gtk_button_set_focus_on_click (GTK_BUTTON (item), FALSE);
   image = gtk_image_new_from_icon_name (icon_name, GTK_ICON_SIZE_MENU);
   gtk_widget_show (image);
   gtk_container_add (GTK_CONTAINER (item), image);
