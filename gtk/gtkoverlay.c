@@ -64,6 +64,7 @@ struct _GtkOverlayChild
 {
   GtkWidget *widget;
   GdkWindow *window;
+  gboolean pass_through;
 };
 
 enum {
@@ -74,6 +75,7 @@ enum {
 enum
 {
   CHILD_PROP_0,
+  CHILD_PROP_PASS_THROUGH,
   CHILD_PROP_INDEX
 };
 
@@ -155,6 +157,8 @@ gtk_overlay_create_child_window (GtkOverlay *overlay,
                            &attributes, attributes_mask);
   gtk_widget_register_window (widget, window);
   gtk_style_context_set_background (gtk_widget_get_style_context (widget), window);
+
+  gdk_window_set_pass_through (window, child->pass_through);
 
   gtk_widget_set_parent_window (child->widget, window);
   
@@ -672,6 +676,19 @@ gtk_overlay_set_child_property (GtkContainer *container,
 
   switch (property_id)
     {
+    case CHILD_PROP_PASS_THROUGH:
+      /* Ignore value on main child */
+      if (child_info)
+	{
+	  if (g_value_get_boolean (value) != child_info->pass_through)
+	    {
+	      child_info->pass_through = g_value_get_boolean (value);
+	      if (child_info->window)
+		gdk_window_set_pass_through (child_info->window, child_info->pass_through);
+	      gtk_container_child_notify (container, child, "pass-through");
+	    }
+	}
+      break;
     case CHILD_PROP_INDEX:
       if (child_info != NULL)
 	gtk_overlay_reorder_overlay (GTK_OVERLAY (container),
@@ -712,6 +729,12 @@ gtk_overlay_get_child_property (GtkContainer *container,
 
   switch (property_id)
     {
+    case CHILD_PROP_PASS_THROUGH:
+      if (child_info)
+	g_value_set_boolean (value, child_info->pass_through);
+      else
+	g_value_set_boolean (value, FALSE);
+      break;
     case CHILD_PROP_INDEX:
       g_value_set_int (value, g_slist_index (priv->children, child_info));
       break;
@@ -742,6 +765,10 @@ gtk_overlay_class_init (GtkOverlayClass *klass)
 
   klass->get_child_position = gtk_overlay_get_child_position;
 
+  gtk_container_class_install_child_property (container_class, CHILD_PROP_PASS_THROUGH,
+      g_param_spec_boolean ("pass-through", P_("Pass Through"), P_("Pass through input, does not affect main child"),
+                            FALSE,
+                            GTK_PARAM_READWRITE));
   gtk_container_class_install_child_property (container_class, CHILD_PROP_INDEX,
 					      g_param_spec_int ("index",
 								P_("Index"),
@@ -854,6 +881,49 @@ gtk_overlay_add_overlay (GtkOverlay *overlay,
 
   child = g_slice_new0 (GtkOverlayChild);
   child->widget = widget;
+
+  priv->children = g_slist_append (priv->children, child);
+
+  if (gtk_widget_get_realized (GTK_WIDGET (overlay)))
+    {
+      child->window = gtk_overlay_create_child_window (overlay, child);
+      gtk_widget_set_parent (widget, GTK_WIDGET (overlay));
+    }
+  else
+    gtk_widget_set_parent (widget, GTK_WIDGET (overlay));
+
+  gtk_widget_child_notify (widget, "index");
+}
+
+/**
+ * gtk_overlay_add_pass_through_overlay:
+ * @overlay: a #GtkOverlay
+ * @widget: a #GtkWidget to be added to the container
+ *
+ * Adds @widget to @overlay, allowing input to fall through
+ * to the main child in non-interactive areas.
+ *
+ * The widget will be stacked on top of the main widget
+ * added with gtk_container_add().
+ *
+ * The position at which @widget is placed is determined
+ * from its #GtkWidget:halign and #GtkWidget:valign properties.
+ *
+ * Since: 3.18
+ */
+void
+gtk_overlay_add_pass_through_overlay (GtkOverlay *overlay,
+				      GtkWidget  *widget)
+{
+  GtkOverlayPrivate *priv = overlay->priv;
+  GtkOverlayChild *child;
+
+  g_return_if_fail (GTK_IS_OVERLAY (overlay));
+  g_return_if_fail (GTK_IS_WIDGET (widget));
+
+  child = g_slice_new0 (GtkOverlayChild);
+  child->widget = widget;
+  child->pass_through = TRUE;
 
   priv->children = g_slist_append (priv->children, child);
 
