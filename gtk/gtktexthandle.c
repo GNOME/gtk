@@ -387,15 +387,19 @@ _gtk_text_handle_update (GtkTextHandle         *handle,
                                         rect.x, rect.y, &rect.x, &rect.y);
 
       if (pos == GTK_TEXT_HANDLE_POSITION_CURSOR)
-        handle_pos = GTK_POS_BOTTOM;
+        {
+          handle_pos = GTK_POS_BOTTOM;
+          if (priv->mode == GTK_TEXT_HANDLE_MODE_CURSOR)
+            rect.x -= rect.width / 2;
+        }
       else
         {
           handle_pos = GTK_POS_TOP;
           rect.y += handle_window->pointing_to.height;
+          rect.x -= rect.width;
         }
 
       height += handle_window->pointing_to.height;
-      rect.x -= rect.width / 2;
 
       gtk_widget_set_size_request (handle_window->widget, width, height);
       gtk_widget_show (handle_window->widget);
