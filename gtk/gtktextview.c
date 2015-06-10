@@ -4732,6 +4732,9 @@ gtk_text_view_set_handle_position (GtkTextView           *text_view,
     }
   else
     {
+      GtkTextDirection dir = GTK_TEXT_DIR_LTR;
+      GtkTextAttributes attributes = { 0 };
+
       _gtk_text_handle_set_visible (priv->text_handle, pos, TRUE);
 
       rect.x = CLAMP (x, 0, SCREEN_WIDTH (text_view));
@@ -4739,6 +4742,11 @@ gtk_text_view_set_handle_position (GtkTextView           *text_view,
       _text_window_to_widget_coords (text_view, &rect.x, &rect.y);
 
       _gtk_text_handle_set_position (priv->text_handle, pos, &rect);
+
+      if (gtk_text_iter_get_attributes (iter, &attributes))
+        dir = attributes.direction;
+
+      _gtk_text_handle_set_direction (priv->text_handle, pos, dir);
     }
 }
 
