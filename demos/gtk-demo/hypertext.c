@@ -128,7 +128,7 @@ key_press_event (GtkWidget *text_view,
   return FALSE;
 }
 
-/* Links can also be activated by clicking.
+/* Links can also be activated by clicking or tapping.
  */
 static gboolean
 event_after (GtkWidget *text_view,
@@ -136,15 +136,30 @@ event_after (GtkWidget *text_view,
 {
   GtkTextIter start, end, iter;
   GtkTextBuffer *buffer;
-  GdkEventButton *event;
+  gdouble ex, ey;
   gint x, y;
 
-  if (ev->type != GDK_BUTTON_RELEASE)
-    return FALSE;
+  if (ev->type == GDK_BUTTON_RELEASE)
+    {
+      GdkEventButton *event;
 
-  event = (GdkEventButton *)ev;
+      event = (GdkEventButton *)ev;
+      if (event->button != GDK_BUTTON_PRIMARY)
+        return FALSE;
 
-  if (event->button != GDK_BUTTON_PRIMARY)
+      ex = event->x;
+      ey = event->y;
+    }
+  else if (ev->type == GDK_TOUCH_END)
+    {
+      GdkEventTouch *event;
+
+      event = (GdkEventTouch *)ev;
+
+      ex = event->x;
+      ey = event->y;
+    }
+  else
     return FALSE;
 
   buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (text_view));
@@ -156,13 +171,13 @@ event_after (GtkWidget *text_view,
 
   gtk_text_view_window_to_buffer_coords (GTK_TEXT_VIEW (text_view),
                                          GTK_TEXT_WINDOW_WIDGET,
-                                         event->x, event->y, &x, &y);
+                                         ex, ey, &x, &y);
 
   gtk_text_view_get_iter_at_location (GTK_TEXT_VIEW (text_view), &iter, x, y);
 
   follow_if_link (text_view, &iter);
 
-  return FALSE;
+  return TRUE;
 }
 
 static gboolean hovering_over_link = FALSE;
