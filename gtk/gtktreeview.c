@@ -1051,7 +1051,8 @@ gtk_tree_view_class_init (GtkTreeViewClass *class)
    *
    * Sets a hint to the theme to draw rows in alternating colors.
    *
-   * Deprecated: 3.14
+   * Deprecated: 3.14: The theme is responsible for drawing rows
+   *   using zebra striping
    */
   g_object_class_install_property (o_class,
                                    PROP_RULES_HINT,
