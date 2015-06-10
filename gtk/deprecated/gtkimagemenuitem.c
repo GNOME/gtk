@@ -188,7 +188,8 @@ gtk_image_menu_item_class_init (GtkImageMenuItemClass *klass)
    *
    * Child widget to appear next to the menu text.
    *
-   * Deprecated: 3.10
+   * Deprecated: 3.10: Use a #GtkMenuItem containing a #GtkBox with
+   *   a #GtkAccelLabel and a #GtkImage instead
    */
   g_object_class_install_property (gobject_class,
                                    PROP_IMAGE,
@@ -205,7 +206,7 @@ gtk_image_menu_item_class_init (GtkImageMenuItemClass *klass)
    *
    * Since: 2.16
    *
-   * Deprecated: 3.10
+   * Deprecated: 3.10: Use a named icon from the #GtkIconTheme instead
    */
   g_object_class_install_property (gobject_class,
                                    PROP_USE_STOCK,
@@ -225,7 +226,8 @@ gtk_image_menu_item_class_init (GtkImageMenuItemClass *klass)
    *
    * Since: 2.16
    *
-   * Deprecated: 3.10
+   * Deprecated: 3.10: Use a #GtkMenuItem containing a #GtkBox with
+   *   a #GtkAccelLabel and a #GtkImage instead
    */
   g_object_class_install_property (gobject_class,
                                    PROP_ALWAYS_SHOW_IMAGE,
@@ -242,7 +244,7 @@ gtk_image_menu_item_class_init (GtkImageMenuItemClass *klass)
    *
    * Since: 2.16
    *
-   * Deprecated: 3.10
+   * Deprecated: 3.10: Use gtk_widget_add_accelerator() instead 
    */
   g_object_class_install_property (gobject_class,
                                    PROP_ACCEL_GROUP,
