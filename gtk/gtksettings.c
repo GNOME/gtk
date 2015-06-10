@@ -1316,7 +1316,11 @@ gtk_settings_class_init (GtkSettingsClass *class)
    *
    * Since: 2.4
    *
-   * Deprecated: 3.10: This setting is deprecated
+   * Deprecated: 3.10: This setting is deprecated. Application developers
+   *   control whether a button should show an icon or now, on a
+   *   per-button basis. If a #GtkButton should show an icon, use the
+   *   #GtkButton:always-show-image property of #GtkButton, and pack a
+   *   #GtkImage inside the #GtkButton
    */
   result = settings_install_property_parser (class,
                                              g_param_spec_boolean ("gtk-button-images",
@@ -1360,7 +1364,11 @@ gtk_settings_class_init (GtkSettingsClass *class)
    *
    * Whether images should be shown in menu items
    *
-   * Deprecated: 3.10: This setting is deprecated
+   * Deprecated: 3.10: This setting is deprecated. Application developers
+   *   control whether or not a #GtkMenuItem should have an icon or not,
+   *   on a per widget basis. Either use a #GtkMenuItem with a #GtkBox
+   *   containing a #GtkImage and a #GtkAccelLabel, or describe your menus
+   *   using a #GMenu XML description
    */
   result = settings_install_property_parser (class,
                                              g_param_spec_boolean ("gtk-menu-images",
