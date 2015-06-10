@@ -2067,33 +2067,33 @@ column-header .titlebar .button.titlebutton,
   border-style: none; }
   .entry.cursor-handle.top,
   .cursor-handle.top {
-    -gtk-icon-source: -gtk-scaled(url("assets/text-select-top.png"), url("assets/text-select-top@2.png"));
+    -gtk-icon-source: -gtk-scaled(url("assets/text-select-start.png"), url("assets/text-select-start@2.png"));
     padding-left: 10px; }
   .entry.cursor-handle.bottom,
   .cursor-handle.bottom {
-    -gtk-icon-source: -gtk-scaled(url("assets/text-select-bottom.png"), url("assets/text-select-bottom@2.png"));
+    -gtk-icon-source: -gtk-scaled(url("assets/text-select-end.png"), url("assets/text-select-end@2.png"));
     padding-right: 10px; }
   .entry.cursor-handle.insertion-cursor,
   .cursor-handle.insertion-cursor {
     -gtk-icon-source: -gtk-scaled(url("assets/slider-horz-scale-has-marks-above.png"), url("assets/slider-horz-scale-has-marks-above@2.png")); }
   .entry.cursor-handle.top:hover,
   .cursor-handle.top:hover {
-    -gtk-icon-source: -gtk-scaled(url("assets/text-select-top-hover.png"), url("assets/text-select-top-hover@2.png"));
+    -gtk-icon-source: -gtk-scaled(url("assets/text-select-start-hover.png"), url("assets/text-select-start-hover@2.png"));
     padding-left: 10px; }
   .entry.cursor-handle.bottom:hover,
   .cursor-handle.bottom:hover {
-    -gtk-icon-source: -gtk-scaled(url("assets/text-select-bottom-hover.png"), url("assets/text-select-bottom-hover@2.png"));
+    -gtk-icon-source: -gtk-scaled(url("assets/text-select-end-hover.png"), url("assets/text-select-end-hover@2.png"));
     padding-right: 10px; }
   .entry.cursor-handle.insertion-cursor:hover,
   .cursor-handle.insertion-cursor:hover {
     -gtk-icon-source: -gtk-scaled(url("assets/slider-horz-scale-has-marks-above-hover.png"), url("assets/slider-horz-scale-has-marks-above-hover@2.png")); }
   .entry.cursor-handle.top:active,
   .cursor-handle.top:active {
-    -gtk-icon-source: -gtk-scaled(url("assets/text-select-top-active.png"), url("assets/text-select-top-active@2.png"));
+    -gtk-icon-source: -gtk-scaled(url("assets/text-select-start-active.png"), url("assets/text-select-start-active@2.png"));
     padding-left: 10px; }
   .entry.cursor-handle.bottom:active,
   .cursor-handle.bottom:active {
-    -gtk-icon-source: -gtk-scaled(url("assets/text-select-bottom-active.png"), url("assets/text-select-bottom-active@2.png"));
+    -gtk-icon-source: -gtk-scaled(url("assets/text-select-end-active.png"), url("assets/text-select-end-active@2.png"));
     padding-right: 10px; }
   .entry.cursor-handle.insertion-cursor:active,
   .cursor-handle.insertion-cursor:active {

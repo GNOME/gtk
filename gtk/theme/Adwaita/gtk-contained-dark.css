@@ -2061,33 +2061,33 @@ column-header .titlebar .button.titlebutton,
   border-style: none; }
   .entry.cursor-handle.top,
   .cursor-handle.top {
-    -gtk-icon-source: -gtk-scaled(url("assets/text-select-top-dark.png"), url("assets/text-select-top-dark@2.png"));
+    -gtk-icon-source: -gtk-scaled(url("assets/text-select-start-dark.png"), url("assets/text-select-start-dark@2.png"));
     padding-left: 10px; }
   .entry.cursor-handle.bottom,
   .cursor-handle.bottom {
-    -gtk-icon-source: -gtk-scaled(url("assets/text-select-bottom-dark.png"), url("assets/text-select-bottom-dark@2.png"));
+    -gtk-icon-source: -gtk-scaled(url("assets/text-select-end-dark.png"), url("assets/text-select-end-dark@2.png"));
     padding-right: 10px; }
   .entry.cursor-handle.insertion-cursor,
   .cursor-handle.insertion-cursor {
     -gtk-icon-source: -gtk-scaled(url("assets/slider-horz-scale-has-marks-above-dark.png"), url("assets/slider-horz-scale-has-marks-above-dark@2.png")); }
   .entry.cursor-handle.top:hover,
   .cursor-handle.top:hover {
-    -gtk-icon-source: -gtk-scaled(url("assets/text-select-top-hover-dark.png"), url("assets/text-select-top-hover-dark@2.png"));
+    -gtk-icon-source: -gtk-scaled(url("assets/text-select-start-hover-dark.png"), url("assets/text-select-start-hover-dark@2.png"));
     padding-left: 10px; }
   .entry.cursor-handle.bottom:hover,
   .cursor-handle.bottom:hover {
-    -gtk-icon-source: -gtk-scaled(url("assets/text-select-bottom-hover-dark.png"), url("assets/text-select-bottom-hover-dark@2.png"));
+    -gtk-icon-source: -gtk-scaled(url("assets/text-select-end-hover-dark.png"), url("assets/text-select-end-hover-dark@2.png"));
     padding-right: 10px; }
   .entry.cursor-handle.insertion-cursor:hover,
   .cursor-handle.insertion-cursor:hover {
     -gtk-icon-source: -gtk-scaled(url("assets/slider-horz-scale-has-marks-above-hover-dark.png"), url("assets/slider-horz-scale-has-marks-above-hover-dark@2.png")); }
   .entry.cursor-handle.top:active,
   .cursor-handle.top:active {
-    -gtk-icon-source: -gtk-scaled(url("assets/text-select-top-active-dark.png"), url("assets/text-select-top-active-dark@2.png"));
+    -gtk-icon-source: -gtk-scaled(url("assets/text-select-start-active-dark.png"), url("assets/text-select-start-active-dark@2.png"));
     padding-left: 10px; }
   .entry.cursor-handle.bottom:active,
   .cursor-handle.bottom:active {
-    -gtk-icon-source: -gtk-scaled(url("assets/text-select-bottom-active-dark.png"), url("assets/text-select-bottom-active-dark@2.png"));
+    -gtk-icon-source: -gtk-scaled(url("assets/text-select-end-active-dark.png"), url("assets/text-select-end-active-dark@2.png"));
     padding-right: 10px; }
   .entry.cursor-handle.insertion-cursor:active,
   .cursor-handle.insertion-cursor:active {
