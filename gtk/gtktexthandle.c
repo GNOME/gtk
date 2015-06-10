@@ -47,6 +47,7 @@ struct _HandleWindow
   GtkBorder border;
   gint dx;
   gint dy;
+  GtkTextDirection dir;
   guint dragged : 1;
   guint mode_visible : 1;
   guint user_visible : 1;
@@ -296,6 +297,8 @@ _gtk_text_handle_ensure_widget (GtkTextHandle         *handle,
                              GDK_LEAVE_NOTIFY_MASK |
                              GDK_POINTER_MOTION_MASK);
 
+      gtk_widget_set_direction (widget, priv->windows[pos].dir);
+
       g_signal_connect (widget, "draw",
                         G_CALLBACK (gtk_text_handle_widget_draw), handle);
       g_signal_connect (widget, "event",
@@ -393,7 +396,10 @@ _gtk_text_handle_update (GtkTextHandle         *handle,
       if (pos == GTK_TEXT_HANDLE_POSITION_CURSOR &&
           priv->mode == GTK_TEXT_HANDLE_MODE_CURSOR)
         rect.x -= rect.width / 2;
-      else if (pos == GTK_TEXT_HANDLE_POSITION_SELECTION_START)
+      else if ((pos == GTK_TEXT_HANDLE_POSITION_CURSOR &&
+                handle_window->dir == GTK_TEXT_DIR_RTL) ||
+               (pos == GTK_TEXT_HANDLE_POSITION_SELECTION_START &&
+                handle_window->dir != GTK_TEXT_DIR_RTL))
         rect.x -= rect.width;
 
       border->top = height;
@@ -827,4 +833,25 @@ _gtk_text_handle_get_is_dragged (GtkTextHandle         *handle,
                GTK_TEXT_HANDLE_POSITION_SELECTION_START);
 
   return priv->windows[pos].dragged;
+}
+
+void
+_gtk_text_handle_set_direction (GtkTextHandle         *handle,
+                                GtkTextHandlePosition  pos,
+                                GtkTextDirection       dir)
+{
+  GtkTextHandlePrivate *priv;
+
+  g_return_val_if_fail (GTK_IS_TEXT_HANDLE (handle), FALSE);
+
+  priv = handle->priv;
+  pos = CLAMP (pos, GTK_TEXT_HANDLE_POSITION_CURSOR,
+               GTK_TEXT_HANDLE_POSITION_SELECTION_START);
+  priv->windows[pos].dir = dir;
+
+  if (priv->windows[pos].widget)
+    {
+      gtk_widget_set_direction (priv->windows[pos].widget, dir);
+      _gtk_text_handle_update (handle, pos);
+    }
 }
