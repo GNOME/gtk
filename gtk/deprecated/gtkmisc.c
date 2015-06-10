@@ -98,6 +98,16 @@ gtk_misc_class_init (GtkMiscClass *class)
   
   widget_class->realize = gtk_misc_realize;
 
+  /**
+   * GtkMisc:xalign:
+   *
+   * The horizontal alignment. A value of 0.0 means left alignment (or right
+   * on RTL locales); a value of 1.0 means right alignment (or left on RTL
+   * locales).
+   *
+   * Deprecated: 3.14: Use gtk_widget_set_halign() instead. If you are using
+   *   #GtkLabel, use #GtkLabel:xalign instead.
+   */
   g_object_class_install_property (gobject_class,
                                    PROP_XALIGN,
                                    g_param_spec_float ("xalign",
@@ -108,6 +118,15 @@ gtk_misc_class_init (GtkMiscClass *class)
 						       0.5,
 						       GTK_PARAM_READWRITE|G_PARAM_DEPRECATED));
 
+  /**
+   * GtkMisc:yalign:
+   *
+   * The vertical alignment. A value of 0.0 means top alignment;
+   * a value of 1.0 means bottom alignment.
+   *
+   * Deprecated: 3.14: Use gtk_widget_set_valign() instead. If you are using
+   *   #GtkLabel, use #GtkLabel:yalign instead.
+   */
   g_object_class_install_property (gobject_class,
                                    PROP_YALIGN,
                                    g_param_spec_float ("yalign",
@@ -118,6 +137,15 @@ gtk_misc_class_init (GtkMiscClass *class)
 						       0.5,
 						       GTK_PARAM_READWRITE|G_PARAM_DEPRECATED));
 
+  /**
+   * GtkMisc:xpad:
+   *
+   * The amount of space to add on the left and right of the widget, in
+   * pixels.
+   *
+   * Deprecated: 3.14: Use gtk_widget_set_margin_start() and
+   *   gtk_widget_set_margin_end() instead
+   */
   g_object_class_install_property (gobject_class,
                                    PROP_XPAD,
                                    g_param_spec_int ("xpad",
@@ -128,6 +156,15 @@ gtk_misc_class_init (GtkMiscClass *class)
 						     0,
 						     GTK_PARAM_READWRITE|G_PARAM_DEPRECATED));
 
+  /**
+   * GtkMisc:ypad:
+   *
+   * The amount of space to add on the top and bottom of the widget, in
+   * pixels.
+   *
+   * Deprecated: 3.14: Use gtk_widget_set_margin_top() and
+   *   gtk_widget_set_margin_bottom() instead
+   */
   g_object_class_install_property (gobject_class,
                                    PROP_YPAD,
                                    g_param_spec_int ("ypad",
