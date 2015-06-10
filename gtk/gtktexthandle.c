@@ -243,20 +243,16 @@ gtk_text_handle_widget_event (GtkWidget     *widget,
            event->motion.state & GDK_BUTTON1_MASK &&
            priv->windows[pos].dragged)
     {
-      gint x, y, width, height, handle_height;
+      gint x, y, width, handle_height;
       GtkAllocation allocation;
 
       gtk_widget_get_allocation (priv->windows[pos].widget, &allocation);
       width = allocation.width;
-      height = allocation.height;
       _gtk_text_handle_get_size (handle, NULL, &handle_height);
+
       x = event->motion.x - priv->windows[pos].dx + (width / 2);
-      y = event->motion.y - priv->windows[pos].dy;
-
-      if (pos != GTK_TEXT_HANDLE_POSITION_CURSOR)
-        y += height - handle_height;
-
-      y += priv->windows[pos].pointing_to.height / 2;
+      y = event->motion.y - priv->windows[pos].dy +
+        priv->windows[pos].pointing_to.height / 2;
 
       gtk_widget_translate_coordinates (widget, priv->parent, x, y, &x, &y);
       g_signal_emit (handle, signals[HANDLE_DRAGGED], 0, pos, x, y);
@@ -372,7 +368,6 @@ _gtk_text_handle_update (GtkTextHandle         *handle,
       handle_window->mode_visible && handle_window->user_visible)
     {
       cairo_rectangle_int_t rect;
-      GtkPositionType handle_pos;
       gint width, height;
       GtkWidget *window;
       GtkBorder shadow;
@@ -395,24 +390,14 @@ _gtk_text_handle_update (GtkTextHandle         *handle,
       gtk_widget_translate_coordinates (priv->parent, window,
                                         rect.x, rect.y, &rect.x, &rect.y);
 
-      if (pos == GTK_TEXT_HANDLE_POSITION_CURSOR)
-        {
-          handle_pos = GTK_POS_BOTTOM;
-          if (priv->mode == GTK_TEXT_HANDLE_MODE_CURSOR)
-            rect.x -= rect.width / 2;
+      if (pos == GTK_TEXT_HANDLE_POSITION_CURSOR &&
+          priv->mode == GTK_TEXT_HANDLE_MODE_CURSOR)
+        rect.x -= rect.width / 2;
+      else if (pos == GTK_TEXT_HANDLE_POSITION_SELECTION_START)
+        rect.x -= rect.width;
 
-          border->top = height;
-          border->bottom = handle_window->pointing_to.height;
-        }
-      else
-        {
-          handle_pos = GTK_POS_TOP;
-          rect.y += handle_window->pointing_to.height;
-          rect.x -= rect.width;
-
-          border->top = handle_window->pointing_to.height;
-          border->bottom = height;
-        }
+      border->top = height;
+      border->bottom = handle_window->pointing_to.height;
 
       /* The goal is to make the window 3 times as wide and high. The handle
        * will be rendered in the center, making the rest an invisible border.
@@ -447,7 +432,7 @@ _gtk_text_handle_update (GtkTextHandle         *handle,
       gtk_widget_show (handle_window->widget);
       _gtk_window_set_popover_position (GTK_WINDOW (window),
                                         handle_window->widget,
-                                        handle_pos, &rect);
+                                        GTK_POS_BOTTOM, &rect);
     }
   else if (handle_window->widget)
     gtk_widget_hide (handle_window->widget);
