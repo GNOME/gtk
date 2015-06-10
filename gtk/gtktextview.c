@@ -217,6 +217,7 @@ struct _GtkTextViewPrivate
   gint left_margin;
   gint right_margin;
   gint indent;
+  gint64 handle_place_time;
   PangoTabArray *tabs;
   guint editable : 1;
 
@@ -572,6 +573,12 @@ static gboolean gtk_text_view_extend_selection (GtkTextView            *text_vie
                                                 const GtkTextIter      *location,
                                                 GtkTextIter            *start,
                                                 GtkTextIter            *end);
+static void extend_selection (GtkTextView          *text_view,
+                              SelectionGranularity  granularity,
+                              const GtkTextIter    *location,
+                              GtkTextIter          *start,
+                              GtkTextIter          *end);
+
 
 
 /* FIXME probably need the focus methods. */
@@ -4888,12 +4895,33 @@ gtk_text_view_handle_drag_finished (GtkTextHandle         *handle,
                                     GtkTextHandlePosition  pos,
                                     GtkTextView           *text_view)
 {
-  if (!text_view->priv->cursor_handle_dragged &&
-      !text_view->priv->selection_handle_dragged)
-    gtk_text_view_selection_bubble_popup_set (text_view);
+  GtkTextViewPrivate *priv = text_view->priv;
 
-  if (text_view->priv->magnifier_popover)
-    gtk_widget_hide (text_view->priv->magnifier_popover);
+  if (!priv->cursor_handle_dragged && !priv->selection_handle_dragged)
+    {
+      GtkTextBuffer *buffer;
+      GtkTextIter cursor, start, end;
+      GtkSettings *settings;
+      guint double_click_time;
+
+      settings = gtk_widget_get_settings (GTK_WIDGET (text_view));
+      g_object_get (settings, "gtk-double-click-time", &double_click_time, NULL);
+      if (g_get_monotonic_time() - priv->handle_place_time < double_click_time * 1000)
+        {
+          buffer = get_buffer (text_view);
+          gtk_text_buffer_get_iter_at_mark (buffer, &cursor,
+                                            gtk_text_buffer_get_insert (buffer));
+          extend_selection (text_view, SELECT_WORDS, &cursor, &start, &end);
+          gtk_text_buffer_select_range (buffer, &start, &end);
+
+          gtk_text_view_update_handles (text_view, GTK_TEXT_HANDLE_MODE_SELECTION);
+        }
+      else
+        gtk_text_view_selection_bubble_popup_set (text_view);
+    }
+
+  if (priv->magnifier_popover)
+    gtk_widget_hide (priv->magnifier_popover);
 }
 
 static void
@@ -5236,6 +5264,7 @@ gtk_text_view_multipress_gesture_pressed (GtkGestureMultiPress *gesture,
 
             if (is_touchscreen)
               handle_mode = GTK_TEXT_HANDLE_MODE_CURSOR;
+
             get_iter_from_gesture (text_view, priv->multipress_gesture,
                                    &iter, NULL, NULL);
 
@@ -5268,7 +5297,10 @@ gtk_text_view_multipress_gesture_pressed (GtkGestureMultiPress *gesture,
                 gtk_text_view_selection_bubble_popup_unset (text_view);
 
 		if (is_touchscreen)
-		  gtk_text_buffer_place_cursor (get_buffer (text_view), &iter);
+                  {
+		    gtk_text_buffer_place_cursor (get_buffer (text_view), &iter);
+                    priv->handle_place_time = g_get_monotonic_time ();
+                  }
 		else
 		  gtk_text_view_start_selection_drag (text_view, &iter,
 						      SELECT_CHARACTERS, extends);
