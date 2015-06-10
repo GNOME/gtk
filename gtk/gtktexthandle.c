@@ -44,6 +44,7 @@ struct _HandleWindow
 {
   GtkWidget *widget;
   GdkRectangle pointing_to;
+  GtkBorder border;
   gint dx;
   gint dy;
   guint dragged : 1;
@@ -98,19 +99,19 @@ _gtk_text_handle_draw (GtkTextHandle         *handle,
                        GtkTextHandlePosition  pos)
 {
   GtkTextHandlePrivate *priv;
+  HandleWindow *handle_window;
   GtkStyleContext *context;
   gint width, height;
 
   priv = handle->priv;
-  context = gtk_widget_get_style_context (priv->windows[pos].widget);
+  handle_window = &priv->windows[pos];
+
+  context = gtk_widget_get_style_context (handle_window->widget);
   _gtk_text_handle_get_size (handle, &width, &height);
 
   cairo_save (cr);
 
-  if (pos == GTK_TEXT_HANDLE_POSITION_SELECTION_END)
-    cairo_translate (cr, width, priv->windows[pos].pointing_to.height);
-  else
-    cairo_translate (cr, width, height);
+  cairo_translate (cr, handle_window->border.left, handle_window->border.top);
 
   gtk_style_context_save (context);
   gtk_style_context_add_class (context,
@@ -162,6 +163,12 @@ gtk_text_handle_widget_draw (GtkWidget     *widget,
 
   if (pos < 0)
     return FALSE;
+
+#if 0
+  /* Show the invisible border */
+  cairo_set_source_rgba (cr, 1, 0, 0, 0.5);
+  cairo_paint (cr);
+#endif
 
   _gtk_text_handle_draw (handle, cr, pos);
   return TRUE;
@@ -285,6 +292,7 @@ _gtk_text_handle_ensure_widget (GtkTextHandle         *handle,
       GtkWidget *widget, *window;
 
       widget = gtk_event_box_new ();
+      gtk_event_box_set_visible_window (GTK_EVENT_BOX (widget), TRUE);
       gtk_widget_set_events (widget,
                              GDK_BUTTON_PRESS_MASK |
                              GDK_BUTTON_RELEASE_MASK |
@@ -351,9 +359,11 @@ _gtk_text_handle_update (GtkTextHandle         *handle,
 {
   GtkTextHandlePrivate *priv;
   HandleWindow *handle_window;
+  GtkBorder *border;
 
   priv = handle->priv;
   handle_window = &priv->windows[pos];
+  border = &handle_window->border;
 
   if (!priv->parent || !gtk_widget_is_drawable (priv->parent))
     return;
@@ -365,6 +375,9 @@ _gtk_text_handle_update (GtkTextHandle         *handle,
       GtkPositionType handle_pos;
       gint width, height;
       GtkWidget *window;
+      GtkBorder shadow;
+      GtkAllocation alloc;
+      gint w, h;
 
       _gtk_text_handle_ensure_widget (handle, pos);
       _gtk_text_handle_get_size (handle, &width, &height);
@@ -373,12 +386,8 @@ _gtk_text_handle_update (GtkTextHandle         *handle,
       rect.width = width;
       rect.height = 0;
 
-      /* Make the window 3 times as wide, and 2 times as high (plus
-       * handle_window->pointing_to.height), the handle will be rendered
-       * in the center. Making the rest an invisible input area.
-       */
-      width *= 3;
-      height *= 2;
+      border->left = width;
+      border->right = width;
 
       _handle_update_child_visible (handle, pos);
 
@@ -391,15 +400,48 @@ _gtk_text_handle_update (GtkTextHandle         *handle,
           handle_pos = GTK_POS_BOTTOM;
           if (priv->mode == GTK_TEXT_HANDLE_MODE_CURSOR)
             rect.x -= rect.width / 2;
+
+          border->top = height;
+          border->bottom = handle_window->pointing_to.height;
         }
       else
         {
           handle_pos = GTK_POS_TOP;
           rect.y += handle_window->pointing_to.height;
           rect.x -= rect.width;
+
+          border->top = handle_window->pointing_to.height;
+          border->bottom = height;
         }
 
-      height += handle_window->pointing_to.height;
+      /* The goal is to make the window 3 times as wide and high. The handle
+       * will be rendered in the center, making the rest an invisible border.
+       * If we hit the edge of the toplevel, we shrink the border to avoid
+       * mispositioning the handle, if at all possible. This calculation uses
+       * knowledge about how popover_get_rect() works.
+       */
+
+      _gtk_window_get_shadow_width (GTK_WINDOW (window), &shadow);
+      gtk_widget_get_allocation (window, &alloc);
+      alloc.x += shadow.left;
+      alloc.y += shadow.top;
+      alloc.width -= shadow.left + shadow.right;
+      alloc.height -= shadow.top + shadow.bottom;
+
+      w = width + border->left + border->right;
+      h = height + border->top + border->bottom;
+
+      if (rect.x + rect.width/2 - w/2 < alloc.x)
+        border->left = MAX (0, border->left - (alloc.x - (rect.x + rect.width/2 - w/2)));
+      if (rect.y + rect.height/2 - h/2 < alloc.y)
+        border->top = MAX (0, border->top - (alloc.y - (rect.y + rect.height/2 - h/2)));
+      if (rect.x + rect.width/2 + w/2 > alloc.x + alloc.width)
+        border->right = MAX (0, border->right - (rect.x + rect.width/2 + w/2 - (alloc.x + alloc.width)));
+      if (rect.y + rect.height/2 + h/2 > alloc.y + alloc.height)
+        border->bottom = MAX (0, border->bottom - (rect.y + rect.height/2 + h/2 - (alloc.y + alloc.height)));
+
+      width += border->left + border->right;
+      height += border->top + border->bottom;
 
       gtk_widget_set_size_request (handle_window->widget, width, height);
       gtk_widget_show (handle_window->widget);
