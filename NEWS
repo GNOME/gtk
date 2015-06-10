@@ -1,3 +1,25 @@
+Overview of changes in GTK+ 3.16.4
+==================================
+
+* Bug fixes:
+ 693738 gtk print dialog shows "Getting printer information failed" for...
+ 719683 Escaping issue "Failed to set text from markup due to error par...
+ 745957 GTK+/Quartz >= 3.14.8: Symbol not found: _gtk_drag_cancel (MyPa...
+ 749451 Windows have no border
+ 749593 Miscellaneous test fixes
+ 749893 Crash when trying to drag a tab from a populated GtkNotebook in...
+ 750058 bad options for the keybindings in css instructions generate a ...
+ 750384 GtkDialog can not be moved when gtk_dialog_run from GtkListBox ...
+ 750477 GtkFileChooserButton's label isn't xalign=0'ed
+ 750505 Main grid overlaps GtkPopover
+
+* Translation updates:
+ Czech
+ Occitan
+ Polish
+ Slovenian
+
+
 Overview of changes in GTK+ 3.16.3
 ==================================
 
