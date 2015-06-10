@@ -3089,7 +3089,7 @@ gtk_list_box_row_draw (GtkWidget *widget,
 
   GTK_WIDGET_CLASS (gtk_list_box_row_parent_class)->draw (widget, cr);
 
-  return TRUE;
+  return GDK_EVENT_PROPAGATE;
 }
 
 static void
