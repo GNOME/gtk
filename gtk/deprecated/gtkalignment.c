@@ -136,6 +136,15 @@ gtk_alignment_class_init (GtkAlignmentClass *class)
   widget_class->get_preferred_height_for_width = gtk_alignment_get_preferred_height_for_width;
   widget_class->get_preferred_height_and_baseline_for_width = gtk_alignment_get_preferred_height_and_baseline_for_width;
 
+  /**
+   * GtkAlignment:xalign:
+   *
+   * Horizontal position of child in available space. A value of 0.0
+   * will flush the child left (or right, in RTL locales); a value
+   * of 1.0 will flush the child right (or left, in RTL locales).
+   *
+   * Deprecated: 3.14: Use gtk_widget_set_halign() on the child instead
+   */
   g_object_class_install_property (gobject_class,
                                    PROP_XALIGN,
                                    g_param_spec_float("xalign",
@@ -146,6 +155,15 @@ gtk_alignment_class_init (GtkAlignmentClass *class)
                                                       0.5,
                                                       GTK_PARAM_READWRITE|G_PARAM_DEPRECATED));
    
+  /**
+   * GtkAlignment:yalign:
+   *
+   * Vertical position of child in available space. A value of 0.0
+   * will flush the child to the top; a value of 1.0 will flush the
+   * child to the bottom.
+   *
+   * Deprecated: 3.14: Use gtk_widget_set_valign() on the child instead
+   */
   g_object_class_install_property (gobject_class,
                                    PROP_YALIGN,
                                    g_param_spec_float("yalign",
@@ -155,6 +173,15 @@ gtk_alignment_class_init (GtkAlignmentClass *class)
                                                       1.0,
 						      0.5,
                                                       GTK_PARAM_READWRITE|G_PARAM_DEPRECATED));
+  /**
+   * GtkAlignment:xscale:
+   *
+   * If available horizontal space is bigger than needed, how much
+   * of it to use for the child. A value of 0.0 means none; a value
+   * of 1.0 means all.
+   *
+   * Deprecated: 3.14: Use gtk_widget_set_hexpand() on the child instead
+   */
   g_object_class_install_property (gobject_class,
                                    PROP_XSCALE,
                                    g_param_spec_float("xscale",
@@ -164,6 +191,15 @@ gtk_alignment_class_init (GtkAlignmentClass *class)
                                                       1.0,
                                                       1.0,
                                                       GTK_PARAM_READWRITE|G_PARAM_DEPRECATED));
+  /**
+   * GtkAlignment:yscale:
+   *
+   * If available vertical space is bigger than needed, how much
+   * of it to use for the child. A value of 0.0 means none; a value
+   * of 1.0 means all.
+   *
+   * Deprecated: 3.14: Use gtk_widget_set_vexpand() on the child instead
+   */
   g_object_class_install_property (gobject_class,
                                    PROP_YSCALE,
                                    g_param_spec_float("yscale",
@@ -181,6 +217,8 @@ gtk_alignment_class_init (GtkAlignmentClass *class)
  * The padding to insert at the top of the widget.
  *
  * Since: 2.4
+ *
+ * Deprecared: 3.14: Use gtk_widget_set_margin_top() instead
  */
   g_object_class_install_property (gobject_class,
                                    PROP_TOP_PADDING,
@@ -198,6 +236,8 @@ gtk_alignment_class_init (GtkAlignmentClass *class)
  * The padding to insert at the bottom of the widget.
  *
  * Since: 2.4
+ *
+ * Deprecated: 3.14: Use gtk_widget_set_margin_bottom() instead
  */
   g_object_class_install_property (gobject_class,
                                    PROP_BOTTOM_PADDING,
@@ -215,6 +255,8 @@ gtk_alignment_class_init (GtkAlignmentClass *class)
  * The padding to insert at the left of the widget.
  *
  * Since: 2.4
+ *
+ * Deprecated: 3.14: Use gtk_widget_set_margin_start() instead
  */
   g_object_class_install_property (gobject_class,
                                    PROP_LEFT_PADDING,
@@ -232,6 +274,8 @@ gtk_alignment_class_init (GtkAlignmentClass *class)
  * The padding to insert at the right of the widget.
  *
  * Since: 2.4
+ *
+ * Deprecated: 3.14: Use gtk_widget_set_margin_end() instead
  */
   g_object_class_install_property (gobject_class,
                                    PROP_RIGHT_PADDING,
