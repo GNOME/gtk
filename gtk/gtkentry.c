@@ -202,6 +202,8 @@ struct _GtkEntryPrivate
   guint16       preedit_length;              /* length of preedit string, in bytes */
   guint16	preedit_cursor;	             /* offset of cursor within preedit string, in chars */
 
+  gint64        handle_place_time;
+
   guint         shadow_type             : 4;
   guint         editable                : 1;
   guint         in_drag                 : 1;
@@ -4513,6 +4515,7 @@ gtk_entry_multipress_gesture_pressed (GtkGestureMultiPress *gesture,
               if (!extend_selection)
                 {
                   gtk_editable_set_position (editable, tmp_pos);
+                  priv->handle_place_time = g_get_monotonic_time ();
                 }
               else
                 {
@@ -6740,12 +6743,26 @@ gtk_entry_handle_drag_finished (GtkTextHandle         *handle,
                                 GtkTextHandlePosition  pos,
                                 GtkEntry              *entry)
 {
-  if (!entry->priv->cursor_handle_dragged &&
-      !entry->priv->selection_handle_dragged)
-    gtk_entry_selection_bubble_popup_set (entry);
+  GtkEntryPrivate *priv = entry->priv;
 
-  if (entry->priv->magnifier_popover)
-    gtk_widget_hide (entry->priv->magnifier_popover);
+  if (!priv->cursor_handle_dragged && !priv->selection_handle_dragged)
+    {
+      GtkSettings *settings;
+      guint double_click_time;
+
+      settings = gtk_widget_get_settings (GTK_WIDGET (entry));
+      g_object_get (settings, "gtk-double-click-time", &double_click_time, NULL);
+      if (g_get_monotonic_time() - priv->handle_place_time < double_click_time * 1000)
+        {
+          gtk_entry_select_word (entry);
+          gtk_entry_update_handles (entry, GTK_TEXT_HANDLE_MODE_SELECTION);
+        }
+      else
+        gtk_entry_selection_bubble_popup_set (entry);
+    }
+
+  if (priv->magnifier_popover)
+    gtk_widget_hide (priv->magnifier_popover);
 }
 
 
