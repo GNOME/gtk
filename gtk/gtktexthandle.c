@@ -373,7 +373,6 @@ _gtk_text_handle_update (GtkTextHandle         *handle,
       cairo_rectangle_int_t rect;
       gint width, height;
       GtkWidget *window;
-      GtkBorder shadow;
       GtkAllocation alloc;
       gint w, h;
 
@@ -412,12 +411,7 @@ _gtk_text_handle_update (GtkTextHandle         *handle,
        * knowledge about how popover_get_rect() works.
        */
 
-      _gtk_window_get_shadow_width (GTK_WINDOW (window), &shadow);
       gtk_widget_get_allocation (window, &alloc);
-      alloc.x += shadow.left;
-      alloc.y += shadow.top;
-      alloc.width -= shadow.left + shadow.right;
-      alloc.height -= shadow.top + shadow.bottom;
 
       w = width + border->left + border->right;
       h = height + border->top + border->bottom;
