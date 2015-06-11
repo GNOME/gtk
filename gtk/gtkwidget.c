@@ -237,7 +237,7 @@
  * Otherwise, you would not properly consider widget margins,
  * #GtkSizeGroup, and so forth.
  *
- * Since 3.10 Gtk+ also supports baseline vertical alignment of widgets. This
+ * Since 3.10 GTK+ also supports baseline vertical alignment of widgets. This
  * means that widgets are positioned such that the typographical baseline of
  * widgets in the same row are aligned. This happens if a widget supports baselines,
  * has a vertical alignment of %GTK_ALIGN_BASELINE, and is inside a container
@@ -321,7 +321,7 @@
  *
  * # Building composite widgets from template XML ## {#composite-templates}
  *
- * GtkWidget exposes some facilities to automate the proceedure
+ * GtkWidget exposes some facilities to automate the procedure
  * of creating composite widgets using #GtkBuilder interface description
  * language.
  *
@@ -330,7 +330,7 @@
  * time using gtk_widget_class_set_template().
  *
  * The interface description semantics expected in composite template descriptions
- * is slightly different from regulare #GtkBuilder XML.
+ * is slightly different from regular #GtkBuilder XML.
  *
  * Unlike regular interface descriptions, gtk_widget_class_set_template() will
  * expect a <template> tag as a direct child of the toplevel <interface>
@@ -348,7 +348,7 @@
  * would with <object> tags.
  *
  * Additionally, <object> tags can also be added before and after the initial
- * <template> tag in the normal way, allowing one to define auxilary objects
+ * <template> tag in the normal way, allowing one to define auxiliary objects
  * which might be referenced by other widgets declared as children of the
  * <template> tag.
  *
@@ -1054,7 +1054,7 @@ child_property_notify_dispatcher (GObject     *object,
 }
 
 /* We guard against the draw signal callbacks modifying the state of the
- * cairo context by surounding it with save/restore.
+ * cairo context by surrounding it with save/restore.
  * Maybe we should also cairo_new_path() just to be sure?
  */
 static void
@@ -3011,7 +3011,7 @@ G_GNUC_END_IGNORE_DEPRECATIONS
    * @result: the result of the drag operation
    *
    * The ::drag-failed signal is emitted on the drag source when a drag has
-   * failed. The signal handler may hook custom code to handle a failed DND
+   * failed. The signal handler may hook custom code to handle a failed DnD
    * operation based on the type of error, it returns %TRUE is the failure has
    * been already handled (not showing the default "drag operation failed"
    * animation), otherwise it returns %FALSE.
@@ -4404,7 +4404,7 @@ _gtk_widget_set_sequence_state_internal (GtkWidget             *widget,
     }
 
   /* If the sequence goes denied, check whether this is a controller attached
-   * to the capture phase, that additionally handled the button/touch press (ie.
+   * to the capture phase, that additionally handled the button/touch press (i.e.
    * it was consumed), the corresponding press will be emulated for widgets
    * beneath, so the widgets beneath get a coherent stream of events from now on.
    */
@@ -4760,7 +4760,7 @@ gtk_widget_unparent (GtkWidget *widget)
 
   /* Now that the parent pointer is nullified and the hierarchy-changed
    * already passed, go ahead and unset the parent window, if we are unparenting
-   * an embeded GtkWindow the window will become toplevel again and hierarchy-changed
+   * an embedded GtkWindow the window will become toplevel again and hierarchy-changed
    * will fire again for the new subhierarchy.
    */
   gtk_widget_set_parent_window (widget, NULL);
@@ -6141,7 +6141,7 @@ gtk_widget_size_allocate_with_baseline (GtkWidget     *widget,
 
       if (size_changed || baseline_changed)
 	{
-          /* Invalidate union(old_clip,priv->clip) in priv->window and descendents owned by widget
+          /* Invalidate union(old_clip,priv->clip) in priv->window and descendants owned by widget
            */
           cairo_region_t *invalidate = cairo_region_create_rectangle (&priv->clip);
           cairo_region_union_rectangle (invalidate, &old_clip);
@@ -7014,7 +7014,7 @@ _gtk_widget_draw_internal (GtkWidget *widget,
       if (cairo_status (cr) &&
           _gtk_cairo_get_event_window (cr))
         {
-          /* We check the event so we only warn about internal GTK calls.
+          /* We check the event so we only warn about internal GTK+ calls.
            * Errors might come from PDF streams having write failures and
            * we don't want to spam stderr in that case.
            * We do want to catch errors from
@@ -7052,10 +7052,10 @@ _gtk_widget_draw_windows (GdkWindow *window,
   window_clip.width = gdk_window_get_width (window);
   window_clip.height = gdk_window_get_height (window);
 
-  /* Cairo paths are fixed point 24.8, but gdk supports 32bit window
+  /* Cairo paths are fixed point 24.8, but GDK supports 32-bit window
      sizes, so we can't feed window_clip to e.g. cairo_rectangle()
      directly. Instead, we pre-clip the window clip to the existing
-     clip regions in full 32bit precision and feed that to cairo. */
+     clip regions in full 32-bit precision and feed that to cairo. */
   if (!gdk_cairo_get_clip_rectangle (cr, &current_clip) ||
       !gdk_rectangle_intersect (&window_clip, &current_clip, &window_clip))
     return;
@@ -7072,7 +7072,7 @@ _gtk_widget_draw_windows (GdkWindow *window,
     {
       gdk_window_get_user_data (window, (gpointer *) &widget);
 
-      /* Only clear bg if double bufferer. This is what we used
+      /* Only clear bg if double buffered. This is what we used
 	 to do before, where begin_paint() did the clearing. */
       pattern = gdk_window_get_background_pattern (window);
       if (pattern != NULL &&
@@ -7139,7 +7139,7 @@ _gtk_widget_draw (GtkWidget *widget,
    * that consists of multiple windows we collect all the windows
    * that belongs to a widget and draw them in one go. This means
    * we may somewhat reorder GdkWindows when we paint them, but
-   * thats not generally a problem, as if you want a guaranteed
+   * that’s not generally a problem, as if you want a guaranteed
    * order you generally use a windowed widget where you control
    * the window hierarchy.
    */
@@ -7651,7 +7651,7 @@ static gboolean
 event_window_is_still_viewable (GdkEvent *event)
 {
   /* Check that we think the event's window is viewable before
-   * delivering the event, to prevent suprises. We do this here
+   * delivering the event, to prevent surprises. We do this here
    * at the last moment, since the event may have been queued
    * up behind other events, held over a recursive main loop, etc.
    */
@@ -8168,7 +8168,7 @@ gtk_widget_real_grab_focus (GtkWidget *focus_widget)
       else if (toplevel != focus_widget)
 	{
 	  /* gtk_widget_grab_focus() operates on a tree without window...
-	   * actually, this is very questionable behaviour.
+	   * actually, this is very questionable behavior.
 	   */
 
 	  gtk_container_foreach (GTK_CONTAINER (toplevel),
@@ -8618,7 +8618,7 @@ gtk_widget_set_receives_default (GtkWidget *widget,
  *
  * See gtk_widget_set_receives_default().
  *
- * Returns: %TRUE if @widget acts as the default widget when focussed,
+ * Returns: %TRUE if @widget acts as the default widget when focused,
  *               %FALSE otherwise
  *
  * Since: 2.18
@@ -9341,7 +9341,7 @@ gtk_widget_get_app_paintable (GtkWidget *widget)
  * event to the toplevel GDK window. If you now unset double buffering, you
  * will cause a separate rendering pass for every widget. This will likely
  * cause rendering problems - in particular related to stacking - and usually
- * increases rrendering times significantly.
+ * increases rendering times significantly.
  *
  * Deprecated: 3.14: This function does not work under non-X11 backends or with
  * non-native windows.
@@ -9741,7 +9741,7 @@ gtk_widget_override_background_color (GtkWidget     *widget,
 /**
  * gtk_widget_override_font:
  * @widget: a #GtkWidget
- * @font_desc: (allow-none): the font descriptiong to use, or %NULL to undo
+ * @font_desc: (allow-none): the font description to use, or %NULL to undo
  *     the effect of previous calls to gtk_widget_override_font()
  *
  * Sets the font to use for a widget. All other style values are
@@ -9822,7 +9822,7 @@ gtk_widget_override_symbolic_color (GtkWidget     *widget,
  *
  * Deprecated: 3.16: This function is not useful in the context of CSS-based
  *   rendering. If you wish to change the color used to render the primary
- *   and seconday cursors you should use a custom CSS style, through an
+ *   and secondary cursors you should use a custom CSS style, through an
  *   application-specific #GtkStyleProvider and a CSS style class.
  */
 void
@@ -10072,7 +10072,7 @@ reset_style_recurse (GtkWidget *widget, gpointer data)
  * gtk_widget_reset_style:
  * @widget: a #GtkWidget
  *
- * Updates the style context of @widget and all descendents
+ * Updates the style context of @widget and all descendants
  * by updating its widget path. #GtkContainers may want
  * to use this on a child when reordering it in a way that a different
  * style might apply to it. See also gtk_container_get_path_for_child().
@@ -10704,7 +10704,7 @@ gtk_widget_get_screen (GtkWidget *widget)
  * screen, and all widgets added into a hierarchy with a toplevel
  * window at the top.
  *
- * Returns: %TRUE if there is a #GdkScreen associcated
+ * Returns: %TRUE if there is a #GdkScreen associated
  *   with the widget.
  *
  * Since: 2.2
@@ -10895,7 +10895,7 @@ gtk_widget_child_focus (GtkWidget       *widget,
  * gtk_widget_child_focus():
  *
  * When %TRUE is returned, stay in the widget, the failed keyboard
- * navigation is Ok and/or there is nowhere we can/should move the
+ * navigation is OK and/or there is nowhere we can/should move the
  * focus to.
  *
  * When %FALSE is returned, the caller should continue with keyboard
@@ -11076,7 +11076,7 @@ gtk_widget_set_size_request (GtkWidget *widget,
  * Gets the size request that was explicitly set for the widget using
  * gtk_widget_set_size_request(). A value of -1 stored in @width or
  * @height indicates that that dimension has not been set explicitly
- * and the natural requisition of the widget will be used intead. See
+ * and the natural requisition of the widget will be used instead. See
  * gtk_widget_set_size_request(). To get the size a widget will
  * actually request, call gtk_widget_get_preferred_size() instead of
  * this function.
@@ -11105,13 +11105,13 @@ gtk_widget_get_size_request (GtkWidget *widget,
  * @width: new forced minimum width
  * @height: new forced minimum height
  * @old_width: location to store previous forced minimum width
- * @old_height: location to store previous forced minumum height
+ * @old_height: location to store previous forced minimum height
  *
  * Temporarily establishes a forced minimum size for a widget; this
  * is used by GtkWindow when calculating the size to add to the
  * window’s geometry widget. Cached sizes for the widget and its
  * parents are invalidated, so that subsequent calls to the size
- * negotiation machinery produce the overriden result, but the
+ * negotiation machinery produce the overridden result, but the
  * widget is not queued for relayout or redraw. The old size must
  * be restored with _gtk_widget_restore_size_request() or things
  * will go screwy.
@@ -11770,7 +11770,7 @@ gtk_widget_get_composite_name (GtkWidget *widget)
  *
  * A composite child is a child that’s an implementation detail of the
  * container it’s inside and should not be visible to people using the
- * container. Composite children aren’t treated differently by GTK (but
+ * container. Composite children aren’t treated differently by GTK+ (but
  * see gtk_container_foreach() vs. gtk_container_forall()), but e.g. GUI
  * builders might want to treat them in a different way.
  *
@@ -12323,8 +12323,8 @@ gtk_widget_real_unrealize (GtkWidget *widget)
 
    /* We must do unrealize child widget BEFORE container widget.
     * gdk_window_destroy() destroys specified xwindow and its sub-xwindows.
-    * So, unrealizing container widget bofore its children causes the problem
-    * (for example, gdk_ic_destroy () with destroyed window causes crash. )
+    * So, unrealizing container widget before its children causes the problem
+    * (for example, gdk_ic_destroy () with destroyed window causes crash.)
     */
 
   if (GTK_IS_CONTAINER (widget))
@@ -12563,13 +12563,13 @@ synth_crossing (GtkWidget       *widget,
  *
  * The real pointer window is the window that most recently received an enter notify
  * event.  Windows that don’t select for crossing events can’t become the real
- * poiner window.  The real pointer widget that owns the real pointer window.  The
+ * pointer window.  The real pointer widget that owns the real pointer window.  The
  * effective pointer window is the same as the real pointer window unless the real
  * pointer widget is either insensitive or there is a grab on a widget that is not
  * an ancestor of the real pointer widget (in which case the effective pointer
  * window should be the root window).
  *
- * When the effective pointer window is the same as the real poiner window, we
+ * When the effective pointer window is the same as the real pointer window, we
  * receive crossing events from the windowing system.  When the effective pointer
  * window changes to become different from the real pointer window we synthesize
  * crossing events, attempting to follow X protocol rules:
@@ -12840,7 +12840,7 @@ gtk_widget_propagate_state (GtkWidget    *widget,
         {
           GtkStateData child_data;
 
-          /* Make sure to only propate the right states further */
+          /* Make sure to only propagate the right states further */
           child_data.flags_to_set = data->flags_to_set & GTK_STATE_FLAGS_DO_PROPAGATE;
           child_data.flags_to_unset = data->flags_to_unset & GTK_STATE_FLAGS_DO_PROPAGATE;
 
@@ -12937,7 +12937,7 @@ gtk_widget_shape_combine_region (GtkWidget *widget,
   GtkWidgetPrivate *priv;
 
   g_return_if_fail (GTK_IS_WIDGET (widget));
-  /*  set_shape doesn't work on widgets without gdk window */
+  /*  set_shape doesn't work on widgets without GDK window */
   g_return_if_fail (gtk_widget_get_has_window (widget));
 
   priv = widget->priv;
@@ -12959,7 +12959,7 @@ gtk_widget_shape_combine_region (GtkWidget *widget,
                                cairo_region_copy (region),
 			       (GDestroyNotify) cairo_region_destroy);
 
-      /* set shape if widget has a gdk window already.
+      /* set shape if widget has a GDK window already.
        * otherwise the shape is scheduled to be set by gtk_widget_realize().
        */
       if (priv->window)
@@ -12972,7 +12972,7 @@ gtk_widget_update_input_shape (GtkWidget *widget)
 {
   GtkWidgetPrivate *priv = widget->priv;
 
-  /* set shape if widget has a gdk window already.
+  /* set shape if widget has a GDK window already.
    * otherwise the shape is scheduled to be set by gtk_widget_realize().
    */
   if (priv->window)
@@ -13036,7 +13036,7 @@ gtk_widget_input_shape_combine_region (GtkWidget      *widget,
                                        cairo_region_t *region)
 {
   g_return_if_fail (GTK_IS_WIDGET (widget));
-  /*  set_shape doesn't work on widgets without gdk window */
+  /*  set_shape doesn't work on widgets without GDK window */
   g_return_if_fail (gtk_widget_get_has_window (widget));
 
   if (region == NULL)
@@ -14582,7 +14582,7 @@ gtk_widget_buildable_custom_finished (GtkBuildable *buildable,
 static GtkSizeRequestMode
 gtk_widget_real_get_request_mode (GtkWidget *widget)
 {
-  /* By default widgets dont trade size at all. */
+  /* By default widgets don't trade size at all. */
   return GTK_SIZE_REQUEST_CONSTANT_SIZE;
 }
 
@@ -15175,7 +15175,7 @@ gtk_widget_add_mnemonic_label (GtkWidget *widget,
 /**
  * gtk_widget_remove_mnemonic_label:
  * @widget: a #GtkWidget
- * @label: a #GtkWidget that was previously set as a mnemnic label for
+ * @label: a #GtkWidget that was previously set as a mnemonic label for
  *         @widget with gtk_widget_add_mnemonic_label().
  *
  * Removes a widget from the list of mnemonic labels for
@@ -15569,7 +15569,7 @@ gtk_widget_get_clip (GtkWidget     *widget,
  *
  * Sets the widget’s clip.  This must not be used directly,
  * but from within a widget’s size_allocate method.
- * It must be called after gtk_widget_set_allocation() (or after chaning up
+ * It must be called after gtk_widget_set_allocation() (or after chaining up
  * to the parent class), because that function resets the clip.
  *
  * The clip set should be the area that @widget draws on. If @widget is a
@@ -16019,7 +16019,7 @@ gtk_widget_set_support_multidevice (GtkWidget *widget,
 }
 
 /* There are multiple alpha related sources. First of all the user can specify alpha
- * in gtk_widget_set_opacity, secondly we can get it from the css opacity. These two
+ * in gtk_widget_set_opacity, secondly we can get it from the CSS opacity. These two
  * are multiplied together to form the total alpha. Secondly, the user can specify
  * an opacity group for a widget, which means we must essentially handle it as having alpha.
  */
@@ -16984,8 +16984,8 @@ gtk_widget_class_bind_template_callback_full (GtkWidgetClass *widget_class,
  * @connect_data_destroy: The #GDestroyNotify to free @connect_data, this will only be used at
  *                        class finalization time, when no classes of type @widget_type are in use anymore.
  *
- * For use in lanuage bindings, this will override the default #GtkBuilderConnectFunc to be
- * used when parsing GtkBuilder xml from this class’s template data.
+ * For use in language bindings, this will override the default #GtkBuilderConnectFunc to be
+ * used when parsing GtkBuilder XML from this class’s template data.
  *
  * Note that this must be called from a composite widget classes class
  * initializer after calling gtk_widget_class_set_template().
