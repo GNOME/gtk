@@ -106,22 +106,14 @@
 #define TIMEOUT_EXPAND 500
 
 /* These are used when a destination-side DND operation is taking place.
- * Normally, when a file is being hovered directly over a bookmark,
- * we’ll be in DROP_STATE_NORMAL.
- *
- * But when a file is being hovered between bookmarks, this means the user
- * may want to create a new bookmark for that file between those bookmarks.
- * In that case, the drop state will be *not* DROP_STATE_NORMAL.
- *
- * When the drop state is FADING_OUT, it means that the user is hovering
- * directly over an existing bookmark and an immediate drop will cause the
- * file being dragged to be dropped on the bookmark, instead of causing
- * a new bookmark to be created.
+ * Normally, when a common drag action is taking place, the state will be
+ * DROP_STATE_NEW_BOOKMARK_ARMED, however, if the client of GtkPlacesSidebar
+ * wants to show hints about the valid targets, we sill set it as
+ * DROP_STATE_NEW_BOOKMARK_ARMED_PERMANENT, so the sidebar will show drop hints
+ * until the client says otherwise
  */
 typedef enum {
   DROP_STATE_NORMAL,
-  DROP_STATE_NEW_BOOKMARK_FADING_IN,
-  DROP_STATE_NEW_BOOKMARK_FADING_OUT,
   DROP_STATE_NEW_BOOKMARK_ARMED,
   DROP_STATE_NEW_BOOKMARK_ARMED_PERMANENT,
 } DropState;
