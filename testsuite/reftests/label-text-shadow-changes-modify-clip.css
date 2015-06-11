@@ -13,7 +13,7 @@ GtkLabel {
   animation-delay: 1ms;
 }
 
-#reference {
+.reference {
   animation: initial;
   text-shadow: 20px 20px tomato;
 }
