@@ -4174,6 +4174,7 @@ gtk_entry_move_handle (GtkEntry              *entry,
 
       _gtk_text_handle_set_visible (priv->text_handle, pos, TRUE);
       _gtk_text_handle_set_position (priv->text_handle, pos, &rect);
+      _gtk_text_handle_set_direction (priv->text_handle, pos, priv->resolved_dir);
     }
 }
 
