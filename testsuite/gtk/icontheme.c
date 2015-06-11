@@ -698,6 +698,60 @@ test_inherit (void)
                       "/icons2/scalable/one-two-symbolic-rtl.svg");
 }
 
+static void
+test_nonsquare_symbolic (void)
+{
+  gint width, height;
+  GtkIconTheme *icon_theme;
+  GtkIconInfo *info;
+  GFile *file;
+  GIcon *icon;
+  GdkRGBA black = { 0.0, 0.0, 0.0, 1.0 };
+  gboolean was_symbolic = FALSE;
+  GError *error = NULL;
+  gchar *path = g_build_filename (g_test_get_dir (G_TEST_DIST),
+				  "icons",
+				  "scalable",
+				  "nonsquare-symbolic.svg",
+				  NULL);
+
+  /* load the original image for reference */
+  GdkPixbuf *pixbuf = gdk_pixbuf_new_from_file (path, &error);
+  g_assert_no_error (error);
+  g_assert_nonnull (pixbuf);
+
+  width = gdk_pixbuf_get_width (pixbuf);
+  height = gdk_pixbuf_get_height (pixbuf);
+  g_assert_cmpint (width, !=, height);
+
+  /* now load it through GtkIconTheme */
+  icon_theme = gtk_icon_theme_get_default ();
+  file = g_file_new_for_path (path);
+  icon = g_file_icon_new (file);
+  info = gtk_icon_theme_lookup_by_gicon_for_scale (icon_theme, icon,
+						   height, 1, 0);
+  g_assert_nonnull (info);
+
+  g_object_unref (pixbuf);
+  pixbuf = gtk_icon_info_load_symbolic (info, &black, NULL, NULL, NULL,
+					&was_symbolic, &error);
+
+  /* we are loaded successfully */
+  g_assert_no_error (error);
+  g_assert_nonnull (pixbuf);
+  g_assert_true (was_symbolic);
+
+  /* the original dimensions have been preserved */
+  g_assert_cmpint (gdk_pixbuf_get_width (pixbuf), ==, width);
+  g_assert_cmpint (gdk_pixbuf_get_height (pixbuf), ==, height);
+
+  g_free (path);
+  g_object_unref (pixbuf);
+  g_object_unref (file);
+  g_object_unref (icon);
+  g_object_unref (info);
+}
+
 int
 main (int argc, char *argv[])
 {
@@ -716,6 +770,7 @@ main (int argc, char *argv[])
   g_test_add_func ("/icontheme/list", test_list);
   g_test_add_func ("/icontheme/async", test_async);
   g_test_add_func ("/icontheme/inherit", test_inherit);
+  g_test_add_func ("/icontheme/nonsquare-symbolic", test_nonsquare_symbolic);
 
   return g_test_run();
 }
