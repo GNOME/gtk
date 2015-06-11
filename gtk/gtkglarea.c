@@ -886,6 +886,8 @@ gtk_gl_area_class_init (GtkGLAreaClass *klass)
   /**
    * GtkGLArea::resize:
    * @area: the #GtkGLArea that emitted the signal
+   * @width: the width of the viewport
+   * @height: the height of the viewport
    *
    * The ::resize signal is emitted once when the widget is realized, and
    * then each time the widget is changed while realized. This is useful
