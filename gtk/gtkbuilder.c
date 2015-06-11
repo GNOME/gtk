@@ -2435,7 +2435,7 @@ gtk_builder_add_callback_symbols (GtkBuilder  *builder,
 }
 
 /**
- * gtk_builder_lookup_callback_symbol:
+ * gtk_builder_lookup_callback_symbol: (skip)
  * @builder: a #GtkBuilder
  * @callback_name: The name of the callback
  *
