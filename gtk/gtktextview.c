@@ -5284,11 +5284,15 @@ gtk_text_view_multipress_gesture_pressed (GtkGestureMultiPress *gesture,
                   {
                     if (!priv->selection_bubble ||
 			!gtk_widget_get_visible (priv->selection_bubble))
-                      gtk_text_view_selection_bubble_popup_set (text_view);
+                      {
+                        gtk_text_view_selection_bubble_popup_set (text_view);
+                        handle_mode = GTK_TEXT_HANDLE_MODE_NONE;
+                      }
                     else
-                      gtk_text_view_selection_bubble_popup_unset (text_view);
-
-                    handle_mode = GTK_TEXT_HANDLE_MODE_SELECTION;
+                      {
+                        gtk_text_view_selection_bubble_popup_unset (text_view);
+                        handle_mode = GTK_TEXT_HANDLE_MODE_SELECTION;
+                      }
                   }
                 else
                   {
