@@ -377,34 +377,24 @@ static PangoFontDescription *
 tree_model_get_font_description (GtkTreeModel *model,
                                  GtkTreeIter  *iter)
 {
-  PangoFontDescription *desc;
+  PangoFontDescription *desc, *face_desc;
   PangoFontFace *face;
-  GtkTreeIter child_iter;
 
   gtk_tree_model_get (model, iter,
                       FONT_DESC_COLUMN, &desc,
                       -1);
-  if (desc != NULL)
+  if (pango_font_description_get_set_fields (desc) != 0)
     return desc;
 
   gtk_tree_model_get (model, iter,
                       FACE_COLUMN, &face,
                       -1);
-  desc = pango_font_face_describe (face);
+  face_desc = pango_font_face_describe (face);
   g_object_unref (face);
   
-  if (GTK_IS_TREE_MODEL_FILTER (model))
-    {
-      gtk_tree_model_filter_convert_iter_to_child_iter (GTK_TREE_MODEL_FILTER (model),
-                                                        &child_iter,
-                                                        iter);
-      iter = &child_iter;
-      model = gtk_tree_model_filter_get_model (GTK_TREE_MODEL_FILTER (model));
-    }
+  pango_font_description_merge (desc, face_desc, TRUE);
 
-  gtk_list_store_set (GTK_LIST_STORE (model), iter,
-                      FONT_DESC_COLUMN, desc,
-                      -1);
+  pango_font_description_free (face_desc);
 
   return desc;
 }
@@ -643,19 +633,23 @@ gtk_font_chooser_widget_load_fonts (GtkFontChooserWidget *fontchooser)
 
       for (j = 0; j < n_faces; j++)
         {
+          PangoFontDescription *empty_font_desc;
           const gchar *face_name;
 
           face_name = pango_font_face_get_face_name (faces[j]);
 
           family_and_face = g_strconcat (fam_name, " ", face_name, NULL);
+          empty_font_desc = pango_font_description_new ();
 
           gtk_list_store_insert_with_values (list_store, &iter, -1,
                                              FAMILY_COLUMN, families[i],
                                              FACE_COLUMN, faces[j],
+                                             FONT_DESC_COLUMN, empty_font_desc,
                                              PREVIEW_TITLE_COLUMN, family_and_face,
                                              -1);
 
           g_free (family_and_face);
+          pango_font_description_free (empty_font_desc);
         }
 
       g_free (faces);
