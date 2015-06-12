@@ -11905,15 +11905,10 @@ _gtk_window_set_popover_position (GtkWindow                   *window,
   data->rect = *rect;
   data->pos = pos;
 
-  if (gtk_widget_is_visible (popover))
+  if (gtk_widget_is_visible (popover) && !data->window)
     {
-      if (!data->window)
-        {
-          popover_realize (popover, data, window);
-          popover_map (popover, data);
-        }
-      else
-        gdk_window_raise (data->window);
+      popover_realize (popover, data, window);
+      popover_map (popover, data);
     }
 
   if (need_resize)
