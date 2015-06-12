@@ -413,7 +413,14 @@ window_set_focus (GtkWindow  *window,
   if (priv->modal && widget &&
       gtk_widget_is_drawable (GTK_WIDGET (popover)) &&
       !gtk_widget_is_ancestor (widget, GTK_WIDGET (popover)))
-    gtk_widget_hide (GTK_WIDGET (popover));
+    {
+      GtkWidget *grab_widget;
+
+      grab_widget = gtk_grab_get_current ();
+
+      if (!grab_widget || !GTK_IS_POPOVER (grab_widget))
+        gtk_widget_hide (GTK_WIDGET (popover));
+    }
 }
 
 static void
@@ -1746,7 +1753,14 @@ _gtk_popover_parent_grab_notify (GtkWidget  *widget,
   if (priv->modal &&
       gtk_widget_is_visible (GTK_WIDGET (popover)) &&
       !gtk_widget_has_grab (GTK_WIDGET (popover)))
-    gtk_widget_hide (GTK_WIDGET (popover));
+    {
+      GtkWidget *grab_widget;
+
+      grab_widget = gtk_grab_get_current ();
+
+      if (!grab_widget || !GTK_IS_POPOVER (grab_widget))
+        gtk_widget_hide (GTK_WIDGET (popover));
+    }
 }
 
 static void
