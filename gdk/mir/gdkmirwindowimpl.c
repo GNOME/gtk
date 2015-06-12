@@ -339,7 +339,7 @@ send_buffer (GdkWindow *window)
   GdkMirWindowImpl *impl = GDK_MIR_WINDOW_IMPL (window->impl);
 
   /* Send the completed buffer to Mir */
-  mir_surface_swap_buffers_sync (impl->surface);
+  mir_buffer_stream_swap_buffers_sync (mir_surface_get_buffer_stream (impl->surface));
 
   /* The Cairo context is no longer valid */
   g_clear_pointer (&impl->cairo_surface, cairo_surface_destroy);
@@ -370,7 +370,7 @@ gdk_mir_window_impl_ref_cairo_surface (GdkWindow *window)
     {
       ensure_surface (window);
 
-      mir_surface_get_graphics_region (impl->surface, &region);
+      mir_buffer_stream_get_graphics_region (mir_surface_get_buffer_stream (impl->surface), &region);
       g_assert (region.pixel_format == mir_pixel_format_argb_8888);
 
       cairo_surface = cairo_image_surface_create_for_data ((unsigned char *) region.vaddr,
@@ -1363,7 +1363,7 @@ _gdk_mir_window_get_egl_surface (GdkWindow *window,
       ensure_surface_full (window, mir_buffer_usage_hardware);
 
       egl_display = _gdk_mir_display_get_egl_display (gdk_window_get_display (window));
-      egl_window = (EGLNativeWindowType) mir_surface_get_egl_native_window (impl->surface);
+      egl_window = (EGLNativeWindowType) mir_buffer_stream_get_egl_native_window (mir_surface_get_buffer_stream (impl->surface));
 
       impl->egl_surface =
         eglCreateWindowSurface (egl_display, config, egl_window, NULL);
@@ -1392,7 +1392,7 @@ _gdk_mir_window_get_dummy_egl_surface (GdkWindow *window,
                                                 mir_buffer_usage_hardware);
 
       egl_display = _gdk_mir_display_get_egl_display (display);
-      egl_window = (EGLNativeWindowType) mir_surface_get_egl_native_window (impl->surface);
+      egl_window = (EGLNativeWindowType) mir_buffer_stream_get_egl_native_window (mir_surface_get_buffer_stream (impl->surface));
 
       impl->dummy_egl_surface =
         eglCreateWindowSurface (egl_display, config, egl_window, NULL);
