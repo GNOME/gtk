@@ -9202,14 +9202,12 @@ show_or_hide_handles (GtkWidget   *popover,
   handle = text_view->priv->text_handle;
   mode = _gtk_text_handle_get_mode (handle);
 
-  if (mode == GTK_TEXT_HANDLE_MODE_CURSOR)
+  if (!visible)
+    gtk_text_view_update_handles (text_view, mode);
+  else
     {
-      _gtk_text_handle_set_visible (handle, GTK_TEXT_HANDLE_POSITION_CURSOR, !visible);
-    }
-  else if (mode == GTK_TEXT_HANDLE_MODE_SELECTION)
-    {
-      _gtk_text_handle_set_visible (handle, GTK_TEXT_HANDLE_POSITION_SELECTION_START, !visible);
-      _gtk_text_handle_set_visible (handle, GTK_TEXT_HANDLE_POSITION_SELECTION_END, !visible);
+      _gtk_text_handle_set_visible (handle, GTK_TEXT_HANDLE_POSITION_SELECTION_START, FALSE);
+      _gtk_text_handle_set_visible (handle, GTK_TEXT_HANDLE_POSITION_SELECTION_END, FALSE);
     }
 }
 
