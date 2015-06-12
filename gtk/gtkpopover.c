@@ -925,8 +925,8 @@ _gtk_popover_update_child_visible (GtkPopover *popover)
 
   gtk_widget_get_allocation (GTK_WIDGET (parent), &allocation);
 
-  if (rect.x < 0 || rect.x + rect.width > allocation.width ||
-      rect.y < 0 || rect.y + rect.height > allocation.height)
+  if (rect.x + rect.width < 0 || rect.x > allocation.width ||
+      rect.y + rect.height < 0 || rect.y > allocation.height)
     gtk_widget_set_child_visible (widget, FALSE);
   else
     gtk_widget_set_child_visible (widget, TRUE);
