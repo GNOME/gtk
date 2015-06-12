@@ -2965,6 +2965,9 @@ gtk_entry_destroy (GtkWidget *widget)
       priv->recompute_idle = 0;
     }
 
+  if (priv->magnifier)
+    _gtk_magnifier_set_inspected (GTK_MAGNIFIER (priv->magnifier), NULL);
+
   GTK_WIDGET_CLASS (gtk_entry_parent_class)->destroy (widget);
 }
 
