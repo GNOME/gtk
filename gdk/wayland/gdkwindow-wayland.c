@@ -1174,7 +1174,7 @@ static void
 gdk_wayland_window_map (GdkWindow *window)
 {
   GdkWindowImplWayland *impl = GDK_WINDOW_IMPL_WAYLAND (window->impl);
-  GdkWindow *transient_for;
+  GdkWindow *transient_for = NULL;
 
   if (!should_be_mapped (window))
     return;
