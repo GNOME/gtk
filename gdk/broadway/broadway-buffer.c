@@ -392,7 +392,7 @@ broadway_buffer_encode (BroadwayBuffer *buffer, BroadwayBuffer *prev, GString *d
       hash = 0;
       for (j = x0; j < MIN(x1, x0 + block_size); j++)
         hash = hash * prime + line[j];
-      for (j = j; j < x0 + block_size; j++)
+      for (; j < x0 + block_size; j++)
         hash = hash * prime;
 
       for (j = x0; j < x1; j++)
@@ -405,7 +405,7 @@ broadway_buffer_encode (BroadwayBuffer *buffer, BroadwayBuffer *prev, GString *d
         }
     }
   // Do the last rows if height < block_size
-  for (i = i; i < y0 + block_size; i++)
+  for (; i < y0 + block_size; i++)
     {
       for (j = x0; j < x1; j++)
         block_hashes[j] = block_hashes[j] * vprime;
