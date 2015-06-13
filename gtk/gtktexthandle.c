@@ -836,7 +836,7 @@ _gtk_text_handle_set_direction (GtkTextHandle         *handle,
 {
   GtkTextHandlePrivate *priv;
 
-  g_return_val_if_fail (GTK_IS_TEXT_HANDLE (handle), FALSE);
+  g_return_if_fail (GTK_IS_TEXT_HANDLE (handle));
 
   priv = handle->priv;
   pos = CLAMP (pos, GTK_TEXT_HANDLE_POSITION_CURSOR,
