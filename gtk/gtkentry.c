@@ -126,7 +126,6 @@
   ((pos) == GTK_ENTRY_ICON_PRIMARY ||                   \
    (pos) == GTK_ENTRY_ICON_SECONDARY)
 
-static const GtkBorder default_inner_border = { 2, 2, 2, 2 };
 static GQuark          quark_inner_border   = 0;
 static GQuark          quark_password_hint  = 0;
 static GQuark          quark_cursor_hadjustment = 0;
