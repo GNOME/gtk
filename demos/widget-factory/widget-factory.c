@@ -1218,6 +1218,15 @@ populate_popup (GtkTextView *tv,
 }
 
 static void
+open_popover_text_changed (GtkEntry *entry, GParamSpec *pspec, GtkWidget *button)
+{
+  const gchar *text;
+
+  text = gtk_entry_get_text (entry);
+  gtk_widget_set_sensitive (button, strlen (text) > 0);
+}
+
+static void
 activate (GApplication *app)
 {
   GtkBuilder *builder;
@@ -1423,6 +1432,13 @@ activate (GApplication *app)
   widget = (GtkWidget *)gtk_builder_get_object (builder, "textview1");
   g_signal_connect (widget, "populate-popup",
                     G_CALLBACK (populate_popup), NULL);
+
+  widget = (GtkWidget *)gtk_builder_get_object (builder, "open_popover");
+  widget2 = (GtkWidget *)gtk_builder_get_object (builder, "open_popover_entry");
+  widget3 = (GtkWidget *)gtk_builder_get_object (builder, "open_popover_button");
+  gtk_popover_set_default_widget (GTK_POPOVER (widget), widget3);
+  g_signal_connect (widget2, "notify::text", G_CALLBACK (open_popover_text_changed), widget3);
+  g_signal_connect_swapped (widget3, "clicked", G_CALLBACK (gtk_widget_hide), widget);
 
   gtk_widget_show_all (GTK_WIDGET (window));
 

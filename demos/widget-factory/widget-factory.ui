@@ -2893,9 +2893,10 @@ microphone-sensitivity-medium-symbolic</property>
                         <property name="halign">start</property>
                         <property name="spacing">6</property>
                         <child>
-                          <object class="GtkButton">
+                          <object class="GtkMenuButton">
                             <property name="visible">True</property>
                             <property name="halign">center</property>
+                            <property name="popover">open_popover</property>
                             <style>
                               <class name="text-button"/>
                               <class name="image-button"/>
@@ -3883,6 +3884,86 @@ bad things might happen.</property>
       <action-widget response="cancel">cancel_selection_dialog</action-widget>
       <action-widget response="ok" default="true">select_selection_dialog</action-widget>
     </action-widgets>
+  </object>
+  <object class="GtkPopover" id="open_popover">
+    <property name="visible">True</property>
+    <child>
+      <object class="GtkGrid">
+        <property name="visible">True</property>
+        <property name="margin">10</property>
+        <property name="row-spacing">10</property>
+        <property name="column-spacing">10</property>
+        <child>
+          <object class="GtkLabel">
+            <property name="visible">True</property>
+            <property name="label">Title:</property>
+            <property name="xalign">1</property>
+          </object>
+          <packing>
+            <property name="left-attach">0</property>
+            <property name="top-attach">0</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkLabel">
+            <property name="valign">start</property>
+            <property name="visible">True</property>
+            <property name="label">Description:</property>
+            <property name="xalign">1</property>
+          </object>
+          <packing>
+            <property name="left-attach">0</property>
+            <property name="top-attach">1</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkScrolledWindow">
+            <property name="valign">start</property>
+            <property name="visible">True</property>
+            <property name="shadow-type">in</property>
+            <property name="hscrollbar-policy">never</property>
+            <property name="vscrollbar-policy">automatic</property>
+            <property name="min-content-height">70</property>
+            <child>
+              <object class="GtkTextView" id="open_popover_textview">
+                <property name="visible">True</property>
+              </object>
+            </child>
+          </object>
+          <packing>
+            <property name="left-attach">1</property>
+            <property name="top-attach">1</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkEntry" id="open_popover_entry">
+            <property name="visible">True</property>
+            <property name="activates-default">True</property>
+          </object>
+          <packing>
+            <property name="left-attach">1</property>
+            <property name="top-attach">0</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkButton" id="open_popover_button">
+            <property name="halign">end</property>
+            <property name="visible">True</property>
+            <property name="label">_Open</property>
+            <property name="use-underline">True</property>
+            <property name="sensitive">False</property>
+            <property name="can-default">True</property>
+            <style>
+              <class name="suggested-action"/>
+            </style>
+          </object>
+          <packing>
+            <property name="left-attach">1</property>
+            <property name="top-attach">2</property>
+          </packing>
+        </child>
+      </object>
+    </child>
   </object>
   <object class="GtkSizeGroup">
     <property name="mode">vertical</property>
