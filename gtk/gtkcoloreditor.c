@@ -15,13 +15,6 @@
  * License along with this library. If not, see <http://www.gnu.org/licenses/>.
  */
 
-/* TODO
- * - touch
- * - accessible relations for popups
- * - saving per-application (?)
- * - better popup theming
- */
-
 #include "config.h"
 
 #include "gtkcoloreditorprivate.h"
