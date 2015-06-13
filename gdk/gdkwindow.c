@@ -198,8 +198,6 @@ static guint signals[LAST_SIGNAL] = { 0 };
 
 static gpointer parent_class = NULL;
 
-static const cairo_user_data_key_t gdk_window_cairo_key;
-
 G_DEFINE_ABSTRACT_TYPE (GdkWindow, gdk_window, G_TYPE_OBJECT)
 
 #ifdef DEBUG_WINDOW_PRINTING
