@@ -106,18 +106,6 @@ gtk_font_chooser_default_init (GtkFontChooserInterface *iface)
                           GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
 
   /**
-   * GtkFontChooser:font-map:
-   *
-   * A custom font map to use for this widget, instead of the
-   * default one.
-   *
-   * Since: 3.18
-   */
-  g_object_interface_install_property (iface,
-      g_param_spec_object ("font-map", P_("Font map"), P_("A custom PangoFontMap"),
-                           PANGO_TYPE_FONT_MAP,
-                           GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
-  /**
    * GtkFontChooser::font-activated:
    * @self: the object which received the signal
    * @fontname: the font name
@@ -466,7 +454,8 @@ gtk_font_chooser_set_font_map (GtkFontChooser *fontchooser,
   g_return_if_fail (GTK_IS_FONT_CHOOSER (fontchooser));
   g_return_if_fail (fontmap == NULL || PANGO_IS_FONT_MAP (fontmap));
 
-  g_object_set (fontchooser, "font-map", fontmap, NULL);
+  if (GTK_FONT_CHOOSER_GET_IFACE (fontchooser)->set_font_map)
+    GTK_FONT_CHOOSER_GET_IFACE (fontchooser)->set_font_map (fontchooser, fontmap);
 }
 
 /**
@@ -483,11 +472,12 @@ gtk_font_chooser_set_font_map (GtkFontChooser *fontchooser,
 PangoFontMap *
 gtk_font_chooser_get_font_map (GtkFontChooser *fontchooser)
 {
-  PangoFontMap *fontmap;
+  PangoFontMap *fontmap = NULL;
 
   g_return_val_if_fail (GTK_IS_FONT_CHOOSER (fontchooser), NULL);
 
-  g_object_get (fontchooser, "font-map", &fontmap, NULL);
+  if (GTK_FONT_CHOOSER_GET_IFACE (fontchooser)->get_font_map)
+    fontmap = GTK_FONT_CHOOSER_GET_IFACE (fontchooser)->get_font_map (fontchooser);
 
   return fontmap;
 }

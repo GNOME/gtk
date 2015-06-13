@@ -64,6 +64,19 @@ delegate_set_filter_func (GtkFontChooser    *chooser,
 }
 
 static void
+delegate_set_font_map (GtkFontChooser *chooser,
+                       PangoFontMap   *map)
+{
+  gtk_font_chooser_set_font_map (get_delegate (chooser), map);
+}
+
+static PangoFontMap *
+delegate_get_font_map (GtkFontChooser *chooser)
+{
+  return gtk_font_chooser_get_font_map (get_delegate (chooser));
+}
+
+static void
 delegate_notify (GObject    *object,
                  GParamSpec *pspec,
                  gpointer    user_data)
@@ -121,9 +134,6 @@ _gtk_font_chooser_install_properties (GObjectClass *klass)
   g_object_class_override_property (klass,
                                     GTK_FONT_CHOOSER_PROP_SHOW_PREVIEW_ENTRY,
                                     "show-preview-entry");
-  g_object_class_override_property (klass,
-                                    GTK_FONT_CHOOSER_PROP_FONT_MAP,
-                                    "font-map");
 }
 
 /**
@@ -144,6 +154,8 @@ _gtk_font_chooser_delegate_iface_init (GtkFontChooserIface *iface)
   iface->get_font_face = delegate_get_font_face;
   iface->get_font_size = delegate_get_font_size;
   iface->set_filter_func = delegate_set_filter_func;
+  iface->set_font_map = delegate_set_font_map;
+  iface->get_font_map = delegate_get_font_map;
 }
 
 /**

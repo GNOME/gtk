@@ -70,8 +70,13 @@ struct _GtkFontChooserIface
   void (* font_activated) (GtkFontChooser *chooser,
                            const gchar    *fontname);
 
+  /* More methods */
+  void              (* set_font_map)            (GtkFontChooser   *fontchooser,
+                                                 PangoFontMap     *map);
+  PangoFontMap *    (* get_font_map)            (GtkFontChooser   *fontchooser);
+
    /* Padding */
-  gpointer padding[12];
+  gpointer padding[10];
 };
 
 GDK_AVAILABLE_IN_3_2

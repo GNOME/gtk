@@ -171,8 +171,6 @@ static void     gtk_font_chooser_widget_cell_data_func         (GtkTreeViewColum
 								GtkTreeModel      *tree_model,
 								GtkTreeIter       *iter,
 								gpointer           user_data);
-static void    gtk_font_chooser_widget_set_font_map            (GtkFontChooserWidget *fontchooser,
-                                                                PangoFontMap         *fontmap);
 
 static void gtk_font_chooser_widget_iface_init (GtkFontChooserIface *iface);
 
@@ -203,9 +201,6 @@ gtk_font_chooser_widget_set_property (GObject         *object,
     case GTK_FONT_CHOOSER_PROP_SHOW_PREVIEW_ENTRY:
       gtk_font_chooser_widget_set_show_preview_entry (fontchooser, g_value_get_boolean (value));
       break;
-    case GTK_FONT_CHOOSER_PROP_FONT_MAP:
-      gtk_font_chooser_widget_set_font_map (fontchooser, g_value_get_object (value));
-      break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
@@ -233,9 +228,6 @@ gtk_font_chooser_widget_get_property (GObject         *object,
       break;
     case GTK_FONT_CHOOSER_PROP_SHOW_PREVIEW_ENTRY:
       g_value_set_boolean (value, gtk_font_chooser_widget_get_show_preview_entry (fontchooser));
-      break;
-    case GTK_FONT_CHOOSER_PROP_FONT_MAP:
-      g_value_set_object (value, fontchooser->priv->font_map);
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -1231,9 +1223,10 @@ gtk_font_chooser_widget_set_show_preview_entry (GtkFontChooserWidget *fontchoose
 }
 
 static void
-gtk_font_chooser_widget_set_font_map (GtkFontChooserWidget *fontchooser,
-                                      PangoFontMap         *fontmap)
+gtk_font_chooser_widget_set_font_map (GtkFontChooser *chooser,
+                                      PangoFontMap   *fontmap)
 {
+  GtkFontChooserWidget *fontchooser = GTK_FONT_CHOOSER_WIDGET (chooser);
   GtkFontChooserWidgetPrivate *priv = fontchooser->priv;
 
   if (g_set_object (&priv->font_map, fontmap))
@@ -1253,6 +1246,15 @@ gtk_font_chooser_widget_set_font_map (GtkFontChooserWidget *fontchooser,
 
       g_object_notify (G_OBJECT (fontchooser), "font-map");
     }
+}
+
+static PangoFontMap *
+gtk_font_chooser_widget_get_font_map (GtkFontChooser *chooser)
+{
+  GtkFontChooserWidget *fontchooser = GTK_FONT_CHOOSER_WIDGET (chooser);
+  GtkFontChooserWidgetPrivate *priv = fontchooser->priv;
+
+  return priv->font_map;
 }
 
 static void
@@ -1281,4 +1283,6 @@ gtk_font_chooser_widget_iface_init (GtkFontChooserIface *iface)
   iface->get_font_face = gtk_font_chooser_widget_get_face;
   iface->get_font_size = gtk_font_chooser_widget_get_size;
   iface->set_filter_func = gtk_font_chooser_widget_set_filter_func;
+  iface->set_font_map = gtk_font_chooser_widget_set_font_map;
+  iface->get_font_map = gtk_font_chooser_widget_get_font_map;
 }

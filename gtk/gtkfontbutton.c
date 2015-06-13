@@ -386,9 +386,11 @@ gtk_font_button_get_font_desc (GtkFontButton *font_button)
 }
 
 static void
-gtk_font_button_set_font_map (GtkFontButton *font_button,
-                              PangoFontMap  *font_map)
+gtk_font_button_font_chooser_set_font_map (GtkFontChooser *chooser,
+                                           PangoFontMap   *font_map)
 {
+  GtkFontButton *font_button = GTK_FONT_BUTTON (chooser);
+
   if (g_set_object (&font_button->priv->font_map, font_map))
     {
       PangoContext *context;
@@ -398,9 +400,15 @@ gtk_font_button_set_font_map (GtkFontButton *font_button,
 
       context = gtk_widget_get_pango_context (font_button->priv->font_label);
       pango_context_set_font_map (context, font_map);
-
-      g_object_notify (G_OBJECT (font_button), "font-map");
     }
+}
+
+static PangoFontMap *
+gtk_font_button_font_chooser_get_font_map (GtkFontChooser *chooser)
+{
+  GtkFontButton *font_button = GTK_FONT_BUTTON (chooser);
+
+  return font_button->priv->font_map;
 }
 
 static void
@@ -421,6 +429,8 @@ gtk_font_button_font_chooser_iface_init (GtkFontChooserIface *iface)
   iface->get_font_face = gtk_font_button_font_chooser_get_font_face;
   iface->get_font_size = gtk_font_button_font_chooser_get_font_size;
   iface->set_filter_func = gtk_font_button_font_chooser_set_filter_func;
+  iface->set_font_map = gtk_font_button_font_chooser_set_font_map;
+  iface->get_font_map = gtk_font_button_font_chooser_get_font_map;
 }
 
 G_DEFINE_TYPE_WITH_CODE (GtkFontButton, gtk_font_button, GTK_TYPE_BUTTON,
@@ -655,9 +665,6 @@ gtk_font_button_set_property (GObject      *object,
     case PROP_SHOW_SIZE:
       gtk_font_button_set_show_size (font_button, g_value_get_boolean (value));
       break;
-    case GTK_FONT_CHOOSER_PROP_FONT_MAP:
-      gtk_font_button_set_font_map (font_button, g_value_get_object (value));
-      break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, param_id, pspec);
       break;
@@ -701,9 +708,6 @@ gtk_font_button_get_property (GObject    *object,
       break;
     case PROP_SHOW_SIZE:
       g_value_set_boolean (value, gtk_font_button_get_show_size (font_button));
-      break;
-    case GTK_FONT_CHOOSER_PROP_FONT_MAP:
-      g_value_set_object (value, font_button->priv->font_map);
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, param_id, pspec);
