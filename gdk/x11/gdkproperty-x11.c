@@ -37,94 +37,7 @@
 #include <X11/Xatom.h>
 #include <string.h>
 
-
-static const gchar xatoms_string[] = 
-  /* These are all the standard predefined X atoms */
-  "\0"  /* leave a space for None, even though it is not a predefined atom */
-  "PRIMARY\0"
-  "SECONDARY\0"
-  "ARC\0"
-  "ATOM\0"
-  "BITMAP\0"
-  "CARDINAL\0"
-  "COLORMAP\0"
-  "CURSOR\0"
-  "CUT_BUFFER0\0"
-  "CUT_BUFFER1\0"
-  "CUT_BUFFER2\0"
-  "CUT_BUFFER3\0"
-  "CUT_BUFFER4\0"
-  "CUT_BUFFER5\0"
-  "CUT_BUFFER6\0"
-  "CUT_BUFFER7\0"
-  "DRAWABLE\0"
-  "FONT\0"
-  "INTEGER\0"
-  "PIXMAP\0"
-  "POINT\0"
-  "RECTANGLE\0"
-  "RESOURCE_MANAGER\0"
-  "RGB_COLOR_MAP\0"
-  "RGB_BEST_MAP\0"
-  "RGB_BLUE_MAP\0"
-  "RGB_DEFAULT_MAP\0"
-  "RGB_GRAY_MAP\0"
-  "RGB_GREEN_MAP\0"
-  "RGB_RED_MAP\0"
-  "STRING\0"
-  "VISUALID\0"
-  "WINDOW\0"
-  "WM_COMMAND\0"
-  "WM_HINTS\0"
-  "WM_CLIENT_MACHINE\0"
-  "WM_ICON_NAME\0"
-  "WM_ICON_SIZE\0"
-  "WM_NAME\0"
-  "WM_NORMAL_HINTS\0"
-  "WM_SIZE_HINTS\0"
-  "WM_ZOOM_HINTS\0"
-  "MIN_SPACE\0"
-  "NORM_SPACE\0"
-  "MAX_SPACE\0"
-  "END_SPACE\0"
-  "SUPERSCRIPT_X\0"
-  "SUPERSCRIPT_Y\0"
-  "SUBSCRIPT_X\0"
-  "SUBSCRIPT_Y\0"
-  "UNDERLINE_POSITION\0"
-  "UNDERLINE_THICKNESS\0"
-  "STRIKEOUT_ASCENT\0"
-  "STRIKEOUT_DESCENT\0"
-  "ITALIC_ANGLE\0"
-  "X_HEIGHT\0"
-  "QUAD_WIDTH\0"
-  "WEIGHT\0"
-  "POINT_SIZE\0"
-  "RESOLUTION\0"
-  "COPYRIGHT\0"
-  "NOTICE\0"
-  "FONT_NAME\0"
-  "FAMILY_NAME\0"
-  "FULL_NAME\0"
-  "CAP_HEIGHT\0"
-  "WM_CLASS\0"
-  "WM_TRANSIENT_FOR\0"
-  /* Below here, these are our additions. Increment N_CUSTOM_PREDEFINED
-   * if you add any.
-   */
-  "CLIPBOARD\0"			/* = 69 */
-;
-
-static const gint xatoms_offset[] = {
-    0,   1,   9,  19,  23,  28,  35,  44,  53,  60,  72,  84,
-   96, 108, 120, 132, 144, 156, 165, 170, 178, 185, 189, 201,
-  218, 232, 245, 258, 274, 287, 301, 313, 320, 329, 336, 347,
-  356, 374, 387, 400, 408, 424, 438, 452, 462, 473, 483, 493,
-  507, 521, 533, 545, 564, 584, 601, 619, 632, 641, 652, 659,
-  670, 681, 691, 698, 708, 720, 730, 741, 750, 767
-};
-
-#define N_CUSTOM_PREDEFINED 1
+#define N_PREDEFINED_ATOMS 69
 
 #define ATOM_TO_INDEX(atom) (GPOINTER_TO_UINT(atom))
 #define INDEX_TO_ATOM(atom) ((GdkAtom)GUINT_TO_POINTER(atom))
@@ -156,7 +69,7 @@ lookup_cached_xatom (GdkDisplay *display,
 {
   GdkX11Display *display_x11 = GDK_X11_DISPLAY (display);
 
-  if (ATOM_TO_INDEX (atom) < G_N_ELEMENTS (xatoms_offset) - N_CUSTOM_PREDEFINED)
+  if (ATOM_TO_INDEX (atom) < N_PREDEFINED_ATOMS)
     return ATOM_TO_INDEX (atom);
   
   if (display_x11->atom_from_virtual)
@@ -291,7 +204,7 @@ gdk_x11_xatom_to_atom_for_display (GdkDisplay *display,
 
   display_x11 = GDK_X11_DISPLAY (display);
   
-  if (xatom < G_N_ELEMENTS (xatoms_offset) - N_CUSTOM_PREDEFINED)
+  if (xatom < N_PREDEFINED_ATOMS)
     return INDEX_TO_ATOM (xatom);
   
   if (display_x11->atom_to_virtual)
