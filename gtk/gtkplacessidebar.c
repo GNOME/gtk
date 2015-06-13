@@ -1701,8 +1701,8 @@ start_drop_feedback (GtkPlacesSidebar        *sidebar,
           GtkTreeIter iter;
           GtkTreeIter iter_prev;
           GtkTreePath *path_prev;
-          gint new_bookmark_col_index;
-          SectionType section_type;
+          gint new_bookmark_col_index = 0;
+          SectionType section_type = SECTION_BOOKMARKS;
 
           /* Use column index of previous bookmark to calculate index for "new bookmark" */
           path_prev = gtk_tree_path_new_from_indices (sidebar->new_bookmark_index - 1, -1);
