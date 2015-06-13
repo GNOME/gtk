@@ -11084,7 +11084,10 @@ gdk_window_get_unscaled_size (GdkWindow *window,
       impl_class = GDK_WINDOW_IMPL_GET_CLASS (window->impl);
 
       if (impl_class->get_unscaled_size)
-        return impl_class->get_unscaled_size (window, unscaled_width, unscaled_height);
+        {
+          impl_class->get_unscaled_size (window, unscaled_width, unscaled_height);
+          return;
+        }
     }
 
   scale = gdk_window_get_scale_factor (window);
