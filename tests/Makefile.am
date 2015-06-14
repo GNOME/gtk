@@ -26,6 +26,10 @@ if USE_X11
 testsocket_programs = testsocket testsocket_child
 endif
 
+if OS_LINUX
+fontconfig_programs = testfontchooserdialog
+endif
+
 noinst_PROGRAMS =  $(TEST_PROGS)	\
 	overlayscroll			\
 	syncscroll			\
@@ -68,7 +72,7 @@ noinst_PROGRAMS =  $(TEST_PROGS)	\
 	testfontselection		\
 	testfontselectiondialog		\
 	testfontchooser			\
-	testfontchooserdialog 		\
+	$(fontconfig_programs)		\
 	testframe			\
 	testfullscreen			\
 	testgeometry			\
