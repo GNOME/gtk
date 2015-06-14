@@ -209,7 +209,9 @@ popup_edit (GtkWidget      *widget,
       focus = editor->priv->a_entry;
     }
 
-  if (popup)
+  if (popup == editor->priv->current_popup)
+    dismiss_current_popup (editor);
+  else if (popup)
     {
       dismiss_current_popup (editor);
       toplevel = gtk_widget_get_toplevel (GTK_WIDGET (editor));
