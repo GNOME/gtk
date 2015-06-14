@@ -144,7 +144,7 @@ msgstr "La pantalla per defecte per al GDK"
 
 #: gdk/gdkglcontext.c:265
 msgid "The GDK display the context is from"
-msgstr "El context del què prové la visualització GDK"
+msgstr "El context del qual prové la visualització GDK"
 
 #: gdk/gdkglcontext.c:280 gtk/gtkwidget.c:1451
 msgid "Window"
@@ -3738,7 +3738,7 @@ msgstr ""
 
 #: gtk/gtkeventcontroller.c:166
 msgid "Widget the gesture relates to"
-msgstr "Giny al que apunta el gest"
+msgstr "Giny al qual apunta el gest"
 
 #: gtk/gtkeventcontroller.c:180
 msgid "Propagation phase"
@@ -4815,7 +4815,7 @@ msgstr "Alinea amb"
 
 #: gtk/gtkmenubutton.c:532
 msgid "The parent widget which the menu should align with."
-msgstr "El giny pare amb el que el menú s'hauria d'alinear amb."
+msgstr "El giny pare amb el qual el menú s'hauria d'alinear amb."
 
 #: gtk/gtkmenubutton.c:546 gtk/gtkstylecontext.c:234
 msgid "Direction"
@@ -5500,7 +5500,7 @@ msgstr "Relatiu a"
 
 #: gtk/gtkpopover.c:1567
 msgid "Widget the bubble window points to"
-msgstr "Giny al que apunta la finestra bombolla"
+msgstr "Giny al qual apunta la finestra bombolla"
 
 #: gtk/gtkpopover.c:1580
 msgid "Pointing to"
@@ -5508,7 +5508,7 @@ msgstr "Apunta a"
 
 #: gtk/gtkpopover.c:1581
 msgid "Rectangle the bubble window points to"
-msgstr "Rectangle al que apunta la finestra bombolla"
+msgstr "Rectangle al qual apunta la finestra bombolla"
 
 #: gtk/gtkpopover.c:1595
 msgid "Position to place the bubble window"
@@ -7615,7 +7615,7 @@ msgstr ""
 
 #: gtk/gtktexttag.c:415 gtk/gtktextview.c:775
 msgid "Left, right, or center justification"
-msgstr "Justificació a l'esquerre, dreta, o centre"
+msgstr "Justificació a l'esquerra, dreta, o centre"
 
 #: gtk/gtktexttag.c:434
 msgid ""
@@ -7963,7 +7963,7 @@ msgstr "Color de les línies d'error inferiors"
 
 #: gtk/gtktextview.c:948
 msgid "Color with which to draw error-indication underlines"
-msgstr "El color amb el que es dibuixa la línia inferior que indica un error"
+msgstr "El color amb el qual es dibuixa la línia inferior que indica un error"
 
 #: gtk/gtktogglebutton.c:180 gtk/gtktoggletoolbutton.c:128
 msgid "If the toggle button should be pressed in"
@@ -8900,7 +8900,7 @@ msgstr "Color del cursor"
 
 #: gtk/gtkwidget.c:3625
 msgid "Color with which to draw insertion cursor"
-msgstr "Color amb el que es dibuixa el cursor d'inserció"
+msgstr "Color amb el qual es dibuixa el cursor d'inserció"
 
 #: gtk/gtkwidget.c:3630
 msgid "Secondary cursor color"

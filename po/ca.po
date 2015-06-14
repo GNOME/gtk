@@ -1666,7 +1666,7 @@ msgstr "No hi ha cap aplicació disponible per «%s»"
 #: gtk/gtkappchooserdialog.c:215
 #, c-format
 msgid "Opening “%s” files."
-msgstr "S'està obrint fitxers «%s»."
+msgstr "S'estan obrint fitxers «%s»."
 
 #: gtk/gtkappchooserdialog.c:217
 #, c-format
@@ -4039,7 +4039,7 @@ msgstr "Acumulatiu"
 
 #: gtk/inspector/statistics.ui:165
 msgid "Enable statistics with GOBJECT_DEBUG=instance-count"
-msgstr "Habilta les estadístiques amb GOBJECT_DEBUG=instance-count"
+msgstr "Habilita les estadístiques amb GOBJECT_DEBUG=instance-count"
 
 #: gtk/inspector/visual.c:263 gtk/inspector/visual.c:278
 msgid "Theme is hardcoded by GTK_THEME"
@@ -5458,7 +5458,7 @@ msgstr "Paper"
 
 #: gtk/ui/gtkprintunixdialog.ui:674
 msgid "Paper _type:"
-msgstr "_Tipus de pape:"
+msgstr "_Tipus de paper:"
 
 #: gtk/ui/gtkprintunixdialog.ui:699
 msgid "Paper _source:"
@@ -5507,7 +5507,7 @@ msgid ""
 " e.g. 15∶30, 2∶35 pm, 14∶15∶20, 11∶46∶30 am, 4 pm"
 msgstr ""
 "Especifiqueu l'hora d'impressió,\n"
-" p.e. 15∶30, 2∶35 pm, 14∶15∶20, 11∶46∶30 am, 4 pm"
+" p. ex. 15∶30, 2∶35 pm, 14∶15∶20, 11∶46∶30 am, 4 pm"
 
 #: gtk/ui/gtkprintunixdialog.ui:1038
 msgid "Time of print"
