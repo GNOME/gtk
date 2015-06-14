@@ -41,6 +41,7 @@ struct _GtkColorSwatchPrivate
   guint    has_color        : 1;
   guint    use_alpha        : 1;
   guint    selectable       : 1;
+  guint    has_menu         : 1;
 
   GdkWindow *event_window;
 
@@ -52,7 +53,8 @@ enum
 {
   PROP_ZERO,
   PROP_RGBA,
-  PROP_SELECTABLE
+  PROP_SELECTABLE,
+  PROP_HAS_MENU
 };
 
 enum
@@ -82,6 +84,7 @@ gtk_color_swatch_init (GtkColorSwatch *swatch)
   swatch->priv = gtk_color_swatch_get_instance_private (swatch);
   swatch->priv->use_alpha = TRUE;
   swatch->priv->selectable = TRUE;
+  swatch->priv->has_menu = TRUE;
 
   gtk_widget_set_can_focus (GTK_WIDGET (swatch), TRUE);
   gtk_widget_set_has_window (GTK_WIDGET (swatch), FALSE);
@@ -357,7 +360,7 @@ swatch_key_press (GtkWidget   *widget,
       event->keyval == GDK_KEY_KP_Enter ||
       event->keyval == GDK_KEY_KP_Space)
     {
-      if (swatch->priv->has_color && 
+      if (swatch->priv->has_color &&
           swatch->priv->selectable &&
           (gtk_widget_get_state_flags (widget) & GTK_STATE_FLAG_SELECTED) == 0)
         gtk_widget_set_state_flags (widget, GTK_STATE_FLAG_SELECTED, FALSE);
@@ -517,7 +520,7 @@ tap_action (GtkGestureMultiPress *gesture,
     }
   else if (button == GDK_BUTTON_SECONDARY)
     {
-      if (swatch->priv->has_color)
+      if (swatch->priv->has_color && swatch->priv->has_menu)
         do_popup (GTK_WIDGET (swatch), button, gtk_get_current_event_time ());
     }
 }
@@ -575,7 +578,7 @@ swatch_realize (GtkWidget *widget)
   gtk_widget_set_window (widget, window);
   g_object_ref (window);
 
-  swatch->priv->event_window = 
+  swatch->priv->event_window =
     gdk_window_new (window,
                     &attributes, attributes_mask);
   gtk_widget_register_window (widget, swatch->priv->event_window);
@@ -641,6 +644,9 @@ swatch_get_property (GObject    *object,
     case PROP_SELECTABLE:
       g_value_set_boolean (value, gtk_color_swatch_get_selectable (swatch));
       break;
+    case PROP_HAS_MENU:
+      g_value_set_boolean (value, swatch->priv->has_menu);
+      break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
@@ -662,6 +668,9 @@ swatch_set_property (GObject      *object,
       break;
     case PROP_SELECTABLE:
       gtk_color_swatch_set_selectable (swatch, g_value_get_boolean (value));
+      break;
+    case PROP_HAS_MENU:
+      swatch->priv->has_menu = g_value_get_boolean (value);
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -728,9 +737,13 @@ gtk_color_swatch_class_init (GtkColorSwatchClass *class)
   g_object_class_install_property (object_class, PROP_SELECTABLE,
       g_param_spec_boolean ("selectable", P_("Selectable"), P_("Whether the swatch is selectable"),
                             TRUE, GTK_PARAM_READWRITE));
+  g_object_class_install_property (object_class, PROP_HAS_MENU,
+      g_param_spec_boolean ("has-menu", P_("Has Menu"), P_("Whether the swatch should offer customization"),
+                            TRUE, GTK_PARAM_READWRITE));
 
   gtk_widget_class_set_accessible_type (widget_class, GTK_TYPE_COLOR_SWATCH_ACCESSIBLE);
 }
+
 
 /* Public API {{{1 */
 
