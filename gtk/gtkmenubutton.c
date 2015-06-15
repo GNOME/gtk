@@ -426,26 +426,36 @@ gtk_menu_button_clicked (GtkButton *button)
 {
   GtkMenuButton *menu_button = GTK_MENU_BUTTON (button);
   GtkMenuButtonPrivate *priv = menu_button->priv;
-  gboolean active = TRUE;
+  gboolean active;
 
-  if (priv->menu && !gtk_widget_get_visible (priv->menu))
+  if (priv->menu)
     {
-      GdkEvent *event;
+      active = !gtk_widget_get_visible (priv->menu);
+      if (active)
+        {
+          GdkEvent *event;
 
-      event = gtk_get_current_event ();
+          event = gtk_get_current_event ();
 
-      popup_menu (menu_button, event);
+          popup_menu (menu_button, event);
 
-      if (!event ||
-          event->type == GDK_KEY_PRESS ||
-          event->type == GDK_KEY_RELEASE)
-        gtk_menu_shell_select_first (GTK_MENU_SHELL (priv->menu), FALSE);
+          if (!event ||
+              event->type == GDK_KEY_PRESS ||
+              event->type == GDK_KEY_RELEASE)
+            gtk_menu_shell_select_first (GTK_MENU_SHELL (priv->menu), FALSE);
 
-      if (event)
-        gdk_event_free (event);
+          if (event)
+            gdk_event_free (event);
+        }
     }
-  else if (priv->popover && !gtk_widget_get_visible (priv->popover))
-    gtk_widget_show (priv->popover);
+  else if (priv->popover)
+    {
+      active = !gtk_widget_get_visible (priv->popover);
+      if (active)
+        gtk_widget_show (priv->popover);
+      else
+        gtk_widget_hide (priv->popover);
+    }
   else
     active = FALSE;
 
