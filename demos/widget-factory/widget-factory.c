@@ -1364,6 +1364,8 @@ activate (GApplication *app)
   g_signal_connect (dialog, "response", G_CALLBACK (close_dialog), NULL);
   widget = (GtkWidget *)gtk_builder_get_object (builder, "preference_dialog_button");
   g_signal_connect (widget, "clicked", G_CALLBACK (show_dialog), dialog);
+  widget = (GtkWidget *)gtk_builder_get_object (builder, "circular_button");
+  g_signal_connect (widget, "clicked", G_CALLBACK (show_dialog), dialog);
 
   dialog = (GtkWidget *)gtk_builder_get_object (builder, "selection_dialog");
   widget = (GtkWidget *)gtk_builder_get_object (builder, "text3");
