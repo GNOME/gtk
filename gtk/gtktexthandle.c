@@ -309,7 +309,7 @@ _gtk_text_handle_ensure_widget (GtkTextHandle         *handle,
 
       priv->windows[pos].widget = g_object_ref_sink (widget);
       window = gtk_widget_get_ancestor (priv->parent, GTK_TYPE_WINDOW);
-      _gtk_window_add_popover (GTK_WINDOW (window), widget);
+      _gtk_window_add_popover (GTK_WINDOW (window), widget, priv->parent);
 
       gtk_style_context_set_parent (gtk_widget_get_style_context (widget),
                                     gtk_widget_get_style_context (priv->parent));

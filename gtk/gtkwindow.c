@@ -132,6 +132,7 @@ typedef struct _GtkWindowPopover GtkWindowPopover;
 struct _GtkWindowPopover
 {
   GtkWidget *widget;
+  GtkWidget *parent;
   GdkWindow *window;
   GtkPositionType pos;
   cairo_rectangle_int_t rect;
@@ -11810,7 +11811,8 @@ _gtk_window_get_shadow_width (GtkWindow *window,
 
 void
 _gtk_window_add_popover (GtkWindow *window,
-                         GtkWidget *popover)
+                         GtkWidget *popover,
+                         GtkWidget *parent)
 {
   GtkWindowPrivate *priv;
   GtkWindowPopover *data;
@@ -11818,7 +11820,9 @@ _gtk_window_add_popover (GtkWindow *window,
 
   g_return_if_fail (GTK_IS_WINDOW (window));
   g_return_if_fail (GTK_IS_WIDGET (popover));
+  g_return_if_fail (GTK_IS_WIDGET (parent));
   g_return_if_fail (gtk_widget_get_parent (popover) == NULL);
+  g_return_if_fail (gtk_widget_is_ancestor (parent, GTK_WIDGET (window)));
 
   priv = window->priv;
 
@@ -11827,6 +11831,7 @@ _gtk_window_add_popover (GtkWindow *window,
 
   data = g_new0 (GtkWindowPopover, 1);
   data->widget = popover;
+  data->parent = parent;
   priv->popovers = g_list_prepend (priv->popovers, data);
 
   if (gtk_widget_get_realized (GTK_WIDGET (window)))
@@ -11941,6 +11946,52 @@ _gtk_window_get_popover_position (GtkWindow             *window,
 
   if (rect)
     *rect = data->rect;
+}
+
+/*<private>
+ * _gtk_window_get_popover_parent:
+ * @window: A #GtkWindow
+ * @popover: A popover #GtkWidget
+ *
+ * Returns the conceptual parent of this popover, the real
+ * parent will always be @window.
+ *
+ * Returns: The conceptual parent widget, or %NULL.
+ **/
+GtkWidget *
+_gtk_window_get_popover_parent (GtkWindow *window,
+                                GtkWidget *popover)
+{
+  GtkWindowPopover *data;
+
+  g_return_if_fail (GTK_IS_WINDOW (window));
+  g_return_if_fail (GTK_IS_WIDGET (popover));
+
+  data = _gtk_window_has_popover (window, popover);
+
+  if (data && data->parent)
+    return data->parent;
+
+  return NULL;
+}
+
+/*<private>
+ * _gtk_window_is_popover_widget:
+ * @window: A #GtkWindow
+ * @possible_popover: A possible popover of @window
+ *
+ * Returns #TRUE if @possible_popover is a popover of @window.
+ *
+ * Returns: Whether the widget is a popover of @window
+ **/
+gboolean
+_gtk_window_is_popover_widget (GtkWindow *window,
+                               GtkWidget *possible_popover)
+{
+  g_return_val_if_fail (GTK_IS_WINDOW (window), FALSE);
+  g_return_val_if_fail (GTK_IS_WIDGET (possible_popover), FALSE);
+
+  return _gtk_window_has_popover (window, possible_popover) != NULL;
 }
 
 static GtkWidget *inspector_window = NULL;

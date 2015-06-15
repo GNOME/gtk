@@ -1699,7 +1699,7 @@ _gtk_popover_parent_hierarchy_changed (GtkWidget  *widget,
     _gtk_window_remove_popover (priv->window, GTK_WIDGET (popover));
 
   if (new_window)
-    _gtk_window_add_popover (new_window, GTK_WIDGET (popover));
+    _gtk_window_add_popover (new_window, GTK_WIDGET (popover), priv->widget);
 
   priv->window = new_window;
 
@@ -1970,7 +1970,7 @@ gtk_popover_update_relative_to (GtkPopover *popover,
     }
 
   if (priv->window)
-    _gtk_window_add_popover (priv->window, GTK_WIDGET (popover));
+    _gtk_window_add_popover (priv->window, GTK_WIDGET (popover), priv->widget);
 
   if (relative_to)
     scrollable = GTK_SCROLLABLE (gtk_widget_get_ancestor (priv->widget, GTK_TYPE_SCROLLABLE));
