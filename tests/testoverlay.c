@@ -497,19 +497,19 @@ test_child_order (void)
       gtk_container_add (GTK_CONTAINER (ebox), button);
 
       gdk_rgba_parse (&color, colors[i]);
-      G_GNUC_BEGIN_IGNORE_DEPRECATIONS
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
       gtk_widget_override_background_color (ebox, 0, &color);
-      G_GNUC_END_IGNORE_DEPRECATIONS
-	gtk_widget_set_halign (ebox, (i == 0 || i == 3) ? GTK_ALIGN_START : GTK_ALIGN_END);
+ G_GNUC_END_IGNORE_DEPRECATIONS
+      gtk_widget_set_halign (ebox, (i == 0 || i == 3) ? GTK_ALIGN_START : GTK_ALIGN_END);
       gtk_widget_set_valign (ebox, i < 2 ? GTK_ALIGN_START : GTK_ALIGN_END);
       gtk_overlay_add_overlay (GTK_OVERLAY (overlay), ebox);
     }
 
   ebox = gtk_event_box_new ();
   gdk_rgba_parse (&color, "white");
-  G_GNUC_BEGIN_IGNORE_DEPRECATIONS
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
   gtk_widget_override_background_color (ebox, 0, &color);
-  G_GNUC_END_IGNORE_DEPRECATIONS
+G_GNUC_END_IGNORE_DEPRECATIONS
 
   label = gtk_label_new ("Main\n"
 			 "Main\n"
