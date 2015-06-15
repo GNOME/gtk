@@ -498,15 +498,16 @@ gtk_style_context_lookup_style (GtkStyleContext *context)
   return gtk_css_node_get_style (context->priv->cssnode);
 }
 
-static GtkCssStyle *
-gtk_style_context_lookup_style_for_state (GtkStyleContext *context,
-                                          GtkStateFlags    state)
+static GtkStateFlags
+gtk_style_context_push_state (GtkStyleContext *context,
+                              GtkStateFlags    state)
 {
-  GtkCssNode *node;
-  GtkCssStyle *values;
+  GtkStateFlags current_state;
 
-  if (gtk_css_node_get_state (context->priv->cssnode) == state)
-    return g_object_ref (gtk_style_context_lookup_style (context));
+  current_state = gtk_css_node_get_state (context->priv->cssnode);
+
+  if (current_state == state)
+    return state;
 
   if (g_getenv ("GTK_STYLE_CONTEXT_WARNING"))
     {
@@ -525,14 +526,16 @@ gtk_style_context_lookup_style_for_state (GtkStyleContext *context,
         }
     }
 
-  node = gtk_css_transient_node_new (context->priv->cssnode);
-  gtk_css_node_set_parent (node, gtk_css_node_get_parent (context->priv->cssnode));
-  gtk_css_node_set_state (node, state);
-  values = g_object_ref (gtk_css_node_get_style (node));
-  gtk_css_node_set_parent (node, NULL);
-  g_object_unref (node);
+  gtk_css_node_set_state (context->priv->cssnode, state);
 
-  return values;
+  return current_state;
+}
+
+static void
+gtk_style_context_pop_state (GtkStyleContext *context,
+                             GtkStateFlags    saved_state)
+{
+  gtk_css_node_set_state (context->priv->cssnode, saved_state);
 }
 
 /**
@@ -809,7 +812,7 @@ gtk_style_context_get_property (GtkStyleContext *context,
                                 GtkStateFlags    state,
                                 GValue          *value)
 {
-  GtkCssStyle *values;
+  GtkStateFlags saved_state;
   GtkStyleProperty *prop;
 
   g_return_if_fail (GTK_IS_STYLE_CONTEXT (context));
@@ -828,9 +831,12 @@ gtk_style_context_get_property (GtkStyleContext *context,
       return;
     }
 
-  values = gtk_style_context_lookup_style_for_state (context, state);
-  _gtk_style_property_query (prop, value, gtk_style_context_query_func, values);
-  g_object_unref (values);
+  saved_state = gtk_style_context_push_state (context, state);
+  _gtk_style_property_query (prop, 
+                             value,
+                             gtk_style_context_query_func,
+                             gtk_css_node_get_style (context->priv->cssnode));
+  gtk_style_context_pop_state (context, saved_state);
 }
 
 /**
@@ -2616,12 +2622,14 @@ gtk_style_context_get_border (GtkStyleContext *context,
                               GtkBorder       *border)
 {
   GtkCssStyle *style;
+  GtkStateFlags saved_state;
   double top, left, bottom, right;
 
   g_return_if_fail (border != NULL);
   g_return_if_fail (GTK_IS_STYLE_CONTEXT (context));
 
-  style = gtk_style_context_lookup_style_for_state (context, state);
+  saved_state = gtk_style_context_push_state (context, state);
+  style = gtk_style_context_lookup_style (context);
 
   top = round (_gtk_css_number_value_get (gtk_css_style_get_value (style, GTK_CSS_PROPERTY_BORDER_TOP_WIDTH), 100));
   right = round (_gtk_css_number_value_get (gtk_css_style_get_value (style, GTK_CSS_PROPERTY_BORDER_RIGHT_WIDTH), 100));
@@ -2633,7 +2641,7 @@ gtk_style_context_get_border (GtkStyleContext *context,
   border->bottom = bottom;
   border->right = right;
 
-  g_object_unref (style);
+  gtk_style_context_pop_state (context, saved_state);
 }
 
 /**
@@ -2653,12 +2661,14 @@ gtk_style_context_get_padding (GtkStyleContext *context,
                                GtkBorder       *padding)
 {
   GtkCssStyle *style;
+  GtkStateFlags saved_state;
   double top, left, bottom, right;
 
   g_return_if_fail (padding != NULL);
   g_return_if_fail (GTK_IS_STYLE_CONTEXT (context));
 
-  style = gtk_style_context_lookup_style_for_state (context, state);
+  saved_state = gtk_style_context_push_state (context, state);
+  style = gtk_style_context_lookup_style (context);
 
   top = round (_gtk_css_number_value_get (gtk_css_style_get_value (style, GTK_CSS_PROPERTY_PADDING_TOP), 100));
   right = round (_gtk_css_number_value_get (gtk_css_style_get_value (style, GTK_CSS_PROPERTY_PADDING_RIGHT), 100));
@@ -2670,7 +2680,7 @@ gtk_style_context_get_padding (GtkStyleContext *context,
   padding->bottom = bottom;
   padding->right = right;
 
-  g_object_unref (style);
+  gtk_style_context_pop_state (context, saved_state);
 }
 
 /**
@@ -2690,12 +2700,14 @@ gtk_style_context_get_margin (GtkStyleContext *context,
                               GtkBorder       *margin)
 {
   GtkCssStyle *style;
+  GtkStateFlags saved_state;
   double top, left, bottom, right;
 
   g_return_if_fail (margin != NULL);
   g_return_if_fail (GTK_IS_STYLE_CONTEXT (context));
 
-  style = gtk_style_context_lookup_style_for_state (context, state);
+  saved_state = gtk_style_context_push_state (context, state);
+  style = gtk_style_context_lookup_style (context);
 
   top = round (_gtk_css_number_value_get (gtk_css_style_get_value (style, GTK_CSS_PROPERTY_MARGIN_TOP), 100));
   right = round (_gtk_css_number_value_get (gtk_css_style_get_value (style, GTK_CSS_PROPERTY_MARGIN_RIGHT), 100));
@@ -2707,7 +2719,7 @@ gtk_style_context_get_margin (GtkStyleContext *context,
   margin->bottom = bottom;
   margin->right = right;
 
-  g_object_unref (style);
+  gtk_style_context_pop_state (context, saved_state);
 }
 
 /**
