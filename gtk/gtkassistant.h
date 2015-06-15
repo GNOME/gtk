@@ -217,6 +217,14 @@ void                  gtk_assistant_update_buttons_state  (GtkAssistant *assista
 GDK_AVAILABLE_IN_ALL
 void                  gtk_assistant_commit                (GtkAssistant *assistant);
 
+GDK_AVAILABLE_IN_3_18
+void                  gtk_assistant_set_page_has_padding  (GtkAssistant *assistant,
+                                                           GtkWidget    *page,
+                                                           gboolean      has_padding);
+GDK_AVAILABLE_IN_3_18
+gboolean              gtk_assistant_get_page_has_padding  (GtkAssistant *assistant,
+                                                           GtkWidget    *page);
+
 G_END_DECLS
 
 #endif /* __GTK_ASSISTANT_H__ */
