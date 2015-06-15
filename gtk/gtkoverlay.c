@@ -497,13 +497,14 @@ gtk_overlay_remove (GtkContainer *container,
 {
   GtkOverlayPrivate *priv = GTK_OVERLAY (container)->priv;
   GtkOverlayChild *child;
-  GSList *children;
+  GSList *children, *next;
   gboolean removed;
 
   removed = FALSE;
-  for (children = priv->children; children; children = children->next)
+  for (children = priv->children; children; children = next)
     {
       child = children->data;
+      next = children->next;
 
       if (child->widget == widget)
         {
@@ -524,7 +525,8 @@ gtk_overlay_remove (GtkContainer *container,
         gtk_widget_child_notify (child->widget, "index");
     }
 
-  GTK_CONTAINER_CLASS (gtk_overlay_parent_class)->remove (container, widget);
+  if (!removed)
+    GTK_CONTAINER_CLASS (gtk_overlay_parent_class)->remove (container, widget);
 }
 
 /**
