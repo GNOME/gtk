@@ -398,7 +398,8 @@ popup_menu (GtkMenuButton *menu_button,
         break;
   }
 
-  if (event)
+  if (event != NULL &&
+      gdk_event_get_screen (event) == gtk_widget_get_screen (GTK_WIDGET (menu_button)))
     {
       device = gdk_event_get_device (event);
       gdk_event_get_button (event, &button);

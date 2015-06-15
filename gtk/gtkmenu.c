@@ -1535,20 +1535,24 @@ gtk_menu_popup_for_device (GtkMenu             *menu,
   gboolean grab_keyboard;
   GtkWidget *parent_toplevel;
   GdkDevice *keyboard, *pointer, *source_device = NULL;
+  GdkDisplay *display;
 
   g_return_if_fail (GTK_IS_MENU (menu));
   g_return_if_fail (device == NULL || GDK_IS_DEVICE (device));
 
+  display = gtk_widget_get_display (GTK_WIDGET (menu));
+
   if (device == NULL)
     device = gtk_get_current_event_device ();
 
+  if (device && gdk_device_get_display (device) != display)
+    device = NULL;
+
   if (device == NULL)
     {
-      GdkDisplay *display;
       GdkDeviceManager *device_manager;
       GList *devices;
 
-      display = gtk_widget_get_display (GTK_WIDGET (menu));
       device_manager = gdk_display_get_device_manager (display);
       devices = gdk_device_manager_list_devices (device_manager, GDK_DEVICE_TYPE_MASTER);
 
