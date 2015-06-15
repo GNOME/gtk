@@ -372,11 +372,14 @@ menu_position_side_func (GtkMenu       *menu,
 }
 
 static void
-popup_menu (GtkMenuButton  *menu_button,
-            GdkEventButton *event)
+popup_menu (GtkMenuButton *menu_button,
+            GdkEvent      *event)
 {
   GtkMenuButtonPrivate *priv = menu_button->priv;
   GtkMenuPositionFunc func;
+  GdkDevice *device;
+  guint button;
+  guint32 time;
 
   if (priv->func)
     priv->func (priv->user_data);
@@ -395,14 +398,27 @@ popup_menu (GtkMenuButton  *menu_button,
         break;
   }
 
+  if (event)
+    {
+      device = gdk_event_get_device (event);
+      gdk_event_get_button (event, &button);
+      time = gdk_event_get_time (event);
+    }
+  else
+    {
+      device = NULL;
+      button = 0;
+      time = gtk_get_current_event_time ();
+    }
+
   gtk_menu_popup_for_device (GTK_MENU (priv->menu),
-                             event ? event->device : NULL,
+                             device,
                              NULL, NULL,
                              func,
                              GTK_WIDGET (menu_button),
                              NULL,
-                             event ? event->button : 0,
-                             event ? event->time : gtk_get_current_event_time ());
+                             button,
+                             time);
 }
 
 static void
@@ -418,9 +434,7 @@ gtk_menu_button_clicked (GtkButton *button)
 
       event = gtk_get_current_event ();
 
-      popup_menu (menu_button,
-                  (event && event->type != GDK_BUTTON_RELEASE) ?
-                  (GdkEventButton *) event : NULL);
+      popup_menu (menu_button, event);
 
       if (!event ||
           event->type == GDK_KEY_PRESS ||
