@@ -11536,6 +11536,8 @@ gtk_tree_view_set_model (GtkTreeView  *tree_view,
   if (tree_view->priv->selection)
   _gtk_tree_selection_emit_changed (tree_view->priv->selection);
 
+  _gtk_pixel_cache_set_always_cache (tree_view->priv->pixel_cache, (model != NULL));
+
   if (gtk_widget_get_realized (GTK_WIDGET (tree_view)))
     gtk_widget_queue_resize (GTK_WIDGET (tree_view));
 }
