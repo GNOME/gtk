@@ -90,7 +90,13 @@ GDK_AVAILABLE_IN_3_18
 void       gtk_overlay_reorder_overlay (GtkOverlay     *overlay,
 					GtkWidget      *child,
 					gint            position);
-
+GDK_AVAILABLE_IN_3_18
+gboolean   gtk_overlay_get_overlay_pass_through (GtkOverlay *overlay,
+						 GtkWidget  *widget);
+GDK_AVAILABLE_IN_3_18
+void       gtk_overlay_set_overlay_pass_through (GtkOverlay *overlay,
+						 GtkWidget  *widget,
+						 gboolean    pass_through);
 
 G_END_DECLS
 
