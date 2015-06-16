@@ -24,24 +24,6 @@
  *
  */
 
-/* TODO:
- *
- * * Fix instances of "#if 0"
- *
- * * Fix FIXMEs
- *
- * * Grep for "NULL-GError" and see if they should be taken care of
- *
- * * Although we do g_mount_unmount_with_operation(), Nautilus used to do
- *   nautilus_file_operations_unmount_mount_full() to unmount a volume.  With
- *   that, Nautilus does the "volume has trash, empty it first?" dance.  Cosimo
- *   suggests that this logic should be part of GtkMountOperation, which can
- *   have Unix-specific code for emptying trash.
- *
- * * Sync nautilus commit 17a85b78acc78b573c2e1776b348ed348e19adb7
- *
- */
-
 #include "config.h"
 
 #include <gio/gio.h>
@@ -1159,12 +1141,6 @@ update_places (GtkPlacesSidebar *sidebar)
       root = sl->data;
       is_native = g_file_is_native (root);
 
-#if 0
-      /* FIXME: remove this?  If we *do* show bookmarks for nonexistent files, the user will eventually clean them up */
-      if (!nautilus_bookmark_get_exists (bookmark))
-        continue;
-#endif
-
       if (_gtk_bookmarks_manager_get_is_builtin (sidebar->bookmarks_manager, root))
         continue;
 
@@ -1692,7 +1668,7 @@ reorder_bookmarks (GtkPlacesSidebar *sidebar,
 
   g_object_get (row, "uri", &uri, NULL);
   file = g_file_new_for_uri (uri);
-  _gtk_bookmarks_manager_reorder_bookmark (sidebar->bookmarks_manager, file, new_position, NULL); /* NULL-GError */
+  _gtk_bookmarks_manager_reorder_bookmark (sidebar->bookmarks_manager, file, new_position, NULL);
 
   g_object_unref (file);
 }
@@ -1717,7 +1693,7 @@ drop_files_as_bookmarks (GtkPlacesSidebar *sidebar,
       if (info)
         {
           if (_gtk_file_info_consider_as_directory (info))
-            _gtk_bookmarks_manager_insert_bookmark (sidebar->bookmarks_manager, f, position++, NULL); /* NULL-GError */
+            _gtk_bookmarks_manager_insert_bookmark (sidebar->bookmarks_manager, f, position++, NULL);
 
           g_object_unref (info);
         }
