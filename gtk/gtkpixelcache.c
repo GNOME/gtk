@@ -49,6 +49,8 @@ struct _GtkPixelCache {
 
   guint extra_width;
   guint extra_height;
+
+  guint always_cache : 1;
 };
 
 GtkPixelCache *
@@ -224,10 +226,12 @@ _gtk_pixel_cache_create_surface_if_needed (GtkPixelCache         *cache,
     }
 
   /* Don't allocate a surface if view >= canvas, as we won't
-     be scrolling then anyway */
+   * be scrolling then anyway, unless the widget requested it.
+   */
   if (cache->surface == NULL &&
-      (view_rect->width < canvas_rect->width ||
-       view_rect->height < canvas_rect->height))
+      (cache->always_cache ||
+       (view_rect->width < canvas_rect->width ||
+        view_rect->height < canvas_rect->height)))
     {
       cache->surface_x = -canvas_rect->x;
       cache->surface_y = -canvas_rect->y;
@@ -482,4 +486,17 @@ void
 _gtk_pixel_cache_unmap (GtkPixelCache *cache)
 {
   gtk_pixel_cache_blow_cache (cache);
+}
+
+gboolean
+_gtk_pixel_cache_get_always_cache (GtkPixelCache *cache)
+{
+  return cache->always_cache;
+}
+
+void
+_gtk_pixel_cache_set_always_cache (GtkPixelCache *cache,
+                                   gboolean       always_cache)
+{
+  cache->always_cache = !!always_cache;
 }
