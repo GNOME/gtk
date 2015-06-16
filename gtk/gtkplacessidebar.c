@@ -3569,7 +3569,7 @@ shell_shows_desktop_changed (GtkSettings *settings,
                              gpointer     user_data)
 {
   GtkPlacesSidebar *sidebar = user_data;
-  gboolean b;
+  gboolean show_desktop;
 
   g_assert (settings == sidebar->gtk_settings);
 
@@ -3577,11 +3577,11 @@ shell_shows_desktop_changed (GtkSettings *settings,
   if (sidebar->show_desktop_set)
     return;
 
-  g_object_get (settings, "gtk-shell-shows-desktop", &b, NULL);
+  g_object_get (settings, "gtk-shell-shows-desktop", &show_desktop, NULL);
 
-  if (b != sidebar->show_desktop)
+  if (show_desktop != sidebar->show_desktop)
     {
-      sidebar->show_desktop = b;
+      sidebar->show_desktop = show_desktop;
       update_places (sidebar);
       g_object_notify_by_pspec (G_OBJECT (sidebar), properties[PROP_SHOW_DESKTOP]);
     }
@@ -3590,8 +3590,8 @@ shell_shows_desktop_changed (GtkSettings *settings,
 static void
 gtk_places_sidebar_init (GtkPlacesSidebar *sidebar)
 {
-  GtkTargetList     *target_list;
-  gboolean           b;
+  GtkTargetList *target_list;
+  gboolean show_desktop;
   GtkStyleContext *context;
 
   gtk_style_context_add_class (gtk_widget_get_style_context (GTK_WIDGET (sidebar)), GTK_STYLE_CLASS_SIDEBAR);
@@ -3697,8 +3697,8 @@ gtk_places_sidebar_init (GtkPlacesSidebar *sidebar)
   sidebar->gtk_settings = gtk_settings_get_default ();
   g_signal_connect (sidebar->gtk_settings, "notify::gtk-shell-shows-desktop",
                     G_CALLBACK (shell_shows_desktop_changed), sidebar);
-  g_object_get (sidebar->gtk_settings, "gtk-shell-shows-desktop", &b, NULL);
-  sidebar->show_desktop = b;
+  g_object_get (sidebar->gtk_settings, "gtk-shell-shows-desktop", &show_desktop, NULL);
+  sidebar->show_desktop = show_desktop;
 
   /* populate the sidebar */
   update_places (sidebar);
