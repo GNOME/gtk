@@ -5977,9 +5977,24 @@ gdk_window_set_background_rgba (GdkWindow     *window,
                                 const GdkRGBA *rgba)
 {
   cairo_pattern_t *pattern;
+  GdkRGBA prev_rgba;
 
   g_return_if_fail (GDK_IS_WINDOW (window));
   g_return_if_fail (rgba != NULL);
+
+  /*
+   * If the new RGBA matches the previous pattern, ignore the change so that
+   * we do not invalidate the window contents.
+   */
+  if ((window->background != NULL) &&
+      (cairo_pattern_get_type (window->background) == CAIRO_PATTERN_TYPE_SOLID) &&
+      (cairo_pattern_get_rgba (window->background,
+                               &prev_rgba.red,
+                               &prev_rgba.green,
+                               &prev_rgba.blue,
+                               &prev_rgba.alpha) == CAIRO_STATUS_SUCCESS) &&
+      gdk_rgba_equal (&prev_rgba, rgba))
+    return;
 
   pattern = cairo_pattern_create_rgba (rgba->red, rgba->green,
                                        rgba->blue, rgba->alpha);
