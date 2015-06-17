@@ -158,6 +158,8 @@ static void gdk_wayland_window_configure (GdkWindow *window,
 
 static void maybe_set_gtk_surface_dbus_properties (GdkWindow *window);
 
+static void gdk_window_request_transient_parent_commit (GdkWindow *window);
+
 GType _gdk_window_impl_wayland_get_type (void);
 
 G_DEFINE_TYPE (GdkWindowImplWayland, _gdk_window_impl_wayland, GDK_TYPE_WINDOW_IMPL)
@@ -882,6 +884,7 @@ gdk_wayland_window_create_subsurface (GdkWindow *window)
                                          impl->surface, parent_impl->surface);
       wl_subsurface_set_position (impl->subsurface, window->x, window->y);
       wl_subsurface_set_desync (impl->subsurface);
+      gdk_window_request_transient_parent_commit (window);
     }
 }
 
