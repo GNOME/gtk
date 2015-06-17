@@ -213,12 +213,9 @@ struct _GtkFileChooserWidgetPrivate {
   GtkWidget *save_widgets_table;
 
   /* The file browsing widgets */
-  GtkWidget *browse_widgets_box;
   GtkWidget *browse_widgets_hpaned;
   GtkWidget *browse_header_revealer;
-  GtkWidget *browse_header_box;
   GtkWidget *browse_header_stack;
-  GtkWidget *browse_files_box;
   GtkWidget *browse_files_stack;
   GtkWidget *browse_files_tree_view;
   GtkWidget *browse_files_popup_menu;
@@ -230,7 +227,6 @@ struct _GtkFileChooserWidgetPrivate {
   GtkWidget *browse_files_popup_menu_open_folder_item;
   GtkWidget *browse_files_popup_menu_sort_directories_item;
   GtkWidget *browse_new_folder_button;
-  GtkWidget *browse_path_bar_hbox;
   GtkSizeGroup *browse_path_bar_size_group;
   GtkWidget *browse_path_bar;
   GtkWidget *new_folder_name_entry;
@@ -7497,18 +7493,13 @@ gtk_file_chooser_widget_class_init (GtkFileChooserWidgetClass *class)
 					       "/org/gtk/libgtk/ui/gtkfilechooserwidget.ui");
 
   /* A *lot* of widgets that we need to handle .... */
-  gtk_widget_class_bind_template_child_private (widget_class, GtkFileChooserWidget, browse_widgets_box);
   gtk_widget_class_bind_template_child_private (widget_class, GtkFileChooserWidget, browse_widgets_hpaned);
-  gtk_widget_class_bind_template_child_private (widget_class, GtkFileChooserWidget, browse_files_box);
   gtk_widget_class_bind_template_child_private (widget_class, GtkFileChooserWidget, browse_files_stack);
-  gtk_widget_class_bind_template_child_private (widget_class, GtkFileChooserWidget, browse_widgets_box);
   gtk_widget_class_bind_template_child_private (widget_class, GtkFileChooserWidget, places_sidebar);
   gtk_widget_class_bind_template_child_private (widget_class, GtkFileChooserWidget, browse_files_tree_view);
   gtk_widget_class_bind_template_child_private (widget_class, GtkFileChooserWidget, browse_header_revealer);
-  gtk_widget_class_bind_template_child_private (widget_class, GtkFileChooserWidget, browse_header_box);
   gtk_widget_class_bind_template_child_private (widget_class, GtkFileChooserWidget, browse_header_stack);
   gtk_widget_class_bind_template_child_private (widget_class, GtkFileChooserWidget, browse_new_folder_button);
-  gtk_widget_class_bind_template_child_private (widget_class, GtkFileChooserWidget, browse_path_bar_hbox);
   gtk_widget_class_bind_template_child_private (widget_class, GtkFileChooserWidget, browse_path_bar_size_group);
   gtk_widget_class_bind_template_child_private (widget_class, GtkFileChooserWidget, browse_path_bar);
   gtk_widget_class_bind_template_child_private (widget_class, GtkFileChooserWidget, filter_combo_hbox);

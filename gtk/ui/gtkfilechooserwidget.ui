@@ -32,7 +32,7 @@
               </packing>
             </child>
             <child>
-              <object class="GtkBox" id="browse_files_box">
+              <object class="GtkBox">
                 <property name="visible">True</property>
                 <property name="orientation">vertical</property>
                 <child>
@@ -40,7 +40,7 @@
                     <property name="visible">True</property>
                     <property name="hexpand">True</property>
                     <child>
-                      <object class="GtkBox" id="browse_header_box">
+                      <object class="GtkBox">
                         <property name="visible">True</property>
                         <property name="orientation">vertical</property>
                         <property name="spacing">12</property>
@@ -53,7 +53,7 @@
                             <property name="can_focus">True</property>
                             <property name="transition-type">crossfade</property>
                             <child>
-                              <object class="GtkBox" id="browse_path_bar_hbox">
+                              <object class="GtkBox">
                                 <property name="visible">True</property>
                                 <property name="spacing">6</property>
                                 <property name="border_width">6</property>
