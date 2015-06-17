@@ -131,8 +131,6 @@ _gtk_text_handle_draw (GtkTextHandle         *handle,
     gtk_style_context_add_class (context,
                                  GTK_STYLE_CLASS_TOP);
 
-  gtk_render_background (context, cr, 0, 0, width, height);
-  gtk_render_frame (context, cr, 0, 0, width, height);
   gtk_render_handle (context, cr, 0, 0, width, height);
 
   gtk_style_context_restore (context);
