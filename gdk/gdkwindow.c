@@ -6852,7 +6852,7 @@ gdk_window_set_pass_through (GdkWindow *window,
 gboolean
 gdk_window_get_pass_through (GdkWindow *window)
 {
-  g_return_if_fail (GDK_IS_WINDOW (window));
+  g_return_val_if_fail (GDK_IS_WINDOW (window), FALSE);
 
   return window->pass_through;
 }
