@@ -1105,14 +1105,6 @@ GtkTreeView.view.progressbar { //Progressbar in treeview cells
   }
 }
 
-//touch selection handlebars for the Popover.osd above
-.cursor-handle {
-  background-color: transparent;
-  background-image: none;
-  &.top { -gtk-icon-source: -gtk-icontheme('selection-start-symbolic'); }
-  &.bottom { -gtk-icon-source: -gtk-icontheme('selection-end-symbolic'); }
-}
-
 /*****************
  * Notebooks and *
  * Tabs          *
@@ -2403,6 +2395,84 @@ GtkColorSwatch {
     @include button(backdrop);
     border-color: transparent;
     transition-property: border, box-shadow, color;
+  }
+}
+
+/**********************
+ * Touch Copy & Paste *
+ *********************/
+
+//touch selection handlebars for the Popover.osd above
+.entry.cursor-handle,
+.cursor-handle {
+  background-color: $bg_color;
+  background-image: none;
+  -gtk-icon-source: none;
+  box-shadow: none;
+  outline-style: none;
+  outline-color: transparent;
+  border: 2px solid $fg_color;
+  @each $s,$as in ('',''),
+                  (':hover','-hover'),
+                  (':active','-active') { //no need for insensitive and backdrop
+                    &.top#{$s}:dir(ltr), &.bottom#{$s}:dir(rtl) {
+                      border-radius: 10px 0 0 0;
+                      padding-left: 10px;
+                    }
+                    &.bottom#{$s}:dir(ltr), &.top#{$s}:dir(rtl) {
+                      border-radius: 0 10px 0 0;
+                      padding-right: 10px;
+                    }
+                    &.insertion-cursor#{$s}:dir(ltr), &.insertion-cursor#{$s}:dir(rtl) {
+                      border-radius: 10px 10px 0 0;
+                    }
+  }
+}
+
+/* Decouple the font of context menus from their entry/textview */
+.context-menu {
+  font: initial;
+}
+
+.touch-selection {
+  font: initial;
+  color: $osd_fg_color;
+  border: none;
+  background-color: opacify($osd_bg_color,0.2);
+  background-clip: padding-box;
+  outline-color: transparentize($osd_fg_color, 0.7);
+  box-shadow: none;
+  text-shadow: 0 1px black;
+  icon-shadow: 0 1px black;
+  &:backdrop { text-shadow: none; }
+  .button {
+    @include button(osd);
+    &:hover { @include button(osd-hover); }
+    &:active, &:checked { @include button(osd-active); }
+    &:insensitive, &:backdrop:insensitive { @include button(osd-insensitive); }
+    &:backdrop { @include button(osd-backdrop); }
+  }
+  // checkboxes and radios to use the -dark style for OSD style popovers
+  @each $w,$a in ('check', 'checkbox'),
+                 ('radio','radio') {
+    @each $s,$as in ('','-unchecked'),
+                  (':hover', '-unchecked-hover'),
+                  (':active', '-unchecked-active'),
+                  (':insensitive','-unchecked-insensitive'),
+                  (':inconsistent', '-mixed'),
+                  (':inconsistent:hover', '-mixed-hover'),
+                  (':inconsistent:selected', '-mixed-active'),
+                  (':inconsistent:insensitive', '-mixed-insensitive'),
+                  (':checked', '-checked'),
+                  (':checked:insensitive','-checked-insensitive'),
+                  (':checked:hover', '-checked-hover'),
+                  (':checked:active', '-checked-active'),
+                  (':backdrop:checked', '-checked-backdrop') {
+    .#{$w}#{$s} {
+      icon-shadow: none;
+      color: $osd_fg_color; 
+      }
+    }
   }
 }
 

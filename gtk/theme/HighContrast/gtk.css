@@ -1324,14 +1324,6 @@ GtkTreeView.view.progressbar {
         border-color: rgba(255, 255, 255, 0.2);
         color: #7f7f7f; }
 
-.cursor-handle {
-  background-color: transparent;
-  background-image: none; }
-  .cursor-handle.top {
-    -gtk-icon-source: -gtk-icontheme("selection-start-symbolic"); }
-  .cursor-handle.bottom {
-    -gtk-icon-source: -gtk-icontheme("selection-end-symbolic"); }
-
 /*****************
  * Notebooks and *
  * Tabs          *
@@ -2695,3 +2687,183 @@ GtkColorSwatch {
     icon-shadow: none;
     border-color: transparent;
     transition-property: border, box-shadow, color; }
+
+/**********************
+ * Touch Copy & Paste *
+ *********************/
+.entry.cursor-handle,
+.cursor-handle {
+  background-color: #fff;
+  background-image: none;
+  -gtk-icon-source: none;
+  box-shadow: none;
+  outline-style: none;
+  outline-color: transparent;
+  border: 2px solid #000; }
+  .entry.cursor-handle.top:dir(ltr), .entry.cursor-handle.bottom:dir(rtl),
+  .cursor-handle.top:dir(ltr),
+  .cursor-handle.bottom:dir(rtl) {
+    border-radius: 10px 0 0 0;
+    padding-left: 10px; }
+  .entry.cursor-handle.bottom:dir(ltr), .entry.cursor-handle.top:dir(rtl),
+  .cursor-handle.bottom:dir(ltr),
+  .cursor-handle.top:dir(rtl) {
+    border-radius: 0 10px 0 0;
+    padding-right: 10px; }
+  .entry.cursor-handle.insertion-cursor:dir(ltr), .entry.cursor-handle.insertion-cursor:dir(rtl),
+  .cursor-handle.insertion-cursor:dir(ltr),
+  .cursor-handle.insertion-cursor:dir(rtl) {
+    border-radius: 10px 10px 0 0; }
+  .entry.cursor-handle.top:hover:dir(ltr), .entry.cursor-handle.bottom:hover:dir(rtl),
+  .cursor-handle.top:hover:dir(ltr),
+  .cursor-handle.bottom:hover:dir(rtl) {
+    border-radius: 10px 0 0 0;
+    padding-left: 10px; }
+  .entry.cursor-handle.bottom:hover:dir(ltr), .entry.cursor-handle.top:hover:dir(rtl),
+  .cursor-handle.bottom:hover:dir(ltr),
+  .cursor-handle.top:hover:dir(rtl) {
+    border-radius: 0 10px 0 0;
+    padding-right: 10px; }
+  .entry.cursor-handle.insertion-cursor:hover:dir(ltr), .entry.cursor-handle.insertion-cursor:hover:dir(rtl),
+  .cursor-handle.insertion-cursor:hover:dir(ltr),
+  .cursor-handle.insertion-cursor:hover:dir(rtl) {
+    border-radius: 10px 10px 0 0; }
+  .entry.cursor-handle.top:active:dir(ltr), .entry.cursor-handle.bottom:active:dir(rtl),
+  .cursor-handle.top:active:dir(ltr),
+  .cursor-handle.bottom:active:dir(rtl) {
+    border-radius: 10px 0 0 0;
+    padding-left: 10px; }
+  .entry.cursor-handle.bottom:active:dir(ltr), .entry.cursor-handle.top:active:dir(rtl),
+  .cursor-handle.bottom:active:dir(ltr),
+  .cursor-handle.top:active:dir(rtl) {
+    border-radius: 0 10px 0 0;
+    padding-right: 10px; }
+  .entry.cursor-handle.insertion-cursor:active:dir(ltr), .entry.cursor-handle.insertion-cursor:active:dir(rtl),
+  .cursor-handle.insertion-cursor:active:dir(ltr),
+  .cursor-handle.insertion-cursor:active:dir(rtl) {
+    border-radius: 10px 10px 0 0; }
+
+/* Decouple the font of context menus from their entry/textview */
+.context-menu {
+  font: initial; }
+
+.touch-selection {
+  font: initial;
+  color: #fff;
+  border: none;
+  background-color: black;
+  background-clip: padding-box;
+  outline-color: rgba(255, 255, 255, 0.3);
+  box-shadow: none;
+  text-shadow: 0 1px black;
+  icon-shadow: 0 1px black; }
+  .touch-selection:backdrop {
+    text-shadow: none; }
+  .touch-selection .button {
+    border-width: 2px;
+    border-style: solid;
+    color: #fff;
+    background-image: none;
+    background-color: rgba(0, 0, 0, 0.8);
+    border-color: rgba(255, 255, 255, 0.2);
+    box-shadow: none; }
+    .touch-selection .button:hover {
+      border-width: 2px;
+      border-style: solid;
+      color: #fff;
+      background-color: rgba(77, 77, 77, 0.8);
+      border-color: rgba(255, 255, 255, 0.2);
+      box-shadow: none; }
+    .touch-selection .button:active, .touch-selection .button:checked {
+      border-width: 2px;
+      border-style: solid;
+      color: rgba(0, 0, 0, 0.8);
+      background-color: #fff;
+      border-color: rgba(255, 255, 255, 0.2);
+      box-shadow: none; }
+    .touch-selection .button:insensitive, .touch-selection .button:backdrop:insensitive {
+      border-width: 2px;
+      border-style: solid;
+      border-color: rgba(255, 255, 255, 0.2);
+      color: #7f7f7f; }
+    .touch-selection .button:backdrop {
+      border-width: 2px;
+      border-style: solid; }
+  .touch-selection .check {
+    icon-shadow: none;
+    color: #fff; }
+  .touch-selection .check:hover {
+    icon-shadow: none;
+    color: #fff; }
+  .touch-selection .check:active {
+    icon-shadow: none;
+    color: #fff; }
+  .touch-selection .check:insensitive {
+    icon-shadow: none;
+    color: #fff; }
+  .touch-selection .check:inconsistent {
+    icon-shadow: none;
+    color: #fff; }
+  .touch-selection .check:inconsistent:hover {
+    icon-shadow: none;
+    color: #fff; }
+  .touch-selection .check:inconsistent:selected {
+    icon-shadow: none;
+    color: #fff; }
+  .touch-selection .check:inconsistent:insensitive {
+    icon-shadow: none;
+    color: #fff; }
+  .touch-selection .check:checked {
+    icon-shadow: none;
+    color: #fff; }
+  .touch-selection .check:checked:insensitive {
+    icon-shadow: none;
+    color: #fff; }
+  .touch-selection .check:checked:hover {
+    icon-shadow: none;
+    color: #fff; }
+  .touch-selection .check:checked:active {
+    icon-shadow: none;
+    color: #fff; }
+  .touch-selection .check:backdrop:checked {
+    icon-shadow: none;
+    color: #fff; }
+  .touch-selection .radio {
+    icon-shadow: none;
+    color: #fff; }
+  .touch-selection .radio:hover {
+    icon-shadow: none;
+    color: #fff; }
+  .touch-selection .radio:active {
+    icon-shadow: none;
+    color: #fff; }
+  .touch-selection .radio:insensitive {
+    icon-shadow: none;
+    color: #fff; }
+  .touch-selection .radio:inconsistent {
+    icon-shadow: none;
+    color: #fff; }
+  .touch-selection .radio:inconsistent:hover {
+    icon-shadow: none;
+    color: #fff; }
+  .touch-selection .radio:inconsistent:selected {
+    icon-shadow: none;
+    color: #fff; }
+  .touch-selection .radio:inconsistent:insensitive {
+    icon-shadow: none;
+    color: #fff; }
+  .touch-selection .radio:checked {
+    icon-shadow: none;
+    color: #fff; }
+  .touch-selection .radio:checked:insensitive {
+    icon-shadow: none;
+    color: #fff; }
+  .touch-selection .radio:checked:hover {
+    icon-shadow: none;
+    color: #fff; }
+  .touch-selection .radio:checked:active {
+    icon-shadow: none;
+    color: #fff; }
+  .touch-selection .radio:backdrop:checked {
+    icon-shadow: none;
+    color: #fff; }
