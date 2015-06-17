@@ -83,6 +83,7 @@
 #include "gtkscrollable.h"
 #include "gtkadjustment.h"
 #include "gtkpopover.h"
+#include "gtkrevealer.h"
 
 #include <cairo-gobject.h>
 #include <errno.h>
@@ -214,6 +215,7 @@ struct _GtkFileChooserWidgetPrivate {
   /* The file browsing widgets */
   GtkWidget *browse_widgets_box;
   GtkWidget *browse_widgets_hpaned;
+  GtkWidget *browse_header_revealer;
   GtkWidget *browse_header_box;
   GtkWidget *browse_header_stack;
   GtkWidget *browse_files_box;
@@ -2152,11 +2154,7 @@ location_switch_to_filename_entry (GtkFileChooserWidget *impl)
       priv->operation_mode == OPERATION_MODE_RECENT)
     return;
 
-  /* Box */
-
-  gtk_widget_show (priv->browse_header_box);
-
-  /* Entry */
+  gtk_revealer_set_reveal_child (GTK_REVEALER (priv->browse_header_revealer), TRUE);
 
   if (!priv->location_entry)
     {
@@ -2164,11 +2162,7 @@ location_switch_to_filename_entry (GtkFileChooserWidget *impl)
       gtk_box_pack_start (GTK_BOX (priv->location_entry_box), priv->location_entry, TRUE, TRUE, 0);
     }
 
-  /* Configure the entry */
-
   _gtk_file_chooser_entry_set_base_folder (GTK_FILE_CHOOSER_ENTRY (priv->location_entry), priv->current_folder);
-
-  /* Done */
 
   gtk_widget_show (priv->location_entry);
 
@@ -2482,8 +2476,6 @@ location_bar_update (GtkFileChooserWidget *impl)
       return;
     }
 
-  gtk_widget_set_visible (priv->browse_header_box, visible);
-
   if (visible)
     {
       if (priv->create_folders
@@ -2531,6 +2523,7 @@ operation_mode_set_enter_location (GtkFileChooserWidget *impl)
 
   gtk_stack_set_visible_child_name (GTK_STACK (priv->browse_files_stack), "list");
   gtk_stack_set_visible_child_name (GTK_STACK (priv->browse_header_stack), "location");
+  gtk_revealer_set_reveal_child (GTK_REVEALER (priv->browse_header_revealer), TRUE);
   location_bar_update (impl);
   gtk_widget_set_sensitive (priv->filter_combo, TRUE);
   location_mode_set (impl, LOCATION_MODE_FILENAME_ENTRY);
@@ -2544,6 +2537,7 @@ operation_mode_set_browse (GtkFileChooserWidget *impl)
 
   gtk_stack_set_visible_child_name (GTK_STACK (priv->browse_files_stack), "list");
   gtk_stack_set_visible_child_name (GTK_STACK (priv->browse_header_stack), "pathbar");
+  gtk_revealer_set_reveal_child (GTK_REVEALER (priv->browse_header_revealer), TRUE);
   location_bar_update (impl);
   gtk_widget_set_sensitive (priv->filter_combo, TRUE);
   gtk_tree_view_column_set_visible (priv->list_location_column, FALSE);
@@ -2559,6 +2553,7 @@ operation_mode_set_search (GtkFileChooserWidget *impl)
 
   gtk_stack_set_visible_child_name (GTK_STACK (priv->browse_files_stack), "list");
   gtk_stack_set_visible_child_name (GTK_STACK (priv->browse_header_stack), "search");
+  gtk_revealer_set_reveal_child (GTK_REVEALER (priv->browse_header_revealer), TRUE);
   location_bar_update (impl);
   search_setup_widgets (impl);
   gtk_entry_grab_focus_without_selecting (GTK_ENTRY (priv->search_entry));
@@ -2582,6 +2577,7 @@ operation_mode_set_recent (GtkFileChooserWidget *impl)
 
   gtk_stack_set_visible_child_name (GTK_STACK (priv->browse_files_stack), "list");
   gtk_stack_set_visible_child_name (GTK_STACK (priv->browse_header_stack), "pathbar");
+  gtk_revealer_set_reveal_child (GTK_REVEALER (priv->browse_header_revealer), FALSE);
   location_bar_update (impl);
   recent_start_loading (impl);
   file = g_file_new_for_uri ("recent:///");
@@ -7508,6 +7504,7 @@ gtk_file_chooser_widget_class_init (GtkFileChooserWidgetClass *class)
   gtk_widget_class_bind_template_child_private (widget_class, GtkFileChooserWidget, browse_widgets_box);
   gtk_widget_class_bind_template_child_private (widget_class, GtkFileChooserWidget, places_sidebar);
   gtk_widget_class_bind_template_child_private (widget_class, GtkFileChooserWidget, browse_files_tree_view);
+  gtk_widget_class_bind_template_child_private (widget_class, GtkFileChooserWidget, browse_header_revealer);
   gtk_widget_class_bind_template_child_private (widget_class, GtkFileChooserWidget, browse_header_box);
   gtk_widget_class_bind_template_child_private (widget_class, GtkFileChooserWidget, browse_header_stack);
   gtk_widget_class_bind_template_child_private (widget_class, GtkFileChooserWidget, browse_new_folder_button);
