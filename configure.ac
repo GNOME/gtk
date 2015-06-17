@@ -1738,7 +1738,7 @@ if test "$enable_man" != no; then
   dnl check for DocBook XSL stylesheets in the local catalog
   JH_CHECK_XML_CATALOG([http://docbook.sourceforge.net/release/xsl/current/manpages/docbook.xsl],
      [DocBook XSL Stylesheets], [have_docbook_style=yes],[have_docbook_style=no])
-  if test "$have_docbook_dtd" != yes; then
+  if test "$have_docbook_style" != yes; then
     if test "$enable_man" = yes ; then
       AC_MSG_ERROR([DocBook XSL Stylesheets are required for --enable-man])
     fi
