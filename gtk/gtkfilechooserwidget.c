@@ -6127,13 +6127,12 @@ search_engine_hits_added_cb (GtkSearchEngine      *engine,
 {
   GList *l, *files;
   GFile *file;
-  const char *uri;
 
   files = NULL;
   for (l = hits; l; l = l->next)
     {
-      uri = (const gchar *)l->data;
-      file = g_file_new_for_uri (uri);
+      GtkSearchHit *hit = (GtkSearchHit *)l->data;
+      file = g_file_new_for_uri (hit->uri);
       if (!file)
         continue;
       files = g_list_prepend (files, file);

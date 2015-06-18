@@ -137,20 +137,20 @@ search_thread_done_idle (gpointer user_data)
 
 typedef struct
 {
-  GList *uris;
+  GList *hits;
   SearchThreadData *thread_data;
-} SearchHits;
+} Batch;
 
 static gboolean
 search_thread_add_hits_idle (gpointer user_data)
 {
-  SearchHits *hits = user_data;
+  Batch *batch = user_data;
 
-  if (!g_cancellable_is_cancelled (hits->thread_data->cancellable))
-    _gtk_search_engine_hits_added (GTK_SEARCH_ENGINE (hits->thread_data->engine), hits->uris);
+  if (!g_cancellable_is_cancelled (batch->thread_data->cancellable))
+    _gtk_search_engine_hits_added (GTK_SEARCH_ENGINE (batch->thread_data->engine), batch->hits);
 
-  g_list_free_full (hits->uris, g_free);
-  g_free (hits);
+  g_list_free_full (batch->hits, (GDestroyNotify)_gtk_search_hit_free);
+  g_free (batch);
 
   return FALSE;
 }
@@ -158,7 +158,7 @@ search_thread_add_hits_idle (gpointer user_data)
 static void
 send_batch (SearchThreadData *data)
 {
-  SearchHits *hits;
+  Batch *batch;
 
   data->n_processed_files = 0;
 
@@ -166,11 +166,11 @@ send_batch (SearchThreadData *data)
     {
       guint id;
 
-      hits = g_new (SearchHits, 1);
-      hits->uris = data->hits;
-      hits->thread_data = data;
+      batch = g_new (Batch, 1);
+      batch->hits = data->hits;
+      batch->thread_data = data;
 
-      id = gdk_threads_add_idle (search_thread_add_hits_idle, hits);
+      id = gdk_threads_add_idle (search_thread_add_hits_idle, batch);
       g_source_set_name_by_id (id, "[gtk+] search_thread_add_hits_idle");
     }
 
@@ -208,7 +208,14 @@ visit_directory (GFile *dir, SearchThreadData *data)
         continue;
 
       if (gtk_query_matches_string (data->query, display_name))
-        data->hits = g_list_prepend (data->hits, g_file_get_uri (child));
+        {
+          GtkSearchHit *hit;
+
+          hit = g_new (GtkSearchHit, 1);
+          hit->uri = g_file_get_uri (child);
+          hit->info = g_object_ref (info);
+          data->hits = g_list_prepend (data->hits, hit);
+        }
 
       data->n_processed_files++;
       if (data->n_processed_files > BATCH_SIZE)

@@ -190,16 +190,17 @@ hits_added (GtkSearchEngine *engine,
 {
   GtkSearchEngine *composite = GTK_SEARCH_ENGINE (data);
   GList *added, *l;
+  GtkSearchHit *hit;
 
   added = NULL;
 
   for (l = hits; l; l = l->next)
     {
-      gchar *hit = l->data;
+      hit = l->data;
 
       if (!g_hash_table_contains (composite->priv->hits, hit))
         {
-          hit = g_strdup (hit);
+          hit = _gtk_search_hit_dup (hit);
           g_hash_table_add (composite->priv->hits, hit);
           added = g_list_prepend (added, hit);
         }
@@ -272,6 +273,47 @@ error (GtkSearchEngine *engine,
   update_status (composite);
 }
 
+static gboolean
+search_hit_equal (gconstpointer a, gconstpointer b)
+{
+  const GtkSearchHit *ha = (const GtkSearchHit *)a;
+  const GtkSearchHit *hb = (const GtkSearchHit *)b;
+
+  return g_str_equal (ha->uri, hb->uri);
+}
+
+
+static guint
+search_hit_hash (gconstpointer a)
+{
+  const GtkSearchHit *ha = (const GtkSearchHit *)a;
+
+  return g_str_hash (ha->uri);
+}
+
+GtkSearchHit *
+_gtk_search_hit_dup (GtkSearchHit *hit)
+{
+  GtkSearchHit *dup;
+
+  dup = g_new (GtkSearchHit, 1);
+  dup->uri = g_strdup (hit->uri);
+  if (hit->info)
+    dup->info = g_object_ref (hit->info);
+  else
+    dup->info = NULL;
+
+  return dup;
+}
+
+void
+_gtk_search_hit_free (GtkSearchHit *hit)
+{
+  g_free (hit->uri);
+  g_clear_object (&hit->info);
+  g_free (hit);
+}
+
 static void
 connect_engine_signals (GtkSearchEngine *engine,
                         gpointer         data)
@@ -310,7 +352,8 @@ _gtk_search_engine_new (void)
   g_debug ("Using simple search engine");
   connect_engine_signals (engine->priv->simple, engine);
 
-  engine->priv->hits = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, NULL);
+  engine->priv->hits = g_hash_table_new_full (search_hit_hash, search_hit_equal,
+                                              (GDestroyNotify)_gtk_search_hit_free, NULL);
 
   return engine;
 }

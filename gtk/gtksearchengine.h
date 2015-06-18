@@ -23,6 +23,7 @@
 #define __GTK_SEARCH_ENGINE_H__
 
 #include "gtkquery.h"
+#include <gio/gio.h>
 
 G_BEGIN_DECLS
 
@@ -36,6 +37,15 @@ G_BEGIN_DECLS
 typedef struct _GtkSearchEngine GtkSearchEngine;
 typedef struct _GtkSearchEngineClass GtkSearchEngineClass;
 typedef struct _GtkSearchEnginePrivate GtkSearchEnginePrivate;
+
+typedef struct _GtkSearchHit GtkSearchHit;
+
+struct _GtkSearchHit
+{
+  gint ref_count;
+  gchar *uri;
+  GFileInfo *info; /* may be NULL */
+};
 
 struct _GtkSearchEngine
 {
@@ -80,6 +90,9 @@ void	         _gtk_search_engine_hits_subtracted (GtkSearchEngine *engine,
 void	         _gtk_search_engine_finished        (GtkSearchEngine *engine);
 void	         _gtk_search_engine_error           (GtkSearchEngine *engine, 
 						     const gchar     *error_message);
+
+void             _gtk_search_hit_free (GtkSearchHit *hit);
+GtkSearchHit    *_gtk_search_hit_dup (GtkSearchHit *hit);
 
 G_END_DECLS
 

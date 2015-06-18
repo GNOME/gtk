@@ -173,21 +173,6 @@ get_query_results (GtkSearchEngineTracker *engine,
                           user_data);
 }
 
-/* Stolen from libtracker-common */
-static GList *
-string_list_to_gslist (gchar **strv)
-{
-  GList *list;
-  gsize i;
-
-  list = NULL;
-
-  for (i = 0; strv[i]; i++)
-    list = g_list_prepend (list, g_strdup (strv[i]));
-
-  return g_list_reverse (list);
-}
-
 /* Stolen from libtracker-sparql */
 static gchar *
 sparql_escape_string (const gchar *literal)
@@ -283,9 +268,9 @@ query_callback (GObject      *object,
   GVariant *reply;
   GVariant *r;
   GVariantIter iter;
-  gchar **result;
   GError *error = NULL;
   gint i, n;
+  GtkSearchHit *hit;
 
   tracker = GTK_SEARCH_ENGINE_TRACKER (user_data);
 
@@ -310,7 +295,8 @@ query_callback (GObject      *object,
   r = g_variant_get_child_value (reply, 0);
   g_variant_iter_init (&iter, r);
   n = g_variant_iter_n_children (&iter);
-  result = g_new0 (gchar *, n + 1);
+  hit = g_new (GtkSearchHit, n);
+  hits = NULL;
   for (i = 0; i < n; i++)
     {
       GVariant *v;
@@ -318,16 +304,16 @@ query_callback (GObject      *object,
 
       v = g_variant_iter_next_value (&iter);
       strv = g_variant_get_strv (v, NULL);
-      result[i] = (gchar*)strv[0];
+      hit[i].uri = (gchar*)strv[0];
+      hit[i].info = NULL;
       g_free (strv);
+      hits = g_list_prepend (hits, &hit[i]);
     }
 
-  /* We iterate result by result, not n at a time. */
-  hits = string_list_to_gslist (result);
   _gtk_search_engine_hits_added (GTK_SEARCH_ENGINE (tracker), hits);
   _gtk_search_engine_finished (GTK_SEARCH_ENGINE (tracker));
   g_list_free (hits);
-  g_free (result);
+  g_free (hit);
   g_variant_unref (reply);
   g_variant_unref (r);
 
