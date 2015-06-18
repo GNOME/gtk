@@ -2917,11 +2917,13 @@ GtkSidebarRow {
     padding: 4px 14px 4px 12px;
   }
   .sidebar-icon {
-    padding-right: 8px;
     opacity: $_placesidebar_icons_opacity; // dim the device icons
+    &:dir(ltr) { padding-right: 8px; }
+    &:dir(rtl) { padding-left: 8px; }
   }
   .sidebar-label {
-    padding-right: 2px;
+    &:dir(ltr) { padding-right: 2px; }
+    &:dir(rtl) { padding-left: 2px; }
   }
 }
 
