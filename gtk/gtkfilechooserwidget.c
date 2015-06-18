@@ -6119,40 +6119,31 @@ search_get_selected_files (GtkFileChooserWidget *impl)
   return result;
 }
 
-/* Adds one hit from the search engine to the search_model */
-static void
-search_add_hit (GtkFileChooserWidget *impl,
-		gchar                 *uri)
-{
-  GtkFileChooserWidgetPrivate *priv = impl->priv;
-  GFile *file;
-
-  file = g_file_new_for_uri (uri);
-  if (!file)
-    return;
-
-  priv->search_model_empty = FALSE;
-
-  _gtk_file_system_model_add_and_query_file (priv->search_model,
-                                             file,
-                                             MODEL_ATTRIBUTES);
-
-  g_object_unref (file);
-}
-
 /* Callback used from GtkSearchEngine when we get new hits */
 static void
-search_engine_hits_added_cb (GtkSearchEngine *engine,
-			     GList           *hits,
-			     gpointer         data)
+search_engine_hits_added_cb (GtkSearchEngine      *engine,
+			     GList                *hits,
+			     GtkFileChooserWidget *impl)
 {
-  GtkFileChooserWidget *impl;
-  GList *l;
+  GList *l, *files;
+  GFile *file;
+  const char *uri;
 
-  impl = GTK_FILE_CHOOSER_WIDGET (data);
-
+  files = NULL;
   for (l = hits; l; l = l->next)
-    search_add_hit (impl, (gchar*)l->data);
+    {
+      uri = (const gchar *)l->data;
+      file = g_file_new_for_uri (uri);
+      if (!file)
+        continue;
+      files = g_list_prepend (files, file);
+    }
+
+  _gtk_file_system_model_add_and_query_files (impl->priv->search_model,
+                                              files,
+                                              MODEL_ATTRIBUTES);
+
+  g_list_free_full (files, g_object_unref);
 }
 
 /* Callback used from GtkSearchEngine when the query is done running */
