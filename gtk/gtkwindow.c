@@ -11964,8 +11964,8 @@ _gtk_window_get_popover_parent (GtkWindow *window,
 {
   GtkWindowPopover *data;
 
-  g_return_if_fail (GTK_IS_WINDOW (window));
-  g_return_if_fail (GTK_IS_WIDGET (popover));
+  g_return_val_if_fail (GTK_IS_WINDOW (window), NULL);
+  g_return_val_if_fail (GTK_IS_WIDGET (popover), NULL);
 
   data = _gtk_window_has_popover (window, popover);
 
