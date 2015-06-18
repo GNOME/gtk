@@ -6138,6 +6138,9 @@ search_engine_hits_added_cb (GtkSearchEngine      *engine,
       files = g_list_prepend (files, file);
     }
 
+  if (files)
+    impl->priv->search_model_empty = FALSE;
+
   _gtk_file_system_model_add_and_query_files (impl->priv->search_model,
                                               files,
                                               MODEL_ATTRIBUTES);
