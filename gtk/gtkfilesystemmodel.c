@@ -1962,6 +1962,23 @@ _gtk_file_system_model_update_file (GtkFileSystemModel *model,
     emit_row_changed_for_node (model, id);
 }
 
+void
+_gtk_file_system_model_update_files (GtkFileSystemModel *model,
+                                     GList              *files,
+                                     GList              *infos)
+{
+  GList *l, *i;
+
+  g_return_if_fail (GTK_IS_FILE_SYSTEM_MODEL (model));
+
+  freeze_updates (model);
+
+  for (l = files, i = infos; l; l = l->next, i = i->next)
+    _gtk_file_system_model_update_file (model, (GFile *)l->data, (GFileInfo *)i->data);
+
+  thaw_updates (model);
+}
+
 /**
  * _gtk_file_system_model_set_filter:
  * @mode: a #GtkFileSystemModel

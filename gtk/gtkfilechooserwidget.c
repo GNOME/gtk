@@ -6125,27 +6125,38 @@ search_engine_hits_added_cb (GtkSearchEngine      *engine,
 			     GList                *hits,
 			     GtkFileChooserWidget *impl)
 {
-  GList *l, *files;
+  GList *l, *files, *files_with_info, *infos;
   GFile *file;
 
   files = NULL;
+  files_with_info = NULL;
+  infos = NULL;
   for (l = hits; l; l = l->next)
     {
       GtkSearchHit *hit = (GtkSearchHit *)l->data;
       file = g_file_new_for_uri (hit->uri);
       if (!file)
         continue;
-      files = g_list_prepend (files, file);
+      if (hit->info)
+        {
+          files_with_info = g_list_prepend (files_with_info, file);
+          infos = g_list_prepend (infos, g_object_ref (hit->info));
+        }
+      else
+        files = g_list_prepend (files, file);
     }
 
-  if (files)
+  if (files || files_with_info)
     impl->priv->search_model_empty = FALSE;
 
+  _gtk_file_system_model_update_files (impl->priv->search_model,
+                                       files_with_info, infos);
   _gtk_file_system_model_add_and_query_files (impl->priv->search_model,
-                                              files,
-                                              MODEL_ATTRIBUTES);
+                                              files, MODEL_ATTRIBUTES);
 
   g_list_free_full (files, g_object_unref);
+  g_list_free_full (files_with_info, g_object_unref);
+  g_list_free_full (infos, g_object_unref);
 }
 
 /* Callback used from GtkSearchEngine when the query is done running */
