@@ -120,7 +120,7 @@ GtkTextView {
     outline-offset: -2px; }
 
 .popover.osd, .app-notification,
-.app-notification.frame, .osd {
+.app-notification.frame, .osd .scale-popup, .osd {
   color: #eeeeec;
   border: none;
   background-color: rgba(32, 37, 38, 0.7);
@@ -129,7 +129,7 @@ GtkTextView {
   box-shadow: none;
   text-shadow: 0 1px black;
   icon-shadow: 0 1px black; }
-  .popover.osd:backdrop, .app-notification:backdrop, .osd:backdrop {
+  .popover.osd:backdrop, .app-notification:backdrop, .osd .scale-popup:backdrop, .osd:backdrop {
     text-shadow: none; }
 
 /*********************
@@ -4274,6 +4274,12 @@ GtkColorSwatch {
 /********
  * Misc *
  ********/
+.osd .scale-popup .button.flat, .osd .scale-popup .sidebar-button.button, .osd .scale-popup .header-bar .titlebutton.button, .header-bar .osd .scale-popup .titlebutton.button,
+.osd .scale-popup .titlebar .titlebutton.button,
+.titlebar .osd .scale-popup .titlebutton.button {
+  padding: 6px;
+  border-style: none;
+  border-radius: 5px; }
 .scale-popup .button, .scale-popup .header-bar .button.titlebutton, .header-bar .scale-popup .button.titlebutton,
 .scale-popup .titlebar .button.titlebutton,
 .titlebar .scale-popup .button.titlebutton {

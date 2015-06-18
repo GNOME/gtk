@@ -3187,16 +3187,27 @@ GtkColorSwatch {
  * Misc *
  ********/
 
-.scale-popup .button { // +/- buttons on GtkVolumeButton popup
-  padding: 6px;
-  &:hover {
-    @extend %undecorated_button;
-    background-color: transparentize($fg_color,0.9);
-    border-radius: 5px;
+.scale-popup {
+
+   .osd & { @extend %osd; }
+
+   .osd & .button.flat {  //FIXME: quick hack, redo properly
+     padding: 6px;
+     border-style: none;
+     border-radius: 5px;
+   }
+
+  .button { // +/- buttons on GtkVolumeButton popup
+    padding: 6px;
+    &:hover {
+      @extend %undecorated_button;
+      background-color: transparentize($fg_color,0.9);
+      border-radius: 5px;
+    }
+    &:backdrop,
+    &:backdrop:hover,
+    &:backdrop:insensitive { @extend %undecorated_button; }
   }
-  &:backdrop,
-  &:backdrop:hover,
-  &:backdrop:insensitive { @extend %undecorated_button; }
 }
 
 GtkVolumeButton.button { padding: 8px; }
