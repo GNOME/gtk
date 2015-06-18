@@ -2129,3 +2129,39 @@ _gtk_file_system_model_add_and_query_file (GtkFileSystemModel *model,
                            gtk_file_system_model_query_done,
                            model);
 }
+
+static void
+gtk_file_system_model_one_query_done (GObject *     object,
+                                      GAsyncResult *res,
+                                      gpointer      data)
+{
+  GtkFileSystemModel *model = data; /* only a valid pointer if not cancelled */
+
+  gtk_file_system_model_query_done (object, res, data);
+  thaw_updates (model);
+}
+
+void
+_gtk_file_system_model_add_and_query_files (GtkFileSystemModel *model,
+                                            GList              *list,
+                                            const char         *attributes)
+{
+  GList *l;
+  GFile *file;
+
+  g_return_if_fail (GTK_IS_FILE_SYSTEM_MODEL (model));
+  g_return_if_fail (attributes != NULL);
+
+  for (l = list; l; l = l->next)
+    {
+      file = (GFile *)l->data;
+      freeze_updates (model);
+      g_file_query_info_async (file,
+                               attributes,
+                               G_FILE_QUERY_INFO_NONE,
+                               IO_PRIORITY,
+                               model->cancellable,
+                               gtk_file_system_model_one_query_done,
+                               model);
+    }
+}
