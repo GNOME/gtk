@@ -47,7 +47,6 @@ struct _GtkSearchEnginePrivate {
 enum
 {
   HITS_ADDED,
-  HITS_SUBTRACTED,
   FINISHED,
   ERROR,
   LAST_SIGNAL
@@ -142,16 +141,6 @@ _gtk_search_engine_class_init (GtkSearchEngineClass *class)
                   G_TYPE_FROM_CLASS (class),
                   G_SIGNAL_RUN_LAST,
                   G_STRUCT_OFFSET (GtkSearchEngineClass, hits_added),
-                  NULL, NULL,
-                  g_cclosure_marshal_VOID__POINTER,
-                  G_TYPE_NONE, 1,
-                  G_TYPE_POINTER);
-
-  signals[HITS_SUBTRACTED] =
-    g_signal_new ("hits-subtracted",
-                  G_TYPE_FROM_CLASS (class),
-                  G_SIGNAL_RUN_LAST,
-                  G_STRUCT_OFFSET (GtkSearchEngineClass, hits_subtracted),
                   NULL, NULL,
                   g_cclosure_marshal_VOID__POINTER,
                   G_TYPE_NONE, 1,
@@ -394,17 +383,6 @@ _gtk_search_engine_hits_added (GtkSearchEngine *engine,
 
   g_signal_emit (engine, signals[HITS_ADDED], 0, hits);
 }
-
-
-void
-_gtk_search_engine_hits_subtracted (GtkSearchEngine *engine,
-                                    GList           *hits)
-{
-  g_return_if_fail (GTK_IS_SEARCH_ENGINE (engine));
-
-  g_signal_emit (engine, signals[HITS_SUBTRACTED], 0, hits);
-}
-
 
 void
 _gtk_search_engine_finished (GtkSearchEngine *engine)

@@ -67,8 +67,6 @@ struct _GtkSearchEngineClass
   /* Signals */
   void     (*hits_added)      (GtkSearchEngine *engine, 
 			       GList           *hits);
-  void     (*hits_subtracted) (GtkSearchEngine *engine, 
-			       GList           *hits);
   void     (*finished)        (GtkSearchEngine *engine);
   void     (*error)           (GtkSearchEngine *engine, 
 			       const gchar     *error_message);
@@ -84,8 +82,6 @@ void	         _gtk_search_engine_start           (GtkSearchEngine *engine);
 void	         _gtk_search_engine_stop            (GtkSearchEngine *engine);
 
 void	         _gtk_search_engine_hits_added      (GtkSearchEngine *engine, 
-						     GList           *hits);
-void	         _gtk_search_engine_hits_subtracted (GtkSearchEngine *engine, 
 						     GList           *hits);
 void	         _gtk_search_engine_finished        (GtkSearchEngine *engine);
 void	         _gtk_search_engine_error           (GtkSearchEngine *engine, 
