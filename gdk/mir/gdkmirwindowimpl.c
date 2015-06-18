@@ -253,6 +253,43 @@ create_mir_surface (GdkDisplay *display,
   return surface;
 }
 
+static GdkDevice *
+get_pointer (GdkWindow *window)
+{
+  return gdk_device_manager_get_client_pointer (gdk_display_get_device_manager (gdk_window_get_display (window)));
+}
+
+static void
+send_event (GdkWindow *window, GdkDevice *device, GdkEvent *event)
+{
+  GdkDisplay *display;
+  GList *node;
+
+  gdk_event_set_device (event, device);
+  gdk_event_set_source_device (event, device);
+  gdk_event_set_screen (event, gdk_display_get_screen (gdk_window_get_display (window), 0));
+  event->any.window = g_object_ref (window);
+
+  display = gdk_window_get_display (window);
+  node = _gdk_event_queue_append (display, event);
+  _gdk_windowing_got_event (display, node, event, _gdk_display_get_next_serial (display));
+}
+
+static void
+generate_configure_event (GdkWindow *window,
+                          gint       width,
+                          gint       height)
+{
+  GdkEvent *event;
+
+  event = gdk_event_new (GDK_CONFIGURE);
+  event->configure.send_event = FALSE;
+  event->configure.width = width;
+  event->configure.height = height;
+
+  send_event (window, get_pointer (window), event);
+}
+
 static void
 ensure_surface_full (GdkWindow *window,
                      MirBufferUsage buffer_usage)
@@ -287,6 +324,8 @@ ensure_surface_full (GdkWindow *window,
 
   _gdk_mir_event_source_queue (window_ref, &resize_event);
   */
+
+  generate_configure_event (window, window->width, window->height);
 
   mir_surface_set_event_handler (impl->surface, event_cb, window_ref); // FIXME: Ignore some events until shown
 }
