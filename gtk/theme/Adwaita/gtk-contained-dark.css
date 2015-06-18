@@ -449,7 +449,8 @@ GtkTextView {
     outline-color: rgba(238, 238, 236, 0.3);
     border: none;
     box-shadow: none; }
-    .button.osd.image-button, .header-bar .osd.titlebutton.button,
+    .button.osd.image-button, GtkScaleButton.button.osd,
+    GtkVolumeButton.button.osd, .header-bar .osd.titlebutton.button,
     .titlebar .osd.titlebutton.button {
       padding: 13px; }
     .button.osd:hover {
@@ -911,20 +912,25 @@ GtkTextView {
         box-shadow: none;
         text-shadow: none;
         icon-shadow: none; }
-  .button.image-button, .header-bar .titlebutton.button,
+  .button.image-button, GtkScaleButton.button,
+  GtkVolumeButton.button, .header-bar .titlebutton.button,
   .titlebar .titlebutton.button {
     padding: 8px; }
-  .button.text-button, .header-bar .text-button.button.titlebutton,
+  .button.text-button, GtkScaleButton.button.text-button,
+  GtkVolumeButton.button.text-button, .header-bar .text-button.button.titlebutton,
   .titlebar .text-button.button.titlebutton {
     padding-left: 16px;
     padding-right: 16px; }
-  .button.text-button.image-button, .header-bar .text-button.titlebutton.button,
+  .button.text-button.image-button, GtkScaleButton.button.text-button,
+  GtkVolumeButton.button.text-button, .header-bar .text-button.titlebutton.button,
   .titlebar .text-button.titlebutton.button {
     padding: 5px 8px 6px; }
-    .button.text-button.image-button .label:first-child, .header-bar .text-button.titlebutton.button .label:first-child,
+    .button.text-button.image-button .label:first-child, GtkScaleButton.button.text-button .label:first-child,
+    GtkVolumeButton.button.text-button .label:first-child, .header-bar .text-button.titlebutton.button .label:first-child,
     .titlebar .text-button.titlebutton.button .label:first-child {
       padding-left: 8px; }
-    .button.text-button.image-button .label:last-child, .header-bar .text-button.titlebutton.button .label:last-child,
+    .button.text-button.image-button .label:last-child, GtkScaleButton.button.text-button .label:last-child,
+    GtkVolumeButton.button.text-button .label:last-child, .header-bar .text-button.titlebutton.button .label:last-child,
     .titlebar .text-button.titlebutton.button .label:last-child {
       padding-right: 8px; }
   .stack-switcher > .button, .header-bar .stack-switcher > .button.titlebutton,
@@ -942,7 +948,8 @@ GtkTextView {
     .stack-switcher > .button.text-button, .header-bar .stack-switcher > .text-button.button.titlebutton,
     .titlebar .stack-switcher > .text-button.button.titlebutton {
       padding: 5px 10px 6px; }
-    .stack-switcher > .button.image-button, .header-bar .stack-switcher > .titlebutton.button,
+    .stack-switcher > .button.image-button, .stack-switcher > GtkScaleButton.button,
+    .stack-switcher > GtkVolumeButton.button, .header-bar .stack-switcher > .titlebutton.button,
     .titlebar .stack-switcher > .titlebutton.button {
       padding: 5px 2px; }
     .stack-switcher > .button.needs-attention:active > .label, .stack-switcher > .button.needs-attention:active > GtkImage, .stack-switcher > .button.needs-attention:checked > .label, .stack-switcher > .button.needs-attention:checked > GtkImage {
@@ -3972,7 +3979,8 @@ GtkPlacesSidebar.sidebar .sidebar-new-bookmark-row {
         box-shadow: inset 0 0 transparentize(white, 1);
         icon-shadow: none;
       } */ }
-  .sidebar-button.button.image-button, .header-bar .sidebar-button.titlebutton.button,
+  .sidebar-button.button.image-button, GtkScaleButton.sidebar-button.button,
+  GtkVolumeButton.sidebar-button.button, .header-bar .sidebar-button.titlebutton.button,
   .titlebar .sidebar-button.titlebutton.button {
     padding: 5px; }
   .sidebar-button.button:not(:hover):not(:active) > GtkImage, .header-bar .sidebar-button.button.titlebutton:not(:hover):not(:active) > GtkImage,
@@ -4287,10 +4295,6 @@ GtkColorSwatch {
   .scale-popup .button:hover {
     background-color: rgba(238, 238, 236, 0.1);
     border-radius: 5px; }
-
-GtkVolumeButton.button, .header-bar GtkVolumeButton.button.titlebutton,
-.titlebar GtkVolumeButton.button.titlebutton {
-  padding: 8px; }
 
 /**********************
  * Window Decorations *

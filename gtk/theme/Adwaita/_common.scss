@@ -3210,7 +3210,14 @@ GtkColorSwatch {
   }
 }
 
-GtkVolumeButton.button { padding: 8px; }
+GtkScaleButton.button,
+GtkVolumeButton.button {
+  // I assume both are image-button *by default*
+  // with the image-button/text-button classes automagically applied depending on the button child these selectors can be deleted.
+  @extend .image-button;
+
+  &.text-button { @extend .text-button }
+}
 
 /**********************
  * Window Decorations *
