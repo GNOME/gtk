@@ -1576,36 +1576,6 @@ column-header.button.dnd { // for treeview-like derive widgets
   &.osd { @extend %osd; }
 }
 
-//touch selection handlebars for the Popover.osd above
-.entry.cursor-handle,
-.cursor-handle {
-  background-color: transparent;
-  background-image: none;
-  box-shadow: none;
-  border-style: none;
-  @each $s,$as in ('',''),
-                      (':hover','-hover'),
-                      (':active','-active') { //no need for insensitive and backdrop
-                        &.top#{$s}:dir(ltr), &.bottom#{$s}:dir(rtl) {
-                          $_url: 'assets/text-select-start#{$as}#{$asset_suffix}';
-                          -gtk-icon-source: -gtk-scaled(url('#{$_url}.png'),
-                                            url('#{$_url}@2.png'));
-                          padding-left: 10px;
-                        }
-                        &.bottom#{$s}:dir(ltr), &.top#{$s}:dir(rtl) {
-                          $_url: 'assets/text-select-end#{$as}#{$asset_suffix}';
-                          -gtk-icon-source: -gtk-scaled(url('#{$_url}.png'),
-                                            url('#{$_url}@2.png'));
-                          padding-right: 10px;
-                        }
-                        &.insertion-cursor#{$s}:dir(ltr), &.insertion-cursor#{$s}:dir(rtl) {
-                          $_url: 'assets/slider-horz-scale-has-marks-above#{$as}#{$asset_suffix}';
-                          -gtk-icon-source: -gtk-scaled(url('#{$_url}.png'),
-                                            url('#{$_url}@2.png'));
-                        }
-  }
-}
-
 /*****************
  * Notebooks and *
  * Tabs          *
@@ -3320,6 +3290,44 @@ GtkVolumeButton.button { padding: 8px; }
   &:backdrop { color: $backdrop_selected_fg_color; }
 }
 
+.monospace {
+  font: Monospace;
+}
+
+/**********************
+ * Touch Copy & Paste *
+ *********************/
+
+//touch selection handlebars for the Popover.osd above
+.entry.cursor-handle,
+.cursor-handle {
+  background-color: transparent;
+  background-image: none;
+  box-shadow: none;
+  border-style: none;
+  @each $s,$as in ('',''),
+                      (':hover','-hover'),
+                      (':active','-active') { //no need for insensitive and backdrop
+                        &.top#{$s}:dir(ltr), &.bottom#{$s}:dir(rtl) {
+                          $_url: 'assets/text-select-start#{$as}#{$asset_suffix}';
+                          -gtk-icon-source: -gtk-scaled(url('#{$_url}.png'),
+                                            url('#{$_url}@2.png'));
+                          padding-left: 10px;
+                        }
+                        &.bottom#{$s}:dir(ltr), &.top#{$s}:dir(rtl) {
+                          $_url: 'assets/text-select-end#{$as}#{$asset_suffix}';
+                          -gtk-icon-source: -gtk-scaled(url('#{$_url}.png'),
+                                            url('#{$_url}@2.png'));
+                          padding-right: 10px;
+                        }
+                        &.insertion-cursor#{$s}:dir(ltr), &.insertion-cursor#{$s}:dir(rtl) {
+                          $_url: 'assets/slider-horz-scale-has-marks-above#{$as}#{$asset_suffix}';
+                          -gtk-icon-source: -gtk-scaled(url('#{$_url}.png'),
+                                            url('#{$_url}@2.png'));
+                        }
+  }
+}
+
 /* Decouple the font of context menus from their entry/textview */
 .context-menu {
   font: initial;
@@ -3336,20 +3344,12 @@ GtkVolumeButton.button { padding: 8px; }
   text-shadow: 0 1px black;
   icon-shadow: 0 1px black;
   &:backdrop { text-shadow: none; }
-  & .button {
+  .button {
     @include button(osd);
-  }
-  & .button:hover {
-      @include button(osd-hover);
-  }
-  & .button:active, & .button:checked {
-      @include button(osd-active);
-  }
-  & .button:insensitive, & .button:backdrop:insensitive {
-      @include button(osd-insensitive);
-  }
-  & .button:backdrop {
-      @include button(osd-backdrop);
+    &:hover { @include button(osd-hover); }
+    &:active, &:checked { @include button(osd-active); }
+    &:insensitive, &:backdrop:insensitive { @include button(osd-insensitive); }
+    &:backdrop { @include button(osd-backdrop); }
   }
   // checkboxes and radios to use the -dark style for OSD style popovers
   @each $w,$a in ('check', 'checkbox'),
@@ -3374,10 +3374,6 @@ GtkVolumeButton.button { padding: 8px; }
       }
     }
   }
-}
-
-.monospace {
-  font: Monospace;
 }
 
 // This is used by GtkScrolledWindow, when content is touch-dragged past boundaries.
