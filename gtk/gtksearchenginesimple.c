@@ -189,7 +189,11 @@ visit_directory (GFile *dir, SearchThreadData *data)
                                           G_FILE_ATTRIBUTE_STANDARD_NAME ","
                                           G_FILE_ATTRIBUTE_STANDARD_DISPLAY_NAME ","
                                           G_FILE_ATTRIBUTE_STANDARD_TYPE ","
-                                          G_FILE_ATTRIBUTE_STANDARD_IS_HIDDEN,
+                                          G_FILE_ATTRIBUTE_STANDARD_IS_HIDDEN ","
+                                          G_FILE_ATTRIBUTE_STANDARD_IS_BACKUP ","
+                                          G_FILE_ATTRIBUTE_STANDARD_SIZE ","
+                                          G_FILE_ATTRIBUTE_STANDARD_CONTENT_TYPE ","
+                                          G_FILE_ATTRIBUTE_TIME_MODIFIED,
                                           G_FILE_QUERY_INFO_NOFOLLOW_SYMLINKS,
                                           data->cancellable, NULL);
   if (enumerator == NULL)
