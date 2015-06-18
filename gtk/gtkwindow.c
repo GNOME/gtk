@@ -4079,8 +4079,7 @@ gtk_window_can_use_csd (GtkWindow *window)
 
   csd_env = g_getenv ("GTK_CSD");
 
-  /* If GTK_CSD is unset we default to CSD support */
-  return csd_env == NULL || (strcmp (csd_env, "1") == 0);
+  return (g_strcmp0 (csd_env, "1") == 0);
 }
 
 static void
