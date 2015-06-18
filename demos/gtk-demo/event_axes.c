@@ -403,6 +403,7 @@ do_event_axes (GtkWidget *toplevel)
 
       box = gtk_event_box_new ();
       gtk_container_add (GTK_CONTAINER (window), box);
+      gtk_widget_set_support_multidevice (box, TRUE);
       gtk_widget_add_events (box,
 			     GDK_POINTER_MOTION_MASK |
 			     GDK_BUTTON_PRESS_MASK |
