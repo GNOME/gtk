@@ -408,6 +408,8 @@ do_event_axes (GtkWidget *toplevel)
 			     GDK_BUTTON_PRESS_MASK |
 			     GDK_BUTTON_RELEASE_MASK |
 			     GDK_SMOOTH_SCROLL_MASK |
+			     GDK_ENTER_NOTIFY_MASK |
+			     GDK_LEAVE_NOTIFY_MASK |
 			     GDK_TOUCH_MASK);
 
       event_data = event_data_new ();
