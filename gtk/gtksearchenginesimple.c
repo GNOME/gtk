@@ -54,6 +54,9 @@ struct _GtkSearchEngineSimplePrivate
   SearchThreadData *active_search;
 
   gboolean query_finished;
+
+  GtkSearchEngineSimpleIsIndexed is_indexed_callback;
+  gpointer                       is_indexed_data;
 };
 
 
@@ -179,6 +182,25 @@ send_batch (SearchThreadData *data)
   data->hits = NULL;
 }
 
+static gboolean
+is_indexed (GtkSearchEngineSimple *engine,
+            GFile                 *location)
+{
+  if (engine->priv->is_indexed_callback)
+    {
+      if (engine->priv->is_indexed_callback (location, engine->priv->is_indexed_data))
+        {
+          gchar *uri = g_file_get_uri (location);
+          g_debug ("Simple search engine: Skipping indexed location: %s\n", uri);
+          g_free (uri);
+
+          return TRUE;
+        }
+    }
+
+  return FALSE;
+}
+
 static void
 visit_directory (GFile *dir, SearchThreadData *data)
 {
@@ -227,7 +249,9 @@ visit_directory (GFile *dir, SearchThreadData *data)
       if (data->n_processed_files > BATCH_SIZE)
         send_batch (data);
 
-      if (data->recursive && g_file_info_get_file_type (info) == G_FILE_TYPE_DIRECTORY)
+      if (data->recursive &&
+          g_file_info_get_file_type (info) == G_FILE_TYPE_DIRECTORY &&
+          !is_indexed (data->engine, child))
         g_queue_push_tail (data->directories, g_object_ref (child));
     }
 
@@ -336,4 +360,13 @@ GtkSearchEngine *
 _gtk_search_engine_simple_new (void)
 {
   return g_object_new (GTK_TYPE_SEARCH_ENGINE_SIMPLE, NULL);
+}
+
+void
+_gtk_search_engine_simple_set_indexed_cb (GtkSearchEngineSimple          *engine,
+                                          GtkSearchEngineSimpleIsIndexed  callback,
+                                          gpointer                        data)
+{
+  engine->priv->is_indexed_callback = callback;
+  engine->priv->is_indexed_data = data;
 }

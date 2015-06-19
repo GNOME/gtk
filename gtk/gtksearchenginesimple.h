@@ -53,6 +53,12 @@ GType            _gtk_search_engine_simple_get_type (void);
 
 GtkSearchEngine* _gtk_search_engine_simple_new      (void);
 
+typedef gboolean (*GtkSearchEngineSimpleIsIndexed) (GFile *location, gpointer data);
+
+void             _gtk_search_engine_simple_set_indexed_cb (GtkSearchEngineSimple *engine,
+                                                           GtkSearchEngineSimpleIsIndexed callback,
+                                                           gpointer                       data);
+
 G_END_DECLS
 
 #endif /* __GTK_SEARCH_ENGINE_SIMPLE_H__ */
