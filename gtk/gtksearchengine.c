@@ -171,6 +171,8 @@ static void
 _gtk_search_engine_init (GtkSearchEngine *engine)
 {
   engine->priv = _gtk_search_engine_get_instance_private (engine);
+
+  engine->priv->recursive = TRUE;
 }
 
 static void
