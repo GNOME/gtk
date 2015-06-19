@@ -246,7 +246,6 @@ struct _GtkFileChooserWidgetPrivate {
   GtkSearchEngine *search_engine;
   GtkQuery *search_query;
   GtkFileSystemModel *search_model;
-  gboolean search_model_empty;
 
   /* OPERATION_MODE_RECENT */
   GtkRecentManager *recent_manager;
@@ -6146,9 +6145,6 @@ search_engine_hits_added_cb (GtkSearchEngine      *engine,
         files = g_list_prepend (files, file);
     }
 
-  if (files || files_with_info)
-    impl->priv->search_model_empty = FALSE;
-
   _gtk_file_system_model_update_files (impl->priv->search_model,
                                        files_with_info, infos);
   _gtk_file_system_model_add_and_query_files (impl->priv->search_model,
@@ -6170,7 +6166,7 @@ search_engine_finished_cb (GtkSearchEngine *engine,
 
   set_busy_cursor (impl, FALSE);
 
-  if (impl->priv->search_model_empty)
+  if (gtk_tree_model_iter_n_children (GTK_TREE_MODEL (impl->priv->search_model), NULL) == 0)
     gtk_stack_set_visible_child_name (GTK_STACK (impl->priv->browse_files_stack), "empty");
 }
 
@@ -6252,7 +6248,6 @@ search_setup_model (GtkFileChooserWidget *impl)
   priv->search_model = _gtk_file_system_model_new (file_system_model_set,
                                                    impl,
 						   MODEL_COLUMN_TYPES);
-  priv->search_model_empty = TRUE;
 
   gtk_tree_sortable_set_sort_func (GTK_TREE_SORTABLE (priv->search_model),
 				   MODEL_COL_NAME,
