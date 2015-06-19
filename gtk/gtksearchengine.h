@@ -37,12 +37,10 @@ G_BEGIN_DECLS
 typedef struct _GtkSearchEngine GtkSearchEngine;
 typedef struct _GtkSearchEngineClass GtkSearchEngineClass;
 typedef struct _GtkSearchEnginePrivate GtkSearchEnginePrivate;
-
 typedef struct _GtkSearchHit GtkSearchHit;
 
 struct _GtkSearchHit
 {
-  gint ref_count;
   gchar *uri;
   GFileInfo *info; /* may be NULL */
 };
