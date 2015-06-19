@@ -84,8 +84,7 @@ finalize (GObject *object)
   g_clear_object (&tracker->priv->query);
   g_clear_object (&tracker->priv->connection);
 
-  if (tracker->priv->indexed_locations)
-    g_ptr_array_unref (tracker->priv->indexed_locations);
+  g_ptr_array_unref (tracker->priv->indexed_locations);
 
   G_OBJECT_CLASS (_gtk_search_engine_tracker_parent_class)->finalize (object);
 }
