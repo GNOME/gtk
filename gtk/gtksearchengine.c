@@ -322,12 +322,19 @@ _gtk_search_engine_new (void)
 
   engine = g_object_new (GTK_TYPE_SEARCH_ENGINE, NULL);
 
+  engine->priv->simple = _gtk_search_engine_simple_new ();
+  g_debug ("Using simple search engine");
+  connect_engine_signals (engine->priv->simple, engine);
+
 #ifdef HAVE_TRACKER
   engine->priv->native = _gtk_search_engine_tracker_new ();
   if (engine->priv->native)
     {
       g_debug ("Using Tracker search engine");
       connect_engine_signals (engine->priv->native, engine);
+      _gtk_search_engine_simple_set_indexed_cb (GTK_SEARCH_ENGINE_SIMPLE (engine->priv->simple),
+                                                _gtk_search_engine_tracker_is_indexed,
+                                                engine->priv->native);
     }
 #endif
 
@@ -339,10 +346,6 @@ _gtk_search_engine_new (void)
       connect_engine_signals (engine->priv->native, engine);
     }
 #endif
-
-  engine->priv->simple = _gtk_search_engine_simple_new ();
-  g_debug ("Using simple search engine");
-  connect_engine_signals (engine->priv->simple, engine);
 
   engine->priv->hits = g_hash_table_new_full (search_hit_hash, search_hit_equal,
                                               (GDestroyNotify)_gtk_search_hit_free, NULL);

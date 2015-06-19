@@ -61,6 +61,7 @@ struct _GtkSearchEngineTrackerPrivate
   GCancellable *cancellable;
   GtkQuery *query;
   gboolean query_pending;
+  GPtrArray *indexed_locations;
 };
 
 G_DEFINE_TYPE_WITH_PRIVATE (GtkSearchEngineTracker, _gtk_search_engine_tracker, GTK_TYPE_SEARCH_ENGINE)
@@ -78,20 +79,13 @@ finalize (GObject *object)
     {
       g_cancellable_cancel (tracker->priv->cancellable);
       g_object_unref (tracker->priv->cancellable);
-      tracker->priv->cancellable = NULL;
     }
 
-  if (tracker->priv->query)
-    {
-      g_object_unref (tracker->priv->query);
-      tracker->priv->query = NULL;
-    }
+  g_clear_object (&tracker->priv->query);
+  g_clear_object (&tracker->priv->connection);
 
-  if (tracker->priv->connection)
-    {
-      g_object_unref (tracker->priv->connection);
-      tracker->priv->connection = NULL;
-    }
+  if (tracker->priv->indexed_locations)
+    g_ptr_array_unref (tracker->priv->indexed_locations);
 
   G_OBJECT_CLASS (_gtk_search_engine_tracker_parent_class)->finalize (object);
 }
@@ -439,12 +433,19 @@ _gtk_search_engine_tracker_class_init (GtkSearchEngineTrackerClass *class)
   engine_class->stop = gtk_search_engine_tracker_stop;
 }
 
+static void get_indexed_locations (GtkSearchEngineTracker *engine);
+
 static void
 _gtk_search_engine_tracker_init (GtkSearchEngineTracker *engine)
 {
   engine->priv = _gtk_search_engine_tracker_get_instance_private (engine);
-}
 
+  engine->priv->cancellable = g_cancellable_new ();
+  engine->priv->query_pending = FALSE;
+  engine->priv->indexed_locations = g_ptr_array_new_with_free_func (g_object_unref);
+
+  get_indexed_locations (engine);
+}
 
 GtkSearchEngine *
 _gtk_search_engine_tracker_new (void)
@@ -463,8 +464,99 @@ _gtk_search_engine_tracker_new (void)
   engine = g_object_new (GTK_TYPE_SEARCH_ENGINE_TRACKER, NULL);
 
   engine->priv->connection = connection;
-  engine->priv->cancellable = g_cancellable_new ();
-  engine->priv->query_pending = FALSE;
 
   return GTK_SEARCH_ENGINE (engine);
+}
+
+#define TRACKER_SCHEMA "org.freedesktop.Tracker.Miner.Files"
+#define TRACKER_KEY_RECURSIVE_DIRECTORIES "index-recursive-directories"
+
+static const gchar *
+get_user_special_dir_if_not_home (GUserDirectory idx)
+{
+  const gchar *path;
+  path = g_get_user_special_dir (idx);
+  if (g_strcmp0 (path, g_get_home_dir ()) == 0)
+    return NULL;
+
+  return path;
+}
+
+static const gchar *
+path_from_tracker_dir (const gchar *value)
+{
+  const gchar *path;
+
+  if (g_strcmp0 (value, "&DESKTOP") == 0)
+    path = get_user_special_dir_if_not_home (G_USER_DIRECTORY_DESKTOP);
+  else if (g_strcmp0 (value, "&DOCUMENTS") == 0)
+    path = get_user_special_dir_if_not_home (G_USER_DIRECTORY_DOCUMENTS);
+  else if (g_strcmp0 (value, "&DOWNLOAD") == 0)
+    path = get_user_special_dir_if_not_home (G_USER_DIRECTORY_DOWNLOAD);
+  else if (g_strcmp0 (value, "&MUSIC") == 0)
+    path = get_user_special_dir_if_not_home (G_USER_DIRECTORY_MUSIC);
+  else if (g_strcmp0 (value, "&PICTURES") == 0)
+    path = get_user_special_dir_if_not_home (G_USER_DIRECTORY_PICTURES);
+  else if (g_strcmp0 (value, "&PUBLIC_SHARE") == 0)
+    path = get_user_special_dir_if_not_home (G_USER_DIRECTORY_PUBLIC_SHARE);
+  else if (g_strcmp0 (value, "&TEMPLATES") == 0)
+    path = get_user_special_dir_if_not_home (G_USER_DIRECTORY_TEMPLATES);
+  else if (g_strcmp0 (value, "&VIDEOS") == 0)
+    path = get_user_special_dir_if_not_home (G_USER_DIRECTORY_VIDEOS);
+  else if (g_strcmp0 (value, "$HOME") == 0)
+    path = g_get_home_dir ();
+  else
+    path = value;
+
+  return path;
+}
+
+static void
+get_indexed_locations (GtkSearchEngineTracker *engine)
+{
+  GSettingsSchemaSource *source;
+  GSettingsSchema *schema;
+  GSettings *settings;
+  gchar **locations;
+  gint i;
+  GFile *location;
+  const gchar *path;
+
+  source = g_settings_schema_source_get_default ();
+  schema = g_settings_schema_source_lookup (source, TRACKER_SCHEMA, FALSE);
+  if (!schema)
+    return;
+
+  settings = g_settings_new_full (schema, NULL, NULL);
+  g_settings_schema_unref (schema);
+
+  locations = g_settings_get_strv (settings, TRACKER_KEY_RECURSIVE_DIRECTORIES);
+
+  for (i = 0; locations[i] != NULL; i++)
+    {
+      path = path_from_tracker_dir (locations[i]);
+      location = g_file_new_for_path (path);
+      g_ptr_array_add (engine->priv->indexed_locations, location);
+    }
+
+  g_strfreev (locations);
+  g_object_unref (settings);
+}
+
+gboolean
+_gtk_search_engine_tracker_is_indexed (GFile    *location,
+                                       gpointer  data)
+{
+  GtkSearchEngineTracker *engine = data;
+  gint i;
+  GFile *place;
+
+  for (i = 0; i < engine->priv->indexed_locations->len; i++)
+    {
+      place = g_ptr_array_index (engine->priv->indexed_locations, i);
+      if (g_file_equal (location, place) || g_file_has_prefix (location, place))
+        return TRUE;
+    }
+
+  return FALSE;
 }

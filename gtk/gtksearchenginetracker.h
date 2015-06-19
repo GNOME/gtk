@@ -53,6 +53,8 @@ GType            _gtk_search_engine_tracker_get_type (void);
 
 GtkSearchEngine* _gtk_search_engine_tracker_new      (void);
 
+gboolean         _gtk_search_engine_tracker_is_indexed (GFile    *file,
+                                                        gpointer  data);
 G_END_DECLS
 
 #endif /* __GTK_SEARCH_ENGINE_TRACKER_H__ */
