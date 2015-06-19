@@ -25,6 +25,7 @@ demos =						\
 	entry_completion.c			\
 	event_axes.c				\
 	expander.c  				\
+	font_features.c				\
 	gestures.c				\
 	glarea.c				\
 	headerbar.c				\
