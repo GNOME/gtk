@@ -68,7 +68,6 @@ struct _GdkMirWindowImpl
   EGLSurface egl_surface;
 
   /* Dummy MIR and EGL surfaces */
-  MirSurface *dummy_surface;
   EGLSurface dummy_egl_surface;
 
   /* TRUE if the window can be seen */
@@ -365,8 +364,6 @@ ensure_no_surface (GdkWindow *window)
           eglDestroySurface (egl_display, impl->dummy_egl_surface);
           impl->dummy_egl_surface = NULL;
         }
-
-      g_clear_pointer (&impl->dummy_surface, mir_surface_release_sync);
     }
 
   g_clear_pointer(&impl->surface, mir_surface_release_sync);
@@ -1426,10 +1423,6 @@ _gdk_mir_window_get_dummy_egl_surface (GdkWindow *window,
       EGLNativeWindowType egl_window;
 
       display = gdk_window_get_display (window);
-      impl->dummy_surface = create_mir_surface (display, NULL, 0, 0, 1, 1,
-                                                GDK_WINDOW_TYPE_HINT_NORMAL,
-                                                mir_buffer_usage_hardware);
-
       egl_display = _gdk_mir_display_get_egl_display (display);
       egl_window = (EGLNativeWindowType) mir_buffer_stream_get_egl_native_window (mir_surface_get_buffer_stream (impl->surface));
 
