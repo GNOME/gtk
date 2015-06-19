@@ -327,6 +327,7 @@ gtk_search_engine_tracker_start (GtkSearchEngine *engine)
   gchar *search_text;
   gchar *location_uri;
   GString *sparql;
+  gboolean recursive;
 
   tracker = GTK_SEARCH_ENGINE_TRACKER (engine);
 
@@ -344,6 +345,7 @@ gtk_search_engine_tracker_start (GtkSearchEngine *engine)
 
   search_text = gtk_query_get_text (tracker->priv->query);
   location_uri = gtk_query_get_location (tracker->priv->query);
+  recursive = _gtk_search_engine_get_recursive (engine);
 
   sparql = g_string_new ("SELECT nie:url(?urn) "
                          "WHERE {"
@@ -356,16 +358,24 @@ gtk_search_engine_tracker_start (GtkSearchEngine *engine)
   sparql_append_string_literal (sparql, search_text, TRUE);
 #endif
 
-  g_string_append (sparql, ". FILTER (fn:contains(fn:lower-case(nfo:fileName(?urn)),");
+  g_string_append (sparql, ". FILTER (");
+
+  g_string_append (sparql, "fn:contains(fn:lower-case(nfo:fileName(?urn)),");
   sparql_append_string_literal_lower_case (sparql, search_text);
+  g_string_append (sparql, ")");
 
   if (location_uri)
     {
-      g_string_append (sparql, ") && fn:starts-with(nie:url(?urn),");
+      g_string_append (sparql, " && ");
+      if (recursive)
+        g_string_append (sparql, "tracker-uri-is-descendant(");
+      else
+        g_string_append (sparql, "tracker-uri-is-parent(");
       sparql_append_string_literal (sparql, location_uri, FALSE);
+      g_string_append (sparql, ",nie:url(?urn))");
     }
 
-  g_string_append (sparql, "))");
+  g_string_append (sparql, ")");
 
 #ifdef FTS_MATCHING
   g_string_append (sparql, " } ORDER BY DESC(fts:rank(?urn)) DESC(nie:url(?urn))");

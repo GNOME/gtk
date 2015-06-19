@@ -43,6 +43,7 @@ typedef struct
   GList *hits;
 
   GtkQuery *query;
+  gboolean recursive;
 } SearchThreadData;
 
 
@@ -95,6 +96,7 @@ search_thread_data_new (GtkSearchEngineSimple *engine,
   data->engine = g_object_ref (engine);
   data->directories = g_queue_new ();
   data->query = g_object_ref (query);
+  data->recursive = _gtk_search_engine_get_recursive (GTK_SEARCH_ENGINE (engine));
   uri = gtk_query_get_location (query);
   if (uri != NULL)
     location = g_file_new_for_uri (uri);
@@ -225,7 +227,7 @@ visit_directory (GFile *dir, SearchThreadData *data)
       if (data->n_processed_files > BATCH_SIZE)
         send_batch (data);
 
-      if (g_file_info_get_file_type (info) == G_FILE_TYPE_DIRECTORY)
+      if (data->recursive && g_file_info_get_file_type (info) == G_FILE_TYPE_DIRECTORY)
         g_queue_push_tail (data->directories, g_object_ref (child));
     }
 
