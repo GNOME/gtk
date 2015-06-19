@@ -364,9 +364,9 @@ gtk_search_engine_tracker_start (GtkSearchEngine *engine)
     {
       g_string_append (sparql, " && ");
       if (recursive)
-        g_string_append (sparql, "tracker-uri-is-descendant(");
+        g_string_append (sparql, "tracker:uri-is-descendant(");
       else
-        g_string_append (sparql, "tracker-uri-is-parent(");
+        g_string_append (sparql, "tracker:uri-is-parent(");
       sparql_append_string_literal (sparql, location_uri, FALSE);
       g_string_append (sparql, ",nie:url(?urn))");
     }
