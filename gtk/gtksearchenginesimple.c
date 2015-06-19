@@ -47,8 +47,10 @@ typedef struct
 } SearchThreadData;
 
 
-struct _GtkSearchEngineSimplePrivate
+struct _GtkSearchEngineSimple
 {
+  GtkSearchEngine parent;
+
   GtkQuery *query;
 
   SearchThreadData *active_search;
@@ -60,36 +62,27 @@ struct _GtkSearchEngineSimplePrivate
   GDestroyNotify                 is_indexed_data_destroy;
 };
 
+struct _GtkSearchEngineSimpleClass
+{
+  GtkSearchEngineClass parent_class;
+};
 
-G_DEFINE_TYPE_WITH_PRIVATE (GtkSearchEngineSimple, _gtk_search_engine_simple, GTK_TYPE_SEARCH_ENGINE)
+G_DEFINE_TYPE (GtkSearchEngineSimple, _gtk_search_engine_simple, GTK_TYPE_SEARCH_ENGINE)
 
 static void
 gtk_search_engine_simple_dispose (GObject *object)
 {
-  GtkSearchEngineSimple *simple;
-  GtkSearchEngineSimplePrivate *priv;
+  GtkSearchEngineSimple *simple = GTK_SEARCH_ENGINE_SIMPLE (object);
 
-  simple = GTK_SEARCH_ENGINE_SIMPLE (object);
-  priv = simple->priv;
+  g_clear_object (&simple->query);
 
-  if (priv->query)
+  if (simple->active_search)
     {
-      g_object_unref (priv->query);
-      priv->query = NULL;
+      g_cancellable_cancel (simple->active_search->cancellable);
+      simple->active_search = NULL;
     }
 
-  if (priv->active_search)
-    {
-      g_cancellable_cancel (priv->active_search->cancellable);
-      priv->active_search = NULL;
-    }
-
-  if (priv->is_indexed_data_destroy)
-    priv->is_indexed_data_destroy (priv->is_indexed_data);
-
-  priv->is_indexed_callback = NULL;
-  priv->is_indexed_data = NULL;
-  priv->is_indexed_data_destroy = NULL;
+  _gtk_search_engine_simple_set_indexed_cb (simple, NULL, NULL, NULL);
 
   G_OBJECT_CLASS (_gtk_search_engine_simple_parent_class)->dispose (object);
 }
@@ -142,7 +135,7 @@ search_thread_done_idle (gpointer user_data)
   if (!g_cancellable_is_cancelled (data->cancellable))
     _gtk_search_engine_finished (GTK_SEARCH_ENGINE (data->engine));
 
-  data->engine->priv->active_search = NULL;
+  data->engine->active_search = NULL;
   search_thread_data_free (data);
 
   return FALSE;
@@ -194,9 +187,9 @@ static gboolean
 is_indexed (GtkSearchEngineSimple *engine,
             GFile                 *location)
 {
-  if (engine->priv->is_indexed_callback)
+  if (engine->is_indexed_callback)
     {
-      if (engine->priv->is_indexed_callback (location, engine->priv->is_indexed_data))
+      if (engine->is_indexed_callback (location, engine->is_indexed_data))
         {
           gchar *uri = g_file_get_uri (location);
           g_debug ("Simple search engine: Skipping indexed location: %s\n", uri);
@@ -299,17 +292,17 @@ gtk_search_engine_simple_start (GtkSearchEngine *engine)
 
   simple = GTK_SEARCH_ENGINE_SIMPLE (engine);
 
-  if (simple->priv->active_search != NULL)
+  if (simple->active_search != NULL)
     return;
 
-  if (simple->priv->query == NULL)
+  if (simple->query == NULL)
     return;
 
-  data = search_thread_data_new (simple, simple->priv->query);
+  data = search_thread_data_new (simple, simple->query);
 
   g_thread_unref (g_thread_new ("file-search", search_thread_func, data));
 
-  simple->priv->active_search = data;
+  simple->active_search = data;
 }
 
 static void
@@ -319,10 +312,10 @@ gtk_search_engine_simple_stop (GtkSearchEngine *engine)
 
   simple = GTK_SEARCH_ENGINE_SIMPLE (engine);
 
-  if (simple->priv->active_search != NULL)
+  if (simple->active_search != NULL)
     {
-      g_cancellable_cancel (simple->priv->active_search->cancellable);
-      simple->priv->active_search = NULL;
+      g_cancellable_cancel (simple->active_search->cancellable);
+      simple->active_search = NULL;
     }
 }
 
@@ -337,10 +330,10 @@ gtk_search_engine_simple_set_query (GtkSearchEngine *engine,
   if (query)
     g_object_ref (query);
 
-  if (simple->priv->query)
-    g_object_unref (simple->priv->query);
+  if (simple->query)
+    g_object_unref (simple->query);
 
-  simple->priv->query = query;
+  simple->query = query;
 }
 
 static void
@@ -361,7 +354,6 @@ _gtk_search_engine_simple_class_init (GtkSearchEngineSimpleClass *class)
 static void
 _gtk_search_engine_simple_init (GtkSearchEngineSimple *engine)
 {
-  engine->priv = _gtk_search_engine_simple_get_instance_private (engine);
 }
 
 GtkSearchEngine *
@@ -376,10 +368,10 @@ _gtk_search_engine_simple_set_indexed_cb (GtkSearchEngineSimple          *engine
                                           gpointer                        data,
                                           GDestroyNotify                  destroy)
 {
-  if (engine->priv->is_indexed_data_destroy)
-    engine->priv->is_indexed_data_destroy (engine->priv->is_indexed_data);
+  if (engine->is_indexed_data_destroy)
+    engine->is_indexed_data_destroy (engine->is_indexed_data);
 
-  engine->priv->is_indexed_callback = callback;
-  engine->priv->is_indexed_data = data;
-  engine->priv->is_indexed_data_destroy = destroy;
+  engine->is_indexed_callback = callback;
+  engine->is_indexed_data = data;
+  engine->is_indexed_data_destroy = destroy;
 }
