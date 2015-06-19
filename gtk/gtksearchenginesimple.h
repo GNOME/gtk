@@ -35,19 +35,6 @@ G_BEGIN_DECLS
 
 typedef struct _GtkSearchEngineSimple GtkSearchEngineSimple;
 typedef struct _GtkSearchEngineSimpleClass GtkSearchEngineSimpleClass;
-typedef struct _GtkSearchEngineSimplePrivate GtkSearchEngineSimplePrivate;
-
-struct _GtkSearchEngineSimple 
-{
-  GtkSearchEngine parent;
-
-  GtkSearchEngineSimplePrivate *priv;
-};
-
-struct _GtkSearchEngineSimpleClass
-{
-  GtkSearchEngineClass parent_class;
-};
 
 GType            _gtk_search_engine_simple_get_type (void);
 
