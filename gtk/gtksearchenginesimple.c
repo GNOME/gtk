@@ -57,6 +57,7 @@ struct _GtkSearchEngineSimplePrivate
 
   GtkSearchEngineSimpleIsIndexed is_indexed_callback;
   gpointer                       is_indexed_data;
+  GDestroyNotify                 is_indexed_data_destroy;
 };
 
 
@@ -82,6 +83,13 @@ gtk_search_engine_simple_dispose (GObject *object)
       g_cancellable_cancel (priv->active_search->cancellable);
       priv->active_search = NULL;
     }
+
+  if (priv->is_indexed_data_destroy)
+    priv->is_indexed_data_destroy (priv->is_indexed_data);
+
+  priv->is_indexed_callback = NULL;
+  priv->is_indexed_data = NULL;
+  priv->is_indexed_data_destroy = NULL;
 
   G_OBJECT_CLASS (_gtk_search_engine_simple_parent_class)->dispose (object);
 }
@@ -365,8 +373,13 @@ _gtk_search_engine_simple_new (void)
 void
 _gtk_search_engine_simple_set_indexed_cb (GtkSearchEngineSimple          *engine,
                                           GtkSearchEngineSimpleIsIndexed  callback,
-                                          gpointer                        data)
+                                          gpointer                        data,
+                                          GDestroyNotify                  destroy)
 {
+  if (engine->priv->is_indexed_data_destroy)
+    engine->priv->is_indexed_data_destroy (engine->priv->is_indexed_data);
+
   engine->priv->is_indexed_callback = callback;
   engine->priv->is_indexed_data = data;
+  engine->priv->is_indexed_data_destroy = destroy;
 }

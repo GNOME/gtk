@@ -334,7 +334,8 @@ _gtk_search_engine_new (void)
       connect_engine_signals (engine->priv->native, engine);
       _gtk_search_engine_simple_set_indexed_cb (GTK_SEARCH_ENGINE_SIMPLE (engine->priv->simple),
                                                 _gtk_search_engine_tracker_is_indexed,
-                                                engine->priv->native);
+                                                g_object_ref (engine->priv->native),
+                                                g_object_unref);
     }
 #endif
 

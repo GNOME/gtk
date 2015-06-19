@@ -57,7 +57,8 @@ typedef gboolean (*GtkSearchEngineSimpleIsIndexed) (GFile *location, gpointer da
 
 void             _gtk_search_engine_simple_set_indexed_cb (GtkSearchEngineSimple *engine,
                                                            GtkSearchEngineSimpleIsIndexed callback,
-                                                           gpointer                       data);
+                                                           gpointer                       data,
+                                                           GDestroyNotify                 destroy);
 
 G_END_DECLS
 
