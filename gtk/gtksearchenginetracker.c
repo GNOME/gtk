@@ -52,11 +52,9 @@
  */
 #define FTS_MATCHING
 
-/*
- * GtkSearchEngineTracker object
- */
-struct _GtkSearchEngineTrackerPrivate
+struct _GtkSearchEngineTracker
 {
+  GtkSearchEngine parent;
   GDBusConnection *connection;
   GCancellable *cancellable;
   GtkQuery *query;
@@ -64,7 +62,12 @@ struct _GtkSearchEngineTrackerPrivate
   GPtrArray *indexed_locations;
 };
 
-G_DEFINE_TYPE_WITH_PRIVATE (GtkSearchEngineTracker, _gtk_search_engine_tracker, GTK_TYPE_SEARCH_ENGINE)
+struct _GtkSearchEngineTrackerClass
+{
+  GtkSearchEngineClass parent_class;
+};
+
+G_DEFINE_TYPE (GtkSearchEngineTracker, _gtk_search_engine_tracker, GTK_TYPE_SEARCH_ENGINE)
 
 static void
 finalize (GObject *object)
@@ -75,16 +78,16 @@ finalize (GObject *object)
 
   tracker = GTK_SEARCH_ENGINE_TRACKER (object);
 
-  if (tracker->priv->cancellable)
+  if (tracker->cancellable)
     {
-      g_cancellable_cancel (tracker->priv->cancellable);
-      g_object_unref (tracker->priv->cancellable);
+      g_cancellable_cancel (tracker->cancellable);
+      g_object_unref (tracker->cancellable);
     }
 
-  g_clear_object (&tracker->priv->query);
-  g_clear_object (&tracker->priv->connection);
+  g_clear_object (&tracker->query);
+  g_clear_object (&tracker->connection);
 
-  g_ptr_array_unref (tracker->priv->indexed_locations);
+  g_ptr_array_unref (tracker->indexed_locations);
 
   G_OBJECT_CLASS (_gtk_search_engine_tracker_parent_class)->finalize (object);
 }
@@ -152,7 +155,7 @@ get_query_results (GtkSearchEngineTracker *engine,
                    GAsyncReadyCallback     callback,
                    gpointer                user_data)
 {
-  g_dbus_connection_call (engine->priv->connection,
+  g_dbus_connection_call (engine->connection,
                           DBUS_SERVICE_RESOURCES,
                           DBUS_PATH_RESOURCES,
                           DBUS_INTERFACE_RESOURCES,
@@ -161,7 +164,7 @@ get_query_results (GtkSearchEngineTracker *engine,
                           NULL,
                           G_DBUS_CALL_FLAGS_NONE,
                           QUERY_TIMEOUT_SECONDS * 1000,
-                          engine->priv->cancellable,
+                          engine->cancellable,
                           callback,
                           user_data);
 }
@@ -267,9 +270,9 @@ query_callback (GObject      *object,
 
   tracker = GTK_SEARCH_ENGINE_TRACKER (user_data);
 
-  tracker->priv->query_pending = FALSE;
+  tracker->query_pending = FALSE;
 
-  reply = g_dbus_connection_call_finish (tracker->priv->connection, res, &error);
+  reply = g_dbus_connection_call_finish (tracker->connection, res, &error);
   if (error)
     {
       _gtk_search_engine_error (GTK_SEARCH_ENGINE (tracker), error->message);
@@ -324,20 +327,20 @@ gtk_search_engine_tracker_start (GtkSearchEngine *engine)
 
   tracker = GTK_SEARCH_ENGINE_TRACKER (engine);
 
-  if (tracker->priv->query_pending)
+  if (tracker->query_pending)
     {
       g_debug ("Attempt to start a new search while one is pending, doing nothing");
       return;
     }
 
-  if (tracker->priv->query == NULL)
+  if (tracker->query == NULL)
     {
       g_debug ("Attempt to start a new search with no GtkQuery, doing nothing");
       return;
     }
 
-  search_text = gtk_query_get_text (tracker->priv->query);
-  location_uri = gtk_query_get_location (tracker->priv->query);
+  search_text = gtk_query_get_text (tracker->query);
+  location_uri = gtk_query_get_location (tracker->query);
   recursive = _gtk_search_engine_get_recursive (engine);
 
   sparql = g_string_new ("SELECT nie:url(?urn) "
@@ -376,7 +379,7 @@ gtk_search_engine_tracker_start (GtkSearchEngine *engine)
   g_string_append (sparql, "} ORDER BY DESC(nie:url(?urn)) DESC(nfo:fileName(?urn))");
 #endif /* FTS_MATCHING */
 
-  tracker->priv->query_pending = TRUE;
+  tracker->query_pending = TRUE;
 
   g_debug ("SearchEngineTracker: query: %s", sparql->str);
 
@@ -393,10 +396,10 @@ gtk_search_engine_tracker_stop (GtkSearchEngine *engine)
 
   tracker = GTK_SEARCH_ENGINE_TRACKER (engine);
 
-  if (tracker->priv->query && tracker->priv->query_pending)
+  if (tracker->query && tracker->query_pending)
     {
-      g_cancellable_cancel (tracker->priv->cancellable);
-      tracker->priv->query_pending = FALSE;
+      g_cancellable_cancel (tracker->cancellable);
+      tracker->query_pending = FALSE;
     }
 }
 
@@ -411,10 +414,10 @@ gtk_search_engine_tracker_set_query (GtkSearchEngine *engine,
   if (query)
     g_object_ref (query);
 
-  if (tracker->priv->query)
-    g_object_unref (tracker->priv->query);
+  if (tracker->query)
+    g_object_unref (tracker->query);
 
-  tracker->priv->query = query;
+  tracker->query = query;
 }
 
 static void
@@ -437,11 +440,9 @@ static void get_indexed_locations (GtkSearchEngineTracker *engine);
 static void
 _gtk_search_engine_tracker_init (GtkSearchEngineTracker *engine)
 {
-  engine->priv = _gtk_search_engine_tracker_get_instance_private (engine);
-
-  engine->priv->cancellable = g_cancellable_new ();
-  engine->priv->query_pending = FALSE;
-  engine->priv->indexed_locations = g_ptr_array_new_with_free_func (g_object_unref);
+  engine->cancellable = g_cancellable_new ();
+  engine->query_pending = FALSE;
+  engine->indexed_locations = g_ptr_array_new_with_free_func (g_object_unref);
 
   get_indexed_locations (engine);
 }
@@ -462,7 +463,7 @@ _gtk_search_engine_tracker_new (void)
 
   engine = g_object_new (GTK_TYPE_SEARCH_ENGINE_TRACKER, NULL);
 
-  engine->priv->connection = connection;
+  engine->connection = connection;
 
   return GTK_SEARCH_ENGINE (engine);
 }
@@ -535,7 +536,7 @@ get_indexed_locations (GtkSearchEngineTracker *engine)
     {
       path = path_from_tracker_dir (locations[i]);
       location = g_file_new_for_path (path);
-      g_ptr_array_add (engine->priv->indexed_locations, location);
+      g_ptr_array_add (engine->indexed_locations, location);
     }
 
   g_strfreev (locations);
@@ -550,9 +551,9 @@ _gtk_search_engine_tracker_is_indexed (GFile    *location,
   gint i;
   GFile *place;
 
-  for (i = 0; i < engine->priv->indexed_locations->len; i++)
+  for (i = 0; i < engine->indexed_locations->len; i++)
     {
-      place = g_ptr_array_index (engine->priv->indexed_locations, i);
+      place = g_ptr_array_index (engine->indexed_locations, i);
       if (g_file_equal (location, place) || g_file_has_prefix (location, place))
         return TRUE;
     }

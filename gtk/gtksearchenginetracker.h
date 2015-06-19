@@ -35,19 +35,6 @@ G_BEGIN_DECLS
 
 typedef struct _GtkSearchEngineTracker GtkSearchEngineTracker;
 typedef struct _GtkSearchEngineTrackerClass GtkSearchEngineTrackerClass;
-typedef struct _GtkSearchEngineTrackerPrivate GtkSearchEngineTrackerPrivate;
-
-struct _GtkSearchEngineTracker 
-{
-  GtkSearchEngine parent;
-
-  GtkSearchEngineTrackerPrivate *priv;
-};
-
-struct _GtkSearchEngineTrackerClass 
-{
-  GtkSearchEngineClass parent_class;
-};
 
 GType            _gtk_search_engine_tracker_get_type (void);
 
