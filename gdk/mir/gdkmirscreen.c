@@ -203,7 +203,7 @@ get_output (GdkScreen *screen, gint monitor_num)
 static gint
 gdk_mir_screen_get_width (GdkScreen *screen)
 {
-  g_printerr ("gdk_mir_screen_get_width\n");
+  //g_printerr ("gdk_mir_screen_get_width\n");
   gint width, height;
   get_screen_size (GDK_MIR_SCREEN (screen)->display_config, &width, &height);
   return width;
@@ -212,7 +212,7 @@ gdk_mir_screen_get_width (GdkScreen *screen)
 static gint
 gdk_mir_screen_get_height (GdkScreen *screen)
 {
-  g_printerr ("gdk_mir_screen_get_height\n");
+  //g_printerr ("gdk_mir_screen_get_height\n");
   gint width, height;
   get_screen_size (GDK_MIR_SCREEN (screen)->display_config, &width, &height);
   return height;
@@ -221,7 +221,7 @@ gdk_mir_screen_get_height (GdkScreen *screen)
 static gint
 gdk_mir_screen_get_width_mm (GdkScreen *screen)
 {
-  g_printerr ("gdk_mir_screen_get_width_mm\n");
+  //g_printerr ("gdk_mir_screen_get_width_mm\n");
   gint width, height;
   get_screen_size_mm (GDK_MIR_SCREEN (screen)->display_config, &width, &height);
   return width;
@@ -230,7 +230,7 @@ gdk_mir_screen_get_width_mm (GdkScreen *screen)
 static gint
 gdk_mir_screen_get_height_mm (GdkScreen *screen)
 {
-  g_printerr ("gdk_mir_screen_get_height_mm\n");
+  //g_printerr ("gdk_mir_screen_get_height_mm\n");
   gint width, height;
   get_screen_size_mm (GDK_MIR_SCREEN (screen)->display_config, &width, &height);
   return height;
@@ -293,7 +293,7 @@ gdk_mir_screen_get_n_monitors (GdkScreen *screen)
 static gint
 gdk_mir_screen_get_primary_monitor (GdkScreen *screen)
 {
-  g_printerr ("gdk_mir_screen_get_primary_monitor\n");
+  //g_printerr ("gdk_mir_screen_get_primary_monitor\n");
   return 0; //?
 }
 
@@ -301,7 +301,7 @@ static gint
 gdk_mir_screen_get_monitor_width_mm	(GdkScreen *screen,
                                      gint       monitor_num)
 {
-  g_printerr ("gdk_mir_screen_get_monitor_width_mm (%d)\n", monitor_num);
+  //g_printerr ("gdk_mir_screen_get_monitor_width_mm (%d)\n", monitor_num);
   MirDisplayOutput *output = get_output (screen, monitor_num);
   return output ? output->physical_width_mm : 0;
 }
@@ -310,7 +310,7 @@ static gint
 gdk_mir_screen_get_monitor_height_mm (GdkScreen *screen,
                                       gint       monitor_num)
 {
-  g_printerr ("gdk_mir_screen_get_monitor_height_mm (%d)\n", monitor_num);
+  //g_printerr ("gdk_mir_screen_get_monitor_height_mm (%d)\n", monitor_num);
   MirDisplayOutput *output = get_output (screen, monitor_num);
   return output ? output->physical_height_mm : 0;
 }
@@ -319,7 +319,7 @@ static gchar *
 gdk_mir_screen_get_monitor_plug_name (GdkScreen *screen,
                                       gint       monitor_num)
 {
-  g_printerr ("gdk_mir_screen_get_monitor_plug_name (%d)\n", monitor_num);
+  //g_printerr ("gdk_mir_screen_get_monitor_plug_name (%d)\n", monitor_num);
   MirDisplayOutput *output = get_output (screen, monitor_num);
 
   if (output)
@@ -399,7 +399,7 @@ gdk_mir_screen_get_monitor_workarea (GdkScreen    *screen,
 static GList *
 gdk_mir_screen_list_visuals (GdkScreen *screen)
 {
-  g_printerr ("gdk_mir_screen_list_visuals\n");
+  //g_printerr ("gdk_mir_screen_list_visuals\n");
   return g_list_append (NULL, GDK_MIR_SCREEN (screen)->visual);
 }
 
@@ -428,21 +428,21 @@ gdk_mir_screen_is_composited (GdkScreen *screen)
 static gchar *
 gdk_mir_screen_make_display_name (GdkScreen *screen)
 {
-  g_printerr ("gdk_mir_screen_make_display_name\n");
+  //g_printerr ("gdk_mir_screen_make_display_name\n");
   return NULL; // FIXME
 }
 
 static GdkWindow *
 gdk_mir_screen_get_active_window (GdkScreen *screen)
 {
-  g_printerr ("gdk_mir_screen_get_active_window\n");
+  //g_printerr ("gdk_mir_screen_get_active_window\n");
   return NULL; // FIXME
 }
 
 static GList *
 gdk_mir_screen_get_window_stack (GdkScreen *screen)
 {
-  g_printerr ("gdk_mir_screen_get_window_stack\n");
+  //g_printerr ("gdk_mir_screen_get_window_stack\n");
   return NULL; // FIXME
 }
 
@@ -450,7 +450,7 @@ static void
 gdk_mir_screen_broadcast_client_message (GdkScreen *screen,
                                          GdkEvent  *event)
 {
-  g_printerr ("gdk_mir_screen_broadcast_client_message\n");
+  //g_printerr ("gdk_mir_screen_broadcast_client_message\n");
   // FIXME
 }
 
@@ -673,21 +673,21 @@ gdk_mir_screen_get_setting (GdkScreen   *screen,
 static gint
 gdk_mir_screen_visual_get_best_depth (GdkScreen *screen)
 {
-  g_printerr ("gdk_mir_screen_visual_get_best_depth\n");
+  //g_printerr ("gdk_mir_screen_visual_get_best_depth\n");
   return VISUAL_DEPTH;
 }
 
 static GdkVisualType
 gdk_mir_screen_visual_get_best_type (GdkScreen *screen)
 {
-  g_printerr ("gdk_mir_screen_visual_get_best_type\n");
+  //g_printerr ("gdk_mir_screen_visual_get_best_type\n");
   return VISUAL_TYPE;
 }
 
 static GdkVisual*
 gdk_mir_screen_visual_get_best (GdkScreen *screen)
 {
-  g_printerr ("gdk_mir_screen_visual_get_best\n");
+  //g_printerr ("gdk_mir_screen_visual_get_best\n");
   return GDK_MIR_SCREEN (screen)->visual;
 }
 
@@ -695,7 +695,7 @@ static GdkVisual*
 gdk_mir_screen_visual_get_best_with_depth (GdkScreen *screen,
                                            gint       depth)
 {
-  g_printerr ("gdk_mir_screen_visual_get_best_with_depth (%d)\n", depth);
+  //g_printerr ("gdk_mir_screen_visual_get_best_with_depth (%d)\n", depth);
   return GDK_MIR_SCREEN (screen)->visual;
 }
 
@@ -703,7 +703,7 @@ static GdkVisual*
 gdk_mir_screen_visual_get_best_with_type (GdkScreen     *screen,
                                           GdkVisualType  visual_type)
 {
-  g_printerr ("gdk_mir_screen_visual_get_best_with_type (%d)\n", visual_type);
+  //g_printerr ("gdk_mir_screen_visual_get_best_with_type (%d)\n", visual_type);
   return GDK_MIR_SCREEN (screen)->visual;
 }
 
@@ -712,7 +712,7 @@ gdk_mir_screen_visual_get_best_with_both (GdkScreen     *screen,
                                           gint           depth,
                                           GdkVisualType  visual_type)
 {
-  g_printerr ("gdk_mir_screen_visual_get_best_with_both\n");
+  //g_printerr ("gdk_mir_screen_visual_get_best_with_both\n");
   return GDK_MIR_SCREEN (screen)->visual;
 }
 
@@ -721,7 +721,7 @@ gdk_mir_screen_query_depths (GdkScreen  *screen,
                              gint      **depths,
                              gint       *count)
 {
-  g_printerr ("gdk_mir_screen_query_depths\n");
+  //g_printerr ("gdk_mir_screen_query_depths\n");
   static gint supported_depths[] = { VISUAL_DEPTH };
   *depths = supported_depths;
   *count = 1;
@@ -732,7 +732,7 @@ gdk_mir_screen_query_visual_types (GdkScreen      *screen,
                                    GdkVisualType **visual_types,
                                    gint           *count)
 {
-  g_printerr ("gdk_mir_screen_query_visual_types\n");
+  //g_printerr ("gdk_mir_screen_query_visual_types\n");
   static GdkVisualType supported_visual_types[] = { VISUAL_TYPE };
   *visual_types = supported_visual_types;
   *count = 1;

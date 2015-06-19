@@ -148,8 +148,6 @@ generate_button_event (GdkWindow *window, GdkEventType type, gdouble x, gdouble 
 {
   GdkEvent *event;
 
-  g_print ("%s %lf %lf\n", G_STRFUNC, x, y);
-
   event = gdk_event_new (type);
   event->button.x = x;
   event->button.y = y;
@@ -362,8 +360,6 @@ handle_motion_event (GdkWindow *window, const MirInputEvent *event)
         {
         case mir_pointer_action_button_up:
         case mir_pointer_action_button_down:
-          g_print ("%s button up/down\n", G_STRFUNC);
-
           event_type = mir_pointer_event_action (pointer_event) == mir_pointer_action_button_down ? GDK_BUTTON_PRESS : GDK_BUTTON_RELEASE;
           changed_button_state = button_state ^ mir_pointer_event_get_button_state (pointer_event);
           if (changed_button_state == 0 || (changed_button_state & mir_pointer_button_primary) != 0)

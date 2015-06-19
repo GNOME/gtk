@@ -611,7 +611,7 @@ gdk_mir_window_impl_reparent (GdkWindow *window,
                               gint       x,
                               gint       y)
 {
-  g_printerr ("gdk_mir_window_impl_reparent window=%p new-parent=%p\n", window, new_parent);
+  //g_printerr ("gdk_mir_window_impl_reparent window=%p new-parent=%p\n", window, new_parent);
   return FALSE;
 }
 
@@ -711,14 +711,14 @@ gdk_mir_window_impl_end_paint (GdkWindow *window)
 static cairo_region_t *
 gdk_mir_window_impl_get_shape (GdkWindow *window)
 {
-  g_printerr ("gdk_mir_window_impl_get_shape window=%p\n", window);
+  //g_printerr ("gdk_mir_window_impl_get_shape window=%p\n", window);
   return NULL;
 }
 
 static cairo_region_t *
 gdk_mir_window_impl_get_input_shape (GdkWindow *window)
 {
-  g_printerr ("gdk_mir_window_impl_get_input_shape window=%p\n", window);
+  //g_printerr ("gdk_mir_window_impl_get_input_shape window=%p\n", window);
   return NULL;
 }
 
@@ -728,7 +728,7 @@ gdk_mir_window_impl_shape_combine_region (GdkWindow            *window,
                                           gint                  offset_x,
                                           gint                  offset_y)
 {
-  g_printerr ("gdk_mir_window_impl_shape_combine_region window=%p\n", window);
+  //g_printerr ("gdk_mir_window_impl_shape_combine_region window=%p\n", window);
 }
 
 static void
@@ -755,14 +755,14 @@ gdk_mir_window_impl_destroy (GdkWindow *window,
 static void
 gdk_mir_window_impl_destroy_foreign (GdkWindow *window)
 {
-  g_printerr ("gdk_mir_window_impl_destroy_foreign window=%p\n", window);
+  //g_printerr ("gdk_mir_window_impl_destroy_foreign window=%p\n", window);
 }
 
 static void
 gdk_mir_window_impl_focus (GdkWindow *window,
                       guint32    timestamp)
 {
-  g_printerr ("gdk_mir_window_impl_focus window=%p\n", window);
+  //g_printerr ("gdk_mir_window_impl_focus window=%p\n", window);
 }
 
 static void
@@ -798,21 +798,21 @@ static void
 gdk_mir_window_impl_set_skip_taskbar_hint (GdkWindow *window,
                                            gboolean   skips_taskbar)
 {
-  g_printerr ("gdk_mir_window_impl_set_skip_taskbar_hint window=%p\n", window);
+  //g_printerr ("gdk_mir_window_impl_set_skip_taskbar_hint window=%p\n", window);
 }
 
 static void
 gdk_mir_window_impl_set_skip_pager_hint (GdkWindow *window,
                                          gboolean   skips_pager)
 {
-  g_printerr ("gdk_mir_window_impl_set_skip_pager_hint window=%p\n", window);
+  //g_printerr ("gdk_mir_window_impl_set_skip_pager_hint window=%p\n", window);
 }
 
 static void
 gdk_mir_window_impl_set_urgency_hint (GdkWindow *window,
                                       gboolean   urgent)
 {
-  g_printerr ("gdk_mir_window_impl_set_urgency_hint window=%p\n", window);
+  //g_printerr ("gdk_mir_window_impl_set_urgency_hint window=%p\n", window);
 }
 
 static void
@@ -835,21 +835,21 @@ static void
 gdk_mir_window_impl_set_role (GdkWindow   *window,
                               const gchar *role)
 {
-  g_printerr ("gdk_mir_window_impl_set_role window=%p\n", window);
+  //g_printerr ("gdk_mir_window_impl_set_role window=%p\n", window);
 }
 
 static void
 gdk_mir_window_impl_set_startup_id (GdkWindow   *window,
                                     const gchar *startup_id)
 {
-  g_printerr ("gdk_mir_window_impl_set_startup_id window=%p\n", window);
+  //g_printerr ("gdk_mir_window_impl_set_startup_id window=%p\n", window);
 }
 
 static void
 gdk_mir_window_impl_set_transient_for (GdkWindow *window,
                                        GdkWindow *parent)
 {
-  g_printerr ("gdk_mir_window_impl_set_transient_for window=%p\n", window);
+  //g_printerr ("gdk_mir_window_impl_set_transient_for window=%p\n", window);
   GdkMirWindowImpl *impl = GDK_MIR_WINDOW_IMPL (window->impl);
 
   if (impl->transient_for == parent)
@@ -865,14 +865,14 @@ static void
 gdk_mir_window_impl_get_frame_extents (GdkWindow    *window,
                                        GdkRectangle *rect)
 {
-  g_printerr ("gdk_mir_window_impl_get_frame_extents window=%p\n", window);
+  //g_printerr ("gdk_mir_window_impl_get_frame_extents window=%p\n", window);
 }
 
 static void
 gdk_mir_window_impl_set_override_redirect (GdkWindow *window,
                                            gboolean   override_redirect)
 {
-  g_printerr ("gdk_mir_window_impl_set_override_redirect window=%p\n", window);
+  //g_printerr ("gdk_mir_window_impl_set_override_redirect window=%p\n", window);
 }
 
 static void
@@ -903,7 +903,7 @@ static void
 gdk_mir_window_impl_set_icon_name (GdkWindow   *window,
                                    const gchar *name)
 {
-  g_printerr ("gdk_mir_window_impl_set_icon_name window=%p\n", window);
+  //g_printerr ("gdk_mir_window_impl_set_icon_name window=%p\n", window);
 }
 
 static void
@@ -987,7 +987,7 @@ gdk_mir_window_impl_set_keep_below (GdkWindow *window,
 static GdkWindow *
 gdk_mir_window_impl_get_group (GdkWindow *window)
 {
-  g_printerr ("gdk_mir_window_impl_get_group window=%p\n", window);
+  //g_printerr ("gdk_mir_window_impl_get_group window=%p\n", window);
   return NULL;
 }
 
@@ -995,21 +995,21 @@ static void
 gdk_mir_window_impl_set_group (GdkWindow *window,
                                GdkWindow *leader)
 {
-  g_printerr ("gdk_mir_window_impl_set_group window=%p\n", window);
+  //g_printerr ("gdk_mir_window_impl_set_group window=%p\n", window);
 }
 
 static void
 gdk_mir_window_impl_set_decorations (GdkWindow       *window,
                                      GdkWMDecoration  decorations)
 {
-  g_printerr ("gdk_mir_window_impl_set_decorations window=%p decorations=%d\n", window, decorations);
+  //g_printerr ("gdk_mir_window_impl_set_decorations window=%p decorations=%d\n", window, decorations);
 }
 
 static gboolean
 gdk_mir_window_impl_get_decorations (GdkWindow       *window,
                                      GdkWMDecoration *decorations)
 {
-  g_printerr ("gdk_mir_window_impl_get_decorations window=%p\n", window);
+  //g_printerr ("gdk_mir_window_impl_get_decorations window=%p\n", window);
   return FALSE;
 }
 
@@ -1017,7 +1017,7 @@ static void
 gdk_mir_window_impl_set_functions (GdkWindow     *window,
                                    GdkWMFunction  functions)
 {
-  g_printerr ("gdk_mir_window_impl_set_functions window=%p\n", window);
+  //g_printerr ("gdk_mir_window_impl_set_functions window=%p\n", window);
 }
 
 static void
@@ -1029,7 +1029,7 @@ gdk_mir_window_impl_begin_resize_drag (GdkWindow     *window,
                                        gint           root_y,
                                        guint32        timestamp)
 {
-  g_printerr ("gdk_mir_window_impl_begin_resize_drag window=%p\n", window);
+  //g_printerr ("gdk_mir_window_impl_begin_resize_drag window=%p\n", window);
 }
 
 static void
@@ -1040,19 +1040,19 @@ gdk_mir_window_impl_begin_move_drag (GdkWindow *window,
                                      gint       root_y,
                                      guint32    timestamp)
 {
-  g_printerr ("gdk_mir_window_impl_begin_move_drag window=%p\n", window);
+  //g_printerr ("gdk_mir_window_impl_begin_move_drag window=%p\n", window);
 }
 
 static void
 gdk_mir_window_impl_enable_synchronized_configure (GdkWindow *window)
 {
-  g_printerr ("gdk_mir_window_impl_enable_synchronized_configure window=%p\n", window);
+  //g_printerr ("gdk_mir_window_impl_enable_synchronized_configure window=%p\n", window);
 }
 
 static void
 gdk_mir_window_impl_configure_finished (GdkWindow *window)
 {
-  g_printerr ("gdk_mir_window_impl_configure_finished window=%p\n", window);
+  //g_printerr ("gdk_mir_window_impl_configure_finished window=%p\n", window);
 }
 
 static void
@@ -1067,27 +1067,27 @@ static void
 gdk_mir_window_impl_set_composited (GdkWindow *window,
                                     gboolean   composited)
 {
-  g_printerr ("gdk_mir_window_impl_set_composited window=%p\n", window);
+  //g_printerr ("gdk_mir_window_impl_set_composited window=%p\n", window);
 }
 
 static void
 gdk_mir_window_impl_destroy_notify (GdkWindow *window)
 {
-  g_printerr ("gdk_mir_window_impl_destroy_notify window=%p\n", window);
+  //g_printerr ("gdk_mir_window_impl_destroy_notify window=%p\n", window);
 }
 
 static GdkDragProtocol
 gdk_mir_window_impl_get_drag_protocol (GdkWindow *window,
                                        GdkWindow **target)
 {
-  g_printerr ("gdk_mir_window_impl_get_drag_protocol window=%p\n", window);
+  //g_printerr ("gdk_mir_window_impl_get_drag_protocol window=%p\n", window);
   return 0;
 }
 
 static void
 gdk_mir_window_impl_register_dnd (GdkWindow *window)
 {
-  g_printerr ("gdk_mir_window_impl_register_dnd window=%p\n", window);
+  //g_printerr ("gdk_mir_window_impl_register_dnd window=%p\n", window);
 }
 
 static GdkDragContext *
@@ -1095,7 +1095,7 @@ gdk_mir_window_impl_drag_begin (GdkWindow *window,
                                 GdkDevice *device,
                                 GList     *targets)
 {
-  g_printerr ("gdk_mir_window_impl_drag_begin window=%p\n", window);
+  //g_printerr ("gdk_mir_window_impl_drag_begin window=%p\n", window);
   return NULL;
 }
 
@@ -1119,7 +1119,7 @@ gdk_mir_window_impl_process_updates_recurse (GdkWindow      *window,
 static void
 gdk_mir_window_impl_sync_rendering (GdkWindow *window)
 {
-  g_printerr ("gdk_mir_window_impl_sync_rendering window=%p\n", window);
+  //g_printerr ("gdk_mir_window_impl_sync_rendering window=%p\n", window);
   // FIXME: Only used for benchmarking
 }
 
@@ -1131,7 +1131,7 @@ gdk_mir_window_impl_simulate_key (GdkWindow       *window,
                                   GdkModifierType  modifiers,
                                   GdkEventType     key_pressrelease)
 {
-  g_printerr ("gdk_mir_window_impl_simulate_key window=%p\n", window);
+  //g_printerr ("gdk_mir_window_impl_simulate_key window=%p\n", window);
   return FALSE;
 }
 
@@ -1143,7 +1143,7 @@ gdk_mir_window_impl_simulate_button (GdkWindow       *window,
                                      GdkModifierType  modifiers,
                                      GdkEventType     button_pressrelease)
 {
-  g_printerr ("gdk_mir_window_impl_simulate_button window=%p\n", window);
+  //g_printerr ("gdk_mir_window_impl_simulate_button window=%p\n", window);
   return FALSE;
 }
 
@@ -1159,7 +1159,7 @@ gdk_mir_window_impl_get_property (GdkWindow   *window,
                                   gint        *actual_length,
                                   guchar     **data)
 {
-  g_printerr ("gdk_mir_window_impl_get_property window=%p\n", window);
+  //g_printerr ("gdk_mir_window_impl_get_property window=%p\n", window);
   return FALSE;
 }
 
@@ -1172,7 +1172,7 @@ gdk_mir_window_impl_change_property (GdkWindow    *window,
                                      const guchar *data,
                                      gint          nelements)
 {
-  g_printerr ("gdk_mir_window_impl_change_property window=%p\n", window);
+  //g_printerr ("gdk_mir_window_impl_change_property window=%p\n", window);
 }
 
 static void
