@@ -95,7 +95,6 @@ struct _GdkWaylandDeviceData
   guint32 repeat_count;
   GSettings *keyboard_settings;
 
-  GdkCursor *grab_cursor;
   guint cursor_timeout_id;
   guint cursor_image_index;
   guint cursor_image_delay;
@@ -204,12 +203,7 @@ gdk_wayland_device_update_window_cursor (GdkWaylandDeviceData *wd)
   guint next_image_index, next_image_delay;
   gboolean retval = G_SOURCE_REMOVE;
 
-  if (wd->grab_cursor)
-    {
-      buffer = _gdk_wayland_cursor_get_buffer (wd->grab_cursor, 0,
-                                               &x, &y, &w, &h, &scale);
-    }
-  else if (wd->cursor)
+  if (wd->cursor)
     {
       buffer = _gdk_wayland_cursor_get_buffer (wd->cursor, wd->cursor_image_index,
                                                &x, &y, &w, &h, &scale);
@@ -233,13 +227,6 @@ gdk_wayland_device_update_window_cursor (GdkWaylandDeviceData *wd)
       wl_surface_set_buffer_scale (wd->pointer_surface, scale);
       wl_surface_damage (wd->pointer_surface,  0, 0, w, h);
       wl_surface_commit (wd->pointer_surface);
-    }
-
-  if (wd->grab_cursor)
-    {
-      /* We admit only static icons during drags so far */
-      gdk_wayland_device_stop_window_cursor_animation (wd);
-      return retval;
     }
 
   next_image_index =
@@ -500,10 +487,10 @@ gdk_wayland_device_grab (GdkDevice    *device,
                                               wayland_device->wl_seat,
                                               time_);
 
-      g_clear_object (&wayland_device->grab_cursor);
+      g_clear_object (&wayland_device->cursor);
 
       if (cursor)
-        wayland_device->grab_cursor = g_object_ref (cursor);
+        wayland_device->cursor = g_object_ref (cursor);
 
       gdk_wayland_device_update_window_cursor (wayland_device);
     }
@@ -542,7 +529,6 @@ gdk_wayland_device_ungrab (GdkDevice *device,
   else
     {
       /* Device is a pointer */
-      g_clear_object (&wayland_device->grab_cursor);
       gdk_wayland_device_update_window_cursor (wayland_device);
 
       if (wayland_device->pointer_grab_window)
@@ -2162,8 +2148,6 @@ pointer_surface_update_scale (GdkWaylandDeviceData *device)
 
   device->current_output_scale = scale;
 
-  if (device->grab_cursor)
-    _gdk_wayland_cursor_set_scale (device->grab_cursor, scale);
   if (device->cursor)
     _gdk_wayland_cursor_set_scale (device->cursor, scale);
 
