@@ -1598,7 +1598,7 @@ gtk_settings_class_init (GtkSettingsClass *class)
    * Recognized actions are minimize, toggle-maximize, menu, lower
    * or none.
    *
-   * Since: 3.14.1
+   * Since: 3.14
    */
   result = settings_install_property_parser (class,
                                              g_param_spec_string ("gtk-titlebar-double-click",
@@ -1617,7 +1617,7 @@ gtk_settings_class_init (GtkSettingsClass *class)
    * Recognized actions are minimize, toggle-maximize, menu, lower
    * or none.
    *
-   * Since: 3.14.1
+   * Since: 3.14
    */
   result = settings_install_property_parser (class,
                                              g_param_spec_string ("gtk-titlebar-middle-click",
@@ -1636,7 +1636,7 @@ gtk_settings_class_init (GtkSettingsClass *class)
    * Recognized actions are minimize, toggle-maximize, menu, lower
    * or none.
    *
-   * Since: 3.14.1
+   * Since: 3.14
    */
   result = settings_install_property_parser (class,
                                              g_param_spec_string ("gtk-titlebar-right-click",
