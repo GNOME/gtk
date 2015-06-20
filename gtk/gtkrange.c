@@ -2286,7 +2286,7 @@ range_grab_remove (GtkRange *range)
 }
 
 static GtkScrollType
-range_get_scroll_for_grab (GtkRange      *range)
+range_get_scroll_for_grab (GtkRange *range)
 {
   GtkRangePrivate *priv = range->priv;
   guint grab_button;
@@ -2397,7 +2397,6 @@ coord_to_value (GtkRange *range,
   value = gtk_adjustment_get_lower (priv->adjustment) + frac * (gtk_adjustment_get_upper (priv->adjustment) -
                                             gtk_adjustment_get_lower (priv->adjustment) -
                                             gtk_adjustment_get_page_size (priv->adjustment));
-
   return value;
 }
 
@@ -2925,15 +2924,18 @@ gtk_range_drag_gesture_update (GtkGestureDrag *gesture,
   GtkRangePrivate *priv = range->priv;
   gdouble start_x, start_y;
 
-  gtk_gesture_drag_get_start_point (gesture, &start_x, &start_y);
-  priv->mouse_x = start_x + offset_x;
-  priv->mouse_y = start_y + offset_y;
-  priv->in_drag = TRUE;
+  if (range->priv->grab_location == MOUSE_SLIDER)
+    {
+      gtk_gesture_drag_get_start_point (gesture, &start_x, &start_y);
+      priv->mouse_x = start_x + offset_x;
+      priv->mouse_y = start_y + offset_y;
+      priv->in_drag = TRUE;
 
-  update_autoscroll_mode (range);
+      update_autoscroll_mode (range);
 
-  if (priv->autoscroll_mode == GTK_SCROLL_NONE)
-    update_slider_position (range, priv->mouse_x, priv->mouse_y);
+      if (priv->autoscroll_mode == GTK_SCROLL_NONE)
+        update_slider_position (range, priv->mouse_x, priv->mouse_y);
+    }
 }
 
 static void
@@ -2952,8 +2954,11 @@ gtk_range_drag_gesture_end (GtkGestureDrag       *gesture,
                             gdouble               offset_y,
                             GtkRange             *range)
 {
-  range->priv->in_drag = FALSE;
-  stop_scrolling (range);
+  if (range->priv->grab_location == MOUSE_SLIDER)
+    {
+      range->priv->in_drag = FALSE;
+      stop_scrolling (range);
+    }
 }
 
 static gboolean
