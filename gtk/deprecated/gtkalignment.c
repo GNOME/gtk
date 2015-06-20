@@ -218,7 +218,7 @@ gtk_alignment_class_init (GtkAlignmentClass *class)
  *
  * Since: 2.4
  *
- * Deprecared: 3.14: Use gtk_widget_set_margin_top() instead
+ * Deprecated: 3.14: Use gtk_widget_set_margin_top() instead
  */
   g_object_class_install_property (gobject_class,
                                    PROP_TOP_PADDING,
