@@ -150,6 +150,8 @@ struct _GtkTextView
  *   view is drawing its own text. Applications can override this vfunc
  *   in a subclass to draw customized content underneath or above the
  *   text. Since: 3.14
+ * @extend_selection: The class handler for the #GtkTextView::extend-selection
+ *   signal. Since 3.16
  */
 struct _GtkTextViewClass
 {
