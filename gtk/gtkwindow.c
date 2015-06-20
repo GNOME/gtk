@@ -6642,7 +6642,7 @@ update_border_windows (GtkWindow *window)
   GtkWidget *widget = (GtkWidget *)window;
   GtkWindowPrivate *priv = window->priv;
   gboolean resize_h, resize_v;
-  gint handle;
+  gint handle, handle_h, handle_v;
   cairo_region_t *region;
   cairo_rectangle_int_t rect;
   gint width, height;
@@ -6696,30 +6696,33 @@ update_border_windows (GtkWindow *window)
   width = gtk_widget_get_allocated_width (widget) - (window_border.left + window_border.right);
   height = gtk_widget_get_allocated_height (widget) - (window_border.top + window_border.bottom);
 
+  handle_h = MIN (handle, width / 2);
+  handle_v = MIN (handle, height / 2);
+
   if (resize_h && resize_v)
     {
       gdk_window_move_resize (priv->border_window[GDK_WINDOW_EDGE_NORTH_WEST],
                               window_border.left - border.left, window_border.top - border.top,
-                              border.left + handle, border.top + handle);
+                              border.left + handle_h, border.top + handle_v);
       gdk_window_move_resize (priv->border_window[GDK_WINDOW_EDGE_NORTH_EAST],
-                              window_border.left + width - handle, window_border.top - border.top,
-                              border.right + handle, border.top + handle);
+                              window_border.left + width - handle_h, window_border.top - border.top,
+                              border.right + handle_h, border.top + handle_v);
       gdk_window_move_resize (priv->border_window[GDK_WINDOW_EDGE_SOUTH_WEST],
-                              window_border.left - border.left, window_border.top + height - handle,
-                              border.left + handle, border.bottom + handle);
+                              window_border.left - border.left, window_border.top + height - handle_v,
+                              border.left + handle_h, border.bottom + handle_v);
       gdk_window_move_resize (priv->border_window[GDK_WINDOW_EDGE_SOUTH_EAST],
-                              window_border.left + width - handle, window_border.top + height - handle,
-                              border.right + handle, border.bottom + handle);
+                              window_border.left + width - handle_h, window_border.top + height - handle_v,
+                              border.right + handle_h, border.bottom + handle_v);
 
       rect.x = 0;
       rect.y = 0;
-      rect.width = border.left + handle;
-      rect.height = border.top + handle;
+      rect.width = border.left + handle_h;
+      rect.height = border.top + handle_v;
       region = cairo_region_create_rectangle (&rect);
       rect.x = border.left;
       rect.y = border.top;
-      rect.width = handle;
-      rect.height = handle;
+      rect.width = handle_h;
+      rect.height = handle_v;
       cairo_region_subtract_rectangle (region, &rect);
       gdk_window_shape_combine_region (priv->border_window[GDK_WINDOW_EDGE_NORTH_WEST],
                                        region, 0, 0);
@@ -6727,13 +6730,13 @@ update_border_windows (GtkWindow *window)
 
       rect.x = 0;
       rect.y = 0;
-      rect.width = border.right + handle;
-      rect.height = border.top + handle;
+      rect.width = border.right + handle_h;
+      rect.height = border.top + handle_v;
       region = cairo_region_create_rectangle (&rect);
       rect.x = 0;
       rect.y = border.top;
-      rect.width = handle;
-      rect.height = handle;
+      rect.width = handle_h;
+      rect.height = handle_v;
       cairo_region_subtract_rectangle (region, &rect);
       gdk_window_shape_combine_region (priv->border_window[GDK_WINDOW_EDGE_NORTH_EAST],
                                        region, 0, 0);
@@ -6741,13 +6744,13 @@ update_border_windows (GtkWindow *window)
 
       rect.x = 0;
       rect.y = 0;
-      rect.width = border.left + handle;
-      rect.height = border.bottom + handle;
+      rect.width = border.left + handle_h;
+      rect.height = border.bottom + handle_v;
       region = cairo_region_create_rectangle (&rect);
       rect.x = border.left;
       rect.y = 0;
-      rect.width = handle;
-      rect.height = handle;
+      rect.width = handle_h;
+      rect.height = handle_v;
       cairo_region_subtract_rectangle (region, &rect);
       gdk_window_shape_combine_region (priv->border_window[GDK_WINDOW_EDGE_SOUTH_WEST],
                                        region, 0, 0);
@@ -6755,13 +6758,13 @@ update_border_windows (GtkWindow *window)
 
       rect.x = 0;
       rect.y = 0;
-      rect.width = border.right + handle;
-      rect.height = border.bottom + handle;
+      rect.width = border.right + handle_h;
+      rect.height = border.bottom + handle_v;
       region = cairo_region_create_rectangle (&rect);
       rect.x = 0;
       rect.y = 0;
-      rect.width = handle;
-      rect.height = handle;
+      rect.width = handle_h;
+      rect.height = handle_v;
       cairo_region_subtract_rectangle (region, &rect);
       gdk_window_shape_combine_region (priv->border_window[GDK_WINDOW_EDGE_SOUTH_EAST],
                                        region, 0, 0);
@@ -6786,8 +6789,8 @@ update_border_windows (GtkWindow *window)
 
       if (resize_h)
         {
-          x = window_border.left + handle;
-          w = width - 2 * handle;
+          x = window_border.left + handle_h;
+          w = width - 2 * handle_h;
         }
       else
         {
@@ -6817,8 +6820,8 @@ update_border_windows (GtkWindow *window)
 
       if (resize_v)
         {
-          y = window_border.top + handle;
-          h = height - 2 * handle;
+          y = window_border.top + handle_v;
+          h = height - 2 * handle_v;
         }
       else
         {
