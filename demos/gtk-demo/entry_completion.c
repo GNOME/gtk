@@ -47,7 +47,7 @@ do_entry_completion (GtkWidget *do_widget)
 
   if (!window)
     {
-      window = gtk_dialog_new_with_buttons ("GtkEntryCompletion",
+      window = gtk_dialog_new_with_buttons ("Entry Completion",
                                             GTK_WINDOW (do_widget),
                                             0,
                                             _("_Close"),

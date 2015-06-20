@@ -242,7 +242,7 @@ open_display_cb (GtkWidget         *button,
           if (!result)
             {
               gchar *error_msg =
-                g_strdup_printf  ("Can't open display :\n\t%s\nplease try another one\n",
+                g_strdup_printf  ("Can't open display:\n\t%s\nplease try another one\n",
                                   new_screen_name);
               gtk_label_set_text (GTK_LABEL (dialog_label), error_msg);
               g_free (error_msg);
@@ -523,12 +523,12 @@ do_changedisplay (GtkWidget *do_widget)
 
       info = g_new0 (ChangeDisplayInfo, 1);
 
-      info->window = gtk_dialog_new_with_buttons ("Change Screen or display",
-                                            GTK_WINDOW (do_widget),
-                                            0,
-                                            _("_Close"),  GTK_RESPONSE_CLOSE,
-                                            "Change",         GTK_RESPONSE_OK,
-                                            NULL);
+      info->window = gtk_dialog_new_with_buttons ("Change Display",
+                                                  GTK_WINDOW (do_widget),
+                                                  0,
+                                                  "Close", GTK_RESPONSE_CLOSE,
+                                                  "Change", GTK_RESPONSE_OK,
+                                                  NULL);
 
       gtk_window_set_default_size (GTK_WINDOW (info->window), 300, 400);
 

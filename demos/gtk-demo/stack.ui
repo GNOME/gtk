@@ -3,7 +3,7 @@
   <!-- interface-requires gtk+ 3.6 -->
   <object class="GtkWindow" id="window1">
     <property name="can_focus">False</property>
-    <property name="title" translatable="yes">GtkStack</property>
+    <property name="title" translatable="yes">Stack</property>
     <child>
       <object class="GtkGrid" id="grid1">
         <property name="visible">True</property>

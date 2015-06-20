@@ -34,7 +34,7 @@ show_parsing_error (GtkCssProvider *provider,
 
   gtk_text_buffer_apply_tag_by_name (buffer, tag_name, &start, &end);
 }
-                    
+
 static void
 css_text_changed (GtkTextBuffer  *buffer,
                   GtkCssProvider *provider)
@@ -90,6 +90,7 @@ do_css_multiplebgs (GtkWidget *do_widget)
       GBytes *bytes;
 
       window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+      gtk_window_set_title (GTK_WINDOW (window), "Multiple Backgrounds");
       gtk_window_set_transient_for (GTK_WINDOW (window), GTK_WINDOW (do_widget));
       gtk_window_set_default_size (GTK_WINDOW (window), 400, 300);
       g_signal_connect (window, "destroy",

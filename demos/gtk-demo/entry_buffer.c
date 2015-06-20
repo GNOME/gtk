@@ -1,7 +1,8 @@
 /* Entry/Entry Buffer
  *
  * GtkEntryBuffer provides the text content in a GtkEntry.
- *
+ * Applications can provide their own buffer implementation,
+ * e.g. to provide secure handling for passwords in memory.
  */
 
 #include <glib/gi18n.h>
@@ -20,7 +21,7 @@ do_entry_buffer (GtkWidget *do_widget)
 
   if (!window)
   {
-    window = gtk_dialog_new_with_buttons ("GtkEntryBuffer",
+    window = gtk_dialog_new_with_buttons ("Entry Buffer",
                                           GTK_WINDOW (do_widget),
                                           0,
                                           _("_Close"),

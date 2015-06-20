@@ -373,7 +373,7 @@ create_glarea_window (GtkWidget *do_widget)
 
   window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
   gtk_window_set_screen (GTK_WINDOW (window), gtk_widget_get_screen (do_widget));
-  gtk_window_set_title (GTK_WINDOW (window), "GtkGLArea - Golden Triangle");
+  gtk_window_set_title (GTK_WINDOW (window), "OpenGL Area");
   gtk_window_set_default_size (GTK_WINDOW (window), 400, 600);
   gtk_container_set_border_width (GTK_CONTAINER (window), 12);
   g_signal_connect (window, "destroy", G_CALLBACK (close_window), NULL);

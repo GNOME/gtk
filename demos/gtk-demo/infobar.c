@@ -1,4 +1,4 @@
-/* Info bar
+/* Info Bars
  *
  * Info bar widgets are used to report important messages to the user.
  */

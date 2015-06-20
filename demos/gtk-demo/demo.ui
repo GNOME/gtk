@@ -24,7 +24,7 @@
     </data>
   </object>
   <object class="GtkAboutDialog" id="aboutdialog1">
-    <property name="program-name" translatable="yes">GtkBuilder demo</property>
+    <property name="program-name" translatable="yes">Builder demo</property>
     <property name="logo-icon-name" translatable="yes">gtk3-demo</property>
     <accessibility>
       <relation target="window1" type="subwindow-of"/>
@@ -33,7 +33,7 @@
   <object class="GtkWindow" id="window1">
     <property name="default_height">250</property>
     <property name="default_width">440</property>
-    <property name="title">GtkBuilder demo</property>
+    <property name="title" translatable="yes">Builder</property>
     <child>
       <object class="GtkVBox" id="vbox1">
         <property name="visible">True</property>

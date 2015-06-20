@@ -34,7 +34,7 @@ show_parsing_error (GtkCssProvider *provider,
 
   gtk_text_buffer_apply_tag_by_name (buffer, tag_name, &start, &end);
 }
-                    
+
 static void
 css_text_changed (GtkTextBuffer  *buffer,
                   GtkCssProvider *provider)
@@ -70,8 +70,9 @@ do_css_basics (GtkWidget *do_widget)
       GtkStyleProvider *provider;
       GtkTextBuffer *text;
       GBytes *bytes;
-      
+
       window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+      gtk_window_set_title (GTK_WINDOW (window), "CSS Basics");
       gtk_window_set_transient_for (GTK_WINDOW (window), GTK_WINDOW (do_widget));
       gtk_window_set_default_size (GTK_WINDOW (window), 400, 300);
       g_signal_connect (window, "destroy",
@@ -88,15 +89,13 @@ do_css_basics (GtkWidget *do_widget)
                                   NULL);
 
       provider = GTK_STYLE_PROVIDER (gtk_css_provider_new ());
-      
+
       container = gtk_scrolled_window_new (NULL, NULL);
       gtk_container_add (GTK_CONTAINER (window), container);
       child = gtk_text_view_new_with_buffer (text);
       gtk_container_add (GTK_CONTAINER (container), child);
-      g_signal_connect (text,
-                        "changed",
-                        G_CALLBACK (css_text_changed),
-                        provider);
+      g_signal_connect (text, "changed",
+                        G_CALLBACK (css_text_changed), provider);
 
       bytes = g_resources_lookup_data ("/css_basics/css_basics.css", 0, NULL);
       gtk_text_buffer_set_text (text, g_bytes_get_data (bytes, NULL), g_bytes_get_size (bytes));

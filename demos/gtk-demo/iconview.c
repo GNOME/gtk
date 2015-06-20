@@ -255,7 +255,7 @@ do_iconview (GtkWidget *do_widget)
 
       gtk_window_set_screen (GTK_WINDOW (window),
                              gtk_widget_get_screen (do_widget));
-      gtk_window_set_title (GTK_WINDOW (window), "GtkIconView demo");
+      gtk_window_set_title (GTK_WINDOW (window), "Icon View Basics");
 
       g_signal_connect (window, "destroy",
                         G_CALLBACK (close_window), NULL);

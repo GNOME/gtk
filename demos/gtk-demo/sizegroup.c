@@ -100,7 +100,7 @@ do_sizegroup (GtkWidget *do_widget)
 
   if (!window)
     {
-      window = gtk_dialog_new_with_buttons ("GtkSizeGroup",
+      window = gtk_dialog_new_with_buttons ("Size Groups",
                                             GTK_WINDOW (do_widget),
                                             0,
                                             _("_Close"),

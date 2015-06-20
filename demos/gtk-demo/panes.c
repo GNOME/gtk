@@ -1,14 +1,14 @@
 /* Paned Widgets
  *
- * The GtkHPaned and GtkVPaned Widgets divide their content
- * area into two panes with a divider in between that the
- * user can adjust. A separate child is placed into each
- * pane.
+ * The GtkPaned Widget divides its content area into two panes
+ * with a divider in between that the user can adjust. A separate
+ * child is placed into each pane. GtkPaned widgets can be split
+ * horizontally or vertially.
  *
  * There are a number of options that can be set for each pane.
- * This test contains both a horizontal (HPaned) and a vertical
- * (VPaned) widget, and allows you to adjust the options for
- * each side of each widget.
+ * This test contains both a horizontal and a vertical GtkPaned
+ * widget, and allows you to adjust the options for each side of
+ * each widget.
  */
 
 #include <gtk/gtk.h>
@@ -141,7 +141,7 @@ do_panes (GtkWidget *do_widget)
       g_signal_connect (window, "destroy",
                         G_CALLBACK (gtk_widget_destroyed), &window);
 
-      gtk_window_set_title (GTK_WINDOW (window), "Panes");
+      gtk_window_set_title (GTK_WINDOW (window), "Paned Widgets");
       gtk_container_set_border_width (GTK_CONTAINER (window), 0);
 
       vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);

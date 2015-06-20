@@ -18,10 +18,6 @@
  * A GtkMenuItem can have a submenu, which is simply a GtkMenu to pop
  * up when the menu item is selected. Typically, all menu items in a menu bar
  * have submenus.
- *
- * GtkUIManager provides a higher-level interface for creating menu bars
- * and menus; while you can construct menus manually, most people don't
- * do that. There's a separate demo for GtkUIManager.
  */
 
 #include <gtk/gtk.h>
@@ -30,7 +26,7 @@
 #include <stdio.h>
 
 static GtkWidget *
-create_menu (gint     depth)
+create_menu (gint depth)
 {
   GtkWidget *menu;
   GtkRadioMenuItem *last_item;
@@ -120,6 +116,7 @@ do_menus (GtkWidget *do_widget)
       gtk_widget_show (box1);
 
       menubar = gtk_menu_bar_new ();
+      gtk_widget_set_hexpand (menubar, TRUE);
       gtk_box_pack_start (GTK_BOX (box1), menubar, FALSE, TRUE, 0);
       gtk_widget_show (menubar);
 

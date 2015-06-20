@@ -186,6 +186,9 @@ do_font_features (GtkWidget *do_widget)
       toggle[i++] = GTK_WIDGET (gtk_builder_get_object (builder, "ss05"));
 
       update ();
+
+      g_signal_connect (window, "destroy",
+                        G_CALLBACK (gtk_widget_destroyed), &window);
     }
 
   if (!gtk_widget_get_visible (window))

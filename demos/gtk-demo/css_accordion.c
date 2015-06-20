@@ -23,16 +23,14 @@ do_css_accordion (GtkWidget *do_widget)
     {
       GtkWidget *container, *child;
       GtkStyleProvider *provider;
-      GBytes *bytes;
-      gsize data_size;
-      const guint8 *data;
 
       window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+      gtk_window_set_title (GTK_WINDOW (window), "CSS Accordion");
       gtk_window_set_transient_for (GTK_WINDOW (window), GTK_WINDOW (do_widget));
       gtk_window_set_default_size (GTK_WINDOW (window), 600, 300);
       g_signal_connect (window, "destroy",
                         G_CALLBACK (gtk_widget_destroyed), &window);
-      
+
       container = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
       gtk_widget_set_halign (container, GTK_ALIGN_CENTER);
       gtk_widget_set_valign (container, GTK_ALIGN_CENTER);
@@ -57,11 +55,7 @@ do_css_accordion (GtkWidget *do_widget)
       gtk_container_add (GTK_CONTAINER (container), child);
 
       provider = GTK_STYLE_PROVIDER (gtk_css_provider_new ());
-      bytes = g_resources_lookup_data ("/css_accordion/css_accordion.css", 0, NULL);
-      data = g_bytes_get_data (bytes, &data_size);
-
-      gtk_css_provider_load_from_data (GTK_CSS_PROVIDER (provider), (gchar *)data, data_size, NULL);
-      g_bytes_unref (bytes);
+      gtk_css_provider_load_from_resource (GTK_CSS_PROVIDER (provider), "/css_accordion/css_accordion.css");
 
       apply_css (window, provider);
     }

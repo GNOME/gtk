@@ -36,7 +36,7 @@ do_spinner (GtkWidget *do_widget)
 
   if (!window)
   {
-    window = gtk_dialog_new_with_buttons ("GtkSpinner",
+    window = gtk_dialog_new_with_buttons ("Spinner",
                                           GTK_WINDOW (do_widget),
                                           0,
                                           _("_Close"),

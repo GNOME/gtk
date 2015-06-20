@@ -48,7 +48,6 @@ GtkWidget *
 do_builder (GtkWidget *do_widget)
 {
   static GtkWidget *window = NULL;
-  GError *err = NULL;
   GtkWidget *toolbar;
   GActionGroup *actions;
   GtkAccelGroup *accel_group;
@@ -56,13 +55,8 @@ do_builder (GtkWidget *do_widget)
 
   if (!window)
     {
-      builder = gtk_builder_new ();
-      gtk_builder_add_from_resource (builder, "/builder/demo.ui", &err);
-      if (err)
-        {
-          g_error ("ERROR: %s\n", err->message);
-          return NULL;
-        }
+      builder = gtk_builder_new_from_resource ("/builder/demo.ui");
+
       gtk_builder_connect_signals (builder, NULL);
       window = GTK_WIDGET (gtk_builder_get_object (builder, "window1"));
       gtk_window_set_screen (GTK_WINDOW (window),
