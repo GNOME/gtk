@@ -129,6 +129,7 @@ IGNORE_HFILES = \
 	gtkmountoperationprivate.h	\
 	gtkorientableprivate.h		\
 	gtkpixelcacheprivate.h		\
+	gtkplacessidebarprivate.h	\
 	gtkpopoverprivate.h		\
 	gtkprinter-private.h		\
 	gtkprintoperation-private.h	\
@@ -144,6 +145,7 @@ IGNORE_HFILES = \
 	gtksearchentryprivate.h		\
 	gtkselectionprivate.h		\
 	gtksettingsprivate.h		\
+	gtksidebarrowprivate.h		\
 	gtksizegroup-private.h		\
 	gtksizerequestcacheprivate.h	\
 	gtksocketprivate.h		\
