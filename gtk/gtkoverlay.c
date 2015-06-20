@@ -533,7 +533,7 @@ gtk_overlay_remove (GtkContainer *container,
  * gtk_overlay_reorder_overlay:
  * @overlay: a #GtkOverlay
  * @child: the overlaid #GtkWidget to move
- * @index: the new index for @child in the list of overlay children
+ * @position: the new index for @child in the list of overlay children
  *   of @overlay, starting from 0. If negative, indicates the end of
  *   the list
  *
@@ -546,9 +546,9 @@ gtk_overlay_remove (GtkContainer *container,
  * the bottom. It also affects the default focus chain order.
  */
 void
-gtk_overlay_reorder_overlay (GtkOverlay     *overlay,
-			     GtkWidget      *child,
-			     gint            index)
+gtk_overlay_reorder_overlay (GtkOverlay *overlay,
+                             GtkWidget  *child,
+                             gint        position)
 {
   GtkOverlayPrivate *priv;
   GSList *old_link;
@@ -556,6 +556,7 @@ gtk_overlay_reorder_overlay (GtkOverlay     *overlay,
   GSList *l;
   GtkOverlayChild *child_info = NULL;
   gint old_index, i;
+  gint index;
 
   g_return_if_fail (GTK_IS_OVERLAY (overlay));
   g_return_if_fail (GTK_IS_WIDGET (child));
@@ -576,7 +577,7 @@ gtk_overlay_reorder_overlay (GtkOverlay     *overlay,
 
   g_return_if_fail (old_link != NULL);
 
-  if (index < 0)
+  if (position < 0)
     {
       new_link = NULL;
       index = g_slist_length (priv->children) - 1;
@@ -584,7 +585,7 @@ gtk_overlay_reorder_overlay (GtkOverlay     *overlay,
   else
     {
       new_link = g_slist_nth (priv->children, index);
-      index = MIN (index, g_slist_length (priv->children) - 1);
+      index = MIN (position, g_slist_length (priv->children) - 1);
     }
 
   if (index == old_index)
