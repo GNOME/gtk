@@ -1472,7 +1472,9 @@ gtk_assistant_remove (GtkContainer *container,
 
   /* Forward this removal to the content notebook */
   box = gtk_widget_get_parent (page);
-  if (gtk_widget_get_parent (box) == assistant->priv->content)
+  if (GTK_IS_BOX (box) &&
+      assistant->priv->content != NULL &&
+      gtk_widget_get_parent (box) == assistant->priv->content)
     {
       container = (GtkContainer *) assistant->priv->content;
       gtk_container_remove (container, box);
