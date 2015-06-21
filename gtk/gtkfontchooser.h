@@ -72,7 +72,7 @@ struct _GtkFontChooserIface
 
   /* More methods */
   void              (* set_font_map)            (GtkFontChooser   *fontchooser,
-                                                 PangoFontMap     *map);
+                                                 PangoFontMap     *fontmap);
   PangoFontMap *    (* get_font_map)            (GtkFontChooser   *fontchooser);
 
    /* Padding */
