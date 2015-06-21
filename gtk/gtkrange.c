@@ -2418,17 +2418,18 @@ gtk_range_key_press (GtkWidget   *widget,
     {
       stop_scrolling (range);
 
-      update_slider_position (range,
-			      priv->slide_initial_coordinate_delta + priv->slide_initial_slider_position,
-			      priv->slide_initial_coordinate_delta + priv->slide_initial_slider_position);
-
       return TRUE;
     }
   else if (priv->in_drag &&
            (event->keyval == GDK_KEY_Shift_L ||
             event->keyval == GDK_KEY_Shift_R))
     {
+      if (priv->orientation == GTK_ORIENTATION_VERTICAL)
+        priv->slide_initial_slider_position = priv->slider.y;
+      else
+        priv->slide_initial_slider_position = priv->slider.x;
       update_zoom_state (range, !priv->zoom);
+
       return TRUE;
     }
 
@@ -2577,7 +2578,7 @@ gtk_range_multipress_gesture_pressed (GtkGestureMultiPress *gesture,
       if (priv->mouse_location != MOUSE_SLIDER)
         {
           gdouble slider_low_value, slider_high_value, new_value;
-          
+
           slider_high_value =
             coord_to_value (range,
                             priv->orientation == GTK_ORIENTATION_VERTICAL ?
@@ -2606,9 +2607,7 @@ gtk_range_multipress_gesture_pressed (GtkGestureMultiPress *gesture,
 
           /* Shift-click in the slider = fine adjustment */
           if (state_mask & GDK_SHIFT_MASK)
-            {
-              update_zoom_state (range, TRUE);
-            }
+            update_zoom_state (range, TRUE);
 
           slider = priv->slider;
         }
@@ -2930,7 +2929,6 @@ gtk_range_drag_gesture_update (GtkGestureDrag *gesture,
       priv->mouse_x = start_x + offset_x;
       priv->mouse_y = start_y + offset_y;
       priv->in_drag = TRUE;
-
       update_autoscroll_mode (range);
 
       if (priv->autoscroll_mode == GTK_SCROLL_NONE)
@@ -2946,6 +2944,7 @@ gtk_range_drag_gesture_begin (GtkGestureDrag *gesture,
 {
   if (range->priv->grab_location == MOUSE_SLIDER)
     gtk_gesture_set_state (range->priv->drag_gesture, GTK_EVENT_SEQUENCE_CLAIMED);
+
 }
 
 static void
