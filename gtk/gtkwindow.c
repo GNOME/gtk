@@ -4057,42 +4057,12 @@ gtk_window_supports_client_shadow (GtkWindow *window)
   return TRUE;
 }
 
-static gboolean
-gtk_window_can_use_csd (GtkWindow *window)
-{
-  const gchar *csd_env;
-
-#ifdef GDK_WINDOWING_BROADWAY
-  if (GDK_IS_BROADWAY_DISPLAY (gtk_widget_get_display (GTK_WIDGET (window))))
-    return TRUE;
-#endif
-
-#ifdef GDK_WINDOWING_WAYLAND
-  if (GDK_IS_WAYLAND_DISPLAY (gtk_widget_get_display (GTK_WIDGET (window))))
-    return TRUE;
-#endif
-
-#ifdef GDK_WINDOWING_MIR
-  if (GDK_IS_MIR_DISPLAY (gtk_widget_get_display (GTK_WIDGET (window))))
-    return TRUE;
-#endif
-
-  csd_env = g_getenv ("GTK_CSD");
-
-  /* If GTK_CSD is unset we default to CSD support */
-  return csd_env == NULL || (strcmp (csd_env, "1") == 0);
-}
-
 static void
 gtk_window_enable_csd (GtkWindow *window)
 {
   GtkWindowPrivate *priv = window->priv;
   GtkWidget *widget = GTK_WIDGET (window);
   GdkVisual *visual;
-
-  /* If the environment does not support CSD, then there's no point in enabling them */
-  if (!gtk_window_can_use_csd (window))
-    return;
 
   /* We need a visual with alpha for client shadows */
   if (priv->use_client_shadow)
@@ -5870,6 +5840,7 @@ static gboolean
 gtk_window_should_use_csd (GtkWindow *window)
 {
   GtkWindowPrivate *priv = window->priv;
+  const gchar *csd_env;
 
   if (priv->csd_requested)
     return TRUE;
@@ -5880,7 +5851,24 @@ gtk_window_should_use_csd (GtkWindow *window)
   if (priv->type == GTK_WINDOW_POPUP)
     return FALSE;
 
-  return gtk_window_can_use_csd (window);
+#ifdef GDK_WINDOWING_BROADWAY
+  if (GDK_IS_BROADWAY_DISPLAY (gtk_widget_get_display (GTK_WIDGET (window))))
+    return TRUE;
+#endif
+
+#ifdef GDK_WINDOWING_WAYLAND
+  if (GDK_IS_WAYLAND_DISPLAY (gtk_widget_get_display (GTK_WIDGET (window))))
+    return TRUE;
+#endif
+
+#ifdef GDK_WINDOWING_MIR
+  if (GDK_IS_MIR_DISPLAY (gtk_widget_get_display (GTK_WIDGET (window))))
+    return TRUE;
+#endif
+
+  csd_env = g_getenv ("GTK_CSD");
+
+  return (g_strcmp0 (csd_env, "1") == 0);
 }
 
 static void
