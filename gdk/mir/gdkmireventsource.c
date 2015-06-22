@@ -386,6 +386,13 @@ handle_motion_event (GdkWindow *window, const MirInputEvent *event)
             }
 
           break;
+        case mir_pointer_action_enter:
+          if (!cursor_inside)
+            {
+              cursor_inside = TRUE;
+              generate_crossing_event (window, GDK_ENTER_NOTIFY, x, y, event_time);
+            }
+          break;
         case mir_pointer_action_leave:
           if (cursor_inside)
             {
