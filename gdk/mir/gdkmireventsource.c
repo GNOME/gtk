@@ -412,6 +412,7 @@ static void
 handle_surface_event (GdkWindow *window, const MirSurfaceEvent *event)
 {
   GdkMirWindowImpl *impl = GDK_MIR_WINDOW_IMPL (window->impl);
+  MirSurfaceState state;
 
   switch (mir_surface_event_get_attribute (event))
     {
@@ -419,8 +420,43 @@ handle_surface_event (GdkWindow *window, const MirSurfaceEvent *event)
       _gdk_mir_window_impl_set_surface_type (impl, mir_surface_event_get_attribute_value (event));
       break;
     case mir_surface_attrib_state:
-      _gdk_mir_window_impl_set_surface_state (impl, mir_surface_event_get_attribute_value (event));
-      // FIXME: notify
+      state = mir_surface_event_get_attribute_value (event);
+      _gdk_mir_window_impl_set_surface_state (impl, state);
+
+      switch (state)
+        {
+        case mir_surface_state_restored:
+        case mir_surface_state_hidden:
+          gdk_synthesize_window_state (window,
+                                       GDK_WINDOW_STATE_ICONIFIED |
+                                       GDK_WINDOW_STATE_MAXIMIZED |
+                                       GDK_WINDOW_STATE_FULLSCREEN,
+                                       0);
+          break;
+        case mir_surface_state_minimized:
+          gdk_synthesize_window_state (window,
+                                       GDK_WINDOW_STATE_MAXIMIZED |
+                                       GDK_WINDOW_STATE_FULLSCREEN,
+                                       GDK_WINDOW_STATE_ICONIFIED);
+          break;
+        case mir_surface_state_maximized:
+        case mir_surface_state_vertmaximized:
+        case mir_surface_state_horizmaximized:
+          gdk_synthesize_window_state (window,
+                                       GDK_WINDOW_STATE_ICONIFIED |
+                                       GDK_WINDOW_STATE_FULLSCREEN,
+                                       GDK_WINDOW_STATE_MAXIMIZED);
+          break;
+        case mir_surface_state_fullscreen:
+          gdk_synthesize_window_state (window,
+                                       GDK_WINDOW_STATE_ICONIFIED |
+                                       GDK_WINDOW_STATE_MAXIMIZED,
+                                       GDK_WINDOW_STATE_FULLSCREEN);
+          break;
+        default:
+          break;
+        }
+
       break;
     case mir_surface_attrib_swapinterval:
       break;
