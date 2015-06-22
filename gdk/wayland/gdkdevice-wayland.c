@@ -125,6 +125,9 @@ struct _GdkWaylandTabletData
   GdkWaylandPointerData pointer_info;
 
   GdkWaylandTabletToolData *current_tool;
+
+  gint axis_indices[GDK_AXIS_LAST];
+  gdouble *axes;
 };
 
 struct _GdkWaylandSeat
@@ -2452,6 +2455,9 @@ _gdk_wayland_seat_remove_tablet (GdkWaylandSeat       *seat,
   if (tablet->pointer_info.focus)
     g_object_unref (tablet->pointer_info.focus);
 
+  if (tablet->axes)
+    g_free (tablet->axes);
+
   wl_surface_destroy (tablet->pointer_info.pointer_surface);
   g_object_unref (tablet->master);
   g_object_unref (tablet->stylus_device);
@@ -2924,10 +2930,18 @@ gdk_wayland_tablet_flush_frame_event (GdkWaylandTabletData *tablet,
     {
     case GDK_MOTION_NOTIFY:
       event->motion.time = time;
+      event->motion.axes =
+        g_memdup (tablet->axes,
+                  sizeof (gdouble) *
+                  gdk_device_get_n_axes (tablet->current_device));
       break;
     case GDK_BUTTON_PRESS:
     case GDK_BUTTON_RELEASE:
       event->button.time = time;
+      event->button.axes =
+        g_memdup (tablet->axes,
+                  sizeof (gdouble) *
+                  gdk_device_get_n_axes (tablet->current_device));
       break;
     case GDK_PROXIMITY_IN:
     case GDK_PROXIMITY_OUT:
@@ -2964,6 +2978,89 @@ gdk_wayland_tablet_get_frame_event (GdkWaylandTabletData *tablet,
 }
 
 static void
+gdk_wayland_device_tablet_clone_tool_axes (GdkWaylandTabletData *tablet,
+                                           GdkDeviceTool        *tool)
+{
+  gint axis_pos;
+
+  g_object_freeze_notify (G_OBJECT (tablet->current_device));
+  _gdk_device_reset_axes (tablet->current_device);
+
+  _gdk_device_add_axis (tablet->current_device, GDK_NONE, GDK_AXIS_X, 0, 0, 0);
+  _gdk_device_add_axis (tablet->current_device, GDK_NONE, GDK_AXIS_Y, 0, 0, 0);
+
+  if (tool->tool_axes & (GDK_AXIS_FLAG_XTILT | GDK_AXIS_FLAG_YTILT))
+    {
+      axis_pos = _gdk_device_add_axis (tablet->current_device, GDK_NONE,
+                                       GDK_AXIS_XTILT, -9000, 9000, 0);
+      tablet->axis_indices[GDK_AXIS_XTILT] = axis_pos;
+
+      axis_pos = _gdk_device_add_axis (tablet->current_device, GDK_NONE,
+                                       GDK_AXIS_YTILT, -9000, 9000, 0);
+      tablet->axis_indices[GDK_AXIS_YTILT] = axis_pos;
+    }
+  if (tool->tool_axes & GDK_AXIS_FLAG_DISTANCE)
+    {
+      axis_pos = _gdk_device_add_axis (tablet->current_device, GDK_NONE,
+                                       GDK_AXIS_DISTANCE, 0, 65535, 0);
+      tablet->axis_indices[GDK_AXIS_DISTANCE] = axis_pos;
+    }
+  if (tool->tool_axes & GDK_AXIS_FLAG_PRESSURE)
+    {
+      axis_pos = _gdk_device_add_axis (tablet->current_device, GDK_NONE,
+                                       GDK_AXIS_PRESSURE, 0, 65535, 0);
+      tablet->axis_indices[GDK_AXIS_PRESSURE] = axis_pos;
+    }
+
+  if (tool->tool_axes & GDK_AXIS_FLAG_ROTATION)
+    {
+      axis_pos = _gdk_device_add_axis (tablet->current_device, GDK_NONE,
+                                       GDK_AXIS_ROTATION, 0, 36000, 0);
+      tablet->axis_indices[GDK_AXIS_ROTATION] = axis_pos;
+    }
+
+  if (tool->tool_axes & GDK_AXIS_FLAG_SLIDER)
+    {
+      axis_pos = _gdk_device_add_axis (tablet->current_device, GDK_NONE,
+                                       GDK_AXIS_SLIDER, -65535, 65535, 0);
+      tablet->axis_indices[GDK_AXIS_SLIDER] = axis_pos;
+    }
+
+  if (tablet->axes)
+    g_free(tablet->axes);
+
+  tablet->axes =
+    g_new0 (gdouble, gdk_device_get_n_axes (tablet->current_device));
+
+  g_object_thaw_notify (G_OBJECT (tablet->current_device));
+}
+
+static void
+gdk_wayland_mimic_device_axes (GdkDevice *master,
+                               GdkDevice *slave)
+{
+  gdouble axis_min, axis_max, axis_resolution;
+  GdkAtom axis_label;
+  GdkAxisUse axis_use;
+  gint axis_count;
+  gint i;
+
+  g_object_freeze_notify (G_OBJECT (master));
+  _gdk_device_reset_axes (master);
+  axis_count = gdk_device_get_n_axes (slave);
+
+  for (i = 0; i < axis_count; i++)
+    {
+      _gdk_device_get_axis_info (slave, i, &axis_label, &axis_use, &axis_min,
+                                 &axis_max, &axis_resolution);
+      _gdk_device_add_axis (master, axis_label, axis_use, axis_min,
+                            axis_max, axis_resolution);
+    }
+
+  g_object_thaw_notify (G_OBJECT (master));
+}
+
+static void
 tablet_tool_handle_proximity_in (void                      *data,
                                  struct zwp_tablet_tool_v1 *wp_tablet_tool,
                                  uint32_t                   serial,
@@ -2993,6 +3090,8 @@ tablet_tool_handle_proximity_in (void                      *data,
     tablet_select_device_for_tool (tablet, tool->tool);
 
   gdk_device_update_tool (tablet->current_device, tool->tool);
+  gdk_wayland_device_tablet_clone_tool_axes (tablet, tool->tool);
+  gdk_wayland_mimic_device_axes (tablet->master, tablet->current_device);
 
   event = gdk_wayland_tablet_get_frame_event (tablet, GDK_PROXIMITY_IN);
   event->proximity.window = g_object_ref (tablet->pointer_info.focus);
@@ -3072,6 +3171,105 @@ tablet_tool_handle_motion (void                      *data,
 }
 
 static void
+tablet_tool_handle_pressure (void                      *data,
+                             struct zwp_tablet_tool_v1 *wp_tablet_tool,
+                             uint32_t                   pressure)
+{
+  GdkWaylandTabletToolData *tool = data;
+  GdkWaylandTabletData *tablet = tool->current_tablet;
+  gint axis_index = tablet->axis_indices[GDK_AXIS_PRESSURE];
+
+  _gdk_device_translate_axis (tablet->current_device, axis_index,
+                              pressure, &tablet->axes[axis_index]);
+
+  GDK_NOTE (EVENTS,
+            g_message ("tablet tool %d pressure %d",
+                       gdk_device_tool_get_tool_type (tool->tool), pressure));
+}
+
+static void
+tablet_tool_handle_distance (void                      *data,
+                             struct zwp_tablet_tool_v1 *wp_tablet_tool,
+                             uint32_t                   distance)
+{
+  GdkWaylandTabletToolData *tool = data;
+  GdkWaylandTabletData *tablet = tool->current_tablet;
+  gint axis_index = tablet->axis_indices[GDK_AXIS_DISTANCE];
+
+  _gdk_device_translate_axis (tablet->current_device, axis_index,
+                              distance, &tablet->axes[axis_index]);
+
+  GDK_NOTE (EVENTS,
+            g_message ("tablet tool %d distance %d",
+                       gdk_device_tool_get_tool_type (tool->tool), distance));
+}
+
+static void
+tablet_tool_handle_tilt (void                      *data,
+                         struct zwp_tablet_tool_v1 *wp_tablet_tool,
+                         int32_t                    xtilt,
+                         int32_t                    ytilt)
+{
+  GdkWaylandTabletToolData *tool = data;
+  GdkWaylandTabletData *tablet = tool->current_tablet;
+  gint xtilt_axis_index = tablet->axis_indices[GDK_AXIS_XTILT];
+  gint ytilt_axis_index = tablet->axis_indices[GDK_AXIS_YTILT];
+
+  _gdk_device_translate_axis (tablet->current_device, xtilt_axis_index,
+                              xtilt, &tablet->axes[xtilt_axis_index]);
+  _gdk_device_translate_axis (tablet->current_device, ytilt_axis_index,
+                              ytilt, &tablet->axes[ytilt_axis_index]);
+
+  GDK_NOTE (EVENTS,
+            g_message ("tablet tool %d tilt %d/%d",
+                       gdk_device_tool_get_tool_type (tool->tool),
+                       xtilt, ytilt));
+}
+
+static void
+tablet_tool_handle_rotation (void                      *data,
+                             struct zwp_tablet_tool_v1 *wp_tablet_tool,
+                             int32_t                    degrees)
+{
+  GdkWaylandTabletToolData *tool = data;
+  GdkWaylandTabletData *tablet = tool->current_tablet;
+  gint axis_index = tablet->axis_indices[GDK_AXIS_ROTATION];
+
+  _gdk_device_translate_axis (tablet->current_device, axis_index,
+                              degrees, &tablet->axes[axis_index]);
+
+  GDK_NOTE (EVENTS,
+            g_message ("tablet tool %d rotation %d",
+                       gdk_device_tool_get_tool_type (tool->tool), degrees));
+}
+
+static void
+tablet_tool_handle_slider (void                      *data,
+                           struct zwp_tablet_tool_v1 *wp_tablet_tool,
+                           int32_t                    position)
+{
+  GdkWaylandTabletToolData *tool = data;
+  GdkWaylandTabletData *tablet = tool->current_tablet;
+  gint axis_index = tablet->axis_indices[GDK_AXIS_SLIDER];
+
+  _gdk_device_translate_axis (tablet->current_device, axis_index,
+                              position, &tablet->axes[axis_index]);
+
+  GDK_NOTE (EVENTS,
+            g_message ("tablet tool %d slider %d",
+                       gdk_device_tool_get_tool_type (tool->tool), position));
+}
+
+static void
+tablet_tool_handle_wheel (void                      *data,
+                          struct zwp_tablet_tool_v1 *wp_tablet_tool,
+                          int32_t                    degrees,
+                          int32_t                    clicks)
+{
+  /* FIXME: Handle wheel */
+}
+
+static void
 tablet_tool_handle_frame (void                      *data,
                           struct zwp_tablet_tool_v1 *wl_tablet_tool,
                           uint32_t                   time)
@@ -3112,12 +3310,12 @@ static const struct zwp_tablet_tool_v1_listener tablet_tool_listener = {
   tablet_handler_placeholder, /* down */
   tablet_handler_placeholder, /* up */
   tablet_tool_handle_motion,
-  tablet_handler_placeholder, /* pressure */
-  tablet_handler_placeholder, /* distance */
-  tablet_handler_placeholder, /* tilt */
-  tablet_handler_placeholder, /* rotation */
-  tablet_handler_placeholder, /* slider */
-  tablet_handler_placeholder, /* wheel */
+  tablet_tool_handle_pressure,
+  tablet_tool_handle_distance,
+  tablet_tool_handle_tilt,
+  tablet_tool_handle_rotation,
+  tablet_tool_handle_slider,
+  tablet_tool_handle_wheel,
   tablet_handler_placeholder, /* button_state */
   tablet_tool_handle_frame,
 };
