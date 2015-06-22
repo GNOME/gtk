@@ -2031,6 +2031,7 @@ enum {
   TOOL_PROP_0,
   TOOL_PROP_SERIAL,
   TOOL_PROP_TOOL_TYPE,
+  TOOL_PROP_AXES,
   N_TOOL_PROPS
 };
 
@@ -2051,6 +2052,9 @@ gdk_device_tool_set_property (GObject      *object,
       break;
     case TOOL_PROP_TOOL_TYPE:
       tool->type = g_value_get_enum (value);
+      break;
+    case TOOL_PROP_AXES:
+      tool->tool_axes = g_value_get_flags (value);
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -2073,6 +2077,9 @@ gdk_device_tool_get_property (GObject    *object,
       break;
     case TOOL_PROP_TOOL_TYPE:
       g_value_set_enum (value, tool->type);
+      break;
+    case TOOL_PROP_AXES:
+      g_value_set_flags (value, tool->tool_axes);
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -2101,6 +2108,12 @@ gdk_device_tool_class_init (GdkDeviceToolClass *klass)
                                                        GDK_DEVICE_TOOL_TYPE_UNKNOWN,
                                                        G_PARAM_READWRITE |
                                                        G_PARAM_CONSTRUCT_ONLY);
+  tool_props[TOOL_PROP_AXES] = g_param_spec_flags ("axes",
+                                                   "Axes",
+                                                   "Tool axes",
+                                                   GDK_TYPE_AXIS_FLAGS, 0,
+                                                   G_PARAM_READWRITE |
+                                                   G_PARAM_CONSTRUCT_ONLY);
 
   g_object_class_install_properties (object_class, N_TOOL_PROPS, tool_props);
 }
@@ -2112,11 +2125,13 @@ gdk_device_tool_init (GdkDeviceTool *tool)
 
 GdkDeviceTool *
 gdk_device_tool_new (guint64           serial,
-                     GdkDeviceToolType type)
+                     GdkDeviceToolType type,
+                     GdkAxisFlags      tool_axes)
 {
   return g_object_new (GDK_TYPE_DEVICE_TOOL,
                        "serial", serial,
                        "tool-type", type,
+                       "axes", tool_axes,
                        NULL);
 }
 
