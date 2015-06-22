@@ -40,6 +40,7 @@
 
 #include <sys/time.h>
 #include <sys/mman.h>
+#include <linux/input.h>
 
 #define BUTTON_BASE (BTN_LEFT - 1) /* Used to translate to 1-indexed buttons */
 
@@ -3287,6 +3288,40 @@ tablet_tool_handle_tilt (void                      *data,
 }
 
 static void
+tablet_tool_handle_button (void                      *data,
+                           struct zwp_tablet_tool_v1 *wp_tablet_tool,
+                           uint32_t                   serial,
+                           uint32_t                   button,
+                           uint32_t                   state)
+{
+  GdkWaylandTabletToolData *tool = data;
+  GdkWaylandTabletData *tablet = tool->current_tablet;
+  GdkEventType evtype;
+  guint n_button;
+
+  if (!tablet->pointer_info.focus)
+    return;
+
+  tablet->pointer_info.press_serial = serial;
+
+  if (button == BTN_STYLUS)
+    n_button = GDK_BUTTON_SECONDARY;
+  else if (button == BTN_STYLUS2)
+    n_button = GDK_BUTTON_MIDDLE;
+  else
+    return;
+
+  if (state == ZWP_TABLET_TOOL_V1_BUTTON_STATE_PRESSED)
+    evtype = GDK_BUTTON_PRESS;
+  else if (state == ZWP_TABLET_TOOL_V1_BUTTON_STATE_RELEASED)
+    evtype = GDK_BUTTON_RELEASE;
+  else
+    return;
+
+  tablet_create_button_event_frame (tablet, evtype, n_button);
+}
+
+static void
 tablet_tool_handle_rotation (void                      *data,
                              struct zwp_tablet_tool_v1 *wp_tablet_tool,
                              int32_t                    degrees)
@@ -3353,11 +3388,6 @@ tablet_tool_handle_frame (void                      *data,
   gdk_wayland_tablet_flush_frame_event (tablet, time);
 }
 
-static void
-tablet_handler_placeholder ()
-{
-}
-
 static const struct zwp_tablet_tool_v1_listener tablet_tool_listener = {
   tablet_tool_handle_type,
   tablet_tool_handle_hardware_serial,
@@ -3376,7 +3406,7 @@ static const struct zwp_tablet_tool_v1_listener tablet_tool_listener = {
   tablet_tool_handle_rotation,
   tablet_tool_handle_slider,
   tablet_tool_handle_wheel,
-  tablet_handler_placeholder, /* button_state */
+  tablet_tool_handle_button,
   tablet_tool_handle_frame,
 };
 
