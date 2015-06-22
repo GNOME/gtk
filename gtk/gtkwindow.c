@@ -126,6 +126,12 @@
  */
 
 #define MNEMONICS_DELAY 300 /* ms */
+#define NO_CONTENT_CHILD_NAT 200
+/* In case the content (excluding header bar and shadows) of the window
+ * would be empty, either because there is no visible child widget or only an
+ * empty container widget, we use NO_CONTENT_CHILD_NAT as natural width/height
+ * instead.
+ */
 
 typedef struct _GtkWindowPopover GtkWindowPopover;
 
@@ -7054,12 +7060,6 @@ gtk_window_realize (GtkWidget *widget)
       gtk_window_get_remembered_size (window, &w, &h);
       allocation.width = MAX (allocation.width, w);
       allocation.height = MAX (allocation.height, h);
-      if (allocation.width == 0 || allocation.height == 0)
-	{
-	  /* non-empty window */
-	  allocation.width = 200;
-	  allocation.height = 200;
-	}
       gtk_widget_size_allocate (widget, &allocation);
 
       _gtk_container_queue_resize (GTK_CONTAINER (widget));
@@ -8396,10 +8396,17 @@ gtk_window_get_preferred_width (GtkWidget *widget,
   if (child && gtk_widget_get_visible (child))
     {
       gtk_widget_get_preferred_width (child, &child_min, &child_nat);
+
+      if (child_nat == 0)
+        child_nat = NO_CONTENT_CHILD_NAT;
       child_min += border_width * 2 +
                    window_border.left + window_border.right;
       child_nat += border_width * 2 +
                    window_border.left + window_border.right;
+    }
+  else
+    {
+      child_nat = NO_CONTENT_CHILD_NAT;
     }
 
   *minimum_size = MAX (title_min, child_min);
@@ -8454,10 +8461,17 @@ gtk_window_get_preferred_width_for_height (GtkWidget *widget,
       gtk_widget_get_preferred_width_for_height (child,
                                                  height,
                                                  &child_min, &child_nat);
+
+      if (child_nat == 0 && height == 0)
+        child_nat = NO_CONTENT_CHILD_NAT;
       child_min += border_width * 2 +
                    window_border.left + window_border.right;
       child_nat += border_width * 2 +
                    window_border.left + window_border.right;
+    }
+  else
+    {
+      child_nat = NO_CONTENT_CHILD_NAT;
     }
 
   *minimum_size = MAX (title_min, child_min);
@@ -8510,8 +8524,14 @@ gtk_window_get_preferred_height (GtkWidget *widget,
       gint child_min, child_nat;
       gtk_widget_get_preferred_height (child, &child_min, &child_nat);
 
+      if (child_nat == 0)
+        child_nat = NO_CONTENT_CHILD_NAT;
       *minimum_size += child_min + 2 * border_width;
       *natural_size += child_nat + 2 * border_width;
+    }
+  else
+    {
+      *natural_size += NO_CONTENT_CHILD_NAT;
     }
 }
 
@@ -8569,8 +8589,14 @@ gtk_window_get_preferred_height_for_width (GtkWidget *widget,
       gtk_widget_get_preferred_height_for_width (child, width,
                                                  &child_min, &child_nat);
 
+      if (child_nat == 0 && width == 0)
+        child_nat = NO_CONTENT_CHILD_NAT;
       *minimum_size += child_min + 2 * border_width;
       *natural_size += child_nat + 2 * border_width;
+    }
+  else
+    {
+      *natural_size += NO_CONTENT_CHILD_NAT;
     }
 }
 
@@ -8754,13 +8780,6 @@ gtk_window_compute_configure_request_size (GtkWindow   *window,
       gtk_window_get_remembered_size (window, &w, &h);
       *width = MAX (*width, w);
       *height = MAX (*height, h);
-
-      /* If window is empty so requests 0, default to random nonzero size */
-      if (*width == 0 && *height == 0)
-        {
-          *width = 200;
-          *height = 200;
-        }
 
       /* Override with default size */
       if (info)
