@@ -3134,6 +3134,66 @@ tablet_tool_handle_proximity_out (void                      *data,
 }
 
 static void
+tablet_create_button_event_frame (GdkWaylandTabletData *tablet,
+                                  GdkEventType          evtype,
+                                  guint                 button)
+{
+  GdkWaylandSeat *seat = GDK_WAYLAND_SEAT (tablet->seat);
+  GdkWaylandDisplay *wayland_display = GDK_WAYLAND_DISPLAY (seat->display);
+  GdkEvent *event;
+
+  event = gdk_wayland_tablet_get_frame_event (tablet, evtype);
+  event->button.window = g_object_ref (tablet->pointer_info.focus);
+  gdk_event_set_device (event, tablet->master);
+  gdk_event_set_source_device (event, tablet->current_device);
+  gdk_event_set_device_tool (event, tablet->current_tool->tool);
+  event->button.time = tablet->pointer_info.time;
+  event->button.state = device_get_modifiers (tablet->master);
+  event->button.button = button;
+  gdk_event_set_screen (event, wayland_display->screen);
+
+  get_coordinates (tablet->master,
+                   &event->button.x,
+                   &event->button.y,
+                   &event->button.x_root,
+                   &event->button.y_root);
+}
+
+static void
+tablet_tool_handle_down (void                      *data,
+                         struct zwp_tablet_tool_v1 *wp_tablet_tool,
+                         uint32_t                   serial)
+{
+  GdkWaylandTabletToolData *tool = data;
+  GdkWaylandTabletData *tablet = tool->current_tablet;
+  GdkWaylandSeat *seat = GDK_WAYLAND_SEAT (tool->seat);
+  GdkWaylandDisplay *wayland_display = GDK_WAYLAND_DISPLAY (seat->display);
+
+  if (!tablet->pointer_info.focus)
+    return;
+
+  _gdk_wayland_display_update_serial (wayland_display, serial);
+  tablet->pointer_info.press_serial = serial;
+
+  tablet_create_button_event_frame (tablet, GDK_BUTTON_PRESS, GDK_BUTTON_PRIMARY);
+  tablet->pointer_info.button_modifiers |= GDK_BUTTON1_MASK;
+}
+
+static void
+tablet_tool_handle_up (void                      *data,
+                       struct zwp_tablet_tool_v1 *wp_tablet_tool)
+{
+  GdkWaylandTabletToolData *tool = data;
+  GdkWaylandTabletData *tablet = tool->current_tablet;
+
+  if (!tablet->pointer_info.focus)
+    return;
+
+  tablet_create_button_event_frame (tablet, GDK_BUTTON_RELEASE, GDK_BUTTON_PRIMARY);
+  tablet->pointer_info.button_modifiers &= ~GDK_BUTTON1_MASK;
+}
+
+static void
 tablet_tool_handle_motion (void                      *data,
                            struct zwp_tablet_tool_v1 *wp_tablet_tool,
                            wl_fixed_t                 sx,
@@ -3307,8 +3367,8 @@ static const struct zwp_tablet_tool_v1_listener tablet_tool_listener = {
   tablet_tool_handle_removed,
   tablet_tool_handle_proximity_in,
   tablet_tool_handle_proximity_out,
-  tablet_handler_placeholder, /* down */
-  tablet_handler_placeholder, /* up */
+  tablet_tool_handle_down,
+  tablet_tool_handle_up,
   tablet_tool_handle_motion,
   tablet_tool_handle_pressure,
   tablet_tool_handle_distance,
