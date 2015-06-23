@@ -6827,7 +6827,7 @@ gdk_window_set_child_input_shapes (GdkWindow *window)
  **/
 void
 gdk_window_set_pass_through (GdkWindow *window,
-			     gboolean pass_through)
+                             gboolean   pass_through)
 {
   g_return_if_fail (GDK_IS_WINDOW (window));
 
@@ -6840,7 +6840,6 @@ gdk_window_set_pass_through (GdkWindow *window,
 /**
  * gdk_window_get_pass_through:
  * @window: a #GdkWindow
- * @pass_through: a boolean
  *
  * Returns whether input to the window is passed through to the window
  * below.
