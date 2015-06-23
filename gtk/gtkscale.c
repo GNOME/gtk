@@ -875,31 +875,28 @@ gtk_scale_get_range_border (GtkRange  *range,
 
   if (priv->marks)
     {
-      gint slider_width;
       gint value_spacing;
       gint n1, w1, h1, n2, w2, h2;
-  
-      gtk_widget_style_get (widget, 
-                            "slider-width", &slider_width,
-                            "value-spacing", &value_spacing, 
-                            NULL);
 
+      gtk_widget_style_get (widget,
+                            "value-spacing", &value_spacing,
+                            NULL);
 
       gtk_scale_get_mark_label_size (scale, GTK_POS_TOP, &n1, &w1, &h1, &n2, &w2, &h2);
 
       if (gtk_orientable_get_orientation (GTK_ORIENTABLE (scale)) == GTK_ORIENTATION_HORIZONTAL)
         {
-          if (n1 > 0)
-            border->top += h1 + value_spacing + slider_width / 4;
-          if (n2 > 0)
-            border->bottom += h2 + value_spacing + slider_width / 4;
+          if (h1 > 0)
+            border->top += h1 + value_spacing;
+          if (h2 > 0)
+            border->bottom += h2 + value_spacing;
         }
       else
         {
-          if (n1 > 0)
-            border->left += w1 + value_spacing + slider_width / 4;
-          if (n2 > 0)
-            border->right += w2 + value_spacing + slider_width / 4;
+          if (w1 > 0)
+            border->left += w1 + value_spacing;
+          if (w2 > 0)
+            border->right += w2 + value_spacing;
         }
     }
 }
