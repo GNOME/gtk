@@ -142,7 +142,6 @@ typedef struct {
 
   GtkStackTransitionType active_transition_type;
 
-  gboolean destroying;
 } GtkStackPrivate;
 
 static GParamSpec *stack_props[LAST_PROP] = { NULL, };
@@ -176,7 +175,6 @@ static void     gtk_stack_get_preferred_width_for_height (GtkWidget     *widget,
                                                           gint           height,
                                                           gint          *minimum_width,
                                                           gint          *natural_width);
-static void     gtk_stack_destroy                        (GtkWidget     *widget);
 static void     gtk_stack_finalize                       (GObject       *obj);
 static void     gtk_stack_get_property                   (GObject       *object,
                                                           guint          property_id,
@@ -402,7 +400,6 @@ gtk_stack_class_init (GtkStackClass *klass)
   widget_class->get_preferred_width = gtk_stack_get_preferred_width;
   widget_class->get_preferred_width_for_height = gtk_stack_get_preferred_width_for_height;
   widget_class->compute_expand = gtk_stack_compute_expand;
-  widget_class->destroy = gtk_stack_destroy;
 
   container_class->add = gtk_stack_add;
   container_class->remove = gtk_stack_remove;
@@ -1017,8 +1014,9 @@ set_visible_child (GtkStack               *stack,
   gboolean contains_focus = FALSE;
 
   /* if we are being destroyed, do not bother with transitions
-   * and notifications */
-  if (priv->destroying)
+   * and notifications
+   */
+  if (gtk_widget_in_destruction (widget))
     return;
 
   /* If none, pick first visible */
@@ -1849,17 +1847,6 @@ gtk_stack_compute_expand (GtkWidget *widget,
 
   *hexpand_p = hexpand;
   *vexpand_p = vexpand;
-}
-
-static void
-gtk_stack_destroy (GtkWidget *widget)
-{
-  GtkStack *stack = GTK_STACK (widget);
-  GtkStackPrivate *priv = gtk_stack_get_instance_private (stack);
-
-  priv->destroying = TRUE;
-
-  GTK_WIDGET_CLASS (gtk_stack_parent_class)->destroy (widget);
 }
 
 static void
