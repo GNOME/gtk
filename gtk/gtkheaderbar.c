@@ -51,7 +51,7 @@
  */
 
 #define DEFAULT_SPACING 6
-#define MIN_TITLE_CHARS 20
+#define MIN_TITLE_CHARS 5
 
 struct _GtkHeaderBarPrivate
 {
