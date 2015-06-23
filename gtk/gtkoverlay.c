@@ -584,7 +584,7 @@ gtk_overlay_reorder_overlay (GtkOverlay *overlay,
     }
   else
     {
-      new_link = g_slist_nth (priv->children, index);
+      new_link = g_slist_nth (priv->children, position);
       index = MIN (position, g_slist_length (priv->children) - 1);
     }
 
