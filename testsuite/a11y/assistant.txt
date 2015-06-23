@@ -9,6 +9,7 @@ window1
   alpha: 1
   button1
     "push button"
+    parent: unnamed-GtkContainerAccessible-0
     index: 0
     name: Page 1
     state: enabled focusable sensitive showing visible
@@ -24,6 +25,7 @@ window1
     action 0 description: Clicks the button
   button2
     "push button"
+    parent: unnamed-GtkContainerAccessible-1
     index: 0
     name: Page 2
     state: enabled focusable sensitive visible
