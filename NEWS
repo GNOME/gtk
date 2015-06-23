@@ -1,3 +1,69 @@
+Overview of Changes in GTK+ 3.17.4
+==================================
+
+* GtkStack animates size changes
+
+* GtkListBox and GtkFlowBox support positional css selectors
+  like :first-child, :last-child and :nth-child
+
+* GtkPlacesSidebar has been rewritten to use GtkListBox
+
+* Touch selection in GtkTextView and GtkEntry has been greatly
+  improved
+
+* There's now a way to have output-only windows, and this is
+  used by GtkOverlay for pass-through overlays
+
+* Bug fixes:
+ 724506 Do not animate and notify during destroy
+ 725441 Print Dialog: Add support for PPD-less printing on IPP printers...
+ 745957 GTK+/Quartz >= 3.14.8: Symbol not found: _gtk_drag_cancel (MyPa...
+ 747793 Implement part of bookmarks mockups
+ 748951 popup menus are being displayed at wrong position
+ 749650 Slider tick marks affect vertical positioning
+ 749717 wayland: Position popups relative to the parent surface
+ 749737 DnD breaks button-released events. (Setting a widget as DnD sou...
+ 750058 bad options for the keybindings in css instructions generate a ...
+ 750068 "Recent" shortcut is missing from the left pane in the file cho...
+ 750338 gtkrevealer: add css padding support
+ 750343 CSD enabled unconditionally for windows with titlebar
+ 750384 GtkDialog can not be moved when gtk_dialog_run from GtkListBox ...
+ 750396 make text selection widgets feel more interactive
+ 750424 GtkPlug has extra space around window
+ 750477 GtkFileChooserButton's label isn't xalign=0'ed
+ 750489 gtk settings c910 warning unexpected annotation element type co...
+ 750505 Main grid overlaps GtkPopover
+ 750568 Add support for windows that are transparent wrt input
+ 750605 icontheme: don't modify symbolic SVG dimensions when recoloring
+ 750631 GtkAssistant: Allow to set a page with no padding
+ 750690 Recent Chooser Widget doesn't expand
+ 750692 Touch text selection: magnifier can't be seen, obscures drag ha...
+ 750718 Improve documentation for deprecated properties
+ 750741 Popover spawned from within another popover gets stacked behind...
+ 750883 HighContrast: add suitable touch selection handle assets
+ 750888 Fix return value error in _gtk_text_handle_set_direction
+ 750892 testfontchooserdialog.c requires pangoft2
+ 750993 non-modal popovers within modal popovers are non interactive
+ 751018 Widget: GtkMenuButton+GtkPopover gtk_toggle_button_set_active()...
+ 751050 Moving the mouse while a stepper is activated causes the scroll...
+ 751082 GtkTreeView draw performance is bad when contents are not large...
+ 751084 Wrong padding/spacing in the new bookmark sidebar in RTL
+ 751098 wayland: Always request transient commit when mapping subsurface
+ 751099 Fix return value error in gdk_window_set_pass_through
+ 751169 Improve search performance
+ 751341 GtkWindow: fix default empty window size with CSD
+
+* Translation updates:
+ Catalan
+ German
+ Greek
+ Hebrew
+ Hungarian
+ Occitan
+ Spanish
+ Tajik
+
+
 Overview of Changes in GTK+ 3.17.3
 ==================================
 
