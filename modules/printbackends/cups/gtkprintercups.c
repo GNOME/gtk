@@ -137,6 +137,8 @@ gtk_printer_cups_init (GtkPrinterCups *printer)
   printer->sides_supported = NULL;
   printer->number_of_covers = 0;
   printer->covers = NULL;
+  printer->output_bin_default = NULL;
+  printer->output_bin_supported = NULL;
 }
 
 static void
@@ -189,6 +191,9 @@ gtk_printer_cups_finalize (GObject *object)
 
   g_free (printer->sides_default);
   g_list_free_full (printer->sides_supported, g_free);
+
+  g_free (printer->output_bin_default);
+  g_list_free_full (printer->output_bin_supported, g_free);
 
   if (printer->get_remote_ppd_poll > 0)
     g_source_remove (printer->get_remote_ppd_poll);

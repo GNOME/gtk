@@ -1939,6 +1939,8 @@ static const char * const printer_attrs_detailed[] =
     "media-top-margin-supported",
     "sides-default",
     "sides-supported",
+    "output-bin-default",
+    "output-bin-supported",
   };
 
 typedef enum
@@ -1996,6 +1998,8 @@ typedef struct
   GList    *sides_supported;
   char    **covers;
   int       number_of_covers;
+  gchar    *output_bin_default;
+  GList    *output_bin_supported;
 } PrinterSetupInfo;
 
 static void
@@ -2365,6 +2369,17 @@ cups_printer_handle_attribute (GtkPrintBackendCups *cups_backend,
 
       info->media_size_supported = g_list_reverse (info->media_size_supported);
     }
+  else if (g_strcmp0 (ippGetName (attr), "output-bin-default") == 0)
+    {
+      info->output_bin_default = g_strdup (ippGetString (attr, 0, NULL));
+    }
+  else if (g_strcmp0 (ippGetName (attr), "output-bin-supported") == 0)
+    {
+      for (i = 0; i < ippGetCount (attr); i++)
+        info->output_bin_supported = g_list_prepend (info->output_bin_supported, g_strdup (ippGetString (attr, i, NULL)));
+
+      info->output_bin_supported = g_list_reverse (info->output_bin_supported);
+    }
   else
     {
       GTK_NOTE (PRINTING,
@@ -2673,6 +2688,8 @@ cups_request_printer_info_cb (GtkPrintBackendCups *cups_backend,
             }
           GTK_PRINTER_CUPS (printer)->sides_default = info->sides_default;
           GTK_PRINTER_CUPS (printer)->sides_supported = info->sides_supported;
+          GTK_PRINTER_CUPS (printer)->output_bin_default = info->output_bin_default;
+          GTK_PRINTER_CUPS (printer)->output_bin_supported = info->output_bin_supported;
 
           gtk_printer_set_has_details (printer, TRUE);
           g_signal_emit_by_name (printer, "details-acquired", TRUE);
@@ -4306,6 +4323,7 @@ static const struct {
   const char *translation;
 } ipp_option_translations[] = {
   { "sides", "gtk-duplex", N_("Two Sided") },
+  { "output-bin", "gtk-output-tray", N_("Output Tray") },
 };
 
 static const struct {
@@ -4318,6 +4336,37 @@ static const struct {
   { "sides", "two-sided-long-edge", NC_("sides", "Long Edge (Standard)") },
   /* Translators: this is an option of "Two Sided" */
   { "sides", "two-sided-short-edge", NC_("sides", "Short Edge (Flip)") },
+
+  /* Translators: Top output bin */
+  { "output-bin", "top", NC_("output-bin", "Top Bin") },
+  /* Translators: Middle output bin */
+  { "output-bin", "middle", NC_("output-bin", "Middle Bin") },
+  /* Translators: Bottom output bin */
+  { "output-bin", "bottom", NC_("output-bin", "Bottom Bin") },
+  /* Translators: Side output bin */
+  { "output-bin", "side", NC_("output-bin", "Side Bin") },
+  /* Translators: Left output bin */
+  { "output-bin", "left", NC_("output-bin", "Left Bin") },
+  /* Translators: Right output bin */
+  { "output-bin", "right", NC_("output-bin", "Right Bin") },
+  /* Translators: Center output bin */
+  { "output-bin", "center", NC_("output-bin", "Center Bin") },
+  /* Translators: Rear output bin */
+  { "output-bin", "rear", NC_("output-bin", "Rear Bin") },
+  /* Translators: Output bin where one sided output is oriented in the face-up position */
+  { "output-bin", "face-up", NC_("output-bin", "Face Up Bin") },
+  /* Translators: Output bin where one sided output is oriented in the face-down position */
+  { "output-bin", "face-down", NC_("output-bin", "Face Down Bin") },
+  /* Translators: Large capacity output bin */
+  { "output-bin", "large-capacity", NC_("output-bin", "Large Capacity Bin") },
+  /* Translators: Output stacker number %d */
+  { "output-bin", "stacker-N", NC_("output-bin", "Stacker %d") },
+  /* Translators: Output mailbox number %d */
+  { "output-bin", "mailbox-N", NC_("output-bin", "Mailbox %d") },
+  /* Translators: Private mailbox */
+  { "output-bin", "my-mailbox", NC_("output-bin", "My Mailbox") },
+  /* Translators: Output tray number %d */
+  { "output-bin", "tray-N", NC_("output-bin", "Tray %d") },
 };
 
 static const struct {
@@ -5036,22 +5085,82 @@ static gchar *
 get_ipp_choice_translation (const gchar  *ipp_option_name,
                             const gchar  *ipp_choice)
 {
-  gchar *translation = NULL;
-  gint   i;
+  const gchar *nptr;
+  guint64      index;
+  gchar       *translation = NULL;
+  gsize        ipp_choice_length;
+  gchar       *endptr;
+  gint         i;
 
   for (i = 0; i < G_N_ELEMENTS (ipp_choice_translations); i++)
     {
-      if (g_strcmp0 (ipp_choice_translations[i].ipp_option_name, ipp_option_name) == 0 &&
-          g_strcmp0 (ipp_choice_translations[i].ipp_choice, ipp_choice) == 0)
+      if (g_strcmp0 (ipp_choice_translations[i].ipp_option_name, ipp_option_name) == 0)
         {
-          translation = g_strdup (g_dpgettext2 (GETTEXT_PACKAGE,
-                                                ipp_option_name,
-                                                ipp_choice_translations[i].translation));
-          break;
+          ipp_choice_length = strlen (ipp_choice_translations[i].ipp_choice);
+
+          if (g_strcmp0 (ipp_choice_translations[i].ipp_choice, ipp_choice) == 0)
+            {
+              translation = g_strdup (g_dpgettext2 (GETTEXT_PACKAGE,
+                                                    ipp_option_name,
+                                                    ipp_choice_translations[i].translation));
+              break;
+            }
+          else if (g_str_has_suffix (ipp_choice_translations[i].ipp_choice, "-N") &&
+                   g_ascii_strncasecmp (ipp_choice_translations[i].ipp_choice,
+                                        ipp_choice,
+                                        ipp_choice_length - 2) == 0)
+            {
+              /* Find out index of the ipp_choice if it is supported for the choice. */
+              endptr = NULL;
+              nptr = ipp_choice + ipp_choice_length - 1;
+              index = g_ascii_strtoull (nptr,
+                                        &endptr,
+                                        10);
+
+              if (index != 0 || endptr != nptr)
+                {
+                  translation = g_strdup_printf (g_dpgettext2 (GETTEXT_PACKAGE,
+                                                               ipp_option_name,
+                                                               ipp_choice_translations[i].translation),
+                                                 index);
+                  break;
+                }
+            }
         }
     }
 
   return translation;
+}
+
+/*
+ * Format an IPP choice to a displayable string.
+ */
+static gchar *
+format_ipp_choice (const gchar *ipp_choice)
+{
+  gboolean  after_space = TRUE;
+  gchar    *result = NULL;
+  gsize     i;
+
+  if (ipp_choice != NULL)
+    {
+      result = g_strdup (ipp_choice);
+      /* Replace all '-' by spaces. */
+      result = g_strdelimit (result, "-", ' ');
+      if (g_str_is_ascii (result))
+        {
+          /* Convert all leading characters to upper case. */
+          for (i = 0; i < strlen (result); i++)
+            {
+              if (after_space && g_ascii_isalpha (result[i]))
+                result[i] = g_ascii_toupper (result[i]);
+
+              after_space = g_ascii_isspace (result[i]);
+            }
+        }
+    }
+
+  return result;
 }
 
 /*
@@ -5109,7 +5218,7 @@ setup_ipp_option (gchar               *ipp_option_name,
           if (translation != NULL)
             choices_display[i] = translation;
           else
-            choices_display[i] = g_strdup (ipp_choice);
+            choices_display[i] = format_ipp_choice (ipp_choice);
 
           i++;
         }
@@ -5388,6 +5497,14 @@ cups_printer_get_options (GtkPrinter           *printer,
       option = setup_ipp_option ("sides",
                                  cups_printer->sides_default,
                                  cups_printer->sides_supported,
+                                 set);
+
+      if (option != NULL)
+        set_option_from_settings (option, settings);
+
+      option = setup_ipp_option ("output-bin",
+                                 cups_printer->output_bin_default,
+                                 cups_printer->output_bin_supported,
                                  set);
 
       if (option != NULL)
@@ -5793,7 +5910,7 @@ set_option_from_settings (GtkPrinterOption *option,
   else if (strcmp (option->name, "gtk-output-tray") == 0)
     map_settings_to_option (option, output_tray_map, G_N_ELEMENTS (output_tray_map),
 			    settings, GTK_PRINT_SETTINGS_OUTPUT_BIN,
-			    "OutputBin", NULL);
+			    "OutputBin", "output-bin");
   else if (strcmp (option->name, "gtk-duplex") == 0)
     map_settings_to_option (option, duplex_map, G_N_ELEMENTS (duplex_map),
 			    settings, GTK_PRINT_SETTINGS_DUPLEX,
@@ -5910,7 +6027,7 @@ foreach_option_get_settings (GtkPrinterOption *option,
   else if (strcmp (option->name, "gtk-output-tray") == 0)
     map_option_to_settings (value, output_tray_map, G_N_ELEMENTS (output_tray_map),
 			    settings, GTK_PRINT_SETTINGS_OUTPUT_BIN,
-			    "OutputBin", NULL, FALSE);
+			    "OutputBin", "output-bin", option_is_ipp_option (option));
   else if (strcmp (option->name, "gtk-duplex") == 0)
     map_option_to_settings (value, duplex_map, G_N_ELEMENTS (duplex_map),
 			    settings, GTK_PRINT_SETTINGS_DUPLEX,

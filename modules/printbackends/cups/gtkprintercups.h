@@ -68,6 +68,8 @@ struct _GtkPrinterCups
   gboolean  media_margin_default_set;
   gchar    *sides_default;
   GList    *sides_supported;
+  gchar    *output_bin_default;
+  GList    *output_bin_supported;
 
   gchar  *default_cover_before;
   gchar  *default_cover_after;
