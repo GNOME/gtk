@@ -664,7 +664,7 @@ render_border (cairo_t       *cr,
                   hidden_side |= (1 << j);
                 else
                   dont_draw |= (1 << j);
-                other_border[i] = border_width[i] / 2;
+                other_border[j] = border_width[j] / 2;
               }
             
             render_frame_fill (cr, border_box, other_border, colors, dont_draw);
