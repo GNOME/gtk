@@ -914,18 +914,6 @@ xdg_surface_configure (void               *data,
   GdkWindowState new_state = 0;
   uint32_t *p;
 
-  if (width > 0 && height > 0)
-    {
-      gdk_window_constrain_size (&impl->geometry_hints,
-                                 impl->geometry_mask,
-                                 width + impl->margin_left + impl->margin_right,
-                                 height + impl->margin_top + impl->margin_bottom,
-                                 &width,
-                                 &height);
-
-      gdk_wayland_window_configure (window, width, height, impl->scale);
-    }
-
   wl_array_for_each (p, states)
     {
       uint32_t state = *p;
@@ -946,6 +934,24 @@ xdg_surface_configure (void               *data,
           /* Unknown state */
           break;
         }
+    }
+
+   if (width > 0 && height > 0)
+    {
+      GdkWindowHints geometry_mask = impl->geometry_mask;
+
+      /* Ignore size increments for maximized/fullscreen windows */
+      if (new_state & (GDK_WINDOW_STATE_MAXIMIZED | GDK_WINDOW_STATE_FULLSCREEN))
+        geometry_mask &= ~GDK_HINT_RESIZE_INC;
+
+      gdk_window_constrain_size (&impl->geometry_hints,
+                                 geometry_mask,
+                                 width + impl->margin_left + impl->margin_right,
+                                 height + impl->margin_top + impl->margin_bottom,
+                                 &width,
+                                 &height);
+
+      gdk_wayland_window_configure (window, width, height, impl->scale);
     }
 
   GDK_NOTE (EVENTS,

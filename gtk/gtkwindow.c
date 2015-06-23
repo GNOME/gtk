@@ -9582,7 +9582,16 @@ gtk_window_constrain_size (GtkWindow   *window,
 			   gint        *new_width,
 			   gint        *new_height)
 {
-  gdk_window_constrain_size (geometry, flags, width, height,
+  GtkWindowPrivate *priv = window->priv;
+  guint geometry_flags;
+
+  /* ignore size increments for maximized/fullscreen windows */
+  if (priv->maximized || priv->fullscreen)
+    geometry_flags = flags & ~GDK_HINT_RESIZE_INC;
+  else
+    geometry_flags = flags;
+
+  gdk_window_constrain_size (geometry, geometry_flags, width, height,
                              new_width, new_height);
 }
 
