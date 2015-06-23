@@ -70,8 +70,6 @@ enum
   PROP_MOUNT,
   PROP_SENSITIVE,
   PROP_PLACEHOLDER,
-  PROP_EJECT_BUTTON,
-  PROP_EVENT_BOX,
   LAST_PROP
 };
 
@@ -168,18 +166,6 @@ gtk_sidebar_row_get_property (GObject    *object,
     case PROP_PLACEHOLDER:
       {
         g_value_set_boolean (value, self->placeholder);
-        break;
-      }
-
-    case PROP_EJECT_BUTTON:
-      {
-        g_value_set_object (value, self->eject_button);
-        break;
-      }
-
-    case PROP_EVENT_BOX:
-      {
-        g_value_set_object (value, self->event_box);
         break;
       }
 
@@ -576,26 +562,6 @@ gtk_sidebar_row_class_init (GtkSidebarRowClass *klass)
   g_object_class_install_property (object_class, PROP_PLACEHOLDER,
                                    gParamSpecs [PROP_PLACEHOLDER]);
 
-  gParamSpecs [PROP_EJECT_BUTTON] =
-   g_param_spec_object ("eject-button",
-                        "Eject Button",
-                        "Eject button",
-                        GTK_TYPE_WIDGET,
-                        (G_PARAM_READABLE |
-                         G_PARAM_STATIC_STRINGS));
-  g_object_class_install_property (object_class, PROP_EJECT_BUTTON,
-                                   gParamSpecs [PROP_EJECT_BUTTON]);
-
-  gParamSpecs [PROP_EVENT_BOX] =
-    g_param_spec_object ("event-box",
-                         "Event Box",
-                         "Event Box",
-                         GTK_TYPE_WIDGET,
-                         (G_PARAM_READABLE |
-                          G_PARAM_STATIC_STRINGS));
-  g_object_class_install_property (object_class, PROP_EVENT_BOX,
-                                   gParamSpecs [PROP_EVENT_BOX]);
-
   gtk_widget_class_set_template_from_resource (widget_class,
                                                "/org/gtk/libgtk/ui/gtksidebarrow.ui");
 
@@ -612,18 +578,30 @@ gtk_sidebar_row_class_init (GtkSidebarRowClass *klass)
 GtkSidebarRow*
 gtk_sidebar_row_clone (GtkSidebarRow *self)
 {
- return  g_object_new (GTK_TYPE_SIDEBAR_ROW,
-                       "sidebar", self->sidebar,
-                       "icon", self->icon,
-                       "label", self->label,
-                       "tooltip", self->tooltip,
-                       "ejectable", self->ejectable,
-                       "order-index", self->order_index,
-                       "section-type", self->section_type,
-                       "place-type", self->place_type,
-                       "uri", self->uri,
-                       "drive", self->drive,
-                       "volume", self->volume,
-                       "mount", self->mount,
-                       NULL);
+ return g_object_new (GTK_TYPE_SIDEBAR_ROW,
+                      "sidebar", self->sidebar,
+                      "icon", self->icon,
+                      "label", self->label,
+                      "tooltip", self->tooltip,
+                      "ejectable", self->ejectable,
+                      "order-index", self->order_index,
+                      "section-type", self->section_type,
+                      "place-type", self->place_type,
+                      "uri", self->uri,
+                      "drive", self->drive,
+                      "volume", self->volume,
+                      "mount", self->mount,
+                      NULL);
+}
+
+GtkWidget *
+gtk_sidebar_row_get_eject_button (GtkSidebarRow *self)
+{
+  return self->eject_button;
+}
+
+GtkWidget *
+gtk_sidebar_row_get_event_box (GtkSidebarRow *self)
+{
+  return self->event_box;
 }

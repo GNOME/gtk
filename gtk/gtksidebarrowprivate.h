@@ -48,6 +48,9 @@ void           gtk_sidebar_row_hide   (GtkSidebarRow *self,
                                        gboolean       inmediate);
 void           gtk_sidebar_row_reveal (GtkSidebarRow *self);
 
+GtkWidget     *gtk_sidebar_row_get_eject_button (GtkSidebarRow *self);
+GtkWidget     *gtk_sidebar_row_get_event_box    (GtkSidebarRow *self);
+
 G_END_DECLS
 
 #endif /* GTK_SIDEBAR_ROW_PRIVATE_H */

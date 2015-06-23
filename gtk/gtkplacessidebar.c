@@ -426,15 +426,15 @@ add_place (GtkPlacesSidebar            *sidebar,
                       NULL);
 
   g_free (tooltip_escaped);
-  g_object_get (row,
-                "eject-button", &eject_button,
-                "event-box", &event_box,
-                NULL);
-  g_signal_connect_swapped (eject_button, "clicked", G_CALLBACK (eject_or_unmount_bookmark), row);
-  /* Needs event box since GtkListBoxRow doesn't have a GdkWindow associated that can
-   * listen events */
-  g_signal_connect (event_box, "button-press-event", G_CALLBACK (on_button_press_event), row);
-  g_signal_connect (event_box, "button-release-event", G_CALLBACK (on_button_release_event), row);
+  eject_button = gtk_sidebar_row_get_eject_button (GTK_SIDEBAR_ROW (row));
+  event_box = gtk_sidebar_row_get_event_box (GTK_SIDEBAR_ROW (row));
+
+  g_signal_connect_swapped (eject_button, "clicked",
+                            G_CALLBACK (eject_or_unmount_bookmark), row);
+  g_signal_connect (event_box, "button-press-event",
+                    G_CALLBACK (on_button_press_event), row);
+  g_signal_connect (event_box, "button-release-event",
+                    G_CALLBACK (on_button_release_event), row);
 
   gtk_container_add (GTK_CONTAINER (sidebar->list_box), GTK_WIDGET (row));
   gtk_widget_show_all (row);
