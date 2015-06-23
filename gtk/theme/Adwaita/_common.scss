@@ -2326,6 +2326,8 @@ GtkCheckButton.text-button, GtkRadioButton.text-button {
       -GtkRange-slider-width: 24;
       -GtkRange-trough-border: 2;
 
+      color: transparentize($fg_color, 0.7); // marks color
+
       @extend %#{$we}_#{$dn};
 
       @each $s,$as in ('',''),
