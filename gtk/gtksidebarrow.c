@@ -73,7 +73,7 @@ enum
   LAST_PROP
 };
 
-static GParamSpec *gParamSpecs [LAST_PROP];
+static GParamSpec *properties [LAST_PROP];
 
 static void
 gtk_sidebar_row_get_property (GObject    *object,
@@ -86,88 +86,60 @@ gtk_sidebar_row_get_property (GObject    *object,
   switch (prop_id)
     {
     case PROP_SIDEBAR:
-      {
-        g_value_set_object (value, self->sidebar);
-        break;
-      }
+      g_value_set_object (value, self->sidebar);
+      break;
 
     case PROP_ICON:
-      {
-        g_value_set_object (value, self->icon);
-        break;
-      }
+      g_value_set_object (value, self->icon);
+      break;
 
     case PROP_LABEL:
-      {
-        g_value_set_string (value, self->label);
-        break;
-      }
+      g_value_set_string (value, self->label);
+      break;
 
     case PROP_TOOLTIP:
-      {
-        g_value_set_string (value, self->tooltip);
-        break;
-      }
+      g_value_set_string (value, self->tooltip);
+      break;
 
     case PROP_EJECTABLE:
-      {
-        g_value_set_boolean (value, self->ejectable);
-        break;
-      }
+      g_value_set_boolean (value, self->ejectable);
+      break;
 
     case PROP_ORDER_INDEX:
-      {
-        g_value_set_int (value, self->order_index);
-          break;
-      }
+      g_value_set_int (value, self->order_index);
+      break;
 
     case PROP_SECTION_TYPE:
-      {
-        g_value_set_int (value, self->section_type);
-        break;
-      }
+      g_value_set_int (value, self->section_type);
+      break;
 
     case PROP_PLACE_TYPE:
-      {
-        g_value_set_int (value, self->place_type);
-        break;
-      }
+      g_value_set_int (value, self->place_type);
+      break;
 
     case PROP_URI:
-      {
-        g_value_set_string (value, self->uri);
-        break;
-      }
+      g_value_set_string (value, self->uri);
+      break;
 
     case PROP_DRIVE:
-      {
-        g_value_set_object (value, self->drive);
-        break;
-      }
+      g_value_set_object (value, self->drive);
+      break;
 
     case PROP_VOLUME:
-      {
-        g_value_set_object (value, self->volume);
-        break;
-      }
+      g_value_set_object (value, self->volume);
+      break;
 
     case PROP_MOUNT:
-      {
-        g_value_set_object (value, self->mount);
-        break;
-      }
+      g_value_set_object (value, self->mount);
+      break;
 
     case PROP_SENSITIVE:
-      {
-        g_value_set_boolean (value, self->sensitive);
-        break;
-      }
+      g_value_set_boolean (value, self->sensitive);
+      break;
 
     case PROP_PLACEHOLDER:
-      {
-        g_value_set_boolean (value, self->placeholder);
-        break;
-      }
+      g_value_set_boolean (value, self->placeholder);
+      break;
 
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -181,169 +153,116 @@ gtk_sidebar_row_set_property (GObject      *object,
                               GParamSpec   *pspec)
 {
   GtkSidebarRow *self = GTK_SIDEBAR_ROW (object);
+  GtkStyleContext *context;
 
   switch (prop_id)
     {
     case PROP_SIDEBAR:
-      {
-        self->sidebar = g_value_get_object (value);
-        break;
-      }
+      self->sidebar = g_value_get_object (value);
+      break;
 
     case PROP_ICON:
-      {
-        g_clear_object (&self->icon);
-        if (value != NULL)
-          {
-            self->icon = g_object_ref (g_value_get_object (value));
-            gtk_image_set_from_gicon (GTK_IMAGE (self->icon_widget), self->icon, GTK_ICON_SIZE_MENU);
-          }
-        else
-          {
-            self->icon = NULL;
-            gtk_image_clear (GTK_IMAGE (self->icon_widget));
-          }
-        break;
-      }
+      g_set_object (&self->icon, g_value_get_object (value));
+      if (self->icon != NULL)
+        gtk_image_set_from_gicon (GTK_IMAGE (self->icon_widget), self->icon, GTK_ICON_SIZE_MENU);
+      else
+        gtk_image_clear (GTK_IMAGE (self->icon_widget));
+      break;
 
     case PROP_LABEL:
-      {
-        g_free (self->label);
-        self->label = g_strdup (g_value_get_string (value));
-        gtk_label_set_text (GTK_LABEL (self->label_widget), self->label);
-        break;
-      }
+      g_free (self->label);
+      self->label = g_strdup (g_value_get_string (value));
+      gtk_label_set_text (GTK_LABEL (self->label_widget), self->label);
+      break;
 
     case PROP_TOOLTIP:
-      {
-        g_free (self->tooltip);
-        self->tooltip = g_strdup (g_value_get_string (value));
-        gtk_widget_set_tooltip_text (GTK_WIDGET (self), self->tooltip);
-        break;
-      }
+      g_free (self->tooltip);
+      self->tooltip = g_strdup (g_value_get_string (value));
+      gtk_widget_set_tooltip_text (GTK_WIDGET (self), self->tooltip);
+      break;
 
     case PROP_EJECTABLE:
-      {
-        self->ejectable = g_value_get_boolean (value);
-        if (self->ejectable)
-          gtk_widget_show (self->eject_button);
-        else
-          gtk_widget_hide (self->eject_button);
-        break;
-      }
+      self->ejectable = g_value_get_boolean (value);
+      if (self->ejectable)
+        gtk_widget_show (self->eject_button);
+      else
+        gtk_widget_hide (self->eject_button);
+      break;
 
     case PROP_ORDER_INDEX:
-      {
-        self->order_index = g_value_get_int (value);
-        break;
-      }
+      self->order_index = g_value_get_int (value);
+      break;
 
     case PROP_SECTION_TYPE:
-      {
-        self->section_type = g_value_get_int (value);
-        if (self->section_type != SECTION_COMPUTER)
-          gtk_label_set_ellipsize (GTK_LABEL (self->label_widget), PANGO_ELLIPSIZE_END);
-        else
-          gtk_label_set_ellipsize (GTK_LABEL (self->label_widget), PANGO_ELLIPSIZE_NONE);
-        break;
-      }
+      self->section_type = g_value_get_int (value);
+      if (self->section_type != SECTION_COMPUTER)
+        gtk_label_set_ellipsize (GTK_LABEL (self->label_widget), PANGO_ELLIPSIZE_END);
+      else
+        gtk_label_set_ellipsize (GTK_LABEL (self->label_widget), PANGO_ELLIPSIZE_NONE);
+      break;
 
     case PROP_PLACE_TYPE:
-      {
-        self->place_type = g_value_get_int (value);
-        break;
-      }
+      self->place_type = g_value_get_int (value);
+      break;
 
     case PROP_URI:
-      {
-        g_free (self->uri);
-        self->uri = g_strdup (g_value_get_string (value));
-        break;
-      }
+      g_free (self->uri);
+      self->uri = g_strdup (g_value_get_string (value));
+      break;
 
     case PROP_DRIVE:
-      {
-        gpointer *object;
-
-        g_clear_object (&self->drive);
-        object = g_value_get_object (value);
-        if (object != NULL)
-          self->drive = g_object_ref (object);
-        break;
-      }
+      g_set_object (&self->drive, g_value_get_object (value));
+      break;
 
     case PROP_VOLUME:
-      {
-        gpointer *object;
-
-        g_clear_object (&self->volume);
-        object = g_value_get_object (value);
-        if (object != NULL)
-          self->volume = g_object_ref (object);
-        break;
-      }
+      g_set_object (&self->volume, g_value_get_object (value));
+      break;
 
     case PROP_MOUNT:
-      {
-        gpointer *object;
-
-        g_clear_object (&self->mount);
-        object = g_value_get_object (value);
-        if (object != NULL)
-          self->mount = g_object_ref (object);
-        break;
-      }
+      g_set_object (&self->mount, g_value_get_object (value));
+      break;
 
     case PROP_SENSITIVE:
-      {
-        GtkStyleContext *style_context;
-
-        self->sensitive = g_value_get_boolean (value);
-       	style_context = gtk_widget_get_style_context (GTK_WIDGET (self));
-        /* Modifying the actual sensitivity of the widget makes the drag state
-         * to change and calling drag-leave wich modifies the gtklistbox and a
-         * style race ocurs. So since we only use it for show which rows are
-         * drop targets, we can simple use a dim-label style */
-        if (self->sensitive)
-          gtk_style_context_remove_class (style_context, "dim-label");
-        else
-          gtk_style_context_add_class (style_context, "dim-label");
-
-        break;
-      }
+      self->sensitive = g_value_get_boolean (value);
+      context = gtk_widget_get_style_context (GTK_WIDGET (self));
+      /* Modifying the actual sensitivity of the widget makes the drag state
+       * to change and calling drag-leave wich modifies the gtklistbox and a
+       * style race ocurs. So since we only use it for show which rows are
+       * drop targets, we can simple use a dim-label style
+       */
+      if (self->sensitive)
+        gtk_style_context_remove_class (context, "dim-label");
+      else
+        gtk_style_context_add_class (context, "dim-label");
+      break;
 
     case PROP_PLACEHOLDER:
-      {
-	      GtkStyleContext *context;
+      self->placeholder = g_value_get_boolean (value);
+      if (self->placeholder)
+        {
+          g_clear_object (&self->icon);
+          g_free (self->label);
+          self->label = NULL;
+          g_free (self->tooltip);
+          self->tooltip = NULL;
+          gtk_widget_set_tooltip_text (GTK_WIDGET (self), NULL);
+          self->ejectable = FALSE;
+          self->section_type = SECTION_BOOKMARKS;
+          self->place_type = PLACES_BOOKMARK_PLACEHOLDER;
+          g_free (self->uri);
+          self->uri = NULL;
+          g_clear_object (&self->drive);
+          g_clear_object (&self->volume);
+          g_clear_object (&self->mount);
 
-        self->placeholder = g_value_get_boolean (value);
-        if (self->placeholder)
-          {
-            g_clear_object (&self->icon);
-            g_free (self->label);
-            self->label = NULL;
-            g_free (self->tooltip);
-            self->tooltip = NULL;
-            gtk_widget_set_tooltip_text (GTK_WIDGET (self), NULL);
-            self->ejectable = FALSE;
-            self->section_type = SECTION_BOOKMARKS;
-            self->place_type = PLACES_BOOKMARK_PLACEHOLDER;
-            g_free (self->uri);
-            self->uri = NULL;
-            g_clear_object (&self->drive);
-            g_clear_object (&self->volume);
-            g_clear_object (&self->mount);
+          gtk_container_foreach (GTK_CONTAINER (self),
+                                 (GtkCallback) gtk_widget_destroy,
+                                 NULL);
 
-            gtk_container_foreach (GTK_CONTAINER (self),
-                                   (GtkCallback) gtk_widget_destroy,
-                                   NULL);
-
-	          context = gtk_widget_get_style_context (GTK_WIDGET (self));
-            gtk_style_context_add_class (context, "sidebar-placeholder-row");
-          }
-
-        break;
-      }
+	  context = gtk_widget_get_style_context (GTK_WIDGET (self));
+          gtk_style_context_add_class (context, "sidebar-placeholder-row");
+        }
+      break;
 
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -417,7 +336,7 @@ gtk_sidebar_row_class_init (GtkSidebarRowClass *klass)
   object_class->set_property = gtk_sidebar_row_set_property;
   object_class->finalize = gtk_sidebar_row_finalize;
 
-  gParamSpecs [PROP_SIDEBAR] =
+  properties [PROP_SIDEBAR] =
     g_param_spec_object ("sidebar",
                          "Sidebar",
                          "Sidebar",
@@ -425,59 +344,48 @@ gtk_sidebar_row_class_init (GtkSidebarRowClass *klass)
                          (G_PARAM_READWRITE |
                           G_PARAM_CONSTRUCT_ONLY |
                           G_PARAM_STATIC_STRINGS));
-  g_object_class_install_property (object_class, PROP_SIDEBAR,
-                                   gParamSpecs [PROP_SIDEBAR]);
-  gParamSpecs [PROP_ICON] =
+
+  properties [PROP_ICON] =
     g_param_spec_object ("icon",
                          "icon",
                          "The place icon.",
                          G_TYPE_ICON,
                          (G_PARAM_READWRITE |
                           G_PARAM_STATIC_STRINGS));
-  g_object_class_install_property (object_class, PROP_ICON,
-                                   gParamSpecs [PROP_ICON]);
 
-  gParamSpecs [PROP_LABEL] =
+  properties [PROP_LABEL] =
     g_param_spec_string ("label",
                          "label",
                          "The label text.",
                          NULL,
                          (G_PARAM_READWRITE |
                           G_PARAM_STATIC_STRINGS));
-  g_object_class_install_property (object_class, PROP_LABEL,
-                                   gParamSpecs [PROP_LABEL]);
 
-  gParamSpecs [PROP_TOOLTIP] =
+  properties [PROP_TOOLTIP] =
     g_param_spec_string ("tooltip",
                          "Tooltip",
                          "Tooltip",
                          NULL,
                          (G_PARAM_READWRITE |
                           G_PARAM_STATIC_STRINGS));
-  g_object_class_install_property (object_class, PROP_TOOLTIP,
-                                   gParamSpecs [PROP_TOOLTIP]);
 
-  gParamSpecs [PROP_EJECTABLE] =
+  properties [PROP_EJECTABLE] =
     g_param_spec_boolean ("ejectable",
                           "Ejectable",
                           "Ejectable",
                           FALSE,
                           (G_PARAM_READWRITE |
                            G_PARAM_STATIC_STRINGS));
-  g_object_class_install_property (object_class, PROP_EJECTABLE,
-                                   gParamSpecs [PROP_EJECTABLE]);
 
-  gParamSpecs [PROP_ORDER_INDEX] =
+  properties [PROP_ORDER_INDEX] =
     g_param_spec_int ("order-index",
                       "OrderIndex",
                       "Order Index",
                       0, G_MAXINT, 0,
                       (G_PARAM_READWRITE |
                        G_PARAM_STATIC_STRINGS));
-  g_object_class_install_property (object_class, PROP_ORDER_INDEX,
-                                   gParamSpecs [PROP_ORDER_INDEX]);
 
-  gParamSpecs [PROP_SECTION_TYPE] =
+  properties [PROP_SECTION_TYPE] =
     g_param_spec_int ("section-type",
                       "section type",
                       "The section type.",
@@ -485,10 +393,8 @@ gtk_sidebar_row_class_init (GtkSidebarRowClass *klass)
                       (G_PARAM_READWRITE |
                        G_PARAM_STATIC_STRINGS |
                        G_PARAM_CONSTRUCT_ONLY));
-  g_object_class_install_property (object_class, PROP_SECTION_TYPE,
-                                   gParamSpecs [PROP_SECTION_TYPE]);
 
-  gParamSpecs [PROP_PLACE_TYPE] =
+  properties [PROP_PLACE_TYPE] =
     g_param_spec_int ("place-type",
                       "place type",
                       "The place type.",
@@ -496,10 +402,8 @@ gtk_sidebar_row_class_init (GtkSidebarRowClass *klass)
                       (G_PARAM_READWRITE |
                        G_PARAM_STATIC_STRINGS |
                        G_PARAM_CONSTRUCT_ONLY));
-  g_object_class_install_property (object_class, PROP_PLACE_TYPE,
-                                   gParamSpecs [PROP_PLACE_TYPE]);
 
-  gParamSpecs [PROP_URI] =
+  properties [PROP_URI] =
     g_param_spec_string ("uri",
                          "Uri",
                          "Uri",
@@ -507,9 +411,8 @@ gtk_sidebar_row_class_init (GtkSidebarRowClass *klass)
                          (G_PARAM_READWRITE |
                           G_PARAM_CONSTRUCT_ONLY |
                           G_PARAM_STATIC_STRINGS));
-  g_object_class_install_property (object_class, PROP_URI,
-                                   gParamSpecs [PROP_URI]);
-  gParamSpecs [PROP_DRIVE] =
+
+  properties [PROP_DRIVE] =
     g_param_spec_object ("drive",
                          "Drive",
                          "Drive",
@@ -517,10 +420,8 @@ gtk_sidebar_row_class_init (GtkSidebarRowClass *klass)
                          (G_PARAM_READWRITE |
                           G_PARAM_CONSTRUCT_ONLY |
                           G_PARAM_STATIC_STRINGS));
-  g_object_class_install_property (object_class, PROP_DRIVE,
-                                   gParamSpecs [PROP_DRIVE]);
 
-  gParamSpecs [PROP_VOLUME] =
+  properties [PROP_VOLUME] =
     g_param_spec_object ("volume",
                          "Volume",
                          "Volume",
@@ -528,10 +429,8 @@ gtk_sidebar_row_class_init (GtkSidebarRowClass *klass)
                          (G_PARAM_READWRITE |
                           G_PARAM_CONSTRUCT_ONLY |
                           G_PARAM_STATIC_STRINGS));
-  g_object_class_install_property (object_class, PROP_VOLUME,
-                                   gParamSpecs [PROP_VOLUME]);
 
-  gParamSpecs [PROP_MOUNT] =
+  properties [PROP_MOUNT] =
     g_param_spec_object ("mount",
                          "Mount",
                          "Mount",
@@ -539,19 +438,16 @@ gtk_sidebar_row_class_init (GtkSidebarRowClass *klass)
                          (G_PARAM_READWRITE |
                           G_PARAM_CONSTRUCT_ONLY |
                           G_PARAM_STATIC_STRINGS));
-  g_object_class_install_property (object_class, PROP_MOUNT,
-                                   gParamSpecs [PROP_MOUNT]);
-  gParamSpecs [PROP_SENSITIVE] =
+
+  properties [PROP_SENSITIVE] =
     g_param_spec_boolean ("sensitive",
                           "Sensitive",
                           "Make the row sensitive or not",
                           TRUE,
                           (G_PARAM_READWRITE |
                            G_PARAM_STATIC_STRINGS));
-  g_object_class_install_property (object_class, PROP_SENSITIVE,
-                                   gParamSpecs [PROP_SENSITIVE]);
 
-  gParamSpecs [PROP_PLACEHOLDER] =
+  properties [PROP_PLACEHOLDER] =
     g_param_spec_boolean ("placeholder",
                           "Placeholder",
                           "Placeholder",
@@ -559,8 +455,8 @@ gtk_sidebar_row_class_init (GtkSidebarRowClass *klass)
                           (G_PARAM_READWRITE |
                            G_PARAM_CONSTRUCT_ONLY |
                            G_PARAM_STATIC_STRINGS));
-  g_object_class_install_property (object_class, PROP_PLACEHOLDER,
-                                   gParamSpecs [PROP_PLACEHOLDER]);
+
+  g_object_class_install_properties (object_class, LAST_PROP, properties);
 
   gtk_widget_class_set_template_from_resource (widget_class,
                                                "/org/gtk/libgtk/ui/gtksidebarrow.ui");
