@@ -415,6 +415,11 @@ gdk_wayland_device_ungrab (GdkDevice *device,
 
   display = gdk_device_get_display (device);
 
+  grab = _gdk_display_get_last_device_grab (display, device);
+
+  if (grab)
+    grab->serial_end = grab->serial_start;
+
   if (gdk_device_get_source (device) == GDK_SOURCE_KEYBOARD)
     {
       /* Device is a keyboard */
@@ -422,11 +427,6 @@ gdk_wayland_device_ungrab (GdkDevice *device,
   else
     {
       /* Device is a pointer */
-      grab = _gdk_display_get_last_device_grab (display, device);
-
-      if (grab)
-        grab->serial_end = grab->serial_start;
-
       g_clear_object (&wayland_device->grab_cursor);
       gdk_wayland_device_update_window_cursor (wayland_device);
 
