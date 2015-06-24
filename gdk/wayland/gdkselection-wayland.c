@@ -272,6 +272,7 @@ gdk_wayland_selection_new (void)
   selection->selection_buffers =
       g_hash_table_new_full (NULL, NULL, NULL,
                              (GDestroyNotify) selection_buffer_cancel_and_unref);
+  selection->stored_selection.fd = -1;
   return selection;
 }
 
@@ -399,6 +400,8 @@ async_write_data_new (GdkWaylandSelection *selection)
 static void
 async_write_data_free (AsyncWriteData *write_data)
 {
+  close (write_data->selection->stored_selection.fd);
+  write_data->selection->stored_selection.fd = -1;
   g_object_unref (write_data->stream);
   g_slice_free (AsyncWriteData, write_data);
 }
