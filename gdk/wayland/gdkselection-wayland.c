@@ -89,6 +89,7 @@ struct _GdkWaylandSelection
 
   /* Source-side data */
   StoredSelection stored_selection;
+  GArray *source_targets;
 
   struct wl_data_source *clipboard_source;
   GdkWindow *clipboard_owner;
@@ -273,6 +274,7 @@ gdk_wayland_selection_new (void)
       g_hash_table_new_full (NULL, NULL, NULL,
                              (GDestroyNotify) selection_buffer_cancel_and_unref);
   selection->stored_selection.fd = -1;
+  selection->source_targets = g_array_new (FALSE, FALSE, sizeof (GdkAtom));
   return selection;
 }
 
@@ -280,6 +282,7 @@ void
 gdk_wayland_selection_free (GdkWaylandSelection *selection)
 {
   g_hash_table_destroy (selection->selection_buffers);
+  g_array_unref (selection->source_targets);
 
   if (selection->targets)
     g_list_free (selection->targets);
@@ -549,6 +552,27 @@ gdk_wayland_selection_lookup_requestor_buffer (GdkWindow *requestor)
 }
 
 static gboolean
+gdk_wayland_selection_source_handles_target (GdkWaylandSelection *wayland_selection,
+                                             GdkAtom              target)
+{
+  GdkAtom atom;
+  guint i;
+
+  if (target == GDK_NONE)
+    return FALSE;
+
+  for (i = 0; i < wayland_selection->source_targets->len; i++)
+    {
+      atom = g_array_index (wayland_selection->source_targets, GdkAtom, i);
+
+      if (atom == target)
+        return TRUE;
+    }
+
+  return FALSE;
+}
+
+static gboolean
 gdk_wayland_selection_request_target (GdkWaylandSelection *wayland_selection,
                                       GdkWindow           *window,
                                       GdkAtom              target,
@@ -578,10 +602,16 @@ gdk_wayland_selection_request_target (GdkWaylandSelection *wayland_selection,
 
   wayland_selection->source_requested_target = target;
 
-  if (window && target != GDK_NONE)
+  if (window &&
+      gdk_wayland_selection_source_handles_target (wayland_selection, target))
     {
       gdk_wayland_selection_emit_request (window, selection, target);
       return TRUE;
+    }
+  else
+    {
+      close (fd);
+      wayland_selection->stored_selection.fd = -1;
     }
 
   return FALSE;
@@ -1027,6 +1057,8 @@ gdk_wayland_selection_add_targets (GdkWindow *window,
                                    guint      ntargets,
                                    GdkAtom   *targets)
 {
+  GdkDisplay *display = gdk_window_get_display (window);
+  GdkWaylandSelection *wayland_selection = gdk_wayland_display_get_selection (display);
   struct wl_data_source *data_source;
   guint i;
 
@@ -1036,6 +1068,8 @@ gdk_wayland_selection_add_targets (GdkWindow *window,
 
   if (!data_source)
     return;
+
+  g_array_append_vals (wayland_selection->source_targets, targets, ntargets);
 
   for (i = 0; i < ntargets; i++)
     wl_data_source_offer (data_source, gdk_atom_name (targets[i]));
@@ -1057,5 +1091,8 @@ void
 gdk_wayland_selection_clear_targets (GdkDisplay *display,
                                      GdkAtom     selection)
 {
+  GdkWaylandSelection *wayland_selection = gdk_wayland_display_get_selection (display);
+
+  g_array_set_size (wayland_selection->source_targets, 0);
   gdk_wayland_selection_unset_data_source (display, selection);
 }
