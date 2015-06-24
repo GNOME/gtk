@@ -1015,14 +1015,14 @@ gtk_image_set_from_resource (GtkImage    *image,
       return;
     }
 
-  priv->resource_path = g_strdup (resource_path);
-
   if (gdk_pixbuf_animation_is_static_image (animation))
     gtk_image_set_from_pixbuf (image, gdk_pixbuf_animation_get_static_image (animation));
   else
     gtk_image_set_from_animation (image, animation);
 
   _gtk_icon_helper_set_pixbuf_scale (priv->icon_helper, scale_factor);
+
+  priv->resource_path = g_strdup (resource_path);
 
   g_object_notify (G_OBJECT (image), "resource");
 
