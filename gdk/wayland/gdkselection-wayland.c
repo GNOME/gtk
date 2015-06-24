@@ -567,6 +567,13 @@ gdk_wayland_selection_request_target (GdkWaylandSelection *wayland_selection,
       wayland_selection->source_requested_target == target)
     return FALSE;
 
+  /* If we didn't issue gdk_wayland_selection_check_write() yet
+   * on a previous fd, it will still linger here. Just close it,
+   * as we can't have more than one fd on the fly.
+   */
+  if (wayland_selection->stored_selection.fd >= 0)
+    close (wayland_selection->stored_selection.fd);
+
   wayland_selection->stored_selection.fd = fd;
 
   wayland_selection->source_requested_target = target;
