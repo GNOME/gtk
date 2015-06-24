@@ -643,7 +643,10 @@ data_source_send (void                  *data,
            G_STRFUNC, source, mime_type, fd);
 
   if (!mime_type)
-    return;
+    {
+      close (fd);
+      return;
+    }
 
   context = gdk_wayland_drag_context_lookup_by_data_source (source);
 
@@ -652,7 +655,10 @@ data_source_send (void                  *data,
   else if (source == wayland_selection->clipboard_source)
     window = wayland_selection->clipboard_owner;
   else
-    return;
+    {
+      close (fd);
+      return;
+    }
 
   if (!gdk_wayland_selection_request_target (wayland_selection, window,
                                              gdk_atom_intern (mime_type, FALSE),
