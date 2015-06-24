@@ -466,6 +466,15 @@ gdk_wayland_selection_check_write (GdkWaylandSelection *selection)
       selection->stored_selection.data_len == 0)
     return FALSE;
 
+  /* Cancel any previous ongoing async write */
+  if (selection->stored_selection.cancellable)
+    {
+      g_cancellable_cancel (selection->stored_selection.cancellable);
+      g_object_unref (selection->stored_selection.cancellable);
+    }
+
+  selection->stored_selection.cancellable = g_cancellable_new ();
+
   write_data = async_write_data_new (selection);
   async_write_data_write (write_data);
   selection->stored_selection.fd = -1;
@@ -512,17 +521,10 @@ gdk_wayland_selection_store (GdkWindow    *window,
       g_free (selection->stored_selection.data);
     }
 
-  if (selection->stored_selection.cancellable)
-    {
-      g_cancellable_cancel (selection->stored_selection.cancellable);
-      g_object_unref (selection->stored_selection.cancellable);
-    }
-
   selection->stored_selection.source = window;
   selection->stored_selection.data_len = array->len;
   selection->stored_selection.data = (guchar *) g_array_free (array, FALSE);
   selection->stored_selection.type = type;
-  selection->stored_selection.cancellable = g_cancellable_new ();
 
   gdk_wayland_selection_check_write (selection);
 }
