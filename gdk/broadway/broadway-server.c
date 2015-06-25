@@ -819,19 +819,31 @@ map_named_shm (char *name, gsize size)
 
   int fd;
   void *ptr;
+  char *filename = NULL;
 
   fd = shm_open(name, O_RDONLY, 0600);
   if (fd == -1)
     {
-      perror ("Failed to shm_open");
-      return NULL;
+      filename = g_build_filename (g_get_tmp_dir (), name, NULL);
+      fd = open (filename, O_RDONLY);
+      if (fd == -1)
+	{
+	  perror ("Failed to map shm");
+	  return NULL;
+	}
     }
 
   ptr = mmap(0, size, PROT_READ, MAP_SHARED, fd, 0);
 
   (void) close(fd);
 
-  shm_unlink (name);
+  if (filename)
+    {
+      unlink (filename);
+      g_free (filename);
+    }
+  else
+    shm_unlink (name);
 
   return ptr;
 
