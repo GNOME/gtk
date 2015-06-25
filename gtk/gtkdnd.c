@@ -3275,6 +3275,7 @@ _gtk_cairo_surface_extents (cairo_surface_t *surface,
 
   cr = cairo_create (surface);
   cairo_clip_extents (cr, &x1, &y1, &x2, &y2);
+  cairo_destroy (cr);
 
   x1 = floor (x1);
   y1 = floor (y1);
