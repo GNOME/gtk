@@ -120,8 +120,8 @@ $asset_suffix: if($variant=='dark', '-dark', '');
 }
 
 .rubberband {
-  border: 1px solid $selected_bg_color;
-  background-color: transparentize($selected_bg_color,0.8);
+  border: 1px solid darken($selected_bg_color, 10%);
+  background-color: transparentize(darken($selected_bg_color, 10%), 0.8);
 }
 
 .label {
@@ -1303,6 +1303,8 @@ GtkTreeView.view {
 
   border-left-color: mix($fg_color, $base_color, 50%); // this is actually the tree lines color,
   border-top-color: $bg_color;                         // while this is the grid lines color, better then nothing
+
+  &.rubberband { @extend .rubberband; } // to avoid borders being overridden by the previously set props
 
   &:selected { border-radius: 0; } // rest border radius in lists
 

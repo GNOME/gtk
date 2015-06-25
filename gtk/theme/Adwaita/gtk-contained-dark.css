@@ -73,9 +73,9 @@
   .view:selected, GtkCalendar:selected {
     border-radius: 3px; }
 
-.rubberband {
-  border: 1px solid #215d9c;
-  background-color: rgba(33, 93, 156, 0.2); }
+.rubberband, GtkTreeView.view.rubberband {
+  border: 1px solid #184472;
+  background-color: rgba(24, 68, 114, 0.2); }
 
 .label.separator {
   color: #eeeeec; }
