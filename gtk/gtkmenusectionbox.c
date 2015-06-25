@@ -395,6 +395,8 @@ update_popover_position_cb (GObject    *source,
       else
         gtk_widget_set_valign (w, GTK_ALIGN_CENTER);
     }
+
+  g_list_free (children);
 }
 
 void
