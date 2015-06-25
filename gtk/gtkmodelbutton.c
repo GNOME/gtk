@@ -795,6 +795,16 @@ gtk_model_button_draw (GtkWidget *widget,
 }
 
 static void
+gtk_model_button_destroy (GtkWidget *widget)
+{
+  GtkModelButton *model_button = GTK_MODEL_BUTTON (widget);
+
+  g_clear_pointer (&model_button->menu_name, g_free);
+
+  GTK_WIDGET_CLASS (gtk_model_button_parent_class)->destroy (widget);
+}
+
+static void
 gtk_model_button_clicked (GtkButton *button)
 {
   GtkModelButton *model_button = GTK_MODEL_BUTTON (button);
@@ -833,6 +843,7 @@ gtk_model_button_class_init (GtkModelButtonClass *class)
   widget_class->get_preferred_height_and_baseline_for_width = gtk_model_button_get_preferred_height_and_baseline_for_width;
   widget_class->size_allocate = gtk_model_button_size_allocate;
   widget_class->draw = gtk_model_button_draw;
+  widget_class->destroy = gtk_model_button_destroy;
 
   button_class->clicked = gtk_model_button_clicked;
 
