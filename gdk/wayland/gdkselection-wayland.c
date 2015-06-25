@@ -504,7 +504,7 @@ gdk_wayland_selection_store (GdkWindow    *window,
       if (mode != GDK_PROP_MODE_REPLACE &&
           type != selection->stored_selection.type)
         {
-          gchar *type_str, stored_str;
+          gchar *type_str, *stored_str;
 
           type_str = gdk_atom_name (type);
           stored_str = gdk_atom_name (selection->stored_selection.type);
