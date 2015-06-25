@@ -132,6 +132,8 @@ needs_explicit_setting (MyParserData *data,
     { "GtkRadioButton", "draw-indicator", 0 },
     { "GtkGrid", "left-attach", 1 },
     { "GtkGrid", "top-attach", 1 },
+    { "GtkWidget", "hexpand", 0 },
+    { "GtkWidget", "vexpand", 0 },
     { NULL, NULL, 0 }
   };
   const gchar *class_name;
