@@ -504,10 +504,16 @@ gdk_wayland_selection_store (GdkWindow    *window,
       if (mode != GDK_PROP_MODE_REPLACE &&
           type != selection->stored_selection.type)
         {
+          gchar *type_str, stored_str;
+
+          type_str = gdk_atom_name (type);
+          stored_str = gdk_atom_name (selection->stored_selection.type);
+
           g_warning (G_STRLOC ": Attempted to append/prepend selection data with "
                      "type %s into the current selection with type %s",
-                     gdk_atom_name (type),
-                     gdk_atom_name (selection->stored_selection.type));
+                     type_str, stored_str);
+          g_free (type_str);
+          g_free (stored_str);
           return;
         }
 
@@ -925,6 +931,7 @@ _gdk_wayland_display_convert_selection (GdkDisplay *display,
 {
   GdkWaylandSelection *wayland_selection = gdk_wayland_display_get_selection (display);
   SelectionBuffer *buffer_data;
+  gchar *mimetype;
 
   if (!wayland_selection->offer)
     {
@@ -944,10 +951,12 @@ _gdk_wayland_display_convert_selection (GdkDisplay *display,
       return;
     }
 
+  mimetype = gdk_atom_name (target);
+
   if (target != gdk_atom_intern_static_string ("TARGETS"))
     wl_data_offer_accept (wayland_selection->offer,
                           _gdk_wayland_display_get_serial (GDK_WAYLAND_DISPLAY (display)),
-                          gdk_atom_name (target));
+                          mimetype);
 
   buffer_data = g_hash_table_lookup (wayland_selection->selection_buffers,
                                      target);
@@ -975,8 +984,7 @@ _gdk_wayland_display_convert_selection (GdkDisplay *display,
         {
           g_unix_open_pipe (pipe_fd, FD_CLOEXEC, NULL);
           wl_data_offer_receive (wayland_selection->offer,
-                                 gdk_atom_name (target),
-                                 pipe_fd[1]);
+                                 mimetype, pipe_fd[1]);
           stream = g_unix_input_stream_new (pipe_fd[0], TRUE);
           close (pipe_fd[1]);
         }
@@ -1001,6 +1009,8 @@ _gdk_wayland_display_convert_selection (GdkDisplay *display,
 
   if (!buffer_data->stream)
     selection_buffer_notify (buffer_data);
+
+  g_free (mimetype);
 }
 
 gint
@@ -1072,7 +1082,12 @@ gdk_wayland_selection_add_targets (GdkWindow *window,
   g_array_append_vals (wayland_selection->source_targets, targets, ntargets);
 
   for (i = 0; i < ntargets; i++)
-    wl_data_source_offer (data_source, gdk_atom_name (targets[i]));
+    {
+      gchar *mimetype = gdk_atom_name (targets[i]);
+
+      wl_data_source_offer (data_source, mimetype);
+      g_free (mimetype);
+    }
 
   if (selection == atoms[ATOM_CLIPBOARD])
     {

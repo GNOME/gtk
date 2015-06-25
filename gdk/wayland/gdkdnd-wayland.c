@@ -214,8 +214,10 @@ gdk_wayland_drop_context_set_status (GdkDragContext *context,
 
       if (l)
         {
-          wl_data_offer_accept (wl_offer, context_wayland->serial,
-                                gdk_atom_name (l->data));
+          gchar *mimetype = gdk_atom_name (l->data);
+
+          wl_data_offer_accept (wl_offer, context_wayland->serial, mimetype);
+          g_free (mimetype);
           return;
         }
     }
@@ -353,7 +355,12 @@ _gdk_wayland_window_drag_begin (GdkWindow *window,
                                            gdk_wayland_drag_context_get_selection (context));
 
   for (l = context->targets; l; l = l->next)
-    wl_data_source_offer (context_wayland->data_source, gdk_atom_name (l->data));
+    {
+      gchar *mimetype = gdk_atom_name (l->data);
+
+      wl_data_source_offer (context_wayland->data_source, mimetype);
+      g_free (mimetype);
+    }
 
   wl_data_device_start_drag (gdk_wayland_device_get_data_device (device),
                              context_wayland->data_source,
