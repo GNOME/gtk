@@ -185,6 +185,9 @@ testdata = \
 	cellrenderer-pixbuf-stock-rtl.css \
 	cellrenderer-pixbuf-stock-rtl.ui \
 	cellrenderer-pixbuf-stock-rtl.ref.ui \
+	color-transition.css \
+	color-transition.ref.ui \
+	color-transition.ui \
 	css-currentcolor-alpha.css \
 	css-currentcolor-alpha.ui \
 	css-currentcolor-alpha.ref.ui \
