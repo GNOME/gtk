@@ -52,6 +52,11 @@ GDK_AVAILABLE_IN_ALL
 GdkWindow *
 gdk_wayland_drag_context_get_dnd_window (GdkDragContext *context);
 
+#define gdk_wayland_drag_context_commit_status gdk_wayland_drag_context_commit_status_libgtk_only
+GDK_AVAILABLE_IN_ALL
+void
+gdk_wayland_drag_context_commit_status (GdkDragContext *context);
+
 #endif
 
 G_END_DECLS

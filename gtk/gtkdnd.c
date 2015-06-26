@@ -1715,6 +1715,11 @@ _gtk_drag_dest_handle_event (GtkWidget *toplevel,
     default:
       g_assert_not_reached ();
     }
+
+#ifdef GDK_WINDOWING_WAYLAND
+  if (GDK_IS_WAYLAND_DISPLAY (gtk_widget_get_display (toplevel)))
+    gdk_wayland_drag_context_commit_status (context);
+#endif
 }
 
 /**

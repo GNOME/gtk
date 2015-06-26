@@ -43,6 +43,7 @@ struct _GdkWaylandDragContext
   GdkWindow *dnd_window;
   struct wl_surface *dnd_surface;
   struct wl_data_source *data_source;
+  GdkDragAction selected_action;
   uint32_t serial;
   gdouble x;
   gdouble y;
@@ -253,15 +254,11 @@ gdk_wayland_drag_context_drag_status (GdkDragContext *context,
 				      GdkDragAction   action,
 				      guint32         time_)
 {
-  GdkDisplay *display;
-  uint32_t dnd_actions;
 
-  display = gdk_device_get_display (gdk_drag_context_get_device (context));
+  GdkWaylandDragContext *wayland_context;
 
-  dnd_actions = gdk_to_wl_actions (action);
-  gdk_wayland_selection_set_current_offer_actions (display, dnd_actions);
-
-  gdk_wayland_drop_context_set_status (context, action != 0);
+  wayland_context = GDK_WAYLAND_DRAG_CONTEXT (context);
+  wayland_context->selected_action = action;
 }
 
 static void
@@ -514,4 +511,20 @@ gdk_wayland_drag_context_get_dnd_window (GdkDragContext *context)
 
   wayland_context = GDK_WAYLAND_DRAG_CONTEXT (context);
   return wayland_context->dnd_window;
+}
+
+void
+gdk_wayland_drag_context_commit_status (GdkDragContext *context)
+{
+  GdkWaylandDragContext *wayland_context;
+  GdkDisplay *display;
+  uint32_t dnd_actions;
+
+  wayland_context = GDK_WAYLAND_DRAG_CONTEXT (context);
+  display = gdk_device_get_display (gdk_drag_context_get_device (context));
+
+  dnd_actions = gdk_to_wl_actions (wayland_context->selected_action);
+  gdk_wayland_selection_set_current_offer_actions (display, dnd_actions);
+
+  gdk_wayland_drop_context_set_status (context, wayland_context->selected_action != 0);
 }
