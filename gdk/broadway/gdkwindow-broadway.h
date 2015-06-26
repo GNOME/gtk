@@ -59,7 +59,13 @@ struct _GdkWindowImplBroadway
   int id;
 
   gboolean visible;
+  gboolean maximized;
   int transient_for;
+
+  int pre_maximize_x;
+  int pre_maximize_y;
+  int pre_maximize_width;
+  int pre_maximize_height;
 
   gint8 toplevel_window_type;
   gboolean dirty;

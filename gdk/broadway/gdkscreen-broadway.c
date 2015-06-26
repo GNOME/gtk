@@ -92,6 +92,7 @@ _gdk_broadway_screen_size_changed (GdkScreen                       *screen,
 {
   GdkBroadwayScreen *broadway_screen = GDK_BROADWAY_SCREEN (screen);
   gint width, height;
+  GList *toplevels, *l;
 
   width = gdk_screen_get_width (screen);
   height = gdk_screen_get_height (screen);
@@ -99,9 +100,22 @@ _gdk_broadway_screen_size_changed (GdkScreen                       *screen,
   broadway_screen->width   = msg->width;
   broadway_screen->height  = msg->height;
 
-  if (width != gdk_screen_get_width (screen) ||
-      height != gdk_screen_get_height (screen))
-    g_signal_emit_by_name (screen, "size-changed");
+  if (width == gdk_screen_get_width (screen) &&
+      height == gdk_screen_get_height (screen))
+    return;
+
+  g_signal_emit_by_name (screen, "size-changed");
+  toplevels = gdk_screen_get_toplevel_windows (screen);
+  for (l = toplevels; l != NULL; l = l->next)
+    {
+      GdkWindow *toplevel = l->data;
+      GdkWindowImplBroadway *toplevel_impl = GDK_WINDOW_IMPL_BROADWAY (toplevel->impl);
+
+      if (toplevel_impl->maximized)
+	gdk_window_move_resize (toplevel, 0, 0,
+				gdk_screen_get_width (screen),
+				gdk_screen_get_height (screen));
+    }
 }
 
 static void

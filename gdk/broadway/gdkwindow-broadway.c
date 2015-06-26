@@ -886,19 +886,57 @@ gdk_broadway_window_unstick (GdkWindow *window)
 static void
 gdk_broadway_window_maximize (GdkWindow *window)
 {
+  GdkWindowImplBroadway *impl;
+  GdkScreen *screen;
+
   if (GDK_WINDOW_DESTROYED (window) ||
       !WINDOW_IS_TOPLEVEL_OR_FOREIGN (window))
     return;
 
+  impl = GDK_WINDOW_IMPL_BROADWAY (window->impl);
+
+  if (impl->maximized)
+    return;
+
+  impl->maximized = TRUE;
+
+  gdk_synthesize_window_state (window, 0, GDK_WINDOW_STATE_MAXIMIZED);
+
+  impl->pre_maximize_x = window->x;
+  impl->pre_maximize_y = window->y;
+  impl->pre_maximize_width = window->width;
+  impl->pre_maximize_height = window->height;
+
+  screen = gdk_window_get_screen (window);
+
+  gdk_window_move_resize (window, 0, 0,
+			  gdk_screen_get_width (screen),
+			  gdk_screen_get_height (screen));
 }
 
 static void
 gdk_broadway_window_unmaximize (GdkWindow *window)
 {
+  GdkWindowImplBroadway *impl;
+
   if (GDK_WINDOW_DESTROYED (window) ||
       !WINDOW_IS_TOPLEVEL_OR_FOREIGN (window))
     return;
 
+  impl = GDK_WINDOW_IMPL_BROADWAY (window->impl);
+
+  if (!impl->maximized)
+    return;
+
+  impl->maximized = FALSE;
+
+  gdk_synthesize_window_state (window, GDK_WINDOW_STATE_MAXIMIZED, 0);
+
+  gdk_window_move_resize (window,
+			  impl->pre_maximize_x,
+			  impl->pre_maximize_y,
+			  impl->pre_maximize_width,
+			  impl->pre_maximize_height);
 }
 
 static void
@@ -1397,6 +1435,9 @@ gdk_broadway_window_begin_resize_drag (GdkWindow     *window,
       !WINDOW_IS_TOPLEVEL_OR_FOREIGN (window))
     return;
 
+  if (impl->maximized)
+    return;
+
   mv_resize = get_move_resize_data (gdk_window_get_display (window), TRUE);
 
   mv_resize->is_resize = TRUE;
@@ -1432,6 +1473,9 @@ gdk_broadway_window_begin_move_drag (GdkWindow *window,
 
   if (GDK_WINDOW_DESTROYED (window) ||
       !WINDOW_IS_TOPLEVEL_OR_FOREIGN (window))
+    return;
+
+  if (impl->maximized)
     return;
 
   mv_resize = get_move_resize_data (gdk_window_get_display (window), TRUE);
