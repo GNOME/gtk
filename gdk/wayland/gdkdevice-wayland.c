@@ -800,7 +800,7 @@ data_device_drop (void                  *data,
   local_dnd_owner = gdk_selection_owner_get_for_display (device->display, gdk_drag_get_selection (device->drop_context));
 
   if (local_dnd_owner)
-    gdk_wayland_device_unset_grab (device->pointer);
+    gdk_wayland_device_unset_grab (device->master_pointer);
 
   _gdk_wayland_drag_context_emit_event (device->drop_context,
                                         GDK_DROP_START, GDK_CURRENT_TIME);
@@ -1712,7 +1712,7 @@ seat_handle_capabilities (void                    *data,
       device_manager->devices =
         g_list_prepend (device_manager->devices, device->pointer);
 
-      device->drop_context = _gdk_wayland_drop_context_new (device->pointer,
+      device->drop_context = _gdk_wayland_drop_context_new (device->master_pointer,
                                                             device->data_device);
 
       g_signal_emit_by_name (device_manager, "device-added", device->pointer);
