@@ -68,9 +68,16 @@ gtk_css_value_rgba_transition (GtkCssValue *start,
 
   progress = CLAMP (progress, 0, 1);
   result.alpha = transition (start->rgba.alpha, end->rgba.alpha, progress);
-  result.red = transition (start->rgba.red, end->rgba.red, progress);
-  result.green = transition (start->rgba.green, end->rgba.green, progress);
-  result.blue = transition (start->rgba.blue, end->rgba.blue, progress);
+  if (result.alpha <= 0.0)
+    {
+      result.red = result.green = result.blue = 0.0;
+    }
+  else
+    {
+      result.red = transition (start->rgba.red, end->rgba.red, progress);
+      result.green = transition (start->rgba.green, end->rgba.green, progress);
+      result.blue = transition (start->rgba.blue, end->rgba.blue, progress);
+    }
 
   return _gtk_css_rgba_value_new_from_rgba (&result);
 }
