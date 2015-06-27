@@ -1232,7 +1232,9 @@ browse_files_key_press_event_cb (GtkWidget   *widget,
   GtkFileChooserWidget *impl = (GtkFileChooserWidget *) data;
   GtkFileChooserWidgetPrivate *priv = impl->priv;
 
-  if (should_trigger_location_entry (widget, event))
+  if (should_trigger_location_entry (widget, event) &&
+      (priv->action == GTK_FILE_CHOOSER_ACTION_OPEN ||
+       priv->action == GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER))
     {
       location_popup_handler (impl, event->string);
       return TRUE;
@@ -1285,11 +1287,14 @@ gtk_file_chooser_widget_key_press_event (GtkWidget   *widget,
 
   if (should_trigger_location_entry (widget, event))
     {
-      location_popup_handler (impl, event->string);
-      return TRUE;
+      if (priv->action == GTK_FILE_CHOOSER_ACTION_OPEN ||
+          priv->action == GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER)
+        {
+          location_popup_handler (impl, event->string);
+          return TRUE;
+        }
     }
-
-  if (gtk_search_entry_handle_event (GTK_SEARCH_ENTRY (priv->search_entry), (GdkEvent *)event))
+  else if (gtk_search_entry_handle_event (GTK_SEARCH_ENTRY (priv->search_entry), (GdkEvent *)event))
     {
       if (priv->operation_mode != OPERATION_MODE_SEARCH)
         operation_mode_set (impl, OPERATION_MODE_SEARCH);
@@ -2329,10 +2334,17 @@ location_toggle_popup_handler (GtkFileChooserWidget *impl)
        priv->action == GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER))
     operation_mode_set (impl, OPERATION_MODE_BROWSE);
 
-  /* If the file entry is not visible, show it.
-   * If it is visible, turn it off only if it is focused.  Otherwise, switch to the entry.
+  /* If the file entry is not visible, show it (it is _always_
+   * visible in save modes, handle these first).
+   * If it is visible, turn it off only if it is focused.
+   * Otherwise, switch to the entry.
    */
-  if (priv->location_mode == LOCATION_MODE_PATH_BAR)
+  if (priv->action == GTK_FILE_CHOOSER_ACTION_SAVE ||
+      priv->action == GTK_FILE_CHOOSER_ACTION_CREATE_FOLDER)
+    {
+      gtk_widget_grab_focus (priv->location_entry);
+    }
+  else if (priv->location_mode == LOCATION_MODE_PATH_BAR)
     {
       location_mode_set (impl, LOCATION_MODE_FILENAME_ENTRY);
     }
@@ -7632,22 +7644,6 @@ gtk_file_chooser_widget_class_init (GtkFileChooserWidgetClass *class)
 				GDK_KEY_l, GDK_CONTROL_MASK,
 				"location-toggle-popup",
 				0);
-
-  gtk_binding_entry_add_signal (binding_set,
-				GDK_KEY_slash, 0,
-				"location-popup",
-				1, G_TYPE_STRING, "/");
-  gtk_binding_entry_add_signal (binding_set,
-				GDK_KEY_KP_Divide, 0,
-				"location-popup",
-				1, G_TYPE_STRING, "/");
-
-#ifdef G_OS_UNIX
-  gtk_binding_entry_add_signal (binding_set,
-				GDK_KEY_asciitilde, 0,
-				"location-popup",
-				1, G_TYPE_STRING, "~");
-#endif
 
   gtk_binding_entry_add_signal (binding_set,
 				GDK_KEY_v, GDK_CONTROL_MASK,
