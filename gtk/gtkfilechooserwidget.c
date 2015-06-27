@@ -2135,6 +2135,8 @@ location_switch_to_path_bar (GtkFileChooserWidget *impl)
     }
 
   gtk_stack_set_visible_child_name (GTK_STACK (priv->browse_header_stack), "pathbar");
+
+  gtk_places_sidebar_set_location (GTK_PLACES_SIDEBAR (priv->places_sidebar), priv->current_folder);
 }
 
 /* Turns on the location entry.  Can be called even if we are already in that
