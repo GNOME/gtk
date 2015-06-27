@@ -1199,17 +1199,10 @@ key_is_left_or_right (GdkEventKey *event)
 	  && (event->state & modifiers) == 0);
 }
 
-/* Handles key press events on the file list, so that we can trap Enter to
- * activate the default button on our own.  Also, checks to see if “/” has been
- * pressed.
- */
 static gboolean
-browse_files_key_press_event_cb (GtkWidget   *widget,
-				 GdkEventKey *event,
-				 gpointer     data)
+should_trigger_location_entry (GtkWidget   *widget,
+                               GdkEventKey *event)
 {
-  GtkFileChooserWidget *impl = (GtkFileChooserWidget *) data;
-  GtkFileChooserWidgetPrivate *priv = impl->priv;
   GdkModifierType no_text_input_mask;
 
   no_text_input_mask =
@@ -1222,6 +1215,24 @@ browse_files_key_press_event_cb (GtkWidget   *widget,
        || event->keyval == GDK_KEY_asciitilde
 #endif
        ) && !(event->state & no_text_input_mask))
+    return TRUE;
+
+  return FALSE;
+}
+
+/* Handles key press events on the file list, so that we can trap Enter to
+ * activate the default button on our own.  Also, checks to see if “/” has been
+ * pressed.
+ */
+static gboolean
+browse_files_key_press_event_cb (GtkWidget   *widget,
+				 GdkEventKey *event,
+				 gpointer     data)
+{
+  GtkFileChooserWidget *impl = (GtkFileChooserWidget *) data;
+  GtkFileChooserWidgetPrivate *priv = impl->priv;
+
+  if (should_trigger_location_entry (widget, event))
     {
       location_popup_handler (impl, event->string);
       return TRUE;
@@ -1271,6 +1282,12 @@ gtk_file_chooser_widget_key_press_event (GtkWidget   *widget,
 {
   GtkFileChooserWidget *impl = (GtkFileChooserWidget *) widget;
   GtkFileChooserWidgetPrivate *priv = impl->priv;
+
+  if (should_trigger_location_entry (widget, event))
+    {
+      location_popup_handler (impl, event->string);
+      return TRUE;
+    }
 
   if (gtk_search_entry_handle_event (GTK_SEARCH_ENTRY (priv->search_entry), (GdkEvent *)event))
     {
