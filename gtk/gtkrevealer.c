@@ -91,7 +91,6 @@ static void     gtk_revealer_real_realize                        (GtkWidget     
 static void     gtk_revealer_real_unrealize                      (GtkWidget     *widget);
 static void     gtk_revealer_real_add                            (GtkContainer  *widget,
                                                                   GtkWidget     *child);
-static void     gtk_revealer_real_style_updated                  (GtkWidget     *widget);
 static void     gtk_revealer_real_size_allocate                  (GtkWidget     *widget,
                                                                   GtkAllocation *allocation);
 static void     gtk_revealer_real_map                            (GtkWidget     *widget);
@@ -222,7 +221,6 @@ gtk_revealer_class_init (GtkRevealerClass *klass)
 
   widget_class->realize = gtk_revealer_real_realize;
   widget_class->unrealize = gtk_revealer_real_unrealize;
-  widget_class->style_updated = gtk_revealer_real_style_updated;
   widget_class->size_allocate = gtk_revealer_real_size_allocate;
   widget_class->map = gtk_revealer_real_map;
   widget_class->unmap = gtk_revealer_real_unmap;
@@ -354,7 +352,6 @@ gtk_revealer_real_realize (GtkWidget *widget)
   GdkWindowAttributesType attributes_mask;
   GtkAllocation child_allocation;
   GtkWidget *child;
-  GtkStyleContext *context;
   GtkRevealerTransitionType transition;
   GtkBorder padding;
 
@@ -413,9 +410,6 @@ gtk_revealer_real_realize (GtkWidget *widget)
   if (child != NULL)
     gtk_widget_set_parent_window (child, priv->bin_window);
 
-  context = gtk_widget_get_style_context (widget);
-  gtk_style_context_set_background (context, priv->view_window);
-  gtk_style_context_set_background (context, priv->bin_window);
   gdk_window_show (priv->bin_window);
 }
 
@@ -445,23 +439,6 @@ gtk_revealer_real_add (GtkContainer *container,
   gtk_widget_set_child_visible (child, priv->current_pos != 0.0);
 
   GTK_CONTAINER_CLASS (gtk_revealer_parent_class)->add (container, child);
-}
-
-static void
-gtk_revealer_real_style_updated (GtkWidget *widget)
-{
-  GtkRevealer *revealer = GTK_REVEALER (widget);
-  GtkRevealerPrivate *priv = gtk_revealer_get_instance_private (revealer);
-  GtkStyleContext* context;
-
-  GTK_WIDGET_CLASS (gtk_revealer_parent_class)->style_updated (widget);
-
-  if (gtk_widget_get_realized (widget))
-    {
-      context = gtk_widget_get_style_context (widget);
-      gtk_style_context_set_background (context, priv->bin_window);
-      gtk_style_context_set_background (context, priv->view_window);
-    }
 }
 
 static void
