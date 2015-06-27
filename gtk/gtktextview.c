@@ -9482,7 +9482,6 @@ static void
 text_window_realize (GtkTextWindow *win,
                      GtkWidget     *widget)
 {
-  GtkStyleContext *context;
   GdkWindow *window;
   GdkWindowAttr attributes;
   gint attributes_mask;
@@ -9532,8 +9531,6 @@ text_window_realize (GtkTextWindow *win,
                                        text_window_invalidate_handler);
 
   gdk_window_show (win->bin_window);
-
-  context = gtk_widget_get_style_context (widget);
 
   switch (win->type)
     {

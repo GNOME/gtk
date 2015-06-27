@@ -597,8 +597,6 @@ static gint     gtk_tree_view_focus                (GtkWidget        *widget,
 						    GtkDirectionType  direction);
 static void     gtk_tree_view_grab_focus           (GtkWidget        *widget);
 static void     gtk_tree_view_style_updated        (GtkWidget        *widget);
-static void     gtk_tree_view_state_flags_changed  (GtkWidget        *widget,
-						    GtkStateFlags     previous_state);
 
 /* container signals */
 static void     gtk_tree_view_remove               (GtkContainer     *container,
@@ -981,7 +979,6 @@ gtk_tree_view_class_init (GtkTreeViewClass *class)
   widget_class->focus = gtk_tree_view_focus;
   widget_class->grab_focus = gtk_tree_view_grab_focus;
   widget_class->style_updated = gtk_tree_view_style_updated;
-  widget_class->state_flags_changed = gtk_tree_view_state_flags_changed;
   widget_class->queue_draw_region = gtk_tree_view_queue_draw_region;
 
   /* GtkContainer signals */
@@ -2345,17 +2342,6 @@ gtk_tree_view_unmap (GtkWidget *widget)
 }
 
 static void
-gtk_tree_view_ensure_background (GtkTreeView *tree_view)
-{
-  GtkStyleContext *context;
-
-  context = gtk_widget_get_style_context (GTK_WIDGET (tree_view));
-
-  gtk_style_context_set_background (context, gtk_widget_get_window (GTK_WIDGET (tree_view)));
-  gtk_style_context_set_background (context, tree_view->priv->header_window);
-}
-
-static void
 gtk_tree_view_bin_window_invalidate_handler (GdkWindow *window,
 					     cairo_region_t *region)
 {
@@ -2470,8 +2456,6 @@ gtk_tree_view_realize (GtkWidget *widget)
   tree_view->priv->header_window = gdk_window_new (window,
 						   &attributes, attributes_mask);
   gtk_widget_register_window (widget, tree_view->priv->header_window);
-
-  gtk_tree_view_ensure_background (tree_view);
 
   tmp_list = tree_view->priv->children;
   while (tmp_list)
@@ -8720,8 +8704,6 @@ gtk_tree_view_style_updated (GtkWidget *widget)
 
   if (gtk_widget_get_realized (widget))
     {
-      gtk_tree_view_ensure_background (tree_view);
-
       gtk_tree_view_set_grid_lines (tree_view, tree_view->priv->grid_lines);
       gtk_tree_view_set_enable_tree_lines (tree_view, tree_view->priv->tree_lines_enabled);
     }
@@ -15971,16 +15953,6 @@ gtk_tree_view_set_row_separator_func (GtkTreeView                 *tree_view,
   /* Have the tree recalculate heights */
   _gtk_rbtree_mark_invalid (tree_view->priv->tree);
   gtk_widget_queue_resize (GTK_WIDGET (tree_view));
-}
-
-static void
-gtk_tree_view_state_flags_changed (GtkWidget     *widget,
-                                   GtkStateFlags  previous_state)
-{
-  if (gtk_widget_get_realized (widget))
-    gtk_tree_view_ensure_background (GTK_TREE_VIEW (widget));
-
-  gtk_widget_queue_draw (widget);
 }
 
 /**
