@@ -59,6 +59,7 @@
 #include "gtkpaned.h"
 #include "gtkpathbar.h"
 #include "gtkplacessidebar.h"
+#include "gtkplacessidebarprivate.h"
 #include "gtkprivate.h"
 #include "gtkrecentmanager.h"
 #include "gtkscrolledwindow.h"
@@ -171,7 +172,8 @@ _gtk_file_chooser_profile_log (const char *func, int indent, const char *msg1, c
 #endif
 
 enum {
-  PROP_SEARCH_MODE = 1
+  PROP_SEARCH_MODE = 1,
+  PROP_SUBTITLE
 };
 
 typedef enum {
@@ -1140,7 +1142,10 @@ file_is_recent_uri (GFile *file)
 }
 
 static void
-places_sidebar_open_location_cb (GtkPlacesSidebar *sidebar, GFile *location, GtkPlacesOpenFlags open_flags, GtkFileChooserWidget *impl)
+places_sidebar_open_location_cb (GtkPlacesSidebar     *sidebar,
+                                 GFile                *location,
+                                 GtkPlacesOpenFlags    open_flags,
+                                 GtkFileChooserWidget *impl)
 {
   GtkFileChooserWidgetPrivate *priv = impl->priv;
   gboolean clear_entry;
@@ -2215,6 +2220,7 @@ location_mode_set (GtkFileChooserWidget *impl,
     }
 
   priv->location_mode = new_mode;
+  g_object_notify (G_OBJECT (impl), "subtitle");
 }
 
 /* Callback used when the places sidebar needs us to enter a location */
@@ -2550,7 +2556,6 @@ operation_mode_set_search (GtkFileChooserWidget *impl)
   location_bar_update (impl);
   search_setup_widgets (impl);
   gtk_entry_grab_focus_without_selecting (GTK_ENTRY (priv->search_entry));
-  gtk_places_sidebar_set_location (GTK_PLACES_SIDEBAR (priv->places_sidebar), NULL);
   gtk_widget_set_sensitive (priv->filter_combo, FALSE);
 
   gtk_tree_view_column_set_visible (priv->list_location_column, TRUE);
@@ -2610,6 +2615,8 @@ operation_mode_set (GtkFileChooserWidget *impl, OperationMode mode)
 
   if ((old_mode == OPERATION_MODE_SEARCH) != (mode == OPERATION_MODE_SEARCH))
     g_object_notify (G_OBJECT (impl), "search-mode");
+
+  g_object_notify (G_OBJECT (impl), "subtitle");
 }
 
 /* This function is basically a do_all function.
@@ -2656,11 +2663,42 @@ update_appearance (GtkFileChooserWidget *impl)
   emit_default_size_changed (impl);
 }
 
+static gchar *
+gtk_file_chooser_widget_get_subtitle (GtkFileChooserWidget *impl)
+{
+  GtkFileChooserWidgetPrivate *priv = impl->priv;
+  gchar *subtitle;
+
+  if (priv->operation_mode == OPERATION_MODE_SEARCH)
+    {
+      gchar *location;
+
+      location = gtk_places_sidebar_get_location_title (GTK_PLACES_SIDEBAR (priv->places_sidebar));
+      subtitle = g_strdup_printf (_("Searching in %s"), location);
+      g_free (location);
+    }
+  else if (priv->operation_mode == OPERATION_MODE_ENTER_LOCATION ||
+           (priv->operation_mode == OPERATION_MODE_BROWSE &&
+            priv->location_mode == LOCATION_MODE_FILENAME_ENTRY))
+    {
+      if (priv->local_only)
+        subtitle = g_strdup (_("Enter location"));
+      else
+        subtitle = g_strdup (_("Enter location or URL"));
+    }
+  else
+    {
+      subtitle = NULL;
+    }
+
+  return subtitle;
+}
+
 static void
 gtk_file_chooser_widget_set_property (GObject      *object,
-				       guint         prop_id,
-				       const GValue *value,
-				       GParamSpec   *pspec)
+                                      guint         prop_id,
+                                      const GValue *value,
+                                      GParamSpec   *pspec)
 
 {
   GtkFileChooserWidget *impl = GTK_FILE_CHOOSER_WIDGET (object);
@@ -2796,6 +2834,10 @@ gtk_file_chooser_widget_get_property (GObject    *object,
     {
     case PROP_SEARCH_MODE:
       g_value_set_boolean (value, priv->operation_mode == OPERATION_MODE_SEARCH);
+      break;
+
+    case PROP_SUBTITLE:
+      g_value_take_string (value, gtk_file_chooser_widget_get_subtitle (impl));
       break;
 
     case GTK_FILE_CHOOSER_PROP_ACTION:
@@ -4634,10 +4676,9 @@ gtk_file_chooser_widget_get_current_folder (GtkFileChooser *chooser)
   GtkFileChooserWidget *impl = GTK_FILE_CHOOSER_WIDGET (chooser);
   GtkFileChooserWidgetPrivate *priv = impl->priv;
 
-  if (priv->operation_mode == OPERATION_MODE_SEARCH ||
-      priv->operation_mode == OPERATION_MODE_RECENT)
+  if (priv->operation_mode == OPERATION_MODE_RECENT)
     return NULL;
- 
+
   if (priv->current_folder)
     return g_object_ref (priv->current_folder);
 
@@ -7475,6 +7516,13 @@ gtk_file_chooser_widget_class_init (GtkFileChooserWidgetClass *class)
                                                          P_("Search mode"),
                                                          FALSE,
                                                          G_PARAM_READWRITE));
+
+  g_object_class_install_property (gobject_class, PROP_SUBTITLE,
+                                   g_param_spec_string ("subtitle",
+                                                        P_("Subtitle"),
+                                                        P_("Subtitle"),
+                                                        "",
+                                                        G_PARAM_READABLE));
 
   _gtk_file_chooser_install_properties (gobject_class);
 
