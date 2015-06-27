@@ -108,7 +108,6 @@ static void gtk_viewport_size_allocate            (GtkWidget        *widget,
 						   GtkAllocation    *allocation);
 static void gtk_viewport_adjustment_value_changed (GtkAdjustment    *adjustment,
 						   gpointer          data);
-static void gtk_viewport_style_updated            (GtkWidget        *widget);
 
 static void gtk_viewport_get_preferred_width      (GtkWidget        *widget,
 						   gint             *minimum_size,
@@ -156,7 +155,6 @@ gtk_viewport_class_init (GtkViewportClass *class)
   widget_class->unmap = gtk_viewport_unmap;
   widget_class->draw = gtk_viewport_draw;
   widget_class->size_allocate = gtk_viewport_size_allocate;
-  widget_class->style_updated = gtk_viewport_style_updated;
   widget_class->get_preferred_width = gtk_viewport_get_preferred_width;
   widget_class->get_preferred_height = gtk_viewport_get_preferred_height;
   widget_class->get_preferred_width_for_height = gtk_viewport_get_preferred_width_for_height;
@@ -724,7 +722,6 @@ gtk_viewport_realize (GtkWidget *widget)
   GtkAdjustment *vadjustment = priv->vadjustment;
   GtkAllocation allocation;
   GtkAllocation view_allocation;
-  GtkStyleContext *context;
   GtkWidget *child;
   GdkWindow *window;
   GdkWindowAttr attributes;
@@ -784,10 +781,6 @@ gtk_viewport_realize (GtkWidget *widget)
   child = gtk_bin_get_child (bin);
   if (child)
     gtk_widget_set_parent_window (child, priv->bin_window);
-
-  context = gtk_widget_get_style_context (widget);
-  gtk_style_context_set_background (context, window);
-  gtk_style_context_set_background (context, priv->bin_window);
 
   gdk_window_show (priv->bin_window);
   gdk_window_show (priv->view_window);
@@ -862,9 +855,14 @@ gtk_viewport_draw (GtkWidget *widget,
   context = gtk_widget_get_style_context (widget);
 
   if (gtk_cairo_should_draw_window (cr, gtk_widget_get_window (widget)))
-    gtk_render_frame (context, cr, 0, 0,
-                      gdk_window_get_width (gtk_widget_get_window (widget)),
-                      gdk_window_get_height (gtk_widget_get_window (widget)));
+    {
+      gtk_render_background (context, cr, 0, 0,
+                             gdk_window_get_width (gtk_widget_get_window (widget)),
+                             gdk_window_get_height (gtk_widget_get_window (widget)));
+      gtk_render_frame (context, cr, 0, 0,
+                        gdk_window_get_width (gtk_widget_get_window (widget)),
+                        gdk_window_get_height (gtk_widget_get_window (widget)));
+    }
 
   if (gtk_cairo_should_draw_window (cr, priv->bin_window))
     {
@@ -997,25 +995,6 @@ gtk_viewport_adjustment_value_changed (GtkAdjustment *adjustment,
 	gdk_window_move (priv->bin_window, new_x, new_y);
     }
 }
-
-static void
-gtk_viewport_style_updated (GtkWidget *widget)
-{
-   GTK_WIDGET_CLASS (gtk_viewport_parent_class)->style_updated (widget);
-
-   if (gtk_widget_get_realized (widget) &&
-       gtk_widget_get_has_window (widget))
-     {
-        GtkStyleContext *context;
-        GtkViewport *viewport = GTK_VIEWPORT (widget);
-        GtkViewportPrivate *priv = viewport->priv;
-
-        context = gtk_widget_get_style_context (widget);
-        gtk_style_context_set_background (context, priv->bin_window);
-        gtk_style_context_set_background (context, gtk_widget_get_window (widget));
-     }
-}
-
 
 static void
 gtk_viewport_get_preferred_size (GtkWidget      *widget,
