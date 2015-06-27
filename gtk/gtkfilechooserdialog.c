@@ -517,6 +517,9 @@ setup_search (GtkFileChooserDialog *dialog)
       g_object_bind_property (button, "active",
                               dialog->priv->widget, "search-mode",
                               G_BINDING_BIDIRECTIONAL);
+      g_object_bind_property (dialog->priv->widget, "subtitle",
+                              header, "subtitle",
+                              G_BINDING_SYNC_CREATE);
 
       gtk_container_forall (GTK_CONTAINER (header), add_button, dialog);
     }
