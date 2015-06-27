@@ -6283,8 +6283,6 @@ search_engine_error_cb (GtkSearchEngine *engine,
 
   search_stop_searching (impl, TRUE);
   error_message (impl, _("Could not send the search request"), message);
-
-  set_busy_cursor (impl, FALSE);
 }
 
 /* Frees the data in the search_model */
@@ -6323,6 +6321,7 @@ search_stop_searching (GtkFileChooserWidget *impl,
       g_signal_handlers_disconnect_by_data (priv->search_engine, impl);
       g_object_unref (priv->search_engine);
       priv->search_engine = NULL;
+      set_busy_cursor (impl, FALSE);
     }
 }
 
@@ -6444,7 +6443,10 @@ search_entry_activate_cb (GtkFileChooserWidget *impl)
 static void
 search_entry_stop_cb (GtkFileChooserWidget *impl)
 {
-  g_object_set (impl, "search-mode", FALSE, NULL);
+  if (impl->priv->search_engine)
+    search_stop_searching (impl, FALSE);
+  else
+    g_object_set (impl, "search-mode", FALSE, NULL);
 }
 
 /* Hides the path bar and creates the search entry */
