@@ -375,6 +375,7 @@ enum {
   MODEL_COL_SIZE_TEXT,
   MODEL_COL_MTIME_TEXT,
   MODEL_COL_LOCATION_TEXT,
+  MODEL_COL_LOCATION_DIST,
   MODEL_COL_ELLIPSIZE,
   MODEL_COL_NUM_COLUMNS
 };
@@ -393,6 +394,7 @@ enum {
 	G_TYPE_STRING,		  /* MODEL_COL_SIZE_TEXT */	\
 	G_TYPE_STRING,		  /* MODEL_COL_MTIME_TEXT */	\
 	G_TYPE_STRING,		  /* MODEL_COL_LOCATION_TEXT */	\
+	G_TYPE_INT,		  /* MODEL_COL_LOCATION_DIST */	\
 	PANGO_TYPE_ELLIPSIZE_MODE /* MODEL_COL_ELLIPSIZE */
 
 /* Identifiers for target types */
@@ -3527,6 +3529,36 @@ mtime_sort_func (GtkTreeModel *model,
     }
 }
 
+static gint
+location_sort_func (GtkTreeModel *model,
+                    GtkTreeIter  *a,
+                    GtkTreeIter  *b,
+                    gpointer      user_data)
+{
+  COMPARE_DIRECTORIES;
+  else
+    {
+      gint ta, tb;
+
+      ta = g_value_get_int (_gtk_file_system_model_get_value (fs_model, a, MODEL_COL_LOCATION_DIST));
+      tb = g_value_get_int (_gtk_file_system_model_get_value (fs_model, b, MODEL_COL_LOCATION_DIST));
+
+      if (ta < tb)
+        return -1;
+      else if (tb < ta)
+        return 1;
+      else
+        {
+          const char *key_a, *key_b;
+
+          key_a = g_value_get_string (_gtk_file_system_model_get_value (fs_model, a, MODEL_COL_LOCATION_TEXT));
+          key_b = g_value_get_string (_gtk_file_system_model_get_value (fs_model, b, MODEL_COL_LOCATION_TEXT));
+
+          return g_strcmp0 (key_a, key_b);
+        }
+    }
+}
+
 /* Callback used when the sort column changes.  We cache the sort order for use
  * in name_sort_func().
  */
@@ -4188,6 +4220,37 @@ file_system_model_set (GtkFileSystemModel *model,
     case MODEL_COL_ELLIPSIZE:
       g_value_set_enum (value, info ? PANGO_ELLIPSIZE_END : PANGO_ELLIPSIZE_NONE);
       break;
+    case MODEL_COL_LOCATION_DIST:
+      {
+        GFile *dir_location;
+
+        if (file)
+          dir_location = g_file_get_parent (file);
+        else
+          dir_location = NULL;
+
+        if (dir_location && file_is_recent_uri (dir_location))
+          {
+            const char *target_uri;
+            GFile *target;
+
+            target_uri = g_file_info_get_attribute_string (info, G_FILE_ATTRIBUTE_STANDARD_TARGET_URI);
+            target = g_file_new_for_uri (target_uri);
+            g_object_unref (dir_location);
+            dir_location = g_file_get_parent (target);
+            g_object_unref (target);
+          }
+
+        if (dir_location && priv->current_folder &&
+            g_file_equal (dir_location, priv->current_folder))
+          g_value_set_int (value, 0);
+        else
+          g_value_set_int (value, 1);
+
+        if (dir_location)
+          g_object_unref (dir_location);
+      }
+      break;
     case MODEL_COL_LOCATION_TEXT:
       {
         GFile *home_location;
@@ -4271,6 +4334,7 @@ set_list_model (GtkFileChooserWidget *impl,
   gtk_tree_sortable_set_sort_func (GTK_TREE_SORTABLE (priv->browse_files_model), MODEL_COL_NAME, name_sort_func, impl, NULL);
   gtk_tree_sortable_set_sort_func (GTK_TREE_SORTABLE (priv->browse_files_model), MODEL_COL_SIZE, size_sort_func, impl, NULL);
   gtk_tree_sortable_set_sort_func (GTK_TREE_SORTABLE (priv->browse_files_model), MODEL_COL_MTIME, mtime_sort_func, impl, NULL);
+  gtk_tree_sortable_set_sort_func (GTK_TREE_SORTABLE (priv->browse_files_model), MODEL_COL_LOCATION_TEXT, location_sort_func, impl, NULL);
   gtk_tree_sortable_set_default_sort_func (GTK_TREE_SORTABLE (priv->browse_files_model), NULL, NULL, NULL);
   set_sort_column (impl);
   priv->list_sort_ascending = TRUE;
@@ -6357,7 +6421,16 @@ search_setup_model (GtkFileChooserWidget *impl)
 				   MODEL_COL_SIZE,
 				   size_sort_func,
 				   impl, NULL);
-  set_sort_column (impl);
+  gtk_tree_sortable_set_sort_func (GTK_TREE_SORTABLE (priv->search_model),
+				   MODEL_COL_LOCATION_TEXT,
+				   location_sort_func,
+				   impl, NULL);
+  gtk_tree_sortable_set_default_sort_func (GTK_TREE_SORTABLE (priv->search_model),
+				           location_sort_func,
+				           impl, NULL);
+  gtk_tree_sortable_set_sort_column_id (GTK_TREE_SORTABLE (priv->search_model),
+                                        GTK_TREE_SORTABLE_DEFAULT_SORT_COLUMN_ID,
+                                        GTK_SORT_ASCENDING);
 
   /* EB: setting the model here will make the hits list update feel
    * more "alive" than setting the model at the end of the search
@@ -6545,6 +6618,10 @@ recent_setup_model (GtkFileChooserWidget *impl)
   gtk_tree_sortable_set_sort_func (GTK_TREE_SORTABLE (priv->recent_model),
                                    MODEL_COL_MTIME,
                                    mtime_sort_func,
+                                   impl, NULL);
+  gtk_tree_sortable_set_sort_func (GTK_TREE_SORTABLE (priv->recent_model),
+                                   MODEL_COL_LOCATION_TEXT,
+                                   location_sort_func,
                                    impl, NULL);
   set_sort_column (impl);
 }
