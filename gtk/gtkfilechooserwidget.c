@@ -2040,6 +2040,12 @@ location_entry_changed_cb (GtkEditable          *editable,
 }
 
 static void
+location_entry_close_clicked (GtkFileChooserWidget *impl)
+{
+  location_mode_set (impl, LOCATION_MODE_PATH_BAR);
+}
+
+static void
 location_entry_setup (GtkFileChooserWidget *impl)
 {
   GtkFileChooserWidgetPrivate *priv = impl->priv;
@@ -2050,6 +2056,8 @@ location_entry_setup (GtkFileChooserWidget *impl)
 
   g_signal_connect (priv->location_entry, "changed",
                     G_CALLBACK (location_entry_changed_cb), impl);
+  g_signal_connect_swapped (priv->location_entry, "hide-entry",
+                            G_CALLBACK (location_entry_close_clicked), impl);
 
   _gtk_file_chooser_entry_set_local_only (GTK_FILE_CHOOSER_ENTRY (priv->location_entry), priv->local_only);
   _gtk_file_chooser_entry_set_action (GTK_FILE_CHOOSER_ENTRY (priv->location_entry), priv->action);
@@ -2073,7 +2081,7 @@ location_entry_create (GtkFileChooserWidget *impl)
 
   if (!priv->location_entry)
     {
-      priv->location_entry = _gtk_file_chooser_entry_new (TRUE);
+      priv->location_entry = _gtk_file_chooser_entry_new (TRUE, TRUE);
       location_entry_setup (impl);
     }
 }
