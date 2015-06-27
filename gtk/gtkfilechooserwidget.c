@@ -1217,6 +1217,7 @@ browse_files_key_press_event_cb (GtkWidget   *widget,
 
   if ((event->keyval == GDK_KEY_slash
        || event->keyval == GDK_KEY_KP_Divide
+       || event->keyval == GDK_KEY_period
 #ifdef G_OS_UNIX
        || event->keyval == GDK_KEY_asciitilde
 #endif
