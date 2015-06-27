@@ -34,6 +34,7 @@
 #include "gtksizerequest.h"
 #include "gtkplug.h"
 #include "gtkprivate.h"
+#include "gtkrender.h"
 #include "gtkdnd.h"
 #include "gtkdebug.h"
 #include "gtkintl.h"
@@ -185,6 +186,18 @@ gtk_socket_finalize (GObject *object)
   G_OBJECT_CLASS (gtk_socket_parent_class)->finalize (object);
 }
 
+static gboolean
+gtk_socket_draw (GtkWidget *widget,
+                 cairo_t   *cr)
+{
+  gtk_render_background (gtk_widget_get_style_context (widget), cr,
+                         0, 0,
+                         gtk_widget_get_allocated_width (widget),
+                         gtk_widget_get_allocated_height (widget));
+
+  return GTK_WIDGET_CLASS (gtk_socket_parent_class)->draw (widget, cr);
+}
+
 static void
 gtk_socket_class_init (GtkSocketClass *class)
 {
@@ -209,6 +222,7 @@ gtk_socket_class_init (GtkSocketClass *class)
   widget_class->key_press_event = gtk_socket_key_event;
   widget_class->key_release_event = gtk_socket_key_event;
   widget_class->focus = gtk_socket_focus;
+  widget_class->draw = gtk_socket_draw;
 
   /* We don't want to show_all the in-process plug, if any.
    */
@@ -397,9 +411,6 @@ gtk_socket_realize (GtkWidget *widget)
                            &attributes, attributes_mask);
   gtk_widget_set_window (widget, window);
   gtk_widget_register_window (widget, window);
-
-  gtk_style_context_set_background (gtk_widget_get_style_context (widget),
-                                    window);
 
   XGetWindowAttributes (GDK_WINDOW_XDISPLAY (window),
 			GDK_WINDOW_XID (window),
