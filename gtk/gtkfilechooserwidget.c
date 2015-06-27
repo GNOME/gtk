@@ -25,6 +25,7 @@
 #include "config.h"
 
 #include "gtkfilechooserwidget.h"
+#include "gtkfilechooserwidgetprivate.h"
 
 #include "gtkbindings.h"
 #include "gtkbutton.h"
@@ -265,6 +266,8 @@ struct _GtkFileChooserWidgetPrivate {
   GtkWidget *location_entry_box;
   GtkWidget *location_entry;
   LocationMode location_mode;
+
+  GtkWidget *external_entry;
 
   /* Handles */
   GCancellable *file_list_drag_data_received_cancellable;
@@ -2037,6 +2040,33 @@ location_entry_changed_cb (GtkEditable          *editable,
 }
 
 static void
+location_entry_setup (GtkFileChooserWidget *impl)
+{
+  GtkFileChooserWidgetPrivate *priv = impl->priv;
+
+  if (priv->action == GTK_FILE_CHOOSER_ACTION_OPEN ||
+      priv->action == GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER)
+    gtk_entry_set_placeholder_text (GTK_ENTRY (priv->location_entry), _("Location"));
+
+  g_signal_connect (priv->location_entry, "changed",
+                    G_CALLBACK (location_entry_changed_cb), impl);
+
+  _gtk_file_chooser_entry_set_local_only (GTK_FILE_CHOOSER_ENTRY (priv->location_entry), priv->local_only);
+  _gtk_file_chooser_entry_set_action (GTK_FILE_CHOOSER_ENTRY (priv->location_entry), priv->action);
+  gtk_entry_set_width_chars (GTK_ENTRY (priv->location_entry), 45);
+  gtk_entry_set_activates_default (GTK_ENTRY (priv->location_entry), TRUE);
+}
+
+static void
+location_entry_disconnect (GtkFileChooserWidget *impl)
+{
+  GtkFileChooserWidgetPrivate *priv = impl->priv;
+
+  if (priv->location_entry)
+    g_signal_handlers_disconnect_by_func (priv->location_entry, location_entry_changed_cb, impl);
+}
+
+static void
 location_entry_create (GtkFileChooserWidget *impl)
 {
   GtkFileChooserWidgetPrivate *priv = impl->priv;
@@ -2044,18 +2074,8 @@ location_entry_create (GtkFileChooserWidget *impl)
   if (!priv->location_entry)
     {
       priv->location_entry = _gtk_file_chooser_entry_new (TRUE);
-      if (priv->action == GTK_FILE_CHOOSER_ACTION_OPEN ||
-          priv->action == GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER)
-        gtk_entry_set_placeholder_text (GTK_ENTRY (priv->location_entry), _("Location"));
-
-      g_signal_connect (priv->location_entry, "changed",
-                        G_CALLBACK (location_entry_changed_cb), impl);
+      location_entry_setup (impl);
     }
-
-  _gtk_file_chooser_entry_set_local_only (GTK_FILE_CHOOSER_ENTRY (priv->location_entry), priv->local_only);
-  _gtk_file_chooser_entry_set_action (GTK_FILE_CHOOSER_ENTRY (priv->location_entry), priv->action);
-  gtk_entry_set_width_chars (GTK_ENTRY (priv->location_entry), 45);
-  gtk_entry_set_activates_default (GTK_ENTRY (priv->location_entry), TRUE);
 }
 
 /* Creates the widgets specific to Save mode */
@@ -2070,6 +2090,14 @@ save_widgets_create (GtkFileChooserWidget *impl)
     return;
 
   location_switch_to_path_bar (impl);
+
+  if (priv->external_entry)
+    {
+      location_entry_disconnect (impl);
+      priv->location_entry = priv->external_entry;
+      location_entry_setup (impl);
+      return;
+    }
 
   vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 12);
   gtk_style_context_add_class (gtk_widget_get_style_context (vbox), "search-bar");
@@ -2110,6 +2138,12 @@ static void
 save_widgets_destroy (GtkFileChooserWidget *impl)
 {
   GtkFileChooserWidgetPrivate *priv = impl->priv;
+
+  if (priv->external_entry && priv->external_entry == priv->location_entry)
+    {
+      location_entry_disconnect (impl);
+      priv->location_entry = NULL;
+    }
 
   if (priv->save_widgets == NULL)
     return;
@@ -2966,6 +3000,12 @@ gtk_file_chooser_widget_dispose (GObject *object)
     {
       _gtk_bookmarks_manager_free (priv->bookmarks_manager);
       priv->bookmarks_manager = NULL;
+    }
+
+  if (priv->external_entry && priv->location_entry == priv->external_entry)
+    {
+      location_entry_disconnect (impl);
+      priv->external_entry = NULL;
     }
 
   G_OBJECT_CLASS (gtk_file_chooser_widget_parent_class)->dispose (object);
@@ -7647,6 +7687,25 @@ post_process_ui (GtkFileChooserWidget *impl)
   set_icon_cell_renderer_fixed_size (impl);
 
   gtk_popover_set_default_widget (GTK_POPOVER (impl->priv->new_folder_popover), impl->priv->new_folder_create_button);
+}
+
+void
+gtk_file_chooser_widget_set_save_entry (GtkFileChooserWidget *impl,
+                                        GtkWidget            *entry)
+{
+  GtkFileChooserWidgetPrivate *priv = impl->priv;
+
+  g_return_if_fail (GTK_IS_FILE_CHOOSER_WIDGET (impl));
+  g_return_if_fail (GTK_IS_FILE_CHOOSER_ENTRY (entry));
+
+  priv->external_entry = entry;
+
+  if (priv->action == GTK_FILE_CHOOSER_ACTION_SAVE ||
+      priv->action == GTK_FILE_CHOOSER_ACTION_CREATE_FOLDER)
+    {
+      save_widgets_destroy (impl);
+      save_widgets_create (impl);
+    }
 }
 
 static void

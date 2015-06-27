@@ -431,6 +431,7 @@ gtk_private_h_sources =		\
 	gtkfilechooserembed.h	\
 	gtkfilechooserentry.h	\
 	gtkfilechooserprivate.h	\
+	gtkfilechooserwidgetprivate.h	\
 	gtkfilechooserutils.h	\
 	gtkfilesystem.h		\
 	gtkfilesystemmodel.h	\
