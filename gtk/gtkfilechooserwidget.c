@@ -1227,8 +1227,8 @@ browse_files_key_press_event_cb (GtkWidget   *widget,
 
   if (key_is_left_or_right (event))
     {
-      gtk_widget_grab_focus (priv->places_sidebar);
-      return TRUE;
+      if (gtk_widget_child_focus (priv->places_sidebar, GTK_DIR_LEFT))
+        return TRUE;
     }
 
   if ((event->keyval == GDK_KEY_Return
