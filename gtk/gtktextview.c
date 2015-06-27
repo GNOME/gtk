@@ -4290,7 +4290,6 @@ gtk_text_view_realize (GtkWidget *widget)
   GtkAllocation allocation;
   GtkTextView *text_view;
   GtkTextViewPrivate *priv;
-  GtkStyleContext *context;
   GdkWindow *window;
   GdkWindowAttr attributes;
   gint attributes_mask;
@@ -4318,9 +4317,6 @@ gtk_text_view_realize (GtkWidget *widget)
                            &attributes, attributes_mask);
   gtk_widget_set_window (widget, window);
   gtk_widget_register_window (widget, window);
-
-  context = gtk_widget_get_style_context (widget);
-  gtk_style_context_set_background (context, window);
 
   text_window_realize (priv->text_window, widget);
 
@@ -4430,46 +4426,6 @@ gtk_text_view_unmap (GtkWidget *widget)
 }
 
 static void
-text_window_set_background (GtkStyleContext *context,
-                            GtkTextWindow   *window,
-                            const gchar     *class)
-{
-  gtk_style_context_save (context);
-  gtk_style_context_add_class (context, class);
-  gtk_style_context_set_background (context, window->bin_window);
-  gtk_style_context_restore (context);
-}
-
-static void
-gtk_text_view_set_background (GtkTextView *text_view)
-{
-  GtkStyleContext *context;
-  GtkWidget *widget;
-  GtkTextViewPrivate *priv;
-
-  widget = GTK_WIDGET (text_view);
-  priv = text_view->priv;
-
-  context = gtk_widget_get_style_context (widget);
-
-  gtk_style_context_set_background (context, gtk_widget_get_window (widget));
-
-  text_window_set_background (context, priv->text_window, GTK_STYLE_CLASS_VIEW);
-
-  if (priv->left_window)
-    text_window_set_background (context, priv->left_window, GTK_STYLE_CLASS_LEFT);
-
-  if (priv->right_window)
-    text_window_set_background (context, priv->right_window, GTK_STYLE_CLASS_RIGHT);
-
-  if (priv->top_window)
-    text_window_set_background (context, priv->top_window, GTK_STYLE_CLASS_TOP);
-
-  if (priv->bottom_window)
-    text_window_set_background (context, priv->bottom_window, GTK_STYLE_CLASS_BOTTOM);
-}
-
-static void
 gtk_text_view_style_updated (GtkWidget *widget)
 {
   static GtkBitmask *affects_font = NULL;
@@ -4486,12 +4442,6 @@ gtk_text_view_style_updated (GtkWidget *widget)
   priv = text_view->priv;
 
   GTK_WIDGET_CLASS (gtk_text_view_parent_class)->style_updated (widget);
-
-  if (gtk_widget_get_realized (widget))
-    {
-      gtk_text_view_set_background (text_view);
-    }
-
 
   style_context = gtk_widget_get_style_context (widget);
   changes = _gtk_style_context_get_changes (style_context);
@@ -4537,8 +4487,6 @@ gtk_text_view_state_flags_changed (GtkWidget     *widget,
 
   if (gtk_widget_get_realized (widget))
     {
-      gtk_text_view_set_background (text_view);
-
       if (gtk_widget_is_sensitive (widget))
         cursor = gdk_cursor_new_for_display (gtk_widget_get_display (widget), GDK_XTERM);
       else
@@ -9546,21 +9494,6 @@ text_window_realize (GtkTextWindow *win,
 
       gtk_im_context_set_client_window (GTK_TEXT_VIEW (widget)->priv->im_context,
                                         win->window);
-
-      text_window_set_background (context, win, GTK_STYLE_CLASS_VIEW);
-      break;
-
-    case GTK_TEXT_WINDOW_LEFT:
-      text_window_set_background (context, win, GTK_STYLE_CLASS_LEFT);
-      break;
-    case GTK_TEXT_WINDOW_RIGHT:
-      text_window_set_background (context, win, GTK_STYLE_CLASS_RIGHT);
-      break;
-    case GTK_TEXT_WINDOW_TOP:
-      text_window_set_background (context, win, GTK_STYLE_CLASS_TOP);
-      break;
-    case GTK_TEXT_WINDOW_BOTTOM:
-      text_window_set_background (context, win, GTK_STYLE_CLASS_BOTTOM);
       break;
     default:
       break;
