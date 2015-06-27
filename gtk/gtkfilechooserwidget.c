@@ -434,6 +434,8 @@ static void     gtk_file_chooser_widget_hierarchy_changed (GtkWidget          *w
 static void     gtk_file_chooser_widget_style_updated  (GtkWidget             *widget);
 static void     gtk_file_chooser_widget_screen_changed (GtkWidget             *widget,
                                                         GdkScreen             *previous_screen);
+static gboolean gtk_file_chooser_widget_key_press_event (GtkWidget            *widget,
+                                                         GdkEventKey          *event);
 
 static gboolean       gtk_file_chooser_widget_set_current_folder 	   (GtkFileChooser    *chooser,
 									    GFile             *folder,
@@ -1259,6 +1261,26 @@ browse_files_key_press_event_cb (GtkWidget   *widget,
 	    }
         }
     }
+
+  return FALSE;
+}
+
+static gboolean
+gtk_file_chooser_widget_key_press_event (GtkWidget   *widget,
+                                         GdkEventKey *event)
+{
+  GtkFileChooserWidget *impl = (GtkFileChooserWidget *) widget;
+  GtkFileChooserWidgetPrivate *priv = impl->priv;
+
+  if (gtk_search_entry_handle_event (GTK_SEARCH_ENTRY (priv->search_entry), (GdkEvent *)event))
+    {
+      if (priv->operation_mode != OPERATION_MODE_SEARCH)
+        operation_mode_set (impl, OPERATION_MODE_SEARCH);
+      return TRUE;
+    }
+
+  if (GTK_WIDGET_CLASS (gtk_file_chooser_widget_parent_class)->key_press_event (widget, event))
+    return TRUE;
 
   return FALSE;
 }
@@ -7319,6 +7341,7 @@ gtk_file_chooser_widget_class_init (GtkFileChooserWidgetClass *class)
   widget_class->hierarchy_changed = gtk_file_chooser_widget_hierarchy_changed;
   widget_class->style_updated = gtk_file_chooser_widget_style_updated;
   widget_class->screen_changed = gtk_file_chooser_widget_screen_changed;
+  widget_class->key_press_event = gtk_file_chooser_widget_key_press_event;
 
   /*
    * Signals
