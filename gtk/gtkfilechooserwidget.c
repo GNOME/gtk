@@ -361,7 +361,7 @@ static guint signals[LAST_SIGNAL] = { 0 };
 
 #define MODEL_ATTRIBUTES "standard::name,standard::type,standard::display-name," \
                          "standard::is-hidden,standard::is-backup,standard::size," \
-                         "standard::content-type,time::modified"
+                         "standard::content-type,time::modified,standard::target-uri"
 enum {
   /* the first 3 must be these due to settings caching sort column */
   MODEL_COL_NAME,
@@ -2612,7 +2612,7 @@ operation_mode_set_recent (GtkFileChooserWidget *impl)
   gtk_places_sidebar_set_location (GTK_PLACES_SIDEBAR (priv->places_sidebar), file);
   g_object_unref (file);
   gtk_widget_set_sensitive (priv->filter_combo, TRUE);
-  gtk_tree_view_column_set_visible (priv->list_location_column, FALSE);
+  gtk_tree_view_column_set_visible (priv->list_location_column, TRUE);
 }
 
 static void
@@ -4192,9 +4192,23 @@ file_system_model_set (GtkFileSystemModel *model,
         else
           dir_location = NULL;
 
-        if (dir_location && g_file_equal (home_location, dir_location))
+        if (dir_location && file_is_recent_uri (dir_location))
+          {
+            const char *target_uri;
+            GFile *target;
+
+            target_uri = g_file_info_get_attribute_string (info, G_FILE_ATTRIBUTE_STANDARD_TARGET_URI);
+            target = g_file_new_for_uri (target_uri);
+            g_object_unref (dir_location);
+            dir_location = g_file_get_parent (target);
+            g_object_unref (target);
+          }
+
+        if (!dir_location)
+          location = g_strdup ("");
+        else if (g_file_equal (home_location, dir_location))
           location = g_strdup (_("Home"));
-        else if (dir_location && g_file_has_prefix (dir_location, home_location))
+        else if (g_file_has_prefix (dir_location, home_location))
           {
             gchar *relative_path;
 
@@ -4204,7 +4218,7 @@ file_system_model_set (GtkFileSystemModel *model,
             g_free (relative_path);
           }
         else
-          location = g_strdup ("");
+          location = g_file_get_path (dir_location);
 
         g_value_take_string (value, location);
 
