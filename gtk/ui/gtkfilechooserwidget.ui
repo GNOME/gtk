@@ -69,11 +69,18 @@
                                 </child>
                                 <child>
                                   <object class="GtkMenuButton" id="browse_new_folder_button">
-                                    <property name="label" translatable="yes">Create _Folder</property>
+                                    <property name="tooltip-text" translatable="yes">Create Folder</property>
                                     <property name="can_focus">True</property>
                                     <property name="use_underline">True</property>
                                     <property name="popover">new_folder_popover</property>
                                     <signal name="notify::active" handler="new_folder_popover_active"/>
+                                    <child>
+                                      <object class="GtkImage">
+                                        <property name="visible">True</property>
+                                        <property name="icon-name">folder-new-symbolic</property>
+                                        <property name="icon-size">1</property>
+                                      </object>
+                                    </child>
                                   </object>
                                   <packing>
                                     <property name="fill">False</property>
