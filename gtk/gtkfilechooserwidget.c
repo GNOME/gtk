@@ -7140,7 +7140,11 @@ update_cell_renderer_attributes (GtkFileChooserWidget *impl)
   column = gtk_tree_view_get_column (GTK_TREE_VIEW (priv->browse_files_tree_view), 3);
   list = gtk_cell_layout_get_cells (GTK_CELL_LAYOUT (column));
   renderer = list->data;
-  g_object_set (renderer, "ellipsize", PANGO_ELLIPSIZE_START, NULL);
+  g_object_set (renderer,
+                "ellipsize", PANGO_ELLIPSIZE_START,
+                "width-chars", 15,
+                "max-width-chars", 30,
+                NULL);
   gtk_tree_view_column_set_attributes (column, renderer,
                                        "text", MODEL_COL_LOCATION_TEXT,
                                        "sensitive", MODEL_COL_IS_SENSITIVE,
