@@ -23,6 +23,7 @@
 
 #include "gtkfilechooserprivate.h"
 #include "gtkfilechooserwidget.h"
+#include "gtkfilechooserwidgetprivate.h"
 #include "gtkfilechooserutils.h"
 #include "gtkfilechooserembed.h"
 #include "gtkfilesystem.h"
@@ -34,6 +35,8 @@
 #include "gtkstylecontext.h"
 #include "gtkheaderbar.h"
 #include "gtkdialogprivate.h"
+#include "gtklabel.h"
+#include "gtkfilechooserentry.h"
 
 #include <stdarg.h>
 
@@ -206,6 +209,7 @@ struct _GtkFileChooserDialogPrivate
   /* for use with GtkFileChooserEmbed */
   gboolean response_requested;
   gboolean search_setup;
+  gboolean has_entry;
 };
 
 static void     gtk_file_chooser_dialog_set_property (GObject               *object,
@@ -526,6 +530,53 @@ setup_search (GtkFileChooserDialog *dialog)
 }
 
 static void
+setup_save_entry (GtkFileChooserDialog *dialog)
+{
+  gboolean use_header;
+  GtkFileChooserAction action;
+  gboolean need_entry;
+  GtkWidget *header;
+
+  g_object_get (dialog,
+                "use-header-bar", &use_header,
+                "action", &action,
+                NULL);
+
+  if (!use_header)
+    return;
+
+  header = gtk_dialog_get_header_bar (GTK_DIALOG (dialog));
+
+  need_entry = action == GTK_FILE_CHOOSER_ACTION_SAVE ||
+               action == GTK_FILE_CHOOSER_ACTION_CREATE_FOLDER;
+
+  if (need_entry && !dialog->priv->has_entry)
+    {
+      GtkWidget *box;
+      GtkWidget *label;
+      GtkWidget *entry;
+
+      box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 12);
+      label = gtk_label_new_with_mnemonic (_("_Name"));
+      entry = _gtk_file_chooser_entry_new (FALSE);
+      gtk_label_set_mnemonic_widget (GTK_LABEL (label), entry);
+      gtk_container_add (GTK_CONTAINER (box), label);
+      gtk_container_add (GTK_CONTAINER (box), entry);
+      gtk_widget_show_all (box);
+
+      gtk_header_bar_set_custom_title (GTK_HEADER_BAR (header), box);
+      gtk_file_chooser_widget_set_save_entry (GTK_FILE_CHOOSER_WIDGET (dialog->priv->widget), entry);
+    }
+  else if (!need_entry && dialog->priv->has_entry)
+    {
+      gtk_header_bar_set_custom_title (GTK_HEADER_BAR (header), NULL);
+      gtk_file_chooser_widget_set_save_entry (GTK_FILE_CHOOSER_WIDGET (dialog->priv->widget), NULL);
+    }
+
+  dialog->priv->has_entry = need_entry;
+}
+
+static void
 ensure_default_response (GtkFileChooserDialog *dialog)
 {
   GtkWidget *widget;
@@ -543,6 +594,7 @@ gtk_file_chooser_dialog_map (GtkWidget *widget)
   GtkFileChooserDialogPrivate *priv = dialog->priv;
 
   setup_search (dialog);
+  setup_save_entry (dialog);
   ensure_default_response (dialog);
 
   _gtk_file_chooser_embed_initial_focus (GTK_FILE_CHOOSER_EMBED (priv->widget));
