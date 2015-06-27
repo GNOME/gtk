@@ -22,6 +22,7 @@
 #define __GTK_PLACES_SIDEBAR_PRIVATE_H__
 
 #include <glib.h>
+#include "gtkplacessidebar.h"
 
 G_BEGIN_DECLS
 
@@ -48,6 +49,8 @@ typedef enum {
   PLACES_BOOKMARK_PLACEHOLDER,
   N_PLACES
 } GtkPlacesSidebarPlaceType;
+
+gchar *gtk_places_sidebar_get_location_title (GtkPlacesSidebar *sidebar);
 
 G_END_DECLS
 

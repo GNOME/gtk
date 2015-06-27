@@ -4416,6 +4416,23 @@ gtk_places_sidebar_get_location (GtkPlacesSidebar *sidebar)
   return file;
 }
 
+gchar *
+gtk_places_sidebar_get_location_title (GtkPlacesSidebar *sidebar)
+{
+  GtkListBoxRow *selected;
+  gchar *title;
+
+  g_return_val_if_fail (sidebar != NULL, NULL);
+
+  title = NULL;
+  selected = gtk_list_box_get_selected_row (GTK_LIST_BOX (sidebar->list_box));
+
+  if (selected)
+    g_object_get (selected, "label", &title, NULL);
+
+  return title;
+}
+
 /**
  * gtk_places_sidebar_set_show_recent:
  * @sidebar: a places sidebar
