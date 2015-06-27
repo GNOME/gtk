@@ -740,9 +740,6 @@ gtk_tool_palette_realize (GtkWidget *widget)
   gtk_widget_set_window (widget, window);
   gtk_widget_register_window (widget, window);
 
-  gtk_style_context_set_background (gtk_widget_get_style_context (widget),
-                                    window);
-
   gtk_container_forall (GTK_CONTAINER (widget),
                         (GtkCallback) gtk_widget_set_parent_window,
                         window);
@@ -759,6 +756,18 @@ gtk_tool_palette_adjustment_value_changed (GtkAdjustment *adjustment,
 
   gtk_widget_get_allocation (widget, &allocation);
   gtk_tool_palette_size_allocate (widget, &allocation);
+}
+
+static gboolean
+gtk_tool_palette_draw (GtkWidget *widget,
+                       cairo_t   *cr)
+{
+  gtk_render_background (gtk_widget_get_style_context (widget), cr,
+                         0, 0,
+                         gtk_widget_get_allocated_width (widget),
+                         gtk_widget_get_allocated_height (widget));
+
+  return GTK_WIDGET_CLASS (gtk_tool_palette_parent_class)->draw (widget, cr);
 }
 
 static void
@@ -914,6 +923,7 @@ gtk_tool_palette_class_init (GtkToolPaletteClass *cls)
   wclass->get_preferred_height= gtk_tool_palette_get_preferred_height;
   wclass->size_allocate       = gtk_tool_palette_size_allocate;
   wclass->realize             = gtk_tool_palette_realize;
+  wclass->draw                = gtk_tool_palette_draw;
 
   cclass->add                 = gtk_tool_palette_add;
   cclass->remove              = gtk_tool_palette_remove;
