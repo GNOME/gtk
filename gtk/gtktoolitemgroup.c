@@ -1215,13 +1215,10 @@ gtk_tool_item_group_realize (GtkWidget *widget)
   GdkWindowAttr attributes;
   gint attributes_mask;
   guint border_width;
-  GtkStyleContext *context;
 
   gtk_widget_set_realized (widget, TRUE);
 
   border_width = gtk_container_get_border_width (GTK_CONTAINER (widget));
-  context = gtk_widget_get_style_context (widget);
-
   gtk_widget_get_allocation (widget, &allocation);
 
   attributes.window_type = GDK_WINDOW_CHILD;
@@ -1243,8 +1240,6 @@ gtk_tool_item_group_realize (GtkWidget *widget)
 
   gtk_widget_register_window (widget, window);
 
-  gtk_style_context_set_background (context, window);
-
   gtk_container_forall (GTK_CONTAINER (widget),
                         (GtkCallback) gtk_widget_set_parent_window,
                         window);
@@ -1261,6 +1256,18 @@ gtk_tool_item_group_unrealize (GtkWidget *widget)
 {
   gtk_tool_item_group_set_toplevel_window (GTK_TOOL_ITEM_GROUP (widget), NULL);
   GTK_WIDGET_CLASS (gtk_tool_item_group_parent_class)->unrealize (widget);
+}
+
+static gboolean
+gtk_tool_item_group_draw (GtkWidget *widget,
+                          cairo_t   *cr)
+{
+  gtk_render_background (gtk_widget_get_style_context (widget), cr,
+                         0, 0,
+                         gtk_widget_get_allocated_width (widget),
+                         gtk_widget_get_allocated_height (widget));
+
+  return GTK_WIDGET_CLASS (gtk_tool_item_group_parent_class)->draw (widget, cr);
 }
 
 static void
@@ -1584,6 +1591,7 @@ gtk_tool_item_group_class_init (GtkToolItemGroupClass *cls)
   wclass->unrealize            = gtk_tool_item_group_unrealize;
   wclass->style_updated        = gtk_tool_item_group_style_updated;
   wclass->screen_changed       = gtk_tool_item_group_screen_changed;
+  wclass->draw                 = gtk_tool_item_group_draw;
 
   cclass->add                = gtk_tool_item_group_add;
   cclass->remove             = gtk_tool_item_group_remove;
