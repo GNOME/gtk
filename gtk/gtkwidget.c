@@ -42,6 +42,7 @@
 #include "gtkcssshadowsvalueprivate.h"
 #include "gtkintl.h"
 #include "gtkmarshalers.h"
+#include "gtkrenderopsprivate.h"
 #include "gtkselectionprivate.h"
 #include "gtksettingsprivate.h"
 #include "gtksizegroup-private.h"
@@ -6984,12 +6985,17 @@ _gtk_widget_draw_internal (GtkWidget *widget,
   if (gdk_cairo_get_clip_rectangle (cr, NULL))
     {
       gboolean result;
+      cairo_t *draw_cr;
 
       gdk_window_mark_paint_from_clip (window, cr);
 
+      draw_cr = gtk_render_ops_begin_draw_widget (widget, cr);
+
       g_signal_emit (widget, widget_signals[DRAW],
-                     0, cr,
+                     0, draw_cr,
                      &result);
+
+      gtk_render_ops_end_draw_widget (widget, draw_cr, cr);
 
 #ifdef G_ENABLE_DEBUG
       if (G_UNLIKELY (gtk_get_debug_flags () & GTK_DEBUG_BASELINES))
