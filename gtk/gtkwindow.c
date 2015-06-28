@@ -7136,12 +7136,6 @@ gtk_window_realize (GtkWidget *widget)
   gtk_widget_register_window (widget, gdk_window);
   gtk_widget_set_realized (widget, TRUE);
 
-  /* We don't need to set a background on the GdkWindow; with decorations
-   * we draw the background ourself
-   */
-  if (!priv->client_decorated && !gtk_widget_get_app_paintable (widget))
-    gtk_style_context_set_background (gtk_widget_get_style_context (widget), gdk_window);
-
   attributes.x = allocation.x;
   attributes.y = allocation.y;
   attributes.width = allocation.width;
