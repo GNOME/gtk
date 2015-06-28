@@ -1187,7 +1187,7 @@ void gtk_style_context_invalidate           (GtkStyleContext *context);
 GDK_AVAILABLE_IN_ALL
 void gtk_style_context_reset_widgets        (GdkScreen       *screen);
 
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_3_18_FOR(gtk_render_background)
 void gtk_style_context_set_background       (GtkStyleContext *context,
                                              GdkWindow       *window);
 

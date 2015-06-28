@@ -2470,6 +2470,10 @@ corner_value_is_right_angle (GtkCssValue *value)
  * color specified in @context for its current state.
  *
  * Since: 3.0
+ *
+ * Deprecated: 3.18: Use gtk_render_background() instead.
+ *   Note that clients still using this function are now responsible
+ *   for calling this function again whenever @context is invalidated.
  **/
 void
 gtk_style_context_set_background (GtkStyleContext *context,
