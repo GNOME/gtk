@@ -161,6 +161,7 @@
     <file>sizegroup.c</file>
     <file>sidebar.c</file>
     <file>stack.c</file>
+    <file>spinbutton.c</file>
     <file>spinner.c</file>
     <file>textview.c</file>
     <file>textscroll.c</file>
@@ -186,5 +187,8 @@
   </gresource>
   <gresource prefix="/font-features">
     <file>font-features.ui</file>
+  </gresource>
+  <gresource prefix="/spinbutton">
+    <file>spinbutton.ui</file>
   </gresource>
 </gresources>

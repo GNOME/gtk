@@ -53,6 +53,7 @@ demos_base =					\
 	search_entry2.c				\
 	sidebar.c				\
 	sizegroup.c				\
+	spinbutton.c				\
 	spinner.c				\
 	stack.c					\
 	textview.c				\
