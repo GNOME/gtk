@@ -7,8 +7,6 @@
 
 #include <gtk/gtk.h>
 
-static GtkWidget *window = NULL;
-
 static void
 show_parsing_error (GtkCssProvider *provider,
                     GtkCssSection  *section,
@@ -82,6 +80,8 @@ apply_css (GtkWidget *widget, GtkStyleProvider *provider)
 GtkWidget *
 do_css_multiplebgs (GtkWidget *do_widget)
 {
+  static GtkWidget *window = NULL;
+
   if (!window)
     {
       GtkWidget *paned, *container, *child;
@@ -163,10 +163,7 @@ do_css_multiplebgs (GtkWidget *do_widget)
   if (!gtk_widget_get_visible (window))
     gtk_widget_show_all (window);
   else
-    {
-      gtk_widget_destroy (window);
-      window = NULL;
-    }
+    gtk_widget_destroy (window);
 
   return window;
 }

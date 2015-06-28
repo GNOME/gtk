@@ -32,9 +32,7 @@ response_cb (GtkDialog *dialog,
              gpointer   user_data)
 {
   if (response_id == GTK_RESPONSE_OK)
-    {
-      gtk_color_chooser_get_rgba (GTK_COLOR_CHOOSER (dialog), &color);
-    }
+    gtk_color_chooser_get_rgba (GTK_COLOR_CHOOSER (dialog), &color);
 
   gtk_widget_destroy (GTK_WIDGET (dialog));
 }
@@ -49,10 +47,8 @@ change_color_callback (GtkWidget *button,
   gtk_window_set_modal (GTK_WINDOW (dialog), TRUE);
   gtk_color_chooser_set_rgba (GTK_COLOR_CHOOSER (dialog), &color);
 
-  g_signal_connect (dialog,
-                    "response",
-                    G_CALLBACK (response_cb),
-                    NULL);
+  g_signal_connect (dialog, "response",
+                    G_CALLBACK (response_cb), NULL);
 
   gtk_widget_show_all (dialog);
 }
@@ -88,7 +84,6 @@ do_colorsel (GtkWidget *do_widget)
        * Create the color swatch area
        */
 
-
       frame = gtk_frame_new (NULL);
       gtk_frame_set_shadow_type (GTK_FRAME (frame), GTK_SHADOW_IN);
       gtk_box_pack_start (GTK_BOX (vbox), frame, TRUE, TRUE, 0);
@@ -113,14 +108,9 @@ do_colorsel (GtkWidget *do_widget)
     }
 
   if (!gtk_widget_get_visible (window))
-    {
-      gtk_widget_show_all (window);
-    }
+    gtk_widget_show_all (window);
   else
-    {
-      gtk_widget_destroy (window);
-      window = NULL;
-    }
+    gtk_widget_destroy (window);
 
   return window;
 }

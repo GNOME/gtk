@@ -468,11 +468,11 @@ gtk_mirror_bin_draw (GtkWidget *widget,
 
 /*** ***/
 
-static GtkWidget *window = NULL;
-
 GtkWidget *
 do_offscreen_window2 (GtkWidget *do_widget)
 {
+  static GtkWidget *window = NULL;
+
   if (!window)
     {
       GtkWidget *bin, *vbox;
@@ -516,10 +516,7 @@ do_offscreen_window2 (GtkWidget *do_widget)
   if (!gtk_widget_get_visible (window))
     gtk_widget_show_all (window);
   else
-    {
-      gtk_widget_destroy (window);
-      window = NULL;
-    }
+    gtk_widget_destroy (window);
 
   return window;
 }

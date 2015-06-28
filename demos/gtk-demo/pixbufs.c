@@ -183,7 +183,6 @@ do_pixbufs (GtkWidget *do_widget)
       g_signal_connect (window, "destroy",
                         G_CALLBACK (gtk_widget_destroyed), &window);
 
-
       error = NULL;
       if (!load_pixbufs (&error))
         {
@@ -221,13 +220,10 @@ do_pixbufs (GtkWidget *do_widget)
     }
 
   if (!gtk_widget_get_visible (window))
-    {
-      gtk_widget_show_all (window);
-    }
+    gtk_widget_show_all (window);
   else
     {
       gtk_widget_destroy (window);
-      window = NULL;
       g_object_unref (frame);
     }
 

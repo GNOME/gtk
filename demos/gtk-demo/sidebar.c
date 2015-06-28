@@ -9,11 +9,10 @@
 #include <glib/gi18n.h>
 #include <gtk/gtk.h>
 
-static GtkWidget *window = NULL;
-
 GtkWidget *
 do_sidebar (GtkWidget *do_widget)
 {
+  static GtkWidget *window = NULL;
   GtkWidget *sidebar;
   GtkWidget *stack;
   GtkWidget *box;

@@ -6,14 +6,13 @@
 #include <glib/gi18n.h>
 #include <gtk/gtk.h>
 
-static GtkWidget *window = NULL;
-
 static void
 on_bar_response (GtkInfoBar *info_bar,
                  gint        response_id,
                  gpointer    user_data)
 {
   GtkWidget *dialog;
+  GtkWidget *window;
 
   if (response_id == GTK_RESPONSE_CLOSE)
     {
@@ -21,6 +20,7 @@ on_bar_response (GtkInfoBar *info_bar,
       return;
     }
 
+  window = gtk_widget_get_toplevel (GTK_WIDGET (info_bar));
   dialog = gtk_message_dialog_new (GTK_WINDOW (window),
                                    GTK_DIALOG_MODAL | GTK_DIALOG_DESTROY_WITH_PARENT,
                                    GTK_MESSAGE_INFO,
@@ -40,6 +40,7 @@ on_bar_response (GtkInfoBar *info_bar,
 GtkWidget *
 do_infobar (GtkWidget *do_widget)
 {
+  static GtkWidget *window = NULL;
   GtkWidget *frame;
   GtkWidget *bar;
   GtkWidget *vbox;
@@ -131,14 +132,9 @@ do_infobar (GtkWidget *do_widget)
     }
 
   if (!gtk_widget_get_visible (window))
-    {
-      gtk_widget_show_all (window);
-    }
+    gtk_widget_show_all (window);
   else
-    {
-      gtk_widget_destroy (window);
-      window = NULL;
-    }
+    gtk_widget_destroy (window);
 
   return window;
 }

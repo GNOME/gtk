@@ -8,8 +8,6 @@
 #include <glib/gi18n.h>
 #include <gtk/gtk.h>
 
-static GtkWidget *window = NULL;
-
 /* Creates a tree model containing the completions */
 GtkTreeModel *
 create_completion_model (void)
@@ -38,7 +36,7 @@ create_completion_model (void)
 GtkWidget *
 do_entry_completion (GtkWidget *do_widget)
 {
-  GtkWidget *content_area;
+  static GtkWidget *window = NULL;
   GtkWidget *vbox;
   GtkWidget *label;
   GtkWidget *entry;
@@ -47,23 +45,17 @@ do_entry_completion (GtkWidget *do_widget)
 
   if (!window)
     {
-      window = gtk_dialog_new_with_buttons ("Entry Completion",
-                                            GTK_WINDOW (do_widget),
-                                            0,
-                                            _("_Close"),
-                                            GTK_RESPONSE_NONE,
-                                            NULL);
+      window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+      gtk_window_set_screen (GTK_WINDOW (window),
+                             gtk_widget_get_screen (do_widget));
+      gtk_window_set_title (GTK_WINDOW (window), "Entry Completion");
       gtk_window_set_resizable (GTK_WINDOW (window), FALSE);
 
-      g_signal_connect (window, "response",
-                        G_CALLBACK (gtk_widget_destroy), NULL);
       g_signal_connect (window, "destroy",
                         G_CALLBACK (gtk_widget_destroyed), &window);
 
-      content_area = gtk_dialog_get_content_area (GTK_DIALOG (window));
-
       vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 5);
-      gtk_box_pack_start (GTK_BOX (content_area), vbox, TRUE, TRUE, 0);
+      gtk_container_add (GTK_CONTAINER (window), vbox);
       gtk_container_set_border_width (GTK_CONTAINER (vbox), 5);
 
       label = gtk_label_new (NULL);

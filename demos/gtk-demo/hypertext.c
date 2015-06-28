@@ -258,15 +258,14 @@ do_hypertext (GtkWidget *do_widget)
       regular_cursor = gdk_cursor_new_for_display (gtk_widget_get_display (do_widget), GDK_XTERM);
 
       window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+      gtk_window_set_title (GTK_WINDOW (window), "Hypertext");
       gtk_window_set_screen (GTK_WINDOW (window),
                              gtk_widget_get_screen (do_widget));
-      gtk_window_set_default_size (GTK_WINDOW (window),
-                                   450, 450);
+      gtk_window_set_default_size (GTK_WINDOW (window), 450, 450);
 
       g_signal_connect (window, "destroy",
                         G_CALLBACK (gtk_widget_destroyed), &window);
 
-      gtk_window_set_title (GTK_WINDOW (window), "Hypertext");
       gtk_container_set_border_width (GTK_CONTAINER (window), 0);
 
       view = gtk_text_view_new ();
@@ -293,14 +292,9 @@ do_hypertext (GtkWidget *do_widget)
     }
 
   if (!gtk_widget_get_visible (window))
-    {
-      gtk_widget_show (window);
-    }
+    gtk_widget_show (window);
   else
-    {
-      gtk_widget_destroy (window);
-      window = NULL;
-    }
+    gtk_widget_destroy (window);
 
   return window;
 }

@@ -10,8 +10,6 @@
 
 #include <gtk/gtk.h>
 
-static GtkWidget *window = NULL;
-
 /* TreeItem structure */
 typedef struct _TreeItem TreeItem;
 struct _TreeItem
@@ -387,6 +385,8 @@ add_columns (GtkTreeView *treeview)
 GtkWidget *
 do_tree_store (GtkWidget *do_widget)
 {
+  static GtkWidget *window = NULL;
+
   if (!window)
     {
       GtkWidget *vbox;
@@ -440,10 +440,7 @@ do_tree_store (GtkWidget *do_widget)
   if (!gtk_widget_get_visible (window))
     gtk_widget_show_all (window);
   else
-    {
-      gtk_widget_destroy (window);
-      window = NULL;
-    }
+    gtk_widget_destroy (window);
 
   return window;
 }

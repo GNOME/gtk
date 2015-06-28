@@ -168,7 +168,7 @@ do_assistant (GtkWidget *do_widget)
     {
       assistant = gtk_assistant_new ();
 
-         gtk_window_set_default_size (GTK_WINDOW (assistant), -1, 300);
+      gtk_window_set_default_size (GTK_WINDOW (assistant), -1, 300);
 
       gtk_window_set_screen (GTK_WINDOW (assistant),
                              gtk_widget_get_screen (do_widget));

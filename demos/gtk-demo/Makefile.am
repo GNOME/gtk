@@ -98,7 +98,7 @@ EXTRA_DIST += 				\
 	data/source.svg			\
 	data/symbolic-source.svg	\
 	demo.gresource.xml		\
-	$(RESOURCES)			\
+	$(resource_files)		\
 	org.gtk.Demo.gschema.xml	\
 	demos.h.win32
 
@@ -130,81 +130,10 @@ gtk3_demo_application_SOURCES = \
 
 gtk3_demo_application_LDADD = $(LDADDS)
 
-demo_resources.c: demo.gresource.xml $(RESOURCES)
+resource_files = $(shell $(GLIB_COMPILE_RESOURCES) --sourcedir=$(srcdir) --generate-dependencies $(builddir)/demo.gresource.xml)
+
+demo_resources.c: demo.gresource.xml $(resource_files)
 	$(AM_V_GEN) $(GLIB_COMPILE_RESOURCES) --target=$@ --sourcedir=$(srcdir) --generate-source $(srcdir)/demo.gresource.xml
-
-RESOURCES =				\
-	$(demos)			\
-	main.ui				\
-	application.ui			\
-	demo.ui				\
-	menus.ui			\
-	stack.ui			\
-	revealer.ui			\
-	theming.ui			\
-	listbox.ui			\
-	popover.ui			\
-	alphatest.png			\
-	apple-red.png			\
-	brick.png			\
-	brick2.png			\
-	background.jpg			\
-	floppybuddy.gif			\
-	glarea-fragment.glsl		\
-	glarea-vertex.glsl		\
-	gnome-applets.png		\
-	gnome-calendar.png		\
-	gnome-foot.png			\
-	gnome-fs-directory.png		\
-	gnome-fs-regular.png		\
-	gnome-gimp.png			\
-	gnome-gmush.png			\
-	gnome-gsame.png			\
-	gnu-keys.png			\
-	messages.txt			\
-	css_accordion.css		\
-	css_basics.css			\
-	css_multiplebgs.css		\
-	css_pixbufs.css			\
-	css_shadows.css			\
-	cssview.css			\
-	reset.css			\
-	alias_cursor.png		\
-	all_scroll_cursor.png		\
-	cell_cursor.png			\
-	col_resize_cursor.png		\
-	copy_cursor.png			\
-	crosshair_cursor.png		\
-	default_cursor.png		\
-	e_resize_cursor.png		\
-	ew_resize_cursor.png		\
-	grabbing_cursor.png		\
-	grab_cursor.png			\
-	hand_cursor.png			\
-	help_cursor.png			\
-	move_cursor.png			\
-	ne_resize_cursor.png		\
-	nesw_resize_cursor.png		\
-	none_cursor.png			\
-	no_drop_cursor.png		\
-	not_allowed_cursor.png		\
-	n_resize_cursor.png		\
-	ns_resize_cursor.png		\
-	nw_resize_cursor.png		\
-	nwse_resize_cursor.png		\
-	pointer_cursor.png		\
-	progress_cursor.png		\
-	row_resize_cursor.png		\
-	se_resize_cursor.png		\
-	s_resize_cursor.png		\
-	sw_resize_cursor.png		\
-	text_cursor.png			\
-	vertical_text_cursor.png	\
-	wait_cursor.png			\
-	w_resize_cursor.png		\
-	zoom_in_cursor.png		\
-	zoom_out_cursor.png
-
 
 iconthemedir = $(datadir)/icons/hicolor
 

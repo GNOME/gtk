@@ -189,17 +189,14 @@ do_font_features (GtkWidget *do_widget)
 
       g_signal_connect (window, "destroy",
                         G_CALLBACK (gtk_widget_destroyed), &window);
+
+      g_object_unref (builder);
     }
 
   if (!gtk_widget_get_visible (window))
-    {
-      gtk_window_present (GTK_WINDOW (window));
-    }
+    gtk_window_present (GTK_WINDOW (window));
   else
-    {
-      gtk_widget_destroy (window);
-      window = NULL;
-    }
+    gtk_widget_destroy (window);
 
   return window;
 }

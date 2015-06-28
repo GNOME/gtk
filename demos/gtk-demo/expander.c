@@ -3,6 +3,8 @@
  * GtkExpander allows to provide additional content that is initially hidden.
  * This is also known as "disclosure triangle".
  *
+ * This example also shows how to make the window resizable only if the expander
+ * is expanded.
  */
 
 #include <glib/gi18n.h>

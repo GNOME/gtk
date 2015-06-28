@@ -14,8 +14,6 @@
 #include <string.h>
 #include <stdlib.h>
 
-static GtkWidget *window = NULL;
-
 typedef struct
 {
   gint   number;
@@ -335,6 +333,8 @@ add_columns (GtkTreeView  *treeview,
 GtkWidget *
 do_editable_cells (GtkWidget *do_widget)
 {
+  static GtkWidget *window = NULL;
+
   if (!window)
     {
       GtkWidget *vbox;
@@ -345,7 +345,6 @@ do_editable_cells (GtkWidget *do_widget)
       GtkTreeModel *items_model;
       GtkTreeModel *numbers_model;
 
-      /* create window, etc */
       window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
       gtk_window_set_screen (GTK_WINDOW (window),
                              gtk_widget_get_screen (do_widget));
@@ -406,10 +405,7 @@ do_editable_cells (GtkWidget *do_widget)
   if (!gtk_widget_get_visible (window))
     gtk_widget_show_all (window);
   else
-    {
-      gtk_widget_destroy (window);
-      window = NULL;
-    }
+    gtk_widget_destroy (window);
 
   return window;
 }

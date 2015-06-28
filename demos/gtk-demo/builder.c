@@ -5,16 +5,13 @@
 
 #include <gtk/gtk.h>
 
-static GtkBuilder *builder;
-
 static void
 quit_activate (GSimpleAction *action,
                GVariant      *parameter,
                gpointer       user_data)
 {
-  GtkWidget *window;
+  GtkWidget *window = user_data;
 
-  window = GTK_WIDGET (gtk_builder_get_object (builder, "window1"));
   gtk_widget_destroy (window);
 }
 
@@ -23,8 +20,11 @@ about_activate (GSimpleAction *action,
                 GVariant      *parameter,
                 gpointer       user_data)
 {
+  GtkWidget *window = user_data;
+  GtkBuilder *builder;
   GtkWidget *about_dlg;
 
+  builder = g_object_get_data (G_OBJECT (window), "builder");
   about_dlg = GTK_WIDGET (gtk_builder_get_object (builder, "aboutdialog1"));
   gtk_dialog_run (GTK_DIALOG (about_dlg));
   gtk_widget_hide (about_dlg);
@@ -55,6 +55,8 @@ do_builder (GtkWidget *do_widget)
 
   if (!window)
     {
+      GtkBuilder *builder;
+
       builder = gtk_builder_new_from_resource ("/builder/demo.ui");
 
       gtk_builder_connect_signals (builder, NULL);
@@ -69,7 +71,7 @@ do_builder (GtkWidget *do_widget)
       actions = (GActionGroup*)g_simple_action_group_new ();
       g_action_map_add_action_entries (G_ACTION_MAP (actions),
                                        win_entries, G_N_ELEMENTS (win_entries),
-                                       NULL);
+                                       window);
       gtk_widget_insert_action_group (window, "win", actions);
       accel_group = gtk_accel_group_new ();
       gtk_window_add_accel_group (GTK_WINDOW (window), accel_group);
@@ -109,18 +111,14 @@ do_builder (GtkWidget *do_widget)
       item = (GtkWidget*)gtk_builder_get_object (builder, "about_item");
       gtk_widget_add_accelerator (item, "activate", accel_group,
                                   GDK_KEY_F7, 0, GTK_ACCEL_VISIBLE);
+
+      g_object_set_data_full (G_OBJECT(window), "builder", builder, g_object_unref);
     }
 
   if (!gtk_widget_get_visible (window))
-    {
-      gtk_widget_show_all (window);
-    }
+    gtk_widget_show_all (window);
   else
-    {
-      gtk_widget_destroy (window);
-      window = NULL;
-    }
-
+    gtk_widget_destroy (window);
 
   return window;
 }

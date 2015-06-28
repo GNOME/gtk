@@ -8,8 +8,6 @@
 
 #include <gtk/gtk.h>
 
-static GtkBuilder *builder;
-
 GtkWidget *
 do_stack (GtkWidget *do_widget)
 {
@@ -17,6 +15,8 @@ do_stack (GtkWidget *do_widget)
 
   if (!window)
     {
+      GtkBuilder *builder;
+
       builder = gtk_builder_new_from_resource ("/stack/stack.ui");
       gtk_builder_connect_signals (builder, NULL);
       window = GTK_WIDGET (gtk_builder_get_object (builder, "window1"));
@@ -24,17 +24,14 @@ do_stack (GtkWidget *do_widget)
                              gtk_widget_get_screen (do_widget));
       g_signal_connect (window, "destroy",
                         G_CALLBACK (gtk_widget_destroyed), &window);
+
+      g_object_unref (builder);
     }
 
   if (!gtk_widget_get_visible (window))
-    {
-      gtk_widget_show_all (window);
-    }
+    gtk_widget_show_all (window);
   else
-    {
-      gtk_widget_destroy (window);
-      window = NULL;
-    }
+    gtk_widget_destroy (window);
 
 
   return window;

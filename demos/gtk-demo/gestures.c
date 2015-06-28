@@ -7,7 +7,6 @@
 
 #include <gtk/gtk.h>
 
-static GtkWidget *window = NULL;
 static GtkGesture *rotate = NULL;
 static GtkGesture *zoom = NULL;
 static gdouble swipe_x = 0;
@@ -132,6 +131,7 @@ drawing_area_draw (GtkWidget *widget,
 GtkWidget *
 do_gestures (GtkWidget *do_widget)
 {
+  static GtkWidget *window = NULL;
   GtkWidget *drawing_area;
   GtkGesture *gesture;
 
@@ -190,10 +190,7 @@ do_gestures (GtkWidget *do_widget)
   if (!gtk_widget_get_visible (window))
     gtk_widget_show_all (window);
   else
-    {
-      gtk_widget_destroy (window);
-      window = NULL;
-    }
+    gtk_widget_destroy (window);
 
   return window;
 }

@@ -10,8 +10,6 @@
 #include <stdlib.h>
 #include <string.h>
 
-static GtkWidget *window = NULL;
-
 static gboolean
 draw_color (GtkWidget  *drawingarea,
             cairo_t    *cr,
@@ -46,6 +44,7 @@ color_swatch_new (const gchar *color)
 GtkWidget *
 do_flowbox (GtkWidget *do_widget)
 {
+  static GtkWidget *window = NULL;
   GtkWidget *scrolled, *flowbox;
   const gchar *colors[] = {
     "AliceBlue",
@@ -726,8 +725,7 @@ do_flowbox (GtkWidget *do_widget)
       gtk_window_set_default_size (GTK_WINDOW (window), 400, 600);
 
       g_signal_connect (window, "destroy",
-                        G_CALLBACK (gtk_widget_destroyed),
-                        &window);
+                        G_CALLBACK (gtk_widget_destroyed), &window);
 
       scrolled = gtk_scrolled_window_new (NULL, NULL);
       gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (scrolled), GTK_POLICY_NEVER, GTK_POLICY_AUTOMATIC);
@@ -740,9 +738,7 @@ do_flowbox (GtkWidget *do_widget)
       gtk_container_add (GTK_CONTAINER (window), scrolled);
 
       for (i = 0; colors[i]; i++)
-        {
-          gtk_container_add (GTK_CONTAINER (flowbox), color_swatch_new (colors[i]));
-        }
+        gtk_container_add (GTK_CONTAINER (flowbox), color_swatch_new (colors[i]));
 
       gtk_widget_show_all (scrolled);
     }

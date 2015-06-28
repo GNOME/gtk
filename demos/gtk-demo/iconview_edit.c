@@ -8,8 +8,6 @@
 #include <gtk/gtk.h>
 #include <string.h>
 
-static GtkWidget *window = NULL;
-
 enum
 {
   COL_TEXT,
@@ -100,6 +98,8 @@ edited (GtkCellRendererText *cell,
 GtkWidget *
 do_iconview_edit (GtkWidget *do_widget)
 {
+  static GtkWidget *window = NULL;
+
   if (!window)
     {
       GtkWidget *icon_view;
@@ -152,10 +152,7 @@ do_iconview_edit (GtkWidget *do_widget)
   if (!gtk_widget_get_visible (window))
     gtk_widget_show_all (window);
   else
-    {
-      gtk_widget_destroy (window);
-      window = NULL;
-    }
+    gtk_widget_destroy (window);
 
   return window;
 }

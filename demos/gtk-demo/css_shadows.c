@@ -5,8 +5,6 @@
 
 #include <gtk/gtk.h>
 
-static GtkWidget *window = NULL;
-
 static void
 show_parsing_error (GtkCssProvider *provider,
                     GtkCssSection  *section,
@@ -86,6 +84,8 @@ create_toolbar (void)
 GtkWidget *
 do_css_shadows (GtkWidget *do_widget)
 {
+  static GtkWidget *window = NULL;
+
   if (!window)
     {
       GtkWidget *paned, *container, *child;
@@ -117,15 +117,13 @@ do_css_shadows (GtkWidget *do_widget)
                                   NULL);
 
       provider = GTK_STYLE_PROVIDER (gtk_css_provider_new ());
-      
+
       container = gtk_scrolled_window_new (NULL, NULL);
       gtk_container_add (GTK_CONTAINER (paned), container);
       child = gtk_text_view_new_with_buffer (text);
       gtk_container_add (GTK_CONTAINER (container), child);
-      g_signal_connect (text,
-                        "changed",
-                        G_CALLBACK (css_text_changed),
-                        provider);
+      g_signal_connect (text, "changed",
+                        G_CALLBACK (css_text_changed), provider);
 
       bytes = g_resources_lookup_data ("/css_shadows/gtk.css", 0, NULL);
       gtk_text_buffer_set_text (text, g_bytes_get_data (bytes, NULL), g_bytes_get_size (bytes));
@@ -142,10 +140,7 @@ do_css_shadows (GtkWidget *do_widget)
   if (!gtk_widget_get_visible (window))
     gtk_widget_show_all (window);
   else
-    {
-      gtk_widget_destroy (window);
-      window = NULL;
-    }
+    gtk_widget_destroy (window);
 
   return window;
 }

@@ -20,8 +20,7 @@ do_pickers (GtkWidget *do_widget)
     gtk_window_set_title (GTK_WINDOW (window), "Pickers");
 
     g_signal_connect (window, "destroy",
-                      G_CALLBACK (gtk_widget_destroyed),
-                      &window);
+                      G_CALLBACK (gtk_widget_destroyed), &window);
 
     gtk_container_set_border_width (GTK_CONTAINER (window), 10);
 
@@ -76,14 +75,9 @@ do_pickers (GtkWidget *do_widget)
   }
 
   if (!gtk_widget_get_visible (window))
-    {
-      gtk_widget_show_all (window);
-    }
+    gtk_widget_show_all (window);
   else
-    {
-      gtk_widget_destroy (window);
-      window = NULL;
-    }
+    gtk_widget_destroy (window);
 
   return window;
 }

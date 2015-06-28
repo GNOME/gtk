@@ -16,8 +16,6 @@
 #include <glib/gi18n.h>
 #include <gtk/gtk.h>
 
-static GtkWidget *window = NULL;
-
 /* Convenience function to create a combo box holding a number of strings
  */
 GtkWidget *
@@ -48,12 +46,14 @@ add_row (GtkGrid      *table,
 
   label = gtk_label_new_with_mnemonic (label_text);
   gtk_widget_set_halign (label, GTK_ALIGN_START);
-  gtk_widget_set_valign (label, GTK_ALIGN_END);
+  gtk_widget_set_valign (label, GTK_ALIGN_BASELINE);
   gtk_widget_set_hexpand (label, TRUE);
   gtk_grid_attach (table, label, 0, row, 1, 1);
 
   combo_box = create_combo_box (options);
   gtk_label_set_mnemonic_widget (GTK_LABEL (label), combo_box);
+  gtk_widget_set_halign (combo_box, GTK_ALIGN_END);
+  gtk_widget_set_valign (combo_box, GTK_ALIGN_BASELINE);
   gtk_size_group_add_widget (size_group, combo_box);
   gtk_grid_attach (table, combo_box, 1, row, 1, 1);
 }
@@ -79,7 +79,7 @@ toggle_grouping (GtkToggleButton *check_button,
 GtkWidget *
 do_sizegroup (GtkWidget *do_widget)
 {
-  GtkWidget *content_area;
+  static GtkWidget *window = NULL;
   GtkWidget *table;
   GtkWidget *frame;
   GtkWidget *vbox;
@@ -95,28 +95,20 @@ do_sizegroup (GtkWidget *do_widget)
   };
 
   static const char *end_options[] = {
-    "Square", "Round", "Arrow", NULL
+    "Square", "Round", "Double Arrow", NULL
   };
 
   if (!window)
     {
-      window = gtk_dialog_new_with_buttons ("Size Groups",
-                                            GTK_WINDOW (do_widget),
-                                            0,
-                                            _("_Close"),
-                                            GTK_RESPONSE_NONE,
-                                            NULL);
+      window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+      gtk_window_set_screen (GTK_WINDOW (window), gtk_widget_get_screen (do_widget));
+      gtk_window_set_title (GTK_WINDOW (window), "Size Groups");
       gtk_window_set_resizable (GTK_WINDOW (window), FALSE);
-
-      g_signal_connect (window, "response",
-                        G_CALLBACK (gtk_widget_destroy), NULL);
       g_signal_connect (window, "destroy",
                         G_CALLBACK (gtk_widget_destroyed), &window);
 
-      content_area = gtk_dialog_get_content_area (GTK_DIALOG (window));
-
       vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 5);
-      gtk_box_pack_start (GTK_BOX (content_area), vbox, TRUE, TRUE, 0);
+      gtk_container_add (GTK_CONTAINER (window), vbox);
       gtk_container_set_border_width (GTK_CONTAINER (vbox), 5);
 
       size_group = gtk_size_group_new (GTK_SIZE_GROUP_HORIZONTAL);

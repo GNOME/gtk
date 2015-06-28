@@ -13,8 +13,6 @@
 #include <gtk/gtk.h>
 #include <string.h>
 
-static GtkWidget *window = NULL;
-
 void
 copy_button_clicked (GtkWidget *button,
                      gpointer   user_data)
@@ -107,12 +105,12 @@ drag_begin (GtkWidget      *widget,
 }
 
 void
-drag_data_get  (GtkWidget        *widget,
-                GdkDragContext   *context,
-                GtkSelectionData *selection_data,
-                guint             info,
-                guint             time,
-                gpointer          data)
+drag_data_get (GtkWidget        *widget,
+               GdkDragContext   *context,
+               GtkSelectionData *selection_data,
+               guint             info,
+               guint             time,
+               gpointer          data)
 {
   GdkPixbuf *pixbuf;
 
@@ -202,6 +200,8 @@ button_press (GtkWidget      *widget,
 GtkWidget *
 do_clipboard (GtkWidget *do_widget)
 {
+  static GtkWidget *window = NULL;
+
   if (!window)
     {
       GtkWidget *vbox, *hbox;
@@ -325,10 +325,7 @@ do_clipboard (GtkWidget *do_widget)
   if (!gtk_widget_get_visible (window))
     gtk_widget_show_all (window);
   else
-    {
-      gtk_widget_destroy (window);
-      window = NULL;
-    }
+    gtk_widget_destroy (window);
 
   return window;
 }
