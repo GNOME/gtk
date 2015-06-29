@@ -705,7 +705,7 @@ data_source_target (void                  *data,
 {
   GdkWaylandSelection *wayland_selection = data;
   GdkDragContext *context = NULL;
-  GdkWindow *window;
+  GdkWindow *window = NULL;
 
   g_debug (G_STRLOC ": %s source = %p, mime_type = %s",
            G_STRFUNC, source, mime_type);
@@ -732,7 +732,8 @@ data_source_target (void                  *data,
     }
   else if (source == wayland_selection->clipboard_source)
     window = wayland_selection->clipboard_owner;
-  else
+
+  if (!window)
     return;
 
   gdk_wayland_selection_request_target (wayland_selection, window,
@@ -770,6 +771,9 @@ data_source_send (void                  *data,
       close (fd);
       return;
     }
+
+  if (!window)
+    return;
 
   if (!gdk_wayland_selection_request_target (wayland_selection, window,
                                              gdk_atom_intern (mime_type, FALSE),
