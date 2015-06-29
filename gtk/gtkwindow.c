@@ -8371,10 +8371,12 @@ gtk_window_get_preferred_width (GtkWidget *widget,
   gint title_min = 0, title_nat = 0;
   gint child_min = 0, child_nat = 0;
   GtkBorder window_border = { 0 };
+  gboolean has_size_request;
 
   window = GTK_WINDOW (widget);
   priv = window->priv;
   child  = gtk_bin_get_child (GTK_BIN (window));
+  has_size_request = gtk_widget_has_size_request (widget);
 
   border_width = gtk_container_get_border_width (GTK_CONTAINER (window));
 
@@ -8397,14 +8399,14 @@ gtk_window_get_preferred_width (GtkWidget *widget,
     {
       gtk_widget_get_preferred_width (child, &child_min, &child_nat);
 
-      if (child_nat == 0)
+      if (child_nat == 0 && !has_size_request)
         child_nat = NO_CONTENT_CHILD_NAT;
       child_min += border_width * 2 +
                    window_border.left + window_border.right;
       child_nat += border_width * 2 +
                    window_border.left + window_border.right;
     }
-  else
+  else if (!has_size_request)
     {
       child_nat = NO_CONTENT_CHILD_NAT;
     }
@@ -8428,10 +8430,12 @@ gtk_window_get_preferred_width_for_height (GtkWidget *widget,
   gint child_min = 0, child_nat = 0;
   gint title_height = 0;
   GtkBorder window_border = { 0 };
+  gboolean has_size_request;
 
   window = GTK_WINDOW (widget);
   priv = window->priv;
   child  = gtk_bin_get_child (GTK_BIN (window));
+  has_size_request = gtk_widget_has_size_request (widget);
 
   border_width = gtk_container_get_border_width (GTK_CONTAINER (window));
 
@@ -8466,14 +8470,14 @@ gtk_window_get_preferred_width_for_height (GtkWidget *widget,
                                                  MAX (height, 0),
                                                  &child_min, &child_nat);
 
-      if (child_nat == 0 && height == 0)
+      if (child_nat == 0 && height == 0 && !has_size_request)
         child_nat = NO_CONTENT_CHILD_NAT;
       child_min += border_width * 2 +
                    window_border.left + window_border.right;
       child_nat += border_width * 2 +
                    window_border.left + window_border.right;
     }
-  else
+  else if (!has_size_request)
     {
       child_nat = NO_CONTENT_CHILD_NAT;
     }
@@ -8494,10 +8498,12 @@ gtk_window_get_preferred_height (GtkWidget *widget,
   int title_min = 0;
   int title_height = 0;
   GtkBorder window_border = { 0 };
+  gboolean has_size_request;
 
   window = GTK_WINDOW (widget);
   priv = window->priv;
   child  = gtk_bin_get_child (GTK_BIN (window));
+  has_size_request = gtk_widget_has_size_request (widget);
 
   *minimum_size = 0;
   *natural_size = 0;
@@ -8528,12 +8534,12 @@ gtk_window_get_preferred_height (GtkWidget *widget,
       gint child_min, child_nat;
       gtk_widget_get_preferred_height (child, &child_min, &child_nat);
 
-      if (child_nat == 0)
+      if (child_nat == 0 && !has_size_request)
         child_nat = NO_CONTENT_CHILD_NAT;
       *minimum_size += child_min + 2 * border_width;
       *natural_size += child_nat + 2 * border_width;
     }
-  else
+  else if (!has_size_request)
     {
       *natural_size += NO_CONTENT_CHILD_NAT;
     }
@@ -8553,10 +8559,12 @@ gtk_window_get_preferred_height_for_width (GtkWidget *widget,
   int title_min = 0;
   int title_height = 0;
   GtkBorder window_border = { 0 };
+  gboolean has_size_request;
 
   window = GTK_WINDOW (widget);
   priv = window->priv;
   child  = gtk_bin_get_child (GTK_BIN (window));
+  has_size_request = gtk_widget_has_size_request (widget);
 
   *minimum_size = 0;
   *natural_size = 0;
@@ -8593,12 +8601,12 @@ gtk_window_get_preferred_height_for_width (GtkWidget *widget,
       gtk_widget_get_preferred_height_for_width (child, MAX (width, 0),
                                                  &child_min, &child_nat);
 
-      if (child_nat == 0 && width == 0)
+      if (child_nat == 0 && width == 0 && !has_size_request)
         child_nat = NO_CONTENT_CHILD_NAT;
       *minimum_size += child_min + 2 * border_width;
       *natural_size += child_nat + 2 * border_width;
     }
-  else
+  else if (!has_size_request)
     {
       *natural_size += NO_CONTENT_CHILD_NAT;
     }

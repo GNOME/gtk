@@ -11152,6 +11152,23 @@ gtk_widget_get_size_request (GtkWidget *widget,
     *height = aux_info->height;
 }
 
+/*< private >
+ * gtk_widget_has_size_request:
+ * @widget: a #GtkWidget
+ *
+ * Returns if the widget has a size request set (anything besides -1 for height
+ * or width)
+ */
+gboolean
+gtk_widget_has_size_request (GtkWidget *widget)
+{
+  const GtkWidgetAuxInfo *aux_info;
+
+  aux_info = _gtk_widget_get_aux_info_or_defaults (widget);
+
+  return !(aux_info->width == -1 && aux_info->height == -1);
+}
+
 /**
  * _gtk_widget_override_size_request:
  * @widget: a #GtkWidget
