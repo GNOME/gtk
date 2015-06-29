@@ -7295,7 +7295,18 @@ desktop_folder_handler (GtkFileChooserWidget *impl)
 static void
 search_shortcut_handler (GtkFileChooserWidget *impl)
 {
-  operation_mode_set (impl, OPERATION_MODE_SEARCH);
+  GtkFileChooserWidgetPrivate *priv = impl->priv;
+
+  if (priv->operation_mode == OPERATION_MODE_SEARCH)
+    {
+      operation_mode_set (impl, OPERATION_MODE_BROWSE);
+      if (priv->current_folder)
+        change_folder_and_display_error (impl, priv->current_folder, FALSE);
+      else
+        switch_to_home_dir (impl);
+    }
+  else
+    operation_mode_set (impl, OPERATION_MODE_SEARCH);
 }
 
 /* Handler for the "recent-shortcut" keybinding signal */
