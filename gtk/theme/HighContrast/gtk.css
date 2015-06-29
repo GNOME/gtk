@@ -1629,6 +1629,7 @@ GtkTreeView.view.progressbar {
  **********/
 GtkSwitch {
   -GtkSwitch-slider-width: 47px;
+  -GtkSwitch-slider-height: 28px;
   font: bold condensed 9;
   outline-offset: -4px; }
   GtkSwitch.trough {

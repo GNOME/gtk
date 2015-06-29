@@ -56,6 +56,7 @@
 #include "fallback-c89.c"
 
 #define DEFAULT_SLIDER_WIDTH    (36)
+#define DEFAULT_SLIDER_HEIGHT   (22)
 
 struct _GtkSwitchPrivate
 {
@@ -403,7 +404,7 @@ gtk_switch_get_preferred_height (GtkWidget *widget,
   GtkStyleContext *context;
   GtkStateFlags state;
   GtkBorder padding;
-  gint height, slider_width, min_height;
+  gint height, slider_height;
   PangoLayout *layout;
   PangoRectangle logical_rect;
   gchar *str;
@@ -422,10 +423,8 @@ gtk_switch_get_preferred_height (GtkWidget *widget,
   gtk_style_context_restore (context);
 
   gtk_widget_style_get (widget,
-                        "slider-width", &slider_width,
+                        "slider-height", &slider_height,
                         NULL);
-
-  min_height = slider_width * 0.6;
 
   str = g_strdup_printf ("%s%s",
                          C_("switch", "ON"),
@@ -434,7 +433,7 @@ gtk_switch_get_preferred_height (GtkWidget *widget,
   layout = gtk_widget_create_pango_layout (widget, str);
   pango_layout_get_extents (layout, NULL, &logical_rect);
   pango_extents_to_pixels (&logical_rect, NULL);
-  height += MAX (min_height, logical_rect.height);
+  height += MAX (slider_height, logical_rect.height);
 
   g_object_unref (layout);
   g_free (str);
@@ -927,6 +926,21 @@ gtk_switch_class_init (GtkSwitchClass *klass)
                                                              P_("The minimum width of the handle"),
                                                              DEFAULT_SLIDER_WIDTH, G_MAXINT,
                                                              DEFAULT_SLIDER_WIDTH,
+                                                             GTK_PARAM_READABLE));
+
+  /**
+   * GtkSwitch:slider-height:
+   *
+   * The minimum height of the #GtkSwitch handle, in pixels.
+   *
+   * Since: 3.18
+   */
+  gtk_widget_class_install_style_property (widget_class,
+                                           g_param_spec_int ("slider-height",
+                                                             P_("Slider Height"),
+                                                             P_("The minimum height of the handle"),
+                                                             DEFAULT_SLIDER_HEIGHT, G_MAXINT,
+                                                             DEFAULT_SLIDER_HEIGHT,
                                                              GTK_PARAM_READABLE));
 
   /**

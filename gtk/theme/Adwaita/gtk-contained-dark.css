@@ -2463,6 +2463,7 @@ column-header .titlebar .button.titlebutton,
  **********/
 GtkSwitch {
   -GtkSwitch-slider-width: 45px;
+  -GtkSwitch-slider-height: 27px;
   font-weight: bold;
   font-size: smaller;
   outline-offset: -4px;
