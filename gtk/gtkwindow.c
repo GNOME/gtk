@@ -6129,7 +6129,9 @@ gtk_window_map (GtkWidget *widget)
 
   gdk_window_show (gdk_window);
 
-  if (!disable_startup_notification)
+  if (!disable_startup_notification &&
+      !GTK_IS_OFFSCREEN_WINDOW (window) &&
+      priv->type != GTK_WINDOW_POPUP)
     {
       /* Do we have a custom startup-notification id? */
       if (priv->startup_id != NULL)
