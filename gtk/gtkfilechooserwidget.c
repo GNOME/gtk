@@ -7697,6 +7697,10 @@ gtk_file_chooser_widget_class_init (GtkFileChooserWidgetClass *class)
                                 "search-shortcut",
                                 0);
   gtk_binding_entry_add_signal (binding_set,
+                                GDK_KEY_f, GDK_CONTROL_MASK,
+                                "search-shortcut",
+                                0);
+  gtk_binding_entry_add_signal (binding_set,
                                 GDK_KEY_r, GDK_MOD1_MASK,
                                 "recent-shortcut",
                                 0);
