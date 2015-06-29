@@ -1,4 +1,4 @@
-/* Font Features
+/* Pango/Font Features
  *
  * This demonstrates support for OpenType font features with
  * Pango attributes. The attributes can be used manually or

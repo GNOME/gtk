@@ -1,4 +1,4 @@
-/* Text Mask
+/* Pango/Text Mask
  *
  * This demo shows how to use PangoCairo to draw text with more than
  * just a single color.
