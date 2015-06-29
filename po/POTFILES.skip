@@ -20,6 +20,7 @@ demos/gtk-demo/popover.ui
 demos/gtk-demo/revealer.ui
 demos/gtk-demo/search_entry.c
 demos/gtk-demo/sizegroup.c
+demos/gtk-demo/spinbutton.ui
 demos/gtk-demo/spinner.c
 demos/gtk-demo/stack.ui
 demos/gtk-demo/theming.ui
