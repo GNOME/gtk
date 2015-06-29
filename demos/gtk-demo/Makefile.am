@@ -56,6 +56,7 @@ demos_base =					\
 	spinbutton.c				\
 	spinner.c				\
 	stack.c					\
+	textmask.c				\
 	textview.c				\
 	textscroll.c				\
 	theming_style_classes.c			\

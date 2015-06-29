@@ -169,6 +169,7 @@
     <file>toolpalette.c</file>
     <file>transparent.c</file>
     <file>tree_store.c</file>
+    <file>textmask.c</file>
   </gresource>
   <gresource prefix="/textview">
     <file>floppybuddy.gif</file>
