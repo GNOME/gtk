@@ -991,7 +991,7 @@ _gdk_wayland_display_get_selection_property (GdkDisplay  *display,
   else
     {
       if (ret_type)
-        *ret_type = GDK_SELECTION_TYPE_STRING;
+        *ret_type = buffer_data->target;
       if (ret_format)
         *ret_format = 8;
     }
