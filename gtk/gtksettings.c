@@ -41,6 +41,7 @@
 
 #ifdef GDK_WINDOWING_WAYLAND
 #include "wayland/gdkwayland.h"
+#include <pango/pangofc-fontmap.h>
 #endif
 
 #ifdef GDK_WINDOWING_BROADWAY
