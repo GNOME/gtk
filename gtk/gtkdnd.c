@@ -786,7 +786,7 @@ gtk_drag_can_use_rgba_cursor (GdkDisplay *display,
                               gint        height)
 {
   guint max_width, max_height;
-  
+
   if (!gdk_display_supports_cursor_color (display))
     return FALSE;
 
@@ -803,6 +803,25 @@ gtk_drag_can_use_rgba_cursor (GdkDisplay *display,
     }
 
   return TRUE;
+}
+
+static gboolean
+gtk_drag_cursor_can_merge_drag_icon (GdkDisplay *display,
+                                     gint        width,
+                                     gint        height)
+{
+#ifdef GDK_WINDOWING_WAYLAND
+  /* On wayland all benefits from merging the drag icon into
+   * the cursor are moot, and furthermore the compositor is
+   * responsible of running any "drag cancelled" animations,
+   * which we won't get for free unless we use the drag
+   * surface.
+   */
+  if (GDK_IS_WAYLAND_DISPLAY (display))
+    return FALSE;
+#endif
+
+  return gtk_drag_can_use_rgba_cursor (display, width, height);
 }
 
 static void
@@ -927,7 +946,7 @@ gtk_drag_get_cursor (GtkWidget         *widget,
       width = ref_x + MAX (cursor_width - hot_x, icon_width - icon_x);
       height = ref_y + MAX (cursor_height - hot_y, icon_height - icon_y);
 
-      if (gtk_drag_can_use_rgba_cursor (display, width * scale, height * scale))
+      if (gtk_drag_cursor_can_merge_drag_icon (display, width * scale, height * scale))
         {
           cairo_surface_t *surface;
           cairo_t *cr;
@@ -3128,7 +3147,7 @@ set_icon_helper (GdkDragContext *context,
                              &width, &height);
 
   if (!force_window &&
-      gtk_drag_can_use_rgba_cursor (display, width + 2, height + 2))
+      gtk_drag_cursor_can_merge_drag_icon (display, width + 2, height + 2))
     {
       GtkDragSourceInfo *info;
 
