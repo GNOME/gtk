@@ -599,6 +599,8 @@ struct _GtkWidgetPrivate
 #endif /* G_ENABLE_DEBUG */
 
   GList *event_controllers;
+
+  cairo_font_options_t *font_options;
 };
 
 struct _GtkWidgetClassPrivate
@@ -10314,10 +10316,11 @@ gtk_widget_get_pango_context (GtkWidget *widget)
 
 static void
 update_pango_context (GtkWidget    *widget,
-		      PangoContext *context)
+                      PangoContext *context)
 {
   PangoFontDescription *font_desc;
   GtkStyleContext *style_context;
+  GdkScreen *screen;
 
   style_context = gtk_widget_get_style_context (widget);
   gtk_style_context_get (style_context,
@@ -10337,6 +10340,18 @@ update_pango_context (GtkWidget    *widget,
                                           _gtk_style_context_peek_property (style_context,
                                                                             GTK_CSS_PROPERTY_DPI),
                                           100));
+
+  screen = gtk_widget_get_screen_unchecked (widget);
+  if (widget->priv->font_options)
+    {
+      pango_cairo_context_set_font_options (context,
+                                            widget->priv->font_options);
+    }
+  else if (screen)
+    {
+      pango_cairo_context_set_font_options (context,
+                                            gdk_screen_get_font_options (screen));
+    }
 }
 
 static void
@@ -10345,18 +10360,56 @@ gtk_widget_update_pango_context (GtkWidget *widget)
   PangoContext *context = gtk_widget_peek_pango_context (widget);
 
   if (context)
+    update_pango_context (widget, context);
+}
+
+/**
+ * gtk_widget_set_font_options:
+ * @widget: a #GtkWidget
+ * @options: (allow-none): a #cairo_font_options_t, or %NULL to unset any
+ *   previously set default font options.
+ *
+ * Sets the #cairo_font_options_t used for Pango rendering in this widget.
+ * When not set, the default font options for the #GdkScreen will be used.
+ *
+ * Since: 3.18
+ **/
+void
+gtk_widget_set_font_options (GtkWidget                  *widget,
+                             const cairo_font_options_t *options)
+{
+  g_return_if_fail (GTK_IS_WIDGET (widget));
+
+  if (widget->priv->font_options != options)
     {
-      GdkScreen *screen;
+      if (widget->priv->font_options)
+        cairo_font_options_destroy (widget->priv->font_options);
 
-      update_pango_context (widget, context);
+      if (options)
+        widget->priv->font_options = cairo_font_options_copy (options);
+      else
+        widget->priv->font_options = NULL;
 
-      screen = gtk_widget_get_screen_unchecked (widget);
-      if (screen)
-	{
-	  pango_cairo_context_set_font_options (context,
-						gdk_screen_get_font_options (screen));
-	}
+      gtk_widget_update_pango_context (widget);
     }
+}
+
+/**
+ * gtk_widget_get_font_options:
+ * @widget: a #GtkWidget
+ *
+ * Returns the #cairo_font_options_t used for Pango rendering. When not set,
+ * the defaults font options for the #GdkScreen will be used.
+ *
+ * Returns: (transfer none): the #cairo_font_options_t or %NULL if not set
+ *
+ * Since: 3.18
+ **/
+const cairo_font_options_t *
+gtk_widget_get_font_options (GtkWidget *widget)
+{
+  g_return_val_if_fail (GTK_IS_WIDGET (widget), NULL);
+  return widget->priv->font_options;
 }
 
 /**
@@ -12213,6 +12266,9 @@ gtk_widget_finalize (GObject *object)
 
   if (priv->context)
     g_object_unref (priv->context);
+
+  if (widget->priv->font_options)
+    cairo_font_options_destroy (widget->priv->font_options);
 
   _gtk_size_request_cache_free (&priv->requests);
 
