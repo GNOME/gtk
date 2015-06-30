@@ -21,6 +21,10 @@
 
 #include "gtkrenderopsprivate.h"
 
+#include "gtkrenderbackgroundprivate.h"
+#include "gtkrenderborderprivate.h"
+#include "gtkrendericonprivate.h"
+
 G_DEFINE_TYPE (GtkRenderOps, gtk_render_ops, G_TYPE_OBJECT)
 
 static cairo_t *
@@ -41,10 +45,78 @@ gtk_render_ops_real_end_draw_widget (GtkRenderOps *ops,
 }
 
 static void
+gtk_render_ops_real_draw_background (GtkRenderOps     *ops,
+                                     GtkCssStyle      *style,
+                                     cairo_t          *cr,
+                                     gdouble           x,
+                                     gdouble           y,
+                                     gdouble           width,
+                                     gdouble           height,
+                                     GtkJunctionSides  junction)
+{
+  gtk_css_style_render_background (style, cr, x, y, width, height, junction);
+}
+
+void
+gtk_render_ops_real_draw_border (GtkRenderOps     *ops,
+                                 GtkCssStyle      *style,
+                                 cairo_t          *cr,
+                                 gdouble           x,
+                                 gdouble           y,
+                                 gdouble           width,
+                                 gdouble           height,
+                                 guint             hidden_side,
+                                 GtkJunctionSides  junction)
+{
+  gtk_css_style_render_border (style, cr, x, y, width, height, hidden_side, junction);
+}
+
+void
+gtk_render_ops_real_draw_outline (GtkRenderOps *ops,
+                                  GtkCssStyle  *style,
+                                  cairo_t      *cr,
+                                  gdouble       x,
+                                  gdouble       y,
+                                  gdouble       width,
+                                  gdouble       height)
+{
+  gtk_css_style_render_outline (style, cr, x, y, width, height);
+}
+
+void
+gtk_render_ops_real_draw_icon (GtkRenderOps           *ops,
+                               GtkCssStyle            *style,
+                               cairo_t                *cr,
+                               double                  x,
+                               double                  y,
+                               double                  width,
+                               double                  height,
+                               GtkCssImageBuiltinType  builtin_type)
+{
+  gtk_css_style_render_icon (style, cr, x, y, width, height, builtin_type);
+}
+
+void
+gtk_render_ops_real_draw_icon_surface (GtkRenderOps    *ops,
+                                       GtkCssStyle     *style,
+                                       cairo_t         *cr,
+                                       cairo_surface_t *surface,
+                                       double           x,
+                                       double           y)
+{
+  gtk_css_style_render_icon_surface (style, cr, surface, x, y);
+}
+
+static void
 gtk_render_ops_class_init (GtkRenderOpsClass *klass)
 {
   klass->begin_draw_widget = gtk_render_ops_real_begin_draw_widget;
   klass->end_draw_widget = gtk_render_ops_real_end_draw_widget;
+  klass->draw_background = gtk_render_ops_real_draw_background;
+  klass->draw_border = gtk_render_ops_real_draw_border;
+  klass->draw_outline = gtk_render_ops_real_draw_outline;
+  klass->draw_icon = gtk_render_ops_real_draw_icon;
+  klass->draw_icon_surface = gtk_render_ops_real_draw_icon_surface;
 }
 
 static void
@@ -105,3 +177,107 @@ gtk_render_ops_end_draw_widget (GtkWidget *widget,
 
   GTK_RENDER_OPS_GET_CLASS (ops)->end_draw_widget (ops, widget, draw_cr, original_cr);
 }
+
+void
+gtk_render_ops_draw_background (GtkCssStyle      *style,
+                                cairo_t          *cr,
+                                gdouble           x,
+                                gdouble           y,
+                                gdouble           width,
+                                gdouble           height,
+                                GtkJunctionSides  junction)
+{
+  GtkRenderOps *ops;
+
+  ops = gtk_cairo_get_render_ops (cr);
+  if (ops == NULL)
+    {
+      gtk_render_ops_real_draw_background (NULL, style, cr, x, y, width, height, junction);
+      return;
+    }
+
+  GTK_RENDER_OPS_GET_CLASS (ops)->draw_background (ops, style, cr, x, y, width, height, junction);
+}
+
+void
+gtk_render_ops_draw_border (GtkCssStyle      *style,
+                            cairo_t          *cr,
+                            gdouble           x,
+                            gdouble           y,
+                            gdouble           width,
+                            gdouble           height,
+                            guint             hidden_side,
+                            GtkJunctionSides  junction)
+{
+  GtkRenderOps *ops;
+
+  ops = gtk_cairo_get_render_ops (cr);
+  if (ops == NULL)
+    {
+      gtk_render_ops_real_draw_border (NULL, style, cr, x, y, width, height, hidden_side, junction);
+      return;
+    }
+
+  GTK_RENDER_OPS_GET_CLASS (ops)->draw_border (ops, style, cr, x, y, width, height, hidden_side, junction);
+}
+
+void
+gtk_render_ops_draw_outline (GtkCssStyle *style,
+                             cairo_t     *cr,
+                             gdouble      x,
+                             gdouble      y,
+                             gdouble      width,
+                             gdouble      height)
+{
+  GtkRenderOps *ops;
+
+  ops = gtk_cairo_get_render_ops (cr);
+  if (ops == NULL)
+    {
+      gtk_render_ops_real_draw_outline (NULL, style, cr, x, y, width, height);
+      return;
+    }
+
+  GTK_RENDER_OPS_GET_CLASS (ops)->draw_outline (ops, style, cr, x, y, width, height);
+}
+
+void
+gtk_render_ops_draw_icon (GtkCssStyle            *style,
+                          cairo_t                *cr,
+                          double                  x,
+                          double                  y,
+                          double                  width,
+                          double                  height,
+                          GtkCssImageBuiltinType  builtin_type)
+{
+  GtkRenderOps *ops;
+
+  ops = gtk_cairo_get_render_ops (cr);
+  if (ops == NULL)
+    {
+      gtk_render_ops_real_draw_icon (NULL, style, cr, x, y, width, height, builtin_type);
+      return;
+    }
+
+  GTK_RENDER_OPS_GET_CLASS (ops)->draw_icon (ops, style, cr, x, y, width, height, builtin_type);
+}
+
+void
+gtk_render_ops_draw_icon_surface (GtkCssStyle     *style,
+                                  cairo_t         *cr,
+                                  cairo_surface_t *surface,
+                                  double           x,
+                                  double           y)
+{
+  GtkRenderOps *ops;
+
+  ops = gtk_cairo_get_render_ops (cr);
+  if (ops == NULL)
+    {
+      gtk_render_ops_real_draw_icon_surface (NULL, style, cr, surface, x, y);
+      return;
+    }
+
+  GTK_RENDER_OPS_GET_CLASS (ops)->draw_icon_surface (ops, style, cr, surface, x, y);
+}
+

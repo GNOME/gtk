@@ -23,6 +23,7 @@
 #include <cairo.h>
 
 #include <gtk/gtktypes.h>
+#include "gtkcssimagebuiltinprivate.h"
 
 G_BEGIN_DECLS
 
@@ -52,6 +53,44 @@ struct _GtkRenderOpsClass
                                                         GtkWidget               *widget,
                                                         cairo_t                 *draw_cr,
                                                         cairo_t                 *original_cr);
+void            (* draw_background)                     (GtkRenderOps           *ops,
+                                                         GtkCssStyle            *style,
+                                                         cairo_t                *cr,
+                                                         gdouble                 x,
+                                                         gdouble                 y,
+                                                         gdouble                 width,
+                                                         gdouble                 height,
+                                                         GtkJunctionSides        junction);
+void            (* draw_border)                         (GtkRenderOps           *ops,
+                                                         GtkCssStyle            *style,
+                                                         cairo_t                *cr,
+                                                         gdouble                 x,
+                                                         gdouble                 y,
+                                                         gdouble                 width,
+                                                         gdouble                 height,
+                                                         guint                   hidden_side,
+                                                         GtkJunctionSides        junction);
+void            (* draw_outline)                        (GtkRenderOps           *ops,
+                                                         GtkCssStyle            *style,
+                                                         cairo_t                *cr,
+                                                         gdouble                 x,
+                                                         gdouble                 y,
+                                                         gdouble                 width,
+                                                         gdouble                 height);
+void            (* draw_icon)                           (GtkRenderOps           *ops,
+                                                         GtkCssStyle            *style,
+                                                         cairo_t                *cr,
+                                                         double                  x,
+                                                         double                  y,
+                                                         double                  width,
+                                                         double                  height,
+                                                         GtkCssImageBuiltinType  builtin_type);
+void            (* draw_icon_surface)                   (GtkRenderOps           *ops,
+                                                         GtkCssStyle            *style,
+                                                         cairo_t                *cr,
+                                                         cairo_surface_t        *surface,
+                                                         double                  x,
+                                                         double                  y);
 };
 
 GType           gtk_render_ops_get_type                (void) G_GNUC_CONST;
@@ -66,6 +105,40 @@ cairo_t *       gtk_render_ops_begin_draw_widget       (GtkWidget               
 void            gtk_render_ops_end_draw_widget         (GtkWidget               *widget,
                                                         cairo_t                 *draw_cr,
                                                         cairo_t                 *original_cr);
+
+void            gtk_render_ops_draw_background          (GtkCssStyle            *style,
+                                                         cairo_t                *cr,
+                                                         gdouble                 x,
+                                                         gdouble                 y,
+                                                         gdouble                 width,
+                                                         gdouble                 height,
+                                                         GtkJunctionSides        junction);
+void            gtk_render_ops_draw_border              (GtkCssStyle            *style,
+                                                         cairo_t                *cr,
+                                                         gdouble                 x,
+                                                         gdouble                 y,
+                                                         gdouble                 width,
+                                                         gdouble                 height,
+                                                         guint                   hidden_side,
+                                                         GtkJunctionSides        junction);
+void            gtk_render_ops_draw_outline             (GtkCssStyle            *style,
+                                                         cairo_t                *cr,
+                                                         gdouble                 x,
+                                                         gdouble                 y,
+                                                         gdouble                 width,
+                                                         gdouble                 height);
+void            gtk_render_ops_draw_icon                (GtkCssStyle            *style,
+                                                         cairo_t                *cr,
+                                                         double                  x,
+                                                         double                  y,
+                                                         double                  width,
+                                                         double                  height,
+                                                         GtkCssImageBuiltinType  builtin_type);
+void            gtk_render_ops_draw_icon_surface        (GtkCssStyle            *style,
+                                                         cairo_t                *cr,
+                                                         cairo_surface_t        *surface,
+                                                         double                  x,
+                                                         double                  y);
 
 G_END_DECLS
 
