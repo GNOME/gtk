@@ -9,6 +9,9 @@ inspector_c_sources = 			\
 	inspector/general.c		\
 	inspector/gestures.c		\
 	inspector/graphdata.c		\
+        inspector/gtkrenderoperation.c  \
+        inspector/gtkrenderoperationcairo.c   \
+        inspector/gtkrenderoperationwidget.c  \
 	inspector/gtktreemodelcssnode.c	\
 	inspector/init.c		\
 	inspector/inspect-button.c	\
@@ -19,10 +22,12 @@ inspector_c_sources = 			\
 	inspector/object-tree.c		\
 	inspector/prop-editor.c		\
 	inspector/prop-list.c		\
+        inspector/recordingrenderops.c  \
 	inspector/resource-list.c	\
 	inspector/selector.c		\
 	inspector/signals-list.c	\
 	inspector/size-groups.c		\
+	inspector/snapshot.c		\
 	inspector/statistics.c		\
 	inspector/style-prop-list.c	\
 	inspector/treewalk.c		\
@@ -40,6 +45,9 @@ inspector_h_sources = 			\
 	inspector/general.h		\
 	inspector/gestures.h		\
 	inspector/graphdata.h		\
+        inspector/gtkrenderoperation.h  \
+        inspector/gtkrenderoperationcairo.h   \
+        inspector/gtkrenderoperationwidget.h  \
 	inspector/gtktreemodelcssnode.h	\
 	inspector/init.h		\
 	inspector/magnifier.h		\
@@ -49,10 +57,12 @@ inspector_h_sources = 			\
 	inspector/object-tree.h		\
 	inspector/prop-editor.h		\
 	inspector/prop-list.h		\
+        inspector/recordingrenderops.h  \
 	inspector/resource-list.h	\
 	inspector/selector.h		\
 	inspector/signals-list.h	\
 	inspector/size-groups.h		\
+	inspector/snapshot.h		\
 	inspector/statistics.h		\
 	inspector/style-prop-list.h	\
 	inspector/treewalk.h		\
@@ -75,6 +85,7 @@ inspector_templates =			\
 	inspector/resource-list.ui	\
 	inspector/selector.ui		\
 	inspector/signals-list.ui	\
+	inspector/snapshot.ui		\
 	inspector/statistics.ui		\
 	inspector/style-prop-list.ui	\
 	inspector/visual.ui		\

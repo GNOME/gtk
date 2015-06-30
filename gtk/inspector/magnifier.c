@@ -21,7 +21,10 @@
 #include "magnifier.h"
 
 #include "gtkmagnifierprivate.h"
+#include "recordingrenderops.h"
+#include "snapshot.h"
 
+#include "gtkbutton.h"
 #include "gtklabel.h"
 
 
@@ -68,6 +71,25 @@ gtk_inspector_magnifier_set_object (GtkInspectorMagnifier *sl,
 }
 
 static void
+on_snapshot_clicked (GtkButton             *button,
+                     GtkInspectorMagnifier *sl)
+{
+  GtkRenderOperation *oper;
+  GtkRenderOps *ops;
+  GtkWidget *snapshot;
+
+  ops = gtk_recording_render_ops_new ();
+  oper = gtk_recording_render_ops_run_for_widget (GTK_RECORDING_RENDER_OPS (ops),
+                                                  GTK_WIDGET (sl->priv->object));
+  g_object_unref (ops);
+
+  snapshot = gtk_inspector_snapshot_new (oper);
+  gtk_window_present (GTK_WINDOW (snapshot));
+
+  g_object_unref (oper);
+}
+
+static void
 gtk_inspector_magnifier_class_init (GtkInspectorMagnifierClass *klass)
 {
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
@@ -75,6 +97,8 @@ gtk_inspector_magnifier_class_init (GtkInspectorMagnifierClass *klass)
   gtk_widget_class_set_template_from_resource (widget_class, "/org/gtk/libgtk/inspector/magnifier.ui");
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorMagnifier, magnifier);
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorMagnifier, object_title);
+
+  gtk_widget_class_bind_template_callback (widget_class, on_snapshot_clicked);
 }
 
 // vim: set et sw=2 ts=2:

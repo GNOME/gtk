@@ -9,6 +9,17 @@
         <property name="spacing">6</property>
         <property name="margin">6</property>
         <child>
+          <object class="GtkButton" id="snapshot">
+            <property name="visible">True</property>
+            <property name="label" translatable="yes">Snapshot</property>
+            <property name="tooltip-text" translatable="yes">Take a snapshot for closer inspection</property>
+            <signal name="clicked" handler="on_snapshot_clicked"/>
+          </object>
+          <packing>
+            <property name="pack-type">start</property>
+          </packing>
+        </child>
+        <child>
           <object class="GtkScale" id="magnification">
             <property name="visible">True</property>
             <property name="orientation">horizontal</property>

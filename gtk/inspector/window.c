@@ -248,8 +248,8 @@ gtk_inspector_window_class_init (GtkInspectorWindowClass *klass)
   gtk_widget_class_bind_template_callback (widget_class, close_object_details);
 }
 
-static GdkScreen *
-get_inspector_screen (void)
+GdkScreen *
+gtk_inspector_get_screen (void)
 {
   static GdkDisplay *display = NULL;
 
@@ -285,7 +285,7 @@ GtkWidget *
 gtk_inspector_window_new (void)
 {
   return GTK_WIDGET (g_object_new (GTK_TYPE_INSPECTOR_WINDOW,
-                                   "screen", get_inspector_screen (),
+                                   "screen", gtk_inspector_get_screen (),
                                    NULL));
 }
 

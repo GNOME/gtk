@@ -91,6 +91,8 @@ G_BEGIN_DECLS
 GType      gtk_inspector_window_get_type    (void);
 GtkWidget *gtk_inspector_window_new         (void);
 
+GdkScreen *gtk_inspector_get_screen         (void);
+
 void       gtk_inspector_flash_widget       (GtkInspectorWindow *iw,
                                              GtkWidget          *widget);
 void       gtk_inspector_start_highlight    (GtkWidget          *widget);
