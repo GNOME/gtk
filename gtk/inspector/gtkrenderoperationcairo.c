@@ -45,6 +45,12 @@ gtk_render_operation_cairo_get_clip (GtkRenderOperation    *operation,
   clip->height = ceil (extents.y + extents.height) - clip->y;
 }
 
+static char *
+gtk_render_operation_cairo_describe (GtkRenderOperation *operation)
+{
+  return g_strdup ("custom rendering");
+}
+
 static void
 gtk_render_operation_cairo_draw (GtkRenderOperation *operation,
                                  cairo_t            *cr)
@@ -74,6 +80,7 @@ gtk_render_operation_cairo_class_init (GtkRenderOperationCairoClass *klass)
   object_class->finalize = gtk_render_operation_cairo_finalize;
 
   operation_class->get_clip = gtk_render_operation_cairo_get_clip;
+  operation_class->describe = gtk_render_operation_cairo_describe;
   operation_class->draw = gtk_render_operation_cairo_draw;
 }
 

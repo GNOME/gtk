@@ -161,13 +161,15 @@ gtk_inspector_snapshot_fill_listbox (GtkInspectorSnapshot *snapshot,
                                      guint                 depth)
 {
   GtkWidget *label, *row;
-  char *text;
+  char *text, *description;
 
-  text = g_strdup_printf ("%*s %s", 2 * depth, "", G_OBJECT_TYPE_NAME (oper));
+  description = gtk_render_operation_describe (oper);
+  text = g_strdup_printf ("%*s %s", 2 * depth, "", description);
   label = gtk_label_new (text);
   gtk_label_set_xalign (GTK_LABEL (label), 0.0);
   gtk_widget_show (label);
   g_free (text);
+  g_free (description);
 
   row = gtk_list_box_row_new ();
   gtk_container_add (GTK_CONTAINER (row), label);

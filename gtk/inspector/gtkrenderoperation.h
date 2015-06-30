@@ -50,6 +50,7 @@ struct _GtkRenderOperationClass
   void          (* get_matrix)                          (GtkRenderOperation      *operation,
                                                          cairo_matrix_t          *matrix);
 
+  char *        (* describe)                            (GtkRenderOperation      *operation);
   void          (* draw)                                (GtkRenderOperation      *operation,
                                                          cairo_t                 *cr);
 };
@@ -61,6 +62,7 @@ void            gtk_render_operation_get_clip           (GtkRenderOperation     
 void            gtk_render_operation_get_matrix         (GtkRenderOperation      *operation,
                                                          cairo_matrix_t          *matrix);
 
+char *          gtk_render_operation_describe           (GtkRenderOperation      *operation);
 void            gtk_render_operation_draw               (GtkRenderOperation      *operation,
                                                          cairo_t                 *cr);
 

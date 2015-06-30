@@ -41,6 +41,14 @@ gtk_render_operation_widget_get_matrix (GtkRenderOperation *operation,
   *matrix = oper->matrix;
 }
 
+static char *
+gtk_render_operation_widget_describe (GtkRenderOperation *operation)
+{
+  GtkRenderOperationWidget *oper = GTK_RENDER_OPERATION_WIDGET (operation);
+
+  return g_strdup (g_type_name (oper->widget_type));
+}
+
 static void
 gtk_render_operation_widget_draw (GtkRenderOperation *operation,
                                   cairo_t            *cr)
@@ -81,6 +89,7 @@ gtk_render_operation_widget_class_init (GtkRenderOperationWidgetClass *klass)
 
   operation_class->get_clip = gtk_render_operation_widget_get_clip;
   operation_class->get_matrix = gtk_render_operation_widget_get_matrix;
+  operation_class->describe = gtk_render_operation_widget_describe;
   operation_class->draw = gtk_render_operation_widget_draw;
 }
 
@@ -100,6 +109,7 @@ gtk_render_operation_widget_new (GtkWidget      *widget,
 
   result = g_object_new (GTK_TYPE_RENDER_OPERATION_WIDGET, NULL);
   
+  result->widget_type = G_OBJECT_TYPE (widget);
   gtk_widget_get_allocation (widget, &result->widget_allocation);
   gtk_widget_get_clip (widget, &result->widget_clip);
   result->widget_clip.x -= result->widget_allocation.x;

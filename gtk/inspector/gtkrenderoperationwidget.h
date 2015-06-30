@@ -40,6 +40,7 @@ struct _GtkRenderOperationWidget
 {
   GtkRenderOperation parent;
   
+  GType                  widget_type;
   GtkAllocation          widget_allocation;
   GtkAllocation          widget_clip;
   cairo_matrix_t         matrix;

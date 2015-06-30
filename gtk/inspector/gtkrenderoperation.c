@@ -37,6 +37,12 @@ gtk_render_operation_real_get_matrix (GtkRenderOperation *operation,
   cairo_matrix_init_identity (matrix);
 }
 
+static char *
+gtk_render_operation_real_describe (GtkRenderOperation *operation)
+{
+  return g_strdup (G_OBJECT_TYPE_NAME (operation));
+}
+
 static void
 gtk_render_operation_real_draw (GtkRenderOperation *operation,
                                 cairo_t            *cr)
@@ -48,6 +54,7 @@ gtk_render_operation_class_init (GtkRenderOperationClass *klass)
 {
   klass->get_clip = gtk_render_operation_real_get_clip;
   klass->get_matrix = gtk_render_operation_real_get_matrix;
+  klass->describe = gtk_render_operation_real_describe;
   klass->draw = gtk_render_operation_real_draw;
 }
 
@@ -74,6 +81,14 @@ gtk_render_operation_get_matrix (GtkRenderOperation *operation,
   g_return_if_fail (matrix != NULL);
 
   GTK_RENDER_OPERATION_GET_CLASS (operation)->get_matrix (operation, matrix);
+}
+
+char *
+gtk_render_operation_describe (GtkRenderOperation *operation)
+{
+  g_return_val_if_fail (GTK_IS_RENDER_OPERATION (operation), NULL);
+
+  return GTK_RENDER_OPERATION_GET_CLASS (operation)->describe (operation);
 }
 
 void
