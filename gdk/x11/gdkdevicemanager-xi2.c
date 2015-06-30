@@ -345,13 +345,17 @@ get_device_ids (GdkDisplay    *display,
   gulong nitems, bytes_after;
   guint32 *data;
   int rc, format;
-  Atom type;
+  Atom prop, type;
 
   gdk_x11_display_error_trap_push (display);
 
+  prop = XInternAtom (GDK_DISPLAY_XDISPLAY (display), "Device Product ID", True);
+
+  if (prop == None)
+    return 0;
+
   rc = XIGetProperty (GDK_DISPLAY_XDISPLAY (display),
-                      info->deviceid,
-                      gdk_x11_get_xatom_by_name_for_display (display, "Device Product ID"),
+                      info->deviceid, prop,
                       0, 2, False, XA_INTEGER, &type, &format, &nitems, &bytes_after,
                       (guchar **) &data);
   gdk_x11_display_error_trap_pop_ignored (display);
