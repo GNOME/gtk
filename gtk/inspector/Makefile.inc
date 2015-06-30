@@ -10,9 +10,10 @@ inspector_c_sources = 			\
 	inspector/gestures.c		\
 	inspector/graphdata.c		\
         inspector/gtkrenderoperation.c  \
-        inspector/gtkrenderoperationbackground.c   \
-        inspector/gtkrenderoperationcairo.c   \
-        inspector/gtkrenderoperationwidget.c  \
+        inspector/gtkrenderoperationbackground.c        \
+        inspector/gtkrenderoperationborder.c            \
+        inspector/gtkrenderoperationcairo.c             \
+        inspector/gtkrenderoperationwidget.c            \
 	inspector/gtktreemodelcssnode.c	\
 	inspector/init.c		\
 	inspector/inspect-button.c	\
@@ -47,9 +48,10 @@ inspector_h_sources = 			\
 	inspector/gestures.h		\
 	inspector/graphdata.h		\
         inspector/gtkrenderoperation.h  \
-        inspector/gtkrenderoperationbackground.h   \
-        inspector/gtkrenderoperationcairo.h   \
-        inspector/gtkrenderoperationwidget.h  \
+        inspector/gtkrenderoperationbackground.h        \
+        inspector/gtkrenderoperationborder.h            \
+        inspector/gtkrenderoperationcairo.h             \
+        inspector/gtkrenderoperationwidget.h            \
 	inspector/gtktreemodelcssnode.h	\
 	inspector/init.h		\
 	inspector/magnifier.h		\
