@@ -21,6 +21,7 @@
 
 #include "recordingrenderops.h"
 
+#include "gtkrenderoperationbackground.h"
 #include "gtkrenderoperationcairo.h"
 #include "gtkrenderoperationwidget.h"
 #include "gtkwidget.h"
@@ -99,6 +100,26 @@ gtk_recording_render_ops_save_snapshot (GtkRecordingRenderOps *record,
   cairo_restore (cr);
 }
 
+static void
+gtk_recording_render_ops_draw_background (GtkRenderOps     *ops,
+                                          GtkCssStyle      *style,
+                                          cairo_t          *cr,
+                                          gdouble           x,
+                                          gdouble           y,
+                                          gdouble           width,
+                                          gdouble           height,
+                                          GtkJunctionSides  junction)
+{
+  GtkRecordingRenderOps *record = GTK_RECORDING_RENDER_OPS (ops);
+  GtkRenderOperation *oper;
+
+  gtk_recording_render_ops_save_snapshot (record, cr);
+
+  oper = gtk_render_operation_background_new (style, x, y, width, height, junction);
+  gtk_render_operation_widget_add_operation (record->widgets->data, oper);
+  g_object_unref (oper);
+}
+
 static cairo_t *
 gtk_recording_render_ops_begin_draw_widget (GtkRenderOps *ops,
                                             GtkWidget    *widget,
@@ -151,6 +172,7 @@ gtk_recording_render_ops_class_init (GtkRecordingRenderOpsClass *klass)
 
   ops_class->begin_draw_widget = gtk_recording_render_ops_begin_draw_widget;
   ops_class->end_draw_widget = gtk_recording_render_ops_end_draw_widget;
+  ops_class->draw_background = gtk_recording_render_ops_draw_background;
 }
 
 static void

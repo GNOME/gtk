@@ -10,6 +10,7 @@ inspector_c_sources = 			\
 	inspector/gestures.c		\
 	inspector/graphdata.c		\
         inspector/gtkrenderoperation.c  \
+        inspector/gtkrenderoperationbackground.c   \
         inspector/gtkrenderoperationcairo.c   \
         inspector/gtkrenderoperationwidget.c  \
 	inspector/gtktreemodelcssnode.c	\
@@ -46,6 +47,7 @@ inspector_h_sources = 			\
 	inspector/gestures.h		\
 	inspector/graphdata.h		\
         inspector/gtkrenderoperation.h  \
+        inspector/gtkrenderoperationbackground.h   \
         inspector/gtkrenderoperationcairo.h   \
         inspector/gtkrenderoperationwidget.h  \
 	inspector/gtktreemodelcssnode.h	\
