@@ -1004,15 +1004,50 @@ device_get_tool_serial (GdkDevice *device)
 }
 
 static void
-handle_property_change (GdkX11DeviceManagerXI2 *device_manager,
-                        XIPropertyEvent        *ev)
+translate_proximity (GdkDevice       *device,
+                     GdkDeviceTool   *tool,
+                     GdkEvent        *event,
+                     XIPropertyEvent *ev)
 {
+  GdkDevice *master = NULL;
+  GdkWindow *window;
+
+  if (gdk_device_get_device_type (device) != GDK_DEVICE_TYPE_MASTER)
+    master = gdk_device_get_associated_device (device);
+
+  if (!master)
+    master = device;
+
+  window = gdk_device_get_window_at_position (master, NULL, NULL);
+
+  if (!window)
+    return;
+
+  event->proximity.type = tool ? GDK_PROXIMITY_IN : GDK_PROXIMITY_OUT;
+  event->proximity.window = window;
+  event->proximity.time = ev->time;
+  event->proximity.send_event = FALSE;
+  gdk_event_set_device (event, master);
+  gdk_event_set_source_device (event, device);
+}
+
+static gboolean
+handle_property_change (GdkX11DeviceManagerXI2 *device_manager,
+                        XIPropertyEvent        *ev,
+                        GdkEvent               *event)
+{
+  GdkDisplay *display;
   GdkDevice *device;
+  Atom wacom_serial_prop;
 
   device = g_hash_table_lookup (device_manager->id_table,
                                 GUINT_TO_POINTER (ev->deviceid));
 
-  if (ev->property == gdk_x11_get_xatom_by_name ("Wacom Serial IDs"))
+  display = gdk_device_manager_get_display (GDK_DEVICE_MANAGER (device_manager));
+  wacom_serial_prop = XInternAtom (GDK_DISPLAY_XDISPLAY (display),
+                                   "Wacom Serial IDs", True);
+
+  if (wacom_serial_prop != None && ev->property == wacom_serial_prop)
     {
       GdkDeviceTool *tool = NULL;
       guint serial_id;
@@ -1033,7 +1068,12 @@ handle_property_change (GdkX11DeviceManagerXI2 *device_manager,
         }
 
       gdk_device_update_tool (device, tool);
+
+      translate_proximity (device, tool, event, ev);
+      return TRUE;
     }
+
+  return FALSE;
 }
 
 static GdkCrossingMode
@@ -1437,9 +1477,10 @@ gdk_x11_device_manager_xi2_translate_event (GdkEventTranslator *translator,
       return_val = FALSE;
       break;
     case XI_PropertyEvent:
-      handle_property_change (device_manager,
-                              (XIPropertyEvent *) ev);
-      return_val = FALSE;
+      if (!handle_property_change (device_manager,
+                                   (XIPropertyEvent *) ev,
+                                   event))
+        return_val = FALSE;
       break;
     case XI_KeyPress:
     case XI_KeyRelease:
