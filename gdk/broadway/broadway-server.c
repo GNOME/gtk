@@ -821,7 +821,7 @@ map_named_shm (char *name, gsize size)
   void *ptr;
   char *filename = NULL;
 
-  fd = shm_open(name, O_RDONLY, 0600);
+  fd = shm_open (name, O_RDONLY, 0600);
   if (fd == -1)
     {
       filename = g_build_filename (g_get_tmp_dir (), name, NULL);
@@ -829,13 +829,15 @@ map_named_shm (char *name, gsize size)
       if (fd == -1)
 	{
 	  perror ("Failed to map shm");
+	  g_free (filename);
+
 	  return NULL;
 	}
     }
 
-  ptr = mmap(0, size, PROT_READ, MAP_SHARED, fd, 0);
+  ptr = mmap (0, size, PROT_READ, MAP_SHARED, fd, 0);
 
-  (void) close(fd);
+  (void) close (fd);
 
   if (filename)
     {
