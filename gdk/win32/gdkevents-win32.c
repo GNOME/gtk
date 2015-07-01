@@ -136,6 +136,8 @@ static UINT     sync_timer = 0;
 
 static int debug_indent = 0;
 
+static int both_shift_pressed[2]; /* to store keycodes for shift keys */
+
 static void
 assign_object (gpointer lhsp,
 	       gpointer rhs)
@@ -2109,6 +2111,38 @@ gdk_event_translate (MSG  *msg,
 					     NULL, NULL, NULL);
 
       fill_key_event_string (event);
+
+  /* Only one release key event is fired when both shift keys are pressed together
+     and then released. In order to send the missing event, press events for shift
+     keys are recorded and sent together when the release event occurs.
+     Other modifiers (e.g. ctrl, alt) don't have this problem. */
+  if (msg->message == WM_KEYDOWN && msg->wParam == VK_SHIFT)
+    {
+      int pressed_shift = msg->lParam & 0xffffff; /* mask shift modifier */
+      if (both_shift_pressed[0] == 0)
+        both_shift_pressed[0] = pressed_shift;
+      else if (both_shift_pressed[0] != pressed_shift)
+        both_shift_pressed[1] = pressed_shift;
+    }
+
+  if (msg->message == WM_KEYUP && msg->wParam == VK_SHIFT)
+    {
+      if (both_shift_pressed[0] != 0 && both_shift_pressed[1] != 0)
+        {
+          gint tmp_retval;
+          MSG fake_release = *msg;
+          int pressed_shift = msg->lParam & 0xffffff;
+
+          if (both_shift_pressed[0] == pressed_shift)
+            fake_release.lParam = both_shift_pressed[1];
+          else
+            fake_release.lParam = both_shift_pressed[0];
+
+          both_shift_pressed[0] = both_shift_pressed[1] = 0;
+          gdk_event_translate (&fake_release, &tmp_retval);
+        }
+      both_shift_pressed[0] = both_shift_pressed[1] = 0;
+    }
 
       /* Reset MOD1_MASK if it is the Alt key itself */
       if (msg->wParam == VK_MENU)
