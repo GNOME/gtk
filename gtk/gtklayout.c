@@ -858,6 +858,25 @@ gtk_layout_init (GtkLayout *layout)
 
 /* Widget methods
  */
+static void
+set_background (GtkWidget *widget)
+{
+  GtkLayoutPrivate *priv;
+
+  if (gtk_widget_get_realized (widget))
+    {
+      priv = GTK_LAYOUT (widget)->priv;
+
+      /* We still need to call gtk_style_context_set_background() here for
+       * GtkLayout, since subclasses like EelCanvas depend on a background to
+       * be set since the beginning of the draw() implementation.
+       * This should be revisited next time we have a major API break.
+       */
+      G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
+      gtk_style_context_set_background (gtk_widget_get_style_context (widget), priv->bin_window);
+      G_GNUC_END_IGNORE_DEPRECATIONS;
+    }
+}
 
 static void 
 gtk_layout_realize (GtkWidget *widget)
@@ -903,7 +922,7 @@ gtk_layout_realize (GtkWidget *widget)
   priv->bin_window = gdk_window_new (window,
                                      &attributes, attributes_mask);
   gtk_widget_register_window (widget, priv->bin_window);
-  gtk_style_context_set_background (gtk_widget_get_style_context (widget), priv->bin_window);
+  set_background (widget);
 
   tmp_list = priv->children;
   while (tmp_list)
@@ -918,15 +937,9 @@ gtk_layout_realize (GtkWidget *widget)
 static void
 gtk_layout_style_updated (GtkWidget *widget)
 {
-  GtkLayoutPrivate *priv;
-
   GTK_WIDGET_CLASS (gtk_layout_parent_class)->style_updated (widget);
 
-  if (gtk_widget_get_realized (widget))
-    {
-      priv = GTK_LAYOUT (widget)->priv;
-      gtk_style_context_set_background (gtk_widget_get_style_context (widget), priv->bin_window);
-    }
+  set_background (widget);
 }
 
 static void
