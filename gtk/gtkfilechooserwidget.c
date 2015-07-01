@@ -549,6 +549,7 @@ static void     settings_load                (GtkFileChooserWidget *impl);
 static void     show_filters                 (GtkFileChooserWidget *impl,
                                               gboolean               show);
 
+static gboolean recent_files_setting_is_enabled (GtkFileChooserWidget *impl);
 static void     recent_start_loading         (GtkFileChooserWidget *impl);
 static void     recent_stop_loading          (GtkFileChooserWidget *impl);
 static void     recent_clear_model           (GtkFileChooserWidget *impl,
@@ -2731,6 +2732,7 @@ update_appearance (GtkFileChooserWidget *impl)
     {
       save_widgets_create (impl);
       gtk_places_sidebar_set_show_enter_location (GTK_PLACES_SIDEBAR (priv->places_sidebar), FALSE);
+      gtk_places_sidebar_set_show_recent (GTK_PLACES_SIDEBAR (priv->places_sidebar), FALSE);
 
       if (priv->select_multiple)
 	{
@@ -2738,12 +2740,14 @@ update_appearance (GtkFileChooserWidget *impl)
 		     "Re-setting to single selection mode.");
 	  set_select_multiple (impl, FALSE, TRUE);
 	}
+
     }
   else if (priv->action == GTK_FILE_CHOOSER_ACTION_OPEN ||
 	   priv->action == GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER)
     {
       save_widgets_destroy (impl);
       gtk_places_sidebar_set_show_enter_location (GTK_PLACES_SIDEBAR (priv->places_sidebar), TRUE);
+      gtk_places_sidebar_set_show_recent (GTK_PLACES_SIDEBAR (priv->places_sidebar), recent_files_setting_is_enabled (impl));
       location_mode_set (impl, priv->location_mode);
     }
 
@@ -3374,7 +3378,7 @@ set_startup_mode (GtkFileChooserWidget *impl)
   switch (priv->startup_mode)
     {
     case STARTUP_MODE_RECENT:
-      if (recent_files_setting_is_enabled (impl))
+      if (gtk_places_sidebar_get_show_recent (GTK_PLACES_SIDEBAR (priv->places_sidebar)))
         {
           operation_mode_set (impl, OPERATION_MODE_RECENT);
           break;
