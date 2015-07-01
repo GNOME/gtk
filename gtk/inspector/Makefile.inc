@@ -13,6 +13,7 @@ inspector_c_sources = 			\
         inspector/gtkrenderoperationbackground.c        \
         inspector/gtkrenderoperationborder.c            \
         inspector/gtkrenderoperationcairo.c             \
+        inspector/gtkrenderoperationicon.c              \
         inspector/gtkrenderoperationoutline.c           \
         inspector/gtkrenderoperationwidget.c            \
 	inspector/gtktreemodelcssnode.c	\
@@ -52,6 +53,7 @@ inspector_h_sources = 			\
         inspector/gtkrenderoperationbackground.h        \
         inspector/gtkrenderoperationborder.h            \
         inspector/gtkrenderoperationcairo.h             \
+        inspector/gtkrenderoperationicon.h              \
         inspector/gtkrenderoperationoutline.h           \
         inspector/gtkrenderoperationwidget.h            \
 	inspector/gtktreemodelcssnode.h	\
