@@ -1881,9 +1881,14 @@ gtk_drag_find_widget (GtkWidget           *widget,
       GList *hierarchy = NULL;
       gboolean found = FALSE;
 
-      if (!gtk_widget_get_mapped (widget) ||
-          !gtk_widget_get_sensitive (widget))
+      if (!gtk_widget_get_mapped (widget))
         return FALSE;
+
+      if (gtk_widget_get_state_flags (widget) & GTK_STATE_FLAG_INSENSITIVE)
+        {
+          widget = gtk_widget_get_parent (widget);
+          continue;
+        }
 
       /* need to reference the entire hierarchy temporarily in case the
        * ::drag-motion/::drag-drop callbacks change the widget hierarchy.
