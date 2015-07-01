@@ -5273,6 +5273,7 @@ check_save_entry (GtkFileChooserWidget  *impl,
   GtkFileChooserEntry *chooser_entry;
   GFile *current_folder;
   const char *file_part;
+  char *file_part_stripped;
   GFile *file;
   GError *error;
 
@@ -5310,21 +5311,26 @@ check_save_entry (GtkFileChooserWidget  *impl,
 
   file_part = _gtk_file_chooser_entry_get_file_part (chooser_entry);
 
-  if (!file_part || file_part[0] == '\0')
+  /* Copy and strip leading and trailing whitespace */
+  file_part_stripped = g_strstrip (g_strdup (file_part));
+
+  if (!file_part_stripped || file_part_stripped[0] == '\0')
     {
       *file_ret = current_folder;
       *is_well_formed_ret = TRUE;
       *is_file_part_empty_ret = TRUE;
       *is_folder = TRUE;
 
+      g_free (file_part_stripped);
       return;
     }
 
   *is_file_part_empty_ret = FALSE;
 
   error = NULL;
-  file = g_file_get_child_for_display_name (current_folder, file_part, &error);
+  file = g_file_get_child_for_display_name (current_folder, file_part_stripped, &error);
   g_object_unref (current_folder);
+  g_free (file_part_stripped);
 
   if (!file)
     {
