@@ -408,7 +408,6 @@ static gint gtk_window_focus_in_event     (GtkWidget         *widget,
 					   GdkEventFocus     *event);
 static gint gtk_window_focus_out_event    (GtkWidget         *widget,
 					   GdkEventFocus     *event);
-static void gtk_window_style_updated      (GtkWidget         *widget);
 static gboolean gtk_window_state_event    (GtkWidget          *widget,
                                            GdkEventWindowState *event);
 static void gtk_window_remove             (GtkContainer      *container,
@@ -685,7 +684,6 @@ gtk_window_class_init (GtkWindowClass *klass)
   widget_class->move_focus = gtk_window_move_focus;
   widget_class->draw = gtk_window_draw;
   widget_class->window_state_event = gtk_window_state_event;
-  widget_class->style_updated = gtk_window_style_updated;
   widget_class->get_preferred_width = gtk_window_get_preferred_width;
   widget_class->get_preferred_width_for_height = gtk_window_get_preferred_width_for_height;
   widget_class->get_preferred_height = gtk_window_get_preferred_height;
@@ -7617,21 +7615,6 @@ gtk_window_state_event (GtkWidget           *widget,
     }
 
   return FALSE;
-}
-
-static void
-gtk_window_style_updated (GtkWidget *widget)
-{
-  GdkRGBA transparent = { 0.0, 0.0, 0.0, 0.0 };
-
-  GTK_WIDGET_CLASS (gtk_window_parent_class)->style_updated (widget);
-
-  if (gtk_widget_get_realized (widget))
-    {
-      gdk_window_set_background_rgba (gtk_widget_get_window (widget),
-                                      &transparent);
-      gtk_widget_queue_resize (widget);
-    }
 }
 
 /**
