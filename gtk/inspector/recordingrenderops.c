@@ -24,6 +24,7 @@
 #include "gtkrenderoperationbackground.h"
 #include "gtkrenderoperationborder.h"
 #include "gtkrenderoperationcairo.h"
+#include "gtkrenderoperationoutline.h"
 #include "gtkrenderoperationwidget.h"
 #include "gtkwidget.h"
 
@@ -142,6 +143,25 @@ gtk_recording_render_ops_draw_border (GtkRenderOps     *ops,
   g_object_unref (oper);
 }
 
+static void
+gtk_recording_render_ops_draw_outline (GtkRenderOps     *ops,
+                                       GtkCssStyle      *style,
+                                       cairo_t          *cr,
+                                       gdouble           x,
+                                       gdouble           y,
+                                       gdouble           width,
+                                       gdouble           height)
+{
+  GtkRecordingRenderOps *record = GTK_RECORDING_RENDER_OPS (ops);
+  GtkRenderOperation *oper;
+
+  gtk_recording_render_ops_save_snapshot (record, cr);
+
+  oper = gtk_render_operation_outline_new (style, x, y, width, height);
+  gtk_render_operation_widget_add_operation (record->widgets->data, oper);
+  g_object_unref (oper);
+}
+
 static cairo_t *
 gtk_recording_render_ops_begin_draw_widget (GtkRenderOps *ops,
                                             GtkWidget    *widget,
@@ -197,6 +217,7 @@ gtk_recording_render_ops_class_init (GtkRecordingRenderOpsClass *klass)
   ops_class->end_draw_widget = gtk_recording_render_ops_end_draw_widget;
   ops_class->draw_background = gtk_recording_render_ops_draw_background;
   ops_class->draw_border = gtk_recording_render_ops_draw_border;
+  ops_class->draw_outline = gtk_recording_render_ops_draw_outline;
 }
 
 static void
