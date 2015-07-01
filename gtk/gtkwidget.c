@@ -8247,12 +8247,6 @@ gtk_widget_real_style_updated (GtkWidget *widget)
     {
       const GtkBitmask *changes = _gtk_style_context_get_changes (widget->priv->context);
 
-      if (gtk_widget_get_realized (widget) &&
-          gtk_widget_get_has_window (widget) &&
-          !gtk_widget_get_app_paintable (widget))
-        gtk_style_context_set_background (widget->priv->context,
-                                          widget->priv->window);
-
       if (widget->priv->anchored)
         {
           static GtkBitmask *affects_size = NULL;
