@@ -34,6 +34,7 @@
 #include "gtkimage.h"
 #include "gtkintl.h"
 #include "gtkprivate.h"
+#include "gtkrendericonprivate.h"
 #include "gtkstylecontext.h"
 #include "gtkstylecontextprivate.h"
 #include "gtkwidgetprivate.h"
@@ -202,11 +203,11 @@ gtk_spinner_size_allocate (GtkWidget     *widget,
   context = gtk_widget_get_style_context (widget);
   size = MIN (allocation->width, allocation->height);
 
-  _gtk_style_context_get_icon_extents (context,
-                                       &clip,
-                                       allocation->x + (allocation->width - size) / 2,
-                                       allocation->y + (allocation->height - size) / 2,
-                                       size, size);
+  gtk_css_style_get_icon_extents (gtk_style_context_lookup_style (context),
+                                  &clip,
+                                  allocation->x + (allocation->width - size) / 2,
+                                  allocation->y + (allocation->height - size) / 2,
+                                  size, size);
 
   gdk_rectangle_union (&clip, allocation, &clip);
 

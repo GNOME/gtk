@@ -40,6 +40,7 @@
 #include "gtkprivate.h"
 #include "gtktypebuiltins.h"
 #include "gtkcssshadowsvalueprivate.h"
+#include "gtkrendericonprivate.h"
 #include "gtkstylecontextprivate.h"
 #include "gtkwidgetprivate.h"
 
@@ -1540,12 +1541,12 @@ gtk_image_size_allocate (GtkWidget     *widget,
   /* XXX: This is not strictly correct, we could compute the area
    * actually occupied by the image, but I'm lazy...
    */
-  _gtk_style_context_get_icon_extents (gtk_widget_get_style_context (widget),
-                                       &clip,
-                                       allocation->x,
-                                       allocation->y,
-                                       allocation->width,
-                                       allocation->height);
+  gtk_css_style_get_icon_extents (gtk_style_context_lookup_style (gtk_widget_get_style_context (widget)),
+                                  &clip,
+                                  allocation->x,
+                                  allocation->y,
+                                  allocation->width,
+                                  allocation->height);
 
   _gtk_widget_set_simple_clip (widget, &clip);
 }
