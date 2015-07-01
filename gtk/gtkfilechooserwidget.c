@@ -304,9 +304,12 @@ struct _GtkFileChooserWidgetPrivate {
   GtkTreeViewColumn *list_name_column;
   GtkCellRenderer *list_name_renderer;
   GtkCellRenderer *list_pixbuf_renderer;
-  GtkTreeViewColumn *list_mtime_column;
+  GtkTreeViewColumn *list_time_column;
+  GtkCellRenderer *list_time_renderer;
   GtkTreeViewColumn *list_size_column;
+  GtkCellRenderer *list_size_renderer;
   GtkTreeViewColumn *list_location_column;
+  GtkCellRenderer *list_location_renderer;
 
   guint location_changed_id;
 
@@ -362,19 +365,20 @@ static guint signals[LAST_SIGNAL] = { 0 };
 
 #define MODEL_ATTRIBUTES "standard::name,standard::type,standard::display-name," \
                          "standard::is-hidden,standard::is-backup,standard::size," \
-                         "standard::content-type,time::modified,standard::target-uri"
+                         "standard::content-type,time::modified,time::access," \
+                         "standard::target-uri"
 enum {
   /* the first 3 must be these due to settings caching sort column */
   MODEL_COL_NAME,
   MODEL_COL_SIZE,
-  MODEL_COL_MTIME,
+  MODEL_COL_TIME,
   MODEL_COL_FILE,
   MODEL_COL_NAME_COLLATED,
   MODEL_COL_IS_FOLDER,
   MODEL_COL_IS_SENSITIVE,
   MODEL_COL_SURFACE,
   MODEL_COL_SIZE_TEXT,
-  MODEL_COL_MTIME_TEXT,
+  MODEL_COL_TIME_TEXT,
   MODEL_COL_LOCATION_TEXT,
   MODEL_COL_LOCATION_DIST,
   MODEL_COL_ELLIPSIZE,
@@ -386,14 +390,14 @@ enum {
 	MODEL_COL_NUM_COLUMNS,					\
 	G_TYPE_STRING,		  /* MODEL_COL_NAME */		\
 	G_TYPE_INT64,		  /* MODEL_COL_SIZE */		\
-	G_TYPE_LONG,		  /* MODEL_COL_MTIME */		\
+	G_TYPE_LONG,		  /* MODEL_COL_TIME */		\
 	G_TYPE_FILE,		  /* MODEL_COL_FILE */		\
 	G_TYPE_STRING,		  /* MODEL_COL_NAME_COLLATED */	\
 	G_TYPE_BOOLEAN,		  /* MODEL_COL_IS_FOLDER */	\
 	G_TYPE_BOOLEAN,		  /* MODEL_COL_IS_SENSITIVE */	\
 	CAIRO_GOBJECT_TYPE_SURFACE,  /* MODEL_COL_SURFACE */	\
 	G_TYPE_STRING,		  /* MODEL_COL_SIZE_TEXT */	\
-	G_TYPE_STRING,		  /* MODEL_COL_MTIME_TEXT */	\
+	G_TYPE_STRING,		  /* MODEL_COL_TIME_TEXT */	\
 	G_TYPE_STRING,		  /* MODEL_COL_LOCATION_TEXT */	\
 	G_TYPE_INT,		  /* MODEL_COL_LOCATION_DIST */	\
 	PANGO_TYPE_ELLIPSIZE_MODE /* MODEL_COL_ELLIPSIZE */
@@ -1986,7 +1990,7 @@ file_list_set_sort_column_ids (GtkFileChooserWidget *impl)
   gtk_tree_view_set_search_column (GTK_TREE_VIEW (priv->browse_files_tree_view), -1);
 
   gtk_tree_view_column_set_sort_column_id (priv->list_name_column, MODEL_COL_NAME);
-  gtk_tree_view_column_set_sort_column_id (priv->list_mtime_column, MODEL_COL_MTIME);
+  gtk_tree_view_column_set_sort_column_id (priv->list_time_column, MODEL_COL_TIME);
   gtk_tree_view_column_set_sort_column_id (priv->list_size_column, MODEL_COL_SIZE);
   gtk_tree_view_column_set_sort_column_id (priv->list_location_column, MODEL_COL_LOCATION_TEXT);
 }
@@ -2629,6 +2633,7 @@ operation_mode_set_enter_location (GtkFileChooserWidget *impl)
   gtk_widget_set_sensitive (priv->filter_combo, TRUE);
   location_mode_set (impl, LOCATION_MODE_FILENAME_ENTRY);
   gtk_tree_view_column_set_visible (priv->list_location_column, FALSE);
+  gtk_tree_view_column_set_title (priv->list_time_column, _("Modified"));
 }
 
 static void
@@ -2642,6 +2647,7 @@ operation_mode_set_browse (GtkFileChooserWidget *impl)
   location_bar_update (impl);
   gtk_widget_set_sensitive (priv->filter_combo, TRUE);
   gtk_tree_view_column_set_visible (priv->list_location_column, FALSE);
+  gtk_tree_view_column_set_title (priv->list_time_column, _("Modified"));
 }
 
 static void
@@ -2658,8 +2664,8 @@ operation_mode_set_search (GtkFileChooserWidget *impl)
   search_setup_widgets (impl);
   gtk_entry_grab_focus_without_selecting (GTK_ENTRY (priv->search_entry));
   gtk_widget_set_sensitive (priv->filter_combo, FALSE);
-
   gtk_tree_view_column_set_visible (priv->list_location_column, TRUE);
+  gtk_tree_view_column_set_title (priv->list_time_column, _("Modified"));
 }
 
 static void
@@ -2678,6 +2684,7 @@ operation_mode_set_recent (GtkFileChooserWidget *impl)
   g_object_unref (file);
   gtk_widget_set_sensitive (priv->filter_combo, TRUE);
   gtk_tree_view_column_set_visible (priv->list_location_column, TRUE);
+  gtk_tree_view_column_set_title (priv->list_time_column, _("Accessed"));
 }
 
 static void
@@ -3568,20 +3575,20 @@ size_sort_func (GtkTreeModel *model,
     }
 }
 
-/* Sort callback for the mtime column */
+/* Sort callback for the time column */
 static gint
-mtime_sort_func (GtkTreeModel *model,
-		 GtkTreeIter  *a,
-		 GtkTreeIter  *b,
-		 gpointer      user_data)
+time_sort_func (GtkTreeModel *model,
+                GtkTreeIter  *a,
+                GtkTreeIter  *b,
+                gpointer      user_data)
 {
   COMPARE_DIRECTORIES;
   else
     {
       glong ta, tb;
 
-      ta = g_value_get_long (_gtk_file_system_model_get_value (fs_model, a, MODEL_COL_MTIME));
-      tb = g_value_get_long (_gtk_file_system_model_get_value (fs_model, b, MODEL_COL_MTIME));
+      ta = g_value_get_long (_gtk_file_system_model_get_value (fs_model, a, MODEL_COL_TIME));
+      tb = g_value_get_long (_gtk_file_system_model_get_value (fs_model, b, MODEL_COL_TIME));
 
       return ta < tb ? -1 : (ta == tb ? 0 : 1);
     }
@@ -4050,7 +4057,7 @@ string_replace (const gchar *input,
 
 static char *
 my_g_format_time_for_display (GtkFileChooserWidget *impl,
-                              glong secs)
+                              glong                 secs)
 {
   GDateTime *now, *time;
   GTimeSpan time_diff;
@@ -4262,19 +4269,22 @@ file_system_model_set (GtkFileSystemModel *model,
       else
         g_value_take_string (value, g_format_size (g_file_info_get_size (info)));
       break;
-    case MODEL_COL_MTIME:
-    case MODEL_COL_MTIME_TEXT:
+    case MODEL_COL_TIME:
+    case MODEL_COL_TIME_TEXT:
       {
-        GTimeVal tv;
+        glong time;
         if (info == NULL)
           break;
-        g_file_info_get_modification_time (info, &tv);
-        if (column == MODEL_COL_MTIME)
-          g_value_set_long (value, tv.tv_sec);
-        else if (tv.tv_sec == 0)
+        if (priv->operation_mode == OPERATION_MODE_RECENT)
+          time = (glong) g_file_info_get_attribute_uint64 (info, G_FILE_ATTRIBUTE_TIME_ACCESS);
+        else
+          time = (glong) g_file_info_get_attribute_uint64 (info, G_FILE_ATTRIBUTE_TIME_MODIFIED);
+        if (column == MODEL_COL_TIME)
+          g_value_set_long (value, time);
+        else if (time == 0)
           g_value_set_static_string (value, _("Unknown"));
         else
-          g_value_take_string (value, my_g_format_time_for_display (impl, tv.tv_sec));
+          g_value_take_string (value, my_g_format_time_for_display (impl, time)); 
         break;
       }
     case MODEL_COL_ELLIPSIZE:
@@ -4393,7 +4403,7 @@ set_list_model (GtkFileChooserWidget *impl,
   profile_msg ("    set sort function", NULL);
   gtk_tree_sortable_set_sort_func (GTK_TREE_SORTABLE (priv->browse_files_model), MODEL_COL_NAME, name_sort_func, impl, NULL);
   gtk_tree_sortable_set_sort_func (GTK_TREE_SORTABLE (priv->browse_files_model), MODEL_COL_SIZE, size_sort_func, impl, NULL);
-  gtk_tree_sortable_set_sort_func (GTK_TREE_SORTABLE (priv->browse_files_model), MODEL_COL_MTIME, mtime_sort_func, impl, NULL);
+  gtk_tree_sortable_set_sort_func (GTK_TREE_SORTABLE (priv->browse_files_model), MODEL_COL_TIME, time_sort_func, impl, NULL);
   gtk_tree_sortable_set_sort_func (GTK_TREE_SORTABLE (priv->browse_files_model), MODEL_COL_LOCATION_TEXT, location_sort_func, impl, NULL);
   gtk_tree_sortable_set_default_sort_func (GTK_TREE_SORTABLE (priv->browse_files_model), NULL, NULL, NULL);
   set_sort_column (impl);
@@ -6473,8 +6483,8 @@ search_setup_model (GtkFileChooserWidget *impl)
 				   name_sort_func,
 				   impl, NULL);
   gtk_tree_sortable_set_sort_func (GTK_TREE_SORTABLE (priv->search_model),
-				   MODEL_COL_MTIME,
-				   mtime_sort_func,
+				   MODEL_COL_TIME,
+				   time_sort_func,
 				   impl, NULL);
   gtk_tree_sortable_set_sort_func (GTK_TREE_SORTABLE (priv->search_model),
 				   MODEL_COL_SIZE,
@@ -6676,8 +6686,8 @@ recent_setup_model (GtkFileChooserWidget *impl)
                                    size_sort_func,
                                    impl, NULL);
   gtk_tree_sortable_set_sort_func (GTK_TREE_SORTABLE (priv->recent_model),
-                                   MODEL_COL_MTIME,
-                                   mtime_sort_func,
+                                   MODEL_COL_TIME,
+                                   time_sort_func,
                                    impl, NULL);
   gtk_tree_sortable_set_sort_func (GTK_TREE_SORTABLE (priv->recent_model),
                                    MODEL_COL_LOCATION_TEXT,
@@ -6702,7 +6712,7 @@ recent_idle_cleanup (gpointer data)
   gtk_tree_view_set_model (GTK_TREE_VIEW (priv->browse_files_tree_view),
                            GTK_TREE_MODEL (priv->recent_model));
   file_list_set_sort_column_ids (impl);
-  gtk_tree_sortable_set_sort_column_id (GTK_TREE_SORTABLE (priv->recent_model), MODEL_COL_MTIME, GTK_SORT_DESCENDING);
+  gtk_tree_sortable_set_sort_column_id (GTK_TREE_SORTABLE (priv->recent_model), MODEL_COL_TIME, GTK_SORT_DESCENDING);
 
   set_busy_cursor (impl, FALSE);
   
@@ -7147,72 +7157,41 @@ static void
 update_cell_renderer_attributes (GtkFileChooserWidget *impl)
 {
   GtkFileChooserWidgetPrivate *priv = impl->priv;
-  GtkTreeViewColumn *column;
-  GtkCellRenderer *renderer;
-  GList *walk, *list;
 
-  /* Keep the following column numbers in sync with create_file_list() */
+  gtk_tree_view_column_set_attributes (priv->list_name_column,
+                                       priv->list_pixbuf_renderer,
+                                       "surface", MODEL_COL_SURFACE,
+                                       "sensitive", MODEL_COL_IS_SENSITIVE,
+                                       NULL);
+  gtk_tree_view_column_set_attributes (priv->list_name_column,
+                                       priv->list_name_renderer,
+                                       "text", MODEL_COL_NAME,
+                                       "ellipsize", MODEL_COL_ELLIPSIZE,
+                                       "sensitive", MODEL_COL_IS_SENSITIVE,
+                                       NULL);
 
-  /* name */
-  column = gtk_tree_view_get_column (GTK_TREE_VIEW (priv->browse_files_tree_view), 0);
-  list = gtk_cell_layout_get_cells (GTK_CELL_LAYOUT (column));
-  for (walk = list; walk; walk = walk->next)
-    {
-      renderer = walk->data;
-      if (GTK_IS_CELL_RENDERER_PIXBUF (renderer))
-        {
-          gtk_tree_view_column_set_attributes (column, renderer, 
-                                               "surface", MODEL_COL_SURFACE,
-                                               NULL);
-        }
-      else
-        {
-          gtk_tree_view_column_set_attributes (column, renderer, 
-                                               "text", MODEL_COL_NAME,
-                                               "ellipsize", MODEL_COL_ELLIPSIZE,
-                                               NULL);
-        }
-
-      gtk_tree_view_column_add_attribute (column, renderer, "sensitive", MODEL_COL_IS_SENSITIVE);
-    }
-  g_list_free (list);
-
-  /* size */
-  column = gtk_tree_view_get_column (GTK_TREE_VIEW (priv->browse_files_tree_view), 1);
-  list = gtk_cell_layout_get_cells (GTK_CELL_LAYOUT (column));
-  renderer = list->data;
-  gtk_tree_view_column_set_attributes (column, renderer, 
+  gtk_tree_view_column_set_attributes (priv->list_size_column,
+                                       priv->list_size_renderer,
                                        "text", MODEL_COL_SIZE_TEXT,
+                                       "sensitive", MODEL_COL_IS_SENSITIVE,
                                        NULL);
 
-  gtk_tree_view_column_add_attribute (column, renderer, "sensitive", MODEL_COL_IS_SENSITIVE);
-  g_list_free (list);
-
-  /* mtime */
-  column = gtk_tree_view_get_column (GTK_TREE_VIEW (priv->browse_files_tree_view), 2);
-  list = gtk_cell_layout_get_cells (GTK_CELL_LAYOUT (column));
-  renderer = list->data;
-  gtk_tree_view_column_set_attributes (column, renderer, 
-                                       "text", MODEL_COL_MTIME_TEXT,
+  gtk_tree_view_column_set_attributes (priv->list_time_column,
+                                       priv->list_time_renderer,
+                                       "text", MODEL_COL_TIME_TEXT,
+                                       "sensitive", MODEL_COL_IS_SENSITIVE,
                                        NULL);
-  gtk_tree_view_column_add_attribute (column, renderer, "sensitive", MODEL_COL_IS_SENSITIVE);
-  g_list_free (list);
 
-  /* location */
-  column = gtk_tree_view_get_column (GTK_TREE_VIEW (priv->browse_files_tree_view), 3);
-  list = gtk_cell_layout_get_cells (GTK_CELL_LAYOUT (column));
-  renderer = list->data;
-  g_object_set (renderer,
+  g_object_set (priv->list_location_renderer,
                 "ellipsize", PANGO_ELLIPSIZE_START,
                 "width-chars", 15,
                 "max-width-chars", 30,
                 NULL);
-  gtk_tree_view_column_set_attributes (column, renderer,
+  gtk_tree_view_column_set_attributes (priv->list_location_column,
+                                       priv->list_location_renderer,
                                        "text", MODEL_COL_LOCATION_TEXT,
                                        "sensitive", MODEL_COL_IS_SENSITIVE,
                                        NULL);
-  g_list_free (list);
-
 }
 
 static void
@@ -7762,9 +7741,12 @@ gtk_file_chooser_widget_class_init (GtkFileChooserWidgetClass *class)
   gtk_widget_class_bind_template_child_private (widget_class, GtkFileChooserWidget, list_name_column);
   gtk_widget_class_bind_template_child_private (widget_class, GtkFileChooserWidget, list_pixbuf_renderer);
   gtk_widget_class_bind_template_child_private (widget_class, GtkFileChooserWidget, list_name_renderer);
-  gtk_widget_class_bind_template_child_private (widget_class, GtkFileChooserWidget, list_mtime_column);
+  gtk_widget_class_bind_template_child_private (widget_class, GtkFileChooserWidget, list_time_column);
+  gtk_widget_class_bind_template_child_private (widget_class, GtkFileChooserWidget, list_time_renderer);
   gtk_widget_class_bind_template_child_private (widget_class, GtkFileChooserWidget, list_size_column);
+  gtk_widget_class_bind_template_child_private (widget_class, GtkFileChooserWidget, list_size_renderer);
   gtk_widget_class_bind_template_child_private (widget_class, GtkFileChooserWidget, list_location_column);
+  gtk_widget_class_bind_template_child_private (widget_class, GtkFileChooserWidget, list_location_renderer);
   gtk_widget_class_bind_template_child_private (widget_class, GtkFileChooserWidget, new_folder_name_entry);
   gtk_widget_class_bind_template_child_private (widget_class, GtkFileChooserWidget, new_folder_create_button);
   gtk_widget_class_bind_template_child_private (widget_class, GtkFileChooserWidget, new_folder_error_label);
