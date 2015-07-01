@@ -3766,8 +3766,6 @@ gtk_places_sidebar_init (GtkPlacesSidebar *sidebar)
   sidebar->source_targets = gtk_target_list_new (dnd_source_targets, G_N_ELEMENTS (dnd_source_targets));
   gtk_target_list_add_text_targets (sidebar->source_targets, 0);
 
-  gtk_drag_dest_set_track_motion (GTK_WIDGET (sidebar->list_box), TRUE);
-
   g_signal_connect (sidebar->list_box, "motion-notify-event",
                     G_CALLBACK (on_motion_notify_event), sidebar);
   g_signal_connect (sidebar->list_box, "drag-begin",
