@@ -23,6 +23,7 @@
 #include "gtksearchengine.h"
 #include "gtksearchenginesimple.h"
 #include "gtksearchenginetracker.h"
+#include "gtksearchenginemodel.h"
 #include "gtksearchenginequartz.h"
 
 #include <gdk/gdk.h> /* for GDK_WINDOWING_QUARTZ */
@@ -40,9 +41,15 @@ struct _GtkSearchEnginePrivate {
   gboolean simple_running;
   gchar *simple_error;
 
+  GtkSearchEngine *model;
+  gboolean model_running;
+  gchar *model_error;
+
   gboolean running;
   gboolean recursive;
   GHashTable *hits;
+
+  GtkQuery *query;
 };
 
 enum
@@ -61,11 +68,16 @@ static void
 set_query (GtkSearchEngine *engine,
            GtkQuery        *query)
 {
+  g_set_object (&engine->priv->query, query);
+
   if (engine->priv->native)
     _gtk_search_engine_set_query (engine->priv->native, query);
 
   if (engine->priv->simple)
     _gtk_search_engine_set_query (engine->priv->simple, query);
+
+  if (engine->priv->model)
+    _gtk_search_engine_set_query (engine->priv->model, query);
 }
 
 static void
@@ -87,6 +99,13 @@ start (GtkSearchEngine *engine)
       engine->priv->simple_running = TRUE;
     }
 
+  if (engine->priv->model)
+    {
+      g_clear_pointer (&engine->priv->model_error, g_free);
+      _gtk_search_engine_start (engine->priv->model);
+      engine->priv->model_running = TRUE;
+    }
+
   engine->priv->running = TRUE;
 }
 
@@ -105,6 +124,12 @@ stop (GtkSearchEngine *engine)
       engine->priv->simple_running = FALSE;
     }
 
+  if (engine->priv->model)
+    {
+      _gtk_search_engine_stop (engine->priv->model);
+      engine->priv->model_running = FALSE;
+    }
+
   engine->priv->running = FALSE;
 
   g_hash_table_remove_all (engine->priv->hits);
@@ -121,7 +146,12 @@ finalize (GObject *object)
   g_clear_object (&engine->priv->simple);
   g_free (engine->priv->simple_error);
 
+  g_clear_object (&engine->priv->model);
+  g_free (engine->priv->model_error);
+
   g_clear_pointer (&engine->priv->hits, g_hash_table_unref);
+
+  g_clear_object (&engine->priv->query);
 
   G_OBJECT_CLASS (_gtk_search_engine_parent_class)->finalize (object);
 }
@@ -222,6 +252,8 @@ update_status (GtkSearchEngine *engine)
             _gtk_search_engine_error (engine, engine->priv->native_error);
           else if (engine->priv->simple_error)
             _gtk_search_engine_error (engine, engine->priv->simple_error);
+          else if (engine->priv->model_error)
+            _gtk_search_engine_error (engine, engine->priv->model_error);
           else
             _gtk_search_engine_finished (engine);
         }
@@ -238,6 +270,8 @@ finished (GtkSearchEngine *engine,
     composite->priv->native_running = FALSE;
   else if (engine == composite->priv->simple)
     composite->priv->simple_running = FALSE;
+  else if (engine == composite->priv->model)
+    composite->priv->model_running = FALSE;
 
   update_status (composite);
 }
@@ -257,9 +291,15 @@ error (GtkSearchEngine *engine,
     }
   else if (engine == composite->priv->simple)
     {
-      g_free (composite->priv->native_error);
-      composite->priv->native_error = g_strdup (message);
+      g_free (composite->priv->simple_error);
+      composite->priv->simple_error = g_strdup (message);
       composite->priv->simple_running = FALSE;
+    }
+  else if (engine == composite->priv->model)
+    {
+      g_free (composite->priv->model_error);
+      composite->priv->model_error = g_strdup (message);
+      composite->priv->model_running = FALSE;
     }
 
   update_status (composite);
@@ -431,4 +471,17 @@ _gtk_search_engine_get_recursive (GtkSearchEngine *engine)
   g_return_val_if_fail (GTK_IS_SEARCH_ENGINE (engine), TRUE);
 
   return engine->priv->recursive;
+}
+
+void
+_gtk_search_engine_set_model (GtkSearchEngine    *engine,
+                              GtkFileSystemModel *model)
+{
+  g_clear_object (&engine->priv->model);
+  if (model)
+    {
+      engine->priv->model = _gtk_search_engine_model_new (model);
+      if (engine->priv->query)
+        _gtk_search_engine_set_query (engine->priv->model, engine->priv->query);
+    }
 }

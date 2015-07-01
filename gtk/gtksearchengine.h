@@ -23,6 +23,7 @@
 #define __GTK_SEARCH_ENGINE_H__
 
 #include "gtkquery.h"
+#include "gtkfilesystemmodel.h"
 #include <gio/gio.h>
 
 G_BEGIN_DECLS
@@ -90,6 +91,9 @@ gboolean         _gtk_search_engine_get_recursive   (GtkSearchEngine *engine);
 
 void             _gtk_search_hit_free (GtkSearchHit *hit);
 GtkSearchHit    *_gtk_search_hit_dup (GtkSearchHit *hit);
+
+void             _gtk_search_engine_set_model       (GtkSearchEngine    *engine,
+                                                     GtkFileSystemModel *model);
 
 G_END_DECLS
 

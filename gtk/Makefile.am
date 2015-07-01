@@ -496,6 +496,7 @@ gtk_private_h_sources =		\
 	gtkscaleprivate.h	\
 	gtksearchengine.h	\
 	gtksearchenginesimple.h	\
+	gtksearchenginemodel.h	\
 	gtksearchentryprivate.h \
 	gtkselectionprivate.h	\
 	gtksidebarrowprivate.h	\
@@ -545,6 +546,7 @@ gtk_base_c_sources = 		\
 	gtksearchentry.c	\
 	gtksearchengine.c	\
 	gtksearchenginesimple.c	\
+	gtksearchenginemodel.c	\
 	fnmatch.c		\
 	gtkaboutdialog.c	\
 	gtkaccelgroup.c		\

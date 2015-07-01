@@ -248,6 +248,7 @@ struct _GtkFileChooserWidgetPrivate {
   GtkSearchEngine *search_engine;
   GtkQuery *search_query;
   GtkFileSystemModel *search_model;
+  GtkFileSystemModel *model_for_search;
 
   /* OPERATION_MODE_RECENT */
   GtkRecentManager *recent_manager;
@@ -659,6 +660,7 @@ gtk_file_chooser_widget_finalize (GObject *object)
   stop_loading_and_clear_list_model (impl, FALSE);
   search_clear_model (impl, FALSE);
   recent_clear_model (impl, FALSE);
+  g_clear_object (&impl->priv->model_for_search);
 
   /* stopping the load above should have cleared this */
   g_assert (priv->load_timeout_id == 0);
@@ -2600,6 +2602,7 @@ operation_mode_stop (GtkFileChooserWidget *impl, OperationMode mode)
       break;
 
     case OPERATION_MODE_SEARCH:
+      g_clear_object (&impl->priv->model_for_search);
       search_stop_searching (impl, FALSE);
       search_clear_model (impl, TRUE);
       break;
@@ -3683,6 +3686,8 @@ load_set_model (GtkFileChooserWidget *impl)
   set_sort_column (impl);
   profile_msg ("    gtk_tree_view_set_model end", NULL);
   priv->list_sort_ascending = TRUE;
+
+  g_set_object (&priv->model_for_search, priv->browse_files_model);
 
   profile_end ("end", NULL);
 }
@@ -6419,12 +6424,11 @@ search_clear_model (GtkFileChooserWidget *impl,
 {
   GtkFileChooserWidgetPrivate *priv = impl->priv;
 
+  g_clear_object (&priv->search_model);
+
   if (!priv->search_model)
     return;
 
-  g_object_unref (priv->search_model);
-  priv->search_model = NULL;
-  
   if (remove_from_treeview)
     gtk_tree_view_set_model (GTK_TREE_VIEW (priv->browse_files_tree_view), NULL);
 }
@@ -6537,6 +6541,7 @@ search_start_query (GtkFileChooserWidget *impl,
       g_object_unref (file);
     }
 
+  _gtk_search_engine_set_model (priv->search_engine, priv->model_for_search);
   _gtk_search_engine_set_query (priv->search_engine, priv->search_query);
 
   g_signal_connect (priv->search_engine, "hits-added",
@@ -6734,6 +6739,8 @@ populate_model_with_recent_items (GtkFileChooserWidget *impl, GList *items)
       if (limit != -1 && n >= limit)
 	break;
     }
+
+  g_set_object (&priv->model_for_search, priv->recent_model);
 }
 
 static void
