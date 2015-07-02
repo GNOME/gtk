@@ -6677,23 +6677,12 @@ recent_setup_model (GtkFileChooserWidget *impl)
 
   _gtk_file_system_model_set_filter (priv->recent_model,
                                      priv->current_filter);
-  gtk_tree_sortable_set_sort_func (GTK_TREE_SORTABLE (priv->recent_model),
-				   MODEL_COL_NAME,
-				   name_sort_func,
-				   impl, NULL);
-  gtk_tree_sortable_set_sort_func (GTK_TREE_SORTABLE (priv->recent_model),
-                                   MODEL_COL_SIZE,
-                                   size_sort_func,
-                                   impl, NULL);
-  gtk_tree_sortable_set_sort_func (GTK_TREE_SORTABLE (priv->recent_model),
-                                   MODEL_COL_TIME,
-                                   time_sort_func,
-                                   impl, NULL);
-  gtk_tree_sortable_set_sort_func (GTK_TREE_SORTABLE (priv->recent_model),
-                                   MODEL_COL_LOCATION_TEXT,
-                                   location_sort_func,
-                                   impl, NULL);
-  set_sort_column (impl);
+  gtk_tree_sortable_set_default_sort_func (GTK_TREE_SORTABLE (priv->recent_model),
+                                           time_sort_func,
+                                           impl, NULL);
+  gtk_tree_sortable_set_sort_column_id (GTK_TREE_SORTABLE (priv->recent_model),
+                                        GTK_TREE_SORTABLE_DEFAULT_SORT_COLUMN_ID,
+                                        GTK_SORT_DESCENDING);
 }
 
 typedef struct
@@ -6711,13 +6700,17 @@ recent_idle_cleanup (gpointer data)
 
   gtk_tree_view_set_model (GTK_TREE_VIEW (priv->browse_files_tree_view),
                            GTK_TREE_MODEL (priv->recent_model));
-  file_list_set_sort_column_ids (impl);
-  gtk_tree_sortable_set_sort_column_id (GTK_TREE_SORTABLE (priv->recent_model), MODEL_COL_TIME, GTK_SORT_DESCENDING);
+  gtk_tree_view_set_search_column (GTK_TREE_VIEW (priv->browse_files_tree_view), -1);
+
+  gtk_tree_view_column_set_sort_column_id (priv->list_name_column, -1);
+  gtk_tree_view_column_set_sort_column_id (priv->list_time_column, -1);
+  gtk_tree_view_column_set_sort_column_id (priv->list_size_column, -1);
+  gtk_tree_view_column_set_sort_column_id (priv->list_location_column, -1);
 
   set_busy_cursor (impl, FALSE);
-  
+
   priv->load_recent_id = 0;
-  
+
   g_free (load_data);
 }
 
