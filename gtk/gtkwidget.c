@@ -10338,10 +10338,14 @@ update_pango_context (GtkWidget    *widget,
   screen = gtk_widget_get_screen_unchecked (widget);
   if (widget->priv->font_options)
     {
-      pango_cairo_context_set_font_options (context,
-                                            widget->priv->font_options);
+      cairo_font_options_t *options;
+
+      options = cairo_font_options_copy (gdk_screen_get_font_options (screen));
+      cairo_font_options_merge (options, widget->priv->font_options);
+      pango_cairo_context_set_font_options (context, options);
+      cairo_font_options_destroy (options);
     }
-  else if (screen)
+  else
     {
       pango_cairo_context_set_font_options (context,
                                             gdk_screen_get_font_options (screen));
