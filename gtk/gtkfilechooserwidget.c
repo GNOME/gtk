@@ -17,11 +17,6 @@
  * License along with this library. If not, see <http://www.gnu.org/licenses/>.
  */
 
-/* TODO:
- *
- * * Fix FIXME-places-sidebar
- */
-
 #include "config.h"
 
 #include "gtkfilechooserwidget.h"
