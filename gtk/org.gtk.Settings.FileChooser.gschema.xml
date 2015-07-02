@@ -43,6 +43,11 @@
     <value nick='12h' value='1'/>
   </enum>
 
+  <enum id='org.gtk.Settings.FileChooser.DateFormat'>
+    <value nick='regular' value='0'/>
+    <value nick='with-time' value='1'/>
+  </enum>
+
   <schema id='org.gtk.Settings.FileChooser' path='/org/gtk/settings/file-chooser/'>
     <key name='last-folder-uri' type='s'>
       <default>""</default>
@@ -134,6 +139,13 @@
       <summary>Time format</summary>
       <description>
         Whether the time is shown in 24h or 12h format.
+      </description>
+    </key>
+    <key name="date-format" enum="org.gtk.Settings.FileChooser.DateFormat">
+      <default>'regular'</default>
+      <summary>Date format</summary>
+      <description>
+        The amount of detail to show in the Modified column.
       </description>
     </key>
   </schema>

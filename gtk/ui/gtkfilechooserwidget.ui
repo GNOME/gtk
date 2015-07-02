@@ -194,7 +194,8 @@
                                     <property name="title" translatable="yes">Size</property>
                                     <child>
                                       <object class="GtkCellRendererText" id="list_size_renderer">
-                                        <property name="alignment">right</property>
+                                        <property name="xalign">0</property>
+                                        <property name="xpad">6</property>
                                       </object>
                                     </child>
                                   </object>
@@ -205,7 +206,13 @@
                                     <property name="visible">False</property>
                                     <property name="title" translatable="yes">Location</property>
                                     <child>
-                                      <object class="GtkCellRendererText" id="list_location_renderer"/>
+                                      <object class="GtkCellRendererText" id="list_location_renderer">
+                                        <property name="xalign">0</property>
+                                        <property name="ellipsize">start</property>
+                                        <property name="width-chars">15</property>
+                                        <property name="max-width-chars">30</property>
+                                        <property name="xpad">6</property>
+                                      </object>
                                     </child>
                                   </object>
                                 </child>
@@ -214,7 +221,19 @@
                                     <property name="resizable">True</property>
                                     <property name="title" translatable="yes">Modified</property>
                                     <child>
-                                      <object class="GtkCellRendererText" id="list_time_renderer"/>
+                                      <object class="GtkCellRendererText" id="list_date_renderer">
+                                        <property name="xalign">1</property>
+                                        <property name="xpad">6</property>
+                                      </object>
+                                      <cell-packing>
+                                        <property name="expand">True</property>
+                                      </cell-packing>
+                                    </child>
+                                    <child>
+                                      <object class="GtkCellRendererText" id="list_time_renderer">
+                                        <property name="xalign">1</property>
+                                        <property name="xpad">6</property>
+                                      </object>
                                     </child>
                                   </object>
                                 </child>

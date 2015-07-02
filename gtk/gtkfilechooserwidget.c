@@ -305,6 +305,7 @@ struct _GtkFileChooserWidgetPrivate {
   GtkCellRenderer *list_name_renderer;
   GtkCellRenderer *list_pixbuf_renderer;
   GtkTreeViewColumn *list_time_column;
+  GtkCellRenderer *list_date_renderer;
   GtkCellRenderer *list_time_renderer;
   GtkTreeViewColumn *list_size_column;
   GtkCellRenderer *list_size_renderer;
@@ -378,6 +379,7 @@ enum {
   MODEL_COL_IS_SENSITIVE,
   MODEL_COL_SURFACE,
   MODEL_COL_SIZE_TEXT,
+  MODEL_COL_DATE_TEXT,
   MODEL_COL_TIME_TEXT,
   MODEL_COL_LOCATION_TEXT,
   MODEL_COL_LOCATION_DIST,
@@ -397,6 +399,7 @@ enum {
 	G_TYPE_BOOLEAN,		  /* MODEL_COL_IS_SENSITIVE */	\
 	CAIRO_GOBJECT_TYPE_SURFACE,  /* MODEL_COL_SURFACE */	\
 	G_TYPE_STRING,		  /* MODEL_COL_SIZE_TEXT */	\
+	G_TYPE_STRING,		  /* MODEL_COL_DATE_TEXT */	\
 	G_TYPE_STRING,		  /* MODEL_COL_TIME_TEXT */	\
 	G_TYPE_STRING,		  /* MODEL_COL_LOCATION_TEXT */	\
 	G_TYPE_INT,		  /* MODEL_COL_LOCATION_DIST */	\
@@ -4056,35 +4059,58 @@ string_replace (const gchar *input,
 }
 
 static char *
-my_g_format_time_for_display (GtkFileChooserWidget *impl,
+my_g_format_date_for_display (GtkFileChooserWidget *impl,
                               glong                 secs)
 {
   GDateTime *now, *time;
   GTimeSpan time_diff;
   gchar *clock_format;
-  gboolean use_24 = TRUE;
+  gchar *date_format;
+  gboolean use_24;
+  gboolean with_time;
   const gchar *format;
   gchar *date_str;
   GSettings *settings;
 
-  now = g_date_time_new_now_local ();
   time = g_date_time_new_from_unix_local (secs);
-  time_diff = g_date_time_difference (now, time);
 
   settings = _gtk_file_chooser_get_settings_for_widget (GTK_WIDGET (impl));
   clock_format = g_settings_get_string (settings, "clock-format");
+  date_format = g_settings_get_string (settings, "date-format");
   use_24 = g_strcmp0 (clock_format, "24h") == 0;
+  with_time = g_strcmp0 (date_format, "with-time") == 0;
   g_free (clock_format);
+  g_free (date_format);
+
+  now = g_date_time_new_now_local ();
+  time_diff = g_date_time_difference (now, time);
 
   /* Translators: see g_date_time_format() for details on the format */
   if (time_diff >= 0 && time_diff < G_TIME_SPAN_DAY)
-    format = use_24 ? _("%H:%M") : _("%-I:%M %P");
+    {
+      if (with_time)
+        format = "";
+      else
+        format = use_24 ? _("%H:%M") : _("%l:%M %p");
+    }
   else if (time_diff >= 0 && time_diff < 2 * G_TIME_SPAN_DAY)
-    format = use_24 ? _("Yesterday at %H:%M") : _("Yesterday at %-I:%M %P");
+    {
+      format = _("Yesterday");
+    }
   else if (time_diff >= 0 && time_diff < 7 * G_TIME_SPAN_DAY)
-    format = "%A"; /* Days from last week */
+    {
+      format = "%a"; /* Days from last week */
+    }
+  else if (g_date_time_get_year (now) == g_date_time_get_year (time))
+    {
+      format = _("%-e %b");
+    }
   else
-    format = "%x"; /* Any other date */
+    {
+      format = N_("%-e %b %Y");
+    }
+
+  g_date_time_unref (now);
 
   date_str = g_date_time_format (time, format);
 
@@ -4097,7 +4123,41 @@ my_g_format_time_for_display (GtkFileChooserWidget *impl,
     }
 
   g_date_time_unref (time);
-  g_date_time_unref (now);
+
+  return date_str;
+}
+
+static char *
+my_g_format_time_for_display (GtkFileChooserWidget *impl,
+                              glong                 secs)
+{
+  GDateTime *time;
+  gchar *clock_format;
+  gboolean use_24;
+  const gchar *format;
+  gchar *date_str;
+  GSettings *settings;
+
+  time = g_date_time_new_from_unix_local (secs);
+
+  settings = _gtk_file_chooser_get_settings_for_widget (GTK_WIDGET (impl));
+  clock_format = g_settings_get_string (settings, "clock-format");
+  use_24 = g_strcmp0 (clock_format, "24h") == 0;
+  g_free (clock_format);
+
+  format = use_24 ? _("%H:%M") : _("%l:%M %p");
+
+  date_str = g_date_time_format (time, format);
+
+  if (g_get_charset (NULL))
+    {
+      gchar *ret;
+      ret = string_replace (date_str, ":", "\xE2\x80\x8E∶");
+      g_free (date_str);
+      date_str = ret;
+    }
+
+  g_date_time_unref (time);
 
   return date_str;
 }
@@ -4270,6 +4330,7 @@ file_system_model_set (GtkFileSystemModel *model,
         g_value_take_string (value, g_format_size (g_file_info_get_size (info)));
       break;
     case MODEL_COL_TIME:
+    case MODEL_COL_DATE_TEXT:
     case MODEL_COL_TIME_TEXT:
       {
         glong time;
@@ -4283,8 +4344,10 @@ file_system_model_set (GtkFileSystemModel *model,
           g_value_set_long (value, time);
         else if (time == 0)
           g_value_set_static_string (value, _("Unknown"));
+        else if (column == MODEL_COL_DATE_TEXT)
+          g_value_take_string (value, my_g_format_date_for_display (impl, time));
         else
-          g_value_take_string (value, my_g_format_time_for_display (impl, time)); 
+          g_value_take_string (value, my_g_format_time_for_display (impl, time));
         break;
       }
     case MODEL_COL_ELLIPSIZE:
@@ -7147,6 +7210,24 @@ path_bar_clicked (GtkPathBar            *path_bar,
 }
 
 static void
+update_time_renderer_visible (GtkFileChooserWidget *impl)
+{
+  GtkFileChooserWidgetPrivate *priv = impl->priv;
+  GSettings *settings;
+  gchar *date_format;
+  gboolean with_time;
+
+  settings = _gtk_file_chooser_get_settings_for_widget (GTK_WIDGET (impl));
+  date_format = g_settings_get_string (settings, "date-format");
+  with_time = g_strcmp0 (date_format, "with-time") == 0;
+  g_free (date_format);
+
+  g_object_set (priv->list_time_renderer,
+                "visible", with_time,
+                NULL);
+}
+
+static void
 update_cell_renderer_attributes (GtkFileChooserWidget *impl)
 {
   GtkFileChooserWidgetPrivate *priv = impl->priv;
@@ -7170,21 +7251,24 @@ update_cell_renderer_attributes (GtkFileChooserWidget *impl)
                                        NULL);
 
   gtk_tree_view_column_set_attributes (priv->list_time_column,
+                                       priv->list_date_renderer,
+                                       "text", MODEL_COL_DATE_TEXT,
+                                       "sensitive", MODEL_COL_IS_SENSITIVE,
+                                       NULL);
+
+  gtk_tree_view_column_set_attributes (priv->list_time_column,
                                        priv->list_time_renderer,
                                        "text", MODEL_COL_TIME_TEXT,
                                        "sensitive", MODEL_COL_IS_SENSITIVE,
                                        NULL);
 
-  g_object_set (priv->list_location_renderer,
-                "ellipsize", PANGO_ELLIPSIZE_START,
-                "width-chars", 15,
-                "max-width-chars", 30,
-                NULL);
   gtk_tree_view_column_set_attributes (priv->list_location_column,
                                        priv->list_location_renderer,
                                        "text", MODEL_COL_LOCATION_TEXT,
                                        "sensitive", MODEL_COL_IS_SENSITIVE,
                                        NULL);
+
+  update_time_renderer_visible (impl);
 }
 
 static void
@@ -7735,6 +7819,7 @@ gtk_file_chooser_widget_class_init (GtkFileChooserWidgetClass *class)
   gtk_widget_class_bind_template_child_private (widget_class, GtkFileChooserWidget, list_pixbuf_renderer);
   gtk_widget_class_bind_template_child_private (widget_class, GtkFileChooserWidget, list_name_renderer);
   gtk_widget_class_bind_template_child_private (widget_class, GtkFileChooserWidget, list_time_column);
+  gtk_widget_class_bind_template_child_private (widget_class, GtkFileChooserWidget, list_date_renderer);
   gtk_widget_class_bind_template_child_private (widget_class, GtkFileChooserWidget, list_time_renderer);
   gtk_widget_class_bind_template_child_private (widget_class, GtkFileChooserWidget, list_size_column);
   gtk_widget_class_bind_template_child_private (widget_class, GtkFileChooserWidget, list_size_renderer);
