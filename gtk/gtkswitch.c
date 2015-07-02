@@ -1078,9 +1078,9 @@ gtk_switch_set_active (GtkSwitch *sw,
       else
         priv->handle_pos = 0.0;
 
-      g_object_notify_by_pspec (G_OBJECT (sw), switch_props[PROP_ACTIVE]);
-
       g_signal_emit (sw, signals[STATE_SET], 0, is_active, &handled);
+
+      g_object_notify_by_pspec (G_OBJECT (sw), switch_props[PROP_ACTIVE]);
 
       accessible = gtk_widget_get_accessible (GTK_WIDGET (sw));
       atk_object_notify_state_change (accessible, ATK_STATE_CHECKED, priv->is_active);
