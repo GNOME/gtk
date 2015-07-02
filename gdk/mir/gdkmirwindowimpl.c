@@ -161,6 +161,8 @@ event_cb (MirSurface     *surface,
   _gdk_mir_event_source_queue (context, event);
 }
 
+static void ensure_surface (GdkWindow *window);
+
 static MirSurface *
 create_mir_surface (GdkDisplay *display,
                     GdkWindow *parent,
@@ -171,7 +173,7 @@ create_mir_surface (GdkDisplay *display,
                     GdkWindowTypeHint type,
                     MirBufferUsage buffer_usage)
 {
-  GdkMirWindowImpl *parent_impl;
+  MirSurface *parent_surface = NULL;
   MirSurfaceSpec *spec;
   MirConnection *connection;
   MirPixelFormat format;
@@ -181,10 +183,24 @@ create_mir_surface (GdkDisplay *display,
   connection = gdk_mir_display_get_mir_connection (display);
   format = _gdk_mir_display_get_pixel_format (display, buffer_usage);
 
-  if (parent)
-    parent_impl = GDK_MIR_WINDOW_IMPL (parent->impl);
-  else
-    parent_impl = NULL;
+  if (parent && parent->impl)
+    {
+      ensure_surface (parent);
+      parent_surface = GDK_MIR_WINDOW_IMPL (parent->impl)->surface;
+    }
+
+  if (!parent_surface)
+    {
+      switch (type)
+        {
+          case GDK_WINDOW_TYPE_HINT_SPLASHSCREEN:
+          case GDK_WINDOW_TYPE_HINT_UTILITY:
+            type = GDK_WINDOW_TYPE_HINT_DIALOG;
+            break;
+          default:
+            break;
+        }
+    }
 
   switch (type)
     {
@@ -208,7 +224,7 @@ create_mir_surface (GdkDisplay *display,
                                                     width,
                                                     height,
                                                     format,
-                                                    parent_impl ? parent_impl->surface : NULL,
+                                                    parent_surface,
                                                     &rect,
                                                     mir_edge_attachment_any);
         break;
@@ -218,7 +234,7 @@ create_mir_surface (GdkDisplay *display,
                                                             width,
                                                             height,
                                                             format,
-                                                            parent_impl ? parent_impl->surface : NULL);
+                                                            parent_surface);
         break;
       case GDK_WINDOW_TYPE_HINT_DND:
       case GDK_WINDOW_TYPE_HINT_TOOLTIP:
@@ -231,7 +247,7 @@ create_mir_surface (GdkDisplay *display,
                                                        width,
                                                        height,
                                                        format,
-                                                       parent_impl ? parent_impl->surface : NULL,
+                                                       parent_surface,
                                                        &rect);
         break;
       case GDK_WINDOW_TYPE_HINT_NORMAL:
