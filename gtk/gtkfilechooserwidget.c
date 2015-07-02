@@ -564,6 +564,11 @@ static GSList * recent_get_selected_files    (GtkFileChooserWidget *impl);
 static void     set_file_system_backend      (GtkFileChooserWidget *impl);
 static void     unset_file_system_backend    (GtkFileChooserWidget *impl);
 
+static void     clear_model_cache            (GtkFileChooserWidget *impl,
+                                              gint                  column);
+static void     set_model_filter             (GtkFileChooserWidget *impl,
+                                              GtkFileFilter        *filter);
+
 
 
 G_DEFINE_TYPE_WITH_CODE (GtkFileChooserWidget, gtk_file_chooser_widget, GTK_TYPE_BOX,
@@ -1556,6 +1561,38 @@ sort_directories_toggled_cb (GtkCheckMenuItem     *item,
 }
 
 static void
+clear_model_cache (GtkFileChooserWidget *impl,
+                   gint                  column)
+{
+  GtkFileChooserWidgetPrivate *priv = impl->priv;
+
+  if (priv->browse_files_model)
+    _gtk_file_system_model_clear_cache (priv->browse_files_model, column);
+
+  if (priv->search_model)
+    _gtk_file_system_model_clear_cache (priv->search_model, column);
+
+  if (priv->recent_model)
+    _gtk_file_system_model_clear_cache (priv->recent_model, column);
+}
+
+static void
+set_model_filter (GtkFileChooserWidget *impl,
+                  GtkFileFilter        *filter)
+{
+  GtkFileChooserWidgetPrivate *priv = impl->priv;
+
+  if (priv->browse_files_model)
+    _gtk_file_system_model_set_filter (priv->browse_files_model, filter);
+
+  if (priv->search_model)
+    _gtk_file_system_model_set_filter (priv->search_model, filter);
+
+  if (priv->recent_model)
+    _gtk_file_system_model_set_filter (priv->recent_model, filter);
+}
+
+static void
 update_time_renderer_visible (GtkFileChooserWidget *impl)
 {
   GtkFileChooserWidgetPrivate *priv = impl->priv;
@@ -1565,11 +1602,8 @@ update_time_renderer_visible (GtkFileChooserWidget *impl)
                 NULL);
   gtk_widget_queue_draw (priv->browse_files_tree_view);
   gtk_tree_view_column_queue_resize (priv->list_time_column);
-  if (priv->browse_files_model)
-    {
-      _gtk_file_system_model_clear_cache (priv->browse_files_model, MODEL_COL_DATE_TEXT);
-      _gtk_file_system_model_clear_cache (priv->browse_files_model, MODEL_COL_TIME_TEXT);
-    }
+  clear_model_cache (impl, MODEL_COL_DATE_TEXT);
+  clear_model_cache (impl, MODEL_COL_TIME_TEXT);
 }
 
 static void
@@ -3213,8 +3247,7 @@ change_icon_theme (GtkFileChooserWidget *impl)
   /* the first cell in the first column is the icon column, and we have a fixed size there */
   set_icon_cell_renderer_fixed_size (impl);
 
-  if (priv->browse_files_model)
-    _gtk_file_system_model_clear_cache (priv->browse_files_model, MODEL_COL_SURFACE);
+  clear_model_cache (impl, MODEL_COL_SURFACE);
   gtk_widget_queue_resize (priv->browse_files_tree_view);
 
   profile_end ("end", NULL);
@@ -6993,8 +7026,7 @@ set_current_filter (GtkFileChooserWidget *impl,
     {
       int filter_index;
 
-      /* NULL filters are allowed to reset to non-filtered status
-       */
+      /* NULL filters are allowed to reset to non-filtered status */
       filter_index = g_slist_index (priv->filters, filter);
       if (priv->filters && filter && filter_index < 0)
 	return;
@@ -7003,32 +7035,13 @@ set_current_filter (GtkFileChooserWidget *impl,
 	g_object_unref (priv->current_filter);
       priv->current_filter = filter;
       if (priv->current_filter)
-	{
-	  g_object_ref_sink (priv->current_filter);
-	}
+	g_object_ref_sink (priv->current_filter);
 
       if (priv->filters)
-	gtk_combo_box_set_active (GTK_COMBO_BOX (priv->filter_combo),
-				  filter_index);
+	gtk_combo_box_set_active (GTK_COMBO_BOX (priv->filter_combo), filter_index);
 
-      if (priv->browse_files_model)
-        {
-          _gtk_file_system_model_set_filter (priv->browse_files_model, priv->current_filter);
-          _gtk_file_system_model_clear_cache (priv->browse_files_model, MODEL_COL_IS_SENSITIVE);
-        }
-
-      if (priv->search_model)
-        {
-          _gtk_file_system_model_set_filter (priv->search_model, filter);
-          _gtk_file_system_model_clear_cache (priv->search_model, MODEL_COL_IS_SENSITIVE);
-        }
-
-      if (priv->recent_model)
-        {
-          _gtk_file_system_model_set_filter (priv->recent_model, filter);
-          _gtk_file_system_model_clear_cache (priv->recent_model, MODEL_COL_IS_SENSITIVE);
-        }
-
+      clear_model_cache (impl, MODEL_COL_IS_SENSITIVE);
+      set_model_filter (impl, priv->current_filter);
       g_object_notify (G_OBJECT (impl), "filter");
     }
 }
@@ -8042,3 +8055,4 @@ gtk_file_chooser_widget_new (GtkFileChooserAction action)
 		       "action", action,
 		       NULL);
 }
+
