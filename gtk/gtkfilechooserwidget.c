@@ -217,14 +217,14 @@ struct _GtkFileChooserWidgetPrivate {
   GtkWidget *browse_files_stack;
   GtkWidget *browse_files_tree_view;
   GtkWidget *browse_files_popup_menu;
-  GtkWidget *browse_files_popup_menu_add_shortcut_item;
-  GtkWidget *browse_files_popup_menu_hidden_files_item;
-  GtkWidget *browse_files_popup_menu_size_column_item;
-  GtkWidget *browse_files_popup_menu_copy_file_location_item;
-  GtkWidget *browse_files_popup_menu_visit_file_item;
-  GtkWidget *browse_files_popup_menu_open_folder_item;
-  GtkWidget *browse_files_popup_menu_sort_directories_item;
-  GtkWidget *browse_files_popup_menu_show_time_item;
+  GtkWidget *add_shortcut_item;
+  GtkWidget *hidden_files_item;
+  GtkWidget *size_column_item;
+  GtkWidget *copy_file_location_item;
+  GtkWidget *visit_file_item;
+  GtkWidget *open_folder_item;
+  GtkWidget *sort_directories_item;
+  GtkWidget *show_time_item;
   GtkWidget *browse_new_folder_button;
   GtkSizeGroup *browse_path_bar_size_group;
   GtkWidget *browse_path_bar;
@@ -1332,14 +1332,14 @@ popup_menu_detach_cb (GtkWidget *attach_widget,
   priv = impl->priv;
 
   priv->browse_files_popup_menu = NULL;
-  priv->browse_files_popup_menu_add_shortcut_item = NULL;
-  priv->browse_files_popup_menu_hidden_files_item = NULL;
-  priv->browse_files_popup_menu_size_column_item = NULL;
-  priv->browse_files_popup_menu_copy_file_location_item = NULL;
-  priv->browse_files_popup_menu_visit_file_item = NULL;
-  priv->browse_files_popup_menu_open_folder_item = NULL;
-  priv->browse_files_popup_menu_sort_directories_item = NULL;
-  priv->browse_files_popup_menu_show_time_item = NULL;
+  priv->add_shortcut_item = NULL;
+  priv->hidden_files_item = NULL;
+  priv->size_column_item = NULL;
+  priv->copy_file_location_item = NULL;
+  priv->visit_file_item = NULL;
+  priv->open_folder_item = NULL;
+  priv->sort_directories_item = NULL;
+  priv->show_time_item = NULL;
 }
 
 /* Callback used from gtk_tree_selection_selected_foreach(); adds a bookmark for
@@ -1821,15 +1821,15 @@ check_file_list_menu_sensitivity (GtkFileChooserWidget *impl)
 
   active = (num_selected != 0);
 
-  if (priv->browse_files_popup_menu_copy_file_location_item)
-    gtk_widget_set_sensitive (priv->browse_files_popup_menu_copy_file_location_item, active);
-  if (priv->browse_files_popup_menu_add_shortcut_item)
-    gtk_widget_set_sensitive (priv->browse_files_popup_menu_add_shortcut_item, active && all_folders);
-  if (priv->browse_files_popup_menu_visit_file_item)
-    gtk_widget_set_sensitive (priv->browse_files_popup_menu_visit_file_item, active);
+  if (priv->copy_file_location_item)
+    gtk_widget_set_sensitive (priv->copy_file_location_item, active);
+  if (priv->add_shortcut_item)
+    gtk_widget_set_sensitive (priv->add_shortcut_item, active && all_folders);
+  if (priv->visit_file_item)
+    gtk_widget_set_sensitive (priv->visit_file_item, active);
 
-  if (priv->browse_files_popup_menu_open_folder_item)
-    gtk_widget_set_visible (priv->browse_files_popup_menu_open_folder_item, (num_selected == 1) && all_folders);
+  if (priv->open_folder_item)
+    gtk_widget_set_visible (priv->open_folder_item, (num_selected == 1) && all_folders);
 }
 
 static GtkWidget *
@@ -1879,19 +1879,19 @@ file_list_build_popup_menu (GtkFileChooserWidget *impl)
 			     priv->browse_files_tree_view,
 			     popup_menu_detach_cb);
 
-  priv->browse_files_popup_menu_visit_file_item	= file_list_add_menu_item (impl,
+  priv->visit_file_item	= file_list_add_menu_item (impl,
                                                                            _("_Visit File"),
                                                                            G_CALLBACK (visit_file_cb));
 
-  priv->browse_files_popup_menu_open_folder_item = file_list_add_menu_item (impl,
+  priv->open_folder_item = file_list_add_menu_item (impl,
                                                                             _("_Open With File Manager"),
                                                                             G_CALLBACK (open_folder_cb));
 
-  priv->browse_files_popup_menu_copy_file_location_item	= file_list_add_menu_item (impl,
+  priv->copy_file_location_item	= file_list_add_menu_item (impl,
                                                                                    _("_Copy Location"),
                                                                                    G_CALLBACK (copy_file_location_cb));
 
-  priv->browse_files_popup_menu_add_shortcut_item = file_list_add_menu_item (impl,
+  priv->add_shortcut_item = file_list_add_menu_item (impl,
                                                                              _("_Add to Bookmarks"),
                                                                              G_CALLBACK (add_to_shortcuts_cb));
 
@@ -1899,19 +1899,19 @@ file_list_build_popup_menu (GtkFileChooserWidget *impl)
   gtk_widget_show (item);
   gtk_menu_shell_append (GTK_MENU_SHELL (priv->browse_files_popup_menu), item);
 
-  priv->browse_files_popup_menu_hidden_files_item = file_list_add_check_menu_item (impl,
+  priv->hidden_files_item = file_list_add_check_menu_item (impl,
                                                                                    _("Show _Hidden Files"),
                                                                                    G_CALLBACK (show_hidden_toggled_cb));
 
-  priv->browse_files_popup_menu_size_column_item = file_list_add_check_menu_item (impl,
+  priv->size_column_item = file_list_add_check_menu_item (impl,
                                                                                   _("Show _Size Column"),
                                                                                   G_CALLBACK (show_size_column_toggled_cb));
 
-  priv->browse_files_popup_menu_show_time_item = file_list_add_check_menu_item (impl,
+  priv->show_time_item = file_list_add_check_menu_item (impl,
                                                                                 _("Show _Time"),
                                                                                 G_CALLBACK (show_time_toggled_cb));
 
-  priv->browse_files_popup_menu_sort_directories_item = file_list_add_check_menu_item (impl,
+  priv->sort_directories_item = file_list_add_check_menu_item (impl,
                                                                                        _("Sort _Folders before Files"),
                                                                                        G_CALLBACK (sort_directories_toggled_cb));
 
@@ -1931,36 +1931,36 @@ file_list_update_popup_menu (GtkFileChooserWidget *impl)
    */
 
   /* 'Visit this file' */
-  gtk_widget_set_visible (priv->browse_files_popup_menu_visit_file_item, (priv->operation_mode != OPERATION_MODE_BROWSE));
+  gtk_widget_set_visible (priv->visit_file_item, (priv->operation_mode != OPERATION_MODE_BROWSE));
 
   /* 'Show Hidden Files' */
-  g_signal_handlers_block_by_func (priv->browse_files_popup_menu_hidden_files_item,
+  g_signal_handlers_block_by_func (priv->hidden_files_item,
 				   G_CALLBACK (show_hidden_toggled_cb), impl);
-  gtk_check_menu_item_set_active (GTK_CHECK_MENU_ITEM (priv->browse_files_popup_menu_hidden_files_item),
+  gtk_check_menu_item_set_active (GTK_CHECK_MENU_ITEM (priv->hidden_files_item),
 				  priv->show_hidden);
-  g_signal_handlers_unblock_by_func (priv->browse_files_popup_menu_hidden_files_item,
+  g_signal_handlers_unblock_by_func (priv->hidden_files_item,
 				     G_CALLBACK (show_hidden_toggled_cb), impl);
 
   /* 'Show Size Column' */
-  g_signal_handlers_block_by_func (priv->browse_files_popup_menu_size_column_item,
+  g_signal_handlers_block_by_func (priv->size_column_item,
 				   G_CALLBACK (show_size_column_toggled_cb), impl);
-  gtk_check_menu_item_set_active (GTK_CHECK_MENU_ITEM (priv->browse_files_popup_menu_size_column_item),
+  gtk_check_menu_item_set_active (GTK_CHECK_MENU_ITEM (priv->size_column_item),
 				  priv->show_size_column);
-  g_signal_handlers_unblock_by_func (priv->browse_files_popup_menu_size_column_item,
+  g_signal_handlers_unblock_by_func (priv->size_column_item,
 				     G_CALLBACK (show_size_column_toggled_cb), impl);
 
-  g_signal_handlers_block_by_func (priv->browse_files_popup_menu_sort_directories_item,
+  g_signal_handlers_block_by_func (priv->sort_directories_item,
                                    G_CALLBACK (sort_directories_toggled_cb), impl);
-  gtk_check_menu_item_set_active (GTK_CHECK_MENU_ITEM (priv->browse_files_popup_menu_sort_directories_item),
+  gtk_check_menu_item_set_active (GTK_CHECK_MENU_ITEM (priv->sort_directories_item),
                                   priv->sort_directories_first);
-  g_signal_handlers_unblock_by_func (priv->browse_files_popup_menu_sort_directories_item,
+  g_signal_handlers_unblock_by_func (priv->sort_directories_item,
                                      G_CALLBACK (sort_directories_toggled_cb), impl);
 
-  g_signal_handlers_block_by_func (priv->browse_files_popup_menu_show_time_item,
+  g_signal_handlers_block_by_func (priv->show_time_item,
                                    G_CALLBACK (show_time_toggled_cb), impl);
-  gtk_check_menu_item_set_active (GTK_CHECK_MENU_ITEM (priv->browse_files_popup_menu_show_time_item),
+  gtk_check_menu_item_set_active (GTK_CHECK_MENU_ITEM (priv->show_time_item),
                                   priv->show_time);
-  g_signal_handlers_unblock_by_func (priv->browse_files_popup_menu_show_time_item,
+  g_signal_handlers_unblock_by_func (priv->show_time_item,
                                      G_CALLBACK (show_time_toggled_cb), impl);
 }
 
