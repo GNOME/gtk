@@ -224,6 +224,7 @@ struct _GtkFileChooserWidgetPrivate {
   GtkWidget *browse_files_popup_menu_visit_file_item;
   GtkWidget *browse_files_popup_menu_open_folder_item;
   GtkWidget *browse_files_popup_menu_sort_directories_item;
+  GtkWidget *browse_files_popup_menu_show_time_item;
   GtkWidget *browse_new_folder_button;
   GtkSizeGroup *browse_path_bar_size_group;
   GtkWidget *browse_path_bar;
@@ -328,6 +329,7 @@ struct _GtkFileChooserWidgetPrivate {
   guint select_multiple : 1;
   guint show_hidden : 1;
   guint sort_directories_first : 1;
+  guint show_time : 1;
   guint do_overwrite_confirmation : 1;
   guint list_sort_ascending : 1;
   guint shortcuts_current_folder_active : 1;
@@ -1327,7 +1329,12 @@ popup_menu_detach_cb (GtkWidget *attach_widget,
   priv->browse_files_popup_menu = NULL;
   priv->browse_files_popup_menu_add_shortcut_item = NULL;
   priv->browse_files_popup_menu_hidden_files_item = NULL;
+  priv->browse_files_popup_menu_size_column_item = NULL;
   priv->browse_files_popup_menu_copy_file_location_item = NULL;
+  priv->browse_files_popup_menu_visit_file_item = NULL;
+  priv->browse_files_popup_menu_open_folder_item = NULL;
+  priv->browse_files_popup_menu_sort_directories_item = NULL;
+  priv->browse_files_popup_menu_show_time_item = NULL;
 }
 
 /* Callback used from gtk_tree_selection_selected_foreach(); adds a bookmark for
@@ -1546,6 +1553,33 @@ sort_directories_toggled_cb (GtkCheckMenuItem     *item,
   gtk_tree_sortable_set_sort_column_id (sortable,
                                         priv->sort_column,
                                         priv->sort_order);
+}
+
+static void
+update_time_renderer_visible (GtkFileChooserWidget *impl)
+{
+  GtkFileChooserWidgetPrivate *priv = impl->priv;
+
+  g_object_set (priv->list_time_renderer,
+                "visible", priv->show_time,
+                NULL);
+  gtk_widget_queue_draw (priv->browse_files_tree_view);
+  gtk_tree_view_column_queue_resize (priv->list_time_column);
+  if (priv->browse_files_model)
+    {
+      _gtk_file_system_model_clear_cache (priv->browse_files_model, MODEL_COL_DATE_TEXT);
+      _gtk_file_system_model_clear_cache (priv->browse_files_model, MODEL_COL_TIME_TEXT);
+    }
+}
+
+static void
+show_time_toggled_cb (GtkCheckMenuItem     *item,
+                      GtkFileChooserWidget *impl)
+{
+  GtkFileChooserWidgetPrivate *priv = impl->priv;
+
+  priv->show_time = gtk_check_menu_item_get_active (item);
+  update_time_renderer_visible (impl);
 }
 
 /* Shows an error dialog about not being able to select a dragged file */
@@ -1811,30 +1845,41 @@ file_list_build_popup_menu (GtkFileChooserWidget *impl)
 			     priv->browse_files_tree_view,
 			     popup_menu_detach_cb);
 
-  priv->browse_files_popup_menu_visit_file_item		= file_list_add_menu_item (impl, _("_Visit File"),
-											 G_CALLBACK (visit_file_cb));
+  priv->browse_files_popup_menu_visit_file_item	= file_list_add_menu_item (impl,
+                                                                           _("_Visit File"),
+                                                                           G_CALLBACK (visit_file_cb));
 
-  priv->browse_files_popup_menu_open_folder_item = file_list_add_menu_item (impl, _("_Open With File Manager"),
-											 G_CALLBACK (open_folder_cb));
+  priv->browse_files_popup_menu_open_folder_item = file_list_add_menu_item (impl,
+                                                                            _("_Open With File Manager"),
+                                                                            G_CALLBACK (open_folder_cb));
 
-  priv->browse_files_popup_menu_copy_file_location_item	= file_list_add_menu_item (impl, _("_Copy Location"),
-											 G_CALLBACK (copy_file_location_cb));
+  priv->browse_files_popup_menu_copy_file_location_item	= file_list_add_menu_item (impl,
+                                                                                   _("_Copy Location"),
+                                                                                   G_CALLBACK (copy_file_location_cb));
 
-  priv->browse_files_popup_menu_add_shortcut_item	= file_list_add_menu_item (impl, _("_Add to Bookmarks"),
-											 G_CALLBACK (add_to_shortcuts_cb));
+  priv->browse_files_popup_menu_add_shortcut_item = file_list_add_menu_item (impl,
+                                                                             _("_Add to Bookmarks"),
+                                                                             G_CALLBACK (add_to_shortcuts_cb));
 
   item = gtk_separator_menu_item_new ();
   gtk_widget_show (item);
   gtk_menu_shell_append (GTK_MENU_SHELL (priv->browse_files_popup_menu), item);
 
-  priv->browse_files_popup_menu_hidden_files_item	= file_list_add_check_menu_item (impl, _("Show _Hidden Files"),
-											 G_CALLBACK (show_hidden_toggled_cb));
+  priv->browse_files_popup_menu_hidden_files_item = file_list_add_check_menu_item (impl,
+                                                                                   _("Show _Hidden Files"),
+                                                                                   G_CALLBACK (show_hidden_toggled_cb));
 
-  priv->browse_files_popup_menu_size_column_item	= file_list_add_check_menu_item (impl, _("Show _Size Column"),
-											 G_CALLBACK (show_size_column_toggled_cb));
+  priv->browse_files_popup_menu_size_column_item = file_list_add_check_menu_item (impl,
+                                                                                  _("Show _Size Column"),
+                                                                                  G_CALLBACK (show_size_column_toggled_cb));
 
-  priv->browse_files_popup_menu_sort_directories_item   = file_list_add_check_menu_item (impl, _("Sort _Folders before Files"),
-                                                                                         G_CALLBACK (sort_directories_toggled_cb));
+  priv->browse_files_popup_menu_show_time_item = file_list_add_check_menu_item (impl,
+                                                                                _("Show _Time"),
+                                                                                G_CALLBACK (show_time_toggled_cb));
+
+  priv->browse_files_popup_menu_sort_directories_item = file_list_add_check_menu_item (impl,
+                                                                                       _("Sort _Folders before Files"),
+                                                                                       G_CALLBACK (sort_directories_toggled_cb));
 
   check_file_list_menu_sensitivity (impl);
 }
@@ -1876,6 +1921,13 @@ file_list_update_popup_menu (GtkFileChooserWidget *impl)
                                   priv->sort_directories_first);
   g_signal_handlers_unblock_by_func (priv->browse_files_popup_menu_sort_directories_item,
                                      G_CALLBACK (sort_directories_toggled_cb), impl);
+
+  g_signal_handlers_block_by_func (priv->browse_files_popup_menu_show_time_item,
+                                   G_CALLBACK (show_time_toggled_cb), impl);
+  gtk_check_menu_item_set_active (GTK_CHECK_MENU_ITEM (priv->browse_files_popup_menu_show_time_item),
+                                  priv->show_time);
+  g_signal_handlers_unblock_by_func (priv->browse_files_popup_menu_show_time_item,
+                                     G_CALLBACK (show_time_toggled_cb), impl);
 }
 
 static void
@@ -3281,6 +3333,8 @@ settings_load (GtkFileChooserWidget *impl)
   gboolean show_hidden;
   gboolean show_size_column;
   gboolean sort_directories_first;
+  gchar *date_format;
+  gboolean show_time;
   gint sort_column;
   GtkSortType sort_order;
   StartupMode startup_mode;
@@ -3296,6 +3350,9 @@ settings_load (GtkFileChooserWidget *impl)
   sidebar_width = g_settings_get_int (settings, SETTINGS_KEY_SIDEBAR_WIDTH);
   startup_mode = g_settings_get_enum (settings, SETTINGS_KEY_STARTUP_MODE);
   sort_directories_first = g_settings_get_boolean (settings, SETTINGS_KEY_SORT_DIRECTORIES_FIRST);
+  date_format = g_settings_get_string (settings, "date-format");
+  show_time = g_strcmp0 (date_format, "with-time") == 0;
+  g_free (date_format);
 
   gtk_file_chooser_set_show_hidden (GTK_FILE_CHOOSER (impl), show_hidden);
 
@@ -3306,12 +3363,14 @@ settings_load (GtkFileChooserWidget *impl)
   priv->sort_order = sort_order;
   priv->startup_mode = startup_mode;
   priv->sort_directories_first = sort_directories_first;
+  priv->show_time = show_time;
 
   /* We don't call set_sort_column() here as the models may not have been
    * created yet.  The individual functions that create and set the models will
    * call set_sort_column() themselves.
    */
 
+  update_time_renderer_visible (impl);
   gtk_paned_set_position (GTK_PANED (priv->browse_widgets_hpaned), sidebar_width);
 }
 
@@ -3320,6 +3379,7 @@ settings_save (GtkFileChooserWidget *impl)
 {
   GtkFileChooserWidgetPrivate *priv = impl->priv;
   GSettings *settings;
+  const gchar *date_format;
 
   settings = _gtk_file_chooser_get_settings_for_widget (GTK_WIDGET (impl));
 
@@ -3334,6 +3394,9 @@ settings_save (GtkFileChooserWidget *impl)
   g_settings_set_enum (settings, SETTINGS_KEY_SORT_ORDER, priv->sort_order);
   g_settings_set_int (settings, SETTINGS_KEY_SIDEBAR_WIDTH,
                       gtk_paned_get_position (GTK_PANED (priv->browse_widgets_hpaned)));
+
+  date_format = priv->show_time ? "with-time" : "regular";
+  g_settings_set_string (settings, "date-format", date_format);
 
   /* Now apply the settings */
   g_settings_apply (settings);
@@ -4057,12 +4120,11 @@ static char *
 my_g_format_date_for_display (GtkFileChooserWidget *impl,
                               glong                 secs)
 {
+  GtkFileChooserWidgetPrivate *priv = impl->priv;
   GDateTime *now, *time;
   GTimeSpan time_diff;
   gchar *clock_format;
-  gchar *date_format;
   gboolean use_24;
-  gboolean with_time;
   const gchar *format;
   gchar *date_str;
   GSettings *settings;
@@ -4071,11 +4133,8 @@ my_g_format_date_for_display (GtkFileChooserWidget *impl,
 
   settings = _gtk_file_chooser_get_settings_for_widget (GTK_WIDGET (impl));
   clock_format = g_settings_get_string (settings, "clock-format");
-  date_format = g_settings_get_string (settings, "date-format");
   use_24 = g_strcmp0 (clock_format, "24h") == 0;
-  with_time = g_strcmp0 (date_format, "with-time") == 0;
   g_free (clock_format);
-  g_free (date_format);
 
   now = g_date_time_new_now_local ();
   time_diff = g_date_time_difference (now, time);
@@ -4083,7 +4142,7 @@ my_g_format_date_for_display (GtkFileChooserWidget *impl,
   /* Translators: see g_date_time_format() for details on the format */
   if (time_diff >= 0 && time_diff < G_TIME_SPAN_DAY)
     {
-      if (with_time)
+      if (priv->show_time)
         format = "";
       else
         format = use_24 ? _("%H:%M") : _("%l:%M %p");
@@ -7202,24 +7261,6 @@ path_bar_clicked (GtkPathBar            *path_bar,
    */
   if (child_is_hidden)
     g_object_set (impl, "show-hidden", TRUE, NULL);
-}
-
-static void
-update_time_renderer_visible (GtkFileChooserWidget *impl)
-{
-  GtkFileChooserWidgetPrivate *priv = impl->priv;
-  GSettings *settings;
-  gchar *date_format;
-  gboolean with_time;
-
-  settings = _gtk_file_chooser_get_settings_for_widget (GTK_WIDGET (impl));
-  date_format = g_settings_get_string (settings, "date-format");
-  with_time = g_strcmp0 (date_format, "with-time") == 0;
-  g_free (date_format);
-
-  g_object_set (priv->list_time_renderer,
-                "visible", with_time,
-                NULL);
 }
 
 static void
