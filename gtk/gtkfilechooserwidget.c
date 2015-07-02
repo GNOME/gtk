@@ -201,6 +201,16 @@ typedef enum {
   STARTUP_MODE_CWD
 } StartupMode;
 
+typedef enum {
+  CLOCK_FORMAT_24,
+  CLOCK_FORMAT_12
+} ClockFormat;
+
+typedef enum {
+  DATE_FORMAT_REGULAR,
+  DATE_FORMAT_WITH_TIME
+} DateFormat;
+
 struct _GtkFileChooserWidgetPrivate {
   GtkFileChooserAction action;
 
@@ -3366,8 +3376,7 @@ settings_load (GtkFileChooserWidget *impl)
   gboolean show_hidden;
   gboolean show_size_column;
   gboolean sort_directories_first;
-  gchar *date_format;
-  gboolean show_time;
+  DateFormat date_format;
   gint sort_column;
   GtkSortType sort_order;
   StartupMode startup_mode;
@@ -3383,9 +3392,7 @@ settings_load (GtkFileChooserWidget *impl)
   sidebar_width = g_settings_get_int (settings, SETTINGS_KEY_SIDEBAR_WIDTH);
   startup_mode = g_settings_get_enum (settings, SETTINGS_KEY_STARTUP_MODE);
   sort_directories_first = g_settings_get_boolean (settings, SETTINGS_KEY_SORT_DIRECTORIES_FIRST);
-  date_format = g_settings_get_string (settings, "date-format");
-  show_time = g_strcmp0 (date_format, "with-time") == 0;
-  g_free (date_format);
+  date_format = g_settings_get_enum (settings, SETTINGS_KEY_DATE_FORMAT);
 
   gtk_file_chooser_set_show_hidden (GTK_FILE_CHOOSER (impl), show_hidden);
 
@@ -3396,7 +3403,7 @@ settings_load (GtkFileChooserWidget *impl)
   priv->sort_order = sort_order;
   priv->startup_mode = startup_mode;
   priv->sort_directories_first = sort_directories_first;
-  priv->show_time = show_time;
+  priv->show_time = date_format == DATE_FORMAT_WITH_TIME;
 
   /* We don't call set_sort_column() here as the models may not have been
    * created yet.  The individual functions that create and set the models will
@@ -3412,7 +3419,6 @@ settings_save (GtkFileChooserWidget *impl)
 {
   GtkFileChooserWidgetPrivate *priv = impl->priv;
   GSettings *settings;
-  const gchar *date_format;
 
   settings = _gtk_file_chooser_get_settings_for_widget (GTK_WIDGET (impl));
 
@@ -3427,9 +3433,7 @@ settings_save (GtkFileChooserWidget *impl)
   g_settings_set_enum (settings, SETTINGS_KEY_SORT_ORDER, priv->sort_order);
   g_settings_set_int (settings, SETTINGS_KEY_SIDEBAR_WIDTH,
                       gtk_paned_get_position (GTK_PANED (priv->browse_widgets_hpaned)));
-
-  date_format = priv->show_time ? "with-time" : "regular";
-  g_settings_set_string (settings, "date-format", date_format);
+  g_settings_set_enum (settings, SETTINGS_KEY_DATE_FORMAT, priv->show_time ? DATE_FORMAT_WITH_TIME : DATE_FORMAT_REGULAR);
 
   /* Now apply the settings */
   g_settings_apply (settings);
@@ -4156,8 +4160,7 @@ my_g_format_date_for_display (GtkFileChooserWidget *impl,
   GtkFileChooserWidgetPrivate *priv = impl->priv;
   GDateTime *now, *time;
   GTimeSpan time_diff;
-  gchar *clock_format;
-  gboolean use_24;
+  ClockFormat clock_format;
   const gchar *format;
   gchar *date_str;
   GSettings *settings;
@@ -4165,9 +4168,7 @@ my_g_format_date_for_display (GtkFileChooserWidget *impl,
   time = g_date_time_new_from_unix_local (secs);
 
   settings = _gtk_file_chooser_get_settings_for_widget (GTK_WIDGET (impl));
-  clock_format = g_settings_get_string (settings, "clock-format");
-  use_24 = g_strcmp0 (clock_format, "24h") == 0;
-  g_free (clock_format);
+  clock_format = g_settings_get_enum (settings, "clock-format");
 
   now = g_date_time_new_now_local ();
   time_diff = g_date_time_difference (now, time);
@@ -4177,8 +4178,10 @@ my_g_format_date_for_display (GtkFileChooserWidget *impl,
     {
       if (priv->show_time)
         format = "";
+      else if (clock_format == CLOCK_FORMAT_24)
+        format = _("%H:%M");
       else
-        format = use_24 ? _("%H:%M") : _("%l:%M %p");
+        format = _("%l:%M %p");
     }
   else if (time_diff >= 0 && time_diff < 2 * G_TIME_SPAN_DAY)
     {
@@ -4219,8 +4222,7 @@ my_g_format_time_for_display (GtkFileChooserWidget *impl,
                               glong                 secs)
 {
   GDateTime *time;
-  gchar *clock_format;
-  gboolean use_24;
+  ClockFormat clock_format;
   const gchar *format;
   gchar *date_str;
   GSettings *settings;
@@ -4228,11 +4230,12 @@ my_g_format_time_for_display (GtkFileChooserWidget *impl,
   time = g_date_time_new_from_unix_local (secs);
 
   settings = _gtk_file_chooser_get_settings_for_widget (GTK_WIDGET (impl));
-  clock_format = g_settings_get_string (settings, "clock-format");
-  use_24 = g_strcmp0 (clock_format, "24h") == 0;
-  g_free (clock_format);
+  clock_format = g_settings_get_enum (settings, "clock-format");
 
-  format = use_24 ? _("%H:%M") : _("%l:%M %p");
+  if (clock_format == CLOCK_FORMAT_24)
+    format = _("%H:%M");
+  else
+    format = _("%l:%M %p");
 
   date_str = g_date_time_format (time, format);
 
