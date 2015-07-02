@@ -643,6 +643,7 @@ main (int argc, char **argv)
   gtk_file_filter_add_pixbuf_formats (filter);
   gtk_file_chooser_add_filter (GTK_FILE_CHOOSER (dialog), filter);
 
+#if 0
   /* Preview widget */
   /* THIS IS A TERRIBLE PREVIEW WIDGET, AND SHOULD NOT BE COPIED AT ALL.
    */
@@ -660,6 +661,7 @@ main (int argc, char **argv)
   update_preview_cb (GTK_FILE_CHOOSER (dialog));
   g_signal_connect (dialog, "update-preview",
 		    G_CALLBACK (update_preview_cb), NULL);
+#endif
 
   /* Extra widget */
 
