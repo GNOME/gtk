@@ -2182,3 +2182,12 @@ _gtk_file_system_model_add_and_query_files (GtkFileSystemModel *model,
                                model);
     }
 }
+
+GFile *
+_gtk_file_system_model_get_directory (GtkFileSystemModel *model)
+{
+  g_return_if_fail (GTK_IS_FILE_SYSTEM_MODEL (model));
+
+  return model->dir;
+}
+

@@ -50,6 +50,7 @@ GtkFileSystemModel *_gtk_file_system_model_new_for_directory(GFile *            
                                                              gpointer            get_data,
                                                              guint               n_columns,
                                                              ...);
+GFile *             _gtk_file_system_model_get_directory    (GtkFileSystemModel *model);
 GCancellable *      _gtk_file_system_model_get_cancellable  (GtkFileSystemModel *model);
 gboolean            _gtk_file_system_model_iter_is_visible  (GtkFileSystemModel *model,
 							     GtkTreeIter        *iter);
