@@ -2685,33 +2685,15 @@ location_bar_update (GtkFileChooserWidget *impl)
   gtk_widget_set_visible (priv->browse_new_folder_button, create_folder_visible);
 }
 
-/* Stops running operations like populating the browse model, searches, and the recent-files model */
 static void
-operation_mode_stop (GtkFileChooserWidget *impl, OperationMode mode)
+operation_mode_stop (GtkFileChooserWidget *impl,
+                     OperationMode         mode)
 {
-  switch (mode)
+  if (mode == OPERATION_MODE_SEARCH)
     {
-    case OPERATION_MODE_ENTER_LOCATION:
-      stop_loading_and_clear_list_model (impl, TRUE);
-      break;
-
-    case OPERATION_MODE_BROWSE:
-      stop_loading_and_clear_list_model (impl, TRUE);
-      break;
-
-    case OPERATION_MODE_SEARCH:
       g_clear_object (&impl->priv->model_for_search);
       search_stop_searching (impl, FALSE);
       search_clear_model (impl, TRUE);
-      break;
-
-    case OPERATION_MODE_RECENT:
-      recent_stop_loading (impl);
-      recent_clear_model (impl, TRUE);
-      break;
-
-    default:
-      g_assert_not_reached ();
     }
 }
 
@@ -2726,8 +2708,6 @@ operation_mode_set_enter_location (GtkFileChooserWidget *impl)
   location_bar_update (impl);
   gtk_widget_set_sensitive (priv->filter_combo, TRUE);
   location_mode_set (impl, LOCATION_MODE_FILENAME_ENTRY);
-  gtk_tree_view_column_set_visible (priv->list_location_column, FALSE);
-  gtk_tree_view_column_set_title (priv->list_time_column, _("Modified"));
 }
 
 static void
@@ -2740,8 +2720,6 @@ operation_mode_set_browse (GtkFileChooserWidget *impl)
   gtk_revealer_set_reveal_child (GTK_REVEALER (priv->browse_header_revealer), TRUE);
   location_bar_update (impl);
   gtk_widget_set_sensitive (priv->filter_combo, TRUE);
-  gtk_tree_view_column_set_visible (priv->list_location_column, FALSE);
-  gtk_tree_view_column_set_title (priv->list_time_column, _("Modified"));
 }
 
 static void
@@ -2758,8 +2736,6 @@ operation_mode_set_search (GtkFileChooserWidget *impl)
   search_setup_widgets (impl);
   gtk_entry_grab_focus_without_selecting (GTK_ENTRY (priv->search_entry));
   gtk_widget_set_sensitive (priv->filter_combo, FALSE);
-  gtk_tree_view_column_set_visible (priv->list_location_column, TRUE);
-  gtk_tree_view_column_set_title (priv->list_time_column, _("Modified"));
 }
 
 static void
@@ -2777,8 +2753,6 @@ operation_mode_set_recent (GtkFileChooserWidget *impl)
   gtk_places_sidebar_set_location (GTK_PLACES_SIDEBAR (priv->places_sidebar), file);
   g_object_unref (file);
   gtk_widget_set_sensitive (priv->filter_combo, TRUE);
-  gtk_tree_view_column_set_visible (priv->list_location_column, TRUE);
-  gtk_tree_view_column_set_title (priv->list_time_column, _("Accessed"));
 }
 
 static void
@@ -3785,7 +3759,9 @@ load_set_model (GtkFileChooserWidget *impl)
 
   profile_msg ("    gtk_tree_view_set_model start", NULL);
   gtk_tree_view_set_model (GTK_TREE_VIEW (priv->browse_files_tree_view),
-			   GTK_TREE_MODEL (priv->browse_files_model));
+                           GTK_TREE_MODEL (priv->browse_files_model));
+  gtk_tree_view_column_set_visible (priv->list_location_column, FALSE);
+  gtk_tree_view_column_set_title (priv->list_time_column, _("Modified"));
   gtk_tree_view_columns_autosize (GTK_TREE_VIEW (priv->browse_files_tree_view));
   file_list_set_sort_column_ids (impl);
   set_sort_column (impl);
@@ -4126,7 +4102,7 @@ stop_loading_and_clear_list_model (GtkFileChooserWidget *impl,
   GtkFileChooserWidgetPrivate *priv = impl->priv;
 
   load_remove_timer (impl, LOAD_EMPTY);
-  
+
   if (priv->browse_files_model)
     {
       g_object_unref (priv->browse_files_model);
@@ -4537,6 +4513,13 @@ set_list_model (GtkFileChooserWidget *impl,
   GtkFileChooserWidgetPrivate *priv = impl->priv;
 
   g_assert (priv->current_folder != NULL);
+
+  if (priv->browse_files_model &&
+      _gtk_file_system_model_get_directory (priv->browse_files_model) == priv->current_folder)
+    {
+      g_print ("avoid reloading\n");
+      return TRUE;
+    }
 
   profile_start ("start", NULL);
 
@@ -6582,18 +6565,22 @@ search_engine_error_cb (GtkSearchEngine *engine,
 
 /* Frees the data in the search_model */
 static void
-search_clear_model (GtkFileChooserWidget *impl, 
+search_clear_model (GtkFileChooserWidget *impl,
 		    gboolean               remove_from_treeview)
 {
   GtkFileChooserWidgetPrivate *priv = impl->priv;
 
-  g_clear_object (&priv->search_model);
-
   if (!priv->search_model)
     return;
 
-  if (remove_from_treeview)
-    gtk_tree_view_set_model (GTK_TREE_VIEW (priv->browse_files_tree_view), NULL);
+  if (remove_from_treeview &&
+      1)//gtk_tree_view_get_model (GTK_TREE_VIEW (priv->browse_files_tree_view)) == GTK_TREE_MODEL (priv->search_model))
+    {
+      g_print ("clear model\n");
+      gtk_tree_view_set_model (GTK_TREE_VIEW (priv->browse_files_tree_view), NULL);
+    }
+
+  g_clear_object (&priv->search_model);
 }
 
 /* Stops any ongoing searches; does not touch the search_model */
@@ -6661,6 +6648,9 @@ search_setup_model (GtkFileChooserWidget *impl)
   gtk_tree_view_set_model (GTK_TREE_VIEW (priv->browse_files_tree_view),
                            GTK_TREE_MODEL (priv->search_model));
   file_list_set_sort_column_ids (impl);
+  gtk_tree_view_column_set_visible (priv->list_location_column, TRUE);
+  gtk_tree_view_column_set_title (priv->list_time_column, _("Modified"));
+  gtk_tree_view_columns_autosize (GTK_TREE_VIEW (priv->browse_files_tree_view));
 }
 
 /* Creates a new query with the specified text and launches it */
@@ -6670,6 +6660,10 @@ search_start_query (GtkFileChooserWidget *impl,
 {
   GtkFileChooserWidgetPrivate *priv = impl->priv;
   GFile *file;
+
+  stop_loading_and_clear_list_model (impl, TRUE);
+  recent_stop_loading (impl);
+  recent_clear_model (impl, TRUE);
 
   search_stop_searching (impl, FALSE);
   search_clear_model (impl, TRUE);
@@ -6859,6 +6853,10 @@ recent_idle_cleanup (gpointer data)
   gtk_tree_view_column_set_sort_column_id (priv->list_time_column, -1);
   gtk_tree_view_column_set_sort_column_id (priv->list_size_column, -1);
   gtk_tree_view_column_set_sort_column_id (priv->list_location_column, -1);
+
+  gtk_tree_view_column_set_visible (priv->list_location_column, TRUE);
+  gtk_tree_view_column_set_title (priv->list_time_column, _("Accessed"));
+  gtk_tree_view_columns_autosize (GTK_TREE_VIEW (priv->browse_files_tree_view));
 
   set_busy_cursor (impl, FALSE);
 
