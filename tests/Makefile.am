@@ -72,6 +72,7 @@ noinst_PROGRAMS =  $(TEST_PROGS)	\
 	testfontselection		\
 	testfontselectiondialog		\
 	testfontchooser			\
+	testfontoptions			\
 	$(fontconfig_programs)		\
 	testframe			\
 	testfullscreen			\
@@ -225,6 +226,7 @@ testfontselection_DEPENDENCIES = $(TEST_DEPS)
 testfontselectiondialog_DEPENDENCIES = $(TEST_DEPS)
 testfontchooser_DEPENDENCIES = $(TEST_DEPS)
 testfontchooserdialog_DEPENDENCIES = $(TEST_DEPS)
+testfontoptions_DEPENDENCIES = $(TEST_DEPS)
 testframe_DEPENDENCIES = $(TEST_DEPS)
 testgeometry_DEPENDENCIES = $(TEST_DEPS)
 testgiconpixbuf = $(TEST_DEPS)
@@ -364,6 +366,9 @@ testfontchooser_SOURCES = \
 
 testfontchooserdialog_SOURCES = \
 	testfontchooserdialog.c
+
+testfontoptions_SOURCES = \
+	testfontoptions.c
 
 testgrid_SOURCES =	\
 	testgrid.c
