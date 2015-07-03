@@ -5320,12 +5320,9 @@ get_files_foreach (GtkTreeModel *model,
 		   GtkTreeIter  *iter,
 		   gpointer      data)
 {
-  struct get_files_closure *info;
+  GtkFileSystemModel *fs_model = GTK_FILE_SYSTEM_MODEL (model);
+  struct get_files_closure *info = data;
   GFile *file;
-  GtkFileSystemModel *fs_model;
-
-  info = data;
-  fs_model = info->impl->priv->browse_files_model;
 
   file = _gtk_file_system_model_get_file (fs_model, iter);
   if (!file)
