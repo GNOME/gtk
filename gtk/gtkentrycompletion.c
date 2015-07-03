@@ -1486,7 +1486,7 @@ gtk_entry_completion_list_motion_notify (GtkWidget      *widget,
 
 
 /* some nasty size requisition */
-gboolean
+void
 _gtk_entry_completion_resize_popup (GtkEntryCompletion *completion)
 {
   GtkAllocation allocation;
@@ -1509,10 +1509,10 @@ _gtk_entry_completion_resize_popup (GtkEntryCompletion *completion)
   window = gtk_widget_get_window (completion->priv->entry);
 
   if (!window)
-    return FALSE;
+    return;
 
   if (!completion->priv->filter_model)
-    return FALSE;
+    return;
 
   gtk_widget_get_allocation (completion->priv->entry, &allocation);
   gtk_widget_get_preferred_size (completion->priv->entry,
@@ -1604,8 +1604,6 @@ _gtk_entry_completion_resize_popup (GtkEntryCompletion *completion)
     }
 
   gtk_window_move (GTK_WINDOW (completion->priv->popup_window), x, y);
-
-  return above;
 }
 
 static void
