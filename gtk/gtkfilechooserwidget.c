@@ -2802,6 +2802,7 @@ update_appearance (GtkFileChooserWidget *impl)
     {
       save_widgets_create (impl);
       gtk_places_sidebar_set_show_recent (GTK_PLACES_SIDEBAR (priv->places_sidebar), FALSE);
+      gtk_places_sidebar_set_show_trash (GTK_PLACES_SIDEBAR (priv->places_sidebar), FALSE);
 
       if (priv->select_multiple)
 	{
