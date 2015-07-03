@@ -2415,14 +2415,6 @@ location_mode_set (GtkFileChooserWidget *impl,
   g_object_notify (G_OBJECT (impl), "subtitle");
 }
 
-/* Callback used when the places sidebar needs us to enter a location */
-static void
-places_sidebar_show_enter_location_cb (GtkPlacesSidebar *sidebar,
-                                       GtkFileChooserWidget *impl)
-{
-  operation_mode_set (impl, OPERATION_MODE_ENTER_LOCATION);
-}
-
 static void
 location_toggle_popup_handler (GtkFileChooserWidget *impl)
 {
@@ -2810,7 +2802,6 @@ update_appearance (GtkFileChooserWidget *impl)
       priv->action == GTK_FILE_CHOOSER_ACTION_CREATE_FOLDER)
     {
       save_widgets_create (impl);
-      gtk_places_sidebar_set_show_enter_location (GTK_PLACES_SIDEBAR (priv->places_sidebar), FALSE);
       gtk_places_sidebar_set_show_recent (GTK_PLACES_SIDEBAR (priv->places_sidebar), FALSE);
 
       if (priv->select_multiple)
@@ -2825,7 +2816,6 @@ update_appearance (GtkFileChooserWidget *impl)
 	   priv->action == GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER)
     {
       save_widgets_destroy (impl);
-      gtk_places_sidebar_set_show_enter_location (GTK_PLACES_SIDEBAR (priv->places_sidebar), TRUE);
       gtk_places_sidebar_set_show_recent (GTK_PLACES_SIDEBAR (priv->places_sidebar), recent_files_setting_is_enabled (impl));
       location_mode_set (impl, priv->location_mode);
     }
@@ -7969,7 +7959,6 @@ gtk_file_chooser_widget_class_init (GtkFileChooserWidgetClass *class)
   gtk_widget_class_bind_template_callback (widget_class, path_bar_clicked);
   gtk_widget_class_bind_template_callback (widget_class, places_sidebar_open_location_cb);
   gtk_widget_class_bind_template_callback (widget_class, places_sidebar_show_error_message_cb);
-  gtk_widget_class_bind_template_callback (widget_class, places_sidebar_show_enter_location_cb);
   gtk_widget_class_bind_template_callback (widget_class, search_entry_activate_cb);
   gtk_widget_class_bind_template_callback (widget_class, search_entry_stop_cb);
   gtk_widget_class_bind_template_callback (widget_class, new_folder_popover_active);
