@@ -389,7 +389,6 @@ enum {
   MODEL_COL_DATE_TEXT,
   MODEL_COL_TIME_TEXT,
   MODEL_COL_LOCATION_TEXT,
-  MODEL_COL_LOCATION_DIST,
   MODEL_COL_ELLIPSIZE,
   MODEL_COL_NUM_COLUMNS
 };
@@ -409,7 +408,6 @@ enum {
 	G_TYPE_STRING,		  /* MODEL_COL_DATE_TEXT */	\
 	G_TYPE_STRING,		  /* MODEL_COL_TIME_TEXT */	\
 	G_TYPE_STRING,		  /* MODEL_COL_LOCATION_TEXT */	\
-	G_TYPE_INT,		  /* MODEL_COL_LOCATION_DIST */	\
 	PANGO_TYPE_ELLIPSIZE_MODE /* MODEL_COL_ELLIPSIZE */
 
 /* Identifiers for target types */
@@ -3675,24 +3673,12 @@ location_sort_func (GtkTreeModel *model,
   COMPARE_DIRECTORIES;
   else
     {
-      gint ta, tb;
+      const char *key_a, *key_b;
 
-      ta = g_value_get_int (_gtk_file_system_model_get_value (fs_model, a, MODEL_COL_LOCATION_DIST));
-      tb = g_value_get_int (_gtk_file_system_model_get_value (fs_model, b, MODEL_COL_LOCATION_DIST));
+      key_a = g_value_get_string (_gtk_file_system_model_get_value (fs_model, a, MODEL_COL_LOCATION_TEXT));
+      key_b = g_value_get_string (_gtk_file_system_model_get_value (fs_model, b, MODEL_COL_LOCATION_TEXT));
 
-      if (ta < tb)
-        return -1;
-      else if (tb < ta)
-        return 1;
-      else
-        {
-          const char *key_a, *key_b;
-
-          key_a = g_value_get_string (_gtk_file_system_model_get_value (fs_model, a, MODEL_COL_LOCATION_TEXT));
-          key_b = g_value_get_string (_gtk_file_system_model_get_value (fs_model, b, MODEL_COL_LOCATION_TEXT));
-
-          return g_strcmp0 (key_a, key_b);
-        }
+      return g_strcmp0 (key_a, key_b);
     }
 }
 
@@ -4419,37 +4405,6 @@ file_system_model_set (GtkFileSystemModel *model,
     case MODEL_COL_ELLIPSIZE:
       g_value_set_enum (value, info ? PANGO_ELLIPSIZE_END : PANGO_ELLIPSIZE_NONE);
       break;
-    case MODEL_COL_LOCATION_DIST:
-      {
-        GFile *dir_location;
-
-        if (file)
-          dir_location = g_file_get_parent (file);
-        else
-          dir_location = NULL;
-
-        if (dir_location && file_is_recent_uri (dir_location))
-          {
-            const char *target_uri;
-            GFile *target;
-
-            target_uri = g_file_info_get_attribute_string (info, G_FILE_ATTRIBUTE_STANDARD_TARGET_URI);
-            target = g_file_new_for_uri (target_uri);
-            g_object_unref (dir_location);
-            dir_location = g_file_get_parent (target);
-            g_object_unref (target);
-          }
-
-        if (dir_location && priv->current_folder &&
-            g_file_equal (dir_location, priv->current_folder))
-          g_value_set_int (value, 0);
-        else
-          g_value_set_int (value, 1);
-
-        if (dir_location)
-          g_object_unref (dir_location);
-      }
-      break;
     case MODEL_COL_LOCATION_TEXT:
       {
         GFile *home_location;
@@ -4475,6 +4430,8 @@ file_system_model_set (GtkFileSystemModel *model,
           }
 
         if (!dir_location)
+          location = g_strdup ("/");
+        else if (priv->current_folder && g_file_equal (priv->current_folder, dir_location))
           location = g_strdup ("");
         else if (g_file_equal (home_location, dir_location))
           location = g_strdup (_("Home"));
