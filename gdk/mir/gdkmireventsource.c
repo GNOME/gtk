@@ -236,9 +236,9 @@ generate_focus_event (GdkWindow *window, gboolean focused)
 }
 
 static guint
-get_modifier_state (unsigned int modifiers, unsigned int button_state)
+get_modifier_state (unsigned int modifiers, guint button_state)
 {
-  guint modifier_state = 0;
+  guint modifier_state = button_state;
 
   if ((modifiers & (mir_input_event_modifier_alt |
                     mir_input_event_modifier_alt_left |
@@ -258,16 +258,6 @@ get_modifier_state (unsigned int modifiers, unsigned int button_state)
     modifier_state |= GDK_META_MASK;
   if ((modifiers & mir_input_event_modifier_caps_lock) != 0)
     modifier_state |= GDK_LOCK_MASK;
-  if ((button_state & mir_pointer_button_primary) != 0)
-    modifier_state |= GDK_BUTTON1_MASK;
-  if ((button_state & mir_pointer_button_secondary) != 0)
-    modifier_state |= GDK_BUTTON2_MASK;
-  if ((button_state & mir_pointer_button_tertiary) != 0)
-    modifier_state |= GDK_BUTTON3_MASK;
-  if ((button_state & mir_pointer_button_back) != 0)
-    modifier_state |= GDK_BUTTON4_MASK;
-  if ((button_state & mir_pointer_button_forward) != 0)
-    modifier_state |= GDK_BUTTON5_MASK;
 
   return modifier_state;
 }
@@ -309,22 +299,18 @@ handle_key_event (GdkWindow *window, const MirInputEvent *event)
 }
 
 static guint
-mir_pointer_event_get_button_state (const MirPointerEvent *event)
+get_button_state (const MirPointerEvent *event)
 {
-  guint button_state = 0;
+  guint state = 0;
 
-  if (mir_pointer_event_button_state (event, mir_pointer_button_primary))
-    button_state |= mir_pointer_button_primary;
-  if (mir_pointer_event_button_state (event, mir_pointer_button_secondary))
-    button_state |= mir_pointer_button_secondary;
-  if (mir_pointer_event_button_state (event, mir_pointer_button_tertiary))
-    button_state |= mir_pointer_button_tertiary;
-  if (mir_pointer_event_button_state (event, mir_pointer_button_back))
-    button_state |= mir_pointer_button_back;
-  if (mir_pointer_event_button_state (event, mir_pointer_button_forward))
-    button_state |= mir_pointer_button_forward;
+  if (mir_pointer_event_button_state (event, mir_pointer_button_primary)) /* left */
+    state |= GDK_BUTTON1_MASK;
+  if (mir_pointer_event_button_state (event, mir_pointer_button_secondary)) /* right */
+    state |= GDK_BUTTON3_MASK;
+  if (mir_pointer_event_button_state (event, mir_pointer_button_tertiary)) /* middle */
+    state |= GDK_BUTTON2_MASK;
 
-  return button_state;
+  return state;
 }
 
 static void
@@ -335,6 +321,7 @@ handle_motion_event (GdkWindow *window, const MirInputEvent *event)
   gdouble x, y;
   gboolean cursor_inside;
   guint button_state;
+  guint new_button_state;
   guint modifier_state;
   guint32 event_time;
   GdkEventType event_type;
@@ -344,7 +331,8 @@ handle_motion_event (GdkWindow *window, const MirInputEvent *event)
     return;
 
   _gdk_mir_window_impl_get_cursor_state (impl, &x, &y, &cursor_inside, &button_state);
-  modifier_state = get_modifier_state (mir_pointer_event_modifiers (pointer_event), mir_pointer_event_get_button_state (pointer_event));
+  new_button_state = get_button_state (pointer_event);
+  modifier_state = get_modifier_state (mir_pointer_event_modifiers (pointer_event), new_button_state);
   event_time = NANO_TO_MILLI (mir_input_event_get_event_time (event));
 
   if (window)
@@ -361,14 +349,14 @@ handle_motion_event (GdkWindow *window, const MirInputEvent *event)
         case mir_pointer_action_button_up:
         case mir_pointer_action_button_down:
           event_type = mir_pointer_event_action (pointer_event) == mir_pointer_action_button_down ? GDK_BUTTON_PRESS : GDK_BUTTON_RELEASE;
-          changed_button_state = button_state ^ mir_pointer_event_get_button_state (pointer_event);
-          if (changed_button_state == 0 || (changed_button_state & mir_pointer_button_primary) != 0)
+          changed_button_state = button_state ^ new_button_state;
+          if (changed_button_state == 0 || (changed_button_state & GDK_BUTTON1_MASK) != 0)
             generate_button_event (window, event_type, x, y, GDK_BUTTON_PRIMARY, modifier_state, event_time);
-          if ((changed_button_state & mir_pointer_button_secondary) != 0)
-            generate_button_event (window, event_type, x, y, GDK_BUTTON_SECONDARY, modifier_state, event_time);
-          if ((changed_button_state & mir_pointer_button_tertiary) != 0)
+          if ((changed_button_state & GDK_BUTTON2_MASK) != 0)
             generate_button_event (window, event_type, x, y, GDK_BUTTON_MIDDLE, modifier_state, event_time);
-          button_state = mir_pointer_event_get_button_state (pointer_event);
+          if ((changed_button_state & GDK_BUTTON3_MASK) != 0)
+            generate_button_event (window, event_type, x, y, GDK_BUTTON_SECONDARY, modifier_state, event_time);
+          button_state = new_button_state;
           break;
         case mir_pointer_action_motion:
           new_x = mir_pointer_event_axis_value (pointer_event, mir_pointer_axis_x);
