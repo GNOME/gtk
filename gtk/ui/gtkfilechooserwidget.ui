@@ -138,6 +138,7 @@
                     <child>
                       <object class="GtkStack" id="browse_files_stack">
                         <property name="visible">True</property>
+                        <property name="transition-type">crossfade</property>
                         <style>
                           <class name="view"/>
                         </style>
@@ -283,6 +284,14 @@
                           </object>
                           <packing>
                             <property name="name">empty</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkSpinner" id="search_spinner">
+                            <property name="visible">True</property>
+                          </object>
+                          <packing>
+                            <property name="name">progress</property>
                           </packing>
                         </child>
                       </object>

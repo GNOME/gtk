@@ -81,6 +81,7 @@
 #include "gtkadjustment.h"
 #include "gtkpopover.h"
 #include "gtkrevealer.h"
+#include "gtkspinner.h"
 
 #include <cairo-gobject.h>
 #include <errno.h>
@@ -251,6 +252,8 @@ struct _GtkFileChooserWidgetPrivate {
 
   /* OPERATION_MODE_SEARCH */
   GtkWidget *search_entry;
+  GtkWidget *search_spinner;
+  guint show_progress_timeout;
   GtkSearchEngine *search_engine;
   GtkQuery *search_query;
   GtkFileSystemModel *search_model;
@@ -6562,6 +6565,14 @@ search_engine_hits_added_cb (GtkSearchEngine      *engine,
   g_list_free_full (files, g_object_unref);
   g_list_free_full (files_with_info, g_object_unref);
   g_list_free_full (infos, g_object_unref);
+
+  if (impl->priv->show_progress_timeout)
+    {
+      g_source_remove (impl->priv->show_progress_timeout);
+      impl->priv->show_progress_timeout = 0;
+    }
+
+  gtk_stack_set_visible_child_name (GTK_STACK (impl->priv->browse_files_stack), "list");
 }
 
 /* Callback used from GtkSearchEngine when the query is done running */
@@ -6574,6 +6585,13 @@ search_engine_finished_cb (GtkSearchEngine *engine,
   impl = GTK_FILE_CHOOSER_WIDGET (data);
 
   set_busy_cursor (impl, FALSE);
+  gtk_spinner_stop (GTK_SPINNER (impl->priv->search_spinner));
+
+  if (impl->priv->show_progress_timeout)
+    {
+      g_source_remove (impl->priv->show_progress_timeout);
+      impl->priv->show_progress_timeout = 0;
+    }
 
   if (gtk_tree_model_iter_n_children (GTK_TREE_MODEL (impl->priv->search_model), NULL) == 0)
     gtk_stack_set_visible_child_name (GTK_STACK (impl->priv->browse_files_stack), "empty");
@@ -6628,7 +6646,7 @@ search_clear_model (GtkFileChooserWidget *impl,
 /* Stops any ongoing searches; does not touch the search_model */
 static void
 search_stop_searching (GtkFileChooserWidget *impl,
-                       gboolean               remove_query)
+                       gboolean              remove_query)
 {
   GtkFileChooserWidgetPrivate *priv = impl->priv;
 
@@ -6645,6 +6663,13 @@ search_stop_searching (GtkFileChooserWidget *impl,
       g_object_unref (priv->search_engine);
       priv->search_engine = NULL;
       set_busy_cursor (impl, FALSE);
+      gtk_spinner_stop (GTK_SPINNER (priv->search_spinner));
+    }
+
+  if (priv->show_progress_timeout)
+    {
+      g_source_remove (priv->show_progress_timeout);
+      priv->show_progress_timeout = 0;
     }
 }
 
@@ -6684,6 +6709,18 @@ search_setup_model (GtkFileChooserWidget *impl)
   gtk_tree_view_columns_autosize (GTK_TREE_VIEW (priv->browse_files_tree_view));
 }
 
+static gboolean
+show_spinner (gpointer data)
+{
+  GtkFileChooserWidget *impl = data;
+  GtkFileChooserWidgetPrivate *priv = impl->priv;
+
+  gtk_stack_set_visible_child_name (GTK_STACK (priv->browse_files_stack), "progress");
+  priv->show_progress_timeout = 0;
+
+  return G_SOURCE_REMOVE;
+}
+
 /* Creates a new query with the specified text and launches it */
 static void
 search_start_query (GtkFileChooserWidget *impl,
@@ -6700,6 +6737,8 @@ search_start_query (GtkFileChooserWidget *impl,
   search_clear_model (impl, TRUE);
   search_setup_model (impl);
   set_busy_cursor (impl, TRUE);
+  gtk_spinner_start (GTK_SPINNER (priv->search_spinner));
+  priv->show_progress_timeout = g_timeout_add (1000, show_spinner, impl);
 
   gtk_stack_set_visible_child_name (GTK_STACK (priv->browse_files_stack), "list");
 
@@ -6709,6 +6748,7 @@ search_start_query (GtkFileChooserWidget *impl,
   if (!priv->search_engine)
     {
       set_busy_cursor (impl, FALSE);
+      gtk_spinner_stop (GTK_SPINNER (priv->search_spinner));
       search_error_could_not_create_client (impl); /* lame; we don't get an error code or anything */
       return;
     }
@@ -7896,6 +7936,7 @@ gtk_file_chooser_widget_class_init (GtkFileChooserWidgetClass *class)
   gtk_widget_class_bind_template_child_private (widget_class, GtkFileChooserWidget, extra_and_filters);
   gtk_widget_class_bind_template_child_private (widget_class, GtkFileChooserWidget, location_entry_box);
   gtk_widget_class_bind_template_child_private (widget_class, GtkFileChooserWidget, search_entry);
+  gtk_widget_class_bind_template_child_private (widget_class, GtkFileChooserWidget, search_spinner);
   gtk_widget_class_bind_template_child_private (widget_class, GtkFileChooserWidget, list_name_column);
   gtk_widget_class_bind_template_child_private (widget_class, GtkFileChooserWidget, list_pixbuf_renderer);
   gtk_widget_class_bind_template_child_private (widget_class, GtkFileChooserWidget, list_name_renderer);
