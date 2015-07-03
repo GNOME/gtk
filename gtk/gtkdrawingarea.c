@@ -219,7 +219,10 @@ gtk_drawing_area_draw (GtkWidget *widget,
                            gtk_widget_get_allocated_width (widget),
                            gtk_widget_get_allocated_height (widget));
 
-  return GTK_WIDGET_CLASS (gtk_drawing_area_parent_class)->draw (widget, cr);
+  if (GTK_WIDGET_CLASS (gtk_drawing_area_parent_class)->draw)
+    return GTK_WIDGET_CLASS (gtk_drawing_area_parent_class)->draw (widget, cr);
+
+  return FALSE;
 }
 
 static void
