@@ -523,13 +523,15 @@ main (int argc, char **argv)
   GtkWidget *preview_vbox;
   gboolean force_rtl = FALSE;
   gboolean multiple = FALSE;
+  gboolean local_only = FALSE;
   char *action_arg = NULL;
   char *initial_filename = NULL;
   char *initial_folder = NULL;
   GError *error = NULL;
   GOptionEntry options[] = {
     { "action", 'a', 0, G_OPTION_ARG_STRING, &action_arg, "Filechooser action", "ACTION" },
-    { "multiple", 'm', 0, G_OPTION_ARG_NONE, &multiple, "Select-multiple", NULL },
+    { "multiple", 'm', 0, G_OPTION_ARG_NONE, &multiple, "Select multiple", NULL },
+    { "local-only", 'l', 0, G_OPTION_ARG_NONE, &local_only, "Local only", NULL },
     { "right-to-left", 'r', 0, G_OPTION_ARG_NONE, &force_rtl, "Force right-to-left layout.", NULL },
     { "initial-filename", 'f', 0, G_OPTION_ARG_FILENAME, &initial_filename, "Initial filename to select", "FILENAME" },
     { "initial-folder", 'F', 0, G_OPTION_ARG_FILENAME, &initial_folder, "Initial folder to show", "FILENAME" },
@@ -576,6 +578,7 @@ main (int argc, char **argv)
   dialog = g_object_new (GTK_TYPE_FILE_CHOOSER_DIALOG,
 			 "action", action,
 			 "select-multiple", multiple,
+                         "local-only", local_only,
 			 NULL);
 
   switch (action)
