@@ -3585,17 +3585,89 @@ gtk_file_chooser_widget_unmap (GtkWidget *widget)
   GTK_WIDGET_CLASS (gtk_file_chooser_widget_parent_class)->unmap (widget);
 }
 
-#define COMPARE_DIRECTORIES										       \
-  GtkFileChooserWidget *impl = user_data;								       \
-  GtkFileChooserWidgetPrivate *priv = impl->priv;							       \
-  GtkFileSystemModel *fs_model = GTK_FILE_SYSTEM_MODEL (model);                                                \
-  gboolean dir_a, dir_b;										       \
-													       \
-  dir_a = g_value_get_boolean (_gtk_file_system_model_get_value (fs_model, a, MODEL_COL_IS_FOLDER));           \
-  dir_b = g_value_get_boolean (_gtk_file_system_model_get_value (fs_model, b, MODEL_COL_IS_FOLDER));           \
-													       \
-  if (priv->sort_directories_first && dir_a != dir_b)											       \
-    return priv->list_sort_ascending ? (dir_a ? -1 : 1) : (dir_a ? 1 : -1) /* Directories *always* go first */
+static gint
+compare_directory (GtkFileSystemModel   *model,
+                   GtkTreeIter          *a,
+                   GtkTreeIter          *b,
+                   GtkFileChooserWidget *impl)
+{
+  GtkFileChooserWidgetPrivate *priv = impl->priv;
+  gboolean dir_a, dir_b;
+
+  dir_a = g_value_get_boolean (_gtk_file_system_model_get_value (model, a, MODEL_COL_IS_FOLDER));
+  dir_b = g_value_get_boolean (_gtk_file_system_model_get_value (model, b, MODEL_COL_IS_FOLDER));
+
+  if (priv->sort_directories_first && dir_a != dir_b)
+    return priv->list_sort_ascending ? (dir_a ? -1 : 1) : (dir_a ? 1 : -1);
+
+  return 0;
+}
+
+static gint
+compare_name (GtkFileSystemModel   *model,
+              GtkTreeIter          *a,
+              GtkTreeIter          *b,
+              GtkFileChooserWidget *impl)
+{
+  const char *key_a, *key_b;
+  gint result;
+
+  key_a = g_value_get_string (_gtk_file_system_model_get_value (model, a, MODEL_COL_NAME_COLLATED));
+  key_b = g_value_get_string (_gtk_file_system_model_get_value (model, b, MODEL_COL_NAME_COLLATED));
+
+  if (key_a && key_b)
+    result = strcmp (key_a, key_b);
+  else if (key_a)
+    result = 1;
+  else if (key_b)
+    result = -1;
+  else
+    result = 0;
+
+  return result;
+}
+
+static gint
+compare_size (GtkFileSystemModel   *model,
+              GtkTreeIter          *a,
+              GtkTreeIter          *b,
+              GtkFileChooserWidget *impl)
+{
+  gint64 size_a, size_b;
+
+  size_a = g_value_get_int64 (_gtk_file_system_model_get_value (model, a, MODEL_COL_SIZE));
+  size_b = g_value_get_int64 (_gtk_file_system_model_get_value (model, b, MODEL_COL_SIZE));
+
+  return size_a < size_b ? -1 : (size_a == size_b ? 0 : 1);
+}
+
+static gint
+compare_time (GtkFileSystemModel   *model,
+              GtkTreeIter          *a,
+              GtkTreeIter          *b,
+              GtkFileChooserWidget *impl)
+{
+  glong ta, tb;
+
+  ta = g_value_get_long (_gtk_file_system_model_get_value (model, a, MODEL_COL_TIME));
+  tb = g_value_get_long (_gtk_file_system_model_get_value (model, b, MODEL_COL_TIME));
+
+  return ta < tb ? -1 : (ta == tb ? 0 : 1);
+}
+
+static gint
+compare_location (GtkFileSystemModel   *model,
+                  GtkTreeIter          *a,
+                  GtkTreeIter          *b,
+                  GtkFileChooserWidget *impl)
+{
+  const char *key_a, *key_b;
+
+  key_a = g_value_get_string (_gtk_file_system_model_get_value (model, a, MODEL_COL_LOCATION_TEXT));
+  key_b = g_value_get_string (_gtk_file_system_model_get_value (model, b, MODEL_COL_LOCATION_TEXT));
+
+  return g_strcmp0 (key_a, key_b);
+}
 
 /* Sort callback for the filename column */
 static gint
@@ -3604,26 +3676,16 @@ name_sort_func (GtkTreeModel *model,
 		GtkTreeIter  *b,
 		gpointer      user_data)
 {
-  COMPARE_DIRECTORIES;
-  else
-    {
-      const char *key_a, *key_b;
-      gint result;
+  GtkFileSystemModel *fs_model = GTK_FILE_SYSTEM_MODEL (model);
+  GtkFileChooserWidget *impl = user_data;
+  gint result;
 
-      key_a = g_value_get_string (_gtk_file_system_model_get_value (fs_model, a, MODEL_COL_NAME_COLLATED));
-      key_b = g_value_get_string (_gtk_file_system_model_get_value (fs_model, b, MODEL_COL_NAME_COLLATED));
+  result = compare_directory (fs_model, a, b, impl);
 
-      if (key_a && key_b)
-        result = strcmp (key_a, key_b);
-      else if (key_a)
-        result = 1;
-      else if (key_b)
-        result = -1;
-      else
-        result = 0;
+  if (result == 0)
+    result = compare_name (fs_model, a, b, impl);
 
-      return result;
-    }
+  return result;
 }
 
 /* Sort callback for the size column */
@@ -3633,16 +3695,16 @@ size_sort_func (GtkTreeModel *model,
 		GtkTreeIter  *b,
 		gpointer      user_data)
 {
-  COMPARE_DIRECTORIES;
-  else
-    {
-      gint64 size_a, size_b;
+  GtkFileSystemModel *fs_model = GTK_FILE_SYSTEM_MODEL (model);
+  GtkFileChooserWidget *impl = user_data;
+  gint result;
 
-      size_a = g_value_get_int64 (_gtk_file_system_model_get_value (fs_model, a, MODEL_COL_SIZE));
-      size_b = g_value_get_int64 (_gtk_file_system_model_get_value (fs_model, b, MODEL_COL_SIZE));
+  result = compare_directory (fs_model, a, b, impl);
 
-      return size_a < size_b ? -1 : (size_a == size_b ? 0 : 1);
-    }
+  if (result == 0)
+    result = compare_size (fs_model, a, b, impl);
+
+  return result;
 }
 
 /* Sort callback for the time column */
@@ -3652,34 +3714,58 @@ time_sort_func (GtkTreeModel *model,
                 GtkTreeIter  *b,
                 gpointer      user_data)
 {
-  COMPARE_DIRECTORIES;
-  else
-    {
-      glong ta, tb;
+  GtkFileSystemModel *fs_model = GTK_FILE_SYSTEM_MODEL (model);
+  GtkFileChooserWidget *impl = user_data;
+  gint result;
 
-      ta = g_value_get_long (_gtk_file_system_model_get_value (fs_model, a, MODEL_COL_TIME));
-      tb = g_value_get_long (_gtk_file_system_model_get_value (fs_model, b, MODEL_COL_TIME));
+  result = compare_directory (fs_model, a, b, impl);
 
-      return ta < tb ? -1 : (ta == tb ? 0 : 1);
-    }
+  if (result == 0)
+    result = compare_time (fs_model, a, b, impl);
+
+  return result;
 }
 
 static gint
-location_sort_func (GtkTreeModel *model,
-                    GtkTreeIter  *a,
-                    GtkTreeIter  *b,
-                    gpointer      user_data)
+recent_sort_func (GtkTreeModel *model,
+                  GtkTreeIter  *a,
+                  GtkTreeIter  *b,
+                  gpointer      user_data)
 {
-  COMPARE_DIRECTORIES;
-  else
-    {
-      const char *key_a, *key_b;
+  GtkFileSystemModel *fs_model = GTK_FILE_SYSTEM_MODEL (model);
+  GtkFileChooserWidget *impl = user_data;
+  gint result;
 
-      key_a = g_value_get_string (_gtk_file_system_model_get_value (fs_model, a, MODEL_COL_LOCATION_TEXT));
-      key_b = g_value_get_string (_gtk_file_system_model_get_value (fs_model, b, MODEL_COL_LOCATION_TEXT));
+  result = compare_time (fs_model, a, b, impl);
 
-      return g_strcmp0 (key_a, key_b);
-    }
+  if (result == 0)
+    result = compare_name (fs_model, a, b, impl);
+
+  if (result == 0)
+    result = compare_location (fs_model, a, b, impl);
+
+  return result;
+}
+
+static gint
+search_sort_func (GtkTreeModel *model,
+                  GtkTreeIter  *a,
+                  GtkTreeIter  *b,
+                  gpointer      user_data)
+{
+  GtkFileSystemModel *fs_model = GTK_FILE_SYSTEM_MODEL (model);
+  GtkFileChooserWidget *impl = user_data;
+  gint result;
+
+  result = compare_location (fs_model, a, b, impl);
+
+  if (result == 0)
+    result = compare_name (fs_model, a, b, impl);
+
+  if (result == 0)
+    result = compare_time (fs_model, a, b, impl);
+
+  return result;
 }
 
 /* Callback used when the sort column changes.  We cache the sort order for use
@@ -4497,7 +4583,6 @@ set_list_model (GtkFileChooserWidget *impl,
   gtk_tree_sortable_set_sort_func (GTK_TREE_SORTABLE (priv->browse_files_model), MODEL_COL_NAME, name_sort_func, impl, NULL);
   gtk_tree_sortable_set_sort_func (GTK_TREE_SORTABLE (priv->browse_files_model), MODEL_COL_SIZE, size_sort_func, impl, NULL);
   gtk_tree_sortable_set_sort_func (GTK_TREE_SORTABLE (priv->browse_files_model), MODEL_COL_TIME, time_sort_func, impl, NULL);
-  gtk_tree_sortable_set_sort_func (GTK_TREE_SORTABLE (priv->browse_files_model), MODEL_COL_LOCATION_TEXT, location_sort_func, impl, NULL);
   gtk_tree_sortable_set_default_sort_func (GTK_TREE_SORTABLE (priv->browse_files_model), NULL, NULL, NULL);
   set_sort_column (impl);
   priv->list_sort_ascending = TRUE;
@@ -6575,24 +6660,8 @@ search_setup_model (GtkFileChooserWidget *impl)
                                                    impl,
 						   MODEL_COLUMN_TYPES);
 
-  gtk_tree_sortable_set_sort_func (GTK_TREE_SORTABLE (priv->search_model),
-				   MODEL_COL_NAME,
-				   name_sort_func,
-				   impl, NULL);
-  gtk_tree_sortable_set_sort_func (GTK_TREE_SORTABLE (priv->search_model),
-				   MODEL_COL_TIME,
-				   time_sort_func,
-				   impl, NULL);
-  gtk_tree_sortable_set_sort_func (GTK_TREE_SORTABLE (priv->search_model),
-				   MODEL_COL_SIZE,
-				   size_sort_func,
-				   impl, NULL);
-  gtk_tree_sortable_set_sort_func (GTK_TREE_SORTABLE (priv->search_model),
-				   MODEL_COL_LOCATION_TEXT,
-				   location_sort_func,
-				   impl, NULL);
   gtk_tree_sortable_set_default_sort_func (GTK_TREE_SORTABLE (priv->search_model),
-				           location_sort_func,
+				           search_sort_func,
 				           impl, NULL);
   gtk_tree_sortable_set_sort_column_id (GTK_TREE_SORTABLE (priv->search_model),
                                         GTK_TREE_SORTABLE_DEFAULT_SORT_COLUMN_ID,
@@ -6604,7 +6673,12 @@ search_setup_model (GtkFileChooserWidget *impl)
    */
   gtk_tree_view_set_model (GTK_TREE_VIEW (priv->browse_files_tree_view),
                            GTK_TREE_MODEL (priv->search_model));
-  file_list_set_sort_column_ids (impl);
+
+  gtk_tree_view_column_set_sort_column_id (priv->list_name_column, -1);
+  gtk_tree_view_column_set_sort_column_id (priv->list_time_column, -1);
+  gtk_tree_view_column_set_sort_column_id (priv->list_size_column, -1);
+  gtk_tree_view_column_set_sort_column_id (priv->list_location_column, -1);
+
   gtk_tree_view_column_set_visible (priv->list_location_column, TRUE);
   gtk_tree_view_column_set_title (priv->list_time_column, _("Modified"));
   gtk_tree_view_columns_autosize (GTK_TREE_VIEW (priv->browse_files_tree_view));
@@ -6782,7 +6856,7 @@ recent_setup_model (GtkFileChooserWidget *impl)
   _gtk_file_system_model_set_filter (priv->recent_model,
                                      priv->current_filter);
   gtk_tree_sortable_set_default_sort_func (GTK_TREE_SORTABLE (priv->recent_model),
-                                           time_sort_func,
+                                           recent_sort_func,
                                            impl, NULL);
   gtk_tree_sortable_set_sort_column_id (GTK_TREE_SORTABLE (priv->recent_model),
                                         GTK_TREE_SORTABLE_DEFAULT_SORT_COLUMN_ID,
