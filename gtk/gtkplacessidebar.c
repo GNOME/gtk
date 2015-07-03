@@ -158,6 +158,7 @@ struct _GtkPlacesSidebar {
   guint show_desktop           : 1;
   guint show_connect_to_server : 1;
   guint show_enter_location    : 1;
+  guint show_trash             : 1;
   guint local_only             : 1;
 };
 
@@ -207,6 +208,7 @@ enum {
   PROP_SHOW_DESKTOP,
   PROP_SHOW_CONNECT_TO_SERVER,
   PROP_SHOW_ENTER_LOCATION,
+  PROP_SHOW_TRASH,
   PROP_LOCAL_ONLY,
   NUM_PROPERTIES
 };
@@ -904,7 +906,7 @@ update_places (GtkPlacesSidebar *sidebar)
     }
 
   /* Trash */
-  if (!sidebar->local_only)
+  if (!sidebar->local_only && sidebar->show_trash)
     {
       mount_uri = "trash:///"; /* No need to strdup */
       icon = _gtk_trash_monitor_get_icon (sidebar->trash_monitor);
@@ -3710,6 +3712,8 @@ gtk_places_sidebar_init (GtkPlacesSidebar *sidebar)
 
   sidebar->cancellable = g_cancellable_new ();
 
+  sidebar->show_trash = TRUE;
+
   create_volume_monitor (sidebar);
 
   sidebar->open_flags = GTK_PLACES_OPEN_NORMAL;
@@ -3848,6 +3852,10 @@ gtk_places_sidebar_set_property (GObject      *obj,
       gtk_places_sidebar_set_show_enter_location (sidebar, g_value_get_boolean (value));
       break;
 
+    case PROP_SHOW_TRASH:
+      gtk_places_sidebar_set_show_trash (sidebar, g_value_get_boolean (value));
+      break;
+
     case PROP_LOCAL_ONLY:
       gtk_places_sidebar_set_local_only (sidebar, g_value_get_boolean (value));
       break;
@@ -3890,6 +3898,10 @@ gtk_places_sidebar_get_property (GObject    *obj,
 
     case PROP_SHOW_ENTER_LOCATION:
       g_value_set_boolean (value, gtk_places_sidebar_get_show_enter_location (sidebar));
+      break;
+
+    case PROP_SHOW_TRASH:
+      g_value_set_boolean (value, gtk_places_sidebar_get_show_trash (sidebar));
       break;
 
     case PROP_LOCAL_ONLY:
@@ -4235,6 +4247,12 @@ gtk_places_sidebar_class_init (GtkPlacesSidebarClass *class)
                                 P_("Local Only"),
                                 P_("Whether the sidebar only includes local files"),
                                 FALSE,
+                                G_PARAM_READWRITE);
+  properties[PROP_SHOW_TRASH] =
+          g_param_spec_boolean ("show-trash",
+                                P_("Show 'Trash'"),
+                                P_("Whether the sidebar includes a builtin shortcut to  the Trash location"),
+                                TRUE,
                                 G_PARAM_READWRITE);
 
   g_object_class_install_properties (gobject_class, NUM_PROPERTIES, properties);
@@ -4617,6 +4635,48 @@ gtk_places_sidebar_get_show_enter_location (GtkPlacesSidebar *sidebar)
   g_return_val_if_fail (GTK_IS_PLACES_SIDEBAR (sidebar), FALSE);
 
   return sidebar->show_enter_location;
+}
+
+/**
+ * gtk_places_sidebar_set_show_trash:
+ * @sidebar: a places sidebar
+ * @show_trash: whether to show an item for the Trash location
+ *
+ * Sets whether the @sidebar should show an item for the Trash location.
+ *
+ * Since: 3.18
+ */
+void
+gtk_places_sidebar_set_show_trash (GtkPlacesSidebar *sidebar,
+                                   gboolean          show_trash)
+{
+  g_return_if_fail (GTK_IS_PLACES_SIDEBAR (sidebar));
+
+  show_trash = !!show_trash;
+  if (sidebar->show_trash != show_trash)
+    {
+      sidebar->show_trash = show_trash;
+      update_places (sidebar);
+      g_object_notify_by_pspec (G_OBJECT (sidebar), properties[PROP_SHOW_TRASH]);
+    }
+}
+
+/**
+ * gtk_places_sidebar_get_show_trash:
+ * @sidebar: a places sidebar
+ *
+ * Returns the value previously set with gtk_places_sidebar_set_show_trash()
+ *
+ * Returns: %TRUE if the sidebar will display a “Trash” item.
+ *
+ * Since: 3.18
+ */
+gboolean
+gtk_places_sidebar_get_show_trash (GtkPlacesSidebar *sidebar)
+{
+  g_return_val_if_fail (GTK_IS_PLACES_SIDEBAR (sidebar), TRUE);
+
+  return sidebar->show_trash;
 }
 
 /**

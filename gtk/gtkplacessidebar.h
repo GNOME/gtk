@@ -141,6 +141,11 @@ GDK_AVAILABLE_IN_3_18
 void               gtk_places_sidebar_set_drop_targets_visible   (GtkPlacesSidebar   *sidebar,
                                                                   gboolean            visible,
                                                                   GdkDragContext     *context);
+GDK_AVAILABLE_IN_3_18
+gboolean           gtk_places_sidebar_get_show_trash             (GtkPlacesSidebar   *sidebar);
+GDK_AVAILABLE_IN_3_18
+void               gtk_places_sidebar_set_show_trash             (GtkPlacesSidebar   *sidebar,
+                                                                  gboolean            show_trash);
 
 G_END_DECLS
 
