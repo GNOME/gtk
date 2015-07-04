@@ -8012,7 +8012,7 @@ gtk_file_chooser_widget_set_save_entry (GtkFileChooserWidget *impl,
   GtkFileChooserWidgetPrivate *priv = impl->priv;
 
   g_return_if_fail (GTK_IS_FILE_CHOOSER_WIDGET (impl));
-  g_return_if_fail (GTK_IS_FILE_CHOOSER_ENTRY (entry));
+  g_return_if_fail (entry == NULL || GTK_IS_FILE_CHOOSER_ENTRY (entry));
 
   priv->external_entry = entry;
 
