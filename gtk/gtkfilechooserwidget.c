@@ -2419,10 +2419,8 @@ location_toggle_popup_handler (GtkFileChooserWidget *impl)
 {
   GtkFileChooserWidgetPrivate *priv = impl->priv;
 
-  if (priv->operation_mode == OPERATION_MODE_SEARCH)
-    return;
-
-  if (priv->operation_mode == OPERATION_MODE_RECENT &&
+  if ((priv->operation_mode == OPERATION_MODE_RECENT ||
+       priv->operation_mode == OPERATION_MODE_SEARCH) &&
       (priv->action == GTK_FILE_CHOOSER_ACTION_OPEN ||
        priv->action == GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER))
     operation_mode_set (impl, OPERATION_MODE_BROWSE);
