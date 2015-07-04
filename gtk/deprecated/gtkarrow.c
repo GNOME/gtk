@@ -47,8 +47,7 @@
  * doing automatic flipping between #GTK_ARROW_LEFT and #GTK_ARROW_RIGHT,
  * depending on the text direction. To get the same effect with an image,
  * use the icon names “pan-start-symbolic“ and “pan-end-symbolic“, which
- * react to the text direction instead of “pan-left-symbolic“ and
- * “pan-right-symbolic“ which don't.
+ * react to the text direction.
  */
 
 #include "config.h"
