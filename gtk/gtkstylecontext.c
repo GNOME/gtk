@@ -3148,6 +3148,26 @@ _gtk_style_context_get_icon_extents (GtkStyleContext *context,
   extents->height += border.top + border.bottom;
 }
 
+PangoAttrList *
+_gtk_style_context_get_pango_attributes (GtkStyleContext *context)
+{
+  gint letter_spacing;
+  PangoAttrList *attrs = NULL;
+
+  letter_spacing = _gtk_css_number_value_get (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_LETTER_SPACING), 100);
+  if (letter_spacing != 0)
+    {
+      PangoAttribute *letter_spacing_attr;
+
+      letter_spacing_attr = pango_attr_letter_spacing_new (letter_spacing * PANGO_SCALE);
+
+      attrs = pango_attr_list_new ();
+      pango_attr_list_insert (attrs, letter_spacing_attr);
+    }
+
+    return attrs;
+}
+
 static AtkAttributeSet *
 add_attribute (AtkAttributeSet  *attributes,
                AtkTextAttribute  attr,

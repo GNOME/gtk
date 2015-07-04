@@ -35,6 +35,7 @@
 #include "gtkbuilderprivate.h"
 #include "gtkclipboard.h"
 #include "gtkcssshadowsvalueprivate.h"
+#include "gtkcssstylepropertyprivate.h"
 #include "gtkdnd.h"
 #include "gtkimage.h"
 #include "gtkintl.h"
@@ -3412,6 +3413,7 @@ gtk_label_update_layout_attributes (GtkLabel *label)
   GtkWidget *widget = GTK_WIDGET (label);
   GtkStyleContext *context;
   PangoAttrList *attrs;
+  PangoAttrList *style_attrs;
 
   if (priv->layout == NULL)
     return;
@@ -3461,6 +3463,17 @@ gtk_label_update_layout_attributes (GtkLabel *label)
     attrs = pango_attr_list_new ();
   else
     attrs = NULL;
+
+  style_attrs = _gtk_style_context_get_pango_attributes (context);
+  if (style_attrs)
+    {
+      if (attrs)
+        _gtk_pango_attr_list_merge (attrs, style_attrs);
+      else
+        attrs = pango_attr_list_ref (style_attrs);
+
+      pango_attr_list_unref (style_attrs);
+    }
 
   if (priv->markup_attrs)
     {
@@ -4124,12 +4137,22 @@ gtk_label_state_flags_changed (GtkWidget     *widget,
 static void 
 gtk_label_style_updated (GtkWidget *widget)
 {
+  static GtkBitmask *affects_text_attrs = NULL;
   GtkLabel *label = GTK_LABEL (widget);
   GtkLabelPrivate *priv = label->priv;
+  GtkStyleContext *context;
+  const GtkBitmask *changes;;
+
+  if (G_UNLIKELY (affects_text_attrs == NULL))
+    affects_text_attrs = _gtk_css_style_property_get_mask_affecting (GTK_CSS_AFFECTS_TEXT_ATTRS);
 
   GTK_WIDGET_CLASS (gtk_label_parent_class)->style_updated (widget);
 
-  if (priv->select_info && priv->select_info->links)
+  context = gtk_widget_get_style_context (widget);
+  changes = _gtk_style_context_get_changes (context);
+
+  if (changes == NULL || _gtk_bitmask_intersects (changes, affects_text_attrs) ||
+      (priv->select_info && priv->select_info->links))
     gtk_label_update_layout_attributes (label);
 }
 

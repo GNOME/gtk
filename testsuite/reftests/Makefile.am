@@ -323,6 +323,9 @@ testdata = \
 	label-width-chars-dont-shrink.ui \
 	label-wrap-justify.ref.ui \
 	label-wrap-justify.ui \
+	letter-spacing.css \
+	letter-spacing.ui \
+	letter-spacing.ref.ui \
 	linear-gradient.css \
 	linear-gradient.ref.ui \
 	linear-gradient.ui \
@@ -498,6 +501,7 @@ libreftest_la_LIBADD = $(gtk_reftest_LDADD)
 libreftest_la_SOURCES =			\
 	expand-expander.c		\
 	label-text-shadow-changes-modify-clip.c	\
+	letter-spacing.c		\
 	set-default-direction.c		\
 	statusbar-remove-all.c		\
 	textview-border-windows.c	\

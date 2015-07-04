@@ -78,6 +78,7 @@ typedef enum { /*< skip >*/
  * @GTK_CSS_AFFECTS_FONT: The font is affected and should be reloaded
  *   if it was cached.
  * @GTK_CSS_AFFECTS_TEXT: Text rendering is affected.
+ * @GTK_CSS_AFFECTS_TEXT_ATTRS: Text attributes are affected.
  * @GTK_CSS_AFFECTS_ICON: Icons and icon rendering is affected.
  * @GTK_CSS_AFFECTS_OUTLINE: The outline styling is affected. Outlines
  *   only affect elements that can be focused.
@@ -99,10 +100,11 @@ typedef enum {
   GTK_CSS_AFFECTS_BORDER = (1 << 2),
   GTK_CSS_AFFECTS_FONT = (1 << 3),
   GTK_CSS_AFFECTS_TEXT = (1 << 4),
-  GTK_CSS_AFFECTS_ICON = (1 << 5),
-  GTK_CSS_AFFECTS_OUTLINE = (1 << 6),
-  GTK_CSS_AFFECTS_CLIP = (1 << 7),
-  GTK_CSS_AFFECTS_SIZE = (1 << 8)
+  GTK_CSS_AFFECTS_TEXT_ATTRS = (1 << 5),
+  GTK_CSS_AFFECTS_ICON = (1 << 6),
+  GTK_CSS_AFFECTS_OUTLINE = (1 << 7),
+  GTK_CSS_AFFECTS_CLIP = (1 << 8),
+  GTK_CSS_AFFECTS_SIZE = (1 << 9)
 } GtkCssAffects;
 
 enum { /*< skip >*/
@@ -116,6 +118,7 @@ enum { /*< skip >*/
   GTK_CSS_PROPERTY_FONT_VARIANT,
   GTK_CSS_PROPERTY_FONT_WEIGHT,
   GTK_CSS_PROPERTY_FONT_STRETCH,
+  GTK_CSS_PROPERTY_LETTER_SPACING,
   GTK_CSS_PROPERTY_TEXT_SHADOW,
   GTK_CSS_PROPERTY_BOX_SHADOW,
   GTK_CSS_PROPERTY_MARGIN_TOP,

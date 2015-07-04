@@ -611,6 +611,13 @@ bindings_value_assign (GtkCssStyleProperty *property,
 }
 
 static GtkCssValue *
+parse_letter_spacing (GtkCssStyleProperty *property,
+                      GtkCssParser        *parser)
+{
+  return _gtk_css_number_value_parse (parser, GTK_CSS_PARSE_LENGTH);
+}
+
+static GtkCssValue *
 box_shadow_value_parse (GtkCssStyleProperty *property,
                         GtkCssParser        *parser)
 {
@@ -1064,6 +1071,16 @@ _gtk_css_style_property_init_properties (void)
                                           query_pango_stretch,
                                           assign_pango_stretch,
                                           _gtk_css_font_stretch_value_new (PANGO_STRETCH_NORMAL));
+
+  gtk_css_style_property_register        ("letter-spacing",
+                                          GTK_CSS_PROPERTY_LETTER_SPACING,
+                                          G_TYPE_NONE,
+                                          GTK_STYLE_PROPERTY_INHERIT | GTK_STYLE_PROPERTY_ANIMATED,
+                                          GTK_CSS_AFFECTS_TEXT | GTK_CSS_AFFECTS_TEXT_ATTRS,
+                                          parse_letter_spacing,
+                                          NULL,
+                                          NULL,
+                                          _gtk_css_number_value_new (0.0, GTK_CSS_PX));
 
   gtk_css_style_property_register        ("text-shadow",
                                           GTK_CSS_PROPERTY_TEXT_SHADOW,
