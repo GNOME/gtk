@@ -64,6 +64,8 @@ void           _gtk_style_context_get_icon_extents           (GtkStyleContext   
                                                               gint                width,
                                                               gint                height);
 
+PangoAttrList *_gtk_style_context_get_pango_attributes       (GtkStyleContext *context);
+
 /* Accessibility support */
 AtkAttributeSet *_gtk_style_context_get_attributes           (AtkAttributeSet    *attributes,
                                                               GtkStyleContext    *context,
