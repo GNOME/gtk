@@ -2435,7 +2435,7 @@ show_rename_popover (GtkSidebarRow *row)
 
   if (sidebar->rename_uri)
     g_free (sidebar->rename_uri);
-  sidebar->rename_uri = uri;
+  sidebar->rename_uri = g_strdup (uri);
 
   gtk_entry_set_text (GTK_ENTRY (sidebar->rename_entry), name);
   gtk_popover_set_relative_to (GTK_POPOVER (sidebar->rename_popover), GTK_WIDGET (row));
@@ -3940,6 +3940,15 @@ gtk_places_sidebar_dispose (GObject *object)
     {
       gtk_widget_destroy (sidebar->popup_menu);
       sidebar->popup_menu = NULL;
+    }
+
+  if (sidebar->rename_popover)
+    {
+      gtk_widget_destroy (sidebar->rename_popover);
+      sidebar->rename_popover = NULL;
+      sidebar->rename_entry = NULL;
+      sidebar->rename_button = NULL;
+      sidebar->rename_error = NULL;
     }
 
   if (sidebar->trash_monitor)
