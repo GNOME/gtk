@@ -811,6 +811,9 @@ GtkColorButton.button {
                                  //a weird transition which for some reason
                                  //makes borders blink on hover
   }
+  & .label {
+    text-decoration-line: underline;
+  }
 }
 
 /*****************
