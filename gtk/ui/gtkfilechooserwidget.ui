@@ -452,4 +452,70 @@
       </object>
     </child>
   </object>
+  <object class="GtkPopover" id="rename_file_popover">
+    <property name="relative-to">browse_files_tree_view</property>
+    <property name="position">bottom</property>
+    <signal name="closed" handler="rename_file_end"/>
+    <child>
+      <object class="GtkGrid">
+        <property name="visible">True</property>
+        <property name="margin">10</property>
+        <property name="row-spacing">6</property>
+        <property name="column-spacing">6</property>
+        <child>
+          <object class="GtkLabel">
+            <property name="visible">True</property>
+            <property name="label" translatable="yes">Name</property>
+            <property name="halign">start</property>
+            <property name="mnemonic_widget">rename_file_name_entry</property>
+            <attributes>
+              <attribute name="weight" value="bold"/>
+            </attributes>
+          </object>
+          <packing>
+            <property name="width">2</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkEntry" id="rename_file_name_entry">
+            <property name="visible">True</property>
+            <property name="activates-default">True</property>
+            <signal name="changed" handler="rename_file_name_changed"/>
+          </object>
+          <packing>
+            <property name="left-attach">0</property>
+            <property name="top-attach">1</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkButton" id="rename_file_rename_button">
+            <property name="visible">True</property>
+            <property name="sensitive">False</property>
+            <property name="label" translatable="yes">_Rename</property>
+            <property name="use_underline">True</property>
+            <property name="can_default">True</property>
+            <signal name="clicked" handler="rename_file_rename_clicked"/>
+            <style>
+              <class name="suggested-action"/>
+            </style>
+          </object>
+          <packing>
+            <property name="left-attach">1</property>
+            <property name="top-attach">1</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkLabel" id="rename_file_error_label">
+            <property name="visible">True</property>
+            <property name="halign">start</property>
+          </object>
+          <packing>
+            <property name="left-attach">0</property>
+            <property name="top-attach">2</property>
+            <property name="width">2</property>
+          </packing>
+        </child>
+      </object>
+    </child>
+  </object>
 </interface>
