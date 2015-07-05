@@ -47,6 +47,7 @@
 #include "gtkmarshalers.h"
 #include "gtkmenu.h"
 #include "gtkmenuitem.h"
+#include "gtkpango.h"
 #include "gtkseparatormenuitem.h"
 #include "gtkselection.h"
 #include "gtksettings.h"
@@ -6250,8 +6251,10 @@ gtk_entry_create_layout (GtkEntry *entry,
 {
   GtkEntryPrivate *priv = entry->priv;
   GtkWidget *widget = GTK_WIDGET (entry);
+  GtkStyleContext *context;
   PangoLayout *layout;
   PangoAttrList *tmp_attrs;
+  PangoAttrList *style_attrs;
   gboolean placeholder_layout;
 
   gchar *preedit_string = NULL;
@@ -6261,11 +6264,20 @@ gtk_entry_create_layout (GtkEntry *entry,
   gchar *display_text;
   guint n_bytes;
 
+  context = gtk_widget_get_style_context (widget);
+
   layout = gtk_widget_create_pango_layout (widget, NULL);
   pango_layout_set_single_paragraph_mode (layout, TRUE);
 
   tmp_attrs = priv->attrs ? pango_attr_list_ref (priv->attrs)
                           : pango_attr_list_new ();
+
+  style_attrs = _gtk_style_context_get_pango_attributes (context);
+  if (style_attrs)
+    {
+      _gtk_pango_attr_list_merge (tmp_attrs, style_attrs);
+      pango_attr_list_unref (style_attrs);
+    }
 
   placeholder_layout = show_placeholder_text (entry);
   if (placeholder_layout)
