@@ -618,6 +618,18 @@ parse_letter_spacing (GtkCssStyleProperty *property,
 }
 
 static GtkCssValue *
+parse_text_decoration_line (GtkCssStyleProperty *property,
+                            GtkCssParser        *parser)
+{
+  GtkCssValue *value = _gtk_css_text_decoration_line_value_try_parse (parser);
+
+  if (value == NULL)
+    _gtk_css_parser_error (parser, "unknown value for property");
+
+  return value;
+}
+
+static GtkCssValue *
 box_shadow_value_parse (GtkCssStyleProperty *property,
                         GtkCssParser        *parser)
 {
@@ -1081,6 +1093,16 @@ _gtk_css_style_property_init_properties (void)
                                           NULL,
                                           NULL,
                                           _gtk_css_number_value_new (0.0, GTK_CSS_PX));
+
+  gtk_css_style_property_register        ("text-decoration-line",
+                                          GTK_CSS_PROPERTY_TEXT_DECORATION_LINE,
+                                          G_TYPE_NONE,
+                                          0,
+                                          GTK_CSS_AFFECTS_TEXT | GTK_CSS_AFFECTS_TEXT_ATTRS,
+                                          parse_text_decoration_line,
+                                          NULL,
+                                          NULL,
+                                          _gtk_css_text_decoration_line_value_new (GTK_CSS_TEXT_DECORATION_LINE_NONE));
 
   gtk_css_style_property_register        ("text-shadow",
                                           GTK_CSS_PROPERTY_TEXT_SHADOW,

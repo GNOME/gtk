@@ -52,6 +52,10 @@ GtkCssValue *   _gtk_css_font_stretch_value_new       (PangoStretch       stretc
 GtkCssValue *   _gtk_css_font_stretch_value_try_parse (GtkCssParser      *parser);
 PangoStretch    _gtk_css_font_stretch_value_get       (const GtkCssValue *value);
 
+GtkCssValue *         _gtk_css_text_decoration_line_value_new       (GtkTextDecorationLine  line);
+GtkCssValue *         _gtk_css_text_decoration_line_value_try_parse (GtkCssParser          *parser);
+GtkTextDecorationLine _gtk_css_text_decoration_line_value_get       (const GtkCssValue     *value);
+
 GtkCssValue *   _gtk_css_area_value_new               (GtkCssArea         area);
 GtkCssValue *   _gtk_css_area_value_try_parse         (GtkCssParser      *parser);
 GtkCssArea      _gtk_css_area_value_get               (const GtkCssValue *value);

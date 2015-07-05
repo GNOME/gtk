@@ -553,6 +553,52 @@ _gtk_css_font_stretch_value_get (const GtkCssValue *value)
   return value->value;
 }
 
+/* GtkTextDecorationLine */
+
+static const GtkCssValueClass GTK_CSS_VALUE_TEXT_DECORATION_LINE = {
+  gtk_css_value_enum_free,
+  gtk_css_value_enum_compute,
+  gtk_css_value_enum_equal,
+  gtk_css_value_enum_transition,
+  gtk_css_value_enum_print
+};
+
+static GtkCssValue text_decoration_line_values[] = {
+  { &GTK_CSS_VALUE_TEXT_DECORATION_LINE, 1, GTK_CSS_TEXT_DECORATION_LINE_NONE, "none" },
+  { &GTK_CSS_VALUE_TEXT_DECORATION_LINE, 1, GTK_CSS_TEXT_DECORATION_LINE_UNDERLINE, "underline" },
+  { &GTK_CSS_VALUE_TEXT_DECORATION_LINE, 1, GTK_CSS_TEXT_DECORATION_LINE_LINE_THROUGH, "line-through" },
+};
+
+GtkCssValue *
+_gtk_css_text_decoration_line_value_new (GtkTextDecorationLine line)
+{
+  g_return_val_if_fail (line < G_N_ELEMENTS (text_decoration_line_values), NULL);
+
+  return _gtk_css_value_ref (&text_decoration_line_values[line]);
+}
+
+GtkCssValue *_gtk_css_text_decoration_line_value_try_parse (GtkCssParser *parser)
+{
+  guint i;
+
+  g_return_val_if_fail (parser != NULL, NULL);
+
+  for (i = 0; i < G_N_ELEMENTS (text_decoration_line_values); i++)
+    {
+      if (_gtk_css_parser_try (parser, text_decoration_line_values[i].name, TRUE))
+        return _gtk_css_value_ref (&text_decoration_line_values[i]);
+    }
+
+  return NULL;
+}
+
+GtkTextDecorationLine _gtk_css_text_decoration_line_value_get (const GtkCssValue *value)
+{
+  g_return_val_if_fail (value->class == &GTK_CSS_VALUE_TEXT_DECORATION_LINE, GTK_CSS_TEXT_DECORATION_LINE_NONE);
+
+  return value->value;
+}
+
 /* GtkCssArea */
 
 static const GtkCssValueClass GTK_CSS_VALUE_AREA = {

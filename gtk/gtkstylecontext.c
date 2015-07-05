@@ -3148,21 +3148,45 @@ _gtk_style_context_get_icon_extents (GtkStyleContext *context,
   extents->height += border.top + border.bottom;
 }
 
+static PangoAttrList *
+add_pango_attr(PangoAttrList *attrs, PangoAttribute *attr)
+{
+  if (attrs == NULL)
+    attrs = pango_attr_list_new ();
+
+  pango_attr_list_insert (attrs, attr);
+
+  return attrs;
+}
+
 PangoAttrList *
 _gtk_style_context_get_pango_attributes (GtkStyleContext *context)
 {
-  gint letter_spacing;
   PangoAttrList *attrs = NULL;
+  GtkTextDecorationLine decoration_line;
+  gint letter_spacing;
 
+  /* text-decoration */
+  decoration_line = _gtk_css_text_decoration_line_value_get (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_TEXT_DECORATION_LINE));
+
+  switch (decoration_line)
+    {
+    case GTK_CSS_TEXT_DECORATION_LINE_UNDERLINE:
+      attrs = add_pango_attr (attrs, pango_attr_underline_new (PANGO_UNDERLINE_SINGLE));
+      break;
+    case GTK_CSS_TEXT_DECORATION_LINE_LINE_THROUGH:
+      attrs = add_pango_attr (attrs, pango_attr_strikethrough_new (TRUE));
+      break;
+    case GTK_CSS_TEXT_DECORATION_LINE_NONE:
+    default:
+      break;
+    }
+
+  /* letter-spacing */
   letter_spacing = _gtk_css_number_value_get (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_LETTER_SPACING), 100);
   if (letter_spacing != 0)
     {
-      PangoAttribute *letter_spacing_attr;
-
-      letter_spacing_attr = pango_attr_letter_spacing_new (letter_spacing * PANGO_SCALE);
-
-      attrs = pango_attr_list_new ();
-      pango_attr_list_insert (attrs, letter_spacing_attr);
+      attrs = add_pango_attr (attrs, pango_attr_letter_spacing_new (letter_spacing * PANGO_SCALE));
     }
 
     return attrs;
