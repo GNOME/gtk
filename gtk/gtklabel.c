@@ -2145,21 +2145,6 @@ gtk_label_set_use_underline_internal (GtkLabel *label,
     }
 }
 
-static gboolean
-my_pango_attr_list_merge_filter (PangoAttribute *attribute,
-                                 gpointer        list)
-{
-  pango_attr_list_change (list, pango_attribute_copy (attribute));
-  return FALSE;
-}
-
-static void
-my_pango_attr_list_merge (PangoAttrList *into,
-                          PangoAttrList *from)
-{
-  pango_attr_list_filter (from, my_pango_attr_list_merge_filter, into);
-}
-
 /* Calculates text, attrs and mnemonic_keyval from
  * label, use_underline and use_markup
  */
@@ -3480,7 +3465,7 @@ gtk_label_update_layout_attributes (GtkLabel *label)
   if (priv->markup_attrs)
     {
       if (attrs)
-        my_pango_attr_list_merge (attrs, priv->markup_attrs);
+        _gtk_pango_attr_list_merge (attrs, priv->markup_attrs);
       else
         attrs = pango_attr_list_ref (priv->markup_attrs);
     }
@@ -3488,7 +3473,7 @@ gtk_label_update_layout_attributes (GtkLabel *label)
   if (priv->attrs)
     {
       if (attrs)
-        my_pango_attr_list_merge (attrs, priv->attrs);
+        _gtk_pango_attr_list_merge (attrs, priv->attrs);
       else
         attrs = pango_attr_list_ref (priv->attrs);
     }

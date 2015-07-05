@@ -1289,3 +1289,18 @@ _gtk_pango_get_text_at (PangoLayout     *layout,
 
   return g_utf8_substring (text, start, end);
 }
+
+static gboolean
+attr_list_merge_filter (PangoAttribute *attribute,
+                        gpointer        list)
+{
+  pango_attr_list_change (list, pango_attribute_copy (attribute));
+  return FALSE;
+}
+
+void
+_gtk_pango_attr_list_merge (PangoAttrList *into,
+                            PangoAttrList *from)
+{
+  pango_attr_list_filter (from, attr_list_merge_filter, into);
+}
