@@ -1036,7 +1036,31 @@ comp_pseudoclass_position (const GtkCssSelector *a,
   return a->position.b - b->position.b;
 }
 
-#define GTK_CSS_CHANGE_PSEUDOCLASS_POSITION GTK_CSS_CHANGE_POSITION
+static GtkCssChange
+change_pseudoclass_position (const GtkCssSelector *selector)
+{
+  switch (selector->position.type)
+    {
+    case POSITION_FORWARD:
+      if (selector->position.a == 0 && selector->position.b == 1)
+        return GTK_CSS_CHANGE_FIRST_CHILD;
+      else
+        return GTK_CSS_CHANGE_NTH_CHILD;
+    case POSITION_BACKWARD:
+      if (selector->position.a == 0 && selector->position.b == 1)
+        return GTK_CSS_CHANGE_LAST_CHILD;
+      else
+        return GTK_CSS_CHANGE_NTH_LAST_CHILD;
+    case POSITION_ONLY:
+      return GTK_CSS_CHANGE_FIRST_CHILD | GTK_CSS_CHANGE_LAST_CHILD;
+    default:
+      g_assert_not_reached ();
+    case POSITION_SORTED:
+      return 0;
+    }
+}
+
+#define GTK_CSS_CHANGE_PSEUDOCLASS_POSITION change_pseudoclass_position(selector)
 DEFINE_SIMPLE_SELECTOR(pseudoclass_position, PSEUDOCLASS_POSITION, print_pseudoclass_position,
                        match_pseudoclass_position, hash_pseudoclass_position, comp_pseudoclass_position,
                        FALSE, TRUE, FALSE)
