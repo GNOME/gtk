@@ -97,8 +97,6 @@ static void     gtk_link_button_set_property (GObject          *object,
 					      guint             prop_id,
 					      const GValue     *value,
 					      GParamSpec       *pspec);
-static void     gtk_link_button_add          (GtkContainer     *container,
-					      GtkWidget        *widget);
 static gboolean gtk_link_button_button_press (GtkWidget        *widget,
 					      GdkEventButton   *event);
 static void     gtk_link_button_clicked      (GtkButton        *button);
@@ -138,18 +136,15 @@ gtk_link_button_class_init (GtkLinkButtonClass *klass)
 {
   GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
-  GtkContainerClass *container_class = GTK_CONTAINER_CLASS (klass);
   GtkButtonClass *button_class = GTK_BUTTON_CLASS (klass);
-  
+
   gobject_class->set_property = gtk_link_button_set_property;
   gobject_class->get_property = gtk_link_button_get_property;
   gobject_class->finalize = gtk_link_button_finalize;
-  
+
   widget_class->button_press_event = gtk_link_button_button_press;
   widget_class->popup_menu = gtk_link_button_popup_menu;
   widget_class->unrealize = gtk_link_button_unrealize;
-  
-  container_class->add = gtk_link_button_add;
 
   button_class->clicked = gtk_link_button_clicked;
 
@@ -290,36 +285,6 @@ gtk_link_button_set_property (GObject      *object,
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
     }
-}
-
-static void
-set_link_underline (GtkLinkButton *link_button)
-{
-  GtkWidget *label;
-  
-  label = gtk_bin_get_child (GTK_BIN (link_button));
-  if (GTK_IS_LABEL (label))
-    {
-      PangoAttrList *attributes;
-      PangoAttribute *uline;
-
-      uline = pango_attr_underline_new (PANGO_UNDERLINE_SINGLE);
-      uline->start_index = 0;
-      uline->end_index = G_MAXUINT;
-      attributes = pango_attr_list_new ();
-      pango_attr_list_insert (attributes, uline); 
-      gtk_label_set_attributes (GTK_LABEL (label), attributes);
-      pango_attr_list_unref (attributes);
-    }
-}
-
-static void
-gtk_link_button_add (GtkContainer *container,
-		     GtkWidget    *widget)
-{
-  GTK_CONTAINER_CLASS (gtk_link_button_parent_class)->add (container, widget);
-
-  set_link_underline (GTK_LINK_BUTTON (container));
 }
 
 static void
