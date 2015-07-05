@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 3.10\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-07-04 04:40+0000\n"
-"PO-Revision-Date: 2015-07-04 08:53+0100\n"
+"POT-Creation-Date: 2015-07-05 03:47+0000\n"
+"PO-Revision-Date: 2015-07-05 10:20+0100\n"
 "Last-Translator: Pedro Albuquerque <palbuquerque73@openmailbox.com>\n"
 "Language-Team: Português <palbuquerque73@openmailbox.com>\n"
 "Language: pt\n"
@@ -1215,14 +1215,15 @@ msgstr ""
 "\"Gravar cor aqui.\""
 
 #: gtk/deprecated/gtkcolorseldialog.c:191 gtk/deprecated/gtkfontsel.c:1689
-#: gtk/gtkfilechooserbutton.c:794 gtk/gtkfilechooserwidget.c:5815
-#: gtk/gtkmessagedialog.c:942 gtk/gtkmessagedialog.c:955
-#: gtk/gtkmountoperation.c:543 gtk/gtkpagesetupunixdialog.c:196
-#: gtk/gtkprintbackend.c:760 gtk/gtkprinteroptionwidget.c:545
-#: gtk/gtkprintunixdialog.c:669 gtk/gtkprintunixdialog.c:742
-#: gtk/gtkwindow.c:12068 gtk/inspector/css-editor.c:199
-#: gtk/ui/gtkappchooserdialog.ui:61 gtk/ui/gtkassistant.ui:136
-#: gtk/ui/gtkcolorchooserdialog.ui:34 gtk/ui/gtkfontchooserdialog.ui:31
+#: gtk/gtkfilechooserbutton.c:794 gtk/gtkfilechooserwidget.c:1466
+#: gtk/gtkfilechooserwidget.c:6090 gtk/gtkmessagedialog.c:942
+#: gtk/gtkmessagedialog.c:955 gtk/gtkmountoperation.c:543
+#: gtk/gtkpagesetupunixdialog.c:196 gtk/gtkprintbackend.c:760
+#: gtk/gtkprinteroptionwidget.c:545 gtk/gtkprintunixdialog.c:669
+#: gtk/gtkprintunixdialog.c:742 gtk/gtkwindow.c:12068
+#: gtk/inspector/css-editor.c:199 gtk/ui/gtkappchooserdialog.ui:61
+#: gtk/ui/gtkassistant.ui:136 gtk/ui/gtkcolorchooserdialog.ui:34
+#: gtk/ui/gtkfontchooserdialog.ui:31
 msgid "_Cancel"
 msgstr "_Cancelar"
 
@@ -2164,7 +2165,8 @@ msgstr "_Copiar"
 msgid "_Paste"
 msgstr "Co_Lar"
 
-#: gtk/gtkentry.c:9665 gtk/gtklabel.c:6615 gtk/gtktextview.c:9033
+#: gtk/gtkentry.c:9665 gtk/gtkfilechooserwidget.c:1467
+#: gtk/gtkfilechooserwidget.c:2176 gtk/gtklabel.c:6615 gtk/gtktextview.c:9033
 msgid "_Delete"
 msgstr "_Eliminar"
 
@@ -2213,7 +2215,6 @@ msgid "Other…"
 msgstr "Outro…"
 
 #: gtk/gtkfilechooserdialog.c:571
-#| msgid "_Name:"
 msgid "_Name"
 msgstr "_Nome"
 
@@ -2226,15 +2227,15 @@ msgstr "_Nome"
 msgid "%1$s on %2$s"
 msgstr "%1$s em %2$s"
 
-#: gtk/gtkfilechooserwidget.c:356
+#: gtk/gtkfilechooserwidget.c:364
 msgid "Type name of new folder"
 msgstr "Insira o nome da nova pasta"
 
-#: gtk/gtkfilechooserwidget.c:771
+#: gtk/gtkfilechooserwidget.c:779
 msgid "The folder could not be created"
 msgstr "Impossível criar a pasta"
 
-#: gtk/gtkfilechooserwidget.c:784
+#: gtk/gtkfilechooserwidget.c:792
 msgid ""
 "The folder could not be created, as a file with the same name already "
 "exists.  Try using a different name for the folder, or rename the file first."
@@ -2242,195 +2243,258 @@ msgstr ""
 "Impossível criar a pasta por já existir um ficheiro com o mesmo nome. Tente "
 "utilizar um nome diferente para a pasta ou renomear primeiro o ficheiro."
 
-#: gtk/gtkfilechooserwidget.c:798
+#: gtk/gtkfilechooserwidget.c:806
 msgid "You need to choose a valid filename."
 msgstr "Tem de escolher um nome de ficheiro válido."
 
-#: gtk/gtkfilechooserwidget.c:801
+#: gtk/gtkfilechooserwidget.c:809
 #, c-format
 msgid "Cannot create a file under %s as it is not a folder"
 msgstr "Impossível criar um ficheiro em %s por não ser uma pasta local"
 
-#: gtk/gtkfilechooserwidget.c:809
+#: gtk/gtkfilechooserwidget.c:817
 msgid "Cannot create file as the filename is too long"
 msgstr "Impossível criar ficheiro pois o seu nome é demasiado extenso"
 
-#: gtk/gtkfilechooserwidget.c:810
+#: gtk/gtkfilechooserwidget.c:818
 msgid "Try using a shorter name."
 msgstr "Tente utilizar um nome mais curto."
 
-#: gtk/gtkfilechooserwidget.c:820
+#: gtk/gtkfilechooserwidget.c:828
 msgid "You may only select folders"
 msgstr "Só pode selecionar pastas"
 
-#: gtk/gtkfilechooserwidget.c:821
+#: gtk/gtkfilechooserwidget.c:829
 msgid "The item that you selected is not a folder try using a different item."
 msgstr ""
 "O item que selecionou não é uma pasta; tente utilizar um item diferente."
 
-#: gtk/gtkfilechooserwidget.c:829
+#: gtk/gtkfilechooserwidget.c:837
 msgid "Invalid file name"
 msgstr "Nome de ficheiro inválido"
 
-#: gtk/gtkfilechooserwidget.c:839
+#: gtk/gtkfilechooserwidget.c:847
 msgid "The folder contents could not be displayed"
 msgstr "Impossível mostrar o conteúdo da pasta"
 
-#: gtk/gtkfilechooserwidget.c:983
+#: gtk/gtkfilechooserwidget.c:856
+#| msgid "The folder could not be created"
+msgid "The file could not be deleted"
+msgstr "O ficheiro não pôde ser eliminado"
+
+#: gtk/gtkfilechooserwidget.c:1001
 msgid "A folder with that name already exists"
 msgstr "Já existe um atalho com esse nome"
 
-#: gtk/gtkfilechooserwidget.c:985
+#: gtk/gtkfilechooserwidget.c:1003
 msgid "A file with that name already exists"
 msgstr "Já existe um ficheiro com esse nome"
 
-#: gtk/gtkfilechooserwidget.c:1016
+#: gtk/gtkfilechooserwidget.c:1038
 msgid "A folder cannot be called “.”"
 msgstr "Uma pasta não se pode chamar \".\""
 
-#: gtk/gtkfilechooserwidget.c:1019
+#: gtk/gtkfilechooserwidget.c:1039
+#| msgid "A folder cannot be called “.”"
+msgid "A file cannot be called “.”"
+msgstr "Um ficheiro não se pode chamar \".\""
+
+#: gtk/gtkfilechooserwidget.c:1042
 msgid "A folder cannot be called “..”"
 msgstr "Uma pasta não se pode chamar \"..\""
 
-#: gtk/gtkfilechooserwidget.c:1022
+#: gtk/gtkfilechooserwidget.c:1043
+#| msgid "A folder cannot be called “..”"
+msgid "A file cannot be called “..”"
+msgstr "Um ficheiro não se pode chamar \"..\""
+
+#: gtk/gtkfilechooserwidget.c:1046
 msgid "Folder names cannot contain “/”"
 msgstr "Nomes de pastas não podem conter \"/\""
 
-#: gtk/gtkfilechooserwidget.c:1636
+#: gtk/gtkfilechooserwidget.c:1047
+#| msgid "Folder names cannot contain “/”"
+msgid "File names cannot contain “/”"
+msgstr "Nomes de ficheiro não podem conter \"/\""
+
+#: gtk/gtkfilechooserwidget.c:1068
+#| msgid "The folder contents could not be displayed"
+msgid "Folder names should not begin with a space"
+msgstr "Nomes de pastas não devem começar com um espaço"
+
+#: gtk/gtkfilechooserwidget.c:1069
+msgid "File names should not begin with a space"
+msgstr "Nomes de ficheiro não devem começar com um espaço"
+
+#: gtk/gtkfilechooserwidget.c:1073
+#| msgid "The folder contents could not be displayed"
+msgid "Folder names should not end with a space"
+msgstr "Nomes de pastas não devem terminar com um espaço"
+
+#: gtk/gtkfilechooserwidget.c:1074
+msgid "File names should not end with a space"
+msgstr "Nomes de ficheiro não devem terminar com um espaço"
+
+#: gtk/gtkfilechooserwidget.c:1077
+#| msgid "Folder names cannot contain “/”"
+msgid "Folder names starting with a “.” are hidden"
+msgstr "Nomes de pastas começados por \".\" são ocultados"
+
+#: gtk/gtkfilechooserwidget.c:1078
+msgid "File names starting with a “.” are hidden"
+msgstr "Nomes de ficheiro começados por \".\" são ocultados"
+
+#: gtk/gtkfilechooserwidget.c:1463
+#, c-format
+msgid "Delete the directory “%s” and its contents?"
+msgstr "Eliminar a pasta \"%s\" e todo o seu conteúdo?"
+
+#: gtk/gtkfilechooserwidget.c:1464
+#, c-format
+#| msgid "Really delete file \"%s\"?"
+msgid "Delete the file “%s”?"
+msgstr "Eliminar o ficheiro \"%s\"?"
+
+#: gtk/gtkfilechooserwidget.c:1575
+#| msgid "The folder could not be created"
+msgid "The file could not be renamed"
+msgstr "Impossível renomear o ficheiro"
+
+#: gtk/gtkfilechooserwidget.c:1867
 msgid "Could not select file"
 msgstr "Impossível selecionar o ficheiro"
 
-#: gtk/gtkfilechooserwidget.c:1893
+#: gtk/gtkfilechooserwidget.c:2161
 msgid "_Visit File"
 msgstr "_Visitar ficheiro"
 
-#: gtk/gtkfilechooserwidget.c:1897
+#: gtk/gtkfilechooserwidget.c:2164
 msgid "_Open With File Manager"
 msgstr "_Abrir com o gestor de ficheiros"
 
-#: gtk/gtkfilechooserwidget.c:1901
+#: gtk/gtkfilechooserwidget.c:2167
 msgid "_Copy Location"
 msgstr "Localização da _Cópia"
 
-#: gtk/gtkfilechooserwidget.c:1905
+#: gtk/gtkfilechooserwidget.c:2170
 msgid "_Add to Bookmarks"
 msgstr "_Adicionar aos marcadores"
 
-#: gtk/gtkfilechooserwidget.c:1913
+#: gtk/gtkfilechooserwidget.c:2173 gtk/gtkplacessidebar.c:2402
+#: gtk/ui/gtkfilechooserwidget.ui:494
+msgid "_Rename"
+msgstr "_Renomear"
+
+#: gtk/gtkfilechooserwidget.c:2183
 msgid "Show _Hidden Files"
 msgstr "Mostrar os ficheiros _Ocultos"
 
-#: gtk/gtkfilechooserwidget.c:1917
+#: gtk/gtkfilechooserwidget.c:2186
 msgid "Show _Size Column"
 msgstr "Mostrar o _Tamanho da coluna"
 
-#: gtk/gtkfilechooserwidget.c:1921
+#: gtk/gtkfilechooserwidget.c:2189
 msgid "Show _Time"
 msgstr "Mostrar _Horas"
 
-#: gtk/gtkfilechooserwidget.c:1925
+#: gtk/gtkfilechooserwidget.c:2192
 msgid "Sort _Folders before Files"
 msgstr "Ordenar pastas antes de _Ficheiros"
 
 #. this is the header for the location column in the print dialog
-#: gtk/gtkfilechooserwidget.c:2202 gtk/inspector/style-prop-list.ui:118
+#: gtk/gtkfilechooserwidget.c:2471 gtk/inspector/style-prop-list.ui:118
 #: gtk/ui/gtkfilechooserwidget.ui:193 gtk/ui/gtkprintunixdialog.ui:127
 msgid "Location"
 msgstr "Localização"
 
 #. Label
-#: gtk/gtkfilechooserwidget.c:2271
+#: gtk/gtkfilechooserwidget.c:2540
 msgid "_Name:"
 msgstr "_Nome:"
 
-#: gtk/gtkfilechooserwidget.c:2845
+#: gtk/gtkfilechooserwidget.c:3114
 #, c-format
-#| msgid "Starting %s"
 msgid "Searching in %s"
 msgstr "A procurar em %s"
 
-#: gtk/gtkfilechooserwidget.c:2853
-#| msgid "Enter Location"
+#: gtk/gtkfilechooserwidget.c:3122
 msgid "Enter location"
 msgstr "Insira a localização"
 
-#: gtk/gtkfilechooserwidget.c:2855
-#| msgid "Enter Location"
+#: gtk/gtkfilechooserwidget.c:3124
 msgid "Enter location or URL"
 msgstr "Insira localização"
 
-#: gtk/gtkfilechooserwidget.c:3855 gtk/gtkfilechooserwidget.c:6706
+#: gtk/gtkfilechooserwidget.c:4124 gtk/gtkfilechooserwidget.c:6981
 #: gtk/ui/gtkfilechooserwidget.ui:221
 msgid "Modified"
 msgstr "Modificado"
 
-#: gtk/gtkfilechooserwidget.c:4134
+#: gtk/gtkfilechooserwidget.c:4403
 #, c-format
 msgid "Could not read the contents of %s"
 msgstr "Impossível ler o conteúdo de %s"
 
-#: gtk/gtkfilechooserwidget.c:4138
+#: gtk/gtkfilechooserwidget.c:4407
 msgid "Could not read the contents of the folder"
 msgstr "Impossível ler o conteúdo da pasta"
 
-#: gtk/gtkfilechooserwidget.c:4256 gtk/gtkfilechooserwidget.c:4302
+#: gtk/gtkfilechooserwidget.c:4525 gtk/gtkfilechooserwidget.c:4571
 msgid "%H:%M"
 msgstr "%H:%M"
 
-#: gtk/gtkfilechooserwidget.c:4258 gtk/gtkfilechooserwidget.c:4304
-#| msgid "%-I:%M %P"
+#: gtk/gtkfilechooserwidget.c:4527 gtk/gtkfilechooserwidget.c:4573
 msgid "%l:%M %p"
 msgstr "%l:%M %p"
 
-#: gtk/gtkfilechooserwidget.c:4262
-#| msgid "Yesterday at %H:%M"
+#: gtk/gtkfilechooserwidget.c:4531
 msgid "Yesterday"
 msgstr "Ontem"
 
-#: gtk/gtkfilechooserwidget.c:4270
+#: gtk/gtkfilechooserwidget.c:4539
 msgid "%-e %b"
 msgstr "%-e %b"
 
-#: gtk/gtkfilechooserwidget.c:4274
+#: gtk/gtkfilechooserwidget.c:4543
 msgid "%-e %b %Y"
 msgstr "%-e %b %Y"
 
 #. Translators: We don't know whether this printer is
 #. * available to print to.
-#: gtk/gtkfilechooserwidget.c:4499 gtk/inspector/prop-editor.c:1569
+#: gtk/gtkfilechooserwidget.c:4768 gtk/inspector/prop-editor.c:1569
 #: modules/printbackends/cloudprint/gtkprintbackendcloudprint.c:748
 msgid "Unknown"
 msgstr "Desconhecido"
 
-#: gtk/gtkfilechooserwidget.c:4538 gtk/gtkplacessidebar.c:871
+#: gtk/gtkfilechooserwidget.c:4807 gtk/gtkplacessidebar.c:871
 msgid "Home"
 msgstr "Início"
 
-#: gtk/gtkfilechooserwidget.c:5029
+#: gtk/gtkfilechooserwidget.c:5298
 msgid "Cannot change to folder because it is not local"
 msgstr "Impossível ir para a pasta por não ser local"
 
-#: gtk/gtkfilechooserwidget.c:5808 gtk/gtkprintunixdialog.c:660
+#: gtk/gtkfilechooserwidget.c:6083 gtk/gtkprintunixdialog.c:660
 #, c-format
 msgid "A file named “%s” already exists.  Do you want to replace it?"
 msgstr "Já existe um ficheiro chamado “%s”. Deseja substituí-lo?"
 
-#: gtk/gtkfilechooserwidget.c:5811 gtk/gtkprintunixdialog.c:664
+#: gtk/gtkfilechooserwidget.c:6086 gtk/gtkprintunixdialog.c:664
 #, c-format
 msgid ""
 "The file already exists in “%s”.  Replacing it will overwrite its contents."
 msgstr ""
 "O ficheiro já existe em “%s”. Substituí-lo irá sobrescrever o seu conteúdo."
 
-#: gtk/gtkfilechooserwidget.c:5816 gtk/gtkprintunixdialog.c:672
+#: gtk/gtkfilechooserwidget.c:6091 gtk/gtkprintunixdialog.c:672
 msgid "_Replace"
 msgstr "_Substituir"
 
-#: gtk/gtkfilechooserwidget.c:6616
+#: gtk/gtkfilechooserwidget.c:6891
 msgid "Could not start the search process"
 msgstr "Impossível iniciar o processo de procura"
 
-#: gtk/gtkfilechooserwidget.c:6617
+#: gtk/gtkfilechooserwidget.c:6892
 msgid ""
 "The program was not able to create a connection to the indexer daemon. "
 "Please make sure it is running."
@@ -2438,12 +2502,11 @@ msgstr ""
 "A aplicação foi incapaz de criar uma ligação ao daemon de indexação. "
 "Certifique-se de que este se encontra em execução."
 
-#: gtk/gtkfilechooserwidget.c:6629
+#: gtk/gtkfilechooserwidget.c:6904
 msgid "Could not send the search request"
 msgstr "Impossível enviar o pedido de procura"
 
-#: gtk/gtkfilechooserwidget.c:6916
-#| msgid "Accessible role"
+#: gtk/gtkfilechooserwidget.c:7191
 msgid "Accessed"
 msgstr "Acedido"
 
@@ -2866,7 +2929,6 @@ msgid "New bookmark"
 msgstr "Novo marcador"
 
 #: gtk/gtkplacessidebar.c:1174
-#| msgid "New bookmark"
 msgid "Add a new bookmark"
 msgstr "Adicionar novo marcador"
 
@@ -2946,13 +3008,9 @@ msgstr "Etiqueta \"%s\" já se encontra definida"
 #: gtk/gtkplacessidebar.c:2396 gtk/inspector/actions.ui:52
 #: gtk/inspector/classes-list.ui:80 gtk/inspector/css-node-tree.ui:17
 #: gtk/inspector/object-tree.ui:109 gtk/inspector/signals-list.ui:90
-#: gtk/ui/gtkfilechooserwidget.ui:175
+#: gtk/ui/gtkfilechooserwidget.ui:175 gtk/ui/gtkfilechooserwidget.ui:468
 msgid "Name"
 msgstr "Nome"
-
-#: gtk/gtkplacessidebar.c:2402
-msgid "_Rename"
-msgstr "_Renomear"
 
 #: gtk/gtkplacessidebar.c:2543
 #, c-format
@@ -5255,7 +5313,6 @@ msgid "Saturation"
 msgstr "Saturação"
 
 #: gtk/ui/gtkfilechooserwidget.ui:67
-#| msgid "Create _Folder"
 msgid "Create Folder"
 msgstr "Criar pasta"
 
@@ -5264,7 +5321,6 @@ msgid "Files"
 msgstr "Ficheiros"
 
 #: gtk/ui/gtkfilechooserwidget.ui:270
-#| msgid "No Fonts Found"
 msgid "No Results Found"
 msgstr "Sem resultados"
 
@@ -6051,8 +6107,6 @@ msgstr "Caixa do meio"
 
 #. Translators: Bottom output bin
 #: modules/printbackends/cups/gtkprintbackendcups.c:4345
-#| msgctxt "Stock label, navigation"
-#| msgid "_Bottom"
 msgctxt "output-bin"
 msgid "Bottom Bin"
 msgstr "Caixa inferior"
@@ -6065,24 +6119,18 @@ msgstr "Caixa lateral"
 
 #. Translators: Left output bin
 #: modules/printbackends/cups/gtkprintbackendcups.c:4349
-#| msgctxt "keyboard label"
-#| msgid "Left"
 msgctxt "output-bin"
 msgid "Left Bin"
 msgstr "Caixa esquerda"
 
 #. Translators: Right output bin
 #: modules/printbackends/cups/gtkprintbackendcups.c:4351
-#| msgctxt "keyboard label"
-#| msgid "Right"
 msgctxt "output-bin"
 msgid "Right Bin"
 msgstr "Caixa direita"
 
 #. Translators: Center output bin
 #: modules/printbackends/cups/gtkprintbackendcups.c:4353
-#| msgctxt "Stock label"
-#| msgid "_Center"
 msgctxt "output-bin"
 msgid "Center Bin"
 msgstr "Caixa central"
@@ -6820,9 +6868,6 @@ msgstr "Imprimir para testar impressora"
 
 #~ msgid "Error deleting file '%s': %s"
 #~ msgstr "Erro ao apagar o ficheiro '%s': %s"
-
-#~ msgid "Really delete file \"%s\"?"
-#~ msgstr "Apagar mesmo o ficheiro \"%s\"?"
 
 #~ msgid "Delete File"
 #~ msgstr "Apagar Ficheiro"
