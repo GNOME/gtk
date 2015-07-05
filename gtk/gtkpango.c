@@ -1300,14 +1300,24 @@ attr_list_merge_filter (PangoAttribute *attribute,
 
 /*
  * _gtk_pango_attr_list_merge:
- * @into: a #PangoAttrList where attributes are merged.
- * @from: a #PangoAttrList with the attributes to merge
+ * @into: a #PangoAttrList where attributes are merged or %NULL
+ * @from: a #PangoAttrList with the attributes to merge or %NULL
  *
  * Merges attributes from @from into @into.
+ *
+ * Returns: the merged list.
  */
-void
+PangoAttrList *
 _gtk_pango_attr_list_merge (PangoAttrList *into,
                             PangoAttrList *from)
 {
-  pango_attr_list_filter (from, attr_list_merge_filter, into);
+  if (from)
+    {
+      if (into)
+        pango_attr_list_filter (from, attr_list_merge_filter, into);
+      else
+       return pango_attr_list_ref (from);
+    }
+
+  return into;
 }

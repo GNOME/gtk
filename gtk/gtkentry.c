@@ -6253,7 +6253,6 @@ gtk_entry_create_layout (GtkEntry *entry,
   GtkWidget *widget = GTK_WIDGET (entry);
   GtkStyleContext *context;
   PangoLayout *layout;
-  PangoAttrList *style_attrs;
   PangoAttrList *tmp_attrs;
   gboolean placeholder_layout;
 
@@ -6269,13 +6268,10 @@ gtk_entry_create_layout (GtkEntry *entry,
   layout = gtk_widget_create_pango_layout (widget, NULL);
   pango_layout_set_single_paragraph_mode (layout, TRUE);
 
-  style_attrs = _gtk_style_context_get_pango_attributes (context);
-  tmp_attrs = style_attrs ? style_attrs : pango_attr_list_new ();
-
-  if (priv->attrs)
-    {
-      _gtk_pango_attr_list_merge (tmp_attrs, priv->attrs);
-    }
+  tmp_attrs = _gtk_style_context_get_pango_attributes (context);
+  tmp_attrs = _gtk_pango_attr_list_merge (tmp_attrs, priv->attrs);
+  if (!tmp_attrs)
+    tmp_attrs = pango_attr_list_new ();
 
   placeholder_layout = show_placeholder_text (entry);
   if (placeholder_layout)

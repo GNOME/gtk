@@ -3465,36 +3465,17 @@ gtk_label_update_layout_attributes (GtkLabel *label)
     attrs = NULL;
 
   style_attrs = _gtk_style_context_get_pango_attributes (context);
-  if (style_attrs)
-    {
-      if (attrs)
-        _gtk_pango_attr_list_merge (attrs, style_attrs);
-      else
-        attrs = pango_attr_list_ref (style_attrs);
 
-      pango_attr_list_unref (style_attrs);
-    }
-
-  if (priv->markup_attrs)
-    {
-      if (attrs)
-        _gtk_pango_attr_list_merge (attrs, priv->markup_attrs);
-      else
-        attrs = pango_attr_list_ref (priv->markup_attrs);
-    }
-
-  if (priv->attrs)
-    {
-      if (attrs)
-        _gtk_pango_attr_list_merge (attrs, priv->attrs);
-      else
-        attrs = pango_attr_list_ref (priv->attrs);
-    }
+  attrs = _gtk_pango_attr_list_merge (attrs, style_attrs);
+  attrs = _gtk_pango_attr_list_merge (attrs, priv->markup_attrs);
+  attrs = _gtk_pango_attr_list_merge (attrs, priv->attrs);
 
   pango_layout_set_attributes (priv->layout, attrs);
 
   if (attrs)
     pango_attr_list_unref (attrs);
+  if (style_attrs)
+    pango_attr_list_unref (style_attrs);
 }
 
 static void
