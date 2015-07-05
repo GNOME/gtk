@@ -1428,7 +1428,7 @@ _gdk_x11_display_open (const gchar *display_name)
   gdk_event_init (display);
 
   attr.window_type = GDK_WINDOW_TOPLEVEL;
-  attr.wclass = GDK_INPUT_OUTPUT;
+  attr.wclass = GDK_INPUT_ONLY;
   attr.x = 10;
   attr.y = 10;
   attr.width = 10;
