@@ -955,7 +955,6 @@ struct FileExistsData
   gboolean file_exists_and_is_not_folder;
   GFile *parent_file;
   GFile *file;
-  gchar *name;
 };
 
 static void
@@ -991,25 +990,13 @@ name_exists_get_info_cb (GCancellable *cancellable,
   else
     {
       gtk_widget_set_sensitive (priv->new_folder_create_button, TRUE);
-
-      // If file doesn't exist, warn if string begins or ends with whitespace
-      if (g_ascii_isspace (data->name[0]))
-        gtk_label_set_text (GTK_LABEL (priv->new_folder_error_label),
-                            "Folder names should not begin with a space");
-
-      else if (g_ascii_isspace (data->name[strlen (data->name) - 1]))
-        gtk_label_set_text (GTK_LABEL (priv->new_folder_error_label),
-                            "Folder names should not end with a space");
-
-      else
-        gtk_label_set_text (GTK_LABEL (priv->new_folder_error_label), "");
+      /* Don't clear the label here, it may contain a warning */
     }
 
 out:
   g_object_unref (impl);
   g_object_unref (data->file);
   g_object_unref (data->parent_file);
-  g_free (data->name);
   g_free (data);
   g_object_unref (cancellable);
 }
@@ -1038,6 +1025,8 @@ check_valid_folder_name (GtkFileChooserWidget *impl,
       GFile *file;
       GError *error = NULL;
 
+      gtk_label_set_text (GTK_LABEL (priv->new_folder_error_label), "");
+
       file = g_file_get_child_for_display_name (priv->current_folder, name, &error);
       if (file == NULL)
         {
@@ -1048,13 +1037,22 @@ check_valid_folder_name (GtkFileChooserWidget *impl,
         {
           struct FileExistsData *data;
 
-          gtk_label_set_text (GTK_LABEL (priv->new_folder_error_label), "");
+          /* Warn the user about questionable names that are technically valid */
+          if (g_ascii_isspace (name[0]))
+            gtk_label_set_text (GTK_LABEL (priv->new_folder_error_label),
+                                _("Folder names should not begin with a space"));
+
+          else if (g_ascii_isspace (name[strlen (name) - 1]))
+            gtk_label_set_text (GTK_LABEL (priv->new_folder_error_label),
+                                _("Folder names should not end with a space"));
+          else if (name[0] == '.')
+            gtk_label_set_text (GTK_LABEL (priv->new_folder_error_label),
+                                _("Folder names starting with a “.” are hidden"));
 
           data = g_new0 (struct FileExistsData, 1);
           data->impl = g_object_ref (impl);
           data->parent_file = g_object_ref (priv->current_folder);
           data->file = g_object_ref (file);
-          data->name = g_strdup(name);
 
           if (priv->file_exists_get_info_cancellable)
             g_cancellable_cancel (priv->file_exists_get_info_cancellable);
@@ -6058,7 +6056,6 @@ out:
   g_object_unref (data->impl);
   g_object_unref (data->file);
   g_object_unref (data->parent_file);
-  g_free (data->name);
   g_free (data);
 
   g_object_unref (cancellable);
@@ -6176,7 +6173,6 @@ out:
       g_object_unref (impl);
       g_object_unref (data->file);
       g_object_unref (data->parent_file);
-      g_free (data->name);
       g_free (data);
     }
 
