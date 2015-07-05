@@ -79,6 +79,9 @@ gchar *_gtk_pango_get_text_after  (PangoLayout     *layout,
                                    gint            *start_offset,
                                    gint            *end_offset);
 
+void _gtk_pango_attr_list_merge   (PangoAttrList *into,
+                                   PangoAttrList *from);
+
 G_END_DECLS
 
 #endif /* __GTK_PANGO_H__ */
