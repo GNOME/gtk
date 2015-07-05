@@ -29,6 +29,7 @@
 
 #include <gdk/gdk.h>
 #include <gtk/gtkaboutdialog.h>
+#include <gtk/gtkabstractimage.h>
 #include <gtk/gtkaccelgroup.h>
 #include <gtk/gtkaccellabel.h>
 #include <gtk/gtkaccelmap.h>
@@ -123,6 +124,7 @@
 #include <gtk/gtkicontheme.h>
 #include <gtk/gtkiconview.h>
 #include <gtk/gtkimage.h>
+#include <gtk/gtkimageview.h>
 #include <gtk/gtkimcontext.h>
 #include <gtk/gtkimcontextinfo.h>
 #include <gtk/gtkimcontextsimple.h>

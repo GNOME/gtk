@@ -1,0 +1,415 @@
+<?xml version="1.0"?>
+<interface>
+  <object class="GtkAdjustment" id="scale_adjustment">
+    <property name="upper">5</property>
+    <property name="lower">0.05</property>
+    <property name="value">1.0</property>
+    <property name="step_increment">0.01</property>
+  </object>
+
+  <object class="GtkAdjustment" id="angle_adjustment">
+    <property name="upper">360</property>
+    <property name="value">0</property>
+    <property name="step_increment">0.1</property>
+    <!--<property name="step_increment">1</property>-->
+    <!--<property name="step_increment">45</property>-->
+  </object>
+
+
+  <object class="GtkBox" id="box">
+    <property name="visible">true</property>
+    <property name="orientation">horizontal</property>
+
+
+    <child>
+      <object class="GtkGrid" id="grid">
+        <property name="visible">true</property>
+        <property name="row_spacing">6</property>
+        <property name="column_spacing">12</property>
+        <property name="margin">6</property>
+
+
+        <child>
+          <object class="GtkEntry" id="uri_entry">
+            <property name="visible">true</property>
+            <property name="placeholder_text">URI</property>
+          </object>
+          <packing>
+            <property name="left_attach">0</property>
+            <property name="top_attach">0</property>
+          </packing>
+        </child>
+
+        <child>
+          <object class="GtkButton" id="load_button">
+            <property name="visible">true</property>
+            <property name="label" translatable="yes">Load</property>
+            <signal name="clicked" handler="load_button_cb" />
+          </object>
+          <packing>
+            <property name="left_attach">1</property>
+            <property name="top_attach">0</property>
+          </packing>
+        </child>
+
+
+        <child>
+          <object class="GtkFileChooserButton">
+            <property name="visible">true</property>
+            <property name="valign">baseline</property>
+            <signal name="file-set" handler="file_set_cb" />
+          </object>
+          <packing>
+            <property name="left_attach">0</property>
+            <property name="top_attach">1</property>
+            <property name="width">2</property>
+          </packing>
+        </child>
+
+
+        <child>
+          <object class="GtkButton">
+            <property name="visible">true</property>
+            <property name="label" translatable="yes">Load Pixbuf</property>
+            <signal name="clicked" handler="load_pixbuf_button_clicked_cb" object="image_view"/>
+          </object>
+          <packing>
+            <property name="left_attach">0</property>
+            <property name="top_attach">2</property>
+            <property name="width">2</property>
+          </packing>
+        </child>
+
+        <child>
+          <object class="GtkButton">
+            <property name="visible">true</property>
+            <property name="label" translatable="yes">Load HiDPI Pixbuf</property>
+            <signal name="clicked" handler="load_hidpi_pixbuf_button_clicked_cb" object="image_view"/>
+          </object>
+          <packing>
+            <property name="left_attach">0</property>
+            <property name="top_attach">3</property>
+            <property name="width">2</property>
+          </packing>
+        </child>
+
+
+        <child>
+          <object class="GtkButton">
+            <property name="visible">false</property>
+            <property name="label" translatable="yes">Load Surface</property>
+            <signal name="clicked" handler="load_surface_button_clicked_cb" />
+          </object>
+          <packing>
+            <property name="left_attach">0</property>
+            <property name="top_attach">4</property>
+            <property name="width">2</property>
+          </packing>
+        </child>
+
+
+        <child>
+          <object class="GtkButton">
+            <property name="visible">false</property>
+            <property name="label" translatable="yes">Clear</property>
+            <signal name="clicked" handler="clear_button_clicked_cb" />
+          </object>
+          <packing>
+            <property name="left_attach">0</property>
+            <property name="top_attach">4</property>
+            <property name="width">2</property>
+          </packing>
+        </child>
+
+        <child>
+          <object class="GtkLabel">
+            <property name="visible">true</property>
+            <property name="label" translatable="yes">Fit Allocation</property>
+            <property name="halign">start</property>
+          </object>
+          <packing>
+            <property name="left_attach">0</property>
+            <property name="top_attach">6</property>
+          </packing>
+        </child>
+
+        <child>
+          <object class="GtkSwitch" id="fit_allocation_switch">
+           <property name="halign">end</property>
+         </object>
+         <packing>
+           <property name="left_attach">1</property>
+           <property name="top_attach">6</property>
+         </packing>
+        </child>
+
+
+
+
+
+        <child>
+          <object class="GtkLabel">
+            <property name="visible">true</property>
+            <property name="label">In ScrolledWindow</property>
+            <property name="halign">start</property>
+          </object>
+          <packing>
+            <property name="left_attach">0</property>
+            <property name="top_attach">7</property>
+          </packing>
+        </child>
+
+        <child>
+          <object class="GtkSwitch" id="scrolled_switch">
+           <property name="halign">end</property>
+            <property name="active">true</property>
+            <signal name="notify::active" handler="scrolled_switch_active_cb" />
+         </object>
+         <packing>
+           <property name="left_attach">1</property>
+           <property name="top_attach">7</property>
+         </packing>
+        </child>
+
+
+        <child>
+          <object class="GtkLabel">
+            <property name="visible">true</property>
+            <property name="label">Zoomable</property>
+            <property name="halign">start</property>
+          </object>
+          <packing>
+            <property name="left_attach">0</property>
+            <property name="top_attach">8</property>
+          </packing>
+        </child>
+
+        <child>
+          <object class="GtkSwitch" id="zoom_gesture_switch">
+           <property name="halign">end</property>
+            <property name="active">true</property>
+         </object>
+         <packing>
+           <property name="left_attach">1</property>
+           <property name="top_attach">8</property>
+         </packing>
+        </child>
+
+
+        <child>
+          <object class="GtkLabel">
+            <property name="visible">true</property>
+            <property name="label">Rotatable</property>
+            <property name="halign">start</property>
+          </object>
+          <packing>
+            <property name="left_attach">0</property>
+            <property name="top_attach">9</property>
+          </packing>
+        </child>
+
+        <child>
+          <object class="GtkSwitch" id="rotate_gesture_switch">
+           <property name="halign">end</property>
+            <property name="active">true</property>
+         </object>
+         <packing>
+           <property name="left_attach">1</property>
+           <property name="top_attach">9</property>
+         </packing>
+       </child>
+
+       <child>
+         <object class="GtkLabel">
+           <property name="visible">true</property>
+           <property name="label" translatable="yes">Snap Angle</property>
+           <property name="halign">start</property>
+         </object>
+         <packing>
+           <property name="left_attach">0</property>
+           <property name="top_attach">10</property>
+         </packing>
+       </child>
+
+        <child>
+          <object class="GtkSwitch" id="snap_angle_switch">
+           <property name="halign">end</property>
+          </object>
+          <packing>
+            <property name="left_attach">1</property>
+            <property name="top_attach">10</property>
+          </packing>
+        </child>
+
+
+       <child>
+         <object class="GtkLabel">
+           <property name="visible">true</property>
+           <property name="label" translatable="yes">Transitions</property>
+           <property name="halign">start</property>
+         </object>
+         <packing>
+           <property name="left_attach">0</property>
+           <property name="top_attach">11</property>
+         </packing>
+       </child>
+
+        <child>
+          <object class="GtkSwitch" id="transitions_switch">
+           <property name="halign">end</property>
+          </object>
+          <packing>
+            <property name="left_attach">1</property>
+            <property name="top_attach">11</property>
+          </packing>
+        </child>
+
+
+
+        <child>
+          <object class="GtkLabel">
+            <property name="visible">true</property>
+            <property name="label" translatable="yes">Angle</property>
+            <property name="margin_top">12</property>
+            <property name="halign">start</property>
+            <attributes>
+              <attribute name="weight" value="bold" />
+            </attributes>
+          </object>
+          <packing>
+            <property name="left_attach">0</property>
+            <property name="top_attach">12</property>
+            <property name="width">2</property>
+          </packing>
+        </child>
+
+
+
+
+        <child>
+          <object class="GtkScale" id="angle_spin_button">
+            <property name="visible">true</property>
+            <property name="digits">2</property>
+            <property name="adjustment">angle_adjustment</property>
+          </object>
+          <packing>
+            <property name="left_attach">0</property>
+            <property name="top_attach">13</property>
+            <property name="width">2</property>
+          </packing>
+        </child>
+
+        <child>
+          <object class="GtkLabel">
+            <property name="visible">true</property>
+            <property name="label" translatable="yes">Scale</property>
+            <property name="halign">start</property>
+            <property name="xalign">0.0</property>
+            <attributes>
+              <attribute name="weight" value="bold" />
+            </attributes>
+          </object>
+          <packing>
+            <property name="left_attach">0</property>
+            <property name="top_attach">14</property>
+            <property name="width">2</property>
+          </packing>
+        </child>
+
+        <child>
+          <object class="GtkScale" id="scale_spin_button">
+            <property name="visible">true</property>
+            <property name="digits">2</property>
+            <property name="adjustment">scale_adjustment</property>
+          </object>
+          <packing>
+            <property name="left_attach">0</property>
+            <property name="top_attach">15</property>
+            <property name="width">2</property>
+          </packing>
+        </child>
+
+
+        <child>
+          <object class="GtkBox">
+            <property name="visible">true</property>
+            <property name="orientation">horizontal</property>
+            <property name="halign">center</property>
+            <style>
+              <class name="linked" />
+            </style>
+
+            <child>
+              <object class="GtkButton">
+                <property name="visible">true</property>
+                <signal name="clicked" handler="rotate_left_clicked_cb" />
+                <child>
+                  <object class="GtkImage">
+                    <property name="visible">true</property>
+                    <property name="icon-name">object-rotate-left-symbolic</property>
+                  </object>
+                </child>
+              </object>
+            </child>
+
+            <child>
+              <object class="GtkButton">
+                <property name="visible">true</property>
+                <signal name="clicked" handler="rotate_right_clicked_cb" />
+                <child>
+                  <object class="GtkImage">
+                    <property name="visible">true</property>
+                    <property name="icon-name">object-rotate-right-symbolic</property>
+                  </object>
+                </child>
+              </object>
+            </child>
+
+          </object>
+          <packing>
+            <property name="left_attach">0</property>
+            <property name="top_attach">16</property>
+            <property name="width">2</property>
+          </packing>
+        </child>
+
+
+        <child>
+          <object class="GtkButton" id="reset_button">
+            <property name="visible">true</property>
+            <property name="label" translatable="true">Reset View</property>
+            <property name="valign">end</property>
+            <property name="vexpand">true</property>
+            <signal name="clicked" handler="reset_view_button_clicked_cb" />
+          </object>
+          <packing>
+            <property name="left_attach">0</property>
+            <property name="top_attach">17</property>
+            <property name="width">2</property>
+          </packing>
+        </child>
+
+
+      </object>
+
+    </child>
+
+    <child>
+      <object class="GtkScrolledWindow">
+        <property name="visible">true</property>
+        <child>
+          <object class="GtkImageView" id="image_view">
+            <property name="visible">true</property>
+            <property name="hexpand">true</property>
+            <property name="vexpand">true</property>
+            <property name="width_request">400</property>
+            <property name="height_request">400</property>
+          </object>
+        </child>
+      </object>
+    </child>
+  </object>
+
+
+
+</interface>

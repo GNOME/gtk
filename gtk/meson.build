@@ -7,6 +7,7 @@ gtk_public_sources = files([
   'fnmatch.c',
   'gdkpixbufutils.c',
   'gtkaboutdialog.c',
+  'gtkabstractimage.c',
   'gtkaccelgroup.c',
   'gtkaccellabel.c',
   'gtkaccelmap.c',
@@ -192,6 +193,7 @@ gtk_public_sources = files([
   'gtkiconview.c',
   'gtkimage.c',
   'gtkimagedefinition.c',
+  'gtkimageview.c',
   'gtkimcontext.c',
   'gtkimcontextsimple.c',
   'gtkimmodule.c',
@@ -371,6 +373,7 @@ gtk_private_headers = gtk_private_type_headers + files([
 
 gtk_public_headers = files([
   'gtkaboutdialog.h',
+  'gtkabstractimage.h',
   'gtkaccelgroup.h',
   'gtkaccellabel.h',
   'gtkaccelmap.h',
@@ -466,6 +469,7 @@ gtk_public_headers = files([
   'gtkiconview.h',
   'gtkimage.h',
   'gtkimcontext.h',
+  'gtkimageview.h',
   'gtkimcontextinfo.h',
   'gtkimcontextsimple.h',
   'gtkimmodule.h',

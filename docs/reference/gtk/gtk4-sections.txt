@@ -1528,6 +1528,45 @@ GtkImageGIconData
 </SECTION>
 
 <SECTION>
+<FILE>gtkimageview</FILE>
+<TITLE>GtkImageView</TITLE>
+GtkImageView
+gtk_image_view_new
+gtk_image_view_set_pixbuf
+gtk_image_view_set_surface
+gtk_image_view_set_animation
+gtk_image_view_load_from_file_async
+gtk_image_view_load_from_file_finish
+gtk_image_view_load_from_stream_async
+gtk_image_view_load_from_stream_finish
+gtk_image_view_set_scale
+gtk_image_view_get_scale
+gtk_image_view_set_angle
+gtk_image_view_get_angle
+gtk_image_view_set_snap_angle
+gtk_image_view_get_snap_angle
+gtk_image_view_set_fit_allocation
+gtk_image_view_get_fit_allocation
+gtk_image_view_set_rotatable
+gtk_image_view_get_rotatable
+gtk_image_view_set_zoomable
+gtk_image_view_get_zoomable
+gtk_image_view_get_scale_set
+gtk_image_view_set_transitions_enabled
+gtk_image_view_get_transitions_enabled
+<SUBSECTION Standard>
+GTK_IMAGE_VIEW
+GTK_IS_IMAGE_VIEW
+GTK_TYPE_IMAGE_VIEW
+GTK_IMAGE__VIEW_CLASS
+GTK_IS_IMAGE_VIEW_CLASS
+GTK_IMAGE_VIEW_GET_CLASS
+<SUBSECTION Private>
+GtkImageViewPrivate
+gtk_image_view_get_type
+</SECTION>
+
+<SECTION>
 <FILE>gtkimcontext</FILE>
 <TITLE>GtkIMContext</TITLE>
 GtkIMContext
