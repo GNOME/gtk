@@ -3164,18 +3164,30 @@ _gtk_style_context_get_pango_attributes (GtkStyleContext *context)
 {
   PangoAttrList *attrs = NULL;
   GtkTextDecorationLine decoration_line;
+  const GdkRGBA *color;
+  const GdkRGBA *decoration_color;
   gint letter_spacing;
 
   /* text-decoration */
   decoration_line = _gtk_css_text_decoration_line_value_get (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_TEXT_DECORATION_LINE));
+  color = _gtk_css_rgba_value_get_rgba (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_COLOR));
+  decoration_color = _gtk_css_rgba_value_get_rgba (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_TEXT_DECORATION_COLOR));
 
   switch (decoration_line)
     {
     case GTK_CSS_TEXT_DECORATION_LINE_UNDERLINE:
       attrs = add_pango_attr (attrs, pango_attr_underline_new (PANGO_UNDERLINE_SINGLE));
+      if (!gdk_rgba_equal(color, decoration_color))
+        attrs = add_pango_attr (attrs, pango_attr_underline_color_new (decoration_color->red * 65535. + 0.5,
+                                                                       decoration_color->green * 65535. + 0.5,
+                                                                       decoration_color->blue * 65535. + 0.5));
       break;
     case GTK_CSS_TEXT_DECORATION_LINE_LINE_THROUGH:
       attrs = add_pango_attr (attrs, pango_attr_strikethrough_new (TRUE));
+      if (!gdk_rgba_equal(color, decoration_color))
+        attrs = add_pango_attr (attrs, pango_attr_strikethrough_color_new (decoration_color->red * 65535. + 0.5,
+                                                                           decoration_color->green * 65535. + 0.5,
+                                                                           decoration_color->blue * 65535. + 0.5));
       break;
     case GTK_CSS_TEXT_DECORATION_LINE_NONE:
     default:

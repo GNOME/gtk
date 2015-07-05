@@ -1104,6 +1104,16 @@ _gtk_css_style_property_init_properties (void)
                                           NULL,
                                           _gtk_css_text_decoration_line_value_new (GTK_CSS_TEXT_DECORATION_LINE_NONE));
 
+  gtk_css_style_property_register        ("text-decoration-color",
+                                          GTK_CSS_PROPERTY_TEXT_DECORATION_COLOR,
+                                          G_TYPE_NONE,
+                                          GTK_STYLE_PROPERTY_ANIMATED,
+                                          GTK_CSS_AFFECTS_TEXT | GTK_CSS_AFFECTS_TEXT_ATTRS,
+                                          color_parse,
+                                          NULL,
+                                          NULL,
+                                          _gtk_css_color_value_new_current_color ());
+
   gtk_css_style_property_register        ("text-shadow",
                                           GTK_CSS_PROPERTY_TEXT_SHADOW,
                                           G_TYPE_NONE,
