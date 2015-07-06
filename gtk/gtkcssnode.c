@@ -643,15 +643,22 @@ gtk_css_node_reposition (GtkCssNode *node,
   /* Take a reference here so the whole function has a reference */
   g_object_ref (node);
 
-  if (node->next_sibling)
+  if (node->visible)
     {
-      if (node->visible)
-        gtk_css_node_invalidate (node->next_sibling, GTK_CSS_CHANGE_POSITION | GTK_CSS_CHANGE_ANY_SIBLING);
+      if (node->next_sibling)
+        gtk_css_node_invalidate (node->next_sibling,
+                                 GTK_CSS_CHANGE_ANY_SIBLING
+                                 | GTK_CSS_CHANGE_NTH_CHILD
+                                 | (node->previous_sibling ? 0 : GTK_CSS_CHANGE_FIRST_CHILD));
+      else if (node->previous_sibling)
+        gtk_css_node_invalidate (node->previous_sibling, GTK_CSS_CHANGE_LAST_CHILD);
     }
 
   if (old_parent != NULL)
     {
       g_signal_emit (old_parent, cssnode_signals[NODE_REMOVED], 0, node, node->previous_sibling);
+      if (old_parent->first_child)
+        gtk_css_node_invalidate (old_parent->first_child, GTK_CSS_CHANGE_NTH_LAST_CHILD);
     }
 
   if (old_parent != new_parent)
@@ -687,12 +694,26 @@ gtk_css_node_reposition (GtkCssNode *node,
   if (new_parent)
     {
       g_signal_emit (new_parent, cssnode_signals[NODE_ADDED], 0, node, previous);
+      gtk_css_node_invalidate (new_parent->first_child, GTK_CSS_CHANGE_NTH_LAST_CHILD);
     }
 
   if (node->next_sibling)
-    gtk_css_node_invalidate_style (node->next_sibling);
+    {
+      if (node->previous_sibling == NULL)
+        gtk_css_node_invalidate (node->next_sibling, GTK_CSS_CHANGE_FIRST_CHILD);
+      else
+        gtk_css_node_invalidate_style (node->next_sibling);
+    }
+  else if (node->previous_sibling)
+    {
+      gtk_css_node_invalidate (node->previous_sibling, GTK_CSS_CHANGE_LAST_CHILD);
+    }
 
-  gtk_css_node_invalidate (node, GTK_CSS_CHANGE_ANY_PARENT | GTK_CSS_CHANGE_POSITION | GTK_CSS_CHANGE_ANY_SIBLING);
+  gtk_css_node_invalidate (node, GTK_CSS_CHANGE_ANY_PARENT
+                                 | GTK_CSS_CHANGE_ANY_SIBLING
+                                 | GTK_CSS_CHANGE_NTH_CHILD
+                                 | (node->previous_sibling ? 0 : GTK_CSS_CHANGE_FIRST_CHILD)
+                                 | (node->next_sibling ? 0 : GTK_CSS_CHANGE_LAST_CHILD));
 
   g_object_unref (node);
 }
