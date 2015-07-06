@@ -143,6 +143,7 @@ struct _GtkWindowPopover
   GtkPositionType pos;
   cairo_rectangle_int_t rect;
   gulong unmap_id;
+  guint clamp_allocation : 1;
 };
 
 struct _GtkWindowPrivate
@@ -6356,6 +6357,7 @@ popover_get_rect (GtkWindowPopover      *popover,
   GtkAllocation win_alloc;
   GtkRequisition req;
   GtkBorder win_border;
+  gdouble min, max;
 
   gtk_widget_get_preferred_size (popover->widget, NULL, &req);
   gtk_widget_get_allocation (GTK_WIDGET (window), &win_alloc);
@@ -6378,8 +6380,19 @@ popover_get_rect (GtkWindowPopover      *popover,
           rect->height = win_alloc.height;
         }
       else
-        rect->y = CLAMP (popover->rect.y + (popover->rect.height / 2) -
-                         (req.height / 2), 0, win_alloc.y + win_alloc.height + win_border.bottom - req.height);
+        {
+          min = 0;
+          max = win_alloc.y + win_alloc.height + win_border.bottom - req.height;
+
+          if (popover->clamp_allocation)
+            {
+              min += win_border.top;
+              max -= win_border.bottom;
+            }
+
+          rect->y = CLAMP (popover->rect.y + (popover->rect.height / 2) -
+                           (req.height / 2), min, max);
+        }
 
       if ((popover->pos == GTK_POS_LEFT) ==
           (gtk_widget_get_direction (popover->widget) == GTK_TEXT_DIR_LTR))
@@ -6410,8 +6423,19 @@ popover_get_rect (GtkWindowPopover      *popover,
           rect->width = win_alloc.width;
         }
       else
-        rect->x = CLAMP (popover->rect.x + (popover->rect.width / 2) -
-                         (req.width / 2), 0, win_alloc.x + win_alloc.width + win_border.right - req.width);
+        {
+          min = 0;
+          max = win_alloc.x + win_alloc.width + win_border.right - req.width;
+
+          if (popover->clamp_allocation)
+            {
+              min += win_border.left;
+              max -= win_border.right;
+            }
+
+          rect->x = CLAMP (popover->rect.x + (popover->rect.width / 2) -
+                           (req.width / 2), min, max);
+        }
 
       if (popover->pos == GTK_POS_TOP)
         {
@@ -11822,7 +11846,8 @@ _gtk_window_get_shadow_width (GtkWindow *window,
 void
 _gtk_window_add_popover (GtkWindow *window,
                          GtkWidget *popover,
-                         GtkWidget *parent)
+                         GtkWidget *parent,
+                         gboolean   clamp_allocation)
 {
   GtkWindowPrivate *priv;
   GtkWindowPopover *data;
@@ -11842,6 +11867,7 @@ _gtk_window_add_popover (GtkWindow *window,
   data = g_new0 (GtkWindowPopover, 1);
   data->widget = popover;
   data->parent = parent;
+  data->clamp_allocation = !!clamp_allocation;
   priv->popovers = g_list_prepend (priv->popovers, data);
 
   if (gtk_widget_get_realized (GTK_WIDGET (window)))

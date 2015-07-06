@@ -105,7 +105,8 @@ void            _gtk_window_set_window_group (GtkWindow      *window,
 /* Popovers */
 void    _gtk_window_add_popover          (GtkWindow                   *window,
                                           GtkWidget                   *popover,
-                                          GtkWidget                   *popover_parent);
+                                          GtkWidget                   *popover_parent,
+                                          gboolean                     clamp_allocation);
 void    _gtk_window_remove_popover       (GtkWindow                   *window,
                                           GtkWidget                   *popover);
 void    _gtk_window_set_popover_position (GtkWindow                   *window,
