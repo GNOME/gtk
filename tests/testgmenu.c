@@ -30,355 +30,6 @@
  * - Other attributes. What about icons ?
  */
 
-/* MenuHolder {{{1 */
-
-typedef struct {
-  GMenuModel   *model;
-  GActionGroup *group;
-  GtkWidget    *menu;
-  gboolean      items_changed;
-} MenuHolder;
-
-/* Menumodel callbacks {{{2 */
-
-static void
-connect_to_items_changed (GMenuModel *model,
-                          GCallback   callback,
-                          gpointer    data)
-{
-  gint i;
-  GMenuModel *m;
-  GMenuLinkIter *iter;
-
-  if (!g_object_get_data (G_OBJECT (model), "handler-connected"))
-    {
-      g_signal_connect (model, "items-changed", callback, data);
-      g_object_set_data (G_OBJECT (model), "handler-connected", GINT_TO_POINTER (1));
-    }
-  for (i = 0; i < g_menu_model_get_n_items (model); i++)
-    {
-      iter = g_menu_model_iterate_item_links (model, i);
-      while (g_menu_link_iter_next (iter))
-        {
-          m = g_menu_link_iter_get_value (iter);
-          connect_to_items_changed (m, callback, data);
-          g_object_unref (m);
-        }
-      g_object_unref (iter);
-    }
-}
-
-static void
-items_changed (GMenuModel *model,
-               gint        position,
-               gint        removed,
-               gint        added,
-               MenuHolder *holder)
-{
-  g_print ("Received GMenuModel::items-changed\n");
-  holder->items_changed = TRUE;
-  connect_to_items_changed (model, G_CALLBACK (items_changed), holder);
-}
-
- /* Actiongroup callbacks {{{2 */
-
-typedef struct {
-  GActionGroup *group;
-  gchar        *name;
-  gchar        *target;
-  gulong        enabled_changed_id;
-  gulong        state_changed_id;
-  gulong        activate_handler;
-} ActionData;
-
-static void
-action_data_free (gpointer data)
-{
-  ActionData *a = data;
-
-  if (a->enabled_changed_id)
-    g_signal_handler_disconnect (a->group, a->enabled_changed_id);
-
-  if (a->state_changed_id)
-    g_signal_handler_disconnect (a->group, a->state_changed_id);
-
-  g_object_unref (a->group);
-  g_free (a->name);
-  g_free (a->target);
-
-  g_free (a);
-}
-
-static void
-enabled_changed (GActionGroup *group,
-                 const gchar  *action_name,
-                 gboolean      enabled,
-                 GtkWidget    *widget)
-{
-  gtk_widget_set_sensitive (widget, enabled);
-}
-
-static void
-toggle_state_changed (GActionGroup     *group,
-                      const gchar      *name,
-                      GVariant         *state,
-                      GtkCheckMenuItem *w)
-{
-  ActionData *a;
-
-  a = g_object_get_data (G_OBJECT (w), "action");
-  g_signal_handler_block (w, a->activate_handler);
-  gtk_check_menu_item_set_active (w, g_variant_get_boolean (state));
-  g_signal_handler_unblock (w, a->activate_handler);
-}
-
-static void
-radio_state_changed (GActionGroup     *group,
-                     const gchar      *name,
-                     GVariant         *state,
-                     GtkCheckMenuItem *w)
-{
-  ActionData *a;
-  gboolean b;
-
-  a = g_object_get_data (G_OBJECT (w), "action");
-  g_signal_handler_block (w, a->activate_handler);
-  b = g_strcmp0 (a->target, g_variant_get_string (state, NULL)) == 0;
-  gtk_check_menu_item_set_active (w, b);
-  g_signal_handler_unblock (w, a->activate_handler);
-}
-
-/* Menuitem callbacks {{{2 */
-
-static void
-item_activated (GtkWidget *w,
-                gpointer   data)
-{
-  ActionData *a;
-  GVariant *parameter;
-
-  a = g_object_get_data (G_OBJECT (w), "action");
-  if (a->target)
-    parameter = g_variant_new_string (a->target);
-  else
-    parameter = NULL;
-  g_action_group_activate_action (a->group, a->name, parameter);
-}
-
-/* GtkMenu construction {{{2 */
-
-static GtkWidget *
-create_menuitem_from_model (GMenuModel   *model,
-                            gint          item,
-                            GActionGroup *group)
-{
-  GtkWidget *w;
-  gchar *label;
-  gchar *action;
-  gchar *target;
-  gchar *s;
-  ActionData *a;
-  const GVariantType *type;
-  GVariant *v;
-
-  label = NULL;
-  g_menu_model_get_item_attribute (model, item, G_MENU_ATTRIBUTE_LABEL, "s", &label);
-
-  action = NULL;
-  g_menu_model_get_item_attribute (model, item, G_MENU_ATTRIBUTE_ACTION, "s", &action);
-
-  if (action != NULL)
-    type = g_action_group_get_action_state_type (group, action);
-  else
-    type = NULL;
-
-  if (type == NULL)
-    w = gtk_menu_item_new_with_mnemonic (label);
-  else if (g_variant_type_equal (type, G_VARIANT_TYPE_BOOLEAN))
-    w = gtk_check_menu_item_new_with_label (label);
-  else if (g_variant_type_equal (type, G_VARIANT_TYPE_STRING))
-    {
-      w = gtk_check_menu_item_new_with_label (label);
-      gtk_check_menu_item_set_draw_as_radio (GTK_CHECK_MENU_ITEM (w), TRUE);
-    }
-  else
-    g_assert_not_reached ();
-
-  if (action != NULL)
-    {
-      a = g_new0 (ActionData, 1);
-      a->group = g_object_ref (group);
-      a->name = g_strdup (action);
-      g_object_set_data_full (G_OBJECT (w), "action", a, action_data_free);
-
-      if (!g_action_group_get_action_enabled (group, action))
-        gtk_widget_set_sensitive (w, FALSE);
-
-      s = g_strconcat ("action-enabled-changed::", action, NULL);
-      a->enabled_changed_id = g_signal_connect (group, s,
-                                                G_CALLBACK (enabled_changed), w);
-      g_free (s);
-
-      a->activate_handler = g_signal_connect (w, "activate", G_CALLBACK (item_activated), NULL);
-
-      if (type == NULL)
-        {
-          /* all set */
-        }
-      else if (g_variant_type_equal (type, G_VARIANT_TYPE_BOOLEAN))
-        {
-          s = g_strconcat ("action-state-changed::", action, NULL);
-          a->state_changed_id = g_signal_connect (group, s,
-                                                  G_CALLBACK (toggle_state_changed), w);
-          g_free (s);
-          v = g_action_group_get_action_state (group, action);
-          gtk_check_menu_item_set_active (GTK_CHECK_MENU_ITEM (w),
-                                          g_variant_get_boolean (v));
-          g_variant_unref (v);
-        }
-      else if (g_variant_type_equal (type, G_VARIANT_TYPE_STRING))
-        {
-          s = g_strconcat ("action-state-changed::", action, NULL);
-          a->state_changed_id = g_signal_connect (group, s,
-                                                  G_CALLBACK (radio_state_changed), w);
-          g_free (s);
-          g_menu_model_get_item_attribute (model, item, G_MENU_ATTRIBUTE_TARGET, "s", &target);
-          a->target = g_strdup (target);
-          v = g_action_group_get_action_state (group, action);
-          gtk_check_menu_item_set_active (GTK_CHECK_MENU_ITEM (w),
-                                          g_strcmp0 (g_variant_get_string (v, NULL), target) == 0);
-          g_variant_unref (v);
-          g_free (target);
-        }
-      else
-        g_assert_not_reached ();
-    }
-
-  g_free (label);
-  g_free (action);
-
-  return w;
-}
-
-static GtkWidget *create_menu_from_model (GMenuModel   *model,
-                                          GActionGroup *group);
-
-static void
-append_items_from_model (GtkWidget    *menu,
-                         GMenuModel   *model,
-                         GActionGroup *group,
-                         gboolean     *need_separator,
-                         const gchar  *heading)
-{
-  gint n;
-  gint i;
-  GtkWidget *w;
-  GtkWidget *menuitem;
-  GtkWidget *submenu;
-  GMenuModel *m;
-  gchar *label;
-
-  n = g_menu_model_get_n_items (model);
-
-  if (*need_separator && n > 0)
-    {
-      w = gtk_separator_menu_item_new ();
-      gtk_widget_show (w);
-      gtk_menu_shell_append (GTK_MENU_SHELL (menu), w);
-      *need_separator = FALSE;
-    }
-
-  if (heading != NULL)
-    {
-      w = gtk_menu_item_new_with_label (heading);
-      gtk_widget_show (w);
-      gtk_widget_set_sensitive (w, FALSE);
-      gtk_menu_shell_append (GTK_MENU_SHELL (menu), w);
-    }
-
-  for (i = 0; i < n; i++)
-    {
-      if ((m = g_menu_model_get_item_link (model, i, G_MENU_LINK_SECTION)))
-        {
-          label = NULL;
-          g_menu_model_get_item_attribute (model, i, G_MENU_ATTRIBUTE_LABEL, "s", &label);
-          append_items_from_model (menu, m, group, need_separator, label);
-          g_object_unref (m);
-          g_free (label);
-
-          if (*need_separator)
-            {
-              w = gtk_separator_menu_item_new ();
-              gtk_widget_show (w);
-              gtk_menu_shell_append (GTK_MENU_SHELL (menu), w);
-              *need_separator = FALSE;
-            }
-
-          continue;
-        }
-
-      menuitem = create_menuitem_from_model (model, i, group);
-
-      if ((m = g_menu_model_get_item_link (model, i, G_MENU_LINK_SUBMENU)))
-        {
-          submenu = create_menu_from_model (m, group);
-          gtk_menu_item_set_submenu (GTK_MENU_ITEM (menuitem), submenu);
-          g_object_unref (m);
-        }
-
-      gtk_widget_show (menuitem);
-      gtk_menu_shell_append (GTK_MENU_SHELL (menu), menuitem);
-
-      *need_separator = TRUE;
-    }
-}
-
-static GtkWidget *
-create_menu_from_model (GMenuModel   *model,
-                        GActionGroup *group)
-{
-  GtkWidget *w;
-  gboolean need_separator;
-
-  w = gtk_menu_new ();
-  need_separator = FALSE;
-  append_items_from_model (w, model, group, &need_separator, NULL);
-
-  return w;
-}
-
-/* }}}2 */
-
-MenuHolder *
-menu_holder_new (GMenuModel   *model,
-                 GActionGroup *group)
-{
-  MenuHolder *holder;
-
-  holder = g_new (MenuHolder, 1);
-  holder->model = g_object_ref (model);
-  holder->group = g_object_ref (group);
-  holder->menu = create_menu_from_model (model, group);
-  holder->items_changed = FALSE;
-
-  connect_to_items_changed (model, G_CALLBACK (items_changed), holder);
-
-  return holder;
-}
-
-GtkWidget *
-menu_holder_get_menu (MenuHolder *holder)
-{
-  if (holder->items_changed)
-    {
-      holder->items_changed = FALSE;
-      gtk_widget_destroy (holder->menu);
-      holder->menu = create_menu_from_model (holder->model, holder->group);
-    }
-
-  return holder->menu;
-}
-
 /* The example menu {{{1 */
 
 static const gchar menu_markup[] =
@@ -386,12 +37,12 @@ static const gchar menu_markup[] =
   "<menu id='edit-menu'>\n"
   "  <section>\n"
   "    <item>\n"
-  "      <attribute name='action'>undo</attribute>\n"
+  "      <attribute name='action'>actions.undo</attribute>\n"
   "      <attribute name='label' translatable='yes' context='Stock label'>_Undo</attribute>\n"
   "    </item>\n"
   "    <item>\n"
   "      <attribute name='label' translatable='yes'>Redo</attribute>\n"
-  "      <attribute name='action'>redo</attribute>\n"
+  "      <attribute name='action'>actions.redo</attribute>\n"
   "    </item>\n"
   "  </section>\n"
   "  <section/>\n"
@@ -399,37 +50,37 @@ static const gchar menu_markup[] =
   "    <attribute name='label' translatable='yes'>Copy &amp; Paste</attribute>\n"
   "    <item>\n"
   "      <attribute name='label' translatable='yes'>Cut</attribute>\n"
-  "      <attribute name='action'>cut</attribute>\n"
+  "      <attribute name='action'>actions.cut</attribute>\n"
   "    </item>\n"
   "    <item>\n"
   "      <attribute name='label' translatable='yes'>Copy</attribute>\n"
-  "      <attribute name='action'>copy</attribute>\n"
+  "      <attribute name='action'>actions.copy</attribute>\n"
   "    </item>\n"
   "    <item>\n"
   "      <attribute name='label' translatable='yes'>Paste</attribute>\n"
-  "      <attribute name='action'>paste</attribute>\n"
+  "      <attribute name='action'>actions.paste</attribute>\n"
   "    </item>\n"
   "  </section>\n"
   "  <section>\n"
   "    <item>\n"
   "      <attribute name='label' translatable='yes'>Bold</attribute>\n"
-  "      <attribute name='action'>bold</attribute>\n"
+  "      <attribute name='action'>actions.bold</attribute>\n"
   "    </item>\n"
   "    <submenu>\n"
   "      <attribute name='label' translatable='yes'>Language</attribute>\n"
   "      <item>\n"
   "        <attribute name='label' translatable='yes'>Latin</attribute>\n"
-  "        <attribute name='action'>lang</attribute>\n"
+  "        <attribute name='action'>actions.lang</attribute>\n"
   "        <attribute name='target'>latin</attribute>\n"
   "      </item>\n"
   "      <item>\n"
   "        <attribute name='label' translatable='yes'>Greek</attribute>\n"
-  "        <attribute name='action'>lang</attribute>\n"
+  "        <attribute name='action'>actions.lang</attribute>\n"
   "        <attribute name='target'>greek</attribute>\n"
   "      </item>\n"
   "      <item>\n"
   "        <attribute name='label' translatable='yes'>Urdu</attribute>\n"
-  "        <attribute name='action'>lang</attribute>\n"
+  "        <attribute name='action'>actions.lang</attribute>\n"
   "        <attribute name='target'>urdu</attribute>\n"
   "      </item>\n"
   "    </submenu>\n"
@@ -923,16 +574,6 @@ create_add_remove_buttons (GActionGroup *group,
 
 /* main {{{1 */
 
-static void
-button_clicked (GtkButton  *button,
-                MenuHolder *holder)
-{
-  GtkWidget *menu;
-
-  menu = menu_holder_get_menu (holder);
-  gtk_menu_popup (GTK_MENU (menu), NULL, NULL, NULL, NULL, 0, 0);
-}
-
 #define BUS_NAME "org.gtk.TestMenus"
 #define OBJ_PATH "/org/gtk/TestMenus"
 
@@ -953,7 +594,6 @@ main (int argc, char *argv[])
   GtkWidget *button;
   GtkWidget *tv;
   GtkWidget *buttons;
-  MenuHolder *holder;
   GMenuModel *model;
   GActionGroup *group;
   GDBusConnection *bus;
@@ -1017,10 +657,11 @@ main (int argc, char *argv[])
     }
   else
     {
-      holder = menu_holder_new (model, group);
-      button = gtk_button_new_with_label ("Click here");
-      g_signal_connect (button, "clicked",
-                        G_CALLBACK (button_clicked), holder);
+      button = gtk_menu_button_new ();
+      gtk_button_set_label (GTK_BUTTON (button), "Click here");
+      gtk_menu_button_set_use_popover (GTK_MENU_BUTTON (button), FALSE);
+      gtk_menu_button_set_menu_model (GTK_MENU_BUTTON (button), model);
+      gtk_widget_insert_action_group (button, "actions", group);
       gtk_container_add (GTK_CONTAINER (box), button);
     }
 
