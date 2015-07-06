@@ -82,14 +82,11 @@ static void
 gtk_application_impl_x11_before_emit (GtkApplicationImpl *impl,
                                       GVariant           *platform_data)
 {
-  const char *startup_notification_id;
+  const char *startup_notification_id = NULL;
 
-  if (g_variant_lookup (platform_data, "desktop-startup-id",
-                        "&s", &startup_notification_id))
-    {
-      gdk_x11_display_set_startup_notification_id (gdk_display_get_default (),
-                                                   startup_notification_id);
-    }
+  g_variant_lookup (platform_data, "desktop-startup-id", "&s", &startup_notification_id);
+
+  gdk_x11_display_set_startup_notification_id (gdk_display_get_default (), startup_notification_id);
 }
 
 static void

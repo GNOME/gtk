@@ -2388,33 +2388,44 @@ gdk_x11_display_set_startup_notification_id (GdkDisplay  *display,
   g_free (display_x11->startup_notification_id);
   display_x11->startup_notification_id = g_strdup (startup_id);
 
-  /* Find the launch time from the startup_id, if it's there.  Newer spec
-   * states that the startup_id is of the form <unique>_TIME<timestamp>
-   */
-  time_str = g_strrstr (startup_id, "_TIME");
-  if (time_str != NULL)
+  if (startup_id != NULL)
     {
-      gulong retval;
-      gchar *end;
-      errno = 0;
+      /* Find the launch time from the startup_id, if it's there.  Newer spec
+       * states that the startup_id is of the form <unique>_TIME<timestamp>
+       */
+      time_str = g_strrstr (startup_id, "_TIME");
+      if (time_str != NULL)
+        {
+          gulong retval;
+          gchar *end;
+          errno = 0;
 
-      /* Skip past the "_TIME" part */
-      time_str += 5;
+          /* Skip past the "_TIME" part */
+          time_str += 5;
 
-      retval = strtoul (time_str, &end, 0);
-      if (end != time_str && errno == 0)
-        display_x11->user_time = retval;
+          retval = strtoul (time_str, &end, 0);
+          if (end != time_str && errno == 0)
+            display_x11->user_time = retval;
+        }
+      else
+        display_x11->user_time = 0;
+
+      /* Set the startup id on the leader window so it
+       * applies to all windows we create on this display
+       */
+      XChangeProperty (display_x11->xdisplay,
+                       display_x11->leader_window,
+                       gdk_x11_get_xatom_by_name_for_display (display, "_NET_STARTUP_ID"),
+                       gdk_x11_get_xatom_by_name_for_display (display, "UTF8_STRING"), 8,
+                       PropModeReplace,
+                       (guchar *)startup_id, strlen (startup_id));
     }
-
-  /* Set the startup id on the leader window so it
-   * applies to all windows we create on this display
-   */
-  XChangeProperty (display_x11->xdisplay,
-                   display_x11->leader_window,
-                   gdk_x11_get_xatom_by_name_for_display (display, "_NET_STARTUP_ID"),
-                   gdk_x11_get_xatom_by_name_for_display (display, "UTF8_STRING"), 8,
-                   PropModeReplace,
-                   (guchar *)startup_id, strlen (startup_id));
+  else
+    {
+      XDeleteProperty (display_x11->xdisplay, display_x11->leader_window,
+                       gdk_x11_get_xatom_by_name_for_display (display, "_NET_STARTUP_ID"));
+      display_x11->user_time = 0;
+    }
 }
 
 static gboolean
