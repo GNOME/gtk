@@ -1481,11 +1481,17 @@ void    gtk_widget_class_bind_template_child_full       (GtkWidgetClass        *
 						         gssize                 struct_offset);
 
 GDK_AVAILABLE_IN_3_16
-GActionGroup           *gtk_widget_get_action_group                     (GtkWidget    *widget,
-                                                                         const gchar  *prefix);
+GActionGroup           *gtk_widget_get_action_group     (GtkWidget             *widget,
+                                                         const gchar           *prefix);
 
 GDK_AVAILABLE_IN_3_16
-const gchar **          gtk_widget_list_action_prefixes                 (GtkWidget    *widget);
+const gchar **          gtk_widget_list_action_prefixes (GtkWidget             *widget);
+
+GDK_AVAILABLE_IN_3_18
+void                    gtk_widget_set_font_map         (GtkWidget             *widget,
+                                                         PangoFontMap          *fontmap);
+GDK_AVAILABLE_IN_3_18
+PangoFontMap *          gtk_widget_get_font_map         (GtkWidget             *widget);
 
 G_END_DECLS
 

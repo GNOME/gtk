@@ -601,6 +601,7 @@ struct _GtkWidgetPrivate
   GList *event_controllers;
 
   cairo_font_options_t *font_options;
+  PangoFontMap *font_map;
 };
 
 struct _GtkWidgetClassPrivate
@@ -10308,6 +10309,17 @@ gtk_widget_get_pango_context (GtkWidget *widget)
   return context;
 }
 
+static PangoFontMap *
+gtk_widget_get_effective_font_map (GtkWidget *widget)
+{
+  if (widget->priv->font_map)
+    return widget->priv->font_map;
+  else if (widget->priv->parent)
+    return gtk_widget_get_effective_font_map (widget->priv->parent);
+  else
+    return pango_cairo_font_map_get_default ();
+}
+
 static void
 update_pango_context (GtkWidget    *widget,
                       PangoContext *context)
@@ -10323,11 +10335,12 @@ update_pango_context (GtkWidget    *widget,
                          NULL);
 
   pango_context_set_font_description (context, font_desc);
+
+  pango_font_description_free (font_desc);
+
   pango_context_set_base_dir (context,
 			      gtk_widget_get_direction (widget) == GTK_TEXT_DIR_LTR ?
 			      PANGO_DIRECTION_LTR : PANGO_DIRECTION_RTL);
-
-  pango_font_description_free (font_desc);
 
   pango_cairo_context_set_resolution (context,
                                       _gtk_css_number_value_get (
@@ -10350,6 +10363,8 @@ update_pango_context (GtkWidget    *widget,
       pango_cairo_context_set_font_options (context,
                                             gdk_screen_get_font_options (screen));
     }
+
+  pango_context_set_font_map (context, gtk_widget_get_effective_font_map (widget));
 }
 
 static void
@@ -10410,13 +10425,71 @@ gtk_widget_get_font_options (GtkWidget *widget)
   return widget->priv->font_options;
 }
 
+static void
+gtk_widget_set_font_map_recurse (GtkWidget *widget, gpointer data)
+{
+  if (widget->priv->font_map)
+    return;
+
+  gtk_widget_update_pango_context (widget);
+
+  if (GTK_IS_CONTAINER (widget))
+    gtk_container_forall (GTK_CONTAINER (widget),
+                          gtk_widget_set_font_map_recurse,
+                          data);
+}
+
+/**
+ * gtk_widget_set_font_map:
+ * @widget: a #GtkWidget
+ * @font_map: (allow-nonw): a #PangoFontMap, or %NULL to unset any previously
+ *     set font map
+ *
+ * Sets the font map to use for Pango rendering. When not set, the widget
+ * will inherit the font map from its parent.
+ *
+ * Since: 3.18
+ */
+void
+gtk_widget_set_font_map (GtkWidget    *widget,
+                         PangoFontMap *font_map)
+{
+  g_return_if_fail (GTK_IS_WIDGET (widget));
+
+  if (g_set_object (&widget->priv->font_map, font_map))
+    {
+      gtk_widget_update_pango_context (widget);
+      if (GTK_IS_CONTAINER (widget))
+        gtk_container_forall (GTK_CONTAINER (widget),
+                              gtk_widget_set_font_map_recurse,
+                              NULL);
+    }
+}
+
+/**
+ * gtk_widget_get_font_map:
+ * @widget: a #GtkWidget
+ *
+ * Gets the font map that has been set with gtk_widget_set_font_map().
+ *
+ * Returns: (transfer none): A #PangoFontMap, or %NULL
+ *
+ * Since: 3.18
+ */
+PangoFontMap *
+gtk_widget_get_font_map (GtkWidget *widget)
+{
+  g_return_val_if_fail (GTK_IS_WIDGET (widget), NULL);
+  return widget->priv->font_map;
+}
+
 /**
  * gtk_widget_create_pango_context:
  * @widget: a #GtkWidget
  *
  * Creates a new #PangoContext with the appropriate font map,
- * font description, and base direction for drawing text for
- * this widget. See also gtk_widget_get_pango_context().
+ * font options, font description, and base direction for drawing
+ * text for this widget. See also gtk_widget_get_pango_context().
  *
  * Returns: (transfer full): the new #PangoContext
  **/

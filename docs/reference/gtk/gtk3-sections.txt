@@ -5474,6 +5474,8 @@ gtk_widget_create_pango_context
 gtk_widget_get_pango_context
 gtk_widget_set_font_options
 gtk_widget_get_font_options
+gtk_widget_set_font_map
+gtk_widget_get_font_map
 gtk_widget_create_pango_layout
 gtk_widget_render_icon
 gtk_widget_render_icon_pixbuf
