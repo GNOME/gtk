@@ -3141,10 +3141,7 @@ set_icon_helper (GdkDragContext *context,
 
       info = gtk_drag_get_source_info (context, FALSE);
 
-      if (info->icon_helper)
-        g_object_unref (info->icon_helper);
-      info->icon_helper = g_object_ref (helper);
-
+      g_set_object (&info->icon_helper, helper);
       gtk_drag_set_icon_window (context, NULL, hot_x, hot_y, TRUE);
     }
   else
