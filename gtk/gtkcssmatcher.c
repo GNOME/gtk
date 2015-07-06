@@ -208,7 +208,7 @@ gtk_css_matcher_widget_path_has_position (const GtkCssMatcher *matcher,
   if (x % a)
     return FALSE;
 
-  return x / a > 0;
+  return x / a >= 0;
 }
 
 static const GtkCssMatcherClass GTK_CSS_MATCHER_WIDGET_PATH = {
@@ -381,7 +381,7 @@ gtk_css_matcher_node_nth_child (GtkCssNode *node,
   if (x % a)
     return FALSE;
 
-  return x / a > 0;
+  return x / a >= 0;
 }
 
 static gboolean
