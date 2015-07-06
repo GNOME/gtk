@@ -710,8 +710,8 @@ data_device_enter (void                  *data,
     return;
 
   GDK_NOTE (EVENTS,
-            g_message ("data device enter, data device %p serial %u, surface %p, x %d y %d, offer %p",
-                       data_device, serial, surface, x, y, offer));
+            g_message ("data device enter, data device %p serial %u, surface %p, x %f y %f, offer %p",
+                       data_device, serial, surface, wl_fixed_to_double (x), wl_fixed_to_double (y), offer));
 
   /* Update pointer state, so device state queries work during DnD */
   device->pointer_focus = g_object_ref (dest_window);
@@ -769,8 +769,8 @@ data_device_motion (void                  *data,
 {
   GdkWaylandDeviceData *device = (GdkWaylandDeviceData *) data;
 
-  g_debug (G_STRLOC ": %s data_device = %p, time = %d, x = %d, y = %d",
-           G_STRFUNC, data_device, time, x, y);
+  g_debug (G_STRLOC ": %s data_device = %p, time = %d, x = %f, y = %f",
+           G_STRFUNC, data_device, time, wl_fixed_to_double (x), wl_fixed_to_double (y));
 
   if (!gdk_drag_context_get_dest_window (device->drop_context))
     return;
@@ -976,8 +976,9 @@ pointer_handle_motion (void              *data,
                    &event->motion.y_root);
 
   GDK_NOTE (EVENTS,
-            g_message ("motion %d %d, device %p state %d",
-                       sx, sy, device, event->button.state));
+            g_message ("motion %f %f, device %p state %d",
+                       wl_fixed_to_double (sx), wl_fixed_to_double (sy),
+		       device, event->button.state));
 
   _gdk_wayland_display_deliver_event (device->display, event);
 }
