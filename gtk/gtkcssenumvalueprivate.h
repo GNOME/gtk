@@ -56,6 +56,10 @@ GtkCssValue *         _gtk_css_text_decoration_line_value_new       (GtkTextDeco
 GtkCssValue *         _gtk_css_text_decoration_line_value_try_parse (GtkCssParser          *parser);
 GtkTextDecorationLine _gtk_css_text_decoration_line_value_get       (const GtkCssValue     *value);
 
+GtkCssValue *          _gtk_css_text_decoration_style_value_new       (GtkTextDecorationStyle  style);
+GtkCssValue *          _gtk_css_text_decoration_style_value_try_parse (GtkCssParser           *parser);
+GtkTextDecorationStyle _gtk_css_text_decoration_style_value_get       (const GtkCssValue      *value);
+
 GtkCssValue *   _gtk_css_area_value_new               (GtkCssArea         area);
 GtkCssValue *   _gtk_css_area_value_try_parse         (GtkCssParser      *parser);
 GtkCssArea      _gtk_css_area_value_get               (const GtkCssValue *value);

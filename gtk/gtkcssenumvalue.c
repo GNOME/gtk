@@ -577,7 +577,8 @@ _gtk_css_text_decoration_line_value_new (GtkTextDecorationLine line)
   return _gtk_css_value_ref (&text_decoration_line_values[line]);
 }
 
-GtkCssValue *_gtk_css_text_decoration_line_value_try_parse (GtkCssParser *parser)
+GtkCssValue *
+_gtk_css_text_decoration_line_value_try_parse (GtkCssParser *parser)
 {
   guint i;
 
@@ -592,9 +593,58 @@ GtkCssValue *_gtk_css_text_decoration_line_value_try_parse (GtkCssParser *parser
   return NULL;
 }
 
-GtkTextDecorationLine _gtk_css_text_decoration_line_value_get (const GtkCssValue *value)
+GtkTextDecorationLine
+_gtk_css_text_decoration_line_value_get (const GtkCssValue *value)
 {
   g_return_val_if_fail (value->class == &GTK_CSS_VALUE_TEXT_DECORATION_LINE, GTK_CSS_TEXT_DECORATION_LINE_NONE);
+
+  return value->value;
+}
+
+/* GtkTextDecorationStyle */
+
+static const GtkCssValueClass GTK_CSS_VALUE_TEXT_DECORATION_STYLE = {
+  gtk_css_value_enum_free,
+  gtk_css_value_enum_compute,
+  gtk_css_value_enum_equal,
+  gtk_css_value_enum_transition,
+  gtk_css_value_enum_print
+};
+
+static GtkCssValue text_decoration_style_values[] = {
+  { &GTK_CSS_VALUE_TEXT_DECORATION_STYLE, 1, GTK_CSS_TEXT_DECORATION_STYLE_SOLID, "solid" },
+  { &GTK_CSS_VALUE_TEXT_DECORATION_STYLE, 1, GTK_CSS_TEXT_DECORATION_STYLE_DOUBLE, "double" },
+  { &GTK_CSS_VALUE_TEXT_DECORATION_STYLE, 1, GTK_CSS_TEXT_DECORATION_STYLE_WAVY, "wavy" },
+};
+
+GtkCssValue *
+_gtk_css_text_decoration_style_value_new (GtkTextDecorationStyle style)
+{
+  g_return_val_if_fail (style < G_N_ELEMENTS (text_decoration_style_values), NULL);
+
+  return _gtk_css_value_ref (&text_decoration_style_values[style]);
+}
+
+GtkCssValue *
+_gtk_css_text_decoration_style_value_try_parse (GtkCssParser *parser)
+{
+  guint i;
+
+  g_return_val_if_fail (parser != NULL, NULL);
+
+  for (i = 0; i < G_N_ELEMENTS (text_decoration_style_values); i++)
+    {
+      if (_gtk_css_parser_try (parser, text_decoration_style_values[i].name, TRUE))
+        return _gtk_css_value_ref (&text_decoration_style_values[i]);
+    }
+
+  return NULL;
+}
+
+GtkTextDecorationStyle
+_gtk_css_text_decoration_style_value_get (const GtkCssValue *value)
+{
+  g_return_val_if_fail (value->class == &GTK_CSS_VALUE_TEXT_DECORATION_STYLE, GTK_CSS_TEXT_DECORATION_STYLE_SOLID);
 
   return value->value;
 }

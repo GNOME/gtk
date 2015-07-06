@@ -836,10 +836,16 @@ parse_text_decoration (GtkCssShorthandProperty  *shorthand,
         if (values[0] == NULL)
           return FALSE;
       }
-    else if (values[1] == NULL)
+    else if (values[1] == NULL &&
+        (values[1] = _gtk_css_text_decoration_style_value_try_parse (parser)))
       {
-        values[1] = _gtk_css_color_value_parse (parser);
         if (values[1] == NULL)
+          return FALSE;
+      }
+    else if (values[2] == NULL)
+      {
+        values[2] = _gtk_css_color_value_parse (parser);
+        if (values[2] == NULL)
           return FALSE;
       }
     else
@@ -1202,7 +1208,7 @@ _gtk_css_shorthand_property_init_properties (void)
   const char *transition_subproperties[] = { "transition-property", "transition-duration", "transition-delay", "transition-timing-function", NULL };
   const char *animation_subproperties[] = { "animation-name", "animation-iteration-count", "animation-duration", "animation-delay", 
                                             "animation-timing-function", "animation-direction", "animation-fill-mode", NULL };
-  const char *text_decoration_subproperties[] = { "text-decoration-line", "text-decoration-color", NULL };
+  const char *text_decoration_subproperties[] = { "text-decoration-line", "text-decoration-style", "text-decoration-color", NULL };
 
   const char **all_subproperties;
 
