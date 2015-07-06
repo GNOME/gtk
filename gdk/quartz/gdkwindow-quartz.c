@@ -2185,7 +2185,17 @@ gdk_window_set_geometry_hints (GdkWindow         *window,
   
   if (geom_mask & GDK_HINT_ASPECT)
     {
-      /* FIXME: Implement */
+      NSSize size;
+
+      if (geometry->min_aspect != geometry->max_aspect)
+        {
+          g_warning ("Only equal minimum and maximum aspect ratios are supported on Mac OS. Using minimum aspect ratio...");
+        }
+
+      size.width = geometry->min_aspect;
+      size.height = 1.0;
+
+      [impl->toplevel setContentAspectRatio:size];
     }
 
   if (geom_mask & GDK_HINT_WIN_GRAVITY)
