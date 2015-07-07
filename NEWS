@@ -1,3 +1,26 @@
+Overview of Changes in GTK+ 3.14.13 to 3.14.14
+==============================================
+
+* Bugs fixed:
+ 693738 gtk print dialog shows "Getting printer information failed"...
+ 738083 GtkMenuButton is not disabled even if corresponding GAction is
+ 745957 GTK+/Quartz >= 3.14.8: Symbol not found: _gtk_drag_cancel (...
+ 750011 Adwaita : missing background for menu
+ 750605 icontheme: don't modify symbolic SVG dimensions when recoloring
+ 750690 Recent Chooser Widget doesn't expand
+ 750870 gtk3 does apparently ignore replayed events?
+ 750994 X11: First mouse wheel event ignored after right click or Alt+Tab...
+ 751050 Moving the mouse while a stepper is activated causes the scrollba...
+ 751227 file picker list box height stretches to match extra widgets area...
+ 751443 resource_path value cleared in gtk_image_set_from_resource
+ 751739 Deadlock in X11 when setting XSetErrorHandler while another threa...
+ 751752 Memleak when both opening shm and opening file in tmp fail
+
+* Translation updates:
+ Icelandic
+ Occitan
+
+
 Overview of Changes in GTK+ 3.14.12 to 3.14.13
 ==============================================
 
