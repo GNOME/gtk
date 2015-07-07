@@ -2479,7 +2479,7 @@ remove_bookmark (GtkSidebarRow *row)
                 "uri", &uri,
                 NULL);
 
-  if (type != PLACES_BOOKMARK)
+  if (type == PLACES_BOOKMARK)
     {
       file = g_file_new_for_uri (uri);
       _gtk_bookmarks_manager_remove_bookmark (sidebar->bookmarks_manager, file, NULL);
