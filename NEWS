@@ -1,3 +1,29 @@
+Overview of changes in GTK+ 3.16.5
+==================================
+
+* Bug fixes:
+ 750489 gtk settings c910 warning unexpected annotation element type command
+ 750605 icontheme: don't modify symbolic SVG dimensions when recoloring
+ 750690 Recent Chooser Widget doesn't expand
+ 750718 Improve documentation for deprecated properties
+ 750870 gtk3 does apparently ignore replayed events?
+ 750888 Fix return value error in _gtk_text_handle_set_direction
+ 750994 X11: First mouse wheel event ignored after right click or Alt+Tab...
+ 751018 Widget: GtkMenuButton+GtkPopover gtk_toggle_button_set_active() n...
+ 751050 Moving the mouse while a stepper is activated causes the scrollba...
+ 751082 GtkTreeView draw performance is bad when contents are not larger ...
+ 751227 file picker list box height stretches to match extra widgets area...
+ 751443 resource_path value cleared in gtk_image_set_from_resource
+ 751739 Deadlock in X11 when setting XSetErrorHandler while another threa...
+ 751752 Memleak when both opening shm and opening file in tmp fail
+ 751754 GtkSwitch: calling gtk_switch_set_active in the handler for notif...
+        Fix ridge/groove border rendering
+        GtkListBoxRow: propagate in the draw vfunc
+
+* Translation updates:
+ German
+
+
 Overview of changes in GTK+ 3.16.4
 ==================================
 
