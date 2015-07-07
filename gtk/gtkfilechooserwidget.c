@@ -1464,10 +1464,8 @@ confirm_delete (GtkFileChooserWidget *impl,
   GtkWidget *dialog;
   gint response;
   const gchar *name;
-  gboolean folder;
 
   name = g_file_info_get_display_name (info);
-  folder = g_file_info_get_file_type (info) == G_FILE_TYPE_DIRECTORY;
 
   toplevel = get_toplevel (GTK_WIDGET (impl));
 
@@ -1475,9 +1473,10 @@ confirm_delete (GtkFileChooserWidget *impl,
                                    GTK_DIALOG_MODAL | GTK_DIALOG_DESTROY_WITH_PARENT,
                                    GTK_MESSAGE_QUESTION,
                                    GTK_BUTTONS_NONE,
-                                   folder ? _("Delete the directory “%s” and its contents?")
-                                          : _("Delete the file “%s”?"),
+                                   _("Are you sure you want to permanently delete “%s”?"),
                                    name);
+  gtk_message_dialog_format_secondary_text (GTK_MESSAGE_DIALOG (dialog),
+                                            _("If you delete an item, it will be permanently lost."));
   gtk_dialog_add_button (GTK_DIALOG (dialog), _("_Cancel"), GTK_RESPONSE_CANCEL);
   gtk_dialog_add_button (GTK_DIALOG (dialog), _("_Delete"), GTK_RESPONSE_ACCEPT);
 G_GNUC_BEGIN_IGNORE_DEPRECATIONS
