@@ -44,7 +44,6 @@ struct _GtkSidebarRow
   GDrive *drive;
   GVolume *volume;
   GMount *mount;
-  gboolean sensitive;
   gboolean placeholder;
   GtkPlacesSidebar *sidebar;
   GtkWidget *event_box;
@@ -68,7 +67,6 @@ enum
   PROP_DRIVE,
   PROP_VOLUME,
   PROP_MOUNT,
-  PROP_SENSITIVE,
   PROP_PLACEHOLDER,
   LAST_PROP
 };
@@ -131,10 +129,6 @@ gtk_sidebar_row_get_property (GObject    *object,
 
     case PROP_MOUNT:
       g_value_set_object (value, self->mount);
-      break;
-
-    case PROP_SENSITIVE:
-      g_value_set_boolean (value, self->sensitive);
       break;
 
     case PROP_PLACEHOLDER:
@@ -220,20 +214,6 @@ gtk_sidebar_row_set_property (GObject      *object,
 
     case PROP_MOUNT:
       g_set_object (&self->mount, g_value_get_object (value));
-      break;
-
-    case PROP_SENSITIVE:
-      self->sensitive = g_value_get_boolean (value);
-      context = gtk_widget_get_style_context (GTK_WIDGET (self));
-      /* Modifying the actual sensitivity of the widget makes the drag state
-       * to change and calling drag-leave wich modifies the gtklistbox and a
-       * style race ocurs. So since we only use it for show which rows are
-       * drop targets, we can simple use a dim-label style
-       */
-      if (self->sensitive)
-        gtk_style_context_remove_class (context, "dim-label");
-      else
-        gtk_style_context_add_class (context, "dim-label");
       break;
 
     case PROP_PLACEHOLDER:
@@ -438,14 +418,6 @@ gtk_sidebar_row_class_init (GtkSidebarRowClass *klass)
                          (G_PARAM_READWRITE |
                           G_PARAM_CONSTRUCT_ONLY |
                           G_PARAM_STATIC_STRINGS));
-
-  properties [PROP_SENSITIVE] =
-    g_param_spec_boolean ("sensitive",
-                          "Sensitive",
-                          "Make the row sensitive or not",
-                          TRUE,
-                          (G_PARAM_READWRITE |
-                           G_PARAM_STATIC_STRINGS));
 
   properties [PROP_PLACEHOLDER] =
     g_param_spec_boolean ("placeholder",
