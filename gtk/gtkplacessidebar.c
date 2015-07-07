@@ -2317,9 +2317,9 @@ rename_entry_changed (GtkEntry         *entry,
       gtk_label_set_label (GTK_LABEL (sidebar->rename_error), "");
       return;
     }
+
   rows = gtk_container_get_children (GTK_CONTAINER (sidebar->list_box));
-  l = rows;
-  while (l != NULL && !found)
+  for (l = rows; l && !found; l = l->next)
     {
       g_object_get (l->data,
                     "place-type", &type,
@@ -2334,15 +2334,12 @@ rename_entry_changed (GtkEntry         *entry,
 
       g_free (uri);
       g_free (name);
-
-      l = l->next;
     }
+  g_list_free (rows);
 
   gtk_widget_set_sensitive (sidebar->rename_button, !found);
   gtk_label_set_label (GTK_LABEL (sidebar->rename_error),
                        found ? _("This name is already taken") : "");
-
-  g_list_free (rows);
 }
 
 static void
