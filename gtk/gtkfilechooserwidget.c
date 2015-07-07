@@ -2951,7 +2951,7 @@ operation_mode_stop (GtkFileChooserWidget *impl,
   if (mode == OPERATION_MODE_SEARCH)
     {
       g_clear_object (&impl->priv->model_for_search);
-      search_stop_searching (impl, FALSE);
+      search_stop_searching (impl, TRUE);
       search_clear_model (impl, TRUE);
     }
 }
@@ -6928,10 +6928,9 @@ search_stop_searching (GtkFileChooserWidget *impl,
 {
   GtkFileChooserWidgetPrivate *priv = impl->priv;
 
-  if (remove_query && priv->search_query)
+  if (remove_query && priv->search_entry)
     {
-      g_object_unref (priv->search_query);
-      priv->search_query = NULL;
+      gtk_entry_set_text (GTK_ENTRY (priv->search_entry), "");
     }
 
   if (priv->search_engine)
