@@ -376,6 +376,7 @@ enum {
   SHOW_HIDDEN,
   SEARCH_SHORTCUT,
   RECENT_SHORTCUT,
+  PLACES_SHORTCUT,
 
   LAST_SIGNAL
 };
@@ -518,6 +519,7 @@ static void quick_bookmark_handler  (GtkFileChooserWidget *impl,
 static void show_hidden_handler     (GtkFileChooserWidget *impl);
 static void search_shortcut_handler (GtkFileChooserWidget *impl);
 static void recent_shortcut_handler (GtkFileChooserWidget *impl);
+static void places_shortcut_handler (GtkFileChooserWidget *impl);
 static void update_appearance       (GtkFileChooserWidget *impl);
 
 static void operation_mode_set (GtkFileChooserWidget *impl, OperationMode mode);
@@ -7816,6 +7818,13 @@ recent_shortcut_handler (GtkFileChooserWidget *impl)
   operation_mode_set (impl, OPERATION_MODE_RECENT);
 }
 
+/* Handler for the "places-shortcut" keybinding signal */
+static void
+places_shortcut_handler (GtkFileChooserWidget *impl)
+{
+  gtk_widget_child_focus (impl->priv->places_sidebar, GTK_DIR_LEFT);
+}
+
 static void
 quick_bookmark_handler (GtkFileChooserWidget *impl,
                         gint                  bookmark_index)
@@ -8127,6 +8136,26 @@ gtk_file_chooser_widget_class_init (GtkFileChooserWidgetClass *class)
                                 _gtk_marshal_VOID__VOID,
                                 G_TYPE_NONE, 0);
 
+  /**
+   * GtkFileChooserWidget::places-shortcut:
+   * @widget: the object which received the signal
+   *
+   * The ::places-shortcut signal is a [keybinding signal][GtkBindingSignal]
+   * which gets emitted when the user asks for it.
+   *
+   * This is used to move the focus to the places sidebar.
+   *
+   * The default binding for this signal is `Alt + P`.
+   */
+  signals[PLACES_SHORTCUT] =
+    g_signal_new_class_handler (I_("places-shortcut"),
+                                G_OBJECT_CLASS_TYPE (class),
+                                G_SIGNAL_RUN_FIRST | G_SIGNAL_ACTION,
+                                G_CALLBACK (places_shortcut_handler),
+                                NULL, NULL,
+                                _gtk_marshal_VOID__VOID,
+                                G_TYPE_NONE, 0);
+
   binding_set = gtk_binding_set_by_class (class);
 
   gtk_binding_entry_add_signal (binding_set,
@@ -8181,6 +8210,10 @@ gtk_file_chooser_widget_class_init (GtkFileChooserWidgetClass *class)
   gtk_binding_entry_add_signal (binding_set,
                                 GDK_KEY_r, GDK_MOD1_MASK,
                                 "recent-shortcut",
+                                0);
+  gtk_binding_entry_add_signal (binding_set,
+                                GDK_KEY_p, GDK_MOD1_MASK,
+                                "places-shortcut",
                                 0);
 
   for (i = 0; i < 10; i++)
