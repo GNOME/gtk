@@ -44,7 +44,7 @@
 
 /**
  * SECTION:gtkimagemenuitem
- * @Short_description: A menu item with an icon
+ * @Short_description: A deprecated widget for a menu item with an icon
  * @Title: GtkImageMenuItem
  *
  * A GtkImageMenuItem is a menu item which has an icon next to the text label.
