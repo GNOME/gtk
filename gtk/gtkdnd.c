@@ -2582,7 +2582,8 @@ gtk_drag_begin_internal (GtkWidget         *widget,
  *    source can provide the data
  * @actions: A bitmask of the allowed drag actions for this drag
  * @button: The button the user clicked to start the drag
- * @event: The event that triggered the start of the drag
+ * @event: (nullable): The event that triggered the start of the drag,
+ *    or %NULL if none can be obtained.
  * @x: The initial x coordinate to start dragging from, in the coordinate space
  *    of @widget. If -1 is passed, the coordinates are retrieved from @event or
  *    the current pointer position
@@ -2644,7 +2645,8 @@ gtk_drag_begin_with_coordinates (GtkWidget     *widget,
  *    source can provide the data
  * @actions: A bitmask of the allowed drag actions for this drag
  * @button: The button the user clicked to start the drag
- * @event: The event that triggered the start of the drag
+ * @event: (nullable): The event that triggered the start of the drag,
+ *    or %NULL if none can be obtained.
  *
  * This function is equivalent to gtk_drag_begin_with_coordinates(),
  * passing -1, -1 as coordinates.
@@ -4386,7 +4388,7 @@ gtk_drag_check_threshold (GtkWidget *widget,
 }
 
 /**
- * gtk_drag_cancel:
+ * gtk_drag_cancel: (method)
  * @context: a #GdkDragContext, as e.g. returned by gtk_drag_begin_with_coordinates()
  *
  * Cancels an ongoing drag operation on the source side.
