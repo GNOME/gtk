@@ -865,8 +865,8 @@ set_width_with_paddings (GtkRevealer *revealer,
 
   gtk_revealer_get_padding (revealer, &padding);
   horizontal_padding = padding.left + padding.right;
-  minimum_width = preferred_natural_width + horizontal_padding;
-  natural_width = preferred_minimum_width + horizontal_padding;
+  minimum_width = preferred_minimum_width + horizontal_padding;
+  natural_width = preferred_natural_width + horizontal_padding;
 
   transition = effective_transition (revealer);
   if (transition == GTK_REVEALER_TRANSITION_TYPE_SLIDE_LEFT ||
