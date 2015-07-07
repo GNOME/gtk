@@ -249,7 +249,6 @@ struct _GtkFileChooserWidgetPrivate {
   GtkWidget *rename_file_rename_button;
   GtkWidget *rename_file_error_label;
   GtkWidget *rename_file_popover;
-  GtkWidget *file_error_label;
   GFile *rename_file_source_file;
 
   GtkFileSystemModel *browse_files_model;
