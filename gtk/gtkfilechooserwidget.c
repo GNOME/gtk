@@ -864,7 +864,7 @@ error_trashing_file (GtkFileChooserWidget *impl,
                      GFile                *file,
                      GError               *error)
 {
-  error_dialog (impl, _("The file could not be move to the Trash"), file, error);
+  error_dialog (impl, _("The file could not be moved to the Trash"), file, error);
 }
 
 /* Changes folders, displaying an error dialog if this fails */
