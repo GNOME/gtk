@@ -235,6 +235,7 @@ struct _GtkFileChooserWidgetPrivate {
   GtkWidget *visit_file_item;
   GtkWidget *open_folder_item;
   GtkWidget *rename_file_item;
+  GtkWidget *trash_file_item;
   GtkWidget *delete_file_item;
   GtkWidget *sort_directories_item;
   GtkWidget *show_time_item;
@@ -384,7 +385,8 @@ static guint signals[LAST_SIGNAL] = { 0 };
 #define MODEL_ATTRIBUTES "standard::name,standard::type,standard::display-name," \
                          "standard::is-hidden,standard::is-backup,standard::size," \
                          "standard::content-type,time::modified,time::access," \
-                         "standard::target-uri,access::can-rename,access::can-delete"
+                         "access::can-rename,access::can-delete,access::can-trash," \
+                         "standard::target-uri"
 enum {
   /* the first 3 must be these due to settings caching sort column */
   MODEL_COL_NAME,
@@ -853,6 +855,14 @@ error_deleting_file (GtkFileChooserWidget *impl,
                      GError               *error)
 {
   error_dialog (impl, _("The file could not be deleted"), file, error);
+}
+
+static void
+error_trashing_file (GtkFileChooserWidget *impl,
+                     GFile                *file,
+                     GError               *error)
+{
+  error_dialog (impl, _("The file could not be move to the Trash"), file, error);
 }
 
 /* Changes folders, displaying an error dialog if this fails */
@@ -1402,6 +1412,7 @@ popup_menu_detach_cb (GtkWidget *attach_widget,
   priv->copy_file_location_item = NULL;
   priv->visit_file_item = NULL;
   priv->rename_file_item = NULL;
+  priv->trash_file_item = NULL;
   priv->delete_file_item = NULL;
   priv->open_folder_item = NULL;
   priv->sort_directories_item = NULL;
@@ -1502,26 +1513,39 @@ delete_file_cb (GtkMenuItem          *item,
     {
       GFile *file;
       GFileInfo *info;
+      GError *error = NULL;
 
       file = _gtk_file_system_model_get_file (GTK_FILE_SYSTEM_MODEL (model), &iter);
       info = _gtk_file_system_model_get_info (GTK_FILE_SYSTEM_MODEL (model), &iter);
 
       if (confirm_delete (impl, info))
         {
-          GError *error = NULL;
-
-          if (!g_file_trash (file, NULL, &error))
-            {
-              if (error->code == G_IO_ERROR_NOT_SUPPORTED)
-                {
-                  g_clear_error (&error);
-                  g_file_delete (file, NULL, &error);
-                }
-
-              if (error)
-                error_deleting_file (impl, file, error);
-            }
+          if (!g_file_delete (file, NULL, &error))
+            error_deleting_file (impl, file, error);
         }
+    }
+}
+
+static void
+trash_file_cb (GtkMenuItem          *item,
+               GtkFileChooserWidget *impl)
+{
+  GtkFileChooserWidgetPrivate *priv = impl->priv;
+  GtkTreeSelection *selection;
+  GtkTreeModel *model;
+  GtkTreeIter iter;
+
+  selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (priv->browse_files_tree_view));
+
+  if (gtk_tree_selection_get_selected (selection, &model, &iter))
+    {
+      GFile *file;
+      GError *error = NULL;
+
+      file = _gtk_file_system_model_get_file (GTK_FILE_SYSTEM_MODEL (model), &iter);
+
+      if (!g_file_trash (file, NULL, &error))
+        error_trashing_file (impl, file, error);
     }
 }
 
@@ -2091,7 +2115,7 @@ check_file_list_menu_sensitivity (GtkFileChooserWidget *impl)
         gtk_widget_set_sensitive (priv->rename_file_item, FALSE);
     }
 
-  if (priv->delete_file_item)
+  if (priv->delete_file_item && priv->trash_file_item)
     {
       if (num_selected == 1)
         {
@@ -2103,12 +2127,31 @@ check_file_list_menu_sensitivity (GtkFileChooserWidget *impl)
           selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (priv->browse_files_tree_view));
           gtk_tree_selection_get_selected (selection, &model, &iter);
           info = _gtk_file_system_model_get_info (GTK_FILE_SYSTEM_MODEL (model), &iter);
-          gtk_widget_set_sensitive (priv->delete_file_item,
-                                    g_file_info_get_attribute_boolean (info, G_FILE_ATTRIBUTE_ACCESS_CAN_TRASH) ||
-                                    g_file_info_get_attribute_boolean (info, G_FILE_ATTRIBUTE_ACCESS_CAN_DELETE));
+          if (g_file_info_get_attribute_boolean (info, G_FILE_ATTRIBUTE_ACCESS_CAN_TRASH))
+            {
+              gtk_widget_set_sensitive (priv->trash_file_item, TRUE);
+              gtk_widget_set_visible (priv->delete_file_item, FALSE);
+              gtk_widget_set_visible (priv->trash_file_item, TRUE);
+            }
+          else if (g_file_info_get_attribute_boolean (info, G_FILE_ATTRIBUTE_ACCESS_CAN_DELETE))
+            {
+              gtk_widget_set_sensitive (priv->delete_file_item, TRUE);
+              gtk_widget_set_visible (priv->delete_file_item, TRUE);
+              gtk_widget_set_visible (priv->trash_file_item, FALSE);
+            }
+          else
+            {
+              gtk_widget_set_sensitive (priv->trash_file_item, FALSE);
+              gtk_widget_set_visible (priv->delete_file_item, FALSE);
+              gtk_widget_set_visible (priv->trash_file_item, TRUE);
+            }
         }
       else
-        gtk_widget_set_sensitive (priv->delete_file_item, FALSE);
+        {
+          gtk_widget_set_visible (priv->delete_file_item, FALSE);
+          gtk_widget_set_visible (priv->trash_file_item, TRUE);
+          gtk_widget_set_sensitive (priv->trash_file_item, FALSE);
+        }
     }
 }
 
@@ -2177,6 +2220,9 @@ file_list_build_popup_menu (GtkFileChooserWidget *impl)
   priv->delete_file_item
     = file_list_add_menu_item (impl, _("_Delete"), G_CALLBACK (delete_file_cb));
 
+  priv->trash_file_item
+    = file_list_add_menu_item (impl, _("_Move to Trash"), G_CALLBACK (trash_file_cb));
+
   item = gtk_separator_menu_item_new ();
   gtk_widget_show (item);
   gtk_menu_shell_append (GTK_MENU_SHELL (priv->browse_files_popup_menu), item);
@@ -2208,8 +2254,14 @@ file_list_update_popup_menu (GtkFileChooserWidget *impl)
    * bookmarks_check_add_sensitivity()
    */
 
-  gtk_widget_set_visible (priv->rename_file_item, (priv->operation_mode == OPERATION_MODE_BROWSE));
-  gtk_widget_set_visible (priv->delete_file_item, (priv->operation_mode == OPERATION_MODE_BROWSE));
+  if (priv->action == GTK_FILE_CHOOSER_ACTION_OPEN ||
+      priv->action == GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER ||
+      priv->operation_mode != OPERATION_MODE_BROWSE)
+    {
+      gtk_widget_set_visible (priv->rename_file_item, FALSE);
+      gtk_widget_set_visible (priv->delete_file_item, FALSE);
+      gtk_widget_set_visible (priv->trash_file_item, FALSE);
+    }
 
   /* 'Visit this file' */
   gtk_widget_set_visible (priv->visit_file_item, (priv->operation_mode != OPERATION_MODE_BROWSE));

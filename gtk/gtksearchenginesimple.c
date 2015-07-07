@@ -222,6 +222,7 @@ visit_directory (GFile *dir, SearchThreadData *data)
                                           G_FILE_ATTRIBUTE_TIME_MODIFIED ","
                                           G_FILE_ATTRIBUTE_TIME_ACCESS ","
                                           G_FILE_ATTRIBUTE_ACCESS_CAN_RENAME ","
+                                          G_FILE_ATTRIBUTE_ACCESS_CAN_TRASH ","
                                           G_FILE_ATTRIBUTE_ACCESS_CAN_DELETE,
                                           G_FILE_QUERY_INFO_NOFOLLOW_SYMLINKS,
                                           data->cancellable, NULL);
