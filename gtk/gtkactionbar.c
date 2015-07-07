@@ -209,18 +209,6 @@ gtk_action_bar_set_child_property (GtkContainer *container,
                                       value);
 }
 
-static GtkWidgetPath *
-gtk_action_bar_get_path_for_child (GtkContainer *container,
-                                   GtkWidget    *child)
-{
-  GtkActionBarPrivate *priv = gtk_action_bar_get_instance_private (GTK_ACTION_BAR (container));
-
-  if (child == priv->revealer)
-    return GTK_CONTAINER_CLASS (gtk_action_bar_parent_class)->get_path_for_child (container, child);
-  else
-    return gtk_container_get_path_for_child (GTK_CONTAINER (priv->box), child);
-}
-
 static void
 gtk_action_bar_class_init (GtkActionBarClass *klass)
 {
@@ -242,7 +230,6 @@ gtk_action_bar_class_init (GtkActionBarClass *klass)
   container_class->child_type = gtk_action_bar_child_type;
   container_class->set_child_property = gtk_action_bar_set_child_property;
   container_class->get_child_property = gtk_action_bar_get_child_property;
-  container_class->get_path_for_child = gtk_action_bar_get_path_for_child;
 
   gtk_container_class_install_child_property (container_class,
                                               CHILD_PROP_PACK_TYPE,
