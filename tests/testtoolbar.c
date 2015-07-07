@@ -504,12 +504,10 @@ main (gint argc, gchar **argv)
 
   hbox1 = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 3);
   gtk_container_set_border_width (GTK_CONTAINER (hbox1), 5);
-  gtk_widget_set_vexpand (hbox1, TRUE);
   gtk_grid_attach (GTK_GRID (grid), hbox1, 1, 1, 1, 1);
 
   hbox2 = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 2);
   gtk_container_set_border_width (GTK_CONTAINER (hbox2), 5);
-  gtk_widget_set_vexpand (hbox2, TRUE);
   gtk_grid_attach (GTK_GRID (grid), hbox2, 1, 2, 1, 1);
 
   checkbox = gtk_check_button_new_with_mnemonic("_Vertical");
