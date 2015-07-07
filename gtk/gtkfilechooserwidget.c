@@ -1013,18 +1013,17 @@ name_exists_get_info_cb (GCancellable *cancellable,
 out:
   g_object_unref (impl);
   g_object_unref (data->file);
-  g_object_unref (data->parent_file);
   g_free (data);
   g_object_unref (cancellable);
 }
 
 static void
-check_valid_file_or_folder_name (GtkFileChooserWidget *impl,
-                                 const gchar          *name,
-                                 GFile                *parent,
-                                 gboolean              folder,
-                                 GtkWidget            *error_label,
-                                 GtkWidget            *button)
+check_valid_child_name (GtkFileChooserWidget *impl,
+                        GFile                *parent,
+                        const gchar          *name,
+                        gboolean              is_folder,
+                        GtkWidget            *error_label,
+                        GtkWidget            *button)
 {
   GtkFileChooserWidgetPrivate *priv = impl->priv;
 
@@ -1034,16 +1033,16 @@ check_valid_file_or_folder_name (GtkFileChooserWidget *impl,
     gtk_label_set_text (GTK_LABEL (error_label), "");
   else if (strcmp (name, ".") == 0)
     gtk_label_set_text (GTK_LABEL (error_label),
-                        folder ? _("A folder cannot be called “.”")
-                               : _("A file cannot be called “.”"));
+                        is_folder ? _("A folder cannot be called “.”")
+                                  : _("A file cannot be called “.”"));
   else if (strcmp (name, "..") == 0)
     gtk_label_set_text (GTK_LABEL (error_label),
-                        folder ? _("A folder cannot be called “..”")
-                               : _("A file cannot be called “..”"));
+                        is_folder ? _("A folder cannot be called “..”")
+                                  : _("A file cannot be called “..”"));
   else if (strchr (name, '/') != NULL)
     gtk_label_set_text (GTK_LABEL (error_label),
-                        folder ? _("Folder names cannot contain “/”")
-                               : _("File names cannot contain “/”"));
+                        is_folder ? _("Folder names cannot contain “/”")
+                                  : _("File names cannot contain “/”"));
   else
     {
       GFile *file;
@@ -1064,21 +1063,20 @@ check_valid_file_or_folder_name (GtkFileChooserWidget *impl,
           /* Warn the user about questionable names that are technically valid */
           if (g_ascii_isspace (name[0]))
             gtk_label_set_text (GTK_LABEL (error_label),
-                                folder ? _("Folder names should not begin with a space")
-                                       : _("File names should not begin with a space"));
+                                is_folder ? _("Folder names should not begin with a space")
+                                          : _("File names should not begin with a space"));
 
           else if (g_ascii_isspace (name[strlen (name) - 1]))
             gtk_label_set_text (GTK_LABEL (error_label),
-                                folder ? _("Folder names should not end with a space")
-                                       : _("File names should not end with a space"));
+                                is_folder ? _("Folder names should not end with a space")
+                                          : _("File names should not end with a space"));
           else if (name[0] == '.')
             gtk_label_set_text (GTK_LABEL (error_label),
-                                folder ? _("Folder names starting with a “.” are hidden")
-                                       : _("File names starting with a “.” are hidden"));
+                                is_folder ? _("Folder names starting with a “.” are hidden")
+                                          : _("File names starting with a “.” are hidden"));
 
           data = g_new0 (struct FileExistsData, 1);
           data->impl = g_object_ref (impl);
-          data->parent_file = g_object_ref (parent);
           data->file = g_object_ref (file);
           data->error_label = error_label;
           data->button = button;
@@ -1104,12 +1102,12 @@ new_folder_name_changed (GtkEntry             *entry,
 {
   GtkFileChooserWidgetPrivate *priv = impl->priv;
 
-  check_valid_file_or_folder_name (impl,
-                                   gtk_entry_get_text (entry),
-                                   priv->current_folder,
-                                   FALSE,
-                                   priv->new_folder_error_label,
-                                   priv->new_folder_create_button);
+  check_valid_child_name (impl,
+                          priv->current_folder,
+                          gtk_entry_get_text (entry),
+                          TRUE,
+                          priv->new_folder_error_label,
+                          priv->new_folder_create_button);
 }
 
 static void
@@ -1526,19 +1524,16 @@ rename_file_name_changed (GtkEntry             *entry,
 {
   GtkFileChooserWidgetPrivate *priv = impl->priv;
   GFileType file_type;
-  GFile *parent;
 
   file_type = g_file_query_file_type (priv->rename_file_source_file,
                                       G_FILE_QUERY_INFO_NONE, NULL);
 
-  parent = g_file_get_parent (priv->rename_file_source_file);
-  check_valid_file_or_folder_name (impl,
-                                   gtk_entry_get_text (entry),
-                                   parent,
-                                   file_type == G_FILE_TYPE_DIRECTORY,
-                                   priv->rename_file_error_label,
-                                   priv->rename_file_rename_button);
-  g_object_unref (parent);
+  check_valid_child_name (impl,
+                          priv->current_folder,
+                          gtk_entry_get_text (entry),
+                          file_type == G_FILE_TYPE_DIRECTORY,
+                          priv->rename_file_error_label,
+                          priv->rename_file_rename_button);
 }
 
 static void
