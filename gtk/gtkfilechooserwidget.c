@@ -1022,6 +1022,7 @@ check_valid_child_name (GtkFileChooserWidget *impl,
                         GFile                *parent,
                         const gchar          *name,
                         gboolean              is_folder,
+                        GFile                *original,
                         GtkWidget            *error_label,
                         GtkWidget            *button)
 {
@@ -1055,6 +1056,11 @@ check_valid_child_name (GtkFileChooserWidget *impl,
         {
           gtk_label_set_text (GTK_LABEL (error_label), error->message);
           g_error_free (error);
+        }
+      else if (original && g_file_equal (original, file))
+        {
+          gtk_widget_set_sensitive (button, TRUE);
+          g_object_unref (file);
         }
       else
         {
@@ -1106,6 +1112,7 @@ new_folder_name_changed (GtkEntry             *entry,
                           priv->current_folder,
                           gtk_entry_get_text (entry),
                           TRUE,
+                          NULL,
                           priv->new_folder_error_label,
                           priv->new_folder_create_button);
 }
@@ -1532,6 +1539,7 @@ rename_file_name_changed (GtkEntry             *entry,
                           priv->current_folder,
                           gtk_entry_get_text (entry),
                           file_type == G_FILE_TYPE_DIRECTORY,
+                          priv->rename_file_source_file,
                           priv->rename_file_error_label,
                           priv->rename_file_rename_button);
 }
