@@ -696,8 +696,9 @@ update_spacings (GtkDialog *dialog)
       _gtk_box_set_spacing_set (GTK_BOX (priv->vbox), FALSE);
     }
 
-  gtk_box_set_spacing (GTK_BOX (priv->action_area),
-                       button_spacing);
+  /* don't set spacing when buttons are linked */
+  if (gtk_button_box_get_layout (GTK_BUTTON_BOX (priv->action_area)) != GTK_BUTTONBOX_EXPAND)
+    gtk_box_set_spacing (GTK_BOX (priv->action_area), button_spacing);
 
   if (!_gtk_container_get_border_width_set (GTK_CONTAINER (priv->action_area)))
     {

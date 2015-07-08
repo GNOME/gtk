@@ -2761,8 +2761,6 @@ GtkCalendar {
 }
 
 .message-dialog { // Message Dialog styling
-  -GtkDialog-button-spacing: 0;
-
   @if $variant==light {
     // the bright variant as a slightly darker bg which in this case clashes with the window decoration, overriding
     &.background { background-color: $bg_color; }

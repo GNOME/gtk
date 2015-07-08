@@ -81,7 +81,10 @@ struct _GtkButtonBoxClass
  * @GTK_BUTTONBOX_END: Buttons are grouped towards the end of the box,
  *   (on the right for a HBox, or the bottom for a VBox).
  * @GTK_BUTTONBOX_CENTER: Buttons are centered in the box. Since 2.12.
- * @GTK_BUTTONBOX_EXPAND: Buttons expand to fill the box. Since 3.12.
+ * @GTK_BUTTONBOX_EXPAND: Buttons expand to fill the box. This entails giving
+ *   buttons a "linked" appearance, making button sizes homogeneous, and
+ *   setting spacing to 0 (same as calling gtk_box_set_homogeneous() and
+ *   gtk_box_set_spacing() manually). Since 3.12.
  *
  * Used to dictate the style that a #GtkButtonBox uses to layout the buttons it
  * contains.

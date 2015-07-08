@@ -1998,7 +1998,6 @@ GtkCalendar {
 }
 
 .message-dialog { // Message Dialog styling
-  -GtkDialog-button-spacing: 0;
   .titlebar {
     border-style: none;
     box-shadow: inset 0 1px $borders_edge;
