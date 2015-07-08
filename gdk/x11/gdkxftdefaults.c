@@ -168,14 +168,13 @@ init_xft_settings (GdkScreen *screen)
   x11_screen->xft_hinting = b;
 
   if (!get_integer_default (xdisplay, "hintstyle", &x11_screen->xft_hintstyle))
-    x11_screen->xft_hintstyle = FC_HINT_FULL;
+    x11_screen->xft_hintstyle = FC_HINT_MEDIUM;
 
   if (!get_integer_default (xdisplay, "rgba", &x11_screen->xft_rgba))
     x11_screen->xft_rgba = FC_RGBA_UNKNOWN;
 
   if (!get_double_default (xdisplay, "dpi", &dpi_double))
-    dpi_double = (((double) DisplayHeight (xdisplay, x11_screen->screen_num) * 25.4) /
-		  (double) DisplayHeightMM (xdisplay, x11_screen->screen_num));
+    dpi_double = 96.0;
 
   x11_screen->xft_dpi = (int)(0.5 + PANGO_SCALE * dpi_double);
 }
