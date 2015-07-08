@@ -3030,10 +3030,11 @@ operation_mode_set_browse (GtkFileChooserWidget *impl)
   GtkFileChooserWidgetPrivate *priv = impl->priv;
 
   gtk_stack_set_visible_child_name (GTK_STACK (priv->browse_files_stack), "list");
+  location_mode_set (impl, LOCATION_MODE_PATH_BAR);
   gtk_stack_set_visible_child_name (GTK_STACK (priv->browse_header_stack), "pathbar");
   gtk_revealer_set_reveal_child (GTK_REVEALER (priv->browse_header_revealer), TRUE);
-  location_bar_update (impl);
   gtk_widget_set_sensitive (priv->filter_combo, TRUE);
+  g_object_notify (G_OBJECT (impl), "subtitle");
 }
 
 static void
@@ -3065,6 +3066,7 @@ operation_mode_set_recent (GtkFileChooserWidget *impl)
   recent_start_loading (impl);
   file = g_file_new_for_uri ("recent:///");
   gtk_places_sidebar_set_location (GTK_PLACES_SIDEBAR (priv->places_sidebar), file);
+  g_object_notify (G_OBJECT (impl), "subtitle");
   g_object_unref (file);
   gtk_widget_set_sensitive (priv->filter_combo, TRUE);
 }
@@ -5313,6 +5315,8 @@ update_current_folder_get_info_cb (GCancellable *cancellable,
   /* Refresh controls */
 
   gtk_places_sidebar_set_location (GTK_PLACES_SIDEBAR (priv->places_sidebar), priv->current_folder);
+
+  g_object_notify (G_OBJECT (impl), "subtitle");
 
   g_signal_emit_by_name (impl, "current-folder-changed", 0);
 
