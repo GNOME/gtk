@@ -1456,11 +1456,7 @@ on_motion_notify_event (GtkWidget      *widget,
     return FALSE;
 
   if (!(event->state & GDK_BUTTON1_MASK))
-    {
-      sidebar->drag_row = NULL;
-
-      return FALSE;
-    }
+    return FALSE;
 
   if (gtk_drag_check_threshold (widget,
                                 sidebar->drag_root_x, sidebar->drag_root_y,
