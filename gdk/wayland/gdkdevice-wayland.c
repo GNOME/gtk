@@ -29,6 +29,7 @@
 #include "gdkkeysyms.h"
 #include "gdkdeviceprivate.h"
 #include "gdkdevicemanagerprivate.h"
+#include "pointer-gestures-client-protocol.h"
 
 #include <xkbcommon/xkbcommon.h>
 
@@ -54,6 +55,8 @@ struct _GdkWaylandDeviceData
   struct wl_pointer *wl_pointer;
   struct wl_keyboard *wl_keyboard;
   struct wl_touch *wl_touch;
+  struct _wl_pointer_gesture_swipe *wl_pointer_gesture_swipe;
+  struct _wl_pointer_gesture_pinch *wl_pointer_gesture_pinch;
 
   GdkDisplay *display;
   GdkDeviceManager *device_manager;
@@ -99,6 +102,10 @@ struct _GdkWaylandDeviceData
 
   /* Source/dest for non-local dnd */
   GdkWindow *foreign_dnd_window;
+
+  /* Some tracking on gesture events */
+  guint gesture_n_fingers;
+  gdouble gesture_scale;
 };
 
 struct _GdkWaylandDevice
@@ -1653,6 +1660,213 @@ touch_handle_cancel (void            *data,
   GDK_NOTE (EVENTS, g_message ("touch cancel"));
 }
 
+static void
+emit_gesture_swipe_event (GdkWaylandDeviceData    *device,
+                          GdkTouchpadGesturePhase  phase,
+                          guint32                  _time,
+                          guint32                  n_fingers,
+                          gdouble                  dx,
+                          gdouble                  dy)
+{
+  GdkWaylandDisplay *display = GDK_WAYLAND_DISPLAY (device->display);
+  GdkEvent *event;
+
+  if (!device->pointer_focus)
+    return;
+
+  device->time = _time;
+
+  event = gdk_event_new (GDK_TOUCHPAD_SWIPE);
+  event->touchpad_swipe.phase = phase;
+  event->touchpad_swipe.window = g_object_ref (device->pointer_focus);
+  gdk_event_set_device (event, device->master_pointer);
+  gdk_event_set_source_device (event, device->pointer);
+  event->touchpad_swipe.time = _time;
+  event->touchpad_swipe.state = device->button_modifiers | device->key_modifiers;
+  gdk_event_set_screen (event, display->screen);
+  event->touchpad_swipe.dx = dx;
+  event->touchpad_swipe.dy = dy;
+  event->touchpad_swipe.n_fingers = n_fingers;
+
+  get_coordinates (device,
+                   &event->touchpad_swipe.x,
+                   &event->touchpad_swipe.y,
+                   &event->touchpad_swipe.x_root,
+                   &event->touchpad_swipe.y_root);
+
+  GDK_NOTE (EVENTS,
+            g_message ("swipe event %d, coords: %f %f, device %p state %d",
+                       event->type, event->touchpad_swipe.x,
+                       event->touchpad_swipe.y, device,
+                       event->touchpad_swipe.state));
+
+  _gdk_wayland_display_deliver_event (device->display, event);
+}
+
+static void
+gesture_swipe_begin (void                             *data,
+                     struct _wl_pointer_gesture_swipe *swipe,
+                     uint32_t                          serial,
+                     uint32_t                          time,
+                     struct wl_surface                *surface,
+                     uint32_t                          fingers)
+{
+  GdkWaylandDeviceData *device = data;
+  GdkWaylandDisplay *display = GDK_WAYLAND_DISPLAY (device->display);
+
+  _gdk_wayland_display_update_serial (display, serial);
+
+  emit_gesture_swipe_event (device,
+                            GDK_TOUCHPAD_GESTURE_PHASE_BEGIN,
+                            time, fingers, 0, 0);
+  device->gesture_n_fingers = fingers;
+}
+
+static void
+gesture_swipe_update (void                             *data,
+                      struct _wl_pointer_gesture_swipe *swipe,
+                      uint32_t                          time,
+                      wl_fixed_t                        dx,
+                      wl_fixed_t                        dy)
+{
+  GdkWaylandDeviceData *device = data;
+
+  emit_gesture_swipe_event (device,
+                            GDK_TOUCHPAD_GESTURE_PHASE_UPDATE,
+                            time,
+                            device->gesture_n_fingers,
+                            wl_fixed_to_double (dx),
+                            wl_fixed_to_double (dy));
+}
+
+static void
+gesture_swipe_end (void                             *data,
+                   struct _wl_pointer_gesture_swipe *swipe,
+                   uint32_t                          serial,
+                   uint32_t                          time,
+                   int32_t                           cancelled)
+{
+  GdkWaylandDeviceData *device = data;
+  GdkWaylandDisplay *display = GDK_WAYLAND_DISPLAY (device->display);
+  GdkTouchpadGesturePhase phase;
+
+  _gdk_wayland_display_update_serial (display, serial);
+
+  phase = (cancelled) ?
+    GDK_TOUCHPAD_GESTURE_PHASE_CANCEL :
+    GDK_TOUCHPAD_GESTURE_PHASE_END;
+
+  emit_gesture_swipe_event (device, phase, time,
+                            device->gesture_n_fingers, 0, 0);
+}
+
+static void
+emit_gesture_pinch_event (GdkWaylandDeviceData    *device,
+                          GdkTouchpadGesturePhase  phase,
+                          guint32                  _time,
+                          guint                    n_fingers,
+                          gdouble                  dx,
+                          gdouble                  dy,
+                          gdouble                  scale,
+                          gdouble                  angle_delta)
+{
+  GdkWaylandDisplay *display = GDK_WAYLAND_DISPLAY (device->display);
+  GdkEvent *event;
+
+  if (!device->pointer_focus)
+    return;
+
+  device->time = _time;
+
+  event = gdk_event_new (GDK_TOUCHPAD_PINCH);
+  event->touchpad_pinch.phase = phase;
+  event->touchpad_pinch.window = g_object_ref (device->pointer_focus);
+  gdk_event_set_device (event, device->master_pointer);
+  gdk_event_set_source_device (event, device->pointer);
+  event->touchpad_pinch.time = _time;
+  event->touchpad_pinch.state = device->button_modifiers | device->key_modifiers;
+  gdk_event_set_screen (event, display->screen);
+  event->touchpad_pinch.dx = dx;
+  event->touchpad_pinch.dy = dy;
+  event->touchpad_pinch.scale = scale;
+  event->touchpad_pinch.angle_delta = angle_delta * G_PI / 180;
+  event->touchpad_pinch.n_fingers = n_fingers;
+
+  get_coordinates (device,
+                   &event->touchpad_pinch.x,
+                   &event->touchpad_pinch.y,
+                   &event->touchpad_pinch.x_root,
+                   &event->touchpad_pinch.y_root);
+
+  GDK_NOTE (EVENTS,
+            g_message ("pinch event %d, coords: %f %f, device %p state %d",
+                       event->type, event->touchpad_pinch.x,
+                       event->touchpad_pinch.y, device,
+                       event->touchpad_pinch.state));
+
+  _gdk_wayland_display_deliver_event (device->display, event);
+}
+
+static void
+gesture_pinch_begin (void                             *data,
+                     struct _wl_pointer_gesture_pinch *pinch,
+                     uint32_t                          serial,
+                     uint32_t                          time,
+                     struct wl_surface                *surface,
+                     uint32_t                          fingers)
+{
+  GdkWaylandDeviceData *device = data;
+  GdkWaylandDisplay *display = GDK_WAYLAND_DISPLAY (device->display);
+
+  _gdk_wayland_display_update_serial (display, serial);
+  emit_gesture_pinch_event (device,
+                            GDK_TOUCHPAD_GESTURE_PHASE_BEGIN,
+                            time, fingers, 0, 0, 1, 0);
+  device->gesture_n_fingers = fingers;
+}
+
+static void
+gesture_pinch_update (void                             *data,
+                      struct _wl_pointer_gesture_pinch *pinch,
+                      uint32_t                          time,
+                      wl_fixed_t                        dx,
+                      wl_fixed_t                        dy,
+                      wl_fixed_t                        scale,
+                      wl_fixed_t                        rotation)
+{
+  GdkWaylandDeviceData *device = data;
+
+  emit_gesture_pinch_event (device,
+                            GDK_TOUCHPAD_GESTURE_PHASE_UPDATE, time,
+                            device->gesture_n_fingers,
+                            wl_fixed_to_double (dx),
+                            wl_fixed_to_double (dy),
+                            wl_fixed_to_double (scale),
+                            wl_fixed_to_double (rotation));
+}
+
+static void
+gesture_pinch_end (void                             *data,
+                   struct _wl_pointer_gesture_pinch *pinch,
+                   uint32_t                          serial,
+                   uint32_t                          time,
+                   int32_t                           cancelled)
+{
+  GdkWaylandDeviceData *device = data;
+  GdkWaylandDisplay *display = GDK_WAYLAND_DISPLAY (device->display);
+  GdkTouchpadGesturePhase phase;
+
+  _gdk_wayland_display_update_serial (display, serial);
+
+  phase = (cancelled) ?
+    GDK_TOUCHPAD_GESTURE_PHASE_CANCEL :
+    GDK_TOUCHPAD_GESTURE_PHASE_END;
+
+  emit_gesture_pinch_event (device, phase,
+                            time, device->gesture_n_fingers,
+                            0, 0, 1, 0);
+}
+
 static const struct wl_pointer_listener pointer_listener = {
   pointer_handle_enter,
   pointer_handle_leave,
@@ -1678,6 +1892,18 @@ static const struct wl_touch_listener touch_listener = {
   touch_handle_cancel
 };
 
+static const struct _wl_pointer_gesture_swipe_listener gesture_swipe_listener = {
+  gesture_swipe_begin,
+  gesture_swipe_update,
+  gesture_swipe_end
+};
+
+static const struct _wl_pointer_gesture_pinch_listener gesture_pinch_listener = {
+  gesture_pinch_begin,
+  gesture_pinch_update,
+  gesture_pinch_end
+};
+
 static void
 seat_handle_capabilities (void                    *data,
                           struct wl_seat          *seat,
@@ -1685,6 +1911,7 @@ seat_handle_capabilities (void                    *data,
 {
   GdkWaylandDeviceData *device = data;
   GdkWaylandDeviceManager *device_manager = GDK_WAYLAND_DEVICE_MANAGER (device->device_manager);
+  GdkWaylandDisplay *wayland_display = GDK_WAYLAND_DISPLAY (device->display);
 
   GDK_NOTE (MISC,
             g_message ("seat %p with %s%s%s", seat,
@@ -1715,6 +1942,24 @@ seat_handle_capabilities (void                    *data,
 
       device->drop_context = _gdk_wayland_drop_context_new (device->master_pointer,
                                                             device->data_device);
+      if (wayland_display->pointer_gestures)
+        {
+          device->wl_pointer_gesture_swipe =
+            _wl_pointer_gestures_get_swipe_gesture (wayland_display->pointer_gestures,
+                                                    device->wl_pointer);
+          _wl_pointer_gesture_swipe_set_user_data (device->wl_pointer_gesture_swipe,
+                                                   device);
+          _wl_pointer_gesture_swipe_add_listener (device->wl_pointer_gesture_swipe,
+                                                  &gesture_swipe_listener, device);
+
+          device->wl_pointer_gesture_pinch =
+            _wl_pointer_gestures_get_pinch_gesture (wayland_display->pointer_gestures,
+                                                    device->wl_pointer);
+          _wl_pointer_gesture_pinch_set_user_data (device->wl_pointer_gesture_pinch,
+                                                   device);
+          _wl_pointer_gesture_pinch_add_listener (device->wl_pointer_gesture_pinch,
+                                                  &gesture_pinch_listener, device);
+        }
 
       g_signal_emit_by_name (device_manager, "device-added", device->pointer);
     }
