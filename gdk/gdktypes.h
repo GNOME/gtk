@@ -440,6 +440,7 @@ typedef enum
   GDK_SCROLL_MASK               = 1 << 21,
   GDK_TOUCH_MASK                = 1 << 22,
   GDK_SMOOTH_SCROLL_MASK        = 1 << 23,
+  GDK_TOUCHPAD_GESTURE_MASK     = 1 << 24,
   GDK_ALL_EVENTS_MASK           = 0xFFFFFE
 } GdkEventMask;
 
