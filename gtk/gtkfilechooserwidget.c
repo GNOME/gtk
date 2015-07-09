@@ -5704,8 +5704,6 @@ get_files_foreach (GtkTreeModel *model,
   GFile *file;
 
   file = _gtk_file_system_model_get_file (fs_model, iter);
-  if (!file)
-    return; /* We are on the editable row */
 
   if (!info->file_from_entry || !g_file_equal (info->file_from_entry, file))
     info->result = g_slist_prepend (info->result, g_object_ref (file));
@@ -7595,23 +7593,6 @@ list_selection_changed (GtkTreeSelection     *selection,
 
   if (gtk_tree_view_get_model (GTK_TREE_VIEW (priv->browse_files_tree_view)) == NULL)
     return;
-
-  /* See if we are in the new folder editable row for Save mode */
-  if (priv->operation_mode == OPERATION_MODE_BROWSE &&
-      priv->action == GTK_FILE_CHOOSER_ACTION_SAVE)
-    {
-      GFileInfo *info;
-      gboolean had_selection;
-
-      info = get_selected_file_info_from_file_list (impl, &had_selection);
-      if (!had_selection)
-        goto out; /* normal processing */
-
-      if (!info)
-        return; /* We are on the editable row for New Folder */
-    }
-
- out:
 
   if (priv->location_entry)
     update_chooser_entry (impl);
