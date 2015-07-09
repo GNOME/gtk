@@ -7584,6 +7584,9 @@ list_selection_changed (GtkTreeSelection     *selection,
 {
   GtkFileChooserWidgetPrivate *priv = impl->priv;
 
+  if (gtk_tree_view_get_model (GTK_TREE_VIEW (priv->browse_files_tree_view)) == NULL)
+    return;
+
   /* See if we are in the new folder editable row for Save mode */
   if (priv->operation_mode == OPERATION_MODE_BROWSE &&
       priv->action == GTK_FILE_CHOOSER_ACTION_SAVE)
