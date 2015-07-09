@@ -2973,9 +2973,7 @@ location_bar_update (GtkFileChooserWidget *impl)
           have_selected = gtk_tree_selection_get_selected (selection, NULL, &iter);
 
           if (have_selected)
-            {
-              put_recent_folder_in_pathbar (impl, &iter);
-            }
+            put_recent_folder_in_pathbar (impl, &iter);
         }
       visible = FALSE;
       break;
