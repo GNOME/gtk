@@ -7605,6 +7605,13 @@ is_button_type (GdkEventType type)
 }
 
 static gboolean
+is_gesture_type (GdkEventType type)
+{
+  return (type == GDK_TOUCHPAD_SWIPE ||
+          type == GDK_TOUCHPAD_PINCH);
+}
+
+static gboolean
 is_motion_type (GdkEventType type)
 {
   return type == GDK_MOTION_NOTIFY ||
@@ -7743,6 +7750,16 @@ _gdk_make_event (GdkWindow    *window,
     case GDK_DROP_START:
     case GDK_DROP_FINISHED:
       event->dnd.time = the_time;
+      break;
+
+    case GDK_TOUCHPAD_SWIPE:
+      event->touchpad_swipe.time = the_time;
+      event->touchpad_swipe.state = the_state;
+      break;
+
+    case GDK_TOUCHPAD_PINCH:
+      event->touchpad_pinch.time = the_time;
+      event->touchpad_pinch.state = the_state;
       break;
 
     case GDK_FOCUS_CHANGE:
@@ -9271,6 +9288,85 @@ proxy_button_event (GdkEvent *source_event,
   return TRUE; /* Always unlink original, we want to obey the emulated event mask */
 }
 
+static gboolean
+proxy_gesture_event (GdkEvent *source_event,
+                     gulong    serial)
+{
+  GdkWindow *toplevel_window, *pointer_window, *event_win;
+  GdkDevice *device, *source_device;
+  gdouble toplevel_x, toplevel_y;
+  GdkDisplay *display;
+  GdkEventMask evmask;
+  GdkEventType evtype;
+  GdkEvent *event;
+  guint state;
+
+  evtype = source_event->any.type;
+  gdk_event_get_coords (source_event, &toplevel_x, &toplevel_y);
+  gdk_event_get_state (source_event, &state);
+  device = gdk_event_get_device (source_event);
+  source_device = gdk_event_get_source_device (source_event);
+  display = gdk_window_get_display (source_event->any.window);
+  toplevel_window = convert_native_coords_to_toplevel (source_event->any.window,
+						       toplevel_x, toplevel_y,
+						       &toplevel_x, &toplevel_y);
+
+  pointer_window = get_pointer_window (display, toplevel_window, device,
+				       toplevel_x, toplevel_y,
+				       serial);
+
+  event_win = get_event_window (display, device, NULL,
+                                pointer_window, evtype, state,
+                                &evmask, FALSE, serial);
+  if (!event_win)
+    return TRUE;
+
+  if ((evmask & GDK_TOUCHPAD_GESTURE_MASK) == 0)
+    return TRUE;
+
+  event = _gdk_make_event (event_win, evtype, source_event, FALSE);
+  gdk_event_set_device (event, device);
+  gdk_event_set_source_device (event, source_device);
+
+  switch (evtype)
+    {
+    case GDK_TOUCHPAD_SWIPE:
+      convert_toplevel_coords_to_window (event_win,
+                                         toplevel_x, toplevel_y,
+                                         &event->touchpad_swipe.x,
+                                         &event->touchpad_swipe.y);
+      gdk_event_get_root_coords (source_event,
+				 &event->touchpad_swipe.x_root,
+				 &event->touchpad_swipe.y_root);
+      event->touchpad_swipe.dx = source_event->touchpad_swipe.dx;
+      event->touchpad_swipe.dy = source_event->touchpad_swipe.dy;
+      event->touchpad_swipe.n_fingers = source_event->touchpad_swipe.n_fingers;
+      event->touchpad_swipe.phase = source_event->touchpad_swipe.phase;
+      break;
+
+    case GDK_TOUCHPAD_PINCH:
+      convert_toplevel_coords_to_window (event_win,
+                                         toplevel_x, toplevel_y,
+                                         &event->touchpad_pinch.x,
+                                         &event->touchpad_pinch.y);
+      gdk_event_get_root_coords (source_event,
+				 &event->touchpad_pinch.x_root,
+				 &event->touchpad_pinch.y_root);
+      event->touchpad_pinch.dx = source_event->touchpad_pinch.dx;
+      event->touchpad_pinch.dy = source_event->touchpad_pinch.dy;
+      event->touchpad_pinch.scale = source_event->touchpad_pinch.scale;
+      event->touchpad_pinch.angle_delta = source_event->touchpad_pinch.angle_delta;
+      event->touchpad_pinch.n_fingers = source_event->touchpad_pinch.n_fingers;
+      event->touchpad_pinch.phase = source_event->touchpad_pinch.phase;
+      break;
+
+    default:
+      break;
+    }
+
+  return TRUE;
+}
+
 #ifdef DEBUG_WINDOW_PRINTING
 
 #ifdef GDK_WINDOWING_X11
@@ -9419,7 +9515,8 @@ _gdk_windowing_got_event (GdkDisplay *display,
     }
 
   if (!(is_button_type (event->type) ||
-        is_motion_type (event->type)) ||
+        is_motion_type (event->type) ||
+        is_gesture_type (event->type)) ||
       event_window->window_type == GDK_WINDOW_ROOT)
     goto out;
 
@@ -9518,6 +9615,8 @@ _gdk_windowing_got_event (GdkDisplay *display,
     unlink_event = proxy_pointer_event (display, event, serial);
   else if (is_button_type (event->type))
     unlink_event = proxy_button_event (event, serial);
+  else if (is_gesture_type (event->type))
+    unlink_event = proxy_gesture_event (event, serial);
 
   if ((event->type == GDK_BUTTON_RELEASE ||
        event->type == GDK_TOUCH_END) &&
