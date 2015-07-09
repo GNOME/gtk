@@ -223,7 +223,8 @@ gtk_gesture_finalize (GObject *object)
 }
 
 static guint
-_gtk_gesture_effective_n_points (GtkGesture *gesture)
+_gtk_gesture_get_n_touch_points (GtkGesture *gesture,
+                                 gboolean    only_active)
 {
   GtkGesturePrivate *priv;
   GHashTableIter iter;
@@ -235,15 +236,23 @@ _gtk_gesture_effective_n_points (GtkGesture *gesture)
 
   while (g_hash_table_iter_next (&iter, NULL, (gpointer *) &data))
     {
-      if (data->state == GTK_EVENT_SEQUENCE_DENIED ||
-          data->event->type == GDK_TOUCH_END ||
-          data->event->type == GDK_BUTTON_RELEASE)
+      if (only_active &&
+          (data->state == GTK_EVENT_SEQUENCE_DENIED ||
+           data->event->type == GDK_TOUCH_END ||
+           data->event->type == GDK_BUTTON_RELEASE))
         continue;
 
       n_points++;
     }
 
   return n_points;
+}
+
+static guint
+_gtk_gesture_get_n_physical_points (GtkGesture *gesture,
+                                    gboolean    only_active)
+{
+  return _gtk_gesture_get_n_touch_points (gesture, only_active);
 }
 
 static gboolean
@@ -253,7 +262,7 @@ gtk_gesture_check_impl (GtkGesture *gesture)
   guint n_points;
 
   priv = gtk_gesture_get_instance_private (gesture);
-  n_points = _gtk_gesture_effective_n_points (gesture);
+  n_points = _gtk_gesture_get_n_physical_points (gesture, TRUE);
 
   return n_points == priv->n_points;
 }
@@ -297,12 +306,13 @@ static gboolean
 _gtk_gesture_has_matching_touchpoints (GtkGesture *gesture)
 {
   GtkGesturePrivate *priv = gtk_gesture_get_instance_private (gesture);
-  guint current_n_points;
+  guint active_n_points, current_n_points;
 
-  current_n_points = _gtk_gesture_effective_n_points (gesture);
+  current_n_points = _gtk_gesture_get_n_physical_points (gesture, FALSE);
+  active_n_points = _gtk_gesture_get_n_physical_points (gesture, TRUE);
 
-  return (current_n_points == priv->n_points &&
-          g_hash_table_size (priv->points) == priv->n_points);
+  return (active_n_points == priv->n_points &&
+          current_n_points == priv->n_points);
 }
 
 static gboolean
@@ -483,7 +493,7 @@ _gtk_gesture_update_point (GtkGesture     *gesture,
    * number of points is exceeded, so this sequence
    * can be tracked with gtk_gesture_handles_sequence().
    */
-  if (!existed && g_hash_table_size (priv->points) > priv->n_points)
+  if (!existed && _gtk_gesture_get_n_physical_points (gesture, FALSE) > priv->n_points)
     gtk_gesture_set_sequence_state (gesture, sequence,
                                     GTK_EVENT_SEQUENCE_DENIED);
 
@@ -1305,7 +1315,7 @@ gtk_gesture_is_active (GtkGesture *gesture)
 {
   g_return_val_if_fail (GTK_IS_GESTURE (gesture), FALSE);
 
-  return _gtk_gesture_effective_n_points (gesture) != 0;
+  return _gtk_gesture_get_n_physical_points (gesture, TRUE) != 0;
 }
 
 /**
