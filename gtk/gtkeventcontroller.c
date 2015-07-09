@@ -145,6 +145,7 @@ gtk_event_controller_class_init (GtkEventControllerClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
 
+  klass->filter_event = gtk_event_controller_handle_event_default;
   klass->handle_event = gtk_event_controller_handle_event_default;
 
   object_class->set_property = gtk_event_controller_set_property;
@@ -217,6 +218,9 @@ gtk_event_controller_handle_event (GtkEventController *controller,
   g_return_val_if_fail (event != NULL, FALSE);
 
   controller_class = GTK_EVENT_CONTROLLER_GET_CLASS (controller);
+
+  if (controller_class->filter_event (controller, event))
+    return retval;
 
   if (controller_class->handle_event)
     {
