@@ -36,6 +36,9 @@ struct _GtkEventControllerClass
   void     (* reset)        (GtkEventController *controller);
 
   /*<private>*/
+
+  gboolean (* filter_event) (GtkEventController *controller,
+                             const GdkEvent     *event);
   gpointer padding[10];
 };
 
