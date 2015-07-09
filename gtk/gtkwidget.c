@@ -7717,6 +7717,10 @@ gtk_widget_event_internal (GtkWidget *widget,
 
       switch (event->type)
 	{
+        case GDK_TOUCHPAD_SWIPE:
+        case GDK_TOUCHPAD_PINCH:
+          return_val |= _gtk_widget_run_controllers (widget, event, GTK_PHASE_BUBBLE);
+          /* Fall through */
 	case GDK_EXPOSE:
 	case GDK_NOTHING:
 	  signal_num = -1;
