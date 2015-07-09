@@ -871,8 +871,6 @@ gdk_mir_window_impl_set_transient_for (GdkWindow *window,
   if (impl->transient_for == parent)
     return;
 
-  g_return_if_fail (impl->transient_for == NULL);
-
   /* Link this window to the parent */
   impl->transient_for = parent;
 }
