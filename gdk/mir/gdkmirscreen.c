@@ -665,6 +665,48 @@ gdk_mir_screen_get_setting (GdkScreen   *screen,
       return TRUE;
     }
 
+  if (g_str_equal (name, "gtk-decoration-layout"))
+    {
+      g_value_set_string (value, "menu:minimize,maximize,close");
+      return TRUE;
+    }
+
+  if (g_str_equal (name, "gtk-dnd-drag-threshold"))
+    {
+      g_value_set_int (value, 8);
+      return TRUE;
+    }
+
+  if (g_str_equal (name, "gtk-dialogs-use-header"))
+    {
+      g_value_set_boolean (value, FALSE);
+      return TRUE;
+    }
+
+  if (g_str_equal (name, "gtk-long-press-time"))
+    {
+      g_value_set_uint (value, 500);
+      return TRUE;
+    }
+
+  if (g_str_equal (name, "gtk-primary-button-warps-slider"))
+    {
+      g_value_set_boolean (value, TRUE);
+      return TRUE;
+    }
+
+  if (g_str_equal (name, "gtk-recent-files-max-age"))
+    {
+      g_value_set_int (value, 30);
+      return TRUE;
+    }
+
+  if (g_str_equal (name, "gtk-titlebar-double-click"))
+    {
+      g_value_set_string (value, "toggle-maximize");
+      return TRUE;
+    }
+
   g_warning ("unknown property %s", name);
 
   return FALSE;
