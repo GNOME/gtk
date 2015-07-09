@@ -1411,6 +1411,18 @@ rewrite_event_for_window (GdkEvent  *event,
                                 new_window,
                                 &event->touch.x, &event->touch.y);
       break;
+    case GDK_TOUCHPAD_SWIPE:
+      rewrite_events_translate (event->any.window,
+                                new_window,
+                                &event->touchpad_swipe.x,
+                                &event->touchpad_swipe.y);
+      break;
+    case GDK_TOUCHPAD_PINCH:
+      rewrite_events_translate (event->any.window,
+                                new_window,
+                                &event->touchpad_pinch.x,
+                                &event->touchpad_pinch.y);
+      break;
     case GDK_KEY_PRESS:
     case GDK_KEY_RELEASE:
     case GDK_PROXIMITY_IN:
@@ -1460,6 +1472,8 @@ rewrite_event_for_grabs (GdkEvent *event)
     case GDK_TOUCH_UPDATE:
     case GDK_TOUCH_END:
     case GDK_TOUCH_CANCEL:
+    case GDK_TOUCHPAD_SWIPE:
+    case GDK_TOUCHPAD_PINCH:
       display = gdk_window_get_display (event->any.window);
       device = gdk_event_get_device (event);
 
@@ -1819,6 +1833,8 @@ gtk_main_do_event (GdkEvent *event)
     case GDK_TOUCH_UPDATE:
     case GDK_TOUCH_END:
     case GDK_TOUCH_CANCEL:
+    case GDK_TOUCHPAD_SWIPE:
+    case GDK_TOUCHPAD_PINCH:
       if (!_gtk_propagate_captured_event (grab_widget, event, topmost_widget))
         gtk_propagate_event (grab_widget, event);
       break;
