@@ -139,6 +139,8 @@ typedef struct _GdkEventDND         GdkEventDND;
 typedef struct _GdkEventWindowState GdkEventWindowState;
 typedef struct _GdkEventSetting     GdkEventSetting;
 typedef struct _GdkEventGrabBroken  GdkEventGrabBroken;
+typedef struct _GdkEventTouchpadSwipe GdkEventTouchpadSwipe;
+typedef struct _GdkEventTouchpadPinch GdkEventTouchpadPinch;
 
 typedef struct _GdkEventSequence    GdkEventSequence;
 
@@ -271,6 +273,10 @@ typedef GdkFilterReturn (*GdkFilterFunc) (GdkXEvent *xevent,
  *   was added in 3.4.
  * @GDK_TOUCH_CANCEL: A touch event sequence has been canceled. This event type
  *   was added in 3.4.
+ * @GDK_TOUCHPAD_SWIPE: A touchpad swipe gesture event, the current state
+ *   is determined by its phase field. This event type was added in 3.18.
+ * @GDK_TOUCHPAD_PINCH: A touchpad pinch gesture event, the current state
+ *   is determined by its phase field. This event type was added in 3.18.
  * @GDK_EVENT_LAST: marks the end of the GdkEventType enumeration. Added in 2.18
  *
  * Specifies the type of the event.
@@ -331,6 +337,8 @@ typedef enum
   GDK_TOUCH_UPDATE      = 38,
   GDK_TOUCH_END         = 39,
   GDK_TOUCH_CANCEL      = 40,
+  GDK_TOUCHPAD_SWIPE    = 41,
+  GDK_TOUCHPAD_PINCH    = 42,
   GDK_EVENT_LAST        /* helper variable for decls */
 } GdkEventType;
 
@@ -348,6 +356,43 @@ typedef enum
   GDK_VISIBILITY_PARTIAL,
   GDK_VISIBILITY_FULLY_OBSCURED
 } GdkVisibilityState;
+
+/**
+ * GdkTouchpadGesturePhase:
+ * @GDK_TOUCHPAD_GESTURE_PHASE_BEGIN: The gesture has begun.
+ * @GDK_TOUCHPAD_GESTURE_PHASE_UPDATE: The gesture has been updated.
+ * @GDK_TOUCHPAD_GESTURE_PHASE_END: The gesture was finished, changes
+ *   should be permanently applied.
+ * @GDK_TOUCHPAD_GESTURE_PHASE_CANCEL: The gesture was cancelled, all
+ *   changes should be undone.
+ *
+ * Specifies the current state of a touchpad gesture. All gestures are
+ * guaranteed to begin with an event with phase %GDK_TOUCHPAD_GESTURE_PHASE_BEGIN,
+ * followed by 0 or several events with phase %GDK_TOUCHPAD_GESTURE_PHASE_UPDATE.
+ *
+ * A finished gesture may have 2 possible outcomes, an event with phase
+ * %GDK_TOUCHPAD_GESTURE_PHASE_END will be emitted when the gesture is
+ * considered successful, this should be used as the hint to perform any
+ * permanent changes.
+
+ * Cancelled gestures may be so for a variety of reasons, due to hardware
+ * or the compositor, or due to the gesture recognition layers hinting the
+ * gesture did not finish resolutely (eg. a 3rd finger being added during
+ * a pinch gesture). In these cases, the last event will report the phase
+ * %GDK_TOUCHPAD_GESTURE_PHASE_CANCEL, this should be used as a hint
+ * to undo any visible/permanent changes that were done throughout the
+ * progress of the gesture.
+ *
+ * See also #GdkEventTouchpadSwipe and #GdkEventTouchpadPinch.
+ *
+ */
+typedef enum
+{
+  GDK_TOUCHPAD_GESTURE_PHASE_BEGIN,
+  GDK_TOUCHPAD_GESTURE_PHASE_UPDATE,
+  GDK_TOUCHPAD_GESTURE_PHASE_END,
+  GDK_TOUCHPAD_GESTURE_PHASE_CANCEL
+} GdkTouchpadGesturePhase;
 
 /**
  * GdkScrollDirection:
@@ -1114,6 +1159,86 @@ struct _GdkEventDND {
 };
 
 /**
+ * GdkEventTouchpadSwipe:
+ * @type: the type of the event (%GDK_TOUCHPAD_SWIPE)
+ * @window: the window which received the event
+ * @send_event: %TRUE if the event was sent explicitly
+ * @phase: (type GdkTouchpadGesturePhase): the current phase of the gesture
+ * @n_fingers: The number of fingers triggering the swipe
+ * @time: the time of the event in milliseconds
+ * @x: The X coordinate of the pointer
+ * @y: The Y coordinate of the pointer
+ * @dx: Movement delta in the X axis of the swipe focal point
+ * @dy: Movement delta in the Y axis of the swipe focal point
+ * @x_root: The X coordinate of the pointer, relative to the
+ *   root of the screen.
+ * @y_root: The Y coordinate of the pointer, relative to the
+ *   root of the screen.
+ * @state: (type GdkModifierType): a bit-mask representing the state of
+ *   the modifier keys (e.g. Control, Shift and Alt) and the pointer
+ *   buttons. See #GdkModifierType.
+ *
+ * Generated during touchpad swipe gestures.
+ */
+struct _GdkEventTouchpadSwipe {
+  GdkEventType type;
+  GdkWindow *window;
+  gint8 send_event;
+  gint8 phase;
+  gint8 n_fingers;
+  guint32 time;
+  gdouble x;
+  gdouble y;
+  gdouble dx;
+  gdouble dy;
+  gdouble x_root, y_root;
+  guint state;
+};
+
+/**
+ * GdkEventTouchpadPinch:
+ * @type: the type of the event (%GDK_TOUCHPAD_PINCH)
+ * @window: the window which received the event
+ * @send_event: %TRUE if the event was sent explicitly
+ * @phase: (type GdkTouchpadGesturePhase): the current phase of the gesture
+ * @n_fingers: The number of fingers triggering the pinch
+ * @time: the time of the event in milliseconds
+ * @x: The X coordinate of the pointer
+ * @y: The Y coordinate of the pointer
+ * @dx: Movement delta in the X axis of the swipe focal point
+ * @dy: Movement delta in the Y axis of the swipe focal point
+ * @angle_delta: The angle change in radians, negative angles
+ *   denote counter-clockwise movements
+ * @scale: The current scale, relative to that at the time of
+ *   the corresponding %GDK_TOUCHPAD_GESTURE_PHASE_BEGIN event
+ * @x_root: The X coordinate of the pointer, relative to the
+ *   root of the screen.
+ * @y_root: The Y coordinate of the pointer, relative to the
+ *   root of the screen.
+ * @state: (type GdkModifierType): a bit-mask representing the state of
+ *   the modifier keys (e.g. Control, Shift and Alt) and the pointer
+ *   buttons. See #GdkModifierType.
+ *
+ * Generated during touchpad swipe gestures.
+ */
+struct _GdkEventTouchpadPinch {
+  GdkEventType type;
+  GdkWindow *window;
+  gint8 send_event;
+  gint8 phase;
+  gint8 n_fingers;
+  guint32 time;
+  gdouble x;
+  gdouble y;
+  gdouble dx;
+  gdouble dy;
+  gdouble angle_delta;
+  gdouble scale;
+  gdouble x_root, y_root;
+  guint state;
+};
+
+/**
  * GdkEvent:
  * @type: the #GdkEventType
  * @any: a #GdkEventAny
@@ -1189,6 +1314,8 @@ union _GdkEvent
   GdkEventWindowState       window_state;
   GdkEventSetting           setting;
   GdkEventGrabBroken        grab_broken;
+  GdkEventTouchpadSwipe     touchpad_swipe;
+  GdkEventTouchpadPinch     touchpad_pinch;
 };
 
 GDK_AVAILABLE_IN_ALL
