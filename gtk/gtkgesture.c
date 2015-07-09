@@ -158,6 +158,9 @@ static guint signals[N_SIGNALS] = { 0 };
 
 #define BUTTONS_MASK (GDK_BUTTON1_MASK | GDK_BUTTON2_MASK | GDK_BUTTON3_MASK)
 
+#define EVENT_IS_TOUCHPAD_GESTURE(e) ((e)->type == GDK_TOUCHPAD_SWIPE || \
+                                      (e)->type == GDK_TOUCHPAD_PINCH)
+
 GList * _gtk_gesture_get_group_link (GtkGesture *gesture);
 
 G_DEFINE_ABSTRACT_TYPE_WITH_PRIVATE (GtkGesture, gtk_gesture, GTK_TYPE_EVENT_CONTROLLER)
@@ -562,6 +565,18 @@ gesture_within_window (GtkGesture *gesture,
 }
 
 static gboolean
+gtk_gesture_filter_event (GtkEventController *controller,
+                          const GdkEvent     *event)
+{
+  /* Even though GtkGesture handles these events, we want
+   * touchpad gestures disabled by default, it will be
+   * subclasses which punch the holes in for the events
+   * they can possibly handle.
+   */
+  return EVENT_IS_TOUCHPAD_GESTURE (event);
+}
+
+static gboolean
 gtk_gesture_handle_event (GtkEventController *controller,
                           const GdkEvent     *event)
 {
@@ -681,6 +696,7 @@ gtk_gesture_class_init (GtkGestureClass *klass)
   object_class->set_property = gtk_gesture_set_property;
   object_class->finalize = gtk_gesture_finalize;
 
+  controller_class->filter_event = gtk_gesture_filter_event;
   controller_class->handle_event = gtk_gesture_handle_event;
   controller_class->reset = gtk_gesture_reset;
 
