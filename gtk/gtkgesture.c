@@ -998,7 +998,8 @@ gtk_gesture_init (GtkGesture *gesture)
   priv->points = g_hash_table_new_full (NULL, NULL, NULL,
                                         (GDestroyNotify) g_free);
   gtk_event_controller_set_event_mask (GTK_EVENT_CONTROLLER (gesture),
-                                       GDK_TOUCH_MASK);
+                                       GDK_TOUCH_MASK |
+                                       GDK_TOUCHPAD_GESTURE_MASK);
 
   priv->group_link = g_list_prepend (NULL, gesture);
 }
