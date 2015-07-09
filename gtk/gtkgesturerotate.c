@@ -45,6 +45,7 @@ enum {
 struct _GtkGestureRotatePrivate
 {
   gdouble initial_angle;
+  gdouble accum_touchpad_angle;
 };
 
 static guint signals[LAST_SIGNAL] = { 0 };
@@ -75,33 +76,52 @@ static gboolean
 _gtk_gesture_rotate_get_angle (GtkGestureRotate *rotate,
                                gdouble          *angle)
 {
+  GtkGestureRotatePrivate *priv;
+  const GdkEvent *last_event;
   gdouble x1, y1, x2, y2;
   GtkGesture *gesture;
   gdouble dx, dy;
   GList *sequences;
 
   gesture = GTK_GESTURE (rotate);
+  priv = gtk_gesture_rotate_get_instance_private (rotate);
 
   if (!gtk_gesture_is_recognized (gesture))
     return FALSE;
 
   sequences = gtk_gesture_get_sequences (gesture);
-  g_assert (sequences && sequences->next);
+  if (!sequences)
+    return FALSE;
 
-  gtk_gesture_get_point (gesture, sequences->data, &x1, &y1);
-  gtk_gesture_get_point (gesture, sequences->next->data, &x2, &y2);
-  g_list_free (sequences);
+  last_event = gtk_gesture_get_last_event (gesture, sequences->data);
 
-  dx = x1 - x2;
-  dy = y1 - y2;
+  if (last_event->type == GDK_TOUCHPAD_PINCH &&
+      (last_event->touchpad_pinch.phase == GDK_TOUCHPAD_GESTURE_PHASE_BEGIN ||
+       last_event->touchpad_pinch.phase == GDK_TOUCHPAD_GESTURE_PHASE_UPDATE ||
+       last_event->touchpad_pinch.phase == GDK_TOUCHPAD_GESTURE_PHASE_END))
+    {
+      *angle = priv->accum_touchpad_angle;
+    }
+  else
+    {
+      if (!sequences->next)
+        return FALSE;
 
-  *angle = atan2 (dx, dy);
+      gtk_gesture_get_point (gesture, sequences->data, &x1, &y1);
+      gtk_gesture_get_point (gesture, sequences->next->data, &x2, &y2);
+      g_list_free (sequences);
 
-  /* Invert angle */
-  *angle = (2 * G_PI) - *angle;
+      dx = x1 - x2;
+      dy = y1 - y2;
 
-  /* And constraint it to 0°-360° */
-  *angle = fmod (*angle, 2 * G_PI);
+      *angle = atan2 (dx, dy);
+
+      /* Invert angle */
+      *angle = (2 * G_PI) - *angle;
+
+      /* And constraint it to 0°-360° */
+      *angle = fmod (*angle, 2 * G_PI);
+    }
 
   return TRUE;
 }
@@ -143,13 +163,54 @@ gtk_gesture_rotate_update (GtkGesture       *gesture,
   _gtk_gesture_rotate_check_emit (GTK_GESTURE_ROTATE (gesture));
 }
 
+static gboolean
+gtk_gesture_rotate_filter_event (GtkEventController *controller,
+                                 const GdkEvent     *event)
+{
+  /* Let 2-finger touchpad pinch events go through */
+  if (event->type == GDK_TOUCHPAD_PINCH)
+    {
+      if (event->touchpad_pinch.n_fingers == 2)
+        return FALSE;
+      else
+        return TRUE;
+    }
+
+  return GTK_EVENT_CONTROLLER_CLASS (gtk_gesture_rotate_parent_class)->filter_event (controller, event);
+}
+
+static gboolean
+gtk_gesture_rotate_handle_event (GtkEventController *controller,
+                                 const GdkEvent     *event)
+{
+  GtkGestureRotate *rotate = GTK_GESTURE_ROTATE (controller);
+  GtkGestureRotatePrivate *priv;
+
+  priv = gtk_gesture_rotate_get_instance_private (rotate);
+
+  if (event->type == GDK_TOUCHPAD_PINCH)
+    {
+      if (event->touchpad_pinch.phase == GDK_TOUCHPAD_GESTURE_PHASE_BEGIN ||
+          event->touchpad_pinch.phase == GDK_TOUCHPAD_GESTURE_PHASE_END)
+        priv->accum_touchpad_angle = 0;
+      else if (event->touchpad_pinch.phase == GDK_TOUCHPAD_GESTURE_PHASE_UPDATE)
+        priv->accum_touchpad_angle += event->touchpad_pinch.angle_delta;
+    }
+
+  return GTK_EVENT_CONTROLLER_CLASS (gtk_gesture_rotate_parent_class)->handle_event (controller, event);
+}
+
 static void
 gtk_gesture_rotate_class_init (GtkGestureRotateClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
+  GtkEventControllerClass *event_controller_class = GTK_EVENT_CONTROLLER_CLASS (klass);
   GtkGestureClass *gesture_class = GTK_GESTURE_CLASS (klass);
 
   object_class->constructor = gtk_gesture_rotate_constructor;
+
+  event_controller_class->filter_event = gtk_gesture_rotate_filter_event;
+  event_controller_class->handle_event = gtk_gesture_rotate_handle_event;
 
   gesture_class->begin = gtk_gesture_rotate_begin;
   gesture_class->update = gtk_gesture_rotate_update;
