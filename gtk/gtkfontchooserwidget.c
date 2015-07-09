@@ -1243,8 +1243,6 @@ gtk_font_chooser_widget_set_font_map (GtkFontChooser *chooser,
       pango_context_set_font_map (context, fontmap);
 
       gtk_font_chooser_widget_load_fonts (fontchooser, TRUE);
-
-      g_object_notify (G_OBJECT (fontchooser), "font-map");
     }
 }
 
