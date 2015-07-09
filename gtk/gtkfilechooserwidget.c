@@ -2239,8 +2239,6 @@ file_list_build_popup_menu (GtkFileChooserWidget *impl)
 
   priv->sort_directories_item
     = file_list_add_check_menu_item (impl, _("Sort _Folders before Files"), G_CALLBACK (sort_directories_toggled_cb));
-
-  check_file_list_menu_sensitivity (impl);
 }
 
 /* Updates the popup menu for the file list, creating it if necessary */
@@ -2250,6 +2248,7 @@ file_list_update_popup_menu (GtkFileChooserWidget *impl)
   GtkFileChooserWidgetPrivate *priv = impl->priv;
 
   file_list_build_popup_menu (impl);
+  check_file_list_menu_sensitivity (impl);
 
   /* The sensitivity of the Add to Bookmarks item is set in
    * bookmarks_check_add_sensitivity()
@@ -7610,7 +7609,6 @@ list_selection_changed (GtkTreeSelection     *selection,
   location_bar_update (impl);
 
   check_preview_change (impl);
-  check_file_list_menu_sensitivity (impl);
 
   g_signal_emit_by_name (impl, "selection-changed", 0);
 }
