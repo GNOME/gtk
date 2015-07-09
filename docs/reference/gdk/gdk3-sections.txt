@@ -883,6 +883,8 @@ GdkEventWindowState
 GdkEventSetting
 GdkEventOwnerChange
 GdkEventGrabBroken
+GdkEventTouchpadSwipe
+GdkEventTouchpadPinch
 
 <SUBSECTION>
 GdkScrollDirection
