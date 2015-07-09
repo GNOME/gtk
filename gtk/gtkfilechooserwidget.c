@@ -3760,7 +3760,6 @@ recent_files_setting_is_enabled (GtkFileChooserWidget *impl)
 
   settings = gtk_widget_get_settings (GTK_WIDGET (impl));
   g_object_get (settings, "gtk-recent-files-enabled", &enabled, NULL);
-
   return enabled;
 }
 
@@ -3771,6 +3770,18 @@ static void
 set_startup_mode (GtkFileChooserWidget *impl)
 {
   GtkFileChooserWidgetPrivate *priv = impl->priv;
+  GtkRevealerTransitionType revealer_transition;
+  GtkStackTransitionType stack_transition;
+
+  /* turn off animations for this setup */
+  revealer_transition
+    = gtk_revealer_get_transition_type (GTK_REVEALER (priv->browse_header_revealer));
+  gtk_revealer_set_transition_type (GTK_REVEALER (priv->browse_header_revealer),
+                                    GTK_REVEALER_TRANSITION_TYPE_NONE);
+  stack_transition
+    = gtk_stack_get_transition_type (GTK_STACK (priv->browse_header_stack));
+  gtk_stack_set_transition_type (GTK_STACK (priv->browse_header_stack),
+                                 GTK_STACK_TRANSITION_TYPE_NONE);
 
   switch (priv->startup_mode)
     {
@@ -3789,6 +3800,11 @@ set_startup_mode (GtkFileChooserWidget *impl)
     default:
       g_assert_not_reached ();
     }
+
+  gtk_stack_set_transition_type (GTK_STACK (priv->browse_header_stack),
+                                 stack_transition);
+  gtk_revealer_set_transition_type (GTK_REVEALER (priv->browse_header_revealer),
+                                    revealer_transition);
 }
 
 static gboolean
