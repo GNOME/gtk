@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 3.10\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-07-07 03:04+0000\n"
-"PO-Revision-Date: 2015-07-07 06:23+0100\n"
+"POT-Creation-Date: 2015-07-09 21:47+0000\n"
+"PO-Revision-Date: 2015-07-10 09:36+0100\n"
 "Last-Translator: Pedro Albuquerque <palbuquerque73@openmailbox.com>\n"
 "Language-Team: Português <palbuquerque73@openmailbox.com>\n"
 "Language: pt\n"
@@ -1215,8 +1215,8 @@ msgstr ""
 "\"Gravar cor aqui.\""
 
 #: gtk/deprecated/gtkcolorseldialog.c:191 gtk/deprecated/gtkfontsel.c:1689
-#: gtk/gtkfilechooserbutton.c:794 gtk/gtkfilechooserwidget.c:1480
-#: gtk/gtkfilechooserwidget.c:6143 gtk/gtkmessagedialog.c:942
+#: gtk/gtkfilechooserbutton.c:794 gtk/gtkfilechooserwidget.c:1482
+#: gtk/gtkfilechooserwidget.c:6145 gtk/gtkmessagedialog.c:942
 #: gtk/gtkmessagedialog.c:955 gtk/gtkmountoperation.c:543
 #: gtk/gtkpagesetupunixdialog.c:196 gtk/gtkprintbackend.c:760
 #: gtk/gtkprinteroptionwidget.c:545 gtk/gtkprintunixdialog.c:669
@@ -2165,8 +2165,8 @@ msgstr "_Copiar"
 msgid "_Paste"
 msgstr "Co_Lar"
 
-#: gtk/gtkentry.c:9671 gtk/gtkfilechooserwidget.c:1481
-#: gtk/gtkfilechooserwidget.c:2220 gtk/gtklabel.c:6604 gtk/gtktextview.c:9033
+#: gtk/gtkentry.c:9671 gtk/gtkfilechooserwidget.c:1483
+#: gtk/gtkfilechooserwidget.c:2222 gtk/gtklabel.c:6604 gtk/gtktextview.c:9033
 msgid "_Delete"
 msgstr "_Eliminar"
 
@@ -2206,7 +2206,7 @@ msgstr "Ambiente de trabalho"
 msgid "(None)"
 msgstr "(nenhum)"
 
-#: gtk/gtkfilechooserbutton.c:795 gtk/gtkplacessidebar.c:3265
+#: gtk/gtkfilechooserbutton.c:795 gtk/gtkplacessidebar.c:3261
 msgid "_Open"
 msgstr "_Abrir"
 
@@ -2231,11 +2231,11 @@ msgstr "%1$s em %2$s"
 msgid "Type name of new folder"
 msgstr "Insira o nome da nova pasta"
 
-#: gtk/gtkfilechooserwidget.c:780
+#: gtk/gtkfilechooserwidget.c:782
 msgid "The folder could not be created"
 msgstr "Impossível criar a pasta"
 
-#: gtk/gtkfilechooserwidget.c:793
+#: gtk/gtkfilechooserwidget.c:795
 msgid ""
 "The folder could not be created, as a file with the same name already "
 "exists.  Try using a different name for the folder, or rename the file first."
@@ -2243,258 +2243,258 @@ msgstr ""
 "Impossível criar a pasta por já existir um ficheiro com o mesmo nome. Tente "
 "utilizar um nome diferente para a pasta ou renomear primeiro o ficheiro."
 
-#: gtk/gtkfilechooserwidget.c:807
+#: gtk/gtkfilechooserwidget.c:809
 msgid "You need to choose a valid filename."
 msgstr "Tem de escolher um nome de ficheiro válido."
 
-#: gtk/gtkfilechooserwidget.c:810
+#: gtk/gtkfilechooserwidget.c:812
 #, c-format
 msgid "Cannot create a file under %s as it is not a folder"
 msgstr "Impossível criar um ficheiro em %s por não ser uma pasta local"
 
-#: gtk/gtkfilechooserwidget.c:818
+#: gtk/gtkfilechooserwidget.c:820
 msgid "Cannot create file as the filename is too long"
 msgstr "Impossível criar ficheiro pois o seu nome é demasiado extenso"
 
-#: gtk/gtkfilechooserwidget.c:819
+#: gtk/gtkfilechooserwidget.c:821
 msgid "Try using a shorter name."
 msgstr "Tente utilizar um nome mais curto."
 
-#: gtk/gtkfilechooserwidget.c:829
+#: gtk/gtkfilechooserwidget.c:831
 msgid "You may only select folders"
 msgstr "Só pode selecionar pastas"
 
-#: gtk/gtkfilechooserwidget.c:830
+#: gtk/gtkfilechooserwidget.c:832
 msgid "The item that you selected is not a folder try using a different item."
 msgstr ""
 "O item que selecionou não é uma pasta; tente utilizar um item diferente."
 
-#: gtk/gtkfilechooserwidget.c:838
+#: gtk/gtkfilechooserwidget.c:840
 msgid "Invalid file name"
 msgstr "Nome de ficheiro inválido"
 
-#: gtk/gtkfilechooserwidget.c:848
+#: gtk/gtkfilechooserwidget.c:850
 msgid "The folder contents could not be displayed"
 msgstr "Impossível mostrar o conteúdo da pasta"
 
-#: gtk/gtkfilechooserwidget.c:857
+#: gtk/gtkfilechooserwidget.c:859
 msgid "The file could not be deleted"
 msgstr "O ficheiro não pôde ser eliminado"
 
-#: gtk/gtkfilechooserwidget.c:865
-#| msgid "The file could not be deleted"
-msgid "The file could not be move to the Trash"
+#: gtk/gtkfilechooserwidget.c:867
+#| msgid "The file could not be move to the Trash"
+msgid "The file could not be moved to the Trash"
 msgstr "O ficheiro não pôde ser movido para o lixo"
 
-#: gtk/gtkfilechooserwidget.c:1010
+#: gtk/gtkfilechooserwidget.c:1012
 msgid "A folder with that name already exists"
 msgstr "Já existe um atalho com esse nome"
 
-#: gtk/gtkfilechooserwidget.c:1012
+#: gtk/gtkfilechooserwidget.c:1014
 msgid "A file with that name already exists"
 msgstr "Já existe um ficheiro com esse nome"
 
-#: gtk/gtkfilechooserwidget.c:1047
+#: gtk/gtkfilechooserwidget.c:1049
 msgid "A folder cannot be called “.”"
 msgstr "Uma pasta não se pode chamar \".\""
 
-#: gtk/gtkfilechooserwidget.c:1048
+#: gtk/gtkfilechooserwidget.c:1050
 msgid "A file cannot be called “.”"
 msgstr "Um ficheiro não se pode chamar \".\""
 
-#: gtk/gtkfilechooserwidget.c:1051
+#: gtk/gtkfilechooserwidget.c:1053
 msgid "A folder cannot be called “..”"
 msgstr "Uma pasta não se pode chamar \"..\""
 
-#: gtk/gtkfilechooserwidget.c:1052
+#: gtk/gtkfilechooserwidget.c:1054
 msgid "A file cannot be called “..”"
 msgstr "Um ficheiro não se pode chamar \"..\""
 
-#: gtk/gtkfilechooserwidget.c:1055
+#: gtk/gtkfilechooserwidget.c:1057
 msgid "Folder names cannot contain “/”"
 msgstr "Nomes de pastas não podem conter \"/\""
 
-#: gtk/gtkfilechooserwidget.c:1056
+#: gtk/gtkfilechooserwidget.c:1058
 msgid "File names cannot contain “/”"
 msgstr "Nomes de ficheiro não podem conter \"/\""
 
-#: gtk/gtkfilechooserwidget.c:1082
+#: gtk/gtkfilechooserwidget.c:1084
 msgid "Folder names should not begin with a space"
 msgstr "Nomes de pastas não devem começar com um espaço"
 
-#: gtk/gtkfilechooserwidget.c:1083
+#: gtk/gtkfilechooserwidget.c:1085
 msgid "File names should not begin with a space"
 msgstr "Nomes de ficheiro não devem começar com um espaço"
 
-#: gtk/gtkfilechooserwidget.c:1087
+#: gtk/gtkfilechooserwidget.c:1089
 msgid "Folder names should not end with a space"
 msgstr "Nomes de pastas não devem terminar com um espaço"
 
-#: gtk/gtkfilechooserwidget.c:1088
+#: gtk/gtkfilechooserwidget.c:1090
 msgid "File names should not end with a space"
 msgstr "Nomes de ficheiro não devem terminar com um espaço"
 
-#: gtk/gtkfilechooserwidget.c:1091
+#: gtk/gtkfilechooserwidget.c:1093
 msgid "Folder names starting with a “.” are hidden"
 msgstr "Nomes de pastas começados por \".\" são ocultados"
 
-#: gtk/gtkfilechooserwidget.c:1092
+#: gtk/gtkfilechooserwidget.c:1094
 msgid "File names starting with a “.” are hidden"
 msgstr "Nomes de ficheiro começados por \".\" são ocultados"
 
-#: gtk/gtkfilechooserwidget.c:1476
+#: gtk/gtkfilechooserwidget.c:1478
 #, c-format
 msgid "Are you sure you want to permanently delete “%s”?"
 msgstr "Tem a certeza que quer eliminar permanentemente \"%s\"?"
 
-#: gtk/gtkfilechooserwidget.c:1479
+#: gtk/gtkfilechooserwidget.c:1481
 #, c-format
 msgid "If you delete an item, it will be permanently lost."
 msgstr "Se eliminar um item, estará permanentemente perdido."
 
-#: gtk/gtkfilechooserwidget.c:1600
+#: gtk/gtkfilechooserwidget.c:1602
 msgid "The file could not be renamed"
 msgstr "Impossível renomear o ficheiro"
 
-#: gtk/gtkfilechooserwidget.c:1892
+#: gtk/gtkfilechooserwidget.c:1894
 msgid "Could not select file"
 msgstr "Impossível selecionar o ficheiro"
 
-#: gtk/gtkfilechooserwidget.c:2205
+#: gtk/gtkfilechooserwidget.c:2207
 msgid "_Visit File"
 msgstr "_Visitar ficheiro"
 
-#: gtk/gtkfilechooserwidget.c:2208
+#: gtk/gtkfilechooserwidget.c:2210
 msgid "_Open With File Manager"
 msgstr "_Abrir com o gestor de ficheiros"
 
-#: gtk/gtkfilechooserwidget.c:2211
+#: gtk/gtkfilechooserwidget.c:2213
 msgid "_Copy Location"
 msgstr "Localização da _Cópia"
 
-#: gtk/gtkfilechooserwidget.c:2214
+#: gtk/gtkfilechooserwidget.c:2216
 msgid "_Add to Bookmarks"
 msgstr "_Adicionar aos marcadores"
 
-#: gtk/gtkfilechooserwidget.c:2217 gtk/gtkplacessidebar.c:2399
+#: gtk/gtkfilechooserwidget.c:2219 gtk/gtkplacessidebar.c:2395
 #: gtk/ui/gtkfilechooserwidget.ui:494
 msgid "_Rename"
 msgstr "_Renomear"
 
-#: gtk/gtkfilechooserwidget.c:2223
+#: gtk/gtkfilechooserwidget.c:2225
 msgid "_Move to Trash"
 msgstr "_Mover para o lixo"
 
-#: gtk/gtkfilechooserwidget.c:2230
+#: gtk/gtkfilechooserwidget.c:2232
 msgid "Show _Hidden Files"
 msgstr "Mostrar os ficheiros _Ocultos"
 
-#: gtk/gtkfilechooserwidget.c:2233
+#: gtk/gtkfilechooserwidget.c:2235
 msgid "Show _Size Column"
 msgstr "Mostrar o _Tamanho da coluna"
 
-#: gtk/gtkfilechooserwidget.c:2236
+#: gtk/gtkfilechooserwidget.c:2238
 msgid "Show _Time"
 msgstr "Mostrar _Horas"
 
-#: gtk/gtkfilechooserwidget.c:2239
+#: gtk/gtkfilechooserwidget.c:2241
 msgid "Sort _Folders before Files"
 msgstr "Ordenar pastas antes de _Ficheiros"
 
 #. this is the header for the location column in the print dialog
-#: gtk/gtkfilechooserwidget.c:2524 gtk/inspector/style-prop-list.ui:118
+#: gtk/gtkfilechooserwidget.c:2526 gtk/inspector/style-prop-list.ui:118
 #: gtk/ui/gtkfilechooserwidget.ui:193 gtk/ui/gtkprintunixdialog.ui:127
 msgid "Location"
 msgstr "Localização"
 
 #. Label
-#: gtk/gtkfilechooserwidget.c:2593
+#: gtk/gtkfilechooserwidget.c:2595
 msgid "_Name:"
 msgstr "_Nome:"
 
-#: gtk/gtkfilechooserwidget.c:3167
+#: gtk/gtkfilechooserwidget.c:3169
 #, c-format
 msgid "Searching in %s"
 msgstr "A procurar em %s"
 
-#: gtk/gtkfilechooserwidget.c:3175
+#: gtk/gtkfilechooserwidget.c:3177
 msgid "Enter location"
 msgstr "Insira a localização"
 
-#: gtk/gtkfilechooserwidget.c:3177
+#: gtk/gtkfilechooserwidget.c:3179
 msgid "Enter location or URL"
 msgstr "Insira localização"
 
-#: gtk/gtkfilechooserwidget.c:4177 gtk/gtkfilechooserwidget.c:7033
+#: gtk/gtkfilechooserwidget.c:4179 gtk/gtkfilechooserwidget.c:7035
 #: gtk/ui/gtkfilechooserwidget.ui:221
 msgid "Modified"
 msgstr "Modificado"
 
-#: gtk/gtkfilechooserwidget.c:4456
+#: gtk/gtkfilechooserwidget.c:4458
 #, c-format
 msgid "Could not read the contents of %s"
 msgstr "Impossível ler o conteúdo de %s"
 
-#: gtk/gtkfilechooserwidget.c:4460
+#: gtk/gtkfilechooserwidget.c:4462
 msgid "Could not read the contents of the folder"
 msgstr "Impossível ler o conteúdo da pasta"
 
-#: gtk/gtkfilechooserwidget.c:4578 gtk/gtkfilechooserwidget.c:4624
+#: gtk/gtkfilechooserwidget.c:4580 gtk/gtkfilechooserwidget.c:4626
 msgid "%H:%M"
 msgstr "%H:%M"
 
-#: gtk/gtkfilechooserwidget.c:4580 gtk/gtkfilechooserwidget.c:4626
+#: gtk/gtkfilechooserwidget.c:4582 gtk/gtkfilechooserwidget.c:4628
 msgid "%l:%M %p"
 msgstr "%l:%M %p"
 
-#: gtk/gtkfilechooserwidget.c:4584
+#: gtk/gtkfilechooserwidget.c:4586
 msgid "Yesterday"
 msgstr "Ontem"
 
-#: gtk/gtkfilechooserwidget.c:4592
+#: gtk/gtkfilechooserwidget.c:4594
 msgid "%-e %b"
 msgstr "%-e %b"
 
-#: gtk/gtkfilechooserwidget.c:4596
+#: gtk/gtkfilechooserwidget.c:4598
 msgid "%-e %b %Y"
 msgstr "%-e %b %Y"
 
 #. Translators: We don't know whether this printer is
 #. * available to print to.
-#: gtk/gtkfilechooserwidget.c:4821 gtk/inspector/prop-editor.c:1569
+#: gtk/gtkfilechooserwidget.c:4823 gtk/inspector/prop-editor.c:1569
 #: modules/printbackends/cloudprint/gtkprintbackendcloudprint.c:748
 msgid "Unknown"
 msgstr "Desconhecido"
 
-#: gtk/gtkfilechooserwidget.c:4860 gtk/gtkplacessidebar.c:871
+#: gtk/gtkfilechooserwidget.c:4862 gtk/gtkplacessidebar.c:871
 msgid "Home"
 msgstr "Início"
 
-#: gtk/gtkfilechooserwidget.c:5351
+#: gtk/gtkfilechooserwidget.c:5353
 msgid "Cannot change to folder because it is not local"
 msgstr "Impossível ir para a pasta por não ser local"
 
-#: gtk/gtkfilechooserwidget.c:6136 gtk/gtkprintunixdialog.c:660
+#: gtk/gtkfilechooserwidget.c:6138 gtk/gtkprintunixdialog.c:660
 #, c-format
 msgid "A file named “%s” already exists.  Do you want to replace it?"
 msgstr "Já existe um ficheiro chamado “%s”. Deseja substituí-lo?"
 
-#: gtk/gtkfilechooserwidget.c:6139 gtk/gtkprintunixdialog.c:664
+#: gtk/gtkfilechooserwidget.c:6141 gtk/gtkprintunixdialog.c:664
 #, c-format
 msgid ""
 "The file already exists in “%s”.  Replacing it will overwrite its contents."
 msgstr ""
 "O ficheiro já existe em “%s”. Substituí-lo irá sobrescrever o seu conteúdo."
 
-#: gtk/gtkfilechooserwidget.c:6144 gtk/gtkprintunixdialog.c:672
+#: gtk/gtkfilechooserwidget.c:6146 gtk/gtkprintunixdialog.c:672
 msgid "_Replace"
 msgstr "_Substituir"
 
-#: gtk/gtkfilechooserwidget.c:6944
+#: gtk/gtkfilechooserwidget.c:6946
 msgid "Could not start the search process"
 msgstr "Impossível iniciar o processo de procura"
 
-#: gtk/gtkfilechooserwidget.c:6945
+#: gtk/gtkfilechooserwidget.c:6947
 msgid ""
 "The program was not able to create a connection to the indexer daemon. "
 "Please make sure it is running."
@@ -2502,11 +2502,11 @@ msgstr ""
 "A aplicação foi incapaz de criar uma ligação ao daemon de indexação. "
 "Certifique-se de que este se encontra em execução."
 
-#: gtk/gtkfilechooserwidget.c:6957
+#: gtk/gtkfilechooserwidget.c:6959
 msgid "Could not send the search request"
 msgstr "Impossível enviar o pedido de procura"
 
-#: gtk/gtkfilechooserwidget.c:7243
+#: gtk/gtkfilechooserwidget.c:7245
 msgid "Accessed"
 msgstr "Acedido"
 
@@ -2949,131 +2949,131 @@ msgid "Connect to a network server address"
 msgstr "Ligar-se a um endereço de servidor de email"
 
 #. Adjust start/stop items to reflect the type of the drive
-#: gtk/gtkplacessidebar.c:2040 gtk/gtkplacessidebar.c:3343
+#: gtk/gtkplacessidebar.c:2036 gtk/gtkplacessidebar.c:3339
 msgid "_Start"
 msgstr "_Iniciar"
 
-#: gtk/gtkplacessidebar.c:2041 gtk/gtkplacessidebar.c:3350
+#: gtk/gtkplacessidebar.c:2037 gtk/gtkplacessidebar.c:3346
 msgid "_Stop"
 msgstr "_Parar"
 
 #. start() for type G_DRIVE_START_STOP_TYPE_SHUTDOWN is normally not used
-#: gtk/gtkplacessidebar.c:2048
+#: gtk/gtkplacessidebar.c:2044
 msgid "_Power On"
 msgstr "_Ligar"
 
-#: gtk/gtkplacessidebar.c:2049
+#: gtk/gtkplacessidebar.c:2045
 msgid "_Safely Remove Drive"
 msgstr "Remover dispositivo com _Segurança"
 
-#: gtk/gtkplacessidebar.c:2053
+#: gtk/gtkplacessidebar.c:2049
 msgid "_Connect Drive"
 msgstr "Ligar _Dispositivo"
 
-#: gtk/gtkplacessidebar.c:2054
+#: gtk/gtkplacessidebar.c:2050
 msgid "_Disconnect Drive"
 msgstr "_Desligar dispositivo"
 
-#: gtk/gtkplacessidebar.c:2058
+#: gtk/gtkplacessidebar.c:2054
 msgid "_Start Multi-disk Device"
 msgstr "_Iniciar dispositivo multidisco"
 
-#: gtk/gtkplacessidebar.c:2059
+#: gtk/gtkplacessidebar.c:2055
 msgid "_Stop Multi-disk Device"
 msgstr "_Parar dispositivo multidisco"
 
 #. stop() for type G_DRIVE_START_STOP_TYPE_PASSWORD is normally not used
-#: gtk/gtkplacessidebar.c:2064
+#: gtk/gtkplacessidebar.c:2060
 msgid "_Unlock Drive"
 msgstr "_Destrancar dispositivo"
 
-#: gtk/gtkplacessidebar.c:2065
+#: gtk/gtkplacessidebar.c:2061
 msgid "_Lock Drive"
 msgstr "_Trancar dispositivo"
 
-#: gtk/gtkplacessidebar.c:2101 gtk/gtkplacessidebar.c:3079
+#: gtk/gtkplacessidebar.c:2097 gtk/gtkplacessidebar.c:3075
 #, c-format
 msgid "Unable to start “%s”"
 msgstr "Impossível iniciar \"%s\""
 
-#: gtk/gtkplacessidebar.c:2131
+#: gtk/gtkplacessidebar.c:2127
 #, c-format
 msgid "Unable to access “%s”"
 msgstr "Impossível aceder a “%s”"
 
-#: gtk/gtkplacessidebar.c:2342
+#: gtk/gtkplacessidebar.c:2338
 msgid "This name is already taken"
 msgstr "Etiqueta \"%s\" já se encontra definida"
 
-#: gtk/gtkplacessidebar.c:2393 gtk/inspector/actions.ui:52
+#: gtk/gtkplacessidebar.c:2389 gtk/inspector/actions.ui:52
 #: gtk/inspector/classes-list.ui:80 gtk/inspector/css-node-tree.ui:17
 #: gtk/inspector/object-tree.ui:109 gtk/inspector/signals-list.ui:90
 #: gtk/ui/gtkfilechooserwidget.ui:175 gtk/ui/gtkfilechooserwidget.ui:468
 msgid "Name"
 msgstr "Nome"
 
-#: gtk/gtkplacessidebar.c:2540
+#: gtk/gtkplacessidebar.c:2536
 #, c-format
 msgid "Unable to unmount “%s”"
 msgstr "Impossível desmontar \"%s\""
 
-#: gtk/gtkplacessidebar.c:2793
+#: gtk/gtkplacessidebar.c:2789
 #, c-format
 msgid "Unable to stop “%s”"
 msgstr "Impossível parar \"%s\""
 
-#: gtk/gtkplacessidebar.c:2822
+#: gtk/gtkplacessidebar.c:2818
 #, c-format
 msgid "Unable to eject “%s”"
 msgstr "Impossível ejetar !%s!"
 
-#: gtk/gtkplacessidebar.c:2851 gtk/gtkplacessidebar.c:2880
+#: gtk/gtkplacessidebar.c:2847 gtk/gtkplacessidebar.c:2876
 #, c-format
 msgid "Unable to eject %s"
 msgstr "Impossível ejetar %s"
 
-#: gtk/gtkplacessidebar.c:3029
+#: gtk/gtkplacessidebar.c:3025
 #, c-format
 msgid "Unable to poll “%s” for media changes"
 msgstr "Impossível consultar \"%s\" por alterações de suporte"
 
-#: gtk/gtkplacessidebar.c:3273
+#: gtk/gtkplacessidebar.c:3269
 msgid "Open in New _Tab"
 msgstr "Abrir num novo _Separador"
 
-#: gtk/gtkplacessidebar.c:3282
+#: gtk/gtkplacessidebar.c:3278
 msgid "Open in New _Window"
 msgstr "Abrir numa nova _Janela"
 
-#: gtk/gtkplacessidebar.c:3291
+#: gtk/gtkplacessidebar.c:3287
 msgid "_Add Bookmark"
 msgstr "_Adicionar marcador"
 
-#: gtk/gtkplacessidebar.c:3297
+#: gtk/gtkplacessidebar.c:3293
 msgid "Remove"
 msgstr "Remover"
 
-#: gtk/gtkplacessidebar.c:3304
+#: gtk/gtkplacessidebar.c:3300
 msgid "Rename…"
 msgstr "Renomear…"
 
-#: gtk/gtkplacessidebar.c:3315
+#: gtk/gtkplacessidebar.c:3311
 msgid "_Mount"
 msgstr "_Montar"
 
-#: gtk/gtkplacessidebar.c:3322
+#: gtk/gtkplacessidebar.c:3318
 msgid "_Unmount"
 msgstr "_Desmontar"
 
-#: gtk/gtkplacessidebar.c:3329
+#: gtk/gtkplacessidebar.c:3325
 msgid "_Eject"
 msgstr "_Ejetar"
 
-#: gtk/gtkplacessidebar.c:3336
+#: gtk/gtkplacessidebar.c:3332
 msgid "_Detect Media"
 msgstr "_Detetar suportes"
 
-#: gtk/gtkplacessidebar.c:3793
+#: gtk/gtkplacessidebar.c:3789
 msgid "Computer"
 msgstr "Computador"
 
