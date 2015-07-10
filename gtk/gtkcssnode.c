@@ -67,17 +67,20 @@ gtk_css_node_set_invalid (GtkCssNode *node,
 
   node->invalid = invalid;
 
-  if (node->parent)
+  if (node->visible)
     {
-      if (invalid && node->visible)
-        gtk_css_node_set_invalid (node->parent, TRUE);
-    }
-  else
-    {
-      if (invalid)
-        GTK_CSS_NODE_GET_CLASS (node)->queue_validate (node);
+      if (node->parent)
+        {
+          if (invalid)
+            gtk_css_node_set_invalid (node->parent, TRUE);
+        }
       else
-        GTK_CSS_NODE_GET_CLASS (node)->dequeue_validate (node);
+        {
+          if (invalid)
+            GTK_CSS_NODE_GET_CLASS (node)->queue_validate (node);
+          else
+            GTK_CSS_NODE_GET_CLASS (node)->dequeue_validate (node);
+        }
     }
 }
 
@@ -895,6 +898,22 @@ gtk_css_node_set_visible (GtkCssNode *cssnode,
 
   cssnode->visible = visible;
   g_object_notify_by_pspec (G_OBJECT (cssnode), cssnode_properties[PROP_VISIBLE]);
+
+  if (cssnode->invalid)
+    {
+      if (cssnode->visible)
+        {
+          if (cssnode->parent)
+            gtk_css_node_set_invalid (cssnode->parent, TRUE);
+          else
+            GTK_CSS_NODE_GET_CLASS (cssnode)->queue_validate (cssnode);
+        }
+      else
+        {
+          if (cssnode->parent == NULL)
+            GTK_CSS_NODE_GET_CLASS (cssnode)->dequeue_validate (cssnode);
+        }
+    }
 
   if (cssnode->next_sibling)
     gtk_css_node_invalidate (cssnode->next_sibling, GTK_CSS_CHANGE_ANY_SIBLING
