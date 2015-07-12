@@ -1318,7 +1318,7 @@ gtk_settings_class_init (GtkSettingsClass *class)
    * Since: 2.4
    *
    * Deprecated: 3.10: This setting is deprecated. Application developers
-   *   control whether a button should show an icon or now, on a
+   *   control whether a button should show an icon or not, on a
    *   per-button basis. If a #GtkButton should show an icon, use the
    *   #GtkButton:always-show-image property of #GtkButton, and pack a
    *   #GtkImage inside the #GtkButton
