@@ -741,27 +741,35 @@ gtk_css_node_set_parent (GtkCssNode *node,
 }
 
 void
-gtk_css_node_set_after (GtkCssNode *cssnode,
-                        GtkCssNode *previous_sibling)
+gtk_css_node_insert_after (GtkCssNode *parent,
+                           GtkCssNode *cssnode,
+                           GtkCssNode *previous_sibling)
 {
-  if (cssnode->previous_sibling == previous_sibling)
+  g_return_if_fail (previous_sibling == NULL || previous_sibling->parent == parent);
+
+  if (cssnode->previous_sibling == previous_sibling &&
+      cssnode->parent == parent)
     return;
 
   gtk_css_node_reposition (cssnode,
-                           previous_sibling->parent,
+                           parent,
                            previous_sibling);
 }
 
 void
-gtk_css_node_set_before (GtkCssNode *cssnode,
-                         GtkCssNode *next_sibling)
+gtk_css_node_insert_before (GtkCssNode *parent,
+                            GtkCssNode *cssnode,
+                            GtkCssNode *next_sibling)
 {
-  if (cssnode->next_sibling == next_sibling)
+  g_return_if_fail (next_sibling == NULL || next_sibling->parent == parent);
+
+  if (cssnode->next_sibling == next_sibling && 
+      cssnode->parent == parent)
     return;
 
   gtk_css_node_reposition (cssnode,
-                           next_sibling->parent,
-                           next_sibling->previous_sibling);
+                           parent,
+                           next_sibling ? next_sibling->previous_sibling : parent->last_child);
 }
 
 GtkCssNode *

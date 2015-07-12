@@ -4013,18 +4013,16 @@ gtk_flow_box_insert_css_node (GtkFlowBox    *box,
                               GSequenceIter *iter)
 {
   GSequenceIter *prev_iter;
-  GtkCssNode *child_node;
-  GtkCssNode *sibling_node;
   GtkWidget *sibling;
 
-  child_node = gtk_widget_get_css_node (child);
   prev_iter = g_sequence_iter_prev (iter);
 
   if (prev_iter != iter)
     {
       sibling = g_sequence_get (prev_iter);
-      sibling_node = gtk_widget_get_css_node (sibling);
-      gtk_css_node_set_after (child_node, sibling_node);
+      gtk_css_node_insert_after (gtk_widget_get_css_node (GTK_WIDGET (box)),
+                                 gtk_widget_get_css_node (child),
+                                 gtk_widget_get_css_node (sibling));
     }
 }
 
@@ -4843,7 +4841,9 @@ gtk_flow_box_css_node_foreach (gpointer data,
     {
       prev_node = gtk_widget_get_css_node (*previous);
       row_node = gtk_widget_get_css_node (row);
-      gtk_css_node_set_after (row_node, prev_node);
+      gtk_css_node_insert_after (gtk_css_node_get_parent (row_node),
+                                 row_node,
+                                 prev_node);
     }
 
   *previous = row;

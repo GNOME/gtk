@@ -1434,43 +1434,40 @@ gtk_box_buildable_init (GtkBuildableIface *iface)
   iface->add_child = gtk_box_buildable_add_child;
 }
 
+typedef struct {
+  GtkCssNode *parent;
+  GtkCssNode *previous;
+  gboolean    reverse;
+} InvalidateOrderData;
+
 static void
 gtk_box_invalidate_order_foreach (GtkWidget *widget,
-                                  gpointer   prev)
+                                  gpointer   datap)
 {
-  GtkCssNode **previous = prev;
+  InvalidateOrderData *data = datap;
   GtkCssNode *cur = gtk_widget_get_css_node (widget);
 
-  if (*previous)
-    gtk_css_node_set_after (cur, *previous);
+  if (data->reverse)
+    gtk_css_node_insert_before (data->parent, cur, data->previous);
+  else
+    gtk_css_node_insert_after (data->parent, cur, data->previous);
 
-  *previous = cur;
-}
-
-static void
-gtk_box_invalidate_order_foreach_reverse (GtkWidget *widget,
-                                          gpointer   prev)
-{
-  GtkCssNode **previous = prev;
-  GtkCssNode *cur = gtk_widget_get_css_node (widget);
-
-  if (*previous)
-    gtk_css_node_set_before (cur, *previous);
-
-  *previous = cur;
+  data->previous = cur;
 }
 
 static void
 gtk_box_invalidate_order (GtkBox *box)
 {
-  GtkCssNode *previous = NULL;
+  InvalidateOrderData data;
+
+  data.parent = gtk_widget_get_css_node (GTK_WIDGET (box));
+  data.previous = NULL;
+  data.reverse = box->priv->orientation == GTK_ORIENTATION_HORIZONTAL
+                 && gtk_widget_get_direction (GTK_WIDGET (box)) == GTK_TEXT_DIR_RTL;
 
   gtk_container_foreach (GTK_CONTAINER (box),
-                         (box->priv->orientation == GTK_ORIENTATION_HORIZONTAL
-                          && gtk_widget_get_direction (GTK_WIDGET (box)) == GTK_TEXT_DIR_RTL)
-                         ? gtk_box_invalidate_order_foreach_reverse
-                         : gtk_box_invalidate_order_foreach,
-                         &previous);
+                         gtk_box_invalidate_order_foreach,
+                         &data);
 }
 
 static void
