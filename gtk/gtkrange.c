@@ -138,12 +138,6 @@ struct _GtkRangePrivate
 
   /* Whether we're doing fine adjustment */
   guint zoom                   : 1;
-  GtkGesture *long_press_gesture;
-  GtkScrollType autoscroll_mode;
-  guint autoscroll_id;
-
-  GtkGesture *multipress_gesture;
-  GtkGesture *drag_gesture;
 
   /* Fill level */
   guint show_fill_level        : 1;
@@ -151,6 +145,13 @@ struct _GtkRangePrivate
 
   /* Whether dragging is ongoing */
   guint in_drag                : 1;
+
+  GtkGesture *long_press_gesture;
+  GtkGesture *multipress_gesture;
+  GtkGesture *drag_gesture;
+
+  GtkScrollType autoscroll_mode;
+  guint autoscroll_id;
 };
 
 
