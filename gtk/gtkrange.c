@@ -752,6 +752,7 @@ gtk_range_init (GtkRange *range)
    * widget.
    */
   priv->drag_gesture = gtk_gesture_drag_new (GTK_WIDGET (range));
+  gtk_gesture_single_set_button (GTK_GESTURE_SINGLE (priv->drag_gesture), 0);
   g_signal_connect (priv->drag_gesture, "drag-begin",
                     G_CALLBACK (gtk_range_drag_gesture_begin), range);
   g_signal_connect (priv->drag_gesture, "drag-update",
@@ -2479,6 +2480,7 @@ gtk_range_multipress_gesture_pressed (GtkGestureMultiPress *gesture,
   gboolean primary_warps;
   gint page_increment_button, warp_button;
   guint button;
+  GdkModifierType state_mask;
 
   if (!gtk_widget_has_focus (widget))
     gtk_widget_grab_focus (widget);
@@ -2486,6 +2488,7 @@ gtk_range_multipress_gesture_pressed (GtkGestureMultiPress *gesture,
   sequence = gtk_gesture_single_get_current_sequence (GTK_GESTURE_SINGLE (gesture));
   button = gtk_gesture_single_get_current_button (GTK_GESTURE_SINGLE (gesture));
   event = gtk_gesture_get_last_event (GTK_GESTURE (gesture), sequence);
+  gdk_event_get_state (event, &state_mask);
 
   source_device = gdk_event_get_source_device ((GdkEvent *) event);
   source = gdk_device_get_source (source_device);
@@ -2537,7 +2540,16 @@ gtk_range_multipress_gesture_pressed (GtkGestureMultiPress *gesture,
 
       scroll = range_get_scroll_for_grab (range);
 
-      gtk_range_add_step_timer (range, scroll);
+      if (state_mask & GDK_SHIFT_MASK)
+        {
+          remove_autoscroll (range);
+          range->priv->autoscroll_mode = priv->trough_click_forward ? GTK_SCROLL_END : GTK_SCROLL_START;
+          add_autoscroll (range);
+        }
+      else
+        {
+          gtk_range_add_step_timer (range, scroll);
+        }
     }
   else if ((priv->mouse_location == MOUSE_STEPPER_A ||
             priv->mouse_location == MOUSE_STEPPER_B ||
@@ -2601,10 +2613,6 @@ gtk_range_multipress_gesture_pressed (GtkGestureMultiPress *gesture,
         }
       else
         {
-          GdkModifierType state_mask;
-
-          gdk_event_get_state (event, &state_mask);
-
           /* Shift-click in the slider = fine adjustment */
           if (state_mask & GDK_SHIFT_MASK)
             update_zoom_state (range, TRUE);
@@ -2748,20 +2756,53 @@ autoscroll_cb (GtkWidget     *widget,
   gdouble increment;
   gdouble value;
   gboolean handled;
+  gdouble step, page;
+
+  step = gtk_adjustment_get_step_increment (adj);
+  page = gtk_adjustment_get_page_increment (adj);
 
   switch (priv->autoscroll_mode)
     {
     case GTK_SCROLL_STEP_FORWARD:
-      increment = gtk_adjustment_get_step_increment (adj) / AUTOSCROLL_FACTOR;
+      increment = step / AUTOSCROLL_FACTOR;
       break;
     case GTK_SCROLL_PAGE_FORWARD:
-      increment = gtk_adjustment_get_page_increment (adj) / AUTOSCROLL_FACTOR;
+      increment = page / AUTOSCROLL_FACTOR;
       break;
     case GTK_SCROLL_STEP_BACKWARD:
-      increment = - gtk_adjustment_get_step_increment (adj) / AUTOSCROLL_FACTOR;
+      increment = - step / AUTOSCROLL_FACTOR;
       break;
     case GTK_SCROLL_PAGE_BACKWARD:
-      increment = - gtk_adjustment_get_page_increment (adj) / AUTOSCROLL_FACTOR;
+      increment = - page / AUTOSCROLL_FACTOR;
+      break;
+    case GTK_SCROLL_START:
+    case GTK_SCROLL_END:
+      {
+        gdouble x, y;
+        gdouble distance, t;
+
+        /* Vary scrolling speed from slow (ie step) to fast (2 * page),
+         * based on the distance of the pointer from the widget. We start
+         * speeding up if the pointer moves at least 20 pixels away, and
+         * we reach maximum speed when it is 220 pixels away.
+         */
+        if (!gtk_gesture_drag_get_offset (GTK_GESTURE_DRAG (priv->drag_gesture), &x, &y))
+          {
+            x = 0.0;
+            y = 0.0;
+          }
+        if (gtk_orientable_get_orientation (GTK_ORIENTABLE (range)) == GTK_ORIENTATION_HORIZONTAL)
+          distance = fabs (y);
+        else
+          distance = fabs (x);
+        distance = CLAMP (distance - 20, 0.0, 200);
+        t = distance / 100.0;
+        step = (1 - t) * step + t * page;
+        if (priv->autoscroll_mode == GTK_SCROLL_END)
+          increment = step / AUTOSCROLL_FACTOR;
+        else
+          increment = - step / AUTOSCROLL_FACTOR;
+      }
       break;
     default:
       g_assert_not_reached ();
@@ -2944,7 +2985,6 @@ gtk_range_drag_gesture_begin (GtkGestureDrag *gesture,
 {
   if (range->priv->grab_location == MOUSE_SLIDER)
     gtk_gesture_set_state (range->priv->drag_gesture, GTK_EVENT_SEQUENCE_CLAIMED);
-
 }
 
 static void
