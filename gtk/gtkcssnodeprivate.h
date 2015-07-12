@@ -101,6 +101,8 @@ void                    gtk_css_node_insert_after       (GtkCssNode            *
 void                    gtk_css_node_insert_before      (GtkCssNode            *parent,
                                                          GtkCssNode            *cssnode,
                                                          GtkCssNode            *next_sibling);
+void                    gtk_css_node_reverse_children   (GtkCssNode            *cssnode);
+
 GtkCssNode *            gtk_css_node_get_parent         (GtkCssNode            *cssnode);
 GtkCssNode *            gtk_css_node_get_first_child    (GtkCssNode            *cssnode);
 GtkCssNode *            gtk_css_node_get_last_child     (GtkCssNode            *cssnode);
