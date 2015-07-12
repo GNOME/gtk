@@ -2305,10 +2305,10 @@ range_get_scroll_for_grab (GtkRange *range)
         case GDK_BUTTON_PRIMARY:
           return invert ? GTK_SCROLL_STEP_FORWARD : GTK_SCROLL_STEP_BACKWARD;
           break;
-        case GDK_BUTTON_MIDDLE:
+        case GDK_BUTTON_SECONDARY:
           return invert ? GTK_SCROLL_PAGE_FORWARD : GTK_SCROLL_PAGE_BACKWARD;
           break;
-        case GDK_BUTTON_SECONDARY:
+        case GDK_BUTTON_MIDDLE:
           return invert ? GTK_SCROLL_END : GTK_SCROLL_START;
           break;
         }
@@ -2322,10 +2322,10 @@ range_get_scroll_for_grab (GtkRange *range)
         case GDK_BUTTON_PRIMARY:
           return invert ? GTK_SCROLL_STEP_BACKWARD : GTK_SCROLL_STEP_FORWARD;
           break;
-        case GDK_BUTTON_MIDDLE:
+        case GDK_BUTTON_SECONDARY:
           return invert ? GTK_SCROLL_PAGE_BACKWARD : GTK_SCROLL_PAGE_FORWARD;
           break;
-        case GDK_BUTTON_SECONDARY:
+        case GDK_BUTTON_MIDDLE:
           return invert ? GTK_SCROLL_START : GTK_SCROLL_END;
           break;
        }
