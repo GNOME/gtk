@@ -418,7 +418,7 @@ gdk_mir_window_impl_ref_cairo_surface (GdkWindow *window)
     {
       cairo_surface = cairo_image_surface_create (pixel_format, window->width, window->height);
     }
-  else
+  else if (impl->visible)
     {
       ensure_surface (window);
 
@@ -431,6 +431,8 @@ gdk_mir_window_impl_ref_cairo_surface (GdkWindow *window)
                                                            region.height,
                                                            region.stride);
     }
+  else
+    cairo_surface = cairo_image_surface_create (pixel_format, 0, 0);
 
   impl->cairo_surface = cairo_surface_reference (cairo_surface);
 
