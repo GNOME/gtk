@@ -2479,7 +2479,7 @@ gtk_range_multipress_gesture_pressed (GtkGestureMultiPress *gesture,
   const GdkEvent *event;
   GdkInputSource source;
   gboolean primary_warps;
-  gint page_increment_button, warp_button;
+  gboolean shift_pressed;
   guint button;
   GdkModifierType state_mask;
 
@@ -2490,6 +2490,7 @@ gtk_range_multipress_gesture_pressed (GtkGestureMultiPress *gesture,
   button = gtk_gesture_single_get_current_button (GTK_GESTURE_SINGLE (gesture));
   event = gtk_gesture_get_last_event (GTK_GESTURE (gesture), sequence);
   gdk_event_get_state (event, &state_mask);
+  shift_pressed = (state_mask & GDK_SHIFT_MASK) != 0;
 
   source_device = gdk_event_get_source_device ((GdkEvent *) event);
   source = gdk_device_get_source (source_device);
@@ -2502,16 +2503,6 @@ gtk_range_multipress_gesture_pressed (GtkGestureMultiPress *gesture,
   g_object_get (gtk_widget_get_settings (widget),
                 "gtk-primary-button-warps-slider", &primary_warps,
                 NULL);
-  if (primary_warps)
-    {
-      warp_button = GDK_BUTTON_PRIMARY;
-      page_increment_button = GDK_BUTTON_SECONDARY;
-    }
-  else
-    {
-      warp_button = GDK_BUTTON_MIDDLE;
-      page_increment_button = GDK_BUTTON_PRIMARY;
-    }
 
   if (priv->mouse_location == MOUSE_SLIDER &&
       gdk_event_triggers_context_menu ((GdkEvent *)event))
@@ -2523,42 +2514,35 @@ gtk_range_multipress_gesture_pressed (GtkGestureMultiPress *gesture,
       return;
     }
 
-  if (source != GDK_SOURCE_TOUCHSCREEN &&
-      priv->mouse_location == MOUSE_TROUGH &&
-      button == page_increment_button)
+  if (priv->mouse_location == MOUSE_SLIDER)
     {
-      /* button 2 steps by page increment, as with button 2 on a stepper
-       */
-      GtkScrollType scroll;
-      gdouble click_value;
+      GdkRectangle slider;
 
-      click_value = coord_to_value (range,
-                                    priv->orientation == GTK_ORIENTATION_VERTICAL ?
-                                    y : x);
+      /* Shift-click in the slider = fine adjustment */
+      if (shift_pressed)
+        update_zoom_state (range, TRUE);
 
-      priv->trough_click_forward = click_value > gtk_adjustment_get_value (priv->adjustment);
-      range_grab_add (range, MOUSE_TROUGH);
+      slider = priv->slider;
 
-      scroll = range_get_scroll_for_grab (range);
-
-      if (state_mask & GDK_SHIFT_MASK)
+      if (priv->orientation == GTK_ORIENTATION_VERTICAL)
         {
-          remove_autoscroll (range);
-          range->priv->autoscroll_mode = priv->trough_click_forward ? GTK_SCROLL_END : GTK_SCROLL_START;
-          add_autoscroll (range);
+          priv->slide_initial_slider_position = slider.y;
+          priv->slide_initial_coordinate_delta = y - slider.y;
         }
       else
         {
-          gtk_range_add_step_timer (range, scroll);
+          priv->slide_initial_slider_position = slider.x;
+          priv->slide_initial_coordinate_delta = x - slider.x;
         }
+
+      range_grab_add (range, MOUSE_SLIDER);
+
+      gtk_widget_queue_draw (widget);
     }
-  else if ((priv->mouse_location == MOUSE_STEPPER_A ||
-            priv->mouse_location == MOUSE_STEPPER_B ||
-            priv->mouse_location == MOUSE_STEPPER_C ||
-            priv->mouse_location == MOUSE_STEPPER_D) &&
-           (button == GDK_BUTTON_PRIMARY ||
-            button == GDK_BUTTON_MIDDLE ||
-            button == GDK_BUTTON_SECONDARY))
+  else if (priv->mouse_location == MOUSE_STEPPER_A ||
+           priv->mouse_location == MOUSE_STEPPER_B ||
+           priv->mouse_location == MOUSE_STEPPER_C ||
+           priv->mouse_location == MOUSE_STEPPER_D)
     {
       GtkScrollType scroll;
 
@@ -2576,50 +2560,30 @@ gtk_range_multipress_gesture_pressed (GtkGestureMultiPress *gesture,
           add_autoscroll (range);
         }
     }
-  else if ((priv->mouse_location == MOUSE_TROUGH &&
-            (source == GDK_SOURCE_TOUCHSCREEN ||
-             button == warp_button)) ||
-           priv->mouse_location == MOUSE_SLIDER)
+  else if (priv->mouse_location == MOUSE_TROUGH &&
+           (source == GDK_SOURCE_TOUCHSCREEN ||
+            (button == GDK_BUTTON_PRIMARY &&
+             ((primary_warps && !shift_pressed) ||
+              (!primary_warps && shift_pressed)))))
     {
-      gboolean need_value_update = FALSE;
+      /* warp to location */
       GdkRectangle slider;
+      gdouble slider_low_value, slider_high_value, new_value;
 
-      /* Any button can be used to drag the slider, but you can start
-       * dragging the slider with a trough click using button 1;
-       * we warp the slider to mouse position, then begin the slider drag.
-       */
-      if (priv->mouse_location != MOUSE_SLIDER)
-        {
-          gdouble slider_low_value, slider_high_value, new_value;
+      slider_high_value =
+        coord_to_value (range,
+                        priv->orientation == GTK_ORIENTATION_VERTICAL ?
+                        y : x);
+      slider_low_value =
+        coord_to_value (range,
+                        priv->orientation == GTK_ORIENTATION_VERTICAL ?
+                        y - priv->slider.height :
+                        x - priv->slider.width);
 
-          slider_high_value =
-            coord_to_value (range,
-                            priv->orientation == GTK_ORIENTATION_VERTICAL ?
-                            y : x);
-          slider_low_value =
-            coord_to_value (range,
-                            priv->orientation == GTK_ORIENTATION_VERTICAL ?
-                            y - priv->slider.height :
-                            x - priv->slider.width);
+      /* compute new value for warped slider */
+      new_value = slider_low_value + (slider_high_value - slider_low_value) / 2;
 
-          /* compute new value for warped slider */
-          new_value = slider_low_value + (slider_high_value - slider_low_value) / 2;
-
-          gtk_range_compute_slider_position (range, new_value, &slider);
-
-	  /* defer adjustment updates to update_slider_position() in order
-	   * to keep pixel quantisation
-	   */
-	  need_value_update = TRUE;
-        }
-      else
-        {
-          /* Shift-click in the slider = fine adjustment */
-          if (state_mask & GDK_SHIFT_MASK)
-            update_zoom_state (range, TRUE);
-
-          slider = priv->slider;
-        }
+      gtk_range_compute_slider_position (range, new_value, &slider);
 
       if (priv->orientation == GTK_ORIENTATION_VERTICAL)
         {
@@ -2636,8 +2600,43 @@ gtk_range_multipress_gesture_pressed (GtkGestureMultiPress *gesture,
 
       gtk_widget_queue_draw (widget);
 
-      if (need_value_update)
-        update_slider_position (range, x, y);
+      update_slider_position (range, x, y);
+    }
+  else if (priv->mouse_location == MOUSE_TROUGH &&
+           button == GDK_BUTTON_PRIMARY &&
+           ((primary_warps && shift_pressed) ||
+            (!primary_warps && !shift_pressed)))
+    {
+      /* jump by pages */
+      GtkScrollType scroll;
+      gdouble click_value;
+
+      click_value = coord_to_value (range,
+                                    priv->orientation == GTK_ORIENTATION_VERTICAL ?
+                                    y : x);
+
+      priv->trough_click_forward = click_value > gtk_adjustment_get_value (priv->adjustment);
+      range_grab_add (range, MOUSE_TROUGH);
+
+      scroll = range_get_scroll_for_grab (range);
+      gtk_range_add_step_timer (range, scroll);
+    }
+  else if (priv->mouse_location == MOUSE_TROUGH &&
+           button == GDK_BUTTON_SECONDARY)
+    {
+      /* autoscroll */
+      gdouble click_value;
+
+      click_value = coord_to_value (range,
+                                    priv->orientation == GTK_ORIENTATION_VERTICAL ?
+                                    y : x);
+
+      priv->trough_click_forward = click_value > gtk_adjustment_get_value (priv->adjustment);
+      range_grab_add (range, MOUSE_TROUGH);
+
+      remove_autoscroll (range);
+      range->priv->autoscroll_mode = priv->trough_click_forward ? GTK_SCROLL_END : GTK_SCROLL_START;
+      add_autoscroll (range);
     }
 
   if (priv->grab_location == MOUSE_SLIDER);
