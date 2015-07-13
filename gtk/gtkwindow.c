@@ -187,6 +187,7 @@ struct _GtkWindowPrivate
   GtkWidget *popup_menu;
 
   GdkWindow *border_window[8];
+  gint       initial_fullscreen_monitor;
 
   /* The following flags are initially TRUE (before a window is mapped).
    * They cause us to compute a configure request that involves
@@ -1642,6 +1643,7 @@ gtk_window_init (GtkWindow *window)
   priv->initial_timestamp = GDK_CURRENT_TIME;
   priv->mnemonics_visible = TRUE;
   priv->focus_visible = TRUE;
+  priv->initial_fullscreen_monitor = -1;
 
   g_object_ref_sink (window);
   priv->has_user_ref_count = TRUE;
@@ -6060,6 +6062,7 @@ gtk_window_map (GtkWidget *widget)
   GtkWindowPrivate *priv = window->priv;
   GdkWindow *gdk_window;
   GList *link;
+  GdkScreen *screen;
 
   if (!gtk_widget_is_toplevel (widget))
     {
@@ -6067,6 +6070,10 @@ gtk_window_map (GtkWidget *widget)
       return;
     }
 
+  screen = gtk_window_get_screen (widget);
+  if (priv->initial_fullscreen_monitor > gdk_screen_get_n_monitors (screen))
+    priv->initial_fullscreen_monitor = -1;
+    
   gtk_widget_set_mapped (widget, TRUE);
 
   child = gtk_bin_get_child (&(window->bin));
@@ -6096,7 +6103,13 @@ gtk_window_map (GtkWidget *widget)
     gdk_window_deiconify (gdk_window);
 
   if (priv->fullscreen_initially)
-    gdk_window_fullscreen (gdk_window);
+    {
+      if (priv->initial_fullscreen_monitor < 0)
+        gdk_window_fullscreen (gdk_window);
+      else
+        gdk_window_fullscreen_on_monitor (gdk_window, 
+                                          priv->initial_fullscreen_monitor);
+    }
   else
     gdk_window_unfullscreen (gdk_window);
 
@@ -10162,6 +10175,48 @@ gtk_window_fullscreen (GtkWindow *window)
 }
 
 /**
+ * gtk_window_fullscreen_on_monitor:
+ * @window: a #GtkWindow
+ * @screen: a #GdkScreen to draw to
+ * @monitor: which monitor to go fullscreen on
+ *
+ * Asks to place @window in the fullscreen state. Note that you shouldn't assume
+ * the window is definitely full screen afterward.
+ *
+ * You can track the fullscreen state via the "window-state-event" signal
+ * on #GtkWidget.
+ *
+ * Since: 3.18
+ */
+void
+gtk_window_fullscreen_on_monitor (GtkWindow *window,
+                                  GdkScreen *screen,
+                                  gint monitor)
+{
+  GtkWindowPrivate *priv;
+  GtkWidget *widget;
+  GdkWindow *toplevel;
+  
+  g_return_if_fail (GTK_IS_WINDOW (window));
+  g_return_if_fail (GDK_IS_SCREEN (screen));
+  g_return_if_fail (monitor >= 0);
+  g_return_if_fail (monitor < gdk_screen_get_n_monitors (screen));
+  
+  priv = window->priv;
+  widget = GTK_WIDGET (window);
+
+  gtk_window_set_screen (window, screen);
+
+  priv->initial_fullscreen_monitor = monitor;
+  priv->fullscreen_initially = TRUE;
+
+  toplevel = gtk_widget_get_window (widget);
+
+  if (toplevel != NULL)
+    gdk_window_fullscreen_on_monitor (toplevel, monitor);
+}
+
+/**
  * gtk_window_unfullscreen:
  * @window: a #GtkWindow
  *
@@ -10188,6 +10243,8 @@ gtk_window_unfullscreen (GtkWindow *window)
   window->priv->fullscreen_initially = FALSE;
 
   toplevel = gtk_widget_get_window (GTK_WIDGET (window));
+  window->priv->fullscreen_initially = FALSE;
+  window->priv->initial_fullscreen_monitor = -1;
 
   if (toplevel != NULL)
     gdk_window_unfullscreen (toplevel);
@@ -10491,6 +10548,9 @@ gtk_window_set_screen (GtkWindow *window,
   if (screen == priv->screen)
     return;
 
+  /* reset initial_fullscreen_monitor since they are relative to the screen */
+  priv->initial_fullscreen_monitor = -1;
+  
   widget = GTK_WIDGET (window);
 
   previous_screen = priv->screen;

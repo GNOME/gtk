@@ -1143,6 +1143,15 @@ _gdk_wayland_screen_add_output (GdkScreen        *screen,
   wl_output_add_listener (output, &output_listener, monitor);
 }
 
+struct wl_output *
+_gdk_wayland_screen_get_wl_output (GdkScreen *screen,
+                                   gint monitor_num)
+{
+  GdkWaylandScreen *screen_wayland = GDK_WAYLAND_SCREEN (screen);
+  GdkWaylandMonitor *monitor = g_ptr_array_index (screen_wayland->monitors, monitor_num);
+  return monitor->output;
+}
+
 void
 _gdk_wayland_screen_remove_output (GdkScreen *screen,
                                    guint32    id)

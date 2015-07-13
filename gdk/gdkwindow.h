@@ -952,6 +952,9 @@ GDK_AVAILABLE_IN_ALL
 void          gdk_window_unmaximize      (GdkWindow       *window);
 GDK_AVAILABLE_IN_ALL
 void          gdk_window_fullscreen      (GdkWindow       *window);
+GDK_AVAILABLE_IN_3_18
+void          gdk_window_fullscreen_on_monitor (GdkWindow      *window,
+                                                gint            monitor);
 GDK_AVAILABLE_IN_3_8
 void          gdk_window_set_fullscreen_mode (GdkWindow   *window,
                                           GdkFullscreenMode mode);

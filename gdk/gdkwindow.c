@@ -10298,6 +10298,32 @@ gdk_window_fullscreen (GdkWindow *window)
 }
 
 /**
+ * gdk_window_fullscreen_on_monitor:
+ * @window: a toplevel #GdkWindow
+ * @monitor: Which monitor to display fullscreen on.
+ *
+ * Moves the window into fullscreen mode on the given monitor. This means
+ * the window covers the entire screen and is above any panels or task bars.
+ *
+ * If the window was already fullscreen, then this function does nothing.
+ * Since: UNRELEASED
+ **/
+void
+gdk_window_fullscreen_on_monitor (GdkWindow      *window,
+                                  gint            monitor)
+{
+  GdkScreen *screen = gdk_window_get_screen (window);
+
+  g_return_if_fail (monitor >= 0);
+  g_return_if_fail (monitor < gdk_screen_get_n_monitors (screen));
+
+  if (GDK_WINDOW_IMPL_GET_CLASS (window->impl)->fullscreen_on_monitor != NULL)
+    GDK_WINDOW_IMPL_GET_CLASS (window->impl)->fullscreen_on_monitor (window, monitor);
+  else
+    GDK_WINDOW_IMPL_GET_CLASS (window->impl)->fullscreen (window);
+}
+
+/**
  * gdk_window_set_fullscreen_mode:
  * @window: a toplevel #GdkWindow
  * @mode: fullscreen mode

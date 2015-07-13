@@ -141,6 +141,8 @@ struct _GdkWindowImplWayland
   int margin_right;
   int margin_top;
   int margin_bottom;
+  
+  int initial_fullscreen_monitor;
 
   cairo_region_t *opaque_region;
   cairo_region_t *input_region;
@@ -168,6 +170,7 @@ static void
 _gdk_window_impl_wayland_init (GdkWindowImplWayland *impl)
 {
   impl->scale = 1;
+  impl->initial_fullscreen_monitor = -1;
 }
 
 /*
@@ -996,6 +999,10 @@ gdk_wayland_window_create_xdg_surface (GdkWindow *window)
   GdkWaylandDisplay *display_wayland = GDK_WAYLAND_DISPLAY (gdk_window_get_display (window));
   GdkWindowImplWayland *impl = GDK_WINDOW_IMPL_WAYLAND (window->impl);
   const gchar *app_id;
+  GdkScreen *screen = gdk_window_get_screen (window);
+  struct wl_output *fullscreen_output = NULL;
+  if (impl->initial_fullscreen_monitor < gdk_screen_get_n_monitors (screen))
+      fullscreen_output = _gdk_wayland_screen_get_wl_output (screen, impl->initial_fullscreen_monitor);
 
   impl->xdg_surface = xdg_shell_get_xdg_surface (display_wayland->xdg_shell, impl->surface);
   xdg_surface_add_listener (impl->xdg_surface, &xdg_surface_listener, window);
@@ -1007,7 +1014,7 @@ gdk_wayland_window_create_xdg_surface (GdkWindow *window)
   if (window->state & GDK_WINDOW_STATE_MAXIMIZED)
     xdg_surface_set_maximized (impl->xdg_surface);
   if (window->state & GDK_WINDOW_STATE_FULLSCREEN)
-    xdg_surface_set_fullscreen (impl->xdg_surface, NULL);
+    xdg_surface_set_fullscreen (impl->xdg_surface, fullscreen_output);
 
   app_id = impl->application.application_id;
   if (app_id == NULL)
@@ -1898,12 +1905,33 @@ gdk_wayland_window_unmaximize (GdkWindow *window)
 }
 
 static void
+gdk_wayland_window_fullscreen_on_monitor (GdkWindow *window, gint monitor)
+{
+  GdkWindowImplWayland *impl = GDK_WINDOW_IMPL_WAYLAND (window->impl);
+  GdkScreen *screen = gdk_window_get_screen (window);
+  struct wl_output *fullscreen_output = 
+    _gdk_wayland_screen_get_wl_output (screen, monitor);
+  
+  if (GDK_WINDOW_DESTROYED (window))
+    return;
+
+  if (impl->xdg_surface)
+    xdg_surface_set_fullscreen (impl->xdg_surface, fullscreen_output);
+  else {
+    gdk_synthesize_window_state (window, 0, GDK_WINDOW_STATE_FULLSCREEN);
+    impl->initial_fullscreen_monitor = monitor;
+  }
+}
+
+static void
 gdk_wayland_window_fullscreen (GdkWindow *window)
 {
   GdkWindowImplWayland *impl = GDK_WINDOW_IMPL_WAYLAND (window->impl);
 
   if (GDK_WINDOW_DESTROYED (window))
     return;
+
+  impl->initial_fullscreen_monitor = -1;
 
   if (impl->xdg_surface)
     xdg_surface_set_fullscreen (impl->xdg_surface, NULL);
@@ -1915,9 +1943,11 @@ static void
 gdk_wayland_window_unfullscreen (GdkWindow *window)
 {
   GdkWindowImplWayland *impl = GDK_WINDOW_IMPL_WAYLAND (window->impl);
-
+  
   if (GDK_WINDOW_DESTROYED (window))
     return;
+
+  impl->initial_fullscreen_monitor = -1;
 
   if (impl->xdg_surface)
     xdg_surface_unset_fullscreen (impl->xdg_surface);
@@ -2316,6 +2346,7 @@ _gdk_window_impl_wayland_class_init (GdkWindowImplWaylandClass *klass)
   impl_class->maximize = gdk_wayland_window_maximize;
   impl_class->unmaximize = gdk_wayland_window_unmaximize;
   impl_class->fullscreen = gdk_wayland_window_fullscreen;
+  impl_class->fullscreen_on_monitor = gdk_wayland_window_fullscreen_on_monitor;
   impl_class->unfullscreen = gdk_wayland_window_unfullscreen;
   impl_class->set_keep_above = gdk_wayland_window_set_keep_above;
   impl_class->set_keep_below = gdk_wayland_window_set_keep_below;

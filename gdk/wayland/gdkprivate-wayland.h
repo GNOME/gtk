@@ -213,6 +213,8 @@ int _gdk_wayland_screen_get_output_refresh_rate (GdkScreen        *screen,
                                                  struct wl_output *output);
 guint32 _gdk_wayland_screen_get_output_scale (GdkScreen        *screen,
 					      struct wl_output *output);
+struct wl_output *_gdk_wayland_screen_get_wl_output (GdkScreen *screen,
+                                                     gint monitor_num);
 
 void _gdk_wayland_screen_set_has_gtk_shell (GdkScreen       *screen);
 
