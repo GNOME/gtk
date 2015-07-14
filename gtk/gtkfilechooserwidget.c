@@ -51,6 +51,7 @@
 #include "gtkpathbar.h"
 #include "gtkplacessidebar.h"
 #include "gtkplacessidebarprivate.h"
+#include "gtkplacesviewprivate.h"
 #include "gtkprivate.h"
 #include "gtkrecentmanager.h"
 #include "gtksearchentry.h"
@@ -177,6 +178,7 @@ typedef enum {
   OPERATION_MODE_BROWSE,
   OPERATION_MODE_SEARCH,
   OPERATION_MODE_ENTER_LOCATION,
+  OPERATION_MODE_OTHER_LOCATIONS,
   OPERATION_MODE_RECENT
 } OperationMode;
 
@@ -209,6 +211,7 @@ struct _GtkFileChooserWidgetPrivate {
   GtkWidget *browse_header_revealer;
   GtkWidget *browse_header_stack;
   GtkWidget *browse_files_stack;
+  GtkWidget *browse_files_swin;
   GtkWidget *browse_files_tree_view;
   GtkWidget *browse_files_popup_menu;
   GtkWidget *add_shortcut_item;
@@ -239,6 +242,7 @@ struct _GtkFileChooserWidgetPrivate {
   char *browse_files_last_selected_name;
 
   GtkWidget *places_sidebar;
+  GtkWidget *places_view;
   StartupMode startup_mode;
 
   /* OPERATION_MODE_SEARCH */
@@ -2565,6 +2569,8 @@ save_widgets_create (GtkFileChooserWidget *impl)
 
   location_switch_to_path_bar (impl);
 
+  gtk_places_sidebar_set_location (GTK_PLACES_SIDEBAR (priv->places_sidebar), priv->current_folder);
+
   if (priv->external_entry)
     {
       location_entry_disconnect (impl);
@@ -2643,8 +2649,6 @@ location_switch_to_path_bar (GtkFileChooserWidget *impl)
     }
 
   gtk_stack_set_visible_child_name (GTK_STACK (priv->browse_header_stack), "pathbar");
-
-  gtk_places_sidebar_set_location (GTK_PLACES_SIDEBAR (priv->places_sidebar), priv->current_folder);
 }
 
 /* Turns on the location entry.  Can be called even if we are already in that
@@ -2731,6 +2735,20 @@ location_mode_set (GtkFileChooserWidget *impl,
 
   priv->location_mode = new_mode;
   g_object_notify (G_OBJECT (impl), "subtitle");
+}
+
+/* Callback used when the places sidebar asks us to show other locations */
+static void
+places_sidebar_show_other_locations_cb (GtkPlacesSidebar     *sidebar,
+                                        GtkFileChooserWidget *impl)
+{
+  GtkFileChooserWidgetPrivate *priv = impl->priv;
+
+  priv->preview_widget_active = FALSE;
+
+  update_preview_widget_visibility (impl);
+
+  operation_mode_set (impl, OPERATION_MODE_OTHER_LOCATIONS);
 }
 
 static void
@@ -2952,6 +2970,9 @@ location_bar_update (GtkFileChooserWidget *impl)
     case OPERATION_MODE_ENTER_LOCATION:
       break;
 
+    case OPERATION_MODE_OTHER_LOCATIONS:
+      break;
+
     case OPERATION_MODE_BROWSE:
       break;
 
@@ -3022,6 +3043,7 @@ operation_mode_set_browse (GtkFileChooserWidget *impl)
 {
   GtkFileChooserWidgetPrivate *priv = impl->priv;
 
+  gtk_places_sidebar_set_location (GTK_PLACES_SIDEBAR (priv->places_sidebar), priv->current_folder);
   gtk_stack_set_visible_child_name (GTK_STACK (priv->browse_files_stack), "list");
   location_mode_set (impl, LOCATION_MODE_PATH_BAR);
   gtk_stack_set_visible_child_name (GTK_STACK (priv->browse_header_stack), "pathbar");
@@ -3034,10 +3056,18 @@ static void
 operation_mode_set_search (GtkFileChooserWidget *impl)
 {
   GtkFileChooserWidgetPrivate *priv = impl->priv;
+  GtkWidget *visible_widget;
 
   g_assert (priv->search_model == NULL);
 
-  gtk_stack_set_visible_child_name (GTK_STACK (priv->browse_files_stack), "list");
+  visible_widget = gtk_stack_get_visible_child (GTK_STACK (priv->browse_files_stack));
+
+  if (visible_widget != priv->places_view &&
+      visible_widget != priv->browse_files_swin)
+    {
+      gtk_stack_set_visible_child_name (GTK_STACK (priv->browse_files_stack), "list");
+    }
+
   gtk_stack_set_visible_child_name (GTK_STACK (priv->browse_header_stack), "search");
   gtk_revealer_set_reveal_child (GTK_REVEALER (priv->browse_header_revealer), TRUE);
   location_bar_update (impl);
@@ -3065,6 +3095,23 @@ operation_mode_set_recent (GtkFileChooserWidget *impl)
 }
 
 static void
+operation_mode_set_other_locations (GtkFileChooserWidget *impl)
+{
+  GtkFileChooserWidgetPrivate *priv = impl->priv;
+
+  gtk_stack_set_visible_child_name (GTK_STACK (priv->browse_files_stack), "other_locations");
+  gtk_stack_set_visible_child_name (GTK_STACK (priv->browse_header_stack), "pathbar");
+  gtk_revealer_set_reveal_child (GTK_REVEALER (priv->browse_header_revealer), FALSE);
+  location_bar_update (impl);
+  stop_loading_and_clear_list_model (impl, TRUE);
+  recent_stop_loading (impl);
+  search_stop_searching (impl, TRUE);
+  recent_clear_model (impl, TRUE);
+  search_clear_model (impl, TRUE);
+  gtk_widget_set_sensitive (priv->filter_combo, FALSE);
+}
+
+static void
 operation_mode_set (GtkFileChooserWidget *impl, OperationMode mode)
 {
   GtkFileChooserWidgetPrivate *priv = impl->priv;
@@ -3079,6 +3126,10 @@ operation_mode_set (GtkFileChooserWidget *impl, OperationMode mode)
     {
     case OPERATION_MODE_ENTER_LOCATION:
       operation_mode_set_enter_location (impl);
+      break;
+
+    case OPERATION_MODE_OTHER_LOCATIONS:
+      operation_mode_set_other_locations (impl);
       break;
 
     case OPERATION_MODE_BROWSE:
@@ -3218,11 +3269,19 @@ gtk_file_chooser_widget_set_property (GObject      *object,
         operation_mode_set (impl, OPERATION_MODE_SEARCH);
       else
         {
-          operation_mode_set (impl, OPERATION_MODE_BROWSE);
-          if (priv->current_folder)
-            change_folder_and_display_error (impl, priv->current_folder, FALSE);
+          if (gtk_stack_get_visible_child (GTK_STACK (priv->browse_files_stack)) != priv->places_view)
+            {
+              operation_mode_set (impl, OPERATION_MODE_BROWSE);
+
+              if (priv->current_folder)
+                change_folder_and_display_error (impl, priv->current_folder, FALSE);
+               else
+                switch_to_home_dir (impl);
+            }
           else
-            switch_to_home_dir (impl);
+            {
+              operation_mode_set (impl, OPERATION_MODE_OTHER_LOCATIONS);
+            }
         }
       break;
 
@@ -7108,6 +7167,9 @@ search_start_query (GtkFileChooserWidget *impl,
   GtkFileChooserWidgetPrivate *priv = impl->priv;
   GFile *file;
 
+  if (gtk_stack_get_visible_child (GTK_STACK (priv->browse_files_stack)) == priv->places_view)
+    return;
+
   stop_loading_and_clear_list_model (impl, TRUE);
   recent_stop_loading (impl);
   recent_clear_model (impl, TRUE);
@@ -7177,6 +7239,8 @@ search_entry_activate_cb (GtkFileChooserWidget *impl)
 
   /* reset any existing query object */
   g_set_object (&priv->search_query, NULL);
+
+  gtk_places_view_set_search_query (GTK_PLACES_VIEW (priv->places_view), text);
 
   if (text[0] != '\0')
     search_start_query (impl, text);
@@ -8253,7 +8317,9 @@ gtk_file_chooser_widget_class_init (GtkFileChooserWidgetClass *class)
   gtk_widget_class_bind_template_child_private (widget_class, GtkFileChooserWidget, browse_widgets_hpaned);
   gtk_widget_class_bind_template_child_private (widget_class, GtkFileChooserWidget, browse_files_stack);
   gtk_widget_class_bind_template_child_private (widget_class, GtkFileChooserWidget, places_sidebar);
+  gtk_widget_class_bind_template_child_private (widget_class, GtkFileChooserWidget, places_view);
   gtk_widget_class_bind_template_child_private (widget_class, GtkFileChooserWidget, browse_files_tree_view);
+  gtk_widget_class_bind_template_child_private (widget_class, GtkFileChooserWidget, browse_files_swin);
   gtk_widget_class_bind_template_child_private (widget_class, GtkFileChooserWidget, browse_header_revealer);
   gtk_widget_class_bind_template_child_private (widget_class, GtkFileChooserWidget, browse_header_stack);
   gtk_widget_class_bind_template_child_private (widget_class, GtkFileChooserWidget, browse_new_folder_button);
@@ -8303,6 +8369,7 @@ gtk_file_chooser_widget_class_init (GtkFileChooserWidgetClass *class)
   gtk_widget_class_bind_template_callback (widget_class, path_bar_clicked);
   gtk_widget_class_bind_template_callback (widget_class, places_sidebar_open_location_cb);
   gtk_widget_class_bind_template_callback (widget_class, places_sidebar_show_error_message_cb);
+  gtk_widget_class_bind_template_callback (widget_class, places_sidebar_show_other_locations_cb);
   gtk_widget_class_bind_template_callback (widget_class, search_entry_activate_cb);
   gtk_widget_class_bind_template_callback (widget_class, search_entry_stop_cb);
   gtk_widget_class_bind_template_callback (widget_class, new_folder_popover_active);

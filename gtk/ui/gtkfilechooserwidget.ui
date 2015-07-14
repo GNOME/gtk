@@ -17,11 +17,13 @@
                 <property name="can_focus">False</property>
                 <property name="hscrollbar_policy">never</property>
                 <property name="local_only">True</property>
+                <property name="show_other_locations">True</property>
                 <style>
                   <class name="sidebar"/>
                 </style>
                 <signal name="open-location" handler="places_sidebar_open_location_cb" swapped="no"/>
                 <signal name="show-error-message" handler="places_sidebar_show_error_message_cb" swapped="no"/>
+                <signal name="show-other-locations" handler="places_sidebar_show_other_locations_cb" swapped="no"/>
               </object>
               <packing>
                 <property name="resize">False</property>
@@ -246,6 +248,17 @@
                           </object>
                           <packing>
                             <property name="name">list</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkPlacesView" id="places_view">
+                            <property name="visible">True</property>
+                            <property name="local_only" bind-source="GtkFileChooserWidget" bind-property="local-only" bind-flags="default|sync-create" />
+                            <signal name="open-location" handler="places_sidebar_open_location_cb" swapped="no"/>
+                            <signal name="show-error-message" handler="places_sidebar_show_error_message_cb" swapped="no"/>
+                          </object>
+                          <packing>
+                            <property name="name">other_locations</property>
                           </packing>
                         </child>
                         <child>
