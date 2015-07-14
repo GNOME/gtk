@@ -106,6 +106,7 @@ noinst_PROGRAMS =  $(TEST_PROGS)	\
 	testorientable			\
 	testoverlay			\
 	testoverlaystyleclass		\
+	testplacesview			\
 	testprint			\
 	testrecentchooser 		\
 	testrecentchoosermenu		\
@@ -253,6 +254,7 @@ testappchooserbutton_DEPENDENCIES = $(TEST_DEPS)
 testorientable_DEPENDENCIES = $(TEST_DEPS)
 testoverlay_DEPENDENCIES = $(TEST_DEPS)
 testoverlaystyleclass_DEPENDENCIES = $(TEST_DEPS)
+testplacesview_DEPENDENCIES = $(TEST_DEPS)
 testprint_DEPENDENCIES = $(TEST_DEPS)
 testrecentchooser_DEPENDENCIES = $(TEST_DEPS)
 testrecentchoosermenu_DEPENDENCIES = $(TEST_DEPS)
@@ -396,6 +398,9 @@ testtoolbar_SOURCES =	\
 
 testmenubutton_SOURCES =	\
 	testmenubutton.c
+
+testplacesview_SOURCES =	\
+	testplacesview.c
 
 testprint_SOURCES =    	\
 	testprint.c		\
