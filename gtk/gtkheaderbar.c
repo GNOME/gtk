@@ -79,10 +79,6 @@ struct _GtkHeaderBarPrivate
   GtkWidget *titlebar_end_separator;
 
   GtkWidget *titlebar_icon;
-  GtkWidget *titlebar_menu_button;
-  GtkWidget *titlebar_min_button;
-  GtkWidget *titlebar_max_button;
-  GtkWidget *titlebar_close_button;
 };
 
 typedef struct _Child Child;
@@ -287,31 +283,6 @@ _gtk_header_bar_update_window_buttons (GtkHeaderBar *bar)
   if (!gtk_widget_get_realized (widget))
     return;
 
-  if (priv->titlebar_icon)
-    {
-      gtk_widget_destroy (priv->titlebar_icon);
-      priv->titlebar_icon = NULL;
-    }
-  if (priv->titlebar_menu_button)
-    {
-      gtk_widget_destroy (priv->titlebar_menu_button);
-      priv->titlebar_menu_button = NULL;
-    }
-  if (priv->titlebar_min_button)
-    {
-      gtk_widget_destroy (priv->titlebar_min_button);
-      priv->titlebar_min_button = NULL;
-    }
-  if (priv->titlebar_max_button)
-    {
-      gtk_widget_destroy (priv->titlebar_max_button);
-      priv->titlebar_max_button = NULL;
-    }
-  if (priv->titlebar_close_button)
-    {
-      gtk_widget_destroy (priv->titlebar_close_button);
-      priv->titlebar_close_button = NULL;
-    }
   if (priv->titlebar_start_box)
     {
       gtk_widget_destroy (priv->titlebar_start_box);
@@ -324,9 +295,6 @@ _gtk_header_bar_update_window_buttons (GtkHeaderBar *bar)
       priv->titlebar_end_box = NULL;
       priv->titlebar_end_separator = NULL;
     }
-
-  if (!priv->shows_wm_decorations)
-    return;
 
   direction = gtk_widget_get_direction (widget);
 
@@ -413,7 +381,6 @@ _gtk_header_bar_update_window_buttons (GtkHeaderBar *bar)
                   if (GTK_IS_ACCESSIBLE (accessible))
                     atk_object_set_name (accessible, _("Application menu"));
                   priv->titlebar_icon = image;
-                  priv->titlebar_menu_button = button;
                   if (!_gtk_header_bar_update_window_icon (bar, window))
                     gtk_image_set_from_icon_name (GTK_IMAGE (priv->titlebar_icon), "process-stop-symbolic", GTK_ICON_SIZE_MENU);
                 }
@@ -434,7 +401,6 @@ _gtk_header_bar_update_window_buttons (GtkHeaderBar *bar)
                   accessible = gtk_widget_get_accessible (button);
                   if (GTK_IS_ACCESSIBLE (accessible))
                     atk_object_set_name (accessible, _("Minimize"));
-                  priv->titlebar_min_button = button;
                 }
               else if (strcmp (t[j], "maximize") == 0 &&
                        gtk_window_get_resizable (window) &&
@@ -458,7 +424,6 @@ _gtk_header_bar_update_window_buttons (GtkHeaderBar *bar)
                   accessible = gtk_widget_get_accessible (button);
                   if (GTK_IS_ACCESSIBLE (accessible))
                     atk_object_set_name (accessible, maximized ? _("Restore") : _("Maximize"));
-                  priv->titlebar_max_button = button;
                 }
               else if (strcmp (t[j], "close") == 0 &&
                        gtk_window_get_deletable (window))
@@ -477,7 +442,6 @@ _gtk_header_bar_update_window_buttons (GtkHeaderBar *bar)
                   accessible = gtk_widget_get_accessible (button);
                   if (GTK_IS_ACCESSIBLE (accessible))
                     atk_object_set_name (accessible, _("Close"));
-                  priv->titlebar_close_button = button;
                 }
 
               if (button)
