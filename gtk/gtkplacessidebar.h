@@ -107,9 +107,9 @@ GDK_AVAILABLE_IN_3_10
 void               gtk_places_sidebar_set_show_desktop           (GtkPlacesSidebar   *sidebar,
                                                                   gboolean            show_desktop);
 
-GDK_AVAILABLE_IN_3_10
+GDK_DEPRECATED_IN_3_18
 gboolean           gtk_places_sidebar_get_show_connect_to_server (GtkPlacesSidebar   *sidebar);
-GDK_AVAILABLE_IN_3_10
+GDK_DEPRECATED_IN_3_18
 void               gtk_places_sidebar_set_show_connect_to_server (GtkPlacesSidebar   *sidebar,
                                                                   gboolean            show_connect_to_server);
 GDK_AVAILABLE_IN_3_14
@@ -146,6 +146,12 @@ gboolean           gtk_places_sidebar_get_show_trash             (GtkPlacesSideb
 GDK_AVAILABLE_IN_3_18
 void               gtk_places_sidebar_set_show_trash             (GtkPlacesSidebar   *sidebar,
                                                                   gboolean            show_trash);
+
+GDK_AVAILABLE_IN_3_18
+void                 gtk_places_sidebar_set_show_other_locations (GtkPlacesSidebar   *sidebar,
+                                                                  gboolean            show_other_locations);
+GDK_AVAILABLE_IN_3_18
+gboolean             gtk_places_sidebar_get_show_other_locations (GtkPlacesSidebar   *sidebar);
 
 G_END_DECLS
 
