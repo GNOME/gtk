@@ -1539,6 +1539,9 @@ gtk_header_bar_forall (GtkContainer *container,
   Child *child;
   GList *children;
 
+  if (include_internals && priv->titlebar_start_box != NULL)
+    (* callback) (priv->titlebar_start_box, callback_data);
+
   children = priv->children;
   while (children)
     {
@@ -1554,12 +1557,6 @@ gtk_header_bar_forall (GtkContainer *container,
   if (include_internals && priv->label_box != NULL)
     (* callback) (priv->label_box, callback_data);
 
-  if (include_internals && priv->titlebar_start_box != NULL)
-    (* callback) (priv->titlebar_start_box, callback_data);
-
-  if (include_internals && priv->titlebar_end_box != NULL)
-    (* callback) (priv->titlebar_end_box, callback_data);
-
   children = priv->children;
   while (children)
     {
@@ -1568,6 +1565,9 @@ gtk_header_bar_forall (GtkContainer *container,
       if (child->pack_type == GTK_PACK_END)
         (* callback) (child->widget, callback_data);
     }
+
+  if (include_internals && priv->titlebar_end_box != NULL)
+    (* callback) (priv->titlebar_end_box, callback_data);
 }
 
 static void
