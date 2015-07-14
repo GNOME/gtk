@@ -458,9 +458,6 @@ _gtk_header_bar_update_window_buttons (GtkHeaderBar *bar)
               continue;
             }
 
-          gtk_widget_show (box);
-          gtk_widget_set_parent (box, GTK_WIDGET (bar));
-
           gtk_box_pack_start (GTK_BOX (box), separator, FALSE, FALSE, 0);
           if (i == 1)
             gtk_box_reorder_child (GTK_BOX (box), separator, 0);
@@ -470,6 +467,9 @@ _gtk_header_bar_update_window_buttons (GtkHeaderBar *bar)
             gtk_style_context_add_class (gtk_widget_get_style_context (box), GTK_STYLE_CLASS_LEFT);
           else
             gtk_style_context_add_class (gtk_widget_get_style_context (box), GTK_STYLE_CLASS_RIGHT);
+
+          gtk_widget_show (box);
+          gtk_widget_set_parent (box, GTK_WIDGET (bar));
 
           if (i == 0)
             priv->titlebar_start_box = box;
