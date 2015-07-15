@@ -131,6 +131,12 @@ struct _GdkX11Display
   gint glx_error_base;
   gint glx_event_base;
 
+  /* Translation between X server time and system-local monotonic time */
+  gint64 server_time_query_time;
+  gint64 server_time_offset;
+
+  guint server_time_is_monotonic_time : 1;
+
   guint have_glx : 1;
 
   /* GLX extensions we check */
