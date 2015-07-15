@@ -40,6 +40,7 @@ struct _ScrollValuator
 {
   guint n_valuator       : 4;
   guint direction        : 4;
+  guint last_value_valid : 1;
   gdouble last_value;
   gdouble increment;
 };
@@ -824,8 +825,8 @@ _gdk_x11_device_xi2_add_scroll_valuator (GdkX11DeviceXI2    *device,
 
   scroll.n_valuator = n_valuator;
   scroll.direction = direction;
+  scroll.last_value_valid = FALSE;
   scroll.increment = increment;
-  scroll.last_value = 0;
 
   g_array_append_val (device->scroll_valuators, scroll);
 }
@@ -856,10 +857,18 @@ _gdk_x11_device_xi2_get_scroll_delta (GdkX11DeviceXI2    *device,
           if (delta_ret)
             *delta_ret = 0;
 
-          if (delta_ret)
-            *delta_ret = (valuator_value - scroll->last_value) / scroll->increment;
+          if (scroll->last_value_valid)
+            {
+              if (delta_ret)
+                *delta_ret = (valuator_value - scroll->last_value) / scroll->increment;
 
-          scroll->last_value = valuator_value;
+              scroll->last_value = valuator_value;
+            }
+          else
+            {
+              scroll->last_value = valuator_value;
+              scroll->last_value_valid = TRUE;
+            }
 
           return TRUE;
         }
@@ -869,33 +878,17 @@ _gdk_x11_device_xi2_get_scroll_delta (GdkX11DeviceXI2    *device,
 }
 
 void
-_gdk_device_xi2_revalidate_scroll_valuators (GdkX11DeviceXI2 *device)
+_gdk_device_xi2_reset_scroll_valuators (GdkX11DeviceXI2 *device)
 {
-  GdkDisplay *display;
-  XIDeviceInfo *info;
-  gint i, ndevices;
-
-  display = gdk_device_get_display (GDK_DEVICE (device));
-
-  gdk_x11_display_error_trap_push (display);
-  info = XIQueryDevice (GDK_DISPLAY_XDISPLAY (display),
-                        device->device_id, &ndevices);
-  gdk_x11_display_error_trap_pop_ignored (display);
-
-  if (!info)
-    return;
+  guint i;
 
   for (i = 0; i < device->scroll_valuators->len; i++)
     {
-      XIValuatorClassInfo *valuator;
       ScrollValuator *scroll;
 
       scroll = &g_array_index (device->scroll_valuators, ScrollValuator, i);
-      valuator = (XIValuatorClassInfo *) info->classes[scroll->n_valuator + 1];
-      scroll->last_value = valuator->value;
+      scroll->last_value_valid = FALSE;
     }
-
-  XIFreeDeviceInfo (info);
 }
 
 void

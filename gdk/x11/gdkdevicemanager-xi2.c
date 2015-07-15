@@ -754,11 +754,13 @@ handle_device_changed (GdkX11DeviceManagerXI2 *device_manager,
                        XIDeviceChangedEvent   *ev)
 {
   GdkDisplay *display;
-  GdkDevice *device;
+  GdkDevice *device, *source_device;
 
   display = gdk_device_manager_get_display (GDK_DEVICE_MANAGER (device_manager));
   device = g_hash_table_lookup (device_manager->id_table,
                                 GUINT_TO_POINTER (ev->deviceid));
+  source_device = g_hash_table_lookup (device_manager->id_table,
+                                       GUINT_TO_POINTER (ev->sourceid));
 
   if (device)
     {
@@ -769,6 +771,9 @@ handle_device_changed (GdkX11DeviceManagerXI2 *device_manager,
 
       g_signal_emit_by_name (G_OBJECT (device), "changed");
     }
+
+  if (source_device)
+    _gdk_device_xi2_reset_scroll_valuators (GDK_X11_DEVICE_XI2 (source_device));
 }
 
 static GdkCrossingMode
@@ -1610,16 +1615,16 @@ gdk_x11_device_manager_xi2_translate_event (GdkEventTranslator *translator,
             xev->detail != XINotifyInferior && xev->mode != XINotifyPassiveUngrab &&
 	    gdk_window_get_window_type (window) == GDK_WINDOW_TOPLEVEL)
           {
-            if (gdk_device_get_device_type (device) != GDK_DEVICE_TYPE_MASTER)
-              _gdk_device_xi2_revalidate_scroll_valuators (GDK_X11_DEVICE_XI2 (source_device));
+            if (gdk_device_get_device_type (source_device) != GDK_DEVICE_TYPE_MASTER)
+              _gdk_device_xi2_reset_scroll_valuators (GDK_X11_DEVICE_XI2 (source_device));
             else
               {
                 GList *slaves, *l;
 
-                slaves = gdk_device_list_slave_devices (device);
+                slaves = gdk_device_list_slave_devices (source_device);
 
                 for (l = slaves; l; l = l->next)
-                  _gdk_device_xi2_revalidate_scroll_valuators (l->data);
+                  _gdk_device_xi2_reset_scroll_valuators (GDK_X11_DEVICE_XI2 (l->data));
 
                 g_list_free (slaves);
               }
