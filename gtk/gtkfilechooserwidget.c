@@ -6964,12 +6964,6 @@ search_engine_hits_added_cb (GtkSearchEngine      *engine,
   g_list_free_full (files_with_info, g_object_unref);
   g_list_free_full (infos, g_object_unref);
 
-  if (impl->priv->show_progress_timeout)
-    {
-      g_source_remove (impl->priv->show_progress_timeout);
-      impl->priv->show_progress_timeout = 0;
-    }
-
   gtk_stack_set_visible_child_name (GTK_STACK (impl->priv->browse_files_stack), "list");
 }
 
