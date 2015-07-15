@@ -1108,6 +1108,47 @@ find_frame_timings (GdkFrameClock *clock,
   return NULL;
 }
 
+/* _NET_WM_FRAME_DRAWN and _NET_WM_FRAME_TIMINGS messages represent time
+ * as a "high resolution server time" - this is the server time interpolated
+ * to microsecond resolution. The advantage of this time representation
+ * is that if  X server is running on the same computer as a client, and
+ * the Xserver uses 'clock_gettime(CLOCK_MONOTONIC, ...)' for the server
+ * time, the client can detect this, and all such clients will share a
+ * a time representation with high accuracy. If there is not a common
+ * time source, then the time synchronization will be less accurate.
+ */
+gint64
+server_time_to_monotonic_time (GdkX11Display *display_x11,
+                               gint64         server_time)
+{
+  if (display_x11->server_time_query_time == 0 ||
+      (!display_x11->server_time_is_monotonic_time &&
+       server_time > display_x11->server_time_query_time + 10*1000*1000)) /* 10 seconds */
+    {
+      gint64 current_server_time = gdk_x11_get_server_time (display_x11->leader_gdk_window);
+      gint64 current_server_time_usec = (gint64)current_server_time * 1000;
+      gint64 current_monotonic_time = g_get_monotonic_time ();
+      display_x11->server_time_query_time = current_monotonic_time;
+
+      /* If the server time is within a second of the monotonic time,
+       * we assume that they are identical. This seems like a big margin,
+       * but we want to be as robust as possible even if the system
+       * is under load and our processing of the server response is
+       * delayed.
+       */
+      if (current_server_time_usec > current_monotonic_time - 1000*1000 &&
+          current_server_time_usec < current_monotonic_time + 1000*1000)
+        display_x11->server_time_is_monotonic_time = TRUE;
+
+      display_x11->server_time_offset = current_server_time_usec - current_monotonic_time;
+    }
+
+  if (display_x11->server_time_is_monotonic_time)
+    return server_time;
+  else
+    return server_time - display_x11->server_time_offset;
+}
+
 GdkFilterReturn
 _gdk_wm_protocols_filter (GdkXEvent *xev,
 			  GdkEvent  *event,
@@ -1140,7 +1181,7 @@ _gdk_wm_protocols_filter (GdkXEvent *xev,
           guint32 d3 = xevent->xclient.data.l[3];
 
           guint64 serial = ((guint64)d1 << 32) | d0;
-          gint64 frame_drawn_time = ((guint64)d3 << 32) | d2;
+          gint64 frame_drawn_time = server_time_to_monotonic_time (GDK_X11_DISPLAY (display), ((guint64)d3 << 32) | d2);
           gint64 refresh_interval, presentation_time;
 
           GdkFrameClock *clock = gdk_window_get_frame_clock (win);
