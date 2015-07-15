@@ -706,6 +706,16 @@ gtk_frame_draw (GtkWidget *widget,
   return FALSE;
 }
 
+static gboolean
+rectangle_equal (const GdkRectangle *a,
+                 const GdkRectangle *b)
+{
+  return a->x == b->x
+      && a->y == b->y
+      && a->width == b->width
+      && a->height == b->height;
+}
+
 static void
 gtk_frame_size_allocate (GtkWidget     *widget,
 			 GtkAllocation *allocation)
@@ -719,11 +729,11 @@ gtk_frame_size_allocate (GtkWidget     *widget,
   gtk_widget_set_allocation (widget, allocation);
 
   gtk_frame_compute_child_allocation (frame, &new_allocation);
-  
+
   /* If the child allocation changed, that means that the frame is drawn
    * in a new place, so we must redraw the entire widget.
    */
-  if (gtk_widget_get_mapped (widget))
+  if (gtk_widget_get_mapped (widget) && !rectangle_equal (&priv->child_allocation, &new_allocation))
     {
       gdk_window_invalidate_rect (gtk_widget_get_window (widget), allocation, FALSE);
     }
