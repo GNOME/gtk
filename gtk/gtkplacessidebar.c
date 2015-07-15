@@ -249,6 +249,7 @@ static gboolean on_button_press_event (GtkWidget      *widget,
 static gboolean on_button_release_event (GtkWidget      *widget,
                                          GdkEventButton *event,
                                          GtkSidebarRow  *sidebar);
+static void popup_menu_cb (GtkSidebarRow *row);
 static void stop_drop_feedback (GtkPlacesSidebar *sidebar);
 
 
@@ -3215,6 +3216,15 @@ on_key_press_event (GtkWidget        *widget,
               rename_bookmark (GTK_SIDEBAR_ROW (row));
               return TRUE;
             }
+
+          if ((event->keyval == GDK_KEY_Menu) ||
+              ((event->keyval == GDK_KEY_F10) &&
+               (event->state & modifiers) == GDK_SHIFT_MASK))
+
+            {
+              popup_menu_cb (GTK_SIDEBAR_ROW (row));
+              return TRUE;
+            }
         }
     }
 
@@ -3493,6 +3503,17 @@ on_button_release_event (GtkWidget      *widget,
     }
 
   return ret;
+}
+
+static void
+popup_menu_cb (GtkSidebarRow *row)
+{
+  GtkPlacesSidebarPlaceType row_type;
+
+  g_object_get (row, "place-type", &row_type, NULL);
+
+  if (row_type != PLACES_CONNECT_TO_SERVER)
+    bookmarks_popup_menu (row, NULL);
 }
 
 static gint
