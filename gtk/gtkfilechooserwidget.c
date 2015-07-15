@@ -7186,6 +7186,8 @@ search_entry_activate_cb (GtkFileChooserWidget *impl)
 
   if (text[0] != '\0')
     search_start_query (impl, text);
+  else
+    search_stop_searching (impl, FALSE);
 }
 
 static void
