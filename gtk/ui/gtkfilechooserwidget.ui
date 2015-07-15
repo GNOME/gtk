@@ -112,6 +112,15 @@
                                     <signal name="stop-search" handler="search_entry_stop_cb" swapped="yes"/>
                                   </object>
                                 </child>
+                                <child>
+                                  <object class="GtkSpinner" id="search_spinner">
+                                    <property name="visible">False</property>
+                                    <property name="active">True</property>
+                                  </object>
+                                  <packing>
+                                    <property name="pack-type">end</property>
+                                  </packing>
+                                </child>
                               </object>
                               <packing>
                                 <property name="name">search</property>
@@ -294,14 +303,6 @@
                           </object>
                           <packing>
                             <property name="name">empty</property>
-                          </packing>
-                        </child>
-                        <child>
-                          <object class="GtkSpinner" id="search_spinner">
-                            <property name="visible">True</property>
-                          </object>
-                          <packing>
-                            <property name="name">progress</property>
                           </packing>
                         </child>
                       </object>

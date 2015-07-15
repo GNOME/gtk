@@ -6978,21 +6978,20 @@ static void
 search_engine_finished_cb (GtkSearchEngine *engine,
                            gpointer         data)
 {
-  GtkFileChooserWidget *impl;
-
-  impl = GTK_FILE_CHOOSER_WIDGET (data);
+  GtkFileChooserWidget *impl = GTK_FILE_CHOOSER_WIDGET (data);
+  GtkFileChooserWidgetPrivate *priv = impl->priv;
 
   set_busy_cursor (impl, FALSE);
-  gtk_spinner_stop (GTK_SPINNER (impl->priv->search_spinner));
+  gtk_widget_hide (priv->search_spinner);
 
-  if (impl->priv->show_progress_timeout)
+  if (priv->show_progress_timeout)
     {
-      g_source_remove (impl->priv->show_progress_timeout);
-      impl->priv->show_progress_timeout = 0;
+      g_source_remove (priv->show_progress_timeout);
+      priv->show_progress_timeout = 0;
     }
 
-  if (gtk_tree_model_iter_n_children (GTK_TREE_MODEL (impl->priv->search_model), NULL) == 0)
-    gtk_stack_set_visible_child_name (GTK_STACK (impl->priv->browse_files_stack), "empty");
+  if (gtk_tree_model_iter_n_children (GTK_TREE_MODEL (priv->search_model), NULL) == 0)
+    gtk_stack_set_visible_child_name (GTK_STACK (priv->browse_files_stack), "empty");
 }
 
 /* Displays a generic error when we cannot create a GtkSearchEngine.
@@ -7055,7 +7054,7 @@ search_stop_searching (GtkFileChooserWidget *impl,
       g_clear_object (&priv->search_engine);
 
       set_busy_cursor (impl, FALSE);
-      gtk_spinner_stop (GTK_SPINNER (priv->search_spinner));
+      gtk_widget_hide (priv->search_spinner);
     }
 
   if (priv->show_progress_timeout)
@@ -7101,7 +7100,7 @@ show_spinner (gpointer data)
   GtkFileChooserWidget *impl = data;
   GtkFileChooserWidgetPrivate *priv = impl->priv;
 
-  gtk_stack_set_visible_child_name (GTK_STACK (priv->browse_files_stack), "progress");
+  gtk_widget_show (priv->search_spinner);
   priv->show_progress_timeout = 0;
 
   return G_SOURCE_REMOVE;
@@ -7124,8 +7123,7 @@ search_start_query (GtkFileChooserWidget *impl,
   search_setup_model (impl);
 
   set_busy_cursor (impl, TRUE);
-  gtk_spinner_start (GTK_SPINNER (priv->search_spinner));
-  priv->show_progress_timeout = g_timeout_add (1000, show_spinner, impl);
+  priv->show_progress_timeout = g_timeout_add (1500, show_spinner, impl);
 
   gtk_stack_set_visible_child_name (GTK_STACK (priv->browse_files_stack), "list");
 
@@ -7135,7 +7133,7 @@ search_start_query (GtkFileChooserWidget *impl,
   if (!priv->search_engine)
     {
       set_busy_cursor (impl, FALSE);
-      gtk_spinner_stop (GTK_SPINNER (priv->search_spinner));
+      gtk_widget_hide (priv->search_spinner);
       search_error_could_not_create_client (impl); /* lame; we don't get an error code or anything */
       return;
     }
