@@ -246,8 +246,6 @@ gboolean  _gdk_x11_device_xi2_get_scroll_delta    (GdkX11DeviceXI2    *device,
                                                    GdkScrollDirection *direction_ret,
                                                    gdouble            *delta_ret);
 void     _gdk_device_xi2_reset_scroll_valuators   (GdkX11DeviceXI2    *device);
-void     _gdk_device_xi2_revalidate_scroll_valuators (GdkX11DeviceXI2 *device);
-
 
 gdouble  gdk_x11_device_xi2_get_last_axis_value (GdkX11DeviceXI2 *device,
                                                  gint             n_axis);
