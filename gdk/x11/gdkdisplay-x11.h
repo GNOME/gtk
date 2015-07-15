@@ -124,6 +124,12 @@ struct _GdkX11Display
   GSList *error_traps;
 
   gint wm_moveresize_button;
+
+  /* Translation between X server time and system-local monotonic time */
+  gint64 server_time_query_time;
+  gint64 server_time_offset;
+
+  guint server_time_is_monotonic_time : 1;
 };
 
 struct _GdkX11DisplayClass
