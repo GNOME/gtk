@@ -3160,9 +3160,29 @@ gtk_file_chooser_widget_get_subtitle (GtkFileChooserWidget *impl)
     {
       gchar *location;
 
+      subtitle = _("Searching");
+
       location = gtk_places_sidebar_get_location_title (GTK_PLACES_SIDEBAR (priv->places_sidebar));
-      subtitle = g_strdup_printf (_("Searching in %s"), location);
-      g_free (location);
+      if (location)
+        {
+          subtitle = g_strdup_printf (_("Searching in %s"), location);
+          g_free (location);
+        }
+      else if (priv->current_folder)
+        {
+          GFileInfo *info;
+
+          info = g_file_query_info (priv->current_folder,
+                                    G_FILE_ATTRIBUTE_STANDARD_DISPLAY_NAME,
+                                    G_FILE_QUERY_INFO_NONE,
+                                    NULL,
+                                    NULL);
+          if (info)
+            {
+              subtitle = g_strdup_printf (_("Searching in %s"), g_file_info_get_display_name (info));
+              g_object_unref (info);
+            }
+        }
     }
   else if (priv->operation_mode == OPERATION_MODE_ENTER_LOCATION ||
            (priv->operation_mode == OPERATION_MODE_BROWSE &&
