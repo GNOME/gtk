@@ -987,7 +987,7 @@ update_places (GtkPlacesSidebar *sidebar)
                 }
               g_free (identifier);
 
-              if (!is_removable_volume (volume))
+              if (sidebar->show_other_locations && !is_removable_volume (volume))
                 {
                   g_object_unref (volume);
                   continue;
@@ -1091,7 +1091,7 @@ update_places (GtkPlacesSidebar *sidebar)
         }
       g_free (identifier);
 
-      if (!is_removable_volume (volume))
+      if (sidebar->show_other_locations && !is_removable_volume (volume))
         {
           g_object_unref (volume);
           continue;
@@ -4757,7 +4757,8 @@ gtk_places_sidebar_get_show_enter_location (GtkPlacesSidebar *sidebar)
  * @show_other_locations: whether to show an item for the Other Locations view
  *
  * Sets whether the @sidebar should show an item for the application to show an Other Locations
- * view; this is off by default.
+ * view; this is off by default. When set to %TRUE, persistent devices such as hard drives are
+ * hidden, otherwise they are shown in the sidebar.
  * An application may want to turn this on if it implements a way for the user to see and interact
  * with drives and network servers directly. #GtkPlacesView is the reference implementation for
  * it.
