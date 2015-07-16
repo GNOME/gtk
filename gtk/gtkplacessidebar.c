@@ -166,6 +166,7 @@ struct _GtkPlacesSidebar {
   guint show_other_locations   : 1;
   guint show_trash             : 1;
   guint local_only             : 1;
+  guint populate_all           : 1;
 };
 
 struct _GtkPlacesSidebarClass {
@@ -220,6 +221,7 @@ enum {
   PROP_SHOW_TRASH,
   PROP_LOCAL_ONLY,
   PROP_SHOW_OTHER_LOCATIONS,
+  PROP_POPULATE_ALL,
   NUM_PROPERTIES
 };
 
@@ -298,18 +300,6 @@ emit_open_location (GtkPlacesSidebar   *sidebar,
   g_signal_emit (sidebar, places_sidebar_signals[OPEN_LOCATION], 0,
                  location, open_flags);
 }
-
-#if 0
-static void
-emit_populate_popup (GtkPlacesSidebar *sidebar,
-                     GtkMenu          *menu,
-                     GFile            *selected_item,
-                     GVolume          *selected_volume)
-{
-  g_signal_emit (sidebar, places_sidebar_signals[POPULATE_POPUP], 0,
-                 menu, selected_item, selected_volume);
-}
-#endif
 
 static void
 emit_show_error_message (GtkPlacesSidebar *sidebar,
@@ -3395,6 +3385,33 @@ create_row_popover (GtkPlacesSidebar *sidebar,
 
   /* Update everything! */
   check_popover_sensitivity (row, &data);
+
+  if (sidebar->populate_all)
+    {
+      gchar *uri;
+      GVolume *volume;
+      GFile *file;
+
+      g_object_get (row,
+                    "uri", &uri,
+                    "volume", &volume,
+                    NULL);
+
+      if (uri)
+        file = g_file_new_for_uri (uri);
+      else
+        file = NULL;
+
+      g_signal_emit (sidebar, places_sidebar_signals[POPULATE_POPUP], 0,
+                     box, file, volume);
+
+      if (file)
+        g_object_unref (file);
+
+      g_free (uri);
+      if (volume)
+        g_object_unref (volume);
+    }
 }
 
 static void
@@ -3893,6 +3910,14 @@ G_GNUC_END_IGNORE_DEPRECATIONS
       gtk_places_sidebar_set_local_only (sidebar, g_value_get_boolean (value));
       break;
 
+    case PROP_POPULATE_ALL:
+      if (sidebar->populate_all != g_value_get_boolean (value))
+        {
+          sidebar->populate_all = g_value_get_boolean (value);
+          g_object_notify_by_pspec (obj, pspec);
+        }
+      break;
+
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (obj, property_id, pspec);
       break;
@@ -3945,6 +3970,10 @@ G_GNUC_END_IGNORE_DEPRECATIONS
 
     case PROP_LOCAL_ONLY:
       g_value_set_boolean (value, gtk_places_sidebar_get_local_only (sidebar));
+      break;
+
+    case PROP_POPULATE_ALL:
+      g_value_set_boolean (value, sidebar->populate_all);
       break;
 
     default:
@@ -4066,28 +4095,35 @@ gtk_places_sidebar_class_init (GtkPlacesSidebarClass *class)
   /**
    * GtkPlacesSidebar::populate-popup:
    * @sidebar: the object which received the signal.
-   * @menu: (type Gtk.Menu): a #GtkMenu.
-   * @selected_item: (type Gio.File) (nullable): #GFile with the item to which the menu should refer, or #NULL in the case of a @selected_volume.
+   * @container: (type Gtk.Widget): a #GtkMenu or another #GtkContainer
+   * @selected_item: (type Gio.File) (nullable): #GFile with the item to which the popup should refer, or #NULL in the case of a @selected_volume.
    * @selected_volume: (type Gio.Volume) (nullable): #GVolume if the selected item is a volume, or #NULL if it is a file.
    *
    * The places sidebar emits this signal when the user invokes a contextual
-   * menu on one of its items.  In the signal handler, the application may
-   * add extra items to the menu as appropriate.  For example, a file manager
+   * popup on one of its items. In the signal handler, the application may
+   * add extra items to the menu as appropriate. For example, a file manager
    * may want to add a "Properties" command to the menu.
    *
    * It is not necessary to store the @selected_item for each menu item;
-   * during their GtkMenuItem::activate callbacks, the application can use
-   * gtk_places_sidebar_get_location() to get the file to which the item
-   * refers.
+   * during their callbacks, the application can use gtk_places_sidebar_get_location()
+   * to get the file to which the item refers.
    *
-   * The @selected_item argument may be #NULL in case the selection refers to
-   * a volume.  In this case, @selected_volume will be non-NULL.  In this case,
+   * The @selected_item argument may be %NULL in case the selection refers to
+   * a volume. In this case, @selected_volume will be non-%NULL. In this case,
    * the calling application will have to g_object_ref() the @selected_volume and
-   * keep it around for the purposes of its menu item's "activate" callback.
+   * keep it around to use it in the callback.
    *
-   * The @menu and all its menu items are destroyed after the user
-   * dismisses the menu.  The menu is re-created (and thus, this signal is
+   * The @container and all its contents are destroyed after the user
+   * dismisses the popup. The popup is re-created (and thus, this signal is
    * emitted) every time the user activates the contextual menu.
+   *
+   * Before 3.18, the @container always was a #GtkMenu, and you were expected
+   * to add your items as #GtkMenuItems. Since 3.18, the popup may be implemented
+   * as a #GtkPopover, in which case @container will be something else, e.g. a
+   * #GtkBox, to which you may add #GtkModelButtons or other widgets, such as
+   * #GtkEntries, #GtkSpinButtons, etc. If your application can deal with this
+   * situation, you can set #GtkPlacesSidebar::populate-all to %TRUE to request
+   * that this signal is emitted for populating popovers as well.
    *
    * Since: 3.10
    */
@@ -4099,9 +4135,9 @@ gtk_places_sidebar_class_init (GtkPlacesSidebarClass *class)
                         NULL, NULL,
                         _gtk_marshal_VOID__OBJECT_OBJECT_OBJECT,
                         G_TYPE_NONE, 3,
-                        G_TYPE_OBJECT,
-                        G_TYPE_OBJECT,
-                        G_TYPE_OBJECT);
+                        GTK_TYPE_WIDGET,
+                        G_TYPE_FILE,
+                        G_TYPE_VOLUME);
 
   /**
    * GtkPlacesSidebar::show-error-message:
@@ -4330,6 +4366,21 @@ gtk_places_sidebar_class_init (GtkPlacesSidebarClass *class)
                                 G_PARAM_READWRITE);
   properties[PROP_SHOW_OTHER_LOCATIONS] =
           g_param_spec_boolean ("show-other-locations",
+                                P_("Show 'Other locations'"),
+                                P_("Whether the sidebar includes an item to show external locations"),
+                                FALSE,
+                                G_PARAM_READWRITE);
+
+  /**
+   * GtkPlacesSidebar:populate-all:
+   *
+   * If :populate-all is %TRUE, the #GtkPlacesSidebar::populate-popup signal
+   * is also emitted for popovers.
+   *
+   * Since: 3.18
+   */
+  properties[PROP_POPULATE_ALL] =
+          g_param_spec_boolean ("populate-all",
                                 P_("Show 'Other locations'"),
                                 P_("Whether the sidebar includes an item to show external locations"),
                                 FALSE,
