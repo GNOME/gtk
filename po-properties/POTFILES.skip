@@ -125,6 +125,8 @@ gtk/ui/gtkpagesetupunixdialog.ui
 gtk/ui/gtkpagesetupunixdialog.ui.h
 gtk/ui/gtkpathbar.ui
 gtk/ui/gtkpathbar.ui.h
+gtk/ui/gtkplacesviewrow.ui
+gtk/ui/gtkplacesview.ui
 gtk/ui/gtkprintunixdialog.ui
 gtk/ui/gtkprintunixdialog.ui.h
 gtk/ui/gtkrecentchooserdefault.ui

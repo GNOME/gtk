@@ -202,6 +202,8 @@ gtk/gtkpaned.c
 gtk/gtkpapersize.c
 gtk/gtkpathbar.c
 gtk/gtkplacessidebar.c
+gtk/gtkplacesview.c
+gtk/gtkplacesviewrow.c
 gtk/gtkplug.c
 gtk/gtkpopover.c
 gtk/gtkpopovermenu.c
@@ -338,6 +340,8 @@ gtk/ui/gtklockbutton.ui
 gtk/ui/gtkmessagedialog.ui
 gtk/ui/gtkpagesetupunixdialog.ui
 gtk/ui/gtkpathbar.ui
+gtk/ui/gtkplacesviewrow.ui
+gtk/ui/gtkplacesview.ui
 gtk/ui/gtkprintunixdialog.ui
 gtk/ui/gtkrecentchooserdefault.ui
 gtk/ui/gtkscalebutton.ui

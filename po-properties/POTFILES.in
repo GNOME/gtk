@@ -201,6 +201,8 @@ gtk/gtkpaned.c
 gtk/gtkpapersize.c
 gtk/gtkpathbar.c
 gtk/gtkplacessidebar.c
+gtk/gtkplacesview.c
+gtk/gtkplacesviewrow.c
 gtk/gtkplug.c
 gtk/gtkpopover.c
 gtk/gtkpopovermenu.c
