@@ -83,18 +83,25 @@ struct gear {
    struct vertex_strip *strips;
    /** The number of triangle strips comprising the gear */
    int nstrips;
-   /** The Vertex Buffer Object holding the vertices in the graphics card */
-   GLuint vbo;
 };
 
 typedef struct {
   /* The view rotation [x, y, z] */
   GLfloat view_rot[GTK_GEARS_N_AXIS];
 
+  /* The Vertex Array Object */
+  GLuint vao;
+
+  /* The shader program */
+  GLuint program;
+
   /* The gears */
   struct gear *gear1;
   struct gear *gear2;
   struct gear *gear3;
+
+  /** The Vertex Buffer Object holding the vertices in the graphics card */
+  GLuint gear_vbo[3];
 
   /** The location of the shader uniforms */
   GLuint ModelViewProjectionMatrix_location;
@@ -120,9 +127,11 @@ G_DEFINE_TYPE_WITH_PRIVATE (GtkGears, gtk_gears, GTK_TYPE_GL_AREA)
 
 static gboolean gtk_gears_render        (GtkGLArea     *area,
                                          GdkGLContext  *context);
-static void     gtk_gears_size_allocate (GtkWidget     *widget,
-                                         GtkAllocation *allocation);
+static void     gtk_gears_reshape       (GtkGLArea     *area,
+                                         int            width,
+                                         int            height);
 static void     gtk_gears_realize       (GtkWidget     *widget);
+static void     gtk_gears_unrealize     (GtkWidget     *widget);
 static gboolean gtk_gears_tick          (GtkWidget     *widget,
                                          GdkFrameClock *frame_clock,
                                          gpointer       user_data);
@@ -175,8 +184,11 @@ static void
 gtk_gears_class_init (GtkGearsClass *klass)
 {
   GTK_GL_AREA_CLASS (klass)->render = gtk_gears_render;
+  GTK_GL_AREA_CLASS (klass)->resize = gtk_gears_reshape;
+
   GTK_WIDGET_CLASS (klass)->realize = gtk_gears_realize;
-  GTK_WIDGET_CLASS (klass)->size_allocate = gtk_gears_size_allocate;
+  GTK_WIDGET_CLASS (klass)->unrealize = gtk_gears_unrealize;
+
   G_OBJECT_CLASS (klass)->finalize = gtk_gears_finalize;
 }
 
@@ -211,7 +223,7 @@ vert (GearVertex *v,
 static void
 destroy_gear (struct gear *g)
 {
-  g_clear_pointer (&g->strips, g_free);
+  g_free (g->strips);
   g_free (g);
 }
 
@@ -357,14 +369,6 @@ create_gear (GLfloat inner_radius,
   }
 
   gear->nvertices = (v - gear->vertices);
-
-  /* Store the vertices in a vertex buffer object (VBO) */
-  glGenBuffers (1, &gear->vbo);
-  glBindBuffer (GL_ARRAY_BUFFER, gear->vbo);
-  glBufferData (GL_ARRAY_BUFFER,
-                gear->nvertices * sizeof(GearVertex),
-                gear->vertices,
-                GL_STATIC_DRAW);
 
   return gear;
 }
@@ -546,6 +550,7 @@ void perspective(GLfloat *m, GLfloat fovy, GLfloat aspect, GLfloat zNear, GLfloa
 static void
 draw_gear(GtkGears *self,
           struct gear *gear,
+          GLuint gear_vbo,
           GLfloat *transform,
           GLfloat x,
           GLfloat y,
@@ -583,7 +588,7 @@ draw_gear(GtkGears *self,
   glUniform4fv(priv->MaterialColor_location, 1, color);
 
   /* Set the vertex buffer object to use */
-  glBindBuffer(GL_ARRAY_BUFFER, gear->vbo);
+  glBindBuffer(GL_ARRAY_BUFFER, gear_vbo);
 
   /* Set up the position of the attributes in the vertex buffer object */
   glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(GLfloat), NULL);
@@ -605,9 +610,9 @@ draw_gear(GtkGears *self,
 
 /* new window size or exposure */
 static void
-reshape(GtkGears *gears, int width, int height)
+gtk_gears_reshape (GtkGLArea *area, int width, int height)
 {
-  GtkGearsPrivate *priv = gtk_gears_get_instance_private (gears);
+  GtkGearsPrivate *priv = gtk_gears_get_instance_private ((GtkGears *) area);
 
   /* Update the projection matrix */
   perspective (priv->ProjectionMatrix, 60.0, width / (float)height, 1.0, 1024.0);
@@ -640,26 +645,11 @@ gtk_gears_render (GtkGLArea    *area,
   rotate (transform, 2 * G_PI * priv->view_rot[2] / 360.0, 0, 0, 1);
 
   /* Draw the gears */
-  draw_gear (self, priv->gear1, transform, -3.0, -2.0,      priv->angle,        red);
-  draw_gear (self, priv->gear2, transform,  3.1, -2.0, -2 * priv->angle - 9.0,  green);
-  draw_gear (self, priv->gear3, transform, -3.1,  4.2, -2 * priv->angle - 25.0, blue);
+  draw_gear (self, priv->gear1, priv->gear_vbo[0], transform, -3.0, -2.0,      priv->angle,        red);
+  draw_gear (self, priv->gear2, priv->gear_vbo[1], transform,  3.1, -2.0, -2 * priv->angle - 9.0,  green);
+  draw_gear (self, priv->gear3, priv->gear_vbo[2], transform, -3.1,  4.2, -2 * priv->angle - 25.0, blue);
 
   return TRUE;
-}
-
-static void
-gtk_gears_size_allocate (GtkWidget     *widget,
-                         GtkAllocation *allocation)
-{
-  GtkGLArea *glarea = GTK_GL_AREA (widget);
-
-  GTK_WIDGET_CLASS (gtk_gears_parent_class)->size_allocate (widget, allocation);
-
-  if (gtk_widget_get_realized (widget))
-    {
-      gtk_gl_area_make_current (glarea);
-      reshape ((GtkGears *) glarea, allocation->width, allocation->height);
-    }
 }
 
 static const char vertex_shader[] =
@@ -715,6 +705,8 @@ gtk_gears_realize (GtkWidget *widget)
   GTK_WIDGET_CLASS (gtk_gears_parent_class)->realize (widget);
 
   gtk_gl_area_make_current (glarea);
+  if (gtk_gl_area_get_error (glarea) != NULL)
+    return;
 
   glEnable (GL_CULL_FACE);
   glEnable (GL_DEPTH_TEST);
@@ -722,6 +714,7 @@ gtk_gears_realize (GtkWidget *widget)
   /* Create the VAO */
   glGenVertexArrays (1, &vao);
   glBindVertexArray (vao);
+  priv->vao = vao;
 
   /* Compile the vertex shader */
   p = vertex_shader;
@@ -749,9 +742,12 @@ gtk_gears_realize (GtkWidget *widget)
   glLinkProgram(program);
   glGetProgramInfoLog(program, sizeof msg, NULL, msg);
   g_print ("program info: %s\n", msg);
+  glDeleteShader (v);
+  glDeleteShader (f);
 
   /* Enable the shaders */
   glUseProgram(program);
+  priv->program = program;
 
   /* Get the locations of the uniforms so we can access them */
   priv->ModelViewProjectionMatrix_location = glGetUniformLocation(program, "ModelViewProjectionMatrix");
@@ -764,8 +760,64 @@ gtk_gears_realize (GtkWidget *widget)
 
   /* make the gears */
   priv->gear1 = create_gear(1.0, 4.0, 1.0, 20, 0.7);
+
+  /* Store the vertices in a vertex buffer object (VBO) */
+  glGenBuffers (1, &(priv->gear_vbo[0]));
+  glBindBuffer (GL_ARRAY_BUFFER, priv->gear_vbo[0]);
+  glBufferData (GL_ARRAY_BUFFER,
+                priv->gear1->nvertices * sizeof(GearVertex),
+                priv->gear1->vertices,
+                GL_STATIC_DRAW);
+
   priv->gear2 = create_gear(0.5, 2.0, 2.0, 10, 0.7);
+  glGenBuffers (1, &(priv->gear_vbo[1]));
+  glBindBuffer (GL_ARRAY_BUFFER, priv->gear_vbo[1]);
+  glBufferData (GL_ARRAY_BUFFER,
+                priv->gear2->nvertices * sizeof(GearVertex),
+                priv->gear2->vertices,
+                GL_STATIC_DRAW);
+
   priv->gear3 = create_gear(1.3, 2.0, 0.5, 10, 0.7);
+  glGenBuffers (1, &(priv->gear_vbo[2]));
+  glBindBuffer (GL_ARRAY_BUFFER, priv->gear_vbo[2]);
+  glBufferData (GL_ARRAY_BUFFER,
+                priv->gear3->nvertices * sizeof(GearVertex),
+                priv->gear3->vertices,
+                GL_STATIC_DRAW);
+}
+
+static void
+gtk_gears_unrealize (GtkWidget *widget)
+{
+  GtkGLArea *glarea = GTK_GL_AREA (widget);
+  GtkGearsPrivate *priv = gtk_gears_get_instance_private ((GtkGears *) widget);
+
+  gtk_gl_area_make_current (glarea);
+  if (gtk_gl_area_get_error (glarea) != NULL)
+    return;
+
+  /* Release the resources associated with OpenGL */
+  if (priv->gear_vbo[0] != 0)
+    glDeleteBuffers (1, &(priv->gear_vbo[0]));
+
+  if (priv->gear_vbo[1] != 0)
+    glDeleteBuffers (1, &(priv->gear_vbo[1]));
+
+  if (priv->gear_vbo[2] != 0)
+    glDeleteBuffers (1, &(priv->gear_vbo[2]));
+
+  if (priv->vao != 0)
+    glDeleteVertexArrays (1, &priv->vao);
+
+  if (priv->program != 0)
+    glDeleteProgram (priv->program);
+
+  priv->ModelViewProjectionMatrix_location = 0;
+  priv->NormalMatrix_location = 0;
+  priv->LightSourcePosition_location = 0;
+  priv->MaterialColor_location = 0;
+
+  GTK_WIDGET_CLASS (gtk_gears_parent_class)->unrealize (widget);
 }
 
 static gboolean
