@@ -1223,6 +1223,17 @@ update_places (GtkPlacesSidebar *sidebar)
   /* network */
   if (!sidebar->local_only)
     {
+      if (sidebar->show_connect_to_server)
+        {
+          icon = g_themed_icon_new_with_default_fallbacks (ICON_NAME_NETWORK_SERVER);
+          add_place (sidebar, PLACES_CONNECT_TO_SERVER,
+                     SECTION_MOUNTS,
+                     _("Connect to Server"), icon, NULL,
+                     NULL, NULL, NULL, 0,
+                     _("Connect to a network server address"));
+          g_object_unref (icon);
+        }
+
       network_volumes = g_list_reverse (network_volumes);
       for (l = network_volumes; l != NULL; l = l->next)
         {
@@ -1247,17 +1258,6 @@ update_places (GtkPlacesSidebar *sidebar)
               g_object_unref (icon);
               g_free (name);
               g_free (tooltip);
-            }
-
-          if (sidebar->show_connect_to_server)
-            {
-              icon = g_themed_icon_new_with_default_fallbacks (ICON_NAME_NETWORK_SERVER);
-              add_place (sidebar, PLACES_CONNECT_TO_SERVER,
-                         SECTION_MOUNTS,
-                         _("Connect to Server"), icon, NULL,
-                         NULL, NULL, NULL, 0,
-                         _("Connect to a network server address"));
-              g_object_unref (icon);
             }
         }
 
