@@ -255,14 +255,14 @@ gdk_gl_context_class_init (GdkGLContextClass *klass)
   /**
    * GdkGLContext:display:
    *
-   * The #GdkWindow the gl context is bound to.
+   * The #GdkDisplay used to create the #GdkGLContext.
    *
    * Since: 3.16
    */
   obj_pspecs[PROP_DISPLAY] =
     g_param_spec_object ("display",
                          P_("Display"),
-                         P_("The GDK display the context is from"),
+                         P_("The GDK display used to create the GL context"),
                          GDK_TYPE_DISPLAY,
                          G_PARAM_READWRITE |
                          G_PARAM_CONSTRUCT_ONLY |
@@ -294,7 +294,7 @@ gdk_gl_context_class_init (GdkGLContextClass *klass)
   obj_pspecs[PROP_SHARED_CONTEXT] =
     g_param_spec_object ("shared-context",
                          P_("Shared context"),
-                         P_("The GL context this context share data with"),
+                         P_("The GL context this context shares data with"),
                          GDK_TYPE_GL_CONTEXT,
                          G_PARAM_READWRITE |
                          G_PARAM_CONSTRUCT_ONLY |
