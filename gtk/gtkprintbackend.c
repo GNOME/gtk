@@ -706,24 +706,27 @@ password_dialog_response (GtkWidget       *dialog,
                           GtkPrintBackend *backend)
 {
   GtkPrintBackendPrivate *priv = backend->priv;
-  gint i;
+  gint i, auth_info_len;
 
   if (response_id == GTK_RESPONSE_OK)
     gtk_print_backend_set_password (backend, priv->auth_info_required, priv->auth_info, priv->store_auth_info);
   else
     gtk_print_backend_set_password (backend, priv->auth_info_required, NULL, FALSE);
 
-  for (i = 0; i < g_strv_length (priv->auth_info_required); i++)
-    if (priv->auth_info[i] != NULL)
-      {
-        memset (priv->auth_info[i], 0, strlen (priv->auth_info[i]));
-        g_free (priv->auth_info[i]);
-        priv->auth_info[i] = NULL;
-      }
-  g_free (priv->auth_info);
-  priv->auth_info = NULL;
+  /* We want to clear the data before freeing it */
+  auth_info_len = g_strv_length (priv->auth_info_required);
+  for (i = 0; i < auth_info_len; i++)
+    {
+      if (priv->auth_info[i] != NULL)
+        {
+          memset (priv->auth_info[i], 0, strlen (priv->auth_info[i]));
+          g_free (priv->auth_info[i]);
+          priv->auth_info[i] = NULL;
+        }
+    }
 
-  g_strfreev (priv->auth_info_required);
+  g_clear_pointer (&priv->auth_info, g_free);
+  g_clear_pointer (&priv->auth_info_required, g_strfreev);
 
   gtk_widget_destroy (dialog);
 

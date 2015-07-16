@@ -142,7 +142,7 @@ record_events (const gchar *ui_file,
   GError *error;
   gchar *contents;
   gchar **actions;
-  gint i;
+  gint i, len;
 
   builder = gtk_builder_new ();
   error = NULL;
@@ -152,8 +152,9 @@ record_events (const gchar *ui_file,
   g_file_get_contents (in_file, &contents, NULL, &error);
   g_assert_no_error (error);
   actions = g_strsplit (contents, "\n", 0);
- 
-  for (i = 0; i < g_strv_length (actions); i++)
+
+  len = g_strv_length (actions);
+  for (i = 0; i < len; i++)
     do_action (builder, actions[i], string);
 
   g_object_unref (builder);

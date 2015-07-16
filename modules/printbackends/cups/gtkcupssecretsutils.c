@@ -109,7 +109,7 @@ get_secret_cb (GObject      *source_object,
                      *key = NULL,
                      *value = NULL;
   GVariantIter       *iter = NULL;
-  guint               i;
+  guint               i, required_len;
   gint                pw_field = -1;
 
   task = user_data;
@@ -228,7 +228,8 @@ get_secret_cb (GObject      *source_object,
 fail:
   /* Error out */
   GTK_NOTE (PRINTING, g_print ("Failed to lookup secret.\n"));
-  for (i = 0; i < g_strv_length (task_data->auth_info_required); i++)
+  required_len = g_strv_length (task_data->auth_info_required);
+  for (i = 0; i < required_len; i++)
     {
       /* Not all fields of auth_info are neccessarily written so we can not
          use strfreev here */

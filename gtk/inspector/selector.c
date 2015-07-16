@@ -64,7 +64,7 @@ gtk_inspector_selector_set_object (GtkInspectorSelector *oh,
                                    GObject              *object)
 {
   GtkTreeIter iter, parent;
-  gint i;
+  gint i, words_len;
   GtkWidget *widget;
   gchar *path, **words;
   const gchar *title;
@@ -85,7 +85,8 @@ gtk_inspector_selector_set_object (GtkInspectorSelector *oh,
   path = gtk_widget_path_to_string (gtk_widget_get_path (widget));
   words = g_strsplit (path, " ", 0);
 
-  for (i = 0; i < g_strv_length (words); i++)
+  words_len = g_strv_length (words);
+  for (i = 0; i < words_len; i++)
     {
       gtk_tree_store_append (oh->priv->model, &iter, i ? &parent : NULL);
       gtk_tree_store_set (oh->priv->model, &iter,
