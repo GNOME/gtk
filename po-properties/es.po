@@ -17,10 +17,10 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-properties.master\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-07-12 21:47+0000\n"
-"PO-Revision-Date: 2015-07-13 \n"
+"POT-Creation-Date: 2015-07-16 04:51+0000\n"
+"PO-Revision-Date: 2015-07-16 \n"
 "Last-Translator: Daniel Mustieles <daniel.mustieles@gmail.com>\n"
-"Language-Team: Español; Castellano <gnome-es-list@gnome.org>\n"
+"Language-Team: Spanish <gnome-es-list@gnome.org>\n"
 "Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -190,11 +190,11 @@ msgstr "Menor"
 msgid "Minor version number"
 msgstr "Número de versión menor"
 
-#: gdk/x11/gdkdevice-xi2.c:142
+#: gdk/x11/gdkdevice-xi2.c:143
 msgid "Device ID"
 msgstr "ID del dispositivo"
 
-#: gdk/x11/gdkdevice-xi2.c:143
+#: gdk/x11/gdkdevice-xi2.c:144
 msgid "Device identifier"
 msgstr "Identificador del dispositivo"
 
@@ -610,7 +610,7 @@ msgid "The text to display in order to demonstrate the selected font"
 msgstr "El texto que mostrar como demostración de la tipografía seleccionada"
 
 #: gtk/deprecated/gtkhandlebox.c:223 gtk/gtkcombobox.c:1068 gtk/gtkentry.c:952
-#: gtk/gtkmenubar.c:217 gtk/gtkstatusbar.c:165 gtk/gtktoolbar.c:633
+#: gtk/gtkmenubar.c:217 gtk/gtkstatusbar.c:165 gtk/gtktoolbar.c:629
 #: gtk/gtkviewport.c:177
 msgid "Shadow type"
 msgstr "Tipo de sombra"
@@ -914,7 +914,7 @@ msgstr "El contenido de las sugerencias para este icono de la bandeja"
 # components/music/nautilus-music-view.c:198
 #: gtk/deprecated/gtkstatusicon.c:435 gtk/gtkcolorbutton.c:181
 #: gtk/gtkfilechooserbutton.c:445 gtk/gtkfontbutton.c:472
-#: gtk/gtkheaderbar.c:1893 gtk/gtkprintjob.c:132 gtk/gtkstack.c:471
+#: gtk/gtkheaderbar.c:1859 gtk/gtkprintjob.c:132 gtk/gtkstack.c:471
 #: gtk/gtktreeviewcolumn.c:322
 msgid "Title"
 msgstr "Título"
@@ -964,7 +964,7 @@ msgid "The amount of space between two consecutive columns"
 msgstr "La cantidad de espacio entre dos columnas consecutivas"
 
 #: gtk/deprecated/gtktable.c:225 gtk/gtkbox.c:264 gtk/gtkflowbox.c:3694
-#: gtk/gtkstack.c:412 gtk/gtktoolbar.c:565 gtk/gtktoolitemgroup.c:1654
+#: gtk/gtkstack.c:412 gtk/gtktoolbar.c:561 gtk/gtktoolitemgroup.c:1654
 msgid "Homogeneous"
 msgstr "Homogéneo"
 
@@ -1308,11 +1308,11 @@ msgstr "acción del valor objetivo"
 msgid "The parameter for action invocations"
 msgstr "El parámetro para acciones de invocación"
 
-#: gtk/gtkactionbar.c:237 gtk/gtkbox.c:330 gtk/gtkheaderbar.c:1878
+#: gtk/gtkactionbar.c:237 gtk/gtkbox.c:330 gtk/gtkheaderbar.c:1844
 msgid "Pack type"
 msgstr "Tipo de empaquetado"
 
-#: gtk/gtkactionbar.c:238 gtk/gtkbox.c:331 gtk/gtkheaderbar.c:1879
+#: gtk/gtkactionbar.c:238 gtk/gtkbox.c:331 gtk/gtkheaderbar.c:1845
 msgid ""
 "A GtkPackType indicating whether the child is packed with reference to the "
 "start or end of the parent"
@@ -1320,13 +1320,13 @@ msgstr ""
 "Un GtkPackType que indica si el hijo está empaquetado con referencia al "
 "inicio o el final del padre"
 
-#: gtk/gtkactionbar.c:244 gtk/gtkbox.c:337 gtk/gtkheaderbar.c:1885
+#: gtk/gtkactionbar.c:244 gtk/gtkbox.c:337 gtk/gtkheaderbar.c:1851
 #: gtk/gtknotebook.c:775 gtk/gtkpaned.c:337 gtk/gtkpopover.c:1618
 #: gtk/gtkpopovermenu.c:375 gtk/gtkstack.c:485 gtk/gtktoolitemgroup.c:1682
 msgid "Position"
 msgstr "Posición"
 
-#: gtk/gtkactionbar.c:245 gtk/gtkbox.c:338 gtk/gtkheaderbar.c:1886
+#: gtk/gtkactionbar.c:245 gtk/gtkbox.c:338 gtk/gtkheaderbar.c:1852
 #: gtk/gtknotebook.c:776 gtk/gtkpopovermenu.c:376 gtk/gtkstack.c:486
 msgid "The index of the child in the parent"
 msgstr "El índice del hijo en el padre"
@@ -1686,11 +1686,11 @@ msgid "If TRUE, the child will not be subject to homogeneous sizing"
 msgstr "Si es TRUE, el hijo no será objeto de tamaño homogéneo"
 
 #: gtk/gtkbox.c:257 gtk/gtkcellareabox.c:310 gtk/gtkexpander.c:299
-#: gtk/gtkheaderbar.c:1919 gtk/gtkiconview.c:511 gtk/gtktreeviewcolumn.c:280
+#: gtk/gtkheaderbar.c:1885 gtk/gtkiconview.c:511 gtk/gtktreeviewcolumn.c:280
 msgid "Spacing"
 msgstr "Espaciado"
 
-#: gtk/gtkbox.c:258 gtk/gtkheaderbar.c:1920
+#: gtk/gtkbox.c:258 gtk/gtkheaderbar.c:1886
 msgid "The amount of space between children"
 msgstr "La cantidad de espacio entre hijos"
 
@@ -1709,7 +1709,7 @@ msgstr ""
 "La posición de la línea base de los widgets alineados si hay espacio "
 "adicional disponible"
 
-#: gtk/gtkbox.c:298 gtk/gtkcellareabox.c:330 gtk/gtktoolbar.c:557
+#: gtk/gtkbox.c:298 gtk/gtkcellareabox.c:330 gtk/gtktoolbar.c:553
 #: gtk/gtktoolitemgroup.c:1661 gtk/gtktoolpalette.c:1023
 #: gtk/gtktreeviewcolumn.c:330
 msgid "Expand"
@@ -3851,7 +3851,8 @@ msgstr "Filtro"
 msgid "The current filter for selecting which files are displayed"
 msgstr "El filtro actual para seleccionar qué archivos se están mostrando"
 
-#: gtk/gtkfilechooser.c:388 gtk/gtkplacessidebar.c:4249
+#: gtk/gtkfilechooser.c:388 gtk/gtkplacessidebar.c:4355
+#: gtk/gtkplacesview.c:1788
 msgid "Local Only"
 msgstr "Sólo local"
 
@@ -3938,13 +3939,13 @@ msgstr ""
 "Indica si un selector de archivos en modo distinto a abrir ofrece al usuario "
 "la posibilidad de crear carpetas nuevas."
 
-#: gtk/gtkfilechooserwidget.c:8220 gtk/gtkfilechooserwidget.c:8221
+#: gtk/gtkfilechooserwidget.c:8298 gtk/gtkfilechooserwidget.c:8299
 msgid "Search mode"
 msgstr "Modo de búsqueda"
 
 # components/music/nautilus-music-view.c:198
-#: gtk/gtkfilechooserwidget.c:8227 gtk/gtkfilechooserwidget.c:8228
-#: gtk/gtkheaderbar.c:1901
+#: gtk/gtkfilechooserwidget.c:8305 gtk/gtkfilechooserwidget.c:8306
+#: gtk/gtkheaderbar.c:1867
 msgid "Subtitle"
 msgstr "Subtítulo"
 
@@ -4242,52 +4243,52 @@ msgstr "Altura"
 msgid "The number of rows that a child spans"
 msgstr "El número de filas que un hijo engendra"
 
-#: gtk/gtkheaderbar.c:1894
+#: gtk/gtkheaderbar.c:1860
 msgid "The title to display"
 msgstr "El título que mostrar"
 
-#: gtk/gtkheaderbar.c:1902
+#: gtk/gtkheaderbar.c:1868
 msgid "The subtitle to display"
 msgstr "El subtítulo que mostrar"
 
-#: gtk/gtkheaderbar.c:1909
+#: gtk/gtkheaderbar.c:1875
 msgid "Custom Title"
 msgstr "Título personalizado"
 
-#: gtk/gtkheaderbar.c:1910
+#: gtk/gtkheaderbar.c:1876
 msgid "Custom title widget to display"
 msgstr "Título personalizado del widget que mostrar"
 
-#: gtk/gtkheaderbar.c:1938
+#: gtk/gtkheaderbar.c:1904
 msgid "Show decorations"
 msgstr "Mostrar decoraciones"
 
-#: gtk/gtkheaderbar.c:1939
+#: gtk/gtkheaderbar.c:1905
 msgid "Whether to show window decorations"
 msgstr "Indica si se deben mostrar las decoraciones de la ventana"
 
-#: gtk/gtkheaderbar.c:1958 gtk/gtksettings.c:1587
+#: gtk/gtkheaderbar.c:1924 gtk/gtksettings.c:1587
 msgid "Decoration Layout"
 msgstr "Distribución la decoración"
 
-#: gtk/gtkheaderbar.c:1959 gtk/gtksettings.c:1588
+#: gtk/gtkheaderbar.c:1925 gtk/gtksettings.c:1588
 msgid "The layout for window decorations"
 msgstr "La distribución par ala decoración de las ventanas"
 
-#: gtk/gtkheaderbar.c:1973
+#: gtk/gtkheaderbar.c:1939
 msgid "Decoration Layout Set"
 msgstr "Distribución la decoración establecida"
 
-#: gtk/gtkheaderbar.c:1974
+#: gtk/gtkheaderbar.c:1940
 msgid "Whether the decoration-layout property has been set"
 msgstr "Indica si se ha establecido la decoración de la distribución"
 
 # components/music/nautilus-music-view.c:198
-#: gtk/gtkheaderbar.c:1989
+#: gtk/gtkheaderbar.c:1955
 msgid "Has Subtitle"
 msgstr "Tiene subtítulo"
 
-#: gtk/gtkheaderbar.c:1990
+#: gtk/gtkheaderbar.c:1956
 msgid "Whether to reserve space for a subtitle"
 msgstr "Indica si se debe reservar espacio para un subtítulo"
 
@@ -4431,7 +4432,7 @@ msgstr "Conjunto de iconos"
 msgid "Icon set to display"
 msgstr "Conjunto de iconos para mostrar"
 
-#: gtk/gtkimage.c:290 gtk/gtkscalebutton.c:201 gtk/gtktoolbar.c:532
+#: gtk/gtkimage.c:290 gtk/gtkscalebutton.c:201 gtk/gtktoolbar.c:528
 #: gtk/gtktoolpalette.c:961
 msgid "Icon size"
 msgstr "Tamaño del icono"
@@ -4790,7 +4791,7 @@ msgstr "La dirección de empaquetado hijo de la barra de menú"
 msgid "Style of bevel around the menubar"
 msgstr "Estilo del bisel alrededor de la barra de menús"
 
-#: gtk/gtkmenubar.c:234 gtk/gtktoolbar.c:591
+#: gtk/gtkmenubar.c:234 gtk/gtktoolbar.c:587
 msgid "Internal padding"
 msgstr "Relleno interno"
 
@@ -5376,12 +5377,10 @@ msgid "Pass through input, does not affect main child"
 msgstr "Pasar por la entrada, no afecta al hijo principal"
 
 #: gtk/gtkoverlay.c:776
-#| msgid "Indent"
 msgid "Index"
 msgstr "Índice"
 
 #: gtk/gtkoverlay.c:777
-#| msgid "The index of the child in the parent"
 msgid "The index of the overlay in the parent, -1 for the main child"
 msgstr "El índice de la superposición en el padre, -1 para el hijo principal"
 
@@ -5448,19 +5447,19 @@ msgstr "Encoger"
 msgid "If TRUE, the child can be made smaller than its requisition"
 msgstr "Si es TRUE, el hijo puede hacerse más pequeño que sus requisitos"
 
-#: gtk/gtkplacessidebar.c:4212
+#: gtk/gtkplacessidebar.c:4318
 msgid "Location to Select"
 msgstr "Ubicación que seleccionar"
 
-#: gtk/gtkplacessidebar.c:4213
+#: gtk/gtkplacessidebar.c:4319
 msgid "The location to highlight in the sidebar"
 msgstr "La ubicación que resaltar en la barra lateral"
 
-#: gtk/gtkplacessidebar.c:4218
+#: gtk/gtkplacessidebar.c:4324 gtk/gtkplacesview.c:1795
 msgid "Open Flags"
 msgstr "Abrir opciones"
 
-#: gtk/gtkplacessidebar.c:4219
+#: gtk/gtkplacessidebar.c:4325 gtk/gtkplacesview.c:1796
 msgid ""
 "Modes in which the calling application can open locations selected in the "
 "sidebar"
@@ -5468,29 +5467,29 @@ msgstr ""
 "Modos en los que la aplicación llamante puede abrir ubicaciones "
 "seleccionadas en la barra lateral"
 
-#: gtk/gtkplacessidebar.c:4225
+#: gtk/gtkplacessidebar.c:4331
 msgid "Show recent files"
 msgstr "Mostrar archivo recientes"
 
-#: gtk/gtkplacessidebar.c:4226
+#: gtk/gtkplacessidebar.c:4332
 msgid "Whether the sidebar includes a builtin shortcut for recent files"
 msgstr ""
 "Indica si la barra lateral incluye un atajo para los archivos recientes"
 
-#: gtk/gtkplacessidebar.c:4231
+#: gtk/gtkplacessidebar.c:4337
 msgid "Show 'Desktop'"
 msgstr "Mostrar «Escritorio»"
 
-#: gtk/gtkplacessidebar.c:4232
+#: gtk/gtkplacessidebar.c:4338
 msgid "Whether the sidebar includes a builtin shortcut to the Desktop folder"
 msgstr ""
 "Indica si la barra lateral incluye un atajo a la carpeta del Escritorio"
 
-#: gtk/gtkplacessidebar.c:4237
+#: gtk/gtkplacessidebar.c:4343
 msgid "Show 'Connect to Server'"
 msgstr "Mostrar «Conectar al servidor»"
 
-#: gtk/gtkplacessidebar.c:4238
+#: gtk/gtkplacessidebar.c:4344
 msgid ""
 "Whether the sidebar includes a builtin shortcut to a 'Connect to server' "
 "dialog"
@@ -5498,34 +5497,92 @@ msgstr ""
 "Indica si la barra lateral incluye un atajo integrado al diálogo «Conectar al "
 "servidor»"
 
-#: gtk/gtkplacessidebar.c:4243
+#: gtk/gtkplacessidebar.c:4349
 msgid "Show 'Enter Location'"
 msgstr "Mostrar «Introducir ubicación»"
 
-#: gtk/gtkplacessidebar.c:4244
+#: gtk/gtkplacessidebar.c:4350
 msgid ""
 "Whether the sidebar includes a builtin shortcut to manually enter a location"
 msgstr ""
 "Indica si la barra lateral incluye un atajo integrado para introducir "
 "manualmente la ubicación"
 
-#: gtk/gtkplacessidebar.c:4250
+#: gtk/gtkplacessidebar.c:4356 gtk/gtkplacesview.c:1789
 msgid "Whether the sidebar only includes local files"
 msgstr "Indica si la barra lateral sólo incluye archivos locales"
 
-#: gtk/gtkplacessidebar.c:4255
-#| msgid "Show Tabs"
+#: gtk/gtkplacessidebar.c:4361
 msgid "Show 'Trash'"
 msgstr "Mostrar «Papelera»"
 
-#: gtk/gtkplacessidebar.c:4256
-#| msgid ""
-#| "Whether the sidebar includes a builtin shortcut to manually enter a "
-#| "location"
+#: gtk/gtkplacessidebar.c:4362
 msgid "Whether the sidebar includes a builtin shortcut to  the Trash location"
 msgstr ""
 "Indica si la barra lateral incluye un atajo integrado a la ubicación de la "
 "papelera"
+
+#: gtk/gtkplacessidebar.c:4367
+#| msgid "Show 'Enter Location'"
+msgid "Show 'Other locations'"
+msgstr "Mostrar «Otras ubicaciones»"
+
+#: gtk/gtkplacessidebar.c:4368
+#| msgid ""
+#| "Whether the sidebar includes a builtin shortcut to  the Trash location"
+msgid "Whether the sidebar includes an item to show external locations"
+msgstr ""
+"Indica si la barra lateral incluye un elemento para mostrar ubicaciones "
+"externas"
+
+#: gtk/gtkplacesviewrow.c:146
+#| msgid "Icon for this window"
+msgid "Icon of the row"
+msgstr "Icono de la fila"
+
+#: gtk/gtkplacesviewrow.c:147
+#| msgid "The current page in the document"
+msgid "The icon representing the volume"
+msgstr "El icono que representa al volumen"
+
+#: gtk/gtkplacesviewrow.c:153
+#| msgid "Name of theme to load"
+msgid "Name of the volume"
+msgstr "Nombre del volumen"
+
+#: gtk/gtkplacesviewrow.c:154
+#| msgid "The name of the submenu"
+msgid "The name of the volume"
+msgstr "El nombre del volumen"
+
+#: gtk/gtkplacesviewrow.c:160
+#| msgid "Current width of the column"
+msgid "Path of the volume"
+msgstr "Ruta del volumen"
+
+#: gtk/gtkplacesviewrow.c:161
+#| msgid "The width of the layout"
+msgid "The path of the volume"
+msgstr "La ruta del volumen"
+
+#: gtk/gtkplacesviewrow.c:167
+msgid "Volume represented by the row"
+msgstr "Volumen representado por la fila"
+
+#: gtk/gtkplacesviewrow.c:168
+#| msgid "The amount of space used by the arrow"
+msgid "The volume represented by the row"
+msgstr "El volumen representado por la fila"
+
+#: gtk/gtkplacesviewrow.c:174
+#| msgid "The amount of space used by the arrow"
+msgid "Mount represented by the row"
+msgstr "Punto de montaje representado por la fila"
+
+#: gtk/gtkplacesviewrow.c:175
+#| msgid "The amount of space used by the arrow"
+msgid "The mount point represented by the row, if any"
+msgstr "El punto de montaje representado por la fila, si hay"
 
 #: gtk/gtkplug.c:202
 msgid "Whether the plug is embedded"
@@ -7495,12 +7552,10 @@ msgid "The minimum width of the handle"
 msgstr "La anchura mínima del tirador"
 
 #: gtk/gtkswitch.c:940
-#| msgid "Slider Length"
 msgid "Slider Height"
 msgstr "Altura del deslizador"
 
 #: gtk/gtkswitch.c:941
-#| msgid "The minimum width of the handle"
 msgid "The minimum height of the handle"
 msgstr "La altura mínima del tirador"
 
@@ -8012,85 +8067,85 @@ msgstr "Indicador de dibujo"
 msgid "If the toggle part of the button is displayed"
 msgstr "Si se muestra la parte de conmutación del botón"
 
-#: gtk/gtktoolbar.c:503 gtk/gtktoolpalette.c:991
+#: gtk/gtktoolbar.c:499 gtk/gtktoolpalette.c:991
 msgid "Toolbar Style"
 msgstr "Estilo de la barra de herramientas"
 
-#: gtk/gtktoolbar.c:504
+#: gtk/gtktoolbar.c:500
 msgid "How to draw the toolbar"
 msgstr "Cómo dibujar la barra de herramientas"
 
-#: gtk/gtktoolbar.c:511
+#: gtk/gtktoolbar.c:507
 msgid "Show Arrow"
 msgstr "Mostrar flecha"
 
-#: gtk/gtktoolbar.c:512
+#: gtk/gtktoolbar.c:508
 msgid "If an arrow should be shown if the toolbar doesn't fit"
 msgstr ""
 "Indica si debe mostrarse una flecha si no cabe la barra de herramientas"
 
-#: gtk/gtktoolbar.c:533
+#: gtk/gtktoolbar.c:529
 msgid "Size of icons in this toolbar"
 msgstr "Tamaño de los iconos en esta barra de herramientas"
 
-#: gtk/gtktoolbar.c:548 gtk/gtktoolpalette.c:977
+#: gtk/gtktoolbar.c:544 gtk/gtktoolpalette.c:977
 msgid "Icon size set"
 msgstr "Tamaño del icono establecido"
 
-#: gtk/gtktoolbar.c:549 gtk/gtktoolpalette.c:978
+#: gtk/gtktoolbar.c:545 gtk/gtktoolpalette.c:978
 msgid "Whether the icon-size property has been set"
 msgstr "Indica si se ha establecido la propiedad de tamaño del icono"
 
-#: gtk/gtktoolbar.c:558
+#: gtk/gtktoolbar.c:554
 msgid "Whether the item should receive extra space when the toolbar grows"
 msgstr ""
 "Indica si el elemento debe recibir espacio extra cuando la barra crezca"
 
-#: gtk/gtktoolbar.c:566 gtk/gtktoolitemgroup.c:1655
+#: gtk/gtktoolbar.c:562 gtk/gtktoolitemgroup.c:1655
 msgid "Whether the item should be the same size as other homogeneous items"
 msgstr ""
 "Indica si el elemento debe ser del mismo tamaño que otros elementos "
 "homogéneos"
 
-#: gtk/gtktoolbar.c:573
+#: gtk/gtktoolbar.c:569
 msgid "Spacer size"
 msgstr "Tamaño del espaciador"
 
-#: gtk/gtktoolbar.c:574
+#: gtk/gtktoolbar.c:570
 msgid "Size of spacers"
 msgstr "Tamaño de los espaciadores"
 
-#: gtk/gtktoolbar.c:592
+#: gtk/gtktoolbar.c:588
 msgid "Amount of border space between the toolbar shadow and the buttons"
 msgstr ""
 "Número de espacio del borde entre la sombra de la barra de herramientas y "
 "los botones"
 
-#: gtk/gtktoolbar.c:600
+#: gtk/gtktoolbar.c:596
 msgid "Maximum child expand"
 msgstr "Expansión de hijos máxima"
 
-#: gtk/gtktoolbar.c:601
+#: gtk/gtktoolbar.c:597
 msgid "Maximum amount of space an expandable item will be given"
 msgstr "Cantidad máxima de espacio que se le dará a un elemento expandible"
 
-#: gtk/gtktoolbar.c:609
+#: gtk/gtktoolbar.c:605
 msgid "Space style"
 msgstr "Estilo del espacio"
 
-#: gtk/gtktoolbar.c:610
+#: gtk/gtktoolbar.c:606
 msgid "Whether spacers are vertical lines or just blank"
 msgstr "Indica si los espaciadores son líneas verticales o sólo blancos"
 
-#: gtk/gtktoolbar.c:617
+#: gtk/gtktoolbar.c:613
 msgid "Button relief"
 msgstr "Borde del botón"
 
-#: gtk/gtktoolbar.c:618
+#: gtk/gtktoolbar.c:614
 msgid "Type of bevel around toolbar buttons"
 msgstr "Tipo de bisel alrededor de los botones de la barra de herramientas"
 
-#: gtk/gtktoolbar.c:634
+#: gtk/gtktoolbar.c:630
 msgid "Style of bevel around the toolbar"
 msgstr "Estilo del bisel alrededor de la barra de herramientas"
 
