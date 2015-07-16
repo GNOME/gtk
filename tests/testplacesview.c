@@ -1,4 +1,6 @@
 #include <gtk/gtk.h>
+#define GTK_COMPILATION
+#include "gtk/gtkplacesviewprivate.h"
 
 int
 main (int argc, char *argv[])
