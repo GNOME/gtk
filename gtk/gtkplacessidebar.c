@@ -58,6 +58,9 @@
 #include "gtkdnd.h"
 #include "gtkseparator.h"
 #include "gtkentry.h"
+#include "gtkgesturelongpress.h"
+#include "gtkbox.h"
+#include "gtkmodelbutton.h"
 
 /**
  * SECTION:gtkplacessidebar
@@ -135,12 +138,14 @@ struct _GtkPlacesSidebar {
   gint drag_root_y;
   GtkWidget *row_placeholder;
   DropState drop_state;
+  GtkGesture *long_press_gesture;
 
   /* volume mounting - delayed open process */
   GtkPlacesOpenFlags go_to_after_mount_open_flags;
   GCancellable *cancellable;
 
-  GtkWidget *popup_menu;
+  GtkWidget *popover;
+  GtkSidebarRow *context_row;
   GSList *shortcuts;
 
   GDBusProxy *hostnamed_proxy;
@@ -255,7 +260,11 @@ static gboolean on_button_press_event (GtkWidget      *widget,
 static gboolean on_button_release_event (GtkWidget      *widget,
                                          GdkEventButton *event,
                                          GtkSidebarRow  *sidebar);
-static void popup_menu_cb (GtkSidebarRow *row);
+static void popup_menu_cb    (GtkSidebarRow   *row);
+static void long_press_cb    (GtkGesture      *gesture,
+                              gdouble          x,
+                              gdouble          y,
+                              GtkPlacesSidebar *sidebar);
 static void stop_drop_feedback (GtkPlacesSidebar *sidebar);
 
 
@@ -290,6 +299,7 @@ emit_open_location (GtkPlacesSidebar   *sidebar,
                  location, open_flags);
 }
 
+#if 0
 static void
 emit_populate_popup (GtkPlacesSidebar *sidebar,
                      GtkMenu          *menu,
@@ -299,6 +309,7 @@ emit_populate_popup (GtkPlacesSidebar *sidebar,
   g_signal_emit (sidebar, places_sidebar_signals[POPULATE_POPUP], 0,
                  menu, selected_item, selected_volume);
 }
+#endif
 
 static void
 emit_show_error_message (GtkPlacesSidebar *sidebar,
@@ -1958,14 +1969,6 @@ drag_drop_callback (GtkWidget      *list_box,
   return retval;
 }
 
-/* Callback used when the file list's popup menu is detached */
-static void
-bookmarks_popup_menu_detach_cb (GtkWidget *attach_widget,
-                                GtkMenu   *menu)
-{
-  GTK_PLACES_SIDEBAR (attach_widget)->popup_menu = NULL;
-}
-
 static void
 check_unmount_and_eject (GMount   *mount,
                          GVolume  *volume,
@@ -2039,11 +2042,11 @@ typedef struct {
   GtkWidget *rescan_item;
   GtkWidget *start_item;
   GtkWidget *stop_item;
-} PopupMenuData;
+} PopoverData;
 
 static void
-check_popup_sensitivity (GtkSidebarRow *row,
-                         PopupMenuData *data)
+check_popover_sensitivity (GtkSidebarRow *row,
+                           PopoverData   *data)
 {
   gboolean show_mount;
   gboolean show_unmount;
@@ -2055,8 +2058,12 @@ check_popup_sensitivity (GtkSidebarRow *row,
   GDrive *drive;
   GVolume *volume;
   GMount *mount;
+  GtkWidget *sidebar;
+  GActionGroup *actions;
+  GAction *action;
 
   g_object_get (row,
+                "sidebar", &sidebar,
                 "place-type", &type,
                 "drive", &drive,
                 "volume", &volume,
@@ -2065,9 +2072,12 @@ check_popup_sensitivity (GtkSidebarRow *row,
 
   gtk_widget_set_visible (data->add_shortcut_item, (type == PLACES_MOUNTED_VOLUME));
 
-  gtk_widget_set_sensitive (data->remove_item, (type == PLACES_BOOKMARK));
-  gtk_widget_set_sensitive (data->rename_item, (type == PLACES_BOOKMARK ||
-                                                type == PLACES_XDG_DIR));
+  actions = gtk_widget_get_action_group (sidebar, "row");
+  action = g_action_map_lookup_action (G_ACTION_MAP (actions), "remove");
+  g_simple_action_set_enabled (G_SIMPLE_ACTION (action), (type == PLACES_BOOKMARK));
+  action = g_action_map_lookup_action (G_ACTION_MAP (actions), "rename");
+  g_simple_action_set_enabled (G_SIMPLE_ACTION (action), (type == PLACES_BOOKMARK ||
+                                                          type == PLACES_XDG_DIR));
 
   check_visibility (mount, volume, drive,
                     &show_mount, &show_unmount, &show_eject, &show_rescan, &show_start, &show_stop);
@@ -2081,32 +2091,32 @@ check_popup_sensitivity (GtkSidebarRow *row,
   gtk_widget_set_visible (data->stop_item, show_stop);
 
   /* Adjust start/stop items to reflect the type of the drive */
-  gtk_menu_item_set_label (GTK_MENU_ITEM (data->start_item), _("_Start"));
-  gtk_menu_item_set_label (GTK_MENU_ITEM (data->stop_item), _("_Stop"));
+  g_object_set (data->start_item, "text", _("_Start"), NULL);
+  g_object_set (data->stop_item, "text", _("_Stop"), NULL);
   if ((show_start || show_stop) && drive != NULL)
     {
       switch (g_drive_get_start_stop_type (drive))
         {
         case G_DRIVE_START_STOP_TYPE_SHUTDOWN:
           /* start() for type G_DRIVE_START_STOP_TYPE_SHUTDOWN is normally not used */
-          gtk_menu_item_set_label (GTK_MENU_ITEM (data->start_item), _("_Power On"));
-          gtk_menu_item_set_label (GTK_MENU_ITEM (data->stop_item), _("_Safely Remove Drive"));
+          g_object_set (data->start_item, "text", _("_Power On"), NULL);
+          g_object_set (data->stop_item, "text", _("_Safely Remove Drive"), NULL);
           break;
 
         case G_DRIVE_START_STOP_TYPE_NETWORK:
-          gtk_menu_item_set_label (GTK_MENU_ITEM (data->start_item), _("_Connect Drive"));
-          gtk_menu_item_set_label (GTK_MENU_ITEM (data->stop_item), _("_Disconnect Drive"));
+          g_object_set (data->start_item, "text", _("_Connect Drive"), NULL);
+          g_object_set (data->stop_item, "text", _("_Disconnect Drive"), NULL);
           break;
 
         case G_DRIVE_START_STOP_TYPE_MULTIDISK:
-          gtk_menu_item_set_label (GTK_MENU_ITEM (data->start_item), _("_Start Multi-disk Device"));
-          gtk_menu_item_set_label (GTK_MENU_ITEM (data->stop_item), _("_Stop Multi-disk Device"));
+          g_object_set (data->start_item, "text", _("_Start Multi-disk Device"), NULL);
+          g_object_set (data->stop_item, "text", _("_Stop Multi-disk Device"), NULL);
           break;
 
         case G_DRIVE_START_STOP_TYPE_PASSWORD:
           /* stop() for type G_DRIVE_START_STOP_TYPE_PASSWORD is normally not used */
-          gtk_menu_item_set_label (GTK_MENU_ITEM (data->start_item), _("_Unlock Drive"));
-          gtk_menu_item_set_label (GTK_MENU_ITEM (data->stop_item), _("_Lock Drive"));
+          g_object_set (data->start_item, "text", _("_Unlock Device"), NULL);
+          g_object_set (data->stop_item, "text", _("_Lock Device"), NULL);
           break;
 
         default:
@@ -2122,6 +2132,8 @@ check_popup_sensitivity (GtkSidebarRow *row,
     g_object_unref (volume);
   if (mount)
     g_object_unref (mount);
+
+  g_object_unref (sidebar);
 }
 
 static void
@@ -2290,42 +2302,31 @@ open_row (GtkSidebarRow      *row,
   g_free (uri);
 }
 
-/* Callback used for the "Open" menu item in the context menu */
+/* Callback used for the "Open" menu items in the context menu */
 static void
-open_shortcut_cb (GtkMenuItem   *item,
-                  GtkSidebarRow *row)
+open_shortcut_cb (GSimpleAction *action,
+                  GVariant      *parameter,
+                  gpointer       data)
 {
-  open_row (row, GTK_PLACES_OPEN_NORMAL);
-}
+  GtkPlacesSidebar *sidebar = data;
+  GtkPlacesOpenFlags flags;
 
-/* Callback used for the "Open in new tab" menu item in the context menu */
-static void
-open_shortcut_in_new_tab_cb (GtkMenuItem   *item,
-                             GtkSidebarRow *row)
-{
-  open_row (row, GTK_PLACES_OPEN_NEW_TAB);
-}
-
-/* Callback used for the "Open in new window" menu item in the context menu */
-static void
-open_shortcut_in_new_window_cb (GtkMenuItem   *item,
-                                GtkSidebarRow *row)
-{
-  open_row (row, GTK_PLACES_OPEN_NEW_WINDOW);
+  flags = (GtkPlacesOpenFlags)g_variant_get_int32 (parameter);
+  open_row (sidebar->context_row, flags);
 }
 
 /* Add bookmark for the selected item - just used from mount points */
 static void
-add_shortcut_cb (GtkMenuItem   *item,
-                 GtkSidebarRow *row)
+add_shortcut_cb (GSimpleAction *action,
+                 GVariant      *parameter,
+                 gpointer       data)
 {
+  GtkPlacesSidebar *sidebar = data;
   gchar *uri;
   gchar *name;
   GFile *location;
-  GtkPlacesSidebar *sidebar;
 
-  g_object_get (row,
-                "sidebar", &sidebar,
+  g_object_get (sidebar->context_row,
                 "uri", &uri,
                 "label", &name,
                 NULL);
@@ -2338,7 +2339,6 @@ add_shortcut_cb (GtkMenuItem   *item,
       g_object_unref (location);
     }
 
-  g_object_unref (sidebar);
   g_free (uri);
   g_free (name);
 }
@@ -2505,10 +2505,13 @@ rename_bookmark (GtkSidebarRow *row)
 }
 
 static void
-rename_shortcut_cb (GtkMenuItem   *item,
-                    GtkSidebarRow *row)
+rename_shortcut_cb (GSimpleAction *action,
+                    GVariant      *parameter,
+                    gpointer       data)
 {
-  rename_bookmark (row);
+  GtkPlacesSidebar *sidebar = data;
+
+  rename_bookmark (sidebar->context_row);
 }
 
 static void
@@ -2537,29 +2540,31 @@ remove_bookmark (GtkSidebarRow *row)
 }
 
 static void
-remove_shortcut_cb (GtkMenuItem   *item,
-                    GtkSidebarRow *row)
+remove_shortcut_cb (GSimpleAction *action,
+                    GVariant      *parameter,
+                    gpointer       data)
 {
-  remove_bookmark (row);
+  GtkPlacesSidebar *sidebar = data;
+
+  remove_bookmark (sidebar->context_row);
 }
 
 static void
-mount_shortcut_cb (GtkMenuItem   *item,
-                   GtkSidebarRow *row)
+mount_shortcut_cb (GSimpleAction *action,
+                   GVariant      *parameter,
+                   gpointer       data)
 {
+  GtkPlacesSidebar *sidebar = data;
   GVolume *volume;
-  GtkPlacesSidebar *sidebar;
 
-  g_object_get (row,
+  g_object_get (sidebar->context_row,
                 "volume", &volume,
-                "sidebar", &sidebar,
                 NULL);
 
   if (volume != NULL)
     mount_volume (sidebar, volume);
 
   g_object_unref (volume);
-  g_object_unref (sidebar);
 }
 
 /* Callback used from g_mount_unmount_with_operation() */
@@ -2800,20 +2805,19 @@ do_unmount (GMount           *mount,
 }
 
 static void
-unmount_shortcut_cb (GtkMenuItem   *item,
-                     GtkSidebarRow *row)
+unmount_shortcut_cb (GSimpleAction *action,
+                     GVariant      *parameter,
+                     gpointer       data)
 {
-  GtkPlacesSidebar *sidebar;
+  GtkPlacesSidebar *sidebar = data;;
   GMount *mount;
 
-  g_object_get (row,
-                "sidebar", &sidebar,
+  g_object_get (sidebar->context_row,
                 "mount", &mount,
                 NULL);
 
   do_unmount (mount, sidebar);
 
-  g_object_unref (sidebar);
   if (mount)
     g_object_unref (mount);
 }
@@ -2974,16 +2978,16 @@ do_eject (GMount           *mount,
 }
 
 static void
-eject_shortcut_cb (GtkMenuItem   *item,
-                   GtkSidebarRow *row)
+eject_shortcut_cb (GSimpleAction *action,
+                   GVariant      *parameter,
+                   gpointer       data)
 {
+  GtkPlacesSidebar *sidebar = data;
   GMount *mount;
   GVolume *volume;
   GDrive *drive;
-  GtkPlacesSidebar *sidebar;
 
-  g_object_get (row,
-                "sidebar", &sidebar,
+  g_object_get (sidebar->context_row,
                 "mount", &mount,
                 "volume", &volume,
                 "drive", &drive,
@@ -2991,7 +2995,6 @@ eject_shortcut_cb (GtkMenuItem   *item,
 
   do_eject (mount, volume, drive, sidebar);
 
-  g_object_unref (sidebar);
   if (mount)
     g_object_unref (mount);
   if (volume)
@@ -3084,14 +3087,14 @@ drive_poll_for_media_cb (GObject      *source_object,
 }
 
 static void
-rescan_shortcut_cb (GtkMenuItem   *item,
-                    GtkSidebarRow *row)
+rescan_shortcut_cb (GSimpleAction *action,
+                    GVariant      *parameter,
+                    gpointer       data)
 {
-  GtkPlacesSidebar *sidebar;
+  GtkPlacesSidebar *sidebar = data;
   GDrive *drive;
 
-  g_object_get (row,
-                "sidebar", &sidebar,
+  g_object_get (sidebar->context_row,
                 "drive", &drive,
                 NULL);
 
@@ -3100,8 +3103,6 @@ rescan_shortcut_cb (GtkMenuItem   *item,
       g_drive_poll_for_media (drive, NULL, drive_poll_for_media_cb, g_object_ref (sidebar));
       g_object_unref (drive);
     }
-
-  g_object_unref (sidebar);
 }
 
 static void
@@ -3134,14 +3135,14 @@ drive_start_cb (GObject      *source_object,
 }
 
 static void
-start_shortcut_cb (GtkMenuItem   *item,
-                   GtkSidebarRow *row)
+start_shortcut_cb (GSimpleAction *action,
+                   GVariant      *parameter,
+                   gpointer       data)
 {
-  GtkPlacesSidebar *sidebar;
+  GtkPlacesSidebar *sidebar = data;
   GDrive  *drive;
 
-  g_object_get (row,
-                "sidebar", &sidebar,
+  g_object_get (sidebar->context_row,
                 "drive", &drive,
                 NULL);
 
@@ -3156,19 +3157,17 @@ start_shortcut_cb (GtkMenuItem   *item,
       g_object_unref (mount_op);
       g_object_unref (drive);
     }
-
-  g_object_unref (sidebar);
 }
 
 static void
-stop_shortcut_cb (GtkMenuItem   *item,
-                  GtkSidebarRow *row)
+stop_shortcut_cb (GSimpleAction *action,
+                  GVariant      *parameter,
+                  gpointer       data)
 {
-  GtkPlacesSidebar *sidebar;
+  GtkPlacesSidebar *sidebar = data;
   GDrive  *drive;
 
-  g_object_get (row,
-                "sidebar", &sidebar,
+  g_object_get (sidebar->context_row,
                 "drive", &drive,
                 NULL);
 
@@ -3183,8 +3182,6 @@ stop_shortcut_cb (GtkMenuItem   *item,
       g_object_unref (mount_op);
       g_object_unref (drive);
     }
-
-  g_object_unref (sidebar);
 }
 
 static gboolean
@@ -3280,195 +3277,142 @@ on_key_press_event (GtkWidget        *widget,
   return FALSE;
 }
 
-static GtkMenuItem *
-append_menu_separator (GtkMenu *menu)
+static GActionEntry entries[] = {
+  { "open", open_shortcut_cb, "i", NULL, NULL },
+  { "bookmark", add_shortcut_cb, NULL, NULL, NULL },
+  { "remove", remove_shortcut_cb, NULL, NULL, NULL },
+  { "rename", rename_shortcut_cb, NULL, NULL, NULL },
+  { "mount", mount_shortcut_cb, NULL, NULL, NULL },
+  { "unmount", unmount_shortcut_cb, NULL, NULL, NULL },
+  { "eject", eject_shortcut_cb, NULL, NULL, NULL },
+  { "rescan", rescan_shortcut_cb, NULL, NULL, NULL },
+  { "start", start_shortcut_cb, NULL, NULL, NULL },
+  { "stop", stop_shortcut_cb, NULL, NULL, NULL },
+};
+
+static void
+add_actions (GtkPlacesSidebar *sidebar)
 {
-  GtkWidget *menu_item;
+  GActionGroup *actions;
 
-  menu_item = gtk_separator_menu_item_new ();
-  gtk_widget_show (menu_item);
-  gtk_menu_shell_insert (GTK_MENU_SHELL (menu), menu_item, -1);
-
-  return GTK_MENU_ITEM (menu_item);
+  actions = G_ACTION_GROUP (g_simple_action_group_new ());
+  g_action_map_add_action_entries (G_ACTION_MAP (actions),
+                                   entries, G_N_ELEMENTS (entries),
+                                   sidebar);
+  gtk_widget_insert_action_group (GTK_WIDGET (sidebar), "row", actions);
+  g_object_unref (actions);
 }
 
-/* Constructs the popup menu for the file list if needed */
-static void
-bookmarks_build_popup_menu (GtkSidebarRow *row)
+static GtkWidget *
+append_separator (GtkWidget *box)
 {
-  PopupMenuData menu_data;
+  GtkWidget *separator;
+
+  separator = g_object_new (GTK_TYPE_SEPARATOR,
+                            "orientation", GTK_ORIENTATION_HORIZONTAL,
+                            "visible", TRUE,
+                            "margin-start", 12,
+                            "margin-end", 12,
+                            "margin-top", 6,
+                            "margin-bottom", 6,
+                            NULL);
+  gtk_container_add (GTK_CONTAINER (box), separator);
+
+  return separator;
+}
+
+static GtkWidget *
+add_button (GtkWidget   *box,
+            const gchar *label,
+            const gchar *action)
+{
   GtkWidget *item;
-  GFile *file;
-  gchar *uri;
-  GVolume *volume;
-  GtkPlacesSidebar *sidebar;
 
-  g_object_get (row,
-                "sidebar", &sidebar,
-                "uri", &uri,
-                "volume", &volume,
-                NULL);
+  item = g_object_new (GTK_TYPE_MODEL_BUTTON,
+                       "visible", TRUE,
+                       "action-name", action,
+                       "text", label,
+                       NULL);
+  gtk_container_add (GTK_CONTAINER (box), item);
 
-  sidebar->popup_menu = gtk_menu_new ();
-  gtk_style_context_add_class (gtk_widget_get_style_context (sidebar->popup_menu),
-                               GTK_STYLE_CLASS_CONTEXT_MENU);
+  return item;
+}
 
-  gtk_menu_attach_to_widget (GTK_MENU (sidebar->popup_menu),
-                             GTK_WIDGET (sidebar),
-                             bookmarks_popup_menu_detach_cb);
+static GtkWidget *
+add_open_button (GtkWidget          *box,
+                 const gchar        *label,
+                 GtkPlacesOpenFlags  flags)
+{
+  GtkWidget *item;
 
-  item = gtk_menu_item_new_with_mnemonic (_("_Open"));
-  g_signal_connect (item, "activate",
-                    G_CALLBACK (open_shortcut_cb), row);
-  gtk_widget_show (item);
-  gtk_menu_shell_append (GTK_MENU_SHELL (sidebar->popup_menu), item);
+  item = g_object_new (GTK_TYPE_MODEL_BUTTON,
+                       "visible", TRUE,
+                       "action-name", "row.open",
+                       "action-target", g_variant_new_int32 (flags),
+                       "text", label,
+                       NULL);
+  gtk_container_add (GTK_CONTAINER (box), item);
+
+  return item;
+}
+
+/* Constructs the popover for the sidebar row if needed */
+static void
+create_row_popover (GtkPlacesSidebar *sidebar,
+                    GtkSidebarRow    *row)
+{
+  PopoverData data;
+  GtkWidget *box;
+
+  sidebar->popover = gtk_popover_new (GTK_WIDGET (sidebar));
+  box = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
+  g_object_set (box, "margin", 10, NULL);
+  gtk_widget_show (box);
+  gtk_container_add (GTK_CONTAINER (sidebar->popover), box);
+
+  add_open_button (box, _("_Open"), GTK_PLACES_OPEN_NORMAL);
 
   if (sidebar->open_flags & GTK_PLACES_OPEN_NEW_TAB)
-    {
-      item = gtk_menu_item_new_with_mnemonic (_("Open in New _Tab"));
-      g_signal_connect (item, "activate",
-                        G_CALLBACK (open_shortcut_in_new_tab_cb), row);
-      gtk_widget_show (item);
-      gtk_menu_shell_append (GTK_MENU_SHELL (sidebar->popup_menu), item);
-    }
+    add_open_button (box, _("Open in New _Tab"), GTK_PLACES_OPEN_NEW_TAB);
 
   if (sidebar->open_flags & GTK_PLACES_OPEN_NEW_WINDOW)
-    {
-      item = gtk_menu_item_new_with_mnemonic (_("Open in New _Window"));
-      g_signal_connect (item, "activate",
-                        G_CALLBACK (open_shortcut_in_new_window_cb), row);
-      gtk_widget_show (item);
-      gtk_menu_shell_append (GTK_MENU_SHELL (sidebar->popup_menu), item);
-    }
+    add_open_button (box, _("Open in New _Window"), GTK_PLACES_OPEN_NEW_WINDOW);
 
-  append_menu_separator (GTK_MENU (sidebar->popup_menu));
+  append_separator (box);
 
-  item = gtk_menu_item_new_with_mnemonic (_("_Add Bookmark"));
-  menu_data.add_shortcut_item = item;
-  g_signal_connect (item, "activate",
-                    G_CALLBACK (add_shortcut_cb), row);
-  gtk_menu_shell_append (GTK_MENU_SHELL (sidebar->popup_menu), item);
+  data.add_shortcut_item = add_button (box, _("_Add Bookmark"), "row.bookmark");
+  data.remove_item = add_button (box, _("_Remove"), "row.remove");
+  data.rename_item = add_button (box, _("Rename…"), "row.rename");
 
-  item = gtk_menu_item_new_with_label (_("Remove"));
-  menu_data.remove_item = item;
-  g_signal_connect (item, "activate",
-                    G_CALLBACK (remove_shortcut_cb), row);
-  gtk_widget_show (item);
-  gtk_menu_shell_append (GTK_MENU_SHELL (sidebar->popup_menu), item);
+  data.separator_item = append_separator (box);
 
-  item = gtk_menu_item_new_with_label (_("Rename…"));
-  menu_data.rename_item = item;
-  g_signal_connect (item, "activate",
-                    G_CALLBACK (rename_shortcut_cb), row);
-  gtk_widget_show (item);
-  gtk_menu_shell_append (GTK_MENU_SHELL (sidebar->popup_menu), item);
-
-  /* Mount/Unmount/Eject menu items */
-
-  menu_data.separator_item = GTK_WIDGET (append_menu_separator (GTK_MENU (sidebar->popup_menu)));
-
-  item = gtk_menu_item_new_with_mnemonic (_("_Mount"));
-  menu_data.mount_item = item;
-  g_signal_connect (item, "activate",
-                    G_CALLBACK (mount_shortcut_cb), row);
-  gtk_widget_show (item);
-  gtk_menu_shell_append (GTK_MENU_SHELL (sidebar->popup_menu), item);
-
-  item = gtk_menu_item_new_with_mnemonic (_("_Unmount"));
-  menu_data.unmount_item = item;
-  g_signal_connect (item, "activate",
-                    G_CALLBACK (unmount_shortcut_cb), row);
-  gtk_widget_show (item);
-  gtk_menu_shell_append (GTK_MENU_SHELL (sidebar->popup_menu), item);
-
-  item = gtk_menu_item_new_with_mnemonic (_("_Eject"));
-  menu_data.eject_item = item;
-  g_signal_connect (item, "activate",
-                    G_CALLBACK (eject_shortcut_cb), row);
-  gtk_widget_show (item);
-  gtk_menu_shell_append (GTK_MENU_SHELL (sidebar->popup_menu), item);
-
-  item = gtk_menu_item_new_with_mnemonic (_("_Detect Media"));
-  menu_data.rescan_item = item;
-  g_signal_connect (item, "activate",
-                    G_CALLBACK (rescan_shortcut_cb), row);
-  gtk_widget_show (item);
-  gtk_menu_shell_append (GTK_MENU_SHELL (sidebar->popup_menu), item);
-
-  item = gtk_menu_item_new_with_mnemonic (_("_Start"));
-  menu_data.start_item = item;
-  g_signal_connect (item, "activate",
-                    G_CALLBACK (start_shortcut_cb), row);
-  gtk_widget_show (item);
-  gtk_menu_shell_append (GTK_MENU_SHELL (sidebar->popup_menu), item);
-
-  item = gtk_menu_item_new_with_mnemonic (_("_Stop"));
-  menu_data.stop_item = item;
-  g_signal_connect (item, "activate",
-                    G_CALLBACK (stop_shortcut_cb), row);
-  gtk_widget_show (item);
-  gtk_menu_shell_append (GTK_MENU_SHELL (sidebar->popup_menu), item);
+  data.mount_item = add_button (box, _("_Mount"), "row.mount");
+  data.unmount_item = add_button (box, _("_Unmount"), "row.unmount");
+  data.eject_item = add_button (box, _("_Eject"), "row.eject");
+  data.rescan_item = add_button (box, _("_Detect Media"), "row.rescan");
+  data.start_item = add_button (box, _("_Start"), "row.start");
+  data.stop_item = add_button (box, _("_Stop"), "row.stop");
 
   /* Update everything! */
-
-  check_popup_sensitivity (row, &menu_data);
-
-  /* And let the caller spice things up */
-
-  if (uri)
-    file = g_file_new_for_uri (uri);
-  else
-    file = NULL;
-
-  emit_populate_popup (sidebar, GTK_MENU (sidebar->popup_menu), file, volume);
-
-  if (file)
-    g_object_unref (file);
-
-  g_free (uri);
-  if (volume)
-    g_object_unref (volume);
-  g_object_unref (sidebar);
+  check_popover_sensitivity (row, &data);
 }
 
 static void
-bookmarks_popup_menu (GtkSidebarRow  *row,
-                      GdkEventButton *event)
+show_row_popover (GtkSidebarRow *row)
 {
-  gint button;
   GtkPlacesSidebar *sidebar;
 
   g_object_get (row, "sidebar", &sidebar, NULL);
 
-  if (sidebar->popup_menu)
-    gtk_widget_destroy (sidebar->popup_menu);
+  if (sidebar->popover)
+    gtk_widget_destroy (sidebar->popover);
 
-  bookmarks_build_popup_menu (row);
+  create_row_popover (sidebar, row);
 
-  /* The event button needs to be 0 if we're popping up this menu from
-   * a button release, else a 2nd click outside the menu with any button
-   * other than the one that invoked the menu will be ignored (instead
-   * of dismissing the menu). This is a subtle fragility of the GTK menu code.
-   */
-  if (event)
-    {
-      if (event->type == GDK_BUTTON_RELEASE)
-        button = 0;
-      else
-        button = event->button;
-    }
-  else
-    {
-      button = 0;
-    }
+  gtk_popover_set_relative_to (GTK_POPOVER (sidebar->popover), GTK_WIDGET (row));
 
-  gtk_menu_popup (GTK_MENU (sidebar->popup_menu),
-                  NULL,
-                  NULL,
-                  NULL,
-                  NULL,
-                  button,
-                  event ? event->time : gtk_get_current_event_time ());
+  sidebar->context_row = row;
+  gtk_widget_show (sidebar->popover);
 
   g_object_unref (sidebar);
 }
@@ -3547,7 +3491,7 @@ on_button_release_event (GtkWidget      *widget,
       else if (event->button == 3)
         {
           if (row_type != PLACES_CONNECT_TO_SERVER)
-            bookmarks_popup_menu (GTK_SIDEBAR_ROW (row), event);
+            show_row_popover (GTK_SIDEBAR_ROW (row));
         }
     }
 
@@ -3562,7 +3506,20 @@ popup_menu_cb (GtkSidebarRow *row)
   g_object_get (row, "place-type", &row_type, NULL);
 
   if (row_type != PLACES_CONNECT_TO_SERVER)
-    bookmarks_popup_menu (row, NULL);
+    show_row_popover (row);
+}
+
+static void
+long_press_cb (GtkGesture       *gesture,
+               gdouble           x,
+               gdouble           y,
+               GtkPlacesSidebar *sidebar)
+{
+  GtkWidget *row;
+
+  row = GTK_WIDGET (gtk_list_box_get_row_at_y (GTK_LIST_BOX (sidebar->list_box), y));
+  if (GTK_IS_SIDEBAR_ROW (row))
+    popup_menu_cb (GTK_SIDEBAR_ROW (row));
 }
 
 static gint
@@ -3821,6 +3778,11 @@ gtk_places_sidebar_init (GtkPlacesSidebar *sidebar)
                     G_CALLBACK (on_key_press_event),
                     sidebar);
 
+  sidebar->long_press_gesture = gtk_gesture_long_press_new (GTK_WIDGET (sidebar));
+  gtk_gesture_single_set_touch_only (GTK_GESTURE_SINGLE (sidebar->long_press_gesture), TRUE);
+  g_signal_connect (sidebar->long_press_gesture, "pressed",
+                    G_CALLBACK (long_press_cb), sidebar);
+
   /* DND support */
   gtk_drag_dest_set (sidebar->list_box,
                      0,
@@ -3879,6 +3841,8 @@ gtk_places_sidebar_init (GtkPlacesSidebar *sidebar)
 
   /* populate the sidebar */
   update_places (sidebar);
+
+  add_actions (sidebar);
 }
 
 static void
@@ -4011,10 +3975,10 @@ gtk_places_sidebar_dispose (GObject *object)
       sidebar->bookmarks_manager = NULL;
     }
 
-  if (sidebar->popup_menu)
+  if (sidebar->popover)
     {
-      gtk_widget_destroy (sidebar->popup_menu);
-      sidebar->popup_menu = NULL;
+      gtk_widget_destroy (sidebar->popover);
+      sidebar->popover = NULL;
     }
 
   if (sidebar->rename_popover)
@@ -4058,6 +4022,8 @@ gtk_places_sidebar_dispose (GObject *object)
 
   g_clear_object (&sidebar->current_location);
   g_clear_pointer (&sidebar->rename_uri, g_free);
+
+  g_clear_object (&sidebar->long_press_gesture);
 
   G_OBJECT_CLASS (gtk_places_sidebar_parent_class)->dispose (object);
 }
