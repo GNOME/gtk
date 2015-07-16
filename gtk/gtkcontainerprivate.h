@@ -25,7 +25,6 @@
 G_BEGIN_DECLS
 
 
-GList *  _gtk_container_get_all_children       (GtkContainer *container);
 void     _gtk_container_queue_resize           (GtkContainer *container);
 void     _gtk_container_queue_restyle          (GtkContainer *container);
 void     _gtk_container_resize_invalidate      (GtkContainer *container);

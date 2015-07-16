@@ -2636,7 +2636,7 @@ get_focus_chain (GtkContainer *container)
 /* same as gtk_container_get_children, except it includes internals
  */
 GList *
-_gtk_container_get_all_children (GtkContainer *container)
+gtk_container_get_all_children (GtkContainer *container)
 {
   GList *children = NULL;
 
@@ -2710,7 +2710,7 @@ gtk_container_focus (GtkWidget        *widget,
       if (priv->has_focus_chain)
         children = g_list_copy (get_focus_chain (container));
       else
-        children = _gtk_container_get_all_children (container);
+        children = gtk_container_get_all_children (container);
 
       if (priv->has_focus_chain &&
           (direction == GTK_DIR_TAB_FORWARD ||
