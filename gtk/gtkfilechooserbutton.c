@@ -55,7 +55,8 @@
 #include "gtktypebuiltins.h"
 #include "gtkprivate.h"
 #include "gtksettings.h"
-
+#include "gtkstylecontextprivate.h"
+#include "gtkbitmaskprivate.h"
 
 /**
  * SECTION:gtkfilechooserbutton
@@ -1473,7 +1474,14 @@ gtk_file_chooser_button_style_updated (GtkWidget *widget)
   GTK_WIDGET_CLASS (gtk_file_chooser_button_parent_class)->style_updated (widget);
 
   if (gtk_widget_has_screen (widget))
-    change_icon_theme (GTK_FILE_CHOOSER_BUTTON (widget));
+    {
+      /* We need to update the icon surface, but only in case
+       * the icon theme really changed. */
+      GtkStyleContext *context = gtk_widget_get_style_context (widget);
+      const GtkBitmask *changes = _gtk_style_context_get_changes (context);
+      if (!changes || _gtk_bitmask_get (changes, GTK_CSS_PROPERTY_ICON_THEME))
+        change_icon_theme (GTK_FILE_CHOOSER_BUTTON (widget));
+    }
 }
 
 static void
