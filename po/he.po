@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: gtk+.HEAD.he\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2015-07-16 12:30+0300\n"
-"PO-Revision-Date: 2015-07-16 12:44+0300\n"
+"PO-Revision-Date: 2015-07-16 12:53+0300\n"
 "Last-Translator: Yosef Or Boczko <yoseforb@gnome.org>\n"
 "Language-Team: עברית <>\n"
 "Language: he\n"
@@ -6193,98 +6193,94 @@ msgstr "צד קצר (היפוך)"
 #: modules/printbackends/cups/gtkprintbackendcups.c:4341
 msgctxt "output-bin"
 msgid "Top Bin"
-msgstr ""
+msgstr "מגש עליון"
 
 #. Translators: Middle output bin
 #: modules/printbackends/cups/gtkprintbackendcups.c:4343
 msgctxt "output-bin"
 msgid "Middle Bin"
-msgstr ""
+msgstr "מגש אמצעי"
 
 #. Translators: Bottom output bin
 #: modules/printbackends/cups/gtkprintbackendcups.c:4345
-#, fuzzy
 msgctxt "output-bin"
 msgid "Bottom Bin"
-msgstr "_תחתון"
+msgstr "מגש תחתון"
 
 #. Translators: Side output bin
 #: modules/printbackends/cups/gtkprintbackendcups.c:4347
 msgctxt "output-bin"
 msgid "Side Bin"
-msgstr ""
+msgstr "מגש צדי"
 
 #. Translators: Left output bin
 #: modules/printbackends/cups/gtkprintbackendcups.c:4349
-#, fuzzy
 msgctxt "output-bin"
 msgid "Left Bin"
-msgstr "שמאלה"
+msgstr "מגש שמאלי"
 
 #. Translators: Right output bin
 #: modules/printbackends/cups/gtkprintbackendcups.c:4351
-#, fuzzy
 msgctxt "output-bin"
 msgid "Right Bin"
-msgstr "ימינה"
+msgstr "מגש ימני"
 
 #. Translators: Center output bin
 #: modules/printbackends/cups/gtkprintbackendcups.c:4353
-#, fuzzy
 msgctxt "output-bin"
 msgid "Center Bin"
-msgstr "מ_רכז"
+msgstr "מגש מרכזי"
 
 #. Translators: Rear output bin
 #: modules/printbackends/cups/gtkprintbackendcups.c:4355
 msgctxt "output-bin"
 msgid "Rear Bin"
-msgstr ""
+msgstr "מגש אחורי"
 
 #. Translators: Output bin where one sided output is oriented in the face-up position
 #: modules/printbackends/cups/gtkprintbackendcups.c:4357
 msgctxt "output-bin"
 msgid "Face Up Bin"
-msgstr ""
+msgstr "מגש עם הפנים כלפי מעלה"
 
 #. Translators: Output bin where one sided output is oriented in the face-down position
 #: modules/printbackends/cups/gtkprintbackendcups.c:4359
 msgctxt "output-bin"
 msgid "Face Down Bin"
-msgstr ""
+msgstr "מגש עם הפנים כלפי מטה"
 
 #. Translators: Large capacity output bin
 #: modules/printbackends/cups/gtkprintbackendcups.c:4361
 msgctxt "output-bin"
 msgid "Large Capacity Bin"
-msgstr ""
+msgstr "מגש בעל קיבולת מוגדלת"
 
 #. Translators: Output stacker number %d
 #: modules/printbackends/cups/gtkprintbackendcups.c:4363
 #, c-format
 msgctxt "output-bin"
 msgid "Stacker %d"
-msgstr ""
+msgstr "מערם פלט נייר %d"
 
 #. Translators: Output mailbox number %d
 #: modules/printbackends/cups/gtkprintbackendcups.c:4365
 #, c-format
 msgctxt "output-bin"
 msgid "Mailbox %d"
-msgstr ""
+msgstr "התקן למיון פלט הדפסה %d"
 
 #. Translators: Private mailbox
 #: modules/printbackends/cups/gtkprintbackendcups.c:4367
 msgctxt "output-bin"
 msgid "My Mailbox"
-msgstr ""
+msgstr "התקן למיון פלט ההדפסה שלי"
 
 #. Translators: Output tray number %d
 #: modules/printbackends/cups/gtkprintbackendcups.c:4369
 #, c-format
 msgctxt "output-bin"
 msgid "Tray %d"
-msgstr ""
+msgstr "מגירת הזנת נייר %d"
 
 #. Translators: These strings name the possible values of the
 #. * job priority option in the print dialog
