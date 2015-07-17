@@ -2304,33 +2304,32 @@ file_list_update_popover (GtkFileChooserWidget *impl)
 
 static void
 file_list_show_popover (GtkFileChooserWidget *impl,
-                        GdkRectangle         *rect)
+                        gdouble               x,
+                        gdouble               y)
 {
   GtkFileChooserWidgetPrivate *priv = impl->priv;
-  GdkRectangle r;
+  GdkRectangle rect;
+  GtkTreeSelection *selection;
+  GtkTreeModel *model;
+  GList *list;
+  GtkTreePath *path;
+
 
   file_list_update_popover (impl);
 
-  if (rect == NULL)
-    {
-      GtkTreeSelection *selection;
-      GtkTreeModel *model;
-      GList *list;
-      GtkTreePath *path;
+  selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (priv->browse_files_tree_view));
+  list = gtk_tree_selection_get_selected_rows (selection, &model);
+  path = list->data;
+  gtk_tree_view_get_cell_area (GTK_TREE_VIEW (priv->browse_files_tree_view), path, NULL, &rect);
+  gtk_tree_view_convert_bin_window_to_widget_coords (GTK_TREE_VIEW (priv->browse_files_tree_view),
+                                                     rect.x, rect.y, &rect.x, &rect.y);
 
-      selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (priv->browse_files_tree_view));
-      list = gtk_tree_selection_get_selected_rows (selection, &model);
-      path = list->data;
-      gtk_tree_view_get_cell_area (GTK_TREE_VIEW (priv->browse_files_tree_view), path, NULL, &r);
-      gtk_tree_view_convert_bin_window_to_widget_coords (GTK_TREE_VIEW (priv->browse_files_tree_view), r.x, r.y, &r.x, &r.y);
-      r.x = 0;
-      r.width = gtk_widget_get_allocated_width (priv->browse_files_tree_view);
-      rect = &r;
+  rect.x = CLAMP (x - 20, 0, gtk_widget_get_allocated_width (priv->browse_files_tree_view) - 40);
+  rect.width = 40;
 
-      g_list_free_full (list, (GDestroyNotify) gtk_tree_path_free);
-    }
+  g_list_free_full (list, (GDestroyNotify) gtk_tree_path_free);
 
-  gtk_popover_set_pointing_to (GTK_POPOVER (priv->browse_files_popover), rect);
+  gtk_popover_set_pointing_to (GTK_POPOVER (priv->browse_files_popover), &rect);
 
   gtk_widget_show (priv->browse_files_popover);
 }
@@ -2340,7 +2339,11 @@ static gboolean
 list_popup_menu_cb (GtkWidget            *widget,
                     GtkFileChooserWidget *impl)
 {
-  file_list_show_popover (impl, NULL);
+  GtkFileChooserWidgetPrivate *priv = impl->priv;
+
+  file_list_show_popover (impl,
+                          0.5 * gtk_widget_get_allocated_width (GTK_WIDGET (priv->browse_files_tree_view)),
+                          0.5 * gtk_widget_get_allocated_height (GTK_WIDGET (priv->browse_files_tree_view)));
   return TRUE;
 }
 
@@ -2365,7 +2368,7 @@ list_button_press_event_cb (GtkWidget            *widget,
   gtk_widget_event (priv->browse_files_tree_view, (GdkEvent *) event);
   in_press = FALSE;
 
-  file_list_show_popover (impl, NULL);
+  file_list_show_popover (impl, event->x, event->y);
 
   return TRUE;
 }
@@ -2376,7 +2379,7 @@ long_press_cb (GtkGesture           *gesture,
                gdouble               y,
                GtkFileChooserWidget *impl)
 {
-  file_list_show_popover (impl, NULL);
+  file_list_show_popover (impl, x, y);
 }
 
 typedef struct {
