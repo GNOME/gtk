@@ -415,7 +415,7 @@ gtk_action_helper_set_action_name (GtkActionHelper *helper,
     return;
 
   GTK_NOTE(ACTIONS,
-           if (!strchr (action_name, '.'))
+           if (action_name == NULL || !strchr (action_name, '.'))
              g_message ("actionhelper: action name %s doesn't look like 'app.' or 'win.' "
                         "which means that it will probably not work properly.", action_name));
 
