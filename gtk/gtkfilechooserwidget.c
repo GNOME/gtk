@@ -6769,7 +6769,6 @@ gtk_file_chooser_widget_should_respond (GtkFileChooserEmbed *chooser_embed)
       gboolean is_well_formed, is_empty, is_file_part_empty;
       gboolean is_folder;
       GtkFileChooserEntry *entry;
-      GError *error;
 
     save_entry:
 
@@ -6818,7 +6817,6 @@ gtk_file_chooser_widget_should_respond (GtkFileChooserEmbed *chooser_embed)
 
       g_assert (file != NULL);
 
-      error = NULL;
       if (is_folder)
         {
           if (priv->action == GTK_FILE_CHOOSER_ACTION_OPEN ||
@@ -6864,9 +6862,6 @@ gtk_file_chooser_widget_should_respond (GtkFileChooserEmbed *chooser_embed)
                                        data);
 
           set_busy_cursor (impl, TRUE);
-
-          if (error != NULL)
-            g_error_free (error);
         }
 
       g_object_unref (file);
