@@ -9430,6 +9430,8 @@ gdk_window_set_geometry_hints (GdkWindow         *window,
 			       const GdkGeometry *geometry,
 			       GdkWindowHints     geom_mask)
 {
+  g_return_if_fail (geometry != NULL || geom_mask == 0);
+
   GDK_WINDOW_IMPL_GET_CLASS (window->impl)->set_geometry_hints (window, geometry, geom_mask);
 }
 
