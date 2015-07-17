@@ -1179,7 +1179,7 @@ attribute_editor (GObject                *object,
 
   box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 10);
   gtk_container_add (GTK_CONTAINER (box), gtk_label_new (_("Model:")));
-  text = g_strdup_printf (_("%p (%s)"), model, g_type_name (G_TYPE_FROM_INSTANCE (model)));
+  text = g_strdup_printf (_("%p (%s)"), model, model ? g_type_name (G_TYPE_FROM_INSTANCE (model)) : "null" );
   gtk_container_add (GTK_CONTAINER (box), gtk_label_new (text));
   g_free (text);
   button = gtk_button_new_with_label (_("Properties"));
