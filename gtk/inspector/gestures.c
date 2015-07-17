@@ -218,7 +218,7 @@ gtk_inspector_gestures_set_object (GtkInspectorGestures *sl,
       gpointer key, value;
       GtkGesture *gesture;
       g_hash_table_iter_init (&iter, hash);
-      g_hash_table_iter_next (&iter, &key, &value);
+      (void)g_hash_table_iter_next (&iter, &key, &value);
       gesture = key;
       add_gesture_group (sl, object, gesture, hash);
     }
