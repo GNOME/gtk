@@ -19,7 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{FC5AADB5-95CD-4BF0-BA8B-0C16FE7073FB}</ProjectGuid>
+    <ProjectGuid>{FC5AADB5-95CD-4BF0-BA8B-0C16FE8073FB}</ProjectGuid>
     <RootNamespace>gtkinstall</RootNamespace>
     <Keyword>Win32Proj</Keyword>
   </PropertyGroup>
