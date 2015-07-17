@@ -1810,6 +1810,15 @@ gtk_header_bar_hierarchy_changed (GtkWidget *widget,
 }
 
 static void
+gtk_header_bar_direction_changed (GtkWidget        *widget,
+                                  GtkTextDirection  previous_direction)
+{
+  GTK_WIDGET_CLASS (gtk_header_bar_parent_class)->direction_changed (widget, previous_direction);
+
+  gtk_css_node_reverse_children (gtk_widget_get_css_node (widget));
+}
+
+static void
 gtk_header_bar_class_init (GtkHeaderBarClass *class)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (class);
@@ -1829,6 +1838,7 @@ gtk_header_bar_class_init (GtkHeaderBarClass *class)
   widget_class->realize = gtk_header_bar_realize;
   widget_class->unrealize = gtk_header_bar_unrealize;
   widget_class->hierarchy_changed = gtk_header_bar_hierarchy_changed;
+  widget_class->direction_changed = gtk_header_bar_direction_changed;
 
   container_class->add = gtk_header_bar_add;
   container_class->remove = gtk_header_bar_remove;
