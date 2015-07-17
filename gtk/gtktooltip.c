@@ -1141,46 +1141,44 @@ gtk_tooltip_position (GtkTooltip *tooltip,
 
 found:
   /* Show it */
-  if (tooltip->current_window)
+  if (x + width > monitor.x + monitor.width)
+    x -= x - (monitor.x + monitor.width) + width;
+  else if (x < monitor.x)
+    x = monitor.x;
+
+  if (y + height > monitor.y + monitor.height)
+    y -= y - (monitor.y + monitor.height) + height;
+  else if (y < monitor.y)
+    y = monitor.y;
+
+  if (!tooltip->keyboard_mode_enabled)
     {
-      if (x + width > monitor.x + monitor.width)
-        x -= x - (monitor.x + monitor.width) + width;
-      else if (x < monitor.x)
-        x = monitor.x;
-
-      if (y + height > monitor.y + monitor.height)
-        y -= y - (monitor.y + monitor.height) + height;
-      else if (y < monitor.y)
-        y = monitor.y;
-
-      if (!tooltip->keyboard_mode_enabled)
-        {
-          /* don't pop up under the pointer */
-          if (x <= tooltip->last_x && tooltip->last_x < x + width &&
-              y <= tooltip->last_y && tooltip->last_y < y + height)
-            y = tooltip->last_y - height - 2;
-        }
+      /* don't pop up under the pointer */
+      if (x <= tooltip->last_x && tooltip->last_x < x + width &&
+          y <= tooltip->last_y && tooltip->last_y < y + height)
+        y = tooltip->last_y - height - 2;
+    }
 
 #ifdef GDK_WINDOWING_WAYLAND
-      /* set the transient parent on the tooltip when running with the Wayland
-       * backend to allow correct positioning of the tooltip windows */
-      if (GDK_IS_WAYLAND_DISPLAY (display))
-        {
-          GtkWidget *toplevel;
+  /* set the transient parent on the tooltip when running with the Wayland
+   * backend to allow correct positioning of the tooltip windows
+   */
+  if (GDK_IS_WAYLAND_DISPLAY (display))
+    {
+      GtkWidget *toplevel;
 
-          toplevel = gtk_widget_get_toplevel (tooltip->tooltip_widget);
-          if (GTK_IS_WINDOW (toplevel))
-            gtk_window_set_transient_for (GTK_WINDOW (tooltip->current_window),
-                                          GTK_WINDOW (toplevel));
-        }
+      toplevel = gtk_widget_get_toplevel (tooltip->tooltip_widget);
+      if (GTK_IS_WINDOW (toplevel))
+        gtk_window_set_transient_for (GTK_WINDOW (tooltip->current_window),
+                                      GTK_WINDOW (toplevel));
+    }
 #endif
 
-      x -= border.left;
-      y -= border.top;
+  x -= border.left;
+  y -= border.top;
 
-      gtk_window_move (GTK_WINDOW (tooltip->current_window), x, y);
-      gtk_widget_show (GTK_WIDGET (tooltip->current_window));
-    }
+  gtk_window_move (GTK_WINDOW (tooltip->current_window), x, y);
+  gtk_widget_show (GTK_WIDGET (tooltip->current_window));
 }
 
 static void
