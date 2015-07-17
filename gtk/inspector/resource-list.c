@@ -120,9 +120,11 @@ load_resources_recurse (GtkInspectorResourceList *sl,
       else
         {
           count = 0;
-          g_resources_get_info (p, 0, &size, NULL, NULL);
-          *count_out += 1;
-          *size_out += size;
+          if (g_resources_get_info (p, 0, &size, NULL, NULL))
+            {
+              *count_out += 1;
+              *size_out += size;
+            }
         }
 
       stored_size = size;
