@@ -564,7 +564,10 @@ gtk_inspector_object_tree_append_object (GtkInspectorObjectTree *wt,
   else
     mapped = TRUE;
 
-  class_name = G_OBJECT_CLASS_NAME (G_OBJECT_GET_CLASS (object));
+  if (G_OBJECT (object)
+    class_name = G_OBJECT_CLASS_NAME (G_OBJECT_GET_CLASS (object));
+  else
+    class_name = "";
 
   if (GTK_IS_WIDGET (object))
     {
