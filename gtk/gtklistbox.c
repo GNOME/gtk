@@ -2147,9 +2147,9 @@ gtk_list_box_update_header (GtkListBox    *box,
     return;
 
   row = g_sequence_get (iter);
+  g_object_ref (row);
+
   before_iter = gtk_list_box_get_previous_visible (box, iter);
-  if (row)
-    g_object_ref (row);
   before_row = NULL;
   if (before_iter != NULL)
     {
@@ -2197,8 +2197,7 @@ gtk_list_box_update_header (GtkListBox    *box,
     }
   if (before_row)
     g_object_unref (before_row);
-  if (row)
-    g_object_unref (row);
+  g_object_unref (row);
 }
 
 static void
