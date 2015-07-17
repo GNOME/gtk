@@ -390,7 +390,7 @@ file_print_cb_locked (GtkPrintBackendFile *print_backend,
   GtkRecentManager *recent_manager;
 
   if (ps->target_io_stream != NULL)
-    g_output_stream_close (G_OUTPUT_STREAM (ps->target_io_stream), NULL, NULL);
+    (void)g_output_stream_close (G_OUTPUT_STREAM (ps->target_io_stream), NULL, NULL);
 
   if (ps->callback)
     ps->callback (ps->job, ps->user_data, error);
