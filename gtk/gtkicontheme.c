@@ -1158,8 +1158,7 @@ insert_theme (GtkIconTheme *icon_theme,
         {
           theme_file = g_key_file_new ();
           g_key_file_set_list_separator (theme_file, ',');
-          g_key_file_load_from_file (theme_file, path, 0, &error);
-          if (error)
+          if (!g_key_file_load_from_file (theme_file, path, 0, &error))
             {
               g_key_file_free (theme_file);
               theme_file = NULL;
@@ -4099,7 +4098,7 @@ load_icon_thread  (GTask        *task,
 {
   GtkIconInfo *dup = task_data;
 
-  icon_info_ensure_scale_and_pixbuf (dup);
+  (void)icon_info_ensure_scale_and_pixbuf (dup);
   g_task_return_pointer (task, NULL, NULL);
 }
 
