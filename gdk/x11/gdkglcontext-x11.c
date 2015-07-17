@@ -326,6 +326,9 @@ glx_pixmap_get (cairo_surface_t *surface, guint texture_target)
     None
   };
 
+  if (visual == NULL)
+    return NULL;
+
   with_alpha = cairo_surface_get_content (surface) == CAIRO_CONTENT_COLOR_ALPHA;
 
   y_inverted = FALSE;
