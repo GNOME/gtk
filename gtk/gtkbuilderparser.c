@@ -1141,6 +1141,8 @@ end_element (GMarkupParseContext  *context,
       PropertyInfo *prop_info = state_pop_info (data, PropertyInfo);
       CommonInfo *info = state_peek_info (data, CommonInfo);
 
+      g_assert (info != NULL);
+
       /* Normal properties */
       if (strcmp (info->tag.name, "object") == 0 ||
           strcmp (info->tag.name, "template") == 0)
@@ -1176,6 +1178,7 @@ end_element (GMarkupParseContext  *context,
     {
       SignalInfo *signal_info = state_pop_info (data, SignalInfo);
       ObjectInfo *object_info = (ObjectInfo*)state_peek_info (data, CommonInfo);
+      g_assert (object_info != NULL);
       signal_info->object_name = g_strdup (object_info->id);
       object_info->signals = g_slist_prepend (object_info->signals, signal_info);
     }
