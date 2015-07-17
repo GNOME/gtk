@@ -2687,6 +2687,9 @@ gtk_tree_view_size_allocate_columns (GtkWidget *widget,
        first_column = first_column->next)
     ;
 
+  if (first_column == NULL)
+    return;
+
   rtl = (gtk_widget_get_direction (widget) == GTK_TEXT_DIR_RTL);
 
   /* find out how many extra space and expandable columns we have */
