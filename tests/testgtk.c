@@ -5630,7 +5630,7 @@ static void
 screen_display_check (GtkWidget *widget, ScreenDisplaySelection *data)
 {
   const gchar *display_name;
-  GdkDisplay *display = gtk_widget_get_display (widget);
+  GdkDisplay *display;
   GtkWidget *dialog;
   GdkScreen *new_screen = NULL;
   GdkScreen *current_screen = gtk_widget_get_screen (widget);
