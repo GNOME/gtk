@@ -6452,7 +6452,7 @@ popover_get_rect (GtkWindowPopover      *popover,
         {
           rect->y = popover->rect.y + popover->rect.height;
 
-          if (rect->y + rect->height < win_alloc.x + win_alloc.height &&
+          if (rect->y + rect->height < win_alloc.y + win_alloc.height &&
               gtk_widget_get_vexpand (popover->widget))
             rect->height = win_alloc.y + win_alloc.height - rect->y;
         }
@@ -11163,13 +11163,15 @@ gtk_window_activate_menubar (GtkWindow   *window,
     return FALSE;
 
   gtk_accelerator_parse (accel, &keyval, &mods);
-  g_free (accel);
 
   if (keyval == 0)
     {
       g_warning ("Failed to parse menu bar accelerator '%s'\n", accel);
+      g_free (accel);
       return FALSE;
     }
+
+  g_free (accel);
 
   /* FIXME this is wrong, needs to be in the global accel resolution
    * thing, to properly consider i18n etc., but that probably requires
