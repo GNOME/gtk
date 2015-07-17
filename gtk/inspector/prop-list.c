@@ -339,12 +339,6 @@ gtk_inspector_prop_list_set_object (GtkInspectorPropList *pl,
 
   cleanup_object (pl);
 
-  if (!object)
-    {
-      gtk_widget_hide (GTK_WIDGET (pl));
-      return TRUE;
-    }
-
   if (pl->priv->child_properties)
     {
       GtkWidget *parent;
