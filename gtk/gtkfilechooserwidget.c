@@ -2556,6 +2556,17 @@ location_entry_create (GtkFileChooserWidget *impl)
     }
 }
 
+static gboolean
+external_entry_key_press (GtkWidget            *entry,
+                          GdkEventKey          *event,
+                          GtkFileChooserWidget *impl)
+{
+  /* Since the entry is not a descendent of the file chooser widget
+   * in this case, we need to manually make our bindings apply.
+   */
+  return gtk_bindings_activate_event (G_OBJECT (impl), event);
+}
+
 /* Creates the widgets specific to Save mode */
 static void
 save_widgets_create (GtkFileChooserWidget *impl)
@@ -2576,6 +2587,9 @@ save_widgets_create (GtkFileChooserWidget *impl)
       location_entry_disconnect (impl);
       priv->location_entry = priv->external_entry;
       location_entry_setup (impl);
+
+      g_signal_connect_after (priv->external_entry, "key-press-event",
+                              G_CALLBACK (external_entry_key_press), impl);
       return;
     }
 
@@ -2621,6 +2635,8 @@ save_widgets_destroy (GtkFileChooserWidget *impl)
 
   if (priv->external_entry && priv->external_entry == priv->location_entry)
     {
+      g_signal_handlers_disconnect_by_func (priv->external_entry, external_entry_key_press, impl);
+
       location_entry_disconnect (impl);
       priv->location_entry = NULL;
     }
