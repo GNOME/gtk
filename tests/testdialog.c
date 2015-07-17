@@ -215,7 +215,9 @@ my_dialog_class_init (MyDialogClass *class)
   gsize size;
   GBytes *bytes;
 
-  g_file_get_contents ("mydialog.ui", &buffer, &size, NULL);
+  if (!g_file_get_contents ("mydialog.ui", &buffer, &size, NULL))
+    g_error ("Template file mydialog.ui not found");
+
   bytes = g_bytes_new_static (buffer, size);
   gtk_widget_class_set_template (GTK_WIDGET_CLASS (class), bytes);
   g_bytes_unref (bytes);
@@ -283,7 +285,9 @@ my_dialog2_class_init (MyDialog2Class *class)
   gsize size;
   GBytes *bytes;
 
-  g_file_get_contents ("mydialog2.ui", &buffer, &size, NULL);
+  if (!g_file_get_contents ("mydialog2.ui", &buffer, &size, NULL))
+    g_error ("Template file mydialog2.ui not found");
+
   bytes = g_bytes_new_static (buffer, size);
   gtk_widget_class_set_template (GTK_WIDGET_CLASS (class), bytes);
   g_bytes_unref (bytes);
