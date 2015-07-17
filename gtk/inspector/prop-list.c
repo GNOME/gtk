@@ -393,12 +393,6 @@ gtk_inspector_prop_list_set_object (GtkInspectorPropList *pl,
 
   cleanup_object (pl);
 
-  if (!object)
-    {
-      gtk_widget_hide (GTK_WIDGET (pl));
-      return TRUE;
-    }
-
   title = (const gchar *)g_object_get_data (object, "gtk-inspector-object-title");
   gtk_label_set_label (GTK_LABEL (pl->priv->object_title), title);
 
