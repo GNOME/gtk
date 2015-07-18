@@ -296,20 +296,18 @@ gtk_switch_pan_gesture_drag_end (GtkGestureDrag *gesture,
                                  GtkSwitch      *sw)
 {
   GtkSwitchPrivate *priv = sw->priv;
+  GtkWidget *widget = GTK_WIDGET (sw);
   GdkEventSequence *sequence;
-  GtkAllocation allocation;
   gboolean active = FALSE;
 
   sequence = gtk_gesture_single_get_current_sequence (GTK_GESTURE_SINGLE (gesture));
 
   if (gtk_gesture_get_sequence_state (GTK_GESTURE (gesture), sequence) == GTK_EVENT_SEQUENCE_CLAIMED)
     {
-      gtk_widget_get_allocation (GTK_WIDGET (sw), &allocation);
-
       /* if half the handle passed the middle of the switch, then we
        * consider it to be on
        */
-      if ((priv->handle_x + (allocation.width / 4)) >= (allocation.width / 2))
+      if ((priv->handle_x + (gtk_widget_get_allocated_width (widget) / 4)) >= (gtk_widget_get_allocated_width (widget) / 2))
         active = TRUE;
     }
   else if (!gtk_gesture_handles_sequence (priv->multipress_gesture, sequence))
@@ -318,12 +316,12 @@ gtk_switch_pan_gesture_drag_end (GtkGestureDrag *gesture,
     return;
 
   if (active)
-    priv->handle_x = allocation.width / 2;
+    priv->handle_x = gtk_widget_get_allocated_width (widget) / 2;
   else
     priv->handle_x = 0;
 
   gtk_switch_set_active (sw, active);
-  gtk_widget_queue_draw (GTK_WIDGET (sw));
+  gtk_widget_queue_draw (widget);
 }
 
 static gboolean
