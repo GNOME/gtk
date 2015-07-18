@@ -262,6 +262,7 @@ open_submenu (GtkWidget *button,
 
   focus = GTK_WIDGET (g_object_get_data (G_OBJECT (button), "focus"));
   get_ancestors (focus, GTK_TYPE_STACK, &stack, &child);
+  g_assert (stack != NULL && child != NULL);
   gtk_stack_set_visible_child (GTK_STACK (stack), child);
   gtk_widget_grab_focus (focus);
 }
