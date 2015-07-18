@@ -3095,10 +3095,7 @@ static void
 gtk_combo_box_menu_setup (GtkComboBox *combo_box)
 {
   GtkComboBoxPrivate *priv = combo_box->priv;
-  GtkWidget *child;
   GtkWidget *menu;
-
-  child = gtk_bin_get_child (GTK_BIN (combo_box));
 
   if (priv->cell_view)
     {
@@ -3108,8 +3105,7 @@ gtk_combo_box_menu_setup (GtkComboBox *combo_box)
 
       g_signal_connect (priv->button, "toggled",
                         G_CALLBACK (gtk_combo_box_button_toggled), combo_box);
-      gtk_widget_set_parent (priv->button,
-                             gtk_widget_get_parent (child));
+      gtk_widget_set_parent (priv->button, GTK_WIDGET (combo_box));
 
       priv->box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
       gtk_container_add (GTK_CONTAINER (priv->button), priv->box);
@@ -3131,8 +3127,7 @@ gtk_combo_box_menu_setup (GtkComboBox *combo_box)
 
       g_signal_connect (priv->button, "toggled",
                         G_CALLBACK (gtk_combo_box_button_toggled), combo_box);
-      gtk_widget_set_parent (priv->button,
-                             gtk_widget_get_parent (child));
+      gtk_widget_set_parent (priv->button, GTK_WIDGET (combo_box));
 
       priv->arrow = gtk_image_new_from_icon_name ("pan-down-symbolic", GTK_ICON_SIZE_BUTTON);
       gtk_container_add (GTK_CONTAINER (priv->button), priv->arrow);
@@ -3400,12 +3395,9 @@ gtk_combo_box_list_setup (GtkComboBox *combo_box)
 {
   GtkComboBoxPrivate *priv = combo_box->priv;
   GtkTreeSelection *sel;
-  GtkWidget *child;
 
   priv->button = gtk_toggle_button_new ();
-  child = gtk_bin_get_child (GTK_BIN (combo_box));
-  gtk_widget_set_parent (priv->button,
-                         gtk_widget_get_parent (child));
+  gtk_widget_set_parent (priv->button, GTK_WIDGET (combo_box));
   g_signal_connect (priv->button, "button-press-event",
                     G_CALLBACK (gtk_combo_box_list_button_pressed), combo_box);
   g_signal_connect (priv->button, "toggled",
@@ -3436,8 +3428,7 @@ gtk_combo_box_list_setup (GtkComboBox *combo_box)
                                             FALSE);
         }
 
-      gtk_widget_set_parent (priv->cell_view_frame,
-                             gtk_widget_get_parent (child));
+      gtk_widget_set_parent (priv->cell_view_frame, GTK_WIDGET (combo_box));
       gtk_container_add (GTK_CONTAINER (priv->cell_view_frame), priv->box);
       gtk_widget_show_all (priv->cell_view_frame);
 
