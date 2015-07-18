@@ -385,8 +385,7 @@ static void     gtk_combo_box_list_row_changed     (GtkTreeModel     *model,
 static void     gtk_combo_box_list_popup_resize    (GtkComboBox      *combo_box);
 
 /* menu */
-static void     gtk_combo_box_menu_setup           (GtkComboBox      *combo_box,
-                                                    gboolean          add_children);
+static void     gtk_combo_box_menu_setup           (GtkComboBox      *combo_box);
 static void     gtk_combo_box_update_title         (GtkComboBox      *combo_box);
 static void     gtk_combo_box_menu_destroy         (GtkComboBox      *combo_box);
 
@@ -1484,7 +1483,7 @@ gtk_combo_box_check_appearance (GtkComboBox *combo_box)
 
       /* Create the menu mode widgets, if they don't already exist. */
       if (!GTK_IS_MENU (priv->popup_widget))
-        gtk_combo_box_menu_setup (combo_box, TRUE);
+        gtk_combo_box_menu_setup (combo_box);
     }
 
   gtk_widget_style_get (GTK_WIDGET (combo_box),
@@ -1650,7 +1649,7 @@ gtk_combo_box_remove (GtkContainer *container,
   if (appears_as_list)
     gtk_combo_box_list_setup (combo_box);
   else
-    gtk_combo_box_menu_setup (combo_box, TRUE);
+    gtk_combo_box_menu_setup (combo_box);
 
   if (gtk_tree_row_reference_valid (priv->active_row))
     {
@@ -3104,8 +3103,7 @@ gtk_combo_box_header_func (GtkTreeModel      *model,
 }
 
 static void
-gtk_combo_box_menu_setup (GtkComboBox *combo_box,
-                          gboolean     add_children)
+gtk_combo_box_menu_setup (GtkComboBox *combo_box)
 {
   GtkComboBoxPrivate *priv = combo_box->priv;
   GtkWidget *child;
