@@ -3091,17 +3091,6 @@ gtk_combo_box_row_separator_func (GtkTreeModel      *model,
   return FALSE;
 }
 
-static gboolean
-gtk_combo_box_header_func (GtkTreeModel      *model,
-                           GtkTreeIter       *iter,
-                           GtkComboBox       *combo)
-{
-  /* Every submenu has a selectable header, however we
-   * can expose a method to make that configurable by
-   * the user (like row_separator_func is done) */
-  return TRUE;
-}
-
 static void
 gtk_combo_box_menu_setup (GtkComboBox *combo_box)
 {
@@ -3177,10 +3166,6 @@ gtk_combo_box_menu_setup (GtkComboBox *combo_box)
   _gtk_tree_menu_set_row_separator_func (GTK_TREE_MENU (menu),
                                          (GtkTreeViewRowSeparatorFunc)gtk_combo_box_row_separator_func,
                                          combo_box, NULL);
-
-  _gtk_tree_menu_set_header_func (GTK_TREE_MENU (menu),
-                                  (GtkTreeMenuHeaderFunc)gtk_combo_box_header_func,
-                                  combo_box, NULL);
 
   g_signal_connect (menu, "key-press-event",
                     G_CALLBACK (gtk_combo_box_menu_key_press), combo_box);

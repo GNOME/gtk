@@ -176,11 +176,6 @@ struct _GtkTreeMenuPrivate
   GtkTreeViewRowSeparatorFunc row_separator_func;
   gpointer                    row_separator_data;
   GDestroyNotify              row_separator_destroy;
-
-  /* Submenu headers */
-  GtkTreeMenuHeaderFunc header_func;
-  gpointer              header_data;
-  GDestroyNotify        header_destroy;
 };
 
 enum {
@@ -452,7 +447,6 @@ gtk_tree_menu_finalize (GObject *object)
   priv = menu->priv;
 
   _gtk_tree_menu_set_row_separator_func (menu, NULL, NULL, NULL);
-  _gtk_tree_menu_set_header_func (menu, NULL, NULL, NULL);
 
   if (priv->root)
     gtk_tree_row_reference_free (priv->root);
@@ -1022,7 +1016,6 @@ row_changed_cb (GtkTreeModel         *model,
 {
   GtkTreeMenuPrivate *priv = menu->priv;
   gboolean            is_separator = FALSE;
-  gboolean            has_header = FALSE;
   GtkWidget          *item;
 
   item = gtk_tree_menu_get_path_item (menu, path);
@@ -1034,22 +1027,7 @@ row_changed_cb (GtkTreeModel         *model,
 
       if (root_path && gtk_tree_path_compare (root_path, path) == 0)
         {
-          if (priv->header_func)
-            has_header =
-              priv->header_func (priv->model, iter, priv->header_data);
-
-          if (has_header && !item)
-            {
-              item = gtk_separator_menu_item_new ();
-              gtk_widget_show (item);
-              gtk_menu_shell_prepend (GTK_MENU_SHELL (menu), item);
-
-              item = gtk_tree_menu_create_item (menu, iter, TRUE);
-              gtk_menu_shell_prepend (GTK_MENU_SHELL (menu), item);
-
-              priv->menu_with_header = TRUE;
-            }
-          else if (!has_header && item)
+          if (item)
             {
               /* Destroy the header item and then the following separator */
               gtk_widget_destroy (item);
@@ -1302,10 +1280,6 @@ gtk_tree_menu_create_submenu (GtkTreeMenu *menu,
                                          priv->row_separator_func,
                                          priv->row_separator_data,
                                          priv->row_separator_destroy);
-  _gtk_tree_menu_set_header_func (GTK_TREE_MENU (submenu),
-                                  priv->header_func,
-                                  priv->header_data,
-                                  priv->header_destroy);
 
   _gtk_tree_menu_set_wrap_width (GTK_TREE_MENU (submenu), priv->wrap_width);
   _gtk_tree_menu_set_row_span_column (GTK_TREE_MENU (submenu), priv->row_span_col);
@@ -1406,26 +1380,8 @@ gtk_tree_menu_populate (GtkTreeMenu *menu)
   if (path)
     {
       if (gtk_tree_model_get_iter (priv->model, &parent, path))
-        {
-          valid = gtk_tree_model_iter_children (priv->model, &iter, &parent);
+        valid = gtk_tree_model_iter_children (priv->model, &iter, &parent);
 
-          if (priv->header_func &&
-              priv->header_func (priv->model, &parent, priv->header_data))
-            {
-              /* Add a submenu header for rows which desire one, used for
-               * combo boxes to allow all rows to be activatable/selectable
-               */
-              menu_item = gtk_tree_menu_create_item (menu, &parent, TRUE);
-              gtk_menu_shell_append (GTK_MENU_SHELL (menu), menu_item);
-
-              menu_item = gtk_separator_menu_item_new ();
-              gtk_widget_show (menu_item);
-              gtk_menu_shell_append (GTK_MENU_SHELL (menu), menu_item);
-
-              prev = menu_item;
-              priv->menu_with_header = TRUE;
-            }
-        }
       gtk_tree_path_free (path);
     }
   else
@@ -1978,66 +1934,6 @@ _gtk_tree_menu_set_row_separator_func (GtkTreeMenu          *menu,
   priv->row_separator_func    = func;
   priv->row_separator_data    = data;
   priv->row_separator_destroy = destroy;
-
-  rebuild_menu (menu);
-}
-
-/*
- * _gtk_tree_menu_get_header_func:
- * @menu: a #GtkTreeMenu
- *
- * Gets the current #GtkTreeMenuHeaderFunc header function.
- *
- * Returns: the current header function.
- *
- * Since: 3.0
- */
-GtkTreeMenuHeaderFunc
-_gtk_tree_menu_get_header_func (GtkTreeMenu *menu)
-{
-  GtkTreeMenuPrivate *priv;
-
-  g_return_val_if_fail (GTK_IS_TREE_MENU (menu), NULL);
-
-  priv = menu->priv;
-
-  return priv->header_func;
-}
-
-/*
- * _gtk_tree_menu_set_header_func:
- * @menu: a #GtkTreeMenu
- * @func: (allow-none): a #GtkTreeMenuHeaderFunc, or %NULL to unset the header function.
- * @data: (allow-none): user data to pass to @func, or %NULL
- * @destroy: (allow-none): destroy notifier for @data, or %NULL
- *
- * Sets the header function, which is used to determine
- * whether a row width children should contain a leading header
- * menu item to allow that row to be selectable as an independant
- * menu item. If the header function is %NULL, no rows with children
- * have menu items which can be activated as leafs.
- * This is the default value.
- *
- * Since: 3.0
- */
-void
-_gtk_tree_menu_set_header_func (GtkTreeMenu          *menu,
-                                GtkTreeMenuHeaderFunc func,
-                                gpointer              data,
-                                GDestroyNotify        destroy)
-{
-  GtkTreeMenuPrivate *priv;
-
-  g_return_if_fail (GTK_IS_TREE_MENU (menu));
-
-  priv = menu->priv;
-
-  if (priv->header_destroy)
-    priv->header_destroy (priv->header_data);
-
-  priv->header_func    = func;
-  priv->header_data    = data;
-  priv->header_destroy = destroy;
 
   rebuild_menu (menu);
 }

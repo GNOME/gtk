@@ -44,23 +44,6 @@ typedef struct _GtkTreeMenu              GtkTreeMenu;
 typedef struct _GtkTreeMenuClass         GtkTreeMenuClass;
 typedef struct _GtkTreeMenuPrivate       GtkTreeMenuPrivate;
 
-/**
- * GtkTreeMenuHeaderFunc:
- * @model: a #GtkTreeModel
- * @iter: the #GtkTreeIter pointing at a row in @model
- * @data: user data
- *
- * Function type for determining whether the row pointed to by @iter
- * which has children should be replicated as a header item in the
- * child menu.
- *
- * Returns: %TRUE if @iter should have an activatable header menu
- * item created for it in a submenu.
- */
-typedef gboolean (*GtkTreeMenuHeaderFunc) (GtkTreeModel      *model,
-                                           GtkTreeIter       *iter,
-                                           gpointer           data);
-
 struct _GtkTreeMenu
 {
   GtkMenu parent_instance;
@@ -112,12 +95,6 @@ void                  _gtk_tree_menu_set_column_span_column         (GtkTreeMenu
 GtkTreeViewRowSeparatorFunc _gtk_tree_menu_get_row_separator_func   (GtkTreeMenu          *menu);
 void                        _gtk_tree_menu_set_row_separator_func   (GtkTreeMenu          *menu,
                                                                      GtkTreeViewRowSeparatorFunc func,
-                                                                     gpointer              data,
-                                                                     GDestroyNotify        destroy);
-
-GtkTreeMenuHeaderFunc _gtk_tree_menu_get_header_func                (GtkTreeMenu          *menu);
-void                  _gtk_tree_menu_set_header_func                (GtkTreeMenu          *menu,
-                                                                     GtkTreeMenuHeaderFunc func,
                                                                      gpointer              data,
                                                                      GDestroyNotify        destroy);
 
