@@ -91,6 +91,7 @@ enum  {
   PROP_TRANSITION_DURATION,
   PROP_TRANSITION_TYPE,
   PROP_TRANSITION_RUNNING,
+  PROP_INTERPOLATE_SIZE,
   LAST_PROP
 };
 
@@ -139,6 +140,8 @@ typedef struct {
 
   gint last_visible_widget_width;
   gint last_visible_widget_height;
+
+  gboolean interpolate_size;
 
   GtkStackTransitionType active_transition_type;
 
@@ -266,6 +269,9 @@ gtk_stack_get_property (GObject   *object,
     case PROP_TRANSITION_RUNNING:
       g_value_set_boolean (value, gtk_stack_get_transition_running (stack));
       break;
+    case PROP_INTERPOLATE_SIZE:
+      g_value_set_boolean (value, gtk_stack_get_interpolate_size (stack));
+      break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, property_id, pspec);
       break;
@@ -302,6 +308,9 @@ gtk_stack_set_property (GObject     *object,
       break;
     case PROP_TRANSITION_TYPE:
       gtk_stack_set_transition_type (stack, g_value_get_enum (value));
+      break;
+    case PROP_INTERPOLATE_SIZE:
+      gtk_stack_set_interpolate_size (stack, g_value_get_boolean (value));
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, property_id, pspec);
@@ -456,6 +465,11 @@ gtk_stack_class_init (GtkStackClass *klass)
       g_param_spec_boolean ("transition-running", P_("Transition running"), P_("Whether or not the transition is currently running"),
                             FALSE,
                             GTK_PARAM_READABLE);
+  stack_props[PROP_INTERPOLATE_SIZE] =
+      g_param_spec_boolean ("interpolate-size", P_("Interpolate size"), P_("Whether or not the size should smoothly change when changing between differently sized children"),
+                            FALSE,
+                            GTK_PARAM_READABLE);
+
 
   g_object_class_install_properties (object_class, LAST_PROP, stack_props);
 
@@ -1630,6 +1644,55 @@ gtk_stack_get_transition_running (GtkStack *stack)
 }
 
 /**
+ * gtk_stack_set_interpolate_size:
+ * @stack: A #GtkStack
+ *
+ * Sets whether or not @stack will interpolate its size when
+ * changing the visible child. If the interpolate-size property
+ * is set to %TRUE, @stack will interpolate its size between
+ * the current one and the one it'll take after changing the visible-child,
+ * according to the set transition-duration.
+ *
+ * Since: 3.18
+ */
+void
+gtk_stack_set_interpolate_size (GtkStack *stack,
+                                gboolean  interpolate_size)
+{
+  GtkStackPrivate *priv = gtk_stack_get_instance_private (stack);
+  g_return_if_fail (GTK_IS_STACK (stack));
+
+  interpolate_size = !!interpolate_size;
+
+  if (priv->interpolate_size == interpolate_size)
+    return;
+
+  priv->interpolate_size = interpolate_size;
+  g_object_notify_by_pspec (G_OBJECT (stack),
+                            stack_props[PROP_INTERPOLATE_SIZE]);
+}
+
+/**
+ * gtk_stack_get_interpolate_size:
+ * @stack: A #GtkStack
+ *
+ * Returns: %TRUE If the #GtkStack is set up to interpolate between
+ * visible-child sizes, %FALSE otherwise.
+ *
+ * Since: 3.18
+ */
+gboolean
+gtk_stack_get_interpolate_size (GtkStack *stack)
+{
+  GtkStackPrivate *priv = gtk_stack_get_instance_private (stack);
+  g_return_if_fail (GTK_IS_STACK (stack));
+
+  return priv->interpolate_size;
+}
+
+
+
+/**
  * gtk_stack_get_visible_child:
  * @stack: a #GtkStack
  *
@@ -2116,16 +2179,23 @@ gtk_stack_size_allocate (GtkWidget     *widget,
       gtk_widget_get_preferred_height_for_width (priv->visible_child->widget,
                                                  allocation->width,
                                                  &min, &nat);
-      valign = gtk_widget_get_valign (priv->visible_child->widget);
-      child_allocation.height = MAX (nat, allocation->height);
-      if (valign == GTK_ALIGN_END &&
-          child_allocation.height > allocation->height)
-        child_allocation.y -= nat - allocation->height;
-      else if (valign == GTK_ALIGN_CENTER &&
-               child_allocation.height > allocation->height)
-        child_allocation.y -= (nat - allocation->height) / 2;
+      if (priv->interpolate_size)
+        {
+          valign = gtk_widget_get_valign (priv->visible_child->widget);
+          child_allocation.height = MAX (nat, allocation->height);
+          if (valign == GTK_ALIGN_END &&
+              child_allocation.height > allocation->height)
+            child_allocation.y -= nat - allocation->height;
+          else if (valign == GTK_ALIGN_CENTER &&
+                   child_allocation.height > allocation->height)
+            child_allocation.y -= (nat - allocation->height) / 2;
 
-      gtk_widget_size_allocate (priv->visible_child->widget, &child_allocation);
+          gtk_widget_size_allocate (priv->visible_child->widget, &child_allocation);
+        }
+      else
+        {
+          gtk_widget_size_allocate (priv->visible_child->widget, &child_allocation);
+        }
     }
 
    if (gtk_widget_get_realized (widget))
@@ -2177,7 +2247,7 @@ gtk_stack_get_preferred_height (GtkWidget *widget,
 
   if (priv->last_visible_child != NULL && !priv->vhomogeneous)
     {
-      gdouble t = ease_out_cubic (priv->transition_pos);
+      gdouble t = priv->interpolate_size ? ease_out_cubic (priv->transition_pos) : 1.0;
       *minimum_height = LERP (*minimum_height, priv->last_visible_widget_height, t);
       *natural_height = LERP (*natural_height, priv->last_visible_widget_height, t);
     }
@@ -2219,7 +2289,7 @@ gtk_stack_get_preferred_height_for_width (GtkWidget *widget,
 
   if (priv->last_visible_child != NULL && !priv->vhomogeneous)
     {
-      gdouble t = ease_out_cubic (priv->transition_pos);
+      gdouble t = priv->interpolate_size ? ease_out_cubic (priv->transition_pos) : 1.0;
       *minimum_height = LERP (*minimum_height, priv->last_visible_widget_height, t);
       *natural_height = LERP (*natural_height, priv->last_visible_widget_height, t);
     }
@@ -2259,7 +2329,7 @@ gtk_stack_get_preferred_width (GtkWidget *widget,
 
   if (priv->last_visible_child != NULL && !priv->hhomogeneous)
     {
-      gdouble t = ease_out_cubic (priv->transition_pos);
+      gdouble t = priv->interpolate_size ? ease_out_cubic (priv->transition_pos) : 1.0;
       *minimum_width = LERP (*minimum_width, priv->last_visible_widget_width, t);
       *natural_width = LERP (*natural_width, priv->last_visible_widget_width, t);
     }
@@ -2300,7 +2370,7 @@ gtk_stack_get_preferred_width_for_height (GtkWidget *widget,
 
   if (priv->last_visible_child != NULL && !priv->hhomogeneous)
     {
-      gdouble t = ease_out_cubic (priv->transition_pos);
+      gdouble t = priv->interpolate_size ? ease_out_cubic (priv->transition_pos) : 1.0;
       *minimum_width = LERP (*minimum_width, priv->last_visible_widget_width, t);
       *natural_width = LERP (*natural_width, priv->last_visible_widget_width, t);
     }

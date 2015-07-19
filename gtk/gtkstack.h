@@ -130,7 +130,11 @@ GDK_AVAILABLE_IN_3_10
 GtkStackTransitionType gtk_stack_get_transition_type     (GtkStack               *stack);
 GDK_AVAILABLE_IN_3_12
 gboolean               gtk_stack_get_transition_running  (GtkStack               *stack);
-
+GDK_AVAILABLE_IN_3_18
+void                   gtk_stack_set_interpolate_size    (GtkStack *stack,
+                                                          gboolean  interpolate_size);
+GDK_AVAILABLE_IN_3_18
+gboolean               gtk_stack_get_interpolate_size    (GtkStack *stack);
 G_END_DECLS
 
 #endif
