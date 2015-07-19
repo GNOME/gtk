@@ -163,7 +163,6 @@ struct _GtkWindowPrivate
   GList                 *popovers;
 
   GdkModifierType        mnemonic_modifier;
-  GdkWindowTypeHint      gdk_type_hint;
 
   gchar   *startup_id;
   gchar   *title;
@@ -1630,7 +1629,6 @@ gtk_window_init (GtkWindow *window)
   priv->need_default_size = TRUE;
   priv->need_default_position = TRUE;
   priv->modal = FALSE;
-  priv->gdk_type_hint = GDK_WINDOW_TYPE_HINT_NORMAL;
   priv->gravity = GDK_GRAVITY_NORTH_WEST;
   priv->decorated = TRUE;
   priv->mnemonic_modifier = GDK_MOD1_MASK;
@@ -3509,13 +3507,9 @@ gtk_window_set_type_hint (GtkWindow           *window,
 
   priv = window->priv;
 
-  if (hint < GDK_WINDOW_TYPE_HINT_DROPDOWN_MENU)
-    priv->type_hint = hint;
-  else
-    priv->type_hint = GDK_WINDOW_TYPE_HINT_NORMAL;
+  priv->type_hint = hint;
 
   priv->reset_type_hint = TRUE;
-  priv->gdk_type_hint = hint;
 
   update_window_buttons (window);
 }
@@ -3533,7 +3527,7 @@ gtk_window_get_type_hint (GtkWindow *window)
 {
   g_return_val_if_fail (GTK_IS_WINDOW (window), GDK_WINDOW_TYPE_HINT_NORMAL);
 
-  return window->priv->gdk_type_hint;
+  return window->priv->type_hint;
 }
 
 /**
@@ -6122,7 +6116,7 @@ gtk_window_map (GtkWidget *widget)
        * Some applications use X directly to change the properties;
        * in that case, we shouldn't overwrite what they did.
        */
-      gdk_window_set_type_hint (gdk_window, priv->gdk_type_hint);
+      gdk_window_set_type_hint (gdk_window, priv->type_hint);
       priv->reset_type_hint = FALSE;
     }
 
