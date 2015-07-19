@@ -296,6 +296,9 @@ _gtk_header_bar_update_window_buttons (GtkHeaderBar *bar)
       priv->titlebar_end_separator = NULL;
     }
 
+  if (!priv->shows_wm_decorations)
+    return;
+
   direction = gtk_widget_get_direction (widget);
 
   g_object_get (gtk_widget_get_settings (widget),
