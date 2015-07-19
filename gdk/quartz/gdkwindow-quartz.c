@@ -2133,6 +2133,19 @@ window_type_hint_to_hides_on_deactivate (GdkWindowTypeHint hint)
 }
 
 static void
+_gdk_quartz_window_update_has_shadow (GdkWindowImplQuartz *impl)
+{
+    gboolean has_shadow;
+
+    /* In case there is any shadow set we have to turn off the
+     * NSWindow setHasShadow as the system drawn ones wont match our
+     * window boundary anymore */
+    has_shadow = (window_type_hint_to_shadow (impl->type_hint) && !impl->shadow_max);
+
+    [impl->toplevel setHasShadow: has_shadow];
+}
+
+static void
 gdk_quartz_window_set_type_hint (GdkWindow        *window,
                                  GdkWindowTypeHint hint)
 {
@@ -2150,7 +2163,7 @@ gdk_quartz_window_set_type_hint (GdkWindow        *window,
   if (GDK_WINDOW_IS_MAPPED (window))
     return;
 
-  [impl->toplevel setHasShadow: window_type_hint_to_shadow (hint)];
+  _gdk_quartz_window_update_has_shadow (impl);
   [impl->toplevel setLevel: window_type_hint_to_level (hint)];
   [impl->toplevel setHidesOnDeactivate: window_type_hint_to_hides_on_deactivate (hint)];
 }
@@ -2393,7 +2406,8 @@ gdk_quartz_window_set_decorations (GdkWindow       *window,
                                                                   backing:NSBackingStoreBuffered
                                                                     defer:NO
                                                                    screen:screen];
-          [impl->toplevel setHasShadow: window_type_hint_to_shadow (impl->type_hint)];
+          _gdk_quartz_window_update_has_shadow (impl);
+
           [impl->toplevel setLevel: window_type_hint_to_level (impl->type_hint)];
           if (title)
             [impl->toplevel setTitle:title];
@@ -2825,6 +2839,8 @@ gdk_quartz_window_set_shadow_width (GdkWindow *window,
     return;
 
   impl->shadow_top = top;
+  impl->shadow_max = MAX (MAX (left, right), MAX (top, bottom));
+  _gdk_quartz_window_update_has_shadow (impl);
 }
 
 static cairo_region_t *

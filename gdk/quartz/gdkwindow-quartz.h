@@ -62,6 +62,8 @@ struct _GdkWindowImplQuartz
   cairo_surface_t *cairo_surface;
 
   gint shadow_top;
+
+  gint shadow_max;
 };
  
 struct _GdkWindowImplQuartzClass 
