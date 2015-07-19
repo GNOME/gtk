@@ -113,7 +113,8 @@
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="invisible_char">•</property>
-                    <property name="text">Sample string goes here</property>
+                    <property name="text"></property>
+                    <property name="placeholder-text" translatable="yes">Preview text</property>
                     <signal name="scroll-event" handler="resize_by_scroll_cb" swapped="no"/>
                   </object>
                   <packing>
