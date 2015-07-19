@@ -219,7 +219,6 @@ struct _GtkWindowPrivate
   guint    focus_visible             : 1;
   guint    modal                     : 1;
   guint    position                  : 3;
-  guint    reset_type_hint           : 1;
   guint    resizable                 : 1;
   guint    skips_pager               : 1;
   guint    skips_taskbar             : 1;
@@ -3501,6 +3500,7 @@ gtk_window_set_type_hint (GtkWindow           *window,
 			  GdkWindowTypeHint    hint)
 {
   GtkWindowPrivate *priv;
+  GdkWindow *gdk_window;
 
   g_return_if_fail (GTK_IS_WINDOW (window));
 
@@ -3511,10 +3511,9 @@ gtk_window_set_type_hint (GtkWindow           *window,
 
   priv->type_hint = hint;
 
-  if (gtk_widget_get_mapped (GTK_WIDGET (window)))
-    gdk_window_set_type_hint (gtk_widget_get_window (GTK_WIDGET (window)), hint);
-  else
-    priv->reset_type_hint = TRUE;
+  gdk_window = gtk_widget_get_window (GTK_WIDGET (window));
+  if (gdk_window)
+    gdk_window_set_type_hint (gdk_window, hint);
 
   g_object_notify (G_OBJECT (window), "type-hint");
 
@@ -6115,17 +6114,6 @@ gtk_window_map (GtkWidget *widget)
   /* No longer use the default settings */
   priv->need_default_size = FALSE;
   priv->need_default_position = FALSE;
-
-  if (priv->reset_type_hint)
-    {
-      /* We should only reset the type hint when the application
-       * used gtk_window_set_type_hint() to change the hint.
-       * Some applications use X directly to change the properties;
-       * in that case, we shouldn't overwrite what they did.
-       */
-      gdk_window_set_type_hint (gdk_window, priv->type_hint);
-      priv->reset_type_hint = FALSE;
-    }
 
   gdk_window_show (gdk_window);
 
