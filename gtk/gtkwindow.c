@@ -3516,6 +3516,8 @@ gtk_window_set_type_hint (GtkWindow           *window,
   else
     priv->reset_type_hint = TRUE;
 
+  g_object_notify (G_OBJECT (window), "type-hint");
+
   update_window_buttons (window);
 }
 
