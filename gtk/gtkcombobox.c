@@ -2502,6 +2502,12 @@ gtk_combo_box_popdown (GtkComboBox *combo_box)
   gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (priv->button),
                                 FALSE);
 
+  if (priv->scroll_timer)
+    {
+      g_source_remove (priv->scroll_timer);
+      priv->scroll_timer = 0;
+    }
+
   priv->grab_pointer = NULL;
   priv->grab_keyboard = NULL;
 }
