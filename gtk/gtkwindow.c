@@ -3506,6 +3506,9 @@ gtk_window_set_type_hint (GtkWindow           *window,
 
   priv = window->priv;
 
+  if (priv->type_hint == hint)
+    return;
+
   priv->type_hint = hint;
 
   if (gtk_widget_get_mapped (GTK_WIDGET (window)))
