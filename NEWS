@@ -1,3 +1,111 @@
+Overview of Changes in GTK+ 3.17.5
+==================================
+
+* GtkFileChooser:
+ - Always search in the current location, and indicate this in
+   the subtitle. Show progress for long searches, and show a nice
+   empty state.
+ - Make search in recent files work
+ - Fix sorting order of recent files and search results
+ - Various improvements to keyboard navigation:
+   - Ctrl-F toggles search
+   - . opens location entry
+   - Alt-P focuses the sidebar
+   - Escape stops search and closes the location entry
+ - Move the name entry to the header bar in Save modes
+ - Don't show Trash and Recent in the sidebar in Save modes
+ - Allow renaming and deleting files in Save modes
+ - Improved sizing behavior of columns
+ - Improved formatting of the time and location columns
+ - Time column can show date and time
+ - Move fixed and network drives and volumes from the sidebar
+   to a new view that also allows to connect to remote servers
+ - Use popovers for context menus and support long press to make
+   them accessible with touch
+
+* GtkScrolledWindow
+ - Keep scrollbars below treeview headers
+ - Switch the roles of secondary and middle click on scrollbar steppers
+   - Primary click starts low-speed autoscrolling
+   - Secondary click start high-speed autoscrolling
+   - Middle click scrolls to the end
+ - Tweak button bindings on scrollbars (and scales)
+   - Primary click warps to the location
+   - Primary click with Shift jumps by pages
+   - Secondary click starts variable-speed autoscrolling
+
+* Theme and CSS
+ - GtkSwitch has a new slider-height style property to make square
+   switches possible
+ - Support CSS letter-spacing for labels and entries
+ - Partial support for CSS text-decoration
+
+* gtk-demo has various new and improved examples
+
+* X11
+ - Fix rendering stalls over remote ssh connections
+
+* Wayland
+ - Various fixes to make Copy-Paste and Drag-and-Drop work better
+ - Ignore size increments for maximized and fullscreen windows
+
+* Mir
+ - Various fixes and improvements
+
+* Broadway
+ - Windows can now be maximized
+
+* OS X
+ - Support windows with a fixed aspect ratio
+
+* Bugs fixed:
+ 325150 Save As dialog cannot delete or rename files
+ 593372 save dialog treats trailing spaces literally
+ 720684 "Places" panel in Open File Dialog should should have a mnemonic...
+ 741800 GTK3 apps have huge rendering pauses/hangs over SSH connection
+ 748892 wayland: focus issue with gnome-terminal
+ 750870 gtk3 does apparently ignore replayed events?
+ 750994 X11: First mouse wheel event ignored after right click or Alt+Ta...
+ 751341 GtkWindow: fix default empty window size with CSD
+ 751368 wayland: gnome-terminal does fill entire area when fullscreen or...
+ 751401 crash on DnD
+ 751414 File descriptor leak in gdk_wayland_selection_request_target()
+ 751443 resource_path value cleared in gtk_image_set_from_resource
+ 751447 GtkSearchBar takes up half the height of gnome-system-monitor's ...
+ 751448 Bookmarks sometimes disappear when dragging them away
+ 751625 build error with pure wayland
+ 751677 per-widget font options
+ 751689 switch: add a style property for the switch height
+ 751739 Deadlock in X11 when setting XSetErrorHandler while another thre...
+ 751752 Memleak when both opening shm and opening file in tmp fail
+ 751754 GtkSwitch: calling gtk_switch_set_active in the handler for noti...
+ 751793 DnD: Look up past insensitive widgets for the DnD drop site
+ 751800 Warn for whitespace at beginning or end of new folder names
+ 751805 Avoid the scrollable border when placing scrollbars
+ 751811 improve the font_options setter
+ 751877 gtkdrawingarea: crash when drawing a video
+ 751910 Headerbar - Buttons doesn't work until focus is changed
+ 752000 GtkApplication vs. _NET_WM_USER_TIME
+ 752016 testgmenu: use the menu binding code
+ 752025 wayland: print correct coordinates during DnD
+ 752034 Delegate permanent devices and connected networks from Places Si...
+ 752088 Improve GtkImageMenuItem documentation to reflect deprecation st...
+ 752093 Improvement to GtkImageMenuItem long description and code snippet
+ 752131 GtkButtonBox has spacing between buttons by default when set to ...
+ 752509 GtkFileChooserButton causes layout jumps
+ 752520 Crash getting a NULL visual in glx_pixmap_get
+
+* Translation updates:
+ Czech
+ Greek
+ Hebrew
+ Hungarian
+ Polish
+ Portuguese
+ Slovak
+ Spanish
+
+
 Overview of Changes in GTK+ 3.17.4
 ==================================
 
