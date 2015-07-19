@@ -3780,18 +3780,13 @@ gtk_places_sidebar_init (GtkPlacesSidebar *sidebar)
                                 list_box_header_func, sidebar, NULL);
   gtk_list_box_set_sort_func (GTK_LIST_BOX (sidebar->list_box),
                               list_box_sort_func, NULL, NULL);
-  gtk_list_box_set_selection_mode (GTK_LIST_BOX (sidebar->list_box),
-                                   GTK_SELECTION_SINGLE);
-  gtk_list_box_set_activate_on_single_click (GTK_LIST_BOX (sidebar->list_box),
-                                             TRUE);
-  g_signal_connect (sidebar->list_box,
-                    "row-activated",
-                    G_CALLBACK (on_row_activated),
-                    sidebar);
-  g_signal_connect (sidebar->list_box,
-                    "key-press-event",
-                    G_CALLBACK (on_key_press_event),
-                    sidebar);
+  gtk_list_box_set_selection_mode (GTK_LIST_BOX (sidebar->list_box), GTK_SELECTION_SINGLE);
+  gtk_list_box_set_activate_on_single_click (GTK_LIST_BOX (sidebar->list_box), TRUE);
+
+  g_signal_connect (sidebar->list_box, "row-activated",
+                    G_CALLBACK (on_row_activated), sidebar);
+  g_signal_connect (sidebar->list_box, "key-press-event",
+                    G_CALLBACK (on_key_press_event), sidebar);
 
   sidebar->long_press_gesture = gtk_gesture_long_press_new (GTK_WIDGET (sidebar));
   gtk_gesture_single_set_touch_only (GTK_GESTURE_SINGLE (sidebar->long_press_gesture), TRUE);
