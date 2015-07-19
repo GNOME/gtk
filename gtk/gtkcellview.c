@@ -25,6 +25,7 @@
 #include "gtkcellrendererpixbuf.h"
 #include "gtkprivate.h"
 #include "gtkorientableprivate.h"
+#include "gtkrender.h"
 #include <gobject/gmarshal.h>
 #include "gtkbuildable.h"
 
@@ -569,14 +570,38 @@ gtk_cell_view_dispose (GObject *object)
 }
 
 static void
+get_padding_and_border (GtkWidget *widget,
+                        GtkBorder *border)
+{
+  GtkStyleContext *context;
+  GtkStateFlags state;
+  GtkBorder tmp;
+
+  context = gtk_widget_get_style_context (widget);
+  state = gtk_widget_get_state_flags (widget);
+
+  gtk_style_context_get_padding (context, state, border);
+  gtk_style_context_get_border (context, state, &tmp);
+  border->top += tmp.top;
+  border->right += tmp.right;
+  border->bottom += tmp.bottom;
+  border->left += tmp.left;
+}
+
+static void
 gtk_cell_view_size_allocate (GtkWidget     *widget,
                              GtkAllocation *allocation)
 {
   GtkCellView        *cellview = GTK_CELL_VIEW (widget);
   GtkCellViewPrivate *priv = cellview->priv;
-  gint                alloc_width, alloc_height;
+  gint                alloc_width, alloc_height, width, height;
+  GtkBorder           border;
 
+  get_padding_and_border (widget, &border);
   gtk_widget_set_allocation (widget, allocation);
+
+  width = allocation->width - border.left - border.right;
+  height = allocation->height - border.top - border.bottom;
 
   gtk_cell_area_context_get_allocation (priv->context, &alloc_width, &alloc_height);
 
@@ -587,11 +612,11 @@ gtk_cell_view_size_allocate (GtkWidget     *widget,
    * allocate every time.
    */
   if (priv->fit_model)
-    gtk_cell_area_context_allocate (priv->context, allocation->width, allocation->height);
+    gtk_cell_area_context_allocate (priv->context, width, height);
   else if (alloc_width != allocation->width && priv->orientation == GTK_ORIENTATION_HORIZONTAL)
-    gtk_cell_area_context_allocate (priv->context, allocation->width, -1);
+    gtk_cell_area_context_allocate (priv->context, width, -1);
   else if (alloc_height != allocation->height && priv->orientation == GTK_ORIENTATION_VERTICAL)
-    gtk_cell_area_context_allocate (priv->context, -1, allocation->height);
+    gtk_cell_area_context_allocate (priv->context, -1, height);
 }
 
 static void
@@ -661,7 +686,9 @@ gtk_cell_view_get_preferred_width  (GtkWidget *widget,
 {
   GtkCellView        *cellview = GTK_CELL_VIEW (widget);
   GtkCellViewPrivate *priv = cellview->priv;
+  GtkBorder           border;
 
+  get_padding_and_border (widget, &border);
   g_signal_handler_block (priv->context, priv->size_changed_id);
 
   if (priv->fit_model)
@@ -680,6 +707,9 @@ gtk_cell_view_get_preferred_width  (GtkWidget *widget,
   gtk_cell_area_context_get_preferred_width (priv->context, minimum_size, natural_size);
 
   g_signal_handler_unblock (priv->context, priv->size_changed_id);
+
+  *minimum_size += border.left + border.right;
+  *natural_size += border.left + border.right;
 }
 
 static void       
@@ -689,6 +719,9 @@ gtk_cell_view_get_preferred_height (GtkWidget *widget,
 {
   GtkCellView        *cellview = GTK_CELL_VIEW (widget);
   GtkCellViewPrivate *priv = cellview->priv;
+  GtkBorder           border;
+
+  get_padding_and_border (widget, &border);
 
   g_signal_handler_block (priv->context, priv->size_changed_id);
 
@@ -708,6 +741,9 @@ gtk_cell_view_get_preferred_height (GtkWidget *widget,
   gtk_cell_area_context_get_preferred_height (priv->context, minimum_size, natural_size);
 
   g_signal_handler_unblock (priv->context, priv->size_changed_id);
+
+  *minimum_size += border.top + border.bottom;
+  *natural_size += border.top + border.bottom;
 }
 
 static void       
@@ -718,6 +754,10 @@ gtk_cell_view_get_preferred_width_for_height (GtkWidget *widget,
 {
   GtkCellView        *cellview = GTK_CELL_VIEW (widget);
   GtkCellViewPrivate *priv = cellview->priv;
+  GtkBorder           border;
+
+  get_padding_and_border (widget, &border);
+  for_size -= border.top + border.bottom;
 
   if (priv->fit_model)
     {
@@ -735,6 +775,9 @@ gtk_cell_view_get_preferred_width_for_height (GtkWidget *widget,
       gtk_cell_area_get_preferred_width_for_height (priv->area, priv->context, widget, 
 						    for_size, minimum_size, natural_size);
     }
+
+  *minimum_size += border.left + border.right;
+  *natural_size += border.left + border.right;
 }
 
 static void       
@@ -745,6 +788,10 @@ gtk_cell_view_get_preferred_height_for_width (GtkWidget *widget,
 {
   GtkCellView        *cellview = GTK_CELL_VIEW (widget);
   GtkCellViewPrivate *priv = cellview->priv;
+  GtkBorder           border;
+
+  get_padding_and_border (widget, &border);
+  for_size -= border.left + border.right;
 
   if (priv->fit_model)
     {
@@ -762,6 +809,9 @@ gtk_cell_view_get_preferred_height_for_width (GtkWidget *widget,
       gtk_cell_area_get_preferred_height_for_width (priv->area, priv->context, widget, 
 						    for_size, minimum_size, natural_size);
     }
+
+  *minimum_size += border.top + border.bottom;
+  *natural_size += border.top + border.bottom;
 }
 
 static gboolean
@@ -771,14 +821,26 @@ gtk_cell_view_draw (GtkWidget *widget,
   GtkCellView *cellview;
   GdkRectangle area;
   GtkCellRendererState state;
+  GtkBorder border;
+  GtkStyleContext *context;
 
   cellview = GTK_CELL_VIEW (widget);
+  context = gtk_widget_get_style_context (widget);
+
+  get_padding_and_border (widget, &border);
 
   /* render cells */
-  area.x = 0;
-  area.y = 0;
-  area.width  = gtk_widget_get_allocated_width (widget);
-  area.height = gtk_widget_get_allocated_height (widget);
+  area.x = border.left;
+  area.y = border.top;
+  area.width  = gtk_widget_get_allocated_width (widget) - border.left - border.right;
+  area.height = gtk_widget_get_allocated_height (widget) - border.top - border.bottom;
+
+  gtk_render_background (context, cr,
+                         0, 0,
+                         gtk_widget_get_allocated_width (widget), gtk_widget_get_allocated_height (widget));
+  gtk_render_frame (context, cr,
+                    0, 0,
+                    gtk_widget_get_allocated_width (widget), gtk_widget_get_allocated_height (widget));
 
   /* "blank" background */
   if (cellview->priv->background_set)
