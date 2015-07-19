@@ -2341,6 +2341,7 @@ gtk_popover_bind_model (GtkPopover  *popover,
       stack = gtk_stack_new ();
       gtk_stack_set_vhomogeneous (GTK_STACK (stack), FALSE);
       gtk_stack_set_transition_type (GTK_STACK (stack), GTK_STACK_TRANSITION_TYPE_SLIDE_LEFT_RIGHT);
+      gtk_stack_set_interpolate_size (GTK_STACK (stack), TRUE);
       gtk_widget_show (stack);
       gtk_container_add (GTK_CONTAINER (popover), stack);
 
