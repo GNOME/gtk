@@ -134,6 +134,7 @@ needs_explicit_setting (MyParserData *data,
     { "GtkGrid", "top-attach", 1 },
     { "GtkWidget", "hexpand", 0 },
     { "GtkWidget", "vexpand", 0 },
+    { "GtkContainer", "border-width", 0 },
     { NULL, NULL, 0 }
   };
   const gchar *class_name;
