@@ -2781,20 +2781,16 @@ gtk_combo_box_draw (GtkWidget *widget,
 {
   GtkComboBox *combo_box = GTK_COMBO_BOX (widget);
   GtkComboBoxPrivate *priv = combo_box->priv;
+  GtkStyleContext *context;
 
-  if (priv->shadow_type != GTK_SHADOW_NONE)
-    {
-      GtkStyleContext *context;
+  context = gtk_widget_get_style_context (widget);
 
-      context = gtk_widget_get_style_context (widget);
-
-      gtk_render_background (context, cr, 0, 0,
-                             gtk_widget_get_allocated_width (widget),
-                             gtk_widget_get_allocated_height (widget));
-      gtk_render_frame (context, cr, 0, 0,
-                        gtk_widget_get_allocated_width (widget),
-                        gtk_widget_get_allocated_height (widget));
-    }
+  gtk_render_background (context, cr, 0, 0,
+                         gtk_widget_get_allocated_width (widget),
+                         gtk_widget_get_allocated_height (widget));
+  gtk_render_frame (context, cr, 0, 0,
+                    gtk_widget_get_allocated_width (widget),
+                    gtk_widget_get_allocated_height (widget));
 
   gtk_container_propagate_draw (GTK_CONTAINER (widget),
                                 priv->button, cr);
