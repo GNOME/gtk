@@ -3503,13 +3503,15 @@ gtk_window_set_type_hint (GtkWindow           *window,
   GtkWindowPrivate *priv;
 
   g_return_if_fail (GTK_IS_WINDOW (window));
-  g_return_if_fail (!gtk_widget_get_mapped (GTK_WIDGET (window)));
 
   priv = window->priv;
 
   priv->type_hint = hint;
 
-  priv->reset_type_hint = TRUE;
+  if (gtk_widget_get_mapped (GTK_WIDGET (window)))
+    gdk_window_set_type_hint (gtk_widget_get_window (GTK_WIDGET (window)), hint);
+  else
+    priv->reset_type_hint = TRUE;
 
   update_window_buttons (window);
 }
