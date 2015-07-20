@@ -32,6 +32,8 @@
   NSPoint initialMoveLocation;
   NSPoint initialResizeLocation;
   NSRect  initialResizeFrame;
+
+  NSRect  lastUnmaximizedFrame;
 }
 
 -(BOOL)isInMove;

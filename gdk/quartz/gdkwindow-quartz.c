@@ -2477,27 +2477,23 @@ static void
 gdk_quartz_window_maximize (GdkWindow *window)
 {
   GdkWindowImplQuartz *impl;
+  gboolean maximized;
 
   if (GDK_WINDOW_DESTROYED (window) ||
       !WINDOW_IS_TOPLEVEL (window))
     return;
 
   impl = GDK_WINDOW_IMPL_QUARTZ (window->impl);
+  maximized = gdk_window_get_state (window) & GDK_WINDOW_STATE_MAXIMIZED;
 
   if (GDK_WINDOW_IS_MAPPED (window))
     {
       GDK_QUARTZ_ALLOC_POOL;
 
-      if (impl->toplevel && ![impl->toplevel isZoomed])
-	[impl->toplevel zoom:nil];
+      if (impl->toplevel && !maximized)
+        [impl->toplevel zoom:nil];
 
       GDK_QUARTZ_RELEASE_POOL;
-    }
-  else
-    {
-      gdk_synthesize_window_state (window,
-				   0,
-				   GDK_WINDOW_STATE_MAXIMIZED);
     }
 }
 
@@ -2505,27 +2501,23 @@ static void
 gdk_quartz_window_unmaximize (GdkWindow *window)
 {
   GdkWindowImplQuartz *impl;
+  gboolean maximized;
 
   if (GDK_WINDOW_DESTROYED (window) ||
       !WINDOW_IS_TOPLEVEL (window))
     return;
 
   impl = GDK_WINDOW_IMPL_QUARTZ (window->impl);
+  maximized = gdk_window_get_state (window) & GDK_WINDOW_STATE_MAXIMIZED;
 
   if (GDK_WINDOW_IS_MAPPED (window))
     {
       GDK_QUARTZ_ALLOC_POOL;
 
-      if (impl->toplevel && [impl->toplevel isZoomed])
-	[impl->toplevel zoom:nil];
+      if (impl->toplevel && maximized)
+        [impl->toplevel zoom:nil];
 
       GDK_QUARTZ_RELEASE_POOL;
-    }
-  else
-    {
-      gdk_synthesize_window_state (window,
-				   GDK_WINDOW_STATE_MAXIMIZED,
-				   0);
     }
 }
 

@@ -689,4 +689,43 @@ update_context_from_dragging_info (id <NSDraggingInfo> sender)
   return rect;
 }
 
+- (NSRect)windowWillUseStandardFrame:(NSWindow *)nsWindow
+                        defaultFrame:(NSRect)newFrame
+{
+  NSRect screenFrame = [[self screen] visibleFrame];
+  GdkWindow *window = [[self contentView] gdkWindow];
+  GdkWindowImplQuartz *impl = GDK_WINDOW_IMPL_QUARTZ (window->impl);
+  gboolean maximized = gdk_window_get_state (window) & GDK_WINDOW_STATE_MAXIMIZED;
+
+  if (!maximized)
+    return screenFrame;
+  else
+    return lastUnmaximizedFrame;
+}
+
+- (BOOL)windowShouldZoom:(NSWindow *)nsWindow
+                 toFrame:(NSRect)newFrame
+{
+
+  GdkWindow *window = [[self contentView] gdkWindow];
+  GdkWindowImplQuartz *impl = GDK_WINDOW_IMPL_QUARTZ (window->impl);
+  gboolean maximized = gdk_window_get_state (window) & GDK_WINDOW_STATE_MAXIMIZED;
+
+  if (maximized)
+    {
+      gdk_synthesize_window_state (window,
+                                   GDK_WINDOW_STATE_MAXIMIZED,
+                                   0);
+    }
+  else
+    {
+      lastUnmaximizedFrame = [nsWindow frame];
+      gdk_synthesize_window_state (window,
+                                   0,
+                                   GDK_WINDOW_STATE_MAXIMIZED);
+    }
+
+  return YES;
+}
+
 @end
