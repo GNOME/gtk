@@ -40,6 +40,9 @@ Overview of Changes in GTK+ 3.17.5
  - Support CSS letter-spacing for labels and entries
  - Partial support for CSS text-decoration
 
+* Font handling
+ - Per-widget font options and font maps are supported now
+
 * gtk-demo has various new and improved examples
 
 * X11
@@ -48,6 +51,7 @@ Overview of Changes in GTK+ 3.17.5
 * Wayland
  - Various fixes to make Copy-Paste and Drag-and-Drop work better
  - Ignore size increments for maximized and fullscreen windows
+ - Fix cursor handling in hi-dpi
 
 * Mir
  - Various fixes and improvements
@@ -94,6 +98,13 @@ Overview of Changes in GTK+ 3.17.5
  752131 GtkButtonBox has spacing between buttons by default when set to ...
  752509 GtkFileChooserButton causes layout jumps
  752520 Crash getting a NULL visual in glx_pixmap_get
+ 309300 Add a key binding for adjusting the value in a spin box
+ 725551 GTK FontChooserWidget should show a placeholder text in the empt...
+ 751812 add gtk_widget_set_font_map
+ 752502 Documentation fix for GdkGLContext
+ 752616 wayland: Always apply scaling factor to cursor hotspot and dimen...
+ 752599 GtkDrawingArea: Only respects background-color if "draw" signal ...
+
 
 * Translation updates:
  Czech
