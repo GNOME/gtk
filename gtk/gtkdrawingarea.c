@@ -25,8 +25,8 @@
 #include "config.h"
 #include "gtkdrawingarea.h"
 #include "gtkintl.h"
-#include "gtkrender.h"
 #include "gtkstylecontext.h"
+
 
 /**
  * SECTION:gtkdrawingarea
@@ -112,8 +112,6 @@
  * gtk_render_focus() for one way to draw focus.
  */
 
-static gboolean gtk_drawing_area_draw      (GtkWidget           *widget,
-                                            cairo_t             *cr);
 static void gtk_drawing_area_realize       (GtkWidget           *widget);
 static void gtk_drawing_area_size_allocate (GtkWidget           *widget,
                                             GtkAllocation       *allocation);
@@ -128,7 +126,6 @@ gtk_drawing_area_class_init (GtkDrawingAreaClass *class)
 
   widget_class->realize = gtk_drawing_area_realize;
   widget_class->size_allocate = gtk_drawing_area_size_allocate;
-  widget_class->draw = gtk_drawing_area_draw;
 
   gtk_widget_class_set_accessible_role (widget_class, ATK_ROLE_DRAWING_AREA);
 }
@@ -184,6 +181,9 @@ gtk_drawing_area_realize (GtkWidget *widget)
                                &attributes, attributes_mask);
       gtk_widget_register_window (widget, window);
       gtk_widget_set_window (widget, window);
+
+      gtk_style_context_set_background (gtk_widget_get_style_context (widget),
+                                        window);
     }
 
   gtk_drawing_area_send_configure (GTK_DRAWING_AREA (widget));
@@ -207,19 +207,6 @@ gtk_drawing_area_size_allocate (GtkWidget     *widget,
 
       gtk_drawing_area_send_configure (GTK_DRAWING_AREA (widget));
     }
-}
-
-static gboolean
-gtk_drawing_area_draw (GtkWidget *widget,
-		       cairo_t   *cr)
-{
-  if (gtk_widget_get_has_window (widget))
-    gtk_render_background (gtk_widget_get_style_context (widget), cr,
-                           0, 0,
-                           gtk_widget_get_allocated_width (widget),
-                           gtk_widget_get_allocated_height (widget));
-
-  return GTK_WIDGET_CLASS (gtk_drawing_area_parent_class)->draw (widget, cr);
 }
 
 static void
