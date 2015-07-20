@@ -2947,19 +2947,35 @@ gtk_tree_view_size_allocate (GtkWidget     *widget,
   for (tmp_list = tree_view->priv->children; tmp_list; tmp_list = tmp_list->next)
     {
       GtkTreeViewChild *child = tmp_list->data;
-      GtkAllocation child_allocation;
       GtkTreePath *path;
-      GdkRectangle rect;
+      GdkRectangle child_rect;
+      int size;
 
-      /* totally ignore our child's requisition */
       path = _gtk_tree_path_new_from_rbtree (child->tree, child->node);
-      gtk_tree_view_get_cell_area (tree_view, path, child->column, &rect);
-      child_allocation.x = rect.x + child->border.left;
-      child_allocation.y = rect.y + child->border.top;
-      child_allocation.width = rect.width - (child->border.left + child->border.right);
-      child_allocation.height = rect.height - (child->border.top + child->border.bottom);
+      gtk_tree_view_get_cell_area (tree_view, path, child->column, &child_rect);
+      child_rect.x += child->border.left;
+      child_rect.y += child->border.right;
+      child_rect.width -= child->border.left + child->border.right;
+      child_rect.height -= child->border.top + child->border.bottom;
+
+      gtk_widget_get_preferred_width (GTK_WIDGET (child->widget), &size, NULL);
+      if (size > child_rect.width)
+        {
+          child_rect.x -= size / 2;
+          child_rect.width += size;
+        }
+
+      gtk_widget_get_preferred_height_for_width (GTK_WIDGET (child->widget),
+                                                 child_rect.width,
+                                                 &size, NULL);
+      if (size > child_rect.height)
+        {
+          child_rect.y -= size / 2;
+          child_rect.height += size;
+        }
+
       gtk_tree_path_free (path);
-      gtk_widget_size_allocate (child->widget, &child_allocation);
+      gtk_widget_size_allocate (child->widget, &child_rect);
     }
 }
 
@@ -15706,16 +15722,12 @@ _gtk_tree_view_add_editable (GtkTreeView       *tree_view,
                              GtkCellEditable   *cell_editable,
                              GdkRectangle      *cell_area)
 {
-  GtkRequisition requisition;
   GdkRectangle full_area;
   GtkBorder border;
 
   tree_view->priv->edited_column = column;
 
   gtk_tree_view_real_set_cursor (tree_view, path, CLAMP_NODE);
-
-  gtk_widget_get_preferred_size (GTK_WIDGET (cell_editable),
-                                 &requisition, NULL);
 
   tree_view->priv->draw_keyfocus = TRUE;
 
