@@ -220,19 +220,21 @@ _gdk_wayland_cursor_get_buffer (GdkCursor *cursor,
 
       image = wayland_cursor->wl_cursor->images[image_index];
 
-      *hotspot_x = image->hotspot_x;
-      *hotspot_y = image->hotspot_y;
+      *hotspot_x = image->hotspot_x / wayland_cursor->scale;
+      *hotspot_y = image->hotspot_y / wayland_cursor->scale;
 
-      *w = image->width;
-      *h = image->height;
+      *w = image->width / wayland_cursor->scale;
+      *h = image->height / wayland_cursor->scale;
       *scale = wayland_cursor->scale;
 
       return wl_cursor_image_get_buffer (image);
     }
   else if (wayland_cursor->name == NULL) /* From surface */
     {
-      *hotspot_x = wayland_cursor->surface.hotspot_x;
-      *hotspot_y = wayland_cursor->surface.hotspot_y;
+      *hotspot_x =
+        wayland_cursor->surface.hotspot_x / wayland_cursor->surface.scale;
+      *hotspot_y =
+        wayland_cursor->surface.hotspot_y / wayland_cursor->surface.scale;
 
       *w = wayland_cursor->surface.width / wayland_cursor->surface.scale;
       *h = wayland_cursor->surface.height / wayland_cursor->surface.scale;
