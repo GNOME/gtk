@@ -34,6 +34,8 @@
   NSRect  initialResizeFrame;
 
   NSRect  lastUnmaximizedFrame;
+  NSRect  lastMaximizedFrame;
+  BOOL    inMaximizeTransition;
 }
 
 -(BOOL)isInMove;

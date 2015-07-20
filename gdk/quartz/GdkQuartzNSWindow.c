@@ -178,6 +178,17 @@
   GdkWindow *window = [[self contentView] gdkWindow];
   GdkEvent *event;
 
+  GdkWindowImplQuartz *impl = GDK_WINDOW_IMPL_QUARTZ (window->impl);
+  gboolean maximized = gdk_window_get_state (window) & GDK_WINDOW_STATE_MAXIMIZED;
+
+  /* In case the window is changed when maximized remove the maximized state */
+  if (maximized && !inMaximizeTransition && !NSEqualRects (lastMaximizedFrame, [self frame]))
+    {
+      gdk_synthesize_window_state (window,
+                                   GDK_WINDOW_STATE_MAXIMIZED,
+                                   0);
+    }
+
   _gdk_quartz_window_update_position (window);
 
   /* Synthesize a configure event */
@@ -198,6 +209,16 @@
   NSRect content_rect = [self contentRectForFrameRect:[self frame]];
   GdkWindow *window = [[self contentView] gdkWindow];
   GdkEvent *event;
+  GdkWindowImplQuartz *impl = GDK_WINDOW_IMPL_QUARTZ (window->impl);
+  gboolean maximized = gdk_window_get_state (window) & GDK_WINDOW_STATE_MAXIMIZED;
+
+  /* see same in windowDidMove */
+  if (maximized && !inMaximizeTransition && !NSEqualRects (lastMaximizedFrame, [self frame]))
+    {
+      gdk_synthesize_window_state (window,
+                                   GDK_WINDOW_STATE_MAXIMIZED,
+                                   0);
+    }
 
   window->width = content_rect.size.width;
   window->height = content_rect.size.height;
@@ -713,6 +734,7 @@ update_context_from_dragging_info (id <NSDraggingInfo> sender)
 
   if (maximized)
     {
+      lastMaximizedFrame = newFrame;
       gdk_synthesize_window_state (window,
                                    GDK_WINDOW_STATE_MAXIMIZED,
                                    0);
@@ -725,7 +747,13 @@ update_context_from_dragging_info (id <NSDraggingInfo> sender)
                                    GDK_WINDOW_STATE_MAXIMIZED);
     }
 
+  inMaximizeTransition = YES;
   return YES;
+}
+
+-(void)windowDidEndLiveResize:(NSNotification *)aNotification
+{
+  inMaximizeTransition = NO;
 }
 
 @end
