@@ -649,7 +649,6 @@ gtk_file_chooser_widget_finalize (GObject *object)
 {
   GtkFileChooserWidget *impl = GTK_FILE_CHOOSER_WIDGET (object);
   GtkFileChooserWidgetPrivate *priv = impl->priv;
-  GSList *l;
 
   if (priv->location_changed_id > 0)
     g_source_remove (priv->location_changed_id);
@@ -658,14 +657,7 @@ gtk_file_chooser_widget_finalize (GObject *object)
 
   g_free (priv->browse_files_last_selected_name);
 
-  for (l = priv->filters; l; l = l->next)
-    {
-      GtkFileFilter *filter;
-
-      filter = GTK_FILE_FILTER (l->data);
-      g_object_unref (filter);
-    }
-  g_slist_free (priv->filters);
+  g_slist_free_full (priv->filters, g_object_unref);
 
   if (priv->current_filter)
     g_object_unref (priv->current_filter);
@@ -3526,6 +3518,9 @@ gtk_file_chooser_widget_dispose (GObject *object)
 
   cancel_all_operations (impl);
 
+  if (priv->rename_file_popover)
+    gtk_popover_set_relative_to (GTK_POPOVER (priv->rename_file_popover), NULL);
+
   if (priv->browse_files_popover)
     {
       gtk_widget_destroy (priv->browse_files_popover);
@@ -3551,6 +3546,8 @@ gtk_file_chooser_widget_dispose (GObject *object)
       location_entry_disconnect (impl);
       priv->external_entry = NULL;
     }
+
+  g_clear_object (&priv->long_press_gesture);
 
   G_OBJECT_CLASS (gtk_file_chooser_widget_parent_class)->dispose (object);
 }
@@ -8452,6 +8449,7 @@ post_process_ui (GtkFileChooserWidget *impl)
 
   gtk_popover_set_default_widget (GTK_POPOVER (impl->priv->new_folder_popover), impl->priv->new_folder_create_button);
   gtk_popover_set_default_widget (GTK_POPOVER (impl->priv->rename_file_popover), impl->priv->rename_file_rename_button);
+  gtk_popover_set_relative_to (GTK_POPOVER (impl->priv->rename_file_popover), impl->priv->browse_files_tree_view);
 
   add_actions (impl);
 }

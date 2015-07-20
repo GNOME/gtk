@@ -467,7 +467,6 @@
     </child>
   </object>
   <object class="GtkPopover" id="rename_file_popover">
-    <property name="relative-to">browse_files_tree_view</property>
     <property name="position">bottom</property>
     <signal name="closed" handler="rename_file_end"/>
     <child>
