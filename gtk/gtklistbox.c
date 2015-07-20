@@ -948,8 +948,10 @@ gtk_list_box_set_adjustment (GtkListBox    *box,
   GtkListBoxPrivate *priv = BOX_PRIV (box);
 
   g_return_if_fail (GTK_IS_LIST_BOX (box));
+  g_return_if_fail (adjustment == NULL || GTK_IS_ADJUSTMENT (adjustment));
 
-  g_object_ref_sink (adjustment);
+  if (adjustment)
+    g_object_ref_sink (adjustment);
   if (priv->adjustment)
     g_object_unref (priv->adjustment);
   priv->adjustment = adjustment;
@@ -975,19 +977,36 @@ gtk_list_box_get_adjustment (GtkListBox *box)
 }
 
 static void
+adjustment_changed (GObject    *object,
+                    GParamSpec *pspec,
+                    gpointer    data)
+{
+  GtkAdjustment *adjustment;
+
+  adjustment = gtk_scrollable_get_vadjustment (GTK_SCROLLABLE (object));
+  gtk_list_box_set_adjustment (GTK_LIST_BOX (data), adjustment);
+}
+
+static void
 gtk_list_box_parent_set (GtkWidget *widget,
                          GtkWidget *prev_parent)
 {
   GtkWidget *parent;
-  GtkAdjustment *adjustment;
 
   parent = gtk_widget_get_parent (widget);
 
+  if (prev_parent && GTK_IS_SCROLLABLE (prev_parent))
+    g_signal_handlers_disconnect_by_func (prev_parent,
+                                          G_CALLBACK (adjustment_changed), widget);
+
   if (parent && GTK_IS_SCROLLABLE (parent))
     {
-      adjustment = gtk_scrollable_get_vadjustment (GTK_SCROLLABLE (parent));
-      gtk_list_box_set_adjustment (GTK_LIST_BOX (widget), adjustment);
+      adjustment_changed (G_OBJECT (parent), NULL, widget);
+      g_signal_connect (parent, "notify::vadjustment",
+                        G_CALLBACK (adjustment_changed), widget);
     }
+  else
+    gtk_list_box_set_adjustment (GTK_LIST_BOX (widget), NULL);
 }
 
 /**
