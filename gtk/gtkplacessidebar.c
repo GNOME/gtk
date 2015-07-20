@@ -3210,34 +3210,6 @@ on_key_press_event (GtkWidget        *widget,
               (event->state & modifiers) == GDK_MOD1_MASK)
             return eject_or_unmount_selection (sidebar);
 
-          if (event->keyval == GDK_KEY_Up)
-            {
-              gint index;
-              GtkListBoxRow *previous_row;
-
-              index = gtk_list_box_row_get_index (row);
-              previous_row = gtk_list_box_get_row_at_index (GTK_LIST_BOX (sidebar->list_box),
-                                                            index - 1);
-              if (previous_row != NULL)
-                gtk_list_box_select_row (GTK_LIST_BOX (sidebar->list_box), previous_row);
-
-              return TRUE;
-            }
-
-          if (event->keyval == GDK_KEY_Down)
-            {
-              gint index;
-              GtkListBoxRow *previous_row;
-
-              index = gtk_list_box_row_get_index (row);
-              previous_row = gtk_list_box_get_row_at_index (GTK_LIST_BOX (sidebar->list_box),
-                                                            index + 1);
-              if (previous_row != NULL)
-                gtk_list_box_select_row (GTK_LIST_BOX (sidebar->list_box), previous_row);
-
-              return TRUE;
-            }
-
           if ((event->keyval == GDK_KEY_Delete ||
                event->keyval == GDK_KEY_KP_Delete) &&
               (event->state & modifiers) == 0)
