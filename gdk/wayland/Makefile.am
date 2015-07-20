@@ -20,6 +20,8 @@ noinst_LTLIBRARIES =				\
 	libgdk-wayland.la
 
 BUILT_SOURCES = 				\
+	pointer-gestures-client-protocol.h	\
+	pointer-gestures-protocol.c		\
 	xdg-shell-client-protocol.h		\
 	xdg-shell-protocol.c			\
 	gtk-shell-client-protocol.h		\
@@ -70,6 +72,7 @@ libgdkwaylandinclude_HEADERS = 			\
 	$(AM_V_GEN)$(WAYLAND_SCANNER) client-header < $< > $@
 
 EXTRA_DIST += 					\
+	protocol/pointer-gestures.xml		\
 	protocol/xdg-shell.xml			\
 	protocol/gtk-shell.xml
 
