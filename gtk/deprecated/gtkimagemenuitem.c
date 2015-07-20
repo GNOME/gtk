@@ -934,7 +934,7 @@ gtk_image_menu_item_new_with_mnemonic (const gchar *label)
  *
  * Returns: a new #GtkImageMenuItem.
  *
- * Deprecated: 3.10: Use gtk_menu_item_new_with_label() instead.
+ * Deprecated: 3.10: Use gtk_menu_item_new_with_mnemonic() instead.
  */
 GtkWidget*
 gtk_image_menu_item_new_from_stock (const gchar   *stock_id,
