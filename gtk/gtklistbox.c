@@ -1425,21 +1425,26 @@ ensure_row_visible (GtkListBox    *box,
 {
   GtkListBoxPrivate *priv = BOX_PRIV (box);
   GtkWidget *header;
-  GtkWidget *widget;
+  gint y, height;
   GtkAllocation allocation;
 
   if (!priv->adjustment)
     return;
 
+  gtk_widget_get_allocation (GTK_WIDGET (row), &allocation);
+  y = allocation.y;
+  height = allocation.height;
+
   /* If the row has a header, we want to ensure that it is visible as well. */
   header = ROW_PRIV (row)->header;
   if (GTK_IS_WIDGET (header) && gtk_widget_is_drawable (header))
-    widget = header;
-  else
-    widget = GTK_WIDGET (row);
+    {
+      gtk_widget_get_allocation (header, &allocation);
+      y = allocation.y;
+      height += allocation.height;
+    }
 
-  gtk_widget_get_allocation (widget, &allocation);
-  gtk_adjustment_clamp_page (priv->adjustment, allocation.y, allocation.y + allocation.height);
+  gtk_adjustment_clamp_page (priv->adjustment, y, y + height);
 }
 
 static void
