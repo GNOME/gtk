@@ -673,4 +673,20 @@ update_context_from_dragging_info (id <NSDraggingInfo> sender)
 
 #endif
 
+- (NSRect)constrainFrameRect:(NSRect)frameRect toScreen:(NSScreen *)screen
+{
+  NSRect rect;
+  GdkWindow *window = [[self contentView] gdkWindow];
+  GdkWindowImplQuartz *impl = GDK_WINDOW_IMPL_QUARTZ (window->impl);
+
+  /* Allow the window to move up "shadow_top" more than normally allowed
+   * by the default impl. This makes it possible to move windows with
+   * client side shadow right up to the screen's menu bar. */
+  rect = [super constrainFrameRect:frameRect toScreen:screen];
+  if (frameRect.origin.y > rect.origin.y)
+    rect.origin.y = MIN (frameRect.origin.y, rect.origin.y + impl->shadow_top);
+
+  return rect;
+}
+
 @end
