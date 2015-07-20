@@ -1133,6 +1133,19 @@ update_places (GtkPlacesSidebar *sidebar)
     }
   g_list_free (volumes);
 
+  /* file system root */
+  if (!sidebar->show_other_locations)
+    {
+      mount_uri = "file:///"; /* No need to strdup */
+      icon = g_themed_icon_new_with_default_fallbacks (ICON_NAME_FILESYSTEM);
+      add_place (sidebar, PLACES_BUILT_IN,
+                 SECTION_MOUNTS,
+                 sidebar->hostname, icon, mount_uri,
+                 NULL, NULL, NULL, 0,
+                 _("Open the contents of the file system"));
+      g_object_unref (icon);
+    }
+
   /* add mounts that has no volume (/etc/mtab mounts, ftp, sftp,...) */
   mounts = g_volume_monitor_get_mounts (sidebar->volume_monitor);
 
