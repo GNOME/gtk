@@ -230,7 +230,6 @@ gtk_rotated_bin_realize (GtkWidget *widget)
 {
   GtkRotatedBin *bin = GTK_ROTATED_BIN (widget);
   GtkAllocation allocation;
-  GtkStyleContext *context;
   GdkWindow *window;
   GdkWindowAttr attributes;
   gint attributes_mask;
@@ -290,9 +289,6 @@ gtk_rotated_bin_realize (GtkWidget *widget)
   g_signal_connect (bin->offscreen_window, "from-embedder",
                     G_CALLBACK (offscreen_window_from_parent), bin);
 
-  context = gtk_widget_get_style_context (widget);
-  gtk_style_context_set_background (context, window);
-  gtk_style_context_set_background (context, bin->offscreen_window);
   gdk_window_show (bin->offscreen_window);
 }
 
