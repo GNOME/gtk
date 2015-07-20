@@ -1685,7 +1685,7 @@ gboolean
 gtk_stack_get_interpolate_size (GtkStack *stack)
 {
   GtkStackPrivate *priv = gtk_stack_get_instance_private (stack);
-  g_return_if_fail (GTK_IS_STACK (stack));
+  g_return_val_if_fail (GTK_IS_STACK (stack), FALSE);
 
   return priv->interpolate_size;
 }
