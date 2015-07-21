@@ -1115,7 +1115,8 @@ gtk_tool_button_sync_action_properties (GtkActivatable *activatable,
  * 
  * Since: 2.4
  *
- * Deprecated: 3.10: Use gtk_tool_button_new() instead.
+ * Deprecated: 3.10: Use gtk_tool_button_new() together with
+ * gtk_image_new_from_icon_name() instead.
  **/
 GtkToolItem *
 gtk_tool_button_new_from_stock (const gchar *stock_id)
@@ -1136,7 +1137,7 @@ gtk_tool_button_new_from_stock (const gchar *stock_id)
  * @label: (allow-none): a string that will be used as label, or %NULL
  * @icon_widget: (allow-none): a widget that will be used as the button contents, or %NULL
  *
- * Creates a new %GtkToolButton using @icon_widget as contents and @label as
+ * Creates a new #GtkToolButton using @icon_widget as contents and @label as
  * label.
  *
  * Returns: A new #GtkToolButton
