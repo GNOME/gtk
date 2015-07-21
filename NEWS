@@ -1,3 +1,21 @@
+Overview of Changes in GTK+ 3.14.14 to 3.14.15
+==============================================
+
+* Bugs fixed:
+ 741800 GTK3 apps have huge rendering pauses/hangs over SSH connection
+ 751401 crash on DnD
+ 752016 testgmenu: use the menu binding code
+        listbox: listen for adjustment changes
+        many coverity warning fixes
+
+* Translation updates:
+ Czech
+ Hungarian
+ Lithuanian
+ Polish
+ Slovenian
+
+
 Overview of Changes in GTK+ 3.14.13 to 3.14.14
 ==============================================
 
@@ -11,7 +29,7 @@ Overview of Changes in GTK+ 3.14.13 to 3.14.14
  750870 gtk3 does apparently ignore replayed events?
  750994 X11: First mouse wheel event ignored after right click or Alt+Tab...
  751050 Moving the mouse while a stepper is activated causes the scrollba...
- 751227 file picker list box height stretches to match extra widgets area...
+ 751227 file picker list box height stretches to matchtk extra widgets area...
  751443 resource_path value cleared in gtk_image_set_from_resource
  751739 Deadlock in X11 when setting XSetErrorHandler while another threa...
  751752 Memleak when both opening shm and opening file in tmp fail
