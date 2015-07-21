@@ -15,7 +15,7 @@ test_simplify = \
 
 EXTRA_DIST += \
 	$(test_simplify)	\
-	test-simplify		\
+	test-simplify.in	\
 	$(NULL)
 
 TESTS_ENVIRONMENT = \
@@ -24,6 +24,9 @@ TESTS_ENVIRONMENT = \
 TEST_PROGS += \
 	test-simplify	\
 	$(NULL)
+
+test-simplify:test-simplify.in
+	$(AM_V_GEN) cp $< $@
 
 if BUILDOPT_INSTALL_TESTS
 insttestdir = $(libexecdir)/installed-tests/$(PACKAGE)
@@ -39,6 +42,7 @@ test-simplify.test: test-simplify Makefile
 test_files = $(TEST_PROGS:=.test)
 
 DISTCLEANFILES = \
+	test-simplify		\
 	$(test_files)		\
 	$(NULL)
 
