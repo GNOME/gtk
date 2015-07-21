@@ -4138,8 +4138,8 @@ gtk_places_sidebar_class_init (GtkPlacesSidebarClass *class)
    * a URL like "sftp://ftp.example.com".  It is up to the application to create
    * the corresponding mount by using, for example, g_file_mount_enclosing_volume().
    *
-   * Deprecated: 3.18: use #GtkPlacesSidebar::show-other-locations property to
-   * connect to network servers.
+   * Deprecated: 3.18: use the #GtkPlacesSidebar::show-other-locations signal
+   *     to connect to network servers.
    */
   places_sidebar_signals [SHOW_CONNECT_TO_SERVER] =
           g_signal_new (I_("show-connect-to-server"),
