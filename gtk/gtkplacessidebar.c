@@ -4346,8 +4346,8 @@ gtk_places_sidebar_class_init (GtkPlacesSidebarClass *class)
    */
   properties[PROP_POPULATE_ALL] =
           g_param_spec_boolean ("populate-all",
-                                P_("Show 'Other locations'"),
-                                P_("Whether the sidebar includes an item to show external locations"),
+                                P_("Populate all"),
+                                P_("Whether to emit ::populate-popup for popups that are not menus"),
                                 FALSE,
                                 G_PARAM_READWRITE);
 
