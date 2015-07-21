@@ -1,3 +1,26 @@
+Overview of changes in GTK+ 3.16.6
+==================================
+
+* OS X: Partial aspect ratio support
+
+* Revert a problematic change to scroll event handling
+
+* Bug fixes:
+ 741800 GTK3 apps have huge rendering pauses/hangs over SSH connection
+ 751401 crash on DnD
+ 751625 build error with pure wayland
+ 752016 testgmenu: use the menu binding code
+ 752093 Improvement to GtkImageMenuItem long description and code snippet
+ 752520 Crash getting a NULL visual in glx_pixmap_get
+
+* Translation updates:
+ Czech
+ Hungarian
+ Lithuanian
+ Polish
+ Slovenian
+
+
 Overview of changes in GTK+ 3.16.5
 ==================================
 
