@@ -4650,11 +4650,14 @@ gtk_places_sidebar_get_show_desktop (GtkPlacesSidebar *sidebar)
  * @sidebar: a places sidebar
  * @show_connect_to_server: whether to show an item for the Connect to Server command
  *
- * Sets whether the @sidebar should show an item for connecting to a network server; this is off by default.
- * An application may want to turn this on if it implements a way for the user to connect
- * to network servers directly.
+ * Sets whether the @sidebar should show an item for connecting to a network server;
+ * this is off by default. An application may want to turn this on if it implements
+ * a way for the user to connect to network servers directly.
  *
  * Since: 3.10
+ *
+ * Deprecated: 3.18: It is recommended to group this functionality with the drives
+ *     and network location under the new 'Other Location' item
  */
 void
 gtk_places_sidebar_set_show_connect_to_server (GtkPlacesSidebar *sidebar,
@@ -5033,17 +5036,17 @@ gtk_places_sidebar_get_nth_bookmark (GtkPlacesSidebar *sidebar,
  * @sidebar: a places sidebar.
  * @visible: whether to show the valid targets or not.
  * @context: drag context used to ask the source about the action that wants to
- * perform, so hints are more accurate.
+ *     perform, so hints are more accurate.
  *
- * Make the GtkPlacesSidebar show drop targets, so it can show the available drop
- * targets and a "new bookmark" row. This improves the drag and drop
- * experience of the user and allow applications to show at once the available
- * drop targets.
- * This needs to be called when the application is aware of a drag and when
- * the applications is aware of the end of a drag.
- * It's not needed to take care of the drag if it finish in GtkPlacesSidebar, so
- * it's not needed to conect to their signals to call gtk_places_sidebar_set_drop_targets_visible
- * manually, just call it when the drag ends on some other widget on your application.
+ * Make the GtkPlacesSidebar show drop targets, so it can show the available
+ * drop targets and a "new bookmark" row. This improves the Drag-and-Drop
+ * experience of the user and allows applications to show all available
+ * drop targets at once.
+ *
+ * This needs to be called when the application is aware of an ongoing drag
+ * that might target the sidebar. The drop-targets-visible state will be unset
+ * automatically if the drag finishes in the GtkPlacesSidebar. You only need
+ * to unset the state when the drag ends on some other widget on your application.
  *
  * Since: 3.18
  */
