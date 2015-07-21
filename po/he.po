@@ -12,8 +12,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+.HEAD.he\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-07-19 10:56+0300\n"
-"PO-Revision-Date: 2015-07-19 10:58+0300\n"
+"POT-Creation-Date: 2015-07-21 12:52+0300\n"
+"PO-Revision-Date: 2015-07-21 12:54+0300\n"
 "Last-Translator: Yosef Or Boczko <yoseforb@gmail.com>\n"
 "Language-Team: עברית <>\n"
 "Language: he\n"
@@ -663,15 +663,15 @@ msgctxt "Stock label"
 msgid "_Close"
 msgstr "_סגירה"
 
-#: gtk/a11y/gtkimageaccessible.c:59 gtk/gtkheaderbar.c:403
+#: gtk/a11y/gtkimageaccessible.c:59 gtk/gtkheaderbar.c:406
 msgid "Minimize"
 msgstr "מזעור"
 
-#: gtk/a11y/gtkimageaccessible.c:60 gtk/gtkheaderbar.c:426
+#: gtk/a11y/gtkimageaccessible.c:60 gtk/gtkheaderbar.c:429
 msgid "Maximize"
 msgstr "הגדלה"
 
-#: gtk/a11y/gtkimageaccessible.c:61 gtk/gtkheaderbar.c:426
+#: gtk/a11y/gtkimageaccessible.c:61 gtk/gtkheaderbar.c:429
 msgid "Restore"
 msgstr "שחזור"
 
@@ -1218,8 +1218,8 @@ msgstr ""
 "לגרור פיסת צבע לכאן או ללחוץ לחיצה ימנית ולבחור ב„שמור צבע כאן”."
 
 #: gtk/deprecated/gtkcolorseldialog.c:191 gtk/deprecated/gtkfontsel.c:1689
-#: gtk/gtkfilechooserbutton.c:795 gtk/gtkfilechooserwidget.c:1453
-#: gtk/gtkfilechooserwidget.c:6249 gtk/gtkmessagedialog.c:942
+#: gtk/gtkfilechooserbutton.c:795 gtk/gtkfilechooserwidget.c:1445
+#: gtk/gtkfilechooserwidget.c:6246 gtk/gtkmessagedialog.c:942
 #: gtk/gtkmessagedialog.c:955 gtk/gtkmountoperation.c:543
 #: gtk/gtkpagesetupunixdialog.c:196 gtk/gtkprintbackend.c:763
 #: gtk/gtkprinteroptionwidget.c:545 gtk/gtkprintunixdialog.c:669
@@ -1418,7 +1418,7 @@ msgstr "Output to this directory instead of cwd"
 msgid "Invalid size %s\n"
 msgstr "Invalid size %s\n"
 
-#: gtk/encodesymbolic.c:279 gtk/gtk-builder-tool.c:539
+#: gtk/encodesymbolic.c:279 gtk/gtk-builder-tool.c:540
 #, c-format
 msgid "Can't load file: %s\n"
 msgstr "Can't load file: %s\n"
@@ -1772,12 +1772,12 @@ msgstr "Property %s::%s not found\n"
 msgid "Couldn't parse value: %s\n"
 msgstr "Couldn't parse value: %s\n"
 
-#: gtk/gtk-builder-tool.c:560
+#: gtk/gtk-builder-tool.c:561
 #, c-format
 msgid "Can't parse file: %s\n"
 msgstr "Can't parse file: %s\n"
 
-#: gtk/gtk-builder-tool.c:731
+#: gtk/gtk-builder-tool.c:732
 #, c-format
 msgid ""
 "Usage:\n"
@@ -2220,8 +2220,8 @@ msgstr "ה_עתקה"
 msgid "_Paste"
 msgstr "ה_דבקה"
 
-#: gtk/gtkentry.c:9671 gtk/gtkfilechooserwidget.c:1454
-#: gtk/gtkfilechooserwidget.c:2254 gtk/gtklabel.c:6604 gtk/gtktextview.c:9033
+#: gtk/gtkentry.c:9671 gtk/gtkfilechooserwidget.c:1446
+#: gtk/gtkfilechooserwidget.c:2246 gtk/gtklabel.c:6604 gtk/gtktextview.c:9033
 msgid "_Delete"
 msgstr "מ_חיקה"
 
@@ -2262,8 +2262,8 @@ msgid "(None)"
 msgstr "(ללא)"
 
 #. Open item is always present
-#: gtk/gtkfilechooserbutton.c:796 gtk/gtkplacessidebar.c:3363
-#: gtk/gtkplacesview.c:1360
+#: gtk/gtkfilechooserbutton.c:796 gtk/gtkplacessidebar.c:3335
+#: gtk/gtkplacesview.c:1364
 msgid "_Open"
 msgstr "_פתיחה"
 
@@ -2288,11 +2288,11 @@ msgstr "‏%1$s ב־%2$s"
 msgid "Type name of new folder"
 msgstr "הזנת שם לתיקייה החדשה"
 
-#: gtk/gtkfilechooserwidget.c:777
+#: gtk/gtkfilechooserwidget.c:769
 msgid "The folder could not be created"
 msgstr "לא ניתן ליצור את התיקייה"
 
-#: gtk/gtkfilechooserwidget.c:790
+#: gtk/gtkfilechooserwidget.c:782
 msgid ""
 "The folder could not be created, as a file with the same name already "
 "exists.  Try using a different name for the folder, or rename the file first."
@@ -2300,269 +2300,269 @@ msgstr ""
 "לא ניתן לייצר את התיקייה מכיוון שקיים קובץ בעל שם דומה. יש לנסות ולבחור שם "
 "חדש לתיקייה, או לשנות את שם הקובץ."
 
-#: gtk/gtkfilechooserwidget.c:804
+#: gtk/gtkfilechooserwidget.c:796
 msgid "You need to choose a valid filename."
 msgstr "עליך לבחור בשם קובץ תקני."
 
-#: gtk/gtkfilechooserwidget.c:807
+#: gtk/gtkfilechooserwidget.c:799
 #, c-format
 msgid "Cannot create a file under %s as it is not a folder"
 msgstr "לא ניתן ליצור קובץ תחת %s כיוון שזו איננה תיקייה"
 
-#: gtk/gtkfilechooserwidget.c:815
+#: gtk/gtkfilechooserwidget.c:807
 msgid "Cannot create file as the filename is too long"
 msgstr "לא ניתן ליצור קובץ כיוון ששם הקובץ ארוך מדי"
 
-#: gtk/gtkfilechooserwidget.c:816
+#: gtk/gtkfilechooserwidget.c:808
 msgid "Try using a shorter name."
 msgstr "כדאי לנסות לקצר את השם."
 
-#: gtk/gtkfilechooserwidget.c:826
+#: gtk/gtkfilechooserwidget.c:818
 msgid "You may only select folders"
 msgstr "ניתן לבחור תיקיות בלבד"
 
-#: gtk/gtkfilechooserwidget.c:827
+#: gtk/gtkfilechooserwidget.c:819
 msgid "The item that you selected is not a folder try using a different item."
 msgstr "הפריט שברחת אינו תיקייה, נא לנסות לבחור בפריט אחר."
 
-#: gtk/gtkfilechooserwidget.c:835
+#: gtk/gtkfilechooserwidget.c:827
 msgid "Invalid file name"
 msgstr "שם קובץ לא תקני"
 
-#: gtk/gtkfilechooserwidget.c:845
+#: gtk/gtkfilechooserwidget.c:837
 msgid "The folder contents could not be displayed"
 msgstr "לא ניתן להציג את תוכן התיקייה"
 
-#: gtk/gtkfilechooserwidget.c:854
+#: gtk/gtkfilechooserwidget.c:846
 msgid "The file could not be deleted"
 msgstr "לא ניתן למחוק את הקובץ"
 
-#: gtk/gtkfilechooserwidget.c:862
+#: gtk/gtkfilechooserwidget.c:854
 msgid "The file could not be moved to the Trash"
 msgstr "לא ניתן להעביר את הקובץ לאשפה"
 
-#: gtk/gtkfilechooserwidget.c:1007
+#: gtk/gtkfilechooserwidget.c:999
 msgid "A folder with that name already exists"
 msgstr "תיקיית בשם זה כבר קיימת"
 
-#: gtk/gtkfilechooserwidget.c:1009
+#: gtk/gtkfilechooserwidget.c:1001
 msgid "A file with that name already exists"
 msgstr "קובץ בשם זה כבר קיים"
 
-#: gtk/gtkfilechooserwidget.c:1044
+#: gtk/gtkfilechooserwidget.c:1036
 msgid "A folder cannot be called “.”"
 msgstr "תיקייה לא יכולה להיקרא „.”"
 
-#: gtk/gtkfilechooserwidget.c:1045
+#: gtk/gtkfilechooserwidget.c:1037
 msgid "A file cannot be called “.”"
 msgstr "קובץ לא יכול להיקרא „.”"
 
-#: gtk/gtkfilechooserwidget.c:1048
+#: gtk/gtkfilechooserwidget.c:1040
 msgid "A folder cannot be called “..”"
 msgstr "תיקייה לא יכולה להיקרא „..”"
 
-#: gtk/gtkfilechooserwidget.c:1049
+#: gtk/gtkfilechooserwidget.c:1041
 msgid "A file cannot be called “..”"
 msgstr "קובץ לא יכול להיקרא „.”"
 
-#: gtk/gtkfilechooserwidget.c:1052
+#: gtk/gtkfilechooserwidget.c:1044
 msgid "Folder names cannot contain “/”"
 msgstr "תיקייה לא יכולה להכיל „/”"
 
-#: gtk/gtkfilechooserwidget.c:1053
+#: gtk/gtkfilechooserwidget.c:1045
 msgid "File names cannot contain “/”"
 msgstr "קובץ לא יכול להכיל „/”"
 
-#: gtk/gtkfilechooserwidget.c:1079
+#: gtk/gtkfilechooserwidget.c:1071
 msgid "Folder names should not begin with a space"
 msgstr "תיקייה לא יכולה להתחיל ברווח"
 
-#: gtk/gtkfilechooserwidget.c:1080
+#: gtk/gtkfilechooserwidget.c:1072
 msgid "File names should not begin with a space"
 msgstr "קובץ לא יכול להתחיל ברווח"
 
-#: gtk/gtkfilechooserwidget.c:1084
+#: gtk/gtkfilechooserwidget.c:1076
 msgid "Folder names should not end with a space"
 msgstr "תיקייה לא יכולה להסתיים ברווח"
 
-#: gtk/gtkfilechooserwidget.c:1085
+#: gtk/gtkfilechooserwidget.c:1077
 msgid "File names should not end with a space"
 msgstr "קובץ לא יכול להסתיים ברווח"
 
-#: gtk/gtkfilechooserwidget.c:1088
+#: gtk/gtkfilechooserwidget.c:1080
 msgid "Folder names starting with a “.” are hidden"
 msgstr "תיקייה המתחילה עם „.” תוסתר"
 
-#: gtk/gtkfilechooserwidget.c:1089
+#: gtk/gtkfilechooserwidget.c:1081
 msgid "File names starting with a “.” are hidden"
 msgstr "קובץ המתחיל עם „.” יוסתר"
 
-#: gtk/gtkfilechooserwidget.c:1449
+#: gtk/gtkfilechooserwidget.c:1441
 #, c-format
 msgid "Are you sure you want to permanently delete “%s”?"
 msgstr "האם אכן ברצונך למחוק לצמיתות את הקובץ „%s”?"
 
-#: gtk/gtkfilechooserwidget.c:1452
+#: gtk/gtkfilechooserwidget.c:1444
 #, c-format
 msgid "If you delete an item, it will be permanently lost."
 msgstr "אם פריט ימחק, הוא יאבד לצמיתות."
 
-#: gtk/gtkfilechooserwidget.c:1586
+#: gtk/gtkfilechooserwidget.c:1578
 msgid "The file could not be renamed"
 msgstr "לא ניתן לשנות את שם הקובץ"
 
-#: gtk/gtkfilechooserwidget.c:1900
+#: gtk/gtkfilechooserwidget.c:1892
 msgid "Could not select file"
 msgstr "לא ניתן לבחור את הקובץ"
 
-#: gtk/gtkfilechooserwidget.c:2249
+#: gtk/gtkfilechooserwidget.c:2241
 msgid "_Visit File"
 msgstr "_ביקור בקובץ"
 
-#: gtk/gtkfilechooserwidget.c:2250
+#: gtk/gtkfilechooserwidget.c:2242
 msgid "_Open With File Manager"
 msgstr "_פתיחה באמצעות מנהל קבצים"
 
-#: gtk/gtkfilechooserwidget.c:2251
+#: gtk/gtkfilechooserwidget.c:2243
 msgid "_Copy Location"
 msgstr "ה_עתקת מיקום"
 
-#: gtk/gtkfilechooserwidget.c:2252
+#: gtk/gtkfilechooserwidget.c:2244
 msgid "_Add to Bookmarks"
 msgstr "_הוספה לסימניות"
 
-#: gtk/gtkfilechooserwidget.c:2253 gtk/gtkplacessidebar.c:2435
-#: gtk/ui/gtkfilechooserwidget.ui:508
+#: gtk/gtkfilechooserwidget.c:2245 gtk/gtkplacessidebar.c:2435
+#: gtk/ui/gtkfilechooserwidget.ui:507
 msgid "_Rename"
 msgstr "_שינוי שם"
 
-#: gtk/gtkfilechooserwidget.c:2255
+#: gtk/gtkfilechooserwidget.c:2247
 msgid "_Move to Trash"
 msgstr "ה_עברה לאשפה"
 
-#: gtk/gtkfilechooserwidget.c:2259
+#: gtk/gtkfilechooserwidget.c:2251
 msgid "Show _Hidden Files"
 msgstr "הצגת קבצים _נסתרים"
 
-#: gtk/gtkfilechooserwidget.c:2260
+#: gtk/gtkfilechooserwidget.c:2252
 msgid "Show _Size Column"
 msgstr "הצגת _רוחב העמודה"
 
-#: gtk/gtkfilechooserwidget.c:2261
+#: gtk/gtkfilechooserwidget.c:2253
 msgid "Show _Time"
 msgstr "הצגה _זמן"
 
-#: gtk/gtkfilechooserwidget.c:2262
+#: gtk/gtkfilechooserwidget.c:2254
 msgid "Sort _Folders before Files"
 msgstr "סידור _תיקיות לפני קבצים"
 
 #. this is the header for the location column in the print dialog
-#: gtk/gtkfilechooserwidget.c:2517 gtk/inspector/style-prop-list.ui:118
+#: gtk/gtkfilechooserwidget.c:2509 gtk/inspector/style-prop-list.ui:118
 #: gtk/ui/gtkfilechooserwidget.ui:204 gtk/ui/gtkprintunixdialog.ui:128
 msgid "Location"
 msgstr "מיקום"
 
 #. Label
-#: gtk/gtkfilechooserwidget.c:2602
+#: gtk/gtkfilechooserwidget.c:2594
 msgid "_Name:"
 msgstr "_שם:"
 
-#: gtk/gtkfilechooserwidget.c:3222
+#: gtk/gtkfilechooserwidget.c:3214
 msgid "Searching"
 msgstr "בחיפוש"
 
-#: gtk/gtkfilechooserwidget.c:3227 gtk/gtkfilechooserwidget.c:3241
+#: gtk/gtkfilechooserwidget.c:3219 gtk/gtkfilechooserwidget.c:3233
 #, c-format
 msgid "Searching in %s"
 msgstr "מחפש ב־%s"
 
-#: gtk/gtkfilechooserwidget.c:3251
+#: gtk/gtkfilechooserwidget.c:3243
 msgid "Enter location"
 msgstr "הזנת מיקום"
 
-#: gtk/gtkfilechooserwidget.c:3253
+#: gtk/gtkfilechooserwidget.c:3245
 msgid "Enter location or URL"
 msgstr "הזנת מיקום או כתובת"
 
-#: gtk/gtkfilechooserwidget.c:4283 gtk/gtkfilechooserwidget.c:7156
+#: gtk/gtkfilechooserwidget.c:4280 gtk/gtkfilechooserwidget.c:7153
 #: gtk/ui/gtkfilechooserwidget.ui:232
 msgid "Modified"
 msgstr "שונה"
 
-#: gtk/gtkfilechooserwidget.c:4562
+#: gtk/gtkfilechooserwidget.c:4559
 #, c-format
 msgid "Could not read the contents of %s"
 msgstr "לא ניתן לקרוא את התוכן של %s"
 
-#: gtk/gtkfilechooserwidget.c:4566
+#: gtk/gtkfilechooserwidget.c:4563
 msgid "Could not read the contents of the folder"
 msgstr "לא ניתן לקרוא את תכני התיקייה"
 
-#: gtk/gtkfilechooserwidget.c:4684 gtk/gtkfilechooserwidget.c:4730
+#: gtk/gtkfilechooserwidget.c:4681 gtk/gtkfilechooserwidget.c:4727
 msgid "%H:%M"
 msgstr "%H:%M"
 
-#: gtk/gtkfilechooserwidget.c:4686 gtk/gtkfilechooserwidget.c:4732
+#: gtk/gtkfilechooserwidget.c:4683 gtk/gtkfilechooserwidget.c:4729
 msgid "%l:%M %p"
 msgstr "%l:%M %p"
 
-#: gtk/gtkfilechooserwidget.c:4690
+#: gtk/gtkfilechooserwidget.c:4687
 msgid "Yesterday"
 msgstr "אתמול"
 
-#: gtk/gtkfilechooserwidget.c:4698
+#: gtk/gtkfilechooserwidget.c:4695
 msgid "%-e %b"
 msgstr "%-e ב%b"
 
-#: gtk/gtkfilechooserwidget.c:4702
+#: gtk/gtkfilechooserwidget.c:4699
 msgid "%-e %b %Y"
 msgstr "%-e ב%b %Y"
 
 #. Translators: We don't know whether this printer is
 #. * available to print to.
-#: gtk/gtkfilechooserwidget.c:4927 gtk/inspector/prop-editor.c:1569
+#: gtk/gtkfilechooserwidget.c:4924 gtk/inspector/prop-editor.c:1569
 #: modules/printbackends/cloudprint/gtkprintbackendcloudprint.c:748
 msgid "Unknown"
 msgstr "לא ידוע"
 
-#: gtk/gtkfilechooserwidget.c:4966 gtk/gtkplacessidebar.c:915
+#: gtk/gtkfilechooserwidget.c:4963 gtk/gtkplacessidebar.c:915
 msgid "Home"
 msgstr "תיקיית הבית"
 
-#: gtk/gtkfilechooserwidget.c:5459
+#: gtk/gtkfilechooserwidget.c:5456
 msgid "Cannot change to folder because it is not local"
 msgstr "לא ניתן לשנות תיקייה כיוון שהיא איננה מקומית"
 
-#: gtk/gtkfilechooserwidget.c:6242 gtk/gtkprintunixdialog.c:660
+#: gtk/gtkfilechooserwidget.c:6239 gtk/gtkprintunixdialog.c:660
 #, c-format
 msgid "A file named “%s” already exists.  Do you want to replace it?"
 msgstr "כבר קיים קובץ בשם „%s“. האם להחליפו?"
 
-#: gtk/gtkfilechooserwidget.c:6245 gtk/gtkprintunixdialog.c:664
+#: gtk/gtkfilechooserwidget.c:6242 gtk/gtkprintunixdialog.c:664
 #, c-format
 msgid ""
 "The file already exists in “%s”.  Replacing it will overwrite its contents."
 msgstr "הקובץ כבר קיים תחת „%s“. החלפתו תגרום לאיבוד תוכנו."
 
-#: gtk/gtkfilechooserwidget.c:6250 gtk/gtkprintunixdialog.c:672
+#: gtk/gtkfilechooserwidget.c:6247 gtk/gtkprintunixdialog.c:672
 msgid "_Replace"
 msgstr "ה_חלפה"
 
-#: gtk/gtkfilechooserwidget.c:7067
+#: gtk/gtkfilechooserwidget.c:7064
 msgid "Could not start the search process"
 msgstr "לא ניתן להתחיל את תהליך החיפוש"
 
-#: gtk/gtkfilechooserwidget.c:7068
+#: gtk/gtkfilechooserwidget.c:7065
 msgid ""
 "The program was not able to create a connection to the indexer daemon. "
 "Please make sure it is running."
 msgstr "התכנית לא הצליחה ליצור חיבור אל סוכן האינדקס. יש לוודא כי הוא פעיל."
 
-#: gtk/gtkfilechooserwidget.c:7080
+#: gtk/gtkfilechooserwidget.c:7077
 msgid "Could not send the search request"
 msgstr "לא ניתן לשלוח את בקשת החיפוש"
 
-#: gtk/gtkfilechooserwidget.c:7372
+#: gtk/gtkfilechooserwidget.c:7369
 msgid "Accessed"
 msgstr "נצפה לאחרונה"
 
@@ -2599,11 +2599,11 @@ msgstr "ללא"
 msgid "OpenGL context creation failed"
 msgstr "OpenGL context creation failed"
 
-#: gtk/gtkheaderbar.c:382
+#: gtk/gtkheaderbar.c:385
 msgid "Application menu"
 msgstr "תפריט יישום"
 
-#: gtk/gtkheaderbar.c:444 gtk/gtkwindow.c:8695
+#: gtk/gtkheaderbar.c:447 gtk/gtkwindow.c:8695
 msgid "Close"
 msgstr "סגירה"
 
@@ -3005,11 +3005,11 @@ msgid "Show other locations"
 msgstr "הצגת מיקומים אחרים"
 
 #. Adjust start/stop items to reflect the type of the drive
-#: gtk/gtkplacessidebar.c:2084 gtk/gtkplacessidebar.c:3383
+#: gtk/gtkplacessidebar.c:2084 gtk/gtkplacessidebar.c:3355
 msgid "_Start"
 msgstr "ה_תחלה"
 
-#: gtk/gtkplacessidebar.c:2085 gtk/gtkplacessidebar.c:3384
+#: gtk/gtkplacessidebar.c:2085 gtk/gtkplacessidebar.c:3356
 msgid "_Stop"
 msgstr "_עצירה"
 
@@ -3064,7 +3064,7 @@ msgstr "שם זה כבר בשימוש"
 #: gtk/gtkplacessidebar.c:2429 gtk/inspector/actions.ui:52
 #: gtk/inspector/classes-list.ui:80 gtk/inspector/css-node-tree.ui:17
 #: gtk/inspector/object-tree.ui:109 gtk/inspector/signals-list.ui:90
-#: gtk/ui/gtkfilechooserwidget.ui:186 gtk/ui/gtkfilechooserwidget.ui:482
+#: gtk/ui/gtkfilechooserwidget.ui:186 gtk/ui/gtkfilechooserwidget.ui:481
 msgid "Name"
 msgstr "שם"
 
@@ -3093,57 +3093,57 @@ msgstr "לא ניתן לשלוף את %s"
 msgid "Unable to poll “%s” for media changes"
 msgstr "לא ניתן לתשאל את „%s” מהם השינויים במדיה"
 
-#: gtk/gtkplacessidebar.c:3366 gtk/gtkplacesview.c:1370
+#: gtk/gtkplacessidebar.c:3338 gtk/gtkplacesview.c:1374
 msgid "Open in New _Tab"
 msgstr "פתיחה ב_לשונית חדשה"
 
-#: gtk/gtkplacessidebar.c:3369 gtk/gtkplacesview.c:1381
+#: gtk/gtkplacessidebar.c:3341 gtk/gtkplacesview.c:1385
 msgid "Open in New _Window"
 msgstr "פתיחה ב_חלון חדש"
 
-#: gtk/gtkplacessidebar.c:3373
+#: gtk/gtkplacessidebar.c:3345
 msgid "_Add Bookmark"
 msgstr "הו_ספה לסימניות"
 
-#: gtk/gtkplacessidebar.c:3374
+#: gtk/gtkplacessidebar.c:3346
 msgid "_Remove"
 msgstr "_הסרה"
 
-#: gtk/gtkplacessidebar.c:3375
+#: gtk/gtkplacessidebar.c:3347
 msgid "Rename…"
 msgstr "שינוי שם…"
 
-#: gtk/gtkplacessidebar.c:3379 gtk/gtkplacesview.c:1408
+#: gtk/gtkplacessidebar.c:3351 gtk/gtkplacesview.c:1412
 msgid "_Mount"
 msgstr "_עיגון"
 
-#: gtk/gtkplacessidebar.c:3380 gtk/gtkplacesview.c:1398
+#: gtk/gtkplacessidebar.c:3352 gtk/gtkplacesview.c:1402
 msgid "_Unmount"
 msgstr "_ניתוק"
 
-#: gtk/gtkplacessidebar.c:3381
+#: gtk/gtkplacessidebar.c:3353
 msgid "_Eject"
 msgstr "_שליפה"
 
-#: gtk/gtkplacessidebar.c:3382
+#: gtk/gtkplacessidebar.c:3354
 msgid "_Detect Media"
 msgstr "_זיהוי מדיה"
 
-#: gtk/gtkplacessidebar.c:3838
+#: gtk/gtkplacessidebar.c:3803
 msgid "Computer"
 msgstr "מחשב"
 
 #. if it wasn't cancelled show a dialog
-#: gtk/gtkplacesview.c:983 gtk/gtkplacesview.c:1046
+#: gtk/gtkplacesview.c:987 gtk/gtkplacesview.c:1050
 msgid "Unable to access location"
 msgstr "לא ניתן לגשת למיקום"
 
 #. if it wasn't cancelled show a dialog
-#: gtk/gtkplacesview.c:1095
+#: gtk/gtkplacesview.c:1099
 msgid "Unable to unmount volume"
 msgstr "לא ניתן לנתק את הכרך"
 
-#: gtk/gtkplacesview.c:1573
+#: gtk/gtkplacesview.c:1577
 msgid "Unable to get remote server location"
 msgstr "לא ניתן לקבל את מיקום השרת המרוחק"
 
@@ -5410,7 +5410,11 @@ msgstr "חיפוש שם הגופן"
 msgid "Font Family"
 msgstr "משפחת הגופנים"
 
-#: gtk/ui/gtkfontchooserwidget.ui:183
+#: gtk/ui/gtkfontchooserwidget.ui:117
+msgid "Preview text"
+msgstr "תצוגה מקדימה לטקסט"
+
+#: gtk/ui/gtkfontchooserwidget.ui:184
 msgid "No Fonts Found"
 msgstr "לא נמצאו גופנים"
 
