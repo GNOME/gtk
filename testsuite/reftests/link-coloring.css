@@ -8,6 +8,10 @@
   color: purple;
 }
 
+:link,*, :visited * {
+  text-decoration: underline;
+}
+
 /* should never happen */
 :link:visited {
   color: red;
