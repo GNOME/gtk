@@ -4019,6 +4019,12 @@ gtk_places_sidebar_dispose (GObject *object)
 
   g_clear_object (&sidebar->long_press_gesture);
 
+  if (sidebar->source_targets)
+    {
+      gtk_target_list_unref (sidebar->source_targets);
+      sidebar->source_targets = NULL;
+    }
+
   G_OBJECT_CLASS (gtk_places_sidebar_parent_class)->dispose (object);
 }
 
