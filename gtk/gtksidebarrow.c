@@ -298,6 +298,8 @@ gtk_sidebar_row_finalize (GObject *object)
   g_clear_object (&self->drive);
   g_clear_object (&self->volume);
   g_clear_object (&self->mount);
+
+  G_OBJECT_CLASS (gtk_sidebar_row_parent_class)->finalize (object);
 }
 
 static void
