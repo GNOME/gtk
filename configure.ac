@@ -41,7 +41,19 @@ AC_CANONICAL_HOST
 m4_define([gtk_binary_version], [3.0.0])
 
 # required versions of other packages
-m4_define([glib_required_version], [2.43.4])
+m4_define([glib_required_major], [2])
+m4_define([glib_required_minor], [43])
+m4_define([glib_required_micro], [3])
+m4_define([glib_required_version],
+          [glib_required_major.glib_required_minor.glib_required_micro])
+m4_define([glib_min_required_minor],
+          [m4_eval(glib_required_minor - (glib_required_minor % 2))])
+m4_define([glib_max_allowed_minor],
+          [m4_eval(glib_required_minor + (glib_required_minor % 2))])
+m4_define([glib_min_required_version], m4_join([_], [GLIB_VERSION], glib_required_major, glib_min_required_minor))
+m4_define([glib_max_allowed_version], m4_join([_], [GLIB_VERSION], glib_required_major, glib_max_allowed_minor))
+GLIB_VERSION_CFLAGS="-DGLIB_MIN_REQUIRED_VERSION=glib_min_required_version -DGLIB_MAX_ALLOWED_VERSION=glib_max_allowed_version"
+
 m4_define([pango_required_version], [1.37.1])
 m4_define([atk_required_version], [2.15.1])
 m4_define([cairo_required_version], [1.14.0])
@@ -348,7 +360,7 @@ backend_immodules=
 have_gio_unix=no
 GDK_BACKENDS=
 GDK_EXTRA_LIBS=
-GDK_EXTRA_CFLAGS=
+GDK_EXTRA_CFLAGS="$GLIB_VERSION_CFLAGS"
 GDK_WINDOWING=
 PANGO_PACKAGES="pango pangocairo"
 
