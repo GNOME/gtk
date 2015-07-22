@@ -1166,9 +1166,9 @@ gtk_tool_button_new (GtkWidget	 *icon_widget,
  * @label: (allow-none): a string that will be used as label, or %NULL.
  *
  * Sets @label as the label used for the tool button. The “label” property
- * only has an effect if not overridden by a non-%NULL “label_widget” property.
- * If both the “label_widget” and “label” properties are %NULL, the label
- * is determined by the “stock_id” property. If the “stock_id” property is also
+ * only has an effect if not overridden by a non-%NULL “label-widget” property.
+ * If both the “label-widget” and “label” properties are %NULL, the label
+ * is determined by the “stock-id” property. If the “stock-id” property is also
  * %NULL, @button will not have a label.
  * 
  * Since: 2.4
@@ -1281,7 +1281,7 @@ gtk_tool_button_get_use_underline (GtkToolButton *button)
  *
  * Sets the name of the stock item. See gtk_tool_button_new_from_stock().
  * The stock_id property only has an effect if not
- * overridden by non-%NULL “label” and “icon_widget” properties.
+ * overridden by non-%NULL “label-widget” and “icon-widget” properties.
  * 
  * Since: 2.4
  *
@@ -1334,7 +1334,7 @@ gtk_tool_button_get_stock_id (GtkToolButton *button)
  * Sets the icon for the tool button from a named themed icon.
  * See the docs for #GtkIconTheme for more details.
  * The “icon_name” property only has an effect if not
- * overridden by non-%NULL “label”, “icon_widget” and “stock_id”
+ * overridden by non-%NULL “label-widget”, “icon-widget” and “stock-id”
  * properties.
  * 
  * Since: 2.8
@@ -1383,8 +1383,8 @@ gtk_tool_button_get_icon_name (GtkToolButton *button)
  * @icon_widget: (allow-none): the widget used as icon, or %NULL
  *
  * Sets @icon as the widget used as icon on @button. If @icon_widget is
- * %NULL the icon is determined by the “stock_id” property. If the
- * “stock_id” property is also %NULL, @button will not have an icon.
+ * %NULL the icon is determined by the “stock-id” property. If the
+ * “stock-id” property is also %NULL, @button will not have an icon.
  * 
  * Since: 2.4
  **/
@@ -1427,8 +1427,8 @@ gtk_tool_button_set_icon_widget (GtkToolButton *button,
  * Sets @label_widget as the widget that will be used as the label
  * for @button. If @label_widget is %NULL the “label” property is used
  * as label. If “label” is also %NULL, the label in the stock item
- * determined by the “stock_id” property is used as label. If
- * “stock_id” is also %NULL, @button does not have a label.
+ * determined by the “stock-id” property is used as label. If
+ * “stock-id” is also %NULL, @button does not have a label.
  * 
  * Since: 2.4
  **/
