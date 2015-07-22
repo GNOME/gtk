@@ -45,8 +45,7 @@ finish_search (GtkButton *button)
   show_find_button ();
   g_source_remove (search_progress_id);
   search_progress_id = 0;
-
-  return FALSE;
+  return G_SOURCE_REMOVE;
 }
 
 static gboolean
@@ -55,7 +54,7 @@ start_search_feedback (gpointer data)
   search_progress_id = g_timeout_add_full (G_PRIORITY_DEFAULT, 100,
                                            (GSourceFunc)search_progress, data,
                                            (GDestroyNotify)search_progress_done);
-  return FALSE;
+  return G_SOURCE_REMOVE;
 }
 
 static void
@@ -170,10 +169,16 @@ static void
 search_entry_destroyed (GtkWidget *widget)
 {
   if (finish_search_id != 0)
-    g_source_remove (finish_search_id);
+    {
+      g_source_remove (finish_search_id);
+      finish_search_id = 0;
+    }
 
   if (search_progress_id != 0)
-    g_source_remove (search_progress_id);
+    {
+      g_source_remove (search_progress_id);
+      search_progress_id = 0;
+    }
 
   window = NULL;
 }
