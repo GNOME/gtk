@@ -8,7 +8,7 @@
       <!-- column-name face -->
       <column type="PangoFontFace"/>
       <!-- column-name description -->
-      <column type="PangoFontDescription"/>
+      <column type="GtkDelayedFontDescription"/>
       <!-- column-name preview-title -->
       <column type="gchararray"/>
     </columns>
