@@ -2559,7 +2559,8 @@ save_widgets_create (GtkFileChooserWidget *impl)
   GtkWidget *vbox;
   GtkWidget *widget;
 
-  if (priv->save_widgets != NULL)
+  if (priv->save_widgets != NULL ||
+      (priv->external_entry && priv->location_entry == priv->external_entry))
     return;
 
   location_switch_to_path_bar (impl);
