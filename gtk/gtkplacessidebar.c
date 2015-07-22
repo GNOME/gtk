@@ -4025,6 +4025,9 @@ gtk_places_sidebar_dispose (GObject *object)
       sidebar->source_targets = NULL;
     }
 
+  g_slist_free_full (sidebar->shortcuts, g_object_unref);
+  sidebar->shortcuts = NULL;
+
   G_OBJECT_CLASS (gtk_places_sidebar_parent_class)->dispose (object);
 }
 
