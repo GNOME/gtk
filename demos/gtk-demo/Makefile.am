@@ -25,6 +25,7 @@ demos_base =					\
 	entry_completion.c			\
 	event_axes.c				\
 	expander.c  				\
+        filtermodel.c				\
 	font_features.c				\
 	gestures.c				\
 	glarea.c				\

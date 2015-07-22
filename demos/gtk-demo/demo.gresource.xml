@@ -131,6 +131,7 @@
     <file>entry_completion.c</file>
     <file>event_axes.c</file>
     <file>expander.c</file>
+    <file>filtermodel.c</file>
     <file>flowbox.c</file>
     <file>font_features.c</file>
     <file>gestures.c</file>
