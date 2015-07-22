@@ -407,8 +407,6 @@ gtk_image_init (GtkImage *image)
   gtk_widget_set_has_window (GTK_WIDGET (image), FALSE);
   priv->icon_helper = _gtk_icon_helper_new ();
   _gtk_icon_helper_set_icon_size (priv->icon_helper, DEFAULT_ICON_SIZE);
-
-  priv->filename = NULL;
 }
 
 static void
@@ -419,6 +417,7 @@ gtk_image_finalize (GObject *object)
   g_clear_object (&image->priv->icon_helper);
   
   g_free (image->priv->filename);
+  g_free (image->priv->resource_path);
 
   G_OBJECT_CLASS (gtk_image_parent_class)->finalize (object);
 };
