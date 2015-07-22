@@ -320,8 +320,8 @@ static void
 gtk_search_engine_tracker_start (GtkSearchEngine *engine)
 {
   GtkSearchEngineTracker *tracker;
-  gchar *search_text;
-  gchar *location_uri;
+  const gchar *search_text;
+  const gchar *location_uri;
   GString *sparql;
   gboolean recursive;
 
@@ -386,7 +386,6 @@ gtk_search_engine_tracker_start (GtkSearchEngine *engine)
   get_query_results (tracker, sparql->str, query_callback, g_object_ref (tracker));
 
   g_string_free (sparql, TRUE);
-  g_free (search_text);
 }
 
 static void

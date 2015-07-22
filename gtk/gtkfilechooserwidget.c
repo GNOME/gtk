@@ -7272,14 +7272,13 @@ search_setup_widgets (GtkFileChooserWidget *impl)
   /* if there already is a query, restart it */
   if (priv->search_query)
     {
-      gchar *query;
+      const gchar *query;
 
       query = gtk_query_get_text (priv->search_query);
       if (query)
         {
           gtk_entry_set_text (GTK_ENTRY (priv->search_entry), query);
           search_start_query (impl, query);
-          g_free (query);
         }
       else
         {

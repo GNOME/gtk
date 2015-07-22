@@ -70,10 +70,10 @@ gtk_query_new (void)
 }
 
 
-gchar *
+const gchar *
 gtk_query_get_text (GtkQuery *query)
 {
-  return g_strdup (query->priv->text);
+  return query->priv->text;
 }
 
 void
@@ -87,10 +87,10 @@ gtk_query_set_text (GtkQuery    *query,
   query->priv->words = NULL;
 }
 
-gchar *
+const gchar *
 gtk_query_get_location (GtkQuery *query)
 {
-  return g_strdup (query->priv->location_uri);
+  return query->priv->location_uri;
 }
 
 void

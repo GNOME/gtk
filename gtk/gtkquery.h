@@ -49,20 +49,20 @@ struct _GtkQueryClass
   GObjectClass parent_class;
 };
 
-GType     gtk_query_get_type       (void);
+GType        gtk_query_get_type       (void);
 
-GtkQuery* gtk_query_new            (void);
+GtkQuery    *gtk_query_new            (void);
 
-gchar*    gtk_query_get_text       (GtkQuery    *query);
-void      gtk_query_set_text       (GtkQuery    *query,
-                                    const gchar *text);
+const gchar *gtk_query_get_text       (GtkQuery    *query);
+void         gtk_query_set_text       (GtkQuery    *query,
+                                       const gchar *text);
 
-gchar*    gtk_query_get_location   (GtkQuery    *query);
-void      gtk_query_set_location   (GtkQuery    *query,
-                                    const gchar *uri);
+const gchar *gtk_query_get_location   (GtkQuery    *query);
+void         gtk_query_set_location   (GtkQuery    *query,
+                                       const gchar *uri);
 
-gboolean  gtk_query_matches_string (GtkQuery    *query,
-                                    const gchar *string);
+gboolean     gtk_query_matches_string (GtkQuery    *query,
+                                       const gchar *string);
 
 G_END_DECLS
 
