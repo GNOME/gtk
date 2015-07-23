@@ -9957,26 +9957,20 @@ gtk_window_present_with_time (GtkWindow *window,
  *
  * You can track iconification via the “window-state-event” signal
  * on #GtkWidget.
- * 
  **/
 void
 gtk_window_iconify (GtkWindow *window)
 {
-  GtkWindowPrivate *priv;
-  GtkWidget *widget;
   GdkWindow *toplevel;
-  
+
   g_return_if_fail (GTK_IS_WINDOW (window));
 
-  priv = window->priv;
-  widget = GTK_WIDGET (window);
+  window->priv->iconify_initially = TRUE;
 
-  toplevel = gtk_widget_get_window (widget);
+  toplevel = gtk_widget_get_window (GTK_WIDGET (window));
 
   if (toplevel != NULL)
     gdk_window_iconify (toplevel);
-  else
-    priv->iconify_initially = TRUE;
 }
 
 /**
@@ -9995,21 +9989,16 @@ gtk_window_iconify (GtkWindow *window)
 void
 gtk_window_deiconify (GtkWindow *window)
 {
-  GtkWindowPrivate *priv;
-  GtkWidget *widget;
   GdkWindow *toplevel;
-  
+
   g_return_if_fail (GTK_IS_WINDOW (window));
 
-  priv = window->priv;
-  widget = GTK_WIDGET (window);
+  window->priv->iconify_initially = FALSE;
 
-  toplevel = gtk_widget_get_window (widget);
+  toplevel = gtk_widget_get_window (GTK_WIDGET (window));
 
   if (toplevel != NULL)
     gdk_window_deiconify (toplevel);
-  else
-    priv->iconify_initially = FALSE;
 }
 
 /**
@@ -10028,26 +10017,20 @@ gtk_window_deiconify (GtkWindow *window)
  *
  * You can track stickiness via the “window-state-event” signal
  * on #GtkWidget.
- * 
  **/
 void
 gtk_window_stick (GtkWindow *window)
 {
-  GtkWindowPrivate *priv;
-  GtkWidget *widget;
   GdkWindow *toplevel;
-  
+
   g_return_if_fail (GTK_IS_WINDOW (window));
 
-  priv = window->priv;
-  widget = GTK_WIDGET (window);
+  window->priv->stick_initially = TRUE;
 
-  toplevel = gtk_widget_get_window (widget);
+  toplevel = gtk_widget_get_window (GTK_WIDGET (window));
 
   if (toplevel != NULL)
     gdk_window_stick (toplevel);
-  else
-    priv->stick_initially = TRUE;
 }
 
 /**
@@ -10063,26 +10046,20 @@ gtk_window_stick (GtkWindow *window)
  *
  * You can track stickiness via the “window-state-event” signal
  * on #GtkWidget.
- * 
  **/
 void
 gtk_window_unstick (GtkWindow *window)
 {
-  GtkWindowPrivate *priv;
-  GtkWidget *widget;
   GdkWindow *toplevel;
-  
+
   g_return_if_fail (GTK_IS_WINDOW (window));
 
-  priv = window->priv;
-  widget = GTK_WIDGET (window);
+  window->priv->stick_initially = FALSE;
 
-  toplevel = gtk_widget_get_window (widget);
+  toplevel = gtk_widget_get_window (GTK_WIDGET (window));
 
   if (toplevel != NULL)
     gdk_window_unstick (toplevel);
-  else
-    priv->stick_initially = FALSE;
 }
 
 /**
@@ -10104,26 +10081,20 @@ gtk_window_unstick (GtkWindow *window)
  * You can track maximization via the “window-state-event” signal
  * on #GtkWidget, or by listening to notifications on the
  * #GtkWindow:is-maximized property.
- *
  **/
 void
 gtk_window_maximize (GtkWindow *window)
 {
-  GtkWindowPrivate *priv;
-  GtkWidget *widget;
   GdkWindow *toplevel;
-  
+
   g_return_if_fail (GTK_IS_WINDOW (window));
 
-  priv = window->priv;
-  widget = GTK_WIDGET (window);
+  window->priv->maximize_initially = TRUE;
 
-  toplevel = gtk_widget_get_window (widget);
+  toplevel = gtk_widget_get_window (GTK_WIDGET (window));
 
   if (toplevel != NULL)
     gdk_window_maximize (toplevel);
-  else
-    priv->maximize_initially = TRUE;
 }
 
 /**
@@ -10139,26 +10110,20 @@ gtk_window_maximize (GtkWindow *window)
  *
  * You can track maximization via the “window-state-event” signal
  * on #GtkWidget.
- * 
  **/
 void
 gtk_window_unmaximize (GtkWindow *window)
 {
-  GtkWindowPrivate *priv;
-  GtkWidget *widget;
   GdkWindow *toplevel;
-  
+
   g_return_if_fail (GTK_IS_WINDOW (window));
 
-  priv = window->priv;
-  widget = GTK_WIDGET (window);
+  window->priv->maximize_initially = FALSE;
 
-  toplevel = gtk_widget_get_window (widget);
+  toplevel = gtk_widget_get_window (GTK_WIDGET (window));
 
   if (toplevel != NULL)
     gdk_window_unmaximize (toplevel);
-  else
-    priv->maximize_initially = FALSE;
 }
 
 /**
@@ -10175,27 +10140,22 @@ gtk_window_unmaximize (GtkWindow *window)
  *
  * You can track the fullscreen state via the “window-state-event” signal
  * on #GtkWidget.
- * 
+ *
  * Since: 2.2
  **/
 void
 gtk_window_fullscreen (GtkWindow *window)
 {
-  GtkWindowPrivate *priv;
-  GtkWidget *widget;
   GdkWindow *toplevel;
 
   g_return_if_fail (GTK_IS_WINDOW (window));
 
-  priv = window->priv;
-  widget = GTK_WIDGET (window);
+  window->priv->fullscreen_initially = TRUE;
 
-  toplevel = gtk_widget_get_window (widget);
+  toplevel = gtk_widget_get_window (GTK_WIDGET (window));
 
   if (toplevel != NULL)
     gdk_window_fullscreen (toplevel);
-  else
-    priv->fullscreen_initially = TRUE;
 }
 
 /**
@@ -10212,27 +10172,22 @@ gtk_window_fullscreen (GtkWindow *window)
  *
  * You can track the fullscreen state via the “window-state-event” signal
  * on #GtkWidget.
- * 
+ *
  * Since: 2.2
  **/
 void
 gtk_window_unfullscreen (GtkWindow *window)
 {
-  GtkWidget *widget;
   GdkWindow *toplevel;
-  GtkWindowPrivate *priv;
 
   g_return_if_fail (GTK_IS_WINDOW (window));
 
-  priv = window->priv;
-  widget = GTK_WIDGET (window);
+  window->priv->fullscreen_initially = FALSE;
 
-  toplevel = gtk_widget_get_window (widget);
+  toplevel = gtk_widget_get_window (GTK_WIDGET (window));
 
   if (toplevel != NULL)
     gdk_window_unfullscreen (toplevel);
-  else
-    priv->fullscreen_initially = FALSE;
 }
 
 /**
@@ -10267,26 +10222,19 @@ void
 gtk_window_set_keep_above (GtkWindow *window,
 			   gboolean   setting)
 {
-  GtkWidget *widget;
-  GtkWindowPrivate *priv;
   GdkWindow *toplevel;
 
   g_return_if_fail (GTK_IS_WINDOW (window));
 
   setting = setting != FALSE;
 
-  priv = window->priv;
-  widget = GTK_WIDGET (window);
+  window->priv->above_initially = setting;
+  window->priv->below_initially &= !setting;
 
-  toplevel = gtk_widget_get_window (widget);
+  toplevel = gtk_widget_get_window (GTK_WIDGET (window));
 
   if (toplevel != NULL)
     gdk_window_set_keep_above (toplevel, setting);
-  else
-    {
-      priv->above_initially = setting;
-      priv->below_initially &= !setting;
-    }
 }
 
 /**
@@ -10321,26 +10269,19 @@ void
 gtk_window_set_keep_below (GtkWindow *window,
 			   gboolean   setting)
 {
-  GtkWidget *widget;
-  GtkWindowPrivate *priv;
   GdkWindow *toplevel;
 
   g_return_if_fail (GTK_IS_WINDOW (window));
 
   setting = setting != FALSE;
 
-  priv = window->priv;
-  widget = GTK_WIDGET (window);
+  window->priv->below_initially = setting;
+  window->priv->above_initially &= !setting;
 
-  toplevel = gtk_widget_get_window (widget);
+  toplevel = gtk_widget_get_window (GTK_WIDGET (window));
 
   if (toplevel != NULL)
     gdk_window_set_keep_below (toplevel, setting);
-  else
-    {
-      priv->below_initially = setting;
-      priv->above_initially &= !setting;
-    }
 }
 
 /**
