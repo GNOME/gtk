@@ -9971,12 +9971,12 @@ gtk_window_iconify (GtkWindow *window)
   priv = window->priv;
   widget = GTK_WIDGET (window);
 
-  priv->iconify_initially = TRUE;
-
   toplevel = gtk_widget_get_window (widget);
 
   if (toplevel != NULL)
     gdk_window_iconify (toplevel);
+  else
+    priv->iconify_initially = TRUE;
 }
 
 /**
@@ -10004,12 +10004,12 @@ gtk_window_deiconify (GtkWindow *window)
   priv = window->priv;
   widget = GTK_WIDGET (window);
 
-  priv->iconify_initially = FALSE;
-
   toplevel = gtk_widget_get_window (widget);
 
   if (toplevel != NULL)
     gdk_window_deiconify (toplevel);
+  else
+    priv->iconify_initially = FALSE;
 }
 
 /**
@@ -10042,12 +10042,12 @@ gtk_window_stick (GtkWindow *window)
   priv = window->priv;
   widget = GTK_WIDGET (window);
 
-  priv->stick_initially = TRUE;
-
   toplevel = gtk_widget_get_window (widget);
 
   if (toplevel != NULL)
     gdk_window_stick (toplevel);
+  else
+    priv->stick_initially = TRUE;
 }
 
 /**
@@ -10077,12 +10077,12 @@ gtk_window_unstick (GtkWindow *window)
   priv = window->priv;
   widget = GTK_WIDGET (window);
 
-  priv->stick_initially = FALSE;
-
   toplevel = gtk_widget_get_window (widget);
 
   if (toplevel != NULL)
     gdk_window_unstick (toplevel);
+  else
+    priv->stick_initially = FALSE;
 }
 
 /**
@@ -10118,12 +10118,12 @@ gtk_window_maximize (GtkWindow *window)
   priv = window->priv;
   widget = GTK_WIDGET (window);
 
-  priv->maximize_initially = TRUE;
-
   toplevel = gtk_widget_get_window (widget);
 
   if (toplevel != NULL)
     gdk_window_maximize (toplevel);
+  else
+    priv->maximize_initially = TRUE;
 }
 
 /**
@@ -10153,12 +10153,12 @@ gtk_window_unmaximize (GtkWindow *window)
   priv = window->priv;
   widget = GTK_WIDGET (window);
 
-  priv->maximize_initially = FALSE;
-
   toplevel = gtk_widget_get_window (widget);
 
   if (toplevel != NULL)
     gdk_window_unmaximize (toplevel);
+  else
+    priv->maximize_initially = FALSE;
 }
 
 /**
@@ -10190,12 +10190,12 @@ gtk_window_fullscreen (GtkWindow *window)
   priv = window->priv;
   widget = GTK_WIDGET (window);
 
-  priv->fullscreen_initially = TRUE;
-
   toplevel = gtk_widget_get_window (widget);
 
   if (toplevel != NULL)
     gdk_window_fullscreen (toplevel);
+  else
+    priv->fullscreen_initially = TRUE;
 }
 
 /**
@@ -10227,12 +10227,12 @@ gtk_window_unfullscreen (GtkWindow *window)
   priv = window->priv;
   widget = GTK_WIDGET (window);
 
-  priv->fullscreen_initially = FALSE;
-
   toplevel = gtk_widget_get_window (widget);
 
   if (toplevel != NULL)
     gdk_window_unfullscreen (toplevel);
+  else
+    priv->fullscreen_initially = FALSE;
 }
 
 /**
@@ -10273,17 +10273,20 @@ gtk_window_set_keep_above (GtkWindow *window,
 
   g_return_if_fail (GTK_IS_WINDOW (window));
 
+  setting = setting != FALSE;
+
   priv = window->priv;
   widget = GTK_WIDGET (window);
-
-  priv->above_initially = setting != FALSE;
-  if (setting)
-    priv->below_initially = FALSE;
 
   toplevel = gtk_widget_get_window (widget);
 
   if (toplevel != NULL)
     gdk_window_set_keep_above (toplevel, setting);
+  else
+    {
+      priv->above_initially = setting;
+      priv->below_initially &= !setting;
+    }
 }
 
 /**
@@ -10324,17 +10327,20 @@ gtk_window_set_keep_below (GtkWindow *window,
 
   g_return_if_fail (GTK_IS_WINDOW (window));
 
+  setting = setting != FALSE;
+
   priv = window->priv;
   widget = GTK_WIDGET (window);
-
-  priv->below_initially = setting != FALSE;
-  if (setting)
-    priv->above_initially = FALSE;
 
   toplevel = gtk_widget_get_window (widget);
 
   if (toplevel != NULL)
     gdk_window_set_keep_below (toplevel, setting);
+  else
+    {
+      priv->below_initially = setting;
+      priv->above_initially &= !setting;
+    }
 }
 
 /**
