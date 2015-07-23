@@ -661,7 +661,7 @@ queue_process_input_at_idle (BroadwayServer *server)
       g_idle_add_full (G_PRIORITY_DEFAULT, (GSourceFunc)process_input_idle_cb, server, NULL);
 }
 
-static void
+static gboolean
 broadway_server_read_all_input_nonblocking (BroadwayInput *input)
 {
   GInputStream *in;
@@ -670,7 +670,7 @@ broadway_server_read_all_input_nonblocking (BroadwayInput *input)
   GError *error = NULL;
 
   if (input == NULL)
-    return;
+    return FALSE;
 
   in = g_io_stream_get_input_stream (input->connection);
 
@@ -683,7 +683,7 @@ broadway_server_read_all_input_nonblocking (BroadwayInput *input)
 	  g_error_matches (error, G_IO_ERROR, G_IO_ERROR_WOULD_BLOCK))
 	{
 	  g_error_free (error);
-	  return;
+	  return TRUE;
 	}
 
       if (input->server->input == input)
@@ -694,12 +694,13 @@ broadway_server_read_all_input_nonblocking (BroadwayInput *input)
 	  g_printerr ("input error %s\n", error->message);
 	  g_error_free (error);
 	}
-      return;
+      return FALSE;
     }
 
   g_byte_array_append (input->buffer, buffer, res);
 
   parse_input (input);
+  return TRUE;
 }
 
 static void
@@ -720,7 +721,8 @@ input_data_cb (GObject  *stream,
 {
   BroadwayServer *server = input->server;
 
-  broadway_server_read_all_input_nonblocking (input);
+  if (!broadway_server_read_all_input_nonblocking (input))
+    return FALSE;
 
   if (input->active)
     process_input_messages (server);
