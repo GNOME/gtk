@@ -5853,12 +5853,6 @@ gtk_file_chooser_widget_get_files (GtkFileChooser *chooser)
       if (!is_well_formed)
         return NULL;
 
-      if (is_file_part_empty && priv->action == GTK_FILE_CHOOSER_ACTION_SAVE)
-        {
-          g_object_unref (info.file_from_entry);
-          return NULL;
-        }
-
       if (info.file_from_entry)
         info.result = g_slist_prepend (info.result, info.file_from_entry);
       else if (!file_list_seen)
