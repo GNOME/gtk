@@ -1194,6 +1194,18 @@ attach_widget_screen_changed (GtkWidget *attach_widget,
     menu_change_screen (menu, gtk_widget_get_screen (attach_widget));
 }
 
+static void
+menu_toplevel_attached_to (GtkWindow *toplevel, GParamSpec *pspec, GtkMenu *menu)
+{
+  GtkMenuAttachData *data;
+
+  data = g_object_get_data (G_OBJECT (menu), attach_data_key);
+
+  g_return_if_fail (data);
+
+  gtk_menu_detach (menu);
+}
+
 /**
  * gtk_menu_attach_to_widget:
  * @menu: a #GtkMenu
@@ -1250,6 +1262,8 @@ gtk_menu_attach_to_widget (GtkMenu           *menu,
 
   /* Attach the widget to the toplevel window. */
   gtk_window_set_attached_to (GTK_WINDOW (menu->priv->toplevel), attach_widget);
+  g_signal_connect (GTK_WINDOW (menu->priv->toplevel), "notify::attached-to",
+                    G_CALLBACK (menu_toplevel_attached_to), menu);
 
   _gtk_widget_update_parent_muxer (GTK_WIDGET (menu));
 
@@ -1291,10 +1305,12 @@ gtk_menu_get_attach_widget (GtkMenu *menu)
 void
 gtk_menu_detach (GtkMenu *menu)
 {
+  GtkWindow *toplevel;
   GtkMenuAttachData *data;
   GList *list;
 
   g_return_if_fail (GTK_IS_MENU (menu));
+  toplevel = GTK_WINDOW (menu->priv->toplevel);
 
   /* keep this function in sync with gtk_widget_unparent() */
   data = g_object_get_data (G_OBJECT (menu), attach_data_key);
@@ -1306,7 +1322,11 @@ gtk_menu_detach (GtkMenu *menu)
   g_object_set_data (G_OBJECT (menu), I_(attach_data_key), NULL);
 
   /* Detach the toplevel window. */
-  gtk_window_set_attached_to (GTK_WINDOW (menu->priv->toplevel), NULL);
+  g_signal_handlers_disconnect_by_func (toplevel,
+                                        (gpointer) menu_toplevel_attached_to,
+                                        menu);
+  if (gtk_window_get_attached_to (toplevel) == data->attach_widget)
+    gtk_window_set_attached_to (toplevel, NULL);
 
   g_signal_handlers_disconnect_by_func (data->attach_widget,
                                         (gpointer) attach_widget_screen_changed,
