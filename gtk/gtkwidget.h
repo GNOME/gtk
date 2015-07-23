@@ -1489,7 +1489,7 @@ const gchar **          gtk_widget_list_action_prefixes (GtkWidget             *
 
 GDK_AVAILABLE_IN_3_18
 void                    gtk_widget_set_font_map         (GtkWidget             *widget,
-                                                         PangoFontMap          *fontmap);
+                                                         PangoFontMap          *font_map);
 GDK_AVAILABLE_IN_3_18
 PangoFontMap *          gtk_widget_get_font_map         (GtkWidget             *widget);
 

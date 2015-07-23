@@ -10442,7 +10442,7 @@ gtk_widget_set_font_map_recurse (GtkWidget *widget, gpointer data)
 /**
  * gtk_widget_set_font_map:
  * @widget: a #GtkWidget
- * @font_map: (allow-nonw): a #PangoFontMap, or %NULL to unset any previously
+ * @font_map: (allow-none): a #PangoFontMap, or %NULL to unset any previously
  *     set font map
  *
  * Sets the font map to use for Pango rendering. When not set, the widget
