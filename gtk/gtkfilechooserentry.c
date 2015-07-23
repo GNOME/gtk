@@ -338,7 +338,6 @@ gtk_file_chooser_get_directory_for_text (GtkFileChooserEntry *chooser_entry,
   if (file == NULL)
     return NULL;
 
-  g_print ("text '%s', folder '%s'\n", text, g_file_get_path (file));
   if (text[0] == 0 || text[strlen (text) - 1] == G_DIR_SEPARATOR ||
       is_directory_shortcut (text))
     return file;
