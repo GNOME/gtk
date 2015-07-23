@@ -133,6 +133,7 @@ struct _GtkMenuButtonPrivate
   GtkArrowType arrow_type;
   gboolean use_popover;
   guint press_handled : 1;
+  guint in_click : 1;
 };
 
 enum
@@ -429,6 +430,11 @@ gtk_menu_button_clicked (GtkButton *button)
   GtkMenuButtonPrivate *priv = menu_button->priv;
   gboolean active;
 
+  if (priv->in_click)
+    return;
+
+  priv->in_click = TRUE;
+
   if (priv->menu)
     {
       active = !gtk_widget_get_visible (priv->menu);
@@ -464,6 +470,7 @@ gtk_menu_button_clicked (GtkButton *button)
 
   gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (button), active);
   gtk_toggle_button_toggled (GTK_TOGGLE_BUTTON (button));
+  priv->in_click = FALSE;
 }
 
 static void
