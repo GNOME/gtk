@@ -319,6 +319,14 @@ gtk_file_chooser_get_file_for_text (GtkFileChooserEntry *chooser_entry,
   return file;
 }
 
+static gboolean
+is_directory_shortcut (const char *text)
+{
+  return strcmp (text, ".") == 0 ||
+         strcmp (text, "..") == 0 ||
+         strcmp (text, "~" ) == 0;
+}
+
 static GFile *
 gtk_file_chooser_get_directory_for_text (GtkFileChooserEntry *chooser_entry,
                                          const char *         text)
@@ -330,7 +338,9 @@ gtk_file_chooser_get_directory_for_text (GtkFileChooserEntry *chooser_entry,
   if (file == NULL)
     return NULL;
 
-  if (text[0] == 0 || text[strlen (text) - 1] == G_DIR_SEPARATOR)
+  g_print ("text '%s', folder '%s'\n", text, g_file_get_path (file));
+  if (text[0] == 0 || text[strlen (text) - 1] == G_DIR_SEPARATOR ||
+      is_directory_shortcut (text))
     return file;
 
   parent = g_file_get_parent (file);
@@ -807,6 +817,8 @@ _gtk_file_chooser_entry_get_file_part (GtkFileChooserEntry *chooser_entry)
   last_slash = strrchr (text, G_DIR_SEPARATOR);
   if (last_slash)
     return last_slash + 1;
+  else if (is_directory_shortcut (text))
+    return "";
   else
     return text;
 }
