@@ -7605,7 +7605,6 @@ gtk_window_state_event (GtkWidget           *widget,
     {
       priv->fullscreen =
         (event->new_window_state & GDK_WINDOW_STATE_FULLSCREEN) ? 1 : 0;
-      priv->fullscreen_initially = priv->fullscreen;
     }
 
   if (event->changed_mask & GDK_WINDOW_STATE_TILED)
@@ -7618,7 +7617,6 @@ gtk_window_state_event (GtkWidget           *widget,
     {
       priv->maximized =
         (event->new_window_state & GDK_WINDOW_STATE_MAXIMIZED) ? 1 : 0;
-      priv->maximize_initially = priv->maximized;
       g_object_notify (G_OBJECT (widget), "is-maximized");
     }
 
