@@ -2573,13 +2573,13 @@ gtk_combo_box_size_allocate (GtkWidget     *widget,
             }
 
           /* allocate the box containing the separator and the arrow */
-          gtk_widget_get_preferred_size (priv->box, &req, NULL);
+          gtk_widget_get_preferred_size (priv->arrow, &req, NULL);
           child.width = req.width;
           if (!is_rtl)
             child.x += width - req.width;
           child.width = MAX (1, child.width);
           child.height = MAX (1, child.height);
-          gtk_widget_size_allocate (priv->box, &child);
+          gtk_widget_size_allocate (priv->arrow, &child);
 
           if (is_rtl)
             {
@@ -3041,40 +3041,19 @@ gtk_combo_box_menu_setup (GtkComboBox *combo_box)
   GtkComboBoxPrivate *priv = combo_box->priv;
   GtkWidget *menu;
 
-  if (priv->cell_view)
-    {
-      priv->button = gtk_toggle_button_new ();
-      gtk_button_set_focus_on_click (GTK_BUTTON (priv->button),
-                                     priv->focus_on_click);
+  priv->button = gtk_toggle_button_new ();
+  gtk_button_set_focus_on_click (GTK_BUTTON (priv->button),
+                                 priv->focus_on_click);
 
-      g_signal_connect (priv->button, "toggled",
-                        G_CALLBACK (gtk_combo_box_button_toggled), combo_box);
-      gtk_widget_set_parent (priv->button, GTK_WIDGET (combo_box));
+  g_signal_connect (priv->button, "toggled",
+                    G_CALLBACK (gtk_combo_box_button_toggled), combo_box);
+  gtk_widget_set_parent (priv->button, GTK_WIDGET (combo_box));
 
-      priv->box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
-      gtk_container_add (GTK_CONTAINER (priv->button), priv->box);
+  priv->arrow = gtk_image_new_from_icon_name ("pan-down-symbolic", GTK_ICON_SIZE_BUTTON);
+  gtk_container_add (GTK_CONTAINER (priv->button), priv->arrow);
+  gtk_widget_add_events (priv->button, GDK_SCROLL_MASK);
 
-      priv->arrow = gtk_image_new_from_icon_name ("pan-down-symbolic", GTK_ICON_SIZE_BUTTON);
-      gtk_container_add (GTK_CONTAINER (priv->box), priv->arrow);
-      gtk_widget_add_events (priv->button, GDK_SCROLL_MASK);
-
-      gtk_widget_show_all (priv->button);
-    }
-  else
-    {
-      priv->button = gtk_toggle_button_new ();
-      gtk_button_set_focus_on_click (GTK_BUTTON (priv->button),
-                                     priv->focus_on_click);
-
-      g_signal_connect (priv->button, "toggled",
-                        G_CALLBACK (gtk_combo_box_button_toggled), combo_box);
-      gtk_widget_set_parent (priv->button, GTK_WIDGET (combo_box));
-
-      priv->arrow = gtk_image_new_from_icon_name ("pan-down-symbolic", GTK_ICON_SIZE_BUTTON);
-      gtk_container_add (GTK_CONTAINER (priv->button), priv->arrow);
-      gtk_widget_add_events (priv->button, GDK_SCROLL_MASK);
-      gtk_widget_show_all (priv->button);
-    }
+  gtk_widget_show_all (priv->button);
 
   g_signal_connect (priv->button, "button-press-event",
                     G_CALLBACK (gtk_combo_box_menu_button_press),
@@ -5378,16 +5357,16 @@ gtk_combo_box_get_preferred_width (GtkWidget *widget,
       /* menu mode */
       if (priv->cell_view)
         {
-          gint box_width, xpad;
+          gint arrow_width, xpad;
           GtkBorder button_padding;
 
           get_widget_padding_and_border (priv->button, &button_padding);
 
-          gtk_widget_get_preferred_width (priv->box, &box_width, NULL);
+          gtk_widget_get_preferred_width (priv->arrow, &arrow_width, NULL);
           xpad = button_padding.left + button_padding.right + padding.left + padding.right;
 
-          minimum_width  = child_min + box_width + xpad;
-          natural_width  = child_nat + box_width + xpad;
+          minimum_width  = child_min + arrow_width + xpad;
+          natural_width  = child_nat + arrow_width + xpad;
         }
       else
         {
@@ -5473,20 +5452,20 @@ gtk_combo_box_get_preferred_height_for_width (GtkWidget *widget,
       if (priv->cell_view)
         {
           /* calculate x/y padding and separator/arrow size */
-          gint box_width, box_height;
+          gint arrow_width, box_height;
           gint xpad, ypad;
           GtkBorder button_padding;
 
           get_widget_padding_and_border (priv->button, &button_padding);
 
-          gtk_widget_get_preferred_width (priv->box, &box_width, NULL);
-          gtk_widget_get_preferred_height_for_width (priv->box,
-                                                     box_width, &box_height, NULL);
+          gtk_widget_get_preferred_width (priv->arrow, &arrow_width, NULL);
+          gtk_widget_get_preferred_height_for_width (priv->arrow,
+                                                     arrow_width, &box_height, NULL);
 
           xpad = button_padding.left + button_padding.right;
           ypad = button_padding.top + button_padding.bottom;
 
-          size -= box_width + xpad;
+          size -= arrow_width + xpad;
 
           /* Get height-for-width of the child widget, usually a GtkCellArea calculating
            * and fitting the whole treemodel */
