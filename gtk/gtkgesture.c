@@ -417,9 +417,8 @@ _gtk_gesture_update_point (GtkGesture     *gesture,
   GdkDevice *device;
   gboolean existed;
   PointData *data;
-  gdouble x, y;
 
-  if (!gdk_event_get_coords (event, &x, &y))
+  if (!gdk_event_get_coords (event, NULL, NULL))
     return FALSE;
 
   device = gdk_event_get_device (event);
