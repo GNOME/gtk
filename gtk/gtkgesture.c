@@ -104,6 +104,15 @@
  *
  * Sequence states can't be changed freely, see gtk_gesture_set_sequence_state()
  * to know about the possible lifetimes of a #GdkEventSequence.
+ *
+ * ## Touchpad gestures
+ *
+ * On the platforms that support it, #GtkGesture will handle transparently
+ * touchpad gesture events. The only precautions users of #GtkGesture should do
+ * to enable this support are:
+ * - Enabling %GDK_TOUCHPAD_GESTURE_MASK on their #GdkWindows
+ * - If the gesture has %GTK_PHASE_NONE, ensuring events of type
+ *   %GDK_TOUCHPAD_SWIPE and %GDK_TOUCHPAD_PINCH are handled by the #GtkGesture
  */
 
 #include "config.h"
