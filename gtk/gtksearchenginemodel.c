@@ -90,23 +90,26 @@ do_search (gpointer data)
       do
         {
           GFileInfo *info;
-          GFile *file;
-          gchar *uri;
 
           info = _gtk_file_system_model_get_info (model->model, &iter);
           if (info_matches_query (model->query, info))
             {
+              GFile *file;
+              GtkSearchHit *hit;
+
               file = _gtk_file_system_model_get_file (model->model, &iter);
-              uri = g_file_get_uri (file);
-              hits = g_list_prepend (hits, uri);
+              hit = g_new (GtkSearchHit, 1);
+              hit->uri = g_file_get_uri (file);
+              hit->info = g_object_ref (info);
+              hits = g_list_prepend (hits, hit);
             }
-          }
-        while (gtk_tree_model_iter_next (GTK_TREE_MODEL (model->model), &iter));
+        }
+      while (gtk_tree_model_iter_next (GTK_TREE_MODEL (model->model), &iter));
 
       if (hits)
         {
           _gtk_search_engine_hits_added (GTK_SEARCH_ENGINE (model), hits);
-          g_list_free_full (hits, g_free);
+          g_list_free_full (hits, (GDestroyNotify)_gtk_search_hit_free);
         }
     }
 
@@ -144,19 +147,11 @@ gtk_search_engine_model_stop (GtkSearchEngine *engine)
 
 static void
 gtk_search_engine_model_set_query (GtkSearchEngine *engine,
-				    GtkQuery        *query)
+                                   GtkQuery        *query)
 {
-  GtkSearchEngineModel *model;
+  GtkSearchEngineModel *model = GTK_SEARCH_ENGINE_MODEL (engine);
 
-  model = GTK_SEARCH_ENGINE_MODEL (engine);
-
-  if (query)
-    g_object_ref (query);
-
-  if (model->query)
-    g_object_unref (model->query);
-
-  model->query = query;
+  g_set_object (&model->query, query);
 }
 
 static void
