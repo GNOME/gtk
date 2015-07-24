@@ -34,11 +34,9 @@
 #include "gtkmenuprivate.h"
 #include "gtkmenushellprivate.h"
 #include "gtkscrolledwindow.h"
-#include "gtkseparatormenuitem.h"
 #include "deprecated/gtktearoffmenuitem.h"
 #include "gtktogglebutton.h"
 #include "gtktreeselection.h"
-#include "gtkseparator.h"
 #include "gtkwidgetpath.h"
 #include "gtkwidgetprivate.h"
 #include "gtkwindow.h"
@@ -114,7 +112,6 @@ struct _GtkComboBoxPrivate
   GtkWidget *button;
   GtkWidget *box;
   GtkWidget *arrow;
-  GtkWidget *separator;
 
   GtkWidget *popup_widget;
   GtkWidget *popup_window;
@@ -170,7 +167,6 @@ struct _GtkComboBoxPrivate
  * cell_view -> GtkCellView, regular child
  * button -> GtkToggleButton set_parent to combo
  * arrow -> GtkArrow set_parent to button
- * separator -> GtkVSepator set_parent to button
  * popup_widget -> GtkMenu
  * popup_window -> NULL
  * scrolled_window -> NULL
@@ -181,7 +177,6 @@ struct _GtkComboBoxPrivate
  * cell_view -> NULL 
  * button -> GtkToggleButton set_parent to combo
  * arrow -> GtkArrow, child of button
- * separator -> NULL
  * popup_widget -> GtkMenu
  * popup_window -> NULL
  * scrolled_window -> NULL
@@ -192,7 +187,6 @@ struct _GtkComboBoxPrivate
  * cell_view -> GtkCellView, regular child
  * button -> GtkToggleButton, set_parent to combo
  * arrow -> GtkArrow, child of button
- * separator -> NULL
  * popup_widget -> tree_view
  * popup_window -> GtkWindow
  * scrolled_window -> GtkScrolledWindow, child of popup_window
@@ -203,7 +197,6 @@ struct _GtkComboBoxPrivate
  * cell_view -> NULL
  * button -> GtkToggleButton, set_parent to combo
  * arrow -> GtkArrow, child of button
- * separator -> NULL
  * popup_widget -> tree_view
  * popup_window -> GtkWindow
  * scrolled_window -> GtkScrolledWindow, child of popup_window
@@ -1547,15 +1540,6 @@ gtk_combo_box_add (GtkContainer *container,
     {
       /* since the cell_view was unparented, it's gone now */
       priv->cell_view = NULL;
-
-      if (!priv->tree_view && priv->separator)
-        {
-          gtk_container_remove (GTK_CONTAINER (gtk_widget_get_parent (priv->separator)),
-                                priv->separator);
-          priv->separator = NULL;
-
-          gtk_widget_queue_resize (GTK_WIDGET (container));
-        }
     }
 
   if (priv->has_entry)
@@ -3070,9 +3054,6 @@ gtk_combo_box_menu_setup (GtkComboBox *combo_box)
       priv->box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
       gtk_container_add (GTK_CONTAINER (priv->button), priv->box);
 
-      priv->separator = gtk_separator_new (GTK_ORIENTATION_VERTICAL);
-      gtk_container_add (GTK_CONTAINER (priv->box), priv->separator);
-
       priv->arrow = gtk_image_new_from_icon_name ("pan-down-symbolic", GTK_ICON_SIZE_BUTTON);
       gtk_container_add (GTK_CONTAINER (priv->box), priv->arrow);
       gtk_widget_add_events (priv->button, GDK_SCROLL_MASK);
@@ -3153,7 +3134,6 @@ gtk_combo_box_menu_destroy (GtkComboBox *combo_box)
   priv->box = NULL;
   priv->button = NULL;
   priv->arrow = NULL;
-  priv->separator = NULL;
 
   /* changing the popup window will unref the menu and the children */
 }
@@ -3365,7 +3345,6 @@ gtk_combo_box_list_setup (GtkComboBox *combo_box)
 
   priv->arrow = gtk_image_new_from_icon_name ("pan-down-symbolic", GTK_ICON_SIZE_BUTTON);
   gtk_container_add (GTK_CONTAINER (priv->button), priv->arrow);
-  priv->separator = NULL;
   gtk_widget_show_all (priv->button);
 
   if (priv->cell_view)
