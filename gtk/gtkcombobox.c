@@ -2792,20 +2792,7 @@ typedef struct {
   GtkTreeIter iter;
   gboolean found;
   gboolean set;
-  gboolean visible;
 } SearchData;
-
-static gboolean
-path_visible (GtkTreeView *view,
-              GtkTreePath *path)
-{
-  GtkRBTree *tree;
-  GtkRBNode *node;
-
-  /* Note that we rely on the fact that collapsed rows don't have nodes
-   */
-  return _gtk_tree_view_find_node (view, path, &tree, &node);
-}
 
 static gboolean
 tree_next_func (GtkTreeModel *model,
@@ -2818,10 +2805,6 @@ tree_next_func (GtkTreeModel *model,
   if (search_data->found)
     {
       if (!tree_column_row_is_sensitive (search_data->combo, iter))
-        return FALSE;
-
-      if (search_data->visible &&
-          !path_visible (GTK_TREE_VIEW (search_data->combo->priv->tree_view), path))
         return FALSE;
 
       search_data->set = TRUE;
@@ -2840,14 +2823,12 @@ static gboolean
 tree_next (GtkComboBox  *combo,
            GtkTreeModel *model,
            GtkTreeIter  *iter,
-           GtkTreeIter  *next,
-           gboolean      visible)
+           GtkTreeIter  *next)
 {
   SearchData search_data;
 
   search_data.combo = combo;
   search_data.path = gtk_tree_model_get_path (model, iter);
-  search_data.visible = visible;
   search_data.found = FALSE;
   search_data.set = FALSE;
 
@@ -2877,10 +2858,6 @@ tree_prev_func (GtkTreeModel *model,
   if (!tree_column_row_is_sensitive (search_data->combo, iter))
     return FALSE;
 
-  if (search_data->visible &&
-      !path_visible (GTK_TREE_VIEW (search_data->combo->priv->tree_view), path))
-    return FALSE;
-
   search_data->set = TRUE;
   search_data->iter = *iter;
 
@@ -2891,14 +2868,12 @@ static gboolean
 tree_prev (GtkComboBox  *combo,
            GtkTreeModel *model,
            GtkTreeIter  *iter,
-           GtkTreeIter  *prev,
-           gboolean      visible)
+           GtkTreeIter  *prev)
 {
   SearchData search_data;
 
   search_data.combo = combo;
   search_data.path = gtk_tree_model_get_path (model, iter);
-  search_data.visible = visible;
   search_data.found = FALSE;
   search_data.set = FALSE;
 
@@ -2922,12 +2897,6 @@ tree_last_func (GtkTreeModel *model,
   if (!tree_column_row_is_sensitive (search_data->combo, iter))
     return FALSE;
 
-  /* Note that we rely on the fact that collapsed rows don't have nodes
-   */
-  if (search_data->visible &&
-      !path_visible (GTK_TREE_VIEW (search_data->combo->priv->tree_view), path))
-    return FALSE;
-
   search_data->set = TRUE;
   search_data->iter = *iter;
 
@@ -2937,13 +2906,11 @@ tree_last_func (GtkTreeModel *model,
 static gboolean
 tree_last (GtkComboBox  *combo,
            GtkTreeModel *model,
-           GtkTreeIter  *last,
-           gboolean      visible)
+           GtkTreeIter  *last)
 {
   SearchData search_data;
 
   search_data.combo = combo;
-  search_data.visible = visible;
   search_data.set = FALSE;
 
   gtk_tree_model_foreach (model, tree_last_func, &search_data);
@@ -2965,10 +2932,6 @@ tree_first_func (GtkTreeModel *model,
   if (!tree_column_row_is_sensitive (search_data->combo, iter))
     return FALSE;
 
-  if (search_data->visible &&
-      !path_visible (GTK_TREE_VIEW (search_data->combo->priv->tree_view), path))
-    return FALSE;
-
   search_data->set = TRUE;
   search_data->iter = *iter;
 
@@ -2978,13 +2941,11 @@ tree_first_func (GtkTreeModel *model,
 static gboolean
 tree_first (GtkComboBox  *combo,
             GtkTreeModel *model,
-            GtkTreeIter  *first,
-            gboolean      visible)
+            GtkTreeIter  *first)
 {
   SearchData search_data;
 
   search_data.combo = combo;
-  search_data.visible = visible;
   search_data.set = FALSE;
 
   gtk_tree_model_foreach (model, tree_first_func, &search_data);
@@ -3008,10 +2969,10 @@ gtk_combo_box_scroll_event (GtkWidget          *widget,
 
   if (event->direction == GDK_SCROLL_UP)
     found = tree_prev (combo_box, combo_box->priv->model,
-                       &iter, &new_iter, FALSE);
+                       &iter, &new_iter);
   else
     found = tree_next (combo_box, combo_box->priv->model,
-                       &iter, &new_iter, FALSE);
+                       &iter, &new_iter);
 
   if (found)
     gtk_combo_box_set_active_iter (combo_box, &new_iter);
@@ -4406,7 +4367,7 @@ gtk_combo_box_real_move_active (GtkComboBox   *combo_box,
       if (active_iter)
         {
           found = tree_prev (combo_box, combo_box->priv->model,
-                             &iter, &new_iter, FALSE);
+                             &iter, &new_iter);
           break;
         }
       /* else fall through */
@@ -4415,7 +4376,7 @@ gtk_combo_box_real_move_active (GtkComboBox   *combo_box,
     case GTK_SCROLL_PAGE_DOWN:
     case GTK_SCROLL_PAGE_RIGHT:
     case GTK_SCROLL_END:
-      found = tree_last (combo_box, combo_box->priv->model, &new_iter, FALSE);
+      found = tree_last (combo_box, combo_box->priv->model, &new_iter);
       break;
 
     case GTK_SCROLL_STEP_FORWARD:
@@ -4424,7 +4385,7 @@ gtk_combo_box_real_move_active (GtkComboBox   *combo_box,
       if (active_iter)
         {
           found = tree_next (combo_box, combo_box->priv->model,
-                             &iter, &new_iter, FALSE);
+                             &iter, &new_iter);
           break;
         }
       /* else fall through */
@@ -4433,7 +4394,7 @@ gtk_combo_box_real_move_active (GtkComboBox   *combo_box,
     case GTK_SCROLL_PAGE_UP:
     case GTK_SCROLL_PAGE_LEFT:
     case GTK_SCROLL_START:
-      found = tree_first (combo_box, combo_box->priv->model, &new_iter, FALSE);
+      found = tree_first (combo_box, combo_box->priv->model, &new_iter);
       break;
 
     default:
