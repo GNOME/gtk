@@ -138,6 +138,11 @@ struct _PointData
   GdkEvent *event;
   gdouble widget_x;
   gdouble widget_y;
+
+  /* Acummulators for touchpad events */
+  gdouble accum_dx;
+  gdouble accum_dy;
+
   guint press_handled : 1;
   guint state : 2;
 };
@@ -401,6 +406,55 @@ _find_widget_window (GtkGesture *gesture,
 }
 
 static void
+_update_touchpad_deltas (PointData *data)
+{
+  GdkEvent *event = data->event;
+
+  if (!event)
+    return;
+
+  if (event->type == GDK_TOUCHPAD_SWIPE)
+    {
+      if (event->touchpad_swipe.phase == GDK_TOUCHPAD_GESTURE_PHASE_BEGIN)
+        data->accum_dx = data->accum_dy = 0;
+      else if (event->touchpad_swipe.phase == GDK_TOUCHPAD_GESTURE_PHASE_UPDATE)
+        {
+          data->accum_dx += event->touchpad_swipe.dx;
+          data->accum_dy += event->touchpad_swipe.dy;
+        }
+    }
+  else if (event->type == GDK_TOUCHPAD_PINCH)
+    {
+      if (event->touchpad_pinch.phase == GDK_TOUCHPAD_GESTURE_PHASE_BEGIN)
+        data->accum_dx = data->accum_dy = 0;
+      else if (event->touchpad_pinch.phase == GDK_TOUCHPAD_GESTURE_PHASE_UPDATE)
+        {
+          data->accum_dx += event->touchpad_pinch.dx;
+          data->accum_dy += event->touchpad_pinch.dy;
+        }
+    }
+}
+
+static void
+_get_event_coordinates (PointData *data,
+                        gdouble   *x,
+                        gdouble   *y)
+{
+  gdouble event_x, event_y;
+
+  g_assert (data->event != NULL);
+
+  gdk_event_get_coords (data->event, &event_x, &event_y);
+  event_x += data->accum_dx;
+  event_y += data->accum_dy;
+
+  if (x)
+    *x = event_x;
+  if (y)
+    *y = event_y;
+}
+
+static void
 _update_widget_coordinates (GtkGesture *gesture,
                             PointData  *data)
 {
@@ -413,7 +467,7 @@ _update_widget_coordinates (GtkGesture *gesture,
   event_widget = gtk_get_event_widget (data->event);
   widget = gtk_event_controller_get_widget (GTK_EVENT_CONTROLLER (gesture));
   event_widget_window = gtk_widget_get_window (event_widget);
-  gdk_event_get_coords (data->event, &event_x, &event_y);
+  _get_event_coordinates (data, &event_x, &event_y);
   window = data->event->any.window;
 
   while (window && window != event_widget_window)
@@ -540,6 +594,7 @@ _gtk_gesture_update_point (GtkGesture     *gesture,
     gdk_event_free (data->event);
 
   data->event = gdk_event_copy (event);
+  _update_touchpad_deltas (data);
   _update_widget_coordinates (gesture, data);
 
   /* Deny the sequence right away if the expected
