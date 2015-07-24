@@ -118,6 +118,8 @@ gboolean	_gtk_file_info_consider_as_directory (GFileInfo *info);
 /* GFile helper functions */
 gboolean	_gtk_file_has_native_path (GFile *file);
 
+gboolean        _gtk_file_consider_as_remote (GFile *file);
+
 G_END_DECLS
 
 #endif /* __GTK_FILE_SYSTEM_H__ */
