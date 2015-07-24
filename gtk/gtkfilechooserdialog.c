@@ -567,9 +567,11 @@ setup_save_entry (GtkFileChooserDialog *dialog)
       GtkWidget *label;
       GtkWidget *entry;
 
-      box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 12);
+      box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
       label = gtk_label_new_with_mnemonic (_("_Name"));
       entry = _gtk_file_chooser_entry_new (FALSE, FALSE);
+      g_object_set (label, "margin-start", 6, "margin-end", 6, NULL);
+      g_object_set (entry, "margin-start", 6, "margin-end", 6, NULL);
       gtk_label_set_mnemonic_widget (GTK_LABEL (label), entry);
       gtk_container_add (GTK_CONTAINER (box), label);
       gtk_container_add (GTK_CONTAINER (box), entry);
