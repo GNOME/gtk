@@ -101,6 +101,7 @@ void       gtk_inspector_on_inspect         (GtkWidget          *widget,
 
 void       gtk_inspector_window_select_widget_under_pointer (GtkInspectorWindow *iw);
 
+void       gtk_inspector_window_rescan     (GtkWidget          *iw);
 
 G_END_DECLS
 

@@ -289,4 +289,12 @@ gtk_inspector_window_new (void)
                                    NULL));
 }
 
+void
+gtk_inspector_window_rescan (GtkWidget *widget)
+{
+  GtkInspectorWindow *iw = GTK_INSPECTOR_WINDOW (widget);
+
+  gtk_inspector_object_tree_scan (GTK_INSPECTOR_OBJECT_TREE (iw->object_tree), NULL);
+}
+
 // vim: set et sw=2 ts=2:
