@@ -1352,6 +1352,12 @@ _gtk_gesture_get_last_update_time (GtkGesture       *gesture,
  * box containing all active touches. Otherwise, %FALSE will be
  * returned.
  *
+ * Note: This function will yield unexpected results on touchpad
+ * gestures. Since there is no correlation between physical and
+ * pixel distances, these will look as if constrained in an
+ * infinitely small area, @rect width and height will thus be 0
+ * regardless of the number of touchpoints.
+ *
  * Returns: %TRUE if there are active touches, %FALSE otherwise
  *
  * Since: 3.14
