@@ -3285,6 +3285,8 @@ gtk_combo_box_list_setup (GtkComboBox *combo_box)
 
   priv->arrow = gtk_image_new_from_icon_name ("pan-down-symbolic", GTK_ICON_SIZE_BUTTON);
   gtk_container_add (GTK_CONTAINER (priv->button), priv->arrow);
+  gtk_widget_add_events (priv->button, GDK_SCROLL_MASK);
+
   gtk_widget_show_all (priv->button);
 
   if (priv->cell_view)
