@@ -216,6 +216,7 @@ struct _GtkFileChooserWidgetPrivate {
   GtkWidget *browse_files_stack;
   GtkWidget *browse_files_swin;
   GtkWidget *browse_files_tree_view;
+  GtkWidget *remote_warning_bar;
 
   GtkWidget *browse_files_popover;
   GtkWidget *add_shortcut_item;
@@ -3024,6 +3025,7 @@ operation_mode_stop (GtkFileChooserWidget *impl,
       g_clear_object (&impl->priv->model_for_search);
       search_stop_searching (impl, TRUE);
       search_clear_model (impl, TRUE);
+      gtk_widget_hide (impl->priv->remote_warning_bar);
     }
 }
 
@@ -7223,6 +7225,9 @@ search_start_query (GtkFileChooserWidget *impl,
                     G_CALLBACK (search_engine_error_cb), impl);
 
   _gtk_search_engine_start (priv->search_engine);
+
+  if (_gtk_file_consider_as_remote (gtk_query_get_location (priv->search_query)))
+    gtk_widget_show (priv->remote_warning_bar);
 }
 
 /* Callback used when the user presses Enter while typing on the search
@@ -8352,6 +8357,7 @@ gtk_file_chooser_widget_class_init (GtkFileChooserWidgetClass *class)
   gtk_widget_class_bind_template_child_private (widget_class, GtkFileChooserWidget, rename_file_rename_button);
   gtk_widget_class_bind_template_child_private (widget_class, GtkFileChooserWidget, rename_file_error_label);
   gtk_widget_class_bind_template_child_private (widget_class, GtkFileChooserWidget, rename_file_popover);
+  gtk_widget_class_bind_template_child_private (widget_class, GtkFileChooserWidget, remote_warning_bar);
 
   /* And a *lot* of callbacks to bind ... */
   gtk_widget_class_bind_template_callback (widget_class, browse_files_key_press_event_cb);
