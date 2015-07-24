@@ -1226,6 +1226,20 @@ open_popover_text_changed (GtkEntry *entry, GParamSpec *pspec, GtkWidget *button
   gtk_widget_set_sensitive (button, strlen (text) > 0);
 }
 
+static gboolean
+show_page_again (gpointer data)
+{
+  gtk_widget_show (GTK_WIDGET (data));
+  return G_SOURCE_REMOVE;
+}
+
+static void
+tab_close_cb (GtkWidget *page)
+{
+  gtk_widget_hide (page);
+  g_timeout_add (2500, show_page_again, page);
+}
+
 static void
 activate (GApplication *app)
 {
@@ -1274,6 +1288,7 @@ activate (GApplication *app)
   gtk_builder_add_callback_symbol (builder, "on_range_from_changed", (GCallback)on_range_from_changed);
   gtk_builder_add_callback_symbol (builder, "on_range_to_changed", (GCallback)on_range_to_changed);
   gtk_builder_add_callback_symbol (builder, "osd_frame_button_press", (GCallback)osd_frame_button_press);
+  gtk_builder_add_callback_symbol (builder, "tab_close_cb", (GCallback)tab_close_cb);
 
   gtk_builder_connect_signals (builder, NULL);
 

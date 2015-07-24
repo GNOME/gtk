@@ -3476,7 +3476,7 @@ microphone-sensitivity-medium-symbolic</property>
                                     <property name="visible">True</property>
                                     <property name="show-border">False</property>
                                     <child>
-                                      <object class="GtkBox">
+                                      <object class="GtkBox" id="closable_page_1">
                                         <property name="visible">True</property>
                                         <property name="height-request">120</property>
                                       </object>
@@ -3498,6 +3498,7 @@ microphone-sensitivity-medium-symbolic</property>
                                             <property name="visible">True</property>
                                             <property name="relief">none</property>
                                             <property name="focus-on-click">False</property>
+                                            <signal name="clicked" handler="tab_close_cb" object="closable_page_1"/>
                                             <style>
                                               <class name="small-button"/>
                                             </style>
@@ -3516,7 +3517,7 @@ microphone-sensitivity-medium-symbolic</property>
                                       </object>
                                     </child>
                                     <child>
-                                      <object class="GtkBox">
+                                      <object class="GtkBox" id="closable_page_2">
                                         <property name="visible">True</property>
                                         <property name="vexpand">True</property>
                                       </object>
@@ -3538,6 +3539,7 @@ microphone-sensitivity-medium-symbolic</property>
                                             <property name="visible">True</property>
                                             <property name="relief">none</property>
                                             <property name="focus-on-click">False</property>
+                                            <signal name="clicked" handler="tab_close_cb" object="closable_page_2"/>
                                             <style>
                                               <class name="small-button"/>
                                             </style>
