@@ -481,6 +481,7 @@ _gtk_search_engine_set_model (GtkSearchEngine    *engine,
   if (model)
     {
       engine->priv->model = _gtk_search_engine_model_new (model);
+      connect_engine_signals (engine->priv->model, engine);
       if (engine->priv->query)
         _gtk_search_engine_set_query (engine->priv->model, engine->priv->query);
     }
