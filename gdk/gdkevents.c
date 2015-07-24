@@ -996,8 +996,8 @@ gdk_event_get_state (const GdkEvent        *event,
 /**
  * gdk_event_get_coords:
  * @event: a #GdkEvent
- * @x_win: (out): location to put event window x coordinate
- * @y_win: (out): location to put event window y coordinate
+ * @x_win: (out) (nullable): location to put event window x coordinate
+ * @y_win: (out) (nullable): location to put event window y coordinate
  * 
  * Extract the event window relative x/y coordinates from an event.
  * 
@@ -1062,8 +1062,8 @@ gdk_event_get_coords (const GdkEvent *event,
 /**
  * gdk_event_get_root_coords:
  * @event: a #GdkEvent
- * @x_root: (out): location to put root window x coordinate
- * @y_root: (out): location to put root window y coordinate
+ * @x_root: (out) (nullable): location to put root window x coordinate
+ * @y_root: (out) (nullable): location to put root window y coordinate
  * 
  * Extract the root window relative x/y coordinates from an event.
  * 
