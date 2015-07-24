@@ -54,13 +54,26 @@ def gen_gtk_filelist(srcroot, subdir, dest):
                                         'gtk_base_c_sources',
                                         'gtk_clipboard_dnd_c_sources'])
 
+    vars_depr = read_vars_from_AM(os.path.join(srcroot, 'gtk', 'deprecated', 'Makefile.inc'),
+                                  vars = {},
+                                  conds = {},
+                                  filters = ['deprecated_h_sources',
+                                             'deprecated_c_sources'])
+
+    vars_a11y = read_vars_from_AM(os.path.join(srcroot, 'gtk', 'a11y', 'Makefile.inc'),
+                                  vars = {},
+                                  conds = {},
+                                  filters = ['a11y_h_sources',
+                                             'a11y_c_sources'])
+
     vars['gtk_other_src'] = 'gtkprintoperation-win32.c gtktypebuiltins.h gtktypebuiltins.c'
 
     files = vars['gtkinclude_HEADERS'].split() + \
-            vars['a11yinclude_HEADERS'].split() + \
-            vars['deprecatedinclude_HEADERS'].split() + \
+            vars_a11y['a11y_h_sources'].split() + \
+            vars_depr['deprecated_h_sources'].split() + \
             vars['gtk_base_c_sources'].split() + \
-			vars['gtk_clipboard_dnd_c_sources'].split() + \
+            vars_a11y['a11y_c_sources'].split() + \
+            vars_depr['deprecated_c_sources'].split() + \
             vars['gtk_other_src'].split()
 
     sources = [i for i in files \
