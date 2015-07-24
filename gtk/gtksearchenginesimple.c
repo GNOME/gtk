@@ -92,7 +92,6 @@ search_thread_data_new (GtkSearchEngineSimple *engine,
 			GtkQuery              *query)
 {
   SearchThreadData *data;
-  const gchar *uri;
   GFile *location;
 
   data = g_new0 (SearchThreadData, 1);
@@ -101,9 +100,9 @@ search_thread_data_new (GtkSearchEngineSimple *engine,
   data->directories = g_queue_new ();
   data->query = g_object_ref (query);
   data->recursive = _gtk_search_engine_get_recursive (GTK_SEARCH_ENGINE (engine));
-  uri = gtk_query_get_location (query);
-  if (uri != NULL)
-    location = g_file_new_for_uri (uri);
+  location = gtk_query_get_location (query);
+  if (location)
+    g_object_ref (location);
   else
     location = g_file_new_for_path (g_get_home_dir ());
   g_queue_push_tail (data->directories, location);

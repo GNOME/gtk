@@ -7208,10 +7208,7 @@ search_start_query (GtkFileChooserWidget *impl,
   file = gtk_places_sidebar_get_location (GTK_PLACES_SIDEBAR (priv->places_sidebar));
   if (file)
     {
-      gchar *location;
-      location = g_file_get_uri (file);
-      gtk_query_set_location (priv->search_query, location);
-      g_free (location);
+      gtk_query_set_location (priv->search_query, file);
       g_object_unref (file);
     }
 
