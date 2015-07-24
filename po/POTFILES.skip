@@ -9,6 +9,7 @@ demos/gtk-demo/dialog.c
 demos/gtk-demo/entry_buffer.c
 demos/gtk-demo/entry_completion.c
 demos/gtk-demo/expander.c
+demos/gtk-demo/filtermodel.ui
 demos/gtk-demo/font-features.ui
 demos/gtk-demo/iconview.c
 demos/gtk-demo/infobar.c
