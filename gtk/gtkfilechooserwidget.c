@@ -343,6 +343,7 @@ struct _GtkFileChooserWidgetPrivate {
   guint use_preview_label : 1;
   guint select_multiple : 1;
   guint show_hidden : 1;
+  guint show_hidden_set : 1;
   guint sort_directories_first : 1;
   guint show_time : 1;
   guint do_overwrite_confirmation : 1;
@@ -3254,6 +3255,21 @@ gtk_file_chooser_widget_get_subtitle (GtkFileChooserWidget *impl)
 }
 
 static void
+set_show_hidden (GtkFileChooserWidget *impl,
+                 gboolean              show_hidden)
+{
+  GtkFileChooserWidgetPrivate *priv = impl->priv;
+
+  if (priv->show_hidden != show_hidden)
+    {
+      priv->show_hidden = show_hidden;
+
+      if (priv->browse_files_model)
+        _gtk_file_system_model_set_show_hidden (priv->browse_files_model, show_hidden);
+    }
+}
+
+static void
 gtk_file_chooser_widget_set_property (GObject      *object,
                                       guint         prop_id,
                                       const GValue *value,
@@ -3355,16 +3371,8 @@ gtk_file_chooser_widget_set_property (GObject      *object,
       break;
 
     case GTK_FILE_CHOOSER_PROP_SHOW_HIDDEN:
-      {
-        gboolean show_hidden = g_value_get_boolean (value);
-        if (show_hidden != priv->show_hidden)
-          {
-            priv->show_hidden = show_hidden;
-
-            if (priv->browse_files_model)
-              _gtk_file_system_model_set_show_hidden (priv->browse_files_model, show_hidden);
-          }
-      }
+      priv->show_hidden_set = TRUE;
+      set_show_hidden (impl, g_value_get_boolean (value));
       break;
 
     case GTK_FILE_CHOOSER_PROP_DO_OVERWRITE_CONFIRMATION:
@@ -3767,8 +3775,8 @@ settings_load (GtkFileChooserWidget *impl)
   sort_directories_first = g_settings_get_boolean (settings, SETTINGS_KEY_SORT_DIRECTORIES_FIRST);
   date_format = g_settings_get_enum (settings, SETTINGS_KEY_DATE_FORMAT);
 
-  gtk_file_chooser_set_show_hidden (GTK_FILE_CHOOSER (impl), show_hidden);
-
+  if (!priv->show_hidden_set)
+    set_show_hidden (impl, show_hidden);
   priv->show_size_column = show_size_column;
   gtk_tree_view_column_set_visible (priv->list_size_column, show_size_column);
 
