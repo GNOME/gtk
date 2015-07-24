@@ -42,7 +42,7 @@ typedef struct _GtkSearchHit GtkSearchHit;
 
 struct _GtkSearchHit
 {
-  gchar *uri;
+  GFile *file;
   GFileInfo *info; /* may be NULL */
 };
 

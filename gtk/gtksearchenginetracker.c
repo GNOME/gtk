@@ -300,7 +300,7 @@ query_callback (GObject      *object,
 
       v = g_variant_iter_next_value (&iter);
       strv = g_variant_get_strv (v, NULL);
-      hit[i].uri = (gchar*)strv[0];
+      hit[i].file = g_file_new_for_uri (strv[0]);
       hit[i].info = NULL;
       g_free (strv);
       hits = g_list_prepend (hits, &hit[i]);

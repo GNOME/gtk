@@ -99,7 +99,7 @@ do_search (gpointer data)
 
               file = _gtk_file_system_model_get_file (model->model, &iter);
               hit = g_new (GtkSearchHit, 1);
-              hit->uri = g_file_get_uri (file);
+              hit->file = g_object_ref (file);
               hit->info = g_object_ref (info);
               hits = g_list_prepend (hits, hit);
             }
