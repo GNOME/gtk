@@ -7211,6 +7211,8 @@ search_start_query (GtkFileChooserWidget *impl,
       gtk_query_set_location (priv->search_query, file);
       g_object_unref (file);
     }
+  else
+    gtk_query_set_location (priv->search_query, priv->current_folder);
 
   _gtk_search_engine_set_model (priv->search_engine, priv->model_for_search);
   _gtk_search_engine_set_query (priv->search_engine, priv->search_query);
