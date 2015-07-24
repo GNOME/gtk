@@ -27,7 +27,7 @@
 struct _GtkQueryPrivate
 {
   gchar *text;
-  gchar *location_uri;
+  GFile *location;
   GList *mime_types;
   gchar **words;
 };
@@ -41,8 +41,8 @@ finalize (GObject *object)
 
   query = GTK_QUERY (object);
 
+  g_clear_object (&query->priv->location);
   g_free (query->priv->text);
-  g_free (query->priv->location_uri);
   g_strfreev (query->priv->words);
 
   G_OBJECT_CLASS (gtk_query_parent_class)->finalize (object);
@@ -87,18 +87,17 @@ gtk_query_set_text (GtkQuery    *query,
   query->priv->words = NULL;
 }
 
-const gchar *
+GFile *
 gtk_query_get_location (GtkQuery *query)
 {
-  return query->priv->location_uri;
+  return query->priv->location;
 }
 
 void
-gtk_query_set_location (GtkQuery    *query,
-                        const gchar *uri)
+gtk_query_set_location (GtkQuery *query,
+                        GFile    *file)
 {
-  g_free (query->priv->location_uri);
-  query->priv->location_uri = g_strdup (uri);
+  g_set_object (&query->priv->location, file);
 }
 
 static gchar *
