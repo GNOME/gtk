@@ -4336,7 +4336,7 @@ gtk_places_sidebar_class_init (GtkPlacesSidebarClass *class)
   properties[PROP_SHOW_TRASH] =
           g_param_spec_boolean ("show-trash",
                                 P_("Show 'Trash'"),
-                                P_("Whether the sidebar includes a builtin shortcut to  the Trash location"),
+                                P_("Whether the sidebar includes a builtin shortcut to the Trash location"),
                                 TRUE,
                                 G_PARAM_READWRITE);
   properties[PROP_SHOW_OTHER_LOCATIONS] =
