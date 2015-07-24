@@ -248,7 +248,7 @@ visit_directory (GFile *dir, SearchThreadData *data)
           GtkSearchHit *hit;
 
           hit = g_new (GtkSearchHit, 1);
-          hit->uri = g_file_get_uri (child);
+          hit->file = g_object_ref (child);
           hit->info = g_object_ref (info);
           data->hits = g_list_prepend (data->hits, hit);
         }

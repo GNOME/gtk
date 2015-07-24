@@ -311,7 +311,7 @@ search_hit_equal (gconstpointer a, gconstpointer b)
   const GtkSearchHit *ha = (const GtkSearchHit *)a;
   const GtkSearchHit *hb = (const GtkSearchHit *)b;
 
-  return g_str_equal (ha->uri, hb->uri);
+  return g_file_equal (ha->file, hb->file);
 }
 
 
@@ -320,7 +320,7 @@ search_hit_hash (gconstpointer a)
 {
   const GtkSearchHit *ha = (const GtkSearchHit *)a;
 
-  return g_str_hash (ha->uri);
+  return g_file_hash (ha->file);
 }
 
 GtkSearchHit *
@@ -329,7 +329,7 @@ _gtk_search_hit_dup (GtkSearchHit *hit)
   GtkSearchHit *dup;
 
   dup = g_new (GtkSearchHit, 1);
-  dup->uri = g_strdup (hit->uri);
+  dup->file = g_object_ref (hit->file);
   if (hit->info)
     dup->info = g_object_ref (hit->info);
   else
@@ -341,7 +341,7 @@ _gtk_search_hit_dup (GtkSearchHit *hit)
 void
 _gtk_search_hit_free (GtkSearchHit *hit)
 {
-  g_free (hit->uri);
+  g_clear_object (&hit->file);
   g_clear_object (&hit->info);
   g_free (hit);
 }

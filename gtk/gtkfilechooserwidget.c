@@ -7011,9 +7011,7 @@ search_engine_hits_added_cb (GtkSearchEngine      *engine,
   for (l = hits; l; l = l->next)
     {
       GtkSearchHit *hit = (GtkSearchHit *)l->data;
-      file = g_file_new_for_uri (hit->uri);
-      if (!file)
-        continue;
+      file = g_object_ref (hit->file);
       if (hit->info)
         {
           files_with_info = g_list_prepend (files_with_info, file);
