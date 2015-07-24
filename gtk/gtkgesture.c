@@ -583,10 +583,9 @@ gtk_gesture_handle_event (GtkEventController *controller,
   if (gtk_gesture_get_sequence_state (gesture, sequence) != GTK_EVENT_SEQUENCE_DENIED)
     priv->last_sequence = sequence;
 
-  switch (event->type)
+  if (event->type == GDK_BUTTON_PRESS ||
+      event->type == GDK_TOUCH_BEGIN)
     {
-    case GDK_BUTTON_PRESS:
-    case GDK_TOUCH_BEGIN:
       if (_gtk_gesture_update_point (gesture, event, TRUE))
         {
           gboolean triggered_recognition;
@@ -613,10 +612,10 @@ gtk_gesture_handle_event (GtkEventController *controller,
               return TRUE;
             }
         }
-
-      break;
-    case GDK_BUTTON_RELEASE:
-    case GDK_TOUCH_END:
+    }
+  else if (event->type == GDK_BUTTON_RELEASE ||
+           event->type == GDK_TOUCH_END)
+    {
       if (_gtk_gesture_update_point (gesture, event, FALSE))
         {
           if (was_recognized &&
@@ -625,30 +624,37 @@ gtk_gesture_handle_event (GtkEventController *controller,
 
           _gtk_gesture_remove_point (gesture, event);
         }
-      break;
-    case GDK_MOTION_NOTIFY:
-      if ((event->motion.state & BUTTONS_MASK) == 0)
-        break;
+    }
+  else if (event->type == GDK_MOTION_NOTIFY ||
+           event->type == GDK_TOUCH_UPDATE)
+    {
+      if (event->type == GDK_MOTION_NOTIFY)
+        {
+          if ((event->motion.state & BUTTONS_MASK) == 0)
+            return FALSE;
 
-      if (event->motion.is_hint)
-        gdk_event_request_motions (&event->motion);
+          if (event->motion.is_hint)
+            gdk_event_request_motions (&event->motion);
+        }
 
-      /* Fall through */
-    case GDK_TOUCH_UPDATE:
       if (_gtk_gesture_update_point (gesture, event, FALSE) &&
           _gtk_gesture_check_recognized (gesture, sequence))
         g_signal_emit (gesture, signals[UPDATE], 0, sequence);
-      break;
-    case GDK_TOUCH_CANCEL:
+    }
+  else if (event->type == GDK_TOUCH_CANCEL)
+    {
       _gtk_gesture_cancel_sequence (gesture, sequence);
-      break;
-    case GDK_GRAB_BROKEN:
+    }
+  else if (event->type == GDK_GRAB_BROKEN)
+    {
       if (!event->grab_broken.grab_window ||
           !gesture_within_window (gesture, event->grab_broken.grab_window))
         _gtk_gesture_cancel_all (gesture);
 
       return FALSE;
-    default:
+    }
+  else
+    {
       /* Unhandled event */
       return FALSE;
     }
