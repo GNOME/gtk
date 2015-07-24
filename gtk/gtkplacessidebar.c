@@ -1840,11 +1840,12 @@ drag_data_received_callback (GtkWidget        *list_box,
 
   if (sidebar->drag_data_info == DND_GTK_SIDEBAR_ROW)
     {
+      GtkWidget **source_row;
       /* A bookmark got reordered */
       if (target_section_type != SECTION_BOOKMARKS)
         goto out;
 
-     	GtkWidget **source_row = (void*) gtk_selection_data_get_data (selection_data);
+      source_row = (void*) gtk_selection_data_get_data (selection_data);
 
       reorder_bookmarks (sidebar, GTK_SIDEBAR_ROW (*source_row), target_order_index);
       success = TRUE;
@@ -2799,7 +2800,7 @@ unmount_shortcut_cb (GSimpleAction *action,
                      GVariant      *parameter,
                      gpointer       data)
 {
-  GtkPlacesSidebar *sidebar = data;;
+  GtkPlacesSidebar *sidebar = data;
   GMount *mount;
 
   g_object_get (sidebar->context_row,
