@@ -56,6 +56,26 @@ static guint signals[N_SIGNALS] = { 0 };
 
 G_DEFINE_TYPE_WITH_PRIVATE (GtkGestureDrag, gtk_gesture_drag, GTK_TYPE_GESTURE_SINGLE)
 
+static gboolean
+gtk_gesture_drag_filter_event (GtkEventController *controller,
+                               const GdkEvent     *event)
+{
+  /* Let touchpad swipe events go through, only if they match n-points  */
+  if (event->type == GDK_TOUCHPAD_SWIPE)
+    {
+      guint n_points;
+
+      g_object_get (G_OBJECT (controller), "n-points", &n_points, NULL);
+
+      if (event->touchpad_swipe.n_fingers == n_points)
+        return FALSE;
+      else
+        return TRUE;
+    }
+
+  return GTK_EVENT_CONTROLLER_CLASS (gtk_gesture_drag_parent_class)->filter_event (controller, event);
+}
+
 static void
 gtk_gesture_drag_begin (GtkGesture       *gesture,
                         GdkEventSequence *sequence)
@@ -110,6 +130,9 @@ static void
 gtk_gesture_drag_class_init (GtkGestureDragClass *klass)
 {
   GtkGestureClass *gesture_class = GTK_GESTURE_CLASS (klass);
+  GtkEventControllerClass *event_controller_class = GTK_EVENT_CONTROLLER_CLASS (klass);
+
+  event_controller_class->filter_event = gtk_gesture_drag_filter_event;
 
   gesture_class->begin = gtk_gesture_drag_begin;
   gesture_class->update = gtk_gesture_drag_update;
