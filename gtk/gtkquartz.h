@@ -39,6 +39,8 @@ void _gtk_quartz_set_selection_data_for_pasteboard (NSPasteboard *pasteboard,
 
 NSImage *_gtk_quartz_create_image_from_pixbuf (GdkPixbuf *pixbuf);
 
+NSImage *_gtk_quartz_create_image_from_surface (cairo_surface_t *surface);
+
 G_END_DECLS
 
 #endif /* __GTK_QUARTZ_H__ */

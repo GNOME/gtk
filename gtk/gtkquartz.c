@@ -22,6 +22,106 @@
 #include "gtkselectionprivate.h"
 #include <gdk/quartz/gdkquartz.h>
 
+
+static gboolean
+_cairo_surface_extents (cairo_surface_t *surface,
+                            GdkRectangle *extents)
+{
+  double x1, x2, y1, y2;
+  cairo_t *cr;
+
+  g_return_val_if_fail (surface != NULL, FALSE);
+  g_return_val_if_fail (extents != NULL, FALSE);
+
+  cr = cairo_create (surface);
+  cairo_clip_extents (cr, &x1, &y1, &x2, &y2);
+
+  x1 = floor (x1);
+  y1 = floor (y1);
+  x2 = ceil (x2);
+  y2 = ceil (y2);
+  x2 -= x1;
+  y2 -= y1;
+
+  if (x1 < G_MININT || x1 > G_MAXINT ||
+      y1 < G_MININT || y1 > G_MAXINT ||
+      x2 > G_MAXINT || y2 > G_MAXINT)
+    {
+      extents->x = extents->y = extents->width = extents->height = 0;
+      return FALSE;
+    }
+
+  extents->x = x1;
+  extents->y = y1;
+  extents->width = x2;
+  extents->height = y2;
+
+  return TRUE;
+}
+
+static void
+_data_provider_release_cairo_surface (void* info, const void* data, size_t size)
+{
+  cairo_surface_destroy ((cairo_surface_t *)info);
+}
+
+/* Returns a new NSImage or %NULL in case of an error.
+ * The device scale factor will be transfered to the NSImage (hidpi)
+ */
+NSImage *
+_gtk_quartz_create_image_from_surface (cairo_surface_t *surface)
+{
+  CGColorSpaceRef colorspace;
+  CGDataProviderRef data_provider;
+  CGImageRef image;
+  void *data;
+  NSImage *nsimage;
+  double sx, sy;
+  cairo_t *cr;
+  cairo_surface_t *img_surface;
+  cairo_rectangle_int_t extents;
+  int width, height, rowstride;
+
+  if (!_cairo_surface_extents (surface, &extents))
+    return NULL;
+
+  cairo_surface_get_device_scale (surface, &sx, &sy);
+  width = extents.width * sx;
+  height = extents.height * sy;
+
+  img_surface = cairo_image_surface_create (CAIRO_FORMAT_ARGB32, width, height);
+  cr = cairo_create (img_surface);
+  cairo_set_operator (cr, CAIRO_OPERATOR_SOURCE);
+  cairo_scale (cr, sx, sy);
+  cairo_set_source_surface (cr, surface, -extents.x, -extents.y);
+  cairo_paint (cr);
+  cairo_destroy (cr);
+
+  cairo_surface_flush (img_surface);
+  rowstride = cairo_image_surface_get_stride (img_surface);
+  data = cairo_image_surface_get_data (img_surface);
+
+  colorspace = CGColorSpaceCreateDeviceRGB ();
+  /* Note: the release callback will only be called after NSImage below dies */
+  data_provider = CGDataProviderCreateWithData (surface, data, height * rowstride,
+                                                _data_provider_release_cairo_surface);
+
+  image = CGImageCreate (width, height, 8,
+                         32, rowstride,
+                         colorspace,
+                         /* XXX: kCGBitmapByteOrderDefault gives wrong colors..?? */
+                         kCGBitmapByteOrder32Little | kCGImageAlphaPremultipliedFirst,
+                         data_provider, NULL, FALSE,
+                         kCGRenderingIntentDefault);
+  CGDataProviderRelease (data_provider);
+  CGColorSpaceRelease (colorspace);
+
+  nsimage = [[NSImage alloc] initWithCGImage:image size:NSMakeSize (extents.width, extents.height)];
+  CGImageRelease (image);
+
+  return nsimage;
+}
+
 NSImage *
 _gtk_quartz_create_image_from_pixbuf (GdkPixbuf *pixbuf)
 {
