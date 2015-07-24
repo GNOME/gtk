@@ -571,6 +571,7 @@ static GtkWindowRegion get_active_region_type (GtkWindow   *window,
                                                gint         x,
                                                gint         y);
 
+static void gtk_window_update_debugging (void);
 
 G_DEFINE_TYPE_WITH_CODE (GtkWindow, gtk_window, GTK_TYPE_BIN,
                          G_ADD_PRIVATE (GtkWindow)
@@ -1645,6 +1646,7 @@ gtk_window_init (GtkWindow *window)
   g_object_ref_sink (window);
   priv->has_user_ref_count = TRUE;
   toplevel_list = g_slist_prepend (toplevel_list, window);
+  gtk_window_update_debugging ();
 
   if (priv->screen)
     g_signal_connect_object (priv->screen, "composited-changed",
@@ -5679,6 +5681,7 @@ gtk_window_destroy (GtkWidget *widget)
   gtk_window_release_application (window);
 
   toplevel_list = g_slist_remove (toplevel_list, window);
+  gtk_window_update_debugging ();
 
   if (priv->transient_parent)
     gtk_window_set_transient_for (window, NULL);
@@ -11512,9 +11515,9 @@ _gtk_window_set_is_toplevel (GtkWindow *window,
     {
       _gtk_widget_set_is_toplevel (widget, FALSE);
       toplevel_list = g_slist_remove (toplevel_list, window);
-
       _gtk_widget_propagate_hierarchy_changed (widget, widget);
     }
+  gtk_window_update_debugging ();
 }
 
 /**
@@ -11985,6 +11988,20 @@ warn_response (GtkDialog *dialog,
     {
       set_warn_again (!remember);
     }
+}
+
+static gboolean
+update_debugging (gpointer data)
+{
+  gtk_inspector_window_rescan (inspector_window);
+  return G_SOURCE_REMOVE;
+}
+
+static void
+gtk_window_update_debugging (void)
+{
+  if (inspector_window)
+    g_idle_add (update_debugging, NULL);
 }
 
 static void
