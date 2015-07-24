@@ -26,6 +26,7 @@
 #include <gdk/gdk.h>
 
 #include "gtksearchenginesimple.h"
+#include "gtkfilesystem.h"
 #include "gtkprivate.h"
 
 #include <string.h>
@@ -87,12 +88,19 @@ gtk_search_engine_simple_dispose (GObject *object)
   G_OBJECT_CLASS (_gtk_search_engine_simple_parent_class)->dispose (object);
 }
 
+static void
+queue_if_local (SearchThreadData *data,
+                GFile            *file)
+{
+  if (!_gtk_file_consider_as_remote (file))
+    g_queue_push_tail (data->directories, g_object_ref (file));
+}
+
 static SearchThreadData *
 search_thread_data_new (GtkSearchEngineSimple *engine,
 			GtkQuery              *query)
 {
   SearchThreadData *data;
-  GFile *location;
 
   data = g_new0 (SearchThreadData, 1);
 
@@ -100,12 +108,7 @@ search_thread_data_new (GtkSearchEngineSimple *engine,
   data->directories = g_queue_new ();
   data->query = g_object_ref (query);
   data->recursive = _gtk_search_engine_get_recursive (GTK_SEARCH_ENGINE (engine));
-  location = gtk_query_get_location (query);
-  if (location)
-    g_object_ref (location);
-  else
-    location = g_file_new_for_path (g_get_home_dir ());
-  g_queue_push_tail (data->directories, location);
+  queue_if_local (data, gtk_query_get_location (query));
 
   data->cancellable = g_cancellable_new ();
 
@@ -257,7 +260,7 @@ visit_directory (GFile *dir, SearchThreadData *data)
       if (data->recursive &&
           g_file_info_get_file_type (info) == G_FILE_TYPE_DIRECTORY &&
           !is_indexed (data->engine, child))
-        g_queue_push_tail (data->directories, g_object_ref (child));
+        queue_if_local (data, child);
     }
 
   g_object_unref (enumerator);
