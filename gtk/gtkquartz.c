@@ -122,60 +122,6 @@ _gtk_quartz_create_image_from_surface (cairo_surface_t *surface)
   return nsimage;
 }
 
-NSImage *
-_gtk_quartz_create_image_from_pixbuf (GdkPixbuf *pixbuf)
-{
-  CGColorSpaceRef colorspace;
-  CGDataProviderRef data_provider;
-  CGContextRef context;
-  CGImageRef image;
-  void *data;
-  int rowstride, pixbuf_width, pixbuf_height;
-  gboolean has_alpha;
-  NSImage *nsimage;
-  NSSize nsimage_size;
-
-  pixbuf_width = gdk_pixbuf_get_width (pixbuf);
-  pixbuf_height = gdk_pixbuf_get_height (pixbuf);
-  g_return_val_if_fail (pixbuf_width != 0 && pixbuf_height != 0, NULL);
-  rowstride = gdk_pixbuf_get_rowstride (pixbuf);
-  has_alpha = gdk_pixbuf_get_has_alpha (pixbuf);
-
-  data = gdk_pixbuf_get_pixels (pixbuf);
-
-  colorspace = CGColorSpaceCreateDeviceRGB ();
-  data_provider = CGDataProviderCreateWithData (NULL, data, pixbuf_height * rowstride, NULL);
-
-  image = CGImageCreate (pixbuf_width, pixbuf_height, 8,
-			 has_alpha ? 32 : 24, rowstride, 
-			 colorspace, 
-			 has_alpha ? kCGImageAlphaLast : 0,
-			 data_provider, NULL, FALSE, 
-			 kCGRenderingIntentDefault);
-
-  CGDataProviderRelease (data_provider);
-  CGColorSpaceRelease (colorspace);
-
-  nsimage = [[NSImage alloc] initWithSize:NSMakeSize (pixbuf_width, pixbuf_height)];
-  nsimage_size = [nsimage size];
-  if (nsimage_size.width == 0.0 && nsimage_size.height == 0.0)
-    {
-      [nsimage release];
-      g_critical ("%s returned a zero-sized image", G_STRFUNC);
-      return NULL;
-    }
-  [nsimage lockFocus];
-
-  context = (CGContextRef)[[NSGraphicsContext currentContext] graphicsPort];
-  CGContextDrawImage (context, CGRectMake (0, 0, pixbuf_width, pixbuf_height), image);
- 
-  [nsimage unlockFocus];
-
-  CGImageRelease (image);
-
-  return nsimage;
-}
-
 NSSet *
 _gtk_quartz_target_list_to_pasteboard_types (GtkTargetList *target_list)
 {

@@ -107,13 +107,43 @@ icon_loaded (GObject      *object,
   GNSMenuItem *item = user_data;
   GError *error = NULL;
   GdkPixbuf *pixbuf;
+  gint scale = 1;
+
+#ifdef AVAILABLE_MAC_OS_X_VERSION_10_7_AND_LATER
+       /* we need a run-time check for the backingScaleFactor selector because we
+        * may be compiling on a 10.7 framework, but targeting a 10.6 one
+        */
+      if ([[NSScreen mainScreen] respondsToSelector:@selector(backingScaleFactor)])
+        scale = roundf ([[NSScreen mainScreen] backingScaleFactor]);
+#endif
 
   pixbuf = gtk_icon_info_load_symbolic_finish (info, result, NULL, &error);
 
   if (pixbuf != NULL)
     {
-      [item setImage:_gtk_quartz_create_image_from_pixbuf (pixbuf)];
+      cairo_t *cr;
+      cairo_surface_t *surface;
+      NSImage *image;
+
+      surface = cairo_image_surface_create (CAIRO_FORMAT_ARGB32,
+                                            gdk_pixbuf_get_width (pixbuf),
+                                            gdk_pixbuf_get_height (pixbuf));
+
+      cr = cairo_create (surface);
+      cairo_set_operator (cr, CAIRO_OPERATOR_SOURCE);
+      gdk_cairo_set_source_pixbuf (cr, pixbuf, 0, 0);
+      cairo_paint (cr);
+      cairo_destroy (cr);
       g_object_unref (pixbuf);
+
+      cairo_surface_set_device_scale (surface, scale, scale);
+      image = _gtk_quartz_create_image_from_surface (surface);
+      cairo_surface_destroy (surface);
+
+      if (image != NULL)
+        [item setImage:image];
+      else
+        [item setImage:nil];
     }
   else
     {
