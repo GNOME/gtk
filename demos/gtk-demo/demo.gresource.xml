@@ -193,4 +193,7 @@
   <gresource prefix="/spinbutton">
     <file>spinbutton.ui</file>
   </gresource>
+  <gresource prefix="/filtermodel">
+    <file>filtermodel.ui</file>
+  </gresource>
 </gresources>

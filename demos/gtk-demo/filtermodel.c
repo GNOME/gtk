@@ -1,8 +1,8 @@
 /* Tree View/Filter Model
  *
- * This example demonstrates how GtkTreeModelFilter can be used
- * to compute columns that are not actually present in the underlying
- * model.
+ * This example demonstrates how GtkTreeModelFilter can be used not
+ * just to show a subset of the rows, but also to compute columns
+ * that are not actually present in the underlying model.
  */
 
 #include <gtk/gtk.h>
@@ -69,6 +69,20 @@ filter_modify_func (GtkTreeModel *model,
     }
 }
 
+static gboolean
+visible_func (GtkTreeModel *model,
+              GtkTreeIter  *iter,
+              gpointer      data)
+{
+  gint width;
+
+  gtk_tree_model_get (model, iter,
+                      WIDTH_COLUMN, &width,
+                      -1);
+
+  return width < 10;
+}
+
 GtkWidget *
 do_filtermodel (GtkWidget *do_widget)
 {
@@ -82,62 +96,47 @@ do_filtermodel (GtkWidget *do_widget)
 
   if (!window)
     {
-      window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+      GtkBuilder *builder;
+
+      builder = gtk_builder_new_from_resource ("/filtermodel/filtermodel.ui");
+      gtk_builder_connect_signals (builder, NULL);
+      window = GTK_WIDGET (gtk_builder_get_object (builder, "window1"));
       gtk_window_set_screen (GTK_WINDOW (window),
                              gtk_widget_get_screen (do_widget));
-      gtk_window_set_title (GTK_WINDOW (window), "Filter Model");
       g_signal_connect (window, "destroy",
                         G_CALLBACK (gtk_widget_destroyed), &window);
 
-      tree = gtk_tree_view_new ();
-      gtk_container_add (GTK_CONTAINER (window), tree);
-
-      column = gtk_tree_view_column_new ();
-      gtk_tree_view_column_set_title (column, "Width");
-      cell = gtk_cell_renderer_text_new ();
-      gtk_tree_view_column_pack_start (column, cell, FALSE);
+      column = (GtkTreeViewColumn*)gtk_builder_get_object (builder, "treeviewcolumn1");
+      cell = (GtkCellRenderer*)gtk_builder_get_object (builder, "cellrenderertext1");
       gtk_tree_view_column_set_cell_data_func (column, cell,
                                                format_number, GINT_TO_POINTER (WIDTH_COLUMN), NULL);
-      gtk_tree_view_append_column (GTK_TREE_VIEW (tree), column);
 
-      column = gtk_tree_view_column_new ();
-      gtk_tree_view_column_set_title (column, "Height");
-      cell = gtk_cell_renderer_text_new ();
-      gtk_tree_view_column_pack_start (column, cell, FALSE);
+      column = (GtkTreeViewColumn*)gtk_builder_get_object (builder, "treeviewcolumn2");
+      cell = (GtkCellRenderer*)gtk_builder_get_object (builder, "cellrenderertext2");
       gtk_tree_view_column_set_cell_data_func (column, cell,
                                                format_number, GINT_TO_POINTER (HEIGHT_COLUMN), NULL);
-      gtk_tree_view_append_column (GTK_TREE_VIEW (tree), column);
 
-      column = gtk_tree_view_column_new ();
-      gtk_tree_view_column_set_title (column, "Area");
-      cell = gtk_cell_renderer_text_new ();
-      gtk_tree_view_column_pack_start (column, cell, FALSE);
+      column = (GtkTreeViewColumn*)gtk_builder_get_object (builder, "treeviewcolumn3");
+      cell = (GtkCellRenderer*)gtk_builder_get_object (builder, "cellrenderertext3");
+      gtk_tree_view_column_set_cell_data_func (column, cell,
+                                               format_number, GINT_TO_POINTER (WIDTH_COLUMN), NULL);
+
+      column = (GtkTreeViewColumn*)gtk_builder_get_object (builder, "treeviewcolumn4");
+      cell = (GtkCellRenderer*)gtk_builder_get_object (builder, "cellrenderertext4");
+      gtk_tree_view_column_set_cell_data_func (column, cell,
+                                               format_number, GINT_TO_POINTER (HEIGHT_COLUMN), NULL);
+
+      column = (GtkTreeViewColumn*)gtk_builder_get_object (builder, "treeviewcolumn5");
+      cell = (GtkCellRenderer*)gtk_builder_get_object (builder, "cellrenderertext5");
       gtk_tree_view_column_set_cell_data_func (column, cell,
                                                format_number, GINT_TO_POINTER (AREA_COLUMN), NULL);
-      gtk_tree_view_append_column (GTK_TREE_VIEW (tree), column);
 
-      column = gtk_tree_view_column_new ();
-      gtk_tree_view_column_set_title (column, "Square");
-      cell = gtk_cell_renderer_pixbuf_new ();
-      g_object_set (cell, "icon-name", "object-select-symbolic", NULL);
-      gtk_tree_view_column_pack_start (column, cell, FALSE);
+      column = (GtkTreeViewColumn*)gtk_builder_get_object (builder, "treeviewcolumn6");
+      cell = (GtkCellRenderer*)gtk_builder_get_object (builder, "cellrendererpixbuf1");
       gtk_tree_view_column_add_attribute (column, cell, "visible", SQUARE_COLUMN);
-      gtk_tree_view_append_column (GTK_TREE_VIEW (tree), column);
 
-      store = gtk_list_store_new (2, G_TYPE_INT, G_TYPE_INT);
-      store = gtk_list_store_new (2, G_TYPE_INT, G_TYPE_INT);
-      gtk_list_store_insert_with_values (store, NULL, -1,
-                                         WIDTH_COLUMN, 10,
-                                         HEIGHT_COLUMN, 20,
-                                         -1);
-      gtk_list_store_insert_with_values (store, NULL, -1,
-                                         WIDTH_COLUMN, 5,
-                                         HEIGHT_COLUMN, 25,
-                                         -1);
-      gtk_list_store_insert_with_values (store, NULL, -1,
-                                         WIDTH_COLUMN, 15,
-                                         HEIGHT_COLUMN, 15,
-                                         -1);
+      store = (GtkListStore*)gtk_builder_get_object (builder, "liststore1");
+      tree = (GtkWidget*)gtk_builder_get_object (builder, "treeview2");
 
       types[WIDTH_COLUMN] = G_TYPE_INT;
       types[HEIGHT_COLUMN] = G_TYPE_INT;
@@ -149,6 +148,25 @@ do_filtermodel (GtkWidget *do_widget)
                                              filter_modify_func, NULL, NULL);
 
       gtk_tree_view_set_model (GTK_TREE_VIEW (tree), model);
+
+      column = (GtkTreeViewColumn*)gtk_builder_get_object (builder, "treeviewcolumn7");
+      cell = (GtkCellRenderer*)gtk_builder_get_object (builder, "cellrenderertext6");
+      gtk_tree_view_column_set_cell_data_func (column, cell,
+                                               format_number, GINT_TO_POINTER (WIDTH_COLUMN), NULL);
+
+      column = (GtkTreeViewColumn*)gtk_builder_get_object (builder, "treeviewcolumn8");
+      cell = (GtkCellRenderer*)gtk_builder_get_object (builder, "cellrenderertext7");
+      gtk_tree_view_column_set_cell_data_func (column, cell,
+                                               format_number, GINT_TO_POINTER (HEIGHT_COLUMN), NULL);
+
+      tree = (GtkWidget*)gtk_builder_get_object (builder, "treeview3");
+
+      model = gtk_tree_model_filter_new (GTK_TREE_MODEL (store), NULL);
+      gtk_tree_model_filter_set_visible_func (GTK_TREE_MODEL_FILTER (model),
+                                              visible_func, NULL, NULL);
+      gtk_tree_view_set_model (GTK_TREE_VIEW (tree), model);
+
+      g_object_unref (builder);
     }
 
   if (!gtk_widget_get_visible (window))
