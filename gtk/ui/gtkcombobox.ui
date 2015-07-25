@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface domain="gtk30">
+  <!-- interface-requires gtk+ 3.10 -->
+  <template class="GtkComboBox" parent="GtkBin">
+    <child>
+      <object class="GtkToggleButton" id="button">
+        <property name="visible">True</property>
+        <property name="focus-on-click">True</property>
+        <signal name="toggled" handler="gtk_combo_box_button_toggled" swapped="no"/>
+        <child>
+          <object class="GtkImage" id="arrow">
+            <property name="visible">True</property>
+            <property name="icon-name">pan-down-symbolic</property>
+          </object>
+        </child>
+      </object>
+    </child>
+  </template>
+</interface>

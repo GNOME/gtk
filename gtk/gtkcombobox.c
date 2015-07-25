@@ -415,6 +415,10 @@ static gchar   *gtk_combo_box_format_entry_text              (GtkComboBox     *c
 static GtkBuildableIface *parent_buildable_iface;
 
 static void     gtk_combo_box_buildable_init                 (GtkBuildableIface *iface);
+static void     gtk_combo_box_buildable_add_child            (GtkBuildable  *buildable,
+                                                              GtkBuilder    *builder,
+                                                              GObject       *child,
+                                                              const gchar   *type);
 static gboolean gtk_combo_box_buildable_custom_tag_start     (GtkBuildable  *buildable,
                                                               GtkBuilder    *builder,
                                                               GObject       *child,
@@ -1058,6 +1062,11 @@ gtk_combo_box_class_init (GtkComboBoxClass *klass)
                                                               GTK_SHADOW_NONE,
                                                               GTK_PARAM_READABLE));
 
+  gtk_widget_class_set_template_from_resource (widget_class, "/org/gtk/libgtk/ui/gtkcombobox.ui");
+  gtk_widget_class_bind_template_child_internal_private (widget_class, GtkComboBox, button);
+  gtk_widget_class_bind_template_child_internal_private (widget_class, GtkComboBox, arrow);
+  gtk_widget_class_bind_template_callback (widget_class, gtk_combo_box_button_toggled);
+
   gtk_widget_class_set_accessible_type (widget_class, GTK_TYPE_COMBO_BOX_ACCESSIBLE);
 }
 
@@ -1065,7 +1074,7 @@ static void
 gtk_combo_box_buildable_init (GtkBuildableIface *iface)
 {
   parent_buildable_iface = g_type_interface_peek_parent (iface);
-  iface->add_child = _gtk_cell_layout_buildable_add_child;
+  iface->add_child = gtk_combo_box_buildable_add_child;
   iface->custom_tag_start = gtk_combo_box_buildable_custom_tag_start;
   iface->custom_tag_end = gtk_combo_box_buildable_custom_tag_end;
   iface->get_internal_child = gtk_combo_box_buildable_get_internal_child;
@@ -1113,19 +1122,9 @@ gtk_combo_box_init (GtkComboBox *combo_box)
   priv->text_renderer = NULL;
   priv->id_column = -1;
 
-  priv->button = gtk_toggle_button_new ();
-  gtk_button_set_focus_on_click (GTK_BUTTON (priv->button),
-                                 priv->focus_on_click);
+  gtk_widget_init_template (GTK_WIDGET (combo_box));
 
-  g_signal_connect (priv->button, "toggled",
-                    G_CALLBACK (gtk_combo_box_button_toggled), combo_box);
-  gtk_widget_set_parent (priv->button, GTK_WIDGET (combo_box));
-
-  priv->arrow = gtk_image_new_from_icon_name ("pan-down-symbolic", GTK_ICON_SIZE_BUTTON);
-  gtk_container_add (GTK_CONTAINER (priv->button), priv->arrow);
   gtk_widget_add_events (priv->button, GDK_SCROLL_MASK);
-
-  gtk_widget_show_all (priv->button);
 }
 
 static void
@@ -5216,6 +5215,20 @@ gtk_combo_box_get_focus_on_click (GtkComboBox *combo_box)
   return combo_box->priv->focus_on_click;
 }
 
+static void
+gtk_combo_box_buildable_add_child (GtkBuildable *buildable,
+                                   GtkBuilder   *builder,
+                                   GObject      *child,
+                                   const gchar  *type)
+{
+  if (GTK_IS_WIDGET (child))
+    {
+      parent_buildable_iface->add_child (buildable, builder, child, type);
+      return;
+    }
+
+  _gtk_cell_layout_buildable_add_child (buildable, builder, child, type);
+}
 
 static gboolean
 gtk_combo_box_buildable_custom_tag_start (GtkBuildable  *buildable,
