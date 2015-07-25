@@ -4275,8 +4275,7 @@ gtk_places_sidebar_class_init (GtkPlacesSidebarClass *class)
    * application to present a way to show other locations e.g. drives
    * and network access points.
    * For example, the application may bring up a page showing persistent
-   * volumes and discovered network addresses. #GtkPlacesView is the
-   * prime example of how to handle them.
+   * volumes and discovered network addresses.
    *
    * Since: 3.18
    */
@@ -4664,6 +4663,9 @@ gtk_places_sidebar_get_show_desktop (GtkPlacesSidebar *sidebar)
  * this is off by default. An application may want to turn this on if it implements
  * a way for the user to connect to network servers directly.
  *
+ * If you enable this, you should connect to the
+ * #GtkPlacesSidebar::show-connect-to-server signal.
+ *
  * Since: 3.10
  *
  * Deprecated: 3.18: It is recommended to group this functionality with the drives
@@ -4705,11 +4707,14 @@ gtk_places_sidebar_get_show_connect_to_server (GtkPlacesSidebar *sidebar)
 /**
  * gtk_places_sidebar_set_show_enter_location:
  * @sidebar: a places sidebar
- * @show_enter_location: whether to show an item for the Connect to Server command
+ * @show_enter_location: whether to show an item to enter a location
  *
- * Sets whether the @sidebar should show an item for connecting to a network server; this is off by default.
- * An application may want to turn this on if it implements a way for the user to connect
- * to network servers directly.
+ * Sets whether the @sidebar should show an item for entering a location;
+ * this is off by default. An application may want to turn this on if manually
+ * entering URLs is an expected user action.
+ *
+ * If you enable this, you should connect to the
+ * #GtkPlacesSidebar::show-enter-location signal.
  *
  * Deprecated: 3.18: use gtk_places_sidebar_set_show_other_locations() instead.
  */
@@ -4751,12 +4756,14 @@ gtk_places_sidebar_get_show_enter_location (GtkPlacesSidebar *sidebar)
  * @sidebar: a places sidebar
  * @show_other_locations: whether to show an item for the Other Locations view
  *
- * Sets whether the @sidebar should show an item for the application to show an Other Locations
- * view; this is off by default. When set to %TRUE, persistent devices such as hard drives are
- * hidden, otherwise they are shown in the sidebar.
- * An application may want to turn this on if it implements a way for the user to see and interact
- * with drives and network servers directly. #GtkPlacesView is the reference implementation for
- * it.
+ * Sets whether the @sidebar should show an item for the application to show
+ * an Other Locations view; this is off by default. When set to %TRUE, persistent
+ * devices such as hard drives are hidden, otherwise they are shown in the sidebar.
+ * An application may want to turn this on if it implements a way for the user to
+ * see and interact with drives and network servers directly.
+ *
+ * If you enable this, you should connect to the
+ * #GtkPlacesSidebar::show-other-locations signal.
  *
  * Since: 3.18
  */
