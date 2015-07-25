@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 3.12\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-07-23 21:47+0000\n"
-"PO-Revision-Date: 2015-07-24 08:33+0100\n"
+"POT-Creation-Date: 2015-07-24 21:50+0000\n"
+"PO-Revision-Date: 2015-07-25 09:36+0100\n"
 "Last-Translator: Pedro Albuquerque <palbuquerque73@gmail.com>\n"
 "Language-Team: Português <palbuquerque73@gmail.com>\n"
 "Language: pt\n"
@@ -120,7 +120,6 @@ msgid "The default display for GDK"
 msgstr "O ecrã predefinido do GDK"
 
 #: gdk/gdkglcontext.c:265
-#| msgid "The GDK window bound to the GL context"
 msgid "The GDK display used to create the GL context"
 msgstr "A janela GDK usada para criar o contexto GL"
 
@@ -137,7 +136,6 @@ msgid "Shared context"
 msgstr "Contexto partilhado"
 
 #: gdk/gdkglcontext.c:297
-#| msgid "The GL context this context share data with"
 msgid "The GL context this context shares data with"
 msgstr "O contexto GL com o qual este contexto partilha dados"
 
@@ -258,7 +256,7 @@ msgstr "O GIcon a ser mostrado"
 
 #: gtk/deprecated/gtkaction.c:365 gtk/deprecated/gtkstatusicon.c:255
 #: gtk/gtkcellrendererpixbuf.c:229 gtk/gtkimage.c:332 gtk/gtkprinter.c:170
-#: gtk/gtkwindow.c:868
+#: gtk/gtkwindow.c:869
 msgid "Icon Name"
 msgstr "Nome do ícone"
 
@@ -838,7 +836,7 @@ msgid "The size of the icon"
 msgstr "O tamanho do ícone"
 
 #: gtk/deprecated/gtkstatusicon.c:298 gtk/gtkinvisible.c:98
-#: gtk/gtkmountoperation.c:177 gtk/gtkstylecontext.c:220 gtk/gtkwindow.c:876
+#: gtk/gtkmountoperation.c:177 gtk/gtkstylecontext.c:220 gtk/gtkwindow.c:877
 msgid "Screen"
 msgstr "Ecrã"
 
@@ -2286,7 +2284,7 @@ msgid "Whether the rendered pixbuf should be colorized according to the state"
 msgstr "Se a imagem desenhada deverá ser colorida de acordo com o estado"
 
 #: gtk/gtkcellrendererpixbuf.c:265 gtk/gtkimage.c:349 gtk/gtkmodelbutton.c:877
-#: gtk/gtkwindow.c:816
+#: gtk/gtkwindow.c:817
 msgid "Icon"
 msgstr "Ícone"
 
@@ -3571,7 +3569,7 @@ msgstr "Dicas para o comportamento do campo de texto"
 msgid "A list of style attributes to apply to the text of the label"
 msgstr "Uma lista de atributos de estilo a aplicar ao texto da etiqueta"
 
-#: gtk/gtkentry.c:1490 gtk/gtkplacessidebar.c:4358 gtk/gtktextview.c:924
+#: gtk/gtkentry.c:1490 gtk/gtkplacessidebar.c:4359 gtk/gtktextview.c:924
 msgid "Populate all"
 msgstr "Popular todos"
 
@@ -3809,7 +3807,7 @@ msgstr "Filtro"
 msgid "The current filter for selecting which files are displayed"
 msgstr "O filtro atual para selecionar que ficheiros são mostrados"
 
-#: gtk/gtkfilechooser.c:388 gtk/gtkplacessidebar.c:4331
+#: gtk/gtkfilechooser.c:388 gtk/gtkplacessidebar.c:4332
 #: gtk/gtkplacesview.c:1792
 msgid "Local Only"
 msgstr "Só local"
@@ -3894,11 +3892,11 @@ msgstr ""
 "Se um seletor de ficheiros que não esteja em modo de abertura permitirá ao "
 "utilizador criar novas pastas."
 
-#: gtk/gtkfilechooserwidget.c:8298 gtk/gtkfilechooserwidget.c:8299
+#: gtk/gtkfilechooserwidget.c:8306 gtk/gtkfilechooserwidget.c:8307
 msgid "Search mode"
 msgstr "Modo de pesquisa ativo"
 
-#: gtk/gtkfilechooserwidget.c:8305 gtk/gtkfilechooserwidget.c:8306
+#: gtk/gtkfilechooserwidget.c:8313 gtk/gtkfilechooserwidget.c:8314
 #: gtk/gtkheaderbar.c:1880
 msgid "Subtitle"
 msgstr "Subtítulo"
@@ -4066,15 +4064,15 @@ msgstr "A aparência da margem da moldura"
 msgid "A widget to display in place of the usual frame label"
 msgstr "Um widget a mostrar em vez da etiqueta de moldura comum"
 
-#: gtk/gtkgesture.c:695
+#: gtk/gtkgesture.c:694
 msgid "Number of points"
 msgstr "Número de pontos"
 
-#: gtk/gtkgesture.c:696
+#: gtk/gtkgesture.c:695
 msgid "Number of points needed to trigger the gesture"
 msgstr "O número de pontos necessários para acionar o gesto"
 
-#: gtk/gtkgesture.c:712 gtk/gtkgesture.c:713
+#: gtk/gtkgesture.c:711 gtk/gtkgesture.c:712
 msgid "GdkWindow to receive events about"
 msgstr "GdkWindow para receber eventos sobre"
 
@@ -4453,7 +4451,7 @@ msgstr "Espaçamento entre os elementos da área"
 msgid "Width of border around the action area"
 msgstr "Largura da margem em torno da área de ação"
 
-#: gtk/gtkinvisible.c:99 gtk/gtkwindow.c:877
+#: gtk/gtkinvisible.c:99 gtk/gtkwindow.c:878
 msgid "The screen where this window will be displayed"
 msgstr "O ecrã onde esta janela será mostrada"
 
@@ -5397,19 +5395,19 @@ msgid "If TRUE, the child can be made smaller than its requisition"
 msgstr ""
 "Se VERDADEIRO, o filho pode ser tornado mais pequeno que o seu requisito"
 
-#: gtk/gtkplacessidebar.c:4294
+#: gtk/gtkplacessidebar.c:4295
 msgid "Location to Select"
 msgstr "Localização a selecionar"
 
-#: gtk/gtkplacessidebar.c:4295
+#: gtk/gtkplacessidebar.c:4296
 msgid "The location to highlight in the sidebar"
 msgstr "A localização a realçar na barra lateral"
 
-#: gtk/gtkplacessidebar.c:4300 gtk/gtkplacesview.c:1799
+#: gtk/gtkplacessidebar.c:4301 gtk/gtkplacesview.c:1799
 msgid "Open Flags"
 msgstr "Parâmetros de abertura"
 
-#: gtk/gtkplacessidebar.c:4301 gtk/gtkplacesview.c:1800
+#: gtk/gtkplacessidebar.c:4302 gtk/gtkplacesview.c:1800
 msgid ""
 "Modes in which the calling application can open locations selected in the "
 "sidebar"
@@ -5417,29 +5415,29 @@ msgstr ""
 "Modos em que iniciar aplicações pode abrir localizações seleccionadas na "
 "barra lateral."
 
-#: gtk/gtkplacessidebar.c:4307
+#: gtk/gtkplacessidebar.c:4308
 msgid "Show recent files"
 msgstr "Mostrar ficheiros recentes"
 
-#: gtk/gtkplacessidebar.c:4308
+#: gtk/gtkplacessidebar.c:4309
 msgid "Whether the sidebar includes a builtin shortcut for recent files"
 msgstr ""
 "Se a barra lateral inclui um atalho incorporado para ficheiros recentes"
 
-#: gtk/gtkplacessidebar.c:4313
+#: gtk/gtkplacessidebar.c:4314
 msgid "Show 'Desktop'"
 msgstr "Mostrar \"Área de trabalho\""
 
-#: gtk/gtkplacessidebar.c:4314
+#: gtk/gtkplacessidebar.c:4315
 msgid "Whether the sidebar includes a builtin shortcut to the Desktop folder"
 msgstr ""
 "Se a barra lateral inclui um atalho incorporado para a pasta Área de trabalho"
 
-#: gtk/gtkplacessidebar.c:4319
+#: gtk/gtkplacessidebar.c:4320
 msgid "Show 'Connect to Server'"
 msgstr "Mostrar \"Ligar ao servidor\""
 
-#: gtk/gtkplacessidebar.c:4320
+#: gtk/gtkplacessidebar.c:4321
 msgid ""
 "Whether the sidebar includes a builtin shortcut to a 'Connect to server' "
 "dialog"
@@ -5447,40 +5445,41 @@ msgstr ""
 "Se a barra lateral inclui um atalho incorporado para um diálogo \"Ligar ao "
 "servidor\""
 
-#: gtk/gtkplacessidebar.c:4325
+#: gtk/gtkplacessidebar.c:4326
 msgid "Show 'Enter Location'"
 msgstr "Mostrar \"Inserir localização\""
 
-#: gtk/gtkplacessidebar.c:4326
+#: gtk/gtkplacessidebar.c:4327
 msgid ""
 "Whether the sidebar includes a builtin shortcut to manually enter a location"
 msgstr ""
 "Se a barra lateral inclui um atalho incorporado para um diálogo \"Inserir "
 "localização\""
 
-#: gtk/gtkplacessidebar.c:4332 gtk/gtkplacesview.c:1793
+#: gtk/gtkplacessidebar.c:4333 gtk/gtkplacesview.c:1793
 msgid "Whether the sidebar only includes local files"
 msgstr "Se a barra lateral só inclui ficheiros locais"
 
-#: gtk/gtkplacessidebar.c:4337
+#: gtk/gtkplacessidebar.c:4338
 msgid "Show 'Trash'"
 msgstr "Mostrar \"Lixo\""
 
-#: gtk/gtkplacessidebar.c:4338
-msgid "Whether the sidebar includes a builtin shortcut to  the Trash location"
+#: gtk/gtkplacessidebar.c:4339
+#| msgid ""
+#| "Whether the sidebar includes a builtin shortcut to  the Trash location"
+msgid "Whether the sidebar includes a builtin shortcut to the Trash location"
 msgstr ""
 "Se a barra lateral inclui um atalho incorporado para a localização do lixo"
 
-#: gtk/gtkplacessidebar.c:4343
+#: gtk/gtkplacessidebar.c:4344
 msgid "Show 'Other locations'"
 msgstr "Mostrar \"Outras localizações\""
 
-#: gtk/gtkplacessidebar.c:4344
+#: gtk/gtkplacessidebar.c:4345
 msgid "Whether the sidebar includes an item to show external locations"
 msgstr "Se a barra lateral inclui um item para mostrar localizações externas"
 
-#: gtk/gtkplacessidebar.c:4359
-#| msgid "Whether to emit ::populate-popup for touch popups"
+#: gtk/gtkplacessidebar.c:4360
 msgid "Whether to emit ::populate-popup for popups that are not menus"
 msgstr "Se emitir ou não ::populate-popup para balões que não são menus"
 
@@ -5556,7 +5555,7 @@ msgstr "Retângulo para o qual a janela bolha aponta"
 msgid "Position to place the bubble window"
 msgstr "Posição onde colocar a janela bolha"
 
-#: gtk/gtkpopover.c:1634 gtk/gtkwindow.c:756
+#: gtk/gtkpopover.c:1634 gtk/gtkwindow.c:757
 msgid "Modal"
 msgstr "Modal"
 
@@ -7378,7 +7377,6 @@ msgid "Whether or not the transition is currently running"
 msgstr "Se a transição está ou não a ser executada"
 
 #: gtk/gtkstack.c:469
-#| msgid "Indicator size"
 msgid "Interpolate size"
 msgstr "Interpolar tamanho"
 
@@ -8460,7 +8458,7 @@ msgstr ""
 msgid "Whether to display the column"
 msgstr "Mostrar ou não a coluna"
 
-#: gtk/gtktreeviewcolumn.c:253 gtk/gtkwindow.c:748
+#: gtk/gtktreeviewcolumn.c:253 gtk/gtkwindow.c:749
 msgid "Resizable"
 msgstr "Redimensionável"
 
@@ -8987,45 +8985,45 @@ msgstr "Largura dos manipuladores de seleção de texto"
 msgid "Height of text selection handles"
 msgstr "Altura dos manipuladores de seleção de texto"
 
-#: gtk/gtkwindow.c:706
+#: gtk/gtkwindow.c:707
 msgid "Window Type"
 msgstr "Tipo de janela"
 
-#: gtk/gtkwindow.c:707
+#: gtk/gtkwindow.c:708
 msgid "The type of the window"
 msgstr "O tipo da janela"
 
-#: gtk/gtkwindow.c:715
+#: gtk/gtkwindow.c:716
 msgid "Window Title"
 msgstr "Título da janela"
 
-#: gtk/gtkwindow.c:716
+#: gtk/gtkwindow.c:717
 msgid "The title of the window"
 msgstr "O título da janela"
 
-#: gtk/gtkwindow.c:723
+#: gtk/gtkwindow.c:724
 msgid "Window Role"
 msgstr "Papel da janela"
 
-#: gtk/gtkwindow.c:724
+#: gtk/gtkwindow.c:725
 msgid "Unique identifier for the window to be used when restoring a session"
 msgstr "Identificador único para a janela a ser utilizado ao repor uma sessão"
 
-#: gtk/gtkwindow.c:740
+#: gtk/gtkwindow.c:741
 msgid "Startup ID"
 msgstr "ID de início"
 
-#: gtk/gtkwindow.c:741
+#: gtk/gtkwindow.c:742
 msgid "Unique startup identifier for the window used by startup-notification"
 msgstr ""
 "Identificador único de início para a janela utilizado pelo startup-"
 "notification"
 
-#: gtk/gtkwindow.c:749
+#: gtk/gtkwindow.c:750
 msgid "If TRUE, users can resize the window"
 msgstr "Se VERDADEIRO, os utilizadores podem redimensionar a janela"
 
-#: gtk/gtkwindow.c:757
+#: gtk/gtkwindow.c:758
 msgid ""
 "If TRUE, the window is modal (other windows are not usable while this one is "
 "up)"
@@ -9033,94 +9031,94 @@ msgstr ""
 "Se VERDADEIRO, a janela é modal (outras janelas não são utilizáveis enquanto "
 "esta estiver aberta)"
 
-#: gtk/gtkwindow.c:764
+#: gtk/gtkwindow.c:765
 msgid "Window Position"
 msgstr "Posição da janela"
 
-#: gtk/gtkwindow.c:765
+#: gtk/gtkwindow.c:766
 msgid "The initial position of the window"
 msgstr "A posição inicial da janela"
 
-#: gtk/gtkwindow.c:773
+#: gtk/gtkwindow.c:774
 msgid "Default Width"
 msgstr "Largura predefinida"
 
-#: gtk/gtkwindow.c:774
+#: gtk/gtkwindow.c:775
 msgid "The default width of the window, used when initially showing the window"
 msgstr ""
 "A largura predefinida da janela, utilizada ao apresentá-la pela primeira vez"
 
-#: gtk/gtkwindow.c:783
+#: gtk/gtkwindow.c:784
 msgid "Default Height"
 msgstr "Altura predefinida"
 
-#: gtk/gtkwindow.c:784
+#: gtk/gtkwindow.c:785
 msgid ""
 "The default height of the window, used when initially showing the window"
 msgstr ""
 "A altura predefinida da janela, utilizada ao apresentá-la pela primeira vez"
 
-#: gtk/gtkwindow.c:793
+#: gtk/gtkwindow.c:794
 msgid "Destroy with Parent"
 msgstr "Destruir com mãe"
 
-#: gtk/gtkwindow.c:794
+#: gtk/gtkwindow.c:795
 msgid "If this window should be destroyed when the parent is destroyed"
 msgstr "Se esta janela deverá ser destruida quando a janela-mãe o for"
 
-#: gtk/gtkwindow.c:808
+#: gtk/gtkwindow.c:809
 msgid "Hide the titlebar during maximization"
 msgstr "Ocultar a barra de título ao maximizar"
 
-#: gtk/gtkwindow.c:809
+#: gtk/gtkwindow.c:810
 msgid "If this window's titlebar should be hidden when the window is maximized"
 msgstr "Se a barra de título deverá ou não ser ocultada ao maximizar a janela"
 
-#: gtk/gtkwindow.c:817
+#: gtk/gtkwindow.c:818
 msgid "Icon for this window"
 msgstr "Ícone para esta janela"
 
-#: gtk/gtkwindow.c:834
+#: gtk/gtkwindow.c:835
 msgid "Mnemonics Visible"
 msgstr "Mnemónicas visíveis"
 
-#: gtk/gtkwindow.c:835
+#: gtk/gtkwindow.c:836
 msgid "Whether mnemonics are currently visible in this window"
 msgstr "Se as mnemónicas são atualmente visíveis nesta janela"
 
-#: gtk/gtkwindow.c:852
+#: gtk/gtkwindow.c:853
 msgid "Focus Visible"
 msgstr "Foco visível"
 
-#: gtk/gtkwindow.c:853
+#: gtk/gtkwindow.c:854
 msgid "Whether focus rectangles are currently visible in this window"
 msgstr "Se os retângulos de foco são atualmente visíveis nesta janela"
 
-#: gtk/gtkwindow.c:869
+#: gtk/gtkwindow.c:870
 msgid "Name of the themed icon for this window"
 msgstr "Nome do tema de ícones para esta janela"
 
-#: gtk/gtkwindow.c:884
+#: gtk/gtkwindow.c:885
 msgid "Is Active"
 msgstr "Está ativa"
 
-#: gtk/gtkwindow.c:885
+#: gtk/gtkwindow.c:886
 msgid "Whether the toplevel is the current active window"
 msgstr "Se o nível de topo é ou não a janela atualmente ativa"
 
-#: gtk/gtkwindow.c:892
+#: gtk/gtkwindow.c:893
 msgid "Focus in Toplevel"
 msgstr "Foco no nível de topo"
 
-#: gtk/gtkwindow.c:893
+#: gtk/gtkwindow.c:894
 msgid "Whether the input focus is within this GtkWindow"
 msgstr "Se o foco de introdução está dentro desta GtkWindow"
 
-#: gtk/gtkwindow.c:900
+#: gtk/gtkwindow.c:901
 msgid "Type hint"
 msgstr "Dica de tipo"
 
-#: gtk/gtkwindow.c:901
+#: gtk/gtkwindow.c:902
 msgid ""
 "Hint to help the desktop environment understand what kind of window this is "
 "and how to treat it."
@@ -9128,126 +9126,126 @@ msgstr ""
 "Dica para ajudar o ambiente de trabalho a compreender que tipo de janela é "
 "esta e como a tratar."
 
-#: gtk/gtkwindow.c:909
+#: gtk/gtkwindow.c:910
 msgid "Skip taskbar"
 msgstr "Ignorar barra de tarefas"
 
-#: gtk/gtkwindow.c:910
+#: gtk/gtkwindow.c:911
 msgid "TRUE if the window should not be in the task bar."
 msgstr "VERDADEIRO para que a janela não surja na barra de tarefas."
 
-#: gtk/gtkwindow.c:917
+#: gtk/gtkwindow.c:918
 msgid "Skip pager"
 msgstr "Ignorar pager"
 
-#: gtk/gtkwindow.c:918
+#: gtk/gtkwindow.c:919
 msgid "TRUE if the window should not be in the pager."
 msgstr "VERDADEIRO para que a janela não surja no pager."
 
-#: gtk/gtkwindow.c:925
+#: gtk/gtkwindow.c:926
 msgid "Urgent"
 msgstr "Urgente"
 
-#: gtk/gtkwindow.c:926
+#: gtk/gtkwindow.c:927
 msgid "TRUE if the window should be brought to the user's attention."
 msgstr ""
 "VERDADEIRO se a atenção do utilizador deverá ser chamada para a janela."
 
-#: gtk/gtkwindow.c:940
+#: gtk/gtkwindow.c:941
 msgid "Accept focus"
 msgstr "Aceitar foco"
 
-#: gtk/gtkwindow.c:941
+#: gtk/gtkwindow.c:942
 msgid "TRUE if the window should receive the input focus."
 msgstr "VERDADEIRO se a janela deve receber o foco de entrada."
 
-#: gtk/gtkwindow.c:955
+#: gtk/gtkwindow.c:956
 msgid "Focus on map"
 msgstr "Focar ao mapear"
 
-#: gtk/gtkwindow.c:956
+#: gtk/gtkwindow.c:957
 msgid "TRUE if the window should receive the input focus when mapped."
 msgstr "VERDADEIRO se a janela deve receber o foco ao ser mapeada."
 
-#: gtk/gtkwindow.c:970
+#: gtk/gtkwindow.c:971
 msgid "Decorated"
 msgstr "Decorada"
 
-#: gtk/gtkwindow.c:971
+#: gtk/gtkwindow.c:972
 msgid "Whether the window should be decorated by the window manager"
 msgstr "Se a janela deverá ou não ser decorada pelo gestor de janelas"
 
-#: gtk/gtkwindow.c:985
+#: gtk/gtkwindow.c:986
 msgid "Deletable"
 msgstr "Eliminável"
 
-#: gtk/gtkwindow.c:986
+#: gtk/gtkwindow.c:987
 msgid "Whether the window frame should have a close button"
 msgstr "Se a moldura da janela deverá ou não ter um botão de fechar"
 
-#: gtk/gtkwindow.c:1007
+#: gtk/gtkwindow.c:1008
 msgid "Resize grip"
 msgstr "Manípulo de redimensionamento"
 
-#: gtk/gtkwindow.c:1008
+#: gtk/gtkwindow.c:1009
 msgid "Specifies whether the window should have a resize grip"
 msgstr ""
 "Especifica se a janela deverá ou não ter um manípulo de redimensionamento"
 
-#: gtk/gtkwindow.c:1024
+#: gtk/gtkwindow.c:1025
 msgid "Resize grip is visible"
 msgstr "Manípulo de redimensionamento é visível"
 
-#: gtk/gtkwindow.c:1025
+#: gtk/gtkwindow.c:1026
 msgid "Specifies whether the window's resize grip is visible."
 msgstr ""
 "Especifica se o manípulo de redimensionamento da janela está ou não visível."
 
-#: gtk/gtkwindow.c:1041
+#: gtk/gtkwindow.c:1042
 msgid "Gravity"
 msgstr "Gravidade"
 
-#: gtk/gtkwindow.c:1042
+#: gtk/gtkwindow.c:1043
 msgid "The window gravity of the window"
 msgstr "A gravidade da janela"
 
-#: gtk/gtkwindow.c:1059
+#: gtk/gtkwindow.c:1060
 msgid "Transient for Window"
 msgstr "Transitório para janela"
 
-#: gtk/gtkwindow.c:1060
+#: gtk/gtkwindow.c:1061
 msgid "The transient parent of the dialog"
 msgstr "A mãe transitória do diálogo"
 
-#: gtk/gtkwindow.c:1080
+#: gtk/gtkwindow.c:1081
 msgid "Attached to Widget"
 msgstr "Anexado ao widget"
 
-#: gtk/gtkwindow.c:1081
+#: gtk/gtkwindow.c:1082
 msgid "The widget where the window is attached"
 msgstr "O widget ao qual a janela está anexada"
 
-#: gtk/gtkwindow.c:1088
+#: gtk/gtkwindow.c:1089
 msgid "Is maximized"
 msgstr "Está maximizada"
 
-#: gtk/gtkwindow.c:1089
+#: gtk/gtkwindow.c:1090
 msgid "Whether the window is maximized"
 msgstr "Se a janela está ou não maximizada"
 
-#: gtk/gtkwindow.c:1097 gtk/gtkwindow.c:1098
+#: gtk/gtkwindow.c:1098 gtk/gtkwindow.c:1099
 msgid "Decorated button layout"
 msgstr "Disposição dos botões decorados"
 
-#: gtk/gtkwindow.c:1104 gtk/gtkwindow.c:1105
+#: gtk/gtkwindow.c:1105 gtk/gtkwindow.c:1106
 msgid "Decoration resize handle size"
 msgstr "Decoração redimensiona o tamanho do manípulo"
 
-#: gtk/gtkwindow.c:1127
+#: gtk/gtkwindow.c:1128
 msgid "GtkApplication"
 msgstr "GtkApplication"
 
-#: gtk/gtkwindow.c:1128
+#: gtk/gtkwindow.c:1129
 msgid "The GtkApplication for the window"
 msgstr "A GtkApplication da janela"
 
