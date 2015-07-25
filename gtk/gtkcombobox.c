@@ -1112,6 +1112,20 @@ gtk_combo_box_init (GtkComboBox *combo_box)
   priv->text_column = -1;
   priv->text_renderer = NULL;
   priv->id_column = -1;
+
+  priv->button = gtk_toggle_button_new ();
+  gtk_button_set_focus_on_click (GTK_BUTTON (priv->button),
+                                 priv->focus_on_click);
+
+  g_signal_connect (priv->button, "toggled",
+                    G_CALLBACK (gtk_combo_box_button_toggled), combo_box);
+  gtk_widget_set_parent (priv->button, GTK_WIDGET (combo_box));
+
+  priv->arrow = gtk_image_new_from_icon_name ("pan-down-symbolic", GTK_ICON_SIZE_BUTTON);
+  gtk_container_add (GTK_CONTAINER (priv->button), priv->arrow);
+  gtk_widget_add_events (priv->button, GDK_SCROLL_MASK);
+
+  gtk_widget_show_all (priv->button);
 }
 
 static void
@@ -3002,20 +3016,6 @@ gtk_combo_box_menu_setup (GtkComboBox *combo_box)
   GtkComboBoxPrivate *priv = combo_box->priv;
   GtkWidget *menu;
 
-  priv->button = gtk_toggle_button_new ();
-  gtk_button_set_focus_on_click (GTK_BUTTON (priv->button),
-                                 priv->focus_on_click);
-
-  g_signal_connect (priv->button, "toggled",
-                    G_CALLBACK (gtk_combo_box_button_toggled), combo_box);
-  gtk_widget_set_parent (priv->button, GTK_WIDGET (combo_box));
-
-  priv->arrow = gtk_image_new_from_icon_name ("pan-down-symbolic", GTK_ICON_SIZE_BUTTON);
-  gtk_container_add (GTK_CONTAINER (priv->button), priv->arrow);
-  gtk_widget_add_events (priv->button, GDK_SCROLL_MASK);
-
-  gtk_widget_show_all (priv->button);
-
   g_signal_connect (priv->button, "button-press-event",
                     G_CALLBACK (gtk_combo_box_menu_button_press),
                     combo_box);
@@ -3067,13 +3067,6 @@ gtk_combo_box_menu_destroy (GtkComboBox *combo_box)
                                         G_SIGNAL_MATCH_DATA,
                                         0, 0, NULL,
                                         gtk_combo_box_menu_activate, combo_box);
-
-  /* unparent will remove our latest ref */
-  gtk_widget_unparent (priv->button);
-
-  priv->box = NULL;
-  priv->button = NULL;
-  priv->arrow = NULL;
 
   /* changing the popup window will unref the menu and the children */
 }
@@ -3276,18 +3269,8 @@ gtk_combo_box_list_setup (GtkComboBox *combo_box)
   GtkComboBoxPrivate *priv = combo_box->priv;
   GtkTreeSelection *sel;
 
-  priv->button = gtk_toggle_button_new ();
-  gtk_widget_set_parent (priv->button, GTK_WIDGET (combo_box));
   g_signal_connect (priv->button, "button-press-event",
                     G_CALLBACK (gtk_combo_box_list_button_pressed), combo_box);
-  g_signal_connect (priv->button, "toggled",
-                    G_CALLBACK (gtk_combo_box_button_toggled), combo_box);
-
-  priv->arrow = gtk_image_new_from_icon_name ("pan-down-symbolic", GTK_ICON_SIZE_BUTTON);
-  gtk_container_add (GTK_CONTAINER (priv->button), priv->arrow);
-  gtk_widget_add_events (priv->button, GDK_SCROLL_MASK);
-
-  gtk_widget_show_all (priv->button);
 
   if (priv->cell_view)
     {
@@ -3405,13 +3388,6 @@ gtk_combo_box_list_destroy (GtkComboBox *combo_box)
                                           0, 0, NULL,
                                           gtk_combo_box_list_button_pressed,
                                           NULL);
-
-  /* destroy things (unparent will kill the latest ref from us)
-   * last unref on button will destroy the arrow
-   */
-  gtk_widget_unparent (priv->button);
-  priv->button = NULL;
-  priv->arrow = NULL;
 
   if (priv->cell_view)
     {
@@ -4469,11 +4445,22 @@ static void
 gtk_combo_box_destroy (GtkWidget *widget)
 {
   GtkComboBox *combo_box = GTK_COMBO_BOX (widget);
+  GtkComboBoxPrivate *priv = combo_box->priv;
 
   if (combo_box->priv->popup_idle_id > 0)
     {
       g_source_remove (combo_box->priv->popup_idle_id);
       combo_box->priv->popup_idle_id = 0;
+    }
+
+  if (priv->button)
+    {
+      /* destroy things (unparent will kill the latest ref from us)
+       * last unref on button will destroy the arrow
+       */
+      gtk_widget_unparent (priv->button);
+      priv->button = NULL;
+      priv->arrow = NULL;
     }
 
   gtk_combo_box_popdown (combo_box);
