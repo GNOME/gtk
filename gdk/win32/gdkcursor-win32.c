@@ -61,9 +61,19 @@ static DefaultCursor default_cursors[] = {
   { "move", IDC_SIZEALL },
   { "not-allowed", IDC_NO },
   { "ew-resize", IDC_SIZEWE },
+  { "e-resize", IDC_SIZEWE },
+  { "w-resize", IDC_SIZEWE },
+  { "col-resize", IDC_SIZEWE },
   { "ns-resize", IDC_SIZENS },
+  { "n-resize", IDC_SIZENS },
+  { "s-resize", IDC_SIZENS },
+  { "row-resize", IDC_SIZENS },
   { "nesw-resize", IDC_SIZENESW },
+  { "ne-resize", IDC_SIZENESW },
+  { "sw-resize", IDC_SIZENESW },
   { "nwse-resize", IDC_SIZENWSE }
+  { "nw-resize", IDC_SIZENWSE }
+  { "se-resize", IDC_SIZENWSE }
 };
 
 static HCURSOR
