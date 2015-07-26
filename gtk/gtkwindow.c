@@ -6070,7 +6070,7 @@ gtk_window_map (GtkWidget *widget)
       return;
     }
 
-  screen = gtk_window_get_screen (widget);
+  screen = gtk_window_get_screen (window);
   if (priv->initial_fullscreen_monitor > gdk_screen_get_n_monitors (screen))
     priv->initial_fullscreen_monitor = -1;
     
