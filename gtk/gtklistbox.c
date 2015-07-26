@@ -1034,10 +1034,7 @@ gtk_list_box_set_selection_mode (GtkListBox       *box,
 
   if (mode == GTK_SELECTION_NONE ||
       priv->selection_mode == GTK_SELECTION_MULTIPLE)
-    {
-      dirty = gtk_list_box_unselect_all_internal (box);
-      priv->selected_row = NULL;
-    }
+    dirty = gtk_list_box_unselect_all_internal (box);
 
   priv->selection_mode = mode;
 
@@ -1649,15 +1646,20 @@ gtk_list_box_update_selection (GtkListBox    *box,
     {
       if (extend)
         {
+          GtkListBoxRow *selected_row;
+
+          selected_row = priv->selected_row;
+
           gtk_list_box_unselect_all_internal (box);
-          if (priv->selected_row == NULL)
+
+          if (selected_row == NULL)
             {
               gtk_list_box_row_set_selected (row, TRUE);
               priv->selected_row = row;
               g_signal_emit (box, signals[ROW_SELECTED], 0, row);
             }
           else
-            gtk_list_box_select_all_between (box, priv->selected_row, row, FALSE);
+            gtk_list_box_select_all_between (box, selected_row, row, FALSE);
         }
       else
         {
@@ -1904,7 +1906,6 @@ gtk_list_box_multipress_gesture_released (GtkGestureMultiPress *gesture,
           gboolean extend;
 
           get_current_selection_modifiers (GTK_WIDGET (box), &modify, &extend);
-
           /* With touch, we default to modifying the selection.
            * You can still clear the selection and start over
            * by holding Ctrl.
