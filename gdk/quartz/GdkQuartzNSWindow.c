@@ -656,6 +656,7 @@ update_context_from_dragging_info (id <NSDraggingInfo> sender)
 - (void)draggedImage:(NSImage *)anImage endedAt:(NSPoint)aPoint operation:(NSDragOperation)operation
 {
   GdkEvent *event;
+  GdkScreen *screen;
 
   g_assert (_gdk_quartz_drag_source_context != NULL);
 
@@ -663,6 +664,33 @@ update_context_from_dragging_info (id <NSDraggingInfo> sender)
   event->dnd.window = g_object_ref ([[self contentView] gdkWindow]);
   event->dnd.send_event = FALSE;
   event->dnd.context = g_object_ref (_gdk_quartz_drag_source_context);
+
+  screen = gdk_window_get_screen (event.dnd.window);
+
+  if (screen)
+    {
+      GList* windows, *list;
+      gint gx, gy;
+
+      event.dnd.context->dest_window = NULL;
+
+      windows = gdk_screen_get_toplevel_windows (screen);
+      _gdk_quartz_window_nspoint_to_gdk_xy (aPoint, &gx, &gy);
+
+      for (list = windows; list; list = list->next)
+        {
+          GdkWindow* win = (GdkWindow*) list->data;
+          gint wx, wy;
+          gint ww, wh;
+
+          gdk_window_get_root_origin (win, &wx, &wy);
+          ww = gdk_window_get_width (win);
+          wh = gdk_window_get_height (win);
+
+          if (gx > wx && gy > wy && gx <= wx + ww && gy <= wy + wh)
+            event.dnd.context->dest_window = win;
+        }
+    }
 
   gdk_event_set_device (event,
                         gdk_drag_context_get_device (_gdk_quartz_drag_source_context));
