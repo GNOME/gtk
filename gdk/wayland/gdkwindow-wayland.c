@@ -1001,7 +1001,8 @@ gdk_wayland_window_create_xdg_surface (GdkWindow *window)
   const gchar *app_id;
   GdkScreen *screen = gdk_window_get_screen (window);
   struct wl_output *fullscreen_output = NULL;
-  if (impl->initial_fullscreen_monitor < gdk_screen_get_n_monitors (screen))
+  if (impl->initial_fullscreen_monitor >= 0 &&
+      impl->initial_fullscreen_monitor < gdk_screen_get_n_monitors (screen))
       fullscreen_output = _gdk_wayland_screen_get_wl_output (screen, impl->initial_fullscreen_monitor);
 
   impl->xdg_surface = xdg_shell_get_xdg_surface (display_wayland->xdg_shell, impl->surface);
