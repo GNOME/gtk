@@ -1690,6 +1690,10 @@ AC_ARG_ENABLE(libcanberra,
               [enable_libcanberra="$enableval"],
               [enable_libcanberra=auto])
 
+if test "$enable_x11_backend" != "yes"; then
+  enable_libcanberra=no
+fi
+
 AC_MSG_CHECKING([whether to use libcanberra])
 if test "$enable_libcanberra" != "no"; then
   AC_MSG_RESULT([yes])
