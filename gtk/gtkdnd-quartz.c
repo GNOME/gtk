@@ -1928,14 +1928,25 @@ gtk_drag_source_info_destroy (GtkDragSourceInfo *info)
 static gboolean
 drag_drop_finished_idle_cb (gpointer data)
 {
-  gtk_drag_source_info_destroy (data);
+  GtkDragSourceInfo* info = (GtkDragSourceInfo*) data;
+
+  if (info->success)
+    gtk_drag_source_info_destroy (data);
+
   return FALSE;
 }
 
 static void
-gtk_drag_drop_finished (GtkDragSourceInfo *info)
+gtk_drag_drop_finished (GtkDragSourceInfo *info,
+                        GtkDragResult      result)
 {
-  if (info->success && info->delete)
+  gboolean success = (result == GTK_DRAG_RESULT_SUCCESS);
+
+  if (!success)
+    g_signal_emit_by_name (info->source_widget, "drag-failed",
+                           info->context, GTK_DRAG_RESULT_NO_TARGET, &success);
+
+  if (success && info->delete)
     g_signal_emit_by_name (info->source_widget, "drag-data-delete",
                            info->context);
 
@@ -1963,6 +1974,7 @@ _gtk_drag_source_handle_event (GtkWidget *widget,
 {
   GtkDragSourceInfo *info;
   GdkDragContext *context;
+  GtkDragResult result;
 
   g_return_if_fail (widget != NULL);
   g_return_if_fail (event != NULL);
@@ -1975,7 +1987,8 @@ _gtk_drag_source_handle_event (GtkWidget *widget,
   switch (event->type)
     {
     case GDK_DROP_FINISHED:
-      gtk_drag_drop_finished (info);
+      result = (gdk_drag_context_get_dest_window (context) != NULL) ? GTK_DRAG_RESULT_SUCCESS : GTK_DRAG_RESULT_NO_TARGET;
+      gtk_drag_drop_finished (info, result);
       break;
     default:
       g_assert_not_reached ();
