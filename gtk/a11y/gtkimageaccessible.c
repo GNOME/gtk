@@ -84,7 +84,6 @@ static const NameMapEntry name_map[] = {
   { "help-contents", NC_("Stock label", "_Help") },
   { "go-home", NC_("Stock label", "_Home") },
   { "format-indent-more", NC_("Stock label", "Increase Indent") },
-  { "dialog-information", NC_("Stock label", "_Information") },
   { "format-text-italic", NC_("Stock label", "_Italic") },
   { "go-jump", NC_("Stock label", "_Jump to") },
   { "format-justify-center", NC_("Stock label", "_Center") },
