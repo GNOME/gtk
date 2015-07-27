@@ -10235,11 +10235,10 @@ gtk_window_unfullscreen (GtkWindow *window)
 
   g_return_if_fail (GTK_IS_WINDOW (window));
 
+  window->priv->initial_fullscreen_monitor = -1;
   window->priv->fullscreen_initially = FALSE;
 
   toplevel = gtk_widget_get_window (GTK_WIDGET (window));
-  window->priv->fullscreen_initially = FALSE;
-  window->priv->initial_fullscreen_monitor = -1;
 
   if (toplevel != NULL)
     gdk_window_unfullscreen (toplevel);
