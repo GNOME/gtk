@@ -2592,8 +2592,8 @@ gtk_label_set_markup_internal (GtkLabel    *label,
 
   if (!parse_uri_markup (label, str, &str_for_display, &links, &error))
     {
-      g_warning ("Failed to set text from markup due to error parsing markup: %s",
-                 error->message);
+      g_warning ("Failed to set text '%s` from markup due to error parsing markup: %s",
+                 str, error->message);
       g_error_free (error);
       return;
     }
@@ -2645,8 +2645,8 @@ gtk_label_set_markup_internal (GtkLabel    *label,
                            NULL,
                            &error))
     {
-      g_warning ("Failed to set text from markup due to error parsing markup: %s",
-                 error->message);
+      g_warning ("Failed to set text '%s` from markup due to error parsing markup: %s",
+                 str_for_display, error->message);
       g_free (str_for_display);
       g_free (str_for_accel);
       g_error_free (error);
