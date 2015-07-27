@@ -758,7 +758,7 @@ add_volume (GtkPlacesView *view,
   root = mount ? g_mount_get_root (mount) : NULL;
   icon = g_volume_get_icon (volume);
   name = g_volume_get_name (volume);
-  path = root ? g_file_get_parse_name (root) : NULL;
+  path = !is_network ? g_volume_get_identifier (volume, G_VOLUME_IDENTIFIER_KIND_UNIX_DEVICE) : NULL;
 
   if (!mount ||
       (mount && !g_mount_is_shadowed (mount)))
