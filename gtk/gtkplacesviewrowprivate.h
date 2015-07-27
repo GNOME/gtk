@@ -43,6 +43,8 @@ GMount*            gtk_places_view_row_get_mount                 (GtkPlacesViewR
 
 GVolume*           gtk_places_view_row_get_volume                (GtkPlacesViewRow   *row);
 
+GFile*             gtk_places_view_row_get_file                  (GtkPlacesViewRow   *row);
+
 void               gtk_places_view_row_set_busy                  (GtkPlacesViewRow   *row,
                                                                   gboolean            is_busy);
 
