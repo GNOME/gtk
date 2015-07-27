@@ -1943,7 +1943,7 @@ gtk_places_view_get_search_query (GtkPlacesView *view)
 }
 
 /**
- * gtk_places_view_get_search_query:
+ * gtk_places_view_set_search_query:
  * @view: a #GtkPlacesView
  * @query_text: the query, or NULL.
  *
