@@ -62,7 +62,8 @@ static void gtk_drag_source_site_destroy        (gpointer           data);
 static GtkDragSourceInfo *gtk_drag_get_source_info (GdkDragContext *context,
 						    gboolean        create);
 
-static void gtk_drag_drop_finished (GtkDragSourceInfo *info);
+static void gtk_drag_drop_finished (GtkDragSourceInfo *info,
+                                   GtkDragResult      result);
 
 extern GdkDragContext *gdk_quartz_drag_source_context (); /* gdk/quartz/gdkdnd-quartz.c */
 
@@ -1399,7 +1400,7 @@ gtk_drag_cancel (GdkDragContext *context)
 
   info = gtk_drag_get_source_info (context, FALSE);
   if (info != NULL)
-    gtk_drag_drop_finished (info);
+    gtk_drag_drop_finished (info, GTK_DRAG_RESULT_ERROR);
 }
 
 static gboolean
@@ -2068,7 +2069,7 @@ gtk_drag_drop_finished (GtkDragSourceInfo *info,
 
   if (!success)
     g_signal_emit_by_name (info->source_widget, "drag-failed",
-                           info->context, GTK_DRAG_RESULT_NO_TARGET, &success);
+                           info->context, result, &success);
 
   if (success && info->delete)
     g_signal_emit_by_name (info->source_widget, "drag-data-delete",

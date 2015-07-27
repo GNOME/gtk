@@ -665,14 +665,14 @@ update_context_from_dragging_info (id <NSDraggingInfo> sender)
   event->dnd.send_event = FALSE;
   event->dnd.context = g_object_ref (_gdk_quartz_drag_source_context);
 
-  screen = gdk_window_get_screen (event.dnd.window);
+  screen = gdk_window_get_screen (event->dnd.window);
 
   if (screen)
     {
       GList* windows, *list;
       gint gx, gy;
 
-      event.dnd.context->dest_window = NULL;
+      event->dnd.context->dest_window = NULL;
 
       windows = gdk_screen_get_toplevel_windows (screen);
       _gdk_quartz_window_nspoint_to_gdk_xy (aPoint, &gx, &gy);
@@ -688,7 +688,7 @@ update_context_from_dragging_info (id <NSDraggingInfo> sender)
           wh = gdk_window_get_height (win);
 
           if (gx > wx && gy > wy && gx <= wx + ww && gy <= wy + wh)
-            event.dnd.context->dest_window = win;
+            event->dnd.context->dest_window = win;
         }
     }
 
