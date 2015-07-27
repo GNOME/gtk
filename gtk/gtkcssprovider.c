@@ -1586,7 +1586,7 @@ gtk_css_provider_init (GtkCssProvider *css_provider)
                                                  (GDestroyNotify) _gtk_css_value_unref);
   priv->keyframes = g_hash_table_new_full (g_str_hash, g_str_equal,
                                            (GDestroyNotify) g_free,
-                                           (GDestroyNotify) _gtk_css_value_unref);
+                                           (GDestroyNotify) _gtk_css_keyframes_unref);
 }
 
 static void
