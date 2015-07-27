@@ -2657,6 +2657,9 @@ GtkScrolledWindow {
   &:hover { transition: none; }
 }
 
+.grid-lines .list-row:not(:first-child) {
+  border-top: 1px solid $borders_color;
+}
 
 /*********************
  * App Notifications *
