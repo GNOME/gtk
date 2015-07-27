@@ -4707,7 +4707,8 @@ gtk_places_sidebar_set_show_connect_to_server (GtkPlacesSidebar *sidebar,
  *
  * Returns: %TRUE if the sidebar will display a “Connect to Server” item.
  *
- * Deprecated: 3.18: use gtk_places_sidebar_get_show_other_locations() instead.
+ * Deprecated: 3.18: It is recommended to group this functionality with the drives
+ *     and network location under the new 'Other Location' item
  */
 gboolean
 gtk_places_sidebar_get_show_connect_to_server (GtkPlacesSidebar *sidebar)
@@ -4729,7 +4730,7 @@ gtk_places_sidebar_get_show_connect_to_server (GtkPlacesSidebar *sidebar)
  * If you enable this, you should connect to the
  * #GtkPlacesSidebar::show-enter-location signal.
  *
- * Deprecated: 3.18: use gtk_places_sidebar_set_show_other_locations() instead.
+ * Since: 3.14
  */
 void
 gtk_places_sidebar_set_show_enter_location (GtkPlacesSidebar *sidebar,
