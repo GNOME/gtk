@@ -103,20 +103,6 @@ gtk_stack_sidebar_get_property (GObject    *object,
     }
 }
 
-static void
-update_header (GtkListBoxRow *row,
-               GtkListBoxRow *before,
-               gpointer       userdata)
-{
-  GtkWidget *ret = NULL;
-
-  if (before && !gtk_list_box_row_get_header (row))
-    {
-      ret = gtk_separator_new (GTK_ORIENTATION_HORIZONTAL);
-      gtk_list_box_row_set_header (row, ret);
-    }
-}
-
 static gint
 sort_list (GtkListBoxRow *row1,
            GtkListBoxRow *row2,
@@ -200,7 +186,7 @@ gtk_stack_sidebar_init (GtkStackSidebar *sidebar)
 
   gtk_container_add (GTK_CONTAINER (sw), GTK_WIDGET (priv->list));
 
-  gtk_list_box_set_header_func (priv->list, update_header, sidebar, NULL);
+  gtk_list_box_set_grid_lines (priv->list, TRUE);
   gtk_list_box_set_sort_func (priv->list, sort_list, sidebar, NULL);
 
   g_signal_connect (priv->list, "row-selected",
