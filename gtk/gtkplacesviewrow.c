@@ -38,6 +38,7 @@ struct _GtkPlacesViewRow
 
   GVolume       *volume;
   GMount        *mount;
+  GFile         *file;
 };
 
 G_DEFINE_TYPE (GtkPlacesViewRow, gtk_places_view_row, GTK_TYPE_LIST_BOX_ROW)
@@ -49,6 +50,7 @@ enum {
   PROP_PATH,
   PROP_VOLUME,
   PROP_MOUNT,
+  PROP_FILE,
   LAST_PROP
 };
 
@@ -89,6 +91,10 @@ gtk_places_view_row_get_property (GObject    *object,
       g_value_set_object (value, self->mount);
       break;
 
+    case PROP_FILE:
+      g_value_set_object (value, self->file);
+      break;
+
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
     }
@@ -125,6 +131,10 @@ gtk_places_view_row_set_property (GObject      *object,
     case PROP_MOUNT:
       self->mount = g_value_get_object (value);
       gtk_widget_set_visible (GTK_WIDGET (self->eject_button), self->mount != NULL);
+      break;
+
+    case PROP_FILE:
+      self->file = g_value_get_object (value);
       break;
 
     default:
@@ -176,6 +186,13 @@ gtk_places_view_row_class_init (GtkPlacesViewRowClass *klass)
                                G_TYPE_MOUNT,
                                G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY);
 
+  properties[PROP_FILE] =
+          g_param_spec_object ("file",
+                               P_("File represented by the row"),
+                               P_("The file represented by the row, if any"),
+                               G_TYPE_FILE,
+                               G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY);
+
   g_object_class_install_properties (object_class, LAST_PROP, properties);
 
   gtk_widget_class_set_template_from_resource (widget_class, "/org/gtk/libgtk/ui/gtkplacesviewrow.ui");
@@ -218,6 +235,14 @@ gtk_places_view_row_get_volume (GtkPlacesViewRow *row)
   g_return_val_if_fail (GTK_IS_PLACES_VIEW_ROW (row), NULL);
 
   return row->volume;
+}
+
+GFile*
+gtk_places_view_row_get_file (GtkPlacesViewRow *row)
+{
+  g_return_val_if_fail (GTK_IS_PLACES_VIEW_ROW (row), NULL);
+
+  return row->file;
 }
 
 GtkWidget*

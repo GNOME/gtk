@@ -342,16 +342,22 @@ activate_row (GtkPlacesView      *view,
   GtkPlacesViewPrivate *priv;
   GVolume *volume;
   GMount *mount;
+  GFile *file;
 
   priv = gtk_places_view_get_instance_private (view);
   mount = gtk_places_view_row_get_mount (row);
   volume = gtk_places_view_row_get_volume (row);
+  file = gtk_places_view_row_get_file (row);
 
-  if (mount)
+  if (file)
+    {
+      emit_open_location (view, file, flags);
+    }
+  else if (mount)
     {
       GFile *location = g_mount_get_root (mount);
 
-      emit_open_location (view, location, GTK_PLACES_OPEN_NORMAL);
+      emit_open_location (view, location, flags);
 
       g_object_unref (location);
     }
@@ -771,6 +777,7 @@ add_volume (GtkPlacesView *view,
                           "path", path ? path : "",
                           "volume", volume,
                           "mount", mount,
+                          "file", NULL,
                           NULL);
 
       insert_row (view, row, is_network);
@@ -814,6 +821,7 @@ add_mount (GtkPlacesView *view,
                           "path", path ? path : "",
                           "volume", NULL,
                           "mount", mount,
+                          "file", NULL,
                           NULL);
 
       insert_row (view, row, is_network);
@@ -847,6 +855,28 @@ add_drive (GtkPlacesView *view,
 }
 
 static void
+add_computer (GtkPlacesView *view)
+{
+  GtkWidget *row;
+  GIcon *icon;
+  GFile *file;
+
+  file = g_file_new_for_path ("/");
+  icon = g_themed_icon_new_with_default_fallbacks ("drive-harddisk");
+
+  row = g_object_new (GTK_TYPE_PLACES_VIEW_ROW,
+                      "icon", icon,
+                      "name", _("Computer"),
+                      "path", "/",
+                      "volume", NULL,
+                      "mount", NULL,
+                      "file", file,
+                      NULL);
+
+  insert_row (view, row, FALSE);
+}
+
+static void
 update_places (GtkPlacesView *view)
 {
   GtkPlacesViewPrivate *priv;
@@ -871,6 +901,9 @@ update_places (GtkPlacesView *view)
    */
   gtk_widget_hide (priv->drives_box);
   gtk_widget_hide (priv->network_grid);
+
+  /* Add "Computer" row */
+  add_computer (view);
 
   /* Add currently connected drives */
   drives = g_volume_monitor_get_connected_drives (priv->volume_monitor);

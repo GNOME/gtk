@@ -53,6 +53,8 @@
                 <property name="justify">right</property>
                 <property name="ellipsize">middle</property>
                 <property name="xalign">1</property>
+                <property name="width_chars">15</property>
+                <property name="max_width_chars">15</property>
                 <style>
                   <class name="dim-label"/>
                 </style>
