@@ -57,6 +57,16 @@ enum {
 static GParamSpec *properties [LAST_PROP];
 
 static void
+gtk_places_view_row_finalize (GObject *object)
+{
+  GtkPlacesViewRow *self = GTK_PLACES_VIEW_ROW (object);
+
+  g_clear_object (&self->volume);
+  g_clear_object (&self->mount);
+  g_clear_object (&self->file);
+}
+
+static void
 gtk_places_view_row_get_property (GObject    *object,
                                   guint       prop_id,
                                   GValue     *value,
@@ -125,16 +135,16 @@ gtk_places_view_row_set_property (GObject      *object,
       break;
 
     case PROP_VOLUME:
-      self->volume = g_value_get_object (value);
+      g_set_object (&self->volume, g_value_get_object (value));
       break;
 
     case PROP_MOUNT:
-      self->mount = g_value_get_object (value);
+      g_set_object (&self->mount, g_value_get_object (value));
       gtk_widget_set_visible (GTK_WIDGET (self->eject_button), self->mount != NULL);
       break;
 
     case PROP_FILE:
-      self->file = g_value_get_object (value);
+      g_set_object (&self->file, g_value_get_object (value));
       break;
 
     default:
@@ -148,6 +158,7 @@ gtk_places_view_row_class_init (GtkPlacesViewRowClass *klass)
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
 
+  object_class->finalize = gtk_places_view_row_finalize;
   object_class->get_property = gtk_places_view_row_get_property;
   object_class->set_property = gtk_places_view_row_set_property;
 

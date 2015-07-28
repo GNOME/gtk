@@ -874,6 +874,9 @@ add_computer (GtkPlacesView *view)
                       NULL);
 
   insert_row (view, row, FALSE);
+
+  g_object_unref (icon);
+  g_object_unref (file);
 }
 
 static void
