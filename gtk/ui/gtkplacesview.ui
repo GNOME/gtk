@@ -151,134 +151,11 @@
                     <property name="can_focus">False</property>
                     <property name="shadow_type">none</property>
                     <child>
-                      <object class="GtkBox" id="main_box">
+                      <object class="GtkListBox" id="listbox">
                         <property name="visible">True</property>
-                        <property name="hexpand">True</property>
-                        <property name="can_focus">False</property>
-                        <property name="orientation">vertical</property>
-                        <child>
-                          <object class="GtkBox" id="drives_box">
-                            <property name="visible">True</property>
-                            <property name="can_focus">False</property>
-                            <property name="orientation">vertical</property>
-                            <child>
-                              <object class="GtkLabel">
-                                <property name="visible">True</property>
-                                <property name="margin_start">12</property>
-                                <property name="margin_end">12</property>
-                                <property name="margin_top">6</property>
-                                <property name="margin_bottom">6</property>
-                                <property name="label" translatable="yes">This Computer</property>
-                                <property name="xalign">0</property>
-                                <attributes>
-                                  <attribute name="weight" value="bold"/>
-                                </attributes>
-                              </object>
-                              <packing>
-                                <property name="expand">False</property>
-                                <property name="fill">True</property>
-                                <property name="position">0</property>
-                              </packing>
-                            </child>
-                            <child>
-                              <object class="GtkSeparator">
-                                <property name="visible">True</property>
-                              </object>
-                              <packing>
-                                <property name="expand">False</property>
-                                <property name="fill">True</property>
-                                <property name="position">1</property>
-                              </packing>
-                            </child>
-                            <child>
-                              <object class="GtkListBox" id="drives_listbox">
-                                <property name="visible">True</property>
-                                <property name="can_focus">True</property>
-                                <property name="selection_mode">none</property>
-                                <signal name="row-activated" handler="on_listbox_row_activated" object="GtkPlacesView" swapped="yes" />
-                              </object>
-                              <packing>
-                                <property name="expand">False</property>
-                                <property name="fill">True</property>
-                                <property name="position">2</property>
-                              </packing>
-                            </child>
-                          </object>
-                          <packing>
-                            <property name="expand">False</property>
-                            <property name="fill">True</property>
-                            <property name="position">0</property>
-                          </packing>
-                        </child>
-                        <child>
-                          <object class="GtkGrid" id="network_grid">
-                            <property name="visible">True</property>
-                            <property name="hexpand">True</property>
-                            <property name="can_focus">False</property>
-                            <child>
-                              <object class="GtkLabel">
-                                <property name="visible">True</property>
-                                <property name="margin_start">12</property>
-                                <property name="margin_end">12</property>
-                                <property name="margin_top">6</property>
-                                <property name="margin_bottom">6</property>
-                                <property name="hexpand">False</property>
-                                <property name="label" translatable="yes" comments="Translators: header of the Network section of the Other Locations view">Network</property>
-                                <property name="ellipsize">end</property>
-                                <property name="xalign">0</property>
-                                <attributes>
-                                  <attribute name="weight" value="bold"/>
-                                </attributes>
-                              </object>
-                              <packing>
-                                <property name="left_attach">0</property>
-                                <property name="top_attach">0</property>
-                              </packing>
-                            </child>
-                            <child>
-                              <object class="GtkSpinner" id="network_spinner">
-                                <property name="visible">True</property>
-                                <property name="halign">start</property>
-                                <property name="hexpand">True</property>
-                                <property name="can_focus">False</property>
-                              </object>
-                              <packing>
-                                <property name="left_attach">1</property>
-                                <property name="top_attach">0</property>
-                              </packing>
-                            </child>
-                            <child>
-                              <object class="GtkSeparator">
-                                <property name="visible">True</property>
-                                <property name="hexpand">True</property>
-                                <property name="can_focus">False</property>
-                              </object>
-                              <packing>
-                                <property name="left_attach">0</property>
-                                <property name="top_attach">1</property>
-                                <property name="width">2</property>
-                              </packing>
-                            </child>
-                            <child>
-                              <object class="GtkListBox" id="network_listbox">
-                                <property name="visible">True</property>
-                                <property name="can_focus">True</property>
-                                <property name="selection_mode">none</property>
-                                <signal name="row-activated" handler="on_listbox_row_activated" object="GtkPlacesView" swapped="yes" />
-                              </object>
-                              <packing>
-                                <property name="left_attach">0</property>
-                                <property name="top_attach">2</property>
-                                <property name="width">2</property>
-                              </packing>
-                            </child>
-                          </object>
-                          <packing>
-                            <property name="expand">False</property>
-                            <property name="fill">True</property>
-                            <property name="position">1</property>
-                          </packing>
-                        </child>
+                        <property name="can_focus">True</property>
+                        <property name="selection_mode">none</property>
+                        <signal name="row-activated" handler="on_listbox_row_activated" object="GtkPlacesView" swapped="yes" />
                       </object>
                     </child>
                     <style>
@@ -291,54 +168,6 @@
           </object>
           <packing>
             <property name="name">browse</property>
-          </packing>
-        </child>
-        <child>
-          <object class="GtkBox">
-            <property name="visible">True</property>
-            <property name="can_focus">False</property>
-            <property name="halign">center</property>
-            <property name="valign">center</property>
-            <property name="hexpand">True</property>
-            <property name="vexpand">True</property>
-            <property name="orientation">vertical</property>
-            <property name="spacing">12</property>
-            <child>
-              <object class="GtkImage">
-                <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="pixel_size">72</property>
-                <property name="icon_name">drive-harddisk-symbolic</property>
-                <style>
-                  <class name="dim-label"/>
-                </style>
-              </object>
-              <packing>
-                <property name="expand">False</property>
-                <property name="fill">True</property>
-                <property name="position">0</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkLabel">
-                <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="label" translatable="yes">No drives or networks found</property>
-                <attributes>
-                  <attribute name="weight" value="bold"/>
-                  <attribute name="scale" value="1.44"/>
-                </attributes>
-              </object>
-              <packing>
-                <property name="expand">False</property>
-                <property name="fill">True</property>
-                <property name="position">1</property>
-              </packing>
-            </child>
-          </object>
-          <packing>
-            <property name="name">empty</property>
-            <property name="position">1</property>
           </packing>
         </child>
         <child>
@@ -400,8 +229,7 @@
             </child>
           </object>
           <packing>
-            <property name="name">search</property>
-            <property name="position">2</property>
+            <property name="name">empty-search</property>
           </packing>
         </child>
       </object>
