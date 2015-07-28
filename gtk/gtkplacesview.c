@@ -47,19 +47,11 @@
  * selects a location to open in the view.
  */
 
-typedef enum
-{
-  MODE_BROWSE,
-  MODE_EMPTY,
-  MODE_EMPTY_SEARCH
-} PlacesViewMode;
-
 struct _GtkPlacesViewPrivate
 {
   GVolumeMonitor                *volume_monitor;
   GtkPlacesOpenFlags             open_flags;
   GtkPlacesOpenFlags             current_open_flags;
-  PlacesViewMode                 mode;
 
   GFile                         *server_list_file;
   GFileMonitor                  *server_list_monitor;
@@ -71,10 +63,7 @@ struct _GtkPlacesViewPrivate
   GtkWidget                     *actionbar;
   GtkWidget                     *address_entry;
   GtkWidget                     *connect_button;
-  GtkWidget                     *drives_box;
-  GtkWidget                     *drives_listbox;
-  GtkWidget                     *network_grid;
-  GtkWidget                     *network_listbox;
+  GtkWidget                     *listbox;
   GtkWidget                     *popup_menu;
   GtkWidget                     *recent_servers_listbox;
   GtkWidget                     *recent_servers_popover;
@@ -595,96 +584,40 @@ populate_servers (GtkPlacesView *view)
 }
 
 static void
-places_view_mode_set (GtkPlacesView  *view,
-                      PlacesViewMode  mode)
-{
-  GtkPlacesViewPrivate *priv;
-
-  priv = gtk_places_view_get_instance_private (view);
-
-  gtk_widget_set_visible (priv->network_grid, !priv->local_only);
-
-  if (priv->mode != mode)
-    {
-      priv->mode = mode;
-
-      switch (mode)
-        {
-        case MODE_BROWSE:
-          gtk_stack_set_visible_child_name (GTK_STACK (priv->stack), "browse");
-          break;
-
-        case MODE_EMPTY:
-          gtk_stack_set_visible_child_name (GTK_STACK (priv->stack), "empty");
-          break;
-
-        case MODE_EMPTY_SEARCH:
-          gtk_stack_set_visible_child_name (GTK_STACK (priv->stack), "search");
-          break;
-        }
-    }
-}
-
-static void
 update_view_mode (GtkPlacesView *view)
 {
   GtkPlacesViewPrivate *priv;
   GList *children;
   GList *l;
-  gboolean show_drives;
-  gboolean show_networks;
+  gboolean show_listbox;
 
   priv = gtk_places_view_get_instance_private (view);
-  show_drives = FALSE;
-  show_networks = FALSE;
+  show_listbox = FALSE;
 
   /* drives */
-  children = gtk_container_get_children (GTK_CONTAINER (priv->drives_listbox));
+  children = gtk_container_get_children (GTK_CONTAINER (priv->listbox));
 
   for (l = children; l; l = l->next)
     {
       /* GtkListBox filter rows by changing their GtkWidget::child-visible property */
       if (gtk_widget_get_child_visible (l->data))
         {
-          show_drives = TRUE;
+          show_listbox = TRUE;
           break;
         }
     }
 
   g_list_free (children);
 
-  /* networks */
-  if (!priv->local_only)
+  if (!show_listbox &&
+      priv->search_query &&
+      priv->search_query[0] != '\0')
     {
-      children = gtk_container_get_children (GTK_CONTAINER (priv->network_listbox));
-
-      for (l = children; l; l = l->next)
-        {
-          /* GtkListBox filter rows by changing their GtkWidget::child-visible property */
-          if (gtk_widget_get_child_visible (l->data))
-            {
-              show_networks = TRUE;
-              break;
-            }
-        }
-
-      g_list_free (children);
-    }
-
-  gtk_widget_set_visible (priv->drives_box, show_drives);
-  gtk_widget_set_visible (priv->network_grid, show_networks);
-
-  if (!show_drives && !show_networks)
-    {
-      if (priv->search_query && priv->search_query[0] != '\0')
-        places_view_mode_set (view, MODE_EMPTY_SEARCH);
-      else
-        places_view_mode_set (view, MODE_EMPTY);
-
+        gtk_stack_set_visible_child_name (GTK_STACK (priv->stack), "empty-search");
     }
   else
     {
-      places_view_mode_set (view, MODE_BROWSE);
+      gtk_stack_set_visible_child_name (GTK_STACK (priv->stack), "browse");
     }
 }
 
@@ -694,12 +627,10 @@ insert_row (GtkPlacesView *view,
             gboolean       is_network)
 {
   GtkPlacesViewPrivate *priv;
-  GtkWidget *container;
-  GtkWidget *list;
 
   priv = gtk_places_view_get_instance_private (view);
-  list = is_network ? priv->network_listbox : priv->drives_listbox;
-  container = is_network ? priv->network_grid : priv->drives_box;
+
+  g_object_set_data (G_OBJECT (row), "is-network", GINT_TO_POINTER (is_network));
 
   g_signal_connect_swapped (gtk_places_view_row_get_event_box (GTK_PLACES_VIEW_ROW (row)),
                             "button-press-event",
@@ -716,15 +647,7 @@ insert_row (GtkPlacesView *view,
                     G_CALLBACK (on_eject_button_clicked),
                     row);
 
-  gtk_container_add (GTK_CONTAINER (list), row);
-
-  if (!priv->local_only || (priv->local_only && !is_network))
-    {
-      gtk_widget_show (container);
-
-      if (priv->mode == MODE_EMPTY)
-        places_view_mode_set (view, MODE_BROWSE);
-    }
+  gtk_container_add (GTK_CONTAINER (priv->listbox), row);
 }
 
 static void
@@ -892,18 +815,8 @@ update_places (GtkPlacesView *view)
   priv = gtk_places_view_get_instance_private (view);
 
   /* Clear all previously added items */
-  children = gtk_container_get_children (GTK_CONTAINER (priv->drives_listbox));
+  children = gtk_container_get_children (GTK_CONTAINER (priv->listbox));
   g_list_free_full (children, (GDestroyNotify) gtk_widget_destroy);
-
-  children = gtk_container_get_children (GTK_CONTAINER (priv->network_listbox));
-  g_list_free_full (children, (GDestroyNotify) gtk_widget_destroy);
-
-  /*
-   * Hide both networks and drives lists, and only show them when
-   * a row is added.
-   */
-  gtk_widget_hide (priv->drives_box);
-  gtk_widget_hide (priv->network_grid);
 
   /* Add "Computer" row */
   add_computer (view);
@@ -970,15 +883,7 @@ update_places (GtkPlacesView *view)
   /* load saved servers */
   populate_servers (view);
 
-  if (priv->search_query && priv->search_query[0] != '\0')
-    {
-      update_view_mode (view);
-    }
-  else if (!gtk_widget_get_visible (priv->drives_box) &&
-           !gtk_widget_get_visible (priv->network_grid))
-    {
-      places_view_mode_set (view, MODE_EMPTY);
-    }
+  update_view_mode (view);
 }
 
 static void
@@ -1676,12 +1581,18 @@ listbox_filter_func (GtkListBoxRow *row,
                      gpointer       user_data)
 {
   GtkPlacesViewPrivate *priv;
+  gboolean is_network;
   gboolean retval;
   gchar *name;
   gchar *path;
 
   priv = gtk_places_view_get_instance_private (GTK_PLACES_VIEW (user_data));
   retval = FALSE;
+
+  is_network = GPOINTER_TO_INT (g_object_get_data (G_OBJECT (row), "is-network"));
+
+  if (is_network && priv->local_only)
+    return FALSE;
 
   if (!priv->search_query || priv->search_query[0] == '\0')
     return TRUE;
@@ -1704,6 +1615,83 @@ listbox_filter_func (GtkListBoxRow *row,
 }
 
 static void
+listbox_header_func (GtkListBoxRow *row,
+                     GtkListBoxRow *before,
+                     gpointer       user_data)
+{
+  gboolean row_is_network;
+  gchar *text;
+
+  text = NULL;
+  row_is_network = GPOINTER_TO_INT (g_object_get_data (G_OBJECT (row), "is-network"));
+
+  if (!before)
+    {
+      text = g_strdup_printf ("<b>%s</b>", row_is_network ? _("Networks") : _("On This Computer"));
+    }
+  else
+    {
+      gboolean before_is_network;
+
+      before_is_network = GPOINTER_TO_INT (g_object_get_data (G_OBJECT (before), "is-network"));
+
+      if (before_is_network != row_is_network)
+        text = g_strdup_printf ("<b>%s</b>", row_is_network ? _("Networks") : _("On This Computer"));
+
+    }
+
+  if (text)
+    {
+      GtkWidget *header;
+      GtkWidget *label;
+      GtkWidget *separator;
+
+      header = gtk_box_new (GTK_ORIENTATION_VERTICAL, 6);
+
+      separator = gtk_separator_new (GTK_ORIENTATION_HORIZONTAL);
+
+      label = g_object_new (GTK_TYPE_LABEL,
+                            "hexpand", TRUE,
+                            "use_markup", TRUE,
+                            "label", text,
+                            "xalign", 0,
+                            NULL);
+
+      g_object_set (label,
+                    "margin-top", 6,
+                    "margin-start", 12,
+                    "margin-end", 12,
+                    NULL);
+
+      gtk_container_add (GTK_CONTAINER (header), label);
+      gtk_container_add (GTK_CONTAINER (header), separator);
+      gtk_widget_show_all (header);
+
+      gtk_list_box_row_set_header (row, header);
+
+      g_free (text);
+    }
+  else
+    {
+      gtk_list_box_row_set_header (row, NULL);
+    }
+}
+
+static gint
+listbox_sort_func (GtkListBoxRow *row1,
+                   GtkListBoxRow *row2,
+                   gpointer       user_data)
+{
+  gboolean row1_is_network;
+  gboolean row2_is_network;
+
+  row1_is_network = GPOINTER_TO_INT (g_object_get_data (G_OBJECT (row1), "is-network"));
+  row2_is_network = GPOINTER_TO_INT (g_object_get_data (G_OBJECT (row2), "is-network"));
+
+  return row1_is_network - row2_is_network;
+}
+
+static void
 gtk_places_view_constructed (GObject *object)
 {
   GtkPlacesViewPrivate *priv;
@@ -1712,12 +1700,16 @@ gtk_places_view_constructed (GObject *object)
 
   G_OBJECT_CLASS (gtk_places_view_parent_class)->constructed (object);
 
-  gtk_list_box_set_filter_func (GTK_LIST_BOX (priv->drives_listbox),
+  gtk_list_box_set_sort_func (GTK_LIST_BOX (priv->listbox),
+                              listbox_sort_func,
+                              object,
+                              NULL);
+  gtk_list_box_set_filter_func (GTK_LIST_BOX (priv->listbox),
                                 listbox_filter_func,
                                 object,
                                 NULL);
-  gtk_list_box_set_filter_func (GTK_LIST_BOX (priv->network_listbox),
-                                listbox_filter_func,
+  gtk_list_box_set_header_func (GTK_LIST_BOX (priv->listbox),
+                                listbox_header_func,
                                 object,
                                 NULL);
 
@@ -1848,10 +1840,7 @@ gtk_places_view_class_init (GtkPlacesViewClass *klass)
   gtk_widget_class_bind_template_child_private (widget_class, GtkPlacesView, address_entry_completion);
   gtk_widget_class_bind_template_child_private (widget_class, GtkPlacesView, completion_store);
   gtk_widget_class_bind_template_child_private (widget_class, GtkPlacesView, connect_button);
-  gtk_widget_class_bind_template_child_private (widget_class, GtkPlacesView, drives_box);
-  gtk_widget_class_bind_template_child_private (widget_class, GtkPlacesView, drives_listbox);
-  gtk_widget_class_bind_template_child_private (widget_class, GtkPlacesView, network_grid);
-  gtk_widget_class_bind_template_child_private (widget_class, GtkPlacesView, network_listbox);
+  gtk_widget_class_bind_template_child_private (widget_class, GtkPlacesView, listbox);
   gtk_widget_class_bind_template_child_private (widget_class, GtkPlacesView, recent_servers_listbox);
   gtk_widget_class_bind_template_child_private (widget_class, GtkPlacesView, recent_servers_popover);
   gtk_widget_class_bind_template_child_private (widget_class, GtkPlacesView, recent_servers_stack);
@@ -2003,8 +1992,8 @@ gtk_places_view_set_search_query (GtkPlacesView *view,
       g_clear_pointer (&priv->search_query, g_free);
       priv->search_query = g_strdup (query_text);
 
-      gtk_list_box_invalidate_filter (GTK_LIST_BOX (priv->drives_listbox));
-      gtk_list_box_invalidate_filter (GTK_LIST_BOX (priv->network_listbox));
+      gtk_list_box_invalidate_filter (GTK_LIST_BOX (priv->listbox));
+      gtk_list_box_invalidate_headers (GTK_LIST_BOX (priv->listbox));
 
       update_view_mode (view);
     }
@@ -2059,7 +2048,7 @@ gtk_places_view_set_local_only (GtkPlacesView *view,
       priv->local_only = local_only;
 
       gtk_widget_set_visible (priv->actionbar, !local_only);
-      gtk_widget_set_visible (priv->network_grid, !local_only);
+      gtk_list_box_invalidate_filter (GTK_LIST_BOX (priv->listbox));
 
       update_view_mode (view);
 
