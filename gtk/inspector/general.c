@@ -278,6 +278,7 @@ init_display (GtkInspectorGeneral *gen)
 {
   GdkScreen *screen;
   gchar *name;
+  gint i;
 
   screen = gdk_screen_get_default ();
   name = gdk_screen_make_display_name (screen);
@@ -289,6 +290,52 @@ init_display (GtkInspectorGeneral *gen)
 
   if (gdk_screen_is_composited (screen))
     gtk_widget_show (gen->priv->x_composited);
+
+  for (i = 0; i < gdk_screen_get_n_monitors (screen); i++)
+    {
+      GtkWidget *box;
+      GtkWidget *label;
+      gchar *text;
+      gchar *plug_name;
+      GdkRectangle rect;
+      gint w, h, wmm, hmm, scale;
+
+      box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 40);
+      g_object_set (box, "margin", 10, NULL);
+
+      plug_name = gdk_screen_get_monitor_plug_name (screen, i);
+      if (plug_name)
+        text = g_strdup_printf ("Monitor %s", plug_name);
+      else
+        text = g_strdup_printf ("Monitor %d", i);
+      label = gtk_label_new (text);
+      gtk_widget_set_halign (label, GTK_ALIGN_START);
+      gtk_widget_set_valign (label, GTK_ALIGN_BASELINE);
+      gtk_label_set_xalign (GTK_LABEL (label), 0.0);
+      gtk_box_pack_start (GTK_BOX (box), label, FALSE, FALSE, 0);
+      g_free (text);
+      g_free (plug_name);
+
+      gdk_screen_get_monitor_geometry (screen, i, &rect);
+      w = rect.width;
+      h = rect.height;
+      wmm = gdk_screen_get_monitor_width_mm (screen, i);
+      hmm = gdk_screen_get_monitor_height_mm (screen, i);
+      scale = gdk_screen_get_monitor_scale_factor (screen, i);
+      text = g_strdup_printf ("%d × %d%s, %d × %d mm²",
+                              w, h, scale == 2 ? " @ 2" : "",
+                              wmm, hmm);
+      label = gtk_label_new (text);
+      gtk_label_set_selectable (GTK_LABEL (label), TRUE);
+      gtk_widget_set_halign (label, GTK_ALIGN_END);
+      gtk_widget_set_valign (label, GTK_ALIGN_BASELINE);
+      gtk_label_set_xalign (GTK_LABEL (label), 1.0);
+      gtk_box_pack_start (GTK_BOX (box), label, TRUE, TRUE, 0);
+      g_free (text);
+
+      gtk_widget_show_all (box);
+      gtk_list_box_insert (GTK_LIST_BOX (gen->priv->x_box), box, -1);
+    }
 }
 
 static void
