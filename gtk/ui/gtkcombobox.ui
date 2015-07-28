@@ -8,9 +8,17 @@
         <property name="focus-on-click">True</property>
         <signal name="toggled" handler="gtk_combo_box_button_toggled" swapped="no"/>
         <child>
-          <object class="GtkImage" id="arrow">
+          <object class="GtkBox">
             <property name="visible">True</property>
-            <property name="icon-name">pan-down-symbolic</property>
+            <child>
+              <object class="GtkImage" id="arrow">
+                <property name="visible">True</property>
+                <property name="icon-name">pan-down-symbolic</property>
+              </object>
+              <packing>
+                <property name="pack_type">end</property>
+              </packing>
+            </child>
           </object>
         </child>
       </object>
