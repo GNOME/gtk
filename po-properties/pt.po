@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 3.12\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-07-24 21:50+0000\n"
-"PO-Revision-Date: 2015-07-28 08:14+0100\n"
+"POT-Creation-Date: 2015-07-28 07:16+0000\n"
+"PO-Revision-Date: 2015-07-28 09:09+0100\n"
 "Last-Translator: Pedro Albuquerque <palbuquerque73@gmail.com>\n"
 "Language-Team: Português <palbuquerque73@gmail.com>\n"
 "Language: pt\n"
@@ -132,12 +132,10 @@ msgid "The GDK window bound to the GL context"
 msgstr "A janela GDK ligada ao contexto GL"
 
 #: gdk/gdkglcontext.c:296
-#| msgid "Style context"
 msgid "Shared context"
 msgstr "Contexto partilhado"
 
 #: gdk/gdkglcontext.c:297
-#| msgid "The Cell Area this context was created for"
 msgid "The GL context this context shares data with"
 msgstr "O contexto GL com o qual este contexto partilha dados"
 
@@ -1151,12 +1149,10 @@ msgid "Comments about the program"
 msgstr "Comentários sobre a aplicação"
 
 #: gtk/gtkaboutdialog.c:410
-#| msgid "License Type"
 msgid "License"
 msgstr "Licença"
 
 #: gtk/gtkaboutdialog.c:411
-#| msgid "The license type of the program"
 msgid "The license of the program"
 msgstr "O tipo de licença da aplicação"
 
@@ -2940,12 +2936,10 @@ msgid "Whether the swatch is selectable"
 msgstr "Se o seletor é ou não selecionável"
 
 #: gtk/gtkcolorswatch.c:741
-#| msgid "Menu"
 msgid "Has Menu"
 msgstr "Tem menu"
 
 #: gtk/gtkcolorswatch.c:741
-#| msgid "Whether the widget should show other applications"
 msgid "Whether the swatch should offer customization"
 msgstr "Se o swatch deve oferecer personalização"
 
@@ -3144,7 +3138,6 @@ msgid "Set if the value can be animated"
 msgstr "Definir se o valor pode ou não ser animado"
 
 #: gtk/gtkcssstyleproperty.c:214
-#| msgid "Affects size"
 msgid "Affects"
 msgstr "Afeta o tamanho"
 
@@ -3697,7 +3690,6 @@ msgstr ""
 "widget filho, por oposição a abaixo desta."
 
 #: gtk/gtkeventcontroller.c:166
-#| msgid "Widget the bubble window points to"
 msgid "Widget the gesture relates to"
 msgstr "Widget para o qual a janela bolha aponta"
 
@@ -3892,7 +3884,6 @@ msgstr ""
 "utilizador criar novas pastas."
 
 #: gtk/gtkfilechooserwidget.c:7452 gtk/gtkfilechooserwidget.c:7453
-#| msgid "Search Mode Enabled"
 msgid "Search mode"
 msgstr "Modo de procura"
 
@@ -4060,12 +4051,10 @@ msgid "A widget to display in place of the usual frame label"
 msgstr "Um widget a mostrar em vez da etiqueta de moldura comum"
 
 #: gtk/gtkgesture.c:695
-#| msgid "Number of lines"
 msgid "Number of points"
 msgstr "Número de pontos"
 
 #: gtk/gtkgesture.c:696
-#| msgid "Number of jobs queued in the printer"
 msgid "Number of points needed to trigger the gesture"
 msgstr "O número de pontos necessários para acionar o gesto"
 
@@ -4074,7 +4063,6 @@ msgid "GdkWindow to receive events about"
 msgstr "GdkWindow para receber eventos sobre"
 
 #: gtk/gtkgesturelongpress.c:284
-#| msgid "Scale factor"
 msgid "Delay factor"
 msgstr "Fator de atraso"
 
@@ -4083,7 +4071,6 @@ msgid "Factor by which to modify the default timeout"
 msgstr "Fator pelo qual modificar o atraso predefinido"
 
 #: gtk/gtkgesturepan.c:238
-#| msgid "Allow folder creation"
 msgid "Allowed orientations"
 msgstr "Permitir a criação de pastas"
 
@@ -4092,17 +4079,14 @@ msgid "Handle only touch events"
 msgstr "Gerir só eventos de toque"
 
 #: gtk/gtkgesturesingle.c:262
-#| msgid "Whether the widget responds to input"
 msgid "Whether the gesture handles only touch events"
 msgstr "Se o gesto gere só eventos de toque"
 
 #: gtk/gtkgesturesingle.c:278 gtk/gtkgesturesingle.c:279
-#| msgid "Whether the spinner is active"
 msgid "Whether the gesture is exclusive"
 msgstr "Se o gesto é exclusivo"
 
 #: gtk/gtkgesturesingle.c:293
-#| msgid "Button relief"
 msgid "Button number"
 msgstr "Número do botão"
 
@@ -4111,32 +4095,26 @@ msgid "Button number to listen to"
 msgstr "Número do boão a ouvir"
 
 #: gtk/gtkglarea.c:768
-#| msgid "Content type"
 msgid "Context"
 msgstr "Contexto"
 
 #: gtk/gtkglarea.c:769
-#| msgid "Style context"
 msgid "The GL context"
 msgstr "Contexto GL"
 
 #: gtk/gtkglarea.c:791
-#| msgid "Text to render"
 msgid "Auto render"
 msgstr "Desenho automático"
 
 #: gtk/gtkglarea.c:792
-#| msgid "Whether the header can be clicked"
 msgid "Whether the GtkGLArea renders on each redraw"
 msgstr "Se o GtkGLArea é sempre redesenhado"
 
 #: gtk/gtkglarea.c:812
-#| msgid "Has Alpha"
 msgid "Has alpha"
 msgstr "Tem alfa"
 
 #: gtk/gtkglarea.c:813
-#| msgid "Whether the pixbuf has an alpha channel"
 msgid "Whether the color buffer has an alpha component"
 msgstr "Se o buffer de cor tem um componente alfa"
 
@@ -4145,7 +4123,6 @@ msgid "Has depth buffer"
 msgstr "Tem buffer de profundidade"
 
 #: gtk/gtkglarea.c:830
-#| msgid "Whether the spinner is active"
 msgid "Whether a depth buffer is allocated"
 msgstr "Se está alocado um buffer de profundidade"
 
@@ -4154,7 +4131,6 @@ msgid "Has stencil buffer"
 msgstr "Tem buffer de estêncil"
 
 #: gtk/gtkglarea.c:847
-#| msgid "Whether the spinner is active"
 msgid "Whether a stencil buffer is allocated"
 msgstr "Se está alocado um buffer de estêncil"
 
@@ -4478,10 +4454,6 @@ msgid "Justification"
 msgstr "Alinhamento"
 
 #: gtk/gtklabel.c:761
-#| msgid ""
-#| "The alignment of the lines in the text of the label relative to each "
-#| "other. This does NOT affect the alignment of the label within its "
-#| "allocation. See GtkMisc::xalign for that"
 msgid ""
 "The alignment of the lines in the text of the label relative to each other. "
 "This does NOT affect the alignment of the label within its allocation. See "
@@ -4661,12 +4633,10 @@ msgid "Whether this link has been visited."
 msgstr "Se esta ligação já foi ou não visitada."
 
 #: gtk/gtklistbox.c:3563
-#| msgid "Whether the header can be clicked"
 msgid "Whether this row can be activated"
 msgstr "Se esta linha pode ou não ser ativada"
 
 #: gtk/gtklistbox.c:3577
-#| msgid "Whether the header can be clicked"
 msgid "Whether this row can be selected"
 msgstr "Se esta linha pode ou não ser selecionada"
 
@@ -4734,7 +4704,6 @@ msgid "magnification"
 msgstr "ampliação"
 
 #: gtk/gtkmagnifier.c:286 gtk/gtkmagnifier.c:287
-#| msgid "Resize"
 msgid "resize"
 msgstr "redimensionar"
 
@@ -5083,32 +5052,26 @@ msgid "Role"
 msgstr "Papel"
 
 #: gtk/gtkmodelbutton.c:851
-#| msgid "The toggle state of the button"
 msgid "The role of this button"
 msgstr "O papel deste botão"
 
 #: gtk/gtkmodelbutton.c:867
-#| msgid "The icon size"
 msgid "The icon"
 msgstr "O ícone"
 
 #: gtk/gtkmodelbutton.c:881
-#| msgid "Show text"
 msgid "The text"
 msgstr "O texto"
 
 #: gtk/gtkmodelbutton.c:910
-#| msgid "Menu model"
 msgid "Menu name"
 msgstr "Nome de menu"
 
 #: gtk/gtkmodelbutton.c:911
-#| msgid "The name of the selected font"
 msgid "The name of the menu to open"
 msgstr "O nome do menu a abrir"
 
 #: gtk/gtkmodelbutton.c:927
-#| msgid "Whether the menu has a tearoff item"
 msgid "Whether the menu is a parent"
 msgstr "Se o menu é pai"
 
@@ -5117,17 +5080,14 @@ msgid "Centered"
 msgstr "Centrado"
 
 #: gtk/gtkmodelbutton.c:942
-#| msgid "Whether to wrap the license text."
 msgid "Whether to center the contents"
 msgstr "Se centrar ou não o conteúdo"
 
 #: gtk/gtkmodelbutton.c:957
-#| msgid "Icon"
 msgid "Iconic"
 msgstr "Icónico"
 
 #: gtk/gtkmodelbutton.c:958
-#| msgid "Whether to wrap the license text."
 msgid "Whether to prefer the icon over text"
 msgstr "Se preferir ou não o ícone ao texto"
 
@@ -5375,12 +5335,10 @@ msgid "Largest possible value for the \"position\" property"
 msgstr "Maior valor possível para a propriedade \"position\""
 
 #: gtk/gtkpaned.c:396
-#| msgid "Width of handle"
 msgid "Wide Handle"
 msgstr "Puxador largo"
 
 #: gtk/gtkpaned.c:397
-#| msgid "Whether the window frame should have a close button"
 msgid "Whether the paned should have a prominent handle"
 msgstr "Se o painel deve ou não ter um puxador proeminente"
 
@@ -5453,14 +5411,10 @@ msgstr ""
 "servidor\""
 
 #: gtk/gtkplacessidebar.c:4612
-#| msgid "Show decorations"
 msgid "Show 'Enter Location'"
 msgstr "Mostrar \"Inserir localização\""
 
 #: gtk/gtkplacessidebar.c:4613
-#| msgid ""
-#| "Whether the sidebar includes a builtin shortcut to a 'Connect to server' "
-#| "dialog"
 msgid ""
 "Whether the sidebar includes a builtin shortcut to manually enter a location"
 msgstr ""
@@ -5512,27 +5466,22 @@ msgid "Whether the popover is modal"
 msgstr "Se a bolha é ou não modal"
 
 #: gtk/gtkpopover.c:1628
-#| msgid "Transition type"
 msgid "Transitions enabled"
 msgstr "Transições ativadas"
 
 #: gtk/gtkpopover.c:1629
-#| msgid "Whether the action is enabled."
 msgid "Whether show/hide transitions are enabled or not"
 msgstr "Mostrar/Ocultar se as transições estão ou não ativas."
 
 #: gtk/gtkpopovermenu.c:350
-#| msgid "Visible Focus"
 msgid "Visible submenu"
 msgstr "Submenu visível"
 
 #: gtk/gtkpopovermenu.c:351
-#| msgid "The name of the child page"
 msgid "The name of the visible submenu"
 msgstr "O nome do submenu visível"
 
 #: gtk/gtkpopovermenu.c:368
-#| msgid "The name of the widget"
 msgid "The name of the submenu"
 msgstr "O nome do submenu"
 
@@ -6432,12 +6381,10 @@ msgid "Kinetic scrolling mode."
 msgstr "Modo de rolamento Kinetic."
 
 #: gtk/gtkscrolledwindow.c:597
-#| msgid "Kinetic Scrolling"
 msgid "Overlay Scrolling"
 msgstr "Rolamento Overlay"
 
 #: gtk/gtkscrolledwindow.c:598
-#| msgid "Kinetic scrolling mode."
 msgid "Overlay scrolling mode"
 msgstr "Modo de rolamento Overlay"
 
@@ -7201,9 +7148,6 @@ msgid "Long press time"
 msgstr "Tempo de pressão longa"
 
 #: gtk/gtksettings.c:1714
-#| msgid ""
-#| "Maximum time allowed between two clicks for them to be considered a "
-#| "double click (in milliseconds)"
 msgid ""
 "Time for a button/touch press to be considered a long press (in milliseconds)"
 msgstr ""
@@ -7295,22 +7239,18 @@ msgid "Homogeneous sizing"
 msgstr "Dimensão homogénea"
 
 #: gtk/gtkstack.c:422
-#| msgid "Horizontal options"
 msgid "Horizontally homogeneous"
 msgstr "Homogéneo horizontalmente"
 
 #: gtk/gtkstack.c:422
-#| msgid "Homogeneous sizing"
 msgid "Horizontally homogeneous sizing"
 msgstr "Dimensão homogénea horizontal"
 
 #: gtk/gtkstack.c:434
-#| msgid "Vertical options"
 msgid "Vertically homogeneous"
 msgstr "Homogéneo verticalmente"
 
 #: gtk/gtkstack.c:434
-#| msgid "Homogeneous sizing"
 msgid "Vertically homogeneous sizing"
 msgstr "Dimensão homogénea vertical"
 
@@ -7416,12 +7356,10 @@ msgid "Whether the switch is on or off"
 msgstr "Se o interruptor está ligado ou desligado"
 
 #: gtk/gtkswitch.c:893
-#| msgid "Status"
 msgid "State"
 msgstr "Estado"
 
 #: gtk/gtkswitch.c:894
-#| msgid "Cell background set"
 msgid "The backend state"
 msgstr "Estado do motor"
 
@@ -7638,21 +7576,21 @@ msgid "Pixels of blank space between wrapped lines in a paragraph"
 msgstr "Pixels de espaço em branco entre linhas quebradas num parágrafo"
 
 #: gtk/gtktexttag.c:542
-#| msgid "Underline"
 msgid "Underline RGBA"
 msgstr "Sublinhado RGBA"
 
 #: gtk/gtktexttag.c:543
-#| msgid "Style of underline for this text"
 msgid "Color of underline for this text"
 msgstr "Cor do sublinhado para este texto"
 
 #: gtk/gtktexttag.c:558
-msgid "Strikethrough RGBA"
+#| msgid "Strikethrough RGBA"
+msgid "Strike-through RGBA"
 msgstr "Rasurado RGBA"
 
 #: gtk/gtktexttag.c:559
-msgid "Color of strikethrough for this text"
+#| msgid "Color of strikethrough for this text"
+msgid "Color of strike-through for this text"
 msgstr "Cor do rasurado para este texto"
 
 #: gtk/gtktexttag.c:567 gtk/gtktextview.c:766
@@ -7699,17 +7637,14 @@ msgid "Paragraph background RGBA as a GdkRGBA"
 msgstr "Fundo do parágrafo RGBA como GdkRGBA"
 
 #: gtk/gtktexttag.c:660
-#| msgid "Use Fallback"
 msgid "Fallback"
 msgstr "Recurso"
 
 #: gtk/gtktexttag.c:661
-#| msgid "Whether the action is enabled."
 msgid "Whether font fallback is enabled."
 msgstr "Se a letra de recurso está ou não ativa."
 
 #: gtk/gtktexttag.c:675
-#| msgid "Header Spacing"
 msgid "Letter Spacing"
 msgstr "Espaçamento do cabeçalho"
 
@@ -7786,22 +7721,18 @@ msgid "Whether this tag affects the right margin"
 msgstr "Se esta etiqueta afeta a margem direita"
 
 #: gtk/gtktexttag.c:798
-#| msgid "Underline set"
 msgid "Underline RGBA set"
 msgstr "Afeta sublinhado RGBA"
 
 #: gtk/gtktexttag.c:799
-#| msgid "Whether this tag affects underlining"
 msgid "Whether this tag affects underlining color"
 msgstr "Se este atributo afeta ou não a cor do sublinhado"
 
 #: gtk/gtktexttag.c:809
-#| msgid "Strikethrough set"
 msgid "Strikethrough RGBA set"
 msgstr "Afeta rasurado RGBA"
 
 #: gtk/gtktexttag.c:810
-#| msgid "Whether this tag affects strikethrough"
 msgid "Whether this tag affects strikethrough color"
 msgstr "Se este atributo afeta ou não a cor do rasurado"
 
@@ -7838,22 +7769,18 @@ msgid "Whether this tag affects the paragraph background color"
 msgstr "Se este atributo afeta ou não a cor de fundo do parágrafo"
 
 #: gtk/gtktexttag.c:829
-#| msgid "Use Fallback"
 msgid "Fallback set"
 msgstr "Afeta recurso"
 
 #: gtk/gtktexttag.c:830
-#| msgid "Whether this tag affects the font family"
 msgid "Whether this tag affects font fallback"
 msgstr "Se este atributo afeta ou não a letra de recurso"
 
 #: gtk/gtktexttag.c:833
-#| msgid "Left margin set"
 msgid "Letter spacing set"
 msgstr "Afeta espaçamento de letras"
 
 #: gtk/gtktexttag.c:834
-#| msgid "Whether this tag affects the left margin"
 msgid "Whether this tag affects letter spacing"
 msgstr "Se esta etiqueta afeta o espaçamento de letras"
 
@@ -7910,12 +7837,10 @@ msgid "Whether Tab will result in a tab character being entered"
 msgstr "Se o Tab resultará na introdução de um carácter de tabulação"
 
 #: gtk/gtktextview.c:928
-#| msgid "Colorspace"
 msgid "Monospace"
 msgstr "Monoespaço"
 
 #: gtk/gtktextview.c:929
-#| msgid "Whether to use symbolic icons"
 msgid "Whether to use a monospace font"
 msgstr "Se utilizar ou não letra monoespaço"
 
