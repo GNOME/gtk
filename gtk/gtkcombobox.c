@@ -1523,6 +1523,19 @@ gtk_combo_box_button_toggled (GtkWidget *widget,
 }
 
 static void
+gtk_combo_box_create_cell_view (GtkComboBox *combo_box)
+{
+  GtkComboBoxPrivate *priv = combo_box->priv;
+
+  priv->cell_view = gtk_cell_view_new_with_context (priv->area, NULL);
+  gtk_cell_view_set_fit_model (GTK_CELL_VIEW (priv->cell_view), TRUE);
+  gtk_cell_view_set_model (GTK_CELL_VIEW (priv->cell_view), priv->model);
+  gtk_widget_set_parent (priv->cell_view, GTK_WIDGET (combo_box));
+  _gtk_bin_set_child (GTK_BIN (combo_box), priv->cell_view);
+  gtk_widget_show (priv->cell_view);
+}
+
+static void
 gtk_combo_box_add (GtkContainer *container,
                    GtkWidget    *widget)
 {
@@ -1618,16 +1631,7 @@ gtk_combo_box_remove (GtkContainer *container,
     }
 
   if (!priv->cell_view)
-    {
-      priv->cell_view = gtk_cell_view_new ();
-      gtk_widget_set_parent (priv->cell_view, GTK_WIDGET (container));
-      _gtk_bin_set_child (GTK_BIN (container), priv->cell_view);
-
-      gtk_widget_show (priv->cell_view);
-      gtk_cell_view_set_model (GTK_CELL_VIEW (priv->cell_view),
-                               priv->model);
-    }
-
+    gtk_combo_box_create_cell_view (combo_box);
 
   if (appears_as_list)
     gtk_combo_box_list_setup (combo_box);
@@ -4556,7 +4560,6 @@ gtk_combo_box_format_entry_text (GtkComboBox     *combo_box,
   return text;
 }
 
-
 static void
 gtk_combo_box_constructed (GObject *object)
 {
@@ -4571,12 +4574,7 @@ gtk_combo_box_constructed (GObject *object)
       g_object_ref_sink (priv->area);
     }
 
-  priv->cell_view = gtk_cell_view_new_with_context (priv->area, NULL);
-  gtk_cell_view_set_fit_model (GTK_CELL_VIEW (priv->cell_view), TRUE);
-  gtk_cell_view_set_model (GTK_CELL_VIEW (priv->cell_view), priv->model);
-  gtk_widget_set_parent (priv->cell_view, GTK_WIDGET (combo_box));
-  _gtk_bin_set_child (GTK_BIN (combo_box), priv->cell_view);
-  gtk_widget_show (priv->cell_view);
+  gtk_combo_box_create_cell_view (combo_box);
 
   gtk_combo_box_check_appearance (combo_box);
 
