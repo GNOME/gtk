@@ -274,7 +274,7 @@ init_env (GtkInspectorGeneral *gen)
 }
 
 static void
-init_x (GtkInspectorGeneral *gen)
+init_display (GtkInspectorGeneral *gen)
 {
   GdkScreen *screen;
   gchar *name;
@@ -298,7 +298,7 @@ gtk_inspector_general_init (GtkInspectorGeneral *gen)
   gtk_widget_init_template (GTK_WIDGET (gen));
   init_version (gen);
   init_env (gen);
-  init_x (gen);
+  init_display (gen);
   init_gl (gen);
 }
 
