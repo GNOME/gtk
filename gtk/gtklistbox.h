@@ -308,6 +308,12 @@ void           gtk_list_box_bind_model                   (GtkListBox            
                                                           gpointer                      user_data,
                                                           GDestroyNotify                user_data_free_func);
 
+GDK_AVAILABLE_IN_3_18
+void           gtk_list_box_set_grid_lines               (GtkListBox                   *box,
+                                                          gboolean                      grid_lines);
+GDK_AVAILABLE_IN_3_18
+gboolean       gtk_list_box_get_grid_lines               (GtkListBox                   *box);
+
 G_END_DECLS
 
 #endif

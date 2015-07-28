@@ -105,6 +105,8 @@ typedef struct
   GtkListBoxCreateWidgetFunc create_widget_func;
   gpointer create_widget_func_data;
   GDestroyNotify create_widget_func_data_destroy;
+
+  gboolean grid_lines;
 } GtkListBoxPrivate;
 
 typedef struct
@@ -140,6 +142,7 @@ enum {
   PROP_0,
   PROP_SELECTION_MODE,
   PROP_ACTIVATE_ON_SINGLE_CLICK,
+  PROP_GRID_LINES,
   LAST_PROPERTY
 };
 
@@ -339,6 +342,9 @@ gtk_list_box_get_property (GObject    *obj,
     case PROP_ACTIVATE_ON_SINGLE_CLICK:
       g_value_set_boolean (value, priv->activate_single_click);
       break;
+    case PROP_GRID_LINES:
+      g_value_set_boolean (value, priv->grid_lines);
+      break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (obj, property_id, pspec);
       break;
@@ -360,6 +366,9 @@ gtk_list_box_set_property (GObject      *obj,
       break;
     case PROP_ACTIVATE_ON_SINGLE_CLICK:
       gtk_list_box_set_activate_on_single_click (box, g_value_get_boolean (value));
+      break;
+    case PROP_GRID_LINES:
+      gtk_list_box_set_grid_lines (box, g_value_get_boolean (value));
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (obj, property_id, pspec);
@@ -451,6 +460,13 @@ gtk_list_box_class_init (GtkListBoxClass *klass)
                           P_("Activate on Single Click"),
                           P_("Activate row on a single click"),
                           TRUE,
+                          G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY);
+
+  properties[PROP_GRID_LINES] =
+    g_param_spec_boolean ("grid-lines",
+                          P_("Enable Grid Lines"),
+                          P_("Whether grid lines should be drawn between rows"),
+                          FALSE,
                           G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY);
 
   g_object_class_install_properties (object_class, LAST_PROPERTY, properties);
@@ -3755,3 +3771,59 @@ gtk_list_box_bind_model (GtkListBox                   *box,
   g_signal_connect (priv->bound_model, "items-changed", G_CALLBACK (gtk_list_box_bound_model_changed), box);
   gtk_list_box_bound_model_changed (model, 0, 0, g_list_model_get_n_items (model), box);
 }
+
+/**
+ * gtk_list_box_set_grid_lines:
+ * @box: a #GtkListBox
+ * @grid_lines: whether to draw lines between rows
+ *
+ * Sets whether to draw grid lines in @box.
+ *
+ * Since: 3.18
+ */
+void
+gtk_list_box_set_grid_lines (GtkListBox *box,
+                             gboolean    grid_lines)
+{
+  GtkListBoxPrivate *priv = BOX_PRIV (box);
+  GtkStyleContext *context;
+
+  g_return_if_fail (GTK_IS_LIST_BOX (box));
+
+  grid_lines = grid_lines != FALSE;
+
+  if (priv->grid_lines != grid_lines)
+    {
+      priv->grid_lines = grid_lines;
+
+      g_object_notify (G_OBJECT (box), "grid-lines");
+
+      context = gtk_widget_get_style_context (GTK_WIDGET (box));
+
+      if (grid_lines)
+        gtk_style_context_add_class (context, "grid-lines");
+      else
+        gtk_style_context_remove_class (context, "grid-lines");
+    }
+}
+
+/**
+ * gtk_list_box_get_grid_lines:
+ * @box: a #GtkListBox
+ *
+ * Returns whether or not lines are drawn between rows.
+ *
+ * Returns: %TRUE if grid lines are drawn
+ *
+ * Since: 3.18
+ */
+gboolean
+gtk_list_box_get_grid_lines (GtkListBox *box)
+{
+  GtkListBoxPrivate *priv = BOX_PRIV (box);
+
+  g_return_if_fail (GTK_IS_LIST_BOX (box));
+
+  return priv->grid_lines;
+}
+
