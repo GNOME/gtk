@@ -64,6 +64,8 @@ gtk_places_view_row_finalize (GObject *object)
   g_clear_object (&self->volume);
   g_clear_object (&self->mount);
   g_clear_object (&self->file);
+
+  G_OBJECT_CLASS (gtk_places_view_row_parent_class)->finalize (object);
 }
 
 static void
