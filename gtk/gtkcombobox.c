@@ -5461,14 +5461,12 @@ gtk_combo_box_get_preferred_height_for_width (GtkWidget *widget,
     {
       /* list mode */
       gint but_width, but_height;
-      gint xpad = 0, ypad = 0;
 
       gtk_widget_get_preferred_width (priv->button, &but_width, NULL);
       gtk_widget_get_preferred_height_for_width (priv->button,
                                                  but_width, &but_height, NULL);
 
       size -= but_width;
-      size -= xpad;
 
       /* Get height-for-width of the child widget, usually a GtkCellArea calculating
        * and fitting the whole treemodel */
@@ -5476,9 +5474,6 @@ gtk_combo_box_get_preferred_height_for_width (GtkWidget *widget,
 
       min_height = MAX (min_height, but_height);
       nat_height = MAX (nat_height, but_height);
-
-      min_height += ypad;
-      nat_height += ypad;
     }
 
   min_height += padding.top + padding.bottom;
