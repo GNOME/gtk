@@ -1959,6 +1959,7 @@ gdk_x11_display_finalize (GObject *object)
 
   /* Free all GdkScreens */
   g_object_unref (display_x11->screen);
+  g_list_free_full (display_x11->screens, g_object_unref);
 
   g_free (display_x11->startup_notification_id);
 
@@ -2035,12 +2036,36 @@ GdkScreen *
 _gdk_x11_display_screen_for_xrootwin (GdkDisplay *display,
 				      Window      xrootwin)
 {
-  GdkScreen *screen = gdk_display_get_default_screen (display);
+  GdkScreen *screen;
+  XWindowAttributes attrs;
+  gboolean result;
+  GdkX11Display *display_x11;
+  GList *l;
+
+  screen = gdk_display_get_default_screen (display);
 
   if (GDK_SCREEN_XROOTWIN (screen) == xrootwin)
     return screen;
 
-  return NULL;
+  display_x11 = GDK_X11_DISPLAY (display);
+
+  for (l = display_x11->screens; l; l = l->next)
+    {
+      screen = l->data;
+      if (GDK_SCREEN_XROOTWIN (screen) == xrootwin)
+        return screen;
+    }
+
+  gdk_x11_display_error_trap_push (display);
+  result = XGetWindowAttributes (display_x11->xdisplay, xrootwin, &attrs);
+  if (gdk_x11_display_error_trap_pop (display) || !result)
+    return NULL;
+
+  screen = _gdk_x11_screen_new (display, XScreenNumberOfScreen (attrs.screen));
+
+  display_x11->screens = g_list_prepend (display_x11->screens, screen);
+
+  return screen;
 }
 
 /**
