@@ -39,6 +39,7 @@ demos_base =					\
 	listbox.c				\
 	flowbox.c				\
 	list_store.c				\
+	markup.c				\
 	menus.c					\
 	offscreen_window.c			\
 	offscreen_window2.c			\

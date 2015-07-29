@@ -145,6 +145,7 @@
     <file>links.c</file>
     <file>listbox.c</file>
     <file>list_store.c</file>
+    <file>markup.c</file>
     <file>menus.c</file>
     <file>offscreen_window.c</file>
     <file>offscreen_window2.c</file>
@@ -200,5 +201,8 @@
   <gresource prefix="/overlay2">
     <file>decor1.png</file>
     <file>decor2.png</file>
+  </gresource>
+  <gresource prefix="/markup">
+    <file>markup.txt</file>
   </gresource>
 </gresources>

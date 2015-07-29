@@ -1,0 +1,14 @@
+
+Text sizes: <span size="xx-small">tiny</span> <span size="x-small">very small</span> <span size="small">small</span> <span size="medium">normal</span> <span size="large">large</span> <span size="x-large">very large</span> <span size="xx-large">huge</span>
+
+Colorful <span underline="low" underline-color="blue"><span underline="double" underline-color="red">under</span>lines</span>
+
+Colorful <span strikethrough="true" strikethrough-color="magenta">strikethroughs</span>
+
+Text <span color="gray">c<span color="green">o</span>l<span color="tomato">o</span>rs</span>
+
+More superscripts: 2<span rise="8000" size="smaller">2<span rise="14000" size="smaller">2</span></span>
+
+<span letter_spacing="3000">Letterspacing</span>
+
+Shortcuts: <tt>Monospace</tt> – <b>Bold</b> – <i>Italic</i> – <big>Big</big> – <small>Small</small> – <u>Underlined</u> – <s>Strikethrough</s> – Super<sup>script</sup> – Sub<sub>script</sub>
