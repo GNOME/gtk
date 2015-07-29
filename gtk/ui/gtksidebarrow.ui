@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<interface>
+<interface domain="gtk30">
   <template class="GtkSidebarRow" parent="GtkListBoxRow">
     <property name="visible">True</property>
     <property name="margin-top">1</property>
