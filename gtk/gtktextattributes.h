@@ -207,8 +207,23 @@ struct _GtkTextAttributes
   /*< public >*/
   gint letter_spacing;
 
+#ifdef __GI_SCANNER__
+  /* The scanner should only see the transparent union, so that its
+   * content does not vary across architectures.
+   */
+  union {
+    gchar *font_features;
+    /*< private >*/
+    guint padding[2];
+  };
+#else
+  gchar *font_features;
+#if (defined(__SIZEOF_INT__) && defined(__SIZEOF_POINTER__)) && (__SIZEOF_INT__ == __SIZEOF_POINTER__)
+  /* unusable, just for ABI compat */
   /*< private >*/
-  guint padding[2];
+  guint padding[1];
+#endif
+#endif
 };
 
 GDK_AVAILABLE_IN_ALL

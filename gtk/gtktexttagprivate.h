@@ -77,6 +77,7 @@ struct _GtkTextTagPrivate
   guint pg_bg_color_set : 1;
   guint fallback_set : 1;
   guint letter_spacing_set : 1;
+  guint font_features_set : 1;
 
   /* Whether these margins accumulate or override */
   guint accumulative_margin : 1;

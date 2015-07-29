@@ -4837,6 +4837,10 @@ get_tag_for_attributes (PangoAttrIterator *iter)
   if (attr)
     g_object_set (tag, "letter-spacing", ((PangoAttrInt*)attr)->value, NULL);
 
+  attr = pango_attr_iterator_get (iter, PANGO_ATTR_FONT_FEATURES);
+  if (attr)
+    g_object_set (tag, "font-features", ((PangoAttrString*)attr)->value, NULL);
+
   return tag;
 }
 

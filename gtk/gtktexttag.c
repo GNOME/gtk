@@ -134,10 +134,11 @@ enum {
   PROP_PARAGRAPH_BACKGROUND_RGBA,
   PROP_FALLBACK,
   PROP_LETTER_SPACING,
+  PROP_FONT_FEATURES,
 
   /* Behavior args */
   PROP_ACCUMULATIVE_MARGIN,
-  
+
   /* Whether-a-style-arg-is-set args */
   PROP_BACKGROUND_SET,
   PROP_FOREGROUND_SET,
@@ -169,6 +170,7 @@ enum {
   PROP_PARAGRAPH_BACKGROUND_SET,
   PROP_FALLBACK_SET,
   PROP_LETTER_SPACING_SET,
+  PROP_FONT_FEATURES_SET,
 
   LAST_ARG
 };
@@ -676,6 +678,22 @@ gtk_text_tag_class_init (GtkTextTagClass *klass)
                                                      P_("Extra spacing between graphemes"),
                                                      0, G_MAXINT, 0,
                                                      GTK_PARAM_READWRITE));
+
+  /**
+   * GtkTextTag:font-features:
+   *
+   * OpenType font features, as a string.
+   *
+   * Since: 3.18
+   */
+  g_object_class_install_property (object_class,
+                                   PROP_FONT_FEATURES,
+                                   g_param_spec_string ("font-features",
+                                                        P_("Font Features"),
+                                                        P_("OpenType Font Features to use"),
+                                                        NULL,
+                                                        GTK_PARAM_READWRITE));
+
   /**
    * GtkTextTag:accumulative-margin:
    *
@@ -832,6 +850,10 @@ gtk_text_tag_class_init (GtkTextTagClass *klass)
   ADD_SET_PROP ("letter-spacing-set", PROP_LETTER_SPACING_SET,
                 P_("Letter spacing set"),
                 P_("Whether this tag affects letter spacing"));
+
+  ADD_SET_PROP ("font-features-set", PROP_FONT_FEATURES_SET,
+                P_("Font features set"),
+                P_("Whether this tag affects font features"));
 
   /**
    * GtkTextTag::event:
@@ -1643,6 +1665,12 @@ gtk_text_tag_set_property (GObject      *object,
       g_object_notify (object, "letter-spacing-set");
       break;
 
+    case PROP_FONT_FEATURES:
+      priv->font_features_set = TRUE;
+      priv->values->font_features = g_value_dup_string (value);
+      g_object_notify (object, "font-features-set");
+      break;
+
     case PROP_ACCUMULATIVE_MARGIN:
       priv->accumulative_margin = g_value_get_boolean (value);
       g_object_notify (object, "accumulative-margin");
@@ -1783,6 +1811,10 @@ gtk_text_tag_set_property (GObject      *object,
 
     case PROP_LETTER_SPACING_SET:
       priv->letter_spacing_set = g_value_get_boolean (value);
+      break;
+
+    case PROP_FONT_FEATURES_SET:
+      priv->font_features_set = g_value_get_boolean (value);
       break;
 
     default:
@@ -2002,6 +2034,10 @@ gtk_text_tag_get_property (GObject      *object,
       g_value_set_int (value, priv->values->letter_spacing);
       break;
 
+    case PROP_FONT_FEATURES:
+      g_value_set_string (value, priv->values->font_features);
+      break;
+
     case PROP_ACCUMULATIVE_MARGIN:
       g_value_set_boolean (value, priv->accumulative_margin);
       break;
@@ -2116,6 +2152,10 @@ gtk_text_tag_get_property (GObject      *object,
 
     case PROP_LETTER_SPACING_SET:
       g_value_set_boolean (value, priv->letter_spacing_set);
+      break;
+
+    case PROP_FONT_FEATURES_SET:
+      g_value_set_boolean (value, priv->font_features_set);
       break;
 
     case PROP_BACKGROUND:
