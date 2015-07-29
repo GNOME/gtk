@@ -24,7 +24,6 @@ $ease-out-quad: cubic-bezier(0.25, 0.46, 0.45, 0.94);
 
   -GtkToolItemGroup-expander-size: 11;
   -GtkExpander-expander-size: 16;
-  -GtkTreeView-expander-size: 11;
 
   -GtkTreeView-horizontal-separator: 4;
 
@@ -941,6 +940,95 @@ GtkComboBox {
 /**************
  * Tree Views *
  **************/
+GtkTreeView.view {
+  -GtkTreeView-grid-line-width: 1;
+  -GtkTreeView-grid-line-pattern: '';
+  -GtkTreeView-tree-line-width: 1;
+  -GtkTreeView-tree-line-pattern: '';
+  -GtkTreeView-expander-size: 16;
+
+  border-left-color: mix($fg_color, $base_color, 50%); // this is actually the tree lines color,
+  border-top-color: $bg_color;                         // while this is the grid lines color, better then nothing
+
+  &.rubberband { @extend .rubberband; } // to avoid borders being overridden by the previously set props
+
+  &:selected { border-radius: 0; } // rest border radius in lists
+
+  &:selected, &:backdrop:selected {
+    border-left-color: mix($selected_fg_color, $selected_bg_color, 50%);
+    border-top-color: transparentize($fg_color, 0.9); // doesn't work unfortunatelly
+  }
+
+  &:insensitive {
+    color: $insensitive_fg_color;
+    &:selected {
+      color: mix($selected_fg_color, $selected_bg_color, 40%);
+      &:backdrop { color: mix($selected_fg_color, $selected_bg_color, 50%); }
+    }
+    &:backdrop { color: insensitive_color; }
+  }
+
+  &.separator:backdrop {
+    color: transparentize(black, 0.9);
+  }
+
+  &:backdrop {
+    color: $backdrop_fg_color;
+    border-left-color: mix($backdrop_fg_color, $backdrop_bg_color, 50%);
+    border-top: $backdrop_bg_color;
+  }
+
+  &.dnd {
+    border-style: solid none;
+    border-width: 1px;
+    border-color: mix($fg_color, $selected_bg_color, 50%);
+  }
+
+  &.expander {
+    -gtk-icon-source: -gtk-icontheme('pan-end-symbolic');
+    &:dir(rtl) { -gtk-icon-source: -gtk-icontheme('pan-end-symbolic-rtl'); }
+    color: mix($fg_color, $base_color, 70%);
+    &:hover { color: $fg_color; }
+    &:selected {
+      color: mix($selected_fg_color, $selected_bg_color, 70%);
+      &:hover { color: $selected_fg_color; }
+      &:backdrop { color: mix($selected_fg_color, $selected_bg_color, 70%); }
+    }
+
+    &:checked { -gtk-icon-source: -gtk-icontheme('pan-down-symbolic'); }
+
+    &:backdrop { color: mix($backdrop_fg_color, $backdrop_base_color, 70%); }
+  }
+
+  &.progressbar { // progress bar in treeviews
+    color: $base_color;
+
+    border: 1px solid $selected_borders_color;
+    border-radius: 4px;
+    background-color: $fg_color;
+
+    &:selected { color: $selected_bg_color; }
+      
+    &:backdrop {
+      color: $selected_bg_color;
+      border-color: $selected_borders_color; // otherwise it gets inherited by .view(?!?)  
+      background-color: $backdrop_base_color;
+    }
+  }
+  
+  &.trough { // progress bar trough in treeviews
+    background-color: transparentize($fg_color,0.9);
+    border-radius: 4px;
+
+    &:selected { 
+      background-color: transparentize($selected_fg_color, 0.7);
+      border-width: 1px 0;
+      border-style: solid;
+      border-color: $selected_bg_color;
+    }
+  }
+}
+
 column-header {
   .button {
     @extend %column_header_button;
