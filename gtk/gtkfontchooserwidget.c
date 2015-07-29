@@ -462,7 +462,7 @@ cursor_changed_cb (GtkTreeView *treeview,
   gtk_tree_model_filter_convert_iter_to_child_iter (GTK_TREE_MODEL_FILTER (priv->filter_model),
                                                     &iter,
                                                     &filter_iter);
-  gtk_tree_model_get (priv->filter_model, &iter,
+  gtk_tree_model_get (priv->model, &iter,
                       FONT_DESC_COLUMN, &desc,
                       -1);
 
