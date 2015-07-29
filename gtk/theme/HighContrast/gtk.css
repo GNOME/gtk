@@ -1957,7 +1957,7 @@ GtkCheckButton.text-button, GtkRadioButton.text-button {
 GtkProgressBar {
   padding: 0;
   font-size: 83%;
-  color: rgba(0, 0, 0, 0.4); }
+  color: #000; }
   GtkProgressBar:backdrop {
     color: #7f7f7f; }
 
