@@ -973,6 +973,32 @@ row_activated_cb (GtkWidget         *tree_view,
 }
 
 static void
+start_cb (GtkMenuItem *item, GtkWidget *scrollbar)
+{
+  GtkAdjustment *adj;
+
+  adj = gtk_range_get_adjustment (GTK_RANGE (scrollbar));
+  gtk_adjustment_set_value (adj, gtk_adjustment_get_lower (adj));
+}
+
+static void
+end_cb (GtkMenuItem *item, GtkWidget *scrollbar)
+{
+  GtkAdjustment *adj;
+
+  adj = gtk_range_get_adjustment (GTK_RANGE (scrollbar));
+  gtk_adjustment_set_value (adj, gtk_adjustment_get_upper (adj) - gtk_adjustment_get_page_size (adj));
+}
+
+static gboolean
+scrollbar_popup (GtkWidget *scrollbar, GtkWidget *menu)
+{
+  gtk_menu_popup (GTK_MENU (menu), NULL, NULL, NULL, NULL, 0, gtk_get_current_event_time ());
+
+  return TRUE;
+}
+
+static void
 activate (GApplication *app)
 {
   GtkBuilder *builder;
@@ -981,6 +1007,11 @@ activate (GApplication *app)
   GtkTreeModel *model;
   GtkTreeIter iter;
   GError *error = NULL;
+  GtkWidget *sw;
+  GtkWidget *scrollbar;
+  GtkWidget *menu;
+  GtkWidget *item;
+
   static GActionEntry win_entries[] = {
     { "run", activate_run, NULL, NULL, NULL }
   };
@@ -1006,6 +1037,23 @@ activate (GApplication *app)
   headerbar = (GtkWidget *)gtk_builder_get_object (builder, "headerbar");
   treeview = (GtkWidget *)gtk_builder_get_object (builder, "treeview");
   model = gtk_tree_view_get_model (GTK_TREE_VIEW (treeview));
+
+  sw = (GtkWidget *)gtk_builder_get_object (builder, "source-scrolledwindow");
+  scrollbar = gtk_scrolled_window_get_vscrollbar (GTK_SCROLLED_WINDOW (sw));
+
+  menu = gtk_menu_new ();
+
+  item = gtk_menu_item_new_with_label ("Start");
+  g_signal_connect (item, "activate", G_CALLBACK (start_cb), scrollbar);
+  gtk_menu_shell_append (GTK_MENU_SHELL (menu), item);
+
+  item = gtk_menu_item_new_with_label ("End");
+  g_signal_connect (item, "activate", G_CALLBACK (end_cb), scrollbar);
+  gtk_menu_shell_append (GTK_MENU_SHELL (menu), item);
+
+  gtk_widget_show_all (menu);
+
+  g_signal_connect (scrollbar, "popup-menu", G_CALLBACK (scrollbar_popup), menu);
 
   load_file (gtk_demos[0].name, gtk_demos[0].filename);
 
