@@ -1044,7 +1044,7 @@ column-header {
     }
     &:active {
       @extend %column_header_button;
-      color: $fg_color;
+      color: $selected_fg_color;
     }
   }
   &:last-child .button,

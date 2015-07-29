@@ -1258,7 +1258,7 @@ column-header .button {
     color: #3f3f3f;
     box-shadow: none; }
   column-header .button:active {
-    color: #000; }
+    color: #fff; }
 column-header:last-child .button, column-header:last-child.button {
   border-right-style: none; }
 
