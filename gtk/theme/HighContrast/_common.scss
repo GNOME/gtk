@@ -1530,8 +1530,6 @@ GtkCheckButton.text-button, GtkRadioButton.text-button {
     &:hover { color: mix($fg_color, $bg_color, 80%) }
     &:checked, &:active {
       -gtk-icon-source: -gtk-icontheme('#{$a}-checked-symbolic');
-      color: $fg_color;
-      &:hover { color: mix($fg_color, $bg_color, 80%); }
       &:insensitive {
         color: $insensitive_fg_color;
         &:backdrop { color: $insensitive_fg_color; }

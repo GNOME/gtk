@@ -1728,10 +1728,7 @@ GtkCheckButton.text-button, GtkRadioButton.text-button {
   .check:hover {
     color: #323232; }
   .check:checked, .check:active {
-    -gtk-icon-source: -gtk-icontheme("checkbox-checked-symbolic");
-    color: #000; }
-    .check:checked:hover, .check:active:hover {
-      color: #323232; }
+    -gtk-icon-source: -gtk-icontheme("checkbox-checked-symbolic"); }
     .check:checked:insensitive, .check:active:insensitive {
       color: #7f7f7f; }
       .check:checked:insensitive:backdrop, .check:active:insensitive:backdrop {
@@ -1756,10 +1753,7 @@ GtkCheckButton.text-button, GtkRadioButton.text-button {
   .radio:hover {
     color: #323232; }
   .radio:checked, .radio:active {
-    -gtk-icon-source: -gtk-icontheme("radio-checked-symbolic");
-    color: #000; }
-    .radio:checked:hover, .radio:active:hover {
-      color: #323232; }
+    -gtk-icon-source: -gtk-icontheme("radio-checked-symbolic"); }
     .radio:checked:insensitive, .radio:active:insensitive {
       color: #7f7f7f; }
       .radio:checked:insensitive:backdrop, .radio:active:insensitive:backdrop {
