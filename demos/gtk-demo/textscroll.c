@@ -1,4 +1,4 @@
-/* Text Widget/Automatic Scrolling
+/* Text View/Automatic Scrolling
  *
  * This example demonstrates how to use the gravity of
  * GtkTextMarks to keep a text view scrolled to the bottom

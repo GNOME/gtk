@@ -1,4 +1,4 @@
-/* Text Widget/Markup
+/* Text View/Markup
  *
  * GtkTextBuffer lets you define your own tags that can influence
  * text formatting in a variety of ways. In this example, we show
