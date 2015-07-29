@@ -806,7 +806,8 @@ GtkColorButton.button {
     color: #000; }
 
 .button:link, .button:visited {
-  color: #000;
+  color: #4a90d9;
+  font-weight: bold;
   text-shadow: none; }
   .button:link:hover, .button:link:active, .button:visited:hover, .button:visited:active {
     color: black;

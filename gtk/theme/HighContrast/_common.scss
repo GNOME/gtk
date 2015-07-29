@@ -607,7 +607,8 @@ GtkColorButton.button { padding: 4px; } // Uniform padding on the
 }
 
 .button:link, .button:visited {
-  color: $selected_bg_color; //FIXME use a proper color
+  color: $suggested_color;
+  font-weight: bold;
   @extend %undecorated_button;
   text-shadow: none;
   &:hover, &:active {
