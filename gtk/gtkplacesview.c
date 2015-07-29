@@ -1289,9 +1289,11 @@ build_popup_menu (GtkPlacesView    *view,
   GtkPlacesViewPrivate *priv;
   GtkWidget *item;
   GMount *mount;
+  GFile *file;
 
   priv = gtk_places_view_get_instance_private (view);
   mount = gtk_places_view_row_get_mount (row);
+  file = gtk_places_view_row_get_file (row);
 
   priv->popup_menu = gtk_menu_new ();
   gtk_style_context_add_class (gtk_widget_get_style_context (priv->popup_menu),
@@ -1331,6 +1333,13 @@ build_popup_menu (GtkPlacesView    *view,
       gtk_widget_show (item);
       gtk_menu_shell_append (GTK_MENU_SHELL (priv->popup_menu), item);
     }
+
+  /*
+   * The only item that contains a file up to now is the Computer
+   * item, which cannot be mounted or unmounted.
+   */
+  if (file)
+    return;
 
   /* Separator */
   item = gtk_separator_menu_item_new ();
