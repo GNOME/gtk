@@ -43,6 +43,7 @@ demos_base =					\
 	offscreen_window.c			\
 	offscreen_window2.c			\
 	overlay.c				\
+	overlay2.c				\
 	panes.c					\
 	pickers.c				\
 	pixbufs.c				\

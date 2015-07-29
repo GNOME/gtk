@@ -1,4 +1,4 @@
-/* Overlay
+/* Overlay/Interactive Overlay
  *
  * Shows widgets in static positions over a main widget.
  *
@@ -33,7 +33,7 @@ do_overlay (GtkWidget *do_widget)
 
       window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
       gtk_window_set_default_size (GTK_WINDOW (window), 500, 510);
-      gtk_window_set_title (GTK_WINDOW (window), "Overlay");
+      gtk_window_set_title (GTK_WINDOW (window), "Interactive Overlay");
 
       overlay = gtk_overlay_new ();
       grid = gtk_grid_new ();
