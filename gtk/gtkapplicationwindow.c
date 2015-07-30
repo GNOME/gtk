@@ -70,13 +70,10 @@
  *
  * If the desktop environment does not display the menubar, then
  * #GtkApplicationWindow will automatically show a #GtkMenuBar for it.
- * (see the #GtkApplication docs for some screenshots of how this
- * looks on different platforms).
  * This behaviour can be overridden with the #GtkApplicationWindow:show-menubar
  * property. If the desktop environment does not display the application
- * menu, then it will automatically be included in the menubar. It can
- * also be shown as part of client-side window decorations, e.g. by
- * using gtk_header_bar_set_show_close_button().
+ * menu, then it will automatically be included in the menubar or in the
+ * windows client-side decorations.
  *
  * ## A GtkApplicationWindow with a menubar
  *
@@ -112,7 +109,9 @@
  * of a toplevel `<menu>` element, which contains one or more `<item>`
  * elements. Each `<item>` element contains `<attribute>` and `<link>`
  * elements with a mandatory name attribute. `<link>` elements have the
- * same content model as `<menu>`.
+ * same content model as `<menu>`. Instead of `<link name="submenu>` or
+ * `<link name="section">`, you can use `<submenu>` or `<section>`
+ * elements.
  *
  * Attribute values can be translated using gettext, like other #GtkBuilder
  * content. `<attribute>` elements can be marked for translation with a
@@ -120,6 +119,25 @@
  * context and translator comments, using the context and comments attributes.
  * To make use of this, the #GtkBuilder must have been given the gettext
  * domain to use.
+ *
+ * The following attributes are used when constructing menu items:
+ * - "label": a user-visible string to display
+ * - "action": the prefixed name of the action to trigger
+ * - "target": the parameter to use when activating the action
+ * - "icon" and "verb-icon": names of icons that may be displayed
+ * - "submenu-action": name of an action that may be used to determine
+ *      if a submenu can be opened
+ * - "hidden-when": a string used to determine when the item will be hidden.
+ *      Possible values include "action-disabled", "action-missing", "macos-menubar".
+ *
+ * The following attributes are used when constructing sections:
+ * - "label": a user-visible string to use as section heading
+ * - "display-hint": a string used to determine special formatting for the section.
+ *     Possible values include "horizontal-buttons".
+ *
+ * The following attributes are used when constructing submenus:
+ * - "label": a user-visible string to display
+ * - "icon": icon name to display
  */
 
 typedef GSimpleActionGroupClass GtkApplicationWindowActionsClass;
