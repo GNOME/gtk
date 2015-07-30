@@ -29,51 +29,49 @@ typedef struct _GtkCssNodeDeclaration GtkCssNodeDeclaration;
 typedef struct _GtkCssStyle GtkCssStyle;
 typedef struct _GtkStyleProviderPrivate GtkStyleProviderPrivate; /* dummy typedef */
 
-typedef enum { /*< skip >*/
-  GTK_CSS_CHANGE_CLASS                          = (1ULL <<  0),
-  GTK_CSS_CHANGE_NAME                           = (1ULL <<  1),
-  GTK_CSS_CHANGE_ID                             = GTK_CSS_CHANGE_NAME,
-  GTK_CSS_CHANGE_REGION                         = GTK_CSS_CHANGE_NAME,
-  GTK_CSS_CHANGE_FIRST_CHILD                    = (1ULL <<  2),
-  GTK_CSS_CHANGE_LAST_CHILD                     = (1ULL <<  3),
-  GTK_CSS_CHANGE_NTH_CHILD                      = (1ULL <<  4),
-  GTK_CSS_CHANGE_NTH_LAST_CHILD                 = (1ULL <<  5),
-  GTK_CSS_CHANGE_STATE                          = (1ULL <<  6),
-  GTK_CSS_CHANGE_SIBLING_CLASS                  = (1ULL <<  7),
-  GTK_CSS_CHANGE_SIBLING_NAME                   = (1ULL <<  8),
-  GTK_CSS_CHANGE_SIBLING_FIRST_CHILD            = (1ULL <<  9),
-  GTK_CSS_CHANGE_SIBLING_LAST_CHILD             = (1ULL << 10),
-  GTK_CSS_CHANGE_SIBLING_NTH_CHILD              = (1ULL << 11),
-  GTK_CSS_CHANGE_SIBLING_NTH_LAST_CHILD         = (1ULL << 12),
-  GTK_CSS_CHANGE_SIBLING_STATE                  = (1ULL << 13),
-  GTK_CSS_CHANGE_PARENT_CLASS                   = (1ULL << 14),
-  GTK_CSS_CHANGE_PARENT_NAME                    = (1ULL << 15),
-  GTK_CSS_CHANGE_PARENT_REGION                  = GTK_CSS_CHANGE_PARENT_NAME,
-  GTK_CSS_CHANGE_PARENT_POSITION                = (1ULL << 16),
-  GTK_CSS_CHANGE_PARENT_FIRST_CHILD             = (1ULL << 17),
-  GTK_CSS_CHANGE_PARENT_LAST_CHILD              = (1ULL << 18),
-  GTK_CSS_CHANGE_PARENT_NTH_CHILD               = (1ULL << 19),
-  GTK_CSS_CHANGE_PARENT_NTH_LAST_CHILD          = (1ULL << 20),
-  GTK_CSS_CHANGE_PARENT_STATE                   = (1ULL << 21),
-  GTK_CSS_CHANGE_PARENT_SIBLING_CLASS           = (1ULL << 22),
-  GTK_CSS_CHANGE_PARENT_SIBLING_NAME            = (1ULL << 23),
-  GTK_CSS_CHANGE_PARENT_SIBLING_FIRST_CHILD     = (1ULL << 24),
-  GTK_CSS_CHANGE_PARENT_SIBLING_LAST_CHILD      = (1ULL << 25),
-  GTK_CSS_CHANGE_PARENT_SIBLING_NTH_CHILD       = (1ULL << 26),
-  GTK_CSS_CHANGE_PARENT_SIBLING_NTH_LAST_CHILD  = (1ULL << 27),
-  GTK_CSS_CHANGE_PARENT_SIBLING_POSITION        = (1ULL << 28),
-  GTK_CSS_CHANGE_PARENT_SIBLING_STATE           = (1ULL << 29),
-  /* add more */
-  GTK_CSS_CHANGE_SOURCE                         = (1ULL << 30),
-  GTK_CSS_CHANGE_PARENT_STYLE                   = (1ULL << 31),
-  GTK_CSS_CHANGE_TIMESTAMP                      = (1ULL << 32),
-  GTK_CSS_CHANGE_ANIMATIONS                     = (1ULL << 33),
+#define GTK_CSS_CHANGE_CLASS                          (1ULL <<  0)
+#define GTK_CSS_CHANGE_NAME                           (1ULL <<  1)
+#define GTK_CSS_CHANGE_ID                             (1ULL <<  1) /* = GTK_CSS_CHANGE_NAME */
+#define GTK_CSS_CHANGE_REGION                         (1ULL <<  1) /* = GTK_CSS_CHANGE_NAME */
+#define GTK_CSS_CHANGE_FIRST_CHILD                    (1ULL <<  2)
+#define GTK_CSS_CHANGE_LAST_CHILD                     (1ULL <<  3)
+#define GTK_CSS_CHANGE_NTH_CHILD                      (1ULL <<  4)
+#define GTK_CSS_CHANGE_NTH_LAST_CHILD                 (1ULL <<  5)
+#define GTK_CSS_CHANGE_STATE                          (1ULL <<  6)
+#define GTK_CSS_CHANGE_SIBLING_CLASS                  (1ULL <<  7)
+#define GTK_CSS_CHANGE_SIBLING_NAME                   (1ULL <<  8)
+#define GTK_CSS_CHANGE_SIBLING_FIRST_CHILD            (1ULL <<  9)
+#define GTK_CSS_CHANGE_SIBLING_LAST_CHILD             (1ULL << 10)
+#define GTK_CSS_CHANGE_SIBLING_NTH_CHILD              (1ULL << 11)
+#define GTK_CSS_CHANGE_SIBLING_NTH_LAST_CHILD         (1ULL << 12)
+#define GTK_CSS_CHANGE_SIBLING_STATE                  (1ULL << 13)
+#define GTK_CSS_CHANGE_PARENT_CLASS                   (1ULL << 14)
+#define GTK_CSS_CHANGE_PARENT_NAME                    (1ULL << 15)
+#define GTK_CSS_CHANGE_PARENT_REGION                  (1ULL << 15) /* = GTK_CSS_CHANGE_PARENT_NAME */
+#define GTK_CSS_CHANGE_PARENT_POSITION_ENUM           (1ULL << 16)
+#define GTK_CSS_CHANGE_PARENT_FIRST_CHILD             (1ULL << 17)
+#define GTK_CSS_CHANGE_PARENT_LAST_CHILD              (1ULL << 18)
+#define GTK_CSS_CHANGE_PARENT_NTH_CHILD               (1ULL << 19)
+#define GTK_CSS_CHANGE_PARENT_NTH_LAST_CHILD          (1ULL << 20)
+#define GTK_CSS_CHANGE_PARENT_STATE                   (1ULL << 21)
+#define GTK_CSS_CHANGE_PARENT_SIBLING_CLASS           (1ULL << 22)
+#define GTK_CSS_CHANGE_PARENT_SIBLING_NAME            (1ULL << 23)
+#define GTK_CSS_CHANGE_PARENT_SIBLING_FIRST_CHILD     (1ULL << 24)
+#define GTK_CSS_CHANGE_PARENT_SIBLING_LAST_CHILD      (1ULL << 25)
+#define GTK_CSS_CHANGE_PARENT_SIBLING_NTH_CHILD       (1ULL << 26)
+#define GTK_CSS_CHANGE_PARENT_SIBLING_NTH_LAST_CHILD  (1ULL << 27)
+#define GTK_CSS_CHANGE_PARENT_SIBLING_POSITION_ENUM   (1ULL << 28)
+#define GTK_CSS_CHANGE_PARENT_SIBLING_STATE           (1ULL << 29)
 
-  GTK_CSS_CHANGE_RESERVED_BIT                   = (1ULL << 62) /* Used internally in gtkcssselector.c */
-} GtkCssChange;
+/* add more */
+#define GTK_CSS_CHANGE_SOURCE                         (1ULL << 30)
+#define GTK_CSS_CHANGE_PARENT_STYLE                   (1ULL << 31)
+#define GTK_CSS_CHANGE_TIMESTAMP                      (1ULL << 32)
+#define GTK_CSS_CHANGE_ANIMATIONS                     (1ULL << 33)
 
-/* if this complains we need to use defines instead of an enum */
-G_STATIC_ASSERT(sizeof (GtkCssChange) >= 8);
+#define GTK_CSS_CHANGE_RESERVED_BIT                   (1ULL << 62) /* Used internally in gtkcssselector.c */
+
+typedef guint64 GtkCssChange;
 
 #define GTK_CSS_CHANGE_POSITION (GTK_CSS_CHANGE_FIRST_CHILD | GTK_CSS_CHANGE_LAST_CHILD | \
                                  GTK_CSS_CHANGE_NTH_CHILD | GTK_CSS_CHANGE_NTH_LAST_CHILD)
