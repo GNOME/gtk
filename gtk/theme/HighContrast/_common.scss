@@ -1696,10 +1696,10 @@ GtkCheckButton.text-button, GtkRadioButton.text-button {
     box-shadow: inset 1px 1px transparentize(black, 0.9);
     &.highlight {
       border-color: $selected_borders_color;
-      background-color: $success_color;
+      background-color: $selected_bg_color;
       &:backdrop {
-         border-color: $selected_bg_color;
-         background-color: desaturate($success_color,100%);
+         border-color: $insensitive_fg_color;
+         background-color: $insensitive_fg_color;
          box-shadow: none;
       }
     }

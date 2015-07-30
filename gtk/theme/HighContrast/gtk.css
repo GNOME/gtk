@@ -1923,12 +1923,12 @@ GtkCheckButton.text-button, GtkRadioButton.text-button {
     .scale.scale-has-marks-above.scale-has-marks-below.trough.highlight,
     .scale.vertical.scale-has-marks-above.scale-has-marks-below.trough.highlight {
       border-color: #000;
-      background-color: #73d216; }
+      background-color: #000; }
       .scale.trough.highlight:backdrop,
       .scale.scale-has-marks-above.scale-has-marks-below.trough.highlight:backdrop,
       .scale.vertical.scale-has-marks-above.scale-has-marks-below.trough.highlight:backdrop {
-        border-color: #000;
-        background-color: #747474;
+        border-color: #7f7f7f;
+        background-color: #7f7f7f;
         box-shadow: none; }
     .scale.trough:insensitive, .scale.trough.hilight:insensitive,
     .scale.scale-has-marks-above.scale-has-marks-below.trough:insensitive,
