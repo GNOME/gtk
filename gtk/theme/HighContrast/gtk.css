@@ -1201,7 +1201,7 @@ GtkTreeView.view {
       GtkTreeView.view:insensitive:selected:backdrop {
         color: #7f7f7f; }
     GtkTreeView.view:insensitive:backdrop {
-      color: insensitive_color; }
+      color: #7f7f7f; }
   GtkTreeView.view.separator:backdrop {
     color: rgba(0, 0, 0, 0.1); }
   GtkTreeView.view:backdrop {

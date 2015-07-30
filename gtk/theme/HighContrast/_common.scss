@@ -965,7 +965,7 @@ GtkTreeView.view {
       color: mix($selected_fg_color, $selected_bg_color, 40%);
       &:backdrop { color: mix($selected_fg_color, $selected_bg_color, 50%); }
     }
-    &:backdrop { color: insensitive_color; }
+    &:backdrop { color: $insensitive_fg_color; }
   }
 
   &.separator:backdrop {
