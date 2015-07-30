@@ -41,6 +41,37 @@ change_theme_state (GSimpleAction *action,
   g_simple_action_set_state (action, state);
 }
 
+static gboolean
+get_idle (gpointer data)
+{
+  GtkWidget *window = data;
+  GtkApplication *app = gtk_window_get_application (GTK_WINDOW (window));
+
+  gtk_widget_set_sensitive (window, TRUE);
+  gdk_window_set_cursor (gtk_widget_get_window (window), NULL);
+  g_application_unmark_busy (G_APPLICATION (app));
+
+  return G_SOURCE_REMOVE;
+}
+
+static void
+get_busy (GSimpleAction *action,
+          GVariant      *parameter,
+          gpointer       user_data)
+{
+  GtkWidget *window = user_data;
+  GdkCursor *cursor;
+  GtkApplication *app = gtk_window_get_application (GTK_WINDOW (window));
+
+  g_application_mark_busy (G_APPLICATION (app));
+  cursor = gdk_cursor_new_from_name (gtk_widget_get_display (window), "wait");
+  gdk_window_set_cursor (gtk_widget_get_window (window), cursor);
+  g_object_unref (cursor);
+  g_timeout_add (5000, get_idle, window);
+
+  gtk_widget_set_sensitive (window, FALSE);
+}
+
 static void
 activate_search (GSimpleAction *action,
                  GVariant      *parameter,
@@ -1256,7 +1287,8 @@ activate (GApplication *app)
   static GActionEntry win_entries[] = {
     { "dark", NULL, NULL, "false", change_theme_state },
     { "search", activate_search, NULL, NULL, NULL },
-    { "delete", activate_delete, NULL, NULL, NULL }
+    { "delete", activate_delete, NULL, NULL, NULL },
+    { "busy", get_busy, NULL, NULL, NULL }
   };
   struct {
     const gchar *action_and_target;

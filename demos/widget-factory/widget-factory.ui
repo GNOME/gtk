@@ -4,6 +4,10 @@
   <menu id="gear_menu">
     <section>
       <item>
+        <attribute name="label" translatable="yes">Get Busy</attribute>
+        <attribute name="action">win.busy</attribute>
+      </item>
+      <item>
         <attribute name="label" translatable="yes">Dark Theme</attribute>
         <attribute name="action">win.dark</attribute>
       </item>
