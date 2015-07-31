@@ -858,8 +858,7 @@ cell_info_free (CellInfo *info)
   if (info->destroy)
     info->destroy (info->data);
 
-  g_slist_foreach (info->attributes, (GFunc)cell_attribute_free, NULL);
-  g_slist_free (info->attributes);
+  g_slist_free_full (info->attributes, (GDestroyNotify)cell_attribute_free);
 
   g_slice_free (CellInfo, info);
 }
@@ -1540,9 +1539,7 @@ gtk_cell_area_clear_attributes (GtkCellLayout         *cell_layout,
 
   if (info)
     {
-      g_slist_foreach (info->attributes, (GFunc)cell_attribute_free, NULL);
-      g_slist_free (info->attributes);
-
+      g_slist_free_full (info->attributes, (GDestroyNotify)cell_attribute_free);
       info->attributes = NULL;
     }
 }

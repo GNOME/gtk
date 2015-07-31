@@ -1497,11 +1497,7 @@ gtk_recent_info_free (GtkRecentInfo *recent_info)
 
   if (recent_info->applications)
     {
-      g_slist_foreach (recent_info->applications,
-                       (GFunc) recent_app_info_free,
-                       NULL);
-      g_slist_free (recent_info->applications);
-
+      g_slist_free_full (recent_info->applications, (GDestroyNotify)recent_app_info_free);
       recent_info->applications = NULL;
     }
 
@@ -1510,11 +1506,7 @@ gtk_recent_info_free (GtkRecentInfo *recent_info)
 
   if (recent_info->groups)
     {
-      g_slist_foreach (recent_info->groups,
-                       (GFunc) g_free,
-                       NULL);
-      g_slist_free (recent_info->groups);
-
+      g_slist_free_full (recent_info->groups, g_free);
       recent_info->groups = NULL;
     }
 

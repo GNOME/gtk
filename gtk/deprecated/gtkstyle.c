@@ -542,8 +542,7 @@ gtk_style_finalize (GObject *object)
         }
     }
 
-  g_slist_foreach (style->icon_factories, (GFunc) g_object_unref, NULL);
-  g_slist_free (style->icon_factories);
+  g_slist_free_full (style->icon_factories, g_object_unref);
 
   pango_font_description_free (style->font_desc);
 
@@ -1108,8 +1107,7 @@ gtk_style_real_copy (GtkStyle *style,
   if (src->rc_style)
     g_object_ref (src->rc_style);
 
-  g_slist_foreach (style->icon_factories, (GFunc) g_object_unref, NULL);
-  g_slist_free (style->icon_factories);
+  g_slist_free_full (style->icon_factories, g_object_unref);
   style->icon_factories = g_slist_copy (src->icon_factories);
   g_slist_foreach (style->icon_factories, (GFunc) g_object_ref, NULL);
 }

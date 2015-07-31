@@ -1018,11 +1018,8 @@ gtk_rc_style_finalize (GObject *object)
       rc_style->rc_properties = NULL;
     }
 
-  g_slist_foreach (rc_style->icon_factories, (GFunc) g_object_unref, NULL);
-  g_slist_free (rc_style->icon_factories);
-
-  g_slist_foreach (rc_priv->color_hashes, (GFunc) g_hash_table_unref, NULL);
-  g_slist_free (rc_priv->color_hashes);
+  g_slist_free_full (rc_style->icon_factories, g_object_unref);
+  g_slist_free_full (rc_priv->color_hashes, (GDestroyNotify)g_hash_table_unref);
 
   G_OBJECT_CLASS (gtk_rc_style_parent_class)->finalize (object);
 }

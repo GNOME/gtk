@@ -31,8 +31,10 @@
 #include "gtkfilechooser.h" /* for the GError types */
 
 static void
-_gtk_bookmark_free (GtkBookmark *bookmark)
+_gtk_bookmark_free (gpointer data)
 {
+  GtkBookmark *bookmark = data;
+
   g_object_unref (bookmark->file);
   g_free (bookmark->label);
   g_slice_free (GtkBookmark, bookmark);
@@ -197,9 +199,7 @@ bookmarks_file_changed (GFileMonitor      *monitor,
     case G_FILE_MONITOR_EVENT_CHANGES_DONE_HINT:
     case G_FILE_MONITOR_EVENT_CREATED:
     case G_FILE_MONITOR_EVENT_DELETED:
-      g_slist_foreach (manager->bookmarks, (GFunc) _gtk_bookmark_free, NULL);
-      g_slist_free (manager->bookmarks);
-
+      g_slist_free_full (manager->bookmarks, _gtk_bookmark_free);
       manager->bookmarks = read_bookmarks (file);
 
       gdk_threads_enter ();
@@ -271,11 +271,7 @@ _gtk_bookmarks_manager_free (GtkBookmarksManager *manager)
       g_object_unref (manager->bookmarks_monitor);
     }
 
-  if (manager->bookmarks)
-    {
-      g_slist_foreach (manager->bookmarks, (GFunc) _gtk_bookmark_free, NULL);
-      g_slist_free (manager->bookmarks);
-    }
+  g_slist_free_full (manager->bookmarks, _gtk_bookmark_free);
 
   g_free (manager);
 }

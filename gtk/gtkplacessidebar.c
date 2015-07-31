@@ -1220,8 +1220,7 @@ update_places (GtkPlacesSidebar *sidebar)
                                clos);
     }
 
-  g_slist_foreach (bookmarks, (GFunc) g_object_unref, NULL);
-  g_slist_free (bookmarks);
+  g_slist_free_full (bookmarks, g_object_unref);
 
   /* Add new bookmark row */
   new_bookmark_icon = g_themed_icon_new ("bookmark-new-symbolic");

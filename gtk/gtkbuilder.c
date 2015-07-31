@@ -319,8 +319,7 @@ gtk_builder_finalize (GObject *object)
   if (priv->callbacks)
     g_hash_table_destroy (priv->callbacks);
 
-  g_slist_foreach (priv->signals, (GFunc) _free_signal_info, NULL);
-  g_slist_free (priv->signals);
+  g_slist_free_full (priv->signals, (GDestroyNotify)_free_signal_info);
 
   G_OBJECT_CLASS (gtk_builder_parent_class)->finalize (object);
 }
@@ -1734,8 +1733,7 @@ gtk_builder_connect_signals_full (GtkBuilder            *builder,
             connect_object, signal->flags, user_data);
     }
 
-  g_slist_foreach (builder->priv->signals, (GFunc)_free_signal_info, NULL);
-  g_slist_free (builder->priv->signals);
+  g_slist_free_full (builder->priv->signals, (GDestroyNotify)_free_signal_info);
   builder->priv->signals = NULL;
 
   if (detailed_id)

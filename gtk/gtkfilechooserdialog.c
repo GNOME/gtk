@@ -424,8 +424,7 @@ file_chooser_widget_selection_changed (GtkWidget            *widget,
   sensitive = (uris != NULL);
   gtk_widget_set_sensitive (button, sensitive);
 
-  if (uris)
-    g_slist_free_full (uris, g_free);
+  g_slist_free_full (uris, g_free);
 }
 
 static void

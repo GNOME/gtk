@@ -120,8 +120,7 @@ gtk_file_system_dispose (GObject *object)
 
   if (priv->volumes)
     {
-      g_slist_foreach (priv->volumes, (GFunc) g_object_unref, NULL);
-      g_slist_free (priv->volumes);
+      g_slist_free_full (priv->volumes, g_object_unref);
       priv->volumes = NULL;
     }
 
@@ -199,8 +198,7 @@ get_volumes_list (GtkFileSystem *file_system)
 
   if (priv->volumes)
     {
-      g_slist_foreach (priv->volumes, (GFunc) g_object_unref, NULL);
-      g_slist_free (priv->volumes);
+      g_slist_free_full (priv->volumes, g_object_unref);
       priv->volumes = NULL;
     }
 

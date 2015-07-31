@@ -159,8 +159,7 @@ free_startup_timeout (void *data)
 
   std = data;
 
-  g_slist_foreach (std->contexts, (GFunc) free_startup_notification_data, NULL);
-  g_slist_free (std->contexts);
+  g_slist_free_full (std->contexts, free_startup_notification_data);
 
   if (std->timeout_id != 0)
     {

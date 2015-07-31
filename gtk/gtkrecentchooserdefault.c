@@ -591,8 +591,7 @@ gtk_recent_chooser_default_dispose (GObject *object)
 
   if (impl->priv->filters)
     {
-      g_slist_foreach (impl->priv->filters, (GFunc) g_object_unref, NULL);
-      g_slist_free (impl->priv->filters);
+      g_slist_free_full (impl->priv->filters, g_object_unref);
       impl->priv->filters = NULL;
     }
   

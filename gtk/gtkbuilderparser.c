@@ -512,9 +512,7 @@ free_object_info (ObjectInfo *info)
 {
   /* Do not free the signal items, which GtkBuilder takes ownership of */
   g_slist_free (info->signals);
-  g_slist_foreach (info->properties,
-                   (GFunc)free_property_info, NULL);
-  g_slist_free (info->properties);
+  g_slist_free_full (info->properties, (GDestroyNotify)free_property_info);
   g_free (info->constructor);
   g_free (info->id);
   g_slice_free (ObjectInfo, info);
@@ -1343,13 +1341,10 @@ _gtk_builder_parser_parse_buffer (GtkBuilder   *builder,
 
  out:
 
-  g_slist_foreach (data->stack, (GFunc)free_info, NULL);
-  g_slist_free (data->stack);
-  g_slist_foreach (data->custom_finalizers, (GFunc)free_subparser, NULL);
-  g_slist_free (data->custom_finalizers);
+  g_slist_free_full (data->stack, (GDestroyNotify)free_info);
+  g_slist_free_full (data->custom_finalizers, (GDestroyNotify)free_subparser);
   g_slist_free (data->finalizers);
-  g_slist_foreach (data->requested_objects, (GFunc) g_free, NULL);
-  g_slist_free (data->requested_objects);
+  g_slist_free_full (data->requested_objects, g_free);
   g_free (data->domain);
   g_hash_table_destroy (data->object_ids);
   g_markup_parse_context_free (data->ctx);

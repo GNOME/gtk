@@ -1744,8 +1744,7 @@ visit_file_cb (GSimpleAction *action,
       gtk_file_chooser_widget_select_file (GTK_FILE_CHOOSER (impl), file, NULL); /* NULL-GError */
     }
 
-  g_slist_foreach (files, (GFunc) g_object_unref, NULL);
-  g_slist_free (files);
+  g_slist_free_full (files, g_object_unref);
 }
 
 /* Callback used when the "Open this folder" menu item is activated */
@@ -1770,8 +1769,7 @@ open_folder_cb (GSimpleAction *action,
       g_free (uri);
     }
 
-  g_slist_foreach (files, (GFunc) g_object_unref, NULL);
-  g_slist_free (files);
+  g_slist_free_full (files, g_object_unref);
 }
 
 /* callback used when the "Show Hidden Files" menu item is toggled */
@@ -6694,8 +6692,7 @@ add_selection_to_recent_list (GtkFileChooserWidget *impl)
         }
     }
 
-  g_slist_foreach (files, (GFunc) g_object_unref, NULL);
-  g_slist_free (files);
+  g_slist_free_full (files, g_object_unref);
 }
 
 static gboolean

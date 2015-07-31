@@ -490,14 +490,7 @@ G_GNUC_END_IGNORE_DEPRECATIONS
 
   if (have_error)
     {
-      GSList *tmp_list = infos;
-      while (tmp_list)
-	{
-	  free_info (tmp_list->data);
-	  tmp_list = tmp_list->next;
-	}
-      g_slist_free (infos);
-
+      g_slist_free_full (infos, (GDestroyNotify)free_info);
       g_object_unref (module);
     }
   else if (module)

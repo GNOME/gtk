@@ -787,9 +787,7 @@ gtk_about_dialog_finalize (GObject *object)
   g_strfreev (priv->artists);
 
   g_slist_free_full (priv->credit_sections, destroy_credit_section);
-
-  g_slist_foreach (priv->visited_links, (GFunc)g_free, NULL);
-  g_slist_free (priv->visited_links);
+  g_slist_free_full (priv->visited_links, g_free);
 
   G_OBJECT_CLASS (gtk_about_dialog_parent_class)->finalize (object);
 }
@@ -1931,8 +1929,7 @@ follow_if_link (GtkAboutDialog *about,
         }
     }
 
-  if (tags)
-    g_slist_free (tags);
+  g_slist_free (tags);
 }
 
 static gboolean
@@ -2034,8 +2031,7 @@ set_cursor_if_appropriate (GtkAboutDialog *about,
         gdk_window_set_device_cursor (gtk_text_view_get_window (text_view, GTK_TEXT_WINDOW_TEXT), device, priv->regular_cursor);
     }
 
-  if (tags)
-    g_slist_free (tags);
+  g_slist_free (tags);
 }
 
 static gboolean

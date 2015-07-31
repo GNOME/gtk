@@ -1948,8 +1948,7 @@ gdk_x11_display_finalize (GObject *object)
   XDestroyWindow (display_x11->xdisplay, display_x11->leader_window);
 
   /* List of event window extraction functions */
-  g_slist_foreach (display_x11->event_types, (GFunc)g_free, NULL);
-  g_slist_free (display_x11->event_types);
+  g_slist_free_full (display_x11->event_types, g_free);
 
   /* input GdkDevice list */
   g_list_free_full (display_x11->input_devices, g_object_unref);

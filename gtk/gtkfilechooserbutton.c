@@ -839,8 +839,7 @@ G_GNUC_END_IGNORE_DEPRECATIONS
 
   list = _gtk_bookmarks_manager_list_bookmarks (priv->bookmarks_manager);
   model_add_bookmarks (button, list);
-  g_slist_foreach (list, (GFunc) g_object_unref, NULL);
-  g_slist_free (list);
+  g_slist_free_full (list, g_object_unref);
 
   model_add_other (button);
 
@@ -2625,14 +2624,12 @@ bookmarks_changed_cb (gpointer user_data)
 
   bookmarks = _gtk_bookmarks_manager_list_bookmarks (priv->bookmarks_manager);
   model_remove_rows (user_data,
-		     model_get_type_position (user_data,
-					      ROW_TYPE_BOOKMARK_SEPARATOR),
-		     (priv->n_bookmarks + priv->has_bookmark_separator));
+		     model_get_type_position (user_data, ROW_TYPE_BOOKMARK_SEPARATOR),
+		     priv->n_bookmarks + priv->has_bookmark_separator);
   priv->has_bookmark_separator = FALSE;
   priv->n_bookmarks = 0;
   model_add_bookmarks (user_data, bookmarks);
-  g_slist_foreach (bookmarks, (GFunc) g_object_unref, NULL);
-  g_slist_free (bookmarks);
+  g_slist_free_full (bookmarks, g_object_unref);
 
   gtk_tree_model_filter_refilter (GTK_TREE_MODEL_FILTER (priv->filter_model));
 

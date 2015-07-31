@@ -873,8 +873,7 @@ gtk_file_chooser_get_filenames (GtkFileChooser *chooser)
   files = gtk_file_chooser_get_files (chooser);
 
   result = files_to_strings (files, g_file_get_path);
-  g_slist_foreach (files, (GFunc) g_object_unref, NULL);
-  g_slist_free (files);
+  g_slist_free_full (files, g_object_unref);
 
   return result;
 }
@@ -1218,8 +1217,7 @@ gtk_file_chooser_get_uris (GtkFileChooser *chooser)
   else
     result = files_to_strings (files, g_file_get_uri);
 
-  g_slist_foreach (files, (GFunc) g_object_unref, NULL);
-  g_slist_free (files);
+  g_slist_free_full (files, g_object_unref);
 
   return result;
 }
@@ -1498,8 +1496,7 @@ gtk_file_chooser_get_file (GtkFileChooser *chooser)
       result = list->data;
       list = g_slist_delete_link (list, list);
 
-      g_slist_foreach (list, (GFunc) g_object_unref, NULL);
-      g_slist_free (list);
+      g_slist_free_full (list, g_object_unref);
     }
 
   return result;
@@ -2064,8 +2061,7 @@ gtk_file_chooser_list_shortcut_folders (GtkFileChooser *chooser)
   folders = _gtk_file_chooser_list_shortcut_folder_files (chooser);
 
   result = files_to_strings (folders, g_file_get_path);
-  g_slist_foreach (folders, (GFunc) g_object_unref, NULL);
-  g_slist_free (folders);
+  g_slist_free_full (folders, g_object_unref);
 
   return result;
 }
@@ -2161,8 +2157,7 @@ gtk_file_chooser_list_shortcut_folder_uris (GtkFileChooser *chooser)
   folders = _gtk_file_chooser_list_shortcut_folder_files (chooser);
 
   result = files_to_strings (folders, g_file_get_uri);
-  g_slist_foreach (folders, (GFunc) g_object_unref, NULL);
-  g_slist_free (folders);
+  g_slist_free_full (folders, g_object_unref);
 
   return result;
 }

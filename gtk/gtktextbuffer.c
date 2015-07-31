@@ -2848,9 +2848,7 @@ gtk_text_buffer_remove_all_tags (GtkTextBuffer     *buffer,
       tmp_list = tmp_list->next;
     }
 
-  g_slist_foreach (tags, (GFunc) g_object_unref, NULL);
-  
-  g_slist_free (tags);
+  g_slist_free_full (tags, g_object_unref);
 }
 
 

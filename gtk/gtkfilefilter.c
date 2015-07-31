@@ -187,8 +187,7 @@ gtk_file_filter_finalize (GObject  *object)
 {
   GtkFileFilter *filter = GTK_FILE_FILTER (object);
 
-  g_slist_foreach (filter->rules, (GFunc)filter_rule_free, NULL);
-  g_slist_free (filter->rules);
+  g_slist_free_full (filter->rules, (GDestroyNotify)filter_rule_free);
 
   g_free (filter->name);
 

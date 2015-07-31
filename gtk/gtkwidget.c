@@ -15516,8 +15516,7 @@ static gboolean
 tooltip_query_idle (gpointer data)
 {
   g_slist_foreach (tooltip_query_displays, (GFunc)gtk_tooltip_trigger_tooltip_query, NULL);
-  g_slist_foreach (tooltip_query_displays, (GFunc)g_object_unref, NULL);
-  g_slist_free (tooltip_query_displays);
+  g_slist_free_full (tooltip_query_displays, g_object_unref);
 
   tooltip_query_displays = NULL;
   tooltip_query_id = 0;

@@ -2192,9 +2192,7 @@ gdk_error_trap_push (void)
 
   g_slist_foreach (trap->displays, (GFunc) g_object_ref, NULL);
   for (l = trap->displays; l != NULL; l = l->next)
-    {
-      class->push_error_trap (l->data);
-    }
+    class->push_error_trap (l->data);
 
   g_queue_push_head (&gdk_error_traps, trap);
 }

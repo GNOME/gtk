@@ -1292,16 +1292,15 @@ gtk_cell_area_box_foreach_alloc (GtkCellArea          *area,
         break;
     }
 
-  g_slist_foreach (allocated_cells, (GFunc)allocated_cell_free, NULL);
-  g_slist_free (allocated_cells);
+  g_slist_free_full (allocated_cells, (GDestroyNotify)allocated_cell_free);
 }
 
 static void
-gtk_cell_area_box_apply_attributes (GtkCellArea          *area,
-				    GtkTreeModel         *tree_model,
-				    GtkTreeIter          *iter,
-				    gboolean              is_expander,
-				    gboolean              is_expanded)
+gtk_cell_area_box_apply_attributes (GtkCellArea  *area,
+				    GtkTreeModel *tree_model,
+				    GtkTreeIter  *iter,
+				    gboolean      is_expander,
+				    gboolean      is_expanded)
 {
   GtkCellAreaBox        *box  = GTK_CELL_AREA_BOX (area);
   GtkCellAreaBoxPrivate *priv = box->priv;
@@ -1309,7 +1308,7 @@ gtk_cell_area_box_apply_attributes (GtkCellArea          *area,
 
   /* Call the parent class to apply the attributes */
   GTK_CELL_AREA_CLASS
-    (gtk_cell_area_box_parent_class)->apply_attributes (area, tree_model, iter, 
+    (gtk_cell_area_box_parent_class)->apply_attributes (area, tree_model, iter,
 							is_expander, is_expanded);
 
   /* Update visible state for cell groups */
