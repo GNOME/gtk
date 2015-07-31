@@ -599,7 +599,7 @@ main (int argc, char **argv)
       gtk_window_set_title (GTK_WINDOW (dialog), "Save a file");
       gtk_dialog_add_buttons (GTK_DIALOG (dialog),
 			      _("_Cancel"), GTK_RESPONSE_CANCEL,
-			      _("_Open"), GTK_RESPONSE_OK,
+			      _("_Save"), GTK_RESPONSE_OK,
 			      NULL);
       break;
     }
