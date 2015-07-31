@@ -336,7 +336,6 @@ enum {
 };
 
 static guint signals[LAST_SIGNAL] = { 0 };
-static gboolean test_touchscreen = FALSE;
 
 typedef enum {
   CURSOR_STANDARD,
@@ -2058,8 +2057,6 @@ gtk_entry_class_init (GtkEntryClass *class)
                                                                GTK_TYPE_BORDER,
                                                                GTK_PARAM_READABLE |
                                                                G_PARAM_DEPRECATED));
-
-  test_touchscreen = g_getenv ("GTK_TEST_TOUCHSCREEN") != NULL;
 
   gtk_widget_class_set_accessible_type (widget_class, GTK_TYPE_ENTRY_ACCESSIBLE);
 }
@@ -4466,9 +4463,8 @@ gtk_entry_multipress_gesture_pressed (GtkGestureMultiPress *gesture,
       GdkDevice *source;
 
       source = gdk_event_get_source_device (event);
-      is_touchscreen = test_touchscreen ||
-        (gtk_get_debug_flags () & GTK_DEBUG_TOUCHSCREEN) != 0 ||
-        gdk_device_get_source (source) == GDK_SOURCE_TOUCHSCREEN;
+      is_touchscreen = gtk_simulate_touchscreen () ||
+                       gdk_device_get_source (source) == GDK_SOURCE_TOUCHSCREEN;
 
       if (!is_touchscreen)
         mode = GTK_TEXT_HANDLE_MODE_NONE;
@@ -4758,8 +4754,7 @@ gtk_entry_drag_gesture_update (GtkGestureDrag *gesture,
         gtk_entry_set_positions (entry, tmp_pos, -1);
 
       /* Update touch handles' position */
-      if (test_touchscreen ||
-          (gtk_get_debug_flags () & GTK_DEBUG_TOUCHSCREEN) != 0 ||
+      if (gtk_simulate_touchscreen () ||
           input_source == GDK_SOURCE_TOUCHSCREEN)
         {
           gtk_entry_ensure_text_handles (entry);
@@ -4797,9 +4792,8 @@ gtk_entry_drag_gesture_end (GtkGestureDrag *gesture,
 
   event = gtk_gesture_get_last_event (GTK_GESTURE (gesture), sequence);
   source = gdk_event_get_source_device (event);
-  is_touchscreen = (test_touchscreen ||
-                    (gtk_get_debug_flags () & GTK_DEBUG_TOUCHSCREEN) != 0 ||
-                    gdk_device_get_source (source) == GDK_SOURCE_TOUCHSCREEN);
+  is_touchscreen = gtk_simulate_touchscreen () ||
+                   gdk_device_get_source (source) == GDK_SOURCE_TOUCHSCREEN;
 
   if (in_drag)
     {
