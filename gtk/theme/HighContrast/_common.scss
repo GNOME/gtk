@@ -2433,12 +2433,20 @@ GtkColorSwatch {
 
   // make the add color button looks like, well, a button
   &#add-color-button {
+    @include button(normal);
     border-style: solid; // the borders are drawn by the overlay for standard colorswatches to have them semi
     border-width: 1px;   // translucent on the colored background, here it's not necessary so they need to be set
-    @include button(normal);
+    box-shadow: none;
     &:hover { @include button(hover); }
-    &:backdrop { @include button(backdrop); }
-    .overlay { @include button(undecorated); } // reset the overlay to not cover the button style underneat
+    &:backdrop { 
+      @include button(backdrop); 
+      border-width: 1px;
+      color: $insensitive_fg_color; 
+    }
+    .overlay { 
+      @include button(undecorated);
+      border-width: 0; } // reset the overlay to not 
+                         // cover the button style underneat
   }
 }
 
