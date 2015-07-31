@@ -811,6 +811,17 @@ gtk_set_debug_flags (guint flags)
   debug_flags = flags;
 }
 
+gboolean
+gtk_simulate_touchscreen (void)
+{
+  static gint test_touchscreen;
+
+  if (test_touchscreen == 0)
+    test_touchscreen = g_getenv ("GTK_TEST_TOUCHSCREEN") != NULL ? 1 : -1;
+
+  return test_touchscreen > 0 || (debug_flags & GTK_DEBUG_TOUCHSCREEN) != 0;
+ }
+
 /**
  * gtk_get_option_group:
  * @open_default_display: whether to open the default display

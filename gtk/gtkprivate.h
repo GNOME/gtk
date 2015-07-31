@@ -95,6 +95,8 @@ gboolean        _gtk_propagate_captured_event  (GtkWidget       *widget,
 void _gtk_load_dll_with_libgtk3_manifest (const char *dllname);
 #endif
 
+gboolean        gtk_simulate_touchscreen (void);
+
 G_END_DECLS
 
 #endif /* __GTK_PRIVATE_H__ */
