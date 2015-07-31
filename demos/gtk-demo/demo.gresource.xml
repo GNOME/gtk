@@ -159,6 +159,7 @@
     <file>printing.c</file>
     <file>revealer.c</file>
     <file>rotated_text.c</file>
+    <file>scale.c</file>
     <file>search_entry.c</file>
     <file>search_entry2.c</file>
     <file>sizegroup.c</file>
@@ -204,5 +205,8 @@
   </gresource>
   <gresource prefix="/markup">
     <file>markup.txt</file>
+  </gresource>
+  <gresource prefix="/scale">
+    <file>scale.ui</file>
   </gresource>
 </gresources>

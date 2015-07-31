@@ -52,6 +52,7 @@ demos_base =					\
 	printing.c				\
 	revealer.c				\
 	rotated_text.c				\
+	scale.c					\
 	search_entry.c				\
 	search_entry2.c				\
 	sidebar.c				\
