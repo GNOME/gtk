@@ -3098,9 +3098,11 @@ shortcuts_drop_uris (GtkFileChooserDefault *impl,
 /* Reorders the selected bookmark to the specified position */
 static void
 shortcuts_reorder (GtkFileChooserDefault *impl,
+                   GtkSelectionData      *selection_data,
 		   int                    new_position)
 {
   GtkTreeIter iter;
+  GtkTreeIter filter_iter;
   gpointer col_data;
   ShortcutType shortcut_type;
   GtkTreePath *path;
@@ -3109,13 +3111,23 @@ shortcuts_reorder (GtkFileChooserDefault *impl,
   GFile *file;
   GError *error;
   gchar *name;
+  GtkTreeModel *model;
 
   /* Get the selected path */
 
-  if (!shortcuts_get_selected (impl, &iter))
-    g_assert_not_reached ();
+  if (!gtk_tree_get_row_drag_data (selection_data, &model, &path))
+    return;
 
+  g_assert (model == impl->shortcuts_pane_filter_model);
+
+  gtk_tree_model_get_iter (model, &filter_iter, path);
+  gtk_tree_path_free (path);
+
+  gtk_tree_model_filter_convert_iter_to_child_iter (GTK_TREE_MODEL_FILTER (impl->shortcuts_pane_filter_model),
+                                                    &iter,
+						    &filter_iter);
   path = gtk_tree_model_get_path (GTK_TREE_MODEL (impl->shortcuts_model), &iter);
+
   old_position = *gtk_tree_path_get_indices (path);
   gtk_tree_path_free (path);
 
@@ -3197,7 +3209,7 @@ shortcuts_drag_data_received_cb (GtkWidget          *widget,
   if (gtk_targets_include_uri (&target, 1))
     shortcuts_drop_uris (impl, selection_data, position);
   else if (target == gdk_atom_intern_static_string ("GTK_TREE_MODEL_ROW"))
-    shortcuts_reorder (impl, position);
+    shortcuts_reorder (impl, selection_data, position);
 
   g_signal_stop_emission_by_name (widget, "drag-data-received");
 }
