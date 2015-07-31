@@ -643,7 +643,6 @@ static gint           text_window_get_height      (GtkTextWindow     *win);
 
 
 static guint signals[LAST_SIGNAL] = { 0 };
-static gboolean test_touchscreen = FALSE;
 
 G_DEFINE_TYPE_WITH_CODE (GtkTextView, gtk_text_view, GTK_TYPE_CONTAINER,
                          G_ADD_PRIVATE (GtkTextView)
@@ -1544,7 +1543,6 @@ G_GNUC_END_IGNORE_DEPRECATIONS
 				GTK_TYPE_DIRECTION_TYPE, GTK_DIR_TAB_BACKWARD);
 
   gtk_widget_class_set_accessible_type (widget_class, GTK_TYPE_TEXT_VIEW_ACCESSIBLE);
-  test_touchscreen = g_getenv ("GTK_TEST_TOUCHSCREEN") != NULL;
 
   quark_text_selection_data =
     g_quark_from_static_string ("gtk-text-view-text-selection-data");
@@ -5170,8 +5168,7 @@ gtk_text_view_multipress_gesture_pressed (GtkGestureMultiPress *gesture,
 #endif
 
   device = gdk_event_get_source_device ((GdkEvent *) event);
-  is_touchscreen = test_touchscreen ||
-                   (gtk_get_debug_flags () & GTK_DEBUG_TOUCHSCREEN) != 0 ||
+  is_touchscreen = gtk_simulate_touchscreen () ||
                    gdk_device_get_source (device) == GDK_SOURCE_TOUCHSCREEN;
 
   if (n_press == 1)
@@ -7141,8 +7138,7 @@ gtk_text_view_drag_gesture_update (GtkGestureDrag *gesture,
 
   device = gdk_event_get_source_device (event);
 
-  is_touchscreen = test_touchscreen ||
-                   (gtk_get_debug_flags () & GTK_DEBUG_TOUCHSCREEN) != 0 ||
+  is_touchscreen = gtk_simulate_touchscreen () ||
                    gdk_device_get_source (device) == GDK_SOURCE_TOUCHSCREEN;
 
   get_iter_from_gesture (text_view, text_view->priv->drag_gesture,
@@ -7277,8 +7273,7 @@ gtk_text_view_drag_gesture_end (GtkGestureDrag *gesture,
 
   event = gtk_gesture_get_last_event (GTK_GESTURE (gesture), sequence);
   device = gdk_event_get_source_device (event);
-  is_touchscreen = test_touchscreen ||
-    (gtk_get_debug_flags () & GTK_DEBUG_TOUCHSCREEN) != 0 ||
+  is_touchscreen = gtk_simulate_touchscreen () ||
     gdk_device_get_source (device) == GDK_SOURCE_TOUCHSCREEN;
 
   if (!is_touchscreen && clicked_in_selection &&
