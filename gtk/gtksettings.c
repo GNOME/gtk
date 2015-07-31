@@ -3070,7 +3070,7 @@ settings_update_fontconfig (GtkSettings *settings)
       /* bug 547680 */
       if (PANGO_IS_FC_FONT_MAP (fontmap) && !FcConfigUptoDate (NULL))
         {
-          pango_fc_font_map_cache_clear (PANGO_FC_FONT_MAP (fontmap));
+          pango_fc_font_map_config_changed (PANGO_FC_FONT_MAP (fontmap));
           if (FcInitReinitialize ())
             update_needed = TRUE;
         }
