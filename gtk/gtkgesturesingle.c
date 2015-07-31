@@ -147,8 +147,7 @@ gtk_gesture_single_handle_event (GtkEventController *controller,
   source = gdk_device_get_source (source_device);
 
   if (source != GDK_SOURCE_TOUCHSCREEN)
-    test_touchscreen = ((gtk_get_debug_flags () & GTK_DEBUG_TOUCHSCREEN) != 0 ||
-                        g_getenv ("GTK_TEST_TOUCHSCREEN"));
+    test_touchscreen = gtk_simulate_touchscreen ();
 
   switch (event->type)
     {
@@ -305,8 +304,7 @@ _gtk_gesture_single_update_evmask (GtkGestureSingle *gesture)
   priv = gtk_gesture_single_get_instance_private (gesture);
   evmask = GDK_TOUCH_MASK;
 
-  if (!priv->touch_only || g_getenv ("GTK_TEST_TOUCHSCREEN") ||
-      (gtk_get_debug_flags () & GTK_DEBUG_TOUCHSCREEN) != 0)
+  if (!priv->touch_only || gtk_simulate_touchscreen ())
     evmask |= GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK |
       GDK_BUTTON_MOTION_MASK;
 
