@@ -536,6 +536,9 @@ get_indexed_locations (GtkSearchEngineTracker *engine)
   for (i = 0; locations[i] != NULL; i++)
     {
       path = path_from_tracker_dir (locations[i]);
+      if (path == NULL)
+        continue;
+
       location = g_file_new_for_path (path);
       g_ptr_array_add (engine->indexed_locations, location);
     }
