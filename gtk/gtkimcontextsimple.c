@@ -139,7 +139,6 @@ gtk_im_context_simple_finalize (GObject *obj)
   GtkIMContextSimplePrivate *priv = context_simple->priv;
 
   g_slist_free_full (priv->tables, g_free);
-  priv->tables = NULL;
 
   G_OBJECT_CLASS (gtk_im_context_simple_parent_class)->finalize (obj);
 }
