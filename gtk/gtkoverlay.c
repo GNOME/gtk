@@ -302,11 +302,8 @@ gtk_overlay_child_allocate (GtkOverlay      *overlay,
 
   if (gtk_widget_get_mapped (GTK_WIDGET (overlay)))
     {
-      /* Note: This calls show every size allocation, which makes
-       * us keep the z-order of the chilren, as gdk_window_show()
-       * does an implicit raise. */
       if (gtk_widget_get_visible (child->widget))
-        gdk_window_show (child->window);
+        gdk_window_show_unraised (child->window);
       else if (gdk_window_is_visible (child->window))
         gdk_window_hide (child->window);
     }
@@ -589,6 +586,16 @@ gtk_overlay_reorder_overlay (GtkOverlay *overlay,
 
   if (index == old_index)
     return;
+
+  if (new_link)
+    {
+      GtkOverlayChild *new_child_info = new_link->data;
+      gdk_window_restack (child_info->window, new_child_info->window, TRUE);
+    }
+  else
+    {
+      gdk_window_raise (child_info->window);
+    }
 
   priv->children = g_slist_delete_link (priv->children, old_link);
   priv->children = g_slist_insert_before (priv->children, new_link, child_info);
