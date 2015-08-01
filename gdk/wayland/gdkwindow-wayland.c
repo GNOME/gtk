@@ -159,6 +159,7 @@ static void gdk_wayland_window_configure (GdkWindow *window,
                                           int        scale);
 
 static void maybe_set_gtk_surface_dbus_properties (GdkWindow *window);
+static void maybe_set_gtk_surface_modal (GdkWindow *window);
 
 static void gdk_window_request_transient_parent_commit (GdkWindow *window);
 
@@ -1026,6 +1027,7 @@ gdk_wayland_window_create_xdg_surface (GdkWindow *window)
   xdg_surface_set_app_id (impl->xdg_surface, app_id);
 
   maybe_set_gtk_surface_dbus_properties (window);
+  maybe_set_gtk_surface_modal (window);
 }
 
 static void
@@ -1699,8 +1701,7 @@ gdk_wayland_window_init_gtk_surface (GdkWindow *window)
 }
 
 static void
-gdk_wayland_window_set_modal_hint (GdkWindow *window,
-                                   gboolean   modal)
+maybe_set_gtk_surface_modal (GdkWindow *window)
 {
   GdkWindowImplWayland *impl = GDK_WINDOW_IMPL_WAYLAND (window->impl);
 
@@ -1708,10 +1709,19 @@ gdk_wayland_window_set_modal_hint (GdkWindow *window,
   if (impl->gtk_surface == NULL)
     return;
 
-  if (modal)
+  if (window->modal_hint)
     gtk_surface_set_modal (impl->gtk_surface);
   else
     gtk_surface_unset_modal (impl->gtk_surface);
+
+}
+
+static void
+gdk_wayland_window_set_modal_hint (GdkWindow *window,
+                                   gboolean   modal)
+{
+  window->modal_hint = modal;
+  maybe_set_gtk_surface_modal (window);
 }
 
 static void
