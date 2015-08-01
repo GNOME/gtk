@@ -191,15 +191,8 @@ gtk_recent_filter_finalize (GObject *object)
   GtkRecentFilter *filter = GTK_RECENT_FILTER (object);
   
   g_free (filter->name);
-  
-  if (filter->rules)
-    {
-      g_slist_foreach (filter->rules,
-      		       (GFunc) filter_rule_free,
-      		       NULL);
-      g_slist_free (filter->rules);
-    }
-  
+  g_slist_free_full (filter->rules, (GDestroyNotify) filter_rule_free);
+
   G_OBJECT_CLASS (gtk_recent_filter_parent_class)->finalize (object);
 }
 
