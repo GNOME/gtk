@@ -1349,6 +1349,12 @@ gdk_wayland_window_hide_surface (GdkWindow *window)
           _gdk_frame_clock_thaw (gdk_window_get_frame_clock (window));
         }
 
+      if (impl->gtk_surface)
+        {
+          gtk_surface_destroy (impl->gtk_surface);
+          impl->gtk_surface = NULL;
+        }
+
       wl_surface_destroy (impl->surface);
       impl->surface = NULL;
 
