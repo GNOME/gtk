@@ -1495,20 +1495,12 @@ gtk_recent_info_free (GtkRecentInfo *recent_info)
   g_free (recent_info->description);
   g_free (recent_info->mime_type);
 
-  if (recent_info->applications)
-    {
-      g_slist_free_full (recent_info->applications, (GDestroyNotify)recent_app_info_free);
-      recent_info->applications = NULL;
-    }
+  g_slist_free_full (recent_info->applications, (GDestroyNotify)recent_app_info_free);
 
   if (recent_info->apps_lookup)
     g_hash_table_destroy (recent_info->apps_lookup);
 
-  if (recent_info->groups)
-    {
-      g_slist_free_full (recent_info->groups, g_free);
-      recent_info->groups = NULL;
-    }
+  g_slist_free_full (recent_info->groups, g_free);
 
   if (recent_info->icon)
     g_object_unref (recent_info->icon);
