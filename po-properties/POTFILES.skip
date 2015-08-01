@@ -19,6 +19,7 @@ demos/gtk-demo/menus.ui
 demos/gtk-demo/offscreen_window2.c
 demos/gtk-demo/popover.ui
 demos/gtk-demo/revealer.ui
+demos/gtk-demo/scale.ui
 demos/gtk-demo/search_entry.c
 demos/gtk-demo/sizegroup.c
 demos/gtk-demo/spinbutton.ui
