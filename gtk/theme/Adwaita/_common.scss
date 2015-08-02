@@ -2652,7 +2652,7 @@ GtkScrolledWindow {
 }
 
 // transition
-.list-row, list-row.button {
+.list-row {
   transition: all 150ms $ease-out-quad;
   &:hover { transition: none; }
 }
