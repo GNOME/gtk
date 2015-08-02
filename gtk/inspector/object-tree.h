@@ -60,7 +60,7 @@ GType      gtk_inspector_object_tree_get_type            (void);
 
 void       gtk_inspector_object_tree_scan                (GtkInspectorObjectTree *wt,
                                                           GtkWidget              *window);
-void       gtk_inspector_object_tree_select_object       (GtkInspectorObjectTree *wt,
+gboolean   gtk_inspector_object_tree_select_object       (GtkInspectorObjectTree *wt,
                                                           GObject                *object);
 void       gtk_inspector_object_tree_append_object       (GtkInspectorObjectTree *wt,
                                                           GObject                *object,

@@ -828,6 +828,45 @@ gtk_inspector_object_tree_append_object (GtkInspectorObjectTree *wt,
     }
 }
 
+gboolean
+select_object_internal (GtkInspectorObjectTree *wt,
+                        GObject                *object,
+                        gboolean                activate)
+{
+  GtkTreeIter iter;
+
+  if (gtk_inspector_object_tree_find_object (wt, object, &iter))
+    {
+      GtkTreePath *path;
+      GtkTreeSelection *selection;
+
+      selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (wt->priv->tree));
+      path = gtk_tree_model_get_path (GTK_TREE_MODEL (wt->priv->model), &iter);
+      gtk_tree_view_expand_to_path (GTK_TREE_VIEW (wt->priv->tree), path);
+      if (!activate)
+        g_signal_handlers_block_by_func (selection, on_selection_changed, wt);
+      gtk_tree_selection_select_iter (selection, &iter);
+      if (!activate)
+        g_signal_handlers_block_by_func (selection, on_selection_changed, wt);
+
+      gtk_tree_view_scroll_to_cell (GTK_TREE_VIEW (wt->priv->tree), path, NULL, TRUE, 0.5, 0);
+      if (activate)
+        gtk_tree_view_row_activated (GTK_TREE_VIEW (wt->priv->tree), path, NULL);
+      gtk_tree_path_free (path);
+
+      return TRUE;
+    }
+
+  return FALSE;
+}
+
+gboolean
+gtk_inspector_object_tree_select_object (GtkInspectorObjectTree *wt,
+                                         GObject                *object)
+{
+  return select_object_internal (wt, object, TRUE);
+}
+
 void
 gtk_inspector_object_tree_scan (GtkInspectorObjectTree *wt,
                                 GtkWidget              *window)
@@ -835,6 +874,9 @@ gtk_inspector_object_tree_scan (GtkInspectorObjectTree *wt,
   GtkWidget *inspector_win;
   GList *toplevels, *l;
   GdkScreen *screen;
+  GObject *selected;
+
+  selected = gtk_inspector_object_tree_get_selected (wt);
 
   gtk_tree_store_clear (wt->priv->model);
   g_hash_table_remove_all (wt->priv->iters);
@@ -861,6 +903,9 @@ gtk_inspector_object_tree_scan (GtkInspectorObjectTree *wt,
   g_list_free (toplevels);
 
   gtk_tree_view_columns_autosize (GTK_TREE_VIEW (wt->priv->tree));
+
+  if (selected)
+    select_object_internal (wt, selected, FALSE);
 }
 
 gboolean
@@ -883,25 +928,6 @@ gtk_inspector_object_tree_find_object (GtkInspectorObjectTree *wt,
     }
 
   return FALSE;
-}
-
-void
-gtk_inspector_object_tree_select_object (GtkInspectorObjectTree *wt,
-                                         GObject                *object)
-{
-  GtkTreeIter iter;
-
-  if (gtk_inspector_object_tree_find_object (wt, object, &iter))
-    {
-      GtkTreePath *path;
-
-      path = gtk_tree_model_get_path (GTK_TREE_MODEL (wt->priv->model), &iter);
-      gtk_tree_view_expand_to_path (GTK_TREE_VIEW (wt->priv->tree), path);
-      gtk_tree_selection_select_iter (gtk_tree_view_get_selection (GTK_TREE_VIEW (wt->priv->tree)), &iter);
-      gtk_tree_view_scroll_to_cell (GTK_TREE_VIEW (wt->priv->tree), path, NULL, TRUE, 0.5, 0);
-      gtk_tree_view_row_activated (GTK_TREE_VIEW (wt->priv->tree), path, NULL);
-      gtk_tree_path_free (path);
-    }
 }
 
 
