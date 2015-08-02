@@ -529,6 +529,8 @@ gtk_private_h_sources =		\
 	gtktooltipprivate.h	\
 	gtktreedatalist.h	\
 	gtktreeprivate.h	\
+	gtkundocommandprivate.h	\
+	gtkundostackprivate.h	\
 	gtkwidgetprivate.h	\
 	gtkwin32themeprivate.h	\
 	gtkwindowprivate.h	\
@@ -860,6 +862,8 @@ gtk_base_c_sources = 		\
 	gtktreeview.c		\
 	gtktreeviewcolumn.c	\
 	gtktypebuiltins.c	\
+	gtkundocommand.c	\
+	gtkundostack.c		\
 	gtkvolumebutton.c	\
 	gtkviewport.c		\
 	gtkwidget.c		\
