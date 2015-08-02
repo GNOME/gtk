@@ -134,6 +134,15 @@ typedef enum {
   GTK_CSS_AFFECTS_SIZE = (1 << 9)
 } GtkCssAffects;
 
+#define GTK_CSS_AFFECTS_REDRAW (GTK_CSS_AFFECTS_FOREGROUND |    \
+                                GTK_CSS_AFFECTS_BACKGROUND |    \
+                                GTK_CSS_AFFECTS_BORDER |        \
+                                GTK_CSS_AFFECTS_FONT |          \
+                                GTK_CSS_AFFECTS_TEXT |          \
+                                GTK_CSS_AFFECTS_TEXT_ATTRS |    \
+                                GTK_CSS_AFFECTS_ICON |          \
+                                GTK_CSS_AFFECTS_OUTLINE)
+
 enum { /*< skip >*/
   GTK_CSS_PROPERTY_COLOR,
   GTK_CSS_PROPERTY_DPI,
