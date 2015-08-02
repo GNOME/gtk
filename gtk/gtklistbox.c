@@ -1492,8 +1492,6 @@ gtk_list_box_row_set_selected (GtkListBoxRow *row,
         gtk_widget_unset_state_flags (GTK_WIDGET (row),
                                       GTK_STATE_FLAG_SELECTED);
 
-      gtk_widget_queue_draw (GTK_WIDGET (row));
-
       return TRUE;
     }
 
@@ -1725,8 +1723,6 @@ gtk_list_box_update_prelight (GtkListBox    *box,
         {
           priv->prelight_row = NULL;
         }
-
-      gtk_widget_queue_draw (GTK_WIDGET (box));
     }
 }
 
@@ -1749,7 +1745,6 @@ gtk_list_box_update_active (GtkListBox    *box,
       else
         gtk_widget_unset_state_flags (GTK_WIDGET (priv->active_row),
                                       GTK_STATE_FLAG_ACTIVE);
-      gtk_widget_queue_draw (GTK_WIDGET (box));
     }
 }
 
