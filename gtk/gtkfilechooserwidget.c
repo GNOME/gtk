@@ -2470,7 +2470,7 @@ file_list_query_tooltip_cb (GtkWidget  *widget,
                                           keyboard_tip,
                                           &model, &path, &iter))
     return FALSE;
-                                       
+
   gtk_tree_model_get (model, &iter,
                       MODEL_COL_FILE, &file,
                       -1);
@@ -2501,7 +2501,7 @@ set_icon_cell_renderer_fixed_size (GtkFileChooserWidget *impl)
   gint xpad, ypad;
 
   gtk_cell_renderer_get_padding (priv->list_pixbuf_renderer, &xpad, &ypad);
-  gtk_cell_renderer_set_fixed_size (priv->list_pixbuf_renderer, 
+  gtk_cell_renderer_set_fixed_size (priv->list_pixbuf_renderer,
                                     xpad * 2 + priv->icon_size,
                                     ypad * 2 + priv->icon_size);
 }
@@ -3358,7 +3358,7 @@ gtk_file_chooser_widget_set_property (GObject      *object,
         if (action != priv->action)
           {
             gtk_file_chooser_widget_unselect_all (GTK_FILE_CHOOSER (impl));
-            
+
             if ((action == GTK_FILE_CHOOSER_ACTION_SAVE ||
                  action == GTK_FILE_CHOOSER_ACTION_CREATE_FOLDER)
                 && priv->select_multiple)
@@ -3652,7 +3652,7 @@ gtk_file_chooser_widget_hierarchy_changed (GtkWidget *widget,
 
   toplevel = gtk_widget_get_toplevel (widget);
 
-  if (previous_toplevel && 
+  if (previous_toplevel &&
       priv->toplevel_set_focus_id != 0)
     {
       g_signal_handler_disconnect (previous_toplevel,
@@ -3983,7 +3983,7 @@ add_cwd_to_sidebar_if_needed (GtkFileChooserWidget *impl)
   GFile *cwd_file;
   GFile *home_file;
 
-  cwd = g_get_current_dir (); 
+  cwd = g_get_current_dir ();
   cwd_file = g_file_new_for_path (cwd);
   g_free (cwd);
 
@@ -4029,7 +4029,7 @@ gtk_file_chooser_widget_map (GtkWidget *widget)
         case RELOAD_EMPTY:
           set_startup_mode (impl);
           break;
-        
+
         case RELOAD_HAS_FOLDER:
           /* Nothing; we are already loading or loaded, so we
            * don't need to reload
@@ -4540,7 +4540,6 @@ show_and_select_files (GtkFileChooserWidget *impl,
         }
 
       /* Okay, can we select the file now? */
-          
       if (!_gtk_file_system_model_get_iter_for_file (fsmodel, &iter, file))
         continue;
 
@@ -4852,7 +4851,7 @@ file_system_model_set (GtkFileSystemModel *model,
 {
   GtkFileChooserWidget *impl = data;
   GtkFileChooserWidgetPrivate *priv = impl->priv;
- 
+
   switch (column)
     {
     case MODEL_COL_FILE:
@@ -4861,13 +4860,13 @@ file_system_model_set (GtkFileSystemModel *model,
     case MODEL_COL_NAME:
       if (info == NULL)
         g_value_set_string (value, DEFAULT_NEW_FOLDER_NAME);
-      else 
+      else
         g_value_set_string (value, g_file_info_get_display_name (info));
       break;
     case MODEL_COL_NAME_COLLATED:
       if (info == NULL)
         g_value_take_string (value, g_utf8_collate_key_for_filename (DEFAULT_NEW_FOLDER_NAME, -1));
-      else 
+      else
         g_value_take_string (value, g_utf8_collate_key_for_filename (g_file_info_get_display_name (info), -1));
       break;
     case MODEL_COL_IS_FOLDER:
