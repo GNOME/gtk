@@ -64,13 +64,20 @@ gdk_wayland_drag_context_finalize (GObject *object)
 {
   GdkWaylandDragContext *wayland_context = GDK_WAYLAND_DRAG_CONTEXT (object);
   GdkDragContext *context = GDK_DRAG_CONTEXT (object);
-  GdkDisplay *display = gdk_window_get_display (context->source_window);
 
   contexts = g_list_remove (contexts, context);
 
-  if (context->is_source &&
-      gdk_selection_owner_get_for_display (display, gdk_drag_get_selection (context)) == context->source_window)
-    gdk_wayland_selection_unset_data_source (display, gdk_drag_get_selection (context));
+  if (context->is_source)
+    {
+      GdkDisplay *display = gdk_window_get_display (context->source_window);
+      GdkAtom selection;
+      GdkWindow *selection_owner;
+
+      selection = gdk_drag_get_selection (context);
+      selection_owner = gdk_selection_owner_get_for_display (display, selection);
+      if (selection_owner == context->source_window)
+        gdk_wayland_selection_unset_data_source (display, selection);
+    }
 
   if (wayland_context->data_source)
     wl_data_source_destroy (wayland_context->data_source);
