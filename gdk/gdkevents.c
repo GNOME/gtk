@@ -658,8 +658,8 @@ gdk_event_copy (const GdkEvent *event)
       GdkEventPrivate *private = (GdkEventPrivate *)event;
 
       new_private->screen = private->screen;
-      new_private->device = private->device;
-      new_private->source_device = private->source_device;
+      new_private->device = private->device ? g_object_ref (private->device) : NULL;
+      new_private->source_device = private->source_device ? g_object_ref (private->source_device) : NULL;
     }
 
   switch (event->any.type)
@@ -754,9 +754,17 @@ gdk_event_copy (const GdkEvent *event)
 void
 gdk_event_free (GdkEvent *event)
 {
+  GdkEventPrivate *private;
   GdkDisplay *display;
 
   g_return_if_fail (event != NULL);
+
+  if (gdk_event_is_allocated (event))
+    {
+      private = (GdkEventPrivate *) event;
+      g_clear_object (&private->device);
+      g_clear_object (&private->source_device);
+    }
 
   switch (event->any.type)
     {
@@ -1519,7 +1527,7 @@ gdk_event_set_device (GdkEvent  *event,
 
   private = (GdkEventPrivate *) event;
 
-  private->device = device;
+  g_set_object (&private->device, device);
 
   switch (event->type)
     {
@@ -1672,7 +1680,7 @@ gdk_event_set_source_device (GdkEvent  *event,
 
   private = (GdkEventPrivate *) event;
 
-  private->source_device = device;
+  g_set_object (&private->source_device, device);
 }
 
 /**
