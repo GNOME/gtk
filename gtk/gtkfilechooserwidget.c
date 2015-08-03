@@ -4911,8 +4911,9 @@ file_system_model_set (GtkFileSystemModel *model,
           else
             {
               GtkTreeModel *tree_model;
-              GtkTreePath *path, *start, *end;
+              GtkTreePath *start, *end;
               GtkTreeIter iter;
+              gboolean visible;
 
               if (priv->browse_files_tree_view == NULL ||
                   g_file_info_has_attribute (info, "filechooser::queried"))
@@ -4922,15 +4923,25 @@ file_system_model_set (GtkFileSystemModel *model,
               if (tree_model != GTK_TREE_MODEL (model))
                 return FALSE;
 
-              if (!_gtk_file_system_model_get_iter_for_file (model,
-                                                             &iter,
-                                                             file))
+              if (!_gtk_file_system_model_get_iter_for_file (model, &iter, file))
                 g_assert_not_reached ();
-              if (!gtk_tree_view_get_visible_range (GTK_TREE_VIEW (priv->browse_files_tree_view), &start, &end))
-                return FALSE;
-              path = gtk_tree_model_get_path (tree_model, &iter);
-              if (gtk_tree_path_compare (start, path) != 1 &&
-                  gtk_tree_path_compare (path, end) != 1)
+
+              if (gtk_tree_view_get_visible_range (GTK_TREE_VIEW (priv->browse_files_tree_view), &start, &end))
+                {
+                  GtkTreePath *path;
+
+                  gtk_tree_path_prev (start);
+                  gtk_tree_path_next (end);
+                  path = gtk_tree_model_get_path (tree_model, &iter);
+                  visible = gtk_tree_path_compare (start, path) != 1 &&
+                            gtk_tree_path_compare (path, end) != 1;
+                  gtk_tree_path_free (path);
+                  gtk_tree_path_free (start);
+                  gtk_tree_path_free (end);
+                }
+              else
+                visible = TRUE;
+              if (visible)
                 {
                   g_file_info_set_attribute_boolean (info, "filechooser::queried", TRUE);
                   g_file_query_info_async (file,
@@ -4943,9 +4954,6 @@ file_system_model_set (GtkFileSystemModel *model,
                                            file_system_model_got_thumbnail,
                                            model);
                 }
-              gtk_tree_path_free (path);
-              gtk_tree_path_free (start);
-              gtk_tree_path_free (end);
               return FALSE;
             }
         }
