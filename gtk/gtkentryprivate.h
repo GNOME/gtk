@@ -26,6 +26,12 @@
 
 G_BEGIN_DECLS
 
+typedef enum {
+  GTK_ENTRY_UNDO_RESET,
+  GTK_ENTRY_UNDO_RECORD,
+  GTK_ENTRY_UNDO_REPLAY
+} GtkEntryUndoMode;
+
 struct _GtkEntryCompletionPrivate
 {
   GtkWidget *entry;
@@ -79,6 +85,9 @@ void     _gtk_entry_completion_popdown      (GtkEntryCompletion *completion);
 void     _gtk_entry_completion_connect      (GtkEntryCompletion *completion,
                                              GtkEntry           *entry);
 void     _gtk_entry_completion_disconnect   (GtkEntryCompletion *completion);
+GtkEntryUndoMode
+         gtk_entry_set_undo_mode            (GtkEntry            *entry,
+                                             GtkEntryUndoMode     mode);
 
 gchar*   _gtk_entry_get_display_text       (GtkEntry *entry,
                                             gint      start_pos,

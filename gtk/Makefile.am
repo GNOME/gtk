@@ -427,6 +427,7 @@ gtk_private_h_sources =		\
 	gtkdialogprivate.h 	\
 	gtkdndprivate.h		\
 	gtkentryprivate.h	\
+	gtkentryundocommandprivate.h	\
 	gtkeventcontrollerprivate.h	\
 	gtkfilechooserembed.h	\
 	gtkfilechooserentry.h	\
@@ -676,6 +677,7 @@ gtk_base_c_sources = 		\
 	gtkentry.c		\
 	gtkentrybuffer.c	\
 	gtkentrycompletion.c	\
+	gtkentryundocommand.c	\
 	gtkeventbox.c		\
 	gtkeventcontroller.c	\
 	gtkexpander.c		\

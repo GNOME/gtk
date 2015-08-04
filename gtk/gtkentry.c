@@ -38,6 +38,7 @@
 #include "gtkdnd.h"
 #include "gtkentry.h"
 #include "gtkentrybuffer.h"
+#include "gtkentryundocommandprivate.h"
 #include "gtkiconhelperprivate.h"
 #include "gtkimcontextsimple.h"
 #include "gtkimmulticontext.h"
@@ -65,6 +66,7 @@
 #include "gtkwidgetprivate.h"
 #include "gtkstylecontextprivate.h"
 #include "gtktexthandleprivate.h"
+#include "gtkundostackprivate.h"
 #include "gtkpopover.h"
 #include "gtktoolbar.h"
 #include "gtkmagnifierprivate.h"
@@ -150,7 +152,8 @@ struct _GtkEntryPrivate
   PangoAttrList         *attrs;
   PangoTabArray         *tabs;
 
-  gchar        *im_module;
+  gchar                 *im_module;
+  GtkUndoStack          *undo_stack;
 
   gdouble       progress_fraction;
   gdouble       progress_pulse_fraction;
@@ -210,6 +213,7 @@ struct _GtkEntryPrivate
   guint         overwrite_mode          : 1;
   guint         visible                 : 1;
 
+  GtkEntryUndoMode undo_mode            : 2;
   guint         activates_default       : 1;
   guint         cache_includes_preedit  : 1;
   guint         caps_lock_warning       : 1;
@@ -2737,6 +2741,8 @@ gtk_entry_init (GtkEntry *entry)
   g_signal_connect (priv->im_context, "delete-surrounding",
 		    G_CALLBACK (gtk_entry_delete_surrounding_cb), entry);
 
+  priv->undo_stack = gtk_undo_stack_new ();
+
   context = gtk_widget_get_style_context (GTK_WIDGET (entry));
   gtk_style_context_add_class (context, GTK_STYLE_CLASS_ENTRY);
 
@@ -3026,6 +3032,8 @@ gtk_entry_finalize (GObject *object)
     g_object_unref (priv->cached_layout);
 
   g_object_unref (priv->im_context);
+
+  g_object_unref (priv->undo_stack);
 
   if (priv->blink_timeout)
     g_source_remove (priv->blink_timeout);
@@ -5360,21 +5368,49 @@ gtk_entry_real_insert_text (GtkEditable *editable,
 }
 
 static void
+gtk_entry_record_undo_command (GtkEntry   *entry,
+                               int         start_pos,
+                               const char *deleted_text,
+                               const char *inserted_text)
+{
+  GtkUndoCommand *command;
+
+  command = gtk_entry_undo_command_new (entry, start_pos, deleted_text, inserted_text);
+  gtk_undo_stack_push (entry->priv->undo_stack, command);
+  g_object_unref (command);
+}
+
+static void
 gtk_entry_real_delete_text (GtkEditable *editable,
                             gint         start_pos,
                             gint         end_pos)
 {
+  GtkEntry *entry = GTK_ENTRY (editable);
+  GtkEntryPrivate *priv = entry->priv;
+
   /*
    * The actual deletion from the buffer. This will end up firing the
    * following signal handlers: buffer_deleted_text(), buffer_notify_display_text(),
    * buffer_notify_text(), buffer_notify_length()
    */
 
-  begin_change (GTK_ENTRY (editable));
+  begin_change (entry);
 
-  gtk_entry_buffer_delete_text (get_buffer (GTK_ENTRY (editable)), start_pos, end_pos - start_pos);
+  if (priv->undo_mode == GTK_ENTRY_UNDO_RECORD)
+    {
+      char *deleted_text = gtk_entry_get_chars (GTK_EDITABLE (entry), start_pos, end_pos);
 
-  end_change (GTK_ENTRY (editable));
+      gtk_entry_record_undo_command (entry,
+                                     start_pos,
+                                     deleted_text,
+                                     NULL);
+
+      g_free (deleted_text);
+    }
+
+  gtk_entry_buffer_delete_text (get_buffer (entry), start_pos, end_pos - start_pos);
+
+  end_change (entry);
 }
 
 /* GtkEntryBuffer signal handlers
@@ -5400,6 +5436,11 @@ buffer_inserted_text (GtkEntryBuffer *buffer,
     selection_bound += n_chars;
 
   gtk_entry_set_positions (entry, current_pos, selection_bound);
+
+  if (priv->undo_mode == GTK_ENTRY_UNDO_RESET)
+    gtk_undo_stack_clear (priv->undo_stack);
+  else if (priv->undo_mode == GTK_ENTRY_UNDO_RECORD)
+    gtk_entry_record_undo_command (entry, position, NULL, chars);
 
   /* Calculate the password hint if it needs to be displayed. */
   if (n_chars == 1 && !priv->visible)
@@ -5452,6 +5493,9 @@ buffer_deleted_text (GtkEntryBuffer *buffer,
 
   /* We might have deleted the selection */
   gtk_entry_update_primary_selection (entry);
+
+  if (priv->undo_mode == GTK_ENTRY_UNDO_RESET)
+    gtk_undo_stack_clear (priv->undo_stack);
 
   /* Disable the password hint if one exists. */
   if (!priv->visible)
@@ -5764,6 +5808,7 @@ gtk_entry_backspace (GtkEntry *entry)
 {
   GtkEntryPrivate *priv = entry->priv;
   GtkEditable *editable = GTK_EDITABLE (entry);
+  GtkEntryUndoMode old_mode;
   gint prev_pos;
 
   gtk_entry_reset_im_context (entry);
@@ -5776,7 +5821,9 @@ gtk_entry_backspace (GtkEntry *entry)
 
   if (priv->selection_bound != priv->current_pos)
     {
+      old_mode = gtk_entry_set_undo_mode (entry, GTK_ENTRY_UNDO_RECORD);
       gtk_editable_delete_selection (editable);
+      gtk_entry_set_undo_mode (entry, old_mode);
       return;
     }
 
@@ -5787,6 +5834,8 @@ gtk_entry_backspace (GtkEntry *entry)
       PangoLayout *layout = gtk_entry_ensure_layout (entry, FALSE);
       PangoLogAttr *log_attrs;
       gint n_attrs;
+
+      old_mode = gtk_entry_set_undo_mode (entry, GTK_ENTRY_UNDO_RECORD);
 
       pango_layout_get_log_attrs (layout, &log_attrs, &n_attrs);
 
@@ -5822,6 +5871,8 @@ gtk_entry_backspace (GtkEntry *entry)
 	{
           gtk_editable_delete_text (editable, prev_pos, priv->current_pos);
 	}
+
+      gtk_entry_set_undo_mode (entry, old_mode);
       
       g_free (log_attrs);
     }
@@ -5862,6 +5913,7 @@ gtk_entry_cut_clipboard (GtkEntry *entry)
 {
   GtkEntryPrivate *priv = entry->priv;
   GtkEditable *editable = GTK_EDITABLE (entry);
+  GtkEntryUndoMode old_mode;
   gint start, end;
 
   if (!priv->visible)
@@ -5875,7 +5927,11 @@ gtk_entry_cut_clipboard (GtkEntry *entry)
   if (priv->editable)
     {
       if (gtk_editable_get_selection_bounds (editable, &start, &end))
-	gtk_editable_delete_text (editable, start, end);
+        {
+          old_mode = gtk_entry_set_undo_mode (entry, GTK_ENTRY_UNDO_RECORD);
+	  gtk_editable_delete_text (editable, start, end);
+          gtk_entry_set_undo_mode (entry, old_mode);
+        }
     }
   else
     {
@@ -6044,11 +6100,16 @@ gtk_entry_delete_surrounding_cb (GtkIMContext *slave,
 				 GtkEntry     *entry)
 {
   GtkEntryPrivate *priv = entry->priv;
+  GtkEntryUndoMode old_mode;
+
+  old_mode = gtk_entry_set_undo_mode (entry, GTK_ENTRY_UNDO_RECORD);
 
   if (priv->editable)
     gtk_editable_delete_text (GTK_EDITABLE (entry),
                               priv->current_pos + offset,
                               priv->current_pos + offset + n_chars);
+
+  gtk_entry_set_undo_mode (entry, old_mode);
 
   return TRUE;
 }
@@ -6063,11 +6124,14 @@ gtk_entry_enter_text (GtkEntry       *entry,
 {
   GtkEntryPrivate *priv = entry->priv;
   GtkEditable *editable = GTK_EDITABLE (entry);
+  GtkEntryUndoMode old_mode;
   gint tmp_pos;
   gboolean old_need_im_reset;
 
   old_need_im_reset = priv->need_im_reset;
   priv->need_im_reset = FALSE;
+
+  old_mode = gtk_entry_set_undo_mode (entry, GTK_ENTRY_UNDO_RECORD);
 
   if (gtk_editable_get_selection_bounds (editable, NULL, NULL))
     gtk_editable_delete_selection (editable);
@@ -6080,6 +6144,8 @@ gtk_entry_enter_text (GtkEntry       *entry,
   tmp_pos = priv->current_pos;
   gtk_editable_insert_text (editable, str, strlen (str), &tmp_pos);
   gtk_editable_set_position (editable, tmp_pos);
+
+  gtk_entry_set_undo_mode (entry, old_mode);
 
   priv->need_im_reset = old_need_im_reset;
 }
@@ -7329,6 +7395,7 @@ paste_received (GtkClipboard *clipboard,
   GtkEntry *entry = GTK_ENTRY (data);
   GtkEditable *editable = GTK_EDITABLE (entry);
   GtkEntryPrivate *priv = entry->priv;
+  GtkEntryUndoMode old_mode;
   guint button;
 
   button = gtk_gesture_single_get_current_button (GTK_GESTURE_SINGLE (priv->multipress_gesture));
@@ -7368,12 +7435,14 @@ paste_received (GtkClipboard *clipboard,
 	}
 
       begin_change (entry);
+      old_mode = gtk_entry_set_undo_mode (entry, GTK_ENTRY_UNDO_RECORD);
       if (gtk_editable_get_selection_bounds (editable, &start, &end))
         gtk_editable_delete_text (editable, start, end);
 
       pos = priv->current_pos;
       gtk_editable_insert_text (editable, text, length, &pos);
       gtk_editable_set_position (editable, pos);
+      gtk_entry_set_undo_mode (entry, old_mode);
       end_change (entry);
 
       if (completion &&
@@ -10954,6 +11023,17 @@ keymap_state_changed (GdkKeymap *keymap,
     show_capslock_feedback (entry, text);
   else
     remove_capslock_feedback (entry);
+}
+
+GtkEntryUndoMode
+gtk_entry_set_undo_mode (GtkEntry         *entry,
+                         GtkEntryUndoMode  mode)
+{
+  GtkEntryUndoMode result = entry->priv->undo_mode;
+
+  entry->priv->undo_mode = mode;
+
+  return result;
 }
 
 /*
