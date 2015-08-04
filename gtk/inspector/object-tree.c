@@ -847,7 +847,7 @@ select_object_internal (GtkInspectorObjectTree *wt,
         g_signal_handlers_block_by_func (selection, on_selection_changed, wt);
       gtk_tree_selection_select_iter (selection, &iter);
       if (!activate)
-        g_signal_handlers_block_by_func (selection, on_selection_changed, wt);
+        g_signal_handlers_unblock_by_func (selection, on_selection_changed, wt);
 
       gtk_tree_view_scroll_to_cell (GTK_TREE_VIEW (wt->priv->tree), path, NULL, TRUE, 0.5, 0);
       if (activate)
