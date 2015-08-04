@@ -1645,8 +1645,13 @@ gtk_main_do_event (GdkEvent *event)
       (grab_widget && grab_widget != event_widget &&
        !gtk_widget_is_ancestor (event_widget, grab_widget)))
     {
-      if (_gtk_window_check_handle_wm_event (event))
-        goto cleanup;
+      /* Ignore event if we got a grab on another toplevel */
+      if (!grab_widget ||
+          gtk_widget_get_toplevel (event_widget) == gtk_widget_get_toplevel (grab_widget))
+        {
+          if (_gtk_window_check_handle_wm_event (event))
+            goto cleanup;
+        }
     }
 
   /* Find out the topmost widget where captured event propagation
