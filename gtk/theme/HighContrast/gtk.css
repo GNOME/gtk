@@ -1277,6 +1277,7 @@ column-header .button, column-header .button:hover, column-header .button:active
   border-color: #fff;
   text-shadow: none; }
   column-header .button:insensitive {
+    border-width: 0 1px 1px 0;
     border-color: #fff;
     background-image: none; }
   column-header .button:backdrop {
@@ -1285,6 +1286,7 @@ column-header .button, column-header .button:hover, column-header .button:active
     color: #7f7f7f;
     background-image: none; }
     column-header .button:backdrop:insensitive {
+      border-width: 0 1px 1px 0;
       border-color: #fff;
       background-image: none; }
 

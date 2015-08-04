@@ -1063,6 +1063,7 @@ column-header {
   border-color: $bg_color;
   text-shadow: none;
   &:insensitive {
+    border-width: 0 1px 1px 0;
     border-color: $bg_color;
     background-image: none;
   }
@@ -1072,6 +1073,7 @@ column-header {
     color: mix($backdrop_fg_color, $backdrop_bg_color,50%);
     background-image: none;
     &:insensitive {
+      border-width: 0 1px 1px 0;
       border-color: $backdrop_bg_color;
       background-image: none;
     }
