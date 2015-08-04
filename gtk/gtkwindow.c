@@ -1445,6 +1445,13 @@ multipress_gesture_pressed_cb (GtkGestureMultiPress *gesture,
 
   region = get_active_region_type (window, (GdkEventAny*) event, x, y);
 
+  if (gdk_display_device_is_grabbed (gtk_widget_get_display (widget),
+                                     gtk_gesture_get_device (GTK_GESTURE (gesture))))
+    {
+      gtk_gesture_set_state (priv->drag_gesture, GTK_EVENT_SEQUENCE_DENIED);
+      return;
+    }
+
   if (button == GDK_BUTTON_SECONDARY && region == GTK_WINDOW_REGION_TITLE)
     {
       if (gtk_window_titlebar_action (window, event, button, n_press))
