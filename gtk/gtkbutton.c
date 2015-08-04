@@ -720,7 +720,7 @@ gtk_button_constructed (GObject *object)
 
   priv->constructed = TRUE;
 
-  if (priv->label_text != NULL)
+  if (priv->label_text != NULL || priv->image != NULL)
     gtk_button_construct_child (button);
 }
 
