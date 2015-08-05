@@ -47,6 +47,8 @@ struct _GtkColorSwatchPrivate
 
   GtkGesture *long_press_gesture;
   GtkGesture *multipress_gesture;
+
+  GtkWidget *popover;
 };
 
 enum
@@ -400,72 +402,27 @@ emit_customize (GtkColorSwatch *swatch)
 }
 
 static void
-popup_position_func (GtkMenu   *menu,
-                     gint      *x,
-                     gint      *y,
-                     gboolean  *push_in,
-                     gpointer   user_data)
+do_popup (GtkColorSwatch *swatch)
 {
-  GtkWidget *widget;
-  GtkRequisition req;
-  gint root_x, root_y;
-  GdkScreen *screen;
-  GdkWindow *window;
-  GdkRectangle monitor;
-  gint monitor_num;
+  if (swatch->priv->popover == NULL)
+    {
+      GtkWidget *box;
+      GtkWidget *item;
 
-  widget = GTK_WIDGET (user_data);
-  g_return_if_fail (gtk_widget_get_realized (widget));
-  window = gtk_widget_get_window (widget);
+      swatch->priv->popover = gtk_popover_new (GTK_WIDGET (swatch));
+      box = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
+      gtk_container_add (GTK_CONTAINER (swatch->priv->popover), box);
+      g_object_set (box, "margin", 10, NULL);
+      item = g_object_new (GTK_TYPE_MODEL_BUTTON,
+                           "text", _("C_ustomize"),
+                           NULL);
+      g_signal_connect_swapped (item, "clicked",
+                                G_CALLBACK (emit_customize), swatch);
+      gtk_container_add (GTK_CONTAINER (box), item);
+      gtk_widget_show_all (box);
+    }
 
-  screen = gtk_widget_get_screen (widget);
-  monitor_num = gdk_screen_get_monitor_at_window (screen, window);
-  if (monitor_num < 0)
-    monitor_num = 0;
-  gtk_menu_set_monitor (menu, monitor_num);
-
-  gdk_window_get_origin (window, &root_x, &root_y);
-  gtk_widget_get_preferred_size (GTK_WIDGET (menu), &req, NULL);
-
-  /* Put corner of menu centered on swatch */
-  *x = root_x + gtk_widget_get_allocated_width (widget) / 2;
-  *y = root_y + gtk_widget_get_allocated_height (widget) / 2;
-
-  /* Ensure sanity */
-  gdk_screen_get_monitor_workarea (screen, monitor_num, &monitor);
-  *x = CLAMP (*x, monitor.x, MAX (monitor.x, monitor.width - req.width));
-  *y = CLAMP (*y, monitor.y, MAX (monitor.y, monitor.height - req.height));
-}
-
-static void
-do_popup (GtkWidget      *swatch,
-          gint            button,
-          gint            time)
-{
-  GtkWidget *menu;
-  GtkWidget *item;
-
-  menu = gtk_menu_new ();
-  gtk_style_context_add_class (gtk_widget_get_style_context (menu),
-                               GTK_STYLE_CLASS_CONTEXT_MENU);
-
-  item = gtk_menu_item_new_with_mnemonic (_("_Customize"));
-  gtk_menu_attach_to_widget (GTK_MENU (menu), swatch, NULL);
-
-  g_signal_connect_swapped (item, "activate",
-                            G_CALLBACK (emit_customize), swatch);
-
-  gtk_menu_shell_append (GTK_MENU_SHELL (menu), item);
-
-  gtk_widget_show_all (item);
-
-  if (button != 0)
-    gtk_menu_popup (GTK_MENU (menu), NULL, NULL,
-                    NULL, NULL, button, time);
-  else
-    gtk_menu_popup (GTK_MENU (menu), NULL, NULL,
-                    popup_position_func, swatch,
-                    button, time);
+  gtk_widget_show (swatch->priv->popover);
 }
 
 static gboolean
@@ -496,7 +453,7 @@ hold_action (GtkGestureLongPress *gesture,
              gdouble              y,
              GtkColorSwatch      *swatch)
 {
-  emit_customize (swatch);
+  do_popup (swatch);
   gtk_gesture_set_state (GTK_GESTURE (gesture), GTK_EVENT_SEQUENCE_CLAIMED);
 }
 
@@ -521,7 +478,7 @@ tap_action (GtkGestureMultiPress *gesture,
   else if (button == GDK_BUTTON_SECONDARY)
     {
       if (swatch->priv->has_color && swatch->priv->has_menu)
-        do_popup (GTK_WIDGET (swatch), button, gtk_get_current_event_time ());
+        do_popup (swatch);
     }
 }
 
@@ -600,7 +557,7 @@ swatch_unrealize (GtkWidget *widget)
 }
 
 static void
-swatch_size_allocate (GtkWidget *widget,
+swatch_size_allocate (GtkWidget     *widget,
                       GtkAllocation *allocation)
 {
   GtkColorSwatch *swatch = GTK_COLOR_SWATCH (widget);
@@ -618,9 +575,9 @@ swatch_size_allocate (GtkWidget *widget,
 }
 
 static gboolean
-swatch_popup_menu (GtkWidget *swatch)
+swatch_popup_menu (GtkWidget *widget)
 {
-  do_popup (swatch, 0, gtk_get_current_event_time ());
+  do_popup (GTK_COLOR_SWATCH (widget));
   return TRUE;
 }
 
@@ -685,10 +642,24 @@ swatch_finalize (GObject *object)
 
   g_free (swatch->priv->icon);
 
-  g_object_unref (swatch->priv->long_press_gesture);
-  g_object_unref (swatch->priv->multipress_gesture);
-
   G_OBJECT_CLASS (gtk_color_swatch_parent_class)->finalize (object);
+}
+
+static void
+swatch_dispose (GObject *object)
+{
+  GtkColorSwatch *swatch = GTK_COLOR_SWATCH (object);
+
+  if (swatch->priv->popover)
+    {
+      gtk_widget_destroy (swatch->priv->popover);
+      swatch->priv->popover = NULL;
+    }
+
+  g_clear_object (&swatch->priv->long_press_gesture);
+  g_clear_object (&swatch->priv->multipress_gesture);
+
+  G_OBJECT_CLASS (gtk_color_swatch_parent_class)->dispose (object);
 }
 
 static void
@@ -700,6 +671,7 @@ gtk_color_swatch_class_init (GtkColorSwatchClass *class)
   object_class->get_property = swatch_get_property;
   object_class->set_property = swatch_set_property;
   object_class->finalize = swatch_finalize;
+  object_class->dispose = swatch_dispose;
 
   widget_class->get_preferred_width = swatch_get_preferred_width;
   widget_class->get_preferred_height = swatch_get_preferred_height;
