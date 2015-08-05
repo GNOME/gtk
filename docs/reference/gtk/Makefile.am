@@ -102,6 +102,7 @@ IGNORE_HFILES = \
 	gtkentryprivate.h		\
 	gtkeventcontrollerprivate.h	\
 	gtkfilechooserprivate.h		\
+	gtkfilechooserwidgetprivate.h	\
 	gtkfontchooserprivate.h		\
 	gtkgesturedragprivate.h		\
 	gtkgesturelongpressprivate.h	\
@@ -130,6 +131,8 @@ IGNORE_HFILES = \
 	gtkorientableprivate.h		\
 	gtkpixelcacheprivate.h		\
 	gtkplacessidebarprivate.h	\
+	gtkplacesviewprivate.h		\
+	gtkplacesviewrowprivate.h	\
 	gtkpopoverprivate.h		\
 	gtkprinter-private.h		\
 	gtkprintoperation-private.h	\
@@ -142,6 +145,11 @@ IGNORE_HFILES = \
 	gtkrenderprivate.h		\
 	gtkroundedboxprivate.h		\
 	gtkscaleprivate.h		\
+	gtksearchengine.h		\
+	gtksearchenginemodel.h		\
+	gtksearchenginequartz.h		\
+	gtksearchenginesimple.h		\
+	gtksearchenginetracker.h	\
 	gtksearchentryprivate.h		\
 	gtkselectionprivate.h		\
 	gtksettingsprivate.h		\
