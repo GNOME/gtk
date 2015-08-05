@@ -1,3 +1,92 @@
+Overview of Changes in GTK+ 3.17.6
+==================================
+
+* GtkFileChooser:
+ - Handle ., / and ~ in the location entry
+ - Improve keyboard navigation in save mode
+ - Don't search recursively in remote locations
+ - Allow activating without double-click
+
+* GtkFontChooser:
+ - Bring back a lazy loading optimization that was lost
+
+* GtkWindow:
+ - Fix handling of window states before the window is mapped
+ - Add API to fullscreen on a given monitor
+
+* GtkTextView:
+ - Support font features on tags
+
+* Theme and CSS
+ - Various HighContrast theme fixes and improvements
+ - Reduce redraws caused by irrelevant style changes
+
+* gtk-demo gained some more examples
+
+* GtkInspector
+ - Show wayland display information
+ - Show monitor information
+ - Preserve the selected object when rescanning the object tree
+
+* X11:
+ - Make copy-paste work across multiple screens again
+
+* OS X:
+ - Fix maximization
+ - Fix winodw shadows
+ - Implement notebook tab DND
+ - Hi-dpi icon fixes
+
+* Bugs fixed:
+ 579466 gtk_entry_completion_insert_action documentation is misleading
+ 610925 GtkFileChooserDialog won't pick show-hidden setting from a ...
+ 652085 CSS cursor support
+ 721398 clipboard not working across screens
+ 734984 CSD windows have incorrectly sized shadows
+ 741685 Invalid memory read on resizing window
+ 746491 [HighContrast] GtkSpinButtons are looking bad
+ 748772 Use new pango_fc_font_map_config_changed()
+ 749339 [Wayland] Gdk-CRITICAL **: gdk_window_get_display: assertion ...
+ 751721 No release event for shift key when both shift keys were pressed
+ 752327 second right-click on header bar buttons brings WM menu, and ...
+ 752577 infinite loop on using nautilus menu
+ 752633 Several GtkPlacesSidebar methods need better documentation
+ 752638 notebook tab dragging doesn't work on Quartz (patches included...
+ 752664 Inspector only shows widget tree if created after startup
+ 752677 x11: implement fullscreen_on_monitor
+ 752707 Location bar navigation to parent directories
+ 752708 File chooser in SAVE mode should accept "foobar/" to navigate
+ 752761 GtkMenu: Properly detach menu when the window is detached
+ 752765 GtkWindow: queue states if not mapped not if not realized
+ 752810 Doubled spacing in string
+ 752875 wayland: Fix initial fullscreen monitor support
+ 752920 GtkLabel's warnings when parsing the markup failed are unhelpful
+ 752960 [HighContrast] GtkPlacesSidebar needs padding (?) around icons
+ 752965 [HighContrast] GtkLinkButton is similar to a non-interactive label
+ 752969 [HighContrast] GtkCheckMenuItem:prelight:checked should be whit...
+ 752975 [HighContrast] selected row of backdrop GtkTreeView should prob...
+ 752977 [HighContrast] clicked header of a GtkTreeView is all black
+ 752978 [HighContrast] label of a GtkProgressBar should probably be black
+ 753048 GtkImage leak when a GtkButton subclass calls gtk_button_set_im...
+ 753051 [HighContrast] double border for the “add custom color” button
+ 753060 [HighContrast] switching from sensitive to insensitive resizes ...
+ 753130 inspector should keep object tree expanded to the selected object
+ 753138 wayland: Invalidate our gtk_surface when we're unmapped
+ 753142 File icons in the filechooser listview only appear 1 out of 2 t...
+ 753230 Adwaita: odd insensitive calendar
+ 753256 Don't handle key event when nothing happens
+ 753284 GtkFileChooser segfault when compiling with clang
+
+* Translation updates:
+ Catalan
+ Czech
+ Greek
+ Hebrew
+ Polish
+ Portuguese
+ Slovak
+
+
 Overview of Changes in GTK+ 3.17.5
 ==================================
 
