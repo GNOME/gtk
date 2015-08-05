@@ -1663,7 +1663,7 @@ listbox_header_func (GtkListBoxRow *row,
                             "hexpand", TRUE,
                             "use_markup", TRUE,
                             "label", text,
-                            "xalign", 0,
+                            "xalign", 0.0f,
                             NULL);
 
       g_object_set (label,
