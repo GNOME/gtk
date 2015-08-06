@@ -1580,8 +1580,7 @@ out:
   gtk_tree_row_reference_free (data->row_ref);
   g_free (data);
 
-  if (model_cancellable)
-    g_object_unref (model_cancellable);
+  g_object_unref (cancellable);
 }
 
 static void
@@ -1684,10 +1683,7 @@ model_free_row_data (GtkFileChooserButton *button,
 		      -1);
 
   if (cancellable)
-    {
-      g_cancellable_cancel (cancellable);
-      g_object_unref (cancellable);
-    }
+    g_cancellable_cancel (cancellable);
 
   switch (type)
     {
@@ -1767,8 +1763,7 @@ out:
   gtk_tree_row_reference_free (data->row_ref);
   g_free (data);
 
-  if (model_cancellable)
-    g_object_unref (model_cancellable);
+  g_object_unref (cancellable);
 }
 
 static void
@@ -2792,6 +2787,7 @@ combo_box_notify_popup_shown_cb (GObject    *object,
 
   /* If the combo box popup got dismissed, go back to showing the ROW_TYPE_EMPTY_SELECTION if needed */
   if (!popup_shown)
+
     {
       GFile *selected = get_selected_file (button);
 
