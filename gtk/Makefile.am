@@ -532,6 +532,7 @@ gtk_private_h_sources =		\
 	gtktreeprivate.h	\
 	gtkundocommandprivate.h	\
 	gtkundostackprivate.h	\
+	gtkundoundocommandprivate.h	\
 	gtkwidgetprivate.h	\
 	gtkwin32themeprivate.h	\
 	gtkwindowprivate.h	\
@@ -866,6 +867,7 @@ gtk_base_c_sources = 		\
 	gtktypebuiltins.c	\
 	gtkundocommand.c	\
 	gtkundostack.c		\
+	gtkundoundocommand.c	\
 	gtkvolumebutton.c	\
 	gtkviewport.c		\
 	gtkwidget.c		\

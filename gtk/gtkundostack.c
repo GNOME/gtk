@@ -24,6 +24,8 @@
 #include <glib/gi18n-lib.h>
 #include <gio/gio.h>
 
+#include "gtkundoundocommandprivate.h"
+
 typedef struct _GtkUndoStackPrivate GtkUndoStackPrivate;
 struct _GtkUndoStackPrivate {
   GSequence *commands;          /* latest added command is at front of queue */
@@ -132,27 +134,71 @@ gtk_undo_stack_clear (GtkUndoStack *stack)
   g_list_model_items_changed (G_LIST_MODEL (stack), 0, len, 0);
 }
 
-void
-gtk_undo_stack_push (GtkUndoStack   *stack,
-                     GtkUndoCommand *command)
+static void
+gtk_undo_stack_push_internal (GtkUndoStack   *stack,
+                              GtkUndoCommand *command,
+                              gboolean        replace)
 {
   GtkUndoStackPrivate *priv = gtk_undo_stack_get_instance_private (stack);
 
-  g_return_if_fail (GTK_IS_UNDO_STACK (stack));
-  g_return_if_fail (GTK_IS_UNDO_COMMAND (command));
+  if (replace)
+    g_sequence_remove (g_sequence_get_begin_iter (priv->commands));
 
   g_object_ref (command);
   g_sequence_prepend (priv->commands, command);
 
-  g_list_model_items_changed (G_LIST_MODEL (stack), 0, 0, 1);
+  g_list_model_items_changed (G_LIST_MODEL (stack), 0, replace ? 1 : 0, 1);
+}
+
+void
+gtk_undo_stack_push (GtkUndoStack   *stack,
+                     GtkUndoCommand *command)
+{
+  g_return_if_fail (GTK_IS_UNDO_STACK (stack));
+  g_return_if_fail (GTK_IS_UNDO_COMMAND (command));
+
+  gtk_undo_stack_push_internal (stack, command, FALSE);
 }
 
 gboolean
 gtk_undo_stack_undo (GtkUndoStack *stack)
 {
+  GtkUndoStackPrivate *priv = gtk_undo_stack_get_instance_private (stack);
+  GtkUndoCommand *command, *undo;
+  GSequenceIter *begin_iter, *end_iter;
+  gboolean replace = FALSE;
+
   g_return_val_if_fail (GTK_IS_UNDO_STACK (stack), FALSE);
 
-  return FALSE;
+  begin_iter = g_sequence_get_begin_iter (priv->commands);
+  if (g_sequence_iter_is_end (begin_iter))
+    return FALSE;
+
+  undo = g_sequence_get (begin_iter);
+
+  if (GTK_IS_UNDO_UNDO_COMMAND (undo))
+    {
+      begin_iter = g_sequence_iter_next (begin_iter);
+      end_iter = g_sequence_iter_move (begin_iter, gtk_undo_undo_command_get_n_items (GTK_UNDO_UNDO_COMMAND (undo)));
+      if (g_sequence_iter_is_end (end_iter))
+        return FALSE;
+
+      undo = g_sequence_get (end_iter);
+      end_iter = g_sequence_iter_next (end_iter);
+      replace = TRUE;
+    }
+  else
+    {
+      end_iter = g_sequence_iter_next (begin_iter);
+      replace = FALSE;
+    }
+
+  gtk_undo_command_undo (undo);
+  command = gtk_undo_undo_command_new (begin_iter, end_iter);
+  gtk_undo_stack_push_internal (stack, command, replace);
+  g_object_unref (command);
+
+  return TRUE;
 }
 
 gboolean
