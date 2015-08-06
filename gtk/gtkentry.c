@@ -279,6 +279,7 @@ enum {
   COPY_CLIPBOARD,
   PASTE_CLIPBOARD,
   TOGGLE_OVERWRITE,
+  UNDO,
   ICON_PRESS,
   ICON_RELEASE,
   PREEDIT_CHANGED,
@@ -508,6 +509,8 @@ static void gtk_entry_cut_clipboard      (GtkEntry        *entry);
 static void gtk_entry_copy_clipboard     (GtkEntry        *entry);
 static void gtk_entry_paste_clipboard    (GtkEntry        *entry);
 static void gtk_entry_toggle_overwrite   (GtkEntry        *entry);
+static void gtk_entry_undo               (GtkEntry        *entry,
+                                          gint             count);
 static void gtk_entry_select_all         (GtkEntry        *entry);
 static void gtk_entry_real_activate      (GtkEntry        *entry);
 static gboolean gtk_entry_popup_menu     (GtkWidget       *widget);
@@ -758,6 +761,7 @@ gtk_entry_class_init (GtkEntryClass *class)
   class->activate = gtk_entry_real_activate;
   class->get_text_area_size = gtk_entry_get_text_area_size;
   class->get_frame_size = gtk_entry_get_frame_size;
+  class->undo = gtk_entry_undo;
   
   quark_inner_border = g_quark_from_static_string ("gtk-entry-inner-border");
   quark_password_hint = g_quark_from_static_string ("gtk-entry-password-hint");
@@ -1807,6 +1811,27 @@ gtk_entry_class_init (GtkEntryClass *class)
 		  G_TYPE_NONE, 0);
 
   /**
+   * GtkEntry::undo:
+   * @entry: the object which received the signal
+   * @count: the number of steps to undo (or redo if @count is negative)
+   *
+   * The ::undo signal is a [keybinding signal][GtkBindingSignal]
+   * which gets emitted to undo or redo user input.
+   *
+   * The default bindings for this signal are Ctrl-z for undo and
+   * Ctrl-Shift-z for redo.
+   */
+  signals[UNDO] =
+    g_signal_new (I_("undo"),
+		  G_OBJECT_CLASS_TYPE (gobject_class),
+		  G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
+		  G_STRUCT_OFFSET (GtkEntryClass, undo),
+		  NULL, NULL,
+		  _gtk_marshal_VOID__INT,
+		  G_TYPE_NONE, 1,
+		  G_TYPE_INT);
+
+  /**
    * GtkEntry::icon-press:
    * @entry: The entry on which the signal is emitted
    * @icon_pos: The position of the clicked icon
@@ -2042,6 +2067,15 @@ gtk_entry_class_init (GtkEntryClass *class)
 				"toggle-overwrite", 0);
   gtk_binding_entry_add_signal (binding_set, GDK_KEY_KP_Insert, 0,
 				"toggle-overwrite", 0);
+
+  /* Undo */
+  gtk_binding_entry_add_signal (binding_set, GDK_KEY_z, GDK_CONTROL_MASK,
+				"undo", 1,
+				G_TYPE_INT, 1);
+  gtk_binding_entry_add_signal (binding_set, GDK_KEY_z, GDK_CONTROL_MASK | GDK_SHIFT_MASK,
+				"undo", 1,
+				G_TYPE_INT, -1);
+
 
   /**
    * GtkEntry:inner-border:
@@ -5994,6 +6028,28 @@ gtk_entry_toggle_overwrite (GtkEntry *entry)
   priv->overwrite_mode = !priv->overwrite_mode;
   gtk_entry_pend_cursor_blink (entry);
   gtk_widget_queue_draw (GTK_WIDGET (entry));
+}
+
+static void
+gtk_entry_undo (GtkEntry *entry,
+                gint      count)
+{
+  GtkEntryPrivate *priv = entry->priv;
+  int i;
+
+  if (priv->editable)
+    {
+      for (i = 0; i < count; i++)
+        {
+          if (!gtk_undo_stack_undo (priv->undo_stack))
+            break;
+        }
+      for (i = 0; i > count; i--)
+        {
+          if (!gtk_undo_stack_redo (priv->undo_stack))
+            break;
+        }
+    }
 }
 
 static void
