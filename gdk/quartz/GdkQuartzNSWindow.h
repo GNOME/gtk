@@ -19,6 +19,7 @@
 #import <AppKit/AppKit.h>
 #import <Foundation/Foundation.h>
 #include <glib.h>
+#include <gdk.h>
 
 @interface GdkQuartzNSWindow : NSWindow {
   BOOL    inMove;
@@ -32,6 +33,7 @@
   NSPoint initialMoveLocation;
   NSPoint initialResizeLocation;
   NSRect  initialResizeFrame;
+  GdkWindowEdge resizeEdge;
 
   NSRect  lastUnmaximizedFrame;
   NSRect  lastMaximizedFrame;
@@ -42,7 +44,7 @@
 -(void)beginManualMove;
 -(BOOL)trackManualMove;
 -(BOOL)isInManualResizeOrMove;
--(void)beginManualResize;
+-(void)beginManualResize:(GdkWindowEdge)edge;
 -(BOOL)trackManualResize;
 -(void)showAndMakeKey:(BOOL)makeKey;
 -(void)hide;

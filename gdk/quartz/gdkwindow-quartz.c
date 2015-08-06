@@ -2224,12 +2224,6 @@ gdk_quartz_window_begin_resize_drag (GdkWindow     *window,
 
   g_return_if_fail (GDK_IS_WINDOW (window));
 
-  if (edge != GDK_WINDOW_EDGE_SOUTH_EAST)
-    {
-      g_warning ("Resizing is only implemented for GDK_WINDOW_EDGE_SOUTH_EAST on Mac OS");
-      return;
-    }
-
   if (GDK_WINDOW_DESTROYED (window))
     return;
 
@@ -2241,7 +2235,7 @@ gdk_quartz_window_begin_resize_drag (GdkWindow     *window,
       return;
     }
 
-  [(GdkQuartzNSWindow *)impl->toplevel beginManualResize];
+  [(GdkQuartzNSWindow *)impl->toplevel beginManualResize:edge];
 }
 
 static void

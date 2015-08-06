@@ -406,9 +406,9 @@
 
 - (BOOL)trackManualResize
 {
-  NSPoint currentLocation;
-  NSRect newFrame;
-  float dx, dy;
+  NSPoint mouse_location;
+  NSRect new_frame;
+  float mdx, mdy, dw, dh, dx, dy;
   NSSize min_size;
 
   if (!inManualResize || inTrackManualResize)
@@ -416,33 +416,72 @@
 
   inTrackManualResize = YES;
 
-  currentLocation = [self convertBaseToScreen:[self mouseLocationOutsideOfEventStream]];
-  currentLocation.x -= initialResizeFrame.origin.x;
-  currentLocation.y -= initialResizeFrame.origin.y;
+  mouse_location = [self convertBaseToScreen:[self mouseLocationOutsideOfEventStream]];
+  mdx = initialResizeLocation.x - mouse_location.x;
+  mdy = initialResizeLocation.y - mouse_location.y;
 
-  dx = currentLocation.x - initialResizeLocation.x;
-  dy = -(currentLocation.y - initialResizeLocation.y);
+  /* Set how a mouse location delta translates to changes in width,
+   * height and position.
+   */
+  dw = dh = dx = dy = 0.0;
+  if (resizeEdge == GDK_WINDOW_EDGE_EAST ||
+      resizeEdge == GDK_WINDOW_EDGE_NORTH_EAST ||
+      resizeEdge == GDK_WINDOW_EDGE_SOUTH_EAST)
+    {
+      dw = -1.0;
+    }
+  if (resizeEdge == GDK_WINDOW_EDGE_NORTH ||
+      resizeEdge == GDK_WINDOW_EDGE_NORTH_WEST ||
+      resizeEdge == GDK_WINDOW_EDGE_NORTH_EAST)
+    {
+      dh = -1.0;
+    }
+  if (resizeEdge == GDK_WINDOW_EDGE_SOUTH ||
+      resizeEdge == GDK_WINDOW_EDGE_SOUTH_WEST ||
+      resizeEdge == GDK_WINDOW_EDGE_SOUTH_EAST)
+    {
+      dh = 1.0;
+      dy = -1.0;
+    }
+  if (resizeEdge == GDK_WINDOW_EDGE_WEST ||
+      resizeEdge == GDK_WINDOW_EDGE_NORTH_WEST ||
+      resizeEdge == GDK_WINDOW_EDGE_SOUTH_WEST)
+    {
+      dw = 1.0;
+      dx = -1.0;
+    }
 
-  newFrame = initialResizeFrame;
-  newFrame.size.width = initialResizeFrame.size.width + dx;
-  newFrame.size.height = initialResizeFrame.size.height + dy;
+  /* Apply changes to the frame captured when we started resizing */
+  new_frame = initialResizeFrame;
+  new_frame.origin.x += mdx * dx;
+  new_frame.origin.y += mdy * dy;
+  new_frame.size.width += mdx * dw;
+  new_frame.size.height += mdy * dh;
 
+  /* In case the resulting window would be too small reduce the
+   * change to both size and position.
+   */
   min_size = [self contentMinSize];
-  if (newFrame.size.width < min_size.width)
-    newFrame.size.width = min_size.width;
-  if (newFrame.size.height < min_size.height)
-    newFrame.size.height = min_size.height;
+
+  if (new_frame.size.width < min_size.width)
+    {
+      if (dx)
+        new_frame.origin.x -= min_size.width - new_frame.size.width;
+      new_frame.size.width = min_size.width;
+    }
+
+  if (new_frame.size.height < min_size.height)
+    {
+      if (dy)
+        new_frame.origin.y -= min_size.height - new_frame.size.height;
+      new_frame.size.height = min_size.height;
+    }
 
   /* We could also apply aspect ratio:
-     newFrame.size.height = newFrame.size.width / [self aspectRatio].width * [self aspectRatio].height;
+     new_frame.size.height = new_frame.size.width / [self aspectRatio].width * [self aspectRatio].height;
   */
 
-  dy = newFrame.size.height - initialResizeFrame.size.height;
-
-  newFrame.origin.x = initialResizeFrame.origin.x;
-  newFrame.origin.y = initialResizeFrame.origin.y - dy;
-
-  [self setFrame:newFrame display:YES];
+  [self setFrame:new_frame display:YES];
 
   /* Let the resizing be handled by GTK+. */
   if (g_main_context_pending (NULL))
@@ -453,17 +492,16 @@
   return YES;
 }
 
--(void)beginManualResize
+-(void)beginManualResize:(GdkWindowEdge)edge
 {
   if (inMove || inManualMove || inManualResize)
     return;
 
   inManualResize = YES;
+  resizeEdge = edge;
 
   initialResizeFrame = [self frame];
   initialResizeLocation = [self convertBaseToScreen:[self mouseLocationOutsideOfEventStream]];
-  initialResizeLocation.x -= initialResizeFrame.origin.x;
-  initialResizeLocation.y -= initialResizeFrame.origin.y;
 }
 
 
