@@ -2079,6 +2079,9 @@ GtkCalendar {
       border-bottom-color: mix($backdrop_borders_color,$backdrop_bg_color,50%);
     }
   }
+
+  &:inconsistent, &:inconsistent:backdrop,
+  &.highlight, &.highlight:backdrop { color: gtkalpha(currentColor, 0.55); }
 }
 
 /***********

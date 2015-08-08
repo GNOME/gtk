@@ -2281,6 +2281,8 @@ GtkCalendar {
     GtkCalendar.header:backdrop {
       background-image: linear-gradient(to bottom, #fff);
       border-bottom-color: #c5c5c5; }
+  GtkCalendar:inconsistent, GtkCalendar:inconsistent:backdrop, GtkCalendar.highlight, GtkCalendar.highlight:backdrop {
+    color: alpha(currentColor,0.55); }
 
 /***********
  * Dialogs *
