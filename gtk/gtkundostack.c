@@ -154,46 +154,80 @@ void
 gtk_undo_stack_push (GtkUndoStack   *stack,
                      GtkUndoCommand *command)
 {
+  GtkUndoStackPrivate *priv = gtk_undo_stack_get_instance_private (stack);
+  GSequenceIter *begin_iter;
+  GtkUndoCommand *previous, *merge;
+
   g_return_if_fail (GTK_IS_UNDO_STACK (stack));
   g_return_if_fail (GTK_IS_UNDO_COMMAND (command));
+
+  begin_iter = g_sequence_get_begin_iter (priv->commands);
+  if (!g_sequence_iter_is_end (begin_iter))
+    {
+      previous = g_sequence_get (begin_iter);
+      merge = gtk_undo_command_merge (previous, command);
+      if (merge)
+        {
+          gtk_undo_stack_push_internal (stack, merge, TRUE);
+          g_object_unref (merge);
+          return;
+        }
+    }
 
   gtk_undo_stack_push_internal (stack, command, FALSE);
 }
 
-gboolean
-gtk_undo_stack_undo (GtkUndoStack *stack)
+/* n_commands negative means we redo */
+static gboolean
+gtk_undo_stack_run_undo (GtkUndoStack *stack,
+                         int           n_commands)
 {
   GtkUndoStackPrivate *priv = gtk_undo_stack_get_instance_private (stack);
-  GtkUndoCommand *command, *undo;
   GSequenceIter *begin_iter, *end_iter;
+  GtkUndoCommand *command;
+  int prev_commands, total_commands;
   gboolean replace = FALSE;
-
-  g_return_val_if_fail (GTK_IS_UNDO_STACK (stack), FALSE);
 
   begin_iter = g_sequence_get_begin_iter (priv->commands);
   if (g_sequence_iter_is_end (begin_iter))
     return FALSE;
 
-  undo = g_sequence_get (begin_iter);
-
-  if (GTK_IS_UNDO_UNDO_COMMAND (undo))
+  command = g_sequence_get (begin_iter);
+  if (GTK_IS_UNDO_UNDO_COMMAND (command))
     {
       begin_iter = g_sequence_iter_next (begin_iter);
-      end_iter = g_sequence_iter_move (begin_iter, gtk_undo_undo_command_get_n_items (GTK_UNDO_UNDO_COMMAND (undo)));
-      if (g_sequence_iter_is_end (end_iter))
-        return FALSE;
-
-      undo = g_sequence_get (end_iter);
-      end_iter = g_sequence_iter_next (end_iter);
+      prev_commands = gtk_undo_undo_command_get_n_items (GTK_UNDO_UNDO_COMMAND (command));
+      total_commands = g_sequence_get_length (priv->commands) - 1;
       replace = TRUE;
     }
   else
     {
-      end_iter = g_sequence_iter_next (begin_iter);
+      prev_commands = 0;
+      total_commands = g_sequence_get_length (priv->commands);
       replace = FALSE;
     }
 
-  gtk_undo_command_undo (undo);
+  n_commands = CLAMP (prev_commands + n_commands, 0, total_commands);
+  if (n_commands == prev_commands)
+    return FALSE;
+
+  end_iter = g_sequence_iter_move (begin_iter, prev_commands);
+  while (prev_commands < n_commands)
+    {
+      GtkUndoCommand *undo = g_sequence_get (end_iter);
+      gtk_undo_command_undo (undo);
+      end_iter = g_sequence_iter_next (end_iter);
+      prev_commands++;
+    }
+  while (prev_commands > n_commands)
+    {
+      GtkUndoCommand *redo;
+      end_iter = g_sequence_iter_prev (end_iter);
+      prev_commands--;
+      redo = g_sequence_get (end_iter);
+      gtk_undo_command_redo (redo);
+    }
+
   command = gtk_undo_undo_command_new (begin_iter, end_iter);
   gtk_undo_stack_push_internal (stack, command, replace);
   g_object_unref (command);
@@ -202,9 +236,17 @@ gtk_undo_stack_undo (GtkUndoStack *stack)
 }
 
 gboolean
+gtk_undo_stack_undo (GtkUndoStack *stack)
+{
+  g_return_val_if_fail (GTK_IS_UNDO_STACK (stack), FALSE);
+
+  return gtk_undo_stack_run_undo (stack, 1);
+}
+
+gboolean
 gtk_undo_stack_redo (GtkUndoStack *stack)
 {
   g_return_val_if_fail (GTK_IS_UNDO_STACK (stack), FALSE);
 
-  return FALSE;
+  return gtk_undo_stack_run_undo (stack, -1);
 }
