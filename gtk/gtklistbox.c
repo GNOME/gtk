@@ -3684,7 +3684,7 @@ gtk_list_box_bound_model_changed (GListModel *list,
       if (g_object_is_floating (widget))
         g_object_ref_sink (widget);
 
-      gtk_widget_show_all (widget);
+      gtk_widget_show (widget);
       gtk_list_box_insert (box, widget, position + i);
 
       g_object_unref (widget);
