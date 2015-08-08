@@ -2605,7 +2605,7 @@ unmount_mount_cb (GObject      *source_object,
 
 static void
 notify_unmount_done (GMountOperation *op,
-                     const gchar *message)
+                     const gchar     *message)
 {
   GApplication *application;
   gchar *notification_id;
@@ -2618,29 +2618,30 @@ notify_unmount_done (GMountOperation *op,
   notification_id = g_strdup_printf ("gtk-mount-operation-%p", op);
   g_application_withdraw_notification (application, notification_id);
 
-  if (message != NULL) {
-    GNotification *unplug;
-    GIcon *icon;
-    gchar **strings;
+  if (message != NULL)
+    {
+      GNotification *unplug;
+      GIcon *icon;
+      gchar **strings;
 
-    strings = g_strsplit (message, "\n", 0);
-    icon = g_themed_icon_new ("media-removable");
-    unplug = g_notification_new (strings[0]);
-    g_notification_set_body (unplug, strings[1]);
-    g_notification_set_icon (unplug, icon);
+      strings = g_strsplit (message, "\n", 0);
+      icon = g_themed_icon_new ("media-removable");
+      unplug = g_notification_new (strings[0]);
+      g_notification_set_body (unplug, strings[1]);
+      g_notification_set_icon (unplug, icon);
 
-    g_application_send_notification (application, notification_id, unplug);
-    g_object_unref (unplug);
-    g_object_unref (icon);
-    g_strfreev (strings);
-  }
+      g_application_send_notification (application, notification_id, unplug);
+      g_object_unref (unplug);
+      g_object_unref (icon);
+      g_strfreev (strings);
+    }
 
   g_free (notification_id);
 }
 
 static void
 notify_unmount_show (GMountOperation *op,
-                     const gchar *message)
+                     const gchar     *message)
 {
   GApplication *application;
   GNotification *unmount;
