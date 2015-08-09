@@ -884,7 +884,7 @@ gtk_button_box_size_allocate (GtkWidget     *widget,
       switch (gtk_box_get_baseline_position (GTK_BOX (widget)))
 	{
 	case GTK_BASELINE_POSITION_TOP:
-	  baseline = baseline;
+          /* keep baseline as is */
 	  break;
 	case GTK_BASELINE_POSITION_CENTER:
 	  baseline = baseline + (allocation->height - baseline_height) / 2;
