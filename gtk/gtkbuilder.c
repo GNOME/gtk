@@ -583,15 +583,6 @@ object_set_name (GObject     *object,
     g_object_set_data_full (object, "gtk-builder-name", g_strdup (name), g_free);
 }
 
-static inline const gchar *
-object_get_name (GObject *object)
-{
-  if (GTK_IS_BUILDABLE (object))
-    return gtk_buildable_get_name (GTK_BUILDABLE (object));
-  else
-    return g_object_get_data (object, "gtk-builder-name");
-}
-
 void
 _gtk_builder_add_object (GtkBuilder  *builder,
                          const gchar *id,
