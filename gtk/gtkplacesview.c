@@ -734,6 +734,9 @@ add_mount (GtkPlacesView *view,
   schema = g_uri_parse_scheme (uri);
   is_network = g_strcmp0 (schema, "file") != 0;
 
+  if (is_network)
+    g_clear_pointer (&path, g_free);
+
   if (!g_mount_is_shadowed (mount))
     {
       GtkWidget *row;
