@@ -1717,11 +1717,27 @@ listbox_sort_func (GtkListBoxRow *row1,
 {
   gboolean row1_is_network;
   gboolean row2_is_network;
+  gchar *location1;
+  gchar *location2;
+  gint retval;
 
   row1_is_network = GPOINTER_TO_INT (g_object_get_data (G_OBJECT (row1), "is-network"));
   row2_is_network = GPOINTER_TO_INT (g_object_get_data (G_OBJECT (row2), "is-network"));
 
-  return row1_is_network - row2_is_network;
+  retval = row1_is_network - row2_is_network;
+
+  if (retval != 0)
+    return retval;
+
+  g_object_get (row1, "path", &location1, NULL);
+  g_object_get (row2, "path", &location2, NULL);
+
+  retval = g_strcmp0 (location1, location2);
+
+  g_free (location1);
+  g_free (location2);
+
+  return retval;
 }
 
 static void
