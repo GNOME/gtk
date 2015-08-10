@@ -31,6 +31,7 @@ struct _GtkPlacesViewRow
 
   GtkSpinner    *busy_spinner;
   GtkButton     *eject_button;
+  GtkImage      *eject_icon;
   GtkEventBox   *event_box;
   GtkImage      *icon_image;
   GtkLabel      *name_label;
@@ -39,6 +40,8 @@ struct _GtkPlacesViewRow
   GVolume       *volume;
   GMount        *mount;
   GFile         *file;
+
+  gint           is_network : 1;
 };
 
 G_DEFINE_TYPE (GtkPlacesViewRow, gtk_places_view_row, GTK_TYPE_LIST_BOX_ROW)
@@ -51,6 +54,7 @@ enum {
   PROP_VOLUME,
   PROP_MOUNT,
   PROP_FILE,
+  PROP_IS_NETWORK,
   LAST_PROP
 };
 
@@ -107,6 +111,10 @@ gtk_places_view_row_get_property (GObject    *object,
       g_value_set_object (value, self->file);
       break;
 
+    case PROP_IS_NETWORK:
+      g_value_set_boolean (value, self->is_network);
+      break;
+
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
     }
@@ -147,6 +155,10 @@ gtk_places_view_row_set_property (GObject      *object,
 
     case PROP_FILE:
       g_set_object (&self->file, g_value_get_object (value));
+      break;
+
+    case PROP_IS_NETWORK:
+      gtk_places_view_row_set_is_network (self, g_value_get_boolean (value));
       break;
 
     default:
@@ -206,12 +218,20 @@ gtk_places_view_row_class_init (GtkPlacesViewRowClass *klass)
                                G_TYPE_FILE,
                                G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY);
 
+  properties[PROP_IS_NETWORK] =
+          g_param_spec_boolean ("is-network",
+                                P_("Whether the row represents a network location"),
+                                P_("Whether the row represents a network location"),
+                                FALSE,
+                                G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY);
+
   g_object_class_install_properties (object_class, LAST_PROP, properties);
 
   gtk_widget_class_set_template_from_resource (widget_class, "/org/gtk/libgtk/ui/gtkplacesviewrow.ui");
 
   gtk_widget_class_bind_template_child (widget_class, GtkPlacesViewRow, busy_spinner);
   gtk_widget_class_bind_template_child (widget_class, GtkPlacesViewRow, eject_button);
+  gtk_widget_class_bind_template_child (widget_class, GtkPlacesViewRow, eject_icon);
   gtk_widget_class_bind_template_child (widget_class, GtkPlacesViewRow, event_box);
   gtk_widget_class_bind_template_child (widget_class, GtkPlacesViewRow, icon_image);
   gtk_widget_class_bind_template_child (widget_class, GtkPlacesViewRow, name_label);
@@ -281,4 +301,27 @@ gtk_places_view_row_set_busy (GtkPlacesViewRow *row,
   g_return_if_fail (GTK_IS_PLACES_VIEW_ROW (row));
 
   gtk_widget_set_visible (GTK_WIDGET (row->busy_spinner), is_busy);
+}
+
+gboolean
+gtk_places_view_row_get_is_network (GtkPlacesViewRow *row)
+{
+  g_return_val_if_fail (GTK_IS_PLACES_VIEW_ROW (row), FALSE);
+
+  return row->is_network;
+}
+
+void
+gtk_places_view_row_set_is_network (GtkPlacesViewRow *row,
+                                    gboolean          is_network)
+{
+  if (row->is_network != is_network)
+    {
+      row->is_network = is_network;
+
+      gtk_image_set_from_icon_name (row->eject_icon,
+                                    is_network ? "network-offline-symbolic" : "media-eject-symbolic",
+                                    GTK_ICON_SIZE_BUTTON);
+      gtk_widget_set_tooltip_text (GTK_WIDGET (row->eject_button), is_network ? P_("Disconnect") : P_("Unmount"));
+    }
 }

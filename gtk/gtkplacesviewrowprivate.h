@@ -48,6 +48,11 @@ GFile*             gtk_places_view_row_get_file                  (GtkPlacesViewR
 void               gtk_places_view_row_set_busy                  (GtkPlacesViewRow   *row,
                                                                   gboolean            is_busy);
 
+gboolean           gtk_places_view_row_get_is_network            (GtkPlacesViewRow   *row);
+
+void               gtk_places_view_row_set_is_network            (GtkPlacesViewRow   *row,
+                                                                  gboolean            is_network);
+
 G_END_DECLS
 
 #endif /* GTK_PLACES_VIEW_ROW_H */

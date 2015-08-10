@@ -72,7 +72,7 @@
                 <property name="valign">center</property>
                 <property name="tooltip-text" translatable="yes">Unmount</property>
                 <child>
-                  <object class="GtkImage">
+                  <object class="GtkImage" id="eject_icon">
                     <property name="visible">True</property>
                     <property name="icon_name">media-eject-symbolic</property>
                     <property name="icon_size">1</property>

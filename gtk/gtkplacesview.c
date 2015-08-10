@@ -701,6 +701,7 @@ add_volume (GtkPlacesView *view,
                           "volume", volume,
                           "mount", mount,
                           "file", NULL,
+                          "is-network", is_network,
                           NULL);
 
       insert_row (view, row, is_network);
@@ -748,6 +749,7 @@ add_mount (GtkPlacesView *view,
                           "volume", NULL,
                           "mount", mount,
                           "file", NULL,
+                          "is-network", is_network,
                           NULL);
 
       insert_row (view, row, is_network);
@@ -1314,10 +1316,12 @@ build_popup_menu (GtkPlacesView    *view,
   GtkWidget *item;
   GMount *mount;
   GFile *file;
+  gboolean is_network;
 
   priv = gtk_places_view_get_instance_private (view);
   mount = gtk_places_view_row_get_mount (row);
   file = gtk_places_view_row_get_file (row);
+  is_network = gtk_places_view_row_get_is_network (row);
 
   priv->popup_menu = gtk_menu_new ();
   gtk_style_context_add_class (gtk_widget_get_style_context (priv->popup_menu),
@@ -1373,7 +1377,7 @@ build_popup_menu (GtkPlacesView    *view,
   /* Mount/Unmount items */
   if (mount)
     {
-      item = gtk_menu_item_new_with_mnemonic (_("_Unmount"));
+      item = gtk_menu_item_new_with_mnemonic (is_network ? P_("_Disconnect") : P_("_Unmount"));
       g_signal_connect (item,
                         "activate",
                         G_CALLBACK (unmount_cb),
@@ -1383,7 +1387,7 @@ build_popup_menu (GtkPlacesView    *view,
     }
   else
     {
-      item = gtk_menu_item_new_with_mnemonic (_("_Mount"));
+      item = gtk_menu_item_new_with_mnemonic (is_network ? P_("_Connect") : P_("_Mount"));
       g_signal_connect (item,
                         "activate",
                         G_CALLBACK (mount_cb),
