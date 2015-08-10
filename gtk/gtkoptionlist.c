@@ -47,10 +47,10 @@
  * SECTION:gtkoptionlist
  * @Short_description: A simple text-only choice
  * @Title: GtkOptionList
- * @See_also: #GtkOptionListBoxText, #GtkOptionButton
+ * @See_also: #GtkOptionButton
  *
- * A GtkOptionList is a simple variant of a choice widget that hides
- * the model-view complexity of #GtkOptionListBox.
+ * GtkOptionList is a widget that allows the user to choose from a list of
+ * valid values.
  *
  * To create a GtkOptionList, use gtk_option_list_new().
  *
@@ -70,7 +70,7 @@
  *
  * # GtkOptionList as GtkBuildable
  *
- * The GtkOptionList implementation of the GtkBuildable interface supports
+ * The GtkOptionList implementation of the #GtkBuildable interface supports
  * adding items directly using the <items> element and specifying <item>
  * elements for each item. Each <item> element can specify the “id”
  * and "sort" corresponding to the appended text and also supports
