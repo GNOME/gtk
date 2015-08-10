@@ -47,6 +47,7 @@
 #include "gtktreeview.h"
 #include "gtkwidget.h"
 #include "gtksettings.h"
+#include "gtkdialog.h"
 
 /**
  * SECTION:gtkfontchooserwidget
@@ -310,7 +311,20 @@ static void
 stop_search_cb (GtkEntry             *entry,
                 GtkFontChooserWidget *fc)
 {
-  gtk_entry_set_text (entry, "");
+  if (gtk_entry_get_text (entry)[0] != 0)
+    gtk_entry_set_text (entry, "");
+  else
+    {
+      GtkWidget *dialog;
+      GtkWidget *button = NULL;
+
+      dialog = gtk_widget_get_ancestor (GTK_WIDGET (fc), GTK_TYPE_DIALOG);
+      if (dialog)
+        button = gtk_dialog_get_widget_for_response (GTK_DIALOG (dialog), GTK_RESPONSE_CANCEL);
+
+      if (button)
+        gtk_widget_activate (button);
+    }
 }
 
 static void
