@@ -1271,6 +1271,108 @@ tab_close_cb (GtkWidget *page)
   g_timeout_add (2500, show_page_again, page);
 }
 
+typedef struct _GTestPermission GTestPermission;
+typedef struct _GTestPermissionClass GTestPermissionClass;
+
+struct _GTestPermission
+{
+  GPermission parent;
+};
+
+struct _GTestPermissionClass
+{
+  GPermissionClass parent_class;
+};
+
+G_DEFINE_TYPE (GTestPermission, g_test_permission, G_TYPE_PERMISSION)
+
+static void
+g_test_permission_init (GTestPermission *test)
+{
+  g_permission_impl_update (G_PERMISSION (test), TRUE, TRUE, TRUE);
+}
+
+static gboolean
+update_allowed (GPermission *permission,
+                gboolean     allowed)
+{
+  g_permission_impl_update (permission, allowed, TRUE, TRUE);
+
+  return TRUE;
+}
+
+static gboolean
+acquire (GPermission   *permission,
+         GCancellable  *cancellable,
+         GError       **error)
+{
+  return update_allowed (permission, TRUE);
+}
+
+static void
+acquire_async (GPermission         *permission,
+               GCancellable        *cancellable,
+               GAsyncReadyCallback  callback,
+               gpointer             user_data)
+{
+  GTask *task;
+
+  task = g_task_new ((GObject*)permission, NULL, callback, user_data);
+  g_task_return_boolean (task, update_allowed (permission, TRUE));
+  g_object_unref (task);
+}
+
+gboolean
+acquire_finish (GPermission   *permission,
+                GAsyncResult  *res,
+                GError       **error)
+{
+  return g_task_propagate_boolean (G_TASK (res), error);
+}
+
+static gboolean
+release (GPermission   *permission,
+         GCancellable  *cancellable,
+         GError       **error)
+{
+  return update_allowed (permission, FALSE);
+}
+
+static void
+release_async (GPermission         *permission,
+               GCancellable        *cancellable,
+               GAsyncReadyCallback  callback,
+               gpointer             user_data)
+{
+  GTask *task;
+
+  task = g_task_new ((GObject*)permission, NULL, callback, user_data);
+  g_task_return_boolean (task, update_allowed (permission, FALSE));
+  g_object_unref (task);
+}
+
+gboolean
+release_finish (GPermission   *permission,
+                GAsyncResult  *result,
+                GError       **error)
+{
+  return g_task_propagate_boolean (G_TASK (result), error);
+}
+
+static void
+g_test_permission_class_init (GTestPermissionClass *class)
+{
+  GPermissionClass *permission_class = G_PERMISSION_CLASS (class);
+
+  permission_class->acquire = acquire;
+  permission_class->acquire_async = acquire_async;
+  permission_class->acquire_finish = acquire_finish;
+
+  permission_class->release = release;
+  permission_class->release_async = release_async;
+  permission_class->release_finish = release_finish;
+}
+
 static void
 activate (GApplication *app)
 {
@@ -1301,6 +1403,7 @@ activate (GApplication *app)
     { "win.delete", { "Delete", NULL } }
   };
   gint i;
+  GPermission *permission;
 
   g_type_ensure (my_text_view_get_type ());
 
@@ -1488,6 +1591,15 @@ activate (GApplication *app)
   gtk_popover_set_default_widget (GTK_POPOVER (widget), widget3);
   g_signal_connect (widget2, "notify::text", G_CALLBACK (open_popover_text_changed), widget3);
   g_signal_connect_swapped (widget3, "clicked", G_CALLBACK (gtk_widget_hide), widget);
+
+  widget = (GtkWidget *)gtk_builder_get_object (builder, "lockbox");
+  widget2 = (GtkWidget *)gtk_builder_get_object (builder, "lockbutton");
+  permission = g_object_new (g_test_permission_get_type (), NULL);
+  g_object_bind_property (permission, "allowed",
+                          widget, "sensitive",
+                          G_BINDING_SYNC_CREATE);
+  gtk_lock_button_set_permission (GTK_LOCK_BUTTON (widget2), permission);
+  g_object_unref (permission);
 
   gtk_widget_show_all (GTK_WIDGET (window));
 

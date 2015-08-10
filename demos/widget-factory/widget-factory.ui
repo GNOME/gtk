@@ -2897,105 +2897,128 @@ microphone-sensitivity-medium-symbolic</property>
                         <property name="halign">start</property>
                         <property name="spacing">6</property>
                         <child>
-                          <object class="GtkMenuButton">
+                          <object class="GtkBox" id="lockbox">
                             <property name="visible">True</property>
-                            <property name="halign">center</property>
-                            <property name="popover">open_popover</property>
-                            <style>
-                              <class name="text-button"/>
-                              <class name="image-button"/>
-                            </style>
+                            <property name="halign">start</property>
+                            <property name="spacing">6</property>
                             <child>
-                              <object class="GtkBox">
+                              <object class="GtkMenuButton">
                                 <property name="visible">True</property>
-                                <property name="spacing">6</property>
+                                <property name="halign">center</property>
+                                <property name="popover">open_popover</property>
+                                <style>
+                                  <class name="text-button"/>
+                                  <class name="image-button"/>
+                                </style>
                                 <child>
-                                  <object class="GtkLabel">
+                                  <object class="GtkBox">
                                     <property name="visible">True</property>
-                                    <property name="valign">baseline</property>
-                                    <property name="label">Open</property>
-                                  </object>
-                                </child>
-                                <child>
-                                  <object class="GtkImage">
-                                    <property name="visible">True</property>
-                                    <property name="valign">baseline</property>
-                                    <property name="icon_name">pan-down-symbolic</property>
+                                    <property name="spacing">6</property>
+                                    <child>
+                                      <object class="GtkLabel">
+                                        <property name="visible">True</property>
+                                        <property name="valign">baseline</property>
+                                        <property name="label">Open</property>
+                                      </object>
+                                    </child>
+                                    <child>
+                                      <object class="GtkImage">
+                                        <property name="visible">True</property>
+                                        <property name="valign">baseline</property>
+                                        <property name="icon_name">pan-down-symbolic</property>
+                                      </object>
+                                    </child>
                                   </object>
                                 </child>
                               </object>
                             </child>
-                          </object>
-                        </child>
-                        <child>
-                          <object class="GtkToggleButton" id="record_button">
-                            <property name="visible">True</property>
-                            <property name="halign">center</property>
-                            <signal name="toggled" handler="on_record_button_toggled"/>
-                            <style>
-                              <class name="text-button"/>
-                              <class name="image-button"/>
-                              <class name="destructive-action"/>
-                            </style>
                             <child>
-                              <object class="GtkBox">
+                              <object class="GtkToggleButton" id="record_button">
                                 <property name="visible">True</property>
-                                <property name="spacing">6</property>
+                                <property name="halign">center</property>
+                                <signal name="toggled" handler="on_record_button_toggled"/>
+                                <style>
+                                  <class name="text-button"/>
+                                  <class name="image-button"/>
+                                  <class name="destructive-action"/>
+                                </style>
                                 <child>
-                                  <object class="GtkImage">
+                                  <object class="GtkBox">
                                     <property name="visible">True</property>
-                                    <property name="valign">baseline</property>
-                                    <property name="icon_name">media-record-symbolic</property>
-                                  </object>
-                                </child>
-                                <child>
-                                  <object class="GtkLabel">
-                                    <property name="visible">True</property>
-                                    <property name="valign">baseline</property>
-                                    <property name="label">Record</property>
+                                    <property name="spacing">6</property>
+                                    <child>
+                                      <object class="GtkImage">
+                                        <property name="visible">True</property>
+                                        <property name="valign">baseline</property>
+                                        <property name="icon_name">media-record-symbolic</property>
+                                      </object>
+                                    </child>
+                                    <child>
+                                      <object class="GtkLabel">
+                                        <property name="visible">True</property>
+                                        <property name="valign">baseline</property>
+                                        <property name="label">Record</property>
+                                      </object>
+                                    </child>
                                   </object>
                                 </child>
                               </object>
                             </child>
-                          </object>
-                        </child>
-                        <child>
-                          <object class="GtkBox">
-                            <property name="visible">True</property>
-                            <style>
-                              <class name="linked"/>
-                            </style>
                             <child>
-                              <object class="GtkRadioButton" id="grid_button">
+                              <object class="GtkBox">
                                 <property name="visible">True</property>
-                                <property name="draw-indicator">False</property>
-                                <property name="active">True</property>
+                                <style>
+                                  <class name="linked"/>
+                                </style>
+                                <child>
+                                  <object class="GtkRadioButton" id="grid_button">
+                                    <property name="visible">True</property>
+                                    <property name="draw-indicator">False</property>
+                                    <property name="active">True</property>
+                                    <style>
+                                      <class name="image-button"/>
+                                    </style>
+                                    <child>
+                                      <object class="GtkImage">
+                                        <property name="visible">True</property>
+                                        <property name="icon-size">1</property>
+                                        <property name="icon-name">view-grid-symbolic</property>
+                                      </object>
+                                    </child>
+                                  </object>
+                                </child>
+                                <child>
+                                  <object class="GtkRadioButton" id="list_button">
+                                    <property name="active">True</property>
+                                    <property name="visible">True</property>
+                                    <property name="draw-indicator">False</property>
+                                    <property name="group">grid_button</property>
+                                    <style>
+                                      <class name="image-button"/>
+                                    </style>
+                                    <child>
+                                      <object class="GtkImage">
+                                        <property name="visible">True</property>
+                                        <property name="icon-size">1</property>
+                                        <property name="icon-name">view-list-symbolic</property>
+                                      </object>
+                                    </child>
+                                  </object>
+                                </child>
+                              </object>
+                            </child>
+                            <child>
+                              <object class="GtkButton" id="circular_button">
+                                <property name="visible">True</property>
                                 <style>
                                   <class name="image-button"/>
+                                  <class name="circular-button"/>
                                 </style>
                                 <child>
                                   <object class="GtkImage">
                                     <property name="visible">True</property>
                                     <property name="icon-size">1</property>
-                                    <property name="icon-name">view-grid-symbolic</property>
-                                  </object>
-                                </child>
-                              </object>
-                            </child>
-                            <child>
-                              <object class="GtkRadioButton" id="list_button">
-                                <property name="active">True</property>
-                                <property name="visible">True</property>
-                                <property name="draw-indicator">False</property>
-                                <property name="group">grid_button</property>
-                                <style>
-                                  <class name="image-button"/>
-                                </style>
-                                <child>
-                                  <object class="GtkImage">
-                                    <property name="visible">True</property>
-                                    <property name="icon-size">1</property>
-                                    <property name="icon-name">view-list-symbolic</property>
+                                    <property name="icon-name">emblem-system-symbolic</property>
                                   </object>
                                 </child>
                               </object>
@@ -3003,19 +3026,8 @@ microphone-sensitivity-medium-symbolic</property>
                           </object>
                         </child>
                         <child>
-                          <object class="GtkButton" id="circular_button">
+                          <object class="GtkLockButton" id="lockbutton">
                             <property name="visible">True</property>
-                            <style>
-                              <class name="image-button"/>
-                              <class name="circular-button"/>
-                            </style>
-                            <child>
-                              <object class="GtkImage">
-                                <property name="visible">True</property>
-                                <property name="icon-size">1</property>
-                                <property name="icon-name">emblem-system-symbolic</property>
-                              </object>
-                            </child>
                           </object>
                         </child>
                       </object>
@@ -3602,7 +3614,6 @@ microphone-sensitivity-medium-symbolic</property>
                     <child>
                       <object class="GtkBox">
                         <property name="visible">True</property>
-                        <property name="orientation">horizontal</property>
                         <property name="halign">center</property>
                         <child>
                           <object class="GtkEntry">
@@ -3610,11 +3621,6 @@ microphone-sensitivity-medium-symbolic</property>
                             <property name="can_focus">True</property>
                             <property name="placeholder_text" translatable="yes">Name…</property>
                           </object>
-                          <packing>
-                            <property name="expand">False</property>
-                            <property name="fill">True</property>
-                            <property name="position">0</property>
-                          </packing>
                         </child>
                         <child>
                           <object class="GtkEntry">
@@ -3623,8 +3629,6 @@ microphone-sensitivity-medium-symbolic</property>
                             <property name="placeholder_text" translatable="yes">Age…</property>
                           </object>
                           <packing>
-                            <property name="expand">False</property>
-                            <property name="fill">True</property>
                             <property name="position">1</property>
                           </packing>
                         </child>
@@ -3928,7 +3932,6 @@ bad things might happen.</property>
             <property name="visible">True</property>
             <property name="shadow-type">in</property>
             <property name="hscrollbar-policy">never</property>
-            <property name="vscrollbar-policy">automatic</property>
             <property name="min-content-height">70</property>
             <child>
               <object class="GtkTextView" id="open_popover_textview">
