@@ -804,16 +804,14 @@ option_list_end_element (GMarkupParseContext *context,
     }
 
   data->translatable = FALSE;
-  g_string_set_size (data->string, 0);
-  g_free (data->context);
-  data->context = NULL;
-  g_free (data->id);
-  data->id = NULL;
-  g_free (data->sort);
-  data->sort = NULL;
-  g_free (data->group);
-  data->group = NULL;
   data->is_text = FALSE;
+
+  g_string_set_size (data->string, 0);
+
+  g_clear_pointer (&data->context, g_free);
+  g_clear_pointer (&data->id, g_free);
+  g_clear_pointer (&data->sort, g_free);
+  g_clear_pointer (&data->group, g_free);
 }
 
 static const GMarkupParser option_list_parser =
