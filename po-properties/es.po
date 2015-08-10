@@ -7462,7 +7462,7 @@ msgid ""
 "Whether or not the size should smoothly change when changing between "
 "differently sized children"
 msgstr ""
-"Indica si el tamaño debe o no cambiar suavemente al cambia entre hijos de "
+"Indica si el tamaño debe o no cambiar suavemente al cambiar entre hijos de "
 "distinto tamaño"
 
 #: gtk/gtkstack.c:479
