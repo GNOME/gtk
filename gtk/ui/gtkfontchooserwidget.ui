@@ -48,7 +48,8 @@
             <property name="primary_icon_sensitive">False</property>
             <property name="secondary_icon_sensitive">False</property>
             <property name="placeholder_text" translatable="yes">Search font name</property>
-            <signal name="notify::text" handler="text_changed_cb" swapped="no"/>
+            <signal name="search-changed" handler="text_changed_cb" swapped="no"/>
+            <signal name="stop-search" handler="stop_search_cb" swapped="no"/>
           </object>
           <packing>
             <property name="left_attach">0</property>

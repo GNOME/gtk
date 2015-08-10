@@ -301,10 +301,16 @@ gtk_font_chooser_widget_refilter_font_list (GtkFontChooserWidget *fontchooser)
 
 static void
 text_changed_cb (GtkEntry             *entry,
-                 GParamSpec           *pspec,
                  GtkFontChooserWidget *fc)
 {
   gtk_font_chooser_widget_refilter_font_list (fc);
+}
+
+static void
+stop_search_cb (GtkEntry             *entry,
+                GtkFontChooserWidget *fc)
+{
+  gtk_entry_set_text (entry, "");
 }
 
 static void
@@ -580,6 +586,7 @@ gtk_font_chooser_widget_class_init (GtkFontChooserWidgetClass *klass)
   gtk_widget_class_bind_template_child_private (widget_class, GtkFontChooserWidget, size_slider);
 
   gtk_widget_class_bind_template_callback (widget_class, text_changed_cb);
+  gtk_widget_class_bind_template_callback (widget_class, stop_search_cb);
   gtk_widget_class_bind_template_callback (widget_class, cursor_changed_cb);
   gtk_widget_class_bind_template_callback (widget_class, row_activated_cb);
   gtk_widget_class_bind_template_callback (widget_class, gtk_font_chooser_widget_set_cell_size);
