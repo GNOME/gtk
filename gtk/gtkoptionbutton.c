@@ -216,7 +216,7 @@ selected_changed (GObject         *list,
  *
  * Returns: A new #GtkOptionButton
  *
- * Since: 3.16
+ * Since: 3.18
  */
 GtkWidget *
 gtk_option_button_new (void)
@@ -240,7 +240,7 @@ gtk_option_button_get_option_list (GtkOptionButton *button)
  * Sets the placeholder text that is displayed in the button
  * if no item is currently selected.
  *
- * Since: 3.16
+ * Since: 3.18
  */
 void
 gtk_option_button_set_placeholder_text (GtkOptionButton *button,
@@ -273,7 +273,7 @@ gtk_option_button_set_placeholder_text (GtkOptionButton *button,
  *
  * Returns: (transfer none): the placeholder text
  *
- * Since: 3.16
+ * Since: 3.18
  */
 const gchar *
 gtk_option_button_get_placeholder_text (GtkOptionButton *button)

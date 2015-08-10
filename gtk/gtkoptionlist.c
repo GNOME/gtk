@@ -1482,7 +1482,7 @@ ensure_group (GtkOptionList *ol,
  *
  * Returns: A new #GtkOptionList
  *
- * Since: 3.16
+ * Since: 3.18
  */
 GtkWidget *
 gtk_option_list_new (void)
@@ -1499,7 +1499,7 @@ gtk_option_list_new (void)
  * Returns: (transfer none): the IDs of the selected items, as
  *   a %NULL-terminated array of strings.
  *
- * Since: 3.16
+ * Since: 3.18
  */
 const gchar **
 gtk_option_list_get_selected_items (GtkOptionList *list)
@@ -1614,7 +1614,7 @@ set_selected (GtkOptionList  *ol,
  * on the seleciton mode, this may cause other
  * items to be deselected.
  *
- * Since: 3.16
+ * Since: 3.18
  */
 void
 gtk_option_list_select_item (GtkOptionList *list,
@@ -1660,7 +1660,7 @@ gtk_option_list_select_item (GtkOptionList *list,
  * on the seleciton mode, this may or may not be
  * possible.
  *
- * Since: 3.16
+ * Since: 3.18
  */
 void
 gtk_option_list_unselect_item (GtkOptionList *list,
@@ -1706,7 +1706,7 @@ gtk_option_list_unselect_item (GtkOptionList *list,
  * If an item with this ID already exists, its display text
  * will be updated with the new values.
  *
- * Since: 3.16
+ * Since: 3.18
  */
 void
 gtk_option_list_add_item (GtkOptionList *list,
@@ -1746,7 +1746,7 @@ gtk_option_list_add_item (GtkOptionList *list,
  *
  * Returns: the display text for @id, or %NULL
  *
- * Since: 3.16
+ * Since: 3.18
  */
 const gchar *
 gtk_option_list_item_get_text (GtkOptionList *list,
@@ -1773,7 +1773,7 @@ gtk_option_list_item_get_text (GtkOptionList *list,
  * If no sort key is set, items are sorted according to
  * their display text.
  *
- * Since: 3.16
+ * Since: 3.18
  */
 void
 gtk_option_list_item_set_sort_key (GtkOptionList *list,
@@ -1805,7 +1805,7 @@ gtk_option_list_item_set_sort_key (GtkOptionList *list,
  * Places the item identified by @id in a group.
  * By default, items are not grouped.
  *
- * Since: 3.16
+ * Since: 3.18
  */
 void
 gtk_option_list_item_set_group_key (GtkOptionList *list,
@@ -1847,7 +1847,7 @@ gtk_option_list_item_set_group_key (GtkOptionList *list,
  * If the removed item was the last one in its group,
  * the group will be removed as well.
  *
- * Since: 3.16
+ * Since: 3.18
  */
 void
 gtk_option_list_remove_item (GtkOptionList *list,
@@ -1868,7 +1868,7 @@ gtk_option_list_remove_item (GtkOptionList *list,
  * Sets whether the list should allow the user
  * to enter custom values.
  *
- * Since: 3.16
+ * Since: 3.18
  */
 void
 gtk_option_list_set_allow_custom (GtkOptionList *list,
@@ -1893,7 +1893,7 @@ gtk_option_list_set_allow_custom (GtkOptionList *list,
  *
  * Returns: %TRUE if custom values are allowed
  *
- * Since: 3.16
+ * Since: 3.18
  */
 gboolean
 gtk_option_list_get_allow_custom (GtkOptionList *list)
@@ -1910,7 +1910,7 @@ gtk_option_list_get_allow_custom (GtkOptionList *list)
  *
  * Sets the text that is displayed for the custom entry.
  *
- * Since: 3.16
+ * Since: 3.18
  */
 void
 gtk_option_list_set_custom_text (GtkOptionList *list,
@@ -1932,7 +1932,7 @@ gtk_option_list_set_custom_text (GtkOptionList *list,
  *
  * Returns: (transfer none): the custom text
  *
- * Since: 3.16
+ * Since: 3.18
  */
 const gchar *
 gtk_option_list_get_custom_text (GtkOptionList *list)
@@ -1951,7 +1951,7 @@ gtk_option_list_get_custom_text (GtkOptionList *list)
  *
  * Associates a display text and sort key with a group of items.
  *
- * Since: 3.16
+ * Since: 3.18
  */
 void
 gtk_option_list_add_group (GtkOptionList *list,
@@ -1990,7 +1990,7 @@ gtk_option_list_add_group (GtkOptionList *list,
  * Note that #GTK_SELECTION_NONE does not make sense
  * for option lists.
  *
- * Since: 3.16
+ * Since: 3.18
  */
 void
 gtk_option_list_set_selection_mode (GtkOptionList    *list,
@@ -2015,7 +2015,7 @@ gtk_option_list_set_selection_mode (GtkOptionList    *list,
  *
  * Returns: the selection mode
  *
- * Since: 3.16
+ * Since: 3.18
  */
 GtkSelectionMode
 gtk_option_list_get_selection_mode (GtkOptionList *list)
@@ -2042,7 +2042,7 @@ gtk_option_list_get_selection_mode (GtkOptionList *list)
  *   in text being entered in the search entry,
  *   %GDK_EVENT_PROPAGATE otherwise.
  *
- * Since: 3.16
+ * Since: 3.18
  */
 gboolean
 gtk_option_list_handle_key_event (GtkOptionList *list,
