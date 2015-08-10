@@ -958,6 +958,7 @@ server_mount_ready_cb (GObject      *source_file,
           if (error)
             {
               emit_show_error_message (view, _("Unable to access location"), error->message);
+              g_clear_error (&error);
               goto out;
             }
 
