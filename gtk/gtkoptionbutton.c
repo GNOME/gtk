@@ -28,6 +28,15 @@
 #include "gtkintl.h"
 #include "gtkprivate.h"
 
+/**
+ * SECTION:gtkoptionbutton
+ * @Short_description: A button widget tied to a GtkOptionList
+ * @Title: GtkOptionButton
+ * @See_also: #GtkOptionList
+ *
+ * GtkOptionButton is a button widget that can be used to show a
+ * #GtkOptionList as a pop over.
+ */
 
 enum {
   PROP_PLACEHOLDER_TEXT = 1
