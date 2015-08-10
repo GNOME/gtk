@@ -344,7 +344,7 @@ activate_row (GtkPlacesView      *view,
     }
   else if (mount)
     {
-      GFile *location = g_mount_get_root (mount);
+      GFile *location = g_mount_get_default_location (mount);
 
       emit_open_location (view, location, flags);
 
@@ -684,7 +684,7 @@ add_volume (GtkPlacesView *view,
   is_network = g_strcmp0 (identifier, "network") == 0;
 
   mount = g_volume_get_mount (volume);
-  root = mount ? g_mount_get_root (mount) : NULL;
+  root = mount ? g_mount_get_default_location (mount) : NULL;
   icon = g_volume_get_icon (volume);
   name = g_volume_get_name (volume);
   path = !is_network ? g_volume_get_identifier (volume, G_VOLUME_IDENTIFIER_KIND_UNIX_DEVICE) : NULL;
@@ -728,7 +728,7 @@ add_mount (GtkPlacesView *view,
 
   icon = g_mount_get_icon (mount);
   name = g_mount_get_name (mount);
-  root = g_mount_get_root (mount);
+  root = g_mount_get_default_location (mount);
   path = root ? g_file_get_parse_name (root) : NULL;
   uri = g_file_get_uri (root);
   schema = g_uri_parse_scheme (uri);
@@ -944,9 +944,29 @@ server_mount_ready_cb (GObject      *source_file,
       gtk_entry_set_text (GTK_ENTRY (priv->address_entry), "");
 
       if (priv->should_open_location)
-        emit_open_location (view, location, priv->open_flags);
+        {
+          GMount *mount_point;
+          GError *error;
+          GFile *enclosing_location;
+
+          error = NULL;
+          mount_point = g_file_find_enclosing_mount (location, NULL, &error);
+
+          if (error)
+            {
+              emit_show_error_message (view, _("Unable to access location"), error->message);
+              goto out;
+            }
+
+          enclosing_location = g_mount_get_default_location (mount_point);
+
+          emit_open_location (view, enclosing_location, priv->open_flags);
+
+          g_object_unref (enclosing_location);
+        }
     }
 
+out:
   update_places (view);
 }
 
@@ -1001,7 +1021,7 @@ volume_mount_ready_cb (GObject      *source_volume,
       GFile *root;
 
       mount = g_volume_get_mount (volume);
-      root = g_mount_get_root (mount);
+      root = g_mount_get_default_location (mount);
 
       if (priv->should_open_location)
         emit_open_location (GTK_PLACES_VIEW (user_data), root, priv->open_flags);
@@ -1190,7 +1210,7 @@ get_view_and_file (GtkPlacesViewRow  *row,
       mount = gtk_places_view_row_get_mount (row);
 
       if (mount)
-        *file = g_mount_get_root (mount);
+        *file = g_mount_get_default_location (mount);
       else if (volume)
         *file = g_volume_get_activation_root (volume);
       else
