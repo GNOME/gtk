@@ -177,6 +177,11 @@ typedef void (*GtkListBoxUpdateHeaderFunc) (GtkListBoxRow *row,
  * Called for list boxes that are bound to a #GListModel with
  * gtk_list_box_bind_model() for each item that gets added to the model.
  *
+ * Versions of GTK+ prior to 3.18 called gtk_widget_show_all() on the rows
+ * created by the GtkListBoxCreateWidgetFunc, but this forced all widgets
+ * inside the row to be shown, and is no longer the case. Applications should
+ * be updated to show the desired row widgets.
+ *
  * Returns: (transfer full): a #GtkWidget that represents @item
  *
  * Since: 3.16
