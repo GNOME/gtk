@@ -1541,6 +1541,14 @@ G_GNUC_END_IGNORE_DEPRECATIONS
     case PANGO_ATTR_FONT_FEATURES:
       attribute = pango_attr_font_features_new (value);
       break;
+    case PANGO_ATTR_FOREGROUND_ALPHA:
+      if (gtk_builder_value_from_string_type (builder, G_TYPE_INT, value, &val, error))
+        attribute = pango_attr_foreground_alpha_new ((guint16)value);
+      break;
+    case PANGO_ATTR_BACKGROUND_ALPHA:
+      if (gtk_builder_value_from_string_type (builder, G_TYPE_INT, value, &val, error))
+        attribute = pango_attr_background_alpha_new ((guint16)value);
+      break;
     case PANGO_ATTR_INVALID:
     default:
       break;
