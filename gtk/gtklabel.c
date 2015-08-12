@@ -1526,11 +1526,22 @@ G_GNUC_END_IGNORE_DEPRECATIONS
       if (gtk_builder_value_from_string_type (builder, G_TYPE_DOUBLE, value, &val, error))
 	attribute = pango_attr_scale_new (g_value_get_double (&val));
       break;
-
-    case PANGO_ATTR_INVALID:
     case PANGO_ATTR_LETTER_SPACING:
+      if (gtk_builder_value_from_string_type (builder, G_TYPE_INT, value, &val, error))
+        attribute = pango_attr_letter_spacing_new (g_value_get_int (&val));
+      break;
     case PANGO_ATTR_RISE:
+      if (gtk_builder_value_from_string_type (builder, G_TYPE_INT, value, &val, error))
+        attribute = pango_attr_rise_new (g_value_get_int (&val));
+      break;
     case PANGO_ATTR_FALLBACK:
+      if (gtk_builder_value_from_string_type (builder, G_TYPE_BOOLEAN, value, &val, error))
+        attribute = pango_attr_fallback_new (g_value_get_boolean (&val));
+      break;
+    case PANGO_ATTR_FONT_FEATURES:
+      attribute = pango_attr_font_features_new (value);
+      break;
+    case PANGO_ATTR_INVALID:
     default:
       break;
     }
