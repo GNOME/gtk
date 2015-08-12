@@ -6099,6 +6099,8 @@ gtk_window_map (GtkWidget *widget)
   else
     gdk_window_unmaximize (gdk_window);
 
+  priv->maximize_initially = FALSE;
+
   if (priv->stick_initially)
     gdk_window_stick (gdk_window);
   else
@@ -6119,6 +6121,8 @@ gtk_window_map (GtkWidget *widget)
     }
   else
     gdk_window_unfullscreen (gdk_window);
+
+  priv->fullscreen_initially = FALSE;
 
   gdk_window_set_keep_above (gdk_window, priv->above_initially);
 
@@ -6592,7 +6596,9 @@ get_shadow_width (GtkWidget *widget,
     return;
 
   if (priv->maximized ||
-      priv->fullscreen)
+      priv->maximize_initially ||
+      priv->fullscreen ||
+      priv->fullscreen_initially)
     return;
 
   if (!gtk_widget_is_toplevel (widget))
