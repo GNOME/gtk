@@ -119,16 +119,14 @@ G_GNUC_END_IGNORE_DEPRECATIONS
 }
 
 static void
-gtk_color_chooser_dialog_map (GtkWidget *widget)
+gtk_color_chooser_dialog_unmap (GtkWidget *widget)
 {
+  GTK_WIDGET_CLASS (gtk_color_chooser_dialog_parent_class)->unmap (widget);
+
   /* We never want the dialog to come up with the editor,
    * even if it was showing the editor the last time it was used.
    */
-  g_object_set (GTK_COLOR_CHOOSER_DIALOG (widget)->priv->chooser,
-                "show-editor", FALSE,
-                NULL);
-
-  GTK_WIDGET_CLASS (gtk_color_chooser_dialog_parent_class)->map (widget);
+  g_object_set (widget, "show-editor", FALSE, NULL);
 }
 
 static void
@@ -207,7 +205,7 @@ gtk_color_chooser_dialog_class_init (GtkColorChooserDialogClass *class)
   object_class->get_property = gtk_color_chooser_dialog_get_property;
   object_class->set_property = gtk_color_chooser_dialog_set_property;
 
-  widget_class->map = gtk_color_chooser_dialog_map;
+  widget_class->unmap = gtk_color_chooser_dialog_unmap;
 
   g_object_class_override_property (object_class, PROP_RGBA, "rgba");
   g_object_class_override_property (object_class, PROP_USE_ALPHA, "use-alpha");
