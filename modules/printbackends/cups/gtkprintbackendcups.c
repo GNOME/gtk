@@ -3964,7 +3964,7 @@ cups_parse_user_options (const char     *filename,
 
       *lineptr++ = '\0';
 
-      if (strncasecmp (name, printer_name, strlen (printer_name)) != 0)
+      if (strcasecmp (name, printer_name) != 0)
           continue;
 
       /* We found our printer, parse the options */
