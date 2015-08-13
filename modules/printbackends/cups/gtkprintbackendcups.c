@@ -3967,12 +3967,9 @@ cups_parse_user_options (const char     *filename,
       if (!*lineptr)
         continue;
 
-      /* NUL-terminate the name, stripping the instance name */
       name = lineptr;
       while (!isspace (*lineptr) && *lineptr)
         {
-          if (*lineptr == '/')
-            *lineptr = '\0';
           lineptr++;
         }
 
