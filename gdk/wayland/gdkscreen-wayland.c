@@ -1001,25 +1001,52 @@ _gdk_wayland_screen_init (GdkWaylandScreen *screen_wayland)
 static void
 update_screen_size (GdkWaylandScreen *screen_wayland)
 {
+  gboolean emit_changed = FALSE;
   gint width, height;
+  gint width_mm, height_mm;
   gint i;
 
   width = height = 0;
+  width_mm = height_mm = 0;
   for (i = 0; i < screen_wayland->monitors->len; i++)
     {
       GdkWaylandMonitor *monitor = screen_wayland->monitors->pdata[i];
+
+      /* XXX: Largely assuming here that monitor areas
+       * are contiguous and never overlap.
+       */
+      if (monitor->geometry.x > 0)
+        width_mm += monitor->width_mm;
+      else
+        width_mm = MAX (width_mm, monitor->width_mm);
+
+      if (monitor->geometry.y > 0)
+        height_mm += monitor->height_mm;
+      else
+        height_mm = MAX (height_mm, monitor->height_mm);
 
       width = MAX (width, monitor->geometry.x + monitor->geometry.width);
       height = MAX (height, monitor->geometry.y + monitor->geometry.height);
     }
 
+  if (screen_wayland->width_mm != width_mm ||
+      screen_wayland->height_mm != height_mm)
+    {
+      emit_changed = TRUE;
+      screen_wayland->width_mm = width_mm;
+      screen_wayland->height_mm = height_mm;
+    }
+
   if (screen_wayland->width != width ||
       screen_wayland->height != height)
     {
+      emit_changed = TRUE;
       screen_wayland->width = width;
       screen_wayland->height = height;
-      g_signal_emit_by_name (screen_wayland, "size-changed");
     }
+
+  if (emit_changed)
+    g_signal_emit_by_name (screen_wayland, "size-changed");
 }
 
 static void
