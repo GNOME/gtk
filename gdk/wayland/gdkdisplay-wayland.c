@@ -431,14 +431,11 @@ _gdk_wayland_display_open (const gchar *display_name)
 
   GDK_NOTE (MISC, g_message ("opening display %s", display_name ? display_name : ""));
 
-  /* If these variables are unset then wayland initialisation will surely
+  /* If this variable is unset then wayland initialisation will surely
    * fail, logging a fatal error in the process.  Save ourselves from
    * that.
    */
   if (g_getenv ("XDG_RUNTIME_DIR") == NULL)
-    return NULL;
-
-  if (g_getenv ("WAYLAND_DISPLAY") == NULL)
     return NULL;
 
   wl_log_set_handler_client (log_handler);
