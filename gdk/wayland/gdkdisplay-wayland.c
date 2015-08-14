@@ -398,7 +398,7 @@ static const struct wl_registry_listener registry_listener = {
 static void
 log_handler (const char *format, va_list args)
 {
-  g_logv (G_LOG_DOMAIN, G_LOG_LEVEL_ERROR, format, args);
+  g_logv (G_LOG_DOMAIN, G_LOG_LEVEL_DEBUG, format, args);
 }
 
 static void
