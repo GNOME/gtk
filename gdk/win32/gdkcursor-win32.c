@@ -71,8 +71,8 @@ static DefaultCursor default_cursors[] = {
   { "nesw-resize", IDC_SIZENESW },
   { "ne-resize", IDC_SIZENESW },
   { "sw-resize", IDC_SIZENESW },
-  { "nwse-resize", IDC_SIZENWSE }
-  { "nw-resize", IDC_SIZENWSE }
+  { "nwse-resize", IDC_SIZENWSE },
+  { "nw-resize", IDC_SIZENWSE },
   { "se-resize", IDC_SIZENWSE }
 };
 
