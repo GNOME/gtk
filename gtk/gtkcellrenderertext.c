@@ -1645,24 +1645,28 @@ get_layout (GtkCellRendererText *celltext,
 	  && (flags & GTK_CELL_RENDERER_SELECTED) == 0)
         {
           PangoColor color;
+          guint16 alpha;
 
-          color.red = (guint16) (priv->foreground.red * 65535);
-          color.green = (guint16) (priv->foreground.green * 65535);
-          color.blue = (guint16) (priv->foreground.blue * 65535);
+          color.red = CLAMP (priv->foreground.red * 65535. + 0.5, 0, 65535);
+          color.green = CLAMP (priv->foreground.green * 65535. + 0.5, 0, 65535);
+          color.blue = CLAMP (priv->foreground.blue * 65535. + 0.5, 0, 65535);
+          alpha = CLAMP (priv->foreground.alpha * 65535. + 0.5, 0, 65535);
 
           add_attr (attr_list,
                     pango_attr_foreground_new (color.red, color.green, color.blue));
+
+          add_attr (attr_list, pango_attr_foreground_alpha_new (alpha));
         }
 
       if (priv->strikethrough_set)
-        add_attr (attr_list,
-                  pango_attr_strikethrough_new (priv->strikethrough));
+        add_attr (attr_list, pango_attr_strikethrough_new (priv->strikethrough));
     }
   else if (placeholder_layout)
     {
       PangoColor color;
+      guint16 alpha;
       GtkStyleContext *context;
-      GdkRGBA fg = { 0.5, 0.5, 0.5 };
+      GdkRGBA fg = { 0.5, 0.5, 0.5, 1.0 };
 
       context = gtk_widget_get_style_context (widget);
       gtk_style_context_lookup_color (context, "placeholder_text_color", &fg);
@@ -1670,9 +1674,12 @@ get_layout (GtkCellRendererText *celltext,
       color.red = CLAMP (fg.red * 65535. + 0.5, 0, 65535);
       color.green = CLAMP (fg.green * 65535. + 0.5, 0, 65535);
       color.blue = CLAMP (fg.blue * 65535. + 0.5, 0, 65535);
+      alpha = CLAMP (fg.alpha * 65535. + 0.5, 0, 65535);
 
       add_attr (attr_list,
                 pango_attr_foreground_new (color.red, color.green, color.blue));
+
+      add_attr (attr_list, pango_attr_foreground_alpha_new (alpha));
     }
 
   add_attr (attr_list, pango_attr_font_desc_new (priv->font));
@@ -1680,7 +1687,7 @@ get_layout (GtkCellRendererText *celltext,
   if (priv->scale_set &&
       priv->font_scale != 1.0)
     add_attr (attr_list, pango_attr_scale_new (priv->font_scale));
-  
+
   if (priv->underline_set)
     uline = priv->underline_style;
   else
@@ -1688,7 +1695,7 @@ get_layout (GtkCellRendererText *celltext,
 
   if (priv->language_set)
     add_attr (attr_list, pango_attr_language_new (priv->language));
-  
+
   if ((flags & GTK_CELL_RENDERER_PRELIT) == GTK_CELL_RENDERER_PRELIT)
     {
       switch (uline)
