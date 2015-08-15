@@ -12062,7 +12062,11 @@ static void
 gtk_window_update_debugging (void)
 {
   if (inspector_window)
-    g_idle_add (update_debugging, NULL);
+    {
+      guint id;
+      id = gdk_threads_add_idle (update_debugging, NULL);
+      g_source_set_name_by_id (id, "[gtk+] gtk_window_update_debugging");
+    }
 }
 
 static void
