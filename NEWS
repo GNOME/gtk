@@ -1,3 +1,46 @@
+Overview of Changes in GTK+ 3.17.7
+==================================
+
+* GtkFileChooser:
+ - Various refinements to the places view
+
+* GtkFontChooser:
+ - Make Escape stop search
+ - Various other keynav improvements
+
+* GtkColorChooser:
+ - Make it possible to start with the editor
+
+* Theme and CSS:
+ - HighContrast theme improvements
+
+* GDK:
+ - Add support for touchpad gesture events
+
+* OS X:
+ - Implement CSD resize for all corners and edges
+
+* Wayland:
+ - Support touchpad gestures
+
+* Bugs fixed:
+ 737804 Setting files on a GtkFileChooser twice before mainloop throws...
+ 752814 Fix build of gtk/gtkcsstypesprivate.h
+ 753329 quartz: Implement CSD drag resize for all edges/corners
+ 753357 [HighContrast] Days of a different month in GtkCalendar should...
+ 753391 [HighContrast] GtkPlacesSidebar:backdrop is white-covered on t...
+ 753392 listbox: Avoid using show_all on rows
+ 753451 GtkLinkButton's context menu has underlined labels
+
+* Translation updates:
+ Catalan
+ Lithuanian
+ Norwegian bokmål
+ Portuguese
+ Spanish
+ Turkish
+
+
 Overview of Changes in GTK+ 3.17.6
 ==================================
 
