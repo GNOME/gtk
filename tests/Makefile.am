@@ -167,6 +167,7 @@ noinst_PROGRAMS =  $(TEST_PROGS)	\
 	testwindowsize			\
 	testpopover			\
 	gdkgears			\
+	listmodel			\
 	$(NULL)
 
 if USE_X11
@@ -306,6 +307,7 @@ teststack_DEPENDENCIES = $(TEST_DEPS)
 testrevealer_DEPENDENCIES = $(TEST_DEPS)
 testtitlebar_DEPENDENCIES = $(TEST_DEPS)
 testwindowsize_DEPENDENCIES = $(TEST_DEPS)
+listmodel_DEPENDENCIES = $(TEST_DEPS)
 
 animated_resizing_SOURCES = 	\
 	animated-resizing.c	\
@@ -537,6 +539,8 @@ testglblending_SOURCES =	\
 	testglblending.c	\
 	gtkgears.c	\
 	gtkgears.h
+
+listmodel_SOURCES = listmodel.c
 
 EXTRA_DIST += 			\
 	gradient1.png		\
