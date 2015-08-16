@@ -5815,12 +5815,35 @@ struct _GtkEntryRecording {
   GtkEntrySnapshot snapshot;
 };
 
+static gboolean
+gtk_entry_should_record (GtkEntry *entry)
+{
+  GtkEntryPrivate *priv = entry->priv;
+
+  /* Password entries should not allow undo because
+   * the undo stack might otherwise contain sensitive
+   * information about passwords.
+   */
+  if (!priv->visible)
+    return FALSE;
+
+  /* Somebody is already recording and recording the same
+   * thing twice makes no sense. */
+  if (priv->undo_mode == GTK_ENTRY_UNDO_RECORD)
+    return FALSE;
+
+  return TRUE;
+}
+
 static GtkEntryRecording *
 gtk_entry_start_recording (GtkEntry *entry)
 {
   GtkEntryRecording *recording;
 
   g_return_val_if_fail (GTK_IS_ENTRY (entry), NULL);
+
+  if (!gtk_entry_should_record (entry))
+    return NULL;
 
   recording = g_slice_new0 (GtkEntryRecording);
   recording->old_mode = gtk_entry_set_undo_mode (entry, GTK_ENTRY_UNDO_RECORD);
@@ -5835,7 +5858,9 @@ gtk_entry_end_recording (GtkEntry          *entry,
                          gboolean           commit)
 {
   g_return_if_fail (GTK_IS_ENTRY (entry));
-  g_return_if_fail (recording != NULL);
+
+  if (recording == NULL)
+    return;
 
   if (commit)
     {
