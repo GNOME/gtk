@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 3.12\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-07-31 21:50+0000\n"
-"PO-Revision-Date: 2015-08-01 10:52+0100\n"
+"POT-Creation-Date: 2015-08-15 21:53+0000\n"
+"PO-Revision-Date: 2015-08-16 07:08+0100\n"
 "Last-Translator: Pedro Albuquerque <palbuquerque73@gmail.com>\n"
 "Language-Team: Português <palbuquerque73@gmail.com>\n"
 "Language: pt\n"
@@ -1258,7 +1258,7 @@ msgstr "Widget de atalho"
 msgid "The widget to be monitored for accelerator changes"
 msgstr "O widget a ser monitorizado para alterações de atalho"
 
-#: gtk/gtkaccessible.c:156 gtk/gtkeventcontroller.c:165
+#: gtk/gtkaccessible.c:156 gtk/gtkeventcontroller.c:166
 #: gtk/gtktreeviewcolumn.c:347
 msgid "Widget"
 msgstr "Widget"
@@ -1846,27 +1846,27 @@ msgstr "Espaçamento da imagem"
 msgid "Spacing in pixels between the image and label"
 msgstr "Espaçamento em pixels entre a imagem e a etiqueta"
 
-#: gtk/gtkcalendar.c:405
+#: gtk/gtkcalendar.c:399
 msgid "Year"
 msgstr "Ano"
 
-#: gtk/gtkcalendar.c:406
+#: gtk/gtkcalendar.c:400
 msgid "The selected year"
 msgstr "O ano selecionado"
 
-#: gtk/gtkcalendar.c:419
+#: gtk/gtkcalendar.c:413
 msgid "Month"
 msgstr "Mês"
 
-#: gtk/gtkcalendar.c:420
+#: gtk/gtkcalendar.c:414
 msgid "The selected month (as a number between 0 and 11)"
 msgstr "O mês selecionado (como um número entre 0 e 11)"
 
-#: gtk/gtkcalendar.c:434
+#: gtk/gtkcalendar.c:428
 msgid "Day"
 msgstr "Dia"
 
-#: gtk/gtkcalendar.c:435
+#: gtk/gtkcalendar.c:429
 msgid ""
 "The selected day (as a number between 1 and 31, or 0 to unselect the "
 "currently selected day)"
@@ -1874,83 +1874,83 @@ msgstr ""
 "O dia selecionado (como um número entre 1 e 31, ou 0 para desfazer a seleção "
 "de dia atual)"
 
-#: gtk/gtkcalendar.c:449
+#: gtk/gtkcalendar.c:443
 msgid "Show Heading"
 msgstr "Mostrar cabeçalho"
 
-#: gtk/gtkcalendar.c:450
+#: gtk/gtkcalendar.c:444
 msgid "If TRUE, a heading is displayed"
 msgstr "Se VERDADEIRO, é mostrado um cabeçalho"
 
-#: gtk/gtkcalendar.c:464
+#: gtk/gtkcalendar.c:458
 msgid "Show Day Names"
 msgstr "Mostrar nomes de dias"
 
-#: gtk/gtkcalendar.c:465
+#: gtk/gtkcalendar.c:459
 msgid "If TRUE, day names are displayed"
 msgstr "Se VERDADEIRO, são mostrados os nomes dos dias"
 
-#: gtk/gtkcalendar.c:478
+#: gtk/gtkcalendar.c:472
 msgid "No Month Change"
 msgstr "Não alterar mês"
 
-#: gtk/gtkcalendar.c:479
+#: gtk/gtkcalendar.c:473
 msgid "If TRUE, the selected month cannot be changed"
 msgstr "Se VERDADEIRO, o mês selecionado não poderá ser alterado"
 
-#: gtk/gtkcalendar.c:493
+#: gtk/gtkcalendar.c:487
 msgid "Show Week Numbers"
 msgstr "Mostrar números de semanas"
 
-#: gtk/gtkcalendar.c:494
+#: gtk/gtkcalendar.c:488
 msgid "If TRUE, week numbers are displayed"
 msgstr "Se VERDADEIRO, são mostrados os números das semanas"
 
-#: gtk/gtkcalendar.c:509
+#: gtk/gtkcalendar.c:503
 msgid "Details Width"
 msgstr "Largura dos detalhes"
 
-#: gtk/gtkcalendar.c:510
+#: gtk/gtkcalendar.c:504
 msgid "Details width in characters"
 msgstr "Largura dos detalhes em caracteres"
 
-#: gtk/gtkcalendar.c:525
+#: gtk/gtkcalendar.c:519
 msgid "Details Height"
 msgstr "Altura dos detalhes"
 
-#: gtk/gtkcalendar.c:526
+#: gtk/gtkcalendar.c:520
 msgid "Details height in rows"
 msgstr "Altura dos detalhes em linhas"
 
-#: gtk/gtkcalendar.c:542
+#: gtk/gtkcalendar.c:536
 msgid "Show Details"
 msgstr "Mostrar detalhes"
 
-#: gtk/gtkcalendar.c:543
+#: gtk/gtkcalendar.c:537
 msgid "If TRUE, details are shown"
 msgstr "Se VERDADEIRO, são mostrados os detalhes"
 
-#: gtk/gtkcalendar.c:555
+#: gtk/gtkcalendar.c:549
 msgid "Inner border"
 msgstr "Margem interior"
 
-#: gtk/gtkcalendar.c:556
+#: gtk/gtkcalendar.c:550
 msgid "Inner border space"
 msgstr "Espaço da margem interior"
 
-#: gtk/gtkcalendar.c:567
+#: gtk/gtkcalendar.c:561
 msgid "Vertical separation"
 msgstr "Separação vertical"
 
-#: gtk/gtkcalendar.c:568
+#: gtk/gtkcalendar.c:562
 msgid "Space between day headers and main area"
 msgstr "Espaçamento entre os cabeçalhos do dia e a área principal"
 
-#: gtk/gtkcalendar.c:579
+#: gtk/gtkcalendar.c:573
 msgid "Horizontal separation"
 msgstr "Separação horizontal"
 
-#: gtk/gtkcalendar.c:580
+#: gtk/gtkcalendar.c:574
 msgid "Space between week headers and main area"
 msgstr "Espaçamento entre os cabeçalhos da semana e a área principal"
 
@@ -2773,7 +2773,7 @@ msgstr "Estado inconsistente"
 msgid "The inconsistent state of the button"
 msgstr "O estado inconsistente do botão"
 
-#: gtk/gtkcellrenderertoggle.c:153 gtk/gtklistbox.c:3612
+#: gtk/gtkcellrenderertoggle.c:153 gtk/gtklistbox.c:3607
 msgid "Activatable"
 msgstr "Activável"
 
@@ -2919,7 +2919,7 @@ msgstr "Cor atual, como uma GdkRGBA"
 msgid "Whether alpha should be shown"
 msgstr "Se o alfa deverá ou não ser mostrado"
 
-#: gtk/gtkcolorchooserdialog.c:215 gtk/gtkcolorchooserwidget.c:700
+#: gtk/gtkcolorchooserdialog.c:213 gtk/gtkcolorchooserwidget.c:700
 msgid "Show editor"
 msgstr "Mostrar editor"
 
@@ -2927,27 +2927,27 @@ msgstr "Mostrar editor"
 msgid "Scale type"
 msgstr "Tipo de escala"
 
-#: gtk/gtkcolorswatch.c:735
+#: gtk/gtkcolorswatch.c:707
 msgid "RGBA Color"
 msgstr "Cor RGBA"
 
-#: gtk/gtkcolorswatch.c:735
+#: gtk/gtkcolorswatch.c:707
 msgid "Color as RGBA"
 msgstr "Cor como RGBA"
 
-#: gtk/gtkcolorswatch.c:738 gtk/gtklabel.c:855 gtk/gtklistbox.c:3626
+#: gtk/gtkcolorswatch.c:710 gtk/gtklabel.c:855 gtk/gtklistbox.c:3621
 msgid "Selectable"
 msgstr "Selecionável"
 
-#: gtk/gtkcolorswatch.c:738
+#: gtk/gtkcolorswatch.c:710
 msgid "Whether the swatch is selectable"
 msgstr "Se o seletor é ou não selecionável"
 
-#: gtk/gtkcolorswatch.c:741
+#: gtk/gtkcolorswatch.c:713
 msgid "Has Menu"
 msgstr "Tem menu"
 
-#: gtk/gtkcolorswatch.c:741
+#: gtk/gtkcolorswatch.c:713
 msgid "Whether the swatch should offer customization"
 msgstr "Se o swatch deve oferecer personalização"
 
@@ -3697,15 +3697,15 @@ msgstr ""
 "Se a janela de captura de eventos da caixa de eventos está sobre a janela do "
 "widget filho, por oposição a abaixo desta."
 
-#: gtk/gtkeventcontroller.c:166
+#: gtk/gtkeventcontroller.c:167
 msgid "Widget the gesture relates to"
 msgstr "Widget para o qual a janela bolha aponta"
 
-#: gtk/gtkeventcontroller.c:180
+#: gtk/gtkeventcontroller.c:181
 msgid "Propagation phase"
 msgstr "Fase de propagação"
 
-#: gtk/gtkeventcontroller.c:181
+#: gtk/gtkeventcontroller.c:182
 msgid "Propagation phase at which this controller is run"
 msgstr "Fase de propagação a que este controlador é executado"
 
@@ -3808,7 +3808,7 @@ msgid "The current filter for selecting which files are displayed"
 msgstr "O filtro atual para selecionar que ficheiros são mostrados"
 
 #: gtk/gtkfilechooser.c:388 gtk/gtkplacessidebar.c:4344
-#: gtk/gtkplacesview.c:1829
+#: gtk/gtkplacesview.c:1873
 msgid "Local Only"
 msgstr "Só local"
 
@@ -3892,11 +3892,11 @@ msgstr ""
 "Se um seletor de ficheiros que não esteja em modo de abertura permitirá ao "
 "utilizador criar novas pastas."
 
-#: gtk/gtkfilechooserwidget.c:8353 gtk/gtkfilechooserwidget.c:8354
+#: gtk/gtkfilechooserwidget.c:8357 gtk/gtkfilechooserwidget.c:8358
 msgid "Search mode"
 msgstr "Modo de pesquisa ativo"
 
-#: gtk/gtkfilechooserwidget.c:8360 gtk/gtkfilechooserwidget.c:8361
+#: gtk/gtkfilechooserwidget.c:8364 gtk/gtkfilechooserwidget.c:8365
 #: gtk/gtkheaderbar.c:1880
 msgid "Subtitle"
 msgstr "Subtítulo"
@@ -4064,15 +4064,15 @@ msgstr "A aparência da margem da moldura"
 msgid "A widget to display in place of the usual frame label"
 msgstr "Um widget a mostrar em vez da etiqueta de moldura comum"
 
-#: gtk/gtkgesture.c:694
+#: gtk/gtkgesture.c:865
 msgid "Number of points"
 msgstr "Número de pontos"
 
-#: gtk/gtkgesture.c:695
+#: gtk/gtkgesture.c:866
 msgid "Number of points needed to trigger the gesture"
 msgstr "O número de pontos necessários para acionar o gesto"
 
-#: gtk/gtkgesture.c:711 gtk/gtkgesture.c:712
+#: gtk/gtkgesture.c:882 gtk/gtkgesture.c:883
 msgid "GdkWindow to receive events about"
 msgstr "GdkWindow para receber eventos sobre"
 
@@ -4642,11 +4642,11 @@ msgstr "Visitada"
 msgid "Whether this link has been visited."
 msgstr "Se esta ligação já foi ou não visitada."
 
-#: gtk/gtklistbox.c:3613
+#: gtk/gtklistbox.c:3608
 msgid "Whether this row can be activated"
 msgstr "Se esta linha pode ou não ser ativada"
 
-#: gtk/gtklistbox.c:3627
+#: gtk/gtklistbox.c:3622
 msgid "Whether this row can be selected"
 msgstr "Se esta linha pode ou não ser selecionada"
 
@@ -5313,19 +5313,19 @@ msgstr "O separador ativo é desenhado com um espaço no fundo"
 msgid "The orientation of the orientable"
 msgstr "A orientação do orientável"
 
-#: gtk/gtkoverlay.c:771
+#: gtk/gtkoverlay.c:778
 msgid "Pass Through"
 msgstr "Passar através"
 
-#: gtk/gtkoverlay.c:771
+#: gtk/gtkoverlay.c:778
 msgid "Pass through input, does not affect main child"
 msgstr "Passar através da entrada, não afeta o filho principal"
 
-#: gtk/gtkoverlay.c:776
+#: gtk/gtkoverlay.c:783
 msgid "Index"
 msgstr "Índice"
 
-#: gtk/gtkoverlay.c:777
+#: gtk/gtkoverlay.c:784
 msgid "The index of the overlay in the parent, -1 for the main child"
 msgstr "O índice da sobreposição no pai, -1 para o filho principal"
 
@@ -5403,11 +5403,11 @@ msgstr "Localização a selecionar"
 msgid "The location to highlight in the sidebar"
 msgstr "A localização a realçar na barra lateral"
 
-#: gtk/gtkplacessidebar.c:4313 gtk/gtkplacesview.c:1836
+#: gtk/gtkplacessidebar.c:4313 gtk/gtkplacesview.c:1880
 msgid "Open Flags"
 msgstr "Parâmetros de abertura"
 
-#: gtk/gtkplacessidebar.c:4314 gtk/gtkplacesview.c:1837
+#: gtk/gtkplacessidebar.c:4314 gtk/gtkplacesview.c:1881
 msgid ""
 "Modes in which the calling application can open locations selected in the "
 "sidebar"
@@ -5456,7 +5456,7 @@ msgstr ""
 "Se a barra lateral inclui um atalho incorporado para um diálogo \"Inserir "
 "localização\""
 
-#: gtk/gtkplacessidebar.c:4345 gtk/gtkplacesview.c:1830
+#: gtk/gtkplacessidebar.c:4345 gtk/gtkplacesview.c:1874
 msgid "Whether the sidebar only includes local files"
 msgstr "Se a barra lateral só inclui ficheiros locais"
 
@@ -5481,55 +5481,82 @@ msgstr "Se a barra lateral inclui um item para mostrar localizações externas"
 msgid "Whether to emit ::populate-popup for popups that are not menus"
 msgstr "Se emitir ou não ::populate-popup para balões que não são menus"
 
-#: gtk/gtkplacesviewrow.c:169
+#: gtk/gtkplacesview.c:1380
+msgid "_Disconnect"
+msgstr "D_Esligar"
+
+#: gtk/gtkplacesview.c:1380
+msgid "_Unmount"
+msgstr "_Desmontar"
+
+#: gtk/gtkplacesview.c:1390
+msgid "_Connect"
+msgstr "_Ligar"
+
+#: gtk/gtkplacesview.c:1390
+msgid "_Mount"
+msgstr "_Montar"
+
+#: gtk/gtkplacesviewrow.c:181
 msgid "Icon of the row"
 msgstr "Ícone da linha"
 
-#: gtk/gtkplacesviewrow.c:170
+#: gtk/gtkplacesviewrow.c:182
 msgid "The icon representing the volume"
 msgstr "O ícone representando o volume"
 
-#: gtk/gtkplacesviewrow.c:176
+#: gtk/gtkplacesviewrow.c:188
 msgid "Name of the volume"
 msgstr "Nome do volume"
 
-#: gtk/gtkplacesviewrow.c:177
+#: gtk/gtkplacesviewrow.c:189
 msgid "The name of the volume"
 msgstr "O nome do volume"
 
-#: gtk/gtkplacesviewrow.c:183
+#: gtk/gtkplacesviewrow.c:195
 msgid "Path of the volume"
 msgstr "Caminho do volume"
 
-#: gtk/gtkplacesviewrow.c:184
+#: gtk/gtkplacesviewrow.c:196
 msgid "The path of the volume"
 msgstr "O caminho do volume"
 
-#: gtk/gtkplacesviewrow.c:190
+#: gtk/gtkplacesviewrow.c:202
 msgid "Volume represented by the row"
 msgstr "Volume representado pela linha"
 
-#: gtk/gtkplacesviewrow.c:191
+#: gtk/gtkplacesviewrow.c:203
 msgid "The volume represented by the row"
 msgstr "O volume representado pela linha"
 
-#: gtk/gtkplacesviewrow.c:197
+#: gtk/gtkplacesviewrow.c:209
 msgid "Mount represented by the row"
 msgstr "Montagem representada pela linha"
 
-#: gtk/gtkplacesviewrow.c:198
+#: gtk/gtkplacesviewrow.c:210
 msgid "The mount point represented by the row, if any"
 msgstr "O ponto de montagem representado pela linha, se houver"
 
-#: gtk/gtkplacesviewrow.c:204
-#| msgid "Volume represented by the row"
+#: gtk/gtkplacesviewrow.c:216
 msgid "File represented by the row"
 msgstr "Ficheiro representado pela linha"
 
-#: gtk/gtkplacesviewrow.c:205
-#| msgid "The mount point represented by the row, if any"
+#: gtk/gtkplacesviewrow.c:217
 msgid "The file represented by the row, if any"
 msgstr "O ficheiro representado pela linha, se houver"
+
+#: gtk/gtkplacesviewrow.c:223 gtk/gtkplacesviewrow.c:224
+#| msgid "Whether the dialog supports selection"
+msgid "Whether the row represents a network location"
+msgstr "Se a linha representa uma localização de rede"
+
+#: gtk/gtkplacesviewrow.c:325
+msgid "Disconnect"
+msgstr "Desligar"
+
+#: gtk/gtkplacesviewrow.c:325
+msgid "Unmount"
+msgstr "Desmontar"
 
 #: gtk/gtkplug.c:202
 msgid "Whether the plug is embedded"
@@ -7777,7 +7804,6 @@ msgid "Extra spacing between graphemes"
 msgstr "Espaço extra entre grafemas"
 
 #: gtk/gtktexttag.c:692
-#| msgid "Font stretch"
 msgid "Font Features"
 msgstr "Funcionalidades da letra"
 
@@ -7918,12 +7944,10 @@ msgid "Whether this tag affects letter spacing"
 msgstr "Se esta etiqueta afeta o espaçamento de letras"
 
 #: gtk/gtktexttag.c:855
-#| msgid "Font stretch set"
 msgid "Font features set"
 msgstr "Conjunto de funcionalidades da letra"
 
 #: gtk/gtktexttag.c:856
-#| msgid "Whether this tag affects font fallback"
 msgid "Whether this tag affects font features"
 msgstr "Se esta etiqueta afeta as funcionalidades da letra"
 
