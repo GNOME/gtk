@@ -8040,6 +8040,9 @@ GtkFlowBoxSortFunc
 gtk_flow_box_set_sort_func
 gtk_flow_box_invalidate_sort
 
+GtkFlowBoxCreateWidgetFunc
+gtk_flow_box_bind_model
+
 <SUBSECTION GtkFlowBoxChild>
 GtkFlowBoxChild
 gtk_flow_box_child_new

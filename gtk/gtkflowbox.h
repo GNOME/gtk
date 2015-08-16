@@ -99,6 +99,20 @@ struct _GtkFlowBoxChildClass
   void (*_gtk_reserved2) (void);
 };
 
+/**
+ * GtkFlowBoxCreateWidgetFunc:
+ * @item: the item from the model for which to create a widget for
+ *
+ * Called for flow boxes that are bound to a #GListModel with
+ * gtk_flow_box_bind_model() for each item that gets added to the model.
+ *
+ * Returns: a #GtkWidget that represents @item
+ *
+ * Since: 3.18
+ */
+typedef GtkWidget * (*GtkFlowBoxCreateWidgetFunc) (gpointer item,
+                                                   gpointer  user_data);
+
 GDK_AVAILABLE_IN_3_12
 GType                 gtk_flow_box_child_get_type            (void) G_GNUC_CONST;
 GDK_AVAILABLE_IN_3_12
@@ -116,6 +130,14 @@ GType                 gtk_flow_box_get_type                  (void) G_GNUC_CONST
 
 GDK_AVAILABLE_IN_3_12
 GtkWidget            *gtk_flow_box_new                       (void);
+
+GDK_AVAILABLE_IN_3_18
+void                  gtk_flow_box_bind_model                (GtkFlowBox                 *box,
+                                                              GListModel                 *model,
+                                                              GtkFlowBoxCreateWidgetFunc  create_widget_func,
+                                                              gpointer                    user_data,
+                                                              GDestroyNotify              user_data_free_func);
+
 GDK_AVAILABLE_IN_3_12
 void                  gtk_flow_box_set_homogeneous           (GtkFlowBox           *box,
                                                               gboolean              homogeneous);

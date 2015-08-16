@@ -84,6 +84,12 @@ static gint gtk_flow_box_sort                (GtkFlowBoxChild *a,
                                               GtkFlowBoxChild *b,
                                               GtkFlowBox      *box);
 
+static void gtk_flow_box_bound_model_changed (GListModel *list,
+                                              guint       position,
+                                              guint       removed,
+                                              guint       added,
+                                              gpointer    user_data);
+
 static void
 get_current_selection_modifiers (GtkWidget *widget,
                                  gboolean  *modify,
@@ -795,6 +801,11 @@ struct _GtkFlowBoxPrivate {
 
   GtkScrollType      autoscroll_mode;
   guint              autoscroll_id;
+
+  GListModel                 *bound_model;
+  GtkFlowBoxCreateWidgetFunc  create_widget_func;
+  gpointer                    create_widget_func_data;
+  GDestroyNotify              create_widget_func_data_destroy;
 };
 
 #define BOX_PRIV(box) ((GtkFlowBoxPrivate*)gtk_flow_box_get_instance_private ((GtkFlowBox*)(box)))
@@ -803,7 +814,7 @@ G_DEFINE_TYPE_WITH_CODE (GtkFlowBox, gtk_flow_box, GTK_TYPE_CONTAINER,
                          G_ADD_PRIVATE (GtkFlowBox)
                          G_IMPLEMENT_INTERFACE (GTK_TYPE_ORIENTABLE, NULL))
 
-/* Internal API, utilities {{{2 */
+/*  Internal API, utilities {{{2 */
 
 #define ORIENTATION_ALIGN(box)                              \
   (BOX_PRIV(box)->orientation == GTK_ORIENTATION_HORIZONTAL \
@@ -3612,6 +3623,15 @@ gtk_flow_box_finalize (GObject *obj)
   g_object_unref (priv->drag_gesture);
   g_object_unref (priv->multipress_gesture);
 
+  if (priv->bound_model)
+    {
+      if (priv->create_widget_func_data_destroy)
+        priv->create_widget_func_data_destroy (priv->create_widget_func_data);
+
+      g_signal_handlers_disconnect_by_func (priv->bound_model, gtk_flow_box_bound_model_changed, obj);
+      g_clear_object (&priv->bound_model);
+    }
+
   G_OBJECT_CLASS (gtk_flow_box_parent_class)->finalize (obj);
 }
 
@@ -3989,7 +4009,40 @@ gtk_flow_box_init (GtkFlowBox *box)
   g_signal_connect (priv->drag_gesture, "drag-end",
                     G_CALLBACK (gtk_flow_box_drag_gesture_end), box);
 }
- 
+
+static void
+gtk_flow_box_bound_model_changed (GListModel *list,
+                                  guint       position,
+                                  guint       removed,
+                                  guint       added,
+                                  gpointer    user_data)
+{
+  GtkFlowBox *box = user_data;
+  GtkFlowBoxPrivate *priv = BOX_PRIV (box);
+  gint i;
+
+  while (removed--)
+    {
+      GtkFlowBoxChild *child;
+
+      child = gtk_flow_box_get_child_at_index (box, position);
+      gtk_widget_destroy (GTK_WIDGET (child));
+    }
+
+  for (i = 0; i < added; i++)
+    {
+      GObject *item;
+      GtkWidget *widget;
+
+      item = g_list_model_get_item (list, position + i);
+      widget = priv->create_widget_func (item, priv->create_widget_func_data);
+      gtk_widget_show (widget);
+      gtk_flow_box_insert (box, widget, position + i);
+
+      g_object_unref (item);
+    }
+}
+
  /* Public API {{{2 */
 
 /**
@@ -4186,6 +4239,65 @@ gtk_flow_box_set_vadjustment (GtkFlowBox    *box,
     g_object_unref (priv->vadjustment);
   priv->vadjustment = adjustment;
   gtk_container_set_focus_vadjustment (GTK_CONTAINER (box), adjustment);
+}
+
+/**
+ * gtk_flow_box_bind_model:
+ * @box: a #GtkFlowBox
+ * @model: (allow-none): the #GListModel to be bound to @box
+ * @create_widget_func: a function that creates widgets for items
+ * @user_data: user data passed to @create_widget_func
+ * @user_data_free_func: function for freeing @user_data
+ *
+ * Binds @model to @box.
+ *
+ * If @box was already bound to a model, that previous binding is
+ * destroyed.
+ *
+ * The contents of @box are cleared and then filled with widgets that
+ * represent items from @model. @box is updated whenever @model changes.
+ * If @model is %NULL, @box is left empty.
+ *
+ * It is undefined to add or remove widgets directly (for example, with
+ * gtk_flow_box_insert() or gtk_container_add()) while @box is bound to a
+ * model.
+ *
+ * Since: 3.18
+ */
+void
+gtk_flow_box_bind_model (GtkFlowBox                 *box,
+                         GListModel                 *model,
+                         GtkFlowBoxCreateWidgetFunc  create_widget_func,
+                         gpointer                    user_data,
+                         GDestroyNotify              user_data_free_func)
+{
+  GtkFlowBoxPrivate *priv = BOX_PRIV (box);
+
+  g_return_if_fail (GTK_IS_FLOW_BOX (box));
+  g_return_if_fail (model == NULL || G_IS_LIST_MODEL (model));
+  g_return_if_fail (model == NULL || create_widget_func != NULL);
+
+  if (priv->bound_model)
+    {
+      if (priv->create_widget_func_data_destroy)
+        priv->create_widget_func_data_destroy (priv->create_widget_func_data);
+
+      g_signal_handlers_disconnect_by_func (priv->bound_model, gtk_flow_box_bound_model_changed, box);
+      g_clear_object (&priv->bound_model);
+    }
+
+  gtk_flow_box_forall (GTK_CONTAINER (box), FALSE, (GtkCallback) gtk_widget_destroy, NULL);
+
+  if (model == NULL)
+    return;
+
+  priv->bound_model = g_object_ref (model);
+  priv->create_widget_func = create_widget_func;
+  priv->create_widget_func_data = user_data;
+  priv->create_widget_func_data_destroy = user_data_free_func;
+
+  g_signal_connect (priv->bound_model, "items-changed", G_CALLBACK (gtk_flow_box_bound_model_changed), box);
+  gtk_flow_box_bound_model_changed (model, 0, 0, g_list_model_get_n_items (model), box);
 }
 
 /* Setters and getters {{{2 */
