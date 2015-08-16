@@ -134,7 +134,9 @@ gtk_entry_undo_command_merge (GtkUndoCommand *command,
   if (command_priv->entry != followup_priv->entry)
     return NULL;
 
-  if (!g_str_equal (command_priv->after.text, followup_priv->before.text))
+  if (!g_str_equal (command_priv->after.text, followup_priv->before.text) ||
+      command_priv->after.cursor != followup_priv->before.cursor ||
+      command_priv->after.selection_start != followup_priv->before.selection_start)
     return NULL;
 
   /* We don't insist on cursor positions being equal here, someone
