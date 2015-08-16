@@ -196,9 +196,9 @@ gtk_entry_undo_command_describe (GtkUndoCommand *command)
   if (before_len == after_len && before_len == prefix_len)
     return g_strdup (_("No changes")); /* huh? */
   else if (prefix_len + suffix_len == before_len)
-    return g_strdup_printf (_("Entered `%*s'"), after_len - prefix_len - suffix_len, priv->after.text + prefix_len);
+    return g_strdup_printf (_("Entered `%.*s'"), after_len - prefix_len - suffix_len, priv->after.text + prefix_len);
   else if (prefix_len + suffix_len == after_len)
-    return g_strdup_printf (_("Deleted `%*s'"), before_len - prefix_len - suffix_len, priv->before.text + prefix_len);
+    return g_strdup_printf (_("Deleted `%.*s'"), before_len - prefix_len - suffix_len, priv->before.text + prefix_len);
   else
     return g_strdup (_("Text changed"));
 }
