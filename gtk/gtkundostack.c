@@ -134,6 +134,26 @@ gtk_undo_stack_clear (GtkUndoStack *stack)
   g_list_model_items_changed (G_LIST_MODEL (stack), 0, len, 0);
 }
 
+static void G_GNUC_UNUSED
+gtk_undo_stack_dump (GtkUndoStack *stack)
+{
+  GtkUndoStackPrivate *priv = gtk_undo_stack_get_instance_private (stack);
+  GSequenceIter *iter;
+
+  g_print ("Undo Stack @ %p (%u items)\n", stack, g_sequence_get_length (priv->commands));
+
+  for (iter = g_sequence_get_begin_iter (priv->commands);
+       !g_sequence_iter_is_end (iter);
+       iter = g_sequence_iter_next (iter))
+    {
+      GtkUndoCommand *command = g_sequence_get (iter);
+      char *desc;
+
+      desc = gtk_undo_command_describe (command);
+      g_print ("  %s\n", desc);
+    }
+}
+
 static void
 gtk_undo_stack_push_internal (GtkUndoStack   *stack,
                               GtkUndoCommand *command,
