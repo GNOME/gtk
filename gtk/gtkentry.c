@@ -5371,6 +5371,17 @@ gtk_entry_remove_password_hint (gpointer data)
   return FALSE;
 }
 
+static void
+gtk_entry_record_undo_command (GtkEntry               *entry,
+                               const GtkEntrySnapshot *before)
+{
+  GtkUndoCommand *command;
+
+  command = gtk_entry_undo_command_new (entry, before);
+  gtk_undo_stack_push (entry->priv->undo_stack, command);
+  g_object_unref (command);
+}
+
 /* Default signal handlers
  */
 static void
@@ -5379,6 +5390,9 @@ gtk_entry_real_insert_text (GtkEditable *editable,
 			    gint         new_text_length,
 			    gint        *position)
 {
+  GtkEntry *entry = GTK_ENTRY (editable);
+  GtkEntryPrivate *priv = entry->priv;
+  GtkEntrySnapshot snapshot = { NULL, };
   guint n_inserted;
   gint n_chars;
 
@@ -5389,29 +5403,25 @@ gtk_entry_real_insert_text (GtkEditable *editable,
    * following signal handlers: buffer_inserted_text(), buffer_notify_display_text(),
    * buffer_notify_text(), buffer_notify_length()
    */
-  begin_change (GTK_ENTRY (editable));
+  if (priv->undo_mode == GTK_ENTRY_UNDO_RECORD)
+    gtk_entry_snapshot_init_from_entry (&snapshot, entry);
 
-  n_inserted = gtk_entry_buffer_insert_text (get_buffer (GTK_ENTRY (editable)), *position, new_text, n_chars);
+  begin_change (entry);
 
-  end_change (GTK_ENTRY (editable));
+  n_inserted = gtk_entry_buffer_insert_text (get_buffer (entry), *position, new_text, n_chars);
+
+  end_change (entry);
+
+  if (priv->undo_mode == GTK_ENTRY_UNDO_RECORD)
+    {
+      gtk_entry_record_undo_command (entry, &snapshot);
+      gtk_entry_snapshot_clear (&snapshot);
+    }
 
   if (n_inserted != n_chars)
       gtk_widget_error_bell (GTK_WIDGET (editable));
 
   *position += n_inserted;
-}
-
-static void
-gtk_entry_record_undo_command (GtkEntry   *entry,
-                               int         start_pos,
-                               const char *deleted_text,
-                               const char *inserted_text)
-{
-  GtkUndoCommand *command;
-
-  command = gtk_entry_undo_command_new (entry, start_pos, deleted_text, inserted_text);
-  gtk_undo_stack_push (entry->priv->undo_stack, command);
-  g_object_unref (command);
 }
 
 static void
@@ -5421,6 +5431,7 @@ gtk_entry_real_delete_text (GtkEditable *editable,
 {
   GtkEntry *entry = GTK_ENTRY (editable);
   GtkEntryPrivate *priv = entry->priv;
+  GtkEntrySnapshot snapshot = { NULL, };
 
   /*
    * The actual deletion from the buffer. This will end up firing the
@@ -5428,23 +5439,20 @@ gtk_entry_real_delete_text (GtkEditable *editable,
    * buffer_notify_text(), buffer_notify_length()
    */
 
-  begin_change (entry);
-
   if (priv->undo_mode == GTK_ENTRY_UNDO_RECORD)
-    {
-      char *deleted_text = gtk_entry_get_chars (GTK_EDITABLE (entry), start_pos, end_pos);
+    gtk_entry_snapshot_init_from_entry (&snapshot, entry);
 
-      gtk_entry_record_undo_command (entry,
-                                     start_pos,
-                                     deleted_text,
-                                     NULL);
-
-      g_free (deleted_text);
-    }
+  begin_change (entry);
 
   gtk_entry_buffer_delete_text (get_buffer (entry), start_pos, end_pos - start_pos);
 
   end_change (entry);
+
+  if (priv->undo_mode == GTK_ENTRY_UNDO_RECORD)
+    {
+      gtk_entry_record_undo_command (entry, &snapshot);
+      gtk_entry_snapshot_clear (&snapshot);
+    }
 }
 
 /* GtkEntryBuffer signal handlers
@@ -5473,8 +5481,6 @@ buffer_inserted_text (GtkEntryBuffer *buffer,
 
   if (priv->undo_mode == GTK_ENTRY_UNDO_RESET)
     gtk_undo_stack_clear (priv->undo_stack);
-  else if (priv->undo_mode == GTK_ENTRY_UNDO_RECORD)
-    gtk_entry_record_undo_command (entry, position, NULL, chars);
 
   /* Calculate the password hint if it needs to be displayed. */
   if (n_chars == 1 && !priv->visible)

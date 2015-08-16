@@ -34,6 +34,13 @@ G_BEGIN_DECLS
 
 typedef struct _GtkEntryUndoCommand           GtkEntryUndoCommand;
 typedef struct _GtkEntryUndoCommandClass      GtkEntryUndoCommandClass;
+typedef struct _GtkEntrySnapshot GtkEntrySnapshot;
+
+struct _GtkEntrySnapshot {
+  char *text;                   /* text of the whole entry */
+  guint cursor;                 /* cursor position */
+  guint selection_start;        /* selection start. Equal to cursor if no selection */
+};
 
 struct _GtkEntryUndoCommand
 {
@@ -47,10 +54,12 @@ struct _GtkEntryUndoCommandClass
 
 GType                   gtk_entry_undo_command_get_type         (void) G_GNUC_CONST;
 
-GtkUndoCommand *        gtk_entry_undo_command_new              (GtkEntry       *entry,
-                                                                 int             position,
-                                                                 const char     *text_deleted,
-                                                                 const char     *text_entered);
+GtkUndoCommand *        gtk_entry_undo_command_new              (GtkEntry               *entry,
+                                                                 const GtkEntrySnapshot *before);
+
+void                    gtk_entry_snapshot_init_from_entry      (GtkEntrySnapshot       *snapshot,
+                                                                 GtkEntry               *entry);
+void                    gtk_entry_snapshot_clear                (GtkEntrySnapshot       *snapshot);
 
 G_END_DECLS
 
