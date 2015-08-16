@@ -202,11 +202,11 @@ static void                 gtk_list_box_add                          (GtkContai
                                                                        GtkWidget           *widget);
 static void                 gtk_list_box_remove                       (GtkContainer        *container,
                                                                        GtkWidget           *widget);
-static void                 gtk_list_box_forall_internal              (GtkContainer        *container,
+static void                 gtk_list_box_forall                       (GtkContainer        *container,
                                                                        gboolean             include_internals,
                                                                        GtkCallback          callback,
                                                                        gpointer             callback_target);
-static void                 gtk_list_box_compute_expand_internal      (GtkWidget           *widget,
+static void                 gtk_list_box_compute_expand               (GtkWidget           *widget,
                                                                        gboolean            *hexpand,
                                                                        gboolean            *vexpand);
 static GType                gtk_list_box_child_type                   (GtkContainer        *container);
@@ -418,7 +418,7 @@ gtk_list_box_class_init (GtkListBoxClass *klass)
   widget_class->focus = gtk_list_box_focus;
   widget_class->draw = gtk_list_box_draw;
   widget_class->realize = gtk_list_box_realize;
-  widget_class->compute_expand = gtk_list_box_compute_expand_internal;
+  widget_class->compute_expand = gtk_list_box_compute_expand;
   widget_class->get_request_mode = gtk_list_box_get_request_mode;
   widget_class->get_preferred_height = gtk_list_box_get_preferred_height;
   widget_class->get_preferred_height_for_width = gtk_list_box_get_preferred_height_for_width;
@@ -429,7 +429,7 @@ gtk_list_box_class_init (GtkListBoxClass *klass)
   widget_class->parent_set = gtk_list_box_parent_set;
   container_class->add = gtk_list_box_add;
   container_class->remove = gtk_list_box_remove;
-  container_class->forall = gtk_list_box_forall_internal;
+  container_class->forall = gtk_list_box_forall;
   container_class->child_type = gtk_list_box_child_type;
   klass->activate_cursor_row = gtk_list_box_activate_cursor_row;
   klass->toggle_cursor_row = gtk_list_box_toggle_cursor_row;
@@ -2380,10 +2380,10 @@ gtk_list_box_remove (GtkContainer *container,
 }
 
 static void
-gtk_list_box_forall_internal (GtkContainer *container,
-                              gboolean      include_internals,
-                              GtkCallback   callback,
-                              gpointer      callback_target)
+gtk_list_box_forall (GtkContainer *container,
+                     gboolean      include_internals,
+                     GtkCallback   callback,
+                     gpointer      callback_target)
 {
   GtkListBoxPrivate *priv = BOX_PRIV (container);
   GSequenceIter *iter;
@@ -2404,9 +2404,9 @@ gtk_list_box_forall_internal (GtkContainer *container,
 }
 
 static void
-gtk_list_box_compute_expand_internal (GtkWidget *widget,
-                                      gboolean  *hexpand,
-                                      gboolean  *vexpand)
+gtk_list_box_compute_expand (GtkWidget *widget,
+                             gboolean  *hexpand,
+                             gboolean  *vexpand)
 {
   GTK_WIDGET_CLASS (gtk_list_box_parent_class)->compute_expand (widget,
                                                                 hexpand, vexpand);
@@ -3737,7 +3737,7 @@ gtk_list_box_bind_model (GtkListBox                   *box,
       g_clear_object (&priv->bound_model);
     }
 
-  gtk_list_box_forall_internal (GTK_CONTAINER (box), FALSE, (GtkCallback) gtk_widget_destroy, NULL);
+  gtk_list_box_forall (GTK_CONTAINER (box), FALSE, (GtkCallback) gtk_widget_destroy, NULL);
 
   if (model == NULL)
     return;
