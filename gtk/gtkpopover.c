@@ -610,7 +610,8 @@ gtk_popover_unmap (GtkWidget *widget)
   gdk_window_hide (gtk_widget_get_window (widget));
   GTK_WIDGET_CLASS (gtk_popover_parent_class)->unmap (widget);
 
-  gtk_window_set_default (priv->window, priv->prev_default);
+  if (gtk_window_get_default_widget (priv->window) == priv->default_widget)
+    gtk_window_set_default (priv->window, priv->prev_default);
   g_clear_object (&priv->prev_default);
 }
 
