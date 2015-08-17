@@ -107,6 +107,12 @@ gboolean
 gtk_undo_command_real_should_merge (GtkUndoCommand *command,
                                     GtkUndoCommand *followup)
 {
+  GtkUndoCommandPrivate *command_priv = gtk_undo_command_get_instance_private (command);
+  GtkUndoCommandPrivate *followup_priv = gtk_undo_command_get_instance_private (followup);
+
+  if (followup_priv->timestamp - command_priv->timestamp > 5 * G_USEC_PER_SEC)
+    return FALSE;
+
   return TRUE;
 }
 
