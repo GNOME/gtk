@@ -77,6 +77,7 @@ struct _GtkPlacesViewPrivate
   guint                          should_open_location : 1;
   guint                          should_pulse_entry : 1;
   guint                          entry_pulse_timeout_id;
+  guint                          connecting_to_server : 1;
 };
 
 static void        mount_volume                                  (GtkPlacesView *view,
@@ -912,6 +913,10 @@ server_mount_ready_cb (GObject      *source_file,
   set_busy_cursor (view, FALSE);
 
   g_file_mount_enclosing_volume_finish (location, res, &error);
+  /* Restore from Cancel to Connect */
+  gtk_button_set_label (GTK_BUTTON (priv->connect_button), _("Con_nect"));
+  gtk_widget_set_sensitive (priv->address_entry, TRUE);
+  priv->connecting_to_server = FALSE;
 
   if (error)
     {
@@ -1130,16 +1135,24 @@ mount_server (GtkPlacesView *view,
   GtkWidget *toplevel;
 
   priv = gtk_places_view_get_instance_private (view);
-  toplevel = gtk_widget_get_toplevel (GTK_WIDGET (view));
-  operation = gtk_mount_operation_new (GTK_WINDOW (toplevel));
 
   g_cancellable_cancel (priv->cancellable);
   g_clear_object (&priv->cancellable);
+  /* User cliked when the operation was ongoing, so wanted to cancel it */
+  if (priv->connecting_to_server)
+    return;
+
   priv->cancellable = g_cancellable_new ();
+  toplevel = gtk_widget_get_toplevel (GTK_WIDGET (view));
+  operation = gtk_mount_operation_new (GTK_WINDOW (toplevel));
 
   set_busy_cursor (view, TRUE);
   priv->should_pulse_entry = TRUE;
   gtk_entry_set_progress_pulse_step (GTK_ENTRY (priv->address_entry), 0.1);
+  /* Allow to cancel the operation */
+  gtk_button_set_label (GTK_BUTTON (priv->connect_button), _("Cance_l"));
+  gtk_widget_set_sensitive (priv->address_entry, FALSE);
+  priv->connecting_to_server = TRUE;
 
   if (priv->entry_pulse_timeout_id == 0)
     priv->entry_pulse_timeout_id = g_timeout_add (100, (GSourceFunc) pulse_entry_cb, view);
