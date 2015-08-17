@@ -59,6 +59,8 @@ struct _GtkUndoCommandClass
 
 GType                   gtk_undo_command_get_type       (void) G_GNUC_CONST;
 
+gint64                  gtk_undo_command_get_timestamp  (GtkUndoCommand                *command);
+
 gboolean                gtk_undo_command_undo           (GtkUndoCommand                *command);
 gboolean                gtk_undo_command_redo           (GtkUndoCommand                *command);
 GtkUndoCommand *        gtk_undo_command_merge          (GtkUndoCommand                *command,

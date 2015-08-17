@@ -105,13 +105,16 @@ gtk_entry_undo_command_redo (GtkUndoCommand *command)
 
 static GtkUndoCommand *
 gtk_entry_undo_command_new_from_snapshots (GtkEntry               *entry,
+                                           gint64                  timestamp,
                                            const GtkEntrySnapshot *before,
                                            const GtkEntrySnapshot *after)
 {
   GtkEntryUndoCommand *command;
   GtkEntryUndoCommandPrivate *priv;
 
-  command = g_object_new (GTK_TYPE_ENTRY_UNDO_COMMAND, NULL);
+  command = g_object_new (GTK_TYPE_ENTRY_UNDO_COMMAND,
+                          "timestamp", timestamp,
+                          NULL);
   priv = gtk_entry_undo_command_get_instance_private (command);
 
   priv->entry = entry;
@@ -134,7 +137,10 @@ gtk_entry_undo_command_merge (GtkUndoCommand *command,
   if (command_priv->entry != followup_priv->entry)
     return NULL;
 
-  return gtk_entry_undo_command_new_from_snapshots (command_priv->entry, &command_priv->before, &followup_priv->after);
+  return gtk_entry_undo_command_new_from_snapshots (command_priv->entry,
+                                                    gtk_undo_command_get_timestamp (followup),
+                                                    &command_priv->before,
+                                                    &followup_priv->after);
 }
 
 gboolean
@@ -262,7 +268,7 @@ gtk_entry_undo_command_new (GtkEntry               *entry,
 
   gtk_entry_snapshot_init_from_entry (&after, entry);
 
-  result = gtk_entry_undo_command_new_from_snapshots (entry, before, &after);
+  result = gtk_entry_undo_command_new_from_snapshots (entry, 0, before, &after);
   
   gtk_entry_snapshot_clear (&after);
 
