@@ -604,6 +604,14 @@ gtk_print_operation_create_custom_widget (GtkPrintOperation *operation)
   return NULL;
 }
 
+static gboolean
+gtk_print_operation_paginate (GtkPrintOperation *operation,
+                              GtkPrintContext   *context)
+{
+  /* assume the number of pages is already set and pagination is not needed */
+  return TRUE;
+}
+
 static void
 gtk_print_operation_done (GtkPrintOperation       *operation,
                           GtkPrintOperationResult  result)
@@ -634,6 +642,19 @@ custom_widget_accumulator (GSignalInvocationHint *ihint,
   return continue_emission;
 }
 
+static gboolean
+paginate_accumulator (GSignalInvocationHint *ihint,
+                      GValue                *return_accu,
+                      const GValue          *handler_return,
+                      gpointer               dummy)
+{
+  *return_accu = *handler_return;
+
+  /* Stop signal emission on first invocation, so if it's a callback then
+   * the default handler won't run. */
+  return FALSE;
+}
+
 static void
 gtk_print_operation_class_init (GtkPrintOperationClass *class)
 {
@@ -645,6 +666,7 @@ gtk_print_operation_class_init (GtkPrintOperationClass *class)
  
   class->preview = gtk_print_operation_preview_handler; 
   class->create_custom_widget = gtk_print_operation_create_custom_widget;
+  class->paginate = gtk_print_operation_paginate;
   class->done = gtk_print_operation_done;
   
   g_type_class_add_private (gobject_class, sizeof (GtkPrintOperationPrivate));
@@ -727,7 +749,7 @@ gtk_print_operation_class_init (GtkPrintOperationClass *class)
 		  G_TYPE_FROM_CLASS (gobject_class),
 		  G_SIGNAL_RUN_LAST,
 		  G_STRUCT_OFFSET (GtkPrintOperationClass, paginate),
-		  _gtk_boolean_handled_accumulator, NULL,
+		  paginate_accumulator, NULL,
 		  _gtk_marshal_BOOLEAN__OBJECT,
 		  G_TYPE_BOOLEAN, 1, GTK_TYPE_PRINT_CONTEXT);
 
@@ -2599,6 +2621,7 @@ prepare_data (PrintPagesData *data)
 {
   GtkPrintOperationPrivate *priv;
   GtkPageSetup             *page_setup;
+  gboolean                  paginated = FALSE;
   gint                      i, j, counter;
 
   priv = data->op->priv;
@@ -2627,14 +2650,9 @@ prepare_data (PrintPagesData *data)
       return;
     }
 
-  if (g_signal_has_handler_pending (data->op, signals[PAGINATE], 0, FALSE))
-    {
-      gboolean paginated = FALSE;
-
-      g_signal_emit (data->op, signals[PAGINATE], 0, priv->print_context, &paginated);
-      if (!paginated)
-        return;
-    }
+  g_signal_emit (data->op, signals[PAGINATE], 0, priv->print_context, &paginated);
+  if (!paginated)
+    return;
 
   /* Initialize parts of PrintPagesData that depend on nr_of_pages
    */
