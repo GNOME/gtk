@@ -283,7 +283,7 @@
                 <property name="can_focus">True</property>
                 <property name="hexpand">True</property>
                 <property name="width_chars">20</property>
-                <property name="placeholder_text" translatable="yes">Address…</property>
+                <property name="placeholder_text" translatable="yes">Enter server address…</property>
                 <property name="completion">address_entry_completion</property>
                 <signal name="notify::text" handler="on_address_entry_text_changed" object="GtkPlacesView" swapped="yes" />
                 <signal name="activate" handler="on_connect_button_clicked" object="GtkPlacesView" swapped="yes" />
