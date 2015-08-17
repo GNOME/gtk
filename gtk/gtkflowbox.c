@@ -4036,9 +4036,22 @@ gtk_flow_box_bound_model_changed (GListModel *list,
 
       item = g_list_model_get_item (list, position + i);
       widget = priv->create_widget_func (item, priv->create_widget_func_data);
+
+      /* We need to sink the floating reference here, so that we can accept
+       * both instances created with a floating reference (e.g. C functions
+       * that just return the result of g_object_new()) and without (e.g.
+       * from language bindings which will automatically sink the floating
+       * reference).
+       *
+       * See the similar code in gtklistbox.c:gtk_list_box_bound_model_changed.
+       */
+      if (g_object_is_floating (widget))
+        g_object_ref_sink (widget);
+
       gtk_widget_show (widget);
       gtk_flow_box_insert (box, widget, position + i);
 
+      g_object_unref (widget);
       g_object_unref (item);
     }
 }
