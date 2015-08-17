@@ -135,6 +135,8 @@
                     <property name="can_focus">True</property>
                     <property name="left-margin">20</property>
                     <property name="right-margin">20</property>
+                    <property name="top-margin">20</property>
+                    <property name="bottom-margin">20</property>
                     <property name="pixels_above_lines">2</property>
                     <property name="pixels_below_lines">2</property>
                     <property name="editable">False</property>
@@ -170,6 +172,8 @@
                     <property name="can_focus">True</property>
                     <property name="left-margin">20</property>
                     <property name="right-margin">20</property>
+                    <property name="top-margin">20</property>
+                    <property name="bottom-margin">20</property>
                     <property name="editable">False</property>
                     <property name="cursor_visible">False</property>
                   </object>
