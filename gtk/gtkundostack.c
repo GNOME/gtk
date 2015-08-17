@@ -168,6 +168,8 @@ gtk_undo_stack_push_internal (GtkUndoStack   *stack,
   g_sequence_prepend (priv->commands, command);
 
   g_list_model_items_changed (G_LIST_MODEL (stack), 0, replace ? 1 : 0, 1);
+
+  gtk_undo_stack_dump (stack);
 }
 
 void
@@ -185,12 +187,15 @@ gtk_undo_stack_push (GtkUndoStack   *stack,
   if (!g_sequence_iter_is_end (begin_iter))
     {
       previous = g_sequence_get (begin_iter);
-      merge = gtk_undo_command_merge (previous, command);
-      if (merge)
+      if (gtk_undo_command_should_merge (previous, command))
         {
-          gtk_undo_stack_push_internal (stack, merge, TRUE);
-          g_object_unref (merge);
-          return;
+          merge = gtk_undo_command_merge (previous, command);
+          if (merge)
+            {
+              gtk_undo_stack_push_internal (stack, merge, TRUE);
+              g_object_unref (merge);
+              return;
+            }
         }
     }
 

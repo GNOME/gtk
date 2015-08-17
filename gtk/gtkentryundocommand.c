@@ -134,15 +134,31 @@ gtk_entry_undo_command_merge (GtkUndoCommand *command,
   if (command_priv->entry != followup_priv->entry)
     return NULL;
 
+  return gtk_entry_undo_command_new_from_snapshots (command_priv->entry, &command_priv->before, &followup_priv->after);
+}
+
+gboolean
+gtk_entry_undo_command_should_merge (GtkUndoCommand *command,
+                                     GtkUndoCommand *followup)
+{
+  GtkEntryUndoCommandPrivate *command_priv = gtk_entry_undo_command_get_instance_private (GTK_ENTRY_UNDO_COMMAND (command));
+  GtkEntryUndoCommandPrivate *followup_priv = gtk_entry_undo_command_get_instance_private (GTK_ENTRY_UNDO_COMMAND (followup));
+
+  if (!GTK_UNDO_COMMAND_CLASS (gtk_entry_undo_command_parent_class)->should_merge (command, followup))
+    return FALSE;
+
+  if (!GTK_IS_ENTRY_UNDO_COMMAND (followup))
+    return FALSE;
+
+  if (command_priv->entry != followup_priv->entry)
+    return FALSE;
+
   if (!g_str_equal (command_priv->after.text, followup_priv->before.text) ||
       command_priv->after.cursor != followup_priv->before.cursor ||
       command_priv->after.selection_start != followup_priv->before.selection_start)
-    return NULL;
+    return FALSE;
 
-  /* We don't insist on cursor positions being equal here, someone
-   * might ie. move the cursor to correct a typo
-   */
-  return gtk_entry_undo_command_new_from_snapshots (command_priv->entry, &command_priv->before, &followup_priv->after);
+  return TRUE;
 }
 
 static guint
@@ -225,6 +241,7 @@ gtk_entry_undo_command_class_init (GtkEntryUndoCommandClass *klass)
   undo_class->undo = gtk_entry_undo_command_undo;
   undo_class->redo = gtk_entry_undo_command_redo;
   undo_class->merge = gtk_entry_undo_command_merge;
+  undo_class->should_merge = gtk_entry_undo_command_should_merge;
   undo_class->describe = gtk_entry_undo_command_describe;
 }
 

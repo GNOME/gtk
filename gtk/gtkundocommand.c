@@ -54,6 +54,13 @@ gtk_undo_command_real_merge (GtkUndoCommand *command,
   return NULL;
 }
 
+gboolean
+gtk_undo_command_real_should_merge (GtkUndoCommand *command,
+                                    GtkUndoCommand *followup)
+{
+  return TRUE;
+}
+
 char *
 gtk_undo_command_real_describe (GtkUndoCommand *command)
 {
@@ -71,6 +78,7 @@ gtk_undo_command_class_init (GtkUndoCommandClass *klass)
   klass->undo = gtk_undo_command_real_undo;
   klass->redo = gtk_undo_command_real_redo;
   klass->merge = gtk_undo_command_real_merge;
+  klass->should_merge = gtk_undo_command_real_should_merge;
   klass->describe = gtk_undo_command_real_describe;
 }
 
@@ -106,6 +114,28 @@ gtk_undo_command_merge (GtkUndoCommand *command,
   g_return_val_if_fail (GTK_IS_UNDO_COMMAND (followup_command), NULL);
 
   return GTK_UNDO_COMMAND_GET_CLASS (command)->merge (command, followup_command);
+}
+
+/*
+ * gtk_undo_command_should_merge:
+ * @command: The command that would be undone second
+ * @followup_command: The command that would be undone first
+ *
+ * Determines if @command and @followup_comand should be merged for
+ * undo. That is, it determines if when the user triggers an undo
+ * (for example by pressing Ctrl-z), if both commands should be
+ * undone at once or if they should require two seperate undos.
+ *
+ * Returns: %TRUE if the commands should be merged for UI purposes.
+ */
+gboolean
+gtk_undo_command_should_merge (GtkUndoCommand *command,
+                               GtkUndoCommand *followup_command)
+{
+  g_return_val_if_fail (GTK_IS_UNDO_COMMAND (command), FALSE);
+  g_return_val_if_fail (GTK_IS_UNDO_COMMAND (followup_command), FALSE);
+
+  return GTK_UNDO_COMMAND_GET_CLASS (command)->should_merge (command, followup_command);
 }
 
 char *
