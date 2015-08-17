@@ -9,12 +9,6 @@ CHECK_PACKAGE = gdk-pixbuf-2.0 atk pangocairo gio-2.0
 built_install_girs = Gdk-$(APIVERSION).gir GdkWin32-$(APIVERSION).gir Gtk-$(APIVERSION).gir
 built_install_typelibs = Gdk-$(APIVERSION).typelib GdkWin32-$(APIVERSION).typelib Gtk-$(APIVERSION).typelib
 
-!if "$(PLAT)" == "x64"
-TIME_T_DEFINE = -Dtime_t=long long
-!else
-TIME_T_DEFINE = -Dtime_t=long
-!endif
-
 !include introspection-msvc.mak
 
 !if "$(BUILD_INTROSPECTION)" == "TRUE"
@@ -27,7 +21,7 @@ gdk_list gdkwin32_list gtk_list:
 setgirbuildnev:
 	@set CC=$(CC)
 	@set PYTHONPATH=$(BASEDIR)\lib\gobject-introspection
-	@set PATH=win32\vs$(VSVER)\$(CFG)\$(PLAT)\bin;$(BASEDIR)\bin;$(PATH);$(MINGWDIR)\bin
+	@set PATH=win32\vs$(VSVER)\$(CFG)\$(PLAT)\bin;$(BASEDIR)\bin;$(PATH)
 	@set PKG_CONFIG_PATH=$(PKG_CONFIG_PATH)
 	@set LIB=win32\vs$(VSVER)\$(CFG)\$(PLAT)\bin;$(LIB)
 
@@ -37,7 +31,7 @@ Gdk-$(APIVERSION).gir: gdk_list
 	-I$(BASEDIR)\include\glib-2.0 -I$(BASEDIR)\lib\glib-2.0\include	\
 	-I$(BASEDIR)\include\pango-1.0 -I$(BASEDIR)\include\atk-1.0	\
 	-I$(BASEDIR)\include\gdk-pixbuf-2.0 -I$(BASEDIR)\include	\
-	$(TIME_T_DEFINE) --namespace=Gdk --nsversion=3.0	\
+	--namespace=Gdk --nsversion=3.0	\
 	--include=Gio-2.0 --include=GdkPixbuf-2.0	\
 	--include=Pango-1.0 --include=cairo-1.0	\
 	--no-libtool --library=gdk-3.0	\
@@ -52,7 +46,7 @@ GdkWin32-$(APIVERSION).gir: gdkwin32_list
 	-I$(BASEDIR)\include\glib-2.0 -I$(BASEDIR)\lib\glib-2.0\include	\
 	-I$(BASEDIR)\include\pango-1.0 -I$(BASEDIR)\include\atk-1.0	\
 	-I$(BASEDIR)\include\gdk-pixbuf-2.0 -I$(BASEDIR)\include	\
-	$(TIME_T_DEFINE) --namespace=GdkWin32 --nsversion=3.0	\
+	--namespace=GdkWin32 --nsversion=3.0	\
 	--include=Gio-2.0 --include=GdkPixbuf-2.0	\
 	--include=Pango-1.0	--include-uninstalled=./Gdk-$(APIVERSION).gir	\
 	--no-libtool --library=gdk-3.0	\
@@ -73,7 +67,7 @@ Gtk-$(APIVERSION).gir: gtk_list
 	--reparse-validate --add-include-path=$(G_IR_INCLUDEDIR) --add-include-path=.	\
 	--pkg-export gtk+-3.0 --warn-all --c-include="gtk/gtkx.h"	\
 	-DG_LOG_DOMAIN=\"Gtk\" -DGTK_LIBDIR=\"/dummy/lib\"	\
-	$(TIME_T_DEFINE) -DGTK_DATADIR=\"/dummy/share\" -DGTK_DATA_PREFIX=\"/dummy\"	\
+	-DGTK_DATADIR=\"/dummy/share\" -DGTK_DATA_PREFIX=\"/dummy\"	\
 	-DGTK_SYSCONFDIR=\"/dummy/etc\" -DGTK_VERSION=\"@GTK_VERSION@\"	\
 	-DGTK_BINARY_VERSION=\"3.0.0\" -DGTK_HOST=\"i686-pc-vs$(VSVER)\"	\
 	-DGTK_COMPILATION -DGTK_PRINT_BACKENDS=\"file\"	\
