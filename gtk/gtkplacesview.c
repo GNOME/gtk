@@ -73,11 +73,14 @@ struct _GtkPlacesViewPrivate
   GtkEntryCompletion            *address_entry_completion;
   GtkListStore                  *completion_store;
 
+  GCancellable                  *networks_fetching_cancellable;
+
   guint                          local_only : 1;
   guint                          should_open_location : 1;
   guint                          should_pulse_entry : 1;
   guint                          entry_pulse_timeout_id;
   guint                          connecting_to_server : 1;
+  guint                          fetching_networks : 1;
 };
 
 static void        mount_volume                                  (GtkPlacesView *view,
@@ -378,12 +381,14 @@ gtk_places_view_finalize (GObject *object)
     g_source_remove (priv->entry_pulse_timeout_id);
 
   g_cancellable_cancel (priv->cancellable);
+  g_cancellable_cancel (priv->networks_fetching_cancellable);
 
   g_clear_pointer (&priv->search_query, g_free);
   g_clear_object (&priv->server_list_file);
   g_clear_object (&priv->server_list_monitor);
   g_clear_object (&priv->volume_monitor);
   g_clear_object (&priv->cancellable);
+  g_clear_object (&priv->networks_fetching_cancellable);
 
   G_OBJECT_CLASS (gtk_places_view_parent_class)->finalize (object);
 }
@@ -784,28 +789,150 @@ add_drive (GtkPlacesView *view,
 }
 
 static void
-add_computer (GtkPlacesView *view)
+add_file (GtkPlacesView *view,
+          GFile         *file,
+          GIcon         *icon,
+          const gchar   *display_name,
+          const gchar   *path,
+          gboolean       is_network)
 {
   GtkWidget *row;
-  GIcon *icon;
-  GFile *file;
-
-  file = g_file_new_for_path ("/");
-  icon = g_themed_icon_new_with_default_fallbacks ("drive-harddisk");
-
   row = g_object_new (GTK_TYPE_PLACES_VIEW_ROW,
                       "icon", icon,
-                      "name", _("Computer"),
-                      "path", "/",
+                      "name", display_name,
+                      "path", path,
                       "volume", NULL,
                       "mount", NULL,
                       "file", file,
+                      "is_network", is_network,
                       NULL);
 
-  insert_row (view, row, FALSE);
+  insert_row (view, row, is_network);
+}
 
-  g_object_unref (icon);
-  g_object_unref (file);
+static void
+populate_networks (GtkPlacesView   *view,
+                   GFileEnumerator *enumerator,
+                   GList           *detected_networks)
+{
+  GList *l;
+  GFile *file;
+  GFile *activatable_file;
+  gchar *uri;
+  GFileType type;
+  GIcon *icon;
+  gchar *display_name;
+
+  for (l = detected_networks; l != NULL; l = l->next)
+    {
+      file = g_file_enumerator_get_child (enumerator, l->data);
+      type = g_file_info_get_file_type (l->data);
+      if (type == G_FILE_TYPE_SHORTCUT || type == G_FILE_TYPE_MOUNTABLE)
+        uri = g_file_info_get_attribute_as_string (l->data, G_FILE_ATTRIBUTE_STANDARD_TARGET_URI);
+      else
+        uri = g_file_get_uri (file);
+      activatable_file = g_file_new_for_uri (uri);
+      display_name = g_file_info_get_attribute_as_string (l->data, G_FILE_ATTRIBUTE_STANDARD_DISPLAY_NAME);
+      icon = g_file_info_get_icon (l->data);
+
+      add_file (view, activatable_file, icon, display_name, NULL, TRUE);
+
+      g_free (uri);
+      g_free (display_name);
+      g_clear_object (&file);
+      g_clear_object (&activatable_file);
+    }
+}
+
+static void
+network_enumeration_next_files_finished (GObject      *source_object,
+                                         GAsyncResult *res,
+                                         gpointer      user_data)
+{
+  GtkPlacesViewPrivate *priv;
+  GtkPlacesView *view;
+  GList *detected_networks;
+  GError *error;
+
+  view = GTK_PLACES_VIEW (user_data);
+  priv = gtk_places_view_get_instance_private (view);
+  error = NULL;
+
+  priv->fetching_networks = FALSE;
+  detected_networks = g_file_enumerator_next_files_finish (G_FILE_ENUMERATOR (source_object),
+                                                           res, &error);
+
+  if (error)
+    {
+      if (g_error_matches (error, G_IO_ERROR, G_IO_ERROR_CANCELLED))
+        g_warning ("Failed to fetch network locations: %s", error->message);
+
+      g_clear_error (&error);
+    }
+  else
+    {
+      populate_networks (view, G_FILE_ENUMERATOR (source_object), detected_networks);
+
+      g_list_free_full (detected_networks, g_object_unref);
+    }
+}
+
+static void
+network_enumeration_finished (GObject      *source_object,
+                              GAsyncResult *res,
+                              gpointer      user_data)
+{
+  GtkPlacesViewPrivate *priv;
+  GFileEnumerator *enumerator;
+  GtkPlacesView *view;
+  GError *error;
+
+  view = GTK_PLACES_VIEW (user_data);
+  priv = gtk_places_view_get_instance_private (view);
+  error = NULL;
+  enumerator = g_file_enumerate_children_finish (G_FILE (source_object), res, &error);
+
+  if (error)
+    {
+      if (g_error_matches (error, G_IO_ERROR, G_IO_ERROR_CANCELLED))
+        g_warning ("Failed to fetch network locations: %s", error->message);
+
+      g_clear_error (&error);
+    }
+  else
+    {
+      g_file_enumerator_next_files_async (enumerator,
+                                          G_MAXINT32,
+                                          G_PRIORITY_DEFAULT,
+                                          priv->networks_fetching_cancellable,
+                                          network_enumeration_next_files_finished,
+                                          user_data);
+    }
+}
+
+static void
+fetch_networks (GtkPlacesView *view)
+{
+  GtkPlacesViewPrivate *priv;
+  GFile *network_file;
+
+  priv = gtk_places_view_get_instance_private (view);
+  network_file = g_file_new_for_uri ("network:///");
+
+  g_cancellable_cancel (priv->networks_fetching_cancellable);
+  g_clear_object (&priv->networks_fetching_cancellable);
+  priv->networks_fetching_cancellable = g_cancellable_new ();
+  priv->fetching_networks = TRUE;
+
+  g_file_enumerate_children_async (network_file,
+                                   "standard::type,standard::target-uri,standard::name,standard::display-name,standard::icon",
+                                   G_FILE_QUERY_INFO_NONE,
+                                   G_PRIORITY_DEFAULT,
+                                   priv->networks_fetching_cancellable,
+                                   network_enumeration_finished,
+                                   view);
+
+  g_clear_object (&network_file);
 }
 
 static void
@@ -817,6 +944,8 @@ update_places (GtkPlacesView *view)
   GList *volumes;
   GList *drives;
   GList *l;
+  GIcon *icon;
+  GFile *file;
 
   priv = gtk_places_view_get_instance_private (view);
 
@@ -825,7 +954,13 @@ update_places (GtkPlacesView *view)
   g_list_free_full (children, (GDestroyNotify) gtk_widget_destroy);
 
   /* Add "Computer" row */
-  add_computer (view);
+  file = g_file_new_for_path ("/");
+  icon = g_themed_icon_new_with_default_fallbacks ("drive-harddisk");
+
+  add_file (view, file, icon, _("Computer"), "/", FALSE);
+
+  g_clear_object (&file);
+  g_clear_object (&icon);
 
   /* Add currently connected drives */
   drives = g_volume_monitor_get_connected_drives (priv->volume_monitor);
@@ -888,6 +1023,9 @@ update_places (GtkPlacesView *view)
 
   /* load saved servers */
   populate_servers (view);
+
+  /* fetch networks and add them asynchronously */
+  fetch_networks (view);
 
   update_view_mode (view);
 }
