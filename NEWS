@@ -11,6 +11,16 @@ Overview of Changes in GTK+ 3.17.7
 * GtkColorChooser:
  - Make it possible to start with the editor
 
+* GtkTextView:
+ - Support top margins
+ - Use CSS padding from the theme
+
+* GtkFlowBox:
+ - Allow using a GListModel
+
+* GtkCellRendererText:
+ - Support alpha in foreground color
+
 * Theme and CSS:
  - HighContrast theme improvements
 
@@ -31,12 +41,18 @@ Overview of Changes in GTK+ 3.17.7
  753391 [HighContrast] GtkPlacesSidebar:backdrop is white-covered on t...
  753392 listbox: Avoid using show_all on rows
  753451 GtkLinkButton's context menu has underlined labels
+ 753568 popover: Optimize the transition
+ 753621 wayland: calculate screen physical size
+ 406159 gtk text view widget doesn't have set_top_margin function
+ 746435 wayland: Use g_get_prgname() to get the xdg_surface.set_app_id string
 
 * Translation updates:
  Catalan
+ Galician
  Lithuanian
  Norwegian bokmål
  Portuguese
+ Slovak
  Spanish
  Turkish
 
