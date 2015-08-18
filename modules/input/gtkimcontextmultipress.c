@@ -170,11 +170,14 @@ clear_compose_buffer (GtkImContextMultipress *multipress_context)
   multipress_context->key_last_entered = 0;
   multipress_context->compose_count = 0;
 
-  multipress_context->tentative_match = NULL;
   cancel_automatic_timeout_commit (multipress_context);
 
-  g_signal_emit_by_name (multipress_context, "preedit-changed");
-  g_signal_emit_by_name (multipress_context, "preedit-end");
+  if (multipress_context->tentative_match)
+    {
+      multipress_context->tentative_match = NULL;
+      g_signal_emit_by_name (multipress_context, "preedit-changed");
+      g_signal_emit_by_name (multipress_context, "preedit-end");
+    }
 }
 
 /* Finish composing, provide the character, and clear our compose buffer.
