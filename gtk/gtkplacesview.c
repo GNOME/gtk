@@ -1687,7 +1687,6 @@ listbox_header_func (GtkListBoxRow *row,
 
       if (before_is_network != row_is_network)
         text = g_strdup_printf ("<b>%s</b>", row_is_network ? _("Networks") : _("On This Computer"));
-
     }
 
   if (text)
