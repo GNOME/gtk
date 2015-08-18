@@ -1305,7 +1305,7 @@ update_places (GtkPlacesSidebar *sidebar)
 
       add_place (sidebar, PLACES_OTHER_LOCATIONS,
                  SECTION_OTHER_LOCATIONS,
-                 _("Other Locations"), icon, NULL,
+                 _("Other Locations"), icon, "other-locations:///",
                  NULL, NULL, NULL, 0, _("Show other locations"));
 
       g_object_unref (icon);
