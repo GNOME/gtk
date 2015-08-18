@@ -1018,9 +1018,7 @@ gdk_wayland_window_create_xdg_surface (GdkWindow *window)
   if (window->state & GDK_WINDOW_STATE_FULLSCREEN)
     xdg_surface_set_fullscreen (impl->xdg_surface, fullscreen_output);
 
-  app_id = impl->application.application_id;
-  if (app_id == NULL)
-    app_id = g_get_prgname ();
+  app_id = g_get_prgname ();
   if (app_id == NULL)
     app_id = gdk_get_program_class ();
 
