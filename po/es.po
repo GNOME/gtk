@@ -1,7 +1,7 @@
 # translation of gtk+.HEAD.po to Español
 # Copyright © 1999-2002, 2006, 2007, 2008 Free Software Foundation, Inc.
 # This file is distributed under the same license as the gtk+ package.
-#
+# 
 # Pablo Saratxaga <srtxg@chanae.alphanet.ch>, 1998-2000.
 # José Antonio Salgueiro A. <joseantsa@eresmas.net>, 2001.
 # Carlos Perelló Marín <carlos@gnome-db.org>, 2002.
@@ -10,16 +10,17 @@
 # Juan Manuel García Molina <juanma_gm@wanadoo.es>, 2003.
 # Francisco Javier F. Serrador <serrador@cvs.gnome.org>, 2003 - 2006.
 # Jorge González <jorgegonz@svn.gnome.org>, 2007, 2008, 2009, 2010, 2011.
-# Daniel Mustieles <daniel.mustieles@gmail.com>, 2011, 2012, 2013, 2014, 2015.
+# 
+# Daniel Mustieles <daniel.mustieles@gmail.com>, 2011, 2012, 2013, 2014, 2015., 2015.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+.master\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-08-11 10:35+0000\n"
-"PO-Revision-Date: 2015-08-11 \n"
+"POT-Creation-Date: 2015-08-18 09:51+0000\n"
+"PO-Revision-Date: 2015-08-18 13:51+0200\n"
 "Last-Translator: Daniel Mustieles <daniel.mustieles@gmail.com>\n"
-"Language-Team: Spanish <gnome-es-list@gnome.org>\n"
+"Language-Team: Español; Castellano <gnome-es-list@gnome.org>\n"
 "Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -1228,7 +1229,7 @@ msgstr ""
 #: gtk/gtkmessagedialog.c:955 gtk/gtkmountoperation.c:543
 #: gtk/gtkpagesetupunixdialog.c:196 gtk/gtkprintbackend.c:763
 #: gtk/gtkprinteroptionwidget.c:545 gtk/gtkprintunixdialog.c:665
-#: gtk/gtkprintunixdialog.c:738 gtk/gtkwindow.c:12102
+#: gtk/gtkprintunixdialog.c:738 gtk/gtkwindow.c:12106
 #: gtk/inspector/css-editor.c:199 gtk/ui/gtkappchooserdialog.ui:61
 #: gtk/ui/gtkassistant.ui:136 gtk/ui/gtkcolorchooserdialog.ui:34
 #: gtk/ui/gtkfontchooserdialog.ui:31
@@ -1280,7 +1281,7 @@ msgid "_Apply"
 msgstr "_Aplicar"
 
 #: gtk/deprecated/gtkfontsel.c:1698 gtk/gtkmessagedialog.c:934
-#: gtk/gtkmessagedialog.c:956 gtk/gtkprintbackend.c:764 gtk/gtkwindow.c:12103
+#: gtk/gtkmessagedialog.c:956 gtk/gtkprintbackend.c:764 gtk/gtkwindow.c:12107
 #: gtk/inspector/classes-list.c:127
 msgid "_OK"
 msgstr "_Aceptar"
@@ -2102,8 +2103,6 @@ msgid "Alpha"
 msgstr "Alfa"
 
 #: gtk/gtkcolorswatch.c:417
-#| msgctxt "Action name"
-#| msgid "Customize"
 msgid "C_ustomize"
 msgstr "_Personalizar"
 
@@ -2171,40 +2170,40 @@ msgstr "_Derecho:"
 msgid "Paper Margins"
 msgstr "Márgenes del papel"
 
-#: gtk/gtkentry.c:9654 gtk/gtklabel.c:6600 gtk/gtktextview.c:9020
+#: gtk/gtkentry.c:9654 gtk/gtklabel.c:6619 gtk/gtktextview.c:9363
 msgid "Cu_t"
 msgstr "Cor_tar"
 
-#: gtk/gtkentry.c:9658 gtk/gtklabel.c:6601 gtk/gtktextview.c:9024
+#: gtk/gtkentry.c:9658 gtk/gtklabel.c:6620 gtk/gtktextview.c:9367
 msgid "_Copy"
 msgstr "_Copiar"
 
-#: gtk/gtkentry.c:9662 gtk/gtklabel.c:6602 gtk/gtktextview.c:9026
+#: gtk/gtkentry.c:9662 gtk/gtklabel.c:6621 gtk/gtktextview.c:9369
 msgid "_Paste"
 msgstr "_Pegar"
 
 #: gtk/gtkentry.c:9665 gtk/gtkfilechooserwidget.c:1449
-#: gtk/gtkfilechooserwidget.c:2247 gtk/gtklabel.c:6604 gtk/gtktextview.c:9029
+#: gtk/gtkfilechooserwidget.c:2247 gtk/gtklabel.c:6623 gtk/gtktextview.c:9372
 msgid "_Delete"
 msgstr "_Eliminar"
 
-#: gtk/gtkentry.c:9676 gtk/gtklabel.c:6613 gtk/gtktextview.c:9043
+#: gtk/gtkentry.c:9676 gtk/gtklabel.c:6632 gtk/gtktextview.c:9386
 msgid "Select _All"
 msgstr "Seleccionar _todo"
 
-#: gtk/gtkentry.c:9854 gtk/gtktextview.c:9253
+#: gtk/gtkentry.c:9854 gtk/gtktextview.c:9596
 msgid "Select all"
 msgstr "Seleccionar todo"
 
-#: gtk/gtkentry.c:9857 gtk/gtktextview.c:9256
+#: gtk/gtkentry.c:9857 gtk/gtktextview.c:9599
 msgid "Cut"
 msgstr "Cortar"
 
-#: gtk/gtkentry.c:9860 gtk/gtktextview.c:9259
+#: gtk/gtkentry.c:9860 gtk/gtktextview.c:9602
 msgid "Copy"
 msgstr "Copiar"
 
-#: gtk/gtkentry.c:9863 gtk/gtktextview.c:9262
+#: gtk/gtkentry.c:9863 gtk/gtktextview.c:9605
 msgid "Paste"
 msgstr "Pegar"
 
@@ -2227,7 +2226,7 @@ msgstr "(Ninguno)"
 
 #. Open item is always present
 #: gtk/gtkfilechooserbutton.c:796 gtk/gtkplacessidebar.c:3349
-#: gtk/gtkplacesview.c:1335
+#: gtk/gtkplacesview.c:1348
 msgid "_Open"
 msgstr "_Abrir"
 
@@ -2623,12 +2622,12 @@ msgid "Error"
 msgstr "Error"
 
 #. Open Link
-#: gtk/gtklabel.c:6581
+#: gtk/gtklabel.c:6600
 msgid "_Open Link"
 msgstr "_Abrir enlace"
 
 #. Copy Link Address
-#: gtk/gtklabel.c:6590
+#: gtk/gtklabel.c:6609
 msgid "Copy _Link Address"
 msgstr "Copiar la dirección del _enlace"
 
@@ -3063,11 +3062,11 @@ msgstr "No se pudo expulsar %s"
 msgid "Unable to poll “%s” for media changes"
 msgstr "No se puede consultar a «%s» si hay cambios en el medio"
 
-#: gtk/gtkplacessidebar.c:3352 gtk/gtkplacesview.c:1345
+#: gtk/gtkplacessidebar.c:3352 gtk/gtkplacesview.c:1358
 msgid "Open in New _Tab"
 msgstr "Abrir en una _pestaña nueva"
 
-#: gtk/gtkplacessidebar.c:3355 gtk/gtkplacesview.c:1356
+#: gtk/gtkplacessidebar.c:3355 gtk/gtkplacesview.c:1369
 msgid "Open in New _Window"
 msgstr "Abrir en una _ventana nueva"
 
@@ -3099,29 +3098,40 @@ msgstr "_Expulsar"
 msgid "_Detect Media"
 msgstr "_Detectar medio"
 
-#: gtk/gtkplacessidebar.c:3817 gtk/gtkplacesview.c:797
+#: gtk/gtkplacessidebar.c:3817 gtk/gtkplacesview.c:798
 msgid "Computer"
 msgstr "Equipo"
 
+#. Restore from Cancel to Connect
+#: gtk/gtkplacesview.c:917 gtk/ui/gtkplacesview.ui:263
+msgid "Con_nect"
+msgstr "Co_nectar"
+
 #. if it wasn't cancelled show a dialog
-#: gtk/gtkplacesview.c:933 gtk/gtkplacesview.c:962 gtk/gtkplacesview.c:1017
+#: gtk/gtkplacesview.c:938 gtk/gtkplacesview.c:967 gtk/gtkplacesview.c:1022
 msgid "Unable to access location"
 msgstr "No se puede acceder a la ubicación"
 
 #. if it wasn't cancelled show a dialog
-#: gtk/gtkplacesview.c:1066
+#: gtk/gtkplacesview.c:1071
 msgid "Unable to unmount volume"
 msgstr "No se puede desmontar del volumen"
 
-#: gtk/gtkplacesview.c:1555
+#. Allow to cancel the operation
+#: gtk/gtkplacesview.c:1153
+#| msgid "Cancel"
+msgid "Cance_l"
+msgstr "Cance_lar"
+
+#: gtk/gtkplacesview.c:1568
 msgid "Unable to get remote server location"
 msgstr "No se pudo obtener la ubicación del servidor remoto"
 
-#: gtk/gtkplacesview.c:1667 gtk/gtkplacesview.c:1676
+#: gtk/gtkplacesview.c:1680 gtk/gtkplacesview.c:1689
 msgid "Networks"
 msgstr "Redes"
 
-#: gtk/gtkplacesview.c:1667 gtk/gtkplacesview.c:1676
+#: gtk/gtkplacesview.c:1680 gtk/gtkplacesview.c:1689
 msgid "On This Computer"
 msgstr "En este equipo"
 
@@ -3673,12 +3683,12 @@ msgctxt "volume percentage"
 msgid "%d %%"
 msgstr "%d %%"
 
-#: gtk/gtkwindow.c:12090
+#: gtk/gtkwindow.c:12094
 #, c-format
 msgid "Do you want to use GTK+ Inspector?"
 msgstr "¿Quiere usar el inspector de GTK+?"
 
-#: gtk/gtkwindow.c:12092
+#: gtk/gtkwindow.c:12096
 #, c-format
 msgid ""
 "GTK+ Inspector is an interactive debugger that lets you explore and modify "
@@ -3689,7 +3699,7 @@ msgstr ""
 "modificar los aspectos internos de cualquier aplicación de GTK+. Al usarlo "
 "puede hacer que la aplicación falle o se cierre."
 
-#: gtk/gtkwindow.c:12097
+#: gtk/gtkwindow.c:12101
 msgid "Don't show this message again"
 msgstr "No mostrar este mensaje de nuevo"
 
@@ -5465,13 +5475,10 @@ msgstr "No se han encontrado resultados"
 msgid "Connect to _Server"
 msgstr "Conectar al _servidor"
 
-#: gtk/ui/gtkplacesview.ui:263
-msgid "Con_nect"
-msgstr "Co_nectar"
-
 #: gtk/ui/gtkplacesview.ui:286
-msgid "Address…"
-msgstr "Dirección…"
+#| msgid "Connect to a network server address"
+msgid "Enter server address…"
+msgstr "Introduzca la dirección del servidor…"
 
 #: gtk/ui/gtkprintunixdialog.ui:117
 msgid "Printer"
@@ -6470,6 +6477,9 @@ msgstr "salida-de-prueba.%s"
 #: modules/printbackends/test/gtkprintbackendtest.c:465
 msgid "Print to Test Printer"
 msgstr "Imprimir en la impresora de prueba"
+
+#~ msgid "Address…"
+#~ msgstr "Dirección…"
 
 #~ msgid "_Customize"
 #~ msgstr "_Personalizar"
