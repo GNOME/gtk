@@ -69,6 +69,9 @@ struct _GtkPlacesViewPrivate
   GtkWidget                     *recent_servers_popover;
   GtkWidget                     *recent_servers_stack;
   GtkWidget                     *stack;
+  GtkWidget                     *network_header_spinner;
+  GtkWidget                     *network_placeholder;
+  GtkWidget                     *network_placeholder_label;
 
   GtkEntryCompletion            *address_entry_completion;
   GtkListStore                  *completion_store;
@@ -810,6 +813,89 @@ add_file (GtkPlacesView *view,
   insert_row (view, row, is_network);
 }
 
+static gboolean
+has_networks (GtkPlacesView *view)
+{
+  GList *l;
+  GtkPlacesViewPrivate *priv;
+  GList *children;
+  gboolean has_network = FALSE;
+
+  priv = gtk_places_view_get_instance_private (view);
+
+  children = gtk_container_get_children (GTK_CONTAINER (priv->listbox));
+  for (l = children; l != NULL; l = l->next)
+    {
+      if (GPOINTER_TO_INT (g_object_get_data (l->data, "is-network")) == TRUE &&
+          g_object_get_data (l->data, "is-placeholder") == NULL)
+      {
+        has_network = TRUE;
+        break;
+      }
+    }
+
+  g_list_free (children);
+
+  return has_network;
+}
+
+static void
+update_network_state (GtkPlacesView *view)
+{
+  GtkPlacesViewPrivate *priv;
+
+  priv = gtk_places_view_get_instance_private (view);
+
+  if (priv->network_placeholder == NULL)
+    {
+      priv->network_placeholder = gtk_list_box_row_new ();
+      priv->network_placeholder_label = gtk_label_new ("");
+      gtk_label_set_xalign (GTK_LABEL (priv->network_placeholder_label), 0.0);
+      gtk_widget_set_margin_start (priv->network_placeholder_label, 12);
+      gtk_widget_set_margin_end (priv->network_placeholder_label, 12);
+      gtk_widget_set_margin_top (priv->network_placeholder_label, 6);
+      gtk_widget_set_margin_bottom (priv->network_placeholder_label, 6);
+      gtk_widget_set_hexpand (priv->network_placeholder_label, TRUE);
+      gtk_widget_set_sensitive (priv->network_placeholder, FALSE);
+      gtk_container_add (GTK_CONTAINER (priv->network_placeholder),
+                         priv->network_placeholder_label);
+      g_object_set_data (G_OBJECT (priv->network_placeholder),
+                         "is-network", GINT_TO_POINTER (TRUE));
+      /* mark the row as placeholder, so it always goes first */
+      g_object_set_data (G_OBJECT (priv->network_placeholder),
+                         "is-placeholder", GINT_TO_POINTER (TRUE));
+      gtk_container_add (GTK_CONTAINER (priv->listbox), priv->network_placeholder);
+
+      gtk_widget_show_all (GTK_WIDGET (priv->network_placeholder));
+      gtk_list_box_invalidate_headers (GTK_LIST_BOX (priv->listbox));
+    }
+
+  if (priv->fetching_networks)
+    {
+      gtk_spinner_start (GTK_SPINNER (priv->network_header_spinner));
+      /* only show a placeholder with a message if the list is empty.
+       * otherwise just show the spinner in the header */
+      if (!has_networks (view))
+        {
+          gtk_widget_show_all (priv->network_placeholder);
+          gtk_label_set_text (GTK_LABEL (priv->network_placeholder_label),
+                              _("Searching for network locations"));
+        }
+    }
+  else if (!has_networks (view))
+    {
+      gtk_spinner_stop (GTK_SPINNER (priv->network_header_spinner));
+      gtk_widget_show_all (priv->network_placeholder);
+      gtk_label_set_text (GTK_LABEL (priv->network_placeholder_label),
+                          _("No networks locations found"));
+    }
+  else
+    {
+      gtk_spinner_stop (GTK_SPINNER (priv->network_header_spinner));
+      gtk_widget_hide (priv->network_placeholder);
+    }
+}
+
 static void
 populate_networks (GtkPlacesView   *view,
                    GFileEnumerator *enumerator,
@@ -875,6 +961,10 @@ network_enumeration_next_files_finished (GObject      *source_object,
 
       g_list_free_full (detected_networks, g_object_unref);
     }
+
+    /* avoid to update widgets if the operation was cancelled in finalize */
+    if (priv->listbox != NULL)
+      update_network_state (view);
 }
 
 static void
@@ -952,6 +1042,8 @@ update_places (GtkPlacesView *view)
   /* Clear all previously added items */
   children = gtk_container_get_children (GTK_CONTAINER (priv->listbox));
   g_list_free_full (children, (GDestroyNotify) gtk_widget_destroy);
+  priv->network_placeholder = NULL;
+  priv->network_header_spinner = NULL;
 
   /* Add "Computer" row */
   file = g_file_new_for_path ("/");
@@ -1770,6 +1862,7 @@ listbox_filter_func (GtkListBoxRow *row,
 {
   GtkPlacesViewPrivate *priv;
   gboolean is_network;
+  gboolean is_placeholder;
   gboolean retval;
   gchar *name;
   gchar *path;
@@ -1778,8 +1871,12 @@ listbox_filter_func (GtkListBoxRow *row,
   retval = FALSE;
 
   is_network = GPOINTER_TO_INT (g_object_get_data (G_OBJECT (row), "is-network"));
+  is_placeholder = GPOINTER_TO_INT (g_object_get_data (G_OBJECT (row), "is-placeholder"));
 
   if (is_network && priv->local_only)
+    return FALSE;
+
+  if (is_placeholder)
     return FALSE;
 
   if (!priv->search_query || priv->search_query[0] == '\0')
@@ -1807,9 +1904,11 @@ listbox_header_func (GtkListBoxRow *row,
                      GtkListBoxRow *before,
                      gpointer       user_data)
 {
+  GtkPlacesViewPrivate *priv;
   gboolean row_is_network;
   gchar *text;
 
+  priv = gtk_places_view_get_instance_private (GTK_PLACES_VIEW (user_data));
   text = NULL;
   row_is_network = GPOINTER_TO_INT (g_object_get_data (G_OBJECT (row), "is-network"));
 
@@ -1838,19 +1937,38 @@ listbox_header_func (GtkListBoxRow *row,
       separator = gtk_separator_new (GTK_ORIENTATION_HORIZONTAL);
 
       label = g_object_new (GTK_TYPE_LABEL,
-                            "hexpand", TRUE,
                             "use_markup", TRUE,
+                            "margin-top", 6,
+                            "margin-start", 12,
                             "label", text,
                             "xalign", 0.0f,
                             NULL);
+      if (row_is_network)
+        {
+          GtkWidget *header_name;
 
-      g_object_set (label,
-                    "margin-top", 6,
-                    "margin-start", 12,
-                    "margin-end", 12,
-                    NULL);
+          g_object_set (label,
+                        "margin-end", 6,
+                        NULL);
 
-      gtk_container_add (GTK_CONTAINER (header), label);
+          header_name = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
+          priv->network_header_spinner = gtk_spinner_new ();
+          g_object_set (priv->network_header_spinner,
+                        "margin-end", 12,
+                        NULL);
+          gtk_container_add (GTK_CONTAINER (header_name), label);
+          gtk_container_add (GTK_CONTAINER (header_name), priv->network_header_spinner);
+          gtk_container_add (GTK_CONTAINER (header), header_name);
+        }
+      else
+        {
+          g_object_set (label,
+                        "hexpand", TRUE,
+                        "margin-end", 12,
+                        NULL);
+          gtk_container_add (GTK_CONTAINER (header), label);
+        }
+
       gtk_container_add (GTK_CONTAINER (header), separator);
       gtk_widget_show_all (header);
 
@@ -1873,6 +1991,8 @@ listbox_sort_func (GtkListBoxRow *row1,
   gboolean row2_is_network;
   gchar *location1;
   gchar *location2;
+  gboolean *is_placeholder1;
+  gboolean *is_placeholder2;
   gint retval;
 
   row1_is_network = GPOINTER_TO_INT (g_object_get_data (G_OBJECT (row1), "is-network"));
@@ -1882,6 +2002,17 @@ listbox_sort_func (GtkListBoxRow *row1,
 
   if (retval != 0)
     return retval;
+
+  is_placeholder1 = g_object_get_data (G_OBJECT (row1), "is-placeholder");
+  is_placeholder2 = g_object_get_data (G_OBJECT (row2), "is-placeholder");
+
+  /* we can't have two placeholders for the same section */
+  g_assert (!(is_placeholder1 != NULL && is_placeholder2 != NULL));
+
+  if (is_placeholder1)
+    return -1;
+  if (is_placeholder2)
+    return 1;
 
   g_object_get (row1, "path", &location1, NULL);
   g_object_get (row2, "path", &location2, NULL);
