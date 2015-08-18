@@ -251,7 +251,7 @@ get_effective_context_id (GtkIMMulticontext *multicontext)
     return priv->context_id_aux;
 
   if (!global_context_id)
-    global_context_id = _gtk_im_module_get_default_context_id (priv->client_window);
+    global_context_id = _gtk_im_module_get_default_context_id ();
 
   return global_context_id;
 }
@@ -605,7 +605,7 @@ gtk_im_multicontext_append_menuitems (GtkIMMulticontext *context,
   GtkWidget *menuitem, *system_menuitem;
   const char *system_context_id; 
 
-  system_context_id = _gtk_im_module_get_default_context_id (priv->client_window);
+  system_context_id = _gtk_im_module_get_default_context_id ();
   system_menuitem = menuitem = gtk_radio_menu_item_new_with_label (group, C_("input method menu", "System"));
   if (!priv->context_id_aux)
     gtk_check_menu_item_set_active (GTK_CHECK_MENU_ITEM (menuitem), TRUE);

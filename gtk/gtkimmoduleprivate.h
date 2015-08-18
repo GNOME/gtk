@@ -27,7 +27,7 @@ G_BEGIN_DECLS
 void           _gtk_im_module_list                   (const GtkIMContextInfo ***contexts,
 						      guint                    *n_contexts);
 GtkIMContext * _gtk_im_module_create                 (const gchar              *context_id);
-const gchar  * _gtk_im_module_get_default_context_id (GdkWindow                *client_window);
+const gchar  * _gtk_im_module_get_default_context_id (void);
 
 G_END_DECLS
 

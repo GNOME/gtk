@@ -792,7 +792,6 @@ get_current_input_language (void)
 
 /**
  * _gtk_im_module_get_default_context_id:
- * @client_window: a window
  * 
  * Return the context_id of the best IM context type 
  * for the given window.
@@ -800,7 +799,7 @@ get_current_input_language (void)
  * Returns: the context ID (will never be %NULL)
  */
 const gchar *
-_gtk_im_module_get_default_context_id (GdkWindow *client_window)
+_gtk_im_module_get_default_context_id (void)
 {
   GSList *tmp_list;
   const gchar *context_id = NULL;
