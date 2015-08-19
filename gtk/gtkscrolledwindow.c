@@ -1229,33 +1229,6 @@ captured_event_cb (GtkWidget *widget,
   priv = sw->priv;
   source_device = gdk_event_get_source_device (event);
 
-  if (event->type == GDK_SCROLL)
-    {
-      gdouble dx, dy, vel_x, vel_y;
-
-      /* The libinput driver may generate a final event with dx=dy=0
-       * after scrolling finished, start kinetic scrolling when this
-       * happens.
-       */
-      gtk_scrolled_window_cancel_deceleration (sw);
-      gdk_event_get_scroll_deltas (event, &dx, &dy);
-
-      if (priv->scroll_device != source_device)
-        {
-          priv->scroll_device = source_device;
-          scroll_history_reset (sw);
-        }
-
-      scroll_history_push (sw, &event->scroll);
-
-      if (event->scroll.direction == GDK_SCROLL_SMOOTH &&
-          dx == 0 && dy == 0 &&
-          scroll_history_finish (sw, &vel_x, &vel_y))
-        gtk_scrolled_window_decelerate (sw, vel_x, vel_y);
-
-      return GDK_EVENT_PROPAGATE;
-    }
-
   if (!priv->use_indicators)
     return GDK_EVENT_PROPAGATE;
 
@@ -3107,7 +3080,8 @@ gtk_scrolled_window_scroll_event (GtkWidget      *widget,
   gdouble delta_x;
   gdouble delta_y;
   GdkScrollDirection direction;
-  gboolean shifted;
+  gboolean shifted, start_deceleration = FALSE;
+  GdkDevice *source_device;
 
   shifted = (event->state & GDK_SHIFT_MASK) != 0;
 
@@ -3115,9 +3089,18 @@ gtk_scrolled_window_scroll_event (GtkWidget      *widget,
   priv = scrolled_window->priv;
 
   gtk_scrolled_window_invalidate_overshoot (scrolled_window);
+  source_device = gdk_event_get_source_device ((GdkEvent *) event);
 
   if (gdk_event_get_scroll_deltas ((GdkEvent *) event, &delta_x, &delta_y))
     {
+      if (priv->scroll_device != source_device)
+        {
+          priv->scroll_device = source_device;
+          scroll_history_reset (scrolled_window);
+        }
+
+      scroll_history_push (scrolled_window, event);
+
       if (shifted)
         {
           gdouble delta;
@@ -3158,6 +3141,16 @@ gtk_scrolled_window_scroll_event (GtkWidget      *widget,
                                                      new_value);
           handled = TRUE;
         }
+
+      /* The libinput driver may generate a final event with dx=dy=0
+       * after scrolling finished, start kinetic scrolling when this
+       * happens.
+       */
+      if (delta_y == 0 && delta_x == 0)
+        {
+          handled = TRUE;
+          start_deceleration = TRUE;
+        }
     }
   else if (gdk_event_get_scroll_direction ((GdkEvent *)event, &direction))
     {
@@ -3197,6 +3190,8 @@ gtk_scrolled_window_scroll_event (GtkWidget      *widget,
 
   if (handled)
     {
+      gdouble vel_x, vel_y;
+
       gtk_scrolled_window_cancel_deceleration (scrolled_window);
       gtk_scrolled_window_invalidate_overshoot (scrolled_window);
 
@@ -3206,7 +3201,10 @@ gtk_scrolled_window_scroll_event (GtkWidget      *widget,
           priv->scroll_events_overshoot_id = 0;
         }
 
-      if (_gtk_scrolled_window_get_overshoot (scrolled_window, NULL, NULL))
+      if (start_deceleration &&
+          scroll_history_finish (scrolled_window, &vel_x, &vel_y))
+        gtk_scrolled_window_decelerate (scrolled_window, vel_x, vel_y);
+      else if (_gtk_scrolled_window_get_overshoot (scrolled_window, NULL, NULL))
         {
           priv->scroll_events_overshoot_id =
             gdk_threads_add_timeout (50, start_scroll_deceleration_cb, scrolled_window);
