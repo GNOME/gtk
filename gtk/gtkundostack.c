@@ -147,10 +147,8 @@ gtk_undo_stack_dump (GtkUndoStack *stack)
        iter = g_sequence_iter_next (iter))
     {
       GtkUndoCommand *command = g_sequence_get (iter);
-      char *desc;
 
-      desc = gtk_undo_command_describe (command);
-      g_print ("  %s\n", desc);
+      g_print ("  %s\n", gtk_undo_command_get_title (command));
     }
 }
 

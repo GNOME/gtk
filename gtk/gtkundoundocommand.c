@@ -77,14 +77,6 @@ gtk_undo_undo_command_merge (GtkUndoCommand *command,
   return NULL;
 }
 
-char *
-gtk_undo_undo_command_describe (GtkUndoCommand *command)
-{
-  GtkUndoUndoCommandPrivate *priv = gtk_undo_undo_command_get_instance_private (GTK_UNDO_UNDO_COMMAND (command));
-
-  return g_strdup_printf (_("Undo last %u commands"), g_sequence_get_length (priv->commands));
-}
-
 static void
 gtk_undo_undo_command_finalize (GObject *object)
 {
@@ -106,7 +98,6 @@ gtk_undo_undo_command_class_init (GtkUndoUndoCommandClass *klass)
   undo_class->undo = gtk_undo_undo_command_undo;
   undo_class->redo = gtk_undo_undo_command_redo;
   undo_class->merge = gtk_undo_undo_command_merge;
-  undo_class->describe = gtk_undo_undo_command_describe;
 }
 
 static void
@@ -124,6 +115,7 @@ gtk_undo_undo_command_new (GSequenceIter *begin_iter,
   GtkUndoUndoCommand *result;
   GtkUndoUndoCommandPrivate *priv;
   GSequenceIter *iter;
+  char *title;
 
   g_return_val_if_fail (begin_iter != NULL, NULL);
   g_return_val_if_fail (end_iter != NULL, NULL);
@@ -135,6 +127,10 @@ gtk_undo_undo_command_new (GSequenceIter *begin_iter,
     {
       g_sequence_prepend (priv->commands, g_object_ref (g_sequence_get (iter)));
     }
+
+  title = g_strdup_printf (_("Undo last %u commands"), g_sequence_get_length (priv->commands));
+  gtk_undo_command_set_title (GTK_UNDO_COMMAND (result), title);
+  g_free (title);
 
   return GTK_UNDO_COMMAND (result);
 }

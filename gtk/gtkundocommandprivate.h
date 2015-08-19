@@ -53,13 +53,14 @@ struct _GtkUndoCommandClass
   /* should the two commands be merged for user undo purposes? */
   gboolean              (* should_merge)                (GtkUndoCommand                *command,
                                                          GtkUndoCommand                *followup_command);
-  /* get a translated string describing the command */
-  char *                (* describe)                    (GtkUndoCommand                *command);
 };
 
 GType                   gtk_undo_command_get_type       (void) G_GNUC_CONST;
 
 gint64                  gtk_undo_command_get_timestamp  (GtkUndoCommand                *command);
+const char *            gtk_undo_command_get_title      (GtkUndoCommand                *command);
+void                    gtk_undo_command_set_title      (GtkUndoCommand                *command,
+                                                         const char                    *title);
 
 gboolean                gtk_undo_command_undo           (GtkUndoCommand                *command);
 gboolean                gtk_undo_command_redo           (GtkUndoCommand                *command);
@@ -67,7 +68,6 @@ GtkUndoCommand *        gtk_undo_command_merge          (GtkUndoCommand         
                                                          GtkUndoCommand                *followup_command);
 gboolean                gtk_undo_command_should_merge   (GtkUndoCommand                *command,
                                                          GtkUndoCommand                *followup_command);
-char *                  gtk_undo_command_describe       (GtkUndoCommand                *command);
 
 
 G_END_DECLS

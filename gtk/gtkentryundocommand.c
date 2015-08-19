@@ -103,6 +103,64 @@ gtk_entry_undo_command_redo (GtkUndoCommand *command)
   return gtk_entry_undo_command_run (priv->entry, &priv->after);
 }
 
+static guint
+get_prefix_len (const char *str1,
+                const char *str2)
+{
+  guint i;
+
+  for (i = 0; str1[i] == str2[i] && str1[i] != 0; i++)
+    {
+      /* nothing to do here */
+    }
+
+  return i;
+}
+
+static guint
+get_suffix_len (const char *str1,
+                guint       len1,
+                const char *str2,
+                guint       len2)
+{
+  const char *cur1, *cur2;
+  guint i, max_len;
+
+  cur1 = str1 + len1 - 1;
+  cur2 = str2 + len2 - 1;
+  max_len = MIN (len1, len2);
+
+  for (i = 0; *cur1 == *cur2 && i < max_len; i++)
+    {
+      cur1--;
+      cur2--;
+    }
+
+  return i;
+}
+
+char *
+generate_title (const GtkEntrySnapshot *before,
+                const GtkEntrySnapshot *after)
+{
+  guint before_len, after_len, prefix_len, suffix_len;
+
+  before_len = strlen (before->text);
+  after_len = strlen (after->text);
+  prefix_len = get_prefix_len (before->text, after->text);
+  suffix_len = get_suffix_len (before->text, before_len,
+                               after->text, after_len);
+
+  if (before_len == after_len && before_len == prefix_len)
+    return g_strdup (_("No changes")); /* huh? */
+  else if (prefix_len + suffix_len == before_len)
+    return g_strdup_printf (_("Entered `%.*s'"), after_len - prefix_len - suffix_len, after->text + prefix_len);
+  else if (prefix_len + suffix_len == after_len)
+    return g_strdup_printf (_("Deleted `%.*s'"), before_len - prefix_len - suffix_len, before->text + prefix_len);
+  else
+    return g_strdup (_("Text changed"));
+}
+
 static GtkUndoCommand *
 gtk_entry_undo_command_new_from_snapshots (GtkEntry               *entry,
                                            gint64                  timestamp,
@@ -111,11 +169,16 @@ gtk_entry_undo_command_new_from_snapshots (GtkEntry               *entry,
 {
   GtkEntryUndoCommand *command;
   GtkEntryUndoCommandPrivate *priv;
+  char *title;
+
+  title = generate_title (before, after);
 
   command = g_object_new (GTK_TYPE_ENTRY_UNDO_COMMAND,
                           "timestamp", timestamp,
+                          "title", title,
                           NULL);
   priv = gtk_entry_undo_command_get_instance_private (command);
+  g_free (title);
 
   priv->entry = entry;
   gtk_entry_snapshot_copy (&priv->before, before);
@@ -167,64 +230,6 @@ gtk_entry_undo_command_should_merge (GtkUndoCommand *command,
   return TRUE;
 }
 
-static guint
-get_prefix_len (const char *str1,
-                const char *str2)
-{
-  guint i;
-
-  for (i = 0; str1[i] == str2[i] && str1[i] != 0; i++)
-    {
-      /* nothing to do here */
-    }
-
-  return i;
-}
-
-static guint
-get_suffix_len (const char *str1,
-                guint       len1,
-                const char *str2,
-                guint       len2)
-{
-  const char *cur1, *cur2;
-  guint i, max_len;
-
-  cur1 = str1 + len1 - 1;
-  cur2 = str2 + len2 - 1;
-  max_len = MIN (len1, len2);
-
-  for (i = 0; *cur1 == *cur2 && i < max_len; i++)
-    {
-      cur1--;
-      cur2--;
-    }
-
-  return i;
-}
-
-char *
-gtk_entry_undo_command_describe (GtkUndoCommand *command)
-{
-  GtkEntryUndoCommandPrivate *priv = gtk_entry_undo_command_get_instance_private (GTK_ENTRY_UNDO_COMMAND (command));
-  guint before_len, after_len, prefix_len, suffix_len;
-
-  before_len = strlen (priv->before.text);
-  after_len = strlen (priv->after.text);
-  prefix_len = get_prefix_len (priv->before.text, priv->after.text);
-  suffix_len = get_suffix_len (priv->before.text, before_len,
-                               priv->after.text, after_len);
-
-  if (before_len == after_len && before_len == prefix_len)
-    return g_strdup (_("No changes")); /* huh? */
-  else if (prefix_len + suffix_len == before_len)
-    return g_strdup_printf (_("Entered `%.*s'"), after_len - prefix_len - suffix_len, priv->after.text + prefix_len);
-  else if (prefix_len + suffix_len == after_len)
-    return g_strdup_printf (_("Deleted `%.*s'"), before_len - prefix_len - suffix_len, priv->before.text + prefix_len);
-  else
-    return g_strdup (_("Text changed"));
-}
-
 static void
 gtk_entry_undo_command_finalize (GObject *object)
 {
@@ -248,7 +253,6 @@ gtk_entry_undo_command_class_init (GtkEntryUndoCommandClass *klass)
   undo_class->redo = gtk_entry_undo_command_redo;
   undo_class->merge = gtk_entry_undo_command_merge;
   undo_class->should_merge = gtk_entry_undo_command_should_merge;
-  undo_class->describe = gtk_entry_undo_command_describe;
 }
 
 static void
