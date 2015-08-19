@@ -86,6 +86,9 @@ void               gtk_places_view_set_local_only                (GtkPlacesView 
                                                                   gboolean               local_only);
 
 GDK_AVAILABLE_IN_3_18
+gboolean           gtk_places_view_get_loading                   (GtkPlacesView         *view);
+
+GDK_AVAILABLE_IN_3_18
 GtkWidget *        gtk_places_view_new                           (void);
 
 G_END_DECLS

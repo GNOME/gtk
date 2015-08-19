@@ -84,6 +84,7 @@ struct _GtkPlacesViewPrivate
   guint                          entry_pulse_timeout_id;
   guint                          connecting_to_server : 1;
   guint                          fetching_networks : 1;
+  guint                          loading : 1;
 };
 
 static void        mount_volume                                  (GtkPlacesView *view,
@@ -106,6 +107,7 @@ enum {
   PROP_0,
   PROP_LOCAL_ONLY,
   PROP_OPEN_FLAGS,
+  PROP_LOADING,
   LAST_PROP
 };
 
@@ -408,6 +410,10 @@ gtk_places_view_get_property (GObject    *object,
     {
     case PROP_LOCAL_ONLY:
       g_value_set_boolean (value, gtk_places_view_get_local_only (self));
+      break;
+
+    case PROP_LOADING:
+      g_value_set_boolean (value, gtk_places_view_get_loading (self));
       break;
 
     default:
@@ -965,6 +971,9 @@ network_enumeration_next_files_finished (GObject      *source_object,
     /* avoid to update widgets if the operation was cancelled in finalize */
     if (priv->listbox != NULL)
       update_network_state (view);
+
+  priv->loading = FALSE;
+  g_object_notify_by_pspec (G_OBJECT (view), properties[PROP_LOADING]);
 }
 
 static void
@@ -1044,6 +1053,9 @@ update_places (GtkPlacesView *view)
   g_list_free_full (children, (GDestroyNotify) gtk_widget_destroy);
   priv->network_placeholder = NULL;
   priv->network_header_spinner = NULL;
+
+  priv->loading = TRUE;
+  g_object_notify_by_pspec (G_OBJECT (view), properties[PROP_LOADING]);
 
   /* Add "Computer" row */
   file = g_file_new_for_path ("/");
@@ -2156,6 +2168,13 @@ gtk_places_view_class_init (GtkPlacesViewClass *klass)
                                 FALSE,
                                 G_PARAM_READWRITE);
 
+  properties[PROP_LOADING] =
+          g_param_spec_boolean ("loading",
+                                P_("Loading"),
+                                P_("Whether the view is loading locations"),
+                                FALSE,
+                                G_PARAM_READABLE);
+
   properties[PROP_OPEN_FLAGS] =
           g_param_spec_flags ("open-flags",
                               P_("Open Flags"),
@@ -2331,6 +2350,26 @@ gtk_places_view_set_search_query (GtkPlacesView *view,
 
       update_view_mode (view);
     }
+}
+
+/**
+ * gtk_places_view_get_loading:
+ * @view: a #GtkPlacesView
+ *
+ * Returns %TRUE if the view is loading locations.
+ *
+ * Since: 3.18
+ */
+gboolean
+gtk_places_view_get_loading (GtkPlacesView *view)
+{
+  GtkPlacesViewPrivate *priv;
+
+  g_return_val_if_fail (GTK_IS_PLACES_VIEW (view), FALSE);
+
+  priv = gtk_places_view_get_instance_private (view);
+
+  return priv->loading;
 }
 
 /**
