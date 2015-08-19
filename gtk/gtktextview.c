@@ -2278,7 +2278,7 @@ _gtk_text_view_scroll_to_iter (GtkTextView   *text_view,
   screen_inner_left = screen.x + within_margin_xoffset;
   screen_inner_top = screen.y + within_margin_yoffset;
   screen_inner_right = screen.x + screen.width - within_margin_xoffset;
-  screen_inner_bottom = screen.y + screen.width - within_margin_yoffset;
+  screen_inner_bottom = screen.y + screen.height - within_margin_yoffset;
 
   buffer_bottom = priv->height - priv->bottom_border;
   buffer_right = priv->width - priv->right_margin;
@@ -2325,14 +2325,14 @@ _gtk_text_view_scroll_to_iter (GtkTextView   *text_view,
           if (cursor.y == 0)
             border_yoffset = (with_border) ? priv->top_padding : 0;
 
-          screen_dest.y = cursor.y - MAX (within_margin_yoffset, border_yoffset);
+          screen_dest.y = cursor.y + priv->top_border - MAX (within_margin_yoffset, border_yoffset);
         }
       else if (cursor_bottom > screen_inner_bottom)
         {
-          if (cursor_bottom == buffer_bottom)
+          if (cursor_bottom == buffer_bottom - priv->top_border)
             border_yoffset = (with_border) ? priv->bottom_padding : 0;
 
-          screen_dest.y = cursor_bottom - screen_dest.height +
+          screen_dest.y = cursor_bottom - screen_dest.height + priv->top_border +
                           MAX (within_margin_yoffset, border_yoffset);
         }
     }
