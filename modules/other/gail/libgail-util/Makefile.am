@@ -7,6 +7,7 @@ endif
 if OS_WIN32
 export_symbols = -export-symbols $(srcdir)/gailutil.def
 install-def-file: gailutil.def
+	$(mkinstalldirs) $(DESTDIR)$(libdir)
 	$(INSTALL) $(srcdir)/gailutil.def $(DESTDIR)$(libdir)
 uninstall-def-file:
 	-rm $(DESTDIR)$(libdir)/gailutil.def
@@ -19,6 +20,7 @@ if MS_LIB_AVAILABLE
 noinst_DATA = gailutil.lib
 
 install-ms-lib:
+	$(mkinstalldirs) $(DESTDIR)$(libdir)
 	$(INSTALL) gailutil.lib $(DESTDIR)$(libdir)
 
 uninstall-ms-lib:

@@ -73,6 +73,7 @@ gtk-win32-res.o : gtk-win32.rc
 	$(WINDRES) gtk-win32.rc $@
 
 install-def-file: gtk.def
+	$(mkinstalldirs) $(DESTDIR)$(libdir)
 	$(INSTALL) $(srcdir)/gtk.def $(DESTDIR)$(libdir)/gtk-win32-2.0.def
 uninstall-def-file:
 	-rm $(DESTDIR)$(libdir)/gtk-win32-2.0.def
@@ -88,6 +89,7 @@ gtk-win32-$(GTK_API_VERSION).lib: libgtk-win32-$(GTK_API_VERSION).la gtk.def
 	lib -machine:@LIB_EXE_MACHINE_FLAG@ -name:libgtk-win32-$(GTK_API_VERSION)-@LT_CURRENT_MINUS_AGE@.dll -def:gtk.def -out:$@
 
 install-ms-lib:
+	$(mkinstalldirs) $(DESTDIR)$(libdir)
 	$(INSTALL) gtk-win32-$(GTK_API_VERSION).lib $(DESTDIR)$(libdir)
 
 uninstall-ms-lib:
