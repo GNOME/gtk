@@ -29,14 +29,14 @@
 # Fallback    - Sistema alternatiu / alternatiu
 #
 # Tag         - Etiqueta
-# 
+#
 # Swatch      - Mostra
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.3.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-08-07 21:35+0200\n"
+"POT-Creation-Date: 2015-08-20 19:03+0200\n"
 "PO-Revision-Date: 2015-03-28 12:54\n"
 "Last-Translator:  <>\n"
 "Language-Team: Catalan <tradgnome@softcatala.org>\n"
@@ -976,7 +976,7 @@ msgid "The amount of space between two consecutive columns"
 msgstr "La quantitat d'espai entre dues columnes consecutives"
 
 #: ../gtk/deprecated/gtktable.c:225 ../gtk/gtkbox.c:264
-#: ../gtk/gtkflowbox.c:3694 ../gtk/gtkstack.c:421 ../gtk/gtktoolbar.c:561
+#: ../gtk/gtkflowbox.c:3714 ../gtk/gtkstack.c:421 ../gtk/gtktoolbar.c:561
 #: ../gtk/gtktoolitemgroup.c:1654
 msgid "Homogeneous"
 msgstr "Homogeni"
@@ -1294,7 +1294,7 @@ msgstr "Element d'interfície accelerador"
 msgid "The widget to be monitored for accelerator changes"
 msgstr "L'element d'interfície a supervisar per a canvis en l'accelerador"
 
-#: ../gtk/gtkaccessible.c:156 ../gtk/gtkeventcontroller.c:165
+#: ../gtk/gtkaccessible.c:156 ../gtk/gtkeventcontroller.c:166
 #: ../gtk/gtktreeviewcolumn.c:347
 msgid "Widget"
 msgstr "Giny"
@@ -1333,7 +1333,7 @@ msgstr ""
 "al final del pare"
 
 #: ../gtk/gtkactionbar.c:244 ../gtk/gtkbox.c:337 ../gtk/gtkheaderbar.c:1864
-#: ../gtk/gtknotebook.c:775 ../gtk/gtkpaned.c:336 ../gtk/gtkpopover.c:1618
+#: ../gtk/gtknotebook.c:775 ../gtk/gtkpaned.c:336 ../gtk/gtkpopover.c:1617
 #: ../gtk/gtkpopovermenu.c:376 ../gtk/gtkstack.c:499
 #: ../gtk/gtktoolitemgroup.c:1682
 msgid "Position"
@@ -1707,7 +1707,7 @@ msgstr "Espaiament"
 msgid "The amount of space between children"
 msgstr "La quantitat d'espai entre fills"
 
-#: ../gtk/gtkbox.c:265 ../gtk/gtkflowbox.c:3695
+#: ../gtk/gtkbox.c:265 ../gtk/gtkflowbox.c:3715
 msgid "Whether the children should all be the same size"
 msgstr "Si tots els fills han de tenir la mateixa mida"
 
@@ -1890,27 +1890,27 @@ msgstr "Espaiat de la imatge"
 msgid "Spacing in pixels between the image and label"
 msgstr "L'espai, en píxels, entre la imatge i l'etiqueta"
 
-#: ../gtk/gtkcalendar.c:405
+#: ../gtk/gtkcalendar.c:399
 msgid "Year"
 msgstr "Any"
 
-#: ../gtk/gtkcalendar.c:406
+#: ../gtk/gtkcalendar.c:400
 msgid "The selected year"
 msgstr "L'any seleccionat"
 
-#: ../gtk/gtkcalendar.c:419
+#: ../gtk/gtkcalendar.c:413
 msgid "Month"
 msgstr "Mes"
 
-#: ../gtk/gtkcalendar.c:420
+#: ../gtk/gtkcalendar.c:414
 msgid "The selected month (as a number between 0 and 11)"
 msgstr "El mes seleccionat (com a número entre 0 i 11)"
 
-#: ../gtk/gtkcalendar.c:434
+#: ../gtk/gtkcalendar.c:428
 msgid "Day"
 msgstr "Dia"
 
-#: ../gtk/gtkcalendar.c:435
+#: ../gtk/gtkcalendar.c:429
 msgid ""
 "The selected day (as a number between 1 and 31, or 0 to unselect the "
 "currently selected day)"
@@ -1918,83 +1918,83 @@ msgstr ""
 "El dia seleccionat (com a número entre 1 i 31, o 0 per desseleccionar el dia "
 "actualment seleccionat)"
 
-#: ../gtk/gtkcalendar.c:449
+#: ../gtk/gtkcalendar.c:443
 msgid "Show Heading"
 msgstr "Mostra la capçalera"
 
-#: ../gtk/gtkcalendar.c:450
+#: ../gtk/gtkcalendar.c:444
 msgid "If TRUE, a heading is displayed"
 msgstr "Si és «TRUE» (cert), es mostrarà una capçalera"
 
-#: ../gtk/gtkcalendar.c:464
+#: ../gtk/gtkcalendar.c:458
 msgid "Show Day Names"
 msgstr "Mostra el nom dels dies"
 
-#: ../gtk/gtkcalendar.c:465
+#: ../gtk/gtkcalendar.c:459
 msgid "If TRUE, day names are displayed"
 msgstr "Si és «TRUE» (cert), es mostraran els noms dels dies"
 
-#: ../gtk/gtkcalendar.c:478
+#: ../gtk/gtkcalendar.c:472
 msgid "No Month Change"
 msgstr "No canviïs el mes"
 
-#: ../gtk/gtkcalendar.c:479
+#: ../gtk/gtkcalendar.c:473
 msgid "If TRUE, the selected month cannot be changed"
 msgstr "Si és «TRUE» (cert), no es podrà canviar el mes seleccionat"
 
-#: ../gtk/gtkcalendar.c:493
+#: ../gtk/gtkcalendar.c:487
 msgid "Show Week Numbers"
 msgstr "Mostra els números de la setmana"
 
-#: ../gtk/gtkcalendar.c:494
+#: ../gtk/gtkcalendar.c:488
 msgid "If TRUE, week numbers are displayed"
 msgstr "Si és «TRUE» (cert), es mostraran els números de la setmana"
 
-#: ../gtk/gtkcalendar.c:509
+#: ../gtk/gtkcalendar.c:503
 msgid "Details Width"
 msgstr "Amplada dels detalls"
 
-#: ../gtk/gtkcalendar.c:510
+#: ../gtk/gtkcalendar.c:504
 msgid "Details width in characters"
 msgstr "Amplada dels detalls en caràcters"
 
-#: ../gtk/gtkcalendar.c:525
+#: ../gtk/gtkcalendar.c:519
 msgid "Details Height"
 msgstr "Alçada dels detalls"
 
-#: ../gtk/gtkcalendar.c:526
+#: ../gtk/gtkcalendar.c:520
 msgid "Details height in rows"
 msgstr "Alçada dels detalls en files"
 
-#: ../gtk/gtkcalendar.c:542
+#: ../gtk/gtkcalendar.c:536
 msgid "Show Details"
 msgstr "Mostra els detalls"
 
-#: ../gtk/gtkcalendar.c:543
+#: ../gtk/gtkcalendar.c:537
 msgid "If TRUE, details are shown"
 msgstr "Si és «TRUE» (cert), es mostraran els detalls"
 
-#: ../gtk/gtkcalendar.c:555
+#: ../gtk/gtkcalendar.c:549
 msgid "Inner border"
 msgstr "Vora interior"
 
-#: ../gtk/gtkcalendar.c:556
+#: ../gtk/gtkcalendar.c:550
 msgid "Inner border space"
 msgstr "Espai de la vora interior"
 
-#: ../gtk/gtkcalendar.c:567
+#: ../gtk/gtkcalendar.c:561
 msgid "Vertical separation"
 msgstr "Separació vertical"
 
-#: ../gtk/gtkcalendar.c:568
+#: ../gtk/gtkcalendar.c:562
 msgid "Space between day headers and main area"
 msgstr "Espaiat entre la capçalera dels dies i l'àrea principal"
 
-#: ../gtk/gtkcalendar.c:579
+#: ../gtk/gtkcalendar.c:573
 msgid "Horizontal separation"
 msgstr "Separació horitzontal"
 
-#: ../gtk/gtkcalendar.c:580
+#: ../gtk/gtkcalendar.c:574
 msgid "Space between week headers and main area"
 msgstr "Espai entre les capçaleres de la setmana i l'àrea principal"
 
@@ -2514,12 +2514,12 @@ msgid "Foreground color as a GdkRGBA"
 msgstr "Color de primer pla com a GdkRGBA"
 
 #: ../gtk/gtkcellrenderertext.c:366 ../gtk/gtkentry.c:798
-#: ../gtk/gtktexttag.c:308 ../gtk/gtktextview.c:768
+#: ../gtk/gtktexttag.c:308 ../gtk/gtktextview.c:791
 msgid "Editable"
 msgstr "Editable"
 
 #: ../gtk/gtkcellrenderertext.c:367 ../gtk/gtktexttag.c:309
-#: ../gtk/gtktextview.c:769
+#: ../gtk/gtktextview.c:792
 msgid "Whether the text can be modified by the user"
 msgstr "Si el text pot ser modificat per l'usuari"
 
@@ -2991,7 +2991,7 @@ msgstr "Color actual com a GdkRGBA"
 msgid "Whether alpha should be shown"
 msgstr "Si s'ha de mostrar l'alfa"
 
-#: ../gtk/gtkcolorchooserdialog.c:215 ../gtk/gtkcolorchooserwidget.c:700
+#: ../gtk/gtkcolorchooserdialog.c:213 ../gtk/gtkcolorchooserwidget.c:700
 msgid "Show editor"
 msgstr "Mostra l'editor"
 
@@ -3421,7 +3421,7 @@ msgstr ""
 "Quin tipus d'ombra s'ha de dibuixar al voltant de l'entrada quan «has-frame» "
 "està activat"
 
-#: ../gtk/gtkentry.c:967 ../gtk/gtktextview.c:842
+#: ../gtk/gtkentry.c:967 ../gtk/gtktextview.c:931
 msgid "Overwrite mode"
 msgstr "Mode de sobreescriptura"
 
@@ -3611,11 +3611,11 @@ msgstr "Marcatge de l'indicador de funció de la icona primària"
 msgid "Secondary icon tooltip markup"
 msgstr "Marcatge de l'indicador de funció de la icona secundària"
 
-#: ../gtk/gtkentry.c:1401 ../gtk/gtktextview.c:870
+#: ../gtk/gtkentry.c:1401 ../gtk/gtktextview.c:959
 msgid "IM module"
 msgstr "Mòdul de mètode d'entrada"
 
-#: ../gtk/gtkentry.c:1402 ../gtk/gtktextview.c:871
+#: ../gtk/gtkentry.c:1402 ../gtk/gtktextview.c:960
 msgid "Which IM module should be used"
 msgstr "Quin mòdul de mètode d'entrada s'hauria d'utilitzar"
 
@@ -3627,19 +3627,19 @@ msgstr "Compleció"
 msgid "The auxiliary completion object"
 msgstr "L'objecte de compleció auxiliar"
 
-#: ../gtk/gtkentry.c:1438 ../gtk/gtkimcontext.c:331 ../gtk/gtktextview.c:888
+#: ../gtk/gtkentry.c:1438 ../gtk/gtkimcontext.c:331 ../gtk/gtktextview.c:977
 msgid "Purpose"
 msgstr "Propòsit"
 
-#: ../gtk/gtkentry.c:1439 ../gtk/gtkimcontext.c:332 ../gtk/gtktextview.c:889
+#: ../gtk/gtkentry.c:1439 ../gtk/gtkimcontext.c:332 ../gtk/gtktextview.c:978
 msgid "Purpose of the text field"
 msgstr "Propòsit del camp de text"
 
-#: ../gtk/gtkentry.c:1455 ../gtk/gtkimcontext.c:339 ../gtk/gtktextview.c:906
+#: ../gtk/gtkentry.c:1455 ../gtk/gtkimcontext.c:339 ../gtk/gtktextview.c:995
 msgid "hints"
 msgstr "consells"
 
-#: ../gtk/gtkentry.c:1456 ../gtk/gtkimcontext.c:340 ../gtk/gtktextview.c:907
+#: ../gtk/gtkentry.c:1456 ../gtk/gtkimcontext.c:340 ../gtk/gtktextview.c:996
 msgid "Hints for the text field behaviour"
 msgstr "Consells pel comportament del camp de text"
 
@@ -3647,16 +3647,16 @@ msgstr "Consells pel comportament del camp de text"
 msgid "A list of style attributes to apply to the text of the label"
 msgstr "Una llista d'atributs d'estil per aplicar al text de l'etiqueta"
 
-#: ../gtk/gtkentry.c:1489 ../gtk/gtkplacessidebar.c:4370
-#: ../gtk/gtktextview.c:923
+#: ../gtk/gtkentry.c:1489 ../gtk/gtkplacessidebar.c:4371
+#: ../gtk/gtktextview.c:1012
 msgid "Populate all"
 msgstr "Emplena-ho tot"
 
-#: ../gtk/gtkentry.c:1490 ../gtk/gtktextview.c:924
+#: ../gtk/gtkentry.c:1490 ../gtk/gtktextview.c:1013
 msgid "Whether to emit ::populate-popup for touch popups"
 msgstr "Si s'emet ::populate-popup per a finestres emergents tàctils"
 
-#: ../gtk/gtkentry.c:1504 ../gtk/gtktexttag.c:578 ../gtk/gtktextview.c:818
+#: ../gtk/gtkentry.c:1504 ../gtk/gtktexttag.c:578 ../gtk/gtktextview.c:907
 msgid "Tabs"
 msgstr "Pestanyes"
 
@@ -3780,15 +3780,15 @@ msgstr ""
 "Si la finestra per atrapar incidències de la caixa d'incidències és per "
 "sobre de la finestra del giny fill, contràriament a per sota seu."
 
-#: ../gtk/gtkeventcontroller.c:166
+#: ../gtk/gtkeventcontroller.c:167
 msgid "Widget the gesture relates to"
 msgstr "Giny al qual apunta el gest"
 
-#: ../gtk/gtkeventcontroller.c:180
+#: ../gtk/gtkeventcontroller.c:181
 msgid "Propagation phase"
 msgstr "Fase de propagació"
 
-#: ../gtk/gtkeventcontroller.c:181
+#: ../gtk/gtkeventcontroller.c:182
 msgid "Propagation phase at which this controller is run"
 msgstr "Fase de propagació en el qual s'executa aquest controlador"
 
@@ -3893,8 +3893,8 @@ msgstr "Filtre"
 msgid "The current filter for selecting which files are displayed"
 msgstr "El filtre actual per seleccionar quins fitxers es mostraran"
 
-#: ../gtk/gtkfilechooser.c:388 ../gtk/gtkplacessidebar.c:4343
-#: ../gtk/gtkplacesview.c:1829
+#: ../gtk/gtkfilechooser.c:388 ../gtk/gtkplacessidebar.c:4344
+#: ../gtk/gtkplacesview.c:1886
 msgid "Local Only"
 msgstr "Només locals"
 
@@ -4005,30 +4005,30 @@ msgstr "Posició Y"
 msgid "Y position of child widget"
 msgstr "Posició Y del giny fill"
 
-#: ../gtk/gtkflowbox.c:3667 ../gtk/gtkiconview.c:395 ../gtk/gtklistbox.c:443
+#: ../gtk/gtkflowbox.c:3687 ../gtk/gtkiconview.c:395 ../gtk/gtklistbox.c:443
 #: ../gtk/gtktreeselection.c:131
 msgid "Selection mode"
 msgstr "Mode de selecció"
 
-#: ../gtk/gtkflowbox.c:3668 ../gtk/gtkiconview.c:396 ../gtk/gtklistbox.c:444
+#: ../gtk/gtkflowbox.c:3688 ../gtk/gtkiconview.c:396 ../gtk/gtklistbox.c:444
 msgid "The selection mode"
 msgstr "Mode de selecció"
 
-#: ../gtk/gtkflowbox.c:3681 ../gtk/gtkiconview.c:652 ../gtk/gtklistbox.c:451
+#: ../gtk/gtkflowbox.c:3701 ../gtk/gtkiconview.c:652 ../gtk/gtklistbox.c:451
 #: ../gtk/gtktreeview.c:1212
 msgid "Activate on Single Click"
 msgstr "Activa en fer un sol clic"
 
-#: ../gtk/gtkflowbox.c:3682 ../gtk/gtkiconview.c:653 ../gtk/gtklistbox.c:452
+#: ../gtk/gtkflowbox.c:3702 ../gtk/gtkiconview.c:653 ../gtk/gtklistbox.c:452
 #: ../gtk/gtktreeview.c:1213
 msgid "Activate row on a single click"
 msgstr "Activa la fila en fer un sol clic"
 
-#: ../gtk/gtkflowbox.c:3711
+#: ../gtk/gtkflowbox.c:3731
 msgid "Minimum Children Per Line"
 msgstr "Fills mínims per línia"
 
-#: ../gtk/gtkflowbox.c:3712
+#: ../gtk/gtkflowbox.c:3732
 msgid ""
 "The minimum number of children to allocate consecutively in the given "
 "orientation."
@@ -4036,11 +4036,11 @@ msgstr ""
 "El nombre mínim de fills que s'ubicaran de forma consecutiva a l'orientació "
 "proporcionada."
 
-#: ../gtk/gtkflowbox.c:3725
+#: ../gtk/gtkflowbox.c:3745
 msgid "Maximum Children Per Line"
 msgstr "Fills màxims per línia"
 
-#: ../gtk/gtkflowbox.c:3726
+#: ../gtk/gtkflowbox.c:3746
 msgid ""
 "The maximum amount of children to request space for consecutively in the "
 "given orientation."
@@ -4048,19 +4048,19 @@ msgstr ""
 "La quantitat màxima de fills per sol·licitar espai de forma consecutiva a "
 "l'orientació proporcionada."
 
-#: ../gtk/gtkflowbox.c:3738
+#: ../gtk/gtkflowbox.c:3758
 msgid "Vertical spacing"
 msgstr "Espaiat vertical"
 
-#: ../gtk/gtkflowbox.c:3739
+#: ../gtk/gtkflowbox.c:3759
 msgid "The amount of vertical space between two children"
 msgstr "La quantitat d'espai vertical entre dos fills"
 
-#: ../gtk/gtkflowbox.c:3750
+#: ../gtk/gtkflowbox.c:3770
 msgid "Horizontal spacing"
 msgstr "Espaiat horitzontal"
 
-#: ../gtk/gtkflowbox.c:3751
+#: ../gtk/gtkflowbox.c:3771
 msgid "The amount of horizontal space between two children"
 msgstr "La quantitat d'espai horitzontal entre dos fills"
 
@@ -4152,15 +4152,15 @@ msgstr "Aparença del contorn del marc"
 msgid "A widget to display in place of the usual frame label"
 msgstr "Un giny a visualitzar en lloc del típic marc d'etiqueta"
 
-#: ../gtk/gtkgesture.c:694
+#: ../gtk/gtkgesture.c:865
 msgid "Number of points"
 msgstr "Nombre de punts"
 
-#: ../gtk/gtkgesture.c:695
+#: ../gtk/gtkgesture.c:866
 msgid "Number of points needed to trigger the gesture"
 msgstr "El nombre de punts necessaris per activar aquest gest"
 
-#: ../gtk/gtkgesture.c:711 ../gtk/gtkgesture.c:712
+#: ../gtk/gtkgesture.c:882 ../gtk/gtkgesture.c:883
 msgid "GdkWindow to receive events about"
 msgstr "La GdkWindow de la qual rebre'n els esdeveniments"
 
@@ -4550,7 +4550,7 @@ msgstr "La pantalla on es mostrarà aquesta finestra"
 msgid "The text of the label"
 msgstr "El text de l'etiqueta"
 
-#: ../gtk/gtklabel.c:777 ../gtk/gtktexttag.c:416 ../gtk/gtktextview.c:785
+#: ../gtk/gtklabel.c:777 ../gtk/gtktexttag.c:416 ../gtk/gtktextview.c:808
 msgid "Justification"
 msgstr "Justificació"
 
@@ -5422,7 +5422,6 @@ msgid "Pass through input, does not affect main child"
 msgstr "L'entrada passa a través, no afecta el fill principal"
 
 #: ../gtk/gtkoverlay.c:783
-
 msgid "Index"
 msgstr "Índex"
 
@@ -5495,19 +5494,19 @@ msgstr "Encongeix"
 msgid "If TRUE, the child can be made smaller than its requisition"
 msgstr "Si és «TRUE» (cert), el fill es podrà fer més petit del necessari"
 
-#: ../gtk/gtkplacessidebar.c:4306
+#: ../gtk/gtkplacessidebar.c:4307
 msgid "Location to Select"
 msgstr "Trieu la ubicació"
 
-#: ../gtk/gtkplacessidebar.c:4307
+#: ../gtk/gtkplacessidebar.c:4308
 msgid "The location to highlight in the sidebar"
 msgstr "La ubicació que s'ha de ressaltar a la barra lateral"
 
-#: ../gtk/gtkplacessidebar.c:4312 ../gtk/gtkplacesview.c:1836
+#: ../gtk/gtkplacessidebar.c:4313 ../gtk/gtkplacesview.c:1893
 msgid "Open Flags"
 msgstr "Indicadors d'obertura"
 
-#: ../gtk/gtkplacessidebar.c:4313 ../gtk/gtkplacesview.c:1837
+#: ../gtk/gtkplacessidebar.c:4314 ../gtk/gtkplacesview.c:1894
 msgid ""
 "Modes in which the calling application can open locations selected in the "
 "sidebar"
@@ -5515,116 +5514,142 @@ msgstr ""
 "Els modes en els quals l'aplicació que fa la crida pot obrir ubicacions "
 "seleccionades a la barra lateral"
 
-#: ../gtk/gtkplacessidebar.c:4319
+#: ../gtk/gtkplacessidebar.c:4320
 msgid "Show recent files"
 msgstr "Mostra els fitxers recents"
 
-#: ../gtk/gtkplacessidebar.c:4320
+#: ../gtk/gtkplacessidebar.c:4321
 msgid "Whether the sidebar includes a builtin shortcut for recent files"
 msgstr "Si la barra lateral inclou una drecera pels fitxers recents"
 
-#: ../gtk/gtkplacessidebar.c:4325
+#: ../gtk/gtkplacessidebar.c:4326
 msgid "Show 'Desktop'"
 msgstr "Mostra l'«Escriptori»"
 
-#: ../gtk/gtkplacessidebar.c:4326
+#: ../gtk/gtkplacessidebar.c:4327
 msgid "Whether the sidebar includes a builtin shortcut to the Desktop folder"
 msgstr "Si la barra lateral inclou una drecera a la carpeta de l'escriptori"
 
-#: ../gtk/gtkplacessidebar.c:4331
+#: ../gtk/gtkplacessidebar.c:4332
 msgid "Show 'Connect to Server'"
 msgstr "Mostra el «Connecta't al servidor»"
 
-#: ../gtk/gtkplacessidebar.c:4332
+#: ../gtk/gtkplacessidebar.c:4333
 msgid ""
 "Whether the sidebar includes a builtin shortcut to a 'Connect to server' "
 "dialog"
 msgstr ""
 "Si la barra lateral inclou una drecera al diàleg «Connecta't al servidor»"
 
-#: ../gtk/gtkplacessidebar.c:4337
+#: ../gtk/gtkplacessidebar.c:4338
 msgid "Show 'Enter Location'"
 msgstr "Mostra «Introduïu la ubicació»"
 
-#: ../gtk/gtkplacessidebar.c:4338
+#: ../gtk/gtkplacessidebar.c:4339
 msgid ""
 "Whether the sidebar includes a builtin shortcut to manually enter a location"
 msgstr ""
 "Si la barra lateral inclou una drecera per introduir manualment una ubicació"
 
-#: ../gtk/gtkplacessidebar.c:4344 ../gtk/gtkplacesview.c:1830
+#: ../gtk/gtkplacessidebar.c:4345 ../gtk/gtkplacesview.c:1887
 msgid "Whether the sidebar only includes local files"
 msgstr "Si la barra lateral inclou només fitxers locals"
 
-#: ../gtk/gtkplacessidebar.c:4349
+#: ../gtk/gtkplacessidebar.c:4350
 msgid "Show 'Trash'"
 msgstr "Mostra la «paperera»"
 
-#: ../gtk/gtkplacessidebar.c:4350
+#: ../gtk/gtkplacessidebar.c:4351
 msgid "Whether the sidebar includes a builtin shortcut to the Trash location"
-msgstr ""
-"Si la barra lateral inclou una drecera amb la ubicació de la paperera"
+msgstr "Si la barra lateral inclou una drecera amb la ubicació de la paperera"
 
-#: ../gtk/gtkplacessidebar.c:4355
+#: ../gtk/gtkplacessidebar.c:4356
 msgid "Show 'Other locations'"
 msgstr "Mostra «altres ubicacions»"
 
-#: ../gtk/gtkplacessidebar.c:4356
+#: ../gtk/gtkplacessidebar.c:4357
 msgid "Whether the sidebar includes an item to show external locations"
-msgstr ""
-"Si la barra lateral inclou un element per mostrar altres ubicacions"
+msgstr "Si la barra lateral inclou un element per mostrar altres ubicacions"
 
-#: ../gtk/gtkplacessidebar.c:4371
+#: ../gtk/gtkplacessidebar.c:4372
 msgid "Whether to emit ::populate-popup for popups that are not menus"
 msgstr "Si s'emet ::populate-popup per a finestres emergents que no són menús"
 
-#: ../gtk/gtkplacesviewrow.c:169
+#: ../gtk/gtkplacesview.c:1393
+msgid "_Disconnect"
+msgstr "_Desconnecta"
+
+#: ../gtk/gtkplacesview.c:1393
+msgid "_Unmount"
+msgstr "_Desmunta"
+
+#: ../gtk/gtkplacesview.c:1403
+msgid "_Connect"
+msgstr "_Connecta"
+
+#: ../gtk/gtkplacesview.c:1403
+msgid "_Mount"
+msgstr "_Munta"
+
+#: ../gtk/gtkplacesviewrow.c:181
 msgid "Icon of the row"
 msgstr "Icona de la fila"
 
-#: ../gtk/gtkplacesviewrow.c:170
+#: ../gtk/gtkplacesviewrow.c:182
 msgid "The icon representing the volume"
 msgstr "La icona que representa el volum"
 
-#: ../gtk/gtkplacesviewrow.c:176
+#: ../gtk/gtkplacesviewrow.c:188
 msgid "Name of the volume"
 msgstr "Nom del volum"
 
-#: ../gtk/gtkplacesviewrow.c:177
+#: ../gtk/gtkplacesviewrow.c:189
 msgid "The name of the volume"
 msgstr "El nom del volum"
 
-#: ../gtk/gtkplacesviewrow.c:183
+#: ../gtk/gtkplacesviewrow.c:195
 msgid "Path of the volume"
 msgstr "Camí del volum"
 
-#: ../gtk/gtkplacesviewrow.c:184
+#: ../gtk/gtkplacesviewrow.c:196
 msgid "The path of the volume"
 msgstr "El camí del volum"
 
-#: ../gtk/gtkplacesviewrow.c:190
+#: ../gtk/gtkplacesviewrow.c:202
 msgid "Volume represented by the row"
 msgstr "Volum representat per la fila"
 
-#: ../gtk/gtkplacesviewrow.c:191
+#: ../gtk/gtkplacesviewrow.c:203
 msgid "The volume represented by the row"
 msgstr "El volum representat per la fila"
 
-#: ../gtk/gtkplacesviewrow.c:197
+#: ../gtk/gtkplacesviewrow.c:209
 msgid "Mount represented by the row"
 msgstr "Punt de muntatge representat per la fila"
 
-#: ../gtk/gtkplacesviewrow.c:198
+#: ../gtk/gtkplacesviewrow.c:210
 msgid "The mount point represented by the row, if any"
 msgstr "El punt de muntatge representat per la fila, si n'hi ha"
 
-#: ../gtk/gtkplacesviewrow.c:204
+#: ../gtk/gtkplacesviewrow.c:216
 msgid "File represented by the row"
 msgstr "Fitxer representat per la fila"
 
-#: ../gtk/gtkplacesviewrow.c:205
+#: ../gtk/gtkplacesviewrow.c:217
 msgid "The file represented by the row, if any"
 msgstr "El fitxer representat per la fila, si n'hi ha"
+
+#: ../gtk/gtkplacesviewrow.c:223 ../gtk/gtkplacesviewrow.c:224
+msgid "Whether the row represents a network location"
+msgstr "Si la fila representa una ubicació de xarxa"
+
+#: ../gtk/gtkplacesviewrow.c:325
+msgid "Disconnect"
+msgstr "Desconnecta"
+
+#: ../gtk/gtkplacesviewrow.c:325
+msgid "Unmount"
+msgstr "Desmunta"
 
 #: ../gtk/gtkplug.c:202
 msgid "Whether the plug is embedded"
@@ -5638,39 +5663,39 @@ msgstr "Finestra del sòcol"
 msgid "The window of the socket the plug is embedded in"
 msgstr "La finestra del sòcol en el qual l'endoll està incrustat"
 
-#: ../gtk/gtkpopover.c:1590
+#: ../gtk/gtkpopover.c:1589
 msgid "Relative to"
 msgstr "Relatiu a"
 
-#: ../gtk/gtkpopover.c:1591
+#: ../gtk/gtkpopover.c:1590
 msgid "Widget the bubble window points to"
 msgstr "Giny al qual apunta la finestra bombolla"
 
-#: ../gtk/gtkpopover.c:1604
+#: ../gtk/gtkpopover.c:1603
 msgid "Pointing to"
 msgstr "Apunta a"
 
-#: ../gtk/gtkpopover.c:1605
+#: ../gtk/gtkpopover.c:1604
 msgid "Rectangle the bubble window points to"
 msgstr "Rectangle al qual apunta la finestra bombolla"
 
-#: ../gtk/gtkpopover.c:1619
+#: ../gtk/gtkpopover.c:1618
 msgid "Position to place the bubble window"
 msgstr "Posició on posar la finestra bombolla"
 
-#: ../gtk/gtkpopover.c:1634 ../gtk/gtkwindow.c:758
+#: ../gtk/gtkpopover.c:1633 ../gtk/gtkwindow.c:758
 msgid "Modal"
 msgstr "Modal"
 
-#: ../gtk/gtkpopover.c:1635
+#: ../gtk/gtkpopover.c:1634
 msgid "Whether the popover is modal"
 msgstr "Si el menú contextual és modal"
 
-#: ../gtk/gtkpopover.c:1649
+#: ../gtk/gtkpopover.c:1648
 msgid "Transitions enabled"
 msgstr "Transicions habilitades"
 
-#: ../gtk/gtkpopover.c:1650
+#: ../gtk/gtkpopover.c:1649
 msgid "Whether show/hide transitions are enabled or not"
 msgstr "Si mostra/amaga transicions està habilitat o no."
 
@@ -5807,7 +5832,7 @@ msgstr "Paràmetres de la impressora"
 msgid "Page Setup"
 msgstr "Configuració de la pàgina"
 
-#: ../gtk/gtkprintjob.c:168 ../gtk/gtkprintoperation.c:1215
+#: ../gtk/gtkprintjob.c:168 ../gtk/gtkprintoperation.c:1237
 msgid "Track Print Status"
 msgstr "Segueix l'estat de la impressió"
 
@@ -5820,51 +5845,51 @@ msgstr ""
 "«status-changed» un cop ja s'hagin transmès les dades a la impressora, o al "
 "servidor d'impressió."
 
-#: ../gtk/gtkprintoperation.c:1087
+#: ../gtk/gtkprintoperation.c:1109
 msgid "Default Page Setup"
 msgstr "Configuració de la pàgina per defecte"
 
-#: ../gtk/gtkprintoperation.c:1088
+#: ../gtk/gtkprintoperation.c:1110
 msgid "The GtkPageSetup used by default"
 msgstr "El GtkPageSetup utilitzat per defecte"
 
-#: ../gtk/gtkprintoperation.c:1106 ../gtk/gtkprintunixdialog.c:424
+#: ../gtk/gtkprintoperation.c:1128 ../gtk/gtkprintunixdialog.c:424
 msgid "Print Settings"
 msgstr "Paràmetres de la impressora"
 
-#: ../gtk/gtkprintoperation.c:1107 ../gtk/gtkprintunixdialog.c:425
+#: ../gtk/gtkprintoperation.c:1129 ../gtk/gtkprintunixdialog.c:425
 msgid "The GtkPrintSettings used for initializing the dialog"
 msgstr "El GtkPrintSettings utilitzat per inicialitzar el diàleg"
 
-#: ../gtk/gtkprintoperation.c:1125
+#: ../gtk/gtkprintoperation.c:1147
 msgid "Job Name"
 msgstr "Nom del treball"
 
-#: ../gtk/gtkprintoperation.c:1126
+#: ../gtk/gtkprintoperation.c:1148
 msgid "A string used for identifying the print job."
 msgstr "Una cadena per identificar el treball d'impressió."
 
-#: ../gtk/gtkprintoperation.c:1150
+#: ../gtk/gtkprintoperation.c:1172
 msgid "Number of Pages"
 msgstr "Nombre de pàgines"
 
-#: ../gtk/gtkprintoperation.c:1151
+#: ../gtk/gtkprintoperation.c:1173
 msgid "The number of pages in the document."
 msgstr "El nombre de pàgines del document."
 
-#: ../gtk/gtkprintoperation.c:1172 ../gtk/gtkprintunixdialog.c:414
+#: ../gtk/gtkprintoperation.c:1194 ../gtk/gtkprintunixdialog.c:414
 msgid "Current Page"
 msgstr "Pàgina actual"
 
-#: ../gtk/gtkprintoperation.c:1173 ../gtk/gtkprintunixdialog.c:415
+#: ../gtk/gtkprintoperation.c:1195 ../gtk/gtkprintunixdialog.c:415
 msgid "The current page in the document"
 msgstr "La pàgina actual en el document"
 
-#: ../gtk/gtkprintoperation.c:1194
+#: ../gtk/gtkprintoperation.c:1216
 msgid "Use full page"
 msgstr "Utilitza la pàgina completa"
 
-#: ../gtk/gtkprintoperation.c:1195
+#: ../gtk/gtkprintoperation.c:1217
 msgid ""
 "TRUE if the origin of the context should be at the corner of the page and "
 "not the corner of the imageable area"
@@ -5872,7 +5897,7 @@ msgstr ""
 "«TRUE» (cert) si l'origen del context ha de ser al racó de la pàgina, i no "
 "al racó de l'àrea representable"
 
-#: ../gtk/gtkprintoperation.c:1216
+#: ../gtk/gtkprintoperation.c:1238
 msgid ""
 "TRUE if the print operation will continue to report on the print job status "
 "after the print data has been sent to the printer or print server."
@@ -5881,93 +5906,93 @@ msgstr ""
 "treball d'impressió quan ja s'hagin enviat tots les dades a la impressora o "
 "al servidor d'impressió."
 
-#: ../gtk/gtkprintoperation.c:1233
+#: ../gtk/gtkprintoperation.c:1255
 msgid "Unit"
 msgstr "Unitat"
 
-#: ../gtk/gtkprintoperation.c:1234
+#: ../gtk/gtkprintoperation.c:1256
 msgid "The unit in which distances can be measured in the context"
 msgstr "La unitat amb què es mesuren distàncies en el context"
 
-#: ../gtk/gtkprintoperation.c:1251
+#: ../gtk/gtkprintoperation.c:1273
 msgid "Show Dialog"
 msgstr "Mostra el diàleg"
 
-#: ../gtk/gtkprintoperation.c:1252
+#: ../gtk/gtkprintoperation.c:1274
 msgid "TRUE if a progress dialog is shown while printing."
 msgstr "«TRUE» (cert) si el diàleg de progrés es mostra mentre s'imprimeix."
 
 # FIXME (josep)
-#: ../gtk/gtkprintoperation.c:1275
+#: ../gtk/gtkprintoperation.c:1297
 msgid "Allow Async"
 msgstr "Permet asíncron"
 
-#: ../gtk/gtkprintoperation.c:1276
+#: ../gtk/gtkprintoperation.c:1298
 msgid "TRUE if print process may run asynchronous."
 msgstr ""
 "«TRUE» (cert) si el procés d'impressió es pot executar de manera asíncrona."
 
-#: ../gtk/gtkprintoperation.c:1298 ../gtk/gtkprintoperation.c:1299
+#: ../gtk/gtkprintoperation.c:1320 ../gtk/gtkprintoperation.c:1321
 msgid "Export filename"
 msgstr "Fitxer a exportar"
 
-#: ../gtk/gtkprintoperation.c:1313
+#: ../gtk/gtkprintoperation.c:1335
 msgid "Status"
 msgstr "Estat"
 
-#: ../gtk/gtkprintoperation.c:1314
+#: ../gtk/gtkprintoperation.c:1336
 msgid "The status of the print operation"
 msgstr "L'estat de l'operació d'impressió"
 
-#: ../gtk/gtkprintoperation.c:1334
+#: ../gtk/gtkprintoperation.c:1356
 msgid "Status String"
 msgstr "Cadena d'estat"
 
-#: ../gtk/gtkprintoperation.c:1335
+#: ../gtk/gtkprintoperation.c:1357
 msgid "A human-readable description of the status"
 msgstr "Descripció de l'estat"
 
-#: ../gtk/gtkprintoperation.c:1353
+#: ../gtk/gtkprintoperation.c:1375
 msgid "Custom tab label"
 msgstr "Etiqueta de pestanya personalitzada"
 
-#: ../gtk/gtkprintoperation.c:1354
+#: ../gtk/gtkprintoperation.c:1376
 msgid "Label for the tab containing custom widgets."
 msgstr "Etiqueta per a la pestanya que contingui ginys personalitzats."
 
-#: ../gtk/gtkprintoperation.c:1369 ../gtk/gtkprintunixdialog.c:449
+#: ../gtk/gtkprintoperation.c:1391 ../gtk/gtkprintunixdialog.c:449
 msgid "Support Selection"
 msgstr "Admet la selecció"
 
-#: ../gtk/gtkprintoperation.c:1370
+#: ../gtk/gtkprintoperation.c:1392
 msgid "TRUE if the print operation will support print of selection."
 msgstr ""
 "«TRUE» (cert) si l'operació d'impressió ha d'admetre la impressió de la "
 "selecció."
 
-#: ../gtk/gtkprintoperation.c:1386 ../gtk/gtkprintunixdialog.c:457
+#: ../gtk/gtkprintoperation.c:1408 ../gtk/gtkprintunixdialog.c:457
 msgid "Has Selection"
 msgstr "Té selecció"
 
-#: ../gtk/gtkprintoperation.c:1387
+#: ../gtk/gtkprintoperation.c:1409
 msgid "TRUE if a selection exists."
 msgstr "«TRUE» (cert) si existeix una selecció."
 
-#: ../gtk/gtkprintoperation.c:1402 ../gtk/gtkprintunixdialog.c:465
+#: ../gtk/gtkprintoperation.c:1424 ../gtk/gtkprintunixdialog.c:465
 msgid "Embed Page Setup"
 msgstr "Incrusta la configuració de la pàgina"
 
-#: ../gtk/gtkprintoperation.c:1403 ../gtk/gtkprintunixdialog.c:466
+#: ../gtk/gtkprintoperation.c:1425 ../gtk/gtkprintunixdialog.c:466
 msgid "TRUE if page setup combos are embedded in GtkPrintUnixDialog"
 msgstr ""
 "«TRUE» (cert) si els quadres combinats de la configuració de pàgina estan "
 "incrustats en un GtkPrintUnixDialog"
 
-#: ../gtk/gtkprintoperation.c:1424
+#: ../gtk/gtkprintoperation.c:1446
 msgid "Number of Pages To Print"
 msgstr "Nombre de pàgines a imprimir"
 
-#: ../gtk/gtkprintoperation.c:1425
+#: ../gtk/gtkprintoperation.c:1447
 msgid "The number of pages that will be printed."
 msgstr "El nombre de pàgines que s'imprimiran."
 
@@ -7533,7 +7558,8 @@ msgid ""
 "Whether or not the size should smoothly change when changing between "
 "differently sized children"
 msgstr ""
-"Si la mida ha de canviar suaument o no en canviar entre fills de diferent mida"
+"Si la mida ha de canviar suaument o no en canviar entre fills de diferent "
+"mida"
 
 #: ../gtk/gtkstack.c:479
 msgid "The name of the child page"
@@ -7778,7 +7804,7 @@ msgstr ""
 "defecte. Això s'adapta pròpiament a canvis de tema, etc., per tant es "
 "recomana. El Pango predefineix algunes escales com ara «PANGO_SCALE_X_LARGE»"
 
-#: ../gtk/gtktexttag.c:417 ../gtk/gtktextview.c:786
+#: ../gtk/gtktexttag.c:417 ../gtk/gtktextview.c:809
 msgid "Left, right, or center justification"
 msgstr "Justificació a l'esquerra, dreta, o centre"
 
@@ -7794,7 +7820,7 @@ msgstr ""
 msgid "Left margin"
 msgstr "Marge esquerre"
 
-#: ../gtk/gtktexttag.c:444 ../gtk/gtktextview.c:795
+#: ../gtk/gtktexttag.c:444 ../gtk/gtktextview.c:830
 msgid "Width of the left margin in pixels"
 msgstr "Amplada del marge esquerre en píxels"
 
@@ -7802,15 +7828,15 @@ msgstr "Amplada del marge esquerre en píxels"
 msgid "Right margin"
 msgstr "Marge dret"
 
-#: ../gtk/gtktexttag.c:454 ../gtk/gtktextview.c:803
+#: ../gtk/gtktexttag.c:454 ../gtk/gtktextview.c:850
 msgid "Width of the right margin in pixels"
 msgstr "Amplada del marge dret en píxels"
 
-#: ../gtk/gtktexttag.c:464 ../gtk/gtktextview.c:810
+#: ../gtk/gtktexttag.c:464 ../gtk/gtktextview.c:899
 msgid "Indent"
 msgstr "Sagnat"
 
-#: ../gtk/gtktexttag.c:465 ../gtk/gtktextview.c:811
+#: ../gtk/gtktexttag.c:465 ../gtk/gtktextview.c:900
 msgid "Amount to indent the paragraph, in pixels"
 msgstr "Quantitat a sagnar el paràgraf, en píxels"
 
@@ -7826,7 +7852,7 @@ msgstr ""
 msgid "Pixels above lines"
 msgstr "Píxels per sobre les línies"
 
-#: ../gtk/gtktexttag.c:486 ../gtk/gtktextview.c:745
+#: ../gtk/gtktexttag.c:486 ../gtk/gtktextview.c:768
 msgid "Pixels of blank space above paragraphs"
 msgstr "Píxels d'espais en blanc per sobre els paràgrafs"
 
@@ -7834,7 +7860,7 @@ msgstr "Píxels d'espais en blanc per sobre els paràgrafs"
 msgid "Pixels below lines"
 msgstr "Píxels per sota les línies"
 
-#: ../gtk/gtktexttag.c:496 ../gtk/gtktextview.c:753
+#: ../gtk/gtktexttag.c:496 ../gtk/gtktextview.c:776
 msgid "Pixels of blank space below paragraphs"
 msgstr "Píxels d'espais en blanc per sota els paràgrafs"
 
@@ -7842,7 +7868,7 @@ msgstr "Píxels d'espais en blanc per sota els paràgrafs"
 msgid "Pixels inside wrap"
 msgstr "Píxels dins l'ajustament"
 
-#: ../gtk/gtktexttag.c:506 ../gtk/gtktextview.c:761
+#: ../gtk/gtktexttag.c:506 ../gtk/gtktextview.c:784
 msgid "Pixels of blank space between wrapped lines in a paragraph"
 msgstr "Píxels d'espais en blanc entre línies ajustades a un paràgraf"
 
@@ -7862,14 +7888,14 @@ msgstr "Ratllat RGBA"
 msgid "Color of strikethrough for this text"
 msgstr "Color del ratllat per a aquest text"
 
-#: ../gtk/gtktexttag.c:569 ../gtk/gtktextview.c:777
+#: ../gtk/gtktexttag.c:569 ../gtk/gtktextview.c:800
 msgid ""
 "Whether to wrap lines never, at word boundaries, or at character boundaries"
 msgstr ""
 "Si no s'ha d'ajustar mai les línies, o fer-ho en els límits de les paraules "
 "o caràcters"
 
-#: ../gtk/gtktexttag.c:579 ../gtk/gtktextview.c:819
+#: ../gtk/gtktexttag.c:579 ../gtk/gtktextview.c:908
 msgid "Custom tabs for this text"
 msgstr "Pestanyes personalitzades per a aquest text"
 
@@ -8070,71 +8096,87 @@ msgstr "Conjunt de funcionalitats del tipus de lletra"
 msgid "Whether this tag affects font features"
 msgstr "Si aquesta etiqueta afecta les funcionalitats del tipus de lletra"
 
-#: ../gtk/gtktextview.c:744
+#: ../gtk/gtktextview.c:767
 msgid "Pixels Above Lines"
 msgstr "Píxels per sobre les línies"
 
-#: ../gtk/gtktextview.c:752
+#: ../gtk/gtktextview.c:775
 msgid "Pixels Below Lines"
 msgstr "Píxels per sota les línies"
 
-#: ../gtk/gtktextview.c:760
+#: ../gtk/gtktextview.c:783
 msgid "Pixels Inside Wrap"
 msgstr "Píxels dins de l'ajust"
 
-#: ../gtk/gtktextview.c:776
+#: ../gtk/gtktextview.c:799
 msgid "Wrap Mode"
 msgstr "Mode ajust"
 
-#: ../gtk/gtktextview.c:794
+#: ../gtk/gtktextview.c:829
 msgid "Left Margin"
 msgstr "Marge esquerre"
 
-#: ../gtk/gtktextview.c:802
+#: ../gtk/gtktextview.c:849
 msgid "Right Margin"
 msgstr "Marge dret"
 
-#: ../gtk/gtktextview.c:826
+#: ../gtk/gtktextview.c:870
+msgid "Top Margin"
+msgstr "Marge superior"
+
+#: ../gtk/gtktextview.c:871
+msgid "Height of the top margin in pixels"
+msgstr "Alçada del marge superior en píxels"
+
+#: ../gtk/gtktextview.c:891
+msgid "Bottom Margin"
+msgstr "Marge inferior"
+
+#: ../gtk/gtktextview.c:892
+msgid "Height of the bottom margin in pixels"
+msgstr "Alçada del marge inferior en píxels"
+
+#: ../gtk/gtktextview.c:915
 msgid "Cursor Visible"
 msgstr "Cursor visible"
 
-#: ../gtk/gtktextview.c:827
+#: ../gtk/gtktextview.c:916
 msgid "If the insertion cursor is shown"
 msgstr "Si es mostra el cursor d'inserció"
 
-#: ../gtk/gtktextview.c:834
+#: ../gtk/gtktextview.c:923
 msgid "Buffer"
 msgstr "Text a memòria intermèdia"
 
-#: ../gtk/gtktextview.c:835
+#: ../gtk/gtktextview.c:924
 msgid "The buffer which is displayed"
 msgstr "El text a la memòria intermèdia que es mostrarà"
 
-#: ../gtk/gtktextview.c:843
+#: ../gtk/gtktextview.c:932
 msgid "Whether entered text overwrites existing contents"
 msgstr "Si el text entrat sobreescriu l'existent"
 
-#: ../gtk/gtktextview.c:850
+#: ../gtk/gtktextview.c:939
 msgid "Accepts tab"
 msgstr "Accepta tabuladors"
 
-#: ../gtk/gtktextview.c:851
+#: ../gtk/gtktextview.c:940
 msgid "Whether Tab will result in a tab character being entered"
 msgstr "Si la tecla de tabulació entra un caràcter de tabulació"
 
-#: ../gtk/gtktextview.c:939
+#: ../gtk/gtktextview.c:1028
 msgid "Monospace"
 msgstr "Monospace"
 
-#: ../gtk/gtktextview.c:940
+#: ../gtk/gtktextview.c:1029
 msgid "Whether to use a monospace font"
 msgstr "Si s'ha d'utilitzar el tipus de lletra monospace"
 
-#: ../gtk/gtktextview.c:958
+#: ../gtk/gtktextview.c:1047
 msgid "Error underline color"
 msgstr "Color de les línies d'error inferiors"
 
-#: ../gtk/gtktextview.c:959
+#: ../gtk/gtktextview.c:1048
 msgid "Color with which to draw error-indication underlines"
 msgstr "El color amb el qual es dibuixa la línia inferior que indica un error"
 
