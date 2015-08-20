@@ -147,6 +147,7 @@
     <file>list_store.c</file>
     <file>markup.c</file>
     <file>menus.c</file>
+    <file>modelbutton.c</file>
     <file>offscreen_window.c</file>
     <file>offscreen_window2.c</file>
     <file>overlay.c</file>
@@ -208,5 +209,8 @@
   </gresource>
   <gresource prefix="/scale">
     <file>scale.ui</file>
+  </gresource>
+  <gresource prefix="/modelbutton">
+    <file>modelbutton.ui</file>
   </gresource>
 </gresources>
