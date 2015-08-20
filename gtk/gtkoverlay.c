@@ -369,10 +369,10 @@ gtk_overlay_get_child_position (GtkOverlay    *overlay,
       alloc->width = MAX (alloc->width, main_alloc.width);
       break;
     case GTK_ALIGN_CENTER:
-      alloc->x += main_alloc.width / 2 - req.width / 2;
+      alloc->x += main_alloc.width / 2 - alloc->width / 2;
       break;
     case GTK_ALIGN_END:
-      alloc->x += main_alloc.width - req.width;
+      alloc->x += main_alloc.width - alloc->width;
       break;
     case GTK_ALIGN_BASELINE:
     default:
@@ -392,10 +392,10 @@ gtk_overlay_get_child_position (GtkOverlay    *overlay,
       alloc->height = MAX (alloc->height, main_alloc.height);
       break;
     case GTK_ALIGN_CENTER:
-      alloc->y += main_alloc.height / 2 - req.height / 2;
+      alloc->y += main_alloc.height / 2 - alloc->height / 2;
       break;
     case GTK_ALIGN_END:
-      alloc->y += main_alloc.height - req.height;
+      alloc->y += main_alloc.height - alloc->height;
       break;
     case GTK_ALIGN_BASELINE:
     default:
