@@ -358,10 +358,12 @@ gdk_registry_handle_global (void               *data,
       display_wayland->subcompositor =
         wl_registry_bind (display_wayland->wl_registry, id, &wl_subcompositor_interface, 1);
     }
-  else if (strcmp (interface, "_wl_pointer_gestures") == 0)
+  else if (strcmp (interface, "_wl_pointer_gestures") == 0 &&
+           version == GDK__WL_POINTER_GESTURES_VERSION)
     {
       display_wayland->pointer_gestures =
-        wl_registry_bind (display_wayland->wl_registry, id, &_wl_pointer_gestures_interface, 1);
+        wl_registry_bind (display_wayland->wl_registry,
+                          id, &_wl_pointer_gestures_interface, version);
     }
   else
     handled = FALSE;
