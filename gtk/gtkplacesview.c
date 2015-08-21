@@ -2001,8 +2001,8 @@ listbox_sort_func (GtkListBoxRow *row1,
 {
   gboolean row1_is_network;
   gboolean row2_is_network;
-  gchar *location1;
-  gchar *location2;
+  gchar *path1;
+  gchar *path2;
   gboolean *is_placeholder1;
   gboolean *is_placeholder2;
   gint retval;
@@ -2026,13 +2026,13 @@ listbox_sort_func (GtkListBoxRow *row1,
   if (is_placeholder2)
     return 1;
 
-  g_object_get (row1, "path", &location1, NULL);
-  g_object_get (row2, "path", &location2, NULL);
+  g_object_get (row1, "path", &path1, NULL);
+  g_object_get (row2, "path", &path2, NULL);
 
-  retval = g_strcmp0 (location1, location2);
+  retval = g_utf8_collate (path1, path2);
 
-  g_free (location1);
-  g_free (location2);
+  g_free (path1);
+  g_free (path2);
 
   return retval;
 }
