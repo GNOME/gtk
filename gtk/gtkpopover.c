@@ -518,6 +518,8 @@ show_animate_cb (GtkWidget     *widget,
       gtk_widget_set_opacity (widget, 1.0 - t);
     }
 
+  gtk_widget_queue_resize (GTK_WIDGET (popover));
+
   if (t >= 1.0)
     {
       if (priv->state == STATE_SHOWING)
@@ -530,10 +532,10 @@ show_animate_cb (GtkWidget     *widget,
       else
         gtk_popover_set_state (popover, STATE_HIDDEN);
 
-      return G_SOURCE_REMOVE;
+      return FALSE;
     }
   else
-    return G_SOURCE_CONTINUE;
+    return TRUE;
 }
 
 static void
@@ -573,7 +575,7 @@ gtk_popover_set_state (GtkPopover *popover,
     gtk_popover_start_transition (popover);
   else
     {
-      if (priv->tick_id != 0)
+      if (priv->tick_id)
         {
           gtk_widget_remove_tick_callback (GTK_WIDGET (popover), priv->tick_id);
           priv->tick_id = 0;
