@@ -1145,21 +1145,11 @@ server_mount_ready_cb (GObject      *source_file,
   GError *error;
   GFile *location;
 
-  view = GTK_PLACES_VIEW (user_data);
-  priv = gtk_places_view_get_instance_private (view);
   location = G_FILE (source_file);
   should_show = TRUE;
   error = NULL;
 
-  priv->should_pulse_entry = FALSE;
-  set_busy_cursor (view, FALSE);
-
   g_file_mount_enclosing_volume_finish (location, res, &error);
-  /* Restore from Cancel to Connect */
-  gtk_button_set_label (GTK_BUTTON (priv->connect_button), _("Con_nect"));
-  gtk_widget_set_sensitive (priv->address_entry, TRUE);
-  priv->connecting_to_server = FALSE;
-
   if (error)
     {
       should_show = FALSE;
@@ -1176,13 +1166,29 @@ server_mount_ready_cb (GObject      *source_file,
                (error->code != G_IO_ERROR_CANCELLED &&
                 error->code != G_IO_ERROR_FAILED_HANDLED))
         {
+          view = GTK_PLACES_VIEW (user_data);
           /* if it wasn't cancelled show a dialog */
           emit_show_error_message (view, _("Unable to access location"), error->message);
           should_show = FALSE;
         }
-
+      else
+        {
+          /* it was cancelled, so probably it was called during finalize, bail out. */
+          g_clear_error (&error);
+          return;
+        }
       g_clear_error (&error);
     }
+
+  view = GTK_PLACES_VIEW (user_data);
+  priv = gtk_places_view_get_instance_private (view);
+  priv->should_pulse_entry = FALSE;
+  set_busy_cursor (view, FALSE);
+
+  /* Restore from Cancel to Connect */
+  gtk_button_set_label (GTK_BUTTON (priv->connect_button), _("Con_nect"));
+  gtk_widget_set_sensitive (priv->address_entry, TRUE);
+  priv->connecting_to_server = FALSE;
 
   if (should_show)
     {
@@ -1234,13 +1240,9 @@ volume_mount_ready_cb (GObject      *source_volume,
   GVolume *volume;
   GError *error;
 
-  view = GTK_PLACES_VIEW (user_data);
-  priv = gtk_places_view_get_instance_private (view);
   volume = G_VOLUME (source_volume);
   should_show = TRUE;
   error = NULL;
-
-  set_busy_cursor (view, FALSE);
 
   g_volume_mount_finish (volume, res, &error);
 
@@ -1264,9 +1266,19 @@ volume_mount_ready_cb (GObject      *source_volume,
           emit_show_error_message (GTK_PLACES_VIEW (user_data), _("Unable to access location"), error->message);
           should_show = FALSE;
         }
+      else
+        {
+          /* it was cancelled, so probably it was called during finalize, bail out. */
+          g_clear_error (&error);
+          return;
+        }
 
       g_clear_error (&error);
     }
+
+  view = GTK_PLACES_VIEW (user_data);
+  priv = gtk_places_view_get_instance_private (view);
+  set_busy_cursor (view, FALSE);
 
   if (should_show)
     {
