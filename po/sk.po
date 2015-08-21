@@ -12,8 +12,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-08-14 21:52+0000\n"
-"PO-Revision-Date: 2015-08-15 11:35+0200\n"
+"POT-Creation-Date: 2015-08-20 21:54+0000\n"
+"PO-Revision-Date: 2015-08-21 10:53+0200\n"
 "Last-Translator: Dušan Kazik <prescott66@gmail.com>\n"
 "Language-Team: Slovak <gnome-sk-list@gnome.org>\n"
 "Language: sk\n"
@@ -1191,7 +1191,7 @@ msgstr ""
 #: gtk/gtkfilechooserwidget.c:1448 gtk/gtkfilechooserwidget.c:6301 gtk/gtkmessagedialog.c:942
 #: gtk/gtkmessagedialog.c:955 gtk/gtkmountoperation.c:543 gtk/gtkpagesetupunixdialog.c:196
 #: gtk/gtkprintbackend.c:763 gtk/gtkprinteroptionwidget.c:545 gtk/gtkprintunixdialog.c:665
-#: gtk/gtkprintunixdialog.c:738 gtk/gtkwindow.c:12102 gtk/inspector/css-editor.c:199
+#: gtk/gtkprintunixdialog.c:738 gtk/gtkwindow.c:12106 gtk/inspector/css-editor.c:199
 #: gtk/ui/gtkappchooserdialog.ui:61 gtk/ui/gtkassistant.ui:136 gtk/ui/gtkcolorchooserdialog.ui:34
 #: gtk/ui/gtkfontchooserdialog.ui:31
 msgid "_Cancel"
@@ -1239,7 +1239,7 @@ msgid "_Apply"
 msgstr "Po_užiť"
 
 #: gtk/deprecated/gtkfontsel.c:1698 gtk/gtkmessagedialog.c:934 gtk/gtkmessagedialog.c:956
-#: gtk/gtkprintbackend.c:764 gtk/gtkwindow.c:12103 gtk/inspector/classes-list.c:127
+#: gtk/gtkprintbackend.c:764 gtk/gtkwindow.c:12107 gtk/inspector/classes-list.c:127
 msgid "_OK"
 msgstr "_Ok"
 
@@ -2135,40 +2135,40 @@ msgstr "_Pravý:"
 msgid "Paper Margins"
 msgstr "Okraje papiera"
 
-#: gtk/gtkentry.c:9654 gtk/gtklabel.c:6611 gtk/gtktextview.c:9020
+#: gtk/gtkentry.c:9654 gtk/gtklabel.c:6619 gtk/gtktextview.c:9363
 msgid "Cu_t"
 msgstr "Vystri_hnúť"
 
-#: gtk/gtkentry.c:9658 gtk/gtklabel.c:6612 gtk/gtktextview.c:9024
+#: gtk/gtkentry.c:9658 gtk/gtklabel.c:6620 gtk/gtktextview.c:9367
 msgid "_Copy"
 msgstr "_Kopírovať"
 
-#: gtk/gtkentry.c:9662 gtk/gtklabel.c:6613 gtk/gtktextview.c:9026
+#: gtk/gtkentry.c:9662 gtk/gtklabel.c:6621 gtk/gtktextview.c:9369
 msgid "_Paste"
 msgstr "_Vložiť"
 
-#: gtk/gtkentry.c:9665 gtk/gtkfilechooserwidget.c:1449 gtk/gtkfilechooserwidget.c:2247 gtk/gtklabel.c:6615
-#: gtk/gtktextview.c:9029
+#: gtk/gtkentry.c:9665 gtk/gtkfilechooserwidget.c:1449 gtk/gtkfilechooserwidget.c:2247 gtk/gtklabel.c:6623
+#: gtk/gtktextview.c:9372
 msgid "_Delete"
 msgstr "O_dstrániť"
 
-#: gtk/gtkentry.c:9676 gtk/gtklabel.c:6624 gtk/gtktextview.c:9043
+#: gtk/gtkentry.c:9676 gtk/gtklabel.c:6632 gtk/gtktextview.c:9386
 msgid "Select _All"
 msgstr "Vybr_ať všetko"
 
-#: gtk/gtkentry.c:9854 gtk/gtktextview.c:9253
+#: gtk/gtkentry.c:9854 gtk/gtktextview.c:9596
 msgid "Select all"
 msgstr "Vybrať všetko"
 
-#: gtk/gtkentry.c:9857 gtk/gtktextview.c:9256
+#: gtk/gtkentry.c:9857 gtk/gtktextview.c:9599
 msgid "Cut"
 msgstr "Vystrihnúť"
 
-#: gtk/gtkentry.c:9860 gtk/gtktextview.c:9259
+#: gtk/gtkentry.c:9860 gtk/gtktextview.c:9602
 msgid "Copy"
 msgstr "Kopírovať"
 
-#: gtk/gtkentry.c:9863 gtk/gtktextview.c:9262
+#: gtk/gtkentry.c:9863 gtk/gtktextview.c:9605
 msgid "Paste"
 msgstr "Vložiť"
 
@@ -2189,7 +2189,7 @@ msgid "(None)"
 msgstr "(žiaden)"
 
 #. Open item is always present
-#: gtk/gtkfilechooserbutton.c:796 gtk/gtkplacessidebar.c:3349 gtk/gtkplacesview.c:1335
+#: gtk/gtkfilechooserbutton.c:796 gtk/gtkplacessidebar.c:3349 gtk/gtkplacesview.c:1348
 msgid "_Open"
 msgstr "_Otvoriť"
 
@@ -2587,12 +2587,12 @@ msgid "Error"
 msgstr "Chyba"
 
 #. Open Link
-#: gtk/gtklabel.c:6592
+#: gtk/gtklabel.c:6600
 msgid "_Open Link"
 msgstr "_Otvoriť odkaz"
 
 #. Copy Link Address
-#: gtk/gtklabel.c:6601
+#: gtk/gtklabel.c:6609
 msgid "Copy _Link Address"
 msgstr "Kopírovať _adresu odkazu"
 
@@ -3039,11 +3039,11 @@ msgstr "Nepodarilo sa vysunúť %s"
 msgid "Unable to poll “%s” for media changes"
 msgstr "Nepodarilo sa skontrolovať „%s“ na zmenu nosiča"
 
-#: gtk/gtkplacessidebar.c:3352 gtk/gtkplacesview.c:1345
+#: gtk/gtkplacessidebar.c:3352 gtk/gtkplacesview.c:1358
 msgid "Open in New _Tab"
 msgstr "Otvoriť na novej _karte"
 
-#: gtk/gtkplacessidebar.c:3355 gtk/gtkplacesview.c:1356
+#: gtk/gtkplacessidebar.c:3355 gtk/gtkplacesview.c:1369
 msgid "Open in New _Window"
 msgstr "Otvoriť v novom _okne"
 
@@ -3075,30 +3075,40 @@ msgstr "_Vysunúť"
 msgid "_Detect Media"
 msgstr "_Zistiť nosič"
 
-#: gtk/gtkplacessidebar.c:3817 gtk/gtkplacesview.c:797
+#: gtk/gtkplacessidebar.c:3817 gtk/gtkplacesview.c:798
 msgid "Computer"
 msgstr "Počítač"
 
+#. Restore from Cancel to Connect
+#: gtk/gtkplacesview.c:917 gtk/ui/gtkplacesview.ui:263
+msgid "Con_nect"
+msgstr "Prip_ojiť"
+
 #. if it wasn't cancelled show a dialog
-#: gtk/gtkplacesview.c:933 gtk/gtkplacesview.c:962 gtk/gtkplacesview.c:1017
+#: gtk/gtkplacesview.c:938 gtk/gtkplacesview.c:967 gtk/gtkplacesview.c:1022
 msgid "Unable to access location"
 msgstr "Nepodarilo sa pristúpiť k umiestneniu"
 
 #. if it wasn't cancelled show a dialog
-#: gtk/gtkplacesview.c:1066
+#: gtk/gtkplacesview.c:1071
 msgid "Unable to unmount volume"
 msgstr "Nepodarilo sa odpojiť zväzok"
 
-#: gtk/gtkplacesview.c:1555
+#. Allow to cancel the operation
+#: gtk/gtkplacesview.c:1153
+msgid "Cance_l"
+msgstr "_Zrušiť"
+
+#: gtk/gtkplacesview.c:1568
 msgid "Unable to get remote server location"
 msgstr "Nie je možné získať umiestnenie vzdialeného servera"
 
 #  heading
-#: gtk/gtkplacesview.c:1667 gtk/gtkplacesview.c:1676
+#: gtk/gtkplacesview.c:1680 gtk/gtkplacesview.c:1689
 msgid "Networks"
 msgstr "Siete"
 
-#: gtk/gtkplacesview.c:1667 gtk/gtkplacesview.c:1676
+#: gtk/gtkplacesview.c:1680 gtk/gtkplacesview.c:1689
 msgid "On This Computer"
 msgstr "Na tomto počítači"
 
@@ -3128,74 +3138,74 @@ msgstr "Nie je k dispozícii"
 msgid "%s job #%d"
 msgstr "%s: úloha č. %d"
 
-#: gtk/gtkprintoperation.c:1777
+#: gtk/gtkprintoperation.c:1799
 msgctxt "print operation status"
 msgid "Initial state"
 msgstr "Počiatočný stav"
 
-#: gtk/gtkprintoperation.c:1778
+#: gtk/gtkprintoperation.c:1800
 msgctxt "print operation status"
 msgid "Preparing to print"
 msgstr "Pripravuje sa na tlač"
 
-#: gtk/gtkprintoperation.c:1779
+#: gtk/gtkprintoperation.c:1801
 msgctxt "print operation status"
 msgid "Generating data"
 msgstr "Generujú sa údaje"
 
-#: gtk/gtkprintoperation.c:1780
+#: gtk/gtkprintoperation.c:1802
 msgctxt "print operation status"
 msgid "Sending data"
 msgstr "Odosielajú sa údaje"
 
-#: gtk/gtkprintoperation.c:1781
+#: gtk/gtkprintoperation.c:1803
 msgctxt "print operation status"
 msgid "Waiting"
 msgstr "Čaká sa"
 
-#: gtk/gtkprintoperation.c:1782
+#: gtk/gtkprintoperation.c:1804
 msgctxt "print operation status"
 msgid "Blocking on issue"
 msgstr "Zablokované na probléme"
 
-#: gtk/gtkprintoperation.c:1783
+#: gtk/gtkprintoperation.c:1805
 msgctxt "print operation status"
 msgid "Printing"
 msgstr "Tlačí sa"
 
-#: gtk/gtkprintoperation.c:1784
+#: gtk/gtkprintoperation.c:1806
 msgctxt "print operation status"
 msgid "Finished"
 msgstr "Tlač ukončená"
 
-#: gtk/gtkprintoperation.c:1785
+#: gtk/gtkprintoperation.c:1807
 msgctxt "print operation status"
 msgid "Finished with error"
 msgstr "Tlač ukončená s chybou"
 
 # %d - pocet stran
-#: gtk/gtkprintoperation.c:2349
+#: gtk/gtkprintoperation.c:2371
 #, c-format
 msgid "Preparing %d"
 msgstr "Pripravuje sa %d"
 
-#: gtk/gtkprintoperation.c:2351 gtk/gtkprintoperation.c:2984
+#: gtk/gtkprintoperation.c:2373 gtk/gtkprintoperation.c:3002
 #, c-format
 msgid "Preparing"
 msgstr "Pripravuje sa"
 
 #  %d - pocet stran
-#: gtk/gtkprintoperation.c:2354
+#: gtk/gtkprintoperation.c:2376
 #, c-format
 msgid "Printing %d"
 msgstr "Tlačí sa %d"
 
-#: gtk/gtkprintoperation.c:3015
+#: gtk/gtkprintoperation.c:3033
 #, c-format
 msgid "Error creating print preview"
 msgstr "Chyba pri vytváraní náhľadu"
 
-#: gtk/gtkprintoperation.c:3018
+#: gtk/gtkprintoperation.c:3036
 #, c-format
 msgid "The most probable reason is that a temporary file could not be created."
 msgstr "Najpravdepodobnejšia príčina je, že sa nepodarilo vytvoriť dočasný súbor."
@@ -3642,12 +3652,12 @@ msgctxt "volume percentage"
 msgid "%d %%"
 msgstr "%d %%"
 
-#: gtk/gtkwindow.c:12090
+#: gtk/gtkwindow.c:12094
 #, c-format
 msgid "Do you want to use GTK+ Inspector?"
 msgstr "Chcete použiť nástroj Inšpektor GTK+?"
 
-#: gtk/gtkwindow.c:12092
+#: gtk/gtkwindow.c:12096
 #, c-format
 msgid ""
 "GTK+ Inspector is an interactive debugger that lets you explore and modify the internals of any GTK+ "
@@ -3656,7 +3666,7 @@ msgstr ""
 "Inšpektor GTK+ je interaktývny ladiaci nástroj, pomocou ktorého je možné preskúmať a meniť interné "
 "vlastnosti ľubovolnej aplikácie GTK+. Jeho používaním môžete spôsobiť neočakávanie chovanie alebo pád."
 
-#: gtk/gtkwindow.c:12097
+#: gtk/gtkwindow.c:12101
 msgid "Don't show this message again"
 msgstr "Nezobrazovať túto správu znovu"
 
@@ -5433,13 +5443,10 @@ msgstr "Nenašli sa žiadne výsledky"
 msgid "Connect to _Server"
 msgstr "Pripojiť k _serveru"
 
-#: gtk/ui/gtkplacesview.ui:263
-msgid "Con_nect"
-msgstr "Prip_ojiť"
-
+#  tooltip
 #: gtk/ui/gtkplacesview.ui:286
-msgid "Address…"
-msgstr "Adresa…"
+msgid "Enter server address…"
+msgstr "Zadajte adresu servera…"
 
 #: gtk/ui/gtkprintunixdialog.ui:117
 msgid "Printer"
@@ -6451,6 +6458,9 @@ msgstr "vystup-test.%s"
 #: modules/printbackends/test/gtkprintbackendtest.c:465
 msgid "Print to Test Printer"
 msgstr "Vytlačiť na skúšobnej tlačiarni"
+
+#~ msgid "Address…"
+#~ msgstr "Adresa…"
 
 #~ msgid "_Customize"
 #~ msgstr "P_rispôsobiť"
