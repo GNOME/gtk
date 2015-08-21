@@ -36,8 +36,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.3.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-08-20 19:03+0200\n"
-"PO-Revision-Date: 2015-03-28 12:54\n"
+"POT-Creation-Date: 2015-08-21 18:13+0200\n"
+"PO-Revision-Date: 2015-08-21 12:54\n"
 "Last-Translator:  <>\n"
 "Language-Team: Catalan <tradgnome@softcatala.org>\n"
 "Language: ca\n"
@@ -3894,7 +3894,7 @@ msgid "The current filter for selecting which files are displayed"
 msgstr "El filtre actual per seleccionar quins fitxers es mostraran"
 
 #: ../gtk/gtkfilechooser.c:388 ../gtk/gtkplacessidebar.c:4344
-#: ../gtk/gtkplacesview.c:1886
+#: ../gtk/gtkplacesview.c:2166
 msgid "Local Only"
 msgstr "Només locals"
 
@@ -5413,19 +5413,19 @@ msgstr "La pestanya activa es dibuixa amb un espai a la part inferior"
 msgid "The orientation of the orientable"
 msgstr "L'orientació de l'orientable"
 
-#: ../gtk/gtkoverlay.c:778
+#: ../gtk/gtkoverlay.c:771
 msgid "Pass Through"
 msgstr "Passa a través"
 
-#: ../gtk/gtkoverlay.c:778
+#: ../gtk/gtkoverlay.c:771
 msgid "Pass through input, does not affect main child"
 msgstr "L'entrada passa a través, no afecta el fill principal"
 
-#: ../gtk/gtkoverlay.c:783
+#: ../gtk/gtkoverlay.c:776
 msgid "Index"
 msgstr "Índex"
 
-#: ../gtk/gtkoverlay.c:784
+#: ../gtk/gtkoverlay.c:777
 msgid "The index of the overlay in the parent, -1 for the main child"
 msgstr "L'índex de superposició en el pare, -1 pel fill principal"
 
@@ -5502,11 +5502,11 @@ msgstr "Trieu la ubicació"
 msgid "The location to highlight in the sidebar"
 msgstr "La ubicació que s'ha de ressaltar a la barra lateral"
 
-#: ../gtk/gtkplacessidebar.c:4313 ../gtk/gtkplacesview.c:1893
+#: ../gtk/gtkplacessidebar.c:4313 ../gtk/gtkplacesview.c:2180
 msgid "Open Flags"
 msgstr "Indicadors d'obertura"
 
-#: ../gtk/gtkplacessidebar.c:4314 ../gtk/gtkplacesview.c:1894
+#: ../gtk/gtkplacessidebar.c:4314 ../gtk/gtkplacesview.c:2181
 msgid ""
 "Modes in which the calling application can open locations selected in the "
 "sidebar"
@@ -5551,7 +5551,7 @@ msgid ""
 msgstr ""
 "Si la barra lateral inclou una drecera per introduir manualment una ubicació"
 
-#: ../gtk/gtkplacessidebar.c:4345 ../gtk/gtkplacesview.c:1887
+#: ../gtk/gtkplacessidebar.c:4345 ../gtk/gtkplacesview.c:2167
 msgid "Whether the sidebar only includes local files"
 msgstr "Si la barra lateral inclou només fitxers locals"
 
@@ -5575,21 +5575,29 @@ msgstr "Si la barra lateral inclou un element per mostrar altres ubicacions"
 msgid "Whether to emit ::populate-popup for popups that are not menus"
 msgstr "Si s'emet ::populate-popup per a finestres emergents que no són menús"
 
-#: ../gtk/gtkplacesview.c:1393
+#: ../gtk/gtkplacesview.c:1635
 msgid "_Disconnect"
 msgstr "_Desconnecta"
 
-#: ../gtk/gtkplacesview.c:1393
+#: ../gtk/gtkplacesview.c:1635
 msgid "_Unmount"
 msgstr "_Desmunta"
 
-#: ../gtk/gtkplacesview.c:1403
+#: ../gtk/gtkplacesview.c:1645
 msgid "_Connect"
 msgstr "_Connecta"
 
-#: ../gtk/gtkplacesview.c:1403
+#: ../gtk/gtkplacesview.c:1645
 msgid "_Mount"
 msgstr "_Munta"
+
+#: ../gtk/gtkplacesview.c:2173
+msgid "Loading"
+msgstr "S'està carregant"
+
+#: ../gtk/gtkplacesview.c:2174
+msgid "Whether the view is loading locations"
+msgstr "Si la vista carrega ubicacions"
 
 #: ../gtk/gtkplacesviewrow.c:181
 msgid "Icon of the row"
