@@ -3562,10 +3562,10 @@ list_box_sort_func (GtkListBoxRow *row1,
     {
       if (section_type_1 == section_type_2)
         {
-          if ((section_type_1 == section_type_2) &&
-              (section_type_1 == SECTION_COMPUTER) &&
-              (place_type_1 == place_type_2) &&
-              (place_type_1 == PLACES_XDG_DIR))
+          if ((section_type_1 == SECTION_COMPUTER &&
+               place_type_1 == place_type_2 &&
+               place_type_1 == PLACES_XDG_DIR) ||
+              section_type_1 == SECTION_MOUNTS)
             {
               retval = g_utf8_collate (label_1, label_2);
             }
