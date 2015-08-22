@@ -6431,7 +6431,8 @@ name_entry_get_parent_info_cb (GCancellable *cancellable,
                                const GError *error,
                                gpointer      user_data)
 {
-  gboolean parent_is_folder;
+  gboolean parent_is_folder = FALSE;
+  gboolean parent_is_accessible = FALSE;
   gboolean cancelled = g_cancellable_is_cancelled (cancellable);
   struct FileExistsData *data = user_data;
   GtkFileChooserWidget *impl = data->impl;
@@ -6447,12 +6448,14 @@ name_entry_get_parent_info_cb (GCancellable *cancellable,
   if (cancelled)
     goto out;
 
-  if (!info)
-    parent_is_folder = FALSE;
-  else
-    parent_is_folder = _gtk_file_info_consider_as_directory (info);
+  if (info)
+    {
+      parent_is_folder = _gtk_file_info_consider_as_directory (info);
+      parent_is_accessible = g_file_info_has_attribute (info, "access::can-execute") &&
+                             g_file_info_get_attribute_boolean (info, "access::can-execute");
+    }
 
-  if (parent_is_folder)
+  if (parent_is_folder && parent_is_accessible)
     {
       if (priv->action == GTK_FILE_CHOOSER_ACTION_OPEN)
         {
@@ -6500,24 +6503,31 @@ name_entry_get_parent_info_cb (GCancellable *cancellable,
       else
         g_assert_not_reached ();
     }
+  else if (parent_is_folder)
+    {
+      GError *error;
+
+      error = NULL;
+      g_set_error_literal (&error, G_IO_ERROR, G_IO_ERROR_PERMISSION_DENIED,
+                           _("You do not have access to the specified folder."));
+
+      error_changing_folder_dialog (impl, data->parent_file, error);
+    }
+  else if (info)
+    {
+      /* The parent exists, but it's not a folder!
+       * Someone probably typed existing_file.txt/subfile.txt
+       */
+      error_with_file_under_nonfolder (impl, data->parent_file);
+    }
   else
     {
-      if (info)
-        {
-          /* The parent exists, but it's not a folder!
-           * Someone probably typed existing_file.txt/subfile.txt
-           */
-          error_with_file_under_nonfolder (impl, data->parent_file);
-        }
-      else
-        {
-          GError *error_copy;
+      GError *error_copy;
 
-          /* The parent folder is not readable for some reason */
+      /* The parent folder is not readable for some reason */
 
-          error_copy = g_error_copy (error);
-          error_changing_folder_dialog (impl, data->parent_file, error_copy);
-        }
+      error_copy = g_error_copy (error);
+      error_changing_folder_dialog (impl, data->parent_file, error_copy);
     }
 
 out:
@@ -6629,7 +6639,7 @@ file_exists_get_info_cb (GCancellable *cancellable,
       priv->should_respond_get_info_cancellable =
         _gtk_file_system_get_info (priv->file_system,
                                    data->parent_file,
-                                   "standard::type",
+                                   "standard::type,access::can-execute",
                                    name_entry_get_parent_info_cb,
                                    data);
       set_busy_cursor (impl, TRUE);
