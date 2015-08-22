@@ -1939,8 +1939,11 @@ gtk_list_box_focus (GtkWidget        *widget,
   GtkListBoxPrivate *priv = BOX_PRIV (box);
   GtkWidget *focus_child;
   GtkListBoxRow *next_focus_row;
+  GtkWidget *row;
+  GtkWidget *header;
 
   focus_child = gtk_container_get_focus_child ((GtkContainer *)box);
+
   next_focus_row = NULL;
   if (focus_child != NULL)
     {
@@ -1951,7 +1954,23 @@ gtk_list_box_focus (GtkWidget        *widget,
 
       if (direction == GTK_DIR_UP || direction == GTK_DIR_TAB_BACKWARD)
         {
-          i = gtk_list_box_get_previous_visible (box, ROW_PRIV (GTK_LIST_BOX_ROW (focus_child))->iter);
+          if (GTK_IS_LIST_BOX_ROW (focus_child))
+            {
+              header = ROW_PRIV (GTK_LIST_BOX_ROW (focus_child))->header;
+              if (header && gtk_widget_child_focus (header, direction))
+                return TRUE;
+            }
+
+          if (GTK_IS_LIST_BOX_ROW (focus_child))
+            row = focus_child;
+          else
+            row = g_hash_table_lookup (priv->header_hash, focus_child);
+
+          if (GTK_IS_LIST_BOX_ROW (row))
+            i = gtk_list_box_get_previous_visible (box, ROW_PRIV (GTK_LIST_BOX_ROW (row))->iter);
+          else
+            i = NULL;
+
           while (i != NULL)
             {
               if (gtk_widget_get_sensitive (g_sequence_get (i)))
@@ -1965,7 +1984,17 @@ gtk_list_box_focus (GtkWidget        *widget,
         }
       else if (direction == GTK_DIR_DOWN || direction == GTK_DIR_TAB_FORWARD)
         {
-          i = gtk_list_box_get_next_visible (box, ROW_PRIV (GTK_LIST_BOX_ROW (focus_child))->iter);
+          if (GTK_IS_LIST_BOX_ROW (focus_child))
+            i = gtk_list_box_get_next_visible (box, ROW_PRIV (GTK_LIST_BOX_ROW (focus_child))->iter);
+          else
+            {
+              row = g_hash_table_lookup (priv->header_hash, focus_child);
+              if (GTK_IS_LIST_BOX_ROW (row))
+                i = ROW_PRIV (GTK_LIST_BOX_ROW (row))->iter;
+              else
+                i = NULL;
+            }
+
           while (!g_sequence_iter_is_end (i))
             {
               if (gtk_widget_get_sensitive (g_sequence_get (i)))
@@ -2008,10 +2037,17 @@ gtk_list_box_focus (GtkWidget        *widget,
       return FALSE;
     }
 
+  if (direction == GTK_DIR_DOWN || direction == GTK_DIR_TAB_FORWARD)
+    {
+      header = ROW_PRIV (next_focus_row)->header;
+      if (header && gtk_widget_child_focus (header, direction))
+        return TRUE;
+    }
+
   if (gtk_widget_child_focus (GTK_WIDGET (next_focus_row), direction))
     return TRUE;
 
-  return TRUE;
+  return FALSE;
 }
 
 static gboolean
