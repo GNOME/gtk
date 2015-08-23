@@ -23,6 +23,8 @@
 
 #include <glib/gi18n-lib.h>
 
+#include "gtkundocommandchainprivate.h"
+
 typedef struct _GtkUndoCommandPrivate GtkUndoCommandPrivate;
 struct _GtkUndoCommandPrivate {
   gint64 timestamp;
@@ -121,7 +123,7 @@ GtkUndoCommand *
 gtk_undo_command_real_merge (GtkUndoCommand *command,
                              GtkUndoCommand *followup)
 {
-  return NULL;
+  return gtk_undo_command_chain_new_merge (command, followup);
 }
 
 gboolean

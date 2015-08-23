@@ -195,9 +195,12 @@ gtk_entry_undo_command_merge (GtkUndoCommand *command,
   GtkEntryUndoCommandPrivate *followup_priv = gtk_entry_undo_command_get_instance_private (GTK_ENTRY_UNDO_COMMAND (followup));
 
   if (!GTK_IS_ENTRY_UNDO_COMMAND (followup))
-    return NULL;
+    return GTK_UNDO_COMMAND_CLASS (gtk_entry_undo_command_parent_class)->merge (command, followup);
 
   if (command_priv->entry != followup_priv->entry)
+    return GTK_UNDO_COMMAND_CLASS (gtk_entry_undo_command_parent_class)->merge (command, followup);
+
+  if (g_str_equal (command_priv->before.text, followup_priv->after.text))
     return NULL;
 
   return gtk_entry_undo_command_new_from_snapshots (command_priv->entry,
