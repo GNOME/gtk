@@ -70,11 +70,11 @@ gtk_undo_undo_command_redo (GtkUndoCommand *command)
   return result;
 }
 
-GtkUndoCommand *
-gtk_undo_undo_command_merge (GtkUndoCommand *command,
-                             GtkUndoCommand *followup)
+gboolean
+gtk_undo_undo_command_should_merge (GtkUndoCommand *command,
+                                    GtkUndoCommand *followup)
 {
-  return NULL;
+  return FALSE;
 }
 
 static void
@@ -97,7 +97,7 @@ gtk_undo_undo_command_class_init (GtkUndoUndoCommandClass *klass)
 
   undo_class->undo = gtk_undo_undo_command_undo;
   undo_class->redo = gtk_undo_undo_command_redo;
-  undo_class->merge = gtk_undo_undo_command_merge;
+  undo_class->should_merge = gtk_undo_undo_command_should_merge;
 }
 
 static void
