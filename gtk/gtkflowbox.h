@@ -61,7 +61,7 @@ struct _GtkFlowBoxClass
   void (*selected_children_changed)  (GtkFlowBox        *box);
   void (*activate_cursor_child)      (GtkFlowBox        *box);
   void (*toggle_cursor_child)        (GtkFlowBox        *box);
-  void (*move_cursor)                (GtkFlowBox        *box,
+  gboolean (*move_cursor)            (GtkFlowBox        *box,
                                       GtkMovementStep    step,
                                       gint               count);
   void (*select_all)                 (GtkFlowBox        *box);
