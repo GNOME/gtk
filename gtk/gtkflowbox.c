@@ -292,6 +292,23 @@ gtk_flow_box_child_focus (GtkWidget        *widget,
 
   child = gtk_bin_get_child (GTK_BIN (widget));
 
+  /* Without "can-focus" flag try to pass the focus to the child immediately */
+  if (!gtk_widget_get_can_focus (widget))
+    {
+      if (child)
+        {
+          if (gtk_widget_child_focus (child, direction))
+            {
+              GtkFlowBox *box;
+              box = gtk_flow_box_child_get_box (GTK_FLOW_BOX_CHILD (widget));
+              if (box)
+                gtk_flow_box_update_cursor (box, GTK_FLOW_BOX_CHILD (widget));
+              return TRUE;
+            }
+        }
+      return FALSE;
+    }
+
   g_object_get (widget, "has-focus", &had_focus, NULL);
   if (had_focus)
     {
@@ -3193,6 +3210,12 @@ gtk_flow_box_focus (GtkWidget        *widget,
   GSequenceIter *iter;
   GtkFlowBoxChild *next_focus_child;
 
+  /* Without "can-focus" flag fall back to the default behavior immediately */
+  if (!gtk_widget_get_can_focus (widget))
+    {
+      return GTK_WIDGET_CLASS (gtk_flow_box_parent_class)->focus (widget, direction);
+    }
+
   focus_child = gtk_container_get_focus_child (GTK_CONTAINER (box));
   next_focus_child = NULL;
 
@@ -3313,7 +3336,7 @@ gtk_flow_box_toggle_cursor_child (GtkFlowBox *box)
     gtk_flow_box_select_and_activate (box, priv->cursor_child);
 }
 
-static void
+static gboolean
 gtk_flow_box_move_cursor (GtkFlowBox      *box,
                           GtkMovementStep  step,
                           gint             count)
@@ -3330,6 +3353,10 @@ gtk_flow_box_move_cursor (GtkFlowBox      *box,
   gint start;
   GtkAdjustment *adjustment;
   gboolean vertical;
+
+  /* Without "can-focus" flag fall back to the default behavior immediately */
+  if (!gtk_widget_get_can_focus (GTK_WIDGET (box)))
+    return FALSE;
 
   vertical = priv->orientation == GTK_ORIENTATION_VERTICAL;
 
@@ -3479,17 +3506,25 @@ gtk_flow_box_move_cursor (GtkFlowBox      *box,
 
       if (!gtk_widget_keynav_failed (GTK_WIDGET (box), direction))
         {
-          GtkWidget *toplevel = gtk_widget_get_toplevel (GTK_WIDGET (box));
-
-          if (toplevel)
-            gtk_widget_child_focus (toplevel,
-                                    direction == GTK_DIR_UP ?
-                                    GTK_DIR_TAB_BACKWARD :
-                                    GTK_DIR_TAB_FORWARD);
-
+          return FALSE;
         }
 
-      return;
+      return TRUE;
+    }
+
+  /* If the child has its "can-focus" property set to FALSE then it will
+   * not grab the focus. We must pass the focus to its child directly.
+   */
+  if (!gtk_widget_get_can_focus (GTK_WIDGET (child)))
+    {
+      GtkWidget *subchild;
+
+      subchild = gtk_bin_get_child (GTK_BIN (child));
+      if (subchild)
+        {
+          GtkDirectionType direction = count < 0 ? GTK_DIR_TAB_BACKWARD : GTK_DIR_TAB_FORWARD;
+          gtk_widget_child_focus (subchild, direction);
+        }
     }
 
   get_current_selection_modifiers (GTK_WIDGET (box), &modify, &extend);
@@ -3497,6 +3532,7 @@ gtk_flow_box_move_cursor (GtkFlowBox      *box,
   gtk_flow_box_update_cursor (box, child);
   if (!modify)
     gtk_flow_box_update_selection (box, child, FALSE, extend);
+  return TRUE;
 }
 
 /* Selection {{{2 */
@@ -3845,8 +3881,6 @@ gtk_flow_box_class_init (GtkFlowBoxClass *class)
    * The ::move-cursor signal is a
    * [keybinding signal][GtkBindingSignal]
    * which gets emitted when the user initiates a cursor movement.
-   * If the cursor is not visible in @text_view, this signal causes
-   * the viewport to be moved instead.
    *
    * Applications should not connect to it, but may emit it with
    * g_signal_emit_by_name() if they need to control the cursor
@@ -3859,14 +3893,17 @@ gtk_flow_box_class_init (GtkFlowBoxClass *class)
    * - Arrow keys move by individual children
    * - Home/End keys move to the ends of the box
    * - PageUp/PageDown keys move vertically by pages
+   *
+   * Returns: %TRUE to stop other handlers from being invoked for the event.
+   * %FALSE to propagate the event further.
    */
   signals[MOVE_CURSOR] = g_signal_new (I_("move-cursor"),
                                        GTK_TYPE_FLOW_BOX,
                                        G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
                                        G_STRUCT_OFFSET (GtkFlowBoxClass, move_cursor),
                                        NULL, NULL,
-                                       _gtk_marshal_VOID__ENUM_INT,
-                                       G_TYPE_NONE, 2,
+                                       _gtk_marshal_BOOLEAN__ENUM_INT,
+                                       G_TYPE_BOOLEAN, 2,
                                        GTK_TYPE_MOVEMENT_STEP, G_TYPE_INT);
   /**
    * GtkFlowBox::select-all:
