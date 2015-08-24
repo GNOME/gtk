@@ -293,6 +293,7 @@ init_display (GtkInspectorGeneral *gen)
 
   for (i = 0; i < gdk_screen_get_n_monitors (screen); i++)
     {
+      GtkWidget *row;
       GtkWidget *box;
       GtkWidget *label;
       gchar *text;
@@ -333,8 +334,12 @@ init_display (GtkInspectorGeneral *gen)
       gtk_box_pack_start (GTK_BOX (box), label, TRUE, TRUE, 0);
       g_free (text);
 
-      gtk_widget_show_all (box);
-      gtk_list_box_insert (GTK_LIST_BOX (gen->priv->x_box), box, -1);
+      row = gtk_list_box_row_new ();
+      gtk_container_add (GTK_CONTAINER (row), box);
+      gtk_list_box_row_set_activatable (GTK_LIST_BOX_ROW (row), FALSE);
+      gtk_widget_show_all (row);
+
+      gtk_list_box_insert (GTK_LIST_BOX (gen->priv->x_box), row, -1);
     }
 }
 
