@@ -295,7 +295,7 @@ gtk_message_row_new (GtkMessage *message)
 static int
 gtk_message_row_sort (GtkMessageRow *a, GtkMessageRow *b, gpointer data)
 {
-  return a->priv->message->time - b->priv->message->time;
+  return b->priv->message->time - a->priv->message->time;
 }
 
 static void
