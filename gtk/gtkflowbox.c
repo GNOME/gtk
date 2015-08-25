@@ -90,6 +90,8 @@ static void gtk_flow_box_bound_model_changed (GListModel *list,
                                               guint       added,
                                               gpointer    user_data);
 
+static void gtk_flow_box_check_model_compat  (GtkFlowBox *box);
+
 static void
 get_current_selection_modifiers (GtkWidget *widget,
                                  gboolean  *modify,
@@ -4254,6 +4256,16 @@ gtk_flow_box_set_vadjustment (GtkFlowBox    *box,
   gtk_container_set_focus_vadjustment (GTK_CONTAINER (box), adjustment);
 }
 
+static void
+gtk_flow_box_check_model_compat (GtkFlowBox *box)
+{
+  GtkFlowBoxPrivate *priv = BOX_PRIV (box);
+
+  if (priv->bound_model &&
+      (priv->sort_func || priv->filter_func))
+    g_warning ("GtkFlowBox with a model will ignore sort and filter functions");
+}
+
 /**
  * gtk_flow_box_bind_model:
  * @box: a #GtkFlowBox
@@ -4308,6 +4320,8 @@ gtk_flow_box_bind_model (GtkFlowBox                 *box,
   priv->create_widget_func = create_widget_func;
   priv->create_widget_func_data = user_data;
   priv->create_widget_func_data_destroy = user_data_free_func;
+
+  gtk_flow_box_check_model_compat (box);
 
   g_signal_connect (priv->bound_model, "items-changed", G_CALLBACK (gtk_flow_box_bound_model_changed), box);
   gtk_flow_box_bound_model_changed (model, 0, 0, g_list_model_get_n_items (model), box);
@@ -4860,6 +4874,8 @@ gtk_flow_box_set_filter_func (GtkFlowBox           *box,
   priv->filter_data = user_data;
   priv->filter_destroy = destroy;
 
+  gtk_flow_box_check_model_compat (box);
+
   gtk_flow_box_apply_filter_all (box);
 }
 
@@ -4939,6 +4955,8 @@ gtk_flow_box_set_sort_func (GtkFlowBox         *box,
   priv->sort_func = sort_func;
   priv->sort_data = user_data;
   priv->sort_destroy = destroy;
+
+  gtk_flow_box_check_model_compat (box);
 
   gtk_flow_box_invalidate_sort (box);
 }
