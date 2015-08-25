@@ -1,7 +1,7 @@
 # translation of gtk+.HEAD.po to Español
 # Copyright © 1999-2002, 2006, 2007, 2008 Free Software Foundation, Inc.
 # This file is distributed under the same license as the gtk+ package.
-# 
+#
 # Pablo Saratxaga <srtxg@chanae.alphanet.ch>, 1998-2000.
 # José Antonio Salgueiro A. <joseantsa@eresmas.net>, 2001.
 # Carlos Perelló Marín <carlos@gnome-db.org>, 2002.
@@ -10,17 +10,17 @@
 # Juan Manuel García Molina <juanma_gm@wanadoo.es>, 2003.
 # Francisco Javier F. Serrador <serrador@cvs.gnome.org>, 2003 - 2006.
 # Jorge González <jorgegonz@svn.gnome.org>, 2007, 2008, 2009, 2010, 2011.
-# 
+#
 # Daniel Mustieles <daniel.mustieles@gmail.com>, 2011, 2012, 2013, 2014, 2015., 2015.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+.master\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-08-18 09:51+0000\n"
-"PO-Revision-Date: 2015-08-18 13:51+0200\n"
+"POT-Creation-Date: 2015-08-24 21:55+0000\n"
+"PO-Revision-Date: 2015-08-25 \n"
 "Last-Translator: Daniel Mustieles <daniel.mustieles@gmail.com>\n"
-"Language-Team: Español; Castellano <gnome-es-list@gnome.org>\n"
+"Language-Team: Spanish <gnome-es-list@gnome.org>\n"
 "Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -2226,7 +2226,7 @@ msgstr "(Ninguno)"
 
 #. Open item is always present
 #: gtk/gtkfilechooserbutton.c:796 gtk/gtkplacessidebar.c:3349
-#: gtk/gtkplacesview.c:1348
+#: gtk/gtkplacesview.c:1602
 msgid "_Open"
 msgstr "_Abrir"
 
@@ -2449,7 +2449,7 @@ msgstr "Introducir ubicación"
 msgid "Enter location or URL"
 msgstr "Introducir ubicación o URL"
 
-#: gtk/gtkfilechooserwidget.c:4334 gtk/gtkfilechooserwidget.c:7205
+#: gtk/gtkfilechooserwidget.c:4334 gtk/gtkfilechooserwidget.c:7215
 #: gtk/ui/gtkfilechooserwidget.ui:236
 msgid "Modified"
 msgstr "Modificado"
@@ -2514,11 +2514,16 @@ msgstr ""
 msgid "_Replace"
 msgstr "_Reemplazar"
 
-#: gtk/gtkfilechooserwidget.c:7116
+#: gtk/gtkfilechooserwidget.c:6512
+#| msgid "Could not read the contents of the folder"
+msgid "You do not have access to the specified folder."
+msgstr "No tiene acceso a la carpeta especificada."
+
+#: gtk/gtkfilechooserwidget.c:7126
 msgid "Could not start the search process"
 msgstr "No se ha podido iniciar el proceso de búsqueda"
 
-#: gtk/gtkfilechooserwidget.c:7117
+#: gtk/gtkfilechooserwidget.c:7127
 msgid ""
 "The program was not able to create a connection to the indexer daemon. "
 "Please make sure it is running."
@@ -2526,11 +2531,11 @@ msgstr ""
 "El programa no pudo de crear una conexión con el demonio indexador. "
 "Asegúrese de que se está ejecutando."
 
-#: gtk/gtkfilechooserwidget.c:7129
+#: gtk/gtkfilechooserwidget.c:7139
 msgid "Could not send the search request"
 msgstr "No se ha podido enviar la petición de búsqueda"
 
-#: gtk/gtkfilechooserwidget.c:7422
+#: gtk/gtkfilechooserwidget.c:7432
 msgid "Accessed"
 msgstr "Accedido"
 
@@ -3062,11 +3067,11 @@ msgstr "No se pudo expulsar %s"
 msgid "Unable to poll “%s” for media changes"
 msgstr "No se puede consultar a «%s» si hay cambios en el medio"
 
-#: gtk/gtkplacessidebar.c:3352 gtk/gtkplacesview.c:1358
+#: gtk/gtkplacessidebar.c:3352 gtk/gtkplacesview.c:1612
 msgid "Open in New _Tab"
 msgstr "Abrir en una _pestaña nueva"
 
-#: gtk/gtkplacessidebar.c:3355 gtk/gtkplacesview.c:1369
+#: gtk/gtkplacessidebar.c:3355 gtk/gtkplacesview.c:1623
 msgid "Open in New _Window"
 msgstr "Abrir en una _ventana nueva"
 
@@ -3098,40 +3103,49 @@ msgstr "_Expulsar"
 msgid "_Detect Media"
 msgstr "_Detectar medio"
 
-#: gtk/gtkplacessidebar.c:3817 gtk/gtkplacesview.c:798
+#: gtk/gtkplacessidebar.c:3817 gtk/gtkplacesview.c:1064
 msgid "Computer"
 msgstr "Equipo"
 
+#: gtk/gtkplacesview.c:888
+#| msgid "Show other locations"
+msgid "Searching for network locations"
+msgstr "Buscando ubicaciones de red"
+
+#: gtk/gtkplacesview.c:896
+#| msgid "No applications found."
+msgid "No networks locations found"
+msgstr "No se han encontrado ubicaciones de red"
+
+#. if it wasn't cancelled show a dialog
+#: gtk/gtkplacesview.c:1171 gtk/gtkplacesview.c:1215 gtk/gtkplacesview.c:1266
+msgid "Unable to access location"
+msgstr "No se puede acceder a la ubicación"
+
 #. Restore from Cancel to Connect
-#: gtk/gtkplacesview.c:917 gtk/ui/gtkplacesview.ui:263
+#: gtk/gtkplacesview.c:1189 gtk/ui/gtkplacesview.ui:263
 msgid "Con_nect"
 msgstr "Co_nectar"
 
 #. if it wasn't cancelled show a dialog
-#: gtk/gtkplacesview.c:938 gtk/gtkplacesview.c:967 gtk/gtkplacesview.c:1022
-msgid "Unable to access location"
-msgstr "No se puede acceder a la ubicación"
-
-#. if it wasn't cancelled show a dialog
-#: gtk/gtkplacesview.c:1071
+#: gtk/gtkplacesview.c:1325
 msgid "Unable to unmount volume"
 msgstr "No se puede desmontar del volumen"
 
 #. Allow to cancel the operation
-#: gtk/gtkplacesview.c:1153
-#| msgid "Cancel"
+#: gtk/gtkplacesview.c:1407
 msgid "Cance_l"
 msgstr "Cance_lar"
 
-#: gtk/gtkplacesview.c:1568
+#: gtk/gtkplacesview.c:1822
 msgid "Unable to get remote server location"
 msgstr "No se pudo obtener la ubicación del servidor remoto"
 
-#: gtk/gtkplacesview.c:1680 gtk/gtkplacesview.c:1689
+#: gtk/gtkplacesview.c:1941 gtk/gtkplacesview.c:1950
 msgid "Networks"
 msgstr "Redes"
 
-#: gtk/gtkplacesview.c:1680 gtk/gtkplacesview.c:1689
+#: gtk/gtkplacesview.c:1941 gtk/gtkplacesview.c:1950
 msgid "On This Computer"
 msgstr "En este equipo"
 
@@ -3160,72 +3174,72 @@ msgstr "No disponible"
 msgid "%s job #%d"
 msgstr "%s tarea #%d"
 
-#: gtk/gtkprintoperation.c:1777
+#: gtk/gtkprintoperation.c:1799
 msgctxt "print operation status"
 msgid "Initial state"
 msgstr "Estado inicial"
 
-#: gtk/gtkprintoperation.c:1778
+#: gtk/gtkprintoperation.c:1800
 msgctxt "print operation status"
 msgid "Preparing to print"
 msgstr "Preparándose para imprimir"
 
-#: gtk/gtkprintoperation.c:1779
+#: gtk/gtkprintoperation.c:1801
 msgctxt "print operation status"
 msgid "Generating data"
 msgstr "Generando datos"
 
-#: gtk/gtkprintoperation.c:1780
+#: gtk/gtkprintoperation.c:1802
 msgctxt "print operation status"
 msgid "Sending data"
 msgstr "Enviando datos"
 
-#: gtk/gtkprintoperation.c:1781
+#: gtk/gtkprintoperation.c:1803
 msgctxt "print operation status"
 msgid "Waiting"
 msgstr "Esperando"
 
-#: gtk/gtkprintoperation.c:1782
+#: gtk/gtkprintoperation.c:1804
 msgctxt "print operation status"
 msgid "Blocking on issue"
 msgstr "Bloqueado en una hoja"
 
-#: gtk/gtkprintoperation.c:1783
+#: gtk/gtkprintoperation.c:1805
 msgctxt "print operation status"
 msgid "Printing"
 msgstr "Imprimiendo"
 
-#: gtk/gtkprintoperation.c:1784
+#: gtk/gtkprintoperation.c:1806
 msgctxt "print operation status"
 msgid "Finished"
 msgstr "Terminado"
 
-#: gtk/gtkprintoperation.c:1785
+#: gtk/gtkprintoperation.c:1807
 msgctxt "print operation status"
 msgid "Finished with error"
 msgstr "Terminado con error"
 
-#: gtk/gtkprintoperation.c:2349
+#: gtk/gtkprintoperation.c:2371
 #, c-format
 msgid "Preparing %d"
 msgstr "Preparando %d"
 
-#: gtk/gtkprintoperation.c:2351 gtk/gtkprintoperation.c:2984
+#: gtk/gtkprintoperation.c:2373 gtk/gtkprintoperation.c:3002
 #, c-format
 msgid "Preparing"
 msgstr "Preparando"
 
-#: gtk/gtkprintoperation.c:2354
+#: gtk/gtkprintoperation.c:2376
 #, c-format
 msgid "Printing %d"
 msgstr "Imprimiendo %d"
 
-#: gtk/gtkprintoperation.c:3015
+#: gtk/gtkprintoperation.c:3033
 #, c-format
 msgid "Error creating print preview"
 msgstr "Error al crear la vista previa de impresión"
 
-#: gtk/gtkprintoperation.c:3018
+#: gtk/gtkprintoperation.c:3036
 #, c-format
 msgid "The most probable reason is that a temporary file could not be created."
 msgstr "La razón más probable es que no se pudiera crear un archivo temporal."
@@ -5476,7 +5490,6 @@ msgid "Connect to _Server"
 msgstr "Conectar al _servidor"
 
 #: gtk/ui/gtkplacesview.ui:286
-#| msgid "Connect to a network server address"
 msgid "Enter server address…"
 msgstr "Introduzca la dirección del servidor…"
 
