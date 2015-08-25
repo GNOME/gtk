@@ -272,6 +272,7 @@ static void                 gtk_list_box_bound_model_changed            (GListMo
                                                                          guint                added,
                                                                          gpointer             user_data);
 
+static void                 gtk_list_box_check_model_compat             (GtkListBox          *box);
 static GParamSpec *properties[LAST_PROPERTY] = { NULL, };
 static guint signals[LAST_SIGNAL] = { 0 };
 static GParamSpec *row_properties[LAST_ROW_PROPERTY] = { NULL, };
@@ -1101,6 +1102,8 @@ gtk_list_box_set_filter_func (GtkListBox           *box,
   priv->filter_func_target = user_data;
   priv->filter_func_target_destroy_notify = destroy;
 
+  gtk_list_box_check_model_compat (box);
+
   gtk_list_box_invalidate_filter (box);
 }
 
@@ -1296,6 +1299,8 @@ gtk_list_box_set_sort_func (GtkListBox         *box,
   priv->sort_func = sort_func;
   priv->sort_func_target = user_data;
   priv->sort_func_target_destroy_notify = destroy;
+
+  gtk_list_box_check_model_compat (box);
 
   gtk_list_box_invalidate_sort (box);
 }
@@ -3728,6 +3733,16 @@ gtk_list_box_bound_model_changed (GListModel *list,
     }
 }
 
+static void
+gtk_list_box_check_model_compat (GtkListBox *box)
+{
+  GtkListBoxPrivate *priv = BOX_PRIV (box);
+
+  if (priv->bound_model &&
+      (priv->sort_func || priv->filter_func))
+    g_warning ("GtkListBox with a model will ignore sort and filter functions");
+}
+
 /**
  * gtk_list_box_bind_model:
  * @box: a #GtkListBox
@@ -3752,11 +3767,11 @@ gtk_list_box_bound_model_changed (GListModel *list,
  * Since: 3.16
  */
 void
-gtk_list_box_bind_model (GtkListBox                   *box,
-                         GListModel                   *model,
-                         GtkListBoxCreateWidgetFunc    create_widget_func,
-                         gpointer                      user_data,
-                         GDestroyNotify                user_data_free_func)
+gtk_list_box_bind_model (GtkListBox                 *box,
+                         GListModel                 *model,
+                         GtkListBoxCreateWidgetFunc  create_widget_func,
+                         gpointer                    user_data,
+                         GDestroyNotify              user_data_free_func)
 {
   GtkListBoxPrivate *priv = BOX_PRIV (box);
 
@@ -3782,6 +3797,8 @@ gtk_list_box_bind_model (GtkListBox                   *box,
   priv->create_widget_func = create_widget_func;
   priv->create_widget_func_data = user_data;
   priv->create_widget_func_data_destroy = user_data_free_func;
+
+  gtk_list_box_check_model_compat (box);
 
   g_signal_connect (priv->bound_model, "items-changed", G_CALLBACK (gtk_list_box_bound_model_changed), box);
   gtk_list_box_bound_model_changed (model, 0, 0, g_list_model_get_n_items (model), box);
