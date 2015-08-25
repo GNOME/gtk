@@ -4287,6 +4287,10 @@ gtk_flow_box_check_model_compat (GtkFlowBox *box)
  * gtk_flow_box_insert() or gtk_container_add()) while @box is bound to a
  * model.
  *
+ * Note that using a model is incompatible with the filtering and sorting
+ * functionality in GtkFlowBox. When using a model, filtering and sorting
+ * should be implemented by the model.
+ *
  * Since: 3.18
  */
 void
@@ -4853,6 +4857,9 @@ gtk_flow_box_get_selection_mode (GtkFlowBox *box)
  * gtk_flow_box_child_changed()) or when gtk_flow_box_invalidate_filter()
  * is called.
  *
+ * Note that using a filter function is incompatible with using a model
+ * (see gtk_flow_box_bind_model()).
+ *
  * Since: 3.12
  */
 void
@@ -4934,6 +4941,9 @@ gtk_flow_box_invalidate_filter (GtkFlowBox *box)
  * and will continue to be called each time a child changes (via
  * gtk_flow_box_child_changed()) and when gtk_flow_box_invalidate_sort()
  * is called.
+ *
+ * + * Note that using a sort function is incompatible with using a model
+ * + * (see gtk_list_box_bind_model()).
  *
  * Since: 3.12
  */
