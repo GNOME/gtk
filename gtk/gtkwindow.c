@@ -12051,21 +12051,24 @@ warn_response (GtkDialog *dialog,
     }
 }
 
+static guint gtk_window_update_debugging_id;
+
 static gboolean
 update_debugging (gpointer data)
 {
   gtk_inspector_window_rescan (inspector_window);
+  gtk_window_update_debugging_id = 0;
   return G_SOURCE_REMOVE;
 }
 
 static void
 gtk_window_update_debugging (void)
 {
-  if (inspector_window)
+  if (inspector_window &&
+      gtk_window_update_debugging_id == 0)
     {
-      guint id;
-      id = gdk_threads_add_idle (update_debugging, NULL);
-      g_source_set_name_by_id (id, "[gtk+] gtk_window_update_debugging");
+      gtk_window_update_debugging_id = gdk_threads_add_idle (update_debugging, NULL);
+      g_source_set_name_by_id (gtk_window_update_debugging_id, "[gtk+] gtk_window_update_debugging");
     }
 }
 
