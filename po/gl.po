@@ -18,8 +18,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-master-po-gl-77922___.merged\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-08-17 00:57+0200\n"
-"PO-Revision-Date: 2015-08-17 01:30+0200\n"
+"POT-Creation-Date: 2015-08-25 16:28+0200\n"
+"PO-Revision-Date: 2015-08-25 16:29+0200\n"
 "Last-Translator: Fran Dieguez <frandieguez@gnome.org>\n"
 "Language-Team: gnome-l10n-gl@gnome.org\n"
 "Language: gl\n"
@@ -2165,41 +2165,41 @@ msgstr "_Dereito:"
 msgid "Paper Margins"
 msgstr "Marxes do papel"
 
-#: ../gtk/gtkentry.c:9654 ../gtk/gtklabel.c:6619 ../gtk/gtktextview.c:9020
+#: ../gtk/gtkentry.c:9654 ../gtk/gtklabel.c:6619 ../gtk/gtktextview.c:9363
 msgid "Cu_t"
 msgstr "Cor_tar"
 
-#: ../gtk/gtkentry.c:9658 ../gtk/gtklabel.c:6620 ../gtk/gtktextview.c:9024
+#: ../gtk/gtkentry.c:9658 ../gtk/gtklabel.c:6620 ../gtk/gtktextview.c:9367
 msgid "_Copy"
 msgstr "_Copiar"
 
-#: ../gtk/gtkentry.c:9662 ../gtk/gtklabel.c:6621 ../gtk/gtktextview.c:9026
+#: ../gtk/gtkentry.c:9662 ../gtk/gtklabel.c:6621 ../gtk/gtktextview.c:9369
 msgid "_Paste"
 msgstr "_Pegar"
 
 #: ../gtk/gtkentry.c:9665 ../gtk/gtkfilechooserwidget.c:1449
 #: ../gtk/gtkfilechooserwidget.c:2247 ../gtk/gtklabel.c:6623
-#: ../gtk/gtktextview.c:9029
+#: ../gtk/gtktextview.c:9372
 msgid "_Delete"
 msgstr "E_liminar"
 
-#: ../gtk/gtkentry.c:9676 ../gtk/gtklabel.c:6632 ../gtk/gtktextview.c:9043
+#: ../gtk/gtkentry.c:9676 ../gtk/gtklabel.c:6632 ../gtk/gtktextview.c:9386
 msgid "Select _All"
 msgstr "Seleccionar _todo"
 
-#: ../gtk/gtkentry.c:9854 ../gtk/gtktextview.c:9253
+#: ../gtk/gtkentry.c:9854 ../gtk/gtktextview.c:9596
 msgid "Select all"
 msgstr "Seleccionar todo"
 
-#: ../gtk/gtkentry.c:9857 ../gtk/gtktextview.c:9256
+#: ../gtk/gtkentry.c:9857 ../gtk/gtktextview.c:9599
 msgid "Cut"
 msgstr "Cortar"
 
-#: ../gtk/gtkentry.c:9860 ../gtk/gtktextview.c:9259
+#: ../gtk/gtkentry.c:9860 ../gtk/gtktextview.c:9602
 msgid "Copy"
 msgstr "Copiar"
 
-#: ../gtk/gtkentry.c:9863 ../gtk/gtktextview.c:9262
+#: ../gtk/gtkentry.c:9863 ../gtk/gtktextview.c:9605
 msgid "Paste"
 msgstr "Pegar"
 
@@ -2221,7 +2221,7 @@ msgstr "(Ningún)"
 
 #. Open item is always present
 #: ../gtk/gtkfilechooserbutton.c:796 ../gtk/gtkplacessidebar.c:3349
-#: ../gtk/gtkplacesview.c:1335
+#: ../gtk/gtkplacesview.c:1602
 msgid "_Open"
 msgstr "_Abrir"
 
@@ -2441,7 +2441,7 @@ msgstr "Escriba unha localización"
 msgid "Enter location or URL"
 msgstr "Escriba a localización ou URL"
 
-#: ../gtk/gtkfilechooserwidget.c:4334 ../gtk/gtkfilechooserwidget.c:7205
+#: ../gtk/gtkfilechooserwidget.c:4334 ../gtk/gtkfilechooserwidget.c:7215
 msgid "Modified"
 msgstr "Modificado"
 
@@ -2505,11 +2505,15 @@ msgstr ""
 msgid "_Replace"
 msgstr "_Substituír"
 
-#: ../gtk/gtkfilechooserwidget.c:7116
+#: ../gtk/gtkfilechooserwidget.c:6512
+msgid "You do not have access to the specified folder."
+msgstr "Vostede non ten acceso para o cartafol especificado."
+
+#: ../gtk/gtkfilechooserwidget.c:7126
 msgid "Could not start the search process"
 msgstr "Non foi posíbel iniciar o proceso de busca"
 
-#: ../gtk/gtkfilechooserwidget.c:7117
+#: ../gtk/gtkfilechooserwidget.c:7127
 msgid ""
 "The program was not able to create a connection to the indexer daemon. "
 "Please make sure it is running."
@@ -2517,11 +2521,11 @@ msgstr ""
 "O programa non puido crear unha conexión co daemon indexador. Asegúrese de "
 "que está en execución."
 
-#: ../gtk/gtkfilechooserwidget.c:7129
+#: ../gtk/gtkfilechooserwidget.c:7139
 msgid "Could not send the search request"
 msgstr "Non foi posíbel enviar a solicitude de busca"
 
-#: ../gtk/gtkfilechooserwidget.c:7422
+#: ../gtk/gtkfilechooserwidget.c:7432
 msgid "Accessed"
 msgstr "Accedido"
 
@@ -3049,11 +3053,11 @@ msgstr "Non é posíbel extraer %s"
 msgid "Unable to poll “%s” for media changes"
 msgstr "Non é posíbel analizar «%s» para saber os cambios no soporte"
 
-#: ../gtk/gtkplacessidebar.c:3352 ../gtk/gtkplacesview.c:1345
+#: ../gtk/gtkplacessidebar.c:3352 ../gtk/gtkplacesview.c:1612
 msgid "Open in New _Tab"
 msgstr "Abrir unha nova _lapela"
 
-#: ../gtk/gtkplacessidebar.c:3355 ../gtk/gtkplacesview.c:1356
+#: ../gtk/gtkplacessidebar.c:3355 ../gtk/gtkplacesview.c:1623
 msgid "Open in New _Window"
 msgstr "Abrir nunha nova _xanela"
 
@@ -3085,30 +3089,48 @@ msgstr "_Expulsar"
 msgid "_Detect Media"
 msgstr "_Detectar soporte"
 
-#: ../gtk/gtkplacessidebar.c:3817 ../gtk/gtkplacesview.c:797
+#: ../gtk/gtkplacessidebar.c:3817 ../gtk/gtkplacesview.c:1064
 msgid "Computer"
 msgstr "Computador"
 
+#: ../gtk/gtkplacesview.c:888
+msgid "Searching for network locations"
+msgstr "Buscar localizacóns de rede"
+
+#: ../gtk/gtkplacesview.c:896
+msgid "No networks locations found"
+msgstr "Non se atoparon localizacións de rede"
+
 #. if it wasn't cancelled show a dialog
-#: ../gtk/gtkplacesview.c:933 ../gtk/gtkplacesview.c:962
-#: ../gtk/gtkplacesview.c:1017
+#: ../gtk/gtkplacesview.c:1171 ../gtk/gtkplacesview.c:1215
+#: ../gtk/gtkplacesview.c:1266
 msgid "Unable to access location"
 msgstr "Non foi posíbel acceder á localización"
 
+#. Restore from Cancel to Connect
+#: ../gtk/gtkplacesview.c:1189
+msgid "Con_nect"
+msgstr "Co_nectar"
+
 #. if it wasn't cancelled show a dialog
-#: ../gtk/gtkplacesview.c:1066
+#: ../gtk/gtkplacesview.c:1325
 msgid "Unable to unmount volume"
 msgstr "Non foi posíbel desmontar o volume"
 
-#: ../gtk/gtkplacesview.c:1555
+#. Allow to cancel the operation
+#: ../gtk/gtkplacesview.c:1407
+msgid "Cance_l"
+msgstr "Cance_lar"
+
+#: ../gtk/gtkplacesview.c:1822
 msgid "Unable to get remote server location"
 msgstr "Non foi posíbel obter a localización remota do servidor"
 
-#: ../gtk/gtkplacesview.c:1667 ../gtk/gtkplacesview.c:1676
+#: ../gtk/gtkplacesview.c:1941 ../gtk/gtkplacesview.c:1950
 msgid "Networks"
 msgstr "Redes"
 
-#: ../gtk/gtkplacesview.c:1667 ../gtk/gtkplacesview.c:1676
+#: ../gtk/gtkplacesview.c:1941 ../gtk/gtkplacesview.c:1950
 msgid "On This Computer"
 msgstr "Neste computador"
 
@@ -3137,70 +3159,70 @@ msgstr "Non dispoñíbel"
 msgid "%s job #%d"
 msgstr "%s traballo #%d"
 
-#: ../gtk/gtkprintoperation.c:1777
+#: ../gtk/gtkprintoperation.c:1799
 msgctxt "print operation status"
 msgid "Initial state"
 msgstr "Estado inicial"
 
-#: ../gtk/gtkprintoperation.c:1778
+#: ../gtk/gtkprintoperation.c:1800
 msgctxt "print operation status"
 msgid "Preparing to print"
 msgstr "Preparándose para imprimir"
 
-#: ../gtk/gtkprintoperation.c:1779
+#: ../gtk/gtkprintoperation.c:1801
 msgctxt "print operation status"
 msgid "Generating data"
 msgstr "Xerando datos"
 
-#: ../gtk/gtkprintoperation.c:1780
+#: ../gtk/gtkprintoperation.c:1802
 msgctxt "print operation status"
 msgid "Sending data"
 msgstr "Enviando datos"
 
-#: ../gtk/gtkprintoperation.c:1781
+#: ../gtk/gtkprintoperation.c:1803
 msgctxt "print operation status"
 msgid "Waiting"
 msgstr "Agardando"
 
-#: ../gtk/gtkprintoperation.c:1782
+#: ../gtk/gtkprintoperation.c:1804
 msgctxt "print operation status"
 msgid "Blocking on issue"
 msgstr "Bloqueada por un problema"
 
-#: ../gtk/gtkprintoperation.c:1783
+#: ../gtk/gtkprintoperation.c:1805
 msgctxt "print operation status"
 msgid "Printing"
 msgstr "Imprimindo"
 
-#: ../gtk/gtkprintoperation.c:1784
+#: ../gtk/gtkprintoperation.c:1806
 msgctxt "print operation status"
 msgid "Finished"
 msgstr "Finalizado"
 
-#: ../gtk/gtkprintoperation.c:1785
+#: ../gtk/gtkprintoperation.c:1807
 msgctxt "print operation status"
 msgid "Finished with error"
 msgstr "Finalizado con erros"
 
-#: ../gtk/gtkprintoperation.c:2349
+#: ../gtk/gtkprintoperation.c:2371
 #, c-format
 msgid "Preparing %d"
 msgstr "Preparando %d"
 
-#: ../gtk/gtkprintoperation.c:2351 ../gtk/gtkprintoperation.c:2984
+#: ../gtk/gtkprintoperation.c:2373 ../gtk/gtkprintoperation.c:3002
 msgid "Preparing"
 msgstr "Preparando"
 
-#: ../gtk/gtkprintoperation.c:2354
+#: ../gtk/gtkprintoperation.c:2376
 #, c-format
 msgid "Printing %d"
 msgstr "Imprimindo %d"
 
-#: ../gtk/gtkprintoperation.c:3015
+#: ../gtk/gtkprintoperation.c:3033
 msgid "Error creating print preview"
 msgstr "Produciuse un erro ao crear a vista previa da páxina"
 
-#: ../gtk/gtkprintoperation.c:3018
+#: ../gtk/gtkprintoperation.c:3036
 msgid "The most probable reason is that a temporary file could not be created."
 msgstr ""
 "O motivo máis probábel é que non foi posíbel crear un ficheiro temporal."
@@ -5920,9 +5942,6 @@ msgstr "Imprimir para probar a impresora"
 
 #~ msgid "_Find New Applications"
 #~ msgstr "_Atopar novos aplicativos"
-
-#~ msgid "No applications found."
-#~ msgstr "Non se atoparon aplicativos"
 
 #~ msgid "Preferences"
 #~ msgstr "Preferencias"
