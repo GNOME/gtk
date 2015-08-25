@@ -434,24 +434,24 @@ stamp-gc-h: $(top_builddir)/config.status
 	&& echo timestamp > gdk/$(@F)
 
 # ------------------- MSVC Build Items ----------------
-MSVCPROJS = gdk
+MSVCPROJS = gdk-3
 
-gdk_FILES = $(libgdk_3_la_SOURCES)
-gdk_EXCLUDES = dummy
-gdk_HEADERS_DIR = $(gdkincludedir)
+gdk_3_FILES = $(libgdk_3_la_SOURCES)
+gdk_3_EXCLUDES = dummy
+gdk_3_HEADERS_DIR = $(gdkincludedir)
 
-gdk_HEADERS_INST = \
+gdk_3_HEADERS_INST = \
 	$(gdkinclude_HEADERS)		\
 	$(deprecatedinclude_HEADERS)	\
 	$(nodist_gdkinclude_HEADERS)
 
-gdk_HEADERS_EXCLUDES = dummy
+gdk_3_HEADERS_EXCLUDES = dummy
 
 include $(top_srcdir)/build/Makefile.msvcproj
 
 dist-hook: \
-	$(top_builddir)/build/win32/vs9/gdk.vcproj	\
-	$(top_builddir)/build/win32/vs9/gdk.headers
+	$(top_builddir)/build/win32/vs9/gdk-3.vcproj	\
+	$(top_builddir)/build/win32/vs9/gdk-3.headers
 
 DISTCLEANFILES = gdkconfig.h stamp-gc-h
 

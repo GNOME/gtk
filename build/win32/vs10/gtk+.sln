@@ -1,16 +1,16 @@
 Microsoft Visual Studio Solution File, Format Version 11.00
 # Visual Studio 2010
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "gtk-prebuild", "gtk-prebuild.vcxproj", "{FC5AADB5-95CD-4BF0-BA8B-0C16FE7073FF}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "gtk3-prebuild", "gtk3-prebuild.vcxproj", "{FC5AADB5-95CD-4BF0-BA8B-0C16FE7073FF}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "gdk-win32", "gdk-win32.vcxproj", "{FC5AADB5-95CD-4BF0-BA8B-0C16FE7073FA}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "gdk3-win32", "gdk3-win32.vcxproj", "{FC5AADB5-95CD-4BF0-BA8B-0C16FE7073FA}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "gdk-broadway", "gdk-broadway.vcxproj", "{FC5AADB5-95CD-4BF0-BA8B-0C16FE7073FE}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "gdk3-broadway", "gdk3-broadway.vcxproj", "{FC5AADB5-95CD-4BF0-BA8B-0C16FE7073FE}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "broadwayd", "broadwayd.vcxproj", "{3281202A-CD26-4C67-B892-EB34BDBC6130}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "gdk", "gdk.vcxproj", "{FC5AADB5-95CD-4BF0-BA8B-0C16FE7073F7}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "gdk-3", "gdk-3.vcxproj", "{FC5AADB5-95CD-4BF0-BA8B-0C16FE7073F7}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "gtk", "gtk.vcxproj", "{FC5AADB5-95CD-4BF0-BA8B-0C16FE7073F5}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "gtk-3", "gtk-3.vcxproj", "{FC5AADB5-95CD-4BF0-BA8B-0C16FE7073F5}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "gtk3-demo", "gtk3-demo.vcxproj", "{FC5AADB5-95CD-4BF0-BA8B-0C16FE7073FC}"
 EndProject
@@ -20,9 +20,9 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "gtk3-icon-browser", "gtk3-i
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "gtk-encode-symbolic-svg", "gtk-encode-symbolic-svg.vcxproj", "{3281202A-CD26-4C67-B892-EB34BDBC6131}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "gailutil", "gailutil.vcxproj", "{29E3E814-1BA3-4AD7-A3A7-3669CB80A942}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "gailutil-3", "gailutil-3.vcxproj", "{29E3E814-1BA3-4AD7-A3A7-3669CB80A942}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "gtk-install", "gtk-install.vcxproj", "{2093D218-190E-4194-9421-3BA7CBF33B15}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "gtk3-install", "gtk3-install.vcxproj", "{2093D218-190E-4194-9421-3BA7CBF33B15}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -1,41 +1,41 @@
 include $(top_srcdir)/Makefile.decl
 
 GENERATED_ITEMS = \
-	gdk-win32.vcxproj			\
-	gdk-win32.vcxproj.filters		\
-	gdk-broadway.vcxproj			\
-	gdk-broadway.vcxproj.filters		\
+	gdk3-win32.vcxproj			\
+	gdk3-win32.vcxproj.filters		\
+	gdk3-broadway.vcxproj			\
+	gdk3-broadway.vcxproj.filters		\
 	broadwayd.vcxproj			\
 	broadwayd.vcxproj.filters		\
-	gdk.vcxproj				\
-	gdk.vcxproj.filters			\
-	gtk.vcxproj				\
-	gtk.vcxproj.filters			\
+	gdk-3.vcxproj				\
+	gdk-3.vcxproj.filters			\
+	gtk-3.vcxproj				\
+	gtk-3.vcxproj.filters			\
 	gtk3-demo.vcxproj			\
 	gtk3-demo.vcxproj.filters		\
 	gtk3-demo-application.vcxproj		\
 	gtk3-demo-application.vcxproj.filters	\
 	gtk3-icon-browser.vcxproj		\
 	gtk3-icon-browser.vcxproj.filters	\
-	gailutil.vcxproj			\
-	gailutil.vcxproj.filters		\
-	gtk-install.props			\
-	gtk-version-paths.props
+	gailutil-3.vcxproj			\
+	gailutil-3.vcxproj.filters		\
+	gtk3-install.props			\
+	gtk3-version-paths.props
 
 EXTRA_DIST += \
 	README.txt				\
 	gtk+.sln				\
-	gtk-prebuild.vcxproj			\
-	gdk-win32.vcxprojin			\
-	gdk-win32.vcxproj.filtersin		\
-	gdk-broadway.vcxprojin			\
-	gdk-broadway.vcxproj.filtersin		\
+	gtk3-prebuild.vcxproj			\
+	gdk3-win32.vcxprojin			\
+	gdk3-win32.vcxproj.filtersin		\
+	gdk3-broadway.vcxprojin			\
+	gdk3-broadway.vcxproj.filtersin		\
 	broadwayd.vcxprojin			\
 	broadwayd.vcxproj.filtersin		\
-	gdk.vcxprojin				\
-	gdk.vcxproj.filtersin			\
-	gtk.vcxprojin				\
-	gtk.vcxproj.filtersin			\
+	gdk-3.vcxprojin				\
+	gdk-3.vcxproj.filtersin			\
+	gtk-3.vcxprojin				\
+	gtk-3.vcxproj.filtersin			\
 	gtk-encode-symbolic-svg.vcxproj		\
 	gtk-encode-symbolic-svg.vcxproj.filters	\
 	gtk3-demo.vcxprojin			\
@@ -44,23 +44,23 @@ EXTRA_DIST += \
 	gtk3-demo-application.vcxproj.filtersin	\
 	gtk3-icon-browser.vcxprojin		\
 	gtk3-icon-browser.vcxproj.filtersin	\
-	gailutil.vcxprojin			\
-	gailutil.vcxproj.filtersin		\
-	gtk-install.vcxproj			\
-	gtk-build-defines.props			\
-	gtk-copy-gdk-broadway.props		\
-	gtk-gen-srcs.props			\
-	gtk-ignore-broadway.props		\
-	gtk-install.propsin			\
-	gtk-version-paths.props.in		\
+	gailutil-3.vcxprojin			\
+	gailutil-3.vcxproj.filtersin		\
+	gtk3-install.vcxproj			\
+	gtk3-build-defines.props			\
+	gtk3-copy-gdk-broadway.props		\
+	gtk3-gen-srcs.props			\
+	gtk3-ignore-broadway.props		\
+	gtk3-install.propsin			\
+	gtk3-version-paths.props.in		\
 	$(GENERATED_ITEMS)
 
-gtk-install.props: $(top_srcdir)/build/win32/vs10/gtk-install.propsin
-	$(CPP) -P - <$(top_srcdir)/build/win32/vs10/gtk-install.propsin >$@
-	rm gdk.vs10.headers
-	rm gdk-win32.vs10.headers
-	rm gdk-broadway.vs10.headers
-	rm gtk.vs10.headers
-	rm gailutil.vs10.headers
+gtk3-install.props: $(top_srcdir)/build/win32/vs10/gtk3-install.propsin
+	$(CPP) -P - <$(top_srcdir)/build/win32/vs10/gtk3-install.propsin >$@
+	rm gdk-3.vs10.headers
+	rm gdk3-win32.vs10.headers
+	rm gdk3-broadway.vs10.headers
+	rm gtk-3.vs10.headers
+	rm gailutil-3.vs10.headers
 
 -include $(top_srcdir)/git.mk

@@ -1302,29 +1302,29 @@ uninstall-mac-key-theme:
 endif
 
 # ------------------- MSVC Build Items ----------------
-MSVCPROJS = gtk
+MSVCPROJS = gtk-3
 
-gtk_FILES = \
+gtk_3_FILES = \
 	$(gtk_base_c_sources)		\
 	$(gtk_os_win32_c_sources)	\
 	$(gtk_use_win32_c_sources)	\
 	$(gtk_dbus_built_sources)
 
-gtk_EXCLUDES = dummy
-gtk_HEADERS_DIR = $(gtkincludedir)
+gtk_3_EXCLUDES = dummy
+gtk_3_HEADERS_DIR = $(gtkincludedir)
 
-gtk_HEADERS_INST = \
+gtk_3_HEADERS_INST = \
 	$(gtkinclude_HEADERS)	\
 	$(a11y_h_sources)	\
 	$(deprecated_h_sources)
 
-gtk_HEADERS_EXCLUDES = dummy
+gtk_3_HEADERS_EXCLUDES = dummy
 
 include $(top_srcdir)/build/Makefile.msvcproj
 
 dist-hook: \
-	$(top_builddir)/build/win32/vs9/gtk.vcproj	\
-	$(top_builddir)/build/win32/vs9/gtk.headers
+	$(top_builddir)/build/win32/vs9/gtk-3.vcproj	\
+	$(top_builddir)/build/win32/vs9/gtk-3.headers
 
 # Install a RC file for the default GTK+ theme, and key themes
 install-data-local: install-ms-lib install-def-file install-mac-key-theme

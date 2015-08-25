@@ -3,13 +3,13 @@ include $(top_srcdir)/Makefile.decl
 EXTRA_DIST +=	\
 	README.txt	\
 	gtk+.sln	\
-	gtk-prebuild.vcxproj	\
-	gdk-win32.vcxproj	\
-	gdk-win32.vcxproj.filters	\
-	gdk.vcxproj	\
-	gdk.vcxproj.filters	\
-	gtk.vcxproj	\
-	gtk.vcxproj.filters	\
+	gtk3-prebuild.vcxproj	\
+	gdk3-win32.vcxproj	\
+	gdk3-win32.vcxproj.filters	\
+	gdk-3.vcxproj	\
+	gdk-3.vcxproj.filters	\
+	gtk-3.vcxproj	\
+	gtk-3.vcxproj.filters	\
 	gtk-encode-symbolic-svg.vcxproj	\
 	gtk-encode-symbolic-svg.vcxproj.filters	\
 	gtk3-demo.vcxproj	\
@@ -18,19 +18,19 @@ EXTRA_DIST +=	\
 	gtk3-demo-application.vcxproj.filters	\
 	gtk3-icon-browser.vcxproj	\
 	gtk3-icon-browser.vcxproj.filters	\
-	gailutil.vcxproj	\
-	gailutil.vcxproj.filters	\
-	gtk-install.vcxproj	\
+	gailutil-3.vcxproj	\
+	gailutil-3.vcxproj.filters	\
+	gtk3-install.vcxproj	\
 	broadwayd.vcxproj	\
 	broadwayd.vcxproj.filters	\
-	gdk-broadway.vcxproj	\
-	gdk-broadway.vcxproj.filters	\
-	gtk-build-defines.props	\
-	gtk-copy-gdk-broadway.props	\
-	gtk-gen-srcs.props	\
-	gtk-ignore-broadway.props	\
-	gtk-install.props	\
-	gtk-version-paths.props
+	gdk3-broadway.vcxproj	\
+	gdk3-broadway.vcxproj.filters	\
+	gtk3-build-defines.props	\
+	gtk3-copy-gdk-broadway.props	\
+	gtk3-gen-srcs.props	\
+	gtk3-ignore-broadway.props	\
+	gtk3-install.props	\
+	gtk3-version-paths.props
 
 DISTCLEANFILES = $(EXTRA_DIST)
 

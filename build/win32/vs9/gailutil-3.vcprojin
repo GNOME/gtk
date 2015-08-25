@@ -1,10 +1,10 @@
-<?xml version="1.0" encoding="Windows-1252"?>
+<?xml version="1.0" encoding="big5"?>
 <VisualStudioProject
 	ProjectType="Visual C++"
 	Version="9.00"
-	Name="gtk-encode-symbolic-svg"
-	ProjectGUID="{3281202A-CD26-4C67-B892-EB34BDBC6131}"
-	RootNamespace="gtkencodesymbolicsvg"
+	Name="gailutil-3"
+	ProjectGUID="{29E3E814-1BA3-4AD7-A3A7-3669CB80A942}"
+	RootNamespace="gailutil3"
 	Keyword="Win32Proj"
 	TargetFrameworkVersion="196613"
 	>
@@ -22,7 +22,7 @@
 		<Configuration
 			Name="Debug|Win32"
 			InheritedPropertySheets=".\gtk3-build-defines.vsprops"
-			ConfigurationType="1"
+			ConfigurationType="2"
 			CharacterSet="2"
 			>
 			<Tool
@@ -31,8 +31,8 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="..\..\..\gdk"
-				PreprocessorDefinitions="_DEBUG"
+				AdditionalIncludeDirectories="..\..\..\gtk;..\..\..\gdk;..\..\..\gdk\win32"
+				PreprocessorDefinitions="_DEBUG;G_ENABLE_DEBUG;GTK_DISABLE_DEPRECATED;GDK_DISABLE_DEPRECATED"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
@@ -42,61 +42,30 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies=""
-				LinkIncremental="2"
-				GenerateDebugInformation="true"
-				SubSystem="1"
-				TargetMachine="1"
-			/>
-		</Configuration>
-		<Configuration
-			Name="Release|Win32"
-			InheritedPropertySheets=".\gtk3-build-defines.vsprops"
-			ConfigurationType="1"
-			CharacterSet="2"
-			WholeProgramOptimization="1"
-			>
-			<Tool
-				Name="VCPreBuildEventTool"
-			/>
-			<Tool
-				Name="VCCLCompilerTool"
-				Optimization="2"
-				AdditionalIncludeDirectories="..\..\..\gdk"
-				EnableIntrinsicFunctions="true"
-				PreprocessorDefinitions=""
-				RuntimeLibrary="2"
-				EnableFunctionLevelLinking="true"
-				UsePrecompiledHeader="0"
-				WarningLevel="3"
-				DebugInformationFormat="3"
-			/>
-			<Tool
-				Name="VCLinkerTool"
-				AdditionalDependencies=""
 				LinkIncremental="1"
+				AdditionalDependencies="atk-1.0.lib"
+				OutputFile="$(OutDir)\$(GtkDllPrefix)$(ProjectName)$(GtkDllSuffix).dll"
 				GenerateDebugInformation="true"
-				SubSystem="1"
-				OptimizeReferences="2"
-				EnableCOMDATFolding="2"
+				ModuleDefinitionFile="..\..\..\libgail-util\gailutil.def"
+				ImportLibrary="$(TargetDir)$(ProjectName).0.lib"
+				SubSystem="2"
 				TargetMachine="1"
 			/>
 		</Configuration>
 		<Configuration
 			Name="Debug|x64"
 			InheritedPropertySheets=".\gtk3-build-defines.vsprops"
-			ConfigurationType="1"
+			ConfigurationType="2"
 			CharacterSet="2"
 			>
 			<Tool
-				Name="VCMIDLTool"
-				TargetEnvironment="3"
+				Name="VCPreBuildEventTool"
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="..\..\..\gdk"
-				PreprocessorDefinitions="_DEBUG"
+				AdditionalIncludeDirectories="..\..\..\gtk;..\..\..\gdk;..\..\..\gdk\win32"
+				PreprocessorDefinitions="_DEBUG;G_ENABLE_DEBUG;GTK_DISABLE_DEPRECATED;GDK_DISABLE_DEPRECATED"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
@@ -106,30 +75,32 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies=""
-				LinkIncremental="2"
+				AdditionalDependencies="atk-1.0.lib"
+				OutputFile="$(OutDir)\$(GtkDllPrefix)$(ProjectName)$(GtkDllSuffix).dll"
+				LinkIncremental="1"
+				ModuleDefinitionFile="..\..\..\libgail-util\gailutil.def"
 				GenerateDebugInformation="true"
-				SubSystem="1"
+				SubSystem="2"
+				ImportLibrary="$(TargetDir)$(ProjectName).0.lib"
 				TargetMachine="17"
 			/>
 		</Configuration>
 		<Configuration
-			Name="Release|x64"
+			Name="Release|Win32"
 			InheritedPropertySheets=".\gtk3-build-defines.vsprops"
-			ConfigurationType="1"
+			ConfigurationType="2"
 			CharacterSet="2"
 			WholeProgramOptimization="1"
 			>
 			<Tool
-				Name="VCMIDLTool"
-				TargetEnvironment="3"
+				Name="VCPreBuildEventTool"
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="2"
-				AdditionalIncludeDirectories="..\..\..\gdk"
 				EnableIntrinsicFunctions="true"
-				PreprocessorDefinitions=""
+				AdditionalIncludeDirectories="..\..\..\gtk;..\..\..\gdk;..\..\..\gdk\win32"
+				PreprocessorDefinitions="GTK_DISABLE_DEPRECATED;GDK_DISABLE_DEPRECATED"
 				RuntimeLibrary="2"
 				EnableFunctionLevelLinking="true"
 				UsePrecompiledHeader="0"
@@ -138,12 +109,48 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies=""
 				LinkIncremental="1"
+				AdditionalDependencies="atk-1.0.lib"
+				OutputFile="$(OutDir)\$(GtkDllPrefix)$(ProjectName)$(GtkDllSuffix).dll"
 				GenerateDebugInformation="true"
-				SubSystem="1"
+				ModuleDefinitionFile="..\..\..\libgail-util\gailutil.def"
+				ImportLibrary="$(TargetDir)$(ProjectName).0.lib"
+				SubSystem="2"
 				OptimizeReferences="2"
 				EnableCOMDATFolding="2"
+				TargetMachine="1"
+			/>
+		</Configuration>
+		<Configuration
+			Name="Release|x64"
+			InheritedPropertySheets=".\gtk3-build-defines.vsprops"
+			ConfigurationType="2"
+			CharacterSet="2"
+			WholeProgramOptimization="1"
+			>
+			<Tool
+				Name="VCPreBuildEventTool"
+			/>
+			<Tool
+				Name="VCCLCompilerTool"
+				AdditionalIncludeDirectories="..\..\..\gtk;..\..\..\gdk;..\..\..\gdk\win32"
+				PreprocessorDefinitions="GTK_DISABLE_DEPRECATED;GDK_DISABLE_DEPRECATED"
+				RuntimeLibrary="2"
+				UsePrecompiledHeader="0"
+				WarningLevel="3"
+				DebugInformationFormat="3"
+			/>
+			<Tool
+				Name="VCLinkerTool"
+				AdditionalDependencies="atk-1.0.lib"
+				OutputFile="$(OutDir)\$(GtkDllPrefix)$(ProjectName)$(GtkDllSuffix).dll"
+				LinkIncremental="1"
+				ModuleDefinitionFile="..\..\..\libgail-util\gailutil.def"
+				GenerateDebugInformation="true"
+				SubSystem="2"
+				OptimizeReferences="2"
+				EnableCOMDATFolding="2"
+				ImportLibrary="$(TargetDir)$(ProjectName).0.lib"
 				TargetMachine="17"
 			/>
 		</Configuration>
@@ -156,7 +163,7 @@
 			Filter="cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx"
 			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}"
 			>
-			<File RelativePath="..\..\..\gtk\encodesymbolic.c" />
+#include "gailutil-3.sourcefiles"
 		</Filter>
 		<Filter
 			Name="Headers"
