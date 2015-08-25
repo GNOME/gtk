@@ -1083,6 +1083,9 @@ gtk_list_box_get_selection_mode (GtkListBox *box)
  * continue to be called each time a row changes (via gtk_list_box_row_changed()) or
  * when gtk_list_box_invalidate_filter() is called.
  *
+ * Note that using a filter function is incompatible with using a model
+ * (see gtk_list_box_bind_model()).
+ *
  * Since: 3.10
  */
 void
@@ -1280,6 +1283,9 @@ gtk_list_box_invalidate_headers (GtkListBox *box)
  * The @sort_func will be called for each row after the call, and will continue to
  * be called each time a row changes (via gtk_list_box_row_changed()) and when
  * gtk_list_box_invalidate_sort() is called.
+ *
+ * Note that using a sort function is incompatible with using a model
+ * (see gtk_list_box_bind_model()).
  *
  * Since: 3.10
  */
@@ -3763,6 +3769,10 @@ gtk_list_box_check_model_compat (GtkListBox *box)
  * It is undefined to add or remove widgets directly (for example, with
  * gtk_list_box_insert() or gtk_container_add()) while @box is bound to a
  * model.
+ *
+ * Note that using a model is incompatible with the filtering and sorting
+ * functionality in GtkListBox. When using a model, filtering and sorting
+ * should be implemented by the model.
  *
  * Since: 3.16
  */
