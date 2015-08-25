@@ -893,7 +893,7 @@ update_network_state (GtkPlacesView *view)
       gtk_spinner_stop (GTK_SPINNER (priv->network_header_spinner));
       gtk_widget_show_all (priv->network_placeholder);
       gtk_label_set_text (GTK_LABEL (priv->network_placeholder_label),
-                          _("No networks locations found"));
+                          _("No network locations found"));
     }
   else
     {
