@@ -1134,16 +1134,15 @@ GtkTextView {
 .titlebar .button.titlebutton:visited, .button:link:hover, .button:link:active, .button:link:checked, .button:visited:hover, .button:visited:active, .button:visited:checked, .button:link:backdrop, .button:visited:backdrop, .menu.button, .header-bar .menu.button.titlebutton,
 .titlebar .menu.button.titlebutton, .notebook tab .button, .notebook tab .header-bar .button.titlebutton, .header-bar .notebook tab .button.titlebutton,
 .notebook tab .titlebar .button.titlebutton,
-.titlebar .notebook tab .button.titlebutton, .list-row.button, .header-bar .list-row.button.titlebutton,
-.titlebar .list-row.button.titlebutton,
-.list-row.button:backdrop,
-.list-row.button:backdrop:active,
-.list-row.button:backdrop:checked,
-.list-row.button:backdrop:insensitive,
-.list-row.button:backdrop:insensitive:active,
-.list-row.button:backdrop:insensitive:checked,
-.list-row.button:insensitive:active,
-.list-row.button:insensitive:checked, .app-notification .button.flat, .app-notification .sidebar-button.button, .app-notification .header-bar .titlebutton.button, .header-bar .app-notification .titlebutton.button,
+.titlebar .notebook tab .button.titlebutton, .list-row.activatable,
+.list-row.activatable:backdrop,
+.list-row.activatable:backdrop:active,
+.list-row.activatable:backdrop:checked,
+.list-row.activatable:backdrop:insensitive,
+.list-row.activatable:backdrop:insensitive:active,
+.list-row.activatable:backdrop:insensitive:checked,
+.list-row.activatable:insensitive:active,
+.list-row.activatable:insensitive:checked, .app-notification .button.flat, .app-notification .sidebar-button.button, .app-notification .header-bar .titlebutton.button, .header-bar .app-notification .titlebutton.button,
 .app-notification .titlebar .titlebutton.button,
 .titlebar .app-notification .titlebutton.button,
 .app-notification.frame .button.flat,
@@ -3594,32 +3593,31 @@ GtkScrolledWindow GtkViewport.frame {
 .grid-child {
   padding: 2px; }
 
-.list-row.button, .header-bar .list-row.button.titlebutton,
-.titlebar .list-row.button.titlebutton,
-.list-row.button:backdrop,
-.list-row.button:backdrop:active,
-.list-row.button:backdrop:checked,
-.list-row.button:backdrop:insensitive,
-.list-row.button:backdrop:insensitive:active,
-.list-row.button:backdrop:insensitive:checked,
-.list-row.button:insensitive:active,
-.list-row.button:insensitive:checked {
+.list-row.activatable,
+.list-row.activatable:backdrop,
+.list-row.activatable:backdrop:active,
+.list-row.activatable:backdrop:checked,
+.list-row.activatable:backdrop:insensitive,
+.list-row.activatable:backdrop:insensitive:active,
+.list-row.activatable:backdrop:insensitive:checked,
+.list-row.activatable:insensitive:active,
+.list-row.activatable:insensitive:checked {
   background-color: rgba(255, 255, 255, 0);
   border-style: none;
   border-radius: 0;
   box-shadow: none; }
 
-.list-row.button:hover {
+.list-row.activatable:hover {
   background-color: #f4f4f4; }
-.list-row.button:active {
+.list-row.activatable:active {
   box-shadow: inset 0 2px 2px -2px rgba(0, 0, 0, 0.2); }
-.list-row.button:backdrop:hover {
+.list-row.activatable:backdrop:hover {
   background-color: transparent; }
-.list-row.button:selected:active {
+.list-row.activatable:selected:active {
   box-shadow: inset 0 2px 3px -1px rgba(0, 0, 0, 0.5); }
-.list-row.button:selected:hover {
+.list-row.activatable:selected:hover {
   background-color: #4786c8; }
-.list-row.button:selected:backdrop {
+.list-row.activatable:selected:backdrop {
   background-color: #4a90d9; }
 
 .list-row:selected .button {

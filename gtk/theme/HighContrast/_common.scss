@@ -1927,15 +1927,15 @@ GtkScrolledWindow {
   padding: 2px;
 }
 
-.list-row.button,
-.list-row.button:backdrop,
-.list-row.button:backdrop:active,
-.list-row.button:backdrop:checked,
-.list-row.button:backdrop:insensitive,
-.list-row.button:backdrop:insensitive:active,
-.list-row.button:backdrop:insensitive:checked,
-.list-row.button:insensitive:active,
-.list-row.button:insensitive:checked {
+.list-row.activatable,
+.list-row.activatable:backdrop,
+.list-row.activatable:backdrop:active,
+.list-row.activatable:backdrop:checked,
+.list-row.activatable:backdrop:insensitive,
+.list-row.activatable:backdrop:insensitive:active,
+.list-row.activatable:backdrop:insensitive:checked,
+.list-row.activatable:insensitive:active,
+.list-row.activatable:insensitive:checked {
   // reset button inherited stuff
   @extend %undecorated_button;
   background-color: transparentize($base_color,1); // for the transition
@@ -1945,7 +1945,7 @@ GtkScrolledWindow {
 
 }
 
-.list-row.button {
+.list-row.activatable {
   @extend %undecorated_button;
   background-color: transparentize($base_color,1); // for the transition
   border-style: none; // I need no borders here
@@ -2013,7 +2013,7 @@ GtkScrolledWindow {
 }
 
 // transition
-.list-row, list-row.button {
+.list-row, .list-row.activatable {
   transition: all 300ms $ease-out-quad;
   &:hover { transition: none; }
 }
