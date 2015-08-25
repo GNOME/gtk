@@ -2,7 +2,7 @@
 # GTK+-properties Spanish translation.
 # Copyright © 1999-2006, 2007, 2008 Free Software Foundation, Inc.
 # This file is distributed under the same license as the gtk+ package.
-# 
+#
 # Pablo Saratxaga <srtxg@chanae.alphanet.ch>, 1998-2000.
 # José Antonio Salgueiro A. <joseantsa@eresmas.net>, 2001.
 # Carlos Perelló Marín <carlos@gnome-db.org>, 2002.
@@ -11,17 +11,17 @@
 # Juan Manuel García Molina <juanma_gm@wanadoo.es>, 2003.
 # Francisco Javier F. Serrador <serrador@cvs.gnome.org>, 2003 - 2006.
 # Jorge González <jorgegonz@svn.gnome.org>, 2007, 2008, 2009, 2010, 2011.
-# 
+#
 # Daniel Mustieles <daniel.mustieles@gmail.com>, 2010, 2011, 2012, 2013, 2014, 2015., 2015.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-properties.master\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-08-18 09:52+0000\n"
-"PO-Revision-Date: 2015-08-18 13:53+0200\n"
+"POT-Creation-Date: 2015-08-24 21:56+0000\n"
+"PO-Revision-Date: 2015-08-25 \n"
 "Last-Translator: Daniel Mustieles <daniel.mustieles@gmail.com>\n"
-"Language-Team: Español; Castellano <gnome-es-list@gnome.org>\n"
+"Language-Team: Spanish <gnome-es-list@gnome.org>\n"
 "Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -1322,7 +1322,7 @@ msgstr ""
 "inicio o el final del padre"
 
 #: gtk/gtkactionbar.c:244 gtk/gtkbox.c:337 gtk/gtkheaderbar.c:1864
-#: gtk/gtknotebook.c:775 gtk/gtkpaned.c:336 gtk/gtkpopover.c:1617
+#: gtk/gtknotebook.c:775 gtk/gtkpaned.c:336 gtk/gtkpopover.c:1619
 #: gtk/gtkpopovermenu.c:376 gtk/gtkstack.c:499 gtk/gtktoolitemgroup.c:1682
 msgid "Position"
 msgstr "Posición"
@@ -2257,8 +2257,7 @@ msgstr "Tiene entrada"
 
 #: gtk/gtkcellrenderercombo.c:170
 msgid "If FALSE, don't allow to enter strings other than the chosen ones"
-msgstr ""
-"Si es «FALSE», no permitir introducir cadenas distintas de las elegidas"
+msgstr "Si es «FALSE», no permitir introducir cadenas distintas de las elegidas"
 
 #: gtk/gtkcellrendererpixbuf.c:152
 msgid "Pixbuf Object"
@@ -2505,8 +2504,7 @@ msgstr "Tipografía"
 
 #: gtk/gtkcellrenderertext.c:375 gtk/gtkfontchooser.c:65 gtk/gtktexttag.c:325
 msgid "Font description as a string, e.g. \"Sans Italic 12\""
-msgstr ""
-"Descripción de la tipografía como una cadena, ejemplo: «Sans Italic 12»"
+msgstr "Descripción de la tipografía como una cadena, ejemplo: «Sans Italic 12»"
 
 #: gtk/gtkcellrenderertext.c:383 gtk/gtkfontchooser.c:78 gtk/gtktexttag.c:333
 msgid "Font description as a PangoFontDescription struct"
@@ -2813,7 +2811,7 @@ msgstr "Estado inconsistente"
 msgid "The inconsistent state of the button"
 msgstr "El estado inconsistente del botón"
 
-#: gtk/gtkcellrenderertoggle.c:153 gtk/gtklistbox.c:3607
+#: gtk/gtkcellrenderertoggle.c:153 gtk/gtklistbox.c:3643
 msgid "Activatable"
 msgstr "Activable"
 
@@ -2977,7 +2975,7 @@ msgstr "Color RGBA"
 msgid "Color as RGBA"
 msgstr "Color como RGBA"
 
-#: gtk/gtkcolorswatch.c:710 gtk/gtklabel.c:855 gtk/gtklistbox.c:3621
+#: gtk/gtkcolorswatch.c:710 gtk/gtklabel.c:855 gtk/gtklistbox.c:3657
 msgid "Selectable"
 msgstr "Seleccionable"
 
@@ -3855,7 +3853,7 @@ msgid "The current filter for selecting which files are displayed"
 msgstr "El filtro actual para seleccionar qué archivos se están mostrando"
 
 #: gtk/gtkfilechooser.c:388 gtk/gtkplacessidebar.c:4344
-#: gtk/gtkplacesview.c:1886
+#: gtk/gtkplacesview.c:2178
 msgid "Local Only"
 msgstr "Sólo local"
 
@@ -3942,12 +3940,12 @@ msgstr ""
 "Indica si un selector de archivos en modo distinto a abrir ofrece al usuario "
 "la posibilidad de crear carpetas nuevas."
 
-#: gtk/gtkfilechooserwidget.c:8357 gtk/gtkfilechooserwidget.c:8358
+#: gtk/gtkfilechooserwidget.c:8367 gtk/gtkfilechooserwidget.c:8368
 msgid "Search mode"
 msgstr "Modo de búsqueda"
 
 # components/music/nautilus-music-view.c:198
-#: gtk/gtkfilechooserwidget.c:8364 gtk/gtkfilechooserwidget.c:8365
+#: gtk/gtkfilechooserwidget.c:8374 gtk/gtkfilechooserwidget.c:8375
 #: gtk/gtkheaderbar.c:1880
 msgid "Subtitle"
 msgstr "Subtítulo"
@@ -4699,11 +4697,11 @@ msgstr "Visitado"
 msgid "Whether this link has been visited."
 msgstr "Indica si este enlace se ha visitado."
 
-#: gtk/gtklistbox.c:3608
+#: gtk/gtklistbox.c:3644
 msgid "Whether this row can be activated"
 msgstr "Indica si se puede activar esta fila"
 
-#: gtk/gtklistbox.c:3622
+#: gtk/gtklistbox.c:3658
 msgid "Whether this row can be selected"
 msgstr "Indica si se puede seleccionar esta fila"
 
@@ -5371,19 +5369,19 @@ msgstr "La pestaña activa se dibuja con un espacio en la parte inferior"
 msgid "The orientation of the orientable"
 msgstr "La orientación del orientable"
 
-#: gtk/gtkoverlay.c:778
+#: gtk/gtkoverlay.c:764
 msgid "Pass Through"
 msgstr "Pasar por"
 
-#: gtk/gtkoverlay.c:778
+#: gtk/gtkoverlay.c:764
 msgid "Pass through input, does not affect main child"
 msgstr "Pasar por la entrada, no afecta al hijo principal"
 
-#: gtk/gtkoverlay.c:783
+#: gtk/gtkoverlay.c:769
 msgid "Index"
 msgstr "Índice"
 
-#: gtk/gtkoverlay.c:784
+#: gtk/gtkoverlay.c:770
 msgid "The index of the overlay in the parent, -1 for the main child"
 msgstr "El índice de la superposición en el padre, -1 para el hijo principal"
 
@@ -5458,11 +5456,11 @@ msgstr "Ubicación que seleccionar"
 msgid "The location to highlight in the sidebar"
 msgstr "La ubicación que resaltar en la barra lateral"
 
-#: gtk/gtkplacessidebar.c:4313 gtk/gtkplacesview.c:1893
+#: gtk/gtkplacessidebar.c:4313 gtk/gtkplacesview.c:2192
 msgid "Open Flags"
 msgstr "Abrir opciones"
 
-#: gtk/gtkplacessidebar.c:4314 gtk/gtkplacesview.c:1894
+#: gtk/gtkplacessidebar.c:4314 gtk/gtkplacesview.c:2193
 msgid ""
 "Modes in which the calling application can open locations selected in the "
 "sidebar"
@@ -5497,8 +5495,8 @@ msgid ""
 "Whether the sidebar includes a builtin shortcut to a 'Connect to server' "
 "dialog"
 msgstr ""
-"Indica si la barra lateral incluye un atajo integrado al diálogo «Conectar "
-"al servidor»"
+"Indica si la barra lateral incluye un atajo integrado al diálogo «Conectar al "
+"servidor»"
 
 #: gtk/gtkplacessidebar.c:4338
 msgid "Show 'Enter Location'"
@@ -5511,7 +5509,7 @@ msgstr ""
 "Indica si la barra lateral incluye un atajo integrado para introducir "
 "manualmente la ubicación"
 
-#: gtk/gtkplacessidebar.c:4345 gtk/gtkplacesview.c:1887
+#: gtk/gtkplacessidebar.c:4345 gtk/gtkplacesview.c:2179
 msgid "Whether the sidebar only includes local files"
 msgstr "Indica si la barra lateral sólo incluye archivos locales"
 
@@ -5541,21 +5539,31 @@ msgstr ""
 "Indica si se debe emitir ::populate-popup para elementos emergentes que no "
 "son menús"
 
-#: gtk/gtkplacesview.c:1393
+#: gtk/gtkplacesview.c:1647
 msgid "_Disconnect"
 msgstr "_Desconectar"
 
-#: gtk/gtkplacesview.c:1393
+#: gtk/gtkplacesview.c:1647
 msgid "_Unmount"
 msgstr "_Desmontar"
 
-#: gtk/gtkplacesview.c:1403
+#: gtk/gtkplacesview.c:1657
 msgid "_Connect"
 msgstr "_Conectar"
 
-#: gtk/gtkplacesview.c:1403
+#: gtk/gtkplacesview.c:1657
 msgid "_Mount"
 msgstr "_Montar"
+
+#: gtk/gtkplacesview.c:2185
+#| msgid "Heading"
+msgid "Loading"
+msgstr "Cargando"
+
+#: gtk/gtkplacesview.c:2186
+#| msgid "Whether the widget should show all applications"
+msgid "Whether the view is loading locations"
+msgstr "Indica si la vista está cargando las ubicaciones"
 
 #: gtk/gtkplacesviewrow.c:181
 msgid "Icon of the row"
@@ -5629,39 +5637,39 @@ msgstr "Ventana del socket"
 msgid "The window of the socket the plug is embedded in"
 msgstr "La ventana del socket en la que el enchufe está empotrado"
 
-#: gtk/gtkpopover.c:1589
+#: gtk/gtkpopover.c:1591
 msgid "Relative to"
 msgstr "Relativo a"
 
-#: gtk/gtkpopover.c:1590
+#: gtk/gtkpopover.c:1592
 msgid "Widget the bubble window points to"
 msgstr "Widget al que apunta la ventana de burbuja"
 
-#: gtk/gtkpopover.c:1603
+#: gtk/gtkpopover.c:1605
 msgid "Pointing to"
 msgstr "Apuntando a"
 
-#: gtk/gtkpopover.c:1604
+#: gtk/gtkpopover.c:1606
 msgid "Rectangle the bubble window points to"
 msgstr "Rectángulo al que la ventana de burbuja apunta"
 
-#: gtk/gtkpopover.c:1618
+#: gtk/gtkpopover.c:1620
 msgid "Position to place the bubble window"
 msgstr "Posición en la que colocar la ventana de burbuja"
 
-#: gtk/gtkpopover.c:1633 gtk/gtkwindow.c:758
+#: gtk/gtkpopover.c:1635 gtk/gtkwindow.c:758
 msgid "Modal"
 msgstr "Modal"
 
-#: gtk/gtkpopover.c:1634
+#: gtk/gtkpopover.c:1636
 msgid "Whether the popover is modal"
 msgstr "Indica si la ventana emergente es modal"
 
-#: gtk/gtkpopover.c:1648
+#: gtk/gtkpopover.c:1650
 msgid "Transitions enabled"
 msgstr "Transiciones activadas"
 
-#: gtk/gtkpopover.c:1649
+#: gtk/gtkpopover.c:1651
 msgid "Whether show/hide transitions are enabled or not"
 msgstr "Indica si mostrar/ocultar las transiciones está activada o no."
 
@@ -5797,7 +5805,7 @@ msgstr "Configuración de la impresora"
 msgid "Page Setup"
 msgstr "Configuración de la página"
 
-#: gtk/gtkprintjob.c:168 gtk/gtkprintoperation.c:1215
+#: gtk/gtkprintjob.c:168 gtk/gtkprintoperation.c:1237
 msgid "Track Print Status"
 msgstr "Seguimiento del estado de impresión"
 
@@ -5810,51 +5818,51 @@ msgstr ""
 "estado después de que los datos de impresión se hayan enviado a la impresora "
 "o servidor de impresoras."
 
-#: gtk/gtkprintoperation.c:1087
+#: gtk/gtkprintoperation.c:1109
 msgid "Default Page Setup"
 msgstr "Configuración de la página predeterminada"
 
-#: gtk/gtkprintoperation.c:1088
+#: gtk/gtkprintoperation.c:1110
 msgid "The GtkPageSetup used by default"
 msgstr "La GtkPageSetup usada por omisión"
 
-#: gtk/gtkprintoperation.c:1106 gtk/gtkprintunixdialog.c:424
+#: gtk/gtkprintoperation.c:1128 gtk/gtkprintunixdialog.c:424
 msgid "Print Settings"
 msgstr "Configuración de impresión"
 
-#: gtk/gtkprintoperation.c:1107 gtk/gtkprintunixdialog.c:425
+#: gtk/gtkprintoperation.c:1129 gtk/gtkprintunixdialog.c:425
 msgid "The GtkPrintSettings used for initializing the dialog"
 msgstr "Los GtkPrintSettings usados para inicializar el diálogo"
 
-#: gtk/gtkprintoperation.c:1125
+#: gtk/gtkprintoperation.c:1147
 msgid "Job Name"
 msgstr "Nombre de la tarea"
 
-#: gtk/gtkprintoperation.c:1126
+#: gtk/gtkprintoperation.c:1148
 msgid "A string used for identifying the print job."
 msgstr "Una cadena usada para identificar la tarea de impresión."
 
-#: gtk/gtkprintoperation.c:1150
+#: gtk/gtkprintoperation.c:1172
 msgid "Number of Pages"
 msgstr "Número de páginas"
 
-#: gtk/gtkprintoperation.c:1151
+#: gtk/gtkprintoperation.c:1173
 msgid "The number of pages in the document."
 msgstr "El número de páginas en el documento."
 
-#: gtk/gtkprintoperation.c:1172 gtk/gtkprintunixdialog.c:414
+#: gtk/gtkprintoperation.c:1194 gtk/gtkprintunixdialog.c:414
 msgid "Current Page"
 msgstr "Página actual"
 
-#: gtk/gtkprintoperation.c:1173 gtk/gtkprintunixdialog.c:415
+#: gtk/gtkprintoperation.c:1195 gtk/gtkprintunixdialog.c:415
 msgid "The current page in the document"
 msgstr "La página actual en el documento"
 
-#: gtk/gtkprintoperation.c:1194
+#: gtk/gtkprintoperation.c:1216
 msgid "Use full page"
 msgstr "Usar página completa"
 
-#: gtk/gtkprintoperation.c:1195
+#: gtk/gtkprintoperation.c:1217
 msgid ""
 "TRUE if the origin of the context should be at the corner of the page and "
 "not the corner of the imageable area"
@@ -5862,7 +5870,7 @@ msgstr ""
 "TRUE si el origen del contexto debe estar en la esquina de la página y no en "
 "la esquina del área de donde puede aparecer la imagen"
 
-#: gtk/gtkprintoperation.c:1216
+#: gtk/gtkprintoperation.c:1238
 msgid ""
 "TRUE if the print operation will continue to report on the print job status "
 "after the print data has been sent to the printer or print server."
@@ -5871,89 +5879,89 @@ msgstr ""
 "impresión después de que los datos de impresión se hayan enviado al servidor "
 "de impresoras o a la impresora."
 
-#: gtk/gtkprintoperation.c:1233
+#: gtk/gtkprintoperation.c:1255
 msgid "Unit"
 msgstr "Unidad"
 
-#: gtk/gtkprintoperation.c:1234
+#: gtk/gtkprintoperation.c:1256
 msgid "The unit in which distances can be measured in the context"
 msgstr "La unidad en la que se pueden medir las distancias en el contexto"
 
-#: gtk/gtkprintoperation.c:1251
+#: gtk/gtkprintoperation.c:1273
 msgid "Show Dialog"
 msgstr "Mostrar diálogo"
 
-#: gtk/gtkprintoperation.c:1252
+#: gtk/gtkprintoperation.c:1274
 msgid "TRUE if a progress dialog is shown while printing."
 msgstr "TRUE si se muestra un diálogo de progreso durante la impresión."
 
-#: gtk/gtkprintoperation.c:1275
+#: gtk/gtkprintoperation.c:1297
 msgid "Allow Async"
 msgstr "Permitir asíncrono"
 
-#: gtk/gtkprintoperation.c:1276
+#: gtk/gtkprintoperation.c:1298
 msgid "TRUE if print process may run asynchronous."
 msgstr "TRUE si el proceso de impresión puede ejecutarse asíncronamente."
 
-#: gtk/gtkprintoperation.c:1298 gtk/gtkprintoperation.c:1299
+#: gtk/gtkprintoperation.c:1320 gtk/gtkprintoperation.c:1321
 msgid "Export filename"
 msgstr "Nombre de archivo para exportar"
 
-#: gtk/gtkprintoperation.c:1313
+#: gtk/gtkprintoperation.c:1335
 msgid "Status"
 msgstr "Estado"
 
-#: gtk/gtkprintoperation.c:1314
+#: gtk/gtkprintoperation.c:1336
 msgid "The status of the print operation"
 msgstr "El estado de la operación de impresión"
 
-#: gtk/gtkprintoperation.c:1334
+#: gtk/gtkprintoperation.c:1356
 msgid "Status String"
 msgstr "Cadena de estado"
 
-#: gtk/gtkprintoperation.c:1335
+#: gtk/gtkprintoperation.c:1357
 msgid "A human-readable description of the status"
 msgstr "Una descripción leíble por humanos del estado"
 
-#: gtk/gtkprintoperation.c:1353
+#: gtk/gtkprintoperation.c:1375
 msgid "Custom tab label"
 msgstr "Etiqueta de pestaña personalizada"
 
-#: gtk/gtkprintoperation.c:1354
+#: gtk/gtkprintoperation.c:1376
 msgid "Label for the tab containing custom widgets."
 msgstr "Etiqueta para la pestaña que contiene widgets personalizados."
 
-#: gtk/gtkprintoperation.c:1369 gtk/gtkprintunixdialog.c:449
+#: gtk/gtkprintoperation.c:1391 gtk/gtkprintunixdialog.c:449
 msgid "Support Selection"
 msgstr "Soportar selección"
 
-#: gtk/gtkprintoperation.c:1370
+#: gtk/gtkprintoperation.c:1392
 msgid "TRUE if the print operation will support print of selection."
 msgstr "TRUE si la operación de impresión soporta impresión de la selección."
 
-#: gtk/gtkprintoperation.c:1386 gtk/gtkprintunixdialog.c:457
+#: gtk/gtkprintoperation.c:1408 gtk/gtkprintunixdialog.c:457
 msgid "Has Selection"
 msgstr "Tiene selección"
 
-#: gtk/gtkprintoperation.c:1387
+#: gtk/gtkprintoperation.c:1409
 msgid "TRUE if a selection exists."
 msgstr "TRUE si existe una selección."
 
-#: gtk/gtkprintoperation.c:1402 gtk/gtkprintunixdialog.c:465
+#: gtk/gtkprintoperation.c:1424 gtk/gtkprintunixdialog.c:465
 msgid "Embed Page Setup"
 msgstr "Configuración de página empotrada"
 
-#: gtk/gtkprintoperation.c:1403 gtk/gtkprintunixdialog.c:466
+#: gtk/gtkprintoperation.c:1425 gtk/gtkprintunixdialog.c:466
 msgid "TRUE if page setup combos are embedded in GtkPrintUnixDialog"
 msgstr ""
 "TRUE si los combos de configuración de página están empotrados en "
 "GtkPrintUnixDialog"
 
-#: gtk/gtkprintoperation.c:1424
+#: gtk/gtkprintoperation.c:1446
 msgid "Number of Pages To Print"
 msgstr "Número de páginas para imprimir"
 
-#: gtk/gtkprintoperation.c:1425
+#: gtk/gtkprintoperation.c:1447
 msgid "The number of pages that will be printed."
 msgstr "El número de páginas que se imprimirán."
 
@@ -6750,8 +6758,8 @@ msgstr "Suavizado Xft"
 #: gtk/gtksettings.c:554
 msgid "Whether to antialias Xft fonts; 0=no, 1=yes, -1=default"
 msgstr ""
-"Indica si se deben suavizar los bordes de las tipografías Xft; 0=no,1=sí, "
-"-1=predeterminado"
+"Indica si se deben suavizar los bordes de las tipografías Xft; 0=no,1=sí, -"
+"1=predeterminado"
 
 #: gtk/gtksettings.c:563
 msgid "Xft Hinting"
@@ -8069,22 +8077,18 @@ msgid "Right Margin"
 msgstr "Margen derecho"
 
 #: gtk/gtktextview.c:870
-#| msgid "Margin"
 msgid "Top Margin"
 msgstr "Margen superior"
 
 #: gtk/gtktextview.c:871
-#| msgid "Width of the left margin in pixels"
 msgid "Height of the top margin in pixels"
 msgstr "Altura del margen superior en píxeles"
 
 #: gtk/gtktextview.c:891
-#| msgid "Bottom Padding"
 msgid "Bottom Margin"
 msgstr "Margen inferior"
 
 #: gtk/gtktextview.c:892
-#| msgid "Width of the left margin in pixels"
 msgid "Height of the bottom margin in pixels"
 msgstr "Altura del margen inferior en píxeles"
 
@@ -9803,11 +9807,11 @@ msgstr "El título del perfil de color que usar"
 #~ msgstr "La GdkFont que está seleccionada actualmente"
 
 #~ msgid ""
-#~ "The maximum number of items to be returned by "
-#~ "gtk_recent_manager_get_items()"
+#~ "The maximum number of items to be returned by gtk_recent_manager_get_items"
+#~ "()"
 #~ msgstr ""
-#~ "El número máximo de elementos a devolver por "
-#~ "gtk_recent_manager_get_items()"
+#~ "El número máximo de elementos a devolver por gtk_recent_manager_get_items"
+#~ "()"
 
 #~ msgid "Allow Shrink"
 #~ msgstr "Permitir encoger"
