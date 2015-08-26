@@ -405,10 +405,14 @@ draw_flash (GtkWidget          *widget,
 
   if (GTK_IS_WINDOW (widget))
     {
+      GtkWidget *child = gtk_bin_get_child (GTK_BIN (widget));
       /* We don't want to draw the drag highlight around the
        * CSD window decorations
        */
-      gtk_widget_get_allocation (gtk_bin_get_child (GTK_BIN (widget)), &alloc);
+      if (child == NULL)
+        return FALSE;
+
+      gtk_widget_get_allocation (child, &alloc);
     }
   else
     {
