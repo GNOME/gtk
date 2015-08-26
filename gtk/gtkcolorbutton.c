@@ -684,7 +684,7 @@ gtk_color_button_set_alpha (GtkColorButton *color_button,
 /**
  * gtk_color_button_get_color:
  * @color_button: a #GtkColorButton.
- * @color: a #GdkColor to fill in with the current color.
+ * @color: (out): a #GdkColor to fill in with the current color.
  *
  * Sets @color to be the current color in the #GtkColorButton widget.
  *
