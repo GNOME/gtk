@@ -22,7 +22,8 @@ enum {
   FOCUS_ITEMS,
   WRAPPY_ITEMS,
   STOCK_ITEMS,
-  IMAGE_ITEMS
+  IMAGE_ITEMS,
+  BUTTON_ITEMS
 };
 
 #define INITIAL_HALIGN          GTK_ALIGN_FILL
@@ -74,6 +75,7 @@ populate_flowbox_focus (GtkFlowBox *flowbox)
     {
       sensitive = TRUE;
       frame = gtk_frame_new (NULL);
+      gtk_frame_set_shadow_type (GTK_FRAME (frame), GTK_SHADOW_NONE);
 
       box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 6);
       gtk_container_add (GTK_CONTAINER (frame), box);
@@ -108,6 +110,22 @@ populate_flowbox_focus (GtkFlowBox *flowbox)
       gtk_container_add (GTK_CONTAINER (flowbox), frame);
       if (!sensitive)
         gtk_widget_set_sensitive (gtk_widget_get_parent (frame), FALSE);
+    }
+}
+
+static void
+populate_flowbox_buttons (GtkFlowBox *flowbox)
+{
+  GtkWidget *widget;
+  gint i;
+
+  for (i = 0; i < 50; i++)
+    {
+      widget = gtk_button_new_with_label ("Button");
+      gtk_widget_show (widget);
+      gtk_container_add (GTK_CONTAINER (flowbox), widget);
+      widget = gtk_widget_get_parent (widget);
+      gtk_widget_set_can_focus (widget, FALSE);
     }
 }
 
@@ -235,6 +253,8 @@ populate_items (GtkFlowBox *flowbox)
     populate_flowbox_stock (flowbox);
   else if (items_type == IMAGE_ITEMS)
     populate_flowbox_images (flowbox);
+  else if (items_type == BUTTON_ITEMS)
+    populate_flowbox_buttons (flowbox);
 }
 
 static void
@@ -642,6 +662,7 @@ create_window (void)
   gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (widget), "Wrappy");
   gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (widget), "Stock");
   gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (widget), "Images");
+  gtk_combo_box_text_append_text (GTK_COMBO_BOX_TEXT (widget), "Buttons");
   gtk_combo_box_set_active (GTK_COMBO_BOX (widget), 0);
   gtk_widget_show (widget);
 
