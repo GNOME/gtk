@@ -3459,7 +3459,7 @@ gtk_flow_box_move_cursor (GtkFlowBox      *box,
               while (!g_sequence_iter_is_end (iter))
                 {
                   iter = gtk_flow_box_get_next_focusable (box, iter);
-                  if (g_sequence_iter_is_end (iter))
+                  if (iter == NULL || g_sequence_iter_is_end (iter))
                     break;
 
                   next = g_sequence_get (iter);
