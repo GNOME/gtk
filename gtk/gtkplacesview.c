@@ -1644,7 +1644,7 @@ build_popup_menu (GtkPlacesView    *view,
   /* Mount/Unmount items */
   if (mount)
     {
-      item = gtk_menu_item_new_with_mnemonic (is_network ? P_("_Disconnect") : P_("_Unmount"));
+      item = gtk_menu_item_new_with_mnemonic (is_network ? _("_Disconnect") : _("_Unmount"));
       g_signal_connect (item,
                         "activate",
                         G_CALLBACK (unmount_cb),
@@ -1654,7 +1654,7 @@ build_popup_menu (GtkPlacesView    *view,
     }
   else
     {
-      item = gtk_menu_item_new_with_mnemonic (is_network ? P_("_Connect") : P_("_Mount"));
+      item = gtk_menu_item_new_with_mnemonic (is_network ? _("_Connect") : _("_Mount"));
       g_signal_connect (item,
                         "activate",
                         G_CALLBACK (mount_cb),
