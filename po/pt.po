@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 3.10\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-08-24 21:55+0000\n"
-"PO-Revision-Date: 2015-08-25 07:13+0100\n"
+"POT-Creation-Date: 2015-08-26 03:33+0000\n"
+"PO-Revision-Date: 2015-08-26 06:32+0100\n"
 "Last-Translator: Pedro Albuquerque <palbuquerque73@gmail.com>\n"
 "Language-Team: Português <palbuquerque73@gmail.com>\n"
 "Language: pt\n"
@@ -2496,7 +2496,6 @@ msgid "_Replace"
 msgstr "_Substituir"
 
 #: gtk/gtkfilechooserwidget.c:6512
-#| msgid "Could not read the contents of the folder"
 msgid "You do not have access to the specified folder."
 msgstr "Não tem acesso à pasta especificada."
 
@@ -2731,16 +2730,16 @@ msgstr "Parâmetros de depuração GTK+ a ativar"
 msgid "GTK+ debugging flags to unset"
 msgstr "Parâmetros de depuração GTK+ a desativar"
 
-#: gtk/gtkmain.c:776
+#: gtk/gtkmain.c:781
 #, c-format
 msgid "Cannot open display: %s"
 msgstr "Impossível abrir o ecrã: %s"
 
-#: gtk/gtkmain.c:853
+#: gtk/gtkmain.c:858
 msgid "GTK+ Options"
 msgstr "Opções GTK+"
 
-#: gtk/gtkmain.c:853
+#: gtk/gtkmain.c:858
 msgid "Show GTK+ Options"
 msgstr "Mostrar as opções GTK+"
 
@@ -2749,7 +2748,7 @@ msgstr "Mostrar as opções GTK+"
 #. * Do *not* translate it to "predefinito:LTR", if it
 #. * it isn't default:LTR or default:RTL it will not work
 #.
-#: gtk/gtkmain.c:1177
+#: gtk/gtkmain.c:1182
 msgid "default:LTR"
 msgstr "default:LTR"
 
@@ -3067,11 +3066,11 @@ msgstr "_Remover"
 msgid "Rename…"
 msgstr "Renomear…"
 
-#: gtk/gtkplacessidebar.c:3365
+#: gtk/gtkplacessidebar.c:3365 gtk/gtkplacesview.c:1657
 msgid "_Mount"
 msgstr "_Montar"
 
-#: gtk/gtkplacessidebar.c:3366
+#: gtk/gtkplacessidebar.c:3366 gtk/gtkplacesview.c:1647
 msgid "_Unmount"
 msgstr "_Desmontar"
 
@@ -3088,13 +3087,12 @@ msgid "Computer"
 msgstr "Computador"
 
 #: gtk/gtkplacesview.c:888
-#| msgid "Show other locations"
 msgid "Searching for network locations"
 msgstr "A procurar localizações de rede"
 
 #: gtk/gtkplacesview.c:896
-#| msgid "No applications found."
-msgid "No networks locations found"
+#| msgid "No networks locations found"
+msgid "No network locations found"
 msgstr "Sem localizações de rede"
 
 #. if it wasn't cancelled show a dialog
@@ -3114,9 +3112,19 @@ msgstr "Impossível desmontar o volume"
 
 #. Allow to cancel the operation
 #: gtk/gtkplacesview.c:1407
-#| msgid "Cancel"
 msgid "Cance_l"
 msgstr "Cance_Lar"
+
+#: gtk/gtkplacesview.c:1647
+#| msgctxt "Stock label"
+#| msgid "_Disconnect"
+msgid "_Disconnect"
+msgstr "_Desligar"
+
+#: gtk/gtkplacesview.c:1657
+#| msgid "Co_nnect"
+msgid "_Connect"
+msgstr "_Ligar"
 
 #: gtk/gtkplacesview.c:1822
 msgid "Unable to get remote server location"
@@ -5475,7 +5483,6 @@ msgid "Connect to _Server"
 msgstr "Ligar ao _Servidor"
 
 #: gtk/ui/gtkplacesview.ui:286
-#| msgid "Connect to a network server address"
 msgid "Enter server address…"
 msgstr "Insira endereço do servidor…"
 
