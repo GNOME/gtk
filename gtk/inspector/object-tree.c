@@ -73,7 +73,6 @@ struct _GtkInspectorObjectTreePrivate
 {
   GtkTreeView *tree;
   GtkTreeStore *model;
-  GHashTable *iters;
   gulong map_hook;
   gulong unmap_hook;
   GtkTreeViewColumn *object_column;
@@ -608,43 +607,14 @@ on_selection_changed (GtkTreeSelection       *selection,
   g_signal_emit (wt, signals[OBJECT_SELECTED], 0, object);
 }
 
-
-typedef struct
-{
-  GtkInspectorObjectTree *wt;
-  GObject *object;
-  GtkTreeRowReference *row;
-} ObjectData;
-
 static void
 gtk_object_tree_remove_dead_object (gpointer data, GObject *dead_object)
 {
-  ObjectData *od = data;
+  GtkInspectorObjectTree *wt = data;
+  GtkTreeIter iter;
 
-  if (gtk_tree_row_reference_valid (od->row))
-    {
-      GtkTreePath *path;
-      GtkTreeIter iter;
-      path = gtk_tree_row_reference_get_path (od->row);
-      gtk_tree_model_get_iter (GTK_TREE_MODEL (od->wt->priv->model), &iter, path);
-      gtk_tree_store_remove (od->wt->priv->model, &iter);
-      gtk_tree_path_free (path);
-    }
-  od->object = NULL;
-  g_hash_table_remove (od->wt->priv->iters, dead_object);
-}
-
-static void
-object_data_free (gpointer data)
-{
-  ObjectData *od = data;
-
-  gtk_tree_row_reference_free (od->row);
-
-  if (od->object)
-    g_object_weak_unref (od->object, gtk_object_tree_remove_dead_object, od);
-
-  g_free (od);
+  if (gtk_inspector_object_tree_find_object (wt, dead_object, &iter))
+    gtk_tree_store_remove (wt->priv->model, &iter);
 }
 
 static gboolean
@@ -888,10 +858,6 @@ gtk_inspector_object_tree_init (GtkInspectorObjectTree *wt)
   guint signal_id;
 
   wt->priv = gtk_inspector_object_tree_get_instance_private (wt);
-  wt->priv->iters = g_hash_table_new_full (g_direct_hash,
-                                           g_direct_equal,
-                                           NULL,
-                                           (GDestroyNotify) object_data_free);
   gtk_widget_init_template (GTK_WIDGET (wt));
 
   gtk_search_bar_connect_entry (GTK_SEARCH_BAR (wt->priv->search_bar),
@@ -916,8 +882,6 @@ gtk_inspector_object_tree_finalize (GObject *object)
 {
   GtkInspectorObjectTree *wt = GTK_INSPECTOR_OBJECT_TREE (object);
   guint signal_id;
-
-  g_hash_table_unref (wt->priv->iters);
 
   signal_id = g_signal_lookup ("map", GTK_TYPE_WIDGET);
   g_signal_remove_emission_hook (signal_id, wt->priv->map_hook);
@@ -997,7 +961,6 @@ gtk_inspector_object_tree_append_object (GtkInspectorObjectTree *wt,
   GtkTreePath *path;
   const gchar *class_name;
   gchar *classes;
-  ObjectData *od;
   const gchar *label;
   FindAllData data;
 
@@ -1074,15 +1037,10 @@ gtk_inspector_object_tree_append_object (GtkInspectorObjectTree *wt,
 
   g_free (classes);
 
-  od = g_new0 (ObjectData, 1);
-  od->wt = wt;
-  od->object = object;
   path = gtk_tree_model_get_path (GTK_TREE_MODEL (wt->priv->model), &iter);
-  od->row = gtk_tree_row_reference_new (GTK_TREE_MODEL (wt->priv->model), path);
   gtk_tree_path_free (path);
 
-  g_hash_table_insert (wt->priv->iters, object, od);
-  g_object_weak_ref (object, gtk_object_tree_remove_dead_object, od);
+  g_object_weak_ref (object, gtk_object_tree_remove_dead_object, wt);
   
   data.wt = wt;
   data.iter = &iter;
@@ -1141,7 +1099,6 @@ gtk_inspector_object_tree_scan (GtkInspectorObjectTree *wt,
 
   selected = gtk_inspector_object_tree_get_selected (wt);
 
-  g_hash_table_remove_all (wt->priv->iters);
   gtk_tree_store_clear (wt->priv->model);
   gtk_inspector_object_tree_append_object (wt, G_OBJECT (gtk_settings_get_default ()), NULL, NULL);
   if (g_application_get_default ())
