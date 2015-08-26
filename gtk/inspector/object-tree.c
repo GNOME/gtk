@@ -517,7 +517,7 @@ find_class_funcs (GObject *object)
   return NULL;
 }
 
-static G_GNUC_UNUSED GObject *
+static GObject *
 object_get_parent (GObject *object)
 {
   const ObjectTreeClassFuncs *funcs;
@@ -1171,26 +1171,54 @@ gtk_inspector_object_tree_scan (GtkInspectorObjectTree *wt,
     select_object_internal (wt, selected, FALSE);
 }
 
+static gboolean
+gtk_inspector_object_tree_find_object_at_parent_iter (GtkTreeModel *model,
+                                                      GObject      *object,
+                                                      GtkTreeIter  *parent,
+                                                      GtkTreeIter  *iter)
+{
+  if (!gtk_tree_model_iter_children (model, iter, parent))
+    return FALSE;
+
+  do {
+    GObject *lookup;
+
+    gtk_tree_model_get (model, iter, OBJECT, &lookup, -1);
+
+    if (lookup == object)
+      return TRUE;
+
+  } while (gtk_tree_model_iter_next (model, iter));
+
+  return FALSE;
+}
+
 gboolean
 gtk_inspector_object_tree_find_object (GtkInspectorObjectTree *wt,
                                        GObject                *object,
                                        GtkTreeIter            *iter)
 {
-  ObjectData *od;
+  GtkTreeIter parent_iter;
+  GObject *parent;
 
-  od = g_hash_table_lookup (wt->priv->iters, object);
-  if (od && gtk_tree_row_reference_valid (od->row))
+  parent = object_get_parent (object);
+  if (parent)
     {
-      GtkTreePath *path;
+      if (!gtk_inspector_object_tree_find_object (wt, parent, &parent_iter))
+        return FALSE;
 
-      path = gtk_tree_row_reference_get_path (od->row);
-      gtk_tree_model_get_iter (GTK_TREE_MODEL (wt->priv->model), iter, path);
-      gtk_tree_path_free (path);
-
-      return TRUE;
+      return gtk_inspector_object_tree_find_object_at_parent_iter (GTK_TREE_MODEL (wt->priv->model),
+                                                                   object,
+                                                                   &parent_iter,
+                                                                   iter);
     }
-
-  return FALSE;
+  else
+    {
+      return gtk_inspector_object_tree_find_object_at_parent_iter (GTK_TREE_MODEL (wt->priv->model),
+                                                                   object,
+                                                                   NULL,
+                                                                   iter);
+    }
 }
 
 
