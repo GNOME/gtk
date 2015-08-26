@@ -109,7 +109,7 @@ main (int argc, char *argv[])
 {
   GtkWidget *window, *box, *hbox, *button, *spinner, *check,
     *fps_label, *gears, *extra_hbox, *bbox, *overlay,
-    *revealer, *frame, *label, *scrolled;
+    *revealer, *frame, *label, *scrolled, *popover;
   int i;
 
   gtk_init (&argc, &argv);
@@ -200,6 +200,16 @@ main (int argc, char *argv[])
   gtk_widget_show (check);
   g_signal_connect (check, "toggled",
                     G_CALLBACK (toggle_overlay), revealer);
+  button = gtk_menu_button_new ();
+  gtk_menu_button_set_direction (GTK_MENU_BUTTON (button), GTK_ARROW_UP);
+  popover = gtk_popover_new (NULL);
+  gtk_container_set_border_width (GTK_CONTAINER (popover), 10);
+  label = gtk_label_new ("Popovers work too!");
+  gtk_widget_show (label);
+  gtk_container_add (GTK_CONTAINER (popover), label);
+  gtk_menu_button_set_popover (GTK_MENU_BUTTON (button), popover);
+  gtk_widget_show (button);
+  gtk_box_pack_end (GTK_BOX (hbox), button, FALSE, FALSE, 0);
 
   scrolled = gtk_scrolled_window_new (NULL, NULL);
   gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (scrolled),
