@@ -1888,11 +1888,13 @@ listbox_filter_func (GtkListBoxRow *row,
   gboolean is_network;
   gboolean is_placeholder;
   gboolean retval;
+  gboolean searching;
   gchar *name;
   gchar *path;
 
   priv = gtk_places_view_get_instance_private (GTK_PLACES_VIEW (user_data));
   retval = FALSE;
+  searching = priv->search_query && priv->search_query[0] != '\0';
 
   is_network = GPOINTER_TO_INT (g_object_get_data (G_OBJECT (row), "is-network"));
   is_placeholder = GPOINTER_TO_INT (g_object_get_data (G_OBJECT (row), "is-placeholder"));
@@ -1900,10 +1902,10 @@ listbox_filter_func (GtkListBoxRow *row,
   if (is_network && priv->local_only)
     return FALSE;
 
-  if (is_placeholder)
+  if (is_placeholder && searching)
     return FALSE;
 
-  if (!priv->search_query || priv->search_query[0] == '\0')
+  if (!searching)
     return TRUE;
 
   g_object_get (row,
