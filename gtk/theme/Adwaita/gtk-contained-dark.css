@@ -1007,7 +1007,11 @@ GtkTextView {
     box-shadow: inset 0 1px rgba(0, 0, 0, 0.07), inset 0 2px 1px -2px rgba(0, 0, 0, 0.6), 0 1px rgba(238, 238, 236, 0.1); }
   .inline-toolbar GtkToolButton > .button:insensitive, .inline-toolbar .header-bar GtkToolButton > .button.titlebutton:insensitive,
   .inline-toolbar .titlebar GtkToolButton > .button.titlebutton:insensitive {
+<<<<<<< HEAD
     color: #949796;
+=======
+    color: #939695;
+>>>>>>> Adwaita, HighContrast: day names in GtkCalendar
     border-color: #1c1f1f;
     background-image: linear-gradient(to bottom, #333636);
     text-shadow: none;
@@ -1018,7 +1022,11 @@ GtkTextView {
   .inline-toolbar GtkToolButton > .button:insensitive:active, .inline-toolbar .header-bar GtkToolButton > .button.titlebutton:insensitive:active,
   .inline-toolbar .titlebar GtkToolButton > .button.titlebutton:insensitive:active, .inline-toolbar GtkToolButton > .button:insensitive:checked, .inline-toolbar .header-bar GtkToolButton > .button.titlebutton:insensitive:checked,
   .inline-toolbar .titlebar GtkToolButton > .button.titlebutton:insensitive:checked {
+<<<<<<< HEAD
     color: #949796;
+=======
+    color: #939695;
+>>>>>>> Adwaita, HighContrast: day names in GtkCalendar
     border-color: #1c1f1f;
     background-image: linear-gradient(to bottom, #313434, #333636);
     box-shadow: inset 0 1px rgba(255, 255, 255, 0), 0 1px rgba(238, 238, 236, 0.1); }
@@ -1026,8 +1034,13 @@ GtkTextView {
       color: inherit; }
   .inline-toolbar GtkToolButton > .button:backdrop, .inline-toolbar .header-bar GtkToolButton > .button.titlebutton:backdrop,
   .inline-toolbar .titlebar GtkToolButton > .button.titlebutton:backdrop {
+<<<<<<< HEAD
     color: #949796;
     border-color: #1f2222;
+=======
+    color: #939695;
+    border-color: #1e2222;
+>>>>>>> Adwaita, HighContrast: day names in GtkCalendar
     background-image: linear-gradient(to bottom, #393f3f);
     text-shadow: none;
     icon-shadow: none;
@@ -1035,9 +1048,15 @@ GtkTextView {
   .inline-toolbar GtkToolButton > .button:backdrop:active, .inline-toolbar .header-bar GtkToolButton > .button.titlebutton:backdrop:active,
   .inline-toolbar .titlebar GtkToolButton > .button.titlebutton:backdrop:active, .inline-toolbar GtkToolButton > .button:backdrop:checked, .inline-toolbar .header-bar GtkToolButton > .button.titlebutton:backdrop:checked,
   .inline-toolbar .titlebar GtkToolButton > .button.titlebutton:backdrop:checked {
+<<<<<<< HEAD
     color: #949796;
     border-color: #1f2222;
     background-image: linear-gradient(to bottom, #303535);
+=======
+    color: #939695;
+    border-color: #1e2222;
+    background-image: linear-gradient(to bottom, #2f3434);
+>>>>>>> Adwaita, HighContrast: day names in GtkCalendar
     box-shadow: inset 0 1px rgba(255, 255, 255, 0), 0 1px rgba(238, 238, 236, 0); }
   .inline-toolbar GtkToolButton > .button:backdrop:insensitive, .inline-toolbar .header-bar GtkToolButton > .button.titlebutton:backdrop:insensitive,
   .inline-toolbar .titlebar GtkToolButton > .button.titlebutton:backdrop:insensitive {
@@ -1142,12 +1161,18 @@ GtkTextView {
   border-style: solid; }
 
 .linked.vertical > .entry, .linked.vertical > .button, .header-bar .linked.vertical > .button.titlebutton,
+<<<<<<< HEAD
 .titlebar .linked.vertical > .button.titlebutton, .linked.vertical > .button:hover, .linked.vertical > .button:active, .linked.vertical > .button:checked, .linked.vertical > .button:backdrop, .linked.vertical > GtkComboBoxText > .the-button-in-the-combobox,
 .linked.vertical > GtkComboBox > .the-button-in-the-combobox {
+=======
+.titlebar .linked.vertical > .button.titlebutton, .linked.vertical > .button:hover, .linked.vertical > .button:active, .linked.vertical > .button:checked, .linked.vertical > .button:backdrop, .linked.vertical > GtkComboBoxText > .button,
+.linked.vertical > GtkComboBox > .button {
+>>>>>>> Adwaita, HighContrast: day names in GtkCalendar
   border-style: solid solid none solid;
   border-radius: 0; }
 
 .linked.vertical > .entry:first-child, .linked.vertical > .button:first-child, .header-bar .linked.vertical > .button.titlebutton:first-child,
+<<<<<<< HEAD
 .titlebar .linked.vertical > .button.titlebutton:first-child, .linked.vertical > GtkComboBoxText:first-child > .the-button-in-the-combobox,
 .linked.vertical > GtkComboBox:first-child > .the-button-in-the-combobox {
   border-top-left-radius: 3px;
@@ -1155,12 +1180,26 @@ GtkTextView {
 .linked.vertical > .entry:last-child, .linked.vertical > .button:last-child, .header-bar .linked.vertical > .button.titlebutton:last-child,
 .titlebar .linked.vertical > .button.titlebutton:last-child, .linked.vertical > GtkComboBoxText:last-child > .the-button-in-the-combobox,
 .linked.vertical > GtkComboBox:last-child > .the-button-in-the-combobox {
+=======
+.titlebar .linked.vertical > .button.titlebutton:first-child, .linked.vertical > GtkComboBoxText:first-child > .button,
+.linked.vertical > GtkComboBox:first-child > .button {
+  border-top-left-radius: 3px;
+  border-top-right-radius: 3px; }
+.linked.vertical > .entry:last-child, .linked.vertical > .button:last-child, .header-bar .linked.vertical > .button.titlebutton:last-child,
+.titlebar .linked.vertical > .button.titlebutton:last-child, .linked.vertical > GtkComboBoxText:last-child > .button,
+.linked.vertical > GtkComboBox:last-child > .button {
+>>>>>>> Adwaita, HighContrast: day names in GtkCalendar
   border-bottom-left-radius: 3px;
   border-bottom-right-radius: 3px;
   border-style: solid; }
 .linked.vertical > .entry:only-child, .linked.vertical > .button:only-child, .header-bar .linked.vertical > .button.titlebutton:only-child,
+<<<<<<< HEAD
 .titlebar .linked.vertical > .button.titlebutton:only-child, .linked.vertical > GtkComboBoxText:only-child > .the-button-in-the-combobox,
 .linked.vertical > GtkComboBox:only-child > .the-button-in-the-combobox {
+=======
+.titlebar .linked.vertical > .button.titlebutton:only-child, .linked.vertical > GtkComboBoxText:only-child > .button,
+.linked.vertical > GtkComboBox:only-child > .button {
+>>>>>>> Adwaita, HighContrast: day names in GtkCalendar
   border-radius: 3px;
   border-style: solid; }
 
@@ -3712,8 +3751,8 @@ GtkCalendar {
   GtkCalendar:inconsistent, GtkCalendar:inconsistent:backdrop {
     color: alpha(currentColor,0.55); }
   GtkCalendar.highlight, GtkCalendar.highlight:backdrop {
-    color: #eeeeec;
-    background: #1c1f1f; }
+    font-size: smaller;
+    color: #eeeeec; }
   GtkCalendar:backdrop {
     color: #d5d5d5;
     border-color: #1f2222; }
