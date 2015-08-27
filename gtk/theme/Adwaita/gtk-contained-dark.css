@@ -3685,8 +3685,11 @@ GtkCalendar {
     GtkCalendar.button:insensitive, .header-bar GtkCalendar.button.titlebutton:insensitive,
     .titlebar GtkCalendar.button.titlebutton:insensitive {
       color: rgba(147, 150, 149, 0.45); }
-  GtkCalendar:inconsistent, GtkCalendar:inconsistent:backdrop, GtkCalendar.highlight, GtkCalendar.highlight:backdrop {
+  GtkCalendar:inconsistent, GtkCalendar:inconsistent:backdrop {
     color: alpha(currentColor,0.55); }
+  GtkCalendar.highlight, GtkCalendar.highlight:backdrop {
+    color: #eeeeec;
+    background: #1c1f1f; }
   GtkCalendar:backdrop {
     color: #d4d4d4;
     border-color: #1e2222; }
