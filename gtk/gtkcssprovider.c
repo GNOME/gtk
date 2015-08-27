@@ -1654,11 +1654,20 @@ verify_tree_get_change_results (GtkCssProvider *provider,
 	GString *s;
 
 	s = g_string_new ("");
-	g_string_append_printf (s, "expected change 0x%x, but it was 0x%x", verify_change, change);
+	g_string_append (s, "expected change ");
+        gtk_css_change_print (verify_change, s);
+        g_string_append (s, ", but it was ");
+        gtk_css_change_print (change, s);
 	if ((change & ~verify_change) != 0)
-	  g_string_append_printf (s, ", unexpectedly set: 0x%x", change & ~verify_change);
+          {
+	    g_string_append (s, ", unexpectedly set: ");
+            gtk_css_change_print (change & ~verify_change, s);
+          }
 	if ((~change & verify_change) != 0)
-	  g_string_append_printf (s, ", unexpectedly no set: 0x%x",  ~change & verify_change);
+          {
+	    g_string_append_printf (s, ", unexpectedly not set: ");
+            gtk_css_change_print (~change & verify_change, s);
+          }
 	g_warning (s->str);
 	g_string_free (s, TRUE);
       }

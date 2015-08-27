@@ -330,6 +330,10 @@ typedef enum /*< skip >*/ {
 GtkCssChange            _gtk_css_change_for_sibling              (GtkCssChange       match);
 GtkCssChange            _gtk_css_change_for_child                (GtkCssChange       match);
 
+char *                  gtk_css_change_to_string                 (GtkCssChange       change);
+void                    gtk_css_change_print                     (GtkCssChange       change,
+                                                                  GString           *string);
+
 /* for lack of better place to put it */
 /* mirror what cairo does */
 #define gtk_rgba_is_clear(rgba) ((rgba)->alpha < ((double)0x00ff / (double)0xffff))
