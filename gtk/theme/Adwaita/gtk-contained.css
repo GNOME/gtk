@@ -212,7 +212,7 @@ GtkTextView {
     box-shadow: none; }
     .entry.progressbar:backdrop {
       background-color: transparent; }
-  .linked:not(.vertical) > .entry:focus + * {
+  .linked:not(.vertical) > .entry:focus + .entry, .linked:not(.vertical) > .entry:focus + .button, .linked:not(.vertical) > .entry:focus + GtkComboBox > .the-button-in-the-combobox, .linked:not(.vertical) > .entry:focus + GtkComboBoxText > .the-button-in-the-combobox {
     border-left-color: #4a90d9; }
   .entry.error {
     color: #cc0000;
