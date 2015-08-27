@@ -1927,6 +1927,7 @@ GtkScrolledWindow {
   padding: 2px;
 }
 
+
 .list-row.activatable,
 .list-row.activatable:backdrop,
 .list-row.activatable:backdrop:active,
@@ -1942,75 +1943,39 @@ GtkScrolledWindow {
   border-style: none; // I need no borders here
   border-radius: 0;   // and no rounded corners
   box-shadow: none;   // and no box-shadow
-
 }
 
-.list-row.activatable {
-  @extend %undecorated_button;
-  background-color: transparentize($base_color,1); // for the transition
-  border-style: none; // I need no borders here
-  border-radius: 0;   // and no rounded corners
-  box-shadow: none;   // and no box-shadow
-  &:hover {
-    background-color: mix($fg_color, $base_color, 5%);
-  }
-  &:active {
-    box-shadow: inset 0 2px 2px -2px transparentize(black, 0.8);
-  }
-  &:selected {
-    background-color: $selected_bg_color;
-    &:active { box-shadow: inset 0 2px 3px -1px transparentize(black, 0.5); }
+.list-row {
+  &.activatable {
+    color: $fg_color;
     &:hover {
-      background-color: mix($fg_color, $selected_bg_color, 10%);
+      background-color: mix($fg_color, $base_color, 5%);
     }
-    &:backdrop { background-color: $borders_color; }
-  }
-}
-
-.list-row:selected {
-  @extend %selected_items;
-  .button {
-    @include button(normal, $edge:none);
-    border-color: $selected_borders_color;
-    &.flat {
-      @include button(undecorated, $edge:none);
+    &:active {
+      box-shadow: inset 0 2px 2px -2px transparentize(black, 0.8);
+    }
+    &:selected {
+      @extend %selected_items;
+      background-color: $selected_bg_color;
       color: $selected_fg_color;
-    }
-    &:hover {
-      @include button(hover, $edge:none);
-      border-color: $selected_borders_color;
-    }
-    &:active, &:checked {
-      @include button(active, $edge:none);
-      border-color: $selected_borders_color;
-    }
-    &:backdrop, &.flat:backdrop {
-      @include button(backdrop, $edge:none);
-      border-color: $selected_borders_color;
-      &:active, &:checked {
-        @include button(backdrop-active, $edge:none);
-        border-color: $selected_borders_color;
+      &:active { box-shadow: inset 0 2px 3px -1px transparentize(black, 0.5); }
+      &:hover {
+        background-color: mix($fg_color, $selected_bg_color, 10%);
       }
-      &:insensitive {
-        @include button(backdrop-insensitive, $edge:none);
-        border-color: $selected_borders_color;
-        &:active, &:checked {
-          @include button(backdrop-insensitive-active, $edge:none);
-          border-color: $selected_borders_color;
-        }
+      &:backdrop { background-color: $borders_color; }
+      .button.flat { 
+        color: $selected_fg_color;
+        &:hover { color: $fg_color; }
+        &:active { color: $selected_fg_color; }
       }
-    }
-    &.flat:backdrop {
-      @include button(undecorated);
-      color: $backdrop_base_color;
-    }
-    &:insensitive {
-      @include button(insensitive, $edge:none);
-      border-color: $selected_borders_color;
-      &:active, &:checked { @include button(insensitive-active, $edge:none); }
     }
   }
+  .button.flat {
+    color: $fg_color;
+    &:active { color: $selected_fg_color; }
+  }
 }
+
 
 // transition
 .list-row, .list-row.activatable {
