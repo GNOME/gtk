@@ -75,6 +75,7 @@ struct _GdkWaylandDeviceData
   GdkModifierType button_modifiers;
   GdkWindow *pointer_focus;
   GdkWindow *keyboard_focus;
+  GdkAtom pending_selection;
   struct wl_data_device *data_device;
   double surface_x, surface_y;
   uint32_t time;
@@ -670,21 +671,6 @@ emit_selection_owner_change (GdkWindow *window,
 }
 
 static void
-emit_selection_owner_change_forall (GdkAtom atom)
-{
-  GdkDisplay *display = gdk_display_get_default ();
-  GdkScreen *screen = GDK_WAYLAND_DISPLAY (display)->screen;
-  GList *windows, *l;
-
-  windows = gdk_screen_get_toplevel_windows (screen);
-
-  for (l = windows; l; l = l->next)
-    emit_selection_owner_change (l->data, atom);
-
-  g_list_free (windows);
-}
-
-static void
 data_device_data_offer (void                  *data,
                         struct wl_data_device *data_device,
                         struct wl_data_offer  *offer)
@@ -744,7 +730,8 @@ data_device_enter (void                  *data,
                                         GDK_CURRENT_TIME);
 
   gdk_wayland_selection_set_offer (device->display, selection, offer);
-  emit_selection_owner_change_forall (selection);
+
+  emit_selection_owner_change (dest_window, selection);
 }
 
 static void
@@ -827,7 +814,16 @@ data_device_selection (void                  *data,
 
   selection = gdk_atom_intern_static_string ("CLIPBOARD");
   gdk_wayland_selection_set_offer (device->display, selection, offer);
-  emit_selection_owner_change_forall (selection);
+
+  /* If we already have keyboard focus, the selection was targeted at the
+   * focused surface. If we don't we will receive keyboard focus directly after
+   * this, so lets wait and find out what window will get the focus before
+   * emitting the owner-changed event.
+   */
+  if (device->keyboard_focus)
+    emit_selection_owner_change (device->keyboard_focus, selection);
+  else
+    device->pending_selection = selection;
 }
 
 static const struct wl_data_device_listener data_device_listener = {
@@ -1163,6 +1159,13 @@ keyboard_handle_enter (void               *data,
                        device, device->keyboard_focus));
 
   _gdk_wayland_display_deliver_event (device->display, event);
+
+  if (device->pending_selection != GDK_NONE)
+    {
+      emit_selection_owner_change (device->keyboard_focus,
+                                   device->pending_selection);
+      device->pending_selection = GDK_NONE;
+    }
 }
 
 static void stop_key_repeat (GdkWaylandDeviceData *device);
@@ -2230,6 +2233,8 @@ _gdk_wayland_device_manager_add_seat (GdkDeviceManager *device_manager,
                                            (GDestroyNotify) g_free);
   device->foreign_dnd_window = create_foreign_dnd_window (display);
   device->wl_seat = wl_seat;
+
+  device->pending_selection = GDK_NONE;
 
   wl_seat_add_listener (device->wl_seat, &seat_listener, device);
   wl_seat_set_user_data (device->wl_seat, device);
