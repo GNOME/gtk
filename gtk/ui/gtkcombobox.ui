@@ -7,6 +7,9 @@
         <property name="visible">True</property>
         <property name="focus-on-click">True</property>
         <signal name="toggled" handler="gtk_combo_box_button_toggled" swapped="no"/>
+        <style>
+          <class name="the-button-in-the-combobox"/>
+        </style>
         <child>
           <object class="GtkBox">
             <property name="visible">True</property>
