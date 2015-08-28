@@ -1617,8 +1617,6 @@ gdk_wayland_window_destroy (GdkWindow *window,
 
   g_return_if_fail (GDK_IS_WINDOW (window));
 
-  /* We don't have nested windows */
-  g_return_if_fail (!recursing);
   /* Wayland windows can't be externally destroyed; we may possibly
    * eventually want to use this path at display close-down
    */
