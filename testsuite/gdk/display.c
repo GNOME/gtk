@@ -19,6 +19,7 @@ static void
 test_unset_display_subprocess2 (void)
 {
   g_unsetenv ("DISPLAY");
+
   gdk_init (NULL, NULL);
 }
 
@@ -68,6 +69,8 @@ int
 main (int argc, char *argv[])
 {
   g_test_init (&argc, &argv, NULL);
+
+  gdk_set_allowed_backends ("x11");
 
   g_test_add_func ("/display/unset-display", test_unset_display);
   g_test_add_func ("/display/unset-display/subprocess/1", test_unset_display_subprocess1);
