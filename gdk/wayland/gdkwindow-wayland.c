@@ -1304,7 +1304,7 @@ gdk_wayland_window_hide_surface (GdkWindow *window)
     {
       if (impl->dummy_egl_surface)
         {
-          eglDestroySurface(display_wayland->egl_display, impl->dummy_egl_surface);
+          eglDestroySurface (display_wayland->egl_display, impl->dummy_egl_surface);
           impl->dummy_egl_surface = NULL;
         }
 
@@ -1316,7 +1316,7 @@ gdk_wayland_window_hide_surface (GdkWindow *window)
 
       if (impl->egl_surface)
         {
-          eglDestroySurface(display_wayland->egl_display, impl->egl_surface);
+          eglDestroySurface (display_wayland->egl_display, impl->egl_surface);
           impl->egl_surface = NULL;
         }
 
