@@ -2042,8 +2042,7 @@ _gdk_window_destroy_hierarchy (GdkWindow *window,
 	  impl_class = GDK_WINDOW_IMPL_GET_CLASS (window->impl);
 
 	  if (gdk_window_has_impl (window))
-	    impl_class->destroy (window, recursing_native,
-				 foreign_destroy);
+	    impl_class->destroy (window, recursing_native, foreign_destroy);
 	  else
 	    {
 	      /* hide to make sure we repaint and break grabs */
