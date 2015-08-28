@@ -319,9 +319,7 @@ gtk_places_view_row_set_is_network (GtkPlacesViewRow *row,
     {
       row->is_network = is_network;
 
-      gtk_image_set_from_icon_name (row->eject_icon,
-                                    is_network ? "network-offline-symbolic" : "media-eject-symbolic",
-                                    GTK_ICON_SIZE_BUTTON);
+      gtk_image_set_from_icon_name (row->eject_icon, "media-eject-symbolic", GTK_ICON_SIZE_BUTTON);
       gtk_widget_set_tooltip_text (GTK_WIDGET (row->eject_button), is_network ? _("Disconnect") : _("Unmount"));
     }
 }
