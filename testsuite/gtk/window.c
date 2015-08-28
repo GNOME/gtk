@@ -375,34 +375,35 @@ test_hide_titlebar_when_maximized (void)
   gtk_main ();
 
 #ifdef GDK_WINDOWING_X11
-  {
-    Atom type;
-    gint format;
-    gulong nitems;
-    gulong bytes_after;
-    gulong *hide = NULL;
+  if (GDK_IS_X11_SCREEN (gtk_widget_get_screen (window)))
+    {
+      Atom type;
+      gint format;
+      gulong nitems;
+      gulong bytes_after;
+      gulong *hide = NULL;
 
-    XGetWindowProperty (gdk_x11_get_default_xdisplay (),
-                        GDK_WINDOW_XID (gtk_widget_get_window (window)),
-                        gdk_x11_get_xatom_by_name ("_GTK_HIDE_TITLEBAR_WHEN_MAXIMIZED"),
-                        0,
-                        G_MAXLONG,
-                        False,
-                        XA_CARDINAL,
-                        &type,
-                        &format,
-                        &nitems,
-                        &bytes_after,
-                        (guchar **) &hide);
+      XGetWindowProperty (gdk_x11_get_default_xdisplay (),
+                          GDK_WINDOW_XID (gtk_widget_get_window (window)),
+                          gdk_x11_get_xatom_by_name ("_GTK_HIDE_TITLEBAR_WHEN_MAXIMIZED"),
+                          0,
+                          G_MAXLONG,
+                          False,
+                          XA_CARDINAL,
+                          &type,
+                          &format,
+                          &nitems,
+                          &bytes_after,
+                          (guchar **) &hide);
 
-    g_assert_cmpint (type, !=, None);
-    g_assert_cmpint (type, ==, XA_CARDINAL);
-    g_assert_cmpint (format, ==, 32);
-    g_assert_cmpint (nitems, ==, 1);
-    g_assert_cmpint (hide[0], ==, 1);
+      g_assert_cmpint (type, !=, None);
+      g_assert_cmpint (type, ==, XA_CARDINAL);
+      g_assert_cmpint (format, ==, 32);
+      g_assert_cmpint (nitems, ==, 1);
+      g_assert_cmpint (hide[0], ==, 1);
 
-    XFree (hide);
-  }
+      XFree (hide);
+    }
 #endif
 
   gtk_widget_destroy (window);

@@ -19,6 +19,12 @@
 #include <string.h>
 #include <gtk/gtk.h>
 #include <gtk/gtkunixprint.h>
+#ifdef GDK_WINDOWING_X11
+#include <gtk/gtkx.h>
+#endif
+#ifdef GDK_WINDOWING_WAYLAND
+#include "gdk/wayland/gdkwayland.h"
+#endif
 
 typedef struct
 {
@@ -407,7 +413,24 @@ test_type (gconstpointer data)
   /* These rely on a d-bus session bus */
   if (g_type_is_a (type, GTK_TYPE_MOUNT_OPERATION))
     return;
- 
+
+  /* Backend-specific */
+#ifdef GDK_WINDOWING_X11
+  if (GDK_IS_X11_DISPLAY (gdk_display_get_default ())) ;
+  else
+#endif
+  if (g_type_is_a (type, GTK_TYPE_PLUG) ||
+      g_type_is_a (type, GTK_TYPE_SOCKET))
+    return;
+
+#ifdef GDK_WINDOWING_WAYLAND
+  if (GDK_IS_WAYLAND_DISPLAY (gdk_display_get_default ()))
+    {
+      if (g_type_is_a (type, GTK_TYPE_STATUS_ICON))
+        return;
+    }
+#endif
+
   klass = g_type_class_ref (type);
 
   if (g_type_is_a (type, GTK_TYPE_SETTINGS))

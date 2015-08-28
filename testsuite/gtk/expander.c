@@ -23,6 +23,10 @@
  */
 #include <gtk/gtk.h>
 
+#ifdef GDK_WINDOWING_X11
+#include <gdk/gdkx.h>
+#endif
+
 static void
 test_click_expander (void)
 {
@@ -65,6 +69,7 @@ test_click_content_widget (void)
   GtkWidget *entry = gtk_entry_new ();
   gboolean expanded;
   gboolean simsuccess;
+
   gtk_container_add (GTK_CONTAINER (expander), entry);
   gtk_container_add (GTK_CONTAINER (gtk_bin_get_child (GTK_BIN (window))), expander);
   gtk_expander_set_expanded (GTK_EXPANDER (expander), TRUE);
@@ -89,7 +94,16 @@ main (int   argc,
       char *argv[])
 {
   gtk_test_init (&argc, &argv);
+
+#ifdef GDK_WINDOWING_X11
+  if (GDK_IS_X11_DISPLAY (gdk_display_get_default ())) ;
+    return 0; /* gtk_test functions don't work well elsewhere */
+#else
+  return 0;
+#endif
+
   g_test_add_func ("/expander/click-expander", test_click_expander);
   g_test_add_func ("/expander/click-content-widget", test_click_content_widget);
+
   return g_test_run();
 }
