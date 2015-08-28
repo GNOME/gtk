@@ -86,7 +86,7 @@ async_roundtrip_callback (void               *data,
   wl_callback_destroy (callback);
 }
 
-static const struct wl_callback_listener async_roundrip_listener = {
+static const struct wl_callback_listener async_roundtrip_listener = {
   async_roundtrip_callback
 };
 
@@ -97,7 +97,7 @@ _gdk_wayland_display_async_roundtrip (GdkWaylandDisplay *display_wayland)
 
   callback = wl_display_sync (display_wayland->wl_display);
   wl_callback_add_listener (callback,
-                            &async_roundrip_listener,
+                            &async_roundtrip_listener,
                             display_wayland);
   display_wayland->async_roundtrips =
     g_list_append (display_wayland->async_roundtrips, callback);
@@ -508,10 +508,14 @@ gdk_wayland_display_dispose (GObject *object)
       display_wayland->selection = NULL;
     }
 
-  g_list_foreach (display_wayland->async_roundtrips,
-                  (GFunc) wl_callback_destroy, NULL);
+  g_list_free_full (display_wayland->async_roundtrips, (GDestroyNotify) wl_callback_destroy);
 
-  g_hash_table_destroy (display_wayland->known_globals);
+  if (display_wayland->known_globals)
+    {
+      g_hash_table_destroy (display_wayland->known_globals);
+      display_wayland->known_globals = NULL;
+    }
+
   g_list_free_full (display_wayland->on_has_globals_closures, g_free);
 
   G_OBJECT_CLASS (gdk_wayland_display_parent_class)->dispose (object);
