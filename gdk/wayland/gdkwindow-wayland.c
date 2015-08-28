@@ -1345,8 +1345,12 @@ gdk_wayland_window_hide_surface (GdkWindow *window)
 
       if (impl->awaiting_frame)
         {
+          GdkFrameClock *frame_clock;
+
           impl->awaiting_frame = FALSE;
-          _gdk_frame_clock_thaw (gdk_window_get_frame_clock (window));
+          frame_clock = gdk_window_get_frame_clock (window);
+          if (frame_clock)
+            _gdk_frame_clock_thaw (frame_clock);
         }
 
       if (impl->gtk_surface)
