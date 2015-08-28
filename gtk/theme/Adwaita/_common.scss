@@ -2573,24 +2573,6 @@ GtkScrolledWindow {
   padding: 2px;
 }
 
-.list-row.activatable,
-.list-row.activatable:backdrop,
-.list-row.activatable:backdrop:active,
-.list-row.activatable:backdrop:checked,
-.list-row.activatable:backdrop:insensitive,
-.list-row.activatable:backdrop:insensitive:active,
-.list-row.activatable:backdrop:insensitive:checked,
-.list-row.activatable:insensitive:active,
-.list-row.activatable:insensitive:checked {
-  // reset button inherited stuff
-  @extend %undecorated_button;
-  background-color: transparentize($base_color,1); // for the transition
-  border-style: none; // I need no borders here
-  border-radius: 0;   // and no rounded corners
-  box-shadow: none;   // and no box-shadow
-
-}
-
 .list-row.activatable {
   // let's take care of background colors
   &:hover {
