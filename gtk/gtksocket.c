@@ -101,16 +101,14 @@
  *
  * The communication between a #GtkSocket and a #GtkPlug follows the
  * [XEmbed Protocol](http://www.freedesktop.org/Standards/xembed-spec).
- * This protocol has also been implemented in other toolkits,
- * e.g. Qt, allowing the same level of
- * integration when embedding a Qt widget
+ * This protocol has also been implemented in other toolkits, e.g. Qt,
+ * allowing the same level of integration when embedding a Qt widget
  * in GTK or vice versa.
  *
  * The #GtkPlug and #GtkSocket widgets are only available when GTK+
  * is compiled for the X11 platform and %GDK_WINDOWING_X11 is defined.
  * They can only be used on a #GdkX11Display. To use #GtkPlug and
- * #GtkSocket, you need to include the `gtk/gtkx.h`
- * header.
+ * #GtkSocket, you need to include the `gtk/gtkx.h` header.
  */
 
 /* Forward declararations */
@@ -391,8 +389,13 @@ gtk_socket_realize (GtkWidget *widget)
   GdkWindowAttr attributes;
   XWindowAttributes xattrs;
   gint attributes_mask;
+  GdkScreen *screen;
 
   gtk_widget_set_realized (widget, TRUE);
+
+  screen = gtk_widget_get_screen (widget);
+  if (!GDK_IS_X11_SCREEN (screen))
+    g_warning ("GtkSocket: only works under X11");
 
   gtk_widget_get_allocation (widget, &allocation);
 
