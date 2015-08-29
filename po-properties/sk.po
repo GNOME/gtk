@@ -11,8 +11,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-properties\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-08-24 09:56+0000\n"
-"PO-Revision-Date: 2015-08-24 18:07+0200\n"
+"POT-Creation-Date: 2015-08-29 09:57+0000\n"
+"PO-Revision-Date: 2015-08-29 17:36+0200\n"
 "Last-Translator: Dušan Kazik <prescott66@gmail.com>\n"
 "Language-Team: slovenčina <>\n"
 "Language: sk\n"
@@ -861,7 +861,7 @@ msgstr "Obrazovka, na ktorej sa má zobraziť táto ikona stavu"
 msgid "Whether the status icon is visible"
 msgstr "Určuje, či je ikona stavu viditeľná"
 
-#: gtk/deprecated/gtkstatusicon.c:322 gtk/gtkplug.c:201
+#: gtk/deprecated/gtkstatusicon.c:322 gtk/gtkplug.c:199
 msgid "Embedded"
 msgstr "Vložená"
 
@@ -953,7 +953,7 @@ msgstr "Rozstupy stĺpcov"
 msgid "The amount of space between two consecutive columns"
 msgstr "Priestor medzi dvoma nasledujúcimi stĺpcami"
 
-#: gtk/deprecated/gtktable.c:225 gtk/gtkbox.c:264 gtk/gtkflowbox.c:3714
+#: gtk/deprecated/gtktable.c:225 gtk/gtkbox.c:264 gtk/gtkflowbox.c:3716
 #: gtk/gtkstack.c:421 gtk/gtktoolbar.c:561 gtk/gtktoolitemgroup.c:1654
 msgid "Homogeneous"
 msgstr "Homogénne"
@@ -1251,21 +1251,21 @@ msgstr "Zalomiť licenciu"
 msgid "Whether to wrap the license text."
 msgstr "Určuje, či zalomiť text licencie."
 
-#: gtk/gtkaccellabel.c:192
+#: gtk/gtkaccellabel.c:193
 #, fuzzy
 msgid "Accelerator Closure"
 msgstr "Objekt akcelerátora"
 
-#: gtk/gtkaccellabel.c:193
+#: gtk/gtkaccellabel.c:194
 #, fuzzy
 msgid "The closure to be monitored for accelerator changes"
 msgstr "Objekt monitorovaný pre zmeny akcelerátora"
 
-#: gtk/gtkaccellabel.c:199
+#: gtk/gtkaccellabel.c:200
 msgid "Accelerator Widget"
 msgstr "Ovládací prvok akcelerátora"
 
-#: gtk/gtkaccellabel.c:200
+#: gtk/gtkaccellabel.c:201
 msgid "The widget to be monitored for accelerator changes"
 msgstr "Ovládací prvok monitorovaný pre zmeny akcelerátora"
 
@@ -1684,7 +1684,7 @@ msgstr "Rozostupy"
 msgid "The amount of space between children"
 msgstr "Veľkosť priestoru medzi potomkami"
 
-#: gtk/gtkbox.c:265 gtk/gtkflowbox.c:3715
+#: gtk/gtkbox.c:265 gtk/gtkflowbox.c:3717
 msgid "Whether the children should all be the same size"
 msgstr "Určuje, či má každý potomok rovnakú veľkosť"
 
@@ -1723,7 +1723,7 @@ msgstr ""
 
 #: gtk/gtkbox.c:324
 msgid "Extra space to put between the child and its neighbors, in pixels"
-msgstr "Extra priestor medzi potomkom a jeho susedmi, v pixeloch"
+msgstr "Dodatočný priestor medzi potomkom a jeho susedmi, v pixeloch"
 
 #: gtk/gtkbuilder.c:289
 msgid "Translation Domain"
@@ -2049,20 +2049,18 @@ msgid "Minimum Width"
 msgstr "Minimálna šírka"
 
 #: gtk/gtkcellareacontext.c:133 gtk/gtkcellareacontext.c:152
-#, fuzzy
 #| msgid "Minimum child width"
 msgid "Minimum cached width"
-msgstr "Minimálna šírka potomka"
+msgstr "Minimálna šírka vo vyrovnávacej pamäti"
 
 #: gtk/gtkcellareacontext.c:170 gtk/gtkcellareacontext.c:189
 msgid "Minimum Height"
 msgstr "Minimálna výška"
 
 #: gtk/gtkcellareacontext.c:171 gtk/gtkcellareacontext.c:190
-#, fuzzy
 #| msgid "Minimum child height"
 msgid "Minimum cached height"
-msgstr "Minimálna výška potomka"
+msgstr "Minimálna výška vo vyrovnávacej pamäti"
 
 #: gtk/gtkcelleditable.c:51
 msgid "Editing Canceled"
@@ -2799,7 +2797,7 @@ msgstr "Nekonzistentný stav"
 msgid "The inconsistent state of the button"
 msgstr "Nekonzistentný stav tlačidla"
 
-#: gtk/gtkcellrenderertoggle.c:153 gtk/gtklistbox.c:3643
+#: gtk/gtkcellrenderertoggle.c:153 gtk/gtklistbox.c:3654
 msgid "Activatable"
 msgstr "Aktivovateľné"
 
@@ -2899,7 +2897,6 @@ msgstr "Nekonzistentný"
 
 # PK: report bug
 #: gtk/gtkcheckmenuitem.c:131
-#, fuzzy
 msgid "Whether to display an \"inconsistent\" state"
 msgstr "Určuje, či zobraziť „nekonzistentný“ stav"
 
@@ -2969,7 +2966,7 @@ msgstr "Farba RGBA"
 msgid "Color as RGBA"
 msgstr "Farba ako RGBA"
 
-#: gtk/gtkcolorswatch.c:710 gtk/gtklabel.c:855 gtk/gtklistbox.c:3657
+#: gtk/gtkcolorswatch.c:710 gtk/gtklabel.c:855 gtk/gtklistbox.c:3668
 msgid "Selectable"
 msgstr "Vybrateľný"
 
@@ -2979,10 +2976,9 @@ msgid "Whether the swatch is selectable"
 msgstr "Či je možné záložku oddeliť"
 
 #: gtk/gtkcolorswatch.c:713
-#, fuzzy
 #| msgid "Menu"
 msgid "Has Menu"
-msgstr "Ponuka"
+msgstr "Má ponuku"
 
 #: gtk/gtkcolorswatch.c:713
 #, fuzzy
@@ -3343,7 +3339,6 @@ msgid "Number of characters to leave space for in the entry"
 msgstr "Počet znakov, na ktoré sa má nechať medzera vo vstupnom poli"
 
 #: gtk/gtkentry.c:882
-#, fuzzy
 #| msgid "Maximum Width In Characters"
 msgid "Maximum width in characters"
 msgstr "Maximálna šírka v znakoch"
@@ -3394,9 +3389,8 @@ msgstr "Dĺžka aktuálneho textu vo vstupnom poli"
 
 # PM: mám pocit že toto hovorí o tom či sa majú skryť znaky pri zadávaní hesla
 #: gtk/gtkentry.c:998
-#, fuzzy
 msgid "Invisible character set"
-msgstr "Neviditeľná sada znakov"
+msgstr "Neviditeľné znaky sú nastavené"
 
 #: gtk/gtkentry.c:999
 #, fuzzy
@@ -3423,9 +3417,8 @@ msgid "The current fraction of the task that's been completed"
 msgstr "Zlomok celkovej plánovanej práce, ktorý už je dokončený"
 
 #: gtk/gtkentry.c:1050
-#, fuzzy
 msgid "Progress Pulse Step"
-msgstr "Krok pulzu"
+msgstr "Krok pulzu priebehu"
 
 #: gtk/gtkentry.c:1051
 #, fuzzy
@@ -3964,59 +3957,59 @@ msgstr "Y pozícia"
 msgid "Y position of child widget"
 msgstr "Y pozícia ovládacieho prvku potomka"
 
-#: gtk/gtkflowbox.c:3687 gtk/gtkiconview.c:395 gtk/gtklistbox.c:443
+#: gtk/gtkflowbox.c:3689 gtk/gtkiconview.c:395 gtk/gtklistbox.c:444
 #: gtk/gtktreeselection.c:131
 msgid "Selection mode"
 msgstr "Režim výberu"
 
-#: gtk/gtkflowbox.c:3688 gtk/gtkiconview.c:396 gtk/gtklistbox.c:444
+#: gtk/gtkflowbox.c:3690 gtk/gtkiconview.c:396 gtk/gtklistbox.c:445
 msgid "The selection mode"
 msgstr "Režim výberu"
 
-#: gtk/gtkflowbox.c:3701 gtk/gtkiconview.c:652 gtk/gtklistbox.c:451
+#: gtk/gtkflowbox.c:3703 gtk/gtkiconview.c:652 gtk/gtklistbox.c:452
 #: gtk/gtktreeview.c:1212
 msgid "Activate on Single Click"
 msgstr "Aktivovať pri jednoduchom kliknutí"
 
-#: gtk/gtkflowbox.c:3702 gtk/gtkiconview.c:653 gtk/gtklistbox.c:452
+#: gtk/gtkflowbox.c:3704 gtk/gtkiconview.c:653 gtk/gtklistbox.c:453
 #: gtk/gtktreeview.c:1213
 msgid "Activate row on a single click"
 msgstr "Aktivovať riadok pri jednoduchom kliknutí"
 
-#: gtk/gtkflowbox.c:3731
+#: gtk/gtkflowbox.c:3733
 msgid "Minimum Children Per Line"
 msgstr "Minimálny počet potomkov na riadok"
 
-#: gtk/gtkflowbox.c:3732
+#: gtk/gtkflowbox.c:3734
 msgid ""
 "The minimum number of children to allocate consecutively in the given "
 "orientation."
 msgstr "Minimálny počet potomkov alokovaných sekvenčne v danej orientácii."
 
-#: gtk/gtkflowbox.c:3745
+#: gtk/gtkflowbox.c:3747
 msgid "Maximum Children Per Line"
 msgstr "Maximálny počet potomkov na riadok"
 
-#: gtk/gtkflowbox.c:3746
+#: gtk/gtkflowbox.c:3748
 msgid ""
 "The maximum amount of children to request space for consecutively in the "
 "given orientation."
 msgstr ""
 "Maximálny počet potomkov požadujúcich sekvenčný priestor v danej orientácii."
 
-#: gtk/gtkflowbox.c:3758
+#: gtk/gtkflowbox.c:3760
 msgid "Vertical spacing"
 msgstr "Zvislé medzery"
 
-#: gtk/gtkflowbox.c:3759
+#: gtk/gtkflowbox.c:3761
 msgid "The amount of vertical space between two children"
 msgstr "Veľkosť zvislého priestoru medzi potomkami"
 
-#: gtk/gtkflowbox.c:3770
+#: gtk/gtkflowbox.c:3772
 msgid "Horizontal spacing"
 msgstr "Vodorovné medzery"
 
-#: gtk/gtkflowbox.c:3771
+#: gtk/gtkflowbox.c:3773
 msgid "The amount of horizontal space between two children"
 msgstr "Veľkosť vodorovného priestoru medzi potomkami"
 
@@ -4695,11 +4688,11 @@ msgstr "Navštívený"
 msgid "Whether this link has been visited."
 msgstr "Určuje, či bol tento odkaz navštívený."
 
-#: gtk/gtklistbox.c:3644
+#: gtk/gtklistbox.c:3655
 msgid "Whether this row can be activated"
 msgstr "Určuje, či môže byť tento riadok aktivovaný"
 
-#: gtk/gtklistbox.c:3658
+#: gtk/gtklistbox.c:3669
 msgid "Whether this row can be selected"
 msgstr "Určuje, či môže byť tento riadok vybraný"
 
@@ -4896,7 +4889,7 @@ msgstr "Monitor, na ktorom bude ponuka rozbalená"
 
 #: gtk/gtkmenu.c:669
 msgid "Reserve Toggle Size"
-msgstr ""
+msgstr "Rezervovať veľkosť prepínača"
 
 #: gtk/gtkmenu.c:670
 #, fuzzy
@@ -5044,10 +5037,9 @@ msgid "The dropdown menu"
 msgstr "Rozbaľovacia ponuka"
 
 #: gtk/gtkmessagedialog.c:174
-#, fuzzy
 #| msgid "Image/label border"
 msgid "label border"
-msgstr "Okraj obrázka/označenia"
+msgstr "okraj označenia"
 
 #: gtk/gtkmessagedialog.c:175
 #, fuzzy
@@ -5377,10 +5369,9 @@ msgid "Pass through input, does not affect main child"
 msgstr ""
 
 #: gtk/gtkoverlay.c:769
-#, fuzzy
 #| msgid "Indent"
 msgid "Index"
-msgstr "Odsadenie"
+msgstr "Index"
 
 #: gtk/gtkoverlay.c:770
 #, fuzzy
@@ -5418,9 +5409,8 @@ msgid "Largest possible value for the \"position\" property"
 msgstr "Najväčšia možná hodnota vlastnosti „position“"
 
 #: gtk/gtkpaned.c:395
-#, fuzzy
 msgid "Wide Handle"
-msgstr "Šírka ovládacieho políčka"
+msgstr "Široký ovládač"
 
 #: gtk/gtkpaned.c:396
 #, fuzzy
@@ -5479,10 +5469,9 @@ msgstr ""
 "bočnom paneli"
 
 #: gtk/gtkplacessidebar.c:4320
-#, fuzzy
 #| msgid "Show Details"
 msgid "Show recent files"
-msgstr "Zobraziť podrobnosti"
+msgstr "Zobraziť nedávne súbory"
 
 #: gtk/gtkplacessidebar.c:4321
 #, fuzzy
@@ -5529,10 +5518,9 @@ msgid "Whether the sidebar only includes local files"
 msgstr "Určuje, či má bočný panel obsahovať iba miestne súbory"
 
 #: gtk/gtkplacessidebar.c:4350
-#, fuzzy
 #| msgid "Show Tabs"
 msgid "Show 'Trash'"
-msgstr "Zobraziť karty"
+msgstr "Zobraziť „Kôš“"
 
 #: gtk/gtkplacessidebar.c:4351
 #, fuzzy
@@ -5564,27 +5552,10 @@ msgstr ""
 msgid "Whether to emit ::populate-popup for popups that are not menus"
 msgstr ""
 
-#: gtk/gtkplacesview.c:1647
-msgid "_Disconnect"
-msgstr "O_dpojiť"
-
-#: gtk/gtkplacesview.c:1647
-msgid "_Unmount"
-msgstr "Vys_unúť"
-
-#: gtk/gtkplacesview.c:1657
-msgid "_Connect"
-msgstr "P_ripojiť"
-
-#: gtk/gtkplacesview.c:1657
-msgid "_Mount"
-msgstr "_Pripojiť"
-
 #: gtk/gtkplacesview.c:2185
-#, fuzzy
 #| msgid "Heading"
 msgid "Loading"
-msgstr "Záhlavie"
+msgstr "Načítava sa"
 
 #: gtk/gtkplacesview.c:2186
 #, fuzzy
@@ -5593,34 +5564,28 @@ msgid "Whether the view is loading locations"
 msgstr "Určuje, či má ovládací prvok zobraziť všetky aplikácie"
 
 #: gtk/gtkplacesviewrow.c:181
-#, fuzzy
 #| msgid "Icon for this window"
 msgid "Icon of the row"
-msgstr "Ikona pre toto okno"
+msgstr "Ikona riadku"
 
 #: gtk/gtkplacesviewrow.c:182
-#, fuzzy
 #| msgid "The current page in the document"
 msgid "The icon representing the volume"
-msgstr "Aktuálna stránka v dokumente"
+msgstr "Ikona reprezentujúca zväzok"
 
 #: gtk/gtkplacesviewrow.c:188
-#| msgid "Name of theme to load"
 msgid "Name of the volume"
 msgstr "Názov zväzku"
 
 #: gtk/gtkplacesviewrow.c:189
-#| msgid "The name of the submenu"
 msgid "The name of the volume"
 msgstr "Názov zväzku"
 
 #: gtk/gtkplacesviewrow.c:195
-#| msgid "Current width of the column"
 msgid "Path of the volume"
 msgstr "Cesta zväzku"
 
 #: gtk/gtkplacesviewrow.c:196
-#| msgid "The width of the layout"
 msgid "The path of the volume"
 msgstr "Cesta zväzku"
 
@@ -5629,16 +5594,14 @@ msgid "Volume represented by the row"
 msgstr ""
 
 #: gtk/gtkplacesviewrow.c:203
-#, fuzzy
 #| msgid "The amount of space used by the arrow"
 msgid "The volume represented by the row"
-msgstr "Priestor využitý šípkou"
+msgstr "Zväzok reprezentovaný riadkom"
 
 #: gtk/gtkplacesviewrow.c:209
-#, fuzzy
 #| msgid "The amount of space used by the arrow"
 msgid "Mount represented by the row"
-msgstr "Priestor využitý šípkou"
+msgstr "Bod pripojenia reprezentovaný riadkom"
 
 #: gtk/gtkplacesviewrow.c:210
 #, fuzzy
@@ -5652,9 +5615,8 @@ msgstr ""
 
 # PK: preverit accessible
 #: gtk/gtkplacesviewrow.c:217
-#, fuzzy
 msgid "The file represented by the row, if any"
-msgstr "Vykresľovač bunky reprezentovaný týmto prístupovým prvkom"
+msgstr "Ak existuje, bude súbor reprezentovaný riadkom"
 
 #: gtk/gtkplacesviewrow.c:223 gtk/gtkplacesviewrow.c:224
 #, fuzzy
@@ -5662,24 +5624,15 @@ msgstr "Vykresľovač bunky reprezentovaný týmto prístupovým prvkom"
 msgid "Whether the row represents a network location"
 msgstr "Určuje, či dialǵové okno podporuje výber"
 
-#: gtk/gtkplacesviewrow.c:325
-msgid "Disconnect"
-msgstr "Odpojí"
-
-#: gtk/gtkplacesviewrow.c:325
-msgid "Unmount"
-msgstr "Vysunie"
-
-#: gtk/gtkplug.c:202
-#, fuzzy
+#: gtk/gtkplug.c:200
 msgid "Whether the plug is embedded"
-msgstr "Či je zástrčka vložená"
+msgstr "Či je zásuvný modul zabudovaný"
 
-#: gtk/gtkplug.c:216
+#: gtk/gtkplug.c:214
 msgid "Socket Window"
 msgstr ""
 
-#: gtk/gtkplug.c:217
+#: gtk/gtkplug.c:215
 #, fuzzy
 msgid "The window of the socket the plug is embedded in"
 msgstr "Či je zástrčka vložená"
@@ -5717,10 +5670,9 @@ msgid "Whether the popover is modal"
 msgstr "Určuje, či je rolovacie tlačidlo aktívne"
 
 #: gtk/gtkpopover.c:1650
-#, fuzzy
 #| msgid "Transition type"
 msgid "Transitions enabled"
-msgstr "Typ prechodu"
+msgstr "Prechody sú povolené"
 
 #: gtk/gtkpopover.c:1651
 #, fuzzy
@@ -6001,9 +5953,8 @@ msgid "TRUE if a selection exists."
 msgstr "TRUE, ak výber existuje."
 
 #: gtk/gtkprintoperation.c:1424 gtk/gtkprintunixdialog.c:465
-#, fuzzy
 msgid "Embed Page Setup"
-msgstr "Zapuzdruje nastavenie stránky"
+msgstr "Zabuduje nastavenie stránky"
 
 #: gtk/gtkprintoperation.c:1425 gtk/gtkprintunixdialog.c:466
 #, fuzzy
@@ -6288,9 +6239,8 @@ msgid "Arrow scaling"
 msgstr "Mierka šípky"
 
 #: gtk/gtkrange.c:611
-#, fuzzy
 msgid "Arrow scaling with regard to scroll button size"
-msgstr "Mierka šípky s ohľadom na veľkosť skrolovacieho tlačidla"
+msgstr "Mierka šípky s ohľadom na veľkosť rolovacieho tlačidla"
 
 #: gtk/gtkrecentchooser.c:130
 msgid "Recent Manager"
@@ -6642,9 +6592,8 @@ msgid "Kinetic scrolling mode."
 msgstr "Režim rolovania s dojazdom."
 
 #: gtk/gtkscrolledwindow.c:608
-#, fuzzy
 msgid "Overlay Scrolling"
-msgstr "Rolovanie s dojazdom"
+msgstr "Prekrývajúce rolovanie"
 
 # MČ: ide o rolovanie s dojazdom? Neviem, či je to takto zrozumiteľné.
 # PM: vyžiadajte zrozumiteľnejší popis pre tento prvok
@@ -6663,10 +6612,9 @@ msgstr ""
 "Určuje, či je zapnutý vyhľadávací režim a panel vyhľadávania je zobrazený"
 
 #: gtk/gtksearchbar.c:413
-#, fuzzy
 #| msgid "Whether to show a sort indicator"
 msgid "Whether to show the close button in the toolbar"
-msgstr "Či zobraziť indikátor triedenia"
+msgstr "Či sa má zobraziť tlačidlo zavretia v paneli nástrojov"
 
 #: gtk/gtkseparatortoolitem.c:144
 msgid "Draw"
@@ -7159,9 +7107,8 @@ msgid "The size of icons in default toolbars."
 msgstr "Veľkosť ikon v predvolených paneloch nástrojov."
 
 #: gtk/gtksettings.c:1243
-#, fuzzy
 msgid "Auto Mnemonics"
-msgstr "Povoliť mnemoniku"
+msgstr "Automatické klávesové skratky"
 
 #: gtk/gtksettings.c:1244
 msgid ""
@@ -7543,10 +7490,9 @@ msgid "The name of the widget currently visible in the stack"
 msgstr "Dĺžka aktuálneho textu v prvku"
 
 #: gtk/gtkstack.c:465
-#, fuzzy
 #| msgid "Transition duration"
 msgid "Transition running"
-msgstr "Dĺžka prechodu"
+msgstr "Prechod je spustený"
 
 #: gtk/gtkstack.c:465
 #, fuzzy
@@ -7555,10 +7501,9 @@ msgid "Whether or not the transition is currently running"
 msgstr "Určuje, či vykresľovač bunky je práve v režime upravovania"
 
 #: gtk/gtkstack.c:469
-#, fuzzy
 #| msgid "Indicator size"
 msgid "Interpolate size"
-msgstr "Veľkosť indikátora"
+msgstr "Odhadovať veľkosť"
 
 #: gtk/gtkstack.c:469
 msgid ""
@@ -7567,26 +7512,23 @@ msgid ""
 msgstr ""
 
 #: gtk/gtkstack.c:479
-#, fuzzy
 #| msgid "The name of the widget"
 msgid "The name of the child page"
-msgstr "Názov tohto prvku"
+msgstr "Názov stránky potomka"
 
 #: gtk/gtkstack.c:486
-#, fuzzy
 #| msgid "The title of the assistant page"
 msgid "The title of the child page"
-msgstr "Titulok stránky asistenta"
+msgstr "Titulok stránky potomka"
 
 #: gtk/gtkstack.c:492 gtk/gtktoolbutton.c:283
 msgid "Icon name"
 msgstr "Názov ikony"
 
 #: gtk/gtkstack.c:493
-#, fuzzy
 #| msgid "The name of the widget"
 msgid "The icon name of the child page"
-msgstr "Názov tohto prvku"
+msgstr "Názov ikony stránky potomka"
 
 #: gtk/gtkstack.c:516
 msgid "Needs Attention"
@@ -7664,10 +7606,9 @@ msgid "The minimum width of the handle"
 msgstr "Minimálna hodnota nastavenia"
 
 #: gtk/gtkswitch.c:940
-#, fuzzy
 #| msgid "Slider Length"
 msgid "Slider Height"
-msgstr "Dĺžka posuvníka"
+msgstr "Výška posuvníka"
 
 #: gtk/gtkswitch.c:941
 #, fuzzy
@@ -7879,10 +7820,9 @@ msgid "Pixels of blank space between wrapped lines in a paragraph"
 msgstr "Počet pixelov prázdneho priestoru medzi zalomenými riadkami v odstavci"
 
 #: gtk/gtktexttag.c:544
-#, fuzzy
 #| msgid "Underline"
 msgid "Underline RGBA"
-msgstr "Podčiarknuté"
+msgstr "Podčiarknutie RGBA"
 
 #: gtk/gtktexttag.c:545
 #, fuzzy
@@ -7891,10 +7831,9 @@ msgid "Color of underline for this text"
 msgstr "Štýl podčiarknutia textu"
 
 #: gtk/gtktexttag.c:560
-#, fuzzy
 #| msgid "Strikethrough"
 msgid "Strikethrough RGBA"
-msgstr "Prečiarknuté"
+msgstr "Prečiarknutie RGBA"
 
 #: gtk/gtktexttag.c:561
 #, fuzzy
@@ -7953,10 +7892,9 @@ msgid "Whether font fallback is enabled."
 msgstr "Určuje, či je povolený záchranný režim pre písma"
 
 #: gtk/gtktexttag.c:677
-#, fuzzy
 #| msgid "Header Spacing"
 msgid "Letter Spacing"
-msgstr "Rozostupy záhlavia"
+msgstr "Rozostupy písmen"
 
 #: gtk/gtktexttag.c:678
 msgid "Extra spacing between graphemes"
@@ -8042,10 +7980,9 @@ msgid "Whether this tag affects the right margin"
 msgstr "Určuje, či táto značka ovplyvňuje pravý odstup"
 
 #: gtk/gtktexttag.c:816
-#, fuzzy
 #| msgid "Underline set"
 msgid "Underline RGBA set"
-msgstr "Podčiarknutie nastavené"
+msgstr "Podčiarknutie RGBA je nastavené"
 
 #: gtk/gtktexttag.c:817
 #, fuzzy
@@ -8054,10 +7991,9 @@ msgid "Whether this tag affects underlining color"
 msgstr "Určuje, či táto značka ovplyvňuje podčiarknutie"
 
 #: gtk/gtktexttag.c:827
-#, fuzzy
 #| msgid "Strikethrough set"
 msgid "Strikethrough RGBA set"
-msgstr "Prečiarknutie nastavené"
+msgstr "Prečiarknutie RGBA je nastavené"
 
 #: gtk/gtktexttag.c:828
 #, fuzzy
@@ -8110,10 +8046,9 @@ msgid "Whether this tag affects font fallback"
 msgstr "Určuje, či táto značka ovplyvňuje písmo (rodinu)"
 
 #: gtk/gtktexttag.c:851
-#, fuzzy
 #| msgid "Left margin set"
 msgid "Letter spacing set"
-msgstr "Ľavý odstup nastavený"
+msgstr "Rozostup písmen je nastavený"
 
 #: gtk/gtktexttag.c:852
 #, fuzzy
@@ -8159,28 +8094,24 @@ msgstr "Pravý odstup"
 
 #  PK: border je okraj tiez
 #: gtk/gtktextview.c:870
-#, fuzzy
 #| msgid "Margin"
 msgid "Top Margin"
-msgstr "Odstup"
+msgstr "Horný okraj"
 
 #: gtk/gtktextview.c:871
-#, fuzzy
 #| msgid "Width of the left margin in pixels"
 msgid "Height of the top margin in pixels"
-msgstr "Šírka ľavého odstupu v pixeloch"
+msgstr "Výška horného okraja v pixeloch"
 
 #: gtk/gtktextview.c:891
-#, fuzzy
 #| msgid "Bottom Padding"
 msgid "Bottom Margin"
-msgstr "Výplň dole"
+msgstr "Dolný okraj"
 
 #: gtk/gtktextview.c:892
-#, fuzzy
 #| msgid "Width of the left margin in pixels"
 msgid "Height of the bottom margin in pixels"
-msgstr "Šírka ľavého odstupu v pixeloch"
+msgstr "Výška spodného okraja v pixeloch"
 
 #: gtk/gtktextview.c:915
 msgid "Cursor Visible"
@@ -8216,10 +8147,9 @@ msgid "Monospace"
 msgstr ""
 
 #: gtk/gtktextview.c:1029
-#, fuzzy
 #| msgid "Whether the cursor should blink"
 msgid "Whether to use a monospace font"
-msgstr "Či má kurzor blikať"
+msgstr "Či sa má použiť písmo s pevnou šírkou"
 
 #: gtk/gtktextview.c:1047
 msgid "Error underline color"
@@ -8277,7 +8207,7 @@ msgstr "Určuje, či je nastavená vlastnosť icon-size"
 #: gtk/gtktoolbar.c:554
 msgid "Whether the item should receive extra space when the toolbar grows"
 msgstr ""
-"Určuje, či má položka získať priestor navyše pri zväčšení panelu nástrojov"
+"Určuje, či má položka získať dodatočný priestor pri zväčšení panelu nástrojov"
 
 #: gtk/gtktoolbar.c:562 gtk/gtktoolitemgroup.c:1655
 msgid "Whether the item should be the same size as other homogeneous items"
@@ -8293,9 +8223,8 @@ msgid "Size of spacers"
 msgstr "Veľkosť oddeľovačov"
 
 #: gtk/gtktoolbar.c:588
-#, fuzzy
 msgid "Amount of border space between the toolbar shadow and the buttons"
-msgstr "Veľkosť priestoru okolo okrajov medzi tieňom panelu a tlačidlami"
+msgstr "Množstvo priestoru okraja medzi tieňom panela nástrojov a tlačidlami"
 
 #: gtk/gtktoolbar.c:596
 msgid "Maximum child expand"
@@ -8396,23 +8325,20 @@ msgid "Whether the group has been collapsed and items are hidden"
 msgstr "Určuje, či skupina bola zbalená a položky sú skryté"
 
 #: gtk/gtktoolitemgroup.c:1626
-#, fuzzy
 msgid "ellipsize"
-msgstr "Výpustka"
+msgstr "výpustka"
 
 #: gtk/gtktoolitemgroup.c:1627
 msgid "Ellipsize for item group headers"
-msgstr ""
+msgstr "Výpustky pre záhlavia skupín položiek"
 
 #: gtk/gtktoolitemgroup.c:1633
-#, fuzzy
 msgid "Header Relief"
-msgstr "Obrázok záhlavia"
+msgstr "Obrys záhlavia"
 
 #: gtk/gtktoolitemgroup.c:1634
-#, fuzzy
 msgid "Relief of the group header button"
-msgstr "Zobraziť tlačidlá v hlavičke stĺpcov"
+msgstr "Obrys tlačidla v záhlaví skupiny"
 
 #: gtk/gtktoolitemgroup.c:1647
 msgid "Header Spacing"
@@ -8424,7 +8350,7 @@ msgstr "Rozostupy okolo šípky rozbaľovača a titulok"
 
 #: gtk/gtktoolitemgroup.c:1662
 msgid "Whether the item should receive extra space when the group grows"
-msgstr "Určuje, či má položka získať priestor navyše pri zväčšení skupiny"
+msgstr "Určuje, či má položka získať dodatočný priestor pri zväčšení skupiny"
 
 #: gtk/gtktoolitemgroup.c:1669
 msgid "Whether the item should fill the available space"
@@ -8987,11 +8913,11 @@ msgstr ""
 
 #: gtk/gtkwidget.c:1487
 msgid "How to position in extra horizontal space"
-msgstr ""
+msgstr "Ako umiestniť v dodatočnom vodorovnom priestore"
 
 #: gtk/gtkwidget.c:1503
 msgid "How to position in extra vertical space"
-msgstr ""
+msgstr "Ako umiestniť v dodatočnom zvislom priestore"
 
 #: gtk/gtkwidget.c:1524
 msgid "Margin on Left"
@@ -9014,20 +8940,18 @@ msgid "Margin on Start"
 msgstr "Odstup na začiatku"
 
 #: gtk/gtkwidget.c:1570
-#, fuzzy
 #| msgid "Pixels of extra space on the right side"
 msgid "Pixels of extra space on the start"
-msgstr "Počet pixelov dodatočného priestoru na pravej strane"
+msgstr "Počet pixelov dodatočného miesta na začiatku"
 
 #: gtk/gtkwidget.c:1591
 msgid "Margin on End"
 msgstr "Odstup na konci"
 
 #: gtk/gtkwidget.c:1592
-#, fuzzy
 #| msgid "Pixels of extra space on the left side"
 msgid "Pixels of extra space on the end"
-msgstr "Počet pixelov dodatočného miesta na ľavej strane"
+msgstr "Počet pixelov dodatočného miesta na konci"
 
 #: gtk/gtkwidget.c:1612
 msgid "Margin on Top"
@@ -9344,9 +9268,8 @@ msgid "Icon for this window"
 msgstr "Ikona pre toto okno"
 
 #: gtk/gtkwindow.c:836
-#, fuzzy
 msgid "Mnemonics Visible"
-msgstr "Klávesová skratka"
+msgstr "Viditeľné klávesové skratky"
 
 #: gtk/gtkwindow.c:837
 #, fuzzy
@@ -9424,9 +9347,8 @@ msgid "TRUE if the window should receive the input focus."
 msgstr "TRUE, ak okno má dostávať vstupný zameriavač."
 
 #: gtk/gtkwindow.c:957
-#, fuzzy
 msgid "Focus on map"
-msgstr "Fokus pri zobrazení"
+msgstr "Zameranie pri mapovaní"
 
 #: gtk/gtkwindow.c:958
 #, fuzzy
@@ -9452,24 +9374,20 @@ msgstr "Určuje, či má mať rámec okna tlačidlo na zatvorenie"
 # MČ: možno by som „grip“ preložil ako „úchop“. Neviem čo je zaužívané, ale ovládač (priveľa slov sa prekladá ako ovládač) sa mi zdá nevhodný.
 # PM: toto som riešil s juls úchop je podľa JULS bohemizmus ani tiahlo nie je správne - odporučili mi rúčka, rukoväť alebo ucho, uško
 #: gtk/gtkwindow.c:1009
-#, fuzzy
 msgid "Resize grip"
 msgstr "Ovládač zmeny veľkosti"
 
 #: gtk/gtkwindow.c:1010
-#, fuzzy
 msgid "Specifies whether the window should have a resize grip"
 msgstr "Určuje, či má okno mať ovládač zmeny veľkosti"
 
 #: gtk/gtkwindow.c:1026
-#, fuzzy
 msgid "Resize grip is visible"
 msgstr "Ovládač zmeny veľkosti je viditeľný"
 
 #: gtk/gtkwindow.c:1027
-#, fuzzy
 msgid "Specifies whether the window's resize grip is visible."
-msgstr "Určuje, či je ovládač na zmenu veľkosti okna viditelný."
+msgstr "Určuje, či je ovládač na zmenu veľkosti okna viditeľný."
 
 #: gtk/gtkwindow.c:1043
 msgid "Gravity"
@@ -9542,6 +9460,24 @@ msgstr "Názov profilu farieb"
 #: modules/printbackends/cups/gtkprintercups.c:94
 msgid "The title of the color profile to use"
 msgstr "Názov profilu farieb, ktorý sa má použiť"
+
+#~ msgid "_Disconnect"
+#~ msgstr "O_dpojiť"
+
+#~ msgid "_Unmount"
+#~ msgstr "Vys_unúť"
+
+#~ msgid "_Connect"
+#~ msgstr "P_ripojiť"
+
+#~ msgid "_Mount"
+#~ msgstr "_Pripojiť"
+
+#~ msgid "Disconnect"
+#~ msgstr "Odpojí"
+
+#~ msgid "Unmount"
+#~ msgstr "Vysunie"
 
 #~ msgid "The GDK display the context is from"
 #~ msgstr "Displej GDK, z ktorého pochádza kontext"
