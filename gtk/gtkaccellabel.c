@@ -962,12 +962,10 @@ gtk_accel_label_refetch (GtkAccelLabel *accel_label)
       if (have_accel)
 	{
 	  GtkAccelLabelClass *klass;
-	  gchar *tmp;
 
 	  klass = GTK_ACCEL_LABEL_GET_CLASS (accel_label);
-	  tmp = _gtk_accel_label_class_get_accelerator_label (klass, accel_key, accel_mods);
-	  accel_label->priv->accel_string = g_strconcat ("   ", tmp, NULL);
-	  g_free (tmp);
+	  accel_label->priv->accel_string =
+	      _gtk_accel_label_class_get_accelerator_label (klass, accel_key, accel_mods);
 	}
 
       else
