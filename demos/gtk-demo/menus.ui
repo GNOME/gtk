@@ -91,7 +91,7 @@
         <item>
           <attribute name="label" translatable="yes">_Bold</attribute>
           <attribute name="action">win.bold</attribute>
-          <attribute name="accel">&lt;Primary&gt;b</attribute>
+          <attribute name="accel">&lt;Primary&gt;&lt;Shift&gt;b</attribute>
         </item>
       </section>
     </submenu>
