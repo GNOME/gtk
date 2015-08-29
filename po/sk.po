@@ -12,8 +12,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-08-24 09:55+0000\n"
-"PO-Revision-Date: 2015-08-24 18:29+0200\n"
+"POT-Creation-Date: 2015-08-28 21:54+0000\n"
+"PO-Revision-Date: 2015-08-29 10:59+0200\n"
 "Last-Translator: Dušan Kazik <prescott66@gmail.com>\n"
 "Language-Team: slovenčina <>\n"
 "Language: sk\n"
@@ -87,7 +87,7 @@ msgstr "PRÍZNAKY"
 msgid "GDK debugging flags to unset"
 msgstr "Ladiace príznaky GDK, ktoré sa majú vypnúť"
 
-#: gdk/gdkwindow.c:2737
+#: gdk/gdkwindow.c:2736
 msgid "GL support disabled via GDK_DEBUG"
 msgstr "Podpora GL je zakázaná prostredníctvom GDK_DEBUG"
 
@@ -1222,7 +1222,7 @@ msgstr ""
 #: gtk/gtkmessagedialog.c:955 gtk/gtkmountoperation.c:543
 #: gtk/gtkpagesetupunixdialog.c:196 gtk/gtkprintbackend.c:763
 #: gtk/gtkprinteroptionwidget.c:545 gtk/gtkprintunixdialog.c:665
-#: gtk/gtkprintunixdialog.c:738 gtk/gtkwindow.c:12106
+#: gtk/gtkprintunixdialog.c:738 gtk/gtkwindow.c:12109
 #: gtk/inspector/css-editor.c:199 gtk/ui/gtkappchooserdialog.ui:61
 #: gtk/ui/gtkassistant.ui:136 gtk/ui/gtkcolorchooserdialog.ui:34
 #: gtk/ui/gtkfontchooserdialog.ui:31
@@ -1273,7 +1273,7 @@ msgid "_Apply"
 msgstr "Po_užiť"
 
 #: gtk/deprecated/gtkfontsel.c:1698 gtk/gtkmessagedialog.c:934
-#: gtk/gtkmessagedialog.c:956 gtk/gtkprintbackend.c:764 gtk/gtkwindow.c:12107
+#: gtk/gtkmessagedialog.c:956 gtk/gtkprintbackend.c:764 gtk/gtkwindow.c:12110
 #: gtk/inspector/classes-list.c:127
 msgid "_OK"
 msgstr "_Ok"
@@ -1722,10 +1722,10 @@ msgid "Text may not appear inside <%s>"
 msgstr "Text sa nesmie objaviť vo vnútri <%s>"
 
 #: gtk/gtk-builder-tool.c:89
-#, fuzzy, c-format
+#, c-format
 #| msgid "Invalid property: %s.%s on line %d"
 msgid "Packing property %s::%s not found\n"
-msgstr "Neplatná vlastnosť: %s.%s na riadku č. %d"
+msgstr "Baliaca vlastnosť %s::%s nebola nájdená\n"
 
 #: gtk/gtk-builder-tool.c:91
 #, c-format
@@ -2531,7 +2531,6 @@ msgid "_Replace"
 msgstr "_Nahradiť"
 
 #: gtk/gtkfilechooserwidget.c:6512
-#| msgid "Could not read the contents of the folder"
 msgid "You do not have access to the specified folder."
 msgstr "Nemáte oprávnenia na prístup do určeného priečinka."
 
@@ -2782,17 +2781,17 @@ msgstr "Ladiace príznaky GTK+, ktoré sa majú nastaviť"
 msgid "GTK+ debugging flags to unset"
 msgstr "Ladiace príznaky GTK+, ktoré sa majú vypnúť"
 
-#: gtk/gtkmain.c:776
+#: gtk/gtkmain.c:781
 #, c-format
 msgid "Cannot open display: %s"
 msgstr "Nedá sa otvoriť displej: %s"
 
-#: gtk/gtkmain.c:853
+#: gtk/gtkmain.c:858
 msgid "GTK+ Options"
 msgstr "Voľby GTK+"
 
 #  cmd desc
-#: gtk/gtkmain.c:853
+#: gtk/gtkmain.c:858
 msgid "Show GTK+ Options"
 msgstr "Zobrazí voľby GTK+"
 
@@ -2801,7 +2800,7 @@ msgstr "Zobrazí voľby GTK+"
 #. * Do *not* translate it to "predefinito:LTR", if it
 #. * it isn't default:LTR or default:RTL it will not work
 #.
-#: gtk/gtkmain.c:1177
+#: gtk/gtkmain.c:1182
 msgid "default:LTR"
 msgstr "default:LTR"
 
@@ -3127,11 +3126,11 @@ msgstr "O_dstrániť"
 msgid "Rename…"
 msgstr "Premenovať…"
 
-#: gtk/gtkplacessidebar.c:3365
+#: gtk/gtkplacessidebar.c:3365 gtk/gtkplacesview.c:1657
 msgid "_Mount"
 msgstr "_Pripojiť"
 
-#: gtk/gtkplacessidebar.c:3366
+#: gtk/gtkplacessidebar.c:3366 gtk/gtkplacesview.c:1647
 msgid "_Unmount"
 msgstr "_Odpojiť"
 
@@ -3148,14 +3147,13 @@ msgid "Computer"
 msgstr "Počítač"
 
 #: gtk/gtkplacesview.c:888
-#| msgid "Show other locations"
 msgid "Searching for network locations"
 msgstr "Vyhľadávajú sa sieťové umiestnenia"
 
 #: gtk/gtkplacesview.c:896
-#| msgid "No applications found."
-msgid "No networks locations found"
-msgstr "Neboli nájdené žiadne sieťové umiestnenia"
+#| msgid "No networks locations found"
+msgid "No network locations found"
+msgstr "Nenašli sa žiadne sieťové umiestnenia"
 
 #. if it wasn't cancelled show a dialog
 #: gtk/gtkplacesview.c:1171 gtk/gtkplacesview.c:1215 gtk/gtkplacesview.c:1266
@@ -3177,6 +3175,17 @@ msgstr "Nepodarilo sa odpojiť zväzok"
 msgid "Cance_l"
 msgstr "_Zrušiť"
 
+#: gtk/gtkplacesview.c:1647
+#| msgctxt "Stock label"
+#| msgid "_Disconnect"
+msgid "_Disconnect"
+msgstr "O_dpojiť"
+
+#: gtk/gtkplacesview.c:1657
+#| msgid "Co_nnect"
+msgid "_Connect"
+msgstr "_Pripojiť"
+
 #: gtk/gtkplacesview.c:1822
 msgid "Unable to get remote server location"
 msgstr "Nie je možné získať umiestnenie vzdialeného servera"
@@ -3189,6 +3198,17 @@ msgstr "Siete"
 #: gtk/gtkplacesview.c:1941 gtk/gtkplacesview.c:1950
 msgid "On This Computer"
 msgstr "Na tomto počítači"
+
+#: gtk/gtkplacesviewrow.c:323
+#| msgctxt "Stock label"
+#| msgid "_Disconnect"
+msgid "Disconnect"
+msgstr "Odpojí"
+
+# tooltip
+#: gtk/gtkplacesviewrow.c:323 gtk/ui/gtkplacesviewrow.ui:73
+msgid "Unmount"
+msgstr "Odpojí"
 
 #: gtk/gtkprintbackend.c:762
 msgid "Authentication"
@@ -3749,12 +3769,12 @@ msgctxt "volume percentage"
 msgid "%d %%"
 msgstr "%d %%"
 
-#: gtk/gtkwindow.c:12094
+#: gtk/gtkwindow.c:12097
 #, c-format
 msgid "Do you want to use GTK+ Inspector?"
 msgstr "Chcete použiť nástroj Inšpektor GTK+?"
 
-#: gtk/gtkwindow.c:12096
+#: gtk/gtkwindow.c:12099
 #, c-format
 msgid ""
 "GTK+ Inspector is an interactive debugger that lets you explore and modify "
@@ -3765,7 +3785,7 @@ msgstr ""
 "preskúmať a meniť interné vlastnosti ľubovolnej aplikácie GTK+. Jeho "
 "používaním môžete spôsobiť neočakávanie chovanie alebo pád."
 
-#: gtk/gtkwindow.c:12101
+#: gtk/gtkwindow.c:12104
 msgid "Don't show this message again"
 msgstr "Nezobrazovať túto správu znovu"
 
@@ -3956,7 +3976,7 @@ msgstr "Oblasť výrezu"
 
 #: gtk/inspector/misc-info.ui:369
 msgid "Tick callback"
-msgstr ""
+msgstr "Spätné volanie pri zaškrtnutí"
 
 #: gtk/inspector/misc-info.ui:405
 msgid "Frame count"
@@ -4329,7 +4349,7 @@ msgstr "Softvérové povrchy"
 
 #: gtk/inspector/visual.ui:659
 msgid "Texture Rectangle Extension"
-msgstr ""
+msgstr "Rozšírenie pre obdĺžnikové textúry"
 
 #: gtk/inspector/window.ui:24
 msgid "Select an Object"
@@ -5527,11 +5547,6 @@ msgstr "Nadol"
 #: gtk/ui/gtkpathbar.ui:36
 msgid "Up Path"
 msgstr "Nahor"
-
-# tooltip
-#: gtk/ui/gtkplacesviewrow.ui:73
-msgid "Unmount"
-msgstr "Odpojí"
 
 #. Translators: Server as any successfully connected network address
 #: gtk/ui/gtkplacesview.ui:51
