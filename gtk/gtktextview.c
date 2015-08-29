@@ -2281,7 +2281,7 @@ _gtk_text_view_scroll_to_iter (GtkTextView   *text_view,
   screen_inner_bottom = screen.y + screen.height - within_margin_yoffset;
 
   buffer_bottom = priv->height - priv->bottom_border;
-  buffer_right = priv->width - priv->right_margin;
+  buffer_right = priv->width - priv->right_margin - priv->left_padding - 1;
 
   screen_dest.x = screen.x;
   screen_dest.y = screen.y;
@@ -2325,21 +2325,21 @@ _gtk_text_view_scroll_to_iter (GtkTextView   *text_view,
           if (cursor.y == 0)
             border_yoffset = (with_border) ? priv->top_padding : 0;
 
-          screen_dest.y = cursor.y + priv->top_border - MAX (within_margin_yoffset, border_yoffset);
+          screen_dest.y = cursor.y - MAX (within_margin_yoffset, border_yoffset);
         }
       else if (cursor_bottom > screen_inner_bottom)
         {
           if (cursor_bottom == buffer_bottom - priv->top_border)
             border_yoffset = (with_border) ? priv->bottom_padding : 0;
 
-          screen_dest.y = cursor_bottom - screen_dest.height + priv->top_border +
+          screen_dest.y = cursor_bottom - screen_dest.height +
                           MAX (within_margin_yoffset, border_yoffset);
         }
     }
 
   if (screen_dest.y != screen.y)
     {
-      gtk_adjustment_animate_to_value (priv->vadjustment, screen_dest.y);
+      gtk_adjustment_animate_to_value (priv->vadjustment, screen_dest.y  + priv->top_border);
 
       DV (g_print (" vert increment %d\n", screen_dest.y - screen.y));
     }
@@ -2361,29 +2361,28 @@ _gtk_text_view_scroll_to_iter (GtkTextView   *text_view,
       if (cursor.x < screen_inner_left)
         {
           if (cursor.x == priv->left_margin)
-            border_xoffset = (with_border) ? 0 : priv->left_padding;
+            border_xoffset = (with_border) ? priv->left_padding : 0;
 
           screen_dest.x = cursor.x - MAX (within_margin_xoffset, border_xoffset);
         }
-      else if (cursor_right > screen_inner_right)
+      else if (cursor_right >= screen_inner_right - 1)
         {
-          if (cursor.x == buffer_right)
-            border_xoffset = (with_border) ? priv->left_border : priv->left_padding;
+          if (cursor.x >= buffer_right - priv->right_padding)
+            border_xoffset = (with_border) ? priv->right_padding : 0;
 
           screen_dest.x = cursor_right - screen_dest.width +
-                          MAX (within_margin_xoffset, border_xoffset);
+                          MAX (within_margin_xoffset, border_xoffset) + 1;
         }
     }
 
   if (screen_dest.x != screen.x)
     {
-      gtk_adjustment_animate_to_value (priv->hadjustment, screen_dest.x);
+      gtk_adjustment_animate_to_value (priv->hadjustment, screen_dest.x + priv->left_padding);
 
       DV (g_print (" horiz increment %d\n", screen_dest.x - screen.x));
     }
 
-  retval = (screen.y != gtk_adjustment_get_value (priv->vadjustment))
-           || (screen.x != gtk_adjustment_get_value (priv->hadjustment));
+  retval = (screen.y != screen_dest.y) || (screen.x != screen_dest.x);
 
   DV(g_print (">%s ("G_STRLOC")\n", retval ? "Actually scrolled" : "Didn't end up scrolling"));
   
@@ -8713,8 +8712,8 @@ gtk_text_view_value_changed (GtkAdjustment *adjustment,
   
   if (adjustment == priv->hadjustment)
     {
-      dx = priv->xoffset - gtk_adjustment_get_value (adjustment);
-      priv->xoffset = gtk_adjustment_get_value (adjustment) - priv->left_padding;
+      dx = priv->xoffset - (gint)gtk_adjustment_get_value (adjustment);
+      priv->xoffset = (gint)gtk_adjustment_get_value (adjustment) - priv->left_padding;
 
       /* If the change is due to a size change we need 
        * to invalidate the entire text window because there might be
@@ -8730,8 +8729,8 @@ gtk_text_view_value_changed (GtkAdjustment *adjustment,
     }
   else if (adjustment == priv->vadjustment)
     {
-      dy = priv->yoffset - gtk_adjustment_get_value (adjustment);
-      priv->yoffset = gtk_adjustment_get_value (adjustment) - priv->top_border;
+      dy = priv->yoffset - (gint)gtk_adjustment_get_value (adjustment) + priv->top_border ;
+      priv->yoffset -= dy;
 
       if (priv->layout)
         {
