@@ -880,9 +880,6 @@ update_network_state (GtkPlacesView *view)
       g_object_set_data (G_OBJECT (priv->network_placeholder),
                          "is-placeholder", GINT_TO_POINTER (TRUE));
       gtk_container_add (GTK_CONTAINER (priv->listbox), priv->network_placeholder);
-
-      gtk_widget_show_all (GTK_WIDGET (priv->network_placeholder));
-      gtk_list_box_invalidate_headers (GTK_LIST_BOX (priv->listbox));
     }
 
   if (gtk_places_view_get_fetching_networks (view))
