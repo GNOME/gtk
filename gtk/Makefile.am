@@ -1366,7 +1366,7 @@ introspection_files += \
 endif
 
 include $(INTROSPECTION_MAKEFILE)
-INTROSPECTION_SCANNER_ENV = CC="$(CC)"
+INTROSPECTION_SCANNER_ENV = CC="$(CC)" CPPFLAGS="-I$(top_srcdir) -I$(top_builddir) -I. -include gtk.h"
 INTROSPECTION_COMPILER_ARGS = \
 	--includedir=$(srcdir) \
 	--includedir=. \
@@ -1376,6 +1376,7 @@ Gtk-3.0.gir: $(INTROSPECTION_SCANNER) libgtk-3.la $(top_builddir)/gdk/Gdk-3.0.gi
 Gtk_3_0_gir_SCANNERFLAGS = 			\
 	--warn-all				\
 	--add-include-path=$(top_builddir)/gdk	\
+	--add-init-section="gtk_init (NULL, NULL);" \
 	--include-uninstalled=$(top_builddir)/gdk/Gdk-3.0.gir
 Gtk_3_0_gir_INCLUDES = Atk-1.0
 if USE_X11
