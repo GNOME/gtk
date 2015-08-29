@@ -82,6 +82,8 @@ struct _GtkPlacesViewPrivate
   guint                          should_pulse_entry : 1;
   guint                          entry_pulse_timeout_id;
   guint                          connecting_to_server : 1;
+  guint                          mounting_volume : 1;
+  guint                          unmounting_mount : 1;
   guint                          fetching_networks : 1;
   guint                          loading : 1;
 };
@@ -103,6 +105,11 @@ static gboolean    gtk_places_view_get_fetching_networks         (GtkPlacesView 
 
 static void        gtk_places_view_set_fetching_networks         (GtkPlacesView *view,
                                                                   gboolean       fetching_networks);
+
+static void        gtk_places_view_set_loading                   (GtkPlacesView *view,
+                                                                  gboolean       loading);
+
+static void        update_loading                                (GtkPlacesView *view);
 
 G_DEFINE_TYPE_WITH_PRIVATE (GtkPlacesView, gtk_places_view, GTK_TYPE_BOX)
 
@@ -975,8 +982,7 @@ network_enumeration_next_files_finished (GObject      *source_object,
     if (priv->listbox != NULL)
       update_network_state (view);
 
-  priv->loading = FALSE;
-  g_object_notify_by_pspec (G_OBJECT (view), properties[PROP_LOADING]);
+  update_loading (view);
 }
 
 static void
@@ -1056,9 +1062,8 @@ update_places (GtkPlacesView *view)
   children = gtk_container_get_children (GTK_CONTAINER (priv->listbox));
   g_list_free_full (children, (GDestroyNotify) gtk_widget_destroy);
   priv->network_placeholder = NULL;
-
-  priv->loading = TRUE;
-  g_object_notify_by_pspec (G_OBJECT (view), properties[PROP_LOADING]);
+  /* Inform clients that we started loading */
+  gtk_places_view_set_loading (view, TRUE);
 
   /* Add "Computer" row */
   file = g_file_new_for_path ("/");
@@ -1136,6 +1141,8 @@ update_places (GtkPlacesView *view)
     fetch_networks (view);
 
   update_view_mode (view);
+  /* Check whether we still are in a loading state */
+  update_loading (view);
 }
 
 static void
@@ -1187,12 +1194,12 @@ server_mount_ready_cb (GObject      *source_file,
   view = GTK_PLACES_VIEW (user_data);
   priv = gtk_places_view_get_instance_private (view);
   priv->should_pulse_entry = FALSE;
-  set_busy_cursor (view, FALSE);
 
   /* Restore from Cancel to Connect */
   gtk_button_set_label (GTK_BUTTON (priv->connect_button), _("Con_nect"));
   gtk_widget_set_sensitive (priv->address_entry, TRUE);
   priv->connecting_to_server = FALSE;
+  update_loading (view);
 
   if (should_show)
     {
@@ -1282,7 +1289,8 @@ volume_mount_ready_cb (GObject      *source_volume,
 
   view = GTK_PLACES_VIEW (user_data);
   priv = gtk_places_view_get_instance_private (view);
-  set_busy_cursor (view, FALSE);
+  priv->mounting_volume = FALSE;
+  update_loading (view);
 
   if (should_show)
     {
@@ -1308,6 +1316,7 @@ unmount_ready_cb (GObject      *source_mount,
                   gpointer      user_data)
 {
   GtkPlacesView *view;
+  GtkPlacesViewPrivate *priv;
   GMount *mount;
   GError *error;
 
@@ -1315,7 +1324,9 @@ unmount_ready_cb (GObject      *source_mount,
   mount = G_MOUNT (source_mount);
   error = NULL;
 
-  set_busy_cursor (view, FALSE);
+  priv = gtk_places_view_get_instance_private (view);
+  priv->unmounting_mount = FALSE;
+  update_loading (view);
 
   g_mount_unmount_with_operation_finish (mount, res, &error);
 
@@ -1368,11 +1379,12 @@ unmount_mount (GtkPlacesView *view,
   toplevel = gtk_widget_get_toplevel (GTK_WIDGET (view));
   operation = gtk_mount_operation_new (GTK_WINDOW (toplevel));
 
-  set_busy_cursor (GTK_PLACES_VIEW (view), TRUE);
-
   g_cancellable_cancel (priv->cancellable);
   g_clear_object (&priv->cancellable);
   priv->cancellable = g_cancellable_new ();
+
+  priv->unmounting_mount = TRUE;
+  update_loading (view);
 
   operation = gtk_mount_operation_new (GTK_WINDOW (toplevel));
   g_mount_unmount_with_operation (mount,
@@ -1404,13 +1416,13 @@ mount_server (GtkPlacesView *view,
   toplevel = gtk_widget_get_toplevel (GTK_WIDGET (view));
   operation = gtk_mount_operation_new (GTK_WINDOW (toplevel));
 
-  set_busy_cursor (view, TRUE);
   priv->should_pulse_entry = TRUE;
   gtk_entry_set_progress_pulse_step (GTK_ENTRY (priv->address_entry), 0.1);
   /* Allow to cancel the operation */
   gtk_button_set_label (GTK_BUTTON (priv->connect_button), _("Cance_l"));
   gtk_widget_set_sensitive (priv->address_entry, FALSE);
   priv->connecting_to_server = TRUE;
+  update_loading (view);
 
   if (priv->entry_pulse_timeout_id == 0)
     priv->entry_pulse_timeout_id = g_timeout_add (100, (GSourceFunc) pulse_entry_cb, view);
@@ -1440,11 +1452,12 @@ mount_volume (GtkPlacesView *view,
   toplevel = gtk_widget_get_toplevel (GTK_WIDGET (view));
   operation = gtk_mount_operation_new (GTK_WINDOW (toplevel));
 
-  set_busy_cursor (view, TRUE);
-
   g_cancellable_cancel (priv->cancellable);
   g_clear_object (&priv->cancellable);
   priv->cancellable = g_cancellable_new ();
+
+  priv->mounting_volume = TRUE;
+  update_loading (view);
 
   g_mount_operation_set_password_save (operation, G_PASSWORD_SAVE_FOR_SESSION);
 
@@ -2400,6 +2413,39 @@ gtk_places_view_get_loading (GtkPlacesView *view)
   priv = gtk_places_view_get_instance_private (view);
 
   return priv->loading;
+}
+
+static void
+update_loading (GtkPlacesView *view)
+{
+  GtkPlacesViewPrivate *priv;
+  gboolean loading;
+
+  g_return_if_fail (GTK_IS_PLACES_VIEW (view));
+
+  priv = gtk_places_view_get_instance_private (view);
+  loading = priv->fetching_networks || priv->connecting_to_server ||
+            priv->mounting_volume || priv->unmounting_mount;
+
+  set_busy_cursor (view, loading);
+  gtk_places_view_set_loading (view, loading);
+}
+
+static void
+gtk_places_view_set_loading (GtkPlacesView *view,
+                             gboolean       loading)
+{
+  GtkPlacesViewPrivate *priv;
+
+  g_return_if_fail (GTK_IS_PLACES_VIEW (view));
+
+  priv = gtk_places_view_get_instance_private (view);
+
+  if (priv->loading != loading)
+    {
+      priv->loading = loading;
+      g_object_notify_by_pspec (G_OBJECT (view), properties [PROP_LOADING]);
+    }
 }
 
 static gboolean
