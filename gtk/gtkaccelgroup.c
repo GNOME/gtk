@@ -1719,11 +1719,12 @@ gtk_accelerator_get_label (guint           accelerator_key,
  * @default_mod_mask: accelerator modifier mask
  *
  * Sets the modifiers that will be considered significant for keyboard
- * accelerators. The default mod mask is #GDK_CONTROL_MASK |
- * #GDK_SHIFT_MASK | #GDK_MOD1_MASK | #GDK_SUPER_MASK |
- * #GDK_HYPER_MASK | #GDK_META_MASK, that is, Control, Shift, Alt,
- * Super, Hyper and Meta. Other modifiers will by default be ignored
- * by #GtkAccelGroup.
+ * accelerators. The default mod mask depends on the GDK backend in use,
+ * but will typically include #GDK_CONTROL_MASK | #GDK_SHIFT_MASK |
+ * #GDK_MOD1_MASK | #GDK_SUPER_MASK | #GDK_HYPER_MASK | #GDK_META_MASK.
+ * In other words, Control, Shift, Alt, Super, Hyper and Meta. Other
+ * modifiers will by default be ignored by #GtkAccelGroup.
+ *
  * You must include at least the three modifiers Control, Shift
  * and Alt in any value you pass to this function.
  *
@@ -1740,7 +1741,10 @@ gtk_accelerator_set_default_mod_mask (GdkModifierType default_mod_mask)
 /**
  * gtk_accelerator_get_default_mod_mask:
  *
- * Gets the value set by gtk_accelerator_set_default_mod_mask().
+ * Gets the modifier mask.
+ *
+ * The modifier mask determines which modifiers are considered significant
+ * for keyboard accelerators. See gtk_accelerator_set_default_mod_mask().
  *
  * Returns: the default accelerator modifier mask
  */
@@ -1748,9 +1752,18 @@ GdkModifierType
 gtk_accelerator_get_default_mod_mask (void)
 {
   if (!default_accel_mod_mask)
-    default_accel_mod_mask =
-      gdk_keymap_get_modifier_mask (gdk_keymap_get_default (),
-				    GDK_MODIFIER_INTENT_DEFAULT_MOD_MASK);
+    {
+      GdkDisplay *display;
+
+      display = gdk_display_get_default ();
+
+      if (!display)
+        return GDK_CONTROL_MASK | GDK_SHIFT_MASK | GDK_MOD1_MASK;
+
+      default_accel_mod_mask =
+          gdk_keymap_get_modifier_mask (gdk_keymap_get_for_display (display),
+				        GDK_MODIFIER_INTENT_DEFAULT_MOD_MASK);
+    }
 
   return default_accel_mod_mask;
 }
