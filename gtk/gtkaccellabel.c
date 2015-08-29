@@ -35,6 +35,7 @@
 #include "gtkprivate.h"
 #include "gtkrender.h"
 #include "gtksizerequest.h"
+#include "gtkstylecontextprivate.h"
 
 /**
  * SECTION:gtkaccellabel
@@ -346,10 +347,43 @@ gtk_accel_label_get_accel_width (GtkAccelLabel *accel_label)
 	  (accel_label->priv->accel_string_width ? accel_label->priv->accel_padding : 0));
 }
 
+static PangoLayout *
+gtk_accel_label_get_accel_layout (GtkAccelLabel *accel_label)
+{
+  GtkWidget *widget = GTK_WIDGET (accel_label);
+  GtkStyleContext *context;
+  PangoAttrList *attrs;
+  PangoLayout *layout;
+  PangoFontDescription *font_desc;
+
+  context = gtk_widget_get_style_context (widget);
+
+  gtk_style_context_save (context);
+  gtk_style_context_add_class (context, GTK_STYLE_CLASS_ACCELERATOR);
+
+  layout = gtk_widget_create_pango_layout (widget, gtk_accel_label_get_string (accel_label));
+
+  attrs = _gtk_style_context_get_pango_attributes (context);
+  if (!attrs)
+    attrs = pango_attr_list_new ();
+  gtk_style_context_get (context,
+                         gtk_widget_get_state_flags (widget),
+                         "font", &font_desc,
+                         NULL);
+  pango_attr_list_change (attrs, pango_attr_font_desc_new (font_desc));
+  pango_font_description_free (font_desc);
+  pango_layout_set_attributes (layout, attrs);
+  pango_attr_list_unref (attrs);
+
+  gtk_style_context_restore (context);
+
+  return layout;
+}
+
 static void
-gtk_accel_label_get_preferred_width (GtkWidget       *widget,
-                                     gint            *min_width,
-                                     gint            *nat_width)
+gtk_accel_label_get_preferred_width (GtkWidget *widget,
+                                     gint      *min_width,
+                                     gint      *nat_width)
 {
   GtkAccelLabel *accel_label = GTK_ACCEL_LABEL (widget);
   PangoLayout   *layout;
@@ -357,8 +391,7 @@ gtk_accel_label_get_preferred_width (GtkWidget       *widget,
 
   GTK_WIDGET_CLASS (gtk_accel_label_parent_class)->get_preferred_width (widget, min_width, nat_width);
 
-  layout = gtk_widget_create_pango_layout (GTK_WIDGET (widget), 
-					   gtk_accel_label_get_string (accel_label));
+  layout = gtk_accel_label_get_accel_layout (accel_label);
   pango_layout_get_pixel_size (layout, &width, NULL);
   accel_label->priv->accel_string_width = width;
 
@@ -409,7 +442,8 @@ gtk_accel_label_draw (GtkWidget *widget,
       cairo_save (cr);
 
       /* XXX: Mad hack: We modify the label's width so it renders
-       * properly in its draw function that we chain to. */
+       * properly in its draw function that we chain to.
+       */
       if (direction == GTK_TEXT_DIR_RTL)
         cairo_translate (cr, ac_width, 0);
       if (gtk_label_get_ellipsize (label))
@@ -424,7 +458,7 @@ gtk_accel_label_draw (GtkWidget *widget,
       gtk_widget_set_allocation (widget, &allocation);
       if (gtk_label_get_ellipsize (label))
         pango_layout_set_width (label_layout,
-                                pango_layout_get_width (label_layout) 
+                                pango_layout_get_width (label_layout)
                                 + ac_width * PANGO_SCALE);
 
       cairo_restore (cr);
@@ -436,8 +470,7 @@ gtk_accel_label_draw (GtkWidget *widget,
 
       gtk_label_get_layout_offsets (GTK_LABEL (accel_label), NULL, &y);
 
-      accel_layout = gtk_widget_create_pango_layout (widget, gtk_accel_label_get_string (accel_label));
-
+      accel_layout = gtk_accel_label_get_accel_layout (accel_label);
       y += get_first_baseline (label_layout) - get_first_baseline (accel_layout) - allocation.y;
 
       gtk_style_context_save (context);
