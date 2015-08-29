@@ -1022,6 +1022,7 @@ fetch_networks (GtkPlacesView *view)
   g_clear_object (&priv->networks_fetching_cancellable);
   priv->networks_fetching_cancellable = g_cancellable_new ();
   priv->fetching_networks = TRUE;
+  update_network_state (view);
 
   g_file_enumerate_children_async (network_file,
                                    "standard::type,standard::target-uri,standard::name,standard::display-name,standard::icon",
