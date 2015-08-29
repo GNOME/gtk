@@ -1002,7 +1002,7 @@ network_enumeration_finished (GObject      *source_object,
 
   if (error)
     {
-      if (g_error_matches (error, G_IO_ERROR, G_IO_ERROR_CANCELLED))
+      if (!g_error_matches (error, G_IO_ERROR, G_IO_ERROR_CANCELLED))
         g_warning ("Failed to fetch network locations: %s", error->message);
 
       g_clear_error (&error);
