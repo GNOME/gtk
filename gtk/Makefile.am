@@ -1376,7 +1376,6 @@ Gtk-3.0.gir: $(INTROSPECTION_SCANNER) libgtk-3.la $(top_builddir)/gdk/Gdk-3.0.gi
 Gtk_3_0_gir_SCANNERFLAGS = 			\
 	--warn-all				\
 	--add-include-path=$(top_builddir)/gdk	\
-	--add-init-section="gtk_init (NULL, NULL);" \
 	--include-uninstalled=$(top_builddir)/gdk/Gdk-3.0.gir
 Gtk_3_0_gir_INCLUDES = Atk-1.0
 if USE_X11
