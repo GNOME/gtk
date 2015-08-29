@@ -1132,7 +1132,8 @@ update_places (GtkPlacesView *view)
   populate_servers (view);
 
   /* fetch networks and add them asynchronously */
-  fetch_networks (view);
+  if (!gtk_places_view_get_local_only (view))
+    fetch_networks (view);
 
   update_view_mode (view);
 }
@@ -2479,7 +2480,7 @@ gtk_places_view_set_local_only (GtkPlacesView *view,
       priv->local_only = local_only;
 
       gtk_widget_set_visible (priv->actionbar, !local_only);
-      gtk_list_box_invalidate_filter (GTK_LIST_BOX (priv->listbox));
+      update_places (view);
 
       update_view_mode (view);
 
