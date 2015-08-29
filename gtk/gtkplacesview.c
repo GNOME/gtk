@@ -69,7 +69,6 @@ struct _GtkPlacesViewPrivate
   GtkWidget                     *recent_servers_popover;
   GtkWidget                     *recent_servers_stack;
   GtkWidget                     *stack;
-  GtkWidget                     *network_header_spinner;
   GtkWidget                     *network_placeholder;
   GtkWidget                     *network_placeholder_label;
 
@@ -100,6 +99,11 @@ static gboolean    on_row_popup_menu                             (GtkPlacesViewR
 
 static void        populate_servers                              (GtkPlacesView *view);
 
+static gboolean    gtk_places_view_get_fetching_networks         (GtkPlacesView *view);
+
+static void        gtk_places_view_set_fetching_networks         (GtkPlacesView *view,
+                                                                  gboolean       fetching_networks);
+
 G_DEFINE_TYPE_WITH_PRIVATE (GtkPlacesView, gtk_places_view, GTK_TYPE_BOX)
 
 /* GtkPlacesView properties & signals */
@@ -107,6 +111,7 @@ enum {
   PROP_0,
   PROP_LOCAL_ONLY,
   PROP_OPEN_FLAGS,
+  PROP_FETCHING_NETWORKS,
   PROP_LOADING,
   LAST_PROP
 };
@@ -414,6 +419,10 @@ gtk_places_view_get_property (GObject    *object,
 
     case PROP_LOADING:
       g_value_set_boolean (value, gtk_places_view_get_loading (self));
+      break;
+
+    case PROP_FETCHING_NETWORKS:
+      g_value_set_boolean (value, gtk_places_view_get_fetching_networks (self));
       break;
 
     default:
@@ -876,9 +885,8 @@ update_network_state (GtkPlacesView *view)
       gtk_list_box_invalidate_headers (GTK_LIST_BOX (priv->listbox));
     }
 
-  if (priv->fetching_networks)
+  if (gtk_places_view_get_fetching_networks (view))
     {
-      gtk_spinner_start (GTK_SPINNER (priv->network_header_spinner));
       /* only show a placeholder with a message if the list is empty.
        * otherwise just show the spinner in the header */
       if (!has_networks (view))
@@ -890,14 +898,12 @@ update_network_state (GtkPlacesView *view)
     }
   else if (!has_networks (view))
     {
-      gtk_spinner_stop (GTK_SPINNER (priv->network_header_spinner));
       gtk_widget_show_all (priv->network_placeholder);
       gtk_label_set_text (GTK_LABEL (priv->network_placeholder_label),
                           _("No network locations found"));
     }
   else
     {
-      gtk_spinner_stop (GTK_SPINNER (priv->network_header_spinner));
       gtk_widget_hide (priv->network_placeholder);
     }
 }
@@ -950,7 +956,7 @@ network_enumeration_next_files_finished (GObject      *source_object,
   priv = gtk_places_view_get_instance_private (view);
   error = NULL;
 
-  priv->fetching_networks = FALSE;
+  gtk_places_view_set_fetching_networks (view, FALSE);
   detected_networks = g_file_enumerator_next_files_finish (G_FILE_ENUMERATOR (source_object),
                                                            res, &error);
 
@@ -1021,7 +1027,7 @@ fetch_networks (GtkPlacesView *view)
   g_cancellable_cancel (priv->networks_fetching_cancellable);
   g_clear_object (&priv->networks_fetching_cancellable);
   priv->networks_fetching_cancellable = g_cancellable_new ();
-  priv->fetching_networks = TRUE;
+  gtk_places_view_set_fetching_networks (view, TRUE);
   update_network_state (view);
 
   g_file_enumerate_children_async (network_file,
@@ -1053,7 +1059,6 @@ update_places (GtkPlacesView *view)
   children = gtk_container_get_children (GTK_CONTAINER (priv->listbox));
   g_list_free_full (children, (GDestroyNotify) gtk_widget_destroy);
   priv->network_placeholder = NULL;
-  priv->network_header_spinner = NULL;
 
   priv->loading = TRUE;
   g_object_notify_by_pspec (G_OBJECT (view), properties[PROP_LOADING]);
@@ -1931,11 +1936,9 @@ listbox_header_func (GtkListBoxRow *row,
                      GtkListBoxRow *before,
                      gpointer       user_data)
 {
-  GtkPlacesViewPrivate *priv;
   gboolean row_is_network;
   gchar *text;
 
-  priv = gtk_places_view_get_instance_private (GTK_PLACES_VIEW (user_data));
   text = NULL;
   row_is_network = GPOINTER_TO_INT (g_object_get_data (G_OBJECT (row), "is-network"));
 
@@ -1973,18 +1976,25 @@ listbox_header_func (GtkListBoxRow *row,
       if (row_is_network)
         {
           GtkWidget *header_name;
+          GtkWidget *network_header_spinner;
 
           g_object_set (label,
                         "margin-end", 6,
                         NULL);
 
           header_name = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
-          priv->network_header_spinner = gtk_spinner_new ();
-          g_object_set (priv->network_header_spinner,
+          network_header_spinner = gtk_spinner_new ();
+          g_object_set (network_header_spinner,
                         "margin-end", 12,
                         NULL);
+          g_object_bind_property (GTK_PLACES_VIEW (user_data),
+                                  "fetching-networks",
+                                  network_header_spinner,
+                                  "active",
+                                  G_BINDING_SYNC_CREATE);
+
           gtk_container_add (GTK_CONTAINER (header_name), label);
-          gtk_container_add (GTK_CONTAINER (header_name), priv->network_header_spinner);
+          gtk_container_add (GTK_CONTAINER (header_name), network_header_spinner);
           gtk_container_add (GTK_CONTAINER (header), header_name);
         }
       else
@@ -2190,6 +2200,13 @@ gtk_places_view_class_init (GtkPlacesViewClass *klass)
                                 FALSE,
                                 G_PARAM_READABLE);
 
+  properties[PROP_FETCHING_NETWORKS] =
+          g_param_spec_boolean ("fetching-networks",
+                                P_("Fetching networks"),
+                                P_("Whether the view is fetching networks"),
+                                FALSE,
+                                G_PARAM_READABLE);
+
   properties[PROP_OPEN_FLAGS] =
           g_param_spec_flags ("open-flags",
                               P_("Open Flags"),
@@ -2385,6 +2402,35 @@ gtk_places_view_get_loading (GtkPlacesView *view)
   priv = gtk_places_view_get_instance_private (view);
 
   return priv->loading;
+}
+
+static gboolean
+gtk_places_view_get_fetching_networks (GtkPlacesView *view)
+{
+  GtkPlacesViewPrivate *priv;
+
+  g_return_val_if_fail (GTK_IS_PLACES_VIEW (view), FALSE);
+
+  priv = gtk_places_view_get_instance_private (view);
+
+  return priv->fetching_networks;
+}
+
+static void
+gtk_places_view_set_fetching_networks (GtkPlacesView *view,
+                                       gboolean       fetching_networks)
+{
+  GtkPlacesViewPrivate *priv;
+
+  g_return_if_fail (GTK_IS_PLACES_VIEW (view));
+
+  priv = gtk_places_view_get_instance_private (view);
+
+  if (priv->fetching_networks != fetching_networks)
+    {
+      priv->fetching_networks = fetching_networks;
+      g_object_notify_by_pspec (G_OBJECT (view), properties [PROP_FETCHING_NETWORKS]);
+    }
 }
 
 /**
