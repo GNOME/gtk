@@ -1366,7 +1366,7 @@ introspection_files += \
 endif
 
 include $(INTROSPECTION_MAKEFILE)
-INTROSPECTION_SCANNER_ENV = CC="$(CC)" CPPFLAGS="-I$(top_srcdir) -I$(top_builddir) -I. -include gtk.h"
+INTROSPECTION_SCANNER_ENV = CC="$(CC)"
 INTROSPECTION_COMPILER_ARGS = \
 	--includedir=$(srcdir) \
 	--includedir=. \
