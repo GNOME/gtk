@@ -18,8 +18,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-properties\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-08-26 17:02+0200\n"
-"PO-Revision-Date: 2015-08-26 17:04+0200\n"
+"POT-Creation-Date: 2015-08-30 15:32+0200\n"
+"PO-Revision-Date: 2015-08-30 15:33+0200\n"
 "Last-Translator: Piotr Drąg <piotrdrag@gmail.com>\n"
 "Language-Team: Polish <gnomepl@aviary.pl>\n"
 "Language: pl\n"
@@ -859,7 +859,7 @@ msgstr "Ekran, na którym ten status będzie wyświetlany"
 msgid "Whether the status icon is visible"
 msgstr "Określa, czy ikona stanu jest widoczna"
 
-#: gtk/deprecated/gtkstatusicon.c:322 gtk/gtkplug.c:201
+#: gtk/deprecated/gtkstatusicon.c:322 gtk/gtkplug.c:199
 msgid "Embedded"
 msgstr "Zagnieżdżona"
 
@@ -1254,19 +1254,19 @@ msgstr "Zawijanie licencji"
 msgid "Whether to wrap the license text."
 msgstr "Określa, czy tekst licencji powinien być zawijany."
 
-#: gtk/gtkaccellabel.c:192
+#: gtk/gtkaccellabel.c:193
 msgid "Accelerator Closure"
 msgstr "Domknięcie skrótu"
 
-#: gtk/gtkaccellabel.c:193
+#: gtk/gtkaccellabel.c:194
 msgid "The closure to be monitored for accelerator changes"
 msgstr "Domknięcie monitorowane pod kątem zmian skrótów"
 
-#: gtk/gtkaccellabel.c:199
+#: gtk/gtkaccellabel.c:200
 msgid "Accelerator Widget"
 msgstr "Widżet skrótu"
 
-#: gtk/gtkaccellabel.c:200
+#: gtk/gtkaccellabel.c:201
 msgid "The widget to be monitored for accelerator changes"
 msgstr "Widżet monitorowana zmian skrótów"
 
@@ -3850,7 +3850,7 @@ msgid "The current filter for selecting which files are displayed"
 msgstr "Bieżący filtr służący do zaznaczania wyświetlanych plików"
 
 #: gtk/gtkfilechooser.c:388 gtk/gtkplacessidebar.c:4344
-#: gtk/gtkplacesview.c:2178
+#: gtk/gtkplacesview.c:2202
 msgid "Local Only"
 msgstr "Tylko lokalne"
 
@@ -5446,11 +5446,11 @@ msgstr "Położenie do wybrania"
 msgid "The location to highlight in the sidebar"
 msgstr "Położenie do wyróżnienia na panelu bocznym"
 
-#: gtk/gtkplacessidebar.c:4313 gtk/gtkplacesview.c:2192
+#: gtk/gtkplacessidebar.c:4313 gtk/gtkplacesview.c:2223
 msgid "Open Flags"
 msgstr "Flagi otwarcia"
 
-#: gtk/gtkplacessidebar.c:4314 gtk/gtkplacesview.c:2193
+#: gtk/gtkplacessidebar.c:4314 gtk/gtkplacesview.c:2224
 msgid ""
 "Modes in which the calling application can open locations selected in the "
 "sidebar"
@@ -5499,7 +5499,7 @@ msgstr ""
 "Określa, czy panel boczny zawiera wbudowany skrót do ręcznego wprowadzania "
 "położenia"
 
-#: gtk/gtkplacessidebar.c:4345 gtk/gtkplacesview.c:2179
+#: gtk/gtkplacessidebar.c:4345 gtk/gtkplacesview.c:2203
 msgid "Whether the sidebar only includes local files"
 msgstr "Określa, czy panel boczny zawiera tylko lokalne pliki"
 
@@ -5527,13 +5527,21 @@ msgstr ""
 "Określa, czy wysyłać sygnał ::populate-popup dla wyskakujących okien, które "
 "nie są menu"
 
-#: gtk/gtkplacesview.c:2185
+#: gtk/gtkplacesview.c:2209
 msgid "Loading"
 msgstr "Wczytywanie"
 
-#: gtk/gtkplacesview.c:2186
+#: gtk/gtkplacesview.c:2210
 msgid "Whether the view is loading locations"
 msgstr "Określa, czy widok wczytuje położenia"
+
+#: gtk/gtkplacesview.c:2216
+msgid "Fetching networks"
+msgstr "Pobieranie sieci"
+
+#: gtk/gtkplacesview.c:2217
+msgid "Whether the view is fetching networks"
+msgstr "Określa, czy widok pobiera sieci"
 
 #: gtk/gtkplacesviewrow.c:181
 msgid "Icon of the row"
@@ -5587,15 +5595,15 @@ msgstr "Plik przedstawiany przez rząd, jeśli dotyczy"
 msgid "Whether the row represents a network location"
 msgstr "Określa, czy rząd przedstawia położenie sieciowe"
 
-#: gtk/gtkplug.c:202
+#: gtk/gtkplug.c:200
 msgid "Whether the plug is embedded"
 msgstr "Określa, czy wtyczka jest osadzona"
 
-#: gtk/gtkplug.c:216
+#: gtk/gtkplug.c:214
 msgid "Socket Window"
 msgstr "Okno gniazda"
 
-#: gtk/gtkplug.c:217
+#: gtk/gtkplug.c:215
 msgid "The window of the socket the plug is embedded in"
 msgstr "Okno gniazda, w którym osadzona jest wtyczka"
 
