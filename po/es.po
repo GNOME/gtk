@@ -17,8 +17,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+.master\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-08-24 21:55+0000\n"
-"PO-Revision-Date: 2015-08-25 \n"
+"POT-Creation-Date: 2015-08-30 21:51+0000\n"
+"PO-Revision-Date: 2015-08-31 \n"
 "Last-Translator: Daniel Mustieles <daniel.mustieles@gmail.com>\n"
 "Language-Team: Spanish <gnome-es-list@gnome.org>\n"
 "Language: \n"
@@ -91,7 +91,7 @@ msgstr "OPCIONES"
 msgid "GDK debugging flags to unset"
 msgstr "Opciones de depuración GTK+ que quitar"
 
-#: gdk/gdkwindow.c:2737
+#: gdk/gdkwindow.c:2736
 msgid "GL support disabled via GDK_DEBUG"
 msgstr "Soporte de GL desactivado mediante GDK_DEBUG"
 
@@ -1229,7 +1229,7 @@ msgstr ""
 #: gtk/gtkmessagedialog.c:955 gtk/gtkmountoperation.c:543
 #: gtk/gtkpagesetupunixdialog.c:196 gtk/gtkprintbackend.c:763
 #: gtk/gtkprinteroptionwidget.c:545 gtk/gtkprintunixdialog.c:665
-#: gtk/gtkprintunixdialog.c:738 gtk/gtkwindow.c:12106
+#: gtk/gtkprintunixdialog.c:738 gtk/gtkwindow.c:12109
 #: gtk/inspector/css-editor.c:199 gtk/ui/gtkappchooserdialog.ui:61
 #: gtk/ui/gtkassistant.ui:136 gtk/ui/gtkcolorchooserdialog.ui:34
 #: gtk/ui/gtkfontchooserdialog.ui:31
@@ -1281,7 +1281,7 @@ msgid "_Apply"
 msgstr "_Aplicar"
 
 #: gtk/deprecated/gtkfontsel.c:1698 gtk/gtkmessagedialog.c:934
-#: gtk/gtkmessagedialog.c:956 gtk/gtkprintbackend.c:764 gtk/gtkwindow.c:12107
+#: gtk/gtkmessagedialog.c:956 gtk/gtkprintbackend.c:764 gtk/gtkwindow.c:12110
 #: gtk/inspector/classes-list.c:127
 msgid "_OK"
 msgstr "_Aceptar"
@@ -1558,7 +1558,7 @@ msgstr "Arte por"
 #. * translated on keyboards used for your language, don't translate
 #. * this.
 #.
-#: gtk/gtkaccellabel.c:164
+#: gtk/gtkaccellabel.c:165
 msgctxt "keyboard label"
 msgid "Shift"
 msgstr "Mayús"
@@ -1568,7 +1568,7 @@ msgstr "Mayús"
 #. * translated on keyboards used for your language, don't translate
 #. * this.
 #.
-#: gtk/gtkaccellabel.c:170
+#: gtk/gtkaccellabel.c:171
 msgctxt "keyboard label"
 msgid "Ctrl"
 msgstr "Ctrl"
@@ -1578,7 +1578,7 @@ msgstr "Ctrl"
 #. * translated on keyboards used for your language, don't translate
 #. * this.
 #.
-#: gtk/gtkaccellabel.c:176
+#: gtk/gtkaccellabel.c:177
 msgctxt "keyboard label"
 msgid "Alt"
 msgstr "Alt"
@@ -1588,7 +1588,7 @@ msgstr "Alt"
 #. * translated on keyboards used for your language, don't translate
 #. * this.
 #.
-#: gtk/gtkaccellabel.c:795
+#: gtk/gtkaccellabel.c:828
 msgctxt "keyboard label"
 msgid "Super"
 msgstr "Super"
@@ -1598,7 +1598,7 @@ msgstr "Super"
 #. * translated on keyboards used for your language, don't translate
 #. * this.
 #.
-#: gtk/gtkaccellabel.c:808
+#: gtk/gtkaccellabel.c:841
 msgctxt "keyboard label"
 msgid "Hyper"
 msgstr "Hyper"
@@ -1608,17 +1608,17 @@ msgstr "Hyper"
 #. * translated on keyboards used for your language, don't translate
 #. * this.
 #.
-#: gtk/gtkaccellabel.c:822
+#: gtk/gtkaccellabel.c:855
 msgctxt "keyboard label"
 msgid "Meta"
 msgstr "Meta"
 
-#: gtk/gtkaccellabel.c:839
+#: gtk/gtkaccellabel.c:872
 msgctxt "keyboard label"
 msgid "Space"
 msgstr "Espacio"
 
-#: gtk/gtkaccellabel.c:842
+#: gtk/gtkaccellabel.c:875
 msgctxt "keyboard label"
 msgid "Backslash"
 msgstr "Contrabarra"
@@ -2226,7 +2226,7 @@ msgstr "(Ninguno)"
 
 #. Open item is always present
 #: gtk/gtkfilechooserbutton.c:796 gtk/gtkplacessidebar.c:3349
-#: gtk/gtkplacesview.c:1602
+#: gtk/gtkplacesview.c:1619
 msgid "_Open"
 msgstr "_Abrir"
 
@@ -2515,7 +2515,6 @@ msgid "_Replace"
 msgstr "_Reemplazar"
 
 #: gtk/gtkfilechooserwidget.c:6512
-#| msgid "Could not read the contents of the folder"
 msgid "You do not have access to the specified folder."
 msgstr "No tiene acceso a la carpeta especificada."
 
@@ -2751,16 +2750,16 @@ msgstr "Opciones de depuración GTK+ a poner"
 msgid "GTK+ debugging flags to unset"
 msgstr "Opciones de depuración GTK+ a quitar"
 
-#: gtk/gtkmain.c:776
+#: gtk/gtkmain.c:781
 #, c-format
 msgid "Cannot open display: %s"
 msgstr "No se puede abrir el visor: %s"
 
-#: gtk/gtkmain.c:853
+#: gtk/gtkmain.c:858
 msgid "GTK+ Options"
 msgstr "Opciones GTK+"
 
-#: gtk/gtkmain.c:853
+#: gtk/gtkmain.c:858
 msgid "Show GTK+ Options"
 msgstr "Mostrar opciones GTK+"
 
@@ -2769,7 +2768,7 @@ msgstr "Mostrar opciones GTK+"
 #. * Do *not* translate it to "predefinito:LTR", if it
 #. * it isn't default:LTR or default:RTL it will not work
 #.
-#: gtk/gtkmain.c:1177
+#: gtk/gtkmain.c:1182
 msgid "default:LTR"
 msgstr "default:LTR"
 
@@ -3067,11 +3066,11 @@ msgstr "No se pudo expulsar %s"
 msgid "Unable to poll “%s” for media changes"
 msgstr "No se puede consultar a «%s» si hay cambios en el medio"
 
-#: gtk/gtkplacessidebar.c:3352 gtk/gtkplacesview.c:1612
+#: gtk/gtkplacessidebar.c:3352 gtk/gtkplacesview.c:1629
 msgid "Open in New _Tab"
 msgstr "Abrir en una _pestaña nueva"
 
-#: gtk/gtkplacessidebar.c:3355 gtk/gtkplacesview.c:1623
+#: gtk/gtkplacessidebar.c:3355 gtk/gtkplacesview.c:1640
 msgid "Open in New _Window"
 msgstr "Abrir en una _ventana nueva"
 
@@ -3087,11 +3086,11 @@ msgstr "_Quitar"
 msgid "Rename…"
 msgstr "Renombrar…"
 
-#: gtk/gtkplacessidebar.c:3365
+#: gtk/gtkplacessidebar.c:3365 gtk/gtkplacesview.c:1674
 msgid "_Mount"
 msgstr "_Montar"
 
-#: gtk/gtkplacessidebar.c:3366
+#: gtk/gtkplacessidebar.c:3366 gtk/gtkplacesview.c:1664
 msgid "_Unmount"
 msgstr "_Desmontar"
 
@@ -3103,51 +3102,71 @@ msgstr "_Expulsar"
 msgid "_Detect Media"
 msgstr "_Detectar medio"
 
-#: gtk/gtkplacessidebar.c:3817 gtk/gtkplacesview.c:1064
+#: gtk/gtkplacessidebar.c:3817 gtk/gtkplacesview.c:1072
 msgid "Computer"
 msgstr "Equipo"
 
-#: gtk/gtkplacesview.c:888
-#| msgid "Show other locations"
+#: gtk/gtkplacesview.c:900
 msgid "Searching for network locations"
 msgstr "Buscando ubicaciones de red"
 
-#: gtk/gtkplacesview.c:896
-#| msgid "No applications found."
-msgid "No networks locations found"
+#: gtk/gtkplacesview.c:907
+#| msgid "No networks locations found"
+msgid "No network locations found"
 msgstr "No se han encontrado ubicaciones de red"
 
 #. if it wasn't cancelled show a dialog
-#: gtk/gtkplacesview.c:1171 gtk/gtkplacesview.c:1215 gtk/gtkplacesview.c:1266
+#: gtk/gtkplacesview.c:1182 gtk/gtkplacesview.c:1226 gtk/gtkplacesview.c:1277
 msgid "Unable to access location"
 msgstr "No se puede acceder a la ubicación"
 
 #. Restore from Cancel to Connect
-#: gtk/gtkplacesview.c:1189 gtk/ui/gtkplacesview.ui:263
+#: gtk/gtkplacesview.c:1199 gtk/ui/gtkplacesview.ui:263
 msgid "Con_nect"
 msgstr "Co_nectar"
 
 #. if it wasn't cancelled show a dialog
-#: gtk/gtkplacesview.c:1325
+#: gtk/gtkplacesview.c:1340
 msgid "Unable to unmount volume"
 msgstr "No se puede desmontar del volumen"
 
 #. Allow to cancel the operation
-#: gtk/gtkplacesview.c:1407
+#: gtk/gtkplacesview.c:1422
 msgid "Cance_l"
 msgstr "Cance_lar"
 
-#: gtk/gtkplacesview.c:1822
+#: gtk/gtkplacesview.c:1664
+#| msgctxt "Stock label"
+#| msgid "_Disconnect"
+msgid "_Disconnect"
+msgstr "_Desconectar"
+
+#: gtk/gtkplacesview.c:1674
+#| msgid "Co_nnect"
+msgid "_Connect"
+msgstr "_Conectar"
+
+#: gtk/gtkplacesview.c:1839
 msgid "Unable to get remote server location"
 msgstr "No se pudo obtener la ubicación del servidor remoto"
 
-#: gtk/gtkplacesview.c:1941 gtk/gtkplacesview.c:1950
+#: gtk/gtkplacesview.c:1958 gtk/gtkplacesview.c:1967
 msgid "Networks"
 msgstr "Redes"
 
-#: gtk/gtkplacesview.c:1941 gtk/gtkplacesview.c:1950
+#: gtk/gtkplacesview.c:1958 gtk/gtkplacesview.c:1967
 msgid "On This Computer"
 msgstr "En este equipo"
+
+#: gtk/gtkplacesviewrow.c:323
+#| msgctxt "Stock label"
+#| msgid "_Disconnect"
+msgid "Disconnect"
+msgstr "Desconectar"
+
+#: gtk/gtkplacesviewrow.c:323 gtk/ui/gtkplacesviewrow.ui:73
+msgid "Unmount"
+msgstr "Desmontar"
 
 #: gtk/gtkprintbackend.c:762
 msgid "Authentication"
@@ -3697,12 +3716,12 @@ msgctxt "volume percentage"
 msgid "%d %%"
 msgstr "%d %%"
 
-#: gtk/gtkwindow.c:12094
+#: gtk/gtkwindow.c:12097
 #, c-format
 msgid "Do you want to use GTK+ Inspector?"
 msgstr "¿Quiere usar el inspector de GTK+?"
 
-#: gtk/gtkwindow.c:12096
+#: gtk/gtkwindow.c:12099
 #, c-format
 msgid ""
 "GTK+ Inspector is an interactive debugger that lets you explore and modify "
@@ -3713,7 +3732,7 @@ msgstr ""
 "modificar los aspectos internos de cualquier aplicación de GTK+. Al usarlo "
 "puede hacer que la aplicación falle o se cierre."
 
-#: gtk/gtkwindow.c:12101
+#: gtk/gtkwindow.c:12104
 msgid "Don't show this message again"
 msgstr "No mostrar este mensaje de nuevo"
 
@@ -5467,10 +5486,6 @@ msgstr "Ruta inferior"
 #: gtk/ui/gtkpathbar.ui:36
 msgid "Up Path"
 msgstr "Ruta superior"
-
-#: gtk/ui/gtkplacesviewrow.ui:73
-msgid "Unmount"
-msgstr "Desmontar"
 
 #. Translators: Server as any successfully connected network address
 #: gtk/ui/gtkplacesview.ui:51
