@@ -81,6 +81,7 @@
 #include <gtk/gtkcontainer.h>
 #include <gtk/gtkcssprovider.h>
 #include <gtk/gtkcsssection.h>
+#include <gtk/gtkdatechooserwidget.h>
 #include <gtk/gtkdebug.h>
 #include <gtk/gtkdialog.h>
 #include <gtk/gtkdnd.h>

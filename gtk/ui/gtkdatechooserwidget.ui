@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Generated with glade 3.18.1 -->
+<interface>
+  <requires lib="gtk+" version="3.16"/>
+  <template class="GtkDateChooserWidget" parent="GtkBin">
+    <child>
+      <object class="GtkBox">
+        <property name="visible">True</property>
+        <property name="orientation">vertical</property>
+        <child>
+          <object class="GtkBox">
+            <property name="visible" bind-source="GtkDateChooserWidget" bind-property="show-heading" bind-flags="sync-create"/>
+            <property name="hexpand">True</property>
+            <child>
+              <object class="GtkBox">
+                <property name="visible">True</property>
+                <property name="halign">start</property>
+                <child>
+                  <object class="GtkButton" id="month_down_button">
+                    <property name="visible" bind-source="GtkDateChooserWidget" bind-property="no-month-change" bind-flags="sync-create|invert-boolean"/>
+                    <property name="can_focus">True</property>
+                    <property name="receives_default">True</property>
+                    <property name="relief">none</property>
+                    <signal name="button-press-event" handler="calendar_button_press_cb"/>
+                    <signal name="button-release-event" handler="calendar_button_release_cb"/>
+                    <signal name="clicked" handler="calendar_clicked_cb"/>
+                    <child>
+                      <object class="GtkImage">
+                        <property name="visible">True</property>
+                        <property name="icon_name">pan-start-symbolic</property>
+                      </object>
+                    </child>
+                    <style>
+                      <class name="image-button"/>
+                    </style>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkStack" id="month_stack">
+                    <property name="visible">True</property>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkButton" id="month_up_button">
+                    <property name="visible" bind-source="GtkDateChooserWidget" bind-property="no-month-change" bind-flags="sync-create|invert-boolean"/>
+                    <property name="can_focus">True</property>
+                    <property name="receives_default">True</property>
+                    <property name="relief">none</property>
+                    <signal name="button-press-event" handler="calendar_button_press_cb"/>
+                    <signal name="button-release-event" handler="calendar_button_release_cb"/>
+                    <signal name="clicked" handler="calendar_clicked_cb"/>
+                    <child>
+                      <object class="GtkImage">
+                        <property name="visible">True</property>
+                        <property name="icon_name">pan-end-symbolic</property>
+                      </object>
+                    </child>
+                    <style>
+                      <class name="image-button"/>
+                    </style>
+                  </object>
+                </child>
+              </object>
+              <packing>
+                <property name="expand">True</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkBox">
+                <property name="visible">True</property>
+                <property name="halign">end</property>
+                <child>
+                  <object class="GtkButton" id="year_down_button">
+                    <property name="visible" bind-source="GtkDateChooserWidget" bind-property="no-month-change" bind-flags="sync-create|invert-boolean"/>
+                    <property name="can_focus">True</property>
+                    <property name="receives_default">True</property>
+                    <property name="relief">none</property>
+                    <signal name="button-press-event" handler="calendar_button_press_cb"/>
+                    <signal name="button-release-event" handler="calendar_button_release_cb"/>
+                    <signal name="clicked" handler="calendar_clicked_cb"/>
+                    <child>
+                      <object class="GtkImage">
+                        <property name="visible">True</property>
+                        <property name="icon_name">pan-start-symbolic</property>
+                      </object>
+                    </child>
+                    <style>
+                      <class name="image-button"/>
+                    </style>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkStack" id="year_stack">
+                    <property name="visible">True</property>
+                    <child>
+                      <object class="GtkLabel" id="odd_year_label">
+                        <property name="visible">True</property>
+                        <property name="label">2015</property>
+                      </object>
+                      <packing>
+                        <property name="name">odd</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkLabel" id="even_year_label">
+                        <property name="visible">True</property>
+                        <property name="label">2016</property>
+                      </object>
+                      <packing>
+                        <property name="name">even</property>
+                      </packing>
+                    </child>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkButton" id="year_up_button">
+                    <property name="visible" bind-source="GtkDateChooserWidget" bind-property="no-month-change" bind-flags="sync-create|invert-boolean"/>
+                    <property name="can_focus">True</property>
+                    <property name="receives_default">True</property>
+                    <property name="relief">none</property>
+                    <signal name="button-press-event" handler="calendar_button_press_cb"/>
+                    <signal name="button-release-event" handler="calendar_button_release_cb"/>
+                    <signal name="clicked" handler="calendar_clicked_cb"/>
+                    <child>
+                      <object class="GtkImage">
+                        <property name="visible">True</property>
+                        <property name="icon_name">pan-end-symbolic</property>
+                      </object>
+                    </child>
+                    <style>
+                      <class name="image-button"/>
+                    </style>
+                  </object>
+                </child>
+              </object>
+              <packing>
+                <property name="expand">True</property>
+              </packing>
+            </child>
+          </object>
+        </child>
+        <child>
+          <object class="GtkGrid" id="grid">
+            <property name="visible">True</property>
+          </object>
+          <packing>
+            <property name="expand">True</property>
+          </packing>
+        </child>
+      </object>
+    </child>
+  </template>
+</interface>

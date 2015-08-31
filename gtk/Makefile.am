@@ -164,6 +164,7 @@ gtk_public_h_sources = 		\
 	gtkcontainer.h		\
 	gtkcssprovider.h	\
 	gtkcsssection.h 	\
+	gtkdatechooserwidget.h  \
 	gtkdebug.h		\
 	gtkdialog.h		\
 	gtkdnd.h		\
@@ -424,6 +425,7 @@ gtk_private_h_sources =		\
 	gtkcssvalueprivate.h	\
 	gtkcsswidgetnodeprivate.h	\
 	gtkcustompaperunixdialog.h \
+	gtkdatechooserdayprivate.h \
 	gtkdialogprivate.h 	\
 	gtkdndprivate.h		\
 	gtkentryprivate.h	\
@@ -668,6 +670,8 @@ gtk_base_c_sources = 		\
 	gtkcsstypes.c		\
 	gtkcssvalue.c		\
 	gtkcsswidgetnode.c	\
+	gtkdatechooserday.c	\
+	gtkdatechooserwidget.c	\
 	gtkdialog.c		\
 	gtkdrawingarea.c	\
 	gtkeditable.c		\
@@ -1080,6 +1084,7 @@ templates =				\
 	ui/gtkcolorchooserdialog.ui	\
 	ui/gtkcoloreditor.ui		\
 	ui/gtkcombobox.ui		\
+	ui/gtkdatechooserwidget.ui	\
 	ui/gtkdialog.ui		\
 	ui/gtkfilechooserbutton.ui	\
 	ui/gtkfilechooserwidget.ui	\
