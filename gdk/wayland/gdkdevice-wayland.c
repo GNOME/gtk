@@ -1184,6 +1184,8 @@ keyboard_handle_leave (void               *data,
   if (!device->keyboard_focus)
     return;
 
+  stop_key_repeat (device);
+
   _gdk_wayland_display_update_serial (display, serial);
 
   event = gdk_event_new (GDK_FOCUS_CHANGE);
