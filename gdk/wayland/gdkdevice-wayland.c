@@ -1333,6 +1333,16 @@ get_key_repeat (GdkWaylandDeviceData *device,
   return repeat;
 }
 
+static void
+stop_key_repeat (GdkWaylandDeviceData *device)
+{
+  if (device->repeat_timer)
+    {
+      g_source_remove (device->repeat_timer);
+      device->repeat_timer = 0;
+    }
+}
+
 static gboolean
 deliver_key_event (GdkWaylandDeviceData *device,
                    uint32_t              time_,
@@ -1387,11 +1397,7 @@ deliver_key_event (GdkWaylandDeviceData *device,
 
   if (state == 0)
     {
-      if (device->repeat_timer)
-        {
-          g_source_remove (device->repeat_timer);
-          device->repeat_timer = 0;
-        }
+      stop_key_repeat (device);
       return FALSE;
     }
   else
@@ -1399,11 +1405,7 @@ deliver_key_event (GdkWaylandDeviceData *device,
       switch (device->repeat_count)
         {
         case 1:
-          if (device->repeat_timer)
-            {
-              g_source_remove (device->repeat_timer);
-              device->repeat_timer = 0;
-            }
+          stop_key_repeat (device);
           device->repeat_timer =
             gdk_threads_add_timeout (delay, keyboard_repeat, device);
           g_source_set_name_by_id (device->repeat_timer, "[gtk+] keyboard_repeat");
