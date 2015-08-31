@@ -18,8 +18,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-properties.master\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-08-24 21:56+0000\n"
-"PO-Revision-Date: 2015-08-25 \n"
+"POT-Creation-Date: 2015-08-30 21:52+0000\n"
+"PO-Revision-Date: 2015-08-31 \n"
 "Last-Translator: Daniel Mustieles <daniel.mustieles@gmail.com>\n"
 "Language-Team: Spanish <gnome-es-list@gnome.org>\n"
 "Language: \n"
@@ -870,7 +870,7 @@ msgstr "La pantalla donde se mostrará este icono de estado"
 msgid "Whether the status icon is visible"
 msgstr "Indica si el icono de estado es visible"
 
-#: gtk/deprecated/gtkstatusicon.c:322 gtk/gtkplug.c:201
+#: gtk/deprecated/gtkstatusicon.c:322 gtk/gtkplug.c:199
 msgid "Embedded"
 msgstr "Empotrado"
 
@@ -964,7 +964,7 @@ msgstr "Espaciado de la columna"
 msgid "The amount of space between two consecutive columns"
 msgstr "La cantidad de espacio entre dos columnas consecutivas"
 
-#: gtk/deprecated/gtktable.c:225 gtk/gtkbox.c:264 gtk/gtkflowbox.c:3714
+#: gtk/deprecated/gtktable.c:225 gtk/gtkbox.c:264 gtk/gtkflowbox.c:3716
 #: gtk/gtkstack.c:421 gtk/gtktoolbar.c:561 gtk/gtktoolitemgroup.c:1654
 msgid "Homogeneous"
 msgstr "Homogéneo"
@@ -1268,19 +1268,19 @@ msgstr "Ajustar licencia"
 msgid "Whether to wrap the license text."
 msgstr "Indica si se debe ajustar el texto de la licencia."
 
-#: gtk/gtkaccellabel.c:192
+#: gtk/gtkaccellabel.c:193
 msgid "Accelerator Closure"
 msgstr "Cierre del acelerador"
 
-#: gtk/gtkaccellabel.c:193
+#: gtk/gtkaccellabel.c:194
 msgid "The closure to be monitored for accelerator changes"
 msgstr "El cierre que monitorizar para cambios en el acelerador"
 
-#: gtk/gtkaccellabel.c:199
+#: gtk/gtkaccellabel.c:200
 msgid "Accelerator Widget"
 msgstr "Widget acelerador"
 
-#: gtk/gtkaccellabel.c:200
+#: gtk/gtkaccellabel.c:201
 msgid "The widget to be monitored for accelerator changes"
 msgstr "El widget que monitorizar para cambios en el acelerador"
 
@@ -1695,7 +1695,7 @@ msgstr "Espaciado"
 msgid "The amount of space between children"
 msgstr "La cantidad de espacio entre hijos"
 
-#: gtk/gtkbox.c:265 gtk/gtkflowbox.c:3715
+#: gtk/gtkbox.c:265 gtk/gtkflowbox.c:3717
 msgid "Whether the children should all be the same size"
 msgstr "Indica si todos los hijos deben ser del mismo tamaño"
 
@@ -2811,7 +2811,7 @@ msgstr "Estado inconsistente"
 msgid "The inconsistent state of the button"
 msgstr "El estado inconsistente del botón"
 
-#: gtk/gtkcellrenderertoggle.c:153 gtk/gtklistbox.c:3643
+#: gtk/gtkcellrenderertoggle.c:153 gtk/gtklistbox.c:3654
 msgid "Activatable"
 msgstr "Activable"
 
@@ -2975,7 +2975,7 @@ msgstr "Color RGBA"
 msgid "Color as RGBA"
 msgstr "Color como RGBA"
 
-#: gtk/gtkcolorswatch.c:710 gtk/gtklabel.c:855 gtk/gtklistbox.c:3657
+#: gtk/gtkcolorswatch.c:710 gtk/gtklabel.c:855 gtk/gtklistbox.c:3668
 msgid "Selectable"
 msgstr "Seleccionable"
 
@@ -3853,7 +3853,7 @@ msgid "The current filter for selecting which files are displayed"
 msgstr "El filtro actual para seleccionar qué archivos se están mostrando"
 
 #: gtk/gtkfilechooser.c:388 gtk/gtkplacessidebar.c:4344
-#: gtk/gtkplacesview.c:2178
+#: gtk/gtkplacesview.c:2202
 msgid "Local Only"
 msgstr "Sólo local"
 
@@ -3966,30 +3966,30 @@ msgstr "Posición Y"
 msgid "Y position of child widget"
 msgstr "Posición Y del widget hijo"
 
-#: gtk/gtkflowbox.c:3687 gtk/gtkiconview.c:395 gtk/gtklistbox.c:443
+#: gtk/gtkflowbox.c:3689 gtk/gtkiconview.c:395 gtk/gtklistbox.c:444
 #: gtk/gtktreeselection.c:131
 msgid "Selection mode"
 msgstr "Modo de selección"
 
-#: gtk/gtkflowbox.c:3688 gtk/gtkiconview.c:396 gtk/gtklistbox.c:444
+#: gtk/gtkflowbox.c:3690 gtk/gtkiconview.c:396 gtk/gtklistbox.c:445
 msgid "The selection mode"
 msgstr "El modo de selección"
 
-#: gtk/gtkflowbox.c:3701 gtk/gtkiconview.c:652 gtk/gtklistbox.c:451
+#: gtk/gtkflowbox.c:3703 gtk/gtkiconview.c:652 gtk/gtklistbox.c:452
 #: gtk/gtktreeview.c:1212
 msgid "Activate on Single Click"
 msgstr "Activar con una única pulsación"
 
-#: gtk/gtkflowbox.c:3702 gtk/gtkiconview.c:653 gtk/gtklistbox.c:452
+#: gtk/gtkflowbox.c:3704 gtk/gtkiconview.c:653 gtk/gtklistbox.c:453
 #: gtk/gtktreeview.c:1213
 msgid "Activate row on a single click"
 msgstr "Activar fila con una única pulsación"
 
-#: gtk/gtkflowbox.c:3731
+#: gtk/gtkflowbox.c:3733
 msgid "Minimum Children Per Line"
 msgstr "Número mínimo de hijos por línea"
 
-#: gtk/gtkflowbox.c:3732
+#: gtk/gtkflowbox.c:3734
 msgid ""
 "The minimum number of children to allocate consecutively in the given "
 "orientation."
@@ -3997,11 +3997,11 @@ msgstr ""
 "La cantidad mínima de hijos que colocar de manera consecutiva en la "
 "orientación dada."
 
-#: gtk/gtkflowbox.c:3745
+#: gtk/gtkflowbox.c:3747
 msgid "Maximum Children Per Line"
 msgstr "Número máximo de hijos por línea"
 
-#: gtk/gtkflowbox.c:3746
+#: gtk/gtkflowbox.c:3748
 msgid ""
 "The maximum amount of children to request space for consecutively in the "
 "given orientation."
@@ -4009,19 +4009,19 @@ msgstr ""
 "La cantidad máxima de hijos que solicitar de manera consecutiva en la "
 "orientación dada."
 
-#: gtk/gtkflowbox.c:3758
+#: gtk/gtkflowbox.c:3760
 msgid "Vertical spacing"
 msgstr "Espaciado vertical"
 
-#: gtk/gtkflowbox.c:3759
+#: gtk/gtkflowbox.c:3761
 msgid "The amount of vertical space between two children"
 msgstr "La cantidad de espacio vertical entre dos hijos"
 
-#: gtk/gtkflowbox.c:3770
+#: gtk/gtkflowbox.c:3772
 msgid "Horizontal spacing"
 msgstr "Espaciado horizontal"
 
-#: gtk/gtkflowbox.c:3771
+#: gtk/gtkflowbox.c:3773
 msgid "The amount of horizontal space between two children"
 msgstr "La cantidad de espacio horizontal entre dos hijos"
 
@@ -4697,11 +4697,11 @@ msgstr "Visitado"
 msgid "Whether this link has been visited."
 msgstr "Indica si este enlace se ha visitado."
 
-#: gtk/gtklistbox.c:3644
+#: gtk/gtklistbox.c:3655
 msgid "Whether this row can be activated"
 msgstr "Indica si se puede activar esta fila"
 
-#: gtk/gtklistbox.c:3658
+#: gtk/gtklistbox.c:3669
 msgid "Whether this row can be selected"
 msgstr "Indica si se puede seleccionar esta fila"
 
@@ -5456,11 +5456,11 @@ msgstr "Ubicación que seleccionar"
 msgid "The location to highlight in the sidebar"
 msgstr "La ubicación que resaltar en la barra lateral"
 
-#: gtk/gtkplacessidebar.c:4313 gtk/gtkplacesview.c:2192
+#: gtk/gtkplacessidebar.c:4313 gtk/gtkplacesview.c:2223
 msgid "Open Flags"
 msgstr "Abrir opciones"
 
-#: gtk/gtkplacessidebar.c:4314 gtk/gtkplacesview.c:2193
+#: gtk/gtkplacessidebar.c:4314 gtk/gtkplacesview.c:2224
 msgid ""
 "Modes in which the calling application can open locations selected in the "
 "sidebar"
@@ -5509,7 +5509,7 @@ msgstr ""
 "Indica si la barra lateral incluye un atajo integrado para introducir "
 "manualmente la ubicación"
 
-#: gtk/gtkplacessidebar.c:4345 gtk/gtkplacesview.c:2179
+#: gtk/gtkplacessidebar.c:4345 gtk/gtkplacesview.c:2203
 msgid "Whether the sidebar only includes local files"
 msgstr "Indica si la barra lateral sólo incluye archivos locales"
 
@@ -5539,31 +5539,22 @@ msgstr ""
 "Indica si se debe emitir ::populate-popup para elementos emergentes que no "
 "son menús"
 
-#: gtk/gtkplacesview.c:1647
-msgid "_Disconnect"
-msgstr "_Desconectar"
-
-#: gtk/gtkplacesview.c:1647
-msgid "_Unmount"
-msgstr "_Desmontar"
-
-#: gtk/gtkplacesview.c:1657
-msgid "_Connect"
-msgstr "_Conectar"
-
-#: gtk/gtkplacesview.c:1657
-msgid "_Mount"
-msgstr "_Montar"
-
-#: gtk/gtkplacesview.c:2185
-#| msgid "Heading"
+#: gtk/gtkplacesview.c:2209
 msgid "Loading"
 msgstr "Cargando"
 
-#: gtk/gtkplacesview.c:2186
-#| msgid "Whether the widget should show all applications"
+#: gtk/gtkplacesview.c:2210
 msgid "Whether the view is loading locations"
 msgstr "Indica si la vista está cargando las ubicaciones"
+
+#: gtk/gtkplacesview.c:2216
+msgid "Fetching networks"
+msgstr "Obteniendo redes"
+
+#: gtk/gtkplacesview.c:2217
+#| msgid "Whether the view is loading locations"
+msgid "Whether the view is fetching networks"
+msgstr "Indica si la vista está obteniendo redes"
 
 #: gtk/gtkplacesviewrow.c:181
 msgid "Icon of the row"
@@ -5617,23 +5608,15 @@ msgstr "El archivo representado por la fila, si hay"
 msgid "Whether the row represents a network location"
 msgstr "Indica si la fila representa una ubicación de la red"
 
-#: gtk/gtkplacesviewrow.c:325
-msgid "Disconnect"
-msgstr "Desconectar"
-
-#: gtk/gtkplacesviewrow.c:325
-msgid "Unmount"
-msgstr "Desmontar"
-
-#: gtk/gtkplug.c:202
+#: gtk/gtkplug.c:200
 msgid "Whether the plug is embedded"
 msgstr "Indica si el complemento está empotrado"
 
-#: gtk/gtkplug.c:216
+#: gtk/gtkplug.c:214
 msgid "Socket Window"
 msgstr "Ventana del socket"
 
-#: gtk/gtkplug.c:217
+#: gtk/gtkplug.c:215
 msgid "The window of the socket the plug is embedded in"
 msgstr "La ventana del socket en la que el enchufe está empotrado"
 
@@ -9457,6 +9440,24 @@ msgstr "Título del perfil de color"
 #: modules/printbackends/cups/gtkprintercups.c:94
 msgid "The title of the color profile to use"
 msgstr "El título del perfil de color que usar"
+
+#~ msgid "_Disconnect"
+#~ msgstr "_Desconectar"
+
+#~ msgid "_Unmount"
+#~ msgstr "_Desmontar"
+
+#~ msgid "_Connect"
+#~ msgstr "_Conectar"
+
+#~ msgid "_Mount"
+#~ msgstr "_Montar"
+
+#~ msgid "Disconnect"
+#~ msgstr "Desconectar"
+
+#~ msgid "Unmount"
+#~ msgstr "Desmontar"
 
 #~ msgid "The GDK display the context is from"
 #~ msgstr "El contexto del que proviene la visualización GDK"
