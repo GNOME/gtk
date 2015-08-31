@@ -2746,6 +2746,28 @@ GtkCalendar {
     border-color: $backdrop_borders_color;
   }
 }
+/* New widget */
+.weekday {
+  background-color: $base_color; /* doesn't seem to work */
+  color: lighten($fg_color,20%);
+  font-weight: bold;
+  font-size: 80%;
+  padding: 0.4em; 
+}
+.weeknum { color: lighten($fg_color,20%); }
+.day {
+  color: $fg_color;
+  padding: 0.4em; /* doesn't seem to work */
+  text-align: center; /* haha, dream on */
+}
+.day.other-month { color: $insensitive_fg_color; }
+.day:selected {
+  color: $selected_fg_color;
+  background-color: $selected_bg_color;
+  padding: 0.4em;
+  border-radius: 3px;
+}
+
 
 /***********
  * Dialogs *
