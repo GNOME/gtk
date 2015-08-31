@@ -3,7 +3,7 @@
 
   <schema id='org.gtk.Settings.Debug' path='/org/gtk/settings/debug/'>
     <key name='enable-inspector-keybinding' type='b'>
-      <default>true</default>
+      <default>false</default>
       <summary>Enable inspector keybinding</summary>
       <description>
         If this setting is true, GTK+ lets the user open an interactive
