@@ -3157,12 +3157,12 @@ GtkColorSwatch {
   // indicator and keynav outline colors
   &.color-dark {
     color: white;
-    outline-color: transparentize(black, 0.7);
+    outline-color: transparentize(white, 0.5);
     &:backdrop { color: transparentize(white, 0.7); }
   }
   &.color-light {
     color: black;
-    outline-color: transparentize(white, 0.5);
+    outline-color: transparentize(black, 0.5);
     &:backdrop { color: transparentize(black, 0.7); }
   }
 

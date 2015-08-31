@@ -4377,12 +4377,12 @@ GtkColorSwatch {
       box-shadow: none; }
   GtkColorSwatch.color-dark {
     color: white;
-    outline-color: rgba(0, 0, 0, 0.3); }
+    outline-color: rgba(255, 255, 255, 0.5); }
     GtkColorSwatch.color-dark:backdrop {
       color: rgba(255, 255, 255, 0.3); }
   GtkColorSwatch.color-light {
     color: black;
-    outline-color: rgba(255, 255, 255, 0.5); }
+    outline-color: rgba(0, 0, 0, 0.5); }
     GtkColorSwatch.color-light:backdrop {
       color: rgba(0, 0, 0, 0.3); }
   GtkColorSwatch.overlay, GtkColorSwatch.overlay:selected {
