@@ -2267,6 +2267,7 @@ _gdk_wayland_device_manager_remove_seat (GdkDeviceManager *manager,
           g_clear_object (&device->keyboard_settings);
           g_hash_table_destroy (device->touches);
           gdk_window_destroy (device->foreign_dnd_window);
+          stop_key_repeat (device);
           g_free (device);
 
           break;
