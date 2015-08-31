@@ -97,10 +97,9 @@ main (int   argc,
 
 #ifdef GDK_WINDOWING_X11
   if (GDK_IS_X11_DISPLAY (gdk_display_get_default ())) ;
-    return 0; /* gtk_test functions don't work well elsewhere */
-#else
-  return 0;
+  else
 #endif
+    return 0; /* gtk_test functions don't work well outside X11 */
 
   g_test_add_func ("/expander/click-expander", test_click_expander);
   g_test_add_func ("/expander/click-content-widget", test_click_content_widget);
