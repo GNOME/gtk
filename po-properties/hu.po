@@ -10,15 +10,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-properties master\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-08-26 05:34+0000\n"
-"PO-Revision-Date: 2015-08-27 17:05+0200\n"
-"Last-Translator: Gabor Kelemen <kelemeng at gnome dot hu>\n"
+"POT-Creation-Date: 2015-08-31 09:53+0000\n"
+"PO-Revision-Date: 2015-08-31 19:02+0200\n"
+"Last-Translator: Balázs Úr <urbalazs@gmail.com>\n"
 "Language-Team: Hungarian <openscope at gmail dot com>\n"
 "Language: hu\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Lokalize 1.5\n"
+"X-Generator: Lokalize 1.2\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 #: gdk/gdkapplaunchcontext.c:127 gdk/gdkcursor.c:139
@@ -119,7 +119,6 @@ msgid "The default display for GDK"
 msgstr "A GDK alapértelmezett képernyője"
 
 #: gdk/gdkglcontext.c:265
-#| msgid "The GDK window bound to the GL context"
 msgid "The GDK display used to create the GL context"
 msgstr "A GL környezet létrehozásához használt GDK kijelző"
 
@@ -136,7 +135,6 @@ msgid "Shared context"
 msgstr "Osztott környezet"
 
 #: gdk/gdkglcontext.c:297
-#| msgid "The GL context this context share data with"
 msgid "The GL context this context shares data with"
 msgstr "A GL környezet, amellyel ez a környezet adatot oszt meg"
 
@@ -850,7 +848,7 @@ msgstr "A képernyő, amelyen az állapotikon megjelenik"
 msgid "Whether the status icon is visible"
 msgstr "Látható-e az állapotikon?"
 
-#: gtk/deprecated/gtkstatusicon.c:322 gtk/gtkplug.c:201
+#: gtk/deprecated/gtkstatusicon.c:322 gtk/gtkplug.c:199
 msgid "Embedded"
 msgstr "Beágyazott"
 
@@ -1242,20 +1240,20 @@ msgstr "Licenc tördelése"
 msgid "Whether to wrap the license text."
 msgstr "Tördelje-e a licenc szövegét?"
 
-#: gtk/gtkaccellabel.c:192
+#: gtk/gtkaccellabel.c:193
 msgid "Accelerator Closure"
 msgstr "Gyorsbillentyű keret"
 
-#: gtk/gtkaccellabel.c:193
+#: gtk/gtkaccellabel.c:194
 msgid "The closure to be monitored for accelerator changes"
 msgstr ""
 "Az a keret, amelyre vonatkozóan figyelni kell a gyorsbillentyű változását"
 
-#: gtk/gtkaccellabel.c:199
+#: gtk/gtkaccellabel.c:200
 msgid "Accelerator Widget"
 msgstr "Gyorsbillentyű felületelem"
 
-#: gtk/gtkaccellabel.c:200
+#: gtk/gtkaccellabel.c:201
 msgid "The widget to be monitored for accelerator changes"
 msgstr ""
 "Az a felületelem, amelyre vonatkozóan figyelni kell a gyorsbillentyű "
@@ -3809,7 +3807,7 @@ msgid "The current filter for selecting which files are displayed"
 msgstr "A megjelenítendő fájlok kiválasztására használt aktuális szűrő"
 
 #: gtk/gtkfilechooser.c:388 gtk/gtkplacessidebar.c:4344
-#: gtk/gtkplacesview.c:2178
+#: gtk/gtkplacesview.c:2202
 msgid "Local Only"
 msgstr "Csak helyi"
 
@@ -5390,11 +5388,11 @@ msgstr "Kiválasztandó hely"
 msgid "The location to highlight in the sidebar"
 msgstr "Az oldalsávban kiemelendő hely"
 
-#: gtk/gtkplacessidebar.c:4313 gtk/gtkplacesview.c:2192
+#: gtk/gtkplacessidebar.c:4313 gtk/gtkplacesview.c:2223
 msgid "Open Flags"
 msgstr "Megnyitás jelzői"
 
-#: gtk/gtkplacessidebar.c:4314 gtk/gtkplacesview.c:2193
+#: gtk/gtkplacessidebar.c:4314 gtk/gtkplacesview.c:2224
 msgid ""
 "Modes in which the calling application can open locations selected in the "
 "sidebar"
@@ -5439,7 +5437,7 @@ msgid ""
 "Whether the sidebar includes a builtin shortcut to manually enter a location"
 msgstr "Az oldalsáv tartalmaz-e beépített hivatkozást egy hely megadásához"
 
-#: gtk/gtkplacessidebar.c:4345 gtk/gtkplacesview.c:2179
+#: gtk/gtkplacessidebar.c:4345 gtk/gtkplacesview.c:2203
 msgid "Whether the sidebar only includes local files"
 msgstr "Az oldalsáv csak helyi fájlokat tartalmaz-e"
 
@@ -5448,8 +5446,6 @@ msgid "Show 'Trash'"
 msgstr "„Kuka” megjelenítése"
 
 #: gtk/gtkplacessidebar.c:4351
-#| msgid ""
-#| "Whether the sidebar includes a builtin shortcut to  the Trash location"
 msgid "Whether the sidebar includes a builtin shortcut to the Trash location"
 msgstr "Az oldalsáv tartalmaz-e beépített hivatkozást a Kuka helyére"
 
@@ -5462,19 +5458,25 @@ msgid "Whether the sidebar includes an item to show external locations"
 msgstr "Az oldalsáv tartalmaz-e egy elemet a külső helyek megjelenítéséhez"
 
 #: gtk/gtkplacessidebar.c:4372
-#| msgid "Whether to emit ::populate-popup for touch popups"
 msgid "Whether to emit ::populate-popup for popups that are not menus"
 msgstr "Kiadja-e a ::populate-popup üzenetet a nem menü felugrókhoz"
 
-#: gtk/gtkplacesview.c:2185
-#| msgid "Heading"
+#: gtk/gtkplacesview.c:2209
 msgid "Loading"
 msgstr "Betöltés"
 
-#: gtk/gtkplacesview.c:2186
-#| msgid "Whether the widget should show all applications"
+#: gtk/gtkplacesview.c:2210
 msgid "Whether the view is loading locations"
 msgstr "A nézet helyeket tölt-e be"
+
+#: gtk/gtkplacesview.c:2216
+msgid "Fetching networks"
+msgstr "Hálózatok lekérése"
+
+#: gtk/gtkplacesview.c:2217
+#| msgid "Whether the view is loading locations"
+msgid "Whether the view is fetching networks"
+msgstr "A nézet lekérje-e a hálózatokat"
 
 #: gtk/gtkplacesviewrow.c:181
 msgid "Icon of the row"
@@ -5517,37 +5519,26 @@ msgid "The mount point represented by the row, if any"
 msgstr "A sor által képviselt csatolási pont, ha van"
 
 #: gtk/gtkplacesviewrow.c:216
-#| msgid "Volume represented by the row"
 msgid "File represented by the row"
 msgstr "A sor által képviselt kötet"
 
 #: gtk/gtkplacesviewrow.c:217
-#| msgid "The mount point represented by the row, if any"
 msgid "The file represented by the row, if any"
 msgstr "A sor által képviselt fájl, ha van"
 
 #: gtk/gtkplacesviewrow.c:223 gtk/gtkplacesviewrow.c:224
-#| msgid "Whether the dialog supports selection"
 msgid "Whether the row represents a network location"
 msgstr "A sor hálózati helyet képvisel-e"
 
-#: gtk/gtkplacesviewrow.c:325
-msgid "Disconnect"
-msgstr "Bontás"
-
-#: gtk/gtkplacesviewrow.c:325
-msgid "Unmount"
-msgstr "Leválasztás"
-
-#: gtk/gtkplug.c:202
+#: gtk/gtkplug.c:200
 msgid "Whether the plug is embedded"
 msgstr "A csatoló beágyazott-e"
 
-#: gtk/gtkplug.c:216
+#: gtk/gtkplug.c:214
 msgid "Socket Window"
 msgstr "Foglalat ablaka"
 
-#: gtk/gtkplug.c:217
+#: gtk/gtkplug.c:215
 msgid "The window of the socket the plug is embedded in"
 msgstr "A foglalat ablaka, amelybe a csatoló be van ágyazva"
 
@@ -7378,7 +7369,6 @@ msgid "Whether or not the transition is currently running"
 msgstr "Az átmenet jelenleg fut-e"
 
 #: gtk/gtkstack.c:469
-#| msgid "Indicator size"
 msgid "Interpolate size"
 msgstr "Méret interpolációja"
 
@@ -7766,7 +7756,6 @@ msgid "Extra spacing between graphemes"
 msgstr "A grafémák közti további térköz"
 
 #: gtk/gtktexttag.c:692
-#| msgid "Font stretch"
 msgid "Font Features"
 msgstr "Betűjellemzők"
 
@@ -7907,12 +7896,10 @@ msgid "Whether this tag affects letter spacing"
 msgstr "Ez a címke befolyásolja-e a betűközt"
 
 #: gtk/gtktexttag.c:855
-#| msgid "Font stretch set"
 msgid "Font features set"
 msgstr "Beállított betűjellemzők"
 
 #: gtk/gtktexttag.c:856
-#| msgid "Whether this tag affects font fallback"
 msgid "Whether this tag affects font features"
 msgstr "Az elem befolyásolja-e a betűjellemzőket"
 
@@ -7941,22 +7928,18 @@ msgid "Right Margin"
 msgstr "Jobb oldali margó"
 
 #: gtk/gtktextview.c:870
-#| msgid "Margin"
 msgid "Top Margin"
 msgstr "Felső margó"
 
 #: gtk/gtktextview.c:871
-#| msgid "Width of the left margin in pixels"
 msgid "Height of the top margin in pixels"
 msgstr "A felső margó magassága képpontokban megadva"
 
 #: gtk/gtktextview.c:891
-#| msgid "Bottom Padding"
 msgid "Bottom Margin"
 msgstr "Alsó margó"
 
 #: gtk/gtktextview.c:892
-#| msgid "Width of the left margin in pixels"
 msgid "Height of the bottom margin in pixels"
 msgstr "Az alsó margó magassága képpontokban megadva"
 
@@ -9305,6 +9288,12 @@ msgstr "Színprofil neve"
 #: modules/printbackends/cups/gtkprintercups.c:94
 msgid "The title of the color profile to use"
 msgstr "A használandó színprofil neve"
+
+#~ msgid "Disconnect"
+#~ msgstr "Bontás"
+
+#~ msgid "Unmount"
+#~ msgstr "Leválasztás"
 
 #~ msgid "The GDK display the context is from"
 #~ msgstr "A GDK képernyő, amelyből a környezet érkezik"
