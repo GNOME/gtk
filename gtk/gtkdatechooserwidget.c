@@ -476,6 +476,7 @@ gtk_date_chooser_widget_init (GtkDateChooserWidget *calendar)
 {
   gint row, col;
   GDateTime *now;
+  GtkWidget *label;
 
   calendar->show_heading = TRUE;
   calendar->show_day_names = TRUE;
@@ -514,9 +515,19 @@ gtk_date_chooser_widget_init (GtkDateChooserWidget *calendar)
       gtk_grid_attach (GTK_GRID (calendar->grid), calendar->rows[row], -1, row, 1, 1);
     }
 
-  calendar->corner = gtk_label_new ("");
-  gtk_style_context_add_class (gtk_widget_get_style_context (calendar->corner), "weekday");
+  /* We are using a stack here to keep the week number column from shrinking
+   * when all the weeks are single-digit
+   */
+  calendar->corner = gtk_stack_new ();
   gtk_grid_attach (GTK_GRID (calendar->grid), calendar->corner, -1, -1, 1, 1);
+  label = gtk_label_new ("");
+  gtk_widget_show (label);
+  gtk_style_context_add_class (gtk_widget_get_style_context (label), "weekday");
+  gtk_container_add (GTK_CONTAINER (calendar->corner), label);
+
+  label = gtk_label_new ("99");
+  gtk_style_context_add_class (gtk_widget_get_style_context (label), "weeknum");
+  gtk_container_add (GTK_CONTAINER (calendar->corner), label);
 
   calendar->day_grid = gtk_grid_new ();
   gtk_widget_show (calendar->day_grid);
