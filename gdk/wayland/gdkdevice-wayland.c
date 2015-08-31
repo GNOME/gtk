@@ -1165,6 +1165,8 @@ keyboard_handle_enter (void               *data,
   _gdk_wayland_display_deliver_event (device->display, event);
 }
 
+static void stop_key_repeat (GdkWaylandDeviceData *device);
+
 static void
 keyboard_handle_leave (void               *data,
                        struct wl_keyboard *keyboard,
