@@ -4855,7 +4855,7 @@ set_invisible_cursor (GdkWindow *window)
  
   gdk_window_set_cursor (window, cursor);
   
-  g_object_unref (cursor);
+  g_clear_object (&cursor);
 }
 
 static void
@@ -9831,7 +9831,7 @@ text_window_realize (GtkTextWindow *win,
           display = gdk_window_get_display (window);
           cursor = gdk_cursor_new_from_name (display, "text");
           gdk_window_set_cursor (win->bin_window, cursor);
-          g_object_unref (cursor);
+          g_clear_object (&cursor);
         }
 
       gtk_im_context_set_client_window (GTK_TEXT_VIEW (widget)->priv->im_context,
