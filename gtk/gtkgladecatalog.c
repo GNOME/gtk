@@ -23,9 +23,11 @@
 #include "config.h"
 
 #include "gtkpathbar.h"
+#include "gtkplacesviewprivate.h"
 #include "gtkcolorswatchprivate.h"
 #include "gtkcolorplaneprivate.h"
 #include "gtkcolorscaleprivate.h"
+#include "gtkcoloreditorprivate.h"
 
 #ifdef G_OS_UNIX
 #  include "gtkprinteroptionwidget.h"
@@ -42,9 +44,11 @@ void
 gtk_glade_catalog_init (const gchar *catalog_name)
 {
   g_type_ensure (GTK_TYPE_PATH_BAR);
+  g_type_ensure (GTK_TYPE_PLACES_VIEW);
   g_type_ensure (GTK_TYPE_COLOR_SWATCH);
   g_type_ensure (GTK_TYPE_COLOR_PLANE);
   g_type_ensure (GTK_TYPE_COLOR_SCALE);
+  g_type_ensure (GTK_TYPE_COLOR_EDITOR);
 
 #ifdef G_OS_UNIX
   g_type_ensure (GTK_TYPE_PRINTER_OPTION_WIDGET);
