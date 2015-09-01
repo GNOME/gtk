@@ -4485,9 +4485,15 @@ GtkColorSwatch {
   background-color: #4a90d9;
   color: #ffffff;
   outline-color: rgba(255, 255, 255, 0.3); }
+  .view:insensitive:selected, GtkCalendar:insensitive:selected, .label:insensitive:selected, .grid-child:insensitive:selected, .entry:insensitive:selected, .menuitem.button.flat:insensitive:selected, .menuitem.sidebar-button.button:insensitive:selected, .header-bar .menuitem.titlebutton.button:insensitive:selected,
+  .titlebar .menuitem.titlebutton.button:insensitive:selected, .list-row:insensitive:selected, .sidebar:insensitive:selected, GtkPlacesSidebar.sidebar .list-row:selected:insensitive .label {
+    color: #a5c8ec; }
   .view:backdrop:selected, GtkCalendar:backdrop:selected, .label:backdrop:selected, .grid-child:backdrop:selected, .entry:backdrop:selected, .menuitem.button.flat:backdrop:selected, .menuitem.sidebar-button.button:backdrop:selected, .header-bar .menuitem.titlebutton.button:backdrop:selected,
   .titlebar .menuitem.titlebutton.button:backdrop:selected, .list-row:backdrop:selected, .sidebar:backdrop:selected {
     color: #ffffff; }
+    .view:backdrop:insensitive:selected, GtkCalendar:backdrop:insensitive:selected, .label:backdrop:insensitive:selected, .grid-child:backdrop:insensitive:selected, .entry:backdrop:insensitive:selected, .menuitem.button.flat:backdrop:insensitive:selected, .menuitem.sidebar-button.button:backdrop:insensitive:selected, .header-bar .menuitem.titlebutton.button:backdrop:insensitive:selected,
+    .titlebar .menuitem.titlebutton.button:backdrop:insensitive:selected, .list-row:backdrop:insensitive:selected, .sidebar:backdrop:insensitive:selected, GtkPlacesSidebar.sidebar .list-row:selected:insensitive .label:backdrop, GtkPlacesSidebar.sidebar .list-row:selected:backdrop:insensitive .label {
+      color: #80b1e4; }
 
 .monospace {
   font: Monospace; }

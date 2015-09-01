@@ -2902,6 +2902,10 @@ GtkPlacesSidebar.sidebar {
   // in the sidebar case it makes no sense to click the selected row
   .list-row:selected:active { box-shadow: none; }
 
+   // looks like the label doesn't get all the states so work around
+  .list-row:selected:insensitive .label { @extend %selected_items:insensitive; }
+  .list-row:selected:backdrop:insensitive .label { @extend %selected_items:backdrop:insensitive; }
+
   .sidebar-placeholder-row {
     border: solid 1px $selected_bg_color;
   }
@@ -3298,7 +3302,13 @@ GtkVolumeButton.button {
   @if $variant == 'light' {
     outline-color: transparentize($selected_fg_color, 0.7);
   }
-  &:backdrop { color: $backdrop_selected_fg_color; }
+  &:insensitive { color: mix($selected_fg_color, $selected_bg_color, 50%); }
+  &:backdrop {
+    color: $backdrop_selected_fg_color;
+    &:insensitive {
+      color: mix($backdrop_selected_fg_color, $selected_bg_color, 30%);
+    }
+  }
 }
 
 .monospace {
