@@ -3241,7 +3241,7 @@ GtkCheckButton.text-button, GtkRadioButton.text-button {
   -GtkScale-slider-length: 20;
   -GtkRange-slider-width: 24;
   -GtkRange-trough-border: 2;
-  color: rgba(46, 52, 54, 0.3); }
+  color: alpha(currentColor,0.5); }
   .scale.scale-has-marks-below.slider {
     border-style: none;
     border-radius: 0;
@@ -3295,7 +3295,7 @@ GtkCheckButton.text-button, GtkRadioButton.text-button {
   -GtkScale-slider-length: 20;
   -GtkRange-slider-width: 24;
   -GtkRange-trough-border: 2;
-  color: rgba(46, 52, 54, 0.3); }
+  color: alpha(currentColor,0.5); }
   .scale.scale-has-marks-above.slider {
     border-style: none;
     border-radius: 0;
@@ -3349,7 +3349,7 @@ GtkCheckButton.text-button, GtkRadioButton.text-button {
   -GtkScale-slider-length: 20;
   -GtkRange-slider-width: 24;
   -GtkRange-trough-border: 2;
-  color: rgba(46, 52, 54, 0.3); }
+  color: alpha(currentColor,0.5); }
   .scale.vertical.scale-has-marks-below.slider {
     border-style: none;
     border-radius: 0;
@@ -3403,7 +3403,7 @@ GtkCheckButton.text-button, GtkRadioButton.text-button {
   -GtkScale-slider-length: 20;
   -GtkRange-slider-width: 24;
   -GtkRange-trough-border: 2;
-  color: rgba(46, 52, 54, 0.3); }
+  color: alpha(currentColor,0.5); }
   .scale.vertical.scale-has-marks-above.slider {
     border-style: none;
     border-radius: 0;
