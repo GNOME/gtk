@@ -3625,7 +3625,7 @@ GtkScrolledWindow GtkViewport.frame {
   padding: 2px; }
 
 .list-row.activatable:hover {
-  background-color: whitesmoke; }
+  background-color: rgba(46, 52, 54, 0.05); }
 .list-row.activatable:active {
   box-shadow: inset 0 2px 2px -2px rgba(0, 0, 0, 0.2); }
 .list-row.activatable:backdrop:hover {
@@ -4104,23 +4104,16 @@ GtkSidebarRow .sidebar-label:dir(ltr) {
 GtkSidebarRow .sidebar-label:dir(rtl) {
   padding-left: 2px; }
 
+GtkPlacesSidebar.sidebar .list-row:selected:active {
+  box-shadow: none; }
 GtkPlacesSidebar.sidebar .sidebar-placeholder-row {
   border: solid 1px #4a90d9; }
 GtkPlacesSidebar.sidebar .sidebar-new-bookmark-row {
-  background-color: #d9d9d9; }
-.list-row.button:hover {
-  background-color: #dadbdb; }
+  color: #4a90d9; }
 .sidebar-button.button, .header-bar .sidebar-button.button.titlebutton,
 .titlebar .sidebar-button.button.titlebutton {
   border-radius: 100%;
-  outline-radius: 100%;
-  /*    &:hover:not(:active):not(:backdrop) {
-        background-image: none;
-        background-color: gtkalpha(currentColor, 0.1);
-        border-color: transparentize($borders_color, 1);
-        box-shadow: inset 0 0 transparentize(white, 1);
-        icon-shadow: none;
-      } */ }
+  outline-radius: 100%; }
   .sidebar-button.button.image-button, GtkScaleButton.sidebar-button.button,
   GtkVolumeButton.sidebar-button.button, .header-bar .sidebar-button.titlebutton.button,
   .titlebar .sidebar-button.titlebutton.button {
