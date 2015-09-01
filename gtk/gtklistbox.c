@@ -3752,8 +3752,9 @@ gtk_list_box_check_model_compat (GtkListBox *box)
 /**
  * gtk_list_box_bind_model:
  * @box: a #GtkListBox
- * @model: (allow-none): the #GListModel to be bound to @box
- * @create_widget_func: a function that creates widgets for items
+ * @model: (nullable): the #GListModel to be bound to @box
+ * @create_widget_func: (nullable): a function that creates widgets for items
+ *   or %NULL in case you also passed %NULL as @model
  * @user_data: user data passed to @create_widget_func
  * @user_data_free_func: function for freeing @user_data
  *
