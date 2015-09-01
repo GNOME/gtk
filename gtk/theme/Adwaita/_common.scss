@@ -2557,7 +2557,7 @@ GtkScrolledWindow {
  * Lists *
  *********/
 
-.list, .list-row {
+.list {
   background-color: $base_color;
   border-color: $borders_color;
   &:backdrop {

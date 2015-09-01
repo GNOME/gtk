@@ -3613,10 +3613,10 @@ GtkScrolledWindow GtkViewport.frame {
 /*********
  * Lists *
  *********/
-.list, .list-row {
+.list {
   background-color: #ffffff;
   border-color: #a1a1a1; }
-  .list:backdrop, .list-row:backdrop {
+  .list:backdrop {
     background-color: white;
     border-color: darkgray; }
 
