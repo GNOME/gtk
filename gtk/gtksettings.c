@@ -1311,7 +1311,7 @@ gtk_settings_class_init (GtkSettingsClass *class)
   g_assert (result == PROP_APPLICATION_PREFER_DARK_THEME);
 
   /**
-   * GtkSettings::gtk-button-images:
+   * GtkSettings:gtk-button-images:
    *
    * Whether images should be shown on buttons
    *
@@ -1361,7 +1361,7 @@ gtk_settings_class_init (GtkSettingsClass *class)
   g_assert (result == PROP_ENTRY_PASSWORD_HINT_TIMEOUT);
 
   /**
-   * GtkSettings::gtk-menu-images:
+   * GtkSettings:gtk-menu-images:
    *
    * Whether images should be shown in menu items
    *
