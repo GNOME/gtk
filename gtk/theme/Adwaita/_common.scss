@@ -980,8 +980,6 @@ GtkComboBox {
   -GtkComboBox-arrow-scaling: 0.5;
   -GtkComboBox-shadow-type: none;
 
-  box-shadow: 0 1px $borders_edge;
-
   @include _button_text_shadow;
 
   &:insensitive {

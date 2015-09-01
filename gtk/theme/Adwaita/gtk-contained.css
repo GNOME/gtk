@@ -1461,7 +1461,6 @@ GtkTreeView .spinbutton.entry, GtkTreeView .spinbutton.entry:focus {
 GtkComboBox {
   -GtkComboBox-arrow-scaling: 0.5;
   -GtkComboBox-shadow-type: none;
-  box-shadow: 0 1px white;
   text-shadow: 0 1px rgba(255, 255, 255, 0.76923);
   icon-shadow: 0 1px rgba(255, 255, 255, 0.76923); }
   GtkComboBox > .the-button-in-the-combobox {
