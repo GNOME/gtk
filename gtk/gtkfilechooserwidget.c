@@ -8571,6 +8571,8 @@ gtk_file_chooser_widget_init (GtkFileChooserWidget *impl)
    * definition before calling gtk_widget_init_template()
    */
   g_type_ensure (GTK_TYPE_PATH_BAR);
+  g_type_ensure (GTK_TYPE_PLACES_VIEW);
+
   gtk_widget_init_template (GTK_WIDGET (impl));
   gtk_widget_set_size_request (priv->browse_files_tree_view, 280, -1);
 
