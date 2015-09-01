@@ -11,8 +11,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-properties\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-08-29 21:54+0000\n"
-"PO-Revision-Date: 2015-08-30 08:39+0200\n"
+"POT-Creation-Date: 2015-08-31 21:53+0000\n"
+"PO-Revision-Date: 2015-09-01 10:49+0200\n"
 "Last-Translator: Dušan Kazik <prescott66@gmail.com>\n"
 "Language-Team: slovenčina <>\n"
 "Language: sk\n"
@@ -122,10 +122,9 @@ msgid "The default display for GDK"
 msgstr "Predvolený displej pre GDK"
 
 #: gdk/gdkglcontext.c:265
-#, fuzzy
 #| msgid "The GDK window bound to the GL context"
 msgid "The GDK display used to create the GL context"
-msgstr "Okno GDK previazané na kontext GL"
+msgstr "Displej GDK použitý na vytvorenie kontextu GL"
 
 #: gdk/gdkglcontext.c:280 gtk/gtkwidget.c:1454
 msgid "Window"
@@ -1534,7 +1533,6 @@ msgid "Force aspect ratio to match that of the frame's child"
 msgstr "Vynútiť, aby pomer strán zodpovedal rámcu potomka"
 
 #: gtk/gtkassistant.c:522 gtk/gtkdialog.c:652
-#| msgid "Header image"
 msgid "Use Header Bar"
 msgstr "Použiť panel so záhlavím"
 
@@ -2850,10 +2848,9 @@ msgid "The GtkCellAreaContext used to compute the geometry of the cell view"
 msgstr ""
 
 #: gtk/gtkcellview.c:296
-#, fuzzy
 #| msgid "Sensitive"
 msgid "Draw Sensitive"
-msgstr "Citlivá"
+msgstr "Citlivosť kreslenia"
 
 #: gtk/gtkcellview.c:297
 #, fuzzy
@@ -2862,10 +2859,9 @@ msgid "Whether to force cells to be drawn in a sensitive state"
 msgstr "Či majú byť zobrazené čiary v stromovom pohľade"
 
 #: gtk/gtkcellview.c:315
-#, fuzzy
 #| msgid "Model"
 msgid "Fit Model"
-msgstr "Vzor"
+msgstr "Prispôsobiť model"
 
 #: gtk/gtkcellview.c:316
 msgid "Whether to request enough space for every row in the model"
@@ -3785,7 +3781,6 @@ msgstr ""
 "priestor"
 
 #: gtk/gtkexpander.c:333
-#| msgid "Resize mode"
 msgid "Resize toplevel"
 msgstr "Zmeniť veľkosť na najvyššej úrovni"
 
@@ -3840,7 +3835,7 @@ msgid "The current filter for selecting which files are displayed"
 msgstr "Aktuálny filter pre výber zobrazovaných súborov"
 
 #: gtk/gtkfilechooser.c:388 gtk/gtkplacessidebar.c:4344
-#: gtk/gtkplacesview.c:2178
+#: gtk/gtkplacesview.c:2202
 msgid "Local Only"
 msgstr "Len miestne"
 
@@ -4127,7 +4122,6 @@ msgid "Whether the gesture handles only touch events"
 msgstr "Určuje, či má gesto spracovať iba dotykové udalosti"
 
 #: gtk/gtkgesturesingle.c:277 gtk/gtkgesturesingle.c:278
-#| msgid "Whether the spinner is active"
 msgid "Whether the gesture is exclusive"
 msgstr "Určuje, či je gesto výhradné"
 
@@ -5445,11 +5439,11 @@ msgstr "Umiestnenie na vybratie"
 msgid "The location to highlight in the sidebar"
 msgstr "Umiestnenie, ktoré sa má zvýrazniť v bočnom paneli"
 
-#: gtk/gtkplacessidebar.c:4313 gtk/gtkplacesview.c:2192
+#: gtk/gtkplacessidebar.c:4313 gtk/gtkplacesview.c:2223
 msgid "Open Flags"
 msgstr "Otváracie príznaky"
 
-#: gtk/gtkplacessidebar.c:4314 gtk/gtkplacesview.c:2193
+#: gtk/gtkplacessidebar.c:4314 gtk/gtkplacesview.c:2224
 msgid ""
 "Modes in which the calling application can open locations selected in the "
 "sidebar"
@@ -5501,7 +5495,7 @@ msgstr ""
 "Určuje, či má bočný panel obsahovať zabudovanú skratku k ručnému zadaniu "
 "umiestnenia"
 
-#: gtk/gtkplacessidebar.c:4345 gtk/gtkplacesview.c:2179
+#: gtk/gtkplacessidebar.c:4345 gtk/gtkplacesview.c:2203
 msgid "Whether the sidebar only includes local files"
 msgstr "Určuje, či má bočný panel obsahovať iba miestne súbory"
 
@@ -5520,7 +5514,6 @@ msgstr ""
 "umiestnenia"
 
 #: gtk/gtkplacessidebar.c:4356
-#| msgid "Show 'Enter Location'"
 msgid "Show 'Other locations'"
 msgstr "Zobraziť „Ostatné umiestnenia“"
 
@@ -5538,14 +5531,24 @@ msgstr ""
 msgid "Whether to emit ::populate-popup for popups that are not menus"
 msgstr ""
 
-#: gtk/gtkplacesview.c:2185
+#: gtk/gtkplacesview.c:2209
 msgid "Loading"
 msgstr "Načítava sa"
 
-#: gtk/gtkplacesview.c:2186
+#: gtk/gtkplacesview.c:2210
 #, fuzzy
 #| msgid "Whether the widget should show all applications"
 msgid "Whether the view is loading locations"
+msgstr "Určuje, či má ovládací prvok zobraziť všetky aplikácie"
+
+#: gtk/gtkplacesview.c:2216
+msgid "Fetching networks"
+msgstr ""
+
+#: gtk/gtkplacesview.c:2217
+#, fuzzy
+#| msgid "Whether the widget should show all applications"
+msgid "Whether the view is fetching networks"
 msgstr "Určuje, či má ovládací prvok zobraziť všetky aplikácie"
 
 #: gtk/gtkplacesviewrow.c:181
@@ -5965,7 +5968,7 @@ msgstr "Položka GtkPrinter, ktorá je vybraná"
 
 #: gtk/gtkprintunixdialog.c:440
 msgid "Manual Capabilities"
-msgstr ""
+msgstr "Ručné schopnosti"
 
 #: gtk/gtkprintunixdialog.c:441
 msgid "Capabilities the application can handle"
@@ -6065,9 +6068,8 @@ msgid "The minimum vertical height of the progress bar"
 msgstr "Minimálna výška zvislého indikátora priebehu"
 
 #: gtk/gtkradiobutton.c:165
-#, fuzzy
 msgid "The radio button whose group this widget belongs to."
-msgstr "Skupina, do ktorej tento prepínač patrí."
+msgstr "Rádiové tlačidlo, do ktorého skupiny patrí tento ovládací prvok."
 
 #: gtk/gtkradiomenuitem.c:413
 #, fuzzy
@@ -7261,7 +7263,7 @@ msgstr ""
 
 #: gtk/gtksettings.c:1551
 msgid "Desktop environment shows the desktop folder"
-msgstr ""
+msgstr "Pracovné prostredie zobrazuje priečinok plochy"
 
 #: gtk/gtksettings.c:1552
 msgid ""
@@ -7271,27 +7273,29 @@ msgstr ""
 
 #: gtk/gtksettings.c:1606
 msgid "Titlebar double-click action"
-msgstr ""
+msgstr "Akcia po dvojitom kliknutí na lištu s titulkom"
 
 #: gtk/gtksettings.c:1607
 msgid "The action to take on titlebar double-click"
-msgstr ""
+msgstr "Akcia, ktorá sa má vykonať po dvojitom kliknutí na lištu s titulkom"
 
 #: gtk/gtksettings.c:1625
 msgid "Titlebar middle-click action"
-msgstr ""
+msgstr "Akcia po kliknutí stredným tlačidlom na lištu s titulkom"
 
 #: gtk/gtksettings.c:1626
 msgid "The action to take on titlebar middle-click"
 msgstr ""
+"Akcia, ktorá sa má vykonať po kliknutí stredným tlačidlom na lištu s titulkom"
 
 #: gtk/gtksettings.c:1644
 msgid "Titlebar right-click action"
-msgstr ""
+msgstr "Akcia po kliknutí pravým tlačidlom na lištu s titulkom"
 
 #: gtk/gtksettings.c:1645
 msgid "The action to take on titlebar right-click"
 msgstr ""
+"Akcia, ktorá sa má vykonať po kliknutí pravým tlačidlom na lištu s titulkom"
 
 #: gtk/gtksettings.c:1667
 msgid "Dialogs use header bar"
@@ -7574,20 +7578,18 @@ msgid "The backend state"
 msgstr "Stav obslužného programu"
 
 #: gtk/gtkswitch.c:926
-#, fuzzy
 #| msgid "The minimum value of the adjustment"
 msgid "The minimum width of the handle"
-msgstr "Minimálna hodnota nastavenia"
+msgstr "Minimálna šírka ovládača"
 
 #: gtk/gtkswitch.c:940
 msgid "Slider Height"
 msgstr "Výška posuvníka"
 
 #: gtk/gtkswitch.c:941
-#, fuzzy
 #| msgid "The minimum value of the adjustment"
 msgid "The minimum height of the handle"
-msgstr "Minimálna hodnota nastavenia"
+msgstr "Minimálna výška ovládača"
 
 #: gtk/gtktextbuffer.c:199
 msgid "Tag Table"
@@ -7868,7 +7870,7 @@ msgstr "Rozostupy písmen"
 
 #: gtk/gtktexttag.c:678
 msgid "Extra spacing between graphemes"
-msgstr ""
+msgstr "Priestor navyše medzi grafémami"
 
 #: gtk/gtktexttag.c:692
 #, fuzzy
@@ -7954,20 +7956,18 @@ msgid "Underline RGBA set"
 msgstr "Podčiarknutie RGBA je nastavené"
 
 #: gtk/gtktexttag.c:817
-#, fuzzy
 #| msgid "Whether this tag affects underlining"
 msgid "Whether this tag affects underlining color"
-msgstr "Určuje, či táto značka ovplyvňuje podčiarknutie"
+msgstr "Určuje, či táto značka ovplyvňuje farbu podčiarknutia"
 
 #: gtk/gtktexttag.c:827
 msgid "Strikethrough RGBA set"
 msgstr "Prečiarknutie RGBA je nastavené"
 
 #: gtk/gtktexttag.c:828
-#, fuzzy
 #| msgid "Whether this tag affects strikethrough"
 msgid "Whether this tag affects strikethrough color"
-msgstr "Určuje, či táto značka ovplyvňuje prečiarknutie"
+msgstr "Určuje, či táto značka ovplyvňuje farbu prečiarknutia"
 
 #: gtk/gtktexttag.c:831
 msgid "Wrap mode set"
@@ -8018,10 +8018,9 @@ msgid "Letter spacing set"
 msgstr "Rozostup písmen je nastavený"
 
 #: gtk/gtktexttag.c:852
-#, fuzzy
 #| msgid "Whether this tag affects the left margin"
 msgid "Whether this tag affects letter spacing"
-msgstr "Určuje, či táto značka ovplyvňuje ľavý odstup"
+msgstr "Určuje, či táto značka ovplyvňuje rozostup písma"
 
 #: gtk/gtktexttag.c:855
 #, fuzzy
@@ -8122,9 +8121,8 @@ msgid "Color with which to draw error-indication underlines"
 msgstr "Farba, ktorou sa budú podčiarkovať chyby"
 
 #: gtk/gtktogglebutton.c:180 gtk/gtktoggletoolbutton.c:128
-#, fuzzy
 msgid "If the toggle button should be pressed in"
-msgstr "Či má byť tlačidlo stlačené alebo nie"
+msgstr "Či má byť prepínacie tlačidlo stlačené"
 
 #: gtk/gtktogglebutton.c:188
 msgid "If the toggle button is in an \"in between\" state"
@@ -8274,9 +8272,8 @@ msgid "The human-readable title of this item group"
 msgstr "Ľuďom zrozumiteľný názov tejto skupiny položiek"
 
 #: gtk/gtktoolitemgroup.c:1613
-#, fuzzy
 msgid "A widget to display in place of the usual label"
-msgstr "Prvok použitý pre zobrazenie namiesto obvyklého popisu rámu"
+msgstr "Prvok použitý pre zobrazenie namiesto obvyklého označenia"
 
 #: gtk/gtktoolitemgroup.c:1619
 msgid "Collapsed"
@@ -8348,10 +8345,10 @@ msgid "Whether the item group should be the only expanded at a given time"
 msgstr "Či sa majú položky zobrazovať aj s číslami"
 
 #: gtk/gtktoolpalette.c:1024
-#, fuzzy
 msgid ""
 "Whether the item group should receive extra space when the palette grows"
-msgstr "Či má potomok dostať extra priestor, ak sa rodič zväčší"
+msgstr ""
+"Určuje, či má skupina položiek obdržať priestor navyše, keď sa paleta zväčší"
 
 #: gtk/gtktreemenu.c:265
 msgid "TreeMenu model"
