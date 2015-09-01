@@ -11,8 +11,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-properties master\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-08-28 09:55+0000\n"
-"PO-Revision-Date: 2015-08-28 21:19+0800\n"
+"POT-Creation-Date: 2015-08-31 21:53+0000\n"
+"PO-Revision-Date: 2015-09-01 16:01+0700\n"
 "Last-Translator: Andika Triwidada <andika@gmail.com>\n"
 "Language-Team: Indonesian <gnome@i15n.org>\n"
 "Language: id\n"
@@ -21,7 +21,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 "X-Poedit-SourceCharset: UTF-8\n"
-"X-Generator: Poedit 1.7.1\n"
+"X-Generator: Poedit 1.6.10\n"
 
 #: gdk/gdkapplaunchcontext.c:127 gdk/gdkcursor.c:139
 #: gdk/gdkdevicemanager.c:181 gdk/gdkglcontext.c:264
@@ -850,7 +850,7 @@ msgstr "Layar dimana ikon status akan ditampilkan"
 msgid "Whether the status icon is visible"
 msgstr "Apakah ikon status nampak"
 
-#: gtk/deprecated/gtkstatusicon.c:322 gtk/gtkplug.c:201
+#: gtk/deprecated/gtkstatusicon.c:322 gtk/gtkplug.c:199
 msgid "Embedded"
 msgstr "Tertanam"
 
@@ -1244,19 +1244,19 @@ msgstr "Lipat lisensi"
 msgid "Whether to wrap the license text."
 msgstr "Apakah teks lisensi dilipat."
 
-#: gtk/gtkaccellabel.c:192
+#: gtk/gtkaccellabel.c:193
 msgid "Accelerator Closure"
 msgstr "Penutup Akselerator"
 
-#: gtk/gtkaccellabel.c:193
+#: gtk/gtkaccellabel.c:194
 msgid "The closure to be monitored for accelerator changes"
 msgstr "Penutup yang dipantau untuk perubahan akselerator"
 
-#: gtk/gtkaccellabel.c:199
+#: gtk/gtkaccellabel.c:200
 msgid "Accelerator Widget"
 msgstr "Widget Akselerator"
 
-#: gtk/gtkaccellabel.c:200
+#: gtk/gtkaccellabel.c:201
 msgid "The widget to be monitored for accelerator changes"
 msgstr "Widget yang dipantau untuk perubahan akselerator"
 
@@ -3811,7 +3811,7 @@ msgid "The current filter for selecting which files are displayed"
 msgstr "Saringan yang telah dipergunakan untuk memilih berkas yang ditampilkan"
 
 #: gtk/gtkfilechooser.c:388 gtk/gtkplacessidebar.c:4344
-#: gtk/gtkplacesview.c:2178
+#: gtk/gtkplacesview.c:2202
 msgid "Local Only"
 msgstr "Pada Komputer Ini Saja"
 
@@ -5393,11 +5393,11 @@ msgstr "Lokasi untu Dipilih"
 msgid "The location to highlight in the sidebar"
 msgstr "Lokasi yang akan disorot di bilah sisi"
 
-#: gtk/gtkplacessidebar.c:4313 gtk/gtkplacesview.c:2192
+#: gtk/gtkplacessidebar.c:4313 gtk/gtkplacesview.c:2223
 msgid "Open Flags"
 msgstr "Flag Buka"
 
-#: gtk/gtkplacessidebar.c:4314 gtk/gtkplacesview.c:2193
+#: gtk/gtkplacessidebar.c:4314 gtk/gtkplacesview.c:2224
 msgid ""
 "Modes in which the calling application can open locations selected in the "
 "sidebar"
@@ -5444,7 +5444,7 @@ msgstr ""
 "Apakah bilah sisi memuat pintasan bawaan ke memasukkan suatu lokasi secara "
 "manual"
 
-#: gtk/gtkplacessidebar.c:4345 gtk/gtkplacesview.c:2179
+#: gtk/gtkplacessidebar.c:4345 gtk/gtkplacesview.c:2203
 msgid "Whether the sidebar only includes local files"
 msgstr "Apakah bilah sisi hanya menyertakan berkas lokal"
 
@@ -5468,13 +5468,21 @@ msgstr "Apakah bilah sisi memuat butir untuk menampilkan lokasi eksternal"
 msgid "Whether to emit ::populate-popup for popups that are not menus"
 msgstr "Apakah memancarkan ::populate-popup bagi popup yang bukan menu"
 
-#: gtk/gtkplacesview.c:2185
+#: gtk/gtkplacesview.c:2209
 msgid "Loading"
 msgstr "Memuat"
 
-#: gtk/gtkplacesview.c:2186
+#: gtk/gtkplacesview.c:2210
 msgid "Whether the view is loading locations"
 msgstr "Apakah tilikan adalah lokasi muat"
+
+#: gtk/gtkplacesview.c:2216
+msgid "Fetching networks"
+msgstr "Mengambil jaringan"
+
+#: gtk/gtkplacesview.c:2217
+msgid "Whether the view is fetching networks"
+msgstr "Apakah tilikan adalah mengambil jaringan"
 
 #: gtk/gtkplacesviewrow.c:181
 msgid "Icon of the row"
@@ -5528,15 +5536,15 @@ msgstr "Berkas yang diwakili oleh baris, bila ada"
 msgid "Whether the row represents a network location"
 msgstr "Apakah baris mewakili suatu lokasi jaringan"
 
-#: gtk/gtkplug.c:202
+#: gtk/gtkplug.c:200
 msgid "Whether the plug is embedded"
 msgstr "Apakah penutup tertanam"
 
-#: gtk/gtkplug.c:216
+#: gtk/gtkplug.c:214
 msgid "Socket Window"
 msgstr "Jendela Soket"
 
-#: gtk/gtkplug.c:217
+#: gtk/gtkplug.c:215
 msgid "The window of the socket the plug is embedded in"
 msgstr "Jendela tempat penutup ditanamkan pada soket"
 
