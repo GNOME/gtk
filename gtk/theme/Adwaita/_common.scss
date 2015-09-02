@@ -2165,6 +2165,7 @@ GtkSwitch {
   background-color: darken($bg_color,7%);
   &:hover { -gtk-image-effect: highlight; }
   &:backdrop { background-color: darken($bg_color,7%); }
+  &.rubberband { @extend .rubberband; }
 }
 
 //selection-mode
