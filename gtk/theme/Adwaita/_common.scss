@@ -2882,7 +2882,6 @@ GtkFileChooserDialog {
 
 .sidebar {
   border: none;
-  // Popover background color
   background-color: mix($bg_color, $base_color, 50%);
 
   &:backdrop {

@@ -4118,7 +4118,7 @@ GtkFileChooserDialog .dialog-action-box {
   border: none;
   background-color: #f6f6f6; }
   .sidebar:backdrop {
-    background-color: #f2f2f2; }
+    background-color: #f6f6f6; }
 
 GtkSidebarRow.list-row {
   padding: 0px; }
