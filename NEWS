@@ -1,3 +1,68 @@
+Overview of Changes in GTK+ 3.17.8
+==================================
+
+* GtkFileChooser:
+ - Show network:/// in the places view
+ - Provide better loading feedback
+
+* GtkTextView
+ - Fix fallout from margin/padding addition
+
+* GtkOverlay
+ - Always align widgets relative to the overlay, not to the
+   main widget
+
+* GtkListBox
+ - Support focusable headers
+
+* Theme
+ - Improve performance of GtkListBox
+ - Better GtkCalendar theming
+
+* Wayland:
+ - Make most tests work under Wayland
+ - Closing displays works now
+ - Fix key repeat sometimes running wild
+
+* Bug fixes:
+
+ 345345 PrintOperation::paginate is not emitted for class handler
+ 736125 The default gtk accelerator mod mask does not include all  ...
+ 752615 listbox: Model items changed doesn't take sorting into account
+ 753185 gdk_device_get_source: assertion 'GDK_IS_DEVICE (device)' f...
+ 753357 [HighContrast] Days of a different month in GtkCalendar sho...
+ 753495 Kinetic scrolling events still reach the GtkScrolledWindow
+ 753644 Switching from Multipress input method to None immediately ...
+ 753694 GtkListBox: Assumes all focusable widgets are GtkListBoxRow...
+ 753786 Implement high priority improvements for gtkplacesview
+ 753815 scroll fix with margin/padding
+ 753856 wayland: Only bind supported unstable pointer gestures global
+ 753925 Remote volumes and mounts get shuffled around
+ 753969 check if a folder is accessible
+ 754022 Remote locations have different actions (and icons)
+ 754086 String marked as properties
+ 754133 Gtk:ERROR:gtkfilechooserwidget.c:8495:post_process_ui: asse...
+ 754150 places view network header spinner is borked
+ 754158 wayland: Don't broadcast selection owner changes
+ 754410 "Open" popover item on selected sidebar row does nothing
+ 754421 settings: annotatiion typos suppress deprecation notices fo...
+
+* Translation updates
+ Catalan
+ Chinese (Taiwan)
+ Galician
+ Greek
+ Hebrew
+ Hungarian
+ Indonesian
+ Lithuanian
+ Polish
+ Portuguese
+ Slovak
+ Spanish
+ Turkish
+
+
 Overview of Changes in GTK+ 3.17.7
 ==================================
 
