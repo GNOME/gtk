@@ -2081,6 +2081,8 @@ check_popover_sensitivity (GtkSidebarRow *row,
   action = g_action_map_lookup_action (G_ACTION_MAP (actions), "rename");
   g_simple_action_set_enabled (G_SIMPLE_ACTION (action), (type == PLACES_BOOKMARK ||
                                                           type == PLACES_XDG_DIR));
+  action = g_action_map_lookup_action (G_ACTION_MAP (actions), "open");
+  g_simple_action_set_enabled (G_SIMPLE_ACTION (action), !gtk_list_box_row_is_selected (GTK_LIST_BOX_ROW (row)));
 
   check_visibility (mount, volume, drive,
                     &show_mount, &show_unmount, &show_eject, &show_rescan, &show_start, &show_stop);
