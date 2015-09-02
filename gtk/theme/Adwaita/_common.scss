@@ -2161,9 +2161,9 @@ GtkSwitch {
 }
 
 //content view (grid/list)
-
 .content-view {
   background-color: darken($bg_color,7%);
+  &:hover { -gtk-image-effect: highlight; }
   &:backdrop { background-color: darken($bg_color,7%); }
 }
 

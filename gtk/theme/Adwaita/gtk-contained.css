@@ -2985,6 +2985,8 @@ GtkSwitch {
 
 .content-view {
   background-color: #dbdbdb; }
+  .content-view:hover {
+    -gtk-image-effect: highlight; }
   .content-view:backdrop {
     background-color: #dbdbdb; }
 

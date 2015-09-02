@@ -2823,6 +2823,8 @@ GtkSwitch {
 
 .content-view {
   background-color: #282c2c; }
+  .content-view:hover {
+    -gtk-image-effect: highlight; }
   .content-view:backdrop {
     background-color: #282c2c; }
 
