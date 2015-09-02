@@ -2302,6 +2302,7 @@ GtkCheckButton.text-button, GtkRadioButton.text-button {
       border-color: $backdrop_borders_color;
       background-color: $insensitive_bg_color;
     }
+
     //OSD troughs
     .osd & {
       border-color: $osd_borders_color;
@@ -2323,6 +2324,23 @@ GtkCheckButton.text-button, GtkRadioButton.text-button {
         border-color: $osd_borders_color;
         background-image: none;
       }
+    }
+  }
+  // scales on selected list rows
+  .list-row:selected & {
+    border-color: $selected_borders_color;
+    &.trough {
+      box-shadow: inset 1px 1px transparentize(black, 0.9);
+      &:backdrop { box-shadow: none; }
+      &.highlight:backdrop { border-color: $selected_borders_color; }
+    }
+    &:insensitive,
+    &.trough.highlight:insensitive {
+      border-color: $selected_bg_color;
+      box-shadow: none;
+      background-color: mix($selected_fg_color, $selected_bg_color, 50%);
+      background-image: none;
+      &:backdrop { background-color: mix($backdrop_selected_fg_color, $selected_bg_color, 50%); }
     }
   }
 }

@@ -3074,6 +3074,37 @@ GtkCheckButton.text-button, GtkRadioButton.text-button {
       .scale.vertical.scale-has-marks-above.scale-has-marks-below.trough:backdrop {
         border-color: rgba(0, 0, 0, 0.7);
         background-image: none; }
+  .list-row:selected .scale, .list-row:selected
+  .scale.scale-has-marks-above.scale-has-marks-below, .list-row:selected
+  .scale.vertical.scale-has-marks-above.scale-has-marks-below {
+    border-color: #0f2b48; }
+    .list-row:selected .scale.trough, .list-row:selected
+    .scale.scale-has-marks-above.scale-has-marks-below.trough, .list-row:selected
+    .scale.vertical.scale-has-marks-above.scale-has-marks-below.trough {
+      box-shadow: inset 1px 1px rgba(0, 0, 0, 0.1); }
+      .list-row:selected .scale.trough:backdrop, .list-row:selected
+      .scale.scale-has-marks-above.scale-has-marks-below.trough:backdrop, .list-row:selected
+      .scale.vertical.scale-has-marks-above.scale-has-marks-below.trough:backdrop {
+        box-shadow: none; }
+      .list-row:selected .scale.trough.highlight:backdrop, .list-row:selected
+      .scale.scale-has-marks-above.scale-has-marks-below.trough.highlight:backdrop, .list-row:selected
+      .scale.vertical.scale-has-marks-above.scale-has-marks-below.trough.highlight:backdrop {
+        border-color: #0f2b48; }
+    .list-row:selected .scale:insensitive, .list-row:selected .scale.trough.highlight:insensitive, .list-row:selected
+    .scale.scale-has-marks-above.scale-has-marks-below:insensitive, .list-row:selected
+    .scale.scale-has-marks-above.scale-has-marks-below.trough.highlight:insensitive, .list-row:selected
+    .scale.vertical.scale-has-marks-above.scale-has-marks-below:insensitive, .list-row:selected
+    .scale.vertical.scale-has-marks-above.scale-has-marks-below.trough.highlight:insensitive {
+      border-color: #215d9c;
+      box-shadow: none;
+      background-color: #90aece;
+      background-image: none; }
+      .list-row:selected .scale:insensitive:backdrop, .list-row:selected .scale.trough.highlight:insensitive:backdrop, .list-row:selected
+      .scale.scale-has-marks-above.scale-has-marks-below:insensitive:backdrop, .list-row:selected
+      .scale.scale-has-marks-above.scale-has-marks-below.trough.highlight:insensitive:backdrop, .list-row:selected
+      .scale.vertical.scale-has-marks-above.scale-has-marks-below:insensitive:backdrop, .list-row:selected
+      .scale.vertical.scale-has-marks-above.scale-has-marks-below.trough.highlight:insensitive:backdrop {
+        background-color: #90aece; }
 
 .scale.scale-has-marks-below {
   -GtkScale-slider-length: 20;
