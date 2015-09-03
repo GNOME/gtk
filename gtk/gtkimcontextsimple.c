@@ -42,7 +42,7 @@ struct _GtkIMContextSimplePrivate
 {
   GSList        *tables;
 
-  guint          compose_buffer[GTK_MAX_COMPOSE_LEN + 1];
+  guint16        compose_buffer[GTK_MAX_COMPOSE_LEN + 1];
   gunichar       tentative_match;
   gint           tentative_match_len;
 
@@ -163,7 +163,7 @@ gtk_im_context_simple_commit_char (GtkIMContext *context,
 static int
 compare_seq_index (const void *key, const void *value)
 {
-  const guint *keysyms = key;
+  const guint16 *keysyms = key;
   const guint16 *seq = value;
 
   if (keysyms[0] < seq[0])
@@ -178,7 +178,7 @@ static int
 compare_seq (const void *key, const void *value)
 {
   int i = 0;
-  const guint *keysyms = key;
+  const guint16 *keysyms = key;
   const guint16 *seq = value;
 
   while (keysyms[i])
@@ -394,7 +394,7 @@ check_quartz_special_cases (GtkIMContextSimple *context_simple,
 
 gboolean
 gtk_check_compact_table (const GtkComposeTableCompact  *table,
-                         guint                         *compose_buffer,
+                         guint16                       *compose_buffer,
                          gint                           n_compose,
                          gboolean                      *compose_finish,
                          gboolean                      *compose_match,
@@ -567,7 +567,7 @@ check_normalize_nfc (gunichar* combination_buffer, gint n_compose)
 }
 
 gboolean
-gtk_check_algorithmically (const guint         *compose_buffer,
+gtk_check_algorithmically (const guint16       *compose_buffer,
                            gint                 n_compose,
                            gunichar            *output_char)
 
