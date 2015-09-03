@@ -232,6 +232,7 @@ struct _GtkEntryPrivate
   guint         cursor_handle_dragged   : 1;
   guint         selection_handle_dragged : 1;
   guint         populate_all            : 1;
+  guint         handling_key_event      : 1;
 };
 
 struct _EntryIconInfo
@@ -4842,6 +4843,9 @@ gtk_entry_key_press (GtkWidget   *widget,
 {
   GtkEntry *entry = GTK_ENTRY (widget);
   GtkEntryPrivate *priv = entry->priv;
+  gboolean retval = FALSE;
+
+  priv->handling_key_event = TRUE;
 
   gtk_entry_reset_blink_time (entry);
   gtk_entry_pend_cursor_blink (entry);
@@ -4856,9 +4860,9 @@ gtk_entry_key_press (GtkWidget   *widget,
     {
       if (gtk_im_context_filter_keypress (priv->im_context, event))
 	{
-	  gtk_entry_obscure_mouse_cursor (entry);
 	  priv->need_im_reset = TRUE;
-	  return TRUE;
+	  retval = TRUE;
+          goto out;
 	}
     }
 
@@ -4869,14 +4873,19 @@ gtk_entry_key_press (GtkWidget   *widget,
     gtk_entry_reset_im_context (entry);
 
   if (GTK_WIDGET_CLASS (gtk_entry_parent_class)->key_press_event (widget, event))
-    /* Activate key bindings
-     */
-    return TRUE;
+    {
+      /* Activate key bindings */
+      retval = TRUE;
+      goto out;
+    }
 
   if (!priv->editable && event->length)
     gtk_widget_error_bell (widget);
 
-  return FALSE;
+out:
+  priv->handling_key_event = FALSE;
+
+  return retval;
 }
 
 static gint
@@ -4885,17 +4894,25 @@ gtk_entry_key_release (GtkWidget   *widget,
 {
   GtkEntry *entry = GTK_ENTRY (widget);
   GtkEntryPrivate *priv = entry->priv;
+  gboolean retval = FALSE;
+
+  priv->handling_key_event = TRUE;
 
   if (priv->editable)
     {
       if (gtk_im_context_filter_keypress (priv->im_context, event))
 	{
 	  priv->need_im_reset = TRUE;
-	  return TRUE;
+	  retval = TRUE;
+          goto out;
 	}
     }
 
-  return GTK_WIDGET_CLASS (gtk_entry_parent_class)->key_release_event (widget, event);
+  retval = GTK_WIDGET_CLASS (gtk_entry_parent_class)->key_release_event (widget, event);
+
+out:
+  priv->handling_key_event = FALSE;
+  return retval;
 }
 
 static gint
@@ -5473,6 +5490,8 @@ buffer_notify_text (GtkEntryBuffer *buffer,
                     GParamSpec     *spec,
                     GtkEntry       *entry)
 {
+  if (entry->priv->handling_key_event)
+    gtk_entry_obscure_mouse_cursor (entry);
   gtk_entry_recompute (entry);
   emit_changed (entry);
   g_object_notify (G_OBJECT (entry), "text");
