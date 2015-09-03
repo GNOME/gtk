@@ -107,6 +107,8 @@ gtk_date_chooser_day_init (GtkDateChooserDay *day)
 
   day->label = gtk_label_new ("");
   gtk_widget_show (day->label);
+  gtk_widget_set_halign (day->label, GTK_ALIGN_CENTER);
+  gtk_widget_set_valign (day->label, GTK_ALIGN_CENTER);
   gtk_widget_set_hexpand (day->label, TRUE);
   gtk_widget_set_vexpand (day->label, TRUE);
   gtk_label_set_xalign (GTK_LABEL (day->label), 1.0);
