@@ -27,7 +27,9 @@
 #include "gtkwidget.h"
 #include "gtkdebug.h"
 #include "gtkintl.h"
+#include "gtkcomposetable.h"
 
+#include "gtkimcontextsimpleprivate.h"
 
 /**
  * SECTION:gtkimcontextsimple
@@ -35,9 +37,6 @@
  * @Title: GtkIMContextSimple
  */
 
-
-typedef struct _GtkComposeTable GtkComposeTable;
-typedef struct _GtkComposeTableCompact GtkComposeTableCompact;
 
 struct _GtkIMContextSimplePrivate
 {
@@ -51,33 +50,12 @@ struct _GtkIMContextSimplePrivate
   guint          modifiers_dropped : 1;
 };
 
-struct _GtkComposeTable 
-{
-  const guint16 *data;
-  gint max_seq_len;
-  gint n_seqs;
-};
-
-struct _GtkComposeTableCompact
-{
-  const guint16 *data;
-  gint max_seq_len;
-  gint n_index_size;
-  gint n_index_stride;
-};
-
-/* This file contains the table of the compose sequences,
- * static const guint16 gtk_compose_seqs_compact[] = {}
- * It is generated from the compose-parse.py script.
- */
-#include "gtkimcontextsimpleseqs.h"
-
 /* From the values below, the value 30 means the number of different first keysyms
  * that exist in the Compose file (from Xorg). When running compose-parse.py without
  * parameters, you get the count that you can put here. Needed when updating the
  * gtkimcontextsimpleseqs.h header file (contains the compose sequences).
  */
-static const GtkComposeTableCompact gtk_compose_table_compact = {
+const GtkComposeTableCompact gtk_compose_table_compact = {
   gtk_compose_seqs_compact,
   5,
   30,
@@ -414,18 +392,27 @@ check_quartz_special_cases (GtkIMContextSimple *context_simple,
 
 #endif
 
-static gboolean
-check_compact_table (GtkIMContextSimple           *context_simple,
-                     const GtkComposeTableCompact *table,
-                     gint                          n_compose)
+gboolean
+gtk_check_compact_table (const GtkComposeTableCompact  *table,
+                         guint                         *compose_buffer,
+                         gint                           n_compose,
+                         gboolean                      *compose_finish,
+                         gboolean                      *compose_match,
+                         gunichar                      *output_char)
 {
-  GtkIMContextSimplePrivate *priv = context_simple->priv;
   gint row_stride;
   guint16 *seq_index;
   guint16 *seq;
   gint i;
   gboolean match;
   gunichar value;
+
+  if (compose_finish)
+    *compose_finish = FALSE;
+  if (compose_match)
+    *compose_match = FALSE;
+  if (output_char)
+    *output_char = 0;
 
   /* Will never match, if the sequence in the compose buffer is longer
    * than the sequences in the table.  Further, compare_seq (key, val)
@@ -434,7 +421,7 @@ check_compact_table (GtkIMContextSimple           *context_simple,
   if (n_compose > table->max_seq_len)
     return FALSE;
 
-  seq_index = bsearch (priv->compose_buffer,
+  seq_index = bsearch (compose_buffer,
                        table->data,
                        table->n_index_size,
                        sizeof (guint16) * table->n_index_stride,
@@ -463,7 +450,7 @@ check_compact_table (GtkIMContextSimple           *context_simple,
 
       if (seq_index[i + 1] - seq_index[i] > 0)
         {
-          seq = bsearch (priv->compose_buffer + 1,
+          seq = bsearch (compose_buffer + 1,
                          table->data + seq_index[i],
                          (seq_index[i + 1] - seq_index[i]) / row_stride,
                          sizeof (guint16) *  row_stride,
@@ -478,14 +465,14 @@ check_compact_table (GtkIMContextSimple           *context_simple,
                 }
               else
                 {
+                  if (output_char)
+                    *output_char = value;
                   if (match)
                     {
+                      if (compose_match)
+                        *compose_match = TRUE;
                       GTK_NOTE (MISC, g_print ("tentative match U+%04X ", value));
-                      priv->tentative_match = value;
-                      priv->tentative_match_len = n_compose;
                     }
-
-                  g_signal_emit_by_name (context_simple, "preedit-changed");
 
                   GTK_NOTE (MISC, g_print ("yes\n"));
                   return TRUE;
@@ -496,11 +483,12 @@ check_compact_table (GtkIMContextSimple           *context_simple,
 
   if (match)
     {
-      gtk_im_context_simple_commit_char (GTK_IM_CONTEXT (context_simple), value);
-#ifdef G_OS_WIN32
-      check_win32_special_case_after_compact_match (context_simple, n_compose, value);
-#endif
-      priv->compose_buffer[0] = 0;
+      if (compose_match)
+        *compose_match = TRUE;
+      if (compose_finish)
+        *compose_finish = TRUE;
+      if (output_char)
+        *output_char = value;
 
       GTK_NOTE (MISC, g_print ("U+%04X\n", value));
       return TRUE;
@@ -578,32 +566,35 @@ check_normalize_nfc (gunichar* combination_buffer, gint n_compose)
   return FALSE;
 }
 
-static gboolean
-check_algorithmically (GtkIMContextSimple *context_simple,
-                       gint                n_compose)
+gboolean
+gtk_check_algorithmically (const guint         *compose_buffer,
+                           gint                 n_compose,
+                           gunichar            *output_char)
 
 {
-  GtkIMContextSimplePrivate *priv = context_simple->priv;
   gint i;
   gunichar combination_buffer[GTK_MAX_COMPOSE_LEN];
   gchar *combination_utf8, *nfc;
 
+  if (output_char)
+    *output_char = 0;
+
   if (n_compose >= GTK_MAX_COMPOSE_LEN)
     return FALSE;
 
-  for (i = 0; i < n_compose && IS_DEAD_KEY (priv->compose_buffer[i]); i++)
+  for (i = 0; i < n_compose && IS_DEAD_KEY (compose_buffer[i]); i++)
     ;
   if (i == n_compose)
     return TRUE;
 
   if (i > 0 && i == n_compose - 1)
     {
-      combination_buffer[0] = gdk_keyval_to_unicode (priv->compose_buffer[i]);
+      combination_buffer[0] = gdk_keyval_to_unicode (compose_buffer[i]);
       combination_buffer[n_compose] = 0;
       i--;
       while (i >= 0)
 	{
-	  switch (priv->compose_buffer[i])
+	  switch (compose_buffer[i])
 	    {
 #define CASE(keysym, unicode) \
 	    case GDK_KEY_dead_##keysym: combination_buffer[i+1] = unicode; break
@@ -640,7 +631,7 @@ check_algorithmically (GtkIMContextSimple *context_simple,
 	    /* CASE (psili, 0x343); */
 #undef CASE
 	    default:
-	      combination_buffer[i+1] = gdk_keyval_to_unicode (priv->compose_buffer[i]);
+	      combination_buffer[i+1] = gdk_keyval_to_unicode (compose_buffer[i]);
 	    }
 	  i--;
 	}
@@ -650,13 +641,11 @@ check_algorithmically (GtkIMContextSimple *context_simple,
        */
       if (check_normalize_nfc (combination_buffer, n_compose))
         {
-          gunichar value;
       	  combination_utf8 = g_ucs4_to_utf8 (combination_buffer, -1, NULL, NULL, NULL);
           nfc = g_utf8_normalize (combination_utf8, -1, G_NORMALIZE_NFC);
 
-          value = g_utf8_get_char (nfc);
-          gtk_im_context_simple_commit_char (GTK_IM_CONTEXT (context_simple), value);
-          priv->compose_buffer[0] = 0;
+          if (output_char)
+            *output_char = g_utf8_get_char (nfc);
 
           g_free (combination_utf8);
           g_free (nfc);
@@ -879,6 +868,9 @@ gtk_im_context_simple_filter_keypress (GtkIMContext *context,
   gboolean is_escape;
   guint hex_keyval;
   int i;
+  gboolean compose_finish;
+  gboolean compose_match;
+  gunichar output_char;
 
   while (priv->compose_buffer[n_compose] != 0)
     n_compose++;
@@ -1121,11 +1113,49 @@ gtk_im_context_simple_filter_keypress (GtkIMContext *context,
         return TRUE;
 #endif
 
-      if (check_compact_table (context_simple, &gtk_compose_table_compact, n_compose))
-        return TRUE;
+      if (gtk_check_compact_table (&gtk_compose_table_compact,
+                                   priv->compose_buffer,
+                                   n_compose, &compose_finish,
+                                   &compose_match, &output_char))
+        {
+          if (compose_finish)
+            {
+              if (compose_match)
+                {
+                  gtk_im_context_simple_commit_char (GTK_IM_CONTEXT (context_simple),
+                                                     output_char);
+#ifdef G_OS_WIN32
+                  check_win32_special_case_after_compact_match (context_simple,
+                                                                n_compose,
+                                                                output_char);
+#endif
+                  priv->compose_buffer[0] = 0;
+                }
+            }
+          else
+            {
+              if (compose_match)
+                {
+                  priv->tentative_match = output_char;
+                  priv->tentative_match_len = n_compose;
+                }
+              if (output_char)
+                g_signal_emit_by_name (context_simple, "preedit-changed");
+            }
+
+          return TRUE;
+        }
   
-      if (check_algorithmically (context_simple, n_compose))
-	return TRUE;
+      if (gtk_check_algorithmically (priv->compose_buffer, n_compose, &output_char))
+        {
+          if (output_char)
+            {
+              gtk_im_context_simple_commit_char (GTK_IM_CONTEXT (context_simple),
+                                                 output_char);
+              priv->compose_buffer[0] = 0;
+            }
+	  return TRUE;
+        }
     }
   
   /* The current compose_buffer doesn't match anything */

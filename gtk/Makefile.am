@@ -368,6 +368,7 @@ gtk_private_h_sources =		\
 	gtkcolorscaleprivate.h	\
 	gtkcolorchooserprivate.h	\
 	gtkcomboboxprivate.h	\
+	gtkcomposetable.h	\
 	gtkcontainerprivate.h   \
 	gtkcssanimationprivate.h	\
 	gtkcssanimatedstyleprivate.h	\
@@ -452,6 +453,7 @@ gtk_private_h_sources =		\
 	gtkiconhelperprivate.h  \
 	gtkiconviewprivate.h	\
 	gtkimageprivate.h	\
+	gtkimcontextsimpleprivate.h	\
 	gtkimmoduleprivate.h	\
 	gtkimcontextsimpleseqs.h \
 	gtkintl.h		\
