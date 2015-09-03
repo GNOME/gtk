@@ -474,6 +474,7 @@ gtk_private_h_sources =		\
 	gtkmodifierstyle.h	\
 	gtkmodulesprivate.h	\
 	gtkmountoperationprivate.h \
+	gtkmultichoiceprivate.h \
 	gtkorientableprivate.h	\
 	gtkpango.h		\
 	gtkpathbar.h		\
@@ -753,6 +754,7 @@ gtk_base_c_sources = 		\
 	gtkmodifierstyle.c	\
 	gtkmodules.c		\
 	gtkmountoperation.c	\
+	gtkmultichoice.c	\
 	gtknotebook.c		\
 	gtkoffscreenwindow.c	\
 	gtkorientable.c		\
@@ -1095,6 +1097,7 @@ templates =				\
 	ui/gtkinfobar.ui		\
 	ui/gtklockbutton.ui		\
 	ui/gtkmessagedialog.ui	\
+	ui/gtkmultichoice.ui		\
 	ui/gtkpagesetupunixdialog.ui	\
 	ui/gtkpathbar.ui		\
 	ui/gtkplacesview.ui		\
