@@ -1665,20 +1665,6 @@ gtk_popover_class_init (GtkPopoverClass *klass)
 }
 
 static void
-_gtk_popover_update_context_parent (GtkPopover *popover)
-{
-  GtkPopoverPrivate *priv = popover->priv;
-  GtkStyleContext *context, *parent_context = NULL;
-
-  context = gtk_widget_get_style_context (GTK_WIDGET (popover));
-
-  if (priv->widget)
-    parent_context = gtk_widget_get_style_context (priv->widget);
-
-  gtk_style_context_set_parent (context, parent_context);
-}
-
-static void
 _gtk_popover_parent_hierarchy_changed (GtkWidget  *widget,
                                        GtkWidget  *previous_toplevel,
                                        GtkPopover *popover)
@@ -1706,8 +1692,6 @@ _gtk_popover_parent_hierarchy_changed (GtkWidget  *widget,
 
   if (new_window)
     gtk_popover_update_position (popover);
-
-  _gtk_popover_update_context_parent (popover);
 
   if (gtk_widget_is_visible (GTK_WIDGET (popover)))
     gtk_widget_queue_resize (GTK_WIDGET (popover));
@@ -1986,7 +1970,6 @@ gtk_popover_update_relative_to (GtkPopover *popover,
     }
 
   _gtk_widget_update_parent_muxer (GTK_WIDGET (popover));
-  _gtk_popover_update_context_parent (popover);
   g_object_unref (popover);
 }
 
