@@ -246,6 +246,7 @@ struct _GtkTextViewPrivate
   guint populate_all   : 1;
 
   guint in_scroll : 1;
+  guint handling_key_event : 1;
 };
 
 struct _GtkTextPendingScroll
@@ -4982,10 +4983,11 @@ gtk_text_view_key_press_event (GtkWidget *widget, GdkEventKey *event)
 
   text_view = GTK_TEXT_VIEW (widget);
   priv = text_view->priv;
-  
-  if (priv->layout == NULL ||
-      get_buffer (text_view) == NULL)
+
+  if (priv->layout == NULL || get_buffer (text_view) == NULL)
     return FALSE;
+
+  priv->handling_key_event = TRUE;
 
   /* Make sure input method knows where it is */
   flush_update_im_spot_location (text_view);
@@ -5017,8 +5019,6 @@ gtk_text_view_key_press_event (GtkWidget *widget, GdkEventKey *event)
        */
       gtk_text_view_reset_im_context (text_view);
       gtk_text_view_commit_text (text_view, "\n");
-
-      obscure = TRUE;
       retval = TRUE;
     }
   /* Pass through Tab as literal tab, unless Control is held down */
@@ -5034,7 +5034,6 @@ gtk_text_view_key_press_event (GtkWidget *widget, GdkEventKey *event)
 	{
 	  gtk_text_view_reset_im_context (text_view);
 	  gtk_text_view_commit_text (text_view, "\t");
-	  obscure = TRUE;
 	}
       else
 	g_signal_emit_by_name (text_view, "move-focus",
@@ -5046,9 +5045,6 @@ gtk_text_view_key_press_event (GtkWidget *widget, GdkEventKey *event)
   else
     retval = FALSE;
 
-  if (obscure)
-    gtk_text_view_obscure_mouse_cursor (text_view);
-  
   gtk_text_view_reset_blink_time (text_view);
   gtk_text_view_pend_cursor_blink (text_view);
 
@@ -5057,6 +5053,8 @@ gtk_text_view_key_press_event (GtkWidget *widget, GdkEventKey *event)
                                GTK_TEXT_HANDLE_MODE_NONE);
 
   gtk_text_view_selection_bubble_popup_unset (text_view);
+
+  priv->handling_key_event = FALSE;
 
   return retval;
 }
@@ -5068,23 +5066,30 @@ gtk_text_view_key_release_event (GtkWidget *widget, GdkEventKey *event)
   GtkTextViewPrivate *priv;
   GtkTextMark *insert;
   GtkTextIter iter;
+  gboolean retval = FALSE;
 
   text_view = GTK_TEXT_VIEW (widget);
   priv = text_view->priv;
 
   if (priv->layout == NULL || get_buffer (text_view) == NULL)
     return FALSE;
-      
+
+  priv->handling_key_event = TRUE;
+
   insert = gtk_text_buffer_get_insert (get_buffer (text_view));
   gtk_text_buffer_get_iter_at_mark (get_buffer (text_view), &iter, insert);
   if (gtk_text_iter_can_insert (&iter, priv->editable) &&
       gtk_im_context_filter_keypress (priv->im_context, event))
     {
       priv->need_im_reset = TRUE;
-      return TRUE;
+      retval = TRUE;
     }
   else
-    return GTK_WIDGET_CLASS (gtk_text_view_parent_class)->key_release_event (widget, event);
+    retval = GTK_WIDGET_CLASS (gtk_text_view_parent_class)->key_release_event (widget, event);
+
+  priv->handling_key_event = FALSE;
+
+  return retval;
 }
 
 static gboolean
@@ -6703,6 +6708,9 @@ gtk_text_view_buffer_changed_handler (GtkTextBuffer *buffer,
 {
   GtkTextView *text_view = data;
   GtkTextViewPrivate *priv = text_view->priv;
+
+  if (priv->handling_key_event)
+    gtk_text_view_obscure_mouse_cursor (text_view);
 
   if (priv->text_handle)
     gtk_text_view_update_handles (text_view,
