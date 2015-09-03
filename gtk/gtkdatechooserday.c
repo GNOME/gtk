@@ -334,12 +334,12 @@ gtk_date_chooser_day_set_other_month (GtkDateChooserDay *day,
   context = gtk_widget_get_style_context (GTK_WIDGET (day));
   if (other_month)
     {
-      gtk_style_context_add_class (context, "other-month");
+      gtk_style_context_add_class (context, GTK_STYLE_CLASS_DIM_LABEL);
       gtk_drag_source_unset (GTK_WIDGET (day));
     }
   else
     {
-      gtk_style_context_remove_class (context, "other-month");
+      gtk_style_context_remove_class (context, GTK_STYLE_CLASS_DIM_LABEL);
       gtk_drag_source_set (GTK_WIDGET (day),
                            GDK_BUTTON1_MASK | GDK_BUTTON3_MASK,
                            NULL, 0,

@@ -2760,7 +2760,7 @@ GtkCalendar {
   padding: 0.4em; /* doesn't seem to work */
   text-align: center; /* haha, dream on */
 }
-.day.other-month { color: $insensitive_fg_color; }
+.day.dim-label{ color: $insensitive_fg_color; }
 .day:selected {
   color: $selected_fg_color;
   background-color: $selected_bg_color;
