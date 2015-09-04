@@ -25,6 +25,7 @@
 #include "gtkgrid.h"
 #include "gtkselection.h"
 #include "gtkdnd.h"
+#include "gtkmultichoiceprivate.h"
 
 #include "gtkintl.h"
 #include "gtkprivate.h"
@@ -58,21 +59,9 @@ struct _GtkDateChooserWidget
 {
   GtkBin parent;
 
-  GtkWidget *month_down_button;
-  GtkWidget *month_stack;
-  GtkWidget *month_up_button;
-  GtkWidget *year_down_button;
-  GtkWidget *year_stack;
-  GtkWidget *odd_year_label;
-  GtkWidget *even_year_label;
-  GtkWidget *year_up_button;
+  GtkWidget *month_choice;
+  GtkWidget *year_choice;
   GtkWidget *grid;
-
-  guint      click_id;
-  GtkWidget *active_button;
-
-  guint      year_id;
-  GtkWidget *active_year_button;
 
   GtkWidget *day_grid;
   GtkWidget *corner;
@@ -238,41 +227,6 @@ calendar_compute_days (GtkDateChooserWidget *calendar)
     }
 }
 
-static const gchar *months[] = {
-  "jan", "feb", "mar", "apr",
-  "may", "jun", "jul", "aug",
-  "sep", "oct", "nov", "dec"
-};
-
-static void
-calendar_update_year_display (GtkDateChooserWidget *calendar)
-{
-  GtkWidget *label;
-  gchar *text;
-  GtkWidget *vis;
-
-  vis = gtk_stack_get_visible_child (GTK_STACK (calendar->year_stack));
-  if (vis == calendar->odd_year_label)
-    label = calendar->even_year_label;
-  else
-    label = calendar->odd_year_label;
-
-  text = g_strdup_printf ("%d", calendar->year);
-  gtk_label_set_label (GTK_LABEL (label), text);
-  g_free (text);
-
-  gtk_stack_set_visible_child (GTK_STACK (calendar->year_stack), label);
-}
-
-static void
-calendar_update_month_display (GtkDateChooserWidget   *calendar,
-                               GtkStackTransitionType  transition)
-{
-  gtk_stack_set_visible_child_full (GTK_STACK (calendar->month_stack),
-                                    months[calendar->month],
-                                    transition);
-}
-
 static gchar *
 calendar_get_weekday_name (gint i)
 {
@@ -313,17 +267,17 @@ static void
 calendar_init_month_display (GtkDateChooserWidget *calendar)
 {
   gint i;
-  GtkWidget *label;
-  gchar *text;
+  gchar *months[13];
 
   for (i = 0; i < 12; i++)
-    {
-      text = calendar_get_month_name (i);
-      label = gtk_label_new (text);
-      gtk_widget_show (label);
-      gtk_stack_add_named (GTK_STACK (calendar->month_stack), label, months[i]);
-      g_free (text);
-    }
+    months[i] = calendar_get_month_name (i);
+  months[12] = NULL;
+
+  gtk_multi_choice_set_choices (GTK_MULTI_CHOICE (calendar->month_choice),
+                                (const gchar **)months);
+
+  for (i = 0; i < 12; i++)
+    g_free (months[i]);
 }
 
 static void
@@ -357,82 +311,6 @@ calendar_update_selected_day (GtkDateChooserWidget *calendar)
     calendar_update_selected_day_display (calendar);
 }
 
-static void
-calendar_set_year_prev (GtkDateChooserWidget *calendar)
-{
-  if (calendar->no_month_change)
-    return;
-
-  calendar->year -= 1;
-  calendar_update_year_display (calendar);
-
-  calendar_compute_days (calendar);
-
-  g_signal_emit (calendar, calendar_signals[MONTH_CHANGED], 0);
-
-  calendar_update_selected_day (calendar);
-}
-
-static void
-calendar_set_year_next (GtkDateChooserWidget *calendar)
-{
-  if (calendar->no_month_change)
-    return;
-
-  calendar->year += 1;
-  calendar_update_year_display (calendar);
-
-  calendar_compute_days (calendar);
-
-  g_signal_emit (calendar, calendar_signals[MONTH_CHANGED], 0);
-
-  calendar_update_selected_day (calendar);
-}
-
-static void
-calendar_set_month_prev (GtkDateChooserWidget *calendar)
-{
-  if (calendar->no_month_change)
-    return;
-
-  calendar->month = (calendar->month + 11) % 12;
-  calendar_update_month_display (calendar, GTK_STACK_TRANSITION_TYPE_SLIDE_RIGHT);
-
-  if (calendar->month == 11)
-    {
-      calendar->year -= 1;
-      calendar_update_year_display (calendar);
-    }
-
-  calendar_compute_days (calendar);
-
-  g_signal_emit (calendar, calendar_signals[MONTH_CHANGED], 0);
-
-  calendar_update_selected_day (calendar);
-}
-
-static void
-calendar_set_month_next (GtkDateChooserWidget *calendar)
-{
-  if (calendar->no_month_change)
-    return;
-
-  calendar->month = (calendar->month + 1) % 12;
-  calendar_update_month_display (calendar, GTK_STACK_TRANSITION_TYPE_SLIDE_LEFT);
-
-  if (calendar->month == 0)
-    {
-      calendar->year += 1;
-      calendar_update_year_display (calendar);
-    }
-
-  calendar_compute_days (calendar);
-
-  g_signal_emit (calendar, calendar_signals[MONTH_CHANGED], 0);
-
-  calendar_update_selected_day (calendar);
-}
-
 static gint
 calendar_get_week_start (void)
 {
@@ -462,13 +340,13 @@ day_selected_cb (GtkDateChooserDay    *d,
   guint year, month, day;
 
   gtk_date_chooser_day_get_date (d, &year, &month, &day);
-
-  if ((month + 1) % 12 == calendar->month)
-    calendar_set_month_prev (calendar);
-  else if ((calendar->month + 1) % 12 == month)
-    calendar_set_month_next (calendar);
-
-  gtk_date_chooser_widget_select_day (calendar, day);
+  if (!calendar->no_month_change)
+    {
+      gtk_multi_choice_set_value (GTK_MULTI_CHOICE (calendar->month_choice), month);
+      gtk_multi_choice_set_value (GTK_MULTI_CHOICE (calendar->year_choice), year);
+    }
+  if (month == calendar->month && year == calendar->year)
+    gtk_date_chooser_widget_select_day (calendar, day);
 }
 
 static void
@@ -548,8 +426,8 @@ gtk_date_chooser_widget_init (GtkDateChooserWidget *calendar)
   calendar_init_weekday_display (calendar);
 
   calendar_compute_days (calendar);
-  calendar_update_month_display (calendar, GTK_STACK_TRANSITION_TYPE_NONE);
-  calendar_update_year_display (calendar);
+  gtk_multi_choice_set_value (GTK_MULTI_CHOICE (calendar->month_choice), calendar->month);
+  gtk_multi_choice_set_value (GTK_MULTI_CHOICE (calendar->year_choice), calendar->year);
   calendar_update_selected_day_display (calendar);
 
   gtk_drag_dest_set (GTK_WIDGET (calendar), GTK_DEST_DEFAULT_ALL, NULL, 0, GDK_ACTION_COPY);
@@ -630,106 +508,29 @@ calendar_get_property (GObject    *obj,
     }
 }
 
-static gboolean
-calendar_button_activate (GtkDateChooserWidget *calendar,
-                          GtkWidget            *button)
+static void
+calendar_month_changed (GtkDateChooserWidget *calendar)
 {
-  if (button == calendar->month_down_button)
-    calendar_set_month_prev (calendar);
-  else if (button == calendar->month_up_button)
-    calendar_set_month_next (calendar);
-  else if (button == calendar->year_down_button)
-    calendar_set_year_prev (calendar);
-  else if (button == calendar->year_up_button)
-    calendar_set_year_next (calendar);
-  else
-    g_assert_not_reached ();
+  gint month;
+  gint year;
 
-  return TRUE;
-}
+  month = gtk_multi_choice_get_value (GTK_MULTI_CHOICE (calendar->month_choice));
+  year = gtk_multi_choice_get_value (GTK_MULTI_CHOICE (calendar->year_choice));
 
-static gboolean
-calendar_button_timeout (gpointer user_data)
-{
-  GtkDateChooserWidget *calendar = GTK_DATE_CHOOSER_WIDGET (user_data);
-  gboolean res;
-
-  if (calendar->click_id == 0)
-    return G_SOURCE_REMOVE;
-
-  res = calendar_button_activate (calendar, calendar->active_button);
-  if (!res)
-    {
-      g_source_remove (calendar->click_id);
-      calendar->click_id = 0;
-    }
-
-  return res;
-}
-
-static gboolean
-calendar_button_press_cb (GtkWidget            *widget,
-                          GdkEventButton       *button,
-                          GtkDateChooserWidget *calendar)
-{
-  gint double_click_time;
-
-  g_object_get (gtk_widget_get_settings (widget),
-                "gtk-double-click-time", &double_click_time,
-                NULL);
-
-  if (calendar->click_id != 0)
-    g_source_remove (calendar->click_id);
-
-  calendar->active_button = widget;
-
-  calendar->click_id = gdk_threads_add_timeout (double_click_time,
-                                            calendar_button_timeout,
-                                            calendar);
-  g_source_set_name_by_id (calendar->click_id, "[gtk+] calendar_button_timeout");
-  calendar_button_timeout (calendar);
-
-  return TRUE;
-}
-
-static gboolean
-calendar_button_release_cb (GtkWidget      *widget,
-                            GdkEventButton *event,
-                            GtkDateChooserWidget *calendar)
-{
-  if (calendar->click_id != 0)
-    {
-      g_source_remove (calendar->click_id);
-      calendar->click_id = 0;
-    }
-
-  calendar->active_button = NULL;
-
-  return TRUE;
+  gtk_date_chooser_widget_set_date (calendar, year, month, calendar->day);
 }
 
 static void
-calendar_clicked_cb (GtkWidget  *widget,
-                     GtkDateChooserWidget *calendar)
+calendar_month_wrapped (GtkDateChooserWidget *calendar)
 {
-  if (calendar->click_id != 0)
-    return;
+  gint month;
 
-  calendar_button_activate (calendar, widget);
-}
+  month = gtk_multi_choice_get_value (GTK_MULTI_CHOICE (calendar->month_choice));
 
-static void
-calendar_dispose (GObject *object)
-{
-  GtkDateChooserWidget *calendar = GTK_DATE_CHOOSER_WIDGET (object);
-
-  if (calendar->click_id != 0)
-    {
-      g_source_remove (calendar->click_id);
-      calendar->click_id = 0;
-    }
-
-  G_OBJECT_CLASS (gtk_date_chooser_widget_parent_class)->dispose (object);
+  gtk_multi_choice_set_value (GTK_MULTI_CHOICE (calendar->year_choice),
+                                                month == 0
+                                                ? calendar->year + 1
+                                                : calendar->year - 1);
 }
 
 static void
@@ -782,7 +583,8 @@ gtk_date_chooser_widget_class_init (GtkDateChooserWidgetClass *class)
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (class);
   GObjectClass *object_class = G_OBJECT_CLASS (class);
 
-  object_class->dispose = calendar_dispose;
+  g_type_ensure (GTK_TYPE_MULTI_CHOICE);
+
   object_class->set_property = calendar_set_property;
   object_class->get_property = calendar_get_property;
 
@@ -831,19 +633,12 @@ gtk_date_chooser_widget_class_init (GtkDateChooserWidgetClass *class)
                                                   NULL,
                                                   G_TYPE_NONE, 0);
 
-  gtk_widget_class_bind_template_child (widget_class, GtkDateChooserWidget, month_down_button);
-  gtk_widget_class_bind_template_child (widget_class, GtkDateChooserWidget, month_stack);
-  gtk_widget_class_bind_template_child (widget_class, GtkDateChooserWidget, month_up_button);
-  gtk_widget_class_bind_template_child (widget_class, GtkDateChooserWidget, year_down_button);
-  gtk_widget_class_bind_template_child (widget_class, GtkDateChooserWidget, year_stack);
-  gtk_widget_class_bind_template_child (widget_class, GtkDateChooserWidget, odd_year_label);
-  gtk_widget_class_bind_template_child (widget_class, GtkDateChooserWidget, even_year_label);
-  gtk_widget_class_bind_template_child (widget_class, GtkDateChooserWidget, year_up_button);
+  gtk_widget_class_bind_template_child (widget_class, GtkDateChooserWidget, month_choice);
+  gtk_widget_class_bind_template_child (widget_class, GtkDateChooserWidget, year_choice);
   gtk_widget_class_bind_template_child (widget_class, GtkDateChooserWidget, grid);
 
-  gtk_widget_class_bind_template_callback (widget_class, calendar_button_press_cb);
-  gtk_widget_class_bind_template_callback (widget_class, calendar_button_release_cb);
-  gtk_widget_class_bind_template_callback (widget_class, calendar_clicked_cb);
+  gtk_widget_class_bind_template_callback (widget_class, calendar_month_changed);
+  gtk_widget_class_bind_template_callback (widget_class, calendar_month_wrapped);
 }
 
 GtkWidget *
@@ -948,7 +743,7 @@ gtk_date_chooser_widget_set_date (GtkDateChooserWidget *calendar,
       calendar->year = year;
       g_object_notify_by_pspec (G_OBJECT (calendar),
                                 calendar_properties[PROP_YEAR]);
-      calendar_update_year_display (calendar);
+      gtk_multi_choice_set_value (GTK_MULTI_CHOICE (calendar->year_choice), year);
     }
 
   if (calendar->month != month)
@@ -957,7 +752,7 @@ gtk_date_chooser_widget_set_date (GtkDateChooserWidget *calendar,
       calendar->month = month;
       g_object_notify_by_pspec (G_OBJECT (calendar),
                                 calendar_properties[PROP_MONTH]);
-      calendar_update_month_display (calendar, GTK_STACK_TRANSITION_TYPE_NONE);
+      gtk_multi_choice_set_value (GTK_MULTI_CHOICE (calendar->month_choice), month);
     }
 
   if (calendar->day != day)
