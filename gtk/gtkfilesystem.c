@@ -770,29 +770,32 @@ _gtk_file_system_volume_render_icon (GtkFileSystemVolume  *volume,
   return surface;
 }
 
+GIcon *
+_gtk_file_system_volume_get_symbolic_icon (GtkFileSystemVolume *volume)
+{
+  if (IS_ROOT_VOLUME (volume))
+    return g_themed_icon_new ("drive-harddisk-symbolic");
+  else if (G_IS_DRIVE (volume))
+    return g_drive_get_symbolic_icon (G_DRIVE (volume));
+  else if (G_IS_VOLUME (volume))
+    return g_volume_get_symbolic_icon (G_VOLUME (volume));
+  else if (G_IS_MOUNT (volume))
+    return g_mount_get_symbolic_icon (G_MOUNT (volume));
+  else
+    return NULL;
+}
+
 cairo_surface_t *
 _gtk_file_system_volume_render_symbolic_icon (GtkFileSystemVolume  *volume,
 				              GtkWidget            *widget,
 				              gint                  icon_size,
 				              GError              **error)
 {
-  GIcon *icon = NULL;
+  GIcon *icon;
   cairo_surface_t *surface;
 
-  if (IS_ROOT_VOLUME (volume))
-    icon = g_themed_icon_new ("drive-harddisk-symbolic");
-  else if (G_IS_DRIVE (volume))
-    icon = g_drive_get_symbolic_icon (G_DRIVE (volume));
-  else if (G_IS_VOLUME (volume))
-    icon = g_volume_get_symbolic_icon (G_VOLUME (volume));
-  else if (G_IS_MOUNT (volume))
-    icon = g_mount_get_symbolic_icon (G_MOUNT (volume));
-
-  if (!icon)
-    return NULL;
-
+  icon = _gtk_file_system_volume_get_symbolic_icon (volume);
   surface = get_surface_from_gicon (icon, widget, icon_size, error);
-
   g_object_unref (icon);
 
   return surface;
