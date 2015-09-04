@@ -75,6 +75,10 @@ struct _GtkDateChooserWidget
   gboolean show_day_names;
   gboolean show_week_numbers;
   gboolean no_month_change;
+
+  GtkDateChooserDayOptionsCallback day_options_cb;
+  gpointer                         day_options_data;
+  GDestroyNotify                   day_options_destroy;
 };
 
 struct _GtkDateChooserWidgetClass
@@ -203,6 +207,8 @@ calendar_compute_days (GtkDateChooserWidget *calendar)
       gtk_label_set_label (GTK_LABEL (calendar->rows[row]), text);
       g_free (text);
     }
+
+  gtk_date_chooser_widget_invalidate_day_options (calendar);
 }
 
 /* 0 == sunday */
@@ -746,4 +752,41 @@ GDateTime *
 gtk_date_chooser_widget_get_date (GtkDateChooserWidget *calendar)
 {
   return calendar->date;
+}
+
+void
+gtk_date_chooser_widget_set_day_options_callback (GtkDateChooserWidget      *calendar,
+                                                  GtkDateChooserDayOptionsCallback  callback,
+                                                  gpointer                   data,
+                                                  GDestroyNotify             destroy)
+{
+  if (calendar->day_options_destroy)
+    calendar->day_options_destroy (calendar->day_options_data);
+
+  calendar->day_options_cb = callback;
+  calendar->day_options_data = data;
+  calendar->day_options_destroy = destroy;
+
+  gtk_date_chooser_widget_invalidate_day_options (calendar);
+}
+
+void
+gtk_date_chooser_widget_invalidate_day_options (GtkDateChooserWidget *calendar)
+{
+  gint row, col;
+  GDateTime *date;
+  GtkDateChooserDay *d;
+  GtkDateChooserDayOptions options;
+
+  for (row = 0; row < 6; row++)
+    for (col = 0; col < 7; col++)
+      {
+        d = GTK_DATE_CHOOSER_DAY (calendar->days[row][col]);
+        date = gtk_date_chooser_day_get_date (d);
+        if (calendar->day_options_cb)
+          options = calendar->day_options_cb (calendar, date, calendar->day_options_data);
+        else
+          options = GTK_DATE_CHOOSER_DAY_NONE;
+        gtk_date_chooser_day_set_options (d, options);
+      }
 }

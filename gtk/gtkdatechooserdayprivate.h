@@ -19,6 +19,7 @@
 #define __GTK_DATE_CHOOSER_DAY_PRIVATE_H__
 
 #include <gtk/gtkbin.h>
+#include <gtk/gtkdatechooserwidget.h>
 
 G_BEGIN_DECLS
 
@@ -42,6 +43,8 @@ void        gtk_date_chooser_day_set_other_month (GtkDateChooserDay *day,
                                                   gboolean           other_month);
 void        gtk_date_chooser_day_set_selected    (GtkDateChooserDay *day,
                                                   gboolean           selected);
+void        gtk_date_chooser_day_set_options     (GtkDateChooserDay *day,
+                                                  GtkDateChooserDayOptions options);
 
 G_END_DECLS
 

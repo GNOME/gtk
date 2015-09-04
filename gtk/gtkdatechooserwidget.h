@@ -52,6 +52,24 @@ void        gtk_date_chooser_widget_set_date              (GtkDateChooserWidget 
 GDK_AVAILABLE_IN_3_20
 GDateTime * gtk_date_chooser_widget_get_date              (GtkDateChooserWidget *chooser);
 
+typedef enum {
+  GTK_DATE_CHOOSER_DAY_NONE    = 0,
+  GTK_DATE_CHOOSER_DAY_WEEKEND = 1,
+  GTK_DATE_CHOOSER_DAY_HOLIDAY = 2,
+  GTK_DATE_CHOOSER_DAY_MARKED  = 4
+} GtkDateChooserDayOptions;
+
+typedef GtkDateChooserDayOptions (* GtkDateChooserDayOptionsCallback) (GtkDateChooserWidget *chooser,
+                                                                       GDateTime            *date,
+                                                                       gpointer              data);
+GDK_AVAILABLE_IN_3_20
+void        gtk_date_chooser_widget_set_day_options_callback      (GtkDateChooserWidget      *chooser,
+                                                                   GtkDateChooserDayOptionsCallback  callback,
+                                                                   gpointer                   data,
+                                                                   GDestroyNotify             destroy);
+GDK_AVAILABLE_IN_3_20
+void        gtk_date_chooser_widget_invalidate_day_options (GtkDateChooserWidget *widget);
+
 GDK_AVAILABLE_IN_3_20
 void        gtk_date_chooser_widget_set_no_month_change   (GtkDateChooserWidget *chooser,
                                                            gboolean              setting);

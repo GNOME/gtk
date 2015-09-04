@@ -347,3 +347,24 @@ gtk_date_chooser_day_set_selected (GtkDateChooserDay *day,
   else
     gtk_widget_unset_state_flags (GTK_WIDGET (day), GTK_STATE_FLAG_SELECTED);
 }
+
+void
+gtk_date_chooser_day_set_options (GtkDateChooserDay        *day,
+                                  GtkDateChooserDayOptions  options)
+{
+  GtkStyleContext *context;
+
+  context = gtk_widget_get_style_context (GTK_WIDGET (day));
+  if (options & GTK_DATE_CHOOSER_DAY_WEEKEND)
+    gtk_style_context_add_class (context, "weekend");
+  else
+    gtk_style_context_remove_class (context, "weekend");
+  if (options & GTK_DATE_CHOOSER_DAY_HOLIDAY)
+    gtk_style_context_add_class (context, "holiday");
+  else
+    gtk_style_context_remove_class (context, "holiday");
+  if (options & GTK_DATE_CHOOSER_DAY_MARKED)
+    gtk_style_context_add_class (context, "marked");
+  else
+    gtk_style_context_remove_class (context, "marked");
+}
