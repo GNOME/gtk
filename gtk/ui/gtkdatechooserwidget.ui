@@ -8,39 +8,14 @@
         <property name="visible">True</property>
         <property name="orientation">vertical</property>
         <child>
-          <object class="GtkBox">
+          <object class="GtkMultiChoice" id="month_choice">
             <property name="visible" bind-source="GtkDateChooserWidget" bind-property="show-heading" bind-flags="sync-create"/>
-            <property name="hexpand">True</property>
-            <child>
-              <object class="GtkMultiChoice" id="month_choice">
-                <property name="visible">True</property>
-                <property name="halign">start</property>
-                <property name="min-value">0</property>
-                <property name="max-value">11</property>
-                <property name="wrap">True</property>
-                <property name="animate">True</property>
-                <property name="value">0</property>
-                <signal name="notify::value" handler="calendar_month_changed" swapped="yes"/>
-                <signal name="wrapped" handler="calendar_month_wrapped" swapped="yes"/>
-              </object>
-              <packing>
-                <property name="expand">True</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkMultiChoice" id="year_choice">
-                <property name="visible">True</property>
-                <property name="halign">end</property>
-                <property name="min-value">0</property>
-                <property name="max-value">9999</property>
-                <property name="wrap">False</property>
-                <property name="value">2015</property>
-                <signal name="notify::value" handler="calendar_month_changed" swapped="yes"/>
-              </object>
-              <packing>
-                <property name="expand">True</property>
-              </packing>
-            </child>
+            <property name="halign">fill</property>
+            <property name="min-value">0</property>
+            <property name="max-value">120000</property>
+            <property name="animate">False</property>
+            <property name="value">0</property>
+            <signal name="notify::value" handler="calendar_month_changed" swapped="yes"/>
           </object>
         </child>
         <child>
