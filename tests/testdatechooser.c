@@ -1,25 +1,18 @@
 #include <gtk/gtk.h>
 
-static const gchar css[] =
-".weekday {"
-"  background: darkgray;"
-"  padding-left: 6px;"
-"  padding-right: 6px;"
-"}"
-".weeknum {"
-"  background: darkgray;"
-"  padding-top: 6px;"
-"  padding-bottom: 6px;"
-"}"
-".day {"
-"  margin: 6px;"
-"}"
-".day.other-month {"
-"  color: gray;"
-"}"
-".day:selected {"
-"  background: @theme_selected_bg_color;"
-"}";
+static void
+date_changed (GObject *calendar,
+              GParamSpec *pspec,
+              gpointer data)
+{
+  GDateTime *date;
+  gchar *text;
+
+  date = gtk_date_chooser_widget_get_date (GTK_DATE_CHOOSER_WIDGET (calendar));
+  text = g_date_time_format (date, "selected: %x");
+  g_print ("%s\n", text);
+  g_free (text);
+}
 
 int
 main (int argc, char *argv[])
@@ -28,25 +21,11 @@ main (int argc, char *argv[])
 
   gtk_init (NULL, NULL);
 
-  if (argc > 1 && g_strcmp0 (argv[1], "--builtin-css") == 0)
-    {
-      GtkCssProvider *provider;
-      GError *error = NULL;
-
-      provider = gtk_css_provider_new ();
-      gtk_css_provider_load_from_data (provider, css, sizeof (css), &error);
-      if (error)
-        {
-          g_print ("%s", error->message);
-          g_error_free (error);
-        }
-      gtk_style_context_add_provider_for_screen (gdk_screen_get_default (),
-                                                 GTK_STYLE_PROVIDER (provider), 800);
-    }
-
   window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
 
   calendar = gtk_date_chooser_widget_new ();
+  g_signal_connect (calendar, "notify::date",
+                    G_CALLBACK (date_changed), NULL);
 
   gtk_container_add (GTK_CONTAINER (window), calendar);
 
