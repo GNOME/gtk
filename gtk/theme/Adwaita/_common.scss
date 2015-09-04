@@ -2761,13 +2761,19 @@ GtkCalendar {
   text-align: center; /* haha, dream on */
 }
 .day.dim-label{ color: $insensitive_fg_color; }
-.day:selected {
+.day.day:selected {
   color: $selected_fg_color;
   background-color: $selected_bg_color;
   padding: 0.4em;
   border-radius: 3px;
 }
-
+.day.holiday,
+.day.weekend {
+  background-color: transparentize(red, 0.9);
+}
+.day.marked {
+  font-weight: bold;
+}
 
 /***********
  * Dialogs *

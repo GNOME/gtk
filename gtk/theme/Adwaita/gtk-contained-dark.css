@@ -3678,11 +3678,18 @@ GtkCalendar {
 .header-bar .day.subtitle {
   color: #939695; }
 
-.day:selected {
+.day.day:selected {
   color: #ffffff;
   background-color: #215d9c;
   padding: 0.4em;
   border-radius: 3px; }
+
+.day.holiday,
+.day.weekend {
+  background-color: rgba(255, 0, 0, 0.1); }
+
+.day.marked {
+  font-weight: bold; }
 
 /***********
  * Dialogs *
