@@ -5322,7 +5322,6 @@ gtk_text_view_key_press_event (GtkWidget *widget, GdkEventKey *event)
   GtkTextIter iter;
   gboolean can_insert;
   gboolean retval = FALSE;
-  gboolean obscure = FALSE;
 
   text_view = GTK_TEXT_VIEW (widget);
   priv = text_view->priv;
@@ -5343,7 +5342,6 @@ gtk_text_view_key_press_event (GtkWidget *widget, GdkEventKey *event)
       priv->need_im_reset = TRUE;
       if (!can_insert)
         gtk_text_view_reset_im_context (text_view);
-      obscure = can_insert;
       retval = TRUE;
     }
   /* Binding set */
