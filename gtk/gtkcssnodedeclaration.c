@@ -33,6 +33,7 @@ struct _GtkCssNodeDeclaration {
   guint refcount;
   GtkJunctionSides junction_sides;
   GType type;
+  const /* interned */ char *name;
   const /* interned */ char *id;
   GtkStateFlags state;
   guint n_classes;
@@ -118,6 +119,9 @@ gtk_css_node_declaration_new (void)
     1, /* need to own a ref ourselves so the copy-on-write path kicks in when people change things */
     0,
     0,
+    NULL,
+    NULL,
+    0,
     0,
     0
   };
@@ -166,10 +170,12 @@ gboolean
 gtk_css_node_declaration_set_type (GtkCssNodeDeclaration **decl,
                                    GType                   type)
 {
-  if ((*decl)->type == type)
+  if ((*decl)->type == type &&
+      (*decl)->name == NULL)
     return FALSE;
 
   gtk_css_node_declaration_make_writable (decl);
+  (*decl)->name = NULL;
   (*decl)->type = type;
 
   return TRUE;
@@ -179,6 +185,27 @@ GType
 gtk_css_node_declaration_get_type (const GtkCssNodeDeclaration *decl)
 {
   return decl->type;
+}
+
+gboolean
+gtk_css_node_declaration_set_name (GtkCssNodeDeclaration   **decl,
+                                   /*interned*/ const char  *name)
+{
+  if ((*decl)->type == 0 &&
+      (*decl)->name == name)
+    return FALSE;
+
+  gtk_css_node_declaration_make_writable (decl);
+  (*decl)->type = 0;
+  (*decl)->name = name;
+
+  return TRUE;
+}
+
+/*interned*/ const char *
+gtk_css_node_declaration_get_name (const GtkCssNodeDeclaration *decl)
+{
+  return decl->name;
 }
 
 gboolean
@@ -510,6 +537,7 @@ gtk_css_node_declaration_hash (gconstpointer elem)
   guint hash, i;
   
   hash = (guint) decl->type;
+  hash ^= GPOINTER_TO_UINT (decl->name);
   hash <<= 5;
   hash ^= GPOINTER_TO_UINT (decl->id);
 
@@ -548,6 +576,9 @@ gtk_css_node_declaration_equal (gconstpointer elem1,
     return TRUE;
 
   if (decl1->type != decl2->type)
+    return FALSE;
+
+  if (decl1->name != decl2->name)
     return FALSE;
 
   if (decl1->state != decl2->state)
