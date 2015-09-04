@@ -44,9 +44,9 @@ struct _GtkPathBarPrivate
 
   GCancellable *get_info_cancellable;
 
-  cairo_surface_t *root_icon;
-  cairo_surface_t *home_icon;
-  cairo_surface_t *desktop_icon;
+  GIcon *root_icon;
+  GIcon *home_icon;
+  GIcon *desktop_icon;
 
   GdkWindow *event_window;
 
@@ -56,7 +56,6 @@ struct _GtkPathBarPrivate
   GtkWidget *up_slider_button;
   GtkWidget *down_slider_button;
   guint settings_signal_id;
-  gint icon_size;
   gint16 slider_width;
   gint16 button_offset;
   guint timer;
@@ -206,7 +205,6 @@ gtk_path_bar_init (GtkPathBar *path_bar)
   gtk_style_context_add_class (context, GTK_STYLE_CLASS_LINKED);
 
   path_bar->priv->get_info_cancellable = NULL;
-  path_bar->priv->icon_size = FALLBACK_ICON_SIZE;
 }
 
 static void
@@ -284,22 +282,15 @@ gtk_path_bar_finalize (GObject *object)
   gtk_path_bar_stop_scrolling (path_bar);
 
   g_list_free (path_bar->priv->button_list);
-  if (path_bar->priv->root_file)
-    g_object_unref (path_bar->priv->root_file);
-  if (path_bar->priv->home_file)
-    g_object_unref (path_bar->priv->home_file);
-  if (path_bar->priv->desktop_file)
-    g_object_unref (path_bar->priv->desktop_file);
+  g_clear_object (&path_bar->priv->root_file);
+  g_clear_object (&path_bar->priv->home_file);
+  g_clear_object (&path_bar->priv->desktop_file);
 
-  if (path_bar->priv->root_icon)
-    cairo_surface_destroy (path_bar->priv->root_icon);
-  if (path_bar->priv->home_icon)
-    cairo_surface_destroy (path_bar->priv->home_icon);
-  if (path_bar->priv->desktop_icon)
-    cairo_surface_destroy (path_bar->priv->desktop_icon);
+  g_clear_object (&path_bar->priv->root_icon);
+  g_clear_object (&path_bar->priv->home_icon);
+  g_clear_object (&path_bar->priv->desktop_icon);
 
-  if (path_bar->priv->file_system)
-    g_object_unref (path_bar->priv->file_system);
+  g_clear_object (&path_bar->priv->file_system);
 
   G_OBJECT_CLASS (gtk_path_bar_parent_class)->finalize (object);
 }
@@ -1234,21 +1225,9 @@ reload_icons (GtkPathBar *path_bar)
 {
   GList *list;
 
-  if (path_bar->priv->root_icon)
-    {
-      cairo_surface_destroy (path_bar->priv->root_icon);
-      path_bar->priv->root_icon = NULL;
-    }
-  if (path_bar->priv->home_icon)
-    {
-      cairo_surface_destroy (path_bar->priv->home_icon);
-      path_bar->priv->home_icon = NULL;
-    }
-  if (path_bar->priv->desktop_icon)
-    {
-      cairo_surface_destroy (path_bar->priv->desktop_icon);
-      path_bar->priv->desktop_icon = NULL;
-    }
+  g_clear_object (&path_bar->priv->root_icon);
+  g_clear_object (&path_bar->priv->home_icon);
+  g_clear_object (&path_bar->priv->desktop_icon);
 
   for (list = path_bar->priv->button_list; list; list = list->next)
     {
@@ -1262,19 +1241,11 @@ reload_icons (GtkPathBar *path_bar)
 	  gtk_path_bar_update_button_appearance (path_bar, button_data, current_dir);
 	}
     }
-  
 }
 
 static void
 change_icon_theme (GtkPathBar *path_bar)
 {
-  gint width, height;
-
-  if (gtk_icon_size_lookup (GTK_ICON_SIZE_MENU, &width, &height))
-    path_bar->priv->icon_size = MAX (width, height);
-  else
-    path_bar->priv->icon_size = FALLBACK_ICON_SIZE;
-
   reload_icons (path_bar);
 }
 
@@ -1375,7 +1346,7 @@ set_button_image_get_info_cb (GCancellable *cancellable,
 			      gpointer      user_data)
 {
   gboolean cancelled = g_cancellable_is_cancelled (cancellable);
-  cairo_surface_t *surface;
+  GIcon *icon;
   struct SetButtonImageData *data = user_data;
 
   if (cancellable != data->button_data->cancellable)
@@ -1392,25 +1363,17 @@ set_button_image_get_info_cb (GCancellable *cancellable,
   if (cancelled || error)
     goto out;
 
-  surface = _gtk_file_info_render_symbolic_icon (info,
-                                                 GTK_WIDGET (data->path_bar),
-			 	                 data->path_bar->priv->icon_size);
-  gtk_image_set_from_surface (GTK_IMAGE (data->button_data->image), surface);
+  icon = g_file_info_get_symbolic_icon (info);
+  gtk_image_set_from_gicon (GTK_IMAGE (data->button_data->image), icon, GTK_ICON_SIZE_BUTTON);
 
   switch (data->button_data->type)
     {
       case HOME_BUTTON:
-	if (data->path_bar->priv->home_icon)
-	  cairo_surface_destroy (surface);
-	else
-	  data->path_bar->priv->home_icon = surface;
+        g_set_object (&data->path_bar->priv->home_icon, icon);
 	break;
 
       case DESKTOP_BUTTON:
-	if (data->path_bar->priv->desktop_icon)
-	  cairo_surface_destroy (surface);
-	else
-	  data->path_bar->priv->desktop_icon = surface;
+        g_set_object (&data->path_bar->priv->desktop_icon, icon);
 	break;
 
       default:
@@ -1435,7 +1398,7 @@ set_button_image (GtkPathBar *path_bar,
 
       if (path_bar->priv->root_icon != NULL)
         {
-          gtk_image_set_from_surface (GTK_IMAGE (button_data->image), path_bar->priv->root_icon);
+          gtk_image_set_from_gicon (GTK_IMAGE (button_data->image), path_bar->priv->root_icon, GTK_ICON_SIZE_BUTTON);
 	  break;
 	}
 
@@ -1443,19 +1406,16 @@ set_button_image (GtkPathBar *path_bar,
       if (volume == NULL)
 	return;
 
-      path_bar->priv->root_icon = _gtk_file_system_volume_render_symbolic_icon (volume,
-								                GTK_WIDGET (path_bar),
-								                path_bar->priv->icon_size,
-								                NULL);
+      path_bar->priv->root_icon = _gtk_file_system_volume_get_symbolic_icon (volume);
       _gtk_file_system_volume_unref (volume);
+      gtk_image_set_from_gicon (GTK_IMAGE (button_data->image), path_bar->priv->root_icon, GTK_ICON_SIZE_BUTTON);
 
-      gtk_image_set_from_surface (GTK_IMAGE (button_data->image), path_bar->priv->root_icon);
       break;
 
     case HOME_BUTTON:
       if (path_bar->priv->home_icon != NULL)
         {
-	  gtk_image_set_from_surface (GTK_IMAGE (button_data->image), path_bar->priv->home_icon);
+          gtk_image_set_from_gicon (GTK_IMAGE (button_data->image), path_bar->priv->home_icon, GTK_ICON_SIZE_BUTTON);
 	  break;
 	}
 
@@ -1477,7 +1437,7 @@ set_button_image (GtkPathBar *path_bar,
     case DESKTOP_BUTTON:
       if (path_bar->priv->desktop_icon != NULL)
         {
-	  gtk_image_set_from_surface (GTK_IMAGE (button_data->image), path_bar->priv->desktop_icon);
+          gtk_image_set_from_gicon (GTK_IMAGE (button_data->image), path_bar->priv->desktop_icon, GTK_ICON_SIZE_BUTTON);
 	  break;
 	}
 
