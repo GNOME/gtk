@@ -43,9 +43,7 @@ struct _GtkDateChooserDay
 {
   GtkBin parent;
   GtkWidget *label;
-  guint day;
-  guint month;
-  guint year;
+  GDateTime *date;
   GdkWindow *event_window;
   GtkGesture *multipress_gesture;
 };
@@ -257,14 +255,11 @@ gtk_date_chooser_day_drag_data_get (GtkWidget        *widget,
                                     guint             time)
 {
   GtkDateChooserDay *day = GTK_DATE_CHOOSER_DAY (widget);
-  GDateTime *dt;
   gchar *text;
 
-  dt = g_date_time_new_local (day->year, day->month + 1 , day->day, 1, 1, 1);
-  text = g_date_time_format (dt, "%x");
+  text = g_date_time_format (day->date, "%x");
   gtk_selection_data_set_text (selection_data, text, -1);
   g_free (text);
-  g_date_time_unref (dt);
 }
 
 static void
@@ -301,30 +296,23 @@ gtk_date_chooser_day_new (void)
 
 void
 gtk_date_chooser_day_set_date (GtkDateChooserDay *day,
-                               guint              y,
-                               guint              m,
-                               guint              d)
+                               GDateTime         *date)
 {
   gchar *text;
 
-  day->year = y;
-  day->month = m;
-  day->day = d;
+  if (day->date)
+    g_date_time_unref (day->date);
+  day->date = g_date_time_ref (date);
 
-  text = g_strdup_printf ("%d", day->day);
+  text = g_strdup_printf ("%d", g_date_time_get_day_of_month (date));
   gtk_label_set_label (GTK_LABEL (day->label), text);
   g_free (text);
 }
 
-void
-gtk_date_chooser_day_get_date (GtkDateChooserDay *day,
-                               guint             *y,
-                               guint             *m,
-                               guint             *d)
+GDateTime *
+gtk_date_chooser_day_get_date (GtkDateChooserDay *day)
 {
-  *y = day->year;
-  *m = day->month;
-  *d = day->day;
+  return day->date;
 }
 
 void

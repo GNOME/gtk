@@ -46,28 +46,13 @@ GType       gtk_date_chooser_widget_get_type              (void) G_GNUC_CONST;
 GDK_AVAILABLE_IN_3_20
 GtkWidget * gtk_date_chooser_widget_new                   (void);
 
-
-GDK_AVAILABLE_IN_3_20
-void        gtk_date_chooser_widget_select_month          (GtkDateChooserWidget *chooser,
-                                                           guint                 year,
-                                                           guint                 month);
-
-GDK_AVAILABLE_IN_3_20
-void        gtk_date_chooser_widget_select_day            (GtkDateChooserWidget *chooser,
-                                                           guint                 day);
-
 GDK_AVAILABLE_IN_3_20
 void        gtk_date_chooser_widget_set_date              (GtkDateChooserWidget *chooser,
-                                                           guint                 year,
-                                                           guint                 month,
-                                                           guint                 day);
+                                                           GDateTime            *dt);
 GDK_AVAILABLE_IN_3_20
-void        gtk_date_chooser_widget_get_date              (GtkDateChooserWidget *chooser,
-                                                           guint                *year,
-                                                           guint                *month,
-                                                           guint                *day);
+GDateTime * gtk_date_chooser_widget_get_date              (GtkDateChooserWidget *chooser);
 
-
+GDK_AVAILABLE_IN_3_20
 void        gtk_date_chooser_widget_set_no_month_change   (GtkDateChooserWidget *chooser,
                                                            gboolean              setting);
 

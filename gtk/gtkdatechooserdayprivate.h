@@ -35,14 +35,9 @@ typedef struct _GtkDateChooserDayClass   GtkDateChooserDayClass;
 
 GType       gtk_date_chooser_day_get_type        (void) G_GNUC_CONST;
 GtkWidget * gtk_date_chooser_day_new             (void);
-void        gtk_date_chooser_day_set_date        (GtkDateChooserDay *widget,
-                                                  guint              year,
-                                                  guint              month,
-                                                  guint              day);
-void        gtk_date_chooser_day_get_date        (GtkDateChooserDay *widget,
-                                                  guint             *year,
-                                                  guint             *month,
-                                                  guint             *day);
+void        gtk_date_chooser_day_set_date        (GtkDateChooserDay *day,
+                                                  GDateTime         *date);
+GDateTime  *gtk_date_chooser_day_get_date        (GtkDateChooserDay *day);
 void        gtk_date_chooser_day_set_other_month (GtkDateChooserDay *day,
                                                   gboolean           other_month);
 void        gtk_date_chooser_day_set_selected    (GtkDateChooserDay *day,

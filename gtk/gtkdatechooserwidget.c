@@ -43,9 +43,7 @@ enum {
 static guint calendar_signals[LAST_SIGNAL] = { 0, };
 
 enum {
-  PROP_YEAR = 1,
-  PROP_MONTH,
-  PROP_DAY,
+  PROP_DATE = 1,
   PROP_SHOW_HEADING,
   PROP_SHOW_DAY_NAMES,
   PROP_SHOW_WEEK_NUMBERS,
@@ -68,9 +66,7 @@ struct _GtkDateChooserWidget
   GtkWidget *rows[6];
   GtkWidget *days[6][7];
 
-  guint month;
-  guint year;
-  guint day;
+  GDateTime *date;
 
   gint this_year;
   gint week_start;
@@ -101,55 +97,27 @@ leap (guint year)
   return ((((year % 4) == 0) && ((year % 100) != 0)) || ((year % 400) == 0));
 }
 
-static guint
-day_of_week (guint year, guint mm, guint dd)
-{
-  GDateTime *dt;
-  guint days;
-
-  dt = g_date_time_new_local (year, mm, dd, 1, 1, 1);
-  if (dt == NULL)
-    return 0;
-
-  days = g_date_time_get_day_of_week (dt);
-  g_date_time_unref (dt);
-
-  return days;
-}
-
-static guint
-week_of_year (guint year, guint mm, guint dd)
-{
-  GDateTime *dt;
-  guint week;
-
-  dt = g_date_time_new_local (year, mm, dd, 1, 1, 1);
-  if (dt == NULL)
-    return 1;
-
-  week = g_date_time_get_week_of_year (dt);
-  g_date_time_unref (dt);
-
-  return week;
-}
-
 static void
 calendar_compute_days (GtkDateChooserWidget *calendar)
 {
-  guint year, month, day;
+  gint year, month, day;
+  gint other_year, other_month;
   gint ndays_in_month;
   gint ndays_in_prev_month;
   gint first_day;
   gint row;
   gint col;
   GtkDateChooserDay *d;
+  GDateTime *date;
 
-  year = calendar->year;
-  month = calendar->month + 1;
+  g_date_time_get_ymd (calendar->date, &year, &month, NULL);
 
   ndays_in_month = month_length[leap (year)][month];
 
-  first_day = day_of_week (year, month, 1);
+  date = g_date_time_new_local (year, month, 1, 1, 1, 1);
+  first_day = g_date_time_get_day_of_week (date);
+  g_date_time_unref (date);
+
   first_day = (first_day + 7 - calendar->week_start) % 7;
   if (first_day == 0)
     first_day = 7;
@@ -161,14 +129,21 @@ calendar_compute_days (GtkDateChooserWidget *calendar)
     ndays_in_prev_month = month_length[leap (year - 1)][12];
   day = ndays_in_prev_month - first_day + 1;
 
-  month = (calendar->month + 11) % 12;
-  year = calendar->year - (month == 11);
+  other_year = year;
+  other_month = month - 1;
+  if (other_month == 0)
+    {
+      other_month = 12;
+      other_year -= 1;
+    }
 
   for (col = 0; col < first_day; col++)
     {
       d = GTK_DATE_CHOOSER_DAY (calendar->days[0][col]);
-      gtk_date_chooser_day_set_date (d, year, month, day);
+      date = g_date_time_new_local (other_year, other_month, day, 1, 1, 1);
+      gtk_date_chooser_day_set_date (d, date);
       gtk_date_chooser_day_set_other_month (d, TRUE);
+      g_date_time_unref (date);
       day++;
     }
 
@@ -176,14 +151,13 @@ calendar_compute_days (GtkDateChooserWidget *calendar)
   row = first_day / 7;
   col = first_day % 7;
 
-  month = calendar->month;
-  year = calendar->year;
-
   for (day = 1; day <= ndays_in_month; day++)
     {
       d = GTK_DATE_CHOOSER_DAY (calendar->days[row][col]);
-      gtk_date_chooser_day_set_date (d, year, month, day);
+      date = g_date_time_new_local (year, month, day, 1, 1, 1);
+      gtk_date_chooser_day_set_date (d, date);
       gtk_date_chooser_day_set_other_month (d, FALSE);
+      g_date_time_unref (date);
 
       col++;
       if (col == 7)
@@ -195,8 +169,13 @@ calendar_compute_days (GtkDateChooserWidget *calendar)
 
   /* Compute days of next month */
 
-  month = (calendar->month + 1) % 12;
-  year = calendar->year + (month == 0);
+  other_year = year;
+  other_month = month + 1;
+  if (other_month == 13)
+    {
+      other_month = 1;
+      other_year += 1;
+    }
 
   day = 1;
   for (; row < 6; row++)
@@ -204,8 +183,10 @@ calendar_compute_days (GtkDateChooserWidget *calendar)
       for (; col < 7; col++)
         {
           d = GTK_DATE_CHOOSER_DAY (calendar->days[row][col]);
-          gtk_date_chooser_day_set_date (d, year, month, day);
+          date = g_date_time_new_local (other_year, other_month, day, 1, 1, 1);
+          gtk_date_chooser_day_set_date (d, date);
           gtk_date_chooser_day_set_other_month (d, TRUE);
+          g_date_time_unref (date);
           day++;
         }
       col = 0;
@@ -215,38 +196,41 @@ calendar_compute_days (GtkDateChooserWidget *calendar)
   for (row = 0; row < 6; row++)
     {
       gchar *text;
-      guint week;
 
       d = GTK_DATE_CHOOSER_DAY (calendar->days[row][6]);
-      gtk_date_chooser_day_get_date (d, &year, &month, &day);
-
-      week = week_of_year (year, month + 1, day);
-      text = g_strdup_printf ("%d", week);
+      date = gtk_date_chooser_day_get_date (d);
+      text = g_strdup_printf ("%d", g_date_time_get_week_of_year (date));
       gtk_label_set_label (GTK_LABEL (calendar->rows[row]), text);
       g_free (text);
     }
 }
 
+/* 0 == sunday */
 static gchar *
 calendar_get_weekday_name (gint i)
 {
-  time_t time;
-  gchar buffer[128];
+  GDateTime *date;
+  gchar *text;
 
-  time = (i + 3) * 86400;
-  strftime (buffer, sizeof (buffer), "%a", gmtime (&time));
-  return g_locale_to_utf8 (buffer, -1, NULL, NULL, NULL);
+  date = g_date_time_new_local (2015, 1, 4 + i, 1, 1, 1);
+  text = g_date_time_format (date, "%a");
+  g_date_time_unref (date);
+
+  return text;
 }
 
+/* 0 = january */
 static gchar *
 calendar_get_month_name (gint i)
 {
-  time_t time;
-  gchar buffer[128];
+  GDateTime *date;
+  gchar *text;
 
-  time = i * 2764800;
-  strftime (buffer, sizeof (buffer), "%B", gmtime (&time));
-  return g_locale_to_utf8 (buffer, -1, NULL, NULL, NULL);
+  date = g_date_time_new_local (2015, i + 1, 1, 1, 1, 1);
+  text = g_date_time_format (date, "%B");
+  g_date_time_unref (date);
+
+  return text;
 }
 
 static void
@@ -321,16 +305,14 @@ calendar_update_selected_day_display (GtkDateChooserWidget *calendar)
 {
   gint row, col;
   GtkDateChooserDay *d;
-  guint year, month, day;
+  GDateTime *date;
 
   for (row = 0; row < 6; row++)
     for (col = 0; col < 7; col++)
       {
         d = GTK_DATE_CHOOSER_DAY (calendar->days[row][col]);
-        gtk_date_chooser_day_get_date (d, &year, &month, &day);
-        gtk_date_chooser_day_set_selected (d, day == calendar->day &&
-                                              month == calendar->month &&
-                                              year == calendar->year);
+        date = gtk_date_chooser_day_get_date (d);
+        gtk_date_chooser_day_set_selected (d, g_date_time_equal (date, calendar->date));
       }
 }
 
@@ -338,11 +320,19 @@ static void
 calendar_update_selected_day (GtkDateChooserWidget *calendar)
 {
   gint month_len;
+  gint year, month, day;
+  GDateTime *date;
 
-  month_len = month_length[leap (calendar->year)][calendar->month + 1];
+  g_date_time_get_ymd (calendar->date, &year, &month, &day);
 
-  if (month_len < calendar->day)
-    gtk_date_chooser_widget_select_day (calendar, month_len);
+  month_len = month_length[leap (year)][month];
+
+  if (month_len < day)
+    {
+      date = g_date_time_new_local (year, month, month_len, 1, 1, 1);
+      gtk_date_chooser_widget_set_date (calendar, date);
+      g_date_time_unref (date);
+    }
   else
     calendar_update_selected_day_display (calendar);
 }
@@ -364,7 +354,7 @@ calendar_get_week_start (void)
   else if (week_origin == 19971201) /* Monday */
     week_1stday = 1;
   else
-    g_warning ("Unknown value of _NL_TIME_WEEK_1STDAY.\n");
+    g_warning ("Unknown value of _NL_TIME_WEEK_1STDAY.");
 
   return (week_1stday + first_weekday - 1) % 7;
 }
@@ -373,35 +363,23 @@ static void
 day_selected_cb (GtkDateChooserDay    *d,
                  GtkDateChooserWidget *calendar)
 {
-  guint year, month, day;
-
-  gtk_date_chooser_day_get_date (d, &year, &month, &day);
-  if (!calendar->no_month_change)
-    gtk_multi_choice_set_value (GTK_MULTI_CHOICE (calendar->month_choice),
-                                12 *year + month);
-
-  if (month == calendar->month && year == calendar->year)
-    gtk_date_chooser_widget_select_day (calendar, day);
+  gtk_date_chooser_widget_set_date (calendar, gtk_date_chooser_day_get_date (d));
 }
 
 static void
 gtk_date_chooser_widget_init (GtkDateChooserWidget *calendar)
 {
   gint row, col;
-  GDateTime *now;
   GtkWidget *label;
+  gint year, month;
 
   calendar->show_heading = TRUE;
   calendar->show_day_names = TRUE;
   calendar->show_week_numbers = TRUE;
   calendar->no_month_change = FALSE;
 
-  now = g_date_time_new_now_local ();
-  calendar->year = g_date_time_get_year (now);
-  calendar->month = g_date_time_get_month (now) - 1;
-  calendar->day = g_date_time_get_day_of_month (now);
-  g_date_time_unref (now);
-  calendar->this_year = calendar->year;
+  calendar->date = g_date_time_new_now_local ();
+  g_date_time_get_ymd (calendar->date, &calendar->this_year, NULL, NULL);
 
   calendar->week_start = calendar_get_week_start ();
 
@@ -462,8 +440,8 @@ gtk_date_chooser_widget_init (GtkDateChooserWidget *calendar)
   calendar_init_weekday_display (calendar);
 
   calendar_compute_days (calendar);
-  gtk_multi_choice_set_value (GTK_MULTI_CHOICE (calendar->month_choice),
-                              12 *calendar->year + calendar->month);
+  g_date_time_get_ymd (calendar->date, &year, &month, NULL);
+  gtk_multi_choice_set_value (GTK_MULTI_CHOICE (calendar->month_choice), 12 * year + month - 1);
   calendar_update_selected_day_display (calendar);
 
   gtk_drag_dest_set (GTK_WIDGET (calendar), GTK_DEST_DEFAULT_ALL, NULL, 0, GDK_ACTION_COPY);
@@ -480,14 +458,8 @@ calendar_set_property (GObject      *obj,
 
   switch (property_id)
     {
-    case PROP_YEAR:
-      gtk_date_chooser_widget_set_date (calendar, g_value_get_int (value), calendar->month, calendar->day);
-      break;
-    case PROP_MONTH:
-      gtk_date_chooser_widget_set_date (calendar, calendar->year, g_value_get_int (value), calendar->day);
-      break;
-    case PROP_DAY:
-      gtk_date_chooser_widget_set_date (calendar, calendar->year, calendar->month, g_value_get_int (value));
+    case PROP_DATE:
+      gtk_date_chooser_widget_set_date (calendar, g_value_get_boxed (value));
       break;
     case PROP_SHOW_HEADING:
       gtk_date_chooser_widget_set_show_heading (calendar, g_value_get_boolean (value));
@@ -517,14 +489,8 @@ calendar_get_property (GObject    *obj,
 
   switch (property_id)
     {
-    case PROP_YEAR:
-      g_value_set_int (value, calendar->year);
-      break;
-    case PROP_MONTH:
-      g_value_set_int (value, calendar->month);
-      break;
-    case PROP_DAY:
-      g_value_set_int (value, calendar->day);
+    case PROP_DATE:
+      g_value_set_boxed (value, calendar->date);
       break;
     case PROP_SHOW_HEADING:
       g_value_set_boolean (value, calendar->show_heading);
@@ -548,14 +514,17 @@ static void
 calendar_month_changed (GtkDateChooserWidget *calendar)
 {
   gint value;
-  gint month;
-  gint year;
+  gint year, month, day;
+  GDateTime *date;
 
   value = gtk_multi_choice_get_value (GTK_MULTI_CHOICE (calendar->month_choice));
-  month = value % 12;
   year = value / 12;
+  month = value % 12 + 1;
+  g_date_time_get_ymd (calendar->date, NULL, NULL, &day);
 
-  gtk_date_chooser_widget_set_date (calendar, year, month, calendar->day);
+  date = g_date_time_new_local (year, month, day, 1, 1, 1);
+  gtk_date_chooser_widget_set_date (calendar, date);
+  g_date_time_unref (date);
 }
 
 static void
@@ -569,37 +538,38 @@ calendar_drag_data_received (GtkWidget        *widget,
 {
   GtkDateChooserWidget *calendar = GTK_DATE_CHOOSER_WIDGET (widget);
   gchar *text;
-  GDate *date;
-  guint year, month, day;
+  GDate *gdate;
+  gint year, month, day;
+  GDateTime *date;
 
-  date = g_date_new ();
+  gdate = g_date_new ();
   text = (gchar *)gtk_selection_data_get_text (selection_data);
   if (text)
     {
-      g_date_set_parse (date, text);
+      g_date_set_parse (gdate, text);
       g_free (text);
     }
-  if (!g_date_valid (date))
+  if (!g_date_valid (gdate))
     {
-      g_date_free (date);
+      g_date_free (gdate);
       gtk_drag_finish (context, FALSE, FALSE, time);
       return;
     }
 
-  year = g_date_get_year (date);
-  month = g_date_get_month (date) - 1;
-  day = g_date_get_day (date);
+  year = g_date_get_year (gdate);
+  month = g_date_get_month (gdate);
+  day = g_date_get_day (gdate);
 
-  g_date_free (date);
+  g_date_free (gdate);
 
   gtk_drag_finish (context, TRUE, FALSE, time);
 
   if (!calendar->show_heading || calendar->no_month_change)
-    {
-      year = calendar->year;
-      month = calendar->month;
-    }
-  gtk_date_chooser_widget_set_date (calendar, year, month, day);
+    g_date_time_get_ymd (calendar->date, &year, &month, NULL);
+
+  date = g_date_time_new_local (year, month, day, 1, 1, 1);
+  gtk_date_chooser_widget_set_date (calendar, date);
+  g_date_time_unref (date);
 }
 
 static void
@@ -617,18 +587,10 @@ gtk_date_chooser_widget_class_init (GtkDateChooserWidgetClass *class)
 
   gtk_widget_class_set_template_from_resource (widget_class, "/org/gtk/libgtk/ui/gtkdatechooserwidget.ui");
 
-  calendar_properties[PROP_YEAR] =
-      g_param_spec_int ("year", P_("Year"), P_("The selected year"),
-                        0, G_MAXINT >> 9, 0,
-                        G_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
-  calendar_properties[PROP_MONTH] =
-      g_param_spec_int ("month", P_("Month"), P_("The selected month (as a number between 0 and 11)"),
-                        0, 11, 0,
-                        G_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
-  calendar_properties[PROP_DAY] =
-      g_param_spec_int ("day", P_("Day"), P_("The selected day (as a number between 1 and 31, or 0 to unselect the currently selected day)"),
-                        0, 31, 0,
-                        G_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
+  calendar_properties[PROP_DATE] =
+      g_param_spec_boxed ("date", P_("Date"), P_("The selected date"),
+                          G_TYPE_DATE_TIME,
+                          G_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
   calendar_properties[PROP_SHOW_HEADING] =
       g_param_spec_boolean ("show-heading", P_("Show Heading"), P_("If TRUE, a heading is displayed"),
                             TRUE, G_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
@@ -752,84 +714,36 @@ gtk_date_chooser_widget_get_no_month_change (GtkDateChooserWidget *calendar)
 
 void
 gtk_date_chooser_widget_set_date (GtkDateChooserWidget *calendar,
-                                  guint                 year,
-                                  guint                 month,
-                                  guint                 day)
+                                  GDateTime            *date)
 {
-  gboolean month_changed = FALSE;
-  gboolean day_changed = FALSE;
+  gint y1, m1, d1, y2, m2, d2;
+
   g_object_freeze_notify (G_OBJECT (calendar));
 
-  if (calendar->year != year)
+  g_date_time_get_ymd (calendar->date, &y1, &m1, &d1);
+  g_date_time_get_ymd (date, &y2, &m2, &d2);
+
+  g_date_time_unref (calendar->date);
+  calendar->date = g_date_time_ref (date);
+
+  if (y1 != y2 || m1 != m2)
     {
-      month_changed = TRUE;
-      calendar->year = year;
-      g_object_notify_by_pspec (G_OBJECT (calendar),
-                                calendar_properties[PROP_YEAR]);
+      gtk_multi_choice_set_value (GTK_MULTI_CHOICE (calendar->month_choice), 12 * y2 + m2 - 1);
+      calendar_compute_days (calendar);
     }
 
-  if (calendar->month != month)
-    {
-      month_changed = TRUE;
-      calendar->month = month;
-      g_object_notify_by_pspec (G_OBJECT (calendar),
-                                calendar_properties[PROP_MONTH]);
-    }
-
-  if (month_changed)
-    gtk_multi_choice_set_value (GTK_MULTI_CHOICE (calendar->month_choice), 12 * year + month);
-
-  if (calendar->day != day)
-    {
-      day_changed = TRUE;
-      calendar->day = day;
-      g_object_notify_by_pspec (G_OBJECT (calendar),
-                                calendar_properties[PROP_DAY]);
-    }
-
-  if (month_changed)
-    calendar_compute_days (calendar);
-
-  if (month_changed || day_changed)
+  if (y1 != y2 || m1 != m2 || d1 != d2)
     {
       calendar_update_selected_day (calendar);
       g_signal_emit (calendar, calendar_signals[DAY_SELECTED], 0);
+      g_object_notify_by_pspec (G_OBJECT (calendar), calendar_properties[PROP_DATE]);
     }
 
   g_object_thaw_notify (G_OBJECT (calendar));
 }
 
-void
-gtk_date_chooser_widget_select_month (GtkDateChooserWidget *calendar,
-                                      guint                 year,
-                                      guint                 month)
+GDateTime *
+gtk_date_chooser_widget_get_date (GtkDateChooserWidget *calendar)
 {
-  gtk_date_chooser_widget_set_date (calendar, year, month, calendar->day);
-}
-
-void
-gtk_date_chooser_widget_select_day (GtkDateChooserWidget *calendar,
-                                    guint                 day)
-{
-  if (calendar->day == day)
-    return;
-
-  calendar->day = day;
-
-  calendar_update_selected_day_display (calendar);
-
-  g_signal_emit (calendar, calendar_signals[DAY_SELECTED], 0);
-  g_object_notify_by_pspec (G_OBJECT (calendar),
-                            calendar_properties[PROP_DAY]);
-}
-
-void
-gtk_date_chooser_widget_get_date (GtkDateChooserWidget *calendar,
-                                  guint                *year,
-                                  guint                *month,
-                                  guint                *day)
-{
-  *year = calendar->year;
-  *month = calendar->month;
-  *day = calendar->day;
+  return calendar->date;
 }
