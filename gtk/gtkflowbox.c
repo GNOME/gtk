@@ -1606,21 +1606,12 @@ gtk_flow_box_size_allocate (GtkWidget     *widget,
   gint i, this_line_size;
   GSequenceIter *iter;
 
-  child_allocation.x = 0;
-  child_allocation.y = 0;
-  child_allocation.width = 0;
-  child_allocation.height = 0;
-
   gtk_widget_set_allocation (widget, allocation);
   window = gtk_widget_get_window (widget);
   if (window != NULL)
     gdk_window_move_resize (window,
                             allocation->x, allocation->y,
                             allocation->width, allocation->height);
-
-  child_allocation.x = 0;
-  child_allocation.y = 0;
-  child_allocation.width = allocation->width;
 
   min_items = MAX (1, priv->min_children_per_line);
 
@@ -1938,7 +1929,7 @@ gtk_flow_box_size_allocate (GtkWidget     *widget,
         }
 
       if (gtk_widget_get_direction (widget) == GTK_TEXT_DIR_RTL)
-        child_allocation.x = allocation->x + allocation->width - (child_allocation.x - allocation->x) - child_allocation.width;
+        child_allocation.x = allocation->width - child_allocation.x - child_allocation.width;
       gtk_widget_size_allocate (child, &child_allocation);
 
       item_offset += this_item_size;
