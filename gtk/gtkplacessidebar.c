@@ -2466,6 +2466,53 @@ create_rename_popover (GtkPlacesSidebar *sidebar)
   sidebar->rename_error = error;
 }
 
+/* Style the row differently while we show a popover for it.
+ * Otherwise, the popover is 'pointing to nothing'. Since the
+ * main popover and the rename popover interleave their hiding
+ * and showing, we have to count to ensure that we don't loose
+ * the state before the last popover is gone.
+ *
+ * This would be nicer as a state, but reusing hover for this
+ * interferes with the normal handling of this state, so just
+ * use a style class.
+ */
+static void
+update_popover_shadowing (GtkWidget *row,
+                          gboolean   shown)
+{
+  GtkStyleContext *context;
+  gint count;
+
+  count = GPOINTER_TO_INT (g_object_get_data (G_OBJECT (row), "popover-count"));
+  count = shown ? count + 1 : count - 1;
+  g_object_set_data (G_OBJECT (row), "popover-count", GINT_TO_POINTER (count));
+
+  context = gtk_widget_get_style_context (row);
+  if (count > 0)
+    gtk_style_context_add_class (context, "has-open-popup");
+  else
+    gtk_style_context_remove_class (context, "has-open-popup");
+}
+
+static void
+set_prelight (GtkPopover *popover)
+{
+  update_popover_shadowing (gtk_popover_get_relative_to (popover), TRUE);
+}
+
+static void
+unset_prelight (GtkPopover *popover)
+{
+  update_popover_shadowing (gtk_popover_get_relative_to (popover), FALSE);
+}
+
+static void
+setup_popover_shadowing (GtkWidget *popover)
+{
+  g_signal_connect (popover, "map", G_CALLBACK (set_prelight), NULL);
+  g_signal_connect (popover, "unmap", G_CALLBACK (unset_prelight), NULL);
+}
+
 static void
 show_rename_popover (GtkSidebarRow *row)
 {
@@ -2487,6 +2534,7 @@ show_rename_popover (GtkSidebarRow *row)
 
   gtk_entry_set_text (GTK_ENTRY (sidebar->rename_entry), name);
   gtk_popover_set_relative_to (GTK_POPOVER (sidebar->rename_popover), GTK_WIDGET (row));
+  setup_popover_shadowing (sidebar->rename_popover);
 
   gtk_widget_show (sidebar->rename_popover);
   gtk_widget_grab_focus (sidebar->rename_entry);
@@ -3344,6 +3392,7 @@ create_row_popover (GtkPlacesSidebar *sidebar,
   GtkWidget *box;
 
   sidebar->popover = gtk_popover_new (GTK_WIDGET (sidebar));
+  setup_popover_shadowing (sidebar->popover);
   box = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
   g_object_set (box, "margin", 10, NULL);
   gtk_widget_show (box);

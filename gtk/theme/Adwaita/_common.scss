@@ -2936,7 +2936,9 @@ GtkPlacesSidebar.sidebar {
     &:not(:hover):not(:active) > GtkImage,
     &:backdrop > GtkImage { opacity: $_placesidebar_icons_opacity };
   }
-
+  // this is for indicating which sidebar row generated a popover
+  // see https://bugzilla.gnome.org/show_bug.cgi?id=754411
+  .has-open-popup { @extend .list-row.activatable:hover; }
 }
 
 .sidebar-item {
