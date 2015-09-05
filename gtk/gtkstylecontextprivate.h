@@ -36,6 +36,9 @@ const char *    gtk_style_context_get_id                     (GtkStyleContext *c
 GtkStyleProviderPrivate *
                 gtk_style_context_get_style_provider         (GtkStyleContext *context);
 
+void            gtk_style_context_save_named                 (GtkStyleContext *context,
+                                                              const char      *name);
+
 const GtkBitmask *
                 _gtk_style_context_get_changes               (GtkStyleContext *context);
 

@@ -1179,6 +1179,29 @@ gtk_style_context_get_parent (GtkStyleContext *context)
   return context->priv->parent;
 }
 
+void
+gtk_style_context_save_named (GtkStyleContext *context,
+                              const char      *name)
+{
+  GtkStyleContextPrivate *priv;
+  GtkCssNode *cssnode;
+
+  priv = context->priv;
+
+  /* Make sure we have the style existing. It is the
+   * parent of the new saved node after all. */
+  if (!gtk_style_context_is_saved (context))
+    gtk_style_context_lookup_style (context);
+
+  cssnode = gtk_css_transient_node_new (priv->cssnode);
+  gtk_css_node_set_parent (cssnode, gtk_style_context_get_root (context));
+  if (name)
+    gtk_css_node_set_name (cssnode, g_intern_string (name));
+
+  priv->saved_nodes = g_slist_prepend (priv->saved_nodes, priv->cssnode);
+  priv->cssnode = cssnode;
+}
+
 /**
  * gtk_style_context_save:
  * @context: a #GtkStyleContext
@@ -1196,24 +1219,9 @@ gtk_style_context_get_parent (GtkStyleContext *context)
 void
 gtk_style_context_save (GtkStyleContext *context)
 {
-  GtkStyleContextPrivate *priv;
-  GtkCssNode *cssnode;
-
   g_return_if_fail (GTK_IS_STYLE_CONTEXT (context));
 
-  priv = context->priv;
-
-  /* Make sure we have the style existing. It is the
-   * parent of the new saved node after all.
-   */
-  if (!gtk_style_context_is_saved (context))
-    gtk_style_context_lookup_style (context);
-
-  cssnode = gtk_css_transient_node_new (priv->cssnode);
-  gtk_css_node_set_parent (cssnode, gtk_style_context_get_root (context));
-
-  priv->saved_nodes = g_slist_prepend (priv->saved_nodes, priv->cssnode);
-  priv->cssnode = cssnode;
+  gtk_style_context_save_named (context, NULL);
 }
 
 /**
