@@ -351,8 +351,11 @@ enum {
   PROP_TRACK_VISITED_LINKS,
   PROP_LINES,
   PROP_XALIGN,
-  PROP_YALIGN
+  PROP_YALIGN,
+  NUM_PROPERTIES
 };
+
+static GParamSpec *label_props[NUM_PROPERTIES] = { NULL, };
 
 /* When rotating ellipsizable text we want the natural size to request 
  * more to ensure the label wont ever ellipsize in an allocation of full natural size.
@@ -742,43 +745,41 @@ gtk_label_class_init (GtkLabelClass *class)
    * set the #GtkLabel:use-underline property to %TRUE in order for the label
    * to display them.
    */
-  g_object_class_install_property (gobject_class,
-                                   PROP_LABEL,
-                                   g_param_spec_string ("label",
-                                                        P_("Label"),
-                                                        P_("The text of the label"),
-                                                        "",
-                                                        GTK_PARAM_READWRITE));
-  g_object_class_install_property (gobject_class,
-				   PROP_ATTRIBUTES,
-				   g_param_spec_boxed ("attributes",
-						       P_("Attributes"),
-						       P_("A list of style attributes to apply to the text of the label"),
-						       PANGO_TYPE_ATTR_LIST,
-						       GTK_PARAM_READWRITE));
-  g_object_class_install_property (gobject_class,
-                                   PROP_USE_MARKUP,
-                                   g_param_spec_boolean ("use-markup",
-							 P_("Use markup"),
-							 P_("The text of the label includes XML markup. See pango_parse_markup()"),
-                                                        FALSE,
-                                                        GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
-  g_object_class_install_property (gobject_class,
-                                   PROP_USE_UNDERLINE,
-                                   g_param_spec_boolean ("use-underline",
-							 P_("Use underline"),
-							 P_("If set, an underline in the text indicates the next character should be used for the mnemonic accelerator key"),
-                                                        FALSE,
-                                                        GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
+  label_props[PROP_LABEL] =
+      g_param_spec_string ("label",
+                           P_("Label"),
+                           P_("The text of the label"),
+                           "",
+                           GTK_PARAM_READWRITE);
 
-  g_object_class_install_property (gobject_class,
-				   PROP_JUSTIFY,
-                                   g_param_spec_enum ("justify",
-                                                      P_("Justification"),
-                                                      P_("The alignment of the lines in the text of the label relative to each other. This does NOT affect the alignment of the label within its allocation. See GtkLabel:xalign for that"),
-						      GTK_TYPE_JUSTIFICATION,
-						      GTK_JUSTIFY_LEFT,
-                                                      GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
+  label_props[PROP_ATTRIBUTES] =
+      g_param_spec_boxed ("attributes",
+                          P_("Attributes"),
+                          P_("A list of style attributes to apply to the text of the label"),
+                          PANGO_TYPE_ATTR_LIST,
+                          GTK_PARAM_READWRITE);
+
+  label_props[PROP_USE_MARKUP] =
+      g_param_spec_boolean ("use-markup",
+                            P_("Use markup"),
+                            P_("The text of the label includes XML markup. See pango_parse_markup()"),
+                            FALSE,
+                            GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
+
+  label_props[PROP_USE_UNDERLINE] =
+      g_param_spec_boolean ("use-underline",
+                            P_("Use underline"),
+                            P_("If set, an underline in the text indicates the next character should be used for the mnemonic accelerator key"),
+                            FALSE,
+                            GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
+
+  label_props[PROP_JUSTIFY] =
+      g_param_spec_enum ("justify",
+                         P_("Justification"),
+                         P_("The alignment of the lines in the text of the label relative to each other. This does NOT affect the alignment of the label within its allocation. See GtkLabel:xalign for that"),
+                         GTK_TYPE_JUSTIFICATION,
+                         GTK_JUSTIFY_LEFT,
+                         GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
   /**
    * GtkLabel:xalign:
@@ -790,13 +791,13 @@ gtk_label_class_init (GtkLabelClass *class)
    *
    * Since: 3.16
    */
-  g_object_class_install_property (gobject_class,
-                                   PROP_XALIGN,
-                                   g_param_spec_float ("xalign",
-                                                       P_("X align"),
-                                                       P_("The horizontal alignment, from 0 (left) to 1 (right). Reversed for RTL layouts."),
-                                                       0.0, 1.0, 0.5,
-                                                       GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
+  label_props[PROP_XALIGN] =
+      g_param_spec_float ("xalign",
+                          P_("X align"),
+                          P_("The horizontal alignment, from 0 (left) to 1 (right). Reversed for RTL layouts."),
+                          0.0, 1.0,
+                          0.5,
+                          GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
   /**
    * GtkLabel:yalign:
@@ -808,117 +809,107 @@ gtk_label_class_init (GtkLabelClass *class)
    *
    * Since: 3.16
    */
-  g_object_class_install_property (gobject_class,
-                                   PROP_YALIGN,
-                                   g_param_spec_float ("yalign",
-                                                       P_("Y align"),
-                                                       P_("The vertical alignment, from 0 (top) to 1 (bottom)"),
-                                                       0.0, 1.0, 0.5,
-                                                       GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
+  label_props[PROP_YALIGN] =
+      g_param_spec_float ("yalign",
+                          P_("Y align"),
+                          P_("The vertical alignment, from 0 (top) to 1 (bottom)"),
+                          0.0, 1.0,
+                          0.5,
+                          GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
-  g_object_class_install_property (gobject_class,
-                                   PROP_PATTERN,
-                                   g_param_spec_string ("pattern",
-                                                        P_("Pattern"),
-                                                        P_("A string with _ characters in positions correspond to characters in the text to underline"),
-                                                        NULL,
-                                                        GTK_PARAM_WRITABLE));
+  label_props[PROP_PATTERN] =
+      g_param_spec_string ("pattern",
+                           P_("Pattern"),
+                           P_("A string with _ characters in positions correspond to characters in the text to underline"),
+                           NULL,
+                           GTK_PARAM_WRITABLE);
 
-  g_object_class_install_property (gobject_class,
-                                   PROP_WRAP,
-                                   g_param_spec_boolean ("wrap",
-                                                        P_("Line wrap"),
-                                                        P_("If set, wrap lines if the text becomes too wide"),
-                                                        FALSE,
-                                                        GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
+  label_props[PROP_WRAP] =
+      g_param_spec_boolean ("wrap",
+                            P_("Line wrap"),
+                            P_("If set, wrap lines if the text becomes too wide"),
+                            FALSE,
+                            GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
   /**
    * GtkLabel:wrap-mode:
    *
-   * If line wrapping is on (see the #GtkLabel:wrap property) this controls 
-   * how the line wrapping is done. The default is %PANGO_WRAP_WORD, which 
+   * If line wrapping is on (see the #GtkLabel:wrap property) this controls
+   * how the line wrapping is done. The default is %PANGO_WRAP_WORD, which
    * means wrap on word boundaries.
    *
    * Since: 2.10
    */
-  g_object_class_install_property (gobject_class,
-                                   PROP_WRAP_MODE,
-                                   g_param_spec_enum ("wrap-mode",
-						      P_("Line wrap mode"),
-						      P_("If wrap is set, controls how linewrapping is done"),
-						      PANGO_TYPE_WRAP_MODE,
-						      PANGO_WRAP_WORD,
-						      GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
-  g_object_class_install_property (gobject_class,
-                                   PROP_SELECTABLE,
-                                   g_param_spec_boolean ("selectable",
-                                                        P_("Selectable"),
-                                                        P_("Whether the label text can be selected with the mouse"),
-                                                        FALSE,
-                                                        GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
-  g_object_class_install_property (gobject_class,
-                                   PROP_MNEMONIC_KEYVAL,
-                                   g_param_spec_uint ("mnemonic-keyval",
-						      P_("Mnemonic key"),
-						      P_("The mnemonic accelerator key for this label"),
-						      0,
-						      G_MAXUINT,
-						      GDK_KEY_VoidSymbol,
-						      GTK_PARAM_READABLE));
-  g_object_class_install_property (gobject_class,
-                                   PROP_MNEMONIC_WIDGET,
-                                   g_param_spec_object ("mnemonic-widget",
-							P_("Mnemonic widget"),
-							P_("The widget to be activated when the label's mnemonic "
-							  "key is pressed"),
-							GTK_TYPE_WIDGET,
-							GTK_PARAM_READWRITE));
+  label_props[PROP_WRAP_MODE] =
+      g_param_spec_enum ("wrap-mode",
+                         P_("Line wrap mode"),
+                         P_("If wrap is set, controls how linewrapping is done"),
+                         PANGO_TYPE_WRAP_MODE,
+                         PANGO_WRAP_WORD,
+                         GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
-  g_object_class_install_property (gobject_class,
-                                   PROP_CURSOR_POSITION,
-                                   g_param_spec_int ("cursor-position",
-                                                     P_("Cursor Position"),
-                                                     P_("The current position of the insertion cursor in chars"),
-                                                     0,
-                                                     G_MAXINT,
-                                                     0,
-                                                     GTK_PARAM_READABLE));
-  
-  g_object_class_install_property (gobject_class,
-                                   PROP_SELECTION_BOUND,
-                                   g_param_spec_int ("selection-bound",
-                                                     P_("Selection Bound"),
-                                                     P_("The position of the opposite end of the selection from the cursor in chars"),
-                                                     0,
-                                                     G_MAXINT,
-                                                     0,
-                                                     GTK_PARAM_READABLE));
-  
+  label_props[PROP_SELECTABLE] =
+      g_param_spec_boolean ("selectable",
+                            P_("Selectable"),
+                            P_("Whether the label text can be selected with the mouse"),
+                            FALSE,
+                            GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
+
+  label_props[PROP_MNEMONIC_KEYVAL] =
+      g_param_spec_uint ("mnemonic-keyval",
+                         P_("Mnemonic key"),
+                         P_("The mnemonic accelerator key for this label"),
+                         0, G_MAXUINT,
+                         GDK_KEY_VoidSymbol,
+                         GTK_PARAM_READABLE);
+
+  label_props[PROP_MNEMONIC_WIDGET] =
+      g_param_spec_object ("mnemonic-widget",
+                           P_("Mnemonic widget"),
+                           P_("The widget to be activated when the label's mnemonic key is pressed"),
+                           GTK_TYPE_WIDGET,
+                           GTK_PARAM_READWRITE);
+
+  label_props[PROP_CURSOR_POSITION] =
+      g_param_spec_int ("cursor-position",
+                        P_("Cursor Position"),
+                        P_("The current position of the insertion cursor in chars"),
+                        0, G_MAXINT,
+                        0,
+                        GTK_PARAM_READABLE);
+
+  label_props[PROP_SELECTION_BOUND] =
+      g_param_spec_int ("selection-bound",
+                        P_("Selection Bound"),
+                        P_("The position of the opposite end of the selection from the cursor in chars"),
+                        0, G_MAXINT,
+                        0,
+                        GTK_PARAM_READABLE);
+
   /**
    * GtkLabel:ellipsize:
    *
-   * The preferred place to ellipsize the string, if the label does 
-   * not have enough room to display the entire string, specified as a 
-   * #PangoEllipsizeMode. 
+   * The preferred place to ellipsize the string, if the label does
+   * not have enough room to display the entire string, specified as a
+   * #PangoEllipsizeMode.
    *
-   * Note that setting this property to a value other than 
-   * %PANGO_ELLIPSIZE_NONE has the side-effect that the label requests 
-   * only enough space to display the ellipsis "...". In particular, this 
-   * means that ellipsizing labels do not work well in notebook tabs, unless 
+   * Note that setting this property to a value other than
+   * %PANGO_ELLIPSIZE_NONE has the side-effect that the label requests
+   * only enough space to display the ellipsis "...". In particular, this
+   * means that ellipsizing labels do not work well in notebook tabs, unless
    * the #GtkNotebook tab-expand child property is set to %TRUE. Other ways
    * to set a label's width are gtk_widget_set_size_request() and
    * gtk_label_set_width_chars().
    *
    * Since: 2.6
    */
-  g_object_class_install_property (gobject_class,
-				   PROP_ELLIPSIZE,
-                                   g_param_spec_enum ("ellipsize",
-                                                      P_("Ellipsize"),
-                                                      P_("The preferred place to ellipsize the string, if the label does not have enough room to display the entire string"),
-						      PANGO_TYPE_ELLIPSIZE_MODE,
-						      PANGO_ELLIPSIZE_NONE,
-                                                      GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
+  label_props[PROP_ELLIPSIZE] =
+      g_param_spec_enum ("ellipsize",
+                         P_("Ellipsize"),
+                         P_("The preferred place to ellipsize the string, if the label does not have enough room to display the entire string"),
+                         PANGO_TYPE_ELLIPSIZE_MODE,
+                         PANGO_ELLIPSIZE_NONE,
+                         GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
   /**
    * GtkLabel:width-chars:
@@ -932,34 +923,31 @@ gtk_label_class_init (GtkLabelClass *class)
    *
    * Since: 2.6
    **/
-  g_object_class_install_property (gobject_class,
-                                   PROP_WIDTH_CHARS,
-                                   g_param_spec_int ("width-chars",
-                                                     P_("Width In Characters"),
-                                                     P_("The desired width of the label, in characters"),
-                                                     -1,
-                                                     G_MAXINT,
-                                                     -1,
-                                                     GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
-  
+  label_props[PROP_WIDTH_CHARS] =
+      g_param_spec_int ("width-chars",
+                        P_("Width In Characters"),
+                        P_("The desired width of the label, in characters"),
+                        -1, G_MAXINT,
+                        -1,
+                        GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
+
   /**
    * GtkLabel:single-line-mode:
-   * 
+   *
    * Whether the label is in single line mode. In single line mode,
    * the height of the label does not depend on the actual text, it
    * is always set to ascent + descent of the font. This can be an
-   * advantage in situations where resizing the label because of text 
+   * advantage in situations where resizing the label because of text
    * changes would be distracting, e.g. in a statusbar.
    *
    * Since: 2.6
    **/
-  g_object_class_install_property (gobject_class,
-                                   PROP_SINGLE_LINE_MODE,
-                                   g_param_spec_boolean ("single-line-mode",
-                                                        P_("Single Line Mode"),
-                                                        P_("Whether the label is in single line mode"),
-                                                        FALSE,
-                                                        GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
+  label_props[PROP_SINGLE_LINE_MODE] =
+      g_param_spec_boolean ("single-line-mode",
+                            P_("Single Line Mode"),
+                            P_("Whether the label is in single line mode"),
+                            FALSE,
+                            GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
   /**
    * GtkLabel:angle:
@@ -971,20 +959,18 @@ gtk_label_class_init (GtkLabelClass *class)
    *
    * Since: 2.6
    **/
-  g_object_class_install_property (gobject_class,
-                                   PROP_ANGLE,
-                                   g_param_spec_double ("angle",
-							P_("Angle"),
-							P_("Angle at which the label is rotated"),
-							0.0,
-							360.0,
-							0.0, 
-							GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
-  
+  label_props[PROP_ANGLE] =
+      g_param_spec_double ("angle",
+                           P_("Angle"),
+                           P_("Angle at which the label is rotated"),
+                           0.0, 360.0,
+                           0.0,
+                           GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
+
   /**
    * GtkLabel:max-width-chars:
-   * 
-   * The desired maximum width of the label, in characters. If this property 
+   *
+   * The desired maximum width of the label, in characters. If this property
    * is set to -1, the width will be calculated automatically.
    *
    * See the section on [text layout][label-text-layout]
@@ -993,15 +979,13 @@ gtk_label_class_init (GtkLabelClass *class)
    *
    * Since: 2.6
    **/
-  g_object_class_install_property (gobject_class,
-                                   PROP_MAX_WIDTH_CHARS,
-                                   g_param_spec_int ("max-width-chars",
-                                                     P_("Maximum Width In Characters"),
-                                                     P_("The desired maximum width of the label, in characters"),
-                                                     -1,
-                                                     G_MAXINT,
-                                                     -1,
-                                                     GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
+  label_props[PROP_MAX_WIDTH_CHARS] =
+      g_param_spec_int ("max-width-chars",
+                        P_("Maximum Width In Characters"),
+                        P_("The desired maximum width of the label, in characters"),
+                        -1, G_MAXINT,
+                        -1,
+                        GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
   /**
    * GtkLabel:track-visited-links:
@@ -1012,13 +996,12 @@ gtk_label_class_init (GtkLabelClass *class)
    *
    * Since: 2.18
    */
-  g_object_class_install_property (gobject_class,
-                                   PROP_TRACK_VISITED_LINKS,
-                                   g_param_spec_boolean ("track-visited-links",
-                                                         P_("Track visited links"),
-                                                         P_("Whether visited links should be tracked"),
-                                                         TRUE,
-                                                         GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
+  label_props[PROP_TRACK_VISITED_LINKS] =
+      g_param_spec_boolean ("track-visited-links",
+                            P_("Track visited links"),
+                            P_("Whether visited links should be tracked"),
+                            TRUE,
+                            GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
   /**
    * GtkLabel:lines:
@@ -1030,25 +1013,25 @@ gtk_label_class_init (GtkLabelClass *class)
    *
    * Since: 3.10
    */
-  g_object_class_install_property (gobject_class,
-                                   PROP_LINES,
-                                   g_param_spec_int ("lines",
-                                                     P_("Number of lines"),
-                                                     P_("The desired number of lines, when ellipsizing a wrapping label"),
-                                                     -1,
-                                                     G_MAXINT,
-                                                     -1,
-                                                     GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
+  label_props[PROP_LINES] =
+      g_param_spec_int ("lines",
+                        P_("Number of lines"),
+                        P_("The desired number of lines, when ellipsizing a wrapping label"),
+                        -1, G_MAXINT,
+                        -1,
+                        GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
+
+  g_object_class_install_properties (gobject_class, NUM_PROPERTIES, label_props);
+
   /*
    * Key bindings
    */
-
   binding_set = gtk_binding_set_by_class (class);
 
   /* Moving the insertion point */
   add_move_binding (binding_set, GDK_KEY_Right, 0,
 		    GTK_MOVEMENT_VISUAL_POSITIONS, 1);
-  
+
   add_move_binding (binding_set, GDK_KEY_Left, 0,
 		    GTK_MOVEMENT_VISUAL_POSITIONS, -1);
 
@@ -2010,7 +1993,7 @@ label_mnemonic_widget_weak_notify (gpointer      data,
   GtkLabelPrivate *priv = label->priv;
 
   priv->mnemonic_widget = NULL;
-  g_object_notify (G_OBJECT (label), "mnemonic-widget");
+  g_object_notify_by_pspec (G_OBJECT (label), label_props[PROP_MNEMONIC_WIDGET]);
 }
 
 /**
@@ -2062,7 +2045,7 @@ gtk_label_set_mnemonic_widget (GtkLabel  *label,
       gtk_widget_add_mnemonic_label (priv->mnemonic_widget, GTK_WIDGET (label));
     }
   
-  g_object_notify (G_OBJECT (label), "mnemonic-widget");
+  g_object_notify_by_pspec (G_OBJECT (label), label_props[PROP_MNEMONIC_WIDGET]);
 }
 
 /**
@@ -2132,7 +2115,7 @@ gtk_label_set_label_internal (GtkLabel *label,
 
   priv->label = str;
 
-  g_object_notify (G_OBJECT (label), "label");
+  g_object_notify_by_pspec (G_OBJECT (label), label_props[PROP_LABEL]);
 }
 
 static void
@@ -2146,7 +2129,7 @@ gtk_label_set_use_markup_internal (GtkLabel *label,
     {
       priv->use_markup = val;
 
-      g_object_notify (G_OBJECT (label), "use-markup");
+      g_object_notify_by_pspec (G_OBJECT (label), label_props[PROP_USE_MARKUP]);
     }
 }
 
@@ -2161,7 +2144,7 @@ gtk_label_set_use_underline_internal (GtkLabel *label,
     {
       priv->use_underline = val;
 
-      g_object_notify (G_OBJECT (label), "use-underline");
+      g_object_notify_by_pspec (G_OBJECT (label), label_props[PROP_USE_UNDERLINE]);
     }
 }
 
@@ -2197,7 +2180,7 @@ gtk_label_recalculate (GtkLabel *label)
   if (keyval != priv->mnemonic_keyval)
     {
       gtk_label_setup_mnemonic (label, keyval);
-      g_object_notify (G_OBJECT (label), "mnemonic-keyval");
+      g_object_notify_by_pspec (G_OBJECT (label), label_props[PROP_MNEMONIC_KEYVAL]);
     }
 
   gtk_label_clear_layout (label);
@@ -2268,7 +2251,7 @@ gtk_label_set_attributes (GtkLabel         *label,
     pango_attr_list_unref (priv->attrs);
   priv->attrs = attrs;
 
-  g_object_notify (G_OBJECT (label), "attributes");
+  g_object_notify_by_pspec (G_OBJECT (label), label_props[PROP_ATTRIBUTES]);
 
   gtk_label_clear_layout (label);
   gtk_widget_queue_resize (GTK_WIDGET (label));
@@ -2948,7 +2931,7 @@ gtk_label_set_justify (GtkLabel        *label,
       /* No real need to be this drastic, but easier than duplicating the code */
       gtk_label_clear_layout (label);
       
-      g_object_notify (G_OBJECT (label), "justify");
+      g_object_notify_by_pspec (G_OBJECT (label), label_props[PROP_JUSTIFY]);
       gtk_widget_queue_resize (GTK_WIDGET (label));
     }
 }
@@ -2996,8 +2979,8 @@ gtk_label_set_ellipsize (GtkLabel          *label,
 
       /* No real need to be this drastic, but easier than duplicating the code */
       gtk_label_clear_layout (label);
-      
-      g_object_notify (G_OBJECT (label), "ellipsize");
+
+      g_object_notify_by_pspec (G_OBJECT (label), label_props[PROP_ELLIPSIZE]);
       gtk_widget_queue_resize (GTK_WIDGET (label));
     }
 }
@@ -3042,7 +3025,7 @@ gtk_label_set_width_chars (GtkLabel *label,
   if (priv->width_chars != n_chars)
     {
       priv->width_chars = n_chars;
-      g_object_notify (G_OBJECT (label), "width-chars");
+      g_object_notify_by_pspec (G_OBJECT (label), label_props[PROP_WIDTH_CHARS]);
       gtk_widget_queue_resize (GTK_WIDGET (label));
     }
 }
@@ -3089,7 +3072,7 @@ gtk_label_set_max_width_chars (GtkLabel *label,
     {
       priv->max_width_chars = n_chars;
 
-      g_object_notify (G_OBJECT (label), "max-width-chars");
+      g_object_notify_by_pspec (G_OBJECT (label), label_props[PROP_MAX_WIDTH_CHARS]);
       gtk_widget_queue_resize (GTK_WIDGET (label));
     }
 }
@@ -3146,7 +3129,7 @@ gtk_label_set_line_wrap (GtkLabel *label,
 
       gtk_label_clear_layout (label);
       gtk_widget_queue_resize (GTK_WIDGET (label));
-      g_object_notify (G_OBJECT (label), "wrap");
+      g_object_notify_by_pspec (G_OBJECT (label), label_props[PROP_WRAP]);
     }
 }
 
@@ -3191,8 +3174,8 @@ gtk_label_set_line_wrap_mode (GtkLabel *label,
   if (priv->wrap_mode != wrap_mode)
     {
       priv->wrap_mode = wrap_mode;
-      g_object_notify (G_OBJECT (label), "wrap-mode");
-      
+      g_object_notify_by_pspec (G_OBJECT (label), label_props[PROP_WRAP_MODE]);
+
       gtk_widget_queue_resize (GTK_WIDGET (label));
     }
 }
@@ -5494,9 +5477,9 @@ gtk_label_set_selectable (GtkLabel *label,
   if (setting != old_setting)
     {
       g_object_freeze_notify (G_OBJECT (label));
-      g_object_notify (G_OBJECT (label), "selectable");
-      g_object_notify (G_OBJECT (label), "cursor-position");
-      g_object_notify (G_OBJECT (label), "selection-bound");
+      g_object_notify_by_pspec (G_OBJECT (label), label_props[PROP_SELECTABLE]);
+      g_object_notify_by_pspec (G_OBJECT (label), label_props[PROP_CURSOR_POSITION]);
+      g_object_notify_by_pspec (G_OBJECT (label), label_props[PROP_SELECTION_BOUND]);
       g_object_thaw_notify (G_OBJECT (label));
       gtk_widget_queue_draw (GTK_WIDGET (label));
     }
@@ -5559,7 +5542,7 @@ gtk_label_set_angle (GtkLabel *label,
       gtk_label_clear_layout (label);
       gtk_widget_queue_resize (GTK_WIDGET (label));
 
-      g_object_notify (G_OBJECT (label), "angle");
+      g_object_notify_by_pspec (G_OBJECT (label), label_props[PROP_ANGLE]);
     }
 }
 
@@ -5728,9 +5711,9 @@ gtk_label_select_region_index (GtkLabel *label,
       g_object_freeze_notify (G_OBJECT (label));
 
       if (priv->select_info->selection_anchor != anchor_index)
-        g_object_notify (G_OBJECT (label), "selection-bound");
+        g_object_notify_by_pspec (G_OBJECT (label), label_props[PROP_SELECTION_BOUND]);
       if (priv->select_info->selection_end != end_index)
-        g_object_notify (G_OBJECT (label), "cursor-position");
+        g_object_notify_by_pspec (G_OBJECT (label), label_props[PROP_CURSOR_POSITION]);
 
       priv->select_info->selection_anchor = anchor_index;
       priv->select_info->selection_end = end_index;
@@ -6046,7 +6029,7 @@ gtk_label_set_single_line_mode (GtkLabel *label,
       gtk_label_clear_layout (label);
       gtk_widget_queue_resize (GTK_WIDGET (label));
 
-      g_object_notify (G_OBJECT (label), "single-line-mode");
+      g_object_notify_by_pspec (G_OBJECT (label), label_props[PROP_SINGLE_LINE_MODE]);
     }
 }
 
@@ -6813,7 +6796,7 @@ gtk_label_set_track_visited_links (GtkLabel *label,
       /* FIXME: shouldn't have to redo everything here */
       gtk_label_recalculate (label);
 
-      g_object_notify (G_OBJECT (label), "track-visited-links");
+      g_object_notify_by_pspec (G_OBJECT (label), label_props[PROP_TRACK_VISITED_LINKS]);
     }
 }
 
@@ -6936,7 +6919,7 @@ gtk_label_set_lines (GtkLabel *label,
     {
       priv->lines = lines;
       gtk_label_clear_layout (label);
-      g_object_notify (G_OBJECT (label), "lines");
+      g_object_notify_by_pspec (G_OBJECT (label), label_props[PROP_LINES]);
       gtk_widget_queue_resize (GTK_WIDGET (label));
     }
 }
@@ -7136,7 +7119,7 @@ gtk_label_set_xalign (GtkLabel *label,
   label->priv->xalign = xalign;
 
   gtk_widget_queue_draw (GTK_WIDGET (label));
-  g_object_notify (G_OBJECT (label), "xalign");
+  g_object_notify_by_pspec (G_OBJECT (label), label_props[PROP_XALIGN]);
 }
 
 /**
@@ -7180,7 +7163,7 @@ gtk_label_set_yalign (GtkLabel *label,
   label->priv->yalign = yalign;
 
   gtk_widget_queue_draw (GTK_WIDGET (label));
-  g_object_notify (G_OBJECT (label), "yalign");
+  g_object_notify_by_pspec (G_OBJECT (label), label_props[PROP_YALIGN]);
 }
 
 /**
