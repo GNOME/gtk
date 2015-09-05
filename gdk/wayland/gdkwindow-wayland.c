@@ -420,8 +420,6 @@ on_frame_clock_after_paint (GdkFrameClock *clock,
   if (!impl->pending_commit)
     return;
 
-  g_assert (_gdk_wayland_is_shm_surface (impl->cairo_surface));
-
   impl->pending_commit = FALSE;
   impl->pending_frame_counter = gdk_frame_clock_get_frame_counter (clock);
   impl->awaiting_frame = TRUE;
@@ -431,7 +429,8 @@ on_frame_clock_after_paint (GdkFrameClock *clock,
   _gdk_frame_clock_freeze (clock);
 
   wl_surface_commit (impl->surface);
-  _gdk_wayland_shm_surface_set_busy (impl->cairo_surface);
+  if (_gdk_wayland_is_shm_surface (impl->cairo_surface))
+    _gdk_wayland_shm_surface_set_busy (impl->cairo_surface);
 }
 
 static void
