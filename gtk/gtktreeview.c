@@ -1757,60 +1757,62 @@ G_GNUC_END_IGNORE_DEPRECATIONS
 static void
 gtk_tree_view_init (GtkTreeView *tree_view)
 {
-  tree_view->priv = gtk_tree_view_get_instance_private (tree_view);
+  GtkTreeViewPrivate *priv;
+
+  priv = tree_view->priv = gtk_tree_view_get_instance_private (tree_view);
 
   gtk_widget_set_can_focus (GTK_WIDGET (tree_view), TRUE);
   gtk_widget_set_redraw_on_allocate (GTK_WIDGET (tree_view), FALSE);
 
-  tree_view->priv->show_expanders = TRUE;
-  tree_view->priv->draw_keyfocus = TRUE;
-  tree_view->priv->headers_visible = TRUE;
-  tree_view->priv->activate_on_single_click = FALSE;
+  priv->show_expanders = TRUE;
+  priv->draw_keyfocus = TRUE;
+  priv->headers_visible = TRUE;
+  priv->activate_on_single_click = FALSE;
 
-  tree_view->priv->pixel_cache = _gtk_pixel_cache_new ();
+  priv->pixel_cache = _gtk_pixel_cache_new ();
 
   /* We need some padding */
-  tree_view->priv->dy = 0;
-  tree_view->priv->cursor_offset = 0;
-  tree_view->priv->n_columns = 0;
-  tree_view->priv->header_height = 1;
-  tree_view->priv->x_drag = 0;
-  tree_view->priv->drag_pos = -1;
-  tree_view->priv->header_has_focus = FALSE;
-  tree_view->priv->press_start_x = -1;
-  tree_view->priv->press_start_y = -1;
-  tree_view->priv->reorderable = FALSE;
-  tree_view->priv->presize_handler_tick_cb = 0;
-  tree_view->priv->scroll_sync_timer = 0;
-  tree_view->priv->fixed_height = -1;
-  tree_view->priv->fixed_height_mode = FALSE;
-  tree_view->priv->fixed_height_check = 0;
-  tree_view->priv->selection = _gtk_tree_selection_new_with_tree_view (tree_view);
-  tree_view->priv->enable_search = TRUE;
-  tree_view->priv->search_column = -1;
-  tree_view->priv->search_position_func = gtk_tree_view_search_position_func;
-  tree_view->priv->search_equal_func = gtk_tree_view_search_equal_func;
-  tree_view->priv->search_custom_entry_set = FALSE;
-  tree_view->priv->typeselect_flush_timeout = 0;
-  tree_view->priv->init_hadjust_value = TRUE;    
-  tree_view->priv->width = 0;
+  priv->dy = 0;
+  priv->cursor_offset = 0;
+  priv->n_columns = 0;
+  priv->header_height = 1;
+  priv->x_drag = 0;
+  priv->drag_pos = -1;
+  priv->header_has_focus = FALSE;
+  priv->press_start_x = -1;
+  priv->press_start_y = -1;
+  priv->reorderable = FALSE;
+  priv->presize_handler_tick_cb = 0;
+  priv->scroll_sync_timer = 0;
+  priv->fixed_height = -1;
+  priv->fixed_height_mode = FALSE;
+  priv->fixed_height_check = 0;
+  priv->selection = _gtk_tree_selection_new_with_tree_view (tree_view);
+  priv->enable_search = TRUE;
+  priv->search_column = -1;
+  priv->search_position_func = gtk_tree_view_search_position_func;
+  priv->search_equal_func = gtk_tree_view_search_equal_func;
+  priv->search_custom_entry_set = FALSE;
+  priv->typeselect_flush_timeout = 0;
+  priv->init_hadjust_value = TRUE;    
+  priv->width = 0;
           
-  tree_view->priv->hover_selection = FALSE;
-  tree_view->priv->hover_expand = FALSE;
+  priv->hover_selection = FALSE;
+  priv->hover_expand = FALSE;
 
-  tree_view->priv->level_indentation = 0;
+  priv->level_indentation = 0;
 
-  tree_view->priv->rubber_banding_enable = FALSE;
+  priv->rubber_banding_enable = FALSE;
 
-  tree_view->priv->grid_lines = GTK_TREE_VIEW_GRID_LINES_NONE;
-  tree_view->priv->tree_lines_enabled = FALSE;
+  priv->grid_lines = GTK_TREE_VIEW_GRID_LINES_NONE;
+  priv->tree_lines_enabled = FALSE;
 
-  tree_view->priv->tooltip_column = -1;
+  priv->tooltip_column = -1;
 
-  tree_view->priv->post_validation_flag = FALSE;
+  priv->post_validation_flag = FALSE;
 
-  tree_view->priv->event_last_x = -10000;
-  tree_view->priv->event_last_y = -10000;
+  priv->event_last_x = -10000;
+  priv->event_last_y = -10000;
 
   gtk_tree_view_do_set_vadjustment (tree_view, NULL);
   gtk_tree_view_do_set_hadjustment (tree_view, NULL);
@@ -1818,35 +1820,35 @@ gtk_tree_view_init (GtkTreeView *tree_view)
   gtk_style_context_add_class (gtk_widget_get_style_context (GTK_WIDGET (tree_view)),
                                GTK_STYLE_CLASS_VIEW);
 
-  tree_view->priv->multipress_gesture = gtk_gesture_multi_press_new (GTK_WIDGET (tree_view));
-  gtk_gesture_single_set_button (GTK_GESTURE_SINGLE (tree_view->priv->multipress_gesture), 0);
-  g_signal_connect (tree_view->priv->multipress_gesture, "pressed",
+  priv->multipress_gesture = gtk_gesture_multi_press_new (GTK_WIDGET (tree_view));
+  gtk_gesture_single_set_button (GTK_GESTURE_SINGLE (priv->multipress_gesture), 0);
+  g_signal_connect (priv->multipress_gesture, "pressed",
                     G_CALLBACK (gtk_tree_view_multipress_gesture_pressed), tree_view);
-  g_signal_connect (tree_view->priv->multipress_gesture, "released",
+  g_signal_connect (priv->multipress_gesture, "released",
                     G_CALLBACK (gtk_tree_view_multipress_gesture_released), tree_view);
 
-  tree_view->priv->column_multipress_gesture = gtk_gesture_multi_press_new (GTK_WIDGET (tree_view));
-  g_signal_connect (tree_view->priv->column_multipress_gesture, "pressed",
+  priv->column_multipress_gesture = gtk_gesture_multi_press_new (GTK_WIDGET (tree_view));
+  g_signal_connect (priv->column_multipress_gesture, "pressed",
                     G_CALLBACK (gtk_tree_view_column_multipress_gesture_pressed), tree_view);
-  gtk_event_controller_set_propagation_phase (GTK_EVENT_CONTROLLER (tree_view->priv->column_multipress_gesture),
+  gtk_event_controller_set_propagation_phase (GTK_EVENT_CONTROLLER (priv->column_multipress_gesture),
                                               GTK_PHASE_CAPTURE);
 
-  tree_view->priv->drag_gesture = gtk_gesture_drag_new (GTK_WIDGET (tree_view));
-  g_signal_connect (tree_view->priv->drag_gesture, "drag-begin",
+  priv->drag_gesture = gtk_gesture_drag_new (GTK_WIDGET (tree_view));
+  g_signal_connect (priv->drag_gesture, "drag-begin",
                     G_CALLBACK (gtk_tree_view_drag_gesture_begin), tree_view);
-  g_signal_connect (tree_view->priv->drag_gesture, "drag-update",
+  g_signal_connect (priv->drag_gesture, "drag-update",
                     G_CALLBACK (gtk_tree_view_drag_gesture_update), tree_view);
-  g_signal_connect (tree_view->priv->drag_gesture, "drag-end",
+  g_signal_connect (priv->drag_gesture, "drag-end",
                     G_CALLBACK (gtk_tree_view_drag_gesture_end), tree_view);
 
-  tree_view->priv->column_drag_gesture = gtk_gesture_drag_new (GTK_WIDGET (tree_view));
-  g_signal_connect (tree_view->priv->column_drag_gesture, "drag-begin",
+  priv->column_drag_gesture = gtk_gesture_drag_new (GTK_WIDGET (tree_view));
+  g_signal_connect (priv->column_drag_gesture, "drag-begin",
                     G_CALLBACK (gtk_tree_view_column_drag_gesture_begin), tree_view);
-  g_signal_connect (tree_view->priv->column_drag_gesture, "drag-update",
+  g_signal_connect (priv->column_drag_gesture, "drag-update",
                     G_CALLBACK (gtk_tree_view_column_drag_gesture_update), tree_view);
-  g_signal_connect (tree_view->priv->column_drag_gesture, "drag-end",
+  g_signal_connect (priv->column_drag_gesture, "drag-end",
                     G_CALLBACK (gtk_tree_view_column_drag_gesture_end), tree_view);
-  gtk_event_controller_set_propagation_phase (GTK_EVENT_CONTROLLER (tree_view->priv->column_drag_gesture),
+  gtk_event_controller_set_propagation_phase (GTK_EVENT_CONTROLLER (priv->column_drag_gesture),
                                               GTK_PHASE_CAPTURE);
 }
 
