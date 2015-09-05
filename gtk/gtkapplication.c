@@ -130,8 +130,11 @@ enum {
   PROP_REGISTER_SESSION,
   PROP_APP_MENU,
   PROP_MENUBAR,
-  PROP_ACTIVE_WINDOW
+  PROP_ACTIVE_WINDOW,
+  NUM_PROPERTIES
 };
+
+static GParamSpec *gtk_application_props[NUM_PROPERTIES];
 
 /* Accel handling */
 typedef struct
@@ -508,7 +511,7 @@ gtk_application_focus_in_event_cb (GtkWindow      *window,
   if (application->priv->impl)
     gtk_application_impl_active_window_changed (application->priv->impl, window);
 
-  g_object_notify (G_OBJECT (application), "active-window");
+  g_object_notify_by_pspec (G_OBJECT (application), gtk_application_props[PROP_ACTIVE_WINDOW]);
 
   return FALSE;
 }
@@ -708,7 +711,7 @@ gtk_application_window_added (GtkApplication *application,
   gtk_application_impl_window_added (application->priv->impl, window);
 
   gtk_application_impl_active_window_changed (application->priv->impl, window);
-  g_object_notify (G_OBJECT (application), "active-window");
+  g_object_notify_by_pspec (G_OBJECT (application), gtk_application_props[PROP_ACTIVE_WINDOW]);
 }
 
 static void
@@ -733,7 +736,7 @@ gtk_application_window_removed (GtkApplication *application,
   if (priv->windows != old_active)
     {
       gtk_application_impl_active_window_changed (application->priv->impl, priv->windows ? priv->windows->data : NULL);
-      g_object_notify (G_OBJECT (application), "active-window");
+      g_object_notify_by_pspec (G_OBJECT (application), gtk_application_props[PROP_ACTIVE_WINDOW]);
     }
 }
 
@@ -932,32 +935,35 @@ gtk_application_class_init (GtkApplicationClass *class)
    *
    * Since: 3.4
    */
-  g_object_class_install_property (object_class, PROP_REGISTER_SESSION,
+  gtk_application_props[PROP_REGISTER_SESSION] =
     g_param_spec_boolean ("register-session",
                           P_("Register session"),
                           P_("Register with the session manager"),
-                          FALSE, G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
+                          FALSE,
+                          G_PARAM_READWRITE|G_PARAM_STATIC_STRINGS);
 
-  g_object_class_install_property (object_class, PROP_APP_MENU,
+  gtk_application_props[PROP_APP_MENU] =
     g_param_spec_object ("app-menu",
                          P_("Application menu"),
                          P_("The GMenuModel for the application menu"),
                          G_TYPE_MENU_MODEL,
-                         G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
+                         G_PARAM_READWRITE|G_PARAM_STATIC_STRINGS);
 
-  g_object_class_install_property (object_class, PROP_MENUBAR,
+  gtk_application_props[PROP_MENUBAR] =
     g_param_spec_object ("menubar",
                          P_("Menubar"),
                          P_("The GMenuModel for the menubar"),
                          G_TYPE_MENU_MODEL,
-                         G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
+                         G_PARAM_READWRITE|G_PARAM_STATIC_STRINGS);
 
-  g_object_class_install_property (object_class, PROP_ACTIVE_WINDOW,
+  gtk_application_props[PROP_ACTIVE_WINDOW] =
     g_param_spec_object ("active-window",
                          P_("Active window"),
                          P_("The window which most recently had focus"),
                          GTK_TYPE_WINDOW,
-                         G_PARAM_READABLE | G_PARAM_STATIC_STRINGS));
+                         G_PARAM_READABLE|G_PARAM_STATIC_STRINGS);
+
+  g_object_class_install_properties (object_class, NUM_PROPERTIES, gtk_application_props);
 }
 
 /**
@@ -1330,7 +1336,7 @@ gtk_application_set_app_menu (GtkApplication *application,
 
       gtk_application_impl_set_app_menu (application->priv->impl, app_menu);
 
-      g_object_notify (G_OBJECT (application), "app-menu");
+      g_object_notify_by_pspec (G_OBJECT (application), gtk_application_props[PROP_APP_MENU]);
     }
 }
 
@@ -1402,7 +1408,7 @@ gtk_application_set_menubar (GtkApplication *application,
 
       gtk_application_impl_set_menubar (application->priv->impl, menubar);
 
-      g_object_notify (G_OBJECT (application), "menubar");
+      g_object_notify_by_pspec (G_OBJECT (application), gtk_application_props[PROP_MENUBAR]);
     }
 }
 
