@@ -36,7 +36,8 @@ struct _GtkCssMatcherClass {
                                                    const GtkCssMatcher    *next);
 
   GtkStateFlags   (* get_state)                   (const GtkCssMatcher   *matcher);
-  gboolean        (* has_type)                    (const GtkCssMatcher   *matcher,
+  gboolean        (* has_name)                    (const GtkCssMatcher   *matcher,
+                                                   /*interned*/const char*name,
                                                    GType                  type);
   gboolean        (* has_class)                   (const GtkCssMatcher   *matcher,
                                                    GQuark                 class_name);
@@ -111,10 +112,11 @@ _gtk_css_matcher_get_state (const GtkCssMatcher *matcher)
 }
 
 static inline gboolean
-_gtk_css_matcher_has_type (const GtkCssMatcher *matcher,
-                           GType type)
+_gtk_css_matcher_has_name (const GtkCssMatcher     *matcher,
+                           /*interned*/ const char *name,
+                           GType                    type)
 {
-  return matcher->klass->has_type (matcher, type);
+  return matcher->klass->has_name (matcher, name, type);
 }
 
 static inline gboolean
