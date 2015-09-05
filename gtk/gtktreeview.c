@@ -5012,8 +5012,6 @@ gtk_tree_view_bin_draw (GtkWidget      *widget,
   do
     {
       gboolean is_separator = FALSE;
-      gboolean is_first = FALSE;
-      gboolean is_last = FALSE;
       gint n_col = 0;
 
       parity = !parity;
@@ -5059,7 +5057,6 @@ gtk_tree_view_bin_draw (GtkWidget      *widget,
 	   list = (rtl ? list->prev : list->next))
 	{
 	  GtkTreeViewColumn *column = list->data;
-          GtkRegionFlags row_flags = 0, column_flags = 0;
 	  GtkStateFlags state = 0;
           gint width;
           gboolean draw_focus;
@@ -5142,46 +5139,12 @@ gtk_tree_view_bin_draw (GtkWidget      *widget,
 						   GTK_RBNODE_FLAG_SET (node, GTK_RBNODE_IS_PARENT),
 						   node->children?TRUE:FALSE);
 
-          /* Select the detail for drawing the cell.  relevant
-           * factors are parity, sortedness, and whether to
-           * display rules.
-           */
-          if (allow_rules && tree_view->priv->has_rules)
-            {
-              if (parity)
-                row_flags |= GTK_REGION_ODD;
-              else
-                row_flags |= GTK_REGION_EVEN;
-            }
-
-          if ((flags & GTK_CELL_RENDERER_SORTED) &&
-              n_visible_columns >= 3)
-            column_flags |= GTK_REGION_SORTED;
-
-	  is_first = (rtl ? !list->next : !list->prev);
-	  is_last = (rtl ? !list->prev : !list->next);
-
-          if (is_first)
-            column_flags |= GTK_REGION_FIRST;
-
-          if (is_last)
-            column_flags |= GTK_REGION_LAST;
-
-          if ((n_col % 2) == 0)
-            column_flags |= GTK_REGION_EVEN;
-          else
-            column_flags |= GTK_REGION_ODD;
-
           gtk_style_context_save (context);
 
           state = gtk_cell_renderer_get_state (NULL, widget, flags);
           gtk_style_context_set_state (context, state);
 
           gtk_style_context_add_class (context, GTK_STYLE_CLASS_CELL);
-G_GNUC_BEGIN_IGNORE_DEPRECATIONS
-          gtk_style_context_add_region (context, GTK_STYLE_REGION_ROW, row_flags);
-          gtk_style_context_add_region (context, GTK_STYLE_REGION_COLUMN, column_flags);
-G_GNUC_END_IGNORE_DEPRECATIONS
 
 	  if (node == tree_view->priv->cursor_node && has_can_focus_cell
               && ((column == tree_view->priv->focus_column
@@ -14623,7 +14586,7 @@ gtk_tree_view_create_row_drag_icon (GtkTreeView  *tree_view,
   cairo_surface_t *surface;
   gint bin_window_width;
   gboolean is_separator = FALSE;
-  gboolean rtl, allow_rules;
+  gboolean rtl;
   cairo_t *cr;
 
   g_return_val_if_fail (GTK_IS_TREE_VIEW (tree_view), NULL);
@@ -14650,29 +14613,6 @@ gtk_tree_view_create_row_drag_icon (GtkTreeView  *tree_view,
     return NULL;
 
   context = gtk_widget_get_style_context (widget);
-
-  gtk_style_context_save (context);
-G_GNUC_BEGIN_IGNORE_DEPRECATIONS
-  gtk_style_context_add_region (context, GTK_STYLE_REGION_COLUMN, 0);
-G_GNUC_END_IGNORE_DEPRECATIONS
-
-  gtk_widget_style_get (widget,
-			"allow-rules", &allow_rules,
-			NULL);
-
-  if (allow_rules && tree_view->priv->has_rules)
-    {
-      GtkRegionFlags row_flags;
-
-      if ((_gtk_rbtree_node_get_index (tree, node) % 2))
-        row_flags = GTK_REGION_ODD;
-      else
-        row_flags = GTK_REGION_EVEN;
-
-G_GNUC_BEGIN_IGNORE_DEPRECATIONS
-      gtk_style_context_add_region (context, GTK_STYLE_REGION_ROW, row_flags);
-G_GNUC_END_IGNORE_DEPRECATIONS
-    }
 
   is_separator = row_is_separator (tree_view, &iter, NULL);
 
@@ -14776,8 +14716,6 @@ G_GNUC_END_IGNORE_DEPRECATIONS
   cairo_destroy (cr);
 
   cairo_surface_set_device_offset (surface, 2, 2);
-
-  gtk_style_context_restore (context);
 
   return surface;
 }
