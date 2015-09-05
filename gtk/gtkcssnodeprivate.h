@@ -113,6 +113,9 @@ void                    gtk_css_node_set_visible        (GtkCssNode            *
                                                          gboolean               visible);
 gboolean                gtk_css_node_get_visible        (GtkCssNode            *cssnode);
 
+void                    gtk_css_node_set_name           (GtkCssNode            *cssnode,
+                                                         /*interned*/const char*name);
+/*interned*/const char *gtk_css_node_get_name           (GtkCssNode            *cssnode);
 void                    gtk_css_node_set_widget_type    (GtkCssNode            *cssnode,
                                                          GType                  widget_type);
 GType                   gtk_css_node_get_widget_type    (GtkCssNode            *cssnode);

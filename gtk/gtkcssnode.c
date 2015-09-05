@@ -43,6 +43,7 @@ enum {
   PROP_0,
   PROP_CLASSES,
   PROP_ID,
+  PROP_NAME,
   PROP_STATE,
   PROP_VISIBLE,
   PROP_WIDGET_TYPE,
@@ -104,6 +105,10 @@ gtk_css_node_get_property (GObject    *object,
       g_value_set_string (value, gtk_css_node_get_id (cssnode));
       break;
 
+    case PROP_NAME:
+      g_value_set_string (value, gtk_css_node_get_name (cssnode));
+      break;
+
     case PROP_STATE:
       g_value_set_flags (value, gtk_css_node_get_state (cssnode));
       break;
@@ -137,6 +142,10 @@ gtk_css_node_set_property (GObject      *object,
 
     case PROP_ID:
       gtk_css_node_set_id (cssnode, g_value_get_string (value));
+      break;
+
+    case PROP_NAME:
+      gtk_css_node_set_name (cssnode, g_value_get_string (value));
       break;
 
     case PROP_STATE:
@@ -589,6 +598,12 @@ gtk_css_node_class_init (GtkCssNodeClass *klass)
                          NULL,
                          G_PARAM_READWRITE
                          | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
+  cssnode_properties[PROP_NAME] =
+    g_param_spec_string ("name", "Name",
+                         "Name identifying the type of node",
+                         NULL,
+                         G_PARAM_READWRITE
+                         | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
   cssnode_properties[PROP_STATE] =
     g_param_spec_flags ("state", "State",
                         "State flags",
@@ -995,12 +1010,31 @@ gtk_css_node_get_visible (GtkCssNode *cssnode)
 }
 
 void
+gtk_css_node_set_name (GtkCssNode              *cssnode,
+                       /*interned*/ const char *name)
+{
+  if (gtk_css_node_declaration_set_name (&cssnode->decl, name))
+    {
+      gtk_css_node_invalidate (cssnode, GTK_CSS_CHANGE_NAME);
+      g_object_notify_by_pspec (G_OBJECT (cssnode), cssnode_properties[PROP_NAME]);
+      g_object_notify_by_pspec (G_OBJECT (cssnode), cssnode_properties[PROP_WIDGET_TYPE]);
+    }
+}
+
+/* interned */ const char *
+gtk_css_node_get_name (GtkCssNode *cssnode)
+{
+  return gtk_css_node_declaration_get_name (cssnode->decl);
+}
+
+void
 gtk_css_node_set_widget_type (GtkCssNode *cssnode,
                               GType       widget_type)
 {
   if (gtk_css_node_declaration_set_type (&cssnode->decl, widget_type))
     {
       gtk_css_node_invalidate (cssnode, GTK_CSS_CHANGE_NAME);
+      g_object_notify_by_pspec (G_OBJECT (cssnode), cssnode_properties[PROP_NAME]);
       g_object_notify_by_pspec (G_OBJECT (cssnode), cssnode_properties[PROP_WIDGET_TYPE]);
     }
 }
