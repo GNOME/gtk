@@ -1233,7 +1233,6 @@ gtk_style_context_save (GtkStyleContext *context)
 
   cssnode = gtk_css_transient_node_new (priv->cssnode);
   gtk_css_node_set_parent (cssnode, gtk_style_context_get_root (context));
-  gtk_css_node_set_widget_type (cssnode, gtk_css_node_get_widget_type (priv->cssnode));
 
   priv->saved_nodes = g_slist_prepend (priv->saved_nodes, priv->cssnode);
   priv->cssnode = cssnode;
