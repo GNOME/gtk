@@ -723,8 +723,11 @@ enum {
   PROP_HEXPAND_SET,
   PROP_VEXPAND_SET,
   PROP_EXPAND,
-  PROP_SCALE_FACTOR
+  PROP_SCALE_FACTOR,
+  NUM_PROPERTIES
 };
+
+static GParamSpec *widget_props[NUM_PROPERTIES] = { NULL, };
 
 typedef	struct	_GtkStateData	 GtkStateData;
 
@@ -1238,137 +1241,131 @@ gtk_widget_class_init (GtkWidgetClass *klass)
   klass->adjust_baseline_allocation = gtk_widget_real_adjust_baseline_allocation;
   klass->queue_draw_region = gtk_widget_real_queue_draw_region;
 
-  g_object_class_install_property (gobject_class,
-				   PROP_NAME,
-				   g_param_spec_string ("name",
- 							P_("Widget name"),
-							P_("The name of the widget"),
-							NULL,
-							GTK_PARAM_READWRITE));
-  g_object_class_install_property (gobject_class,
-				   PROP_PARENT,
-				   g_param_spec_object ("parent",
-							P_("Parent widget"),
-							P_("The parent widget of this widget. Must be a Container widget"),
-							GTK_TYPE_CONTAINER,
-							GTK_PARAM_READWRITE));
+  widget_props[PROP_NAME] =
+      g_param_spec_string ("name",
+                           P_("Widget name"),
+                           P_("The name of the widget"),
+                           NULL,
+                           GTK_PARAM_READWRITE);
 
-  g_object_class_install_property (gobject_class,
-				   PROP_WIDTH_REQUEST,
-				   g_param_spec_int ("width-request",
- 						     P_("Width request"),
- 						     P_("Override for width request of the widget, or -1 if natural request should be used"),
- 						     -1,
- 						     G_MAXINT,
- 						     -1,
- 						     GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
-  g_object_class_install_property (gobject_class,
-				   PROP_HEIGHT_REQUEST,
-				   g_param_spec_int ("height-request",
- 						     P_("Height request"),
- 						     P_("Override for height request of the widget, or -1 if natural request should be used"),
- 						     -1,
- 						     G_MAXINT,
- 						     -1,
- 						     GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
-  g_object_class_install_property (gobject_class,
-				   PROP_VISIBLE,
-				   g_param_spec_boolean ("visible",
- 							 P_("Visible"),
- 							 P_("Whether the widget is visible"),
- 							 FALSE,
- 							 GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
-  g_object_class_install_property (gobject_class,
-				   PROP_SENSITIVE,
-				   g_param_spec_boolean ("sensitive",
- 							 P_("Sensitive"),
- 							 P_("Whether the widget responds to input"),
- 							 TRUE,
- 							 GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
-  g_object_class_install_property (gobject_class,
-				   PROP_APP_PAINTABLE,
-				   g_param_spec_boolean ("app-paintable",
- 							 P_("Application paintable"),
- 							 P_("Whether the application will paint directly on the widget"),
- 							 FALSE,
- 							 GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
-  g_object_class_install_property (gobject_class,
-				   PROP_CAN_FOCUS,
-				   g_param_spec_boolean ("can-focus",
- 							 P_("Can focus"),
- 							 P_("Whether the widget can accept the input focus"),
- 							 FALSE,
- 							 GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
-  g_object_class_install_property (gobject_class,
-				   PROP_HAS_FOCUS,
-				   g_param_spec_boolean ("has-focus",
- 							 P_("Has focus"),
- 							 P_("Whether the widget has the input focus"),
- 							 FALSE,
- 							 GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
-  g_object_class_install_property (gobject_class,
-				   PROP_IS_FOCUS,
-				   g_param_spec_boolean ("is-focus",
- 							 P_("Is focus"),
- 							 P_("Whether the widget is the focus widget within the toplevel"),
- 							 FALSE,
- 							 GTK_PARAM_READWRITE));
-  g_object_class_install_property (gobject_class,
-				   PROP_CAN_DEFAULT,
-				   g_param_spec_boolean ("can-default",
- 							 P_("Can default"),
- 							 P_("Whether the widget can be the default widget"),
- 							 FALSE,
- 							 GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
-  g_object_class_install_property (gobject_class,
-				   PROP_HAS_DEFAULT,
-				   g_param_spec_boolean ("has-default",
- 							 P_("Has default"),
- 							 P_("Whether the widget is the default widget"),
- 							 FALSE,
- 							 GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
-  g_object_class_install_property (gobject_class,
-				   PROP_RECEIVES_DEFAULT,
-				   g_param_spec_boolean ("receives-default",
- 							 P_("Receives default"),
- 							 P_("If TRUE, the widget will receive the default action when it is focused"),
- 							 FALSE,
- 							 GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
-  g_object_class_install_property (gobject_class,
-				   PROP_COMPOSITE_CHILD,
-				   g_param_spec_boolean ("composite-child",
- 							 P_("Composite child"),
- 							 P_("Whether the widget is part of a composite widget"),
- 							 FALSE,
- 							 GTK_PARAM_READABLE));
+  widget_props[PROP_PARENT] =
+      g_param_spec_object ("parent",
+                           P_("Parent widget"),
+                           P_("The parent widget of this widget. Must be a Container widget"),
+                           GTK_TYPE_CONTAINER,
+                           GTK_PARAM_READWRITE);
+
+  widget_props[PROP_WIDTH_REQUEST] =
+      g_param_spec_int ("width-request",
+                        P_("Width request"),
+                        P_("Override for width request of the widget, or -1 if natural request should be used"),
+                        -1, G_MAXINT,
+                        -1,
+                        GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
+
+  widget_props[PROP_HEIGHT_REQUEST] =
+      g_param_spec_int ("height-request",
+                        P_("Height request"),
+                        P_("Override for height request of the widget, or -1 if natural request should be used"),
+                        -1, G_MAXINT,
+                        -1,
+                        GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
+
+  widget_props[PROP_VISIBLE] =
+      g_param_spec_boolean ("visible",
+                            P_("Visible"),
+                            P_("Whether the widget is visible"),
+                            FALSE,
+                            GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
+
+  widget_props[PROP_SENSITIVE] =
+      g_param_spec_boolean ("sensitive",
+                            P_("Sensitive"),
+                            P_("Whether the widget responds to input"),
+                            TRUE,
+                            GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
+
+  widget_props[PROP_APP_PAINTABLE] =
+      g_param_spec_boolean ("app-paintable",
+                            P_("Application paintable"),
+                            P_("Whether the application will paint directly on the widget"),
+                            FALSE,
+                            GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
+
+  widget_props[PROP_CAN_FOCUS] =
+      g_param_spec_boolean ("can-focus",
+                            P_("Can focus"),
+                            P_("Whether the widget can accept the input focus"),
+                            FALSE,
+                            GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
+
+  widget_props[PROP_HAS_FOCUS] =
+      g_param_spec_boolean ("has-focus",
+                            P_("Has focus"),
+                            P_("Whether the widget has the input focus"),
+                            FALSE,
+                            GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
+
+  widget_props[PROP_IS_FOCUS] =
+      g_param_spec_boolean ("is-focus",
+                            P_("Is focus"),
+                            P_("Whether the widget is the focus widget within the toplevel"),
+                            FALSE,
+                            GTK_PARAM_READWRITE);
+
+  widget_props[PROP_CAN_DEFAULT] =
+      g_param_spec_boolean ("can-default",
+                            P_("Can default"),
+                            P_("Whether the widget can be the default widget"),
+                            FALSE,
+                            GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
+
+  widget_props[PROP_HAS_DEFAULT] =
+      g_param_spec_boolean ("has-default",
+                            P_("Has default"),
+                            P_("Whether the widget is the default widget"),
+                            FALSE,
+                            GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
+
+  widget_props[PROP_RECEIVES_DEFAULT] =
+      g_param_spec_boolean ("receives-default",
+                            P_("Receives default"),
+                            P_("If TRUE, the widget will receive the default action when it is focused"),
+                            FALSE,
+                            GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
+
+  widget_props[PROP_COMPOSITE_CHILD] =
+      g_param_spec_boolean ("composite-child",
+                            P_("Composite child"),
+                            P_("Whether the widget is part of a composite widget"),
+                            FALSE,
+                            GTK_PARAM_READABLE);
 
 G_GNUC_BEGIN_IGNORE_DEPRECATIONS
 
-  g_object_class_install_property (gobject_class,
-				   PROP_STYLE,
-				   g_param_spec_object ("style",
- 							P_("Style"),
- 							P_("The style of the widget, which contains information about how it will look (colors etc)"),
- 							GTK_TYPE_STYLE,
- 							GTK_PARAM_READWRITE | G_PARAM_DEPRECATED));
+  widget_props[PROP_STYLE] =
+      g_param_spec_object ("style",
+                           P_("Style"),
+                           P_("The style of the widget, which contains information about how it will look (colors etc)"),
+                           GTK_TYPE_STYLE,
+                           GTK_PARAM_READWRITE|G_PARAM_DEPRECATED);
 
 G_GNUC_END_IGNORE_DEPRECATIONS
 
-  g_object_class_install_property (gobject_class,
-				   PROP_EVENTS,
-				   g_param_spec_flags ("events",
- 						       P_("Events"),
- 						       P_("The event mask that decides what kind of GdkEvents this widget gets"),
- 						       GDK_TYPE_EVENT_MASK,
- 						       GDK_STRUCTURE_MASK,
- 						       GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
-  g_object_class_install_property (gobject_class,
-				   PROP_NO_SHOW_ALL,
-				   g_param_spec_boolean ("no-show-all",
- 							 P_("No show all"),
- 							 P_("Whether gtk_widget_show_all() should not affect this widget"),
- 							 FALSE,
- 							 GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
+  widget_props[PROP_EVENTS] =
+      g_param_spec_flags ("events",
+                          P_("Events"),
+                          P_("The event mask that decides what kind of GdkEvents this widget gets"),
+                          GDK_TYPE_EVENT_MASK,
+                          GDK_STRUCTURE_MASK,
+                          GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
+
+  widget_props[PROP_NO_SHOW_ALL] =
+      g_param_spec_boolean ("no-show-all",
+                            P_("No show all"),
+                            P_("Whether gtk_widget_show_all() should not affect this widget"),
+                            FALSE,
+                            GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
 /**
  * GtkWidget:has-tooltip:
@@ -1385,13 +1382,13 @@ G_GNUC_END_IGNORE_DEPRECATIONS
  *
  * Since: 2.12
  */
-  g_object_class_install_property (gobject_class,
-				   PROP_HAS_TOOLTIP,
-				   g_param_spec_boolean ("has-tooltip",
- 							 P_("Has tooltip"),
- 							 P_("Whether this widget has a tooltip"),
- 							 FALSE,
- 							 GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
+  widget_props[PROP_HAS_TOOLTIP] =
+      g_param_spec_boolean ("has-tooltip",
+                            P_("Has tooltip"),
+                            P_("Whether this widget has a tooltip"),
+                            FALSE,
+                            GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
+
   /**
    * GtkWidget:tooltip-text:
    *
@@ -1409,13 +1406,13 @@ G_GNUC_END_IGNORE_DEPRECATIONS
    *
    * Since: 2.12
    */
-  g_object_class_install_property (gobject_class,
-                                   PROP_TOOLTIP_TEXT,
-                                   g_param_spec_string ("tooltip-text",
-                                                        P_("Tooltip Text"),
-                                                        P_("The contents of the tooltip for this widget"),
-                                                        NULL,
-                                                        GTK_PARAM_READWRITE));
+  widget_props[PROP_TOOLTIP_TEXT] =
+      g_param_spec_string ("tooltip-text",
+                           P_("Tooltip Text"),
+                           P_("The contents of the tooltip for this widget"),
+                           NULL,
+                           GTK_PARAM_READWRITE);
+
   /**
    * GtkWidget:tooltip-markup:
    *
@@ -1433,13 +1430,12 @@ G_GNUC_END_IGNORE_DEPRECATIONS
    *
    * Since: 2.12
    */
-  g_object_class_install_property (gobject_class,
-				   PROP_TOOLTIP_MARKUP,
-				   g_param_spec_string ("tooltip-markup",
- 							P_("Tooltip markup"),
-							P_("The contents of the tooltip for this widget"),
-							NULL,
-							GTK_PARAM_READWRITE));
+  widget_props[PROP_TOOLTIP_MARKUP] =
+      g_param_spec_string ("tooltip-markup",
+                           P_("Tooltip markup"),
+                           P_("The contents of the tooltip for this widget"),
+                           NULL,
+                           GTK_PARAM_READWRITE);
 
   /**
    * GtkWidget:window:
@@ -1448,13 +1444,12 @@ G_GNUC_END_IGNORE_DEPRECATIONS
    *
    * Since: 2.14
    */
-  g_object_class_install_property (gobject_class,
-				   PROP_WINDOW,
-				   g_param_spec_object ("window",
- 							P_("Window"),
-							P_("The widget's window if it is realized"),
-							GDK_TYPE_WINDOW,
-							GTK_PARAM_READABLE));
+  widget_props[PROP_WINDOW] =
+      g_param_spec_object ("window",
+                           P_("Window"),
+                           P_("The widget's window if it is realized"),
+                           GDK_TYPE_WINDOW,
+                           GTK_PARAM_READABLE);
 
   /**
    * GtkWidget:double-buffered:
@@ -1465,13 +1460,12 @@ G_GNUC_END_IGNORE_DEPRECATIONS
    *
    * Deprecated: 3.14: Widgets should not use this property.
    */
-  g_object_class_install_property (gobject_class,
-                                   PROP_DOUBLE_BUFFERED,
-                                   g_param_spec_boolean ("double-buffered",
-                                                         P_("Double Buffered"),
-                                                         P_("Whether the widget is double buffered"),
-                                                         TRUE,
-                                                         GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY|G_PARAM_DEPRECATED));
+  widget_props[PROP_DOUBLE_BUFFERED] =
+      g_param_spec_boolean ("double-buffered",
+                            P_("Double Buffered"),
+                            P_("Whether the widget is double buffered"),
+                            TRUE,
+                            GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY|G_PARAM_DEPRECATED);
 
   /**
    * GtkWidget:halign:
@@ -1480,14 +1474,13 @@ G_GNUC_END_IGNORE_DEPRECATIONS
    *
    * Since: 3.0
    */
-  g_object_class_install_property (gobject_class,
-                                   PROP_HALIGN,
-                                   g_param_spec_enum ("halign",
-                                                      P_("Horizontal Alignment"),
-                                                      P_("How to position in extra horizontal space"),
-                                                      GTK_TYPE_ALIGN,
-                                                      GTK_ALIGN_FILL,
-                                                      GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
+  widget_props[PROP_HALIGN] =
+      g_param_spec_enum ("halign",
+                         P_("Horizontal Alignment"),
+                         P_("How to position in extra horizontal space"),
+                         GTK_TYPE_ALIGN,
+                         GTK_ALIGN_FILL,
+                         GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
   /**
    * GtkWidget:valign:
@@ -1496,14 +1489,13 @@ G_GNUC_END_IGNORE_DEPRECATIONS
    *
    * Since: 3.0
    */
-  g_object_class_install_property (gobject_class,
-                                   PROP_VALIGN,
-                                   g_param_spec_enum ("valign",
-                                                      P_("Vertical Alignment"),
-                                                      P_("How to position in extra vertical space"),
-                                                      GTK_TYPE_ALIGN,
-                                                      GTK_ALIGN_FILL,
-                                                      GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
+  widget_props[PROP_VALIGN] =
+      g_param_spec_enum ("valign",
+                         P_("Vertical Alignment"),
+                         P_("How to position in extra vertical space"),
+                         GTK_TYPE_ALIGN,
+                         GTK_ALIGN_FILL,
+                         GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
   /**
    * GtkWidget:margin-left:
@@ -1518,15 +1510,13 @@ G_GNUC_END_IGNORE_DEPRECATIONS
    *
    * Since: 3.0
    */
-  g_object_class_install_property (gobject_class,
-                                   PROP_MARGIN_LEFT,
-                                   g_param_spec_int ("margin-left",
-                                                     P_("Margin on Left"),
-                                                     P_("Pixels of extra space on the left side"),
-                                                     0,
-                                                     G_MAXINT16,
-                                                     0,
-                                                     GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY|G_PARAM_DEPRECATED));
+  widget_props[PROP_MARGIN_LEFT] =
+      g_param_spec_int ("margin-left",
+                        P_("Margin on Left"),
+                        P_("Pixels of extra space on the left side"),
+                        0, G_MAXINT16,
+                        0,
+                        GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY|G_PARAM_DEPRECATED);
 
   /**
    * GtkWidget:margin-right:
@@ -1541,15 +1531,13 @@ G_GNUC_END_IGNORE_DEPRECATIONS
    *
    * Since: 3.0
    */
-  g_object_class_install_property (gobject_class,
-                                   PROP_MARGIN_RIGHT,
-                                   g_param_spec_int ("margin-right",
-                                                     P_("Margin on Right"),
-                                                     P_("Pixels of extra space on the right side"),
-                                                     0,
-                                                     G_MAXINT16,
-                                                     0,
-                                                     GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY|G_PARAM_DEPRECATED));
+  widget_props[PROP_MARGIN_RIGHT] =
+      g_param_spec_int ("margin-right",
+                        P_("Margin on Right"),
+                        P_("Pixels of extra space on the right side"),
+                        0, G_MAXINT16,
+                        0,
+                        GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY|G_PARAM_DEPRECATED);
 
   /**
    * GtkWidget:margin-start:
@@ -1563,15 +1551,13 @@ G_GNUC_END_IGNORE_DEPRECATIONS
    *
    * Since: 3.12
    */
-  g_object_class_install_property (gobject_class,
-                                   PROP_MARGIN_START,
-                                   g_param_spec_int ("margin-start",
-                                                     P_("Margin on Start"),
-                                                     P_("Pixels of extra space on the start"),
-                                                     0,
-                                                     G_MAXINT16,
-                                                     0,
-                                                     GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
+  widget_props[PROP_MARGIN_START] =
+      g_param_spec_int ("margin-start",
+                        P_("Margin on Start"),
+                        P_("Pixels of extra space on the start"),
+                        0, G_MAXINT16,
+                        0,
+                        GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
   /**
    * GtkWidget:margin-end:
@@ -1585,15 +1571,13 @@ G_GNUC_END_IGNORE_DEPRECATIONS
    *
    * Since: 3.12
    */
-  g_object_class_install_property (gobject_class,
-                                   PROP_MARGIN_END,
-                                   g_param_spec_int ("margin-end",
-                                                     P_("Margin on End"),
-                                                     P_("Pixels of extra space on the end"),
-                                                     0,
-                                                     G_MAXINT16,
-                                                     0,
-                                                     GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
+  widget_props[PROP_MARGIN_END] =
+      g_param_spec_int ("margin-end",
+                        P_("Margin on End"),
+                        P_("Pixels of extra space on the end"),
+                        0, G_MAXINT16,
+                        0,
+                        GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
   /**
    * GtkWidget:margin-top:
@@ -1606,15 +1590,13 @@ G_GNUC_END_IGNORE_DEPRECATIONS
    *
    * Since: 3.0
    */
-  g_object_class_install_property (gobject_class,
-                                   PROP_MARGIN_TOP,
-                                   g_param_spec_int ("margin-top",
-                                                     P_("Margin on Top"),
-                                                     P_("Pixels of extra space on the top side"),
-                                                     0,
-                                                     G_MAXINT16,
-                                                     0,
-                                                     GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
+  widget_props[PROP_MARGIN_TOP] =
+      g_param_spec_int ("margin-top",
+                        P_("Margin on Top"),
+                        P_("Pixels of extra space on the top side"),
+                        0, G_MAXINT16,
+                        0,
+                        GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
   /**
    * GtkWidget:margin-bottom:
@@ -1627,15 +1609,13 @@ G_GNUC_END_IGNORE_DEPRECATIONS
    *
    * Since: 3.0
    */
-  g_object_class_install_property (gobject_class,
-                                   PROP_MARGIN_BOTTOM,
-                                   g_param_spec_int ("margin-bottom",
-                                                     P_("Margin on Bottom"),
-                                                     P_("Pixels of extra space on the bottom side"),
-                                                     0,
-                                                     G_MAXINT16,
-                                                     0,
-                                                     GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
+  widget_props[PROP_MARGIN_BOTTOM] =
+      g_param_spec_int ("margin-bottom",
+                        P_("Margin on Bottom"),
+                        P_("Pixels of extra space on the bottom side"),
+                        0, G_MAXINT16,
+                        0,
+                        GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
   /**
    * GtkWidget:margin:
@@ -1645,15 +1625,119 @@ G_GNUC_END_IGNORE_DEPRECATIONS
    *
    * Since: 3.0
    */
-  g_object_class_install_property (gobject_class,
-                                   PROP_MARGIN,
-                                   g_param_spec_int ("margin",
-                                                     P_("All Margins"),
-                                                     P_("Pixels of extra space on all four sides"),
-                                                     0,
-                                                     G_MAXINT16,
-                                                     0,
-                                                     GTK_PARAM_READWRITE));
+  widget_props[PROP_MARGIN] =
+      g_param_spec_int ("margin",
+                        P_("All Margins"),
+                        P_("Pixels of extra space on all four sides"),
+                        0, G_MAXINT16,
+                        0,
+                        GTK_PARAM_READWRITE);
+
+  /**
+   * GtkWidget:hexpand:
+   *
+   * Whether to expand horizontally. See gtk_widget_set_hexpand().
+   *
+   * Since: 3.0
+   */
+  widget_props[PROP_HEXPAND] =
+      g_param_spec_boolean ("hexpand",
+                            P_("Horizontal Expand"),
+                            P_("Whether widget wants more horizontal space"),
+                            FALSE,
+                            GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
+
+  /**
+   * GtkWidget:hexpand-set:
+   *
+   * Whether to use the #GtkWidget:hexpand property. See gtk_widget_get_hexpand_set().
+   *
+   * Since: 3.0
+   */
+  widget_props[PROP_HEXPAND_SET] =
+      g_param_spec_boolean ("hexpand-set",
+                            P_("Horizontal Expand Set"),
+                            P_("Whether to use the hexpand property"),
+                            FALSE,
+                            GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
+
+  /**
+   * GtkWidget:vexpand:
+   *
+   * Whether to expand vertically. See gtk_widget_set_vexpand().
+   *
+   * Since: 3.0
+   */
+  widget_props[PROP_VEXPAND] =
+      g_param_spec_boolean ("vexpand",
+                            P_("Vertical Expand"),
+                            P_("Whether widget wants more vertical space"),
+                            FALSE,
+                            GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
+
+  /**
+   * GtkWidget:vexpand-set:
+   *
+   * Whether to use the #GtkWidget:vexpand property. See gtk_widget_get_vexpand_set().
+   *
+   * Since: 3.0
+   */
+  widget_props[PROP_VEXPAND_SET] =
+      g_param_spec_boolean ("vexpand-set",
+                            P_("Vertical Expand Set"),
+                            P_("Whether to use the vexpand property"),
+                            FALSE,
+                            GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
+
+  /**
+   * GtkWidget:expand:
+   *
+   * Whether to expand in both directions. Setting this sets both #GtkWidget:hexpand and #GtkWidget:vexpand
+   *
+   * Since: 3.0
+   */
+  widget_props[PROP_EXPAND] =
+      g_param_spec_boolean ("expand",
+                            P_("Expand Both"),
+                            P_("Whether widget wants to expand in both directions"),
+                            FALSE,
+                            GTK_PARAM_READWRITE);
+
+  /**
+   * GtkWidget:opacity:
+   *
+   * The requested opacity of the widget. See gtk_widget_set_opacity() for
+   * more details about window opacity.
+   *
+   * Before 3.8 this was only available in GtkWindow
+   *
+   * Since: 3.8
+   */
+  widget_props[PROP_OPACITY] =
+      g_param_spec_double ("opacity",
+                           P_("Opacity for Widget"),
+                           P_("The opacity of the widget, from 0 to 1"),
+                           0.0, 1.0,
+                           1.0,
+                           GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
+
+  /**
+   * GtkWidget:scale-factor:
+   *
+   * The scale factor of the widget. See gtk_widget_get_scale_factor() for
+   * more details about widget scaling.
+   *
+   * Since: 3.10
+   */
+  widget_props[PROP_SCALE_FACTOR] =
+      g_param_spec_int ("scale-factor",
+                        P_("Scale factor"),
+                        P_("The scaling factor of the window"),
+                        1, G_MAXINT,
+                        1,
+                        GTK_PARAM_READABLE);
+
+  g_object_class_install_properties (gobject_class, NUM_PROPERTIES, widget_props);
 
   /**
    * GtkWidget::destroy:
@@ -1673,119 +1757,6 @@ G_GNUC_END_IGNORE_DEPRECATIONS
                   NULL, NULL,
                   _gtk_marshal_VOID__VOID,
                   G_TYPE_NONE, 0);
-
-  /**
-   * GtkWidget:hexpand:
-   *
-   * Whether to expand horizontally. See gtk_widget_set_hexpand().
-   *
-   * Since: 3.0
-   */
-  g_object_class_install_property (gobject_class,
-                                   PROP_HEXPAND,
-                                   g_param_spec_boolean ("hexpand",
-                                                         P_("Horizontal Expand"),
-                                                         P_("Whether widget wants more horizontal space"),
-                                                         FALSE,
-                                                         GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
-
-  /**
-   * GtkWidget:hexpand-set:
-   *
-   * Whether to use the #GtkWidget:hexpand property. See gtk_widget_get_hexpand_set().
-   *
-   * Since: 3.0
-   */
-  g_object_class_install_property (gobject_class,
-                                   PROP_HEXPAND_SET,
-                                   g_param_spec_boolean ("hexpand-set",
-                                                         P_("Horizontal Expand Set"),
-                                                         P_("Whether to use the hexpand property"),
-                                                         FALSE,
-                                                         GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
-
-  /**
-   * GtkWidget:vexpand:
-   *
-   * Whether to expand vertically. See gtk_widget_set_vexpand().
-   *
-   * Since: 3.0
-   */
-  g_object_class_install_property (gobject_class,
-                                   PROP_VEXPAND,
-                                   g_param_spec_boolean ("vexpand",
-                                                         P_("Vertical Expand"),
-                                                         P_("Whether widget wants more vertical space"),
-                                                         FALSE,
-                                                         GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
-
-  /**
-   * GtkWidget:vexpand-set:
-   *
-   * Whether to use the #GtkWidget:vexpand property. See gtk_widget_get_vexpand_set().
-   *
-   * Since: 3.0
-   */
-  g_object_class_install_property (gobject_class,
-                                   PROP_VEXPAND_SET,
-                                   g_param_spec_boolean ("vexpand-set",
-                                                         P_("Vertical Expand Set"),
-                                                         P_("Whether to use the vexpand property"),
-                                                         FALSE,
-                                                         GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
-
-  /**
-   * GtkWidget:expand:
-   *
-   * Whether to expand in both directions. Setting this sets both #GtkWidget:hexpand and #GtkWidget:vexpand
-   *
-   * Since: 3.0
-   */
-  g_object_class_install_property (gobject_class,
-                                   PROP_EXPAND,
-                                   g_param_spec_boolean ("expand",
-                                                         P_("Expand Both"),
-                                                         P_("Whether widget wants to expand in both directions"),
-                                                         FALSE,
-                                                         GTK_PARAM_READWRITE));
-
-  /**
-   * GtkWidget:opacity:
-   *
-   * The requested opacity of the widget. See gtk_widget_set_opacity() for
-   * more details about window opacity.
-   *
-   * Before 3.8 this was only available in GtkWindow
-   *
-   * Since: 3.8
-   */
-  g_object_class_install_property (gobject_class,
-				   PROP_OPACITY,
-				   g_param_spec_double ("opacity",
-							P_("Opacity for Widget"),
-							P_("The opacity of the widget, from 0 to 1"),
-							0.0,
-							1.0,
-							1.0,
-							GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
-
-  /**
-   * GtkWidget:scale-factor:
-   *
-   * The scale factor of the widget. See gtk_widget_get_scale_factor() for
-   * more details about widget scaling.
-   *
-   * Since: 3.10
-   */
-  g_object_class_install_property (gobject_class,
-                                   PROP_SCALE_FACTOR,
-                                   g_param_spec_int ("scale-factor",
-                                                     P_("Scale factor"),
-                                                     P_("The scaling factor of the window"),
-                                                     1,
-                                                     G_MAXINT,
-                                                     1,
-                                                     GTK_PARAM_READABLE));
 
   /**
    * GtkWidget::show:
@@ -4768,7 +4739,7 @@ gtk_widget_unparent (GtkWidget *widget)
    */
   gtk_widget_set_parent_window (widget, NULL);
 
-  g_object_notify (G_OBJECT (widget), "parent");
+  g_object_notify_by_pspec (G_OBJECT (widget), widget_props[PROP_PARENT]);
   g_object_thaw_notify (G_OBJECT (widget));
   if (!priv->parent)
     g_object_notify_queue_clear (G_OBJECT (widget), nqueue);
@@ -4875,7 +4846,7 @@ gtk_widget_show (GtkWidget *widget)
       gtk_css_node_set_visible (widget->priv->cssnode, TRUE);
 
       g_signal_emit (widget, widget_signals[SHOW], 0);
-      g_object_notify (G_OBJECT (widget), "visible");
+      g_object_notify_by_pspec (G_OBJECT (widget), widget_props[PROP_VISIBLE]);
 
       gtk_widget_pop_verify_invariants (widget);
       g_object_unref (widget);
@@ -4977,7 +4948,7 @@ gtk_widget_hide (GtkWidget *widget)
       g_signal_emit (widget, widget_signals[HIDE], 0);
       if (!gtk_widget_is_toplevel (widget))
 	gtk_widget_queue_resize (widget);
-      g_object_notify (G_OBJECT (widget), "visible");
+      g_object_notify_by_pspec (G_OBJECT (widget), widget_props[PROP_VISIBLE]);
 
       gtk_widget_pop_verify_invariants (widget);
       g_object_unref (widget);
@@ -7980,7 +7951,7 @@ gtk_widget_reparent (GtkWidget *widget,
 					   gtk_widget_get_parent_window (widget));
 	}
 
-      g_object_notify (G_OBJECT (widget), "parent");
+      g_object_notify_by_pspec (G_OBJECT (widget), widget_props[PROP_PARENT]);
     }
 }
 
@@ -8106,7 +8077,7 @@ gtk_widget_grab_focus (GtkWidget *widget)
 
   g_object_ref (widget);
   g_signal_emit (widget, widget_signals[GRAB_FOCUS], 0);
-  g_object_notify (G_OBJECT (widget), "has-focus");
+  g_object_notify_by_pspec (G_OBJECT (widget), widget_props[PROP_HAS_FOCUS]);
   g_object_unref (widget);
 }
 
@@ -8362,7 +8333,7 @@ gtk_widget_set_can_focus (GtkWidget *widget,
       widget->priv->can_focus = can_focus;
 
       gtk_widget_queue_resize (widget);
-      g_object_notify (G_OBJECT (widget), "can-focus");
+      g_object_notify_by_pspec (G_OBJECT (widget), widget_props[PROP_CAN_FOCUS]);
     }
 }
 
@@ -8495,7 +8466,7 @@ gtk_widget_set_can_default (GtkWidget *widget,
       widget->priv->can_default = can_default;
 
       gtk_widget_queue_resize (widget);
-      g_object_notify (G_OBJECT (widget), "can-default");
+      g_object_notify_by_pspec (G_OBJECT (widget), widget_props[PROP_CAN_FOCUS]);
     }
 }
 
@@ -8608,7 +8579,7 @@ gtk_widget_set_receives_default (GtkWidget *widget,
     {
       widget->priv->receives_default = receives_default;
 
-      g_object_notify (G_OBJECT (widget), "receives-default");
+      g_object_notify_by_pspec (G_OBJECT (widget), widget_props[PROP_RECEIVES_DEFAULT]);
     }
 }
 
@@ -8748,7 +8719,7 @@ gtk_widget_set_name (GtkWidget	 *widget,
   if (priv->context)
     gtk_style_context_set_id (priv->context, priv->name);
 
-  g_object_notify (G_OBJECT (widget), "name");
+  g_object_notify_by_pspec (G_OBJECT (widget), widget_props[PROP_NAME]);
 }
 
 /**
@@ -9291,7 +9262,7 @@ gtk_widget_set_app_paintable (GtkWidget *widget,
       if (gtk_widget_is_drawable (widget))
 	gtk_widget_queue_draw (widget);
 
-      g_object_notify (G_OBJECT (widget), "app-paintable");
+      g_object_notify_by_pspec (G_OBJECT (widget), widget_props[PROP_APP_PAINTABLE]);
     }
 }
 
@@ -9363,7 +9334,7 @@ gtk_widget_set_double_buffered (GtkWidget *widget,
     {
       widget->priv->double_buffered = double_buffered;
 
-      g_object_notify (G_OBJECT (widget), "double-buffered");
+      g_object_notify_by_pspec (G_OBJECT (widget), widget_props[PROP_DOUBLE_BUFFERED]);
     }
 }
 
@@ -9467,7 +9438,7 @@ gtk_widget_set_sensitive (GtkWidget *widget,
       gtk_widget_queue_resize (widget);
     }
 
-  g_object_notify (G_OBJECT (widget), "sensitive");
+  g_object_notify_by_pspec (G_OBJECT (widget), widget_props[PROP_SENSITIVE]);
 }
 
 /**
@@ -9576,7 +9547,7 @@ gtk_widget_set_parent (GtkWidget *widget,
   g_signal_emit (widget, widget_signals[PARENT_SET], 0, NULL);
   if (priv->parent->priv->anchored)
     _gtk_widget_propagate_hierarchy_changed (widget, NULL);
-  g_object_notify (G_OBJECT (widget), "parent");
+  g_object_notify_by_pspec (G_OBJECT (widget), widget_props[PROP_PARENT]);
 
   /* Enforce realized/mapped invariants
    */
@@ -10860,7 +10831,7 @@ _gtk_widget_scale_changed (GtkWidget *widget)
   if (priv->context)
     gtk_style_context_set_scale (priv->context, gtk_widget_get_scale_factor (widget));
 
-  g_object_notify (G_OBJECT (widget), "scale-factor");
+  g_object_notify_by_pspec (G_OBJECT (widget), widget_props[PROP_SCALE_FACTOR]);
 
   gtk_widget_queue_draw (widget);
 
@@ -11120,14 +11091,14 @@ gtk_widget_set_usize_internal (GtkWidget          *widget,
   if (width > -2 && aux_info->width != width)
     {
       if ((flags & GTK_QUEUE_RESIZE_INVALIDATE_ONLY) == 0)
-	g_object_notify (G_OBJECT (widget), "width-request");
+	g_object_notify_by_pspec (G_OBJECT (widget), widget_props[PROP_WIDTH_REQUEST]);
       aux_info->width = width;
       changed = TRUE;
     }
   if (height > -2 && aux_info->height != height)
     {
       if ((flags & GTK_QUEUE_RESIZE_INVALIDATE_ONLY) == 0)
-	g_object_notify (G_OBJECT (widget), "height-request");
+	g_object_notify_by_pspec (G_OBJECT (widget), widget_props[PROP_HEIGHT_REQUEST]);
       aux_info->height = height;
       changed = TRUE;
     }
@@ -11324,7 +11295,7 @@ gtk_widget_set_events (GtkWidget *widget,
     {
       g_object_set_qdata (G_OBJECT (widget), quark_event_mask,
                           GINT_TO_POINTER (events));
-      g_object_notify (G_OBJECT (widget), "events");
+      g_object_notify_by_pspec (G_OBJECT (widget), widget_props[PROP_EVENTS]);
     }
 }
 
@@ -11517,7 +11488,7 @@ gtk_widget_add_events (GtkWidget *widget,
       gtk_widget_update_devices_mask (widget, FALSE);
     }
 
-  g_object_notify (G_OBJECT (widget), "events");
+  g_object_notify_by_pspec (G_OBJECT (widget), widget_props[PROP_EVENTS]);
 }
 
 /**
@@ -11559,7 +11530,7 @@ gtk_widget_add_device_events (GtkWidget    *widget,
   if (gtk_widget_get_realized (widget))
     gtk_widget_add_events_internal (widget, device, events);
 
-  g_object_notify (G_OBJECT (widget), "events");
+  g_object_notify_by_pspec (G_OBJECT (widget), widget_props[PROP_EVENTS]);
 }
 
 /**
@@ -13833,8 +13804,8 @@ gtk_widget_set_expand (GtkWidget     *widget,
                        GtkOrientation orientation,
                        gboolean       expand)
 {
-  const char *expand_prop;
-  const char *expand_set_prop;
+  gint expand_prop;
+  gint expand_set_prop;
   gboolean was_both;
   GtkWidgetPrivate *priv;
 
@@ -13855,8 +13826,8 @@ gtk_widget_set_expand (GtkWidget     *widget,
       priv->hexpand_set = TRUE;
       priv->hexpand = expand;
 
-      expand_prop = "hexpand";
-      expand_set_prop = "hexpand-set";
+      expand_prop = PROP_HEXPAND;
+      expand_set_prop = PROP_HEXPAND_SET;
     }
   else
     {
@@ -13867,17 +13838,17 @@ gtk_widget_set_expand (GtkWidget     *widget,
       priv->vexpand_set = TRUE;
       priv->vexpand = expand;
 
-      expand_prop = "vexpand";
-      expand_set_prop = "vexpand-set";
+      expand_prop = PROP_VEXPAND;
+      expand_set_prop = PROP_VEXPAND_SET;
     }
 
   gtk_widget_queue_compute_expand (widget);
 
   g_object_freeze_notify (G_OBJECT (widget));
-  g_object_notify (G_OBJECT (widget), expand_prop);
-  g_object_notify (G_OBJECT (widget), expand_set_prop);
+  g_object_notify_by_pspec (G_OBJECT (widget), widget_props[expand_prop]);
+  g_object_notify_by_pspec (G_OBJECT (widget), widget_props[expand_set_prop]);
   if (was_both != (priv->hexpand && priv->vexpand))
-    g_object_notify (G_OBJECT (widget), "expand");
+    g_object_notify_by_pspec (G_OBJECT (widget), widget_props[PROP_EXPAND]);
   g_object_thaw_notify (G_OBJECT (widget));
 }
 
@@ -13887,7 +13858,7 @@ gtk_widget_set_expand_set (GtkWidget      *widget,
                            gboolean        set)
 {
   GtkWidgetPrivate *priv;
-  const char *prop;
+  gint prop;
 
   priv = widget->priv;
 
@@ -13899,7 +13870,7 @@ gtk_widget_set_expand_set (GtkWidget      *widget,
         return;
 
       priv->hexpand_set = set;
-      prop = "hexpand-set";
+      prop = PROP_HEXPAND_SET;
     }
   else
     {
@@ -13907,12 +13878,12 @@ gtk_widget_set_expand_set (GtkWidget      *widget,
         return;
 
       priv->vexpand_set = set;
-      prop = "vexpand-set";
+      prop = PROP_VEXPAND_SET;
     }
 
   gtk_widget_queue_compute_expand (widget);
 
-  g_object_notify (G_OBJECT (widget), prop);
+  g_object_notify_by_pspec (G_OBJECT (widget), widget_props[prop]);
 }
 
 /**
@@ -14822,7 +14793,7 @@ gtk_widget_set_halign (GtkWidget *widget,
 
   aux_info->halign = align;
   gtk_widget_queue_resize (widget);
-  g_object_notify (G_OBJECT (widget), "halign");
+  g_object_notify_by_pspec (G_OBJECT (widget), widget_props[PROP_HALIGN]);
 }
 
 /**
@@ -14892,7 +14863,7 @@ gtk_widget_set_valign (GtkWidget *widget,
 
   aux_info->valign = align;
   gtk_widget_queue_resize (widget);
-  g_object_notify (G_OBJECT (widget), "valign");
+  g_object_notify_by_pspec (G_OBJECT (widget), widget_props[PROP_VALIGN]);
 }
 
 /**
@@ -14946,8 +14917,8 @@ gtk_widget_set_margin_left (GtkWidget *widget,
 
   aux_info->margin.left = margin;
   gtk_widget_queue_resize (widget);
-  g_object_notify (G_OBJECT (widget), "margin-left");
-  g_object_notify (G_OBJECT (widget), rtl ? "margin-end" : "margin-start");
+  g_object_notify_by_pspec (G_OBJECT (widget), widget_props[PROP_MARGIN_LEFT]);
+  g_object_notify_by_pspec (G_OBJECT (widget), widget_props[rtl ? PROP_MARGIN_END : PROP_MARGIN_START]);
 }
 
 /**
@@ -15001,8 +14972,8 @@ gtk_widget_set_margin_right (GtkWidget *widget,
 
   aux_info->margin.right = margin;
   gtk_widget_queue_resize (widget);
-  g_object_notify (G_OBJECT (widget), "margin-right");
-  g_object_notify (G_OBJECT (widget), rtl ? "margin-start" : "margin-end");
+  g_object_notify_by_pspec (G_OBJECT (widget), widget_props[PROP_MARGIN_RIGHT]);
+  g_object_notify_by_pspec (G_OBJECT (widget), widget_props[rtl ? PROP_MARGIN_START : PROP_MARGIN_END]);
 }
 
 /**
@@ -15065,8 +15036,8 @@ gtk_widget_set_margin_start (GtkWidget *widget,
 
   *start = margin;
   gtk_widget_queue_resize (widget);
-  g_object_notify (G_OBJECT (widget), "margin-start");
-  g_object_notify (G_OBJECT (widget), rtl ? "margin-right" : "margin-left");
+  g_object_notify_by_pspec (G_OBJECT (widget), widget_props[PROP_MARGIN_START]);
+  g_object_notify_by_pspec (G_OBJECT (widget), widget_props[rtl ? PROP_MARGIN_RIGHT : PROP_MARGIN_LEFT]);
 }
 
 /**
@@ -15129,8 +15100,8 @@ gtk_widget_set_margin_end (GtkWidget *widget,
 
   *end = margin;
   gtk_widget_queue_resize (widget);
-  g_object_notify (G_OBJECT (widget), "margin-end");
-  g_object_notify (G_OBJECT (widget), rtl ? "margin-left" : "margin-right");
+  g_object_notify_by_pspec (G_OBJECT (widget), widget_props[PROP_MARGIN_END]);
+  g_object_notify_by_pspec (G_OBJECT (widget), widget_props[rtl ? PROP_MARGIN_LEFT : PROP_MARGIN_RIGHT]);
 }
 
 /**
@@ -15177,7 +15148,7 @@ gtk_widget_set_margin_top (GtkWidget *widget,
 
   aux_info->margin.top = margin;
   gtk_widget_queue_resize (widget);
-  g_object_notify (G_OBJECT (widget), "margin-top");
+  g_object_notify_by_pspec (G_OBJECT (widget), widget_props[PROP_MARGIN_TOP]);
 }
 
 /**
@@ -15224,7 +15195,7 @@ gtk_widget_set_margin_bottom (GtkWidget *widget,
 
   aux_info->margin.bottom = margin;
   gtk_widget_queue_resize (widget);
-  g_object_notify (G_OBJECT (widget), "margin-bottom");
+  g_object_notify_by_pspec (G_OBJECT (widget), widget_props[PROP_MARGIN_BOTTOM]);
 }
 
 /**
@@ -15398,7 +15369,7 @@ gtk_widget_set_no_show_all (GtkWidget *widget,
     {
       widget->priv->no_show_all = no_show_all;
 
-      g_object_notify (G_OBJECT (widget), "no-show-all");
+      g_object_notify_by_pspec (G_OBJECT (widget), widget_props[PROP_NO_SHOW_ALL]);
     }
 }
 
@@ -15435,7 +15406,7 @@ gtk_widget_real_set_has_tooltip (GtkWidget *widget,
       g_object_set_qdata (G_OBJECT (widget), quark_has_tooltip,
 			  GUINT_TO_POINTER (priv_has_tooltip));
 
-      g_object_notify (G_OBJECT (widget), "has-tooltip");
+      g_object_notify_by_pspec (G_OBJECT (widget), widget_props[PROP_HAS_TOOLTIP]);
     }
 }
 
@@ -16038,7 +16009,7 @@ gtk_widget_set_window (GtkWidget *widget,
     {
       priv->window = window;
 
-      g_object_notify (G_OBJECT (widget), "window");
+      g_object_notify_by_pspec (G_OBJECT (widget), widget_props[PROP_WINDOW]);
     }
 }
 
@@ -16253,7 +16224,7 @@ gtk_widget_set_opacity (GtkWidget *widget,
 
   gtk_widget_update_alpha (widget);
 
-  g_object_notify (G_OBJECT (widget), "opacity");
+  g_object_notify_by_pspec (G_OBJECT (widget), widget_props[PROP_OPACITY]);
 }
 
 /**
@@ -16336,7 +16307,7 @@ gtk_widget_send_focus_change (GtkWidget *widget,
 
   res = gtk_widget_event (widget, event);
 
-  g_object_notify (G_OBJECT (widget), "has-focus");
+  g_object_notify_by_pspec (G_OBJECT (widget), widget_props[PROP_HAS_FOCUS]);
 
   g_object_unref (widget);
 
