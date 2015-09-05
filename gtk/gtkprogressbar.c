@@ -97,12 +97,15 @@ enum {
   PROP_0,
   PROP_FRACTION,
   PROP_PULSE_STEP,
-  PROP_ORIENTATION,
   PROP_INVERTED,
   PROP_TEXT,
   PROP_SHOW_TEXT,
-  PROP_ELLIPSIZE
+  PROP_ELLIPSIZE,
+  PROP_ORIENTATION,
+  NUM_PROPERTIES = PROP_ORIENTATION
 };
+
+static GParamSpec *progress_props[NUM_PROPERTIES] = { NULL, };
 
 static void gtk_progress_bar_set_property         (GObject        *object,
                                                    guint           prop_id,
@@ -153,37 +156,35 @@ gtk_progress_bar_class_init (GtkProgressBarClass *class)
 
   g_object_class_override_property (gobject_class, PROP_ORIENTATION, "orientation");
 
-  g_object_class_install_property (gobject_class,
-                                   PROP_INVERTED,
-                                   g_param_spec_boolean ("inverted",
-                                                         P_("Inverted"),
-                                                         P_("Invert the direction in which the progress bar grows"),
-                                                         FALSE,
-                                                         GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
+  progress_props[PROP_INVERTED] =
+      g_param_spec_boolean ("inverted",
+                            P_("Inverted"),
+                            P_("Invert the direction in which the progress bar grows"),
+                            FALSE,
+                            GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
-  g_object_class_install_property (gobject_class,
-                                   PROP_FRACTION,
-                                   g_param_spec_double ("fraction",
-                                                        P_("Fraction"),
-                                                        P_("The fraction of total work that has been completed"),
-                                                        0.0, 1.0, 0.0,
-                                                        GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
+  progress_props[PROP_FRACTION] =
+      g_param_spec_double ("fraction",
+                           P_("Fraction"),
+                           P_("The fraction of total work that has been completed"),
+                           0.0, 1.0,
+                           0.0,
+                           GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
-  g_object_class_install_property (gobject_class,
-                                   PROP_PULSE_STEP,
-                                   g_param_spec_double ("pulse-step",
-                                                        P_("Pulse Step"),
-                                                        P_("The fraction of total progress to move the bouncing block when pulsed"),
-                                                        0.0, 1.0, 0.1,
-                                                        GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
+  progress_props[PROP_PULSE_STEP] =
+      g_param_spec_double ("pulse-step",
+                           P_("Pulse Step"),
+                           P_("The fraction of total progress to move the bouncing block when pulsed"),
+                           0.0, 1.0,
+                           0.1,
+                           GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
-  g_object_class_install_property (gobject_class,
-                                   PROP_TEXT,
-                                   g_param_spec_string ("text",
-                                                        P_("Text"),
-                                                        P_("Text to be displayed in the progress bar"),
-                                                        NULL,
-                                                        GTK_PARAM_READWRITE));
+  progress_props[PROP_TEXT] =
+      g_param_spec_string ("text",
+                           P_("Text"),
+                           P_("Text to be displayed in the progress bar"),
+                           NULL,
+                           GTK_PARAM_READWRITE);
 
   /**
    * GtkProgressBar:show-text:
@@ -200,13 +201,12 @@ gtk_progress_bar_class_init (GtkProgressBarClass *class)
    *
    * Since: 3.0
    */
-  g_object_class_install_property (gobject_class,
-                                   PROP_SHOW_TEXT,
-                                   g_param_spec_boolean ("show-text",
-                                                         P_("Show text"),
-                                                         P_("Whether the progress is shown as text."),
-                                                         FALSE,
-                                                         GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
+  progress_props[PROP_SHOW_TEXT] =
+      g_param_spec_boolean ("show-text",
+                            P_("Show text"),
+                            P_("Whether the progress is shown as text."),
+                            FALSE,
+                            GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
   /**
    * GtkProgressBar:ellipsize:
@@ -222,15 +222,16 @@ gtk_progress_bar_class_init (GtkProgressBarClass *class)
    *
    * Since: 2.6
    */
-  g_object_class_install_property (gobject_class,
-                                   PROP_ELLIPSIZE,
-                                   g_param_spec_enum ("ellipsize",
-                                                      P_("Ellipsize"),
-                                                      P_("The preferred place to ellipsize the string, if the progress bar "
-                                                         "does not have enough room to display the entire string, if at all."),
-                                                      PANGO_TYPE_ELLIPSIZE_MODE,
-                                                      PANGO_ELLIPSIZE_NONE,
-                                                      GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
+  progress_props[PROP_ELLIPSIZE] =
+      g_param_spec_enum ("ellipsize",
+                         P_("Ellipsize"),
+                         P_("The preferred place to ellipsize the string, if the progress bar "
+                            "does not have enough room to display the entire string, if at all."),
+                         PANGO_TYPE_ELLIPSIZE_MODE,
+                         PANGO_ELLIPSIZE_NONE,
+                         GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
+
+  g_object_class_install_properties (gobject_class, NUM_PROPERTIES, progress_props);
 
   gtk_widget_class_install_style_property (widget_class,
                                            g_param_spec_int ("xspacing",
@@ -1130,7 +1131,7 @@ gtk_progress_bar_set_fraction (GtkProgressBar *pbar,
   gtk_progress_bar_set_activity_mode (pbar, FALSE);
   gtk_widget_queue_draw (GTK_WIDGET (pbar));
 
-  g_object_notify (G_OBJECT (pbar), "fraction");
+  g_object_notify_by_pspec (G_OBJECT (pbar), progress_props[PROP_FRACTION]);
 }
 
 static void
@@ -1196,7 +1197,7 @@ gtk_progress_bar_set_text (GtkProgressBar *pbar,
 
   gtk_widget_queue_resize (GTK_WIDGET (pbar));
 
-  g_object_notify (G_OBJECT (pbar), "text");
+  g_object_notify_by_pspec (G_OBJECT (pbar), progress_props[PROP_TEXT]);
 }
 
 /**
@@ -1233,7 +1234,7 @@ gtk_progress_bar_set_show_text (GtkProgressBar *pbar,
 
       gtk_widget_queue_resize (GTK_WIDGET (pbar));
 
-      g_object_notify (G_OBJECT (pbar), "show-text");
+      g_object_notify_by_pspec (G_OBJECT (pbar), progress_props[PROP_SHOW_TEXT]);
     }
 }
 
@@ -1276,7 +1277,7 @@ gtk_progress_bar_set_pulse_step (GtkProgressBar *pbar,
 
   priv->pulse_fraction = fraction;
 
-  g_object_notify (G_OBJECT (pbar), "pulse-step");
+  g_object_notify_by_pspec (G_OBJECT (pbar), progress_props[PROP_PULSE_STEP]);
 }
 
 static void
@@ -1318,7 +1319,7 @@ gtk_progress_bar_set_inverted (GtkProgressBar *pbar,
 
       gtk_widget_queue_resize (GTK_WIDGET (pbar));
 
-      g_object_notify (G_OBJECT (pbar), "inverted");
+      g_object_notify_by_pspec (G_OBJECT (pbar), progress_props[PROP_INVERTED]);
     }
 }
 
@@ -1416,7 +1417,7 @@ gtk_progress_bar_set_ellipsize (GtkProgressBar     *pbar,
     {
       priv->ellipsize = mode;
 
-      g_object_notify (G_OBJECT (pbar), "ellipsize");
+      g_object_notify_by_pspec (G_OBJECT (pbar), progress_props[PROP_ELLIPSIZE]);
       gtk_widget_queue_resize (GTK_WIDGET (pbar));
     }
 }
