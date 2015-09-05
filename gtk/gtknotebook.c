@@ -238,12 +238,12 @@ enum {
   CHILD_PROP_DETACHABLE
 };
 
-#define GTK_NOTEBOOK_PAGE(_glist_)         ((GtkNotebookPage *)((GList *)(_glist_))->data)
+#define GTK_NOTEBOOK_PAGE(_glist_)         ((GtkNotebookPage *)(_glist_)->data)
 
 /* some useful defines for calculating coords */
-#define PAGE_MIDDLE_X(_page_) (((GtkNotebookPage *) (_page_))->allocation.x + ((GtkNotebookPage *) (_page_))->allocation.width / 2)
-#define PAGE_MIDDLE_Y(_page_) (((GtkNotebookPage *) (_page_))->allocation.y + ((GtkNotebookPage *) (_page_))->allocation.height / 2)
-#define NOTEBOOK_IS_TAB_LABEL_PARENT(_notebook_,_page_) (gtk_widget_get_parent (((GtkNotebookPage *) (_page_))->tab_label) == ((GtkWidget *) (_notebook_)))
+#define PAGE_MIDDLE_X(_page_) ((_page_)->allocation.x + (_page_)->allocation.width / 2)
+#define PAGE_MIDDLE_Y(_page_) ((_page_)->allocation.y + (_page_)->allocation.height / 2)
+#define NOTEBOOK_IS_TAB_LABEL_PARENT(_notebook_,_page_) (gtk_widget_get_parent ((_page_)->tab_label) == (GTK_WIDGET (_notebook_)))
 
 struct _GtkNotebookPage
 {
