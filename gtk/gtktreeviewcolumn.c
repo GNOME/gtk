@@ -459,6 +459,8 @@ gtk_tree_view_column_init (GtkTreeViewColumn *tree_column)
   priv->maybe_reordered = FALSE;
   priv->fixed_width = -1;
   priv->title = g_strdup ("");
+
+  gtk_tree_view_column_create_button (tree_column);
 }
 
 static void
@@ -512,6 +514,8 @@ gtk_tree_view_column_dispose (GObject *object)
       g_object_unref (priv->child);
       priv->child = NULL;
     }
+
+  g_clear_object (&priv->button);
 
   G_OBJECT_CLASS (gtk_tree_view_column_parent_class)->dispose (object);
 }
@@ -809,25 +813,16 @@ static void
 gtk_tree_view_column_create_button (GtkTreeViewColumn *tree_column)
 {
   GtkTreeViewColumnPrivate *priv = tree_column->priv;
-  GtkTreeView *tree_view;
   GtkWidget *child;
   GtkWidget *hbox;
 
-  tree_view = (GtkTreeView *) priv->tree_view;
-
-  g_return_if_fail (GTK_IS_TREE_VIEW (tree_view));
   g_return_if_fail (priv->button == NULL);
 
   priv->button = gtk_button_new ();
-  if (priv->visible)
-    gtk_widget_show (priv->button);
+  g_object_ref_sink (priv->button);
+
+  gtk_widget_show (priv->button);
   gtk_widget_add_events (priv->button, GDK_POINTER_MOTION_MASK);
-
-  /* make sure we own a reference to it as well. */
-  if (_gtk_tree_view_get_header_window (tree_view))
-    gtk_widget_set_parent_window (priv->button, _gtk_tree_view_get_header_window (tree_view));
-
-  gtk_widget_set_parent (priv->button, GTK_WIDGET (tree_view));
 
   g_signal_connect (priv->button, "event",
 		    G_CALLBACK (gtk_tree_view_column_button_event),
@@ -871,7 +866,6 @@ G_GNUC_END_IGNORE_DEPRECATIONS
 
   gtk_widget_show (hbox);
   gtk_widget_show (priv->alignment);
-  gtk_tree_view_column_update_button (tree_column);
 }
 
 static void 
@@ -890,16 +884,6 @@ gtk_tree_view_column_update_button (GtkTreeViewColumn *tree_column)
     model = gtk_tree_view_get_model (GTK_TREE_VIEW (priv->tree_view));
   else
     model = NULL;
-
-  /* Create a button if necessary */
-  if (priv->visible &&
-      priv->button == NULL &&
-      priv->tree_view &&
-      gtk_widget_get_realized (priv->tree_view))
-    gtk_tree_view_column_create_button (tree_column);
-  
-  if (! priv->button)
-    return;
 
   hbox = gtk_bin_get_child (GTK_BIN (priv->button));
   alignment = priv->alignment;
@@ -950,9 +934,12 @@ G_GNUC_END_IGNORE_DEPRECATIONS
     {
       gboolean alternative;
 
-      g_object_get (gtk_widget_get_settings (priv->tree_view),
-		    "gtk-alternative-sort-arrows", &alternative,
-		    NULL);
+      if (priv->tree_view)
+        g_object_get (gtk_widget_get_settings (priv->tree_view),
+                      "gtk-alternative-sort-arrows", &alternative,
+                      NULL);
+      else
+        alternative = FALSE;
 
       switch (priv->sort_order)
         {
@@ -994,8 +981,7 @@ G_GNUC_END_IGNORE_DEPRECATIONS
 
   /* It's always safe to hide the button.  It isn't always safe to show it, as
    * if you show it before it's realized, it'll get the wrong window. */
-  if (priv->button &&
-      priv->tree_view != NULL &&
+  if (priv->tree_view != NULL &&
       gtk_widget_get_realized (priv->tree_view))
     {
       if (priv->visible &&
@@ -1043,9 +1029,8 @@ G_GNUC_END_IGNORE_DEPRECATIONS
   /* Queue a resize on the assumption that we always want to catch all changes
    * and columns don't change all that often.
    */
-  if (gtk_widget_get_realized (priv->tree_view))
+  if (priv->tree_view && gtk_widget_get_realized (priv->tree_view))
      gtk_widget_queue_resize (priv->tree_view);
-
 }
 
 /* Button signal handlers
@@ -1406,7 +1391,12 @@ _gtk_tree_view_column_set_tree_view (GtkTreeViewColumn *column,
   g_assert (priv->tree_view == NULL);
 
   priv->tree_view = GTK_WIDGET (tree_view);
-  gtk_tree_view_column_create_button (column);
+
+  /* make sure we own a reference to it as well. */
+  if (_gtk_tree_view_get_header_window (tree_view))
+    gtk_widget_set_parent_window (priv->button, _gtk_tree_view_get_header_window (tree_view));
+
+  gtk_widget_set_parent (priv->button, GTK_WIDGET (tree_view));
 
   priv->property_changed_signal =
     g_signal_connect_swapped (tree_view,
@@ -1422,7 +1412,7 @@ _gtk_tree_view_column_unset_tree_view (GtkTreeViewColumn *column)
 {
   GtkTreeViewColumnPrivate *priv = column->priv;
 
-  if (priv->tree_view && priv->button)
+  if (priv->tree_view)
     {
       gtk_container_remove (GTK_CONTAINER (priv->tree_view), priv->button);
     }
@@ -1893,6 +1883,8 @@ gtk_tree_view_column_set_visible (GtkTreeViewColumn *tree_column,
 
   priv->visible = visible;
 
+  gtk_widget_set_visible (priv->button, visible);
+
   if (priv->visible)
     _gtk_tree_view_column_cell_set_dirty (tree_column, TRUE);
 
@@ -2343,7 +2335,6 @@ gtk_tree_view_column_clicked (GtkTreeViewColumn *tree_column)
   priv = tree_column->priv;
 
   if (priv->visible &&
-      priv->button &&
       priv->clickable)
     gtk_button_clicked (GTK_BUTTON (priv->button));
 }
