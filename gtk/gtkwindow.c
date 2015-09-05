@@ -306,6 +306,8 @@ enum {
   LAST_ARG
 };
 
+static GParamSpec *window_props[LAST_ARG] = { NULL, };
+
 /* Must be kept in sync with GdkWindowEdge ! */
 typedef enum
 {
@@ -701,31 +703,27 @@ gtk_window_class_init (GtkWindowClass *klass)
   klass->keys_changed = gtk_window_keys_changed;
   klass->enable_debugging = gtk_window_enable_debugging;
 
-  /* Construct */
-  g_object_class_install_property (gobject_class,
-                                   PROP_TYPE,
-                                   g_param_spec_enum ("type",
-						      P_("Window Type"),
-						      P_("The type of the window"),
-						      GTK_TYPE_WINDOW_TYPE,
-						      GTK_WINDOW_TOPLEVEL,
-						      GTK_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY));
-  /* Regular Props */
-  g_object_class_install_property (gobject_class,
-                                   PROP_TITLE,
-                                   g_param_spec_string ("title",
-                                                        P_("Window Title"),
-                                                        P_("The title of the window"),
-                                                        NULL,
-                                                        GTK_PARAM_READWRITE));
+  window_props[PROP_TYPE] =
+      g_param_spec_enum ("type",
+                         P_("Window Type"),
+                         P_("The type of the window"),
+                         GTK_TYPE_WINDOW_TYPE,
+                         GTK_WINDOW_TOPLEVEL,
+                         GTK_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY);
 
-  g_object_class_install_property (gobject_class,
-                                   PROP_ROLE,
-                                   g_param_spec_string ("role",
-							P_("Window Role"),
-							P_("Unique identifier for the window to be used when restoring a session"),
-							NULL,
-							GTK_PARAM_READWRITE));
+  window_props[PROP_TITLE] =
+      g_param_spec_string ("title",
+                           P_("Window Title"),
+                           P_("The title of the window"),
+                           NULL,
+                           GTK_PARAM_READWRITE);
+
+  window_props[PROP_ROLE] =
+      g_param_spec_string ("role",
+                           P_("Window Role"),
+                           P_("Unique identifier for the window to be used when restoring a session"),
+                           NULL,
+                           GTK_PARAM_READWRITE);
 
   /**
    * GtkWindow:startup-id:
@@ -736,66 +734,57 @@ gtk_window_class_init (GtkWindowClass *klass)
    *
    * Since: 2.12
    */
-  g_object_class_install_property (gobject_class,
-                                   PROP_STARTUP_ID,
-                                   g_param_spec_string ("startup-id",
-							P_("Startup ID"),
-							P_("Unique startup identifier for the window used by startup-notification"),
-							NULL,
-							GTK_PARAM_WRITABLE));
+  window_props[PROP_STARTUP_ID] =
+      g_param_spec_string ("startup-id",
+                           P_("Startup ID"),
+                           P_("Unique startup identifier for the window used by startup-notification"),
+                           NULL,
+                           GTK_PARAM_WRITABLE);
 
-  g_object_class_install_property (gobject_class,
-                                   PROP_RESIZABLE,
-                                   g_param_spec_boolean ("resizable",
-							 P_("Resizable"),
-							 P_("If TRUE, users can resize the window"),
-							 TRUE,
-							 GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
-  
-  g_object_class_install_property (gobject_class,
-                                   PROP_MODAL,
-                                   g_param_spec_boolean ("modal",
-							 P_("Modal"),
-							 P_("If TRUE, the window is modal (other windows are not usable while this one is up)"),
-							 FALSE,
-							 GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
+  window_props[PROP_RESIZABLE] =
+      g_param_spec_boolean ("resizable",
+                            P_("Resizable"),
+                            P_("If TRUE, users can resize the window"),
+                            TRUE,
+                            GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
-  g_object_class_install_property (gobject_class,
-                                   PROP_WIN_POS,
-                                   g_param_spec_enum ("window-position",
-						      P_("Window Position"),
-						      P_("The initial position of the window"),
-						      GTK_TYPE_WINDOW_POSITION,
-						      GTK_WIN_POS_NONE,
-						      GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
- 
-  g_object_class_install_property (gobject_class,
-                                   PROP_DEFAULT_WIDTH,
-                                   g_param_spec_int ("default-width",
-						     P_("Default Width"),
-						     P_("The default width of the window, used when initially showing the window"),
-						     -1,
-						     G_MAXINT,
-						     -1,
-						     GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
-  
-  g_object_class_install_property (gobject_class,
-                                   PROP_DEFAULT_HEIGHT,
-                                   g_param_spec_int ("default-height",
-						     P_("Default Height"),
-						     P_("The default height of the window, used when initially showing the window"),
-						     -1,
-						     G_MAXINT,
-						     -1,
-						     GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
-  
-  g_object_class_install_property (gobject_class,
-                                   PROP_DESTROY_WITH_PARENT,
-                                   g_param_spec_boolean ("destroy-with-parent",
-							 P_("Destroy with Parent"),
-							 P_("If this window should be destroyed when the parent is destroyed"),
-                                                         FALSE,
-							 GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
+  window_props[PROP_MODAL] =
+      g_param_spec_boolean ("modal",
+                            P_("Modal"),
+                            P_("If TRUE, the window is modal (other windows are not usable while this one is up)"),
+                            FALSE,
+                            GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
+
+  window_props[PROP_WIN_POS] =
+      g_param_spec_enum ("window-position",
+                         P_("Window Position"),
+                         P_("The initial position of the window"),
+                         GTK_TYPE_WINDOW_POSITION,
+                         GTK_WIN_POS_NONE,
+                         GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
+
+  window_props[PROP_DEFAULT_WIDTH] =
+      g_param_spec_int ("default-width",
+                        P_("Default Width"),
+                        P_("The default width of the window, used when initially showing the window"),
+                        -1, G_MAXINT,
+                        -1,
+                        GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
+
+  window_props[PROP_DEFAULT_HEIGHT] =
+      g_param_spec_int ("default-height",
+                        P_("Default Height"),
+                        P_("The default height of the window, used when initially showing the window"),
+                        -1, G_MAXINT,
+                        -1,
+                        GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
+
+  window_props[PROP_DESTROY_WITH_PARENT] =
+      g_param_spec_boolean ("destroy-with-parent",
+                            P_("Destroy with Parent"),
+                            P_("If this window should be destroyed when the parent is destroyed"),
+                            FALSE,
+                            GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
   /**
    * GtkWindow:hide-titlebar-when-maximized:
@@ -804,21 +793,19 @@ gtk_window_class_init (GtkWindowClass *klass)
    *
    * Since: 3.4
    */
-  g_object_class_install_property (gobject_class,
-                                   PROP_HIDE_TITLEBAR_WHEN_MAXIMIZED,
-                                   g_param_spec_boolean ("hide-titlebar-when-maximized",
-							 P_("Hide the titlebar during maximization"),
-							 P_("If this window's titlebar should be hidden when the window is maximized"),
-                                                         FALSE,
-							 GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
+  window_props[PROP_HIDE_TITLEBAR_WHEN_MAXIMIZED] =
+      g_param_spec_boolean ("hide-titlebar-when-maximized",
+                            P_("Hide the titlebar during maximization"),
+                            P_("If this window's titlebar should be hidden when the window is maximized"),
+                            FALSE,
+                            GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
-  g_object_class_install_property (gobject_class,
-                                   PROP_ICON,
-                                   g_param_spec_object ("icon",
-                                                        P_("Icon"),
-                                                        P_("Icon for this window"),
-                                                        GDK_TYPE_PIXBUF,
-                                                        GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
+  window_props[PROP_ICON] =
+      g_param_spec_object ("icon",
+                           P_("Icon"),
+                           P_("Icon for this window"),
+                           GDK_TYPE_PIXBUF,
+                           GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
   /**
    * GtkWindow:mnemonics-visible:
@@ -830,13 +817,12 @@ gtk_window_class_init (GtkWindowClass *klass)
    *
    * Since: 2.20
    */
-  g_object_class_install_property (gobject_class,
-                                   PROP_MNEMONICS_VISIBLE,
-                                   g_param_spec_boolean ("mnemonics-visible",
-                                                         P_("Mnemonics Visible"),
-                                                         P_("Whether mnemonics are currently visible in this window"),
-                                                         TRUE,
-                                                         GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
+  window_props[PROP_MNEMONICS_VISIBLE] =
+      g_param_spec_boolean ("mnemonics-visible",
+                            P_("Mnemonics Visible"),
+                            P_("Whether mnemonics are currently visible in this window"),
+                            TRUE,
+                            GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
   /**
    * GtkWindow:focus-visible:
@@ -848,14 +834,13 @@ gtk_window_class_init (GtkWindowClass *klass)
    *
    * Since: 2.20
    */
-  g_object_class_install_property (gobject_class,
-                                   PROP_FOCUS_VISIBLE,
-                                   g_param_spec_boolean ("focus-visible",
-                                                         P_("Focus Visible"),
-                                                         P_("Whether focus rectangles are currently visible in this window"),
-                                                         TRUE,
-                                                         GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
-  
+  window_props[PROP_FOCUS_VISIBLE] =
+      g_param_spec_boolean ("focus-visible",
+                            P_("Focus Visible"),
+                            P_("Whether focus rectangles are currently visible in this window"),
+                            TRUE,
+                            GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
+
   /**
    * GtkWindow:icon-name:
    *
@@ -864,70 +849,62 @@ gtk_window_class_init (GtkWindowClass *klass)
    *
    * Since: 2.6
    */
-  g_object_class_install_property (gobject_class,
-                                   PROP_ICON_NAME,
-                                   g_param_spec_string ("icon-name",
-                                                        P_("Icon Name"),
-                                                        P_("Name of the themed icon for this window"),
-							NULL,
-                                                        GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
-  
-  g_object_class_install_property (gobject_class,
-				   PROP_SCREEN,
-				   g_param_spec_object ("screen",
- 							P_("Screen"),
- 							P_("The screen where this window will be displayed"),
-							GDK_TYPE_SCREEN,
- 							GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
+  window_props[PROP_ICON_NAME] =
+      g_param_spec_string ("icon-name",
+                           P_("Icon Name"),
+                           P_("Name of the themed icon for this window"),
+                           NULL,
+                           GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
-  g_object_class_install_property (gobject_class,
-                                   PROP_IS_ACTIVE,
-                                   g_param_spec_boolean ("is-active",
-							 P_("Is Active"),
-							 P_("Whether the toplevel is the current active window"),
-							 FALSE,
-							 GTK_PARAM_READABLE));
-  
-  g_object_class_install_property (gobject_class,
-                                   PROP_HAS_TOPLEVEL_FOCUS,
-                                   g_param_spec_boolean ("has-toplevel-focus",
-							 P_("Focus in Toplevel"),
-							 P_("Whether the input focus is within this GtkWindow"),
-							 FALSE,
-							 GTK_PARAM_READABLE));
+  window_props[PROP_SCREEN] =
+      g_param_spec_object ("screen",
+                           P_("Screen"),
+                           P_("The screen where this window will be displayed"),
+                           GDK_TYPE_SCREEN,
+                           GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
-  g_object_class_install_property (gobject_class,
-				   PROP_TYPE_HINT,
-				   g_param_spec_enum ("type-hint",
-                                                      P_("Type hint"),
-                                                      P_("Hint to help the desktop environment understand what kind of window this is and how to treat it."),
-                                                      GDK_TYPE_WINDOW_TYPE_HINT,
-                                                      GDK_WINDOW_TYPE_HINT_NORMAL,
-                                                      GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
+  window_props[PROP_IS_ACTIVE] =
+      g_param_spec_boolean ("is-active",
+                            P_("Is Active"),
+                            P_("Whether the toplevel is the current active window"),
+                            FALSE,
+                            GTK_PARAM_READABLE);
 
-  g_object_class_install_property (gobject_class,
-				   PROP_SKIP_TASKBAR_HINT,
-				   g_param_spec_boolean ("skip-taskbar-hint",
-                                                         P_("Skip taskbar"),
-                                                         P_("TRUE if the window should not be in the task bar."),
-                                                         FALSE,
-                                                         GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
+  window_props[PROP_HAS_TOPLEVEL_FOCUS] =
+      g_param_spec_boolean ("has-toplevel-focus",
+                            P_("Focus in Toplevel"),
+                            P_("Whether the input focus is within this GtkWindow"),
+                            FALSE,
+                            GTK_PARAM_READABLE);
 
-  g_object_class_install_property (gobject_class,
-				   PROP_SKIP_PAGER_HINT,
-				   g_param_spec_boolean ("skip-pager-hint",
-                                                         P_("Skip pager"),
-                                                         P_("TRUE if the window should not be in the pager."),
-                                                         FALSE,
-                                                         GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
+  window_props[PROP_TYPE_HINT] =
+      g_param_spec_enum ("type-hint",
+                         P_("Type hint"),
+                         P_("Hint to help the desktop environment understand what kind of window this is and how to treat it."),
+                         GDK_TYPE_WINDOW_TYPE_HINT,
+                         GDK_WINDOW_TYPE_HINT_NORMAL,
+                         GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
-  g_object_class_install_property (gobject_class,
-				   PROP_URGENCY_HINT,
-				   g_param_spec_boolean ("urgency-hint",
-                                                         P_("Urgent"),
-                                                         P_("TRUE if the window should be brought to the user's attention."),
-                                                         FALSE,
-                                                         GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));  
+  window_props[PROP_SKIP_TASKBAR_HINT] =
+      g_param_spec_boolean ("skip-taskbar-hint",
+                            P_("Skip taskbar"),
+                            P_("TRUE if the window should not be in the task bar."),
+                            FALSE,
+                            GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
+
+  window_props[PROP_SKIP_PAGER_HINT] =
+      g_param_spec_boolean ("skip-pager-hint",
+                            P_("Skip pager"),
+                            P_("TRUE if the window should not be in the pager."),
+                            FALSE,
+                            GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
+
+  window_props[PROP_URGENCY_HINT] =
+      g_param_spec_boolean ("urgency-hint",
+                            P_("Urgent"),
+                            P_("TRUE if the window should be brought to the user's attention."),
+                            FALSE,
+                            GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
   /**
    * GtkWindow:accept-focus:
@@ -936,13 +913,12 @@ gtk_window_class_init (GtkWindowClass *klass)
    *
    * Since: 2.4
    */
-  g_object_class_install_property (gobject_class,
-				   PROP_ACCEPT_FOCUS,
-				   g_param_spec_boolean ("accept-focus",
-                                                         P_("Accept focus"),
-                                                         P_("TRUE if the window should receive the input focus."),
-                                                         TRUE,
-                                                         GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
+  window_props[PROP_ACCEPT_FOCUS] =
+      g_param_spec_boolean ("accept-focus",
+                            P_("Accept focus"),
+                            P_("TRUE if the window should receive the input focus."),
+                            TRUE,
+                            GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
   /**
    * GtkWindow:focus-on-map:
@@ -951,13 +927,12 @@ gtk_window_class_init (GtkWindowClass *klass)
    *
    * Since: 2.6
    */
-  g_object_class_install_property (gobject_class,
-				   PROP_FOCUS_ON_MAP,
-				   g_param_spec_boolean ("focus-on-map",
-                                                         P_("Focus on map"),
-                                                         P_("TRUE if the window should receive the input focus when mapped."),
-                                                         TRUE,
-                                                         GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
+  window_props[PROP_FOCUS_ON_MAP] =
+      g_param_spec_boolean ("focus-on-map",
+                            P_("Focus on map"),
+                            P_("TRUE if the window should receive the input focus when mapped."),
+                            TRUE,
+                            GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
   /**
    * GtkWindow:decorated:
@@ -966,13 +941,12 @@ gtk_window_class_init (GtkWindowClass *klass)
    *
    * Since: 2.4
    */
-  g_object_class_install_property (gobject_class,
-                                   PROP_DECORATED,
-                                   g_param_spec_boolean ("decorated",
-							 P_("Decorated"),
-							 P_("Whether the window should be decorated by the window manager"),
-							 TRUE,
-							 GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
+  window_props[PROP_DECORATED] =
+      g_param_spec_boolean ("decorated",
+                            P_("Decorated"),
+                            P_("Whether the window should be decorated by the window manager"),
+                            TRUE,
+                            GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
   /**
    * GtkWindow:deletable:
@@ -981,13 +955,12 @@ gtk_window_class_init (GtkWindowClass *klass)
    *
    * Since: 2.10
    */
-  g_object_class_install_property (gobject_class,
-                                   PROP_DELETABLE,
-                                   g_param_spec_boolean ("deletable",
-							 P_("Deletable"),
-							 P_("Whether the window frame should have a close button"),
-							 TRUE,
-							 GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
+  window_props[PROP_DELETABLE] =
+      g_param_spec_boolean ("deletable",
+                            P_("Deletable"),
+                            P_("Whether the window frame should have a close button"),
+                            TRUE,
+                            GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
   /**
    * GtkWindow:has-resize-grip:
@@ -1003,13 +976,12 @@ gtk_window_class_init (GtkWindowClass *klass)
    *
    * Since: 3.0
    */
-  g_object_class_install_property (gobject_class,
-                                   PROP_HAS_RESIZE_GRIP,
-                                   g_param_spec_boolean ("has-resize-grip",
-                                                         P_("Resize grip"),
-                                                         P_("Specifies whether the window should have a resize grip"),
-                                                         FALSE,
-                                                         GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY|G_PARAM_DEPRECATED));
+  window_props[PROP_HAS_RESIZE_GRIP] =
+      g_param_spec_boolean ("has-resize-grip",
+                            P_("Resize grip"),
+                            P_("Specifies whether the window should have a resize grip"),
+                            FALSE,
+                            GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY|G_PARAM_DEPRECATED);
 
   /**
    * GtkWindow:resize-grip-visible:
@@ -1020,14 +992,12 @@ gtk_window_class_init (GtkWindowClass *klass)
    *
    * Since: 3.0
    */
-  g_object_class_install_property (gobject_class,
-                                   PROP_RESIZE_GRIP_VISIBLE,
-                                   g_param_spec_boolean ("resize-grip-visible",
-                                                         P_("Resize grip is visible"),
-                                                         P_("Specifies whether the window's resize grip is visible."),
-                                                         FALSE,
-                                                         GTK_PARAM_READABLE|G_PARAM_DEPRECATED));
-
+  window_props[PROP_RESIZE_GRIP_VISIBLE] =
+      g_param_spec_boolean ("resize-grip-visible",
+                            P_("Resize grip is visible"),
+                            P_("Specifies whether the window's resize grip is visible."),
+                            FALSE,
+                            GTK_PARAM_READABLE|G_PARAM_DEPRECATED);
 
   /**
    * GtkWindow:gravity:
@@ -1037,15 +1007,13 @@ gtk_window_class_init (GtkWindowClass *klass)
    *
    * Since: 2.4
    */
-  g_object_class_install_property (gobject_class,
-                                   PROP_GRAVITY,
-                                   g_param_spec_enum ("gravity",
-						      P_("Gravity"),
-						      P_("The window gravity of the window"),
-						      GDK_TYPE_GRAVITY,
-						      GDK_GRAVITY_NORTH_WEST,
-						      GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
-
+  window_props[PROP_GRAVITY] =
+      g_param_spec_enum ("gravity",
+                         P_("Gravity"),
+                         P_("The window gravity of the window"),
+                         GDK_TYPE_GRAVITY,
+                         GDK_GRAVITY_NORTH_WEST,
+                         GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
   /**
    * GtkWindow:transient-for:
@@ -1055,13 +1023,12 @@ gtk_window_class_init (GtkWindowClass *klass)
    *
    * Since: 2.10
    */
-  g_object_class_install_property (gobject_class,
-				   PROP_TRANSIENT_FOR,
-				   g_param_spec_object ("transient-for",
-							P_("Transient for Window"),
-							P_("The transient parent of the dialog"),
-							GTK_TYPE_WINDOW,
-							GTK_PARAM_READWRITE|G_PARAM_CONSTRUCT|G_PARAM_EXPLICIT_NOTIFY));
+  window_props[PROP_TRANSIENT_FOR] =
+      g_param_spec_object ("transient-for",
+                           P_("Transient for Window"),
+                           P_("The transient parent of the dialog"),
+                           GTK_TYPE_WINDOW,
+                           GTK_PARAM_READWRITE|G_PARAM_CONSTRUCT|G_PARAM_EXPLICIT_NOTIFY);
 
   /**
    * GtkWindow:attached-to:
@@ -1076,37 +1043,19 @@ gtk_window_class_init (GtkWindowClass *klass)
    *
    * Since: 3.4
    */
-  g_object_class_install_property (gobject_class,
-                                   PROP_ATTACHED_TO,
-                                   g_param_spec_object ("attached-to",
-                                                        P_("Attached to Widget"),
-                                                        P_("The widget where the window is attached"),
-                                                        GTK_TYPE_WIDGET,
-                                                        GTK_PARAM_READWRITE|G_PARAM_CONSTRUCT|G_PARAM_EXPLICIT_NOTIFY));
+  window_props[PROP_ATTACHED_TO] =
+      g_param_spec_object ("attached-to",
+                           P_("Attached to Widget"),
+                           P_("The widget where the window is attached"),
+                           GTK_TYPE_WIDGET,
+                           GTK_PARAM_READWRITE|G_PARAM_CONSTRUCT|G_PARAM_EXPLICIT_NOTIFY);
 
-  g_object_class_install_property (gobject_class,
-                                   PROP_IS_MAXIMIZED,
-                                   g_param_spec_boolean ("is-maximized",
-                                                         P_("Is maximized"),
-                                                         P_("Whether the window is maximized"),
-                                                         FALSE,
-                                                         GTK_PARAM_READABLE));
-
-  /* Style properties.
-   */
-  gtk_widget_class_install_style_property (widget_class,
-                                           g_param_spec_string ("decoration-button-layout",
-                                                                P_("Decorated button layout"),
-                                                                P_("Decorated button layout"),
-                                                                "menu:close",
-                                                                GTK_PARAM_READABLE|G_PARAM_DEPRECATED));
-
-  gtk_widget_class_install_style_property (widget_class,
-                                           g_param_spec_int ("decoration-resize-handle",
-                                                             P_("Decoration resize handle size"),
-                                                             P_("Decoration resize handle size"),
-                                                             0, G_MAXINT,
-                                                             20, GTK_PARAM_READWRITE));
+  window_props[PROP_IS_MAXIMIZED] =
+      g_param_spec_boolean ("is-maximized",
+                            P_("Is maximized"),
+                            P_("Whether the window is maximized"),
+                            FALSE,
+                            GTK_PARAM_READABLE);
 
   /**
    * GtkWindow:application:
@@ -1123,13 +1072,30 @@ gtk_window_class_init (GtkWindowClass *klass)
    *
    * Since: 3.0
    */
-  g_object_class_install_property (gobject_class,
-                                   PROP_APPLICATION,
-                                   g_param_spec_object ("application",
-                                                        P_("GtkApplication"),
-                                                        P_("The GtkApplication for the window"),
-                                                        GTK_TYPE_APPLICATION,
-                                                        GTK_PARAM_READWRITE|G_PARAM_STATIC_STRINGS|G_PARAM_EXPLICIT_NOTIFY));
+  window_props[PROP_APPLICATION] =
+      g_param_spec_object ("application",
+                           P_("GtkApplication"),
+                           P_("The GtkApplication for the window"),
+                           GTK_TYPE_APPLICATION,
+                           GTK_PARAM_READWRITE|G_PARAM_STATIC_STRINGS|G_PARAM_EXPLICIT_NOTIFY);
+
+  g_object_class_install_properties (gobject_class, LAST_ARG, window_props);
+
+  /* Style properties.
+   */
+  gtk_widget_class_install_style_property (widget_class,
+                                           g_param_spec_string ("decoration-button-layout",
+                                                                P_("Decorated button layout"),
+                                                                P_("Decorated button layout"),
+                                                                "menu:close",
+                                                                GTK_PARAM_READABLE|G_PARAM_DEPRECATED));
+
+  gtk_widget_class_install_style_property (widget_class,
+                                           g_param_spec_int ("decoration-resize-handle",
+                                                             P_("Decoration resize handle size"),
+                                                             P_("Decoration resize handle size"),
+                                                             0, G_MAXINT,
+                                                             20, GTK_PARAM_READWRITE));
 
   /**
    * GtkWindow:set-focus:
@@ -2298,7 +2264,7 @@ gtk_window_set_title_internal (GtkWindow   *window,
   if (update_titlebar && GTK_IS_HEADER_BAR (priv->title_box))
     gtk_header_bar_set_title (GTK_HEADER_BAR (priv->title_box), new_title);
 
-  g_object_notify (G_OBJECT (window), "title");
+  g_object_notify_by_pspec (G_OBJECT (window), window_props[PROP_TITLE]);
 }
 
 /**
@@ -2419,7 +2385,7 @@ gtk_window_set_role (GtkWindow   *window,
   if (gtk_widget_get_realized (widget))
     gdk_window_set_role (gtk_widget_get_window (widget), priv->wm_role);
 
-  g_object_notify (G_OBJECT (window), "role");
+  g_object_notify_by_pspec (G_OBJECT (window), window_props[PROP_ROLE]);
 }
 
 /**
@@ -2484,7 +2450,7 @@ gtk_window_set_startup_id (GtkWindow   *window,
         }
     }
 
-  g_object_notify (G_OBJECT (window), "startup-id");
+  g_object_notify_by_pspec (G_OBJECT (window), window_props[PROP_STARTUP_ID]);
 }
 
 /**
@@ -2901,7 +2867,7 @@ gtk_window_set_position (GtkWindow         *window,
     {
       priv->position = position;
   
-      g_object_notify (G_OBJECT (window), "window-position");
+      g_object_notify_by_pspec (G_OBJECT (window), window_props[PROP_WIN_POS]);
     }
 }
 
@@ -3028,7 +2994,7 @@ gtk_window_set_modal (GtkWindow *window,
 	gtk_grab_remove (widget);
     }
 
-  g_object_notify (G_OBJECT (window), "modal");
+  g_object_notify_by_pspec (G_OBJECT (window), window_props[PROP_MODAL]);
 }
 
 /**
@@ -3347,7 +3313,7 @@ gtk_window_set_attached_to (GtkWindow *window,
   else
     gtk_style_context_set_parent (context, NULL);
 
-  g_object_notify (G_OBJECT (window), "attached-to");
+  g_object_notify_by_pspec (G_OBJECT (window), window_props[PROP_ATTACHED_TO]);
 }
 
 /**
@@ -3487,7 +3453,7 @@ gtk_window_set_application (GtkWindow      *window,
 
       _gtk_window_notify_keys_changed (window);
 
-      g_object_notify (G_OBJECT (window), "application");
+      g_object_notify_by_pspec (G_OBJECT (window), window_props[PROP_APPLICATION]);
     }
 }
 
@@ -3526,7 +3492,7 @@ gtk_window_set_type_hint (GtkWindow           *window,
   if (gdk_window)
     gdk_window_set_type_hint (gdk_window, hint);
 
-  g_object_notify (G_OBJECT (window), "type-hint");
+  g_object_notify_by_pspec (G_OBJECT (window), window_props[PROP_TYPE_HINT]);
 
   update_window_buttons (window);
 }
@@ -3575,7 +3541,7 @@ gtk_window_set_skip_taskbar_hint (GtkWindow *window,
       if (gtk_widget_get_realized (GTK_WIDGET (window)))
         gdk_window_set_skip_taskbar_hint (gtk_widget_get_window (GTK_WIDGET (window)),
                                           priv->skips_taskbar);
-      g_object_notify (G_OBJECT (window), "skip-taskbar-hint");
+      g_object_notify_by_pspec (G_OBJECT (window), window_props[PROP_SKIP_TASKBAR_HINT]);
     }
 }
 
@@ -3628,7 +3594,7 @@ gtk_window_set_skip_pager_hint (GtkWindow *window,
       if (gtk_widget_get_realized (GTK_WIDGET (window)))
         gdk_window_set_skip_pager_hint (gtk_widget_get_window (GTK_WIDGET (window)),
                                         priv->skips_pager);
-      g_object_notify (G_OBJECT (window), "skip-pager-hint");
+      g_object_notify_by_pspec (G_OBJECT (window), window_props[PROP_SKIP_PAGER_HINT]);
     }
 }
 
@@ -3678,7 +3644,7 @@ gtk_window_set_urgency_hint (GtkWindow *window,
       if (gtk_widget_get_realized (GTK_WIDGET (window)))
         gdk_window_set_urgency_hint (gtk_widget_get_window (GTK_WIDGET (window)),
 				     priv->urgent);
-      g_object_notify (G_OBJECT (window), "urgency-hint");
+      g_object_notify_by_pspec (G_OBJECT (window), window_props[PROP_URGENCY_HINT]);
     }
 }
 
@@ -3728,7 +3694,7 @@ gtk_window_set_accept_focus (GtkWindow *window,
       if (gtk_widget_get_realized (GTK_WIDGET (window)))
         gdk_window_set_accept_focus (gtk_widget_get_window (GTK_WIDGET (window)),
 				     priv->accept_focus);
-      g_object_notify (G_OBJECT (window), "accept-focus");
+      g_object_notify_by_pspec (G_OBJECT (window), window_props[PROP_ACCEPT_FOCUS]);
     }
 }
 
@@ -3779,7 +3745,7 @@ gtk_window_set_focus_on_map (GtkWindow *window,
       if (gtk_widget_get_realized (GTK_WIDGET (window)))
         gdk_window_set_focus_on_map (gtk_widget_get_window (GTK_WIDGET (window)),
 				     priv->focus_on_map);
-      g_object_notify (G_OBJECT (window), "focus-on-map");
+      g_object_notify_by_pspec (G_OBJECT (window), window_props[PROP_FOCUS_ON_MAP]);
     }
 }
 
@@ -3836,7 +3802,7 @@ gtk_window_set_destroy_with_parent  (GtkWindow *window,
 
   priv->destroy_with_parent = setting;
 
-  g_object_notify (G_OBJECT (window), "destroy-with-parent");
+  g_object_notify_by_pspec (G_OBJECT (window), window_props[PROP_DESTROY_WITH_PARENT]);
 }
 
 /**
@@ -3901,7 +3867,7 @@ gtk_window_set_hide_titlebar_when_maximized (GtkWindow *window,
   window->priv->hide_titlebar_when_maximized = setting;
   gtk_window_apply_hide_titlebar_when_maximized (window);
 
-  g_object_notify (G_OBJECT (window), "hide-titlebar-when-maximized");
+  g_object_notify_by_pspec (G_OBJECT (window), window_props[PROP_HIDE_TITLEBAR_WHEN_MAXIMIZED]);
 }
 
 /**
@@ -4264,7 +4230,7 @@ gtk_window_set_decorated (GtkWindow *window,
   update_window_buttons (window);
   gtk_widget_queue_resize (GTK_WIDGET (window));
 
-  g_object_notify (G_OBJECT (window), "decorated");
+  g_object_notify_by_pspec (G_OBJECT (window), window_props[PROP_DECORATED]);
 }
 
 /**
@@ -4333,7 +4299,7 @@ gtk_window_set_deletable (GtkWindow *window,
 
   update_window_buttons (window);
 
-  g_object_notify (G_OBJECT (window), "deletable");  
+  g_object_notify_by_pspec (G_OBJECT (window), window_props[PROP_DELETABLE]);
 }
 
 /**
@@ -4651,7 +4617,7 @@ gtk_window_set_icon_list (GtkWindow  *window,
 
   info->icon_list = g_list_copy (list);
 
-  g_object_notify (G_OBJECT (window), "icon");
+  g_object_notify_by_pspec (G_OBJECT (window), window_props[PROP_ICON]);
   
   gtk_window_unrealize_icon (window);
   
@@ -4736,7 +4702,7 @@ static void
 update_themed_icon (GtkIconTheme *icon_theme,
 		    GtkWindow    *window)
 {
-  g_object_notify (G_OBJECT (window), "icon");
+  g_object_notify_by_pspec (G_OBJECT (window), window_props[PROP_ICON_NAME]);
   
   gtk_window_unrealize_icon (window);
   
@@ -4780,7 +4746,7 @@ gtk_window_set_icon_name (GtkWindow   *window,
   
   update_themed_icon (NULL, window);
 
-  g_object_notify (G_OBJECT (window), "icon-name");
+  g_object_notify_by_pspec (G_OBJECT (window), window_props[PROP_ICON_NAME]);
 }
 
 /**
@@ -5106,7 +5072,7 @@ gtk_window_set_default_size_internal (GtkWindow    *window,
       if (info->default_width != width)
         {
           info->default_width = width;
-          g_object_notify (G_OBJECT (window), "default-width");
+          g_object_notify_by_pspec (G_OBJECT (window), window_props[PROP_DEFAULT_WIDTH]);
         }
     }
 
@@ -5121,7 +5087,7 @@ gtk_window_set_default_size_internal (GtkWindow    *window,
       if (info->default_height != height)
         {
           info->default_height = height;
-          g_object_notify (G_OBJECT (window), "default-height");
+          g_object_notify_by_pspec (G_OBJECT (window), window_props[PROP_DEFAULT_HEIGHT]);
         }
     }
   
@@ -7629,7 +7595,7 @@ gtk_window_state_event (GtkWidget           *widget,
     {
       priv->maximized =
         (event->new_window_state & GDK_WINDOW_STATE_MAXIMIZED) ? 1 : 0;
-      g_object_notify (G_OBJECT (widget), "is-maximized");
+      g_object_notify_by_pspec (G_OBJECT (widget), window_props[PROP_IS_MAXIMIZED]);
     }
 
   if (event->changed_mask & (GDK_WINDOW_STATE_FULLSCREEN | GDK_WINDOW_STATE_MAXIMIZED | GDK_WINDOW_STATE_TILED))
@@ -10373,7 +10339,7 @@ gtk_window_set_resizable (GtkWindow *window,
 
       gtk_widget_queue_resize_no_redraw (GTK_WIDGET (window));
 
-      g_object_notify (G_OBJECT (window), "resizable");
+      g_object_notify_by_pspec (G_OBJECT (window), window_props[PROP_RESIZABLE]);
     }
 }
 
@@ -10424,7 +10390,7 @@ gtk_window_set_gravity (GtkWindow *window,
        */
       gtk_widget_queue_resize_no_redraw (GTK_WIDGET (window));
 
-      g_object_notify (G_OBJECT (window), "gravity");
+      g_object_notify_by_pspec (G_OBJECT (window), window_props[PROP_GRAVITY]);
     }
 }
 
@@ -10592,7 +10558,7 @@ gtk_window_set_screen (GtkWindow *window,
       _gtk_widget_propagate_screen_changed (widget, previous_screen);
       _gtk_widget_propagate_composited_changed (widget);
     }
-  g_object_notify (G_OBJECT (window), "screen");
+  g_object_notify_by_pspec (G_OBJECT (window), window_props[PROP_SCREEN]);
 
   if (was_rgba && priv->use_client_shadow)
     {
@@ -11505,7 +11471,7 @@ _gtk_window_set_is_active (GtkWindow *window,
       priv->is_active = is_active;
       window_update_has_focus (window);
 
-      g_object_notify (G_OBJECT (window), "is-active");
+      g_object_notify_by_pspec (G_OBJECT (window), window_props[PROP_IS_ACTIVE]);
     }
 }
 
@@ -11606,7 +11572,7 @@ _gtk_window_set_has_toplevel_focus (GtkWindow *window,
       priv->has_toplevel_focus = has_toplevel_focus;
       window_update_has_focus (window);
 
-      g_object_notify (G_OBJECT (window), "has-toplevel-focus");
+      g_object_notify_by_pspec (G_OBJECT (window), window_props[PROP_HAS_TOPLEVEL_FOCUS]);
     }
 }
 
@@ -11693,7 +11659,7 @@ gtk_window_set_mnemonics_visible (GtkWindow *window,
   if (priv->mnemonics_visible != setting)
     {
       priv->mnemonics_visible = setting;
-      g_object_notify (G_OBJECT (window), "mnemonics-visible");
+      g_object_notify_by_pspec (G_OBJECT (window), window_props[PROP_MNEMONICS_VISIBLE]);
     }
 
   if (priv->mnemonics_display_timeout_id)
@@ -11773,7 +11739,7 @@ gtk_window_set_focus_visible (GtkWindow *window,
   if (priv->focus_visible != setting)
     {
       priv->focus_visible = setting;
-      g_object_notify (G_OBJECT (window), "focus-visible");
+      g_object_notify_by_pspec (G_OBJECT (window), window_props[PROP_FOCUS_VISIBLE]);
     }
 }
 
