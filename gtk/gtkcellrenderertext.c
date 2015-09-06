@@ -133,7 +133,7 @@ enum {
   PROP_LANGUAGE,
   PROP_ELLIPSIZE,
   PROP_WRAP_MODE,
-  
+
   /* Whether-a-style-arg-is-set args */
   PROP_BACKGROUND_SET,
   PROP_FOREGROUND_SET,
@@ -150,10 +150,13 @@ enum {
   PROP_RISE_SET,
   PROP_LANGUAGE_SET,
   PROP_ELLIPSIZE_SET,
-  PROP_ALIGN_SET
+  PROP_ALIGN_SET,
+
+  LAST_PROP
 };
 
 static guint text_cell_renderer_signals [LAST_SIGNAL];
+static GParamSpec *text_cell_renderer_props [LAST_PROP];
 
 #define GTK_CELL_RENDERER_TEXT_PATH "gtk-cell-renderer-text-path"
 
@@ -247,46 +250,40 @@ gtk_cell_renderer_text_class_init (GtkCellRendererTextClass *class)
   cell_class->get_preferred_height_for_width = gtk_cell_renderer_text_get_preferred_height_for_width;
   cell_class->get_aligned_area = gtk_cell_renderer_text_get_aligned_area;
 
-  g_object_class_install_property (object_class,
-                                   PROP_TEXT,
-                                   g_param_spec_string ("text",
-                                                        P_("Text"),
-                                                        P_("Text to render"),
-                                                        NULL,
-                                                        GTK_PARAM_READWRITE));
-  
-  g_object_class_install_property (object_class,
-                                   PROP_MARKUP,
-                                   g_param_spec_string ("markup",
-                                                        P_("Markup"),
-                                                        P_("Marked up text to render"),
-                                                        NULL,
-                                                        GTK_PARAM_WRITABLE));
+  text_cell_renderer_props[PROP_TEXT] =
+      g_param_spec_string ("text",
+                           P_("Text"),
+                           P_("Text to render"),
+                           NULL,
+                           GTK_PARAM_READWRITE);
 
-  g_object_class_install_property (object_class,
-				   PROP_ATTRIBUTES,
-				   g_param_spec_boxed ("attributes",
-						       P_("Attributes"),
-						       P_("A list of style attributes to apply to the text of the renderer"),
-						       PANGO_TYPE_ATTR_LIST,
-						       GTK_PARAM_READWRITE));
+  text_cell_renderer_props[PROP_MARKUP] =
+      g_param_spec_string ("markup",
+                           P_("Markup"),
+                           P_("Marked up text to render"),
+                           NULL,
+                           GTK_PARAM_WRITABLE);
 
-  g_object_class_install_property (object_class,
-                                   PROP_SINGLE_PARAGRAPH_MODE,
-                                   g_param_spec_boolean ("single-paragraph-mode",
-                                                         P_("Single Paragraph Mode"),
-                                                         P_("Whether to keep all text in a single paragraph"),
-                                                         FALSE,
-                                                         GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
+  text_cell_renderer_props[PROP_ATTRIBUTES] =
+      g_param_spec_boxed ("attributes",
+                          P_("Attributes"),
+                          P_("A list of style attributes to apply to the text of the renderer"),
+                          PANGO_TYPE_ATTR_LIST,
+                          GTK_PARAM_READWRITE);
 
-  
-  g_object_class_install_property (object_class,
-                                   PROP_BACKGROUND,
-                                   g_param_spec_string ("background",
-                                                        P_("Background color name"),
-                                                        P_("Background color as a string"),
-                                                        NULL,
-                                                        GTK_PARAM_WRITABLE));
+  text_cell_renderer_props[PROP_SINGLE_PARAGRAPH_MODE] =
+      g_param_spec_boolean ("single-paragraph-mode",
+                            P_("Single Paragraph Mode"),
+                            P_("Whether to keep all text in a single paragraph"),
+                            FALSE,
+                            GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
+
+  text_cell_renderer_props[PROP_BACKGROUND] =
+      g_param_spec_string ("background",
+                           P_("Background color name"),
+                           P_("Background color as a string"),
+                           NULL,
+                           GTK_PARAM_WRITABLE);
 
   /**
    * GtkCellRendererText:background-gdk:
@@ -296,13 +293,12 @@ gtk_cell_renderer_text_class_init (GtkCellRendererTextClass *class)
    * Deprecated: 3.4: Use #GtkCellRendererText:background-rgba instead.
    */
 G_GNUC_BEGIN_IGNORE_DEPRECATIONS
-  g_object_class_install_property (object_class,
-                                   PROP_BACKGROUND_GDK,
-                                   g_param_spec_boxed ("background-gdk",
-                                                       P_("Background color"),
-                                                       P_("Background color as a GdkColor"),
-                                                       GDK_TYPE_COLOR,
-                                                       GTK_PARAM_READWRITE | G_PARAM_DEPRECATED));
+  text_cell_renderer_props[PROP_BACKGROUND_GDK] =
+      g_param_spec_boxed ("background-gdk",
+                          P_("Background color"),
+                          P_("Background color as a GdkColor"),
+                          GDK_TYPE_COLOR,
+                          GTK_PARAM_READWRITE | G_PARAM_DEPRECATED);
 G_GNUC_END_IGNORE_DEPRECATIONS
 
   /**
@@ -312,20 +308,18 @@ G_GNUC_END_IGNORE_DEPRECATIONS
    *
    * Since: 3.0
    */
-  g_object_class_install_property (object_class,
-                                   PROP_BACKGROUND_RGBA,
-                                   g_param_spec_boxed ("background-rgba",
-                                                       P_("Background color as RGBA"),
-                                                       P_("Background color as a GdkRGBA"),
-                                                       GDK_TYPE_RGBA,
-                                                       GTK_PARAM_READWRITE));
-  g_object_class_install_property (object_class,
-                                   PROP_FOREGROUND,
-                                   g_param_spec_string ("foreground",
-                                                        P_("Foreground color name"),
-                                                        P_("Foreground color as a string"),
-                                                        NULL,
-                                                        GTK_PARAM_WRITABLE));
+  text_cell_renderer_props[PROP_BACKGROUND_RGBA] =
+      g_param_spec_boxed ("background-rgba",
+                          P_("Background color as RGBA"),
+                          P_("Background color as a GdkRGBA"),
+                          GDK_TYPE_RGBA,
+                          GTK_PARAM_READWRITE);
+  text_cell_renderer_props[PROP_FOREGROUND] =
+      g_param_spec_string ("foreground",
+                           P_("Foreground color name"),
+                           P_("Foreground color as a string"),
+                           NULL,
+                           GTK_PARAM_WRITABLE);
 
   /**
    * GtkCellRendererText:foreground-gdk:
@@ -335,13 +329,12 @@ G_GNUC_END_IGNORE_DEPRECATIONS
    * Deprecated: 3.4: Use #GtkCellRendererText:foreground-rgba instead.
    */
 G_GNUC_BEGIN_IGNORE_DEPRECATIONS
-  g_object_class_install_property (object_class,
-                                   PROP_FOREGROUND_GDK,
-                                   g_param_spec_boxed ("foreground-gdk",
-                                                       P_("Foreground color"),
-                                                       P_("Foreground color as a GdkColor"),
-                                                       GDK_TYPE_COLOR,
-                                                       GTK_PARAM_READWRITE | G_PARAM_DEPRECATED));
+  text_cell_renderer_props[PROP_FOREGROUND_GDK] =
+      g_param_spec_boxed ("foreground-gdk",
+                          P_("Foreground color"),
+                          P_("Foreground color as a GdkColor"),
+                          GDK_TYPE_COLOR,
+                          GTK_PARAM_READWRITE | G_PARAM_DEPRECATED);
 G_GNUC_END_IGNORE_DEPRECATIONS
 
   /**
@@ -351,200 +344,172 @@ G_GNUC_END_IGNORE_DEPRECATIONS
    *
    * Since: 3.0
    */
-  g_object_class_install_property (object_class,
-                                   PROP_FOREGROUND_RGBA,
-                                   g_param_spec_boxed ("foreground-rgba",
-                                                       P_("Foreground color as RGBA"),
-                                                       P_("Foreground color as a GdkRGBA"),
-                                                       GDK_TYPE_RGBA,
-                                                       GTK_PARAM_READWRITE));
+  text_cell_renderer_props[PROP_FOREGROUND_RGBA] =
+      g_param_spec_boxed ("foreground-rgba",
+                          P_("Foreground color as RGBA"),
+                          P_("Foreground color as a GdkRGBA"),
+                          GDK_TYPE_RGBA,
+                          GTK_PARAM_READWRITE);
 
 
-  g_object_class_install_property (object_class,
-                                   PROP_EDITABLE,
-                                   g_param_spec_boolean ("editable",
-                                                         P_("Editable"),
-                                                         P_("Whether the text can be modified by the user"),
-                                                         FALSE,
-                                                         GTK_PARAM_READWRITE));
+  text_cell_renderer_props[PROP_EDITABLE] =
+      g_param_spec_boolean ("editable",
+                            P_("Editable"),
+                            P_("Whether the text can be modified by the user"),
+                            FALSE,
+                            GTK_PARAM_READWRITE);
 
-  g_object_class_install_property (object_class,
-                                   PROP_FONT,
-                                   g_param_spec_string ("font",
-                                                        P_("Font"),
-                                                        P_("Font description as a string, e.g. \"Sans Italic 12\""),
-                                                        NULL,
-                                                        GTK_PARAM_READWRITE));
+  text_cell_renderer_props[PROP_FONT] =
+      g_param_spec_string ("font",
+                           P_("Font"),
+                           P_("Font description as a string, e.g. \"Sans Italic 12\""),
+                           NULL,
+                           GTK_PARAM_READWRITE);
 
-  g_object_class_install_property (object_class,
-                                   PROP_FONT_DESC,
-                                   g_param_spec_boxed ("font-desc",
-                                                       P_("Font"),
-                                                       P_("Font description as a PangoFontDescription struct"),
-                                                       PANGO_TYPE_FONT_DESCRIPTION,
-                                                       GTK_PARAM_READWRITE));
+  text_cell_renderer_props[PROP_FONT_DESC] =
+      g_param_spec_boxed ("font-desc",
+                          P_("Font"),
+                          P_("Font description as a PangoFontDescription struct"),
+                          PANGO_TYPE_FONT_DESCRIPTION,
+                          GTK_PARAM_READWRITE);
 
-  
-  g_object_class_install_property (object_class,
-                                   PROP_FAMILY,
-                                   g_param_spec_string ("family",
-                                                        P_("Font family"),
-                                                        P_("Name of the font family, e.g. Sans, Helvetica, Times, Monospace"),
-                                                        NULL,
-                                                        GTK_PARAM_READWRITE));
+  text_cell_renderer_props[PROP_FAMILY] =
+      g_param_spec_string ("family",
+                           P_("Font family"),
+                           P_("Name of the font family, e.g. Sans, Helvetica, Times, Monospace"),
+                           NULL,
+                           GTK_PARAM_READWRITE);
 
-  g_object_class_install_property (object_class,
-                                   PROP_STYLE,
-                                   g_param_spec_enum ("style",
-                                                      P_("Font style"),
-                                                      P_("Font style"),
-                                                      PANGO_TYPE_STYLE,
-                                                      PANGO_STYLE_NORMAL,
-                                                      GTK_PARAM_READWRITE));
+  text_cell_renderer_props[PROP_STYLE] =
+      g_param_spec_enum ("style",
+                         P_("Font style"),
+                         P_("Font style"),
+                         PANGO_TYPE_STYLE,
+                         PANGO_STYLE_NORMAL,
+                         GTK_PARAM_READWRITE);
 
-  g_object_class_install_property (object_class,
-                                   PROP_VARIANT,
-                                   g_param_spec_enum ("variant",
-                                                     P_("Font variant"),
-                                                     P_("Font variant"),
-                                                      PANGO_TYPE_VARIANT,
-                                                      PANGO_VARIANT_NORMAL,
-                                                      GTK_PARAM_READWRITE));
-  
-  g_object_class_install_property (object_class,
-                                   PROP_WEIGHT,
-                                   g_param_spec_int ("weight",
-                                                     P_("Font weight"),
-                                                     P_("Font weight"),
-                                                     0,
-                                                     G_MAXINT,
-                                                     PANGO_WEIGHT_NORMAL,
-                                                     GTK_PARAM_READWRITE));
+  text_cell_renderer_props[PROP_VARIANT] =
+      g_param_spec_enum ("variant",
+                         P_("Font variant"),
+                         P_("Font variant"),
+                         PANGO_TYPE_VARIANT,
+                         PANGO_VARIANT_NORMAL,
+                         GTK_PARAM_READWRITE);
 
-   g_object_class_install_property (object_class,
-                                   PROP_STRETCH,
-                                   g_param_spec_enum ("stretch",
-                                                      P_("Font stretch"),
-                                                      P_("Font stretch"),
-                                                      PANGO_TYPE_STRETCH,
-                                                      PANGO_STRETCH_NORMAL,
-                                                      GTK_PARAM_READWRITE));
-  
-  g_object_class_install_property (object_class,
-                                   PROP_SIZE,
-                                   g_param_spec_int ("size",
-                                                     P_("Font size"),
-                                                     P_("Font size"),
-                                                     0,
-                                                     G_MAXINT,
-                                                     0,
-                                                     GTK_PARAM_READWRITE));
+  text_cell_renderer_props[PROP_WEIGHT] =
+      g_param_spec_int ("weight",
+                        P_("Font weight"),
+                        P_("Font weight"),
+                        0, G_MAXINT,
+                        PANGO_WEIGHT_NORMAL,
+                        GTK_PARAM_READWRITE);
 
-  g_object_class_install_property (object_class,
-                                   PROP_SIZE_POINTS,
-                                   g_param_spec_double ("size-points",
-                                                        P_("Font points"),
-                                                        P_("Font size in points"),
-                                                        0.0,
-                                                        G_MAXDOUBLE,
-                                                        0.0,
-                                                        GTK_PARAM_READWRITE));  
+   text_cell_renderer_props[PROP_STRETCH] =
+       g_param_spec_enum ("stretch",
+                          P_("Font stretch"),
+                          P_("Font stretch"),
+                          PANGO_TYPE_STRETCH,
+                          PANGO_STRETCH_NORMAL,
+                          GTK_PARAM_READWRITE);
 
-  g_object_class_install_property (object_class,
-                                   PROP_SCALE,
-                                   g_param_spec_double ("scale",
-                                                        P_("Font scale"),
-                                                        P_("Font scaling factor"),
-                                                        0.0,
-                                                        G_MAXDOUBLE,
-                                                        1.0,
-                                                        GTK_PARAM_READWRITE));
-  
-  g_object_class_install_property (object_class,
-                                   PROP_RISE,
-                                   g_param_spec_int ("rise",
-                                                     P_("Rise"),
-                                                     P_("Offset of text above the baseline "
-							"(below the baseline if rise is negative)"),
-                                                     -G_MAXINT,
-                                                     G_MAXINT,
-                                                     0,
-                                                     GTK_PARAM_READWRITE));
+  text_cell_renderer_props[PROP_SIZE] =
+      g_param_spec_int ("size",
+                        P_("Font size"),
+                        P_("Font size"),
+                        0, G_MAXINT,
+                        0,
+                        GTK_PARAM_READWRITE);
+
+  text_cell_renderer_props[PROP_SIZE_POINTS] =
+      g_param_spec_double ("size-points",
+                           P_("Font points"),
+                           P_("Font size in points"),
+                           0.0, G_MAXDOUBLE,
+                           0.0,
+                           GTK_PARAM_READWRITE);
+
+  text_cell_renderer_props[PROP_SCALE] =
+      g_param_spec_double ("scale",
+                           P_("Font scale"),
+                           P_("Font scaling factor"),
+                           0.0, G_MAXDOUBLE,
+                           1.0,
+                           GTK_PARAM_READWRITE);
+
+  text_cell_renderer_props[PROP_RISE] =
+      g_param_spec_int ("rise",
+                        P_("Rise"),
+                        P_("Offset of text above the baseline (below the baseline if rise is negative)"),
+                        -G_MAXINT, G_MAXINT,
+                        0,
+                        GTK_PARAM_READWRITE);
 
 
-  g_object_class_install_property (object_class,
-                                   PROP_STRIKETHROUGH,
-                                   g_param_spec_boolean ("strikethrough",
-                                                         P_("Strikethrough"),
-                                                         P_("Whether to strike through the text"),
-                                                         FALSE,
-                                                         GTK_PARAM_READWRITE));
-  
-  g_object_class_install_property (object_class,
-                                   PROP_UNDERLINE,
-                                   g_param_spec_enum ("underline",
-                                                      P_("Underline"),
-                                                      P_("Style of underline for this text"),
-                                                      PANGO_TYPE_UNDERLINE,
-                                                      PANGO_UNDERLINE_NONE,
-                                                      GTK_PARAM_READWRITE));
+  text_cell_renderer_props[PROP_STRIKETHROUGH] =
+      g_param_spec_boolean ("strikethrough",
+                            P_("Strikethrough"),
+                            P_("Whether to strike through the text"),
+                            FALSE,
+                            GTK_PARAM_READWRITE);
 
-  g_object_class_install_property (object_class,
-                                   PROP_LANGUAGE,
-                                   g_param_spec_string ("language",
-                                                        P_("Language"),
-                                                        P_("The language this text is in, as an ISO code. "
-							   "Pango can use this as a hint when rendering the text. "
-							   "If you don't understand this parameter, you probably don't need it"),
-                                                        NULL,
-                                                        GTK_PARAM_READWRITE));
+  text_cell_renderer_props[PROP_UNDERLINE] =
+      g_param_spec_enum ("underline",
+                         P_("Underline"),
+                         P_("Style of underline for this text"),
+                         PANGO_TYPE_UNDERLINE,
+                         PANGO_UNDERLINE_NONE,
+                         GTK_PARAM_READWRITE);
 
+  text_cell_renderer_props[PROP_LANGUAGE] =
+      g_param_spec_string ("language",
+                           P_("Language"),
+                           P_("The language this text is in, as an ISO code. "
+                              "Pango can use this as a hint when rendering the text. "
+                              "If you don't understand this parameter, you probably don't need it"),
+                           NULL,
+                           GTK_PARAM_READWRITE);
 
   /**
    * GtkCellRendererText:ellipsize:
    *
-   * Specifies the preferred place to ellipsize the string, if the cell renderer 
-   * does not have enough room to display the entire string. Setting it to 
+   * Specifies the preferred place to ellipsize the string, if the cell renderer
+   * does not have enough room to display the entire string. Setting it to
    * %PANGO_ELLIPSIZE_NONE turns off ellipsizing. See the wrap-width property
    * for another way of making the text fit into a given width.
    *
    * Since: 2.6
    */
-  g_object_class_install_property (object_class,
-                                   PROP_ELLIPSIZE,
-                                   g_param_spec_enum ("ellipsize",
-						      P_("Ellipsize"),
-						      P_("The preferred place to ellipsize the string, "
-							 "if the cell renderer does not have enough room "
-							 "to display the entire string"),
-						      PANGO_TYPE_ELLIPSIZE_MODE,
-						      PANGO_ELLIPSIZE_NONE,
-						      GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
+  text_cell_renderer_props[PROP_ELLIPSIZE] =
+      g_param_spec_enum ("ellipsize",
+                         P_("Ellipsize"),
+                         P_("The preferred place to ellipsize the string, "
+                            "if the cell renderer does not have enough room "
+                            "to display the entire string"),
+                         PANGO_TYPE_ELLIPSIZE_MODE,
+                         PANGO_ELLIPSIZE_NONE,
+                         GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
   /**
    * GtkCellRendererText:width-chars:
-   * 
+   *
    * The desired width of the cell, in characters. If this property is set to
    * -1, the width will be calculated automatically, otherwise the cell will
    * request either 3 characters or the property value, whichever is greater.
-   * 
+   *
    * Since: 2.6
    **/
-  g_object_class_install_property (object_class,
-                                   PROP_WIDTH_CHARS,
-                                   g_param_spec_int ("width-chars",
-                                                     P_("Width In Characters"),
-                                                     P_("The desired width of the label, in characters"),
-                                                     -1,
-                                                     G_MAXINT,
-                                                     -1,
-                                                     GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
-  
+  text_cell_renderer_props[PROP_WIDTH_CHARS] =
+      g_param_spec_int ("width-chars",
+                        P_("Width In Characters"),
+                        P_("The desired width of the label, in characters"),
+                        -1, G_MAXINT,
+                        -1,
+                        GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
   /**
    * GtkCellRendererText:max-width-chars:
-   * 
-   * The desired maximum width of the cell, in characters. If this property 
+   *
+   * The desired maximum width of the cell, in characters. If this property
    * is set to -1, the width will be calculated automatically.
    *
    * For cell renderers that ellipsize or wrap text; this property
@@ -555,74 +520,68 @@ G_GNUC_END_IGNORE_DEPRECATIONS
    *
    * Since: 3.0
    **/
-  g_object_class_install_property (object_class,
-                                   PROP_MAX_WIDTH_CHARS,
-                                   g_param_spec_int ("max-width-chars",
-                                                     P_("Maximum Width In Characters"),
-                                                     P_("The maximum width of the cell, in characters"),
-                                                     -1,
-                                                     G_MAXINT,
-                                                     -1,
-                                                     GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
-  
+  text_cell_renderer_props[PROP_MAX_WIDTH_CHARS] =
+      g_param_spec_int ("max-width-chars",
+                        P_("Maximum Width In Characters"),
+                        P_("The maximum width of the cell, in characters"),
+                        -1, G_MAXINT,
+                        -1,
+                        GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
+
   /**
    * GtkCellRendererText:wrap-mode:
    *
-   * Specifies how to break the string into multiple lines, if the cell 
-   * renderer does not have enough room to display the entire string. 
+   * Specifies how to break the string into multiple lines, if the cell
+   * renderer does not have enough room to display the entire string.
    * This property has no effect unless the wrap-width property is set.
    *
    * Since: 2.8
    */
-  g_object_class_install_property (object_class,
-                                   PROP_WRAP_MODE,
-                                   g_param_spec_enum ("wrap-mode",
-						      P_("Wrap mode"),
-						      P_("How to break the string into multiple lines, "
-							 "if the cell renderer does not have enough room "
-							 "to display the entire string"),
-						      PANGO_TYPE_WRAP_MODE,
-						      PANGO_WRAP_CHAR,
-						      GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
+  text_cell_renderer_props[PROP_WRAP_MODE] =
+      g_param_spec_enum ("wrap-mode",
+                         P_("Wrap mode"),
+                         P_("How to break the string into multiple lines, "
+                            "if the cell renderer does not have enough room "
+                            "to display the entire string"),
+                         PANGO_TYPE_WRAP_MODE,
+                         PANGO_WRAP_CHAR,
+                         GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
   /**
    * GtkCellRendererText:wrap-width:
    *
-   * Specifies the minimum width at which the text is wrapped. The wrap-mode property can 
+   * Specifies the minimum width at which the text is wrapped. The wrap-mode property can
    * be used to influence at what character positions the line breaks can be placed.
    * Setting wrap-width to -1 turns wrapping off.
    *
    * Since: 2.8
    */
-  g_object_class_install_property (object_class,
-				   PROP_WRAP_WIDTH,
-				   g_param_spec_int ("wrap-width",
-						     P_("Wrap width"),
-						     P_("The width at which the text is wrapped"),
-						     -1,
-						     G_MAXINT,
-						     -1,
-						     GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
+  text_cell_renderer_props[PROP_WRAP_WIDTH] =
+      g_param_spec_int ("wrap-width",
+                        P_("Wrap width"),
+                        P_("The width at which the text is wrapped"),
+                        -1, G_MAXINT,
+                        -1,
+                        GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
   /**
    * GtkCellRendererText:alignment:
    *
-   * Specifies how to align the lines of text with respect to each other. 
+   * Specifies how to align the lines of text with respect to each other.
    *
-   * Note that this property describes how to align the lines of text in 
-   * case there are several of them. The "xalign" property of #GtkCellRenderer, 
+   * Note that this property describes how to align the lines of text in
+   * case there are several of them. The "xalign" property of #GtkCellRenderer,
    * on the other hand, sets the horizontal alignment of the whole text.
    *
    * Since: 2.10
    */
-  g_object_class_install_property (object_class,
-                                   PROP_ALIGN,
-                                   g_param_spec_enum ("alignment",
-						      P_("Alignment"),
-						      P_("How to align the lines"),
-						      PANGO_TYPE_ALIGNMENT,
-						      PANGO_ALIGN_LEFT,
-						      GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
+  text_cell_renderer_props[PROP_ALIGN] =
+      g_param_spec_enum ("alignment",
+                         P_("Alignment"),
+                         P_("How to align the lines"),
+                         PANGO_TYPE_ALIGNMENT,
+                         PANGO_ALIGN_LEFT,
+                         GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
   /**
    * GtkCellRendererText:placeholder-text:
@@ -632,18 +591,16 @@ G_GNUC_END_IGNORE_DEPRECATIONS
    *
    * Since 3.6
    */
-  g_object_class_install_property (object_class,
-                                   PROP_PLACEHOLDER_TEXT,
-                                   g_param_spec_string ("placeholder-text",
-                                                        P_("Placeholder text"),
-                                                        P_("Text rendered when an editable cell is empty"),
-                                                        NULL,
-                                                        GTK_PARAM_READWRITE));
-
+  text_cell_renderer_props[PROP_PLACEHOLDER_TEXT] =
+      g_param_spec_string ("placeholder-text",
+                           P_("Placeholder text"),
+                           P_("Text rendered when an editable cell is empty"),
+                           NULL,
+                           GTK_PARAM_READWRITE);
 
   /* Style props are set or not */
 
-#define ADD_SET_PROP(propname, propval, nick, blurb) g_object_class_install_property (object_class, propval, g_param_spec_boolean (propname, nick, blurb, FALSE, GTK_PARAM_READWRITE))
+#define ADD_SET_PROP(propname, propval, nick, blurb) text_cell_renderer_props[propval] = g_param_spec_boolean (propname, nick, blurb, FALSE, GTK_PARAM_READWRITE)
 
   ADD_SET_PROP ("background-set", PROP_BACKGROUND_SET,
                 P_("Background set"),
@@ -652,14 +609,14 @@ G_GNUC_END_IGNORE_DEPRECATIONS
   ADD_SET_PROP ("foreground-set", PROP_FOREGROUND_SET,
                 P_("Foreground set"),
                 P_("Whether this tag affects the foreground color"));
-  
+
   ADD_SET_PROP ("editable-set", PROP_EDITABLE_SET,
                 P_("Editability set"),
                 P_("Whether this tag affects text editability"));
 
   ADD_SET_PROP ("family-set", PROP_FAMILY_SET,
                 P_("Font family set"),
-                P_("Whether this tag affects the font family"));  
+                P_("Whether this tag affects the font family"));
 
   ADD_SET_PROP ("style-set", PROP_STYLE_SET,
                 P_("Font style set"),
@@ -684,7 +641,7 @@ G_GNUC_END_IGNORE_DEPRECATIONS
   ADD_SET_PROP ("scale-set", PROP_SCALE_SET,
                 P_("Font scale set"),
                 P_("Whether this tag scales the font size by a factor"));
-  
+
   ADD_SET_PROP ("rise-set", PROP_RISE_SET,
                 P_("Rise set"),
                 P_("Whether this tag affects the rise"));
@@ -708,6 +665,8 @@ G_GNUC_END_IGNORE_DEPRECATIONS
   ADD_SET_PROP ("align-set", PROP_ALIGN_SET,
                 P_("Align set"),
                 P_("Whether this tag affects the alignment mode"));
+
+  g_object_class_install_properties (object_class, LAST_PROP, text_cell_renderer_props);
 
   /**
    * GtkCellRendererText::edited:
@@ -995,7 +954,7 @@ set_bg_color (GtkCellRendererText *celltext,
       if (!priv->background_set)
         {
           priv->background_set = TRUE;
-          g_object_notify (G_OBJECT (celltext), "background-set");
+          g_object_notify_by_pspec (G_OBJECT (celltext), text_cell_renderer_props[PROP_BACKGROUND_SET]);
         }
 
       priv->background = *rgba;
@@ -1005,7 +964,7 @@ set_bg_color (GtkCellRendererText *celltext,
       if (priv->background_set)
         {
           priv->background_set = FALSE;
-          g_object_notify (G_OBJECT (celltext), "background-set");
+          g_object_notify_by_pspec (G_OBJECT (celltext), text_cell_renderer_props[PROP_BACKGROUND_SET]);
         }
     }
 }
@@ -1022,7 +981,7 @@ set_fg_color (GtkCellRendererText *celltext,
       if (!priv->foreground_set)
         {
           priv->foreground_set = TRUE;
-          g_object_notify (G_OBJECT (celltext), "foreground-set");
+          g_object_notify_by_pspec (G_OBJECT (celltext), text_cell_renderer_props[PROP_FOREGROUND_SET]);
         }
 
       priv->foreground = *rgba;
@@ -1032,7 +991,7 @@ set_fg_color (GtkCellRendererText *celltext,
       if (priv->foreground_set)
         {
           priv->foreground_set = FALSE;
-          g_object_notify (G_OBJECT (celltext), "foreground-set");
+          g_object_notify_by_pspec (G_OBJECT (celltext), text_cell_renderer_props[PROP_FOREGROUND_SET]);
         }
     }
 }
@@ -1082,17 +1041,17 @@ notify_set_changed (GObject       *object,
 		    PangoFontMask  changed_mask)
 {
   if (changed_mask & PANGO_FONT_MASK_FAMILY)
-    g_object_notify (object, "family-set");
+    g_object_notify_by_pspec (object, text_cell_renderer_props[PROP_FAMILY_SET]);
   if (changed_mask & PANGO_FONT_MASK_STYLE)
-    g_object_notify (object, "style-set");
+    g_object_notify_by_pspec (object, text_cell_renderer_props[PROP_STYLE_SET]);
   if (changed_mask & PANGO_FONT_MASK_VARIANT)
-    g_object_notify (object, "variant-set");
+    g_object_notify_by_pspec (object, text_cell_renderer_props[PROP_VARIANT_SET]);
   if (changed_mask & PANGO_FONT_MASK_WEIGHT)
-    g_object_notify (object, "weight-set");
+    g_object_notify_by_pspec (object, text_cell_renderer_props[PROP_WEIGHT_SET]);
   if (changed_mask & PANGO_FONT_MASK_STRETCH)
-    g_object_notify (object, "stretch-set");
+    g_object_notify_by_pspec (object, text_cell_renderer_props[PROP_STRETCH_SET]);
   if (changed_mask & PANGO_FONT_MASK_SIZE)
-    g_object_notify (object, "size-set");
+    g_object_notify_by_pspec (object, text_cell_renderer_props[PROP_SIZE_SET]);
 }
 
 static void
@@ -1100,17 +1059,20 @@ notify_fields_changed (GObject       *object,
 		       PangoFontMask  changed_mask)
 {
   if (changed_mask & PANGO_FONT_MASK_FAMILY)
-    g_object_notify (object, "family");
+    g_object_notify_by_pspec (object, text_cell_renderer_props[PROP_FAMILY]);
   if (changed_mask & PANGO_FONT_MASK_STYLE)
-    g_object_notify (object, "style");
+    g_object_notify_by_pspec (object, text_cell_renderer_props[PROP_STYLE]);
   if (changed_mask & PANGO_FONT_MASK_VARIANT)
-    g_object_notify (object, "variant");
+    g_object_notify_by_pspec (object, text_cell_renderer_props[PROP_VARIANT]);
   if (changed_mask & PANGO_FONT_MASK_WEIGHT)
-    g_object_notify (object, "weight");
+    g_object_notify_by_pspec (object, text_cell_renderer_props[PROP_WEIGHT]);
   if (changed_mask & PANGO_FONT_MASK_STRETCH)
-    g_object_notify (object, "stretch");
+    g_object_notify_by_pspec (object, text_cell_renderer_props[PROP_STRETCH]);
   if (changed_mask & PANGO_FONT_MASK_SIZE)
-    g_object_notify (object, "size");
+    {
+      g_object_notify_by_pspec (object, text_cell_renderer_props[PROP_SIZE]);
+      g_object_notify_by_pspec (object, text_cell_renderer_props[PROP_SIZE_POINTS]);
+    }
 }
 
 static void
@@ -1121,7 +1083,7 @@ set_font_description (GtkCellRendererText  *celltext,
   GObject *object = G_OBJECT (celltext);
   PangoFontDescription *new_font_desc;
   PangoFontMask old_mask, new_mask, changed_mask, set_changed_mask;
-  
+
   if (font_desc)
     new_font_desc = pango_font_description_copy (font_desc);
   else
@@ -1135,30 +1097,15 @@ set_font_description (GtkCellRendererText  *celltext,
 
   pango_font_description_free (priv->font);
   priv->font = new_font_desc;
-  
+
   g_object_freeze_notify (object);
 
-  g_object_notify (object, "font-desc");
-  g_object_notify (object, "font");
-  
-  if (changed_mask & PANGO_FONT_MASK_FAMILY)
-    g_object_notify (object, "family");
-  if (changed_mask & PANGO_FONT_MASK_STYLE)
-    g_object_notify (object, "style");
-  if (changed_mask & PANGO_FONT_MASK_VARIANT)
-    g_object_notify (object, "variant");
-  if (changed_mask & PANGO_FONT_MASK_WEIGHT)
-    g_object_notify (object, "weight");
-  if (changed_mask & PANGO_FONT_MASK_STRETCH)
-    g_object_notify (object, "stretch");
-  if (changed_mask & PANGO_FONT_MASK_SIZE)
-    {
-      g_object_notify (object, "size");
-      g_object_notify (object, "size-points");
-    }
+  g_object_notify_by_pspec (object, text_cell_renderer_props[PROP_FONT_DESC]);
+  g_object_notify_by_pspec (object, text_cell_renderer_props[PROP_FONT]);
 
+  notify_fields_changed (object, changed_mask);
   notify_set_changed (object, set_changed_mask);
-  
+
   g_object_thaw_notify (object);
 }
 
@@ -1185,7 +1132,7 @@ gtk_cell_renderer_text_set_property (GObject      *object,
         }
 
       priv->text = g_value_dup_string (value);
-      g_object_notify (object, "text");
+      g_object_notify_by_pspec (object, pspec);
       break;
 
     case PROP_ATTRIBUTES:
@@ -1204,13 +1151,7 @@ gtk_cell_renderer_text_set_property (GObject      *object,
 	PangoAttrList *attrs = NULL;
 
 	str = g_value_get_string (value);
-	if (str && !pango_parse_markup (str,
-					-1,
-					0,
-					&attrs,
-					&text,
-					NULL,
-					&error))
+	if (str && !pango_parse_markup (str, -1, 0, &attrs, &text, NULL, &error))
 	  {
 	    g_warning ("Failed to set text from markup due to error parsing markup: %s",
 		       error->message);
@@ -1236,7 +1177,7 @@ gtk_cell_renderer_text_set_property (GObject      *object,
           g_object_notify_by_pspec (object, pspec);
         }
       break;
-      
+
     case PROP_BACKGROUND:
       {
         GdkRGBA rgba;
@@ -1248,10 +1189,10 @@ gtk_cell_renderer_text_set_property (GObject      *object,
         else
           g_warning ("Don't know color `%s'", g_value_get_string (value));
 
-        g_object_notify (object, "background-gdk");
+        g_object_notify_by_pspec (object, text_cell_renderer_props[PROP_BACKGROUND_GDK]);
       }
       break;
-      
+
     case PROP_FOREGROUND:
       {
         GdkRGBA rgba;
@@ -1263,7 +1204,7 @@ gtk_cell_renderer_text_set_property (GObject      *object,
         else
           g_warning ("Don't know color `%s'", g_value_get_string (value));
 
-        g_object_notify (object, "foreground-gdk");
+        g_object_notify_by_pspec (object, text_cell_renderer_props[PROP_FOREGROUND_GDK]);
       }
       break;
 
@@ -1314,12 +1255,10 @@ gtk_cell_renderer_text_set_property (GObject      *object,
       break;
 
     case PROP_BACKGROUND_RGBA:
-      /* This notifies the GObject itself. */
       set_bg_color (celltext, g_value_get_boxed (value));
       break;
 
     case PROP_FOREGROUND_RGBA:
-      /* This notifies the GObject itself. */
       set_fg_color (celltext, g_value_get_boxed (value));
       break;
 
@@ -1336,7 +1275,7 @@ gtk_cell_renderer_text_set_property (GObject      *object,
         set_font_description (celltext, font_desc);
 
 	pango_font_description_free (font_desc);
-        
+
 	if (priv->fixed_height_rows != -1)
 	  priv->calc_fixed_height = TRUE;
       }
@@ -1344,7 +1283,7 @@ gtk_cell_renderer_text_set_property (GObject      *object,
 
     case PROP_FONT_DESC:
       set_font_description (celltext, g_value_get_boxed (value));
-      
+
       if (priv->fixed_height_rows != -1)
 	priv->calc_fixed_height = TRUE;
       break;
@@ -1358,7 +1297,7 @@ gtk_cell_renderer_text_set_property (GObject      *object,
     case PROP_SIZE_POINTS:
       {
 	PangoFontMask old_set_mask = pango_font_description_get_set_fields (priv->font);
-	
+
 	switch (param_id)
 	  {
 	  case PROP_FAMILY:
@@ -1384,33 +1323,33 @@ gtk_cell_renderer_text_set_property (GObject      *object,
 	  case PROP_SIZE:
 	    pango_font_description_set_size (priv->font,
 					     g_value_get_int (value));
-	    g_object_notify (object, "size");
+	    g_object_notify_by_pspec (object, pspec);
 	    break;
 	  case PROP_SIZE_POINTS:
 	    pango_font_description_set_size (priv->font,
 					     g_value_get_double (value) * PANGO_SCALE);
-	    g_object_notify (object, "size-points");
+	    g_object_notify_by_pspec (object, pspec);
 	    break;
 	  }
-	
+
 	if (priv->fixed_height_rows != -1)
 	  priv->calc_fixed_height = TRUE;
-	
+
 	notify_set_changed (object, old_set_mask & pango_font_description_get_set_fields (priv->font));
-	g_object_notify (object, "font-desc");
-	g_object_notify (object, "font");
+	g_object_notify_by_pspec (object, text_cell_renderer_props[PROP_FONT_DESC]);
+	g_object_notify_by_pspec (object, text_cell_renderer_props[PROP_FONT]);
 
 	break;
       }
-      
+
     case PROP_SCALE:
       priv->font_scale = g_value_get_double (value);
       priv->scale_set = TRUE;
       if (priv->fixed_height_rows != -1)
 	priv->calc_fixed_height = TRUE;
-      g_object_notify (object, "scale-set");
+      g_object_notify_by_pspec (object, text_cell_renderer_props[PROP_SCALE_SET]);
       break;
-      
+
     case PROP_EDITABLE:
       priv->editable = g_value_get_boolean (value);
       priv->editable_set = TRUE;
@@ -1418,44 +1357,44 @@ gtk_cell_renderer_text_set_property (GObject      *object,
         g_object_set (celltext, "mode", GTK_CELL_RENDERER_MODE_EDITABLE, NULL);
       else
         g_object_set (celltext, "mode", GTK_CELL_RENDERER_MODE_INERT, NULL);
-      g_object_notify (object, "editable-set");
+      g_object_notify_by_pspec (object, text_cell_renderer_props[PROP_EDITABLE_SET]);
       break;
 
     case PROP_STRIKETHROUGH:
       priv->strikethrough = g_value_get_boolean (value);
       priv->strikethrough_set = TRUE;
-      g_object_notify (object, "strikethrough-set");
+      g_object_notify_by_pspec (object, text_cell_renderer_props[PROP_STRIKETHROUGH_SET]);
       break;
 
     case PROP_UNDERLINE:
       priv->underline_style = g_value_get_enum (value);
       priv->underline_set = TRUE;
-      g_object_notify (object, "underline-set");
-            
+      g_object_notify_by_pspec (object, text_cell_renderer_props[PROP_UNDERLINE_SET]);
+
       break;
 
     case PROP_RISE:
       priv->rise = g_value_get_int (value);
       priv->rise_set = TRUE;
-      g_object_notify (object, "rise-set");
+      g_object_notify_by_pspec (object, text_cell_renderer_props[PROP_RISE_SET]);
       if (priv->fixed_height_rows != -1)
 	priv->calc_fixed_height = TRUE;
-      break;  
+      break;
 
     case PROP_LANGUAGE:
       priv->language_set = TRUE;
       if (priv->language)
         g_object_unref (priv->language);
       priv->language = pango_language_from_string (g_value_get_string (value));
-      g_object_notify (object, "language-set");
+      g_object_notify_by_pspec (object, text_cell_renderer_props[PROP_LANGUAGE_SET]);
       break;
 
     case PROP_ELLIPSIZE:
       priv->ellipsize = g_value_get_enum (value);
       priv->ellipsize_set = TRUE;
-      g_object_notify (object, "ellipsize-set");
+      g_object_notify_by_pspec (object, text_cell_renderer_props[PROP_ELLIPSIZE_SET]);
       break;
-      
+
     case PROP_WRAP_MODE:
       if (priv->wrap_mode != g_value_get_enum (value))
         {
@@ -1463,7 +1402,7 @@ gtk_cell_renderer_text_set_property (GObject      *object,
           g_object_notify_by_pspec (object, pspec);
         }
       break;
-      
+
     case PROP_WRAP_WIDTH:
       if (priv->wrap_width != g_value_get_int (value))
         {
@@ -1471,14 +1410,14 @@ gtk_cell_renderer_text_set_property (GObject      *object,
           g_object_notify_by_pspec (object, pspec);
         }
       break;
-            
+
     case PROP_WIDTH_CHARS:
       if (priv->width_chars != g_value_get_int (value))
         {
           priv->width_chars  = g_value_get_int (value);
           g_object_notify_by_pspec (object, pspec);
         }
-      break;  
+      break;
 
     case PROP_MAX_WIDTH_CHARS:
       if (priv->max_width_chars != g_value_get_int (value))
@@ -1486,16 +1425,16 @@ gtk_cell_renderer_text_set_property (GObject      *object,
           priv->max_width_chars  = g_value_get_int (value);
           g_object_notify_by_pspec (object, pspec);
         }
-      break;  
+      break;
 
     case PROP_ALIGN:
       if (priv->align != g_value_get_enum (value))
         {
           priv->align = g_value_get_enum (value);
-          g_object_notify (object, "alignment");
+          g_object_notify_by_pspec (object, pspec);
         }
       priv->align_set = TRUE;
-      g_object_notify (object, "align-set");
+      g_object_notify_by_pspec (object, text_cell_renderer_props[PROP_ALIGN_SET]);
       break;
 
     case PROP_BACKGROUND_SET:
@@ -1520,7 +1459,7 @@ gtk_cell_renderer_text_set_property (GObject      *object,
       else
 	{
 	  PangoFontMask changed_mask;
-	  
+
 	  changed_mask = set_font_desc_fields (priv->font,
 					       get_property_font_set_mask (param_id));
 	  notify_fields_changed (G_OBJECT (celltext), changed_mask);
@@ -1530,7 +1469,7 @@ gtk_cell_renderer_text_set_property (GObject      *object,
     case PROP_SCALE_SET:
       priv->scale_set = g_value_get_boolean (value);
       break;
-      
+
     case PROP_EDITABLE_SET:
       priv->editable_set = g_value_get_boolean (value);
       break;
