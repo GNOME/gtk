@@ -145,6 +145,7 @@ static gboolean
 widget_needs_widget_path (GtkWidget *widget)
 {
   static GetPathForChildFunc funcs[2];
+  GtkContainerClass *class;
   GtkWidget *parent;
   GetPathForChildFunc parent_func;
   guint i;
@@ -152,8 +153,14 @@ widget_needs_widget_path (GtkWidget *widget)
   if (G_UNLIKELY (funcs[0] == NULL))
     {
       i = 0;
-      funcs[i++] = GTK_CONTAINER_CLASS (g_type_class_ref (GTK_TYPE_CONTAINER))->get_path_for_child;
-      funcs[i++] = GTK_CONTAINER_CLASS (g_type_class_ref (GTK_TYPE_BOX))->get_path_for_child;
+
+      class = (GtkContainerClass*)g_type_class_ref (GTK_TYPE_CONTAINER);
+      funcs[i++] = class->get_path_for_child;
+      g_type_class_unref (class);
+
+      class = (GtkContainerClass*)g_type_class_ref (GTK_TYPE_BOX);
+      funcs[i++] = class->get_path_for_child;
+      g_type_class_unref (class);
 
       g_assert (i == G_N_ELEMENTS (funcs));
     }
