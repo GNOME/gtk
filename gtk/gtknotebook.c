@@ -2004,14 +2004,18 @@ add_tab_position_style_class (GtkStyleContext *context,
 }
 
 static GtkStateFlags
-notebook_tab_prepare_style_context (GtkNotebook *notebook,
-                                    GtkNotebookPage *page,
-                                    GtkStyleContext *context,
-                                    gboolean use_flags)
+notebook_save_context_for_tab (GtkNotebook     *notebook,
+                               GtkNotebookPage *page,
+                               GtkStyleContext *context,
+                               gboolean         use_flags)
 {
   GtkPositionType tab_pos = get_effective_tab_pos (notebook);
   GtkRegionFlags flags = 0;
-  GtkStateFlags state = gtk_style_context_get_state (context);
+  GtkStateFlags state;
+
+  gtk_style_context_save (context);
+
+  state = gtk_style_context_get_state (context);
 
   if (page != NULL)
     {
@@ -2093,8 +2097,7 @@ gtk_notebook_get_preferred_tabs_size (GtkNotebook    *notebook,
                                          &child_requisition, NULL);
 
           /* Get border/padding for tab */
-          gtk_style_context_save (context);
-          state = notebook_tab_prepare_style_context (notebook, page, context, TRUE);
+          state = notebook_save_context_for_tab (notebook, page, context, TRUE);
           gtk_style_context_get_padding (context, state, &tab_padding);
           gtk_style_context_restore (context);
 
@@ -3631,8 +3634,7 @@ on_drag_icon_draw (GtkWidget *widget,
   child = gtk_bin_get_child (GTK_BIN (widget));
   context = gtk_widget_get_style_context (widget);
 
-  gtk_style_context_save (context);
-  notebook_tab_prepare_style_context (GTK_NOTEBOOK (notebook), NULL, context, FALSE);
+  notebook_save_context_for_tab (GTK_NOTEBOOK (notebook), NULL, context, FALSE);
 
   gtk_widget_get_preferred_size (widget,
                                  &requisition, NULL);
@@ -5527,8 +5529,7 @@ gtk_notebook_draw_tab (GtkNotebook     *notebook,
   priv = notebook->priv;
 
   context = gtk_widget_get_style_context (widget);
-  gtk_style_context_save (context);
-  notebook_tab_prepare_style_context (notebook, page, context, use_flags);
+  notebook_save_context_for_tab (notebook, page, context, use_flags);
 
   gtk_widget_style_get (GTK_WIDGET (notebook),
                         "has-tab-gap", &has_tab_gap,
@@ -6282,8 +6283,7 @@ gtk_notebook_calculate_tabs_allocation (GtkNotebook  *notebook,
            * Note that the padding will still be applied to the tab content though,
            * see gtk_notebook_page_allocate().
            */
-          gtk_style_context_save (context);
-          notebook_tab_prepare_style_context (notebook, page, context, TRUE);
+          notebook_save_context_for_tab (notebook, page, context, TRUE);
 
           gtk_style_context_get_padding (context, GTK_STATE_FLAG_ACTIVE, &active_padding);
           gtk_style_context_get_padding (context, GTK_STATE_FLAG_NORMAL, &normal_padding);
@@ -6480,8 +6480,7 @@ gtk_notebook_page_allocate (GtkNotebook     *notebook,
 
   context = gtk_widget_get_style_context (widget);
 
-  gtk_style_context_save (context);
-  state = notebook_tab_prepare_style_context (notebook, page, context, TRUE);
+  state = notebook_save_context_for_tab (notebook, page, context, TRUE);
 
   gtk_style_context_get_padding (context, state, &tab_padding);
 
