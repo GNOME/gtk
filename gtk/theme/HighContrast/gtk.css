@@ -1268,7 +1268,7 @@ column-header .button {
     box-shadow: none; }
   column-header .button:active {
     color: #fff; }
-column-header:last-child .button, column-header:last-child.button {
+column-header :last-child.button, column-header:last-child.button {
   border-right-style: none; }
 
 column-header .button, column-header .button:hover, column-header .button:active {

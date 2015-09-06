@@ -1890,7 +1890,6 @@ gtk_tree_view_column_set_visible (GtkTreeViewColumn *tree_column,
 
   if (priv->tree_view)
     {
-      _gtk_tree_view_reset_header_styles (GTK_TREE_VIEW (priv->tree_view));
       _gtk_tree_view_accessible_toggle_visibility (GTK_TREE_VIEW (priv->tree_view),
                                                    tree_column);
     }

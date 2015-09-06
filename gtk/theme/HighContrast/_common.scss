@@ -1072,7 +1072,7 @@ column-header {
       color: $selected_fg_color;
     }
   }
-  &:last-child .button,
+  & :last-child.button,
   &:last-child.button { //treeview-like derived widgets in Banshee and Evolution
     border-right-style: none;
   }

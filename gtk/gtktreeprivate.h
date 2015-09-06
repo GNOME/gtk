@@ -142,7 +142,6 @@ void              _gtk_tree_view_column_push_padding          (GtkTreeViewColumn
 gint              _gtk_tree_view_column_get_requested_width   (GtkTreeViewColumn  *column);
 gint              _gtk_tree_view_column_get_drag_x            (GtkTreeViewColumn  *column);
 GtkCellAreaContext *_gtk_tree_view_column_get_context         (GtkTreeViewColumn  *column);
-void              _gtk_tree_view_reset_header_styles       (GtkTreeView        *tree_view);
 
 
 G_END_DECLS

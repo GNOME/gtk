@@ -1403,8 +1403,8 @@ column-header {
       @extend column-header.button.dnd;
     }
   }
-  &:last-child .button,
-  &:last-child .button:backdrop, // set :backdrop too or the border will be visibile there
+  & .button:last-child,
+  & .button:last-child:backdrop, // set :backdrop too or the border will be visibile there
   &:last-child.button,
   &:last-child.button:backdrop { //treeview-like derived widgets in Banshee and Evolution
     border-right-style: none;
