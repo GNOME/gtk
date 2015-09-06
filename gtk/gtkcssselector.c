@@ -332,63 +332,6 @@ static const GtkCssSelectorClass GTK_CSS_SELECTOR_DESCENDANT = {
   FALSE
 };
 
-/* DESCENDANT FOR REGION */
-
-static void
-gtk_css_selector_descendant_for_region_print (const GtkCssSelector *selector,
-                                              GString              *string)
-{
-  g_string_append_c (string, ' ');
-}
-
-static gboolean
-gtk_css_selector_descendant_for_region_foreach_matcher (const GtkCssSelector      *selector,
-                                                        const GtkCssMatcher       *matcher,
-                                                        GtkCssSelectorForeachFunc  func,
-                                                        gpointer                   data)
-{
-  GtkCssMatcher ancestor;
-
-  if (_gtk_css_matcher_has_regions (matcher))
-    {
-      if (func (selector, matcher, data))
-        return TRUE;
-    }
-
-  while (_gtk_css_matcher_get_parent (&ancestor, matcher))
-    {
-      matcher = &ancestor;
-
-      if (func (selector, matcher, data))
-        return TRUE;
-
-      /* any matchers are dangerous here, as we may loop forever, but
-	 we can terminate now as all possible matches have already been added */
-      if (_gtk_css_matcher_matches_any (matcher))
-	break;
-    }
-
-  return FALSE;
-}
-
-static GtkCssChange
-gtk_css_selector_descendant_for_region_get_change (const GtkCssSelector *selector, GtkCssChange previous_change)
-{
-  return previous_change | _gtk_css_change_for_child (previous_change);
-}
-
-static const GtkCssSelectorClass GTK_CSS_SELECTOR_DESCENDANT_FOR_REGION = {
-  "descendant_for_region",
-  gtk_css_selector_descendant_for_region_print,
-  gtk_css_selector_descendant_for_region_foreach_matcher,
-  gtk_css_selector_default_match_one,
-  gtk_css_selector_descendant_for_region_get_change,
-  gtk_css_selector_default_add_specificity,
-  gtk_css_selector_default_hash_one,
-  gtk_css_selector_default_compare_one,
-  FALSE
-};
-
 /* CHILD */
 
 static void
@@ -708,107 +651,6 @@ comp_name (const GtkCssSelector *a,
 }
 
 DEFINE_SIMPLE_SELECTOR(name, NAME, print_name, match_name, hash_name, comp_name, FALSE, FALSE, TRUE)
-
-/* REGION */
-
-static void
-gtk_css_selector_region_print (const GtkCssSelector *selector,
-                               GString              *string)
-{
-  char *region_names[] = {
-    "even",
-    "odd",
-    "first-child",
-    "last-child",
-    "only-child",
-    "sorted"
-  };
-  guint i;
-
-  g_string_append (string, selector->region.name);
-
-  for (i = 0; i < G_N_ELEMENTS (region_names); i++)
-    {
-      if (selector->region.flags & (1 << i))
-        {
-          g_string_append_c (string, ':');
-          g_string_append (string, region_names[i]);
-        }
-    }
-}
-
-static gboolean
-gtk_css_selector_region_match_one (const GtkCssSelector *selector,
-                                   const GtkCssMatcher  *matcher)
-{
-  return _gtk_css_matcher_has_region (matcher, selector->region.name, selector->region.flags);
-}
-
-static GtkCssChange
-gtk_css_selector_region_get_change (const GtkCssSelector *selector, GtkCssChange previous_change)
-{
-  return previous_change | GTK_CSS_CHANGE_REGION;
-}
-
-static inline guint
-count_bits (guint n)
-{
-#if defined(__GNUC__) && (__GNUC__ > 4 || (__GNUC__ == 4 && __GNUC_MINOR__ >= 5))
-  return (guint) __builtin_popcount (n);
-#elif defined(__clang__) && (__clang_major__ > 3 || (__clang_major__ == 3 && __clang_minor__ >= 1))
-  return (guint) __builtin_popcount (n);
-#elif defined(_MSC_VER) && _MSC_VER >= 1500
-  return (guint) __popcnt (n);
-#else
-  guint result = 0;
-
-  for (result = 0; n != 0; result++)
-    n &= n - 1;
-
-  return result;
-#endif
-}
-
-static void
-gtk_css_selector_region_add_specificity (const GtkCssSelector *selector,
-                                         guint                *ids,
-                                         guint                *classes,
-                                         guint                *elements)
-{
-  (*elements)++;
-
-  (*classes) += count_bits (selector->region.flags);
-}
- 
-static guint
-gtk_css_selector_region_hash_one (const GtkCssSelector *a)
-{
-  return GPOINTER_TO_UINT (a->region.name) ^ a->region.flags;
-}
-
-static int
-gtk_css_selector_region_compare_one (const GtkCssSelector *a,
-				     const GtkCssSelector *b)
-{
-  if (a->region.name < b->region.name)
-    return -1;
-  else if (a->region.name > b->region.name)
-    return 1;
-  else
-    return a->region.flags - b->region.flags;
-}
-
-static const GtkCssSelectorClass GTK_CSS_SELECTOR_REGION = {
-  "region",
-  gtk_css_selector_region_print,
-  gtk_css_selector_default_foreach_matcher,
-  gtk_css_selector_region_match_one,
-  gtk_css_selector_region_get_change,
-  gtk_css_selector_region_add_specificity,
-  gtk_css_selector_region_hash_one,
-  gtk_css_selector_region_compare_one,
-  TRUE
-};
 
 /* CLASS */
 
@@ -1317,31 +1159,6 @@ parse_selector_pseudo_class_nth_child (GtkCssParser   *parser,
   return selector;
 }
 
-static GtkRegionFlags
-try_parse_selector_region_pseudo_class (GtkCssParser *parser)
-{
-  static const struct {
-    const char     *name;
-    GtkRegionFlags  flags;
-  } region_flags[] = {
-    { "even",           GTK_REGION_EVEN },
-    { "odd",            GTK_REGION_ODD },
-    { "first-child",    GTK_REGION_FIRST },
-    { "last-child",     GTK_REGION_LAST },
-    { "only-child",     GTK_REGION_ONLY },
-    { "sorted",         GTK_REGION_SORTED }
-  };
-  guint i;
-
-  for (i = 0; i < G_N_ELEMENTS (region_flags); i++)
-    {
-      if (_gtk_css_parser_try (parser, region_flags[i].name, FALSE))
-        return region_flags[i].flags;
-    }
-
-  return 0;
-}
-
 static GtkCssSelector *
 parse_selector_pseudo_class (GtkCssParser   *parser,
                              GtkCssSelector *selector,
@@ -1458,25 +1275,14 @@ parse_simple_selector (GtkCssParser   *parser,
                        GtkCssSelector *selector)
 {
   gboolean parsed_something = FALSE;
-  guint region_offset = 0; 
   char *name;
 
   name = _gtk_css_parser_try_ident (parser, FALSE);
   if (name)
     {
-      if (_gtk_style_context_check_region_name (name))
-        {
-          selector = gtk_css_selector_new (&GTK_CSS_SELECTOR_REGION,
-                                           selector);
-          selector->region.name = g_intern_string (name);
-          region_offset = gtk_css_selector_size (selector);
-        }
-      else
-        {
-          selector = gtk_css_selector_new (&GTK_CSS_SELECTOR_NAME,
-                                           selector);
-	  selector->name.reference = get_type_reference (name);
-        }
+      selector = gtk_css_selector_new (&GTK_CSS_SELECTOR_NAME,
+                                       selector);
+      selector->name.reference = get_type_reference (name);
       g_free (name);
       parsed_something = TRUE;
     }
@@ -1494,18 +1300,7 @@ parse_simple_selector (GtkCssParser   *parser,
       else if (_gtk_css_parser_try (parser, ":not(", TRUE))
         selector = parse_selector_negation (parser, selector);
       else if (_gtk_css_parser_try (parser, ":", FALSE))
-        {
-          GtkRegionFlags region_flags;
-          if (region_offset &&
-              (region_flags = try_parse_selector_region_pseudo_class (parser)))
-            {
-              selector[gtk_css_selector_size (selector) - region_offset].region.flags |= region_flags;
-            }
-          else
-            {
-              selector = parse_selector_pseudo_class (parser, selector, FALSE);
-            }
-        }
+        selector = parse_selector_pseudo_class (parser, selector, FALSE);
       else if (!parsed_something)
         {
           _gtk_css_parser_error (parser, "Expected a valid selector");
@@ -1521,16 +1316,6 @@ parse_simple_selector (GtkCssParser   *parser,
   while (selector && !_gtk_css_parser_is_eof (parser));
 
   _gtk_css_parser_skip_whitespace (parser);
-
-  /* This is the big region hack where we change the descendant matcher
-   * to a version that respects regions.
-   */
-  if (selector)
-    {
-      if ((selector[0].class == &GTK_CSS_SELECTOR_ANY || selector[0].class == &GTK_CSS_SELECTOR_REGION)
-          && selector[1].class == &GTK_CSS_SELECTOR_DESCENDANT)
-        selector[1].class = &GTK_CSS_SELECTOR_DESCENDANT_FOR_REGION;
-    }
 
   return selector;
 }

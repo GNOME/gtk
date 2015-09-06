@@ -1189,16 +1189,14 @@ gtk_css_node_add_region (GtkCssNode     *cssnode,
                          GQuark          region,
                          GtkRegionFlags  flags)
 {
-  if (gtk_css_node_declaration_add_region (&cssnode->decl, region, flags))
-    gtk_css_node_invalidate (cssnode, GTK_CSS_CHANGE_REGION);
+  gtk_css_node_declaration_add_region (&cssnode->decl, region, flags);
 }
 
 void
 gtk_css_node_remove_region (GtkCssNode *cssnode,
                             GQuark      region)
 {
-  if (gtk_css_node_declaration_remove_region (&cssnode->decl, region))
-    gtk_css_node_invalidate (cssnode, GTK_CSS_CHANGE_REGION);
+  gtk_css_node_declaration_remove_region (&cssnode->decl, region);
 }
 
 gboolean
