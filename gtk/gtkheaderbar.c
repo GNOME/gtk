@@ -97,7 +97,8 @@ enum {
   PROP_SPACING,
   PROP_SHOW_CLOSE_BUTTON,
   PROP_DECORATION_LAYOUT,
-  PROP_DECORATION_LAYOUT_SET
+  PROP_DECORATION_LAYOUT_SET,
+  LAST_PROP
 };
 
 enum {
@@ -105,6 +106,8 @@ enum {
   CHILD_PROP_PACK_TYPE,
   CHILD_PROP_POSITION
 };
+
+static GParamSpec *header_bar_props[LAST_PROP] = { NULL, };
 
 static void gtk_header_bar_buildable_init (GtkBuildableIface *iface);
 
@@ -1201,7 +1204,7 @@ gtk_header_bar_set_title (GtkHeaderBar *bar,
       gtk_widget_queue_resize (GTK_WIDGET (bar));
     }
 
-  g_object_notify (G_OBJECT (bar), "title");
+  g_object_notify_by_pspec (G_OBJECT (bar), header_bar_props[PROP_TITLE]);
 }
 
 /**
@@ -1262,7 +1265,7 @@ gtk_header_bar_set_subtitle (GtkHeaderBar *bar,
 
   gtk_widget_set_visible (priv->subtitle_sizing_label, priv->has_subtitle || (priv->subtitle && priv->subtitle[0]));
 
-  g_object_notify (G_OBJECT (bar), "subtitle");
+  g_object_notify_by_pspec (G_OBJECT (bar), header_bar_props[PROP_SUBTITLE]);
 }
 
 /**
@@ -1354,7 +1357,7 @@ gtk_header_bar_set_custom_title (GtkHeaderBar *bar,
 
   gtk_widget_queue_resize (GTK_WIDGET (bar));
 
-  g_object_notify (G_OBJECT (bar), "custom-title");
+  g_object_notify_by_pspec (G_OBJECT (bar), header_bar_props[PROP_CUSTOM_TITLE]);
 }
 
 /**
@@ -1866,40 +1869,34 @@ gtk_header_bar_class_init (GtkHeaderBarClass *class)
                                                                 -1, G_MAXINT, 0,
                                                                 GTK_PARAM_READWRITE));
 
-  g_object_class_install_property (object_class,
-                                   PROP_TITLE,
-                                   g_param_spec_string ("title",
-                                                        P_("Title"),
-                                                        P_("The title to display"),
-                                                        NULL,
-                                                        G_PARAM_READWRITE));
+  header_bar_props[PROP_TITLE] =
+      g_param_spec_string ("title",
+                           P_("Title"),
+                           P_("The title to display"),
+                           NULL,
+                           G_PARAM_READWRITE);
 
-  g_object_class_install_property (object_class,
-                                   PROP_SUBTITLE,
-                                   g_param_spec_string ("subtitle",
-                                                        P_("Subtitle"),
-                                                        P_("The subtitle to display"),
-                                                        NULL,
-                                                        G_PARAM_READWRITE));
+  header_bar_props[PROP_SUBTITLE] =
+      g_param_spec_string ("subtitle",
+                           P_("Subtitle"),
+                           P_("The subtitle to display"),
+                           NULL,
+                           G_PARAM_READWRITE);
 
-  g_object_class_install_property (object_class,
-                                   PROP_CUSTOM_TITLE,
-                                   g_param_spec_object ("custom-title",
-                                                        P_("Custom Title"),
-                                                        P_("Custom title widget to display"),
-                                                        GTK_TYPE_WIDGET,
-                                                        G_PARAM_READWRITE |
-                                                        G_PARAM_CONSTRUCT |
-                                                        G_PARAM_STATIC_STRINGS));
+  header_bar_props[PROP_CUSTOM_TITLE] =
+      g_param_spec_object ("custom-title",
+                           P_("Custom Title"),
+                           P_("Custom title widget to display"),
+                           GTK_TYPE_WIDGET,
+                           G_PARAM_READWRITE|G_PARAM_CONSTRUCT|G_PARAM_STATIC_STRINGS);
 
-  g_object_class_install_property (object_class,
-                                   PROP_SPACING,
-                                   g_param_spec_int ("spacing",
-                                                     P_("Spacing"),
-                                                     P_("The amount of space between children"),
-                                                     0, G_MAXINT,
-                                                     DEFAULT_SPACING,
-                                                     GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
+  header_bar_props[PROP_SPACING] =
+      g_param_spec_int ("spacing",
+                        P_("Spacing"),
+                        P_("The amount of space between children"),
+                        0, G_MAXINT,
+                        DEFAULT_SPACING,
+                        GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
   /**
    * GtkHeaderBar:show-close-button:
@@ -1911,17 +1908,16 @@ gtk_header_bar_class_init (GtkHeaderBarClass *class)
    * the state of the window (e.g. a close button will not be
    * shown if the window can't be closed).
    */
-  g_object_class_install_property (object_class,
-                                   PROP_SHOW_CLOSE_BUTTON,
-                                   g_param_spec_boolean ("show-close-button",
-                                                         P_("Show decorations"),
-                                                         P_("Whether to show window decorations"),
-                                                         FALSE,
-                                                         GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
+  header_bar_props[PROP_SHOW_CLOSE_BUTTON] =
+      g_param_spec_boolean ("show-close-button",
+                            P_("Show decorations"),
+                            P_("Whether to show window decorations"),
+                            FALSE,
+                            GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
   /**
    * GtkHeaderBar:decoration-layout:
-   * 
+   *
    * The decoration layout for buttons. If this property is
    * not set, the #GtkSettings:gtk-decoration-layout setting
    * is used.
@@ -1931,13 +1927,12 @@ gtk_header_bar_class_init (GtkHeaderBarClass *class)
    *
    * Since: 3.12
    */
-  g_object_class_install_property (object_class,
-                                   PROP_DECORATION_LAYOUT,
-                                   g_param_spec_string ("decoration-layout",
-                                                        P_("Decoration Layout"),
-                                                        P_("The layout for window decorations"),
-                                                        NULL,
-                                                        GTK_PARAM_READWRITE));
+  header_bar_props[PROP_DECORATION_LAYOUT] =
+      g_param_spec_string ("decoration-layout",
+                           P_("Decoration Layout"),
+                           P_("The layout for window decorations"),
+                           NULL,
+                           GTK_PARAM_READWRITE);
 
   /**
    * GtkHeaderBar:decoration-layout-set:
@@ -1946,29 +1941,29 @@ gtk_header_bar_class_init (GtkHeaderBarClass *class)
    *
    * Since: 3.12
    */
-  g_object_class_install_property (object_class,
-                                   PROP_DECORATION_LAYOUT_SET,
-                                   g_param_spec_boolean ("decoration-layout-set",
-                                                         P_("Decoration Layout Set"),
-                                                         P_("Whether the decoration-layout property has been set"),
-                                                         FALSE,
-                                                         GTK_PARAM_READWRITE));
+  header_bar_props[PROP_DECORATION_LAYOUT_SET] =
+      g_param_spec_boolean ("decoration-layout-set",
+                            P_("Decoration Layout Set"),
+                            P_("Whether the decoration-layout property has been set"),
+                            FALSE,
+                            GTK_PARAM_READWRITE);
 
   /**
-   * GtkHeaderBar:has-subtitle: 
-   * 
+   * GtkHeaderBar:has-subtitle:
+   *
    * If %TRUE, reserve space for a subtitle, even if none
    * is currently set.
    *
    * Since: 3.12
    */
-  g_object_class_install_property (object_class,
-                                   PROP_HAS_SUBTITLE,
-                                   g_param_spec_boolean ("has-subtitle",
-                                                         P_("Has Subtitle"),
-                                                         P_("Whether to reserve space for a subtitle"),
-                                                         TRUE,
-                                                         GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
+  header_bar_props[PROP_HAS_SUBTITLE] =
+      g_param_spec_boolean ("has-subtitle",
+                            P_("Has Subtitle"),
+                            P_("Whether to reserve space for a subtitle"),
+                            TRUE,
+                            GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
+
+  g_object_class_install_properties (object_class, LAST_PROP, header_bar_props);
 
   gtk_widget_class_set_accessible_role (widget_class, ATK_ROLE_PANEL);
 }
@@ -2092,7 +2087,7 @@ gtk_header_bar_set_show_close_button (GtkHeaderBar *bar,
 
   priv->shows_wm_decorations = setting;
   _gtk_header_bar_update_window_buttons (bar);
-  g_object_notify (G_OBJECT (bar), "show-close-button");
+  g_object_notify_by_pspec (G_OBJECT (bar), header_bar_props[PROP_SHOW_CLOSE_BUTTON]);
 }
 
 /**
@@ -2125,7 +2120,7 @@ gtk_header_bar_set_has_subtitle (GtkHeaderBar *bar,
 
   gtk_widget_queue_resize (GTK_WIDGET (bar));
 
-  g_object_notify (G_OBJECT (bar), "has-subtitle");
+  g_object_notify_by_pspec (G_OBJECT (bar), header_bar_props[PROP_HAS_SUBTITLE]);
 }
 
 /**
@@ -2193,8 +2188,8 @@ gtk_header_bar_set_decoration_layout (GtkHeaderBar *bar,
 
   _gtk_header_bar_update_window_buttons (bar);
 
-  g_object_notify (G_OBJECT (bar), "decoration-layout");
-  g_object_notify (G_OBJECT (bar), "decoration-layout-set");
+  g_object_notify_by_pspec (G_OBJECT (bar), header_bar_props[PROP_DECORATION_LAYOUT]);
+  g_object_notify_by_pspec (G_OBJECT (bar), header_bar_props[PROP_DECORATION_LAYOUT_SET]);
 }
 
 /**
