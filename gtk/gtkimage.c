@@ -200,8 +200,11 @@ enum
   PROP_STORAGE_TYPE,
   PROP_GICON,
   PROP_RESOURCE,
-  PROP_USE_FALLBACK
+  PROP_USE_FALLBACK,
+  NUM_PROPERTIES
 };
+
+static GParamSpec *image_props[NUM_PROPERTIES] = { NULL, };
 
 G_GNUC_BEGIN_IGNORE_DEPRECATIONS
 G_DEFINE_TYPE_WITH_PRIVATE (GtkImage, gtk_image, GTK_TYPE_MISC)
@@ -230,93 +233,85 @@ gtk_image_class_init (GtkImageClass *class)
   widget_class->unrealize = gtk_image_unrealize;
   widget_class->style_updated = gtk_image_style_updated;
   widget_class->screen_changed = gtk_image_screen_changed;
-  
-  g_object_class_install_property (gobject_class,
-                                   PROP_PIXBUF,
-                                   g_param_spec_object ("pixbuf",
-                                                        P_("Pixbuf"),
-                                                        P_("A GdkPixbuf to display"),
-                                                        GDK_TYPE_PIXBUF,
-                                                        GTK_PARAM_READWRITE));
 
-  g_object_class_install_property (gobject_class,
-                                   PROP_SURFACE,
-                                   g_param_spec_boxed ("surface",
-						       P_("Surface"),
-						       P_("A cairo_surface_t to display"),
-						       CAIRO_GOBJECT_TYPE_SURFACE,
-						       GTK_PARAM_READWRITE));
+  image_props[PROP_PIXBUF] =
+      g_param_spec_object ("pixbuf",
+                           P_("Pixbuf"),
+                           P_("A GdkPixbuf to display"),
+                           GDK_TYPE_PIXBUF,
+                           GTK_PARAM_READWRITE);
 
-  g_object_class_install_property (gobject_class,
-                                   PROP_FILE,
-                                   g_param_spec_string ("file",
-                                                        P_("Filename"),
-                                                        P_("Filename to load and display"),
-                                                        NULL,
-                                                        GTK_PARAM_READWRITE));
-  
+  image_props[PROP_SURFACE] =
+      g_param_spec_boxed ("surface",
+                          P_("Surface"),
+                          P_("A cairo_surface_t to display"),
+                          CAIRO_GOBJECT_TYPE_SURFACE,
+                          GTK_PARAM_READWRITE);
+
+  image_props[PROP_FILE] =
+      g_param_spec_string ("file",
+                           P_("Filename"),
+                           P_("Filename to load and display"),
+                           NULL,
+                           GTK_PARAM_READWRITE);
 
   /**
    * GtkImage:stock:
    *
    * Deprecated: 3.10: Use #GtkImage:icon-name instead.
    */
-  g_object_class_install_property (gobject_class,
-                                   PROP_STOCK,
-                                   g_param_spec_string ("stock",
-                                                        P_("Stock ID"),
-                                                        P_("Stock ID for a stock image to display"),
-                                                        NULL,
-                                                        GTK_PARAM_READWRITE | G_PARAM_DEPRECATED));
-  
+  image_props[PROP_STOCK] =
+      g_param_spec_string ("stock",
+                           P_("Stock ID"),
+                           P_("Stock ID for a stock image to display"),
+                           NULL,
+                           GTK_PARAM_READWRITE | G_PARAM_DEPRECATED);
+
   /**
    * GtkImage:icon-set:
    *
    * Deprecated: 3.10: Use #GtkImage:icon-name instead.
    */
   G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
-  g_object_class_install_property (gobject_class,
-                                   PROP_ICON_SET,
-                                   g_param_spec_boxed ("icon-set",
-                                                       P_("Icon set"),
-                                                       P_("Icon set to display"),
-                                                       GTK_TYPE_ICON_SET,
-                                                       GTK_PARAM_READWRITE | G_PARAM_DEPRECATED));
+  image_props[PROP_ICON_SET] =
+      g_param_spec_boxed ("icon-set",
+                          P_("Icon set"),
+                          P_("Icon set to display"),
+                          GTK_TYPE_ICON_SET,
+                          GTK_PARAM_READWRITE | G_PARAM_DEPRECATED);
   G_GNUC_END_IGNORE_DEPRECATIONS;
 
-  g_object_class_install_property (gobject_class,
-                                   PROP_ICON_SIZE,
-                                   g_param_spec_int ("icon-size",
-                                                     P_("Icon size"),
-                                                     P_("Symbolic size to use for stock icon, icon set or named icon"),
-                                                     0, G_MAXINT,
-                                                     DEFAULT_ICON_SIZE,
-                                                     GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
+  image_props[PROP_ICON_SIZE] =
+      g_param_spec_int ("icon-size",
+                        P_("Icon size"),
+                        P_("Symbolic size to use for stock icon, icon set or named icon"),
+                        0, G_MAXINT,
+                        DEFAULT_ICON_SIZE,
+                        GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
+
   /**
    * GtkImage:pixel-size:
    *
    * The "pixel-size" property can be used to specify a fixed size
-   * overriding the #GtkImage:icon-size property for images of type 
-   * %GTK_IMAGE_ICON_NAME. 
+   * overriding the #GtkImage:icon-size property for images of type
+   * %GTK_IMAGE_ICON_NAME.
    *
    * Since: 2.6
    */
-  g_object_class_install_property (gobject_class,
-				   PROP_PIXEL_SIZE,
-				   g_param_spec_int ("pixel-size",
-						     P_("Pixel size"),
-						     P_("Pixel size to use for named icon"),
-						     -1, G_MAXINT,
-						     -1,
-						     GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
-  
-  g_object_class_install_property (gobject_class,
-                                   PROP_PIXBUF_ANIMATION,
-                                   g_param_spec_object ("pixbuf-animation",
-                                                        P_("Animation"),
-                                                        P_("GdkPixbufAnimation to display"),
-                                                        GDK_TYPE_PIXBUF_ANIMATION,
-                                                        GTK_PARAM_READWRITE));
+  image_props[PROP_PIXEL_SIZE] =
+      g_param_spec_int ("pixel-size",
+                        P_("Pixel size"),
+                        P_("Pixel size to use for named icon"),
+                        -1, G_MAXINT,
+                        -1,
+                        GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
+
+  image_props[PROP_PIXBUF_ANIMATION] =
+      g_param_spec_object ("pixbuf-animation",
+                           P_("Animation"),
+                           P_("GdkPixbufAnimation to display"),
+                           GDK_TYPE_PIXBUF_ANIMATION,
+                           GTK_PARAM_READWRITE);
 
   /**
    * GtkImage:icon-name:
@@ -326,14 +321,13 @@ gtk_image_class_init (GtkImageClass *class)
    *
    * Since: 2.6
    */
-  g_object_class_install_property (gobject_class,
-                                   PROP_ICON_NAME,
-                                   g_param_spec_string ("icon-name",
-                                                        P_("Icon Name"),
-                                                        P_("The name of the icon from the icon theme"),
-                                                        NULL,
-                                                        GTK_PARAM_READWRITE));
-  
+  image_props[PROP_ICON_NAME] =
+      g_param_spec_string ("icon-name",
+                           P_("Icon Name"),
+                           P_("The name of the icon from the icon theme"),
+                           NULL,
+                           GTK_PARAM_READWRITE);
+
   /**
    * GtkImage:gicon:
    *
@@ -343,13 +337,12 @@ gtk_image_class_init (GtkImageClass *class)
    *
    * Since: 2.14
    */
-  g_object_class_install_property (gobject_class,
-                                   PROP_GICON,
-                                   g_param_spec_object ("gicon",
-                                                        P_("Icon"),
-                                                        P_("The GIcon being displayed"),
-                                                        G_TYPE_ICON,
-                                                        GTK_PARAM_READWRITE));
+  image_props[PROP_GICON] =
+      g_param_spec_object ("gicon",
+                           P_("Icon"),
+                           P_("The GIcon being displayed"),
+                           G_TYPE_ICON,
+                           GTK_PARAM_READWRITE);
 
   /**
    * GtkImage:resource:
@@ -358,22 +351,20 @@ gtk_image_class_init (GtkImageClass *class)
    *
    * Since: 3.8
    */
-  g_object_class_install_property (gobject_class,
-                                   PROP_RESOURCE,
-                                   g_param_spec_string ("resource",
-                                                        P_("Resource"),
-                                                        P_("The resource path being displayed"),
-                                                        NULL,
-                                                        GTK_PARAM_READWRITE));
+  image_props[PROP_RESOURCE] =
+      g_param_spec_string ("resource",
+                           P_("Resource"),
+                           P_("The resource path being displayed"),
+                           NULL,
+                           GTK_PARAM_READWRITE);
 
-  g_object_class_install_property (gobject_class,
-                                   PROP_STORAGE_TYPE,
-                                   g_param_spec_enum ("storage-type",
-                                                      P_("Storage type"),
-                                                      P_("The representation being used for image data"),
-                                                      GTK_TYPE_IMAGE_TYPE,
-                                                      GTK_IMAGE_EMPTY,
-                                                      GTK_PARAM_READABLE));
+  image_props[PROP_STORAGE_TYPE] =
+      g_param_spec_enum ("storage-type",
+                         P_("Storage type"),
+                         P_("The representation being used for image data"),
+                         GTK_TYPE_IMAGE_TYPE,
+                         GTK_IMAGE_EMPTY,
+                         GTK_PARAM_READABLE);
 
   /**
    * GtkImage:use-fallback:
@@ -385,13 +376,14 @@ gtk_image_class_init (GtkImageClass *class)
    *
    * Since: 3.0
    */
-  g_object_class_install_property (gobject_class,
-                                   PROP_USE_FALLBACK,
-                                   g_param_spec_boolean ("use-fallback",
-                                                         P_("Use Fallback"),
-                                                         P_("Whether to use icon names fallback"),
-                                                         FALSE,
-                                                         GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
+  image_props[PROP_USE_FALLBACK] =
+      g_param_spec_boolean ("use-fallback",
+                            P_("Use Fallback"),
+                            P_("Whether to use icon names fallback"),
+                            FALSE,
+                            GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
+
+  g_object_class_install_properties (gobject_class, NUM_PROPERTIES, image_props);
 
   gtk_widget_class_set_accessible_type (widget_class, GTK_TYPE_IMAGE_ACCESSIBLE);
 }
@@ -1023,7 +1015,7 @@ gtk_image_set_from_resource (GtkImage    *image,
 
   priv->resource_path = g_strdup (resource_path);
 
-  g_object_notify (G_OBJECT (image), "resource");
+  g_object_notify_by_pspec (G_OBJECT (image), image_props[PROP_RESOURCE]);
 
   g_object_unref (animation);
 
@@ -1057,7 +1049,7 @@ gtk_image_set_from_pixbuf (GtkImage  *image,
   if (pixbuf != NULL)
     _gtk_icon_helper_set_pixbuf (priv->icon_helper, pixbuf);
 
-  g_object_notify (G_OBJECT (image), "pixbuf");
+  g_object_notify_by_pspec (G_OBJECT (image), image_props[PROP_PIXBUF]);
   
   g_object_thaw_notify (G_OBJECT (image));
 }
@@ -1095,9 +1087,9 @@ gtk_image_set_from_stock  (GtkImage       *image,
       g_free (new_id);
     }
 
-  g_object_notify (G_OBJECT (image), "stock");
-  g_object_notify (G_OBJECT (image), "icon-size");
-  
+  g_object_notify_by_pspec (G_OBJECT (image), image_props[PROP_STOCK]);
+  g_object_notify_by_pspec (G_OBJECT (image), image_props[PROP_ICON_SIZE]);
+
   g_object_thaw_notify (G_OBJECT (image));
 }
 
@@ -1128,20 +1120,20 @@ gtk_image_set_from_icon_set  (GtkImage       *image,
 
   if (icon_set)
     gtk_icon_set_ref (icon_set);
-  
+
   gtk_image_clear (image);
 
   if (icon_set)
-    {      
+    {
       _gtk_icon_helper_set_icon_set (priv->icon_helper, icon_set, size);
       gtk_icon_set_unref (icon_set);
     }
 
   G_GNUC_END_IGNORE_DEPRECATIONS;
 
-  g_object_notify (G_OBJECT (image), "icon-set");
-  g_object_notify (G_OBJECT (image), "icon-size");
-  
+  g_object_notify_by_pspec (G_OBJECT (image), image_props[PROP_ICON_SET]);
+  g_object_notify_by_pspec (G_OBJECT (image), image_props[PROP_ICON_SIZE]);
+
   g_object_thaw_notify (G_OBJECT (image));
 }
 
@@ -1178,8 +1170,8 @@ gtk_image_set_from_animation (GtkImage           *image,
       g_object_unref (animation);
     }
 
-  g_object_notify (G_OBJECT (image), "pixbuf-animation");
-  
+  g_object_notify_by_pspec (G_OBJECT (image), image_props[PROP_PIXBUF_ANIMATION]);
+
   g_object_thaw_notify (G_OBJECT (image));
 }
 
@@ -1216,8 +1208,8 @@ gtk_image_set_from_icon_name  (GtkImage       *image,
       g_free (new_name);
     }
 
-  g_object_notify (G_OBJECT (image), "icon-name");
-  g_object_notify (G_OBJECT (image), "icon-size");
+  g_object_notify_by_pspec (G_OBJECT (image), image_props[PROP_ICON_NAME]);
+  g_object_notify_by_pspec (G_OBJECT (image), image_props[PROP_ICON_SIZE]);
   
   g_object_thaw_notify (G_OBJECT (image));
 }
@@ -1256,8 +1248,8 @@ gtk_image_set_from_gicon  (GtkImage       *image,
       g_object_unref (icon);
     }
 
-  g_object_notify (G_OBJECT (image), "gicon");
-  g_object_notify (G_OBJECT (image), "icon-size");
+  g_object_notify_by_pspec (G_OBJECT (image), image_props[PROP_GICON]);
+  g_object_notify_by_pspec (G_OBJECT (image), image_props[PROP_ICON_SIZE]);
   
   g_object_thaw_notify (G_OBJECT (image));
 }
@@ -1294,7 +1286,7 @@ gtk_image_set_from_surface (GtkImage       *image,
       cairo_surface_destroy (surface);
     }
 
-  g_object_notify (G_OBJECT (image), "surface");
+  g_object_notify_by_pspec (G_OBJECT (image), image_props[PROP_SURFACE]);
   
   g_object_thaw_notify (G_OBJECT (image));
 }
@@ -1749,32 +1741,32 @@ gtk_image_reset (GtkImage *image)
 
   g_object_freeze_notify (G_OBJECT (image));
   storage_type = gtk_image_get_storage_type (image);
-  
-  if (storage_type != GTK_IMAGE_EMPTY)
-    g_object_notify (G_OBJECT (image), "storage-type");
 
-  g_object_notify (G_OBJECT (image), "icon-size");
-  
+  if (storage_type != GTK_IMAGE_EMPTY)
+    g_object_notify_by_pspec (G_OBJECT (image), image_props[PROP_STORAGE_TYPE]);
+
+  g_object_notify_by_pspec (G_OBJECT (image), image_props[PROP_ICON_SIZE]);
+
   switch (storage_type)
     {
     case GTK_IMAGE_PIXBUF:
-      g_object_notify (G_OBJECT (image), "pixbuf");
+      g_object_notify_by_pspec (G_OBJECT (image), image_props[PROP_PIXBUF]);
       break;
     case GTK_IMAGE_STOCK:
-      g_object_notify (G_OBJECT (image), "stock");      
+      g_object_notify_by_pspec (G_OBJECT (image), image_props[PROP_STOCK]);
       break;
     case GTK_IMAGE_ICON_SET:
-      g_object_notify (G_OBJECT (image), "icon-set");      
+      g_object_notify_by_pspec (G_OBJECT (image), image_props[PROP_ICON_SET]);
       break;
     case GTK_IMAGE_ANIMATION:
-      gtk_image_reset_anim_iter (image);      
-      g_object_notify (G_OBJECT (image), "pixbuf-animation");
+      gtk_image_reset_anim_iter (image);
+      g_object_notify_by_pspec (G_OBJECT (image), image_props[PROP_PIXBUF_ANIMATION]);
       break;
     case GTK_IMAGE_ICON_NAME:
-      g_object_notify (G_OBJECT (image), "icon-name");
+      g_object_notify_by_pspec (G_OBJECT (image), image_props[PROP_ICON_NAME]);
       break;
     case GTK_IMAGE_GICON:
-      g_object_notify (G_OBJECT (image), "gicon");
+      g_object_notify_by_pspec (G_OBJECT (image), image_props[PROP_GICON]);
       break;
     case GTK_IMAGE_EMPTY:
     default:
@@ -1785,14 +1777,14 @@ gtk_image_reset (GtkImage *image)
     {
       g_free (priv->filename);
       priv->filename = NULL;
-      g_object_notify (G_OBJECT (image), "file");
+      g_object_notify_by_pspec (G_OBJECT (image), image_props[PROP_FILE]);
     }
 
   if (priv->resource_path)
     {
       g_free (priv->resource_path);
       priv->resource_path = NULL;
-      g_object_notify (G_OBJECT (image), "resource");
+      g_object_notify_by_pspec (G_OBJECT (image), image_props[PROP_RESOURCE]);
     }
 
   _gtk_icon_helper_clear (priv->icon_helper);
@@ -1939,7 +1931,7 @@ gtk_image_set_pixel_size (GtkImage *image,
     {
       if (gtk_widget_get_visible (GTK_WIDGET (image)))
         gtk_widget_queue_resize (GTK_WIDGET (image));
-      g_object_notify (G_OBJECT (image), "pixel-size");
+      g_object_notify_by_pspec (G_OBJECT (image), image_props[PROP_PIXEL_SIZE]);
     }
 }
 
