@@ -196,7 +196,6 @@ static void draw_ugly_color (GdkWindow       *window,
 
 static guint signals[LAST_SIGNAL] = { 0 };
 
-static gpointer parent_class = NULL;
 
 G_DEFINE_ABSTRACT_TYPE (GdkWindow, gdk_window, G_TYPE_OBJECT)
 
@@ -290,8 +289,6 @@ static void
 gdk_window_class_init (GdkWindowClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
-
-  parent_class = g_type_class_peek_parent (klass);
 
   object_class->finalize = gdk_window_finalize;
   object_class->set_property = gdk_window_set_property;
@@ -510,7 +507,7 @@ gdk_window_finalize (GObject *object)
   if (window->devices_inside)
     g_list_free (window->devices_inside);
 
-  G_OBJECT_CLASS (parent_class)->finalize (object);
+  G_OBJECT_CLASS (gdk_window_parent_class)->finalize (object);
 }
 
 static void
