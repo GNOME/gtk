@@ -282,8 +282,11 @@ enum {
   PROP_0,
   PROP_BORDER_WIDTH,
   PROP_RESIZE_MODE,
-  PROP_CHILD
+  PROP_CHILD,
+  LAST_PROP
 };
+
+static GParamSpec *container_props[LAST_PROP];
 
 #define PARAM_SPEC_PARAM_ID(pspec)              ((pspec)->param_id)
 #define PARAM_SPEC_SET_PARAM_ID(pspec, id)      ((pspec)->param_id = (id))
@@ -502,30 +505,31 @@ gtk_container_class_init (GtkContainerClass *class)
   class->composite_name = gtk_container_child_default_composite_name;
   class->get_path_for_child = gtk_container_real_get_path_for_child;
 
-  g_object_class_install_property (gobject_class,
-                                   PROP_RESIZE_MODE,
-                                   g_param_spec_enum ("resize-mode",
-                                                      P_("Resize mode"),
-                                                      P_("Specify how resize events are handled"),
-                                                      GTK_TYPE_RESIZE_MODE,
-                                                      GTK_RESIZE_PARENT,
-                                                      GTK_PARAM_READWRITE|G_PARAM_DEPRECATED));
-  g_object_class_install_property (gobject_class,
-                                   PROP_BORDER_WIDTH,
-                                   g_param_spec_uint ("border-width",
-                                                      P_("Border width"),
-                                                      P_("The width of the empty border outside the containers children"),
-                                                      0,
-                                                      65535,
-                                                      0,
-                                                      GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
-  g_object_class_install_property (gobject_class,
-                                   PROP_CHILD,
-                                   g_param_spec_object ("child",
-                                                      P_("Child"),
-                                                      P_("Can be used to add a new child to the container"),
-                                                      GTK_TYPE_WIDGET,
-                                                      GTK_PARAM_WRITABLE));
+  container_props[PROP_RESIZE_MODE] =
+      g_param_spec_enum ("resize-mode",
+                         P_("Resize mode"),
+                         P_("Specify how resize events are handled"),
+                         GTK_TYPE_RESIZE_MODE,
+                         GTK_RESIZE_PARENT,
+                         GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY|G_PARAM_DEPRECATED);
+
+  container_props[PROP_BORDER_WIDTH] =
+      g_param_spec_uint ("border-width",
+                         P_("Border width"),
+                         P_("The width of the empty border outside the containers children"),
+                         0, 65535,
+                         0,
+                         GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
+
+  container_props[PROP_CHILD] =
+      g_param_spec_object ("child",
+                           P_("Child"),
+                           P_("Can be used to add a new child to the container"),
+                           GTK_TYPE_WIDGET,
+                           GTK_PARAM_WRITABLE);
+
+  g_object_class_install_properties (gobject_class, LAST_PROP, container_props);
+
   container_signals[ADD] =
     g_signal_new (I_("add"),
                   G_OBJECT_CLASS_TYPE (gobject_class),
@@ -1687,7 +1691,7 @@ gtk_container_set_border_width (GtkContainer *container,
       priv->border_width = border_width;
       _gtk_container_set_border_width_set (container, TRUE);
 
-      g_object_notify (G_OBJECT (container), "border-width");
+      g_object_notify_by_pspec (G_OBJECT (container), container_props[PROP_BORDER_WIDTH]);
 
       if (gtk_widget_get_realized (GTK_WIDGET (container)))
         gtk_widget_queue_resize (GTK_WIDGET (container));
@@ -1839,7 +1843,7 @@ gtk_container_set_resize_mode (GtkContainer  *container,
       priv->resize_mode = resize_mode;
 
       gtk_widget_queue_resize (GTK_WIDGET (container));
-      g_object_notify (G_OBJECT (container), "resize-mode");
+      g_object_notify_by_pspec (G_OBJECT (container), container_props[PROP_RESIZE_MODE]);
     }
 }
 
