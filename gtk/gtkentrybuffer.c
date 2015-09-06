@@ -55,7 +55,10 @@ enum {
   PROP_TEXT,
   PROP_LENGTH,
   PROP_MAX_LENGTH,
+  NUM_PROPERTIES
 };
+
+static GParamSpec *entry_buffer_props[NUM_PROPERTIES] = { NULL, };
 
 enum {
   INSERTED_TEXT,
@@ -223,8 +226,8 @@ gtk_entry_buffer_real_inserted_text (GtkEntryBuffer *buffer,
                                      const gchar    *chars,
                                      guint           n_chars)
 {
-  g_object_notify (G_OBJECT (buffer), "text");
-  g_object_notify (G_OBJECT (buffer), "length");
+  g_object_notify_by_pspec (G_OBJECT (buffer), entry_buffer_props[PROP_TEXT]);
+  g_object_notify_by_pspec (G_OBJECT (buffer), entry_buffer_props[PROP_LENGTH]);
 }
 
 static void
@@ -232,8 +235,8 @@ gtk_entry_buffer_real_deleted_text (GtkEntryBuffer *buffer,
                                     guint           position,
                                     guint           n_chars)
 {
-  g_object_notify (G_OBJECT (buffer), "text");
-  g_object_notify (G_OBJECT (buffer), "length");
+  g_object_notify_by_pspec (G_OBJECT (buffer), entry_buffer_props[PROP_TEXT]);
+  g_object_notify_by_pspec (G_OBJECT (buffer), entry_buffer_props[PROP_LENGTH]);
 }
 
 /* --------------------------------------------------------------------------------
@@ -342,13 +345,12 @@ gtk_entry_buffer_class_init (GtkEntryBufferClass *klass)
    *
    * Since: 2.18
    */
-  g_object_class_install_property (gobject_class,
-                                   PROP_TEXT,
-                                   g_param_spec_string ("text",
-                                                        P_("Text"),
-                                                        P_("The contents of the buffer"),
-                                                        "",
-                                                        GTK_PARAM_READWRITE));
+  entry_buffer_props[PROP_TEXT] =
+      g_param_spec_string ("text",
+                           P_("Text"),
+                           P_("The contents of the buffer"),
+                           "",
+                           GTK_PARAM_READWRITE);
 
   /**
    * GtkEntryBuffer:length:
@@ -357,13 +359,12 @@ gtk_entry_buffer_class_init (GtkEntryBufferClass *klass)
    *
    * Since: 2.18
    */
-  g_object_class_install_property (gobject_class,
-                                   PROP_LENGTH,
-                                   g_param_spec_uint ("length",
-                                                      P_("Text length"),
-                                                      P_("Length of the text currently in the buffer"),
-                                                      0, GTK_ENTRY_BUFFER_MAX_SIZE, 0,
-                                                      GTK_PARAM_READABLE));
+   entry_buffer_props[PROP_LENGTH] =
+       g_param_spec_uint ("length",
+                          P_("Text length"),
+                          P_("Length of the text currently in the buffer"),
+                          0, GTK_ENTRY_BUFFER_MAX_SIZE, 0,
+                          GTK_PARAM_READABLE);
 
   /**
    * GtkEntryBuffer:max-length:
@@ -372,13 +373,14 @@ gtk_entry_buffer_class_init (GtkEntryBufferClass *klass)
    *
    * Since: 2.18
    */
-  g_object_class_install_property (gobject_class,
-                                   PROP_MAX_LENGTH,
-                                   g_param_spec_int ("max-length",
-                                                     P_("Maximum length"),
-                                                     P_("Maximum number of characters for this entry. Zero if no maximum"),
-                                   0, GTK_ENTRY_BUFFER_MAX_SIZE, 0,
-                                   GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
+  entry_buffer_props[PROP_MAX_LENGTH] =
+      g_param_spec_int ("max-length",
+                        P_("Maximum length"),
+                        P_("Maximum number of characters for this entry. Zero if no maximum"),
+                        0, GTK_ENTRY_BUFFER_MAX_SIZE, 0,
+                        GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
+
+  g_object_class_install_properties (gobject_class, NUM_PROPERTIES, entry_buffer_props);
 
   /**
    * GtkEntryBuffer::inserted-text:
@@ -585,7 +587,7 @@ gtk_entry_buffer_set_max_length (GtkEntryBuffer *buffer,
     gtk_entry_buffer_delete_text (buffer, max_length, -1);
 
   buffer->priv->max_length = max_length;
-  g_object_notify (G_OBJECT (buffer), "max-length");
+  g_object_notify_by_pspec (G_OBJECT (buffer), entry_buffer_props[PROP_MAX_LENGTH]);
 }
 
 /**
