@@ -89,8 +89,11 @@ enum {
   PROP_LABEL_XALIGN,
   PROP_LABEL_YALIGN,
   PROP_SHADOW_TYPE,
-  PROP_LABEL_WIDGET
+  PROP_LABEL_WIDGET,
+  LAST_PROP
 };
+
+static GParamSpec *frame_props[LAST_PROP];
 
 static void gtk_frame_set_property (GObject      *object,
 				    guint         param_id,
@@ -158,47 +161,45 @@ gtk_frame_class_init (GtkFrameClass *class)
   gobject_class->set_property = gtk_frame_set_property;
   gobject_class->get_property = gtk_frame_get_property;
 
-  g_object_class_install_property (gobject_class,
-                                   PROP_LABEL,
-                                   g_param_spec_string ("label",
-                                                        P_("Label"),
-                                                        P_("Text of the frame's label"),
-                                                        NULL,
-                                                        GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
-  g_object_class_install_property (gobject_class,
-				   PROP_LABEL_XALIGN,
-				   g_param_spec_float ("label-xalign",
-						       P_("Label xalign"),
-						       P_("The horizontal alignment of the label"),
-						       0.0,
-						       1.0,
-						       0.0,
-						       GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
-  g_object_class_install_property (gobject_class,
-				   PROP_LABEL_YALIGN,
-				   g_param_spec_float ("label-yalign",
-						       P_("Label yalign"),
-						       P_("The vertical alignment of the label"),
-						       0.0,
-						       1.0,
-						       0.5,
-						       GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
-  g_object_class_install_property (gobject_class,
-                                   PROP_SHADOW_TYPE,
-                                   g_param_spec_enum ("shadow-type",
-                                                      P_("Frame shadow"),
-                                                      P_("Appearance of the frame border"),
-						      GTK_TYPE_SHADOW_TYPE,
-						      GTK_SHADOW_ETCHED_IN,
-                                                      GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
+  frame_props[PROP_LABEL] =
+      g_param_spec_string ("label",
+                           P_("Label"),
+                           P_("Text of the frame's label"),
+                           NULL,
+                           GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
-  g_object_class_install_property (gobject_class,
-                                   PROP_LABEL_WIDGET,
-                                   g_param_spec_object ("label-widget",
-                                                        P_("Label widget"),
-                                                        P_("A widget to display in place of the usual frame label"),
-                                                        GTK_TYPE_WIDGET,
-                                                        GTK_PARAM_READWRITE));
+  frame_props[PROP_LABEL_XALIGN] =
+      g_param_spec_float ("label-xalign",
+                          P_("Label xalign"),
+                          P_("The horizontal alignment of the label"),
+                          0.0, 1.0,
+                          0.0,
+                          GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
+
+  frame_props[PROP_LABEL_YALIGN] =
+      g_param_spec_float ("label-yalign",
+                          P_("Label yalign"),
+                          P_("The vertical alignment of the label"),
+                          0.0, 1.0,
+                          0.5,
+                          GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
+
+  frame_props[PROP_SHADOW_TYPE] =
+      g_param_spec_enum ("shadow-type",
+                         P_("Frame shadow"),
+                         P_("Appearance of the frame border"),
+			GTK_TYPE_SHADOW_TYPE,
+			GTK_SHADOW_ETCHED_IN,
+                        GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
+
+  frame_props[PROP_LABEL_WIDGET] =
+      g_param_spec_object ("label-widget",
+                           P_("Label widget"),
+                           P_("A widget to display in place of the usual frame label"),
+                           GTK_TYPE_WIDGET,
+                           GTK_PARAM_READWRITE);
+
+  g_object_class_install_properties (gobject_class, LAST_PROP, frame_props);
 
   widget_class->draw                           = gtk_frame_draw;
   widget_class->size_allocate                  = gtk_frame_size_allocate;
@@ -468,8 +469,8 @@ gtk_frame_set_label_widget (GtkFrame  *frame,
     gtk_widget_queue_resize (GTK_WIDGET (frame));
 
   g_object_freeze_notify (G_OBJECT (frame));
-  g_object_notify (G_OBJECT (frame), "label-widget");
-  g_object_notify (G_OBJECT (frame), "label");
+  g_object_notify_by_pspec (G_OBJECT (frame), frame_props[PROP_LABEL_WIDGET]);
+  g_object_notify_by_pspec (G_OBJECT (frame),  frame_props[PROP_LABEL]);
   g_object_thaw_notify (G_OBJECT (frame));
 }
 
@@ -523,13 +524,13 @@ gtk_frame_set_label_align (GtkFrame *frame,
   if (xalign != priv->label_xalign)
     {
       priv->label_xalign = xalign;
-      g_object_notify (G_OBJECT (frame), "label-xalign");
+      g_object_notify_by_pspec (G_OBJECT (frame), frame_props[PROP_LABEL_XALIGN]);
     }
 
   if (yalign != priv->label_yalign)
     {
       priv->label_yalign = yalign;
-      g_object_notify (G_OBJECT (frame), "label-yalign");
+      g_object_notify_by_pspec (G_OBJECT (frame), frame_props[PROP_LABEL_YALIGN]);
     }
 
   g_object_thaw_notify (G_OBJECT (frame));
@@ -596,9 +597,9 @@ gtk_frame_set_shadow_type (GtkFrame      *frame,
 
       if (gtk_widget_is_drawable (widget))
 	gtk_widget_queue_draw (widget);
-      
+
       gtk_widget_queue_resize (widget);
-      g_object_notify (G_OBJECT (frame), "shadow-type");
+      g_object_notify_by_pspec (G_OBJECT (frame), frame_props[PROP_SHADOW_TYPE]);
     }
 }
 
