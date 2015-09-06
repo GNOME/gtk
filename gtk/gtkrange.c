@@ -157,7 +157,6 @@ struct _GtkRangePrivate
 
 enum {
   PROP_0,
-  PROP_ORIENTATION,
   PROP_ADJUSTMENT,
   PROP_INVERTED,
   PROP_LOWER_STEPPER_SENSITIVITY,
@@ -165,7 +164,9 @@ enum {
   PROP_SHOW_FILL_LEVEL,
   PROP_RESTRICT_TO_FILL_LEVEL,
   PROP_FILL_LEVEL,
-  PROP_ROUND_DIGITS
+  PROP_ROUND_DIGITS,
+  PROP_ORIENTATION,
+  LAST_PROP = PROP_ORIENTATION
 };
 
 enum {
@@ -304,7 +305,7 @@ G_DEFINE_ABSTRACT_TYPE_WITH_CODE (GtkRange, gtk_range, GTK_TYPE_WIDGET,
                                                          NULL))
 
 static guint signals[LAST_SIGNAL];
-
+static GParamSpec *properties[LAST_PROP];
 
 static void
 gtk_range_class_init (GtkRangeClass *class)
@@ -366,7 +367,7 @@ gtk_range_class_init (GtkRangeClass *class)
                   _gtk_marshal_VOID__DOUBLE,
                   G_TYPE_NONE, 1,
                   G_TYPE_DOUBLE);
-  
+
   /**
    * GtkRange::move-slider:
    * @range: the #GtkRange that received the signal
@@ -422,43 +423,37 @@ gtk_range_class_init (GtkRangeClass *class)
                   GTK_TYPE_SCROLL_TYPE,
                   G_TYPE_DOUBLE);
 
-  g_object_class_override_property (gobject_class,
-                                    PROP_ORIENTATION,
-                                    "orientation");
+  g_object_class_override_property (gobject_class, PROP_ORIENTATION, "orientation");
 
-  g_object_class_install_property (gobject_class,
-                                   PROP_ADJUSTMENT,
-                                   g_param_spec_object ("adjustment",
-							P_("Adjustment"),
-							P_("The GtkAdjustment that contains the current value of this range object"),
-                                                        GTK_TYPE_ADJUSTMENT,
-                                                        GTK_PARAM_READWRITE | G_PARAM_CONSTRUCT));
+  properties[PROP_ADJUSTMENT] =
+      g_param_spec_object ("adjustment",
+                           P_("Adjustment"),
+                           P_("The GtkAdjustment that contains the current value of this range object"),
+                           GTK_TYPE_ADJUSTMENT,
+                           GTK_PARAM_READWRITE|G_PARAM_CONSTRUCT);
 
-  g_object_class_install_property (gobject_class,
-                                   PROP_INVERTED,
-                                   g_param_spec_boolean ("inverted",
-							P_("Inverted"),
-							P_("Invert direction slider moves to increase range value"),
-                                                         FALSE,
-                                                         GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
+  properties[PROP_INVERTED] =
+      g_param_spec_boolean ("inverted",
+                            P_("Inverted"),
+                            P_("Invert direction slider moves to increase range value"),
+                            FALSE,
+                            GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
-  g_object_class_install_property (gobject_class,
-                                   PROP_LOWER_STEPPER_SENSITIVITY,
-                                   g_param_spec_enum ("lower-stepper-sensitivity",
-						      P_("Lower stepper sensitivity"),
-						      P_("The sensitivity policy for the stepper that points to the adjustment's lower side"),
-						      GTK_TYPE_SENSITIVITY_TYPE,
-						      GTK_SENSITIVITY_AUTO,
-						      GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
+  properties[PROP_LOWER_STEPPER_SENSITIVITY] =
+      g_param_spec_enum ("lower-stepper-sensitivity",
+                         P_("Lower stepper sensitivity"),
+                         P_("The sensitivity policy for the stepper that points to the adjustment's lower side"),
+                         GTK_TYPE_SENSITIVITY_TYPE,
+                         GTK_SENSITIVITY_AUTO,
+                         GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
-  g_object_class_install_property (gobject_class,
-                                   PROP_UPPER_STEPPER_SENSITIVITY,
-                                   g_param_spec_enum ("upper-stepper-sensitivity",
-						      P_("Upper stepper sensitivity"),
-						      P_("The sensitivity policy for the stepper that points to the adjustment's upper side"),
-						      GTK_TYPE_SENSITIVITY_TYPE,
-						      GTK_SENSITIVITY_AUTO,
-						      GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
+  properties[PROP_UPPER_STEPPER_SENSITIVITY] =
+      g_param_spec_enum ("upper-stepper-sensitivity",
+                         P_("Upper stepper sensitivity"),
+                         P_("The sensitivity policy for the stepper that points to the adjustment's upper side"),
+                         GTK_TYPE_SENSITIVITY_TYPE,
+                         GTK_SENSITIVITY_AUTO,
+                         GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
   /**
    * GtkRange:show-fill-level:
@@ -469,13 +464,12 @@ gtk_range_class_init (GtkRangeClass *class)
    *
    * Since: 2.12
    **/
-  g_object_class_install_property (gobject_class,
-                                   PROP_SHOW_FILL_LEVEL,
-                                   g_param_spec_boolean ("show-fill-level",
-                                                         P_("Show Fill Level"),
-                                                         P_("Whether to display a fill level indicator graphics on trough."),
-                                                         FALSE,
-                                                         GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
+  properties[PROP_SHOW_FILL_LEVEL] =
+      g_param_spec_boolean ("show-fill-level",
+                            P_("Show Fill Level"),
+                            P_("Whether to display a fill level indicator graphics on trough."),
+                            FALSE,
+                            GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
   /**
    * GtkRange:restrict-to-fill-level:
@@ -486,13 +480,12 @@ gtk_range_class_init (GtkRangeClass *class)
    *
    * Since: 2.12
    **/
-  g_object_class_install_property (gobject_class,
-                                   PROP_RESTRICT_TO_FILL_LEVEL,
-                                   g_param_spec_boolean ("restrict-to-fill-level",
-                                                         P_("Restrict to Fill Level"),
-                                                         P_("Whether to restrict the upper boundary to the fill level."),
-                                                         TRUE,
-                                                         GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
+  properties[PROP_RESTRICT_TO_FILL_LEVEL] =
+      g_param_spec_boolean ("restrict-to-fill-level",
+                            P_("Restrict to Fill Level"),
+                            P_("Whether to restrict the upper boundary to the fill level."),
+                            TRUE,
+                            GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
   /**
    * GtkRange:fill-level:
@@ -502,15 +495,13 @@ gtk_range_class_init (GtkRangeClass *class)
    *
    * Since: 2.12
    **/
-  g_object_class_install_property (gobject_class,
-                                   PROP_FILL_LEVEL,
-                                   g_param_spec_double ("fill-level",
-							P_("Fill Level"),
-							P_("The fill level."),
-							-G_MAXDOUBLE,
-							G_MAXDOUBLE,
-                                                        G_MAXDOUBLE,
-                                                        GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
+  properties[PROP_FILL_LEVEL] =
+      g_param_spec_double ("fill-level",
+                           P_("Fill Level"),
+                           P_("The fill level."),
+                           -G_MAXDOUBLE, G_MAXDOUBLE,
+                           G_MAXDOUBLE,
+                           GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
   /**
    * GtkRange:round-digits:
@@ -520,13 +511,15 @@ gtk_range_class_init (GtkRangeClass *class)
    *
    * Since: 2.24
    */
-  g_object_class_install_property (gobject_class,
-                                   PROP_ROUND_DIGITS,
-                                   g_param_spec_int ("round-digits",
-                                                     P_("Round Digits"),
-                                                     P_("The number of digits to round the value to."),
-                                                     -1, G_MAXINT, -1,
-                                                     GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
+  properties[PROP_ROUND_DIGITS] =
+      g_param_spec_int ("round-digits",
+                        P_("Round Digits"),
+                        P_("The number of digits to round the value to."),
+                        -1, G_MAXINT,
+                        -1,
+                        GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
+
+  g_object_class_install_properties (gobject_class, LAST_PROP, properties);
 
   gtk_widget_class_install_style_property (widget_class,
 					   g_param_spec_int ("slider-width",
@@ -853,7 +846,7 @@ gtk_range_set_adjustment (GtkRange      *range,
 			range);
       
       gtk_range_adjustment_changed (adjustment, range);
-      g_object_notify (G_OBJECT (range), "adjustment");
+      g_object_notify_by_pspec (G_OBJECT (range), properties[PROP_ADJUSTMENT]);
     }
 }
 
@@ -882,7 +875,7 @@ gtk_range_set_inverted (GtkRange *range,
   if (setting != priv->inverted)
     {
       priv->inverted = setting;
-      g_object_notify (G_OBJECT (range), "inverted");
+      g_object_notify_by_pspec (G_OBJECT (range), properties[PROP_INVERTED]);
       gtk_widget_queue_resize (GTK_WIDGET (range));
     }
 }
@@ -1152,7 +1145,7 @@ gtk_range_set_lower_stepper_sensitivity (GtkRange           *range,
 
       gtk_range_calc_stepper_sensitivity (range);
 
-      g_object_notify (G_OBJECT (range), "lower-stepper-sensitivity");
+      g_object_notify_by_pspec (G_OBJECT (range), properties[PROP_LOWER_STEPPER_SENSITIVITY]);
     }
 }
 
@@ -1201,7 +1194,7 @@ gtk_range_set_upper_stepper_sensitivity (GtkRange           *range,
 
       gtk_range_calc_stepper_sensitivity (range);
 
-      g_object_notify (G_OBJECT (range), "upper-stepper-sensitivity");
+      g_object_notify_by_pspec (G_OBJECT (range), properties[PROP_UPPER_STEPPER_SENSITIVITY]);
     }
 }
 
@@ -1363,7 +1356,7 @@ gtk_range_set_show_fill_level (GtkRange *range,
   if (show_fill_level != priv->show_fill_level)
     {
       priv->show_fill_level = show_fill_level;
-      g_object_notify (G_OBJECT (range), "show-fill-level");
+      g_object_notify_by_pspec (G_OBJECT (range), properties[PROP_SHOW_FILL_LEVEL]);
       gtk_widget_queue_draw (GTK_WIDGET (range));
     }
 }
@@ -1412,7 +1405,7 @@ gtk_range_set_restrict_to_fill_level (GtkRange *range,
   if (restrict_to_fill_level != priv->restrict_to_fill_level)
     {
       priv->restrict_to_fill_level = restrict_to_fill_level;
-      g_object_notify (G_OBJECT (range), "restrict-to-fill-level");
+      g_object_notify_by_pspec (G_OBJECT (range), properties[PROP_RESTRICT_TO_FILL_LEVEL]);
 
       gtk_range_set_value (range, gtk_range_get_value (range));
     }
@@ -1474,7 +1467,7 @@ gtk_range_set_fill_level (GtkRange *range,
   if (fill_level != priv->fill_level)
     {
       priv->fill_level = fill_level;
-      g_object_notify (G_OBJECT (range), "fill-level");
+      g_object_notify_by_pspec (G_OBJECT (range), properties[PROP_FILL_LEVEL]);
 
       if (priv->show_fill_level)
         gtk_widget_queue_draw (GTK_WIDGET (range));
@@ -4244,7 +4237,7 @@ gtk_range_set_round_digits (GtkRange *range,
   if (range->priv->round_digits != round_digits)
     {
       range->priv->round_digits = round_digits;
-      g_object_notify (G_OBJECT (range), "round-digits");
+      g_object_notify_by_pspec (G_OBJECT (range), properties[PROP_ROUND_DIGITS]);
     }
 }
 
