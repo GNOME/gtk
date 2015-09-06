@@ -105,7 +105,8 @@ enum {
   PROP_DIGITS,
   PROP_DRAW_VALUE,
   PROP_HAS_ORIGIN,
-  PROP_VALUE_POS
+  PROP_VALUE_POS,
+  LAST_PROP
 };
 
 enum {
@@ -113,6 +114,7 @@ enum {
   LAST_SIGNAL
 };
 
+static GParamSpec *properties[LAST_PROP];
 static guint signals[LAST_SIGNAL];
 
 static void     gtk_scale_set_property            (GObject        *object,
@@ -295,38 +297,37 @@ gtk_scale_class_init (GtkScaleClass *class)
                   G_TYPE_STRING, 1,
                   G_TYPE_DOUBLE);
 
-  g_object_class_install_property (gobject_class,
-                                   PROP_DIGITS,
-                                   g_param_spec_int ("digits",
-                                                     P_("Digits"),
-                                                     P_("The number of decimal places that are displayed in the value"),
-                                                     -1, MAX_DIGITS, 1,
-                                                     GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
-  
-  g_object_class_install_property (gobject_class,
-                                   PROP_DRAW_VALUE,
-                                   g_param_spec_boolean ("draw-value",
-                                                         P_("Draw Value"),
-                                                         P_("Whether the current value is displayed as a string next to the slider"),
-                                                         TRUE,
-                                                         GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
+  properties[PROP_DIGITS] =
+      g_param_spec_int ("digits",
+                        P_("Digits"),
+                        P_("The number of decimal places that are displayed in the value"),
+                        -1, MAX_DIGITS,
+                        1,
+                        GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
-  g_object_class_install_property (gobject_class,
-                                   PROP_HAS_ORIGIN,
-                                   g_param_spec_boolean ("has-origin",
-                                                         P_("Has Origin"),
-                                                         P_("Whether the scale has an origin"),
-                                                         TRUE,
-                                                         GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
+  properties[PROP_DRAW_VALUE] =
+      g_param_spec_boolean ("draw-value",
+                            P_("Draw Value"),
+                            P_("Whether the current value is displayed as a string next to the slider"),
+                            TRUE,
+                            GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
-  g_object_class_install_property (gobject_class,
-                                   PROP_VALUE_POS,
-                                   g_param_spec_enum ("value-pos",
-                                                      P_("Value Position"),
-                                                      P_("The position in which the current value is displayed"),
-                                                      GTK_TYPE_POSITION_TYPE,
-                                                      GTK_POS_TOP,
-                                                      GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
+  properties[PROP_HAS_ORIGIN] =
+      g_param_spec_boolean ("has-origin",
+                            P_("Has Origin"),
+                            P_("Whether the scale has an origin"),
+                            TRUE,
+                            GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
+
+  properties[PROP_VALUE_POS] =
+      g_param_spec_enum ("value-pos",
+                         P_("Value Position"),
+                         P_("The position in which the current value is displayed"),
+                         GTK_TYPE_POSITION_TYPE,
+                         GTK_POS_TOP,
+                         GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
+
+  g_object_class_install_properties (gobject_class, LAST_PROP, properties);
 
   gtk_widget_class_install_style_property (widget_class,
                                            g_param_spec_int ("slider-length",
@@ -663,7 +664,7 @@ gtk_scale_set_digits (GtkScale *scale,
       _gtk_scale_clear_layout (scale);
       gtk_widget_queue_resize (GTK_WIDGET (scale));
 
-      g_object_notify (G_OBJECT (scale), "digits");
+      g_object_notify_by_pspec (G_OBJECT (scale), properties[PROP_DIGITS]);
     }
 }
 
@@ -715,7 +716,7 @@ gtk_scale_set_draw_value (GtkScale *scale,
 
       gtk_widget_queue_resize (GTK_WIDGET (scale));
 
-      g_object_notify (G_OBJECT (scale), "draw-value");
+      g_object_notify_by_pspec (G_OBJECT (scale), properties[PROP_DRAW_VALUE]);
     }
 }
 
@@ -762,7 +763,7 @@ gtk_scale_set_has_origin (GtkScale *scale,
 
       gtk_widget_queue_draw (GTK_WIDGET (scale));
 
-      g_object_notify (G_OBJECT (scale), "has-origin");
+      g_object_notify_by_pspec (G_OBJECT (scale), properties[PROP_HAS_ORIGIN]);
     }
 }
 
@@ -811,7 +812,7 @@ gtk_scale_set_value_pos (GtkScale        *scale,
       if (gtk_widget_get_visible (widget) && gtk_widget_get_mapped (widget))
 	gtk_widget_queue_resize (widget);
 
-      g_object_notify (G_OBJECT (scale), "value-pos");
+      g_object_notify_by_pspec (G_OBJECT (scale), properties[PROP_VALUE_POS]);
     }
 }
 
