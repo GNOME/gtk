@@ -152,7 +152,8 @@ enum {
 
 enum {
   PROP_0,
-  PROP_CURSOR
+  PROP_CURSOR,
+  LAST_PROP
 };
 
 /* Global info */
@@ -195,7 +196,7 @@ static void draw_ugly_color (GdkWindow       *window,
 
 
 static guint signals[LAST_SIGNAL] = { 0 };
-
+static GParamSpec *properties[LAST_PROP] = { NULL, };
 
 G_DEFINE_ABSTRACT_TYPE (GdkWindow, gdk_window, G_TYPE_OBJECT)
 
@@ -309,13 +310,13 @@ gdk_window_class_init (GdkWindowClass *klass)
    *
    * Since: 2.18
    */
-  g_object_class_install_property (object_class,
-                                   PROP_CURSOR,
-                                   g_param_spec_object ("cursor",
-                                                        P_("Cursor"),
-                                                        P_("Cursor"),
-                                                        GDK_TYPE_CURSOR,
-                                                        G_PARAM_READWRITE));
+  properties[PROP_CURSOR] =
+      g_param_spec_object ("cursor",
+                           P_("Cursor"),
+                           P_("Cursor"),
+                           GDK_TYPE_CURSOR,
+                           G_PARAM_READWRITE);
+  g_object_class_install_properties (object_class, LAST_PROP, properties);
 
   /**
    * GdkWindow::pick-embedded-child:
@@ -6165,7 +6166,7 @@ gdk_window_set_cursor (GdkWindow *window,
         }
 
       g_list_free (devices);
-      g_object_notify (G_OBJECT (window), "cursor");
+      g_object_notify_by_pspec (G_OBJECT (window), properties[PROP_CURSOR]);
     }
 }
 
