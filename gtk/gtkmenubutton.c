@@ -144,8 +144,11 @@ enum
   PROP_ALIGN_WIDGET,
   PROP_DIRECTION,
   PROP_USE_POPOVER,
-  PROP_POPOVER
+  PROP_POPOVER,
+  LAST_PROP
 };
+
+static GParamSpec *menu_button_props[LAST_PROP];
 
 G_DEFINE_TYPE_WITH_PRIVATE (GtkMenuButton, gtk_menu_button, GTK_TYPE_TOGGLE_BUTTON)
 
@@ -523,13 +526,12 @@ gtk_menu_button_class_init (GtkMenuButtonClass *klass)
    *
    * Since: 3.6
    */
-  g_object_class_install_property (gobject_class,
-                                   PROP_POPUP,
-                                   g_param_spec_object ("popup",
-                                                        P_("Popup"),
-                                                        P_("The dropdown menu."),
-                                                        GTK_TYPE_MENU,
-                                                        GTK_PARAM_READWRITE));
+  menu_button_props[PROP_POPUP] =
+      g_param_spec_object ("popup",
+                           P_("Popup"),
+                           P_("The dropdown menu."),
+                           GTK_TYPE_MENU,
+                           GTK_PARAM_READWRITE);
 
   /**
    * GtkMenuButton:menu-model:
@@ -543,13 +545,13 @@ gtk_menu_button_class_init (GtkMenuButtonClass *klass)
    *
    * Since: 3.6
    */
-  g_object_class_install_property (gobject_class,
-                                   PROP_MENU_MODEL,
-                                   g_param_spec_object ("menu-model",
-                                                        P_("Menu model"),
-                                                        P_("The model from which the popup is made."),
-                                                        G_TYPE_MENU_MODEL,
-                                                        GTK_PARAM_READWRITE));
+  menu_button_props[PROP_MENU_MODEL] =
+      g_param_spec_object ("menu-model",
+                           P_("Menu model"),
+                           P_("The model from which the popup is made."),
+                           G_TYPE_MENU_MODEL,
+                           GTK_PARAM_READWRITE);
+
   /**
    * GtkMenuButton:align-widget:
    *
@@ -557,13 +559,13 @@ gtk_menu_button_class_init (GtkMenuButtonClass *klass)
    *
    * Since: 3.6
    */
-  g_object_class_install_property (gobject_class,
-                                   PROP_ALIGN_WIDGET,
-                                   g_param_spec_object ("align-widget",
-                                                        P_("Align with"),
-                                                        P_("The parent widget which the menu should align with."),
-                                                        GTK_TYPE_CONTAINER,
-                                                        GTK_PARAM_READWRITE));
+  menu_button_props[PROP_ALIGN_WIDGET] =
+      g_param_spec_object ("align-widget",
+                           P_("Align with"),
+                           P_("The parent widget which the menu should align with."),
+                           GTK_TYPE_CONTAINER,
+                           GTK_PARAM_READWRITE);
+
   /**
    * GtkMenuButton:direction:
    *
@@ -572,14 +574,13 @@ gtk_menu_button_class_init (GtkMenuButtonClass *klass)
    *
    * Since: 3.6
    */
-  g_object_class_install_property (gobject_class,
-                                   PROP_DIRECTION,
-                                   g_param_spec_enum ("direction",
-                                                      P_("Direction"),
-                                                      P_("The direction the arrow should point."),
-                                                      GTK_TYPE_ARROW_TYPE,
-                                                      GTK_ARROW_DOWN,
-                                                      GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
+  menu_button_props[PROP_DIRECTION] =
+      g_param_spec_enum ("direction",
+                         P_("Direction"),
+                         P_("The direction the arrow should point."),
+                         GTK_TYPE_ARROW_TYPE,
+                         GTK_ARROW_DOWN,
+                         GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
   /**
    * GtkMenuButton:use-popover:
@@ -589,13 +590,12 @@ gtk_menu_button_class_init (GtkMenuButtonClass *klass)
    *
    * Since: 3.12
    */
-  g_object_class_install_property (gobject_class,
-                                   PROP_USE_POPOVER,
-                                   g_param_spec_boolean ("use-popover",
-                                                         P_("Use a popover"),
-                                                         P_("Use a popover instead of a menu"),
-                                                         TRUE,
-                                                         GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
+  menu_button_props[PROP_USE_POPOVER] =
+      g_param_spec_boolean ("use-popover",
+                            P_("Use a popover"),
+                            P_("Use a popover instead of a menu"),
+                            TRUE,
+                            GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
   /**
    * GtkMenuButton:popover:
@@ -604,14 +604,14 @@ gtk_menu_button_class_init (GtkMenuButtonClass *klass)
    *
    * Since: 3.12
    */
-  g_object_class_install_property (gobject_class,
-                                   PROP_POPOVER,
-                                   g_param_spec_object ("popover",
-                                                        P_("Popover"),
-                                                        P_("The popover"),
-                                                        GTK_TYPE_POPOVER,
-                                                        G_PARAM_READWRITE));
+  menu_button_props[PROP_POPOVER] =
+      g_param_spec_object ("popover",
+                           P_("Popover"),
+                           P_("The popover"),
+                           GTK_TYPE_POPOVER,
+                           G_PARAM_READWRITE);
 
+  g_object_class_install_properties (gobject_class, LAST_PROP, menu_button_props);
 
   gtk_widget_class_set_accessible_type (widget_class, GTK_TYPE_MENU_BUTTON_ACCESSIBLE);
 }
@@ -769,8 +769,8 @@ _gtk_menu_button_set_popup_with_func (GtkMenuButton                 *menu_button
 
   update_sensitivity (menu_button);
 
-  g_object_notify (G_OBJECT (menu_button), "popup");
-  g_object_notify (G_OBJECT (menu_button), "menu-model");
+  g_object_notify_by_pspec (G_OBJECT (menu_button), menu_button_props[PROP_POPUP]);
+  g_object_notify_by_pspec (G_OBJECT (menu_button), menu_button_props[PROP_MENU_MODEL]);
 }
 
 /**
@@ -886,7 +886,7 @@ gtk_menu_button_set_menu_model (GtkMenuButton *menu_button,
     }
 
   priv->model = menu_model;
-  g_object_notify (G_OBJECT (menu_button), "menu-model");
+  g_object_notify_by_pspec (G_OBJECT (menu_button), menu_button_props[PROP_MENU_MODEL]);
 
   g_object_thaw_notify (G_OBJECT (menu_button));
 }
@@ -957,7 +957,7 @@ gtk_menu_button_set_align_widget (GtkMenuButton *menu_button,
 
   set_align_widget_pointer (menu_button, align_widget);
 
-  g_object_notify (G_OBJECT (menu_button), "align-widget");
+  g_object_notify_by_pspec (G_OBJECT (menu_button), menu_button_props[PROP_ALIGN_WIDGET]);
 }
 
 /**
@@ -1034,7 +1034,7 @@ gtk_menu_button_set_direction (GtkMenuButton *menu_button,
     return;
 
   priv->arrow_type = direction;
-  g_object_notify (G_OBJECT (menu_button), "direction");
+  g_object_notify_by_pspec (G_OBJECT (menu_button), menu_button_props[PROP_DIRECTION]);
 
   /* Is it custom content? We don't change that */
   child = gtk_bin_get_child (GTK_BIN (menu_button));
@@ -1123,7 +1123,7 @@ gtk_menu_button_set_use_popover (GtkMenuButton *menu_button,
   if (priv->model)
     gtk_menu_button_set_menu_model (menu_button, priv->model);
 
-  g_object_notify (G_OBJECT (menu_button), "use-popover");
+  g_object_notify_by_pspec (G_OBJECT (menu_button), menu_button_props[PROP_USE_POPOVER]);
 
   g_object_thaw_notify (G_OBJECT (menu_button));
 }
@@ -1199,8 +1199,8 @@ gtk_menu_button_set_popover (GtkMenuButton *menu_button,
 
   update_sensitivity (menu_button);
 
-  g_object_notify (G_OBJECT (menu_button), "popover");
-  g_object_notify (G_OBJECT (menu_button), "menu-model");
+  g_object_notify_by_pspec (G_OBJECT (menu_button), menu_button_props[PROP_POPOVER]);
+  g_object_notify_by_pspec (G_OBJECT (menu_button), menu_button_props[PROP_MENU_MODEL]);
   g_object_thaw_notify (G_OBJECT (menu_button));
 }
 
