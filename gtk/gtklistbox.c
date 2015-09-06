@@ -3468,7 +3468,7 @@ gtk_list_box_row_set_activatable (GtkListBoxRow *row,
       ROW_PRIV (row)->activatable = activatable;
 
       gtk_list_box_update_row_style (gtk_list_box_row_get_box (row), row);
-      g_object_notify (G_OBJECT (row), "activatable");
+      g_object_notify_by_pspec (G_OBJECT (row), row_properties[ROW_PROP_ACTIVATABLE]);
     }
 }
 
@@ -3516,7 +3516,7 @@ gtk_list_box_row_set_selectable (GtkListBoxRow *row,
       ROW_PRIV (row)->selectable = selectable;
 
       gtk_list_box_update_row_style (gtk_list_box_row_get_box (row), row);
-      g_object_notify (G_OBJECT (row), "selectable");
+      g_object_notify_by_pspec (G_OBJECT (row), row_properties[ROW_PROP_SELECTABLE]);
     }
 }
 
