@@ -160,13 +160,16 @@ enum {
   PROP_SCREEN,
   PROP_DIRECTION,
   PROP_FRAME_CLOCK,
-  PROP_PARENT
+  PROP_PARENT,
+  LAST_PROP
 };
 
 enum {
   CHANGED,
   LAST_SIGNAL
 };
+
+static GParamSpec *properties[LAST_PROP] = { NULL, };
 
 static guint signals[LAST_SIGNAL] = { 0 };
 
@@ -214,28 +217,27 @@ gtk_style_context_class_init (GtkStyleContextClass *klass)
                   g_cclosure_marshal_VOID__VOID,
                   G_TYPE_NONE, 0);
 
-  g_object_class_install_property (object_class,
-                                   PROP_SCREEN,
-                                   g_param_spec_object ("screen",
-                                                        P_("Screen"),
-                                                        P_("The associated GdkScreen"),
-                                                        GDK_TYPE_SCREEN,
-                                                        GTK_PARAM_READWRITE));
-  g_object_class_install_property (object_class,
-                                   PROP_FRAME_CLOCK,
-                                   g_param_spec_object ("paint-clock",
-                                                        P_("FrameClock"),
-                                                        P_("The associated GdkFrameClock"),
-                                                        GDK_TYPE_FRAME_CLOCK,
-                                                        GTK_PARAM_READWRITE));
-  g_object_class_install_property (object_class,
-                                   PROP_DIRECTION,
-                                   g_param_spec_enum ("direction",
-                                                      P_("Direction"),
-                                                      P_("Text direction"),
-                                                      GTK_TYPE_TEXT_DIRECTION,
-                                                      GTK_TEXT_DIR_LTR,
-                                                      GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY|G_PARAM_DEPRECATED));
+  properties[PROP_SCREEN] =
+      g_param_spec_object ("screen",
+                           P_("Screen"),
+                           P_("The associated GdkScreen"),
+                           GDK_TYPE_SCREEN,
+                           GTK_PARAM_READWRITE);
+
+  properties[PROP_FRAME_CLOCK] =
+      g_param_spec_object ("paint-clock",
+                           P_("FrameClock"),
+                           P_("The associated GdkFrameClock"),
+                           GDK_TYPE_FRAME_CLOCK,
+                           GTK_PARAM_READWRITE);
+
+  properties[PROP_DIRECTION] =
+      g_param_spec_enum ("direction",
+                         P_("Direction"),
+                         P_("Text direction"),
+                         GTK_TYPE_TEXT_DIRECTION,
+                         GTK_TEXT_DIR_LTR,
+                         GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY|G_PARAM_DEPRECATED);
 
   /**
    * GtkStyleContext:parent:
@@ -245,13 +247,14 @@ gtk_style_context_class_init (GtkStyleContextClass *klass)
    *
    * Since: 3.4
    */
-  g_object_class_install_property (object_class,
-                                   PROP_PARENT,
-                                   g_param_spec_object ("parent",
-                                                        P_("Parent"),
-                                                        P_("The parent style context"),
-                                                        GTK_TYPE_STYLE_CONTEXT,
-                                                        GTK_PARAM_READWRITE));
+  properties[PROP_PARENT] =
+      g_param_spec_object ("parent",
+                           P_("Parent"),
+                           P_("The parent style context"),
+                           GTK_TYPE_STYLE_CONTEXT,
+                           GTK_PARAM_READWRITE);
+
+  g_object_class_install_properties (object_class, LAST_PROP, properties);
 }
 
 void
@@ -965,7 +968,7 @@ gtk_style_context_set_state (GtkStyleContext *context,
 
   if (((old_flags ^ flags) & (GTK_STATE_FLAG_DIR_LTR | GTK_STATE_FLAG_DIR_RTL)) &&
       !gtk_style_context_is_saved (context))
-    g_object_notify (G_OBJECT (context), "direction");
+    g_object_notify_by_pspec (G_OBJECT (context), properties[PROP_DIRECTION]);
 }
 
 /**
@@ -1176,7 +1179,7 @@ gtk_style_context_set_parent (GtkStyleContext *context,
 
   priv->parent = parent;
 
-  g_object_notify (G_OBJECT (context), "parent");
+  g_object_notify_by_pspec (G_OBJECT (context), properties[PROP_PARENT]);
   gtk_css_node_invalidate (gtk_style_context_get_root (context), GTK_CSS_CHANGE_ANY_PARENT | GTK_CSS_CHANGE_ANY_SIBLING);
 }
 
@@ -1975,7 +1978,7 @@ gtk_style_context_set_screen (GtkStyleContext *context,
 
   priv->screen = screen;
 
-  g_object_notify (G_OBJECT (context), "screen");
+  g_object_notify_by_pspec (G_OBJECT (context), properties[PROP_SCREEN]);
 }
 
 /**
@@ -2031,7 +2034,7 @@ gtk_style_context_set_frame_clock (GtkStyleContext *context,
   if (priv->frame_clock)
     g_object_ref (priv->frame_clock);
 
-  g_object_notify (G_OBJECT (context), "paint-clock");
+  g_object_notify_by_pspec (G_OBJECT (context), properties[PROP_FRAME_CLOCK]);
 }
 
 /**
