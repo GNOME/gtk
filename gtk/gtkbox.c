@@ -463,7 +463,7 @@ count_expand_children (GtkBox *box,
     {
       child = children->data;
 
-      if (gtk_widget_get_visible (child->widget))
+      if (_gtk_widget_get_visible (child->widget))
 	{
 	  *visible_children += 1;
 	  if (child->expand || gtk_widget_compute_expand (child->widget, private->orientation))
@@ -526,7 +526,7 @@ gtk_box_size_allocate_no_center (GtkWidget     *widget,
     {
       child = children->data;
 
-      if (!gtk_widget_get_visible (child->widget))
+      if (!_gtk_widget_get_visible (child->widget))
 	continue;
 
       if (private->orientation == GTK_ORIENTATION_HORIZONTAL)
@@ -607,7 +607,7 @@ gtk_box_size_allocate_no_center (GtkWidget     *widget,
 	  child = children->data;
 
 	  /* If widget is not visible, skip it. */
-	  if (!gtk_widget_get_visible (child->widget))
+	  if (!_gtk_widget_get_visible (child->widget))
 	    continue;
 
 	  /* If widget is packed differently skip it, but still increment i,
@@ -731,7 +731,7 @@ gtk_box_size_allocate_no_center (GtkWidget     *widget,
 	  child = children->data;
 
 	  /* If widget is not visible, skip it. */
-	  if (!gtk_widget_get_visible (child->widget))
+	  if (!_gtk_widget_get_visible (child->widget))
 	    continue;
 
 	  /* If widget is packed differently skip it, but still increment i,
@@ -848,7 +848,7 @@ gtk_box_size_allocate_with_center (GtkWidget     *widget,
       child = children->data;
 
       if (child != priv->center &&
-          gtk_widget_get_visible (child->widget))
+          _gtk_widget_get_visible (child->widget))
         {
           nvis[child->pack] += 1;
           if (child->expand || gtk_widget_compute_expand (child->widget, priv->orientation))
@@ -880,7 +880,7 @@ gtk_box_size_allocate_with_center (GtkWidget     *widget,
 
       child = children->data;
 
-      if (!gtk_widget_get_visible (child->widget))
+      if (!_gtk_widget_get_visible (child->widget))
 	continue;
 
       if (child == priv->center)
@@ -954,7 +954,7 @@ gtk_box_size_allocate_with_center (GtkWidget     *widget,
           child = children->data;
 
           /* If widget is not visible, skip it. */
-          if (!gtk_widget_get_visible (child->widget))
+          if (!_gtk_widget_get_visible (child->widget))
             continue;
 
           /* Skip the center widget */
@@ -1075,7 +1075,7 @@ gtk_box_size_allocate_with_center (GtkWidget     *widget,
           child = children->data;
 
           /* If widget is not visible, skip it. */
-          if (!gtk_widget_get_visible (child->widget))
+          if (!_gtk_widget_get_visible (child->widget))
             continue;
 
           /* Skip the center widget */
@@ -1183,7 +1183,7 @@ gtk_box_size_allocate (GtkWidget     *widget,
   GtkBox *box = GTK_BOX (widget);
 
   if (box->priv->center &&
-      gtk_widget_get_visible (box->priv->center->widget))
+      _gtk_widget_get_visible (box->priv->center->widget))
     gtk_box_size_allocate_with_center (widget, allocation);
   else
     gtk_box_size_allocate_no_center (widget, allocation);
@@ -1327,7 +1327,7 @@ count_widget_position (GtkWidget *widget,
 {
   CountingData *count = data;
 
-  if (!gtk_widget_get_visible (widget))
+  if (!_gtk_widget_get_visible (widget))
     return;
 
   if (count->widget == widget)
@@ -1377,7 +1377,7 @@ gtk_box_get_path_for_child (GtkContainer *container,
 
   path = _gtk_widget_create_path (GTK_WIDGET (container));
 
-  if (gtk_widget_get_visible (child))
+  if (_gtk_widget_get_visible (child))
     {
       gint position;
 
@@ -1391,7 +1391,7 @@ gtk_box_get_path_for_child (GtkContainer *container,
 
       for (list = children; list; list = list->next)
         {
-          if (!gtk_widget_get_visible (list->data))
+          if (!_gtk_widget_get_visible (list->data))
             continue;
 
           gtk_widget_path_append_for_widget (sibling_path, list->data);
@@ -1500,7 +1500,7 @@ gtk_box_pack (GtkBox      *box,
 
   g_return_val_if_fail (GTK_IS_BOX (box), NULL);
   g_return_val_if_fail (GTK_IS_WIDGET (child), NULL);
-  g_return_val_if_fail (gtk_widget_get_parent (child) == NULL, NULL);
+  g_return_val_if_fail (_gtk_widget_get_parent (child) == NULL, NULL);
 
   child_info = g_new (GtkBoxChild, 1);
   child_info->widget = child;
@@ -1565,7 +1565,7 @@ gtk_box_get_size (GtkWidget      *widget,
     {
       GtkBoxChild *child = children->data;
 
-      if (gtk_widget_get_visible (child->widget))
+      if (_gtk_widget_get_visible (child->widget))
         {
           gint child_minimum, child_natural;
           gint child_minimum_baseline = -1, child_natural_baseline = -1;
@@ -1734,7 +1734,7 @@ gtk_box_compute_size_for_opposing_orientation (GtkBox *box,
     {
       child = children->data;
 
-      if (gtk_widget_get_visible (child->widget))
+      if (_gtk_widget_get_visible (child->widget))
 	{
 	  if (private->orientation == GTK_ORIENTATION_HORIZONTAL)
 	    gtk_widget_get_preferred_width (child->widget,
@@ -1805,7 +1805,7 @@ gtk_box_compute_size_for_opposing_orientation (GtkBox *box,
 	  child = children->data;
 
 	  /* If widget is not visible, skip it. */
-	  if (!gtk_widget_get_visible (child->widget))
+	  if (!_gtk_widget_get_visible (child->widget))
 	    continue;
 
 	  /* If widget is packed differently skip it, but still increment i,
@@ -1933,7 +1933,7 @@ gtk_box_compute_size_for_orientation (GtkBox *box,
     {
       GtkBoxChild *child = children->data;
 
-      if (gtk_widget_get_visible (child->widget))
+      if (_gtk_widget_get_visible (child->widget))
         {
 
           if (private->orientation == GTK_ORIENTATION_HORIZONTAL)
@@ -2347,8 +2347,8 @@ gtk_box_reorder_child (GtkBox    *box,
   priv->children = g_list_insert_before (priv->children, new_link, child_info);
 
   gtk_widget_child_notify (child, "position");
-  if (gtk_widget_get_visible (child) &&
-      gtk_widget_get_visible (GTK_WIDGET (box)))
+  if (_gtk_widget_get_visible (child) &&
+      _gtk_widget_get_visible (GTK_WIDGET (box)))
     {
       gtk_box_invalidate_order (box);
       gtk_widget_queue_resize (child);
@@ -2478,8 +2478,8 @@ gtk_box_set_child_packing (GtkBox      *box,
           gtk_box_invalidate_order (box);
         }
 
-      if (gtk_widget_get_visible (child)
-          && gtk_widget_get_visible (GTK_WIDGET (box)))
+      if (_gtk_widget_get_visible (child) &&
+          _gtk_widget_get_visible (GTK_WIDGET (box)))
 	gtk_widget_queue_resize (child);
     }
   gtk_widget_thaw_child_notify (child);
@@ -2534,7 +2534,7 @@ gtk_box_remove (GtkContainer *container,
                                                 box_child_visibility_notify_cb,
                                                 box);
 
-	  was_visible = gtk_widget_get_visible (widget);
+	  was_visible = _gtk_widget_get_visible (widget);
 	  gtk_widget_unparent (widget);
 
 	  priv->children = g_list_remove_link (priv->children, children);

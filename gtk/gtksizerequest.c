@@ -372,7 +372,7 @@ gtk_widget_compute_size_for_orientation (GtkWidget        *widget,
   gpointer key;
   gint    min_result = 0, nat_result = 0;
 
-  if (!gtk_widget_get_visible (widget) && !gtk_widget_is_toplevel (widget))
+  if (!_gtk_widget_get_visible (widget) && !_gtk_widget_is_toplevel (widget))
     {
       if (minimum)
         *minimum = 0;

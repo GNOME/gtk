@@ -593,7 +593,7 @@ gtk_container_buildable_add_child (GtkBuildable  *buildable,
       GTK_BUILDER_WARN_INVALID_CHILD_TYPE (buildable, type);
     }
   else if (GTK_IS_WIDGET (child) &&
-           gtk_widget_get_parent (GTK_WIDGET (child)) == NULL)
+           _gtk_widget_get_parent (GTK_WIDGET (child)) == NULL)
     {
       gtk_container_add (GTK_CONTAINER (buildable), GTK_WIDGET (child));
     }
@@ -613,7 +613,7 @@ gtk_container_buildable_set_child_property (GtkContainer *container,
   GValue gvalue = G_VALUE_INIT;
   GError *error = NULL;
 
-  if (gtk_widget_get_parent (child) != (GtkWidget *)container &&
+  if (_gtk_widget_get_parent (child) != (GtkWidget *)container &&
       !GTK_IS_ASSISTANT (container) &&
       !GTK_IS_ACTION_BAR (container) &&
       !GTK_IS_POPOVER_MENU (container))
@@ -1374,14 +1374,14 @@ gtk_container_add_with_properties (GtkContainer *container,
 {
   g_return_if_fail (GTK_IS_CONTAINER (container));
   g_return_if_fail (GTK_IS_WIDGET (widget));
-  g_return_if_fail (gtk_widget_get_parent (widget) == NULL);
+  g_return_if_fail (_gtk_widget_get_parent (widget) == NULL);
 
   g_object_ref (container);
   g_object_ref (widget);
   gtk_widget_freeze_child_notify (widget);
 
   g_signal_emit (container, container_signals[ADD], 0, widget);
-  if (gtk_widget_get_parent (widget))
+  if (_gtk_widget_get_parent (widget))
     {
       va_list var_args;
 
@@ -1693,7 +1693,7 @@ gtk_container_set_border_width (GtkContainer *container,
 
       g_object_notify_by_pspec (G_OBJECT (container), container_props[PROP_BORDER_WIDTH]);
 
-      if (gtk_widget_get_realized (GTK_WIDGET (container)))
+      if (_gtk_widget_get_realized (GTK_WIDGET (container)))
         gtk_widget_queue_resize (GTK_WIDGET (container));
     }
 }
@@ -1742,7 +1742,7 @@ gtk_container_add (GtkContainer *container,
   g_return_if_fail (GTK_IS_CONTAINER (container));
   g_return_if_fail (GTK_IS_WIDGET (widget));
 
-  parent = gtk_widget_get_parent (widget);
+  parent = _gtk_widget_get_parent (widget);
 
   if (parent != NULL)
     {
@@ -1781,7 +1781,7 @@ gtk_container_remove (GtkContainer *container,
 {
   g_return_if_fail (GTK_IS_CONTAINER (container));
   g_return_if_fail (GTK_IS_WIDGET (widget));
-  g_return_if_fail (gtk_widget_get_parent (widget) == GTK_WIDGET (container) ||
+  g_return_if_fail (_gtk_widget_get_parent (widget) == GTK_WIDGET (container) ||
                     GTK_IS_ASSISTANT (container) ||
                     GTK_IS_ACTION_BAR (container) ||
                     GTK_IS_POPOVER_MENU (container));
@@ -1826,13 +1826,14 @@ gtk_container_set_resize_mode (GtkContainer  *container,
                                GtkResizeMode  resize_mode)
 {
   GtkContainerPrivate *priv;
+  GtkWidget *widget = (GtkWidget *)container;
 
   g_return_if_fail (GTK_IS_CONTAINER (container));
   g_return_if_fail (resize_mode <= GTK_RESIZE_IMMEDIATE);
 
   priv = container->priv;
 
-  if (gtk_widget_is_toplevel (GTK_WIDGET (container)) &&
+  if (_gtk_widget_is_toplevel (widget) &&
       resize_mode == GTK_RESIZE_PARENT)
     {
       resize_mode = GTK_RESIZE_QUEUE;
@@ -1842,7 +1843,7 @@ gtk_container_set_resize_mode (GtkContainer  *container,
     {
       priv->resize_mode = resize_mode;
 
-      gtk_widget_queue_resize (GTK_WIDGET (container));
+      gtk_widget_queue_resize (widget);
       g_object_notify_by_pspec (G_OBJECT (container), container_props[PROP_RESIZE_MODE]);
     }
 }
@@ -1974,9 +1975,9 @@ gtk_container_queue_resize_handler (GtkContainer *container)
 
   widget = GTK_WIDGET (container);
 
-  if (gtk_widget_get_visible (widget) &&
-      (gtk_widget_is_toplevel (widget) ||
-       gtk_widget_get_realized (widget)))
+  if (_gtk_widget_get_visible (widget) &&
+      (_gtk_widget_is_toplevel (widget) ||
+       _gtk_widget_get_realized (widget)))
     {
       switch (container->priv->resize_mode)
         {
@@ -2006,9 +2007,7 @@ _gtk_container_queue_resize_internal (GtkContainer *container,
 {
   GtkWidget *widget;
 
-  g_return_if_fail (GTK_IS_CONTAINER (container));
-
-  widget = GTK_WIDGET (container);
+  widget = (GtkWidget*)container;
 
   do
     {
@@ -2016,16 +2015,16 @@ _gtk_container_queue_resize_internal (GtkContainer *container,
       _gtk_size_request_cache_clear (_gtk_widget_peek_request_cache (widget));
 
       G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
-      if (GTK_IS_RESIZE_CONTAINER (widget))
+      if (((GtkContainer*)widget)->priv->resize_mode != GTK_RESIZE_PARENT)
         break;
       G_GNUC_END_IGNORE_DEPRECATIONS;
 
-      widget = gtk_widget_get_parent (widget);
+      widget = _gtk_widget_get_parent (widget);
     }
   while (widget);
 
   if (widget && !invalidate_only)
-    gtk_container_queue_resize_handler (GTK_CONTAINER (widget));
+    gtk_container_queue_resize_handler ((GtkContainer*)widget);
 }
 
 void
@@ -2495,7 +2494,7 @@ _gtk_container_child_composite_name (GtkContainer *container,
 
   g_return_val_if_fail (GTK_IS_CONTAINER (container), NULL);
   g_return_val_if_fail (GTK_IS_WIDGET (child), NULL);
-  g_return_val_if_fail (gtk_widget_get_parent (child) == GTK_WIDGET (container), NULL);
+  g_return_val_if_fail (_gtk_widget_get_parent (child) == GTK_WIDGET (container), NULL);
 
   g_object_get (child, "composite-child", &composite_child, NULL);
   if (composite_child)
@@ -2658,9 +2657,10 @@ gtk_container_real_get_path_for_child (GtkContainer *container,
   GtkStyleContext *context;
   GtkWidgetPath *path;
   GList *classes;
+  GtkWidget *widget = (GtkWidget *)container;
 
-  context = gtk_widget_get_style_context (GTK_WIDGET (container));
-  path = _gtk_widget_create_path (GTK_WIDGET (container));
+  context = _gtk_widget_get_style_context (widget);
+  path = _gtk_widget_create_path (widget);
 
   /* Copy any permanent classes to the path */
   classes = gtk_style_context_list_classes (context);
@@ -2818,7 +2818,7 @@ find_old_focus (GtkContainer *container,
         {
           GtkWidget *parent;
 
-          parent = gtk_widget_get_parent (widget);
+          parent = _gtk_widget_get_parent (widget);
 
           if (parent && (gtk_container_get_focus_child (GTK_CONTAINER (parent)) != widget))
             goto next;
@@ -2840,7 +2840,7 @@ old_focus_coords (GtkContainer *container,
                   GdkRectangle *old_focus_rect)
 {
   GtkWidget *widget = GTK_WIDGET (container);
-  GtkWidget *toplevel = gtk_widget_get_toplevel (widget);
+  GtkWidget *toplevel = _gtk_widget_get_toplevel (widget);
   GtkWidget *old_focus;
 
   if (GTK_IS_WINDOW (toplevel))
@@ -3152,7 +3152,7 @@ _gtk_container_focus_sort (GtkContainer     *container,
 
   while (children)
     {
-      if (gtk_widget_get_realized (children->data))
+      if (_gtk_widget_get_realized (children->data))
         visible_children = g_list_prepend (visible_children, children->data);
       children = children->next;
     }
@@ -3597,9 +3597,9 @@ static void
 gtk_container_map_child (GtkWidget *child,
                          gpointer   client_data)
 {
-  if (gtk_widget_get_visible (child) &&
-      gtk_widget_get_child_visible (child) &&
-      !gtk_widget_get_mapped (child))
+  if (_gtk_widget_get_visible (child) &&
+      _gtk_widget_get_child_visible (child) &&
+      !_gtk_widget_get_mapped (child))
     gtk_widget_map (child);
 }
 
@@ -3704,7 +3704,7 @@ gtk_container_propagate_draw (GtkContainer   *container,
   g_return_if_fail (GTK_IS_WIDGET (child));
   g_return_if_fail (cr != NULL);
 
-  g_assert (gtk_widget_get_parent (child) == GTK_WIDGET (container));
+  g_assert (_gtk_widget_get_parent (child) == GTK_WIDGET (container));
 
   if (!gtk_container_should_propagate_draw (container, child, cr))
     return;
@@ -3778,7 +3778,7 @@ gtk_container_get_path_for_child (GtkContainer *container,
 
   g_return_val_if_fail (GTK_IS_CONTAINER (container), NULL);
   g_return_val_if_fail (GTK_IS_WIDGET (child), NULL);
-  g_return_val_if_fail (container == (GtkContainer *) gtk_widget_get_parent (child), NULL);
+  g_return_val_if_fail (container == (GtkContainer *) _gtk_widget_get_parent (child), NULL);
 
   path = GTK_CONTAINER_GET_CLASS (container)->get_path_for_child (container, child);
   if (gtk_widget_path_get_object_type (path) != G_OBJECT_TYPE (child))

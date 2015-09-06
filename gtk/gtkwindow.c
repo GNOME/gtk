@@ -1308,7 +1308,7 @@ send_delete_event (gpointer data)
 void
 gtk_window_close (GtkWindow *window)
 {
-  if (!gtk_widget_get_realized (GTK_WIDGET (window)))
+  if (!_gtk_widget_get_realized (GTK_WIDGET (window)))
     return;
 
   window->priv->delete_event_handler = gdk_threads_add_idle (send_delete_event, window);
@@ -1324,7 +1324,7 @@ popover_destroy (GtkWindowPopover *popover)
       popover->unmap_id = 0;
     }
 
-  if (popover->widget && gtk_widget_get_parent (popover->widget))
+  if (popover->widget && _gtk_widget_get_parent (popover->widget))
     gtk_widget_unparent (popover->widget);
 
   if (popover->window)
@@ -2258,7 +2258,7 @@ gtk_window_set_title_internal (GtkWindow   *window,
   if (new_title == NULL)
     new_title = "";
 
-  if (gtk_widget_get_realized (widget))
+  if (_gtk_widget_get_realized (widget))
     gdk_window_set_title (gtk_widget_get_window (widget), new_title);
 
   if (update_titlebar && GTK_IS_HEADER_BAR (priv->title_box))
@@ -2342,7 +2342,7 @@ gtk_window_set_wmclass (GtkWindow *window,
   g_free (priv->wmclass_class);
   priv->wmclass_class = g_strdup (wmclass_class);
 
-  if (gtk_widget_get_realized (GTK_WIDGET (window)))
+  if (_gtk_widget_get_realized (GTK_WIDGET (window)))
     g_warning ("gtk_window_set_wmclass: shouldn't set wmclass after window is realized!\n");
 }
 
@@ -2382,7 +2382,7 @@ gtk_window_set_role (GtkWindow   *window,
   g_free (priv->wm_role);
   priv->wm_role = new_role;
 
-  if (gtk_widget_get_realized (widget))
+  if (_gtk_widget_get_realized (widget))
     gdk_window_set_role (gtk_widget_get_window (widget), priv->wm_role);
 
   g_object_notify_by_pspec (G_OBJECT (window), window_props[PROP_ROLE]);
@@ -2421,7 +2421,7 @@ gtk_window_set_startup_id (GtkWindow   *window,
   g_free (priv->startup_id);
   priv->startup_id = g_strdup (startup_id);
 
-  if (gtk_widget_get_realized (widget))
+  if (_gtk_widget_get_realized (widget))
     {
       GdkWindow *gdk_window;
       guint32 timestamp = extract_time_from_startup_id (priv->startup_id);
@@ -2516,7 +2516,7 @@ gtk_window_set_focus (GtkWindow *window,
       GtkWidget *widget = priv->focus_widget;
       if (widget)
 	{
-	  while ((parent = gtk_widget_get_parent (widget)))
+	  while ((parent = _gtk_widget_get_parent (widget)))
 	    {
 	      widget = parent;
 	      gtk_container_set_focus_child (GTK_CONTAINER (widget), NULL);
@@ -2983,7 +2983,7 @@ gtk_window_set_modal (GtkWindow *window,
   widget = GTK_WIDGET (window);
   
   /* adjust desired modality state */
-  if (gtk_widget_get_realized (widget))
+  if (_gtk_widget_get_realized (widget))
     gdk_window_set_modal_hint (gtk_widget_get_window (widget), priv->modal);
 
   if (gtk_widget_get_visible (widget))
@@ -3110,7 +3110,7 @@ static void
 gtk_window_transient_parent_realized (GtkWidget *parent,
 				      GtkWidget *window)
 {
-  if (gtk_widget_get_realized (window))
+  if (_gtk_widget_get_realized (window))
     gdk_window_set_transient_for (gtk_widget_get_window (window),
                                   gtk_widget_get_window (parent));
 }
@@ -3119,7 +3119,7 @@ static void
 gtk_window_transient_parent_unrealized (GtkWidget *parent,
 					GtkWidget *window)
 {
-  if (gtk_widget_get_realized (window))
+  if (_gtk_widget_get_realized (window))
     gdk_property_delete (gtk_widget_get_window (window),
 			 gdk_atom_intern_static_string ("WM_TRANSIENT_FOR"));
 }
@@ -3198,9 +3198,9 @@ gtk_window_set_transient_for  (GtkWindow *window,
 
   if (priv->transient_parent)
     {
-      if (gtk_widget_get_realized (GTK_WIDGET (window)) &&
-          gtk_widget_get_realized (GTK_WIDGET (priv->transient_parent)) &&
-          (!parent || !gtk_widget_get_realized (GTK_WIDGET (parent))))
+      if (_gtk_widget_get_realized (GTK_WIDGET (window)) &&
+          _gtk_widget_get_realized (GTK_WIDGET (priv->transient_parent)) &&
+          (!parent || !_gtk_widget_get_realized (GTK_WIDGET (parent))))
 	gtk_window_transient_parent_unrealized (GTK_WIDGET (priv->transient_parent),
 						GTK_WIDGET (window));
 
@@ -3229,8 +3229,8 @@ gtk_window_set_transient_for  (GtkWindow *window,
       if (priv->destroy_with_parent)
         connect_parent_destroyed (window);
       
-      if (gtk_widget_get_realized (GTK_WIDGET (window)) &&
-	  gtk_widget_get_realized (GTK_WIDGET (parent)))
+      if (_gtk_widget_get_realized (GTK_WIDGET (window)) &&
+	  _gtk_widget_get_realized (GTK_WIDGET (parent)))
 	gtk_window_transient_parent_realized (GTK_WIDGET (parent),
 					      GTK_WIDGET (window));
 
@@ -3538,7 +3538,7 @@ gtk_window_set_skip_taskbar_hint (GtkWindow *window,
   if (priv->skips_taskbar != setting)
     {
       priv->skips_taskbar = setting;
-      if (gtk_widget_get_realized (GTK_WIDGET (window)))
+      if (_gtk_widget_get_realized (GTK_WIDGET (window)))
         gdk_window_set_skip_taskbar_hint (gtk_widget_get_window (GTK_WIDGET (window)),
                                           priv->skips_taskbar);
       g_object_notify_by_pspec (G_OBJECT (window), window_props[PROP_SKIP_TASKBAR_HINT]);
@@ -3591,7 +3591,7 @@ gtk_window_set_skip_pager_hint (GtkWindow *window,
   if (priv->skips_pager != setting)
     {
       priv->skips_pager = setting;
-      if (gtk_widget_get_realized (GTK_WIDGET (window)))
+      if (_gtk_widget_get_realized (GTK_WIDGET (window)))
         gdk_window_set_skip_pager_hint (gtk_widget_get_window (GTK_WIDGET (window)),
                                         priv->skips_pager);
       g_object_notify_by_pspec (G_OBJECT (window), window_props[PROP_SKIP_PAGER_HINT]);
@@ -3641,7 +3641,7 @@ gtk_window_set_urgency_hint (GtkWindow *window,
   if (priv->urgent != setting)
     {
       priv->urgent = setting;
-      if (gtk_widget_get_realized (GTK_WIDGET (window)))
+      if (_gtk_widget_get_realized (GTK_WIDGET (window)))
         gdk_window_set_urgency_hint (gtk_widget_get_window (GTK_WIDGET (window)),
 				     priv->urgent);
       g_object_notify_by_pspec (G_OBJECT (window), window_props[PROP_URGENCY_HINT]);
@@ -3691,7 +3691,7 @@ gtk_window_set_accept_focus (GtkWindow *window,
   if (priv->accept_focus != setting)
     {
       priv->accept_focus = setting;
-      if (gtk_widget_get_realized (GTK_WIDGET (window)))
+      if (_gtk_widget_get_realized (GTK_WIDGET (window)))
         gdk_window_set_accept_focus (gtk_widget_get_window (GTK_WIDGET (window)),
 				     priv->accept_focus);
       g_object_notify_by_pspec (G_OBJECT (window), window_props[PROP_ACCEPT_FOCUS]);
@@ -3742,7 +3742,7 @@ gtk_window_set_focus_on_map (GtkWindow *window,
   if (priv->focus_on_map != setting)
     {
       priv->focus_on_map = setting;
-      if (gtk_widget_get_realized (GTK_WIDGET (window)))
+      if (_gtk_widget_get_realized (GTK_WIDGET (window)))
         gdk_window_set_focus_on_map (gtk_widget_get_window (GTK_WIDGET (window)),
 				     priv->focus_on_map);
       g_object_notify_by_pspec (G_OBJECT (window), window_props[PROP_FOCUS_ON_MAP]);
@@ -4102,7 +4102,7 @@ gtk_window_set_titlebar (GtkWindow *window,
   if ((!priv->title_box && titlebar) || (priv->title_box && !titlebar))
     {
       was_mapped = gtk_widget_get_mapped (widget);
-      if (gtk_widget_get_realized (widget))
+      if (_gtk_widget_get_realized (widget))
         {
           g_warning ("gtk_window_set_titlebar() called on a realized window");
           gtk_widget_unrealize (widget);
@@ -4621,7 +4621,7 @@ gtk_window_set_icon_list (GtkWindow  *window,
   
   gtk_window_unrealize_icon (window);
   
-  if (gtk_widget_get_realized (GTK_WIDGET (window)))
+  if (_gtk_widget_get_realized (GTK_WIDGET (window)))
     gtk_window_realize_icon (window);
 
   /* We could try to update our transient children, but I don't think
@@ -4706,7 +4706,7 @@ update_themed_icon (GtkIconTheme *icon_theme,
   
   gtk_window_unrealize_icon (window);
   
-  if (gtk_widget_get_realized (GTK_WIDGET (window)))
+  if (_gtk_widget_get_realized (GTK_WIDGET (window)))
     gtk_window_realize_icon (window);  
 }
 
@@ -4900,7 +4900,7 @@ gtk_window_set_default_icon_list (GList *list)
       if (info && info->using_default_icon)
         {
           gtk_window_unrealize_icon (w);
-          if (gtk_widget_get_realized (GTK_WIDGET (w)))
+          if (_gtk_widget_get_realized (GTK_WIDGET (w)))
             gtk_window_realize_icon (w);
         }
 
@@ -4968,7 +4968,7 @@ gtk_window_set_default_icon_name (const gchar *name)
       if (info && info->using_default_icon && info->using_themed_icon)
         {
           gtk_window_unrealize_icon (w);
-          if (gtk_widget_get_realized (GTK_WIDGET (w)))
+          if (_gtk_widget_get_realized (GTK_WIDGET (w)))
             gtk_window_realize_icon (w);
         }
 
@@ -5897,7 +5897,7 @@ gtk_window_show (GtkWidget *widget)
 
   _gtk_widget_set_visible_flag (widget, TRUE);
 
-  need_resize = _gtk_widget_get_alloc_needed (widget) || !gtk_widget_get_realized (widget);
+  need_resize = _gtk_widget_get_alloc_needed (widget) || !_gtk_widget_get_realized (widget);
 
   gtk_css_node_validate (gtk_widget_get_css_node (widget));
 
@@ -5936,7 +5936,7 @@ gtk_window_show (GtkWidget *widget)
 
       /* Then we guarantee we have a realize */
       was_realized = FALSE;
-      if (!gtk_widget_get_realized (widget))
+      if (!_gtk_widget_get_realized (widget))
 	{
 	  gtk_widget_realize (widget);
 	  was_realized = TRUE;
@@ -6932,7 +6932,7 @@ update_opaque_region (GtkWindow           *window,
   GtkStyleContext *context;
   gboolean is_opaque = FALSE;
 
-  if (!gtk_widget_get_realized (widget))
+  if (!_gtk_widget_get_realized (widget))
       return;
 
   context = gtk_widget_get_style_context (widget);
@@ -7060,7 +7060,7 @@ gtk_window_realize (GtkWidget *widget)
 
       _gtk_container_queue_resize (GTK_CONTAINER (widget));
 
-      g_return_if_fail (!gtk_widget_get_realized (widget));
+      g_return_if_fail (!_gtk_widget_get_realized (widget));
     }
 
   if (priv->hardcoded_window)
@@ -7169,7 +7169,7 @@ gtk_window_realize (GtkWidget *widget)
     }
 
   if (priv->transient_parent &&
-      gtk_widget_get_realized (GTK_WIDGET (priv->transient_parent)))
+      _gtk_widget_get_realized (GTK_WIDGET (priv->transient_parent)))
     gdk_window_set_transient_for (gdk_window,
                                   gtk_widget_get_window (GTK_WIDGET (priv->transient_parent)));
 
@@ -7426,7 +7426,7 @@ _gtk_window_set_allocation (GtkWindow           *window,
 
   get_shadow_width (widget, &window_border);
 
-  if (gtk_widget_get_realized (widget))
+  if (_gtk_widget_get_realized (widget))
     update_realized_window_properties (window, &child_allocation, &window_border);
 
   priv->title_height = 0;
@@ -7465,7 +7465,7 @@ _gtk_window_set_allocation (GtkWindow           *window,
                                  priv->title_height;
     }
 
-  if (!gtk_widget_is_toplevel (widget) && gtk_widget_get_realized (widget))
+  if (!gtk_widget_is_toplevel (widget) && _gtk_widget_get_realized (widget))
     {
       gdk_window_move_resize (gtk_widget_get_window (widget),
                               allocation->x, allocation->y,
@@ -7782,7 +7782,7 @@ gtk_window_propagate_key_event (GtkWindow        *window,
             break;
         }
 
-      parent = gtk_widget_get_parent (focus);
+      parent = _gtk_widget_get_parent (focus);
       if (parent)
         g_object_ref (parent);
       
@@ -8180,11 +8180,11 @@ gtk_window_focus (GtkWidget        *widget,
 	}
       
       /* Wrapped off the end, clear the focus setting for the toplpevel */
-      parent = gtk_widget_get_parent (priv->focus_widget);
+      parent = _gtk_widget_get_parent (priv->focus_widget);
       while (parent)
 	{
 	  gtk_container_set_focus_child (GTK_CONTAINER (parent), NULL);
-	  parent = gtk_widget_get_parent (parent);
+	  parent = _gtk_widget_get_parent (parent);
 	}
       
       gtk_window_set_focus (GTK_WINDOW (container), NULL);
@@ -8600,13 +8600,13 @@ _gtk_window_unset_focus_and_default (GtkWindow *window,
   g_object_ref (window);
   g_object_ref (widget);
 
-  parent = gtk_widget_get_parent (widget);
+  parent = _gtk_widget_get_parent (widget);
   if (gtk_container_get_focus_child (GTK_CONTAINER (parent)) == widget)
     {
       child = priv->focus_widget;
       
       while (child && child != widget)
-        child = gtk_widget_get_parent (child);
+        child = _gtk_widget_get_parent (child);
 
       if (child == widget)
 	gtk_window_set_focus (GTK_WINDOW (window), NULL);
@@ -8615,7 +8615,7 @@ _gtk_window_unset_focus_and_default (GtkWindow *window,
   child = priv->default_widget;
       
   while (child && child != widget)
-    child = gtk_widget_get_parent (child);
+    child = _gtk_widget_get_parent (child);
 
   if (child == widget)
     gtk_window_set_default (window, NULL);
@@ -10531,7 +10531,7 @@ gtk_window_set_screen (GtkWindow *window,
 
   if (was_mapped)
     gtk_widget_unmap (widget);
-  if (gtk_widget_get_realized (widget))
+  if (_gtk_widget_get_realized (widget))
     gtk_widget_unrealize (widget);
 
   gtk_window_free_key_hash (window);
@@ -11816,7 +11816,7 @@ _gtk_window_add_popover (GtkWindow *window,
   g_return_if_fail (GTK_IS_WINDOW (window));
   g_return_if_fail (GTK_IS_WIDGET (popover));
   g_return_if_fail (GTK_IS_WIDGET (parent));
-  g_return_if_fail (gtk_widget_get_parent (popover) == NULL);
+  g_return_if_fail (_gtk_widget_get_parent (popover) == NULL);
   g_return_if_fail (gtk_widget_is_ancestor (parent, GTK_WIDGET (window)));
 
   priv = window->priv;
@@ -11830,7 +11830,7 @@ _gtk_window_add_popover (GtkWindow *window,
   data->clamp_allocation = !!clamp_allocation;
   priv->popovers = g_list_prepend (priv->popovers, data);
 
-  if (gtk_widget_get_realized (GTK_WIDGET (window)))
+  if (_gtk_widget_get_realized (GTK_WIDGET (window)))
     popover_realize (popover, data, window);
 
   gtk_widget_set_parent (popover, GTK_WIDGET (window));
@@ -11863,7 +11863,7 @@ _gtk_window_remove_popover (GtkWindow *window,
 
   popover_unmap (popover, data);
 
-  if (gtk_widget_get_realized (GTK_WIDGET (window)))
+  if (_gtk_widget_get_realized (GTK_WIDGET (window)))
     popover_unrealize (popover, data, window);
 
   priv->popovers = g_list_remove (priv->popovers, data);
@@ -12189,7 +12189,7 @@ gtk_window_set_use_subsurface (GtkWindow *window,
   GtkWindowPrivate *priv = window->priv;
 
   g_return_if_fail (GTK_IS_WINDOW (window));
-  g_return_if_fail (!gtk_widget_get_realized (GTK_WIDGET (window)));
+  g_return_if_fail (!_gtk_widget_get_realized (GTK_WIDGET (window)));
 
   priv->use_subsurface = use_subsurface;
 }
@@ -12201,7 +12201,7 @@ gtk_window_set_hardcoded_window (GtkWindow *window,
   GtkWindowPrivate *priv = window->priv;
 
   g_return_if_fail (GTK_IS_WINDOW (window));
-  g_return_if_fail (!gtk_widget_get_realized (GTK_WIDGET (window)));
+  g_return_if_fail (!_gtk_widget_get_realized (GTK_WIDGET (window)));
 
   if (priv->hardcoded_window)
     g_object_unref (priv->hardcoded_window);

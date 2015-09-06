@@ -212,9 +212,9 @@ real_queue_resize (GtkWidget          *widget,
   _gtk_widget_set_alloc_needed (widget, TRUE);
   _gtk_size_request_cache_clear (_gtk_widget_peek_request_cache (widget));
 
-  container = gtk_widget_get_parent (widget);
+  container = _gtk_widget_get_parent (widget);
   if (!container &&
-      gtk_widget_is_toplevel (widget) && GTK_IS_CONTAINER (widget))
+      _gtk_widget_is_toplevel (widget) && GTK_IS_CONTAINER (widget))
     container = widget;
 
   if (container)
@@ -243,7 +243,7 @@ queue_resize_on_widget (GtkWidget          *widget,
       if (widget == parent && !check_siblings)
 	{
 	  real_queue_resize (widget, flags);
-          parent = gtk_widget_get_parent (parent);
+          parent = _gtk_widget_get_parent (parent);
 	  continue;
 	}
       
@@ -253,7 +253,7 @@ queue_resize_on_widget (GtkWidget          *widget,
 	  if (widget == parent)
 	    real_queue_resize (widget, flags);
 
-          parent = gtk_widget_get_parent (parent);
+          parent = _gtk_widget_get_parent (parent);
 	  continue;
 	}
 
@@ -297,7 +297,7 @@ queue_resize_on_widget (GtkWidget          *widget,
       
       g_hash_table_destroy (widgets);
 
-      parent = gtk_widget_get_parent (parent);
+      parent = _gtk_widget_get_parent (parent);
     }
 }
 

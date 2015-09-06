@@ -165,7 +165,7 @@ widget_needs_widget_path (GtkWidget *widget)
       g_assert (i == G_N_ELEMENTS (funcs));
     }
 
-  parent = gtk_widget_get_parent (widget);
+  parent = _gtk_widget_get_parent (widget);
   if (parent == NULL)
     return FALSE;
 
@@ -302,7 +302,7 @@ gtk_css_widget_node_new (GtkWidget *widget)
   result = g_object_new (GTK_TYPE_CSS_WIDGET_NODE, NULL);
   result->widget = widget;
   gtk_css_node_set_visible (GTK_CSS_NODE (result),
-                            gtk_widget_get_visible (widget));
+                            _gtk_widget_get_visible (widget));
 
   return GTK_CSS_NODE (result);
 }

@@ -221,11 +221,10 @@ gtk_style_cascade_lookup (GtkStyleProviderPrivate *provider,
        item;
        item = gtk_style_cascade_iter_next (cascade, &iter))
     {
-      if (GTK_IS_STYLE_PROVIDER_PRIVATE (item))
+      GtkStyleProviderPrivate *sp = (GtkStyleProviderPrivate*)item;
+      if (GTK_IS_STYLE_PROVIDER_PRIVATE (sp))
         {
-          _gtk_style_provider_private_lookup (GTK_STYLE_PROVIDER_PRIVATE (item),
-                                              matcher,
-                                              lookup,
+          _gtk_style_provider_private_lookup (sp, matcher, lookup,
                                               change ? &iter_change : NULL);
           if (change)
             *change |= iter_change;
