@@ -42,8 +42,11 @@ typedef struct _GtkEventControllerPrivate GtkEventControllerPrivate;
 
 enum {
   PROP_WIDGET = 1,
-  PROP_PROPAGATION_PHASE
+  PROP_PROPAGATION_PHASE,
+  LAST_PROP
 };
+
+static GParamSpec *properties[LAST_PROP] = { NULL, };
 
 struct _GtkEventControllerPrivate
 {
@@ -160,14 +163,12 @@ gtk_event_controller_class_init (GtkEventControllerClass *klass)
    *
    * Since: 3.14
    */
-  g_object_class_install_property (object_class,
-                                   PROP_WIDGET,
-                                   g_param_spec_object ("widget",
-                                                        P_("Widget"),
-                                                        P_("Widget the gesture relates to"),
-                                                        GTK_TYPE_WIDGET,
-                                                        GTK_PARAM_READWRITE |
-                                                        G_PARAM_CONSTRUCT_ONLY));
+  properties[PROP_WIDGET] =
+      g_param_spec_object ("widget",
+                           P_("Widget"),
+                           P_("Widget the gesture relates to"),
+                           GTK_TYPE_WIDGET,
+                           GTK_PARAM_READWRITE|G_PARAM_CONSTRUCT_ONLY);
   /**
    * GtkEventController:propagation-phase:
    *
@@ -175,14 +176,15 @@ gtk_event_controller_class_init (GtkEventControllerClass *klass)
    *
    * Since: 3.14
    */
-  g_object_class_install_property (object_class,
-                                   PROP_PROPAGATION_PHASE,
-                                   g_param_spec_enum ("propagation-phase",
-                                                      P_("Propagation phase"),
-                                                      P_("Propagation phase at which this controller is run"),
-                                                      GTK_TYPE_PROPAGATION_PHASE,
-                                                      GTK_PHASE_BUBBLE,
-                                                      GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
+  properties[PROP_PROPAGATION_PHASE] =
+      g_param_spec_enum ("propagation-phase",
+                         P_("Propagation phase"),
+                         P_("Propagation phase at which this controller is run"),
+                         GTK_TYPE_PROPAGATION_PHASE,
+                         GTK_PHASE_BUBBLE,
+                         GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
+
+  g_object_class_install_properties (object_class, LAST_PROP, properties);
 }
 
 static void
@@ -359,5 +361,5 @@ gtk_event_controller_set_propagation_phase (GtkEventController  *controller,
   if (phase == GTK_PHASE_NONE)
     gtk_event_controller_reset (controller);
 
-  g_object_notify (G_OBJECT (controller), "propagation-phase");
+  g_object_notify_by_pspec (G_OBJECT (controller), properties[PROP_PROPAGATION_PHASE]);
 }
