@@ -114,9 +114,11 @@ struct _GtkRadioButtonPrivate
 
 enum {
   PROP_0,
-  PROP_GROUP
+  PROP_GROUP,
+  LAST_PROP
 };
 
+static GParamSpec *radio_button_props[LAST_PROP] = { NULL, };
 
 static void     gtk_radio_button_destroy        (GtkWidget           *widget);
 static gboolean gtk_radio_button_focus          (GtkWidget           *widget,
@@ -158,13 +160,15 @@ gtk_radio_button_class_init (GtkRadioButtonClass *class)
    *
    * Sets a new group for a radio button.
    */
-  g_object_class_install_property (gobject_class,
-				   PROP_GROUP,
-				   g_param_spec_object ("group",
-							P_("Group"),
-							P_("The radio button whose group this widget belongs to."),
-							GTK_TYPE_RADIO_BUTTON,
-							GTK_PARAM_WRITABLE));
+  radio_button_props[PROP_GROUP] =
+      g_param_spec_object ("group",
+                           P_("Group"),
+                           P_("The radio button whose group this widget belongs to."),
+                           GTK_TYPE_RADIO_BUTTON,
+                           GTK_PARAM_WRITABLE);
+
+  g_object_class_install_properties (gobject_class, LAST_PROP, radio_button_props);
+
   widget_class->destroy = gtk_radio_button_destroy;
   widget_class->focus = gtk_radio_button_focus;
 
@@ -323,7 +327,7 @@ gtk_radio_button_set_group (GtkRadioButton *radio_button,
 
   g_object_ref (radio_button);
   
-  g_object_notify (G_OBJECT (radio_button), "group");
+  g_object_notify_by_pspec (G_OBJECT (radio_button), radio_button_props[PROP_GROUP]);
   g_signal_emit (radio_button, group_changed_signal, 0);
   if (old_group_singleton)
     {
