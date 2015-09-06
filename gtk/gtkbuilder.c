@@ -242,7 +242,10 @@ static GType gtk_builder_real_get_type_from_name (GtkBuilder  *builder,
 enum {
   PROP_0,
   PROP_TRANSLATION_DOMAIN,
+  LAST_PROP
 };
+
+static GParamSpec *builder_props[LAST_PROP];
 
 struct _GtkBuilderPrivate
 {
@@ -283,13 +286,14 @@ gtk_builder_class_init (GtkBuilderClass *klass)
   *
   * Since: 2.12
   */
-  g_object_class_install_property (gobject_class,
-                                   PROP_TRANSLATION_DOMAIN,
-                                   g_param_spec_string ("translation-domain",
-                                                        P_("Translation Domain"),
-                                                        P_("The translation domain used by gettext"),
-                                                        NULL,
-                                                        GTK_PARAM_READWRITE));
+  builder_props[PROP_TRANSLATION_DOMAIN] =
+      g_param_spec_string ("translation-domain",
+                           P_("Translation Domain"),
+                           P_("The translation domain used by gettext"),
+                           NULL,
+                           GTK_PARAM_READWRITE);
+
+  g_object_class_install_properties (gobject_class, LAST_PROP, builder_props);
 }
 
 static void
@@ -1496,7 +1500,7 @@ gtk_builder_set_translation_domain (GtkBuilder  *builder,
   g_free (builder->priv->domain);
   builder->priv->domain = new_domain;
 
-  g_object_notify (G_OBJECT (builder), "translation-domain");
+  g_object_notify_by_pspec (G_OBJECT (builder), builder_props[PROP_TRANSLATION_DOMAIN]);
 }
 
 /**
