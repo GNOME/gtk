@@ -79,7 +79,6 @@ static void get_property                   (GObject         *object,
 static GtkWidget *create_menu_item         (GtkAction       *action);
 
 
-static GObjectClass *parent_class = NULL;
 static guint         action_signals[LAST_SIGNAL] = { 0 };
 
 static void
@@ -88,7 +87,6 @@ gtk_toggle_action_class_init (GtkToggleActionClass *klass)
   GObjectClass *gobject_class;
   GtkActionClass *action_class;
 
-  parent_class = g_type_class_peek_parent (klass);
   gobject_class = G_OBJECT_CLASS (klass);
   action_class = GTK_ACTION_CLASS (klass);
 
