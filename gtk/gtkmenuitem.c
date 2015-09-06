@@ -106,8 +106,10 @@ enum {
   PROP_LABEL,
   PROP_USE_UNDERLINE,
 
+  LAST_PROP,
+
   /* activatable properties */
-  PROP_ACTIVATABLE_RELATED_ACTION,
+  PROP_ACTIVATABLE_RELATED_ACTION = LAST_PROP,
   PROP_ACTIVATABLE_USE_ACTION_APPEARANCE,
 
   PROP_ACTION_NAME,
@@ -206,6 +208,7 @@ static void gtk_menu_item_set_use_action_appearance  (GtkMenuItem          *menu
                                                       gboolean              use_appearance);
 
 static guint menu_item_signals[LAST_SIGNAL] = { 0 };
+static GParamSpec *menu_item_props[LAST_PROP];
 
 static GtkBuildableIface *parent_buildable_iface;
 
@@ -391,13 +394,12 @@ gtk_menu_item_class_init (GtkMenuItemClass *klass)
    *
    * Since: 2.14
    */
-  g_object_class_install_property (gobject_class,
-                                   PROP_RIGHT_JUSTIFIED,
-                                   g_param_spec_boolean ("right-justified",
-                                                         P_("Right Justified"),
-                                                         P_("Sets whether the menu item appears justified at the right side of a menu bar"),
-                                                         FALSE,
-                                                         GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY|G_PARAM_DEPRECATED));
+  menu_item_props[PROP_RIGHT_JUSTIFIED] =
+      g_param_spec_boolean ("right-justified",
+                            P_("Right Justified"),
+                            P_("Sets whether the menu item appears justified at the right side of a menu bar"),
+                            FALSE,
+                            GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY|G_PARAM_DEPRECATED);
 
   /**
    * GtkMenuItem:submenu:
@@ -406,13 +408,12 @@ gtk_menu_item_class_init (GtkMenuItemClass *klass)
    *
    * Since: 2.12
    */
-  g_object_class_install_property (gobject_class,
-                                   PROP_SUBMENU,
-                                   g_param_spec_object ("submenu",
-                                                        P_("Submenu"),
-                                                        P_("The submenu attached to the menu item, or NULL if it has none"),
-                                                        GTK_TYPE_MENU,
-                                                        GTK_PARAM_READWRITE));
+  menu_item_props[PROP_SUBMENU] =
+      g_param_spec_object ("submenu",
+                           P_("Submenu"),
+                           P_("The submenu attached to the menu item, or NULL if it has none"),
+                           GTK_TYPE_MENU,
+                           GTK_PARAM_READWRITE);
 
   /**
    * GtkMenuItem:accel-path:
@@ -423,13 +424,12 @@ gtk_menu_item_class_init (GtkMenuItemClass *klass)
    *
    * Since: 2.14
    */
-  g_object_class_install_property (gobject_class,
-                                   PROP_ACCEL_PATH,
-                                   g_param_spec_string ("accel-path",
-                                                        P_("Accel Path"),
-                                                        P_("Sets the accelerator path of the menu item"),
-                                                        NULL,
-                                                        GTK_PARAM_READWRITE));
+  menu_item_props[PROP_ACCEL_PATH] =
+      g_param_spec_string ("accel-path",
+                           P_("Accel Path"),
+                           P_("Sets the accelerator path of the menu item"),
+                           NULL,
+                           GTK_PARAM_READWRITE);
 
   /**
    * GtkMenuItem:label:
@@ -438,13 +438,12 @@ gtk_menu_item_class_init (GtkMenuItemClass *klass)
    *
    * Since: 2.16
    */
-  g_object_class_install_property (gobject_class,
-                                   PROP_LABEL,
-                                   g_param_spec_string ("label",
-                                                        P_("Label"),
-                                                        P_("The text for the child label"),
-                                                        "",
-                                                        GTK_PARAM_READWRITE));
+  menu_item_props[PROP_LABEL] =
+      g_param_spec_string ("label",
+                           P_("Label"),
+                           P_("The text for the child label"),
+                           "",
+                           GTK_PARAM_READWRITE);
 
   /**
    * GtkMenuItem:use-underline:
@@ -453,15 +452,16 @@ gtk_menu_item_class_init (GtkMenuItemClass *klass)
    *
    * Since: 2.16
    */
-  g_object_class_install_property (gobject_class,
-                                   PROP_USE_UNDERLINE,
-                                   g_param_spec_boolean ("use-underline",
-                                                         P_("Use underline"),
-                                                         P_("If set, an underline in the text indicates "
-                                                            "the next character should be used for the "
-                                                            "mnemonic accelerator key"),
-                                                         FALSE,
-                                                         GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
+  menu_item_props[PROP_USE_UNDERLINE] =
+      g_param_spec_boolean ("use-underline",
+                            P_("Use underline"),
+                            P_("If set, an underline in the text indicates "
+                               "the next character should be used for the "
+                               "mnemonic accelerator key"),
+                            FALSE,
+                            GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
+
+  g_object_class_install_properties (gobject_class, LAST_PROP, menu_item_props);
 
   g_object_class_override_property (gobject_class, PROP_ACTIVATABLE_RELATED_ACTION, "related-action");
   g_object_class_override_property (gobject_class, PROP_ACTIVATABLE_USE_ACTION_APPEARANCE, "use-action-appearance");
@@ -649,7 +649,7 @@ gtk_menu_item_do_set_right_justified (GtkMenuItem *menu_item,
     {
       priv->right_justify = right_justified;
       gtk_widget_queue_resize (GTK_WIDGET (menu_item));
-      g_object_notify (G_OBJECT (menu_item), "right-justified");
+      g_object_notify_by_pspec (G_OBJECT (menu_item), menu_item_props[PROP_RIGHT_JUSTIFIED]);
     }
 }
 
@@ -1340,7 +1340,7 @@ gtk_menu_item_set_submenu (GtkMenuItem *menu_item,
       if (gtk_widget_get_parent (GTK_WIDGET (menu_item)))
         gtk_widget_queue_resize (GTK_WIDGET (menu_item));
 
-      g_object_notify (G_OBJECT (menu_item), "submenu");
+      g_object_notify_by_pspec (G_OBJECT (menu_item), menu_item_props[PROP_SUBMENU]);
     }
 }
 
@@ -1868,7 +1868,7 @@ gtk_real_menu_item_set_label (GtkMenuItem *menu_item,
     {
       gtk_label_set_label (GTK_LABEL (child), label ? label : "");
 
-      g_object_notify (G_OBJECT (menu_item), "label");
+      g_object_notify_by_pspec (G_OBJECT (menu_item), menu_item_props[PROP_LABEL]);
     }
 }
 
@@ -2581,7 +2581,7 @@ gtk_menu_item_set_use_underline (GtkMenuItem *menu_item,
       gtk_label_get_use_underline (GTK_LABEL (child)) != setting)
     {
       gtk_label_set_use_underline (GTK_LABEL (child), setting);
-      g_object_notify (G_OBJECT (menu_item), "use-underline");
+      g_object_notify_by_pspec (G_OBJECT (menu_item), menu_item_props[PROP_USE_UNDERLINE]);
     }
 }
 
