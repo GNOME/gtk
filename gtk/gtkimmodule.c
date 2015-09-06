@@ -117,8 +117,6 @@ static gint n_loaded_contexts = 0;
 static GHashTable *contexts_hash = NULL;
 static GSList *modules_list = NULL;
 
-static GObjectClass *parent_class = NULL;
-
 static gboolean
 gtk_im_module_load (GTypeModule *module)
 {
@@ -176,6 +174,8 @@ gtk_im_module_unload (GTypeModule *module)
     }
 }
 
+G_DEFINE_TYPE (GtkIMModule, gtk_im_module, G_TYPE_TYPE_MODULE)
+
 /* This only will ever be called if an error occurs during
  * initialization
  */
@@ -186,10 +186,8 @@ gtk_im_module_finalize (GObject *object)
 
   g_free (module->path);
 
-  parent_class->finalize (object);
+  G_OBJECT_CLASS (gtk_im_module_parent_class)->finalize (object);
 }
-
-G_DEFINE_TYPE (GtkIMModule, gtk_im_module, G_TYPE_TYPE_MODULE)
 
 static void
 gtk_im_module_class_init (GtkIMModuleClass *class)
@@ -197,8 +195,6 @@ gtk_im_module_class_init (GtkIMModuleClass *class)
   GTypeModuleClass *module_class = G_TYPE_MODULE_CLASS (class);
   GObjectClass *gobject_class = G_OBJECT_CLASS (class);
 
-  parent_class = G_OBJECT_CLASS (g_type_class_peek_parent (class));
-  
   module_class->load = gtk_im_module_load;
   module_class->unload = gtk_im_module_unload;
 
