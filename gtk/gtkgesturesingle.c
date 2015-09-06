@@ -58,11 +58,13 @@ struct _GtkGestureSinglePrivate
 enum {
   PROP_TOUCH_ONLY = 1,
   PROP_EXCLUSIVE,
-  PROP_BUTTON
+  PROP_BUTTON,
+  LAST_PROP
 };
 
-G_DEFINE_TYPE_WITH_PRIVATE (GtkGestureSingle, gtk_gesture_single,
-                            GTK_TYPE_GESTURE)
+static GParamSpec *properties[LAST_PROP] = { NULL, };
+
+G_DEFINE_TYPE_WITH_PRIVATE (GtkGestureSingle, gtk_gesture_single, GTK_TYPE_GESTURE)
 
 static void
 gtk_gesture_single_get_property (GObject    *object,
@@ -254,14 +256,12 @@ gtk_gesture_single_class_init (GtkGestureSingleClass *klass)
    *
    * Since: 3.14
    */
-  g_object_class_install_property (object_class,
-                                   PROP_TOUCH_ONLY,
-                                   g_param_spec_boolean ("touch-only",
-                                                         P_("Handle only touch events"),
-                                                         P_("Whether the gesture handles"
-                                                            " only touch events"),
-                                                         FALSE,
-                                                         GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
+  properties[PROP_TOUCH_ONLY] =
+      g_param_spec_boolean ("touch-only",
+                            P_("Handle only touch events"),
+                            P_("Whether the gesture handles only touch events"),
+                            FALSE,
+                            GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
   /**
    * GtkGestureSingle:exclusive:
@@ -271,13 +271,12 @@ gtk_gesture_single_class_init (GtkGestureSingleClass *klass)
    *
    * Since: 3.14
    */
-  g_object_class_install_property (object_class,
-                                   PROP_EXCLUSIVE,
-                                   g_param_spec_boolean ("exclusive",
-                                                         P_("Whether the gesture is exclusive"),
-                                                         P_("Whether the gesture is exclusive"),
-                                                         FALSE,
-                                                         GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
+  properties[PROP_EXCLUSIVE] =
+      g_param_spec_boolean ("exclusive",
+                            P_("Whether the gesture is exclusive"),
+                            P_("Whether the gesture is exclusive"),
+                            FALSE,
+                            GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
   /**
    * GtkGestureSingle:button:
@@ -286,13 +285,15 @@ gtk_gesture_single_class_init (GtkGestureSingleClass *klass)
    *
    * Since: 3.14
    */
-  g_object_class_install_property (object_class,
-                                   PROP_BUTTON,
-                                   g_param_spec_uint ("button",
-                                                      P_("Button number"),
-                                                      P_("Button number to listen to"),
-                                                      0, G_MAXUINT, GDK_BUTTON_PRIMARY,
-                                                      GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
+  properties[PROP_BUTTON] =
+      g_param_spec_uint ("button",
+                         P_("Button number"),
+                         P_("Button number to listen to"),
+                         0, G_MAXUINT,
+                         GDK_BUTTON_PRIMARY,
+                         GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
+
+  g_object_class_install_properties (object_class, LAST_PROP, properties);
 }
 
 static void
@@ -371,7 +372,7 @@ gtk_gesture_single_set_touch_only (GtkGestureSingle *gesture,
 
   priv->touch_only = touch_only;
   _gtk_gesture_single_update_evmask (gesture);
-  g_object_notify (G_OBJECT (gesture), "touch-only");
+  g_object_notify_by_pspec (G_OBJECT (gesture), properties[PROP_TOUCH_ONLY]);
 }
 
 /**
@@ -425,7 +426,7 @@ gtk_gesture_single_set_exclusive (GtkGestureSingle *gesture,
 
   priv->exclusive = exclusive;
   _gtk_gesture_single_update_evmask (gesture);
-  g_object_notify (G_OBJECT (gesture), "exclusive");
+  g_object_notify_by_pspec (G_OBJECT (gesture), properties[PROP_EXCLUSIVE]);
 }
 
 /**
@@ -476,7 +477,7 @@ gtk_gesture_single_set_button (GtkGestureSingle *gesture,
     return;
 
   priv->button = button;
-  g_object_notify (G_OBJECT (gesture), "button");
+  g_object_notify_by_pspec (G_OBJECT (gesture), properties[PROP_BUTTON]);
 }
 
 /**
