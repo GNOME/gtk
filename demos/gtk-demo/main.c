@@ -1044,6 +1044,70 @@ activate (GApplication *app)
   g_object_unref (builder);
 }
 
+static gboolean
+auto_quit (gpointer data)
+{
+  g_application_quit (G_APPLICATION (data));
+  return G_SOURCE_REMOVE;
+}
+
+static void
+command_line (GApplication            *app,
+              GApplicationCommandLine *cmdline)
+{
+  GVariantDict *options;
+  const gchar *name = NULL;
+  gint autoquit = 0;
+  Demo *d, *c;
+  GDoDemoFunc func = 0;
+  GtkWidget *window, *demo;
+
+  activate (app);
+
+  options = g_application_command_line_get_options_dict (cmdline);
+  g_variant_dict_lookup (options, "run", "&s", &name);
+  g_variant_dict_lookup (options, "autoquit", "i", &autoquit);
+
+  if (name == NULL)
+    goto out;
+
+  window = gtk_application_get_windows (GTK_APPLICATION (app))->data;
+
+  d = gtk_demos;
+
+  while (d->title)
+    {
+      c = d->children;
+      if (g_strcmp0 (d->name, name) == 0)
+        {
+          func = d->func;
+          goto out;
+        }
+      d++;
+      while (c && c->title)
+        {
+          if (g_strcmp0 (c->name, name) == 0)
+            {
+              func = c->func;
+              goto out;
+            }
+          c++;
+        }
+    }
+
+out:
+  if (func)
+    {
+      demo = (func) (window);
+
+      gtk_window_set_transient_for (GTK_WINDOW (demo), GTK_WINDOW (window));
+      gtk_window_set_modal (GTK_WINDOW (demo), TRUE);
+    }
+
+  if (autoquit > 0)
+    g_timeout_add_seconds (autoquit, auto_quit, app);
+}
+
 int
 main (int argc, char **argv)
 {
@@ -1063,14 +1127,18 @@ main (int argc, char **argv)
     }
   /* -- End of hack -- */
 
-  app = gtk_application_new ("org.gtk.Demo", G_APPLICATION_NON_UNIQUE);
+  app = gtk_application_new ("org.gtk.Demo", G_APPLICATION_NON_UNIQUE|G_APPLICATION_HANDLES_COMMAND_LINE);
 
   g_action_map_add_action_entries (G_ACTION_MAP (app),
                                    app_entries, G_N_ELEMENTS (app_entries),
                                    app);
 
+  g_application_add_main_option (G_APPLICATION (app), "run", 0, 0, G_OPTION_ARG_STRING, "Run an example", "EXAMPLE");
+  g_application_add_main_option (G_APPLICATION (app), "autoquit", 0, 0, G_OPTION_ARG_INT, "Quit after a delay", "SECONDS");
+
   g_signal_connect (app, "startup", G_CALLBACK (startup), NULL);
   g_signal_connect (app, "activate", G_CALLBACK (activate), NULL);
+  g_signal_connect (app, "command-line", G_CALLBACK (command_line), NULL);
 
   g_application_run (G_APPLICATION (app), argc, argv);
 
