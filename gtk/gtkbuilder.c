@@ -2265,6 +2265,52 @@ _gtk_builder_flags_from_string (GType         type,
   return ret;
 }
 
+gboolean
+_gtk_builder_boolean_from_string (const gchar  *string,
+                                  gboolean     *value,
+                                  GError      **error)
+{
+  gboolean retval = TRUE;
+  int length;
+
+  g_assert (string != NULL);
+  length = strlen (string);
+
+  if (length == 0)
+    retval = FALSE;
+  else if (length == 1)
+    {
+      gchar c = g_ascii_tolower (string[0]);
+      if (c == 'y' || c == 't' || c == '1')
+        *value = TRUE;
+      else if (c == 'n' || c == 'f' || c == '0')
+        *value = FALSE;
+      else
+        retval = FALSE;
+    }
+  else
+    {
+      gchar *lower = g_ascii_strdown (string, length);
+
+      if (strcmp (lower, "yes") == 0 || strcmp (lower, "true") == 0)
+        *value = TRUE;
+      else if (strcmp (lower, "no") == 0 || strcmp (lower, "false") == 0)
+        *value = FALSE;
+      else
+        retval = FALSE;
+      g_free (lower);
+    }
+
+  if (!retval)
+    g_set_error (error,
+                 GTK_BUILDER_ERROR,
+                 GTK_BUILDER_ERROR_INVALID_VALUE,
+                 "Could not parse boolean '%s'",
+                 string);
+
+  return retval;
+}
+
 /**
  * gtk_builder_get_type_from_name:
  * @builder: a #GtkBuilder
