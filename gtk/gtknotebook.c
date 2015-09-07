@@ -2035,8 +2035,6 @@ notebook_save_context_for_tab (GtkNotebook     *notebook,
     {
       if (page == notebook->priv->cur_page)
         state |= GTK_STATE_FLAG_ACTIVE;
-      if (page == notebook->priv->prelight_tab)
-        state |= GTK_STATE_FLAG_PRELIGHT;
       if (page->reorderable)
         gtk_style_context_add_class (context, "reorderable-page");
     }
@@ -3282,13 +3280,23 @@ update_prelight_tab (GtkNotebook     *notebook,
   if (priv->prelight_tab == page)
     return;
 
-  if (priv->prelight_tab && priv->prelight_tab->tab_label)
-    gtk_style_context_remove_class (gtk_widget_get_style_context (priv->prelight_tab->tab_label),
-                                    "prelight-page");
+  if (priv->prelight_tab)
+    {
+      gtk_css_node_set_state (priv->prelight_tab->cssnode,
+                              gtk_css_node_get_state (priv->prelight_tab->cssnode) & ~GTK_STATE_FLAG_PRELIGHT);
+      if (priv->prelight_tab->tab_label)
+        gtk_style_context_remove_class (gtk_widget_get_style_context (priv->prelight_tab->tab_label),
+                                        "prelight-page");
+    }
 
-  if (page && page->tab_label)
-    gtk_style_context_add_class (gtk_widget_get_style_context (page->tab_label),
-                                 "prelight-page");
+  if (page)
+    {
+      gtk_css_node_set_state (page->cssnode,
+                              gtk_css_node_get_state (page->cssnode) | GTK_STATE_FLAG_PRELIGHT);
+      if (page->tab_label)
+        gtk_style_context_add_class (gtk_widget_get_style_context (page->tab_label),
+                                     "prelight-page");
+    }
 
   priv->prelight_tab = page;
 }
