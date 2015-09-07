@@ -2470,7 +2470,7 @@ GtkColorSwatch {
  * Window Decorations *
  *********************/
 
-.window-frame {
+decoration {
   border-radius: 7px 7px 0 0;
   // lamefun trick to get rounded borders regardless of CSD use
   border-width: 0px;

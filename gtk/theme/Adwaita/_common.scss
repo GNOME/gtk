@@ -3031,7 +3031,7 @@ GtkInfoBar {
   box-shadow: none; // otherwise it gets inherited by windowframe.csd
   text-shadow: 0 1px black;
   // FIXME: we need a border or tooltips vanish on black background.
-  &.window-frame.csd {
+  decoration.csd {
     background-color: transparent;
   }
 }
@@ -3220,7 +3220,7 @@ GtkVolumeButton.button {
  * Window Decorations *
  *********************/
 
-.window-frame {
+decoration {
   border-radius: 7px 7px 0 0;
   // lamefun trick to get rounded borders regardless of CSD use
   border-width: 0px;
@@ -3233,7 +3233,7 @@ GtkVolumeButton.button {
   box-shadow: 0 3px 9px 1px transparentize(black, 0.5),
               0 0 0 1px $_wm_border; //doing borders with box-shadow
 
-  // FIXME rationalize window-frame shadows
+  // FIXME rationalize shadows
 
   /* this is used for the resize cursor area */
   margin: 10px;

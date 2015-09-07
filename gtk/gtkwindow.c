@@ -6522,7 +6522,7 @@ subtract_borders (GtkBorder *one,
 static void
 style_context_save_to_decoration (GtkStyleContext *context)
 {
-  gtk_style_context_save (context);
+  gtk_style_context_save_named (context, "decoration");
 
   gtk_style_context_remove_class (context, GTK_STYLE_CLASS_BACKGROUND);
   gtk_style_context_add_class (context, "window-frame");

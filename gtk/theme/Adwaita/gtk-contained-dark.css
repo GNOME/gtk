@@ -4070,7 +4070,7 @@ GtkInfoBar {
     background-color: rgba(0, 0, 0, 0.8);
     background-clip: padding-box;
     border: 1px solid rgba(255, 255, 255, 0.1); }
-  .tooltip.window-frame.csd {
+  .tooltip decoration.csd {
     background-color: transparent; }
 
 .tooltip * {
@@ -4207,30 +4207,30 @@ GtkColorSwatch {
 /**********************
  * Window Decorations *
  *********************/
-.window-frame {
+decoration {
   border-radius: 7px 7px 0 0;
   border-width: 0px;
   box-shadow: 0 3px 9px 1px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(28, 31, 31, 0.9);
   /* this is used for the resize cursor area */
   margin: 10px; }
-  .window-frame:backdrop {
+  decoration:backdrop {
     box-shadow: 0 2px 6px 2px rgba(0, 0, 0, 0.2), 0 0 0 1px rgba(28, 31, 31, 0.9); }
-  .window-frame.tiled {
+  decoration.tiled {
     border-radius: 0; }
-  .window-frame.popup {
+  decoration.popup {
     box-shadow: none; }
-  .window-frame.ssd {
+  decoration.ssd {
     box-shadow: 0 0 0 1px rgba(28, 31, 31, 0.9); }
-  .window-frame.csd.popup {
+  decoration.csd.popup {
     border-radius: 0;
     box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2), 0 0 0 1px rgba(28, 31, 31, 0.8); }
-  .window-frame.csd.tooltip {
+  decoration.csd.tooltip {
     border-radius: 5px;
     box-shadow: none; }
-  .window-frame.csd.message-dialog {
+  decoration.csd.message-dialog {
     border-radius: 7px;
     box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2), 0 0 0 1px rgba(28, 31, 31, 0.8); }
-  .window-frame.solid-csd {
+  decoration.solid-csd {
     border-radius: 0;
     margin: 4px;
     background-color: #393f3f;
