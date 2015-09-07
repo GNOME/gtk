@@ -602,6 +602,42 @@ gtk_container_buildable_add_child (GtkBuildable  *buildable,
                g_type_name (G_OBJECT_TYPE (child)), g_type_name (G_OBJECT_TYPE (buildable)));
 }
 
+static inline void
+container_set_child_property (GtkContainer       *container,
+                              GtkWidget          *child,
+                              GParamSpec         *pspec,
+                              const GValue       *value,
+                              GObjectNotifyQueue *nqueue)
+{
+  GValue tmp_value = G_VALUE_INIT;
+  GtkContainerClass *class = g_type_class_peek (pspec->owner_type);
+
+  /* provide a copy to work from, convert (if necessary) and validate */
+  g_value_init (&tmp_value, G_PARAM_SPEC_VALUE_TYPE (pspec));
+  if (!g_value_transform (value, &tmp_value))
+    g_warning ("unable to set child property `%s' of type `%s' from value of type `%s'",
+               pspec->name,
+               g_type_name (G_PARAM_SPEC_VALUE_TYPE (pspec)),
+               G_VALUE_TYPE_NAME (value));
+  else if (g_param_value_validate (pspec, &tmp_value) && !(pspec->flags & G_PARAM_LAX_VALIDATION))
+    {
+      gchar *contents = g_strdup_value_contents (value);
+
+      g_warning ("value \"%s\" of type `%s' is invalid for property `%s' of type `%s'",
+                 contents,
+                 G_VALUE_TYPE_NAME (value),
+                 pspec->name,
+                 g_type_name (G_PARAM_SPEC_VALUE_TYPE (pspec)));
+      g_free (contents);
+    }
+  else
+    {
+      class->set_child_property (container, child, PARAM_SPEC_PARAM_ID (pspec), &tmp_value, pspec);
+      g_object_notify_queue_add (G_OBJECT (child), nqueue, pspec);
+    }
+  g_value_unset (&tmp_value);
+}
+
 static void
 gtk_container_buildable_set_child_property (GtkContainer *container,
                                             GtkBuilder   *builder,
@@ -612,6 +648,7 @@ gtk_container_buildable_set_child_property (GtkContainer *container,
   GParamSpec *pspec;
   GValue gvalue = G_VALUE_INIT;
   GError *error = NULL;
+  GObjectNotifyQueue *nqueue;
 
   if (_gtk_widget_get_parent (child) != (GtkWidget *)container &&
       !GTK_IS_ASSISTANT (container) &&
@@ -628,8 +665,14 @@ gtk_container_buildable_set_child_property (GtkContainer *container,
   pspec = gtk_container_class_find_child_property (G_OBJECT_GET_CLASS (container), name);
   if (!pspec)
     {
-      g_warning ("%s does not have a property called %s",
-                 g_type_name (G_OBJECT_TYPE (container)), name);
+      g_warning ("%s does not have a child property called %s",
+                 G_OBJECT_TYPE_NAME (container), name);
+      return;
+    }
+  else if (!(pspec->flags & G_PARAM_WRITABLE))
+    {
+      g_warning ("Child property `%s' of container class `%s' is not writable",
+                 name, G_OBJECT_TYPE_NAME (container));
       return;
     }
 
@@ -645,7 +688,13 @@ gtk_container_buildable_set_child_property (GtkContainer *container,
       return;
     }
 
-  gtk_container_child_set_property (container, child, name, &gvalue);
+  g_object_ref (container);
+  g_object_ref (child);
+  nqueue = g_object_notify_queue_freeze (G_OBJECT (child), _gtk_widget_child_property_notify_context);
+  container_set_child_property (container, child, pspec, &gvalue, nqueue);
+  g_object_notify_queue_thaw (G_OBJECT (child), nqueue);
+  g_object_unref (container);
+  g_object_unref (child);
   g_value_unset (&gvalue);
 }
 
@@ -992,7 +1041,7 @@ gtk_container_child_type (GtkContainer *container)
  *
  * Emits a #GtkWidget::child-notify signal for the
  * [child property][child-properties]
- * @child_property on widget.
+ * @child_property on the child.
  *
  * This is an analogue of g_object_notify() for child properties.
  *
@@ -1044,6 +1093,46 @@ gtk_container_child_notify (GtkContainer *container,
   g_object_unref (obj);
 }
 
+/**
+ * gtk_container_child_notify_by_pspec:
+ * @container: the #GtkContainer
+ * @child: the child widget
+ * @pspec: the #GParamSpec of a child property instealled on
+ *     the class of @container
+ *
+ * Emits a #GtkWidget::child-notify signal for the
+ * [child property][child-properties] specified by
+ * @pspec on the child.
+ *
+ * This is an analogue of g_object_notify_by_pspec() for child properties.
+ *
+ * Since: 3.18
+ */
+void
+gtk_container_child_notify_by_pspec (GtkContainer *container,
+                                     GtkWidget    *child,
+                                     GParamSpec   *pspec)
+{
+  GObject *obj = G_OBJECT (child);
+  GObjectNotifyQueue *nqueue;
+
+  g_return_if_fail (GTK_IS_CONTAINER (container));
+  g_return_if_fail (GTK_IS_WIDGET (child));
+  g_return_if_fail (G_IS_PARAM_SPEC (pspec));
+
+  if (obj->ref_count == 0)
+    return;
+
+  g_object_ref (obj);
+
+  nqueue = g_object_notify_queue_freeze (obj, _gtk_widget_child_property_notify_context);
+
+  g_object_notify_queue_add (obj, nqueue, pspec);
+  g_object_notify_queue_thaw (obj, nqueue);
+
+  g_object_unref (obj);
+}
+
 static inline void
 container_get_child_property (GtkContainer *container,
                               GtkWidget    *child,
@@ -1053,42 +1142,6 @@ container_get_child_property (GtkContainer *container,
   GtkContainerClass *class = g_type_class_peek (pspec->owner_type);
 
   class->get_child_property (container, child, PARAM_SPEC_PARAM_ID (pspec), value, pspec);
-}
-
-static inline void
-container_set_child_property (GtkContainer       *container,
-                              GtkWidget          *child,
-                              GParamSpec         *pspec,
-                              const GValue       *value,
-                              GObjectNotifyQueue *nqueue)
-{
-  GValue tmp_value = G_VALUE_INIT;
-  GtkContainerClass *class = g_type_class_peek (pspec->owner_type);
-
-  /* provide a copy to work from, convert (if necessary) and validate */
-  g_value_init (&tmp_value, G_PARAM_SPEC_VALUE_TYPE (pspec));
-  if (!g_value_transform (value, &tmp_value))
-    g_warning ("unable to set child property `%s' of type `%s' from value of type `%s'",
-               pspec->name,
-               g_type_name (G_PARAM_SPEC_VALUE_TYPE (pspec)),
-               G_VALUE_TYPE_NAME (value));
-  else if (g_param_value_validate (pspec, &tmp_value) && !(pspec->flags & G_PARAM_LAX_VALIDATION))
-    {
-      gchar *contents = g_strdup_value_contents (value);
-
-      g_warning ("value \"%s\" of type `%s' is invalid for property `%s' of type `%s'",
-                 contents,
-                 G_VALUE_TYPE_NAME (value),
-                 pspec->name,
-                 g_type_name (G_PARAM_SPEC_VALUE_TYPE (pspec)));
-      g_free (contents);
-    }
-  else
-    {
-      class->set_child_property (container, child, PARAM_SPEC_PARAM_ID (pspec), &tmp_value, pspec);
-      g_object_notify_queue_add (G_OBJECT (child), nqueue, pspec);
-    }
-  g_value_unset (&tmp_value);
 }
 
 /**
@@ -1441,6 +1494,24 @@ gtk_container_child_get (GtkContainer      *container,
   va_end (var_args);
 }
 
+static inline void
+install_child_property_internal (GType       g_type,
+                                 guint       property_id,
+                                 GParamSpec *pspec)
+{
+  if (g_param_spec_pool_lookup (_gtk_widget_child_property_pool, pspec->name, g_type, FALSE))
+    {
+      g_warning ("Class '%s' already contains a child property named '%s'",
+                 g_type_name (g_type),
+                 pspec->name);
+      return;
+    }
+  g_param_spec_ref (pspec);
+  g_param_spec_sink (pspec);
+  PARAM_SPEC_SET_PARAM_ID (pspec, property_id);
+  g_param_spec_pool_insert (_gtk_widget_child_property_pool, pspec, g_type);
+}
+
 /**
  * gtk_container_class_install_child_property:
  * @cclass: a #GtkContainerClass
@@ -1465,17 +1536,47 @@ gtk_container_class_install_child_property (GtkContainerClass *cclass,
   if (pspec->flags & (G_PARAM_CONSTRUCT | G_PARAM_CONSTRUCT_ONLY))
     g_return_if_fail ((pspec->flags & (G_PARAM_CONSTRUCT | G_PARAM_CONSTRUCT_ONLY)) == 0);
 
-  if (g_param_spec_pool_lookup (_gtk_widget_child_property_pool, pspec->name, G_OBJECT_CLASS_TYPE (cclass), FALSE))
+  install_child_property_internal (G_OBJECT_CLASS_TYPE (cclass), property_id, pspec);
+}
+
+/**
+ * gtk_container_class_install_child_properties:
+ * @cclass: a #GtkContainerClass
+ * @n_pspecs: the length of the #GParamSpec array
+ * @pspec: (array length=n_pspecs): the #GParamSpec array defining the new
+ *     child properties
+ *
+ * Installs child properties on a container class.
+ *
+ * Since: 3.18
+ */
+void
+gtk_container_class_install_child_properties (GtkContainerClass  *cclass,
+                                              guint               n_pspecs,
+                                              GParamSpec        **pspecs)
+{
+  gint i;
+
+  g_return_if_fail (GTK_IS_CONTAINER_CLASS (cclass));
+  g_return_if_fail (n_pspecs > 1);
+  g_return_if_fail (pspecs[0] == NULL);
+
+  /* we skip the first element of the array as it would have a 0 prop_id */
+  for (i = 1; i < n_pspecs; i++)
     {
-      g_warning (G_STRLOC ": class `%s' already contains a child property named `%s'",
-                 G_OBJECT_CLASS_NAME (cclass),
-                 pspec->name);
-      return;
+      GParamSpec *pspec = pspecs[i];
+
+      g_return_if_fail (G_IS_PARAM_SPEC (pspec));
+      if (pspec->flags & G_PARAM_WRITABLE)
+        g_return_if_fail (cclass->set_child_property != NULL);
+      if (pspec->flags & G_PARAM_READABLE)
+        g_return_if_fail (cclass->get_child_property != NULL);
+      g_return_if_fail (PARAM_SPEC_PARAM_ID (pspec) == 0);  /* paranoid */
+      if (pspec->flags & (G_PARAM_CONSTRUCT | G_PARAM_CONSTRUCT_ONLY))
+        g_return_if_fail ((pspec->flags & (G_PARAM_CONSTRUCT | G_PARAM_CONSTRUCT_ONLY)) == 0);
+
+      install_child_property_internal (G_OBJECT_CLASS_TYPE (cclass), i, pspec);
     }
-  g_param_spec_ref (pspec);
-  g_param_spec_sink (pspec);
-  PARAM_SPEC_SET_PARAM_ID (pspec, property_id);
-  g_param_spec_pool_insert (_gtk_widget_child_property_pool, pspec, G_OBJECT_CLASS_TYPE (cclass));
 }
 
 /**
