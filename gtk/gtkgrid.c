@@ -165,8 +165,11 @@ enum
   CHILD_PROP_LEFT_ATTACH,
   CHILD_PROP_TOP_ATTACH,
   CHILD_PROP_WIDTH,
-  CHILD_PROP_HEIGHT
+  CHILD_PROP_HEIGHT,
+  N_CHILD_PROPERTIES
 };
+
+static GParamSpec *child_properties[N_CHILD_PROPERTIES] = { NULL, };
 
 G_DEFINE_TYPE_WITH_CODE (GtkGrid, gtk_grid, GTK_TYPE_CONTAINER,
                          G_ADD_PRIVATE (GtkGrid)
@@ -1769,33 +1772,35 @@ gtk_grid_class_init (GtkGridClass *class)
                                      N_PROPERTIES,
                                      obj_properties);
 
-  gtk_container_class_install_child_property (container_class, CHILD_PROP_LEFT_ATTACH,
+  child_properties[CHILD_PROP_LEFT_ATTACH] =
     g_param_spec_int ("left-attach",
                       P_("Left attachment"),
                       P_("The column number to attach the left side of the child to"),
                       G_MININT, G_MAXINT, 0,
-                      GTK_PARAM_READWRITE));
+                      GTK_PARAM_READWRITE);
 
-  gtk_container_class_install_child_property (container_class, CHILD_PROP_TOP_ATTACH,
+  child_properties[CHILD_PROP_TOP_ATTACH] =
     g_param_spec_int ("top-attach",
                       P_("Top attachment"),
                       P_("The row number to attach the top side of a child widget to"),
                       G_MININT, G_MAXINT, 0,
-                      GTK_PARAM_READWRITE));
+                      GTK_PARAM_READWRITE);
 
-  gtk_container_class_install_child_property (container_class, CHILD_PROP_WIDTH,
+  child_properties[CHILD_PROP_WIDTH] =
     g_param_spec_int ("width",
                       P_("Width"),
                       P_("The number of columns that a child spans"),
                       1, G_MAXINT, 1,
-                      GTK_PARAM_READWRITE));
+                      GTK_PARAM_READWRITE);
 
-  gtk_container_class_install_child_property (container_class, CHILD_PROP_HEIGHT,
+  child_properties[CHILD_PROP_HEIGHT] =
     g_param_spec_int ("height",
                       P_("Height"),
                       P_("The number of rows that a child spans"),
                       1, G_MAXINT, 1,
-                      GTK_PARAM_READWRITE));
+                      GTK_PARAM_READWRITE);
+
+  gtk_container_class_install_child_properties (container_class, N_CHILD_PROPERTIES, child_properties);
 }
 
 /**
@@ -2013,12 +2018,16 @@ gtk_grid_insert_row (GtkGrid *grid,
       if (top >= position)
         {
           CHILD_TOP (child) = top + 1;
-          gtk_container_child_notify (GTK_CONTAINER (grid), child->widget, "top-attach");
+          gtk_container_child_notify_by_pspec (GTK_CONTAINER (grid),
+                                               child->widget,
+                                               child_properties[CHILD_PROP_TOP_ATTACH]);
         }
       else if (top + height > position)
         {
           CHILD_HEIGHT (child) = height + 1;
-          gtk_container_child_notify (GTK_CONTAINER (grid), child->widget, "height");
+          gtk_container_child_notify_by_pspec (GTK_CONTAINER (grid),
+                                               child->widget,
+                                               child_properties[CHILD_PROP_HEIGHT]);
         }
     }
 
@@ -2118,12 +2127,16 @@ gtk_grid_insert_column (GtkGrid *grid,
       if (left >= position)
         {
           CHILD_LEFT (child) = left + 1;
-          gtk_container_child_notify (GTK_CONTAINER (grid), child->widget, "left-attach");
+          gtk_container_child_notify_by_pspec (GTK_CONTAINER (grid),
+                                               child->widget,
+                                               child_properties[CHILD_PROP_LEFT_ATTACH]);
         }
       else if (left + width > position)
         {
           CHILD_WIDTH (child) = width + 1;
-          gtk_container_child_notify (GTK_CONTAINER (grid), child->widget, "width");
+          gtk_container_child_notify_by_pspec (GTK_CONTAINER (grid),
+                                               child->widget,
+                                               child_properties[CHILD_PROP_WIDTH]);
         }
     }
 }
