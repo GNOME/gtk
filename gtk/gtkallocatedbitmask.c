@@ -25,6 +25,7 @@
 
 #define VALUE_SIZE_BITS (sizeof (VALUE_TYPE) * 8)
 #define VALUE_BIT(idx) (((VALUE_TYPE) 1) << (idx))
+#define ALL_BITS G_MAXSIZE
 
 struct _GtkBitmask {
   gsize len;
@@ -224,7 +225,7 @@ _gtk_allocated_bitmask_subtract (GtkBitmask       *mask,
   return gtk_allocated_bitmask_shrink (mask);
 }
 
-static void
+static inline void
 gtk_allocated_bitmask_indexes (guint index_,
                                guint *array_index,
                                guint *bit_index)
@@ -286,17 +287,33 @@ _gtk_allocated_bitmask_invert_range (GtkBitmask *mask,
                                      guint       end)
 {
   guint i;
+  guint start_word, start_bit;
+  guint end_word, end_bit;
 
   g_return_val_if_fail (mask != NULL, NULL);
   g_return_val_if_fail (start < end, NULL);
 
   mask = gtk_bitmask_ensure_allocated (mask);
 
-  /* I CAN HAS SPEEDUP? */
-  for (i = start; i < end; i++)
-    mask = _gtk_allocated_bitmask_set (mask, i, !_gtk_allocated_bitmask_get (mask, i));
+  gtk_allocated_bitmask_indexes (start, &start_word, &start_bit);
+  gtk_allocated_bitmask_indexes (end - 1, &end_word, &end_bit);
 
-  return mask;
+  if (end_word >= mask->len)
+    mask = gtk_allocated_bitmask_resize (mask, end_word + 1);
+
+  if (start_word == end_word)
+    {
+      mask->data[start_word] ^= (ALL_BITS >> (end_bit - start_bit)) << start_bit;
+    }
+  else
+    {
+      mask->data[start_word] ^= ALL_BITS << start_bit;
+      for (i = start_word + 1; i < end_word; i++)
+        mask->data[i] ^= ALL_BITS;
+      mask->data[end_word] ^= ALL_BITS >> (VALUE_SIZE_BITS - end_bit);
+    }
+
+  return gtk_allocated_bitmask_shrink (mask);
 }
 
 gboolean
