@@ -17,6 +17,15 @@
 
 #include "config.h"
 
+#include <gdk/gdk.h>
+
+#ifdef GDK_WINDOWING_X11
+#include <gdk/gdkx.h>
+#endif
+#ifdef GDK_WINDOWING_WAYLAND
+#include <wayland/gdkwayland.h>
+#endif
+
 #include <stdlib.h>
 #include <string.h>
 
@@ -38,10 +47,10 @@
  */
 
 
+#define X11_DATADIR X11_DATA_PREFIX "/share/X11/locale"
+
 struct _GtkIMContextSimplePrivate
 {
-  GSList        *tables;
-
   guint16        compose_buffer[GTK_MAX_COMPOSE_LEN + 1];
   gunichar       tentative_match;
   gint           tentative_match_len;
@@ -61,6 +70,8 @@ const GtkComposeTableCompact gtk_compose_table_compact = {
   30,
   6
 };
+
+static GSList          *global_tables;
 
 static const guint16 gtk_compose_ignore[] = {
   GDK_KEY_Shift_L,
@@ -89,6 +100,8 @@ static void     gtk_im_context_simple_get_preedit_string (GtkIMContext          
 							  gchar                   **str,
 							  PangoAttrList           **attrs,
 							  gint                     *cursor_pos);
+static void     gtk_im_context_simple_set_client_window  (GtkIMContext             *context,
+                                                          GdkWindow                *window);
 
 G_DEFINE_TYPE_WITH_PRIVATE (GtkIMContextSimple, gtk_im_context_simple, GTK_TYPE_IM_CONTEXT)
 
@@ -101,7 +114,117 @@ gtk_im_context_simple_class_init (GtkIMContextSimpleClass *class)
   im_context_class->filter_keypress = gtk_im_context_simple_filter_keypress;
   im_context_class->reset = gtk_im_context_simple_reset;
   im_context_class->get_preedit_string = gtk_im_context_simple_get_preedit_string;
+  im_context_class->set_client_window = gtk_im_context_simple_set_client_window;
   gobject_class->finalize = gtk_im_context_simple_finalize;
+}
+
+static void
+gtk_im_context_simple_init_compose_table (GtkIMContextSimple *im_context_simple)
+{
+  gchar *path = NULL;
+  const gchar *home;
+  const gchar *locale;
+  gchar **langs = NULL;
+  gchar **lang = NULL;
+  gchar * const sys_langs[] = { "el_gr", "fi_fi", "pt_br", NULL };
+  gchar * const *sys_lang = NULL;
+
+  path = g_build_filename (g_get_user_config_dir (), "gtk-3.0", "Compose", NULL);
+  if (g_file_test (path, G_FILE_TEST_EXISTS))
+    {
+      gtk_im_context_simple_add_compose_file (im_context_simple, path);
+      g_free (path);
+      return;
+    }
+  g_free (path);
+  path = NULL;
+
+  home = g_get_home_dir ();
+  if (home == NULL)
+    return;
+
+  path = g_build_filename (home, ".XCompose", NULL);
+  if (g_file_test (path, G_FILE_TEST_EXISTS))
+    {
+      gtk_im_context_simple_add_compose_file (im_context_simple, path);
+      g_free (path);
+      return;
+    }
+  g_free (path);
+  path = NULL;
+
+  locale = g_getenv ("LC_CTYPE");
+  if (locale == NULL)
+    locale = g_getenv ("LANG");
+  if (locale == NULL)
+    locale = "C";
+
+  /* FIXME: https://bugzilla.gnome.org/show_bug.cgi?id=751826 */
+  langs = g_get_locale_variants (locale);
+
+  for (lang = langs; *lang; lang++)
+    {
+      if (g_str_has_prefix (*lang, "en_US"))
+        break;
+      if (**lang == 'C')
+        break;
+
+      /* Other languages just include en_us compose table. */
+      for (sys_lang = sys_langs; *sys_lang; sys_lang++)
+        {
+          if (g_ascii_strncasecmp (*lang, *sys_lang, strlen (*sys_lang)) == 0)
+            {
+              path = g_build_filename (X11_DATADIR, *lang, "Compose", NULL);
+              break;
+            }
+        }
+
+      if (path == NULL)
+        continue;
+
+      if (g_file_test (path, G_FILE_TEST_EXISTS))
+        break;
+      g_free (path);
+      path = NULL;
+    }
+
+  g_strfreev (langs);
+
+  if (path != NULL)
+    gtk_im_context_simple_add_compose_file (im_context_simple, path);
+  g_free (path);
+  path = NULL;
+}
+
+static void
+init_compose_table_thread_cb (GTask            *task,
+                              gpointer          source_object,
+                              gpointer          task_data,
+                              GCancellable     *cancellable)
+{
+  GtkIMContextSimple *im_context_simple;
+
+  if (g_task_return_error_if_cancelled (task))
+    return;
+
+  g_return_if_fail (GTK_IS_IM_CONTEXT_SIMPLE (task_data));
+
+  im_context_simple = GTK_IM_CONTEXT_SIMPLE (task_data);
+
+  gtk_im_context_simple_init_compose_table (im_context_simple);
+}
+
+void
+init_compose_table_async (GtkIMContextSimple   *im_context_simple,
+                          GCancellable         *cancellable,
+                          GAsyncReadyCallback   callback,
+                          gpointer              user_data)
+{
+  GTask *task = g_task_new (NULL, cancellable, callback, user_data);
+  g_task_set_source_tag (task, init_compose_table_async);
+  g_task_set_task_data (task, im_context_simple, NULL);
+  g_task_run_in_thread (task, init_compose_table_thread_cb);
+  g_object_unref (task);
 }
 
 static void
@@ -113,11 +236,6 @@ gtk_im_context_simple_init (GtkIMContextSimple *im_context_simple)
 static void
 gtk_im_context_simple_finalize (GObject *obj)
 {
-  GtkIMContextSimple *context_simple = GTK_IM_CONTEXT_SIMPLE (obj);
-  GtkIMContextSimplePrivate *priv = context_simple->priv;
-
-  g_slist_free_full (priv->tables, g_free);
-
   G_OBJECT_CLASS (gtk_im_context_simple_parent_class)->finalize (obj);
 }
 
@@ -1081,7 +1199,7 @@ gtk_im_context_simple_filter_keypress (GtkIMContext *context,
     }
   else
     {
-      tmp_list = priv->tables;
+      tmp_list = global_tables;
       while (tmp_list)
         {
           if (check_table (context_simple, tmp_list->data, n_compose))
@@ -1232,6 +1350,33 @@ gtk_im_context_simple_get_preedit_string (GtkIMContext   *context,
     *cursor_pos = len;
 }
 
+static void
+gtk_im_context_simple_set_client_window  (GtkIMContext *context,
+                                          GdkWindow    *window)
+{
+  GdkDisplay *display;
+  GtkIMContextSimple *im_context_simple = GTK_IM_CONTEXT_SIMPLE (context);
+  gboolean run_compose_table = FALSE;
+
+  if (!window)
+    return;
+
+  display = gdk_window_get_display (window);
+
+  /* Load compose table for X11 or Wayland. */
+#ifdef GDK_WINDOWING_X11
+  if (GDK_IS_X11_DISPLAY (display))
+    run_compose_table = TRUE;
+#endif
+#ifdef GDK_WINDOWING_WAYLAND
+  if (GDK_IS_WAYLAND_DISPLAY (display))
+    run_compose_table = TRUE;
+#endif
+
+  if (run_compose_table)
+    init_compose_table_async (im_context_simple, NULL, NULL, NULL);
+}
+
 /**
  * gtk_im_context_simple_add_table: (skip)
  * @context_simple: A #GtkIMContextSimple
@@ -1256,17 +1401,25 @@ gtk_im_context_simple_add_table (GtkIMContextSimple *context_simple,
 				 gint                max_seq_len,
 				 gint                n_seqs)
 {
-  GtkIMContextSimplePrivate *priv = context_simple->priv;
-  GtkComposeTable *table;
-
   g_return_if_fail (GTK_IS_IM_CONTEXT_SIMPLE (context_simple));
-  g_return_if_fail (data != NULL);
-  g_return_if_fail (max_seq_len <= GTK_MAX_COMPOSE_LEN);
-  
-  table = g_new (GtkComposeTable, 1);
-  table->data = data;
-  table->max_seq_len = max_seq_len;
-  table->n_seqs = n_seqs;
 
-  priv->tables = g_slist_prepend (priv->tables, table);
+  global_tables = gtk_compose_table_list_add_array (global_tables,
+                                                    data, max_seq_len, n_seqs);
+}
+
+/*
+ * gtk_im_context_simple_add_compose_file:
+ * @context_simple: A #GtkIMContextSimple
+ * @compose_file: The path of compose file
+ *
+ * Adds an additional table from the X11 compose file.
+ */
+void
+gtk_im_context_simple_add_compose_file (GtkIMContextSimple *context_simple,
+                                        const gchar        *compose_file)
+{
+  g_return_if_fail (GTK_IS_IM_CONTEXT_SIMPLE (context_simple));
+
+  global_tables = gtk_compose_table_list_add_file (global_tables,
+                                                   compose_file);
 }

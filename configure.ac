@@ -1375,6 +1375,14 @@ if test x"$os_win32" = xyes; then
   GTK_EXTRA_CFLAGS="$msnative_struct"
 fi
 
+if $PKG_CONFIG --exists x11; then
+  X11_PREFIX="`$PKG_CONFIG --variable=prefix x11`"
+elif test x"$prefix" != xNONE; then
+  X11_PREFIX="$prefix"
+else
+  X11_PREFIX="$ac_default_prefix"
+fi
+
 GLIB_PREFIX="`$PKG_CONFIG --variable=prefix glib-2.0`"
 ATK_PREFIX="`$PKG_CONFIG --variable=prefix atk`"
 PANGO_PREFIX="`$PKG_CONFIG --variable=prefix pango`"
@@ -1387,6 +1395,7 @@ AC_SUBST(GTK_EXTRA_CFLAGS)
 AC_SUBST(GTK_DEP_LIBS)
 AC_SUBST(GTK_DEP_CFLAGS)
 
+AC_SUBST(X11_PREFIX)
 AC_SUBST(GLIB_PREFIX)
 AC_SUBST(ATK_PREFIX)
 AC_SUBST(PANGO_PREFIX)

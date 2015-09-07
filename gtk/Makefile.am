@@ -14,6 +14,7 @@ AM_CPPFLAGS =						\
 	-DGTK_COMPILATION				\
 	-DGTK_PRINT_BACKENDS=\"$(GTK_PRINT_BACKENDS)\"	\
 	-DGTK_PRINT_BACKEND_ENABLE_UNSUPPORTED		\
+	-DX11_DATA_PREFIX=\"$(X11_PREFIX)\"		\
 	-I$(top_builddir)				\
 	-I$(top_builddir)/gtk				\
 	-I$(top_srcdir) 				\
