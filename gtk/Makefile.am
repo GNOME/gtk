@@ -611,6 +611,7 @@ gtk_base_c_sources = 		\
 	gtkcolorutils.c		\
 	gtkcombobox.c		\
 	gtkcomboboxtext.c	\
+	gtkcomposetable.c	\
 	gtkcontainer.c		\
 	gtkcssanimation.c	\
 	gtkcssanimatedstyle.c	\
