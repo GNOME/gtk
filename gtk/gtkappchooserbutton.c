@@ -62,10 +62,12 @@
 #include "gtkmarshalers.h"
 
 enum {
-  PROP_CONTENT_TYPE = 1,
-  PROP_SHOW_DIALOG_ITEM,
+  PROP_SHOW_DIALOG_ITEM = 1,
   PROP_SHOW_DEFAULT_ITEM,
-  PROP_HEADING
+  PROP_HEADING,
+  NUM_PROPERTIES,
+
+  PROP_CONTENT_TYPE = NUM_PROPERTIES
 };
 
 enum {
@@ -99,6 +101,7 @@ static void real_insert_separator   (GtkAppChooserButton *self,
                                      GtkTreeIter         *iter);
 
 static guint signals[NUM_SIGNALS] = { 0, };
+static GParamSpec *properties[NUM_PROPERTIES];
 
 struct _GtkAppChooserButtonPrivate {
   GtkListStore *store;
@@ -593,7 +596,6 @@ gtk_app_chooser_button_class_init (GtkAppChooserButtonClass *klass)
 {
   GObjectClass *oclass = G_OBJECT_CLASS (klass);
   GtkComboBoxClass *combo_class = GTK_COMBO_BOX_CLASS (klass);
-  GParamSpec *pspec;
 
   oclass->set_property = gtk_app_chooser_button_set_property;
   oclass->get_property = gtk_app_chooser_button_get_property;
@@ -611,13 +613,12 @@ gtk_app_chooser_button_class_init (GtkAppChooserButtonClass *klass)
    * whether the dropdown menu should show an item that triggers
    * a #GtkAppChooserDialog when clicked.
    */
-  pspec =
+  properties[PROP_SHOW_DIALOG_ITEM] =
     g_param_spec_boolean ("show-dialog-item",
                           P_("Include an 'Other…' item"),
                           P_("Whether the combobox should include an item that triggers a GtkAppChooserDialog"),
                           FALSE,
                           G_PARAM_READWRITE|G_PARAM_CONSTRUCT|G_PARAM_STATIC_STRINGS|G_PARAM_EXPLICIT_NOTIFY);
-  g_object_class_install_property (oclass, PROP_SHOW_DIALOG_ITEM, pspec);
 
   /**
    * GtkAppChooserButton:show-default-item:
@@ -628,13 +629,12 @@ gtk_app_chooser_button_class_init (GtkAppChooserButtonClass *klass)
    *
    * Since: 3.2
    */
-  pspec =
+  properties[PROP_SHOW_DEFAULT_ITEM] =
     g_param_spec_boolean ("show-default-item",
                           P_("Show default item"),
                           P_("Whether the combobox should show the default application on top"),
                           FALSE,
                           G_PARAM_READWRITE|G_PARAM_CONSTRUCT|G_PARAM_STATIC_STRINGS|G_PARAM_EXPLICIT_NOTIFY);
-  g_object_class_install_property (oclass, PROP_SHOW_DEFAULT_ITEM, pspec);
 
   /**
    * GtkAppChooserButton:heading:
@@ -642,12 +642,14 @@ gtk_app_chooser_button_class_init (GtkAppChooserButtonClass *klass)
    * The text to show at the top of the dialog that can be
    * opened from the button. The string may contain Pango markup.
    */
-  pspec = g_param_spec_string ("heading",
-                               P_("Heading"),
-                               P_("The text to show at the top of the dialog"),
-                               NULL,
-                               G_PARAM_READWRITE|G_PARAM_STATIC_STRINGS|G_PARAM_EXPLICIT_NOTIFY);
-  g_object_class_install_property (oclass, PROP_HEADING, pspec);
+  properties[PROP_HEADING] =
+    g_param_spec_string ("heading",
+                         P_("Heading"),
+                         P_("The text to show at the top of the dialog"),
+                         NULL,
+                         G_PARAM_READWRITE|G_PARAM_STATIC_STRINGS|G_PARAM_EXPLICIT_NOTIFY);
+
+  g_object_class_install_properties (oclass, NUM_PROPERTIES, properties);
 
   /**
    * GtkAppChooserButton::custom-item-activated:
@@ -896,7 +898,7 @@ gtk_app_chooser_button_set_show_dialog_item (GtkAppChooserButton *self,
     {
       self->priv->show_dialog_item = setting;
 
-      g_object_notify (G_OBJECT (self), "show-dialog-item");
+      g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_SHOW_DIALOG_ITEM]);
 
       gtk_app_chooser_refresh (GTK_APP_CHOOSER (self));
     }
@@ -939,7 +941,7 @@ gtk_app_chooser_button_set_show_default_item (GtkAppChooserButton *self,
     {
       self->priv->show_default_item = setting;
 
-      g_object_notify (G_OBJECT (self), "show-default-item");
+      g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_SHOW_DEFAULT_ITEM]);
 
       gtk_app_chooser_refresh (GTK_APP_CHOOSER (self));
     }
@@ -962,7 +964,7 @@ gtk_app_chooser_button_set_heading (GtkAppChooserButton *self,
   g_free (self->priv->heading);
   self->priv->heading = g_strdup (heading);
 
-  g_object_notify (G_OBJECT (self), "heading");
+  g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_HEADING]);
 }
 
 /**
