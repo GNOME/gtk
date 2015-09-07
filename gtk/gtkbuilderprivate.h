@@ -62,7 +62,6 @@ typedef struct {
   TagInfo tag;
   GParamSpec *pspec;
   GString *text;
-  gchar *data;
   gboolean translatable:1;
   gboolean bound:1;
   gchar *context;

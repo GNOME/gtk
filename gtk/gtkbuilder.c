@@ -480,7 +480,7 @@ gtk_builder_get_parameters (GtkBuilder  *builder,
       if (G_IS_PARAM_SPEC_OBJECT (prop->pspec) &&
           (G_PARAM_SPEC_VALUE_TYPE (prop->pspec) != GDK_TYPE_PIXBUF))
         {
-          GObject *object = gtk_builder_get_object (builder, prop->data);
+          GObject *object = gtk_builder_get_object (builder, prop->text->str);
 
           if (object)
             {
@@ -493,14 +493,14 @@ gtk_builder_get_parameters (GtkBuilder  *builder,
                 {
                   g_warning ("Failed to get construct only property "
                              "%s of %s with value `%s'",
-                             prop->pspec->name, object_name, prop->data);
+                             prop->pspec->name, object_name, prop->text->str);
                   continue;
                 }
               /* Delay setting property */
               property = g_slice_new (DelayedProperty);
               property->pspec = prop->pspec;
               property->object = g_strdup (object_name);
-              property->value = g_strdup (prop->data);
+              property->value = g_strdup (prop->text->str);
               property->line = prop->line;
               property->col = prop->col;
               builder->priv->delayed_properties =
@@ -508,7 +508,7 @@ gtk_builder_get_parameters (GtkBuilder  *builder,
               continue;
             }
         }
-      else if (prop->bound && (!prop->data || *prop->data == '\0'))
+      else if (prop->bound && (!prop->text || prop->text->len == 0))
         {
           /* Ignore properties with a binding and no value since they are
            * only there for to express the binding.
@@ -516,10 +516,10 @@ gtk_builder_get_parameters (GtkBuilder  *builder,
           continue;
         }
       else if (!gtk_builder_value_from_string (builder, prop->pspec,
-                                               prop->data, &parameter.value, &error))
+                                               prop->text->str, &parameter.value, &error))
         {
           g_warning ("Failed to set property %s.%s to %s: %s",
-                     g_type_name (object_type), prop->pspec->name, prop->data,
+                     g_type_name (object_type), prop->pspec->name, prop->text->str,
                      error->message);
           g_error_free (error);
           error = NULL;

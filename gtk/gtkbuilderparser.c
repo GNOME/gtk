@@ -681,9 +681,8 @@ parse_property (ParserData   *data,
 static void
 free_property_info (PropertyInfo *info)
 {
-  g_free (info->data);
+  g_string_free (info->text, TRUE);
   g_free (info->context);
-  /* info->text is already freed */
   g_slice_free (PropertyInfo, info);
 }
 
@@ -1156,8 +1155,6 @@ end_element (GMarkupParseContext  *context,
                                                           prop_info->text->str);
               g_string_assign (prop_info->text, translated);
             }
-
-          prop_info->data = g_string_free (prop_info->text, FALSE);
 
           object_info->properties = g_slist_prepend (object_info->properties, prop_info);
         }
