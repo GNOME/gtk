@@ -1302,6 +1302,12 @@ GtkStyleContext * gtk_widget_get_style_context (GtkWidget *widget);
 GDK_AVAILABLE_IN_ALL
 GtkWidgetPath *   gtk_widget_get_path (GtkWidget *widget);
 
+/*GDK_AVAILABLE_IN_3_20*/
+void              gtk_widget_class_set_css_name (GtkWidgetClass *widget_class,
+                                                 const char     *name);
+/*GDK_AVAILABLE_IN_3_20*/
+const char *      gtk_widget_class_get_css_name (GtkWidgetClass *widget_class);
+
 GDK_AVAILABLE_IN_3_4
 GdkModifierType   gtk_widget_get_modifier_mask (GtkWidget         *widget,
                                                 GdkModifierIntent  intent);

@@ -487,6 +487,7 @@ struct _GtkWidgetClassPrivate
   GtkWidgetTemplate *template;
   GType accessible_type;
   AtkRole accessible_role;
+  const char *css_name;
 };
 
 enum {
@@ -4365,7 +4366,10 @@ gtk_widget_init (GTypeInstance *instance, gpointer g_class)
   priv->cssnode = gtk_css_widget_node_new (widget);
   gtk_css_node_set_state (priv->cssnode, GTK_STATE_FLAG_DIR_LTR);
   /* need to set correct type here, and only class has the correct type here */
-  gtk_css_node_set_widget_type (priv->cssnode, G_TYPE_FROM_CLASS (g_class));
+  if (GTK_WIDGET_GET_CLASS (widget)->priv->css_name)
+    gtk_css_node_set_name (priv->cssnode, GTK_WIDGET_GET_CLASS (widget)->priv->css_name);
+  else
+    gtk_css_node_set_widget_type (priv->cssnode, G_TYPE_FROM_CLASS (g_class));
 
   G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
   priv->style = gtk_widget_get_default_style ();
@@ -16310,6 +16314,47 @@ void
 gtk_widget_clear_path (GtkWidget *widget)
 {
   g_object_set_qdata (G_OBJECT (widget), quark_widget_path, NULL);
+}
+
+/**
+ * gtk_widget_class_set_css_name:
+ * @widget_class: class to set the name on
+ * @name: name to use
+ *
+ * Sets the name to be used for CSS matching of widgets. 
+ *
+ * If this function is not calles for a given class, the name
+ * of the parent class is used.
+ **/
+void
+gtk_widget_class_set_css_name (GtkWidgetClass *widget_class,
+                               const char     *name)
+{
+  GtkWidgetClassPrivate *priv;
+
+  g_return_if_fail (GTK_IS_WIDGET_CLASS (widget_class));
+  g_return_if_fail (name != NULL);
+
+  priv = widget_class->priv;
+
+  priv->css_name = g_intern_string (name);
+}
+
+/**
+ * gtk_widget_class_get_css_name:
+ * @widget_class: class to set the name on
+ *
+ * Gets the name used by this class for matching in CSS code. See 
+ * gtk_widget_class_set_css_name() for details.
+ *
+ * Returns: the CSS name of the given class.
+ */
+const char *
+gtk_widget_class_get_css_name (GtkWidgetClass *widget_class)
+{
+  g_return_val_if_fail (GTK_IS_WIDGET_CLASS (widget_class), NULL);
+
+  return widget_class->priv->css_name;
 }
 
 void
