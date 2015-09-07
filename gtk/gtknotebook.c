@@ -1967,21 +1967,15 @@ add_tab_position_style_class (GtkStyleContext *context,
     }
 }
 
-static GtkStateFlags
+static void
 notebook_save_context_for_tab (GtkNotebook     *notebook,
                                GtkNotebookPage *page,
                                GtkStyleContext *context)
 {
-  GtkStateFlags state;
-
   if (page)
     gtk_style_context_save_to_node (context, page->cssnode);
   else
     gtk_style_context_save (context);
-
-  state = gtk_style_context_get_state (context);
-
-  return state;
 }
 
 static void
@@ -2030,7 +2024,6 @@ gtk_notebook_get_preferred_tabs_size (GtkNotebook    *notebook,
       if (gtk_widget_get_visible (page->child))
         {
           GtkBorder tab_padding;
-          GtkStateFlags state;
 
           vis_pages++;
 
@@ -2041,8 +2034,8 @@ gtk_notebook_get_preferred_tabs_size (GtkNotebook    *notebook,
                                          &child_requisition, NULL);
 
           /* Get border/padding for tab */
-          state = notebook_save_context_for_tab (notebook, page, context);
-          gtk_style_context_get_padding (context, state, &tab_padding);
+          notebook_save_context_for_tab (notebook, page, context);
+          gtk_style_context_get_padding (context, gtk_style_context_get_state (context), &tab_padding);
           gtk_style_context_restore (context);
 
           page->requisition.width = child_requisition.width +
@@ -6402,7 +6395,6 @@ gtk_notebook_page_allocate (GtkNotebook     *notebook,
   gboolean tab_allocation_changed;
   gboolean was_visible = page->tab_allocated_visible;
   GtkBorder tab_padding;
-  GtkStateFlags state;
 
   if (!page->tab_label ||
       !gtk_widget_get_visible (page->tab_label) ||
@@ -6414,9 +6406,9 @@ gtk_notebook_page_allocate (GtkNotebook     *notebook,
 
   context = gtk_widget_get_style_context (widget);
 
-  state = notebook_save_context_for_tab (notebook, page, context);
+  notebook_save_context_for_tab (notebook, page, context);
 
-  gtk_style_context_get_padding (context, state, &tab_padding);
+  gtk_style_context_get_padding (context, gtk_style_context_get_state (context), &tab_padding);
 
   gtk_widget_get_preferred_size (page->tab_label, &tab_requisition, NULL);
   gtk_widget_style_get (widget,
