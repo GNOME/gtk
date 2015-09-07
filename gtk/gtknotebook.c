@@ -2031,14 +2031,6 @@ notebook_save_context_for_tab (GtkNotebook     *notebook,
 
   state = gtk_style_context_get_state (context);
 
-  if (page != NULL)
-    {
-      if (page->reorderable)
-        gtk_style_context_add_class (context, "reorderable-page");
-    }
-
-  gtk_style_context_set_state (context, state);
-
   if (use_flags && (page != NULL))
     flags = _gtk_notebook_get_tab_flags (notebook, page);
 
@@ -8355,6 +8347,7 @@ gtk_notebook_set_tab_reorderable (GtkNotebook *notebook,
                                   GtkWidget   *child,
                                   gboolean     reorderable)
 {
+  GtkNotebookPage *page;
   GList *list;
 
   g_return_if_fail (GTK_IS_NOTEBOOK (notebook));
@@ -8363,11 +8356,16 @@ gtk_notebook_set_tab_reorderable (GtkNotebook *notebook,
   list = gtk_notebook_find_child (notebook, child);
   g_return_if_fail (list != NULL);
 
+  page = GTK_NOTEBOOK_PAGE (list);
   reorderable = reorderable != FALSE;
 
-  if (GTK_NOTEBOOK_PAGE (list)->reorderable != reorderable)
+  if (page->reorderable != reorderable)
     {
-      GTK_NOTEBOOK_PAGE (list)->reorderable = reorderable;
+      page->reorderable = reorderable;
+      if (reorderable)
+        gtk_css_node_add_class (page->cssnode, g_quark_from_static_string ("reorderable-page"));
+      else
+        gtk_css_node_remove_class (page->cssnode, g_quark_from_static_string ("reorderable-page"));
       gtk_widget_child_notify (child, "reorderable");
     }
 }
