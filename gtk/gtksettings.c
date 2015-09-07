@@ -322,7 +322,7 @@ gtk_settings_init (GtkSettings *settings)
       g_value_init (&priv->property_values[i].value, value_type);
       g_param_value_set_default (pspec, &priv->property_values[i].value);
 
-      g_object_notify (G_OBJECT (settings), pspec->name);
+      g_object_notify_by_pspec (G_OBJECT (settings), pspec);
       priv->property_values[i].source = GTK_SETTINGS_SOURCE_DEFAULT;
       i++;
     }
@@ -2151,7 +2151,7 @@ apply_queued_setting (GtkSettings             *settings,
         {
           g_value_copy (&tmp_value, &priv->property_values[pspec->param_id - 1].value);
           priv->property_values[pspec->param_id - 1].source = qvalue->source;
-          g_object_notify (G_OBJECT (settings), g_param_spec_get_name (pspec));
+          g_object_notify_by_pspec (G_OBJECT (settings), pspec);
         }
 
     }
@@ -2229,7 +2229,7 @@ settings_install_property_parser (GtkSettingsClass   *class,
       g_value_init (&priv->property_values[class_n_properties - 1].value, G_PARAM_SPEC_VALUE_TYPE (pspec));
       g_param_value_set_default (pspec, &priv->property_values[class_n_properties - 1].value);
       priv->property_values[class_n_properties - 1].source = GTK_SETTINGS_SOURCE_DEFAULT;
-      g_object_notify (G_OBJECT (settings), pspec->name);
+      g_object_notify_by_pspec (G_OBJECT (settings), pspec);
 
       qvalue = g_datalist_get_data (&priv->queued_settings, pspec->name);
       if (qvalue)
@@ -2883,7 +2883,7 @@ _gtk_settings_reset_rc_values (GtkSettings *settings)
           GParamSpec *pspec = *p;
 
           g_param_value_set_default (pspec, &priv->property_values[i].value);
-          g_object_notify (G_OBJECT (settings), pspec->name);
+          g_object_notify_by_pspec (G_OBJECT (settings), pspec);
         }
       i++;
     }
