@@ -224,8 +224,11 @@ enum {
   PROP_SCROLLABLE,
   PROP_PAGE,
   PROP_ENABLE_POPUP,
-  PROP_GROUP_NAME
+  PROP_GROUP_NAME,
+  LAST_PROP
 };
+
+static GParamSpec *properties[LAST_PROP];
 
 enum {
   CHILD_PROP_0,
@@ -690,51 +693,49 @@ gtk_notebook_class_init (GtkNotebookClass *class)
   class->reorder_tab = gtk_notebook_reorder_tab;
   class->create_window = gtk_notebook_create_window;
 
-  g_object_class_install_property (gobject_class,
-                                   PROP_PAGE,
-                                   g_param_spec_int ("page",
-                                                     P_("Page"),
-                                                     P_("The index of the current page"),
-                                                     -1,
-                                                     G_MAXINT,
-                                                     -1,
-                                                     GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
-  g_object_class_install_property (gobject_class,
-                                   PROP_TAB_POS,
-                                   g_param_spec_enum ("tab-pos",
-                                                      P_("Tab Position"),
-                                                      P_("Which side of the notebook holds the tabs"),
-                                                      GTK_TYPE_POSITION_TYPE,
-                                                      GTK_POS_TOP,
-                                                      GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
-  g_object_class_install_property (gobject_class,
-                                   PROP_SHOW_TABS,
-                                   g_param_spec_boolean ("show-tabs",
-                                                         P_("Show Tabs"),
-                                                         P_("Whether tabs should be shown"),
-                                                         TRUE,
-                                                         GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
-  g_object_class_install_property (gobject_class,
-                                   PROP_SHOW_BORDER,
-                                   g_param_spec_boolean ("show-border",
-                                                         P_("Show Border"),
-                                                         P_("Whether the border should be shown"),
-                                                         TRUE,
-                                                         GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
-  g_object_class_install_property (gobject_class,
-                                   PROP_SCROLLABLE,
-                                   g_param_spec_boolean ("scrollable",
-                                                         P_("Scrollable"),
-                                                         P_("If TRUE, scroll arrows are added if there are too many tabs to fit"),
-                                                         FALSE,
-                                                         GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
-  g_object_class_install_property (gobject_class,
-                                   PROP_ENABLE_POPUP,
-                                   g_param_spec_boolean ("enable-popup",
-                                                         P_("Enable Popup"),
-                                                         P_("If TRUE, pressing the right mouse button on the notebook pops up a menu that you can use to go to a page"),
-                                                         FALSE,
-                                                         GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
+  properties[PROP_PAGE] =
+      g_param_spec_int ("page",
+                        P_("Page"),
+                        P_("The index of the current page"),
+                        -1, G_MAXINT,
+                        -1,
+                        GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
+
+  properties[PROP_TAB_POS] =
+      g_param_spec_enum ("tab-pos",
+                         P_("Tab Position"),
+                         P_("Which side of the notebook holds the tabs"),
+                         GTK_TYPE_POSITION_TYPE,
+                         GTK_POS_TOP,
+                         GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
+
+  properties[PROP_SHOW_TABS] =
+      g_param_spec_boolean ("show-tabs",
+                            P_("Show Tabs"),
+                            P_("Whether tabs should be shown"),
+                            TRUE,
+                            GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
+
+  properties[PROP_SHOW_BORDER] =
+      g_param_spec_boolean ("show-border",
+                            P_("Show Border"),
+                            P_("Whether the border should be shown"),
+                            TRUE,
+                            GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
+
+  properties[PROP_SCROLLABLE] =
+      g_param_spec_boolean ("scrollable",
+                            P_("Scrollable"),
+                            P_("If TRUE, scroll arrows are added if there are too many tabs to fit"),
+                            FALSE,
+                            GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
+
+  properties[PROP_ENABLE_POPUP] =
+      g_param_spec_boolean ("enable-popup",
+                            P_("Enable Popup"),
+                            P_("If TRUE, pressing the right mouse button on the notebook pops up a menu that you can use to go to a page"),
+                            FALSE,
+                            GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
   /**
    * GtkNotebook:group-name:
@@ -743,13 +744,14 @@ gtk_notebook_class_init (GtkNotebookClass *class)
    *
    * Since: 2.24
    */
-  g_object_class_install_property (gobject_class,
-                                   PROP_GROUP_NAME,
-                                   g_param_spec_string ("group-name",
-                                                        P_("Group Name"),
-                                                        P_("Group name for tab drag and drop"),
-                                                        NULL,
-                                                        GTK_PARAM_READWRITE));
+  properties[PROP_GROUP_NAME] =
+      g_param_spec_string ("group-name",
+                           P_("Group Name"),
+                           P_("Group name for tab drag and drop"),
+                           NULL,
+                           GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
+
+  g_object_class_install_properties (gobject_class, LAST_PROP, properties);
 
   gtk_container_class_install_child_property (container_class,
                                               CHILD_PROP_TAB_LABEL,
@@ -6796,7 +6798,7 @@ gtk_notebook_real_switch_page (GtkNotebook     *notebook,
   gtk_notebook_pages_allocate (notebook);
 
   gtk_widget_queue_resize (GTK_WIDGET (notebook));
-  g_object_notify (G_OBJECT (notebook), "page");
+  g_object_notify_by_pspec (G_OBJECT (notebook), properties[PROP_PAGE]);
 }
 
 /* Private GtkNotebook Page Switch Functions:
@@ -7389,7 +7391,7 @@ gtk_notebook_set_current_page (GtkNotebook *notebook,
   if (list)
     gtk_notebook_switch_page (notebook, GTK_NOTEBOOK_PAGE (list));
 
-  g_object_notify (G_OBJECT (notebook), "page");
+  g_object_notify_by_pspec (G_OBJECT (notebook), properties[PROP_PAGE]);
 }
 
 /**
@@ -7487,7 +7489,7 @@ gtk_notebook_set_show_border (GtkNotebook *notebook,
       if (gtk_widget_get_visible (GTK_WIDGET (notebook)))
         gtk_widget_queue_resize (GTK_WIDGET (notebook));
 
-      g_object_notify (G_OBJECT (notebook), "show-border");
+      g_object_notify_by_pspec (G_OBJECT (notebook), properties[PROP_SHOW_BORDER]);
     }
 }
 
@@ -7573,7 +7575,7 @@ gtk_notebook_set_show_tabs (GtkNotebook *notebook,
   gtk_widget_reset_style (GTK_WIDGET (notebook));
   gtk_widget_queue_resize (GTK_WIDGET (notebook));
 
-  g_object_notify (G_OBJECT (notebook), "show-tabs");
+  g_object_notify_by_pspec (G_OBJECT (notebook), properties[PROP_SHOW_TABS]);
 }
 
 /**
@@ -7617,7 +7619,7 @@ gtk_notebook_set_tab_pos (GtkNotebook     *notebook,
       if (gtk_widget_get_visible (GTK_WIDGET (notebook)))
         gtk_widget_queue_resize (GTK_WIDGET (notebook));
 
-      g_object_notify (G_OBJECT (notebook), "tab-pos");
+      g_object_notify_by_pspec (G_OBJECT (notebook), properties[PROP_TAB_POS]);
     }
 }
 
@@ -7665,7 +7667,7 @@ gtk_notebook_set_scrollable (GtkNotebook *notebook,
       if (gtk_widget_get_visible (GTK_WIDGET (notebook)))
         gtk_widget_queue_resize (GTK_WIDGET (notebook));
 
-      g_object_notify (G_OBJECT (notebook), "scrollable");
+      g_object_notify_by_pspec (G_OBJECT (notebook), properties[PROP_SCROLLABLE]);
     }
 }
 
@@ -7769,7 +7771,7 @@ gtk_notebook_popup_enable (GtkNotebook *notebook)
                              GTK_WIDGET (notebook),
                              gtk_notebook_menu_detacher);
 
-  g_object_notify (G_OBJECT (notebook), "enable-popup");
+  g_object_notify_by_pspec (G_OBJECT (notebook), properties[PROP_ENABLE_POPUP]);
 }
 
 /**
@@ -7794,7 +7796,7 @@ gtk_notebook_popup_disable (GtkNotebook *notebook)
                          (GtkCallback) gtk_notebook_menu_label_unparent, NULL);
   gtk_widget_destroy (priv->menu);
 
-  g_object_notify (G_OBJECT (notebook), "enable-popup");
+  g_object_notify_by_pspec (G_OBJECT (notebook), properties[PROP_ENABLE_POPUP]);
 }
 
 /* Public GtkNotebook Page Properties Functions:
@@ -8303,7 +8305,8 @@ gtk_notebook_set_group_name (GtkNotebook *notebook,
   if (priv->group != group)
     {
       priv->group = group;
-      g_object_notify (G_OBJECT (notebook), "group-name");
+
+      g_object_notify_by_pspec (G_OBJECT (notebook), properties[PROP_GROUP_NAME]);
     }
 }
 
