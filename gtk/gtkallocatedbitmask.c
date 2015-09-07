@@ -25,7 +25,7 @@
 
 #define VALUE_SIZE_BITS (sizeof (VALUE_TYPE) * 8)
 #define VALUE_BIT(idx) (((VALUE_TYPE) 1) << (idx))
-#define ALL_BITS G_MAXSIZE
+#define ALL_BITS (~((VALUE_TYPE) 0))
 
 struct _GtkBitmask {
   gsize len;
@@ -301,17 +301,11 @@ _gtk_allocated_bitmask_invert_range (GtkBitmask *mask,
   if (end_word >= mask->len)
     mask = gtk_allocated_bitmask_resize (mask, end_word + 1);
 
-  if (start_word == end_word)
-    {
-      mask->data[start_word] ^= (ALL_BITS >> (end_bit - start_bit)) << start_bit;
-    }
-  else
-    {
-      mask->data[start_word] ^= ALL_BITS << start_bit;
-      for (i = start_word + 1; i < end_word; i++)
-        mask->data[i] ^= ALL_BITS;
-      mask->data[end_word] ^= ALL_BITS >> (VALUE_SIZE_BITS - end_bit);
-    }
+  for (i = start_word; i <= end_word; i++)
+    mask->data[i] ^= ALL_BITS;
+  mask->data[start_word] ^= (((VALUE_TYPE) 1) << start_bit) - 1;
+  if (end_bit != 63)
+  mask->data[end_word] ^= ALL_BITS << (end_bit + 1);
 
   return gtk_allocated_bitmask_shrink (mask);
 }
