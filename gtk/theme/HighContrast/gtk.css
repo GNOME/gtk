@@ -1523,7 +1523,7 @@ GtkTreeView.view.progressbar {
       border-left-width: 3px; }
     .notebook tab:hover, .notebook tab.prelight-page {
       border-color: #7f7f7f; }
-    .notebook tab:active, .notebook tab.active-page, .notebook tab:backdrop:active {
+    .notebook tab:active, .notebook tab:backdrop:active {
       border-color: #000; }
     .notebook tab:backdrop {
       background-color: transparent;
@@ -1534,13 +1534,13 @@ GtkTreeView.view.progressbar {
         border-color: rgba(127, 127, 127, 0.3);
         border-bottom-color: #7f7f7f;
         background-color: rgba(255, 255, 255, 0.2); }
-      .notebook tab.reorderable-page.top:active, .notebook tab.reorderable-page.top.active-page {
+      .notebook tab.reorderable-page.top:active {
         background-color: rgba(255, 255, 255, 0.5);
         border-color: rgba(127, 127, 127, 0.5);
         border-bottom-color: #000; }
-        .notebook tab.reorderable-page.top:active:hover, .notebook tab.reorderable-page.top.active-page:hover {
+        .notebook tab.reorderable-page.top:active:hover {
           background-color: rgba(255, 255, 255, 0.7); }
-        .notebook tab.reorderable-page.top:active:backdrop, .notebook tab.reorderable-page.top.active-page:backdrop {
+        .notebook tab.reorderable-page.top:active:backdrop {
           border-color: #8b8b8b;
           background-color: #fff;
           border-bottom-color: #000; }
@@ -1553,13 +1553,13 @@ GtkTreeView.view.progressbar {
         border-color: rgba(127, 127, 127, 0.3);
         border-top-color: #7f7f7f;
         background-color: rgba(255, 255, 255, 0.2); }
-      .notebook tab.reorderable-page.bottom:active, .notebook tab.reorderable-page.bottom.active-page {
+      .notebook tab.reorderable-page.bottom:active {
         background-color: rgba(255, 255, 255, 0.5);
         border-color: rgba(127, 127, 127, 0.5);
         border-top-color: #000; }
-        .notebook tab.reorderable-page.bottom:active:hover, .notebook tab.reorderable-page.bottom.active-page:hover {
+        .notebook tab.reorderable-page.bottom:active:hover {
           background-color: rgba(255, 255, 255, 0.7); }
-        .notebook tab.reorderable-page.bottom:active:backdrop, .notebook tab.reorderable-page.bottom.active-page:backdrop {
+        .notebook tab.reorderable-page.bottom:active:backdrop {
           border-color: #8b8b8b;
           background-color: #fff;
           border-top-color: #000; }
@@ -1572,13 +1572,13 @@ GtkTreeView.view.progressbar {
         border-color: rgba(127, 127, 127, 0.3);
         border-right-color: #7f7f7f;
         background-color: rgba(255, 255, 255, 0.2); }
-      .notebook tab.reorderable-page.left:active, .notebook tab.reorderable-page.left.active-page {
+      .notebook tab.reorderable-page.left:active {
         background-color: rgba(255, 255, 255, 0.5);
         border-color: rgba(127, 127, 127, 0.5);
         border-right-color: #000; }
-        .notebook tab.reorderable-page.left:active:hover, .notebook tab.reorderable-page.left.active-page:hover {
+        .notebook tab.reorderable-page.left:active:hover {
           background-color: rgba(255, 255, 255, 0.7); }
-        .notebook tab.reorderable-page.left:active:backdrop, .notebook tab.reorderable-page.left.active-page:backdrop {
+        .notebook tab.reorderable-page.left:active:backdrop {
           border-color: #8b8b8b;
           background-color: #fff;
           border-right-color: #000; }
@@ -1591,13 +1591,13 @@ GtkTreeView.view.progressbar {
         border-color: rgba(127, 127, 127, 0.3);
         border-left-color: #7f7f7f;
         background-color: rgba(255, 255, 255, 0.2); }
-      .notebook tab.reorderable-page.right:active, .notebook tab.reorderable-page.right.active-page {
+      .notebook tab.reorderable-page.right:active {
         background-color: rgba(255, 255, 255, 0.5);
         border-color: rgba(127, 127, 127, 0.5);
         border-left-color: #000; }
-        .notebook tab.reorderable-page.right:active:hover, .notebook tab.reorderable-page.right.active-page:hover {
+        .notebook tab.reorderable-page.right:active:hover {
           background-color: rgba(255, 255, 255, 0.7); }
-        .notebook tab.reorderable-page.right:active:backdrop, .notebook tab.reorderable-page.right.active-page:backdrop {
+        .notebook tab.reorderable-page.right:active:backdrop {
           border-color: #8b8b8b;
           background-color: #fff;
           border-left-color: #000; }
@@ -1613,9 +1613,9 @@ GtkTreeView.view.progressbar {
         color: #7f7f7f; }
     .notebook tab.prelight-page GtkLabel, .notebook tab GtkLabel.prelight-page {
       color: #3f3f3f; }
-    .notebook tab.active-page GtkLabel, .notebook tab GtkLabel.active-page {
+    .notebook tab:active GtkLabel {
       color: #000; }
-      .notebook tab.active-page GtkLabel:backdrop, .notebook tab GtkLabel.active-page:backdrop {
+      .notebook tab:active GtkLabel:backdrop {
         color: #000; }
     .notebook tab .button {
       border: 2px solid transparent;

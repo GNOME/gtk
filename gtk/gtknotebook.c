@@ -4970,9 +4970,6 @@ gtk_notebook_real_remove (GtkNotebook *notebook,
 
   if (priv->cur_page == list->data)
     {
-      if (priv->cur_page->tab_label)
-	gtk_style_context_remove_class (gtk_widget_get_style_context (priv->cur_page->tab_label),
-					"active-page");
       priv->cur_page = NULL;
       if (next_list && !destroying)
         gtk_notebook_switch_page (notebook, GTK_NOTEBOOK_PAGE (next_list));
@@ -6631,17 +6628,11 @@ gtk_notebook_real_switch_page (GtkNotebook     *notebook,
       gtk_widget_set_child_visible (priv->cur_page->child, FALSE);
       gtk_css_node_set_state (priv->cur_page->cssnode,
                               gtk_css_node_get_state (priv->cur_page->cssnode) & ~GTK_STATE_FLAG_ACTIVE);
-      if (priv->cur_page->tab_label)
-	gtk_style_context_remove_class (gtk_widget_get_style_context (priv->cur_page->tab_label),
-					"active-page");
     }
 
   priv->cur_page = page;
   gtk_css_node_set_state (page->cssnode,
                           gtk_css_node_get_state (page->cssnode) | GTK_STATE_FLAG_ACTIVE);
-  if (page->tab_label)
-    gtk_style_context_add_class (gtk_widget_get_style_context (page->tab_label),
-				 "active-page");
 
   if (!priv->focus_tab ||
       priv->focus_tab->data != (gpointer) priv->cur_page)
@@ -7812,10 +7803,6 @@ gtk_notebook_set_tab_label (GtkNotebook *notebook,
                         "mnemonic-activate",
                         G_CALLBACK (gtk_notebook_mnemonic_activate_switch_page),
                         notebook);
-
-  if (priv->cur_page == page)
-    gtk_style_context_add_class (gtk_widget_get_style_context (page->tab_label),
-				 "active-page");
 
   if (priv->prelight_tab == page)
     gtk_style_context_add_class (gtk_widget_get_style_context (page->tab_label),

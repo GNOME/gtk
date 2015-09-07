@@ -2138,7 +2138,7 @@ column-header .titlebar .button.titlebutton,
       border-left-width: 3px; }
     .notebook tab:hover, .notebook tab.prelight-page {
       border-color: #a1a1a1; }
-    .notebook tab:active, .notebook tab.active-page, .notebook tab:backdrop:active {
+    .notebook tab:active, .notebook tab:backdrop:active {
       border-color: #4a90d9; }
     .notebook tab:backdrop {
       background-color: transparent;
@@ -2149,13 +2149,13 @@ column-header .titlebar .button.titlebutton,
         border-color: rgba(161, 161, 161, 0.3);
         border-bottom-color: #a1a1a1;
         background-color: rgba(237, 237, 237, 0.2); }
-      .notebook tab.reorderable-page.top:active, .notebook tab.reorderable-page.top.active-page {
+      .notebook tab.reorderable-page.top:active {
         background-color: rgba(237, 237, 237, 0.5);
         border-color: rgba(161, 161, 161, 0.5);
         border-bottom-color: #4a90d9; }
-        .notebook tab.reorderable-page.top:active:hover, .notebook tab.reorderable-page.top.active-page:hover {
+        .notebook tab.reorderable-page.top:active:hover {
           background-color: rgba(237, 237, 237, 0.7); }
-        .notebook tab.reorderable-page.top:active:backdrop, .notebook tab.reorderable-page.top.active-page:backdrop {
+        .notebook tab.reorderable-page.top:active:backdrop {
           border-color: #a8a8a8;
           background-color: #ededed;
           border-bottom-color: #4a90d9; }
@@ -2168,13 +2168,13 @@ column-header .titlebar .button.titlebutton,
         border-color: rgba(161, 161, 161, 0.3);
         border-top-color: #a1a1a1;
         background-color: rgba(237, 237, 237, 0.2); }
-      .notebook tab.reorderable-page.bottom:active, .notebook tab.reorderable-page.bottom.active-page {
+      .notebook tab.reorderable-page.bottom:active {
         background-color: rgba(237, 237, 237, 0.5);
         border-color: rgba(161, 161, 161, 0.5);
         border-top-color: #4a90d9; }
-        .notebook tab.reorderable-page.bottom:active:hover, .notebook tab.reorderable-page.bottom.active-page:hover {
+        .notebook tab.reorderable-page.bottom:active:hover {
           background-color: rgba(237, 237, 237, 0.7); }
-        .notebook tab.reorderable-page.bottom:active:backdrop, .notebook tab.reorderable-page.bottom.active-page:backdrop {
+        .notebook tab.reorderable-page.bottom:active:backdrop {
           border-color: #a8a8a8;
           background-color: #ededed;
           border-top-color: #4a90d9; }
@@ -2187,13 +2187,13 @@ column-header .titlebar .button.titlebutton,
         border-color: rgba(161, 161, 161, 0.3);
         border-right-color: #a1a1a1;
         background-color: rgba(237, 237, 237, 0.2); }
-      .notebook tab.reorderable-page.left:active, .notebook tab.reorderable-page.left.active-page {
+      .notebook tab.reorderable-page.left:active {
         background-color: rgba(237, 237, 237, 0.5);
         border-color: rgba(161, 161, 161, 0.5);
         border-right-color: #4a90d9; }
-        .notebook tab.reorderable-page.left:active:hover, .notebook tab.reorderable-page.left.active-page:hover {
+        .notebook tab.reorderable-page.left:active:hover {
           background-color: rgba(237, 237, 237, 0.7); }
-        .notebook tab.reorderable-page.left:active:backdrop, .notebook tab.reorderable-page.left.active-page:backdrop {
+        .notebook tab.reorderable-page.left:active:backdrop {
           border-color: #a8a8a8;
           background-color: #ededed;
           border-right-color: #4a90d9; }
@@ -2206,13 +2206,13 @@ column-header .titlebar .button.titlebutton,
         border-color: rgba(161, 161, 161, 0.3);
         border-left-color: #a1a1a1;
         background-color: rgba(237, 237, 237, 0.2); }
-      .notebook tab.reorderable-page.right:active, .notebook tab.reorderable-page.right.active-page {
+      .notebook tab.reorderable-page.right:active {
         background-color: rgba(237, 237, 237, 0.5);
         border-color: rgba(161, 161, 161, 0.5);
         border-left-color: #4a90d9; }
-        .notebook tab.reorderable-page.right:active:hover, .notebook tab.reorderable-page.right.active-page:hover {
+        .notebook tab.reorderable-page.right:active:hover {
           background-color: rgba(237, 237, 237, 0.7); }
-        .notebook tab.reorderable-page.right:active:backdrop, .notebook tab.reorderable-page.right.active-page:backdrop {
+        .notebook tab.reorderable-page.right:active:backdrop {
           border-color: #a8a8a8;
           background-color: #ededed;
           border-left-color: #4a90d9; }
@@ -2229,9 +2229,9 @@ column-header .titlebar .button.titlebutton,
       color: #5d6263; }
       .notebook tab .prelight-page .label:backdrop, .notebook tab .label.prelight-page:backdrop {
         color: #aaabac; }
-    .notebook tab .active-page .label, .notebook tab .label.active-page {
+    .notebook tab:active .label {
       color: #2e3436; }
-      .notebook tab .active-page .label:backdrop, .notebook tab .label.active-page:backdrop {
+      .notebook tab:active .label:backdrop {
         color: #8d9091; }
     .notebook tab .button, .notebook tab .header-bar .button.titlebutton, .header-bar .notebook tab .button.titlebutton,
     .notebook tab .titlebar .button.titlebutton,

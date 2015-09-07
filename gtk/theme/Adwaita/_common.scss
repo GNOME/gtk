@@ -1703,7 +1703,7 @@ column-header.button.dnd { // for treeview-like derive widgets
     &:hover, &.prelight-page {
       border-color: $borders_color;
     }
-    &:active, &.active-page, &:backdrop:active {
+    &:active, &:backdrop:active {
       border-color: $selected_bg_color;
     }
     &:backdrop {
@@ -1721,7 +1721,7 @@ column-header.button.dnd { // for treeview-like derive widgets
           border-#{$_border}-color: $borders_color;
           background-color: transparentize($bg_color,0.8);
         }
-        &:active, &.active-page {
+        &:active {
           background-color: transparentize($bg_color,0.5);
           border-color: transparentize($borders_color,0.5);
           border-#{$_border}-color: $selected_bg_color;
@@ -1753,7 +1753,7 @@ column-header.button.dnd { // for treeview-like derive widgets
         color: mix($backdrop_fg_color, $backdrop_insensitive_color, 50%);
       }
     }
-    .active-page .label, .label.active-page {
+    &:active .label {
       // active tab text
       color: $fg_color;
       &:backdrop { color: $backdrop_fg_color; }
