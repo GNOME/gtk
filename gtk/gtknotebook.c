@@ -1972,7 +1972,6 @@ notebook_save_context_for_tab (GtkNotebook     *notebook,
                                GtkNotebookPage *page,
                                GtkStyleContext *context)
 {
-  GtkPositionType tab_pos = get_effective_tab_pos (notebook);
   GtkStateFlags state;
 
   if (page)
@@ -1981,8 +1980,6 @@ notebook_save_context_for_tab (GtkNotebook     *notebook,
     gtk_style_context_save (context);
 
   state = gtk_style_context_get_state (context);
-
-  add_tab_position_style_class (context, tab_pos);
 
   return state;
 }
@@ -4603,6 +4600,12 @@ gtk_notebook_real_insert_page (GtkNotebook *notebook,
   GtkNotebookPage *page;
   gint nchildren;
   GList *list;
+  GQuark tab_pos_names[] = {
+    g_quark_from_static_string (GTK_STYLE_CLASS_LEFT),
+    g_quark_from_static_string (GTK_STYLE_CLASS_RIGHT),
+    g_quark_from_static_string (GTK_STYLE_CLASS_TOP),
+    g_quark_from_static_string (GTK_STYLE_CLASS_BOTTOM)
+  };
 
   gtk_widget_freeze_child_notify (child);
 
@@ -4617,6 +4620,7 @@ gtk_notebook_real_insert_page (GtkNotebook *notebook,
 
   page->cssnode = gtk_css_node_new ();
   gtk_css_node_set_name (page->cssnode, g_intern_string ("tab"));
+  gtk_css_node_add_class (page->cssnode, tab_pos_names[get_effective_tab_pos (notebook)]);
   gtk_css_node_set_state (page->cssnode, gtk_css_node_get_state (priv->tabs_node));
   gtk_css_node_insert_after (priv->tabs_node,
                              page->cssnode,
@@ -7479,6 +7483,36 @@ gtk_notebook_get_show_tabs (GtkNotebook *notebook)
   return notebook->priv->show_tabs;
 }
 
+static void
+gtk_notebook_update_tab_pos (GtkNotebook *notebook)
+{
+  GtkNotebookPrivate *priv = notebook->priv;
+  GtkPositionType tab_pos;
+  GQuark tab_pos_names[] = {
+    g_quark_from_static_string (GTK_STYLE_CLASS_LEFT),
+    g_quark_from_static_string (GTK_STYLE_CLASS_RIGHT),
+    g_quark_from_static_string (GTK_STYLE_CLASS_TOP),
+    g_quark_from_static_string (GTK_STYLE_CLASS_BOTTOM)
+  };
+  GList *l;
+
+  tab_pos = get_effective_tab_pos (notebook);
+
+  for (l = priv->children; l; l = l->next)
+    {
+      GtkNotebookPage *page = GTK_NOTEBOOK_PAGE (l);
+      guint i;
+
+      for (i = 0; i < G_N_ELEMENTS (tab_pos_names); i++)
+        {
+          if (tab_pos == i)
+            gtk_css_node_add_class (page->cssnode, tab_pos_names[i]);
+          else
+            gtk_css_node_remove_class (page->cssnode, tab_pos_names[i]);
+        }
+    }
+}
+
 /**
  * gtk_notebook_set_tab_pos:
  * @notebook: a #GtkNotebook.
@@ -7502,6 +7536,8 @@ gtk_notebook_set_tab_pos (GtkNotebook     *notebook,
       priv->tab_pos = pos;
       if (gtk_widget_get_visible (GTK_WIDGET (notebook)))
         gtk_widget_queue_resize (GTK_WIDGET (notebook));
+
+      gtk_notebook_update_tab_pos (notebook);
 
       g_object_notify_by_pspec (G_OBJECT (notebook), properties[PROP_TAB_POS]);
     }
