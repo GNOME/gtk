@@ -6520,8 +6520,10 @@ subtract_borders (GtkBorder *one,
 }
 
 static void
-add_window_frame_style_class (GtkStyleContext *context)
+style_context_save_to_decoration (GtkStyleContext *context)
 {
+  gtk_style_context_save (context);
+
   gtk_style_context_remove_class (context, GTK_STYLE_CLASS_BACKGROUND);
   gtk_style_context_add_class (context, "window-frame");
 }
@@ -6559,8 +6561,7 @@ get_shadow_width (GtkWindow *window,
   state = _gtk_widget_get_state_flags (GTK_WIDGET (window));
   context = _gtk_widget_get_style_context (GTK_WIDGET (window));
 
-  gtk_style_context_save (context);
-  add_window_frame_style_class (context);
+  style_context_save_to_decoration (context);
 
   /* We don't want windows to jump as they go to backdrop,
    * therefore we use the maximum of the decoration sizes
@@ -6651,8 +6652,7 @@ update_border_windows (GtkWindow *window)
   state = _gtk_widget_get_state_flags (widget);
   context = _gtk_widget_get_style_context (widget);
 
-  gtk_style_context_save (context);
-  add_window_frame_style_class (context);
+  style_context_save_to_decoration (context);
   gtk_style_context_set_state (context, state);
   gtk_style_context_get_margin (context, state, &border);
   gtk_widget_style_get (widget,
@@ -6888,8 +6888,7 @@ subtract_corners_from_region (cairo_region_t        *region,
 {
   cairo_rectangle_int_t rect;
 
-  gtk_style_context_save (context);
-  add_window_frame_style_class (context);
+  style_context_save_to_decoration (context);
 
   corner_rect (&rect, _gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_BORDER_TOP_LEFT_RADIUS));
   rect.x = extents->x;
@@ -9792,9 +9791,7 @@ gtk_window_draw (GtkWidget *widget,
           !priv->fullscreen &&
           !priv->maximized)
         {
-          gtk_style_context_save (context);
-
-          add_window_frame_style_class (context);
+          style_context_save_to_decoration (context);
 
           if (priv->use_client_shadow)
             {
