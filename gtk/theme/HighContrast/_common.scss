@@ -1377,7 +1377,7 @@ GtkTreeView.view.progressbar { //Progressbar in treeview cells
     }
 
     //here's the interesting stuff
-    &:hover, &.prelight-page {
+    &:hover {
       border-color: $borders_color;
     }
     &:active, &:backdrop:active {
@@ -1393,7 +1393,7 @@ GtkTreeView.view.progressbar { //Progressbar in treeview cells
                              (right, left) {
       &.reorderable-page.#{$_tab} {
         border-color: transparent;
-        &:hover, &.prelight-page {
+        &:hover {
           border-color: transparentize($borders_color,0.7);
           border-#{$_border}-color: $borders_color;
           background-color: transparentize($bg_color,0.8);
@@ -1419,11 +1419,11 @@ GtkTreeView.view.progressbar { //Progressbar in treeview cells
       padding: 0 2px; // needed for a nicer focus ring
       font-weight: bold;
       color: $insensitive_fg_color; /* color: inherit doesn't work here */
-      &:backdrop, &.prelight-page:backdrop {
+      &:backdrop {
         color: $insensitive_fg_color;
       }
     }
-    &.prelight-page GtkLabel, GtkLabel.prelight-page {
+    &:hover GtkLabel {
       // prelight tab text
       color: mix($fg_color, $insensitive_fg_color, 50%);
     }

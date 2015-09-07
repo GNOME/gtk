@@ -3198,18 +3198,12 @@ update_prelight_tab (GtkNotebook     *notebook,
     {
       gtk_css_node_set_state (priv->prelight_tab->cssnode,
                               gtk_css_node_get_state (priv->prelight_tab->cssnode) & ~GTK_STATE_FLAG_PRELIGHT);
-      if (priv->prelight_tab->tab_label)
-        gtk_style_context_remove_class (gtk_widget_get_style_context (priv->prelight_tab->tab_label),
-                                        "prelight-page");
     }
 
   if (page)
     {
       gtk_css_node_set_state (page->cssnode,
                               gtk_css_node_get_state (page->cssnode) | GTK_STATE_FLAG_PRELIGHT);
-      if (page->tab_label)
-        gtk_style_context_add_class (gtk_widget_get_style_context (page->tab_label),
-                                     "prelight-page");
     }
 
   priv->prelight_tab = page;
@@ -7803,10 +7797,6 @@ gtk_notebook_set_tab_label (GtkNotebook *notebook,
                         "mnemonic-activate",
                         G_CALLBACK (gtk_notebook_mnemonic_activate_switch_page),
                         notebook);
-
-  if (priv->prelight_tab == page)
-    gtk_style_context_add_class (gtk_widget_get_style_context (page->tab_label),
-                                 "prelight-page");
 
   if (priv->show_tabs && gtk_widget_get_visible (child))
     {

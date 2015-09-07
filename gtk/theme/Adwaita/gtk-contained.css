@@ -2136,7 +2136,7 @@ column-header .titlebar .button.titlebutton,
       border-right-width: 3px; }
     .notebook tab.right {
       border-left-width: 3px; }
-    .notebook tab:hover, .notebook tab.prelight-page {
+    .notebook tab:hover {
       border-color: #a1a1a1; }
     .notebook tab:active, .notebook tab:backdrop:active {
       border-color: #4a90d9; }
@@ -2145,7 +2145,7 @@ column-header .titlebar .button.titlebutton,
       border-color: transparent; }
     .notebook tab.reorderable-page.top {
       border-color: transparent; }
-      .notebook tab.reorderable-page.top:hover, .notebook tab.reorderable-page.top.prelight-page {
+      .notebook tab.reorderable-page.top:hover {
         border-color: rgba(161, 161, 161, 0.3);
         border-bottom-color: #a1a1a1;
         background-color: rgba(237, 237, 237, 0.2); }
@@ -2164,7 +2164,7 @@ column-header .titlebar .button.titlebutton,
         background-color: transparent; }
     .notebook tab.reorderable-page.bottom {
       border-color: transparent; }
-      .notebook tab.reorderable-page.bottom:hover, .notebook tab.reorderable-page.bottom.prelight-page {
+      .notebook tab.reorderable-page.bottom:hover {
         border-color: rgba(161, 161, 161, 0.3);
         border-top-color: #a1a1a1;
         background-color: rgba(237, 237, 237, 0.2); }
@@ -2183,7 +2183,7 @@ column-header .titlebar .button.titlebutton,
         background-color: transparent; }
     .notebook tab.reorderable-page.left {
       border-color: transparent; }
-      .notebook tab.reorderable-page.left:hover, .notebook tab.reorderable-page.left.prelight-page {
+      .notebook tab.reorderable-page.left:hover {
         border-color: rgba(161, 161, 161, 0.3);
         border-right-color: #a1a1a1;
         background-color: rgba(237, 237, 237, 0.2); }
@@ -2202,7 +2202,7 @@ column-header .titlebar .button.titlebutton,
         background-color: transparent; }
     .notebook tab.reorderable-page.right {
       border-color: transparent; }
-      .notebook tab.reorderable-page.right:hover, .notebook tab.reorderable-page.right.prelight-page {
+      .notebook tab.reorderable-page.right:hover {
         border-color: rgba(161, 161, 161, 0.3);
         border-left-color: #a1a1a1;
         background-color: rgba(237, 237, 237, 0.2); }
@@ -2223,11 +2223,11 @@ column-header .titlebar .button.titlebutton,
       padding: 0 2px;
       font-weight: bold;
       color: #8d9091; }
-      .notebook tab .label:backdrop, .notebook tab .label.prelight-page:backdrop {
+      .notebook tab .label:backdrop {
         color: #aaabac; }
-    .notebook tab .prelight-page .label, .notebook tab .label.prelight-page {
+    .notebook tab:hover .label {
       color: #5d6263; }
-      .notebook tab .prelight-page .label:backdrop, .notebook tab .label.prelight-page:backdrop {
+      .notebook tab:hover .label:backdrop {
         color: #aaabac; }
     .notebook tab:active .label {
       color: #2e3436; }
