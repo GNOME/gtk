@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 3.16.x\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-08-11 19:49+0200\n"
-"PO-Revision-Date: 2015-08-11 19:58+0200\n"
+"POT-Creation-Date: 2015-09-07 20:32+0200\n"
+"PO-Revision-Date: 2015-09-07 20:39+0200\n"
 "Last-Translator: Kjartan Maraas <kmaraas@gnome.org>\n"
 "Language-Team: Norwegian bokmål <i18n-nb@lister.ping.uio.no>\n"
 "Language: no\n"
@@ -80,7 +80,7 @@ msgstr "FLAGG"
 msgid "GDK debugging flags to unset"
 msgstr "Feilsøkingsflagg som skal fjernes for GDK"
 
-#: ../gdk/gdkwindow.c:2737
+#: ../gdk/gdkwindow.c:2734
 msgid "GL support disabled via GDK_DEBUG"
 msgstr "GL-støtte slått av via GDK_DEBUG"
 
@@ -659,15 +659,15 @@ msgctxt "Stock label"
 msgid "_Close"
 msgstr "_Lukk"
 
-#: ../gtk/a11y/gtkimageaccessible.c:59 ../gtk/gtkheaderbar.c:406
+#: ../gtk/a11y/gtkimageaccessible.c:59 ../gtk/gtkheaderbar.c:409
 msgid "Minimize"
 msgstr "Minimer"
 
-#: ../gtk/a11y/gtkimageaccessible.c:60 ../gtk/gtkheaderbar.c:429
+#: ../gtk/a11y/gtkimageaccessible.c:60 ../gtk/gtkheaderbar.c:432
 msgid "Maximize"
 msgstr "Maksimer"
 
-#: ../gtk/a11y/gtkimageaccessible.c:61 ../gtk/gtkheaderbar.c:429
+#: ../gtk/a11y/gtkimageaccessible.c:61 ../gtk/gtkheaderbar.c:432
 msgid "Restore"
 msgstr "Gjenopprett"
 
@@ -1214,9 +1214,9 @@ msgstr ""
 #: ../gtk/gtkfilechooserwidget.c:1448 ../gtk/gtkfilechooserwidget.c:6301
 #: ../gtk/gtkmessagedialog.c:942 ../gtk/gtkmessagedialog.c:955
 #: ../gtk/gtkmountoperation.c:543 ../gtk/gtkpagesetupunixdialog.c:196
-#: ../gtk/gtkprintbackend.c:763 ../gtk/gtkprinteroptionwidget.c:545
+#: ../gtk/gtkprintbackend.c:759 ../gtk/gtkprinteroptionwidget.c:545
 #: ../gtk/gtkprintunixdialog.c:665 ../gtk/gtkprintunixdialog.c:738
-#: ../gtk/gtkwindow.c:12102 ../gtk/inspector/css-editor.c:199
+#: ../gtk/gtkwindow.c:12075 ../gtk/inspector/css-editor.c:199
 msgid "_Cancel"
 msgstr "_Avbryt"
 
@@ -1261,8 +1261,8 @@ msgid "_Apply"
 msgstr "_Bruk"
 
 #: ../gtk/deprecated/gtkfontsel.c:1698 ../gtk/gtkmessagedialog.c:934
-#: ../gtk/gtkmessagedialog.c:956 ../gtk/gtkprintbackend.c:764
-#: ../gtk/gtkwindow.c:12103 ../gtk/inspector/classes-list.c:127
+#: ../gtk/gtkmessagedialog.c:956 ../gtk/gtkprintbackend.c:760
+#: ../gtk/gtkwindow.c:12076 ../gtk/inspector/classes-list.c:127
 msgid "_OK"
 msgstr "_OK"
 
@@ -1537,7 +1537,7 @@ msgstr "Grafikk av"
 #. * translated on keyboards used for your language, don't translate
 #. * this.
 #.
-#: ../gtk/gtkaccellabel.c:164
+#: ../gtk/gtkaccellabel.c:165
 msgctxt "keyboard label"
 msgid "Shift"
 msgstr "Shift"
@@ -1547,7 +1547,7 @@ msgstr "Shift"
 #. * translated on keyboards used for your language, don't translate
 #. * this.
 #.
-#: ../gtk/gtkaccellabel.c:170
+#: ../gtk/gtkaccellabel.c:171
 msgctxt "keyboard label"
 msgid "Ctrl"
 msgstr "Ctrl"
@@ -1557,7 +1557,7 @@ msgstr "Ctrl"
 #. * translated on keyboards used for your language, don't translate
 #. * this.
 #.
-#: ../gtk/gtkaccellabel.c:176
+#: ../gtk/gtkaccellabel.c:177
 msgctxt "keyboard label"
 msgid "Alt"
 msgstr "Alt"
@@ -1567,7 +1567,7 @@ msgstr "Alt"
 #. * translated on keyboards used for your language, don't translate
 #. * this.
 #.
-#: ../gtk/gtkaccellabel.c:795
+#: ../gtk/gtkaccellabel.c:828
 msgctxt "keyboard label"
 msgid "Super"
 msgstr "Super"
@@ -1577,7 +1577,7 @@ msgstr "Super"
 #. * translated on keyboards used for your language, don't translate
 #. * this.
 #.
-#: ../gtk/gtkaccellabel.c:808
+#: ../gtk/gtkaccellabel.c:841
 msgctxt "keyboard label"
 msgid "Hyper"
 msgstr "Hyper"
@@ -1587,17 +1587,17 @@ msgstr "Hyper"
 #. * translated on keyboards used for your language, don't translate
 #. * this.
 #.
-#: ../gtk/gtkaccellabel.c:822
+#: ../gtk/gtkaccellabel.c:855
 msgctxt "keyboard label"
 msgid "Meta"
 msgstr "Meta"
 
-#: ../gtk/gtkaccellabel.c:839
+#: ../gtk/gtkaccellabel.c:872
 msgctxt "keyboard label"
 msgid "Space"
 msgstr "Mellomrom"
 
-#: ../gtk/gtkaccellabel.c:842
+#: ../gtk/gtkaccellabel.c:875
 msgctxt "keyboard label"
 msgid "Backslash"
 msgstr "Backslash"
@@ -2139,45 +2139,45 @@ msgstr "Høy_re:"
 msgid "Paper Margins"
 msgstr "Papirmarger"
 
-#: ../gtk/gtkentry.c:9654 ../gtk/gtklabel.c:6600 ../gtk/gtktextview.c:9020
+#: ../gtk/gtkentry.c:9637 ../gtk/gtklabel.c:6602 ../gtk/gtktextview.c:9368
 msgid "Cu_t"
 msgstr "Klipp u_t"
 
-#: ../gtk/gtkentry.c:9658 ../gtk/gtklabel.c:6601 ../gtk/gtktextview.c:9024
+#: ../gtk/gtkentry.c:9641 ../gtk/gtklabel.c:6603 ../gtk/gtktextview.c:9372
 msgid "_Copy"
 msgstr "_Kopier"
 
-#: ../gtk/gtkentry.c:9662 ../gtk/gtklabel.c:6602 ../gtk/gtktextview.c:9026
+#: ../gtk/gtkentry.c:9645 ../gtk/gtklabel.c:6604 ../gtk/gtktextview.c:9374
 msgid "_Paste"
 msgstr "_Lim inn"
 
-#: ../gtk/gtkentry.c:9665 ../gtk/gtkfilechooserwidget.c:1449
-#: ../gtk/gtkfilechooserwidget.c:2247 ../gtk/gtklabel.c:6604
-#: ../gtk/gtktextview.c:9029
+#: ../gtk/gtkentry.c:9648 ../gtk/gtkfilechooserwidget.c:1449
+#: ../gtk/gtkfilechooserwidget.c:2247 ../gtk/gtklabel.c:6606
+#: ../gtk/gtktextview.c:9377
 msgid "_Delete"
 msgstr "_Slett"
 
-#: ../gtk/gtkentry.c:9676 ../gtk/gtklabel.c:6613 ../gtk/gtktextview.c:9043
+#: ../gtk/gtkentry.c:9659 ../gtk/gtklabel.c:6615 ../gtk/gtktextview.c:9391
 msgid "Select _All"
 msgstr "Velg _alt"
 
-#: ../gtk/gtkentry.c:9854 ../gtk/gtktextview.c:9253
+#: ../gtk/gtkentry.c:9837 ../gtk/gtktextview.c:9601
 msgid "Select all"
 msgstr "Velg alt"
 
-#: ../gtk/gtkentry.c:9857 ../gtk/gtktextview.c:9256
+#: ../gtk/gtkentry.c:9840 ../gtk/gtktextview.c:9604
 msgid "Cut"
 msgstr "Klipp ut"
 
-#: ../gtk/gtkentry.c:9860 ../gtk/gtktextview.c:9259
+#: ../gtk/gtkentry.c:9843 ../gtk/gtktextview.c:9607
 msgid "Copy"
 msgstr "Kopier"
 
-#: ../gtk/gtkentry.c:9863 ../gtk/gtktextview.c:9262
+#: ../gtk/gtkentry.c:9846 ../gtk/gtktextview.c:9610
 msgid "Paste"
 msgstr "Lim inn"
 
-#: ../gtk/gtkentry.c:10950
+#: ../gtk/gtkentry.c:10933
 msgid "Caps Lock is on"
 msgstr "Caps Lock er på"
 
@@ -2194,8 +2194,8 @@ msgid "(None)"
 msgstr "(Ingen)"
 
 #. Open item is always present
-#: ../gtk/gtkfilechooserbutton.c:796 ../gtk/gtkplacessidebar.c:3349
-#: ../gtk/gtkplacesview.c:1335
+#: ../gtk/gtkfilechooserbutton.c:796 ../gtk/gtkplacessidebar.c:3351
+#: ../gtk/gtkplacesview.c:1618
 msgid "_Open"
 msgstr "_Åpne"
 
@@ -2363,7 +2363,7 @@ msgstr "Kopier _adresse"
 msgid "_Add to Bookmarks"
 msgstr "L_egg til i bokmerker"
 
-#: ../gtk/gtkfilechooserwidget.c:2246 ../gtk/gtkplacessidebar.c:2448
+#: ../gtk/gtkfilechooserwidget.c:2246 ../gtk/gtkplacessidebar.c:2450
 msgid "_Rename"
 msgstr "End_re navn"
 
@@ -2413,7 +2413,7 @@ msgstr "Oppgi lokasjon"
 msgid "Enter location or URL"
 msgstr "Oppgi lokasjon eller URL"
 
-#: ../gtk/gtkfilechooserwidget.c:4334 ../gtk/gtkfilechooserwidget.c:7205
+#: ../gtk/gtkfilechooserwidget.c:4334 ../gtk/gtkfilechooserwidget.c:7215
 msgid "Modified"
 msgstr "Endret"
 
@@ -2478,11 +2478,15 @@ msgstr ""
 msgid "_Replace"
 msgstr "E_rstatt"
 
-#: ../gtk/gtkfilechooserwidget.c:7116
+#: ../gtk/gtkfilechooserwidget.c:6512
+msgid "You do not have access to the specified folder."
+msgstr "Du har ikke tilgang til oppgitt mappe."
+
+#: ../gtk/gtkfilechooserwidget.c:7126
 msgid "Could not start the search process"
 msgstr "Klarte ikke å starte søkeprosessen"
 
-#: ../gtk/gtkfilechooserwidget.c:7117
+#: ../gtk/gtkfilechooserwidget.c:7127
 msgid ""
 "The program was not able to create a connection to the indexer daemon. "
 "Please make sure it is running."
@@ -2490,11 +2494,11 @@ msgstr ""
 "Programmet kunne ikke opprette en tilkobling til indekseringstjenesten. "
 "Sjekk at denne kjører."
 
-#: ../gtk/gtkfilechooserwidget.c:7129
+#: ../gtk/gtkfilechooserwidget.c:7139
 msgid "Could not send the search request"
 msgstr "Klarte ikke å sende søkeforespørselen"
 
-#: ../gtk/gtkfilechooserwidget.c:7422
+#: ../gtk/gtkfilechooserwidget.c:7432
 msgid "Accessed"
 msgstr "Aksessert"
 
@@ -2529,11 +2533,11 @@ msgstr "Ingen"
 msgid "OpenGL context creation failed"
 msgstr "Oppretting av OpenGL-kontekst feilet"
 
-#: ../gtk/gtkheaderbar.c:385
+#: ../gtk/gtkheaderbar.c:388
 msgid "Application menu"
 msgstr "Programmeny"
 
-#: ../gtk/gtkheaderbar.c:447 ../gtk/gtkwindow.c:8705
+#: ../gtk/gtkheaderbar.c:450 ../gtk/gtkwindow.c:8671
 msgid "Close"
 msgstr "Lukk"
 
@@ -2546,12 +2550,12 @@ msgstr "Ikon «%s» finnes ikke i tema %s"
 msgid "Failed to load icon"
 msgstr "Feil under lasting av ikon"
 
-#: ../gtk/gtkimmodule.c:534
+#: ../gtk/gtkimmodule.c:530
 msgctxt "input method menu"
 msgid "Simple"
 msgstr "Enkel"
 
-#: ../gtk/gtkimmodule.c:550
+#: ../gtk/gtkimmodule.c:546
 msgctxt "input method menu"
 msgid "None"
 msgstr "Ingen"
@@ -2584,12 +2588,12 @@ msgid "Error"
 msgstr "Feil"
 
 #. Open Link
-#: ../gtk/gtklabel.c:6581
+#: ../gtk/gtklabel.c:6583
 msgid "_Open Link"
 msgstr "_Åpne lenke"
 
 #. Copy Link Address
-#: ../gtk/gtklabel.c:6590
+#: ../gtk/gtklabel.c:6592
 msgid "Copy _Link Address"
 msgstr "Kopier _lenkas adresse"
 
@@ -2709,16 +2713,16 @@ msgstr "Feilsøkingsflagg som skal settes for GTK+"
 msgid "GTK+ debugging flags to unset"
 msgstr "Feilsøkingsflagg som skal fjernes for GTK+"
 
-#: ../gtk/gtkmain.c:776
+#: ../gtk/gtkmain.c:781
 #, c-format
 msgid "Cannot open display: %s"
 msgstr "Kan ikke åpne skjerm: %s"
 
-#: ../gtk/gtkmain.c:853
+#: ../gtk/gtkmain.c:858
 msgid "GTK+ Options"
 msgstr "Alternativer for GTK+"
 
-#: ../gtk/gtkmain.c:853
+#: ../gtk/gtkmain.c:858
 msgid "Show GTK+ Options"
 msgstr "Vis alternativer for GTK+"
 
@@ -2727,7 +2731,7 @@ msgstr "Vis alternativer for GTK+"
 #. * Do *not* translate it to "predefinito:LTR", if it
 #. * it isn't default:LTR or default:RTL it will not work
 #.
-#: ../gtk/gtkmain.c:1177
+#: ../gtk/gtkmain.c:1182
 msgid "default:LTR"
 msgstr "default:LTR"
 
@@ -2824,7 +2828,7 @@ msgstr "Z Shell"
 msgid "Cannot end process with PID %d: %s"
 msgstr "Kan ikke avslutte prosess med PID %d: %s"
 
-#: ../gtk/gtknotebook.c:5172 ../gtk/gtknotebook.c:7903
+#: ../gtk/gtknotebook.c:5168 ../gtk/gtknotebook.c:7899
 #, c-format
 msgid "Page %u"
 msgstr "Side %u"
@@ -2865,7 +2869,7 @@ msgstr "Håndter egendefinerte størrelser …"
 msgid "Page Setup"
 msgstr "Sideoppsett"
 
-#: ../gtk/gtkpathbar.c:1627
+#: ../gtk/gtkpathbar.c:1587
 msgid "File System Root"
 msgstr "Filsystemrot"
 
@@ -2936,159 +2940,193 @@ msgid "Show other locations"
 msgstr "Vis andre lokasjoner"
 
 #. Adjust start/stop items to reflect the type of the drive
-#: ../gtk/gtkplacessidebar.c:2097 ../gtk/gtkplacessidebar.c:3369
+#: ../gtk/gtkplacessidebar.c:2099 ../gtk/gtkplacessidebar.c:3371
 msgid "_Start"
 msgstr "_Start"
 
-#: ../gtk/gtkplacessidebar.c:2098 ../gtk/gtkplacessidebar.c:3370
+#: ../gtk/gtkplacessidebar.c:2100 ../gtk/gtkplacessidebar.c:3372
 msgid "_Stop"
 msgstr "_Stopp"
 
 #. start() for type G_DRIVE_START_STOP_TYPE_SHUTDOWN is normally not used
-#: ../gtk/gtkplacessidebar.c:2105
+#: ../gtk/gtkplacessidebar.c:2107
 msgid "_Power On"
 msgstr "Slå _på"
 
-#: ../gtk/gtkplacessidebar.c:2106
+#: ../gtk/gtkplacessidebar.c:2108
 msgid "_Safely Remove Drive"
 msgstr "_Fjern stasjon på en trygg måte"
 
-#: ../gtk/gtkplacessidebar.c:2110
+#: ../gtk/gtkplacessidebar.c:2112
 msgid "_Connect Drive"
 msgstr "_Koble til stasjon"
 
-#: ../gtk/gtkplacessidebar.c:2111
+#: ../gtk/gtkplacessidebar.c:2113
 msgid "_Disconnect Drive"
 msgstr "Koble _fra stasjon"
 
-#: ../gtk/gtkplacessidebar.c:2115
+#: ../gtk/gtkplacessidebar.c:2117
 msgid "_Start Multi-disk Device"
 msgstr "_Start enhet med flere disker"
 
-#: ../gtk/gtkplacessidebar.c:2116
+#: ../gtk/gtkplacessidebar.c:2118
 msgid "_Stop Multi-disk Device"
 msgstr "_Stopp enhet med flere disker"
 
 #. stop() for type G_DRIVE_START_STOP_TYPE_PASSWORD is normally not used
-#: ../gtk/gtkplacessidebar.c:2121
+#: ../gtk/gtkplacessidebar.c:2123
 msgid "_Unlock Device"
 msgstr "Lås _opp enhet"
 
-#: ../gtk/gtkplacessidebar.c:2122
+#: ../gtk/gtkplacessidebar.c:2124
 msgid "_Lock Device"
 msgstr "_Lås enhet"
 
-#: ../gtk/gtkplacessidebar.c:2160 ../gtk/gtkplacessidebar.c:3130
+#: ../gtk/gtkplacessidebar.c:2162 ../gtk/gtkplacessidebar.c:3132
 #, c-format
 msgid "Unable to start “%s”"
 msgstr "Kan ikke starte «%s»"
 
-#: ../gtk/gtkplacessidebar.c:2190
+#: ../gtk/gtkplacessidebar.c:2192
 #, c-format
 msgid "Unable to access “%s”"
 msgstr "Kan ikke aksessere «%s»"
 
-#: ../gtk/gtkplacessidebar.c:2391
+#: ../gtk/gtkplacessidebar.c:2393
 msgid "This name is already taken"
 msgstr "Dette navnet er allerede brukt"
 
-#: ../gtk/gtkplacessidebar.c:2442
+#: ../gtk/gtkplacessidebar.c:2444
 msgid "Name"
 msgstr "Navn"
 
-#: ../gtk/gtkplacessidebar.c:2594
+#: ../gtk/gtkplacessidebar.c:2596
 #, c-format
 msgid "Unable to unmount “%s”"
 msgstr "Kan ikke avmontere «%s»"
 
-#: ../gtk/gtkplacessidebar.c:2847
+#: ../gtk/gtkplacessidebar.c:2849
 #, c-format
 msgid "Unable to stop “%s”"
 msgstr "Kan ikke stoppe «%s»"
 
-#: ../gtk/gtkplacessidebar.c:2876
+#: ../gtk/gtkplacessidebar.c:2878
 #, c-format
 msgid "Unable to eject “%s”"
 msgstr "Kan ikke løse ut «%s»"
 
-#: ../gtk/gtkplacessidebar.c:2905 ../gtk/gtkplacessidebar.c:2934
+#: ../gtk/gtkplacessidebar.c:2907 ../gtk/gtkplacessidebar.c:2936
 #, c-format
 msgid "Unable to eject %s"
 msgstr "Kan ikke løse ut %s"
 
-#: ../gtk/gtkplacessidebar.c:3082
+#: ../gtk/gtkplacessidebar.c:3084
 #, c-format
 msgid "Unable to poll “%s” for media changes"
 msgstr "Kan ikke spørre «%s» etter endringer i medie"
 
-#: ../gtk/gtkplacessidebar.c:3352 ../gtk/gtkplacesview.c:1345
+#: ../gtk/gtkplacessidebar.c:3354 ../gtk/gtkplacesview.c:1628
 msgid "Open in New _Tab"
 msgstr "Åpne i ny _fane"
 
-#: ../gtk/gtkplacessidebar.c:3355 ../gtk/gtkplacesview.c:1356
+#: ../gtk/gtkplacessidebar.c:3357 ../gtk/gtkplacesview.c:1639
 msgid "Open in New _Window"
 msgstr "Åpne i nytt _vindu"
 
-#: ../gtk/gtkplacessidebar.c:3359
+#: ../gtk/gtkplacessidebar.c:3361
 msgid "_Add Bookmark"
 msgstr "_Legg til bokmerke"
 
-#: ../gtk/gtkplacessidebar.c:3360
+#: ../gtk/gtkplacessidebar.c:3362
 msgid "_Remove"
 msgstr "Fje_rn"
 
-#: ../gtk/gtkplacessidebar.c:3361
+#: ../gtk/gtkplacessidebar.c:3363
 msgid "Rename…"
 msgstr "Endre navn …"
 
-#: ../gtk/gtkplacessidebar.c:3365
+#: ../gtk/gtkplacessidebar.c:3367 ../gtk/gtkplacesview.c:1673
 msgid "_Mount"
 msgstr "_Monter"
 
-#: ../gtk/gtkplacessidebar.c:3366
+#: ../gtk/gtkplacessidebar.c:3368 ../gtk/gtkplacesview.c:1663
 msgid "_Unmount"
 msgstr "A_vmonter"
 
-#: ../gtk/gtkplacessidebar.c:3367
+#: ../gtk/gtkplacessidebar.c:3369
 msgid "_Eject"
 msgstr "_Løs ut"
 
-#: ../gtk/gtkplacessidebar.c:3368
+#: ../gtk/gtkplacessidebar.c:3370
 msgid "_Detect Media"
 msgstr "_Gjenkjenn medie"
 
-#: ../gtk/gtkplacessidebar.c:3817 ../gtk/gtkplacesview.c:797
+#: ../gtk/gtkplacessidebar.c:3819 ../gtk/gtkplacesview.c:1071
 msgid "Computer"
 msgstr "Datamaskin"
 
+#: ../gtk/gtkplacesview.c:900
+msgid "Searching for network locations"
+msgstr "Søker etter nettverkslokasjoner"
+
+#: ../gtk/gtkplacesview.c:907
+msgid "No network locations found"
+msgstr "Fant ingen nettverkslokasjoner"
+
 #. if it wasn't cancelled show a dialog
-#: ../gtk/gtkplacesview.c:933 ../gtk/gtkplacesview.c:962
-#: ../gtk/gtkplacesview.c:1017
+#: ../gtk/gtkplacesview.c:1181 ../gtk/gtkplacesview.c:1225
+#: ../gtk/gtkplacesview.c:1276
 msgid "Unable to access location"
 msgstr "Kan ikke aksessere lokasjon"
 
+#. Restore from Cancel to Connect
+#: ../gtk/gtkplacesview.c:1198
+msgid "Con_nect"
+msgstr "K_oble til"
+
 #. if it wasn't cancelled show a dialog
-#: ../gtk/gtkplacesview.c:1066
+#: ../gtk/gtkplacesview.c:1339
 msgid "Unable to unmount volume"
 msgstr "Kan ikke avmontere volum"
 
-#: ../gtk/gtkplacesview.c:1555
+#. Allow to cancel the operation
+#: ../gtk/gtkplacesview.c:1421
+msgid "Cance_l"
+msgstr "A_vbryt"
+
+#: ../gtk/gtkplacesview.c:1663
+msgid "_Disconnect"
+msgstr "Koble _fra"
+
+#: ../gtk/gtkplacesview.c:1673
+msgid "_Connect"
+msgstr "K_oble til"
+
+#: ../gtk/gtkplacesview.c:1838
 msgid "Unable to get remote server location"
 msgstr "Kan ikke finne lokasjon for ekstern tjener"
 
-#: ../gtk/gtkplacesview.c:1667 ../gtk/gtkplacesview.c:1676
+#: ../gtk/gtkplacesview.c:1957 ../gtk/gtkplacesview.c:1966
 msgid "Networks"
 msgstr "Nettverk"
 
-#: ../gtk/gtkplacesview.c:1667 ../gtk/gtkplacesview.c:1676
+#: ../gtk/gtkplacesview.c:1957 ../gtk/gtkplacesview.c:1966
 msgid "On This Computer"
 msgstr "På denne datamaskinen"
 
-#: ../gtk/gtkprintbackend.c:762
+#: ../gtk/gtkplacesviewrow.c:323
+msgid "Disconnect"
+msgstr "Koble fra"
+
+#: ../gtk/gtkplacesviewrow.c:323
+msgid "Unmount"
+msgstr "Avmonter"
+
+#: ../gtk/gtkprintbackend.c:758
 msgid "Authentication"
 msgstr "Autentisering"
 
-#: ../gtk/gtkprintbackend.c:833
+#: ../gtk/gtkprintbackend.c:829
 msgid "_Remember password"
 msgstr "Husk passo_rd"
 
@@ -3109,70 +3147,70 @@ msgstr "Ikke tilgjengelig"
 msgid "%s job #%d"
 msgstr "%s jobb #%d"
 
-#: ../gtk/gtkprintoperation.c:1777
+#: ../gtk/gtkprintoperation.c:1799
 msgctxt "print operation status"
 msgid "Initial state"
 msgstr "Starttilstand"
 
-#: ../gtk/gtkprintoperation.c:1778
+#: ../gtk/gtkprintoperation.c:1800
 msgctxt "print operation status"
 msgid "Preparing to print"
 msgstr "Forbereder utskrift"
 
-#: ../gtk/gtkprintoperation.c:1779
+#: ../gtk/gtkprintoperation.c:1801
 msgctxt "print operation status"
 msgid "Generating data"
 msgstr "Genererer data"
 
-#: ../gtk/gtkprintoperation.c:1780
+#: ../gtk/gtkprintoperation.c:1802
 msgctxt "print operation status"
 msgid "Sending data"
 msgstr "Sender data"
 
-#: ../gtk/gtkprintoperation.c:1781
+#: ../gtk/gtkprintoperation.c:1803
 msgctxt "print operation status"
 msgid "Waiting"
 msgstr "Venter"
 
-#: ../gtk/gtkprintoperation.c:1782
+#: ../gtk/gtkprintoperation.c:1804
 msgctxt "print operation status"
 msgid "Blocking on issue"
 msgstr "Blokkert pga hendelse"
 
-#: ../gtk/gtkprintoperation.c:1783
+#: ../gtk/gtkprintoperation.c:1805
 msgctxt "print operation status"
 msgid "Printing"
 msgstr "Skriver ut"
 
-#: ../gtk/gtkprintoperation.c:1784
+#: ../gtk/gtkprintoperation.c:1806
 msgctxt "print operation status"
 msgid "Finished"
 msgstr "Fullført"
 
-#: ../gtk/gtkprintoperation.c:1785
+#: ../gtk/gtkprintoperation.c:1807
 msgctxt "print operation status"
 msgid "Finished with error"
 msgstr "Fullført med feil"
 
-#: ../gtk/gtkprintoperation.c:2349
+#: ../gtk/gtkprintoperation.c:2371
 #, c-format
 msgid "Preparing %d"
 msgstr "Forbereder %d"
 
-#: ../gtk/gtkprintoperation.c:2351 ../gtk/gtkprintoperation.c:2984
+#: ../gtk/gtkprintoperation.c:2373 ../gtk/gtkprintoperation.c:3002
 msgid "Preparing"
 msgstr "Forbereder"
 
-#: ../gtk/gtkprintoperation.c:2354
+#: ../gtk/gtkprintoperation.c:2376
 #, c-format
 msgid "Printing %d"
 msgstr "Skriver ut %d"
 
-#: ../gtk/gtkprintoperation.c:3015
+#: ../gtk/gtkprintoperation.c:3033
 msgid "Error creating print preview"
 msgstr "Feil under oppretting av forhåndsvisning for utskrift"
 
-#: ../gtk/gtkprintoperation.c:3018
+#: ../gtk/gtkprintoperation.c:3036
 msgid "The most probable reason is that a temporary file could not be created."
 msgstr ""
 "Den mest sannsynlige årsaken er at en midlertidig fil ikke kunne lages."
@@ -3326,7 +3364,7 @@ msgstr "Bunn til topp"
 msgid "Print"
 msgstr "Skriv ut"
 
-#: ../gtk/gtkprogressbar.c:448
+#: ../gtk/gtkprogressbar.c:449
 #, c-format
 msgctxt "progress bar label"
 msgid "%.0f %%"
@@ -3628,18 +3666,18 @@ msgctxt "volume percentage"
 msgid "%d %%"
 msgstr "%d %%"
 
-#: ../gtk/gtkwindow.c:12090
+#: ../gtk/gtkwindow.c:12063
 msgid "Do you want to use GTK+ Inspector?"
 msgstr "Vil du bruke GTK+ inspektør?"
 
-#: ../gtk/gtkwindow.c:12092
+#: ../gtk/gtkwindow.c:12065
 msgid ""
 "GTK+ Inspector is an interactive debugger that lets you explore and modify "
 "the internals of any GTK+ application. Using it may cause the application to "
 "break or crash."
 msgstr ""
 
-#: ../gtk/gtkwindow.c:12097
+#: ../gtk/gtkwindow.c:12070
 msgid "Don't show this message again"
 msgstr "Ikke vis denne meldingen igjen"
 
