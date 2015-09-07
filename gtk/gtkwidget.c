@@ -8818,7 +8818,7 @@ gtk_widget_get_state (GtkWidget *widget)
 
   g_return_val_if_fail (GTK_IS_WIDGET (widget), GTK_STATE_NORMAL);
 
-  flags = gtk_widget_get_state_flags (widget);
+  flags = _gtk_widget_get_state_flags (widget);
 
   if (flags & GTK_STATE_FLAG_INSENSITIVE)
     return GTK_STATE_INSENSITIVE;
@@ -9407,7 +9407,7 @@ gtk_widget_set_parent (GtkWidget *widget,
 
   priv->parent = parent;
 
-  parent_flags = gtk_widget_get_state_flags (parent);
+  parent_flags = _gtk_widget_get_state_flags (parent);
 
   /* Merge both old state and current parent state,
    * making sure to only propagate the right states */
@@ -10187,7 +10187,7 @@ update_pango_context (GtkWidget    *widget,
 
   style_context = _gtk_widget_get_style_context (widget);
   gtk_style_context_get (style_context,
-                         gtk_widget_get_state_flags (widget),
+                         _gtk_widget_get_state_flags (widget),
                          "font", &font_desc,
                          NULL);
 

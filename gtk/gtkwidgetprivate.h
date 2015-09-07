@@ -333,6 +333,12 @@ _gtk_widget_is_toplevel (GtkWidget *widget)
   return widget->priv->toplevel;
 }
 
+static inline GtkStateFlags
+_gtk_widget_get_state_flags (GtkWidget *widget)
+{
+  return widget->priv->state_flags;
+}
+
 static inline GtkWidget *
 _gtk_widget_get_toplevel (GtkWidget *widget)
 {
