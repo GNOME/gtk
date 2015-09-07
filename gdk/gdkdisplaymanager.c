@@ -363,12 +363,12 @@ gdk_display_get_default (void)
 GdkScreen *
 gdk_screen_get_default (void)
 {
-  GdkDisplay *default_display;
+  GdkDisplay *display;
 
-  default_display = gdk_display_get_default ();
+  display = gdk_display_get_default ();
 
-  if (default_display)
-    return gdk_display_get_default_screen (default_display);
+  if (display)
+    return GDK_DISPLAY_GET_CLASS (display)->get_default_screen (display);
   else
     return NULL;
 }
