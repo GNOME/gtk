@@ -2833,7 +2833,7 @@ _gtk_settings_handle_event (GdkEventSetting *event)
   pspec = g_object_class_find_property (G_OBJECT_GET_CLASS (settings), event->name);
 
   if (pspec)
-    g_object_notify (G_OBJECT (settings), pspec->name);
+    g_object_notify_by_pspec (G_OBJECT (settings), pspec);
 }
 
 static void
