@@ -102,7 +102,8 @@ enum
   CHILD_PROP_TITLE,
   CHILD_PROP_ICON_NAME,
   CHILD_PROP_POSITION,
-  CHILD_PROP_NEEDS_ATTENTION
+  CHILD_PROP_NEEDS_ATTENTION,
+  LAST_CHILD_PROP
 };
 
 typedef struct _GtkStackChildInfo GtkStackChildInfo;
@@ -148,6 +149,7 @@ typedef struct {
 } GtkStackPrivate;
 
 static GParamSpec *stack_props[LAST_PROP] = { NULL, };
+static GParamSpec *stack_child_props[LAST_CHILD_PROP] = { NULL, };
 
 static void     gtk_stack_add                            (GtkContainer  *widget,
                                                           GtkWidget     *child);
@@ -473,33 +475,34 @@ gtk_stack_class_init (GtkStackClass *klass)
 
   g_object_class_install_properties (object_class, LAST_PROP, stack_props);
 
-  gtk_container_class_install_child_property (container_class, CHILD_PROP_NAME,
+  stack_child_props[CHILD_PROP_NAME] =
     g_param_spec_string ("name",
                          P_("Name"),
                          P_("The name of the child page"),
                          NULL,
-                         GTK_PARAM_READWRITE));
+                         GTK_PARAM_READWRITE);
 
-  gtk_container_class_install_child_property (container_class, CHILD_PROP_TITLE,
+  stack_child_props[CHILD_PROP_TITLE] =
     g_param_spec_string ("title",
                          P_("Title"),
                          P_("The title of the child page"),
                          NULL,
-                         GTK_PARAM_READWRITE));
+                         GTK_PARAM_READWRITE);
 
-  gtk_container_class_install_child_property (container_class, CHILD_PROP_ICON_NAME,
+  stack_child_props[CHILD_PROP_ICON_NAME] =
     g_param_spec_string ("icon-name",
                          P_("Icon name"),
                          P_("The icon name of the child page"),
                          NULL,
-                         GTK_PARAM_READWRITE));
+                         GTK_PARAM_READWRITE);
 
-  gtk_container_class_install_child_property (container_class, CHILD_PROP_POSITION,
+  stack_child_props[CHILD_PROP_POSITION] =
     g_param_spec_int ("position",
                       P_("Position"),
                       P_("The index of the child in the parent"),
-                      -1, G_MAXINT, 0,
-                      GTK_PARAM_READWRITE));
+                      -1, G_MAXINT,
+                      0,
+                      GTK_PARAM_READWRITE);
 
   /**
    * GtkStack:needs-attention:
@@ -511,12 +514,14 @@ gtk_stack_class_init (GtkStackClass *klass)
    *
    * Since: 3.12
    */
-  gtk_container_class_install_child_property (container_class, CHILD_PROP_NEEDS_ATTENTION,
+  stack_child_props[CHILD_PROP_NEEDS_ATTENTION] =
     g_param_spec_boolean ("needs-attention",
                          P_("Needs Attention"),
                          P_("Whether this page needs attention"),
                          FALSE,
-                         GTK_PARAM_READWRITE));
+                         GTK_PARAM_READWRITE);
+
+  gtk_container_class_install_child_properties (container_class, LAST_CHILD_PROP, stack_child_props);
 }
 
 /**
@@ -601,7 +606,7 @@ reorder_child (GtkStack  *stack,
   priv->children = g_list_delete_link (priv->children, old_link);
   priv->children = g_list_insert_before (priv->children, new_link, child_info);
 
-  gtk_widget_child_notify (child, "position");
+  gtk_container_child_notify_by_pspec (GTK_CONTAINER (stack), child, stack_child_props[CHILD_PROP_POSITION]);
 }
 
 static void
@@ -690,7 +695,7 @@ gtk_stack_set_child_property (GtkContainer *container,
       g_free (info->name);
       info->name = name;
 
-      gtk_container_child_notify (container, child, "name");
+      gtk_container_child_notify_by_pspec (container, child, pspec);
 
       if (priv->visible_child == info)
         g_object_notify_by_pspec (G_OBJECT (stack),
@@ -701,13 +706,13 @@ gtk_stack_set_child_property (GtkContainer *container,
     case CHILD_PROP_TITLE:
       g_free (info->title);
       info->title = g_value_dup_string (value);
-      gtk_container_child_notify (container, child, "title");
+      gtk_container_child_notify_by_pspec (container, child, pspec);
       break;
 
     case CHILD_PROP_ICON_NAME:
       g_free (info->icon_name);
       info->icon_name = g_value_dup_string (value);
-      gtk_container_child_notify (container, child, "icon-name");
+      gtk_container_child_notify_by_pspec (container, child, pspec);
       break;
 
     case CHILD_PROP_POSITION:
@@ -716,7 +721,7 @@ gtk_stack_set_child_property (GtkContainer *container,
 
     case CHILD_PROP_NEEDS_ATTENTION:
       info->needs_attention = g_value_get_boolean (value);
-      gtk_container_child_notify (container, child, "needs-attention");
+      gtk_container_child_notify_by_pspec (container, child, pspec);
       break;
 
     default:
@@ -1253,7 +1258,7 @@ gtk_stack_add (GtkContainer *container,
   g_signal_connect (child, "notify::visible",
                     G_CALLBACK (stack_child_visibility_notify_cb), stack);
 
-  gtk_widget_child_notify (child, "position");
+  gtk_container_child_notify_by_pspec (container, child, stack_child_props[CHILD_PROP_POSITION]);
 
   if (priv->visible_child == NULL &&
       gtk_widget_get_visible (child))
