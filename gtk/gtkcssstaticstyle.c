@@ -149,7 +149,7 @@ gtk_css_static_style_get_default (void)
   GtkCssStyle *result;
 
   if (style_quark == 0)
-    style_quark = g_quark_from_string ("gtk-default-style");
+    style_quark = g_quark_from_static_string ("gtk-default-style");
 
   settings = gtk_settings_get_for_screen (gdk_screen_get_default ());
   result = g_object_get_qdata (G_OBJECT (settings), style_quark);
