@@ -2270,15 +2270,9 @@ _gtk_builder_boolean_from_string (const gchar  *string,
                                   gboolean     *value,
                                   GError      **error)
 {
-  gboolean retval = TRUE;
-  int length;
-
-  g_assert (string != NULL);
-  length = strlen (string);
-
-  if (length == 0)
-    retval = FALSE;
-  else if (length == 1)
+  if (string[0] == '\0')
+    goto error;
+  else if (string[1] == '\0')
     {
       gchar c = g_ascii_tolower (string[0]);
       if (c == 'y' || c == 't' || c == '1')
@@ -2286,29 +2280,29 @@ _gtk_builder_boolean_from_string (const gchar  *string,
       else if (c == 'n' || c == 'f' || c == '0')
         *value = FALSE;
       else
-        retval = FALSE;
+        goto error;
     }
   else
     {
-      gchar *lower = g_ascii_strdown (string, length);
-
-      if (strcmp (lower, "yes") == 0 || strcmp (lower, "true") == 0)
+      if (g_ascii_strcasecmp (string, "true") == 0 ||
+          g_ascii_strcasecmp (string, "yes") == 0)
         *value = TRUE;
-      else if (strcmp (lower, "no") == 0 || strcmp (lower, "false") == 0)
+      else if (g_ascii_strcasecmp (string, "false") == 0 ||
+               g_ascii_strcasecmp (string, "no") == 0)
         *value = FALSE;
       else
-        retval = FALSE;
-      g_free (lower);
+        goto error;
     }
 
-  if (!retval)
-    g_set_error (error,
-                 GTK_BUILDER_ERROR,
-                 GTK_BUILDER_ERROR_INVALID_VALUE,
-                 "Could not parse boolean '%s'",
-                 string);
+  return TRUE;
 
-  return retval;
+error:
+  g_set_error (error,
+               GTK_BUILDER_ERROR,
+               GTK_BUILDER_ERROR_INVALID_VALUE,
+               "Could not parse boolean '%s'",
+               string);
+  return FALSE;
 }
 
 /**
