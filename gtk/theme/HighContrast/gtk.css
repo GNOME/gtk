@@ -2573,6 +2573,8 @@ GtkColorSwatch {
       border-color: #fff; }
   GtkColorSwatch:selected {
     box-shadow: inset 0 1px rgba(0, 0, 0, 0.1), 0 1px #fff; }
+  GtkColorButton > GtkColorSwatch {
+    box-shadow: none; }
   GtkColorSwatch.top {
     border-top-left-radius: 5px;
     border-top-right-radius: 5px; }

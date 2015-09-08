@@ -2360,6 +2360,7 @@ GtkColorSwatch {
 
   // we need to re-set the shadow here since it get axed by the previous bit
   &:selected { box-shadow: $_colorswatch_shadow; }
+  GtkColorButton > & { box-shadow: none; }
 
   // border rounding
   &.top {
