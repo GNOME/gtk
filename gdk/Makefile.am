@@ -33,9 +33,13 @@ EXTRA_DIST += 			\
 	gdkenumtypes.h.template	\
 	gdkversionmacros.h.in
 
-AM_CPPFLAGS = 				\
+GDK_CFLAGS_DEFINES =	\
 	-DG_LOG_DOMAIN=\"Gdk\"		\
-	-DGDK_COMPILATION		\
+	-DGDK_COMPILATION
+
+
+AM_CPPFLAGS =				\
+	$(GDK_CFLAGS_DEFINES)		\
 	-I$(top_builddir)		\
 	-I$(top_builddir)/gdk		\
 	-I$(top_srcdir)			\
@@ -302,7 +306,6 @@ INTROSPECTION_GIRS += GdkX11-3.0.gir
 
 endif # USE_X11
 
-if OS_WIN32
 w32_introspection_files =		\
 	win32/gdkcursor-win32.c		\
 	win32/gdkdevicemanager-win32.c	\
@@ -333,7 +336,7 @@ w32_introspection_files =		\
 	win32/gdkwin32window.h		\
 	win32/gdkwindow-win32.c
 
-
+if OS_WIN32
 GdkWin32-3.0.gir: libgdk-3.la Gdk-3.0.gir Makefile
 GdkWin32_3_0_gir_SCANNERFLAGS = \
 	--identifier-prefix=Gdk		\
@@ -455,9 +458,46 @@ gdk_3_HEADERS_EXCLUDES = dummy
 
 include $(top_srcdir)/build/Makefile.msvcproj
 
+if HAVE_INTROSPECTION
+# Introspection Items for MSVC
+MSVC_INTROSPECT_GIRS = Gdk-3.0.gir GdkWin32-3.0.gir
+
+BASE_MSVC_GIR_CFLAGS =			\
+	$(GDK_CFLAGS_DEFINES)		\
+	-I../.. -I../../gdk -I.../../gdk/win32
+
+INTROSPECTION_INTERMEDIATE_ITEMS = \
+	$(top_builddir)/build/win32/Gdk-3.0.gir.msvc.introspect	\
+	$(top_builddir)/build/win32/Gdk_3_0_gir_list			\
+	$(top_builddir)/build/win32/GdkWin32-3.0.gir.msvc.introspect	\
+	$(top_builddir)/build/win32/GdkWin32_3_0_gir_list
+
+Gdk_3_0_gir_MSVC_FILES = $(introspection_files)
+Gdk_3_0_gir_MSVC_EXPORT_PACKAGES = $(Gdk_3_0_gir_EXPORT_PACKAGES)
+Gdk_3_0_gir_MSVC_INCLUDE_GIRS = $(Gdk_3_0_gir_INCLUDES)
+Gdk_3_0_gir_MSVC_LIBS = gdk-3.0
+Gdk_3_0_gir_MSVC_CFLAGS = $(BASE_MSVC_GIR_CFLAGS)
+Gdk_3_0_gir_MSVC_SCANNERFLAGS = $(Gdk_3_0_gir_SCANNERFLAGS)
+
+GdkWin32_3_0_gir_MSVC_FILES = $(w32_introspection_files)
+GdkWin32_3_0_gir_MSVC_INCLUDE_GIRS = $(GdkWin32_3_0_gir_INCLUDES)
+GdkWin32_3_0_gir_MSVC_LIBS = $(Gdk_3_0_gir_MSVC_LIBS)
+GdkWin32_3_0_gir_MSVC_CFLAGS = $(BASE_MSVC_GIR_CFLAGS)
+GdkWin32_3_0_gir_MSVC_SCANNERFLAGS =	\
+	--identifier-prefix=Gdk		\
+	--c-include="gdk/gdkwin32.h"	\
+	--include-uninstalled=./Gdk-3.0.gir
+
+include $(top_srcdir)/build/Makefile.msvc-introspection
+
+else
+INTROSPECTION_INTERMEDIATE_ITEMS =
+endif
+
 dist-hook: \
 	$(top_builddir)/build/win32/vs9/gdk-3.vcproj	\
-	$(top_builddir)/build/win32/vs9/gdk-3.headers
+	$(top_builddir)/build/win32/vs9/gdk-3.headers	\
+	$(INTROSPECTION_INTERMEDIATE_ITEMS)
 
 DISTCLEANFILES = gdkconfig.h stamp-gc-h
 
