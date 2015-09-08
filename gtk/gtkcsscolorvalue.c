@@ -25,6 +25,8 @@
 #include "gtkstylepropertyprivate.h"
 #include "gtkwin32themeprivate.h"
 
+#include "gtkprivate.h"
+
 typedef enum {
   COLOR_TYPE_LITERAL,
   COLOR_TYPE_NAME,
@@ -141,8 +143,8 @@ _gtk_css_color_value_resolve (GtkCssValue             *color,
 {
   GtkCssValue *value;
 
-  g_return_val_if_fail (color != NULL, NULL);
-  g_return_val_if_fail (provider == NULL || GTK_IS_STYLE_PROVIDER_PRIVATE (provider), NULL);
+  gtk_internal_return_val_if_fail (color != NULL, NULL);
+  gtk_internal_return_val_if_fail (provider == NULL || GTK_IS_STYLE_PROVIDER_PRIVATE (provider), NULL);
 
   switch (color->type)
     {
@@ -466,7 +468,7 @@ _gtk_css_color_value_new_name (const gchar *name)
 {
   GtkCssValue *value;
 
-  g_return_val_if_fail (name != NULL, NULL);
+  gtk_internal_return_val_if_fail (name != NULL, NULL);
 
   value = _gtk_css_value_new (GtkCssValue, &GTK_CSS_VALUE_COLOR);
   value->type = COLOR_TYPE_NAME;
@@ -481,7 +483,7 @@ _gtk_css_color_value_new_shade (GtkCssValue *color,
 {
   GtkCssValue *value;
 
-  g_return_val_if_fail (color->class == &GTK_CSS_VALUE_COLOR, NULL);
+  gtk_internal_return_val_if_fail (color->class == &GTK_CSS_VALUE_COLOR, NULL);
 
   value = _gtk_css_value_new (GtkCssValue, &GTK_CSS_VALUE_COLOR);
   value->type = COLOR_TYPE_SHADE;
@@ -497,7 +499,7 @@ _gtk_css_color_value_new_alpha (GtkCssValue *color,
 {
   GtkCssValue *value;
 
-  g_return_val_if_fail (color->class == &GTK_CSS_VALUE_COLOR, NULL);
+  gtk_internal_return_val_if_fail (color->class == &GTK_CSS_VALUE_COLOR, NULL);
 
   value = _gtk_css_value_new (GtkCssValue, &GTK_CSS_VALUE_COLOR);
   value->type = COLOR_TYPE_ALPHA;
@@ -514,8 +516,8 @@ _gtk_css_color_value_new_mix (GtkCssValue *color1,
 {
   GtkCssValue *value;
 
-  g_return_val_if_fail (color1->class == &GTK_CSS_VALUE_COLOR, NULL);
-  g_return_val_if_fail (color2->class == &GTK_CSS_VALUE_COLOR, NULL);
+  gtk_internal_return_val_if_fail (color1->class == &GTK_CSS_VALUE_COLOR, NULL);
+  gtk_internal_return_val_if_fail (color2->class == &GTK_CSS_VALUE_COLOR, NULL);
 
   value = _gtk_css_value_new (GtkCssValue, &GTK_CSS_VALUE_COLOR);
   value->type = COLOR_TYPE_MIX;
@@ -532,7 +534,7 @@ _gtk_css_color_value_new_win32 (const gchar *theme_class,
 {
   GtkCssValue *value;
 
-  g_return_val_if_fail (theme_class != NULL, NULL);
+  gtk_internal_return_val_if_fail (theme_class != NULL, NULL);
 
   value = _gtk_css_value_new (GtkCssValue, &GTK_CSS_VALUE_COLOR);
   value->type = COLOR_TYPE_WIN32;
