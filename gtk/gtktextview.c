@@ -1644,6 +1644,7 @@ gtk_text_view_init (GtkTextView *text_view)
   GtkWidget *widget = GTK_WIDGET (text_view);
   GtkTargetList *target_list;
   GtkTextViewPrivate *priv;
+  GtkStyleContext *style_context;
 
   text_view->priv = gtk_text_view_get_instance_private (text_view);
   priv = text_view->priv;
@@ -1651,6 +1652,9 @@ gtk_text_view_init (GtkTextView *text_view)
   gtk_widget_set_can_focus (widget, TRUE);
 
   priv->pixel_cache = _gtk_pixel_cache_new ();
+
+  style_context = gtk_widget_get_style_context (GTK_WIDGET (text_view));
+  _gtk_pixel_cache_set_style_context (priv->pixel_cache, style_context);
 
   /* Set up default style */
   priv->wrap_mode = GTK_WRAP_NONE;
