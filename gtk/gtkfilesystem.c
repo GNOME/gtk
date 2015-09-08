@@ -924,6 +924,8 @@ _gtk_file_has_native_path (GFile *file)
 }
 
 static const gchar * const remote_types[] = {
+  "afp",
+  "google-drive",
   "sftp",
   "webdav",
   "ftp",
