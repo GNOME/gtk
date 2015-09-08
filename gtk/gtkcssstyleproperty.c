@@ -30,6 +30,7 @@
 #include "gtkintl.h"
 #include "gtkprivatetypebuiltins.h"
 #include "deprecated/gtkstylepropertiesprivate.h"
+#include "gtkprivate.h"
 
 /* this is in case round() is not provided by the compiler, 
  * such as in the case of C89 compilers, like MSVC
@@ -301,7 +302,7 @@ _gtk_css_style_property_lookup_by_id (guint id)
       g_assert (gtk_css_style_property_class);
     }
 
-  g_return_val_if_fail (id < gtk_css_style_property_class->style_properties->len, NULL);
+  gtk_internal_return_val_if_fail (id < gtk_css_style_property_class->style_properties->len, NULL);
 
   return g_ptr_array_index (gtk_css_style_property_class->style_properties, id);
 }
@@ -319,7 +320,7 @@ _gtk_css_style_property_lookup_by_id (guint id)
 gboolean
 _gtk_css_style_property_is_inherit (GtkCssStyleProperty *property)
 {
-  g_return_val_if_fail (GTK_IS_CSS_STYLE_PROPERTY (property), FALSE);
+  gtk_internal_return_val_if_fail (GTK_IS_CSS_STYLE_PROPERTY (property), FALSE);
 
   return property->inherit;
 }
@@ -337,7 +338,7 @@ _gtk_css_style_property_is_inherit (GtkCssStyleProperty *property)
 gboolean
 _gtk_css_style_property_is_animated (GtkCssStyleProperty *property)
 {
-  g_return_val_if_fail (GTK_IS_CSS_STYLE_PROPERTY (property), FALSE);
+  gtk_internal_return_val_if_fail (GTK_IS_CSS_STYLE_PROPERTY (property), FALSE);
 
   return property->animated;
 }
@@ -354,7 +355,7 @@ _gtk_css_style_property_is_animated (GtkCssStyleProperty *property)
 GtkCssAffects
 _gtk_css_style_property_get_affects (GtkCssStyleProperty *property)
 {
-  g_return_val_if_fail (GTK_IS_CSS_STYLE_PROPERTY (property), 0);
+  gtk_internal_return_val_if_fail (GTK_IS_CSS_STYLE_PROPERTY (property), 0);
 
   return property->affects;
 }
@@ -371,7 +372,7 @@ _gtk_css_style_property_get_affects (GtkCssStyleProperty *property)
 guint
 _gtk_css_style_property_get_id (GtkCssStyleProperty *property)
 {
-  g_return_val_if_fail (GTK_IS_CSS_STYLE_PROPERTY (property), 0);
+  gtk_internal_return_val_if_fail (GTK_IS_CSS_STYLE_PROPERTY (property), 0);
 
   return property->id;
 }
@@ -389,7 +390,7 @@ _gtk_css_style_property_get_id (GtkCssStyleProperty *property)
 GtkCssValue *
 _gtk_css_style_property_get_initial_value (GtkCssStyleProperty *property)
 {
-  g_return_val_if_fail (GTK_IS_CSS_STYLE_PROPERTY (property), NULL);
+  gtk_internal_return_val_if_fail (GTK_IS_CSS_STYLE_PROPERTY (property), NULL);
 
   return property->initial_value;
 }
