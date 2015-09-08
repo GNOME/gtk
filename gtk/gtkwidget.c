@@ -4385,7 +4385,7 @@ gtk_widget_dispatch_child_properties_changed (GtkWidget   *widget,
   guint i;
 
   for (i = 0; widget->priv->parent == container && i < n_pspecs; i++)
-    g_signal_emit (widget, widget_signals[CHILD_NOTIFY], g_quark_from_string (pspecs[i]->name), pspecs[i]);
+    g_signal_emit (widget, widget_signals[CHILD_NOTIFY], g_param_spec_get_name_quark (pspecs[i]), pspecs[i]);
 }
 
 /**
