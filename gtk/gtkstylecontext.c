@@ -2504,11 +2504,7 @@ gtk_style_context_set_background (GtkStyleContext *context,
    */
   color = _gtk_css_rgba_value_get_rgba (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_BACKGROUND_COLOR));
 
-  if (color->alpha >= 1.0 &&
-      corner_value_is_right_angle (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_BORDER_TOP_LEFT_RADIUS)) &&
-      corner_value_is_right_angle (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_BORDER_TOP_RIGHT_RADIUS)) &&
-      corner_value_is_right_angle (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_BORDER_BOTTOM_RIGHT_RADIUS)) &&
-      corner_value_is_right_angle (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_BORDER_BOTTOM_LEFT_RADIUS)))
+  if (_gtk_style_context_is_background_opaque (context))
     {
       gdk_window_set_background_rgba (window, color);
     }
@@ -3305,3 +3301,18 @@ gtk_gradient_resolve_for_context (GtkGradient     *gradient,
                                      priv->parent ? gtk_style_context_lookup_style (priv->parent) : NULL);
 }
 
+gboolean
+_gtk_style_context_is_background_opaque (GtkStyleContext *context)
+{
+  const GdkRGBA *color;
+
+  g_return_val_if_fail (context != NULL, FALSE);
+
+  color = _gtk_css_rgba_value_get_rgba (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_BACKGROUND_COLOR));
+
+  return (color->alpha >= 1.0 &&
+          corner_value_is_right_angle (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_BORDER_TOP_LEFT_RADIUS)) &&
+          corner_value_is_right_angle (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_BORDER_TOP_RIGHT_RADIUS)) &&
+          corner_value_is_right_angle (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_BORDER_BOTTOM_RIGHT_RADIUS)) &&
+          corner_value_is_right_angle (_gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_BORDER_BOTTOM_LEFT_RADIUS)));
+}
