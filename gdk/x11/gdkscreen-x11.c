@@ -1520,7 +1520,7 @@ gdk_x11_screen_get_setting (GdkScreen   *screen,
   if (setting == NULL)
     goto out;
 
-  if (!g_value_type_transformable (G_VALUE_TYPE (setting), G_VALUE_TYPE (value)))
+  if (!g_value_transform (setting, value))
     {
       g_warning ("Cannot transform xsetting %s of type %s to type %s\n",
 		 name,
@@ -1528,8 +1528,6 @@ gdk_x11_screen_get_setting (GdkScreen   *screen,
 		 g_type_name (G_VALUE_TYPE (value)));
       goto out;
     }
-
-  g_value_transform (setting, value);
 
   return TRUE;
 
