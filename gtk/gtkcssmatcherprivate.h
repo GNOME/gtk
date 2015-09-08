@@ -43,10 +43,6 @@ struct _GtkCssMatcherClass {
                                                    GQuark                 class_name);
   gboolean        (* has_id)                      (const GtkCssMatcher   *matcher,
                                                    const char            *id);
-  gboolean        (* has_regions)                 (const GtkCssMatcher   *matcher);
-  gboolean        (* has_region)                  (const GtkCssMatcher   *matcher,
-                                                   const char            *region,
-                                                   GtkRegionFlags         flags);
   gboolean        (* has_position)                (const GtkCssMatcher   *matcher,
                                                    gboolean               forward,
                                                    int                    a,
@@ -131,21 +127,6 @@ _gtk_css_matcher_has_id (const GtkCssMatcher *matcher,
                          const char          *id)
 {
   return matcher->klass->has_id (matcher, id);
-}
-
-
-static inline gboolean
-_gtk_css_matcher_has_regions (const GtkCssMatcher *matcher)
-{
-  return matcher->klass->has_regions (matcher);
-}
-
-static inline gboolean
-_gtk_css_matcher_has_region (const GtkCssMatcher *matcher,
-                             const char          *region,
-                             GtkRegionFlags       flags)
-{
-  return matcher->klass->has_region (matcher, region, flags);
 }
 
 static inline guint
