@@ -2160,14 +2160,6 @@ GtkSwitch {
   &:selected, &:hover { icon-shadow: none; }
 }
 
-//content view (grid/list)
-.content-view {
-  background-color: darken($bg_color,7%);
-  &:hover { -gtk-image-effect: highlight; }
-  &:backdrop { background-color: darken($bg_color,7%); }
-  &.rubberband { @extend .rubberband; }
-}
-
 //selection-mode
 @each $s,$as in ('','-selectionmode'),
                   (':hover', '-hover-selectionmode'),
@@ -2177,7 +2169,7 @@ GtkSwitch {
                   (':checked:hover', '-checked-hover-selectionmode'),
                   (':checked:active', '-checked-active-selectionmode'),
                   (':backdrop:checked', '-checked-backdrop-selectionmode') {
-  .view.content-view.check#{$s} {
+  .view.content-view.check#{$s}:not(.list) {
     icon-shadow: none;
     -gtk-icon-source: -gtk-scaled(url("assets/checkbox#{$as}.png"),
                                     url("assets/checkbox#{$as}@2.png"));
@@ -3201,6 +3193,14 @@ GtkColorSwatch {
 /********
  * Misc *
  ********/
+
+//content view (grid/list)
+.content-view {
+  background-color: darken($bg_color,7%);
+  &:hover { -gtk-image-effect: highlight; }
+  &:backdrop { background-color: darken($bg_color,7%); }
+  &.rubberband { @extend .rubberband; }
+}
 
 .scale-popup {
 

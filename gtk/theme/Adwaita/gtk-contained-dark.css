@@ -2821,49 +2821,42 @@ GtkSwitch {
   .list-row .check:hover, list-row .radio:selected, list-row .radio:hover {
     icon-shadow: none; }
 
-.content-view {
-  background-color: #282c2c; }
-  .content-view:hover {
-    -gtk-image-effect: highlight; }
-  .content-view:backdrop {
-    background-color: #282c2c; }
-
-.view.content-view.check {
+.view.content-view.check:not(.list) {
   icon-shadow: none;
   -gtk-icon-source: -gtk-scaled(url("assets/checkbox-selectionmode.png"), url("assets/checkbox-selectionmode@2.png"));
   background-color: transparent; }
 
-.view.content-view.check:hover {
+.view.content-view.check:hover:not(.list) {
   icon-shadow: none;
   -gtk-icon-source: -gtk-scaled(url("assets/checkbox-hover-selectionmode.png"), url("assets/checkbox-hover-selectionmode@2.png"));
   background-color: transparent; }
 
-.view.content-view.check:active {
+.view.content-view.check:active:not(.list) {
   icon-shadow: none;
   -gtk-icon-source: -gtk-scaled(url("assets/checkbox-active-selectionmode.png"), url("assets/checkbox-active-selectionmode@2.png"));
   background-color: transparent; }
 
-.view.content-view.check:backdrop {
+.view.content-view.check:backdrop:not(.list) {
   icon-shadow: none;
   -gtk-icon-source: -gtk-scaled(url("assets/checkbox-backdrop-selectionmode.png"), url("assets/checkbox-backdrop-selectionmode@2.png"));
   background-color: transparent; }
 
-.view.content-view.check:checked {
+.view.content-view.check:checked:not(.list) {
   icon-shadow: none;
   -gtk-icon-source: -gtk-scaled(url("assets/checkbox-checked-selectionmode.png"), url("assets/checkbox-checked-selectionmode@2.png"));
   background-color: transparent; }
 
-.view.content-view.check:checked:hover {
+.view.content-view.check:checked:hover:not(.list) {
   icon-shadow: none;
   -gtk-icon-source: -gtk-scaled(url("assets/checkbox-checked-hover-selectionmode.png"), url("assets/checkbox-checked-hover-selectionmode@2.png"));
   background-color: transparent; }
 
-.view.content-view.check:checked:active {
+.view.content-view.check:checked:active:not(.list) {
   icon-shadow: none;
   -gtk-icon-source: -gtk-scaled(url("assets/checkbox-checked-active-selectionmode.png"), url("assets/checkbox-checked-active-selectionmode@2.png"));
   background-color: transparent; }
 
-.view.content-view.check:backdrop:checked {
+.view.content-view.check:backdrop:checked:not(.list) {
   icon-shadow: none;
   -gtk-icon-source: -gtk-scaled(url("assets/checkbox-checked-backdrop-selectionmode.png"), url("assets/checkbox-checked-backdrop-selectionmode@2.png"));
   background-color: transparent; }
@@ -4278,6 +4271,13 @@ GtkColorSwatch {
 /********
  * Misc *
  ********/
+.content-view {
+  background-color: #282c2c; }
+  .content-view:hover {
+    -gtk-image-effect: highlight; }
+  .content-view:backdrop {
+    background-color: #282c2c; }
+
 .osd .scale-popup .button.flat, .osd .scale-popup .sidebar-button.button, .osd .scale-popup .header-bar .titlebutton.button, .header-bar .osd .scale-popup .titlebutton.button,
 .osd .scale-popup .titlebar .titlebutton.button,
 .titlebar .osd .scale-popup .titlebutton.button {
