@@ -16498,11 +16498,7 @@ void
 _gtk_widget_invalidate_style_context (GtkWidget    *widget,
                                       GtkCssChange  change)
 {
-  GtkWidgetPrivate *priv;
-
-  priv = widget->priv;
-
-  gtk_css_node_invalidate (priv->cssnode, change);
+  gtk_css_node_invalidate (widget->priv->cssnode, change);
 }
 
 /**
