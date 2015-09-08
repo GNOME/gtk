@@ -45,6 +45,9 @@ struct _GtkPixelCache {
   /* may be null if not dirty */
   cairo_region_t *surface_dirty;
 
+  /* background tracking for rgb/rgba */
+  GtkStyleContext *style_context;
+
   guint timeout_tag;
 
   guint extra_width;
@@ -87,6 +90,8 @@ _gtk_pixel_cache_free (GtkPixelCache *cache)
 
   if (cache->surface_dirty != NULL)
     cairo_region_destroy (cache->surface_dirty);
+
+  g_clear_object (&cache->style_context);
 
   g_free (cache);
 }
@@ -193,11 +198,8 @@ _gtk_pixel_cache_create_surface_if_needed (GtkPixelCache         *cache,
   if (!content)
     {
       content = CAIRO_CONTENT_COLOR_ALPHA;
-      bg = gdk_window_get_background_pattern (window);
-      if (bg != NULL &&
-          cairo_pattern_get_type (bg) == CAIRO_PATTERN_TYPE_SOLID &&
-          cairo_pattern_get_rgba (bg, &red, &green, &blue, &alpha) == CAIRO_STATUS_SUCCESS &&
-          alpha == 1.0)
+      if (cache->style_context &&
+          _gtk_style_context_is_background_opaque (cache->style_context))
         content = CAIRO_CONTENT_COLOR;
     }
 
@@ -499,4 +501,12 @@ _gtk_pixel_cache_set_always_cache (GtkPixelCache *cache,
                                    gboolean       always_cache)
 {
   cache->always_cache = !!always_cache;
+}
+
+void
+_gtk_pixel_cache_set_style_context (GtkPixelCache   *cache,
+                                    GtkStyleContext *style_context)
+{
+  if (g_set_object (&cache->style_context, style_context))
+    _gtk_pixel_cache_invalidate (cache, NULL);
 }
