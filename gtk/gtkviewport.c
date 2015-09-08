@@ -260,6 +260,7 @@ static void
 gtk_viewport_init (GtkViewport *viewport)
 {
   GtkViewportPrivate *priv;
+  GtkStyleContext *style_context;
 
   viewport->priv = gtk_viewport_get_instance_private (viewport);
   priv = viewport->priv;
@@ -275,6 +276,9 @@ gtk_viewport_init (GtkViewport *viewport)
   priv->vadjustment = NULL;
 
   priv->pixel_cache = _gtk_pixel_cache_new ();
+
+  style_context = gtk_widget_get_style_context (GTK_WIDGET (viewport));
+  _gtk_pixel_cache_set_style_context (priv->pixel_cache, style_context);
 
   gtk_style_context_add_class (gtk_widget_get_style_context (GTK_WIDGET (viewport)), GTK_STYLE_CLASS_FRAME);
   viewport_set_adjustment (viewport, GTK_ORIENTATION_HORIZONTAL, NULL);
