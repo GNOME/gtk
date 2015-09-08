@@ -3995,16 +3995,16 @@ unset_titlebar (GtkWindow *window)
 static gboolean
 gtk_window_supports_client_shadow (GtkWindow *window)
 {
-  GtkWidget *widget = GTK_WIDGET (window);
+  GdkDisplay *display;
+  GdkScreen *screen;
+  GdkVisual *visual;
+
+  screen = gtk_window_get_screen (window);
+  display = gdk_screen_get_display (screen);
 
 #ifdef GDK_WINDOWING_X11
-  if (GDK_IS_X11_DISPLAY (gtk_widget_get_display (widget)))
+  if (GDK_IS_X11_DISPLAY (display))
     {
-      GdkScreen *screen;
-      GdkVisual *visual;
-
-      screen = gtk_widget_get_screen (widget);
-
       if (!gdk_screen_is_composited (screen))
         return FALSE;
 
@@ -4019,13 +4019,8 @@ gtk_window_supports_client_shadow (GtkWindow *window)
 #endif
 
 #ifdef GDK_WINDOWING_WIN32
-  if (GDK_IS_WIN32_DISPLAY (gtk_widget_get_display (widget)))
+  if (GDK_IS_WIN32_DISPLAY (display))
     {
-      GdkScreen *screen;
-      GdkVisual *visual;
-
-      screen = gtk_widget_get_screen (widget);
-
       if (!gdk_screen_is_composited (screen))
         return FALSE;
 
@@ -5889,7 +5884,7 @@ gtk_window_show (GtkWidget *widget)
   gboolean need_resize;
   gboolean is_plug;
 
-  if (!gtk_widget_is_toplevel (GTK_WIDGET (widget)))
+  if (!_gtk_widget_is_toplevel (GTK_WIDGET (widget)))
     {
       GTK_WIDGET_CLASS (gtk_window_parent_class)->show (widget);
       return;
@@ -5984,7 +5979,7 @@ gtk_window_hide (GtkWidget *widget)
   GtkWindow *window = GTK_WINDOW (widget);
   GtkWindowPrivate *priv = window->priv;
 
-  if (!gtk_widget_is_toplevel (GTK_WIDGET (widget)))
+  if (!_gtk_widget_is_toplevel (GTK_WIDGET (widget)))
     {
       GTK_WIDGET_CLASS (gtk_window_parent_class)->hide (widget);
       return;
@@ -6037,7 +6032,7 @@ gtk_window_map (GtkWidget *widget)
   GList *link;
   GdkScreen *screen;
 
-  if (!gtk_widget_is_toplevel (widget))
+  if (!_gtk_widget_is_toplevel (widget))
     {
       GTK_WIDGET_CLASS (gtk_window_parent_class)->map (widget);
       return;
@@ -6179,7 +6174,7 @@ gtk_window_unmap (GtkWidget *widget)
   GdkWindowState state;
   GList *link;
 
-  if (!gtk_widget_is_toplevel (GTK_WIDGET (widget)))
+  if (!_gtk_widget_is_toplevel (GTK_WIDGET (widget)))
     {
       GTK_WIDGET_CLASS (gtk_window_parent_class)->unmap (widget);
       return;
@@ -6561,7 +6556,7 @@ get_shadow_width (GtkWidget *widget,
       priv->fullscreen)
     return;
 
-  if (!gtk_widget_is_toplevel (widget))
+  if (!_gtk_widget_is_toplevel (widget))
     return;
 
   state = _gtk_widget_get_state_flags (widget);
@@ -6982,7 +6977,7 @@ update_realized_window_properties (GtkWindow     *window,
 
   update_opaque_region (window, window_border, child_allocation);
 
-  if (gtk_widget_is_toplevel (GTK_WIDGET (window)))
+  if (_gtk_widget_is_toplevel (GTK_WIDGET (window)))
     update_border_windows (window);
 }
 
@@ -7465,7 +7460,7 @@ _gtk_window_set_allocation (GtkWindow           *window,
                                  priv->title_height;
     }
 
-  if (!gtk_widget_is_toplevel (widget) && _gtk_widget_get_realized (widget))
+  if (!_gtk_widget_is_toplevel (widget) && _gtk_widget_get_realized (widget))
     {
       gdk_window_move_resize (gtk_widget_get_window (widget),
                               allocation->x, allocation->y,
@@ -7515,7 +7510,7 @@ gtk_window_configure_event (GtkWidget         *widget,
 
   check_scale_changed (window);
 
-  if (!gtk_widget_is_toplevel (widget))
+  if (!_gtk_widget_is_toplevel (widget))
     return FALSE;
 
   /* If this is a gratuitous ConfigureNotify that's already
@@ -8101,7 +8096,7 @@ gtk_window_check_resize (GtkContainer *container)
 {
   /* If the window is not toplevel anymore than it's embedded somewhere,
    * so handle it like a normal window */
-  if (!gtk_widget_is_toplevel (GTK_WIDGET (container)))
+  if (!_gtk_widget_is_toplevel (GTK_WIDGET (container)))
     GTK_CONTAINER_CLASS (gtk_window_parent_class)->check_resize (container);
   else if (gtk_widget_get_visible (GTK_WIDGET (container)))
     gtk_window_move_resize (GTK_WINDOW (container));
@@ -8149,7 +8144,7 @@ gtk_window_focus (GtkWidget        *widget,
   GtkWidget *old_focus_child;
   GtkWidget *parent;
 
-  if (!gtk_widget_is_toplevel (widget))
+  if (!_gtk_widget_is_toplevel (widget))
     return GTK_WIDGET_CLASS (gtk_window_parent_class)->focus (widget, direction);
 
   container = GTK_CONTAINER (widget);
@@ -8214,7 +8209,7 @@ static void
 gtk_window_move_focus (GtkWidget        *widget,
                        GtkDirectionType  dir)
 {
-  if (!gtk_widget_is_toplevel (widget))
+  if (!_gtk_widget_is_toplevel (widget))
     {
       GTK_WIDGET_CLASS (gtk_window_parent_class)->move_focus (widget, dir);
       return;
@@ -11495,12 +11490,12 @@ _gtk_window_set_is_toplevel (GtkWindow *window,
 
   widget = GTK_WIDGET (window);
 
-  if (gtk_widget_is_toplevel (widget))
+  if (_gtk_widget_is_toplevel (widget))
     g_assert (g_slist_find (toplevel_list, window) != NULL);
   else
     g_assert (g_slist_find (toplevel_list, window) == NULL);
 
-  if (is_toplevel == gtk_widget_is_toplevel (widget))
+  if (is_toplevel == _gtk_widget_is_toplevel (widget))
     return;
 
   if (is_toplevel)
@@ -11523,8 +11518,8 @@ _gtk_window_set_is_toplevel (GtkWindow *window,
        * already unanchored at this point, just adding this clause incase
        * things happen differently.
        */
-      toplevel = gtk_widget_get_toplevel (widget);
-      if (!gtk_widget_is_toplevel (toplevel))
+      toplevel = _gtk_widget_get_toplevel (widget);
+      if (!_gtk_widget_is_toplevel (toplevel))
         toplevel = NULL;
 
       _gtk_widget_set_is_toplevel (widget, TRUE);
