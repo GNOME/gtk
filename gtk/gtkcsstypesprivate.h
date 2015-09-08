@@ -31,7 +31,6 @@ typedef struct _GtkStyleProviderPrivate GtkStyleProviderPrivate; /* dummy typede
 
 #define GTK_CSS_CHANGE_CLASS                          (1ULL <<  0)
 #define GTK_CSS_CHANGE_NAME                           (1ULL <<  1)
-#define GTK_CSS_CHANGE_REGION                         GTK_CSS_CHANGE_NAME
 #define GTK_CSS_CHANGE_ID                             (1ULL <<  2)
 #define GTK_CSS_CHANGE_FIRST_CHILD                    (1ULL <<  3)
 #define GTK_CSS_CHANGE_LAST_CHILD                     (1ULL <<  4)
@@ -48,7 +47,6 @@ typedef struct _GtkStyleProviderPrivate GtkStyleProviderPrivate; /* dummy typede
 #define GTK_CSS_CHANGE_SIBLING_STATE                  (1ULL << 15)
 #define GTK_CSS_CHANGE_PARENT_CLASS                   (1ULL << 16)
 #define GTK_CSS_CHANGE_PARENT_NAME                    (1ULL << 17)
-#define GTK_CSS_CHANGE_PARENT_REGION                  GTK_CSS_CHANGE_PARENT_NAME
 #define GTK_CSS_CHANGE_PARENT_ID                      (1ULL << 18)
 #define GTK_CSS_CHANGE_PARENT_FIRST_CHILD             (1ULL << 19)
 #define GTK_CSS_CHANGE_PARENT_LAST_CHILD              (1ULL << 20)
