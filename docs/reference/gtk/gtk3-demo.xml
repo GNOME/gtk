@@ -31,6 +31,9 @@
 <cmdsynopsis>
 <command>gtk3-demo</command>
 <arg choice="opt">--help</arg>
+<arg choice="opt">--list</arg>
+<arg choice="opt">--run <replaceable>EXAMPLE</replaceable></arg>
+<arg choice="opt">--autoquit</arg>
 </cmdsynopsis>
 </refsynopsisdiv>
 
@@ -52,6 +55,20 @@ other used resources, such as ui files and icons.
     <varlistentry>
     <term><option>-h</option>, <option>--help</option></term>
       <listitem><para>Show help options</para></listitem>
+    </varlistentry>
+    <varlistentry>
+    <term><option>--list</option></term>
+      <listitem><para>List available examples.</para></listitem>
+    </varlistentry>
+    <varlistentry>
+    <term><option>-run <replaceable>EXAMPLE</replaceable></option></term>
+      <listitem><para>Run the named example. Use <option>--list</option> to
+        see the available examples.</para></listitem>
+    </varlistentry>
+    <varlistentry>
+    <term><option>--autoquit</option></term>
+      <listitem><para>Quit after a short timeout. This is intended for use
+        with <option>--run</option>, e.g. when profiling.</para></listitem>
     </varlistentry>
   </variablelist>
 </refsect1>
