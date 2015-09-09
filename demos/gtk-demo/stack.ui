@@ -2,65 +2,58 @@
 <interface>
   <!-- interface-requires gtk+ 3.6 -->
   <object class="GtkWindow" id="window1">
-    <property name="can_focus">False</property>
-    <property name="title" translatable="yes">Stack</property>
+    <property name="title" translatable="1">Stack</property>
     <child>
       <object class="GtkGrid" id="grid1">
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
+        <property name="visible">1</property>
         <child>
           <object class="GtkStackSwitcher" id="switcher">
-            <property name="visible">True</property>
+            <property name="visible">1</property>
             <property name="stack">stack</property>
             <property name="halign">center</property>
           </object>
           <packing>
             <property name="left_attach">0</property>
             <property name="top_attach">0</property>
-            <property name="width">1</property>
-            <property name="height">1</property>
           </packing>
         </child>
         <child>
           <object class="GtkStack" id="stack">
-            <property name="visible">True</property>
-            <property name="can_focus">True</property>
+            <property name="visible">1</property>
+            <property name="can_focus">1</property>
             <property name="transition-type">crossfade</property>
             <child>
               <object class="GtkImage" id="image1">
-                <property name="visible">True</property>
-                <property name="can_focus">False</property>
+                <property name="visible">1</property>
                 <property name="margin-top">20</property>
                 <property name="margin-bottom">20</property>
                 <property name="icon-name">gtk3-demo</property>
               </object>
               <packing>
                 <property name="name">page1</property>
-                <property name="title" translatable="yes">Page 1</property>
+                <property name="title" translatable="1">Page 1</property>
               </packing>
             </child>
             <child>
               <object class="GtkCheckButton" id="checkbutton1">
-                <property name="label" translatable="yes">Page 2</property>
-                <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="receives_default">False</property>
-                <property name="draw_indicator">True</property>
+                <property name="label" translatable="1">Page 2</property>
+                <property name="visible">1</property>
+                <property name="can_focus">1</property>
+                <property name="draw_indicator">1</property>
                 <property name="halign">center</property>
                 <property name="valign">center</property>
               </object>
               <packing>
                 <property name="name">page2</property>
-                <property name="title" translatable="yes">Page 2</property>
+                <property name="title" translatable="1">Page 2</property>
               </packing>
             </child>
             <child>
               <object class="GtkSpinner" id="spinner1">
-                <property name="visible">True</property>
-                <property name="can_focus">False</property>
+                <property name="visible">1</property>
                 <property name="halign">center</property>
                 <property name="valign">center</property>
-                <property name="active">True</property>
+                <property name="active">1</property>
               </object>
               <packing>
                 <property name="name">page3</property>
@@ -71,8 +64,6 @@
           <packing>
             <property name="left_attach">0</property>
             <property name="top_attach">1</property>
-            <property name="width">1</property>
-            <property name="height">1</property>
           </packing>
         </child>
       </object>

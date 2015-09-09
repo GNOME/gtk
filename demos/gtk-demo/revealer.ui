@@ -8,17 +8,17 @@
     <property name="title">Revealer</property>
     <child>
       <object class="GtkGrid">
-        <property name="visible">True</property>
+        <property name="visible">1</property>
         <property name="halign">center</property>
         <property name="valign">center</property>
         <child>
           <object class="GtkRevealer" id="revealer0">
-            <property name="visible">True</property>
+            <property name="visible">1</property>
             <property name="transition-duration">2000</property>
             <property name="transition-type">crossfade</property>
             <child>
               <object class="GtkImage">
-                <property name="visible">True</property>
+                <property name="visible">1</property>
                 <property name="icon-name">face-cool-symbolic</property>
                 <property name="icon-size">6</property>
               </object>
@@ -31,12 +31,12 @@
         </child>
         <child>
           <object class="GtkRevealer" id="revealer1">
-            <property name="visible">True</property>
+            <property name="visible">1</property>
             <property name="transition-duration">2000</property>
             <property name="transition-type">slide-up</property>
             <child>
               <object class="GtkImage">
-                <property name="visible">True</property>
+                <property name="visible">1</property>
                 <property name="icon-name">face-cool-symbolic</property>
                 <property name="icon-size">6</property>
               </object>
@@ -49,12 +49,12 @@
         </child>
         <child>
           <object class="GtkRevealer" id="revealer2">
-            <property name="visible">True</property>
+            <property name="visible">1</property>
             <property name="transition-duration">2000</property>
             <property name="transition-type">slide-right</property>
             <child>
               <object class="GtkImage">
-                <property name="visible">True</property>
+                <property name="visible">1</property>
                 <property name="icon-name">face-cool-symbolic</property>
                 <property name="icon-size">6</property>
               </object>
@@ -67,11 +67,11 @@
         </child>
         <child>
           <object class="GtkRevealer" id="revealer3">
-            <property name="visible">True</property>
+            <property name="visible">1</property>
             <property name="transition-duration">2000</property>
             <child>
               <object class="GtkImage">
-                <property name="visible">True</property>
+                <property name="visible">1</property>
                 <property name="icon-name">face-cool-symbolic</property>
                 <property name="icon-size">6</property>
               </object>
@@ -84,12 +84,12 @@
         </child>
         <child>
           <object class="GtkRevealer" id="revealer4">
-            <property name="visible">True</property>
+            <property name="visible">1</property>
             <property name="transition-duration">2000</property>
             <property name="transition-type">slide-left</property>
             <child>
               <object class="GtkImage">
-                <property name="visible">True</property>
+                <property name="visible">1</property>
                 <property name="icon-name">face-cool-symbolic</property>
                 <property name="icon-size">6</property>
               </object>
@@ -102,12 +102,12 @@
         </child>
         <child>
           <object class="GtkRevealer" id="revealer5">
-            <property name="visible">True</property>
+            <property name="visible">1</property>
             <property name="transition-duration">2000</property>
             <property name="transition-type">slide-up</property>
             <child>
               <object class="GtkImage">
-                <property name="visible">True</property>
+                <property name="visible">1</property>
                 <property name="icon-name">face-cool-symbolic</property>
                 <property name="icon-size">6</property>
               </object>
@@ -120,12 +120,12 @@
         </child>
         <child>
           <object class="GtkRevealer" id="revealer6">
-            <property name="visible">True</property>
+            <property name="visible">1</property>
             <property name="transition-duration">2000</property>
             <property name="transition-type">slide-right</property>
             <child>
               <object class="GtkImage">
-                <property name="visible">True</property>
+                <property name="visible">1</property>
                 <property name="icon-name">face-cool-symbolic</property>
                 <property name="icon-size">6</property>
               </object>
@@ -138,11 +138,11 @@
         </child>
         <child>
           <object class="GtkRevealer" id="revealer7">
-            <property name="visible">True</property>
+            <property name="visible">1</property>
             <property name="transition-duration">2000</property>
             <child>
               <object class="GtkImage">
-                <property name="visible">True</property>
+                <property name="visible">1</property>
                 <property name="icon-name">face-cool-symbolic</property>
                 <property name="icon-size">6</property>
               </object>
@@ -155,12 +155,12 @@
         </child>
         <child>
           <object class="GtkRevealer" id="revealer8">
-            <property name="visible">True</property>
+            <property name="visible">1</property>
             <property name="transition-duration">2000</property>
             <property name="transition-type">slide-left</property>
             <child>
               <object class="GtkImage">
-                <property name="visible">True</property>
+                <property name="visible">1</property>
                 <property name="icon-name">face-cool-symbolic</property>
                 <property name="icon-size">6</property>
               </object>

@@ -3,9 +3,7 @@
   <object class="GtkGrid" id="grid">
     <child>
       <object class="GtkToolbar" id="toolbar">
-        <property name="orientation">horizontal</property>
-        <property name="halign">fill</property>
-        <property name="hexpand">True</property>
+        <property name="hexpand">1</property>
         <style>
           <class name="primary-toolbar"/>
         </style>
@@ -37,16 +35,14 @@
     </child>
     <child>
       <object class="GtkInfoBar" id="infobar">
-        <property name="no-show-all">True</property>
-        <property name="halign">fill</property>
-        <property name="hexpand">True</property>
+        <property name="no-show-all">1</property>
+        <property name="hexpand">1</property>
         <child internal-child="content_area">
           <object class="GtkBox" id="content_area">
             <child>
               <object class="GtkLabel" id="message">
-                <property name="visible">True</property>
-                <property name="hexpand">True</property>
-                <property name="halign">fill</property>
+                <property name="visible">1</property>
+                <property name="hexpand">1</property>
               </object>
             </child>
           </object>
@@ -55,10 +51,10 @@
           <object class="GtkBox" id="action_area">
             <child>
               <object class="GtkButton" id="button">
-                <property name="visible">True</property>
+                <property name="visible">1</property>
                 <property name="valign">center</property>
-                <property name="label" translatable="yes">_OK</property>
-                <property name="use_underline">True</property>
+                <property name="label" translatable="1">_OK</property>
+                <property name="use_underline">1</property>
               </object>
             </child>
           </object>
@@ -74,10 +70,8 @@
         <property name="shadow-type">in</property>
         <child>
           <object class="GtkTextView" id="contents">
-            <property name="halign">fill</property>
-            <property name="valign">fill</property>
-            <property name="hexpand">True</property>
-            <property name="vexpand">True</property>
+            <property name="hexpand">1</property>
+            <property name="vexpand">1</property>
           </object>
         </child>
       </object>
@@ -88,9 +82,8 @@
     </child>
     <child>
       <object class="GtkStatusbar" id="status">
-        <property name="halign">fill</property>
-        <property name="hexpand">True</property>
-        <property name="visible">True</property>
+        <property name="hexpand">1</property>
+        <property name="visible">1</property>
       </object>
       <packing>
         <property name="left-attach">0</property>

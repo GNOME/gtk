@@ -25,24 +25,21 @@
     </data>
   </object>
   <object class="GtkWindow" id="window1">
-    <property name="can_focus">False</property>
-    <property name="title" translatable="yes">Filter Model</property>
+    <property name="title" translatable="1">Filter Model</property>
     <child>
       <object class="GtkGrid" id="grid1">
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
+        <property name="visible">1</property>
         <property name="margin_left">10</property>
         <property name="margin_right">10</property>
         <property name="margin_top">10</property>
         <property name="margin_bottom">10</property>
         <property name="row_spacing">10</property>
         <property name="column_spacing">10</property>
-        <property name="column_homogeneous">True</property>
+        <property name="column_homogeneous">1</property>
         <child>
           <object class="GtkLabel" id="label1">
-            <property name="visible">True</property>
-            <property name="can_focus">False</property>
-            <property name="label" translatable="yes">Original</property>
+            <property name="visible">1</property>
+            <property name="label" translatable="1">Original</property>
             <property name="xalign">0</property>
             <attributes>
               <attribute name="weight" value="bold"/>
@@ -55,16 +52,16 @@
         </child>
         <child>
           <object class="GtkTreeView" id="treeview1">
-            <property name="visible">True</property>
-            <property name="can_focus">True</property>
+            <property name="visible">1</property>
+            <property name="can_focus">1</property>
             <property name="model">liststore1</property>
-            <property name="headers_clickable">False</property>
+            <property name="headers_clickable">0</property>
             <child internal-child="selection">
               <object class="GtkTreeSelection" id="treeview-selection1"/>
             </child>
             <child>
               <object class="GtkTreeViewColumn" id="treeviewcolumn1">
-                <property name="title" translatable="yes">Width</property>
+                <property name="title" translatable="1">Width</property>
                 <child>
                   <object class="GtkCellRendererText" id="cellrenderertext1"/>
                 </child>
@@ -72,7 +69,7 @@
             </child>
             <child>
               <object class="GtkTreeViewColumn" id="treeviewcolumn2">
-                <property name="title" translatable="yes">Height</property>
+                <property name="title" translatable="1">Height</property>
                 <child>
                   <object class="GtkCellRendererText" id="cellrenderertext2"/>
                 </child>
@@ -86,16 +83,16 @@
         </child>
         <child>
           <object class="GtkTreeView" id="treeview2">
-            <property name="visible">True</property>
-            <property name="can_focus">True</property>
-            <property name="headers_clickable">False</property>
+            <property name="visible">1</property>
+            <property name="can_focus">1</property>
+            <property name="headers_clickable">0</property>
             <property name="search_column">0</property>
             <child internal-child="selection">
               <object class="GtkTreeSelection" id="treeview-selection3"/>
             </child>
             <child>
               <object class="GtkTreeViewColumn" id="treeviewcolumn3">
-                <property name="title" translatable="yes">Width</property>
+                <property name="title" translatable="1">Width</property>
                 <child>
                   <object class="GtkCellRendererText" id="cellrenderertext3"/>
                 </child>
@@ -103,7 +100,7 @@
             </child>
             <child>
               <object class="GtkTreeViewColumn" id="treeviewcolumn4">
-                <property name="title" translatable="yes">Height</property>
+                <property name="title" translatable="1">Height</property>
                 <child>
                   <object class="GtkCellRendererText" id="cellrenderertext4"/>
                 </child>
@@ -111,7 +108,7 @@
             </child>
             <child>
               <object class="GtkTreeViewColumn" id="treeviewcolumn5">
-                <property name="title" translatable="yes">Area</property>
+                <property name="title" translatable="1">Area</property>
                 <child>
                   <object class="GtkCellRendererText" id="cellrenderertext5"/>
                 </child>
@@ -119,7 +116,7 @@
             </child>
             <child>
               <object class="GtkTreeViewColumn" id="treeviewcolumn6">
-                <property name="title" translatable="yes">Square</property>
+                <property name="title" translatable="1">Square</property>
                 <child>
                   <object class="GtkCellRendererPixbuf" id="cellrendererpixbuf1">
                     <property name="icon-name">object-select-symbolic</property>
@@ -135,9 +132,8 @@
         </child>
         <child>
           <object class="GtkLabel" id="label2">
-            <property name="visible">True</property>
-            <property name="can_focus">False</property>
-            <property name="label" translatable="yes">Computed Columns</property>
+            <property name="visible">1</property>
+            <property name="label" translatable="1">Computed Columns</property>
             <property name="xalign">0</property>
             <attributes>
               <attribute name="weight" value="bold"/>
@@ -150,9 +146,8 @@
         </child>
         <child>
           <object class="GtkLabel" id="label3">
-            <property name="visible">True</property>
-            <property name="can_focus">False</property>
-            <property name="label" translatable="yes">Filtered</property>
+            <property name="visible">1</property>
+            <property name="label" translatable="1">Filtered</property>
             <property name="xalign">0</property>
             <attributes>
               <attribute name="weight" value="bold"/>
@@ -165,16 +160,16 @@
         </child>
         <child>
           <object class="GtkTreeView" id="treeview3">
-            <property name="visible">True</property>
-            <property name="can_focus">True</property>
-            <property name="headers_clickable">False</property>
+            <property name="visible">1</property>
+            <property name="can_focus">1</property>
+            <property name="headers_clickable">0</property>
             <property name="search_column">0</property>
             <child internal-child="selection">
               <object class="GtkTreeSelection" id="treeview-selection5"/>
             </child>
             <child>
               <object class="GtkTreeViewColumn" id="treeviewcolumn7">
-                <property name="title" translatable="yes">Width</property>
+                <property name="title" translatable="1">Width</property>
                 <child>
                   <object class="GtkCellRendererText" id="cellrenderertext6"/>
                 </child>
@@ -182,7 +177,7 @@
             </child>
             <child>
               <object class="GtkTreeViewColumn" id="treeviewcolumn8">
-                <property name="title" translatable="yes">Height</property>
+                <property name="title" translatable="1">Height</property>
                 <child>
                   <object class="GtkCellRendererText" id="cellrenderertext7"/>
                 </child>
@@ -193,12 +188,6 @@
             <property name="left_attach">0</property>
             <property name="top_attach">3</property>
           </packing>
-        </child>
-        <child>
-          <placeholder/>
-        </child>
-        <child>
-          <placeholder/>
         </child>
       </object>
     </child>
