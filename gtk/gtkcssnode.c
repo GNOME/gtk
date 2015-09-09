@@ -1265,8 +1265,10 @@ gtk_css_node_validate_internal (GtkCssNode *cssnode,
    * Note that this also completely revalidates child widgets all
    * the time.
    */
-  if (G_UNLIKELY (gtk_get_debug_flags () & GTK_DEBUG_NO_CSS_CACHE))
+#ifdef G_ENABLE_DEBUG
+  if (GTK_DEBUG_CHECK (NO_CSS_CACHE))
     cssnode->pending_changes |= GTK_CSS_CHANGE_ANY;
+#endif
 
   if (!cssnode->invalid)
     return;

@@ -752,7 +752,7 @@ _gtk_builder_construct (GtkBuilder  *builder,
         g_object_set_property (obj, param->name, &param->value);
 
 #if G_ENABLE_DEBUG
-      if (gtk_get_debug_flags () & GTK_DEBUG_BUILDER)
+      if (GTK_DEBUG_CHECK (BUILDER))
         {
           gchar *str = g_strdup_value_contents ((const GValue*)&param->value);
           g_print ("set %s: %s = %s\n", info->id, param->name, str);
@@ -816,7 +816,7 @@ _gtk_builder_apply_properties (GtkBuilder  *builder,
         g_object_set_property (info->object, param->name, &param->value);
 
 #if G_ENABLE_DEBUG
-      if (gtk_get_debug_flags () & GTK_DEBUG_BUILDER)
+      if (GTK_DEBUG_CHECK (BUILDER))
         {
           gchar *str = g_strdup_value_contents ((const GValue*)&param->value);
           g_print ("set %s: %s = %s\n", info->id, param->name, str);

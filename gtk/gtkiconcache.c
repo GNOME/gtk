@@ -122,8 +122,7 @@ _gtk_icon_cache_new_for_path (const gchar *path)
   /* Verify cache is uptodate */
   if (st.st_mtime < path_st.st_mtime)
     {
-      GTK_NOTE (ICONTHEME, 
-		g_print ("cache outdated\n"));
+      GTK_NOTE (ICONTHEME, g_print ("cache outdated\n"));
       goto done; 
     }
 
@@ -133,7 +132,7 @@ _gtk_icon_cache_new_for_path (const gchar *path)
     goto done;
 
 #ifdef G_ENABLE_DEBUG
-  if (gtk_get_debug_flags () & GTK_DEBUG_ICONTHEME)
+  if (GTK_DEBUG_CHECK (ICONTHEME))
     {
       CacheInfo info;
 

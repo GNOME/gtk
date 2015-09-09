@@ -5839,7 +5839,7 @@ gtk_widget_size_allocate_with_baseline (GtkWidget     *widget,
   gtk_widget_push_verify_invariants (widget);
 
 #ifdef G_ENABLE_DEBUG
-  if (gtk_get_debug_flags () & GTK_DEBUG_GEOMETRY)
+  if (GTK_DEBUG_CHECK (GEOMETRY))
     {
       gint depth;
       GtkWidget *parent;
@@ -5901,7 +5901,7 @@ gtk_widget_size_allocate_with_baseline (GtkWidget     *widget,
     }
 
 #ifdef G_ENABLE_DEBUG
-  if (gtk_get_debug_flags () & GTK_DEBUG_GEOMETRY)
+  if (GTK_DEBUG_CHECK (GEOMETRY))
     {
       if ((min_width > real_allocation.width || min_height > real_allocation.height) &&
           !GTK_IS_SCROLLABLE (widget))
@@ -6845,7 +6845,7 @@ _gtk_widget_draw_internal (GtkWidget *widget,
                      &result);
 
 #ifdef G_ENABLE_DEBUG
-      if (G_UNLIKELY (gtk_get_debug_flags () & GTK_DEBUG_BASELINES))
+      if (GTK_DEBUG_CHECK (BASELINES))
 	{
 	  gint baseline = gtk_widget_get_allocated_baseline (widget);
 	  gint width = gtk_widget_get_allocated_width (widget);
@@ -15584,7 +15584,7 @@ gtk_widget_set_clip (GtkWidget           *widget,
   priv = widget->priv;
 
 #ifdef G_ENABLE_DEBUG
-  if (gtk_get_debug_flags () & GTK_DEBUG_GEOMETRY)
+  if (GTK_DEBUG_CHECK (GEOMETRY))
     {
       gint depth;
       GtkWidget *parent;

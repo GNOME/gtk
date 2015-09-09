@@ -192,16 +192,19 @@ static void     gtk_tree_store_move                    (GtkTreeStore           *
                                                         gboolean                before);
 
 
+#ifdef G_ENABLE_DEBUG
 static inline void
 validate_tree (GtkTreeStore *tree_store)
 {
-  if (gtk_get_debug_flags () & GTK_DEBUG_TREE)
+  if (GTK_DEBUG_CHECK (TREE))
     {
       g_assert (G_NODE (tree_store->priv->root)->parent == NULL);
-
       validate_gnode (G_NODE (tree_store->priv->root));
     }
 }
+#else
+#define validate_tree(store)
+#endif
 
 G_DEFINE_TYPE_WITH_CODE (GtkTreeStore, gtk_tree_store, G_TYPE_OBJECT,
                          G_ADD_PRIVATE (GtkTreeStore)

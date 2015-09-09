@@ -35,7 +35,7 @@ static inline void _fixup_validation              (GtkRBTree  *tree,
 						   GtkRBNode  *node);
 static inline void _fixup_total_count             (GtkRBTree  *tree,
 						   GtkRBNode  *node);
-#ifdef G_ENABLE_DEBUG  
+#ifdef G_ENABLE_DEBUG
 static void        _gtk_rbtree_test               (const gchar *where,
                                                    GtkRBTree  *tree);
 static void        _gtk_rbtree_debug_spew         (GtkRBTree  *tree);
@@ -74,7 +74,7 @@ static void
 _gtk_rbnode_free (GtkRBNode *node)
 {
 #ifdef G_ENABLE_DEBUG
-  if (gtk_get_debug_flags () & GTK_DEBUG_TREE)
+  if (GTK_DEBUG_CHECK (TREE))
     {
       node->left = (gpointer) 0xdeadbeef;
       node->right = (gpointer) 0xdeadbeef;
@@ -391,10 +391,10 @@ gtk_rbnode_adjust (GtkRBTree *tree,
 void
 _gtk_rbtree_remove (GtkRBTree *tree)
 {
-#ifdef G_ENABLE_DEBUG  
+#ifdef G_ENABLE_DEBUG
   GtkRBTree *tmp_tree;
 
-  if (gtk_get_debug_flags () & GTK_DEBUG_TREE)
+  if (GTK_DEBUG_CHECK (TREE))
     _gtk_rbtree_test (G_STRLOC, tree);
 #endif
   
@@ -408,14 +408,14 @@ _gtk_rbtree_remove (GtkRBTree *tree)
                      - (int) tree->root->total_count,
                      - tree->root->offset);
 
-#ifdef G_ENABLE_DEBUG  
+#ifdef G_ENABLE_DEBUG
   tmp_tree = tree->parent_tree;
 #endif
 
   _gtk_rbtree_free (tree);
 
-#ifdef G_ENABLE_DEBUG  
-  if (gtk_get_debug_flags () & GTK_DEBUG_TREE)
+#ifdef G_ENABLE_DEBUG
+  if (GTK_DEBUG_CHECK (TREE))
     _gtk_rbtree_test (G_STRLOC, tmp_tree);
 #endif
 }
@@ -430,14 +430,14 @@ _gtk_rbtree_insert_after (GtkRBTree *tree,
   GtkRBNode *node;
   gboolean right = TRUE;
 
-#ifdef G_ENABLE_DEBUG  
-  if (gtk_get_debug_flags () & GTK_DEBUG_TREE)
+#ifdef G_ENABLE_DEBUG
+  if (GTK_DEBUG_CHECK (TREE))
     {
       g_print ("\n\n_gtk_rbtree_insert_after: %p\n", current);
       _gtk_rbtree_debug_spew (tree);
       _gtk_rbtree_test (G_STRLOC, tree);
     }
-#endif /* G_ENABLE_DEBUG */  
+#endif
 
   if (current != NULL && !_gtk_rbtree_is_nil (current->right))
     {
@@ -475,15 +475,15 @@ _gtk_rbtree_insert_after (GtkRBTree *tree,
 
   _gtk_rbtree_insert_fixup (tree, node);
 
-#ifdef G_ENABLE_DEBUG  
-  if (gtk_get_debug_flags () & GTK_DEBUG_TREE)
+#ifdef G_ENABLE_DEBUG
+  if (GTK_DEBUG_CHECK (TREE))
     {
       g_print ("_gtk_rbtree_insert_after finished...\n");
       _gtk_rbtree_debug_spew (tree);
       g_print ("\n\n");
       _gtk_rbtree_test (G_STRLOC, tree);
     }
-#endif /* G_ENABLE_DEBUG */  
+#endif
 
   return node;
 }
@@ -497,15 +497,15 @@ _gtk_rbtree_insert_before (GtkRBTree *tree,
   GtkRBNode *node;
   gboolean left = TRUE;
 
-#ifdef G_ENABLE_DEBUG  
-  if (gtk_get_debug_flags () & GTK_DEBUG_TREE)
+#ifdef G_ENABLE_DEBUG
+  if (GTK_DEBUG_CHECK (TREE))
     {
       g_print ("\n\n_gtk_rbtree_insert_before: %p\n", current);
       _gtk_rbtree_debug_spew (tree);
       _gtk_rbtree_test (G_STRLOC, tree);
     }
-#endif /* G_ENABLE_DEBUG */
-  
+#endif
+
   if (current != NULL && !_gtk_rbtree_is_nil (current->left))
     {
       current = current->left;
@@ -543,16 +543,16 @@ _gtk_rbtree_insert_before (GtkRBTree *tree,
 
   _gtk_rbtree_insert_fixup (tree, node);
 
-#ifdef G_ENABLE_DEBUG  
-  if (gtk_get_debug_flags () & GTK_DEBUG_TREE)
+#ifdef G_ENABLE_DEBUG
+  if (GTK_DEBUG_CHECK (TREE))
     {
       g_print ("_gtk_rbtree_insert_before finished...\n");
       _gtk_rbtree_debug_spew (tree);
       g_print ("\n\n");
       _gtk_rbtree_test (G_STRLOC, tree);
     }
-#endif /* G_ENABLE_DEBUG */
-  
+#endif
+
   return node;
 }
 
@@ -590,8 +590,8 @@ _gtk_rbtree_node_set_height (GtkRBTree *tree,
 
   gtk_rbnode_adjust (tree, node, 0, 0, diff);
 
-#ifdef G_ENABLE_DEBUG  
-  if (gtk_get_debug_flags () & GTK_DEBUG_TREE)
+#ifdef G_ENABLE_DEBUG
+  if (GTK_DEBUG_CHECK (TREE))
     _gtk_rbtree_test (G_STRLOC, tree);
 #endif
 }
@@ -1117,21 +1117,21 @@ _gtk_rbtree_remove_node (GtkRBTree *tree,
 
   
 #ifdef G_ENABLE_DEBUG
-  if (gtk_get_debug_flags () & GTK_DEBUG_TREE)
+  if (GTK_DEBUG_CHECK (TREE))
     {
       g_print ("\n\n_gtk_rbtree_remove_node: %p\n", node);
       _gtk_rbtree_debug_spew (tree);
       _gtk_rbtree_test (G_STRLOC, tree);
     }
-#endif /* G_ENABLE_DEBUG */
+#endif
   
   /* make sure we're deleting a node that's actually in the tree */
   for (x = node; !_gtk_rbtree_is_nil (x->parent); x = x->parent)
     ;
   g_return_if_fail (x == tree->root);
 
-#ifdef G_ENABLE_DEBUG  
-  if (gtk_get_debug_flags () & GTK_DEBUG_TREE)
+#ifdef G_ENABLE_DEBUG
+  if (GTK_DEBUG_CHECK (TREE))
     _gtk_rbtree_test (G_STRLOC, tree);
 #endif
   
@@ -1226,15 +1226,15 @@ _gtk_rbtree_remove_node (GtkRBTree *tree,
 
   _gtk_rbnode_free (node);
 
-#ifdef G_ENABLE_DEBUG  
-  if (gtk_get_debug_flags () & GTK_DEBUG_TREE)
+#ifdef G_ENABLE_DEBUG
+  if (GTK_DEBUG_CHECK (TREE))
     {
       g_print ("_gtk_rbtree_remove_node finished...\n");
       _gtk_rbtree_debug_spew (tree);
       g_print ("\n\n");
       _gtk_rbtree_test (G_STRLOC, tree);
     }
-#endif /* G_ENABLE_DEBUG */  
+#endif
 }
 
 GtkRBNode *

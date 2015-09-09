@@ -185,7 +185,7 @@ _gtk_pixel_cache_create_surface_if_needed (GtkPixelCache         *cache,
   double red, green, blue, alpha;
 
 #ifdef G_ENABLE_DEBUG
-  if (gtk_get_debug_flags () & GTK_DEBUG_NO_PIXEL_CACHE)
+  if (GTK_DEBUG_CHECK (NO_PIXEL_CACHE))
     return;
 #endif
 
@@ -363,7 +363,7 @@ _gtk_pixel_cache_repaint (GtkPixelCache         *cache,
       cairo_restore (backing_cr);
 
 #ifdef G_ENABLE_DEBUG
-      if (gtk_get_debug_flags () & GTK_DEBUG_PIXEL_CACHE)
+      if (GTK_DEBUG_CHECK (PIXEL_CACHE))
         {
           GdkRGBA colors[] = {
             { 1, 0, 0, 0.08},
