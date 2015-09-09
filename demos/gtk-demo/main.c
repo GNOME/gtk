@@ -1057,7 +1057,7 @@ command_line (GApplication            *app,
 {
   GVariantDict *options;
   const gchar *name = NULL;
-  gint autoquit = 0;
+  gboolean autoquit = FALSE;
   Demo *d, *c;
   GDoDemoFunc func = 0;
   GtkWidget *window, *demo;
@@ -1066,7 +1066,7 @@ command_line (GApplication            *app,
 
   options = g_application_command_line_get_options_dict (cmdline);
   g_variant_dict_lookup (options, "run", "&s", &name);
-  g_variant_dict_lookup (options, "autoquit", "i", &autoquit);
+  g_variant_dict_lookup (options, "autoquit", "b", &autoquit);
 
   if (name == NULL)
     goto out;
@@ -1104,8 +1104,8 @@ out:
       gtk_window_set_modal (GTK_WINDOW (demo), TRUE);
     }
 
-  if (autoquit > 0)
-    g_timeout_add_seconds (autoquit, auto_quit, app);
+  if (autoquit)
+    g_timeout_add_seconds (1, auto_quit, app);
 }
 
 int
@@ -1134,7 +1134,7 @@ main (int argc, char **argv)
                                    app);
 
   g_application_add_main_option (G_APPLICATION (app), "run", 0, 0, G_OPTION_ARG_STRING, "Run an example", "EXAMPLE");
-  g_application_add_main_option (G_APPLICATION (app), "autoquit", 0, 0, G_OPTION_ARG_INT, "Quit after a delay", "SECONDS");
+  g_application_add_main_option (G_APPLICATION (app), "autoquit", 0, 0, G_OPTION_ARG_NONE, "Quit after a delay", NULL);
 
   g_signal_connect (app, "startup", G_CALLBACK (startup), NULL);
   g_signal_connect (app, "activate", G_CALLBACK (activate), NULL);
