@@ -21,6 +21,7 @@
 
 #include "gtkintl.h"
 #include "gtkstyleprovider.h"
+#include "gtkprivate.h"
 
 enum {
   CHANGED,
@@ -54,7 +55,7 @@ _gtk_style_provider_private_get_color (GtkStyleProviderPrivate *provider,
   if (provider == NULL)
     return NULL;
 
-  g_return_val_if_fail (GTK_IS_STYLE_PROVIDER_PRIVATE (provider), NULL);
+  gtk_internal_return_val_if_fail (GTK_IS_STYLE_PROVIDER_PRIVATE (provider), NULL);
 
   iface = GTK_STYLE_PROVIDER_PRIVATE_GET_INTERFACE (provider);
 
@@ -70,8 +71,8 @@ _gtk_style_provider_private_get_keyframes (GtkStyleProviderPrivate *provider,
 {
   GtkStyleProviderPrivateInterface *iface;
 
-  g_return_val_if_fail (GTK_IS_STYLE_PROVIDER_PRIVATE (provider), NULL);
-  g_return_val_if_fail (name != NULL, NULL);
+  gtk_internal_return_val_if_fail (GTK_IS_STYLE_PROVIDER_PRIVATE (provider), NULL);
+  gtk_internal_return_val_if_fail (name != NULL, NULL);
 
   iface = GTK_STYLE_PROVIDER_PRIVATE_GET_INTERFACE (provider);
 
@@ -89,9 +90,9 @@ _gtk_style_provider_private_lookup (GtkStyleProviderPrivate *provider,
 {
   GtkStyleProviderPrivateInterface *iface;
 
-  g_return_if_fail (GTK_IS_STYLE_PROVIDER_PRIVATE (provider));
-  g_return_if_fail (matcher != NULL);
-  g_return_if_fail (lookup != NULL);
+  gtk_internal_return_if_fail (GTK_IS_STYLE_PROVIDER_PRIVATE (provider));
+  gtk_internal_return_if_fail (matcher != NULL);
+  gtk_internal_return_if_fail (lookup != NULL);
 
   if (out_change)
     *out_change = 0;
@@ -107,7 +108,7 @@ _gtk_style_provider_private_lookup (GtkStyleProviderPrivate *provider,
 void
 _gtk_style_provider_private_changed (GtkStyleProviderPrivate *provider)
 {
-  g_return_if_fail (GTK_IS_STYLE_PROVIDER_PRIVATE (provider));
+  gtk_internal_return_if_fail (GTK_IS_STYLE_PROVIDER_PRIVATE (provider));
 
   g_signal_emit (provider, signals[CHANGED], 0);
 }
@@ -117,7 +118,7 @@ _gtk_style_provider_private_get_settings (GtkStyleProviderPrivate *provider)
 {
   GtkStyleProviderPrivateInterface *iface;
 
-  g_return_val_if_fail (GTK_IS_STYLE_PROVIDER_PRIVATE (provider), NULL);
+  gtk_internal_return_val_if_fail (GTK_IS_STYLE_PROVIDER_PRIVATE (provider), NULL);
 
   iface = GTK_STYLE_PROVIDER_PRIVATE_GET_INTERFACE (provider);
 
@@ -132,7 +133,7 @@ _gtk_style_provider_private_get_scale (GtkStyleProviderPrivate *provider)
 {
   GtkStyleProviderPrivateInterface *iface;
 
-  g_return_val_if_fail (GTK_IS_STYLE_PROVIDER_PRIVATE (provider), 1);
+  gtk_internal_return_val_if_fail (GTK_IS_STYLE_PROVIDER_PRIVATE (provider), 1);
 
   iface = GTK_STYLE_PROVIDER_PRIVATE_GET_INTERFACE (provider);
 
