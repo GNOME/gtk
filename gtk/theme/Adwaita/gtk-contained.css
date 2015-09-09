@@ -73,7 +73,7 @@
   .view:selected, GtkCalendar:selected {
     border-radius: 3px; }
 
-.rubberband {
+.rubberband, .content-view.rubberband {
   border: 1px solid #4a90d9;
   background-color: rgba(74, 144, 217, 0.2); }
 
