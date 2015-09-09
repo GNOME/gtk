@@ -11993,7 +11993,7 @@ gtk_widget_dispose (GObject *object)
   G_OBJECT_CLASS (gtk_widget_parent_class)->dispose (object);
 }
 
-#ifdef G_ENABLE_DEBUG
+#ifdef G_ENABLE_CONSISTENCY_CHECKS
 typedef struct {
   AutomaticChildClass *child_class;
   GType                widget_type;
@@ -12066,7 +12066,7 @@ build_finalize_assertion_list (GtkWidget *widget)
 
   return list;
 }
-#endif /* G_ENABLE_DEBUG */
+#endif /* G_ENABLE_CONSISTENCY_CHECKS */
 
 static void
 gtk_widget_real_destroy (GtkWidget *object)
@@ -12080,7 +12080,7 @@ gtk_widget_real_destroy (GtkWidget *object)
       GtkWidgetClass *class;
       GSList *l;
 
-#ifdef G_ENABLE_DEBUG
+#ifdef G_ENABLE_CONSISTENCY_CHECKS
       GSList *assertions = NULL;
 
       /* Note, GTK_WIDGET_ASSERT_COMPONENTS is very useful
@@ -12100,7 +12100,7 @@ gtk_widget_real_destroy (GtkWidget *object)
       g_hash_table_destroy (priv->auto_children);
       priv->auto_children = NULL;
 
-#ifdef G_ENABLE_DEBUG
+#ifdef G_ENABEL_CONSISTENCY_CHECKS
       for (l = assertions; l; l = l->next)
 	{
 	  FinalizeAssertion *assertion = l->data;
