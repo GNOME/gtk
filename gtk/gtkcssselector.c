@@ -159,8 +159,8 @@ g_ptr_array_insert_sorted (GPtrArray *array,
 }
 
 static void
-gtk_css_selector_tree_found_match (const GtkCssSelectorTree *tree,
-				   GPtrArray                *array)
+gtk_css_selector_tree_found_match (const GtkCssSelectorTree  *tree,
+				   GPtrArray                **array)
 {
   int i;
   gpointer *matches;
@@ -168,8 +168,11 @@ gtk_css_selector_tree_found_match (const GtkCssSelectorTree *tree,
   matches = gtk_css_selector_tree_get_matches (tree);
   if (matches)
     {
+      if (!*array)
+        *array = g_ptr_array_sized_new (16);
+
       for (i = 0; matches[i] != NULL; i++)
-        g_ptr_array_insert_sorted (array, matches[i]);
+        g_ptr_array_insert_sorted (*array, matches[i]);
     }
 }
 
@@ -1757,15 +1760,13 @@ GPtrArray *
 _gtk_css_selector_tree_match_all (const GtkCssSelectorTree *tree,
 				  const GtkCssMatcher *matcher)
 {
-  GPtrArray *array;
+  GPtrArray *array = NULL;
 
   update_type_references ();
 
-  array = g_ptr_array_sized_new (16);
-
   for (; tree != NULL;
        tree = gtk_css_selector_tree_get_sibling (tree))
-    gtk_css_selector_foreach (&tree->selector, matcher, gtk_css_selector_tree_match_foreach, array);
+    gtk_css_selector_foreach (&tree->selector, matcher, gtk_css_selector_tree_match_foreach, &array);
 
   return array;
 }
