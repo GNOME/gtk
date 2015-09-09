@@ -41,28 +41,19 @@ typedef struct {
   gint indent;
 } MyParserData;
 
-static gboolean
-value_is_default (MyParserData *data,
-                  gint          i)
+static GParamSpec *
+get_property_pspec (MyParserData *data,
+                    const gchar  *class_name,
+                    const gchar  *property_name)
 {
   GType type;
   GObjectClass *class;
   GParamSpec *pspec;
-  GValue value = { 0, };
-  gboolean ret;
-  GError *error = NULL;
-  const gchar *class_name;
-  const gchar *value_string;
-  const gchar *property_name;
   gchar *canonical_name;
-
-  class_name = (const gchar *)data->classes->data;
-  value_string =(const gchar *)data->value->str;
-  property_name = (const gchar *)data->attribute_values[i];
 
   type = g_type_from_name (class_name);
   if (type == G_TYPE_INVALID)
-    return FALSE;
+    return NULL;
 
   class = g_type_class_ref (type);
   canonical_name = g_strdup (property_name);
@@ -83,6 +74,23 @@ value_is_default (MyParserData *data,
   g_free (canonical_name);
   g_type_class_unref (class);
 
+  return pspec;
+}
+
+
+static gboolean
+value_is_default (MyParserData *data,
+                  const gchar  *class_name,
+                  const gchar  *property_name,
+                  const gchar  *value_string)
+{
+  GValue value = { 0, };
+  gboolean ret;
+  GError *error = NULL;
+  GParamSpec *pspec;
+
+  pspec = get_property_pspec (data, class_name, property_name);
+
   if (pspec == NULL)
     {
       if (data->packing)
@@ -98,7 +106,7 @@ value_is_default (MyParserData *data,
 
   if (!gtk_builder_value_from_string (data->builder, pspec, value_string, &value, &error))
     {
-      g_printerr (_("Couldn't parse value: %s\n"), error->message);
+      g_printerr (_("Couldn't parse value for %s::%s: %s\n"), class_name, property_name, error->message);
       g_error_free (error);
       ret = FALSE;
     }
@@ -110,6 +118,33 @@ value_is_default (MyParserData *data,
   return ret;
 }
 
+static gboolean
+property_is_boolean (MyParserData *data,
+                     const gchar  *class_name,
+                     const gchar  *property_name)
+{
+  GParamSpec *pspec;
+
+  pspec = get_property_pspec (data, class_name, property_name);
+  if (pspec)
+    return G_PARAM_SPEC_VALUE_TYPE (pspec) == G_TYPE_BOOLEAN;
+
+  return FALSE;
+}
+
+static const gchar *
+canonical_boolean_value (MyParserData *data,
+                         const gchar  *string)
+{
+  GValue value = G_VALUE_INIT;
+  gboolean b = FALSE;
+
+  if (gtk_builder_value_from_string_type (data->builder, G_TYPE_BOOLEAN, string, &value, NULL))
+    b = g_value_get_boolean (&value);
+
+  return b ? "1" : "0";
+}
+
 /* A number of properties unfortunately can't be omitted even
  * if they are nominally set to their default value. In many
  * cases, this is due to subclasses not overriding the default
@@ -117,7 +152,8 @@ value_is_default (MyParserData *data,
  */
 static gboolean
 needs_explicit_setting (MyParserData *data,
-                        gint          i)
+                        const gchar  *class_name,
+                        const gchar  *property_name)
 {
   struct _Prop {
     const char *class;
@@ -137,14 +173,10 @@ needs_explicit_setting (MyParserData *data,
     { "GtkContainer", "border-width", 0 },
     { NULL, NULL, 0 }
   };
-  const gchar *class_name;
-  const gchar *property_name;
   gchar *canonical_name;
   gboolean found;
   gint k;
 
-  class_name = (const gchar *)data->classes->data;
-  property_name = (const gchar *)data->attribute_values[i];
   canonical_name = g_strdup (property_name);
   g_strdelimit (canonical_name, "_", '-');
 
@@ -214,6 +246,13 @@ maybe_emit_property (MyParserData *data)
   gboolean bound;
   gboolean translatable;
   gchar *escaped;
+  const gchar *class_name;
+  const gchar *property_name;
+  const gchar *value_string;
+
+  class_name = (const gchar *)data->classes->data;
+  property_name = "";
+  value_string = (const gchar *)data->value->str;
 
   bound = FALSE;
   translatable = FALSE;
@@ -235,10 +274,12 @@ maybe_emit_property (MyParserData *data)
               if (data->classes == NULL)
                 break;
 
-              if (needs_explicit_setting (data, i))
+              property_name = (const gchar *)data->attribute_values[i];
+
+              if (needs_explicit_setting (data, class_name, property_name))
                 break;
 
-              if (value_is_default (data, i))
+              if (value_is_default (data, class_name, property_name, value_string))
                 return;
             }
         }
@@ -255,9 +296,16 @@ maybe_emit_property (MyParserData *data)
            strcmp (data->attribute_names[i], "context") == 0))
         continue;
 
-      escaped = g_markup_escape_text (data->attribute_values[i], -1);
-      g_print (" %s=\"%s\"", data->attribute_names[i], escaped);
-      g_free (escaped);
+      if (strcmp (data->attribute_names[i], "translatable") == 0)
+        {
+          g_print (" %s=\"%s\"", data->attribute_names[i], canonical_boolean_value (data, data->attribute_values[i]));
+        }
+      else
+        {
+          escaped = g_markup_escape_text (data->attribute_values[i], -1);
+          g_print (" %s=\"%s\"", data->attribute_names[i], escaped);
+          g_free (escaped);
+        }
     }
 
   if (bound)
@@ -266,9 +314,18 @@ maybe_emit_property (MyParserData *data)
     }
   else
     {
-      escaped = g_markup_escape_text (data->value->str, -1);
-      g_print (">%s</property>\n", escaped);
-      g_free (escaped);
+      g_print (">");
+      if (property_is_boolean (data, class_name, property_name))
+        {
+          g_print ("%s", canonical_boolean_value (data, value_string));
+        }
+      else
+        {
+          escaped = g_markup_escape_text (value_string, -1);
+          g_print ("%s", escaped);
+          g_free (escaped);
+        }
+      g_print ("</property>\n");
     }
 }
 
