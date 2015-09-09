@@ -2274,10 +2274,16 @@ _gtk_builder_boolean_from_string (const gchar  *string,
     goto error;
   else if (string[1] == '\0')
     {
-      gchar c = g_ascii_tolower (string[0]);
-      if (c == 'y' || c == 't' || c == '1')
+      gchar c;
+
+      c = string[0];
+      if (c == '1' ||
+          c == 'y' || c == 't' ||
+          c == 'Y' || c == 'T')
         *value = TRUE;
-      else if (c == 'n' || c == 'f' || c == '0')
+      else if (c == '0' ||
+               c == 'n' || c == 'f' ||
+               c == 'N' || c == 'F')
         *value = FALSE;
       else
         goto error;
