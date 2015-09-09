@@ -32,16 +32,14 @@
 #include "deprecated/gtkstyle.h"
 
 
-#ifndef G_DISABLE_CHECKS
+#ifdef G_ENABLE_CONSISTENCY_CHECKS
 static GQuark recursion_check_quark = 0;
-#endif /* G_DISABLE_CHECKS */
 
 static void
 push_recursion_check (GtkWidget       *widget,
                       GtkOrientation   orientation,
                       gint             for_size)
 {
-#ifndef G_DISABLE_CHECKS
   const char *previous_method;
   const char *method;
 
@@ -71,17 +69,18 @@ push_recursion_check (GtkWidget       *widget,
     }
 
   g_object_set_qdata (G_OBJECT (widget), recursion_check_quark, (char*) method);
-#endif /* G_DISABLE_CHECKS */
 }
 
 static void
 pop_recursion_check (GtkWidget       *widget,
                      GtkOrientation   orientation)
 {
-#ifndef G_DISABLE_CHECKS
   g_object_set_qdata (G_OBJECT (widget), recursion_check_quark, NULL);
-#endif
 }
+#else
+#define push_recursion_check(widget, orientation, for_size)
+#define pop_recursion_check(widget, orientation)
+#endif /* G_ENABLE_CONSISTENCY_CHECKS */
 
 static const char *
 get_vfunc_name (GtkOrientation orientation,
