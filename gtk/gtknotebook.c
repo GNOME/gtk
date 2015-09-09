@@ -278,13 +278,6 @@ static const GtkTargetEntry notebook_targets [] = {
   { "GTK_NOTEBOOK_TAB", GTK_TARGET_SAME_APP, 0 },
 };
 
-#ifdef G_DISABLE_CHECKS
-#define CHECK_FIND_CHILD(notebook, child)                           \
- gtk_notebook_find_child (notebook, child, G_STRLOC)
-#else
-#define CHECK_FIND_CHILD(notebook, child)                           \
- gtk_notebook_find_child (notebook, child, NULL)
-#endif
 
 /*** GtkNotebook Methods ***/
 static gboolean gtk_notebook_select_page         (GtkNotebook      *notebook,
@@ -451,8 +444,7 @@ static void gtk_notebook_set_scroll_timer    (GtkNotebook *notebook);
 static gint gtk_notebook_page_compare        (gconstpointer     a,
                                               gconstpointer     b);
 static GList* gtk_notebook_find_child        (GtkNotebook      *notebook,
-                                              GtkWidget        *child,
-                                              const gchar      *function);
+                                              GtkWidget        *child);
 static GList * gtk_notebook_search_page      (GtkNotebook      *notebook,
                                               GList            *list,
                                               gint              direction,
@@ -4086,7 +4078,7 @@ gtk_notebook_set_child_property (GtkContainer    *container,
   gboolean fill;
 
   /* not finding child's page is valid for menus or labels */
-  if (!gtk_notebook_find_child (GTK_NOTEBOOK (container), child, NULL))
+  if (!gtk_notebook_find_child (GTK_NOTEBOOK (container), child))
     return;
 
   switch (property_id)
@@ -4149,7 +4141,7 @@ gtk_notebook_get_child_property (GtkContainer    *container,
   gboolean fill;
 
   /* not finding child's page is valid for menus or labels */
-  list = gtk_notebook_find_child (notebook, child, NULL);
+  list = gtk_notebook_find_child (notebook, child);
   if (!list)
     {
       /* nothing to set on labels or menus */
@@ -4523,7 +4515,7 @@ gtk_notebook_set_focus_child (GtkContainer *container,
         {
           if (gtk_widget_get_parent (page_child) == GTK_WIDGET (container))
             {
-              GList *list = gtk_notebook_find_child (notebook, page_child, NULL);
+              GList *list = gtk_notebook_find_child (notebook, page_child);
               if (list != NULL)
                 {
                   GtkNotebookPage *page = list->data;
@@ -5002,20 +4994,11 @@ gtk_notebook_page_compare (gconstpointer a,
 
 static GList*
 gtk_notebook_find_child (GtkNotebook *notebook,
-                         GtkWidget   *child,
-                         const gchar *function)
+                         GtkWidget   *child)
 {
-  GtkNotebookPrivate *priv = notebook->priv;
-  GList *list = g_list_find_custom (priv->children, child,
-                                    gtk_notebook_page_compare);
-
-#ifndef G_DISABLE_CHECKS
-  if (!list && function)
-    g_warning ("%s: unable to find child %p in notebook %p",
-               function, child, notebook);
-#endif
-
-  return list;
+  return g_list_find_custom (notebook->priv->children,
+                             child,
+                             gtk_notebook_page_compare);
 }
 
 static void
@@ -6750,7 +6733,7 @@ gtk_notebook_real_switch_page (GtkNotebook     *notebook,
                                guint            page_num)
 {
   GtkNotebookPrivate *priv = notebook->priv;
-  GList *list = gtk_notebook_find_child (notebook, GTK_WIDGET (child), NULL);
+  GList *list = gtk_notebook_find_child (notebook, GTK_WIDGET (child));
   GtkNotebookPage *page = GTK_NOTEBOOK_PAGE (list);
   gboolean child_has_focus;
 
@@ -7833,9 +7816,8 @@ gtk_notebook_get_tab_label (GtkNotebook *notebook,
   g_return_val_if_fail (GTK_IS_NOTEBOOK (notebook), NULL);
   g_return_val_if_fail (GTK_IS_WIDGET (child), NULL);
 
-  list = CHECK_FIND_CHILD (notebook, child);
-  if (!list)
-    return NULL;
+  list = gtk_notebook_find_child (notebook, child);
+  g_return_val_if_fail (list != NULL, NULL);
 
   if (GTK_NOTEBOOK_PAGE (list)->default_tab)
     return NULL;
@@ -7868,9 +7850,8 @@ gtk_notebook_set_tab_label (GtkNotebook *notebook,
 
   priv = notebook->priv;
 
-  list = CHECK_FIND_CHILD (notebook, child);
-  if (!list)
-    return;
+  list = gtk_notebook_find_child (notebook, child);
+  g_return_if_fail (list != NULL);
 
   /* a NULL pointer indicates a default_tab setting, otherwise
    * we need to set the associated label
@@ -8003,9 +7984,8 @@ gtk_notebook_get_menu_label (GtkNotebook *notebook,
   g_return_val_if_fail (GTK_IS_NOTEBOOK (notebook), NULL);
   g_return_val_if_fail (GTK_IS_WIDGET (child), NULL);
 
-  list = CHECK_FIND_CHILD (notebook, child);
-  if (!list)
-    return NULL;
+  list = gtk_notebook_find_child (notebook, child);
+  g_return_val_if_fail (list != NULL, NULL);
 
   if (GTK_NOTEBOOK_PAGE (list)->default_menu)
     return NULL;
@@ -8035,9 +8015,8 @@ gtk_notebook_set_menu_label (GtkNotebook *notebook,
 
   priv = notebook->priv;
 
-  list = CHECK_FIND_CHILD (notebook, child);
-  if (!list)
-    return;
+  list = gtk_notebook_find_child (notebook, child);
+  g_return_if_fail (list != NULL);
 
   page = list->data;
   if (page->menu_label)
@@ -8158,9 +8137,8 @@ gtk_notebook_set_tab_label_packing (GtkNotebook *notebook,
 
   priv = notebook->priv;
 
-  list = CHECK_FIND_CHILD (notebook, child);
-  if (!list)
-    return;
+  list = gtk_notebook_find_child (notebook, child);
+  g_return_if_fail (list != NULL);
 
   page = list->data;
   expand = expand != FALSE;
@@ -8190,7 +8168,7 @@ gtk_notebook_query_tab_label_packing (GtkNotebook *notebook,
   g_return_if_fail (GTK_IS_NOTEBOOK (notebook));
   g_return_if_fail (GTK_IS_WIDGET (child));
 
-  list = CHECK_FIND_CHILD (notebook, child);
+  list = gtk_notebook_find_child (notebook, child);
   g_return_if_fail (list != NULL);
 
   if (expand)
@@ -8227,9 +8205,8 @@ gtk_notebook_reorder_child (GtkNotebook *notebook,
 
   priv = notebook->priv;
 
-  list = CHECK_FIND_CHILD (notebook, child);
-  if (!list)
-    return;
+  list = gtk_notebook_find_child (notebook, child);
+  g_return_if_fail (list != NULL);
 
   max_pos = g_list_length (priv->children) - 1;
   if (position < 0 || position > max_pos)
@@ -8349,9 +8326,8 @@ gtk_notebook_get_tab_reorderable (GtkNotebook *notebook,
   g_return_val_if_fail (GTK_IS_NOTEBOOK (notebook), FALSE);
   g_return_val_if_fail (GTK_IS_WIDGET (child), FALSE);
 
-  list = CHECK_FIND_CHILD (notebook, child);
-  if (!list)
-    return FALSE;
+  list = gtk_notebook_find_child (notebook, child);
+  g_return_val_if_fail (list != NULL, FALSE);
 
   return GTK_NOTEBOOK_PAGE (list)->reorderable;
 }
@@ -8377,9 +8353,8 @@ gtk_notebook_set_tab_reorderable (GtkNotebook *notebook,
   g_return_if_fail (GTK_IS_NOTEBOOK (notebook));
   g_return_if_fail (GTK_IS_WIDGET (child));
 
-  list = CHECK_FIND_CHILD (notebook, child);
-  if (!list)
-    return;
+  list = gtk_notebook_find_child (notebook, child);
+  g_return_if_fail (list != NULL);
 
   reorderable = reorderable != FALSE;
 
@@ -8410,9 +8385,8 @@ gtk_notebook_get_tab_detachable (GtkNotebook *notebook,
   g_return_val_if_fail (GTK_IS_NOTEBOOK (notebook), FALSE);
   g_return_val_if_fail (GTK_IS_WIDGET (child), FALSE);
 
-  list = CHECK_FIND_CHILD (notebook, child);
-  if (!list)
-    return FALSE;
+  list = gtk_notebook_find_child (notebook, child);
+  g_return_val_if_fail (list != NULL, FALSE);
 
   return GTK_NOTEBOOK_PAGE (list)->detachable;
 }
@@ -8480,9 +8454,8 @@ gtk_notebook_set_tab_detachable (GtkNotebook *notebook,
   g_return_if_fail (GTK_IS_NOTEBOOK (notebook));
   g_return_if_fail (GTK_IS_WIDGET (child));
 
-  list = CHECK_FIND_CHILD (notebook, child);
-  if (!list)
-    return;
+  list = gtk_notebook_find_child (notebook, child);
+  g_return_if_fail (list != NULL);
 
   detachable = detachable != FALSE;
 
