@@ -685,7 +685,7 @@ static void             gtk_widget_real_move_focus              (GtkWidget      
                                                                  GtkDirectionType  direction);
 static gboolean		gtk_widget_real_keynav_failed		(GtkWidget        *widget,
 								 GtkDirectionType  direction);
-#ifdef G_ENABLE_DEBUG
+#ifdef G_ENABLE_CONSISTENCY_CHECKS
 static void             gtk_widget_verify_invariants            (GtkWidget        *widget);
 static void             gtk_widget_push_verify_invariants       (GtkWidget        *widget);
 static void             gtk_widget_pop_verify_invariants        (GtkWidget        *widget);
@@ -9944,7 +9944,7 @@ gtk_widget_reset_style (GtkWidget *widget)
                   (GFunc) reset_style_recurse, NULL);
 }
 
-#ifdef G_ENABLE_DEBUG
+#ifdef G_ENABLE_CONSISTENCY_CHECKS
 
 /* Verify invariants, see docs/widget_system.txt for notes on much of
  * this.  Invariants may be temporarily broken while we’re in the
@@ -10124,7 +10124,7 @@ gtk_widget_pop_verify_invariants (GtkWidget *widget)
         }
     }
 }
-#endif /* G_ENABLE_DEBUG */
+#endif /* G_ENABLE_CONSISTENCY_CHECKS */
 
 static PangoContext *
 gtk_widget_peek_pango_context (GtkWidget *widget)
