@@ -492,7 +492,7 @@ fi
 
 if test "x$enable_debug" = "xyes"; then
   test "$cflags_set" = set || CFLAGS="$CFLAGS -g"
-  GTK_DEBUG_FLAGS="-DG_ENABLE_DEBUG"
+  GTK_DEBUG_FLAGS="-DG_ENABLE_DEBUG -DG_ENABLE_CONSISTENCY_CHECKS"
 else
   if test "x$enable_debug" = "xno"; then
     GTK_DEBUG_FLAGS="-DG_DISABLE_ASSERT -DG_DISABLE_CHECKS -DG_DISABLE_CAST_CHECKS"
