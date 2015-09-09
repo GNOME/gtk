@@ -339,6 +339,17 @@ _gtk_widget_get_state_flags (GtkWidget *widget)
   return widget->priv->state_flags;
 }
 
+extern GtkTextDirection gtk_default_direction;
+
+static inline GtkTextDirection
+_gtk_widget_get_direction (GtkWidget *widget)
+{
+  if (widget->priv->direction == GTK_TEXT_DIR_NONE)
+    return gtk_default_direction;
+  else
+    return widget->priv->direction;
+}
+
 static inline GtkWidget *
 _gtk_widget_get_toplevel (GtkWidget *widget)
 {

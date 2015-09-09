@@ -837,7 +837,7 @@ static gint             GtkWidget_private_offset = 0;
 static gpointer         gtk_widget_parent_class = NULL;
 static guint            widget_signals[LAST_SIGNAL] = { 0 };
 static guint            composite_child_stack = 0;
-static GtkTextDirection gtk_default_direction = GTK_TEXT_DIR_LTR;
+GtkTextDirection gtk_default_direction = GTK_TEXT_DIR_LTR;
 static GParamSpecPool  *style_property_spec_pool = NULL;
 
 static GQuark		quark_property_parser = 0;
@@ -4335,7 +4335,7 @@ gtk_widget_init (GTypeInstance *instance, gpointer g_class)
   priv->redraw_on_alloc = TRUE;
   priv->alloc_needed = TRUE;
    
-  switch (gtk_widget_get_direction (widget))
+  switch (_gtk_widget_get_direction (widget))
     {
     case GTK_TEXT_DIR_LTR:
       priv->state_flags = GTK_STATE_FLAG_DIR_LTR;
@@ -6319,7 +6319,7 @@ gtk_widget_real_adjust_size_allocation (GtkWidget         *widget,
                          aux_info->margin.right,
                          minimum_size, natural_size,
                          allocated_pos, allocated_size);
-      adjust_for_align (effective_align (aux_info->halign, gtk_widget_get_direction (widget)),
+      adjust_for_align (effective_align (aux_info->halign, _gtk_widget_get_direction (widget)),
                         natural_size, allocated_pos, allocated_size);
     }
   else
@@ -10196,7 +10196,7 @@ update_pango_context (GtkWidget    *widget,
   pango_font_description_free (font_desc);
 
   pango_context_set_base_dir (context,
-			      gtk_widget_get_direction (widget) == GTK_TEXT_DIR_LTR ?
+			      _gtk_widget_get_direction (widget) == GTK_TEXT_DIR_LTR ?
 			      PANGO_DIRECTION_LTR : PANGO_DIRECTION_RTL);
 
   pango_cairo_context_set_resolution (context,
@@ -11804,7 +11804,7 @@ gtk_widget_emit_direction_changed (GtkWidget        *widget,
 
   gtk_widget_update_pango_context (widget);
 
-  direction = gtk_widget_get_direction (widget);
+  direction = _gtk_widget_get_direction (widget);
 
   switch (direction)
     {
@@ -11856,11 +11856,11 @@ gtk_widget_set_direction (GtkWidget        *widget,
   g_return_if_fail (GTK_IS_WIDGET (widget));
   g_return_if_fail (dir >= GTK_TEXT_DIR_NONE && dir <= GTK_TEXT_DIR_RTL);
 
-  old_dir = gtk_widget_get_direction (widget);
+  old_dir = _gtk_widget_get_direction (widget);
 
   widget->priv->direction = dir;
 
-  if (old_dir != gtk_widget_get_direction (widget))
+  if (old_dir != _gtk_widget_get_direction (widget))
     gtk_widget_emit_direction_changed (widget, old_dir);
 }
 
@@ -14789,7 +14789,7 @@ gtk_widget_set_margin_left (GtkWidget *widget,
 
   aux_info = gtk_widget_get_aux_info (widget, TRUE);
 
-  rtl = gtk_widget_get_direction (widget) == GTK_TEXT_DIR_RTL;
+  rtl = _gtk_widget_get_direction (widget) == GTK_TEXT_DIR_RTL;
 
   if (aux_info->margin.left == margin)
     return;
@@ -14844,7 +14844,7 @@ gtk_widget_set_margin_right (GtkWidget *widget,
 
   aux_info = gtk_widget_get_aux_info (widget, TRUE);
 
-  rtl = gtk_widget_get_direction (widget) == GTK_TEXT_DIR_RTL;
+  rtl = _gtk_widget_get_direction (widget) == GTK_TEXT_DIR_RTL;
 
   if (aux_info->margin.right == margin)
     return;
@@ -14874,7 +14874,7 @@ gtk_widget_get_margin_start (GtkWidget *widget)
 
   aux_info = _gtk_widget_get_aux_info_or_defaults (widget);
 
-  if (gtk_widget_get_direction (widget) == GTK_TEXT_DIR_RTL)
+  if (_gtk_widget_get_direction (widget) == GTK_TEXT_DIR_RTL)
     return aux_info->margin.right;
   else
     return aux_info->margin.left;
@@ -14903,7 +14903,7 @@ gtk_widget_set_margin_start (GtkWidget *widget,
 
   aux_info = gtk_widget_get_aux_info (widget, TRUE);
 
-  rtl = gtk_widget_get_direction (widget) == GTK_TEXT_DIR_RTL;
+  rtl = _gtk_widget_get_direction (widget) == GTK_TEXT_DIR_RTL;
 
   if (rtl)
     start = &aux_info->margin.right;
@@ -14938,7 +14938,7 @@ gtk_widget_get_margin_end (GtkWidget *widget)
 
   aux_info = _gtk_widget_get_aux_info_or_defaults (widget);
 
-  if (gtk_widget_get_direction (widget) == GTK_TEXT_DIR_RTL)
+  if (_gtk_widget_get_direction (widget) == GTK_TEXT_DIR_RTL)
     return aux_info->margin.left;
   else
     return aux_info->margin.right;
@@ -14967,7 +14967,7 @@ gtk_widget_set_margin_end (GtkWidget *widget,
 
   aux_info = gtk_widget_get_aux_info (widget, TRUE);
 
-  rtl = gtk_widget_get_direction (widget) == GTK_TEXT_DIR_RTL;
+  rtl = _gtk_widget_get_direction (widget) == GTK_TEXT_DIR_RTL;
 
   if (rtl)
     end = &aux_info->margin.left;

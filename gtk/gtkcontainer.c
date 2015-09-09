@@ -2875,7 +2875,7 @@ gtk_container_focus_sort_tab (GtkContainer     *container,
                               GtkDirectionType  direction,
                               GtkWidget        *old_focus)
 {
-  GtkTextDirection text_direction = gtk_widget_get_direction (GTK_WIDGET (container));
+  GtkTextDirection text_direction = _gtk_widget_get_direction (GTK_WIDGET (container));
   children = g_list_sort_with_data (children, tab_compare, GINT_TO_POINTER (text_direction));
 
   /* if we are going backwards then reverse the order
