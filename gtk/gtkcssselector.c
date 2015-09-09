@@ -141,8 +141,26 @@ gtk_css_selector_tree_get_matches (const GtkCssSelectorTree *tree)
 }
 
 static void
+g_ptr_array_insert_sorted (GPtrArray *array,
+                           gpointer   data)
+{
+  gint i;
+
+  for (i = 0; i < array->len; i++)
+    {
+      if (data == array->pdata[i])
+        return;
+
+      if (data < array->pdata[i])
+        break;
+    }
+
+  g_ptr_array_insert (array, i, data);
+}
+
+static void
 gtk_css_selector_tree_found_match (const GtkCssSelectorTree *tree,
-				   GHashTable *res)
+				   GPtrArray                *array)
 {
   int i;
   gpointer *matches;
@@ -151,7 +169,7 @@ gtk_css_selector_tree_found_match (const GtkCssSelectorTree *tree,
   if (matches)
     {
       for (i = 0; matches[i] != NULL; i++)
-	g_hash_table_insert (res, matches[i], matches[i]);
+        g_ptr_array_insert_sorted (array, matches[i]);
     }
 }
 
@@ -1714,18 +1732,6 @@ gtk_css_selectors_skip_initial_selector (GtkCssSelector *selector, const GtkCssS
   return (GtkCssSelector *)gtk_css_selector_previous (selector);
 }
 
-static int
-direct_ptr_compare (const void *_a, const void *_b)
-{
-  gpointer *a = (gpointer *)_a;
-  gpointer *b = (gpointer *)_b;
-  if (*a < *b)
-    return -1;
-  else if (*a == *b)
-    return 0;
-  return 1;
-}
-
 static gboolean
 gtk_css_selector_tree_match_foreach (const GtkCssSelector *selector,
                                      const GtkCssMatcher  *matcher,
@@ -1751,28 +1757,15 @@ GPtrArray *
 _gtk_css_selector_tree_match_all (const GtkCssSelectorTree *tree,
 				  const GtkCssMatcher *matcher)
 {
-  GHashTable *res;
   GPtrArray *array;
-  GHashTableIter iter;
-  gpointer key;
 
   update_type_references ();
 
-  res = g_hash_table_new (g_direct_hash, g_direct_equal);
+  array = g_ptr_array_sized_new (16);
 
   for (; tree != NULL;
        tree = gtk_css_selector_tree_get_sibling (tree))
-    gtk_css_selector_foreach (&tree->selector, matcher, gtk_css_selector_tree_match_foreach, res);
-
-  array = g_ptr_array_sized_new (g_hash_table_size (res));
-
-  g_hash_table_iter_init (&iter, res);
-  while (g_hash_table_iter_next (&iter, &key, NULL))
-    g_ptr_array_add (array, key);
-
-  g_hash_table_destroy (res);
-
-  qsort (array->pdata, array->len, sizeof (gpointer), direct_ptr_compare);
+    gtk_css_selector_foreach (&tree->selector, matcher, gtk_css_selector_tree_match_foreach, array);
 
   return array;
 }
