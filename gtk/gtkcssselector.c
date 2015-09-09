@@ -36,7 +36,7 @@ struct _GtkCssSelectorClass {
   void              (* print)       (const GtkCssSelector       *selector,
                                      GString                    *string);
   /* NULL or an iterator that calls func with each submatcher of @matcher.
-   * Potentially no submatcher exissts.
+   * Potentially no submatcher exists.
    * If any @invocation of @func returns %TRUE, the function will immediately
    * return %TRUE itself. If @func never returns %TRUE (or isn't called at all),
    * %FALSE will be returned.
@@ -798,15 +798,14 @@ match_class (const GtkCssSelector *selector,
 static guint
 hash_class (const GtkCssSelector *a)
 {
-  return g_str_hash (g_quark_to_string (a->style_class.style_class));
+  return a->style_class.style_class;
 }
 
 static int
 comp_class (const GtkCssSelector *a,
             const GtkCssSelector *b)
 {
-  return strcmp (g_quark_to_string (a->style_class.style_class),
-		 g_quark_to_string (b->style_class.style_class));
+  return a->style_class.style_class - b->style_class.style_class;
 }
 
 DEFINE_SIMPLE_SELECTOR(class, CLASS, print_class, match_class, hash_class, comp_class, FALSE, TRUE, FALSE)
