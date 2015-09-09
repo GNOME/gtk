@@ -311,7 +311,28 @@ gboolean
 gtk_css_node_declaration_has_class (const GtkCssNodeDeclaration *decl,
                                     GQuark                       class_quark)
 {
-  return find_class (decl, class_quark, NULL);
+  GQuark *classes = get_classes (decl);
+
+  switch (decl->n_classes)
+    {
+    case 3:
+      if (classes[2] == class_quark)
+        return TRUE;
+
+    case 2:
+      if (classes[1] == class_quark)
+        return TRUE;
+
+    case 1:
+      if (classes[0] == class_quark)
+        return TRUE;
+
+    case 0:
+      return FALSE;
+
+    default:
+      return find_class (decl, class_quark, NULL);
+    }
 }
 
 GList *
