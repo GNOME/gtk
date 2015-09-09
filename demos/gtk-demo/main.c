@@ -1052,12 +1052,35 @@ auto_quit (gpointer data)
 }
 
 static void
+list_demos (void)
+{
+  Demo *d, *c;
+
+  d = gtk_demos;
+
+  while (d->title)
+    {
+      c = d->children;
+      if (d->name)
+        g_print ("%s\n", d->name);
+      d++;
+      while (c && c->title)
+        {
+          if (c->name)
+            g_print ("%s\n", c->name);
+          c++;
+        }
+    }
+}
+
+static void
 command_line (GApplication            *app,
               GApplicationCommandLine *cmdline)
 {
   GVariantDict *options;
   const gchar *name = NULL;
   gboolean autoquit = FALSE;
+  gboolean list = FALSE;
   Demo *d, *c;
   GDoDemoFunc func = 0;
   GtkWidget *window, *demo;
@@ -1067,6 +1090,14 @@ command_line (GApplication            *app,
   options = g_application_command_line_get_options_dict (cmdline);
   g_variant_dict_lookup (options, "run", "&s", &name);
   g_variant_dict_lookup (options, "autoquit", "b", &autoquit);
+  g_variant_dict_lookup (options, "list", "b", &list);
+
+  if (list)
+    {
+      list_demos ();
+      g_application_quit (app);
+      return;
+    }
 
   if (name == NULL)
     goto out;
@@ -1134,6 +1165,7 @@ main (int argc, char **argv)
                                    app);
 
   g_application_add_main_option (G_APPLICATION (app), "run", 0, 0, G_OPTION_ARG_STRING, "Run an example", "EXAMPLE");
+  g_application_add_main_option (G_APPLICATION (app), "list", 0, 0, G_OPTION_ARG_NONE, "List examples", NULL);
   g_application_add_main_option (G_APPLICATION (app), "autoquit", 0, 0, G_OPTION_ARG_NONE, "Quit after a delay", NULL);
 
   g_signal_connect (app, "startup", G_CALLBACK (startup), NULL);
