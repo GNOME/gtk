@@ -10664,16 +10664,7 @@ gtk_widget_get_screen (GtkWidget *widget)
   if (screen)
     return screen;
   else
-    {
-#if 0
-      g_warning (G_STRLOC ": Can't get associated screen"
-		 " for a widget unless it is inside a toplevel GtkWindow\n"
-		 " widget type is %s associated top level type is %s",
-		 g_type_name (G_OBJECT_TYPE(G_OBJECT (widget))),
-		 g_type_name (G_OBJECT_TYPE(G_OBJECT (toplevel))));
-#endif
-      return gdk_screen_get_default ();
-    }
+    return gdk_screen_get_default ();
 }
 
 /**
