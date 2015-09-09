@@ -22,49 +22,24 @@
 #include "gtkcssnumbervalueprivate.h"
 #include "gtkstylecontextprivate.h"
 
-typedef struct _GtkCssChangeTranslation GtkCssChangeTranslation;
-struct _GtkCssChangeTranslation {
-  GtkCssChange from;
-  GtkCssChange to;
-};
-
-static GtkCssChange
-gtk_css_change_translate (GtkCssChange                   match,
-                         const GtkCssChangeTranslation *translations,
-                         guint                         n_translations)
-{
-  GtkCssChange result = match;
-  guint i;
-
-  for (i = 0; i < n_translations; i++)
-    {
-      if (match & translations[i].from)
-        {
-          result &= ~translations[i].from;
-          result |= translations[i].to;
-        }
-    }
-
-  return result;
-}
-
 GtkCssChange
 _gtk_css_change_for_sibling (GtkCssChange match)
 {
-  static const GtkCssChangeTranslation table[] = {
-    { GTK_CSS_CHANGE_CLASS, GTK_CSS_CHANGE_SIBLING_CLASS },
-    { GTK_CSS_CHANGE_NAME, GTK_CSS_CHANGE_SIBLING_NAME },
-    { GTK_CSS_CHANGE_ID, GTK_CSS_CHANGE_SIBLING_ID },
-    { GTK_CSS_CHANGE_FIRST_CHILD, GTK_CSS_CHANGE_SIBLING_FIRST_CHILD },
-    { GTK_CSS_CHANGE_LAST_CHILD, GTK_CSS_CHANGE_SIBLING_LAST_CHILD },
-    { GTK_CSS_CHANGE_NTH_CHILD, GTK_CSS_CHANGE_NTH_CHILD | GTK_CSS_CHANGE_SIBLING_NTH_CHILD },
-    { GTK_CSS_CHANGE_NTH_LAST_CHILD, GTK_CSS_CHANGE_NTH_LAST_CHILD | GTK_CSS_CHANGE_SIBLING_NTH_LAST_CHILD },
-    { GTK_CSS_CHANGE_STATE, GTK_CSS_CHANGE_SIBLING_STATE },
-    { GTK_CSS_CHANGE_SOURCE, 0 },
-    { GTK_CSS_CHANGE_PARENT_STYLE, 0 }
-  };
+#define BASE_STATES ( GTK_CSS_CHANGE_CLASS \
+                    | GTK_CSS_CHANGE_NAME \
+                    | GTK_CSS_CHANGE_ID \
+                    | GTK_CSS_CHANGE_FIRST_CHILD \
+                    | GTK_CSS_CHANGE_LAST_CHILD \
+                    | GTK_CSS_CHANGE_NTH_CHILD \
+                    | GTK_CSS_CHANGE_NTH_LAST_CHILD \
+                    | GTK_CSS_CHANGE_STATE )
 
-  return gtk_css_change_translate (match, table, G_N_ELEMENTS (table)); 
+#define SIBLING_SHIFT 8
+
+  return (match & ~(BASE_STATES|GTK_CSS_CHANGE_SOURCE|GTK_CSS_CHANGE_PARENT_STYLE)) | ((match & BASE_STATES) << SIBLING_SHIFT);
+
+#undef BASE_STATES
+#undef SIBLING_SHIFT
 }
 
 GtkCssChange
@@ -90,6 +65,9 @@ _gtk_css_change_for_child (GtkCssChange match)
 #define PARENT_SHIFT 16
 
   return (match & ~(BASE_STATES|GTK_CSS_CHANGE_SOURCE|GTK_CSS_CHANGE_PARENT_STYLE)) | ((match & BASE_STATES) << PARENT_SHIFT);
+
+#undef BASE_STATES
+#undef PARENT_SHIFT
 }
 
 void
