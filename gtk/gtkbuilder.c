@@ -480,7 +480,8 @@ gtk_builder_get_parameters (GtkBuilder  *builder,
       if (G_IS_PARAM_SPEC_OBJECT (prop->pspec) &&
           (G_PARAM_SPEC_VALUE_TYPE (prop->pspec) != GDK_TYPE_PIXBUF))
         {
-          GObject *object = gtk_builder_get_object (builder, prop->text->str);
+          GObject *object = g_hash_table_lookup (builder->priv->objects,
+                                                 prop->text->str);
 
           if (object)
             {
@@ -667,7 +668,7 @@ _gtk_builder_construct (GtkBuilder  *builder,
     {
       GObject *constructor;
 
-      constructor = gtk_builder_get_object (builder, info->constructor);
+      constructor = g_hash_table_lookup (builder->priv->objects, info->constructor);
       if (constructor == NULL)
         {
           g_set_error (error,
@@ -1540,7 +1541,7 @@ gtk_builder_expose_object (GtkBuilder    *builder,
 {
   g_return_if_fail (GTK_IS_BUILDER (builder));
   g_return_if_fail (name && name[0]);
-  g_return_if_fail (gtk_builder_get_object (builder, name) == NULL);
+  g_return_if_fail (!g_hash_table_contains (builder->priv->objects, name));
 
   object_set_name (object, name);
   g_hash_table_insert (builder->priv->objects,
@@ -1845,7 +1846,6 @@ gtk_builder_value_from_string_type (GtkBuilder   *builder,
 {
   gboolean ret = TRUE;
 
-  g_return_val_if_fail (type != G_TYPE_INVALID, FALSE);
   g_return_val_if_fail (string != NULL, FALSE);
   g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
 
@@ -2041,7 +2041,7 @@ G_GNUC_END_IGNORE_DEPRECATIONS
           GError *tmp_error = NULL;
           GdkPixbuf *pixbuf = NULL;
 
-          if (gtk_builder_get_object (builder, string))
+          if (g_hash_table_contains (builder->priv->objects, string))
             {
               g_set_error (error,
                            GTK_BUILDER_ERROR,
