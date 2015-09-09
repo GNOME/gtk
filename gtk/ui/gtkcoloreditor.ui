@@ -31,11 +31,11 @@
     <signal name="notify::visible" handler="dismiss_current_popup" swapped="no"/>
     <child>
       <object class="GtkOverlay" id="overlay">
-        <property name="visible">True</property>
+        <property name="visible">1</property>
         <signal name="get-child-position" handler="get_child_position" swapped="no"/>
         <child>
           <object class="GtkGrid" id="grid">
-            <property name="visible">True</property>
+            <property name="visible">1</property>
             <property name="margin_start">30</property>
             <property name="margin_end">30</property>
             <property name="row_spacing">12</property>
@@ -55,12 +55,12 @@
             </child>
             <child>
               <object class="GtkEntry" id="entry">
-                <property name="visible">True</property>
-                <property name="can_focus">True</property>
+                <property name="visible">1</property>
+                <property name="can_focus">1</property>
                 <property name="invisible_char">•</property>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="entry-atkobject">
-                    <property name="AtkObject::accessible-name" translatable="yes">Color Name</property>
+                    <property name="AtkObject::accessible-name" translatable="1">Color Name</property>
                   </object>
                 </child>
                 <signal name="activate" handler="entry_apply" swapped="no"/>
@@ -132,7 +132,7 @@
     </child>
   </template>
   <object class="GtkBox" id="a_popup">
-    <property name="no_show_all">True</property>
+    <property name="no_show_all">1</property>
     <style>
       <class name="popover"/>
       <class name="osd"/>
@@ -140,7 +140,7 @@
     <signal name="draw" handler="popup_draw" swapped="no"/>
     <child>
       <object class="GtkGrid" id="grid4">
-        <property name="visible">True</property>
+        <property name="visible">1</property>
         <property name="margin_start">12</property>
         <property name="margin_end">12</property>
         <property name="margin_top">12</property>
@@ -148,8 +148,8 @@
         <property name="column_spacing">6</property>
         <child>
           <object class="GtkLabel" id="label4">
-            <property name="visible">True</property>
-            <property name="label" translatable="yes" context="Color channel">A</property>
+            <property name="visible">1</property>
+            <property name="label" translatable="1" context="Color channel">A</property>
           </object>
           <packing>
             <property name="left_attach">0</property>
@@ -158,14 +158,14 @@
         </child>
         <child>
           <object class="GtkSpinButton" id="a_entry">
-            <property name="visible">True</property>
-            <property name="can_focus">True</property>
+            <property name="visible">1</property>
+            <property name="can_focus">1</property>
             <property name="invisible_char">•</property>
-            <property name="invisible_char_set">True</property>
+            <property name="invisible_char_set">1</property>
             <property name="climb_rate">1</property>
             <child internal-child="accessible">
               <object class="AtkObject" id="a_entry-atkobject">
-                <property name="AtkObject::accessible-name" translatable="yes">Alpha</property>
+                <property name="AtkObject::accessible-name" translatable="1">Alpha</property>
               </object>
             </child>
             <signal name="key-press-event" handler="popup_key_press" swapped="no"/>
@@ -179,7 +179,7 @@
     </child>
   </object>
   <object class="GtkBox" id="h_popup">
-    <property name="no_show_all">True</property>
+    <property name="no_show_all">1</property>
     <style>
       <class name="popover"/>
       <class name="osd"/>
@@ -187,7 +187,7 @@
     <signal name="draw" handler="popup_draw" swapped="no"/>
     <child>
       <object class="GtkGrid" id="grid3">
-        <property name="visible">True</property>
+        <property name="visible">1</property>
         <property name="margin_start">12</property>
         <property name="margin_end">12</property>
         <property name="margin_top">12</property>
@@ -195,8 +195,8 @@
         <property name="column_spacing">6</property>
         <child>
           <object class="GtkLabel" id="label3">
-            <property name="visible">True</property>
-            <property name="label" translatable="yes" context="Color channel">H</property>
+            <property name="visible">1</property>
+            <property name="label" translatable="1" context="Color channel">H</property>
           </object>
           <packing>
             <property name="left_attach">0</property>
@@ -205,14 +205,14 @@
         </child>
         <child>
           <object class="GtkSpinButton" id="h_entry">
-            <property name="visible">True</property>
-            <property name="can_focus">True</property>
+            <property name="visible">1</property>
+            <property name="can_focus">1</property>
             <property name="invisible_char">•</property>
-            <property name="invisible_char_set">True</property>
+            <property name="invisible_char_set">1</property>
             <property name="climb_rate">1</property>
             <child internal-child="accessible">
               <object class="AtkObject" id="h_entry-atkobject">
-                <property name="AtkObject::accessible-name" translatable="yes">Hue</property>
+                <property name="AtkObject::accessible-name" translatable="1">Hue</property>
               </object>
             </child>
             <signal name="key-press-event" handler="popup_key_press" swapped="no"/>
@@ -226,7 +226,7 @@
     </child>
   </object>
   <object class="GtkBox" id="sv_popup">
-    <property name="no_show_all">True</property>
+    <property name="no_show_all">1</property>
     <style>
       <class name="popover"/>
       <class name="osd"/>
@@ -234,7 +234,7 @@
     <signal name="draw" handler="popup_draw" swapped="no"/>
     <child>
       <object class="GtkGrid" id="grid2">
-        <property name="visible">True</property>
+        <property name="visible">1</property>
         <property name="margin_start">12</property>
         <property name="margin_end">12</property>
         <property name="margin_top">12</property>
@@ -243,8 +243,8 @@
         <property name="column_spacing">6</property>
         <child>
           <object class="GtkLabel" id="label1">
-            <property name="visible">True</property>
-            <property name="label" translatable="yes" context="Color Channel">S</property>
+            <property name="visible">1</property>
+            <property name="label" translatable="1" context="Color Channel">S</property>
           </object>
           <packing>
             <property name="left_attach">0</property>
@@ -253,8 +253,8 @@
         </child>
         <child>
           <object class="GtkLabel" id="label2">
-            <property name="visible">True</property>
-            <property name="label" translatable="yes" context="Color Channel">V</property>
+            <property name="visible">1</property>
+            <property name="label" translatable="1" context="Color Channel">V</property>
           </object>
           <packing>
             <property name="left_attach">0</property>
@@ -263,13 +263,13 @@
         </child>
         <child>
           <object class="GtkSpinButton" id="s_entry">
-            <property name="visible">True</property>
-            <property name="can_focus">True</property>
+            <property name="visible">1</property>
+            <property name="can_focus">1</property>
             <property name="invisible_char">•</property>
             <property name="climb_rate">1</property>
             <child internal-child="accessible">
               <object class="AtkObject" id="s_entry-atkobject">
-                <property name="AtkObject::accessible-name" translatable="yes">Saturation</property>
+                <property name="AtkObject::accessible-name" translatable="1">Saturation</property>
               </object>
             </child>
             <signal name="key-press-event" handler="popup_key_press" swapped="no"/>
@@ -281,14 +281,14 @@
         </child>
         <child>
           <object class="GtkSpinButton" id="v_entry">
-            <property name="visible">True</property>
-            <property name="can_focus">True</property>
+            <property name="visible">1</property>
+            <property name="can_focus">1</property>
             <property name="invisible_char">•</property>
-            <property name="invisible_char_set">True</property>
+            <property name="invisible_char_set">1</property>
             <property name="climb_rate">1</property>
             <child internal-child="accessible">
               <object class="AtkObject" id="v_entry-atkobject">
-                <property name="AtkObject::accessible-name" translatable="yes">Value</property>
+                <property name="AtkObject::accessible-name" translatable="1">Value</property>
               </object>
             </child>
             <signal name="key-press-event" handler="popup_key_press" swapped="no"/>

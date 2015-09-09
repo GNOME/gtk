@@ -4,16 +4,16 @@
   <template class="GtkActionBar" parent="GtkBin">
     <child>
       <object class="GtkRevealer" id="revealer">
-        <property name="visible">True</property>
+        <property name="visible">1</property>
         <child>
           <object class="GtkFrame" id="frame">
-            <property name="visible">True</property>
+            <property name="visible">1</property>
             <style>
               <class name="action-bar"/>
             </style>
             <child>
               <object class="GtkBox" id="box">
-                <property name="visible">True</property>
+                <property name="visible">1</property>
                 <property name="spacing">6</property>
               </object>
             </child>

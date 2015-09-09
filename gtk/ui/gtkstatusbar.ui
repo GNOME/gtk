@@ -9,29 +9,28 @@
     <property name="margin_bottom">6</property>
     <child>
       <object class="GtkFrame" id="frame">
-        <property name="visible">True</property>
+        <property name="visible">1</property>
         <property name="shadow_type">none</property>
         <child>
           <object class="GtkBox" id="message_area">
-            <property name="visible">True</property>
+            <property name="visible">1</property>
             <property name="spacing">4</property>
             <property name="margin">4</property>
             <child>
               <object class="GtkLabel" id="label">
-                <property name="visible">True</property>
+                <property name="visible">1</property>
                 <property name="halign">start</property>
                 <property name="valign">center</property>
                 <property name="ellipsize">end</property>
-                <property name="single_line_mode">True</property>
+                <property name="single_line_mode">1</property>
               </object>
             </child>
           </object>
         </child>
-        <child type="label_item">
-        </child>
+        <child type="label_item"/>
       </object>
       <packing>
-        <property name="expand">True</property>
+        <property name="expand">1</property>
       </packing>
     </child>
   </template>

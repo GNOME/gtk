@@ -2,44 +2,44 @@
 <interface domain="gtk30">
   <!-- interface-requires gtk+ 3.6 -->
   <template class="GtkLockButton" parent="GtkButton">
-    <property name="visible">True</property>
-    <property name="can_focus">True</property>
-    <property name="receives_default">True</property>
+    <property name="visible">1</property>
+    <property name="can_focus">1</property>
+    <property name="receives_default">1</property>
     <child>
       <object class="GtkBox" id="box">
-        <property name="visible">True</property>
+        <property name="visible">1</property>
         <property name="halign">center</property>
         <property name="valign">center</property>
         <property name="spacing">6</property>
         <child>
           <object class="GtkImage" id="image">
-            <property name="visible">True</property>
+            <property name="visible">1</property>
             <property name="icon_name">image-missing</property>
           </object>
           <packing>
-            <property name="fill">False</property>
+            <property name="fill">0</property>
           </packing>
         </child>
         <child>
           <object class="GtkLabel" id="label_lock">
-            <property name="visible">True</property>
-            <property name="no_show_all">True</property>
+            <property name="visible">1</property>
+            <property name="no_show_all">1</property>
             <property name="xalign">0</property>
-            <property name="label" translatable="yes">Lock</property>
+            <property name="label" translatable="1">Lock</property>
           </object>
           <packing>
-            <property name="fill">False</property>
+            <property name="fill">0</property>
             <property name="position">1</property>
           </packing>
         </child>
         <child>
           <object class="GtkLabel" id="label_unlock">
-            <property name="no_show_all">True</property>
+            <property name="no_show_all">1</property>
             <property name="xalign">0</property>
-            <property name="label" translatable="yes">Unlock</property>
+            <property name="label" translatable="1">Unlock</property>
           </object>
           <packing>
-            <property name="fill">False</property>
+            <property name="fill">0</property>
             <property name="position">2</property>
           </packing>
         </child>

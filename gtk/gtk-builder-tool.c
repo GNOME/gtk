@@ -263,20 +263,19 @@ maybe_emit_property (MyParserData *data)
         bound = TRUE;
       else if (strcmp (data->attribute_names[i], "translatable") == 0)
         translatable = TRUE;
+      else if (strcmp (data->attribute_names[i], "name") == 0)
+        property_name = (const gchar *)data->attribute_values[i];
     }
 
-  if (!translatable)
+  if (!translatable &&
+      !bound &&
+      !needs_explicit_setting (data, class_name, property_name))
     {
       for (i = 0; data->attribute_names[i]; i++)
         {
           if (strcmp (data->attribute_names[i], "name") == 0)
             {
               if (data->classes == NULL)
-                break;
-
-              property_name = (const gchar *)data->attribute_values[i];
-
-              if (needs_explicit_setting (data, class_name, property_name))
                 break;
 
               if (value_is_default (data, class_name, property_name, value_string))

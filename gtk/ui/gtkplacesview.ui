@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface domain="gtk30">
   <requires lib="gtk+" version="3.16"/>
-    <object class="GtkListStore" id="completion_store">
+  <object class="GtkListStore" id="completion_store">
     <columns>
       <!-- column-name name -->
       <column type="gchararray"/>
@@ -11,51 +11,40 @@
   </object>
   <object class="GtkEntryCompletion" id="address_entry_completion">
     <property name="model">completion_store</property>
-    <property name="minimum_key_length">1</property>
     <property name="text_column">1</property>
-    <property name="inline_completion">True</property>
-    <property name="popup_completion">False</property>
+    <property name="inline_completion">1</property>
+    <property name="popup_completion">0</property>
   </object>
   <object class="GtkPopover" id="recent_servers_popover">
     <child>
       <object class="GtkStack" id="recent_servers_stack">
-        <property name="visible">True</property>
+        <property name="visible">1</property>
         <child>
           <object class="GtkBox">
-            <property name="visible">True</property>
-            <property name="can_focus">False</property>
-            <property name="vexpand">True</property>
+            <property name="visible">1</property>
+            <property name="vexpand">1</property>
             <property name="valign">center</property>
             <property name="orientation">vertical</property>
             <property name="spacing">18</property>
             <child>
               <object class="GtkImage">
-                <property name="visible">True</property>
-                <property name="can_focus">False</property>
+                <property name="visible">1</property>
                 <property name="pixel-size">48</property>
                 <property name="icon_name">network-server-symbolic</property>
                 <style>
                   <class name="dim-label"/>
                 </style>
               </object>
-              <packing>
-                <property name="expand">False</property>
-                <property name="fill">True</property>
-                <property name="position">0</property>
-              </packing>
             </child>
             <child>
               <object class="GtkLabel">
-                <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="label" translatable="yes" comments="Translators: Server as any successfully connected network address">No recent servers found</property>
+                <property name="visible">1</property>
+                <property name="label" translatable="1" comments="Translators: Server as any successfully connected network address">No recent servers found</property>
                 <style>
                   <class name="dim-label"/>
                 </style>
               </object>
               <packing>
-                <property name="expand">False</property>
-                <property name="fill">True</property>
                 <property name="position">1</property>
               </packing>
             </child>
@@ -66,52 +55,43 @@
         </child>
         <child>
           <object class="GtkBox">
-            <property name="visible">True</property>
+            <property name="visible">1</property>
             <property name="border_width">12</property>
             <property name="orientation">vertical</property>
             <property name="spacing">12</property>
             <child>
               <object class="GtkLabel">
-                <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="label" translatable="yes">Recent Servers</property>
+                <property name="visible">1</property>
+                <property name="label" translatable="1">Recent Servers</property>
                 <attributes>
                   <attribute name="weight" value="bold"/>
                 </attributes>
               </object>
-              <packing>
-                <property name="expand">False</property>
-                <property name="fill">True</property>
-                <property name="position">0</property>
-              </packing>
             </child>
             <child>
               <object class="GtkScrolledWindow">
-                <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="vexpand">True</property>
+                <property name="visible">1</property>
+                <property name="can_focus">1</property>
+                <property name="vexpand">1</property>
                 <property name="shadow_type">in</property>
                 <property name="min_content_width">250</property>
                 <property name="min_content_height">150</property>
                 <child>
                   <object class="GtkViewport">
-                    <property name="visible">True</property>
-                    <property name="can_focus">False</property>
+                    <property name="visible">1</property>
                     <property name="shadow_type">none</property>
                     <child>
                       <object class="GtkListBox" id="recent_servers_listbox">
-                        <property name="visible">True</property>
-                        <property name="can_focus">True</property>
+                        <property name="visible">1</property>
+                        <property name="can_focus">1</property>
                         <property name="selection_mode">none</property>
-                        <signal name="row-activated" handler="on_recent_servers_listbox_row_activated" object="GtkPlacesView" swapped="yes" />
+                        <signal name="row-activated" handler="on_recent_servers_listbox_row_activated" object="GtkPlacesView" swapped="yes"/>
                       </object>
                     </child>
                   </object>
                 </child>
               </object>
               <packing>
-                <property name="expand">False</property>
-                <property name="fill">True</property>
                 <property name="position">1</property>
               </packing>
             </child>
@@ -127,35 +107,31 @@
     <property name="visible">True</property>
     <property name="can_focus">False</property>
     <property name="orientation">vertical</property>
-    <signal name="key-press-event" handler="on_key_press_event" object="GtkPlacesView" swapped="no" />
+    <signal name="key-press-event" handler="on_key_press_event" object="GtkPlacesView" swapped="no"/>
     <child>
       <object class="GtkStack" id="stack">
-        <property name="visible">True</property>
-        <property name="can_focus">False</property>
-        <property name="vhomogeneous">False</property>
+        <property name="visible">1</property>
+        <property name="vhomogeneous">0</property>
         <property name="transition_type">crossfade</property>
         <child>
           <object class="GtkFrame">
-            <property name="visible">True</property>
-            <property name="can_focus">False</property>
-            <property name="label_xalign">0</property>
+            <property name="visible">1</property>
             <property name="shadow_type">none</property>
             <child>
               <object class="GtkScrolledWindow">
-                <property name="visible">True</property>
-                <property name="hexpand">True</property>
-                <property name="vexpand">True</property>
+                <property name="visible">1</property>
+                <property name="hexpand">1</property>
+                <property name="vexpand">1</property>
                 <child>
                   <object class="GtkViewport">
-                    <property name="visible">True</property>
-                    <property name="can_focus">False</property>
+                    <property name="visible">1</property>
                     <property name="shadow_type">none</property>
                     <child>
                       <object class="GtkListBox" id="listbox">
-                        <property name="visible">True</property>
-                        <property name="can_focus">True</property>
+                        <property name="visible">1</property>
+                        <property name="can_focus">1</property>
                         <property name="selection_mode">none</property>
-                        <signal name="row-activated" handler="on_listbox_row_activated" object="GtkPlacesView" swapped="yes" />
+                        <signal name="row-activated" handler="on_listbox_row_activated" object="GtkPlacesView" swapped="yes"/>
                       </object>
                     </child>
                     <style>
@@ -172,58 +148,45 @@
         </child>
         <child>
           <object class="GtkBox">
-            <property name="visible">True</property>
-            <property name="can_focus">False</property>
+            <property name="visible">1</property>
             <property name="halign">center</property>
             <property name="valign">center</property>
-            <property name="hexpand">True</property>
-            <property name="vexpand">True</property>
+            <property name="hexpand">1</property>
+            <property name="vexpand">1</property>
             <property name="orientation">vertical</property>
             <property name="spacing">12</property>
             <child>
               <object class="GtkImage">
-                <property name="visible">True</property>
-                <property name="can_focus">False</property>
+                <property name="visible">1</property>
                 <property name="pixel_size">72</property>
                 <property name="icon_name">edit-find-symbolic</property>
                 <style>
                   <class name="dim-label"/>
                 </style>
               </object>
-              <packing>
-                <property name="expand">False</property>
-                <property name="fill">True</property>
-                <property name="position">0</property>
-              </packing>
             </child>
             <child>
               <object class="GtkLabel">
-                <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="label" translatable="yes">No results found</property>
+                <property name="visible">1</property>
+                <property name="label" translatable="1">No results found</property>
                 <attributes>
                   <attribute name="weight" value="bold"/>
                   <attribute name="scale" value="1.44"/>
                 </attributes>
               </object>
               <packing>
-                <property name="expand">False</property>
-                <property name="fill">True</property>
                 <property name="position">1</property>
               </packing>
             </child>
             <child>
               <object class="GtkLabel">
-                <property name="visible">True</property>
-                <property name="can_focus">False</property>
-                <property name="label" translatable="yes">Try a different search</property>
+                <property name="visible">1</property>
+                <property name="label" translatable="1">Try a different search</property>
                 <style>
                   <class name="dim-label"/>
                 </style>
               </object>
               <packing>
-                <property name="expand">False</property>
-                <property name="fill">True</property>
                 <property name="position">2</property>
               </packing>
             </child>
@@ -241,18 +204,16 @@
     </child>
     <child>
       <object class="GtkActionBar" id="actionbar">
-        <property name="visible">True</property>
-        <property name="hexpand">True</property>
-        <property name="can_focus">False</property>
+        <property name="visible">1</property>
+        <property name="hexpand">1</property>
         <child>
           <object class="GtkLabel">
-            <property name="visible">True</property>
-            <property name="hexpand">True</property>
-            <property name="can_focus">False</property>
+            <property name="visible">1</property>
+            <property name="hexpand">1</property>
             <property name="xalign">0</property>
-            <property name="label" translatable="yes">Connect to _Server</property>
+            <property name="label" translatable="1">Connect to _Server</property>
             <property name="mnemonic_widget">address_entry</property>
-            <property name="use_underline">True</property>
+            <property name="use_underline">1</property>
             <attributes>
               <attribute name="weight" value="bold"/>
             </attributes>
@@ -260,13 +221,13 @@
         </child>
         <child>
           <object class="GtkButton" id="connect_button">
-            <property name="label" translatable="yes">Con_nect</property>
-            <property name="use_underline">True</property>
-            <property name="visible">True</property>
-            <property name="can_focus">True</property>
-            <property name="sensitive">False</property>
-            <property name="receives_default">True</property>
-            <signal name="clicked" handler="on_connect_button_clicked" object="GtkPlacesView" swapped="yes" />
+            <property name="label" translatable="1">Con_nect</property>
+            <property name="use_underline">1</property>
+            <property name="visible">1</property>
+            <property name="can_focus">1</property>
+            <property name="sensitive">0</property>
+            <property name="receives_default">1</property>
+            <signal name="clicked" handler="on_connect_button_clicked" object="GtkPlacesView" swapped="yes"/>
           </object>
           <packing>
             <property name="pack_type">end</property>
@@ -274,44 +235,34 @@
         </child>
         <child>
           <object class="GtkBox">
-            <property name="visible">True</property>
-            <property name="hexpand">True</property>
-            <property name="can_focus">False</property>
+            <property name="visible">1</property>
+            <property name="hexpand">1</property>
             <child>
               <object class="GtkEntry" id="address_entry">
-                <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="hexpand">True</property>
+                <property name="visible">1</property>
+                <property name="can_focus">1</property>
+                <property name="hexpand">1</property>
                 <property name="width_chars">20</property>
-                <property name="placeholder_text" translatable="yes">Enter server address…</property>
+                <property name="placeholder_text" translatable="1">Enter server address…</property>
                 <property name="completion">address_entry_completion</property>
-                <signal name="notify::text" handler="on_address_entry_text_changed" object="GtkPlacesView" swapped="yes" />
-                <signal name="activate" handler="on_connect_button_clicked" object="GtkPlacesView" swapped="yes" />
+                <signal name="notify::text" handler="on_address_entry_text_changed" object="GtkPlacesView" swapped="yes"/>
+                <signal name="activate" handler="on_connect_button_clicked" object="GtkPlacesView" swapped="yes"/>
               </object>
-              <packing>
-                <property name="expand">False</property>
-                <property name="fill">True</property>
-              </packing>
             </child>
             <child>
               <object class="GtkMenuButton" id="server_list_button">
-                <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="receives_default">True</property>
+                <property name="visible">1</property>
+                <property name="can_focus">1</property>
+                <property name="receives_default">1</property>
                 <property name="direction">up</property>
                 <property name="popover">recent_servers_popover</property>
                 <child>
                   <object class="GtkImage">
-                    <property name="visible">True</property>
-                    <property name="can_focus">False</property>
+                    <property name="visible">1</property>
                     <property name="icon_name">pan-up-symbolic</property>
                   </object>
                 </child>
               </object>
-              <packing>
-                <property name="expand">False</property>
-                <property name="fill">True</property>
-              </packing>
             </child>
             <style>
               <class name="linked"/>

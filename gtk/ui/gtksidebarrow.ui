@@ -9,21 +9,21 @@
     </style>
     <child>
       <object class="GtkRevealer" id="revealer">
-        <property name="visible">True</property>
-        <property name="reveal-child">True</property>
+        <property name="visible">1</property>
+        <property name="reveal-child">1</property>
         <signal name="notify::child-revealed" handler="on_child_revealed"/>
         <style>
           <class name="sidebar-revealer"/>
         </style>
         <child>
           <object class="GtkEventBox" id="event_box">
-            <property name="visible">True</property>
+            <property name="visible">1</property>
             <child>
               <object class="GtkGrid">
-                <property name="visible">True</property>
+                <property name="visible">1</property>
                 <child>
                   <object class="GtkImage" id="icon_widget">
-                    <property name="visible">True</property>
+                    <property name="visible">1</property>
                     <style>
                       <class name="sidebar-icon"/>
                     </style>
@@ -35,8 +35,8 @@
                 </child>
                 <child>
                   <object class="GtkLabel" id="label_widget">
-                    <property name="visible">True</property>
-                    <property name="hexpand">True</property>
+                    <property name="visible">1</property>
+                    <property name="hexpand">1</property>
                     <property name="xalign">0</property>
                     <style>
                       <class name="sidebar-label"/>
@@ -49,14 +49,14 @@
                 </child>
                 <child>
                   <object class="GtkButton" id="eject_button">
-                    <property name="visible">True</property>
+                    <property name="visible">1</property>
                     <property name="halign">center</property>
                     <property name="valign">center</property>
                     <property name="margin-start">4px</property>
-                    <property name="no-show-all">True</property>
+                    <property name="no-show-all">1</property>
                     <child>
                       <object class="GtkImage">
-                        <property name="visible">True</property>
+                        <property name="visible">1</property>
                         <property name="icon_name">media-eject-symbolic</property>
                         <property name="icon_size">1</property>
                       </object>

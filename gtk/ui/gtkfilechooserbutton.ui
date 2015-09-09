@@ -4,57 +4,57 @@
   <template class="GtkFileChooserButton" parent="GtkBox">
     <child>
       <object class="GtkButton" id="button">
-        <property name="visible">True</property>
-        <property name="can_focus">True</property>
-        <property name="receives_default">True</property>
+        <property name="visible">1</property>
+        <property name="can_focus">1</property>
+        <property name="receives_default">1</property>
         <signal name="clicked" handler="button_clicked_cb" swapped="no"/>
         <child>
           <object class="GtkBox" id="box2">
-            <property name="visible">True</property>
+            <property name="visible">1</property>
             <property name="spacing">4</property>
             <child>
               <object class="GtkImage" id="image">
-                <property name="visible">True</property>
+                <property name="visible">1</property>
                 <property name="icon_name">image-missing</property>
               </object>
               <packing>
-                <property name="fill">False</property>
+                <property name="fill">0</property>
               </packing>
             </child>
             <child>
               <object class="GtkLabel" id="label">
-                <property name="visible">True</property>
+                <property name="visible">1</property>
                 <property name="halign">start</property>
                 <property name="valign">baseline</property>
                 <property name="xalign">0</property>
-                <property name="label" translatable="yes">(None)</property>
+                <property name="label" translatable="1">(None)</property>
                 <property name="ellipsize">end</property>
               </object>
               <packing>
-                <property name="expand">True</property>
+                <property name="expand">1</property>
                 <property name="position">1</property>
               </packing>
             </child>
             <child>
               <object class="GtkSeparator" id="separator1">
-                <property name="visible">True</property>
+                <property name="visible">1</property>
                 <property name="orientation">vertical</property>
               </object>
               <packing>
-                <property name="fill">False</property>
+                <property name="fill">0</property>
                 <property name="position">2</property>
               </packing>
             </child>
             <child>
               <object class="GtkImage" id="open_file_icon">
-                <property name="visible">True</property>
+                <property name="visible">1</property>
                 <property name="icon_name">document-open-symbolic</property>
                 <property name="icon_size">1</property>
-                <property name="use_fallback">True</property>
+                <property name="use_fallback">1</property>
                 <property name="valign">baseline</property>
               </object>
               <packing>
-                <property name="fill">False</property>
+                <property name="fill">0</property>
                 <property name="position">3</property>
               </packing>
             </child>
@@ -62,12 +62,12 @@
         </child>
       </object>
       <packing>
-        <property name="expand">True</property>
+        <property name="expand">1</property>
       </packing>
     </child>
     <child>
       <object class="GtkComboBox" id="combo_box">
-        <property name="visible">True</property>
+        <property name="visible">1</property>
         <signal name="changed" handler="combo_box_changed_cb" swapped="no"/>
         <signal name="notify::popup-shown" handler="combo_box_notify_popup_shown_cb" swapped="no"/>
         <child>
@@ -84,7 +84,7 @@
         </child>
       </object>
       <packing>
-        <property name="expand">True</property>
+        <property name="expand">1</property>
         <property name="position">1</property>
       </packing>
     </child>

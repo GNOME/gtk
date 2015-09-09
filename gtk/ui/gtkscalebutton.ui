@@ -3,15 +3,15 @@
   <!-- interface-requires gtk+ 3.10 -->
   <!-- interface-requires gtkprivate 3.10 -->
   <template class="GtkScaleButton" parent="GtkButton">
-    <property name="can_focus">True</property>
-    <property name="receives_default">True</property>
+    <property name="can_focus">1</property>
+    <property name="receives_default">1</property>
     <property name="relief">none</property>
-    <property name="focus_on_click">False</property>
+    <property name="focus_on_click">0</property>
     <child>
       <object class="GtkImage" id="image">
-        <property name="visible">True</property>
+        <property name="visible">1</property>
         <property name="icon_name">image-missing</property>
-        <property name="use-fallback">True</property>
+        <property name="use-fallback">1</property>
       </object>
     </child>
   </template>
@@ -27,15 +27,15 @@
     </style>
     <child>
       <object class="GtkBox" id="box">
-        <property name="visible">True</property>
+        <property name="visible">1</property>
         <property name="orientation">vertical</property>
         <property name="margin">4</property>
         <property name="spacing">4</property>
         <child>
           <object class="GtkButton" id="plus_button">
-            <property name="visible">True</property>
-            <property name="can_focus">True</property>
-            <property name="receives_default">True</property>
+            <property name="visible">1</property>
+            <property name="can_focus">1</property>
+            <property name="receives_default">1</property>
             <property name="relief">none</property>
             <property name="halign">center</property>
             <property name="valign">center</property>
@@ -44,9 +44,9 @@
             </style>
             <child>
               <object class="GtkImage">
-                <property name="visible">True</property>
+                <property name="visible">1</property>
                 <property name="icon-name">list-add-symbolic</property>
-                <property name="use-fallback">True</property>
+                <property name="use-fallback">1</property>
               </object>
             </child>
             <signal name="button-press-event" handler="cb_button_press" swapped="no"/>
@@ -54,19 +54,19 @@
             <signal name="clicked" handler="cb_button_clicked" swapped="no"/>
           </object>
           <packing>
-            <property name="fill">False</property>
+            <property name="fill">0</property>
           </packing>
         </child>
         <child>
           <object class="GtkScale" id="scale">
             <property name="height_request">100</property>
-            <property name="visible">True</property>
-            <property name="can_focus">True</property>
+            <property name="visible">1</property>
+            <property name="can_focus">1</property>
             <property name="orientation">vertical</property>
             <property name="adjustment">adjustment</property>
-            <property name="inverted">True</property>
+            <property name="inverted">1</property>
             <property name="round_digits">1</property>
-            <property name="draw_value">False</property>
+            <property name="draw_value">0</property>
             <signal name="value-changed" handler="cb_scale_value_changed" swapped="no"/>
           </object>
           <packing>
@@ -75,9 +75,9 @@
         </child>
         <child>
           <object class="GtkButton" id="minus_button">
-            <property name="visible">True</property>
-            <property name="can_focus">True</property>
-            <property name="receives_default">True</property>
+            <property name="visible">1</property>
+            <property name="can_focus">1</property>
+            <property name="receives_default">1</property>
             <property name="relief">none</property>
             <property name="halign">center</property>
             <property name="valign">center</property>
@@ -86,9 +86,9 @@
             </style>
             <child>
               <object class="GtkImage">
-                <property name="visible">True</property>
+                <property name="visible">1</property>
                 <property name="icon-name">list-remove-symbolic</property>
-                <property name="use-fallback">True</property>
+                <property name="use-fallback">1</property>
               </object>
             </child>
             <signal name="button-press-event" handler="cb_button_press" swapped="no"/>
@@ -96,7 +96,7 @@
             <signal name="clicked" handler="cb_button_clicked" swapped="no"/>
           </object>
           <packing>
-            <property name="fill">False</property>
+            <property name="fill">0</property>
             <property name="position">2</property>
           </packing>
         </child>

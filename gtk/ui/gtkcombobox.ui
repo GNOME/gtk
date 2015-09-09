@@ -4,18 +4,17 @@
   <template class="GtkComboBox" parent="GtkBin">
     <child>
       <object class="GtkToggleButton" id="button">
-        <property name="visible">True</property>
-        <property name="focus-on-click">True</property>
+        <property name="visible">1</property>
         <signal name="toggled" handler="gtk_combo_box_button_toggled" swapped="no"/>
         <style>
           <class name="the-button-in-the-combobox"/>
         </style>
         <child>
           <object class="GtkBox">
-            <property name="visible">True</property>
+            <property name="visible">1</property>
             <child>
               <object class="GtkImage" id="arrow">
-                <property name="visible">True</property>
+                <property name="visible">1</property>
                 <property name="icon-name">pan-down-symbolic</property>
               </object>
               <packing>

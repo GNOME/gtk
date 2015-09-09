@@ -7,12 +7,12 @@
     <property name="page_increment">0.2</property>
   </object>
   <template class="GtkVolumeButton" parent="GtkScaleButton">
-    <property name="visible">True</property>
-    <property name="can_focus">True</property>
-    <property name="receives_default">True</property>
-    <property name="has_tooltip">True</property>
+    <property name="visible">1</property>
+    <property name="can_focus">1</property>
+    <property name="receives_default">1</property>
+    <property name="has_tooltip">1</property>
     <property name="relief">none</property>
-    <property name="focus_on_click">False</property>
+    <property name="focus_on_click">0</property>
     <property name="orientation">vertical</property>
     <property name="adjustment">adjustment</property>
     <property name="icons">audio-volume-muted
@@ -21,8 +21,8 @@ audio-volume-low
 audio-volume-medium</property>
     <child internal-child="accessible">
       <object class="AtkObject" id="GtkVolumeButton-atkobject">
-        <property name="AtkObject::accessible-name" translatable="yes">Volume</property>
-        <property name="AtkObject::accessible-description" translatable="yes">Turns volume up or down</property>
+        <property name="AtkObject::accessible-name" translatable="1">Volume</property>
+        <property name="AtkObject::accessible-description" translatable="1">Turns volume up or down</property>
       </object>
     </child>
     <signal name="query-tooltip" handler="cb_query_tooltip" swapped="no"/>
@@ -31,8 +31,8 @@ audio-volume-medium</property>
       <object class="GtkButton" id="scalebutton-plus_button1">
         <child internal-child="accessible">
           <object class="AtkObject" id="scalebutton-plus_button1-atkobject">
-            <property name="AtkObject::accessible-name" translatable="yes">Volume Up</property>
-            <property name="AtkObject::accessible-description" translatable="yes">Increases the volume</property>
+            <property name="AtkObject::accessible-name" translatable="1">Volume Up</property>
+            <property name="AtkObject::accessible-description" translatable="1">Increases the volume</property>
           </object>
         </child>
       </object>
@@ -41,8 +41,8 @@ audio-volume-medium</property>
       <object class="GtkButton" id="scalebutton-minus_button1">
         <child internal-child="accessible">
           <object class="AtkObject" id="scalebutton-minus_button1-atkobject">
-            <property name="AtkObject::accessible-name" translatable="yes">Volume Down</property>
-            <property name="AtkObject::accessible-description" translatable="yes">Decreases the volume</property>
+            <property name="AtkObject::accessible-name" translatable="1">Volume Down</property>
+            <property name="AtkObject::accessible-description" translatable="1">Decreases the volume</property>
           </object>
         </child>
       </object>
