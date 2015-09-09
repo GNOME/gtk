@@ -214,11 +214,12 @@ translate_device_classes (GdkDisplay      *display,
         case XIKeyClass:
           {
             XIKeyClassInfo *key_info = (XIKeyClassInfo *) class_info;
+            gint j;
 
             _gdk_device_set_keys (device, key_info->num_keycodes);
 
-            for (i = 0; i < key_info->num_keycodes; i++)
-              gdk_device_set_key (device, i, key_info->keycodes[i], 0);
+            for (j = 0; j < key_info->num_keycodes; j++)
+              gdk_device_set_key (device, j, key_info->keycodes[j], 0);
           }
           break;
         case XIValuatorClass:
