@@ -37,6 +37,14 @@
 #include <string.h>
 #include <errno.h>
 
+enum {
+  COMMITTED,
+
+  LAST_SIGNAL
+};
+
+static guint signals[LAST_SIGNAL];
+
 #define WINDOW_IS_TOPLEVEL_OR_FOREIGN(window) \
   (GDK_WINDOW_TYPE (window) != GDK_WINDOW_CHILD &&   \
    GDK_WINDOW_TYPE (window) != GDK_WINDOW_OFFSCREEN)
@@ -431,6 +439,8 @@ on_frame_clock_after_paint (GdkFrameClock *clock,
   wl_surface_commit (impl->surface);
   if (_gdk_wayland_is_shm_surface (impl->cairo_surface))
     _gdk_wayland_shm_surface_set_busy (impl->cairo_surface);
+
+  g_signal_emit (impl, signals[COMMITTED], 0);
 }
 
 static void
@@ -860,6 +870,19 @@ static const struct wl_surface_listener surface_listener = {
 };
 
 static void
+on_parent_surface_committed (GdkWindowImplWayland *parent_impl,
+                             GdkWindow            *window)
+{
+  GdkWindowImplWayland *impl = GDK_WINDOW_IMPL_WAYLAND (window->impl);
+
+  g_signal_handlers_disconnect_by_func (parent_impl,
+                                        (gpointer) on_parent_surface_committed,
+                                        window);
+
+  wl_subsurface_set_desync (impl->subsurface);
+}
+
+static void
 gdk_wayland_window_create_subsurface (GdkWindow *window)
 {
   GdkWindowImplWayland *impl, *parent_impl = NULL;
@@ -886,7 +909,14 @@ gdk_wayland_window_create_subsurface (GdkWindow *window)
         wl_subcompositor_get_subsurface (display_wayland->subcompositor,
                                          impl->surface, parent_impl->surface);
       wl_subsurface_set_position (impl->subsurface, window->x, window->y);
-      wl_subsurface_set_desync (impl->subsurface);
+
+      /* In order to synchronize the initial position with the initial frame
+       * content, wait with making the subsurface desynchronized until after
+       * the parent was committed.
+       */
+      g_signal_connect_object (parent_impl, "committed",
+                               G_CALLBACK (on_parent_surface_committed),
+                               window, 0);
       gdk_window_request_transient_parent_commit (window);
     }
 }
@@ -1295,6 +1325,23 @@ gdk_wayland_window_show (GdkWindow *window,
 }
 
 static void
+unmap_subsurface (GdkWindow *window)
+{
+  GdkWindowImplWayland *impl = GDK_WINDOW_IMPL_WAYLAND (window->impl);
+  GdkWindowImplWayland *parent_impl;
+
+  g_return_if_fail (impl->subsurface);
+  g_return_if_fail (impl->transient_for);
+
+  parent_impl = GDK_WINDOW_IMPL_WAYLAND (impl->transient_for->impl);
+  wl_subsurface_destroy (impl->subsurface);
+  g_signal_handlers_disconnect_by_func (parent_impl,
+                                        (gpointer) on_parent_surface_committed,
+                                        window);
+  impl->subsurface = NULL;
+}
+
+static void
 gdk_wayland_window_hide_surface (GdkWindow *window)
 {
   GdkWaylandDisplay *display_wayland = GDK_WAYLAND_DISPLAY (gdk_window_get_display (window));
@@ -1338,10 +1385,7 @@ gdk_wayland_window_hide_surface (GdkWindow *window)
         }
 
       if (impl->subsurface)
-        {
-          wl_subsurface_destroy (impl->subsurface);
-          impl->subsurface = NULL;
-        }
+        unmap_subsurface (window);
 
       if (impl->awaiting_frame)
         {
@@ -1793,24 +1837,18 @@ static void
 gdk_wayland_window_set_transient_for (GdkWindow *window,
                                       GdkWindow *parent)
 {
-  GdkWindowImplWayland *impl;
+  GdkWindowImplWayland *impl = GDK_WINDOW_IMPL_WAYLAND (window->impl);
 
-  impl = GDK_WINDOW_IMPL_WAYLAND (window->impl);
+  if (impl->subsurface)
+    unmap_subsurface (window);
+
   impl->transient_for = parent;
 
   gdk_wayland_window_sync_parent (window);
 
-  if (GDK_WINDOW_TYPE (window) == GDK_WINDOW_SUBSURFACE)
-    {
-      if (impl->subsurface)
-        {
-          wl_subsurface_destroy (impl->subsurface);
-          impl->subsurface = NULL;
-        }
-
-      if (parent && gdk_window_is_visible (window))
-        gdk_wayland_window_create_subsurface (window);
-    }
+  if (GDK_WINDOW_TYPE (window) == GDK_WINDOW_SUBSURFACE &&
+      parent && gdk_window_is_visible (window))
+    gdk_wayland_window_create_subsurface (window);
 }
 
 static void
@@ -2392,6 +2430,13 @@ _gdk_window_impl_wayland_class_init (GdkWindowImplWaylandClass *klass)
   impl_class->show_window_menu = gdk_wayland_window_show_window_menu;
   impl_class->create_gl_context = gdk_wayland_window_create_gl_context;
   impl_class->invalidate_for_new_frame = gdk_wayland_window_invalidate_for_new_frame;
+
+  signals[COMMITTED] = g_signal_new ("committed",
+                                     G_TYPE_FROM_CLASS (object_class),
+                                     G_SIGNAL_RUN_LAST,
+                                     0,
+                                     NULL, NULL, NULL,
+                                     G_TYPE_NONE, 0);
 }
 
 void
