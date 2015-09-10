@@ -174,10 +174,13 @@ _gtk_allocated_bitmask_intersect (GtkBitmask       *mask,
   mask = gtk_bitmask_ensure_allocated (mask);
   ENSURE_ALLOCATED (other, other_allocated);
 
-  mask = gtk_allocated_bitmask_resize (mask, MIN (mask->len, other->len));
-  for (i = 0; i < mask->len; i++)
+  for (i = 0; i < MIN (mask->len, other->len); i++)
     {
       mask->data[i] &= other->data[i];
+    }
+  for (; i < mask->len; i++)
+    {
+      mask->data[i] = 0;
     }
 
   return gtk_allocated_bitmask_shrink (mask);
