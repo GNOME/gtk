@@ -12094,13 +12094,13 @@ gtk_widget_real_destroy (GtkWidget *object)
        */
       if (g_getenv ("GTK_WIDGET_ASSERT_COMPONENTS") != NULL)
 	assertions = build_finalize_assertion_list (widget);
-#endif /* G_ENABLE_DEBUG */
+#endif /* G_ENABLE_CONSISTENCY_CHECKS */
 
       /* Release references to all automated children */
       g_hash_table_destroy (priv->auto_children);
       priv->auto_children = NULL;
 
-#ifdef G_ENABEL_CONSISTENCY_CHECKS
+#ifdef G_ENABLE_CONSISTENCY_CHECKS
       for (l = assertions; l; l = l->next)
 	{
 	  FinalizeAssertion *assertion = l->data;
@@ -12115,7 +12115,7 @@ gtk_widget_real_destroy (GtkWidget *object)
 	  g_slice_free (FinalizeAssertion, assertion);
 	}
       g_slist_free (assertions);
-#endif /* G_ENABLE_DEBUG */
+#endif /* G_ENABLE_CONSISTENCY_CHECKS */
 
       /* Set any automatic private data pointers to NULL */
       for (class = GTK_WIDGET_GET_CLASS (widget);
