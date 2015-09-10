@@ -238,6 +238,39 @@ print_region (cairo_region_t *region)
 }
 #endif
 
+static GList *
+list_insert_link_before (GList *list,
+                         GList *sibling,
+                         GList *link)
+{
+  if (list == NULL || sibling == list)
+    {
+      link->prev = NULL;
+      link->next = list;
+      if (list)
+        list->prev = link;
+      return link;
+    }
+  else if (sibling == NULL)
+    {
+      GList *last = g_list_last (list);
+
+      last->next = link;
+      link->prev = last;
+      link->next = NULL;
+
+      return list;
+    }
+  else
+    {
+      link->next = sibling;
+      link->prev = sibling->prev;
+      sibling->prev = link;
+
+      return list;
+    }
+}
+
 static void
 gdk_window_init (GdkWindow *window)
 {
@@ -255,6 +288,7 @@ gdk_window_init (GdkWindow *window)
   window->visibility = GDK_VISIBILITY_FULLY_OBSCURED;
   /* Default to unobscured since some backends don't send visibility events */
   window->native_visibility = GDK_VISIBILITY_UNOBSCURED;
+  window->children_list_node.data = window;
 
   window->device_cursor = g_hash_table_new_full (NULL, NULL,
                                                  NULL, g_object_unref);
@@ -1369,7 +1403,7 @@ gdk_window_new (GdkWindow     *parent,
       window->input_only = TRUE;
     }
 
-  window->parent->children = g_list_prepend (window->parent->children, window);
+  window->parent->children = g_list_concat (&window->children_list_node, window->parent->children);
 
   if (window->parent->window_type == GDK_WINDOW_ROOT)
     {
@@ -1606,7 +1640,7 @@ gdk_window_reparent (GdkWindow *window,
 
   if (old_parent)
     {
-      old_parent->children = g_list_remove (old_parent->children, window);
+      old_parent->children = g_list_remove_link (old_parent->children, &window->children_list_node);
 
       if (gdk_window_has_impl (window))
         old_parent->impl_window->native_children =
@@ -1617,7 +1651,7 @@ gdk_window_reparent (GdkWindow *window,
   window->x = x;
   window->y = y;
 
-  new_parent->children = g_list_prepend (new_parent->children, window);
+  new_parent->children = g_list_concat (&window->children_list_node, new_parent->children);
 
   if (gdk_window_has_impl (window))
     new_parent->impl_window->native_children = g_list_prepend (new_parent->impl_window->native_children, window);
@@ -1918,7 +1952,6 @@ _gdk_window_destroy_hierarchy (GdkWindow *window,
   GdkWindow *temp_window;
   GdkScreen *screen;
   GdkDisplay *display;
-  GList *children;
   GList *tmp;
 
   g_return_if_fail (GDK_IS_WINDOW (window));
@@ -1974,7 +2007,7 @@ _gdk_window_destroy_hierarchy (GdkWindow *window,
 	  if (window->parent)
 	    {
 	      if (window->parent->children)
-		window->parent->children = g_list_remove (window->parent->children, window);
+                window->parent->children = g_list_remove_link (window->parent->children, &window->children_list_node);
 
               if (gdk_window_has_impl (window))
                 window->parent->impl_window->native_children =
@@ -2014,8 +2047,9 @@ _gdk_window_destroy_hierarchy (GdkWindow *window,
 	    g_assert (window->children == NULL);
 	  else
 	    {
-	      children = tmp = window->children;
+	      tmp = window->children;
 	      window->children = NULL;
+	      /* No need to free children list, its all made up of in-struct nodes */
 
 	      while (tmp)
 		{
@@ -2029,7 +2063,6 @@ _gdk_window_destroy_hierarchy (GdkWindow *window,
 						   foreign_destroy);
 		}
 
-	      g_list_free (children);
 
               if (gdk_window_has_impl (window))
                 g_assert (window->native_children == NULL);
@@ -4771,8 +4804,8 @@ gdk_window_raise_internal (GdkWindow *window)
 
   if (parent && parent->children->data != window)
     {
-      parent->children = g_list_remove (parent->children, window);
-      parent->children = g_list_prepend (parent->children, window);
+      parent->children = g_list_remove_link (parent->children, &window->children_list_node);
+      parent->children = g_list_concat (&window->children_list_node, parent->children);
       did_raise = TRUE;
     }
 
@@ -5040,8 +5073,8 @@ gdk_window_lower_internal (GdkWindow *window)
 
   if (parent)
     {
-      parent->children = g_list_remove (parent->children, window);
-      parent->children = g_list_append (parent->children, window);
+      parent->children = g_list_remove_link (parent->children, &window->children_list_node);
+      parent->children = g_list_concat (parent->children, &window->children_list_node);
     }
 
   impl_class = GDK_WINDOW_IMPL_GET_CLASS (window->impl);
@@ -5208,15 +5241,15 @@ gdk_window_restack (GdkWindow     *window,
       if (sibling_link == NULL)
 	return;
 
-      parent->children = g_list_remove (parent->children, window);
+      parent->children = g_list_remove_link (parent->children, &window->children_list_node);
       if (above)
-	parent->children = g_list_insert_before (parent->children,
-						 sibling_link,
-						 window);
+	parent->children = list_insert_link_before (parent->children,
+                                                    sibling_link,
+                                                    &window->children_list_node);
       else
-	parent->children = g_list_insert_before (parent->children,
-						 sibling_link->next,
-						 window);
+	parent->children = list_insert_link_before (parent->children,
+                                                    sibling_link->next,
+                                                    &window->children_list_node);
 
       impl_class = GDK_WINDOW_IMPL_GET_CLASS (window->impl);
       if (gdk_window_has_impl (window))

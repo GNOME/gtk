@@ -212,7 +212,9 @@ struct _GdkWindow
 
   GList *filters;
   GList *children;
+  GList children_list_node;
   GList *native_children;
+
 
   cairo_pattern_t *background;
 
