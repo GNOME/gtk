@@ -103,7 +103,7 @@ struct _GtkListBoxRow
 /**
  * GtkListBoxRowClass:
  * @parent_class: The parent class.
- * @activate: 
+ * @activate:
  */
 struct _GtkListBoxRowClass
 {
@@ -312,7 +312,6 @@ void           gtk_list_box_bind_model                   (GtkListBox            
                                                           GtkListBoxCreateWidgetFunc    create_widget_func,
                                                           gpointer                      user_data,
                                                           GDestroyNotify                user_data_free_func);
-
 G_END_DECLS
 
 #endif
