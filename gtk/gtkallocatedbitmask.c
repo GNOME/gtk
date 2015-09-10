@@ -52,6 +52,9 @@ gtk_allocated_bitmask_resize (GtkBitmask *mask,
 {
   gsize i;
 
+  if (size == mask->len)
+    return mask;
+
   mask = g_realloc (mask, sizeof (GtkBitmask) + sizeof(VALUE_TYPE) * (size - 1));
 
   for (i = mask->len; i < size; i++)
