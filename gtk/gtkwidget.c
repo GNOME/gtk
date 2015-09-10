@@ -7357,6 +7357,22 @@ cancel_event_sequence_on_hierarchy (GtkWidget        *widget,
     }
 }
 
+static void
+event_check_cancel_sequence_on_hierarchy (GtkWidget *widget,
+                                          GdkEvent  *event)
+{
+  GdkDevice *source_device;
+
+  source_device = gdk_event_get_source_device (event);
+
+  if (source_device &&
+      gdk_device_get_source (source_device) != GDK_SOURCE_KEYBOARD &&
+      event->type != GDK_ENTER_NOTIFY && event->type != GDK_LEAVE_NOTIFY)
+    cancel_event_sequence_on_hierarchy (widget,
+                                        gtk_get_event_widget (event),
+                                        gdk_event_get_event_sequence (event));
+}
+
 gboolean
 _gtk_widget_captured_event (GtkWidget *widget,
                             GdkEvent  *event)
@@ -7387,7 +7403,15 @@ _gtk_widget_captured_event (GtkWidget *widget,
   g_object_ref (widget);
 
   return_val |= handler (widget, event);
-  return_val |= !WIDGET_REALIZED_FOR_EVENT (widget, event);
+
+  if (!WIDGET_REALIZED_FOR_EVENT (widget, event))
+    {
+      /* We stop event propagation, but still we must ensure the sequence is
+       * cancelled across the widget hierarchy.
+       */
+      event_check_cancel_sequence_on_hierarchy (widget, event);
+      return_val = TRUE;
+    }
 
   /* The widget that was originally to receive the event
    * handles motion hints, but the capturing widget might
@@ -7702,7 +7726,13 @@ gtk_widget_event_internal (GtkWidget *widget,
   if (WIDGET_REALIZED_FOR_EVENT (widget, event))
     g_signal_emit (widget, widget_signals[EVENT_AFTER], 0, event);
   else
-    return_val = TRUE;
+    {
+      /* We stop event propagation, but still we must ensure the sequence is
+       * cancelled across the widget hierarchy.
+       */
+      event_check_cancel_sequence_on_hierarchy (widget, event);
+      return_val = TRUE;
+    }
 
   g_object_unref (widget);
 
