@@ -1543,7 +1543,7 @@ gtk_container_class_install_child_property (GtkContainerClass *cclass,
  * gtk_container_class_install_child_properties:
  * @cclass: a #GtkContainerClass
  * @n_pspecs: the length of the #GParamSpec array
- * @pspec: (array length=n_pspecs): the #GParamSpec array defining the new
+ * @pspecs: (array length=n_pspecs): the #GParamSpec array defining the new
  *     child properties
  *
  * Installs child properties on a container class.
