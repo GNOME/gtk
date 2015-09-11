@@ -21,6 +21,7 @@
 
 #include "gtkstyleprovider.h"
 #include "gtkstyleproviderprivate.h"
+#include "gtkprivate.h"
 
 typedef struct _GtkStyleCascadeIter GtkStyleCascadeIter;
 typedef struct _GtkStyleProviderData GtkStyleProviderData;
@@ -300,10 +301,10 @@ void
 _gtk_style_cascade_set_parent (GtkStyleCascade *cascade,
                                GtkStyleCascade *parent)
 {
-  g_return_if_fail (GTK_IS_STYLE_CASCADE (cascade));
-  g_return_if_fail (parent == NULL || GTK_IS_STYLE_CASCADE (parent));
+  gtk_internal_return_if_fail (GTK_IS_STYLE_CASCADE (cascade));
+  gtk_internal_return_if_fail (parent == NULL || GTK_IS_STYLE_CASCADE (parent));
   if (parent)
-    g_return_if_fail (parent->parent == NULL);
+    gtk_internal_return_if_fail (parent->parent == NULL);
 
   if (cascade->parent == parent)
     return;
@@ -336,9 +337,9 @@ _gtk_style_cascade_add_provider (GtkStyleCascade  *cascade,
   GtkStyleProviderData data;
   guint i;
 
-  g_return_if_fail (GTK_IS_STYLE_CASCADE (cascade));
-  g_return_if_fail (GTK_IS_STYLE_PROVIDER (provider));
-  g_return_if_fail (GTK_STYLE_PROVIDER (cascade) != provider);
+  gtk_internal_return_if_fail (GTK_IS_STYLE_CASCADE (cascade));
+  gtk_internal_return_if_fail (GTK_IS_STYLE_PROVIDER (provider));
+  gtk_internal_return_if_fail (GTK_STYLE_PROVIDER (cascade) != provider);
 
   data.provider = g_object_ref (provider);
   data.priority = priority;
@@ -366,8 +367,8 @@ _gtk_style_cascade_remove_provider (GtkStyleCascade  *cascade,
 {
   guint i;
 
-  g_return_if_fail (GTK_IS_STYLE_CASCADE (cascade));
-  g_return_if_fail (GTK_IS_STYLE_PROVIDER (provider));
+  gtk_internal_return_if_fail (GTK_IS_STYLE_CASCADE (cascade));
+  gtk_internal_return_if_fail (GTK_IS_STYLE_PROVIDER (provider));
 
   for (i = 0; i < cascade->providers->len; i++)
     {
@@ -387,7 +388,7 @@ void
 _gtk_style_cascade_set_scale (GtkStyleCascade *cascade,
                               int              scale)
 {
-  g_return_if_fail (GTK_IS_STYLE_CASCADE (cascade));
+  gtk_internal_return_if_fail (GTK_IS_STYLE_CASCADE (cascade));
 
   if (cascade->scale == scale)
     return;
@@ -400,7 +401,7 @@ _gtk_style_cascade_set_scale (GtkStyleCascade *cascade,
 int
 _gtk_style_cascade_get_scale (GtkStyleCascade *cascade)
 {
-  g_return_val_if_fail (GTK_IS_STYLE_CASCADE (cascade), 1);
+  gtk_internal_return_val_if_fail (GTK_IS_STYLE_CASCADE (cascade), 1);
 
   return cascade->scale;
 }
