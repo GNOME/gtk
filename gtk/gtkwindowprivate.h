@@ -131,6 +131,8 @@ void       gtk_window_set_use_subsurface (GtkWindow *window,
 void       gtk_window_set_hardcoded_window (GtkWindow *window,
                                             GdkWindow *gdk_window);
 
+GdkScreen *_gtk_window_get_screen (GtkWindow *window);
+
 G_END_DECLS
 
 #endif /* __GTK_WINDOW_PRIVATE_H__ */

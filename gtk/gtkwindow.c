@@ -478,12 +478,12 @@ static void     gtk_window_set_default_size_internal (GtkWindow    *window,
 
 static void     update_themed_icon                    (GtkIconTheme *theme,
 				                       GtkWindow    *window);
-static GList   *icon_list_from_theme                  (GtkWidget    *widget,
+static GList   *icon_list_from_theme                  (GtkWindow    *window,
 						       const gchar  *name);
 static void     gtk_window_realize_icon               (GtkWindow    *window);
 static void     gtk_window_unrealize_icon             (GtkWindow    *window);
 static void     update_window_buttons                 (GtkWindow    *window);
-static void     get_shadow_width                      (GtkWidget    *widget,
+static void     get_shadow_width                      (GtkWindow    *window,
                                                        GtkBorder    *shadow_width);
 
 static GtkKeyHash *gtk_window_get_key_hash        (GtkWindow   *window);
@@ -3999,7 +3999,7 @@ gtk_window_supports_client_shadow (GtkWindow *window)
   GdkScreen *screen;
   GdkVisual *visual;
 
-  screen = gtk_window_get_screen (window);
+  screen = _gtk_window_get_screen (window);
   display = gdk_screen_get_display (screen);
 
 #ifdef GDK_WINDOWING_X11
@@ -4350,8 +4350,8 @@ ensure_icon_info (GtkWindow *window)
 }
 
 static GList *
-icon_list_from_theme (GtkWidget    *widget,
-		      const gchar  *name)
+icon_list_from_theme (GtkWindow   *window,
+		      const gchar *name)
 {
   GList *list;
 
@@ -4360,13 +4360,13 @@ icon_list_from_theme (GtkWidget    *widget,
   gint *sizes;
   gint i;
 
-  icon_theme = gtk_icon_theme_get_for_screen (gtk_widget_get_screen (widget));
+  icon_theme = gtk_icon_theme_get_for_screen (_gtk_window_get_screen (window));
 
   sizes = gtk_icon_theme_get_icon_sizes (icon_theme, name);
 
   list = NULL;
   for (i = 0; sizes[i]; i++)
-    {      
+    {
       /* FIXME
        * We need an EWMH extension to handle scalable icons 
        * by passing their name to the WM. For now just use a 
@@ -4421,7 +4421,7 @@ gtk_window_realize_icon (GtkWindow *window)
   /* Look up themed icon */
   if (icon_list == NULL && info->icon_name) 
     {
-      icon_list = icon_list_from_theme (widget, info->icon_name);
+      icon_list = icon_list_from_theme (window, info->icon_name);
       if (icon_list)
 	info->using_themed_icon = TRUE;
     }
@@ -4445,7 +4445,7 @@ gtk_window_realize_icon (GtkWindow *window)
   /* Look up themed icon */
   if (icon_list == NULL && default_icon_name) 
     {
-      icon_list = icon_list_from_theme (widget, default_icon_name);
+      icon_list = icon_list_from_theme (window, default_icon_name);
       info->using_default_icon = TRUE;
       info->using_themed_icon = TRUE;
     }
@@ -4462,7 +4462,7 @@ gtk_window_realize_icon (GtkWindow *window)
 
       g_list_free_full (icon_list, g_object_unref);
  
-      icon_theme = gtk_icon_theme_get_for_screen (gtk_widget_get_screen (GTK_WIDGET (window)));
+      icon_theme = gtk_icon_theme_get_for_screen (_gtk_window_get_screen (window));
       g_signal_connect (icon_theme, "changed",
 			G_CALLBACK (update_themed_icon), window);
     }
@@ -4549,7 +4549,7 @@ gtk_window_unrealize_icon (GtkWindow *window)
     {
       GtkIconTheme *icon_theme;
 
-      icon_theme = gtk_icon_theme_get_for_screen (gtk_widget_get_screen (GTK_WIDGET (window)));
+      icon_theme = gtk_icon_theme_get_for_screen (_gtk_window_get_screen (window));
 
       g_signal_handlers_disconnect_by_func (icon_theme, update_themed_icon, window);
     }
@@ -6038,7 +6038,7 @@ gtk_window_map (GtkWidget *widget)
       return;
     }
 
-  screen = gtk_window_get_screen (window);
+  screen = _gtk_window_get_screen (window);
   if (priv->initial_fullscreen_monitor > gdk_screen_get_n_monitors (screen))
     priv->initial_fullscreen_monitor = -1;
     
@@ -6252,8 +6252,8 @@ gtk_window_guess_default_size (GtkWindow *window,
   int minimum, natural;
 
   widget = GTK_WIDGET (window);
-  screen = gtk_widget_get_screen (widget);
-  gdkwindow = gtk_widget_get_window (GTK_WIDGET (window));
+  screen = _gtk_window_get_screen (window);
+  gdkwindow = gtk_widget_get_window (widget);
 
   if (gdkwindow)
     {
@@ -6331,7 +6331,7 @@ popover_get_rect (GtkWindowPopover      *popover,
   gtk_widget_get_preferred_size (popover->widget, NULL, &req);
   gtk_widget_get_allocation (GTK_WIDGET (window), &win_alloc);
 
-  get_shadow_width (GTK_WIDGET (window), &win_border);
+  get_shadow_width (window, &win_border);
   win_alloc.x += win_border.left;
   win_alloc.y += win_border.top;
   win_alloc.width -= win_border.left + win_border.right;
@@ -6447,7 +6447,7 @@ popover_realize (GtkWidget        *widget,
   if (GDK_IS_WAYLAND_DISPLAY (gtk_widget_get_display (widget)))
     {
       attributes.window_type = GDK_WINDOW_SUBSURFACE;
-      parent_window = gdk_screen_get_root_window (gtk_widget_get_screen (GTK_WIDGET (window)));
+      parent_window = gdk_screen_get_root_window (_gtk_window_get_screen (window));
     }
   else
 #endif
@@ -6529,10 +6529,9 @@ add_window_frame_style_class (GtkStyleContext *context)
 }
 
 static void
-get_shadow_width (GtkWidget *widget,
+get_shadow_width (GtkWindow *window,
                   GtkBorder *shadow_width)
 {
-  GtkWindow *window = GTK_WINDOW (widget);
   GtkWindowPrivate *priv = window->priv;
   GtkBorder border = { 0 };
   GtkBorder d = { 0 };
@@ -6556,11 +6555,11 @@ get_shadow_width (GtkWidget *widget,
       priv->fullscreen)
     return;
 
-  if (!_gtk_widget_is_toplevel (widget))
+  if (!_gtk_widget_is_toplevel (GTK_WIDGET (window)))
     return;
 
-  state = _gtk_widget_get_state_flags (widget);
-  context = _gtk_widget_get_style_context (widget);
+  state = _gtk_widget_get_state_flags (GTK_WIDGET (window));
+  context = _gtk_widget_get_style_context (GTK_WIDGET (window));
 
   gtk_style_context_save (context);
   add_window_frame_style_class (context);
@@ -6662,7 +6661,7 @@ update_border_windows (GtkWindow *window)
                         "decoration-resize-handle", &handle,
                         NULL);
   gtk_style_context_restore (context);
-  get_shadow_width (widget, &window_border);
+  get_shadow_width (window, &window_border);
 
   if (priv->border_window[0] == NULL)
     goto shape;
@@ -7092,7 +7091,7 @@ gtk_window_realize (GtkWidget *widget)
       attributes.visual = gtk_widget_get_visual (widget);
 
       attributes_mask = 0;
-      parent_window = gdk_screen_get_root_window (gtk_widget_get_screen (widget));
+      parent_window = gdk_screen_get_root_window (_gtk_window_get_screen (window));
 
       gtk_widget_get_allocation (widget, &allocation);
       attributes.width = allocation.width;
@@ -7225,7 +7224,7 @@ gtk_window_realize (GtkWidget *widget)
   child_allocation.width = allocation.width;
   child_allocation.height = allocation.height;
 
-  get_shadow_width (widget, &window_border);
+  get_shadow_width (window, &window_border);
 
   update_realized_window_properties (window, &child_allocation, &window_border);
 
@@ -7419,7 +7418,7 @@ _gtk_window_set_allocation (GtkWindow           *window,
   child_allocation.width = allocation->width;
   child_allocation.height = allocation->height;
 
-  get_shadow_width (widget, &window_border);
+  get_shadow_width (window, &window_border);
 
   if (_gtk_widget_get_realized (widget))
     update_realized_window_properties (window, &child_allocation, &window_border);
@@ -8346,7 +8345,7 @@ gtk_window_get_preferred_width (GtkWidget *widget,
   if (priv->decorated &&
       !priv->fullscreen)
     {
-      get_shadow_width (widget, &window_border);
+      get_shadow_width (window, &window_border);
 
       if (priv->title_box != NULL &&
           gtk_widget_get_visible (priv->title_box) &&
@@ -8407,7 +8406,7 @@ gtk_window_get_preferred_width_for_height (GtkWidget *widget,
   if (priv->decorated &&
       !priv->fullscreen)
     {
-      get_shadow_width (widget, &window_border);
+      get_shadow_width (window, &window_border);
 
       height -= window_border.top + window_border.bottom;
 
@@ -8476,7 +8475,7 @@ gtk_window_get_preferred_height (GtkWidget *widget,
   if (priv->decorated &&
       !priv->fullscreen)
     {
-      get_shadow_width (widget, &window_border);
+      get_shadow_width (window, &window_border);
 
       if (priv->title_box != NULL &&
           gtk_widget_get_visible (priv->title_box) &&
@@ -8539,7 +8538,7 @@ gtk_window_get_preferred_height_for_width (GtkWidget *widget,
   if (priv->decorated &&
       !priv->fullscreen)
     {
-      get_shadow_width (widget, &window_border);
+      get_shadow_width (window, &window_border);
 
       width -= window_border.left + window_border.right;
 
@@ -9757,7 +9756,7 @@ gtk_window_draw (GtkWidget *widget,
 
   context = gtk_widget_get_style_context (widget);
 
-  get_shadow_width (widget, &window_border);
+  get_shadow_width (GTK_WINDOW (widget), &window_border);
   gtk_widget_get_allocation (widget, &allocation);
 
   if (!gtk_widget_get_app_paintable (widget) &&
@@ -10640,6 +10639,12 @@ gtk_window_get_screen (GtkWindow *window)
 {
   g_return_val_if_fail (GTK_IS_WINDOW (window), NULL);
 
+  return window->priv->screen;
+}
+
+GdkScreen *
+_gtk_window_get_screen (GtkWindow *window)
+{
   return window->priv->screen;
 }
 
@@ -11795,7 +11800,7 @@ void
 _gtk_window_get_shadow_width (GtkWindow *window,
                               GtkBorder *border)
 {
-  get_shadow_width (GTK_WIDGET (window), border);
+  get_shadow_width (window, border);
 }
 
 void
