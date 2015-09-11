@@ -16333,17 +16333,16 @@ gtk_widget_path_append_for_widget (GtkWidgetPath *path,
 
   if (widget->priv->context)
     {
-      GList *classes, *l;
+      const GQuark *classes;
+      guint n_classes, i;
 
       /* Also add any persistent classes in
        * the style context the widget path
        */
-      classes = gtk_css_node_list_classes (widget->priv->cssnode);
+      classes = gtk_css_node_list_classes (widget->priv->cssnode, &n_classes);
 
-      for (l = classes; l; l = l->next)
-        gtk_widget_path_iter_add_class (path, pos, g_quark_to_string (GPOINTER_TO_UINT (l->data)));
-
-      g_list_free (classes);
+      for (i = n_classes; i-- > 0;)
+        gtk_widget_path_iter_add_qclass (path, pos, classes[i]);
     }
 
   return pos;

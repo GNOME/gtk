@@ -134,7 +134,8 @@ void                    gtk_css_node_remove_class       (GtkCssNode            *
                                                          GQuark                 style_class);
 gboolean                gtk_css_node_has_class          (GtkCssNode            *cssnode,
                                                          GQuark                 style_class);
-GList *                 gtk_css_node_list_classes       (GtkCssNode            *cssnode);
+const GQuark *          gtk_css_node_list_classes       (GtkCssNode            *cssnode,
+                                                         guint                 *n_classes);
 void                    gtk_css_node_add_region         (GtkCssNode            *cssnode,
                                                          GQuark                 region,
                                                          GtkRegionFlags         flags);

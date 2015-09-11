@@ -107,10 +107,18 @@ GDK_AVAILABLE_IN_ALL
 void     gtk_widget_path_iter_add_class     (GtkWidgetPath       *path,
                                              gint                 pos,
                                              const gchar         *name);
+GDK_AVAILABLE_IN_3_18
+void     gtk_widget_path_iter_add_qclass    (GtkWidgetPath       *path,
+                                             gint                 pos,
+                                             GQuark               qname);
 GDK_AVAILABLE_IN_ALL
 void     gtk_widget_path_iter_remove_class  (GtkWidgetPath       *path,
                                              gint                 pos,
                                              const gchar         *name);
+GDK_AVAILABLE_IN_3_18
+void     gtk_widget_path_iter_remove_qclass (GtkWidgetPath       *path,
+                                             gint                 pos,
+                                             GQuark               qname);
 GDK_AVAILABLE_IN_ALL
 void     gtk_widget_path_iter_clear_classes (GtkWidgetPath       *path,
                                              gint                 pos);
@@ -163,6 +171,12 @@ gboolean        gtk_widget_path_is_type    (const GtkWidgetPath *path,
 GDK_AVAILABLE_IN_ALL
 gboolean        gtk_widget_path_has_parent (const GtkWidgetPath *path,
                                             GType                type);
+
+/* private API goes here */
+
+void gtk_widget_path_iter_add_qclass       (GtkWidgetPath       *path,
+                                            gint                 pos,
+                                            GQuark               qname);
 
 G_END_DECLS
 

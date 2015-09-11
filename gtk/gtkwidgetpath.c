@@ -805,20 +805,23 @@ gtk_widget_path_iter_add_class (GtkWidgetPath *path,
                                 gint           pos,
                                 const gchar   *name)
 {
-  GtkPathElement *elem;
-  gboolean added = FALSE;
-  GQuark qname;
-  guint i;
-
   gtk_internal_return_if_fail (path != NULL);
   gtk_internal_return_if_fail (path->elems->len != 0);
   gtk_internal_return_if_fail (name != NULL);
 
-  if (pos < 0 || pos >= path->elems->len)
-    pos = path->elems->len - 1;
+  gtk_widget_path_iter_add_qclass (path, pos, g_quark_from_string (name));
+}
+
+void
+gtk_widget_path_iter_add_qclass (GtkWidgetPath *path,
+                                 gint           pos,
+                                 GQuark         qname)
+{
+  GtkPathElement *elem;
+  gboolean added = FALSE;
+  guint i;
 
   elem = &g_array_index (path->elems, GtkPathElement, pos);
-  qname = g_quark_from_string (name);
 
   if (!elem->classes)
     elem->classes = g_array_new (FALSE, FALSE, sizeof (GQuark));

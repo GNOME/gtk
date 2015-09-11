@@ -1054,16 +1054,15 @@ gtk_css_node_get_junction_sides (GtkCssNode *cssnode)
 static void
 gtk_css_node_clear_classes (GtkCssNode *cssnode)
 {
-  GList *list, *l;
-  
-  list = gtk_css_node_declaration_list_classes (cssnode->decl);
+  const GQuark *classes;
+  guint n_classes, i;
 
-  for (l = list; l; l = l->next)
+  classes = gtk_css_node_declaration_get_classes (cssnode->decl, &n_classes);
+
+  for (i = 0; i < n_classes; ++i)
     {
-      gtk_css_node_remove_class (cssnode, GPOINTER_TO_UINT (l->data));
+      gtk_css_node_remove_class (cssnode, classes[i]);
     }
-
-  g_list_free (list);
 }
 
 void
@@ -1090,22 +1089,20 @@ gtk_css_node_set_classes (GtkCssNode  *cssnode,
 char **
 gtk_css_node_get_classes (GtkCssNode *cssnode)
 {
-  GList *list, *l;
-  GPtrArray *result;
-  
-  list = gtk_css_node_declaration_list_classes (cssnode->decl);
-  result = g_ptr_array_new ();
+  const GQuark *classes;
+  char **result;
+  guint n_classes, i, j;
 
-  for (l = list; l; l = l->next)
+  classes = gtk_css_node_declaration_get_classes (cssnode->decl, &n_classes);
+  result = g_new (char *, n_classes + 1);
+
+  for (i = n_classes, j = 0; i-- > 0; ++j)
     {
-      g_ptr_array_add (result, g_strdup (g_quark_to_string (GPOINTER_TO_UINT (l->data))));
+      result[j] = g_strdup (g_quark_to_string (classes[i]));
     }
 
-  g_ptr_array_add (result, NULL);
-
-  g_list_free (list);
-
-  return (char **) g_ptr_array_free (result, FALSE);
+  result[n_classes] = NULL;
+  return result;
 }
 
 void
@@ -1137,10 +1134,11 @@ gtk_css_node_has_class (GtkCssNode *cssnode,
   return gtk_css_node_declaration_has_class (cssnode->decl, style_class);
 }
 
-GList *
-gtk_css_node_list_classes (GtkCssNode *cssnode)
+const GQuark *
+gtk_css_node_list_classes (GtkCssNode *cssnode,
+                           guint      *n_classes)
 {
-  return gtk_css_node_declaration_list_classes (cssnode->decl);
+  return gtk_css_node_declaration_get_classes (cssnode->decl, n_classes);
 }
 
 void

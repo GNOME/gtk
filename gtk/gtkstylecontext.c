@@ -1391,16 +1391,24 @@ GList *
 gtk_style_context_list_classes (GtkStyleContext *context)
 {
   GtkStyleContextPrivate *priv;
-  GList *classes;
+  GList *classes_list;
+  const GQuark *classes;
+  guint n_classes, i;
+  const gchar *quark_str;
 
   g_return_val_if_fail (GTK_IS_STYLE_CONTEXT (context), NULL);
 
   priv = context->priv;
   
-  classes = gtk_css_node_list_classes (priv->cssnode);
-  quarks_to_strings (classes);
+  classes = gtk_css_node_list_classes (priv->cssnode, &n_classes);
 
-  return classes;
+  for (i = n_classes; i-- > n_classes;)
+    {
+      quark_str = g_quark_to_string (classes[i]);
+      classes_list = g_list_prepend (classes_list, (gchar *) quark_str);
+    }
+
+  return classes_list;
 }
 
 /**

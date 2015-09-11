@@ -335,22 +335,13 @@ gtk_css_node_declaration_has_class (const GtkCssNodeDeclaration *decl,
     }
 }
 
-GList *
-gtk_css_node_declaration_list_classes (const GtkCssNodeDeclaration *decl)
+const GQuark *
+gtk_css_node_declaration_get_classes (const GtkCssNodeDeclaration *decl,
+                                      guint                       *n_classes)
 {
-  GQuark *classes;
-  GList *result;
-  guint i;
+  *n_classes = decl->n_classes;
 
-  classes = get_classes (decl);
-  result = NULL;
-
-  for (i = 0; i < decl->n_classes; i++)
-    {
-      result = g_list_prepend (result, GUINT_TO_POINTER (classes[i]));
-    }
-
-  return result;
+  return get_classes (decl);
 }
 
 static gboolean
@@ -589,8 +580,7 @@ G_GNUC_END_IGNORE_DEPRECATIONS
   classes = get_classes (decl);
   for (i = 0; i < decl->n_classes; i++)
     {
-      gtk_widget_path_iter_add_class (path, pos,
-                                      g_quark_to_string (classes[i]));
+      gtk_widget_path_iter_add_qclass (path, pos, classes[i]);
     }
 
   /* Set widget state */
