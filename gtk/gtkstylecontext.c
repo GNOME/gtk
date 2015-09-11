@@ -1391,7 +1391,7 @@ GList *
 gtk_style_context_list_classes (GtkStyleContext *context)
 {
   GtkStyleContextPrivate *priv;
-  GList *classes_list;
+  GList *classes_list = NULL;
   const GQuark *classes;
   guint n_classes, i;
   const gchar *quark_str;
