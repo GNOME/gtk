@@ -97,7 +97,7 @@ struct GtkPathElement
 
 struct _GtkWidgetPath
 {
-  volatile guint ref_count;
+  guint ref_count;
 
   GArray *elems; /* First element contains the described widget */
 };
@@ -185,7 +185,7 @@ gtk_widget_path_ref (GtkWidgetPath *path)
 {
   gtk_internal_return_val_if_fail (path != NULL, path);
 
-  g_atomic_int_add (&path->ref_count, 1);
+  path->ref_count += 1;
 
   return path;
 }
@@ -206,7 +206,8 @@ gtk_widget_path_unref (GtkWidgetPath *path)
 
   gtk_internal_return_if_fail (path != NULL);
 
-  if (!g_atomic_int_dec_and_test (&path->ref_count))
+  path->ref_count -= 1;
+  if (path->ref_count > 0)
     return;
 
   for (i = 0; i < path->elems->len; i++)
