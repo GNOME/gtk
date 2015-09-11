@@ -746,15 +746,19 @@ gtk_css_selector_region_get_change (const GtkCssSelector *selector, GtkCssChange
   return previous_change | GTK_CSS_CHANGE_REGION;
 }
 
-static guint
+static inline guint
 count_bits (guint n)
 {
+#if defined(__GNUC__)
+  return (guint) __builtin_popcount (n);
+#else
   guint result = 0;
 
   for (result = 0; n != 0; result++)
     n &= n - 1;
 
   return result;
+#endif
 }
 
 static void
@@ -771,7 +775,7 @@ gtk_css_selector_region_add_specificity (const GtkCssSelector *selector,
 static guint
 gtk_css_selector_region_hash_one (const GtkCssSelector *a)
 {
-  return g_str_hash (a->region.name) ^ a->region.flags;
+  return GPOINTER_TO_UINT (a->region.name) ^ a->region.flags;
 }
 
 static int
@@ -825,7 +829,12 @@ static int
 comp_class (const GtkCssSelector *a,
             const GtkCssSelector *b)
 {
-  return a->style_class.style_class - b->style_class.style_class;
+  if (a->style_class.style_class < b->style_class.style_class)
+    return -1;
+  if (a->style_class.style_class > b->style_class.style_class)
+    return 1;
+  else
+    return 0;
 }
 
 DEFINE_SIMPLE_SELECTOR(class, CLASS, print_class, match_class, hash_class, comp_class, FALSE, TRUE, FALSE)
