@@ -778,13 +778,12 @@ static int
 gtk_css_selector_region_compare_one (const GtkCssSelector *a,
 				     const GtkCssSelector *b)
 {
-  int diff;
-
-  diff = strcmp (a->region.name, b->region.name);
-  if (diff)
-    return diff;
-
-  return a->region.flags - b->region.flags;
+  if (a->region.name < b->region.name)
+    return -1;
+  else if (a->region.name > b->region.name)
+    return 1;
+  else
+    return a->region.flags - b->region.flags;
 }
 
 static const GtkCssSelectorClass GTK_CSS_SELECTOR_REGION = {
@@ -851,14 +850,19 @@ match_id (const GtkCssSelector *selector,
 static guint
 hash_id (const GtkCssSelector *a)
 {
-  return g_str_hash (a->id.name);
+  return GPOINTER_TO_UINT (a->id.name);
 }
 
 static int
 comp_id (const GtkCssSelector *a,
 	 const GtkCssSelector *b)
 {
-  return strcmp (a->id.name, b->id.name);
+  if (a->id.name < b->id.name)
+    return -1;
+  else if (a->id.name > b->id.name)
+    return 1;
+  else
+    return 0;
 }
 
 DEFINE_SIMPLE_SELECTOR(id, ID, print_id, match_id, hash_id, comp_id, TRUE, FALSE, FALSE)
