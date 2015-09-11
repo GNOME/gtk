@@ -22,6 +22,7 @@
 #include "gtkcssstylepropertyprivate.h"
 #include "gtkcsstypesprivate.h"
 #include "gtkprivatetypebuiltins.h"
+#include "gtkprivate.h"
 
 GtkCssLookup *
 _gtk_css_lookup_new (const GtkBitmask *relevant)
@@ -47,7 +48,7 @@ _gtk_css_lookup_new (const GtkBitmask *relevant)
 void
 _gtk_css_lookup_free (GtkCssLookup *lookup)
 {
-  g_return_if_fail (lookup != NULL);
+  gtk_internal_return_if_fail (lookup != NULL);
 
   _gtk_bitmask_free (lookup->missing);
   g_free (lookup);
@@ -57,7 +58,7 @@ gboolean
 _gtk_css_lookup_is_missing (const GtkCssLookup *lookup,
                             guint               id)
 {
-  g_return_val_if_fail (lookup != NULL, FALSE);
+  gtk_internal_return_val_if_fail (lookup != NULL, FALSE);
 
   return _gtk_bitmask_get (lookup->missing, id);
 }
@@ -81,9 +82,9 @@ _gtk_css_lookup_set (GtkCssLookup  *lookup,
                      GtkCssSection *section,
                      GtkCssValue   *value)
 {
-  g_return_if_fail (lookup != NULL);
-  g_return_if_fail (_gtk_bitmask_get (lookup->missing, id));
-  g_return_if_fail (value != NULL);
+  gtk_internal_return_if_fail (lookup != NULL);
+  gtk_internal_return_if_fail (_gtk_bitmask_get (lookup->missing, id));
+  gtk_internal_return_if_fail (value != NULL);
 
   lookup->missing = _gtk_bitmask_set (lookup->missing, id, FALSE);
   lookup->values[id].value = value;
@@ -110,10 +111,10 @@ _gtk_css_lookup_resolve (GtkCssLookup            *lookup,
 {
   guint i, n;
 
-  g_return_if_fail (lookup != NULL);
-  g_return_if_fail (GTK_IS_STYLE_PROVIDER_PRIVATE (provider));
-  g_return_if_fail (GTK_IS_CSS_STATIC_STYLE (style));
-  g_return_if_fail (parent_style == NULL || GTK_IS_CSS_STYLE (parent_style));
+  gtk_internal_return_if_fail (lookup != NULL);
+  gtk_internal_return_if_fail (GTK_IS_STYLE_PROVIDER_PRIVATE (provider));
+  gtk_internal_return_if_fail (GTK_IS_CSS_STATIC_STYLE (style));
+  gtk_internal_return_if_fail (parent_style == NULL || GTK_IS_CSS_STYLE (parent_style));
 
   n = _gtk_css_style_property_get_n_properties ();
 
