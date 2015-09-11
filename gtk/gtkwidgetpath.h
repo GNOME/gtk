@@ -107,18 +107,10 @@ GDK_AVAILABLE_IN_ALL
 void     gtk_widget_path_iter_add_class     (GtkWidgetPath       *path,
                                              gint                 pos,
                                              const gchar         *name);
-GDK_AVAILABLE_IN_3_18
-void     gtk_widget_path_iter_add_qclass    (GtkWidgetPath       *path,
-                                             gint                 pos,
-                                             GQuark               qname);
 GDK_AVAILABLE_IN_ALL
 void     gtk_widget_path_iter_remove_class  (GtkWidgetPath       *path,
                                              gint                 pos,
                                              const gchar         *name);
-GDK_AVAILABLE_IN_3_18
-void     gtk_widget_path_iter_remove_qclass (GtkWidgetPath       *path,
-                                             gint                 pos,
-                                             GQuark               qname);
 GDK_AVAILABLE_IN_ALL
 void     gtk_widget_path_iter_clear_classes (GtkWidgetPath       *path,
                                              gint                 pos);
