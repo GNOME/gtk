@@ -2395,7 +2395,7 @@ GtkFileChooserDialog .dialog-action-box {
       border-right: none;
       border-left: 1px solid #7f7f7f; }
 
-.list-row {
+GtkSidebarRow.list-row {
   padding: 0px; }
 GtkSidebarRow .sidebar-revealer {
   padding: 4px 14px 4px 12px; }
