@@ -231,8 +231,7 @@ find_class (const GtkCssNodeDeclaration *decl,
   GQuark *classes;
   guint pos;
 
-  if (position)
-    *position = 0;
+  *position = 0;
 
   if (decl->n_classes == 0)
     return FALSE;
@@ -264,8 +263,7 @@ find_class (const GtkCssNodeDeclaration *decl,
     }
   while (min <= max);
 
-  if (position)
-    *position = pos;
+  *position = pos;
 
   return found;
 }
@@ -326,6 +324,7 @@ gboolean
 gtk_css_node_declaration_has_class (const GtkCssNodeDeclaration *decl,
                                     GQuark                       class_quark)
 {
+  guint pos;
   GQuark *classes = get_classes (decl);
 
   switch (decl->n_classes)
@@ -346,7 +345,7 @@ gtk_css_node_declaration_has_class (const GtkCssNodeDeclaration *decl,
       return FALSE;
 
     default:
-      return find_class (decl, class_quark, NULL);
+      return find_class (decl, class_quark, &pos);
     }
 }
 
