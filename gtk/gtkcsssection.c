@@ -20,6 +20,7 @@
 #include "gtkcsssectionprivate.h"
 
 #include "gtkcssparserprivate.h"
+#include "gtkprivate.h"
 
 /**
  * GtkCssSection:
@@ -53,7 +54,7 @@ _gtk_css_section_new (GtkCssSection     *parent,
 {
   GtkCssSection *section;
 
-  g_return_val_if_fail (parser != NULL, NULL);
+  gtk_internal_return_val_if_fail (parser != NULL, NULL);
 
   section = g_slice_new0 (GtkCssSection);
 
@@ -77,7 +78,7 @@ _gtk_css_section_new_for_file (GtkCssSectionType  type,
 {
   GtkCssSection *section;
 
-  g_return_val_if_fail (G_IS_FILE (file), NULL);
+  gtk_internal_return_val_if_fail (G_IS_FILE (file), NULL);
 
   section = g_slice_new0 (GtkCssSection);
 
@@ -91,8 +92,8 @@ _gtk_css_section_new_for_file (GtkCssSectionType  type,
 void
 _gtk_css_section_end (GtkCssSection *section)
 {
-  g_return_if_fail (section != NULL);
-  g_return_if_fail (section->parser != NULL);
+  gtk_internal_return_if_fail (section != NULL);
+  gtk_internal_return_if_fail (section->parser != NULL);
 
   section->end_line = _gtk_css_parser_get_line (section->parser);
   section->end_position = _gtk_css_parser_get_position (section->parser);
@@ -112,7 +113,7 @@ _gtk_css_section_end (GtkCssSection *section)
 GtkCssSection *
 gtk_css_section_ref (GtkCssSection *section)
 {
-  g_return_val_if_fail (section != NULL, NULL);
+  gtk_internal_return_val_if_fail (section != NULL, NULL);
 
   g_atomic_int_add (&section->ref_count, 1);
 
@@ -131,7 +132,7 @@ gtk_css_section_ref (GtkCssSection *section)
 void
 gtk_css_section_unref (GtkCssSection *section)
 {
-  g_return_if_fail (section != NULL);
+  gtk_internal_return_if_fail (section != NULL);
 
   if (!g_atomic_int_dec_and_test (&section->ref_count))
     return;
@@ -157,7 +158,7 @@ gtk_css_section_unref (GtkCssSection *section)
 GtkCssSectionType
 gtk_css_section_get_section_type (const GtkCssSection *section)
 {
-  g_return_val_if_fail (section != NULL, GTK_CSS_SECTION_DOCUMENT);
+  gtk_internal_return_val_if_fail (section != NULL, GTK_CSS_SECTION_DOCUMENT);
 
   return section->section_type;
 }
@@ -181,7 +182,7 @@ gtk_css_section_get_section_type (const GtkCssSection *section)
 GtkCssSection *
 gtk_css_section_get_parent (const GtkCssSection *section)
 {
-  g_return_val_if_fail (section != NULL, NULL);
+  gtk_internal_return_val_if_fail (section != NULL, NULL);
 
   return section->parent;
 }
@@ -202,7 +203,7 @@ gtk_css_section_get_parent (const GtkCssSection *section)
 GFile *
 gtk_css_section_get_file (const GtkCssSection *section)
 {
-  g_return_val_if_fail (section != NULL, NULL);
+  gtk_internal_return_val_if_fail (section != NULL, NULL);
 
   return section->file;
 }
@@ -222,7 +223,7 @@ gtk_css_section_get_file (const GtkCssSection *section)
 guint
 gtk_css_section_get_start_line (const GtkCssSection *section)
 {
-  g_return_val_if_fail (section != NULL, 0);
+  gtk_internal_return_val_if_fail (section != NULL, 0);
 
   return section->start_line;
 }
@@ -241,7 +242,7 @@ gtk_css_section_get_start_line (const GtkCssSection *section)
 guint
 gtk_css_section_get_start_position (const GtkCssSection *section)
 {
-  g_return_val_if_fail (section != NULL, 0);
+  gtk_internal_return_val_if_fail (section != NULL, 0);
 
   return section->start_position;
 }
@@ -267,7 +268,7 @@ gtk_css_section_get_start_position (const GtkCssSection *section)
 guint
 gtk_css_section_get_end_line (const GtkCssSection *section)
 {
-  g_return_val_if_fail (section != NULL, 0);
+  gtk_internal_return_val_if_fail (section != NULL, 0);
 
   if (section->parser)
     return _gtk_css_parser_get_line (section->parser);
@@ -295,7 +296,7 @@ gtk_css_section_get_end_line (const GtkCssSection *section)
 guint
 gtk_css_section_get_end_position (const GtkCssSection *section)
 {
-  g_return_val_if_fail (section != NULL, 0);
+  gtk_internal_return_val_if_fail (section != NULL, 0);
 
   if (section->parser)
     return _gtk_css_parser_get_position (section->parser);
@@ -338,7 +339,7 @@ _gtk_css_section_to_string (const GtkCssSection *section)
 {
   GString *string;
 
-  g_return_val_if_fail (section != NULL, NULL);
+  gtk_internal_return_val_if_fail (section != NULL, NULL);
 
   string = g_string_new (NULL);
   _gtk_css_section_print (section, string);
