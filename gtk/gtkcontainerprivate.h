@@ -24,6 +24,24 @@
 
 G_BEGIN_DECLS
 
+struct _GtkContainerPrivate
+{
+  GtkWidget *focus_child;
+
+  GdkFrameClock *resize_clock;
+  guint resize_handler;
+
+  guint border_width : 16;
+  guint border_width_set   : 1;
+
+  guint has_focus_chain    : 1;
+  guint reallocate_redraws : 1;
+  guint resize_pending     : 1;
+  guint restyle_pending    : 1;
+  guint resize_mode        : 2;
+  guint request_mode       : 2;
+};
+
 
 void     _gtk_container_queue_resize           (GtkContainer *container);
 void     _gtk_container_queue_restyle          (GtkContainer *container);
@@ -43,6 +61,16 @@ void      _gtk_container_maybe_start_idle_sizer (GtkContainer *container);
 gboolean  _gtk_container_get_border_width_set   (GtkContainer *container);
 void      _gtk_container_set_border_width_set   (GtkContainer *container,
                                                  gboolean      border_width_set);
+
+static inline GtkResizeMode _gtk_container_get_resize_mode (GtkContainer *container);
+
+static inline GtkResizeMode
+_gtk_container_get_resize_mode (GtkContainer *container)
+{
+  return container->priv->resize_mode;
+}
+
+#define _GTK_IS_RESIZE_CONTAINER(container) (_gtk_container_get_resize_mode (GTK_CONTAINER (container)) != GTK_RESIZE_PARENT)
 
 G_END_DECLS
 

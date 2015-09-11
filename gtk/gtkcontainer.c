@@ -251,25 +251,6 @@
  *
  */
 
-
-struct _GtkContainerPrivate
-{
-  GtkWidget *focus_child;
-
-  GdkFrameClock *resize_clock;
-  guint resize_handler;
-
-  guint border_width : 16;
-  guint border_width_set   : 1;
-
-  guint has_focus_chain    : 1;
-  guint reallocate_redraws : 1;
-  guint resize_pending     : 1;
-  guint restyle_pending    : 1;
-  guint resize_mode        : 2;
-  guint request_mode       : 2;
-};
-
 enum {
   ADD,
   REMOVE,
@@ -2071,7 +2052,7 @@ gtk_container_queue_resize_handler (GtkContainer *container)
   GtkWidget *widget;
 
   G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
-  g_return_if_fail (GTK_IS_RESIZE_CONTAINER (container));
+  g_return_if_fail (_GTK_IS_RESIZE_CONTAINER (container));
   G_GNUC_END_IGNORE_DEPRECATIONS;
 
   widget = GTK_WIDGET (container);
@@ -2116,7 +2097,7 @@ _gtk_container_queue_resize_internal (GtkContainer *container,
       _gtk_size_request_cache_clear (_gtk_widget_peek_request_cache (widget));
 
       G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
-      if (((GtkContainer*)widget)->priv->resize_mode != GTK_RESIZE_PARENT)
+      if (_GTK_IS_RESIZE_CONTAINER (container))
         break;
       G_GNUC_END_IGNORE_DEPRECATIONS;
 
@@ -2204,7 +2185,7 @@ gtk_container_real_check_resize (GtkContainer *container)
       requisition.height > allocation.height)
     {
       G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
-      if (GTK_IS_RESIZE_CONTAINER (container))
+      if (_GTK_IS_RESIZE_CONTAINER (container))
         {
           gtk_widget_size_allocate (widget, &allocation);
           gtk_widget_set_allocation (widget, &allocation);
