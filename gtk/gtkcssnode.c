@@ -389,7 +389,7 @@ gtk_css_node_real_update_style (GtkCssNode   *cssnode,
                                               gtk_css_node_get_style_provider (cssnode),
                                               should_create_transitions (change) ? style : NULL);
     }
-  else if (GTK_IS_CSS_ANIMATED_STYLE (style) && (change & GTK_CSS_CHANGE_TIMESTAMP))
+  else if (static_style != style && (change & GTK_CSS_CHANGE_TIMESTAMP))
     {
       new_style = gtk_css_animated_style_new_advance (GTK_CSS_ANIMATED_STYLE (style),
                                                       static_style,
