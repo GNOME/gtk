@@ -446,11 +446,9 @@ gtk_widget_get_request_mode (GtkWidget *widget)
 {
   SizeRequestCache *cache;
 
-  g_return_val_if_fail (GTK_IS_WIDGET (widget), GTK_SIZE_REQUEST_CONSTANT_SIZE);
-
   cache = _gtk_widget_peek_request_cache (widget);
 
-  if (!cache->request_mode_valid)
+  if (G_UNLIKELY (!cache->request_mode_valid))
     {
       cache->request_mode = GTK_WIDGET_GET_CLASS (widget)->get_request_mode (widget);
       cache->request_mode_valid = TRUE;
