@@ -313,7 +313,8 @@ static gboolean
 gtk_css_matcher_node_has_id (const GtkCssMatcher *matcher,
                              const char          *id)
 {
-  return gtk_css_node_get_id (matcher->node.node) == g_intern_string (id);
+  /* assume all callers pass an interned string */
+  return gtk_css_node_get_id (matcher->node.node) == id;
 }
 
 static gboolean
