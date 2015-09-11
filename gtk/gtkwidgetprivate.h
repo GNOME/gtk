@@ -248,7 +248,7 @@ void              _gtk_widget_synthesize_crossing          (GtkWidget       *fro
                                                             GdkDevice       *device,
                                                             GdkCrossingMode  mode);
 
-gpointer          _gtk_widget_peek_request_cache           (GtkWidget *widget);
+static inline gpointer _gtk_widget_peek_request_cache           (GtkWidget *widget);
 
 void              _gtk_widget_buildable_finish_accelerator (GtkWidget *widget,
                                                             GtkWidget *toplevel,
@@ -366,6 +366,12 @@ _gtk_widget_get_style_context (GtkWidget *widget)
     return widget->priv->context;
 
   return gtk_widget_get_style_context (widget);
+}
+
+static inline gpointer
+_gtk_widget_peek_request_cache (GtkWidget *widget)
+{
+  return &widget->priv->requests;
 }
 
 G_END_DECLS

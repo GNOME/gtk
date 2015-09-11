@@ -10627,7 +10627,7 @@ gtk_widget_get_screen_unchecked (GtkWidget *widget)
   if (_gtk_widget_is_toplevel (toplevel))
     {
       if (GTK_IS_WINDOW (toplevel))
-	return gtk_window_get_screen (GTK_WINDOW (toplevel));
+	return _gtk_window_get_screen (GTK_WINDOW (toplevel));
       else if (GTK_IS_INVISIBLE (toplevel))
 	return gtk_invisible_get_screen (GTK_INVISIBLE (widget));
     }
@@ -12400,21 +12400,6 @@ gtk_widget_real_adjust_baseline_request (GtkWidget         *widget,
       *minimum_baseline += aux_info->margin.top;
       *natural_baseline += aux_info->margin.top;
     }
-}
-
-/**
- * _gtk_widget_peek_request_cache:
- *
- * Returns the address of the widget’s request cache (strictly for
- * internal use in gtksizerequest.c)
- *
- * Returns: the address of @widget’s size request cache.
- **/
-gpointer
-_gtk_widget_peek_request_cache (GtkWidget *widget)
-{
-  /* Don't bother slowing things down with the return_if_fail guards here */
-  return &widget->priv->requests;
 }
 
 static gboolean
