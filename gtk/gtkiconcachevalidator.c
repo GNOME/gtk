@@ -163,9 +163,11 @@ check_pixel_data (CacheInfo *info,
     {
       GdkPixdata data;
 
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
       check ("pixel data", gdk_pixdata_deserialize (&data, length,
                                                     (const guint8*)info->cache + offset + 8,
                                                     NULL));
+G_GNUC_END_IGNORE_DEPRECATIONS;
     }
 
   return TRUE;

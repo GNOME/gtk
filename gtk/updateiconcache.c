@@ -514,7 +514,9 @@ maybe_cache_image_data (Image       *image,
 
 	  if (pixbuf)
 	    {
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
 	      gdk_pixdata_from_pixbuf (&idata->pixdata, pixbuf, FALSE);
+G_GNUC_END_IGNORE_DEPRECATIONS;
 	      idata->size = idata->pixdata.length + 8;
 	      idata->has_pixdata = TRUE;
 	    }
@@ -825,7 +827,9 @@ write_image_data (FILE *cache, ImageData *image_data, int offset)
   if (!write_card32 (cache, 0))
     return FALSE;
 
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
   s = gdk_pixdata_serialize (pixdata, &len);
+G_GNUC_END_IGNORE_DEPRECATIONS;
 
   if (!write_card32 (cache, len))
     {
