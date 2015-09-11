@@ -34,7 +34,7 @@
 
 struct _GtkCssSection
 {
-  volatile gint       ref_count;
+  gint                ref_count;
   GtkCssSectionType   section_type;
   GtkCssSection      *parent;
   GFile              *file;
@@ -115,7 +115,7 @@ gtk_css_section_ref (GtkCssSection *section)
 {
   gtk_internal_return_val_if_fail (section != NULL, NULL);
 
-  g_atomic_int_add (&section->ref_count, 1);
+  section->ref_count += 1;
 
   return section;
 }
@@ -134,7 +134,8 @@ gtk_css_section_unref (GtkCssSection *section)
 {
   gtk_internal_return_if_fail (section != NULL);
 
-  if (!g_atomic_int_dec_and_test (&section->ref_count))
+  section->ref_count -= 1;
+  if (section->ref_count > 0)
     return;
 
   if (section->parent)
