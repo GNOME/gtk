@@ -33,7 +33,7 @@ struct _GtkCssNodeDeclaration {
   guint refcount;
   GtkJunctionSides junction_sides;
   GType type;
-  const /* interened */ char *id;
+  const /* interned */ char *id;
   GtkStateFlags state;
   guint n_classes;
   guint n_regions;
