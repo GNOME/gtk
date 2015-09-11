@@ -48,7 +48,7 @@ _gtk_css_value_ref (GtkCssValue *value)
 {
   gtk_internal_return_val_if_fail (value != NULL, NULL);
 
-  g_atomic_int_add (&value->ref_count, 1);
+  value->ref_count += 1;
 
   return value;
 }
@@ -59,7 +59,8 @@ _gtk_css_value_unref (GtkCssValue *value)
   if (value == NULL)
     return;
 
-  if (!g_atomic_int_dec_and_test (&value->ref_count))
+  value->ref_count -= 1;
+  if (value->ref_count > 0)
     return;
 
   value->class->free (value);
