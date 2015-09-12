@@ -56,6 +56,7 @@ gboolean                gtk_css_node_declaration_add_region             (GtkCssN
                                                                          GtkRegionFlags                 flags);
 gboolean                gtk_css_node_declaration_remove_region          (GtkCssNodeDeclaration        **decl,
                                                                          GQuark                         region_quark);
+gboolean                gtk_css_node_declaration_clear_regions          (GtkCssNodeDeclaration        **decl);
 gboolean                gtk_css_node_declaration_has_region             (const GtkCssNodeDeclaration   *decl,
                                                                          GQuark                         region_quark,
                                                                          GtkRegionFlags                *flags_return);

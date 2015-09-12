@@ -450,6 +450,21 @@ gtk_css_node_declaration_remove_region (GtkCssNodeDeclaration **decl,
 }
 
 gboolean
+gtk_css_node_declaration_clear_regions (GtkCssNodeDeclaration **decl)
+{
+  if ((*decl)->n_regions == 0)
+    return FALSE;
+
+  gtk_css_node_declaration_make_writable_resize (decl,
+                                                 (char *) get_regions (*decl) - (char *) *decl,
+                                                 0,
+                                                 sizeof (GtkRegion) * (*decl)->n_regions);
+  (*decl)->n_regions = 0;
+
+  return TRUE;
+}
+
+gboolean
 gtk_css_node_declaration_has_region (const GtkCssNodeDeclaration  *decl,
                                      GQuark                        region_quark,
                                      GtkRegionFlags               *flags_return)
