@@ -36,6 +36,27 @@ G_BEGIN_DECLS
 
 #define GTK_STATE_FLAGS_BITS 12
 
+/**
+ * GtkWidgetAuxInfo:
+ * @width: the widget’s width
+ * @height: the widget’s height
+ * @halign: the widget’s horizontal alignment
+ * @valign: the widget’s horizontal alignment
+ * @margin: the widget’s #GtkBorder margins
+ *
+ */
+typedef struct _GtkWidgetAuxInfo GtkWidgetAuxInfo;
+struct _GtkWidgetAuxInfo
+{
+  gint width;
+  gint height;
+
+  guint   halign : 4;
+  guint   valign : 4;
+
+  GtkBorder margin;
+};
+
 struct _GtkWidgetPrivate
 {
   /* The state of the widget. Needs to be able to hold all GtkStateFlags bits
