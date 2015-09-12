@@ -69,6 +69,7 @@ gtk/gtkaccelmap.c
 gtk/gtkaccessible.c
 gtk/gtkactionable.c
 gtk/gtkactionbar.c
+gtk/gtkactionmuxer.c
 gtk/gtkadjustment.c
 gtk/gtkappchooserbutton.c
 gtk/gtkappchooser.c
@@ -154,9 +155,14 @@ gtk/gtkfontchooserdialog.c
 gtk/gtkfontchooserwidget.c
 gtk/gtkframe.c
 gtk/gtkgesture.c
+gtk/gtkgesturedrag.c
 gtk/gtkgesturelongpress.c
+gtk/gtkgesturemultipress.c
 gtk/gtkgesturepan.c
+gtk/gtkgesturerotate.c
 gtk/gtkgesturesingle.c
+gtk/gtkgestureswipe.c
+gtk/gtkgesturezoom.c
 gtk/gtkglarea.c
 gtk/gtkgrid.c
 gtk/gtkheaderbar.c
@@ -209,6 +215,7 @@ gtk/gtkpopovermenu.c
 gtk/gtkprintbackend.c
 gtk/gtkprinter.c
 gtk/gtkprinteroption.c
+gtk/gtkprinteroptionset.c
 gtk/gtkprinteroptionwidget.c
 gtk/gtkprintjob.c
 gtk/gtkprintoperation.c
@@ -232,6 +239,7 @@ gtk/gtkscrollable.c
 gtk/gtkscrollbar.c
 gtk/gtkscrolledwindow.c
 gtk/gtksearchbar.c
+gtk/gtksearchengine.c
 gtk/gtksearchentry.c
 gtk/gtkselection.c
 gtk/gtkseparator.c
