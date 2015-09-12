@@ -89,7 +89,7 @@ gtk_printer_option_class_init (GtkPrinterOptionClass *class)
   gobject_class->get_property = gtk_printer_option_get_property;
 
   signals[CHANGED] =
-    g_signal_new ("changed",
+    g_signal_new (I_("changed"),
 		  G_TYPE_FROM_CLASS (class),
 		  G_SIGNAL_RUN_LAST,
 		  G_STRUCT_OFFSET (GtkPrinterOptionClass, changed),

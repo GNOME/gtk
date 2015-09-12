@@ -926,7 +926,7 @@ gtk_level_bar_class_init (GtkLevelBarClass *klass)
    * Since: 3.6
    */
   signals[SIGNAL_OFFSET_CHANGED] =
-    g_signal_new ("offset-changed",
+    g_signal_new (I_("offset-changed"),
                   GTK_TYPE_LEVEL_BAR,
                   G_SIGNAL_RUN_FIRST | G_SIGNAL_DETAILED,
                   G_STRUCT_OFFSET (GtkLevelBarClass, offset_changed),

@@ -324,7 +324,7 @@ gtk_about_dialog_class_init (GtkAboutDialogClass *klass)
    * Since: 2.24
    */
   signals[ACTIVATE_LINK] =
-    g_signal_new ("activate-link",
+    g_signal_new (I_("activate-link"),
                   G_TYPE_FROM_CLASS (object_class),
                   G_SIGNAL_RUN_LAST,
                   G_STRUCT_OFFSET (GtkAboutDialogClass, activate_link),

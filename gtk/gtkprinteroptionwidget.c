@@ -112,7 +112,7 @@ gtk_printer_option_widget_class_init (GtkPrinterOptionWidgetClass *class)
   widget_class->mnemonic_activate = gtk_printer_option_widget_mnemonic_activate;
 
   signals[CHANGED] =
-    g_signal_new ("changed",
+    g_signal_new (I_("changed"),
 		  G_TYPE_FROM_CLASS (class),
 		  G_SIGNAL_RUN_LAST,
 		  G_STRUCT_OFFSET (GtkPrinterOptionWidgetClass, changed),

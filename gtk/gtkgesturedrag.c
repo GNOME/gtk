@@ -33,6 +33,7 @@
 #include "config.h"
 #include "gtkgesturedrag.h"
 #include "gtkgesturedragprivate.h"
+#include "gtkintl.h"
 
 typedef struct _GtkGestureDragPrivate GtkGestureDragPrivate;
 typedef struct _EventData EventData;
@@ -149,7 +150,7 @@ gtk_gesture_drag_class_init (GtkGestureDragClass *klass)
    * Since: 3.14
    */
   signals[DRAG_BEGIN] =
-    g_signal_new ("drag-begin",
+    g_signal_new (I_("drag-begin"),
                   G_TYPE_FROM_CLASS (klass),
                   G_SIGNAL_RUN_LAST,
                   G_STRUCT_OFFSET (GtkGestureDragClass, drag_begin),
@@ -166,7 +167,7 @@ gtk_gesture_drag_class_init (GtkGestureDragClass *klass)
    * Since: 3.14
    */
   signals[DRAG_UPDATE] =
-    g_signal_new ("drag-update",
+    g_signal_new (I_("drag-update"),
                   G_TYPE_FROM_CLASS (klass),
                   G_SIGNAL_RUN_LAST,
                   G_STRUCT_OFFSET (GtkGestureDragClass, drag_update),
@@ -183,7 +184,7 @@ gtk_gesture_drag_class_init (GtkGestureDragClass *klass)
    * Since: 3.14
    */
   signals[DRAG_END] =
-    g_signal_new ("drag-end",
+    g_signal_new (I_("drag-end"),
                   G_TYPE_FROM_CLASS (klass),
                   G_SIGNAL_RUN_LAST,
                   G_STRUCT_OFFSET (GtkGestureDragClass, drag_end),

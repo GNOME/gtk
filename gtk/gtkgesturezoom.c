@@ -34,6 +34,7 @@
 #include <math.h>
 #include "gtkgesturezoom.h"
 #include "gtkgesturezoomprivate.h"
+#include "gtkintl.h"
 
 typedef struct _GtkGestureZoomPrivate GtkGestureZoomPrivate;
 
@@ -196,7 +197,7 @@ gtk_gesture_zoom_class_init (GtkGestureZoomClass *klass)
    * Since: 3.14
    */
   signals[SCALE_CHANGED] =
-    g_signal_new ("scale-changed",
+    g_signal_new (I_("scale-changed"),
                   GTK_TYPE_GESTURE_ZOOM,
                   G_SIGNAL_RUN_FIRST,
                   G_STRUCT_OFFSET (GtkGestureZoomClass, scale_changed),

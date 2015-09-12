@@ -471,7 +471,7 @@ gtk_list_box_class_init (GtkListBoxClass *klass)
    * Since: 3.10
    */
   signals[ROW_SELECTED] =
-    g_signal_new ("row-selected",
+    g_signal_new (I_("row-selected"),
                   GTK_TYPE_LIST_BOX,
                   G_SIGNAL_RUN_LAST,
                   G_STRUCT_OFFSET (GtkListBoxClass, row_selected),
@@ -489,7 +489,7 @@ gtk_list_box_class_init (GtkListBoxClass *klass)
    *
    * Since: 3.14
    */
-  signals[SELECTED_ROWS_CHANGED] = g_signal_new ("selected-rows-changed",
+  signals[SELECTED_ROWS_CHANGED] = g_signal_new (I_("selected-rows-changed"),
                                                  GTK_TYPE_LIST_BOX,
                                                  G_SIGNAL_RUN_FIRST,
                                                  G_STRUCT_OFFSET (GtkListBoxClass, selected_rows_changed),
@@ -509,7 +509,7 @@ gtk_list_box_class_init (GtkListBoxClass *klass)
    *
    * Since: 3.14
    */
-  signals[SELECT_ALL] = g_signal_new ("select-all",
+  signals[SELECT_ALL] = g_signal_new (I_("select-all"),
                                       GTK_TYPE_LIST_BOX,
                                       G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
                                       G_STRUCT_OFFSET (GtkListBoxClass, select_all),
@@ -529,13 +529,13 @@ gtk_list_box_class_init (GtkListBoxClass *klass)
    *
    * Since: 3.14
    */
-  signals[UNSELECT_ALL] = g_signal_new ("unselect-all",
-                                      GTK_TYPE_LIST_BOX,
-                                      G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
-                                      G_STRUCT_OFFSET (GtkListBoxClass, unselect_all),
-                                      NULL, NULL,
-                                      g_cclosure_marshal_VOID__VOID,
-                                      G_TYPE_NONE, 0);
+  signals[UNSELECT_ALL] = g_signal_new (I_("unselect-all"),
+                                        GTK_TYPE_LIST_BOX,
+                                        G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
+                                        G_STRUCT_OFFSET (GtkListBoxClass, unselect_all),
+                                        NULL, NULL,
+                                        g_cclosure_marshal_VOID__VOID,
+                                        G_TYPE_NONE, 0);
 
   /**
    * GtkListBox::row-activated:
@@ -547,7 +547,7 @@ gtk_list_box_class_init (GtkListBoxClass *klass)
    * Since: 3.10
    */
   signals[ROW_ACTIVATED] =
-    g_signal_new ("row-activated",
+    g_signal_new (I_("row-activated"),
                   GTK_TYPE_LIST_BOX,
                   G_SIGNAL_RUN_LAST,
                   G_STRUCT_OFFSET (GtkListBoxClass, row_activated),
@@ -556,7 +556,7 @@ gtk_list_box_class_init (GtkListBoxClass *klass)
                   G_TYPE_NONE, 1,
                   GTK_TYPE_LIST_BOX_ROW);
   signals[ACTIVATE_CURSOR_ROW] =
-    g_signal_new ("activate-cursor-row",
+    g_signal_new (I_("activate-cursor-row"),
                   GTK_TYPE_LIST_BOX,
                   G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
                   G_STRUCT_OFFSET (GtkListBoxClass, activate_cursor_row),
@@ -564,7 +564,7 @@ gtk_list_box_class_init (GtkListBoxClass *klass)
                   g_cclosure_marshal_VOID__VOID,
                   G_TYPE_NONE, 0);
   signals[TOGGLE_CURSOR_ROW] =
-    g_signal_new ("toggle-cursor-row",
+    g_signal_new (I_("toggle-cursor-row"),
                   GTK_TYPE_LIST_BOX,
                   G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
                   G_STRUCT_OFFSET (GtkListBoxClass, toggle_cursor_row),
@@ -572,7 +572,7 @@ gtk_list_box_class_init (GtkListBoxClass *klass)
                   g_cclosure_marshal_VOID__VOID,
                   G_TYPE_NONE, 0);
   signals[MOVE_CURSOR] =
-    g_signal_new ("move-cursor",
+    g_signal_new (I_("move-cursor"),
                   GTK_TYPE_LIST_BOX,
                   G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
                   G_STRUCT_OFFSET (GtkListBoxClass, move_cursor),

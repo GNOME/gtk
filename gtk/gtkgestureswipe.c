@@ -40,6 +40,7 @@
 #include "gtkgestureswipeprivate.h"
 #include "gtkgestureprivate.h"
 #include "gtkmarshalers.h"
+#include "gtkintl.h"
 
 #define CAPTURE_THRESHOLD_MS 150
 
@@ -230,7 +231,7 @@ gtk_gesture_swipe_class_init (GtkGestureSwipeClass *klass)
    * Since: 3.14
    */
   signals[SWIPE] =
-    g_signal_new ("swipe",
+    g_signal_new (I_("swipe"),
                   G_TYPE_FROM_CLASS (klass),
                   G_SIGNAL_RUN_LAST,
                   G_STRUCT_OFFSET (GtkGestureSwipeClass, swipe),

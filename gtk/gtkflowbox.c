@@ -3775,7 +3775,7 @@ gtk_flow_box_class_init (GtkFlowBoxClass *class)
    * The ::child-activated signal is emitted when a child has been
    * activated by the user.
    */
-  signals[CHILD_ACTIVATED] = g_signal_new ("child-activated",
+  signals[CHILD_ACTIVATED] = g_signal_new (I_("child-activated"),
                                            GTK_TYPE_FLOW_BOX,
                                            G_SIGNAL_RUN_LAST,
                                            G_STRUCT_OFFSET (GtkFlowBoxClass, child_activated),
@@ -3795,7 +3795,7 @@ gtk_flow_box_class_init (GtkFlowBoxClass *class)
    * gtk_flow_box_get_selected_children() to obtain the
    * selected children.
    */
-  signals[SELECTED_CHILDREN_CHANGED] = g_signal_new ("selected-children-changed",
+  signals[SELECTED_CHILDREN_CHANGED] = g_signal_new (I_("selected-children-changed"),
                                                      GTK_TYPE_FLOW_BOX,
                                                      G_SIGNAL_RUN_FIRST,
                                                      G_STRUCT_OFFSET (GtkFlowBoxClass, selected_children_changed),
@@ -3811,7 +3811,7 @@ gtk_flow_box_class_init (GtkFlowBoxClass *class)
    * [keybinding signal][GtkBindingSignal]
    * which gets emitted when the user activates the @box.
    */
-  signals[ACTIVATE_CURSOR_CHILD] = g_signal_new ("activate-cursor-child",
+  signals[ACTIVATE_CURSOR_CHILD] = g_signal_new (I_("activate-cursor-child"),
                                                  GTK_TYPE_FLOW_BOX,
                                                  G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
                                                  G_STRUCT_OFFSET (GtkFlowBoxClass, activate_cursor_child),
@@ -3829,7 +3829,7 @@ gtk_flow_box_class_init (GtkFlowBoxClass *class)
    *
    * The default binding for this signal is Ctrl-Space.
    */
-  signals[TOGGLE_CURSOR_CHILD] = g_signal_new ("toggle-cursor-child",
+  signals[TOGGLE_CURSOR_CHILD] = g_signal_new (I_("toggle-cursor-child"),
                                                GTK_TYPE_FLOW_BOX,
                                                G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
                                                G_STRUCT_OFFSET (GtkFlowBoxClass, toggle_cursor_child),
@@ -3861,7 +3861,7 @@ gtk_flow_box_class_init (GtkFlowBoxClass *class)
    * - Home/End keys move to the ends of the box
    * - PageUp/PageDown keys move vertically by pages
    */
-  signals[MOVE_CURSOR] = g_signal_new ("move-cursor",
+  signals[MOVE_CURSOR] = g_signal_new (I_("move-cursor"),
                                        GTK_TYPE_FLOW_BOX,
                                        G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
                                        G_STRUCT_OFFSET (GtkFlowBoxClass, move_cursor),
@@ -3880,7 +3880,7 @@ gtk_flow_box_class_init (GtkFlowBoxClass *class)
    *
    * The default bindings for this signal is Ctrl-a.
    */
-  signals[SELECT_ALL] = g_signal_new ("select-all",
+  signals[SELECT_ALL] = g_signal_new (I_("select-all"),
                                       GTK_TYPE_FLOW_BOX,
                                       G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
                                       G_STRUCT_OFFSET (GtkFlowBoxClass, select_all),
@@ -3899,13 +3899,13 @@ gtk_flow_box_class_init (GtkFlowBoxClass *class)
    *
    * The default bindings for this signal is Ctrl-Shift-a.
    */
-  signals[UNSELECT_ALL] = g_signal_new ("unselect-all",
-                                      GTK_TYPE_FLOW_BOX,
-                                      G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
-                                      G_STRUCT_OFFSET (GtkFlowBoxClass, unselect_all),
-                                      NULL, NULL,
-                                      g_cclosure_marshal_VOID__VOID,
-                                      G_TYPE_NONE, 0);
+  signals[UNSELECT_ALL] = g_signal_new (I_("unselect-all"),
+                                        GTK_TYPE_FLOW_BOX,
+                                        G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
+                                        G_STRUCT_OFFSET (GtkFlowBoxClass, unselect_all),
+                                        NULL, NULL,
+                                        g_cclosure_marshal_VOID__VOID,
+                                        G_TYPE_NONE, 0);
 
   widget_class->activate_signal = signals[ACTIVATE_CURSOR_CHILD];
 

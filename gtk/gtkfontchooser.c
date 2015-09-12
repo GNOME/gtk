@@ -116,7 +116,7 @@ gtk_font_chooser_default_init (GtkFontChooserInterface *iface)
    * Space, Shift+Space, Return or Enter.
     */
   chooser_signals[SIGNAL_FONT_ACTIVATED] =
-    g_signal_new ("font-activated",
+    g_signal_new (I_("font-activated"),
                   GTK_TYPE_FONT_CHOOSER,
                   G_SIGNAL_RUN_FIRST,
                   G_STRUCT_OFFSET (GtkFontChooserIface, font_activated),

@@ -904,7 +904,7 @@ gtk_application_class_init (GtkApplicationClass *class)
    * Since: 3.2
    */
   gtk_application_signals[WINDOW_ADDED] =
-    g_signal_new ("window-added", GTK_TYPE_APPLICATION, G_SIGNAL_RUN_FIRST,
+    g_signal_new (I_("window-added"), GTK_TYPE_APPLICATION, G_SIGNAL_RUN_FIRST,
                   G_STRUCT_OFFSET (GtkApplicationClass, window_added),
                   NULL, NULL,
                   g_cclosure_marshal_VOID__OBJECT,
@@ -922,7 +922,7 @@ gtk_application_class_init (GtkApplicationClass *class)
    * Since: 3.2
    */
   gtk_application_signals[WINDOW_REMOVED] =
-    g_signal_new ("window-removed", GTK_TYPE_APPLICATION, G_SIGNAL_RUN_FIRST,
+    g_signal_new (I_("window-removed"), GTK_TYPE_APPLICATION, G_SIGNAL_RUN_FIRST,
                   G_STRUCT_OFFSET (GtkApplicationClass, window_removed),
                   NULL, NULL,
                   g_cclosure_marshal_VOID__OBJECT,

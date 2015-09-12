@@ -661,7 +661,7 @@ gtk_app_chooser_button_class_init (GtkAppChooserButtonClass *klass)
    * dropdown menu.
    */
   signals[SIGNAL_CUSTOM_ITEM_ACTIVATED] =
-    g_signal_new ("custom-item-activated",
+    g_signal_new (I_("custom-item-activated"),
                   GTK_TYPE_APP_CHOOSER_BUTTON,
                   G_SIGNAL_RUN_FIRST | G_SIGNAL_DETAILED,
                   G_STRUCT_OFFSET (GtkAppChooserButtonClass, custom_item_activated),

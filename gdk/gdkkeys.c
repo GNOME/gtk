@@ -133,7 +133,7 @@ gdk_keymap_class_init (GdkKeymapClass *klass)
    * Since: 2.0
    */
   signals[DIRECTION_CHANGED] =
-    g_signal_new ("direction-changed",
+    g_signal_new (g_intern_static_string ("direction-changed"),
 		  G_OBJECT_CLASS_TYPE (object_class),
 		  G_SIGNAL_RUN_LAST,
 		  G_STRUCT_OFFSET (GdkKeymapClass, direction_changed),
@@ -151,7 +151,7 @@ gdk_keymap_class_init (GdkKeymapClass *klass)
    * Since: 2.2
    */
   signals[KEYS_CHANGED] =
-    g_signal_new ("keys-changed",
+    g_signal_new (g_intern_static_string ("keys-changed"),
 		  G_OBJECT_CLASS_TYPE (object_class),
 		  G_SIGNAL_RUN_LAST,
 		  G_STRUCT_OFFSET (GdkKeymapClass, keys_changed),
@@ -171,7 +171,7 @@ gdk_keymap_class_init (GdkKeymapClass *klass)
    * Since: 2.16
    */
   signals[STATE_CHANGED] =
-    g_signal_new ("state_changed",
+    g_signal_new (g_intern_static_string ("state_changed"),
                   G_OBJECT_CLASS_TYPE (object_class),
                   G_SIGNAL_RUN_LAST,
                   G_STRUCT_OFFSET (GdkKeymapClass, state_changed),

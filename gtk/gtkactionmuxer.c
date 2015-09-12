@@ -23,6 +23,7 @@
 
 #include "gtkactionobservable.h"
 #include "gtkactionobserver.h"
+#include "gtkintl.h"
 
 #include <string.h>
 
@@ -632,7 +633,7 @@ gtk_action_muxer_class_init (GObjectClass *class)
   class->finalize = gtk_action_muxer_finalize;
   class->dispose = gtk_action_muxer_dispose;
 
-  accel_signal = g_signal_new ("primary-accel-changed", GTK_TYPE_ACTION_MUXER, G_SIGNAL_RUN_LAST,
+  accel_signal = g_signal_new (I_("primary-accel-changed"), GTK_TYPE_ACTION_MUXER, G_SIGNAL_RUN_LAST,
                                0, NULL, NULL, NULL, G_TYPE_NONE, 2, G_TYPE_STRING, G_TYPE_STRING);
 
   properties[PROP_PARENT] = g_param_spec_object ("parent", "Parent",

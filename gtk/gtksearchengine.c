@@ -25,6 +25,7 @@
 #include "gtksearchenginetracker.h"
 #include "gtksearchenginemodel.h"
 #include "gtksearchenginequartz.h"
+#include "gtkintl.h"
 
 #include <gdk/gdk.h> /* for GDK_WINDOWING_QUARTZ */
 
@@ -168,7 +169,7 @@ _gtk_search_engine_class_init (GtkSearchEngineClass *class)
   class->stop = stop;
 
   signals[HITS_ADDED] =
-    g_signal_new ("hits-added",
+    g_signal_new (I_("hits-added"),
                   G_TYPE_FROM_CLASS (class),
                   G_SIGNAL_RUN_LAST,
                   G_STRUCT_OFFSET (GtkSearchEngineClass, hits_added),
@@ -178,7 +179,7 @@ _gtk_search_engine_class_init (GtkSearchEngineClass *class)
                   G_TYPE_POINTER);
 
   signals[FINISHED] =
-    g_signal_new ("finished",
+    g_signal_new (I_("finished"),
                   G_TYPE_FROM_CLASS (class),
                   G_SIGNAL_RUN_LAST,
                   G_STRUCT_OFFSET (GtkSearchEngineClass, finished),
@@ -187,7 +188,7 @@ _gtk_search_engine_class_init (GtkSearchEngineClass *class)
                   G_TYPE_NONE, 0);
 
   signals[ERROR] =
-    g_signal_new ("error",
+    g_signal_new (I_("error"),
                   G_TYPE_FROM_CLASS (class),
                   G_SIGNAL_RUN_LAST,
                   G_STRUCT_OFFSET (GtkSearchEngineClass, error),

@@ -1042,7 +1042,7 @@ gtk_app_chooser_widget_class_init (GtkAppChooserWidgetClass *klass)
    * Emitted when an application item is selected from the widget's list.
    */
   signals[SIGNAL_APPLICATION_SELECTED] =
-    g_signal_new ("application-selected",
+    g_signal_new (I_("application-selected"),
                   GTK_TYPE_APP_CHOOSER_WIDGET,
                   G_SIGNAL_RUN_FIRST,
                   G_STRUCT_OFFSET (GtkAppChooserWidgetClass, application_selected),
@@ -1063,7 +1063,7 @@ gtk_app_chooser_widget_class_init (GtkAppChooserWidgetClass *klass)
    * Return or Enter.
    */
   signals[SIGNAL_APPLICATION_ACTIVATED] =
-    g_signal_new ("application-activated",
+    g_signal_new (I_("application-activated"),
                   GTK_TYPE_APP_CHOOSER_WIDGET,
                   G_SIGNAL_RUN_FIRST,
                   G_STRUCT_OFFSET (GtkAppChooserWidgetClass, application_activated),
@@ -1084,7 +1084,7 @@ gtk_app_chooser_widget_class_init (GtkAppChooserWidgetClass *klass)
    * if at least one item has been added to the menu.
    */
   signals[SIGNAL_POPULATE_POPUP] =
-    g_signal_new ("populate-popup",
+    g_signal_new (I_("populate-popup"),
                   GTK_TYPE_APP_CHOOSER_WIDGET,
                   G_SIGNAL_RUN_FIRST,
                   G_STRUCT_OFFSET (GtkAppChooserWidgetClass, populate_popup),

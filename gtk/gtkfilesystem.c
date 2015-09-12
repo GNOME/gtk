@@ -29,6 +29,7 @@
 #include "gtkfilesystem.h"
 #include "gtkicontheme.h"
 #include "gtkprivate.h"
+#include "gtkintl.h"
 
 /* #define DEBUG_MODE */
 #ifdef DEBUG_MODE
@@ -142,7 +143,7 @@ _gtk_file_system_class_init (GtkFileSystemClass *class)
   object_class->dispose = gtk_file_system_dispose;
 
   fs_signals[VOLUMES_CHANGED] =
-    g_signal_new ("volumes-changed",
+    g_signal_new (I_("volumes-changed"),
 		  G_TYPE_FROM_CLASS (object_class),
 		  G_SIGNAL_RUN_LAST,
 		  G_STRUCT_OFFSET (GtkFileSystemClass, volumes_changed),

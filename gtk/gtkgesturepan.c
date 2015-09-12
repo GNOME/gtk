@@ -252,7 +252,7 @@ gtk_gesture_pan_class_init (GtkGesturePanClass *klass)
    * Since: 3.14
    */
   signals[PAN] =
-    g_signal_new ("pan",
+    g_signal_new (I_("pan"),
                   G_TYPE_FROM_CLASS (klass),
                   G_SIGNAL_RUN_LAST,
                   G_STRUCT_OFFSET (GtkGesturePanClass, pan),

@@ -899,7 +899,7 @@ gtk_gesture_class_init (GtkGestureClass *klass)
    * Since: 3.14
    */
   signals[BEGIN] =
-    g_signal_new ("begin",
+    g_signal_new (I_("begin"),
                   G_TYPE_FROM_CLASS (klass),
                   G_SIGNAL_RUN_LAST,
                   G_STRUCT_OFFSET (GtkGestureClass, begin),
@@ -923,7 +923,7 @@ gtk_gesture_class_init (GtkGestureClass *klass)
    * Since: 3.14
    */
   signals[END] =
-    g_signal_new ("end",
+    g_signal_new (I_("end"),
                   G_TYPE_FROM_CLASS (klass),
                   G_SIGNAL_RUN_LAST,
                   G_STRUCT_OFFSET (GtkGestureClass, end),
@@ -940,7 +940,7 @@ gtk_gesture_class_init (GtkGestureClass *klass)
    * Since: 3.14
    */
   signals[UPDATE] =
-    g_signal_new ("update",
+    g_signal_new (I_("update"),
                   G_TYPE_FROM_CLASS (klass),
                   G_SIGNAL_RUN_LAST,
                   G_STRUCT_OFFSET (GtkGestureClass, update),
@@ -961,7 +961,7 @@ gtk_gesture_class_init (GtkGestureClass *klass)
    * Since: 3.14
    */
   signals[CANCEL] =
-    g_signal_new ("cancel",
+    g_signal_new (I_("cancel"),
                   G_TYPE_FROM_CLASS (klass),
                   G_SIGNAL_RUN_LAST,
                   G_STRUCT_OFFSET (GtkGestureClass, cancel),
@@ -980,7 +980,7 @@ gtk_gesture_class_init (GtkGestureClass *klass)
    * Since: 3.14
    */
   signals[SEQUENCE_STATE_CHANGED] =
-    g_signal_new ("sequence-state-changed",
+    g_signal_new (I_("sequence-state-changed"),
                   G_TYPE_FROM_CLASS (klass),
                   G_SIGNAL_RUN_LAST,
                   G_STRUCT_OFFSET (GtkGestureClass, sequence_state_changed),

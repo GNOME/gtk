@@ -102,7 +102,7 @@ gtk_color_chooser_default_init (GtkColorChooserInterface *iface)
    * Since: 3.4
    */
   signals[COLOR_ACTIVATED] =
-    g_signal_new ("color-activated",
+    g_signal_new (I_("color-activated"),
                   GTK_TYPE_COLOR_CHOOSER,
                   G_SIGNAL_RUN_FIRST,
                   G_STRUCT_OFFSET (GtkColorChooserInterface, color_activated),

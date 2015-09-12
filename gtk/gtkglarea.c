@@ -902,7 +902,7 @@ gtk_gl_area_class_init (GtkGLAreaClass *klass)
    * Since: 3.16
    */
   area_signals[RESIZE] =
-    g_signal_new ("resize",
+    g_signal_new (I_("resize"),
                   G_TYPE_FROM_CLASS (klass),
                   G_SIGNAL_RUN_LAST,
                   G_STRUCT_OFFSET (GtkGLAreaClass, resize),
@@ -931,7 +931,7 @@ gtk_gl_area_class_init (GtkGLAreaClass *klass)
    * Since: 3.16
    */
   area_signals[CREATE_CONTEXT] =
-    g_signal_new ("create-context",
+    g_signal_new (I_("create-context"),
                   G_TYPE_FROM_CLASS (klass),
                   G_SIGNAL_RUN_LAST,
                   G_STRUCT_OFFSET (GtkGLAreaClass, create_context),

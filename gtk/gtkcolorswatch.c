@@ -690,14 +690,14 @@ gtk_color_swatch_class_init (GtkColorSwatchClass *class)
   widget_class->size_allocate = swatch_size_allocate;
 
   signals[ACTIVATE] =
-    g_signal_new ("activate",
+    g_signal_new (I_("activate"),
                   GTK_TYPE_COLOR_SWATCH,
                   G_SIGNAL_RUN_FIRST,
                   G_STRUCT_OFFSET (GtkColorSwatchClass, activate),
                   NULL, NULL, NULL, G_TYPE_NONE, 0);
 
   signals[CUSTOMIZE] =
-    g_signal_new ("customize",
+    g_signal_new (I_("customize"),
                   GTK_TYPE_COLOR_SWATCH,
                   G_SIGNAL_RUN_FIRST,
                   G_STRUCT_OFFSET (GtkColorSwatchClass, customize),

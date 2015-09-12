@@ -298,7 +298,7 @@ gtk_gesture_long_press_class_init (GtkGestureLongPressClass *klass)
    * Since: 3.14
    */
   signals[PRESSED] =
-    g_signal_new ("pressed",
+    g_signal_new (I_("pressed"),
                   G_TYPE_FROM_CLASS (klass),
                   G_SIGNAL_RUN_LAST,
                   G_STRUCT_OFFSET (GtkGestureLongPressClass, pressed),
@@ -314,7 +314,7 @@ gtk_gesture_long_press_class_init (GtkGestureLongPressClass *klass)
    * Since: 3.14
    */
   signals[CANCELLED] =
-    g_signal_new ("cancelled",
+    g_signal_new (I_("cancelled"),
                   G_TYPE_FROM_CLASS (klass),
                   G_SIGNAL_RUN_LAST,
                   G_STRUCT_OFFSET (GtkGestureLongPressClass, cancelled),

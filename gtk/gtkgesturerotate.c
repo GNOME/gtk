@@ -34,6 +34,7 @@
 #include "gtkgesturerotate.h"
 #include "gtkgesturerotateprivate.h"
 #include "gtkmarshalers.h"
+#include "gtkintl.h"
 
 typedef struct _GtkGestureRotatePrivate GtkGestureRotatePrivate;
 
@@ -227,7 +228,7 @@ gtk_gesture_rotate_class_init (GtkGestureRotateClass *klass)
    * Since: 3.14
    */
   signals[ANGLE_CHANGED] =
-    g_signal_new ("angle-changed",
+    g_signal_new (I_("angle-changed"),
                   GTK_TYPE_GESTURE_ROTATE,
                   G_SIGNAL_RUN_FIRST,
                   G_STRUCT_OFFSET (GtkGestureRotateClass, angle_changed),
