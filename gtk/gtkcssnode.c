@@ -1054,14 +1054,10 @@ gtk_css_node_get_junction_sides (GtkCssNode *cssnode)
 static void
 gtk_css_node_clear_classes (GtkCssNode *cssnode)
 {
-  const GQuark *classes;
-  guint n_classes, i;
-
-  classes = gtk_css_node_declaration_get_classes (cssnode->decl, &n_classes);
-
-  for (i = 0; i < n_classes; ++i)
+  if (gtk_css_node_declaration_clear_classes (&cssnode->decl))
     {
-      gtk_css_node_remove_class (cssnode, classes[i]);
+      gtk_css_node_invalidate (cssnode, GTK_CSS_CHANGE_CLASS);
+      g_object_notify_by_pspec (G_OBJECT (cssnode), cssnode_properties[PROP_CLASSES]);
     }
 }
 

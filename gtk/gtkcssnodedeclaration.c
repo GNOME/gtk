@@ -308,6 +308,21 @@ gtk_css_node_declaration_remove_class (GtkCssNodeDeclaration **decl,
 }
 
 gboolean
+gtk_css_node_declaration_clear_classes (GtkCssNodeDeclaration **decl)
+{
+  if ((*decl)->n_classes == 0)
+    return FALSE;
+
+  gtk_css_node_declaration_make_writable_resize (decl,
+                                                 (char *) get_classes (*decl) - (char *) *decl,
+                                                 0,
+                                                 sizeof (GQuark) * (*decl)->n_classes);
+  (*decl)->n_classes = 0;
+
+  return TRUE;
+}
+
+gboolean
 gtk_css_node_declaration_has_class (const GtkCssNodeDeclaration *decl,
                                     GQuark                       class_quark)
 {

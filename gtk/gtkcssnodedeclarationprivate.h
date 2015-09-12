@@ -45,6 +45,7 @@ gboolean                gtk_css_node_declaration_add_class              (GtkCssN
                                                                          GQuark                         class_quark);
 gboolean                gtk_css_node_declaration_remove_class           (GtkCssNodeDeclaration        **decl,
                                                                          GQuark                         class_quark);
+gboolean                gtk_css_node_declaration_clear_classes          (GtkCssNodeDeclaration        **decl);
 gboolean                gtk_css_node_declaration_has_class              (const GtkCssNodeDeclaration   *decl,
                                                                          GQuark                         class_quark);
 const GQuark *          gtk_css_node_declaration_get_classes            (const GtkCssNodeDeclaration   *decl,
