@@ -269,6 +269,7 @@ static const gchar default_color_palette[] =
 
 /* --- variables --- */
 static GQuark            quark_property_parser = 0;
+static GQuark            quark_gtk_settings = 0;
 static GSList           *object_list = NULL;
 static guint             class_n_properties = 0;
 
@@ -367,6 +368,8 @@ gtk_settings_class_init (GtkSettingsClass *class)
   gobject_class->notify = gtk_settings_notify;
 
   quark_property_parser = g_quark_from_static_string ("gtk-rc-property-parser");
+  quark_gtk_settings = g_quark_from_static_string ("gtk-settings");
+
   result = settings_install_property_parser (class,
                                              g_param_spec_int ("gtk-double-click-time",
                                                                P_("Double Click Time"),
@@ -1849,7 +1852,7 @@ gtk_settings_get_for_screen (GdkScreen *screen)
 
   g_return_val_if_fail (GDK_IS_SCREEN (screen), NULL);
 
-  settings = g_object_get_data (G_OBJECT (screen), "gtk-settings");
+  settings = g_object_get_qdata (G_OBJECT (screen), quark_gtk_settings);
   if (!settings)
     {
 #ifdef GDK_WINDOWING_QUARTZ
@@ -1874,8 +1877,10 @@ gtk_settings_get_for_screen (GdkScreen *screen)
 #endif
         settings = g_object_new (GTK_TYPE_SETTINGS, NULL);
       settings->priv->screen = screen;
-      g_object_set_data_full (G_OBJECT (screen), I_("gtk-settings"),
-                              settings, g_object_unref);
+      g_object_set_qdata_full (G_OBJECT (screen),
+                               quark_gtk_settings,
+                               settings,
+                               g_object_unref);
 
       settings_init_style (settings);
       settings_update_modules (settings);
@@ -2231,7 +2236,7 @@ settings_install_property_parser (GtkSettingsClass   *class,
       priv->property_values[class_n_properties - 1].source = GTK_SETTINGS_SOURCE_DEFAULT;
       g_object_notify_by_pspec (G_OBJECT (settings), pspec);
 
-      qvalue = g_datalist_get_data (&priv->queued_settings, pspec->name);
+      qvalue = g_datalist_id_dup_data (&priv->queued_settings, g_param_spec_get_name_quark (pspec), NULL, NULL);
       if (qvalue)
         apply_queued_setting (settings, pspec, qvalue);
     }
@@ -2343,7 +2348,7 @@ gtk_settings_set_property_value_internal (GtkSettings            *settings,
   name_quark = g_quark_from_string (name);
   g_free (name);
 
-  qvalue = g_datalist_id_get_data (&priv->queued_settings, name_quark);
+  qvalue = g_datalist_id_dup_data (&priv->queued_settings, name_quark, NULL, NULL);
   if (!qvalue)
     {
       qvalue = g_slice_new0 (GtkSettingsValuePrivate);

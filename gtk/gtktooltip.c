@@ -150,6 +150,7 @@ static void       gtk_tooltip_display_closed       (GdkDisplay      *display,
 static void       gtk_tooltip_set_last_window      (GtkTooltip      *tooltip,
 						    GdkWindow       *window);
 
+static GQuark quark_current_tooltip;
 
 G_DEFINE_TYPE (GtkTooltip, gtk_tooltip, G_TYPE_OBJECT);
 
@@ -161,6 +162,8 @@ gtk_tooltip_class_init (GtkTooltipClass *klass)
   object_class = G_OBJECT_CLASS (klass);
 
   object_class->dispose = gtk_tooltip_dispose;
+
+  quark_current_tooltip = g_quark_from_static_string ("gdk-display-current-tooltip");
 }
 
 static void
@@ -868,6 +871,7 @@ static gint
 tooltip_browse_mode_expired (gpointer data)
 {
   GtkTooltip *tooltip;
+  GdkDisplay *display;
 
   tooltip = GTK_TOOLTIP (data);
 
@@ -875,8 +879,8 @@ tooltip_browse_mode_expired (gpointer data)
   tooltip->browse_mode_timeout_id = 0;
 
   /* destroy tooltip */
-  g_object_set_data (G_OBJECT (gtk_widget_get_display (tooltip->window)),
-		     "gdk-display-current-tooltip", NULL);
+  display = gtk_widget_get_display (tooltip->window);
+  g_object_set_qdata (G_OBJECT (display), quark_current_tooltip, NULL);
 
   return FALSE;
 }
@@ -886,7 +890,7 @@ gtk_tooltip_display_closed (GdkDisplay *display,
 			    gboolean    was_error,
 			    GtkTooltip *tooltip)
 {
-  g_object_set_data (G_OBJECT (display), "gdk-display-current-tooltip", NULL);
+  g_object_set_qdata (G_OBJECT (display), quark_current_tooltip, NULL);
 }
 
 static void
@@ -1209,8 +1213,7 @@ gtk_tooltip_show_tooltip (GdkDisplay *display)
   GtkTooltip *tooltip;
   gboolean return_value = FALSE;
 
-  tooltip = g_object_get_data (G_OBJECT (display),
-                               "gdk-display-current-tooltip");
+  tooltip = g_object_get_qdata (G_OBJECT (display), quark_current_tooltip);
 
   if (tooltip->keyboard_mode_enabled)
     {
@@ -1338,8 +1341,7 @@ tooltip_popup_timeout (gpointer data)
   GtkTooltip *tooltip;
 
   display = GDK_DISPLAY (data);
-  tooltip = g_object_get_data (G_OBJECT (display),
-			       "gdk-display-current-tooltip");
+  tooltip = g_object_get_qdata (G_OBJECT (display), quark_current_tooltip);
 
   /* This usually does not happen.  However, it does occur in language
    * bindings were reference counting of objects behaves differently.
@@ -1360,8 +1362,7 @@ gtk_tooltip_start_delay (GdkDisplay *display)
   guint timeout;
   GtkTooltip *tooltip;
 
-  tooltip = g_object_get_data (G_OBJECT (display),
-			       "gdk-display-current-tooltip");
+  tooltip = g_object_get_qdata (G_OBJECT (display), quark_current_tooltip);
 
   if (!tooltip || GTK_TOOLTIP_VISIBLE (tooltip))
     return;
@@ -1392,8 +1393,7 @@ _gtk_tooltip_focus_in (GtkWidget *widget)
 
   /* Get current tooltip for this display */
   display = gtk_widget_get_display (widget);
-  tooltip = g_object_get_data (G_OBJECT (display),
-			       "gdk-display-current-tooltip");
+  tooltip = g_object_get_qdata (G_OBJECT (display), quark_current_tooltip);
 
   /* Check if keyboard mode is enabled at this moment */
   if (!tooltip || !tooltip->keyboard_mode_enabled)
@@ -1444,8 +1444,7 @@ _gtk_tooltip_focus_out (GtkWidget *widget)
 
   /* Get current tooltip for this display */
   display = gtk_widget_get_display (widget);
-  tooltip = g_object_get_data (G_OBJECT (display),
-			       "gdk-display-current-tooltip");
+  tooltip = g_object_get_qdata (G_OBJECT (display), quark_current_tooltip);
 
   if (!tooltip || !tooltip->keyboard_mode_enabled)
     return;
@@ -1466,15 +1465,15 @@ _gtk_tooltip_toggle_keyboard_mode (GtkWidget *widget)
   GtkTooltip *tooltip;
 
   display = gtk_widget_get_display (widget);
-  tooltip = g_object_get_data (G_OBJECT (display),
-			       "gdk-display-current-tooltip");
+  tooltip = g_object_get_qdata (G_OBJECT (display), quark_current_tooltip);
 
   if (!tooltip)
     {
       tooltip = g_object_new (GTK_TYPE_TOOLTIP, NULL);
-      g_object_set_data_full (G_OBJECT (display),
-			      "gdk-display-current-tooltip",
-			      tooltip, g_object_unref);
+      g_object_set_qdata_full (G_OBJECT (display),
+			       quark_current_tooltip,
+			       tooltip,
+                               g_object_unref);
       g_signal_connect (display, "closed",
 			G_CALLBACK (gtk_tooltip_display_closed),
 			tooltip);
@@ -1506,8 +1505,7 @@ _gtk_tooltip_hide (GtkWidget *widget)
   GtkTooltip *tooltip;
 
   display = gtk_widget_get_display (widget);
-  tooltip = g_object_get_data (G_OBJECT (display),
-			       "gdk-display-current-tooltip");
+  tooltip = g_object_get_qdata (G_OBJECT (display), quark_current_tooltip);
 
   if (!tooltip || !GTK_TOOLTIP_VISIBLE (tooltip) || !tooltip->tooltip_widget)
     return;
@@ -1550,8 +1548,7 @@ _gtk_tooltip_handle_event (GdkEvent *event)
   /* Returns coordinates relative to has_tooltip_widget's allocation. */
   has_tooltip_widget = find_topmost_widget_coords_from_event (event, &x, &y);
   display = gdk_window_get_display (event->any.window);
-  current_tooltip = g_object_get_data (G_OBJECT (display),
-				       "gdk-display-current-tooltip");
+  current_tooltip = g_object_get_qdata (G_OBJECT (display), quark_current_tooltip);
 
   if (current_tooltip)
     {
@@ -1657,9 +1654,10 @@ _gtk_tooltip_handle_event (GdkEvent *event)
 	  {
 	    /* Need a new tooltip for this display */
 	    current_tooltip = g_object_new (GTK_TYPE_TOOLTIP, NULL);
-	    g_object_set_data_full (G_OBJECT (display),
-				    "gdk-display-current-tooltip",
-				    current_tooltip, g_object_unref);
+	    g_object_set_qdata_full (G_OBJECT (display),
+				     quark_current_tooltip,
+				     current_tooltip,
+                                     g_object_unref);
 	    g_signal_connect (display, "closed",
 			      G_CALLBACK (gtk_tooltip_display_closed),
 			      current_tooltip);

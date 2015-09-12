@@ -52,6 +52,8 @@ enum {
 static guint cssnode_signals[LAST_SIGNAL] = { 0 };
 static GParamSpec *cssnode_properties[NUM_PROPERTIES];
 
+static GQuark quark_global_cache;
+
 static GtkStyleProviderPrivate *
 gtk_css_node_get_style_provider_or_null (GtkCssNode *cssnode)
 {
@@ -214,7 +216,7 @@ lookup_in_global_parent_cache (GtkCssNode                  *node,
       !may_use_global_parent_cache (node))
     return NULL;
 
-  cache = g_object_get_data (G_OBJECT (parent), "gtk-global-cache");
+  cache = g_object_get_qdata (G_OBJECT (parent), quark_global_cache);
   if (cache == NULL)
     return NULL;
 
@@ -289,14 +291,17 @@ store_in_global_parent_cache (GtkCssNode                  *node,
   if (!may_be_stored_in_parent_cache (style))
     return;
 
-  cache = g_object_get_data (G_OBJECT (parent), "gtk-global-cache");
+  cache = g_object_get_qdata (G_OBJECT (parent), quark_global_cache);
   if (cache == NULL)
     {
       cache = g_hash_table_new_full (gtk_global_parent_cache_hash,
                                      gtk_global_parent_cache_equal,
                                      gtk_global_parent_cache_free,
                                      g_object_unref);
-      g_object_set_data_full (G_OBJECT (parent), "gtk-global-cache", cache, (GDestroyNotify) g_hash_table_destroy);
+      g_object_set_qdata_full (G_OBJECT (parent),
+                               quark_global_cache,
+                               cache,
+                               (GDestroyNotify) g_hash_table_destroy);
     }
 
   g_hash_table_insert (cache,
@@ -521,6 +526,8 @@ static void
 gtk_css_node_class_init (GtkCssNodeClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
+
+  quark_global_cache = g_quark_from_static_string ("gtk-global-cache");
 
   object_class->get_property = gtk_css_node_get_property;
   object_class->set_property = gtk_css_node_set_property;

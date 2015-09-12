@@ -364,6 +364,12 @@ static GParamSpec *label_props[NUM_PROPERTIES] = { NULL, };
 
 static guint signals[LAST_SIGNAL] = { 0 };
 
+static GQuark quark_shortcuts_connected;
+static GQuark quark_mnemonic_menu;
+static GQuark quark_mnemonics_visible_connected;
+static GQuark quark_gtk_signal;
+static GQuark quark_link;
+
 static void gtk_label_set_property      (GObject          *object,
 					 guint             prop_id,
 					 const GValue     *value,
@@ -700,7 +706,7 @@ gtk_label_class_init (GtkLabelClass *class)
      * Since: 2.18
      */
     signals[ACTIVATE_CURRENT_LINK] =
-      g_signal_new_class_handler ("activate-current-link",
+      g_signal_new_class_handler (I_("activate-current-link"),
                                   G_TYPE_FROM_CLASS (gobject_class),
                                   G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
                                   G_CALLBACK (gtk_label_activate_current_link),
@@ -722,7 +728,7 @@ gtk_label_class_init (GtkLabelClass *class)
      * Since: 2.18
      */
     signals[ACTIVATE_LINK] =
-      g_signal_new ("activate-link",
+      g_signal_new (I_("activate-link"),
                     G_TYPE_FROM_CLASS (gobject_class),
                     G_SIGNAL_RUN_LAST,
                     G_STRUCT_OFFSET (GtkLabelClass, activate_link),
@@ -1139,6 +1145,12 @@ gtk_label_class_init (GtkLabelClass *class)
 				"activate-current-link", 0);
 
   gtk_widget_class_set_accessible_type (widget_class, GTK_TYPE_LABEL_ACCESSIBLE);
+
+  quark_shortcuts_connected = g_quark_from_static_string ("gtk-label-shortcuts-connected");
+  quark_mnemonic_menu = g_quark_from_static_string ("gtk-mnemonic-menu");
+  quark_mnemonics_visible_connected = g_quark_from_static_string ("gtk-label-mnemonics-visible-connected");
+  quark_gtk_signal = g_quark_from_static_string ("gtk-signal");
+  quark_link = g_quark_from_static_string ("link");
 }
 
 static void 
@@ -1795,7 +1807,7 @@ gtk_label_setup_mnemonic (GtkLabel *label,
   GtkWidget *toplevel;
   GtkWidget *mnemonic_menu;
   
-  mnemonic_menu = g_object_get_data (G_OBJECT (label), "gtk-mnemonic-menu");
+  mnemonic_menu = g_object_get_qdata (G_OBJECT (label), quark_mnemonic_menu);
   
   if (last_key != GDK_KEY_VoidSymbol)
     {
@@ -1846,7 +1858,7 @@ gtk_label_setup_mnemonic (GtkLabel *label,
     }
   
  done:
-  g_object_set_data (G_OBJECT (label), I_("gtk-mnemonic-menu"), mnemonic_menu);
+  g_object_set_qdata (G_OBJECT (label), quark_mnemonic_menu, mnemonic_menu);
 }
 
 static void
@@ -1965,8 +1977,7 @@ gtk_label_screen_changed (GtkWidget *widget,
   settings = gtk_widget_get_settings (widget);
 
   shortcuts_connected =
-    GPOINTER_TO_INT (g_object_get_data (G_OBJECT (settings),
-                                        "gtk-label-shortcuts-connected"));
+    GPOINTER_TO_INT (g_object_get_qdata (G_OBJECT (settings), quark_shortcuts_connected));
 
   if (! shortcuts_connected)
     {
@@ -1977,7 +1988,7 @@ gtk_label_screen_changed (GtkWidget *widget,
                         G_CALLBACK (label_shortcut_setting_changed),
                         NULL);
 
-      g_object_set_data (G_OBJECT (settings), "gtk-label-shortcuts-connected",
+      g_object_set_qdata (G_OBJECT (settings), quark_shortcuts_connected,
                          GINT_TO_POINTER (TRUE));
     }
 
@@ -5027,8 +5038,7 @@ connect_mnemonics_visible_notify (GtkLabel *label)
     gtk_window_get_mnemonics_visible (GTK_WINDOW (toplevel));
 
   connected =
-    GPOINTER_TO_INT (g_object_get_data (G_OBJECT (toplevel),
-                                        "gtk-label-mnemonics-visible-connected"));
+    GPOINTER_TO_INT (g_object_get_qdata (G_OBJECT (toplevel), quark_mnemonics_visible_connected));
 
   if (!connected)
     {
@@ -5036,9 +5046,9 @@ connect_mnemonics_visible_notify (GtkLabel *label)
                         "notify::mnemonics-visible",
                         G_CALLBACK (label_mnemonics_visible_changed),
                         label);
-      g_object_set_data (G_OBJECT (toplevel),
-                         "gtk-label-mnemonics-visible-connected",
-                         GINT_TO_POINTER (1));
+      g_object_set_qdata (G_OBJECT (toplevel),
+                          quark_mnemonics_visible_connected,
+                          GINT_TO_POINTER (1));
     }
 }
 
@@ -6440,7 +6450,7 @@ static void
 activate_cb (GtkWidget *menuitem,
 	     GtkLabel  *label)
 {
-  const gchar *signal = g_object_get_data (G_OBJECT (menuitem), "gtk-signal");
+  const gchar *signal = g_object_get_qdata (G_OBJECT (menuitem), quark_gtk_signal);
   g_signal_emit_by_name (label, signal);
 }
 
@@ -6453,7 +6463,7 @@ append_action_signal (GtkLabel     *label,
 {
   GtkWidget *menuitem = gtk_menu_item_new_with_mnemonic (text);
 
-  g_object_set_data (G_OBJECT (menuitem), I_("gtk-signal"), (char *)signal);
+  g_object_set_qdata (G_OBJECT (menuitem), quark_gtk_signal, (char *)signal);
   g_signal_connect (menuitem, "activate",
 		    G_CALLBACK (activate_cb), label);
 
@@ -6518,7 +6528,7 @@ open_link_activate_cb (GtkMenuItem *menuitem,
 {
   GtkLabelLink *link;
 
-  link = g_object_get_data (G_OBJECT (menuitem), "link");
+  link = g_object_get_qdata (G_OBJECT (menuitem), quark_link);
   emit_activate_link (label, link);
 }
 
@@ -6529,7 +6539,7 @@ copy_link_activate_cb (GtkMenuItem *menuitem,
   GtkLabelLink *link;
   GtkClipboard *clipboard;
 
-  link = g_object_get_data (G_OBJECT (menuitem), "link");
+  link = g_object_get_qdata (G_OBJECT (menuitem), quark_link);
   clipboard = gtk_widget_get_clipboard (GTK_WIDGET (label), GDK_SELECTION_CLIPBOARD);
   gtk_clipboard_set_text (clipboard, link->uri, -1);
 }
@@ -6581,7 +6591,7 @@ gtk_label_do_popup (GtkLabel       *label,
     {
       /* Open Link */
       menuitem = gtk_menu_item_new_with_mnemonic (_("_Open Link"));
-      g_object_set_data (G_OBJECT (menuitem), "link", link);
+      g_object_set_qdata (G_OBJECT (menuitem), quark_link, link);
       gtk_widget_show (menuitem);
       gtk_menu_shell_append (GTK_MENU_SHELL (menu), menuitem);
 
@@ -6590,7 +6600,7 @@ gtk_label_do_popup (GtkLabel       *label,
 
       /* Copy Link Address */
       menuitem = gtk_menu_item_new_with_mnemonic (_("Copy _Link Address"));
-      g_object_set_data (G_OBJECT (menuitem), "link", link);
+      g_object_set_qdata (G_OBJECT (menuitem), quark_link, link);
       gtk_widget_show (menuitem);
       gtk_menu_shell_append (GTK_MENU_SHELL (menu), menuitem);
 
