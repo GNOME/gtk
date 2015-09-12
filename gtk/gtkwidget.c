@@ -17223,6 +17223,8 @@ _gtk_widget_add_controller (GtkWidget          *widget,
   EventControllerData *data;
   GtkWidgetPrivate *priv;
 
+  g_return_if_fail (GTK_IS_WIDGET (widget));
+  g_return_if_fail (GTK_IS_EVENT_CONTROLLER (controller));
   g_return_if_fail (widget == gtk_event_controller_get_widget (controller));
 
   priv = widget->priv;

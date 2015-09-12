@@ -9444,7 +9444,7 @@ gtk_window_move_resize (GtkWindow *window)
 	  gtk_widget_size_allocate (widget, &allocation);
 
           G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
-	  if (_gtk_container_get_resize_mode (container) == GTK_RESIZE_QUEUE)
+	  if (gtk_container_get_resize_mode (container) == GTK_RESIZE_QUEUE)
 	    gtk_widget_queue_draw (widget);
           G_GNUC_END_IGNORE_DEPRECATIONS;
 	}
@@ -9471,7 +9471,7 @@ gtk_window_move_resize (GtkWindow *window)
 	   * we handle those ourselves upon ->configure_notify_received==TRUE.
 	   */
           G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
-	  if (_gtk_container_get_resize_mode (container) == GTK_RESIZE_QUEUE)
+	  if (gtk_container_get_resize_mode (container) == GTK_RESIZE_QUEUE)
 	    {
 	      gtk_widget_queue_resize_no_redraw (widget);
 	      _gtk_container_dequeue_resize_handler (container);
