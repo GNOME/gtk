@@ -16681,9 +16681,8 @@ get_auto_child_hash (GtkWidget *widget,
 
       widget->priv->auto_children =
 	g_hash_table_new_full (g_direct_hash,
-			       g_direct_equal,
-			       NULL,
-			       (GDestroyNotify)g_hash_table_destroy);
+                               NULL,
+			       NULL, (GDestroyNotify)g_hash_table_destroy);
     }
 
   auto_child_hash =
