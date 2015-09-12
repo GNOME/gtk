@@ -165,10 +165,6 @@ struct _GtkWidgetPrivate
   GList *tick_callbacks;
   guint clock_tick_id;
 
-  /* A hash by GType key, containing hash tables by widget name
-   */
-  GHashTable *auto_children;
-
   GList *event_controllers;
 
   cairo_font_options_t *font_options;

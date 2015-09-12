@@ -859,6 +859,7 @@ static GQuark		quark_visual = 0;
 static GQuark           quark_modifier_style = 0;
 static GQuark           quark_enabled_devices = 0;
 static GQuark           quark_size_groups = 0;
+static GQuark           quark_auto_children = 0;
 GParamSpecPool         *_gtk_widget_child_property_pool = NULL;
 GObjectNotifyContext   *_gtk_widget_child_property_notify_context = NULL;
 
@@ -1025,6 +1026,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
   quark_modifier_style = g_quark_from_static_string ("gtk-widget-modifier-style");
   quark_enabled_devices = g_quark_from_static_string ("gtk-widget-enabled-devices");
   quark_size_groups = g_quark_from_static_string ("gtk-widget-size-groups");
+  quark_auto_children = g_quark_from_static_string ("gtk-widget-auto-children");
 
   style_property_spec_pool = g_param_spec_pool_new (FALSE);
   _gtk_widget_child_property_pool = g_param_spec_pool_new (TRUE);
@@ -12075,7 +12077,7 @@ gtk_widget_real_destroy (GtkWidget *object)
   GtkWidget *widget = GTK_WIDGET (object);
   GtkWidgetPrivate *priv = widget->priv;
 
-  if (priv->auto_children)
+  if (g_object_get_qdata (G_OBJECT (widget), quark_auto_children))
     {
       GtkWidgetClass *class;
       GSList *l;
@@ -12097,8 +12099,7 @@ gtk_widget_real_destroy (GtkWidget *object)
 #endif /* G_ENABLE_CONSISTENCY_CHECKS */
 
       /* Release references to all automated children */
-      g_hash_table_destroy (priv->auto_children);
-      priv->auto_children = NULL;
+      g_object_set_qdata (G_OBJECT (widget), quark_auto_children, NULL);
 
 #ifdef G_ENABLE_CONSISTENCY_CHECKS
       for (l = assertions; l; l = l->next)
@@ -16672,21 +16673,26 @@ get_auto_child_hash (GtkWidget *widget,
 		     GType      type,
 		     gboolean   create)
 {
+  GHashTable *auto_children;
   GHashTable *auto_child_hash;
 
-  if (widget->priv->auto_children == NULL)
+  auto_children = (GHashTable *)g_object_get_qdata (G_OBJECT (widget), quark_auto_children);
+  if (auto_children == NULL)
     {
       if (!create)
-	return NULL;
+        return NULL;
 
-      widget->priv->auto_children =
-	g_hash_table_new_full (g_direct_hash,
-                               NULL,
-			       NULL, (GDestroyNotify)g_hash_table_destroy);
+      auto_children = g_hash_table_new_full (g_direct_hash,
+                                             NULL,
+			                     NULL, (GDestroyNotify)g_hash_table_destroy);
+      g_object_set_qdata_full (G_OBJECT (widget),
+                               quark_auto_children,
+                               auto_children,
+                               (GDestroyNotify)g_hash_table_destroy);
     }
 
   auto_child_hash =
-    g_hash_table_lookup (widget->priv->auto_children, GSIZE_TO_POINTER (type));
+    g_hash_table_lookup (auto_children, GSIZE_TO_POINTER (type));
 
   if (!auto_child_hash && create)
     {
@@ -16695,7 +16701,7 @@ get_auto_child_hash (GtkWidget *widget,
 					       NULL,
 					       (GDestroyNotify)g_object_unref);
 
-      g_hash_table_insert (widget->priv->auto_children,
+      g_hash_table_insert (auto_children,
 			   GSIZE_TO_POINTER (type),
 			   auto_child_hash);
     }
