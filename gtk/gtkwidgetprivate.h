@@ -120,8 +120,9 @@ struct _GtkWidgetPrivate
 
   /* The list of attached windows to this widget.
    * We keep a list in order to call reset_style to all of them,
-   * recursively. */
-  GList *attached_windows; 
+   * recursively.
+   */
+  GList *attached_windows;
 
   /* The style for the widget. The style contains the
    * colors the widget should be drawn in for each state
@@ -131,9 +132,6 @@ struct _GtkWidgetPrivate
   GtkStyle *style;
   GtkCssNode *cssnode;
   GtkStyleContext *context;
-
-  /* Widget's path for styling */
-  GtkWidgetPath *path;
 
   /* The widget's allocated size */
   GtkAllocation allocation;

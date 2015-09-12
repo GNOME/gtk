@@ -860,6 +860,7 @@ static GQuark           quark_modifier_style = 0;
 static GQuark           quark_enabled_devices = 0;
 static GQuark           quark_size_groups = 0;
 static GQuark           quark_auto_children = 0;
+static GQuark           quark_widget_path = 0;
 GParamSpecPool         *_gtk_widget_child_property_pool = NULL;
 GObjectNotifyContext   *_gtk_widget_child_property_notify_context = NULL;
 
@@ -1027,6 +1028,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
   quark_enabled_devices = g_quark_from_static_string ("gtk-widget-enabled-devices");
   quark_size_groups = g_quark_from_static_string ("gtk-widget-size-groups");
   quark_auto_children = g_quark_from_static_string ("gtk-widget-auto-children");
+  quark_widget_path = g_quark_from_static_string ("gtk-widget-path");
 
   style_property_spec_pool = g_param_spec_pool_new (FALSE);
   _gtk_widget_child_property_pool = g_param_spec_pool_new (TRUE);
@@ -11948,19 +11950,16 @@ static void
 gtk_widget_constructed (GObject *object)
 {
   GtkWidget *widget = GTK_WIDGET (object);
-  GtkWidgetPrivate *priv = widget->priv;
+  GtkWidgetPath *path;
 
   /* As strange as it may seem, this may happen on object construction.
    * init() implementations of parent types may eventually call this function,
    * each with its corresponding GType, which could leave a child
    * implementation with a wrong widget type in the widget path
    */
-  if (priv->path &&
-      G_OBJECT_TYPE (widget) != gtk_widget_path_get_object_type (priv->path))
-    {
-      gtk_widget_path_free (priv->path);
-      priv->path = NULL;
-    }
+  path = (GtkWidgetPath*)g_object_get_qdata (object, quark_widget_path);
+  if (path && G_OBJECT_TYPE (widget) != gtk_widget_path_get_object_type (path))
+    g_object_set_qdata (object, quark_widget_path, NULL);
 
   G_OBJECT_CLASS (gtk_widget_parent_class)->constructed (object);
 }
@@ -12195,8 +12194,7 @@ gtk_widget_finalize (GObject *object)
   if (accessible)
     g_object_unref (accessible);
 
-  if (priv->path)
-    gtk_widget_path_free (priv->path);
+  gtk_widget_clear_path (widget);
 
   gtk_css_widget_node_widget_destroyed (GTK_CSS_WIDGET_NODE (priv->cssnode));
   g_object_unref (priv->cssnode);
@@ -16380,22 +16378,27 @@ _gtk_widget_create_path (GtkWidget *widget)
 GtkWidgetPath *
 gtk_widget_get_path (GtkWidget *widget)
 {
+  GtkWidgetPath *path;
+
   g_return_val_if_fail (GTK_IS_WIDGET (widget), NULL);
 
-  if (!widget->priv->path)
-    widget->priv->path = _gtk_widget_create_path (widget);
+  path = (GtkWidgetPath*)g_object_get_qdata (G_OBJECT (widget), quark_widget_path);
+  if (!path)
+    {
+      path = _gtk_widget_create_path (widget);
+      g_object_set_qdata_full (G_OBJECT (widget),
+                               quark_widget_path,
+                               path,
+                               (GDestroyNotify)gtk_widget_path_free);
+    }
 
-  return widget->priv->path;
+  return path;
 }
 
 void
 gtk_widget_clear_path (GtkWidget *widget)
 {
-  if (widget->priv->path)
-    {
-      gtk_widget_path_free (widget->priv->path);
-      widget->priv->path = NULL;
-    }
+  g_object_set_qdata (G_OBJECT (widget), quark_widget_path, NULL);
 }
 
 void
