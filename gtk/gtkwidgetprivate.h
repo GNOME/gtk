@@ -140,6 +140,11 @@ struct _GtkWidgetPrivate
   gint allocated_baseline;
   GtkAllocation clip;
 
+#ifdef G_ENABLE_DEBUG
+  /* Number of gtk_widget_push_verify_invariants () */
+  guint verifying_invariants_count;
+#endif /* G_ENABLE_DEBUG */
+
   /* The widget's requested sizes */
   SizeRequestCache requests;
 
@@ -163,11 +168,6 @@ struct _GtkWidgetPrivate
   /* A hash by GType key, containing hash tables by widget name
    */
   GHashTable *auto_children;
-
-#ifdef G_ENABLE_DEBUG
-  /* Number of gtk_widget_push_verify_invariants () */
-  guint verifying_invariants_count;
-#endif /* G_ENABLE_DEBUG */
 
   GList *event_controllers;
 
