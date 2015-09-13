@@ -722,10 +722,6 @@ static void             gtk_widget_real_state_flags_changed     (GtkWidget      
                                                                  GtkStateFlags     old_state);
 static void             gtk_widget_real_queue_draw_region       (GtkWidget         *widget,
 								 const cairo_region_t *region);
-static const GtkWidgetAuxInfo* _gtk_widget_get_aux_info_or_defaults (GtkWidget *widget);
-static GtkWidgetAuxInfo* gtk_widget_get_aux_info                (GtkWidget        *widget,
-                                                                 gboolean          create);
-static void		gtk_widget_aux_info_destroy		(GtkWidgetAuxInfo *aux_info);
 static AtkObject*	gtk_widget_real_get_accessible		(GtkWidget	  *widget);
 static void		gtk_widget_accessible_interface_init	(AtkImplementorIface *iface);
 static AtkObject*	gtk_widget_ref_accessible		(AtkImplementor *implementor);
@@ -841,7 +837,6 @@ GtkTextDirection gtk_default_direction = GTK_TEXT_DIR_LTR;
 static GParamSpecPool  *style_property_spec_pool = NULL;
 
 static GQuark		quark_property_parser = 0;
-static GQuark		quark_aux_info = 0;
 static GQuark		quark_accel_path = 0;
 static GQuark		quark_accel_closures = 0;
 static GQuark		quark_event_mask = 0;
@@ -1013,7 +1008,6 @@ gtk_widget_class_init (GtkWidgetClass *klass)
   gtk_widget_parent_class = g_type_class_peek_parent (klass);
 
   quark_property_parser = g_quark_from_static_string ("gtk-rc-property-parser");
-  quark_aux_info = g_quark_from_static_string ("gtk-aux-info");
   quark_accel_path = g_quark_from_static_string ("gtk-accel-path");
   quark_accel_closures = g_quark_from_static_string ("gtk-accel-closures");
   quark_event_mask = g_quark_from_static_string ("gtk-event-mask");
@@ -3970,20 +3964,10 @@ gtk_widget_get_property (GObject         *object,
       g_value_set_int (value, gtk_widget_get_margin_bottom (widget));
       break;
     case PROP_MARGIN:
-      {
-        GtkWidgetAuxInfo *aux_info = gtk_widget_get_aux_info (widget, FALSE);
-        if (aux_info == NULL)
-          {
-            g_value_set_int (value, 0);
-          }
-        else
-          {
-            g_value_set_int (value, MAX (MAX (aux_info->margin.left,
-                                              aux_info->margin.right),
-                                         MAX (aux_info->margin.top,
-                                              aux_info->margin.bottom)));
-          }
-      }
+      g_value_set_int (value, MAX (MAX (priv->margin.left,
+                                        priv->margin.right),
+                                   MAX (priv->margin.top,
+                                        priv->margin.bottom)));
       break;
     case PROP_HEXPAND:
       g_value_set_boolean (value, gtk_widget_get_hexpand (widget));
@@ -4345,7 +4329,7 @@ gtk_widget_init (GTypeInstance *instance, gpointer g_class)
   priv->double_buffered = TRUE;
   priv->redraw_on_alloc = TRUE;
   priv->alloc_needed = TRUE;
-   
+ 
   switch (_gtk_widget_get_direction (widget))
     {
     case GTK_TEXT_DIR_LTR:
@@ -4362,7 +4346,6 @@ gtk_widget_init (GTypeInstance *instance, gpointer g_class)
       break;
     }
 
-
   /* this will be set to TRUE if the widget gets a child or if the
    * expand flag is set on the widget, but until one of those happen
    * we know the expand is already properly FALSE.
@@ -4371,6 +4354,12 @@ gtk_widget_init (GTypeInstance *instance, gpointer g_class)
    * all over the place while initially building a widget tree.
    */
   priv->need_compute_expand = FALSE;
+
+  priv->halign = GTK_ALIGN_FILL;
+  priv->valign = GTK_ALIGN_FILL;
+
+  priv->width = -1;
+  priv->height = -1;
 
   _gtk_size_request_cache_init (&priv->requests);
 
@@ -6320,40 +6309,34 @@ gtk_widget_real_adjust_size_allocation (GtkWidget         *widget,
                                         gint              *allocated_pos,
                                         gint              *allocated_size)
 {
-  const GtkWidgetAuxInfo *aux_info;
-
-  aux_info = _gtk_widget_get_aux_info_or_defaults (widget);
+  GtkWidgetPrivate *priv = widget->priv;
 
   if (orientation == GTK_ORIENTATION_HORIZONTAL)
     {
-      adjust_for_margin (aux_info->margin.left,
-                         aux_info->margin.right,
+      adjust_for_margin (priv->margin.left,
+                         priv->margin.right,
                          minimum_size, natural_size,
                          allocated_pos, allocated_size);
-      adjust_for_align (effective_align (aux_info->halign, _gtk_widget_get_direction (widget)),
+      adjust_for_align (effective_align (priv->halign, _gtk_widget_get_direction (widget)),
                         natural_size, allocated_pos, allocated_size);
     }
   else
     {
-      adjust_for_margin (aux_info->margin.top,
-                         aux_info->margin.bottom,
+      adjust_for_margin (priv->margin.top,
+                         priv->margin.bottom,
                          minimum_size, natural_size,
                          allocated_pos, allocated_size);
-      adjust_for_align (effective_align (aux_info->valign, GTK_TEXT_DIR_NONE),
+      adjust_for_align (effective_align (priv->valign, GTK_TEXT_DIR_NONE),
                         natural_size, allocated_pos, allocated_size);
     }
 }
 
 static void
-gtk_widget_real_adjust_baseline_allocation (GtkWidget         *widget,
-					    gint              *baseline)
+gtk_widget_real_adjust_baseline_allocation (GtkWidget *widget,
+					    gint      *baseline)
 {
-  const GtkWidgetAuxInfo *aux_info;
-
-  aux_info = _gtk_widget_get_aux_info_or_defaults (widget);
-
   if (*baseline >= 0)
-    *baseline -= aux_info->margin.top;
+    *baseline -= widget->priv->margin.top;
 }
 
 static gboolean
@@ -10977,25 +10960,23 @@ gtk_widget_set_usize_internal (GtkWidget          *widget,
 			       gint                height,
 			       GtkQueueResizeFlags flags)
 {
-  GtkWidgetAuxInfo *aux_info;
+  GtkWidgetPrivate *priv = widget->priv;
   gboolean changed = FALSE;
 
   g_object_freeze_notify (G_OBJECT (widget));
 
-  aux_info = gtk_widget_get_aux_info (widget, TRUE);
-
-  if (width > -2 && aux_info->width != width)
+  if (width > -2 && priv->width != width)
     {
       if ((flags & GTK_QUEUE_RESIZE_INVALIDATE_ONLY) == 0)
 	g_object_notify_by_pspec (G_OBJECT (widget), widget_props[PROP_WIDTH_REQUEST]);
-      aux_info->width = width;
+      priv->width = width;
       changed = TRUE;
     }
-  if (height > -2 && aux_info->height != height)
+  if (height > -2 && priv->height != height)
     {
       if ((flags & GTK_QUEUE_RESIZE_INVALIDATE_ONLY) == 0)
 	g_object_notify_by_pspec (G_OBJECT (widget), widget_props[PROP_HEIGHT_REQUEST]);
-      aux_info->height = height;
+      priv->height = height;
       changed = TRUE;
     }
 
@@ -11084,17 +11065,13 @@ gtk_widget_get_size_request (GtkWidget *widget,
                              gint      *width,
                              gint      *height)
 {
-  const GtkWidgetAuxInfo *aux_info;
-
   g_return_if_fail (GTK_IS_WIDGET (widget));
 
-  aux_info = _gtk_widget_get_aux_info_or_defaults (widget);
-
   if (width)
-    *width = aux_info->width;
+    *width = widget->priv->width;
 
   if (height)
-    *height = aux_info->height;
+    *height = widget->priv->height;
 }
 
 /*< private >
@@ -11107,11 +11084,7 @@ gtk_widget_get_size_request (GtkWidget *widget,
 gboolean
 gtk_widget_has_size_request (GtkWidget *widget)
 {
-  const GtkWidgetAuxInfo *aux_info;
-
-  aux_info = _gtk_widget_get_aux_info_or_defaults (widget);
-
-  return !(aux_info->width == -1 && aux_info->height == -1);
+  return !(widget->priv->width == -1 && widget->priv->height == -1);
 }
 
 /**
@@ -12198,7 +12171,6 @@ gtk_widget_finalize (GObject *object)
 {
   GtkWidget *widget = GTK_WIDGET (object);
   GtkWidgetPrivate *priv = widget->priv;
-  GtkWidgetAuxInfo *aux_info;
   GtkAccessible *accessible;
   GList *l;
 
@@ -12207,10 +12179,6 @@ gtk_widget_finalize (GObject *object)
   g_clear_object (&priv->style);
 
   g_free (priv->name);
-
-  aux_info = gtk_widget_get_aux_info (widget, FALSE);
-  if (aux_info)
-    gtk_widget_aux_info_destroy (aux_info);
 
   accessible = g_object_get_qdata (G_OBJECT (widget), quark_accessible_object);
   if (accessible)
@@ -12360,25 +12328,17 @@ gtk_widget_real_unrealize (GtkWidget *widget)
 }
 
 static void
-gtk_widget_real_adjust_size_request (GtkWidget         *widget,
-                                     GtkOrientation     orientation,
-                                     gint              *minimum_size,
-                                     gint              *natural_size)
+gtk_widget_real_adjust_size_request (GtkWidget      *widget,
+                                     GtkOrientation  orientation,
+                                     gint           *minimum_size,
+                                     gint           *natural_size)
 {
-  const GtkWidgetAuxInfo *aux_info;
+  GtkWidgetPrivate *priv = widget->priv;
 
-  aux_info =_gtk_widget_get_aux_info_or_defaults (widget);
-
-  if (orientation == GTK_ORIENTATION_HORIZONTAL &&
-      aux_info->width > 0)
-    {
-      *minimum_size = MAX (*minimum_size, aux_info->width);
-    }
-  else if (orientation == GTK_ORIENTATION_VERTICAL &&
-           aux_info->height > 0)
-    {
-      *minimum_size = MAX (*minimum_size, aux_info->height);
-    }
+  if (orientation == GTK_ORIENTATION_HORIZONTAL && priv->width > 0)
+    *minimum_size = MAX (*minimum_size, priv->width);
+  else if (orientation == GTK_ORIENTATION_VERTICAL && priv->height > 0)
+    *minimum_size = MAX (*minimum_size, priv->height);
 
   /* Fix it if set_size_request made natural size smaller than min size.
    * This would also silently fix broken widgets, but we warn about them
@@ -12388,26 +12348,24 @@ gtk_widget_real_adjust_size_request (GtkWidget         *widget,
 
   if (orientation == GTK_ORIENTATION_HORIZONTAL)
     {
-      *minimum_size += (aux_info->margin.left + aux_info->margin.right);
-      *natural_size += (aux_info->margin.left + aux_info->margin.right);
+      *minimum_size += priv->margin.left + priv->margin.right;
+      *natural_size += priv->margin.left + priv->margin.right;
     }
   else
     {
-      *minimum_size += (aux_info->margin.top + aux_info->margin.bottom);
-      *natural_size += (aux_info->margin.top + aux_info->margin.bottom);
+      *minimum_size += priv->margin.top + priv->margin.bottom;
+      *natural_size += priv->margin.top + priv->margin.bottom;
     }
 }
 
 static void
-gtk_widget_real_adjust_baseline_request (GtkWidget         *widget,
-					 gint              *minimum_baseline,
-					 gint              *natural_baseline)
+gtk_widget_real_adjust_baseline_request (GtkWidget *widget,
+					 gint      *minimum_baseline,
+					 gint      *natural_baseline)
 {
-  const GtkWidgetAuxInfo *aux_info;
+  GtkWidgetPrivate *priv = widget->priv;
 
-  aux_info =_gtk_widget_get_aux_info_or_defaults (widget);
-
-  if (aux_info->height >= 0)
+  if (priv->height >= 0)
     {
       /* No baseline support for explicitly set height */
       *minimum_baseline = -1;
@@ -12415,8 +12373,8 @@ gtk_widget_real_adjust_baseline_request (GtkWidget         *widget,
     }
   else
     {
-      *minimum_baseline += aux_info->margin.top;
-      *natural_baseline += aux_info->margin.top;
+      *minimum_baseline += priv->margin.top;
+      *natural_baseline += priv->margin.top;
     }
 }
 
@@ -12846,72 +12804,6 @@ gtk_widget_propagate_state (GtkWidget    *widget,
 
       g_object_unref (widget);
     }
-}
-
-static const GtkWidgetAuxInfo default_aux_info = {
-  -1, -1,
-  GTK_ALIGN_FILL,
-  GTK_ALIGN_FILL,
-  { 0, 0, 0, 0 }
-};
-
-/*
- * gtk_widget_get_aux_info:
- * @widget: a #GtkWidget
- * @create: if %TRUE, create the #GtkWidgetAuxInfo-struct if it doesn’t exist
- *
- * Get the #GtkWidgetAuxInfo-struct for the widget.
- *
- * Returns: the #GtkWidgetAuxInfo-struct for the widget, or
- *    %NULL if @create is %FALSE and one doesn’t already exist.
- */
-static GtkWidgetAuxInfo *
-gtk_widget_get_aux_info (GtkWidget *widget,
-			 gboolean   create)
-{
-  GtkWidgetAuxInfo *aux_info;
-
-  aux_info = g_object_get_qdata (G_OBJECT (widget), quark_aux_info);
-  if (!aux_info && create)
-    {
-      aux_info = g_slice_new0 (GtkWidgetAuxInfo);
-
-      *aux_info = default_aux_info;
-
-      g_object_set_qdata (G_OBJECT (widget), quark_aux_info, aux_info);
-    }
-
-  return aux_info;
-}
-
-static const GtkWidgetAuxInfo*
-_gtk_widget_get_aux_info_or_defaults (GtkWidget *widget)
-{
-  GtkWidgetAuxInfo *aux_info;
-
-  aux_info = gtk_widget_get_aux_info (widget, FALSE);
-  if (aux_info == NULL)
-    {
-      return &default_aux_info;
-    }
-  else
-    {
-      return aux_info;
-    }
-}
-
-/*****************************************
- * gtk_widget_aux_info_destroy:
- *
- *   arguments:
- *
- *   results:
- *****************************************/
-
-static void
-gtk_widget_aux_info_destroy (GtkWidgetAuxInfo *aux_info)
-{
-  g_slice_free (GtkWidgetAuxInfo, aux_info);
 }
 
 /**
@@ -14637,7 +14529,7 @@ gtk_widget_get_halign (GtkWidget *widget)
 
   g_return_val_if_fail (GTK_IS_WIDGET (widget), GTK_ALIGN_FILL);
 
-  align = _gtk_widget_get_aux_info_or_defaults (widget)->halign;
+  align = widget->priv->halign;
   if (align == GTK_ALIGN_BASELINE)
     return GTK_ALIGN_FILL;
   return align;
@@ -14655,16 +14547,12 @@ void
 gtk_widget_set_halign (GtkWidget *widget,
                        GtkAlign   align)
 {
-  GtkWidgetAuxInfo *aux_info;
-
   g_return_if_fail (GTK_IS_WIDGET (widget));
 
-  aux_info = gtk_widget_get_aux_info (widget, TRUE);
-
-  if (aux_info->halign == align)
+  if (widget->priv->halign == align)
     return;
 
-  aux_info->halign = align;
+  widget->priv->halign = align;
   gtk_widget_queue_resize (widget);
   g_object_notify_by_pspec (G_OBJECT (widget), widget_props[PROP_HALIGN]);
 }
@@ -14684,7 +14572,7 @@ GtkAlign
 gtk_widget_get_valign_with_baseline (GtkWidget *widget)
 {
   g_return_val_if_fail (GTK_IS_WIDGET (widget), GTK_ALIGN_FILL);
-  return _gtk_widget_get_aux_info_or_defaults (widget)->valign;
+  return widget->priv->valign;
 }
 
 /**
@@ -14725,16 +14613,12 @@ void
 gtk_widget_set_valign (GtkWidget *widget,
                        GtkAlign   align)
 {
-  GtkWidgetAuxInfo *aux_info;
-
   g_return_if_fail (GTK_IS_WIDGET (widget));
 
-  aux_info = gtk_widget_get_aux_info (widget, TRUE);
-
-  if (aux_info->valign == align)
+  if (widget->priv->valign == align)
     return;
 
-  aux_info->valign = align;
+  widget->priv->valign = align;
   gtk_widget_queue_resize (widget);
   g_object_notify_by_pspec (G_OBJECT (widget), widget_props[PROP_VALIGN]);
 }
@@ -14756,7 +14640,7 @@ gtk_widget_get_margin_left (GtkWidget *widget)
 {
   g_return_val_if_fail (GTK_IS_WIDGET (widget), 0);
 
-  return _gtk_widget_get_aux_info_or_defaults (widget)->margin.left;
+  return widget->priv->margin.left;
 }
 
 /**
@@ -14775,20 +14659,17 @@ void
 gtk_widget_set_margin_left (GtkWidget *widget,
                             gint       margin)
 {
-  GtkWidgetAuxInfo *aux_info;
   gboolean rtl;
 
   g_return_if_fail (GTK_IS_WIDGET (widget));
   g_return_if_fail (margin <= G_MAXINT16);
 
-  aux_info = gtk_widget_get_aux_info (widget, TRUE);
-
   rtl = _gtk_widget_get_direction (widget) == GTK_TEXT_DIR_RTL;
 
-  if (aux_info->margin.left == margin)
+  if (widget->priv->margin.left == margin)
     return;
 
-  aux_info->margin.left = margin;
+  widget->priv->margin.left = margin;
   gtk_widget_queue_resize (widget);
   g_object_notify_by_pspec (G_OBJECT (widget), widget_props[PROP_MARGIN_LEFT]);
   g_object_notify_by_pspec (G_OBJECT (widget), widget_props[rtl ? PROP_MARGIN_END : PROP_MARGIN_START]);
@@ -14811,7 +14692,7 @@ gtk_widget_get_margin_right (GtkWidget *widget)
 {
   g_return_val_if_fail (GTK_IS_WIDGET (widget), 0);
 
-  return _gtk_widget_get_aux_info_or_defaults (widget)->margin.right;
+  return widget->priv->margin.right;
 }
 
 /**
@@ -14830,20 +14711,17 @@ void
 gtk_widget_set_margin_right (GtkWidget *widget,
                              gint       margin)
 {
-  GtkWidgetAuxInfo *aux_info;
   gboolean rtl;
 
   g_return_if_fail (GTK_IS_WIDGET (widget));
   g_return_if_fail (margin <= G_MAXINT16);
 
-  aux_info = gtk_widget_get_aux_info (widget, TRUE);
-
   rtl = _gtk_widget_get_direction (widget) == GTK_TEXT_DIR_RTL;
 
-  if (aux_info->margin.right == margin)
+  if (widget->priv->margin.right == margin)
     return;
 
-  aux_info->margin.right = margin;
+  widget->priv->margin.right = margin;
   gtk_widget_queue_resize (widget);
   g_object_notify_by_pspec (G_OBJECT (widget), widget_props[PROP_MARGIN_RIGHT]);
   g_object_notify_by_pspec (G_OBJECT (widget), widget_props[rtl ? PROP_MARGIN_START : PROP_MARGIN_END]);
@@ -14862,16 +14740,12 @@ gtk_widget_set_margin_right (GtkWidget *widget,
 gint
 gtk_widget_get_margin_start (GtkWidget *widget)
 {
-  const GtkWidgetAuxInfo *aux_info;
-
   g_return_val_if_fail (GTK_IS_WIDGET (widget), 0);
 
-  aux_info = _gtk_widget_get_aux_info_or_defaults (widget);
-
   if (_gtk_widget_get_direction (widget) == GTK_TEXT_DIR_RTL)
-    return aux_info->margin.right;
+    return widget->priv->margin.right;
   else
-    return aux_info->margin.left;
+    return widget->priv->margin.left;
 }
 
 /**
@@ -14888,21 +14762,18 @@ void
 gtk_widget_set_margin_start (GtkWidget *widget,
                              gint       margin)
 {
-  GtkWidgetAuxInfo *aux_info;
   gint16 *start;
   gboolean rtl;
 
   g_return_if_fail (GTK_IS_WIDGET (widget));
   g_return_if_fail (margin <= G_MAXINT16);
 
-  aux_info = gtk_widget_get_aux_info (widget, TRUE);
-
   rtl = _gtk_widget_get_direction (widget) == GTK_TEXT_DIR_RTL;
 
   if (rtl)
-    start = &aux_info->margin.right;
+    start = &widget->priv->margin.right;
   else
-    start = &aux_info->margin.left;
+    start = &widget->priv->margin.left;
 
   if (*start == margin)
     return;
@@ -14926,16 +14797,12 @@ gtk_widget_set_margin_start (GtkWidget *widget,
 gint
 gtk_widget_get_margin_end (GtkWidget *widget)
 {
-  const GtkWidgetAuxInfo *aux_info;
-
   g_return_val_if_fail (GTK_IS_WIDGET (widget), 0);
 
-  aux_info = _gtk_widget_get_aux_info_or_defaults (widget);
-
   if (_gtk_widget_get_direction (widget) == GTK_TEXT_DIR_RTL)
-    return aux_info->margin.left;
+    return widget->priv->margin.left;
   else
-    return aux_info->margin.right;
+    return widget->priv->margin.right;
 }
 
 /**
@@ -14952,21 +14819,18 @@ void
 gtk_widget_set_margin_end (GtkWidget *widget,
                            gint       margin)
 {
-  GtkWidgetAuxInfo *aux_info;
   gint16 *end;
   gboolean rtl;
 
   g_return_if_fail (GTK_IS_WIDGET (widget));
   g_return_if_fail (margin <= G_MAXINT16);
 
-  aux_info = gtk_widget_get_aux_info (widget, TRUE);
-
   rtl = _gtk_widget_get_direction (widget) == GTK_TEXT_DIR_RTL;
 
   if (rtl)
-    end = &aux_info->margin.left;
+    end = &widget->priv->margin.left;
   else
-    end = &aux_info->margin.right;
+    end = &widget->priv->margin.right;
 
   if (*end == margin)
     return;
@@ -14992,7 +14856,7 @@ gtk_widget_get_margin_top (GtkWidget *widget)
 {
   g_return_val_if_fail (GTK_IS_WIDGET (widget), 0);
 
-  return _gtk_widget_get_aux_info_or_defaults (widget)->margin.top;
+  return widget->priv->margin.top;
 }
 
 /**
@@ -15009,17 +14873,13 @@ void
 gtk_widget_set_margin_top (GtkWidget *widget,
                            gint       margin)
 {
-  GtkWidgetAuxInfo *aux_info;
-
   g_return_if_fail (GTK_IS_WIDGET (widget));
   g_return_if_fail (margin <= G_MAXINT16);
 
-  aux_info = gtk_widget_get_aux_info (widget, TRUE);
-
-  if (aux_info->margin.top == margin)
+  if (widget->priv->margin.top == margin)
     return;
 
-  aux_info->margin.top = margin;
+  widget->priv->margin.top = margin;
   gtk_widget_queue_resize (widget);
   g_object_notify_by_pspec (G_OBJECT (widget), widget_props[PROP_MARGIN_TOP]);
 }
@@ -15039,7 +14899,7 @@ gtk_widget_get_margin_bottom (GtkWidget *widget)
 {
   g_return_val_if_fail (GTK_IS_WIDGET (widget), 0);
 
-  return _gtk_widget_get_aux_info_or_defaults (widget)->margin.bottom;
+  return widget->priv->margin.bottom;
 }
 
 /**
@@ -15056,17 +14916,13 @@ void
 gtk_widget_set_margin_bottom (GtkWidget *widget,
                               gint       margin)
 {
-  GtkWidgetAuxInfo *aux_info;
-
   g_return_if_fail (GTK_IS_WIDGET (widget));
   g_return_if_fail (margin <= G_MAXINT16);
 
-  aux_info = gtk_widget_get_aux_info (widget, TRUE);
-
-  if (aux_info->margin.bottom == margin)
+  if (widget->priv->margin.bottom == margin)
     return;
 
-  aux_info->margin.bottom = margin;
+  widget->priv->margin.bottom = margin;
   gtk_widget_queue_resize (widget);
   g_object_notify_by_pspec (G_OBJECT (widget), widget_props[PROP_MARGIN_BOTTOM]);
 }

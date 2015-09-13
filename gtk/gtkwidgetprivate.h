@@ -36,27 +36,6 @@ G_BEGIN_DECLS
 
 #define GTK_STATE_FLAGS_BITS 12
 
-/**
- * GtkWidgetAuxInfo:
- * @width: the widget’s width
- * @height: the widget’s height
- * @halign: the widget’s horizontal alignment
- * @valign: the widget’s horizontal alignment
- * @margin: the widget’s #GtkBorder margins
- *
- */
-typedef struct _GtkWidgetAuxInfo GtkWidgetAuxInfo;
-struct _GtkWidgetAuxInfo
-{
-  gint width;
-  gint height;
-
-  guint   halign : 4;
-  guint   valign : 4;
-
-  GtkBorder margin;
-};
-
 struct _GtkWidgetPrivate
 {
   /* The state of the widget. Needs to be able to hold all GtkStateFlags bits
@@ -107,8 +86,25 @@ struct _GtkWidgetPrivate
   /* SizeGroup related flags */
   guint have_size_groups      : 1;
 
+  /* Alignment */
+  guint   halign              : 4;
+  guint   valign              : 4;
+
   guint8 alpha;
   guint8 user_alpha;
+
+#ifdef G_ENABLE_CONSISTENCY_CHECKS
+  /* Number of gtk_widget_push_verify_invariants () */
+  guint8 verifying_invariants_count;
+#endif
+
+  gint width;
+  gint height;
+  GtkBorder margin;
+
+  /* Animations and other things to update on clock ticks */
+  guint clock_tick_id;
+  GList *tick_callbacks;
 
   /* The widget's name. If the widget does not have a name
    * (the name is NULL), then its name (as returned by
@@ -135,13 +131,8 @@ struct _GtkWidgetPrivate
 
   /* The widget's allocated size */
   GtkAllocation allocation;
-  gint allocated_baseline;
   GtkAllocation clip;
-
-#ifdef G_ENABLE_DEBUG
-  /* Number of gtk_widget_push_verify_invariants () */
-  guint verifying_invariants_count;
-#endif /* G_ENABLE_DEBUG */
+  gint allocated_baseline;
 
   /* The widget's requested sizes */
   SizeRequestCache requests;
@@ -155,10 +146,6 @@ struct _GtkWidgetPrivate
 
   /* The widget's parent */
   GtkWidget *parent;
-
-  /* Animations and other things to update on clock ticks */
-  GList *tick_callbacks;
-  guint clock_tick_id;
 
   GList *event_controllers;
 };
