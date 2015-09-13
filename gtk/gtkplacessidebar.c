@@ -3257,6 +3257,7 @@ on_key_press_event (GtkWidget        *widget,
 
 static GActionEntry entries[] = {
   { "open", open_shortcut_cb, "i", NULL, NULL },
+  { "open-other", open_shortcut_cb, "i", NULL, NULL },
   { "bookmark", add_shortcut_cb, NULL, NULL, NULL },
   { "remove", remove_shortcut_cb, NULL, NULL, NULL },
   { "rename", rename_shortcut_cb, NULL, NULL, NULL },
@@ -3325,7 +3326,7 @@ add_open_button (GtkWidget          *box,
 
   item = g_object_new (GTK_TYPE_MODEL_BUTTON,
                        "visible", TRUE,
-                       "action-name", "row.open",
+                       "action-name", flags == GTK_PLACES_OPEN_NORMAL ? "row.open" : "row.open-other",
                        "action-target", g_variant_new_int32 (flags),
                        "text", label,
                        NULL);
