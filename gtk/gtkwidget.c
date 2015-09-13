@@ -861,6 +861,8 @@ static GQuark           quark_enabled_devices = 0;
 static GQuark           quark_size_groups = 0;
 static GQuark           quark_auto_children = 0;
 static GQuark           quark_widget_path = 0;
+static GQuark           quark_action_muxer = 0;
+
 GParamSpecPool         *_gtk_widget_child_property_pool = NULL;
 GObjectNotifyContext   *_gtk_widget_child_property_notify_context = NULL;
 
@@ -1029,6 +1031,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
   quark_size_groups = g_quark_from_static_string ("gtk-widget-size-groups");
   quark_auto_children = g_quark_from_static_string ("gtk-widget-auto-children");
   quark_widget_path = g_quark_from_static_string ("gtk-widget-path");
+  quark_action_muxer = g_quark_from_static_string ("gtk-widget-action-muxer");
 
   style_property_spec_pool = g_param_spec_pool_new (FALSE);
   _gtk_widget_child_property_pool = g_param_spec_pool_new (TRUE);
@@ -11986,7 +11989,7 @@ gtk_widget_dispose (GObject *object)
       priv->in_destruction = FALSE;
     }
 
-  g_clear_object (&priv->muxer);
+  g_object_set_qdata (object, quark_action_muxer, NULL);
 
   while (priv->attached_windows)
     gtk_window_set_attached_to (priv->attached_windows->data, NULL);
@@ -16546,10 +16549,13 @@ _gtk_widget_get_parent_muxer (GtkWidget *widget,
 void
 _gtk_widget_update_parent_muxer (GtkWidget *widget)
 {
-  if (widget->priv->muxer == NULL)
+  GtkActionMuxer *muxer;
+
+  muxer = (GtkActionMuxer*)g_object_get_qdata (G_OBJECT (widget), quark_action_muxer);
+  if (muxer == NULL)
     return;
 
-  gtk_action_muxer_set_parent (widget->priv->muxer,
+  gtk_action_muxer_set_parent (muxer,
                                _gtk_widget_get_parent_muxer (widget, TRUE));
 }
 
@@ -16557,15 +16563,22 @@ GtkActionMuxer *
 _gtk_widget_get_action_muxer (GtkWidget *widget,
                               gboolean   create)
 {
-  if (widget->priv->muxer)
-    return widget->priv->muxer;
+  GtkActionMuxer *muxer;
+
+  muxer = (GtkActionMuxer*)g_object_get_qdata (G_OBJECT (widget), quark_action_muxer);
+  if (muxer)
+    return muxer;
 
   if (create)
     {
-      widget->priv->muxer = gtk_action_muxer_new ();
+      muxer = gtk_action_muxer_new ();
+      g_object_set_qdata_full (G_OBJECT (widget),
+                               quark_action_muxer,
+                               muxer,
+                               g_object_unref);
       _gtk_widget_update_parent_muxer (widget);
 
-      return widget->priv->muxer;
+      return muxer;
     }
   else
     return _gtk_widget_get_parent_muxer (widget, FALSE);
@@ -17095,11 +17108,15 @@ gtk_widget_get_template_child (GtkWidget   *widget,
 const gchar **
 gtk_widget_list_action_prefixes (GtkWidget *widget)
 {
+  GtkActionMuxer *muxer;
+
   g_return_val_if_fail (GTK_IS_WIDGET (widget), NULL);
 
-  if (widget->priv->muxer)
-      return gtk_action_muxer_list_prefixes (widget->priv->muxer);
-  return g_new0 (const gchar *, 0 + 1);
+  muxer = _gtk_widget_get_action_muxer (widget, FALSE);
+  if (muxer)
+    return gtk_action_muxer_list_prefixes (muxer);
+
+  return g_new0 (const gchar *, 1);
 }
 
 /**
@@ -17121,11 +17138,15 @@ GActionGroup *
 gtk_widget_get_action_group (GtkWidget   *widget,
                              const gchar *prefix)
 {
+  GtkActionMuxer *muxer;
+
   g_return_val_if_fail (GTK_IS_WIDGET (widget), NULL);
   g_return_val_if_fail (prefix, NULL);
 
-  if (widget->priv->muxer)
-    return gtk_action_muxer_lookup (widget->priv->muxer, prefix);
+  muxer = _gtk_widget_get_action_muxer (widget, FALSE);
+  if (muxer)
+    return gtk_action_muxer_lookup (muxer, prefix);
+
   return NULL;
 }
 

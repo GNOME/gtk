@@ -146,9 +146,6 @@ struct _GtkWidgetPrivate
   /* The widget's requested sizes */
   SizeRequestCache requests;
 
-  /* actions attached to this or any parent widget */
-  GtkActionMuxer *muxer;
-
   /* The widget's window or its parent window if it does
    * not have a window. (Which will be indicated by the
    * no_window field being set).
