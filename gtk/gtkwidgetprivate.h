@@ -161,8 +161,6 @@ struct _GtkWidgetPrivate
   guint clock_tick_id;
 
   GList *event_controllers;
-
-  PangoFontMap *font_map;
 };
 
 GtkCssNode *  gtk_widget_get_css_node       (GtkWidget *widget);

@@ -863,6 +863,7 @@ static GQuark           quark_auto_children = 0;
 static GQuark           quark_widget_path = 0;
 static GQuark           quark_action_muxer = 0;
 static GQuark           quark_font_options = 0;
+static GQuark           quark_font_map = 0;
 
 GParamSpecPool         *_gtk_widget_child_property_pool = NULL;
 GObjectNotifyContext   *_gtk_widget_child_property_notify_context = NULL;
@@ -1034,6 +1035,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
   quark_widget_path = g_quark_from_static_string ("gtk-widget-path");
   quark_action_muxer = g_quark_from_static_string ("gtk-widget-action-muxer");
   quark_font_options = g_quark_from_static_string ("gtk-widget-font-options");
+  quark_font_map = g_quark_from_static_string ("gtk-widget-font-map");
 
   style_property_spec_pool = g_param_spec_pool_new (FALSE);
   _gtk_widget_child_property_pool = g_param_spec_pool_new (TRUE);
@@ -10178,8 +10180,11 @@ gtk_widget_get_pango_context (GtkWidget *widget)
 static PangoFontMap *
 gtk_widget_get_effective_font_map (GtkWidget *widget)
 {
-  if (widget->priv->font_map)
-    return widget->priv->font_map;
+  PangoFontMap *font_map;
+
+  font_map = PANGO_FONT_MAP (g_object_get_qdata (G_OBJECT (widget), quark_font_map));
+  if (font_map)
+    return font_map;
   else if (widget->priv->parent)
     return gtk_widget_get_effective_font_map (widget->priv->parent);
   else
@@ -10297,7 +10302,7 @@ gtk_widget_get_font_options (GtkWidget *widget)
 static void
 gtk_widget_set_font_map_recurse (GtkWidget *widget, gpointer data)
 {
-  if (widget->priv->font_map)
+  if (g_object_get_qdata (G_OBJECT (widget), quark_font_map))
     return;
 
   gtk_widget_update_pango_context (widget);
@@ -10323,16 +10328,24 @@ void
 gtk_widget_set_font_map (GtkWidget    *widget,
                          PangoFontMap *font_map)
 {
+  PangoFontMap *map;
+
   g_return_if_fail (GTK_IS_WIDGET (widget));
 
-  if (g_set_object (&widget->priv->font_map, font_map))
-    {
-      gtk_widget_update_pango_context (widget);
-      if (GTK_IS_CONTAINER (widget))
-        gtk_container_forall (GTK_CONTAINER (widget),
-                              gtk_widget_set_font_map_recurse,
-                              NULL);
-    }
+  map = PANGO_FONT_MAP (g_object_get_qdata (G_OBJECT (widget), quark_font_map));
+  if (map == font_map)
+    return;
+
+  g_object_set_qdata_full (G_OBJECT (widget),
+                           quark_font_map,
+                           g_object_ref (font_map),
+                           g_object_unref);
+
+  gtk_widget_update_pango_context (widget);
+  if (GTK_IS_CONTAINER (widget))
+    gtk_container_forall (GTK_CONTAINER (widget),
+                          gtk_widget_set_font_map_recurse,
+                          NULL);
 }
 
 /**
@@ -10349,7 +10362,8 @@ PangoFontMap *
 gtk_widget_get_font_map (GtkWidget *widget)
 {
   g_return_val_if_fail (GTK_IS_WIDGET (widget), NULL);
-  return widget->priv->font_map;
+
+  return PANGO_FONT_MAP (g_object_get_qdata (G_OBJECT (widget), quark_font_map));
 }
 
 /**
