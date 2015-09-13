@@ -1289,7 +1289,8 @@ gdk_wayland_window_show (GdkWindow *window,
 
   _gdk_make_event (window, GDK_MAP, NULL, FALSE);
 
-  if (impl->cairo_surface)
+  if (impl->cairo_surface &&
+      _gdk_wayland_is_shm_surface (impl->cairo_surface))
     gdk_wayland_window_attach_image (window);
 }
 
