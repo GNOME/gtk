@@ -3655,16 +3655,6 @@ gtk_range_compute_slider_position (GtkRange     *range,
     }
 }
 
-static gboolean
-rectangle_equal (const GdkRectangle *a,
-                 const GdkRectangle *b)
-{
-  return a->x == b->x
-      && a->y == b->y
-      && a->width == b->width
-      && a->height == b->height;
-}
-
 static void
 gtk_range_calc_slider (GtkRange *range)
 {
@@ -3675,7 +3665,7 @@ gtk_range_calc_slider (GtkRange *range)
                                      gtk_adjustment_get_value (priv->adjustment),
                                      &new_slider);
 
-  if (rectangle_equal (&priv->slider, &new_slider))
+  if (gdk_rectangle_equal (&priv->slider, &new_slider))
     return;
 
   gtk_range_queue_draw_location (range, MOUSE_SLIDER);
