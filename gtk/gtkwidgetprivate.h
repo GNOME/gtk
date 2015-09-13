@@ -162,7 +162,6 @@ struct _GtkWidgetPrivate
 
   GList *event_controllers;
 
-  cairo_font_options_t *font_options;
   PangoFontMap *font_map;
 };
 

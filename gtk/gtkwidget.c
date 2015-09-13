@@ -862,6 +862,7 @@ static GQuark           quark_size_groups = 0;
 static GQuark           quark_auto_children = 0;
 static GQuark           quark_widget_path = 0;
 static GQuark           quark_action_muxer = 0;
+static GQuark           quark_font_options = 0;
 
 GParamSpecPool         *_gtk_widget_child_property_pool = NULL;
 GObjectNotifyContext   *_gtk_widget_child_property_notify_context = NULL;
@@ -1032,6 +1033,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
   quark_auto_children = g_quark_from_static_string ("gtk-widget-auto-children");
   quark_widget_path = g_quark_from_static_string ("gtk-widget-path");
   quark_action_muxer = g_quark_from_static_string ("gtk-widget-action-muxer");
+  quark_font_options = g_quark_from_static_string ("gtk-widget-font-options");
 
   style_property_spec_pool = g_param_spec_pool_new (FALSE);
   _gtk_widget_child_property_pool = g_param_spec_pool_new (TRUE);
@@ -10191,6 +10193,7 @@ update_pango_context (GtkWidget    *widget,
   PangoFontDescription *font_desc;
   GtkStyleContext *style_context;
   GdkScreen *screen;
+  cairo_font_options_t *font_options;
 
   style_context = _gtk_widget_get_style_context (widget);
   gtk_style_context_get (style_context,
@@ -10213,12 +10216,13 @@ update_pango_context (GtkWidget    *widget,
                                           100));
 
   screen = gtk_widget_get_screen_unchecked (widget);
-  if (screen && widget->priv->font_options)
+  font_options = (cairo_font_options_t*)g_object_get_qdata (G_OBJECT (widget), quark_font_options);
+  if (screen && font_options)
     {
       cairo_font_options_t *options;
 
       options = cairo_font_options_copy (gdk_screen_get_font_options (screen));
-      cairo_font_options_merge (options, widget->priv->font_options);
+      cairo_font_options_merge (options, font_options);
       pango_cairo_context_set_font_options (context, options);
       cairo_font_options_destroy (options);
     }
@@ -10255,17 +10259,17 @@ void
 gtk_widget_set_font_options (GtkWidget                  *widget,
                              const cairo_font_options_t *options)
 {
+  cairo_font_options_t *font_options;
+
   g_return_if_fail (GTK_IS_WIDGET (widget));
 
-  if (widget->priv->font_options != options)
+  font_options = (cairo_font_options_t *)g_object_get_qdata (G_OBJECT (widget), quark_font_options);
+  if (font_options != options)
     {
-      if (widget->priv->font_options)
-        cairo_font_options_destroy (widget->priv->font_options);
-
-      if (options)
-        widget->priv->font_options = cairo_font_options_copy (options);
-      else
-        widget->priv->font_options = NULL;
+      g_object_set_qdata_full (G_OBJECT (widget),
+                               quark_font_options,
+                               options ? cairo_font_options_copy (options) : NULL,
+                               (GDestroyNotify)cairo_font_options_destroy);
 
       gtk_widget_update_pango_context (widget);
     }
@@ -10286,7 +10290,8 @@ const cairo_font_options_t *
 gtk_widget_get_font_options (GtkWidget *widget)
 {
   g_return_val_if_fail (GTK_IS_WIDGET (widget), NULL);
-  return widget->priv->font_options;
+
+  return (cairo_font_options_t *)g_object_get_qdata (G_OBJECT (widget), quark_font_options);
 }
 
 static void
@@ -12204,9 +12209,6 @@ gtk_widget_finalize (GObject *object)
 
   if (priv->context)
     g_object_unref (priv->context);
-
-  if (widget->priv->font_options)
-    cairo_font_options_destroy (widget->priv->font_options);
 
   _gtk_size_request_cache_free (&priv->requests);
 
