@@ -19,6 +19,7 @@
 
 #include "gtkdebug.h"
 #include "gtkpixelcacheprivate.h"
+#include "gtkstylecontextprivate.h"
 
 #define BLOW_CACHE_TIMEOUT_SEC 20
 
@@ -186,8 +187,6 @@ _gtk_pixel_cache_create_surface_if_needed (GtkPixelCache         *cache,
   cairo_rectangle_int_t rect;
   int surface_w, surface_h;
   cairo_content_t content;
-  cairo_pattern_t *bg;
-  double red, green, blue, alpha;
 
 #ifdef G_ENABLE_DEBUG
   if (GTK_DEBUG_CHECK (NO_PIXEL_CACHE))
