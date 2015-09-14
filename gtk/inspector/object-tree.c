@@ -103,7 +103,7 @@ G_DEFINE_TYPE_WITH_PRIVATE (GtkInspectorObjectTree, gtk_inspector_object_tree, G
 static GObject *
 object_tree_get_parent_default (GObject *object)
 {
-  return NULL;
+  return g_object_get_data (object, "inspector-object-tree-parent");
 }
 
 static void
@@ -990,7 +990,18 @@ gtk_inspector_object_tree_append_object (GtkInspectorObjectTree *wt,
       g_list_free (list);
     }
   else
-    classes = g_strdup ("");
+    {
+      if (parent_iter)
+        {
+          GObject *parent;
+
+          gtk_tree_model_get (GTK_TREE_MODEL (wt->priv->model), parent_iter,
+                              OBJECT, &parent,
+                              -1);
+          g_object_set_data (object, "inspector-object-tree-parent", parent);
+        }
+      classes = g_strdup ("");
+    }
 
   if (GTK_IS_BUILDABLE (object))
     {
