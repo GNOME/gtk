@@ -68,6 +68,8 @@ enum
   PROP_STATUS
 };
 
+static GObjectClass *backend_parent_class;
+
 GQuark
 gtk_print_backend_error_quark (void)
 {
@@ -365,6 +367,8 @@ gtk_print_backend_class_init (GtkPrintBackendClass *class)
   GObjectClass *object_class;
   object_class = (GObjectClass *) class;
 
+  backend_parent_class = g_type_class_peek_parent (class);
+  
   object_class->dispose = gtk_print_backend_dispose;
   object_class->set_property = gtk_print_backend_set_property;
   object_class->get_property = gtk_print_backend_get_property;
@@ -469,7 +473,7 @@ gtk_print_backend_dispose (GObject *object)
       priv->printers = NULL;
     }
 
-  G_OBJECT_CLASS (_gtk_print_backend_module_parent_class)->dispose (object);
+  backend_parent_class->dispose (object);
 }
 
 
