@@ -18,8 +18,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-master-po-gl-77922___.merged\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-08-25 16:28+0200\n"
-"PO-Revision-Date: 2015-08-25 16:29+0200\n"
+"POT-Creation-Date: 2015-09-14 16:44+0200\n"
+"PO-Revision-Date: 2015-09-14 16:44+0200\n"
 "Last-Translator: Fran Dieguez <frandieguez@gnome.org>\n"
 "Language-Team: gnome-l10n-gl@gnome.org\n"
 "Language: gl\n"
@@ -93,7 +93,7 @@ msgstr "OPCIÓNS"
 msgid "GDK debugging flags to unset"
 msgstr "Opcións de depuración GDK que quitar"
 
-#: ../gdk/gdkwindow.c:2737
+#: ../gdk/gdkwindow.c:2767
 msgid "GL support disabled via GDK_DEBUG"
 msgstr "Compatibilidade de GL desactivada mediante GDK_DEBUG"
 
@@ -671,15 +671,15 @@ msgctxt "Stock label"
 msgid "_Close"
 msgstr "_Pechar"
 
-#: ../gtk/a11y/gtkimageaccessible.c:59 ../gtk/gtkheaderbar.c:406
+#: ../gtk/a11y/gtkimageaccessible.c:59 ../gtk/gtkheaderbar.c:409
 msgid "Minimize"
 msgstr "Minimizar"
 
-#: ../gtk/a11y/gtkimageaccessible.c:60 ../gtk/gtkheaderbar.c:429
+#: ../gtk/a11y/gtkimageaccessible.c:60 ../gtk/gtkheaderbar.c:432
 msgid "Maximize"
 msgstr "Maximizar"
 
-#: ../gtk/a11y/gtkimageaccessible.c:61 ../gtk/gtkheaderbar.c:429
+#: ../gtk/a11y/gtkimageaccessible.c:61 ../gtk/gtkheaderbar.c:432
 msgid "Restore"
 msgstr "Restaurar"
 
@@ -1215,7 +1215,7 @@ msgstr "A cor que seleccionou."
 msgid "_Save color here"
 msgstr "_Gardar cor aquí"
 
-#: ../gtk/deprecated/gtkcolorsel.c:1694
+#: ../gtk/deprecated/gtkcolorsel.c:1693
 msgid ""
 "Click this palette entry to make it the current color. To change this entry, "
 "drag a color swatch here or right-click it and select “Save color here.”"
@@ -1229,9 +1229,9 @@ msgstr ""
 #: ../gtk/gtkfilechooserwidget.c:1448 ../gtk/gtkfilechooserwidget.c:6301
 #: ../gtk/gtkmessagedialog.c:942 ../gtk/gtkmessagedialog.c:955
 #: ../gtk/gtkmountoperation.c:543 ../gtk/gtkpagesetupunixdialog.c:196
-#: ../gtk/gtkprintbackend.c:763 ../gtk/gtkprinteroptionwidget.c:545
+#: ../gtk/gtkprintbackend.c:759 ../gtk/gtkprinteroptionwidget.c:545
 #: ../gtk/gtkprintunixdialog.c:665 ../gtk/gtkprintunixdialog.c:738
-#: ../gtk/gtkwindow.c:12106 ../gtk/inspector/css-editor.c:199
+#: ../gtk/gtkwindow.c:12075 ../gtk/inspector/css-editor.c:199
 msgid "_Cancel"
 msgstr "_Cancelar"
 
@@ -1278,8 +1278,8 @@ msgid "_Apply"
 msgstr "_Aplicar"
 
 #: ../gtk/deprecated/gtkfontsel.c:1698 ../gtk/gtkmessagedialog.c:934
-#: ../gtk/gtkmessagedialog.c:956 ../gtk/gtkprintbackend.c:764
-#: ../gtk/gtkwindow.c:12107 ../gtk/inspector/classes-list.c:127
+#: ../gtk/gtkmessagedialog.c:956 ../gtk/gtkprintbackend.c:760
+#: ../gtk/gtkwindow.c:12076 ../gtk/inspector/classes-list.c:127
 msgid "_OK"
 msgstr "_Aceptar"
 
@@ -1428,7 +1428,7 @@ msgstr "Saída a este directorio no lugar de cwd"
 msgid "Invalid size %s\n"
 msgstr "Tamaño non válido «%s»\n"
 
-#: ../gtk/encodesymbolic.c:279 ../gtk/gtk-builder-tool.c:540
+#: ../gtk/encodesymbolic.c:279 ../gtk/gtk-builder-tool.c:589
 #, c-format
 msgid "Can't load file: %s\n"
 msgstr "Non foi posíbel cargar o ficheiro: %s\n"
@@ -1554,7 +1554,7 @@ msgstr "Material gráfico por"
 #. * translated on keyboards used for your language, don't translate
 #. * this.
 #.
-#: ../gtk/gtkaccellabel.c:164
+#: ../gtk/gtkaccellabel.c:165
 msgctxt "keyboard label"
 msgid "Shift"
 msgstr "Maiús"
@@ -1564,7 +1564,7 @@ msgstr "Maiús"
 #. * translated on keyboards used for your language, don't translate
 #. * this.
 #.
-#: ../gtk/gtkaccellabel.c:170
+#: ../gtk/gtkaccellabel.c:171
 msgctxt "keyboard label"
 msgid "Ctrl"
 msgstr "Ctrl"
@@ -1574,7 +1574,7 @@ msgstr "Ctrl"
 #. * translated on keyboards used for your language, don't translate
 #. * this.
 #.
-#: ../gtk/gtkaccellabel.c:176
+#: ../gtk/gtkaccellabel.c:177
 msgctxt "keyboard label"
 msgid "Alt"
 msgstr "Alt"
@@ -1584,7 +1584,7 @@ msgstr "Alt"
 #. * translated on keyboards used for your language, don't translate
 #. * this.
 #.
-#: ../gtk/gtkaccellabel.c:795
+#: ../gtk/gtkaccellabel.c:828
 msgctxt "keyboard label"
 msgid "Super"
 msgstr "Super"
@@ -1594,7 +1594,7 @@ msgstr "Super"
 #. * translated on keyboards used for your language, don't translate
 #. * this.
 #.
-#: ../gtk/gtkaccellabel.c:808
+#: ../gtk/gtkaccellabel.c:841
 msgctxt "keyboard label"
 msgid "Hyper"
 msgstr "Hyper"
@@ -1604,22 +1604,22 @@ msgstr "Hyper"
 #. * translated on keyboards used for your language, don't translate
 #. * this.
 #.
-#: ../gtk/gtkaccellabel.c:822
+#: ../gtk/gtkaccellabel.c:855
 msgctxt "keyboard label"
 msgid "Meta"
 msgstr "Meta"
 
-#: ../gtk/gtkaccellabel.c:839
+#: ../gtk/gtkaccellabel.c:872
 msgctxt "keyboard label"
 msgid "Space"
 msgstr "Espazo"
 
-#: ../gtk/gtkaccellabel.c:842
+#: ../gtk/gtkaccellabel.c:875
 msgctxt "keyboard label"
 msgid "Backslash"
 msgstr "Contrabarra"
 
-#: ../gtk/gtkappchooserbutton.c:292
+#: ../gtk/gtkappchooserbutton.c:295
 msgid "Other application…"
 msgstr "Outro aplicativo…"
 
@@ -1709,32 +1709,32 @@ msgstr "Elemento <%s> non permitido no nivel superior"
 msgid "Text may not appear inside <%s>"
 msgstr "O texto non debe aparecer dentro de <%s>"
 
-#: ../gtk/gtk-builder-tool.c:89
+#: ../gtk/gtk-builder-tool.c:97
 #, c-format
 msgid "Packing property %s::%s not found\n"
 msgstr "Propiedade de empaquetado %s::%s non atopado\n"
 
-#: ../gtk/gtk-builder-tool.c:91
+#: ../gtk/gtk-builder-tool.c:99
 #, c-format
 msgid "Cell property %s::%s not found\n"
 msgstr "Propiedade de cela %s::%s non atopado\n"
 
-#: ../gtk/gtk-builder-tool.c:93
+#: ../gtk/gtk-builder-tool.c:101
 #, c-format
 msgid "Property %s::%s not found\n"
 msgstr "Non foi posíbel atopar a propiedade %s::%s\n"
 
-#: ../gtk/gtk-builder-tool.c:101
+#: ../gtk/gtk-builder-tool.c:109
 #, c-format
-msgid "Couldn't parse value: %s\n"
-msgstr "Non foi posíbel analizar o valor: %s\n"
+msgid "Couldn't parse value for %s::%s: %s\n"
+msgstr "Non foi posíbel analizar o valor para %s::%s: %s\n"
 
-#: ../gtk/gtk-builder-tool.c:561
+#: ../gtk/gtk-builder-tool.c:610
 #, c-format
 msgid "Can't parse file: %s\n"
 msgstr "Non é posíbel analizar o ficheiro: %s\n"
 
-#: ../gtk/gtk-builder-tool.c:732
+#: ../gtk/gtk-builder-tool.c:781
 #, c-format
 msgid ""
 "Usage:\n"
@@ -1784,7 +1784,7 @@ msgstr "calendar:week_start:1"
 #. *
 #. * If you don't understand this, leave it as "2000"
 #.
-#: ../gtk/gtkcalendar.c:1862
+#: ../gtk/gtkcalendar.c:1861
 msgctxt "year measurement template"
 msgid "2000"
 msgstr "2000"
@@ -1799,7 +1799,7 @@ msgstr "2000"
 #. * digits. That needs support from your system and locale definition
 #. * too.
 #.
-#: ../gtk/gtkcalendar.c:1893 ../gtk/gtkcalendar.c:2571
+#: ../gtk/gtkcalendar.c:1892 ../gtk/gtkcalendar.c:2570
 #, c-format
 msgctxt "calendar:day:digits"
 msgid "%d"
@@ -1815,7 +1815,7 @@ msgstr "%d"
 #. * digits. That needs support from your system and locale definition
 #. * too.
 #.
-#: ../gtk/gtkcalendar.c:1925 ../gtk/gtkcalendar.c:2437
+#: ../gtk/gtkcalendar.c:1924 ../gtk/gtkcalendar.c:2436
 #, c-format
 msgctxt "calendar:week:digits"
 msgid "%d"
@@ -1831,7 +1831,7 @@ msgstr "%d"
 #. *
 #. * "%Y" is appropriate for most locales.
 #.
-#: ../gtk/gtkcalendar.c:2216
+#: ../gtk/gtkcalendar.c:2215
 msgctxt "calendar year format"
 msgid "%Y"
 msgstr "%Y"
@@ -2165,45 +2165,45 @@ msgstr "_Dereito:"
 msgid "Paper Margins"
 msgstr "Marxes do papel"
 
-#: ../gtk/gtkentry.c:9654 ../gtk/gtklabel.c:6619 ../gtk/gtktextview.c:9363
+#: ../gtk/gtkentry.c:9637 ../gtk/gtklabel.c:6612 ../gtk/gtktextview.c:9374
 msgid "Cu_t"
 msgstr "Cor_tar"
 
-#: ../gtk/gtkentry.c:9658 ../gtk/gtklabel.c:6620 ../gtk/gtktextview.c:9367
+#: ../gtk/gtkentry.c:9641 ../gtk/gtklabel.c:6613 ../gtk/gtktextview.c:9378
 msgid "_Copy"
 msgstr "_Copiar"
 
-#: ../gtk/gtkentry.c:9662 ../gtk/gtklabel.c:6621 ../gtk/gtktextview.c:9369
+#: ../gtk/gtkentry.c:9645 ../gtk/gtklabel.c:6614 ../gtk/gtktextview.c:9380
 msgid "_Paste"
 msgstr "_Pegar"
 
-#: ../gtk/gtkentry.c:9665 ../gtk/gtkfilechooserwidget.c:1449
-#: ../gtk/gtkfilechooserwidget.c:2247 ../gtk/gtklabel.c:6623
-#: ../gtk/gtktextview.c:9372
+#: ../gtk/gtkentry.c:9648 ../gtk/gtkfilechooserwidget.c:1449
+#: ../gtk/gtkfilechooserwidget.c:2247 ../gtk/gtklabel.c:6616
+#: ../gtk/gtktextview.c:9383
 msgid "_Delete"
 msgstr "E_liminar"
 
-#: ../gtk/gtkentry.c:9676 ../gtk/gtklabel.c:6632 ../gtk/gtktextview.c:9386
+#: ../gtk/gtkentry.c:9659 ../gtk/gtklabel.c:6625 ../gtk/gtktextview.c:9397
 msgid "Select _All"
 msgstr "Seleccionar _todo"
 
-#: ../gtk/gtkentry.c:9854 ../gtk/gtktextview.c:9596
+#: ../gtk/gtkentry.c:9837 ../gtk/gtktextview.c:9607
 msgid "Select all"
 msgstr "Seleccionar todo"
 
-#: ../gtk/gtkentry.c:9857 ../gtk/gtktextview.c:9599
+#: ../gtk/gtkentry.c:9840 ../gtk/gtktextview.c:9610
 msgid "Cut"
 msgstr "Cortar"
 
-#: ../gtk/gtkentry.c:9860 ../gtk/gtktextview.c:9602
+#: ../gtk/gtkentry.c:9843 ../gtk/gtktextview.c:9613
 msgid "Copy"
 msgstr "Copiar"
 
-#: ../gtk/gtkentry.c:9863 ../gtk/gtktextview.c:9605
+#: ../gtk/gtkentry.c:9846 ../gtk/gtktextview.c:9616
 msgid "Paste"
 msgstr "Pegar"
 
-#: ../gtk/gtkentry.c:10950
+#: ../gtk/gtkentry.c:10933
 msgid "Caps Lock is on"
 msgstr "Bloq Maiús está activado"
 
@@ -2220,8 +2220,8 @@ msgid "(None)"
 msgstr "(Ningún)"
 
 #. Open item is always present
-#: ../gtk/gtkfilechooserbutton.c:796 ../gtk/gtkplacessidebar.c:3349
-#: ../gtk/gtkplacesview.c:1602
+#: ../gtk/gtkfilechooserbutton.c:796 ../gtk/gtkplacessidebar.c:3401
+#: ../gtk/gtkplacesview.c:1618
 msgid "_Open"
 msgstr "_Abrir"
 
@@ -2391,7 +2391,7 @@ msgstr "Copiar _localización"
 msgid "_Add to Bookmarks"
 msgstr "_Engadir aos marcadores"
 
-#: ../gtk/gtkfilechooserwidget.c:2246 ../gtk/gtkplacessidebar.c:2448
+#: ../gtk/gtkfilechooserwidget.c:2246 ../gtk/gtkplacessidebar.c:2450
 msgid "_Rename"
 msgstr "_Renomear…"
 
@@ -2534,7 +2534,7 @@ msgstr "Accedido"
 #. * token for the fake “File System” volume.  So, we’ll return a pointer to
 #. * this particular string.
 #.
-#: ../gtk/gtkfilesystem.c:47
+#: ../gtk/gtkfilesystem.c:48
 msgid "File System"
 msgstr "Sistema de ficheiros"
 
@@ -2560,11 +2560,11 @@ msgstr "Ningún"
 msgid "OpenGL context creation failed"
 msgstr "Produciuse un erro ao crear o contexto de OpenGL"
 
-#: ../gtk/gtkheaderbar.c:385
+#: ../gtk/gtkheaderbar.c:388
 msgid "Application menu"
 msgstr "Menú do aplicativo"
 
-#: ../gtk/gtkheaderbar.c:447 ../gtk/gtkwindow.c:8705
+#: ../gtk/gtkheaderbar.c:450 ../gtk/gtkwindow.c:8665
 msgid "Close"
 msgstr "Pechar"
 
@@ -2577,12 +2577,12 @@ msgstr "A icona «%s» non está presente no tema %s"
 msgid "Failed to load icon"
 msgstr "Non foi posíbel cargar a icona"
 
-#: ../gtk/gtkimmodule.c:534
+#: ../gtk/gtkimmodule.c:530
 msgctxt "input method menu"
 msgid "Simple"
 msgstr "Simple"
 
-#: ../gtk/gtkimmodule.c:550
+#: ../gtk/gtkimmodule.c:546
 msgctxt "input method menu"
 msgid "None"
 msgstr "Ningún"
@@ -2615,12 +2615,12 @@ msgid "Error"
 msgstr "Erro"
 
 #. Open Link
-#: ../gtk/gtklabel.c:6600
+#: ../gtk/gtklabel.c:6593
 msgid "_Open Link"
 msgstr "_Abrir ligazón"
 
 #. Copy Link Address
-#: ../gtk/gtklabel.c:6609
+#: ../gtk/gtklabel.c:6602
 msgid "Copy _Link Address"
 msgstr "Copiar enderezo da _ligazón"
 
@@ -2741,16 +2741,16 @@ msgstr "Opcións de depuración GTK+ a poñer"
 msgid "GTK+ debugging flags to unset"
 msgstr "Opcións de depuración GTK+ a quitar"
 
-#: ../gtk/gtkmain.c:776
+#: ../gtk/gtkmain.c:781
 #, c-format
 msgid "Cannot open display: %s"
 msgstr "Non é posíbel abrir o visor: %s"
 
-#: ../gtk/gtkmain.c:853
+#: ../gtk/gtkmain.c:858
 msgid "GTK+ Options"
 msgstr "Opcións de GTK+"
 
-#: ../gtk/gtkmain.c:853
+#: ../gtk/gtkmain.c:858
 msgid "Show GTK+ Options"
 msgstr "Mostrar opcións de GTK+"
 
@@ -2759,7 +2759,7 @@ msgstr "Mostrar opcións de GTK+"
 #. * Do *not* translate it to "predefinito:LTR", if it
 #. * it isn't default:LTR or default:RTL it will not work
 #.
-#: ../gtk/gtkmain.c:1177
+#: ../gtk/gtkmain.c:1182
 msgid "default:LTR"
 msgstr "default:LTR"
 
@@ -2856,7 +2856,7 @@ msgstr "Shell Z"
 msgid "Cannot end process with PID %d: %s"
 msgstr "Non é posíbel finalizar o proceso co PID %d: %s"
 
-#: ../gtk/gtknotebook.c:5172 ../gtk/gtknotebook.c:7903
+#: ../gtk/gtknotebook.c:5153 ../gtk/gtknotebook.c:7882
 #, c-format
 msgid "Page %u"
 msgstr "Páxina %u"
@@ -2897,7 +2897,7 @@ msgstr "Xestionar tamaños personalizados…"
 msgid "Page Setup"
 msgstr "Configuración de páxina"
 
-#: ../gtk/gtkpathbar.c:1627
+#: ../gtk/gtkpathbar.c:1587
 msgid "File System Root"
 msgstr "Sistema de ficheiros raíz"
 
@@ -2968,177 +2968,193 @@ msgid "Show other locations"
 msgstr "Mostrar outras localizacións"
 
 #. Adjust start/stop items to reflect the type of the drive
-#: ../gtk/gtkplacessidebar.c:2097 ../gtk/gtkplacessidebar.c:3369
+#: ../gtk/gtkplacessidebar.c:2099 ../gtk/gtkplacessidebar.c:3421
 msgid "_Start"
 msgstr "_Iniciar"
 
-#: ../gtk/gtkplacessidebar.c:2098 ../gtk/gtkplacessidebar.c:3370
+#: ../gtk/gtkplacessidebar.c:2100 ../gtk/gtkplacessidebar.c:3422
 msgid "_Stop"
 msgstr "De_ter"
 
 #. start() for type G_DRIVE_START_STOP_TYPE_SHUTDOWN is normally not used
-#: ../gtk/gtkplacessidebar.c:2105
+#: ../gtk/gtkplacessidebar.c:2107
 msgid "_Power On"
 msgstr "_Encender"
 
-#: ../gtk/gtkplacessidebar.c:2106
+#: ../gtk/gtkplacessidebar.c:2108
 msgid "_Safely Remove Drive"
 msgstr "Extraer unidade de forma _segura"
 
-#: ../gtk/gtkplacessidebar.c:2110
+#: ../gtk/gtkplacessidebar.c:2112
 msgid "_Connect Drive"
 msgstr "_Conectar dispositivo"
 
-#: ../gtk/gtkplacessidebar.c:2111
+#: ../gtk/gtkplacessidebar.c:2113
 msgid "_Disconnect Drive"
 msgstr "_Desconectar dispositivo"
 
-#: ../gtk/gtkplacessidebar.c:2115
+#: ../gtk/gtkplacessidebar.c:2117
 msgid "_Start Multi-disk Device"
 msgstr "_Iniciar dispositivo multidisco"
 
-#: ../gtk/gtkplacessidebar.c:2116
+#: ../gtk/gtkplacessidebar.c:2118
 msgid "_Stop Multi-disk Device"
 msgstr "_Deter dispositivo multidisco"
 
 #. stop() for type G_DRIVE_START_STOP_TYPE_PASSWORD is normally not used
-#: ../gtk/gtkplacessidebar.c:2121
+#: ../gtk/gtkplacessidebar.c:2123
 msgid "_Unlock Device"
 msgstr "_Desbloquear dispositivo"
 
-#: ../gtk/gtkplacessidebar.c:2122
+#: ../gtk/gtkplacessidebar.c:2124
 msgid "_Lock Device"
 msgstr "_Bloquear dispositivo"
 
-#: ../gtk/gtkplacessidebar.c:2160 ../gtk/gtkplacessidebar.c:3130
+#: ../gtk/gtkplacessidebar.c:2162 ../gtk/gtkplacessidebar.c:3180
 #, c-format
 msgid "Unable to start “%s”"
 msgstr "Non é posíbel iniciar «%s»"
 
-#: ../gtk/gtkplacessidebar.c:2190
+#: ../gtk/gtkplacessidebar.c:2192
 #, c-format
 msgid "Unable to access “%s”"
 msgstr "Non é posíbel acceder a «%s»"
 
-#: ../gtk/gtkplacessidebar.c:2391
+#: ../gtk/gtkplacessidebar.c:2393
 msgid "This name is already taken"
 msgstr "Este nome xa está collido"
 
-#: ../gtk/gtkplacessidebar.c:2442
+#: ../gtk/gtkplacessidebar.c:2444
 msgid "Name"
 msgstr "Nome"
 
-#: ../gtk/gtkplacessidebar.c:2594
+#: ../gtk/gtkplacessidebar.c:2644
 #, c-format
 msgid "Unable to unmount “%s”"
 msgstr "Non é posíbel desmontar «%s»"
 
-#: ../gtk/gtkplacessidebar.c:2847
+#: ../gtk/gtkplacessidebar.c:2897
 #, c-format
 msgid "Unable to stop “%s”"
 msgstr "Non é posíbel deter «%s»"
 
-#: ../gtk/gtkplacessidebar.c:2876
+#: ../gtk/gtkplacessidebar.c:2926
 #, c-format
 msgid "Unable to eject “%s”"
 msgstr "Non é posíbel extraer «%s»"
 
-#: ../gtk/gtkplacessidebar.c:2905 ../gtk/gtkplacessidebar.c:2934
+#: ../gtk/gtkplacessidebar.c:2955 ../gtk/gtkplacessidebar.c:2984
 #, c-format
 msgid "Unable to eject %s"
 msgstr "Non é posíbel extraer %s"
 
-#: ../gtk/gtkplacessidebar.c:3082
+#: ../gtk/gtkplacessidebar.c:3132
 #, c-format
 msgid "Unable to poll “%s” for media changes"
 msgstr "Non é posíbel analizar «%s» para saber os cambios no soporte"
 
-#: ../gtk/gtkplacessidebar.c:3352 ../gtk/gtkplacesview.c:1612
+#: ../gtk/gtkplacessidebar.c:3404 ../gtk/gtkplacesview.c:1628
 msgid "Open in New _Tab"
 msgstr "Abrir unha nova _lapela"
 
-#: ../gtk/gtkplacessidebar.c:3355 ../gtk/gtkplacesview.c:1623
+#: ../gtk/gtkplacessidebar.c:3407 ../gtk/gtkplacesview.c:1639
 msgid "Open in New _Window"
 msgstr "Abrir nunha nova _xanela"
 
-#: ../gtk/gtkplacessidebar.c:3359
+#: ../gtk/gtkplacessidebar.c:3411
 msgid "_Add Bookmark"
 msgstr "_Engadir marcador"
 
-#: ../gtk/gtkplacessidebar.c:3360
+#: ../gtk/gtkplacessidebar.c:3412
 msgid "_Remove"
 msgstr "_Eliminar"
 
-#: ../gtk/gtkplacessidebar.c:3361
+#: ../gtk/gtkplacessidebar.c:3413
 msgid "Rename…"
 msgstr "Renomear…"
 
-#: ../gtk/gtkplacessidebar.c:3365
+#: ../gtk/gtkplacessidebar.c:3417 ../gtk/gtkplacesview.c:1673
 msgid "_Mount"
 msgstr "_Montar"
 
-#: ../gtk/gtkplacessidebar.c:3366
+#: ../gtk/gtkplacessidebar.c:3418 ../gtk/gtkplacesview.c:1663
 msgid "_Unmount"
 msgstr "_Desmontar"
 
-#: ../gtk/gtkplacessidebar.c:3367
+#: ../gtk/gtkplacessidebar.c:3419
 msgid "_Eject"
 msgstr "_Expulsar"
 
-#: ../gtk/gtkplacessidebar.c:3368
+#: ../gtk/gtkplacessidebar.c:3420
 msgid "_Detect Media"
 msgstr "_Detectar soporte"
 
-#: ../gtk/gtkplacessidebar.c:3817 ../gtk/gtkplacesview.c:1064
+#: ../gtk/gtkplacessidebar.c:3869 ../gtk/gtkplacesview.c:1071
 msgid "Computer"
 msgstr "Computador"
 
-#: ../gtk/gtkplacesview.c:888
+#: ../gtk/gtkplacesview.c:900
 msgid "Searching for network locations"
 msgstr "Buscar localizacóns de rede"
 
-#: ../gtk/gtkplacesview.c:896
-msgid "No networks locations found"
+#: ../gtk/gtkplacesview.c:907
+msgid "No network locations found"
 msgstr "Non se atoparon localizacións de rede"
 
 #. if it wasn't cancelled show a dialog
-#: ../gtk/gtkplacesview.c:1171 ../gtk/gtkplacesview.c:1215
-#: ../gtk/gtkplacesview.c:1266
+#: ../gtk/gtkplacesview.c:1181 ../gtk/gtkplacesview.c:1225
+#: ../gtk/gtkplacesview.c:1276
 msgid "Unable to access location"
 msgstr "Non foi posíbel acceder á localización"
 
 #. Restore from Cancel to Connect
-#: ../gtk/gtkplacesview.c:1189
+#: ../gtk/gtkplacesview.c:1198
 msgid "Con_nect"
 msgstr "Co_nectar"
 
 #. if it wasn't cancelled show a dialog
-#: ../gtk/gtkplacesview.c:1325
+#: ../gtk/gtkplacesview.c:1339
 msgid "Unable to unmount volume"
 msgstr "Non foi posíbel desmontar o volume"
 
 #. Allow to cancel the operation
-#: ../gtk/gtkplacesview.c:1407
+#: ../gtk/gtkplacesview.c:1421
 msgid "Cance_l"
 msgstr "Cance_lar"
 
-#: ../gtk/gtkplacesview.c:1822
+#: ../gtk/gtkplacesview.c:1663
+msgid "_Disconnect"
+msgstr "_Desconectar"
+
+#: ../gtk/gtkplacesview.c:1673
+msgid "_Connect"
+msgstr "Co_nectar"
+
+#: ../gtk/gtkplacesview.c:1838
 msgid "Unable to get remote server location"
 msgstr "Non foi posíbel obter a localización remota do servidor"
 
-#: ../gtk/gtkplacesview.c:1941 ../gtk/gtkplacesview.c:1950
+#: ../gtk/gtkplacesview.c:1957 ../gtk/gtkplacesview.c:1966
 msgid "Networks"
 msgstr "Redes"
 
-#: ../gtk/gtkplacesview.c:1941 ../gtk/gtkplacesview.c:1950
+#: ../gtk/gtkplacesview.c:1957 ../gtk/gtkplacesview.c:1966
 msgid "On This Computer"
 msgstr "Neste computador"
 
-#: ../gtk/gtkprintbackend.c:762
+#: ../gtk/gtkplacesviewrow.c:323
+msgid "Disconnect"
+msgstr "_Desconectar"
+
+#: ../gtk/gtkplacesviewrow.c:323
+msgid "Unmount"
+msgstr "_Desmontar"
+
+#: ../gtk/gtkprintbackend.c:758
 msgid "Authentication"
 msgstr "Autenticación"
 
-#: ../gtk/gtkprintbackend.c:833
+#: ../gtk/gtkprintbackend.c:829
 msgid "_Remember password"
 msgstr "_Lembrar o contrasinal"
 
@@ -3376,7 +3392,7 @@ msgstr "De abaixo a arriba"
 msgid "Print"
 msgstr "Imprimir"
 
-#: ../gtk/gtkprogressbar.c:448
+#: ../gtk/gtkprogressbar.c:449
 #, c-format
 msgctxt "progress bar label"
 msgid "%.0f %%"
@@ -3680,11 +3696,11 @@ msgctxt "volume percentage"
 msgid "%d %%"
 msgstr "%d %%"
 
-#: ../gtk/gtkwindow.c:12094
+#: ../gtk/gtkwindow.c:12063
 msgid "Do you want to use GTK+ Inspector?"
 msgstr "Desexa usar o Inspector de GTK+?"
 
-#: ../gtk/gtkwindow.c:12096
+#: ../gtk/gtkwindow.c:12065
 msgid ""
 "GTK+ Inspector is an interactive debugger that lets you explore and modify "
 "the internals of any GTK+ application. Using it may cause the application to "
@@ -3694,7 +3710,7 @@ msgstr ""
 "modificar propiedades internas de calquera aplicativo GTK+. Ao usalo pode "
 "causar que o aplicativo se rompa ou se interrompa. "
 
-#: ../gtk/gtkwindow.c:12101
+#: ../gtk/gtkwindow.c:12070
 msgid "Don't show this message again"
 msgstr "Non mostrar este mensaxe de novo"
 
@@ -4811,105 +4827,105 @@ msgctxt "paper size"
 msgid "ROC 8k"
 msgstr "ROC 8k"
 
-#: ../gtk/updateiconcache.c:1386
+#: ../gtk/updateiconcache.c:1390
 #, c-format
 msgid "Failed to write header\n"
 msgstr "Produciuse un erro ao escribir a cabeceira\n"
 
-#: ../gtk/updateiconcache.c:1392
+#: ../gtk/updateiconcache.c:1396
 #, c-format
 msgid "Failed to write hash table\n"
 msgstr "Produciuse un erro ao escribir a táboa hash\n"
 
-#: ../gtk/updateiconcache.c:1398
+#: ../gtk/updateiconcache.c:1402
 #, c-format
 msgid "Failed to write folder index\n"
 msgstr "Produciuse un erro ao escribir o índice do cartafol\n"
 
-#: ../gtk/updateiconcache.c:1406
+#: ../gtk/updateiconcache.c:1410
 #, c-format
 msgid "Failed to rewrite header\n"
 msgstr "Produciuse un erro ao reescribir a cabeceira\n"
 
-#: ../gtk/updateiconcache.c:1500
+#: ../gtk/updateiconcache.c:1504
 #, c-format
 msgid "Failed to open file %s : %s\n"
 msgstr "Produciuse un erro ao abrir o ficheiro %s : %s\n"
 
-#: ../gtk/updateiconcache.c:1508 ../gtk/updateiconcache.c:1538
+#: ../gtk/updateiconcache.c:1512 ../gtk/updateiconcache.c:1542
 #, c-format
 msgid "Failed to write cache file: %s\n"
 msgstr "Produciuse un erro ao escribir o ficheiro da caché: %s\n"
 
-#: ../gtk/updateiconcache.c:1548
+#: ../gtk/updateiconcache.c:1552
 #, c-format
 msgid "The generated cache was invalid.\n"
 msgstr "A caché xerada non é válida.\n"
 
-#: ../gtk/updateiconcache.c:1562
+#: ../gtk/updateiconcache.c:1566
 #, c-format
 msgid "Could not rename %s to %s: %s, removing %s then.\n"
 msgstr "Non foi posíbel renomear %s como %s: %s, polo tanto retírase %s.\n"
 
-#: ../gtk/updateiconcache.c:1576
+#: ../gtk/updateiconcache.c:1580
 #, c-format
 msgid "Could not rename %s to %s: %s\n"
 msgstr "Non foi posíbel renomear %s como %s: %s\n"
 
-#: ../gtk/updateiconcache.c:1586
+#: ../gtk/updateiconcache.c:1590
 #, c-format
 msgid "Could not rename %s back to %s: %s.\n"
 msgstr "Non foi posíbel volver a renomear %s como %s: %s.\n"
 
-#: ../gtk/updateiconcache.c:1613
+#: ../gtk/updateiconcache.c:1617
 #, c-format
 msgid "Cache file created successfully.\n"
 msgstr "O ficheiro da caché creouse correctamente.\n"
 
-#: ../gtk/updateiconcache.c:1652
+#: ../gtk/updateiconcache.c:1656
 msgid "Overwrite an existing cache, even if up to date"
 msgstr "Substituír unha caché existente, mesmo se está actualizada"
 
-#: ../gtk/updateiconcache.c:1653
+#: ../gtk/updateiconcache.c:1657
 msgid "Don't check for the existence of index.theme"
 msgstr "Non verificar a existencia de index.theme"
 
-#: ../gtk/updateiconcache.c:1654
+#: ../gtk/updateiconcache.c:1658
 msgid "Don't include image data in the cache"
 msgstr "Non incluír os datos da imaxe na caché"
 
-#: ../gtk/updateiconcache.c:1655
+#: ../gtk/updateiconcache.c:1659
 msgid "Include image data in the cache"
 msgstr "Inclúe datos de imaxe na caché"
 
-#: ../gtk/updateiconcache.c:1656
+#: ../gtk/updateiconcache.c:1660
 msgid "Output a C header file"
 msgstr "Xerar un ficheiro de cabeceira C"
 
-#: ../gtk/updateiconcache.c:1657
+#: ../gtk/updateiconcache.c:1661
 msgid "Turn off verbose output"
 msgstr "Desactivar a saída detallada"
 
-#: ../gtk/updateiconcache.c:1658
+#: ../gtk/updateiconcache.c:1662
 msgid "Validate existing icon cache"
 msgstr "Validar a caché de iconas existente"
 
-#: ../gtk/updateiconcache.c:1725
+#: ../gtk/updateiconcache.c:1729
 #, c-format
 msgid "File not found: %s\n"
 msgstr "O ficheiro non foi atopado: %s\n"
 
-#: ../gtk/updateiconcache.c:1731
+#: ../gtk/updateiconcache.c:1735
 #, c-format
 msgid "Not a valid icon cache: %s\n"
 msgstr "Non é unha caché de iconas correcta: %s\n"
 
-#: ../gtk/updateiconcache.c:1744
+#: ../gtk/updateiconcache.c:1748
 #, c-format
 msgid "No theme index file.\n"
 msgstr "Non hai ficheiro de índice de tema.\n"
 
-#: ../gtk/updateiconcache.c:1748
+#: ../gtk/updateiconcache.c:1752
 #, c-format
 msgid ""
 "No theme index file in '%s'.\n"
