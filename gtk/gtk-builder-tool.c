@@ -295,16 +295,9 @@ maybe_emit_property (MyParserData *data)
            strcmp (data->attribute_names[i], "context") == 0))
         continue;
 
-      if (strcmp (data->attribute_names[i], "translatable") == 0)
-        {
-          g_print (" %s=\"%s\"", data->attribute_names[i], canonical_boolean_value (data, data->attribute_values[i]));
-        }
-      else
-        {
-          escaped = g_markup_escape_text (data->attribute_values[i], -1);
-          g_print (" %s=\"%s\"", data->attribute_names[i], escaped);
-          g_free (escaped);
-        }
+      escaped = g_markup_escape_text (data->attribute_values[i], -1);
+      g_print (" %s=\"%s\"", data->attribute_names[i], escaped);
+      g_free (escaped);
     }
 
   if (bound)
