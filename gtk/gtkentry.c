@@ -1935,10 +1935,6 @@ gtk_entry_class_init (GtkEntryClass *class)
 				"delete-from-cursor", 2,
 				G_TYPE_ENUM, GTK_DELETE_PARAGRAPH_ENDS,
 				G_TYPE_INT, -1);
-  gtk_binding_entry_add_signal (binding_set, GDK_KEY_k, GDK_CONTROL_MASK,
-				"delete-from-cursor", 2,
-				G_TYPE_ENUM, GTK_DELETE_PARAGRAPH_ENDS,
-				G_TYPE_INT, 1);
 
   /* Make this do the same as Backspace, to help with mis-typing */
   gtk_binding_entry_add_signal (binding_set, GDK_KEY_BackSpace, GDK_SHIFT_MASK,
