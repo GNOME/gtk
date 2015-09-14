@@ -1423,7 +1423,8 @@ clicked_eject_button (GtkPlacesSidebar  *sidebar,
   GdkEvent *event = gtk_get_current_event ();
   GdkEventButton *button_event = (GdkEventButton *) event;
 
-  if ((event->type == GDK_BUTTON_PRESS || event->type == GDK_BUTTON_RELEASE) &&
+  if (event != NULL &&
+      (event->type == GDK_BUTTON_PRESS || event->type == GDK_BUTTON_RELEASE) &&
        over_eject_button (sidebar, button_event->x, button_event->y, path))
     return TRUE;
 
