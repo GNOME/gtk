@@ -478,7 +478,6 @@ typedef struct {
 
 typedef struct {
   GtkEventController *controller;
-  guint evmask_notify_id;
   guint grab_notify_id;
   guint sequence_state_changed_id;
 } EventControllerData;
@@ -17114,14 +17113,6 @@ _gtk_widget_update_evmask (GtkWidget *widget)
 }
 
 static void
-event_controller_notify_event_mask (GtkEventController *controller,
-                                    GParamSpec         *pspec,
-                                    GtkWidget          *widget)
-{
-  _gtk_widget_update_evmask (widget);
-}
-
-static void
 event_controller_sequence_state_changed (GtkGesture            *gesture,
                                          GdkEventSequence      *sequence,
                                          GtkEventSequenceState  state,
@@ -17186,9 +17177,6 @@ _gtk_widget_add_controller (GtkWidget          *widget,
 
   data = g_new0 (EventControllerData, 1);
   data->controller = controller;
-  data->evmask_notify_id =
-    g_signal_connect (controller, "notify::event-mask",
-                      G_CALLBACK (event_controller_notify_event_mask), widget);
   data->grab_notify_id =
     g_signal_connect (widget, "grab-notify",
                       G_CALLBACK (event_controller_grab_notify), data);
@@ -17226,7 +17214,6 @@ _gtk_widget_remove_controller (GtkWidget          *widget,
   if (g_signal_handler_is_connected (widget, data->grab_notify_id))
     g_signal_handler_disconnect (widget, data->grab_notify_id);
 
-  g_signal_handler_disconnect (data->controller, data->evmask_notify_id);
   g_signal_handler_disconnect (data->controller, data->sequence_state_changed_id);
   data->controller = NULL;
 }
