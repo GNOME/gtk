@@ -5574,6 +5574,28 @@ gtk_widget_queue_draw (GtkWidget *widget)
 }
 
 /**
+ * gtk_widget_queue_allocate:
+ * @widget: a #GtkWidget
+ *
+ * This function is only for use in widget implementations.
+ *
+ * Flags the widget for a rerun of the GtkWidgetClass::size_allocate
+ * function. Use this function instead of gtk_widget_queue_resize()
+ * when the @widget's size request didn't change but it wants to
+ * reposition its contents.
+ *
+ * An example user of this function is gtk_widget_set_halign().
+ */
+void
+gtk_widget_queue_allocate (GtkWidget *widget)
+{
+  g_return_if_fail (GTK_IS_WIDGET (widget));
+
+  /* for now... */
+  gtk_widget_queue_resize (widget);
+}
+
+/**
  * gtk_widget_queue_resize:
  * @widget: a #GtkWidget
  *
@@ -10976,7 +10998,7 @@ gtk_widget_error_bell (GtkWidget *widget)
 
   settings = gtk_widget_get_settings (widget);
   if (!settings)
-    return;
+  return;
 
   g_object_get (settings,
                 "gtk-error-bell", &beep,
@@ -14541,7 +14563,7 @@ gtk_widget_set_halign (GtkWidget *widget,
     return;
 
   widget->priv->halign = align;
-  gtk_widget_queue_resize (widget);
+  gtk_widget_queue_allocate (widget);
   g_object_notify_by_pspec (G_OBJECT (widget), widget_props[PROP_HALIGN]);
 }
 
@@ -14607,7 +14629,7 @@ gtk_widget_set_valign (GtkWidget *widget,
     return;
 
   widget->priv->valign = align;
-  gtk_widget_queue_resize (widget);
+  gtk_widget_queue_allocate (widget);
   g_object_notify_by_pspec (G_OBJECT (widget), widget_props[PROP_VALIGN]);
 }
 

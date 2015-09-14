@@ -663,6 +663,8 @@ GDK_AVAILABLE_IN_ALL
 void	   gtk_widget_queue_resize	  (GtkWidget	       *widget);
 GDK_AVAILABLE_IN_ALL
 void	   gtk_widget_queue_resize_no_redraw (GtkWidget *widget);
+GDK_AVAILABLE_IN_3_20
+void       gtk_widget_queue_allocate      (GtkWidget           *widget);
 GDK_AVAILABLE_IN_3_8
 GdkFrameClock* gtk_widget_get_frame_clock (GtkWidget           *widget);
 
