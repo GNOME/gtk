@@ -190,7 +190,7 @@ gtk_win32_embed_widget_realize (GtkWidget *widget)
 	}
       gtk_widget_size_allocate (widget, &allocation);
       
-      _gtk_container_queue_resize (GTK_CONTAINER (widget));
+      gtk_widget_queue_resize (widget);
 
       g_return_if_fail (!gtk_widget_get_realized (widget));
     }

@@ -7052,7 +7052,7 @@ gtk_window_realize (GtkWidget *widget)
       allocation.height = MAX (allocation.height, h);
       gtk_widget_size_allocate (widget, &allocation);
 
-      _gtk_container_queue_resize (GTK_CONTAINER (widget));
+      gtk_widget_queue_resize (widget);
 
       g_return_if_fail (!_gtk_widget_get_realized (widget));
     }
@@ -7558,7 +7558,7 @@ gtk_window_configure_event (GtkWidget         *widget,
   
   priv->configure_notify_received = TRUE;
 
-  _gtk_container_queue_resize (GTK_CONTAINER (widget));
+  gtk_widget_queue_resize (widget);
   
   return TRUE;
 }
