@@ -5861,6 +5861,9 @@ gtk_widget_size_allocate_with_baseline (GtkWidget     *widget,
   old_baseline = priv->allocated_baseline;
   real_allocation = *allocation;
 
+  priv->allocated_size = *allocation;
+  priv->allocated_size_baseline = baseline;
+
   adjusted_allocation = real_allocation;
   if (gtk_widget_get_request_mode (widget) == GTK_SIZE_REQUEST_HEIGHT_FOR_WIDTH)
     {
@@ -8895,6 +8898,8 @@ _gtk_widget_set_visible_flag (GtkWidget *widget,
       priv->allocation.width = 1;
       priv->allocation.height = 1;
       memset (&priv->clip, 0, sizeof (priv->clip));
+      memset (&priv->allocated_size, 0, sizeof (priv->allocated_size));
+      priv->allocated_size_baseline = 0;
     }
 }
 
@@ -15527,6 +15532,42 @@ _gtk_widget_set_simple_clip (GtkWidget     *widget,
     }
 
   gtk_widget_set_clip (widget, &clip);
+}
+
+/**
+ * gtk_widget_get_allocated_size:
+ * @widget: a #GtkWidget
+ * @allocation: (out) (allow-none): a pointer to a #GtkAllocation to copy to
+ * @baseline: (out) (allow-none): a pointer to an integer to copy to
+ *
+ * Retrieves the widget’s allocated size.
+ *
+ * This function returns the last values passed to
+ * gtk_widget_size_allocate_with_baseline(). The value differs from
+ * the size returned in gtk_widget_get_allocation() in that functions
+ * like gtk_widget_set_halign() can adjust the allocation, but not
+ * the value returned by this function.
+ *
+ * If a widget is not visible, its allocated size is 0.
+ *
+ * Since: 3.20
+ */
+void
+gtk_widget_get_allocated_size (GtkWidget     *widget,
+                               GtkAllocation *allocation,
+                               int           *baseline)
+{
+  GtkWidgetPrivate *priv;
+
+  g_return_if_fail (GTK_IS_WIDGET (widget));
+  g_return_if_fail (allocation != NULL);
+
+  priv = widget->priv;
+
+  if (allocation)
+    *allocation = priv->allocated_size;
+  if (baseline)
+    *baseline = priv->allocated_size_baseline;
 }
 
 /**

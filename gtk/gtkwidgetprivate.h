@@ -130,6 +130,8 @@ struct _GtkWidgetPrivate
   GtkStyleContext *context;
 
   /* The widget's allocated size */
+  GtkAllocation allocated_size;
+  gint allocated_size_baseline;
   GtkAllocation allocation;
   GtkAllocation clip;
   gint allocated_baseline;
