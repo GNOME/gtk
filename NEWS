@@ -1,3 +1,62 @@
+Overview of Changes in GTK+ 3.17.9
+==================================
+
+* GtkPopover has been changed back to not inherit its style
+  from the widget it is attached to
+
+* The Ctrl-K key binding has been dropped from GtkEntry to avoid
+  conflict with a firefox shortcut
+
+* Theme
+ - Adwaita: fixes for rubberbanding, icon view highlighting
+ - HighContrast: fixes for path bar, linked entries, color button
+
+* Wayland
+ - Fix assertions when using GL
+
+* gtk3-demo can now launch individual demos from the commandline
+
+* Various optimizations
+ - Use g_object_notify_by_pspec
+ - Reduce g_return_if_fail in internal APIs
+ - Speed up some bitmask operations
+ - Avoid some copies in inner loops
+ - Make better use of GQuarks
+ - Use CAIRO_CONTENT_COLOR when possible
+ - Avoid allocations and referencing during repaint
+ - Stop sending Expose events for most widgets
+ - Avoid ::draw and ::size-allocate signal overhead when possible
+
+* Bugs fixed:
+ 753431 Scroll events from wireless mouse are ignored
+ 753628 user options of wrong printer are used
+ 754143 Popover and GLarea crash on wayland
+ 754410 "Open" popover item on selected sidebar row does nothing
+ 754411 sidebar row popover confusing with bookmarks with short names
+ 754535 Cursor disappears only on adding characters
+ 754559 GtkFlowBox: bad allocation of the children in RTL locales
+ 754658 GtkTextView should always use RGB (no-alpha) when drawing to pi...
+ 754687 Drop the GSlice allocator
+ 754746 Add afp and google-drive to list of remote filesystems
+ 754770 GtkGLArea and gtk_window_present() crash on Wayland
+ 754854 unexpected background color in tray icon
+ 754866 [HighContrast] GtkListBoxRow should have the same height than i...
+ 754928 Broken .ui translations
+ 754987 Inspector can't show GtkAdjustments anymore
+ 754839 wayland: Make subsurface desynchronized after first parent surf...
+
+* Translation updates:
+ French
+ Greek
+ Kazakh
+ Korean
+ Lithuanian
+ Norwegian bokmål
+ Polish
+ Portuguese
+ Slovak
+
+
 Overview of Changes in GTK+ 3.17.8
 ==================================
 
