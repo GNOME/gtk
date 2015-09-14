@@ -3545,6 +3545,7 @@ _gdk_window_process_updates_recurse_helper (GdkWindow *window,
   GdkWindow **free_children = NULL;
   int i, n_children;
   GList *l;
+  GList *last_link;
 
   if (window->destroyed)
     return;
@@ -3587,14 +3588,22 @@ _gdk_window_process_updates_recurse_helper (GdkWindow *window,
       _gdk_event_emit (&event);
     }
 
-  n_children = g_list_length (window->children);
+  n_children = 0;
+  last_link = NULL;
+  /* Count n_children and fetch bottommost at same time */
+  for (l = window->children; l != NULL; l = l->next)
+    {
+      last_link = l;
+      n_children++;
+    }
+
   children = g_newa (GdkWindow *, n_children);
   if (children == NULL)
     children = free_children = g_new (GdkWindow *, n_children);
 
   n_children = 0;
   /* Iterate over children, starting at bottommost */
-  for (l = g_list_last (window->children); l != NULL; l = l->prev)
+  for (l = last_link; l != NULL; l = l->prev)
     {
       child = l->data;
 
