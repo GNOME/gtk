@@ -5969,7 +5969,10 @@ gtk_widget_size_allocate_with_baseline (GtkWidget     *widget,
     goto out;
 
   priv->allocated_baseline = baseline;
-  g_signal_emit (widget, widget_signals[SIZE_ALLOCATE], 0, &real_allocation);
+  if (g_signal_has_handler_pending (widget, widget_signals[SIZE_ALLOCATE], 0, FALSE))
+    g_signal_emit (widget, widget_signals[SIZE_ALLOCATE], 0, &real_allocation);
+  else
+    GTK_WIDGET_GET_CLASS (widget)->size_allocate (widget, &real_allocation);
 
   /* Size allocation is god... after consulting god, no further requests or allocations are needed */
   priv->alloc_needed = FALSE;
